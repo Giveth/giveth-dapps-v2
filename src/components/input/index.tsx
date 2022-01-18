@@ -66,40 +66,41 @@ interface IWalletAddressInputWithButtonProps {
 	disabled?: boolean;
 }
 
-export const WalletAddressInputWithButton: FC<IWalletAddressInputWithButtonProps> =
-	({
-		placeholder,
-		btnLable,
-		onSubmit,
-		walletAddress = '',
-		disabled = false,
-		onUpdate = () => {},
-	}) => {
-		const [value, setValue] = useState<string>(walletAddress);
+export const WalletAddressInputWithButton: FC<
+	IWalletAddressInputWithButtonProps
+> = ({
+	placeholder,
+	btnLable,
+	onSubmit,
+	walletAddress = '',
+	disabled = false,
+	onUpdate = () => {},
+}) => {
+	const [value, setValue] = useState<string>(walletAddress);
 
-		useEffect(() => {
-			setValue(walletAddress);
-		}, [walletAddress]);
+	useEffect(() => {
+		setValue(walletAddress);
+	}, [walletAddress]);
 
-		const onValueChange = (e: any) => {
-			onUpdate();
-			setValue(e.target.value);
-		};
-
-		return (
-			<InputContainer>
-				<Input
-					placeholder={placeholder}
-					value={value}
-					onChange={onValueChange}
-					disabled={disabled}
-				/>
-				<Button onClick={() => onSubmit(value)} disabled={disabled}>
-					{btnLable}
-				</Button>
-			</InputContainer>
-		);
+	const onValueChange = (e: any) => {
+		onUpdate();
+		setValue(e.target.value);
 	};
+
+	return (
+		<InputContainer>
+			<Input
+				placeholder={placeholder}
+				value={value}
+				onChange={onValueChange}
+				disabled={disabled}
+			/>
+			<Button onClick={() => onSubmit(value)} disabled={disabled}>
+				{btnLable}
+			</Button>
+		</InputContainer>
+	);
+};
 
 const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`); // match escaped "." characters via in a non-capturing group
 

@@ -8,13 +8,7 @@ import {
 	walletsArray,
 	TWalletConnector,
 } from '@/lib/wallet/walletTypes';
-import {
-	brandColors,
-	H5,
-	Lead,
-	neutralColors,
-	Overline,
-} from '@giveth/ui-design-system';
+import { brandColors, H5, Lead, neutralColors } from '@giveth/ui-design-system';
 import { IModal, Modal } from '@/components/modals/Modal';
 import styled from 'styled-components';
 

@@ -1,4 +1,3 @@
-import config from '@/configuration';
 import { P, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';

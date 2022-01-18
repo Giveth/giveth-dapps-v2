@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import config from '../configuration';
 import { B, brandColors } from '@giveth/ui-design-system';
@@ -7,8 +7,8 @@ import { IconXDAI } from './Icons/XDAI';
 import { IconEthereum } from './Icons/Eth';
 import { BasicNetworkConfig } from '../types/config';
 import { ChangeNetworkModal } from './modals/ChangeNetwork';
-import { switchNetwork } from '@/lib/wallet';
 import { useWeb3React } from '@web3-react/core';
+import { switchNetwork } from '@/lib/wallet';
 
 interface NetworkSelectorProps {
 	disabled?: boolean;
