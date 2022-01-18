@@ -135,7 +135,7 @@ export const RewardMenu = () => {
 					<a>
 						<PartRow>
 							<PartInfo>
-								<PartTitle>From Givstream</PartTitle>
+								<PartTitle as='span'>From Givstream</PartTitle>
 								<Row gap='4px'>
 									<PartAmount medium>
 										{formatWeiHelper(givStreamLiquidPart)}
@@ -156,7 +156,9 @@ export const RewardMenu = () => {
 					<a>
 						<PartRow>
 							<PartInfo>
-								<PartTitle>GIVFarm & Givgarden</PartTitle>
+								<PartTitle as='span'>
+									GIVFarm & Givgarden
+								</PartTitle>
 								<Row gap='4px'>
 									<PartAmount medium>
 										{formatWeiHelper(farmsLiquidPart)}
@@ -177,7 +179,7 @@ export const RewardMenu = () => {
 					<a>
 						<PartRow>
 							<PartInfo>
-								<PartTitle>GIVBacks</PartTitle>
+								<PartTitle as='span'>GIVBacks</PartTitle>
 								<Row gap='4px'>
 									<PartAmount medium>
 										{formatWeiHelper(givbackLiquidPart)}
