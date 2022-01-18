@@ -1,0 +1,82 @@
+[
+  {
+    "question": "How do I know the project I contributed to was completed?",
+    "answer": "Each project has the opportunity to post updates as its status changes, and donors who contributed to that project will receive notifications at key milestones, including project completion. Donors can log back on to Giveth to see photos, written updates, and sometimes videos of the completed project."
+  },
+  {
+    "question": "Is Giveth recognized as an official charity?",
+    "answer": "Giveth is a Decentralized Altruistic Community and with the help of SDG impact fund our DAO and community based organizational structure is represented as a non-profit 501c3 in the United States. We are a community-led project and will not derive any direct profit from the platform. We strive to model the DAC concept as one of the first not-for-profit blockchain based entities. We guarantee all funds will get recycled back into the Community that is ensuring the Giveth Platform gets adopted widely."
+  },
+  {
+    "question": "What types of projects are prohibited",
+    "answer": "Projects relating to instigating violence or otherwise illegal activities - also this is a clean site, so we will not allow any form of pornographic imagery on the page."
+  },
+  {
+    "question": "What is the maximum funding goal for a fundraising project?",
+    "answer": "The fundraising requirements are stated by each project but there is no limit set. The project should set a realistic timeline for fundraising based on the amount of money to be raised."
+  },
+  {
+    "question": "I like your project but right now I have no funds to donate, how else can I contribute?",
+    "answer": "We are a very inclusive Community and would love your help (in any way possible). \n Just join and come talk to us! We even have a special channel for you: #contributors."
+  },
+  {
+    "question": "Are there fees for creating a project?",
+    "answer": "Nope! Giveth will never charge any additional fees for creating projects on our platform. If you create a project on Giveth.io it creates an entry in our database that directly points to your chosen Ethereum wallet. You can do this as well with a brand new account that holds zero funds. \n There are minor fees when using the ethereum network, and if you use other exchanges or services, there are likely associated fees."
+  },
+  {
+    "question": "I’m a donor. How do I know projects are getting my money?",
+    "answer": "Each project description page shows a list of all donations made to that project and by who. We believe that every human being should be able to transparently see their funds create good in the world. Transparency is the key to staying focused on the work at hand. You will get to see photos and receive frequent updates on the status of each project you've donated to."
+  },
+  {
+    "question": "What percentage of the donations go directly to the project?",
+    "answer": "100% of funds raised on Giveth go directly to the project. Giveth does not charge fees to givers or makers. There are minor fees when using the ethereum network, and if you use other exchanges or services, there are likely associated fees."
+  },
+  {
+    "question": "How can I be sure my donations are making a difference?",
+    "answer": "We believe that every human being should be able to transparently see their funds create good in the world. Transparency is the key to staying focused on the work at hand. You will get to see photos and receive frequent updates on the status of each project you've donated to."
+  },
+  {
+    "question": "Can I donate on Giveth if I don't have crypto?",
+    "answer": "FIAT integration (donate funds from your credit card or bank account) is coming soon! Stay tuned...\r\n\r\nGiveth has also partnered with SDG Impact Fund to make it possible for donors to contribute tax-deductible donations, in fiat or crypto, to altruistic projects on the blockchain. This is a major development in finance innovation to effectively care for the commons. We are very close to having fiat options integrated with the Dapp. Until then, fiat donations will accepted here (https://www.sdgimpactfund.org/giveth-foundation). To learn more about the partnership between giveth and the SDG Impact Fund, please refer to this blog post (https://medium.com/giveth/giveth-2-0-next-level-community-philanthropy-f7e60d7e78cb)"
+  },
+  {
+    "question": "Is my donation tax deductible?",
+    "answer": "Yes! Giveth is a 501c3 non-profit and donations made to projects are tax deductible for US tax payers. However, you are responsible to consult with your tax attorney for legal or financial advice.\r\n\r\nGiveth is a Decentralized Altruistic Community and with the help of SDG impact fund (https://www.sdgimpactfund.org/) our DAO and community based organizational structure is represented as a non-profit 501c3 in the United States. \n We are a community-led project and will not derive any direct profit from the platform. We strive to model the DAC concept as one of the first not-for-profit blockchain based entities. We guarantee all funds will get recycled back into the Community that is ensuring the Giveth Platform gets adopted widely."
+  },
+  {
+    "question": "Does the IRS recognize cryptocurrency donations?",
+    "answer": "The IRS classifies cryptocurrencies as property, so cryptocurrency donations to 501c3 organizations receive the same tax treatment as stocks.\r"
+  },
+  {
+    "question": "Why donate cryptocurrency?",
+    "answer": "Cryptocurrency knows no borders and marginalizes nobody. It can not be taken from you if you hold your keys. \n Another difference: When you donate crypto, you do not recognize capital gains from the crypto you hold and you can deduct it from your taxes. In other words, donating your crypto can often reduce your tax burden. Would you rather donate to the IRS or your favorite cause?"
+  },
+  {
+    "question": "What is Tor.us?",
+    "answer": "For a more detailed answer, see Tor.us documentation (https://docs.tor.us). \n\"Torus is a user-friendly, fully open source and non-custodial key management system for DApps. It runs a Distributed Key Generation protocol that allows applications to access its generated keys via OAuths and thus existing user accounts. Try out the experience on the Tor.us Wallet (https://app.tor.us). \n Tor.us is the main way to sign on to and use Giveth.io. \nIt is our wallet option alongside Metamask (https://metamask.io)"
+  },
+  {
+    "question": "What is the difference between Bitcoin and Ethereum?",
+    "answer": "Bitcoin is intended to function as decentralized means of value transfer whereas Ethereum is a protocol that allows users to develop decentralized applications on top of a blockchain network. As prominent Ethereum developer Vlad Zamfir has confirmed on several occasions, Ethereum is “not money.” Ethereum’s native token, Ether (ETH) exists in order to facilitate the process of building and deploying distributed applications. Meanwhile, the bitcoin currency exists on the Bitcoin blockchain to facilitate peer-to-peer (P2P) exchange of uncensorable, non-confiscatable money from cryptocompare.com (https://www.cryptocompare.com/coins/guides/what-s-the-difference-between-bitcoin-btc-and-ethereum-eth)"
+  },
+  {
+    "question": "What is Blockchain?",
+    "answer": "Simply, it is a secure form of digital cash that can be transferred anywhere in the world peer-to-peer, similar to email (where the emails server is replaced with a decentralized network). \n More technically, bitcoin is a type of digital currency that uses cryptography and open source software to regulate the generation of units of currency and verify the transfer of funds, operating independently of a central bank. There is a distinction between bitcoin, the digital currency, and Blockchain the technology, which has many additional potential use cases beyond the currency."
+  },
+  {
+    "question": "What is Ethereum?",
+    "answer": "It's the world's programmable blockchain.\r\nEthereum builds on Bitcoin's innovation, with some big differences.\r\nBoth let you use digital money without payment providers or banks. But Ethereum is programmable, so you can also use it for lots of different digital assets – even Bitcoin!\r\nThis also means Ethereum is for more than payments. It's a marketplace of financial services, games and apps that can't steal your data or censor you.\r\nSo step into the bazaar and give it a try..."
+  },
+  {
+    "question": "What is Giveth?",
+    "answer": "Giveth is a community focused on building the future of giving using blockchain technology. There are a lot of projects in the Giveth Galaxy, but the core 2 projects are:\r\n\r\n- Giveth.io\r\n- beta.giveth.io\r\n\r\nYou can use Giveth to donate to projects or also propose projects that need funding, all using cryptocurrency and soon Fiat currencies!\r\nWe aim to foster a large network of organizations and to build a bright, transparent and decentralized Future of Giving."
+  },
+  {
+    "question": "I still need more detail on how Giveth works, where can I find this?",
+    "answer": "For information about the DAO governing Giveth, please visit the Wiki (https://wiki.giveth.io). For developer documentation and user guides for the Donation Application please have a look at the Docs (https://docs.giveth.io). We always love to welcome you as well in our chatrooms, please visit the Join Page (https://giveth.io/join)"
+  },
+  {
+    "question": "Where can I see in detail what you are spending donations on?",
+    "answer": "One of the core values of Giveth is transparency. We invite everyone to have a look at our finances. As a Giver you can also ask us for an exclusive tour of the DApp (beta.giveth.io). The Giveth DAC has its own campaign with funding and payout milestones. The funds of that campaign are usually donated to individual's milestones. All movements are visible at a very granular level in the DApp as well as from an Ethereum blockchain explorer. Access to the DApp is gradually opened up to the wider public."
+  }
+]
