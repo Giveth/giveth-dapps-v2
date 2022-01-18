@@ -1,6 +1,6 @@
 import React from 'react';
 import toast from 'react-hot-toast';
-import { networksParams } from '../../helpers/blockchain';
+import { networksParams } from '@/helpers/blockchain';
 
 export function showPendingStake(
 	amount: string,

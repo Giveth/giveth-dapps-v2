@@ -1,7 +1,7 @@
 import React from 'react';
 import toast from 'react-hot-toast';
-import config from '../../configuration';
-import { networksParams } from '../../helpers/blockchain';
+import config from '@/configuration';
+import { networksParams } from '@/helpers/blockchain';
 
 export function showCorrectAnswer(): void {
 	toast.success('Correct!', { duration: 2000 });
