@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Button } from '../styled-components/Button';
 import { Row } from '../styled-components/Grid';
 import { ArrowButton, Card } from './common';
-import useClaim, { GiveDropStateType } from '../../context/claim.context';
+import useClaim, { GiveDropStateType } from '@/context/claim.context';
 import { IClaimViewCardProps } from '../views/claim/Claim.view';
 import { formatWeiHelper } from '@/helpers/number';
 import {

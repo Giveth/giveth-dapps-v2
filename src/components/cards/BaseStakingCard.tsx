@@ -1,9 +1,9 @@
-import config from '../../configuration';
-import { PoolStakingConfig, StakingType } from '../../types/config';
-import React, { FC, useContext, useEffect, useState, ReactNode } from 'react';
+import config from '@/configuration';
+import { PoolStakingConfig, StakingType } from '@/types/config';
+import React, { FC, useEffect, useState, ReactNode } from 'react';
 import { Row } from '../styled-components/Grid';
 import { IconWithTooltip } from '../IconWithToolTip';
-import { formatEthHelper, formatWeiHelper, Zero } from '../../helpers/number';
+import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import {
 	StakingPoolContainer,
 	StakingPoolExchangeRow,

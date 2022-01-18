@@ -8,7 +8,7 @@ import {
 } from '@giveth/ui-design-system';
 import { Row } from '../styled-components/Grid';
 import styled from 'styled-components';
-import { PoolStakingConfig } from '../../types/config';
+import { PoolStakingConfig } from '@/types/config';
 import { StakingPoolImages } from '../StakingPoolImages';
 import { BigNumber } from 'ethers';
 import { AmountInput } from '../AmountInput';
@@ -16,9 +16,9 @@ import {
 	approveERC20tokenTransfer,
 	stakeTokens,
 	wrapToken,
-} from '../../lib/stakingPool';
+} from '@/lib/stakingPool';
 import Lottie from 'react-lottie';
-import LoadingAnimation from '../../animations/loading.json';
+import LoadingAnimation from '@/animations/loading.json';
 import { SubmittedInnerModal, ConfirmedInnerModal } from './ConfirmSubmit';
 import { useWeb3React } from '@web3-react/core';
 

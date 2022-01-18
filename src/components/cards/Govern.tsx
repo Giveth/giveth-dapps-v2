@@ -30,8 +30,7 @@ import {
 import { InputWithUnit } from '../input';
 import { Row } from '../styled-components/Grid';
 import { IClaimViewCardProps } from '../views/claim/Claim.view';
-import config from '../../configuration';
-import { UserContext } from '@/context/user.context';
+import config from '@/configuration';
 import { formatEthHelper, formatWeiHelper, Zero } from '@/helpers/number';
 import { getGivStakingAPR } from '@/lib/stakingPool';
 import { APR } from '@/types/poolInfo';
@@ -39,6 +38,7 @@ import { useTokenDistro } from '@/context/tokenDistro.context';
 import { H2, H5, Lead, P } from '@giveth/ui-design-system';
 import { useSubgraph } from '@/context';
 import { StakingType } from '@/types/config';
+import useClaim from '@/context/claim.context';
 
 const GovernCardContainer = styled(Card)`
 	padding-left: 254px;
@@ -119,8 +119,7 @@ const GovernFooter = styled.div`
 `;
 
 const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
-	const { totalAmount, step, goNextStep, goPreviousStep } =
-		useContext(UserContext);
+	const { totalAmount, step, goNextStep, goPreviousStep } = useClaim();
 
 	const [stacked, setStacked] = useState<string>('0');
 	const [potentialClaim, setPotentialClaim] = useState<EthersBigNumber>(

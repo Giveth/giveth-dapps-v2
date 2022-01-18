@@ -1,8 +1,8 @@
 import { FC, useState } from 'react';
 import { Modal, IModal } from './Modal';
 import Lottie from 'react-lottie';
-import LoadingAnimation from '../../animations/loading.json';
-import CheckAnimation from '../../animations/check.json';
+import LoadingAnimation from '@/animations/loading.json';
+import CheckAnimation from '@/animations/check.json';
 import {
 	brandColors,
 	neutralColors,

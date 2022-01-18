@@ -1,7 +1,7 @@
 import React, { FC, useContext, useEffect, useState } from 'react';
 import { IModal, Modal } from './Modal';
 import Lottie from 'react-lottie';
-import LoadingAnimation from '../../animations/loading.json';
+import LoadingAnimation from '@/animations/loading.json';
 import {
 	B,
 	brandColors,

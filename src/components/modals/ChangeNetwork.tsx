@@ -1,7 +1,7 @@
 import { FC, useEffect } from 'react';
 import { Modal, IModal } from './Modal';
 import styled from 'styled-components';
-import config from '../../configuration';
+import config from '@/configuration';
 import { IconEthereum } from '../Icons/Eth';
 import { IconXDAI } from '../Icons/XDAI';
 import { H4, B, neutralColors } from '@giveth/ui-design-system';

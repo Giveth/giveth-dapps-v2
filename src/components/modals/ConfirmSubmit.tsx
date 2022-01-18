@@ -11,9 +11,9 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import Lottie from 'react-lottie';
-import LoadingAnimation from '../../animations/loading.json';
-import TikAnimation from '../../animations/tik.json';
-import ErrorAnimation from '../../animations/error.json';
+import LoadingAnimation from '@/animations/loading.json';
+import TikAnimation from '@/animations/tik.json';
+import ErrorAnimation from '@/animations/error.json';
 import styled from 'styled-components';
 import { FC } from 'react';
 import { AddGIVTokenButton } from '../AddGIVTokenButton';

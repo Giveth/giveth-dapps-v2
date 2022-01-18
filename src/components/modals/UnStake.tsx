@@ -4,11 +4,11 @@ import { Modal, IModal } from './Modal';
 import { neutralColors, Button, H4 } from '@giveth/ui-design-system';
 import { Row } from '../styled-components/Grid';
 import styled from 'styled-components';
-import { PoolStakingConfig } from '../../types/config';
+import { PoolStakingConfig } from '@/types/config';
 import { StakingPoolImages } from '../StakingPoolImages';
 import { BigNumber } from 'ethers';
 import { AmountInput } from '../AmountInput';
-import { unwrapToken, withdrawTokens } from '../../lib/stakingPool';
+import { unwrapToken, withdrawTokens } from '@/lib/stakingPool';
 import LoadingAnimation from '@/animations/loading.json';
 import {
 	ConfirmedInnerModal,
