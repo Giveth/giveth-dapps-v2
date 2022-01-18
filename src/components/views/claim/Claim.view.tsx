@@ -1,4 +1,4 @@
-import React, { FC, useContext, useState } from 'react';
+import React, { FC, useContext } from 'react';
 import config from '@/configuration';
 import styled from 'styled-components';
 import { CongratulationsCard } from '../../cards/Congratulations';
