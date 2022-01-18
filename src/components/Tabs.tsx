@@ -13,7 +13,7 @@ import { useRouter } from 'next/router';
 const tabs = [
 	{
 		label: 'Overview',
-		href: '/',
+		href: '/giveconomy',
 	},
 	{
 		label: 'GIVgarden',
