@@ -45,7 +45,8 @@ const Header: FC<IHeader> = () => {
 	const {
 		currentValues: { balances },
 	} = useSubgraph();
-	const { chainId, activate, account, library } = useWeb3React();
+	const { chainId, active, activate, deactivate, account, library } =
+		useWeb3React();
 
 	const handleHoverClickBalance = (show: boolean) => {
 		setShowRewardMenu(show);
@@ -59,6 +60,7 @@ const Header: FC<IHeader> = () => {
 			activate(wallet.connector);
 		}
 	}, []);
+
 	useEffect(() => {
 		const threshold = 0;
 		let lastScrollY = window.pageYOffset;
@@ -152,7 +154,7 @@ const Header: FC<IHeader> = () => {
 							/>
 						}
 					/>
-					{account && chainId ? (
+					{active && account && chainId ? (
 						<>
 							<RewardMenuAndButtonContainer
 								onClick={() => handleHoverClickBalance(true)}
@@ -185,6 +187,7 @@ const Header: FC<IHeader> = () => {
 									window.localStorage.removeItem(
 										'selectedWallet',
 									);
+									deactivate();
 									setShowWalletModal(true);
 								}}
 							>

@@ -3,7 +3,7 @@ import { P, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
 import { Button } from '@giveth/ui-design-system';
-import { switchNetwork } from '@/lib/metamask';
+import { switchNetwork } from '@/lib/wallet';
 
 import { chainName } from '@/utils/constants';
 import { Modal, IModal } from './Modal';

@@ -7,7 +7,7 @@ import { IconXDAI } from './Icons/XDAI';
 import { IconEthereum } from './Icons/Eth';
 import { BasicNetworkConfig } from '../types/config';
 import { ChangeNetworkModal } from './modals/ChangeNetwork';
-import { switchNetwork } from '@/lib/metamask';
+import { switchNetwork } from '@/lib/wallet';
 import { useWeb3React } from '@web3-react/core';
 
 interface NetworkSelectorProps {

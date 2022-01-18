@@ -12,7 +12,7 @@ import styled from 'styled-components';
 import { Row } from '../styled-components/Grid';
 import { RewardMenuContainer } from './RewardMenu.sc';
 import Image from 'next/image';
-import { switchNetwork } from '@/lib/metamask';
+import { switchNetwork } from '@/lib/wallet';
 import config from '@/configuration';
 import BigNumber from 'bignumber.js';
 import { useTokenDistro } from '@/context/tokenDistro.context';
