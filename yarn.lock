@@ -1100,7 +1100,7 @@
     keccak "^3.0.2"
     randombytes "^2.1.0"
 
-"@toruslabs/torus-embed@^1.18.3":
+"@toruslabs/torus-embed@^1.20.2":
   version "1.20.2"
   resolved "https://registry.yarnpkg.com/@toruslabs/torus-embed/-/torus-embed-1.20.2.tgz#8c2a1b22b3ba9c24a927f0fc4b7517f1dc5d3c38"
   integrity sha512-+HCoDFXP2XPl4Qf82LwjNvu2lQEQd5OiRs8KupDIlTFv2qh8i+42erP4A+VuLDrJGEYmdSwc2ERulzA5FOYsmQ==
@@ -1718,15 +1718,6 @@
     "@web3-react/abstract-connector" "^6.0.7"
     "@web3-react/types" "^6.0.7"
     tiny-invariant "^1.0.6"
-
-"@web3-react/torus-connector@^6.2.9":
-  version "6.2.9"
-  resolved "https://registry.yarnpkg.com/@web3-react/torus-connector/-/torus-connector-6.2.9.tgz#93678652c9e722c0adc01208c36d54ce3782916b"
-  integrity sha512-aq0pDZh00aIBdZZUsDFf3y91ZMVpEZpqKEPe5Q+Mk+aG0dbgOs5gwuT/jtfaCDAkxJqwGJzKQ4kF6+bj/HMaJw==
-  dependencies:
-    "@toruslabs/torus-embed" "^1.18.3"
-    "@web3-react/abstract-connector" "^6.0.7"
-    "@web3-react/types" "^6.0.7"
 
 "@web3-react/types@^6.0.7":
   version "6.0.7"
