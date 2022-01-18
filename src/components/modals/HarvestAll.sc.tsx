@@ -11,10 +11,9 @@ import {
 	H6,
 	Caption,
 	Subline,
+	Title,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Title } from '../Header.sc';
-import { IconGIV } from '../Icons/GIV';
 import { Row } from '../styled-components/Grid';
 import Scrollbars from 'react-custom-scrollbars';
 
