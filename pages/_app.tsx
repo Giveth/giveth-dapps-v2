@@ -13,6 +13,8 @@ import { SubgraphProvider } from '@/context/subgraph.context';
 import Head from 'next/head';
 import { PriceProvider } from '@/context/price.context';
 import { ExternalProvider, Web3Provider } from '@ethersproject/providers';
+import { GeneralProvider } from '@/context/general.context';
+import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
 
 function getLibrary(provider: ExternalProvider) {
 	return new Web3Provider(provider);
@@ -44,29 +46,32 @@ function MyApp({ Component, pageProps }: AppProps) {
 			<Head>
 				{viewPort && <meta name='viewport' content='width=768' />}
 			</Head>
-			<Web3ReactProvider getLibrary={getLibrary}>
-				<SubgraphProvider>
-					<TokenDistroProvider>
-						<NftsProvider>
-							<PriceProvider>
-								<FarmProvider>
-									<ThemeProvider>
-										<Component {...pageProps} />
-										{showMobileModal && (
-											<MobileModal
-												showModal={showMobileModal}
-												setShowModal={
-													setShowMobileModal
-												}
-											/>
-										)}
-									</ThemeProvider>
-								</FarmProvider>
-							</PriceProvider>
-						</NftsProvider>
-					</TokenDistroProvider>
-				</SubgraphProvider>
-			</Web3ReactProvider>
+			<GeneralProvider>
+				<Web3ReactProvider getLibrary={getLibrary}>
+					<SubgraphProvider>
+						<TokenDistroProvider>
+							<NftsProvider>
+								<PriceProvider>
+									<FarmProvider>
+										<ThemeProvider>
+											<HeaderWrapper />
+											<Component {...pageProps} />
+											{showMobileModal && (
+												<MobileModal
+													showModal={showMobileModal}
+													setShowModal={
+														setShowMobileModal
+													}
+												/>
+											)}
+										</ThemeProvider>
+									</FarmProvider>
+								</PriceProvider>
+							</NftsProvider>
+						</TokenDistroProvider>
+					</SubgraphProvider>
+				</Web3ReactProvider>
+			</GeneralProvider>
 		</>
 	);
 }
