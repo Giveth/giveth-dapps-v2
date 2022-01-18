@@ -21,11 +21,11 @@ import {
 	PreviousArrowButton,
 } from './common';
 import { IClaimViewCardProps } from '../views/claim/Claim.view';
-import { UserContext } from '../../context/user.context';
+import useClaim from '@/context/claim.context';
 import { BigNumber as EthersBigNumber, constants, utils } from 'ethers';
-import config from '../../configuration';
+import config from '@/configuration';
 import BigNumber from 'bignumber.js';
-import { formatEthHelper, formatWeiHelper, Zero } from '../../helpers/number';
+import { formatEthHelper, formatWeiHelper, Zero } from '@/helpers/number';
 import { APR } from '@/types/poolInfo';
 import { getLPStakingAPR } from '@/lib/stakingPool';
 import { useLiquidityPositions, useSubgraph } from '@/context';
@@ -86,8 +86,7 @@ const Desc = styled(Lead)`
 `;
 
 const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
-	const { totalAmount, step, goNextStep, goPreviousStep } =
-		useContext(UserContext);
+	const { totalAmount, step, goNextStep, goPreviousStep } = useClaim();
 
 	const [deposit, setDeposit] = useState<string>('0');
 	const [potentialClaim, setPotentialClaim] = useState<EthersBigNumber>(

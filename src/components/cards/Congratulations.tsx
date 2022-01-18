@@ -1,17 +1,14 @@
 import styled from 'styled-components';
 import { Button } from '../styled-components/Button';
-import { useContext, useEffect, useState } from 'react';
-import useUser from '../../context/user.context';
+import { useEffect, useState } from 'react';
+import useClaim from '@/context/claim.context';
 import { Container, H2, Lead } from '@giveth/ui-design-system';
 import Lottie from 'react-lottie';
 import { formatWeiHelper } from '@/helpers/number';
-import { addGIVToken } from '@/lib/metamask';
 import Image from 'next/image';
-import SparkleBurstAnimation from '../../animations/sparkle-burst.json';
-import SparkleAnimation from '../../animations/sparkle.json';
-import BlowingAnimation from '../../animations/blowing.json';
-import config from '@/configuration';
-import Link from 'next/link';
+import SparkleBurstAnimation from '@/animations/sparkle-burst.json';
+import SparkleAnimation from '@/animations/sparkle.json';
+import BlowingAnimation from '@/animations/blowing.json';
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import { Row } from '../styled-components/Grid';
 import { AddGIVTokenButton } from '../AddGIVTokenButton';
@@ -161,7 +158,7 @@ const BlowingContainer = styled.div`
 export const CongratulationsCard = () => {
 	const [streamValue, setStreamValue] = useState<string>('0');
 	const { tokenDistroHelper } = useTokenDistro();
-	const { totalAmount, resetWallet } = useUser();
+	const { totalAmount, resetWallet } = useClaim();
 	const { library } = useWeb3React();
 
 	useEffect(() => {

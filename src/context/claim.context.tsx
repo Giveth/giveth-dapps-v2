@@ -21,7 +21,7 @@ export enum GiveDropStateType {
 	Missed,
 	Claimed,
 }
-export interface IUserContext {
+export interface IClaimContext {
 	isloading: boolean;
 	totalAmount: BigNumber;
 	giveDropState: GiveDropStateType;
@@ -43,12 +43,12 @@ const initialValue = {
 	getClaimData: async () => {},
 	resetWallet: () => {},
 };
-export const UserContext = createContext<IUserContext>(initialValue);
+export const ClaimContext = createContext<IClaimContext>(initialValue);
 
 type Props = {
 	children?: ReactNode;
 };
-export const UserProvider: FC<Props> = ({ children }) => {
+export const ClaimProvider: FC<Props> = ({ children }) => {
 	const [step, setStep] = useState(0);
 	const [isloading, setIsLoading] = useState(false);
 	const [showModal, setShowModal] = useState<boolean>(false);
@@ -103,7 +103,7 @@ export const UserProvider: FC<Props> = ({ children }) => {
 	}, [account]);
 
 	return (
-		<UserContext.Provider
+		<ClaimContext.Provider
 			value={{
 				isloading,
 				totalAmount,
@@ -128,15 +128,15 @@ export const UserProvider: FC<Props> = ({ children }) => {
 					targetNetworks={[config.XDAI_NETWORK_NUMBER]}
 				/>
 			)}
-		</UserContext.Provider>
+		</ClaimContext.Provider>
 	);
 };
 
-export default function useUser() {
-	const context = useContext(UserContext);
+export default function useClaim() {
+	const context = useContext(ClaimContext);
 
 	if (!context) {
-		throw new Error('User context not found!');
+		throw new Error('Claim context not found!');
 	}
 
 	return context;

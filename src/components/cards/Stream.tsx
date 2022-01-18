@@ -1,24 +1,15 @@
-import { useState, ChangeEvent, FC, useContext, useEffect } from 'react';
+import { useState, FC, useContext, useEffect } from 'react';
 import Image from 'next/image';
-import { utils } from 'ethers';
 import styled from 'styled-components';
-import { InputWithUnit } from '../input';
 import { Row } from '../styled-components/Grid';
-import {
-	ArrowButton,
-	Card,
-	Header,
-	ICardProps,
-	MaxGIV,
-	PreviousArrowButton,
-} from './common';
-import { UserContext } from '../../context/user.context';
+import { ArrowButton, Card, PreviousArrowButton } from './common';
 import { IClaimViewCardProps } from '../views/claim/Claim.view';
 
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import { formatWeiHelper } from '@/helpers/number';
 import { DurationToString } from '@/lib/helpers';
 import { H2, Lead, H5 } from '@giveth/ui-design-system';
+import useClaim from '@/context/claim.context';
 
 const StreamCardContainer = styled(Card)`
 	::before {
@@ -103,8 +94,7 @@ const StreamPlaceholder = styled(Row)`
 `;
 
 export const StreamCard: FC<IClaimViewCardProps> = ({ index }) => {
-	const { totalAmount, step, goNextStep, goPreviousStep } =
-		useContext(UserContext);
+	const { totalAmount, step, goNextStep, goPreviousStep } = useClaim();
 	const [streamValue, setStreamValue] = useState<string>('0');
 	const [remain, setRemain] = useState('');
 

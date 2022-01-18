@@ -4,8 +4,8 @@ import { Button } from '../styled-components/Button';
 import { Row } from '../styled-components/Grid';
 import { Card, Header, PreviousArrowButton } from './common';
 import { IClaimViewCardProps } from '../views/claim/Claim.view';
-import useUser from '../../context/user.context';
-import config from '../../configuration';
+import useClaim from '@/context/claim.context';
+import config from '@/configuration';
 import { GIVdropHarvestModal } from '../modals/GIVdropHarvestModal';
 import type { TransactionResponse } from '@ethersproject/providers';
 import { H2, Lead } from '@giveth/ui-design-system';
@@ -61,7 +61,7 @@ const AddTokenRow = styled(Row)`
 `;
 
 const ClaimCard: FC<IClaimViewCardProps> = ({ index }) => {
-	const { totalAmount, step, goPreviousStep, goNextStep } = useUser();
+	const { totalAmount, step, goPreviousStep, goNextStep } = useClaim();
 	const { active, activate, chainId, library } = useWeb3React();
 
 	const [txStatus, setTxStatus] = useState<TransactionResponse | undefined>();

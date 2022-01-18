@@ -1,10 +1,10 @@
-import { FC, useContext } from 'react';
+import { FC } from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
 import { Button } from '../styled-components/Button';
 import { Row } from '../styled-components/Grid';
 import { ArrowButton, Card } from './common';
-import { UserContext, GiveDropStateType } from '../../context/user.context';
+import useClaim, { GiveDropStateType } from '../../context/claim.context';
 import { IClaimViewCardProps } from '../views/claim/Claim.view';
 import { formatWeiHelper } from '@/helpers/number';
 import {
@@ -218,7 +218,7 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 		setStep,
 		goNextStep,
 		getClaimData,
-	} = useContext(UserContext);
+	} = useClaim();
 
 	let title;
 	let desc;

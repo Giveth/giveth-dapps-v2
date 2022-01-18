@@ -1,5 +1,4 @@
-import { useState, ChangeEvent, FC, useContext, useEffect } from 'react';
-import Image from 'next/image';
+import { useState, FC, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { InputWithUnit } from '../input';
 import { Row } from '../styled-components/Grid';
@@ -7,11 +6,9 @@ import {
 	APRRow,
 	ArrowButton,
 	Card,
-	ICardProps,
 	ImpactCard,
 	ImpactCardInput,
 	ImpactCardLabel,
-	MaxGIV,
 	MaxStakeGIV,
 	PoolCard,
 	PoolCardContainer,
@@ -21,25 +18,21 @@ import {
 	PoolItems,
 	PreviousArrowButton,
 } from './common';
-import { IClaimViewCardProps } from '../views/claim/Claim.view';
-import { UserContext } from '../../context/user.context';
+import { IClaimViewCardProps } from '@/components/views/claim/Claim.view';
 import { utils, BigNumber as EthersBigNumber, constants } from 'ethers';
 import { useTokenDistro } from '@/context/tokenDistro.context';
-import { formatWeiHelper, Zero } from '../../helpers/number';
+import { formatWeiHelper, Zero } from '@/helpers/number';
 import BigNumber from 'bignumber.js';
 import {
 	Subline,
 	neutralColors,
 	IconHelp,
 	H2,
-	H4,
-	P,
-	Caption,
 	H5,
 	Lead,
-	H6,
 } from '@giveth/ui-design-system';
 import { IconWithTooltip } from '../IconWithToolTip';
+import useClaim from '@/context/claim.context';
 
 const DonatePoolCard = styled(PoolCard)`
 	height: 127px;
@@ -67,9 +60,10 @@ const DonateCardContainer = styled(Card)`
 	}
 	@media only screen and (max-width: 1360px) {
 		@media only screen and (max-width: 1120px) {
-		padding: 8px;
-		::before {
-			background-image: none;
+			padding: 8px;
+			::before {
+				background-image: none;
+			}
 		}
 	}
 `;
@@ -100,8 +94,7 @@ const Desc = styled(Lead)`
 `;
 
 export const DonateCard: FC<IClaimViewCardProps> = ({ index }) => {
-	const { totalAmount, step, goNextStep, goPreviousStep } =
-		useContext(UserContext);
+	const { totalAmount, step, goNextStep, goPreviousStep } = useClaim();
 
 	const [donation, setDonation] = useState<string>('0');
 	const [potentialClaim, setPotentialClaim] = useState<EthersBigNumber>(

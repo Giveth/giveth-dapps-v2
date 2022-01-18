@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import ClaimView from '@/components/views/claim/Claim.view';
-import { UserProvider } from '@/context/user.context';
+import { ClaimProvider } from '@/context/claim.context';
 import { Toaster } from 'react-hot-toast';
 import { useGeneral } from '@/context/general.context';
 import { useEffect } from 'react';
@@ -20,9 +20,9 @@ export default function GIVdropRoute() {
 			<Head>
 				<title>GIVdrop</title>
 			</Head>
-			<UserProvider>
+			<ClaimProvider>
 				<ClaimView />
-			</UserProvider>
+			</ClaimProvider>
 			<Toaster />
 		</>
 	);
