@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useWeb3React } from '@web3-react/core';
@@ -25,10 +25,12 @@ import WalletModal from '../modals/WalletModal';
 import { switchNetwork } from '@/lib/wallet';
 import { MenuContainer } from './Menu.sc';
 
-const MenuWallet = () => {
+interface IMenuWallet {
+	setShowWalletModal: Dispatch<SetStateAction<boolean>>;
+}
+
+const MenuWallet: FC<IMenuWallet> = ({ setShowWalletModal }) => {
 	const [isMounted, setIsMounted] = useState(false);
-	const [showModal, setShowModal] = useState(false);
-	const [isOpen, setIsOpen] = useState(false);
 	const [balance, setBalance] = useState<string | null>(null);
 	const { chainId, deactivate, account, library } = useWeb3React();
 	const {
@@ -54,53 +56,45 @@ const MenuWallet = () => {
 	}, []);
 
 	return (
-		<>
-			<WalletMenuContainer isMounted={isMounted}>
-				<Title>WALLET</Title>
-				<Subtitle>
-					<LeftSection>
-						{balance + ' '}
-						<span>{networkToken}</span>
-					</LeftSection>
-					<StyledButton
-						onClick={() => {
-							window.localStorage.removeItem('selectedWallet');
-							deactivate();
-							setShowModal(true);
-						}}
-					>
-						Change wallet
+		<WalletMenuContainer isMounted={isMounted}>
+			<Title>WALLET</Title>
+			<Subtitle>
+				<LeftSection>
+					{balance + ' '}
+					<span>{networkToken}</span>
+				</LeftSection>
+				<StyledButton
+					onClick={() => {
+						window.localStorage.removeItem('selectedWallet');
+						deactivate();
+						setShowWalletModal(true);
+					}}
+				>
+					Change wallet
+				</StyledButton>
+			</Subtitle>
+			<Title>NETWORK</Title>
+			<Subtitle>
+				<LeftSection>{networkName}</LeftSection>
+				{chainId && (
+					<StyledButton onClick={() => switchNetwork(chainId)}>
+						Switch network
 					</StyledButton>
-				</Subtitle>
-				<Title>NETWORK</Title>
-				<Subtitle>
-					<LeftSection>{networkName}</LeftSection>
-					{chainId && (
-						<StyledButton onClick={() => switchNetwork(chainId)}>
-							Switch network
-						</StyledButton>
-					)}
-				</Subtitle>
-				<Menus>
-					{walletMenuArray.map(i => (
-						<Link href={i.url} key={i.title} passHref>
-							<MenuItem>{i.title}</MenuItem>
-						</Link>
-					))}
-					{isSignedIn ? (
-						<MenuItem onClick={signOut}>Sign out</MenuItem>
-					) : (
-						<MenuItem onClick={signIn}>Sign in</MenuItem>
-					)}
-				</Menus>
-			</WalletMenuContainer>
-			{showModal && (
-				<WalletModal
-					showModal={showModal}
-					setShowModal={setShowModal}
-				/>
-			)}
-		</>
+				)}
+			</Subtitle>
+			<Menus>
+				{walletMenuArray.map(i => (
+					<Link href={i.url} key={i.title} passHref>
+						<MenuItem>{i.title}</MenuItem>
+					</Link>
+				))}
+				{isSignedIn ? (
+					<MenuItem onClick={signOut}>Sign out</MenuItem>
+				) : (
+					<MenuItem onClick={signIn}>Sign in</MenuItem>
+				)}
+			</Menus>
+		</WalletMenuContainer>
 	);
 };
 

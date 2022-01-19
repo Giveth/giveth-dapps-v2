@@ -227,7 +227,11 @@ const Header: FC<IHeader> = () => {
 									</HBContainer>
 									<CoverLine />
 								</WalletButton>
-								{showUserMenu && <MenuWallet />}
+								{showUserMenu && (
+									<MenuWallet
+										setShowWalletModal={setShowWalletModal}
+									/>
+								)}
 							</MenuAndButtonContainer>
 						</>
 					) : (
