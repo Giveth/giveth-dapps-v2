@@ -1,7 +1,7 @@
 import { FunctionComponent, ReactNode, useEffect, useState } from 'react'
 import Select, { components, OptionProps, OnChangeValue, StylesConfig } from 'react-select'
 import { defaultTheme } from 'react-select'
-import { neutralColors, P } from '@giveth/ui-design-system'
+import { neutralColors, P, B } from '@giveth/ui-design-system'
 import styled from 'styled-components'
 
 interface ISelectObj {
@@ -34,25 +34,31 @@ const ImageIcon = ({ ...props }: any) => {
   )
 }
 
-const Option = ({ children, ...props }: OptionProps<ISelectObj, false>) => {
+const Option = ({ ...props }: OptionProps<ISelectObj, false>) => {
   const value = props.data as any
   return (
     <components.Option {...props}>
-      <RowContainer>
-        <ImageIcon value={value} />
-        {children}
-      </RowContainer>
+      <OptionContainer>
+        <RowContainer>
+          <ImageIcon value={value} />
+          <B style={{ color: neutralColors.gray[900] }}>
+            {value.name} ({value.symbol})
+          </B>
+        </RowContainer>
+        {props.isSelected && <Img src='/images/checkmark.svg' width='10px' height='10px' />}
+      </OptionContainer>
     </components.Option>
   )
 }
 
 const selectStyles: StylesConfig<ISelectObj, false> = {
-  control: provided => ({
-    ...provided,
+  control: (base: any) => ({
+    ...base,
     minWidth: 240,
     margin: 8,
-    borderRadius: '8 !important',
-    border: '2px solid #EBECF2'
+    marginBottom: -3,
+    border: `2px solid ${neutralColors.gray[500]}`,
+    borderRadius: '8px !important'
   }),
   menu: () => ({
     borderRadius: 0,
@@ -87,6 +93,15 @@ const selectStyles: StylesConfig<ISelectObj, false> = {
     padding: '8px 16px',
     borderRadius: '8px',
     cursor: 'pointer'
+  }),
+  placeholder: (base: any) => ({
+    ...base,
+    color: neutralColors.gray[500],
+    fontSize: '12px'
+  }),
+  input: (base: any) => ({
+    ...base,
+    borderRadius: '8px !important'
   })
 }
 
@@ -95,8 +110,10 @@ const TokenPicker = (props: {
   onChange: any
   onInputChange: any
   inputValue: any
+  selectedToken: ISelectObj
+  placeholder: string
 }) => {
-  const { tokenList, onChange, onInputChange, inputValue } = props
+  const { tokenList, onChange, onInputChange, inputValue, selectedToken, placeholder } = props
 
   const [value, setValue] = useState<ISelectObj | null>()
   const [isOpen, setIsOpen] = useState(false)
@@ -111,8 +128,8 @@ const TokenPicker = (props: {
   }
 
   useEffect(() => {
-    setValue(tokenList![0])
-  }, [tokenList])
+    setValue(selectedToken)
+  }, [selectedToken])
 
   return (
     <Dropdown
@@ -121,7 +138,7 @@ const TokenPicker = (props: {
       target={
         <TargetContainer onClick={toggleOpen}>
           <TokenContainer>
-            {value && <ImageIcon value={value} />}
+            {value && <ImageIcon value={value} style={{ margin: '0 16px 0 4px' }} />}
             <P style={{ color: neutralColors.gray[900] }}>
               {value ? `${value.label}` : 'Select a token'}
             </P>
@@ -143,7 +160,7 @@ const TokenPicker = (props: {
           IndicatorSeparator: null,
           Option
         }}
-        inputValue={inputValue}
+        value={value}
         controlShouldRenderValue={false}
         hideSelectedOptions={false}
         isClearable={false}
@@ -154,6 +171,7 @@ const TokenPicker = (props: {
         placeholder='Search...'
         styles={selectStyles}
         tabSelectsValue={false}
+        placeholder={placeholder}
       />
     </Dropdown>
   )
@@ -233,6 +251,12 @@ const TargetContainer = styled.div`
 const RowContainer = styled.div`
   display: flex;
   flex-direction: row;
+`
+const OptionContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 `
 const TokenContainer = styled.div`
   display: flex;

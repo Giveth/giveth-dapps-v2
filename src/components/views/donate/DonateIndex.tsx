@@ -199,6 +199,11 @@ const Right = styled.div`
   padding: 65px 32px 32px;
   border-top-right-radius: 16px;
   border-bottom-right-radius: 16px;
+
+  h4 {
+    color: ${brandColors.deep[700]};
+    font-weight: bold;
+  }
 `
 const Title = styled(H6)`
   margin-left: 30.67px;

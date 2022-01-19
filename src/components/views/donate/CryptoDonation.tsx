@@ -10,7 +10,14 @@ import { FETCH_LISTED_TOKENS } from '../../../../src/apollo/gql/gqlEnums'
 import { Button } from '../../styled-components/Button'
 import { Caption, neutralColors, brandColors, GLink } from '@giveth/ui-design-system'
 import { IProject } from '../../../apollo/types/types'
-import { getERC20List, pollEvery, fetchPrices, fetchEthPrice, getERC20Info } from '../../../utils'
+import {
+  getERC20List,
+  pollEvery,
+  fetchPrices,
+  fetchEthPrice,
+  getERC20Info,
+  switchToXdai
+} from '../../../utils'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import tokenAbi from 'human-standard-token-abi'
@@ -287,10 +294,27 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
 
   return (
     <>
+      {networkId !== xdaiChain.id && (
+        <XDaiContainer>
+          <div>
+            <img src='/images/gas_station.svg' />
+            <Caption color={neutralColors.gray[900]}>
+              Save on gas fees, switch to xDAI network.
+            </Caption>
+            <Caption
+              style={{ color: brandColors.pinky[500], marginLeft: '5px' }}
+              onClick={switchToXdai}
+            >
+              Switch network
+            </Caption>
+          </div>
+        </XDaiContainer>
+      )}
       <SearchContainer>
         <DropdownContainer>
           <TokenPicker
             tokenList={erc20List}
+            selectedToken={selectedToken}
             inputValue={customInput}
             onChange={i => {
               // setSelectedToken(i || selectedToken)
@@ -329,6 +353,7 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
                 setErc20List([...erc20OriginalList])
               }
             }}
+            placeholder={isGivingBlockProject ? 'Search name' : 'Search name or paste an address'}
           />
         </DropdownContainer>
         <SearchBarContainer>
@@ -338,7 +363,7 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
       <AvText>
         {' '}
         Available:{' '}
-        {parseFloat(selectedTokenBalance).toLocaleString(
+        {parseFloat(selectedTokenBalance || 0).toLocaleString(
           'en-US',
           {
             minimumFractionDigits: 2,
@@ -347,20 +372,6 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
         )}{' '}
         {tokenSymbol}
       </AvText>
-      {networkId !== xdaiChain.id && (
-        <XDaiContainer>
-          <div>
-            <img src='/images/gas_station.svg' />
-            <Caption color={neutralColors.gray[900]}>
-              Save on gas fees, switch to xDAI network.
-            </Caption>
-          </div>
-          <Caption bold color={brandColors.giv[500]}>
-            Switch network
-          </Caption>
-        </XDaiContainer>
-      )}
-
       <ButtonContainer>
         <Button
           small
@@ -384,6 +395,7 @@ const IconContainer = styled.div`
   flex-direction: row;
 `
 const AvText = styled(GLink)`
+  color: ${brandColors.deep[500]};
   padding: 4px 0 0 5px;
 `
 const SearchContainer = styled.div`
@@ -404,14 +416,14 @@ const XDaiContainer = styled.div`
   display: flex;
   flex: row;
   justify-content: space-between;
-  background-color: ${brandColors.giv[200]};
-  padding: 8px 16px;
+  padding: 8px 16px 18.5px 16px;
   margin: 24px 0 0 0;
   cursor: pointer;
   border-radius: 8px;
   div:first-child {
     display: flex;
     flex-direction: row;
+    color: ${neutralColors.gray[800]};
     img {
       padding-right: 12px;
     }
