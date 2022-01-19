@@ -176,7 +176,7 @@ export const BalanceTooltip = styled(Subline)`
 	width: 120px;
 `;
 
-export const RewardMenuAndButtonContainer = styled.div`
+export const MenuAndButtonContainer = styled.div`
 	position: relative;
 	z-index: 2;
 `;
@@ -186,8 +186,7 @@ export const CoverLine = styled.div`
 	position: absolute;
 	z-index: 1;
 	height: 6px;
-	// width: 100%;
-	left: 0;
-	right: 0;
+	left: 1px;
+	right: 1px;
 	top: 40%;
 `;
