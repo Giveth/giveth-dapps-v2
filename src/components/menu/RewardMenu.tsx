@@ -7,10 +7,10 @@ import {
 	Caption,
 	IconHelp,
 } from '@giveth/ui-design-system';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Row } from '../styled-components/Grid';
-import { RewardMenuContainer } from './RewardMenu.sc';
+import { MenuContainer } from './Menu.sc';
 import Image from 'next/image';
 import { switchNetwork } from '@/lib/wallet';
 import config from '@/configuration';
@@ -102,7 +102,7 @@ export const RewardMenu = () => {
 	return (
 		<>
 			<RewardMenuContainer isMounted={isMounted}>
-				<Overline styleType='Small'>Network</Overline>
+				<Overline>Network</Overline>
 				<NetworkRow>
 					<B>{library?._network?.name}</B>
 					<SwithNetwork onClick={switchNetworkHandler}>
@@ -266,4 +266,8 @@ export const ArrowImage = styled(GLink)`
 const IconHelpWraper = styled.div`
 	cursor: pointer;
 	color: ${brandColors.giv[200]};
+`;
+
+const RewardMenuContainer = styled(MenuContainer)`
+	max-height: 380px;
 `;
