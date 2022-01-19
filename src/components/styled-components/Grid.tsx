@@ -44,3 +44,9 @@ export const Container = styled.div`
 		width: 1320px;
 	}
 `;
+
+export const FlexCenter = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+`;
