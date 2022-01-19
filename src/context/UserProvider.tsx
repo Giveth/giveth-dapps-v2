@@ -1,6 +1,6 @@
 import React, {
 	createContext,
-	ReactElement,
+	ReactNode,
 	useContext,
 	useEffect,
 	useState,
@@ -32,7 +32,7 @@ interface IUserContext {
 	};
 }
 
-export const UserContext = createContext<IUserContext>({
+const UserContext = createContext<IUserContext>({
 	state: {
 		user: {},
 		isEnabled: false,
@@ -46,7 +46,7 @@ export const UserContext = createContext<IUserContext>({
 
 const apolloClient = initializeApollo();
 
-const UserProvider = (props: { children: ReactElement }) => {
+export const UserProvider = (props: { children: ReactNode }) => {
 	const [user, setUser] = useState<IUserByAddress | undefined>();
 
 	useWallet();
