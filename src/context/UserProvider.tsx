@@ -6,6 +6,8 @@ import React, {
 	useState,
 } from 'react';
 import { useWeb3React } from '@web3-react/core';
+import { BigNumberish } from '@ethersproject/bignumber';
+import { formatEther } from '@ethersproject/units';
 
 import { initializeApollo } from '../apollo/apolloClient';
 import { GET_USER_BY_ADDRESS } from '../apollo/gql/gqlUser';
@@ -23,6 +25,7 @@ import useWallet from '@/hooks/walletHooks';
 interface IUserContext {
 	state: {
 		user?: IUserByAddress;
+		balance?: string | null;
 		isEnabled?: boolean;
 		isSignedIn?: boolean;
 	};
@@ -48,6 +51,7 @@ const apolloClient = initializeApollo();
 
 export const UserProvider = (props: { children: ReactNode }) => {
 	const [user, setUser] = useState<IUserByAddress | undefined>();
+	const [balance, setBalance] = useState<string | null>(null);
 
 	useWallet();
 	const context = useWeb3React();
@@ -147,6 +151,17 @@ export const UserProvider = (props: { children: ReactNode }) => {
 	// }
 
 	useEffect(() => {
+		if (!!account && !!library) {
+			library
+				.getBalance(account)
+				.then((_balance: BigNumberish) => {
+					setBalance(parseFloat(formatEther(_balance)).toFixed(3));
+				})
+				.catch(() => setBalance(null));
+		}
+	}, [account, library, chainId]);
+
+	useEffect(() => {
 		if (account) {
 			const _user = Auth.getUser();
 			if (compareAddresses(account, _user?.walletAddress || '')) {
@@ -175,6 +190,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 			value={{
 				state: {
 					user,
+					balance,
 					isEnabled,
 					isSignedIn,
 				},

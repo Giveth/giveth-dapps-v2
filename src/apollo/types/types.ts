@@ -26,6 +26,7 @@ export interface IProject {
 	totalDonations?: number;
 	totalProjectUpdates?: number;
 	traceCampaignId: string | null;
+	givingBlocksId?: string | null;
 }
 export interface IUser {
 	name?: string;
