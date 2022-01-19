@@ -7,9 +7,9 @@ import { BigNumberish } from '@ethersproject/bignumber';
 import defaultUserProfile from '/public//images/default_user_profile.png';
 import { Shadow } from '../styled-components/Shadow';
 import { FlexCenter } from '../styled-components/Grid';
-import Routes from '../../lib/constants/Routes';
-import { mediaQueries, shortenAddress } from '../../lib/helpers';
-import { networkInfo } from '../../lib/constants/NetworksObj';
+import Routes from '@/lib/constants/Routes';
+import { mediaQueries, shortenAddress } from '@/lib/helpers';
+import { networkInfo } from '@/lib/constants/NetworksObj';
 import useUser from '@/context/UserProvider';
 import links from '@/lib/constants/links';
 import {
@@ -23,19 +23,18 @@ import {
 import styled from 'styled-components';
 import WalletModal from '../modals/WalletModal';
 import { switchNetwork } from '@/lib/wallet';
+import { MenuContainer } from './Menu.sc';
 
 const MenuWallet = () => {
+	const [isMounted, setIsMounted] = useState(false);
 	const [showModal, setShowModal] = useState(false);
 	const [isOpen, setIsOpen] = useState(false);
 	const [balance, setBalance] = useState<string | null>(null);
-
+	const { chainId, deactivate, account, library } = useWeb3React();
 	const {
 		state: { user, isSignedIn },
 		actions: { signIn, signOut },
 	} = useUser();
-
-	const context = useWeb3React();
-	const { chainId, account, library } = context;
 
 	useEffect(() => {
 		if (!!account && !!library) {
@@ -50,41 +49,26 @@ const MenuWallet = () => {
 
 	const { networkName, networkToken } = networkInfo(chainId);
 
-	return (
-		<Wrapper
-			onMouseEnter={() => setIsOpen(true)}
-			onMouseLeave={() => setIsOpen(false)}
-		>
-			{showModal && (
-				<WalletModal
-					showModal={showModal}
-					setShowModal={setShowModal}
-				/>
-			)}
-			<WalletClosed
-				isOpen={isOpen}
-				onClick={() => setIsOpen(!isOpen)}
-				onMouseEnter={() => setIsOpen(true)}
-			>
-				<UserAvatar src={defaultUserProfile} />
-				<UserDetails>
-					<GLink size='Medium' color={brandColors.deep[800]}>
-						{user?.name || shortenAddress(account)}
-					</GLink>
-					<Overline color={brandColors.giv[800]}>
-						Connected to {networkName}
-					</Overline>
-				</UserDetails>
-			</WalletClosed>
+	useEffect(() => {
+		setIsMounted(true);
+	}, []);
 
-			<WalletOpened isOpen={isOpen} onMouseLeave={() => setIsOpen(false)}>
+	return (
+		<>
+			<WalletMenuContainer isMounted={isMounted}>
 				<Title>WALLET</Title>
 				<Subtitle>
 					<LeftSection>
 						{balance + ' '}
 						<span>{networkToken}</span>
 					</LeftSection>
-					<StyledButton onClick={() => setShowModal(true)}>
+					<StyledButton
+						onClick={() => {
+							window.localStorage.removeItem('selectedWallet');
+							deactivate();
+							setShowModal(true);
+						}}
+					>
 						Change wallet
 					</StyledButton>
 				</Subtitle>
@@ -109,8 +93,14 @@ const MenuWallet = () => {
 						<MenuItem onClick={signIn}>Sign in</MenuItem>
 					)}
 				</Menus>
-			</WalletOpened>
-		</Wrapper>
+			</WalletMenuContainer>
+			{showModal && (
+				<WalletModal
+					showModal={showModal}
+					setShowModal={setShowModal}
+				/>
+			)}
+		</>
 	);
 };
 
@@ -132,15 +122,13 @@ const Wrapper = styled.div`
 const MenuItem = styled.a`
 	height: 45px;
 	line-height: 45px;
-	border-top: 2px solid ${neutralColors.gray[300]};
-	color: ${brandColors.deep[800]};
 	padding: 0 16px;
 	font-size: 14px;
 	cursor: pointer;
-
-	:hover {
-		background: ${neutralColors.gray[200]};
-		color: ${brandColors.pinky[500]} !important;
+	border-top: 2px solid ${brandColors.giv[300]};
+	color: ${neutralColors.gray[100]};
+	&:hover {
+		background: ${brandColors.giv[700]};
 	}
 `;
 
@@ -149,7 +137,7 @@ const Menus = styled.div`
 	flex-direction: column;
 	margin-top: 15px;
 	padding: 0 !important;
-	border-bottom: 2px solid ${neutralColors.gray[300]};
+	/* border-bottom: 2px solid ${brandColors.giv[300]}; */
 `;
 
 const UserAvatar = styled(Image)`
@@ -224,10 +212,14 @@ const Subtitle = styled(Overline)`
 `;
 
 const Title = styled(Overline)`
-	color: ${neutralColors.gray[800]};
+	/* color: ${neutralColors.gray[800]}; */
 	text-transform: uppercase;
-	font-weight: 500;
+	/* font-weight: 500; */
 	margin-bottom: 2px;
+`;
+
+const WalletMenuContainer = styled(MenuContainer)`
+	max-height: 470px;
 `;
 
 export default MenuWallet;
