@@ -17,6 +17,8 @@ export interface IGeneralContext {
 	setTheme: Dispatch<SetStateAction<Theme>>;
 	showHeader: boolean;
 	setShowHeader: Dispatch<SetStateAction<boolean>>;
+	showFooter: boolean;
+	setShowFooter: Dispatch<SetStateAction<boolean>>;
 }
 
 export const GeneralContext = createContext<IGeneralContext>({
@@ -24,11 +26,14 @@ export const GeneralContext = createContext<IGeneralContext>({
 	setTheme: theme => {},
 	showHeader: true,
 	setShowHeader: showHeader => {},
+	showFooter: true,
+	setShowFooter: showFooter => {},
 });
 
 export const GeneralProvider: FC = ({ children }) => {
 	const [theme, setTheme] = useState<Theme>(Theme.Light);
 	const [showHeader, setShowHeader] = useState(true);
+	const [showFooter, setShowFooter] = useState(true);
 
 	return (
 		<GeneralContext.Provider
@@ -37,6 +42,8 @@ export const GeneralProvider: FC = ({ children }) => {
 				setTheme,
 				showHeader,
 				setShowHeader,
+				showFooter,
+				setShowFooter,
 			}}
 		>
 			{children}
