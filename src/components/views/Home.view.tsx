@@ -1,4 +1,3 @@
-import { Footer } from '../Footer';
 import { TabOverviewTop, TabOverviewBottom } from '../homeTabs/Overview';
 
 import Tabs from '../Tabs';
@@ -9,7 +8,6 @@ function HomeView() {
 			<TabOverviewTop />
 			<Tabs />
 			<TabOverviewBottom />
-			<Footer />
 		</>
 	);
 }

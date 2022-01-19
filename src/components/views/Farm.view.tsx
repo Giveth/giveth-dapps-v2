@@ -1,4 +1,3 @@
-import { Footer } from '../Footer';
 import { TabGIVfarmTop, TabGIVfarmBottom } from '../homeTabs/GIVfarm';
 
 import Tabs from '../Tabs';
@@ -9,7 +8,6 @@ function GIVfarmView() {
 			<TabGIVfarmTop />
 			<Tabs />
 			<TabGIVfarmBottom />
-			<Footer />
 		</>
 	);
 }

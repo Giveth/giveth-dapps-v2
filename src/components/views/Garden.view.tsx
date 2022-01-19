@@ -1,4 +1,3 @@
-import { Footer } from '../Footer';
 import { TabGardenTop, TabGardenBottom } from '../homeTabs/GIVgarden';
 
 import Tabs from '../Tabs';
@@ -9,7 +8,6 @@ function GIVgardenView() {
 			<TabGardenTop />
 			<Tabs />
 			<TabGardenBottom />
-			<Footer />
 		</>
 	);
 }
