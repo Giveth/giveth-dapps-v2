@@ -203,7 +203,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	};
 
 	const calcUSD = (amount: string) => {
-		return price.times(amount).toFixed(2);
+		return price.isNaN() ? '0' : price.times(amount).toFixed(2);
 	};
 
 	return (

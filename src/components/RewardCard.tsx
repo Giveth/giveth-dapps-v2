@@ -55,6 +55,8 @@ export const RewardCard: FC<IRewardCardProps> = ({
 		useState(false);
 	const { price } = usePrice();
 	useEffect(() => {
+		if (price.isNaN()) return;
+
 		const usd = (+ethers.utils.formatEther(
 			price.times(liquidAmount.toString()).toFixed(0),
 		)).toFixed(2);
