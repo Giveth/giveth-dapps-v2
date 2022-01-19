@@ -15,9 +15,10 @@ import Head from 'next/head';
 import { PriceProvider } from '@/context/price.context';
 import { ExternalProvider, Web3Provider } from '@ethersproject/providers';
 import { GeneralProvider } from '@/context/general.context';
-import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
 import { useApollo } from '@/apollo/apolloClient';
 import { UserProvider } from '@/context/UserProvider';
+import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
+import { FooterWrapper } from '@/components/Footer/FooterWrapper';
 
 function getLibrary(provider: ExternalProvider) {
 	return new Web3Provider(provider);
@@ -58,22 +59,21 @@ function MyApp({ Component, pageProps }: AppProps) {
 								<NftsProvider>
 									<PriceProvider>
 										<FarmProvider>
-											<ThemeProvider>
-												<UserProvider>
-													<HeaderWrapper />
-													<Component {...pageProps} />
-													{showMobileModal && (
-														<MobileModal
-															showModal={
-																showMobileModal
-															}
-															setShowModal={
-																setShowMobileModal
-															}
-														/>
-													)}
-												</UserProvider>
-											</ThemeProvider>
+											<UserProvider>
+												<HeaderWrapper />
+												<Component {...pageProps} />
+												<FooterWrapper />
+												{showMobileModal && (
+													<MobileModal
+														showModal={
+															showMobileModal
+														}
+														setShowModal={
+															setShowMobileModal
+														}
+													/>
+												)}
+											</UserProvider>
 										</FarmProvider>
 									</PriceProvider>
 								</NftsProvider>
