@@ -1,4 +1,3 @@
-import React from 'react';
 import Link from 'next/link';
 import { Row } from '../styled-components/Grid';
 import router from 'next/router';

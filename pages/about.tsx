@@ -1,4 +1,3 @@
-import React from 'react';
 import Head from 'next/head';
 import AboutIndex from '@/components/views/about/AboutIndex';
 

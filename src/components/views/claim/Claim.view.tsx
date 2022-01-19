@@ -1,15 +1,15 @@
-import React, { FC, useContext } from 'react';
+import React, { FC } from 'react';
 import config from '@/configuration';
 import styled from 'styled-components';
-import { CongratulationsCard } from '../../cards/Congratulations';
-import ClaimCard from '../../cards/Claim';
-import { ConnectCard } from '../../cards/Connect';
-import { DonateCard } from '../../cards/Donate';
-import { StreamCard } from '../../cards/Stream';
-import GovernCard from '../../cards/Govern';
-import InvestCard from '../../cards/Stake';
-import { Row } from '../../styled-components/Grid';
-import { GiveDropStateType, UserContext } from '@/context/user.context';
+import { CongratulationsCard } from '@/components/cards/Congratulations';
+import ClaimCard from '@/components/cards/Claim';
+import { ConnectCard } from '@/components/cards/Connect';
+import { DonateCard } from '@/components/cards/Donate';
+import { StreamCard } from '@/components/cards/Stream';
+import GovernCard from '@/components/cards/Govern';
+import InvestCard from '@/components/cards/Stake';
+import { Row } from '@/components/styled-components/Grid';
+import useClaim, { GiveDropStateType } from '@/context/claim.context';
 import { useWeb3React } from '@web3-react/core';
 
 const stepsTitle = ['Connect', 'Donate', 'Govern', 'Stake', 'Stream', 'Claim'];
@@ -112,7 +112,7 @@ export interface IClaimViewCardProps {
 }
 
 const ClaimView = () => {
-	const { giveDropState, step, setStep } = useContext(UserContext);
+	const { giveDropState, step, setStep } = useClaim();
 	const { chainId } = useWeb3React();
 
 	return (

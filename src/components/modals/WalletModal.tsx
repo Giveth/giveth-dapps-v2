@@ -1,7 +1,5 @@
-import React from 'react';
 import Image from 'next/image';
 import { useWeb3React } from '@web3-react/core';
-
 import {
 	useWalletName,
 	EWallets,

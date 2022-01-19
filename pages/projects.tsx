@@ -1,4 +1,3 @@
-import React from 'react';
 import Head from 'next/head';
 import { addApolloState, initializeApollo } from '@/apollo/apolloClient';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';

@@ -1,4 +1,3 @@
-import React from 'react';
 import Head from 'next/head';
 import HomeIndex from '@/components/views/homepage/HomeIndex';
 import { client } from '@/apollo/apolloClient';

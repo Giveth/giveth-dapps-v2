@@ -1,4 +1,3 @@
-import React from 'react';
 import toast from 'react-hot-toast';
 import config from '@/configuration';
 import { networksParams } from '@/helpers/blockchain';

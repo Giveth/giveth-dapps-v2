@@ -1,4 +1,3 @@
-import React from 'react';
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { IProjectBySlug } from '@/apollo/types/types';

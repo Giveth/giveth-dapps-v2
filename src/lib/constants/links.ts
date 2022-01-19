@@ -5,7 +5,7 @@ const links = {
 	ASK_QUESTION: 'https://giveth.typeform.com/question',
 	FEATURE_REQUEST: 'https://giveth.typeform.com/featurerequest',
 	FEEDBACK: 'https://giveth.typeform.com/feedback',
-	GIVECONOMY: 'https://giv.giveth.io/',
+	GIVECONOMY: '/giveconomy',
 	DISCORD: 'https://discord.gg/Uq2TaXP9bC',
 	DISCOURSE: 'https://forum.giveth.io/',
 	GITHUB: 'https://github.com/Giveth/',
