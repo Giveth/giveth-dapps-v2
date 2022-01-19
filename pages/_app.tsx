@@ -6,6 +6,7 @@ import { ThemeProvider } from '@/context/theme.context';
 import { FarmProvider } from '@/context/farm.context';
 import { NftsProvider } from '@/context/positions.context';
 import { TokenDistroProvider } from '@/context/tokenDistro.context';
+import { ApolloProvider } from '@apollo/client';
 
 import { MobileModal } from '@/components/modals/Mobile';
 import { useEffect, useState } from 'react';
@@ -15,6 +16,8 @@ import { PriceProvider } from '@/context/price.context';
 import { ExternalProvider, Web3Provider } from '@ethersproject/providers';
 import { GeneralProvider } from '@/context/general.context';
 import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
+import { useApollo } from '@/apollo/apolloClient';
+import { UserProvider } from '@/context/UserProvider';
 
 function getLibrary(provider: ExternalProvider) {
 	return new Web3Provider(provider);
@@ -23,6 +26,7 @@ function getLibrary(provider: ExternalProvider) {
 function MyApp({ Component, pageProps }: AppProps) {
 	const [showMobileModal, setShowMobileModal] = useState(false);
 	const [viewPort, setViewPort] = useState(false);
+	const apolloClient = useApollo(pageProps);
 
 	useEffect(() => {
 		const windowResizeHandler = () => {
@@ -47,30 +51,36 @@ function MyApp({ Component, pageProps }: AppProps) {
 				{viewPort && <meta name='viewport' content='width=768' />}
 			</Head>
 			<GeneralProvider>
-				<Web3ReactProvider getLibrary={getLibrary}>
-					<SubgraphProvider>
-						<TokenDistroProvider>
-							<NftsProvider>
-								<PriceProvider>
-									<FarmProvider>
-										<ThemeProvider>
-											<HeaderWrapper />
-											<Component {...pageProps} />
-											{showMobileModal && (
-												<MobileModal
-													showModal={showMobileModal}
-													setShowModal={
-														setShowMobileModal
-													}
-												/>
-											)}
-										</ThemeProvider>
-									</FarmProvider>
-								</PriceProvider>
-							</NftsProvider>
-						</TokenDistroProvider>
-					</SubgraphProvider>
-				</Web3ReactProvider>
+				<ApolloProvider client={apolloClient}>
+					<Web3ReactProvider getLibrary={getLibrary}>
+						<SubgraphProvider>
+							<TokenDistroProvider>
+								<NftsProvider>
+									<PriceProvider>
+										<FarmProvider>
+											<ThemeProvider>
+												<UserProvider>
+													<HeaderWrapper />
+													<Component {...pageProps} />
+													{showMobileModal && (
+														<MobileModal
+															showModal={
+																showMobileModal
+															}
+															setShowModal={
+																setShowMobileModal
+															}
+														/>
+													)}
+												</UserProvider>
+											</ThemeProvider>
+										</FarmProvider>
+									</PriceProvider>
+								</NftsProvider>
+							</TokenDistroProvider>
+						</SubgraphProvider>
+					</Web3ReactProvider>
+				</ApolloProvider>
 			</GeneralProvider>
 		</>
 	);
