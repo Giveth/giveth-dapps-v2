@@ -1,4 +1,10 @@
-import React, { createContext, ReactElement, useEffect, useState } from 'react';
+import React, {
+	createContext,
+	ReactElement,
+	useContext,
+	useEffect,
+	useState,
+} from 'react';
 import { useWeb3React } from '@web3-react/core';
 
 import { initializeApollo } from '../apollo/apolloClient';
@@ -26,8 +32,17 @@ interface IUserContext {
 	};
 }
 
-const Context = createContext<IUserContext>({ state: {}, actions: {} });
-const { Provider } = Context;
+export const UserContext = createContext<IUserContext>({
+	state: {
+		user: {},
+		isEnabled: false,
+		isSignedIn: false,
+	},
+	actions: {
+		signIn: async () => false,
+		signOut: () => {},
+	},
+});
 
 const apolloClient = initializeApollo();
 
@@ -156,7 +171,7 @@ const UserProvider = (props: { children: ReactElement }) => {
 	}, [account]);
 
 	return (
-		<Provider
+		<UserContext.Provider
 			value={{
 				state: {
 					user,
@@ -174,9 +189,16 @@ const UserProvider = (props: { children: ReactElement }) => {
 			}}
 		>
 			{props.children}
-		</Provider>
+		</UserContext.Provider>
 	);
 };
 
-export { Context };
-export default UserProvider;
+export default function useUser() {
+	const context = useContext(UserContext);
+
+	if (!context) {
+		throw new Error('Claim context not found!');
+	}
+
+	return context;
+}
