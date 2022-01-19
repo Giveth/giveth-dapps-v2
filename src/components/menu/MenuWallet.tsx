@@ -4,16 +4,14 @@ import Link from 'next/link';
 import { useWeb3React } from '@web3-react/core';
 import { formatEther } from '@ethersproject/units';
 import { BigNumberish } from '@ethersproject/bignumber';
-import defaultUserProfile from '/public//images/default_user_profile.png';
 import { Shadow } from '../styled-components/Shadow';
 import { FlexCenter } from '../styled-components/Grid';
 import Routes from '@/lib/constants/Routes';
-import { mediaQueries, shortenAddress } from '@/lib/helpers';
+import { mediaQueries } from '@/lib/helpers';
 import { networkInfo } from '@/lib/constants/NetworksObj';
 import useUser from '@/context/UserProvider';
 import links from '@/lib/constants/links';
 import {
-	GLink,
 	brandColors,
 	neutralColors,
 	Subline,
@@ -21,7 +19,6 @@ import {
 	Overline,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import WalletModal from '../modals/WalletModal';
 import { switchNetwork } from '@/lib/wallet';
 import { MenuContainer } from './Menu.sc';
 
