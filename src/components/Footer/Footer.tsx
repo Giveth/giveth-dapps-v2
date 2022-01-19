@@ -13,7 +13,7 @@ import {
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import styled from 'styled-components';
-import { Row } from './styled-components/Grid';
+import { Row } from '@/components/styled-components/Grid';
 
 export const Footer = () => {
 	return (
