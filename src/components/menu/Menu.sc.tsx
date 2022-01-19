@@ -5,7 +5,7 @@ interface isMounted {
 	isMounted: boolean;
 }
 
-export const RewardMenuContainer = styled.div<isMounted>`
+export const MenuContainer = styled.div<isMounted>`
 	position: absolute;
 	top: 40%;
 	right: 0;
@@ -15,7 +15,7 @@ export const RewardMenuContainer = styled.div<isMounted>`
 	border-radius: 10px 0 10px 10px;
 	padding: ${props => (props.isMounted ? '38px 12px' : '12px')};
 	z-index: 0;
-	height: ${props => (props.isMounted ? '400px' : '0px')};
+	height: ${props => (props.isMounted ? '70vh' : '0px')};
 	overflow: hidden;
 	transition: height 0.3s ease, padding 0.3s ease;
 `;
