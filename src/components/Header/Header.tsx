@@ -20,7 +20,7 @@ import {
 	CreateProject,
 	SmallCreateProject,
 	Logo,
-	RewardMenuAndButtonContainer,
+	MenuAndButtonContainer,
 	CoverLine,
 	SmallHeaderLinks,
 	HeaderPlaceholder,
@@ -32,6 +32,8 @@ import { useWeb3React } from '@web3-react/core';
 import WalletModal from '@/components/modals/WalletModal';
 import { walletsArray } from '@/lib/wallet/walletTypes';
 import links from '@/lib/constants/links';
+import SignInModal from '../SignInModal';
+import MenuWallet from '@/components/menu/MenuWallet';
 
 export interface IHeader {
 	theme?: ThemeType;
@@ -40,14 +42,15 @@ export interface IHeader {
 
 const Header: FC<IHeader> = () => {
 	const [showRewardMenu, setShowRewardMenu] = useState(false);
+	const [showUserMenu, setShowUserMenu] = useState(false);
 	const [showHeader, setShowHeader] = useState(true);
 	const [showWalletModal, setShowWalletModal] = useState(false);
+	const [showSigninModal, setShowSigninModal] = useState(false);
 	const { theme } = useContext(ThemeContext);
 	const {
 		currentValues: { balances },
 	} = useSubgraph();
-	const { chainId, active, activate, deactivate, account, library } =
-		useWeb3React();
+	const { chainId, active, activate, account, library } = useWeb3React();
 
 	const handleHoverClickBalance = (show: boolean) => {
 		setShowRewardMenu(show);
@@ -155,7 +158,7 @@ const Header: FC<IHeader> = () => {
 					/>
 					{active && account && chainId ? (
 						<>
-							<RewardMenuAndButtonContainer
+							<MenuAndButtonContainer
 								onClick={() => handleHoverClickBalance(true)}
 								onMouseEnter={() =>
 									handleHoverClickBalance(true)
@@ -179,42 +182,53 @@ const Header: FC<IHeader> = () => {
 									<CoverLine />
 								</BalanceButton>
 								{showRewardMenu && <RewardMenu />}
-							</RewardMenuAndButtonContainer>
-							<WalletButton
-								outline
-								onClick={() => {
-									window.localStorage.removeItem(
-										'selectedWallet',
-									);
-									deactivate();
-									setShowWalletModal(true);
-								}}
+							</MenuAndButtonContainer>
+							<MenuAndButtonContainer
+								onClick={() => setShowUserMenu(true)}
+								onMouseEnter={() => setShowUserMenu(true)}
+								onMouseLeave={() => setShowUserMenu(false)}
 							>
-								<HBContainer>
-									<HBPic
-										src={'/images/placeholders/profile.png'}
-										alt='Profile Pic'
-										width={'24px'}
-										height={'24px'}
-									/>
-									<WBInfo>
-										<span>{`${account.substring(
-											0,
-											6,
-										)}...${account.substring(
-											account.length - 5,
-											account.length,
-										)}`}</span>
-										<WBNetwork>
-											Connected to{' '}
-											{networksParams[chainId]
-												? networksParams[chainId]
-														.nativeCurrency.symbol
-												: library?._network?.name}
-										</WBNetwork>
-									</WBInfo>
-								</HBContainer>
-							</WalletButton>
+								<WalletButton
+									outline
+									onClick={() => {
+										// window.localStorage.removeItem(
+										// 	'selectedWallet',
+										// );
+										// deactivate();
+										// setShowWalletModal(true);
+									}}
+								>
+									<HBContainer>
+										<HBPic
+											src={
+												'/images/placeholders/profile.png'
+											}
+											alt='Profile Pic'
+											width={'24px'}
+											height={'24px'}
+										/>
+										<WBInfo>
+											<span>{`${account.substring(
+												0,
+												6,
+											)}...${account.substring(
+												account.length - 5,
+												account.length,
+											)}`}</span>
+											<WBNetwork>
+												Connected to{' '}
+												{networksParams[chainId]
+													? networksParams[chainId]
+															.nativeCurrency
+															.symbol
+													: library?._network?.name}
+											</WBNetwork>
+										</WBInfo>
+									</HBContainer>
+									<CoverLine />
+								</WalletButton>
+								{showUserMenu && <MenuWallet />}
+							</MenuAndButtonContainer>
 						</>
 					) : (
 						<div>
@@ -233,6 +247,12 @@ const Header: FC<IHeader> = () => {
 				<WalletModal
 					showModal={showWalletModal}
 					setShowModal={setShowWalletModal}
+				/>
+			)}
+			{showSigninModal && (
+				<SignInModal
+					showModal={showSigninModal}
+					closeModal={() => setShowSigninModal(false)}
 				/>
 			)}
 		</>
