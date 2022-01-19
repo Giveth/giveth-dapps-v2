@@ -31,6 +31,7 @@ import { RewardMenu } from '@/components/menu/RewardMenu';
 import { useWeb3React } from '@web3-react/core';
 import WalletModal from '@/components/modals/WalletModal';
 import { walletsArray } from '@/lib/wallet/walletTypes';
+import links from '@/lib/constants/links';
 
 export interface IHeader {
 	theme?: ThemeType;
@@ -120,30 +121,28 @@ const Header: FC<IHeader> = () => {
 					</SmallHeaderLinks>
 				</Row>
 				<HeaderLinks>
-					<HeaderLink size='Big' href='https://giveth.io/'>
-						Home
-					</HeaderLink>
-					<HeaderLink size='Big' href='https://giveth.io/projects'>
+					<Link href='/' passHref>
+						<HeaderLink size='Big'>Home</HeaderLink>
+					</Link>
+					<HeaderLink size='Big' href='/projects'>
 						Projects
 					</HeaderLink>
-					<Link href='/' passHref>
-						<HeaderLink size='Big' active>
-							GIVeconomy
-						</HeaderLink>
+					<Link href={links.GIVECONOMY} passHref>
+						<HeaderLink size='Big'>GIVeconomy</HeaderLink>
 					</Link>
-					<HeaderLink size='Big' href='https://giveth.io/join'>
-						Community
-					</HeaderLink>
+					<Link href='/join' passHref>
+						<HeaderLink size='Big'>Community</HeaderLink>
+					</Link>
 				</HeaderLinks>
 				<Row gap='8px'>
 					<CreateProject
 						label='CREATE A PROJECT'
-						href='https://giveth.io/create'
+						href='/create'
 						target='_blank'
 					/>
 					<SmallCreateProject
 						label=''
-						href='https://giveth.io/create'
+						href='/create'
 						target='_blank'
 						icon={
 							<Image
