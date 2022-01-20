@@ -6070,6 +6070,11 @@ react-lifecycles-compat@^3.0.0:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
+react-loader-spinner@^5.0.10:
+  version "5.0.10"
+  resolved "https://registry.yarnpkg.com/react-loader-spinner/-/react-loader-spinner-5.0.10.tgz#7a95e1485a22ae9663dfa0c740744ad4520dd2d6"
+  integrity sha512-wYYs3/8NQFHOFGvvcpaPJCHxjDCuk1pAEG3ziuNoQwH6hxBbIZiQLrfkXlrLKNtnu9vBeeDZp8PljMAduGT5Mg==
+
 react-lottie@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/react-lottie/-/react-lottie-1.2.3.tgz#8544b96939e088658072eea5e12d912cdaa3acc1"

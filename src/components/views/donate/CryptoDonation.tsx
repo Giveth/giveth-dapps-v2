@@ -10,6 +10,7 @@ import { FETCH_LISTED_TOKENS } from '../../../../src/apollo/gql/gqlEnums'
 import { Button } from '../../styled-components/Button'
 import { Caption, neutralColors, brandColors, GLink } from '@giveth/ui-design-system'
 import WalletModal from '@/components/modals/WalletModal'
+import DonateModal from '@/components/modals/DonateModal'
 import { IProject } from '../../../apollo/types/types'
 import {
   getERC20List,
@@ -116,6 +117,7 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
   const [selectLoading, setSelectLoading] = useState(false)
   const [givBackEligible, setGivBackEligible] = useState(true)
   const [showWalletModal, setShowWalletModal] = useState(false)
+  const [showDonateModal, setShowDonateModal] = useState(false)
   const switchTraceable = false
   const donateToGiveth = false
 
@@ -298,6 +300,16 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
       {showWalletModal && (
         <WalletModal showModal={showWalletModal} setShowModal={setShowWalletModal} />
       )}
+      {showDonateModal && selectedToken && amountTyped && (
+        <DonateModal
+          showModal={showDonateModal}
+          setShowModal={setShowDonateModal}
+          project={project}
+          token={selectedToken}
+          amount={parseFloat(amountTyped)}
+          price={tokenPrice}
+        />
+      )}
       {networkId !== xdaiChain.id && (
         <XDaiContainer>
           <div>
@@ -361,7 +373,13 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
           />
         </DropdownContainer>
         <SearchBarContainer>
-          <InputBox onChange={() => null} placeholder='Amount' />
+          <InputBox
+            onChange={a => {
+              setShowDonateModal(false)
+              setAmountTyped(a)
+            }}
+            placeholder='Amount'
+          />
         </SearchBarContainer>
       </SearchContainer>
       <AvText>
@@ -382,7 +400,7 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
             small
             background={brandColors.giv[500]}
             width='100%'
-            // onClick={() => setSuccessDonation(true)}
+            onClick={() => setShowDonateModal(true)}
           >
             DONATE
           </Button>
