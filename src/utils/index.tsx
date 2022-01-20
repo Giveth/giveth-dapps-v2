@@ -31,9 +31,9 @@ export function pollEvery(fn: Function, delay: any) {
 export async function getERC20Info({ library, tokenAbi, contractAddress, chainId }) {
   try {
     const instance = new Contract(contractAddress, tokenAbi, library)
-    const name = await instance.methods.name().call()
-    const symbol = await instance.methods.symbol().call()
-    const decimals = await instance.methods.decimals().call()
+    const name = await instance.name()
+    const symbol = await instance.symbol()
+    const decimals = await instance.decimals()
     const ERC20Info = {
       name,
       symbol,
@@ -45,6 +45,8 @@ export async function getERC20Info({ library, tokenAbi, contractAddress, chainId
         symbol
       }
     }
+    console.log({ ERC20Info })
+
     return ERC20Info
   } catch (error) {
     console.log({ error })

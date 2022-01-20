@@ -55,6 +55,7 @@ const selectStyles: StylesConfig<ISelectObj, false> = {
   control: (base: any) => ({
     ...base,
     minWidth: 240,
+    maxWidth: '280px',
     margin: 8,
     marginBottom: -3,
     border: `2px solid ${neutralColors.gray[500]}`,
@@ -109,7 +110,7 @@ const TokenPicker = (props: {
   tokenList: ISelectObj[] | undefined
   onChange: any
   onInputChange: any
-  inputValue: any
+  inputValue?: any
   selectedToken: ISelectObj
   placeholder: string
 }) => {
@@ -161,6 +162,7 @@ const TokenPicker = (props: {
           Option
         }}
         value={value}
+        inputValue={inputValue}
         controlShouldRenderValue={false}
         hideSelectedOptions={false}
         isClearable={false}

@@ -116,6 +116,7 @@ const DonateButton = styled(Button)`
   * {
     margin: auto 0;
     padding: 0 8px 0 0;
+    font-weight: bold;
   }
 `
 
