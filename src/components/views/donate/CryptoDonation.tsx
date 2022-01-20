@@ -42,6 +42,7 @@ interface ISelectObj {
   symbol?: string
   icon?: string
   address?: string
+  ethereumAddress?: string
 }
 
 interface IToken {
@@ -92,7 +93,6 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
     state: { isEnabled, user, balance },
     actions: { signIn }
   } = userContext
-
   const { project, setSuccessDonation } = props
   const { data: tokensList } = useQuery(FETCH_LISTED_TOKENS)
 
@@ -109,8 +109,8 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
   const [unconfirmed, setUnconfirmed] = useState(false)
   const [geminiModal, setGeminiModal] = useState(false)
   const [txHash, setTxHash] = useState(null)
-  const [erc20List, setErc20List] = useState([])
-  const [erc20OriginalList, setErc20OriginalList] = useState([])
+  const [erc20List, setErc20List] = useState<ISelectObj[]>()
+  const [erc20OriginalList, setErc20OriginalList] = useState<ISelectObj[]>()
   const [modalIsOpen, setIsOpen] = useState(false)
   const [icon, setIcon] = useState(null)
   const [anonymous, setAnonymous] = useState(false)
@@ -127,7 +127,7 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
   const isGivingBlockProject = project?.givingBlocksId
 
   const stopPolling = useRef()
-
+  console.log({ txHash })
   // Fetches initial main token price
   useEffect(() => {
     fetchEthPrice(setMainTokenPrice).then(setMainTokenPrice)
@@ -139,9 +139,9 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
       let netId = networkId as Number | string
       if (isGivingBlockProject) netId = 'thegivingblock'
       if (isGivingBlockProject && networkId === 3) netId = 'ropsten_thegivingblock'
-      let givIndex
+      let givIndex: number | undefined
       const erc20List = getERC20List(netId).tokens
-      const tokens = erc20List.map((token, index) => {
+      const tokens = erc20List.map((token: any, index) => {
         token.value = token
         token.label = token.symbol
         if (token.symbol === 'GIV' || token.symbol === 'TestGIV' || token.name === 'Giveth') {
@@ -149,8 +149,8 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
         }
         return token
       })
-      const givToken = erc20List[givIndex]
-      if (givToken) {
+      const givToken = givIndex && erc20List[givIndex]
+      if (givToken && givIndex) {
         tokens.splice(givIndex, 1)
       }
       tokens?.sort((a, b) => {
@@ -185,7 +185,7 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
       setTokenPrice(1)
     } else if (selectedToken?.address && selectedToken.address) {
       let chain = xdaiChain.name
-      let tokenAddress = selectedToken.address
+      let tokenAddress: string | undefined = selectedToken.address
       if (isXdai) {
         // coingecko doesn't have these tokens in xdai, so fetching price from ethereum
         if (xdaiExcluded.includes(selectedToken.symbol)) {
@@ -221,7 +221,7 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
     }
   }
 
-  const buildTokensObj = (array: IToken[], chain: number) => {
+  const buildTokensObj = (array: IToken[], chain: number | undefined) => {
     const newArray = [tokensList]
     array.forEach(e => {
       if (e.chainId !== chain) return
@@ -306,8 +306,13 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
           setShowModal={setShowDonateModal}
           project={project}
           token={selectedToken}
+          userTokenBalance={selectedTokenBalance}
           amount={parseFloat(amountTyped)}
           price={tokenPrice}
+          setTxHash={setTxHash}
+          setInProgress={setInProgress}
+          setUnconfirmed={setUnconfirmed}
+          givBackEligible={givBackEligible}
         />
       )}
       {networkId !== xdaiChain.id && (

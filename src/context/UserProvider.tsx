@@ -113,7 +113,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
       await apolloClient.resetStore()
       setUser(localUser)
     }
-    return true
+    return token
   }
 
   const signOut = () => {

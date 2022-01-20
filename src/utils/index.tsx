@@ -4,9 +4,10 @@ import fetch from 'isomorphic-fetch'
 // import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
 import ERC20List from './erc20TokenList'
 import { Contract } from '@ethersproject/contracts'
+import config from '../../config'
 
 const xDaiChainId = 100
-const appNetworkId = process.env.NEXT_PUBLIC_NETWORK_ID
+const appNetworkId = config.PRIMARY_NETWORK.id
 
 export function pollEvery(fn: Function, delay: any) {
   let timer = -1
@@ -56,7 +57,7 @@ export async function getERC20Info({ library, tokenAbi, contractAddress, chainId
 
 export function checkNetwork(networkId) {
   const isXdai = networkId === xDaiChainId
-  return networkId?.toString() === appNetworkId || isXdai
+  return networkId === appNetworkId || isXdai
 }
 
 export function titleCase(str) {
