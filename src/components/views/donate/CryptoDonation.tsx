@@ -9,6 +9,7 @@ import { useQuery } from '@apollo/client'
 import { FETCH_LISTED_TOKENS } from '../../../../src/apollo/gql/gqlEnums'
 import { Button } from '../../styled-components/Button'
 import { Caption, neutralColors, brandColors, GLink } from '@giveth/ui-design-system'
+import WalletModal from '@/components/modals/WalletModal'
 import { IProject } from '../../../apollo/types/types'
 import {
   getERC20List,
@@ -83,7 +84,7 @@ const customStyles = {
 
 const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: IProject }) => {
   const context = useWeb3React()
-  const { chainId: networkId, account, library: web3 } = context
+  const { chainId: networkId, account, library: web3, deactivate } = context
   const userContext = UserContext()
 
   const {
@@ -114,6 +115,7 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
   const [anonymous, setAnonymous] = useState(false)
   const [selectLoading, setSelectLoading] = useState(false)
   const [givBackEligible, setGivBackEligible] = useState(true)
+  const [showWalletModal, setShowWalletModal] = useState(false)
   const switchTraceable = false
   const donateToGiveth = false
 
@@ -291,9 +293,11 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
     }
     return 'less than $0.01'
   }
-
   return (
     <>
+      {showWalletModal && (
+        <WalletModal showModal={showWalletModal} setShowModal={setShowWalletModal} />
+      )}
       {networkId !== xdaiChain.id && (
         <XDaiContainer>
           <div>
@@ -373,14 +377,33 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
         {tokenSymbol}
       </AvText>
       <ButtonContainer>
-        <Button
-          small
-          background={brandColors.giv[500]}
-          width='100%'
-          onClick={() => setSuccessDonation(true)}
-        >
-          CONNECT WALLET
-        </Button>
+        {isEnabled && (
+          <Button
+            small
+            background={brandColors.giv[500]}
+            width='100%'
+            // onClick={() => setSuccessDonation(true)}
+          >
+            DONATE
+          </Button>
+        )}
+        {!isEnabled && (
+          <Button
+            small
+            background={brandColors.giv[500]}
+            width='100%'
+            onClick={() => setShowWalletModal(true)}
+          >
+            CONNECT WALLET
+          </Button>
+        )}
+        {!!web3 && (
+          <GLink
+          // onClick={showWalletModal}
+          >
+            click here to use another wallet
+          </GLink>
+        )}
       </ButtonContainer>
     </>
   )
