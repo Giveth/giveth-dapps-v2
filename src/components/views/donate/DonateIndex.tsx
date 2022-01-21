@@ -6,7 +6,8 @@ import FiatDonation from './FiatDonation'
 import { IProjectBySlug } from '@/apollo/types/types'
 import { FacebookShareButton, LinkedinShareButton, TwitterShareButton } from 'react-share'
 import { BigArc } from '@/components/styled-components/Arc'
-import ArrowLeft from '/public/images/arrow_left.svg'
+import { Button } from '@/components/styled-components/Button'
+import ConfettiAnimation from '../../animations/confetti'
 import RadioOnIcon from '/public/images/radio_on.svg'
 import RadioOffIcon from '/public/images/radio_off.svg'
 import {
@@ -75,19 +76,59 @@ const ProjectsIndex = (props: IProjectBySlug) => {
     )
   }
 
+  const SocialBox = (props: any) => {
+    return (
+      <Social isSuccess={props.isSuccess}>
+        <Lead>
+          {props?.isSuccess
+            ? 'Share this with your friends'
+            : 'Can’t donate? Share this page instead.'}
+        </Lead>
+        <SocialItems>
+          <SocialItem isSuccess={props.isSuccess}>
+            <TwitterShareButton title={shareTitle} url={url || ''} hashtags={['Giveth']}>
+              <Image src={'/images/social-tw.svg'} alt='tw' width='44px' height='44px' />
+            </TwitterShareButton>
+          </SocialItem>
+          <SocialItem isSuccess={props.isSuccess}>
+            <LinkedinShareButton title={shareTitle} summary={project?.description} url={url || ''}>
+              <Image src={'/images/social-linkedin.svg'} alt='lin' width='44px' height='44px' />
+            </LinkedinShareButton>
+          </SocialItem>
+          <SocialItem isSuccess={props.isSuccess}>
+            <FacebookShareButton quote={shareTitle} url={url || ''} hashtag='#Giveth'>
+              <Image src={'/images/social-fb.svg'} alt='fb' width='44px' height='44px' />
+            </FacebookShareButton>
+          </SocialItem>
+        </SocialItems>
+      </Social>
+    )
+  }
+
   const SuccessView = () => {
     return (
       <SucceessContainer>
-        <H4 color={semanticColors.jade[500]}>Successfully donated</H4>
-        <Image src='/images/motivation.svg' alt='motivation' width='121px' height='121px' />
-        <SuccessMessage color={brandColors.deep[900]}>
-          We have received your donation, you can see this project on your account under the Donated
-          projects and follow the project updates there or take a shortcut here. Go to
+        <ConfettiContainer>{/* <ConfettiAnimation size={300} /> */}</ConfettiContainer>
+        <H4 color={semanticColors.jade[500]}>You're a giver now!</H4>
+        {/* <Image src='/images/motivation.svg' alt='motivation' width='121px' height='121px' /> */}
+        <SuccessMessage>
+          Thank you for supporting The Giveth Community of Makers. Your contribution goes a long
+          way!
         </SuccessMessage>
-        <P color={brandColors.deep[900]}>Go to</P>
+        <SocialBox isSuccess />
+        <P style={{ color: neutralColors.gray[900] }}>Your transaction has been submitted.</P>
         <Options>
-          <GLink>Check project updates</GLink>
-          <GLink>Your account</GLink>
+          <GLink style={{ color: brandColors.pinky[500], fontSize: '16px' }}>
+            View on explorer
+          </GLink>
+          <ProjectsButton
+            small
+            background={brandColors.giv[500]}
+            width='100%'
+            onClick={() => alert(true)}
+          >
+            SEE MORE PROJECTS
+          </ProjectsButton>
         </Options>
       </SucceessContainer>
     )
@@ -112,40 +153,24 @@ const ProjectsIndex = (props: IProjectBySlug) => {
             )}
           </Right>
         </Sections>
-        <Social>
-          <Lead>Can’t donate? Share this page instead.</Lead>
-          <SocialItems>
-            <SocialItem>
-              <TwitterShareButton title={shareTitle} url={url || ''} hashtags={['Giveth']}>
-                <Image src={'/images/social-tw.svg'} alt='tw' width='44px' height='44px' />
-              </TwitterShareButton>
-            </SocialItem>
-            <SocialItem>
-              <LinkedinShareButton
-                title={shareTitle}
-                summary={project?.description}
-                url={url || ''}
-              >
-                <Image src={'/images/social-linkedin.svg'} alt='lin' width='44px' height='44px' />
-              </LinkedinShareButton>
-            </SocialItem>
-            <SocialItem>
-              <FacebookShareButton quote={shareTitle} url={url || ''} hashtag='#Giveth'>
-                <Image src={'/images/social-fb.svg'} alt='fb' width='44px' height='44px' />
-              </FacebookShareButton>
-            </SocialItem>
-          </SocialItems>
-        </Social>
+        {!isSuccess && <SocialBox />}
       </Wrapper>
     </>
   )
 }
 
+const ConfettiContainer = styled.div`
+  position: absolute;
+  top: 200px;
+`
+
 const Social = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: 24px 0;
+  margin: ${(props: { isSuccess: boolean }) => (props.isSuccess ? 0 : '12px 0')};
+  color: ${(props: { isSuccess: boolean }) =>
+    props.isSuccess === true ? neutralColors.gray[900] : 'white'};
   align-items: center;
 `
 const SocialItems = styled.div`
@@ -157,7 +182,11 @@ const SocialItems = styled.div`
 `
 const SocialItem = styled.div`
   cursor: pointer;
-  padding: 0 12px;
+  border-radius: 8px;
+  padding: ${(props: { isSuccess: boolean }) => (props.isSuccess ? `0 6px` : '0 12px')};
+  margin: ${(props: { isSuccess: boolean }) => (props.isSuccess ? `0 12px` : '0')};
+  border: ${(props: { isSuccess: boolean }) =>
+    props.isSuccess ? `1px solid ${neutralColors.gray[400]}` : 'none'};
 `
 const TitleBox = styled.div`
   display: flex;
@@ -241,14 +270,23 @@ const SucceessContainer = styled.div`
   align-items: center;
   text-align: center;
   height: 400px;
+  padding: 0 39px;
+  color: ${brandColors.deep[900]};
 `
 const SuccessMessage = styled(P)`
-  margin: 20px 0;
+  margin: -19px 0 16px 0;
+  color: ${brandColors.deep[900]};
 `
 const Options = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   width: 100%;
-  justify-content: space-around;
+  justify-content: center;
+  align-items: center;
 `
+const ProjectsButton = styled(Button)`
+  width: 242px;
+  height: 48px;
+`
+
 export default ProjectsIndex

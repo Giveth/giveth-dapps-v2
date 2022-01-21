@@ -405,7 +405,8 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
             small
             background={brandColors.giv[500]}
             width='100%'
-            onClick={() => setShowDonateModal(true)}
+            // onClick={() => setShowDonateModal(true)}
+            onClick={() => setSuccessDonation(true)}
           >
             DONATE
           </Button>
