@@ -6,7 +6,7 @@ export async function send(
   contractAddress: string, // if none is set, it defaults to ETH
   subtotal: number,
   sendTransaction: any,
-  txCallbacks: Function,
+  txCallbacks: any,
   traceable: boolean
 ) {
   try {
@@ -33,19 +33,19 @@ export async function send(
     if (!hash) throw new Error('Transaction failed')
 
     return hash
-  } catch (error) {
+  } catch (error: any) {
     const err = new Error(error)
     err.data = error?.data || error
     throw err
   }
 }
 
-export async function getHashInfo(txHash, isXDAI, web3: any) {
+export async function getHashInfo(txHash: string, isXDAI: boolean, web3: any) {
   try {
     const txInfo = await web3.eth.getTransaction(txHash)
     console.log({ txInfo })
     return txInfo
-  } catch (error) {
+  } catch (error: any) {
     console.log({ error })
     throw new Error(error)
   }

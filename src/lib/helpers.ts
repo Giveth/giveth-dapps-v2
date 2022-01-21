@@ -149,7 +149,7 @@ export async function sendTransaction(
   try {
     let web3Provider = web3
     let txn = null
-    const txParams = {
+    const txParams: any = {
       to: params?.to
       // value: params?.value
     }
@@ -198,11 +198,11 @@ export async function sendTransaction(
           from: from[0]
         })
         .on('transactionHash', txCallbacks?.onTransactionHash)
-        .on('receipt', function (receipt) {
+        .on('receipt', function (receipt: any) {
           console.log('receipt>>>', receipt)
           txCallbacks?.onReceiptGenerated(receipt)
         })
-        .on('error', error => txCallbacks?.onError(error)) // If a out of gas error, the second parameter is the receipt.
+        .on('error', (error: any) => txCallbacks?.onError(error)) // If a out of gas error, the second parameter is the receipt.
     }
 
     // REGULAR ETH TRANSFER
@@ -216,16 +216,16 @@ export async function sendTransaction(
       return web3Provider
         .sendTransaction(txParams)
         .on('transactionHash', txCallbacks?.onTransactionHash)
-        .on('receipt', function (receipt) {
+        .on('receipt', function (receipt: any) {
           console.log('receipt>>>', receipt)
           txCallbacks?.onReceiptGenerated(receipt)
         })
-        .on('error', error => txCallbacks?.onError(error)) // If a out of gas error, the second parameter is the receipt.
+        .on('error', (error: any) => txCallbacks?.onError(error)) // If a out of gas error, the second parameter is the receipt.
     }
 
     console.log('stTxn ---> : ', { txn })
     return txn
-  } catch (error) {
+  } catch (error: any) {
     console.log('Error sending transaction: ', { error })
     const err = new Error(error)
     err.data = error

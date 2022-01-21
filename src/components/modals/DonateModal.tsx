@@ -32,13 +32,13 @@ interface IDonateModal extends IModal {
   closeParentModal?: () => void
   project: IProject
   token: IToken
-  amount: Number
-  price?: Number
-  userTokenBalance?: Number
-  anonymous?: Boolean
-  setTxHash?: Function
-  setInProgress?: Function
-  setUnconfirmed?: Function
+  amount: number
+  price?: number
+  userTokenBalance?: number
+  anonymous?: boolean
+  setTxHash?: any
+  setInProgress?: any
+  setUnconfirmed?: any
   givBackEligible?: boolean
 }
 
@@ -73,7 +73,6 @@ const DonateModal = ({
 
   const confirmDonation = async () => {
     try {
-      console.log('in')
       // Traceable by default if it comes from Trace only
       // Depends on the toggle if it's an IO to Trace project
       // let traceable = project?.fromTrace
@@ -85,7 +84,7 @@ const DonateModal = ({
       let userToken: any = user?.token
       // Sign message for registered users to get user info, no need to sign for anonymous
       if (!userToken) {
-        const tokenFromSignin = await signIn()
+        const tokenFromSignin = signIn && (await signIn())
         if (!tokenFromSignin) return
         userToken = tokenFromSignin
       }
@@ -109,13 +108,13 @@ const DonateModal = ({
         return alert('wrong network')
       }
 
-      if (!amount || parseFloat(amount) <= 0) {
+      if (!amount || amount <= 0) {
         // TODO: SET RIGHT MODAL
         // return Toast({ content: 'Please set an amount', type: 'warn' })
         alert('Please set an amount')
       }
 
-      if (userTokenBalance < amount) {
+      if (userTokenBalance! < amount) {
         // return triggerPopup('InsufficientFunds')
         // TODO: SET RIGHT MODAL
         return alert('Insufficient Funds')
@@ -128,29 +127,29 @@ const DonateModal = ({
       //   isLoading: true,
       //   noAutoClose: true
       // })
-      const toAddress = isAddressENS(project.walletAddress)
-        ? await getAddressFromENS(project.walletAddress, web3)
+      const toAddress = isAddressENS(project.walletAddress!)
+        ? await getAddressFromENS(project.walletAddress!, web3)
         : project.walletAddress
       const web3Provider = web3
       await transaction.send(
         web3,
         toAddress,
-        token.address,
+        token.address!,
         amount,
         sendTransaction,
         {
-          onTransactionHash: async transactionHash => {
+          onTransactionHash: async (transactionHash: any) => {
             // Save initial txn details to db
             const { donationId, savedDonation, saveDonationErrors } = await saveDonation(
-              account,
+              account!,
               toAddress,
               transactionHash,
-              networkId,
+              networkId!,
               Number(amount),
-              token.symbol,
+              token.symbol!,
               Number(project.id),
-              token.address,
-              anonymous
+              token.address!,
+              anonymous!
             )
             console.log('DONATION RESPONSE: ', {
               donationId,
@@ -160,7 +159,7 @@ const DonateModal = ({
             // onTransactionHash callback for event emitter
             transaction.confirmEtherTransaction(
               transactionHash,
-              res => {
+              (res: any) => {
                 try {
                   if (!res) return
                   // toast.dismiss()
@@ -221,14 +220,14 @@ const DonateModal = ({
             )
             await saveDonationTransaction(transactionHash, donationId)
           },
-          onReceiptGenerated: receipt => {
+          onReceiptGenerated: (receipt: any) => {
             setTxHash({
               transactionHash: receipt?.transactionHash,
               tokenSymbol: token.symbol,
               subtotal: amount
             })
           },
-          onError: error => {
+          onError: (error: any) => {
             console.log({ error })
             // toast.dismiss()
             // the outside catch handles any error here
@@ -243,7 +242,7 @@ const DonateModal = ({
 
       // Commented notify and instead we are using our own service
       // transaction.notify(transactionHash)
-    } catch (error) {
+    } catch (error: any) {
       // toast.dismiss()
       console.log({ error })
       setDonating(false)

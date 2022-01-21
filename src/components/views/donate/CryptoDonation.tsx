@@ -43,6 +43,7 @@ interface ISelectObj {
   icon?: string
   address?: string
   ethereumAddress?: string
+  decimals?: number
 }
 
 interface IToken {
@@ -98,19 +99,19 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
 
   const [tokens, setTokensObject] = useState<ISelectObj[]>()
   const [selectedToken, setSelectedToken] = useState<ISelectObj>()
-  const [selectedTokenBalance, setSelectedTokenBalance] = useState()
-  const [customInput, setCustomInput] = useState()
+  const [selectedTokenBalance, setSelectedTokenBalance] = useState<any>()
+  const [customInput, setCustomInput] = useState<any>()
   const [tokenPrice, setTokenPrice] = useState(1)
   const [mainTokenPrice, setMainTokenPrice] = useState(0)
-  const [gasPrice, setGasPrice] = useState(null)
-  const [gasETHPrice, setGasETHPrice] = useState(null)
+  const [gasPrice, setGasPrice] = useState<number>()
+  const [gasETHPrice, setGasETHPrice] = useState<number>()
   const [amountTyped, setAmountTyped] = useState('')
   const [inProgress, setInProgress] = useState(false)
   const [unconfirmed, setUnconfirmed] = useState(false)
   const [geminiModal, setGeminiModal] = useState(false)
   const [txHash, setTxHash] = useState(null)
-  const [erc20List, setErc20List] = useState<ISelectObj[]>()
-  const [erc20OriginalList, setErc20OriginalList] = useState<ISelectObj[]>()
+  const [erc20List, setErc20List] = useState<any>()
+  const [erc20OriginalList, setErc20OriginalList] = useState<any>()
   const [modalIsOpen, setIsOpen] = useState(false)
   const [icon, setIcon] = useState(null)
   const [anonymous, setAnonymous] = useState(false)
@@ -126,8 +127,7 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
   const isXdai = networkId === xdaiChain.id
   const isGivingBlockProject = project?.givingBlocksId
 
-  const stopPolling = useRef()
-  console.log({ txHash })
+  const stopPolling = useRef<any>(null)
   // Fetches initial main token price
   useEffect(() => {
     fetchEthPrice(setMainTokenPrice).then(setMainTokenPrice)
@@ -140,8 +140,8 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
       if (isGivingBlockProject) netId = 'thegivingblock'
       if (isGivingBlockProject && networkId === 3) netId = 'ropsten_thegivingblock'
       let givIndex: number | undefined
-      const erc20List = getERC20List(netId).tokens
-      const tokens = erc20List.map((token: any, index) => {
+      const erc20List: any = getERC20List(netId).tokens
+      const tokens = erc20List.map((token: any, index: any) => {
         token.value = token
         token.label = token.symbol
         if (token.symbol === 'GIV' || token.symbol === 'TestGIV' || token.name === 'Giveth') {
@@ -153,7 +153,7 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
       if (givToken && givIndex) {
         tokens.splice(givIndex, 1)
       }
-      tokens?.sort((a, b) => {
+      tokens?.sort((a: any, b: any) => {
         var tokenA = a.name.toUpperCase()
         var tokenB = b.name.toUpperCase()
         return tokenA < tokenB ? -1 : tokenA > tokenB ? 1 : 0
@@ -188,7 +188,7 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
       let tokenAddress: string | undefined = selectedToken.address
       if (isXdai) {
         // coingecko doesn't have these tokens in xdai, so fetching price from ethereum
-        if (xdaiExcluded.includes(selectedToken.symbol)) {
+        if (xdaiExcluded.includes(selectedToken.symbol!)) {
           tokenAddress = selectedToken.ethereumAddress
           chain = ethereumChain.name
         }
@@ -202,8 +202,8 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
   }, [selectedToken, mainTokenPrice])
 
   // Gets GAS price
-  useEffect(async () => {
-    web3?.getGasPrice().then(wei => {
+  useEffect(() => {
+    web3?.getGasPrice().then((wei: any) => {
       const ethFromWei = formatEther(isXdai ? '1' : Number(wei))
       const gwei = isXdai ? 1 : formatUnits(wei, 'gwei')
       gwei && setGasPrice(Number(gwei))
@@ -240,7 +240,7 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
 
   const clearPoll = () => {
     if (stopPolling.current) {
-      stopPolling.current()
+      stopPolling?.current()
       stopPolling.current = undefined
     }
   }
@@ -254,14 +254,14 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
       () => ({
         request: async () => {
           try {
-            const instance = new Contract(selectedToken.address, tokenAbi, web3)
+            const instance = new Contract(selectedToken.address!, tokenAbi, web3)
             const a = await instance.balanceOf(account)
-            return (await instance.balanceOf(account)) / 10 ** selectedToken.decimals
+            return (await instance.balanceOf(account)) / 10 ** selectedToken.decimals!
           } catch (e) {
             return 0
           }
         },
-        onResult: _balance => {
+        onResult: (_balance: any) => {
           if (
             _balance !== undefined &&
             (!selectedTokenBalance || selectedTokenBalance !== _balance)
@@ -277,18 +277,16 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
   const donation = parseFloat(amountTyped)
   const givethFee = Math.round((GIVETH_DONATION_AMOUNT * 100.0) / tokenPrice) / 100
 
-  const subtotal = donation + (donateToGiveth === true ? givethFee : 0)
-
-  const mainTokenToUSD = amountOfToken => {
-    const USDValue = (amountOfToken * mainTokenPrice).toFixed(2)
+  const mainTokenToUSD = (amountOfToken: any) => {
+    const USDValue: any = (amountOfToken * mainTokenPrice).toFixed(2)
     if (USDValue > 0) {
       return `$${USDValue}`
     }
     return 'less than $0.01'
   }
 
-  const donationTokenToUSD = amountOfToken => {
-    const USDValue = (amountOfToken * tokenPrice).toFixed(2)
+  const donationTokenToUSD = (amountOfToken: any) => {
+    const USDValue: any = (amountOfToken * tokenPrice).toFixed(2)
     if (isXdai) return ''
     if (USDValue > 0) {
       return `$${USDValue}`
@@ -323,7 +321,7 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
               Save on gas fees, switch to xDAI network.
             </Caption>
             <Caption
-              style={{ color: brandColors.pinky[500], marginLeft: '5px' }}
+              style={{ color: brandColors.pinky[500], marginLeft: '5px', cursor: 'pointer' }}
               onClick={switchToXdai}
             >
               Switch network
@@ -337,19 +335,21 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
             tokenList={erc20List}
             selectedToken={selectedToken}
             inputValue={customInput}
-            onChange={i => {
+            onChange={(i: any) => {
               // setSelectedToken(i || selectedToken)
               setSelectedToken(i)
               // setIsComponentVisible(false)
               setCustomInput('')
-              setErc20List([...erc20OriginalList])
-              let givBackEligibilty = erc20OriginalList?.find(t => t?.symbol === i?.symbol)
+              setErc20List(erc20OriginalList)
+              let givBackEligibilty: any = erc20OriginalList?.find(
+                (t: any) => t?.symbol === i?.symbol
+              )
               if (i?.symbol?.toUpperCase() === 'ETH' || i?.symbol?.toUpperCase() === 'XDAI') {
                 givBackEligibilty = true
               }
               setGivBackEligible(givBackEligibilty)
             }}
-            onInputChange={i => {
+            onInputChange={(i: any) => {
               // It's a contract
               if (i?.length === 42) {
                 try {
@@ -361,7 +361,7 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
                     chainId: networkId
                   }).then(pastedToken => {
                     if (!pastedToken) return
-                    const found = erc20List?.find(t => t?.symbol === pastedToken?.symbol)
+                    const found = erc20List?.find((t: any) => t?.symbol === pastedToken?.symbol)
                     !found && setErc20List([...erc20List, pastedToken])
                     setCustomInput(pastedToken?.symbol)
                     setSelectLoading(false)
@@ -464,7 +464,6 @@ const XDaiContainer = styled.div`
   justify-content: space-between;
   padding: 8px 16px 18.5px 16px;
   margin: 24px 0 0 0;
-  cursor: pointer;
   border-radius: 8px;
   div:first-child {
     display: flex;

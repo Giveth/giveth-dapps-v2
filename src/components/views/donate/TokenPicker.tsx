@@ -111,7 +111,7 @@ const TokenPicker = (props: {
   onChange: any
   onInputChange: any
   inputValue?: any
-  selectedToken: ISelectObj
+  selectedToken: ISelectObj | undefined
   placeholder: string
 }) => {
   const { tokenList, onChange, onInputChange, inputValue, selectedToken, placeholder } = props
@@ -170,7 +170,6 @@ const TokenPicker = (props: {
         onChange={onSelectChange}
         onInputChange={onInputChange}
         options={tokenList}
-        placeholder='Search...'
         styles={selectStyles}
         tabSelectsValue={false}
         placeholder={placeholder}
