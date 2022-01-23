@@ -1,11 +1,12 @@
 import Image from 'next/image';
+import { brandColors, D3, Lead } from '@giveth/ui-design-system';
+import styled from 'styled-components';
+
 import SearchBox from '../SearchBox';
 import Accordion from '../Accordion';
 import FAQArray from '@/content/FAQs.json';
 import { Arc } from '@/components/styled-components/Arc';
 import FlowerIcon from '/public//images/flower_faq.svg';
-import { brandColors, D3, Lead } from '@giveth/ui-design-system';
-import styled from 'styled-components';
 
 const FAQIndex = () => {
 	return (
@@ -24,8 +25,10 @@ const FAQIndex = () => {
 				<SearchStyles>
 					{/*TODO implement search*/}
 					<SearchBox
-						onChange={console.log}
+						onChange={() => {}}
 						placeholder='What are you looking for?'
+						value=''
+						reset={() => {}}
 					/>
 				</SearchStyles>
 				<FAQContainer>
