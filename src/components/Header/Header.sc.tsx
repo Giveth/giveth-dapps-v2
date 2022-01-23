@@ -11,6 +11,7 @@ import {
 	ButtonLink,
 } from '@giveth/ui-design-system';
 import { device } from '@/utils/constants';
+import { ETheme } from '@/context/general.context';
 
 export const HeaderPlaceholder = styled.div`
 	height: 100px;
@@ -35,7 +36,11 @@ export const Logo = styled.div`
 	height: 64px;
 `;
 
-export const HeaderButton = styled(CButton)`
+interface IThemed {
+	theme?: ETheme;
+}
+
+export const HeaderButton = styled(CButton)<IThemed>`
 	display: flex;
 	height: 50px;
 	color: white;
@@ -47,8 +52,13 @@ export const HeaderButton = styled(CButton)`
 	padding: 12px;
 	border-radius: 48px;
 	text-align: left;
-	border: 1px solid #3811bf;
-	background-color: ${brandColors.giv[900]};
+	color: ${props =>
+		props.theme === ETheme.Dark ? 'white' : brandColors.giv[900]};
+	background-color: ${props =>
+		props.theme === ETheme.Dark ? brandColors.giv[900] : 'white'};
+	border: 1px solid
+		${props =>
+			props.theme === ETheme.Dark ? brandColors.giv[600] : 'white'};
 `;
 
 export const BalanceButton = styled(HeaderButton)`
@@ -110,9 +120,12 @@ interface IHeaderLinkProps {
 	active?: boolean;
 }
 
-export const HeaderLinks = styled(Row)`
-	background-color: ${brandColors.giv[900]};
-	border: 1px solid ${brandColors.giv[600]};
+export const HeaderLinks = styled(Row)<IThemed>`
+	background-color: ${props =>
+		props.theme === ETheme.Dark ? brandColors.giv[900] : 'white'};
+	border: 1px solid
+		${props =>
+			props.theme === ETheme.Dark ? brandColors.giv[600] : 'white'};
 	border-radius: 48px;
 	padding: 6px;
 	gap: 8px;
@@ -181,8 +194,9 @@ export const MenuAndButtonContainer = styled.div`
 	z-index: 2;
 `;
 
-export const CoverLine = styled.div`
-	background-color: ${brandColors.giv[900]};
+export const CoverLine = styled.div<IThemed>`
+	background-color: ${props =>
+		props.theme === ETheme.Dark ? brandColors.giv[900] : 'white'};
 	position: absolute;
 	z-index: 1;
 	height: 6px;

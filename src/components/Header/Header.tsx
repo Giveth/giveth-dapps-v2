@@ -34,6 +34,7 @@ import { walletsArray } from '@/lib/wallet/walletTypes';
 import links from '@/lib/constants/links';
 import SignInModal from '../SignInModal';
 import MenuWallet from '@/components/menu/MenuWallet';
+import { ETheme, useGeneral } from '@/context/general.context';
 
 export interface IHeader {
 	theme?: ThemeType;
@@ -46,11 +47,11 @@ const Header: FC<IHeader> = () => {
 	const [showHeader, setShowHeader] = useState(true);
 	const [showWalletModal, setShowWalletModal] = useState(false);
 	const [showSigninModal, setShowSigninModal] = useState(false);
-	const { theme } = useContext(ThemeContext);
 	const {
 		currentValues: { balances },
 	} = useSubgraph();
 	const { chainId, active, activate, account, library } = useWeb3React();
+	const { theme } = useGeneral();
 
 	const handleHoverClickBalance = (show: boolean) => {
 		setShowRewardMenu(show);
@@ -100,7 +101,7 @@ const Header: FC<IHeader> = () => {
 
 	return (
 		<>
-			<HeaderPlaceholder />
+			{/* <HeaderPlaceholder /> */}
 			<StyledHeader
 				justifyContent='space-between'
 				alignItems='center'
@@ -123,7 +124,7 @@ const Header: FC<IHeader> = () => {
 						</Link>
 					</SmallHeaderLinks>
 				</Row>
-				<HeaderLinks>
+				<HeaderLinks theme={theme}>
 					<Link href='/' passHref>
 						<HeaderLink size='Big'>Home</HeaderLink>
 					</Link>
@@ -142,6 +143,9 @@ const Header: FC<IHeader> = () => {
 						label='CREATE A PROJECT'
 						href='/create'
 						target='_blank'
+						linkType={
+							theme === ETheme.Light ? 'primary' : 'secondary'
+						}
 					/>
 					<SmallCreateProject
 						label=''
@@ -154,6 +158,9 @@ const Header: FC<IHeader> = () => {
 								height={16}
 								alt='create project'
 							/>
+						}
+						linkType={
+							theme === ETheme.Light ? 'primary' : 'secondary'
 						}
 					/>
 					{active && account && chainId ? (
