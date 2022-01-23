@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { Row } from '@/components/styled-components/Grid';
-import { FC, useContext, useState, useEffect } from 'react';
-import { ThemeContext, ThemeType } from '@/context/theme.context';
+import { FC, useState, useEffect } from 'react';
+import { ThemeType } from '@/context/theme.context';
 import { formatWeiHelper } from '@/helpers/number';
 import { networksParams } from '@/helpers/blockchain';
 import {
@@ -32,9 +32,10 @@ import { useWeb3React } from '@web3-react/core';
 import WalletModal from '@/components/modals/WalletModal';
 import { walletsArray } from '@/lib/wallet/walletTypes';
 import links from '@/lib/constants/links';
-import SignInModal from '../SignInModal';
+import SignInModal from '../modals/SignInModal';
 import MenuWallet from '@/components/menu/MenuWallet';
 import { ETheme, useGeneral } from '@/context/general.context';
+import { useRouter } from 'next/router';
 
 export interface IHeader {
 	theme?: ThemeType;
@@ -47,11 +48,13 @@ const Header: FC<IHeader> = () => {
 	const [showHeader, setShowHeader] = useState(true);
 	const [showWalletModal, setShowWalletModal] = useState(false);
 	const [showSigninModal, setShowSigninModal] = useState(false);
+	const [isGIVconomyRoute, setIsGIVconomyRoute] = useState(false);
 	const {
 		currentValues: { balances },
 	} = useSubgraph();
 	const { chainId, active, activate, account, library } = useWeb3React();
 	const { theme } = useGeneral();
+	const router = useRouter();
 
 	const handleHoverClickBalance = (show: boolean) => {
 		setShowRewardMenu(show);
@@ -64,7 +67,7 @@ const Header: FC<IHeader> = () => {
 		if (wallet) {
 			activate(wallet.connector);
 		}
-	}, []);
+	}, [activate]);
 
 	useEffect(() => {
 		const threshold = 0;
@@ -98,6 +101,10 @@ const Header: FC<IHeader> = () => {
 
 		return () => window.removeEventListener('scroll', onScroll);
 	}, [showHeader]);
+
+	useEffect(() => {
+		setIsGIVconomyRoute(router.route.startsWith('/giv'));
+	}, [router.route]);
 
 	return (
 		<>
@@ -236,9 +243,17 @@ const Header: FC<IHeader> = () => {
 						<div>
 							<ConnectButton
 								buttonType='primary'
-								label='CONNECT WALLET'
+								label={
+									isGIVconomyRoute
+										? 'CONNECT WALLET'
+										: 'SIGN IN'
+								}
 								onClick={() => {
-									setShowWalletModal(true);
+									if (isGIVconomyRoute) {
+										setShowWalletModal(true);
+									} else {
+										setShowSigninModal(true);
+									}
 								}}
 							/>
 						</div>
