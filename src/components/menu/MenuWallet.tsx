@@ -21,6 +21,7 @@ import {
 import styled from 'styled-components';
 import { switchNetwork } from '@/lib/wallet';
 import { MenuContainer } from './Menu.sc';
+import { ETheme, useGeneral } from '@/context/general.context';
 
 interface IMenuWallet {
 	setShowWalletModal: Dispatch<SetStateAction<boolean>>;
@@ -34,6 +35,7 @@ const MenuWallet: FC<IMenuWallet> = ({ setShowWalletModal }) => {
 		state: { user, isSignedIn },
 		actions: { signIn, signOut },
 	} = useUser();
+	const { theme } = useGeneral();
 
 	useEffect(() => {
 		if (!!account && !!library) {
@@ -53,7 +55,7 @@ const MenuWallet: FC<IMenuWallet> = ({ setShowWalletModal }) => {
 	}, []);
 
 	return (
-		<WalletMenuContainer isMounted={isMounted}>
+		<WalletMenuContainer isMounted={isMounted} theme={theme}>
 			<Title>WALLET</Title>
 			<Subtitle>
 				<LeftSection>
@@ -116,10 +118,20 @@ const MenuItem = styled.a`
 	padding: 0 16px;
 	font-size: 14px;
 	cursor: pointer;
-	border-top: 2px solid ${brandColors.giv[300]};
-	color: ${neutralColors.gray[100]};
+	color: ${props =>
+		props.theme === ETheme.Dark
+			? neutralColors.gray[100]
+			: neutralColors.gray[800]};
+	border-top: 2px solid
+		${props =>
+			props.theme === ETheme.Dark
+				? brandColors.giv[300]
+				: neutralColors.gray[300]};
 	&:hover {
-		background: ${brandColors.giv[700]};
+		background-color: ${props =>
+			props.theme === ETheme.Dark
+				? brandColors.giv[700]
+				: neutralColors.gray[200]};
 	}
 `;
 
