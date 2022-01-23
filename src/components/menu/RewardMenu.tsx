@@ -13,7 +13,7 @@ import styled from 'styled-components';
 import { Row } from '../styled-components/Grid';
 import { MenuContainer } from './Menu.sc';
 import Image from 'next/image';
-import { switchNetwork } from '@/lib/wallet';
+import { switchNetworkHandler } from '@/lib/wallet';
 import config from '@/configuration';
 import BigNumber from 'bignumber.js';
 import { useTokenDistro } from '@/context/tokenDistro.context';
@@ -45,14 +45,6 @@ export const RewardMenu = () => {
 	const { balances } = currentValues;
 	const { allocatedTokens, claimed, givbackLiquidPart } = balances;
 	const { theme } = useGeneral();
-
-	const switchNetworkHandler = () => {
-		if (chainId === config.XDAI_NETWORK_NUMBER) {
-			switchNetwork(config.MAINNET_NETWORK_NUMBER);
-		} else {
-			switchNetwork(config.XDAI_NETWORK_NUMBER);
-		}
-	};
 
 	useEffect(() => {
 		setGIVstreamLiquidPart(
@@ -108,7 +100,7 @@ export const RewardMenu = () => {
 				<Overline>Network</Overline>
 				<NetworkRow>
 					<B>{library?._network?.name}</B>
-					<SwithNetwork onClick={switchNetworkHandler}>
+					<SwithNetwork onClick={() => switchNetworkHandler(chainId)}>
 						Switch network
 					</SwithNetwork>
 				</NetworkRow>

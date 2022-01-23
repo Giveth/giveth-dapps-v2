@@ -19,7 +19,7 @@ import {
 	Overline,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { switchNetwork } from '@/lib/wallet';
+import { switchNetworkHandler } from '@/lib/wallet';
 import { MenuContainer } from './Menu.sc';
 import { ETheme, useGeneral } from '@/context/general.context';
 
@@ -76,7 +76,7 @@ const MenuWallet: FC<IMenuWallet> = ({ setShowWalletModal }) => {
 			<Subtitle>
 				<LeftSection>{networkName}</LeftSection>
 				{chainId && (
-					<StyledButton onClick={() => switchNetwork(chainId)}>
+					<StyledButton onClick={() => switchNetworkHandler(chainId)}>
 						Switch network
 					</StyledButton>
 				)}
