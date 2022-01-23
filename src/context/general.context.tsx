@@ -55,7 +55,7 @@ export const GeneralProvider: FC = ({ children }) => {
 				setShowFooter,
 			}}
 		>
-			<GlobalStyle />
+			<GlobalStyle theme={theme} />
 			{children}
 		</GeneralContext.Provider>
 	);
