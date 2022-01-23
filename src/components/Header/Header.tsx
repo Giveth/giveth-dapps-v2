@@ -31,11 +31,11 @@ import { RewardMenu } from '@/components/menu/RewardMenu';
 import { useWeb3React } from '@web3-react/core';
 import WalletModal from '@/components/modals/WalletModal';
 import { walletsArray } from '@/lib/wallet/walletTypes';
-import links from '@/lib/constants/links';
 import SignInModal from '../modals/SignInModal';
 import MenuWallet from '@/components/menu/MenuWallet';
 import { ETheme, useGeneral } from '@/context/general.context';
 import { useRouter } from 'next/router';
+import { menuRoutes } from '../menu/MenuRoutes';
 
 export interface IHeader {
 	theme?: ThemeType;
@@ -132,18 +132,17 @@ const Header: FC<IHeader> = () => {
 					</SmallHeaderLinks>
 				</Row>
 				<HeaderLinks theme={theme}>
-					<Link href='/' passHref>
-						<HeaderLink size='Big'>Home</HeaderLink>
-					</Link>
-					<Link href='/projects' passHref>
-						<HeaderLink size='Big'>Projects</HeaderLink>
-					</Link>
-					<Link href={links.GIVECONOMY} passHref>
-						<HeaderLink size='Big'>GIVeconomy</HeaderLink>
-					</Link>
-					<Link href='/join' passHref>
-						<HeaderLink size='Big'>Community</HeaderLink>
-					</Link>
+					{menuRoutes.map((link, index) => (
+						<Link href={link.href} passHref key={index}>
+							<HeaderLink
+								size='Big'
+								theme={theme}
+								active={router.route === link.href}
+							>
+								{link.title}
+							</HeaderLink>
+						</Link>
+					))}
 				</HeaderLinks>
 				<Row gap='8px'>
 					<Link href='/terms' passHref>

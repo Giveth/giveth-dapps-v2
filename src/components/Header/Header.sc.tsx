@@ -118,6 +118,7 @@ export const Title = styled.h1`
 
 interface IHeaderLinkProps {
 	active?: boolean;
+	theme?: ETheme;
 }
 
 export const HeaderLinks = styled(Row)<IThemed>`
@@ -147,8 +148,21 @@ export const SmallHeaderLinks = styled(Row)`
 
 export const HeaderLink = styled(GLink)<IHeaderLinkProps>`
 	padding: 8px 16px 7px;
-	background-color: ${props => (props.active ? brandColors.giv[600] : '')};
 	border-radius: 72px;
+	background-color: ${props => {
+		if (props.active) {
+			return props.theme === ETheme.Dark
+				? brandColors.giv[600]
+				: neutralColors.gray[100];
+		}
+		return '';
+	}};
+	&:hover {
+		background-color: ${props =>
+			props.theme === ETheme.Dark
+				? brandColors.giv[800]
+				: neutralColors.gray[200]};
+	}
 `;
 
 export const ConnectButton = styled(Button)``;
