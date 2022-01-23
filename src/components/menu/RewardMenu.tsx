@@ -6,6 +6,7 @@ import {
 	brandColors,
 	Caption,
 	IconHelp,
+	neutralColors,
 } from '@giveth/ui-design-system';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -28,6 +29,7 @@ import { constants } from 'ethers';
 import { useStakingNFT } from '@/hooks/useStakingNFT';
 import { StakingType } from '@/types/config';
 import { useWeb3React } from '@web3-react/core';
+import { ETheme, useGeneral } from '@/context/general.context';
 
 export const RewardMenu = () => {
 	const [isMounted, setIsMounted] = useState(false);
@@ -42,6 +44,7 @@ export const RewardMenu = () => {
 	const { chainId, library } = useWeb3React();
 	const { balances } = currentValues;
 	const { allocatedTokens, claimed, givbackLiquidPart } = balances;
+	const { theme } = useGeneral();
 
 	const switchNetworkHandler = () => {
 		if (chainId === config.XDAI_NETWORK_NUMBER) {
@@ -101,7 +104,7 @@ export const RewardMenu = () => {
 
 	return (
 		<>
-			<RewardMenuContainer isMounted={isMounted}>
+			<RewardMenuContainer isMounted={isMounted} theme={theme}>
 				<Overline>Network</Overline>
 				<NetworkRow>
 					<B>{library?._network?.name}</B>
@@ -218,7 +221,10 @@ export const SwithNetwork = styled(GLink)`
 `;
 
 export const FlowrateBox = styled.div`
-	background-color: ${brandColors.giv[500]};
+	background-color: ${props =>
+		props.theme === ETheme.Dark
+			? brandColors.giv[500]
+			: neutralColors.gray[200]};
 	margin: 16px 0;
 	border-radius: 8px;
 	padding: 8px 16px;
@@ -245,7 +251,10 @@ export const PartRow = styled(Row)`
 	padding: 4px 16px;
 	cursor: pointer;
 	&:hover {
-		background-color: ${brandColors.giv[800]};
+		background-color: ${props =>
+			props.theme === ETheme.Dark
+				? brandColors.giv[800]
+				: neutralColors.gray[200]};
 	}
 `;
 
