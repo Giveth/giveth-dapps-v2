@@ -128,9 +128,9 @@ const Header: FC<IHeader> = () => {
 					<Link href='/' passHref>
 						<HeaderLink size='Big'>Home</HeaderLink>
 					</Link>
-					<HeaderLink size='Big' href='/projects'>
-						Projects
-					</HeaderLink>
+					<Link href='/projects' passHref>
+						<HeaderLink size='Big'>Projects</HeaderLink>
+					</Link>
 					<Link href={links.GIVECONOMY} passHref>
 						<HeaderLink size='Big'>GIVeconomy</HeaderLink>
 					</Link>
@@ -139,30 +139,30 @@ const Header: FC<IHeader> = () => {
 					</Link>
 				</HeaderLinks>
 				<Row gap='8px'>
-					<CreateProject
-						label='CREATE A PROJECT'
-						href='/create'
-						target='_blank'
-						linkType={
-							theme === ETheme.Light ? 'primary' : 'secondary'
-						}
-					/>
-					<SmallCreateProject
-						label=''
-						href='/create'
-						target='_blank'
-						icon={
-							<Image
-								src='/images/plus-white.svg'
-								width={16}
-								height={16}
-								alt='create project'
-							/>
-						}
-						linkType={
-							theme === ETheme.Light ? 'primary' : 'secondary'
-						}
-					/>
+					<Link href='/terms' passHref>
+						<CreateProject
+							label='CREATE A PROJECT'
+							linkType={
+								theme === ETheme.Light ? 'primary' : 'secondary'
+							}
+						/>
+					</Link>
+					<Link href='/terms' passHref>
+						<SmallCreateProject
+							label=''
+							icon={
+								<Image
+									src='/images/plus-white.svg'
+									width={16}
+									height={16}
+									alt='create project'
+								/>
+							}
+							linkType={
+								theme === ETheme.Light ? 'primary' : 'secondary'
+							}
+						/>
+					</Link>
 					{active && account && chainId ? (
 						<>
 							<MenuAndButtonContainer
