@@ -50,8 +50,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 	const [user, setUser] = useState<IUserByAddress | undefined>();
 
 	useWallet();
-	const context = useWeb3React();
-	const { account, active, library, chainId, deactivate } = context;
+	const { account, active, library, chainId, deactivate } = useWeb3React();
 	const isEnabled =
 		!!library?.getSigner() && !!account && !!chainId && !!user;
 	const isSignedIn = isEnabled && !!user.token;
@@ -93,7 +92,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 
 	const signIn = async () => {
 		console.log('trigou');
-		if (!library.getSigner()) return false;
+		if (!library?.getSigner()) return false;
 
 		const signedMessage = await signMessage(
 			process.env.NEXT_PUBLIC_OUR_SECRET as string,
