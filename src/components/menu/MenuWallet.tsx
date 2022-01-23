@@ -84,13 +84,17 @@ const MenuWallet: FC<IMenuWallet> = ({ setShowWalletModal }) => {
 			<Menus>
 				{walletMenuArray.map(i => (
 					<Link href={i.url} key={i.title} passHref>
-						<MenuItem>{i.title}</MenuItem>
+						<MenuItem theme={theme}>{i.title}</MenuItem>
 					</Link>
 				))}
 				{isSignedIn ? (
-					<MenuItem onClick={signOut}>Sign out</MenuItem>
+					<MenuItem onClick={signOut} theme={theme}>
+						Sign out
+					</MenuItem>
 				) : (
-					<MenuItem onClick={signIn}>Sign in</MenuItem>
+					<MenuItem onClick={signIn} theme={theme}>
+						Sign in
+					</MenuItem>
 				)}
 			</Menus>
 		</WalletMenuContainer>

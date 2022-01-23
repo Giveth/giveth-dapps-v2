@@ -174,7 +174,7 @@ const Header: FC<IHeader> = () => {
 									handleHoverClickBalance(false)
 								}
 							>
-								<BalanceButton outline>
+								<BalanceButton outline theme={theme}>
 									<HBContainer>
 										<HBBalanceLogo
 											src={'/images/logo/logo.svg'}
@@ -186,7 +186,7 @@ const Header: FC<IHeader> = () => {
 											{formatWeiHelper(balances.balance)}
 										</HBContent>
 									</HBContainer>
-									<CoverLine />
+									<CoverLine theme={theme} />
 								</BalanceButton>
 								{showRewardMenu && <RewardMenu />}
 							</MenuAndButtonContainer>
@@ -195,16 +195,7 @@ const Header: FC<IHeader> = () => {
 								onMouseEnter={() => setShowUserMenu(true)}
 								onMouseLeave={() => setShowUserMenu(false)}
 							>
-								<WalletButton
-									outline
-									onClick={() => {
-										// window.localStorage.removeItem(
-										// 	'selectedWallet',
-										// );
-										// deactivate();
-										// setShowWalletModal(true);
-									}}
-								>
+								<WalletButton outline theme={theme}>
 									<HBContainer>
 										<HBPic
 											src={
@@ -232,7 +223,7 @@ const Header: FC<IHeader> = () => {
 											</WBNetwork>
 										</WBInfo>
 									</HBContainer>
-									<CoverLine />
+									<CoverLine theme={theme} />
 								</WalletButton>
 								{showUserMenu && (
 									<MenuWallet

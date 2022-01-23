@@ -112,7 +112,7 @@ export const RewardMenu = () => {
 						Switch network
 					</SwithNetwork>
 				</NetworkRow>
-				<FlowrateBox>
+				<FlowrateBox theme={theme}>
 					<Overline styleType='Small'>GIVStream Flowrate</Overline>
 					<FlowrateRow>
 						<Image
@@ -136,7 +136,7 @@ export const RewardMenu = () => {
 				</FlowrateBox>
 				<Link href='/givstream' passHref>
 					<a>
-						<PartRow>
+						<PartRow theme={theme}>
 							<PartInfo>
 								<PartTitle as='span'>From Givstream</PartTitle>
 								<Row gap='4px'>
@@ -157,7 +157,7 @@ export const RewardMenu = () => {
 				</Link>
 				<Link href='/givfarm' passHref>
 					<a>
-						<PartRow>
+						<PartRow theme={theme}>
 							<PartInfo>
 								<PartTitle as='span'>
 									GIVFarm & Givgarden
@@ -180,7 +180,7 @@ export const RewardMenu = () => {
 				</Link>
 				<Link href='/givbacks' passHref>
 					<a>
-						<PartRow>
+						<PartRow theme={theme}>
 							<PartInfo>
 								<PartTitle as='span'>GIVBacks</PartTitle>
 								<Row gap='4px'>

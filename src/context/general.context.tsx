@@ -17,7 +17,7 @@ const GlobalStyle = createGlobalStyle<{ theme: ETheme }>`
   body {
     background-color: ${props =>
 		props.theme === ETheme.Dark ? '#1b1657' : 'white'};
-	color: ${props => (props.theme === ETheme.Dark ? '#1b1657' : '#212529')};
+	color: ${props => (props.theme === ETheme.Dark ? 'white' : '#212529')};
   }
 `;
 
