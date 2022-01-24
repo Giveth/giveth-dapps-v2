@@ -24,26 +24,6 @@ const ProjectHeader = (props: { project: IProject }) => {
 	);
 };
 
-const Title = styled(H3)`
-	color: white;
-	max-width: 770px;
-`;
-
-const BadgeSection = styled.div`
-	height: 50%;
-	display: flex;
-	padding: 27px;
-`;
-
-const TitleSection = styled.div`
-	height: 50%;
-	padding: 35px 27px;
-	display: flex;
-	flex-direction: column;
-	justify-content: end;
-	background: linear-gradient(0deg, #0a1444 4.69%, rgba(29, 30, 31, 0) 100%);
-`;
-
 const Wrapper = styled.div<{ image: string | undefined }>`
 	background: ${props => (isNoImg(props.image) ? noImgColor() : 'unset')};
 	background-repeat: ${props =>
@@ -54,6 +34,26 @@ const Wrapper = styled.div<{ image: string | undefined }>`
 	height: 360px;
 	border-radius: 12px;
 	overflow: hidden;
+`;
+
+const BadgeSection = styled.div`
+	height: 50%;
+	display: flex;
+	padding: 27px;
+`;
+
+const Title = styled(H3)`
+	color: white;
+	max-width: 770px;
+`;
+
+const TitleSection = styled.div`
+	height: 50%;
+	padding: 35px 27px;
+	display: flex;
+	flex-direction: column;
+	justify-content: end;
+	background: linear-gradient(0deg, #0a1444 4.69%, rgba(29, 30, 31, 0) 100%);
 `;
 
 export default ProjectHeader;
