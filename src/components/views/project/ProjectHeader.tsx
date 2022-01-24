@@ -18,7 +18,7 @@ const ProjectHeader = (props: { project: IProject }) => {
 			</BadgeSection>
 			<TitleSection>
 				<Title>{title}</Title>
-				<P color={brandColors.pinky[500]}>{name}</P>
+				<Author>{name}</Author>
 			</TitleSection>
 		</Wrapper>
 	);
@@ -45,6 +45,10 @@ const BadgeSection = styled.div`
 const Title = styled(H3)`
 	color: white;
 	max-width: 770px;
+`;
+
+const Author = styled(P)`
+	color: ${brandColors.pinky[500]};
 `;
 
 const TitleSection = styled.div`
