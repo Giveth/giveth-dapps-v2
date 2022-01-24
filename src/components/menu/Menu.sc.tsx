@@ -1,8 +1,10 @@
+import { ETheme } from '@/context/general.context';
 import { brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 interface isMounted {
 	isMounted: boolean;
+	theme?: ETheme;
 }
 
 export const MenuContainer = styled.div<isMounted>`
@@ -10,8 +12,13 @@ export const MenuContainer = styled.div<isMounted>`
 	top: 40%;
 	right: 0;
 	width: 260px;
-	background-color: ${brandColors.giv[900]};
-	border: 1px solid ${brandColors.giv[600]};
+	/* background-color: ${brandColors.giv[900]};
+	border: 1px solid ${brandColors.giv[600]}; */
+	background-color: ${props =>
+		props.theme === ETheme.Dark ? brandColors.giv[900] : 'white'};
+	border: 1px solid
+		${props =>
+			props.theme === ETheme.Dark ? brandColors.giv[600] : 'white'};
 	border-radius: 10px 0 10px 10px;
 	padding: ${props => (props.isMounted ? '38px 12px' : '12px')};
 	z-index: 0;

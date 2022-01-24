@@ -1,5 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import {
+	neutralColors,
+	brandColors,
+	H6,
+	Subline,
+} from '@giveth/ui-design-system';
+import styled from 'styled-components';
+
 import SearchBox from '@/components/SearchBox';
 import { formatDateFromString, formatTxLink } from '@/lib/helpers';
 import linkIcon from '/public/images/external_link.svg';
@@ -9,13 +17,6 @@ import Pagination from '@/components/Pagination';
 import { initializeApollo } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { IDonationsByProjectId } from '@/apollo/types/gqlTypes';
-import {
-	neutralColors,
-	brandColors,
-	H6,
-	Subline,
-} from '@giveth/ui-design-system';
-import styled from 'styled-components';
 
 const ProjectDonationTable = (props: {
 	donations: IDonationsByProjectId;
@@ -74,7 +75,7 @@ const ProjectDonationTable = (props: {
 					</Tab>
 				</Tabs>
 				{/*TODO implement search func*/}
-				<SearchBox onChange={console.log} />
+				<SearchBox onChange={() => {}} value='' reset={() => {}} />
 			</UpperSection>
 
 			{activeTab === 0 && (

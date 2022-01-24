@@ -2,6 +2,16 @@ import { useEffect, useRef, useState } from 'react';
 import Select from 'react-select';
 import Debounced from 'lodash.debounce';
 import { useRouter } from 'next/router';
+import {
+	brandColors,
+	P,
+	neutralColors,
+	Subline,
+	H5,
+	OulineButton,
+} from '@giveth/ui-design-system';
+import styled from 'styled-components';
+
 import { useQuery } from '@apollo/client';
 import { BigArc } from '@/components/styled-components/Arc';
 import ProjectCard from '@/components/project-card/ProjectCard';
@@ -14,16 +24,7 @@ import { initializeApollo } from '@/apollo/apolloClient';
 import { ICategory, IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
 import { gqlEnums } from '@/apollo/types/gqlEnums';
-import {
-	brandColors,
-	P,
-	neutralColors,
-	Subline,
-	H5,
-	Button,
-	OulineButton,
-} from '@giveth/ui-design-system';
-import styled from 'styled-components';
+import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
 
 interface ISelectObj {
 	value: string;
@@ -77,7 +78,8 @@ const ProjectsIndex = () => {
 	const [filteredProjects, setFilteredProjects] =
 		useState<IProject[]>(projects);
 	const [sortBy, setSortBy] = useState<ISelectObj>(sortByObj[0]);
-	const [search, setSearch] = useState<string>();
+	const [search, setSearch] = useState<string>('');
+	const [searchValue, setSearchValue] = useState<string>('');
 	const [totalCount, setTotalCount] = useState(_totalCount);
 
 	const isFirstRender = useRef(true);
@@ -134,9 +136,16 @@ const ProjectsIndex = () => {
 
 	const handleChange = (type: string, input: any) => {
 		pageNum.current = 0;
-		if (type === 'search') debouncedSearch.current(input);
-		else if (type === 'sortBy') setSortBy(input);
+		if (type === 'search') {
+			setSearchValue(input);
+			debouncedSearch.current(input);
+		} else if (type === 'sortBy') setSortBy(input);
 		else if (type === 'category') setSelectedCategory(input);
+	};
+
+	const clearSearch = () => {
+		setSearch('');
+		setSearchValue('');
 	};
 
 	const loadMore = () => {
@@ -178,35 +187,42 @@ const ProjectsIndex = () => {
 						<Label />
 						<SearchBox
 							onChange={(e: string) => handleChange('search', e)}
+							reset={clearSearch}
 							placeholder='Search Projects ...'
+							value={searchValue}
 						/>
 					</div>
 				</FiltersSection>
 
-				{isLoading && <div className='dot-flashing mx-auto my-3' />}
+				{isLoading && <Loader className='dot-flashing' />}
 
 				<ProjectsContainer>
-					{filteredProjects.map(project => (
-						<ProjectCard key={project.id} project={project} />
-					))}
+					{filteredProjects.length > 0 ? (
+						filteredProjects.map(project => (
+							<ProjectCard key={project.id} project={project} />
+						))
+					) : (
+						<ProjectsNoResults trySearch={clearSearch} />
+					)}
 				</ProjectsContainer>
 
 				{showLoadMore && (
 					<>
-						<StyledButton
-							onClick={loadMore}
-							label='LOAD MORE'
-						></StyledButton>
+						<StyledButton onClick={loadMore} label='LOAD MORE' />
 						<StyledButton
 							onClick={() => router.push(Routes.CreateProject)}
 							label='Create a Project'
-						></StyledButton>
+						/>
 					</>
 				)}
 			</Wrapper>
 		</>
 	);
 };
+
+const Loader = styled.div`
+	margin: 20px auto;
+`;
 
 const StyledButton = styled(OulineButton)`
 	color: ${brandColors.pinky[500]};
@@ -215,8 +231,6 @@ const StyledButton = styled(OulineButton)`
 
 const SelectComponent = styled(P)`
 	width: 343px;
-	font-weight: 500;
-	color: ${neutralColors.gray[900]};
 `;
 
 const Label = styled(Subline)`
@@ -234,6 +248,8 @@ const FiltersSection = styled.div`
 	gap: 16px;
 	align-items: center;
 	position: relative;
+	font-weight: 500;
+	color: ${neutralColors.gray[900]};
 `;
 
 const ProjectsContainer = styled.div`

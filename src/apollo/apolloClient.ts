@@ -5,8 +5,8 @@ import gql from 'graphql-tag';
 import { createUploadLink } from 'apollo-upload-client';
 import merge from 'deepmerge';
 import isEqual from 'lodash.isequal';
-import { getLocalStorageUserLabel } from '../services/auth';
-import { isSSRMode } from '../lib/helpers';
+import { getLocalStorageUserLabel } from '@/services/auth';
+import { isSSRMode } from '@/lib/helpers';
 import links from '@/lib/constants/links';
 
 let apolloClient: any;
