@@ -147,6 +147,7 @@ const ProjectDonationTable = (props: {
 
 const Table = styled.table`
 	margin-bottom: 32px;
+	border-collapse: collapse;
 `;
 
 const UsdValue = styled(Subline)`
@@ -178,6 +179,7 @@ const TableHead = styled.th`
 	color: ${brandColors.giv[800]};
 	font-size: 10px;
 	line-height: 13px;
+	text-align: left;
 `;
 
 const DonationSection = styled.div`
@@ -208,6 +210,7 @@ const UpperSection = styled.div`
 	flex-wrap: wrap;
 	gap: 30px;
 	align-items: center;
+	max-width: 750px;
 `;
 
 const Wrapper = styled.div`
