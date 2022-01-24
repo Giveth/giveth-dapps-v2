@@ -47,23 +47,31 @@ const HomeChangeMakers = () => {
 					raising funds within minutes. Creating a project is
 					absolutely free!
 				</Lead>
-				<Button
+				<br />
+				<CreateProjectButton
+					buttonType='primary'
+					size='large'
+					label='CREATE A PROJECT'
 					onClick={() => router.push(Routes.CreateProject)}
-					className='mt-5'
-					label='CREAT A PROJECT'
-				></Button>
+				/>
 			</MiddleSection>
 			<EndSection>
 				{content.map(i => (
 					<EndItem key={i.title}>
-						<H3>{i.title}</H3>
-						<Lead className='mt-3'>{i.description}</Lead>
+						<H3 weight={700}>{i.title}</H3>
+						<br />
+						<Lead>{i.description}</Lead>
 					</EndItem>
 				))}
 			</EndSection>
 		</Wrapper>
 	);
 };
+
+const CreateProjectButton = styled(Button)`
+	height: 66px;
+	padding: 0 80px;
+`;
 
 const PurpleArc = styled(Arc)`
 	border-color: ${`transparent ${brandColors.giv[500]} ${brandColors.giv[500]} ${brandColors.giv[500]}`};
