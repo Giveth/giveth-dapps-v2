@@ -22,9 +22,9 @@ export const menuRoutes = [
 		href: Routes.Join,
 		desktopOnly: true,
 	},
-	{
-		title: 'Create a Project',
-		href: Routes.CreateProject,
-		desktopOnly: false,
-	},
+	// {
+	// 	title: 'Create a Project',
+	// 	href: Routes.CreateProject,
+	// 	desktopOnly: false,
+	// },
 ];

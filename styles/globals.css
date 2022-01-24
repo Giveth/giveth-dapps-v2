@@ -20,24 +20,7 @@ a {
   outline: none;
 }
 
-.select__menu {
-  z-index: 10 !important;
-}
-.select__control {
-  border: 2px solid #EBECF2 !important;
-  border-radius: 8px !important;
-  height: 54px;
-}
-.select__value-container {
-  padding-left: 16px !important;
-}
-.select__indicator {
-  padding-right: 24px !important;
-}
-.select__indicators > span {
-  display: none;
-}
-
+/* Loader CSS */
 .dot-flashing {
   position: relative;
   width: 10px;
@@ -79,8 +62,8 @@ a {
   font-style: normal;
   font-weight: 400;
   src: local(''),
-      url('/fonts/red-hat-text-v6-latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
-      url('/fonts/red-hat-text-v6-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+      url('../public/fonts/red-hat-text-v6-latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+      url('../public/fonts/red-hat-text-v6-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 /* red-hat-text-500 - latin */
 @font-face {
@@ -88,8 +71,8 @@ a {
   font-style: normal;
   font-weight: 500;
   src: local(''),
-      url('/fonts/red-hat-text-v6-latin-500.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
-      url('/fonts/red-hat-text-v6-latin-500.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+      url('../public/fonts/red-hat-text-v6-latin-500.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+      url('../public/fonts/red-hat-text-v6-latin-500.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 /* red-hat-display-700 - latin */
 @font-face {
@@ -97,20 +80,20 @@ a {
   font-style: normal;
   font-weight: 700;
   src: local(''),
-      url('/fonts/red-hat-display-v7-latin-700.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
-      url('/fonts/red-hat-display-v7-latin-700.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+      url('../public/fonts/red-hat-display-v7-latin-700.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+      url('../public/fonts/red-hat-display-v7-latin-700.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 @font-face {
   font-family: 'TeX Gyre Adventor';
   font-style: normal;
   font-weight: normal;
-  src: url('/fonts/texgyreadventor-regular-webfont.woff');
+  src: url('../public/fonts/texgyreadventor-regular-webfont.woff');
 }
 @font-face {
   font-family: 'TeX Gyre Adventor';
   font-style: normal;
   font-weight: 700;
-  src: url('/fonts/texgyreadventor-bold-webfont.woff');
+  src: url('../public/fonts/texgyreadventor-bold-webfont.woff');
 }
 
 .bn-onboard-custom {
