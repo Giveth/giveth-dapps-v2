@@ -10,12 +10,15 @@ const SearchBox = (props: {
 	const { onChange, placeholder } = props;
 	return (
 		<Wrapper>
-			<B className='w-100 mr-2' color={neutralColors.gray[900]}>
+			<InputWrapper
+				className='w-100 mr-2'
+				color={neutralColors.gray[900]}
+			>
 				<Input
 					onChange={e => onChange(e.target.value)}
 					placeholder={placeholder || 'Search ...'}
 				/>
-			</B>
+			</InputWrapper>
 			<Image src={SearchIcon} alt='Search Icon' />
 		</Wrapper>
 	);
@@ -37,6 +40,11 @@ const Input = styled.input`
 	&::placeholder {
 		color: ${neutralColors.gray[500]};
 	}
+`;
+
+const InputWrapper = styled(B)`
+	width: 100%;
+	margin-right: 0.5rem;
 `;
 
 const Wrapper = styled.div`

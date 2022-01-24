@@ -20,6 +20,59 @@ a {
   outline: none;
 }
 
+.select__menu {
+  z-index: 10 !important;
+}
+.select__control {
+  border: 2px solid #EBECF2 !important;
+  border-radius: 8px !important;
+  height: 54px;
+}
+.select__value-container {
+  padding-left: 16px !important;
+}
+.select__indicator {
+  padding-right: 24px !important;
+}
+.select__indicators > span {
+  display: none;
+}
+
+.dot-flashing {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  animation: dot-flashing 1s infinite linear alternate;
+  animation-delay: .5s;
+}
+.dot-flashing::before {
+  left: -15px;
+  animation-delay: 0s;
+}
+.dot-flashing::before, .dot-flashing::after {
+  border-radius: 5px;
+  width: 10px;
+  height: 10px;
+  animation: dot-flashing 1s infinite alternate;
+  content: '';
+  display: inline-block;
+  position: absolute;
+  top: 0;
+}
+.dot-flashing::after {
+  left: 15px;
+  animation-delay: 1s;
+}
+
+@keyframes dot-flashing {
+  0% {
+    background-color: #E1458D;
+  }
+  50%, 100% {
+    background-color: #FFC9E2;
+  }
+}
 
 @font-face {
   font-family: 'Red Hat Text';

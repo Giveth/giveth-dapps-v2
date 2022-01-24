@@ -183,7 +183,7 @@ const ProjectsIndex = () => {
 					</div>
 				</FiltersSection>
 
-				{isLoading && <div className='dot-flashing mx-auto my-3' />}
+				{isLoading && <LoadingIconContainer className='dot-flashing' />}
 
 				<ProjectsContainer>
 					{filteredProjects.map(project => (
@@ -195,11 +195,19 @@ const ProjectsIndex = () => {
 					<>
 						<StyledButton
 							onClick={loadMore}
-							label='LOAD MORE'
+							label={isLoading ? '' : 'LOAD MORE'}
+							icon={
+								isLoading && (
+									<LoadingDotIcon>
+										<div className='dot-flashing'></div>
+									</LoadingDotIcon>
+								)
+							}
 						></StyledButton>
 						<StyledButton
 							onClick={() => router.push(Routes.CreateProject)}
 							label='Create a Project'
+							transparent
 						></StyledButton>
 					</>
 				)}
@@ -208,15 +216,27 @@ const ProjectsIndex = () => {
 	);
 };
 
-const StyledButton = styled(OulineButton)`
+const StyledButton = styled(OulineButton)<{ transparent?: boolean }>`
 	color: ${brandColors.pinky[500]};
+	border-color: ${props =>
+		props.transparent ? 'transparent' : brandColors.pinky[500]};
 	margin: 16px auto;
+	padding: 22px 80px;
+
+	&:hover {
+		color: ${brandColors.pinky[500]};
+		background: inherit;
+	}
 `;
 
 const SelectComponent = styled(P)`
 	width: 343px;
 	font-weight: 500;
 	color: ${neutralColors.gray[900]};
+`;
+
+const LoadingDotIcon = styled.div`
+	padding: 4px 37px;
 `;
 
 const Label = styled(Subline)`
@@ -247,8 +267,14 @@ const Wrapper = styled.div`
 	padding: 166px 30px 4px 30px;
 `;
 
+const LoadingIconContainer = styled.div`
+	margin: 12px auto;
+`;
+
 const Title = styled(H5)`
+	font-weight: 700;
 	margin-bottom: 25px;
+
 	span {
 		color: ${neutralColors.gray[700]};
 	}
