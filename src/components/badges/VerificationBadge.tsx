@@ -13,18 +13,22 @@ const VerificationBadge = (props: { verified?: boolean; trace?: boolean }) => {
 	return (
 		<Wrapper>
 			<Image src={icon} alt='badge icon' />
-			<Overline className='pl-2'>{text}</Overline>
+			<TextBadge styleType='Small'>{text}</TextBadge>
 		</Wrapper>
 	);
 };
 
 const Wrapper = styled(FlexCenter)`
 	height: 30px;
-	background: ${brandColors.deep[900]};
+	background: rgba(9, 17, 57, 0.6);
 	border-radius: 56px;
 	color: white;
 	padding: 0 12px 0 10px;
 	margin-right: 8px;
+`;
+
+const TextBadge = styled(Overline)`
+	padding-left: 0.5rem;
 `;
 
 export default VerificationBadge;

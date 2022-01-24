@@ -4,7 +4,7 @@ import HeartRedIcon from '/public/images/heart_red.svg';
 import ShareIcon from '/public/images/share.svg';
 import { Shadow } from '../styled-components/Shadow';
 import styled from 'styled-components';
-import { GLink } from '@giveth/ui-design-system';
+import { neutralColors, GLink } from '@giveth/ui-design-system';
 
 const ShareLikeBadge = (props: {
 	type: 'share' | 'like';
@@ -17,9 +17,9 @@ const ShareLikeBadge = (props: {
 	return (
 		<Wrapper>
 			<Image src={icon} alt='badge icon' />
-			<GLink size='Medium' className='mx-auto'>
+			<BadgeText size='Medium' className='mx-auto'>
 				{text}
-			</GLink>
+			</BadgeText>
 		</Wrapper>
 	);
 };
@@ -34,6 +34,12 @@ const Wrapper = styled.div`
 	border-radius: 48px;
 	box-shadow: ${Shadow.Neutral['400']};
 	cursor: pointer;
+`;
+
+const BadgeText = styled(GLink)`
+	color: ${neutralColors.gray[600]};
+	font-weight: 500;
+	margin: 0 auto;
 `;
 
 export default ShareLikeBadge;
