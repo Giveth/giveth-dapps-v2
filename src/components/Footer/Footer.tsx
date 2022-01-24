@@ -75,40 +75,22 @@ export const Footer = () => {
 					<RightContainer>
 						<SocialContainer>
 							<a href='https://medium.com/giveth/'>
-								<IconMedium
-									size={24}
-									color={brandColors.deep[100]}
-								/>
+								<IconMedium size={24} />
 							</a>
 							<a href='https://github.com/giveth'>
-								<IconGithub
-									size={24}
-									color={brandColors.deep[100]}
-								/>
+								<IconGithub size={24} />
 							</a>
 							<a href='https://reddit.com/r/giveth'>
-								<IconRedit
-									size={24}
-									color={brandColors.deep[100]}
-								/>
+								<IconRedit size={24} />
 							</a>
 							<a href='https://twitter.com/givethio'>
-								<IconTwitter
-									size={24}
-									color={brandColors.deep[100]}
-								/>
+								<IconTwitter size={24} />
 							</a>
 							<a href='https://www.youtube.com/channel/UClfutpRoY0WTVnq0oB0E0wQ'>
-								<IconYoutube
-									size={24}
-									color={brandColors.deep[100]}
-								/>
+								<IconYoutube size={24} />
 							</a>
 							<a href='https://docs.giveth.io/'>
-								<IconWikipedia
-									size={24}
-									color={brandColors.deep[100]}
-								/>
+								<IconWikipedia size={24} />
 							</a>
 						</SocialContainer>
 						<Row justifyContent='flex-end'>
@@ -140,7 +122,6 @@ const LeftContainer = styled(Row)`
 
 const RightContainer = styled.div`
 	flex: 1;
-	color: ${brandColors.deep[100]};
 `;
 
 const SocialContainer = styled(Row)`
@@ -157,7 +138,6 @@ const LinkColumn = styled(Row)`
 `;
 
 const LinkItem = styled(P)`
-	color: ${brandColors.deep[100]};
 	cursor: pointer;
 `;
 
