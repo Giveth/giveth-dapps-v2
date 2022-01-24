@@ -20,6 +20,14 @@ a {
   outline: none;
 }
 
+/* Quill component */
+.ql-tooltip.ql-hidden {
+  display: none;
+}
+.ql-clipboard {
+  display: none;
+}
+
 /* Loader CSS */
 .dot-flashing {
   position: relative;
