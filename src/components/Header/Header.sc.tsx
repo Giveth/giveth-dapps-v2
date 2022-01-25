@@ -30,7 +30,12 @@ export const StyledHeader = styled(Row)<IHeader>`
 
 export const Logo = styled.div`
 	background: ${neutralColors.gray[100]};
-	box-shadow: 0px 4.125px 27.5px rgba(33, 32, 60, 0.24);
+	box-shadow: ${props => {
+		console.log(' props.theme', props.theme);
+		return props.theme === ETheme.Light
+			? Shadow.Dark[500]
+			: Shadow.Neutral[400];
+	}};
 	border-radius: 99px;
 	padding: 8px;
 	width: 64px;
@@ -60,6 +65,8 @@ export const HeaderButton = styled(CButton)<IThemed>`
 	border: 1px solid
 		${props =>
 			props.theme === ETheme.Dark ? brandColors.giv[600] : 'white'};
+	box-shadow: ${props =>
+		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
 `;
 
 export const BalanceButton = styled(HeaderButton)`
@@ -132,7 +139,8 @@ export const HeaderLinks = styled(Row)<IThemed>`
 	padding: 6px;
 	gap: 8px;
 	display: none;
-	box-shadow: ${Shadow.Dark[500]};
+	box-shadow: ${props =>
+		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
 	@media ${device.laptopL} {
 		display: flex;
 	}
@@ -180,6 +188,8 @@ export const NotifButton = styled(HeaderButton)`
 export const CreateProject = styled(ButtonLink)`
 	white-space: nowrap;
 	display: none;
+	box-shadow: ${props =>
+		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
 	@media ${device.laptop} {
 		display: block;
 	}
@@ -194,6 +204,8 @@ export const SmallCreateProject = styled(ButtonLink)`
 	span {
 		font-size: 32px !important;
 	}
+	box-shadow: ${props =>
+		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
 	@media ${device.laptop} {
 		display: none;
 	}
