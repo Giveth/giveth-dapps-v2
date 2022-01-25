@@ -12,6 +12,7 @@ import {
 } from '@giveth/ui-design-system';
 import { device } from '@/utils/constants';
 import { ETheme } from '@/context/general.context';
+import { Shadow } from '@/components/styled-components/Shadow';
 
 export const HeaderPlaceholder = styled.div`
 	height: 100px;
@@ -131,6 +132,7 @@ export const HeaderLinks = styled(Row)<IThemed>`
 	padding: 6px;
 	gap: 8px;
 	display: none;
+	box-shadow: ${Shadow.Dark[500]};
 	@media ${device.laptopL} {
 		display: flex;
 	}
@@ -213,8 +215,9 @@ export const CoverLine = styled.div<IThemed>`
 		props.theme === ETheme.Dark ? brandColors.giv[900] : 'white'};
 	position: absolute;
 	z-index: 1;
-	height: 6px;
 	left: 1px;
 	right: 1px;
-	top: 40%;
+	top: 1px;
+	bottom: 4px;
+	border-radius: 48px;
 `;
