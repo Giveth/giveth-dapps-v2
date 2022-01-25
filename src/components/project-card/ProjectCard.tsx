@@ -11,7 +11,6 @@ import {
 	slugToProjectDonate,
 	slugToProjectView,
 } from '../../lib/helpers';
-import { Button } from '../styled-components/Button';
 import ProjectCardImage from './ProjectCardImage';
 import {
 	GLink,
@@ -19,6 +18,8 @@ import {
 	H6,
 	brandColors,
 	neutralColors,
+	Button,
+	OulineButton,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
@@ -76,14 +77,20 @@ const ProjectCard = (props: IProjectCard) => {
 					<HoverButtons isHover={isHover}>
 						<Link href={slugToProjectView(slug)}>
 							<a>
-								<Button outline color={brandColors.pinky[500]}>
-									LEARN MORE
-								</Button>
+								<OulineButton
+									buttonType='primary'
+									size='small'
+									label='LEARN MORE'
+								/>
 							</a>
 						</Link>
 						<Link href={slugToProjectDonate(slug)}>
 							<a>
-								<Button>DONATE</Button>
+								<Button
+									buttonType='primary'
+									size='small'
+									label='DONATE'
+								/>
 							</a>
 						</Link>
 					</HoverButtons>
