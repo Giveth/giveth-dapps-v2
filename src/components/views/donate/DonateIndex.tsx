@@ -169,7 +169,7 @@ const ProjectsIndex = (props: IProjectBySlug) => {
   }
 
   return (
-    <>
+    <Container>
       <BigArc />
       <Wrapper>
         <Sections>
@@ -189,10 +189,13 @@ const ProjectsIndex = (props: IProjectBySlug) => {
         </Sections>
         {!isSuccess && <SocialBox />}
       </Wrapper>
-    </>
+    </Container>
   )
 }
 
+const Container = styled.div`
+  background-color: #f7f7f9;
+`
 const ConfettiContainer = styled.div`
   position: absolute;
   top: 200px;
@@ -203,8 +206,7 @@ const Social = styled.div`
   flex-direction: column;
   justify-content: center;
   margin: ${(props: { isSuccess: boolean }) => (props.isSuccess ? 0 : '12px 0')};
-  color: ${(props: { isSuccess: boolean }) =>
-    props.isSuccess === true ? neutralColors.gray[900] : 'white'};
+  color: ${neutralColors.gray[900]};
   align-items: center;
 `
 const SocialItems = styled.div`
@@ -232,7 +234,8 @@ const TitleBox = styled.div`
 `
 const Wrapper = styled.div`
   text-align: center;
-  margin: 60px 194px;
+  margin: 0 194px;
+  padding: 137px 0;
   align-items: center;
 `
 const Sections = styled.div`
