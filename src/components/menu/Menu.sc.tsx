@@ -20,7 +20,7 @@ export const MenuContainer = styled.div<isMounted>`
 		${props =>
 			props.theme === ETheme.Dark ? brandColors.giv[600] : 'white'};
 	border-radius: 10px 0 10px 10px;
-	padding: ${props => (props.isMounted ? '38px 12px' : '12px')};
+	padding: ${props => (props.isMounted ? '38px 12px 12px' : '12px')};
 	z-index: 0;
 	height: ${props => (props.isMounted ? '70vh' : '0px')};
 	overflow: hidden;
