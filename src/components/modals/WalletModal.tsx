@@ -1,14 +1,15 @@
 import Image from 'next/image';
 import { useWeb3React } from '@web3-react/core';
 import {
-	useWalletName,
 	EWallets,
-	walletsArray,
 	TWalletConnector,
+	useWalletName,
+	walletsArray,
 } from '@/lib/wallet/walletTypes';
 import { brandColors, H5, Lead, neutralColors } from '@giveth/ui-design-system';
 import { IModal, Modal } from '@/components/modals/Modal';
 import styled from 'styled-components';
+import { ETheme } from '@/context/general.context';
 
 interface IWalletModal extends IModal {
 	closeParentModal?: () => void;
@@ -47,7 +48,11 @@ const WalletModal = ({
 	if (!showModal) return null;
 
 	return (
-		<Modal showModal={showModal} setShowModal={setShowModal}>
+		<Modal
+			showModal={showModal}
+			setShowModal={setShowModal}
+			customTheme={ETheme.Light}
+		>
 			<IconsContainer>
 				{walletsArray.map(i => (
 					<WalletItem
@@ -78,7 +83,7 @@ const CloseButton = styled.div`
 `;
 
 const IconsContainer = styled.div`
-	padding: 50px 20px;
+	padding: 18px 20px 50px;
 	display: grid;
 	grid-gap: 4px;
 	justify-content: center;

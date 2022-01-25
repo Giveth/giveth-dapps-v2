@@ -92,7 +92,8 @@ export const WrongNetworkModal: FC<IWrongNetworkModal> = ({
 };
 
 const WrongNetworkModalContainer = styled.div`
-	padding: 20px 30px;
+	padding: 0 30px 20px;
+	margin-top: -12px;
 `;
 
 const WrongNetworkModalTitle = styled.span`

@@ -69,7 +69,7 @@ export const WhatisGIVstreamModal: FC<IWhatisGIVstreamModal> = ({
 };
 
 const WhatisGIVstreamContainer = styled.div`
-	padding: 56px 24px 24px;
+	padding: 24px 24px 24px;
 	background-image: url('/images/stream1.svg');
 	background-repeat: no-repeat;
 	width: 570px;

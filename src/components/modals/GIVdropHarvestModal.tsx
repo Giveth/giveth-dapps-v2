@@ -10,8 +10,6 @@ import {
 	GIVRate,
 	HarvestAllDesc,
 	HarvestAllModalContainer,
-	HarvestAllModalTitle,
-	HarvestAllModalTitleRow,
 	HarvestBoxes,
 	HarvestButton,
 	HelpRow,
@@ -214,16 +212,15 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 	};
 
 	return (
-		<Modal showModal={showModal} setShowModal={setShowModal}>
+		<Modal
+			showModal={showModal}
+			setShowModal={setShowModal}
+			headerTitle={'GIVdrop'}
+		>
 			<HarvestAllModalContainer>
 				{(claimState === ClaimState.UNKNOWN ||
 					claimState === ClaimState.WAITING) && (
 					<>
-						<HarvestAllModalTitleRow alignItems='center'>
-							<HarvestAllModalTitle weight={700}>
-								GIVdrop
-							</HarvestAllModalTitle>
-						</HarvestAllModalTitleRow>
 						<StyledScrollbars
 							autoHeight
 							autoHeightMin={'20Vh'}

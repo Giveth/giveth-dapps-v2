@@ -325,7 +325,8 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 };
 
 const StakeModalContainer = styled.div`
-	padding: 24px 0;
+	padding: 0 0 24px;
+	margin-top: -12px;
 `;
 
 const StakeModalTitle = styled(Row)`

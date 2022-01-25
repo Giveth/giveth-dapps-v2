@@ -1,19 +1,33 @@
-import { brandColors, IconX } from '@giveth/ui-design-system';
-import React, { useEffect, useRef } from 'react';
+import { brandColors, IconX, neutralColors } from '@giveth/ui-design-system';
+import React, { ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
+import {
+	ModalHeader,
+	ModalHeaderTitlePosition,
+} from '@/components/modals/ModalHeader';
+import { ETheme, useGeneral } from '@/context/general.context';
 export interface IModal {
 	showModal: boolean;
 	setShowModal: (value: boolean) => void;
 	hiddenClose?: boolean;
+	headerTitlePosition?: ModalHeaderTitlePosition;
+	headerTitle?: string;
+	headerIcon?: ReactNode;
+	customTheme?: ETheme;
 }
 
 export const Modal: React.FC<IModal> = ({
 	hiddenClose = false,
 	setShowModal,
 	children,
+	headerTitlePosition,
+	headerTitle,
+	headerIcon,
+	customTheme,
 }) => {
 	const el = useRef(document.createElement('div'));
+	const { theme } = useGeneral();
 
 	useEffect(() => {
 		const current = el.current;
@@ -30,13 +44,15 @@ export const Modal: React.FC<IModal> = ({
 
 	return createPortal(
 		<Background>
-			<ModalWrapper>
+			<ModalWrapper theme={customTheme || theme}>
+				<ModalHeader
+					hiddenClose={hiddenClose}
+					title={headerTitle}
+					icon={headerIcon}
+					closeModal={() => setShowModal(false)}
+					position={headerTitlePosition}
+				/>
 				{children}
-				{!hiddenClose && (
-					<CloseModalButton onClick={() => setShowModal(false)}>
-						<IconX size={24} />
-					</CloseModalButton>
-				)}
 			</ModalWrapper>
 		</Background>,
 		el.current,
@@ -57,21 +73,20 @@ const Background = styled.div`
 `;
 
 const ModalWrapper = styled.div`
-	background: ${brandColors.giv[600]};
+	background-color: ${props =>
+		props.theme === ETheme.Dark
+			? brandColors.giv[600]
+			: neutralColors.gray[100]};
 	box-shadow: 0px 3px 20px #21203c;
 	border-radius: 8px;
-	color: ${brandColors.deep[100]};
+	color: ${props =>
+		props.theme === ETheme.Dark
+			? neutralColors.gray[100]
+			: brandColors.deep[900]};
 	position: relative;
 	// padding: 24px;
 	z-index: 10;
 	text-align: center;
 	max-height: 90vh;
 	overflow: hidden;
-`;
-
-const CloseModalButton = styled.div`
-	position: absolute;
-	top: 16px;
-	right: 16px;
-	cursor: pointer;
 `;

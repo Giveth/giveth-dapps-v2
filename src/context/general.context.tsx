@@ -9,7 +9,7 @@ import {
 import { createGlobalStyle } from 'styled-components';
 
 export enum ETheme {
-	Light,
+	Light = 1,
 	Dark,
 }
 

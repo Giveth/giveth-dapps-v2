@@ -24,11 +24,8 @@ import {
 	GIVRate,
 	HarvestAllDesc,
 	HarvestAllModalContainer,
-	HarvestAllModalTitle,
-	HarvestAllModalTitleRow,
 	HarvestButton,
 	HelpRow,
-	Pending,
 	RateRow,
 	SPTitle,
 	StakingPoolLabel,
@@ -210,6 +207,8 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 		<Modal
 			showModal={showModal}
 			setShowModal={setShowModal}
+			headerTitle={title}
+			headerTitlePosition={'left'}
 			// title='Your GIVgardens Rewards'
 		>
 			<>
@@ -217,11 +216,6 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 					state === HarvestStates.HARVESTING) &&
 					(sum.isZero() ? (
 						<HarvestAllModalContainer>
-							<HarvestAllModalTitleRow alignItems='center'>
-								<HarvestAllModalTitle weight={700}>
-									{title}
-								</HarvestAllModalTitle>
-							</HarvestAllModalTitleRow>
 							<NothingToHarvest>
 								You have nothing to claim
 							</NothingToHarvest>
@@ -236,12 +230,6 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 						</HarvestAllModalContainer>
 					) : (
 						<HarvestAllModalContainer>
-							<HarvestAllModalTitleRow alignItems='center'>
-								<HarvestAllModalTitle weight={700}>
-									{title}
-								</HarvestAllModalTitle>
-								{/* <TitleIcon size={24} /> */}
-							</HarvestAllModalTitleRow>
 							<StyledScrollbars
 								autoHeight
 								autoHeightMin={'20Vh'}

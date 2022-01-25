@@ -270,7 +270,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 
 const StakeModalContainer = styled.div`
 	width: 370px;
-	padding: 24px 0;
+	padding: 0 0 24px;
 `;
 
 const StakeModalTitle = styled(Row)`

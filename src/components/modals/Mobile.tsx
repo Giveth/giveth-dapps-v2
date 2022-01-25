@@ -42,7 +42,7 @@ export const MobileModal: FC<IMobileModalProps> = ({
 const ModalContainer = styled.div`
 	width: 100%;
 	max-width: 420px;
-	padding: 16px 24px;
+	padding: 0 24px 16px;
 	text-align: center;
 `;
 
