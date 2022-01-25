@@ -55,7 +55,11 @@ const MenuWallet: FC<IMenuWallet> = ({ setShowWalletModal }) => {
 	}, []);
 
 	return (
-		<WalletMenuContainer isMounted={isMounted} theme={theme}>
+		<WalletMenuContainer
+			isMounted={isMounted}
+			theme={theme}
+			isSignedIn={isSignedIn || false}
+		>
 			<Title>WALLET</Title>
 			<Subtitle>
 				<LeftSection>
@@ -87,13 +91,9 @@ const MenuWallet: FC<IMenuWallet> = ({ setShowWalletModal }) => {
 						<MenuItem theme={theme}>{i.title}</MenuItem>
 					</Link>
 				))}
-				{isSignedIn ? (
+				{isSignedIn && (
 					<MenuItem onClick={signOut} theme={theme}>
 						Sign out
-					</MenuItem>
-				) : (
-					<MenuItem onClick={signIn} theme={theme}>
-						Sign in
 					</MenuItem>
 				)}
 			</Menus>
@@ -225,8 +225,12 @@ const Title = styled(Overline)`
 	margin-bottom: 2px;
 `;
 
-const WalletMenuContainer = styled(MenuContainer)`
-	max-height: 470px;
+interface IWalletMenuContainer {
+	isSignedIn: boolean;
+}
+
+const WalletMenuContainer = styled(MenuContainer)<IWalletMenuContainer>`
+	max-height: ${props => (props.isSignedIn ? '470px' : '430px')};
 `;
 
 export default MenuWallet;
