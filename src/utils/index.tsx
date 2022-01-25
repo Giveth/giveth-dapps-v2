@@ -210,3 +210,29 @@ export const switchToXdai = () => {
     ]
   })
 }
+
+export interface IPrefixes {
+  [networkID: number]: string
+}
+
+export const ETHERSCAN_PREFIXES: IPrefixes = {
+  1: 'https://etherscan.io/',
+  3: 'https://ropsten.etherscan.io/',
+  4: 'https://rinkeby.etherscan.io/',
+  5: 'https://goerli.etherscan.io/',
+  42: 'https://kovan.etherscan.io/',
+  100: 'https://blockscout.com/poa/xdai/'
+}
+
+export function formatEtherscanLink(type: any, data: any) {
+  switch (type) {
+    case 'Account': {
+      const [chainId, address] = data
+      return `${ETHERSCAN_PREFIXES[chainId]}address/${address}`
+    }
+    case 'Transaction': {
+      const [chainId, hash] = data
+      return `${ETHERSCAN_PREFIXES[chainId]}tx/${hash}`
+    }
+  }
+}

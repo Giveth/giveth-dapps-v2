@@ -109,7 +109,7 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
   const [inProgress, setInProgress] = useState(false)
   const [unconfirmed, setUnconfirmed] = useState(false)
   const [geminiModal, setGeminiModal] = useState(false)
-  const [txHash, setTxHash] = useState(null)
+  const [txHash, setTxHash] = useState<any>()
   const [erc20List, setErc20List] = useState<any>()
   const [erc20OriginalList, setErc20OriginalList] = useState<any>()
   const [modalIsOpen, setIsOpen] = useState(false)
@@ -293,21 +293,25 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
     }
     return 'less than $0.01'
   }
+
   return (
     <>
-      {showWalletModal && (
+      {showWalletModal && !txHash && (
         <WalletModal showModal={showWalletModal} setShowModal={setShowWalletModal} />
       )}
       {showDonateModal && selectedToken && amountTyped && (
         <DonateModal
           showModal={showDonateModal}
           setShowModal={setShowDonateModal}
+          setSuccessDonation={(hash: any) => {
+            setSuccessDonation(hash)
+            setTxHash(hash)
+          }}
           project={project}
           token={selectedToken}
           userTokenBalance={selectedTokenBalance}
           amount={parseFloat(amountTyped)}
           price={tokenPrice}
-          setTxHash={setTxHash}
           setInProgress={setInProgress}
           setUnconfirmed={setUnconfirmed}
           givBackEligible={givBackEligible}
@@ -347,7 +351,7 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
               if (i?.symbol?.toUpperCase() === 'ETH' || i?.symbol?.toUpperCase() === 'XDAI') {
                 givBackEligibilty = true
               }
-              setGivBackEligible(givBackEligibilty)
+              setGivBackEligible(givBackEligibilty && true)
             }}
             onInputChange={(i: any) => {
               // It's a contract
@@ -405,8 +409,7 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
             small
             background={brandColors.giv[500]}
             width='100%'
-            // onClick={() => setShowDonateModal(true)}
-            onClick={() => setSuccessDonation(true)}
+            onClick={() => setShowDonateModal(true)}
           >
             DONATE
           </Button>

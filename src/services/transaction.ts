@@ -68,25 +68,20 @@ export async function confirmEtherTransaction(
 ) {
   try {
     const MAX_INTENTS = 20 // one every second
-    web3.getTransactionReceipt(transactionHash, function (err: any, receipt: any) {
-      if (err) {
-        return callbackFunction({ ...receipt, error: err })
+    const receipt = await web3?.getTransactionReceipt(transactionHash)
+    if (receipt !== null) {
+      // Transaction went through
+      if (callbackFunction) {
+        callbackFunction({ ...receipt, tooSlow: false })
       }
-
-      if (receipt !== null) {
-        // Transaction went through
-        if (callbackFunction) {
-          callbackFunction({ ...receipt, tooSlow: false })
-        }
-      } else if (count >= MAX_INTENTS) {
-        callbackFunction({ tooSlow: true })
-      } else {
-        // Try again in 1 second
-        setTimeout(function () {
-          confirmEtherTransaction(transactionHash, callbackFunction, ++count, isXDAI, web3)
-        }, 1000)
-      }
-    })
+    } else if (count >= MAX_INTENTS) {
+      callbackFunction({ tooSlow: true })
+    } else {
+      // Try again in 1 second
+      setTimeout(function () {
+        confirmEtherTransaction(transactionHash, callbackFunction, ++count, isXDAI, web3)
+      }, 1000)
+    }
   } catch (error) {
     return callbackFunction({ error })
   }

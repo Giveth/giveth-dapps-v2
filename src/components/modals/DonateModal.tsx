@@ -36,9 +36,9 @@ interface IDonateModal extends IModal {
   price?: number
   userTokenBalance?: number
   anonymous?: boolean
-  setTxHash?: any
   setInProgress?: any
   setUnconfirmed?: any
+  setSuccessDonation?: any
   givBackEligible?: boolean
 }
 
@@ -52,8 +52,8 @@ const DonateModal = ({
   amount,
   price,
   anonymous,
-  setTxHash,
   setInProgress,
+  setSuccessDonation,
   setUnconfirmed,
   givBackEligible
 }: IDonateModal) => {
@@ -161,22 +161,24 @@ const DonateModal = ({
               transactionHash,
               (res: any) => {
                 try {
+                  console.log({ res })
                   if (!res) return
                   // toast.dismiss()
-                  if (res?.tooSlow) {
+                  if (res?.tooSlow === true) {
                     // Tx is being too slow
                     // toast.dismiss()
-                    setTxHash({
+                    setSuccessDonation({
                       transactionHash,
                       tokenSymbol: token.symbol,
                       subtotal: amount,
-                      givBackEligible
+                      givBackEligible,
+                      tooSlow: true
                     })
                     setInProgress(true)
                   } else if (res?.status) {
                     // Tx was successful
                     // toast.dismiss()
-                    setTxHash({
+                    setSuccessDonation({
                       transactionHash,
                       tokenSymbol: token.symbol,
                       subtotal: amount,
@@ -185,7 +187,7 @@ const DonateModal = ({
                     setUnconfirmed(false)
                   } else {
                     // EVM reverted the transaction, it failed
-                    setTxHash({
+                    setSuccessDonation({
                       transactionHash,
                       tokenSymbol: token.symbol,
                       subtotal: amount,
@@ -221,7 +223,8 @@ const DonateModal = ({
             await saveDonationTransaction(transactionHash, donationId)
           },
           onReceiptGenerated: (receipt: any) => {
-            setTxHash({
+            console.log({ receipt })
+            setSuccessDonation({
               transactionHash: receipt?.transactionHash,
               tokenSymbol: token.symbol,
               subtotal: amount
