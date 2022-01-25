@@ -147,7 +147,7 @@ const Header: FC<IHeader> = () => {
 					))}
 				</HeaderLinks>
 				<Row gap='8px'>
-					<Link href='/terms' passHref>
+					<Link href='/create' passHref>
 						<CreateProject
 							label='CREATE A PROJECT'
 							size='small'
@@ -156,7 +156,7 @@ const Header: FC<IHeader> = () => {
 							}
 						/>
 					</Link>
-					<Link href='/terms' passHref>
+					<Link href='/create' passHref>
 						<SmallCreateProject
 							label=''
 							icon={
