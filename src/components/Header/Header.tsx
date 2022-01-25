@@ -86,6 +86,7 @@ const Header: FC<IHeader> = () => {
 			setShowHeader(show);
 			if (!show) {
 				setShowRewardMenu(false);
+				setShowUserMenu(false);
 			}
 			lastScrollY = scrollY > 0 ? scrollY : 0;
 			ticking = false;
