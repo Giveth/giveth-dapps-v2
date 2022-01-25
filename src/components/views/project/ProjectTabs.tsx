@@ -67,11 +67,17 @@ const Tab = styled(P)`
 `;
 
 const Wrapper = styled.div`
-	margin: 24px 0 40px 0;
+	padding: 24px 0 24px 0;
+	margin-bottom: 16px;
 	color: ${brandColors.deep[600]};
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
+	position: sticky;
+	position: -webkit-sticky;
+	top: calc(22.5% + 8px);
+	background-color: white;
+	z-index: 10;
 `;
 
 export default ProjectTabs;

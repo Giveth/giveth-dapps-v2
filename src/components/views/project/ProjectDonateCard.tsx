@@ -119,6 +119,10 @@ const Wrapper = styled.div`
 	position: relative;
 	box-shadow: ${Shadow.Neutral['400']};
 	flex-shrink: 0;
+	position: sticky;
+	position: -webkit-sticky;
+	align-self: flex-start;
+	top: calc(22.5% - 24px);
 `;
 
 const DonateButton = styled(Button)`
