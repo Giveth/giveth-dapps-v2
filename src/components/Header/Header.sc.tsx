@@ -83,7 +83,7 @@ export const WBInfo = styled.div`
 	margin-left: 8px;
 `;
 
-export const WBNetwork = styled.span`
+export const WBNetwork = styled(GLink)`
 	font-family: 'Red Hat Text';
 	font-style: normal;
 	font-weight: normal;
@@ -102,7 +102,7 @@ export const HBBalanceLogo = styled(HBPic)`
 	background: #5326ec;
 `;
 
-export const HBContent = styled.span`
+export const HBContent = styled(GLink)`
 	margin-left: 8px;
 `;
 
@@ -153,7 +153,7 @@ export const HeaderLink = styled(GLink)<IHeaderLinkProps>`
 		if (props.active) {
 			return props.theme === ETheme.Dark
 				? brandColors.giv[600]
-				: neutralColors.gray[100];
+				: brandColors.giv[100];
 		}
 		return '';
 	}};

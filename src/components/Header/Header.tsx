@@ -36,6 +36,7 @@ import MenuWallet from '@/components/menu/MenuWallet';
 import { ETheme, useGeneral } from '@/context/general.context';
 import { useRouter } from 'next/router';
 import { menuRoutes } from '../menu/MenuRoutes';
+import { GLink } from '@giveth/ui-design-system';
 
 export interface IHeader {
 	theme?: ThemeType;
@@ -148,6 +149,7 @@ const Header: FC<IHeader> = () => {
 					<Link href='/terms' passHref>
 						<CreateProject
 							label='CREATE A PROJECT'
+							size='small'
 							linkType={
 								theme === ETheme.Light ? 'primary' : 'secondary'
 							}
@@ -188,7 +190,7 @@ const Header: FC<IHeader> = () => {
 											width={'24px'}
 											height={'24px'}
 										/>
-										<HBContent>
+										<HBContent size='Big'>
 											{formatWeiHelper(balances.balance)}
 										</HBContent>
 									</HBContainer>
@@ -212,14 +214,14 @@ const Header: FC<IHeader> = () => {
 											height={'24px'}
 										/>
 										<WBInfo>
-											<span>{`${account.substring(
+											<GLink size='Medium'>{`${account.substring(
 												0,
 												6,
 											)}...${account.substring(
 												account.length - 5,
 												account.length,
-											)}`}</span>
-											<WBNetwork>
+											)}`}</GLink>
+											<WBNetwork size='Tiny'>
 												Connected to{' '}
 												{networksParams[chainId]
 													? networksParams[chainId]
