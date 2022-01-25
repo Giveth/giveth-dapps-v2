@@ -39,29 +39,26 @@ export const useStakingPool = (
 
 	const { type, LM_ADDRESS } = poolStakingConfig;
 
-	const unipoolIsDefined = !!currentValues[type];
+	const unipool = currentValues[type];
+	const unipoolIsDefined = !!unipool;
+	const providerNetwork = library?.network?.chainId;
 
 	useEffect(() => {
 		const cb = () => {
-			const providerNetwork = library?.network?.chainId;
 			if (
 				library &&
 				chainId === network &&
-				// When switching to another network, the provider may still be connected to wrong one
-				(providerNetwork === undefined || providerNetwork === network)
+				providerNetwork === network &&
+				unipoolIsDefined
 			) {
 				const promise: Promise<APR> =
 					type === StakingType.GIV_LM
-						? getGivStakingAPR(
-								LM_ADDRESS,
-								network,
-								currentValues[type],
-						  )
+						? getGivStakingAPR(LM_ADDRESS, network, unipool)
 						: getLPStakingAPR(
 								poolStakingConfig,
 								network,
 								library,
-								currentValues[type],
+								unipool,
 						  );
 				promise.then(setApr);
 			} else {
@@ -79,7 +76,7 @@ export const useStakingPool = (
 				stakePoolInfoPoll.current = null;
 			}
 		};
-	}, [library, chainId, unipoolIsDefined]);
+	}, [library, chainId, unipoolIsDefined, providerNetwork]);
 
 	const isMounted = useRef(true);
 	useEffect(() => {

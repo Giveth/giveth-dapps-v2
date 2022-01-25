@@ -6,15 +6,24 @@ import {
 	Dispatch,
 	SetStateAction,
 } from 'react';
+import { createGlobalStyle } from 'styled-components';
 
-enum Theme {
+export enum ETheme {
 	Light,
 	Dark,
 }
 
+const GlobalStyle = createGlobalStyle<{ theme: ETheme }>`
+  body {
+    background-color: ${props =>
+		props.theme === ETheme.Dark ? '#1b1657' : 'white'};
+	color: ${props => (props.theme === ETheme.Dark ? 'white' : '#212529')};
+  }
+`;
+
 export interface IGeneralContext {
-	theme: Theme;
-	setTheme: Dispatch<SetStateAction<Theme>>;
+	theme: ETheme;
+	setTheme: Dispatch<SetStateAction<ETheme>>;
 	showHeader: boolean;
 	setShowHeader: Dispatch<SetStateAction<boolean>>;
 	showFooter: boolean;
@@ -22,7 +31,7 @@ export interface IGeneralContext {
 }
 
 export const GeneralContext = createContext<IGeneralContext>({
-	theme: Theme.Light,
+	theme: ETheme.Light,
 	setTheme: theme => {},
 	showHeader: true,
 	setShowHeader: showHeader => {},
@@ -31,7 +40,7 @@ export const GeneralContext = createContext<IGeneralContext>({
 });
 
 export const GeneralProvider: FC = ({ children }) => {
-	const [theme, setTheme] = useState<Theme>(Theme.Light);
+	const [theme, setTheme] = useState<ETheme>(ETheme.Light);
 	const [showHeader, setShowHeader] = useState(true);
 	const [showFooter, setShowFooter] = useState(true);
 
@@ -46,6 +55,7 @@ export const GeneralProvider: FC = ({ children }) => {
 				setShowFooter,
 			}}
 		>
+			<GlobalStyle theme={theme} />
 			{children}
 		</GeneralContext.Provider>
 	);

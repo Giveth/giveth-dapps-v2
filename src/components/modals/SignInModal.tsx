@@ -4,7 +4,7 @@ import Modal from 'react-modal';
 import Image from 'next/image';
 import { useWeb3React } from '@web3-react/core';
 
-import { Shadow } from '../components/styled-components/Shadow';
+import { Shadow } from '@/components/styled-components/Shadow';
 import closeIcon from '/public/images/close.svg';
 import ethIcon from '/public/images/tokens/eth.png';
 import googleIcon from '/public/images/google_icon.svg';
@@ -12,11 +12,11 @@ import twitterIcon from '/public/images/social-tt.svg';
 import facebookIcon from '/public/images/social-fb2.svg';
 import discordIcon from '/public/images/social-disc.svg';
 import torusBrand from '/public/images/torus_pwr.svg';
-import { mediaQueries } from '../lib/helpers';
+import { mediaQueries } from '@/lib/helpers';
 import { torusConnector } from '@/lib/wallet/walletTypes';
 import { H3, P, brandColors, neutralColors, B } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import WalletModal from './modals/WalletModal';
+import WalletModal from './WalletModal';
 
 interface ISignInModal {
 	showModal: boolean;
@@ -188,7 +188,7 @@ const customStyles = {
 	},
 	overlay: {
 		backgroundColor: 'rgb(9 4 70 / 70%)',
-		zIndex: 1000,
+		zIndex: 1060,
 	},
 };
 

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
 import { Button } from '../styled-components/Button';
@@ -15,7 +15,7 @@ import {
 	OulineLinkButton,
 } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
-import { InjectedConnector } from '@web3-react/injected-connector';
+import WalletModal from '@/components/modals/WalletModal';
 interface IConnectCardContainerProps {
 	data: any;
 }
@@ -209,7 +209,10 @@ const WalletCheckButton = styled.button`
 `;
 
 export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
-	const { account, activate } = useWeb3React();
+	const { account, deactivate } = useWeb3React();
+	const [showWalletModal, setShowWalletModal] = useState(false);
+	// Auto get claim data on wallet change
+	const [walletIsChanged, setWalletIsChanged] = useState(false);
 	const {
 		totalAmount,
 		giveDropState,
@@ -219,6 +222,13 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 		goNextStep,
 		getClaimData,
 	} = useClaim();
+
+	useEffect(() => {
+		if (walletIsChanged && account) {
+			setWalletIsChanged(false);
+			getClaimData();
+		}
+	}, [walletIsChanged, account, getClaimData]);
 
 	let title;
 	let desc;
@@ -286,70 +296,78 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 	}
 
 	return (
-		<ConnectCardContainer activeIndex={step} index={index} data={bg}>
-			{giveDropState !== GiveDropStateType.Claimed && (
-				<Header>
-					<Title as='h1' weight={700}>
-						{title}
-					</Title>
-					<Desc>{desc}</Desc>
-				</Header>
-			)}
-			{giveDropState !== GiveDropStateType.Success &&
-				giveDropState !== GiveDropStateType.Claimed && (
-					<>
-						<ConnectRow
-							alignItems={'center'}
-							justifyContent={'space-between'}
-						>
-							<WalletDisplayer>
-								<ConnectButton
-									secondary
-									onClick={async () => {
-										const res = await activate(
-											new InjectedConnector({}),
-										);
-										if (account) {
-											getClaimData();
-										}
-									}}
-								>
-									{btnLabel}
-								</ConnectButton>
-								{giveDropState === GiveDropStateType.Missed && (
-									<Link href='/' passHref>
-										<WalletLink>
-											Go to GIVeconomy
-										</WalletLink>
-									</Link>
-								)}
-							</WalletDisplayer>
-							<WalletDisplayer>
-								<WalletDisplayerInputContainer>
-									<WalletDisplayerInput
-										disabled
-										value={account || ''}
-										placeholder='Please connect your wallet'
-									/>
-									<WalletCheckButton onClick={getClaimData}>
-										Check
-									</WalletCheckButton>
-								</WalletDisplayerInputContainer>
-								<WalletLink
-									href='https://docs.giveth.io/giveconomy/givdrop/#if-you-get-stuck-in-the-givdrop-claim'
-									target='_blank'
-								>
-									What if this address doesn&apos;t match the
-									address in my wallet?
-								</WalletLink>
-							</WalletDisplayer>
-						</ConnectRow>
-					</>
+		<>
+			<ConnectCardContainer activeIndex={step} index={index} data={bg}>
+				{giveDropState !== GiveDropStateType.Claimed && (
+					<Header>
+						<Title as='h1' weight={700}>
+							{title}
+						</Title>
+						<Desc>{desc}</Desc>
+					</Header>
 				)}
-			{giveDropState === GiveDropStateType.Success && step === index && (
-				<ArrowButton onClick={goNextStep} />
+				{giveDropState !== GiveDropStateType.Success &&
+					giveDropState !== GiveDropStateType.Claimed && (
+						<>
+							<ConnectRow
+								alignItems={'center'}
+								justifyContent={'space-between'}
+							>
+								<WalletDisplayer>
+									<ConnectButton
+										secondary
+										onClick={() => {
+											deactivate();
+											setWalletIsChanged(true);
+											setShowWalletModal(true);
+										}}
+									>
+										{btnLabel}
+									</ConnectButton>
+									{giveDropState ===
+										GiveDropStateType.Missed && (
+										<Link href='/' passHref>
+											<WalletLink>
+												Go to GIVeconomy
+											</WalletLink>
+										</Link>
+									)}
+								</WalletDisplayer>
+								<WalletDisplayer>
+									<WalletDisplayerInputContainer>
+										<WalletDisplayerInput
+											disabled
+											value={account || ''}
+											placeholder='Please connect your wallet'
+										/>
+										<WalletCheckButton
+											onClick={getClaimData}
+										>
+											Check
+										</WalletCheckButton>
+									</WalletDisplayerInputContainer>
+									<WalletLink
+										href='https://docs.giveth.io/giveconomy/givdrop/#if-you-get-stuck-in-the-givdrop-claim'
+										target='_blank'
+									>
+										What if this address doesn&apos;t match
+										the address in my wallet?
+									</WalletLink>
+								</WalletDisplayer>
+							</ConnectRow>
+						</>
+					)}
+				{giveDropState === GiveDropStateType.Success &&
+					step === index && <ArrowButton onClick={goNextStep} />}
+			</ConnectCardContainer>
+
+			{showWalletModal && (
+				<WalletModal
+					showModal={showWalletModal}
+					setShowModal={setShowWalletModal}
+				/>
 			)}
-		</ConnectCardContainer>
+		</>
 	);
 };
 

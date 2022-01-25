@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { Row } from '@/components/styled-components/Grid';
-import { FC, useContext, useState, useEffect } from 'react';
-import { ThemeContext, ThemeType } from '@/context/theme.context';
+import { FC, useState, useEffect } from 'react';
+import { ThemeType } from '@/context/theme.context';
 import { formatWeiHelper } from '@/helpers/number';
 import { networksParams } from '@/helpers/blockchain';
 import {
@@ -31,9 +31,11 @@ import { RewardMenu } from '@/components/menu/RewardMenu';
 import { useWeb3React } from '@web3-react/core';
 import WalletModal from '@/components/modals/WalletModal';
 import { walletsArray } from '@/lib/wallet/walletTypes';
-import links from '@/lib/constants/links';
-import SignInModal from '../SignInModal';
+import SignInModal from '../modals/SignInModal';
 import MenuWallet from '@/components/menu/MenuWallet';
+import { ETheme, useGeneral } from '@/context/general.context';
+import { useRouter } from 'next/router';
+import { menuRoutes } from '../menu/MenuRoutes';
 
 export interface IHeader {
 	theme?: ThemeType;
@@ -46,11 +48,13 @@ const Header: FC<IHeader> = () => {
 	const [showHeader, setShowHeader] = useState(true);
 	const [showWalletModal, setShowWalletModal] = useState(false);
 	const [showSigninModal, setShowSigninModal] = useState(false);
-	const { theme } = useContext(ThemeContext);
+	const [isGIVconomyRoute, setIsGIVconomyRoute] = useState(false);
 	const {
 		currentValues: { balances },
 	} = useSubgraph();
 	const { chainId, active, activate, account, library } = useWeb3React();
+	const { theme } = useGeneral();
+	const router = useRouter();
 
 	const handleHoverClickBalance = (show: boolean) => {
 		setShowRewardMenu(show);
@@ -63,7 +67,7 @@ const Header: FC<IHeader> = () => {
 		if (wallet) {
 			activate(wallet.connector);
 		}
-	}, []);
+	}, [activate]);
 
 	useEffect(() => {
 		const threshold = 0;
@@ -98,9 +102,13 @@ const Header: FC<IHeader> = () => {
 		return () => window.removeEventListener('scroll', onScroll);
 	}, [showHeader]);
 
+	useEffect(() => {
+		setIsGIVconomyRoute(router.route.startsWith('/giv'));
+	}, [router.route]);
+
 	return (
 		<>
-			<HeaderPlaceholder />
+			{/* <HeaderPlaceholder /> */}
 			<StyledHeader
 				justifyContent='space-between'
 				alignItems='center'
@@ -123,39 +131,44 @@ const Header: FC<IHeader> = () => {
 						</Link>
 					</SmallHeaderLinks>
 				</Row>
-				<HeaderLinks>
-					<Link href='/' passHref>
-						<HeaderLink size='Big'>Home</HeaderLink>
-					</Link>
-					<HeaderLink size='Big' href='/projects'>
-						Projects
-					</HeaderLink>
-					<Link href={links.GIVECONOMY} passHref>
-						<HeaderLink size='Big'>GIVeconomy</HeaderLink>
-					</Link>
-					<Link href='/join' passHref>
-						<HeaderLink size='Big'>Community</HeaderLink>
-					</Link>
+				<HeaderLinks theme={theme}>
+					{menuRoutes.map((link, index) => (
+						<Link href={link.href} passHref key={index}>
+							<HeaderLink
+								size='Big'
+								theme={theme}
+								active={router.route === link.href}
+							>
+								{link.title}
+							</HeaderLink>
+						</Link>
+					))}
 				</HeaderLinks>
 				<Row gap='8px'>
-					<CreateProject
-						label='CREATE A PROJECT'
-						href='/create'
-						target='_blank'
-					/>
-					<SmallCreateProject
-						label=''
-						href='/create'
-						target='_blank'
-						icon={
-							<Image
-								src='/images/plus-white.svg'
-								width={16}
-								height={16}
-								alt='create project'
-							/>
-						}
-					/>
+					<Link href='/terms' passHref>
+						<CreateProject
+							label='CREATE A PROJECT'
+							linkType={
+								theme === ETheme.Light ? 'primary' : 'secondary'
+							}
+						/>
+					</Link>
+					<Link href='/terms' passHref>
+						<SmallCreateProject
+							label=''
+							icon={
+								<Image
+									src='/images/plus-white.svg'
+									width={16}
+									height={16}
+									alt='create project'
+								/>
+							}
+							linkType={
+								theme === ETheme.Light ? 'primary' : 'secondary'
+							}
+						/>
+					</Link>
 					{active && account && chainId ? (
 						<>
 							<MenuAndButtonContainer
@@ -167,7 +180,7 @@ const Header: FC<IHeader> = () => {
 									handleHoverClickBalance(false)
 								}
 							>
-								<BalanceButton outline>
+								<BalanceButton outline theme={theme}>
 									<HBContainer>
 										<HBBalanceLogo
 											src={'/images/logo/logo.svg'}
@@ -179,7 +192,7 @@ const Header: FC<IHeader> = () => {
 											{formatWeiHelper(balances.balance)}
 										</HBContent>
 									</HBContainer>
-									<CoverLine />
+									<CoverLine theme={theme} />
 								</BalanceButton>
 								{showRewardMenu && <RewardMenu />}
 							</MenuAndButtonContainer>
@@ -188,16 +201,7 @@ const Header: FC<IHeader> = () => {
 								onMouseEnter={() => setShowUserMenu(true)}
 								onMouseLeave={() => setShowUserMenu(false)}
 							>
-								<WalletButton
-									outline
-									onClick={() => {
-										// window.localStorage.removeItem(
-										// 	'selectedWallet',
-										// );
-										// deactivate();
-										// setShowWalletModal(true);
-									}}
-								>
+								<WalletButton outline theme={theme}>
 									<HBContainer>
 										<HBPic
 											src={
@@ -225,7 +229,7 @@ const Header: FC<IHeader> = () => {
 											</WBNetwork>
 										</WBInfo>
 									</HBContainer>
-									<CoverLine />
+									<CoverLine theme={theme} />
 								</WalletButton>
 								{showUserMenu && (
 									<MenuWallet
@@ -238,9 +242,17 @@ const Header: FC<IHeader> = () => {
 						<div>
 							<ConnectButton
 								buttonType='primary'
-								label='CONNECT WALLET'
+								label={
+									isGIVconomyRoute
+										? 'CONNECT WALLET'
+										: 'SIGN IN'
+								}
 								onClick={() => {
-									setShowWalletModal(true);
+									if (isGIVconomyRoute) {
+										setShowWalletModal(true);
+									} else {
+										setShowSigninModal(true);
+									}
 								}}
 							/>
 						</div>

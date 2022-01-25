@@ -1,5 +1,6 @@
 import { EWallets, torusConnector } from '@/lib/wallet/walletTypes'
 import { switchNetwork as metamaskSwitchNetwork } from '@/lib/metamask'
+import config from '@/configuration'
 
 export const switchNetwork = async (chainId: number) => {
   const selectedWallet = window.localStorage.getItem('selectedWallet')
@@ -36,4 +37,13 @@ export async function getAddressFromENS(ens: string, web3: any) {
   let zeroXAddress = '0x0000000000000000000000000000000000000000'
 
   return address === zeroXAddress ? new Error('Error gettingAddressFromENS') : address
+}
+
+export const switchNetworkHandler = (chainId: number | undefined) => {
+  if (!chainId) return
+  if (chainId === config.XDAI_NETWORK_NUMBER) {
+    switchNetwork(config.MAINNET_NETWORK_NUMBER)
+  } else {
+    switchNetwork(config.XDAI_NETWORK_NUMBER)
+  }
 }

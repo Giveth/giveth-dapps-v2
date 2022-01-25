@@ -38,11 +38,10 @@ const ProjectDonateCard = (props: IProjectBySlug) => {
 
 	return (
 		<Wrapper>
-			<Button
+			<DonateButton
 				onClick={() => router.push(slugToProjectDonate(slug))}
-				className='w-100'
 				label='DONATE'
-			></Button>
+			></DonateButton>
 			<BadgeWrapper>
 				<ShareLikeBadge type='share' />
 				<ShareLikeBadge type='like' active={heartedByUser} />
@@ -120,6 +119,10 @@ const Wrapper = styled.div`
 	position: relative;
 	box-shadow: ${Shadow.Neutral['400']};
 	flex-shrink: 0;
+`;
+
+const DonateButton = styled(Button)`
+	width: 100%;
 `;
 
 export default ProjectDonateCard;

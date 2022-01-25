@@ -20,7 +20,7 @@ const ProjectTotalFundCard = (props: {
 			<UpperSection>
 				<div>
 					<Subline>All time funding received</Subline>
-					<H2>{'$' + totalFund}</H2>
+					<TotalFund>{'$' + totalFund}</TotalFund>
 				</div>
 				<div>
 					<Subline>Funding from Traces</Subline>
@@ -35,17 +35,13 @@ const ProjectTotalFundCard = (props: {
 	);
 };
 
-const BottomSection = styled.div`
-	background: ${neutralColors.gray[200]};
-	padding: 9.5px 22px;
-	display: flex;
-	gap: 8px;
-	color: ${neutralColors.gray[500]};
-`;
-
-const FromTraces = styled(H5)`
-	margin-top: 12px;
-	font-weight: 400;
+const Wrapper = styled.div`
+	background: white;
+	max-width: 750px;
+	margin-right: 30px;
+	border-radius: 12px;
+	box-shadow: ${Shadow.Neutral[400]};
+	overflow: hidden;
 `;
 
 const UpperSection = styled.div`
@@ -57,13 +53,21 @@ const UpperSection = styled.div`
 	gap: 40px 150px;
 `;
 
-const Wrapper = styled.div`
-	background: white;
-	max-width: 750px;
-	margin-right: 30px;
-	border-radius: 12px;
-	box-shadow: ${Shadow.Neutral[400]};
-	overflow: hidden;
+const TotalFund = styled(H2)`
+	font-weight: 700;
+`;
+
+const FromTraces = styled(H5)`
+	margin-top: 12px;
+	font-weight: 400;
+`;
+
+const BottomSection = styled.div`
+	background: ${neutralColors.gray[200]};
+	padding: 9.5px 22px;
+	display: flex;
+	gap: 8px;
+	color: ${neutralColors.gray[500]};
 `;
 
 export default ProjectTotalFundCard;
