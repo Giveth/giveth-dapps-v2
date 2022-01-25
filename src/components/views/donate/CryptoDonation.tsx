@@ -317,7 +317,7 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
           givBackEligible={givBackEligible}
         />
       )}
-      {networkId !== xdaiChain.id && (
+      {isEnabled && networkId !== xdaiChain.id && (
         <XDaiContainer>
           <div>
             <img src='/images/gas_station.svg' />
@@ -375,7 +375,9 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
                 }
               } else {
                 setCustomInput(i)
-                setErc20List([...erc20OriginalList])
+                erc20OriginalList &&
+                  erc20OriginalList?.length > 0 &&
+                  setErc20List([...erc20OriginalList])
               }
             }}
             placeholder={isGivingBlockProject ? 'Search name' : 'Search name or paste an address'}
@@ -423,13 +425,6 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
           >
             CONNECT WALLET
           </Button>
-        )}
-        {!!web3 && (
-          <GLink
-          // onClick={showWalletModal}
-          >
-            click here to use another wallet
-          </GLink>
         )}
       </ButtonContainer>
     </>
