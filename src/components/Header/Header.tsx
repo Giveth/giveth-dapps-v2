@@ -118,7 +118,7 @@ const Header: FC<IHeader> = () => {
 				show={showHeader}
 			>
 				<Row>
-					<Logo>
+					<Logo theme={theme}>
 						<Image
 							width='48p'
 							height='48px'
@@ -151,6 +151,7 @@ const Header: FC<IHeader> = () => {
 						<CreateProject
 							label='CREATE A PROJECT'
 							size='small'
+							theme={theme}
 							linkType={
 								theme === ETheme.Light ? 'primary' : 'secondary'
 							}
@@ -158,6 +159,7 @@ const Header: FC<IHeader> = () => {
 					</Link>
 					<Link href='/create' passHref>
 						<SmallCreateProject
+							theme={theme}
 							label=''
 							icon={
 								<Image

@@ -27,5 +27,5 @@ export const MenuContainer = styled.div<isMounted>`
 	overflow: hidden;
 	transition: height 0.3s ease, padding 0.3s ease;
 	box-shadow: ${props =>
-		props.theme === ETheme.Light ? Shadow.Dark[500] : Shadow.Neutral[400]};
+		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
 `;
