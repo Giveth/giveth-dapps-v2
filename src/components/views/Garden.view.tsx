@@ -1,15 +1,15 @@
-import { TabGardenTop, TabGardenBottom } from '../homeTabs/GIVgarden'
+import { TabGardenTop, TabGardenBottom } from '../homeTabs/GIVgarden';
 
-import Tabs from '../Tabs'
+import Tabs from '../Tabs';
 
 function GIVgardenView() {
-  return (
-    <>
-      <TabGardenTop />
-      <Tabs />
-      <TabGardenBottom />
-    </>
-  )
+	return (
+		<>
+			<TabGardenTop />
+			<Tabs />
+			<TabGardenBottom />
+		</>
+	);
 }
 
-export default GIVgardenView
+export default GIVgardenView;

@@ -1,15 +1,15 @@
-import { TabGIVfarmTop, TabGIVfarmBottom } from '../homeTabs/GIVfarm'
+import { TabGIVfarmTop, TabGIVfarmBottom } from '../homeTabs/GIVfarm';
 
-import Tabs from '../Tabs'
+import Tabs from '../Tabs';
 
 function GIVfarmView() {
-  return (
-    <>
-      <TabGIVfarmTop />
-      <Tabs />
-      <TabGIVfarmBottom />
-    </>
-  )
+	return (
+		<>
+			<TabGIVfarmTop />
+			<Tabs />
+			<TabGIVfarmBottom />
+		</>
+	);
 }
 
-export default GIVfarmView
+export default GIVfarmView;

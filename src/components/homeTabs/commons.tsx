@@ -1,25 +1,25 @@
-import { brandColors, Container, GLink } from '@giveth/ui-design-system'
-import styled from 'styled-components'
-import { Row } from '../styled-components/Grid'
+import { brandColors, Container, GLink } from '@giveth/ui-design-system';
+import styled from 'styled-components';
+import { Row } from '../styled-components/Grid';
 
-export const TabContainer = styled.div``
+export const TabContainer = styled.div``;
 
 export const TopContainer = styled(TabContainer)`
-  background-image: url('/images/backgrounds/givup.svg');
-  height: 370px;
-`
+	background-image: url('/images/backgrounds/givup.svg');
+	height: 370px;
+`;
 
 export const TopInnerContainer = styled(Container)`
-  display: flex;
-  flex-direction: column;
-  height: 370px;
-`
-export const TopContainerRow = styled(Row)``
+	display: flex;
+	flex-direction: column;
+	height: 370px;
+`;
+export const TopContainerRow = styled(Row)``;
 export const TopFiller = styled.div`
-  flex: 1;
-`
+	flex: 1;
+`;
 
 export const ExtLink = styled(GLink)`
-  color: ${brandColors.cyan[500]};
-  cursor: pointer;
-`
+	color: ${brandColors.cyan[500]};
+	cursor: pointer;
+`;

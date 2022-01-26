@@ -1,86 +1,100 @@
-import { useEffect, useRef, useState } from 'react'
-import BigNumber from 'bignumber.js'
-import { ethers } from 'ethers'
+import { useEffect, useRef, useState } from 'react';
+import BigNumber from 'bignumber.js';
+import { ethers } from 'ethers';
 
-import { getGivStakingAPR, getLPStakingAPR, getUserStakeInfo } from '@/lib/stakingPool'
-import { useSubgraph } from '@/context'
-import { PoolStakingConfig, StakingType } from '@/types/config'
-import { APR, UserStakeInfo } from '@/types/poolInfo'
-import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper'
-import { Zero } from '@/helpers/number'
-import { useWeb3React } from '@web3-react/core'
+import {
+	getGivStakingAPR,
+	getLPStakingAPR,
+	getUserStakeInfo,
+} from '@/lib/stakingPool';
+import { useSubgraph } from '@/context';
+import { PoolStakingConfig, StakingType } from '@/types/config';
+import { APR, UserStakeInfo } from '@/types/poolInfo';
+import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
+import { Zero } from '@/helpers/number';
+import { useWeb3React } from '@web3-react/core';
 
 export const useStakingPool = (
-  poolStakingConfig: PoolStakingConfig,
-  network: number
+	poolStakingConfig: PoolStakingConfig,
+	network: number,
 ): {
-  apr: BigNumber | null
-  earned: ethers.BigNumber
-  stakedAmount: ethers.BigNumber
-  notStakedAmount: ethers.BigNumber
+	apr: BigNumber | null;
+	earned: ethers.BigNumber;
+	stakedAmount: ethers.BigNumber;
+	notStakedAmount: ethers.BigNumber;
 } => {
-  const { library, chainId } = useWeb3React()
-  const { currentValues } = useSubgraph()
+	const { library, chainId } = useWeb3React();
+	const { currentValues } = useSubgraph();
 
-  const { balances } = currentValues
+	const { balances } = currentValues;
 
-  const [apr, setApr] = useState<BigNumber | null>(null)
-  const [userStakeInfo, setUserStakeInfo] = useState<UserStakeInfo>({
-    earned: ethers.constants.Zero,
-    notStakedAmount: ethers.constants.Zero,
-    stakedAmount: ethers.constants.Zero
-  })
+	const [apr, setApr] = useState<BigNumber | null>(null);
+	const [userStakeInfo, setUserStakeInfo] = useState<UserStakeInfo>({
+		earned: ethers.constants.Zero,
+		notStakedAmount: ethers.constants.Zero,
+		stakedAmount: ethers.constants.Zero,
+	});
 
-  const stakePoolInfoPoll = useRef<NodeJS.Timer | null>(null)
+	const stakePoolInfoPoll = useRef<NodeJS.Timer | null>(null);
 
-  const { type, LM_ADDRESS } = poolStakingConfig
+	const { type, LM_ADDRESS } = poolStakingConfig;
 
-  const unipool = currentValues[type]
-  const unipoolIsDefined = !!unipool
-  const providerNetwork = library?.network?.chainId
+	const unipool = currentValues[type];
+	const unipoolIsDefined = !!unipool;
+	const providerNetwork = library?.network?.chainId;
 
-  useEffect(() => {
-    const cb = () => {
-      if (library && chainId === network && providerNetwork === network && unipoolIsDefined) {
-        const promise: Promise<APR> =
-          type === StakingType.GIV_LM
-            ? getGivStakingAPR(LM_ADDRESS, network, unipool)
-            : getLPStakingAPR(poolStakingConfig, network, library, unipool)
-        promise.then(setApr)
-      } else {
-        setApr(Zero)
-      }
-    }
+	useEffect(() => {
+		const cb = () => {
+			if (
+				library &&
+				chainId === network &&
+				providerNetwork === network &&
+				unipoolIsDefined
+			) {
+				const promise: Promise<APR> =
+					type === StakingType.GIV_LM
+						? getGivStakingAPR(LM_ADDRESS, network, unipool)
+						: getLPStakingAPR(
+								poolStakingConfig,
+								network,
+								library,
+								unipool,
+						  );
+				promise.then(setApr);
+			} else {
+				setApr(Zero);
+			}
+		};
 
-    cb()
+		cb();
 
-    stakePoolInfoPoll.current = setInterval(cb, 60000) // Every one minutes
+		stakePoolInfoPoll.current = setInterval(cb, 60000); // Every one minutes
 
-    return () => {
-      if (stakePoolInfoPoll.current) {
-        clearInterval(stakePoolInfoPoll.current)
-        stakePoolInfoPoll.current = null
-      }
-    }
-  }, [library, chainId, unipoolIsDefined, providerNetwork])
+		return () => {
+			if (stakePoolInfoPoll.current) {
+				clearInterval(stakePoolInfoPoll.current);
+				stakePoolInfoPoll.current = null;
+			}
+		};
+	}, [library, chainId, unipoolIsDefined, providerNetwork]);
 
-  const isMounted = useRef(true)
-  useEffect(() => {
-    return () => {
-      isMounted.current = false
-    }
-  }, [])
+	const isMounted = useRef(true);
+	useEffect(() => {
+		return () => {
+			isMounted.current = false;
+		};
+	}, []);
 
-  useEffect(() => {
-    const unipoolInfo = currentValues[type]
-    if (unipoolInfo) {
-      const unipoolHelper = new UnipoolHelper(unipoolInfo)
-      setUserStakeInfo(getUserStakeInfo(type, balances, unipoolHelper))
-    }
-  }, [type, currentValues, balances])
+	useEffect(() => {
+		const unipoolInfo = currentValues[type];
+		if (unipoolInfo) {
+			const unipoolHelper = new UnipoolHelper(unipoolInfo);
+			setUserStakeInfo(getUserStakeInfo(type, balances, unipoolHelper));
+		}
+	}, [type, currentValues, balances]);
 
-  return {
-    apr,
-    ...userStakeInfo
-  }
-}
+	return {
+		apr,
+		...userStakeInfo,
+	};
+};

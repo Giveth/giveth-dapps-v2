@@ -20,23 +20,6 @@ import { claimUnstakeStake } from '@/lib/stakingNFT';
 import { useLiquidityPositions } from '@/context';
 import { ConfirmedInnerModal, SubmittedInnerModal } from './ConfirmSubmit';
 import {
-	B,
-	brandColors,
-	Caption,
-	IconGIVStream,
-	IconHelp,
-	Lead,
-} from '@giveth/ui-design-system';
-import { PoolStakingConfig } from '@/types/config';
-import { StakingPoolImages } from '../StakingPoolImages';
-import { formatWeiHelper } from '@/helpers/number';
-import { useSubgraph } from '@/context/subgraph.context';
-import { useTokenDistro } from '@/context/tokenDistro.context';
-import { harvestTokens } from '@/lib/stakingPool';
-import { claimUnstakeStake } from '@/lib/stakingNFT';
-import { useLiquidityPositions } from '@/context';
-import { ConfirmedInnerModal, SubmittedInnerModal } from './ConfirmSubmit';
-import {
 	CancelButton,
 	GIVRate,
 	HarvestAllDesc,

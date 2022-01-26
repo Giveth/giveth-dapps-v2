@@ -1,208 +1,220 @@
-import styled from 'styled-components'
-import { Row } from '@/components/styled-components/Grid'
-import { Button as CButton } from '@/components/styled-components/Button'
-import { IHeader } from './Header'
+import styled from 'styled-components';
+import { Row } from '@/components/styled-components/Grid';
+import { Button as CButton } from '@/components/styled-components/Button';
+import { IHeader } from './Header';
 import {
-  neutralColors,
-  brandColors,
-  Button,
-  GLink,
-  Subline,
-  ButtonLink
-} from '@giveth/ui-design-system'
-import { device } from '@/utils/constants'
-import { ETheme } from '@/context/general.context'
+	neutralColors,
+	brandColors,
+	Button,
+	GLink,
+	Subline,
+	ButtonLink,
+} from '@giveth/ui-design-system';
+import { device } from '@/utils/constants';
+import { ETheme } from '@/context/general.context';
 
 export const HeaderPlaceholder = styled.div`
-  height: 100px;
-`
+	height: 100px;
+`;
 
 export const StyledHeader = styled(Row)<IHeader>`
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: ${props => (props.show ? 0 : '-100px')};
-  padding: 16px 32px;
-  z-index: 1050;
-  transition: top 0.3s ease;
-`
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: ${props => (props.show ? 0 : '-100px')};
+	padding: 16px 32px;
+	z-index: 1050;
+	transition: top 0.3s ease;
+`;
 
 export const Logo = styled.div`
-  background: ${neutralColors.gray[100]};
-  box-shadow: 0px 4.125px 27.5px rgba(33, 32, 60, 0.24);
-  border-radius: 99px;
-  padding: 8px;
-  width: 64px;
-  height: 64px;
-`
+	background: ${neutralColors.gray[100]};
+	box-shadow: 0px 4.125px 27.5px rgba(33, 32, 60, 0.24);
+	border-radius: 99px;
+	padding: 8px;
+	width: 64px;
+	height: 64px;
+`;
 
 interface IThemed {
-  theme?: ETheme
+	theme?: ETheme;
 }
 
 export const HeaderButton = styled(CButton)<IThemed>`
-  display: flex;
-  height: 50px;
-  color: white;
-  font-family: 'Red Hat Text';
-  font-style: normal;
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 22px;
-  padding: 12px;
-  border-radius: 48px;
-  text-align: left;
-  color: ${props => (props.theme === ETheme.Dark ? 'white' : brandColors.giv[900])};
-  background-color: ${props => (props.theme === ETheme.Dark ? brandColors.giv[900] : 'white')};
-  border: 1px solid ${props => (props.theme === ETheme.Dark ? brandColors.giv[600] : 'white')};
-`
+	display: flex;
+	height: 50px;
+	color: white;
+	font-family: 'Red Hat Text';
+	font-style: normal;
+	font-weight: normal;
+	font-size: 16px;
+	line-height: 22px;
+	padding: 12px;
+	border-radius: 48px;
+	text-align: left;
+	color: ${props =>
+		props.theme === ETheme.Dark ? 'white' : brandColors.giv[900]};
+	background-color: ${props =>
+		props.theme === ETheme.Dark ? brandColors.giv[900] : 'white'};
+	border: 1px solid
+		${props =>
+			props.theme === ETheme.Dark ? brandColors.giv[600] : 'white'};
+`;
 
 export const BalanceButton = styled(HeaderButton)`
-  position: relative;
-`
+	position: relative;
+`;
 
 export const WalletButton = styled(HeaderButton)`
-  font-size: 14px;
-  width: 176px;
-  padding: 6px 16px;
-`
+	font-size: 14px;
+	width: 176px;
+	padding: 6px 16px;
+`;
 
 export const HBContainer = styled.div`
-  display: flex;
-  align-items: center;
-  z-index: 2;
-`
+	display: flex;
+	align-items: center;
+	z-index: 2;
+`;
 
 export const WBInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-left: 8px;
-`
+	display: flex;
+	flex-direction: column;
+	margin-left: 8px;
+`;
 
 export const WBNetwork = styled.span`
-  font-family: 'Red Hat Text';
-  font-style: normal;
-  font-weight: normal;
-  font-size: 10px;
-  line-height: 13px;
-  color: #b9a7ff;
-  width: 120px;
-`
+	font-family: 'Red Hat Text';
+	font-style: normal;
+	font-weight: normal;
+	font-size: 10px;
+	line-height: 13px;
+	color: #b9a7ff;
+	width: 120px;
+`;
 
 export const HBPic = styled.img`
-  border-radius: 24px;
-`
+	border-radius: 24px;
+`;
 
 export const HBBalanceLogo = styled(HBPic)`
-  padding: 4px;
-  background: #5326ec;
-`
+	padding: 4px;
+	background: #5326ec;
+`;
 
 export const HBContent = styled.span`
-  margin-left: 8px;
-`
+	margin-left: 8px;
+`;
 
 export const Title = styled.h1`
-  font-family: 'Red Hat Text';
-  font-size: 16px;
-  //font-style: bold;
-  line-height: 24px;
-  letter-spacing: 0.02em;
-  text-align: left;
-  color: ${props => props.theme.fg};
-`
+	font-family: 'Red Hat Text';
+	font-size: 16px;
+	//font-style: bold;
+	line-height: 24px;
+	letter-spacing: 0.02em;
+	text-align: left;
+	color: ${props => props.theme.fg};
+`;
 
 interface IHeaderLinkProps {
-  active?: boolean
-  theme?: ETheme
+	active?: boolean;
+	theme?: ETheme;
 }
 
 export const HeaderLinks = styled(Row)<IThemed>`
-  background-color: ${props => (props.theme === ETheme.Dark ? brandColors.giv[900] : 'white')};
-  border: 1px solid ${props => (props.theme === ETheme.Dark ? brandColors.giv[600] : 'white')};
-  border-radius: 48px;
-  padding: 6px;
-  gap: 8px;
-  display: none;
-  @media ${device.laptopL} {
-    display: flex;
-  }
-`
+	background-color: ${props =>
+		props.theme === ETheme.Dark ? brandColors.giv[900] : 'white'};
+	border: 1px solid
+		${props =>
+			props.theme === ETheme.Dark ? brandColors.giv[600] : 'white'};
+	border-radius: 48px;
+	padding: 6px;
+	gap: 8px;
+	display: none;
+	@media ${device.laptopL} {
+		display: flex;
+	}
+`;
 
 export const SmallHeaderLinks = styled(Row)`
-  align-self: center;
-  align-items: center;
-  display: flex;
-  padding: 0 16px;
-  @media ${device.laptopL} {
-    display: none;
-  }
-`
+	align-self: center;
+	align-items: center;
+	display: flex;
+	padding: 0 16px;
+	@media ${device.laptopL} {
+		display: none;
+	}
+`;
 
 export const HeaderLink = styled(GLink)<IHeaderLinkProps>`
-  padding: 8px 16px 7px;
-  border-radius: 72px;
-  background-color: ${props => {
-    if (props.active) {
-      return props.theme === ETheme.Dark ? brandColors.giv[600] : neutralColors.gray[100]
-    }
-    return ''
-  }};
-  &:hover {
-    background-color: ${props =>
-      props.theme === ETheme.Dark ? brandColors.giv[800] : neutralColors.gray[200]};
-  }
-`
+	padding: 8px 16px 7px;
+	border-radius: 72px;
+	background-color: ${props => {
+		if (props.active) {
+			return props.theme === ETheme.Dark
+				? brandColors.giv[600]
+				: neutralColors.gray[100];
+		}
+		return '';
+	}};
+	&:hover {
+		background-color: ${props =>
+			props.theme === ETheme.Dark
+				? brandColors.giv[800]
+				: neutralColors.gray[200]};
+	}
+`;
 
-export const ConnectButton = styled(Button)``
+export const ConnectButton = styled(Button)``;
 
 export const NotifButton = styled(HeaderButton)`
-  padding: 23px;
-  background-image: url('/images/notif.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-  max-width: 48px;
-`
+	padding: 23px;
+	background-image: url('/images/notif.svg');
+	background-position: center;
+	background-repeat: no-repeat;
+	max-width: 48px;
+`;
 
 export const CreateProject = styled(ButtonLink)`
-  white-space: nowrap;
-  display: none;
-  @media ${device.laptop} {
-    display: block;
-  }
-`
+	white-space: nowrap;
+	display: none;
+	@media ${device.laptop} {
+		display: block;
+	}
+`;
 
 export const SmallCreateProject = styled(ButtonLink)`
-  white-space: nowrap;
-  padding: 0;
-  width: 48px;
-  height: 48px;
-  gap: 0;
-  span {
-    font-size: 32px !important;
-  }
-  @media ${device.laptop} {
-    display: none;
-  }
-`
+	white-space: nowrap;
+	padding: 0;
+	width: 48px;
+	height: 48px;
+	gap: 0;
+	span {
+		font-size: 32px !important;
+	}
+	@media ${device.laptop} {
+		display: none;
+	}
+`;
 
 export const BalanceTooltip = styled(Subline)`
-  color: ${neutralColors.gray[100]};
-  text-align: center;
-  width: 120px;
-`
+	color: ${neutralColors.gray[100]};
+	text-align: center;
+	width: 120px;
+`;
 
 export const MenuAndButtonContainer = styled.div`
-  position: relative;
-  z-index: 2;
-`
+	position: relative;
+	z-index: 2;
+`;
 
 export const CoverLine = styled.div<IThemed>`
-  background-color: ${props => (props.theme === ETheme.Dark ? brandColors.giv[900] : 'white')};
-  position: absolute;
-  z-index: 1;
-  height: 6px;
-  left: 1px;
-  right: 1px;
-  top: 40%;
-`
+	background-color: ${props =>
+		props.theme === ETheme.Dark ? brandColors.giv[900] : 'white'};
+	position: absolute;
+	z-index: 1;
+	height: 6px;
+	left: 1px;
+	right: 1px;
+	top: 40%;
+`;

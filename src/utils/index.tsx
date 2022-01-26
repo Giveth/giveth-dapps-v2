@@ -1,105 +1,110 @@
-import fetch from 'isomorphic-fetch'
+import fetch from 'isomorphic-fetch';
 // import Web3 from 'web3'
 // import { GET_PROJECT_BY_ADDRESS } from '../apollo/gql/projects'
 // import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
-import ERC20List from './erc20TokenList'
-import { Contract } from '@ethersproject/contracts'
-import config from '../../config'
+import ERC20List from './erc20TokenList';
+import { Contract } from '@ethersproject/contracts';
+import config from '../../config';
 
-const xDaiChainId = 100
-const appNetworkId = config.PRIMARY_NETWORK.id
+const xDaiChainId = 100;
+const appNetworkId = config.PRIMARY_NETWORK.id;
 
 export function pollEvery(fn: Function, delay: any) {
-  let timer: any = -1
-  let stop = false
-  const poll = async (request: any, onResult: Function) => {
-    const result = await request()
-    if (!stop) {
-      onResult(result)
-      timer = setTimeout(poll.bind(null, request, onResult), delay)
-    }
-  }
-  return (...params: any) => {
-    const { request, onResult } = fn(...params)
-    poll(request, onResult).then()
-    return () => {
-      stop = true
-      clearTimeout(timer)
-    }
-  }
+	let timer: any = -1;
+	let stop = false;
+	const poll = async (request: any, onResult: Function) => {
+		const result = await request();
+		if (!stop) {
+			onResult(result);
+			timer = setTimeout(poll.bind(null, request, onResult), delay);
+		}
+	};
+	return (...params: any) => {
+		const { request, onResult } = fn(...params);
+		poll(request, onResult).then();
+		return () => {
+			stop = true;
+			clearTimeout(timer);
+		};
+	};
 }
 
-export async function getERC20Info({ library, tokenAbi, contractAddress, chainId }: any) {
-  try {
-    const instance = new Contract(contractAddress, tokenAbi, library)
-    const name = await instance.name()
-    const symbol = await instance.symbol()
-    const decimals = await instance.decimals()
-    const ERC20Info = {
-      name,
-      symbol,
-      address: contractAddress,
-      label: symbol,
-      chainId,
-      decimals,
-      value: {
-        symbol
-      }
-    }
-    console.log({ ERC20Info })
+export async function getERC20Info({
+	library,
+	tokenAbi,
+	contractAddress,
+	chainId,
+}: any) {
+	try {
+		const instance = new Contract(contractAddress, tokenAbi, library);
+		const name = await instance.name();
+		const symbol = await instance.symbol();
+		const decimals = await instance.decimals();
+		const ERC20Info = {
+			name,
+			symbol,
+			address: contractAddress,
+			label: symbol,
+			chainId,
+			decimals,
+			value: {
+				symbol,
+			},
+		};
+		console.log({ ERC20Info });
 
-    return ERC20Info
-  } catch (error) {
-    console.log({ error })
-    return false
-  }
+		return ERC20Info;
+	} catch (error) {
+		console.log({ error });
+		return false;
+	}
 }
 
 export function checkNetwork(networkId: number) {
-  const isXdai = networkId === xDaiChainId
-  return networkId === appNetworkId || isXdai
+	const isXdai = networkId === xDaiChainId;
+	return networkId === appNetworkId || isXdai;
 }
 
 export function titleCase(str: string) {
-  //TODO hot fix
-  return str
-  // if (!str) return null
-  // return str
-  //   ?.toLowerCase()
-  //   .split(' ')
-  //   .map(function (word) {
-  //     return word.replace(word[0], word[0].toUpperCase())
-  //   })
-  //   .join(' ')
+	//TODO hot fix
+	return str;
+	// if (!str) return null
+	// return str
+	//   ?.toLowerCase()
+	//   .split(' ')
+	//   .map(function (word) {
+	//     return word.replace(word[0], word[0].toUpperCase())
+	//   })
+	//   .join(' ')
 }
 
 export function base64ToBlob(base64: any) {
-  const binaryString = window.atob(base64)
-  const len = binaryString.length
-  const bytes = new Uint8Array(len)
-  for (let i = 0; i < len; ++i) {
-    bytes[i] = binaryString.charCodeAt(i)
-  }
+	const binaryString = window.atob(base64);
+	const len = binaryString.length;
+	const bytes = new Uint8Array(len);
+	for (let i = 0; i < len; ++i) {
+		bytes[i] = binaryString.charCodeAt(i);
+	}
 
-  return new Blob([bytes], { type: 'application/pdf' })
+	return new Blob([bytes], { type: 'application/pdf' });
 }
 
 export const toBase64 = (file: any) =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = () => resolve(reader.result)
-    reader.onerror = error => reject(error)
-  })
+	new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.readAsDataURL(file);
+		reader.onload = () => resolve(reader.result);
+		reader.onerror = error => reject(error);
+	});
 
 export const getImageFile = async (base64Data: any, projectName: any) => {
-  const imageFile = await fetch(base64Data)
-    .then(res => res.blob())
-    .then(blob => {
-      return new File([blob], projectName)
-    })
-  return imageFile
-}
+	const imageFile = await fetch(base64Data)
+		.then(res => res.blob())
+		.then(blob => {
+			return new File([blob], projectName);
+		});
+	return imageFile;
+};
 
 // export async function getEtherscanTxs(address, apolloClient = false, isDonor = false) {
 //   try {
@@ -155,99 +160,105 @@ export const getImageFile = async (base64Data: any, projectName: any) => {
 //   }
 // }
 
-export const getERC20List = ERC20List
+export const getERC20List = ERC20List;
 
 export async function checkIfURLisValid(checkUrl: string) {
-  let url = checkUrl
-  if (!/^(?:f|ht)tps?:\/\//.test(checkUrl)) {
-    url = 'https://' + url
-  }
-  const pattern = new RegExp(
-    '^(https?:\\/\\/)?' + // protocol
-      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
-      '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-      '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-      '(\\#[-a-z\\d_]*)?$',
-    'i'
-  )
-  return !!pattern.test(url)
+	let url = checkUrl;
+	if (!/^(?:f|ht)tps?:\/\//.test(checkUrl)) {
+		url = 'https://' + url;
+	}
+	const pattern = new RegExp(
+		'^(https?:\\/\\/)?' + // protocol
+			'((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+			'((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+			'(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+			'(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+			'(\\#[-a-z\\d_]*)?$',
+		'i',
+	);
+	return !!pattern.test(url);
 }
 
-export const fetchPrices = (chain: any, tokenAddress: any, catchFunction: any) => {
-  return fetch(
-    `https://api.coingecko.com/api/v3/simple/token_price/${chain}?contract_addresses=${tokenAddress}&vs_currencies=usd`
-  )
-    .then(response => response.json())
-    .then(data => parseFloat(data[Object.keys(data)[0]]?.usd?.toFixed(2)))
-    .catch(err => {
-      console.log('Error fetching prices: ', err)
-      catchFunction(0)
-    })
-}
+export const fetchPrices = (
+	chain: any,
+	tokenAddress: any,
+	catchFunction: any,
+) => {
+	return fetch(
+		`https://api.coingecko.com/api/v3/simple/token_price/${chain}?contract_addresses=${tokenAddress}&vs_currencies=usd`,
+	)
+		.then(response => response.json())
+		.then(data => parseFloat(data[Object.keys(data)[0]]?.usd?.toFixed(2)))
+		.catch(err => {
+			console.log('Error fetching prices: ', err);
+			catchFunction(0);
+		});
+};
 
 export const fetchEthPrice = (catchFunction: any) => {
-  return fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd')
-    .then(response => response.json())
-    .then(data => data.ethereum.usd)
-    .catch(err => {
-      console.log('Error fetching ETH price: ', err)
-      catchFunction(0)
-    })
-}
+	return fetch(
+		'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd',
+	)
+		.then(response => response.json())
+		.then(data => data.ethereum.usd)
+		.catch(err => {
+			console.log('Error fetching ETH price: ', err);
+			catchFunction(0);
+		});
+};
 
 export const switchToXdai = () => {
-  ;(window as any).ethereum.request({
-    method: 'wallet_addEthereumChain',
-    params: [
-      {
-        chainId: '0x64',
-        chainName: 'xDai',
-        nativeCurrency: { name: 'xDAI', symbol: 'xDai', decimals: 18 },
-        rpcUrls: ['https://rpc.xdaichain.com/'],
-        blockExplorerUrls: ['https://blockscout.com/xdai/mainnet']
-      }
-    ]
-  })
-}
+	(window as any).ethereum.request({
+		method: 'wallet_addEthereumChain',
+		params: [
+			{
+				chainId: '0x64',
+				chainName: 'xDai',
+				nativeCurrency: { name: 'xDAI', symbol: 'xDai', decimals: 18 },
+				rpcUrls: ['https://rpc.xdaichain.com/'],
+				blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
+			},
+		],
+	});
+};
 
 export const switchNetwork = (currentNetworkId?: any) => {
-  let chainId = config.PRIMARY_NETWORK.chain
-  const defaultNetworkId = config.PRIMARY_NETWORK.id
-  if (currentNetworkId === defaultNetworkId) {
-    chainId = config.SECONDARY_NETWORK.chain
-  }
+	let chainId = config.PRIMARY_NETWORK.chain;
+	const defaultNetworkId = config.PRIMARY_NETWORK.id;
+	if (currentNetworkId === defaultNetworkId) {
+		chainId = config.SECONDARY_NETWORK.chain;
+	}
 
-  ;(window as any).ethereum
-    .request({
-      method: 'wallet_switchEthereumChain',
-      params: [{ chainId }]
-    })
-    .then()
-}
+	(window as any).ethereum
+		.request({
+			method: 'wallet_switchEthereumChain',
+			params: [{ chainId }],
+		})
+		.then();
+};
 
 export interface IPrefixes {
-  [networkID: number]: string
+	[networkID: number]: string;
 }
 
 export const ETHERSCAN_PREFIXES: IPrefixes = {
-  1: 'https://etherscan.io/',
-  3: 'https://ropsten.etherscan.io/',
-  4: 'https://rinkeby.etherscan.io/',
-  5: 'https://goerli.etherscan.io/',
-  42: 'https://kovan.etherscan.io/',
-  100: 'https://blockscout.com/poa/xdai/'
-}
+	1: 'https://etherscan.io/',
+	3: 'https://ropsten.etherscan.io/',
+	4: 'https://rinkeby.etherscan.io/',
+	5: 'https://goerli.etherscan.io/',
+	42: 'https://kovan.etherscan.io/',
+	100: 'https://blockscout.com/poa/xdai/',
+};
 
 export function formatEtherscanLink(type: any, data: any) {
-  switch (type) {
-    case 'Account': {
-      const [chainId, address] = data
-      return `${ETHERSCAN_PREFIXES[chainId]}address/${address}`
-    }
-    case 'Transaction': {
-      const [chainId, hash] = data
-      return `${ETHERSCAN_PREFIXES[chainId]}tx/${hash}`
-    }
-  }
+	switch (type) {
+		case 'Account': {
+			const [chainId, address] = data;
+			return `${ETHERSCAN_PREFIXES[chainId]}address/${address}`;
+		}
+		case 'Transaction': {
+			const [chainId, hash] = data;
+			return `${ETHERSCAN_PREFIXES[chainId]}tx/${hash}`;
+		}
+	}
 }

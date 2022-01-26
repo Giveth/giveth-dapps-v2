@@ -6,11 +6,6 @@ import {
 	SubmittedInnerModal,
 } from './ConfirmSubmit';
 import {
-	ConfirmedInnerModal,
-	ErrorInnerModal,
-	SubmittedInnerModal,
-} from './ConfirmSubmit';
-import {
 	CancelButton,
 	GIVRate,
 	HarvestAllDesc,
