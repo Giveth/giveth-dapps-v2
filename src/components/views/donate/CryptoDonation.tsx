@@ -18,8 +18,11 @@ import {
   fetchPrices,
   fetchEthPrice,
   getERC20Info,
-  switchToXdai
+  switchToXdai,
+  switchNetwork
 } from '../../../utils'
+import GeminiModal from './GeminiModal'
+import config from '../../../configuration'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import tokenAbi from 'human-standard-token-abi'
@@ -126,7 +129,6 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
   const tokenAddress = selectedToken?.address
   const isXdai = networkId === xdaiChain.id
   const isGivingBlockProject = project?.givingBlocksId
-
   const stopPolling = useRef<any>(null)
   // Fetches initial main token price
   useEffect(() => {
@@ -149,7 +151,7 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
         }
         return token
       })
-      const givToken = givIndex && erc20List[givIndex]
+      const givToken = erc20List[givIndex!]
       if (givToken && givIndex) {
         tokens.splice(givIndex, 1)
       }
@@ -296,6 +298,7 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
 
   return (
     <>
+      <GeminiModal showModal={geminiModal} setShowModal={setGeminiModal} />
       {showWalletModal && !txHash && (
         <WalletModal showModal={showWalletModal} setShowModal={setShowWalletModal} />
       )}
@@ -317,7 +320,20 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
           givBackEligible={givBackEligible}
         />
       )}
-      {isEnabled && networkId !== xdaiChain.id && (
+      {isGivingBlockProject && networkId !== config.PRIMARY_NETWORK.id && (
+        <XDaiContainer>
+          <Caption color={neutralColors.gray[900]}>
+            Projects from The Giving Block only accept donations on mainnet.
+          </Caption>
+          <Caption
+            style={{ color: brandColors.pinky[500], marginLeft: '5px', cursor: 'pointer' }}
+            onClick={() => switchNetwork()}
+          >
+            Switch Network
+          </Caption>
+        </XDaiContainer>
+      )}
+      {!isGivingBlockProject && isEnabled && networkId !== xdaiChain.id && (
         <XDaiContainer>
           <div>
             <img src='/images/gas_station.svg' />
@@ -385,9 +401,17 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
         </DropdownContainer>
         <SearchBarContainer>
           <InputBox
-            onChange={a => {
-              setShowDonateModal(false)
-              setAmountTyped(a)
+            // onChange={a => {
+            //   setShowDonateModal(false)
+            //   setAmountTyped(a)
+            // }}}
+            type='number'
+            onChange={val => {
+              if (parseFloat(val) !== 0 && parseFloat(val) < 0.001) {
+                return
+              }
+              const checkGIV = checkGIVTokenAvailability()
+              if (checkGIV) setAmountTyped(val)
             }}
             placeholder='Amount'
           />
@@ -456,6 +480,9 @@ const SearchBarContainer = styled.div`
   width: 65%;
   border: 2px solid ${neutralColors.gray[300]};
   border-radius: 0px 6px 6px 0px;
+  * {
+    width: 90%;
+  }
 `
 const XDaiContainer = styled.div`
   display: flex;

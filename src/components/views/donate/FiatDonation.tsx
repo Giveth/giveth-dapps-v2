@@ -24,7 +24,6 @@ const FiatContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100%;
 `
 const ImageContainer = styled.div`
   width: 100%;

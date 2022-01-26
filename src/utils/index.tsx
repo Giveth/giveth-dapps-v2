@@ -211,6 +211,21 @@ export const switchToXdai = () => {
   })
 }
 
+export const switchNetwork = (currentNetworkId?: any) => {
+  let chainId = config.PRIMARY_NETWORK.chain
+  const defaultNetworkId = config.PRIMARY_NETWORK.id
+  if (currentNetworkId === defaultNetworkId) {
+    chainId = config.SECONDARY_NETWORK.chain
+  }
+
+  window?.ethereum
+    .request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId }]
+    })
+    .then()
+}
+
 export interface IPrefixes {
   [networkID: number]: string
 }
