@@ -30,12 +30,8 @@ export const StyledHeader = styled(Row)<IHeader>`
 
 export const Logo = styled.div`
 	background: ${neutralColors.gray[100]};
-	box-shadow: ${props => {
-		console.log(' props.theme', props.theme);
-		return props.theme === ETheme.Light
-			? Shadow.Dark[500]
-			: Shadow.Neutral[400];
-	}};
+	box-shadow: ${props =>
+		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
 	border-radius: 99px;
 	padding: 8px;
 	width: 64px;
