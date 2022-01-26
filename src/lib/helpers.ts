@@ -245,7 +245,7 @@ export async function sendTransaction(
 		return txn;
 	} catch (error: any) {
 		console.log('Error sending transaction: ', { error });
-		throw err;
+		throw error;
 	}
 }
 

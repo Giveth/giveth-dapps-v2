@@ -1,7 +1,9 @@
 import React from 'react';
 import Modal from 'react-modal';
 import { TwitterShareButton } from 'react-share';
-import { P, Button } from '@giveth/ui-design-system';
+// We need to add icon customization on the design system
+import { Button } from '../../styled-components/Button';
+import { P } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 const GeminiModal = ({ showModal, setShowModal }: any) => {
@@ -63,16 +65,7 @@ const GeminiModal = ({ showModal, setShowModal }: any) => {
 						alt='tw-modal'
 						style={{ margin: '15px 0' }}
 					/>
-					<Button
-						style={{
-							marginTop: 4,
-							color: 'white',
-							width: '240px',
-							height: '52px',
-							border: '2px solid #AAAFCA',
-							backgroundColor: '#00ACEE',
-						}}
-					>
+					<TwButton>
 						<TwitterShareButton
 							beforeOnClick={() => setShowModal(false)}
 							title={
@@ -98,7 +91,7 @@ const GeminiModal = ({ showModal, setShowModal }: any) => {
 								/>
 							</a>
 						</TwitterShareButton>
-					</Button>
+					</TwButton>
 					<P
 						onClick={() => {
 							setShowModal(false);
@@ -119,6 +112,15 @@ const GeminiModal = ({ showModal, setShowModal }: any) => {
 		</>
 	);
 };
+
+const TwButton = styled(Button)`
+	margin-top: 4;
+	color: white;
+	width: 240px;
+	height: 52px;
+	border: 2px solid white;
+	background-color: #00acee;
+`;
 
 const XButton = styled.div`
 	position: absolute;
