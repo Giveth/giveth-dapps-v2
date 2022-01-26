@@ -108,6 +108,9 @@ const CryptoDonation = (props: {
 	const [txHash, setTxHash] = useState<any>();
 	const [erc20List, setErc20List] = useState<any>();
 	const [erc20OriginalList, setErc20OriginalList] = useState<any>();
+	// TODO: Set this to a better flow, gotta discuss with design team but it is needed
+	const [unconfirmed, setUnconfirmed] = useState<any>();
+	const [inProgress, setInProgress] = useState<any>();
 	// const [anonymous, setAnonymous] = useState(false);
 	// const [selectLoading, setSelectLoading] = useState(false);
 	const [givBackEligible, setGivBackEligible] = useState(true);
@@ -282,8 +285,8 @@ const CryptoDonation = (props: {
 					userTokenBalance={selectedTokenBalance}
 					amount={parseFloat(amountTyped)}
 					price={tokenPrice}
-					// setInProgress={setInProgress}
-					// setUnconfirmed={setUnconfirmed}
+					setInProgress={setInProgress}
+					setUnconfirmed={setUnconfirmed}
 					givBackEligible={isGivBackEligible}
 				/>
 			)}

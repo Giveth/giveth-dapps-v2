@@ -103,7 +103,6 @@ export const UserProvider = (props: { children: ReactNode }) => {
 	};
 
 	const signIn = async () => {
-		console.log('trigou');
 		if (!library.getSigner()) return false;
 
 		const signedMessage = await signMessage(
