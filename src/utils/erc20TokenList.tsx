@@ -1519,7 +1519,7 @@ const theGivingBlockTokens = {
   ]
 }
 
-const getTokens = network => {
+const getTokens = (network: any) => {
   let tokens
   switch (network) {
     case 1:

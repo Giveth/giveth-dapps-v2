@@ -5,7 +5,7 @@ import { Button } from '../../styled-components/Button'
 import { P } from '@giveth/ui-design-system'
 import styled from 'styled-components'
 
-const GeminiModal = ({ showModal, setShowModal }) => {
+const GeminiModal = ({ showModal, setShowModal }: any) => {
   const url = typeof window !== 'undefined' ? window?.location?.href : null
   return (
     <>
@@ -70,7 +70,7 @@ const GeminiModal = ({ showModal, setShowModal }) => {
               title={
                 'Hey @gemini - I want to donate $GIV to this @thegivingblock project on @givethio! Help me support them by listing $GIV on gemini.com @tyler @cameron'
               }
-              url={url}
+              url={url!}
               hashtags={['gemini', 'giveth', 'giv', 'donation']}
             >
               {' '}

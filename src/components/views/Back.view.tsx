@@ -1,16 +1,16 @@
-import { Footer } from '../Footer/Footer';
-import { TabGIVbacksTop, TabGIVbacksBottom } from '../homeTabs/GIVbacks';
+import { Footer } from '../Footer/Footer'
+import { TabGIVbacksTop, TabGIVbacksBottom } from '../homeTabs/GIVbacks'
 
-import Tabs from '../Tabs';
+import Tabs from '../Tabs'
 
 function GIVbackView() {
-	return (
-		<>
-			<TabGIVbacksTop />
-			<Tabs />
-			<TabGIVbacksBottom />
-		</>
-	);
+  return (
+    <>
+      <TabGIVbacksTop />
+      <Tabs />
+      <TabGIVbacksBottom />
+    </>
+  )
 }
 
-export default GIVbackView;
+export default GIVbackView

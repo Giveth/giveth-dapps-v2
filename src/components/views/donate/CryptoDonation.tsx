@@ -23,7 +23,6 @@ import {
 } from '../../../utils'
 import GeminiModal from './GeminiModal'
 import config from '../../../configuration'
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import tokenAbi from 'human-standard-token-abi'
 
@@ -104,7 +103,7 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
   const [selectedToken, setSelectedToken] = useState<ISelectObj>()
   const [selectedTokenBalance, setSelectedTokenBalance] = useState<any>()
   const [customInput, setCustomInput] = useState<any>()
-  const [tokenPrice, setTokenPrice] = useState(1)
+  const [tokenPrice, setTokenPrice] = useState<any>(1)
   const [mainTokenPrice, setMainTokenPrice] = useState(0)
   const [gasPrice, setGasPrice] = useState<number>()
   const [gasETHPrice, setGasETHPrice] = useState<number>()
@@ -430,26 +429,8 @@ const CryptoDonation = (props: { setSuccessDonation: SuccessFunction; project: I
         {tokenSymbol}
       </AvText>
       <ButtonContainer>
-        {isEnabled && (
-          <Button
-            small
-            background={brandColors.giv[500]}
-            width='100%'
-            onClick={() => setShowDonateModal(true)}
-          >
-            DONATE
-          </Button>
-        )}
-        {!isEnabled && (
-          <Button
-            small
-            background={brandColors.giv[500]}
-            width='100%'
-            onClick={() => setShowWalletModal(true)}
-          >
-            CONNECT WALLET
-          </Button>
-        )}
+        {isEnabled && <Button onClick={() => setShowDonateModal(true)}>DONATE</Button>}
+        {!isEnabled && <Button onClick={() => setShowWalletModal(true)}>CONNECT WALLET</Button>}
       </ButtonContainer>
     </>
   )

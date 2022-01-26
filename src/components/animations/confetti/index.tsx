@@ -2,8 +2,11 @@ import React from 'react'
 import Lottie from 'react-lottie'
 import animationData from './animation.json'
 
-export default class LottieControl extends React.Component {
-  constructor(props: any) {
+type MyProps = { size: any }
+type MyState = { isStopped: boolean; isPaused: boolean }
+
+export default class LottieControl extends React.Component<MyProps, MyState> {
+  constructor(props: { size: any }) {
     super(props)
     this.state = { isStopped: false, isPaused: false }
   }

@@ -35,7 +35,6 @@ export async function send(
     return hash
   } catch (error: any) {
     const err = new Error(error)
-    err.data = error?.data || error
     throw err
   }
 }

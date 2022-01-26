@@ -1,23 +1,23 @@
-import styled from 'styled-components';
-import { FlexCenter } from '../styled-components/Grid';
+import styled from 'styled-components'
+import { FlexCenter } from '../styled-components/Grid'
 
 const InfoBadge = () => {
-	return (
-		<div>
-			<Circle>?</Circle>
-		</div>
-	);
-};
+  return (
+    <div>
+      <Circle>?</Circle>
+    </div>
+  )
+}
 
 const Circle = styled(FlexCenter)`
-	border-radius: 50%;
-	border: 1px solid;
-	width: 16px;
-	text-align: center;
-	height: 16px;
-	font-size: 10px;
-	color: inherit;
-	font-weight: 500;
-`;
+  border-radius: 50%;
+  border: 1px solid;
+  width: 16px;
+  text-align: center;
+  height: 16px;
+  font-size: 10px;
+  color: inherit;
+  font-weight: 500;
+`
 
-export default InfoBadge;
+export default InfoBadge

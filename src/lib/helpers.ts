@@ -9,7 +9,6 @@ import { AuthereumConnector } from '@web3-react/authereum-connector'
 import { promisify } from 'util'
 import Routes from './constants/Routes'
 import { networkInfo } from './constants/NetworksObj'
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import tokenAbi from 'human-standard-token-abi'
 
@@ -228,7 +227,6 @@ export async function sendTransaction(
   } catch (error: any) {
     console.log('Error sending transaction: ', { error })
     const err = new Error(error)
-    err.data = error
     throw err
   }
 }

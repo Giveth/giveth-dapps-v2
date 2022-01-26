@@ -1,77 +1,77 @@
-import { Dispatch, SetStateAction } from 'react';
-import { Shadow } from '@/components/styled-components/Shadow';
-import { IProject } from '@/apollo/types/types';
-import { Subline, brandColors, P } from '@giveth/ui-design-system';
-import styled from 'styled-components';
+import { Dispatch, SetStateAction } from 'react'
+import { Shadow } from '@/components/styled-components/Shadow'
+import { IProject } from '@/apollo/types/types'
+import { Subline, brandColors, P } from '@giveth/ui-design-system'
+import styled from 'styled-components'
 
 interface IProjectTabs {
-	project: IProject;
-	activeTab: number;
-	totalDonations?: number;
-	setActiveTab: Dispatch<SetStateAction<number>>;
+  project: IProject
+  activeTab: number
+  totalDonations?: number
+  setActiveTab: Dispatch<SetStateAction<number>>
 }
 
 const badgeCount = (count?: number) => {
-	return count || null;
-};
+  return count || null
+}
 
 const ProjectTabs = (props: IProjectTabs) => {
-	const { project, activeTab, setActiveTab, totalDonations } = props;
-	const { totalProjectUpdates } = project;
+  const { project, activeTab, setActiveTab, totalDonations } = props
+  const { totalProjectUpdates } = project
 
-	const tabsArray = [
-		{ title: 'About' },
-		{ title: 'Updates', badge: totalProjectUpdates },
-		{ title: 'Donations', badge: totalDonations },
-	];
+  const tabsArray = [
+    { title: 'About' },
+    { title: 'Updates', badge: totalProjectUpdates },
+    { title: 'Donations', badge: totalDonations }
+  ]
 
-	return (
-		<Wrapper>
-			{tabsArray.map((i, index) => (
-				<Tab
-					onClick={() => setActiveTab(index)}
-					key={i.title}
-					className={activeTab === index ? 'active' : ''}
-				>
-					{i.title}
-					{badgeCount(i.badge) && <Badge>{i.badge}</Badge>}
-				</Tab>
-			))}
-		</Wrapper>
-	);
-};
+  return (
+    <Wrapper>
+      {tabsArray.map((i, index) => (
+        <Tab
+          onClick={() => setActiveTab(index)}
+          key={i.title}
+          className={activeTab === index ? 'active' : ''}
+        >
+          {i.title}
+          {badgeCount(i.badge) && <Badge>{i.badge}</Badge>}
+        </Tab>
+      ))}
+    </Wrapper>
+  )
+}
 
 const Badge = styled(Subline)`
-	background: ${brandColors.deep[600]};
-	color: white;
-	border-radius: 40px;
-	height: 22px;
-	padding: 0 9px;
-	display: flex;
-	align-items: center;
-	margin-left: 6px;
-`;
+  background: ${brandColors.deep[600]};
+  color: white;
+  border-radius: 40px;
+  height: 22px;
+  padding: 0 9px;
+  display: flex;
+  align-items: center;
+  margin-left: 6px;
+`
 
 const Tab = styled(P)`
-	display: flex;
-	padding: 10px 35px;
-	color: ${brandColors.pinky[500]};
-	border-radius: 48px;
-	cursor: pointer;
+  display: flex;
+  padding: 10px 35px;
+  color: ${brandColors.pinky[500]};
+  border-radius: 48px;
+  cursor: pointer;
 
-	&.active {
-		color: ${brandColors.deep[600]};
-		background: white;
-		box-shadow: ${Shadow.Neutral[400]};
-	}
-`;
+  &.active {
+    color: ${brandColors.deep[600]};
+    background: white;
+    box-shadow: ${Shadow.Neutral[400]};
+  }
+`
 
 const Wrapper = styled.div`
-	margin: 24px 0 40px 0;
-	color: ${brandColors.deep[600]};
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-`;
+  margin: 24px 0 40px 0;
+  color: ${brandColors.deep[600]};
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+`
 
-export default ProjectTabs;
+export default ProjectTabs

@@ -10,7 +10,7 @@ const xDaiChainId = 100
 const appNetworkId = config.PRIMARY_NETWORK.id
 
 export function pollEvery(fn: Function, delay: any) {
-  let timer = -1
+  let timer: any = -1
   let stop = false
   const poll = async (request: any, onResult: Function) => {
     const result = await request()
@@ -19,7 +19,7 @@ export function pollEvery(fn: Function, delay: any) {
       timer = setTimeout(poll.bind(null, request, onResult), delay)
     }
   }
-  return (...params) => {
+  return (...params: any) => {
     const { request, onResult } = fn(...params)
     poll(request, onResult).then()
     return () => {
@@ -29,7 +29,7 @@ export function pollEvery(fn: Function, delay: any) {
   }
 }
 
-export async function getERC20Info({ library, tokenAbi, contractAddress, chainId }) {
+export async function getERC20Info({ library, tokenAbi, contractAddress, chainId }: any) {
   try {
     const instance = new Contract(contractAddress, tokenAbi, library)
     const name = await instance.name()
@@ -55,12 +55,12 @@ export async function getERC20Info({ library, tokenAbi, contractAddress, chainId
   }
 }
 
-export function checkNetwork(networkId) {
+export function checkNetwork(networkId: number) {
   const isXdai = networkId === xDaiChainId
   return networkId === appNetworkId || isXdai
 }
 
-export function titleCase(str) {
+export function titleCase(str: string) {
   //TODO hot fix
   return str
   // if (!str) return null
@@ -73,7 +73,7 @@ export function titleCase(str) {
   //   .join(' ')
 }
 
-export function base64ToBlob(base64) {
+export function base64ToBlob(base64: any) {
   const binaryString = window.atob(base64)
   const len = binaryString.length
   const bytes = new Uint8Array(len)
@@ -84,7 +84,7 @@ export function base64ToBlob(base64) {
   return new Blob([bytes], { type: 'application/pdf' })
 }
 
-export const toBase64 = file =>
+export const toBase64 = (file: any) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.readAsDataURL(file)
@@ -92,7 +92,7 @@ export const toBase64 = file =>
     reader.onerror = error => reject(error)
   })
 
-export const getImageFile = async (base64Data, projectName) => {
+export const getImageFile = async (base64Data: any, projectName: any) => {
   const imageFile = await fetch(base64Data)
     .then(res => res.blob())
     .then(blob => {
@@ -157,7 +157,7 @@ export const getImageFile = async (base64Data, projectName) => {
 
 export const getERC20List = ERC20List
 
-export async function checkIfURLisValid(checkUrl) {
+export async function checkIfURLisValid(checkUrl: string) {
   let url = checkUrl
   if (!/^(?:f|ht)tps?:\/\//.test(checkUrl)) {
     url = 'https://' + url
@@ -174,7 +174,7 @@ export async function checkIfURLisValid(checkUrl) {
   return !!pattern.test(url)
 }
 
-export const fetchPrices = (chain, tokenAddress, catchFunction) => {
+export const fetchPrices = (chain: any, tokenAddress: any, catchFunction: any) => {
   return fetch(
     `https://api.coingecko.com/api/v3/simple/token_price/${chain}?contract_addresses=${tokenAddress}&vs_currencies=usd`
   )
@@ -186,7 +186,7 @@ export const fetchPrices = (chain, tokenAddress, catchFunction) => {
     })
 }
 
-export const fetchEthPrice = catchFunction => {
+export const fetchEthPrice = (catchFunction: any) => {
   return fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd')
     .then(response => response.json())
     .then(data => data.ethereum.usd)
@@ -197,7 +197,7 @@ export const fetchEthPrice = catchFunction => {
 }
 
 export const switchToXdai = () => {
-  window?.ethereum.request({
+  ;(window as any).ethereum.request({
     method: 'wallet_addEthereumChain',
     params: [
       {
@@ -218,7 +218,7 @@ export const switchNetwork = (currentNetworkId?: any) => {
     chainId = config.SECONDARY_NETWORK.chain
   }
 
-  window?.ethereum
+  ;(window as any).ethereum
     .request({
       method: 'wallet_switchEthereumChain',
       params: [{ chainId }]

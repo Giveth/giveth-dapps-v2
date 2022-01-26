@@ -40,8 +40,7 @@ const ProjectsIndex = (props: IProjectBySlug) => {
   const givBackEligible = isSuccess?.givBackEligible
   const txHash = isSuccess?.transactionHash
 
-  const shareTitle =
-    'I am a Giver and you can be one too! 💙 @givethio. Let’s Build the Future of Giving together! 🙌 🌈 #maketheworldabetterplace 🌏 💜'
+  const shareTitle = `I am a Giver and you can be one too! 💙 @givethio. Let's Build the Future of Giving together! 🙌 🌈 #maketheworldabetterplace 🌏 💜`
   const url = typeof window !== 'undefined' ? window?.location?.href : null
 
   const TypeSelection = () => {
@@ -90,7 +89,7 @@ const ProjectsIndex = (props: IProjectBySlug) => {
         <Lead>
           {props?.isSuccess
             ? 'Share this with your friends'
-            : 'Can’t donate? Share this page instead.'}
+            : `Can't donate? Share this page instead.`}
         </Lead>
         <SocialItems>
           <SocialItem isSuccess={props.isSuccess}>
@@ -127,15 +126,13 @@ const ProjectsIndex = (props: IProjectBySlug) => {
         </SuccessMessage>
         {givBackEligible && (
           <GivBackContainer>
-            <H6>You're eligible for GIVbacks!</H6>
+            <H6>You&#39;re eligible for GIVbacks!</H6>
             <P>
               GIV rewards from the GIVbacks program will be distributed after the end of the current
               round.
             </P>
             <Link passHref href='/givbacks'>
-              <LearnButton small background={brandColors.giv[500]} width='100%'>
-                LEARN MORE
-              </LearnButton>
+              <LearnButton>LEARN MORE</LearnButton>
             </Link>
           </GivBackContainer>
         )}
@@ -159,9 +156,7 @@ const ProjectsIndex = (props: IProjectBySlug) => {
             </a>
           </GLink>
           <Link passHref href='/projects'>
-            <ProjectsButton small background={brandColors.giv[500]} width='100%'>
-              SEE MORE PROJECTS
-            </ProjectsButton>
+            <ProjectsButton>SEE MORE PROJECTS</ProjectsButton>
           </Link>
         </Options>
       </SucceessContainer>

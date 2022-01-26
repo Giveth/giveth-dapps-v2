@@ -97,7 +97,7 @@ const DonateModal = ({
         alert('There is no eth address assigned for this project')
       }
 
-      const isCorrectNetwork = checkNetwork(networkId)
+      const isCorrectNetwork = checkNetwork(networkId!)
       if (isGivingBlockProject && networkId !== config.PRIMARY_NETWORK.id)
         // return triggerPopup('WrongNetwork', networkId)
         // TODO: SET RIGHT MODAL
