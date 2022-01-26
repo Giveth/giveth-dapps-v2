@@ -20,6 +20,25 @@ a {
   outline: none;
 }
 
+/* React-Select component */
+.select__menu {
+  z-index: 10 !important;
+}
+.select__control {
+  border: 2px solid #EBECF2 !important;
+  border-radius: 8px !important;
+  height: 54px;
+}
+.select__value-container {
+  padding-left: 16px !important;
+}
+.select__indicator {
+  padding-right: 24px !important;
+}
+.select__indicators > span {
+  display: none;
+}
+
 /* Quill component */
 .ql-tooltip.ql-hidden {
   display: none;
