@@ -2,12 +2,13 @@ import Image from 'next/image';
 import TwitterIcon from '/public/images/twitter.svg';
 import { Arc } from '@/components/styled-components/Arc';
 import {
+	B,
 	Button,
 	brandColors,
 	D3,
 	Lead,
-	H3,
 	H2,
+	H3,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
@@ -20,16 +21,18 @@ const HomePurpleSection = () => {
 				<ArcMustard />
 				<DotMustard />
 			</div>
-			<GivingEffortless>
+			<GivingEffortless weight={700}>
 				Giving is effortless and people all around the world are
 				rewarded for creating positive change.
 			</GivingEffortless>
 			<GivingButtons>
-				<Button label='START GIVING'></Button>
-				<Button
+				<StartGiving size='large' label='START GIVING' />
+				<TwitterButton
+					buttonType='texty'
+					size='large'
 					label='Tweet this'
 					icon={<Image src={TwitterIcon} alt='twitter icon' />}
-				></Button>
+				/>
 			</GivingButtons>
 			<GIVeconomy>
 				<D3>The GIVeconomy</D3>
@@ -50,18 +53,24 @@ const HomePurpleSection = () => {
 				</GIVeconomyUrl>
 			</GIVeconomy>
 			<ForMakersGivers>
-				<ForProjects>
-					<H3>For Projects</H3>
+				<ForMakersContainers>
+					<H3 weight={700}>For Projects</H3>
+					<br />
 					<Lead>
 						Create a project and start raising funds in crypto
 						within minutes. Get verified to reward your donors with
 						GIVbacks.
 					</Lead>
 					<br />
-					<Button label='CREATE A PROJECT'></Button>
-				</ForProjects>
-				<ForGivers>
-					<H3>For Givers</H3>
+					<ForMakersButton
+						buttonType='primary'
+						size='large'
+						label='CREATE A PROJECT'
+					/>
+				</ForMakersContainers>
+				<ForMakersContainers>
+					<H3 weight={700}>For Givers</H3>
+					<br />
 					<Lead>
 						Donate to change-makers that are working hard to make a
 						difference. Earn GIV from GIVbacks when you donate to
@@ -69,8 +78,12 @@ const HomePurpleSection = () => {
 						of philanthropy.
 					</Lead>
 					<br />
-					<Button label='DONATE TO A PROJECT'></Button>
-				</ForGivers>
+					<ForMakersButton
+						buttonType='primary'
+						size='large'
+						label='DONATE TO A PROJECT'
+					/>
+				</ForMakersContainers>
 			</ForMakersGivers>
 		</Wrapper>
 	);
@@ -115,22 +128,27 @@ const ArcSmall = styled(Arc)`
 	height: 700px;
 `;
 
-const ForProjects = styled.div`
-	min-width: 350px;
-	max-width: 436px;
-`;
-
-const ForGivers = styled.div`
-	min-width: 350px;
-	max-width: 443px;
-`;
-
 const ForMakersGivers = styled.div`
 	margin-top: 107px;
 	margin-bottom: 162px;
 	display: flex;
 	flex-wrap: wrap;
 	gap: 200px;
+`;
+
+const ForMakersContainers = styled.div`
+	min-width: 350px;
+	max-width: 445px;
+	min-height: 320px;
+	display: flex;
+	flex-direction: column;
+`;
+
+const ForMakersButton = styled(Button)`
+	height: 66px;
+	padding: 0 80px;
+	margin-top: auto;
+	align-self: start;
 `;
 
 const GIVeconomy = styled.div`
@@ -146,6 +164,19 @@ const GivingButtons = styled.div`
 	display: flex;
 	margin-top: 70px;
 	flex-wrap: wrap;
+`;
+
+const StartGiving = styled(Button)`
+	background-color: ${brandColors.mustard[500]};
+	color: ${brandColors.giv[500]};
+	height: 66px;
+	padding: 0 80px;
+`;
+
+const TwitterButton = styled(Button)`
+	color: white;
+	height: 66px;
+	padding: 0 80px;
 `;
 
 const GivingEffortless = styled(H2)`

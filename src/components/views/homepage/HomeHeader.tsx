@@ -9,28 +9,55 @@ const HomeHeader = () => {
 	const router = useRouter();
 	return (
 		<Wrapper>
-			<H1 className='pt-5'>Welcome to the future of giving</H1>
+			<Title weight={700}>Welcome to the future of giving</Title>
 			<Subtitle>
 				Donate directly to social good projects with zero added fees.
 			</Subtitle>
-			<Button
+			<AllProjectsButton
+				buttonType='primary'
+				size='large'
 				label='SEE PROJECTS'
 				onClick={() => router.push(Routes.Projects)}
-			></Button>
-			<Button
+			/>
+			<CreateProject
+				buttonType='texty'
+				size='large'
 				label='Create a Project'
 				onClick={() => router.push(Routes.CreateProject)}
-			></Button>
+			/>
 			<MustardArc />
 		</Wrapper>
 	);
 };
+
+const Title = styled(H1)`
+	margin-bottom: 0.5rem;
+	padding-top: 3rem;
+`;
 
 const Subtitle = styled.div`
 	font-size: 20px;
 	line-height: 30px;
 	margin: 23px 0;
 	padding-bottom: 30px;
+`;
+
+const AllProjectsButton = styled(Button)`
+	height: 66px;
+	padding: 0 80px;
+`;
+
+const CreateProject = styled(Button)`
+	height: 66px;
+	color: ${brandColors.mustard[500]};
+	a {
+		font-weight: 400;
+	}
+
+	&:hover {
+		background-color: transparent;
+		color: ${brandColors.mustard[500]};
+	}
 `;
 
 const MustardArc = styled(Arc)`

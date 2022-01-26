@@ -3,7 +3,12 @@ import ProjectCard from '@/components/project-card/ProjectCard';
 import { IProject } from '@/apollo/types/types';
 import Routes from '@/lib/constants/Routes';
 import { FlexCenter } from '@/components/styled-components/Grid';
-import { Button, H5, neutralColors } from '@giveth/ui-design-system';
+import {
+	Button,
+	H5,
+	brandColors,
+	neutralColors,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 interface IHomeExploreProjects {
@@ -29,18 +34,40 @@ const HomeExploreProjects = (props: IHomeExploreProjects) => {
 				))}
 			</ProjectsContainer>
 			<ButtonsWrapper>
-				<Button
+				<AllProjectsButton
+					buttonType='primary'
+					size='large'
 					label='SEE ALL PROJECTS'
 					onClick={() => router.push(Routes.Projects)}
-				></Button>
-				<Button
+				/>
+				<CreateProject
+					buttonType='texty'
+					size='large'
 					label='Create a Project'
 					onClick={() => router.push(Routes.CreateProject)}
-				></Button>
+				/>
 			</ButtonsWrapper>
 		</Wrapper>
 	);
 };
+
+const AllProjectsButton = styled(Button)`
+	height: 66px;
+	padding: 0 80px;
+`;
+
+const CreateProject = styled(Button)`
+	height: 66px;
+	color: ${brandColors.pinky[500]};
+	a {
+		font-weight: 400;
+	}
+
+	&:hover {
+		background-color: transparent;
+		color: ${brandColors.pinky[500]};
+	}
+`;
 
 const ButtonsWrapper = styled(FlexCenter)`
 	flex-direction: column;
@@ -55,6 +82,8 @@ const ProjectsContainer = styled.div`
 
 const Title = styled(H5)`
 	margin-bottom: 25px;
+	font-weight: 700;
+
 	span {
 		color: ${neutralColors.gray[700]};
 	}
