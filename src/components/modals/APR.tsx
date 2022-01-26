@@ -1,15 +1,14 @@
-import { FC, useState } from 'react';
-import { Modal, IModal } from './Modal';
+import { FC, useEffect, useState } from 'react';
+import { IModal, Modal } from './Modal';
 import styled from 'styled-components';
 import Link from 'next/link';
 import {
-	H6,
-	GLink,
-	IconCalculator,
-	neutralColors,
 	brandColors,
-	SublineBold,
+	GLink,
+	H6,
+	neutralColors,
 	Subline,
+	SublineBold,
 } from '@giveth/ui-design-system';
 import { BigNumber } from 'ethers';
 import { Row } from '../styled-components/Grid';
@@ -17,6 +16,7 @@ import { PoolStakingConfig } from '@/types/config';
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import Image from 'next/image';
 import { WhatisGIVstreamModal } from './WhatisGIVstream';
+
 interface IAPRModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
 	maxAmount: BigNumber;
@@ -34,17 +34,12 @@ export const APRModal: FC<IAPRModalProps> = ({
 
 	return (
 		<>
-			<Modal showModal={showModal} setShowModal={setShowModal}>
+			<Modal
+				showModal={showModal}
+				setShowModal={setShowModal}
+				headerTitle={'APR'}
+			>
 				<APRModalContainer>
-					<Row gap='8px' alignItems='center'>
-						<APRLabel>APR</APRLabel>
-						{/* <IconCalculator size={16} /> */}
-					</Row>
-					{/* <InputLabel size='big'>{`${poolStakingConfig.title} ${poolStakingConfig.unit} Staking`}</InputLabel>
-					<USDInput
-						maxAmount={maxAmount}
-						poolStakingConfig={poolStakingConfig}
-					/> */}
 					<DescContainer>
 						<AlertRow alignItems='flex-end'>
 							<Image

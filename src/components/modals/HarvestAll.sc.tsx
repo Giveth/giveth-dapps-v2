@@ -21,17 +21,6 @@ export const HarvestAllModalContainer = styled.div`
 	width: 686px;
 `;
 
-export const HarvestAllModalTitleRow = styled(Row)`
-	gap: 14px;
-	padding: 24px;
-`;
-
-export const HarvestAllModalTitle = styled(H6)`
-	color: ${neutralColors.gray[100]};
-`;
-
-export const TitleIcon = styled(IconGIVGarden)``;
-
 export const StyledGivethIcon = styled.div`
 	margin-top: 48px;
 	margin-bottom: 23px;

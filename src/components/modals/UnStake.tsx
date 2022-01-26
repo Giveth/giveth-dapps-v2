@@ -155,7 +155,7 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 
 const UnStakeModalContainer = styled.div`
 	width: 370px;
-	padding: 24px 0;
+	padding: 0 0 24px;
 `;
 
 const UnStakeModalTitle = styled(Row)`

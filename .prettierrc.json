@@ -2,7 +2,6 @@
   "singleQuote": true,
   "useTabs": true,
   "tabWidth": 4,
-  "useTab": false,
   "semi": true,
   "jsxSingleQuote": true,
   "trailingComma": "all",
