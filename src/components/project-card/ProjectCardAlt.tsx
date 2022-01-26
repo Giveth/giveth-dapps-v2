@@ -48,12 +48,8 @@ const ProjectCard = (props: IProjectCard) => {
 					{name && <Author>{name}</Author>}
 					<Description>{htmlToText(description)}</Description>
 					<Captions>
-						<Caption style={{ color: neutralColors.gray[700] }}>
-							Raised: $200
-						</Caption>
-						<Caption style={{ color: neutralColors.gray[700] }}>
-							Last updated: 5 days ago
-						</Caption>
+						<BodyCaption>Raised: $200</BodyCaption>
+						<BodyCaption>Last updated: 5 days ago</BodyCaption>
 					</Captions>
 				</CardBody>
 			</Wrapper2>
@@ -66,6 +62,10 @@ const NoImg = styled.div`
 	width: 100%;
 	height: 100%;
 	background-image: url(${noImgIcon});
+`;
+
+const BodyCaption = styled(Caption)`
+	color: ${neutralColors.gray[700]};
 `;
 
 const Captions = styled.div`

@@ -9,22 +9,22 @@ import {
 	P,
 	B,
 	neutralColors,
+	Button,
 } from '@giveth/ui-design-system';
 import { IModal, Modal } from '@/components/modals/Modal';
 import { IProject } from '../../apollo/types/types';
 import { Row } from '../styled-components/Grid';
-import { Button } from '../styled-components/Button';
-import { TailSpin } from 'react-loader-spinner';
+import LoadingSpinner from '../animations/spinner';
 import Logger from '../../utils/Logger';
 import { checkNetwork } from '../../utils';
 import { isAddressENS, getAddressFromENS } from '../../lib/wallet';
 import { sendTransaction } from '../../lib/helpers';
 import * as transaction from '../../services/transaction';
 import { saveDonation, saveDonationTransaction } from '../../services/donation';
-import config from '../../../config';
+import config from '@/configuration';
 import styled from 'styled-components';
 
-const xdaiChain = { id: 100, name: 'xdai', mainToken: 'XDAI' };
+const xdaiChain = config.SECONDARY_NETWORK;
 
 interface IToken {
 	value: string;
@@ -64,20 +64,17 @@ const DonateModal = ({
 	setUnconfirmed,
 	givBackEligible,
 }: IDonateModal) => {
-	const context = useWeb3React();
-	const { account, library: web3, chainId: networkId } = context;
-	const userContext = UserContext();
+	const { account, library, chainId } = useWeb3React();
 	const {
 		state: { user },
 		actions: { signIn },
-	} = userContext;
+	} = UserContext();
 	const [donating, setDonating] = useState(false);
 	if (!showModal) return null;
 
 	const avgPrice = price && price * amount;
 	const isGivingBlockProject = project?.givingBlocksId;
-	const isXdai = networkId === xdaiChain.id;
-
+	const isXdai = chainId === xdaiChain.id;
 	const confirmDonation = async () => {
 		try {
 			// Traceable by default if it comes from Trace only
@@ -88,12 +85,12 @@ const DonateModal = ({
 			//   ? isTraceable
 			//   : switchTraceable
 			let traceable = false;
-			let userToken: any = user?.token;
+			let userTokenValidation: string | boolean = user?.token!;
 			// Sign message for registered users to get user info, no need to sign for anonymous
-			if (!userToken) {
+			if (!userTokenValidation) {
 				const tokenFromSignin = signIn && (await signIn());
 				if (!tokenFromSignin) return;
-				userToken = tokenFromSignin;
+				userTokenValidation = tokenFromSignin;
 			}
 			if (!project?.walletAddress) {
 				// return Toast({
@@ -104,9 +101,9 @@ const DonateModal = ({
 				alert('There is no eth address assigned for this project');
 			}
 
-			const isCorrectNetwork = checkNetwork(networkId!);
-			if (isGivingBlockProject && networkId !== config.PRIMARY_NETWORK.id)
-				// return triggerPopup('WrongNetwork', networkId)
+			const isCorrectNetwork = checkNetwork(chainId!);
+			if (isGivingBlockProject && chainId !== config.PRIMARY_NETWORK.id)
+				// return triggerPopup('WrongNetwork', chainId)
 				// TODO: SET RIGHT MODAL
 				return alert('wrong network');
 			if (!isCorrectNetwork) {
@@ -135,11 +132,11 @@ const DonateModal = ({
 			//   noAutoClose: true
 			// })
 			const toAddress = isAddressENS(project.walletAddress!)
-				? await getAddressFromENS(project.walletAddress!, web3)
+				? await getAddressFromENS(project.walletAddress!, library)
 				: project.walletAddress;
-			const web3Provider = web3;
+			const web3Provider = library;
 			await transaction.send(
-				web3,
+				library,
 				toAddress,
 				token.address!,
 				amount,
@@ -155,7 +152,7 @@ const DonateModal = ({
 							account!,
 							toAddress,
 							transactionHash,
-							networkId!,
+							chainId!,
 							Number(amount),
 							token.symbol!,
 							Number(project.id),
@@ -168,6 +165,10 @@ const DonateModal = ({
 							saveDonationErrors,
 						});
 						// onTransactionHash callback for event emitter
+						if (saveDonationErrors?.length > 0) {
+							// TODO: ADD TOAST
+							alert(JSON.stringify(saveDonationErrors));
+						}
 						transaction.confirmEtherTransaction(
 							transactionHash,
 							(res: any) => {
@@ -231,7 +232,7 @@ const DonateModal = ({
 							},
 							0,
 							isXdai,
-							web3,
+							library,
 						);
 						await saveDonationTransaction(
 							transactionHash,
@@ -319,24 +320,13 @@ const DonateModal = ({
 					</div>
 				</DonatingBox>
 				<DonateButton
-					style={{
-						borderColor: 'transparent',
-						backgroundColor: donating
-							? brandColors.giv[200]
-							: brandColors.giv[500],
-					}}
+					donating={donating}
+					label={donating ? 'DONATING' : 'DONATE'}
 					onClick={() => {
 						setDonating(!donating);
 						confirmDonation();
 					}}
-				>
-					<Row>
-						{donating && (
-							<TailSpin color='white' height={32} width={32} />
-						)}
-						{donating ? <P>DONATING</P> : <P>DONATE</P>}
-					</Row>
-				</DonateButton>
+				/>
 			</DonateContainer>
 		</Modal>
 	);
@@ -383,6 +373,13 @@ const DonateButton = styled(Button)`
 	display: flex;
 	justify-content: center;
 	algin-items: center;
+	border-color: transparent;
+	width: 100%;
+	background: ${(props: { donating: boolean }) =>
+		props.donating ? brandColors.giv[200] : brandColors.giv[500]};
+	:hover {
+		background: ${(props: { donating: boolean }) => brandColors.giv[700]};
+	}
 	* {
 		margin: auto 0;
 		padding: 0 8px 0 0;

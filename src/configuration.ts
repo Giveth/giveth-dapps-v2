@@ -12,14 +12,16 @@ const config: GlobalConfig = {
 	SUBGRAPH_POLLING_INTERVAL: 5000,
 	TOKEN_PRECISION: 2,
 	PRIMARY_NETWORK: {
-		name: 'Mainnet',
-		id: 1,
-		chain: '0x1',
+		name: isProduction ? 'Ethereum Mainnet' : 'Ropsten',
+		id: isProduction ? 1 : 3,
+		chain: isProduction ? '0x1' : '0x3',
+		mainToken: 'ETH',
 	},
 	SECONDARY_NETWORK: {
 		name: 'xDai',
 		id: 100,
 		chain: '0x64',
+		mainToken: 'XDAI',
 	},
 	...envConfig,
 	NETWORKS_CONFIG: {

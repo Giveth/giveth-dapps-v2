@@ -1,7 +1,6 @@
 import type { AppProps } from 'next/app';
 
 import '../styles/globals.css';
-import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import { Web3ReactProvider } from '@web3-react/core';
 import { ThemeProvider } from '@/context/theme.context';
 import { FarmProvider } from '@/context/farm.context';

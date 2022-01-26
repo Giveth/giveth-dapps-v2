@@ -56,3 +56,34 @@ export const getGivethV3PoolContract = (provider: Web3Provider | null) => {
 
 	return new Contract(UNISWAP_V3_LP_POOL, UniswapV3PoolABI, signer);
 };
+
+export async function getERC20Info({
+	library,
+	tokenAbi,
+	contractAddress,
+	chainId,
+}: any) {
+	try {
+		const instance = new Contract(contractAddress, tokenAbi, library);
+		const name = await instance.name();
+		const symbol = await instance.symbol();
+		const decimals = await instance.decimals();
+		const ERC20Info = {
+			name,
+			symbol,
+			address: contractAddress,
+			label: symbol,
+			chainId,
+			decimals,
+			value: {
+				symbol,
+			},
+		};
+		console.log({ ERC20Info });
+
+		return ERC20Info;
+	} catch (error) {
+		console.log({ error });
+		return false;
+	}
+}

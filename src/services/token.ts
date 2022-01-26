@@ -34,3 +34,19 @@ export async function getToken(
 		console.log('Input data for getting token is incomplete');
 	}
 }
+
+export const fetchPrices = (
+	chain: any,
+	tokenAddress: any,
+	catchFunction: any,
+) => {
+	return fetch(
+		`https://api.coingecko.com/api/v3/simple/token_price/${chain}?contract_addresses=${tokenAddress}&vs_currencies=usd`,
+	)
+		.then(response => response.json())
+		.then(data => parseFloat(data[Object.keys(data)[0]]?.usd?.toFixed(2)))
+		.catch(err => {
+			console.log('Error fetching prices: ', err);
+			catchFunction(0);
+		});
+};

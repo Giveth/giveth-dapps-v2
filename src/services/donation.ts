@@ -39,6 +39,7 @@ export async function saveDonation(
 		const { saveDonation: saveDonationId } = data;
 		donationId = saveDonationId;
 	} catch (error) {
+		console.log({ error });
 		saveDonationErrors.push(error);
 	}
 	return {

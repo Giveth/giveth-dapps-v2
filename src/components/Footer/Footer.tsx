@@ -134,7 +134,6 @@ export const Footer = () => {
 };
 
 const FooterContainer = styled.div`
-	background-color: #f7f7f9;
 	padding: 57px 0 83px;
 `;
 

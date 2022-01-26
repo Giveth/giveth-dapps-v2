@@ -1,10 +1,9 @@
-import fetch from 'isomorphic-fetch';
 // import Web3 from 'web3'
 // import { GET_PROJECT_BY_ADDRESS } from '../apollo/gql/projects'
 // import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
 import ERC20List from './erc20TokenList';
-import { Contract } from '@ethersproject/contracts';
-import config from '../../config';
+import { networkInfo } from '@/lib/constants/NetworksObj';
+import config from '@/configuration';
 
 const xDaiChainId = 100;
 const appNetworkId = config.PRIMARY_NETWORK.id;
@@ -29,53 +28,9 @@ export function pollEvery(fn: Function, delay: any) {
 	};
 }
 
-export async function getERC20Info({
-	library,
-	tokenAbi,
-	contractAddress,
-	chainId,
-}: any) {
-	try {
-		const instance = new Contract(contractAddress, tokenAbi, library);
-		const name = await instance.name();
-		const symbol = await instance.symbol();
-		const decimals = await instance.decimals();
-		const ERC20Info = {
-			name,
-			symbol,
-			address: contractAddress,
-			label: symbol,
-			chainId,
-			decimals,
-			value: {
-				symbol,
-			},
-		};
-		console.log({ ERC20Info });
-
-		return ERC20Info;
-	} catch (error) {
-		console.log({ error });
-		return false;
-	}
-}
-
 export function checkNetwork(networkId: number) {
 	const isXdai = networkId === xDaiChainId;
 	return networkId === appNetworkId || isXdai;
-}
-
-export function titleCase(str: string) {
-	//TODO hot fix
-	return str;
-	// if (!str) return null
-	// return str
-	//   ?.toLowerCase()
-	//   .split(' ')
-	//   .map(function (word) {
-	//     return word.replace(word[0], word[0].toUpperCase())
-	//   })
-	//   .join(' ')
 }
 
 export function base64ToBlob(base64: any) {
@@ -179,49 +134,6 @@ export async function checkIfURLisValid(checkUrl: string) {
 	return !!pattern.test(url);
 }
 
-export const fetchPrices = (
-	chain: any,
-	tokenAddress: any,
-	catchFunction: any,
-) => {
-	return fetch(
-		`https://api.coingecko.com/api/v3/simple/token_price/${chain}?contract_addresses=${tokenAddress}&vs_currencies=usd`,
-	)
-		.then(response => response.json())
-		.then(data => parseFloat(data[Object.keys(data)[0]]?.usd?.toFixed(2)))
-		.catch(err => {
-			console.log('Error fetching prices: ', err);
-			catchFunction(0);
-		});
-};
-
-export const fetchEthPrice = (catchFunction: any) => {
-	return fetch(
-		'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd',
-	)
-		.then(response => response.json())
-		.then(data => data.ethereum.usd)
-		.catch(err => {
-			console.log('Error fetching ETH price: ', err);
-			catchFunction(0);
-		});
-};
-
-export const switchToXdai = () => {
-	(window as any).ethereum.request({
-		method: 'wallet_addEthereumChain',
-		params: [
-			{
-				chainId: '0x64',
-				chainName: 'xDai',
-				nativeCurrency: { name: 'xDAI', symbol: 'xDai', decimals: 18 },
-				rpcUrls: ['https://rpc.xdaichain.com/'],
-				blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
-			},
-		],
-	});
-};
-
 export const switchNetwork = (currentNetworkId?: any) => {
 	let chainId = config.PRIMARY_NETWORK.chain;
 	const defaultNetworkId = config.PRIMARY_NETWORK.id;
@@ -241,24 +153,15 @@ export interface IPrefixes {
 	[networkID: number]: string;
 }
 
-export const ETHERSCAN_PREFIXES: IPrefixes = {
-	1: 'https://etherscan.io/',
-	3: 'https://ropsten.etherscan.io/',
-	4: 'https://rinkeby.etherscan.io/',
-	5: 'https://goerli.etherscan.io/',
-	42: 'https://kovan.etherscan.io/',
-	100: 'https://blockscout.com/poa/xdai/',
-};
-
 export function formatEtherscanLink(type: any, data: any) {
 	switch (type) {
 		case 'Account': {
 			const [chainId, address] = data;
-			return `${ETHERSCAN_PREFIXES[chainId]}address/${address}`;
+			return `${networkInfo(chainId).networkPrefix}address/${address}`;
 		}
 		case 'Transaction': {
 			const [chainId, hash] = data;
-			return `${ETHERSCAN_PREFIXES[chainId]}tx/${hash}`;
+			return `${networkInfo(chainId).networkPrefix}tx/${hash}`;
 		}
 	}
 }

@@ -34,8 +34,7 @@ export async function send(
 
 		return hash;
 	} catch (error: any) {
-		const err = new Error(error);
-		throw err;
+		throw error;
 	}
 }
 

@@ -30,7 +30,7 @@ interface IUserContext {
 		isSignedIn?: boolean;
 	};
 	actions: {
-		signIn?: () => Promise<boolean>;
+		signIn?: () => Promise<boolean | string>;
 		signOut?: () => void;
 	};
 }
@@ -54,8 +54,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 	const [balance, setBalance] = useState<string | null>(null);
 
 	useWallet();
-	const context = useWeb3React();
-	const { account, active, library, chainId, deactivate } = context;
+	const { account, active, library, chainId, deactivate } = useWeb3React();
 	const isEnabled = !!library?.getSigner() && !!account && !!chainId;
 	const isSignedIn = isEnabled && !!user?.token;
 
@@ -73,6 +72,15 @@ export const UserProvider = (props: { children: ReactNode }) => {
 			// setToken().then()
 		}
 	}, [user]);
+
+	useEffect(() => {
+		library?.on('block', () => {
+			getBalance();
+		});
+		return () => {
+			library?.removeAllListeners('block');
+		};
+	}, []);
 
 	const fetchLocalUser = (): User => {
 		const localUser = Auth.getUser() as User;
@@ -149,14 +157,18 @@ export const UserProvider = (props: { children: ReactNode }) => {
 	//   return true
 	// }
 
+	const getBalance = () => {
+		library
+			.getBalance(account)
+			.then((_balance: BigNumberish) => {
+				setBalance(parseFloat(formatEther(_balance)).toFixed(3));
+			})
+			.catch(() => setBalance(null));
+	};
+
 	useEffect(() => {
 		if (!!account && !!library) {
-			library
-				.getBalance(account)
-				.then((_balance: BigNumberish) => {
-					setBalance(parseFloat(formatEther(_balance)).toFixed(3));
-				})
-				.catch(() => setBalance(null));
+			getBalance();
 		}
 	}, [account, library, chainId]);
 

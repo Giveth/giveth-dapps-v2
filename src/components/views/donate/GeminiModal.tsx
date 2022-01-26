@@ -1,8 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import { TwitterShareButton } from 'react-share';
-import { Button } from '../../styled-components/Button';
-import { P } from '@giveth/ui-design-system';
+import { P, Button } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 const GeminiModal = ({ showModal, setShowModal }: any) => {

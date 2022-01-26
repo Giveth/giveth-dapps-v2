@@ -4,11 +4,10 @@ import InputBox from '../../InputBox';
 import { useWeb3React } from '@web3-react/core';
 import { Contract } from '@ethersproject/contracts';
 import UserContext from '../../../context/UserProvider';
-import { formatEther, formatUnits } from '@ethersproject/units';
 import { useQuery } from '@apollo/client';
-import { FETCH_LISTED_TOKENS } from '../../../../src/apollo/gql/gqlEnums';
-import { Button } from '../../styled-components/Button';
+import BigNumber from 'bignumber.js';
 import {
+	Button,
 	Caption,
 	neutralColors,
 	brandColors,
@@ -17,27 +16,22 @@ import {
 import WalletModal from '@/components/modals/WalletModal';
 import DonateModal from '@/components/modals/DonateModal';
 import { IProject } from '../../../apollo/types/types';
-import {
-	getERC20List,
-	pollEvery,
-	fetchPrices,
-	fetchEthPrice,
-	getERC20Info,
-	switchToXdai,
-	switchNetwork,
-} from '../../../utils';
+import { getERC20Info } from '../../../lib/contracts';
+import { getERC20List, pollEvery } from '../../../utils';
+import { fetchPrices } from '../../../services/token';
+import { switchNetwork } from '@/lib/wallet';
+import { usePrice } from '@/context/price.context';
 import GeminiModal from './GeminiModal';
-import config from '../../../configuration';
+import config from '@/configuration';
 // @ts-ignore
 import tokenAbi from 'human-standard-token-abi';
 
 import TokenPicker from './TokenPicker';
 
-const xdaiChain = { id: 100, name: 'xdai', mainToken: 'XDAI' };
-const ethereumChain = { id: 1, name: 'ethereum', mainToken: 'ETH' };
+const ethereumChain = config.PRIMARY_NETWORK;
+const xdaiChain = config.SECONDARY_NETWORK;
 const xdaiExcluded = ['PAN', 'XNODE', 'USDT', 'CRV'];
 const stableCoins = [xdaiChain.mainToken, 'DAI', 'USDT'];
-const GIVETH_DONATION_AMOUNT = 5;
 const POLL_DELAY_TOKENS = 5000;
 
 type SuccessFunction = (param: boolean) => void;
@@ -96,51 +90,35 @@ const CryptoDonation = (props: {
 	setSuccessDonation: SuccessFunction;
 	project: IProject;
 }) => {
-	const context = useWeb3React();
-	const { chainId: networkId, account, library: web3, deactivate } = context;
-	const userContext = UserContext();
-
+	const { chainId, account, library } = useWeb3React();
 	const {
 		state: { isEnabled, user, balance },
 		actions: { signIn },
-	} = userContext;
+	} = UserContext();
 	const { project, setSuccessDonation } = props;
-	const { data: tokensList } = useQuery(FETCH_LISTED_TOKENS);
-
-	const [tokens, setTokensObject] = useState<ISelectObj[]>();
+	const { ethPrice } = usePrice();
+	const mainTokenPrice = new BigNumber(ethPrice).toNumber();
+	const networkId = chainId;
 	const [selectedToken, setSelectedToken] = useState<ISelectObj>();
 	const [selectedTokenBalance, setSelectedTokenBalance] = useState<any>();
 	const [customInput, setCustomInput] = useState<any>();
 	const [tokenPrice, setTokenPrice] = useState<any>(1);
-	const [mainTokenPrice, setMainTokenPrice] = useState(0);
-	const [gasPrice, setGasPrice] = useState<number>();
-	const [gasETHPrice, setGasETHPrice] = useState<number>();
 	const [amountTyped, setAmountTyped] = useState('');
-	const [inProgress, setInProgress] = useState(false);
-	const [unconfirmed, setUnconfirmed] = useState(false);
 	const [geminiModal, setGeminiModal] = useState(false);
 	const [txHash, setTxHash] = useState<any>();
 	const [erc20List, setErc20List] = useState<any>();
 	const [erc20OriginalList, setErc20OriginalList] = useState<any>();
-	const [modalIsOpen, setIsOpen] = useState(false);
-	const [icon, setIcon] = useState(null);
-	const [anonymous, setAnonymous] = useState(false);
-	const [selectLoading, setSelectLoading] = useState(false);
+	// const [anonymous, setAnonymous] = useState(false);
+	// const [selectLoading, setSelectLoading] = useState(false);
 	const [givBackEligible, setGivBackEligible] = useState(true);
 	const [showWalletModal, setShowWalletModal] = useState(false);
 	const [showDonateModal, setShowDonateModal] = useState(false);
-	const switchTraceable = false;
-	const donateToGiveth = false;
 
 	const tokenSymbol = selectedToken?.symbol;
-	const tokenAddress = selectedToken?.address;
 	const isXdai = networkId === xdaiChain.id;
 	const isGivingBlockProject = project?.givingBlocksId;
 	const stopPolling = useRef<any>(null);
-	// Fetches initial main token price
-	useEffect(() => {
-		fetchEthPrice(setMainTokenPrice).then(setMainTokenPrice);
-	}, []);
+	const isGivBackEligible = givBackEligible && project?.verified;
 
 	// Checks network changes to fetch proper token list
 	useEffect(() => {
@@ -181,12 +159,6 @@ const CryptoDonation = (props: {
 		}
 	}, [networkId]);
 
-	// Gets token list ready
-	useEffect(() => {
-		if (!tokensList) return;
-		setTokensObject(buildTokensObj(tokensList?.tokens, networkId));
-	}, [tokensList]);
-
 	// Polls selected token data
 	useEffect(() => {
 		if (isEnabled) pollToken();
@@ -222,14 +194,14 @@ const CryptoDonation = (props: {
 	}, [selectedToken, mainTokenPrice]);
 
 	// Gets GAS price
-	useEffect(() => {
-		web3?.getGasPrice().then((wei: any) => {
-			const ethFromWei = formatEther(isXdai ? '1' : Number(wei));
-			const gwei = isXdai ? 1 : formatUnits(wei, 'gwei');
-			gwei && setGasPrice(Number(gwei));
-			ethFromWei && setGasETHPrice(Number(ethFromWei) * 21000);
-		});
-	}, [networkId, selectedToken]);
+	// useEffect(() => {
+	// 	library?.getGasPrice().then((wei: any) => {
+	// 		const ethFromWei = formatEther(isXdai ? '1' : Number(wei));
+	// 		const gwei = isXdai ? 1 : formatUnits(wei, 'gwei');
+	// 		gwei && setGasPrice(Number(gwei));
+	// 		ethFromWei && setGasETHPrice(Number(ethFromWei) * 21000);
+	// 	});
+	// }, [networkId, selectedToken]);
 
 	const checkGIVTokenAvailability = () => {
 		if (!isGivingBlockProject) return true;
@@ -239,23 +211,6 @@ const CryptoDonation = (props: {
 		} else {
 			return true;
 		}
-	};
-
-	const buildTokensObj = (array: IToken[], chain: number | undefined) => {
-		const newArray = [tokensList];
-		array.forEach(e => {
-			if (e.chainId !== chain) return;
-			const obj: ISelectObj = {
-				label: e.symbol,
-				value: e.symbol,
-				chainId: e.chainId,
-				icon: `/images/tokens/${e.symbol?.toLocaleLowerCase()}.png`,
-			};
-			newArray.push(obj);
-		});
-		newArray.sort((a, b) => a.label.localeCompare(b.label));
-		// setSelectedToken(newArray && newArray[0])
-		return newArray;
 	};
 
 	const clearPoll = () => {
@@ -277,7 +232,7 @@ const CryptoDonation = (props: {
 						const instance = new Contract(
 							selectedToken.address!,
 							tokenAbi,
-							web3,
+							library,
 						);
 						const a = await instance.balanceOf(account);
 						return (
@@ -302,29 +257,8 @@ const CryptoDonation = (props: {
 		)();
 	}, [account, networkId, tokenSymbol, balance]);
 
-	const donation = parseFloat(amountTyped);
-	const givethFee =
-		Math.round((GIVETH_DONATION_AMOUNT * 100.0) / tokenPrice) / 100;
-
-	const mainTokenToUSD = (amountOfToken: any) => {
-		const USDValue: any = (amountOfToken * mainTokenPrice).toFixed(2);
-		if (USDValue > 0) {
-			return `$${USDValue}`;
-		}
-		return 'less than $0.01';
-	};
-
-	const donationTokenToUSD = (amountOfToken: any) => {
-		const USDValue: any = (amountOfToken * tokenPrice).toFixed(2);
-		if (isXdai) return '';
-		if (USDValue > 0) {
-			return `$${USDValue}`;
-		}
-		return 'less than $0.01';
-	};
-
 	return (
-		<>
+		<MainContainer>
 			<GeminiModal
 				showModal={geminiModal}
 				setShowModal={setGeminiModal}
@@ -348,171 +282,181 @@ const CryptoDonation = (props: {
 					userTokenBalance={selectedTokenBalance}
 					amount={parseFloat(amountTyped)}
 					price={tokenPrice}
-					setInProgress={setInProgress}
-					setUnconfirmed={setUnconfirmed}
-					givBackEligible={givBackEligible}
+					// setInProgress={setInProgress}
+					// setUnconfirmed={setUnconfirmed}
+					givBackEligible={isGivBackEligible}
 				/>
 			)}
-			{isGivingBlockProject && networkId !== config.PRIMARY_NETWORK.id && (
-				<XDaiContainer>
-					<Caption color={neutralColors.gray[900]}>
-						Projects from The Giving Block only accept donations on
-						mainnet.
-					</Caption>
-					<Caption
-						style={{
-							color: brandColors.pinky[500],
-							marginLeft: '5px',
-							cursor: 'pointer',
-						}}
-						onClick={() => switchNetwork()}
-					>
-						Switch Network
-					</Caption>
-				</XDaiContainer>
-			)}
-			{!isGivingBlockProject && isEnabled && networkId !== xdaiChain.id && (
-				<XDaiContainer>
-					<div>
-						<img src='/images/gas_station.svg' />
-						<Caption color={neutralColors.gray[900]}>
-							Save on gas fees, switch to xDAI network.
-						</Caption>
-						<Caption
-							style={{
-								color: brandColors.pinky[500],
-								marginLeft: '5px',
-								cursor: 'pointer',
-							}}
-							onClick={switchToXdai}
-						>
-							Switch network
-						</Caption>
-					</div>
-				</XDaiContainer>
-			)}
-			<SearchContainer>
-				<DropdownContainer>
-					<TokenPicker
-						tokenList={erc20List}
-						selectedToken={selectedToken}
-						inputValue={customInput}
-						onChange={(i: any) => {
-							// setSelectedToken(i || selectedToken)
-							setSelectedToken(i);
-							// setIsComponentVisible(false)
-							setCustomInput('');
-							setErc20List(erc20OriginalList);
-							let givBackEligibilty: any =
-								erc20OriginalList?.find(
-									(t: any) => t?.symbol === i?.symbol,
-								);
-							if (
-								i?.symbol?.toUpperCase() === 'ETH' ||
-								i?.symbol?.toUpperCase() === 'XDAI'
-							) {
-								givBackEligibilty = true;
-							}
-							setGivBackEligible(givBackEligibilty && true);
-						}}
-						onInputChange={(i: any) => {
-							// It's a contract
-							if (i?.length === 42) {
-								try {
-									setSelectLoading(true);
-									getERC20Info({
-										library: web3,
-										tokenAbi,
-										contractAddress: i,
-										chainId: networkId,
-									}).then(pastedToken => {
-										if (!pastedToken) return;
-										const found = erc20List?.find(
-											(t: any) =>
-												t?.symbol ===
-												pastedToken?.symbol,
-										);
-										!found &&
-											setErc20List([
-												...erc20List,
-												pastedToken,
-											]);
-										setCustomInput(pastedToken?.symbol);
-										setSelectLoading(false);
-									});
-								} catch (error) {
-									setSelectLoading(false);
+
+			<InputContainer>
+				{isGivingBlockProject &&
+					networkId !== config.PRIMARY_NETWORK.id && (
+						<XDaiContainer>
+							<Caption color={neutralColors.gray[900]}>
+								Projects from The Giving Block only accept
+								donations on mainnet.
+							</Caption>
+							<Caption
+								style={{
+									color: brandColors.pinky[500],
+									marginLeft: '5px',
+									cursor: 'pointer',
+								}}
+								onClick={() => switchNetwork(1)}
+							>
+								Switch Network
+							</Caption>
+						</XDaiContainer>
+					)}
+				{!isGivingBlockProject &&
+					isEnabled &&
+					networkId !== xdaiChain.id && (
+						<XDaiContainer>
+							<div>
+								<img src='/images/gas_station.svg' />
+								<Caption color={neutralColors.gray[900]}>
+									Save on gas fees, switch to xDAI network.
+								</Caption>
+								<Caption
+									style={{
+										color: brandColors.pinky[500],
+										marginLeft: '5px',
+										cursor: 'pointer',
+									}}
+									onClick={() => switchNetwork(100)}
+								>
+									Switch network
+								</Caption>
+							</div>
+						</XDaiContainer>
+					)}
+				<SearchContainer>
+					<DropdownContainer>
+						<TokenPicker
+							tokenList={erc20List}
+							selectedToken={selectedToken}
+							inputValue={customInput}
+							onChange={(i: any) => {
+								// setSelectedToken(i || selectedToken)
+								setSelectedToken(i);
+								// setIsComponentVisible(false)
+								setCustomInput('');
+								setErc20List(erc20OriginalList);
+								let givBackEligibilty: any =
+									erc20OriginalList?.find(
+										(t: any) => t?.symbol === i?.symbol,
+									);
+								if (
+									i?.symbol?.toUpperCase() === 'ETH' ||
+									i?.symbol?.toUpperCase() === 'XDAI'
+								) {
+									givBackEligibilty = true;
 								}
-							} else {
-								setCustomInput(i);
-								erc20OriginalList &&
-									erc20OriginalList?.length > 0 &&
-									setErc20List([...erc20OriginalList]);
+								setGivBackEligible(givBackEligibilty);
+							}}
+							onInputChange={(i: any) => {
+								// It's a contract
+								if (i?.length === 42) {
+									try {
+										// setSelectLoading(true);
+										getERC20Info({
+											library,
+											tokenAbi,
+											contractAddress: i,
+											chainId: networkId,
+										}).then(pastedToken => {
+											if (!pastedToken) return;
+											const found = erc20List?.find(
+												(t: any) =>
+													t?.symbol ===
+													pastedToken?.symbol,
+											);
+											!found &&
+												setErc20List([
+													...erc20List,
+													pastedToken,
+												]);
+											setCustomInput(pastedToken?.symbol);
+											// setSelectLoading(false);
+										});
+									} catch (error) {
+										// setSelectLoading(false);
+										console.log({ error });
+									}
+								} else {
+									setCustomInput(i);
+									erc20OriginalList &&
+										erc20OriginalList?.length > 0 &&
+										setErc20List([...erc20OriginalList]);
+								}
+							}}
+							placeholder={
+								isGivingBlockProject
+									? 'Search name'
+									: 'Search name or paste an address'
 							}
-						}}
-						placeholder={
-							isGivingBlockProject
-								? 'Search name'
-								: 'Search name or paste an address'
-						}
-					/>
-				</DropdownContainer>
-				<SearchBarContainer>
-					<InputBox
-						// onChange={a => {
-						//   setShowDonateModal(false)
-						//   setAmountTyped(a)
-						// }}}
-						type='number'
-						onChange={val => {
-							if (
-								parseFloat(val) !== 0 &&
-								parseFloat(val) < 0.001
-							) {
-								return;
-							}
-							const checkGIV = checkGIVTokenAvailability();
-							if (checkGIV) setAmountTyped(val);
-						}}
-						placeholder='Amount'
-					/>
-				</SearchBarContainer>
-			</SearchContainer>
-			<AvText>
-				{' '}
-				Available:{' '}
-				{parseFloat(selectedTokenBalance || 0).toLocaleString(
-					'en-US',
-					{
-						minimumFractionDigits: 2,
-						maximumFractionDigits: 6,
-					} || '',
-				)}{' '}
-				{tokenSymbol}
-			</AvText>
-			<ButtonContainer>
-				{isEnabled && (
-					<Button onClick={() => setShowDonateModal(true)}>
-						DONATE
-					</Button>
-				)}
-				{!isEnabled && (
-					<Button onClick={() => setShowWalletModal(true)}>
-						CONNECT WALLET
-					</Button>
-				)}
-			</ButtonContainer>
-		</>
+						/>
+					</DropdownContainer>
+					<SearchBarContainer>
+						<InputBox
+							// onChange={a => {
+							//   setShowDonateModal(false)
+							//   setAmountTyped(a)
+							// }}}
+							type='number'
+							onChange={val => {
+								if (
+									parseFloat(val) !== 0 &&
+									parseFloat(val) < 0.001
+								) {
+									return;
+								}
+								const checkGIV = checkGIVTokenAvailability();
+								if (checkGIV) setAmountTyped(val);
+							}}
+							placeholder='Amount'
+						/>
+					</SearchBarContainer>
+				</SearchContainer>
+				<AvText>
+					{' '}
+					Available:{' '}
+					{parseFloat(selectedTokenBalance || 0).toLocaleString(
+						'en-US',
+						{
+							minimumFractionDigits: 2,
+							maximumFractionDigits: 6,
+						} || '',
+					)}{' '}
+					{tokenSymbol}
+				</AvText>
+			</InputContainer>
+			{isEnabled && (
+				<MainButton
+					label='DONATE'
+					size='large'
+					onClick={() => setShowDonateModal(true)}
+				/>
+			)}
+			{!isEnabled && (
+				<MainButton
+					label='CONNECT WALLET'
+					onClick={() => setShowWalletModal(true)}
+				/>
+			)}
+		</MainContainer>
 	);
 };
 
-const Img = styled.img`
-	margin-right: -10px;
-	margin-top: 5px;
-`;
-const IconContainer = styled.div`
+const MainContainer = styled.div`
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
+	height: 60%;
+	justify-content: space-between;
+`;
+const InputContainer = styled.div`
+	display: flex;
+	flex-direction: column;
 `;
 const AvText = styled(GLink)`
 	color: ${brandColors.deep[500]};
@@ -540,7 +484,6 @@ const XDaiContainer = styled.div`
 	flex: row;
 	justify-content: space-between;
 	padding: 8px 16px 18.5px 16px;
-	margin: 24px 0 0 0;
 	border-radius: 8px;
 	div:first-child {
 		display: flex;
@@ -551,8 +494,8 @@ const XDaiContainer = styled.div`
 		}
 	}
 `;
-const ButtonContainer = styled.div`
-	padding: 51px 0 0 0;
+const MainButton = styled(Button)`
+	width: 100%;
 `;
 
 export default CryptoDonation;
