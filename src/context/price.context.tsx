@@ -75,10 +75,12 @@ export const PriceProvider: FC = ({ children }) => {
 
 	useEffect(() => {
 		// fetch('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD')
-		fetch('https://feathers.giveth.io/conversionRates?symbol=ETH&to=USD')
+		fetch(
+			'https://feathers.giveth.io/conversionRates?from=ETH&to=USD&interval=hourly',
+		)
 			.then(async res => {
 				const data = await res.json();
-				setEthPrice(new BigNumber(data.rates.USD));
+				setEthPrice(new BigNumber(data.rate));
 			})
 			.catch(error => {
 				console.error(
