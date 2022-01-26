@@ -46,11 +46,11 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 
 	return (
 		<BadgeWrapper>
-			<div className='d-flex'>
+			<BadgeContainer>
 				{verified && <VerificationBadge verified />}
 				{traceable && <VerificationBadge trace />}
-			</div>
-			<div className='d-flex'>
+			</BadgeContainer>
+			<BadgeContainer>
 				{Number(likes) > 0 && <LikeBadge>{likes}</LikeBadge>}
 				<HeartWrap active={heartedByUser} isHover={isHover}>
 					<Image
@@ -59,10 +59,14 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 					/>
 					<Image src={shareIcon} alt='share icon' />
 				</HeartWrap>
-			</div>
+			</BadgeContainer>
 		</BadgeWrapper>
 	);
 };
+
+const BadgeContainer = styled.div`
+	display: flex;
+`;
 
 const HeartWrap = styled(FlexCenter)<{ active?: boolean; isHover?: boolean }>`
 	height: ${props => (props.isHover ? '72px' : '30px')};
