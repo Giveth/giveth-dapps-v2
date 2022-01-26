@@ -247,6 +247,7 @@ const Header: FC<IHeader> = () => {
 						<div>
 							<ConnectButton
 								buttonType='primary'
+								size='small'
 								label={
 									isGIVconomyRoute
 										? 'CONNECT WALLET'
