@@ -175,7 +175,10 @@ export const HeaderLink = styled(GLink)<IHeaderLinkProps>`
 	}
 `;
 
-export const ConnectButton = styled(Button)``;
+export const ConnectButton = styled(Button)`
+	box-shadow: ${props =>
+		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
+`;
 
 export const NotifButton = styled(HeaderButton)`
 	padding: 23px;
