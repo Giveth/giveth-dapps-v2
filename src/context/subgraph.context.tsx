@@ -59,7 +59,7 @@ export const SubgraphProvider: FC = ({ children }) => {
     useState<ISubgraphValue>(defaultSubgraphValue)
   const [xDaiSubgraphValue, setXDaiSubgraphValue] = useState<ISubgraphValue>(defaultSubgraphValue)
 
-  const fetchMainnetInfo = useCallback(async userAddress => {
+  const fetchMainnetInfo = useCallback(async (userAddress = '') => {
     try {
       const response = await fetchSubgraph(
         SubgraphQueryBuilder.getMainnetQuery(userAddress),
@@ -71,7 +71,7 @@ export const SubgraphProvider: FC = ({ children }) => {
     }
   }, [])
 
-  const fetchXDaiInfo = useCallback(async userAddress => {
+  const fetchXDaiInfo = useCallback(async (userAddress = '') => {
     try {
       const response = await fetchSubgraph(
         SubgraphQueryBuilder.getXDaiQuery(userAddress),
@@ -92,20 +92,17 @@ export const SubgraphProvider: FC = ({ children }) => {
   }, [mainnetSubgraphValue, xDaiSubgraphValue, chainId])
 
   useEffect(() => {
-    if (account && isAddress(account)) {
-      fetchMainnetInfo(account)
-      fetchXDaiInfo(account)
-
-      const interval = setInterval(() => {
-        if (chainId === config.XDAI_NETWORK_NUMBER) {
-          fetchXDaiInfo(account)
-        } else {
-          fetchMainnetInfo(account)
-        }
-      }, config.SUBGRAPH_POLLING_INTERVAL)
-      return () => {
-        clearInterval(interval)
+    fetchMainnetInfo(account)
+    fetchXDaiInfo(account)
+    const interval = setInterval(() => {
+      if (chainId === config.XDAI_NETWORK_NUMBER) {
+        fetchXDaiInfo(account)
+      } else {
+        fetchMainnetInfo(account)
       }
+    }, config.SUBGRAPH_POLLING_INTERVAL)
+    return () => {
+      clearInterval(interval)
     }
   }, [account, fetchMainnetInfo, fetchXDaiInfo, chainId])
 
