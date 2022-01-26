@@ -74,6 +74,7 @@ import { useSubgraph } from '@/context';
 import { ITokenAllocation } from '@/types/subgraph';
 import { TopFiller } from './commons';
 import { useWeb3React } from '@web3-react/core';
+import { IconGIV } from '../Icons/GIV';
 
 export const TabGIVstreamTop = () => {
 	const [showModal, setShowModal] = useState(false);
@@ -378,7 +379,7 @@ const convetSourceTypeToIcon = (distributor: string) => {
 		case 'givdrop':
 			return (
 				<Row gap='16px'>
-					<IconGIVGarden size={24} color={brandColors.mustard[500]} />
+					<IconGIV size={24} />
 					<P>{` GIVdrop`}</P>
 				</Row>
 			);
