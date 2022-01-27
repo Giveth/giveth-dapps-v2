@@ -12,7 +12,7 @@ import {
 	GLink,
 	H2,
 	Lead,
-	OulineLinkButton,
+	OutlineLinkButton,
 } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 import WalletModal from '@/components/modals/WalletModal';
@@ -146,7 +146,7 @@ const AddGivButton = styled.div`
 	cursor: pointer;
 `;
 
-const SocialButton = styled(OulineLinkButton)`
+const SocialButton = styled(OutlineLinkButton)`
 	width: 265px;
 `;
 
