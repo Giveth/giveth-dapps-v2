@@ -46,7 +46,7 @@ const ProjectIndex = (props: IProjectBySlug) => {
 			</Head>
 			<ProjectHeader project={project} />
 			<BodyWrapper>
-				<TabsWrapper className='w-100'>
+				<TabsWrapper>
 					<ProjectTabs
 						activeTab={activeTab}
 						setActiveTab={setActiveTab}
@@ -71,11 +71,16 @@ const ProjectIndex = (props: IProjectBySlug) => {
 };
 
 const Wrapper = styled.div`
-	margin: 150px 125px;
+	// margin: 150px 125px;
 	position: relative;
 `;
 
+const TabsWrapper = styled.div`
+	width: 100%;
+`;
+
 const BodyWrapper = styled.div`
+	margin: 0px 170px 0px 150px;
 	display: flex;
 	align-items: center;
 	flex-direction: column-reverse;
@@ -85,10 +90,6 @@ const BodyWrapper = styled.div`
 		flex-direction: row;
 		justify-content: space-between;
 	}
-`;
-
-const TabsWrapper = styled.div`
-	width: 100%;
 `;
 
 export default ProjectIndex;
