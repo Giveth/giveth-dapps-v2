@@ -146,7 +146,14 @@ export const SmallHeaderLinks = styled(Row)`
 	align-self: center;
 	align-items: center;
 	display: flex;
-	padding: 0 16px;
+	padding: 10px 16px;
+	border-radius: 48px;
+	gap: 8px;
+	background-color: ${props =>
+		props.theme === ETheme.Dark ? brandColors.giv[900] : 'white'};
+	border: 1px solid
+		${props =>
+			props.theme === ETheme.Dark ? brandColors.giv[600] : 'white'};
 	@media ${device.laptopL} {
 		display: none;
 	}
@@ -231,4 +238,8 @@ export const CoverLine = styled.div<IThemed>`
 	top: 1px;
 	bottom: 4px;
 	border-radius: 48px;
+`;
+
+export const IconMenuWrapper = styled.div`
+	color: ${brandColors.giv[500]};
 `;
