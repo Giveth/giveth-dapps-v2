@@ -40,6 +40,8 @@ import { useRouter } from 'next/router';
 import { menuRoutes } from '../menu/MenuRoutes';
 import { GLink, IconMenu24 } from '@giveth/ui-design-system';
 import { HeaderSmallMenu } from '../menu/HeaderMenu';
+import useUser from '@/context/UserProvider';
+import { shortenAddress } from '@/lib/helpers';
 
 export interface IHeader {
 	theme?: ThemeType;
@@ -57,6 +59,9 @@ const Header: FC<IHeader> = () => {
 	const {
 		currentValues: { balances },
 	} = useSubgraph();
+	const {
+		state: { user },
+	} = useUser();
 	const { chainId, active, activate, account, library } = useWeb3React();
 	const { theme } = useGeneral();
 	const router = useRouter();
@@ -225,13 +230,10 @@ const Header: FC<IHeader> = () => {
 											height={'24px'}
 										/>
 										<WBInfo>
-											<GLink size='Medium'>{`${account.substring(
-												0,
-												6,
-											)}...${account.substring(
-												account.length - 5,
-												account.length,
-											)}`}</GLink>
+											<GLink size='Medium'>
+												{user?.name ||
+													shortenAddress(account)}
+											</GLink>
 											<WBNetwork size='Tiny'>
 												Connected to{' '}
 												{networksParams[chainId]
