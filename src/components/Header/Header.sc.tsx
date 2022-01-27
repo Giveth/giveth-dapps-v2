@@ -163,9 +163,6 @@ export const SmallHeaderLinks = styled(Row)`
 	border: 1px solid
 		${props =>
 			props.theme === ETheme.Dark ? brandColors.giv[600] : 'white'};
-	@media ${device.laptopL} {
-		display: none;
-	}
 `;
 
 export const HeaderLink = styled(GLink)<IHeaderLinkProps>`
@@ -254,4 +251,11 @@ export const IconMenuWrapper = styled.div`
 	left: 16px;
 	top: 12px;
 	color: ${brandColors.giv[500]};
+`;
+export const HeaderSmallMenuAndButtonContainer = styled(MenuAndButtonContainer)`
+	position: relative;
+	z-index: 2;
+	@media ${device.laptopL} {
+		display: none;
+	}
 `;
