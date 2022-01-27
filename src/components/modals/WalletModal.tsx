@@ -30,22 +30,24 @@ const WalletModal = ({
 	}) => {
 		if (selectedWallet !== selected.value) {
 			deactivate();
+			let timeOut = 0;
 			if (selectedWallet === EWallets.METAMASK) {
-				setTimeout(() => {
-					activate(selected.connector)
-						.then(() => {
-							window.localStorage.setItem(
-								'selectedWallet',
-								selected.value,
-							);
-							closeParentModal ? closeParentModal() : undefined;
-						})
-						.catch(e => {
-							// toast to inform error
-							console.log(e);
-						});
-				}, 500);
+				timeOut = 500;
 			}
+			setTimeout(() => {
+				activate(selected.connector)
+					.then(() => {
+						window.localStorage.setItem(
+							'selectedWallet',
+							selected.value,
+						);
+						closeParentModal ? closeParentModal() : undefined;
+					})
+					.catch(e => {
+						// toast to inform error
+						console.log(e);
+					});
+			}, timeOut);
 		}
 		setShowModal(false);
 	};
