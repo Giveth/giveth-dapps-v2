@@ -134,7 +134,7 @@ export const Footer = () => {
 };
 
 const FooterContainer = styled.div`
-	padding: 57px 0 83px;
+	padding: 35px 0 12px;
 `;
 
 const LeftContainer = styled(Row)`

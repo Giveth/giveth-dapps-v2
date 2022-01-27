@@ -171,12 +171,22 @@ const StartGiving = styled(Button)`
 	color: ${brandColors.giv[500]};
 	height: 66px;
 	padding: 0 80px;
+
+	&:hover {
+		background-color: ${brandColors.mustard[500]};
+		color: ${brandColors.giv[500]};
+	}
 `;
 
 const TwitterButton = styled(Button)`
 	color: white;
 	height: 66px;
 	padding: 0 80px;
+
+	&:hover {
+		background-color: transparent;
+		color: white;
+	}
 `;
 
 const GivingEffortless = styled(H2)`

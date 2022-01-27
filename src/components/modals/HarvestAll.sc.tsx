@@ -2,7 +2,6 @@ import {
 	brandColors,
 	neutralColors,
 	P,
-	IconGIVGarden,
 	Lead,
 	Button,
 	GLink,
@@ -60,12 +59,12 @@ export const CancelButton = styled(Button)`
 	margin: 0 auto 8px;
 `;
 
-export const WitingModalContainer = styled.div`
+export const WaitingModalContainer = styled.div`
 	width: 546px;
 	padding: 24px;
 `;
 
-export const WaitinMessage = styled(H6)`
+export const WaitingMessage = styled(H6)`
 	color: ${neutralColors.gray[100]};
 	padding: 24px;
 	margin-top: 18px;
