@@ -10,6 +10,8 @@ const RichTextViewer = (props: { content?: string }) => {
 };
 
 const Wrapper = styled.div`
+	max-width: 750px;
+
 	a {
 		color: #007bff !important;
 		&:hover {
