@@ -81,6 +81,13 @@ export const HBContainer = styled.div`
 	z-index: 2;
 `;
 
+export const MBContainer = styled(HBContainer)`
+	display: flex;
+	align-items: center;
+	z-index: 2;
+	gap: 8px;
+`;
+
 export const WBInfo = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -146,9 +153,11 @@ export const SmallHeaderLinks = styled(Row)`
 	align-self: center;
 	align-items: center;
 	display: flex;
-	padding: 10px 16px;
-	border-radius: 48px;
+	flex-direction: column;
+	padding: 12px 16px 12px 48px;
+	border-radius: 24px;
 	gap: 8px;
+	position: relative;
 	background-color: ${props =>
 		props.theme === ETheme.Dark ? brandColors.giv[900] : 'white'};
 	border: 1px solid
@@ -241,5 +250,8 @@ export const CoverLine = styled.div<IThemed>`
 `;
 
 export const IconMenuWrapper = styled.div`
+	position: absolute;
+	left: 16px;
+	top: 12px;
 	color: ${brandColors.giv[500]};
 `;

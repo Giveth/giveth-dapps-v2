@@ -22,6 +22,7 @@ import {
 	Logo,
 	MenuAndButtonContainer,
 	CoverLine,
+	MBContainer,
 	SmallHeaderLinks,
 	HeaderPlaceholder,
 	IconMenuWrapper,
@@ -38,6 +39,7 @@ import { ETheme, useGeneral } from '@/context/general.context';
 import { useRouter } from 'next/router';
 import { menuRoutes } from '../menu/MenuRoutes';
 import { GLink, IconMenu24 } from '@giveth/ui-design-system';
+import { HeaderSmallMenu } from '../menu/HeaderMenu';
 
 export interface IHeader {
 	theme?: ThemeType;
@@ -48,6 +50,7 @@ const Header: FC<IHeader> = () => {
 	const [showRewardMenu, setShowRewardMenu] = useState(false);
 	const [showUserMenu, setShowUserMenu] = useState(false);
 	const [showHeader, setShowHeader] = useState(true);
+	const [showSmallMenu, setShowSmallMenu] = useState(false);
 	const [showWalletModal, setShowWalletModal] = useState(false);
 	const [showSigninModal, setShowSigninModal] = useState(false);
 	const [isGIVconomyRoute, setIsGIVconomyRoute] = useState(false);
@@ -118,7 +121,7 @@ const Header: FC<IHeader> = () => {
 				theme={theme}
 				show={showHeader}
 			>
-				<Row gap='24px'>
+				<Row gap='24px' alignItems='center'>
 					<Logo theme={theme}>
 						<Image
 							width='48p'
@@ -127,12 +130,16 @@ const Header: FC<IHeader> = () => {
 							src={`/images/logo/logo1.png`}
 						/>
 					</Logo>
-					<SmallHeaderLinks theme={theme}>
-						<IconMenuWrapper>
-							<IconMenu24 />
-						</IconMenuWrapper>
-						<GLink size='Big'>Home</GLink>
-					</SmallHeaderLinks>
+					<MenuAndButtonContainer>
+						<BalanceButton outline theme={theme}>
+							<MBContainer>
+								<IconMenu24 />
+								<GLink size='Big'>Home</GLink>
+							</MBContainer>
+							<CoverLine theme={theme} />
+						</BalanceButton>
+						{showSmallMenu && <HeaderSmallMenu />}
+					</MenuAndButtonContainer>
 				</Row>
 				<HeaderLinks theme={theme}>
 					{menuRoutes.map((link, index) => (
