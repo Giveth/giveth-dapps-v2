@@ -190,7 +190,7 @@ export const CreateProject = styled(ButtonLink)`
 	box-shadow: ${props =>
 		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
 	@media ${device.laptop} {
-		display: block;
+		display: flex;
 	}
 `;
 
