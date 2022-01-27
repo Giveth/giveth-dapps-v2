@@ -24,6 +24,7 @@ import {
 	CoverLine,
 	SmallHeaderLinks,
 	HeaderPlaceholder,
+	IconMenuWrapper,
 } from './Header.sc';
 import Link from 'next/link';
 import { useSubgraph } from '@/context/subgraph.context';
@@ -36,7 +37,7 @@ import MenuWallet from '@/components/menu/MenuWallet';
 import { ETheme, useGeneral } from '@/context/general.context';
 import { useRouter } from 'next/router';
 import { menuRoutes } from '../menu/MenuRoutes';
-import { GLink } from '@giveth/ui-design-system';
+import { GLink, IconMenu24 } from '@giveth/ui-design-system';
 
 export interface IHeader {
 	theme?: ThemeType;
@@ -117,7 +118,7 @@ const Header: FC<IHeader> = () => {
 				theme={theme}
 				show={showHeader}
 			>
-				<Row>
+				<Row gap='24px'>
 					<Logo theme={theme}>
 						<Image
 							width='48p'
@@ -126,11 +127,11 @@ const Header: FC<IHeader> = () => {
 							src={`/images/logo/logo1.png`}
 						/>
 					</Logo>
-					<SmallHeaderLinks>
-						{/* <IconMenu24 /> */}
-						<Link href='/' passHref>
-							<HeaderLink size='Big'>GIVeconomy</HeaderLink>
-						</Link>
+					<SmallHeaderLinks theme={theme}>
+						<IconMenuWrapper>
+							<IconMenu24 />
+						</IconMenuWrapper>
+						<GLink size='Big'>Home</GLink>
 					</SmallHeaderLinks>
 				</Row>
 				<HeaderLinks theme={theme}>
