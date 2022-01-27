@@ -26,6 +26,7 @@ import {
 	SmallHeaderLinks,
 	HeaderPlaceholder,
 	IconMenuWrapper,
+	HeaderSmallMenuAndButtonContainer,
 } from './Header.sc';
 import Link from 'next/link';
 import { useSubgraph } from '@/context/subgraph.context';
@@ -135,7 +136,7 @@ const Header: FC<IHeader> = () => {
 							src={`/images/logo/logo1.png`}
 						/>
 					</Logo>
-					<MenuAndButtonContainer>
+					<HeaderSmallMenuAndButtonContainer>
 						<BalanceButton outline theme={theme}>
 							<MBContainer>
 								<IconMenu24 />
@@ -144,7 +145,7 @@ const Header: FC<IHeader> = () => {
 							<CoverLine theme={theme} />
 						</BalanceButton>
 						{showSmallMenu && <HeaderSmallMenu />}
-					</MenuAndButtonContainer>
+					</HeaderSmallMenuAndButtonContainer>
 				</Row>
 				<HeaderLinks theme={theme}>
 					{menuRoutes.map((link, index) => (
