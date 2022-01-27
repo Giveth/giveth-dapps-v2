@@ -14,7 +14,7 @@ const ProjectHeader = (props: { project: IProject }) => {
 	const traceable = !!traceCampaignId;
 
 	useEffect(() => {
-		const threshold = 320;
+		const threshold = 280;
 		const updateScrollDir = () => {
 			const scrollY = window.pageYOffset;
 
@@ -61,7 +61,7 @@ const Wrapper = styled.div<{ image: string | undefined }>`
 	height: 512px;
 	overflow: hidden;
 	position: sticky;
-	top: -37.5%;
+	top: -312px;
 	z-index: 10;
 `;
 
