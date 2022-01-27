@@ -337,6 +337,7 @@ const DonateContainer = styled.div`
 	background: white;
 	color: black;
 	padding: 0 24px 38px 24px;
+	margin: -30px 0 0 0;
 `;
 
 const DonateTopTitle = styled(Row)`

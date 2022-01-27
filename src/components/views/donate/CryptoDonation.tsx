@@ -15,6 +15,7 @@ import {
 } from '@giveth/ui-design-system';
 import WalletModal from '@/components/modals/WalletModal';
 import DonateModal from '@/components/modals/DonateModal';
+import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import { IProject } from '../../../apollo/types/types';
 import { getERC20Info } from '../../../lib/contracts';
 import { getERC20List, pollEvery } from '../../../utils';
@@ -116,6 +117,7 @@ const CryptoDonation = (props: {
 	const [givBackEligible, setGivBackEligible] = useState(true);
 	const [showWalletModal, setShowWalletModal] = useState(false);
 	const [showDonateModal, setShowDonateModal] = useState(false);
+	const [showInsufficientModal, setShowInsufficientModal] = useState(false);
 
 	const tokenSymbol = selectedToken?.symbol;
 	const isXdai = networkId === xdaiChain.id;
@@ -266,6 +268,12 @@ const CryptoDonation = (props: {
 				showModal={geminiModal}
 				setShowModal={setGeminiModal}
 			/>
+			{showInsufficientModal && (
+				<InsufficientFundModal
+					showModal={showInsufficientModal}
+					setShowModal={setShowInsufficientModal}
+				/>
+			)}
 			{showWalletModal && !txHash && (
 				<WalletModal
 					showModal={showWalletModal}
@@ -438,7 +446,12 @@ const CryptoDonation = (props: {
 				<MainButton
 					label='DONATE'
 					size='large'
-					onClick={() => setShowDonateModal(true)}
+					onClick={() => {
+						if (selectedTokenBalance < amountTyped) {
+							return setShowInsufficientModal(true);
+						}
+						setShowDonateModal(true);
+					}}
 				/>
 			)}
 			{!isEnabled && (
