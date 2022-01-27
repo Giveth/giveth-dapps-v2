@@ -184,20 +184,6 @@ const Wrapper = styled.div`
 	width: 100%;
 	border-radius: ${cardRadius};
 	background: white;
-
-	// ${mediaQueries['lg']} {
-	// 	min-width: 0px;
-	// 	max-width: 465px;
-	// }
-	// ${mediaQueries['xl']} {
-	// 	min-width: 335px;
-	// 	max-width: 390px;
-	// }
-
-	// @media (min-width: 1440px) {
-	// 	min-height: 389px;
-	// 	max-width: 445px;
-	// }
 `;
 
 export default ProjectCard;
