@@ -69,7 +69,6 @@ const MenuWallet: FC<IMenuWallet> = ({ setShowWalletModal }) => {
 				<StyledButton
 					onClick={() => {
 						window.localStorage.removeItem('selectedWallet');
-						deactivate();
 						setShowWalletModal(true);
 					}}
 				>
