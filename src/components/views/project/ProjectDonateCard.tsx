@@ -5,7 +5,7 @@ import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import { Shadow } from '@/components/styled-components/Shadow';
 import CategoryBadge from '@/components/badges/CategoryBadge';
 import Routes from '@/lib/constants/Routes';
-import { slugToProjectDonate, mediaQueries } from '@/lib/helpers';
+import { slugToProjectDonate } from '@/lib/helpers';
 import InfoBadge from '@/components/badges/InfoBadge';
 import { IProjectBySlug } from '@/apollo/types/gqlTypes';
 import links from '@/lib/constants/links';
@@ -119,14 +119,6 @@ const Wrapper = styled.div`
 	position: relative;
 	box-shadow: ${Shadow.Neutral['400']};
 	flex-shrink: 0;
-	z-index: 20;
-
-	${mediaQueries['xl']} {
-		position: sticky;
-		position: -webkit-sticky;
-		align-self: flex-start;
-		top: 168px;
-	}
 `;
 
 const DonateButton = styled(Button)`

@@ -2,7 +2,6 @@ import { Dispatch, SetStateAction } from 'react';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { IProject } from '@/apollo/types/types';
 import { Subline, brandColors, P } from '@giveth/ui-design-system';
-import { mediaQueries } from '@/lib/helpers';
 import styled from 'styled-components';
 
 interface IProjectTabs {
@@ -68,24 +67,11 @@ const Tab = styled(P)`
 `;
 
 const Wrapper = styled.div`
-	padding: 24px 0 24px 0;
-	margin-bottom: 16px;
+	margin: 24px 0 40px 0;
 	color: ${brandColors.deep[600]};
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	position: sticky;
-	top: 200px;
-	z-index: 10;
-	background: white;
-
-	${mediaQueries['xl']} {
-		padding: 8px 0 12px;
-		position: sticky;
-		top: 200px;
-		z-index: 10;
-		background: white;
-	}
 `;
 
 export default ProjectTabs;
