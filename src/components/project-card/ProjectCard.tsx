@@ -22,6 +22,7 @@ import {
 	OulineButton,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { mediaQueries } from '@/lib/helpers';
 
 const cardWidth = '440px';
 const cardRadius = '12px';
@@ -121,7 +122,8 @@ const NoImg = styled.div`
 `;
 const Img = styled.img`
 	border-radius: ${cardRadius} ${cardRadius} 0 0;
-	width: ${cardWidth};
+	// width: ${cardWidth};
+	width: 100px;
 	height: auto;
 `;
 
@@ -179,9 +181,23 @@ const Wrapper2 = styled.div`
 const Wrapper = styled.div`
 	position: relative;
 	height: 430px;
-	width: 440px;
+	width: 100%;
 	border-radius: ${cardRadius};
 	background: white;
+
+	// ${mediaQueries['lg']} {
+	// 	min-width: 0px;
+	// 	max-width: 465px;
+	// }
+	// ${mediaQueries['xl']} {
+	// 	min-width: 335px;
+	// 	max-width: 390px;
+	// }
+
+	// @media (min-width: 1440px) {
+	// 	min-height: 389px;
+	// 	max-width: 445px;
+	// }
 `;
 
 export default ProjectCard;
