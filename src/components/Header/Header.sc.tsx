@@ -28,12 +28,19 @@ export const StyledHeader = styled(Row)<IHeader>`
 `;
 
 export const Logo = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: cneter;
 	background: ${neutralColors.gray[100]};
 	box-shadow: 0px 4.125px 27.5px rgba(33, 32, 60, 0.24);
 	border-radius: 99px;
 	padding: 8px;
 	width: 64px;
 	height: 64px;
+`;
+
+export const BackBtn = styled.a`
+	cursor: pointer;
 `;
 
 interface IThemed {

@@ -106,3 +106,13 @@ export const FETCH_PROJECT_UPDATES = gql`
 		}
 	}
 `;
+
+export const UPLOAD_IMAGE = gql`
+	mutation ($imageUpload: ImageUpload!) {
+		uploadImage(imageUpload: $imageUpload) {
+			url
+			projectId
+			projectImageId
+		}
+	}
+`;

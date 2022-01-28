@@ -7,3 +7,11 @@ export const Email_Input = styled.input`
 	border-radius: 56px;
 	padding: 14px 25px;
 `;
+
+export const Regular_Input = styled.input`
+	width: 677px;
+	height: 56px;
+	border: 1px solid #ebecf2;
+	border-radius: 8px;
+	padding: 17.5px 0 17.5px 16px;
+`;
