@@ -32,6 +32,7 @@ const config: GlobalConfig = {
 	// included in metamask by default and its rpc endpoint is not infura
 	INFURA_API_KEY: process.env.NEXT_PUBLIC_INFURA_API_KEY,
 	BLOCKNATIVE_DAPP_ID: process.env.BLOCKNATIVE_DAPP_ID,
+	GOOGLE_MAPS_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
 };
 
 config.MAINNET_CONFIG.nodeUrl = process.env.NEXT_PUBLIC_NODE_URL || '';

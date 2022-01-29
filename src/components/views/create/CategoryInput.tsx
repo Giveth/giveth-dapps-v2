@@ -1,11 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { H5, Caption, brandColors } from '@giveth/ui-design-system';
 import { InputContainer } from './Create.sc';
-import { Regular_Input } from '@/components/styled-components/Input';
-import { categoryList } from '@/lib/constants/Categories';
+import CheckBox from '@/components/Checkbox';
+import { categoryList, maxSelectedCategory } from '@/lib/constants/Categories';
 import styled from 'styled-components';
 
 const CategoryInput = (props: any) => {
+	const [categories, setCategories] = useState<any>([]);
+
+	const handleChange = (value: any) => {
+		const categoriesCp = categories;
+		// Remove it, it's already there
+		const found = categoriesCp.findIndex(
+			(el: any) => el.name === value.name,
+		);
+		if (found >= 0) {
+			return setCategories(
+				categoriesCp?.filter((el: any) => el.name !== value.name),
+			);
+		}
+		const newCategories = [...categories, value];
+		const isMaxCategories = newCategories.length > maxSelectedCategory;
+		if (isMaxCategories) {
+			return alert('only 5 categories allowed');
+		}
+		setCategories(newCategories);
+	};
 	return (
 		<>
 			<H5>Please select a category.</H5>
@@ -17,15 +37,22 @@ const CategoryInput = (props: any) => {
 			<InputContainer>
 				<CatgegoriesGrid>
 					{categoryList.map(i => {
-						return <div>{i.value}</div>;
+						const checked = categories.find(
+							(el: any) => el.name === i.name,
+						);
+						return (
+							<CheckBox
+								title={i.value}
+								checked={!!checked}
+								onChange={() => handleChange(i)}
+							/>
+						);
 					})}
 				</CatgegoriesGrid>
 			</InputContainer>
 		</>
 	);
 };
-
-const Input = styled(Regular_Input)``;
 
 const CaptionContainer = styled(Caption)`
 	height: 18px;
@@ -40,7 +67,7 @@ const CatgegoriesGrid = styled.div`
 	grid-template-columns: auto auto auto;
 	padding: 10px 10px 22px 10px;
 	div {
-		padding: 20px;
+		padding: 10px 0;
 	}
 `;
 

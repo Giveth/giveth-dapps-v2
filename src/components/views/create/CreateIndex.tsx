@@ -2,7 +2,12 @@ import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { H3, brandColors } from '@giveth/ui-design-system';
 import { Regular_Input } from '@/components/styled-components/Input';
-import { NameInput, DescriptionInput, CategoryInput } from './Inputs';
+import {
+	NameInput,
+	DescriptionInput,
+	CategoryInput,
+	LocationInput,
+} from './Inputs';
 import styled from 'styled-components';
 
 type Inputs = {
@@ -18,7 +23,6 @@ const CreateIndex = () => {
 	const {
 		register,
 		handleSubmit,
-		watch,
 		formState: { errors },
 	} = useForm<Inputs>();
 	const onSubmit: SubmitHandler<Inputs> = data => console.log(data);
@@ -35,6 +39,9 @@ const CreateIndex = () => {
 					/>
 					<CategoryInput
 						{...register('category', { required: true })}
+					/>
+					<LocationInput
+						{...register('impactLocation', { required: true })}
 					/>
 					<input type='submit' />
 				</form>
