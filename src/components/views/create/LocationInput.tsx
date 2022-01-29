@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { H5, Caption, brandColors } from '@giveth/ui-design-system';
 import { InputContainer, Label } from './Create.sc';
 import { withScriptjs } from 'react-google-maps';
@@ -13,12 +13,6 @@ const LocationInput = (props: any) => {
 	const [globalImpact, setGlobalImpact] = useState(false);
 	return (
 		<>
-			<head>
-				<script
-					type='text/javascript'
-					src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`}
-				/>
-			</head>
 			<H5>Where will your project have the most impact?</H5>
 			<div>
 				<CaptionContainer>
