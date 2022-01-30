@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import VerificationBadge from '@/components/badges/VerificationBadge';
-import { isNoImg, noImgColor, noImgIcon } from '@/lib/helpers';
+import { isNoImg, noImgColor, noImgIcon, mediaQueries } from '@/lib/helpers';
 import { IProject } from '@/apollo/types/types';
-import { P, brandColors, H3 } from '@giveth/ui-design-system';
+import { P, brandColors, H3, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 const ProjectHeader = (props: { project: IProject }) => {
@@ -13,30 +13,33 @@ const ProjectHeader = (props: { project: IProject }) => {
 	const name = adminUser?.name;
 	const traceable = !!traceCampaignId;
 
+	const containerRef = useRef(null);
+	const intersectOptions = {
+		root: null,
+		rootMargin: '0px',
+		threshold: 0.45,
+	};
+
+	const callbackFunction = (entries: IntersectionObserverEntry[]) => {
+		const [entry] = entries;
+		setAdjustTitle(!entry.isIntersecting);
+	};
+
 	useEffect(() => {
-		const threshold = 280;
-		const updateScrollDir = () => {
-			const scrollY = window.pageYOffset;
+		const observer = new IntersectionObserver(
+			callbackFunction,
+			intersectOptions,
+		);
 
-			if (scrollY > threshold && !adjustTitle) {
-				setAdjustTitle(true);
-			}
-			if (scrollY < threshold) {
-				setAdjustTitle(false);
-			}
+		if (containerRef.current) observer.observe(containerRef.current);
+
+		return () => {
+			if (containerRef.current) observer.unobserve(containerRef.current);
 		};
-
-		const onScroll = () => {
-			window.requestAnimationFrame(updateScrollDir);
-		};
-
-		window.addEventListener('scroll', onScroll);
-
-		return () => window.removeEventListener('scroll', onScroll);
-	}, [adjustTitle]);
+	}, [containerRef, adjustTitle]);
 
 	return (
-		<Wrapper image={image}>
+		<Wrapper image={image} ref={containerRef}>
 			<TitleSection>
 				<BadgeSection>
 					{verified && <VerificationBadge verified />}
@@ -58,11 +61,15 @@ const Wrapper = styled.div<{ image: string | undefined }>`
 	background-size: ${props => (isNoImg(props.image) ? 'unset' : 'cover')};
 	background-image: ${props =>
 		`url(${isNoImg(props.image) ? noImgIcon : props.image})`};
-	height: 512px;
+	height: 312px;
 	overflow: hidden;
-	position: sticky;
-	top: -312px;
-	z-index: 10;
+
+	${mediaQueries['xl']} {
+		position: sticky;
+		top: -312px;
+		z-index: 10;
+		height: 512px;
+	}
 `;
 
 const TitleSection = styled.div`
@@ -71,7 +78,10 @@ const TitleSection = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: end;
-	background: linear-gradient(#1d1e1f00, #0a1444);
+	background: linear-gradient(
+		${neutralColors.gray[900]}00,
+		${brandColors.giv[900]}
+	);
 `;
 
 const BadgeSection = styled.div`

@@ -46,7 +46,7 @@ const ProjectIndex = (props: IProjectBySlug) => {
 			</Head>
 			<ProjectHeader project={project} />
 			<BodyWrapper>
-				<TabsWrapper>
+				<div>
 					<ProjectTabs
 						activeTab={activeTab}
 						setActiveTab={setActiveTab}
@@ -63,7 +63,7 @@ const ProjectIndex = (props: IProjectBySlug) => {
 							project={project}
 						/>
 					)}
-				</TabsWrapper>
+				</div>
 				<ProjectDonateCard project={project} />
 			</BodyWrapper>
 		</Wrapper>
@@ -71,12 +71,7 @@ const ProjectIndex = (props: IProjectBySlug) => {
 };
 
 const Wrapper = styled.div`
-	// margin: 150px 125px;
 	position: relative;
-`;
-
-const TabsWrapper = styled.div`
-	width: 100%;
 `;
 
 const BodyWrapper = styled.div`
