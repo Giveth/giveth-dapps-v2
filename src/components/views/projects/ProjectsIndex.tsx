@@ -178,6 +178,7 @@ const ProjectsIndex = () => {
 						<Label>SORT BY</Label>
 						<Select
 							classNamePrefix='select'
+							styles={selectCustomStyles}
 							value={sortBy}
 							onChange={e => handleChange('sortBy', e)}
 							options={sortByObj}
@@ -249,9 +250,6 @@ const selectCustomStyles: StylesConfig = {
 			: isFocused
 			? neutralColors.gray[200]
 			: neutralColors.gray[100],
-		':before': {
-			content: '"✭ "',
-		},
 	}),
 };
 

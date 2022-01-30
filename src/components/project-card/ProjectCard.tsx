@@ -22,7 +22,6 @@ import {
 	OulineButton,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { mediaQueries } from '@/lib/helpers';
 
 const cardWidth = '440px';
 const cardRadius = '12px';
@@ -112,19 +111,6 @@ const HoverButtons = styled.div`
 	button {
 		width: 100%;
 	}
-`;
-const NoImg = styled.div`
-	background: ${noImgColor};
-	width: 100%;
-	height: 100%;
-	border-radius: ${cardRadius} ${cardRadius} 0 0;
-	background-image: url(${noImgIcon});
-`;
-const Img = styled.img`
-	border-radius: ${cardRadius} ${cardRadius} 0 0;
-	// width: ${cardWidth};
-	width: 100px;
-	height: auto;
 `;
 
 const Captions = styled.div`
