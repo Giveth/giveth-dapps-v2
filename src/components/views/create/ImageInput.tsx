@@ -30,9 +30,9 @@ const ImageInput = (props: any) => {
 		},
 	});
 
-	const searchPhotos = () => {
-		return true;
-	};
+	// const searchPhotos = () => {
+	// 	return true;
+	// };
 
 	const pickBg = (index: number) => {
 		if (index === 0) {
@@ -59,11 +59,11 @@ const ImageInput = (props: any) => {
 						buttonType='primary'
 						onClick={open}
 					/>
-					<Button
+					{/* <Button
 						label='Search for photos'
 						buttonType='texty'
 						onClick={searchPhotos}
-					/>
+					/> */}
 				</Buttons>
 				{bgImage ? (
 					<DragContainer>

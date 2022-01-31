@@ -105,7 +105,15 @@ class Map extends Component<MyProps, MyState> {
 								})}
 							/>
 							{this.props.extraComponent()}
-							<div className='autocomplete-dropdown-container'>
+							<div
+								className='autocomplete-dropdown-container'
+								style={{
+									position: 'absolute',
+									marginTop: '-40px',
+									zIndex: 2,
+									width: '677px',
+								}}
+							>
 								{loading && <div>Loading...</div>}
 								{suggestions.map((suggestion: any) => {
 									const className = suggestion.active
@@ -116,10 +124,12 @@ class Map extends Component<MyProps, MyState> {
 										? {
 												backgroundColor: '#fafafa',
 												cursor: 'pointer',
+												padding: '4px 0',
 										  }
 										: {
 												backgroundColor: '#ffffff',
 												cursor: 'pointer',
+												padding: '4px 0',
 										  };
 									return (
 										<div
