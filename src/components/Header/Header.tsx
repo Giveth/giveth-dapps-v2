@@ -36,6 +36,7 @@ import MenuWallet from '@/components/menu/MenuWallet';
 import { ETheme, useGeneral } from '@/context/general.context';
 import { useRouter } from 'next/router';
 import { menuRoutes } from '../menu/MenuRoutes';
+import { shortenAddress } from '@/lib/helpers';
 
 export interface IHeader {
 	theme?: ThemeType;
@@ -212,13 +213,9 @@ const Header: FC<IHeader> = () => {
 											height={'24px'}
 										/>
 										<WBInfo>
-											<span>{`${account.substring(
-												0,
-												6,
-											)}...${account.substring(
-												account.length - 5,
-												account.length,
-											)}`}</span>
+											<span>
+												{shortenAddress(account)}
+											</span>
 											<WBNetwork>
 												Connected to{' '}
 												{networksParams[chainId]
