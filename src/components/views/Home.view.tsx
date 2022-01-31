@@ -5,8 +5,8 @@ import Tabs from '../Tabs';
 function HomeView() {
 	return (
 		<>
-			<TabOverviewTop />
 			<Tabs />
+			<TabOverviewTop />
 			<TabOverviewBottom />
 		</>
 	);
