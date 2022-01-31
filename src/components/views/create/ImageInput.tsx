@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
 	P,
 	H5,
@@ -7,17 +7,40 @@ import {
 	Button,
 	neutralColors,
 } from '@giveth/ui-design-system';
+import { useDropzone } from 'react-dropzone';
 import { InputContainer } from './Create.sc';
 import styled from 'styled-components';
 import { OurImages } from '@/utils/constants';
+import { toBase64 } from '@/utils/index';
 
 const ImageInput = (props: any) => {
-	const uploadImage = () => {
-		return true;
-	};
+	const [bgImage, setBgImage] = useState<any>();
+	const [showingImage, setShowingImage] = useState<any>();
+
+	const { getRootProps, getInputProps, open } = useDropzone({
+		accept: 'image/*',
+		multiple: false,
+		onDrop: async acceptedFile => {
+			try {
+				setBgImage(acceptedFile);
+				setShowingImage(await toBase64(acceptedFile[0]));
+			} catch (error) {
+				console.log({ error });
+			}
+		},
+	});
 
 	const searchPhotos = () => {
 		return true;
+	};
+
+	const pickBg = (index: number) => {
+		if (index === 0) {
+			setBgImage(null);
+			setShowingImage(null);
+		}
+		setBgImage(index);
+		setShowingImage(`/images/project_image${index}.png`);
 	};
 
 	return (
@@ -34,7 +57,7 @@ const ImageInput = (props: any) => {
 					<Button
 						label='Upload cover image'
 						buttonType='primary'
-						onClick={uploadImage}
+						onClick={open}
 					/>
 					<Button
 						label='Search for photos'
@@ -42,25 +65,38 @@ const ImageInput = (props: any) => {
 						onClick={searchPhotos}
 					/>
 				</Buttons>
-				<DragContainer>
-					<img src='/images/icons/image.svg' />
-					<P>
-						{`Drag & drop an image here or`}{' '}
-						<span onClick={uploadImage}>Upload from computer.</span>
-					</P>
-					<P>
-						Suggested image size min. 1200px width. Image size up to
-						16Mb.
-					</P>
-				</DragContainer>
+				{bgImage ? (
+					<DragContainer>
+						<ShowingImage src={showingImage} />
+					</DragContainer>
+				) : (
+					<DragContainer {...getRootProps()}>
+						<input {...getInputProps()} />
+						<img src='/images/icons/image.svg' />
+						<P>
+							{`Drag & drop an image here or`}{' '}
+							<span onClick={open}>Upload from computer.</span>
+						</P>
+						<P>
+							Suggested image size min. 1200px width. Image size
+							up to 16Mb.
+						</P>
+					</DragContainer>
+				)}
 				<CaptionContainer>
 					Select an image from our gallery.
 				</CaptionContainer>
 				<PickImageContainer>
-					{OurImages.map((imageOption: any) => {
-						return <ColorBox color={imageOption.color} />;
+					{OurImages.map((imageOption: any, index: number) => {
+						return (
+							<ColorBox
+								key={index}
+								color={imageOption.color}
+								onClick={() => pickBg(index + 1)}
+							/>
+						);
 					})}
-					<RemoveBox>
+					<RemoveBox onClick={() => pickBg(0)}>
 						<img src='/images/icons/x.svg' />
 					</RemoveBox>
 				</PickImageContainer>
@@ -140,6 +176,11 @@ const RemoveBox = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+`;
+
+const ShowingImage = styled.img`
+	width: 80%;
+	height: 100%;
 `;
 
 export default ImageInput;

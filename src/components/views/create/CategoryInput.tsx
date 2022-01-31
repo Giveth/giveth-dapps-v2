@@ -36,12 +36,13 @@ const CategoryInput = (props: any) => {
 			</div>
 			<InputContainer>
 				<CatgegoriesGrid>
-					{categoryList.map(i => {
+					{categoryList.map((i, index) => {
 						const checked = categories.find(
 							(el: any) => el.name === i.name,
 						);
 						return (
 							<CheckBox
+								key={index}
 								title={i.value}
 								checked={!!checked}
 								onChange={() => handleChange(i)}

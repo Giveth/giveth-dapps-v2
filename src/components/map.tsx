@@ -6,7 +6,6 @@ import {
 	Marker,
 	InfoWindow,
 } from 'react-google-maps';
-import CheckBox from '@/components/Checkbox';
 
 import PlacesAutocomplete, {
 	geocodeByAddress,
