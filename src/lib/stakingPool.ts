@@ -357,6 +357,7 @@ export const approveERC20tokenTransfer = async (
 				.approve(spenderAddress, ethers.constants.Zero, gasPreference);
 
 			const { status } = await approveZero.wait();
+			if (!status) return false;
 		} catch (error) {
 			console.log('Error on Zero Approve', error);
 			return false;
@@ -369,6 +370,7 @@ export const approveERC20tokenTransfer = async (
 			.approve(spenderAddress, amountNumber, gasPreference);
 
 		const { status } = await approve.wait();
+		if (!status) return false;
 	} catch (error) {
 		console.log('Error on Amount Approve:', error);
 		return false;
