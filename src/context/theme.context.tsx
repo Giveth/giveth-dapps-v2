@@ -7,7 +7,7 @@ export enum ThemeType {
 
 const ligthTheme = {
 	type: ThemeType.Light,
-	bg: '#ffffff',
+	bg: '#f7f7f9',
 	fg: '#0D3382',
 };
 
