@@ -87,7 +87,7 @@ export const Footer = () => {
 									Partnerships
 								</LinkItem>
 							</a>
-							<a href='https://docs.giveth.io/jobs/'>
+							<a href='https://giveth.recruitee.com/'>
 								<LinkItem color={textColor}>
 									We’re Hiring!
 								</LinkItem>
