@@ -7,9 +7,9 @@ import {
 	getNftManagerPositionsContract,
 	getUniswapV3StakerContract,
 } from './contracts';
-import { StakeState } from '@/components/modals/V3Stake';
 import config from '@/configuration';
 import { getGasPreference } from '@/lib/helpers';
+import { StakeState } from '@/lib/staking';
 
 const abiEncoder = utils.defaultAbiCoder;
 
@@ -151,12 +151,10 @@ export const claimUnstakeStake = async (
 		.concat(stakeMulticall)
 		.concat(claimRewardCalldata);
 
-	const tx = await uniswapV3StakerContract.multicall(
+	return await uniswapV3StakerContract.multicall(
 		multicallData,
 		getGasPreference(config.NETWORKS_CONFIG[provider.network.chainId]),
 	);
-
-	return tx;
 };
 
 export const claim = async (
