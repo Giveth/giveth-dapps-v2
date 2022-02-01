@@ -1,6 +1,7 @@
 import { ETheme } from '@/context/general.context';
 import { brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { Shadow } from '../styled-components/Shadow';
 
 interface isMounted {
 	isMounted: boolean;
@@ -20,9 +21,11 @@ export const MenuContainer = styled.div<isMounted>`
 		${props =>
 			props.theme === ETheme.Dark ? brandColors.giv[600] : 'white'};
 	border-radius: 10px 0 10px 10px;
-	padding: ${props => (props.isMounted ? '38px 12px' : '12px')};
+	padding: ${props => (props.isMounted ? '38px 12px 12px' : '12px')};
 	z-index: 0;
 	height: ${props => (props.isMounted ? '70vh' : '0px')};
 	overflow: hidden;
 	transition: height 0.3s ease, padding 0.3s ease;
+	box-shadow: ${props =>
+		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
 `;
