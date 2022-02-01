@@ -21,7 +21,7 @@ const WalletModal = ({
 	closeParentModal,
 }: IWalletModal) => {
 	const context = useWeb3React();
-	const { activate } = context;
+	const { activate, deactivate } = context;
 	const selectedWallet = useWalletName(context);
 
 	const handleSelect = (selected: {
@@ -29,18 +29,25 @@ const WalletModal = ({
 		value: EWallets;
 	}) => {
 		if (selectedWallet !== selected.value) {
-			activate(selected.connector)
-				.then(() => {
-					window.localStorage.setItem(
-						'selectedWallet',
-						selected.value,
-					);
-					closeParentModal ? closeParentModal() : undefined;
-				})
-				.catch(e => {
-					// toast to inform error
-					console.log(e);
-				});
+			deactivate();
+			let timeOut = 0;
+			if (selectedWallet === EWallets.METAMASK) {
+				timeOut = 500;
+			}
+			setTimeout(() => {
+				activate(selected.connector)
+					.then(() => {
+						window.localStorage.setItem(
+							'selectedWallet',
+							selected.value,
+						);
+						closeParentModal ? closeParentModal() : undefined;
+					})
+					.catch(e => {
+						// toast to inform error
+						console.log(e);
+					});
+			}, timeOut);
 		}
 		setShowModal(false);
 	};
