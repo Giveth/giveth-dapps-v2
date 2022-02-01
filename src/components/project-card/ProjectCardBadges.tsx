@@ -74,9 +74,11 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 							src={heartedByUser ? redHeartIcon : grayHeartIcon}
 							alt='heart icon'
 						/>
-						<div onClick={() => setShowModal(true)}>
-							<Image src={shareIcon} alt='share icon' />
-						</div>
+						<ShareImageButton
+							src={shareIcon}
+							alt='share icon'
+							onClick={() => setShowModal(true)}
+						/>
 					</HeartWrap>
 				</BadgeContainer>
 			</BadgeWrapper>
@@ -86,6 +88,10 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 
 const BadgeContainer = styled.div`
 	display: flex;
+`;
+
+const ShareImageButton = styled(Image)`
+	cursor: pointer;
 `;
 
 const HeartWrap = styled(FlexCenter)<{ active?: boolean; isHover?: boolean }>`

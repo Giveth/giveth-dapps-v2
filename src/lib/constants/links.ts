@@ -1,9 +1,6 @@
 const links = {
 	BACKEND: 'https://serve.giveth.io/graphql',
-	FRONTEND:
-		process.env.NEXT_PUBLIC_ENVIRONMENT === 'production'
-			? 'https://giveth-dapps-v2.vercel.app/'
-			: 'http://localhost:3000/',
+	FRONTEND: 'https://giveth-dapps-v2.vercel.app/',
 	REPORT_ISSUE: 'https://github.com/Giveth/giveth-io-typescript/issues/new',
 	ASK_QUESTION: 'https://giveth.typeform.com/question',
 	FEATURE_REQUEST: 'https://giveth.typeform.com/featurerequest',
