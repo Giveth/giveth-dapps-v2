@@ -3,10 +3,13 @@ import { H5, Caption, brandColors } from '@giveth/ui-design-system';
 import { InputContainer } from './Create.sc';
 import CheckBox from '@/components/Checkbox';
 import { categoryList, maxSelectedCategory } from '@/lib/constants/Categories';
+import { ICategory } from '@/apollo/types/types';
 import styled from 'styled-components';
 
 const CategoryInput = (props: any) => {
+	const { setValue } = props;
 	const [categories, setCategories] = useState<any>([]);
+	const [list, setList] = useState<any>(null);
 
 	const handleChange = (value: any) => {
 		const categoriesCp = categories;
@@ -14,18 +17,28 @@ const CategoryInput = (props: any) => {
 		const found = categoriesCp.findIndex(
 			(el: any) => el.name === value.name,
 		);
+		const categoriesList = { ...list };
 		if (found >= 0) {
+			delete categoriesList[value.name];
+			setList(categoriesList);
+			setValue(categoriesList);
 			return setCategories(
-				categoriesCp?.filter((el: any) => el.name !== value.name),
+				categoriesCp?.filter((el: ICategory) => el.name !== value.name),
 			);
 		}
 		const newCategories = [...categories, value];
+		categoriesList[value.name] = true;
 		const isMaxCategories = newCategories.length > maxSelectedCategory;
 		if (isMaxCategories) {
-			return alert('only 5 categories allowed');
+			return console.log('only 5 categories allowed');
 		}
+		// With whole category object
 		setCategories(newCategories);
+		// Parsed for mutation
+		setList(categoriesList);
+		setValue(categoriesList);
 	};
+
 	return (
 		<>
 			<H5>Please select a category.</H5>

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import {
 	H3,
 	H4,
+	P,
 	Button,
 	brandColors,
 	neutralColors,
@@ -15,6 +16,7 @@ import {
 	ImageInput,
 	WalletAddressInput,
 } from './Inputs';
+import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
 import styled from 'styled-components';
 
 type Inputs = {
@@ -36,9 +38,27 @@ const CreateIndex = () => {
 	const onSubmit: SubmitHandler<Inputs> = data => {
 		console.log({ data });
 	};
-	console.log({ errors });
+	const [showGuidelineModal, setShowGuidelineModal] = useState(false);
+
+	const createProject = () => {
+		handleSubmit(onSubmit)();
+	};
+
+	const hasErrors = Object.entries(errors).length !== 0;
+
+	useEffect(() => {
+		// Show guideline first thing
+		setShowGuidelineModal(true);
+	}, []);
+
 	return (
 		<>
+			{showGuidelineModal && (
+				<ProjectGuidelineModal
+					showModal={showGuidelineModal}
+					setShowModal={setShowGuidelineModal}
+				/>
+			)}
 			<CreateContainer>
 				<Title>Create a Project</Title>
 				<form
@@ -56,7 +76,9 @@ const CreateIndex = () => {
 					/>
 					<CategoryInput
 						{...register('categories', { required: true })}
-						setValue={(val: string) => setValue('categories', val)}
+						setValue={(val: Array<any>) =>
+							setValue('categories', val)
+						}
 					/>
 					<LocationInput {...register('impactLocation')} />
 					<ImageInput
@@ -94,9 +116,14 @@ const CreateIndex = () => {
 						<Button
 							label='PUBLISH'
 							buttonType='primary'
-							onClick={() => handleSubmit(onSubmit)()}
+							onClick={createProject}
 						/>
 					</Buttons>
+					{hasErrors && (
+						<ErrorMessage>
+							Empty fields or errors, please check the values
+						</ErrorMessage>
+					)}
 				</form>
 			</CreateContainer>
 		</>
@@ -154,4 +181,10 @@ const PublishList = styled.ul`
 	font-size: 14px;
 	color: ${neutralColors.gray[900]};
 `;
+
+const ErrorMessage = styled(P)`
+	color: ${brandColors.pinky[500]};
+	font-weight: bold;
+`;
+
 export default CreateIndex;

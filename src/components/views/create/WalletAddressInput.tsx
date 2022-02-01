@@ -5,6 +5,8 @@ import { InputContainer, TinyLabel } from './Create.sc';
 import styled from 'styled-components';
 
 const WalletAddressInput = (props: any) => {
+	const { setValue } = props;
+
 	return (
 		<>
 			<H5>Receiving funds</H5>
@@ -17,7 +19,10 @@ const WalletAddressInput = (props: any) => {
 
 			<InputContainer>
 				<TinyLabel>Receiving address</TinyLabel>
-				<Input placeholder='My Wallet Address' />
+				<Input
+					placeholder='My Wallet Address'
+					onChange={e => setValue(e.target.value)}
+				/>
 				<TinyLabel>
 					This is the default wallet address associated with your
 					account. You can choose a different receiving address.
