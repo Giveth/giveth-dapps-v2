@@ -8,9 +8,8 @@ import shareIcon from '/public//images/share.svg';
 import { IReaction } from '../../apollo/types/types';
 import useUser from '@/context/UserProvider';
 import { brandColors, Subline } from '@giveth/ui-design-system';
-import { all } from 'deepmerge';
-import { type } from 'os';
 import styled from 'styled-components';
+import ShareModal from '../modals/ShareModal';
 
 interface IBadgeWrapper {
 	width?: string;
@@ -23,6 +22,8 @@ interface IProjectCardBadges {
 	isHover?: boolean;
 	likes?: number;
 	cardWidth?: string;
+	projectHref: string;
+	projectDescription?: string;
 }
 
 const ProjectCardBadges = (props: IProjectCardBadges) => {
@@ -30,9 +31,16 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 		state: { user },
 	} = useUser();
 
-	const [heartedByUser, setHeartedByUser] = useState(false);
-
-	const { reactions, verified, isHover, traceable } = props;
+	const [heartedByUser, setHeartedByUser] = useState<boolean>(false);
+	const [showModal, setShowModal] = useState<boolean>(false);
+	const {
+		reactions,
+		verified,
+		isHover,
+		traceable,
+		projectHref,
+		projectDescription,
+	} = props;
 	const likes = reactions?.length;
 
 	useEffect(() => {
@@ -45,22 +53,34 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 	}, [user]);
 
 	return (
-		<BadgeWrapper>
-			<BadgeContainer>
-				{verified && <VerificationBadge verified />}
-				{traceable && <VerificationBadge trace />}
-			</BadgeContainer>
-			<BadgeContainer>
-				{Number(likes) > 0 && <LikeBadge>{likes}</LikeBadge>}
-				<HeartWrap active={heartedByUser} isHover={isHover}>
-					<Image
-						src={heartedByUser ? redHeartIcon : grayHeartIcon}
-						alt='heart icon'
-					/>
-					<Image src={shareIcon} alt='share icon' />
-				</HeartWrap>
-			</BadgeContainer>
-		</BadgeWrapper>
+		<>
+			{showModal && (
+				<ShareModal
+					showModal={showModal}
+					setShowModal={setShowModal}
+					projectHref={projectHref}
+					projectDescription={projectDescription}
+				/>
+			)}
+			<BadgeWrapper>
+				<BadgeContainer>
+					{verified && <VerificationBadge verified />}
+					{traceable && <VerificationBadge trace />}
+				</BadgeContainer>
+				<BadgeContainer>
+					{Number(likes) > 0 && <LikeBadge>{likes}</LikeBadge>}
+					<HeartWrap active={heartedByUser} isHover={isHover}>
+						<Image
+							src={heartedByUser ? redHeartIcon : grayHeartIcon}
+							alt='heart icon'
+						/>
+						<div onClick={() => setShowModal(true)}>
+							<Image src={shareIcon} alt='share icon' />
+						</div>
+					</HeartWrap>
+				</BadgeContainer>
+			</BadgeWrapper>
+		</>
 	);
 };
 
