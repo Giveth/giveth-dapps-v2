@@ -170,14 +170,7 @@ export async function sendTransaction(
 			// value: params?.value
 		};
 
-		if (!fromSigner) {
-			// Can be signed instantly by current provider
-			const fromAccount = await web3Provider.getAccounts();
-			txParams.from = fromAccount[0];
-		} else {
-			// It will be signed later by provider
-			web3Provider = fromSigner;
-		}
+		web3Provider = fromSigner;
 
 		// TRACEABLE DONATION
 		// if (traceableDonation) {
@@ -210,7 +203,7 @@ export async function sendTransaction(
 				txCallbacks?.onTransactionHash(txn?.hash, txn?.from);
 				return txn;
 			}
-			const from = await web3Provider.getAccounts();
+			const from = await fromSigner.getAccounts();
 			return instance
 				.transfer(txParams?.to, txParams?.value)
 				.send({
@@ -230,16 +223,6 @@ export async function sendTransaction(
 			// gets hash and checks until it's mined
 			txn = await web3Provider.sendTransaction(txParams);
 			txCallbacks?.onTransactionHash(txn?.hash, txn?.from);
-		} else {
-			// using the event emitter
-			return web3Provider
-				.sendTransaction(txParams)
-				.on('transactionHash', txCallbacks?.onTransactionHash)
-				.on('receipt', function (receipt: any) {
-					console.log('receipt>>>', receipt);
-					txCallbacks?.onReceiptGenerated(receipt);
-				})
-				.on('error', (error: any) => txCallbacks?.onError(error)); // If a out of gas error, the second parameter is the receipt.
 		}
 
 		console.log('stTxn ---> : ', { txn });

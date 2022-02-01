@@ -112,9 +112,7 @@ const CryptoDonation = (props: {
 	const [selectedToken, setSelectedToken] = useState<ISelectObj>();
 	const [selectedTokenBalance, setSelectedTokenBalance] = useState<any>();
 	const [customInput, setCustomInput] = useState<any>();
-	const [tokenPrice, setTokenPrice] = useState<number | BigNumber | string>(
-		1,
-	);
+	const [tokenPrice, setTokenPrice] = useState<number>(1);
 	const [amountTyped, setAmountTyped] = useState('');
 	const [geminiModal, setGeminiModal] = useState(false);
 	const [txHash, setTxHash] = useState<any>();
@@ -133,7 +131,7 @@ const CryptoDonation = (props: {
 	const tokenSymbol = selectedToken?.symbol;
 	const isXdai = networkId === xdaiChain.id;
 	const isGivingBlockProject = project?.givingBlocksId;
-	const stopPolling = useRef<NodeJS.Timer | null>(null);
+	const stopPolling = useRef<any>(null);
 	const isGivBackEligible = givBackEligible && project?.verified;
 
 	// Checks network changes to fetch proper token list
@@ -183,30 +181,38 @@ const CryptoDonation = (props: {
 
 	// Gets price of selected token
 	useEffect(() => {
-		if (
-			selectedToken?.symbol &&
-			stableCoins.includes(selectedToken.symbol)
-		) {
-			setTokenPrice(1);
-		} else if (selectedToken?.address && selectedToken.address) {
-			let chain = xdaiChain.name;
-			let tokenAddress: string | undefined = selectedToken.address;
-			if (isXdai) {
-				// coingecko doesn't have these tokens in xdai, so fetching price from ethereum
-				if (xdaiExcluded.includes(selectedToken.symbol!)) {
-					tokenAddress = selectedToken.ethereumAddress;
+		const setPrice = async () => {
+			if (
+				selectedToken?.symbol &&
+				stableCoins.includes(selectedToken.symbol)
+			) {
+				setTokenPrice(1);
+			} else if (selectedToken?.address && selectedToken.address) {
+				let chain = xdaiChain.name;
+				let tokenAddress: string | undefined = selectedToken.address;
+				if (isXdai) {
+					// coingecko doesn't have these tokens in xdai, so fetching price from ethereum
+					if (xdaiExcluded.includes(selectedToken.symbol!)) {
+						tokenAddress = selectedToken.ethereumAddress;
+						chain = ethereumChain.name;
+					}
+				} else {
 					chain = ethereumChain.name;
 				}
-			} else {
-				chain = ethereumChain.name;
+				const fetchedPrice = await fetchPrice(
+					chain?.toLowerCase(),
+					tokenAddress,
+					setTokenPrice,
+				);
+				fetchedPrice && setTokenPrice(fetchedPrice);
+			} else if (
+				selectedToken?.symbol &&
+				selectedToken.symbol === ethereumChain.mainToken
+			) {
+				mainTokenPrice && setTokenPrice(mainTokenPrice);
 			}
-			fetchPrice(chain, tokenAddress, setTokenPrice).then(setTokenPrice);
-		} else if (
-			selectedToken?.symbol &&
-			selectedToken.symbol === ethereumChain.mainToken
-		) {
-			mainTokenPrice && setTokenPrice(mainTokenPrice);
-		}
+		};
+		setPrice();
 	}, [selectedToken, mainTokenPrice]);
 
 	// Gets GAS price
@@ -231,7 +237,7 @@ const CryptoDonation = (props: {
 
 	const clearPoll = () => {
 		if (stopPolling.current) {
-			stopPolling?.current();
+			stopPolling.current();
 			stopPolling.current = undefined;
 		}
 	};
@@ -375,7 +381,7 @@ const CryptoDonation = (props: {
 											library,
 											tokenAbi,
 											contractAddress: i,
-											chainId: networkId,
+											chainId: networkId!,
 										}).then(pastedToken => {
 											if (!pastedToken) return;
 											const found = erc20List?.find(

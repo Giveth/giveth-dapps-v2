@@ -38,17 +38,6 @@ export async function send(
 	}
 }
 
-export async function getHashInfo(txHash: string, web3: Web3Provider) {
-	try {
-		const txInfo = await web3.eth.getTransaction(txHash);
-		console.log({ txInfo });
-		return txInfo;
-	} catch (error: any) {
-		console.log({ error });
-		return error;
-	}
-}
-
 export interface IEthTxConfirmation {
 	status: string;
 	tooSlow: boolean;

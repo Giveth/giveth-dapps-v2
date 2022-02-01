@@ -35,18 +35,18 @@ export async function getToken(
 	}
 }
 
-export const fetchPrice = (
+export const fetchPrice = async (
 	chain: string,
 	tokenAddress: string | undefined,
 	catchFunction: any,
 ) => {
-	return fetch(
-		`https://api.coingecko.com/api/v3/simple/token_price/${chain}?contract_addresses=${tokenAddress}&vs_currencies=usd`,
-	)
-		.then(response => response.json())
-		.then(data => parseFloat(data[Object.keys(data)[0]]?.usd?.toFixed(2)))
-		.catch(err => {
-			console.log('Error fetching prices: ', err);
-			catchFunction(0);
-		});
+	try {
+		const fetchCall = await fetch(
+			`https://api.coingecko.com/api/v3/simple/token_price/${chain}?contract_addresses=${tokenAddress}&vs_currencies=usd`,
+		);
+		const data = await fetchCall.json();
+		return parseFloat(data[Object.keys(data)[0]]?.usd?.toFixed(2));
+	} catch (error) {
+		catchFunction(0);
+	}
 };

@@ -9,7 +9,8 @@ const xDaiChainId = 100;
 const appNetworkId = config.PRIMARY_NETWORK.id;
 
 export function pollEvery(fn: Function, delay: any) {
-	let timer: NodeJS.Timer | null = null;
+	let timer: any = null;
+	// having trouble with this type
 	let stop = false;
 	const poll = async (request: any, onResult: Function) => {
 		const result = await request();

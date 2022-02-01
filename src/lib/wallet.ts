@@ -29,7 +29,7 @@ export function isAddressENS(ens: string) {
 	return ens.toLowerCase().indexOf('.eth') > -1;
 }
 
-export async function getAddressFromENS(ens: string, web3: Web3Provider) {
+export async function getAddressFromENS(ens: string, web3: any) {
 	const isEns = isAddressENS(ens);
 	if (!isEns) return new Error('Error addressNotENS');
 
