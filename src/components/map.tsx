@@ -6,7 +6,7 @@ import {
 	Marker,
 	InfoWindow,
 } from 'react-google-maps';
-
+import CheckBox from '@/components/Checkbox';
 import PlacesAutocomplete, {
 	geocodeByAddress,
 	getLatLng,
@@ -14,11 +14,18 @@ import PlacesAutocomplete, {
 import { Regular_Input } from '@/components/styled-components/Input';
 import styled from 'styled-components';
 
-type MyProps = { index?: any; handleCloseCall?: any; extraComponent?: any };
+type MyProps = {
+	index?: any;
+	handleCloseCall?: any;
+	extraComponent?: any;
+	setLocation?: any;
+	setGlobalLocation?: any;
+};
 type MyState = {
 	isOpen: boolean;
 	coords: any;
 	address: string;
+	globalImpact: boolean;
 };
 
 const Input = styled(Regular_Input)``;
@@ -30,6 +37,7 @@ class Map extends Component<MyProps, MyState> {
 			isOpen: false,
 			coords: { lat: 41.3879, lng: 2.15899 },
 			address: '',
+			globalImpact: false,
 		};
 	}
 
@@ -39,11 +47,16 @@ class Map extends Component<MyProps, MyState> {
 
 	handleSelect = (address: any) => {
 		geocodeByAddress(address)
-			.then((results: any) => getLatLng(results[0]))
-			.then((latLng: any) =>
-				this.setState({
-					coords: latLng,
-				}),
+			.then((results: any) => {
+				return getLatLng(results[0]);
+			})
+			.then(
+				(latLng: any) =>
+					this.setState({
+						address,
+						coords: latLng,
+					}),
+				this.props.setLocation(address),
 			)
 			.catch((error: any) => console.error('Error', error));
 	};
@@ -100,11 +113,26 @@ class Map extends Component<MyProps, MyState> {
 						<div>
 							<Input
 								{...getInputProps({
-									placeholder: 'Search Places...',
+									placeholder: this.state.globalImpact
+										? 'Global Impact'
+										: 'Search Places...',
 									className: 'location-search-input',
 								})}
+								disabled={this.state.globalImpact}
 							/>
-							{this.props.extraComponent()}
+							<CheckBox
+								title='This project has a global impact'
+								checked={this.state.globalImpact}
+								onChange={() => {
+									this.setState({
+										globalImpact: !this.state.globalImpact,
+									});
+									this.props.setGlobalLocation(
+										!this.state.globalImpact,
+									);
+								}}
+								style={{ marginTop: '20px' }}
+							/>
 							<div
 								className='autocomplete-dropdown-container'
 								style={{

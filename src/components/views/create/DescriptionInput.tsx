@@ -9,6 +9,7 @@ const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
 });
 
 const NameInput = (props: any) => {
+	const { setValue } = props;
 	return (
 		<>
 			<H5>Tell us about your project...</H5>
@@ -25,6 +26,7 @@ const NameInput = (props: any) => {
 					rows={12}
 					autoFocus
 					onChange={(newValue: any) => {
+						setValue(newValue);
 						// console.log({ setValue, newValue, delta, source })
 					}}
 				/>

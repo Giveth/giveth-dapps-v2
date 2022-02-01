@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { H5, Caption, brandColors } from '@giveth/ui-design-system';
 import { InputContainer, Label } from './Create.sc';
 import { withScriptjs } from 'react-google-maps';
@@ -6,11 +6,19 @@ import Map from '@/components/map';
 
 import config from '@/configuration';
 import styled from 'styled-components';
-import CheckBox from '@/components/Checkbox';
 
 const LocationInput = (props: any) => {
 	const MapLoader = withScriptjs(Map);
-	const [globalImpact, setGlobalImpact] = useState(false);
+	const [globalImpact, setGlobalImpact] = useState<boolean>(false);
+
+	const setImpactLocation = useCallback(val => {
+		console.log({ val });
+	}, []);
+
+	const setGlobalLocation = useCallback(val => {
+		console.log({ val });
+	}, []);
+
 	return (
 		<>
 			<H5>Where will your project have the most impact?</H5>
@@ -33,16 +41,8 @@ const LocationInput = (props: any) => {
 							}}
 						/>
 					}
-					extraComponent={() => {
-						return (
-							<CheckBox
-								title='This project has a global impact'
-								checked={globalImpact}
-								onChange={() => setGlobalImpact(!globalImpact)}
-								style={{ marginTop: '20px' }}
-							/>
-						);
-					}}
+					setGlobalLocation={setGlobalLocation}
+					setLocation={setImpactLocation}
 				/>
 			</InputContainer>
 		</>

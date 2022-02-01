@@ -20,7 +20,7 @@ import styled from 'styled-components';
 type Inputs = {
 	name: string;
 	description: string;
-	category: any;
+	categories: any;
 	impactLocation: string;
 	image: any;
 	walletAddress: string;
@@ -30,28 +30,45 @@ const CreateIndex = () => {
 	const {
 		register,
 		handleSubmit,
+		setValue,
 		formState: { errors },
 	} = useForm<Inputs>();
-	const onSubmit: SubmitHandler<Inputs> = data => console.log(data);
+	const onSubmit: SubmitHandler<Inputs> = data => {
+		console.log({ data });
+	};
 	console.log({ errors });
 	return (
 		<>
 			<CreateContainer>
 				<Title>Create a Project</Title>
-				<form onSubmit={handleSubmit(onSubmit)}>
+				<form
+					onSubmit={handleSubmit(onSubmit)}
+					id='create-project-form'
+				>
 					{/* register your input into the hook by invoking the "register" function */}
-					<NameInput {...register('name', { required: true })} />
+					<NameInput
+						{...register('name', { required: true })}
+						setValue={(val: string) => setValue('name', val)}
+					/>
 					<DescriptionInput
 						{...register('description', { required: true })}
+						setValue={(val: string) => setValue('description', val)}
 					/>
 					<CategoryInput
-						{...register('category', { required: true })}
+						{...register('categories', { required: true })}
+						setValue={(val: string) => setValue('categories', val)}
 					/>
-					<LocationInput
-						{...register('impactLocation', { required: true })}
+					<LocationInput {...register('impactLocation')} />
+					<ImageInput
+						{...register('image')}
+						setValue={(val: string) => setValue('image', val)}
 					/>
-					<ImageInput {...register('image')} />
-					<WalletAddressInput {...register('walletAddress')} />
+					<WalletAddressInput
+						{...register('walletAddress', { required: true })}
+						setValue={(val: string) =>
+							setValue('walletAddress', val)
+						}
+					/>
 
 					<PublishTitle>{`Let's Publish!`}</PublishTitle>
 					<PublishList>
@@ -77,8 +94,7 @@ const CreateIndex = () => {
 						<Button
 							label='PUBLISH'
 							buttonType='primary'
-							// onClick={}
-							// type='submit'
+							onClick={() => handleSubmit(onSubmit)()}
 						/>
 					</Buttons>
 				</form>

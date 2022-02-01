@@ -16,14 +16,16 @@ import { toBase64 } from '@/utils/index';
 const ImageInput = (props: any) => {
 	const [bgImage, setBgImage] = useState<any>();
 	const [showingImage, setShowingImage] = useState<any>();
-
+	const { setValue } = props;
 	const { getRootProps, getInputProps, open } = useDropzone({
 		accept: 'image/*',
 		multiple: false,
 		onDrop: async acceptedFile => {
 			try {
+				const base64Image = await toBase64(acceptedFile[0]);
 				setBgImage(acceptedFile);
-				setShowingImage(await toBase64(acceptedFile[0]));
+				setShowingImage(base64Image);
+				setValue(base64Image);
 			} catch (error) {
 				console.log({ error });
 			}
@@ -40,6 +42,7 @@ const ImageInput = (props: any) => {
 			setShowingImage(null);
 		}
 		setBgImage(index);
+		setValue(index);
 		setShowingImage(`/images/project_image${index}.png`);
 	};
 

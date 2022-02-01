@@ -5,12 +5,16 @@ import { InputContainer, Label } from './Create.sc';
 import styled from 'styled-components';
 
 const NameInput = (props: any) => {
+	const { setValue } = props;
 	return (
 		<>
 			<H5>Name of your Project</H5>
 			<InputContainer>
 				<Label>Project name</Label>
-				<Input placeholder='My First Project' />
+				<Input
+					placeholder='My First Project'
+					onChange={e => setValue(e.target.value)}
+				/>
 			</InputContainer>
 		</>
 	);
