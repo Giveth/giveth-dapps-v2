@@ -238,6 +238,9 @@ const selectCustomStyles: StylesConfig = {
 		border: '0px',
 		borderRadius: '8px',
 		boxShadow: Shadow.Neutral[500],
+		'&:focus-within': {
+			border: `2px solid ${brandColors.pinky[500]}`,
+		},
 	}),
 	option: (styles, { isFocused, isSelected }) => ({
 		...styles,
@@ -246,10 +249,11 @@ const selectCustomStyles: StylesConfig = {
 		margin: '4px auto',
 		borderRadius: '8px',
 		backgroundColor: isSelected
-			? brandColors.pinky[400]
+			? neutralColors.gray[300]
 			: isFocused
 			? neutralColors.gray[200]
-			: neutralColors.gray[100],
+			: 'white',
+		color: isSelected ? neutralColors.gray[900] : neutralColors.gray[800],
 	}),
 };
 
