@@ -19,11 +19,12 @@ import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import { IProject } from '../../../apollo/types/types';
 import { getERC20Info } from '../../../lib/contracts';
 import { getERC20List, pollEvery } from '../../../utils';
-import { fetchPrices } from '../../../services/token';
+import { fetchPrice } from '../../../services/token';
 import { switchNetwork } from '@/lib/wallet';
 import { usePrice } from '@/context/price.context';
 import GeminiModal from './GeminiModal';
 import config from '@/configuration';
+
 // @ts-ignore
 import tokenAbi from 'human-standard-token-abi';
 
@@ -31,9 +32,9 @@ import TokenPicker from './TokenPicker';
 
 const ethereumChain = config.PRIMARY_NETWORK;
 const xdaiChain = config.SECONDARY_NETWORK;
-const xdaiExcluded = ['PAN', 'XNODE', 'USDT', 'CRV'];
+const xdaiExcluded = config.XDAI_EXCLUDED_COINS;
 const stableCoins = [xdaiChain.mainToken, 'DAI', 'USDT'];
-const POLL_DELAY_TOKENS = 5000;
+const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
 type SuccessFunction = (param: boolean) => void;
 
@@ -53,6 +54,14 @@ interface IToken {
 	chainId: number;
 	symbol: string;
 	icon?: string;
+}
+
+interface ISuccessDonation {
+	transactionHash: string;
+	tokenSymbol: string;
+	subtotal: number;
+	givBackEligible?: boolean;
+	tooSlow?: boolean;
 }
 
 const customStyles = {
@@ -103,7 +112,9 @@ const CryptoDonation = (props: {
 	const [selectedToken, setSelectedToken] = useState<ISelectObj>();
 	const [selectedTokenBalance, setSelectedTokenBalance] = useState<any>();
 	const [customInput, setCustomInput] = useState<any>();
-	const [tokenPrice, setTokenPrice] = useState<any>(1);
+	const [tokenPrice, setTokenPrice] = useState<number | BigNumber | string>(
+		1,
+	);
 	const [amountTyped, setAmountTyped] = useState('');
 	const [geminiModal, setGeminiModal] = useState(false);
 	const [txHash, setTxHash] = useState<any>();
@@ -122,7 +133,7 @@ const CryptoDonation = (props: {
 	const tokenSymbol = selectedToken?.symbol;
 	const isXdai = networkId === xdaiChain.id;
 	const isGivingBlockProject = project?.givingBlocksId;
-	const stopPolling = useRef<any>(null);
+	const stopPolling = useRef<NodeJS.Timer | null>(null);
 	const isGivBackEligible = givBackEligible && project?.verified;
 
 	// Checks network changes to fetch proper token list
@@ -189,7 +200,7 @@ const CryptoDonation = (props: {
 			} else {
 				chain = ethereumChain.name;
 			}
-			fetchPrices(chain, tokenAddress, setTokenPrice).then(setTokenPrice);
+			fetchPrice(chain, tokenAddress, setTokenPrice).then(setTokenPrice);
 		} else if (
 			selectedToken?.symbol &&
 			selectedToken.symbol === ethereumChain.mainToken
@@ -239,7 +250,6 @@ const CryptoDonation = (props: {
 							tokenAbi,
 							library,
 						);
-						const a = await instance.balanceOf(account);
 						return (
 							(await instance.balanceOf(account)) /
 							10 ** selectedToken.decimals!
@@ -248,7 +258,7 @@ const CryptoDonation = (props: {
 						return 0;
 					}
 				},
-				onResult: (_balance: any) => {
+				onResult: (_balance: number) => {
 					if (
 						_balance !== undefined &&
 						(!selectedTokenBalance ||
@@ -284,9 +294,9 @@ const CryptoDonation = (props: {
 				<DonateModal
 					showModal={showDonateModal}
 					setShowModal={setShowDonateModal}
-					setSuccessDonation={(hash: any) => {
-						setSuccessDonation(hash);
-						setTxHash(hash);
+					setSuccessDonation={(successTxHash: ISuccessDonation) => {
+						setSuccessDonation(!!successTxHash);
+						setTxHash(successTxHash);
 					}}
 					project={project}
 					token={selectedToken}
@@ -307,16 +317,9 @@ const CryptoDonation = (props: {
 								Projects from The Giving Block only accept
 								donations on mainnet.
 							</Caption>
-							<Caption
-								style={{
-									color: brandColors.pinky[500],
-									marginLeft: '5px',
-									cursor: 'pointer',
-								}}
-								onClick={() => switchNetwork(1)}
-							>
+							<SwitchCaption onClick={() => switchNetwork(1)}>
 								Switch Network
-							</Caption>
+							</SwitchCaption>
 						</XDaiContainer>
 					)}
 				{!isGivingBlockProject &&
@@ -328,16 +331,12 @@ const CryptoDonation = (props: {
 								<Caption color={neutralColors.gray[900]}>
 									Save on gas fees, switch to xDAI network.
 								</Caption>
-								<Caption
-									style={{
-										color: brandColors.pinky[500],
-										marginLeft: '5px',
-										cursor: 'pointer',
-									}}
+								<SwitchCaption
+									style={{}}
 									onClick={() => switchNetwork(100)}
 								>
 									Switch network
-								</Caption>
+								</SwitchCaption>
 							</div>
 						</XDaiContainer>
 					)}
@@ -358,14 +357,16 @@ const CryptoDonation = (props: {
 										(t: any) => t?.symbol === i?.symbol,
 									);
 								if (
-									i?.symbol?.toUpperCase() === 'ETH' ||
-									i?.symbol?.toUpperCase() === 'XDAI'
+									i?.symbol?.toUpperCase() ===
+										ethereumChain.mainToken ||
+									i?.symbol?.toUpperCase() ===
+										xdaiChain.mainToken
 								) {
 									givBackEligibilty = true;
 								}
 								setGivBackEligible(givBackEligibilty);
 							}}
-							onInputChange={(i: any) => {
+							onInputChange={(i: string) => {
 								// It's a contract
 								if (i?.length === 42) {
 									try {
@@ -510,6 +511,12 @@ const XDaiContainer = styled.div`
 		}
 	}
 `;
+const SwitchCaption = styled(Caption)`
+	color: ${brandColors.pinky[500]};
+	margin-left: 5px;
+	cursor: pointer;
+`;
+
 const MainButton = styled(Button)`
 	width: 100%;
 `;

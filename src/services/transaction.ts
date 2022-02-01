@@ -1,11 +1,11 @@
-import getSigner from './ethersSigner';
+import { Web3Provider } from '@ethersproject/providers';
 
 export async function send(
-	web3: any,
+	web3: Web3Provider,
 	toAddress: string,
 	contractAddress: string, // if none is set, it defaults to ETH
 	subtotal: number,
-	sendTransaction: any,
+	sendTransaction: Function,
 	txCallbacks: any,
 	traceable: boolean,
 ) {
@@ -18,7 +18,7 @@ export async function send(
 		};
 		let hash;
 
-		const signer = getSigner(web3);
+		const signer = web3?.getSigner();
 		const signerTransaction = await sendTransaction(
 			web3,
 			transaction,
@@ -38,35 +38,28 @@ export async function send(
 	}
 }
 
-export async function getHashInfo(txHash: string, isXDAI: boolean, web3: any) {
+export async function getHashInfo(txHash: string, web3: Web3Provider) {
 	try {
 		const txInfo = await web3.eth.getTransaction(txHash);
 		console.log({ txInfo });
 		return txInfo;
 	} catch (error: any) {
 		console.log({ error });
-		throw new Error(error);
+		return error;
 	}
 }
 
-export async function getTxFromHash(
-	transactionHash: string,
-	isXDAI: boolean,
-	web3: any,
-) {
-	try {
-		return await web3.eth.getTransaction(transactionHash);
-	} catch (error) {
-		return false;
-	}
+export interface IEthTxConfirmation {
+	status: string;
+	tooSlow: boolean;
+	error?: any;
 }
 
 export async function confirmEtherTransaction(
 	transactionHash: string,
 	callbackFunction: Function,
 	count = 0,
-	isXDAI: boolean,
-	web3: any,
+	web3: Web3Provider,
 ) {
 	try {
 		const MAX_INTENTS = 20; // one every second
@@ -85,7 +78,6 @@ export async function confirmEtherTransaction(
 					transactionHash,
 					callbackFunction,
 					++count,
-					isXDAI,
 					web3,
 				);
 			}, 1000);

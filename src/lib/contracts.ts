@@ -57,12 +57,19 @@ export const getGivethV3PoolContract = (provider: Web3Provider | null) => {
 	return new Contract(UNISWAP_V3_LP_POOL, UniswapV3PoolABI, signer);
 };
 
+interface IERC20Info {
+	library: Web3Provider;
+	tokenAbi: string;
+	contractAddress: string;
+	chainId: number;
+}
+
 export async function getERC20Info({
 	library,
 	tokenAbi,
 	contractAddress,
 	chainId,
-}: any) {
+}: IERC20Info) {
 	try {
 		const instance = new Contract(contractAddress, tokenAbi, library);
 		const name = await instance.name();

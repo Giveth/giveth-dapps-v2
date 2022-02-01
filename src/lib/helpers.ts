@@ -1,6 +1,7 @@
 import { ethers } from 'ethers';
 import { keccak256 } from '@ethersproject/keccak256';
 import { Contract } from '@ethersproject/contracts';
+import { Web3Provider } from '@ethersproject/providers';
 import { Web3ReactContextInterface } from '@web3-react/core/dist/types';
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
 import { PortisConnector } from '@web3-react/portis-connector';
@@ -154,7 +155,7 @@ export function formatTxLink(
 }
 
 export async function sendTransaction(
-	web3: any,
+	web3: Web3Provider,
 	params: any,
 	txCallbacks: any,
 	contractAddress: string,

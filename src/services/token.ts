@@ -35,9 +35,9 @@ export async function getToken(
 	}
 }
 
-export const fetchPrices = (
-	chain: any,
-	tokenAddress: any,
+export const fetchPrice = (
+	chain: string,
+	tokenAddress: string | undefined,
 	catchFunction: any,
 ) => {
 	return fetch(
