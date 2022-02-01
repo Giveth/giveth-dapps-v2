@@ -5,8 +5,8 @@ import Tabs from '../Tabs';
 function GIVfarmView() {
 	return (
 		<>
-			<TabGIVfarmTop />
 			<Tabs />
+			<TabGIVfarmTop />
 			<TabGIVfarmBottom />
 		</>
 	);

@@ -6,8 +6,8 @@ import Tabs from '../Tabs';
 function GIVbackView() {
 	return (
 		<>
-			<TabGIVbacksTop />
 			<Tabs />
+			<TabGIVbacksTop />
 			<TabGIVbacksBottom />
 		</>
 	);

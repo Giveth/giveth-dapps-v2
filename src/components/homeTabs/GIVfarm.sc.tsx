@@ -48,3 +48,15 @@ export const PoolRow = styled(Row)<PoolRowProps>`
 	opacity: ${props => (props.disabled ? '0.2' : '1')};
 	pointer-events: ${props => (props.disabled ? 'none' : 'auto')};
 `;
+
+export const ContractRow = styled(Row)`
+	gap: 8px;
+`;
+
+export const CopyWrapper = styled.div`
+	color: ${brandColors.cyan[500]};
+	cursor: pointer;
+	:hover {
+		color: ${brandColors.cyan[300]};
+	}
+`;
