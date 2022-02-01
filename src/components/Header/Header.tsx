@@ -231,7 +231,7 @@ const Header: FC<IHeader> = () => {
 											height={'24px'}
 										/>
 										<WBInfo>
-                      <GLink size='Medium'>
+											<GLink size='Medium'>
 												{user?.name ||
 													shortenAddress(account)}
 											</GLink>
