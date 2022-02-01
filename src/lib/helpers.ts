@@ -109,6 +109,7 @@ export const breakPoints = {
 	md: 768,
 	lg: 992,
 	xl: 1200,
+	xxl: 1440,
 };
 
 export const mediaQueries = {
@@ -116,6 +117,7 @@ export const mediaQueries = {
 	md: `@media (min-width: ${breakPoints.md}px)`,
 	lg: `@media (min-width: ${breakPoints.lg}px)`,
 	xl: `@media (min-width: ${breakPoints.xl}px)`,
+	xxl: `@media (min-width: ${breakPoints.xxl}px)`,
 };
 
 export const shortenAddress = (
