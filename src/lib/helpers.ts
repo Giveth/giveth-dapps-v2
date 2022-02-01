@@ -12,6 +12,7 @@ declare let window: any;
 import { BasicNetworkConfig, GasPreference } from '@/types/config';
 import { EWallets } from '@/lib/wallet/walletTypes';
 import { brandColors } from '@giveth/ui-design-system';
+import { giveconomyTabs } from '@/components/Tabs';
 
 export const DurationToYMDh = (ms: number) => {
 	let baseTime = new Date(0);
@@ -247,3 +248,20 @@ export async function signMessage(
 }
 
 export const LocalStorageTokenLabel = 'userToken';
+
+export const checkLinkActive = (route: string, href: string) => {
+	if (route === href) {
+		return true;
+	}
+	if (href === '/giveconomy') {
+		return isGivEconomyRoute(route);
+	}
+	return false;
+};
+
+export const isGivEconomyRoute = (route: string) => {
+	const givEconomyRoute = giveconomyTabs.find(
+		giveconomyTab => giveconomyTab.href === route,
+	);
+	return givEconomyRoute ? true : false;
+};
