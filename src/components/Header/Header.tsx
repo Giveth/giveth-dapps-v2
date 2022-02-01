@@ -23,9 +23,6 @@ import {
 	MenuAndButtonContainer,
 	CoverLine,
 	MBContainer,
-	SmallHeaderLinks,
-	HeaderPlaceholder,
-	IconMenuWrapper,
 	HeaderSmallMenuAndButtonContainer,
 } from './Header.sc';
 import Link from 'next/link';
@@ -42,7 +39,11 @@ import { menuRoutes } from '../menu/MenuRoutes';
 import { GLink, IconMenu24 } from '@giveth/ui-design-system';
 import { HeaderSmallMenu } from '../menu/HeaderMenu';
 import useUser from '@/context/UserProvider';
-import { shortenAddress } from '@/lib/helpers';
+import {
+	checkLinkActive,
+	isGivEconomyRoute,
+	shortenAddress,
+} from '@/lib/helpers';
 
 export interface IHeader {
 	theme?: ThemeType;
@@ -56,7 +57,7 @@ const Header: FC<IHeader> = () => {
 	const [showSmallMenu, setShowSmallMenu] = useState(false);
 	const [showWalletModal, setShowWalletModal] = useState(false);
 	const [showSigninModal, setShowSigninModal] = useState(false);
-	const [isGIVconomyRoute, setIsGIVconomyRoute] = useState(false);
+	const [isGIVeconomyRoute, setIsGIVeconomyRoute] = useState(false);
 	const {
 		currentValues: { balances },
 	} = useSubgraph();
@@ -115,7 +116,7 @@ const Header: FC<IHeader> = () => {
 	}, [showHeader]);
 
 	useEffect(() => {
-		setIsGIVconomyRoute(router.route.startsWith('/giv'));
+		setIsGIVeconomyRoute(isGivEconomyRoute(router.route));
 	}, [router.route]);
 
 	return (
@@ -153,7 +154,10 @@ const Header: FC<IHeader> = () => {
 							<HeaderLink
 								size='Big'
 								theme={theme}
-								active={router.route === link.href}
+								active={checkLinkActive(
+									router.route,
+									link.href,
+								)}
 							>
 								{link.title}
 							</HeaderLink>
@@ -260,16 +264,12 @@ const Header: FC<IHeader> = () => {
 								buttonType='primary'
 								size='small'
 								label={
-									isGIVconomyRoute
+									isGIVeconomyRoute
 										? 'CONNECT WALLET'
 										: 'SIGN IN'
 								}
 								onClick={() => {
-									if (isGIVconomyRoute) {
-										setShowWalletModal(true);
-									} else {
-										setShowSigninModal(true);
-									}
+									setShowWalletModal(isGIVeconomyRoute);
 								}}
 							/>
 						</div>
