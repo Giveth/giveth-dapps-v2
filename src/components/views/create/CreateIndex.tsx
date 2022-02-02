@@ -150,7 +150,6 @@ const CreateIndex = () => {
 	if (creationSuccessful) {
 		return <SuccessfulCreation project={creationSuccessful} />;
 	}
-	console.log({ user });
 
 	return (
 		<>
