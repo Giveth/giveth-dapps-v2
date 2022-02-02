@@ -141,12 +141,7 @@ const CreateIndex = () => {
 	useEffect(() => {
 		// Show guideline first thing
 		setShowGuidelineModal(true);
-
-		if (!isSignedIn && signIn) {
-			signIn();
-		}
 	}, []);
-
 	if (creationSuccessful) {
 		return <SuccessfulCreation project={creationSuccessful} />;
 	}
@@ -156,7 +151,14 @@ const CreateIndex = () => {
 			{showGuidelineModal && (
 				<ProjectGuidelineModal
 					showModal={showGuidelineModal}
-					setShowModal={setShowGuidelineModal}
+					setShowModal={val => {
+						if (val === false) {
+							if (!isSignedIn && signIn) {
+								signIn();
+							}
+						}
+						setShowGuidelineModal(val);
+					}}
 				/>
 			)}
 			<CreateContainer>
