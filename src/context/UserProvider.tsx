@@ -20,6 +20,7 @@ import {
 import * as Auth from '../services/auth';
 import { getToken } from '../services/token';
 import User from '../entities/user';
+import { getLocalStorageUserLabel } from '@/services/auth';
 import useWallet from '@/hooks/walletHooks';
 
 interface IUserContext {
@@ -103,7 +104,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 	};
 
 	const signIn = async () => {
-		if (!library.getSigner()) return false;
+		if (!library?.getSigner()) return false;
 
 		const signedMessage = await signMessage(
 			process.env.NEXT_PUBLIC_OUR_SECRET as string,
@@ -130,12 +131,14 @@ export const UserProvider = (props: { children: ReactNode }) => {
 			await apolloClient.resetStore();
 			setUser(localUser);
 		}
+		localStorage.setItem(getLocalStorageUserLabel() + '_token', token);
 		return token;
 	};
 
 	const signOut = () => {
 		Auth.logout();
 		window.localStorage.removeItem('selectedWallet');
+		window.localStorage.removeItem(getLocalStorageUserLabel() + '_token');
 		apolloClient.resetStore().then();
 		deactivate();
 		setUser(undefined);

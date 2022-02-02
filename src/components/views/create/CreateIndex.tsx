@@ -8,6 +8,13 @@ import {
 	brandColors,
 	neutralColors,
 } from '@giveth/ui-design-system';
+import { useMutation } from '@apollo/client';
+import { client } from '@/apollo/apolloClient';
+import { utils } from 'ethers';
+import { WALLET_ADDRESS_IS_VALID, ADD_PROJECT } from '@/apollo/gql/gqlProjects';
+import { useWeb3React } from '@web3-react/core';
+import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
+import { IProjectCreation } from '@/apollo/types/types';
 import {
 	NameInput,
 	DescriptionInput,
@@ -16,6 +23,10 @@ import {
 	ImageInput,
 	WalletAddressInput,
 } from './Inputs';
+import { getImageFile } from '@/utils/index';
+import useUser from '@/context/UserProvider';
+import Logger from '@/utils/Logger';
+import SuccessfulCreation from './SuccessfulCreation';
 import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
 import styled from 'styled-components';
 
@@ -23,7 +34,7 @@ type Inputs = {
 	name: string;
 	description: string;
 	categories: any;
-	impactLocation: string;
+	impactLocation: any;
 	image: any;
 	walletAddress: string;
 };
@@ -35,21 +46,111 @@ const CreateIndex = () => {
 		setValue,
 		formState: { errors },
 	} = useForm<Inputs>();
-	const onSubmit: SubmitHandler<Inputs> = data => {
-		console.log({ data });
+	const { library } = useWeb3React();
+	const [addProjectMutation] = useMutation(ADD_PROJECT);
+	const [creationSuccessful, setCreationSuccessful] = useState<any>(null);
+	const {
+		state: { isSignedIn },
+		actions: { signIn },
+	} = useUser();
+
+	const onSubmit: SubmitHandler<Inputs> = async data => {
+		try {
+			// check heavy description
+			const stringSize =
+				encodeURI(data?.description).split(/%..|./).length - 1;
+			if (stringSize > 4000000) {
+				// 4Mb tops max maybe?
+				// TODO: ADD TOAST HERE
+				return alert('Description too large');
+			}
+
+			// Check wallet
+			let address;
+			// Handle ENS address
+			if (isAddressENS(data.walletAddress)) {
+				address = await getAddressFromENS(data.walletAddress, library);
+			} else {
+				address = data.walletAddress;
+			}
+			// Check wallet valid
+			await client.query({
+				query: WALLET_ADDRESS_IS_VALID,
+				variables: {
+					address,
+				},
+			});
+			// Set categories
+			const projectCategories = [];
+			for (const category in data.categories) {
+				projectCategories.push(category);
+			}
+			const projectData: IProjectCreation = {
+				title: data.name,
+				description: data.description,
+				impactLocation: data.impactLocation?.global
+					? 'Global'
+					: data.impactLocation,
+				categories: projectCategories,
+				organisationId: 1,
+				walletAddress: utils.getAddress(address),
+				imageStatic: null,
+				imageUpload: null,
+			};
+
+			if (!isNaN(data?.image)) {
+				projectData.imageStatic = data.image?.toString();
+			} else if (data.image) {
+				projectData.imageUpload = await getImageFile(
+					data.image,
+					data.name,
+				);
+			}
+
+			const addedProject = await addProjectMutation({
+				variables: {
+					project: { ...projectData },
+				},
+			});
+
+			if (addedProject) {
+				// Success
+				setCreationSuccessful(addedProject);
+			}
+		} catch (e) {
+			const error = e as Error;
+			if (error.message === 'Access denied') {
+				console.log('Please first sign in');
+			} else {
+				Logger.captureException(error);
+			}
+			console.log({ error });
+			// TODO: TOAST ERROR
+			alert(JSON.stringify(error));
+		}
 	};
 	const [showGuidelineModal, setShowGuidelineModal] = useState(false);
 
-	const createProject = () => {
+	const createProject = (e: any) => {
+		e.preventDefault();
 		handleSubmit(onSubmit)();
 	};
 
 	const hasErrors = Object.entries(errors).length !== 0;
 
 	useEffect(() => {
+		// UNCOMMENT BEFORE COMMIT FINAL PR: COMMENTING THIS WHILE DEVELOPING BECAUSE IT'S ANNOYING
 		// Show guideline first thing
-		setShowGuidelineModal(true);
+		// setShowGuidelineModal(true);
+
+		if (!isSignedIn && signIn) {
+			signIn();
+		}
 	}, []);
+
+	if (creationSuccessful) {
+		return <SuccessfulCreation project={creationSuccessful} />;
+	}
 
 	return (
 		<>
@@ -61,10 +162,7 @@ const CreateIndex = () => {
 			)}
 			<CreateContainer>
 				<Title>Create a Project</Title>
-				<form
-					onSubmit={handleSubmit(onSubmit)}
-					id='create-project-form'
-				>
+				<form>
 					{/* register your input into the hook by invoking the "register" function */}
 					<NameInput
 						{...register('name', { required: true })}
@@ -80,7 +178,12 @@ const CreateIndex = () => {
 							setValue('categories', val)
 						}
 					/>
-					<LocationInput {...register('impactLocation')} />
+					<LocationInput
+						{...register('impactLocation')}
+						setValue={(val: string) =>
+							setValue('impactLocation', val)
+						}
+					/>
 					<ImageInput
 						{...register('image')}
 						setValue={(val: string) => setValue('image', val)}

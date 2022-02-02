@@ -40,7 +40,7 @@ const ProjectCard = (props: IProjectCard) => {
 				</ImagePlaceholder>
 				<ProjectCardBadges
 					cardWidth={cardWidth}
-					likes={reactions.length}
+					likes={reactions?.length}
 					verified={verified}
 				/>
 				<CardBody>
@@ -48,8 +48,8 @@ const ProjectCard = (props: IProjectCard) => {
 					{name && <Author>{name}</Author>}
 					<Description>{htmlToText(description)}</Description>
 					<Captions>
-						<BodyCaption>Raised: $200</BodyCaption>
-						<BodyCaption>Last updated: 5 days ago</BodyCaption>
+						<BodyCaption>Raised: $</BodyCaption>
+						<BodyCaption>Last updated: x days ago</BodyCaption>
 					</Captions>
 				</CardBody>
 			</Wrapper2>

@@ -8,15 +8,15 @@ import config from '@/configuration';
 import styled from 'styled-components';
 
 const LocationInput = (props: any) => {
+	const { setValue } = props;
 	const MapLoader = withScriptjs(Map);
-	const [globalImpact, setGlobalImpact] = useState<boolean>(false);
 
 	const setImpactLocation = useCallback(val => {
-		console.log({ val });
+		setValue(val);
 	}, []);
 
 	const setGlobalLocation = useCallback(val => {
-		console.log({ val });
+		setValue({ global: true });
 	}, []);
 
 	return (
