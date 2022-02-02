@@ -115,7 +115,7 @@ const CreateIndex = () => {
 
 			if (addedProject) {
 				// Success
-				setCreationSuccessful(addedProject);
+				setCreationSuccessful(addedProject?.data?.addProject);
 			}
 		} catch (e) {
 			const error = e as Error;
@@ -139,9 +139,8 @@ const CreateIndex = () => {
 	const hasErrors = Object.entries(errors).length !== 0;
 
 	useEffect(() => {
-		// UNCOMMENT BEFORE COMMIT FINAL PR: COMMENTING THIS WHILE DEVELOPING BECAUSE IT'S ANNOYING
 		// Show guideline first thing
-		// setShowGuidelineModal(true);
+		setShowGuidelineModal(true);
 
 		if (!isSignedIn && signIn) {
 			signIn();

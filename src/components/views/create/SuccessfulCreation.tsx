@@ -1,25 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ProjectCard from '@/components/project-card/ProjectCardAlt';
 import { IProjectBySlug } from '@/apollo/types/types';
-import { BigArc } from '@/components/styled-components/Arc';
 import SocialBox from '../donate/SocialBox';
 import ConfettiAnimation from '../../animations/confetti';
-import {
-	H4,
-	H6,
-	GLink,
-	brandColors,
-	P,
-	Lead,
-	neutralColors,
-	Subline,
-	Button,
-} from '@giveth/ui-design-system';
+import { H4, brandColors, P, Button } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import styled from 'styled-components';
 
 const SuccessfulCreation = (props: IProjectBySlug) => {
 	const { project } = props;
+
+	useEffect(() => {
+		setTimeout(() => window.scrollTo(0, 0), 200);
+	}, []);
 
 	const SuccessView = () => {
 		return (
@@ -47,8 +40,9 @@ const SuccessfulCreation = (props: IProjectBySlug) => {
 
 	return (
 		<Container>
-			<BigArc />
 			<Wrapper>
+				<BGImg src='/images/arc2.svg' />
+				<BGImg src='/images/arc3.svg' />
 				<Sections>
 					<Left>
 						<ProjectCard key={project.id} project={project} />
@@ -68,15 +62,27 @@ const ConfettiContainer = styled.div`
 const GiverH4 = styled(H4)`
 	color: ${brandColors.deep[700]};
 `;
+const BGImg = styled.img`
+	position: absolute;
+`;
 
 const Container = styled.div`
-	background-color: transparent;
+	background-image: url('/images/creation_success.svg');
 `;
 const Wrapper = styled.div`
 	text-align: center;
 	margin: 0 194px;
 	padding: 137px 0;
 	align-items: center;
+
+	img:first-child {
+		top: 0;
+		right: 20px;
+	}
+	img:nth-child(2) {
+		bottom: 0;
+		left: 20px;
+	}
 `;
 const Sections = styled.div`
 	display: grid;
@@ -97,7 +103,6 @@ const Left = styled.div`
 const Right = styled.div`
 	z-index: 1;
 	grid-row: 1;
-	background: white;
 	text-align: left;
 	padding: 65px 32px 32px;
 	border-top-right-radius: 16px;
