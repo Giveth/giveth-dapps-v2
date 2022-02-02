@@ -319,12 +319,16 @@ const CryptoDonation = (props: {
 				{isGivingBlockProject &&
 					networkId !== config.PRIMARY_NETWORK.id && (
 						<XDaiContainer>
+							<img src='/images/gas_station.svg' />
 							<Caption color={neutralColors.gray[900]}>
 								Projects from The Giving Block only accept
-								donations on mainnet.
+								donations on mainnet.{' '}
 							</Caption>
-							<SwitchCaption onClick={() => switchNetwork(1)}>
-								Switch Network
+							<SwitchCaption
+								style={{}}
+								onClick={() => switchNetwork(1)}
+							>
+								Switch network
 							</SwitchCaption>
 						</XDaiContainer>
 					)}
@@ -332,18 +336,13 @@ const CryptoDonation = (props: {
 					isEnabled &&
 					networkId !== xdaiChain.id && (
 						<XDaiContainer>
-							<div>
-								<img src='/images/gas_station.svg' />
-								<Caption color={neutralColors.gray[900]}>
-									Save on gas fees, switch to xDAI network.
-								</Caption>
-								<SwitchCaption
-									style={{}}
-									onClick={() => switchNetwork(100)}
-								>
-									Switch network
-								</SwitchCaption>
-							</div>
+							<img src='/images/gas_station.svg' />
+							<Caption color={neutralColors.gray[900]}>
+								Save on gas fees, switch to xDAI network.
+							</Caption>
+							<SwitchCaption onClick={() => switchNetwork(100)}>
+								Switch network
+							</SwitchCaption>
 						</XDaiContainer>
 					)}
 				<SearchContainer>
@@ -512,15 +511,16 @@ const XDaiContainer = styled.div`
 		display: flex;
 		flex-direction: row;
 		color: ${neutralColors.gray[800]};
-		img {
-			padding-right: 12px;
-		}
+	}
+	img {
+		padding-right: 12px;
 	}
 `;
 const SwitchCaption = styled(Caption)`
 	color: ${brandColors.pinky[500]};
-	margin-left: 5px;
 	cursor: pointer;
+	width: 200px;
+	padding: 0 0 0 12px;
 `;
 
 const MainButton = styled(Button)`
