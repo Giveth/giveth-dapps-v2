@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import { IProject } from '@/apollo/types/types';
 import Routes from '@/lib/constants/Routes';
+import { mediaQueries } from '@/lib/helpers';
 import { FlexCenter } from '@/components/styled-components/Grid';
 import {
 	Button,
@@ -75,9 +76,21 @@ const ButtonsWrapper = styled(FlexCenter)`
 `;
 
 const ProjectsContainer = styled.div`
-	display: flex;
-	gap: 23px 26px;
-	flex-wrap: wrap;
+	display: grid;
+	gap: 25px;
+	margin-bottom: 64px;
+
+	${mediaQueries['lg']} {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	${mediaQueries['xl']} {
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	${mediaQueries['xxl']} {
+		grid-template-columns: repeat(4, 1fr);
+	}
 `;
 
 const Title = styled(H5)`

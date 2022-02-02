@@ -19,7 +19,13 @@ export const TopFiller = styled.div`
 	flex: 1;
 `;
 
-export const ExtLink = styled(GLink)`
+export const ExtLinkRow = styled(Row)`
 	color: ${brandColors.cyan[500]};
 	cursor: pointer;
+	gap: 4px;
+	:hover {
+		color: ${brandColors.cyan[300]};
+	}
 `;
+
+export const ExtLink = styled(GLink)``;

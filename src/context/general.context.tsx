@@ -1,3 +1,4 @@
+import { neutralColors } from '@giveth/ui-design-system';
 import {
 	createContext,
 	FC,
@@ -16,7 +17,7 @@ export enum ETheme {
 const GlobalStyle = createGlobalStyle<{ theme: ETheme }>`
   body {
     background-color: ${props =>
-		props.theme === ETheme.Dark ? '#1b1657' : 'white'};
+		props.theme === ETheme.Dark ? '#1b1657' : neutralColors.gray[200]};
 	color: ${props => (props.theme === ETheme.Dark ? 'white' : '#212529')};
   }
 `;

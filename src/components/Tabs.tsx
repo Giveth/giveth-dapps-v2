@@ -10,7 +10,7 @@ import { Row } from './styled-components/Grid';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-const tabs = [
+export const giveconomyTabs = [
 	{
 		label: 'Overview',
 		href: '/giveconomy',
@@ -41,7 +41,7 @@ const Tabs: FC = () => {
 			<LabelsContainer>
 				<Container>
 					<Row gap='16px'>
-						{tabs.map((tab, idx) => (
+						{giveconomyTabs.map((tab, idx) => (
 							<Link key={idx} href={tab.href} passHref>
 								<Label
 									size='Big'
@@ -80,7 +80,7 @@ const Label = styled(GLink)<ILabelProps>`
 `;
 
 const LabelsContainer = styled.div`
-	padding: 42px 0;
+	padding: 120px 0 42px;
 `;
 
 export default Tabs;

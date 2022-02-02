@@ -12,6 +12,7 @@ import {
 } from '@giveth/ui-design-system';
 import { device } from '@/utils/constants';
 import { ETheme } from '@/context/general.context';
+import { Shadow } from '@/components/styled-components/Shadow';
 
 export const HeaderPlaceholder = styled.div`
 	height: 100px;
@@ -32,7 +33,8 @@ export const Logo = styled.div`
 	justify-content: center;
 	align-items: cneter;
 	background: ${neutralColors.gray[100]};
-	box-shadow: 0px 4.125px 27.5px rgba(33, 32, 60, 0.24);
+	box-shadow: ${props =>
+		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
 	border-radius: 99px;
 	padding: 8px;
 	width: 64px;
@@ -66,6 +68,8 @@ export const HeaderButton = styled(CButton)<IThemed>`
 	border: 1px solid
 		${props =>
 			props.theme === ETheme.Dark ? brandColors.giv[600] : 'white'};
+	box-shadow: ${props =>
+		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
 `;
 
 export const BalanceButton = styled(HeaderButton)`
@@ -84,13 +88,20 @@ export const HBContainer = styled.div`
 	z-index: 2;
 `;
 
+export const MBContainer = styled(HBContainer)`
+	display: flex;
+	align-items: center;
+	z-index: 2;
+	gap: 8px;
+`;
+
 export const WBInfo = styled.div`
 	display: flex;
 	flex-direction: column;
 	margin-left: 8px;
 `;
 
-export const WBNetwork = styled.span`
+export const WBNetwork = styled(GLink)`
 	font-family: 'Red Hat Text';
 	font-style: normal;
 	font-weight: normal;
@@ -109,7 +120,7 @@ export const HBBalanceLogo = styled(HBPic)`
 	background: #5326ec;
 `;
 
-export const HBContent = styled.span`
+export const HBContent = styled(GLink)`
 	margin-left: 8px;
 `;
 
@@ -138,6 +149,8 @@ export const HeaderLinks = styled(Row)<IThemed>`
 	padding: 6px;
 	gap: 8px;
 	display: none;
+	box-shadow: ${props =>
+		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
 	@media ${device.laptopL} {
 		display: flex;
 	}
@@ -147,10 +160,16 @@ export const SmallHeaderLinks = styled(Row)`
 	align-self: center;
 	align-items: center;
 	display: flex;
-	padding: 0 16px;
-	@media ${device.laptopL} {
-		display: none;
-	}
+	flex-direction: column;
+	padding: 12px 16px 12px 48px;
+	border-radius: 24px;
+	gap: 8px;
+	position: relative;
+	background-color: ${props =>
+		props.theme === ETheme.Dark ? brandColors.giv[900] : 'white'};
+	border: 1px solid
+		${props =>
+			props.theme === ETheme.Dark ? brandColors.giv[600] : 'white'};
 `;
 
 export const HeaderLink = styled(GLink)<IHeaderLinkProps>`
@@ -160,7 +179,7 @@ export const HeaderLink = styled(GLink)<IHeaderLinkProps>`
 		if (props.active) {
 			return props.theme === ETheme.Dark
 				? brandColors.giv[600]
-				: neutralColors.gray[100];
+				: brandColors.giv[100];
 		}
 		return '';
 	}};
@@ -172,7 +191,10 @@ export const HeaderLink = styled(GLink)<IHeaderLinkProps>`
 	}
 `;
 
-export const ConnectButton = styled(Button)``;
+export const ConnectButton = styled(Button)`
+	box-shadow: ${props =>
+		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
+`;
 
 export const NotifButton = styled(HeaderButton)`
 	padding: 23px;
@@ -185,8 +207,10 @@ export const NotifButton = styled(HeaderButton)`
 export const CreateProject = styled(ButtonLink)`
 	white-space: nowrap;
 	display: none;
+	box-shadow: ${props =>
+		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
 	@media ${device.laptop} {
-		display: block;
+		display: flex;
 	}
 `;
 
@@ -199,6 +223,8 @@ export const SmallCreateProject = styled(ButtonLink)`
 	span {
 		font-size: 32px !important;
 	}
+	box-shadow: ${props =>
+		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
 	@media ${device.laptop} {
 		display: none;
 	}
@@ -220,8 +246,23 @@ export const CoverLine = styled.div<IThemed>`
 		props.theme === ETheme.Dark ? brandColors.giv[900] : 'white'};
 	position: absolute;
 	z-index: 1;
-	height: 6px;
 	left: 1px;
 	right: 1px;
-	top: 40%;
+	top: 1px;
+	bottom: 4px;
+	border-radius: 48px;
+`;
+
+export const IconMenuWrapper = styled.div`
+	position: absolute;
+	left: 16px;
+	top: 12px;
+	color: ${brandColors.giv[500]};
+`;
+export const HeaderSmallMenuAndButtonContainer = styled(MenuAndButtonContainer)`
+	position: relative;
+	z-index: 2;
+	@media ${device.laptopL} {
+		display: none;
+	}
 `;
