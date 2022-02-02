@@ -31,7 +31,7 @@ const FIAT_DONATION = 'Credit Card';
 const ProjectsIndex = (props: IProjectBySlug) => {
 	const { project } = props;
 	const [donationType, setDonationType] = useState(CRYPTO_DONATION);
-	const [isSuccess, setSuccess] = useState<any>(false);
+	const [isSuccess, setSuccess] = useState<any>(null);
 
 	const { chainId: networkId } = useWeb3React();
 
@@ -84,7 +84,7 @@ const ProjectsIndex = (props: IProjectBySlug) => {
 				{donationType === CRYPTO_DONATION ? (
 					<CryptoDonation
 						project={project}
-						setSuccessDonation={hash => setSuccess(hash)}
+						setSuccessDonation={successTx => setSuccess(successTx)}
 					/>
 				) : (
 					<FiatDonation

@@ -12,9 +12,10 @@ import {
 	Button,
 } from '@giveth/ui-design-system';
 import { IModal, Modal } from '@/components/modals/Modal';
+import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
+import { WrongNetworkModal } from '@/components/modals/WrongNetwork';
 import { IProject } from '../../apollo/types/types';
 import { Row } from '../styled-components/Grid';
-import LoadingSpinner from '../animations/spinner';
 import Logger from '../../utils/Logger';
 import { checkNetwork } from '../../utils';
 import { isAddressENS, getAddressFromENS } from '../../lib/wallet';
@@ -70,6 +71,8 @@ const DonateModal = ({
 		actions: { signIn },
 	} = UserContext();
 	const [donating, setDonating] = useState(false);
+	const [showInsufficientModal, setShowInsufficientModal] = useState(false);
+	const [showWrongNetworkModal, setShowWrongNetworkModal] = useState(false);
 	if (!showModal) return null;
 
 	const avgPrice = price && price * amount;
@@ -103,13 +106,9 @@ const DonateModal = ({
 
 			const isCorrectNetwork = checkNetwork(chainId!);
 			if (isGivingBlockProject && chainId !== config.PRIMARY_NETWORK.id)
-				// return triggerPopup('WrongNetwork', chainId)
-				// TODO: SET RIGHT MODAL
-				return alert('wrong network');
+				return setShowWrongNetworkModal(true);
 			if (!isCorrectNetwork) {
-				// TODO: SET RIGHT MODAL
-				// return triggerPopup('WrongNetwork')
-				return alert('wrong network');
+				return setShowWrongNetworkModal(true);
 			}
 
 			if (!amount || amount <= 0) {
@@ -119,9 +118,7 @@ const DonateModal = ({
 			}
 
 			if (userTokenBalance! < amount) {
-				// return triggerPopup('InsufficientFunds')
-				// TODO: SET RIGHT MODAL
-				return alert('Insufficient Funds');
+				return setShowInsufficientModal(true);
 			}
 
 			// Toast({
@@ -142,7 +139,7 @@ const DonateModal = ({
 				amount,
 				sendTransaction,
 				{
-					onTransactionHash: async (transactionHash: any) => {
+					onTransactionHash: async (transactionHash: string) => {
 						// Save initial txn details to db
 						const {
 							donationId,
@@ -171,7 +168,7 @@ const DonateModal = ({
 						}
 						transaction.confirmEtherTransaction(
 							transactionHash,
-							(res: any) => {
+							(res: transaction.IEthTxConfirmation) => {
 								try {
 									console.log({ res });
 									if (!res) return;
@@ -231,7 +228,6 @@ const DonateModal = ({
 								}
 							},
 							0,
-							isXdai,
 							library,
 						);
 						await saveDonationTransaction(
@@ -284,9 +280,30 @@ const DonateModal = ({
 			//     error,
 			//   type: 'error'
 			// })
+
+			// TODO: Add toast for errors
 			alert(JSON.stringify(error));
 		}
 	};
+
+	if (showInsufficientModal) {
+		return (
+			<InsufficientFundModal
+				showModal={showInsufficientModal}
+				setShowModal={setShowInsufficientModal}
+			/>
+		);
+	}
+
+	if (showWrongNetworkModal) {
+		return (
+			<WrongNetworkModal
+				showModal={showWrongNetworkModal}
+				setShowModal={setShowWrongNetworkModal}
+				targetNetworks={[config.XDAI_NETWORK_NUMBER]}
+			/>
+		);
+	}
 
 	return (
 		<Modal showModal={showModal} setShowModal={setShowModal}>

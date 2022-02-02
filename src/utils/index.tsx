@@ -9,7 +9,8 @@ const xDaiChainId = 100;
 const appNetworkId = config.PRIMARY_NETWORK.id;
 
 export function pollEvery(fn: Function, delay: any) {
-	let timer: any = -1;
+	let timer: any = null;
+	// having trouble with this type
 	let stop = false;
 	const poll = async (request: any, onResult: Function) => {
 		const result = await request();
@@ -133,21 +134,6 @@ export async function checkIfURLisValid(checkUrl: string) {
 	);
 	return !!pattern.test(url);
 }
-
-export const switchNetwork = (currentNetworkId?: any) => {
-	let chainId = config.PRIMARY_NETWORK.chain;
-	const defaultNetworkId = config.PRIMARY_NETWORK.id;
-	if (currentNetworkId === defaultNetworkId) {
-		chainId = config.SECONDARY_NETWORK.chain;
-	}
-
-	(window as any).ethereum
-		.request({
-			method: 'wallet_switchEthereumChain',
-			params: [{ chainId }],
-		})
-		.then();
-};
 
 export interface IPrefixes {
 	[networkID: number]: string;

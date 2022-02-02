@@ -74,7 +74,6 @@ const GeminiModal = ({ showModal, setShowModal }: any) => {
 							url={url!}
 							hashtags={['gemini', 'giveth', 'giv', 'donation']}
 						>
-							{' '}
 							<a
 								style={{
 									display: 'flex',
