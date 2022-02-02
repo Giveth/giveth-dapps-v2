@@ -11,6 +11,7 @@ import {
 import { useMutation } from '@apollo/client';
 import { client } from '@/apollo/apolloClient';
 import { utils } from 'ethers';
+import SignInModal from '../../modals/SignInModal';
 import { WALLET_ADDRESS_IS_VALID, ADD_PROJECT } from '@/apollo/gql/gqlProjects';
 import { useWeb3React } from '@web3-react/core';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
@@ -49,8 +50,9 @@ const CreateIndex = () => {
 	const { library } = useWeb3React();
 	const [addProjectMutation] = useMutation(ADD_PROJECT);
 	const [creationSuccessful, setCreationSuccessful] = useState<any>(null);
+	const [showSigninModal, setShowSigninModal] = useState(false);
 	const {
-		state: { isSignedIn },
+		state: { user, isSignedIn },
 		actions: { signIn },
 	} = useUser();
 
@@ -139,12 +141,16 @@ const CreateIndex = () => {
 	const hasErrors = Object.entries(errors).length !== 0;
 
 	useEffect(() => {
-		// Show guideline first thing
-		setShowGuidelineModal(true);
-	}, []);
+		if (isSignedIn) {
+			// Show guideline first thing
+			setShowGuidelineModal(true);
+		}
+	}, [isSignedIn]);
+
 	if (creationSuccessful) {
 		return <SuccessfulCreation project={creationSuccessful} />;
 	}
+	console.log({ user });
 
 	return (
 		<>
@@ -161,75 +167,86 @@ const CreateIndex = () => {
 					}}
 				/>
 			)}
-			<CreateContainer>
-				<Title>Create a Project</Title>
-				<form>
-					{/* register your input into the hook by invoking the "register" function */}
-					<NameInput
-						{...register('name', { required: true })}
-						setValue={(val: string) => setValue('name', val)}
-					/>
-					<DescriptionInput
-						{...register('description', { required: true })}
-						setValue={(val: string) => setValue('description', val)}
-					/>
-					<CategoryInput
-						{...register('categories', { required: true })}
-						setValue={(val: Array<any>) =>
-							setValue('categories', val)
-						}
-					/>
-					<LocationInput
-						{...register('impactLocation')}
-						setValue={(val: string) =>
-							setValue('impactLocation', val)
-						}
-					/>
-					<ImageInput
-						{...register('image')}
-						setValue={(val: string) => setValue('image', val)}
-					/>
-					<WalletAddressInput
-						{...register('walletAddress', { required: true })}
-						setValue={(val: string) =>
-							setValue('walletAddress', val)
-						}
-					/>
+			{showSigninModal && (
+				<SignInModal
+					showModal={showSigninModal}
+					closeModal={() => setShowSigninModal(false)}
+				/>
+			)}
+			{user && (
+				<CreateContainer>
+					<Title>Create a Project</Title>
+					<form>
+						{/* register your input into the hook by invoking the "register" function */}
+						<NameInput
+							{...register('name', { required: true })}
+							setValue={(val: string) => setValue('name', val)}
+						/>
+						<DescriptionInput
+							{...register('description', { required: true })}
+							setValue={(val: string) =>
+								setValue('description', val)
+							}
+						/>
+						<CategoryInput
+							{...register('categories', { required: true })}
+							setValue={(val: Array<any>) =>
+								setValue('categories', val)
+							}
+						/>
+						<LocationInput
+							{...register('impactLocation')}
+							setValue={(val: string) =>
+								setValue('impactLocation', val)
+							}
+						/>
+						<ImageInput
+							{...register('image')}
+							setValue={(val: string) => setValue('image', val)}
+						/>
+						<WalletAddressInput
+							{...register('walletAddress', { required: true })}
+							setValue={(val: string) =>
+								setValue('walletAddress', val)
+							}
+						/>
 
-					<PublishTitle>{`Let's Publish!`}</PublishTitle>
-					<PublishList>
-						<li>
-							Newly published projects will be "unlisted" until
-							reviewed by our team.
-						</li>
-						<li>
-							You can still access your project from your account
-							and share it with your friends via the project link!
-						</li>
-						<li>
-							You'll receive an email from us once your project is
-							listed.
-						</li>
-					</PublishList>
-					<Buttons>
-						<Button
-							label='PREVIEW'
-							buttonType='primary'
-							// onClick={uploadImage}
-						/>
-						<Button
-							label='PUBLISH'
-							buttonType='primary'
-							onClick={createProject}
-						/>
-					</Buttons>
-					{hasErrors && (
-						<ErrorMessage>
-							Empty fields or errors, please check the values
-						</ErrorMessage>
-					)}
-				</form>
-			</CreateContainer>
+						<PublishTitle>{`Let's Publish!`}</PublishTitle>
+						<PublishList>
+							<li>
+								Newly published projects will be "unlisted"
+								until reviewed by our team.
+							</li>
+							<li>
+								You can still access your project from your
+								account and share it with your friends via the
+								project link!
+							</li>
+							<li>
+								You'll receive an email from us once your
+								project is listed.
+							</li>
+						</PublishList>
+						<Buttons>
+							<Button
+								label='PREVIEW'
+								buttonType='primary'
+								// onClick={uploadImage}
+							/>
+							<Button
+								label='PUBLISH'
+								buttonType='primary'
+								onClick={createProject}
+							/>
+						</Buttons>
+						{hasErrors && (
+							<ErrorMessage>
+								Empty fields or errors, please check the values
+							</ErrorMessage>
+						)}
+					</form>
+				</CreateContainer>
+			)}
 		</>
 	);
 };
