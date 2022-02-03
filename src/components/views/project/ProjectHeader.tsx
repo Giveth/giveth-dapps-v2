@@ -8,33 +8,27 @@ import styled from 'styled-components';
 const ProjectHeader = (props: { project: IProject }) => {
 	const { title, verified, image, adminUser, traceCampaignId } =
 		props.project;
-
 	const [adjustTitle, setAdjustTitle] = useState<boolean>(false);
+	const containerRef = useRef(null);
+
 	const name = adminUser?.name;
 	const traceable = !!traceCampaignId;
 
-	const containerRef = useRef(null);
-	const intersectOptions = {
-		root: null,
-		rootMargin: '0px',
-		threshold: 0.45,
-	};
-
-	const callbackFunction = (entries: IntersectionObserverEntry[]) => {
-		const [entry] = entries;
-		setAdjustTitle(!entry.isIntersecting);
-	};
-
 	useEffect(() => {
-		const observer = new IntersectionObserver(
-			callbackFunction,
-			intersectOptions,
-		);
+		const observerHandler = (entries: IntersectionObserverEntry[]) => {
+			const [entry] = entries;
+			setAdjustTitle(!entry.isIntersecting);
+		};
+		const observer = new IntersectionObserver(observerHandler, {
+			root: null,
+			rootMargin: '0px',
+			threshold: 0.45,
+		});
 
 		if (containerRef.current) observer.observe(containerRef.current);
 
 		return () => {
-			if (containerRef.current) observer.unobserve(containerRef.current);
+			if (observer) observer.disconnect();
 		};
 	}, [containerRef, adjustTitle]);
 
