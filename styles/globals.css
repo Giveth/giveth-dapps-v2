@@ -29,6 +29,9 @@ a {
   border-radius: 8px !important;
   height: 54px;
 }
+.select__control:focus-within {
+  border-color: #3811BF !important;
+}
 .select__value-container {
   padding-left: 16px !important;
 }
