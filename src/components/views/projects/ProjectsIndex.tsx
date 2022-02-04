@@ -197,15 +197,15 @@ const ProjectsIndex = () => {
 
 				{isLoading && <Loader className='dot-flashing' />}
 
-				<ProjectsContainer>
-					{filteredProjects.length > 0 ? (
-						filteredProjects.map(project => (
+				{filteredProjects.length > 0 ? (
+					<ProjectsContainer>
+						{filteredProjects.map(project => (
 							<ProjectCard key={project.id} project={project} />
-						))
-					) : (
-						<ProjectsNoResults trySearch={clearSearch} />
-					)}
-				</ProjectsContainer>
+						))}
+					</ProjectsContainer>
+				) : (
+					<ProjectsNoResults trySearch={clearSearch} />
+				)}
 
 				{showLoadMore && (
 					<>

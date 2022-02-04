@@ -73,7 +73,7 @@ const Wrapper = styled.div`
 	background: white;
 
 	&:focus-within {
-		border: 2px solid ${brandColors.pinky[500]};
+		border: 2px solid ${brandColors.giv[600]};
 	}
 `;
 
