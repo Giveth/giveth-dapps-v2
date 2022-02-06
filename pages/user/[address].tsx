@@ -1,9 +1,24 @@
 import { client } from '@/apollo/apolloClient';
 import { GET_USER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
+import UserPublicProfileView from '@/components/views/UserPublicProfile.view';
+import { IUser } from '@/types/entities';
 import { GetServerSideProps } from 'next';
+import Head from 'next/head';
+import { FC } from 'react';
 
-const UserRoute = () => {
-	return <div>User: NoBody :D</div>;
+interface IUserRouteProps {
+	user: IUser;
+}
+
+const UserRoute: FC<IUserRouteProps> = ({ user }) => {
+	return (
+		<>
+			<Head>
+				<title>Giveth | {user.name}</title>
+			</Head>
+			<UserPublicProfileView user={user} />
+		</>
+	);
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
@@ -14,13 +29,12 @@ export const getServerSideProps: GetServerSideProps = async context => {
 		? queryAddress[0].toLowerCase()
 		: queryAddress.toLowerCase();
 	const { data: userData } = await client.query({
-		query: `${GET_USER_BY_ADDRESS}`,
+		query: GET_USER_BY_ADDRESS,
 		variables: {
 			address: address,
 		},
 	});
 	const user = userData?.userByAddress;
-	console.log('user', user);
 	return {
 		props: {
 			user,
