@@ -52,6 +52,7 @@ export default PublicProfileContributes;
 const PubliCProfileTabsAndProjectContianer = styled.div``;
 
 const PubliCProfileTabsContainer = styled(Row)`
+	padding-bottom: 37px;
 	gap: 16px;
 `;
 

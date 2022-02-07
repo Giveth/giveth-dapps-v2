@@ -1,6 +1,8 @@
 import { client } from '@/apollo/apolloClient';
 import { FETCH_USER_PROJECTS } from '@/apollo/gql/gqlUser';
+import { IUserProjects } from '@/apollo/types/gqlTypes';
 import { IProject } from '@/apollo/types/types';
+import ProjectCard from '@/components/project-card/ProjectCard';
 import {
 	brandColors,
 	Container,
@@ -10,13 +12,16 @@ import {
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Row } from '../../styled-components/Grid';
+import { ProjectsContainer } from '../projects/ProjectsIndex';
 import { IUserPublicProfileView } from './UserPublicProfile.view';
 
 const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({ user }) => {
+	const [loading, setLoading] = useState(false);
 	const [projects, setProjects] = useState<IProject[]>([]);
 	useEffect(() => {
 		if (!user) return;
 		const fetchUserProjects = async () => {
+			setLoading(true);
 			const { data: userProjects } = await client.query({
 				query: FETCH_USER_PROJECTS,
 				variables: {
@@ -26,12 +31,28 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({ user }) => {
 				},
 				fetchPolicy: 'network-only',
 			});
-			console.log('userProjects', userProjects);
+			setLoading(false);
+			if (userProjects?.projectsByUserId) {
+				const projectsByUserId: IUserProjects =
+					userProjects.projectsByUserId;
+				setProjects(projectsByUserId.projects);
+			}
 		};
 		fetchUserProjects();
-	}, []);
+	}, [user]);
 
-	return <div>Projects</div>;
+	console.log('projects', projects);
+
+	return (
+		<>
+			{loading && <div>Loading</div>}
+			<ProjectsContainer>
+				{projects.map(project => (
+					<ProjectCard key={project.id} project={project} />
+				))}
+			</ProjectsContainer>
+		</>
+	);
 };
 
 export default PublicProfileProjectsTab;
