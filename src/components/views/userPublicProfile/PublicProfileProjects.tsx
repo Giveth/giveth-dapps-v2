@@ -2,19 +2,11 @@ import { IUser } from '@/types/entities';
 import {
 	brandColors,
 	Container,
-	GLink,
-	H2,
-	H3,
-	H5,
-	IconCopy,
-	IconExternalLink,
 	neutralColors,
 	P,
-	Subline,
 } from '@giveth/ui-design-system';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
-import Image from 'next/image';
 import { Row } from '../../styled-components/Grid';
 
 interface IPublicProfileProjects {
