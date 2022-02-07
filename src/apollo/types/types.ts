@@ -70,6 +70,16 @@ export interface IDonation {
 	createdAt: string;
 }
 
+export interface IWalletDonation extends IDonation {
+	anonymous: boolean;
+	priceEth: number;
+	priceUsd: number;
+	project: IProject;
+	toWalletAddress: string;
+	valueEth: number;
+	valueUsd: number;
+}
+
 export interface IMediumBlogPost {
 	title: string;
 	author: string;
