@@ -1,4 +1,3 @@
-import { IUser } from '@/types/entities';
 import {
 	brandColors,
 	Container,
@@ -17,12 +16,13 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import { Row } from '../../styled-components/Grid';
 import PublicProfileContributes from './PublicProfileContributes';
+import { IUser } from '@/apollo/types/types';
 
-interface UserPublicProfileView {
+export interface IUserPublicProfileView {
 	user: IUser;
 }
 
-const UserPublicProfileView: FC<UserPublicProfileView> = ({ user }) => {
+const UserPublicProfileView: FC<IUserPublicProfileView> = ({ user }) => {
 	return (
 		<>
 			<PubliCProfileHeader>

@@ -1,4 +1,3 @@
-import { IUser } from '@/types/entities';
 import {
 	brandColors,
 	Container,
@@ -8,10 +7,8 @@ import {
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { Row } from '../../styled-components/Grid';
-
-interface IPublicProfileContributes {
-	user: IUser;
-}
+import PublicProfileProjectsTab from './PublicProfileProjectsTab';
+import { IUserPublicProfileView } from './UserPublicProfile.view';
 
 enum EPublicProfile {
 	PROJECTS,
@@ -19,7 +16,7 @@ enum EPublicProfile {
 	LIKED,
 }
 
-const PublicProfileContributes: FC<IPublicProfileContributes> = ({ user }) => {
+const PublicProfileContributes: FC<IUserPublicProfileView> = ({ user }) => {
 	const [tab, setTab] = useState(EPublicProfile.PROJECTS);
 	return (
 		<PubliCProfileTabsAndProjectContianer>
@@ -42,6 +39,9 @@ const PublicProfileContributes: FC<IPublicProfileContributes> = ({ user }) => {
 						Liked projects
 					</PubliCProfileTab>
 				</PubliCProfileTabsContainer>
+				{tab === EPublicProfile.PROJECTS && (
+					<PublicProfileProjectsTab user={user} />
+				)}
 			</Container>
 		</PubliCProfileTabsAndProjectContianer>
 	);
