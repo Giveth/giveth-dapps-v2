@@ -9,7 +9,7 @@ import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { Row } from '../../styled-components/Grid';
 
-interface IPublicProfileProjects {
+interface IPublicProfileContributes {
 	user: IUser;
 }
 
@@ -19,7 +19,7 @@ enum EPublicProfile {
 	LIKED,
 }
 
-const PublicProfileProjects: FC<IPublicProfileProjects> = ({ user }) => {
+const PublicProfileContributes: FC<IPublicProfileContributes> = ({ user }) => {
 	const [tab, setTab] = useState(EPublicProfile.PROJECTS);
 	return (
 		<PubliCProfileTabsAndProjectContianer>
@@ -47,7 +47,7 @@ const PublicProfileProjects: FC<IPublicProfileProjects> = ({ user }) => {
 	);
 };
 
-export default PublicProfileProjects;
+export default PublicProfileContributes;
 
 const PubliCProfileTabsAndProjectContianer = styled.div``;
 

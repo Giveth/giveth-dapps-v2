@@ -16,7 +16,7 @@ import { FC } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { Row } from '../../styled-components/Grid';
-import PublicProfileProjects from './PublicProfileProjects';
+import PublicProfileContributes from './PublicProfileContributes';
 
 interface UserPublicProfileView {
 	user: IUser;
@@ -87,7 +87,7 @@ const UserPublicProfileView: FC<UserPublicProfileView> = ({ user }) => {
 					</ContributeCardContainer>
 				</Container>
 			</UserContributeInfo>
-			<PublicProfileProjects user={user} />
+			<PublicProfileContributes user={user} />
 		</>
 	);
 };
