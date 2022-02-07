@@ -11,9 +11,8 @@ import {
 	OulineButton,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Shadow } from '../../styled-components/Shadow';
-
 import { useQuery } from '@apollo/client';
+
 import { BigArc } from '@/components/styled-components/Arc';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import SearchBox from '@/components/SearchBox';
@@ -26,6 +25,7 @@ import { ICategory, IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
 import { gqlEnums } from '@/apollo/types/gqlEnums';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
+import { Shadow } from '../../styled-components/Shadow';
 
 interface ISelectObj {
 	value: string;
@@ -197,15 +197,15 @@ const ProjectsIndex = () => {
 
 				{isLoading && <Loader className='dot-flashing' />}
 
-				<ProjectsContainer>
-					{filteredProjects.length > 0 ? (
-						filteredProjects.map(project => (
+				{filteredProjects.length > 0 ? (
+					<ProjectsContainer>
+						{filteredProjects.map(project => (
 							<ProjectCard key={project.id} project={project} />
-						))
-					) : (
-						<ProjectsNoResults trySearch={clearSearch} />
-					)}
-				</ProjectsContainer>
+						))}
+					</ProjectsContainer>
+				) : (
+					<ProjectsNoResults trySearch={clearSearch} />
+				)}
 
 				{showLoadMore && (
 					<>
@@ -245,11 +245,17 @@ const selectCustomStyles: StylesConfig = {
 		height: '38px',
 		margin: '4px auto',
 		borderRadius: '8px',
+		color: 'black',
 		backgroundColor: isSelected
-			? brandColors.pinky[400]
+			? neutralColors.gray[300]
 			: isFocused
 			? neutralColors.gray[200]
 			: neutralColors.gray[100],
+	}),
+	control: base => ({
+		...base,
+		border: 0,
+		boxShadow: 'none',
 	}),
 };
 
