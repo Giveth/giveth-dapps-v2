@@ -48,3 +48,40 @@ export const FETCH_USER_PROJECTS = gql`
 		}
 	}
 `;
+
+export const FETCH_USER_DONATIONS = gql`
+	query FetchUserProjects(
+		$take: Int
+		$skip: Int
+		$userId: Int!
+		$orderBy: SortField!
+		$direction: SortDirection!
+	) {
+		donationsByUserId(
+			take: $take
+			skip: $skip
+			orderBy: { field: $orderBy, direction: $direction }
+			userId: $userId
+		) {
+			donations {
+				id
+				transactionId
+				transactionNetworkId
+				toWalletAddress
+				fromWalletAddress
+				currency
+				anonymous
+				valueUsd
+				amount
+				user {
+					id
+				}
+				project {
+					id
+				}
+				createdAt
+			}
+			totalCount
+		}
+	}
+`;
