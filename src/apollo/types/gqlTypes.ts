@@ -1,4 +1,10 @@
-import { ICategory, IDonation, IProject, IProjectUpdate } from './types';
+import {
+	ICategory,
+	IDonation,
+	IProject,
+	IProjectUpdate,
+	IWalletDonation,
+} from './types';
 
 export interface IFetchAllProjects {
 	projects: IProject[];
@@ -21,6 +27,11 @@ export interface IDonationsByProjectId {
 
 export interface IUserProjects {
 	projects: IProject[];
+	totalCount: number;
+}
+
+export interface IUserDonations {
+	donations: IWalletDonation[];
 	totalCount: number;
 }
 
