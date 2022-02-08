@@ -54,6 +54,7 @@ const Input = styled.input`
 	border-width: 0;
 	height: 100%;
 	width: 100%;
+	font-size: 16px;
 	font-weight: inherit;
 	background: inherit;
 	font-family: inherit;
@@ -64,11 +65,12 @@ const Input = styled.input`
 
 	&::placeholder {
 		color: ${neutralColors.gray[500]};
+		font-size: 16px;
 	}
 `;
 
 const Wrapper = styled.div`
-	min-width: 343px;
+	min-width: 320px;
 	padding: 5px 16px;
 	display: flex;
 	align-items: center;
@@ -104,6 +106,8 @@ const Wrapper = styled.div`
 `;
 
 const ErrorMsg = styled(GLink)`
+	position: fixed;
+	margin-top: 4%;
 	color: ${semanticColors.punch[500]};
 `;
 

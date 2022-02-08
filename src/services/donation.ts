@@ -19,6 +19,7 @@ export async function saveDonation(
 	const saveDonationErrors = [];
 	let donationId: any = 0;
 	try {
+		console.log({ isAnonymous });
 		const { data } = await client.mutate({
 			mutation: SAVE_DONATION,
 			variables: {

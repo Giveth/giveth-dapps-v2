@@ -167,7 +167,12 @@ const TokenPicker = (props: {
 								style={{ margin: '0 16px 0 4px' }}
 							/>
 						)}
-						<P style={{ color: neutralColors.gray[900] }}>
+						<P
+							style={{
+								color: neutralColors.gray[900],
+								marginLeft: '-8px',
+							}}
+						>
 							{value ? `${value.label}` : 'Select a token'}
 						</P>
 					</TokenContainer>

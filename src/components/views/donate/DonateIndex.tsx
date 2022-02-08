@@ -231,7 +231,7 @@ const Right = styled.div`
 	padding: 65px 32px 32px;
 	border-top-right-radius: 16px;
 	border-bottom-right-radius: 16px;
-	height: 620px;
+	min-height: 620px;
 	h4 {
 		color: ${brandColors.deep[700]};
 		font-weight: bold;

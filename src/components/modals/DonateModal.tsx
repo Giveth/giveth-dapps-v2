@@ -48,6 +48,7 @@ interface IDonateModal extends IModal {
 	setUnconfirmed?: any;
 	setSuccessDonation?: any;
 	givBackEligible?: boolean;
+	anonymous?: boolean;
 }
 
 const DonateModal = ({
