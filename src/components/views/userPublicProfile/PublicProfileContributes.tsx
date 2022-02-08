@@ -8,6 +8,7 @@ import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { Row } from '../../styled-components/Grid';
 import PublicProfileDonationsTab from './PublicProfileDonationsTab';
+import PublicProfileLikedTab from './PublicProfileLikedTab';
 import PublicProfileProjectsTab from './PublicProfileProjectsTab';
 import { IUserPublicProfileView } from './UserPublicProfile.view';
 
@@ -45,6 +46,9 @@ const PublicProfileContributes: FC<IUserPublicProfileView> = ({ user }) => {
 				)}
 				{tab === EPublicProfile.DONATIONS && (
 					<PublicProfileDonationsTab user={user} />
+				)}
+				{tab === EPublicProfile.LIKED && (
+					<PublicProfileLikedTab user={user} />
 				)}
 			</Container>
 		</PubliCProfileTabsAndProjectContianer>

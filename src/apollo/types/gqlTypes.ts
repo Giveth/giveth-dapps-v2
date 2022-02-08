@@ -23,3 +23,8 @@ export interface IUserProjects {
 	projects: IProject[];
 	totalCount: number;
 }
+
+export interface IUserLikedProjects {
+	projects: IProject[];
+	totalCount: number;
+}
