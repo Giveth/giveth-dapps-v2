@@ -13,6 +13,8 @@ import {
 	brandColors,
 	GLink,
 } from '@giveth/ui-design-system';
+import FixedToast from '@/components/FixedToast';
+import CheckBox from '@/components/Checkbox';
 import WalletModal from '@/components/modals/WalletModal';
 import DonateModal from '@/components/modals/DonateModal';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
@@ -419,26 +421,29 @@ const CryptoDonation = (props: {
 							}
 						/>
 					</DropdownContainer>
-					<SearchBarContainer>
-						<InputBox
-							// onChange={a => {
-							//   setShowDonateModal(false)
-							//   setAmountTyped(a)
-							// }}}
-							type='number'
-							onChange={val => {
-								if (
-									parseFloat(val) !== 0 &&
-									parseFloat(val) < 0.001
-								) {
-									return;
-								}
-								const checkGIV = checkGIVTokenAvailability();
-								if (checkGIV) setAmountTyped(val);
-							}}
-							placeholder='Amount'
-						/>
-					</SearchBarContainer>
+					<InputBox
+						// onChange={a => {
+						//   setShowDonateModal(false)
+						//   setAmountTyped(a)
+						// }}}
+						errorHandler={{
+							condition: (value: any) =>
+								!isNaN(value) && value <= 0,
+							message: 'Set a valid amount',
+						}}
+						type='number'
+						onChange={val => {
+							if (
+								parseFloat(val) !== 0 &&
+								parseFloat(val) < 0.001
+							) {
+								return;
+							}
+							const checkGIV = checkGIVTokenAvailability();
+							if (checkGIV) setAmountTyped(val);
+						}}
+						placeholder='Amount'
+					/>
 				</SearchContainer>
 				<AvText>
 					{' '}
@@ -453,10 +458,31 @@ const CryptoDonation = (props: {
 					{tokenSymbol}
 				</AvText>
 			</InputContainer>
+			{!givBackEligible ? (
+				<FixedToast
+					message='This token is not eligible for GIVbacks.'
+					color={brandColors.mustard[600]}
+					backgroundColor={brandColors.mustard[200]}
+					href='/givbacks'
+				/>
+			) : (
+				<FixedToast
+					message='This token is eligible for GIVbacks.'
+					color={brandColors.giv[300]}
+					backgroundColor={brandColors.giv[100]}
+					href='/givbacks'
+				/>
+			)}
+			<CheckBox
+				key={1}
+				title={'Make it anonymous'}
+				checked={true}
+				onChange={() => null}
+			/>
 			{isEnabled && (
 				<MainButton
 					label='DONATE'
-					disabled={!amountTyped}
+					disabled={!amountTyped || parseInt(amountTyped) <= 0}
 					size='large'
 					onClick={() => {
 						if (selectedTokenBalance < amountTyped) {
@@ -489,6 +515,8 @@ const InputContainer = styled.div`
 const AvText = styled(GLink)`
 	color: ${brandColors.deep[500]};
 	padding: 4px 0 0 5px;
+	position: absolute;
+	margin: 56px 0 0 0;
 `;
 const SearchContainer = styled.div`
 	display: flex;
@@ -497,15 +525,6 @@ const SearchContainer = styled.div`
 const DropdownContainer = styled.div`
 	width: 35%;
 	height: 54px;
-`;
-const SearchBarContainer = styled.div`
-	height: 54px;
-	width: 65%;
-	border: 2px solid ${neutralColors.gray[300]};
-	border-radius: 0px 6px 6px 0px;
-	* {
-		width: 90%;
-	}
 `;
 const XDaiContainer = styled.div`
 	display: flex;

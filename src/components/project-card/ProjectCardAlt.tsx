@@ -19,7 +19,7 @@ const imgHeight = '200px';
 
 interface IProjectCard {
 	project: IProject;
-	noHearts: boolean;
+	noHearts?: boolean;
 }
 
 const ProjectCard = (props: IProjectCard) => {
