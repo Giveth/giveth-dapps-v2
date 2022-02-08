@@ -3,6 +3,7 @@ import { FETCH_USER_PROJECTS } from '@/apollo/gql/gqlUser';
 import { IUserProjects } from '@/apollo/types/gqlTypes';
 import { IProject } from '@/apollo/types/types';
 import ProjectCard from '@/components/project-card/ProjectCard';
+import { mediaQueries } from '@/lib/helpers';
 import {
 	brandColors,
 	Container,
@@ -12,7 +13,6 @@ import {
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Row } from '../../styled-components/Grid';
-import { ProjectsContainer } from '../projects/ProjectsIndex';
 import { IUserPublicProfileView } from './UserPublicProfile.view';
 
 const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({ user }) => {
@@ -56,3 +56,22 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({ user }) => {
 };
 
 export default PublicProfileProjectsTab;
+
+export const ProjectsContainer = styled(Container)`
+	display: grid;
+	gap: 25px;
+	margin-bottom: 64px;
+	padding: 0;
+
+	${mediaQueries['lg']} {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	${mediaQueries['xl']} {
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	${mediaQueries['xxl']} {
+		grid-template-columns: repeat(3, 1fr);
+	}
+`;
