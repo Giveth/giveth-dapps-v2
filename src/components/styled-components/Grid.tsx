@@ -45,8 +45,13 @@ export const Container = styled.div`
 	}
 `;
 
-export const FlexCenter = styled.div`
+interface IFlexCenter {
+	gap?: string;
+}
+
+export const FlexCenter = styled.div<IFlexCenter>`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	gap: ${props => props.gap};
 `;

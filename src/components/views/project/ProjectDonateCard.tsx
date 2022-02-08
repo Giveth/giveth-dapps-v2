@@ -5,13 +5,14 @@ import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import { Shadow } from '@/components/styled-components/Shadow';
 import CategoryBadge from '@/components/badges/CategoryBadge';
 import Routes from '@/lib/constants/Routes';
-import { slugToProjectDonate } from '@/lib/helpers';
+import { slugToProjectDonate, mediaQueries } from '@/lib/helpers';
 import InfoBadge from '@/components/badges/InfoBadge';
 import { IProjectBySlug } from '@/apollo/types/gqlTypes';
 import links from '@/lib/constants/links';
 import { Button, brandColors, GLink } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import useUser from '@/context/UserProvider';
+import ShareModal from '@/components/modals/ShareModal';
 
 const ProjectDonateCard = (props: IProjectBySlug) => {
 	const {
@@ -19,9 +20,10 @@ const ProjectDonateCard = (props: IProjectBySlug) => {
 	} = useUser();
 
 	const { project } = props;
-	const { categories, slug, reactions } = project;
+	const { categories, slug, reactions, description } = project;
 
-	const [heartedByUser, setHeartedByUser] = useState(false);
+	const [heartedByUser, setHeartedByUser] = useState<boolean>(false);
+	const [showModal, setShowModal] = useState<boolean>(false);
 
 	const isCategories = categories.length > 0;
 
@@ -37,40 +39,53 @@ const ProjectDonateCard = (props: IProjectBySlug) => {
 	}, [reactions, user]);
 
 	return (
-		<Wrapper>
-			<DonateButton
-				onClick={() => router.push(slugToProjectDonate(slug))}
-				label='DONATE'
-			></DonateButton>
-			<BadgeWrapper>
-				<ShareLikeBadge type='share' />
-				<ShareLikeBadge type='like' active={heartedByUser} />
-			</BadgeWrapper>
-			<GivBackNotif>
-				<GLink size='Medium' color={brandColors.giv[300]}>
-					When you donate to verified projects, you get GIV back.
-				</GLink>
-				<InfoBadge />
-			</GivBackNotif>
-			{isCategories && (
-				<CategoryWrapper>
-					{categories.map(i => (
-						<CategoryBadge key={i.name} category={i} />
-					))}
-				</CategoryWrapper>
+		<>
+			{showModal && (
+				<ShareModal
+					showModal={showModal}
+					setShowModal={setShowModal}
+					projectHref={slug}
+					projectDescription={description}
+				/>
 			)}
-			<Link href={Routes.Projects} passHref>
-				<Links>View similar projects</Links>
-			</Link>
-			<br />
-			<Links
-				target='_blank'
-				href={links.REPORT_ISSUE}
-				rel='noreferrer noopener'
-			>
-				Report an issue
-			</Links>
-		</Wrapper>
+			<Wrapper>
+				<DonateButton
+					onClick={() => router.push(slugToProjectDonate(slug))}
+					label='DONATE'
+				></DonateButton>
+				<BadgeWrapper>
+					<ShareLikeBadge
+						type='share'
+						onClick={() => setShowModal(true)}
+					/>
+					<ShareLikeBadge type='like' active={heartedByUser} />
+				</BadgeWrapper>
+				<GivBackNotif>
+					<GLink size='Medium' color={brandColors.giv[300]}>
+						When you donate to verified projects, you get GIV back.
+					</GLink>
+					<InfoBadge />
+				</GivBackNotif>
+				{isCategories && (
+					<CategoryWrapper>
+						{categories.map(i => (
+							<CategoryBadge key={i.name} category={i} />
+						))}
+					</CategoryWrapper>
+				)}
+				<Link href={Routes.Projects} passHref>
+					<Links>View similar projects</Links>
+				</Link>
+				<br />
+				<Links
+					target='_blank'
+					href={links.REPORT_ISSUE}
+					rel='noreferrer noopener'
+				>
+					Report an issue
+				</Links>
+			</Wrapper>
+		</>
 	);
 };
 
@@ -119,6 +134,14 @@ const Wrapper = styled.div`
 	position: relative;
 	box-shadow: ${Shadow.Neutral['400']};
 	flex-shrink: 0;
+	z-index: 20;
+
+	${mediaQueries['xl']} {
+		position: sticky;
+		position: -webkit-sticky;
+		align-self: flex-start;
+		top: 168px;
+	}
 `;
 
 const DonateButton = styled(Button)`
