@@ -32,6 +32,7 @@ export const FETCH_USER_PROJECTS = gql`
 				impactLocation
 				listed
 				givingBlocksId
+				totalDonations
 				categories {
 					name
 				}

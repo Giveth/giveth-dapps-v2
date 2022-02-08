@@ -122,6 +122,7 @@ export const FETCH_USER_LIKED_PROJECTS = gql`
 				impactLocation
 				listed
 				givingBlocksId
+				totalDonations
 				categories {
 					name
 				}
