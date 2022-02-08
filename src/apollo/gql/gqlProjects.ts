@@ -106,3 +106,37 @@ export const FETCH_PROJECT_UPDATES = gql`
 		}
 	}
 `;
+
+export const UPLOAD_IMAGE = gql`
+	mutation ($imageUpload: ImageUpload!) {
+		uploadImage(imageUpload: $imageUpload) {
+			url
+			projectId
+			projectImageId
+		}
+	}
+`;
+
+export const WALLET_ADDRESS_IS_VALID = gql`
+	query WalletAddressIsValid($address: String!) {
+		walletAddressIsValid(address: $address)
+	}
+`;
+
+export const ADD_PROJECT = gql`
+	mutation ($project: ProjectInput!) {
+		addProject(project: $project) {
+			id
+			title
+			description
+			admin
+			image
+			impactLocation
+			slug
+			walletAddress
+			categories {
+				name
+			}
+		}
+	}
+`;

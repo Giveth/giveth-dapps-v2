@@ -1,10 +1,10 @@
-import React, { FC, useState, useContext, useEffect } from 'react';
-import { Modal, IModal } from './Modal';
+import React, { FC, useEffect, useState } from 'react';
+import { IModal, Modal } from './Modal';
 import {
-	neutralColors,
 	Button,
-	OulineButton,
 	H4,
+	neutralColors,
+	OulineButton,
 } from '@giveth/ui-design-system';
 import { Row } from '../styled-components/Grid';
 import styled from 'styled-components';
@@ -18,25 +18,18 @@ import {
 	wrapToken,
 } from '@/lib/stakingPool';
 import Lottie from 'react-lottie';
-import LoadingAnimation from '@/animations/loading.json';
-import { SubmittedInnerModal, ConfirmedInnerModal } from './ConfirmSubmit';
+import LoadingAnimation from '../../animations/loading.json';
+import {
+	ConfirmedInnerModal,
+	ErrorInnerModal,
+	SubmittedInnerModal,
+} from './ConfirmSubmit';
 import { useWeb3React } from '@web3-react/core';
+import { StakeState } from '@/lib/staking';
 
 interface IStakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
 	maxAmount: BigNumber;
-}
-
-enum StakeStates {
-	UNKNOWN = 'UNKNOWN',
-	APPROVE = 'APPROVE',
-	APPROVING = 'APPROVING',
-	WRAP = 'WRAP',
-	WRAPPING = 'WRAPPING',
-	STAKE = 'STAKE',
-	STAKING = 'STAKING',
-	SUBMITTED = 'SUBMITTED',
-	CONFIRMED = 'CONFIRMED',
 }
 
 const loadingAnimationOptions = {
@@ -56,7 +49,9 @@ export const StakeModal: FC<IStakeModalProps> = ({
 }) => {
 	const [amount, setAmount] = useState('0');
 	const [txHash, setTxHash] = useState('');
-	const [stakeState, setStakeState] = useState(StakeStates.UNKNOWN);
+	const [stakeState, setStakeState] = useState<StakeState>(
+		StakeState.UNKNOWN,
+	);
 	const { chainId, library } = useWeb3React();
 
 	const { title, LM_ADDRESS, POOL_ADDRESS, GARDEN_ADDRESS } =
@@ -64,15 +59,15 @@ export const StakeModal: FC<IStakeModalProps> = ({
 
 	useEffect(() => {
 		if (GARDEN_ADDRESS) {
-			setStakeState(StakeStates.APPROVE);
+			setStakeState(StakeState.APPROVE);
 		} else {
-			setStakeState(StakeStates.STAKE);
+			setStakeState(StakeState.STAKE);
 		}
 	}, [GARDEN_ADDRESS]);
 
 	useEffect(() => {
-		if (stakeState == StakeStates.WRAP) {
-			setStakeState(StakeStates.APPROVE);
+		if (stakeState == StakeState.WRAP) {
+			setStakeState(StakeState.APPROVE);
 		}
 	}, [amount]);
 
@@ -87,7 +82,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 			return;
 		}
 
-		setStakeState(StakeStates.APPROVING);
+		setStakeState(StakeState.APPROVING);
 
 		const signer = library.getSigner();
 
@@ -102,61 +97,74 @@ export const StakeModal: FC<IStakeModalProps> = ({
 		);
 
 		if (isApproved) {
-			setStakeState(StakeStates.WRAP);
+			setStakeState(StakeState.WRAP);
 		} else {
-			setStakeState(StakeStates.APPROVE);
+			setStakeState(StakeState.APPROVE);
 		}
 	};
 
-	const onStake = () => {
-		setStakeState(StakeStates.STAKING);
-		stakeTokens(amount, POOL_ADDRESS, LM_ADDRESS, library)
-			.then(txResponse => {
-				if (txResponse) {
-					setTxHash(txResponse.hash);
-					setStakeState(StakeStates.SUBMITTED);
-					txResponse.wait().then(data => {
-						setStakeState(StakeStates.CONFIRMED);
-					});
-				} else {
-					setStakeState(StakeStates.STAKE);
-				}
-			})
-			.catch(err => {
-				setStakeState(StakeStates.STAKE);
-			});
+	const onStake = async () => {
+		setStakeState(StakeState.STAKING);
+		try {
+			const txResponse = await stakeTokens(
+				amount,
+				POOL_ADDRESS,
+				LM_ADDRESS,
+				library,
+			);
+			if (txResponse) {
+				setTxHash(txResponse.hash);
+				setStakeState(StakeState.CONFIRMING);
+				const { status } = await txResponse.wait();
+				setStakeState(status ? StakeState.CONFIRMED : StakeState.ERROR);
+			} else {
+				setStakeState(StakeState.STAKE);
+			}
+		} catch (err: any) {
+			setStakeState(
+				err?.code === 4001 ? StakeState.STAKE : StakeState.ERROR,
+			);
+		}
 	};
 
-	const onWrap = () => {
+	const onWrap = async () => {
 		if (!GARDEN_ADDRESS) {
 			console.error('GARDEN_ADDRESS is null');
 			return;
 		}
-		setStakeState(StakeStates.WRAPPING);
-		wrapToken(amount, POOL_ADDRESS, GARDEN_ADDRESS, library)
-			.then(txResponse => {
+		setStakeState(StakeState.WRAPPING);
+		try {
+			const txResponse = await wrapToken(
+				amount,
+				POOL_ADDRESS,
+				GARDEN_ADDRESS,
+				library,
+			);
+			if (txResponse) {
+				setTxHash(txResponse.hash);
+				setStakeState(StakeState.CONFIRMING);
 				if (txResponse) {
-					setTxHash(txResponse.hash);
-					setStakeState(StakeStates.SUBMITTED);
-					if (txResponse) {
-						txResponse.wait().then(data => {
-							setStakeState(StakeStates.CONFIRMED);
-						});
-					}
-				} else {
-					setStakeState(StakeStates.WRAP);
+					const { status } = await txResponse.wait();
+					setStakeState(
+						status ? StakeState.CONFIRMED : StakeState.ERROR,
+					);
 				}
-			})
-			.catch(err => {
-				setStakeState(StakeStates.WRAP);
-			});
+			} else {
+				setStakeState(StakeState.WRAP);
+			}
+		} catch (err: any) {
+			setStakeState(
+				err?.code === 4001 ? StakeState.WRAP : StakeState.ERROR,
+			);
+		}
 	};
 
 	return (
 		<Modal showModal={showModal} setShowModal={setShowModal}>
 			<StakeModalContainer>
-				{stakeState !== StakeStates.SUBMITTED &&
-					stakeState !== StakeStates.CONFIRMED && (
+				{stakeState !== StakeState.CONFIRMING &&
+					stakeState !== StakeState.CONFIRMED &&
+					stakeState !== StakeState.ERROR && (
 						<>
 							<StakeModalTitle alignItems='center'>
 								<StakingPoolImages title={title} />
@@ -171,13 +179,12 @@ export const StakeModal: FC<IStakeModalProps> = ({
 									poolStakingConfig={poolStakingConfig}
 									disabled={
 										!(
-											stakeState ===
-												StakeStates.APPROVE ||
-											stakeState === StakeStates.STAKE
+											stakeState === StakeState.APPROVE ||
+											stakeState === StakeState.STAKE
 										)
 									}
 								/>
-								{stakeState === StakeStates.APPROVE && (
+								{stakeState === StakeState.APPROVE && (
 									<ApproveButton
 										label={'APPROVE'}
 										onClick={onApprove}
@@ -187,7 +194,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 										}
 									/>
 								)}
-								{stakeState === StakeStates.APPROVING && (
+								{stakeState === StakeState.APPROVING && (
 									<Pending>
 										<Lottie
 											options={loadingAnimationOptions}
@@ -197,7 +204,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 										&nbsp;APPROVE PENDING
 									</Pending>
 								)}
-								{stakeState === StakeStates.WRAP && (
+								{stakeState === StakeState.WRAP && (
 									<ConfirmButton
 										label={'STAKE'}
 										onClick={onWrap}
@@ -208,7 +215,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 										buttonType='primary'
 									/>
 								)}
-								{stakeState === StakeStates.WRAPPING && (
+								{stakeState === StakeState.WRAPPING && (
 									<Pending>
 										<Lottie
 											options={loadingAnimationOptions}
@@ -218,7 +225,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 										&nbsp;STAKE PENDING
 									</Pending>
 								)}
-								{stakeState === StakeStates.STAKE && (
+								{stakeState === StakeState.STAKE && (
 									<ConfirmButton
 										label={'STAKE'}
 										onClick={onStake}
@@ -229,7 +236,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 										buttonType='primary'
 									/>
 								)}
-								{stakeState === StakeStates.STAKING && (
+								{stakeState === StakeState.STAKING && (
 									<Pending>
 										<Lottie
 											options={loadingAnimationOptions}
@@ -249,16 +256,23 @@ export const StakeModal: FC<IStakeModalProps> = ({
 							</InnerModal>
 						</>
 					)}
-				{chainId && stakeState === StakeStates.SUBMITTED && (
+				{chainId && stakeState === StakeState.CONFIRMING && (
 					<SubmittedInnerModal
 						title={title}
 						walletNetwork={chainId}
 						txHash={txHash}
 					/>
 				)}
-				{chainId && stakeState === StakeStates.CONFIRMED && (
+				{chainId && stakeState === StakeState.CONFIRMED && (
 					<ConfirmedInnerModal
 						title={title}
+						walletNetwork={chainId}
+						txHash={txHash}
+					/>
+				)}
+				{chainId && stakeState === StakeState.ERROR && (
+					<ErrorInnerModal
+						title='Something went wrong!'
 						walletNetwork={chainId}
 						txHash={txHash}
 					/>
@@ -270,7 +284,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 
 const StakeModalContainer = styled.div`
 	width: 370px;
-	padding: 0 0 24px;
+	padding: 24px 0;
 `;
 
 const StakeModalTitle = styled(Row)`

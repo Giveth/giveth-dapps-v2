@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import Select from 'react-select';
+import Select, { StylesConfig } from 'react-select';
 import Debounced from 'lodash.debounce';
 import { useRouter } from 'next/router';
 import {
@@ -7,17 +7,18 @@ import {
 	P,
 	neutralColors,
 	Subline,
-	H5,
+	H3,
 	OulineButton,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { Shadow } from '../../styled-components/Shadow';
 
 import { useQuery } from '@apollo/client';
 import { BigArc } from '@/components/styled-components/Arc';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import SearchBox from '@/components/SearchBox';
 import Routes from '@/lib/constants/Routes';
-import { capitalizeFirstLetter } from '@/lib/helpers';
+import { capitalizeFirstLetter, mediaQueries } from '@/lib/helpers';
 import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { initializeApollo } from '@/apollo/apolloClient';
@@ -160,15 +161,14 @@ const ProjectsIndex = () => {
 		<>
 			<BigArc />
 			<Wrapper>
-				<Title>
-					Explore <span>{_totalCount} Projects</span>
-				</Title>
+				<Title weight={700}>Projects</Title>
 
 				<FiltersSection>
 					<SelectComponent>
 						<Label>CATEGORY</Label>
 						<Select
 							classNamePrefix='select'
+							styles={selectCustomStyles}
 							value={selectedCategory}
 							onChange={e => handleChange('category', e)}
 							options={categoriesObj}
@@ -178,12 +178,13 @@ const ProjectsIndex = () => {
 						<Label>SORT BY</Label>
 						<Select
 							classNamePrefix='select'
+							styles={selectCustomStyles}
 							value={sortBy}
 							onChange={e => handleChange('sortBy', e)}
 							options={sortByObj}
 						/>
 					</SelectComponent>
-					<div>
+					<SearchComponent>
 						<Label />
 						<SearchBox
 							onChange={(e: string) => handleChange('search', e)}
@@ -191,7 +192,7 @@ const ProjectsIndex = () => {
 							placeholder='Search Projects ...'
 							value={searchValue}
 						/>
-					</div>
+					</SearchComponent>
 				</FiltersSection>
 
 				{isLoading && <Loader className='dot-flashing' />}
@@ -231,6 +232,27 @@ const ProjectsIndex = () => {
 	);
 };
 
+const selectCustomStyles: StylesConfig = {
+	menu: styles => ({
+		...styles,
+		border: '0px',
+		borderRadius: '8px',
+		boxShadow: Shadow.Neutral[500],
+	}),
+	option: (styles, { isFocused, isSelected }) => ({
+		...styles,
+		width: '95%',
+		height: '38px',
+		margin: '4px auto',
+		borderRadius: '8px',
+		backgroundColor: isSelected
+			? brandColors.pinky[400]
+			: isFocused
+			? neutralColors.gray[200]
+			: neutralColors.gray[100],
+	}),
+};
+
 const Loader = styled.div`
 	margin: 20px auto;
 `;
@@ -249,7 +271,15 @@ const StyledButton = styled(OulineButton)<{ transparent?: boolean }>`
 `;
 
 const SelectComponent = styled(P)`
-	width: 343px;
+	width: calc(50% - 8px);
+
+	${mediaQueries['xl']} {
+		width: 345px;
+	}
+`;
+
+const SearchComponent = styled.div`
+	flex-grow: 1;
 `;
 
 const LoadingDotIcon = styled.div`
@@ -276,27 +306,29 @@ const FiltersSection = styled.div`
 `;
 
 const ProjectsContainer = styled.div`
-	display: flex;
-	flex-wrap: wrap;
-	gap: 26px 23px;
+	display: grid;
+	gap: 25px;
 	margin-bottom: 64px;
+
+	${mediaQueries['lg']} {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	${mediaQueries['xl']} {
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	${mediaQueries['xxl']} {
+		grid-template-columns: repeat(4, 1fr);
+	}
 `;
 
 const Wrapper = styled.div`
 	padding: 166px 30px 4px 30px;
 `;
 
-const LoadingIconContainer = styled.div`
-	margin: 12px auto;
-`;
-
-const Title = styled(H5)`
-	font-weight: 700;
+const Title = styled(H3)`
 	margin-bottom: 25px;
-
-	span {
-		color: ${neutralColors.gray[700]};
-	}
 `;
 
 export default ProjectsIndex;

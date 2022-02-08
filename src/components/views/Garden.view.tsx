@@ -5,8 +5,8 @@ import Tabs from '../Tabs';
 function GIVgardenView() {
 	return (
 		<>
-			<TabGardenTop />
 			<Tabs />
+			<TabGardenTop />
 			<TabGardenBottom />
 		</>
 	);

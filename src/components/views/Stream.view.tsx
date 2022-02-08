@@ -5,8 +5,8 @@ import Tabs from '../Tabs';
 function GIVstreamView() {
 	return (
 		<>
-			<TabGIVstreamTop />
 			<Tabs />
+			<TabGIVstreamTop />
 			<TabGIVstreamBottom />
 		</>
 	);

@@ -93,13 +93,5 @@ const SocialItem = styled.div`
 	border: ${(props: { isSuccess: boolean }) =>
 		props.isSuccess ? `1px solid ${neutralColors.gray[400]}` : 'none'};
 `;
-const TitleBox = styled.div`
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	cursor: pointer !important;
-	margin-bottom: 26px;
-	min-width: 400px;
-`;
 
 export default SocialBox;

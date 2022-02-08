@@ -18,7 +18,11 @@ import { useTokenDistro } from '@/context/tokenDistro.context';
 import { harvestTokens } from '@/lib/stakingPool';
 import { claimUnstakeStake } from '@/lib/stakingNFT';
 import { useLiquidityPositions } from '@/context';
-import { ConfirmedInnerModal, SubmittedInnerModal } from './ConfirmSubmit';
+import {
+	ConfirmedInnerModal,
+	ErrorInnerModal,
+	SubmittedInnerModal,
+} from './ConfirmSubmit';
 import {
 	CancelButton,
 	GIVRate,
@@ -63,10 +67,11 @@ const loadingAnimationOptions = {
 };
 
 enum HarvestStates {
-	HARVEST = 'HARVEST',
-	HARVESTING = 'HARVESTING',
-	SUBMITTED = 'SUBMITTED',
-	CONFIRMED = 'CONFIRMED',
+	HARVEST,
+	HARVESTING,
+	SUBMITTED,
+	CONFIRMED,
+	ERROR,
 }
 
 export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
@@ -77,7 +82,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	claimable,
 	network,
 }) => {
-	const [state, setState] = useState(HarvestStates.HARVEST);
+	const [state, setState] = useState<HarvestStates>(HarvestStates.HARVEST);
 	const {
 		currentValues: { balances },
 	} = useSubgraph();
@@ -137,65 +142,74 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 		}
 	}, [account, network, balances, tokenDistroHelper]);
 
-	const onHarvest = () => {
+	const onHarvest = async () => {
 		if (!library || !account) return;
 		setState(HarvestStates.HARVESTING);
-		if (poolStakingConfig) {
-			if (
-				poolStakingConfig.hasOwnProperty(
-					'NFT_POSITIONS_MANAGER_ADDRESS',
-				)
-			) {
-				//NFT Harvest
-				claimUnstakeStake(
-					account,
-					library,
-					currentIncentive,
-					stakedPositions,
-				)
-					.then(res => {
-						setState(HarvestStates.CONFIRMED);
-					})
-					.catch(err => {
-						setState(HarvestStates.HARVEST);
-					});
-			} else {
-				// LP Harvest
-				harvestTokens(poolStakingConfig.LM_ADDRESS, library)
-					.then(txResponse => {
-						if (txResponse) {
-							setState(HarvestStates.SUBMITTED);
-							setTxHash(txResponse.hash);
-							txResponse.wait().then(data => {
-								setState(HarvestStates.CONFIRMED);
-							});
-						} else {
-							setState(HarvestStates.HARVEST);
-						}
-					})
-					.catch(err => {
-						setState(HarvestStates.HARVEST);
-					});
-			}
-		} else {
-			claimReward(
-				config.NETWORKS_CONFIG[network]?.TOKEN_DISTRO_ADDRESS,
-				library,
-			)
-				.then(txResponse => {
+		try {
+			if (poolStakingConfig) {
+				if (
+					poolStakingConfig.hasOwnProperty(
+						'NFT_POSITIONS_MANAGER_ADDRESS',
+					)
+				) {
+					//NFT Harvest
+					const txResponse = await claimUnstakeStake(
+						account,
+						library,
+						currentIncentive,
+						stakedPositions,
+					);
 					if (txResponse) {
-						setState(HarvestStates.SUBMITTED);
-						setTxHash(txResponse.hash);
-						txResponse.wait().then(data => {
-							setState(HarvestStates.CONFIRMED);
-						});
+						const { status } = await txResponse.wait();
+						setState(
+							status
+								? HarvestStates.CONFIRMED
+								: HarvestStates.ERROR,
+						);
 					} else {
 						setState(HarvestStates.HARVEST);
 					}
-				})
-				.catch(err => {
+				} else {
+					// LP Harvest
+					const txResponse = await harvestTokens(
+						poolStakingConfig.LM_ADDRESS,
+						library,
+					);
+					if (txResponse) {
+						setState(HarvestStates.SUBMITTED);
+						setTxHash(txResponse.hash);
+						const { status } = await txResponse.wait();
+						setState(
+							status
+								? HarvestStates.CONFIRMED
+								: HarvestStates.ERROR,
+						);
+					} else {
+						setState(HarvestStates.HARVEST);
+					}
+				}
+			} else {
+				const txResponse = await claimReward(
+					config.NETWORKS_CONFIG[network]?.TOKEN_DISTRO_ADDRESS,
+					library,
+				);
+				if (txResponse) {
+					setState(HarvestStates.SUBMITTED);
+					setTxHash(txResponse.hash);
+					const { status } = await txResponse.wait();
+					setState(
+						status ? HarvestStates.CONFIRMED : HarvestStates.ERROR,
+					);
+				} else {
 					setState(HarvestStates.HARVEST);
-				});
+				}
+			}
+		} catch (error: any) {
+			setState(
+				error?.code === 4001
+					? HarvestStates.HARVEST
+					: HarvestStates.ERROR,
+			);
 		}
 	};
 
@@ -456,6 +470,15 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 					<HarvestAllModalContainer>
 						<ConfirmedInnerModal
 							title={title}
+							walletNetwork={network}
+							txHash={txHash}
+						/>
+					</HarvestAllModalContainer>
+				)}
+				{state === HarvestStates.ERROR && (
+					<HarvestAllModalContainer>
+						<ErrorInnerModal
+							title='Something went wrong!'
 							walletNetwork={network}
 							txHash={txHash}
 						/>

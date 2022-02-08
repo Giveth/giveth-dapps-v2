@@ -80,7 +80,7 @@ export const RewardCard: FC<IRewardCardProps> = ({
 									<IconEthereum size={16} />
 								)}
 								{network === config.XDAI_NETWORK_NUMBER && (
-									<IconXDAI size={16} />
+									<IconXDAI size={16} fill={false} />
 								)}
 								<ChainName styleType='Small'>
 									{network === config.MAINNET_NETWORK_NUMBER

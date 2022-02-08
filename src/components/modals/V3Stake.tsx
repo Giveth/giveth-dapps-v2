@@ -1,26 +1,26 @@
 import { FC, useState } from 'react';
-import { Modal, IModal } from './Modal';
+import { IModal, Modal } from './Modal';
 import {
-	neutralColors,
+	B,
 	brandColors,
 	Button,
 	Caption,
 	H4,
-	Overline,
-	B,
-	IconHelp,
 	IconGIVStream,
+	IconHelp,
 	Lead,
+	neutralColors,
+	Overline,
 } from '@giveth/ui-design-system';
 import {
 	CancelButton,
+	GIVRate,
 	HarvestButton,
 	HelpRow,
 	Pending,
 	RateRow,
-	GIVRate,
-	TooltipContent,
 	StyledScrollbars,
+	TooltipContent,
 } from './HarvestAll.sc';
 import Lottie from 'react-lottie';
 import { Row } from '../styled-components/Grid';
@@ -32,18 +32,19 @@ import { useLiquidityPositions, useSubgraph } from '@/context';
 import { GIVBoxWithPrice } from '../GIVBoxWithPrice';
 import { IconWithTooltip } from '../IconWithToolTip';
 import LoadingAnimation from '@/animations/loading.json';
-import { transfer, exit, getReward } from '@/lib/stakingNFT';
-import { ethers, BigNumber, constants, utils } from 'ethers';
+import { exit, getReward, transfer } from '@/lib/stakingNFT';
+import { BigNumber, constants } from 'ethers';
 import {
 	ConfirmedInnerModal,
-	SubmittedInnerModal,
 	ErrorInnerModal,
+	SubmittedInnerModal,
 } from './ConfirmSubmit';
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import { formatWeiHelper } from '@/helpers/number';
 import { getUniswapV3StakerContract } from '@/lib/contracts';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { useWeb3React } from '@web3-react/core';
+import { StakeState } from '@/lib/staking';
 
 const loadingAnimationOptions = {
 	loop: true,
@@ -53,17 +54,6 @@ const loadingAnimationOptions = {
 		preserveAspectRatio: 'xMidYMid slice',
 	},
 };
-
-export enum StakeState {
-	UNKNOWN,
-	UNSTAKING,
-	CONFIRM_UNSTAKE,
-	CONFIRMING,
-	CONFIRMED,
-	REJECT,
-	SUBMITTING,
-	ERROR,
-}
 
 interface IV3StakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
@@ -325,8 +315,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 };
 
 const StakeModalContainer = styled.div`
-	padding: 0 0 24px;
-	margin-top: -12px;
+	padding: 24px 0;
 `;
 
 const StakeModalTitle = styled(Row)`

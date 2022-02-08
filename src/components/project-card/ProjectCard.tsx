@@ -112,18 +112,6 @@ const HoverButtons = styled.div`
 		width: 100%;
 	}
 `;
-const NoImg = styled.div`
-	background: ${noImgColor};
-	width: 100%;
-	height: 100%;
-	border-radius: ${cardRadius} ${cardRadius} 0 0;
-	background-image: url(${noImgIcon});
-`;
-const Img = styled.img`
-	border-radius: ${cardRadius} ${cardRadius} 0 0;
-	width: ${cardWidth};
-	height: auto;
-`;
 
 const Captions = styled.div`
 	display: flex;
@@ -179,7 +167,7 @@ const Wrapper2 = styled.div`
 const Wrapper = styled.div`
 	position: relative;
 	height: 430px;
-	width: 440px;
+	width: 100%;
 	border-radius: ${cardRadius};
 	background: white;
 `;

@@ -20,10 +20,11 @@ import {
 	CreateProject,
 	SmallCreateProject,
 	Logo,
+	BackBtn,
 	MenuAndButtonContainer,
 	CoverLine,
-	SmallHeaderLinks,
-	HeaderPlaceholder,
+	MBContainer,
+	HeaderSmallMenuAndButtonContainer,
 } from './Header.sc';
 import Link from 'next/link';
 import { useSubgraph } from '@/context/subgraph.context';
@@ -36,6 +37,14 @@ import MenuWallet from '@/components/menu/MenuWallet';
 import { ETheme, useGeneral } from '@/context/general.context';
 import { useRouter } from 'next/router';
 import { menuRoutes } from '../menu/MenuRoutes';
+import { GLink, IconMenu24 } from '@giveth/ui-design-system';
+import { HeaderSmallMenu } from '../menu/HeaderMenu';
+import useUser from '@/context/UserProvider';
+import {
+	checkLinkActive,
+	isGivEconomyRoute,
+	shortenAddress,
+} from '@/lib/helpers';
 
 export interface IHeader {
 	theme?: ThemeType;
@@ -46,15 +55,22 @@ const Header: FC<IHeader> = () => {
 	const [showRewardMenu, setShowRewardMenu] = useState(false);
 	const [showUserMenu, setShowUserMenu] = useState(false);
 	const [showHeader, setShowHeader] = useState(true);
+	const [showSmallMenu, setShowSmallMenu] = useState(false);
 	const [showWalletModal, setShowWalletModal] = useState(false);
 	const [showSigninModal, setShowSigninModal] = useState(false);
-	const [isGIVconomyRoute, setIsGIVconomyRoute] = useState(false);
+	const [isGIVeconomyRoute, setIsGIVeconomyRoute] = useState(false);
+	const [isCreateRoute, setIsCreateRoute] = useState(false);
 	const {
 		currentValues: { balances },
 	} = useSubgraph();
+	const {
+		state: { user },
+	} = useUser();
 	const { chainId, active, activate, account, library } = useWeb3React();
 	const { theme } = useGeneral();
 	const router = useRouter();
+
+	const showLinks = !isCreateRoute;
 
 	const handleHoverClickBalance = (show: boolean) => {
 		setShowRewardMenu(show);
@@ -85,6 +101,7 @@ const Header: FC<IHeader> = () => {
 			setShowHeader(show);
 			if (!show) {
 				setShowRewardMenu(false);
+				setShowUserMenu(false);
 			}
 			lastScrollY = scrollY > 0 ? scrollY : 0;
 			ticking = false;
@@ -103,7 +120,8 @@ const Header: FC<IHeader> = () => {
 	}, [showHeader]);
 
 	useEffect(() => {
-		setIsGIVconomyRoute(router.route.startsWith('/giv'));
+		setIsGIVeconomyRoute(router.route.startsWith('/giv'));
+		setIsCreateRoute(router.route.startsWith('/create'));
 	}, [router.route]);
 
 	return (
@@ -116,45 +134,58 @@ const Header: FC<IHeader> = () => {
 				show={showHeader}
 			>
 				<Row>
-					<Logo>
-						<Image
-							width='48p'
-							height='48px'
-							alt='Giveth logo'
-							src={`/images/logo/logo1.png`}
-						/>
-					</Logo>
-					<SmallHeaderLinks>
-						{/* <IconMenu24 /> */}
-						<Link href='/' passHref>
-							<HeaderLink size='Big'>GIVeconomy</HeaderLink>
-						</Link>
-					</SmallHeaderLinks>
+					{isCreateRoute ? (
+						<BackBtn onClick={() => router.back()}>
+							<Logo>
+								<Image
+									width='26px'
+									height='26px'
+									alt='Giveth logo'
+									src={`/images/back-2.svg`}
+								/>{' '}
+							</Logo>
+						</BackBtn>
+					) : (
+						<Logo>
+							<Image
+								width='48px'
+								height='48px'
+								alt='Giveth logo'
+								src={`/images/logo/logo1.png`}
+							/>
+						</Logo>
+					)}
 				</Row>
-				<HeaderLinks theme={theme}>
-					{menuRoutes.map((link, index) => (
-						<Link href={link.href} passHref key={index}>
-							<HeaderLink
-								size='Big'
-								theme={theme}
-								active={router.route === link.href}
-							>
-								{link.title}
-							</HeaderLink>
-						</Link>
-					))}
-				</HeaderLinks>
+				{showLinks && (
+					<HeaderLinks theme={theme}>
+						{menuRoutes.map((link, index) => (
+							<Link href={link.href} passHref key={index}>
+								<HeaderLink
+									size='Big'
+									theme={theme}
+									active={router.route === link.href}
+								>
+									{link.title}
+								</HeaderLink>
+							</Link>
+						))}
+					</HeaderLinks>
+				)}
+
 				<Row gap='8px'>
-					<Link href='/terms' passHref>
+					<Link href='/create' passHref>
 						<CreateProject
 							label='CREATE A PROJECT'
+							size='small'
+							theme={theme}
 							linkType={
 								theme === ETheme.Light ? 'primary' : 'secondary'
 							}
 						/>
 					</Link>
-					<Link href='/terms' passHref>
+					<Link href='/create' passHref>
 						<SmallCreateProject
+							theme={theme}
 							label=''
 							icon={
 								<Image
@@ -188,7 +219,7 @@ const Header: FC<IHeader> = () => {
 											width={'24px'}
 											height={'24px'}
 										/>
-										<HBContent>
+										<HBContent size='Big'>
 											{formatWeiHelper(balances.balance)}
 										</HBContent>
 									</HBContainer>
@@ -212,14 +243,11 @@ const Header: FC<IHeader> = () => {
 											height={'24px'}
 										/>
 										<WBInfo>
-											<span>{`${account.substring(
-												0,
-												6,
-											)}...${account.substring(
-												account.length - 5,
-												account.length,
-											)}`}</span>
-											<WBNetwork>
+											<GLink size='Medium'>
+												{user?.name ||
+													shortenAddress(account)}
+											</GLink>
+											<WBNetwork size='Tiny'>
 												Connected to{' '}
 												{networksParams[chainId]
 													? networksParams[chainId]
@@ -242,17 +270,14 @@ const Header: FC<IHeader> = () => {
 						<div>
 							<ConnectButton
 								buttonType='primary'
+								size='small'
 								label={
-									isGIVconomyRoute
+									isGIVeconomyRoute
 										? 'CONNECT WALLET'
 										: 'SIGN IN'
 								}
 								onClick={() => {
-									if (isGIVconomyRoute) {
-										setShowWalletModal(true);
-									} else {
-										setShowSigninModal(true);
-									}
+									setShowWalletModal(isGIVeconomyRoute);
 								}}
 							/>
 						</div>

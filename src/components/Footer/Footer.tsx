@@ -87,7 +87,7 @@ export const Footer = () => {
 									Partnerships
 								</LinkItem>
 							</a>
-							<a href='https://docs.giveth.io/jobs/'>
+							<a href='https://giveth.recruitee.com/'>
 								<LinkItem color={textColor}>
 									We’re Hiring!
 								</LinkItem>
@@ -134,7 +134,7 @@ export const Footer = () => {
 };
 
 const FooterContainer = styled.div`
-	padding: 35px 0 12px;
+	padding: 57px 0 83px;
 `;
 
 const LeftContainer = styled(Row)`

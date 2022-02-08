@@ -66,7 +66,7 @@ export const GIVBackExplainModal: FC<IGIVBackExplainModal> = ({
 
 const GIVBackExplainContainer = styled.div`
 	padding: 24px 24px 24px;
-	background-image: url('/images/stream1.svg');
+	/* background-image: url('/images/stream1.svg'); */
 	background-repeat: no-repeat;
 	width: 570px;
 	color: ${neutralColors.gray[100]};

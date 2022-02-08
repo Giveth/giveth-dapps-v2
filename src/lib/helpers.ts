@@ -17,6 +17,7 @@ declare let window: any;
 import { BasicNetworkConfig, GasPreference } from '@/types/config';
 import { EWallets } from '@/lib/wallet/walletTypes';
 import { brandColors } from '@giveth/ui-design-system';
+import { giveconomyTabs } from '@/components/Tabs';
 
 export const DurationToYMDh = (ms: number) => {
 	let baseTime = new Date(0);
@@ -114,6 +115,7 @@ export const breakPoints = {
 	md: 768,
 	lg: 992,
 	xl: 1200,
+	xxl: 1440,
 };
 
 export const mediaQueries = {
@@ -121,6 +123,7 @@ export const mediaQueries = {
 	md: `@media (min-width: ${breakPoints.md}px)`,
 	lg: `@media (min-width: ${breakPoints.lg}px)`,
 	xl: `@media (min-width: ${breakPoints.xl}px)`,
+	xxl: `@media (min-width: ${breakPoints.xxl}px)`,
 };
 
 export const shortenAddress = (
@@ -329,3 +332,20 @@ export async function signMessage(
 }
 
 export const LocalStorageTokenLabel = 'userToken';
+
+export const checkLinkActive = (route: string, href: string) => {
+	if (route === href) {
+		return true;
+	}
+	if (href === '/giveconomy') {
+		return isGivEconomyRoute(route);
+	}
+	return false;
+};
+
+export const isGivEconomyRoute = (route: string) => {
+	const givEconomyRoute = giveconomyTabs.find(
+		giveconomyTab => giveconomyTab.href === route,
+	);
+	return givEconomyRoute ? true : false;
+};
