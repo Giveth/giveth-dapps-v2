@@ -59,7 +59,7 @@ export default PublicProfileProjectsTab;
 
 export const ProjectsContainer = styled(Container)`
 	display: grid;
-	gap: 25px;
+	gap: 24px;
 	margin-bottom: 64px;
 	padding: 0;
 

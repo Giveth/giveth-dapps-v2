@@ -13,7 +13,7 @@ import { formatDateFromString, formatTxLink } from '@/lib/helpers';
 import linkIcon from '/public/images/external_link.svg';
 import donorProfileIcon from '/public/images/default_donor.svg';
 import ExternalLink from '@/components/ExternalLink';
-import Pagination from '@/components/Pagination';
+import Pagination from '@/components/PaginationOld';
 import { initializeApollo } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { IDonationsByProjectId } from '@/apollo/types/gqlTypes';
