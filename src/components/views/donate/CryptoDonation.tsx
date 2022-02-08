@@ -340,7 +340,12 @@ const CryptoDonation = (props: {
 							<Caption color={neutralColors.gray[900]}>
 								Save on gas fees, switch to xDAI network.
 							</Caption>
-							<SwitchCaption onClick={() => switchNetwork(100)}>
+							<SwitchCaption
+								onClick={() => switchNetwork(100)}
+								style={{
+									textAlign: 'right',
+								}}
+							>
 								Switch network
 							</SwitchCaption>
 						</XDaiContainer>
@@ -451,6 +456,7 @@ const CryptoDonation = (props: {
 			{isEnabled && (
 				<MainButton
 					label='DONATE'
+					disabled={!amountTyped}
 					size='large'
 					onClick={() => {
 						if (selectedTokenBalance < amountTyped) {
@@ -525,6 +531,9 @@ const SwitchCaption = styled(Caption)`
 
 const MainButton = styled(Button)`
 	width: 100%;
+	background-color: ${props =>
+		props.disabled ? brandColors.giv[200] : brandColors.giv[500]};
+	color: white;
 `;
 
 export default CryptoDonation;

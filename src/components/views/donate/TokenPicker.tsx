@@ -155,7 +155,7 @@ const TokenPicker = (props: {
 			isOpen={isOpen}
 			onClose={toggleOpen}
 			target={
-				<TargetContainer onClick={toggleOpen}>
+				<TargetContainer onClick={toggleOpen} isOpen={isOpen}>
 					<TokenContainer>
 						{value && (
 							<ImageIcon
@@ -283,7 +283,8 @@ const TargetContainer = styled.div`
 	height: 54px;
 	border: 2px solid ${neutralColors.gray[300]};
 	padding: 14px 16px;
-	background: ${neutralColors.gray[200]};
+	background: ${props =>
+		props.isOpen ? neutralColors.gray[200] : 'transparent'};
 	border-radius: 6px 0px 0px 6px;
 	align-items: center;
 `;
