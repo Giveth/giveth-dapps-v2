@@ -434,17 +434,11 @@ const CryptoDonation = (props: {
 						// }}}
 						errorHandler={{
 							condition: (value: any) =>
-								!isNaN(value) && value <= 0,
+								value >= 0 && value <= 0.0001,
 							message: 'Set a valid amount',
 						}}
 						type='number'
 						onChange={val => {
-							if (
-								parseFloat(val) !== 0 &&
-								parseFloat(val) < 0.001
-							) {
-								return;
-							}
 							const checkGIV = checkGIVTokenAvailability();
 							if (checkGIV) setAmountTyped(val);
 						}}
@@ -500,7 +494,7 @@ const CryptoDonation = (props: {
 				<>
 					<MainButton
 						label='DONATE'
-						disabled={!amountTyped || parseInt(amountTyped) <= 0}
+						disabled={!amountTyped || parseInt(amountTyped) < 0}
 						size='large'
 						onClick={() => {
 							if (selectedTokenBalance < amountTyped) {

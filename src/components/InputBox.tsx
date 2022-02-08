@@ -106,8 +106,8 @@ const Wrapper = styled.div`
 `;
 
 const ErrorMsg = styled(GLink)`
-	position: fixed;
-	margin-top: 4%;
+	position: absolute;
+	margin-top: 58px;
 	color: ${semanticColors.punch[500]};
 `;
 
