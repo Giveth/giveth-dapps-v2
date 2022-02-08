@@ -1,7 +1,8 @@
-import { neutralColors, brandColors } from '@giveth/ui-design-system';
+import { ETheme, useGeneral } from '@/context/general.context';
+import { neutralColors, brandColors, Caption } from '@giveth/ui-design-system';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { PaginationRow, PaginationItem } from './homeTabs/GIVstream.sc';
+import { Row } from './styled-components/Grid';
 
 interface IPagination {
 	setPage: Dispatch<SetStateAction<number>>;
@@ -14,6 +15,7 @@ const Pagination = (props: IPagination) => {
 	const { setPage, currentPage, totalCount, itemPerPage } = props;
 	const [pages, setPages] = useState<any[]>([]);
 	const [pageCount, setPageCount] = useState(0);
+	const { theme } = useGeneral();
 
 	useEffect(() => {
 		const nop = Math.ceil(totalCount / itemPerPage);
@@ -48,6 +50,7 @@ const Pagination = (props: IPagination) => {
 			{pageCount > 1 && (
 				<PaginationRow justifyContent={'flex-end'} gap='16px'>
 					<PaginationItem
+						theme={theme}
 						onClick={() => {
 							if (currentPage > 0) setPage(page => page - 1);
 						}}
@@ -59,6 +62,7 @@ const Pagination = (props: IPagination) => {
 						return (
 							<PaginationItem
 								key={id}
+								theme={theme}
 								onClick={() => {
 									if (!isNaN(+p)) setPage(+p - 1);
 								}}
@@ -69,6 +73,7 @@ const Pagination = (props: IPagination) => {
 						);
 					})}
 					<PaginationItem
+						theme={theme}
 						onClick={() => {
 							if (currentPage + 1 < pageCount)
 								setPage(page => page + 1);
@@ -84,3 +89,28 @@ const Pagination = (props: IPagination) => {
 };
 
 export default Pagination;
+
+interface IPaginationItem {
+	disable?: boolean;
+	isActive?: boolean;
+}
+
+export const PaginationRow = styled(Row)`
+	margin-top: 16px;
+`;
+
+export const PaginationItem = styled(Caption)<IPaginationItem>`
+	${props =>
+		props.disable
+			? `color: ${
+					props.theme === ETheme.Dark
+						? neutralColors.gray[700]
+						: neutralColors.gray[500]
+			  }`
+			: `cursor: pointer; color: ${
+					props.theme === ETheme.Dark
+						? neutralColors.gray[100]
+						: neutralColors.gray[900]
+			  }`};
+	${props => (props.isActive ? `font-weight: bold;` : '')};
+`;
