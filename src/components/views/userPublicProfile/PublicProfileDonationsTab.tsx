@@ -19,7 +19,7 @@ import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IUserPublicProfileView } from './UserPublicProfile.view';
 
-const itemPerPage = 2;
+const itemPerPage = 10;
 
 enum EOrderBy {
 	TokenAmount = 'TokenAmount',
