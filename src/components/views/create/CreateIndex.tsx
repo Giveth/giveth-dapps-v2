@@ -9,11 +9,12 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import { useMutation } from '@apollo/client';
-import { client } from '@/apollo/apolloClient';
 import { utils } from 'ethers';
+import styled from 'styled-components';
+import { useWeb3React } from '@web3-react/core';
+
 import SignInModal from '../../modals/SignInModal';
 import { WALLET_ADDRESS_IS_VALID, ADD_PROJECT } from '@/apollo/gql/gqlProjects';
-import { useWeb3React } from '@web3-react/core';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import { IProjectCreation } from '@/apollo/types/types';
 import {
@@ -24,12 +25,12 @@ import {
 	ImageInput,
 	WalletAddressInput,
 } from './Inputs';
-import { getImageFile } from '@/utils/index';
+import { getImageFile } from '@/utils';
 import useUser from '@/context/UserProvider';
 import Logger from '@/utils/Logger';
 import SuccessfulCreation from './SuccessfulCreation';
 import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
-import styled from 'styled-components';
+import { client } from '@/apollo/apolloClient';
 
 type Inputs = {
 	name: string;
@@ -47,20 +48,32 @@ const CreateIndex = () => {
 		setValue,
 		formState: { errors },
 	} = useForm<Inputs>();
+
 	const { library } = useWeb3React();
 	const [addProjectMutation] = useMutation(ADD_PROJECT);
+
 	const [creationSuccessful, setCreationSuccessful] = useState<any>(null);
 	const [showSigninModal, setShowSigninModal] = useState(false);
+	const [showGuidelineModal, setShowGuidelineModal] = useState(false);
+	const [name, setName] = useState('');
+	const [description, setDescription] = useState('');
+	const [categories, setCategories] = useState([]);
+	const [impactLocation, setImpactLocation] = useState('');
+	const [image, setImage] = useState(null);
+	const [walletAddress, setWalletAddress] = useState('');
+	const [isLoading, setIsLoading] = useState(false);
+
 	const {
 		state: { user, isSignedIn },
 		actions: { signIn },
 	} = useUser();
 
+	console.log(description);
+
 	const onSubmit: SubmitHandler<Inputs> = async data => {
 		try {
 			// check heavy description
-			const stringSize =
-				encodeURI(data?.description).split(/%..|./).length - 1;
+			const stringSize = encodeURI(description).split(/%..|./).length - 1;
 			if (stringSize > 4000000) {
 				// 4Mb tops max maybe?
 				// TODO: ADD TOAST HERE
@@ -70,10 +83,10 @@ const CreateIndex = () => {
 			// Check wallet
 			let address;
 			// Handle ENS address
-			if (isAddressENS(data.walletAddress)) {
-				address = await getAddressFromENS(data.walletAddress, library);
+			if (isAddressENS(walletAddress)) {
+				address = await getAddressFromENS(walletAddress, library);
 			} else {
-				address = data.walletAddress;
+				address = walletAddress;
 			}
 			// Check wallet valid
 			await client.query({
@@ -88,8 +101,8 @@ const CreateIndex = () => {
 				projectCategories.push(category);
 			}
 			const projectData: IProjectCreation = {
-				title: data.name,
-				description: data.description,
+				title: name,
+				description,
 				impactLocation: data.impactLocation?.global
 					? 'Global'
 					: data.impactLocation,
@@ -109,6 +122,8 @@ const CreateIndex = () => {
 				);
 			}
 
+			setIsLoading(true);
+
 			const addedProject = await addProjectMutation({
 				variables: {
 					project: { ...projectData },
@@ -117,6 +132,7 @@ const CreateIndex = () => {
 
 			if (addedProject) {
 				// Success
+				setIsLoading(false);
 				setCreationSuccessful(addedProject?.data?.addProject);
 			}
 		} catch (e) {
@@ -131,7 +147,6 @@ const CreateIndex = () => {
 			alert(JSON.stringify(error));
 		}
 	};
-	const [showGuidelineModal, setShowGuidelineModal] = useState(false);
 
 	const createProject = (e: any) => {
 		e.preventDefault();
@@ -142,10 +157,15 @@ const CreateIndex = () => {
 
 	useEffect(() => {
 		if (isSignedIn) {
-			// Show guideline first thing
 			setShowGuidelineModal(true);
 		}
 	}, [isSignedIn]);
+
+	useEffect(() => {
+		if (user?.walletAddress) {
+			setWalletAddress(user.walletAddress);
+		}
+	}, [user]);
 
 	if (creationSuccessful) {
 		return <SuccessfulCreation project={creationSuccessful} />;
@@ -157,9 +177,9 @@ const CreateIndex = () => {
 				<ProjectGuidelineModal
 					showModal={showGuidelineModal}
 					setShowModal={val => {
-						if (val === false) {
+						if (!val) {
 							if (!isSignedIn && signIn) {
-								signIn();
+								signIn().then();
 							}
 						}
 						setShowGuidelineModal(val);
@@ -176,17 +196,8 @@ const CreateIndex = () => {
 				<CreateContainer>
 					<Title>Create a Project</Title>
 					<form>
-						{/* register your input into the hook by invoking the "register" function */}
-						<NameInput
-							{...register('name', { required: true })}
-							setValue={(val: string) => setValue('name', val)}
-						/>
-						<DescriptionInput
-							{...register('description', { required: true })}
-							setValue={(val: string) =>
-								setValue('description', val)
-							}
-						/>
+						<NameInput value={name} setValue={setName} />
+						<DescriptionInput setValue={setDescription} />
 						<CategoryInput
 							{...register('categories', { required: true })}
 							setValue={(val: Array<any>) =>
@@ -204,17 +215,15 @@ const CreateIndex = () => {
 							setValue={(val: string) => setValue('image', val)}
 						/>
 						<WalletAddressInput
-							{...register('walletAddress', { required: true })}
-							setValue={(val: string) =>
-								setValue('walletAddress', val)
-							}
+							value={walletAddress}
+							setValue={setWalletAddress}
 						/>
 
 						<PublishTitle>{`Let's Publish!`}</PublishTitle>
 						<PublishList>
 							<li>
-								Newly published projects will be "unlisted"
-								until reviewed by our team.
+								Newly published projects will be
+								&quot;unlisted&quot; until reviewed by our team.
 							</li>
 							<li>
 								You can still access your project from your
@@ -222,7 +231,7 @@ const CreateIndex = () => {
 								project link!
 							</li>
 							<li>
-								You'll receive an email from us once your
+								You&apos;ll receive an email from us once your
 								project is listed.
 							</li>
 						</PublishList>
@@ -230,11 +239,13 @@ const CreateIndex = () => {
 							<Button
 								label='PREVIEW'
 								buttonType='primary'
+								disabled={isLoading}
 								// onClick={uploadImage}
 							/>
 							<Button
 								label='PUBLISH'
 								buttonType='primary'
+								disabled={isLoading}
 								onClick={createProject}
 							/>
 						</Buttons>
