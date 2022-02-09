@@ -152,7 +152,7 @@ const DonationTable: FC<DonationTable> = ({
 						<B>{donation.project.title}</B>
 					</TabelCell>
 					<TabelCell>
-						<SublineBold>{donation.currency}</SublineBold>
+						<CurrencyBadge>{donation.currency}</CurrencyBadge>
 					</TabelCell>
 					<TabelCell>
 						<P>{donation.amount}</P>
@@ -178,4 +178,11 @@ const TabelCell = styled(Row)`
 	height: 60px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
 	align-items: center;
+`;
+
+const CurrencyBadge = styled(SublineBold)`
+	padding: 2px 8px;
+	border: 2px solid ${neutralColors.gray[400]};
+	border-radius: 50px;
+	color: ${neutralColors.gray[700]};
 `;
