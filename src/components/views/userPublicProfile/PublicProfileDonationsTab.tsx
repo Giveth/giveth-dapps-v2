@@ -1,50 +1,68 @@
 import { client } from '@/apollo/apolloClient';
-import { WALLET_DONATIONS } from '@/apollo/gql/gqlDonations';
-import { IUserProjects } from '@/apollo/types/gqlTypes';
-import { IWalletDonation, IProject } from '@/apollo/types/types';
-import ProjectCard from '@/components/project-card/ProjectCard';
-import { formatDate, smallFormatDate } from '@/lib/helpers';
-import {
-	B,
-	brandColors,
-	Container,
-	neutralColors,
-	P,
-	SublineBold,
-} from '@giveth/ui-design-system';
+import { FETCH_USER_DONATIONS } from '@/apollo/gql/gqlUser';
+import { IUserDonations } from '@/apollo/types/gqlTypes';
+import { IWalletDonation } from '@/apollo/types/types';
+import Pagination from '@/components/Pagination';
+import { smallFormatDate } from '@/lib/helpers';
+import { B, P, SublineBold } from '@giveth/ui-design-system';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Row } from '../../styled-components/Grid';
-import { ProjectsContainer } from '../projects/ProjectsIndex';
 import { IUserPublicProfileView } from './UserPublicProfile.view';
+
+const itemPerPage = 2;
+
+enum EOrderBy {
+	TokenAmount = 'TokenAmount',
+	UsdAmount = 'UsdAmount',
+	CreationDate = 'CreationDate',
+}
+
+enum EDirection {
+	DESC = 'DESC',
+	ASC = 'ASC',
+}
 
 const PublicProfileDonationsTab: FC<IUserPublicProfileView> = ({ user }) => {
 	const [loading, setLoading] = useState(false);
 	const [donations, setDonations] = useState<IWalletDonation[]>([]);
+	const [totalDonations, setTotalDonations] = useState<number>(0);
+	const [page, setPage] = useState(0);
 	useEffect(() => {
 		if (!user) return;
 		const fetchUserDonations = async () => {
 			setLoading(true);
 			const { data: userDonations } = await client.query({
-				query: WALLET_DONATIONS,
-				variables: { fromWalletAddresses: [user.walletAddress] },
+				query: FETCH_USER_DONATIONS,
+				variables: {
+					userId: parseFloat(user.id) || -1,
+					take: itemPerPage,
+					skip: page * itemPerPage,
+					orderBy: EOrderBy.CreationDate,
+					direction: EDirection.ASC,
+				},
 				fetchPolicy: 'network-only',
 			});
 			setLoading(false);
-			if (userDonations?.donationsFromWallets) {
-				const donationsFromWallets: IWalletDonation[] =
-					userDonations.donationsFromWallets;
-				setDonations(donationsFromWallets);
+			if (userDonations?.donationsByUserId) {
+				const donationsByUserId: IUserDonations =
+					userDonations.donationsByUserId;
+				setDonations(donationsByUserId.donations);
+				setTotalDonations(donationsByUserId.totalCount);
 			}
-			console.log('userDonations', userDonations);
 		};
 		fetchUserDonations();
-	}, [user]);
+	}, [user, page]);
 
 	return (
 		<>
 			{loading && <div>Loading</div>}
 			<DonationTable donations={donations} />
+			<Pagination
+				currentPage={page}
+				totalCount={totalDonations}
+				setPage={setPage}
+				itemPerPage={itemPerPage}
+			/>
 		</>
 	);
 };
