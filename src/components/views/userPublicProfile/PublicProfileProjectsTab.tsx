@@ -2,22 +2,22 @@ import { client } from '@/apollo/apolloClient';
 import { FETCH_USER_PROJECTS } from '@/apollo/gql/gqlUser';
 import { IUserProjects } from '@/apollo/types/gqlTypes';
 import { IProject } from '@/apollo/types/types';
+import Pagination from '@/components/Pagination';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import { mediaQueries } from '@/lib/helpers';
-import {
-	brandColors,
-	Container,
-	neutralColors,
-	P,
-} from '@giveth/ui-design-system';
+import { Container } from '@giveth/ui-design-system';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Row } from '../../styled-components/Grid';
 import { IUserPublicProfileView } from './UserPublicProfile.view';
+
+const itemPerPage = 6;
 
 const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({ user }) => {
 	const [loading, setLoading] = useState(false);
 	const [projects, setProjects] = useState<IProject[]>([]);
+	const [totalCount, setTotalCount] = useState<number>(0);
+	const [page, setPage] = useState(0);
+
 	useEffect(() => {
 		if (!user) return;
 		const fetchUserProjects = async () => {
@@ -26,22 +26,20 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({ user }) => {
 				query: FETCH_USER_PROJECTS,
 				variables: {
 					userId: parseFloat(user.id) || -1,
-					take: 100,
-					skip: 0,
+					take: itemPerPage,
+					skip: page * itemPerPage,
 				},
-				fetchPolicy: 'network-only',
 			});
 			setLoading(false);
 			if (userProjects?.projectsByUserId) {
 				const projectsByUserId: IUserProjects =
 					userProjects.projectsByUserId;
 				setProjects(projectsByUserId.projects);
+				setTotalCount(projectsByUserId.totalCount);
 			}
 		};
 		fetchUserProjects();
-	}, [user]);
-
-	console.log('projects', projects);
+	}, [page, user]);
 
 	return (
 		<>
@@ -51,6 +49,12 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({ user }) => {
 					<ProjectCard key={project.id} project={project} />
 				))}
 			</ProjectsContainer>
+			<Pagination
+				currentPage={page}
+				totalCount={totalCount}
+				setPage={setPage}
+				itemPerPage={itemPerPage}
+			/>
 		</>
 	);
 };
