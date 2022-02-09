@@ -3,8 +3,16 @@ import { FETCH_USER_DONATIONS } from '@/apollo/gql/gqlUser';
 import { IUserDonations } from '@/apollo/types/gqlTypes';
 import { IWalletDonation } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
+import { Row } from '@/components/styled-components/Grid';
 import { smallFormatDate } from '@/lib/helpers';
-import { B, P, SublineBold } from '@giveth/ui-design-system';
+import {
+	B,
+	IconArrowBottom,
+	IconArrowTop,
+	neutralColors,
+	P,
+	SublineBold,
+} from '@giveth/ui-design-system';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IUserPublicProfileView } from './UserPublicProfile.view';
@@ -22,11 +30,38 @@ enum EDirection {
 	ASC = 'ASC',
 }
 
+interface IOrder {
+	by: EOrderBy;
+	direction: EDirection;
+}
+
 const PublicProfileDonationsTab: FC<IUserPublicProfileView> = ({ user }) => {
 	const [loading, setLoading] = useState(false);
 	const [donations, setDonations] = useState<IWalletDonation[]>([]);
 	const [totalDonations, setTotalDonations] = useState<number>(0);
 	const [page, setPage] = useState(0);
+	const [order, setOrder] = useState<IOrder>({
+		by: EOrderBy.CreationDate,
+		direction: EDirection.DESC,
+	});
+
+	const orderChangeHandler = (orderby: EOrderBy) => {
+		if (orderby === order.by) {
+			setOrder({
+				by: orderby,
+				direction:
+					order.direction === EDirection.ASC
+						? EDirection.DESC
+						: EDirection.ASC,
+			});
+		} else {
+			setOrder({
+				by: orderby,
+				direction: EDirection.DESC,
+			});
+		}
+	};
+
 	useEffect(() => {
 		if (!user) return;
 		const fetchUserDonations = async () => {
@@ -37,10 +72,9 @@ const PublicProfileDonationsTab: FC<IUserPublicProfileView> = ({ user }) => {
 					userId: parseFloat(user.id) || -1,
 					take: itemPerPage,
 					skip: page * itemPerPage,
-					orderBy: EOrderBy.CreationDate,
-					direction: EDirection.ASC,
+					orderBy: order.by,
+					direction: order.direction,
 				},
-				fetchPolicy: 'network-only',
 			});
 			setLoading(false);
 			if (userDonations?.donationsByUserId) {
@@ -51,12 +85,16 @@ const PublicProfileDonationsTab: FC<IUserPublicProfileView> = ({ user }) => {
 			}
 		};
 		fetchUserDonations();
-	}, [user, page]);
+	}, [user, page, order.by, order.direction]);
 
 	return (
 		<>
 			{loading && <div>Loading</div>}
-			<DonationTable donations={donations} />
+			<DonationTable
+				donations={donations}
+				order={order}
+				orderChangeHandler={orderChangeHandler}
+			/>
 			<Pagination
 				currentPage={page}
 				totalCount={totalDonations}
@@ -71,20 +109,54 @@ export default PublicProfileDonationsTab;
 
 interface DonationTable {
 	donations: IWalletDonation[];
+	order: IOrder;
+	orderChangeHandler: (orderby: EOrderBy) => void;
 }
-const DonationTable: FC<DonationTable> = ({ donations }) => {
+const DonationTable: FC<DonationTable> = ({
+	donations,
+	order,
+	orderChangeHandler,
+}) => {
 	return (
 		<DonationTablecontainer>
-			<B>Donated at</B>
+			<SortableTitle
+				onClick={() => orderChangeHandler(EOrderBy.CreationDate)}
+			>
+				<B>Donated at</B>
+				{order.by === EOrderBy.CreationDate &&
+					(order.direction === EDirection.DESC ? (
+						<IconArrowBottom size={16} />
+					) : (
+						<IconArrowTop size={16} />
+					))}
+			</SortableTitle>
 			<B>Project</B>
 			<B>Currency</B>
-			<B>Amount</B>
+			<SortableTitle
+				onClick={() => orderChangeHandler(EOrderBy.TokenAmount)}
+			>
+				<B>Amount</B>
+				{order.by === EOrderBy.TokenAmount &&
+					(order.direction === EDirection.DESC ? (
+						<IconArrowBottom size={16} />
+					) : (
+						<IconArrowTop size={16} />
+					))}
+			</SortableTitle>
 			{donations.map(donation => (
 				<>
-					<P>{smallFormatDate(new Date(donation.createdAt))}</P>
-					<B>{donation.project.title}</B>
-					<SublineBold>{donation.currency}</SublineBold>
-					<P>{donation.amount}</P>
+					<TabelCell>
+						<P>{smallFormatDate(new Date(donation.createdAt))}</P>
+					</TabelCell>
+					<TabelCell>
+						<B>{donation.project.title}</B>
+					</TabelCell>
+					<TabelCell>
+						<SublineBold>{donation.currency}</SublineBold>
+					</TabelCell>
+					<TabelCell>
+						<P>{donation.amount}</P>
+					</TabelCell>
 				</>
 			))}
 		</DonationTablecontainer>
@@ -94,4 +166,16 @@ const DonationTable: FC<DonationTable> = ({ donations }) => {
 const DonationTablecontainer = styled.div`
 	display: grid;
 	grid-template-columns: 1fr 5fr 1fr 1fr;
+`;
+
+const SortableTitle = styled(Row)`
+	cursor: pointer;
+	gap: 8px;
+	align-items: center;
+`;
+
+const TabelCell = styled(Row)`
+	height: 60px;
+	border-bottom: 1px solid ${neutralColors.gray[300]};
+	align-items: center;
 `;
