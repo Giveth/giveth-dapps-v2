@@ -52,8 +52,6 @@ import {
 	IncreaseSectionTitle,
 	Left,
 	NoData,
-	PaginationItem,
-	PaginationRow,
 	PercentageRow,
 	Right,
 	TxHash,

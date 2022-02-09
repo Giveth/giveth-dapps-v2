@@ -1,7 +1,7 @@
 import { client } from '@/apollo/apolloClient';
 import { GET_USER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
+import { IUser } from '@/apollo/types/types';
 import UserPublicProfileView from '@/components/views/userPublicProfile/UserPublicProfile.view';
-import { IUser } from '@/types/entities';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { FC } from 'react';
