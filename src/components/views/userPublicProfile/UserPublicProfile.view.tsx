@@ -41,7 +41,16 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({ user }) => {
 						<UserInforRow>
 							<H3 weight={700}>{user.name}</H3>
 							{user.url && (
-								<Website size='Big' href={user.url}>
+								<Website
+									size='Big'
+									href={
+										user.url
+											.toLowerCase()
+											.startsWith('http')
+											? user.url
+											: `https://${user.url}`
+									}
+								>
 									{user.url}
 								</Website>
 							)}
