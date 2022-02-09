@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { H5, Caption, brandColors } from '@giveth/ui-design-system';
+import styled from 'styled-components';
+
 import { InputContainer } from './Create.sc';
 import CheckBox from '@/components/Checkbox';
 import { categoryList, maxSelectedCategory } from '@/lib/constants/Categories';
 import { ICategory } from '@/apollo/types/types';
-import styled from 'styled-components';
 
 const CategoryInput = (props: any) => {
 	const { setValue } = props;
@@ -30,7 +31,9 @@ const CategoryInput = (props: any) => {
 		categoriesList[value.name] = true;
 		const isMaxCategories = newCategories.length > maxSelectedCategory;
 		if (isMaxCategories) {
-			return console.log('only 5 categories allowed');
+			return console.log(
+				`only ${maxSelectedCategory} categories allowed`,
+			);
 		}
 		// With whole category object
 		setCategories(newCategories);
@@ -44,7 +47,8 @@ const CategoryInput = (props: any) => {
 			<H5>Please select a category.</H5>
 			<div>
 				<CaptionContainer>
-					You can choose up to 4 category for your project.
+					You can choose up to {maxSelectedCategory} category for your
+					project.
 				</CaptionContainer>
 			</div>
 			<InputContainer>

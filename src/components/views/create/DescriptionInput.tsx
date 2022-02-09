@@ -1,22 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { H5, Caption, brandColors } from '@giveth/ui-design-system';
 import dynamic from 'next/dynamic';
-import { InputContainer, Label } from './Create.sc';
 import styled from 'styled-components';
+import { InputContainer, Label } from './Create.sc';
+import { GoodProjectDescription } from '@/components/modals/GoodProjectDescription';
 
 const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
 	ssr: false,
 });
 
-const NameInput = (props: any) => {
+const DescriptionInput = (props: { setValue: (e: string) => void }) => {
+	const [showModal, setShowModal] = useState(false);
 	const { setValue } = props;
 	return (
 		<>
+			{showModal && (
+				<GoodProjectDescription
+					showModal={showModal}
+					setShowModal={val => setShowModal(val)}
+				/>
+			)}
+
 			<H5>Tell us about your project...</H5>
 			<div>
 				<CaptionContainer>
 					Aim for 200-500 words.{' '}
-					<span>How to write a good project description.</span>
+					<span onClick={() => setShowModal(true)}>
+						How to write a good project description.
+					</span>
 				</CaptionContainer>
 			</div>
 			<InputContainer>
@@ -25,10 +36,7 @@ const NameInput = (props: any) => {
 					style={TextInputStyle}
 					rows={12}
 					autoFocus
-					onChange={(newValue: any) => {
-						setValue(newValue);
-						// console.log({ setValue, newValue, delta, source })
-					}}
+					onChange={setValue}
 				/>
 			</InputContainer>
 		</>
@@ -50,4 +58,4 @@ const TextInputStyle = {
 	fontFamily: 'body',
 };
 
-export default NameInput;
+export default DescriptionInput;
