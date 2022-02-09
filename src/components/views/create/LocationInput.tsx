@@ -1,11 +1,11 @@
 import React, { useState, useCallback } from 'react';
 import { H5, Caption, brandColors } from '@giveth/ui-design-system';
-import { InputContainer, Label } from './Create.sc';
 import { withScriptjs } from 'react-google-maps';
-import Map from '@/components/map';
-
-import config from '@/configuration';
 import styled from 'styled-components';
+
+import Map from '@/components/map';
+import { InputContainer, Label } from './Create.sc';
+import config from '@/configuration';
 
 const LocationInput = (props: any) => {
 	const { setValue } = props;
@@ -15,7 +15,7 @@ const LocationInput = (props: any) => {
 		setValue(val);
 	}, []);
 
-	const setGlobalLocation = useCallback(val => {
+	const setGlobalLocation = useCallback(() => {
 		setValue({ global: true });
 	}, []);
 

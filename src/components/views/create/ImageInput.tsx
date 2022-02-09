@@ -11,7 +11,7 @@ import { useDropzone } from 'react-dropzone';
 import { InputContainer } from './Create.sc';
 import styled from 'styled-components';
 import { OurImages } from '@/utils/constants';
-import { toBase64 } from '@/utils/index';
+import { toBase64 } from '@/utils';
 
 const ImageInput = (props: any) => {
 	const [bgImage, setBgImage] = useState<any>();
@@ -57,11 +57,7 @@ const ImageInput = (props: any) => {
 
 			<InputContainer>
 				<Buttons>
-					<Button
-						label='Upload cover image'
-						buttonType='primary'
-						onClick={open}
-					/>
+					{/*<Button label='Upload cover image' buttonType='primary' />*/}
 					{/* <Button
 						label='Search for photos'
 						buttonType='texty'
@@ -126,7 +122,7 @@ const Buttons = styled.div`
 	button:first-child {
 		background: white;
 		color: ${brandColors.deep[600]};
-		box-shadow: 0px 3px 20px rgba(212, 218, 238, 0.4);
+		box-shadow: 0 3px 20px rgba(212, 218, 238, 0.4);
 	}
 	button:nth-child(2) {
 		color: ${brandColors.pinky[500]};
