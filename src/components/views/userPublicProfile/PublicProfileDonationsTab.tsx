@@ -119,7 +119,7 @@ const DonationTable: FC<DonationTable> = ({
 }) => {
 	return (
 		<DonationTablecontainer>
-			<SortableTitle
+			<TabelHeader
 				onClick={() => orderChangeHandler(EOrderBy.CreationDate)}
 			>
 				<B>Donated at</B>
@@ -129,10 +129,14 @@ const DonationTable: FC<DonationTable> = ({
 					) : (
 						<IconArrowTop size={16} />
 					))}
-			</SortableTitle>
-			<B>Project</B>
-			<B>Currency</B>
-			<SortableTitle
+			</TabelHeader>
+			<TabelHeader>
+				<B>Project</B>
+			</TabelHeader>
+			<TabelHeader>
+				<B>Currency</B>
+			</TabelHeader>
+			<TabelHeader
 				onClick={() => orderChangeHandler(EOrderBy.TokenAmount)}
 			>
 				<B>Amount</B>
@@ -142,7 +146,7 @@ const DonationTable: FC<DonationTable> = ({
 					) : (
 						<IconArrowTop size={16} />
 					))}
-			</SortableTitle>
+			</TabelHeader>
 			{donations.map(donation => (
 				<>
 					<TabelCell>
@@ -172,6 +176,17 @@ const SortableTitle = styled(Row)`
 	cursor: pointer;
 	gap: 8px;
 	align-items: center;
+`;
+
+const TabelHeader = styled(Row)`
+	height: 40px;
+	border-bottom: 1px solid ${neutralColors.gray[400]};
+	align-items: center;
+	${props =>
+		props.onClick &&
+		`cursor: pointer;
+	gap: 8px;
+	align-items: center;`}
 `;
 
 const TabelCell = styled(Row)`
