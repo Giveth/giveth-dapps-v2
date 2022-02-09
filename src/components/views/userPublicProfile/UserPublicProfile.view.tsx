@@ -56,7 +56,13 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({ user }) => {
 							)}
 							<WalletContainer>
 								<GLink size='Big'>{user.walletAddress}</GLink>
-								<WalletIconsContainer>
+								<WalletIconsContainer
+									onClick={() => {
+										navigator.clipboard.writeText(
+											user.walletAddress || '',
+										);
+									}}
+								>
 									<IconCopy />
 								</WalletIconsContainer>
 								<WalletIconsContainer>
