@@ -4,9 +4,11 @@ import { IUserDonations } from '@/apollo/types/gqlTypes';
 import { IWalletDonation } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import { Row } from '@/components/styled-components/Grid';
+import { ETheme } from '@/context/general.context';
 import { smallFormatDate } from '@/lib/helpers';
 import {
 	B,
+	brandColors,
 	IconArrowBottom,
 	IconArrowTop,
 	neutralColors,
@@ -89,12 +91,14 @@ const PublicProfileDonationsTab: FC<IUserPublicProfileView> = ({ user }) => {
 
 	return (
 		<>
-			{loading && <div>Loading</div>}
-			<DonationTable
-				donations={donations}
-				order={order}
-				orderChangeHandler={orderChangeHandler}
-			/>
+			<DonationTableWrapper>
+				<DonationTable
+					donations={donations}
+					order={order}
+					orderChangeHandler={orderChangeHandler}
+				/>
+				{loading && <Loading />}
+			</DonationTableWrapper>
 			<Pagination
 				currentPage={page}
 				totalCount={totalDonations}
@@ -172,12 +176,6 @@ const DonationTablecontainer = styled.div`
 	grid-template-columns: 1fr 5fr 1fr 1fr;
 `;
 
-const SortableTitle = styled(Row)`
-	cursor: pointer;
-	gap: 8px;
-	align-items: center;
-`;
-
 const TabelHeader = styled(Row)`
 	height: 40px;
 	border-bottom: 1px solid ${neutralColors.gray[400]};
@@ -200,4 +198,20 @@ const CurrencyBadge = styled(SublineBold)`
 	border: 2px solid ${neutralColors.gray[400]};
 	border-radius: 50px;
 	color: ${neutralColors.gray[700]};
+`;
+
+const Loading = styled(Row)`
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 42px;
+	bottom: 0;
+	background-color: ${props =>
+		props.theme === ETheme.Dark
+			? brandColors.giv[800]
+			: neutralColors.gray[200]}aa;
+`;
+
+const DonationTableWrapper = styled.div`
+	position: relative;
 `;
