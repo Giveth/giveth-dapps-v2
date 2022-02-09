@@ -4,8 +4,14 @@ import { IUserProjects } from '@/apollo/types/gqlTypes';
 import { IProject } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import ProjectCard from '@/components/project-card/ProjectCard';
+import { Row } from '@/components/styled-components/Grid';
+import { ETheme } from '@/context/general.context';
 import { mediaQueries } from '@/lib/helpers';
-import { Container } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	Container,
+	neutralColors,
+} from '@giveth/ui-design-system';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IUserPublicProfileView } from './UserPublicProfile.view';
@@ -43,11 +49,11 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({ user }) => {
 
 	return (
 		<>
-			{loading && <div>Loading</div>}
 			<ProjectsContainer>
 				{projects.map(project => (
 					<ProjectCard key={project.id} project={project} />
 				))}
+				{loading && <Loading />}
 			</ProjectsContainer>
 			<Pagination
 				currentPage={page}
@@ -63,6 +69,7 @@ export default PublicProfileProjectsTab;
 
 export const ProjectsContainer = styled(Container)`
 	display: grid;
+	position: relative;
 	gap: 24px;
 	margin-bottom: 64px;
 	padding: 0;
@@ -78,4 +85,16 @@ export const ProjectsContainer = styled(Container)`
 	${mediaQueries['xxl']} {
 		grid-template-columns: repeat(3, 1fr);
 	}
+`;
+
+export const Loading = styled(Row)`
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-color: ${props =>
+		props.theme === ETheme.Dark
+			? brandColors.giv[800]
+			: neutralColors.gray[200]}aa;
 `;

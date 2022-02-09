@@ -5,7 +5,7 @@ import { IProject } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import { FC, useEffect, useState } from 'react';
-import { ProjectsContainer } from './PublicProfileProjectsTab';
+import { Loading, ProjectsContainer } from './PublicProfileProjectsTab';
 import { IUserPublicProfileView } from './UserPublicProfile.view';
 
 const itemPerPage = 6;
@@ -41,11 +41,11 @@ const PublicProfileLikedTab: FC<IUserPublicProfileView> = ({ user }) => {
 
 	return (
 		<>
-			{loading && <div>Loading</div>}
 			<ProjectsContainer>
 				{projects.map(project => (
 					<ProjectCard key={project.id} project={project} />
 				))}
+				{loading && <Loading />}
 			</ProjectsContainer>
 			<Pagination
 				currentPage={page}
