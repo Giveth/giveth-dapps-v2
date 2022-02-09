@@ -9,16 +9,16 @@ import { useWeb3React } from '@web3-react/core';
 import { BigNumberish } from '@ethersproject/bignumber';
 import { formatEther } from '@ethersproject/units';
 
-import { initializeApollo } from '../apollo/apolloClient';
-import { GET_USER_BY_ADDRESS } from '../apollo/gql/gqlUser';
-import { IUserByAddress } from '../apollo/types/gqlTypes';
+import { initializeApollo } from '@/apollo/apolloClient';
+import { GET_USER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
+import { IUserByAddress } from '@/apollo/types/gqlTypes';
 import {
 	compareAddresses,
 	LocalStorageTokenLabel,
 	signMessage,
-} from '../lib/helpers';
+} from '@/lib/helpers';
 import * as Auth from '../services/auth';
-import { getToken } from '../services/token';
+import { getToken } from '@/services/token';
 import User from '../entities/user';
 import { getLocalStorageUserLabel } from '@/services/auth';
 import useWallet from '@/hooks/walletHooks';

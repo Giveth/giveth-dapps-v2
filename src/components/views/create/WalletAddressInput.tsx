@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { H5, Caption, brandColors } from '@giveth/ui-design-system';
-import { Regular_Input } from '@/components/styled-components/Input';
-import { InputContainer, TinyLabel } from './Create.sc';
 import styled from 'styled-components';
 
-const WalletAddressInput = (props: any) => {
-	const { setValue } = props;
+import { Regular_Input } from '@/components/styled-components/Input';
+import { InputContainer, TinyLabel } from './Create.sc';
+
+const WalletAddressInput = (props: {
+	value: string;
+	setValue: (e: string) => void;
+}) => {
+	const { value, setValue } = props;
+	const [disabled, setDisabled] = useState(true);
 
 	return (
 		<>
@@ -19,20 +24,35 @@ const WalletAddressInput = (props: any) => {
 
 			<InputContainer>
 				<TinyLabel>Receiving address</TinyLabel>
-				<Input
+				<Regular_Input
 					placeholder='My Wallet Address'
 					onChange={e => setValue(e.target.value)}
+					value={value}
+					disabled={disabled}
 				/>
 				<TinyLabel>
 					This is the default wallet address associated with your
 					account. You can choose a different receiving address.
 				</TinyLabel>
+				<ChangeAddress
+					onClick={() => {
+						setDisabled(false);
+						setValue('');
+					}}
+				>
+					Change address
+				</ChangeAddress>
 			</InputContainer>
 		</>
 	);
 };
 
-const Input = styled(Regular_Input)``;
+const ChangeAddress = styled.div`
+	color: ${brandColors.pinky[500]};
+	font-size: 14px;
+	margin-top: 16px;
+	cursor: pointer;
+`;
 
 const CaptionContainer = styled(Caption)`
 	height: 18px;

@@ -26,7 +26,7 @@ export const switchNetwork = async (chainId: number) => {
 };
 
 export function isAddressENS(ens: string) {
-	return ens.toLowerCase().indexOf('.eth') > -1;
+	return ens?.toLowerCase().indexOf('.eth') > -1;
 }
 
 export async function getAddressFromENS(ens: string, web3: any) {
