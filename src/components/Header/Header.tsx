@@ -119,6 +119,14 @@ const Header: FC<IHeader> = () => {
 		setIsGIVeconomyRoute(isGivEconomyRoute(router.route));
 	}, [router.route]);
 
+	const handleModals = () => {
+		if (isGIVeconomyRoute) {
+			setShowWalletModal(true);
+		} else {
+			setShowSigninModal(true);
+		}
+	};
+
 	return (
 		<>
 			{/* <HeaderPlaceholder /> */}
@@ -268,9 +276,7 @@ const Header: FC<IHeader> = () => {
 										? 'CONNECT WALLET'
 										: 'SIGN IN'
 								}
-								onClick={() => {
-									setShowWalletModal(isGIVeconomyRoute);
-								}}
+								onClick={handleModals}
 							/>
 						</div>
 					)}
