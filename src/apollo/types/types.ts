@@ -18,6 +18,7 @@ export interface IProject {
 		id?: string;
 		email?: string;
 		name?: string;
+		walletAddress?: string;
 	};
 	donations: {
 		id?: string;
