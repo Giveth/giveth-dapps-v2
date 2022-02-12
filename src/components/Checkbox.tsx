@@ -29,7 +29,7 @@ const Wrapper = styled.div<ICheckBox>`
 	flex-direction: row;
 	align-items: center;
 	color: ${(props: any) =>
-		props.checked ? neutralColors.gray[900] : neutralColors.gray[400]};
+		props.checked ? neutralColors.gray[900] : neutralColors.gray[700]};
 	img {
 		border: 2px solid
 			${(props: any) =>

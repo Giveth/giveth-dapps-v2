@@ -12,7 +12,10 @@ import {
 	neutralColors,
 	brandColors,
 	GLink,
+	B,
 } from '@giveth/ui-design-system';
+import FixedToast from '@/components/FixedToast';
+import CheckBox from '@/components/Checkbox';
 import WalletModal from '@/components/modals/WalletModal';
 import DonateModal from '@/components/modals/DonateModal';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
@@ -121,7 +124,7 @@ const CryptoDonation = (props: {
 	// TODO: Set this to a better flow, gotta discuss with design team but it is needed
 	const [unconfirmed, setUnconfirmed] = useState<any>();
 	const [inProgress, setInProgress] = useState<any>();
-	// const [anonymous, setAnonymous] = useState(false);
+	const [anonymous, setAnonymous] = useState<boolean>(false);
 	// const [selectLoading, setSelectLoading] = useState(false);
 	const [givBackEligible, setGivBackEligible] = useState(true);
 	const [showWalletModal, setShowWalletModal] = useState(false);
@@ -312,6 +315,7 @@ const CryptoDonation = (props: {
 					setInProgress={setInProgress}
 					setUnconfirmed={setUnconfirmed}
 					givBackEligible={isGivBackEligible}
+					anonymous={anonymous}
 				/>
 			)}
 
@@ -319,12 +323,18 @@ const CryptoDonation = (props: {
 				{isGivingBlockProject &&
 					networkId !== config.PRIMARY_NETWORK.id && (
 						<XDaiContainer>
-							<Caption color={neutralColors.gray[900]}>
-								Projects from The Giving Block only accept
-								donations on mainnet.
-							</Caption>
-							<SwitchCaption onClick={() => switchNetwork(1)}>
-								Switch Network
+							<div>
+								<img src='/images/gas_station.svg' />
+								<Caption color={neutralColors.gray[900]}>
+									Projects from The Giving Block only accept
+									donations on mainnet.{' '}
+								</Caption>
+							</div>
+							<SwitchCaption
+								style={{}}
+								onClick={() => switchNetwork(1)}
+							>
+								Switch network
 							</SwitchCaption>
 						</XDaiContainer>
 					)}
@@ -337,13 +347,15 @@ const CryptoDonation = (props: {
 								<Caption color={neutralColors.gray[900]}>
 									Save on gas fees, switch to xDAI network.
 								</Caption>
-								<SwitchCaption
-									style={{}}
-									onClick={() => switchNetwork(100)}
-								>
-									Switch network
-								</SwitchCaption>
 							</div>
+							<SwitchCaption
+								onClick={() => switchNetwork(100)}
+								style={{
+									textAlign: 'right',
+								}}
+							>
+								Switch network
+							</SwitchCaption>
 						</XDaiContainer>
 					)}
 				<SearchContainer>
@@ -415,26 +427,23 @@ const CryptoDonation = (props: {
 							}
 						/>
 					</DropdownContainer>
-					<SearchBarContainer>
-						<InputBox
-							// onChange={a => {
-							//   setShowDonateModal(false)
-							//   setAmountTyped(a)
-							// }}}
-							type='number'
-							onChange={val => {
-								if (
-									parseFloat(val) !== 0 &&
-									parseFloat(val) < 0.001
-								) {
-									return;
-								}
-								const checkGIV = checkGIVTokenAvailability();
-								if (checkGIV) setAmountTyped(val);
-							}}
-							placeholder='Amount'
-						/>
-					</SearchBarContainer>
+					<InputBox
+						// onChange={a => {
+						//   setShowDonateModal(false)
+						//   setAmountTyped(a)
+						// }}}
+						errorHandler={{
+							condition: (value: any) =>
+								value >= 0 && value <= 0.0001,
+							message: 'Set a valid amount',
+						}}
+						type='number'
+						onChange={val => {
+							const checkGIV = checkGIVTokenAvailability();
+							if (checkGIV) setAmountTyped(val);
+						}}
+						placeholder='Amount'
+					/>
 				</SearchContainer>
 				<AvText>
 					{' '}
@@ -449,17 +458,58 @@ const CryptoDonation = (props: {
 					{tokenSymbol}
 				</AvText>
 			</InputContainer>
-			{isEnabled && (
-				<MainButton
-					label='DONATE'
-					size='large'
-					onClick={() => {
-						if (selectedTokenBalance < amountTyped) {
-							return setShowInsufficientModal(true);
-						}
-						setShowDonateModal(true);
-					}}
+			{!givBackEligible ? (
+				<ToastContainer>
+					<FixedToast
+						message='This token is not eligible for GIVbacks.'
+						color={brandColors.mustard[600]}
+						backgroundColor={brandColors.mustard[200]}
+						href='/givbacks'
+					/>
+				</ToastContainer>
+			) : (
+				<ToastContainer>
+					<FixedToast
+						message='This token is eligible for GIVbacks.'
+						color={brandColors.giv[300]}
+						backgroundColor={brandColors.giv[100]}
+						href='/givbacks'
+					/>
+				</ToastContainer>
+			)}
+			<CheckBoxContainer>
+				<CheckBox
+					title={'Make it anonymous'}
+					checked={anonymous}
+					onChange={() => setAnonymous(!anonymous)}
 				/>
+				<B>
+					By checking this, we won't consider your profile information
+					as a donor for this donation and won't show it on public
+					pages.
+				</B>
+			</CheckBoxContainer>
+
+			{isEnabled && (
+				<>
+					<MainButton
+						label='DONATE'
+						disabled={!amountTyped || parseInt(amountTyped) < 0}
+						size='large'
+						onClick={() => {
+							if (selectedTokenBalance < amountTyped) {
+								return setShowInsufficientModal(true);
+							}
+							setShowDonateModal(true);
+						}}
+					/>
+					<AnotherWalletTxt>
+						Want to use another wallet?{' '}
+						<a onClick={() => setShowWalletModal(true)}>
+							Change Wallet
+						</a>
+					</AnotherWalletTxt>
+				</>
 			)}
 			{!isEnabled && (
 				<MainButton
@@ -493,15 +543,6 @@ const DropdownContainer = styled.div`
 	width: 35%;
 	height: 54px;
 `;
-const SearchBarContainer = styled.div`
-	height: 54px;
-	width: 65%;
-	border: 2px solid ${neutralColors.gray[300]};
-	border-radius: 0px 6px 6px 0px;
-	* {
-		width: 90%;
-	}
-`;
 const XDaiContainer = styled.div`
 	display: flex;
 	flex: row;
@@ -512,19 +553,47 @@ const XDaiContainer = styled.div`
 		display: flex;
 		flex-direction: row;
 		color: ${neutralColors.gray[800]};
-		img {
-			padding-right: 12px;
-		}
+	}
+	img {
+		padding-right: 12px;
 	}
 `;
 const SwitchCaption = styled(Caption)`
 	color: ${brandColors.pinky[500]};
-	margin-left: 5px;
 	cursor: pointer;
+	padding: 0 0 0 12px;
 `;
 
 const MainButton = styled(Button)`
 	width: 100%;
+	background-color: ${props =>
+		props.disabled ? brandColors.giv[200] : brandColors.giv[500]};
+	color: white;
+`;
+
+const CheckBoxContainer = styled.div`
+	margin: 24px 0;
+	div:nth-child(2) {
+		color: ${neutralColors.gray[700]};
+		font-size: 12px;
+		margin: 4px 0 0 50px;
+		width: 422px;
+	}
+`;
+
+const ToastContainer = styled.div`
+	margin: 12px 0;
+`;
+
+const AnotherWalletTxt = styled(GLink)`
+	font-size 14px;
+	color: ${neutralColors.gray[800]};
+	padding: 16px 0;
+	text-align: center;
+	a {
+		color: ${brandColors.pinky[500]};
+		cursor: pointer;
+	}
 `;
 
 export default CryptoDonation;

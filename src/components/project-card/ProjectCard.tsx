@@ -61,6 +61,8 @@ const ProjectCard = (props: IProjectCard) => {
 						reactions={reactions}
 						verified={verified}
 						traceable={!!traceCampaignId}
+						projectHref={slug}
+						projectDescription={description}
 					/>
 					<ProjectCardImage image={image} cardRadius={cardRadius} />
 				</ImagePlaceholder>

@@ -304,7 +304,6 @@ const DonateModal = ({
 			/>
 		);
 	}
-
 	return (
 		<Modal showModal={showModal} setShowModal={setShowModal}>
 			<DonateContainer>
@@ -319,12 +318,16 @@ const DonateModal = ({
 				<DonatingBox>
 					<P>You are donating</P>
 					<H3>
-						{amount} {token.symbol}
+						{parseFloat(String(amount)).toLocaleString('en-US', {
+							maximumFractionDigits: 6,
+						})}
+						{token.symbol}
 					</H3>
 					{avgPrice && (
 						<H6>
 							{parseFloat(String(avgPrice)).toLocaleString(
 								'en-US',
+								{ maximumFractionDigits: 6 },
 							)}{' '}
 							USD{' '}
 						</H6>

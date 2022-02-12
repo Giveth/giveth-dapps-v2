@@ -17,6 +17,10 @@ interface ISelectObj {
 	icon?: string;
 }
 
+interface ITokenPicker {
+	isOpen: boolean;
+}
+
 const { colors } = defaultTheme;
 
 const ImageIcon = ({ ...props }: any) => {
@@ -155,7 +159,7 @@ const TokenPicker = (props: {
 			isOpen={isOpen}
 			onClose={toggleOpen}
 			target={
-				<TargetContainer onClick={toggleOpen}>
+				<TargetContainer onClick={toggleOpen} isOpen={isOpen}>
 					<TokenContainer>
 						{value && (
 							<ImageIcon
@@ -163,7 +167,12 @@ const TokenPicker = (props: {
 								style={{ margin: '0 16px 0 4px' }}
 							/>
 						)}
-						<P style={{ color: neutralColors.gray[900] }}>
+						<P
+							style={{
+								color: neutralColors.gray[900],
+								marginLeft: '-8px',
+							}}
+						>
 							{value ? `${value.label}` : 'Select a token'}
 						</P>
 					</TokenContainer>
@@ -283,7 +292,8 @@ const TargetContainer = styled.div`
 	height: 54px;
 	border: 2px solid ${neutralColors.gray[300]};
 	padding: 14px 16px;
-	background: ${neutralColors.gray[200]};
+	background: ${(props: ITokenPicker) =>
+		props.isOpen ? neutralColors.gray[200] : 'transparent'};
 	border-radius: 6px 0px 0px 6px;
 	align-items: center;
 `;

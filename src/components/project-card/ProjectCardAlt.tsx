@@ -19,12 +19,14 @@ const imgHeight = '200px';
 
 interface IProjectCard {
 	project: IProject;
+	noHearts?: boolean;
 }
 
 const ProjectCard = (props: IProjectCard) => {
 	const [rndColor, setRndColor] = useState(noImgColor);
-	const { title, description, image, verified, reactions, adminUser } =
+	const { title, description, image, verified, reactions, adminUser, slug } =
 		props.project;
+	const { noHearts } = props;
 
 	const name = adminUser?.name;
 
@@ -38,11 +40,15 @@ const ProjectCard = (props: IProjectCard) => {
 						cardRadius={cardRadius}
 					/>
 				</ImagePlaceholder>
-				<ProjectCardBadges
-					cardWidth={cardWidth}
-					likes={reactions?.length}
-					verified={verified}
-				/>
+				{!noHearts && (
+					<ProjectCardBadges
+						cardWidth={cardWidth}
+						likes={reactions.length}
+						verified={verified}
+						projectHref={slug}
+						projectDescription={description}
+					/>
+				)}
 				<CardBody>
 					<Title>{title}</Title>
 					{name && <Author>{name}</Author>}
@@ -82,7 +88,7 @@ const Description = styled(P)`
 `;
 
 const CardBody = styled.div`
-	margin: 70px 24px 0 24px;
+	margin: 30px 24px 0 24px;
 	text-align: left;
 `;
 

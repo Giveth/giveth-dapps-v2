@@ -18,6 +18,7 @@ const Wrapper = styled.div`
 	text-align: center;
 	margin: 128px auto;
 	color: ${brandColors.deep[500]};
+	position: relative;
 `;
 
 const TrySearch = styled(Lead)`

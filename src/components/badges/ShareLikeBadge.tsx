@@ -9,13 +9,14 @@ import { neutralColors, GLink } from '@giveth/ui-design-system';
 const ShareLikeBadge = (props: {
 	type: 'share' | 'like';
 	active?: boolean;
+	onClick?: () => void;
 }) => {
-	const { type, active } = props;
+	const { type, active, onClick } = props;
 	const isShare = type === 'share';
 	const text = isShare ? 'Share' : 'Like';
 	const icon = isShare ? ShareIcon : active ? HeartRedIcon : HeartGrayIcon;
 	return (
-		<Wrapper>
+		<Wrapper onClick={onClick}>
 			<Image src={icon} alt='badge icon' />
 			<BadgeText size='Medium' className='mx-auto'>
 				{text}

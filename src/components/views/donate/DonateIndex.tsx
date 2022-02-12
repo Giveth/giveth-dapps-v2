@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { useWeb3React } from '@web3-react/core';
 import ProjectCard from '@/components/project-card/ProjectCardAlt';
+import { Shadow } from '@/components/styled-components/Shadow';
 import CryptoDonation from './CryptoDonation';
 import FiatDonation from './FiatDonation';
 import { IProjectBySlug } from '@/apollo/types/types';
@@ -158,7 +159,11 @@ const ProjectsIndex = (props: IProjectBySlug) => {
 			<Wrapper>
 				<Sections>
 					<Left>
-						<ProjectCard key={project.id} project={project} />
+						<ProjectCard
+							key={project.id}
+							project={project}
+							noHearts={true}
+						/>
 					</Left>
 					<Right>
 						{isSuccess ? (
@@ -178,7 +183,10 @@ const ProjectsIndex = (props: IProjectBySlug) => {
 };
 
 const Container = styled.div`
-	background-color: #f7f7f9;
+	display: flex;
+	justify-content: center;
+	background-color: rgba(246, 247, 249);
+	align-items: center;
 `;
 const ConfettiContainer = styled.div`
 	position: absolute;
@@ -190,10 +198,11 @@ const GiverH4 = styled(H4)`
 `;
 
 const Wrapper = styled.div`
+	width: 1052px;
 	text-align: center;
-	margin: 0 194px;
 	padding: 137px 0;
 	align-items: center;
+	maring: 0 auto;
 `;
 const Sections = styled.div`
 	display: grid;
@@ -203,11 +212,13 @@ const Sections = styled.div`
 const Left = styled.div`
 	display: grid;
 	justify-content: center;
+	align-istems: center;
 	grid-auto-flow: column;
 	z-index: 1;
 	grid-column: 1 / 2;
 	grid-row: 1;
 	background: ${neutralColors.gray[200]};
+	box-shadow: ${Shadow.Neutral[400]};
 	padding: 29px 0;
 	border-top-left-radius: 16px;
 	border-bottom-left-radius: 16px;
@@ -220,7 +231,7 @@ const Right = styled.div`
 	padding: 65px 32px 32px;
 	border-top-right-radius: 16px;
 	border-bottom-right-radius: 16px;
-	height: 620px;
+	min-height: 620px;
 	h4 {
 		color: ${brandColors.deep[700]};
 		font-weight: bold;
