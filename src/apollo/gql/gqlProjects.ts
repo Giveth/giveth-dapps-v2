@@ -140,3 +140,9 @@ export const ADD_PROJECT = gql`
 		}
 	}
 `;
+
+export const TITLE_IS_VALID = gql`
+	query IsValidTitleForProject($title: String!, $projectId: Float) {
+		isValidTitleForProject(title: $title, projectId: $projectId)
+	}
+`;

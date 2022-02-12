@@ -31,6 +31,7 @@ import Logger from '@/utils/Logger';
 import SuccessfulCreation from './SuccessfulCreation';
 import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
 import { client } from '@/apollo/apolloClient';
+import { TitleValidationError } from '@/components/views/create/FormValidation';
 
 type Inputs = {
 	name: string;
@@ -42,12 +43,7 @@ type Inputs = {
 };
 
 const CreateIndex = () => {
-	const {
-		register,
-		handleSubmit,
-		setValue,
-		formState: { errors },
-	} = useForm<Inputs>();
+	const { register, handleSubmit, setValue } = useForm<Inputs>();
 
 	const { library } = useWeb3React();
 	const [addProjectMutation] = useMutation(ADD_PROJECT);
@@ -62,13 +58,14 @@ const CreateIndex = () => {
 	const [image, setImage] = useState(null);
 	const [walletAddress, setWalletAddress] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
+	const [errors, setErrors] = useState({});
 
 	const {
 		state: { user, isSignedIn },
 		actions: { signIn },
 	} = useUser();
 
-	console.log(description);
+	console.log(errors);
 
 	const onSubmit: SubmitHandler<Inputs> = async data => {
 		try {
@@ -171,6 +168,28 @@ const CreateIndex = () => {
 		return <SuccessfulCreation project={creationSuccessful} />;
 	}
 
+	const handleInputChange = (value: string, id: string) => {
+		if (id === 'name') {
+			setName(value);
+			TitleValidationError(value).then(error => {
+				const _errors = { ...errors };
+				if (error) {
+					_errors[id] = error;
+				} else {
+					delete _errors[id];
+				}
+				setErrors(_errors);
+			});
+		}
+		// else if (id === 'description') {
+		// 	setDescription(e.target.value);
+		// } else if (id === 'impactLocation') {
+		// 	setImpactLocation(e.target.value);
+		// } else if (id === 'walletAddress') {
+		// 	setWalletAddress(e.target.value);
+		// }
+	};
+
 	return (
 		<>
 			{showGuidelineModal && (
@@ -196,10 +215,13 @@ const CreateIndex = () => {
 				<CreateContainer>
 					<Title>Create a Project</Title>
 					<form>
-						<NameInput value={name} setValue={setName} />
+						<NameInput
+							value={name}
+							setValue={e => handleInputChange(e, 'name')}
+						/>
 						<DescriptionInput setValue={setDescription} />
 						<CategoryInput
-							{...register('categories', { required: true })}
+							{...register('categories')}
 							setValue={(val: Array<any>) =>
 								setValue('categories', val)
 							}
