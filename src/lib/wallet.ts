@@ -1,7 +1,5 @@
 import { EWallets, torusConnector } from '@/lib/wallet/walletTypes';
-import { ethers } from 'ethers';
 import { switchNetwork as metamaskSwitchNetwork } from '@/lib/metamask';
-import { Web3Provider } from '@ethersproject/providers';
 import config from '@/configuration';
 
 export const switchNetwork = async (chainId: number) => {
@@ -33,13 +31,8 @@ export async function getAddressFromENS(ens: string, web3: any) {
 	const isEns = isAddressENS(ens);
 	if (!isEns) return new Error('Error addressNotENS');
 
-	const address = await web3.ens.getOwner(ens);
-
-	let zeroXAddress = ethers.constants.Zero;
-
-	return address === zeroXAddress
-		? new Error('Error gettingAddressFromENS')
-		: address;
+	const resolver = await web3.getResolver(ens);
+	return resolver?.address;
 }
 
 export const switchNetworkHandler = (chainId: number | undefined) => {
