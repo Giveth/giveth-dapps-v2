@@ -88,7 +88,7 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 
 	useEffect(() => {
 		setReaction(props.reaction);
-	}, [props]);
+	}, [props.reaction]);
 
 	return (
 		<>
