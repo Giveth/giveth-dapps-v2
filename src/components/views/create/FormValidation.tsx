@@ -1,22 +1,54 @@
 import { client } from '@/apollo/apolloClient';
-import { TITLE_IS_VALID } from '@/apollo/gql/gqlProjects';
+import {
+	TITLE_IS_VALID,
+	WALLET_ADDRESS_IS_VALID,
+} from '@/apollo/gql/gqlProjects';
+import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 
-export const TitleValidationError = async (title: string) => {
+export const TitleValidation = async (title: string) => {
 	if (title.length < 1) {
-		return 'Title is required';
+		throw { message: 'Title is required' };
+	} else {
+		return client
+			.query({
+				query: TITLE_IS_VALID,
+				variables: {
+					title,
+				},
+			})
+			.then(() => {
+				return;
+			})
+			.catch((err: any) => {
+				throw err;
+			});
 	}
-	client
+};
+
+export const WalletAddressValidation = async (
+	walletAddress: string,
+	web3: any,
+) => {
+	let address = walletAddress;
+	if (isAddressENS(walletAddress)) {
+		address = await getAddressFromENS(walletAddress, web3);
+		if (!address) {
+			throw { message: 'Invalid ENS address' };
+		}
+	} else if (walletAddress.length !== 42) {
+		throw { message: 'Eth address not valid' };
+	}
+	return client
 		.query({
-			query: TITLE_IS_VALID,
+			query: WALLET_ADDRESS_IS_VALID,
 			variables: {
-				title,
+				address,
 			},
 		})
 		.then(() => {
-			return false;
+			return;
 		})
 		.catch((err: any) => {
-			console.log(err);
-			return 'Title is already taken';
+			throw err;
 		});
 };

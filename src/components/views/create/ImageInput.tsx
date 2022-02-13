@@ -4,14 +4,14 @@ import {
 	H5,
 	Caption,
 	brandColors,
-	Button,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import { useDropzone } from 'react-dropzone';
-import { InputContainer } from './Create.sc';
 import styled from 'styled-components';
+
 import { OurImages } from '@/utils/constants';
 import { toBase64 } from '@/utils';
+import { InputContainer } from './Create.sc';
 
 const ImageInput = (props: any) => {
 	const [bgImage, setBgImage] = useState<any>();

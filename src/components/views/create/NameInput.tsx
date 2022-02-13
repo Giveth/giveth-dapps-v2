@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
 import { H5, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Regular_Input } from '@/components/styled-components/Input';
-import { InputContainer, Label } from './Create.sc';
+import {
+	InputContainer,
+	InputErrorMessage,
+	InputWithError,
+	Label,
+} from './Create.sc';
 import { FlexCenter } from '@/components/styled-components/Grid';
 
-const NameInput = (props: { value: string; setValue: (e: string) => void }) => {
-	const { setValue, value } = props;
+const NameInput = (props: {
+	value: string;
+	setValue: (e: string) => void;
+	error: string;
+}) => {
+	const { setValue, value, error } = props;
 	const [characterLength, setCharacterLength] = useState(0);
 	const maxLength = 55;
 	return (
@@ -15,7 +23,7 @@ const NameInput = (props: { value: string; setValue: (e: string) => void }) => {
 			<InputContainer>
 				<Label>Project name</Label>
 				<div style={{ position: 'relative' }}>
-					<Input
+					<InputWithError
 						placeholder='My First Project'
 						onChange={e => {
 							setValue(e.target.value);
@@ -23,11 +31,13 @@ const NameInput = (props: { value: string; setValue: (e: string) => void }) => {
 						}}
 						value={value}
 						maxLength={maxLength}
+						error={!!error}
 					/>
 					<CharLength>
 						{characterLength}/{maxLength}
 					</CharLength>
 				</div>
+				<InputErrorMessage>{error || null}</InputErrorMessage>
 			</InputContainer>
 		</>
 	);
@@ -47,7 +57,5 @@ const CharLength = styled(FlexCenter)`
 	bottom: 0;
 	margin: auto 0;
 `;
-
-const Input = styled(Regular_Input)``;
 
 export default NameInput;

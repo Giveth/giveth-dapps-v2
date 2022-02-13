@@ -1,16 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { H5, Caption, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
-import { Regular_Input } from '@/components/styled-components/Input';
-import { InputContainer, TinyLabel } from './Create.sc';
+import {
+	InputContainer,
+	InputErrorMessage,
+	InputWithError,
+	TinyLabel,
+} from './Create.sc';
+import useUser from '@/context/UserProvider';
+import { compareAddresses } from '@/lib/helpers';
 
 const WalletAddressInput = (props: {
 	value: string;
 	setValue: (e: string) => void;
+	error: string;
 }) => {
-	const { value, setValue } = props;
-	const [disabled, setDisabled] = useState(true);
+	const { value, setValue, error } = props;
+
+	const {
+		state: { user },
+	} = useUser();
 
 	return (
 		<>
@@ -24,22 +34,20 @@ const WalletAddressInput = (props: {
 
 			<InputContainer>
 				<TinyLabel>Receiving address</TinyLabel>
-				<Regular_Input
+				<InputWithError
 					placeholder='My Wallet Address'
 					onChange={e => setValue(e.target.value)}
 					value={value}
-					disabled={disabled}
+					error={!!error}
 				/>
-				<TinyLabel>
-					This is the default wallet address associated with your
-					account. You can choose a different receiving address.
-				</TinyLabel>
-				<ChangeAddress
-					onClick={() => {
-						setDisabled(false);
-						setValue('');
-					}}
-				>
+				<InputErrorMessage>{error || null}</InputErrorMessage>
+				{compareAddresses(value, user?.walletAddress) && (
+					<TinyLabel>
+						This is the default wallet address associated with your
+						account. You can choose a different receiving address.
+					</TinyLabel>
+				)}
+				<ChangeAddress onClick={() => setValue('')}>
 					Change address
 				</ChangeAddress>
 			</InputContainer>

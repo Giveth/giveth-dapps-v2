@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import React, { useEffect, useRef, useState } from 'react';
 import {
 	H3,
 	H4,
@@ -12,6 +11,7 @@ import { useMutation } from '@apollo/client';
 import { utils } from 'ethers';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
+import Debounced from 'lodash.debounce';
 
 import SignInModal from '../../modals/SignInModal';
 import { WALLET_ADDRESS_IS_VALID, ADD_PROJECT } from '@/apollo/gql/gqlProjects';
@@ -31,20 +31,12 @@ import Logger from '@/utils/Logger';
 import SuccessfulCreation from './SuccessfulCreation';
 import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
 import { client } from '@/apollo/apolloClient';
-import { TitleValidationError } from '@/components/views/create/FormValidation';
-
-type Inputs = {
-	name: string;
-	description: string;
-	categories: any;
-	impactLocation: any;
-	image: any;
-	walletAddress: string;
-};
+import {
+	TitleValidation,
+	WalletAddressValidation,
+} from '@/components/views/create/FormValidation';
 
 const CreateIndex = () => {
-	const { register, handleSubmit, setValue } = useForm<Inputs>();
-
 	const { library } = useWeb3React();
 	const [addProjectMutation] = useMutation(ADD_PROJECT);
 
@@ -58,16 +50,28 @@ const CreateIndex = () => {
 	const [image, setImage] = useState(null);
 	const [walletAddress, setWalletAddress] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
-	const [errors, setErrors] = useState({});
+	const [errors, setErrors] = useState<{
+		name: string;
+		walletAddress: string;
+	}>({ name: '', walletAddress: '' });
 
 	const {
 		state: { user, isSignedIn },
 		actions: { signIn },
 	} = useUser();
 
-	console.log(errors);
+	const debouncedTitleValidation = useRef<any>();
+	const debouncedAddressValidation = useRef<any>();
 
-	const onSubmit: SubmitHandler<Inputs> = async data => {
+	useEffect(() => {
+		debouncedTitleValidation.current = Debounced(TitleValidation, 1000);
+		debouncedAddressValidation.current = Debounced(
+			WalletAddressValidation,
+			1000,
+		);
+	}, []);
+
+	const onSubmit = async () => {
 		try {
 			// check heavy description
 			const stringSize = encodeURI(description).split(/%..|./).length - 1;
@@ -94,15 +98,15 @@ const CreateIndex = () => {
 			});
 			// Set categories
 			const projectCategories = [];
-			for (const category in data.categories) {
+			for (const category in categories) {
 				projectCategories.push(category);
 			}
 			const projectData: IProjectCreation = {
 				title: name,
 				description,
-				impactLocation: data.impactLocation?.global
+				impactLocation: impactLocation?.global
 					? 'Global'
-					: data.impactLocation,
+					: impactLocation,
 				categories: projectCategories,
 				organisationId: 1,
 				walletAddress: utils.getAddress(address),
@@ -110,13 +114,10 @@ const CreateIndex = () => {
 				imageUpload: null,
 			};
 
-			if (!isNaN(data?.image)) {
-				projectData.imageStatic = data.image?.toString();
-			} else if (data.image) {
-				projectData.imageUpload = await getImageFile(
-					data.image,
-					data.name,
-				);
+			if (!isNaN(image)) {
+				projectData.imageStatic = image?.toString();
+			} else if (image) {
+				projectData.imageUpload = await getImageFile(image, name);
 			}
 
 			setIsLoading(true);
@@ -147,7 +148,7 @@ const CreateIndex = () => {
 
 	const createProject = (e: any) => {
 		e.preventDefault();
-		handleSubmit(onSubmit)();
+		onSubmit().then();
 	};
 
 	const hasErrors = Object.entries(errors).length !== 0;
@@ -159,8 +160,11 @@ const CreateIndex = () => {
 	}, [isSignedIn]);
 
 	useEffect(() => {
-		if (user?.walletAddress) {
-			setWalletAddress(user.walletAddress);
+		const userAddress = user?.walletAddress;
+		if (userAddress) {
+			WalletAddressValidation(userAddress, library)
+				.then(() => setWalletAddress(userAddress))
+				.catch(() => {});
 		}
 	}, [user]);
 
@@ -169,25 +173,31 @@ const CreateIndex = () => {
 	}
 
 	const handleInputChange = (value: string, id: string) => {
+		const _errors = { ...errors };
 		if (id === 'name') {
 			setName(value);
-			TitleValidationError(value).then(error => {
-				const _errors = { ...errors };
-				if (error) {
-					_errors[id] = error;
-				} else {
-					delete _errors[id];
-				}
-				setErrors(_errors);
-			});
+			TitleValidation(value)
+				.then(() => {
+					_errors[id] = '';
+					setErrors(_errors);
+				})
+				.catch((error: { message: string }) => {
+					_errors[id] = error?.message;
+					setErrors(_errors);
+				});
 		}
-		// else if (id === 'description') {
-		// 	setDescription(e.target.value);
-		// } else if (id === 'impactLocation') {
-		// 	setImpactLocation(e.target.value);
-		// } else if (id === 'walletAddress') {
-		// 	setWalletAddress(e.target.value);
-		// }
+		if (id === 'walletAddress') {
+			setWalletAddress(value);
+			WalletAddressValidation(value, library)
+				.then(() => {
+					_errors[id] = '';
+					setErrors(_errors);
+				})
+				.catch((error: { message: string }) => {
+					_errors[id] = error?.message;
+					setErrors(_errors);
+				});
+		}
 	};
 
 	return (
@@ -218,27 +228,18 @@ const CreateIndex = () => {
 						<NameInput
 							value={name}
 							setValue={e => handleInputChange(e, 'name')}
+							error={errors['name']}
 						/>
 						<DescriptionInput setValue={setDescription} />
-						<CategoryInput
-							{...register('categories')}
-							setValue={(val: Array<any>) =>
-								setValue('categories', val)
-							}
-						/>
-						<LocationInput
-							{...register('impactLocation')}
-							setValue={(val: string) =>
-								setValue('impactLocation', val)
-							}
-						/>
-						<ImageInput
-							{...register('image')}
-							setValue={(val: string) => setValue('image', val)}
-						/>
+						<CategoryInput setValue={setCategories} />
+						<LocationInput setValue={setImpactLocation} />
+						<ImageInput setValue={setImage} />
 						<WalletAddressInput
 							value={walletAddress}
-							setValue={setWalletAddress}
+							setValue={e =>
+								handleInputChange(e, 'walletAddress')
+							}
+							error={errors['walletAddress']}
 						/>
 
 						<PublishTitle>{`Let's Publish!`}</PublishTitle>
