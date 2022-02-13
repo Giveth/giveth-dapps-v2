@@ -32,6 +32,7 @@ const ProjectCard = (props: IProjectCard) => {
 		totalReactions,
 		adminUser,
 		slug,
+		id,
 	} = props.project;
 	const { noHearts } = props;
 
@@ -54,6 +55,7 @@ const ProjectCard = (props: IProjectCard) => {
 						verified={verified}
 						projectHref={slug}
 						projectDescription={description}
+						projectId={id}
 					/>
 				)}
 				<CardBody>

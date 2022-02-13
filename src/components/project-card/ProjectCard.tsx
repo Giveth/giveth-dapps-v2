@@ -43,6 +43,7 @@ const ProjectCard = (props: IProjectCard) => {
 		adminUser,
 		totalDonations,
 		traceCampaignId,
+		id,
 	} = props.project;
 
 	const [isHover, setIsHover] = useState(false);
@@ -65,6 +66,7 @@ const ProjectCard = (props: IProjectCard) => {
 						traceable={!!traceCampaignId}
 						projectHref={slug}
 						projectDescription={description}
+						projectId={id}
 					/>
 					<ProjectCardImage image={image} cardRadius={cardRadius} />
 				</ImagePlaceholder>
