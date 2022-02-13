@@ -56,9 +56,11 @@ const ProjectDonateCard = (props: IProjectBySlug) => {
 
 			try {
 				if (!reaction) {
-					await likeProject(project.id);
+					const newReaction = await likeProject(project.id);
+					setReaction(newReaction);
 				} else {
-					await unlikeProject(reaction.id);
+					const successful = await unlikeProject(reaction.id);
+					if (successful) setReaction(undefined);
 				}
 			} catch (e) {
 				console.error('Error on like/unlike project ', e);

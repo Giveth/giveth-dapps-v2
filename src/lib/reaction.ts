@@ -3,7 +3,6 @@ import { client } from '@/apollo/apolloClient';
 import {
 	LIKE_PROJECT_MUTATION,
 	UNLIKE_PROJECT_MUTATION,
-	UPLOAD_IMAGE,
 } from '@/apollo/gql/gqlProjects';
 
 export const likeProject = async (
@@ -16,7 +15,6 @@ export const likeProject = async (
 		},
 	});
 
-	console.log('data:', data);
 	return data.likeProject;
 };
 
@@ -30,6 +28,5 @@ export const unlikeProject = async (
 		},
 	});
 
-	console.log('data:', data);
-	return data.likeProject;
+	return data.unlikeProject;
 };
