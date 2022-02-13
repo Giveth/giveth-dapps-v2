@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
@@ -13,30 +13,88 @@ import { Button, brandColors, GLink } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import useUser from '@/context/UserProvider';
 import ShareModal from '@/components/modals/ShareModal';
+import { IReaction } from '@/apollo/types/types';
+import { client } from '@/apollo/apolloClient';
+import { FETCH_PROJECT_REACTION_BY_ID } from '@/apollo/gql/gqlProjects';
+import SignInModal from '@/components/modals/SignInModal';
+import { likeProject, unlikeProject } from '@/lib/reaction';
 
 const ProjectDonateCard = (props: IProjectBySlug) => {
 	const {
-		state: { user },
+		state: { user, isSignedIn },
+		actions: { signIn },
 	} = useUser();
 
 	const { project } = props;
-	const { categories, slug, reactions, description } = project;
+	const { categories, slug, description } = project;
+	const [reaction, setReaction] = useState<IReaction | undefined>(undefined);
 
 	const [heartedByUser, setHeartedByUser] = useState<boolean>(false);
 	const [showModal, setShowModal] = useState<boolean>(false);
+	const [showSigninModal, setShowSigninModal] = useState(false);
+	const [loading, setLoading] = useState(false);
 
 	const isCategories = categories.length > 0;
 
 	const router = useRouter();
 
-	useEffect(() => {
-		if (user?.id) {
-			const isHearted = !!reactions?.some(
-				i => Number(i.userId) === Number(user.id),
-			);
-			setHeartedByUser(isHearted);
+	const likeUnlikeProject = async () => {
+		if (!isSignedIn) {
+			if (signIn) {
+				const success = await signIn();
+				if (!success) return;
+			} else {
+				console.error('Sign in is not possible');
+			}
+			// setShowSigninModal(true);
+			// return;
 		}
-	}, [reactions, user]);
+		if (loading) return;
+
+		if (project.id) {
+			setLoading(true);
+
+			try {
+				if (!reaction) {
+					await likeProject(project.id);
+				} else {
+					await unlikeProject(reaction.id);
+				}
+			} catch (e) {
+				console.error('Error on like/unlike project ', e);
+			} finally {
+				setLoading(false);
+			}
+		}
+	};
+
+	const fetchProjectReaction = async () => {
+		if (user?.id) {
+			try {
+				const { data } = await client.query({
+					query: FETCH_PROJECT_REACTION_BY_ID,
+					variables: {
+						id: Number(project.id),
+						connectedWalletUserId: Number(user?.id),
+					},
+					fetchPolicy: 'no-cache',
+				});
+				setReaction(data?.projectById?.reaction);
+			} catch (e) {
+				console.error('Error on fetching project by id:', e);
+			}
+		} else if (reaction) {
+			setReaction(undefined);
+		}
+	};
+
+	useEffect(() => {
+		fetchProjectReaction();
+	}, [user]);
+
+	useEffect(() => {
+		setHeartedByUser(!!reaction?.id);
+	}, [project, reaction]);
 
 	return (
 		<>
@@ -46,6 +104,12 @@ const ProjectDonateCard = (props: IProjectBySlug) => {
 					setShowModal={setShowModal}
 					projectHref={slug}
 					projectDescription={description}
+				/>
+			)}
+			{showSigninModal && (
+				<SignInModal
+					showModal={showSigninModal}
+					closeModal={() => setShowSigninModal(false)}
 				/>
 			)}
 			<Wrapper>
@@ -58,7 +122,11 @@ const ProjectDonateCard = (props: IProjectBySlug) => {
 						type='share'
 						onClick={() => setShowModal(true)}
 					/>
-					<ShareLikeBadge type='like' active={heartedByUser} />
+					<ShareLikeBadge
+						type='like'
+						active={heartedByUser}
+						onClick={likeUnlikeProject}
+					/>
 				</BadgeWrapper>
 				<GivBackNotif>
 					<GLink size='Medium' color={brandColors.giv[300]}>

@@ -1,8 +1,16 @@
 import { gql } from '@apollo/client';
 
 export const FETCH_HOME_PROJECTS = gql`
-	query FetchAllProjects($limit: Int, $orderBy: OrderBy) {
-		projects(take: $limit, orderBy: $orderBy) {
+	query FetchAllProjects(
+		$limit: Int
+		$orderBy: OrderBy
+		$connectedWalletUserId: Int
+	) {
+		projects(
+			take: $limit
+			orderBy: $orderBy
+			connectedWalletUserId: $connectedWalletUserId
+		) {
 			projects {
 				id
 				title
@@ -13,8 +21,9 @@ export const FETCH_HOME_PROJECTS = gql`
 				totalDonations
 				traceCampaignId
 				reaction {
-					userId
+					id
 				}
+				totalReactions
 				adminUser {
 					name
 				}
@@ -32,6 +41,7 @@ export const FETCH_ALL_PROJECTS = gql`
 		$filterBy: FilterBy
 		$searchTerm: String
 		$category: String
+		$connectedWalletUserId: Int
 	) {
 		projects(
 			take: $limit
@@ -40,6 +50,7 @@ export const FETCH_ALL_PROJECTS = gql`
 			filterBy: $filterBy
 			searchTerm: $searchTerm
 			category: $category
+			connectedWalletUserId: $connectedWalletUserId
 		) {
 			projects {
 				id
@@ -51,8 +62,9 @@ export const FETCH_ALL_PROJECTS = gql`
 				totalDonations
 				traceCampaignId
 				reaction {
-					userId
+					id
 				}
+				totalReactions
 				adminUser {
 					name
 				}
@@ -66,8 +78,11 @@ export const FETCH_ALL_PROJECTS = gql`
 `;
 
 export const FETCH_PROJECT_BY_SLUG = gql`
-	query ProjectBySlug($slug: String!) {
-		projectBySlug(slug: $slug) {
+	query ProjectBySlug($slug: String!, $connectedWalletUserId: Int) {
+		projectBySlug(
+			slug: $slug
+			connectedWalletUserId: $connectedWalletUserId
+		) {
 			id
 			title
 			image
@@ -81,8 +96,9 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 			creationDate
 			givingBlocksId
 			reaction {
-				userId
+				id
 			}
+			totalReactions
 			traceCampaignId
 			categories {
 				name
@@ -90,6 +106,18 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 			adminUser {
 				name
 			}
+		}
+	}
+`;
+
+export const FETCH_PROJECT_REACTION_BY_ID = gql`
+	query ProjectById($id: Float!, $connectedWalletUserId: Int) {
+		projectById(id: $id, connectedWalletUserId: $connectedWalletUserId) {
+			id
+			reaction {
+				id
+			}
+			totalReactions
 		}
 	}
 `;
@@ -155,34 +183,34 @@ export const ADD_PROJECT = gql`
 	}
 `;
 
-export const LIKE_PROJECT_QUERY = `
-  mutation ($projectId: Int!) {
-    likeProject(projectId: $projectId) {
-      id
-      projectId
-      reaction
-    }
-  }
+export const LIKE_PROJECT_MUTATION = gql`
+	mutation ($projectId: Int!) {
+		likeProject(projectId: $projectId) {
+			id
+			projectId
+			reaction
+		}
+	}
 `;
 
-export const UNLIKE_PROJECT_QUERY = `
-  mutation ($reactionId: Int!) {
-    unlikeProject(reactionId: $reactionId)
-  }
+export const UNLIKE_PROJECT_MUTATION = gql`
+	mutation ($reactionId: Int!) {
+		unlikeProject(reactionId: $reactionId)
+	}
 `;
 
-export const LIKE_PROJECT_UPDATE_QUERY = `
-  mutation ($projectUpdateId: Int!) {
-    likeProjectUpdate(projectUpdateId: $projectUpdateId) {
-      id
-      projectUpdateId
-      reaction
-    }
-  }
+export const LIKE_PROJECT_UPDATE_MUTATION = gql`
+	mutation ($projectUpdateId: Int!) {
+		likeProjectUpdate(projectUpdateId: $projectUpdateId) {
+			id
+			projectUpdateId
+			reaction
+		}
+	}
 `;
 
-export const UNLIKE_PROJECT_UPDATE_QUERY = `
-  mutation ($reactionId: Int!) {
-    unlikeProjectUpdate(reactionId: $reactionId)
-  }
+export const UNLIKE_PROJECT_UPDATE_MUTATION = gql`
+	mutation ($reactionId: Int!) {
+		unlikeProjectUpdate(reactionId: $reactionId)
+	}
 `;

@@ -16,7 +16,8 @@ interface IBadgeWrapper {
 }
 
 interface IProjectCardBadges {
-	reactions?: IReaction[];
+	reaction?: IReaction;
+	totalReactions?: number;
 	verified?: boolean;
 	traceable?: boolean;
 	isHover?: boolean;
@@ -34,21 +35,19 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 	const [heartedByUser, setHeartedByUser] = useState<boolean>(false);
 	const [showModal, setShowModal] = useState<boolean>(false);
 	const {
-		reactions,
+		totalReactions,
+		reaction,
 		verified,
 		isHover,
 		traceable,
 		projectHref,
 		projectDescription,
 	} = props;
-	const likes = reactions?.length;
+	const likes = totalReactions || 0;
 
 	useEffect(() => {
 		if (user?.id) {
-			const isHearted = !!reactions?.some(
-				i => Number(i.userId) === Number(user.id),
-			);
-			setHeartedByUser(isHearted);
+			setHeartedByUser(!!reaction?.id);
 		}
 	}, [user]);
 

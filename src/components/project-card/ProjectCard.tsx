@@ -38,7 +38,8 @@ const ProjectCard = (props: IProjectCard) => {
 		image,
 		verified,
 		slug,
-		reactions,
+		reaction,
+		totalReactions,
 		adminUser,
 		totalDonations,
 		traceCampaignId,
@@ -58,7 +59,8 @@ const ProjectCard = (props: IProjectCard) => {
 				<ImagePlaceholder>
 					<ProjectCardBadges
 						isHover={isHover}
-						reactions={reactions}
+						totalReactions={totalReactions}
+						reaction={reaction}
 						verified={verified}
 						traceable={!!traceCampaignId}
 						projectHref={slug}

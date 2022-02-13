@@ -1,5 +1,5 @@
 const links = {
-	BACKEND: 'https://serve.giveth.io/graphql',
+	BACKEND: 'http://localhost:4000/graphql',
 	FRONTEND: 'https://giveth-dapps-v2.vercel.app/',
 	REPORT_ISSUE: 'https://github.com/Giveth/giveth-io-typescript/issues/new',
 	ASK_QUESTION: 'https://giveth.typeform.com/question',
