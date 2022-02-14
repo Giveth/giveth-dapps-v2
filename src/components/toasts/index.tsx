@@ -26,8 +26,6 @@ export enum ToastDirection {
 
 export interface IToast {
 	type?: ToastType;
-	actionLabel?: string;
-	actionCB?: any;
 	title?: string;
 	direction?: ToastDirection;
 	dismissLabel?: string;
@@ -59,8 +57,9 @@ export const gToast = (message: string, options: IToast) => {
 		direction = ToastDirection.LEFT,
 		title,
 		dismissLabel,
+		dismissCB,
 	} = options;
-	return toast.custom(
+	const toastID = toast.custom(
 		<ToastContainer {...options}>
 			{direction === ToastDirection.LEFT && (
 				<LeftIconContainer>{toastIcon(type)}</LeftIconContainer>
@@ -71,14 +70,24 @@ export const gToast = (message: string, options: IToast) => {
 			</Content>
 			<Spacer />
 			{dismissLabel && (
-				<DismissButton size='small'>{dismissLabel}</DismissButton>
+				<DismissButton
+					size='small'
+					onClick={() => {
+						if (dismissCB) {
+							dismissCB();
+						}
+						toast.remove(toastID);
+					}}
+				>
+					{dismissLabel}
+				</DismissButton>
 			)}
 			{direction === ToastDirection.RIGHT && (
 				<IconContainer>{toastIcon(type)}</IconContainer>
 			)}
 		</ToastContainer>,
 		{
-			duration: 400000,
+			duration: 40000,
 		},
 	);
 };
@@ -160,4 +169,6 @@ const Spacer = styled.div`
 	flex: 1;
 `;
 
-const DismissButton = styled(ButtonText)``;
+const DismissButton = styled(ButtonText)`
+	cursor: pointer;
+`;
