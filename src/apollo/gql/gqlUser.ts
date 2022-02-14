@@ -12,6 +12,10 @@ export const GET_USER_BY_ADDRESS = gql`
 			walletAddress
 			url
 			location
+			totalDonated
+			totalReceived
+			projectsCount
+			donationsCount
 		}
 	}
 `;
@@ -35,12 +39,6 @@ export const FETCH_USER_PROJECTS = gql`
 				totalDonations
 				categories {
 					name
-				}
-				reactions {
-					reaction
-					id
-					projectUpdateId
-					userId
 				}
 				qualityScore
 			}
