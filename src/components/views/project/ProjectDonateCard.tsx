@@ -29,7 +29,8 @@ const ProjectDonateCard = (props: IProjectBySlug) => {
 	} = useUser();
 
 	const { project } = props;
-	const { categories, slug, reactions, description, adminUser } = project;
+	const { categories, slug, reactions, description, adminUser, id, status } =
+		project;
 
 	const [heartedByUser, setHeartedByUser] = useState<boolean>(false);
 	const [showModal, setShowModal] = useState<boolean>(false);
@@ -69,6 +70,7 @@ const ProjectDonateCard = (props: IProjectBySlug) => {
 				<DeactivateProjectModal
 					showModal={deactivateModal}
 					setShowModal={setDeactivateModal}
+					projectId={id}
 				/>
 			)}
 			<Wrapper>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Select, { StylesConfig } from 'react-select';
 import styled from 'styled-components';
@@ -11,6 +11,11 @@ import {
 	P,
 	semanticColors,
 } from '@giveth/ui-design-system';
+import { client } from '@/apollo/apolloClient';
+import {
+	DEACTIVATE_PROJECT,
+	GET_STATUS_REASONS,
+} from '@/apollo/gql/gqlProjects';
 import InfoBadge from '@/components/badges/InfoBadge';
 import FormProgress from '@/components/FormProgress';
 import { Shadow } from '@/components/styled-components/Shadow';
@@ -22,38 +27,61 @@ interface ISelectObj {
 	label: string;
 }
 
-const reasons: ISelectObj[] = [
-	{ value: 1, label: 'The project has completed its goals!' },
-	{ value: 2, label: 'The project is no longer in need of funding.' },
-	{ value: 3, label: 'The project is not longer active.' },
-	{ value: 4, label: 'The project was made by mistake.' },
-	{ value: 5, label: 'Other / prefer not to say.' },
-];
-
 const buttonLabels: { [key: string]: string }[] = [
 	{ confirm: 'okay, do it', cancel: "nope, don't do it" },
 	{ confirm: 'deactivate this project', cancel: 'cancel' },
 	{ confirm: '', cancel: 'close' },
 ];
+interface IDeactivateProjectModal extends IModal {
+	projectId?: string;
+}
 
-const DeactivateProjectModal = ({ showModal, setShowModal }: IModal) => {
+const DeactivateProjectModal = ({
+	projectId,
+	showModal,
+	setShowModal,
+}: IDeactivateProjectModal) => {
 	const [tab, setTab] = useState<number>(0);
 	const [motive, setMotive] = useState<string>('');
-	const [selectedReason, setSelectedReason] = useState<ISelectObj | void>(
+	const [reasons, setReasons] = useState<ISelectObj[]>([]);
+	const [selectedReason, setSelectedReason] = useState<ISelectObj | any>(
 		undefined,
 	);
+
+	const fetchReasons = async () => {
+		const { data } = await client.query({
+			query: GET_STATUS_REASONS,
+			fetchPolicy: 'no-cache',
+		});
+		const fetchedReasons = data.getStatusReasons.map((elem: any) => ({
+			label: elem.description,
+			value: elem.id,
+		}));
+		setReasons(fetchedReasons);
+	};
 
 	const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
 		const { value } = e.target;
 		setMotive(value);
 	};
 
-	const handleConfirmButton = () => {
-		if (!!tab) {
-			console.log('deactivate project');
+	const handleConfirmButton = async () => {
+		if (!!tab && !!selectedReason) {
+			const { data } = await client.mutate({
+				mutation: DEACTIVATE_PROJECT,
+				variables: {
+					projectId: Number(projectId),
+					reasonId: Number(selectedReason.value),
+				},
+			});
+			console.log(data);
 		}
 		setTab(previousTab => previousTab + 1);
 	};
+
+	useEffect(() => {
+		fetchReasons();
+	}, [selectedReason]);
 
 	return (
 		<Modal
@@ -76,6 +104,7 @@ const DeactivateProjectModal = ({ showModal, setShowModal }: IModal) => {
 					<DeactivatingContent show={tab === 0} />
 					<WhyContent
 						handleChange={handleChange}
+						handleSelect={setSelectedReason}
 						options={reasons}
 						selectedOption={selectedReason}
 						show={tab === 1}
@@ -97,6 +126,7 @@ const DeactivateProjectModal = ({ showModal, setShowModal }: IModal) => {
 						size='small'
 						label={buttonLabels[tab].confirm}
 						onClick={handleConfirmButton}
+						disabled={tab > 0 && !!!selectedReason}
 					/>
 				)}
 				<CancelButton
@@ -195,6 +225,7 @@ const BulletPoint = styled.li`
 
 interface IWhyContent {
 	handleChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+	handleSelect: (e: any) => void;
 	options: ISelectObj[];
 	selectedOption: ISelectObj | void;
 	show: boolean;
@@ -203,6 +234,7 @@ interface IWhyContent {
 
 const WhyContent = ({
 	handleChange,
+	handleSelect,
 	options,
 	selectedOption,
 	show,
@@ -219,6 +251,7 @@ const WhyContent = ({
 					placeholder='Select a reason for deactivating'
 					styles={selectCustomStyles}
 					value={selectedOption}
+					onChange={e => handleSelect(e)}
 				/>
 				<GLink>Or write your own reason:</GLink>
 				<InputBox
