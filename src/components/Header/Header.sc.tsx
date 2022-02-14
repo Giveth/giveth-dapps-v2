@@ -29,6 +29,9 @@ export const StyledHeader = styled(Row)<IHeader>`
 `;
 
 export const Logo = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: cneter;
 	background: ${neutralColors.gray[100]};
 	box-shadow: ${props =>
 		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
@@ -36,6 +39,10 @@ export const Logo = styled.div`
 	padding: 8px;
 	width: 64px;
 	height: 64px;
+`;
+
+export const BackBtn = styled.a`
+	cursor: pointer;
 `;
 
 interface IThemed {

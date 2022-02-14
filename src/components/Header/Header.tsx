@@ -20,6 +20,7 @@ import {
 	CreateProject,
 	SmallCreateProject,
 	Logo,
+	BackBtn,
 	MenuAndButtonContainer,
 	CoverLine,
 	MBContainer,
@@ -58,6 +59,7 @@ const Header: FC<IHeader> = () => {
 	const [showWalletModal, setShowWalletModal] = useState(false);
 	const [showSigninModal, setShowSigninModal] = useState(false);
 	const [isGIVeconomyRoute, setIsGIVeconomyRoute] = useState(false);
+	const [isCreateRoute, setIsCreateRoute] = useState(false);
 	const {
 		currentValues: { balances },
 	} = useSubgraph();
@@ -67,6 +69,8 @@ const Header: FC<IHeader> = () => {
 	const { chainId, active, activate, account, library } = useWeb3React();
 	const { theme } = useGeneral();
 	const router = useRouter();
+
+	const showLinks = !isCreateRoute;
 
 	const handleHoverClickBalance = (show: boolean) => {
 		setShowRewardMenu(show);
@@ -116,7 +120,8 @@ const Header: FC<IHeader> = () => {
 	}, [showHeader]);
 
 	useEffect(() => {
-		setIsGIVeconomyRoute(isGivEconomyRoute(router.route));
+		setIsGIVeconomyRoute(router.route.startsWith('/giv'));
+		setIsCreateRoute(router.route.startsWith('/create'));
 	}, [router.route]);
 
 	const handleModals = () => {
@@ -136,42 +141,45 @@ const Header: FC<IHeader> = () => {
 				theme={theme}
 				show={showHeader}
 			>
-				<Row gap='24px' alignItems='center'>
-					<Logo theme={theme}>
-						<Image
-							width='48p'
-							height='48px'
-							alt='Giveth logo'
-							src={`/images/logo/logo1.png`}
-						/>
-					</Logo>
-					<HeaderSmallMenuAndButtonContainer>
-						<BalanceButton outline theme={theme}>
-							<MBContainer>
-								<IconMenu24 />
-								<GLink size='Big'>Home</GLink>
-							</MBContainer>
-							<CoverLine theme={theme} />
-						</BalanceButton>
-						{showSmallMenu && <HeaderSmallMenu />}
-					</HeaderSmallMenuAndButtonContainer>
+				<Row>
+					{isCreateRoute ? (
+						<BackBtn onClick={() => router.back()}>
+							<Logo>
+								<Image
+									width='26px'
+									height='26px'
+									alt='Giveth logo'
+									src={`/images/back-2.svg`}
+								/>{' '}
+							</Logo>
+						</BackBtn>
+					) : (
+						<Logo>
+							<Image
+								width='48px'
+								height='48px'
+								alt='Giveth logo'
+								src={`/images/logo/logo1.png`}
+							/>
+						</Logo>
+					)}
 				</Row>
-				<HeaderLinks theme={theme}>
-					{menuRoutes.map((link, index) => (
-						<Link href={link.href} passHref key={index}>
-							<HeaderLink
-								size='Big'
-								theme={theme}
-								active={checkLinkActive(
-									router.route,
-									link.href,
-								)}
-							>
-								{link.title}
-							</HeaderLink>
-						</Link>
-					))}
-				</HeaderLinks>
+				{showLinks && (
+					<HeaderLinks theme={theme}>
+						{menuRoutes.map((link, index) => (
+							<Link href={link.href} passHref key={index}>
+								<HeaderLink
+									size='Big'
+									theme={theme}
+									active={router.route === link.href}
+								>
+									{link.title}
+								</HeaderLink>
+							</Link>
+						))}
+					</HeaderLinks>
+				)}
+
 				<Row gap='8px'>
 					<Link href='/create' passHref>
 						<CreateProject

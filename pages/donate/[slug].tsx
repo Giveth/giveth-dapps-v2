@@ -23,7 +23,6 @@ export async function getServerSideProps(props: { query: { slug: string } }) {
 		variables: { slug },
 		fetchPolicy: 'no-cache',
 	});
-
 	const project = data.projectBySlug;
 
 	return {

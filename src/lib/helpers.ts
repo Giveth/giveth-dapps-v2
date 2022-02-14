@@ -1,4 +1,7 @@
+import { ethers } from 'ethers';
 import { keccak256 } from '@ethersproject/keccak256';
+import { Contract } from '@ethersproject/contracts';
+import { Web3Provider } from '@ethersproject/providers';
 import { Web3ReactContextInterface } from '@web3-react/core/dist/types';
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
 import { PortisConnector } from '@web3-react/portis-connector';
@@ -7,6 +10,8 @@ import { AuthereumConnector } from '@web3-react/authereum-connector';
 import { promisify } from 'util';
 import Routes from './constants/Routes';
 import { networkInfo } from './constants/NetworksObj';
+// @ts-ignore
+import tokenAbi from 'human-standard-token-abi';
 
 declare let window: any;
 import { BasicNetworkConfig, GasPreference } from '@/types/config';
@@ -150,6 +155,85 @@ export function formatTxLink(
 	hash: string | undefined,
 ) {
 	return `${networkInfo(chainId).networkPrefix}tx/${hash}`;
+}
+
+export async function sendTransaction(
+	web3: Web3Provider,
+	params: any,
+	txCallbacks: any,
+	contractAddress: string,
+	fromSigner: any,
+	// traceableDonation = false
+) {
+	try {
+		let web3Provider = web3;
+		let txn = null;
+		const txParams: any = {
+			to: params?.to,
+			// value: params?.value
+		};
+
+		web3Provider = fromSigner;
+
+		// TRACEABLE DONATION
+		// if (traceableDonation) {
+		//   //
+		//   // DEV: 0x279277482F13aeF92914317a0417DD591145aDc9
+		//   // RELEASE: 0xC59dCE5CCC065A4b51A2321F857466A25ca49B40
+		//   // TRACE: 0x30f938fED5dE6e06a9A7Cd2Ac3517131C317B1E7
+		//
+		//   // TODO !!!!!!!!!!!!
+		//   const givethBridgeCurrent = new GivethBridge(
+		//     web3,
+		//     process.env.NEXT_PUBLIC_GIVETH_BRIDGE_ADDRESS
+		//   )
+		//   console.log({ givethBridgeCurrent })
+		//   return alert('This is a trace donation, do something NOW!')
+		// }
+
+		// ERC20 TRANSFER
+		if (contractAddress) {
+			const contract = new Contract(contractAddress, tokenAbi, web3);
+			const decimals = await contract.decimals.call();
+			txParams.value = ethers.utils.parseUnits(
+				params?.value,
+				parseInt(decimals),
+			);
+			const instance = contract.connect(web3.getSigner());
+
+			if (fromSigner) {
+				txn = await instance.transfer(txParams?.to, txParams?.value);
+				txCallbacks?.onTransactionHash(txn?.hash, txn?.from);
+				return txn;
+			}
+			const from = await fromSigner.getAccounts();
+			return instance
+				.transfer(txParams?.to, txParams?.value)
+				.send({
+					from: from[0],
+				})
+				.on('transactionHash', txCallbacks?.onTransactionHash)
+				.on('receipt', function (receipt: any) {
+					console.log('receipt>>>', receipt);
+					txCallbacks?.onReceiptGenerated(receipt);
+				})
+				.on('error', (error: any) => txCallbacks?.onError(error)); // If a out of gas error, the second parameter is the receipt.
+		}
+
+		// REGULAR ETH TRANSFER
+		txParams.value = ethers.utils.parseEther(params?.value);
+		if (!txCallbacks || fromSigner) {
+			// gets hash and checks until it's mined
+			txn = await web3Provider.sendTransaction(txParams);
+			txCallbacks?.onTransactionHash(txn?.hash, txn?.from);
+		}
+
+		console.log('stTxn ---> : ', { txn });
+		return txn;
+	} catch (error: any) {
+		console.log('Error sending transaction: ', { error });
+		throw error;
+	}
 }
 
 export async function signMessage(

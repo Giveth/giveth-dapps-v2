@@ -181,9 +181,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 						</FirstDetail>
 						<Detail justifyContent='space-between'>
 							<DetailLabel>Claimable</DetailLabel>
-							<DetailValue>
-								{`${formatWeiHelper(rewardLiquidPart)} GIV`}
-							</DetailValue>
+							<DetailValue>{`${formatWeiHelper(
+								rewardLiquidPart,
+							)} GIV`}</DetailValue>
 						</Detail>
 						<Detail justifyContent='space-between'>
 							<Row gap='8px' alignItems='center'>
