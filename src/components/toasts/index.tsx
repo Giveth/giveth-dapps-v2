@@ -6,7 +6,7 @@ import {
 	semanticColors,
 	ButtonText,
 } from '@giveth/ui-design-system';
-import toast from 'react-hot-toast';
+import toast, { ToastPosition } from 'react-hot-toast';
 import styled from 'styled-components';
 import { Row } from '../styled-components/Grid';
 
@@ -30,6 +30,8 @@ export interface IToast {
 	direction?: ToastDirection;
 	dismissLabel?: string;
 	dismissCB?: any;
+	position?: ToastPosition;
+	duration?: number;
 }
 
 const toastIcon = (type: ToastType) => {
@@ -58,6 +60,8 @@ export const gToast = (message: string, options: IToast) => {
 		title,
 		dismissLabel,
 		dismissCB,
+		position = 'bottom-center',
+		duration,
 	} = options;
 	const toastID = toast.custom(
 		<ToastContainer {...options}>
@@ -87,7 +91,8 @@ export const gToast = (message: string, options: IToast) => {
 			)}
 		</ToastContainer>,
 		{
-			duration: 40000,
+			duration,
+			position,
 		},
 	);
 };

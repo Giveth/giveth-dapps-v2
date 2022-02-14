@@ -11,6 +11,7 @@ const TestRoute = () => {
 			// direction: ToastDirection.RIGHT,
 			title: 'test',
 			dismissLabel: 'OK :D',
+			position: 'bottom-center',
 		});
 	return (
 		<>
