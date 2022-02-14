@@ -17,12 +17,15 @@ import Image from 'next/image';
 import { Row } from '../../styled-components/Grid';
 import PublicProfileContributes from './PublicProfileContributes';
 import { IUser } from '@/apollo/types/types';
+import { networksParams } from '@/helpers/blockchain';
+import { useWeb3React } from '@web3-react/core';
 
 export interface IUserPublicProfileView {
 	user: IUser;
 }
 
 const UserPublicProfileView: FC<IUserPublicProfileView> = ({ user }) => {
+	const { chainId } = useWeb3React();
 	return (
 		<>
 			<PubliCProfileHeader>
@@ -65,7 +68,15 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({ user }) => {
 								>
 									<IconCopy />
 								</WalletIconsContainer>
-								<WalletIconsContainer>
+								<WalletIconsContainer
+									onClick={() => {
+										if (chainId) {
+											window.open(
+												`${networksParams[chainId].blockExplorerUrls[0]}/address/${user.walletAddress}`,
+											);
+										}
+									}}
+								>
 									<IconExternalLink />
 								</WalletIconsContainer>
 							</WalletContainer>
