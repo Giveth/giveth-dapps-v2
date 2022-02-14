@@ -28,6 +28,10 @@ export interface IProject {
 	totalProjectUpdates?: number;
 	traceCampaignId: string | null;
 	givingBlocksId?: string | null;
+	status: {
+		id?: string;
+		name?: string;
+	};
 }
 
 export interface IProjectCreation {

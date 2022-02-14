@@ -18,6 +18,10 @@ export const FETCH_HOME_PROJECTS = gql`
 				adminUser {
 					name
 				}
+				status {
+					id
+					name
+				}
 			}
 			totalCount
 		}
@@ -56,6 +60,10 @@ export const FETCH_ALL_PROJECTS = gql`
 				adminUser {
 					name
 				}
+				status {
+					id
+					name
+				}
 			}
 			totalCount
 			categories {
@@ -91,6 +99,10 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 				name
 				walletAddress
 			}
+			status {
+				id
+				name
+			}
 		}
 	}
 `;
@@ -117,6 +129,10 @@ export const FETCH_PROJECT_UPDATES = gql`
 			totalReactions
 			reaction {
 				projectUpdateId
+			}
+			status {
+				id
+				name
 			}
 		}
 	}
@@ -186,4 +202,23 @@ export const UNLIKE_PROJECT_UPDATE_QUERY = `
   mutation ($reactionId: Int!) {
     unlikeProjectUpdate(reactionId: $reactionId)
   }
+`;
+
+export const GET_STATUS_REASONS = gql`
+	query {
+		getStatusReasons(statusId: 6) {
+			id
+			description
+			status {
+				id
+				name
+			}
+		}
+	}
+`;
+
+export const DEACTIVATE_PROJECT = gql`
+	mutation ($projectId: Float!, $reasonId: Float) {
+		deactivateProject(projectId: $projectId, reasonId: $reasonId)
+	}
 `;
