@@ -8,10 +8,12 @@ import { useWeb3React } from '@web3-react/core';
 
 export interface IPriceContext {
 	price: BigNumber;
+	ethPrice: BigNumber;
 }
 
 const priceDefaultValue = {
 	price: Zero,
+	ethPrice: Zero,
 };
 
 const PriceContext = createContext<IPriceContext>(priceDefaultValue);
@@ -107,7 +109,8 @@ export const PriceProvider: FC = ({ children }) => {
 	return (
 		<PriceContext.Provider
 			value={{
-				price: currentPrice,
+				price: mainnetPrice,
+				ethPrice,
 			}}
 		>
 			{children}

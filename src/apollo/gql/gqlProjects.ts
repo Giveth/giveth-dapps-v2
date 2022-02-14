@@ -12,7 +12,7 @@ export const FETCH_HOME_PROJECTS = gql`
 				verified
 				totalDonations
 				traceCampaignId
-				reactions {
+				reaction {
 					userId
 				}
 				adminUser {
@@ -50,7 +50,7 @@ export const FETCH_ALL_PROJECTS = gql`
 				verified
 				totalDonations
 				traceCampaignId
-				reactions {
+				reaction {
 					userId
 				}
 				adminUser {
@@ -79,7 +79,8 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 			totalProjectUpdates
 			totalDonations
 			creationDate
-			reactions {
+			givingBlocksId
+			reaction {
 				userId
 			}
 			traceCampaignId
@@ -94,13 +95,27 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 `;
 
 export const FETCH_PROJECT_UPDATES = gql`
-	query GetProjectUpdates($projectId: Float!, $take: Float!, $skip: Float!) {
-		getProjectUpdates(projectId: $projectId, take: $take, skip: $skip) {
-			projectUpdate {
-				id
-				title
-				content
-				createdAt
+	query GetProjectUpdates(
+		$projectId: Int!
+		$take: Int!
+		$skip: Int!
+		$connectedWalletUserId: Int
+	) {
+		getProjectUpdates(
+			projectId: $projectId
+			take: $take
+			skip: $skip
+			connectedWalletUserId: $connectedWalletUserId
+		) {
+			id
+			title
+			projectId
+			userId
+			content
+			isMain
+			totalReactions
+			reaction {
+				projectUpdateId
 			}
 		}
 	}
@@ -137,4 +152,69 @@ export const FETCH_USER_LIKED_PROJECTS = gql`
 			totalCount
 		}
 	}
+`;
+export const UPLOAD_IMAGE = gql`
+	mutation ($imageUpload: ImageUpload!) {
+		uploadImage(imageUpload: $imageUpload) {
+			url
+			projectId
+			projectImageId
+		}
+	}
+`;
+
+export const WALLET_ADDRESS_IS_VALID = gql`
+	query WalletAddressIsValid($address: String!) {
+		walletAddressIsValid(address: $address)
+	}
+`;
+
+export const ADD_PROJECT = gql`
+	mutation ($project: ProjectInput!) {
+		addProject(project: $project) {
+			id
+			title
+			description
+			admin
+			image
+			impactLocation
+			slug
+			walletAddress
+			categories {
+				name
+			}
+		}
+	}
+`;
+
+export const LIKE_PROJECT_QUERY = `
+  mutation ($projectId: Int!) {
+    likeProject(projectId: $projectId) {
+      id
+      projectId
+      reaction
+    }
+  }
+`;
+
+export const UNLIKE_PROJECT_QUERY = `
+  mutation ($reactionId: Int!) {
+    unlikeProject(reactionId: $reactionId)
+  }
+`;
+
+export const LIKE_PROJECT_UPDATE_QUERY = `
+  mutation ($projectUpdateId: Int!) {
+    likeProjectUpdate(projectUpdateId: $projectUpdateId) {
+      id
+      projectUpdateId
+      reaction
+    }
+  }
+`;
+
+export const UNLIKE_PROJECT_UPDATE_QUERY = `
+  mutation ($reactionId: Int!) {
+    unlikeProjectUpdate(reactionId: $reactionId)
+  }
 `;

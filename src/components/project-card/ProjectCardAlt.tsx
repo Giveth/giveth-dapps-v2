@@ -19,12 +19,14 @@ const imgHeight = '200px';
 
 interface IProjectCard {
 	project: IProject;
+	noHearts?: boolean;
 }
 
 const ProjectCard = (props: IProjectCard) => {
 	const [rndColor, setRndColor] = useState(noImgColor);
-	const { title, description, image, verified, reactions, adminUser } =
+	const { title, description, image, verified, reactions, adminUser, slug } =
 		props.project;
+	const { noHearts } = props;
 
 	const name = adminUser?.name;
 
@@ -38,18 +40,22 @@ const ProjectCard = (props: IProjectCard) => {
 						cardRadius={cardRadius}
 					/>
 				</ImagePlaceholder>
-				<ProjectCardBadges
-					cardWidth={cardWidth}
-					likes={reactions.length}
-					verified={verified}
-				/>
+				{!noHearts && (
+					<ProjectCardBadges
+						cardWidth={cardWidth}
+						likes={reactions.length}
+						verified={verified}
+						projectHref={slug}
+						projectDescription={description}
+					/>
+				)}
 				<CardBody>
 					<Title>{title}</Title>
 					{name && <Author>{name}</Author>}
 					<Description>{htmlToText(description)}</Description>
 					<Captions>
-						<Caption>Raised: $200</Caption>
-						<Caption>Last updated: 5 days ago</Caption>
+						<BodyCaption>Raised: $</BodyCaption>
+						<BodyCaption>Last updated: x days ago</BodyCaption>
 					</Captions>
 				</CardBody>
 			</Wrapper2>
@@ -62,6 +68,10 @@ const NoImg = styled.div`
 	width: 100%;
 	height: 100%;
 	background-image: url(${noImgIcon});
+`;
+
+const BodyCaption = styled(Caption)`
+	color: ${neutralColors.gray[700]};
 `;
 
 const Captions = styled.div`
@@ -78,7 +88,7 @@ const Description = styled(P)`
 `;
 
 const CardBody = styled.div`
-	margin: 70px 24px 0 24px;
+	margin: 30px 24px 0 24px;
 	text-align: left;
 `;
 

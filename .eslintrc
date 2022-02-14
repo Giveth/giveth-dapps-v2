@@ -2,11 +2,14 @@
   "extends": [
     "next/core-web-vitals",
     "plugin:@next/next/recommended",
-    "plugin:prettier/recommended"  ],
-  "rules": {},
+    "plugin:prettier/recommended"
+  ],
+  "rules": {
+    "react/no-unescaped-entities": "warn"
+  },
   "settings": {
-		"import/resolver": {
-			"typescript": {}
-		}
-	}
+    "import/resolver": {
+      "typescript": {}
+    }
+  }
 }

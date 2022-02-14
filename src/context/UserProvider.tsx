@@ -6,6 +6,8 @@ import React, {
 	useState,
 } from 'react';
 import { useWeb3React } from '@web3-react/core';
+import { BigNumberish } from '@ethersproject/bignumber';
+import { formatEther } from '@ethersproject/units';
 
 import { initializeApollo } from '../apollo/apolloClient';
 import { GET_USER_BY_ADDRESS } from '../apollo/gql/gqlUser';
@@ -17,17 +19,19 @@ import {
 import * as Auth from '../services/auth';
 import { getToken } from '../services/token';
 import User from '../entities/user';
+import { getLocalStorageUserLabel } from '@/services/auth';
 import useWallet from '@/hooks/walletHooks';
 import { IUser } from '@/apollo/types/types';
 
 interface IUserContext {
 	state: {
 		user?: IUser;
+		balance?: string | null;
 		isEnabled?: boolean;
 		isSignedIn?: boolean;
 	};
 	actions: {
-		signIn?: () => Promise<boolean>;
+		signIn?: () => Promise<boolean | string>;
 		signOut?: () => void;
 	};
 }
@@ -48,12 +52,12 @@ const apolloClient = initializeApollo();
 
 export const UserProvider = (props: { children: ReactNode }) => {
 	const [user, setUser] = useState<IUser | undefined>();
+	const [balance, setBalance] = useState<string | null>(null);
 
 	useWallet();
 	const { account, active, library, chainId, deactivate } = useWeb3React();
-	const isEnabled =
-		!!library?.getSigner() && !!account && !!chainId && !!user;
-	const isSignedIn = isEnabled && !!user.token;
+	const isEnabled = !!library?.getSigner() && !!account && !!chainId;
+	const isSignedIn = isEnabled && !!user?.token;
 
 	useEffect(() => {
 		localStorage.removeItem(LocalStorageTokenLabel);
@@ -69,6 +73,15 @@ export const UserProvider = (props: { children: ReactNode }) => {
 			// setToken().then()
 		}
 	}, [user]);
+
+	useEffect(() => {
+		library?.on('block', () => {
+			getBalance();
+		});
+		return () => {
+			library?.removeAllListeners('block');
+		};
+	}, []);
 
 	const fetchLocalUser = (): User => {
 		const localUser = Auth.getUser() as User;
@@ -91,7 +104,6 @@ export const UserProvider = (props: { children: ReactNode }) => {
 	};
 
 	const signIn = async () => {
-		console.log('trigou');
 		if (!library?.getSigner()) return false;
 
 		const signedMessage = await signMessage(
@@ -119,12 +131,14 @@ export const UserProvider = (props: { children: ReactNode }) => {
 			await apolloClient.resetStore();
 			setUser(localUser);
 		}
-		return true;
+		localStorage.setItem(getLocalStorageUserLabel() + '_token', token);
+		return token;
 	};
 
 	const signOut = () => {
 		Auth.logout();
 		window.localStorage.removeItem('selectedWallet');
+		window.localStorage.removeItem(getLocalStorageUserLabel() + '_token');
 		apolloClient.resetStore().then();
 		deactivate();
 		setUser(undefined);
@@ -144,6 +158,21 @@ export const UserProvider = (props: { children: ReactNode }) => {
 	//   localStorage.setItem(LocalStorageTokenLabel, token)
 	//   return true
 	// }
+
+	const getBalance = () => {
+		library
+			.getBalance(account)
+			.then((_balance: BigNumberish) => {
+				setBalance(parseFloat(formatEther(_balance)).toFixed(3));
+			})
+			.catch(() => setBalance(null));
+	};
+
+	useEffect(() => {
+		if (!!account && !!library) {
+			getBalance();
+		}
+	}, [account, library, chainId]);
 
 	useEffect(() => {
 		if (account) {
@@ -174,6 +203,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 			value={{
 				state: {
 					user,
+					balance,
 					isEnabled,
 					isSignedIn,
 				},

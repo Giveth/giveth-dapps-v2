@@ -12,7 +12,7 @@ const FiatDonation = (props: {
 	const { setSuccessDonation } = props;
 
 	return (
-		<>
+		<FiatContainer>
 			<ButtonContainer>
 				<Button
 					label='CONTINUE WITH TRANSAK'
@@ -26,10 +26,15 @@ const FiatDonation = (props: {
 					height='24px'
 				/>
 			</ImageContainer>
-		</>
+		</FiatContainer>
 	);
 };
 
+const FiatContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+`;
 const ImageContainer = styled.div`
 	width: 100%;
 	text-align: center;

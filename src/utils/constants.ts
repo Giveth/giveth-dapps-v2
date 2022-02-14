@@ -1,3 +1,5 @@
+import { brandColors, semanticColors } from '@giveth/ui-design-system';
+
 export const networksParams: Record<number, any> = {
 	1: {
 		chainId: '0x1',
@@ -91,3 +93,26 @@ export const device = {
 	desktop: `(min-width: ${size.desktop})`,
 	desktopL: `(min-width: ${size.desktop})`,
 };
+
+export const OurImages = [
+	{
+		id: 1,
+		color: brandColors.giv[500],
+		url: '',
+	},
+	{
+		id: 2,
+		color: brandColors.mustard[500],
+		url: '',
+	},
+	{
+		id: 3,
+		color: brandColors.cyan[500],
+		url: '',
+	},
+	{
+		id: 4,
+		color: semanticColors.blueSky[500],
+		url: '',
+	},
+];

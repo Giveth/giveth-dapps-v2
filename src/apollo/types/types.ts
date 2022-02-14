@@ -26,7 +26,20 @@ export interface IProject {
 	totalDonations?: number;
 	totalProjectUpdates?: number;
 	traceCampaignId: string | null;
+	givingBlocksId?: string | null;
 }
+
+export interface IProjectCreation {
+	title: string;
+	description: string;
+	impactLocation?: any;
+	categories: any;
+	organisationId: number;
+	walletAddress: string;
+	imageStatic?: string | null;
+	imageUpload?: any;
+}
+
 export interface IUser {
 	id: string;
 	firstName?: string;
