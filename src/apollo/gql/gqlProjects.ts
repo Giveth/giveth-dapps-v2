@@ -18,10 +18,6 @@ export const FETCH_HOME_PROJECTS = gql`
 				adminUser {
 					name
 				}
-				status {
-					id
-					name
-				}
 			}
 			totalCount
 		}
@@ -58,10 +54,6 @@ export const FETCH_ALL_PROJECTS = gql`
 					userId
 				}
 				adminUser {
-					name
-				}
-				status {
-					id
 					name
 				}
 			}
@@ -129,10 +121,6 @@ export const FETCH_PROJECT_UPDATES = gql`
 			totalReactions
 			reaction {
 				projectUpdateId
-			}
-			status {
-				id
-				name
 			}
 		}
 	}
@@ -220,5 +208,11 @@ export const GET_STATUS_REASONS = gql`
 export const DEACTIVATE_PROJECT = gql`
 	mutation ($projectId: Float!, $reasonId: Float) {
 		deactivateProject(projectId: $projectId, reasonId: $reasonId)
+	}
+`;
+
+export const ACTIVATE_PROJECT = gql`
+	mutation ($projectId: Float!) {
+		activateProject(projectId: $projectId)
 	}
 `;

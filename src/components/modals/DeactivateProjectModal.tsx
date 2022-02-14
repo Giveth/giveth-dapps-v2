@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Select, { StylesConfig } from 'react-select';
 import styled from 'styled-components';
@@ -19,6 +19,7 @@ import {
 import InfoBadge from '@/components/badges/InfoBadge';
 import FormProgress from '@/components/FormProgress';
 import { Shadow } from '@/components/styled-components/Shadow';
+import useUser from '@/context/UserProvider';
 import { IModal, Modal } from './Modal';
 import ArchiveIcon from '../../../public/images/icons/archive_deep.svg';
 
@@ -34,10 +35,12 @@ const buttonLabels: { [key: string]: string }[] = [
 ];
 interface IDeactivateProjectModal extends IModal {
 	projectId?: string;
+	setIsActive: Dispatch<SetStateAction<boolean>>;
 }
 
 const DeactivateProjectModal = ({
 	projectId,
+	setIsActive,
 	showModal,
 	setShowModal,
 }: IDeactivateProjectModal) => {
@@ -47,6 +50,10 @@ const DeactivateProjectModal = ({
 	const [selectedReason, setSelectedReason] = useState<ISelectObj | any>(
 		undefined,
 	);
+	const {
+		state: { isSignedIn },
+		actions: { signIn },
+	} = useUser();
 
 	const fetchReasons = async () => {
 		const { data } = await client.query({
@@ -66,7 +73,10 @@ const DeactivateProjectModal = ({
 	};
 
 	const handleConfirmButton = async () => {
-		if (!!tab && !!selectedReason) {
+		if (!!tab && !!selectedReason && !!signIn) {
+			if (!isSignedIn) {
+				await signIn();
+			}
 			const { data } = await client.mutate({
 				mutation: DEACTIVATE_PROJECT,
 				variables: {
@@ -74,7 +84,8 @@ const DeactivateProjectModal = ({
 					reasonId: Number(selectedReason.value),
 				},
 			});
-			console.log(data);
+			const status = data.deactivateProject;
+			setIsActive(!status);
 		}
 		setTab(previousTab => previousTab + 1);
 	};

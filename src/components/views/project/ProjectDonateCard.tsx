@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -8,7 +8,7 @@ import CategoryBadge from '@/components/badges/CategoryBadge';
 import Routes from '@/lib/constants/Routes';
 import { slugToProjectDonate, mediaQueries } from '@/lib/helpers';
 import InfoBadge from '@/components/badges/InfoBadge';
-import { IProjectBySlug } from '@/apollo/types/gqlTypes';
+import { IProject } from '@/apollo/types/types';
 import links from '@/lib/constants/links';
 import {
 	Button,
@@ -22,15 +22,27 @@ import useUser from '@/context/UserProvider';
 import ShareModal from '@/components/modals/ShareModal';
 import DeactivateProjectModal from '@/components/modals/DeactivateProjectModal';
 import ArchiveIcon from '../../../../public/images/icons/archive.svg';
+import { client } from '@/apollo/apolloClient';
+import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
 
-const ProjectDonateCard = (props: IProjectBySlug) => {
+interface IProjectDonateCard {
+	project: IProject;
+	isActive: boolean;
+	setIsActive: Dispatch<SetStateAction<boolean>>;
+}
+
+const ProjectDonateCard = ({
+	project,
+	isActive,
+	setIsActive,
+}: IProjectDonateCard) => {
 	const {
-		state: { user },
+		state: { user, isSignedIn },
+		actions: { signIn },
 	} = useUser();
 
-	const { project } = props;
-	const { categories, slug, reactions, description, adminUser, id, status } =
-		project;
+	// const { project } = props;
+	const { categories, slug, reactions, description, adminUser, id } = project;
 
 	const [heartedByUser, setHeartedByUser] = useState<boolean>(false);
 	const [showModal, setShowModal] = useState<boolean>(false);
@@ -56,6 +68,23 @@ const ProjectDonateCard = (props: IProjectBySlug) => {
 		}
 	}, [user, adminUser]);
 
+	const handleProjectStatus = async () => {
+		if (isActive) {
+			setDeactivateModal(true);
+		} else {
+			if (!isSignedIn && !!signIn) {
+				await signIn();
+			}
+			const { data } = await client.mutate({
+				mutation: ACTIVATE_PROJECT,
+				variables: {
+					projectId: Number(id),
+				},
+			});
+			setIsActive(data.activateProject);
+		}
+	};
+
 	return (
 		<>
 			{showModal && (
@@ -71,6 +100,7 @@ const ProjectDonateCard = (props: IProjectBySlug) => {
 					showModal={deactivateModal}
 					setShowModal={setDeactivateModal}
 					projectId={id}
+					setIsActive={setIsActive}
 				/>
 			)}
 			<Wrapper>
@@ -127,9 +157,9 @@ const ProjectDonateCard = (props: IProjectBySlug) => {
 					<ArchiveButton
 						buttonType='texty'
 						size='small'
-						label='ARCHIVE PROJECT'
+						label={`${isActive ? 'DE' : ''}ACTIVATE PROJECT`}
 						icon={<Image src={ArchiveIcon} alt='Archive icon.' />}
-						onClick={() => setDeactivateModal(true)}
+						onClick={() => handleProjectStatus()}
 					/>
 				)}
 			</Wrapper>
