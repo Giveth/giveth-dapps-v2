@@ -4,8 +4,8 @@ import {
 	IconAlertCricle,
 	IconCheckmarkCircle,
 	semanticColors,
+	ButtonText,
 } from '@giveth/ui-design-system';
-import { FC } from 'react';
 import toast from 'react-hot-toast';
 import styled from 'styled-components';
 import { Row } from '../styled-components/Grid';
@@ -28,9 +28,10 @@ export interface IToast {
 	type?: ToastType;
 	actionLabel?: string;
 	actionCB?: any;
-	dismiss?: boolean;
 	title?: string;
 	direction?: ToastDirection;
+	dismissLabel?: string;
+	dismissCB?: any;
 }
 
 const toastIcon = (type: ToastType) => {
@@ -57,31 +58,41 @@ export const gToast = (message: string, options: IToast) => {
 		type = ToastType.INFO_PRIMARY,
 		direction = ToastDirection.LEFT,
 		title,
+		dismissLabel,
 	} = options;
 	return toast.custom(
 		<ToastContainer {...options}>
 			{direction === ToastDirection.LEFT && (
-				<IconContainer>{toastIcon(type)}</IconContainer>
+				<LeftIconContainer>{toastIcon(type)}</LeftIconContainer>
 			)}
 			<Content>
 				{title && <Caption medium>{title}</Caption>}
 				<Caption>{message}</Caption>
 			</Content>
+			<Spacer />
+			{dismissLabel && (
+				<DismissButton size='small'>{dismissLabel}</DismissButton>
+			)}
 			{direction === ToastDirection.RIGHT && (
 				<IconContainer>{toastIcon(type)}</IconContainer>
 			)}
 		</ToastContainer>,
+		{
+			duration: 400000,
+		},
 	);
 };
 
 const ToastContainer = styled(Row)<IToast>`
+	min-width: 580px;
 	padding: 16px;
+	gap: 16px;
+	align-items: center;
 	color: ${props => {
 		switch (props.type) {
 			case ToastType.INFO_PRIMARY:
-				return semanticColors.blueSky[700];
 			case ToastType.INFO_SECONDARY:
-				return 'unset';
+				return semanticColors.blueSky[700];
 			case ToastType.SUCCESS:
 				return semanticColors.jade[700];
 			case ToastType.HINT:
@@ -118,7 +129,7 @@ const ToastContainer = styled(Row)<IToast>`
 			case ToastType.INFO_PRIMARY:
 				return semanticColors.blueSky[700];
 			case ToastType.INFO_SECONDARY:
-				return 'unset';
+				return `${semanticColors.blueSky[700]}00`;
 			case ToastType.SUCCESS:
 				return semanticColors.jade[700];
 			case ToastType.HINT:
@@ -134,10 +145,19 @@ const ToastContainer = styled(Row)<IToast>`
 	border-radius: 8px;
 `;
 
-const IconContainer = styled.div`
-	padding-top: 2.5px;
+const IconContainer = styled.div``;
+
+const LeftIconContainer = styled.div`
+	align-self: flex-start;
+	padding-top: 2px;
 `;
 
 const Content = styled.div`
-	padding: 0 16px;
+	// padding: 0 16px;
 `;
+
+const Spacer = styled.div`
+	flex: 1;
+`;
+
+const DismissButton = styled(ButtonText)``;
