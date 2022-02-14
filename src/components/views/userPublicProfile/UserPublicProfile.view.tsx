@@ -86,8 +86,8 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({ user }) => {
 							<ContributeCardTitles>
 								Total amount donated
 							</ContributeCardTitles>
-							<H2>2</H2>
-							<H5>$50.32</H5>
+							<H2>{user.donationsCount}</H2>
+							<H5>${user.totalDonated}</H5>
 						</ContributeCard>
 						<ContributeCard>
 							<ContributeCardTitles>
@@ -96,8 +96,8 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({ user }) => {
 							<ContributeCardTitles>
 								Donation received
 							</ContributeCardTitles>
-							<H2>1</H2>
-							<H5>$780.18</H5>
+							<H2>{user.projectsCount}</H2>
+							<H5>${user.totalReceived}</H5>
 						</ContributeCard>
 					</ContributeCardContainer>
 				</Container>
