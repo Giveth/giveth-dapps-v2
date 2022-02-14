@@ -46,8 +46,8 @@ const CreateIndex = () => {
 	const [name, setName] = useState('');
 	const [description, setDescription] = useState('');
 	const [categories, setCategories] = useState([]);
-	const [impactLocation, setImpactLocation] = useState('');
-	const [image, setImage] = useState(null);
+	const [impactLocation, setImpactLocation] = useState<any>('');
+	const [image, setImage] = useState<any>(null);
 	const [walletAddress, setWalletAddress] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const [errors, setErrors] = useState<{
@@ -114,7 +114,7 @@ const CreateIndex = () => {
 				imageUpload: null,
 			};
 
-			if (!isNaN(image)) {
+			if (!isNaN(image!)) {
 				projectData.imageStatic = image?.toString();
 			} else if (image) {
 				projectData.imageUpload = await getImageFile(image, name);
