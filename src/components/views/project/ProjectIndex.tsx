@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { GLink, semanticColors } from '@giveth/ui-design-system';
 
 import { useQuery } from '@apollo/client';
 import { IProjectBySlug } from '@/apollo/types/gqlTypes';
-import Head from 'next/head';
+import WarningBadge from '@/components/badges/WarningBadge';
 
 import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
@@ -24,7 +26,7 @@ const donationsPerPage = 11;
 const ProjectIndex = (props: IProjectBySlug) => {
 	const router = useRouter();
 	const { project } = props;
-	const { description, title } = project;
+	const { description, title, status } = project;
 
 	const { data: donationsData } = useQuery(FETCH_PROJECT_DONATIONS, {
 		variables: {
@@ -38,6 +40,14 @@ const ProjectIndex = (props: IProjectBySlug) => {
 	const totalDonations = donationsByProjectId?.totalCount;
 
 	const [activeTab, setActiveTab] = useState(0);
+	const [isActive, setIsActive] = useState<boolean>(true);
+
+	useEffect(() => {
+		if (status) {
+			console.log(status);
+			setIsActive(status.name === 'activate');
+		}
+	}, [status]);
 
 	return (
 		<Wrapper>
@@ -46,13 +56,25 @@ const ProjectIndex = (props: IProjectBySlug) => {
 			</Head>
 			<ProjectHeader project={project} />
 			<BodyWrapper>
-				<div>
+				<ContentWrapper>
 					<ProjectTabs
 						activeTab={activeTab}
 						setActiveTab={setActiveTab}
 						project={project}
 						totalDonations={totalDonations}
 					/>
+					{!isActive && (
+						<GivBackNotif>
+							<WarningBadge />
+
+							<GLink
+								size='Medium'
+								color={semanticColors.golden[700]}
+							>
+								This project is not active.
+							</GLink>
+						</GivBackNotif>
+					)}
 					{activeTab === 0 && (
 						<RichTextViewer content={description} />
 					)}
@@ -63,8 +85,12 @@ const ProjectIndex = (props: IProjectBySlug) => {
 							project={project}
 						/>
 					)}
-				</div>
-				<ProjectDonateCard project={project} />
+				</ContentWrapper>
+				<ProjectDonateCard
+					project={project}
+					isActive={isActive}
+					setIsActive={setIsActive}
+				/>
 			</BodyWrapper>
 		</Wrapper>
 	);
@@ -72,6 +98,17 @@ const ProjectIndex = (props: IProjectBySlug) => {
 
 const Wrapper = styled.div`
 	position: relative;
+`;
+
+const GivBackNotif = styled.div`
+	display: flex;
+	gap: 16px;
+	padding: 16px;
+	background: ${semanticColors.golden[200]};
+	border-radius: 8px;
+	border: 1px solid ${semanticColors.golden[700]};
+	margin-top: 24px;
+	color: ${semanticColors.golden[700]};
 `;
 
 const BodyWrapper = styled.div`
@@ -85,6 +122,11 @@ const BodyWrapper = styled.div`
 		flex-direction: row;
 		justify-content: space-between;
 	}
+`;
+
+const ContentWrapper = styled.div`
+	flex-grow: 1;
+	padding-right: 48px;
 `;
 
 export default ProjectIndex;

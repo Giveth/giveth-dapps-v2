@@ -89,6 +89,11 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 			}
 			adminUser {
 				name
+				walletAddress
+			}
+			status {
+				id
+				name
 			}
 		}
 	}
@@ -185,4 +190,29 @@ export const UNLIKE_PROJECT_UPDATE_QUERY = `
   mutation ($reactionId: Int!) {
     unlikeProjectUpdate(reactionId: $reactionId)
   }
+`;
+
+export const GET_STATUS_REASONS = gql`
+	query {
+		getStatusReasons(statusId: 6) {
+			id
+			description
+			status {
+				id
+				name
+			}
+		}
+	}
+`;
+
+export const DEACTIVATE_PROJECT = gql`
+	mutation ($projectId: Float!, $reasonId: Float) {
+		deactivateProject(projectId: $projectId, reasonId: $reasonId)
+	}
+`;
+
+export const ACTIVATE_PROJECT = gql`
+	mutation ($projectId: Float!) {
+		activateProject(projectId: $projectId)
+	}
 `;
