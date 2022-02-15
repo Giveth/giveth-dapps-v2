@@ -31,25 +31,25 @@ export const Footer = () => {
 									<LinkItem color={textColor}>Home</LinkItem>
 								</a>
 							</Link>
-							<a href='https://giveth.io/projects'>
+							<Link href='/projects' passHref>
 								<LinkItem color={textColor}>Projects</LinkItem>
-							</a>
-							<a href='https://giveth.io/about'>
+							</Link>
+							<Link href='/about' passHref>
 								<LinkItem color={textColor}>About Us</LinkItem>
-							</a>
-							<a href='https://giveth.io/faq'>
+							</Link>
+							<Link href='/faq' passHref>
 								<LinkItem color={textColor}>FAQ</LinkItem>
-							</a>
-							<a href=''>
+							</Link>
+							<Link href='/support' passHref>
 								<LinkItem color={textColor}>Support</LinkItem>
-							</a>
+							</Link>
 						</LinkColumn>
 						<LinkColumn>
-							<a href='https://giveth.io/join'>
+							<Link href='/join' passHref>
 								<LinkItem color={textColor}>
 									Join Our Community
 								</LinkItem>
-							</a>
+							</Link>
 							<a href='https://docs.giveth.io/whatisgiveth/'>
 								<LinkItem color={textColor}>
 									What is Giveth?
@@ -65,11 +65,11 @@ export const Footer = () => {
 									Developer Docs
 								</LinkItem>
 							</a>
-							<a href='https://giveth.io/tos'>
+							<Link href='/terms' passHref>
 								<LinkItem color={textColor}>
 									Terms of Use
 								</LinkItem>
-							</a>
+							</Link>
 						</LinkColumn>
 						<LinkColumn>
 							<a href='https://trace.giveth.io/'>
@@ -82,11 +82,11 @@ export const Footer = () => {
 									Commons Stack
 								</LinkItem>
 							</a>
-							<a href='https://giveth.io/partnerships'>
+							<Link href='/partnerships' passHref>
 								<LinkItem color={textColor}>
 									Partnerships
 								</LinkItem>
-							</a>
+							</Link>
 							<a href='https://giveth.recruitee.com/'>
 								<LinkItem color={textColor}>
 									We’re Hiring!
@@ -117,11 +117,14 @@ export const Footer = () => {
 						</SocialContainer>
 						<Row justifyContent='flex-end'>
 							<Caption medium>Support us</Caption>
-							<a href='https://giveth.io/donate/the-giveth-community-of-makers'>
+							<Link
+								href='/donate/giveth-2021:-retreat-to-the-future'
+								passHref
+							>
 								<CaptionRed medium>
 									&nbsp;with your Donation
 								</CaptionRed>
-							</a>
+							</Link>
 						</Row>
 						<CopyRights>
 							MMXX - No Rights Reserved - The Giveth DAC
