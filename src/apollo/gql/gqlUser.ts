@@ -77,6 +77,7 @@ export const FETCH_USER_DONATIONS = gql`
 				project {
 					id
 					title
+					slug
 				}
 				createdAt
 			}

@@ -11,11 +11,13 @@ import {
 	brandColors,
 	IconArrowBottom,
 	IconArrowTop,
+	IconLink24,
 	IconSort16,
 	neutralColors,
 	P,
 	SublineBold,
 } from '@giveth/ui-design-system';
+import Link from 'next/link';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IUserPublicProfileView } from './UserPublicProfile.view';
@@ -163,9 +165,12 @@ const DonationTable: FC<DonationTable> = ({
 					<TabelCell>
 						<P>{smallFormatDate(new Date(donation.createdAt))}</P>
 					</TabelCell>
-					<TabelCell>
-						<B>{donation.project.title}</B>
-					</TabelCell>
+					<Link href={`/project/${donation.project.slug}`} passHref>
+						<ProjectTitleCell>
+							<B>{donation.project.title}</B>
+							<IconLink24 />
+						</ProjectTitleCell>
+					</Link>
 					<TabelCell>
 						<CurrencyBadge>{donation.currency}</CurrencyBadge>
 					</TabelCell>
@@ -198,6 +203,17 @@ const TabelCell = styled(Row)`
 	height: 60px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
 	align-items: center;
+	gap: 8px;
+`;
+
+const ProjectTitleCell = styled(TabelCell)`
+	cursor: pointer;
+	& > svg {
+		display: none;
+	}
+	&:hover > svg {
+		display: block;
+	}
 `;
 
 const CurrencyBadge = styled(SublineBold)`
