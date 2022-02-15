@@ -13,49 +13,46 @@ import { formatDateFromString, formatTxLink } from '@/lib/helpers';
 import linkIcon from '/public/images/external_link.svg';
 import donorProfileIcon from '/public/images/default_donor.svg';
 import ExternalLink from '@/components/ExternalLink';
-import Pagination from '@/components/PaginationOld';
 import { initializeApollo } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { IDonationsByProjectId } from '@/apollo/types/gqlTypes';
+import Pagination from '@/components/Pagination';
 
 const ProjectDonationTable = (props: {
 	donations: IDonationsByProjectId;
 	projectId: string;
 }) => {
 	const { donations, totalCount } = props.donations;
-
-	const pageCount = Math.ceil(totalCount / donations.length);
-
 	const [activeTab, setActiveTab] = useState(0);
-	const [currentPage, setCurrentPage] = useState(1);
+	const [currentPage, setCurrentPage] = useState(0);
 	const [nDonations, setNDonations] = useState(donations);
 
 	const firstRender = useRef(true);
 
-	const fetchDonations = () => {
-		initializeApollo()
-			.query({
-				query: FETCH_PROJECT_DONATIONS,
-				variables: {
-					projectId: parseInt(props.projectId),
-					skip: donations.length * (currentPage - 1),
-					take: donations.length,
-				},
-			})
-			.then(
-				(res: {
-					data: { donationsByProjectId: IDonationsByProjectId };
-				}) => {
-					setNDonations(res.data.donationsByProjectId.donations);
-				},
-			)
-			.catch(console.log);
-	};
-
 	useEffect(() => {
+		const fetchDonations = () => {
+			initializeApollo()
+				.query({
+					query: FETCH_PROJECT_DONATIONS,
+					variables: {
+						projectId: parseInt(props.projectId),
+						take: donations.length,
+						skip: currentPage * donations.length,
+					},
+				})
+				.then(
+					(res: {
+						data: { donationsByProjectId: IDonationsByProjectId };
+					}) => {
+						setNDonations(res.data.donationsByProjectId.donations);
+					},
+				)
+				.catch(console.log);
+		};
+
 		if (firstRender.current) firstRender.current = false;
 		else fetchDonations();
-	}, [currentPage]);
+	}, [currentPage, donations.length, props.projectId]);
 
 	return (
 		<Wrapper>
@@ -133,11 +130,11 @@ const ProjectDonationTable = (props: {
 							})}
 						</tbody>
 					</Table>
-
 					<Pagination
-						setPage={setCurrentPage}
-						pageCount={pageCount}
 						currentPage={currentPage}
+						totalCount={totalCount}
+						setPage={setCurrentPage}
+						itemPerPage={donations.length}
 					/>
 				</DonationSection>
 			)}
