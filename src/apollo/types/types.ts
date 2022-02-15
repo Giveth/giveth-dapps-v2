@@ -51,10 +51,10 @@ export interface IUser {
 	url?: string;
 	location?: string;
 	token?: string;
-	totalDonated?: string;
-	totalReceived?: string;
-	projectsCount?: string;
-	donationsCount?: string;
+	totalDonated?: number;
+	totalReceived?: number;
+	projectsCount?: number;
+	donationsCount?: number;
 }
 
 export interface IAdmin {
