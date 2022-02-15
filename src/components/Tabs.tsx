@@ -10,6 +10,17 @@ import { Row } from './styled-components/Grid';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
+export const mustSignTabs = [
+	{
+		label: 'Account',
+		href: '/account',
+	},
+	{
+		label: 'Create',
+		href: '/create',
+	},
+];
+
 export const giveconomyTabs = [
 	{
 		label: 'Overview',

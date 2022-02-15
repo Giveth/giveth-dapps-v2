@@ -277,7 +277,9 @@ const Header: FC<IHeader> = () => {
 										: 'SIGN IN'
 								}
 								onClick={() => {
-									setShowWalletModal(isGIVeconomyRoute);
+									isGIVeconomyRoute
+										? setShowWalletModal(true)
+										: setShowSigninModal(true);
 								}}
 							/>
 						</div>

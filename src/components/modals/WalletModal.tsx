@@ -21,10 +21,10 @@ const WalletModal = ({
 	closeParentModal,
 }: IWalletModal) => {
 	const context = useWeb3React();
-	const { activate, deactivate } = context;
+	const { activate, deactivate, library } = context;
 	const selectedWallet = useWalletName(context);
 
-	const handleSelect = (selected: {
+	const handleSelect = async (selected: {
 		connector: TWalletConnector;
 		value: EWallets;
 	}) => {

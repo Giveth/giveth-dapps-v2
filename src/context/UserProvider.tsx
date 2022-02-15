@@ -5,6 +5,7 @@ import React, {
 	useEffect,
 	useState,
 } from 'react';
+import { useRouter } from 'next/router';
 import { useWeb3React } from '@web3-react/core';
 import { BigNumberish } from '@ethersproject/bignumber';
 import { formatEther } from '@ethersproject/units';
@@ -22,6 +23,9 @@ import { getToken } from '../services/token';
 import User from '../entities/user';
 import { getLocalStorageUserLabel } from '@/services/auth';
 import useWallet from '@/hooks/walletHooks';
+import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
+
+import { isMustSignRoute } from '@/lib/helpers';
 
 interface IUserContext {
 	state: {
@@ -51,9 +55,10 @@ const UserContext = createContext<IUserContext>({
 const apolloClient = initializeApollo();
 
 export const UserProvider = (props: { children: ReactNode }) => {
+	const router = useRouter();
 	const [user, setUser] = useState<IUserByAddress | undefined>();
 	const [balance, setBalance] = useState<string | null>(null);
-
+	const [showWelcomeSignin, setShowWelcomeSignin] = useState<boolean>(false);
 	useWallet();
 	const { account, active, library, chainId, deactivate } = useWeb3React();
 	const isEnabled = !!library?.getSigner() && !!account && !!chainId;
@@ -62,7 +67,8 @@ export const UserProvider = (props: { children: ReactNode }) => {
 	useEffect(() => {
 		localStorage.removeItem(LocalStorageTokenLabel);
 		if (active && account) {
-			fetchUser().then(setUser);
+			// not sure what this does, commenging  because causing a bug
+			// fetchUser().then(setUser);
 		} else {
 			user && setUser(undefined);
 		}
@@ -73,6 +79,17 @@ export const UserProvider = (props: { children: ReactNode }) => {
 			// setToken().then()
 		}
 	}, [user]);
+
+	useEffect(() => {
+		if (
+			isEnabled &&
+			user &&
+			!user?.token &&
+			isMustSignRoute(router.route)
+		) {
+			setShowWelcomeSignin(true);
+		}
+	}, [isEnabled, user]);
 
 	useEffect(() => {
 		library?.on('block', () => {
@@ -217,6 +234,12 @@ export const UserProvider = (props: { children: ReactNode }) => {
 				},
 			}}
 		>
+			{showWelcomeSignin && (
+				<WelcomeSigninModal
+					showModal={true}
+					setShowModal={() => setShowWelcomeSignin(false)}
+				/>
+			)}
 			{props.children}
 		</UserContext.Provider>
 	);
