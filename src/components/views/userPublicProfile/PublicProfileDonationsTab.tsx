@@ -194,7 +194,7 @@ const DonationTable: FC<DonationTable> = ({
 						</TransactionLink>
 					</TabelCell>
 					<TabelCell>
-						<P>{donation.valueUsd}$</P>
+						<P>{donation.valueUsd?.toFixed(2)}$</P>
 					</TabelCell>
 				</RowWrapper>
 			))}
