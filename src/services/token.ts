@@ -26,6 +26,7 @@ export async function getToken(
 				},
 			};
 			const { data } = await apolloClient.mutate(mutate);
+			console.log({ data });
 			return data?.loginWallet?.token;
 		} catch (error) {
 			console.log('Error in token login: ', error);
