@@ -65,7 +65,7 @@ export const Footer = () => {
 									Developer Docs
 								</LinkItem>
 							</a>
-							<Link href='/terms' passHref>
+							<Link href='/tos' passHref>
 								<LinkItem color={textColor}>
 									Terms of Use
 								</LinkItem>
