@@ -88,7 +88,7 @@ export interface IDonation {
 	currency: string;
 	valueUsd?: number;
 	transactionId?: string;
-	transactionNetworkId?: number;
+	transactionNetworkId: number;
 	createdAt: string;
 }
 

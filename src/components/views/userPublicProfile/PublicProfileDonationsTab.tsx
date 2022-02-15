@@ -5,12 +5,14 @@ import { IWalletDonation } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import { Row } from '@/components/styled-components/Grid';
 import { ETheme } from '@/context/general.context';
+import { networksParams } from '@/helpers/blockchain';
 import { smallFormatDate } from '@/lib/helpers';
 import {
 	B,
 	brandColors,
 	IconArrowBottom,
 	IconArrowTop,
+	IconExternalLink,
 	IconLink24,
 	IconSort16,
 	neutralColors,
@@ -176,6 +178,20 @@ const DonationTable: FC<DonationTable> = ({
 					</TabelCell>
 					<TabelCell>
 						<P>{donation.amount}</P>
+						<TransactionLink
+							href={
+								networksParams[donation.transactionNetworkId]
+									? `${
+											networksParams[
+												donation.transactionNetworkId
+											].blockExplorerUrls[0]
+									  }/tx/${donation.transactionId}`
+									: ''
+							}
+							target='_blank'
+						>
+							<IconExternalLink size={16} />
+						</TransactionLink>
 					</TabelCell>
 					<TabelCell>
 						<P>{donation.valueUsd}$</P>
@@ -251,4 +267,9 @@ const RowWrapper = styled.div`
 	& > div:first-child {
 		padding-left: 4px;
 	}
+`;
+
+const TransactionLink = styled.a`
+	cursor: pointer;
+	color: ${brandColors.pinky[500]};
 `;
