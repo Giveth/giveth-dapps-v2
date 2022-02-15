@@ -46,6 +46,7 @@ export const WALLET_DONATIONS = gql`
 			createdAt
 			currency
 		}
+	}
 `;
 
 export const SAVE_DONATION = gql`
