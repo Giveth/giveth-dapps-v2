@@ -126,6 +126,32 @@ export const FETCH_PROJECT_UPDATES = gql`
 	}
 `;
 
+export const FETCH_USER_LIKED_PROJECTS = gql`
+	query FetchUesrLikedProjects($take: Int, $skip: Int, $userId: Int!) {
+		likedProjectsByUserId(take: $take, skip: $skip, userId: $userId) {
+			projects {
+				id
+				title
+				balance
+				description
+				image
+				slug
+				creationDate
+				admin
+				walletAddress
+				impactLocation
+				listed
+				givingBlocksId
+				totalDonations
+				categories {
+					name
+				}
+				qualityScore
+			}
+			totalCount
+		}
+	}
+`;
 export const UPLOAD_IMAGE = gql`
 	mutation ($imageUpload: ImageUpload!) {
 		uploadImage(imageUpload: $imageUpload) {
