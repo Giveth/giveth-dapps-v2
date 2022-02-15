@@ -11,6 +11,7 @@ import {
 	brandColors,
 	IconArrowBottom,
 	IconArrowTop,
+	IconSort16,
 	neutralColors,
 	P,
 	SublineBold,
@@ -127,12 +128,15 @@ const DonationTable: FC<DonationTable> = ({
 				onClick={() => orderChangeHandler(EOrderBy.CreationDate)}
 			>
 				<B>Donated at</B>
-				{order.by === EOrderBy.CreationDate &&
-					(order.direction === EDirection.DESC ? (
+				{order.by === EOrderBy.CreationDate ? (
+					order.direction === EDirection.DESC ? (
 						<IconArrowBottom size={16} />
 					) : (
 						<IconArrowTop size={16} />
-					))}
+					)
+				) : (
+					<IconSort16 />
+				)}
 			</TabelHeader>
 			<TabelHeader>
 				<B>Project</B>
@@ -144,15 +148,18 @@ const DonationTable: FC<DonationTable> = ({
 				onClick={() => orderChangeHandler(EOrderBy.TokenAmount)}
 			>
 				<B>Amount</B>
-				{order.by === EOrderBy.TokenAmount &&
-					(order.direction === EDirection.DESC ? (
+				{order.by === EOrderBy.TokenAmount ? (
+					order.direction === EDirection.DESC ? (
 						<IconArrowBottom size={16} />
 					) : (
 						<IconArrowTop size={16} />
-					))}
+					)
+				) : (
+					<IconSort16 />
+				)}
 			</TabelHeader>
-			{donations.map(donation => (
-				<>
+			{donations.map((donation, idx) => (
+				<RowWrapper key={idx}>
 					<TabelCell>
 						<P>{smallFormatDate(new Date(donation.createdAt))}</P>
 					</TabelCell>
@@ -165,7 +172,7 @@ const DonationTable: FC<DonationTable> = ({
 					<TabelCell>
 						<P>{donation.amount}</P>
 					</TabelCell>
-				</>
+				</RowWrapper>
 			))}
 		</DonationTablecontainer>
 	);
@@ -214,4 +221,15 @@ const Loading = styled(Row)`
 
 const DonationTableWrapper = styled.div`
 	position: relative;
+`;
+
+const RowWrapper = styled.div`
+	display: contents;
+	&:hover > div {
+		background-color: ${neutralColors.gray[300]};
+		color: ${brandColors.pinky[500]};
+	}
+	& > div:first-child {
+		padding-left: 4px;
+	}
 `;
