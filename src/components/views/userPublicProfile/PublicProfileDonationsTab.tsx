@@ -40,6 +40,18 @@ interface IOrder {
 	direction: EDirection;
 }
 
+const injectSortIcon = (order: IOrder, title: EOrderBy) => {
+	return order.by === title ? (
+		order.direction === EDirection.DESC ? (
+			<IconArrowBottom size={16} />
+		) : (
+			<IconArrowTop size={16} />
+		)
+	) : (
+		<IconSort16 />
+	);
+};
+
 const PublicProfileDonationsTab: FC<IUserPublicProfileView> = ({ user }) => {
 	const [loading, setLoading] = useState(false);
 	const [donations, setDonations] = useState<IWalletDonation[]>([]);
@@ -130,15 +142,7 @@ const DonationTable: FC<DonationTable> = ({
 				onClick={() => orderChangeHandler(EOrderBy.CreationDate)}
 			>
 				<B>Donated at</B>
-				{order.by === EOrderBy.CreationDate ? (
-					order.direction === EDirection.DESC ? (
-						<IconArrowBottom size={16} />
-					) : (
-						<IconArrowTop size={16} />
-					)
-				) : (
-					<IconSort16 />
-				)}
+				{injectSortIcon(order, EOrderBy.CreationDate)}
 			</TabelHeader>
 			<TabelHeader>
 				<B>Project</B>
@@ -150,15 +154,11 @@ const DonationTable: FC<DonationTable> = ({
 				onClick={() => orderChangeHandler(EOrderBy.TokenAmount)}
 			>
 				<B>Amount</B>
-				{order.by === EOrderBy.TokenAmount ? (
-					order.direction === EDirection.DESC ? (
-						<IconArrowBottom size={16} />
-					) : (
-						<IconArrowTop size={16} />
-					)
-				) : (
-					<IconSort16 />
-				)}
+				{injectSortIcon(order, EOrderBy.TokenAmount)}
+			</TabelHeader>
+			<TabelHeader onClick={() => orderChangeHandler(EOrderBy.UsdAmount)}>
+				<B>USD Value</B>
+				{injectSortIcon(order, EOrderBy.UsdAmount)}
 			</TabelHeader>
 			{donations.map((donation, idx) => (
 				<RowWrapper key={idx}>
@@ -177,6 +177,9 @@ const DonationTable: FC<DonationTable> = ({
 					<TabelCell>
 						<P>{donation.amount}</P>
 					</TabelCell>
+					<TabelCell>
+						<P>{donation.valueUsd}$</P>
+					</TabelCell>
 				</RowWrapper>
 			))}
 		</DonationTablecontainer>
@@ -185,7 +188,7 @@ const DonationTable: FC<DonationTable> = ({
 
 const DonationTablecontainer = styled.div`
 	display: grid;
-	grid-template-columns: 1fr 5fr 1fr 1fr;
+	grid-template-columns: 1fr 5fr 1fr 1fr 1fr;
 `;
 
 const TabelHeader = styled(Row)`
