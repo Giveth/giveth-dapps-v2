@@ -44,7 +44,6 @@ const ProjectIndex = (props: IProjectBySlug) => {
 
 	useEffect(() => {
 		if (status) {
-			console.log(status);
 			setIsActive(status.name === 'activate');
 		}
 	}, [status]);
