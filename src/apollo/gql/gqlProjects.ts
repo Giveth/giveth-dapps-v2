@@ -89,6 +89,11 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 			}
 			adminUser {
 				name
+				walletAddress
+			}
+			status {
+				id
+				name
 			}
 		}
 	}
@@ -121,6 +126,32 @@ export const FETCH_PROJECT_UPDATES = gql`
 	}
 `;
 
+export const FETCH_USER_LIKED_PROJECTS = gql`
+	query FetchUesrLikedProjects($take: Int, $skip: Int, $userId: Int!) {
+		likedProjectsByUserId(take: $take, skip: $skip, userId: $userId) {
+			projects {
+				id
+				title
+				balance
+				description
+				image
+				slug
+				creationDate
+				admin
+				walletAddress
+				impactLocation
+				listed
+				givingBlocksId
+				totalDonations
+				categories {
+					name
+				}
+				qualityScore
+			}
+			totalCount
+		}
+	}
+`;
 export const UPLOAD_IMAGE = gql`
 	mutation ($imageUpload: ImageUpload!) {
 		uploadImage(imageUpload: $imageUpload) {
@@ -185,4 +216,29 @@ export const UNLIKE_PROJECT_UPDATE_QUERY = `
   mutation ($reactionId: Int!) {
     unlikeProjectUpdate(reactionId: $reactionId)
   }
+`;
+
+export const GET_STATUS_REASONS = gql`
+	query {
+		getStatusReasons(statusId: 6) {
+			id
+			description
+			status {
+				id
+				name
+			}
+		}
+	}
+`;
+
+export const DEACTIVATE_PROJECT = gql`
+	mutation ($projectId: Float!, $reasonId: Float) {
+		deactivateProject(projectId: $projectId, reasonId: $reasonId)
+	}
+`;
+
+export const ACTIVATE_PROJECT = gql`
+	mutation ($projectId: Float!) {
+		activateProject(projectId: $projectId)
+	}
 `;

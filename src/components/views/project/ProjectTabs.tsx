@@ -77,14 +77,12 @@ const Wrapper = styled.div`
 	position: sticky;
 	top: 200px;
 	z-index: 10;
-	background: white;
 
 	${mediaQueries['xl']} {
 		padding: 8px 0 12px;
 		position: sticky;
 		top: 200px;
 		z-index: 10;
-		background: white;
 	}
 `;
 

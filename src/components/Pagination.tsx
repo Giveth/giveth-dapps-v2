@@ -1,100 +1,116 @@
-import { neutralColors, brandColors } from '@giveth/ui-design-system';
+import { ETheme, useGeneral } from '@/context/general.context';
+import { neutralColors, brandColors, Caption } from '@giveth/ui-design-system';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { Row } from './styled-components/Grid';
 
 interface IPagination {
-	setPage: (number: number) => void;
-	pageCount: number;
+	setPage: Dispatch<SetStateAction<number>>;
+	totalCount: number;
 	currentPage: number;
+	itemPerPage: number;
 }
 
 const Pagination = (props: IPagination) => {
-	const { setPage, currentPage, pageCount } = props;
+	const { setPage, currentPage, totalCount, itemPerPage } = props;
+	const [pages, setPages] = useState<any[]>([]);
+	const [pageCount, setPageCount] = useState(0);
+	const { theme } = useGeneral();
 
-	const handleNext = () => {
-		if (currentPage !== pageCount) return setPage(currentPage + 1);
-	};
-	const handlePrev = () => {
-		if (currentPage !== 1) return setPage(currentPage - 1);
-	};
-	const handleSelect = (num: number) => {
-		if (num !== currentPage) return setPage(num);
-	};
+	useEffect(() => {
+		const nop = Math.ceil(totalCount / itemPerPage);
+		let _pages: Array<string | number> = [];
+		const current_page = currentPage + 1;
+		// Loop through
+		for (let i = 1; i <= nop; i++) {
+			// Define offset
+			let offset = i == 1 || nop ? itemPerPage + 1 : itemPerPage;
+			// If added
+			if (
+				i == 1 ||
+				(current_page - offset <= i && current_page + offset >= i) ||
+				i == current_page ||
+				i == nop
+			) {
+				_pages.push(i);
+			} else if (
+				i == current_page - (offset + 1) ||
+				i == current_page + (offset + 1)
+			) {
+				_pages.push('...');
+			}
+		}
+		setPages(_pages);
+		setPageCount(nop);
+	}, [totalCount, currentPage, itemPerPage]);
 
 	if (pageCount < 2) return null;
 	return (
-		<div>
-			<UlStyled>
-				<LiStyled
-					onClick={handlePrev}
-					className={currentPage === 1 ? 'disabled' : ''}
-				>
-					{'< Prev'}
-				</LiStyled>
-				{[...Array(pageCount || [])].map((i, index) => {
-					return (
-						<LiStyled
-							style={{ width: '12px' }}
-							onClick={() => handleSelect(index + 1)}
-							className={
-								currentPage === index + 1 ? 'active' : ''
-							}
-							key={index}
-						>
-							{index + 1}
-						</LiStyled>
-					);
-				})}
-				<LiStyled
-					onClick={handleNext}
-					className={currentPage === pageCount ? 'disabled' : ''}
-				>
-					{'Next >'}
-				</LiStyled>
-			</UlStyled>
-		</div>
+		<>
+			{pageCount > 1 && (
+				<PaginationRow justifyContent={'flex-end'} gap='16px'>
+					<PaginationItem
+						theme={theme}
+						onClick={() => {
+							if (currentPage > 0) setPage(page => page - 1);
+						}}
+						disable={currentPage == 0}
+					>
+						{'<  Prev'}
+					</PaginationItem>
+					{pages.map((p, id) => {
+						return (
+							<PaginationItem
+								key={id}
+								theme={theme}
+								onClick={() => {
+									if (!isNaN(+p)) setPage(+p - 1);
+								}}
+								isActive={+p - 1 === currentPage}
+							>
+								{p}
+							</PaginationItem>
+						);
+					})}
+					<PaginationItem
+						theme={theme}
+						onClick={() => {
+							if (currentPage + 1 < pageCount)
+								setPage(page => page + 1);
+						}}
+						disable={currentPage + 1 >= pageCount}
+					>
+						{'Next  >'}
+					</PaginationItem>
+				</PaginationRow>
+			)}
+		</>
 	);
 };
 
-const LiStyled = styled.li`
-	font-size: 14px;
-	line-height: 150%;
-	font-weight: 400;
-	color: ${neutralColors.gray[600]};
-	cursor: pointer;
-
-	&.active {
-		cursor: default;
-		font-weight: 500;
-		color: ${brandColors.deep[900]};
-		border-bottom: 2px solid ${brandColors.giv[500]};
-	}
-
-	&:nth-of-type(1) {
-		padding-right: 16px;
-		color: ${brandColors.deep[900]};
-		&.disabled {
-			cursor: default;
-			color: ${neutralColors.gray[400]};
-		}
-	}
-
-	&:last-of-type {
-		padding-left: 16px;
-		color: ${brandColors.deep[900]};
-		&.disabled {
-			cursor: default;
-			color: ${neutralColors.gray[400]};
-		}
-	}
-`;
-
-const UlStyled = styled.ul`
-	justify-content: center;
-	align-items: center;
-	text-align: center;
-	list-style: none;
-	display: flex;
-	gap: 16px;
-`;
-
 export default Pagination;
+
+interface IPaginationItem {
+	disable?: boolean;
+	isActive?: boolean;
+}
+
+export const PaginationRow = styled(Row)`
+	margin-top: 16px;
+`;
+
+export const PaginationItem = styled(Caption)<IPaginationItem>`
+	${props =>
+		props.disable
+			? `color: ${
+					props.theme === ETheme.Dark
+						? neutralColors.gray[700]
+						: neutralColors.gray[500]
+			  }`
+			: `cursor: pointer; color: ${
+					props.theme === ETheme.Dark
+						? neutralColors.gray[100]
+						: neutralColors.gray[900]
+			  }`};
+	${props => (props.isActive ? `font-weight: bold;` : '')};
+`;

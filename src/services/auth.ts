@@ -1,15 +1,15 @@
 import { isSSRMode } from '../lib/helpers';
 import User from '../entities/user';
-import { IUserByAddress } from '../apollo/types/gqlTypes';
+import { IUser } from '@/apollo/types/types';
 
-export const getUser = (): IUserByAddress =>
+export const getUser = (): IUser =>
 	!isSSRMode && window.localStorage.getItem(getLocalStorageUserLabel())
 		? JSON.parse(
 				window.localStorage.getItem(getLocalStorageUserLabel()) || '',
 		  )
 		: {};
 
-export function setUser(user: IUserByAddress) {
+export function setUser(user: IUser) {
 	return window.localStorage.setItem(
 		getLocalStorageUserLabel(),
 		JSON.stringify(user),

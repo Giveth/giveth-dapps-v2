@@ -1,7 +1,7 @@
+import { IUser } from '@/apollo/types/types';
 import { ethers } from 'ethers';
 import { initializeApollo } from '../apollo/apolloClient';
 import { LOGIN_USER } from '../apollo/gql/gqlAuth';
-import { IUserByAddress } from '../apollo/types/gqlTypes';
 
 const apolloClient = initializeApollo();
 
@@ -9,7 +9,7 @@ export async function getToken(
 	walletAddress: string | null | undefined,
 	signature: string,
 	networkId: number | undefined,
-	user?: IUserByAddress,
+	user?: IUser,
 ) {
 	if (signature && walletAddress && networkId) {
 		try {

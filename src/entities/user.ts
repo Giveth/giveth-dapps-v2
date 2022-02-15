@@ -1,6 +1,6 @@
-import { IUserByAddress } from '../apollo/types/gqlTypes';
+import { IUser } from '@/apollo/types/types';
 
-export default class User implements IUserByAddress {
+export default class User implements IUser {
 	id!: string;
 	firstName?: string;
 	lastName?: string;

@@ -12,7 +12,6 @@ import { formatEther } from '@ethersproject/units';
 
 import { initializeApollo } from '../apollo/apolloClient';
 import { GET_USER_BY_ADDRESS } from '../apollo/gql/gqlUser';
-import { IUserByAddress } from '../apollo/types/gqlTypes';
 import {
 	compareAddresses,
 	LocalStorageTokenLabel,
@@ -24,12 +23,12 @@ import User from '../entities/user';
 import { getLocalStorageUserLabel } from '@/services/auth';
 import useWallet from '@/hooks/walletHooks';
 import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
-
 import { isMustSignRoute } from '@/lib/helpers';
+import { IUser } from '@/apollo/types/types';
 
 interface IUserContext {
 	state: {
-		user?: IUserByAddress;
+		user?: IUser;
 		balance?: string | null;
 		isEnabled?: boolean;
 		isSignedIn?: boolean;
@@ -42,7 +41,7 @@ interface IUserContext {
 
 const UserContext = createContext<IUserContext>({
 	state: {
-		user: {},
+		user: undefined,
 		isEnabled: false,
 		isSignedIn: false,
 	},
@@ -55,8 +54,7 @@ const UserContext = createContext<IUserContext>({
 const apolloClient = initializeApollo();
 
 export const UserProvider = (props: { children: ReactNode }) => {
-	const router = useRouter();
-	const [user, setUser] = useState<IUserByAddress | undefined>();
+	const [user, setUser] = useState<IUser | undefined>();
 	const [balance, setBalance] = useState<string | null>(null);
 	const [showWelcomeSignin, setShowWelcomeSignin] = useState<boolean>(false);
 	useWallet();
