@@ -61,6 +61,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 	const { account, active, library, chainId, deactivate } = useWeb3React();
 	const isEnabled = !!library?.getSigner() && !!account && !!chainId;
 	const isSignedIn = isEnabled && !!user?.token;
+	const router = useRouter();
 
 	useEffect(() => {
 		localStorage.removeItem(LocalStorageTokenLabel);
