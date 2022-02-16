@@ -12,9 +12,10 @@ import { utils } from 'ethers';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import Debounced from 'lodash.debounce';
+import { Toaster } from 'react-hot-toast';
 
 import SignInModal from '../../modals/SignInModal';
-import { WALLET_ADDRESS_IS_VALID, ADD_PROJECT } from '@/apollo/gql/gqlProjects';
+import { ADD_PROJECT } from '@/apollo/gql/gqlProjects';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import { IProjectCreation } from '@/apollo/types/types';
 import {
@@ -30,14 +31,27 @@ import useUser from '@/context/UserProvider';
 import Logger from '@/utils/Logger';
 import SuccessfulCreation from './SuccessfulCreation';
 import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
-import { client } from '@/apollo/apolloClient';
 import {
+	isDescriptionHeavy,
 	TitleValidation,
 	WalletAddressValidation,
 } from '@/components/views/create/FormValidation';
+import { gToast, ToastType } from '@/components/toasts';
+
+export enum ECreateErrFields {
+	NAME = 'name',
+	DESCRIPTION = 'description',
+	WALLET_ADDRESS = 'walletAddress',
+}
+
+export interface ICreateProjectErrors {
+	[ECreateErrFields.NAME]: string;
+	[ECreateErrFields.DESCRIPTION]: string;
+	[ECreateErrFields.WALLET_ADDRESS]: string;
+}
 
 const CreateIndex = () => {
-	const { library } = useWeb3React();
+	const { library, chainId } = useWeb3React();
 	const [addProjectMutation] = useMutation(ADD_PROJECT);
 
 	const [creationSuccessful, setCreationSuccessful] = useState<any>(null);
@@ -50,10 +64,13 @@ const CreateIndex = () => {
 	const [image, setImage] = useState<any>(null);
 	const [walletAddress, setWalletAddress] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
-	const [errors, setErrors] = useState<{
-		name: string;
-		walletAddress: string;
-	}>({ name: '', walletAddress: '' });
+	const [errors, setErrors] = useState<ICreateProjectErrors>({
+		[ECreateErrFields.NAME]: '',
+		[ECreateErrFields.DESCRIPTION]: '',
+		[ECreateErrFields.WALLET_ADDRESS]: '',
+	});
+
+	console.log(image, impactLocation);
 
 	const {
 		state: { user, isSignedIn },
@@ -62,6 +79,7 @@ const CreateIndex = () => {
 
 	const debouncedTitleValidation = useRef<any>();
 	const debouncedAddressValidation = useRef<any>();
+	const debouncedDescriptionValidation = useRef<any>();
 
 	useEffect(() => {
 		debouncedTitleValidation.current = Debounced(TitleValidation, 1000);
@@ -69,38 +87,40 @@ const CreateIndex = () => {
 			WalletAddressValidation,
 			1000,
 		);
+		debouncedDescriptionValidation.current = Debounced(
+			isDescriptionHeavy,
+			1000,
+		);
 	}, []);
+
+	const submitErrorHandler = (id: string, error: string) => {
+		document.getElementById(id)?.scrollIntoView({
+			behavior: 'smooth',
+		});
+		return gToast(error, {
+			type: ToastType.DANGER,
+			position: 'top-center',
+		});
+	};
 
 	const onSubmit = async () => {
 		try {
-			// check heavy description
-			const stringSize = encodeURI(description).split(/%..|./).length - 1;
-			if (stringSize > 4000000) {
-				// 4Mb tops max maybe?
-				// TODO: ADD TOAST HERE
-				return alert('Description too large');
+			for (let [key, value] of Object.entries(errors)) {
+				if (value) {
+					submitErrorHandler(key, value);
+					return;
+				}
 			}
 
-			// Check wallet
-			let address;
-			// Handle ENS address
-			if (isAddressENS(walletAddress)) {
-				address = await getAddressFromENS(walletAddress, library);
-			} else {
-				address = walletAddress;
-			}
-			// Check wallet valid
-			await client.query({
-				query: WALLET_ADDRESS_IS_VALID,
-				variables: {
-					address,
-				},
-			});
-			// Set categories
+			const address = isAddressENS(walletAddress)
+				? await getAddressFromENS(walletAddress, library)
+				: walletAddress;
+
 			const projectCategories = [];
 			for (const category in categories) {
 				projectCategories.push(category);
 			}
+
 			const projectData: IProjectCreation = {
 				title: name,
 				description,
@@ -134,24 +154,27 @@ const CreateIndex = () => {
 				setCreationSuccessful(addedProject?.data?.addProject);
 			}
 		} catch (e) {
+			setIsLoading(false);
 			const error = e as Error;
 			if (error.message === 'Access denied') {
-				console.log('Please first sign in');
+				gToast('Please first sign in', {
+					type: ToastType.DANGER,
+					position: 'top-center',
+				});
 			} else {
 				Logger.captureException(error);
 			}
-			console.log({ error });
-			// TODO: TOAST ERROR
-			alert(JSON.stringify(error));
+			gToast(JSON.stringify(error), {
+				type: ToastType.DANGER,
+				position: 'top-center',
+			});
 		}
 	};
 
-	const createProject = (e: any) => {
-		e.preventDefault();
-		onSubmit().then();
-	};
-
-	const hasErrors = Object.entries(errors).length !== 0;
+	const hasErrors =
+		errors[ECreateErrFields.NAME] ||
+		errors[ECreateErrFields.WALLET_ADDRESS] ||
+		errors[ECreateErrFields.DESCRIPTION];
 
 	useEffect(() => {
 		if (isSignedIn) {
@@ -162,9 +185,15 @@ const CreateIndex = () => {
 	useEffect(() => {
 		const userAddress = user?.walletAddress;
 		if (userAddress) {
-			WalletAddressValidation(userAddress, library)
-				.then(() => setWalletAddress(userAddress))
-				.catch(() => {});
+			setWalletAddress(userAddress);
+			TitleValidation(name, errors, setErrors);
+			WalletAddressValidation(
+				userAddress,
+				library,
+				errors,
+				setErrors,
+				chainId,
+			);
 		}
 	}, [user]);
 
@@ -173,30 +202,21 @@ const CreateIndex = () => {
 	}
 
 	const handleInputChange = (value: string, id: string) => {
-		const _errors = { ...errors };
-		if (id === 'name') {
+		if (id === ECreateErrFields.NAME) {
 			setName(value);
-			TitleValidation(value)
-				.then(() => {
-					_errors[id] = '';
-					setErrors(_errors);
-				})
-				.catch((error: { message: string }) => {
-					_errors[id] = error?.message;
-					setErrors(_errors);
-				});
-		}
-		if (id === 'walletAddress') {
+			debouncedTitleValidation.current(value, errors, setErrors);
+		} else if (id === ECreateErrFields.WALLET_ADDRESS) {
 			setWalletAddress(value);
-			WalletAddressValidation(value, library)
-				.then(() => {
-					_errors[id] = '';
-					setErrors(_errors);
-				})
-				.catch((error: { message: string }) => {
-					_errors[id] = error?.message;
-					setErrors(_errors);
-				});
+			debouncedAddressValidation.current(
+				value,
+				library,
+				errors,
+				setErrors,
+				chainId,
+			);
+		} else if (id === ECreateErrFields.DESCRIPTION) {
+			setDescription(value);
+			debouncedDescriptionValidation.current(value, errors, setErrors);
 		}
 	};
 
@@ -224,22 +244,36 @@ const CreateIndex = () => {
 			{user && (
 				<CreateContainer>
 					<Title>Create a Project</Title>
-					<form>
+
+					<div>
 						<NameInput
 							value={name}
-							setValue={e => handleInputChange(e, 'name')}
-							error={errors['name']}
+							setValue={e =>
+								handleInputChange(e, ECreateErrFields.NAME)
+							}
+							error={errors[ECreateErrFields.NAME]}
 						/>
-						<DescriptionInput setValue={setDescription} />
+						<DescriptionInput
+							setValue={e =>
+								handleInputChange(
+									e,
+									ECreateErrFields.DESCRIPTION,
+								)
+							}
+							error={errors[ECreateErrFields.DESCRIPTION]}
+						/>
 						<CategoryInput setValue={setCategories} />
 						<LocationInput setValue={setImpactLocation} />
 						<ImageInput setValue={setImage} />
 						<WalletAddressInput
 							value={walletAddress}
 							setValue={e =>
-								handleInputChange(e, 'walletAddress')
+								handleInputChange(
+									e,
+									ECreateErrFields.WALLET_ADDRESS,
+								)
 							}
-							error={errors['walletAddress']}
+							error={errors[ECreateErrFields.WALLET_ADDRESS]}
 						/>
 
 						<PublishTitle>{`Let's Publish!`}</PublishTitle>
@@ -259,17 +293,17 @@ const CreateIndex = () => {
 							</li>
 						</PublishList>
 						<Buttons>
-							<Button
-								label='PREVIEW'
-								buttonType='primary'
-								disabled={isLoading}
-								// onClick={uploadImage}
-							/>
+							{/*<Button*/}
+							{/*	label='PREVIEW'*/}
+							{/*	buttonType='primary'*/}
+							{/*	disabled={isLoading}*/}
+							{/*	// onClick={uploadImage}*/}
+							{/*/>*/}
 							<Button
 								label='PUBLISH'
 								buttonType='primary'
 								disabled={isLoading}
-								onClick={createProject}
+								onClick={onSubmit}
 							/>
 						</Buttons>
 						{hasErrors && (
@@ -277,9 +311,10 @@ const CreateIndex = () => {
 								Empty fields or errors, please check the values
 							</ErrorMessage>
 						)}
-					</form>
+					</div>
 				</CreateContainer>
 			)}
+			<Toaster containerStyle={{ top: '80px' }} />
 		</>
 	);
 };
@@ -289,7 +324,7 @@ const CreateContainer = styled.div`
 	flex-direction: column;
 	padding: 104px 0 154px 264px;
 	width: 677px;
-	form {
+	> div {
 		display: flex;
 		flex-direction: column;
 		margin: 48px 0;

@@ -8,6 +8,7 @@ import {
 	Label,
 } from './Create.sc';
 import { FlexCenter } from '@/components/styled-components/Grid';
+import { ECreateErrFields } from '@/components/views/create/CreateIndex';
 
 const NameInput = (props: {
 	value: string;
@@ -19,7 +20,7 @@ const NameInput = (props: {
 	const maxLength = 55;
 	return (
 		<>
-			<H5>Name of your Project</H5>
+			<H5 id={ECreateErrFields.NAME}>Name of your Project</H5>
 			<InputContainer>
 				<Label>Project name</Label>
 				<div style={{ position: 'relative' }}>

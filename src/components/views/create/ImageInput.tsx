@@ -13,7 +13,7 @@ import { OurImages } from '@/utils/constants';
 import { toBase64 } from '@/utils';
 import { InputContainer } from './Create.sc';
 
-const ImageInput = (props: any) => {
+const ImageInput = (props: { setValue: (x: any) => void }) => {
 	const [bgImage, setBgImage] = useState<any>();
 	const [showingImage, setShowingImage] = useState<any>();
 	const { setValue } = props;

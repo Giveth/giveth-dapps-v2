@@ -137,25 +137,25 @@ const ToastContainer = styled(Row)<IToast>`
 				break;
 		}
 	}};
-	border: 1px solid;
-	border-color: ${props => {
-		switch (props.type) {
-			case ToastType.INFO_PRIMARY:
-				return semanticColors.blueSky[700];
-			case ToastType.INFO_SECONDARY:
-				return `${semanticColors.blueSky[700]}00`;
-			case ToastType.SUCCESS:
-				return semanticColors.jade[700];
-			case ToastType.HINT:
-				return brandColors.giv[300];
-			case ToastType.WARNING:
-				return semanticColors.golden[700];
-			case ToastType.DANGER:
-				return semanticColors.punch[700];
-			default:
-				break;
-		}
-	}};
+	border: 1px solid
+		${props => {
+			switch (props.type) {
+				case ToastType.INFO_PRIMARY:
+					return semanticColors.blueSky[700];
+				case ToastType.INFO_SECONDARY:
+					return `${semanticColors.blueSky[700]}00`;
+				case ToastType.SUCCESS:
+					return semanticColors.jade[700];
+				case ToastType.HINT:
+					return brandColors.giv[300];
+				case ToastType.WARNING:
+					return semanticColors.golden[700];
+				case ToastType.DANGER:
+					return semanticColors.punch[700];
+				default:
+					break;
+			}
+		}};
 	border-radius: 8px;
 `;
 

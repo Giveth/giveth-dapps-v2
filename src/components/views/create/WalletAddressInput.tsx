@@ -10,6 +10,7 @@ import {
 } from './Create.sc';
 import useUser from '@/context/UserProvider';
 import { compareAddresses } from '@/lib/helpers';
+import { ECreateErrFields } from '@/components/views/create/CreateIndex';
 
 const WalletAddressInput = (props: {
 	value: string;
@@ -24,7 +25,7 @@ const WalletAddressInput = (props: {
 
 	return (
 		<>
-			<H5>Receiving funds</H5>
+			<H5 id={ECreateErrFields.WALLET_ADDRESS}>Receiving funds</H5>
 			<div>
 				<CaptionContainer>
 					You can set a custom Ethereum address or ENS to receive
