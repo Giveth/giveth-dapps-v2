@@ -52,8 +52,6 @@ import {
 	IncreaseSectionTitle,
 	Left,
 	NoData,
-	PaginationItem,
-	PaginationRow,
 	PercentageRow,
 	Right,
 	TxHash,
@@ -75,6 +73,7 @@ import { ITokenAllocation } from '@/types/subgraph';
 import { TopFiller } from './commons';
 import { useWeb3React } from '@web3-react/core';
 import { IconGIV } from '../Icons/GIV';
+import Pagination from '../Pagination';
 
 export const TabGIVstreamTop = () => {
 	const [showModal, setShowModal] = useState(false);
@@ -389,6 +388,8 @@ const convetSourceTypeToIcon = (distributor: string) => {
 	}
 };
 
+const itemPerPage = 6;
+
 export const GIVstreamHistory: FC = () => {
 	const { chainId, account } = useWeb3React();
 	const [tokenAllocations, setTokenAllocations] = useState<
@@ -396,9 +397,6 @@ export const GIVstreamHistory: FC = () => {
 	>([]);
 	const [loading, setLoading] = useState(true);
 	const [page, setPage] = useState(0);
-	const [pages, setPages] = useState<any[]>([]);
-	const [numberOfPages, setNumberOfPages] = useState(0);
-	const count = 6;
 	const {
 		currentValues: { balances },
 	} = useSubgraph();
@@ -413,7 +411,7 @@ export const GIVstreamHistory: FC = () => {
 	useEffect(() => {
 		if (chainId && account) {
 			setLoading(true);
-			getHistory(chainId, account, page * count, count).then(
+			getHistory(chainId, account, page * itemPerPage, itemPerPage).then(
 				_tokenAllocations => {
 					setTokenAllocations(_tokenAllocations);
 					setLoading(false);
@@ -421,33 +419,6 @@ export const GIVstreamHistory: FC = () => {
 			);
 		}
 	}, [chainId, account, page]);
-
-	useEffect(() => {
-		const nop = Math.ceil(allocationCount / count);
-		let _pages: Array<string | number> = [];
-		const current_page = page + 1;
-		// Loop through
-		for (let i = 1; i <= nop; i++) {
-			// Define offset
-			let offset = i == 1 || nop ? count + 1 : count;
-			// If added
-			if (
-				i == 1 ||
-				(current_page - offset <= i && current_page + offset >= i) ||
-				i == current_page ||
-				i == nop
-			) {
-				_pages.push(i);
-			} else if (
-				i == current_page - (offset + 1) ||
-				i == current_page + (offset + 1)
-			) {
-				_pages.push('...');
-			}
-		}
-		setPages(_pages);
-		setNumberOfPages(nop);
-	}, [allocationCount, page]);
 
 	return (
 		<HistoryContainer>
@@ -507,40 +478,12 @@ export const GIVstreamHistory: FC = () => {
 			{(!tokenAllocations || tokenAllocations.length == 0) && (
 				<NoData> NO DATA</NoData>
 			)}
-			{numberOfPages > 1 && (
-				<PaginationRow justifyContent={'flex-end'} gap='16px'>
-					<PaginationItem
-						onClick={() => {
-							if (page > 0) setPage(page => page - 1);
-						}}
-						disable={page == 0}
-					>
-						{'<  Prev'}
-					</PaginationItem>
-					{pages.map((p, id) => {
-						return (
-							<PaginationItem
-								key={id}
-								onClick={() => {
-									if (!isNaN(+p)) setPage(+p - 1);
-								}}
-								isActive={+p - 1 === page}
-							>
-								{p}
-							</PaginationItem>
-						);
-					})}
-					<PaginationItem
-						onClick={() => {
-							if (page + 1 < numberOfPages)
-								setPage(page => page + 1);
-						}}
-						disable={page + 1 >= numberOfPages}
-					>
-						{'Next  >'}
-					</PaginationItem>
-				</PaginationRow>
-			)}
+			<Pagination
+				currentPage={page}
+				totalCount={allocationCount}
+				setPage={setPage}
+				itemPerPage={itemPerPage}
+			/>
 			{loading && <HistoryLoading></HistoryLoading>}
 		</HistoryContainer>
 	);

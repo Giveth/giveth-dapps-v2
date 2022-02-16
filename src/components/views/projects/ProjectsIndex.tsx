@@ -314,7 +314,7 @@ const FiltersSection = styled.div`
 	color: ${neutralColors.gray[900]};
 `;
 
-const ProjectsContainer = styled.div`
+export const ProjectsContainer = styled.div`
 	display: grid;
 	gap: 25px;
 	margin-bottom: 64px;
