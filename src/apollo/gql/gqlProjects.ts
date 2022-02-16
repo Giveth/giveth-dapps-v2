@@ -17,6 +17,7 @@ export const FETCH_HOME_PROJECTS = gql`
 				}
 				adminUser {
 					name
+					walletAddress
 				}
 			}
 			totalCount
@@ -55,6 +56,7 @@ export const FETCH_ALL_PROJECTS = gql`
 				}
 				adminUser {
 					name
+					walletAddress
 				}
 			}
 			totalCount
