@@ -19,6 +19,7 @@ export interface IProject {
 		id?: string;
 		email?: string;
 		name?: string;
+		walletAddress?: string;
 	};
 	donations: {
 		id?: string;
@@ -28,6 +29,10 @@ export interface IProject {
 	totalProjectUpdates?: number;
 	traceCampaignId: string | null;
 	givingBlocksId?: string | null;
+	status: {
+		id?: string;
+		name?: string;
+	};
 }
 
 export interface IProjectCreation {
@@ -42,7 +47,20 @@ export interface IProjectCreation {
 }
 
 export interface IUser {
+	id: string;
+	firstName?: string;
+	lastName?: string;
 	name?: string;
+	email?: string;
+	avatar?: string;
+	walletAddress?: string;
+	url?: string;
+	location?: string;
+	token?: string;
+	totalDonated?: number;
+	totalReceived?: number;
+	projectsCount?: number;
+	donationsCount?: number;
 }
 
 export interface IAdmin {
@@ -73,6 +91,16 @@ export interface IDonation {
 	transactionId?: string;
 	transactionNetworkId?: number;
 	createdAt: string;
+}
+
+export interface IWalletDonation extends IDonation {
+	anonymous: boolean;
+	priceEth: number;
+	priceUsd: number;
+	project: IProject;
+	toWalletAddress: string;
+	valueEth: number;
+	valueUsd: number;
 }
 
 export interface IMediumBlogPost {

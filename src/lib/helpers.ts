@@ -60,6 +60,16 @@ export const formatDate = (date: Date) => {
 		.replace(/,/g, '');
 };
 
+export const smallFormatDate = (date: Date) => {
+	return date
+		.toLocaleString('en-US', {
+			day: 'numeric',
+			year: 'numeric',
+			month: 'short',
+		})
+		.replace(/,/g, '');
+};
+
 export const getGasPreference = (
 	networkConfig: BasicNetworkConfig,
 ): GasPreference => {

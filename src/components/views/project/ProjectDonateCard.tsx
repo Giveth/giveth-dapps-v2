@@ -1,5 +1,6 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import { Shadow } from '@/components/styled-components/Shadow';
@@ -7,9 +8,15 @@ import CategoryBadge from '@/components/badges/CategoryBadge';
 import Routes from '@/lib/constants/Routes';
 import { slugToProjectDonate, mediaQueries } from '@/lib/helpers';
 import InfoBadge from '@/components/badges/InfoBadge';
-import { IProjectBySlug } from '@/apollo/types/gqlTypes';
+import { IProject } from '@/apollo/types/types';
 import links from '@/lib/constants/links';
-import { Button, brandColors, GLink } from '@giveth/ui-design-system';
+import {
+	Button,
+	brandColors,
+	GLink,
+	neutralColors,
+	OulineButton,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import useUser from '@/context/UserProvider';
 import ShareModal from '@/components/modals/ShareModal';
@@ -18,21 +25,36 @@ import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_REACTION_BY_ID } from '@/apollo/gql/gqlProjects';
 import SignInModal from '@/components/modals/SignInModal';
 import { likeProject, unlikeProject } from '@/lib/reaction';
+import DeactivateProjectModal from '@/components/modals/DeactivateProjectModal';
+import ArchiveIcon from '../../../../public/images/icons/archive.svg';
+import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
 
-const ProjectDonateCard = (props: IProjectBySlug) => {
+interface IProjectDonateCard {
+	project: IProject;
+	isActive: boolean;
+	setIsActive: Dispatch<SetStateAction<boolean>>;
+}
+
+const ProjectDonateCard = ({
+	project,
+	isActive,
+	setIsActive,
+}: IProjectDonateCard) => {
 	const {
 		state: { user, isSignedIn },
 		actions: { signIn },
 	} = useUser();
 
-	const { project } = props;
-	const { categories, slug, description } = project;
+	// const { project } = props;
+	const { categories, slug, description, adminUser, id } = project;
 	const [reaction, setReaction] = useState<IReaction | undefined>(undefined);
 
 	const [heartedByUser, setHeartedByUser] = useState<boolean>(false);
 	const [showModal, setShowModal] = useState<boolean>(false);
 	const [showSigninModal, setShowSigninModal] = useState(false);
 	const [loading, setLoading] = useState(false);
+	const [isAdmin, setIsAdmin] = useState<boolean>(false);
+	const [deactivateModal, setDeactivateModal] = useState<boolean>(false);
 
 	const isCategories = categories.length > 0;
 
@@ -98,6 +120,29 @@ const ProjectDonateCard = (props: IProjectBySlug) => {
 		setHeartedByUser(!!reaction?.id);
 	}, [project, reaction]);
 
+	useEffect(() => {
+		if (adminUser?.walletAddress === user?.walletAddress) {
+			setIsAdmin(true);
+		}
+	}, [user, adminUser]);
+
+	const handleProjectStatus = async () => {
+		if (isActive) {
+			setDeactivateModal(true);
+		} else {
+			if (!isSignedIn && !!signIn) {
+				await signIn();
+			}
+			const { data } = await client.mutate({
+				mutation: ACTIVATE_PROJECT,
+				variables: {
+					projectId: Number(id),
+				},
+			});
+			setIsActive(data.activateProject);
+		}
+	};
+
 	return (
 		<>
 			{showModal && (
@@ -114,11 +159,33 @@ const ProjectDonateCard = (props: IProjectBySlug) => {
 					closeModal={() => setShowSigninModal(false)}
 				/>
 			)}
+			{deactivateModal && (
+				<DeactivateProjectModal
+					showModal={deactivateModal}
+					setShowModal={setDeactivateModal}
+					projectId={id}
+					setIsActive={setIsActive}
+				/>
+			)}
 			<Wrapper>
-				<DonateButton
-					onClick={() => router.push(slugToProjectDonate(slug))}
-					label='DONATE'
-				></DonateButton>
+				{isAdmin ? (
+					<>
+						<FullButton
+							buttonType='primary'
+							label='EDIT'
+							disabled
+						/>
+						<FullOutlineButton
+							buttonType='primary'
+							label='VERIFY YOUR PROJECT'
+						/>
+					</>
+				) : (
+					<FullButton
+						onClick={() => router.push(slugToProjectDonate(slug))}
+						label='DONATE'
+					/>
+				)}
 				<BadgeWrapper>
 					<ShareLikeBadge
 						type='share'
@@ -154,6 +221,15 @@ const ProjectDonateCard = (props: IProjectBySlug) => {
 				>
 					Report an issue
 				</Links>
+				{isAdmin && (
+					<ArchiveButton
+						buttonType='texty'
+						size='small'
+						label={`${isActive ? 'DE' : ''}ACTIVATE PROJECT`}
+						icon={<Image src={ArchiveIcon} alt='Archive icon.' />}
+						onClick={() => handleProjectStatus()}
+					/>
+				)}
 			</Wrapper>
 		</>
 	);
@@ -198,7 +274,7 @@ const Wrapper = styled.div`
 	padding: 32px;
 	overflow: hidden;
 	width: 326px;
-	max-height: 450px;
+	max-height: 470px;
 	height: fit-content;
 	border-radius: 40px;
 	position: relative;
@@ -214,8 +290,29 @@ const Wrapper = styled.div`
 	}
 `;
 
-const DonateButton = styled(Button)`
+const FullButton = styled(Button)`
 	width: 100%;
+
+	&:disabled {
+		background-color: ${neutralColors.gray[600]};
+		color: ${neutralColors.gray[100]};
+	}
+`;
+
+const FullOutlineButton = styled(OulineButton)`
+	width: 100%;
+	margin-top: 8px;
+`;
+
+const ArchiveButton = styled(Button)`
+	width: 100%;
+	margin: 12px 0px;
+	color: ${brandColors.giv[500]};
+
+	&:hover {
+		color: ${brandColors.giv[500]};
+		background-color: transparent;
+	}
 `;
 
 export default ProjectDonateCard;
