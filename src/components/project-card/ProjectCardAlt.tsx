@@ -53,8 +53,13 @@ const ProjectCard = (props: IProjectCard) => {
 				<CardBody>
 					<Title>{title}</Title>
 					{name && (
-						<Link href={`/user/${adminUser?.walletAddress}`}>
-							<Author>{name}</Author>
+						<Link
+							href={`/user/${adminUser?.walletAddress}`}
+							passHref
+						>
+							<a>
+								<Author>{name}</Author>
+							</a>
 						</Link>
 					)}
 					<Description>{htmlToText(description)}</Description>
