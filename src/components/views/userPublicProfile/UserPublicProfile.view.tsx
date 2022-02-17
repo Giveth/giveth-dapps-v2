@@ -22,7 +22,7 @@ import { useWeb3React } from '@web3-react/core';
 
 export interface IUserPublicProfileView {
 	user: IUser;
-	myAccount: boolean;
+	myAccount?: boolean;
 }
 
 const UserPublicProfileView: FC<IUserPublicProfileView> = ({
