@@ -18,6 +18,7 @@ import { BasicNetworkConfig, GasPreference } from '@/types/config';
 import { EWallets } from '@/lib/wallet/walletTypes';
 import { brandColors } from '@giveth/ui-design-system';
 import { giveconomyTabs, mustSignTabs } from '@/lib/constants/Tabs';
+import { IUser } from '@/apollo/types/types';
 
 export const DurationToYMDh = (ms: number) => {
 	let baseTime = new Date(0);
@@ -89,6 +90,10 @@ export const compareAddresses = (
 	add2: string | undefined,
 ) => {
 	return add1?.toLowerCase() === add2?.toLowerCase();
+};
+
+export const isUserRegistered = (user?: IUser) => {
+	return Boolean(user && user.name && user.email);
 };
 
 export const slugToProjectView = (slug: string) => {

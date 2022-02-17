@@ -36,6 +36,7 @@ interface IUserContext {
 	actions: {
 		signIn?: () => Promise<boolean | string>;
 		signOut?: () => void;
+		showSignModal: () => void;
 	};
 }
 
@@ -48,6 +49,7 @@ const UserContext = createContext<IUserContext>({
 	actions: {
 		signIn: async () => false,
 		signOut: () => {},
+		showSignModal: () => {},
 	},
 });
 
@@ -228,6 +230,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 					// showSign,
 					// signModalContent,
 					// setToken
+					showSignModal: () => setShowWelcomeSignin(true),
 					signIn,
 					signOut,
 				},

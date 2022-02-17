@@ -37,6 +37,7 @@ import {
 	walletAddressValidation,
 } from '@/helpers/createProjectValidation';
 import { gToast, ToastType } from '@/components/toasts';
+import { isUserRegistered } from '@/lib/helpers';
 
 export enum ECreateErrFields {
 	NAME = 'name',
@@ -65,33 +66,19 @@ const CreateIndex = () => {
 	const [walletAddress, setWalletAddress] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const [errors, setErrors] = useState<ICreateProjectErrors>({
-		[ECreateErrFields.NAME]: '',
+		[ECreateErrFields.NAME]: 'Title is required',
 		[ECreateErrFields.DESCRIPTION]: '',
 		[ECreateErrFields.WALLET_ADDRESS]: '',
 	});
 
-	console.log(image, impactLocation);
-
 	const {
 		state: { user, isSignedIn },
-		actions: { signIn },
+		actions: { showSignModal },
 	} = useUser();
 
 	const debouncedTitleValidation = useRef<any>();
 	const debouncedAddressValidation = useRef<any>();
 	const debouncedDescriptionValidation = useRef<any>();
-
-	useEffect(() => {
-		debouncedTitleValidation.current = Debounced(titleValidation, 1000);
-		debouncedAddressValidation.current = Debounced(
-			walletAddressValidation,
-			1000,
-		);
-		debouncedDescriptionValidation.current = Debounced(
-			isDescriptionHeavy,
-			1000,
-		);
-	}, []);
 
 	const submitErrorHandler = (id: string, error: string) => {
 		document.getElementById(id)?.scrollIntoView({
@@ -105,6 +92,16 @@ const CreateIndex = () => {
 
 	const onSubmit = async () => {
 		try {
+			if (!isSignedIn) {
+				return showSignModal();
+			}
+			if (!isUserRegistered(user)) {
+				// TODO: Show modal to register
+				return gToast('Please first register', {
+					type: ToastType.DANGER,
+					position: 'top-center',
+				});
+			}
 			for (let [key, value] of Object.entries(errors)) {
 				if (value) {
 					submitErrorHandler(key, value);
@@ -157,14 +154,7 @@ const CreateIndex = () => {
 		} catch (e) {
 			setIsLoading(false);
 			const error = e as Error;
-			if (error.message === 'Access denied') {
-				gToast('Please first sign in', {
-					type: ToastType.DANGER,
-					position: 'top-center',
-				});
-			} else {
-				Logger.captureException(error);
-			}
+			Logger.captureException(error);
 			gToast(JSON.stringify(error), {
 				type: ToastType.DANGER,
 				position: 'top-center',
@@ -186,8 +176,15 @@ const CreateIndex = () => {
 	useEffect(() => {
 		const userAddress = user?.walletAddress;
 		if (userAddress) {
+			if (!isUserRegistered(user)) {
+				// TODO: Show modal to register
+				gToast('Please first register', {
+					type: ToastType.DANGER,
+					position: 'top-center',
+				});
+			}
+			setShowSigninModal(false);
 			setWalletAddress(userAddress);
-			titleValidation(name, errors, setErrors);
 			walletAddressValidation(
 				userAddress,
 				library,
@@ -196,7 +193,22 @@ const CreateIndex = () => {
 				chainId,
 			);
 		}
+		if (!user) {
+			setShowSigninModal(true);
+		}
 	}, [user]);
+
+	useEffect(() => {
+		debouncedTitleValidation.current = Debounced(titleValidation, 1000);
+		debouncedAddressValidation.current = Debounced(
+			walletAddressValidation,
+			1000,
+		);
+		debouncedDescriptionValidation.current = Debounced(
+			isDescriptionHeavy,
+			1000,
+		);
+	}, []);
 
 	if (creationSuccessful) {
 		return <SuccessfulCreation project={creationSuccessful} />;
@@ -226,14 +238,7 @@ const CreateIndex = () => {
 			{showGuidelineModal && (
 				<ProjectGuidelineModal
 					showModal={showGuidelineModal}
-					setShowModal={val => {
-						if (!val) {
-							if (!isSignedIn && signIn) {
-								signIn().then();
-							}
-						}
-						setShowGuidelineModal(val);
-					}}
+					setShowModal={setShowGuidelineModal}
 				/>
 			)}
 			{showSigninModal && (
