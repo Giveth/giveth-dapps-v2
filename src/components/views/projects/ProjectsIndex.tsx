@@ -47,10 +47,11 @@ const allCategoryObj = { value: 'All', label: 'All' };
 const sortByObj = [
 	{ label: 'Default', value: gqlEnums.QUALITYSCORE },
 	{ label: 'Amount Raised', value: gqlEnums.DONATIONS },
+	{ label: 'Accepts GIV Token', value: gqlEnums.ACCEPTGIV },
 	{ label: 'Hearts', value: gqlEnums.HEARTS },
-	{ label: 'Date Created - Descending', value: gqlEnums.CREATIONDATE },
+	{ label: 'Newest', value: gqlEnums.CREATIONDATE },
 	{
-		label: 'Date Created - Ascending',
+		label: 'Oldest',
 		value: gqlEnums.CREATIONDATE,
 		direction: gqlEnums.ASC,
 	},
@@ -191,6 +192,9 @@ const ProjectsIndex = () => {
 							value={sortBy}
 							onChange={e => handleChange('sortBy', e)}
 							options={sortByObj}
+							isOptionSelected={(option, selectValue) =>
+								selectValue.some((i: any) => i.label === option)
+							}
 						/>
 					</SelectComponent>
 					<SearchComponent>
