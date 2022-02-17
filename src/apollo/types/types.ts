@@ -13,7 +13,8 @@ export interface IProject {
 	verified?: boolean;
 	listed?: boolean;
 	categories: ICategory[];
-	reactions: IReaction[];
+	reaction?: IReaction;
+	totalReactions: number;
 	adminUser: {
 		id?: string;
 		email?: string;
@@ -73,7 +74,7 @@ export interface IAdmin {
 }
 
 export interface IReaction {
-	userId: string;
+	id: string;
 }
 
 export interface IDonation {

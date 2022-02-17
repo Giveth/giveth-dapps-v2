@@ -10,13 +10,15 @@ import useUser from '@/context/UserProvider';
 import { brandColors, Subline } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import ShareModal from '../modals/ShareModal';
+import { likeProject, unlikeProject } from '@/lib/reaction';
 
 interface IBadgeWrapper {
 	width?: string;
 }
 
 interface IProjectCardBadges {
-	reactions?: IReaction[];
+	reaction?: IReaction;
+	totalReactions?: number;
 	verified?: boolean;
 	traceable?: boolean;
 	isHover?: boolean;
@@ -24,33 +26,69 @@ interface IProjectCardBadges {
 	cardWidth?: string;
 	projectHref: string;
 	projectDescription?: string;
+	projectId?: string | number;
 }
 
 const ProjectCardBadges = (props: IProjectCardBadges) => {
 	const {
-		state: { user },
+		state: { isSignedIn },
+		actions: { signIn },
 	} = useUser();
 
-	const [heartedByUser, setHeartedByUser] = useState<boolean>(false);
 	const [showModal, setShowModal] = useState<boolean>(false);
 	const {
-		reactions,
 		verified,
 		isHover,
 		traceable,
 		projectHref,
 		projectDescription,
+		projectId,
 	} = props;
-	const likes = reactions?.length;
+
+	const [reaction, setReaction] = useState(props.reaction);
+	const [totalReactions, setTotalReactions] = useState(props.totalReactions);
+	const [loading, setLoading] = useState(false);
+
+	const likeUnlikeProject = async () => {
+		if (!isSignedIn) {
+			if (signIn) {
+				const success = await signIn();
+				if (!success) return;
+			} else {
+				console.error('Sign in is not possible');
+			}
+			// setShowSigninModal(true);
+			// return;
+		}
+		if (loading) return;
+
+		if (projectId) {
+			setLoading(true);
+
+			try {
+				if (!reaction) {
+					const newReaction = await likeProject(projectId);
+					setReaction(newReaction);
+					if (newReaction)
+						setTotalReactions((totalReactions || 0) + 1);
+				} else {
+					const successful = await unlikeProject(reaction.id);
+					if (successful) {
+						setReaction(undefined);
+						setTotalReactions((totalReactions || 1) - 1);
+					}
+				}
+			} catch (e) {
+				console.error('Error on like/unlike project ', e);
+			} finally {
+				setLoading(false);
+			}
+		}
+	};
 
 	useEffect(() => {
-		if (user?.id) {
-			const isHearted = !!reactions?.some(
-				i => Number(i.userId) === Number(user.id),
-			);
-			setHeartedByUser(isHearted);
-		}
-	}, [user]);
+		setReaction(props.reaction);
+	}, [props.reaction]);
 
 	return (
 		<>
@@ -68,11 +106,16 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 					{traceable && <VerificationBadge trace />}
 				</BadgeContainer>
 				<BadgeContainer>
-					{Number(likes) > 0 && <LikeBadge>{likes}</LikeBadge>}
-					<HeartWrap active={heartedByUser} isHover={isHover}>
+					{Number(totalReactions) > 0 && (
+						<LikeBadge>{totalReactions}</LikeBadge>
+					)}
+					<HeartWrap active={!!reaction?.id} isHover={isHover}>
 						<Image
-							src={heartedByUser ? redHeartIcon : grayHeartIcon}
+							src={reaction?.id ? redHeartIcon : grayHeartIcon}
 							alt='heart icon'
+							onClick={() => {
+								likeUnlikeProject();
+							}}
 						/>
 						<ShareImageButton
 							src={shareIcon}

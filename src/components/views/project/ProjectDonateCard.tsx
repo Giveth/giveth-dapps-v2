@@ -20,9 +20,13 @@ import {
 import styled from 'styled-components';
 import useUser from '@/context/UserProvider';
 import ShareModal from '@/components/modals/ShareModal';
+import { IReaction } from '@/apollo/types/types';
+import { client } from '@/apollo/apolloClient';
+import { FETCH_PROJECT_REACTION_BY_ID } from '@/apollo/gql/gqlProjects';
+import SignInModal from '@/components/modals/SignInModal';
+import { likeProject, unlikeProject } from '@/lib/reaction';
 import DeactivateProjectModal from '@/components/modals/DeactivateProjectModal';
 import ArchiveIcon from '../../../../public/images/icons/archive.svg';
-import { client } from '@/apollo/apolloClient';
 import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
 
 interface IProjectDonateCard {
@@ -42,10 +46,13 @@ const ProjectDonateCard = ({
 	} = useUser();
 
 	// const { project } = props;
-	const { categories, slug, reactions, description, adminUser, id } = project;
+	const { categories, slug, description, adminUser, id } = project;
+	const [reaction, setReaction] = useState<IReaction | undefined>(undefined);
 
 	const [heartedByUser, setHeartedByUser] = useState<boolean>(false);
 	const [showModal, setShowModal] = useState<boolean>(false);
+	const [showSigninModal, setShowSigninModal] = useState(false);
+	const [loading, setLoading] = useState(false);
 	const [isAdmin, setIsAdmin] = useState<boolean>(false);
 	const [deactivateModal, setDeactivateModal] = useState<boolean>(false);
 
@@ -53,14 +60,65 @@ const ProjectDonateCard = ({
 
 	const router = useRouter();
 
-	useEffect(() => {
-		if (user?.id) {
-			const isHearted = !!reactions?.some(
-				i => Number(i.userId) === Number(user.id),
-			);
-			setHeartedByUser(isHearted);
+	const likeUnlikeProject = async () => {
+		if (!isSignedIn) {
+			if (signIn) {
+				const success = await signIn();
+				if (!success) return;
+			} else {
+				console.error('Sign in is not possible');
+			}
+			// setShowSigninModal(true);
+			// return;
 		}
-	}, [reactions, user]);
+		if (loading) return;
+
+		if (project.id) {
+			setLoading(true);
+
+			try {
+				if (!reaction) {
+					const newReaction = await likeProject(project.id);
+					setReaction(newReaction);
+				} else {
+					const successful = await unlikeProject(reaction.id);
+					if (successful) setReaction(undefined);
+				}
+			} catch (e) {
+				console.error('Error on like/unlike project ', e);
+			} finally {
+				setLoading(false);
+			}
+		}
+	};
+
+	const fetchProjectReaction = async () => {
+		if (user?.id) {
+			try {
+				const { data } = await client.query({
+					query: FETCH_PROJECT_REACTION_BY_ID,
+					variables: {
+						id: Number(project.id),
+						connectedWalletUserId: Number(user?.id),
+					},
+					fetchPolicy: 'no-cache',
+				});
+				setReaction(data?.projectById?.reaction);
+			} catch (e) {
+				console.error('Error on fetching project by id:', e);
+			}
+		} else if (reaction) {
+			setReaction(undefined);
+		}
+	};
+
+	useEffect(() => {
+		fetchProjectReaction();
+	}, [user]);
+
+	useEffect(() => {
+		setHeartedByUser(!!reaction?.id);
+	}, [project, reaction]);
 
 	useEffect(() => {
 		if (adminUser?.walletAddress === user?.walletAddress) {
@@ -95,6 +153,12 @@ const ProjectDonateCard = ({
 					projectDescription={description}
 				/>
 			)}
+			{showSigninModal && (
+				<SignInModal
+					showModal={showSigninModal}
+					closeModal={() => setShowSigninModal(false)}
+				/>
+			)}
 			{deactivateModal && (
 				<DeactivateProjectModal
 					showModal={deactivateModal}
@@ -127,7 +191,11 @@ const ProjectDonateCard = ({
 						type='share'
 						onClick={() => setShowModal(true)}
 					/>
-					<ShareLikeBadge type='like' active={heartedByUser} />
+					<ShareLikeBadge
+						type='like'
+						active={heartedByUser}
+						onClick={likeUnlikeProject}
+					/>
 				</BadgeWrapper>
 				<GivBackNotif>
 					<GLink size='Medium' color={brandColors.giv[300]}>

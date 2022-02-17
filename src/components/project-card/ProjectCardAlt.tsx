@@ -24,8 +24,16 @@ interface IProjectCard {
 
 const ProjectCard = (props: IProjectCard) => {
 	const [rndColor, setRndColor] = useState(noImgColor);
-	const { title, description, image, verified, reactions, adminUser, slug } =
-		props.project;
+	const {
+		title,
+		description,
+		image,
+		verified,
+		totalReactions,
+		adminUser,
+		slug,
+		id,
+	} = props.project;
 	const { noHearts } = props;
 
 	const name = adminUser?.name;
@@ -43,10 +51,11 @@ const ProjectCard = (props: IProjectCard) => {
 				{!noHearts && (
 					<ProjectCardBadges
 						cardWidth={cardWidth}
-						likes={reactions.length}
+						likes={totalReactions}
 						verified={verified}
 						projectHref={slug}
 						projectDescription={description}
+						projectId={id}
 					/>
 				)}
 				<CardBody>

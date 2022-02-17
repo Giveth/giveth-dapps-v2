@@ -26,6 +26,7 @@ import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
 import { gqlEnums } from '@/apollo/types/gqlEnums';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
 import { Shadow } from '../../styled-components/Shadow';
+import useUser from '@/context/UserProvider';
 
 interface ISelectObj {
 	value: string;
@@ -39,6 +40,7 @@ interface IQueries {
 	limit?: number;
 	category?: string;
 	searchTerm?: string;
+	connectedWalletUserId?: number;
 }
 
 const allCategoryObj = { value: 'All', label: 'All' };
@@ -69,6 +71,9 @@ const buildCategoryObj = (array: ICategory[]) => {
 };
 
 const ProjectsIndex = () => {
+	const {
+		state: { user },
+	} = useUser();
 	const { data } = useQuery(FETCH_ALL_PROJECTS, OPTIONS_HOME_PROJECTS);
 	const { projects, totalCount: _totalCount, categories } = data.projects;
 
@@ -107,6 +112,10 @@ const ProjectsIndex = () => {
 			limit: projects.length,
 			skip: projects.length * (loadNum || 0),
 		};
+
+		if (user?.id) {
+			variables.connectedWalletUserId = Number(user?.id);
+		}
 
 		if (sortBy.direction) variables.orderBy.direction = sortBy.direction;
 		if (categoryQuery && categoryQuery !== 'All')

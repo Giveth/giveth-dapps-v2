@@ -38,10 +38,12 @@ const ProjectCard = (props: IProjectCard) => {
 		image,
 		verified,
 		slug,
-		reactions,
+		reaction,
+		totalReactions,
 		adminUser,
 		totalDonations,
 		traceCampaignId,
+		id,
 	} = props.project;
 
 	const [isHover, setIsHover] = useState(false);
@@ -58,11 +60,13 @@ const ProjectCard = (props: IProjectCard) => {
 				<ImagePlaceholder>
 					<ProjectCardBadges
 						isHover={isHover}
-						reactions={reactions}
+						totalReactions={totalReactions}
+						reaction={reaction}
 						verified={verified}
 						traceable={!!traceCampaignId}
 						projectHref={slug}
 						projectDescription={description}
+						projectId={id}
 					/>
 					<ProjectCardImage image={image} cardRadius={cardRadius} />
 				</ImagePlaceholder>
