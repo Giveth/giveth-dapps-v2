@@ -24,7 +24,9 @@ const PublicProfileContributes: FC<IUserPublicProfileView> = ({
 	user,
 	myAccount,
 }) => {
-	const [tab, setTab] = useState(EPublicProfile.PROJECTS);
+	const [tab, setTab] = useState(
+		myAccount ? EPublicProfile.OVERVIEW : EPublicProfile.PROJECTS,
+	);
 	return (
 		<PubliCProfileTabsAndProjectContianer>
 			<Container>
