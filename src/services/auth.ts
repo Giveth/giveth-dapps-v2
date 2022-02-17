@@ -30,6 +30,6 @@ export function getLocalStorageUserLabel(): string {
 	return process.env.NEXT_PUBLIC_LOCAL_USER_LABEL
 		? process.env.NEXT_PUBLIC_LOCAL_USER_LABEL +
 				'_' +
-				process.env.ENVIRONMENT
-		: 'nextUser' + '_' + process.env.ENVIRONMENT;
+				process.env.NEXT_PUBLIC_ENV
+		: 'nextUser' + '_' + process.env.NEXT_PUBLIC_ENV;
 }

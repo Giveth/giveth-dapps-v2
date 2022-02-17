@@ -90,7 +90,7 @@ const DonateModal = ({
 			let traceable = false;
 			let userTokenValidation: string | boolean = user?.token!;
 			// Sign message for registered users to get user info, no need to sign for anonymous
-			if (!userTokenValidation) {
+			if (!userTokenValidation && !anonymous) {
 				const tokenFromSignin = signIn && (await signIn());
 				if (!tokenFromSignin) return;
 				userTokenValidation = tokenFromSignin;

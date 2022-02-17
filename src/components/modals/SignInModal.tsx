@@ -24,8 +24,7 @@ interface ISignInModal {
 }
 
 const SignInModal = ({ showModal, closeModal }: ISignInModal) => {
-	const context = useWeb3React();
-	const { activate } = context;
+	const { activate } = useWeb3React();
 	const [showWalletModal, setShowWalletModal] = useState<boolean>(false);
 
 	const handleSocialConnection = (): void => {
@@ -36,6 +35,7 @@ const SignInModal = ({ showModal, closeModal }: ISignInModal) => {
 				console.log(e);
 			});
 	};
+
 	return (
 		<>
 			{showWalletModal && (

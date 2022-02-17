@@ -3,7 +3,6 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import InputBox from '../../InputBox';
 import { useWeb3React } from '@web3-react/core';
 import { Contract } from '@ethersproject/contracts';
-import UserContext from '../../../context/UserProvider';
 import { useQuery } from '@apollo/client';
 import BigNumber from 'bignumber.js';
 import {
@@ -14,11 +13,13 @@ import {
 	GLink,
 	B,
 } from '@giveth/ui-design-system';
+import useUser from '@/context/UserProvider';
 import FixedToast from '@/components/FixedToast';
 import CheckBox from '@/components/Checkbox';
 import WalletModal from '@/components/modals/WalletModal';
 import DonateModal from '@/components/modals/DonateModal';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
+import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
 import { IProject } from '../../../apollo/types/types';
 import { getERC20Info } from '../../../lib/contracts';
 import { getERC20List, pollEvery } from '../../../utils';
@@ -105,9 +106,9 @@ const CryptoDonation = (props: {
 }) => {
 	const { chainId, account, library } = useWeb3React();
 	const {
-		state: { isEnabled, user, balance },
+		state: { isSignedIn, isEnabled, user, balance },
 		actions: { signIn },
-	} = UserContext();
+	} = useUser();
 	const { project, setSuccessDonation } = props;
 	const { ethPrice } = usePrice();
 	const mainTokenPrice = new BigNumber(ethPrice).toNumber();
@@ -130,6 +131,7 @@ const CryptoDonation = (props: {
 	const [showWalletModal, setShowWalletModal] = useState(false);
 	const [showDonateModal, setShowDonateModal] = useState(false);
 	const [showInsufficientModal, setShowInsufficientModal] = useState(false);
+	const [showWelcomeSignin, setShowWelcomeSignin] = useState<boolean>(false);
 
 	const tokenSymbol = selectedToken?.symbol;
 	const isXdai = networkId === xdaiChain.id;
@@ -490,6 +492,13 @@ const CryptoDonation = (props: {
 				</B>
 			</CheckBoxContainer>
 
+			{showWelcomeSignin && (
+				<WelcomeSigninModal
+					showModal={true}
+					setShowModal={() => setShowWelcomeSignin(false)}
+				/>
+			)}
+
 			{isEnabled && (
 				<>
 					<MainButton
@@ -499,6 +508,9 @@ const CryptoDonation = (props: {
 						onClick={() => {
 							if (selectedTokenBalance < amountTyped) {
 								return setShowInsufficientModal(true);
+							}
+							if (!isSignedIn && isEnabled) {
+								setShowWelcomeSignin(true);
 							}
 							setShowDonateModal(true);
 						}}
