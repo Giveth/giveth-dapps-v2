@@ -1,22 +1,16 @@
 import styled from 'styled-components';
 
 import {
-	Container,
 	D1,
-	H1,
 	H2,
 	H4,
-	H5,
 	P,
-	Button,
 	QuoteText,
 	DataBlock,
 	brandColors,
 	GLink,
 	neutralColors,
-	Title,
 	Subline,
-	Caption,
 	ButtonLink,
 } from '@giveth/ui-design-system';
 import { TopContainer, TopInnerContainer } from './commons';
@@ -191,23 +185,6 @@ export const GsHFrUnit = styled(P)`
 `;
 
 export const TxHash = styled(GLink)``;
-
-interface IPaginationItem {
-	disable?: boolean;
-	isActive?: boolean;
-}
-
-export const PaginationRow = styled(Row)`
-	margin-top: 16px;
-`;
-
-export const PaginationItem = styled(Caption)<IPaginationItem>`
-	${props =>
-		props.disable
-			? `color: ${neutralColors.gray[700]}`
-			: `cursor: pointer; color: ${neutralColors.gray[100]}`};
-	${props => (props.isActive ? `font-weight: bold;` : '')};
-`;
 
 export const TxSpan = styled.span`
 	color: ${brandColors.cyan[500]};
