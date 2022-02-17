@@ -32,23 +32,39 @@ export const Footer = () => {
 								</a>
 							</Link>
 							<Link href='/projects' passHref>
-								<LinkItem color={textColor}>Projects</LinkItem>
+								<a>
+									<LinkItem color={textColor}>
+										Projects
+									</LinkItem>
+								</a>
 							</Link>
 							<Link href='/about' passHref>
-								<LinkItem color={textColor}>About Us</LinkItem>
+								<a>
+									<LinkItem color={textColor}>
+										About Us
+									</LinkItem>
+								</a>
 							</Link>
 							<Link href='/faq' passHref>
-								<LinkItem color={textColor}>FAQ</LinkItem>
+								<a>
+									<LinkItem color={textColor}>FAQ</LinkItem>
+								</a>
 							</Link>
 							<Link href='/support' passHref>
-								<LinkItem color={textColor}>Support</LinkItem>
+								<a>
+									<LinkItem color={textColor}>
+										Support
+									</LinkItem>
+								</a>
 							</Link>
 						</LinkColumn>
 						<LinkColumn>
 							<Link href='/join' passHref>
-								<LinkItem color={textColor}>
-									Join Our Community
-								</LinkItem>
+								<a>
+									<LinkItem color={textColor}>
+										Join Our Community
+									</LinkItem>
+								</a>
 							</Link>
 							<a href='https://docs.giveth.io/whatisgiveth/'>
 								<LinkItem color={textColor}>
@@ -121,9 +137,11 @@ export const Footer = () => {
 								href='/donate/giveth-2021:-retreat-to-the-future'
 								passHref
 							>
-								<CaptionRed medium>
-									&nbsp;with your Donation
-								</CaptionRed>
+								<a>
+									<CaptionRed medium>
+										&nbsp;with your Donation
+									</CaptionRed>
+								</a>
 							</Link>
 						</Row>
 						<CopyRights>
