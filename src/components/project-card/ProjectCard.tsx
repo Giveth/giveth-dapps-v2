@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import Link from 'next/dist/client/link';
 
 import ProjectCardBadges from './ProjectCardBadges';
@@ -38,10 +37,12 @@ const ProjectCard = (props: IProjectCard) => {
 		image,
 		verified,
 		slug,
-		reactions,
+		reaction,
+		totalReactions,
 		adminUser,
 		totalDonations,
 		traceCampaignId,
+		id,
 	} = props.project;
 
 	const [isHover, setIsHover] = useState(false);
@@ -58,17 +59,23 @@ const ProjectCard = (props: IProjectCard) => {
 				<ImagePlaceholder>
 					<ProjectCardBadges
 						isHover={isHover}
-						reactions={reactions}
+						totalReactions={totalReactions}
+						reaction={reaction}
 						verified={verified}
 						traceable={!!traceCampaignId}
 						projectHref={slug}
 						projectDescription={description}
+						projectId={id}
 					/>
 					<ProjectCardImage image={image} cardRadius={cardRadius} />
 				</ImagePlaceholder>
 				<CardBody>
 					<Title>{title}</Title>
-					<Author>{name || ' '}</Author>
+					<Link href={`/user/${adminUser?.walletAddress}`}>
+						<a>
+							<Author>{name || ' '}</Author>
+						</a>
+					</Link>
 					<Description>{htmlToText(description)}</Description>
 					<Captions>
 						<GLink size='Medium'>
@@ -135,6 +142,7 @@ const CardBody = styled.div`
 const Author = styled(P)`
 	color: ${brandColors.pinky[500]};
 	margin-bottom: 10px;
+	cursor: pointer;
 `;
 
 const Title = styled(H6)`

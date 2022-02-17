@@ -1,16 +1,20 @@
 import Image from 'next/image';
 import { Shadow } from '@/components/styled-components/Shadow';
+import { IPartner } from '@/content/Partnerships';
 import { H4, P, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
-const PartnershipsCard = (props: {
-	content: { icon: string; title: string; description: string };
-}) => {
-	const { icon, title, description } = props.content;
+const PartnershipsCard = ({ icon, title, description, link }: IPartner) => {
 	return (
-		<Wrapper>
+		<Wrapper href={link} target='_blank' rel='noreferrer'>
 			<IconContainer>
-				<Image src={icon} alt={title} />
+				<Image
+					src={icon}
+					objectFit='contain'
+					width={100}
+					height={100}
+					alt={`${title} logo`}
+				/>
 			</IconContainer>
 			<Title>{title}</Title>
 			<Caption>{description}</Caption>
@@ -33,9 +37,11 @@ const Caption = styled(P)`
 
 const IconContainer = styled.div`
 	margin-bottom: 35px;
+	max-width: 255px;
+	max-height: 110px;
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled.a`
 	display: flex;
 	flex-direction: column;
 	width: 326px;
@@ -45,6 +51,7 @@ const Wrapper = styled.div`
 	border-radius: 12px;
 	box-shadow: ${Shadow.Neutral[500]};
 	padding: 70px 35px 40px 35px;
+	cursor: pointer;
 `;
 
 export default PartnershipsCard;

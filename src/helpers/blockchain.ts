@@ -36,6 +36,16 @@ export const networksParams: {
 		},
 		blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
 	},
+	3: {
+		chainId: '0x3',
+		chainName: 'Ropsten',
+		nativeCurrency: {
+			name: 'Ropsten ETH',
+			symbol: 'ETH',
+			decimals: 18,
+		},
+		blockExplorerUrls: ['https://ropsten.etherscan.io'],
+	},
 	4: {
 		chainId: '0x4',
 		chainName: 'Rinkeby',

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import VerificationBadge from '@/components/badges/VerificationBadge';
 import { isNoImg, noImgColor, noImgIcon, mediaQueries } from '@/lib/helpers';
 import { IProject } from '@/apollo/types/types';
@@ -42,7 +43,9 @@ const ProjectHeader = (props: { project: IProject }) => {
 				<Title fixSize={adjustTitle} weight={700}>
 					{title}
 				</Title>
-				<Author>{name}</Author>
+				<Link href={`/user/${adminUser?.walletAddress}`} passHref>
+					<Author>{name}</Author>
+				</Link>
 			</TitleSection>
 		</Wrapper>
 	);
@@ -91,6 +94,7 @@ const Title = styled(H3)<{ fixSize: boolean }>`
 
 const Author = styled(P)`
 	color: ${brandColors.pinky[500]};
+	cursor: pointer;
 `;
 
 export default ProjectHeader;

@@ -4,6 +4,8 @@ import { client } from '@/apollo/apolloClient';
 import { FETCH_HOME_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { gqlEnums } from '@/apollo/types/gqlEnums';
 import { IProject } from '@/apollo/types/types';
+import useUser from '@/context/UserProvider';
+import { useEffect, useState } from 'react';
 
 const projectsToFetch = 15;
 
@@ -12,27 +14,49 @@ interface IHomeRoute {
 	totalCount: number;
 }
 
+const fetchProjects = async (userId: string | undefined = undefined) => {
+	const variables: any = {
+		limit: projectsToFetch,
+		orderBy: { field: gqlEnums.QUALITYSCORE, direction: gqlEnums.DESC },
+	};
+
+	if (userId) {
+		variables.connectedWalletUserId = Number(userId);
+	}
+	const { data } = await client.query({
+		query: FETCH_HOME_PROJECTS,
+		variables,
+	});
+
+	return data.projects;
+};
+
 const HomeRoute = (props: IHomeRoute) => {
+	const {
+		state: { user },
+	} = useUser();
+
+	const [projects, setProjects] = useState(props.projects);
+	const [totalCount, setTotalCount] = useState(props.totalCount);
+
+	useEffect(() => {
+		fetchProjects(user?.id).then(({ projects, totalCount }) => {
+			setProjects(projects);
+			setTotalCount(totalCount);
+		});
+	}, [user]);
 	return (
 		<>
 			<Head>
 				<title>Home | Giveth</title>
 			</Head>
-			<HomeIndex {...props} />
+			<HomeIndex projects={projects} totalCount={totalCount} />
 		</>
 	);
 };
 
 export async function getServerSideProps() {
-	const { data } = await client.query({
-		query: FETCH_HOME_PROJECTS,
-		variables: {
-			limit: projectsToFetch,
-			orderBy: { field: gqlEnums.QUALITYSCORE, direction: gqlEnums.DESC },
-		},
-	});
-
-	const { projects, totalCount } = data.projects;
+	const { projects, totalCount } = await fetchProjects();
 
 	return {
 		props: {
