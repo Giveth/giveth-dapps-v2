@@ -1,5 +1,5 @@
 import { Arc } from '@/components/styled-components/Arc';
-import PartnershipsArray from '@/content/Partnerships';
+import { PartnershipArray, IPartner } from '@/content/Partnerships';
 import { H2, brandColors, Lead, D3 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import PartnershipsCard from './PartnershipsCard';
@@ -17,8 +17,14 @@ const PartnershipsIndex = () => {
 				</Caption>
 				<PartnershipsContainer>
 					<OurPartners>Our partners and friends</OurPartners>
-					{PartnershipsArray.map(i => (
-						<PartnershipsCard key={i.title} content={i} />
+					{PartnershipArray.map((partner: IPartner) => (
+						<PartnershipsCard
+							key={partner.title}
+							description={partner.description}
+							link={partner.link}
+							icon={partner.icon}
+							title={partner.title}
+						/>
 					))}
 				</PartnershipsContainer>
 			</Wrapper>
