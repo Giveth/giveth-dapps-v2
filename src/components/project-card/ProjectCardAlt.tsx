@@ -21,10 +21,12 @@ const imgHeight = '200px';
 interface IProjectCard {
 	project: IProject;
 	noHearts?: boolean;
+	isNew?: boolean;
 }
 
 const ProjectCard = (props: IProjectCard) => {
 	const [rndColor, setRndColor] = useState(noImgColor);
+	const { noHearts, isNew, project } = props;
 	const {
 		title,
 		description,
@@ -34,8 +36,7 @@ const ProjectCard = (props: IProjectCard) => {
 		adminUser,
 		slug,
 		id,
-	} = props.project;
-	const { noHearts } = props;
+	} = project;
 
 	const name = adminUser?.name;
 
@@ -72,10 +73,12 @@ const ProjectCard = (props: IProjectCard) => {
 						</Link>
 					)}
 					<Description>{htmlToText(description)}</Description>
-					<Captions>
-						<BodyCaption>Raised: $</BodyCaption>
-						<BodyCaption>Last updated: x days ago</BodyCaption>
-					</Captions>
+					{!isNew && (
+						<Captions>
+							<BodyCaption>Raised: $</BodyCaption>
+							<BodyCaption>Last updated: x days ago</BodyCaption>
+						</Captions>
+					)}
 				</CardBody>
 			</Wrapper2>
 		</Wrapper>

@@ -210,10 +210,6 @@ const CreateIndex = () => {
 		);
 	}, []);
 
-	if (creationSuccessful) {
-		return <SuccessfulCreation project={creationSuccessful} />;
-	}
-
 	const handleInputChange = (value: string, id: string) => {
 		if (id === ECreateErrFields.NAME) {
 			setName(value);
@@ -232,6 +228,10 @@ const CreateIndex = () => {
 			debouncedDescriptionValidation.current(value, errors, setErrors);
 		}
 	};
+
+	if (creationSuccessful) {
+		return <SuccessfulCreation project={creationSuccessful} />;
+	}
 
 	return (
 		<>
