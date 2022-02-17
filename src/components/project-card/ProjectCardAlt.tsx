@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Link from 'next/link';
 
 import ProjectCardBadges from './ProjectCardBadges';
 import ProjectCardImage from './ProjectCardImage';
@@ -60,7 +61,16 @@ const ProjectCard = (props: IProjectCard) => {
 				)}
 				<CardBody>
 					<Title>{title}</Title>
-					{name && <Author>{name}</Author>}
+					{name && (
+						<Link
+							href={`/user/${adminUser?.walletAddress}`}
+							passHref
+						>
+							<a>
+								<Author>{name}</Author>
+							</a>
+						</Link>
+					)}
 					<Description>{htmlToText(description)}</Description>
 					<Captions>
 						<BodyCaption>Raised: $</BodyCaption>
@@ -104,6 +114,7 @@ const CardBody = styled.div`
 const Author = styled(P)`
 	color: ${brandColors.pinky[500]};
 	margin-bottom: 10px;
+	cursor: pointer;
 `;
 
 const Title = styled(H6)`

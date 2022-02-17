@@ -26,6 +26,7 @@ export const FETCH_HOME_PROJECTS = gql`
 				totalReactions
 				adminUser {
 					name
+					walletAddress
 				}
 			}
 			totalCount
@@ -67,6 +68,7 @@ export const FETCH_ALL_PROJECTS = gql`
 				totalReactions
 				adminUser {
 					name
+					walletAddress
 				}
 			}
 			totalCount
