@@ -17,7 +17,7 @@ declare let window: any;
 import { BasicNetworkConfig, GasPreference } from '@/types/config';
 import { EWallets } from '@/lib/wallet/walletTypes';
 import { brandColors } from '@giveth/ui-design-system';
-import { giveconomyTabs, mustSignTabs } from '@/components/Tabs';
+import { giveconomyTabs, mustSignTabs } from '@/lib/constants/Tabs';
 
 export const DurationToYMDh = (ms: number) => {
 	let baseTime = new Date(0);
