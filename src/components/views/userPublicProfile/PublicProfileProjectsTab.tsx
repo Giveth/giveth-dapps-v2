@@ -4,6 +4,7 @@ import { IUserProjects } from '@/apollo/types/gqlTypes';
 import { IProject } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import ProjectCard from '@/components/project-card/ProjectCard';
+import ContributeCard from './PublicProfileContributeCard';
 import { Row } from '@/components/styled-components/Grid';
 import { ETheme } from '@/context/general.context';
 import { mediaQueries } from '@/lib/helpers';
@@ -49,6 +50,9 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({ user }) => {
 
 	return (
 		<>
+			<UserContributeInfo>
+				<ContributeCard user={user} />
+			</UserContributeInfo>
 			<ProjectsContainer>
 				{projects.map(project => (
 					<ProjectCard key={project.id} project={project} />
@@ -85,6 +89,10 @@ export const ProjectsContainer = styled(Container)`
 	${mediaQueries['xxl']} {
 		grid-template-columns: repeat(3, 1fr);
 	}
+`;
+
+const UserContributeInfo = styled.div`
+	padding: 40px 0 60px;
 `;
 
 export const Loading = styled(Row)`
