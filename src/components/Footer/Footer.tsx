@@ -82,9 +82,11 @@ export const Footer = () => {
 								</LinkItem>
 							</a>
 							<Link href='/tos' passHref>
-								<LinkItem color={textColor}>
-									Terms of Use
-								</LinkItem>
+								<a>
+									<LinkItem color={textColor}>
+										Terms of Use
+									</LinkItem>
+								</a>
 							</Link>
 						</LinkColumn>
 						<LinkColumn>
@@ -99,9 +101,11 @@ export const Footer = () => {
 								</LinkItem>
 							</a>
 							<Link href='/partnerships' passHref>
-								<LinkItem color={textColor}>
-									Partnerships
-								</LinkItem>
+								<a>
+									<LinkItem color={textColor}>
+										Partnerships
+									</LinkItem>
+								</a>
 							</Link>
 							<a href='https://giveth.recruitee.com/'>
 								<LinkItem color={textColor}>
