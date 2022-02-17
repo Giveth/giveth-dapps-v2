@@ -9,7 +9,7 @@ import {
 	ICreateProjectErrors,
 } from '@/components/views/create/CreateIndex';
 
-export const TitleValidation = (
+export const titleValidation = (
 	title: string,
 	errors: ICreateProjectErrors,
 	setErrors: (arg0: ICreateProjectErrors) => void,
@@ -37,7 +37,7 @@ export const TitleValidation = (
 	}
 };
 
-export const WalletAddressValidation = (
+export const walletAddressValidation = (
 	walletAddress: string,
 	web3: any,
 	errors: ICreateProjectErrors,

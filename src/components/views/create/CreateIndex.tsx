@@ -33,9 +33,9 @@ import SuccessfulCreation from './SuccessfulCreation';
 import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
 import {
 	isDescriptionHeavy,
-	TitleValidation,
-	WalletAddressValidation,
-} from '@/components/views/create/FormValidation';
+	titleValidation,
+	walletAddressValidation,
+} from '@/helpers/createProjectValidation';
 import { gToast, ToastType } from '@/components/toasts';
 
 export enum ECreateErrFields {
@@ -82,9 +82,9 @@ const CreateIndex = () => {
 	const debouncedDescriptionValidation = useRef<any>();
 
 	useEffect(() => {
-		debouncedTitleValidation.current = Debounced(TitleValidation, 1000);
+		debouncedTitleValidation.current = Debounced(titleValidation, 1000);
 		debouncedAddressValidation.current = Debounced(
-			WalletAddressValidation,
+			walletAddressValidation,
 			1000,
 		);
 		debouncedDescriptionValidation.current = Debounced(
@@ -140,6 +140,7 @@ const CreateIndex = () => {
 				projectData.imageUpload = await getImageFile(image, name);
 			}
 
+			console.log(projectData);
 			setIsLoading(true);
 
 			const addedProject = await addProjectMutation({
@@ -186,8 +187,8 @@ const CreateIndex = () => {
 		const userAddress = user?.walletAddress;
 		if (userAddress) {
 			setWalletAddress(userAddress);
-			TitleValidation(name, errors, setErrors);
-			WalletAddressValidation(
+			titleValidation(name, errors, setErrors);
+			walletAddressValidation(
 				userAddress,
 				library,
 				errors,
@@ -263,8 +264,11 @@ const CreateIndex = () => {
 							error={errors[ECreateErrFields.DESCRIPTION]}
 						/>
 						<CategoryInput setValue={setCategories} />
-						<LocationInput setValue={setImpactLocation} />
-						<ImageInput setValue={setImage} />
+						<LocationInput
+							value={impactLocation}
+							setValue={setImpactLocation}
+						/>
+						<ImageInput value={image} setValue={setImage} />
 						<WalletAddressInput
 							value={walletAddress}
 							setValue={e =>

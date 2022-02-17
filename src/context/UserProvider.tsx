@@ -177,7 +177,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 	useEffect(() => {
 		if (account) {
 			const _user = Auth.getUser();
-			if (compareAddresses(account, _user?.walletAddress || '')) {
+			if (compareAddresses(account, _user?.walletAddress)) {
 				const newUser = new User(_user as User);
 				setUser(newUser);
 			} else {

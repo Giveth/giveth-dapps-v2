@@ -56,9 +56,8 @@ const WalletAddressInput = (props: {
 	);
 };
 
-const ChangeAddress = styled.div`
+const ChangeAddress = styled(Caption)`
 	color: ${brandColors.pinky[500]};
-	font-size: 14px;
 	margin-top: 16px;
 	cursor: pointer;
 `;

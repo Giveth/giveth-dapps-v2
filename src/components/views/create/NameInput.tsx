@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { H5, neutralColors } from '@giveth/ui-design-system';
+import { H5, neutralColors, SublineBold } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import {
 	InputContainer,
@@ -23,7 +23,7 @@ const NameInput = (props: {
 			<H5 id={ECreateErrFields.NAME}>Name of your Project</H5>
 			<InputContainer>
 				<Label>Project name</Label>
-				<div style={{ position: 'relative' }}>
+				<RelativePositioned>
 					<InputWithError
 						placeholder='My First Project'
 						onChange={e => {
@@ -37,14 +37,21 @@ const NameInput = (props: {
 					<CharLength>
 						{characterLength}/{maxLength}
 					</CharLength>
-				</div>
+				</RelativePositioned>
 				<InputErrorMessage>{error || null}</InputErrorMessage>
 			</InputContainer>
 		</>
 	);
 };
 
-const CharLength = styled(FlexCenter)`
+const RelativePositioned = styled.div`
+	position: relative;
+`;
+
+const CharLength = styled(SublineBold)`
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	font-size: 12px;
 	background: ${neutralColors.gray[300]};
 	color: ${neutralColors.gray[700]};
