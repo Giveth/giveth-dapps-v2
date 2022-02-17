@@ -13,11 +13,13 @@ export interface IProject {
 	verified?: boolean;
 	listed?: boolean;
 	categories: ICategory[];
-	reactions: IReaction[];
+	reaction?: IReaction;
+	totalReactions: number;
 	adminUser: {
 		id?: string;
 		email?: string;
 		name?: string;
+		walletAddress?: string;
 	};
 	donations: {
 		id?: string;
@@ -27,6 +29,10 @@ export interface IProject {
 	totalProjectUpdates?: number;
 	traceCampaignId: string | null;
 	givingBlocksId?: string | null;
+	status: {
+		id?: string;
+		name?: string;
+	};
 }
 
 export interface IProjectCreation {
@@ -51,10 +57,10 @@ export interface IUser {
 	url?: string;
 	location?: string;
 	token?: string;
-	totalDonated?: string;
-	totalReceived?: string;
-	projectsCount?: string;
-	donationsCount?: string;
+	totalDonated?: number;
+	totalReceived?: number;
+	projectsCount?: number;
+	donationsCount?: number;
 }
 
 export interface IAdmin {
@@ -68,7 +74,7 @@ export interface IAdmin {
 }
 
 export interface IReaction {
-	userId: string;
+	id: string;
 }
 
 export interface IDonation {
@@ -83,7 +89,7 @@ export interface IDonation {
 	currency: string;
 	valueUsd?: number;
 	transactionId?: string;
-	transactionNetworkId?: number;
+	transactionNetworkId: number;
 	createdAt: string;
 }
 

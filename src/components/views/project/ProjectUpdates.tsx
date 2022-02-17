@@ -4,6 +4,7 @@ import { IFetchProjectUpdates, IProjectBySlug } from '@/apollo/types/gqlTypes';
 import ProjectTimeline from './ProjectTimeline';
 import { IProjectUpdate } from '@/apollo/types/types';
 import styled from 'styled-components';
+import { useEffect, useState } from 'react';
 
 const ProjectUpdates = (props: IProjectBySlug) => {
 	const { id, creationDate } = props.project;

@@ -5,16 +5,21 @@ import { IWalletDonation } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import { Row } from '@/components/styled-components/Grid';
 import { ETheme } from '@/context/general.context';
+import { networksParams } from '@/helpers/blockchain';
 import { smallFormatDate } from '@/lib/helpers';
 import {
 	B,
 	brandColors,
 	IconArrowBottom,
 	IconArrowTop,
+	IconExternalLink,
+	IconLink24,
+	IconSort16,
 	neutralColors,
 	P,
 	SublineBold,
 } from '@giveth/ui-design-system';
+import Link from 'next/link';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IUserPublicProfileView } from './UserPublicProfile.view';
@@ -36,6 +41,18 @@ interface IOrder {
 	by: EOrderBy;
 	direction: EDirection;
 }
+
+const injectSortIcon = (order: IOrder, title: EOrderBy) => {
+	return order.by === title ? (
+		order.direction === EDirection.DESC ? (
+			<IconArrowBottom size={16} />
+		) : (
+			<IconArrowTop size={16} />
+		)
+	) : (
+		<IconSort16 />
+	);
+};
 
 const PublicProfileDonationsTab: FC<IUserPublicProfileView> = ({ user }) => {
 	const [loading, setLoading] = useState(false);
@@ -127,12 +144,7 @@ const DonationTable: FC<DonationTable> = ({
 				onClick={() => orderChangeHandler(EOrderBy.CreationDate)}
 			>
 				<B>Donated at</B>
-				{order.by === EOrderBy.CreationDate &&
-					(order.direction === EDirection.DESC ? (
-						<IconArrowBottom size={16} />
-					) : (
-						<IconArrowTop size={16} />
-					))}
+				{injectSortIcon(order, EOrderBy.CreationDate)}
 			</TabelHeader>
 			<TabelHeader>
 				<B>Project</B>
@@ -144,28 +156,47 @@ const DonationTable: FC<DonationTable> = ({
 				onClick={() => orderChangeHandler(EOrderBy.TokenAmount)}
 			>
 				<B>Amount</B>
-				{order.by === EOrderBy.TokenAmount &&
-					(order.direction === EDirection.DESC ? (
-						<IconArrowBottom size={16} />
-					) : (
-						<IconArrowTop size={16} />
-					))}
+				{injectSortIcon(order, EOrderBy.TokenAmount)}
 			</TabelHeader>
-			{donations.map(donation => (
-				<>
+			<TabelHeader onClick={() => orderChangeHandler(EOrderBy.UsdAmount)}>
+				<B>USD Value</B>
+				{injectSortIcon(order, EOrderBy.UsdAmount)}
+			</TabelHeader>
+			{donations.map((donation, idx) => (
+				<RowWrapper key={idx}>
 					<TabelCell>
 						<P>{smallFormatDate(new Date(donation.createdAt))}</P>
 					</TabelCell>
-					<TabelCell>
-						<B>{donation.project.title}</B>
-					</TabelCell>
+					<Link href={`/project/${donation.project.slug}`} passHref>
+						<ProjectTitleCell>
+							<B>{donation.project.title}</B>
+							<IconLink24 />
+						</ProjectTitleCell>
+					</Link>
 					<TabelCell>
 						<CurrencyBadge>{donation.currency}</CurrencyBadge>
 					</TabelCell>
 					<TabelCell>
 						<P>{donation.amount}</P>
+						<TransactionLink
+							href={
+								networksParams[donation.transactionNetworkId]
+									? `${
+											networksParams[
+												donation.transactionNetworkId
+											].blockExplorerUrls[0]
+									  }/tx/${donation.transactionId}`
+									: ''
+							}
+							target='_blank'
+						>
+							<IconExternalLink size={16} />
+						</TransactionLink>
 					</TabelCell>
-				</>
+					<TabelCell>
+						<P>{donation.valueUsd?.toFixed(2)}$</P>
+					</TabelCell>
+				</RowWrapper>
 			))}
 		</DonationTablecontainer>
 	);
@@ -173,7 +204,7 @@ const DonationTable: FC<DonationTable> = ({
 
 const DonationTablecontainer = styled.div`
 	display: grid;
-	grid-template-columns: 1fr 5fr 1fr 1fr;
+	grid-template-columns: 1fr 5fr 1fr 1fr 1fr;
 `;
 
 const TabelHeader = styled(Row)`
@@ -191,6 +222,17 @@ const TabelCell = styled(Row)`
 	height: 60px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
 	align-items: center;
+	gap: 8px;
+`;
+
+const ProjectTitleCell = styled(TabelCell)`
+	cursor: pointer;
+	& > svg {
+		display: none;
+	}
+	&:hover > svg {
+		display: block;
+	}
 `;
 
 const CurrencyBadge = styled(SublineBold)`
@@ -214,4 +256,20 @@ const Loading = styled(Row)`
 
 const DonationTableWrapper = styled.div`
 	position: relative;
+`;
+
+const RowWrapper = styled.div`
+	display: contents;
+	&:hover > div {
+		background-color: ${neutralColors.gray[300]};
+		color: ${brandColors.pinky[500]};
+	}
+	& > div:first-child {
+		padding-left: 4px;
+	}
+`;
+
+const TransactionLink = styled.a`
+	cursor: pointer;
+	color: ${brandColors.pinky[500]};
 `;
