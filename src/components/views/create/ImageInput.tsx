@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
 	P,
 	H5,
@@ -8,23 +8,22 @@ import {
 } from '@giveth/ui-design-system';
 import { useDropzone } from 'react-dropzone';
 import styled from 'styled-components';
+import Image from 'next/image';
 
 import { OurImages } from '@/utils/constants';
 import { toBase64 } from '@/utils';
 import { InputContainer } from './Create.sc';
+import ImageIcon from '/public/images/icons/image.svg';
+import XIcon from '/public/images/icons/x.svg';
 
-const ImageInput = (props: { setValue: (x: any) => void }) => {
-	const [bgImage, setBgImage] = useState<any>();
-	const [showingImage, setShowingImage] = useState<any>();
-	const { setValue } = props;
-	const { getRootProps, getInputProps, open } = useDropzone({
+const ImageInput = (props: { setValue: (x: any) => void; value: string }) => {
+	const { setValue, value } = props;
+	const { getRootProps, getInputProps } = useDropzone({
 		accept: 'image/*',
 		multiple: false,
 		onDrop: async acceptedFile => {
 			try {
 				const base64Image = await toBase64(acceptedFile[0]);
-				setBgImage(acceptedFile);
-				setShowingImage(base64Image);
 				setValue(base64Image);
 			} catch (error) {
 				console.log({ error });
@@ -32,18 +31,8 @@ const ImageInput = (props: { setValue: (x: any) => void }) => {
 		},
 	});
 
-	// const searchPhotos = () => {
-	// 	return true;
-	// };
-
 	const pickBg = (index: number) => {
-		if (index === 0) {
-			setBgImage(null);
-			setShowingImage(null);
-		}
-		setBgImage(index);
-		setValue(index);
-		setShowingImage(`/images/project_image${index}.png`);
+		setValue(`/images/project_image${index}.png`);
 	};
 
 	return (
@@ -56,25 +45,17 @@ const ImageInput = (props: { setValue: (x: any) => void }) => {
 			</div>
 
 			<InputContainer>
-				<Buttons>
-					{/*<Button label='Upload cover image' buttonType='primary' />*/}
-					{/* <Button
-						label='Search for photos'
-						buttonType='texty'
-						onClick={searchPhotos}
-					/> */}
-				</Buttons>
-				{bgImage ? (
+				{value ? (
 					<DragContainer>
-						<ShowingImage src={showingImage} />
+						<ShowingImage src={value} />
 					</DragContainer>
 				) : (
 					<DragContainer {...getRootProps()}>
 						<input {...getInputProps()} />
-						<img src='/images/icons/image.svg' />
+						<Image src={ImageIcon} alt='image icon' />
 						<P>
 							{`Drag & drop an image here or`}{' '}
-							<span onClick={open}>Upload from computer.</span>
+							<span>Upload from computer.</span>
 						</P>
 						<P>
 							Suggested image size min. 1200px width. Image size
@@ -95,8 +76,8 @@ const ImageInput = (props: { setValue: (x: any) => void }) => {
 							/>
 						);
 					})}
-					<RemoveBox onClick={() => pickBg(0)}>
-						<img src='/images/icons/x.svg' />
+					<RemoveBox onClick={() => setValue(null)}>
+						<Image alt='x icon' src={XIcon} />
 					</RemoveBox>
 				</PickImageContainer>
 			</InputContainer>
@@ -110,25 +91,6 @@ const CaptionContainer = styled(Caption)`
 	span {
 		cursor: pointer;
 		color: ${brandColors.pinky[500]};
-	}
-`;
-
-const Buttons = styled.div`
-	display: flex;
-	flex-direction: row;
-	* {
-		font-weight: normal;
-	}
-	button:first-child {
-		background: white;
-		color: ${brandColors.deep[600]};
-		box-shadow: 0 3px 20px rgba(212, 218, 238, 0.4);
-	}
-	button:nth-child(2) {
-		color: ${brandColors.pinky[500]};
-		:hover {
-			background: transparent;
-		}
 	}
 `;
 
