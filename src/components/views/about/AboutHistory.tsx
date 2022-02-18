@@ -7,7 +7,6 @@ import {
 	H3,
 	H4,
 	Lead,
-	neutralColors,
 } from '@giveth/ui-design-system';
 
 const AboutHistory = () => {
