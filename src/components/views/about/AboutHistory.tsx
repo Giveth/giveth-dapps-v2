@@ -22,11 +22,9 @@ const AboutHistory = () => {
 					by donations.
 				</Rect>
 				<UpperText>
-					They are dedicated to building the tools that will make it
-					easy for anyone to build a global community around a cause.
-					In fact, this core team is using the Giveth Platform to
-					build a community around the Giveth idea itself! If you want
-					to help create the solution, join our community.
+					The launch of the <span>GIVeconomy</span> in December 2021
+					provided a new way to fund our initiatives to evolve
+					philanthropy.
 				</UpperText>
 			</Upper>
 			<End>
@@ -95,22 +93,26 @@ const End = styled.div`
 	margin: 134px auto 0 auto;
 `;
 
-const UpperText = styled(Lead)`
-	color: ${brandColors.giv[900]};
-	max-width: 430px;
-	margin-top: 115px;
-	position: relative;
-`;
-
 const Rect = styled(H4)`
 	padding: 48px;
 	background: ${brandColors.giv[500]};
 	color: white;
-	max-width: 580px;
+	max-width: 530px;
 	border-radius: 12px;
 
 	span {
 		color: ${brandColors.mustard[500]};
+	}
+`;
+
+const UpperText = styled(Rect)`
+	color: ${brandColors.giv[900]};
+	background: ${brandColors.mustard[500]};
+	max-width: 430px;
+	position: relative;
+
+	span {
+		color: ${brandColors.giv[500]};
 	}
 `;
 
