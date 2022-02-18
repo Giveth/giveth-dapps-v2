@@ -108,7 +108,6 @@ const Rect = styled(H4)`
 const UpperText = styled(Rect)`
 	color: ${brandColors.giv[900]};
 	background: ${brandColors.mustard[500]};
-	max-width: 430px;
 	position: relative;
 
 	span {
