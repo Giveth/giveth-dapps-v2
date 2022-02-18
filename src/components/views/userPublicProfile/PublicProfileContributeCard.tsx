@@ -48,7 +48,7 @@ const UserContributeTitle = styled(H5)`
 `;
 
 const ContributeCardContainer = styled(Row)`
-	gap: 16px;
+	gap: 32px;
 `;
 
 const ContributeCard = styled.div`
