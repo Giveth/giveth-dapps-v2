@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { H5, Caption, brandColors } from '@giveth/ui-design-system';
 import { withScriptjs } from 'react-google-maps';
 import styled from 'styled-components';
@@ -9,14 +9,9 @@ import config from '@/configuration';
 
 const googleMapURL = `https://maps.googleapis.com/maps/api/js?key=${config.GOOGLE_MAPS_API_KEY}&v=3.exp&libraries=geometry,drawing,places`;
 
-const LocationInput = (props: {
-	value: string;
-	setValue: (a: string) => void;
-}) => {
-	const { value, setValue } = props;
+const LocationInput = (props: { setValue: (a: string) => void }) => {
+	const { setValue } = props;
 	const MapLoader = withScriptjs(Map);
-
-	const setImpactLocation = useCallback(val => setValue(val), [value]);
 
 	return (
 		<>
@@ -40,8 +35,7 @@ const LocationInput = (props: {
 							}}
 						/>
 					}
-					setLocation={setImpactLocation}
-					location={value}
+					setLocation={setValue}
 				/>
 			</InputContainer>
 		</>
@@ -57,4 +51,4 @@ const CaptionContainer = styled(Caption)`
 	}
 `;
 
-export default LocationInput;
+export default React.memo(LocationInput);

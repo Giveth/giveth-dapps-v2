@@ -6,6 +6,7 @@ import { InputContainer } from './Create.sc';
 import CheckBox from '@/components/Checkbox';
 import { categoryList, maxSelectedCategory } from '@/lib/constants/Categories';
 import { ICategory } from '@/apollo/types/types';
+import { gToast, ToastType } from '@/components/toasts';
 
 const CategoryInput = (props: any) => {
 	const { setValue } = props;
@@ -31,9 +32,10 @@ const CategoryInput = (props: any) => {
 		categoriesList[value.name] = true;
 		const isMaxCategories = newCategories.length > maxSelectedCategory;
 		if (isMaxCategories) {
-			return console.log(
-				`only ${maxSelectedCategory} categories allowed`,
-			);
+			return gToast(`only ${maxSelectedCategory} categories allowed`, {
+				type: ToastType.DANGER,
+				position: 'top-center',
+			});
 		}
 		// With whole category object
 		setCategories(newCategories);

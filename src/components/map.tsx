@@ -12,13 +12,13 @@ import PlacesAutocomplete, {
 
 import { Regular_Input } from '@/components/styled-components/Input';
 import CheckBox from '@/components/Checkbox';
+import { globalLocation } from '@/lib/constants/projects';
 
 type MyProps = {
 	index?: any;
 	handleCloseCall?: any;
 	extraComponent?: any;
 	setLocation?: any;
-	location?: string;
 };
 type MyState = {
 	isOpen: boolean;
@@ -52,28 +52,27 @@ class Map extends Component<MyProps, MyState> {
 	};
 
 	render() {
-		console.log(this.state);
+		const { coords, address, isOpen } = this.state;
+		const { index, setLocation, handleCloseCall } = this.props;
+		const isGlobal = address === globalLocation;
+
 		const GoogleMapComponent = withGoogleMap(() => (
 			<GoogleMap
-				defaultCenter={this.state.coords}
+				defaultCenter={coords}
 				defaultZoom={13}
 				options={{ draggable: false, disableDefaultUI: true }}
 			>
 				<Marker
-					key={this.props.index}
-					position={this.state.coords}
-					onClick={() =>
-						this.setState({
-							isOpen: true,
-						})
-					}
+					key={index}
+					position={coords}
+					onClick={() => this.setState({ isOpen: true })}
 				>
-					{this.state.isOpen && (
+					{isOpen && (
 						<InfoWindow
-							onCloseClick={this.props.handleCloseCall}
+							onCloseClick={handleCloseCall}
 							options={{ maxWidth: 100 }}
 						>
-							<span>{this.props.location}</span>
+							<span>{address}</span>
 						</InfoWindow>
 					)}
 				</Marker>
@@ -83,8 +82,8 @@ class Map extends Component<MyProps, MyState> {
 		return (
 			<div>
 				<PlacesAutocomplete
-					value={this.props.location}
-					onChange={address => this.props.setLocation(address)}
+					value={address}
+					onChange={address => this.setState({ address })}
 					onSelect={this.handleSelect}
 				>
 					{({
@@ -96,23 +95,20 @@ class Map extends Component<MyProps, MyState> {
 						<div>
 							<Regular_Input
 								{...getInputProps({
-									placeholder:
-										this.props.location === 'Global'
-											? 'Global Impact'
-											: 'Search Places...',
+									placeholder: isGlobal
+										? 'Global Impact'
+										: 'Search Places...',
 									className: 'location-search-input',
 								})}
-								disabled={this.props.location === 'Global'}
+								disabled={isGlobal}
 							/>
 							<CheckBox
 								title='This project has a global impact'
-								checked={this.props.location === 'Global'}
+								checked={isGlobal}
 								onChange={() => {
-									this.props.setLocation(
-										this.props.location === 'Global'
-											? ''
-											: 'Global',
-									);
+									const loc = isGlobal ? '' : globalLocation;
+									setLocation(loc);
+									this.setState({ address: loc });
 								}}
 								style={{ marginTop: '20px' }}
 							/>

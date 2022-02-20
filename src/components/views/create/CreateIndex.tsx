@@ -93,8 +93,6 @@ const CreateIndex = () => {
 		});
 	};
 
-	console.log('impactLocation', impactLocation);
-
 	const onSubmit = async () => {
 		try {
 			if (!isSignedIn) {
@@ -272,10 +270,7 @@ const CreateIndex = () => {
 							error={errors[ECreateErrFields.DESCRIPTION]}
 						/>
 						<CategoryInput setValue={setCategories} />
-						<LocationInput
-							value={impactLocation}
-							setValue={setImpactLocation}
-						/>
+						<LocationInput setValue={setImpactLocation} />
 						<ImageInput value={image} setValue={setImage} />
 						<WalletAddressInput
 							value={walletAddress}
