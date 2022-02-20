@@ -1,34 +1,30 @@
 import React, { Component } from 'react';
 import {
 	withGoogleMap,
-	withScriptjs,
 	GoogleMap,
 	Marker,
 	InfoWindow,
 } from 'react-google-maps';
-import CheckBox from '@/components/Checkbox';
 import PlacesAutocomplete, {
 	geocodeByAddress,
 	getLatLng,
 } from 'react-places-autocomplete';
+
 import { Regular_Input } from '@/components/styled-components/Input';
-import styled from 'styled-components';
+import CheckBox from '@/components/Checkbox';
 
 type MyProps = {
 	index?: any;
 	handleCloseCall?: any;
 	extraComponent?: any;
 	setLocation?: any;
-	setGlobalLocation?: any;
+	location?: string;
 };
 type MyState = {
 	isOpen: boolean;
 	coords: any;
 	address: string;
-	globalImpact: boolean;
 };
-
-const Input = styled(Regular_Input)``;
 
 class Map extends Component<MyProps, MyState> {
 	constructor(props: any) {
@@ -37,44 +33,27 @@ class Map extends Component<MyProps, MyState> {
 			isOpen: false,
 			coords: { lat: 41.3879, lng: 2.15899 },
 			address: '',
-			globalImpact: false,
 		};
 	}
-
-	handleChange = (address: any) => {
-		this.setState({ address });
-	};
 
 	handleSelect = (address: any) => {
 		geocodeByAddress(address)
 			.then((results: any) => {
 				return getLatLng(results[0]);
 			})
-			.then(
-				(latLng: any) =>
-					this.setState({
-						address,
-						coords: latLng,
-					}),
-				this.props.setLocation(address),
-			)
-			.catch((error: any) => console.error('Error', error));
-	};
-
-	handleToggleOpen = () => {
-		this.setState({
-			isOpen: true,
-		});
-	};
-
-	handleToggleClose = () => {
-		this.setState({
-			isOpen: false,
-		});
+			.then((latLng: any) => {
+				this.props.setLocation(address);
+				this.setState({
+					address,
+					coords: latLng,
+				});
+			})
+			.catch((error: any) => console.error('Error: ', error));
 	};
 
 	render() {
-		const GoogleMapExample = withGoogleMap(props => (
+		console.log(this.state);
+		const GoogleMapComponent = withGoogleMap(() => (
 			<GoogleMap
 				defaultCenter={this.state.coords}
 				defaultZoom={13}
@@ -83,14 +62,18 @@ class Map extends Component<MyProps, MyState> {
 				<Marker
 					key={this.props.index}
 					position={this.state.coords}
-					onClick={() => this.handleToggleOpen()}
+					onClick={() =>
+						this.setState({
+							isOpen: true,
+						})
+					}
 				>
 					{this.state.isOpen && (
 						<InfoWindow
 							onCloseClick={this.props.handleCloseCall}
 							options={{ maxWidth: 100 }}
 						>
-							<span>This is InfoWindow message!</span>
+							<span>{this.props.location}</span>
 						</InfoWindow>
 					)}
 				</Marker>
@@ -100,8 +83,8 @@ class Map extends Component<MyProps, MyState> {
 		return (
 			<div>
 				<PlacesAutocomplete
-					value={this.state.address}
-					onChange={this.handleChange}
+					value={this.props.location}
+					onChange={address => this.props.setLocation(address)}
 					onSelect={this.handleSelect}
 				>
 					{({
@@ -111,24 +94,24 @@ class Map extends Component<MyProps, MyState> {
 						loading,
 					}) => (
 						<div>
-							<Input
+							<Regular_Input
 								{...getInputProps({
-									placeholder: this.state.globalImpact
-										? 'Global Impact'
-										: 'Search Places...',
+									placeholder:
+										this.props.location === 'Global'
+											? 'Global Impact'
+											: 'Search Places...',
 									className: 'location-search-input',
 								})}
-								disabled={this.state.globalImpact}
+								disabled={this.props.location === 'Global'}
 							/>
 							<CheckBox
 								title='This project has a global impact'
-								checked={this.state.globalImpact}
+								checked={this.props.location === 'Global'}
 								onChange={() => {
-									this.setState({
-										globalImpact: !this.state.globalImpact,
-									});
-									this.props.setGlobalLocation(
-										!this.state.globalImpact,
+									this.props.setLocation(
+										this.props.location === 'Global'
+											? ''
+											: 'Global',
 									);
 								}}
 								style={{ marginTop: '20px' }}
@@ -180,7 +163,7 @@ class Map extends Component<MyProps, MyState> {
 						</div>
 					)}
 				</PlacesAutocomplete>
-				<GoogleMapExample
+				<GoogleMapComponent
 					containerElement={
 						<div
 							style={{

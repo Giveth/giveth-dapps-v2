@@ -4,8 +4,11 @@ import {
 	H4,
 	P,
 	Button,
+	OulineButton,
 	brandColors,
 	neutralColors,
+	IconExternalLink,
+	Caption,
 } from '@giveth/ui-design-system';
 import { useMutation } from '@apollo/client';
 import { utils } from 'ethers';
@@ -90,6 +93,8 @@ const CreateIndex = () => {
 		});
 	};
 
+	console.log('impactLocation', impactLocation);
+
 	const onSubmit = async () => {
 		try {
 			if (!isSignedIn) {
@@ -121,9 +126,7 @@ const CreateIndex = () => {
 			const projectData: IProjectCreation = {
 				title: name,
 				description,
-				impactLocation: impactLocation?.global
-					? 'Global'
-					: impactLocation,
+				impactLocation,
 				categories: projectCategories,
 				organisationId: 1,
 				walletAddress: utils.getAddress(address),
@@ -302,12 +305,13 @@ const CreateIndex = () => {
 							</li>
 						</PublishList>
 						<Buttons>
-							{/*<Button*/}
-							{/*	label='PREVIEW'*/}
-							{/*	buttonType='primary'*/}
-							{/*	disabled={isLoading}*/}
-							{/*	// onClick={uploadImage}*/}
-							{/*/>*/}
+							<OulineButton
+								label='PREVIEW '
+								buttonType='primary'
+								disabled={true}
+								icon={<IconExternalLink size={16} />}
+								// onClick={uploadImage}
+							/>
 							<Button
 								label='PUBLISH'
 								buttonType='primary'
@@ -339,28 +343,17 @@ const CreateContainer = styled.div`
 		margin: 48px 0;
 		width: 677px;
 	}
-	h5 {
-		font-weight: normal;
-		line-height: 36px;
-		letter-spacing: -0.005em;
-	}
 `;
 
 const Buttons = styled.div`
 	display: flex;
 	flex-direction: row;
 	margin: 61px 0 32px 0;
-	* {
-		font-weight: bold;
-	}
 	button {
 		width: 100%;
-	}
-	button:first-child {
-		background: white;
-		color: ${brandColors.pinky[500]};
-		border: 2px solid ${brandColors.pinky[500]};
-		margin: 0 24px 0 0;
+		&:first-of-type {
+			margin-right: 10px;
+		}
 	}
 `;
 
@@ -375,8 +368,7 @@ const PublishTitle = styled(H4)`
 	font-weight: bold;
 `;
 
-const PublishList = styled.ul`
-	font-size: 14px;
+const PublishList = styled(Caption)`
 	color: ${neutralColors.gray[900]};
 `;
 

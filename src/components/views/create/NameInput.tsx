@@ -7,7 +7,6 @@ import {
 	InputWithError,
 	Label,
 } from './Create.sc';
-import { FlexCenter } from '@/components/styled-components/Grid';
 import { ECreateErrFields } from '@/components/views/create/CreateIndex';
 
 const NameInput = (props: {
