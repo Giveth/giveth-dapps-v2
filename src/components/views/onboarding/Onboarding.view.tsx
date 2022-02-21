@@ -19,9 +19,9 @@ const StatesLabel = [
 const OnboardView = () => {
 	const [step, setStep] = useState(OnboardSteps.INFO);
 	return (
-		<div>
+		<OnboardViewContainer>
 			<OnboardHeader step={step} />
-		</div>
+		</OnboardViewContainer>
 	);
 };
 
@@ -62,8 +62,13 @@ const OnboardHeader: FC<IOnboardHeader> = ({ step }) => {
 	);
 };
 
-const OnboardHeaderConatiner = styled(Container)`
+const OnboardViewContainer = styled.div`
 	padding-top: 207px;
+	padding-bottom: 68px;
+`;
+
+const OnboardHeaderConatiner = styled(Container)`
+	padding-bottom: 68px;
 `;
 
 const OnboardProgressbar = styled.div<IOnboardHeader>`
