@@ -1,6 +1,7 @@
 import { B, brandColors, Container, H5 } from '@giveth/ui-design-system';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
+import InfoStep from './infoStep';
 
 export enum OnboardSteps {
 	REG,
@@ -21,6 +22,7 @@ const OnboardView = () => {
 	return (
 		<OnboardViewContainer>
 			<OnboardHeader step={step} />
+			{step === OnboardSteps.INFO && <InfoStep />}
 		</OnboardViewContainer>
 	);
 };
@@ -62,12 +64,12 @@ const OnboardHeader: FC<IOnboardHeader> = ({ step }) => {
 	);
 };
 
-const OnboardViewContainer = styled.div`
+const OnboardViewContainer = styled(Container)`
 	padding-top: 207px;
 	padding-bottom: 68px;
 `;
 
-const OnboardHeaderConatiner = styled(Container)`
+const OnboardHeaderConatiner = styled.div`
 	padding-bottom: 68px;
 `;
 
