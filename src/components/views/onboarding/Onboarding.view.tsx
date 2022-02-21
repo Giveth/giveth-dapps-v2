@@ -1,8 +1,9 @@
-import { brandColors, Container, H5 } from '@giveth/ui-design-system';
+import { B, brandColors, Container, H5 } from '@giveth/ui-design-system';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 
 export enum OnboardSteps {
+	REG,
 	INFO,
 	PHOTO,
 	DONE,
@@ -30,6 +31,12 @@ interface IOnboardHeader {
 	step: OnboardSteps;
 }
 
+enum LabelStatus {
+	PREV,
+	ACTIVE,
+	NEXT,
+}
+
 const OnboardHeader: FC<IOnboardHeader> = ({ step }) => {
 	return (
 		<OnboardHeaderConatiner>
@@ -37,7 +44,16 @@ const OnboardHeader: FC<IOnboardHeader> = ({ step }) => {
 			<OnboardProgressbar step={step} />
 			<OnboardProgressbarLabels>
 				{StatesLabel.map((label, idx) => (
-					<OnboardProgressbarLabel key={idx}>
+					<OnboardProgressbarLabel
+						key={idx}
+						status={
+							idx > step
+								? LabelStatus.NEXT
+								: idx === step
+								? LabelStatus.ACTIVE
+								: LabelStatus.PREV
+						}
+					>
 						{label}
 					</OnboardProgressbarLabel>
 				))}
@@ -83,7 +99,11 @@ const OnboardProgressbarLabels = styled.div`
 	grid-template-columns: 1fr 2fr 2fr 1fr;
 `;
 
-const OnboardProgressbarLabel = styled.div`
+interface IOnboardProgressbarLabel {
+	status: LabelStatus;
+}
+
+const OnboardProgressbarLabel = styled(B)<IOnboardProgressbarLabel>`
 	text-align: center;
 	&:first-of-type {
 		text-align: left;
@@ -91,4 +111,16 @@ const OnboardProgressbarLabel = styled.div`
 	&:last-of-type {
 		text-align: right;
 	}
+	color: ${props => {
+		switch (props.status) {
+			case LabelStatus.PREV:
+				return `${brandColors.deep[900]}66`;
+			case LabelStatus.ACTIVE:
+				return brandColors.giv[500];
+			case LabelStatus.NEXT:
+				return brandColors.deep[900];
+			default:
+				break;
+		}
+	}};
 `;
