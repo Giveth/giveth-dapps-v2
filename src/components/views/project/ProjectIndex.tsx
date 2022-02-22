@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
-import { GLink, semanticColors } from '@giveth/ui-design-system';
+import { Caption, GLink, semanticColors } from '@giveth/ui-design-system';
+import styled from 'styled-components';
 
 import { useQuery } from '@apollo/client';
-import { IProjectBySlug } from '@/apollo/types/gqlTypes';
 import WarningBadge from '@/components/badges/WarningBadge';
 
 import ProjectHeader from './ProjectHeader';
@@ -13,7 +12,15 @@ import ProjectTabs from './ProjectTabs';
 import ProjectDonateCard from './ProjectDonateCard';
 import { mediaQueries } from '@/lib/helpers';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
-import styled from 'styled-components';
+import { client } from '@/apollo/apolloClient';
+import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
+import useUser from '@/context/UserProvider';
+import { useRouter } from 'next/router';
+import { IProject } from '@/apollo/types/types';
+import { gToast, ToastType } from '@/components/toasts';
+import { EProjectStatus } from '@/apollo/types/gqlEnums';
+import InfoBadge from '@/components/badges/InfoBadge';
+import { Toaster } from 'react-hot-toast';
 
 const ProjectDonations = dynamic(() => import('./ProjectDonations'));
 const ProjectUpdates = dynamic(() => import('./ProjectUpdates'));
@@ -23,31 +30,56 @@ const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {
 
 const donationsPerPage = 11;
 
-const ProjectIndex = (props: IProjectBySlug) => {
-	const router = useRouter();
-	const { project } = props;
-	const { description, title, status } = project;
+const ProjectIndex = () => {
+	const [activeTab, setActiveTab] = useState(0);
+	const [isActive, setIsActive] = useState<boolean>(true);
+	const [isDraft, setIsDraft] = useState<boolean>(false);
+	const [project, setProject] = useState<IProject>();
+	const { description = '', title, status, id = '' } = project || {};
 
 	const { data: donationsData } = useQuery(FETCH_PROJECT_DONATIONS, {
 		variables: {
-			projectId: parseInt(project.id || ''),
+			projectId: parseInt(id),
 			skip: 0,
 			take: donationsPerPage,
 		},
 	});
-
 	const donationsByProjectId = donationsData?.donationsByProjectId;
 	const totalDonations = donationsByProjectId?.totalCount;
 
-	const [activeTab, setActiveTab] = useState(0);
-	const [isActive, setIsActive] = useState<boolean>(true);
+	const {
+		state: { isSignedIn },
+	} = useUser();
+
+	const router = useRouter();
 
 	useEffect(() => {
 		if (status) {
-			console.log(status);
-			setIsActive(status.name === 'activate');
+			setIsActive(status.name === EProjectStatus.ACTIVE);
+			setIsDraft(status.name === EProjectStatus.DRAFT);
 		}
 	}, [status]);
+
+	useEffect(() => {
+		const slug = router.query.slug as string;
+		if (isSignedIn) {
+			client
+				.query({
+					query: FETCH_PROJECT_BY_SLUG,
+					variables: { slug },
+					fetchPolicy: 'no-cache',
+				})
+				.then((res: { data: any }) => {
+					setProject(res.data.projectBySlug);
+				})
+				.catch((err: any) =>
+					gToast(JSON.stringify(err.message || err), {
+						type: ToastType.DANGER,
+						position: 'top-center',
+					}),
+				);
+		}
+	}, [isSignedIn]);
 
 	return (
 		<Wrapper>
@@ -55,15 +87,23 @@ const ProjectIndex = (props: IProjectBySlug) => {
 				<title>{title} | Giveth</title>
 			</Head>
 			<ProjectHeader project={project} />
+			{isDraft && (
+				<DraftIndicator>
+					<InfoBadge />
+					<Caption medium>This is a preview of your project.</Caption>
+				</DraftIndicator>
+			)}
 			<BodyWrapper>
 				<ContentWrapper>
-					<ProjectTabs
-						activeTab={activeTab}
-						setActiveTab={setActiveTab}
-						project={project}
-						totalDonations={totalDonations}
-					/>
-					{!isActive && (
+					{!isDraft && (
+						<ProjectTabs
+							activeTab={activeTab}
+							setActiveTab={setActiveTab}
+							project={project}
+							totalDonations={totalDonations}
+						/>
+					)}
+					{!isActive && !isDraft && (
 						<GivBackNotif>
 							<WarningBadge />
 
@@ -87,14 +127,28 @@ const ProjectIndex = (props: IProjectBySlug) => {
 					)}
 				</ContentWrapper>
 				<ProjectDonateCard
+					isDraft={isDraft}
 					project={project}
 					isActive={isActive}
 					setIsActive={setIsActive}
+					setIsDraft={setIsDraft}
 				/>
 			</BodyWrapper>
+			<Toaster containerStyle={{ top: '80px' }} />
 		</Wrapper>
 	);
 };
+
+const DraftIndicator = styled.div`
+	//color: ${semanticColors.link[600]};
+	color: #0083e0;
+	//background: ${semanticColors.link[100]};
+	background: #cae9ff;
+	display: flex;
+	gap: 18px;
+	padding: 25px 150px;
+	margin-bottom: 30px;
+`;
 
 const Wrapper = styled.div`
 	position: relative;
@@ -112,7 +166,7 @@ const GivBackNotif = styled.div`
 `;
 
 const BodyWrapper = styled.div`
-	margin: 0px 170px 0px 150px;
+	margin: 0 170px 0 150px;
 	display: flex;
 	align-items: center;
 	flex-direction: column-reverse;
