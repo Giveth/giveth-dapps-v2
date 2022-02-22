@@ -6,13 +6,62 @@ import {
 	neutralColors,
 	Subline,
 } from '@giveth/ui-design-system';
-import { useState } from 'react';
+import {
+	ChangeEvent,
+	Dispatch,
+	FC,
+	SetStateAction,
+	useEffect,
+	useReducer,
+	useState,
+} from 'react';
 import styled from 'styled-components';
 import { OnboardActions, OnboardStep } from './common';
+import { OnboardSteps } from './Onboarding.view';
 
-const InfoStep = () => {
+interface IInfoStep {
+	setStep: Dispatch<SetStateAction<OnboardSteps>>;
+}
+
+interface IUserIfo {
+	firstName: string;
+	lastName: string;
+	location: string;
+	website: string;
+}
+
+const initialUserInfo: IUserIfo = {
+	firstName: '',
+	lastName: '',
+	location: '',
+	website: '',
+};
+
+const InfoStep: FC<IInfoStep> = ({ setStep }) => {
+	const [info, setInfo] = useReducer(
+		(curValues: IUserIfo, newValues: object) => ({
+			...curValues,
+			...newValues,
+		}),
+		initialUserInfo,
+	);
 	const [disabled, setDisabled] = useState(true);
-	const onSave = () => {};
+
+	const { firstName, lastName, location, website } = info;
+
+	const reducerInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = e.target;
+		setInfo({ [name]: value });
+	};
+
+	useEffect(() => {
+		console.log('called');
+		setDisabled(!(firstName.length > 0 && lastName.length > 0));
+	}, [firstName, lastName]);
+
+	const onSave = () => {
+		setStep(OnboardSteps.PHOTO);
+	};
 
 	return (
 		<OnboardStep>
@@ -20,18 +69,33 @@ const InfoStep = () => {
 			<Section>
 				<InputContainer>
 					<InputLabel>FIRST NAME</InputLabel>
-					<Input placeholder='John' />
+					<Input
+						placeholder='John'
+						name='firstName'
+						value={firstName}
+						onChange={reducerInputChange}
+					/>
 				</InputContainer>
 				<InputContainer>
 					<InputLabel>LAST NAME</InputLabel>
-					<Input placeholder='Doe' />
+					<Input
+						placeholder='Doe'
+						name='lastName'
+						value={lastName}
+						onChange={reducerInputChange}
+					/>
 				</InputContainer>
 			</Section>
 			<SectionHeader>Where are you?</SectionHeader>
 			<Section>
 				<InputContainer>
 					<InputLabel>LOCATION (OPTIONAL)</InputLabel>
-					<Input placeholder='Portugal, Turkey,...' />
+					<Input
+						placeholder='Portugal, Turkey,...'
+						name='location'
+						value={location}
+						onChange={reducerInputChange}
+					/>
 				</InputContainer>
 			</Section>
 			<SectionHeader>
@@ -40,7 +104,12 @@ const InfoStep = () => {
 			<Section>
 				<InputContainer>
 					<InputLabel>WEBSITE OR URL (OPTIONAL)</InputLabel>
-					<Input placeholder='Website' />
+					<Input
+						placeholder='Website'
+						name='website'
+						value={website}
+						onChange={reducerInputChange}
+					/>
 					<InputDesc size='Small'>
 						Your home page, blog, or company site.
 					</InputDesc>

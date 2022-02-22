@@ -26,7 +26,7 @@ const OnboardView = () => {
 	return (
 		<OnboardViewContainer>
 			<OnboardHeader step={step} />
-			{step === OnboardSteps.INFO && <InfoStep />}
+			{step === OnboardSteps.INFO && <InfoStep setStep={setStep} />}
 		</OnboardViewContainer>
 	);
 };
