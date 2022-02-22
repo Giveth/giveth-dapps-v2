@@ -37,6 +37,12 @@ export const FETCH_USER_PROJECTS = gql`
 				listed
 				givingBlocksId
 				totalDonations
+				totalReactions
+				verified
+				status {
+					id
+					name
+				}
 				categories {
 					name
 				}

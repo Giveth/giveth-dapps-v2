@@ -16,13 +16,17 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import { Row } from '../../styled-components/Grid';
 import PublicProfileContributes from './PublicProfileContributes';
-import { IUser } from '@/apollo/types/types';
+import { IUser, IProject } from '@/apollo/types/types';
 import { networksParams } from '@/helpers/blockchain';
 import { useWeb3React } from '@web3-react/core';
 
 export interface IUserPublicProfileView {
 	user: IUser;
 	myAccount?: boolean;
+}
+
+export interface IUserProfileProjectsView {
+	projects: IProject[];
 }
 
 const UserPublicProfileView: FC<IUserPublicProfileView> = ({

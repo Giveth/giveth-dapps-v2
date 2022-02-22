@@ -16,10 +16,14 @@ import {
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IUserPublicProfileView } from './UserPublicProfile.view';
+import ProjectsTable from './ProjectsTable';
 
 const itemPerPage = 6;
 
-const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({ user }) => {
+const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({
+	user,
+	myAccount,
+}) => {
 	const [loading, setLoading] = useState(false);
 	const [projects, setProjects] = useState<IProject[]>([]);
 	const [totalCount, setTotalCount] = useState<number>(0);
@@ -47,16 +51,21 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({ user }) => {
 		};
 		fetchUserProjects();
 	}, [page, user]);
-
 	return (
 		<>
 			<UserContributeInfo>
 				<ContributeCard user={user} />
 			</UserContributeInfo>
 			<ProjectsContainer>
-				{projects.map(project => (
-					<ProjectCard key={project.id} project={project} />
-				))}
+				{myAccount ? (
+					<ProjectsTableWrapper>
+						<ProjectsTable projects={projects} />
+					</ProjectsTableWrapper>
+				) : (
+					projects.map(project => (
+						<ProjectCard key={project.id} project={project} />
+					))
+				)}
 				{loading && <Loading />}
 			</ProjectsContainer>
 			<Pagination
@@ -77,7 +86,6 @@ export const ProjectsContainer = styled(Container)`
 	gap: 24px;
 	margin-bottom: 64px;
 	padding: 0;
-
 	${mediaQueries['lg']} {
 		grid-template-columns: repeat(2, 1fr);
 	}
@@ -89,6 +97,10 @@ export const ProjectsContainer = styled(Container)`
 	${mediaQueries['xxl']} {
 		grid-template-columns: repeat(3, 1fr);
 	}
+`;
+
+const ProjectsTableWrapper = styled.div`
+	margin-left: 35px;
 `;
 
 const UserContributeInfo = styled.div`
