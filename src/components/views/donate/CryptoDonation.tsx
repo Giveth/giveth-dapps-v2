@@ -9,6 +9,7 @@ import {
 	Button,
 	Caption,
 	neutralColors,
+	semanticColors,
 	brandColors,
 	GLink,
 	B,
@@ -41,6 +42,10 @@ const stableCoins = [xdaiChain.mainToken, 'DAI', 'USDT'];
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
 type SuccessFunction = (param: boolean) => void;
+
+interface IInputBox {
+	error: boolean;
+}
 
 interface ISelectObj {
 	value: string;
@@ -127,6 +132,7 @@ const CryptoDonation = (props: {
 	const [inProgress, setInProgress] = useState<any>();
 	const [anonymous, setAnonymous] = useState<boolean>(false);
 	// const [selectLoading, setSelectLoading] = useState(false);
+	const [error, setError] = useState<boolean>(false);
 	const [givBackEligible, setGivBackEligible] = useState(true);
 	const [showWalletModal, setShowWalletModal] = useState(false);
 	const [showDonateModal, setShowDonateModal] = useState(false);
@@ -360,7 +366,7 @@ const CryptoDonation = (props: {
 							</SwitchCaption>
 						</XDaiContainer>
 					)}
-				<SearchContainer>
+				<SearchContainer error={error}>
 					<DropdownContainer>
 						<TokenPicker
 							tokenList={erc20List}
@@ -434,6 +440,8 @@ const CryptoDonation = (props: {
 						//   setShowDonateModal(false)
 						//   setAmountTyped(a)
 						// }}}
+						error={error}
+						setError={setError}
 						errorHandler={{
 							condition: (value: any) =>
 								value >= 0 && value <= 0.0001,
@@ -464,7 +472,8 @@ const CryptoDonation = (props: {
 				<ToastContainer>
 					<FixedToast
 						message='This token is not eligible for GIVbacks.'
-						color={brandColors.mustard[600]}
+						color={brandColors.mustard[500]}
+						boldColor={brandColors.mustard[600]}
 						backgroundColor={brandColors.mustard[200]}
 						href='/givbacks'
 					/>
@@ -474,6 +483,7 @@ const CryptoDonation = (props: {
 					<FixedToast
 						message='This token is eligible for GIVbacks.'
 						color={brandColors.giv[300]}
+						boldColor={brandColors.giv[600]}
 						backgroundColor={brandColors.giv[100]}
 						href='/givbacks'
 					/>
@@ -550,6 +560,21 @@ const AvText = styled(GLink)`
 const SearchContainer = styled.div`
 	display: flex;
 	flex-direction: row;
+
+	border: ${(props: IInputBox) =>
+		props.error === true
+			? `2px solid ${semanticColors.punch[500]}`
+			: `2px solid ${neutralColors.gray[300]}`};
+	border-radius: 6px;
+
+	:active,
+	:hover {
+		border: 2px solid
+			${(props: IInputBox) =>
+				props.error === true
+					? semanticColors.punch[500]
+					: brandColors.giv[500]};
+	}
 `;
 const DropdownContainer = styled.div`
 	width: 35%;

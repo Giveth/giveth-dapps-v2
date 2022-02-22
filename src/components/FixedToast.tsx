@@ -5,7 +5,8 @@ import styled from 'styled-components';
 interface IFToast {
 	message: string;
 	href: string;
-	color: any;
+	color: string;
+	boldColor: string;
 	backgroundColor: string;
 }
 
@@ -14,13 +15,13 @@ interface IToastContainer {
 }
 
 const FixedToast = (props: IFToast) => {
-	const { message, color, backgroundColor, href } = props;
+	const { message, color, backgroundColor, boldColor, href } = props;
 	return (
 		<Container color={backgroundColor} borderColor={color}>
 			<Text color={color}>{message}</Text>
 			{href && (
 				<a href={href} target='_blank' rel='noreferrer'>
-					<Text color={color}>Learn More</Text>
+					<Text color={boldColor}>Learn More</Text>
 				</a>
 			)}
 		</Container>
