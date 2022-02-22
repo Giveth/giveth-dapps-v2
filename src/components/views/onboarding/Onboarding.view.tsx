@@ -2,6 +2,7 @@ import { B, brandColors, Container, H5 } from '@giveth/ui-design-system';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 import InfoStep from './infoStep';
+import PhotoStep from './photoStep';
 
 const StatesLabel = [
 	'Register on Giveth',
@@ -22,11 +23,12 @@ export interface IOnboard {
 }
 
 const OnboardView = () => {
-	const [step, setStep] = useState(OnboardSteps.INFO);
+	const [step, setStep] = useState(OnboardSteps.PHOTO);
 	return (
 		<OnboardViewContainer>
 			<OnboardHeader step={step} />
 			{step === OnboardSteps.INFO && <InfoStep setStep={setStep} />}
+			{step === OnboardSteps.PHOTO && <PhotoStep setStep={setStep} />}
 		</OnboardViewContainer>
 	);
 };
