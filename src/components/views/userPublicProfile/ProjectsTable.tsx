@@ -115,32 +115,37 @@ const ProjectsTable: FC<IUserProfileProjectsView> = ({ projects }) => {
 	return (
 		<>
 			<DonationTablecontainer>
-				<TabelHeader
+				<TableHeader
 					onClick={() => orderChangeHandler(EOrderBy.CreationDate)}
 				>
 					<B>Created at</B>
 					{injectSortIcon(order, EOrderBy.CreationDate)}
-				</TabelHeader>
-				<TabelHeader>
+				</TableHeader>
+				<TableHeader>
 					<B>Active</B>
-				</TabelHeader>
-				<TabelHeader>
+				</TableHeader>
+				<TableHeader>
 					<B>Project</B>
-				</TabelHeader>
-				<TabelHeader>
-					<B>Likes</B>
-				</TabelHeader>
-				<TabelHeader
+				</TableHeader>
+				<TableHeader>
+					<B>Likes</B>{' '}
+					<img
+						src='/images/heart-black.svg'
+						width='24px'
+						height='24px'
+					/>
+				</TableHeader>
+				<TableHeader
 					onClick={() => orderChangeHandler(EOrderBy.TokenAmount)}
 				>
 					<B>Total Raised</B>
-				</TabelHeader>
-				<TabelHeader>
+				</TableHeader>
+				<TableHeader>
 					<B>Listing</B>
-				</TabelHeader>
-				<TabelHeader>
+				</TableHeader>
+				<TableHeader>
 					<B>Actions</B>
-				</TabelHeader>
+				</TableHeader>
 				{projects?.map((project, idx) => (
 					<RowWrapper key={idx}>
 						<TabelCell>
@@ -215,7 +220,7 @@ const DonationTablecontainer = styled.div`
 	min-width: 1133px;
 `;
 
-const TabelHeader = styled(Row)`
+const TableHeader = styled(Row)`
 	height: 40px;
 	border-bottom: 1px solid ${neutralColors.gray[400]};
 	align-items: center;
@@ -224,6 +229,9 @@ const TabelHeader = styled(Row)`
 		`cursor: pointer;
 	gap: 8px;
 	align-items: center;`}
+	img {
+		padding-left: 5px;
+	}
 `;
 
 const TabelCell = styled(Row)`
