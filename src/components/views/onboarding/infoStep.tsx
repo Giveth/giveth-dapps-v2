@@ -6,22 +6,10 @@ import {
 	neutralColors,
 	Subline,
 } from '@giveth/ui-design-system';
-import {
-	ChangeEvent,
-	Dispatch,
-	FC,
-	SetStateAction,
-	useEffect,
-	useReducer,
-	useState,
-} from 'react';
+import { ChangeEvent, FC, useEffect, useReducer, useState } from 'react';
 import styled from 'styled-components';
-import { OnboardActions, OnboardStep } from './common';
+import { IStep, OnboardActions, OnboardStep } from './common';
 import { OnboardSteps } from './Onboarding.view';
-
-interface IInfoStep {
-	setStep: Dispatch<SetStateAction<OnboardSteps>>;
-}
 
 interface IUserIfo {
 	firstName: string;
@@ -37,7 +25,7 @@ const initialUserInfo: IUserIfo = {
 	website: '',
 };
 
-const InfoStep: FC<IInfoStep> = ({ setStep }) => {
+const InfoStep: FC<IStep> = ({ setStep }) => {
 	const [info, setInfo] = useReducer(
 		(curValues: IUserIfo, newValues: object) => ({
 			...curValues,

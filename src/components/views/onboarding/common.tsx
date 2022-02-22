@@ -1,13 +1,17 @@
 import { Row } from '@/components/styled-components/Grid';
 import { Button, neutralColors } from '@giveth/ui-design-system';
-import { FC } from 'react';
+import { Dispatch, FC, SetStateAction } from 'react';
 import styled from 'styled-components';
+import { OnboardSteps } from './Onboarding.view';
 
 export const OnboardStep = styled.div`
 	width: 750px;
 	margin: 0 auto;
 `;
 
+export interface IStep {
+	setStep: Dispatch<SetStateAction<OnboardSteps>>;
+}
 interface IOnboardActions {
 	onSave: any;
 	saveLabel: string;
