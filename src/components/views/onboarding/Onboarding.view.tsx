@@ -3,6 +3,13 @@ import { FC, useState } from 'react';
 import styled from 'styled-components';
 import InfoStep from './infoStep';
 
+const StatesLabel = [
+	'Register on Giveth',
+	'Who you are?',
+	'Fancy profile photo',
+	'Done',
+];
+
 export enum OnboardSteps {
 	REG,
 	INFO,
@@ -10,12 +17,9 @@ export enum OnboardSteps {
 	DONE,
 }
 
-const StatesLabel = [
-	'Register on Giveth',
-	'Who you are?',
-	'Fancy profile photo',
-	'Done',
-];
+export interface IOnboard {
+	step: OnboardSteps;
+}
 
 const OnboardView = () => {
 	const [step, setStep] = useState(OnboardSteps.INFO);
@@ -29,17 +33,13 @@ const OnboardView = () => {
 
 export default OnboardView;
 
-interface IOnboardHeader {
-	step: OnboardSteps;
-}
-
 enum LabelStatus {
 	PREV,
 	ACTIVE,
 	NEXT,
 }
 
-const OnboardHeader: FC<IOnboardHeader> = ({ step }) => {
+const OnboardHeader: FC<IOnboard> = ({ step }) => {
 	return (
 		<OnboardHeaderConatiner>
 			<H5 weight={700}>Complete your profile</H5>
@@ -73,7 +73,7 @@ const OnboardHeaderConatiner = styled.div`
 	padding-bottom: 68px;
 `;
 
-const OnboardProgressbar = styled.div<IOnboardHeader>`
+const OnboardProgressbar = styled.div<IOnboard>`
 	background: ${brandColors.giv[100]};
 	height: 6px;
 	border-radius: 12px;
