@@ -312,7 +312,7 @@ const CryptoDonation = (props: {
 					showModal={showDonateModal}
 					setShowModal={setShowDonateModal}
 					setSuccessDonation={(successTxHash: ISuccessDonation) => {
-						setSuccessDonation(!!successTxHash);
+						setSuccessDonation(successTxHash);
 						setTxHash(successTxHash);
 					}}
 					project={project}
