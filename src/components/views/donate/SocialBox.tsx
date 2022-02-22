@@ -71,6 +71,7 @@ const BLead = styled(Lead)`
 	line-height: 30px;
 	font-weight: 400;
 	color: ${neutralColors.gray[900]};
+	z-index: 2;
 `;
 
 const Social = styled.div`
