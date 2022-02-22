@@ -69,7 +69,7 @@ const BGImg = styled.img`
 	position: absolute;
 `;
 const Container = styled.div`
-	background-image: url('../../../../public/images/creation_success.svg');
+	background-image: url('/images/creation_success.svg');
 `;
 const Wrapper = styled.div`
 	text-align: center;
