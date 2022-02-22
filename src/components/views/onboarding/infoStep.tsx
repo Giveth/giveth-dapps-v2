@@ -1,14 +1,19 @@
 import { Row } from '@/components/styled-components/Grid';
 import {
 	brandColors,
+	GLink,
 	H6,
 	neutralColors,
 	Subline,
 } from '@giveth/ui-design-system';
+import { useState } from 'react';
 import styled from 'styled-components';
-import { OnboardStep } from './common';
+import { OnboardActions, OnboardStep } from './common';
 
 const InfoStep = () => {
+	const [disabled, setDisabled] = useState(true);
+	const onSave = () => {};
+
 	return (
 		<OnboardStep>
 			<SectionHeader>How we should call you?</SectionHeader>
@@ -36,8 +41,16 @@ const InfoStep = () => {
 				<InputContainer>
 					<InputLabel>WEBSITE OR URL (OPTIONAL)</InputLabel>
 					<Input placeholder='Website' />
+					<InputDesc size='Small'>
+						Your home page, blog, or company site.
+					</InputDesc>
 				</InputContainer>
 			</Section>
+			<OnboardActions
+				onSave={onSave}
+				saveLabel='SAVE & CONTINUE'
+				disabled={disabled}
+			/>
 		</OnboardStep>
 	);
 };
@@ -75,6 +88,11 @@ const Input = styled.input`
 	::placeholder {
 		color: ${neutralColors.gray[500]};
 	}
+`;
+
+const InputDesc = styled(GLink)`
+	padding-top: 4px;
+	color: ${brandColors.deep[500]};
 `;
 
 export default InfoStep;
