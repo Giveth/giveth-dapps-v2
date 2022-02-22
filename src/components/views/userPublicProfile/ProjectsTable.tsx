@@ -3,7 +3,6 @@ import {
 	brandColors,
 	IconArrowBottom,
 	IconArrowTop,
-	IconLink24,
 	IconSort16,
 	neutralColors,
 	P,
@@ -148,14 +147,14 @@ const ProjectsTable: FC<IUserProfileProjectsView> = ({ projects }) => {
 				</TableHeader>
 				{projects?.map((project, idx) => (
 					<RowWrapper key={idx}>
-						<TabelCell>
+						<TableCell>
 							<P>
 								{project.creationDate &&
 									smallFormatDate(
 										new Date(project.creationDate),
 									)}
 							</P>
-						</TabelCell>
+						</TableCell>
 						<ProjectTitleCell>
 							{project?.status?.id == '5' ? (
 								<img
@@ -170,21 +169,19 @@ const ProjectsTable: FC<IUserProfileProjectsView> = ({ projects }) => {
 									height='24px'
 								/>
 							)}
-
-							<IconLink24 />
 						</ProjectTitleCell>
-						<TabelCell>
+						<TableCell>
 							<P>{project?.title}</P>
 							{project?.verified && (
 								<Badge mainColor={semanticColors.jade}>
 									verified
 								</Badge>
 							)}
-						</TabelCell>
-						<TabelCell>
+						</TableCell>
+						<TableCell>
 							<P>{project?.totalReactions}</P>
-						</TabelCell>
-						<TabelCell>
+						</TableCell>
+						<TableCell>
 							<P>
 								{project?.totalDonations}{' '}
 								{project.totalDonations &&
@@ -192,9 +189,9 @@ const ProjectsTable: FC<IUserProfileProjectsView> = ({ projects }) => {
 									? 'USD'
 									: ''}
 							</P>
-						</TabelCell>
-						<TabelCell>{setupBadge(project.status)}</TabelCell>
-						<TabelCell>
+						</TableCell>
+						<TableCell>{setupBadge(project.status)}</TableCell>
+						<TableCell>
 							<Actions>
 								<GLink>Edit</GLink>
 								<GLink
@@ -205,7 +202,7 @@ const ProjectsTable: FC<IUserProfileProjectsView> = ({ projects }) => {
 									View
 								</GLink>
 							</Actions>
-						</TabelCell>
+						</TableCell>
 					</RowWrapper>
 				))}
 			</DonationTablecontainer>
@@ -234,14 +231,14 @@ const TableHeader = styled(Row)`
 	}
 `;
 
-const TabelCell = styled(Row)`
+const TableCell = styled(Row)`
 	height: 60px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
 	align-items: center;
 	gap: 8px;
 `;
 
-const ProjectTitleCell = styled(TabelCell)`
+const ProjectTitleCell = styled(TableCell)`
 	cursor: pointer;
 	& > svg {
 		display: none;
