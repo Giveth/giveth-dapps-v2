@@ -10,21 +10,19 @@ import styled from 'styled-components';
 
 type OnChangeFunction = (e: any) => void;
 
-interface IInputBox {
-	error: boolean;
-}
-
 const InputBox = (props: {
 	onChange: OnChangeFunction;
 	placeholder?: string;
 	type?: string;
 	errorHandler?: any;
+	setError?: any;
+	error?: any;
 }) => {
-	const { onChange, errorHandler, type, placeholder } = props;
-	const [error, setError] = useState<boolean>(false);
+	const { onChange, error, setError, errorHandler, type, placeholder } =
+		props;
 	return (
 		<Box>
-			<Wrapper error={error}>
+			<Wrapper>
 				<B className='w-100 mr-2' color={neutralColors.gray[900]}>
 					<Input
 						type={type}
@@ -78,18 +76,8 @@ const Wrapper = styled.div`
 	margin: 0 auto;
 
 	height: 54px;
-	border: 2px solid ${neutralColors.gray[300]};
-	border-radius: 0px 6px 6px 0px;
 	* {
 		width: 90%;
-	}
-
-	:active,
-	:hover {
-		border-color: ${(props: IInputBox) =>
-			props.error === true
-				? semanticColors.punch[500]
-				: brandColors.giv[500]};
 	}
 
 	/* Chrome, Safari, Edge, Opera */

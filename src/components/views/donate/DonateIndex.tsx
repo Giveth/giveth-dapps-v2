@@ -85,12 +85,16 @@ const ProjectsIndex = (props: IProjectBySlug) => {
 				{donationType === CRYPTO_DONATION ? (
 					<CryptoDonation
 						project={project}
-						setSuccessDonation={successTx => setSuccess(successTx)}
+						setSuccessDonation={(successTx: any) =>
+							setSuccess(successTx)
+						}
 					/>
 				) : (
 					<FiatDonation
 						project={project}
-						setSuccessDonation={() => setSuccess(true)}
+						setSuccessDonation={(successTx: any) =>
+							setSuccess(successTx)
+						}
 					/>
 				)}
 			</>
