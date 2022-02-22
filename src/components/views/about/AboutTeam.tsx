@@ -22,6 +22,7 @@ const AboutTeam = () => {
 
 const TeamCards = styled.div`
 	display: flex;
+	justify-content: space-around;
 	flex-wrap: wrap;
 	gap: 24px;
 `;

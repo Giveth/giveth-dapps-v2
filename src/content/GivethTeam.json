@@ -7,39 +7,11 @@
     "socialTwitter": "https://twitter.com/thegrifft"
   },
   {
-    "name": "Willy Ogorzaly",
-    "title": "Product",
-    "image": "https://images.ctfassets.net/movecrqtj4el/3t7dqUIGzJ950Q1Z00AYAU/1dc9975c0fe65e3eb44f4fc429a67d72/willy_portrait.jpg",
-    "socialGithub": "https://github.com/willyogo",
-    "socialTwitter": "https://twitter.com/willyogo"
-  },
-  {
-    "name": "Amin Latifi",
-    "title": "Lead Developer",
-    "image": "https://images.ctfassets.net/movecrqtj4el/493M3go1bqVrJjPub2V7Tf/9f6bf5ac12ffd5e162b708ff37484f95/amin.jpg",
-    "socialGithub": "https://github.com/aminlatifi",
-    "socialTwitter": "https://twitter.com/amin__dev"
-  },
-  {
-    "name": "Kay",
-    "title": "devops",
-    "image": "https://images.ctfassets.net/movecrqtj4el/2khGR1MokmUb0xZ606Rba/b804d0497c80d0787f36170929faf6b3/teamphoto-kay.jpg",
-    "socialGithub": "https://github.com/geleeroyale",
-    "socialTwitter": "https://twitter.com/krassvs"
-  },
-  {
-    "name": "Ashley",
-    "title": "Community Ambassador",
-    "image": "https://images.ctfassets.net/movecrqtj4el/7B4n9f24UizuROm4tgoQUs/fa3fb6df52559ef14813a8603cf84b9f/ashley-square.png",
-    "socialGithub": "https://github.com/WhyldWanderer",
-    "socialTwitter": "https://twitter.com/WhyldW"
-  },
-  {
-    "name": "Dani Bellavita",
-    "title": "Governance Steward",
-    "image": "https://images.ctfassets.net/movecrqtj4el/1y6BX8PUrCYDNBpZGqTt7M/bb84fcf4c96f6aae01a928ff885afd1a/Dani_Headshot_2019_-_Danielle_Gennety.jpg",
-    "socialGithub": "https://github.com/Danibelle",
-    "socialTwitter": "https://twitter.com/TheOfficeMystic"
+    "name": "Mitch",
+    "title": "DAO Steward",
+    "image": "https://images.ctfassets.net/movecrqtj4el/2YvZ8dTpNsDTBe8A2QMi3d/9a41ec18848ef54093fbf8b26604214a/githubprofile.jpg",
+    "socialGithub": "https://github.com/divine-comedian",
+    "socialTwitter": "https://www.theodysseyonline.com/dont-wont-make-twitter-account"
   },
   {
     "name": "Lauren Luz",
@@ -49,25 +21,11 @@
     "socialTwitter": "https://twitter.com/karmaticacid"
   },
   {
-    "name": "Mitch",
-    "title": "Writer",
-    "image": "https://images.ctfassets.net/movecrqtj4el/2YvZ8dTpNsDTBe8A2QMi3d/9a41ec18848ef54093fbf8b26604214a/githubprofile.jpg",
-    "socialGithub": "https://github.com/divine-comedian",
-    "socialTwitter": "https://www.theodysseyonline.com/dont-wont-make-twitter-account"
-  },
-  {
-    "name": "Mateo Daza",
-    "title": "developer giveth.io",
-    "image": "https://images.ctfassets.net/movecrqtj4el/3KhdzfaOj2BZDeWdG0ZyKQ/aba2c95e7fef7cbc951d5296f6c68618/05ff0cfc-46a4-4000-9f46-faf5635caf64_-_Mateo_Daza.jpeg",
-    "socialGithub": "https://github.com/mateodaza",
-    "socialTwitter": "https://twitter.com/mateodazab"
-  },
-  {
-    "name": "Marko Prljic",
-    "title": "lead designer",
-    "image": "https://images.ctfassets.net/movecrqtj4el/2SPuH7gYlMH3B0cIGD4joO/bcc7c03e7981d63c11e4381df1dac2ee/IMG-20200604-WA0005_-_Marko_Prlji__.jpg",
-    "socialGithub": "https://github.com/markoprljic",
-    "socialTwitter": "https://twitter.com/@markoprljic"
+    "name": "Ashley",
+    "title": "Community Ambassador",
+    "image": "https://images.ctfassets.net/movecrqtj4el/7B4n9f24UizuROm4tgoQUs/fa3fb6df52559ef14813a8603cf84b9f/ashley-square.png",
+    "socialGithub": "https://github.com/WhyldWanderer",
+    "socialTwitter": "https://twitter.com/WhyldW"
   },
   {
     "name": "Forest Soleil",
@@ -77,10 +35,73 @@
     "socialTwitter": "https://twitter.com/ForestSoleil"
   },
   {
+    "name": "Dani Bellavita",
+    "title": "Governance Steward",
+    "image": "https://images.ctfassets.net/movecrqtj4el/1y6BX8PUrCYDNBpZGqTt7M/bb84fcf4c96f6aae01a928ff885afd1a/Dani_Headshot_2019_-_Danielle_Gennety.jpg",
+    "socialGithub": "https://github.com/Danibelle",
+    "socialTwitter": "https://twitter.com/TheOfficeMystic"
+  },
+  {
+    "name": "Moe Nick",
+    "title": "Product Manager",
+    "image": "https://images.ctfassets.net/movecrqtj4el/VuW8aI5LiuiI2pNbZzSBT/38db263885fdc08bdc739ba16dc29dda/moeNick2.jpg",
+    "socialGithub": "https://github.com/MoeNick",
+    "socialTwitter": "https://twitter.com/moe_nick"
+  },
+  {
+    "name": "Amin Latifi",
+    "title": "Lead Developer",
+    "image": "https://images.ctfassets.net/movecrqtj4el/493M3go1bqVrJjPub2V7Tf/9f6bf5ac12ffd5e162b708ff37484f95/amin.jpg",
+    "socialGithub": "https://github.com/aminlatifi",
+    "socialTwitter": "https://twitter.com/amin__dev"
+  },
+  {
+    "name": "Marko Prljic",
+    "title": "Lead Designer",
+    "image": "https://images.ctfassets.net/movecrqtj4el/2SPuH7gYlMH3B0cIGD4joO/bcc7c03e7981d63c11e4381df1dac2ee/IMG-20200604-WA0005_-_Marko_Prlji__.jpg",
+    "socialGithub": "https://github.com/markoprljic",
+    "socialTwitter": "https://twitter.com/@markoprljic"
+  },
+  {
+    "name": "Mateo Daza",
+    "title": "Lead Developer",
+    "image": "https://images.ctfassets.net/movecrqtj4el/3KhdzfaOj2BZDeWdG0ZyKQ/aba2c95e7fef7cbc951d5296f6c68618/05ff0cfc-46a4-4000-9f46-faf5635caf64_-_Mateo_Daza.jpeg",
+    "socialGithub": "https://github.com/mateodaza",
+    "socialTwitter": "https://twitter.com/mateodazab"
+  },
+  {
+    "name": "Mohammad Ranjbar",
+    "title": "Backend Developer",
+    "image": "https://images.ctfassets.net/movecrqtj4el/6L8PRenLtB7kBlfreYGWGy/defd3896dd6adde4273d8a865fe0e1ff/mohammad.jpeg",
+    "socialGithub": "https://github.com/mohammadranjbarz",
+    "socialTwitter": ""
+  },
+  {
+    "name": "Kay",
+    "title": "Devops",
+    "image": "https://images.ctfassets.net/movecrqtj4el/2khGR1MokmUb0xZ606Rba/b804d0497c80d0787f36170929faf6b3/teamphoto-kay.jpg",
+    "socialGithub": "https://github.com/geleeroyale",
+    "socialTwitter": "https://twitter.com/krassvs"
+  },
+  {
+    "name": "Willy Ogorzaly",
+    "title": "Product",
+    "image": "https://images.ctfassets.net/movecrqtj4el/3t7dqUIGzJ950Q1Z00AYAU/1dc9975c0fe65e3eb44f4fc429a67d72/willy_portrait.jpg",
+    "socialGithub": "https://github.com/willyogo",
+    "socialTwitter": "https://twitter.com/willyogo"
+  },
+  {
     "name": "Heather Eisner",
     "title": "Hiring Recruiter",
     "image": "https://images.ctfassets.net/movecrqtj4el/3zTo4C0GmsLVwVpv9VvQyb/cf8bb8f26f25ee7b4cc66b771975d906/heatherTeamPhoto.jpg",
     "socialGithub": "https://github.com/hanners717",
     "socialTwitter": "https://twitter.com/hanners717"
+  },
+  {
+    "name": "Freshelle",
+    "title": "Accounting and Administration",
+    "image": "https://images.ctfassets.net/movecrqtj4el/5AbQat52Bp1KnuwQMAXBYn/d6cd080977c1d704629ba9c739167304/freshelle.jpg",
+    "socialGithub": "",
+    "socialTwitter": ""
   }
 ]
