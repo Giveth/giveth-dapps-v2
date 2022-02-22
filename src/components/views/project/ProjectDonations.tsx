@@ -6,10 +6,10 @@ import styled from 'styled-components';
 
 const ProjectDonations = (props: {
 	donationsByProjectId: IDonationsByProjectId;
-	project: IProject;
+	project?: IProject;
 }) => {
 	const { donationsByProjectId, project } = props;
-	const { totalDonations, walletAddress } = project;
+	const { totalDonations, walletAddress, id } = project || {};
 	return (
 		<Wrapper>
 			<ProjectTotalFundCard
@@ -18,7 +18,7 @@ const ProjectDonations = (props: {
 			/>
 			<ProjectDonationTable
 				donations={donationsByProjectId}
-				projectId={project.id || ''}
+				projectId={id || ''}
 			/>
 		</Wrapper>
 	);

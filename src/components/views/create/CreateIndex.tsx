@@ -16,6 +16,7 @@ import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import Debounced from 'lodash.debounce';
 import { Toaster } from 'react-hot-toast';
+import { useRouter } from 'next/router';
 
 import SignInModal from '../../modals/SignInModal';
 import { ADD_PROJECT } from '@/apollo/gql/gqlProjects';
@@ -40,7 +41,7 @@ import {
 	walletAddressValidation,
 } from '@/helpers/createProjectValidation';
 import { gToast, ToastType } from '@/components/toasts';
-import { isUserRegistered } from '@/lib/helpers';
+import { isUserRegistered, slugToProjectView } from '@/lib/helpers';
 
 export enum ECreateErrFields {
 	NAME = 'name',
@@ -57,6 +58,7 @@ export interface ICreateProjectErrors {
 const CreateIndex = () => {
 	const { library, chainId } = useWeb3React();
 	const [addProjectMutation] = useMutation(ADD_PROJECT);
+	const router = useRouter();
 
 	const [creationSuccessful, setCreationSuccessful] = useState<any>(null);
 	const [showSigninModal, setShowSigninModal] = useState(false);
@@ -93,7 +95,7 @@ const CreateIndex = () => {
 		});
 	};
 
-	const onSubmit = async () => {
+	const onSubmit = async (isDraft?: boolean) => {
 		try {
 			if (!isSignedIn) {
 				return showSignModal();
@@ -130,6 +132,7 @@ const CreateIndex = () => {
 				walletAddress: utils.getAddress(address),
 				imageStatic: null,
 				imageUpload: null,
+				isDraft: !!isDraft,
 			};
 
 			if (!isNaN(image!)) {
@@ -150,7 +153,10 @@ const CreateIndex = () => {
 			if (addedProject) {
 				// Success
 				setIsLoading(false);
-				setCreationSuccessful(addedProject?.data?.addProject);
+				const project = addedProject.data?.addProject;
+				!isDraft
+					? setCreationSuccessful(project)
+					: await router.push(slugToProjectView(project.slug));
 			}
 		} catch (e) {
 			setIsLoading(false);
@@ -303,15 +309,15 @@ const CreateIndex = () => {
 							<OulineButton
 								label='PREVIEW '
 								buttonType='primary'
-								disabled={true}
+								disabled={isLoading}
 								icon={<IconExternalLink size={16} />}
-								// onClick={uploadImage}
+								onClick={() => onSubmit(true)}
 							/>
 							<Button
 								label='PUBLISH'
 								buttonType='primary'
 								disabled={isLoading}
-								onClick={onSubmit}
+								onClick={() => onSubmit(false)}
 							/>
 						</Buttons>
 						{hasErrors && (

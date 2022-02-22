@@ -7,7 +7,7 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import CategoryBadge from '@/components/badges/CategoryBadge';
 import Routes from '@/lib/constants/Routes';
 import { slugToProjectDonate, mediaQueries } from '@/lib/helpers';
-import InfoBadge from '@/components/badges/InfoBadge';
+import QuestionBadge from '@/components/badges/QuestionBadge';
 import { IProject } from '@/apollo/types/types';
 import links from '@/lib/constants/links';
 import {
@@ -28,25 +28,29 @@ import { likeProject, unlikeProject } from '@/lib/reaction';
 import DeactivateProjectModal from '@/components/modals/DeactivateProjectModal';
 import ArchiveIcon from '../../../../public/images/icons/archive.svg';
 import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
+import { gToast, ToastType } from '@/components/toasts';
 
 interface IProjectDonateCard {
-	project: IProject;
+	project?: IProject;
 	isActive: boolean;
 	setIsActive: Dispatch<SetStateAction<boolean>>;
+	isDraft: boolean;
+	setIsDraft: Dispatch<SetStateAction<boolean>>;
 }
 
 const ProjectDonateCard = ({
 	project,
 	isActive,
 	setIsActive,
+	isDraft,
+	setIsDraft,
 }: IProjectDonateCard) => {
 	const {
 		state: { user, isSignedIn },
 		actions: { signIn },
 	} = useUser();
 
-	// const { project } = props;
-	const { categories, slug, description, adminUser, id } = project;
+	const { categories = [], slug, description, adminUser, id } = project || {};
 	const [reaction, setReaction] = useState<IReaction | undefined>(undefined);
 
 	const [heartedByUser, setHeartedByUser] = useState<boolean>(false);
@@ -56,7 +60,7 @@ const ProjectDonateCard = ({
 	const [isAdmin, setIsAdmin] = useState<boolean>(false);
 	const [deactivateModal, setDeactivateModal] = useState<boolean>(false);
 
-	const isCategories = categories.length > 0;
+	const isCategories = categories?.length > 0;
 
 	const router = useRouter();
 
@@ -73,12 +77,12 @@ const ProjectDonateCard = ({
 		}
 		if (loading) return;
 
-		if (project.id) {
+		if (id) {
 			setLoading(true);
 
 			try {
 				if (!reaction) {
-					const newReaction = await likeProject(project.id);
+					const newReaction = await likeProject(id);
 					setReaction(newReaction);
 				} else {
 					const successful = await unlikeProject(reaction.id);
@@ -98,7 +102,7 @@ const ProjectDonateCard = ({
 				const { data } = await client.query({
 					query: FETCH_PROJECT_REACTION_BY_ID,
 					variables: {
-						id: Number(project.id),
+						id: Number(id),
 						connectedWalletUserId: Number(user?.id),
 					},
 					fetchPolicy: 'no-cache',
@@ -130,22 +134,36 @@ const ProjectDonateCard = ({
 		if (isActive) {
 			setDeactivateModal(true);
 		} else {
-			if (!isSignedIn && !!signIn) {
-				await signIn();
+			try {
+				if (!isSignedIn && !!signIn) {
+					await signIn();
+				}
+				const { data } = await client.mutate({
+					mutation: ACTIVATE_PROJECT,
+					variables: {
+						projectId: Number(id),
+					},
+				});
+				if (data.activateProject) {
+					setIsActive(true);
+					setIsDraft(false);
+					gToast('Project activated successfully', {
+						type: ToastType.SUCCESS,
+						position: 'top-center',
+					});
+				}
+			} catch (e: any) {
+				gToast(JSON.stringify(e.message || e), {
+					type: ToastType.DANGER,
+					position: 'top-center',
+				});
 			}
-			const { data } = await client.mutate({
-				mutation: ACTIVATE_PROJECT,
-				variables: {
-					projectId: Number(id),
-				},
-			});
-			setIsActive(data.activateProject);
 		}
 	};
 
 	return (
 		<>
-			{showModal && (
+			{showModal && slug && (
 				<ShareModal
 					showModal={showModal}
 					setShowModal={setShowModal}
@@ -175,14 +193,25 @@ const ProjectDonateCard = ({
 							label='EDIT'
 							disabled
 						/>
-						<FullOutlineButton
-							buttonType='primary'
-							label='VERIFY YOUR PROJECT'
-						/>
+						{!isDraft ? (
+							<FullOutlineButton
+								buttonType='primary'
+								label='VERIFY YOUR PROJECT'
+							/>
+						) : (
+							<Button
+								buttonType='primary'
+								onClick={handleProjectStatus}
+								className='w-100'
+								label='PUBLISH PROJECT'
+							/>
+						)}
 					</>
 				) : (
 					<FullButton
-						onClick={() => router.push(slugToProjectDonate(slug))}
+						onClick={() =>
+							router.push(slugToProjectDonate(slug || ''))
+						}
 						label='DONATE'
 					/>
 				)}
@@ -197,12 +226,15 @@ const ProjectDonateCard = ({
 						onClick={likeUnlikeProject}
 					/>
 				</BadgeWrapper>
-				<GivBackNotif>
-					<GLink size='Medium' color={brandColors.giv[300]}>
-						When you donate to verified projects, you get GIV back.
-					</GLink>
-					<InfoBadge />
-				</GivBackNotif>
+				{!isDraft && (
+					<GivBackNotif>
+						<GLink size='Medium' color={brandColors.giv[300]}>
+							When you donate to verified projects, you get GIV
+							back.
+						</GLink>
+						<QuestionBadge />
+					</GivBackNotif>
+				)}
 				{isCategories && (
 					<CategoryWrapper>
 						{categories.map(i => (
@@ -210,24 +242,30 @@ const ProjectDonateCard = ({
 						))}
 					</CategoryWrapper>
 				)}
-				<Link href={Routes.Projects} passHref>
-					<Links>View similar projects</Links>
-				</Link>
-				<br />
-				<Links
-					target='_blank'
-					href={links.REPORT_ISSUE}
-					rel='noreferrer noopener'
-				>
-					Report an issue
-				</Links>
-				{isAdmin && (
+				{!isDraft && (
+					<>
+						{' '}
+						<Link href={Routes.Projects} passHref>
+							<Links>View similar projects</Links>
+						</Link>
+						<br />
+						<Links
+							target='_blank'
+							href={links.REPORT_ISSUE}
+							rel='noreferrer noopener'
+						>
+							Report an issue
+						</Links>
+					</>
+				)}
+
+				{isAdmin && !isDraft && (
 					<ArchiveButton
 						buttonType='texty'
 						size='small'
 						label={`${isActive ? 'DE' : ''}ACTIVATE PROJECT`}
 						icon={<Image src={ArchiveIcon} alt='Archive icon.' />}
-						onClick={() => handleProjectStatus()}
+						onClick={handleProjectStatus}
 					/>
 				)}
 			</Wrapper>
@@ -292,6 +330,7 @@ const Wrapper = styled.div`
 
 const FullButton = styled(Button)`
 	width: 100%;
+	margin-bottom: 8px;
 
 	&:disabled {
 		background-color: ${neutralColors.gray[600]};
@@ -301,12 +340,11 @@ const FullButton = styled(Button)`
 
 const FullOutlineButton = styled(OulineButton)`
 	width: 100%;
-	margin-top: 8px;
 `;
 
 const ArchiveButton = styled(Button)`
 	width: 100%;
-	margin: 12px 0px;
+	margin: 12px 0;
 	color: ${brandColors.giv[500]};
 
 	&:hover {
