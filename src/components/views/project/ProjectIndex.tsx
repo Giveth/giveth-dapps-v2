@@ -140,9 +140,9 @@ const ProjectIndex = () => {
 };
 
 const DraftIndicator = styled.div`
-	//color: ${semanticColors.link[600]};
+	//color: {semanticColors.link[600]};
 	color: #0083e0;
-	//background: ${semanticColors.link[100]};
+	//background: {semanticColors.link[100]};
 	background: #cae9ff;
 	display: flex;
 	gap: 18px;
