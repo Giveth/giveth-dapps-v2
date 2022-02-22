@@ -41,7 +41,13 @@ const xdaiExcluded = config.XDAI_EXCLUDED_COINS;
 const stableCoins = [xdaiChain.mainToken, 'DAI', 'USDT'];
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
-type SuccessFunction = (param: boolean) => void;
+interface ISuccessDonation {
+	transactionHash: string;
+	tokenSymbol: string;
+	subtotal: number;
+	givBackEligible?: boolean;
+	tooSlow?: boolean;
+}
 
 interface IInputBox {
 	error: boolean;
@@ -63,14 +69,6 @@ interface IToken {
 	chainId: number;
 	symbol: string;
 	icon?: string;
-}
-
-interface ISuccessDonation {
-	transactionHash: string;
-	tokenSymbol: string;
-	subtotal: number;
-	givBackEligible?: boolean;
-	tooSlow?: boolean;
 }
 
 const customStyles = {
@@ -106,7 +104,7 @@ const customStyles = {
 };
 
 const CryptoDonation = (props: {
-	setSuccessDonation: SuccessFunction;
+	setSuccessDonation: any;
 	project: IProject;
 }) => {
 	const { chainId, account, library } = useWeb3React();
