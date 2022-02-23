@@ -10,6 +10,7 @@ import {
 	B,
 	neutralColors,
 	Button,
+	semanticColors,
 } from '@giveth/ui-design-system';
 import { IModal, Modal } from '@/components/modals/Modal';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
@@ -22,6 +23,7 @@ import { isAddressENS, getAddressFromENS } from '../../lib/wallet';
 import { sendTransaction } from '../../lib/helpers';
 import * as transaction from '../../services/transaction';
 import { saveDonation, saveDonationTransaction } from '../../services/donation';
+import FixedToast from '@/components/FixedToast';
 import config from '@/configuration';
 import styled from 'styled-components';
 
@@ -71,6 +73,7 @@ const DonateModal = ({
 		actions: { signIn },
 	} = UserContext();
 	const [donating, setDonating] = useState(false);
+	const [donationSaved, setDonationSaved] = useState(false);
 	const [showInsufficientModal, setShowInsufficientModal] = useState(false);
 	const [showWrongNetworkModal, setShowWrongNetworkModal] = useState(false);
 	if (!showModal) return null;
@@ -161,6 +164,7 @@ const DonateModal = ({
 							savedDonation,
 							saveDonationErrors,
 						});
+						setDonationSaved(true);
 						// onTransactionHash callback for event emitter
 						if (saveDonationErrors?.length > 0) {
 							// TODO: ADD TOAST
@@ -339,14 +343,35 @@ const DonateModal = ({
 						</P>
 					</div>
 				</DonatingBox>
-				<DonateButton
-					donating={donating}
-					label={donating ? 'DONATING' : 'DONATE'}
-					onClick={() => {
-						setDonating(!donating);
-						confirmDonation();
-					}}
-				/>
+				<Buttons>
+					{donationSaved && (
+						<ToastContainer>
+							<FixedToast
+								message='Your donation is being processed, you can close this modal.'
+								color={semanticColors.blueSky[700]}
+								backgroundColor={semanticColors.blueSky[100]}
+								icon={() => <img src='/images/info-icon.svg' />}
+							/>
+						</ToastContainer>
+					)}
+					<DonateButton
+						donating={donating}
+						label={donating ? 'DONATING' : 'DONATE'}
+						onClick={() => {
+							setDonating(!donating);
+							confirmDonation();
+						}}
+					/>
+					{donationSaved && (
+						<CloseButton
+							label='CLOSE THIS MODAL'
+							buttonType='texty'
+							onClick={() => {
+								setShowModal(false);
+							}}
+						/>
+					)}
+				</Buttons>
 			</DonateContainer>
 		</Modal>
 	);
@@ -406,6 +431,23 @@ const DonateButton = styled(Button)`
 		padding: 0 8px 0 0;
 		font-weight: bold;
 	}
+`;
+
+const Buttons = styled.div`
+	display: flex;
+	flex-direction: column;
+	jusitfy-content: center;
+`;
+
+const CloseButton = styled(Button)`
+	margin: 5px 0 0 0;
+	:hover {
+		background: transparent;
+	}
+`;
+
+const ToastContainer = styled.div`
+	margin: 15px 0;
 `;
 
 export default DonateModal;

@@ -10,21 +10,37 @@ import styled from 'styled-components';
 
 type OnChangeFunction = (e: any) => void;
 
+interface IInputBox {
+	error: boolean;
+}
+
 const InputBox = (props: {
+	value: string;
 	onChange: OnChangeFunction;
 	placeholder?: string;
 	type?: string;
 	errorHandler?: any;
 	setError?: any;
 	error?: any;
+	onFocus?: any;
 }) => {
-	const { onChange, error, setError, errorHandler, type, placeholder } =
-		props;
+	const {
+		value,
+		onChange,
+		error,
+		setError,
+		errorHandler,
+		type,
+		placeholder,
+		onFocus,
+	} = props;
 	return (
 		<Box>
 			<Wrapper>
 				<B className='w-100 mr-2' color={neutralColors.gray[900]}>
 					<Input
+						id='input-box'
+						value={value}
 						type={type}
 						onChange={(e: any) => {
 							onChange(e.target.value);
@@ -33,6 +49,8 @@ const InputBox = (props: {
 									errorHandler?.condition(e.target.value),
 							);
 						}}
+						onFocus={() => onFocus(true)}
+						onBlur={() => onFocus(false)}
 						placeholder={placeholder || 'Search Projects...'}
 					/>
 				</B>

@@ -4,6 +4,7 @@ import InputBox from '../../InputBox';
 import { useWeb3React } from '@web3-react/core';
 import { Contract } from '@ethersproject/contracts';
 import { useQuery } from '@apollo/client';
+import { Shadow } from '@/components/styled-components/Shadow';
 import BigNumber from 'bignumber.js';
 import {
 	Button,
@@ -51,6 +52,7 @@ interface ISuccessDonation {
 
 interface IInputBox {
 	error: boolean;
+	focused: boolean;
 }
 
 interface ISelectObj {
@@ -121,6 +123,7 @@ const CryptoDonation = (props: {
 	const [customInput, setCustomInput] = useState<any>();
 	const [tokenPrice, setTokenPrice] = useState<number>(1);
 	const [amountTyped, setAmountTyped] = useState('');
+	const [inputBoxFocused, setInputBoxFocused] = useState(false);
 	const [geminiModal, setGeminiModal] = useState(false);
 	const [txHash, setTxHash] = useState<any>();
 	const [erc20List, setErc20List] = useState<any>();
@@ -364,7 +367,7 @@ const CryptoDonation = (props: {
 							</SwitchCaption>
 						</XDaiContainer>
 					)}
-				<SearchContainer error={error}>
+				<SearchContainer error={error} focused={inputBoxFocused}>
 					<DropdownContainer>
 						<TokenPicker
 							tokenList={erc20List}
@@ -412,7 +415,9 @@ const CryptoDonation = (props: {
 													...erc20List,
 													pastedToken,
 												]);
-											setCustomInput(pastedToken?.symbol);
+											setCustomInput(
+												pastedToken?.address,
+											);
 											// setSelectLoading(false);
 										});
 									} catch (error) {
@@ -438,18 +443,21 @@ const CryptoDonation = (props: {
 						//   setShowDonateModal(false)
 						//   setAmountTyped(a)
 						// }}}
+						value={amountTyped}
 						error={error}
 						setError={setError}
 						errorHandler={{
 							condition: (value: any) =>
-								value >= 0 && value <= 0.0001,
+								value >= 0 && value <= 0.000001,
 							message: 'Set a valid amount',
 						}}
 						type='number'
 						onChange={val => {
 							const checkGIV = checkGIVTokenAvailability();
+							if (/^0+(?=\d)/.test(val)) return;
 							if (checkGIV) setAmountTyped(val);
 						}}
+						onFocus={(val: any) => setInputBoxFocused(!!val)}
 						placeholder='Amount'
 					/>
 				</SearchContainer>
@@ -470,8 +478,8 @@ const CryptoDonation = (props: {
 				<ToastContainer>
 					<FixedToast
 						message='This token is not eligible for GIVbacks.'
-						color={brandColors.mustard[500]}
-						boldColor={brandColors.mustard[600]}
+						color={brandColors.mustard[700]}
+						boldColor={brandColors.mustard[800]}
 						backgroundColor={brandColors.mustard[200]}
 						href='/givbacks'
 					/>
@@ -565,6 +573,8 @@ const SearchContainer = styled.div`
 			: `2px solid ${neutralColors.gray[300]}`};
 	border-radius: 6px;
 
+	:focus,
+	:visited,
 	:active,
 	:hover {
 		border: 2px solid
@@ -572,7 +582,15 @@ const SearchContainer = styled.div`
 				props.error === true
 					? semanticColors.punch[500]
 					: brandColors.giv[500]};
+		box-shadow: ${Shadow.Neutral[500]};
 	}
+
+	${(props: IInputBox) =>
+		!!props.focused &&
+		`
+	border: 2px solid ${brandColors.giv[500]};
+box-shadow: ${Shadow.Neutral[500]};
+	`}
 `;
 const DropdownContainer = styled.div`
 	width: 35%;

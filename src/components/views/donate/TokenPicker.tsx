@@ -15,8 +15,10 @@ interface ISelectObj {
 	chainId?: number;
 	symbol?: string;
 	icon?: string;
+	address?: string;
+	ethereumAddress?: string;
+	decimals?: number;
 }
-
 interface ITokenPicker {
 	isOpen: boolean;
 }
@@ -128,6 +130,14 @@ const selectStyles: StylesConfig<ISelectObj, false> = {
 	input: (base: any) => ({
 		...base,
 		borderRadius: '8px !important',
+		display: 'flex',
+		flex: 1,
+		'*': {
+			width: '100%',
+		},
+		input: {
+			width: '100% !important',
+		},
 	}),
 };
 
@@ -158,6 +168,21 @@ const TokenPicker = (props: {
 		toggleOpen();
 		setValue(value);
 		onChange(value);
+	};
+
+	const filterOptions = (option: any, inputValue: string) => {
+		if (
+			option.data.address?.toLowerCase() ===
+			inputValue?.toLowerCase()?.replace(/ /g, '')
+		) {
+			return true;
+		}
+		return (
+			option.label.includes(inputValue?.toUpperCase()) ||
+			option.data.name
+				?.toLowerCase()
+				.includes(inputValue?.toLocaleLowerCase())
+		);
 	};
 
 	useEffect(() => {
@@ -222,6 +247,7 @@ const TokenPicker = (props: {
 				styles={selectStyles}
 				tabSelectsValue={false}
 				placeholder={placeholder}
+				filterOption={filterOptions}
 			/>
 		</Dropdown>
 	);
@@ -310,6 +336,7 @@ const TargetContainer = styled.div`
 	border-radius: 6px 0px 0px 6px;
 	border: none;
 	align-items: center;
+	border-right: 2px solid ${neutralColors.gray[300]};
 `;
 
 const RowContainer = styled.div`
