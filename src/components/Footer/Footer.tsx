@@ -2,11 +2,11 @@ import {
 	P,
 	brandColors,
 	Container,
+	IconDocs,
 	IconMedium,
 	IconGithub,
 	IconRedit,
 	IconYoutube,
-	IconWikipedia,
 	IconTwitter,
 	Caption,
 	Subline,
@@ -132,7 +132,7 @@ export const Footer = () => {
 								<IconYoutube size={24} color={textColor} />
 							</a>
 							<a href='https://docs.giveth.io/'>
-								<IconWikipedia size={24} color={textColor} />
+								<IconDocs size={24} color={textColor} />
 							</a>
 						</SocialContainer>
 						<Row justifyContent='flex-end'>
