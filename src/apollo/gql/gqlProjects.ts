@@ -145,6 +145,7 @@ export const FETCH_PROJECT_UPDATES = gql`
 			id
 			title
 			projectId
+			createdAt
 			userId
 			content
 			isMain

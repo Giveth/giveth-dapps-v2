@@ -24,9 +24,10 @@ const ProjectUpdates = (props: { project?: IProject }) => {
 
 	return (
 		<Wrapper>
-			{sortedUpdates?.map((i: IProjectUpdate) => (
-				<ProjectTimeline key={i.id} projectUpdate={i} />
-			))}
+			{sortedUpdates?.map(
+				(i: IProjectUpdate) =>
+					i && <ProjectTimeline key={i.id} projectUpdate={i} />,
+			)}
 			<ProjectTimeline creationDate={creationDate} />
 		</Wrapper>
 	);
