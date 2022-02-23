@@ -24,8 +24,8 @@ const PhotoStep: FC<IStep> = ({ setStep }) => {
 			const { data: imageUploaded } = await client.mutate({
 				mutation: UPLOAD_PROFILE_PHOTO,
 				variables: {
-					imageUpload: {
-						image: acceptedFile,
+					fileUpload: {
+						image: acceptedFile[0],
 					},
 				},
 			});

@@ -87,7 +87,7 @@ export const FETCH_USER_DONATIONS = gql`
 `;
 
 export const UPLOAD_PROFILE_PHOTO = gql`
-	mutation ($image: Upload!) {
-		upload(image: $image)
+	mutation ($fileUpload: FileUploadInputType!) {
+		upload(fileUpload: $fileUpload)
 	}
 `;
