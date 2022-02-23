@@ -71,11 +71,15 @@ const ProjectCard = (props: IProjectCard) => {
 				</ImagePlaceholder>
 				<CardBody>
 					<Title>{title}</Title>
-					<Link href={`/user/${adminUser?.walletAddress}`}>
-						<a>
-							<Author>{name || ' '}</Author>
-						</a>
-					</Link>
+					{name ? (
+						<Link href={`/user/${adminUser?.walletAddress}`}>
+							<a>
+								<Author>{name}</Author>
+							</a>
+						</Link>
+					) : (
+						<br />
+					)}
 					<Description>{htmlToText(description)}</Description>
 					<Captions>
 						<GLink size='Medium'>
