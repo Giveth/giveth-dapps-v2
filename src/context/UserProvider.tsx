@@ -6,6 +6,7 @@ import React, {
 	useState,
 } from 'react';
 import { useRouter } from 'next/router';
+import { useCookies } from 'react-cookie';
 import { useWeb3React } from '@web3-react/core';
 import { BigNumberish } from '@ethersproject/bignumber';
 import { formatEther } from '@ethersproject/units';
@@ -57,6 +58,8 @@ const apolloClient = initializeApollo();
 
 export const UserProvider = (props: { children: ReactNode }) => {
 	const [user, setUser] = useState<IUser | undefined>();
+	const [cookie, setCookie, removeCookie] = useCookies(['giveth_user']);
+
 	const [balance, setBalance] = useState<string | null>(null);
 	const [showWelcomeSignin, setShowWelcomeSignin] = useState<boolean>(false);
 	useWallet();
@@ -140,12 +143,12 @@ export const UserProvider = (props: { children: ReactNode }) => {
 			const DBUser = await fetchUser();
 			const newUser = new User(DBUser);
 			newUser.setToken(token);
-			Auth.setUser(newUser);
+			Auth.setUser(newUser, setCookie, 'giveth_user');
 			await apolloClient.resetStore();
 			setUser(newUser);
 		} else {
 			localUser.setToken(token);
-			Auth.setUser(localUser);
+			Auth.setUser(localUser, setCookie, 'giveth_user');
 			await apolloClient.resetStore();
 			setUser(localUser);
 		}
@@ -157,6 +160,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 		Auth.logout();
 		window.localStorage.removeItem('selectedWallet');
 		window.localStorage.removeItem(getLocalStorageUserLabel() + '_token');
+		removeCookie('giveth_user');
 		apolloClient.resetStore().then();
 		deactivate();
 		setUser(undefined);
@@ -203,7 +207,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 				fetchUser().then((res: any) => {
 					if (res) {
 						const newUser = new User(res);
-						Auth.setUser(newUser);
+						Auth.setUser(newUser, setCookie, 'giveth_user');
 						setUser(newUser);
 					} else {
 						const noUser = new User({} as User);

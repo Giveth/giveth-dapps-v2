@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { Row } from '@/components/styled-components/Grid';
 
 import ProjectCardBadges from './ProjectCardBadges';
 import ProjectCardImage from './ProjectCardImage';
@@ -8,6 +9,7 @@ import { htmlToText, noImgColor, noImgIcon } from '../../lib/helpers';
 import {
 	Caption,
 	P,
+	Overline,
 	neutralColors,
 	brandColors,
 	H6,
@@ -24,6 +26,15 @@ interface IProjectCard {
 	isNew?: boolean;
 }
 
+const ProjectByGivingBlock = () => {
+	return (
+		<GivingBlockContainer>
+			<Overline styleType='Small'>PROJECT BY: </Overline>
+			<img src='/images/giving-block-logo.svg' />
+		</GivingBlockContainer>
+	);
+};
+
 const ProjectCard = (props: IProjectCard) => {
 	const [rndColor, setRndColor] = useState(noImgColor);
 	const { noHearts, isNew, project } = props;
@@ -32,14 +43,16 @@ const ProjectCard = (props: IProjectCard) => {
 		description,
 		image,
 		verified,
+		traceCampaignId,
 		totalReactions,
 		adminUser,
 		slug,
 		id,
+		totalDonations,
+		givingBlocksId,
 	} = project;
 
 	const name = adminUser?.name;
-
 	return (
 		<Wrapper>
 			<Wrapper2>
@@ -50,16 +63,17 @@ const ProjectCard = (props: IProjectCard) => {
 						cardRadius={cardRadius}
 					/>
 				</ImagePlaceholder>
-				{!noHearts && (
-					<ProjectCardBadges
-						cardWidth={cardWidth}
-						likes={totalReactions}
-						verified={verified}
-						projectHref={slug}
-						projectDescription={description}
-						projectId={id}
-					/>
-				)}
+				{givingBlocksId && <ProjectByGivingBlock />}
+				<ProjectCardBadges
+					cardWidth={cardWidth}
+					likes={totalReactions}
+					verified={verified}
+					traceable={!!traceCampaignId}
+					projectHref={slug}
+					projectDescription={description}
+					projectId={id}
+					noHearts={noHearts}
+				/>
 				<CardBody>
 					<Title>{title}</Title>
 					{name && (
@@ -75,9 +89,11 @@ const ProjectCard = (props: IProjectCard) => {
 					<Description>{htmlToText(description)}</Description>
 					{!isNew && (
 						<Captions>
-							<BodyCaption>Raised: $</BodyCaption>
-							<BodyCaption>Last updated: x days ago</BodyCaption>
-						</Captions>
+						<BodyCaption>
+							Raised: ${totalDonations?.toLocaleString()}
+						</BodyCaption>
+						{/* <BodyCaption>Last updated: x days ago</BodyCaption> */}
+					</Captions>
 					)}
 				</CardBody>
 			</Wrapper2>
@@ -110,7 +126,7 @@ const Description = styled(P)`
 `;
 
 const CardBody = styled.div`
-	margin: 30px 24px 0 24px;
+	margin: 50px 24px 0 24px;
 	text-align: left;
 `;
 
@@ -155,6 +171,19 @@ const Wrapper = styled.div`
 	height: 430px;
 	width: ${cardWidth};
 	border-radius: ${cardRadius};
+`;
+
+const GivingBlockContainer = styled(Row)`
+	position: absolute;
+	align-items: center;
+	border-radius: 0px 12px 0px 0px;
+	color: ${neutralColors.gray[600]};
+	background: ${neutralColors.gray[200]};
+	margin-top: -42px;
+	padding: 8px 24px;
+	img {
+		padding-left: 10px;
+	}
 `;
 
 export default ProjectCard;

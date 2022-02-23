@@ -6,7 +6,7 @@ import Select, {
 	StylesConfig,
 } from 'react-select';
 import { defaultTheme } from 'react-select';
-import { neutralColors, P, B } from '@giveth/ui-design-system';
+import { neutralColors, P, B, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 interface ISelectObj {
@@ -63,6 +63,16 @@ const Option = ({ ...props }: OptionProps<ISelectObj, false>) => {
 				)}
 			</OptionContainer>
 		</components.Option>
+	);
+};
+
+const NotFound = ({ emptyField }: any) => {
+	return (
+		<NotFoundContainer>
+			<P>No results found</P>
+			<P>Please try a different address or select one from the list</P>
+			<P onClick={emptyField}>Token List</P>
+		</NotFoundContainer>
 	);
 };
 
@@ -197,6 +207,9 @@ const TokenPicker = (props: {
 					IndicatorSeparator: null,
 					Option,
 				}}
+				noOptionsMessage={() => (
+					<NotFound emptyField={() => onChange('')} />
+				)}
 				value={value}
 				inputValue={inputValue}
 				controlShouldRenderValue={false}
@@ -295,6 +308,7 @@ const TargetContainer = styled.div`
 	background: ${(props: ITokenPicker) =>
 		props.isOpen ? neutralColors.gray[200] : 'transparent'};
 	border-radius: 6px 0px 0px 6px;
+	border: none;
 	align-items: center;
 `;
 
@@ -317,6 +331,21 @@ const Img = styled.img`
 `;
 const ArrowImg = styled.img`
 	margin-left: 5px;
+`;
+
+const NotFoundContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	margin-top: 20px;
+
+	div:first-child {
+		font-weight: bold;
+	}
+	div:nth-child(3) {
+		margin-top: 20px;
+		color: ${brandColors.pinky[500]};
+		cursor: pointer;
+	}
 `;
 
 export default TokenPicker;

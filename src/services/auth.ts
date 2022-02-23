@@ -9,7 +9,13 @@ export const getUser = (): IUser =>
 		  )
 		: {};
 
-export function setUser(user: IUser) {
+export function setUser(user: IUser, setCookie: any, cookieName: string) {
+	setCookie &&
+		setCookie(cookieName, JSON.stringify(user), {
+			path: '/',
+			maxAge: 691200,
+			sameSite: true,
+		});
 	return window.localStorage.setItem(
 		getLocalStorageUserLabel(),
 		JSON.stringify(user),

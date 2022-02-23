@@ -7,6 +7,7 @@ import { FarmProvider } from '@/context/farm.context';
 import { NftsProvider } from '@/context/positions.context';
 import { TokenDistroProvider } from '@/context/tokenDistro.context';
 import { ApolloProvider } from '@apollo/client';
+import { CookiesProvider } from 'react-cookie';
 
 import { MobileModal } from '@/components/modals/Mobile';
 import { useEffect, useState } from 'react';
@@ -59,21 +60,23 @@ function MyApp({ Component, pageProps }: AppProps) {
 								<NftsProvider>
 									<PriceProvider>
 										<FarmProvider>
-											<UserProvider>
-												<HeaderWrapper />
-												<Component {...pageProps} />
-												<FooterWrapper />
-												{showMobileModal && (
-													<MobileModal
-														showModal={
-															showMobileModal
-														}
-														setShowModal={
-															setShowMobileModal
-														}
-													/>
-												)}
-											</UserProvider>
+											<CookiesProvider>
+												<UserProvider>
+													<HeaderWrapper />
+													<Component {...pageProps} />
+													<FooterWrapper />
+													{showMobileModal && (
+														<MobileModal
+															showModal={
+																showMobileModal
+															}
+															setShowModal={
+																setShowMobileModal
+															}
+														/>
+													)}
+												</UserProvider>
+											</CookiesProvider>
 										</FarmProvider>
 									</PriceProvider>
 								</NftsProvider>

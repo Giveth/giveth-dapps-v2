@@ -10,6 +10,7 @@ import { AuthereumConnector } from '@web3-react/authereum-connector';
 import { promisify } from 'util';
 import Routes from './constants/Routes';
 import { networkInfo } from './constants/NetworksObj';
+import cookie from 'cookie';
 // @ts-ignore
 import tokenAbi from 'human-standard-token-abi';
 
@@ -19,6 +20,10 @@ import { EWallets } from '@/lib/wallet/walletTypes';
 import { brandColors } from '@giveth/ui-design-system';
 import { giveconomyTabs, mustSignTabs } from '@/lib/constants/Tabs';
 import { IUser } from '@/apollo/types/types';
+
+export function parseCookies(req: any) {
+	return cookie.parse(req ? req.headers.cookie || '' : document.cookie);
+}
 
 export const DurationToYMDh = (ms: number) => {
 	let baseTime = new Date(0);

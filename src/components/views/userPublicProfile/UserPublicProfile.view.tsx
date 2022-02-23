@@ -16,15 +16,23 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import { Row } from '../../styled-components/Grid';
 import PublicProfileContributes from './PublicProfileContributes';
-import { IUser } from '@/apollo/types/types';
+import { IUser, IProject } from '@/apollo/types/types';
 import { networksParams } from '@/helpers/blockchain';
 import { useWeb3React } from '@web3-react/core';
 
 export interface IUserPublicProfileView {
 	user: IUser;
+	myAccount?: boolean;
 }
 
-const UserPublicProfileView: FC<IUserPublicProfileView> = ({ user }) => {
+export interface IUserProfileProjectsView {
+	projects: IProject[];
+}
+
+const UserPublicProfileView: FC<IUserPublicProfileView> = ({
+	user,
+	myAccount,
+}) => {
 	const { chainId } = useWeb3React();
 	return (
 		<>
@@ -84,36 +92,7 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({ user }) => {
 					</UserInfoWithAvatarRow>
 				</Container>
 			</PubliCProfileHeader>
-			<UserContributeInfo>
-				<Container>
-					<UserContributeTitle
-						weight={700}
-					>{`${user.name}’s donations & projects`}</UserContributeTitle>
-					<ContributeCardContainer>
-						<ContributeCard>
-							<ContributeCardTitles>
-								donations
-							</ContributeCardTitles>
-							<ContributeCardTitles>
-								Total amount donated
-							</ContributeCardTitles>
-							<H2>{user.donationsCount}</H2>
-							<H5>${user.totalDonated}</H5>
-						</ContributeCard>
-						<ContributeCard>
-							<ContributeCardTitles>
-								Projects
-							</ContributeCardTitles>
-							<ContributeCardTitles>
-								Donation received
-							</ContributeCardTitles>
-							<H2>{user.projectsCount}</H2>
-							<H5>${user.totalReceived}</H5>
-						</ContributeCard>
-					</ContributeCardContainer>
-				</Container>
-			</UserContributeInfo>
-			<PublicProfileContributes user={user} />
+			<PublicProfileContributes user={user} myAccount={myAccount} />
 		</>
 	);
 };
@@ -147,30 +126,4 @@ const WalletContainer = styled(Row)`
 const WalletIconsContainer = styled.div`
 	color: ${brandColors.pinky[500]};
 	cursor: pointer;
-`;
-
-const UserContributeInfo = styled.div`
-	padding: 40px 0 60px;
-`;
-
-const UserContributeTitle = styled(H5)`
-	margin-bottom: 16px;
-`;
-
-const ContributeCardContainer = styled(Row)`
-	gap: 16px;
-`;
-
-const ContributeCard = styled.div`
-	background: ${brandColors.giv['000']};
-	box-shadow: 0px 3px 20px rgba(212, 218, 238, 0.4);
-	border-radius: 12px;
-	display: grid;
-	padding: 24px;
-	width: 556px;
-	grid-template-columns: 1fr 1fr;
-`;
-
-const ContributeCardTitles = styled(Subline)`
-	text-transform: uppercase;
 `;
