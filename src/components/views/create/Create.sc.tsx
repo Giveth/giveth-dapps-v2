@@ -25,5 +25,8 @@ export const InputErrorMessage = styled.div`
 `;
 
 export const InputWithError = styled(Regular_Input)<{ error: boolean }>`
-	border-color: ${props => props.error && brandColors.pinky[500]};
+	border: ${props => props.error && `2px solid ${brandColors.pinky[500]}`};
+	&:focus-within {
+		border: ${props => !props.error && `2px solid ${brandColors.giv[600]}`};
+	}
 `;

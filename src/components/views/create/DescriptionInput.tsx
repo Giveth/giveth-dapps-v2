@@ -51,13 +51,18 @@ const DescriptionInput = (props: {
 };
 
 const InputContainerStyled = styled(InputContainer)<{ error: string }>`
-	.ql-container.ql-snow {
-		border: ${props =>
-			props.error && `2px solid ${brandColors.pinky[500]}`};
-	}
+	.ql-container.ql-snow,
 	.ql-toolbar.ql-snow {
 		border: ${props =>
 			props.error && `2px solid ${brandColors.pinky[500]}`};
+	}
+
+	&:focus-within {
+		.ql-toolbar.ql-snow,
+		.ql-container.ql-snow {
+			border: ${props =>
+				!props.error && `2px solid ${brandColors.giv[600]}`};
+		}
 	}
 `;
 
