@@ -199,10 +199,9 @@ const ProjectDonateCard = ({
 								label='VERIFY YOUR PROJECT'
 							/>
 						) : (
-							<Button
+							<FullButton
 								buttonType='primary'
 								onClick={handleProjectStatus}
-								className='w-100'
 								label='PUBLISH PROJECT'
 							/>
 						)}
