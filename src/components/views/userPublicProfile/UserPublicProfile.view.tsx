@@ -11,7 +11,7 @@ import {
 	P,
 	Subline,
 } from '@giveth/ui-design-system';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { Row } from '../../styled-components/Grid';
@@ -19,6 +19,7 @@ import PublicProfileContributes from './PublicProfileContributes';
 import { IUser, IProject } from '@/apollo/types/types';
 import { networksParams } from '@/helpers/blockchain';
 import { useWeb3React } from '@web3-react/core';
+import EditUserModal from '@/components/modals/EditUserModal';
 
 export interface IUserPublicProfileView {
 	user: IUser;
@@ -34,8 +35,16 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 	myAccount,
 }) => {
 	const { chainId } = useWeb3React();
+	const [showModal, setShowModal] = useState<boolean>(false); // follow this state to refresh user content on screen
 	return (
 		<>
+			{showModal && (
+				<EditUserModal
+					showModal={showModal}
+					setShowModal={setShowModal}
+					user={user}
+				/>
+			)}
 			<PubliCProfileHeader>
 				<Container>
 					<UserInfoWithAvatarRow>
@@ -50,7 +59,9 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 							/>
 						)}
 						<UserInforRow>
-							<H3 weight={700}>{user.name}</H3>
+							<H3 weight={700} onClick={() => setShowModal(true)}>
+								{user.name}
+							</H3>
 							{user.url && (
 								<Website
 									size='Big'

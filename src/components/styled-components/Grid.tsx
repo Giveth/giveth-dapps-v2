@@ -47,6 +47,7 @@ export const Container = styled.div`
 
 interface IFlexCenter {
 	gap?: string;
+	direction?: 'row' | 'column';
 }
 
 export const FlexCenter = styled.div<IFlexCenter>`
@@ -54,4 +55,5 @@ export const FlexCenter = styled.div<IFlexCenter>`
 	justify-content: center;
 	align-items: center;
 	gap: ${props => props.gap};
+	flex-direction: ${props => props.direction};
 `;

@@ -28,7 +28,7 @@ const PublicProfileContributes: FC<IUserPublicProfileView> = ({
 		myAccount ? EPublicProfile.OVERVIEW : EPublicProfile.PROJECTS,
 	);
 	return (
-		<PubliCProfileTabsAndProjectContianer>
+		<PubliCProfileTabsAndProjectContainer>
 			<Container>
 				<PubliCProfileTabsContainer>
 					{myAccount && (
@@ -80,13 +80,13 @@ const PublicProfileContributes: FC<IUserPublicProfileView> = ({
 					<PublicProfileLikedTab user={user} myAccount={myAccount} />
 				)}
 			</Container>
-		</PubliCProfileTabsAndProjectContianer>
+		</PubliCProfileTabsAndProjectContainer>
 	);
 };
 
 export default PublicProfileContributes;
 
-const PubliCProfileTabsAndProjectContianer = styled.div``;
+const PubliCProfileTabsAndProjectContainer = styled.div``;
 
 const PubliCProfileTabsContainer = styled(Row)`
 	padding: 37px 0;
