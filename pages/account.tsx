@@ -20,7 +20,6 @@ const NoUserContainer = styled.div`
 `;
 
 const UserRoute: FC<IUserRouteProps> = ({ user }) => {
-	console.log({ user });
 	return (
 		<>
 			<Head>
@@ -44,7 +43,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
 		? JSON.parse(data.giveth_user)
 		: null;
 	let user = null;
-
 	if (userFromCookie) {
 		const { data: userData } = await client.query({
 			query: GET_USER_BY_ADDRESS,

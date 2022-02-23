@@ -21,6 +21,22 @@ import { networksParams } from '@/helpers/blockchain';
 import { useWeb3React } from '@web3-react/core';
 import EditUserModal from '@/components/modals/EditUserModal';
 
+export enum EOrderBy {
+	TokenAmount = 'TokenAmount',
+	UsdAmount = 'UsdAmount',
+	CreationDate = 'CreationDate',
+}
+
+export enum EDirection {
+	DESC = 'DESC',
+	ASC = 'ASC',
+}
+
+export interface IOrder {
+	by: EOrderBy;
+	direction: EDirection;
+}
+
 export interface IUserPublicProfileView {
 	user: IUser;
 	myAccount?: boolean;
@@ -28,6 +44,12 @@ export interface IUserPublicProfileView {
 
 export interface IUserProfileProjectsView {
 	projects: IProject[];
+}
+
+export interface IProjectsTable {
+	projects: IProject[];
+	order: IOrder;
+	orderChangeHandler: any;
 }
 
 const UserPublicProfileView: FC<IUserPublicProfileView> = ({
