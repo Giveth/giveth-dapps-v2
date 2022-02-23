@@ -6,7 +6,7 @@ import { mediaQueries } from '@/lib/helpers';
 import styled from 'styled-components';
 
 interface IProjectTabs {
-	project: IProject;
+	project?: IProject;
 	activeTab: number;
 	totalDonations?: number;
 	setActiveTab: Dispatch<SetStateAction<number>>;
@@ -18,7 +18,7 @@ const badgeCount = (count?: number) => {
 
 const ProjectTabs = (props: IProjectTabs) => {
 	const { project, activeTab, setActiveTab, totalDonations } = props;
-	const { totalProjectUpdates } = project;
+	const { totalProjectUpdates } = project || {};
 
 	const tabsArray = [
 		{ title: 'About' },

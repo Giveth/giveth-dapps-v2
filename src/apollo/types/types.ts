@@ -44,6 +44,7 @@ export interface IProjectCreation {
 	walletAddress: string;
 	imageStatic?: string | null;
 	imageUpload?: any;
+	isDraft?: boolean;
 }
 
 export interface IUser {

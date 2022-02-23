@@ -11,15 +11,15 @@ import { useWeb3React } from '@web3-react/core';
 import { BigNumberish } from '@ethersproject/bignumber';
 import { formatEther } from '@ethersproject/units';
 
-import { initializeApollo } from '../apollo/apolloClient';
-import { GET_USER_BY_ADDRESS } from '../apollo/gql/gqlUser';
+import { initializeApollo } from '@/apollo/apolloClient';
+import { GET_USER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
 import {
 	compareAddresses,
 	LocalStorageTokenLabel,
 	signMessage,
-} from '../lib/helpers';
+} from '@/lib/helpers';
 import * as Auth from '../services/auth';
-import { getToken } from '../services/token';
+import { getToken } from '@/services/token';
 import User from '../entities/user';
 import { getLocalStorageUserLabel } from '@/services/auth';
 import useWallet from '@/hooks/walletHooks';
@@ -37,6 +37,7 @@ interface IUserContext {
 	actions: {
 		signIn?: () => Promise<boolean | string>;
 		signOut?: () => void;
+		showSignModal: () => void;
 	};
 }
 
@@ -49,6 +50,7 @@ const UserContext = createContext<IUserContext>({
 	actions: {
 		signIn: async () => false,
 		signOut: () => {},
+		showSignModal: () => {},
 	},
 });
 
@@ -197,7 +199,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 	useEffect(() => {
 		if (account) {
 			const _user = Auth.getUser();
-			if (compareAddresses(account, _user?.walletAddress || '')) {
+			if (compareAddresses(account, _user?.walletAddress)) {
 				const newUser = new User(_user as User);
 				setUser(newUser);
 			} else {
@@ -232,6 +234,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 					// showSign,
 					// signModalContent,
 					// setToken
+					showSignModal: () => setShowWelcomeSignin(true),
 					signIn,
 					signOut,
 				},

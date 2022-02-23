@@ -6,9 +6,10 @@ import { IProject } from '@/apollo/types/types';
 import { P, brandColors, H3, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
-const ProjectHeader = (props: { project: IProject }) => {
+const ProjectHeader = (props: { project?: IProject }) => {
+	const { project } = props;
 	const { title, verified, image, adminUser, traceCampaignId } =
-		props.project;
+		project || {};
 	const [adjustTitle, setAdjustTitle] = useState<boolean>(false);
 	const containerRef = useRef(null);
 

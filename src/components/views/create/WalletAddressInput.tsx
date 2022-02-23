@@ -1,15 +1,31 @@
 import React from 'react';
 import { H5, Caption, brandColors } from '@giveth/ui-design-system';
-import { Regular_Input } from '@/components/styled-components/Input';
-import { InputContainer, TinyLabel } from './Create.sc';
 import styled from 'styled-components';
 
-const WalletAddressInput = (props: any) => {
-	const { setValue } = props;
+import {
+	InputContainer,
+	InputErrorMessage,
+	InputWithError,
+	TinyLabel,
+} from './Create.sc';
+import useUser from '@/context/UserProvider';
+import { compareAddresses } from '@/lib/helpers';
+import { ECreateErrFields } from '@/components/views/create/CreateIndex';
+
+const WalletAddressInput = (props: {
+	value: string;
+	setValue: (e: string) => void;
+	error: string;
+}) => {
+	const { value, setValue, error } = props;
+
+	const {
+		state: { user },
+	} = useUser();
 
 	return (
 		<>
-			<H5>Receiving funds</H5>
+			<H5 id={ECreateErrFields.WALLET_ADDRESS}>Receiving funds</H5>
 			<div>
 				<CaptionContainer>
 					You can set a custom Ethereum address or ENS to receive
@@ -19,20 +35,32 @@ const WalletAddressInput = (props: any) => {
 
 			<InputContainer>
 				<TinyLabel>Receiving address</TinyLabel>
-				<Input
+				<InputWithError
 					placeholder='My Wallet Address'
 					onChange={e => setValue(e.target.value)}
+					value={value}
+					error={!!error}
 				/>
-				<TinyLabel>
-					This is the default wallet address associated with your
-					account. You can choose a different receiving address.
-				</TinyLabel>
+				<InputErrorMessage>{error || null}</InputErrorMessage>
+				{compareAddresses(value, user?.walletAddress) && (
+					<TinyLabel>
+						This is the default wallet address associated with your
+						account. You can choose a different receiving address.
+					</TinyLabel>
+				)}
+				<ChangeAddress onClick={() => setValue('')}>
+					Change address
+				</ChangeAddress>
 			</InputContainer>
 		</>
 	);
 };
 
-const Input = styled(Regular_Input)``;
+const ChangeAddress = styled(Caption)`
+	color: ${brandColors.pinky[500]};
+	margin-top: 16px;
+	cursor: pointer;
+`;
 
 const CaptionContainer = styled(Caption)`
 	height: 18px;

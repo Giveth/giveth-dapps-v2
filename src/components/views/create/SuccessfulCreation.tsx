@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
+import { H4, brandColors, P, Button } from '@giveth/ui-design-system';
+import Link from 'next/link';
+import styled from 'styled-components';
+
 import ProjectCard from '@/components/project-card/ProjectCardAlt';
 import { IProjectBySlug } from '@/apollo/types/types';
 import SocialBox from '../donate/SocialBox';
 import ConfettiAnimation from '../../animations/confetti';
-import { H4, brandColors, P, Button } from '@giveth/ui-design-system';
-import Link from 'next/link';
-import styled from 'styled-components';
+import { slugToProjectView } from '@/lib/helpers';
 
 const SuccessfulCreation = (props: IProjectBySlug) => {
 	const { project } = props;
@@ -23,15 +25,15 @@ const SuccessfulCreation = (props: IProjectBySlug) => {
 				<GiverH4>High five!</GiverH4>
 				{/* <Image src='/images/motivation.svg' alt='motivation' width='121px' height='121px' /> */}
 				<SuccessMessage>
-					Your project is being reviewed by our team. You'll receive
-					an email from us once your project is listed.
+					Your project is being reviewed by our team. You&apos;ll
+					receive an email from us once your project is listed.
 				</SuccessMessage>
 				<SocialBox project={project} isSuccess />
 				<SuccessMessage>
 					You can still access your project from your account and
 					share it with your friends.
 				</SuccessMessage>
-				<Link passHref href='/projects'>
+				<Link passHref href={slugToProjectView(project.slug)}>
 					<ProjectsButton label='VIEW PROJECT' />
 				</Link>
 			</SucceessContainer>
@@ -45,7 +47,7 @@ const SuccessfulCreation = (props: IProjectBySlug) => {
 				<BGImg src='/images/arc3.svg' />
 				<Sections>
 					<Left>
-						<ProjectCard key={project.id} project={project} />
+						<ProjectCard project={project} isNew />
 					</Left>
 					<Right>
 						<SuccessView />
@@ -55,6 +57,7 @@ const SuccessfulCreation = (props: IProjectBySlug) => {
 		</Container>
 	);
 };
+
 const ConfettiContainer = styled.div`
 	position: absolute;
 	top: 200px;
@@ -65,7 +68,6 @@ const GiverH4 = styled(H4)`
 const BGImg = styled.img`
 	position: absolute;
 `;
-
 const Container = styled.div`
 	background-image: url('/images/creation_success.svg');
 `;
@@ -132,4 +134,5 @@ const ProjectsButton = styled(Button)`
 	height: 48px;
 	font-size: 12px;
 `;
+
 export default SuccessfulCreation;

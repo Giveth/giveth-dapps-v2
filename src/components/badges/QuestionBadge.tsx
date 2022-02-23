@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import { FlexCenter } from '../styled-components/Grid';
 
-const InfoBadge = () => {
+const QuestionBadge = () => {
 	return (
 		<div>
-			<Circle>!</Circle>
+			<Circle>?</Circle>
 		</div>
 	);
 };
@@ -20,4 +20,4 @@ const Circle = styled(FlexCenter)`
 	font-weight: 500;
 `;
 
-export default InfoBadge;
+export default QuestionBadge;

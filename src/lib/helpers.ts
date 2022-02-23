@@ -19,6 +19,7 @@ import { BasicNetworkConfig, GasPreference } from '@/types/config';
 import { EWallets } from '@/lib/wallet/walletTypes';
 import { brandColors } from '@giveth/ui-design-system';
 import { giveconomyTabs, mustSignTabs } from '@/lib/constants/Tabs';
+import { IUser } from '@/apollo/types/types';
 
 export function parseCookies(req: any) {
 	return cookie.parse(req ? req.headers.cookie || '' : document.cookie);
@@ -89,8 +90,15 @@ export const getGasPreference = (
 
 export const isSSRMode = typeof window === 'undefined';
 
-export const compareAddresses = (add1: string, add2: string) => {
+export const compareAddresses = (
+	add1: string | undefined,
+	add2: string | undefined,
+) => {
 	return add1?.toLowerCase() === add2?.toLowerCase();
+};
+
+export const isUserRegistered = (user?: IUser) => {
+	return Boolean(user && user.name && user.email);
 };
 
 export const slugToProjectView = (slug: string) => {
