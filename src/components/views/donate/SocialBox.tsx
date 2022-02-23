@@ -97,8 +97,6 @@ const SocialItem = styled.div`
 		props.isSuccess ? `0 6px` : '0 12px'};
 	margin: ${(props: { isSuccess: boolean }) =>
 		props.isSuccess ? `0 12px` : '0'};
-	border: ${(props: { isSuccess: boolean }) =>
-		props.isSuccess ? `1px solid ${neutralColors.gray[400]}` : 'none'};
 `;
 
 export default SocialBox;
