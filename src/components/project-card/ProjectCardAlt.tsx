@@ -1,11 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import { Row } from '@/components/styled-components/Grid';
-
-import ProjectCardBadges from './ProjectCardBadges';
-import ProjectCardImage from './ProjectCardImage';
-import { IProject } from '../../apollo/types/types';
-import { htmlToText, noImgColor, noImgIcon } from '../../lib/helpers';
 import {
 	Caption,
 	P,
@@ -15,6 +9,12 @@ import {
 	H6,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+
+import { Row } from '@/components/styled-components/Grid';
+import ProjectCardBadges from './ProjectCardBadges';
+import ProjectCardImage from './ProjectCardImage';
+import { IProject } from '@/apollo/types/types';
+import { htmlToText } from '@/lib/helpers';
 
 const cardWidth = '440px';
 const cardRadius = '12px';
@@ -36,7 +36,6 @@ const ProjectByGivingBlock = () => {
 };
 
 const ProjectCard = (props: IProjectCard) => {
-	const [rndColor, setRndColor] = useState(noImgColor);
 	const { noHearts, isNew, project } = props;
 	const {
 		title,
@@ -89,24 +88,17 @@ const ProjectCard = (props: IProjectCard) => {
 					<Description>{htmlToText(description)}</Description>
 					{!isNew && (
 						<Captions>
-						<BodyCaption>
-							Raised: ${totalDonations?.toLocaleString()}
-						</BodyCaption>
-						{/* <BodyCaption>Last updated: x days ago</BodyCaption> */}
-					</Captions>
+							<BodyCaption>
+								Raised: ${totalDonations?.toLocaleString()}
+							</BodyCaption>
+							{/* <BodyCaption>Last updated: x days ago</BodyCaption> */}
+						</Captions>
 					)}
 				</CardBody>
 			</Wrapper2>
 		</Wrapper>
 	);
 };
-
-const NoImg = styled.div`
-	background: ${(props: { rndColor: string }) => props.rndColor};
-	width: 100%;
-	height: 100%;
-	background-image: url(${noImgIcon});
-`;
 
 const BodyCaption = styled(Caption)`
 	color: ${neutralColors.gray[700]};
@@ -142,12 +134,6 @@ const Title = styled(H6)`
 	overflow: hidden;
 `;
 
-const Img = styled.img`
-	border-radius: ${cardRadius} ${cardRadius} 0 0;
-	width: ${cardWidth};
-	height: auto;
-`;
-
 const ImagePlaceholder = styled.div`
 	height: ${imgHeight};
 	width: 100%;
@@ -176,7 +162,7 @@ const Wrapper = styled.div`
 const GivingBlockContainer = styled(Row)`
 	position: absolute;
 	align-items: center;
-	border-radius: 0px 12px 0px 0px;
+	border-radius: 0 12px 0 0;
 	color: ${neutralColors.gray[600]};
 	background: ${neutralColors.gray[200]};
 	margin-top: -42px;
