@@ -52,6 +52,7 @@ const ProjectIndex = () => {
 	} = useUser();
 
 	const router = useRouter();
+	const slug = router.query.slug as string;
 
 	useEffect(() => {
 		if (status) {
@@ -61,8 +62,7 @@ const ProjectIndex = () => {
 	}, [status]);
 
 	useEffect(() => {
-		const slug = router.query.slug as string;
-		if (isSignedIn) {
+		if (slug) {
 			client
 				.query({
 					query: FETCH_PROJECT_BY_SLUG,
@@ -79,7 +79,7 @@ const ProjectIndex = () => {
 					}),
 				);
 		}
-	}, [isSignedIn]);
+	}, [isSignedIn, slug]);
 
 	return (
 		<Wrapper>
