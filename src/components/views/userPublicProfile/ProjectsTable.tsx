@@ -15,28 +15,19 @@ import { smallFormatDate } from '@/lib/helpers';
 import { Row } from '@/components/styled-components/Grid';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
-import { IUserProfileProjectsView } from './UserPublicProfile.view';
-
-const itemPerPage = 10;
-
-enum EOrderBy {
-	TokenAmount = 'TokenAmount',
-	UsdAmount = 'UsdAmount',
-	CreationDate = 'CreationDate',
-}
-
-enum EDirection {
-	DESC = 'DESC',
-	ASC = 'ASC',
-}
-
-interface IOrder {
-	by: EOrderBy;
-	direction: EDirection;
-}
+import {
+	IProjectsTable,
+	EOrderBy,
+	EDirection,
+	IOrder,
+} from './UserPublicProfile.view';
 
 interface IBadge {
 	mainColor?: any;
+}
+
+interface IEditGLink {
+	disabled?: boolean;
 }
 
 interface IStatus {
@@ -56,53 +47,37 @@ const injectSortIcon = (order: IOrder, title: EOrderBy) => {
 	);
 };
 
-const ProjectsTable: FC<IUserProfileProjectsView> = ({ projects }) => {
+const ProjectsTable: FC<IProjectsTable> = ({
+	projects,
+	orderChangeHandler,
+	order,
+}) => {
 	const router = useRouter();
 
-	const [order, setOrder] = useState<IOrder>({
-		by: EOrderBy.CreationDate,
-		direction: EDirection.DESC,
-	});
-
-	const orderChangeHandler = (orderby: EOrderBy) => {
-		if (orderby === order.by) {
-			setOrder({
-				by: orderby,
-				direction:
-					order.direction === EDirection.ASC
-						? EDirection.DESC
-						: EDirection.ASC,
-			});
-		} else {
-			setOrder({
-				by: orderby,
-				direction: EDirection.DESC,
-			});
-		}
-	};
-
-	const setupBadge = (status: IStatus) => {
+	const setupBadge = (status: IStatus, listed?: boolean) => {
 		const Bull = () => <BulletPoint>&bull;</BulletPoint>;
 		let color,
 			title = '';
+
+		if (listed) {
+			color = semanticColors.jade;
+			title = 'Listed';
+		} else {
+			color = semanticColors.golden;
+			title = 'Not Listed';
+		}
+
 		switch (status.id) {
-			case '5':
-				color = semanticColors.jade;
-				title = 'Active';
-				break;
 			case '6':
-				color = semanticColors.punch;
-				title = 'Deactivated';
+				color = semanticColors.golden;
+				title = 'Not Listed';
 				break;
 			case '7':
-				color = semanticColors.golden;
-				title = 'Cancelled';
-				break;
-			default:
-				color = semanticColors.jade;
-				title = status.name!;
+				color = semanticColors.punch;
+				title = 'Banned';
 				break;
 		}
+
 		return (
 			<Badge mainColor={color}>
 				<Bull />
@@ -120,9 +95,9 @@ const ProjectsTable: FC<IUserProfileProjectsView> = ({ projects }) => {
 					<B>Created at</B>
 					{injectSortIcon(order, EOrderBy.CreationDate)}
 				</TableHeader>
-				<TableHeader>
+				<TableHeaderCentered>
 					<B>Active</B>
-				</TableHeader>
+				</TableHeaderCentered>
 				<TableHeader>
 					<B>Project</B>
 				</TableHeader>
@@ -135,9 +110,10 @@ const ProjectsTable: FC<IUserProfileProjectsView> = ({ projects }) => {
 					/>
 				</TableHeader>
 				<TableHeader
-					onClick={() => orderChangeHandler(EOrderBy.TokenAmount)}
+					onClick={() => orderChangeHandler(EOrderBy.Donations)}
 				>
-					<B>Total Raised</B>
+					<B>Total Funds Raised</B>
+					{injectSortIcon(order, EOrderBy.Donations)}
 				</TableHeader>
 				<TableHeader>
 					<B>Listing</B>
@@ -148,14 +124,14 @@ const ProjectsTable: FC<IUserProfileProjectsView> = ({ projects }) => {
 				{projects?.map((project, idx) => (
 					<RowWrapper key={idx}>
 						<TableCell>
-							<P>
+							<B>
 								{project.creationDate &&
 									smallFormatDate(
 										new Date(project.creationDate),
 									)}
-							</P>
+							</B>
 						</TableCell>
-						<ProjectTitleCell>
+						<CenteredCell>
 							{project?.status?.id == '5' ? (
 								<img
 									src='/images/checkmark-3.svg'
@@ -169,12 +145,12 @@ const ProjectsTable: FC<IUserProfileProjectsView> = ({ projects }) => {
 									height='24px'
 								/>
 							)}
-						</ProjectTitleCell>
+						</CenteredCell>
 						<TableCell>
-							<P>{project?.title}</P>
+							<B>{project?.title}</B>
 							{project?.verified && (
 								<Badge mainColor={semanticColors.jade}>
-									verified
+									Verified
 								</Badge>
 							)}
 						</TableCell>
@@ -182,18 +158,35 @@ const ProjectsTable: FC<IUserProfileProjectsView> = ({ projects }) => {
 							<P>{project?.totalReactions}</P>
 						</TableCell>
 						<TableCell>
-							<P>
-								{project?.totalDonations}{' '}
+							<B>
+								{project?.totalDonations?.toLocaleString(
+									'en-US',
+									{
+										minimumFractionDigits: 0,
+										maximumFractionDigits: 1,
+									} || '',
+								)}{' '}
 								{project.totalDonations &&
 								project.totalDonations > 0
 									? 'USD'
 									: ''}
-							</P>
+							</B>
 						</TableCell>
-						<TableCell>{setupBadge(project.status)}</TableCell>
+						<TableCell>
+							{setupBadge(project.status, !!project.listed)}
+						</TableCell>
 						<TableCell>
 							<Actions>
-								<GLink>Edit</GLink>
+								<EditGLink
+									disabled={project?.status?.id === '7'}
+									color={
+										project?.status?.id !== '7'
+											? brandColors.pinky[500]
+											: brandColors.pinky[200]
+									}
+								>
+									Edit
+								</EditGLink>
 								<GLink
 									onClick={() =>
 										router.push(`project/${project.slug}`)
@@ -212,7 +205,7 @@ const ProjectsTable: FC<IUserProfileProjectsView> = ({ projects }) => {
 
 const DonationTablecontainer = styled.div`
 	display: grid;
-	grid-template-columns: 2fr 1fr 4fr 1fr 1fr 1fr 1fr;
+	grid-template-columns: 1.5fr 1fr 4fr 1.1fr 2fr 1.5fr 1fr;
 	width: 100%;
 	min-width: 1133px;
 `;
@@ -231,21 +224,23 @@ const TableHeader = styled(Row)`
 	}
 `;
 
+const TableHeaderCentered = styled(TableHeader)`
+	display: flex;
+	justify-content: center;
+`;
+
 const TableCell = styled(Row)`
+	width: 100%;
 	height: 60px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
 	align-items: center;
 	gap: 8px;
 `;
 
-const ProjectTitleCell = styled(TableCell)`
+const CenteredCell = styled(TableCell)`
 	cursor: pointer;
-	& > svg {
-		display: none;
-	}
-	&:hover > svg {
-		display: block;
-	}
+	display: flex;
+	justify-content: center;
 `;
 
 const RowWrapper = styled.div`
@@ -281,6 +276,11 @@ const BulletPoint = styled.div`
 	font-size: 18px;
 	margin: 0 5px 0 0;
 	padding: 0;
+`;
+
+const EditGLink = styled(GLink)`
+	color: ${props => props.color};
+	cursor: ${(props: IEditGLink) => (props.disabled ? 'default' : 'pointer')};
 `;
 
 export default ProjectsTable;

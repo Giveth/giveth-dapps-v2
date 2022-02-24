@@ -22,25 +22,14 @@ import {
 import Link from 'next/link';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { IUserPublicProfileView } from './UserPublicProfile.view';
+import {
+	IUserPublicProfileView,
+	EOrderBy,
+	EDirection,
+	IOrder,
+} from './UserPublicProfile.view';
 
 const itemPerPage = 10;
-
-enum EOrderBy {
-	TokenAmount = 'TokenAmount',
-	UsdAmount = 'UsdAmount',
-	CreationDate = 'CreationDate',
-}
-
-enum EDirection {
-	DESC = 'DESC',
-	ASC = 'ASC',
-}
-
-interface IOrder {
-	by: EOrderBy;
-	direction: EDirection;
-}
 
 const injectSortIcon = (order: IOrder, title: EOrderBy) => {
 	return order.by === title ? (

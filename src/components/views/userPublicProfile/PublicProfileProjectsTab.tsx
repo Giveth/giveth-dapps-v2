@@ -15,10 +15,15 @@ import {
 } from '@giveth/ui-design-system';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { IUserPublicProfileView } from './UserPublicProfile.view';
+import {
+	IUserPublicProfileView,
+	EOrderBy,
+	EDirection,
+	IOrder,
+} from './UserPublicProfile.view';
 import ProjectsTable from './ProjectsTable';
 
-const itemPerPage = 6;
+const itemPerPage = 10;
 
 const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({
 	user,
@@ -28,6 +33,28 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({
 	const [projects, setProjects] = useState<IProject[]>([]);
 	const [totalCount, setTotalCount] = useState<number>(0);
 	const [page, setPage] = useState(0);
+
+	const [order, setOrder] = useState<IOrder>({
+		by: EOrderBy.CreationDate,
+		direction: EDirection.DESC,
+	});
+
+	const orderChangeHandler = (orderby: EOrderBy) => {
+		if (orderby === order.by) {
+			setOrder({
+				by: orderby,
+				direction:
+					order.direction === EDirection.ASC
+						? EDirection.DESC
+						: EDirection.ASC,
+			});
+		} else {
+			setOrder({
+				by: orderby,
+				direction: EDirection.DESC,
+			});
+		}
+	};
 
 	useEffect(() => {
 		if (!user) return;
@@ -39,9 +66,12 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({
 					userId: parseFloat(user.id) || -1,
 					take: itemPerPage,
 					skip: page * itemPerPage,
+					orderBy: order.by,
+					direction: order.direction,
 				},
 			});
 			setLoading(false);
+			console.log({ userProjects });
 			if (userProjects?.projectsByUserId) {
 				const projectsByUserId: IUserProjects =
 					userProjects.projectsByUserId;
@@ -50,7 +80,7 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({
 			}
 		};
 		fetchUserProjects();
-	}, [page, user]);
+	}, [user, page, order.by, order.direction]);
 	return (
 		<>
 			<UserContributeInfo>
@@ -59,7 +89,11 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({
 			<ProjectsContainer>
 				{myAccount ? (
 					<ProjectsTableWrapper>
-						<ProjectsTable projects={projects} />
+						<ProjectsTable
+							projects={projects}
+							orderChangeHandler={orderChangeHandler}
+							order={order}
+						/>
 					</ProjectsTableWrapper>
 				) : (
 					projects.map(project => (

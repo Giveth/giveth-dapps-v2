@@ -20,6 +20,10 @@ enum EPublicProfile {
 	LIKED,
 }
 
+interface ITab {
+	active: boolean;
+}
+
 const PublicProfileContributes: FC<IUserPublicProfileView> = ({
 	user,
 	myAccount,
@@ -28,7 +32,7 @@ const PublicProfileContributes: FC<IUserPublicProfileView> = ({
 		myAccount ? EPublicProfile.OVERVIEW : EPublicProfile.PROJECTS,
 	);
 	return (
-		<PubliCProfileTabsAndProjectContianer>
+		<PubliCProfileTabsAndProjectContainer>
 			<Container>
 				<PubliCProfileTabsContainer>
 					{myAccount && (
@@ -50,6 +54,11 @@ const PublicProfileContributes: FC<IUserPublicProfileView> = ({
 						onClick={() => setTab(EPublicProfile.DONATIONS)}
 					>
 						{`${myAccount ? 'My ' : ''}Donations`}
+						{myAccount && (
+							<Count active={tab === EPublicProfile.DONATIONS}>
+								{user?.donationsCount}
+							</Count>
+						)}
 					</PubliCProfileTab>
 					<PubliCProfileTab
 						active={tab === EPublicProfile.LIKED}
@@ -80,27 +89,27 @@ const PublicProfileContributes: FC<IUserPublicProfileView> = ({
 					<PublicProfileLikedTab user={user} myAccount={myAccount} />
 				)}
 			</Container>
-		</PubliCProfileTabsAndProjectContianer>
+		</PubliCProfileTabsAndProjectContainer>
 	);
 };
 
 export default PublicProfileContributes;
 
-const PubliCProfileTabsAndProjectContianer = styled.div``;
+const PubliCProfileTabsAndProjectContainer = styled.div``;
 
 const PubliCProfileTabsContainer = styled(Row)`
 	padding: 37px 0;
 	gap: 16px;
 `;
 
-interface ITab {
-	active?: boolean;
-}
-
 const PubliCProfileTab = styled(P)<ITab>`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 	padding: 9px 16px;
-	color: ${brandColors.pinky[500]};
 	cursor: pointer;
+	color: ${(props: ITab) =>
+		props.active ? brandColors.deep[600] : brandColors.pinky[500]};
 	${props =>
 		props.active &&
 		`
@@ -108,4 +117,14 @@ const PubliCProfileTab = styled(P)<ITab>`
 		box-shadow: 0px 3px 20px rgba(212, 218, 238, 0.4);
 		border-radius: 50px;
 	`}
+`;
+
+const Count = styled.div`
+	background-color: ${(props: ITab) =>
+		props.active ? neutralColors.gray[500] : brandColors.pinky[500]};
+	color: white;
+	border-radius: 50%;
+	padding: 2px 9px;
+	font-size: 12px;
+	margin-left: 4px;
 `;

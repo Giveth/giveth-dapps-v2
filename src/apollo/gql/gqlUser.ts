@@ -21,8 +21,19 @@ export const GET_USER_BY_ADDRESS = gql`
 `;
 
 export const FETCH_USER_PROJECTS = gql`
-	query FetchUserProjects($take: Float, $skip: Float, $userId: Int!) {
-		projectsByUserId(take: $take, skip: $skip, userId: $userId) {
+	query FetchUserProjects(
+		$take: Float
+		$skip: Float
+		$userId: Int!
+		$orderBy: OrderField!
+		$direction: OrderDirection!
+	) {
+		projectsByUserId(
+			take: $take
+			skip: $skip
+			userId: $userId
+			orderBy: { field: $orderBy, direction: $direction }
+		) {
 			projects {
 				id
 				title
@@ -89,5 +100,25 @@ export const FETCH_USER_DONATIONS = gql`
 			}
 			totalCount
 		}
+	}
+`;
+
+export const UPDATE_USER = gql`
+	mutation UpdateUser(
+		$url: String
+		$name: String!
+		$location: String
+		$email: String
+		$lastName: String
+		$firstName: String
+	) {
+		updateUser(
+			url: $url
+			name: $name
+			location: $location
+			email: $email
+			firstName: $firstName
+			lastName: $lastName
+		)
 	}
 `;

@@ -27,8 +27,8 @@ const PublicProfileContributeCard: FC<IUserPublicProfileView> = ({ user }) => {
 					<ContributeCardTitles>
 						Total amount donated
 					</ContributeCardTitles>
-					<H2>{user.donationsCount}</H2>
-					<H5>${user.totalDonated}</H5>
+					<H2>{user.donationsCount || 0}</H2>
+					<H5>${user.totalDonated || 0}</H5>
 				</ContributeCard>
 				<ContributeCard>
 					<ContributeCardTitles>Projects</ContributeCardTitles>
