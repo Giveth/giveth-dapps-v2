@@ -49,7 +49,7 @@ const PhotoStep: FC<IStep> = ({ setStep }) => {
 	};
 
 	const onSave = () => {
-		setStep(OnboardSteps.PHOTO);
+		setStep(OnboardSteps.DONE);
 	};
 
 	return (

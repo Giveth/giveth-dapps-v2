@@ -24,7 +24,7 @@ export interface IOnboard {
 }
 
 const OnboardView = () => {
-	const [step, setStep] = useState(OnboardSteps.PHOTO);
+	const [step, setStep] = useState(OnboardSteps.INFO);
 	return (
 		<OnboardViewContainer>
 			<OnboardHeader step={step} />
@@ -102,6 +102,7 @@ const OnboardProgressbar = styled.div<IOnboard>`
 		}};
 		border-radius: 12px;
 		height: 6px;
+		transition: width 0.3s ease;
 	}
 `;
 
