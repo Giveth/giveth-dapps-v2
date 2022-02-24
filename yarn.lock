@@ -819,10 +819,10 @@
     "@ethersproject/properties" "^5.5.0"
     "@ethersproject/strings" "^5.5.0"
 
-"@giveth/ui-design-system@^1.5.0":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@giveth/ui-design-system/-/ui-design-system-1.5.0.tgz#629dcafbf9a9f570b1b83b73b7db48db522ed902"
-  integrity sha512-TLJ/ZLz/U4PUR3Kpr85ci1M6ZeBZYK0AGdZj0rgy9Pd09XtwEz6ork813w4bAYhidHme7rE1ZA7MxvpXKBtspA==
+"@giveth/ui-design-system@^1.6.2":
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/@giveth/ui-design-system/-/ui-design-system-1.6.2.tgz#04802943743c9170d8c432375477471c8a12dbea"
+  integrity sha512-13t0uhWTuojaQC/WKvdN+JaAhRu+J4uunEezZ+h6TB7pIgrtddBmGWJhTsjy8F5aowCKDx7iomgucaee5UBb/w==
   dependencies:
     next "12.0.7"
     react "17.0.2"
