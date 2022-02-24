@@ -6,7 +6,8 @@ import Pagination from '@/components/Pagination';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import { FC, useEffect, useState } from 'react';
 import { Loading, ProjectsContainer } from './PublicProfileProjectsTab';
-import { IUserPublicProfileView } from './UserPublicProfile.view';
+import { IUserPublicProfileView, NothingToSee } from './UserPublicProfile.view';
+import styled from 'styled-components';
 
 const itemPerPage = 6;
 
@@ -42,9 +43,18 @@ const PublicProfileLikedTab: FC<IUserPublicProfileView> = ({ user }) => {
 	return (
 		<>
 			<ProjectsContainer>
-				{projects.map(project => (
-					<ProjectCard key={project.id} project={project} />
-				))}
+				{!loading ? (
+					<NothingWrapper>
+						<NothingToSee
+							title='This user didn’t liked any project yet!!'
+							heartIcon={true}
+						/>
+					</NothingWrapper>
+				) : (
+					projects?.map(project => (
+						<ProjectCard key={project.id} project={project} />
+					))
+				)}
 				{loading && <Loading />}
 			</ProjectsContainer>
 			<Pagination
@@ -58,3 +68,8 @@ const PublicProfileLikedTab: FC<IUserPublicProfileView> = ({ user }) => {
 };
 
 export default PublicProfileLikedTab;
+
+const NothingWrapper = styled.div`
+	position: relative;
+	padding: 100px 0;
+`;

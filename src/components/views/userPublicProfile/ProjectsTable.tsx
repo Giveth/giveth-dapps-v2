@@ -166,10 +166,7 @@ const ProjectsTable: FC<IProjectsTable> = ({
 										maximumFractionDigits: 1,
 									} || '',
 								)}{' '}
-								{project.totalDonations &&
-								project.totalDonations > 0
-									? 'USD'
-									: ''}
+								USD
 							</B>
 						</TableCell>
 						<TableCell>
@@ -238,7 +235,6 @@ const TableCell = styled(Row)`
 `;
 
 const CenteredCell = styled(TableCell)`
-	cursor: pointer;
 	display: flex;
 	justify-content: center;
 `;

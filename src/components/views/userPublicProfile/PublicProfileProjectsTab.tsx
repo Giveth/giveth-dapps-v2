@@ -20,6 +20,7 @@ import {
 	EOrderBy,
 	EDirection,
 	IOrder,
+	NothingToSee,
 } from './UserPublicProfile.view';
 import ProjectsTable from './ProjectsTable';
 
@@ -87,7 +88,11 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({
 				<ContributeCard user={user} />
 			</UserContributeInfo>
 			<ProjectsContainer>
-				{myAccount ? (
+				{!loading && totalCount === 0 ? (
+					<NothingWrapper>
+						<NothingToSee title='This user didn’t create any project yet!' />
+					</NothingWrapper>
+				) : myAccount ? (
 					<ProjectsTableWrapper>
 						<ProjectsTable
 							projects={projects}
@@ -120,17 +125,7 @@ export const ProjectsContainer = styled(Container)`
 	gap: 24px;
 	margin-bottom: 64px;
 	padding: 0;
-	${mediaQueries['lg']} {
-		grid-template-columns: repeat(2, 1fr);
-	}
-
-	${mediaQueries['xl']} {
-		grid-template-columns: repeat(3, 1fr);
-	}
-
-	${mediaQueries['xxl']} {
-		grid-template-columns: repeat(3, 1fr);
-	}
+	align-items: center;
 `;
 
 const ProjectsTableWrapper = styled.div`
@@ -151,4 +146,9 @@ export const Loading = styled(Row)`
 		props.theme === ETheme.Dark
 			? brandColors.giv[800]
 			: neutralColors.gray[200]}aa;
+`;
+
+const NothingWrapper = styled.div`
+	position: relative;
+	padding: 100px 0;
 `;
