@@ -24,7 +24,7 @@ export interface IOnboard {
 }
 
 const OnboardView = () => {
-	const [step, setStep] = useState(OnboardSteps.DONE);
+	const [step, setStep] = useState(OnboardSteps.PHOTO);
 	return (
 		<OnboardViewContainer>
 			<OnboardHeader step={step} />
@@ -55,9 +55,9 @@ const OnboardHeader: FC<IOnboard> = ({ step }) => {
 						status={
 							idx > step
 								? LabelStatus.NEXT
-								: idx === step
-								? LabelStatus.ACTIVE
-								: LabelStatus.PREV
+								: idx === 0
+								? LabelStatus.PREV
+								: LabelStatus.ACTIVE
 						}
 					>
 						{label}
