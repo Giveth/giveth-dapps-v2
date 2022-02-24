@@ -2,8 +2,8 @@ import { B, brandColors, Container, H5 } from '@giveth/ui-design-system';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 import DoneStep from './DoneStep';
-import InfoStep from './infoStep';
-import PhotoStep from './photoStep';
+import InfoStep from './InfoStep';
+import PhotoStep from './PhotoStep';
 
 const StatesLabel = [
 	'Register on Giveth',
