@@ -1,4 +1,4 @@
-import { Lead, P } from '@giveth/ui-design-system';
+import { brandColors, Lead, neutralColors, P } from '@giveth/ui-design-system';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { IStep, OnboardActions, OnboardStep } from './common';
@@ -15,7 +15,7 @@ interface IImageFile {
 const PhotoStep: FC<IStep> = ({ setStep }) => {
 	const [disabled, setDisabled] = useState(true);
 	const [file, setFile] = useState<IImageFile>();
-	const { getRootProps, getInputProps } = useDropzone({
+	const { getRootProps, getInputProps, open } = useDropzone({
 		accept: 'image/*',
 		multiple: false,
 		onDrop: async acceptedFile => {
@@ -52,7 +52,15 @@ const PhotoStep: FC<IStep> = ({ setStep }) => {
 			</Desc>
 			<DropZone {...getRootProps()}>
 				<input {...getInputProps()} />
-				<P>Drag 'n' drop some files here, or click to select files</P>
+				<img src='/images/icons/image.svg' />
+				<P>
+					{`Drag & drop an image here or`}{' '}
+					<span onClick={open}>Upload from computer.</span>
+				</P>
+				<P>
+					Suggested image size min. 1200px width. Image size up to
+					16Mb.
+				</P>
 			</DropZone>
 			{file && <img src={file.preview} />}
 			<OnboardActions
@@ -75,7 +83,21 @@ const Desc = styled(Lead)`
 `;
 
 const DropZone = styled.div`
-	background-color: red;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	border: 1px dotted ${neutralColors.gray[400]};
+	margin: 24px 0 16px 0;
+	padding: 64px 0;
+	color: ${brandColors.deep[500]};
+	img {
+		margin: 0 0 30px 0;
+	}
+	span {
+		cursor: pointer;
+		color: ${brandColors.pinky[500]};
+	}
 `;
 
 export default PhotoStep;
