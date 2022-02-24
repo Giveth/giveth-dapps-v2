@@ -25,6 +25,7 @@ export enum EOrderBy {
 	TokenAmount = 'TokenAmount',
 	UsdAmount = 'UsdAmount',
 	CreationDate = 'CreationDate',
+	Donations = 'Donations',
 }
 
 export enum EDirection {

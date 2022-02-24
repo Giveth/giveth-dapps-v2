@@ -110,10 +110,10 @@ const ProjectsTable: FC<IProjectsTable> = ({
 					/>
 				</TableHeader>
 				<TableHeader
-					onClick={() => orderChangeHandler(EOrderBy.UsdAmount)}
+					onClick={() => orderChangeHandler(EOrderBy.Donations)}
 				>
 					<B>Total Funds Raised</B>
-					{injectSortIcon(order, EOrderBy.UsdAmount)}
+					{injectSortIcon(order, EOrderBy.Donations)}
 				</TableHeader>
 				<TableHeader>
 					<B>Listing</B>

@@ -66,6 +66,8 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({
 					userId: parseFloat(user.id) || -1,
 					take: itemPerPage,
 					skip: page * itemPerPage,
+					orderBy: order.by,
+					direction: order.direction,
 				},
 			});
 			setLoading(false);

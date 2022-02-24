@@ -21,8 +21,19 @@ export const GET_USER_BY_ADDRESS = gql`
 `;
 
 export const FETCH_USER_PROJECTS = gql`
-	query FetchUserProjects($take: Float, $skip: Float, $userId: Int!) {
-		projectsByUserId(take: $take, skip: $skip, userId: $userId) {
+	query FetchUserProjects(
+		$take: Float
+		$skip: Float
+		$userId: Int!
+		$orderBy: OrderField!
+		$direction: OrderDirection!
+	) {
+		projectsByUserId(
+			take: $take
+			skip: $skip
+			userId: $userId
+			orderBy: { field: $orderBy, direction: $direction }
+		) {
 			projects {
 				id
 				title
