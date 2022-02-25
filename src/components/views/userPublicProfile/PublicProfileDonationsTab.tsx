@@ -190,7 +190,17 @@ const DonationTable: FC<DonationTable> = ({
 						</TransactionLink>
 					</TabelCell>
 					<TabelCell>
-						<P>{donation.valueUsd?.toFixed(2)}$</P>
+						<P>
+							{donation.valueUsd
+								? donation.valueUsd?.toLocaleString(
+										'en-US',
+										{
+											minimumFractionDigits: 0,
+											maximumFractionDigits: 4,
+										} || '',
+								  ) + ' USD'
+								: '-'}{' '}
+						</P>
 					</TabelCell>
 				</RowWrapper>
 			))}

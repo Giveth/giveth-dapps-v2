@@ -14,6 +14,7 @@ import {
 } from '@giveth/ui-design-system';
 import { client } from '@/apollo/apolloClient';
 import { GET_USER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
+import { CopyToClipboard } from '@/components/CopyToClipboard';
 import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
 import useUser from '@/context/UserProvider';
 import { FC, useEffect, useState } from 'react';
@@ -168,15 +169,12 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 							)}
 							<WalletContainer>
 								<GLink size='Big'>{user.walletAddress}</GLink>
-								<WalletIconsContainer
-									onClick={() => {
-										navigator.clipboard.writeText(
-											user.walletAddress || '',
-										);
-									}}
-								>
-									<IconCopy />
+								<WalletIconsContainer>
+									<CopyToClipboard
+										text={user.walletAddress || ''}
+									/>
 								</WalletIconsContainer>
+
 								<WalletIconsContainer
 									onClick={() => {
 										if (chainId) {
