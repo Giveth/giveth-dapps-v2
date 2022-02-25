@@ -13,8 +13,9 @@ import styled from 'styled-components';
 const ProjectTotalFundCard = (props: {
 	address?: string;
 	totalFund?: number;
+	showTrace: boolean;
 }) => {
-	const { address, totalFund } = props;
+	const { address, totalFund, showTrace } = props;
 	return (
 		<Wrapper>
 			<UpperSection>
@@ -22,10 +23,12 @@ const ProjectTotalFundCard = (props: {
 					<Subline>All time funding received</Subline>
 					<TotalFund>{'$' + totalFund}</TotalFund>
 				</div>
-				<div>
-					<Subline>Funding from Traces</Subline>
-					<FromTraces>$50.32</FromTraces>
-				</div>
+				{showTrace && (
+					<div>
+						<Subline>Funding from Traces</Subline>
+						<FromTraces>$50.32</FromTraces>
+					</div>
+				)}
 			</UpperSection>
 			<BottomSection>
 				<Image src={WalletIcon} alt='wallet icon' />
@@ -38,7 +41,6 @@ const ProjectTotalFundCard = (props: {
 const Wrapper = styled.div`
 	background: white;
 	max-width: 750px;
-	margin-right: 30px;
 	border-radius: 12px;
 	box-shadow: ${Shadow.Neutral[400]};
 	overflow: hidden;
