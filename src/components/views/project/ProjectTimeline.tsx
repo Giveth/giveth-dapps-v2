@@ -34,7 +34,7 @@ const LaunchSection = (props: { creationDate: string }) => {
 			<Content>
 				<Title>Project Launched! 🎉</Title>
 				{/*TODO share in twitter?*/}
-				<Button label='Share this'></Button>
+				{/* <Button label='Share this'></Button> */}
 			</Content>
 		</Wrapper>
 	);
