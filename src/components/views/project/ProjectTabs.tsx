@@ -1,7 +1,12 @@
 import { Dispatch, SetStateAction } from 'react';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { IProject } from '@/apollo/types/types';
-import { Subline, brandColors, P } from '@giveth/ui-design-system';
+import {
+	Subline,
+	brandColors,
+	P,
+	neutralColors,
+} from '@giveth/ui-design-system';
 import { mediaQueries } from '@/lib/helpers';
 import styled from 'styled-components';
 
@@ -43,7 +48,7 @@ const ProjectTabs = (props: IProjectTabs) => {
 };
 
 const Badge = styled(Subline)`
-	background: ${brandColors.deep[600]};
+	background: ${brandColors.pinky[500]};
 	color: white;
 	border-radius: 40px;
 	height: 22px;
@@ -74,12 +79,12 @@ const Wrapper = styled.div`
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	position: sticky;
-	top: 200px;
+	position: block;
 	z-index: 10;
+	background-color: ${neutralColors.gray[200]};
 
 	${mediaQueries['xl']} {
-		padding: 8px 0 12px;
+		padding: 16px 0 12px;
 		position: sticky;
 		top: 200px;
 		z-index: 10;

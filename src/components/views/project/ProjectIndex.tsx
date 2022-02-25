@@ -28,7 +28,7 @@ const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {
 	ssr: false,
 });
 
-const donationsPerPage = 11;
+const donationsPerPage = 10;
 
 const ProjectIndex = () => {
 	const [activeTab, setActiveTab] = useState(0);
@@ -42,6 +42,8 @@ const ProjectIndex = () => {
 			projectId: parseInt(id),
 			skip: 0,
 			take: donationsPerPage,
+			orderBy: 'CreationDate',
+			direction: 'ASC',
 		},
 	});
 	const donationsByProjectId = donationsData?.donationsByProjectId;
@@ -123,6 +125,8 @@ const ProjectIndex = () => {
 						<ProjectDonations
 							donationsByProjectId={donationsByProjectId}
 							project={project}
+							isActive={isActive}
+							isDraft={isDraft}
 						/>
 					)}
 				</ContentWrapper>
@@ -161,7 +165,8 @@ const GivBackNotif = styled.div`
 	background: ${semanticColors.golden[200]};
 	border-radius: 8px;
 	border: 1px solid ${semanticColors.golden[700]};
-	margin-top: 24px;
+	margin: 24px 0px 24px;
+	max-width: 750px;
 	color: ${semanticColors.golden[700]};
 `;
 

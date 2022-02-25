@@ -128,7 +128,7 @@ const CreateIndex = () => {
 				description,
 				impactLocation,
 				categories: projectCategories,
-				organisationId: 1,
+				organizationId: 1,
 				walletAddress: utils.getAddress(address),
 				imageStatic: null,
 				imageUpload: null,

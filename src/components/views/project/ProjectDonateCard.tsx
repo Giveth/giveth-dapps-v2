@@ -16,6 +16,7 @@ import {
 	GLink,
 	neutralColors,
 	OulineButton,
+	Overline,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import useUser from '@/context/UserProvider';
@@ -50,7 +51,14 @@ const ProjectDonateCard = ({
 		actions: { signIn },
 	} = useUser();
 
-	const { categories = [], slug, description, adminUser, id } = project || {};
+	const {
+		categories = [],
+		slug,
+		description,
+		adminUser,
+		id,
+		givingBlocksId,
+	} = project || {};
 	const [reaction, setReaction] = useState<IReaction | undefined>(undefined);
 
 	const [heartedByUser, setHeartedByUser] = useState<boolean>(false);
@@ -125,7 +133,7 @@ const ProjectDonateCard = ({
 	}, [project, reaction]);
 
 	useEffect(() => {
-		if (adminUser?.walletAddress === user?.walletAddress) {
+		if (adminUser?.walletAddress === user?.walletAddress && !!user) {
 			setIsAdmin(true);
 		}
 	}, [user, adminUser]);
@@ -186,6 +194,17 @@ const ProjectDonateCard = ({
 				/>
 			)}
 			<Wrapper>
+				{!!givingBlocksId && (
+					<GivingBlocksContainer>
+						<GivingBlocksText>PROJECT BY:</GivingBlocksText>
+						<Image
+							src='/images/thegivingblock.svg'
+							alt='The Giving Block icon.'
+							height={36}
+							width={126}
+						/>
+					</GivingBlocksContainer>
+				)}
 				{isAdmin ? (
 					<>
 						<FullButton
@@ -272,6 +291,19 @@ const ProjectDonateCard = ({
 	);
 };
 
+const GivingBlocksContainer = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	margin-bottom: 12px;
+`;
+
+const GivingBlocksText = styled(Overline)`
+	color: ${neutralColors.gray[600]};
+	font-size: 10px;
+`;
+
 const Links = styled.a`
 	font-size: 14px;
 	color: ${brandColors.pinky[500]} !important;
@@ -311,7 +343,6 @@ const Wrapper = styled.div`
 	padding: 32px;
 	overflow: hidden;
 	width: 326px;
-	max-height: 470px;
 	height: fit-content;
 	border-radius: 40px;
 	position: relative;
@@ -343,7 +374,8 @@ const FullOutlineButton = styled(OulineButton)`
 
 const ArchiveButton = styled(Button)`
 	width: 100%;
-	margin: 12px 0;
+	margin: 12px 0px 0px;
+	padding-bottom: 0px;
 	color: ${brandColors.giv[500]};
 
 	&:hover {
