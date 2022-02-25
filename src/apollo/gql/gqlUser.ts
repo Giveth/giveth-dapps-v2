@@ -14,6 +14,7 @@ export const GET_USER_BY_ADDRESS = gql`
 			location
 			totalDonated
 			totalReceived
+			likedProjectsCount
 			projectsCount
 			donationsCount
 		}

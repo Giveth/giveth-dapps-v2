@@ -62,6 +62,7 @@ export interface IUser {
 	totalReceived?: number;
 	projectsCount?: number;
 	donationsCount?: number;
+	likedProjectsCount?: number;
 }
 
 export interface IAdmin {

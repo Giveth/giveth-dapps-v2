@@ -48,13 +48,18 @@ const PublicProfileContributes: FC<IUserPublicProfileView> = ({
 						onClick={() => setTab(EPublicProfile.PROJECTS)}
 					>
 						{`${myAccount ? 'My ' : user.name + '’s'} projects`}
+						{myAccount && user?.projectsCount != 0 && (
+							<Count active={tab === EPublicProfile.PROJECTS}>
+								{user?.projectsCount}
+							</Count>
+						)}
 					</PubliCProfileTab>
 					<PubliCProfileTab
 						active={tab === EPublicProfile.DONATIONS}
 						onClick={() => setTab(EPublicProfile.DONATIONS)}
 					>
 						{`${myAccount ? 'My ' : ''}Donations`}
-						{myAccount && (
+						{myAccount && user?.donationsCount != 0 && (
 							<Count active={tab === EPublicProfile.DONATIONS}>
 								{user?.donationsCount}
 							</Count>
@@ -65,6 +70,11 @@ const PublicProfileContributes: FC<IUserPublicProfileView> = ({
 						onClick={() => setTab(EPublicProfile.LIKED)}
 					>
 						Liked projects
+						{myAccount && user?.donationsCount != 0 && (
+							<Count active={tab === EPublicProfile.LIKED}>
+								{user?.likedProjectsCount}
+							</Count>
+						)}
 					</PubliCProfileTab>
 				</PubliCProfileTabsContainer>
 				{tab === EPublicProfile.OVERVIEW && (
@@ -123,8 +133,11 @@ const Count = styled.div`
 	background-color: ${(props: ITab) =>
 		props.active ? neutralColors.gray[500] : brandColors.pinky[500]};
 	color: white;
+	width: 24px;
+	height: 24px;
+	align-itmes: center;
+	text-align: center;
 	border-radius: 50%;
-	padding: 2px 9px;
 	font-size: 12px;
 	margin-left: 4px;
 `;

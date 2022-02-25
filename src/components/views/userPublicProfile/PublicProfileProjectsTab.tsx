@@ -20,6 +20,7 @@ import {
 	EOrderBy,
 	EDirection,
 	IOrder,
+	NothingToSee,
 } from './UserPublicProfile.view';
 import ProjectsTable from './ProjectsTable';
 
@@ -71,7 +72,6 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({
 				},
 			});
 			setLoading(false);
-			console.log({ userProjects });
 			if (userProjects?.projectsByUserId) {
 				const projectsByUserId: IUserProjects =
 					userProjects.projectsByUserId;
@@ -87,7 +87,11 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({
 				<ContributeCard user={user} />
 			</UserContributeInfo>
 			<ProjectsContainer>
-				{myAccount ? (
+				{!loading && totalCount === 0 ? (
+					<NothingWrapper>
+						<NothingToSee title='This user didn’t create any project yet!' />
+					</NothingWrapper>
+				) : myAccount ? (
 					<ProjectsTableWrapper>
 						<ProjectsTable
 							projects={projects}
@@ -96,9 +100,11 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({
 						/>
 					</ProjectsTableWrapper>
 				) : (
-					projects.map(project => (
-						<ProjectCard key={project.id} project={project} />
-					))
+					<GridContainer>
+						{projects.map(project => (
+							<ProjectCard key={project.id} project={project} />
+						))}
+					</GridContainer>
 				)}
 				{loading && <Loading />}
 			</ProjectsContainer>
@@ -120,17 +126,7 @@ export const ProjectsContainer = styled(Container)`
 	gap: 24px;
 	margin-bottom: 64px;
 	padding: 0;
-	${mediaQueries['lg']} {
-		grid-template-columns: repeat(2, 1fr);
-	}
-
-	${mediaQueries['xl']} {
-		grid-template-columns: repeat(3, 1fr);
-	}
-
-	${mediaQueries['xxl']} {
-		grid-template-columns: repeat(3, 1fr);
-	}
+	align-items: center;
 `;
 
 const ProjectsTableWrapper = styled.div`
@@ -151,4 +147,27 @@ export const Loading = styled(Row)`
 		props.theme === ETheme.Dark
 			? brandColors.giv[800]
 			: neutralColors.gray[200]}aa;
+`;
+
+const NothingWrapper = styled.div`
+	position: relative;
+	padding: 100px 0;
+`;
+
+const GridContainer = styled.div`
+	display: grid;
+	position: relative;
+	gap: 24px;
+	margin-bottom: 64px;
+	padding: 0;
+	align-items: center;
+	${mediaQueries['lg']} {
+		grid-template-columns: repeat(2, 1fr);
+	}
+	${mediaQueries['xl']} {
+		grid-template-columns: repeat(3, 1fr);
+	}
+	${mediaQueries['xxl']} {
+		grid-template-columns: repeat(3, 1fr);
+	}
 `;

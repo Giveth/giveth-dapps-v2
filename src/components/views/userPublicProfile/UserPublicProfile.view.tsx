@@ -7,11 +7,17 @@ import {
 	H5,
 	IconCopy,
 	IconExternalLink,
+	Lead,
 	neutralColors,
 	P,
 	Subline,
 } from '@giveth/ui-design-system';
-import { FC, useState } from 'react';
+import { client } from '@/apollo/apolloClient';
+import { GET_USER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
+import { CopyToClipboard } from '@/components/CopyToClipboard';
+import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
+import useUser from '@/context/UserProvider';
+import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { Row } from '../../styled-components/Grid';
@@ -53,12 +59,68 @@ export interface IProjectsTable {
 	orderChangeHandler: any;
 }
 
+interface IEmptyBox {
+	title: string;
+	heartIcon?: boolean;
+}
+
+export const NothingToSee = ({ title, heartIcon }: IEmptyBox) => {
+	return (
+		<NothingBox>
+			<img
+				src={
+					heartIcon
+						? '/images/heart-white.svg'
+						: '/images/empty-box.svg'
+				}
+			/>
+			<Lead>{title}</Lead>
+		</NothingBox>
+	);
+};
+
 const UserPublicProfileView: FC<IUserPublicProfileView> = ({
-	user,
+	user: userFromSSR,
 	myAccount,
 }) => {
 	const { chainId } = useWeb3React();
+	const [user, setUser] = useState(userFromSSR);
+	const [showWelcomeSignin, setShowWelcomeSignin] = useState<boolean>(false);
 	const [showModal, setShowModal] = useState<boolean>(false); // follow this state to refresh user content on screen
+
+	const {
+		state: { isSignedIn, user: userFromContext },
+	} = useUser();
+
+	useEffect(() => {
+		const getUser = async () => {
+			try {
+				if (!userFromContext?.walletAddress) return;
+				const { data: userData } = await client.query({
+					query: GET_USER_BY_ADDRESS,
+					variables: {
+						address: userFromContext?.walletAddress,
+					},
+				});
+				setUser(userData?.userByAddress);
+			} catch (error) {
+				console.log({ error });
+			}
+		};
+		if (myAccount && userFromContext?.id !== user?.id) {
+			// fetch new user
+			getUser();
+		}
+		if (userFromContext && myAccount && !isSignedIn) {
+			setShowWelcomeSignin(true);
+		}
+	}, [myAccount, isSignedIn, userFromContext]);
+	if (!userFromContext)
+		return (
+			<NoUserContainer>
+				<H5>Not logged in or user not found</H5>
+			</NoUserContainer>
+		);
 	return (
 		<>
 			{showModal && (
@@ -66,6 +128,12 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 					showModal={showModal}
 					setShowModal={setShowModal}
 					user={user}
+				/>
+			)}
+			{showWelcomeSignin && (
+				<WelcomeSigninModal
+					showModal={true}
+					setShowModal={() => setShowWelcomeSignin(false)}
 				/>
 			)}
 			<PubliCProfileHeader>
@@ -101,15 +169,12 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 							)}
 							<WalletContainer>
 								<GLink size='Big'>{user.walletAddress}</GLink>
-								<WalletIconsContainer
-									onClick={() => {
-										navigator.clipboard.writeText(
-											user.walletAddress || '',
-										);
-									}}
-								>
-									<IconCopy />
+								<WalletIconsContainer>
+									<CopyToClipboard
+										text={user.walletAddress || ''}
+									/>
 								</WalletIconsContainer>
+
 								<WalletIconsContainer
 									onClick={() => {
 										if (chainId) {
@@ -133,8 +198,24 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 
 export default UserPublicProfileView;
 
+const NothingBox = styled.div`
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	align-items: center;
+	color: ${neutralColors.gray[800]};
+	font-size: 20px;
+	img {
+		padding-bottom: 21px;
+	}
+`;
+
+const NoUserContainer = styled.div`
+	padding: 200px;
+`;
+
 const PubliCProfileHeader = styled.div`
-	padding: 173px 0 32px;
+	padding: 180px 0 32px;
 	background-color: ${neutralColors.gray[100]};
 `;
 

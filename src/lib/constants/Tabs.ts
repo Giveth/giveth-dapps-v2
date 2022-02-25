@@ -1,9 +1,5 @@
 export const mustSignTabs = [
 	{
-		label: 'Account',
-		href: '/account',
-	},
-	{
 		label: 'Create',
 		href: '/create',
 	},
