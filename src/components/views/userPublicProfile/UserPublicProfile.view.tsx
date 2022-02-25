@@ -215,7 +215,7 @@ const NoUserContainer = styled.div`
 `;
 
 const PubliCProfileHeader = styled.div`
-	padding: 173px 0 32px;
+	padding: 180px 0 32px;
 	background-color: ${neutralColors.gray[100]};
 `;
 
