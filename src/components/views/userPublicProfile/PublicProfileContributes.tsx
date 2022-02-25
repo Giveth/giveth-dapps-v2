@@ -4,7 +4,8 @@ import {
 	neutralColors,
 	P,
 } from '@giveth/ui-design-system';
-import { FC, useState } from 'react';
+import { useRouter } from 'next/router';
+import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Row } from '../../styled-components/Grid';
 import PublicProfileDonationsTab from './PublicProfileDonationsTab';
@@ -28,9 +29,32 @@ const PublicProfileContributes: FC<IUserPublicProfileView> = ({
 	user,
 	myAccount,
 }) => {
+	const router = useRouter();
 	const [tab, setTab] = useState(
 		myAccount ? EPublicProfile.OVERVIEW : EPublicProfile.PROJECTS,
 	);
+
+	useEffect(() => {
+		const tab = router?.query?.tab;
+		switch (tab) {
+			case 'projects':
+				setTab(EPublicProfile.PROJECTS);
+				break;
+			case 'donations':
+				setTab(EPublicProfile.DONATIONS);
+				break;
+			case 'liked':
+				setTab(EPublicProfile.LIKED);
+				break;
+			default:
+				setTab(
+					myAccount
+						? EPublicProfile.OVERVIEW
+						: EPublicProfile.PROJECTS,
+				);
+		}
+	}, [router?.query?.tab]);
+
 	return (
 		<PubliCProfileTabsAndProjectContainer>
 			<Container>

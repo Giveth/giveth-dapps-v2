@@ -51,7 +51,6 @@ const IncompleteProfileToast = ({ close }: IIncompleteToast) => {
 
 const PublicProfileOverviewTab: FC<IUserPublicProfileView> = ({ user }) => {
 	const router = useRouter();
-
 	const Sections = {
 		stranger: {
 			title: 'Don’t be a stranger!',
