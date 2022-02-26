@@ -91,3 +91,24 @@ export const UPLOAD_PROFILE_PHOTO = gql`
 		upload(fileUpload: $fileUpload)
 	}
 `;
+
+export const UPDATE_USER = gql`
+	mutation UpdateUser(
+		$url: String
+		$location: String
+		$email: String
+		$lastName: String
+		$firstName: String
+		$avatat: String
+	) {
+		updateUser(
+			url: $url
+			name: $name
+			location: $location
+			email: $email
+			firstName: $firstName
+			lastName: $lastName
+			avatar: $avatat
+		)
+	}
+`;
