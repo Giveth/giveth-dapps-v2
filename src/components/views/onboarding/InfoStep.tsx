@@ -1,4 +1,6 @@
+import { UPDATE_USER } from '@/apollo/gql/gqlUser';
 import { Row } from '@/components/styled-components/Grid';
+import { useMutation } from '@apollo/client';
 import {
 	brandColors,
 	GLink,
@@ -34,6 +36,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 		initialUserInfo,
 	);
 	const [disabled, setDisabled] = useState(true);
+	const [updateUser] = useMutation(UPDATE_USER);
 
 	const { firstName, lastName, location, website } = info;
 
@@ -47,7 +50,17 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 		setDisabled(!(firstName.length > 0 && lastName.length > 0));
 	}, [firstName, lastName]);
 
-	const onSave = () => {
+	const onSave = async () => {
+		setDisabled(true);
+		const { data: response } = await updateUser({
+			variables: {
+				firstName,
+				lastName,
+				location,
+				website,
+			},
+		});
+		setDisabled(false);
 		setStep(OnboardSteps.PHOTO);
 	};
 

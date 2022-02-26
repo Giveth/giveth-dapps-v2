@@ -103,7 +103,6 @@ export const UPDATE_USER = gql`
 	) {
 		updateUser(
 			url: $url
-			name: $name
 			location: $location
 			email: $email
 			firstName: $firstName
