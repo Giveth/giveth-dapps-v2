@@ -8,9 +8,11 @@ import { FETCH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
 import { IProjectEdition } from '@/apollo/types/types';
 import CreateIndex from '@/components/views/create/CreateIndex';
 import { showToastError } from '@/lib/helpers';
+import SignInModal from '@/components/modals/SignInModal';
 
 const EditIndex = () => {
 	const [project, setProject] = useState<IProjectEdition>();
+	const [showSigninModal, setShowSigninModal] = useState(false);
 
 	const {
 		state: { user },
@@ -29,11 +31,19 @@ const EditIndex = () => {
 				})
 				.then((res: any) => setProject(res.data.projectById))
 				.catch(showToastError);
+		} else {
+			setShowSigninModal(true);
 		}
 	}, [user]);
 
 	return (
 		<>
+			{showSigninModal && (
+				<SignInModal
+					showModal={showSigninModal}
+					closeModal={() => setShowSigninModal(false)}
+				/>
+			)}
 			{project && <CreateIndex project={project} />}
 			<Toaster containerStyle={{ top: '80px' }} />
 		</>
