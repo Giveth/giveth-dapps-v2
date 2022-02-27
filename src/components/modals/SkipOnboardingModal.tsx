@@ -46,7 +46,7 @@ export const SkipOnboardingModal: FC<IWhatisGIVstreamModal> = ({
 				<Link href='/' passHref>
 					<CancelButton
 						size='small'
-						label='OK, I’LL DO IT NOW'
+						label='OK, I’LL DO IT LATER'
 						linkType='texty'
 					/>
 				</Link>
