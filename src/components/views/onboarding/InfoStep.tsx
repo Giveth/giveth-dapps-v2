@@ -16,6 +16,7 @@ import { OnboardSteps } from './Onboarding.view';
 import { Toaster } from 'react-hot-toast';
 
 interface IUserIfo {
+	email: string;
 	firstName: string;
 	lastName: string;
 	location: string;
@@ -23,6 +24,7 @@ interface IUserIfo {
 }
 
 const initialUserInfo: IUserIfo = {
+	email: '',
 	firstName: '',
 	lastName: '',
 	location: '',
@@ -40,7 +42,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 	const [disabled, setDisabled] = useState(true);
 	const [updateUser] = useMutation(UPDATE_USER);
 
-	const { firstName, lastName, location, website } = info;
+	const { email, firstName, lastName, location, website } = info;
 
 	const reducerInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -48,7 +50,6 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 	};
 
 	useEffect(() => {
-		console.log('called');
 		setDisabled(!(firstName.length > 0 && lastName.length > 0));
 	}, [firstName, lastName]);
 
@@ -57,6 +58,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 		try {
 			const { data: response } = await updateUser({
 				variables: {
+					email,
 					firstName,
 					lastName,
 					location,
@@ -96,6 +98,17 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 							placeholder='Doe'
 							name='lastName'
 							value={lastName}
+							onChange={reducerInputChange}
+						/>
+					</InputContainer>
+				</Section>
+				<Section>
+					<InputContainer>
+						<InputLabel>EMAIL</InputLabel>
+						<Input
+							placeholder='Example@Domain.com'
+							name='email'
+							value={email}
 							onChange={reducerInputChange}
 						/>
 					</InputContainer>
@@ -141,8 +154,8 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 };
 
 const Section = styled(Row)`
-	padding-top: 32px;
-	padding-bottom: 67px;
+	margin-top: 32px;
+	margin-bottom: 67px;
 	gap: 24px;
 `;
 
