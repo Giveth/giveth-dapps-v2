@@ -1,16 +1,6 @@
 import React, { useState } from 'react';
 import Link from 'next/dist/client/link';
-
-import ProjectCardBadges from './ProjectCardBadges';
-import { IProject } from '../../apollo/types/types';
-import {
-	htmlToText,
-	noImgColor,
-	noImgIcon,
-	slugToProjectDonate,
-	slugToProjectView,
-} from '../../lib/helpers';
-import ProjectCardImage from './ProjectCardImage';
+import styled from 'styled-components';
 import {
 	GLink,
 	P,
@@ -20,9 +10,13 @@ import {
 	Button,
 	OulineButton,
 } from '@giveth/ui-design-system';
-import styled from 'styled-components';
 
-const cardWidth = '440px';
+import ProjectCardBadges from './ProjectCardBadges';
+import { IProject } from '@/apollo/types/types';
+import { htmlToText } from '@/lib/helpers';
+import ProjectCardImage from './ProjectCardImage';
+import { slugToProjectDonate, slugToProjectView } from '@/lib/routeCreators';
+
 const cardRadius = '12px';
 const imgHeight = '200px';
 

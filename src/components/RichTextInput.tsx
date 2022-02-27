@@ -75,7 +75,7 @@ Video.tagName = 'DIV';
 
 Quill.register(Video, true);
 
-const modules = (projectId: any) => {
+const modules = (projectId?: any) => {
 	return {
 		toolbar: [
 			[{ header: '1' }, { header: '2' }],
@@ -162,38 +162,28 @@ const formats = [
 	'emoji',
 ];
 
-function TextRichWithQuill(props: any) {
-	const [content, setContent] = useState('');
+function TextRichWithQuill(props: {
+	value: string;
+	setValue: any;
+	style: any;
+}) {
+	const { value, setValue, style } = props;
 	const [mod, setMod] = useState<any>();
 
-	const handleChange = (html: any) => {
-		setContent(html);
-		props.onChange(html);
-	};
-
 	useEffect(() => {
-		!mod && setMod(modules(props.projectId));
+		setMod(modules());
 	}, []);
 
-	useEffect(() => {
-		props.value && setContent(props.value);
-	}, [props.value]);
-
 	if (!mod) return null;
-
-	const value = props.defaultValue && !content ? props.defaultValue : content;
 
 	return (
 		<ReactQuill
 			modules={mod}
 			formats={formats}
 			theme='snow'
-			ref={props.ref}
-			id={props.id}
-			// name={props.name}
 			value={value}
-			onChange={handleChange}
-			style={props.style}
+			onChange={setValue}
+			style={style}
 		/>
 	);
 }

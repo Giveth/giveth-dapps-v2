@@ -117,6 +117,28 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 	}
 `;
 
+export const FETCH_PROJECT_BY_ID = gql`
+	query ProjectById($id: Float!) {
+		projectById(id: $id) {
+			id
+			title
+			image
+			description
+			walletAddress
+			impactLocation
+			categories {
+				name
+			}
+			adminUser {
+				walletAddress
+			}
+			status {
+				name
+			}
+		}
+	}
+`;
+
 export const FETCH_PROJECT_REACTION_BY_ID = gql`
 	query ProjectById($id: Float!, $connectedWalletUserId: Int) {
 		projectById(id: $id, connectedWalletUserId: $connectedWalletUserId) {
@@ -277,5 +299,24 @@ export const ACTIVATE_PROJECT = gql`
 export const TITLE_IS_VALID = gql`
 	query IsValidTitleForProject($title: String!, $projectId: Float) {
 		isValidTitleForProject(title: $title, projectId: $projectId)
+	}
+`;
+
+export const EDIT_PROJECT = gql`
+	mutation editProject($projectId: Float!, $newProjectData: ProjectInput!) {
+		editProject(projectId: $projectId, newProjectData: $newProjectData) {
+			id
+			title
+			description
+			image
+			slug
+			creationDate
+			admin
+			walletAddress
+			impactLocation
+			categories {
+				name
+			}
+		}
 	}
 `;

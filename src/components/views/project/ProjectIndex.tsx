@@ -3,24 +3,21 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { Caption, GLink, semanticColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-
 import { useQuery } from '@apollo/client';
-import WarningBadge from '@/components/badges/WarningBadge';
 
+import WarningBadge from '@/components/badges/WarningBadge';
 import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
 import ProjectDonateCard from './ProjectDonateCard';
-import { mediaQueries } from '@/lib/helpers';
+import { mediaQueries, showToastError } from '@/lib/helpers';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 import useUser from '@/context/UserProvider';
 import { useRouter } from 'next/router';
 import { IProject } from '@/apollo/types/types';
-import { gToast, ToastType } from '@/components/toasts';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import InfoBadge from '@/components/badges/InfoBadge';
-import { Toaster } from 'react-hot-toast';
 
 const ProjectDonations = dynamic(() => import('./ProjectDonations'));
 const ProjectUpdates = dynamic(() => import('./ProjectUpdates'));
@@ -54,7 +51,7 @@ const ProjectIndex = () => {
 	} = useUser();
 
 	const router = useRouter();
-	const slug = router.query.slug as string;
+	const slug = router.query.projectIdSlug as string;
 
 	useEffect(() => {
 		if (status) {
@@ -74,12 +71,7 @@ const ProjectIndex = () => {
 				.then((res: { data: any }) => {
 					setProject(res.data.projectBySlug);
 				})
-				.catch((err: any) =>
-					gToast(JSON.stringify(err.message || err), {
-						type: ToastType.DANGER,
-						position: 'top-center',
-					}),
-				);
+				.catch(showToastError);
 		}
 	}, [isSignedIn, slug]);
 
@@ -138,7 +130,6 @@ const ProjectIndex = () => {
 					setIsDraft={setIsDraft}
 				/>
 			</BodyWrapper>
-			<Toaster containerStyle={{ top: '80px' }} />
 		</Wrapper>
 	);
 };

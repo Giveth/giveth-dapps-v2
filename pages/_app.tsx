@@ -1,16 +1,14 @@
 import type { AppProps } from 'next/app';
-
-import '../styles/globals.css';
+import { Toaster } from 'react-hot-toast';
+import { CookiesProvider } from 'react-cookie';
 import { Web3ReactProvider } from '@web3-react/core';
-import { ThemeProvider } from '@/context/theme.context';
+
 import { FarmProvider } from '@/context/farm.context';
 import { NftsProvider } from '@/context/positions.context';
 import { TokenDistroProvider } from '@/context/tokenDistro.context';
 import { ApolloProvider } from '@apollo/client';
-import { CookiesProvider } from 'react-cookie';
-
 import { MobileModal } from '@/components/modals/Mobile';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SubgraphProvider } from '@/context/subgraph.context';
 import Head from 'next/head';
 import { PriceProvider } from '@/context/price.context';
@@ -20,6 +18,8 @@ import { useApollo } from '@/apollo/apolloClient';
 import { UserProvider } from '@/context/UserProvider';
 import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
 import { FooterWrapper } from '@/components/Footer/FooterWrapper';
+
+import '../styles/globals.css';
 
 function getLibrary(provider: ExternalProvider) {
 	return new Web3Provider(provider);
@@ -85,6 +85,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 					</Web3ReactProvider>
 				</ApolloProvider>
 			</GeneralProvider>
+			<Toaster containerStyle={{ top: '80px' }} />
 		</>
 	);
 }

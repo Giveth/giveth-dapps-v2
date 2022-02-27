@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { H5, Caption, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
@@ -6,42 +6,33 @@ import { InputContainer } from './Create.sc';
 import CheckBox from '@/components/Checkbox';
 import { categoryList, maxSelectedCategory } from '@/lib/constants/Categories';
 import { ICategory } from '@/apollo/types/types';
-import { gToast, ToastType } from '@/components/toasts';
+import { showToastError } from '@/lib/helpers';
 
-const CategoryInput = (props: any) => {
-	const { setValue } = props;
-	const [categories, setCategories] = useState<any>([]);
-	const [list, setList] = useState<any>(null);
+const CategoryInput = (props: {
+	value: ICategory[];
+	setValue: Dispatch<SetStateAction<ICategory[]>>;
+}) => {
+	const { value, setValue } = props;
 
-	const handleChange = (value: any) => {
-		const categoriesCp = categories;
-		// Remove it, it's already there
-		const found = categoriesCp.findIndex(
-			(el: any) => el.name === value.name,
-		);
-		const categoriesList = { ...list };
-		if (found >= 0) {
-			delete categoriesList[value.name];
-			setList(categoriesList);
-			setValue(categoriesList);
-			return setCategories(
-				categoriesCp?.filter((el: ICategory) => el.name !== value.name),
+	const handleChange = (isChecked: boolean, name: string) => {
+		const newCategories = [...value];
+
+		if (isChecked) {
+			const isMaxCategories = newCategories.length >= maxSelectedCategory;
+			if (isMaxCategories) {
+				return showToastError(
+					`only ${maxSelectedCategory} categories allowed`,
+				);
+			}
+			newCategories.push({ name });
+			setValue(newCategories);
+		} else {
+			const index = value.findIndex(
+				(category: ICategory) => category.name === name,
 			);
+			newCategories.splice(index, 1);
+			setValue(newCategories);
 		}
-		const newCategories = [...categories, value];
-		categoriesList[value.name] = true;
-		const isMaxCategories = newCategories.length > maxSelectedCategory;
-		if (isMaxCategories) {
-			return gToast(`only ${maxSelectedCategory} categories allowed`, {
-				type: ToastType.DANGER,
-				position: 'top-center',
-			});
-		}
-		// With whole category object
-		setCategories(newCategories);
-		// Parsed for mutation
-		setList(categoriesList);
-		setValue(categoriesList);
 	};
 
 	return (
@@ -55,16 +46,16 @@ const CategoryInput = (props: any) => {
 			</div>
 			<InputContainer>
 				<CatgegoriesGrid>
-					{categoryList.map((i, index) => {
-						const checked = categories.find(
-							(el: any) => el.name === i.name,
+					{categoryList.map(i => {
+						const checked = value.find(
+							(el: ICategory) => el.name === i.name,
 						);
 						return (
 							<CheckBox
-								key={index}
+								key={i.value}
 								title={i.value}
 								checked={!!checked}
-								onChange={() => handleChange(i)}
+								onChange={e => handleChange(e, i.name)}
 							/>
 						);
 					})}

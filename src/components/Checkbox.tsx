@@ -13,10 +13,13 @@ const CheckBox = (props: {
 	style?: any;
 }) => {
 	const { onChange, checked, title, style } = props;
-	const isChecked = checked;
 	return (
-		<Wrapper onClick={onChange} checked={isChecked} style={style}>
-			<Box checked={isChecked} />
+		<Wrapper
+			onClick={() => onChange(!checked)}
+			checked={checked}
+			style={style}
+		>
+			<Box checked={checked} />
 			{checked ? <img src='/images/checkmark-2.svg' /> : <span />}
 			<P>{title}</P>
 		</Wrapper>
