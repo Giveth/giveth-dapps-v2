@@ -25,7 +25,7 @@ const PhotoStep: FC<IStep> = ({ setStep }) => {
 				},
 			},
 		});
-		setUrl(imageUploaded);
+		setUrl(imageUploaded.upload);
 	};
 
 	const onSave = async () => {
