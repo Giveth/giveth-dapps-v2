@@ -15,13 +15,15 @@ import { OnboardSteps } from './Onboarding.view';
 import Image from 'next/image';
 import { useDropzone } from 'react-dropzone';
 import { client } from '@/apollo/apolloClient';
-import { UPLOAD_PROFILE_PHOTO } from '@/apollo/gql/gqlUser';
+import { UPDATE_USER, UPLOAD_PROFILE_PHOTO } from '@/apollo/gql/gqlUser';
 import { Row } from '@/components/styled-components/Grid';
+import { useMutation } from '@apollo/client';
 
 const PhotoStep: FC<IStep> = ({ setStep }) => {
 	const [url, setUrl] = useState<string>();
 	const [file, setFile] = useState<File>();
 	const [uploading, setUploading] = useState(false);
+	const [updateUser] = useMutation(UPDATE_USER);
 	const { getRootProps, getInputProps, open } = useDropzone({
 		accept: 'image/*',
 		multiple: false,
@@ -48,7 +50,12 @@ const PhotoStep: FC<IStep> = ({ setStep }) => {
 		setUploading(false);
 	};
 
-	const onSave = () => {
+	const onSave = async () => {
+		const { data: response } = await updateUser({
+			variables: {
+				avatar: url,
+			},
+		});
 		setStep(OnboardSteps.DONE);
 	};
 
