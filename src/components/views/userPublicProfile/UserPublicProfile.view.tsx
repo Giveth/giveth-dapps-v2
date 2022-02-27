@@ -139,16 +139,14 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 			<PubliCProfileHeader>
 				<Container>
 					<UserInfoWithAvatarRow>
-						{user.avatar ? (
-							<img src={user.avatar} alt={user.name} />
-						) : (
-							<Image
-								src='/images/avatar.svg'
-								width={128}
-								height={128}
-								alt='user avatar'
-							/>
-						)}
+						<Image
+							src={
+								user.avatar ? user.avatar : '/images/avatar.svg'
+							}
+							width={128}
+							height={128}
+							alt={user.name}
+						/>
 						<UserInforRow>
 							<H3 weight={700}>{user.name}</H3>
 							{user.url && (
