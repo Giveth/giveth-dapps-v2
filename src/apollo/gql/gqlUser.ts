@@ -117,7 +117,7 @@ export const UPDATE_USER = gql`
 		$email: String
 		$lastName: String
 		$firstName: String
-		$avatat: String
+		$avatar: String
 	) {
 		updateUser(
 			url: $url
@@ -125,7 +125,7 @@ export const UPDATE_USER = gql`
 			email: $email
 			firstName: $firstName
 			lastName: $lastName
-			avatar: $avatat
+			avatar: $avatar
 		)
 	}
 `;
