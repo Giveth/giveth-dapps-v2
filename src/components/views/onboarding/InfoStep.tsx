@@ -1,5 +1,6 @@
 import { UPDATE_USER } from '@/apollo/gql/gqlUser';
 import { Row } from '@/components/styled-components/Grid';
+import { gToast, ToastType } from '@/components/toasts';
 import { useMutation } from '@apollo/client';
 import {
 	brandColors,
@@ -12,6 +13,7 @@ import { ChangeEvent, FC, useEffect, useReducer, useState } from 'react';
 import styled from 'styled-components';
 import { IStep, OnboardActions, OnboardStep } from './common';
 import { OnboardSteps } from './Onboarding.view';
+import { Toaster } from 'react-hot-toast';
 
 interface IUserIfo {
 	firstName: string;
@@ -61,67 +63,76 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 			},
 		});
 		setDisabled(false);
-		setStep(OnboardSteps.PHOTO);
+		if (response.updateUser) {
+			setStep(OnboardSteps.PHOTO);
+		} else {
+			gToast('Failed to update your inforamtion. Please try again.', {
+				type: ToastType.DANGER,
+			});
+		}
 	};
 
 	return (
-		<OnboardStep>
-			<SectionHeader>How we should call you?</SectionHeader>
-			<Section>
-				<InputContainer>
-					<InputLabel>FIRST NAME</InputLabel>
-					<Input
-						placeholder='John'
-						name='firstName'
-						value={firstName}
-						onChange={reducerInputChange}
-					/>
-				</InputContainer>
-				<InputContainer>
-					<InputLabel>LAST NAME</InputLabel>
-					<Input
-						placeholder='Doe'
-						name='lastName'
-						value={lastName}
-						onChange={reducerInputChange}
-					/>
-				</InputContainer>
-			</Section>
-			<SectionHeader>Where are you?</SectionHeader>
-			<Section>
-				<InputContainer>
-					<InputLabel>LOCATION (OPTIONAL)</InputLabel>
-					<Input
-						placeholder='Portugal, Turkey,...'
-						name='location'
-						value={location}
-						onChange={reducerInputChange}
-					/>
-				</InputContainer>
-			</Section>
-			<SectionHeader>
-				Personal website or URL to somewhere special?
-			</SectionHeader>
-			<Section>
-				<InputContainer>
-					<InputLabel>WEBSITE OR URL (OPTIONAL)</InputLabel>
-					<Input
-						placeholder='Website'
-						name='website'
-						value={website}
-						onChange={reducerInputChange}
-					/>
-					<InputDesc size='Small'>
-						Your home page, blog, or company site.
-					</InputDesc>
-				</InputContainer>
-			</Section>
-			<OnboardActions
-				onSave={onSave}
-				saveLabel='SAVE & CONTINUE'
-				disabled={disabled}
-			/>
-		</OnboardStep>
+		<>
+			<OnboardStep>
+				<SectionHeader>How we should call you?</SectionHeader>
+				<Section>
+					<InputContainer>
+						<InputLabel>FIRST NAME</InputLabel>
+						<Input
+							placeholder='John'
+							name='firstName'
+							value={firstName}
+							onChange={reducerInputChange}
+						/>
+					</InputContainer>
+					<InputContainer>
+						<InputLabel>LAST NAME</InputLabel>
+						<Input
+							placeholder='Doe'
+							name='lastName'
+							value={lastName}
+							onChange={reducerInputChange}
+						/>
+					</InputContainer>
+				</Section>
+				<SectionHeader>Where are you?</SectionHeader>
+				<Section>
+					<InputContainer>
+						<InputLabel>LOCATION (OPTIONAL)</InputLabel>
+						<Input
+							placeholder='Portugal, Turkey,...'
+							name='location'
+							value={location}
+							onChange={reducerInputChange}
+						/>
+					</InputContainer>
+				</Section>
+				<SectionHeader>
+					Personal website or URL to somewhere special?
+				</SectionHeader>
+				<Section>
+					<InputContainer>
+						<InputLabel>WEBSITE OR URL (OPTIONAL)</InputLabel>
+						<Input
+							placeholder='Website'
+							name='website'
+							value={website}
+							onChange={reducerInputChange}
+						/>
+						<InputDesc size='Small'>
+							Your home page, blog, or company site.
+						</InputDesc>
+					</InputContainer>
+				</Section>
+				<OnboardActions
+					onSave={onSave}
+					saveLabel='SAVE & CONTINUE'
+					disabled={disabled}
+				/>
+			</OnboardStep>
+			<Toaster />
+		</>
 	);
 };
 

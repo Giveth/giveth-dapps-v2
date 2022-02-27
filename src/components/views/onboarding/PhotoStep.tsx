@@ -18,6 +18,8 @@ import { client } from '@/apollo/apolloClient';
 import { UPDATE_USER, UPLOAD_PROFILE_PHOTO } from '@/apollo/gql/gqlUser';
 import { Row } from '@/components/styled-components/Grid';
 import { useMutation } from '@apollo/client';
+import { gToast, ToastType } from '@/components/toasts';
+import { Toaster } from 'react-hot-toast';
 
 const PhotoStep: FC<IStep> = ({ setStep }) => {
 	const [url, setUrl] = useState<string>();
@@ -56,70 +58,84 @@ const PhotoStep: FC<IStep> = ({ setStep }) => {
 				avatar: url,
 			},
 		});
-		setStep(OnboardSteps.DONE);
+		if (response.updateUser) {
+			setStep(OnboardSteps.DONE);
+		} else {
+			gToast('Failed to update your profile photo. Please try again.', {
+				type: ToastType.DANGER,
+			});
+		}
 	};
 
 	return (
-		<OnboardStep>
-			<ProfilePicWrapper>
-				<Image
-					src='/images/avatar.svg'
-					width={128}
-					height={128}
-					alt='user avatar'
+		<>
+			<OnboardStep>
+				<ProfilePicWrapper>
+					<Image
+						src='/images/avatar.svg'
+						width={128}
+						height={128}
+						alt='user avatar'
+					/>
+				</ProfilePicWrapper>
+				<Desc>
+					This is how you look like right now, strange! right?
+					<br />
+					Uploadsomething better can help with getting more funds!
+				</Desc>
+				<DropZone {...getRootProps()}>
+					<input {...getInputProps()} />
+					<Image
+						src='/images/icons/image.svg'
+						width={36}
+						height={36}
+						alt='image'
+					/>
+					<P>
+						{`Drag & drop an image here or`}{' '}
+						<span onClick={open}>Upload from computer.</span>
+					</P>
+					<P>
+						Suggested image size min. 600px width. Image size up to
+						4Mb.
+					</P>
+				</DropZone>
+				<UploadsContainer>
+					{file && (
+						<UploadContainer>
+							<Image
+								src={URL.createObjectURL(file)}
+								height={48}
+								width={48}
+								alt='user profile photo'
+							/>
+							<UploadInfoRow
+								flexDirection='column'
+								justifyContent='space-between'
+							>
+								<Subline>{file.name}</Subline>
+								{url && (
+									<Row justifyContent='space-between'>
+										<SublineBold>Uploaded</SublineBold>
+										<DeleteRow onClick={onDelete}>
+											<IconX size={16} />
+											<GLink size='Small'>Delete</GLink>
+										</DeleteRow>
+									</Row>
+								)}
+								<UplaodBar uploading={uploading} />
+							</UploadInfoRow>
+						</UploadContainer>
+					)}
+				</UploadsContainer>
+				<OnboardActions
+					onSave={onSave}
+					saveLabel='SAVE'
+					disabled={!url}
 				/>
-			</ProfilePicWrapper>
-			<Desc>
-				This is how you look like right now, strange! right?
-				<br />
-				Uploadsomething better can help with getting more funds!
-			</Desc>
-			<DropZone {...getRootProps()}>
-				<input {...getInputProps()} />
-				<Image
-					src='/images/icons/image.svg'
-					width={36}
-					height={36}
-					alt='image'
-				/>
-				<P>
-					{`Drag & drop an image here or`}{' '}
-					<span onClick={open}>Upload from computer.</span>
-				</P>
-				<P>
-					Suggested image size min. 600px width. Image size up to 4Mb.
-				</P>
-			</DropZone>
-			<UploadsContainer>
-				{file && (
-					<UploadContainer>
-						<Image
-							src={URL.createObjectURL(file)}
-							height={48}
-							width={48}
-							alt='user profile photo'
-						/>
-						<UploadInfoRow
-							flexDirection='column'
-							justifyContent='space-between'
-						>
-							<Subline>{file.name}</Subline>
-							{url && (
-								<Row justifyContent='space-between'>
-									<SublineBold>Uploaded</SublineBold>
-									<DeleteRow onClick={onDelete}>
-										<IconX size={16} />
-										<GLink size='Small'>Delete</GLink>
-									</DeleteRow>
-								</Row>
-							)}
-							<UplaodBar uploading={uploading} />
-						</UploadInfoRow>
-					</UploadContainer>
-				)}
-			</UploadsContainer>
-			<OnboardActions onSave={onSave} saveLabel='SAVE' disabled={!url} />
-		</OnboardStep>
+			</OnboardStep>
+			<Toaster />
+		</>
 	);
 };
 
