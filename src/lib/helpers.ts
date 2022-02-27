@@ -2,24 +2,20 @@ import { ethers } from 'ethers';
 import { keccak256 } from '@ethersproject/keccak256';
 import { Contract } from '@ethersproject/contracts';
 import { Web3Provider } from '@ethersproject/providers';
-import { Web3ReactContextInterface } from '@web3-react/core/dist/types';
-import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
-import { PortisConnector } from '@web3-react/portis-connector';
-import { FortmaticConnector } from '@web3-react/fortmatic-connector';
-import { AuthereumConnector } from '@web3-react/authereum-connector';
 import { promisify } from 'util';
-import Routes from './constants/Routes';
 import { networkInfo } from './constants/NetworksObj';
 import cookie from 'cookie';
 // @ts-ignore
 import tokenAbi from 'human-standard-token-abi';
-
-declare let window: any;
 import { BasicNetworkConfig, GasPreference } from '@/types/config';
 import { EWallets } from '@/lib/wallet/walletTypes';
 import { brandColors } from '@giveth/ui-design-system';
 import { giveconomyTabs, mustSignTabs } from '@/lib/constants/Tabs';
 import { IUser } from '@/apollo/types/types';
+import Routes from '@/lib/constants/Routes';
+import { gToast, ToastType } from '@/components/toasts';
+
+declare let window: any;
 
 export function parseCookies(req: any) {
 	return cookie.parse(req ? req.headers.cookie || '' : document.cookie);
@@ -99,14 +95,6 @@ export const compareAddresses = (
 
 export const isUserRegistered = (user?: IUser) => {
 	return Boolean(user && user.name && user.email);
-};
-
-export const slugToProjectView = (slug: string) => {
-	return Routes.Project + '/' + slug;
-};
-
-export const slugToProjectDonate = (slug: string) => {
-	return Routes.Donate + '/' + slug;
 };
 
 export const htmlToText = (text?: string) => {
@@ -360,7 +348,7 @@ export const checkLinkActive = (route: string, href: string) => {
 	if (route === href) {
 		return true;
 	}
-	if (href === '/giveconomy') {
+	if (href === Routes.GIVECONOMY) {
 		return isGivEconomyRoute(route);
 	}
 	return false;
@@ -370,12 +358,19 @@ export const isGivEconomyRoute = (route: string) => {
 	const givEconomyRoute = giveconomyTabs.find(
 		giveconomyTab => giveconomyTab.href === route,
 	);
-	return givEconomyRoute ? true : false;
+	return !!givEconomyRoute;
 };
 
 export const isMustSignRoute = (route: string) => {
 	const mustSignRoute = mustSignTabs.find(
 		mustSignTab => mustSignTab.href === route,
 	);
-	return mustSignRoute ? true : false;
+	return !!mustSignRoute;
+};
+
+export const showToastError = (err: any) => {
+	gToast(JSON.stringify(err.message || err), {
+		type: ToastType.DANGER,
+		position: 'top-center',
+	});
 };

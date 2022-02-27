@@ -6,7 +6,7 @@ import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import { Shadow } from '@/components/styled-components/Shadow';
 import CategoryBadge from '@/components/badges/CategoryBadge';
 import Routes from '@/lib/constants/Routes';
-import { slugToProjectDonate, mediaQueries } from '@/lib/helpers';
+import { mediaQueries, showToastError } from '@/lib/helpers';
 import QuestionBadge from '@/components/badges/QuestionBadge';
 import { IProject } from '@/apollo/types/types';
 import links from '@/lib/constants/links';
@@ -29,6 +29,7 @@ import DeactivateProjectModal from '@/components/modals/DeactivateProjectModal';
 import ArchiveIcon from '../../../../public/images/icons/archive.svg';
 import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
 import { gToast, ToastType } from '@/components/toasts';
+import { idToProjectEdit, slugToProjectDonate } from '@/lib/routeCreators';
 
 interface IProjectDonateCard {
 	project?: IProject;
@@ -140,9 +141,7 @@ const ProjectDonateCard = ({
 				}
 				const { data } = await client.mutate({
 					mutation: ACTIVATE_PROJECT,
-					variables: {
-						projectId: Number(id),
-					},
+					variables: { projectId: Number(id) },
 				});
 				if (data.activateProject) {
 					setIsActive(true);
@@ -153,10 +152,7 @@ const ProjectDonateCard = ({
 					});
 				}
 			} catch (e: any) {
-				gToast(JSON.stringify(e.message || e), {
-					type: ToastType.DANGER,
-					position: 'top-center',
-				});
+				showToastError(e);
 			}
 		}
 	};
@@ -191,7 +187,9 @@ const ProjectDonateCard = ({
 						<FullButton
 							buttonType='primary'
 							label='EDIT'
-							disabled
+							onClick={() =>
+								router.push(idToProjectEdit(project?.id || ''))
+							}
 						/>
 						{!isDraft ? (
 							<FullOutlineButton

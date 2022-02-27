@@ -15,6 +15,7 @@ const Routes = {
 	MyAccount,
 	MyProjects: MyAccount + '/projects',
 	MyDonations: MyAccount + '/donations',
+	GIVECONOMY: '/giveconomy',
 };
 
 export default Routes;

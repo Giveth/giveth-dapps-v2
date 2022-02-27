@@ -9,8 +9,11 @@ import config from '@/configuration';
 
 const googleMapURL = `https://maps.googleapis.com/maps/api/js?key=${config.GOOGLE_MAPS_API_KEY}&v=3.exp&libraries=geometry,drawing,places`;
 
-const LocationInput = (props: { setValue: (a: string) => void }) => {
-	const { setValue } = props;
+const LocationInput = (props: {
+	defaultValue?: string;
+	setValue: (a: string) => void;
+}) => {
+	const { defaultValue, setValue } = props;
 	const MapLoader = withScriptjs(Map);
 
 	return (
@@ -35,6 +38,7 @@ const LocationInput = (props: { setValue: (a: string) => void }) => {
 							}}
 						/>
 					}
+					defaultLocation={defaultValue}
 					setLocation={setValue}
 				/>
 			</InputContainer>
