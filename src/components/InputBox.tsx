@@ -15,18 +15,32 @@ interface IInputBox {
 }
 
 const InputBox = (props: {
+	value: string;
 	onChange: OnChangeFunction;
 	placeholder?: string;
 	type?: string;
 	errorHandler?: any;
+	setError?: any;
+	error?: any;
+	onFocus?: any;
 }) => {
-	const { onChange, errorHandler, type, placeholder } = props;
-	const [error, setError] = useState<boolean>(false);
+	const {
+		value,
+		onChange,
+		error,
+		setError,
+		errorHandler,
+		type,
+		placeholder,
+		onFocus,
+	} = props;
 	return (
 		<Box>
-			<Wrapper error={error}>
+			<Wrapper>
 				<B className='w-100 mr-2' color={neutralColors.gray[900]}>
 					<Input
+						id='input-box'
+						value={value}
 						type={type}
 						onChange={(e: any) => {
 							onChange(e.target.value);
@@ -35,6 +49,8 @@ const InputBox = (props: {
 									errorHandler?.condition(e.target.value),
 							);
 						}}
+						onFocus={() => onFocus(true)}
+						onBlur={() => onFocus(false)}
 						placeholder={placeholder || 'Search Projects...'}
 					/>
 				</B>
@@ -78,18 +94,8 @@ const Wrapper = styled.div`
 	margin: 0 auto;
 
 	height: 54px;
-	border: 2px solid ${neutralColors.gray[300]};
-	border-radius: 0px 6px 6px 0px;
 	* {
 		width: 90%;
-	}
-
-	:active,
-	:hover {
-		border-color: ${(props: IInputBox) =>
-			props.error === true
-				? semanticColors.punch[500]
-				: brandColors.giv[500]};
 	}
 
 	/* Chrome, Safari, Edge, Opera */

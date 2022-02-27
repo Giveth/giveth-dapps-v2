@@ -27,6 +27,7 @@ interface IProjectCardBadges {
 	projectHref: string;
 	projectDescription?: string;
 	projectId?: string | number;
+	noHearts?: boolean;
 }
 
 const ProjectCardBadges = (props: IProjectCardBadges) => {
@@ -43,6 +44,7 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 		projectHref,
 		projectDescription,
 		projectId,
+		noHearts,
 	} = props;
 
 	const [reaction, setReaction] = useState(props.reaction);
@@ -105,25 +107,29 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 					{verified && <VerificationBadge verified />}
 					{traceable && <VerificationBadge trace />}
 				</BadgeContainer>
-				<BadgeContainer>
-					{Number(totalReactions) > 0 && (
-						<LikeBadge>{totalReactions}</LikeBadge>
-					)}
-					<HeartWrap active={!!reaction?.id} isHover={isHover}>
-						<Image
-							src={reaction?.id ? redHeartIcon : grayHeartIcon}
-							alt='heart icon'
-							onClick={() => {
-								likeUnlikeProject();
-							}}
-						/>
-						<ShareImageButton
-							src={shareIcon}
-							alt='share icon'
-							onClick={() => setShowModal(true)}
-						/>
-					</HeartWrap>
-				</BadgeContainer>
+				{!noHearts && (
+					<BadgeContainer>
+						{Number(totalReactions) > 0 && (
+							<LikeBadge>{totalReactions}</LikeBadge>
+						)}
+						<HeartWrap active={!!reaction?.id} isHover={isHover}>
+							<Image
+								src={
+									reaction?.id ? redHeartIcon : grayHeartIcon
+								}
+								alt='heart icon'
+								onClick={() => {
+									likeUnlikeProject();
+								}}
+							/>
+							<ShareImageButton
+								src={shareIcon}
+								alt='share icon'
+								onClick={() => setShowModal(true)}
+							/>
+						</HeartWrap>
+					</BadgeContainer>
+				)}
 			</BadgeWrapper>
 		</>
 	);

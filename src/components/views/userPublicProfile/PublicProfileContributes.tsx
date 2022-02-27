@@ -4,74 +4,146 @@ import {
 	neutralColors,
 	P,
 } from '@giveth/ui-design-system';
-import { FC, useState } from 'react';
+import { useRouter } from 'next/router';
+import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Row } from '../../styled-components/Grid';
 import PublicProfileDonationsTab from './PublicProfileDonationsTab';
 import PublicProfileLikedTab from './PublicProfileLikedTab';
 import PublicProfileProjectsTab from './PublicProfileProjectsTab';
+import PublicProfileOverviewTab from './PublicProfileOverviewTab';
 import { IUserPublicProfileView } from './UserPublicProfile.view';
 
 enum EPublicProfile {
+	OVERVIEW,
 	PROJECTS,
 	DONATIONS,
 	LIKED,
 }
 
-const PublicProfileContributes: FC<IUserPublicProfileView> = ({ user }) => {
-	const [tab, setTab] = useState(EPublicProfile.PROJECTS);
+interface ITab {
+	active: boolean;
+}
+
+const PublicProfileContributes: FC<IUserPublicProfileView> = ({
+	user,
+	myAccount,
+}) => {
+	const router = useRouter();
+	const [tab, setTab] = useState(
+		myAccount ? EPublicProfile.OVERVIEW : EPublicProfile.PROJECTS,
+	);
+
+	useEffect(() => {
+		const tab = router?.query?.tab;
+		switch (tab) {
+			case 'projects':
+				setTab(EPublicProfile.PROJECTS);
+				break;
+			case 'donations':
+				setTab(EPublicProfile.DONATIONS);
+				break;
+			case 'liked':
+				setTab(EPublicProfile.LIKED);
+				break;
+			default:
+				setTab(
+					myAccount
+						? EPublicProfile.OVERVIEW
+						: EPublicProfile.PROJECTS,
+				);
+		}
+	}, [router?.query?.tab]);
+
 	return (
-		<PubliCProfileTabsAndProjectContianer>
+		<PubliCProfileTabsAndProjectContainer>
 			<Container>
 				<PubliCProfileTabsContainer>
+					{myAccount && (
+						<PubliCProfileTab
+							active={tab === EPublicProfile.OVERVIEW}
+							onClick={() => setTab(EPublicProfile.OVERVIEW)}
+						>
+							Overview
+						</PubliCProfileTab>
+					)}
 					<PubliCProfileTab
 						active={tab === EPublicProfile.PROJECTS}
 						onClick={() => setTab(EPublicProfile.PROJECTS)}
-					>{`${user.name}’s projects`}</PubliCProfileTab>
+					>
+						{`${myAccount ? 'My ' : user.name + '’s'} projects`}
+						{myAccount && user?.projectsCount != 0 && (
+							<Count active={tab === EPublicProfile.PROJECTS}>
+								{user?.projectsCount}
+							</Count>
+						)}
+					</PubliCProfileTab>
 					<PubliCProfileTab
 						active={tab === EPublicProfile.DONATIONS}
 						onClick={() => setTab(EPublicProfile.DONATIONS)}
 					>
-						Donations
+						{`${myAccount ? 'My ' : ''}Donations`}
+						{myAccount && user?.donationsCount != 0 && (
+							<Count active={tab === EPublicProfile.DONATIONS}>
+								{user?.donationsCount}
+							</Count>
+						)}
 					</PubliCProfileTab>
 					<PubliCProfileTab
 						active={tab === EPublicProfile.LIKED}
 						onClick={() => setTab(EPublicProfile.LIKED)}
 					>
 						Liked projects
+						{myAccount && user?.donationsCount != 0 && (
+							<Count active={tab === EPublicProfile.LIKED}>
+								{user?.likedProjectsCount}
+							</Count>
+						)}
 					</PubliCProfileTab>
 				</PubliCProfileTabsContainer>
+				{tab === EPublicProfile.OVERVIEW && (
+					<PublicProfileOverviewTab
+						user={user}
+						myAccount={myAccount}
+					/>
+				)}
 				{tab === EPublicProfile.PROJECTS && (
-					<PublicProfileProjectsTab user={user} />
+					<PublicProfileProjectsTab
+						user={user}
+						myAccount={myAccount}
+					/>
 				)}
 				{tab === EPublicProfile.DONATIONS && (
-					<PublicProfileDonationsTab user={user} />
+					<PublicProfileDonationsTab
+						user={user}
+						myAccount={myAccount}
+					/>
 				)}
 				{tab === EPublicProfile.LIKED && (
-					<PublicProfileLikedTab user={user} />
+					<PublicProfileLikedTab user={user} myAccount={myAccount} />
 				)}
 			</Container>
-		</PubliCProfileTabsAndProjectContianer>
+		</PubliCProfileTabsAndProjectContainer>
 	);
 };
 
 export default PublicProfileContributes;
 
-const PubliCProfileTabsAndProjectContianer = styled.div``;
+const PubliCProfileTabsAndProjectContainer = styled.div``;
 
 const PubliCProfileTabsContainer = styled(Row)`
-	padding-bottom: 37px;
+	padding: 37px 0;
 	gap: 16px;
 `;
 
-interface ITab {
-	active?: boolean;
-}
-
 const PubliCProfileTab = styled(P)<ITab>`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 	padding: 9px 16px;
-	color: ${brandColors.pinky[500]};
 	cursor: pointer;
+	color: ${(props: ITab) =>
+		props.active ? brandColors.deep[600] : brandColors.pinky[500]};
 	${props =>
 		props.active &&
 		`
@@ -79,4 +151,17 @@ const PubliCProfileTab = styled(P)<ITab>`
 		box-shadow: 0px 3px 20px rgba(212, 218, 238, 0.4);
 		border-radius: 50px;
 	`}
+`;
+
+const Count = styled.div`
+	background-color: ${(props: ITab) =>
+		props.active ? neutralColors.gray[500] : brandColors.pinky[500]};
+	color: white;
+	width: 24px;
+	height: 24px;
+	align-itmes: center;
+	text-align: center;
+	border-radius: 50%;
+	font-size: 12px;
+	margin-left: 4px;
 `;

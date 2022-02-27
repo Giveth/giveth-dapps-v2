@@ -1,6 +1,11 @@
 import Image from 'next/image';
-import { Row } from '@/components/styled-components/Grid';
 import { FC, useState, useEffect } from 'react';
+import { useWeb3React } from '@web3-react/core';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
+import { GLink, IconMenu24 } from '@giveth/ui-design-system';
+
+import { Row } from '@/components/styled-components/Grid';
 import { ThemeType } from '@/context/theme.context';
 import { formatWeiHelper } from '@/helpers/number';
 import { networksParams } from '@/helpers/blockchain';
@@ -25,19 +30,16 @@ import {
 	CoverLine,
 	MBContainer,
 	HeaderSmallMenuAndButtonContainer,
+	SmallCreateProjectParent,
 } from './Header.sc';
-import Link from 'next/link';
 import { useSubgraph } from '@/context/subgraph.context';
 import { RewardMenu } from '@/components/menu/RewardMenu';
-import { useWeb3React } from '@web3-react/core';
 import WalletModal from '@/components/modals/WalletModal';
 import { walletsArray } from '@/lib/wallet/walletTypes';
 import SignInModal from '../modals/SignInModal';
 import MenuWallet from '@/components/menu/MenuWallet';
 import { ETheme, useGeneral } from '@/context/general.context';
-import { useRouter } from 'next/router';
 import { menuRoutes } from '../menu/MenuRoutes';
-import { GLink, IconMenu24 } from '@giveth/ui-design-system';
 import { HeaderSmallMenu } from '../menu/HeaderMenu';
 import useUser from '@/context/UserProvider';
 import {
@@ -45,6 +47,7 @@ import {
 	isGivEconomyRoute,
 	shortenAddress,
 } from '@/lib/helpers';
+import Routes from '@/lib/constants/Routes';
 
 export interface IHeader {
 	theme?: ThemeType;
@@ -97,7 +100,7 @@ const Header: FC<IHeader> = () => {
 				ticking = false;
 				return;
 			}
-			const show = scrollY > lastScrollY ? false : true;
+			const show = scrollY <= lastScrollY;
 			setShowHeader(show);
 			if (!show) {
 				setShowRewardMenu(false);
@@ -154,14 +157,18 @@ const Header: FC<IHeader> = () => {
 							</Logo>
 						</BackBtn>
 					) : (
-						<Logo>
-							<Image
-								width='48px'
-								height='48px'
-								alt='Giveth logo'
-								src={`/images/logo/logo1.png`}
-							/>
-						</Logo>
+						<Link href={Routes.Home}>
+							<a>
+								<Logo>
+									<Image
+										width='48px'
+										height='48px'
+										alt='Giveth logo'
+										src={`/images/logo/logo1.png`}
+									/>
+								</Logo>
+							</a>
+						</Link>
 					)}
 				</Row>
 				{showLinks && (
@@ -181,33 +188,43 @@ const Header: FC<IHeader> = () => {
 				)}
 
 				<Row gap='8px'>
-					<Link href='/create' passHref>
-						<CreateProject
-							label='CREATE A PROJECT'
-							size='small'
-							theme={theme}
-							linkType={
-								theme === ETheme.Light ? 'primary' : 'secondary'
-							}
-						/>
+					<Link href={Routes.CreateProject}>
+						<a>
+							<CreateProject
+								label='CREATE A PROJECT'
+								size='small'
+								theme={theme}
+								linkType={
+									theme === ETheme.Light
+										? 'primary'
+										: 'secondary'
+								}
+							/>
+						</a>
 					</Link>
-					<Link href='/create' passHref>
-						<SmallCreateProject
-							theme={theme}
-							label=''
-							icon={
-								<Image
-									src='/images/plus-white.svg'
-									width={16}
-									height={16}
-									alt='create project'
+					<SmallCreateProjectParent>
+						<Link href={Routes.CreateProject}>
+							<a>
+								<SmallCreateProject
+									theme={theme}
+									label=''
+									icon={
+										<Image
+											src='/images/plus-white.svg'
+											width={16}
+											height={16}
+											alt='create project'
+										/>
+									}
+									linkType={
+										theme === ETheme.Light
+											? 'primary'
+											: 'secondary'
+									}
 								/>
-							}
-							linkType={
-								theme === ETheme.Light ? 'primary' : 'secondary'
-							}
-						/>
-					</Link>
+							</a>
+						</Link>
+					</SmallCreateProjectParent>
 					{active && account && chainId ? (
 						<>
 							<MenuAndButtonContainer

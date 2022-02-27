@@ -4,7 +4,7 @@ import { FlexCenter } from '../styled-components/Grid';
 const InfoBadge = () => {
 	return (
 		<div>
-			<Circle>?</Circle>
+			<Circle>!</Circle>
 		</div>
 	);
 };

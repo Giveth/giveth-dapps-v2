@@ -145,6 +145,7 @@ export const FETCH_PROJECT_UPDATES = gql`
 			id
 			title
 			projectId
+			createdAt
 			userId
 			content
 			isMain
@@ -270,5 +271,11 @@ export const DEACTIVATE_PROJECT = gql`
 export const ACTIVATE_PROJECT = gql`
 	mutation ($projectId: Float!) {
 		activateProject(projectId: $projectId)
+	}
+`;
+
+export const TITLE_IS_VALID = gql`
+	query IsValidTitleForProject($title: String!, $projectId: Float) {
+		isValidTitleForProject(title: $title, projectId: $projectId)
 	}
 `;

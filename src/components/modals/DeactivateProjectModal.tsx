@@ -16,7 +16,7 @@ import {
 	DEACTIVATE_PROJECT,
 	GET_STATUS_REASONS,
 } from '@/apollo/gql/gqlProjects';
-import InfoBadge from '@/components/badges/InfoBadge';
+import QuestionBadge from '@/components/badges/QuestionBadge';
 import FormProgress from '@/components/FormProgress';
 import { Shadow } from '@/components/styled-components/Shadow';
 import useUser from '@/context/UserProvider';
@@ -124,7 +124,7 @@ const DeactivateProjectModal = ({
 					<DoneContent show={tab === 2} />
 				</TextWrapper>
 				<GivBackNotif>
-					<InfoBadge />
+					<QuestionBadge />
 					<GLink>
 						{tab < 2
 							? 'You can reactivate later from your projects section under your account space!'

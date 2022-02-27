@@ -44,6 +44,7 @@ export const Button = styled.button<IButtonProps>`
 	}};
 	width: 100%;
 	font-style: normal;
+	font-family: 'Red Hat Text', sans-serif;
 	font-weight: bold;
 	font-size: 16px;
 	line-height: 18px;

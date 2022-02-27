@@ -6,19 +6,20 @@ import React, {
 	useState,
 } from 'react';
 import { useRouter } from 'next/router';
+import { useCookies } from 'react-cookie';
 import { useWeb3React } from '@web3-react/core';
 import { BigNumberish } from '@ethersproject/bignumber';
 import { formatEther } from '@ethersproject/units';
 
-import { initializeApollo } from '../apollo/apolloClient';
-import { GET_USER_BY_ADDRESS } from '../apollo/gql/gqlUser';
+import { initializeApollo } from '@/apollo/apolloClient';
+import { GET_USER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
 import {
 	compareAddresses,
 	LocalStorageTokenLabel,
 	signMessage,
-} from '../lib/helpers';
+} from '@/lib/helpers';
 import * as Auth from '../services/auth';
-import { getToken } from '../services/token';
+import { getToken } from '@/services/token';
 import User from '../entities/user';
 import { getLocalStorageUserLabel } from '@/services/auth';
 import useWallet from '@/hooks/walletHooks';
@@ -36,6 +37,7 @@ interface IUserContext {
 	actions: {
 		signIn?: () => Promise<boolean | string>;
 		signOut?: () => void;
+		showSignModal: () => void;
 	};
 }
 
@@ -48,6 +50,7 @@ const UserContext = createContext<IUserContext>({
 	actions: {
 		signIn: async () => false,
 		signOut: () => {},
+		showSignModal: () => {},
 	},
 });
 
@@ -55,6 +58,8 @@ const apolloClient = initializeApollo();
 
 export const UserProvider = (props: { children: ReactNode }) => {
 	const [user, setUser] = useState<IUser | undefined>();
+	const [cookie, setCookie, removeCookie] = useCookies(['giveth_user']);
+
 	const [balance, setBalance] = useState<string | null>(null);
 	const [showWelcomeSignin, setShowWelcomeSignin] = useState<boolean>(false);
 	useWallet();
@@ -138,12 +143,12 @@ export const UserProvider = (props: { children: ReactNode }) => {
 			const DBUser = await fetchUser();
 			const newUser = new User(DBUser);
 			newUser.setToken(token);
-			Auth.setUser(newUser);
+			Auth.setUser(newUser, setCookie, 'giveth_user');
 			await apolloClient.resetStore();
 			setUser(newUser);
 		} else {
 			localUser.setToken(token);
-			Auth.setUser(localUser);
+			Auth.setUser(localUser, setCookie, 'giveth_user');
 			await apolloClient.resetStore();
 			setUser(localUser);
 		}
@@ -155,6 +160,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 		Auth.logout();
 		window.localStorage.removeItem('selectedWallet');
 		window.localStorage.removeItem(getLocalStorageUserLabel() + '_token');
+		removeCookie('giveth_user');
 		apolloClient.resetStore().then();
 		deactivate();
 		setUser(undefined);
@@ -193,7 +199,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 	useEffect(() => {
 		if (account) {
 			const _user = Auth.getUser();
-			if (compareAddresses(account, _user?.walletAddress || '')) {
+			if (compareAddresses(account, _user?.walletAddress)) {
 				const newUser = new User(_user as User);
 				setUser(newUser);
 			} else {
@@ -201,7 +207,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 				fetchUser().then((res: any) => {
 					if (res) {
 						const newUser = new User(res);
-						Auth.setUser(newUser);
+						Auth.setUser(newUser, setCookie, 'giveth_user');
 						setUser(newUser);
 					} else {
 						const noUser = new User({} as User);
@@ -228,6 +234,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 					// showSign,
 					// signModalContent,
 					// setToken
+					showSignModal: () => setShowWelcomeSignin(true),
 					signIn,
 					signOut,
 				},

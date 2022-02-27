@@ -40,10 +40,11 @@ export interface IProjectCreation {
 	description: string;
 	impactLocation?: any;
 	categories: any;
-	organisationId: number;
+	organizationId: number;
 	walletAddress: string;
 	imageStatic?: string | null;
 	imageUpload?: any;
+	isDraft?: boolean;
 }
 
 export interface IUser {
@@ -61,6 +62,7 @@ export interface IUser {
 	totalReceived?: number;
 	projectsCount?: number;
 	donationsCount?: number;
+	likedProjectsCount?: number;
 }
 
 export interface IAdmin {
@@ -83,6 +85,7 @@ export interface IDonation {
 		id?: string;
 		email?: string;
 		name?: string;
+		firstName?: string;
 	};
 	fromWalletAddress: string;
 	amount: number;

@@ -6,7 +6,7 @@ import Select, {
 	StylesConfig,
 } from 'react-select';
 import { defaultTheme } from 'react-select';
-import { neutralColors, P, B } from '@giveth/ui-design-system';
+import { neutralColors, P, B, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 interface ISelectObj {
@@ -15,8 +15,10 @@ interface ISelectObj {
 	chainId?: number;
 	symbol?: string;
 	icon?: string;
+	address?: string;
+	ethereumAddress?: string;
+	decimals?: number;
 }
-
 interface ITokenPicker {
 	isOpen: boolean;
 }
@@ -63,6 +65,16 @@ const Option = ({ ...props }: OptionProps<ISelectObj, false>) => {
 				)}
 			</OptionContainer>
 		</components.Option>
+	);
+};
+
+const NotFound = ({ emptyField }: any) => {
+	return (
+		<NotFoundContainer>
+			<P>No results found</P>
+			<P>Please try a different address or select one from the list</P>
+			<P onClick={emptyField}>Token List</P>
+		</NotFoundContainer>
 	);
 };
 
@@ -118,6 +130,14 @@ const selectStyles: StylesConfig<ISelectObj, false> = {
 	input: (base: any) => ({
 		...base,
 		borderRadius: '8px !important',
+		display: 'flex',
+		flex: 1,
+		'*': {
+			width: '100%',
+		},
+		input: {
+			width: '100% !important',
+		},
 	}),
 };
 
@@ -148,6 +168,21 @@ const TokenPicker = (props: {
 		toggleOpen();
 		setValue(value);
 		onChange(value);
+	};
+
+	const filterOptions = (option: any, inputValue: string) => {
+		if (
+			option.data.address?.toLowerCase() ===
+			inputValue?.toLowerCase()?.replace(/ /g, '')
+		) {
+			return true;
+		}
+		return (
+			option.label.includes(inputValue?.toUpperCase()) ||
+			option.data.name
+				?.toLowerCase()
+				.includes(inputValue?.toLocaleLowerCase())
+		);
 	};
 
 	useEffect(() => {
@@ -197,6 +232,9 @@ const TokenPicker = (props: {
 					IndicatorSeparator: null,
 					Option,
 				}}
+				noOptionsMessage={() => (
+					<NotFound emptyField={() => onChange('')} />
+				)}
 				value={value}
 				inputValue={inputValue}
 				controlShouldRenderValue={false}
@@ -209,6 +247,7 @@ const TokenPicker = (props: {
 				styles={selectStyles}
 				tabSelectsValue={false}
 				placeholder={placeholder}
+				filterOption={filterOptions}
 			/>
 		</Dropdown>
 	);
@@ -295,7 +334,9 @@ const TargetContainer = styled.div`
 	background: ${(props: ITokenPicker) =>
 		props.isOpen ? neutralColors.gray[200] : 'transparent'};
 	border-radius: 6px 0px 0px 6px;
+	border: none;
 	align-items: center;
+	border-right: 2px solid ${neutralColors.gray[300]};
 `;
 
 const RowContainer = styled.div`
@@ -317,6 +358,21 @@ const Img = styled.img`
 `;
 const ArrowImg = styled.img`
 	margin-left: 5px;
+`;
+
+const NotFoundContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	margin-top: 20px;
+
+	div:first-child {
+		font-weight: bold;
+	}
+	div:nth-child(3) {
+		margin-top: 20px;
+		color: ${brandColors.pinky[500]};
+		cursor: pointer;
+	}
 `;
 
 export default TokenPicker;

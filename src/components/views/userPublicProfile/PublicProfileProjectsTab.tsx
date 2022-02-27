@@ -4,6 +4,7 @@ import { IUserProjects } from '@/apollo/types/gqlTypes';
 import { IProject } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import ProjectCard from '@/components/project-card/ProjectCard';
+import ContributeCard from './PublicProfileContributeCard';
 import { Row } from '@/components/styled-components/Grid';
 import { ETheme } from '@/context/general.context';
 import { mediaQueries } from '@/lib/helpers';
@@ -14,15 +15,47 @@ import {
 } from '@giveth/ui-design-system';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { IUserPublicProfileView } from './UserPublicProfile.view';
+import {
+	IUserPublicProfileView,
+	EOrderBy,
+	EDirection,
+	IOrder,
+	NothingToSee,
+} from './UserPublicProfile.view';
+import ProjectsTable from './ProjectsTable';
 
-const itemPerPage = 6;
+const itemPerPage = 10;
 
-const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({ user }) => {
+const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({
+	user,
+	myAccount,
+}) => {
 	const [loading, setLoading] = useState(false);
 	const [projects, setProjects] = useState<IProject[]>([]);
 	const [totalCount, setTotalCount] = useState<number>(0);
 	const [page, setPage] = useState(0);
+
+	const [order, setOrder] = useState<IOrder>({
+		by: EOrderBy.CreationDate,
+		direction: EDirection.DESC,
+	});
+
+	const orderChangeHandler = (orderby: EOrderBy) => {
+		if (orderby === order.by) {
+			setOrder({
+				by: orderby,
+				direction:
+					order.direction === EDirection.ASC
+						? EDirection.DESC
+						: EDirection.ASC,
+			});
+		} else {
+			setOrder({
+				by: orderby,
+				direction: EDirection.DESC,
+			});
+		}
+	};
 
 	useEffect(() => {
 		if (!user) return;
@@ -34,6 +67,8 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({ user }) => {
 					userId: parseFloat(user.id) || -1,
 					take: itemPerPage,
 					skip: page * itemPerPage,
+					orderBy: order.by,
+					direction: order.direction,
 				},
 			});
 			setLoading(false);
@@ -45,14 +80,32 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({ user }) => {
 			}
 		};
 		fetchUserProjects();
-	}, [page, user]);
-
+	}, [user, page, order.by, order.direction]);
 	return (
 		<>
+			<UserContributeInfo>
+				<ContributeCard user={user} />
+			</UserContributeInfo>
 			<ProjectsContainer>
-				{projects.map(project => (
-					<ProjectCard key={project.id} project={project} />
-				))}
+				{!loading && totalCount === 0 ? (
+					<NothingWrapper>
+						<NothingToSee title='This user didn’t create any project yet!' />
+					</NothingWrapper>
+				) : myAccount ? (
+					<ProjectsTableWrapper>
+						<ProjectsTable
+							projects={projects}
+							orderChangeHandler={orderChangeHandler}
+							order={order}
+						/>
+					</ProjectsTableWrapper>
+				) : (
+					<GridContainer>
+						{projects.map(project => (
+							<ProjectCard key={project.id} project={project} />
+						))}
+					</GridContainer>
+				)}
 				{loading && <Loading />}
 			</ProjectsContainer>
 			<Pagination
@@ -73,18 +126,15 @@ export const ProjectsContainer = styled(Container)`
 	gap: 24px;
 	margin-bottom: 64px;
 	padding: 0;
+	align-items: center;
+`;
 
-	${mediaQueries['lg']} {
-		grid-template-columns: repeat(2, 1fr);
-	}
+const ProjectsTableWrapper = styled.div`
+	margin-left: 35px;
+`;
 
-	${mediaQueries['xl']} {
-		grid-template-columns: repeat(3, 1fr);
-	}
-
-	${mediaQueries['xxl']} {
-		grid-template-columns: repeat(3, 1fr);
-	}
+const UserContributeInfo = styled.div`
+	padding: 40px 0 60px;
 `;
 
 export const Loading = styled(Row)`
@@ -97,4 +147,27 @@ export const Loading = styled(Row)`
 		props.theme === ETheme.Dark
 			? brandColors.giv[800]
 			: neutralColors.gray[200]}aa;
+`;
+
+const NothingWrapper = styled.div`
+	position: relative;
+	padding: 100px 0;
+`;
+
+const GridContainer = styled.div`
+	display: grid;
+	position: relative;
+	gap: 24px;
+	margin-bottom: 64px;
+	padding: 0;
+	align-items: center;
+	${mediaQueries['lg']} {
+		grid-template-columns: repeat(2, 1fr);
+	}
+	${mediaQueries['xl']} {
+		grid-template-columns: repeat(3, 1fr);
+	}
+	${mediaQueries['xxl']} {
+		grid-template-columns: repeat(3, 1fr);
+	}
 `;

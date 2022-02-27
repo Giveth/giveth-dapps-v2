@@ -22,25 +22,15 @@ import {
 import Link from 'next/link';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { IUserPublicProfileView } from './UserPublicProfile.view';
+import {
+	IUserPublicProfileView,
+	EOrderBy,
+	EDirection,
+	IOrder,
+	NothingToSee,
+} from './UserPublicProfile.view';
 
 const itemPerPage = 10;
-
-enum EOrderBy {
-	TokenAmount = 'TokenAmount',
-	UsdAmount = 'UsdAmount',
-	CreationDate = 'CreationDate',
-}
-
-enum EDirection {
-	DESC = 'DESC',
-	ASC = 'ASC',
-}
-
-interface IOrder {
-	by: EOrderBy;
-	direction: EDirection;
-}
 
 const injectSortIcon = (order: IOrder, title: EOrderBy) => {
 	return order.by === title ? (
@@ -109,11 +99,17 @@ const PublicProfileDonationsTab: FC<IUserPublicProfileView> = ({ user }) => {
 	return (
 		<>
 			<DonationTableWrapper>
-				<DonationTable
-					donations={donations}
-					order={order}
-					orderChangeHandler={orderChangeHandler}
-				/>
+				{!loading && totalDonations === 0 ? (
+					<NothingWrapper>
+						<NothingToSee title='It seems this user didn’t donate to any project yet!' />
+					</NothingWrapper>
+				) : (
+					<DonationTable
+						donations={donations}
+						order={order}
+						orderChangeHandler={orderChangeHandler}
+					/>
+				)}
 				{loading && <Loading />}
 			</DonationTableWrapper>
 			<Pagination
@@ -194,7 +190,17 @@ const DonationTable: FC<DonationTable> = ({
 						</TransactionLink>
 					</TabelCell>
 					<TabelCell>
-						<P>{donation.valueUsd?.toFixed(2)}$</P>
+						<P>
+							{donation.valueUsd
+								? donation.valueUsd?.toLocaleString(
+										'en-US',
+										{
+											minimumFractionDigits: 0,
+											maximumFractionDigits: 4,
+										} || '',
+								  ) + ' USD'
+								: '-'}{' '}
+						</P>
 					</TabelCell>
 				</RowWrapper>
 			))}
@@ -256,6 +262,11 @@ const Loading = styled(Row)`
 
 const DonationTableWrapper = styled.div`
 	position: relative;
+`;
+
+const NothingWrapper = styled.div`
+	position: relative;
+	padding: 100px 0;
 `;
 
 const RowWrapper = styled.div`

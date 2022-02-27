@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import Image from 'next/image';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
+import Link from 'next/link';
 import { Arc } from '@/components/styled-components/Arc';
 import FlowerIcon from '/public/images/flower.svg';
 import AboutMission from './AboutMission';
@@ -8,6 +9,7 @@ import {
 	H1,
 	Lead,
 	brandColors,
+	GLink,
 	P,
 	Button,
 	neutralColors,
@@ -55,19 +57,34 @@ const AboutIndex = () => {
 					<H1>About us</H1>
 					<br />
 					<Lead>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-						Vitae purus, quis sit pretium, a nunc. Volutpat euismod
-						semper porttitor eleifend. Elementum dui orci enim, nam
-						diam mattis tempus. Et scelerisque dolor bibendum turpis
-						enim, convallis senectus nulla suscipit.
+						Giveth is a community focused on Building the Future of
+						Giving using blockchain technology. Our intention is to
+						support and reward the funding of public goods by
+						creating open, transparent and free access to the
+						revolutionary funding opportunities available within the
+						Ethereum ecosystem.
 					</Lead>
 					<br />
 					<Lead>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-						Vitae purus, quis sit pretium, a nunc. Volutpat euismod
-						semper porttitor eleifend. Elementum dui orci enim, nam
-						diam mattis tempus. Et scelerisque dolor bibendum turpis
-						enim, convallis senectus nulla suscipit.
+						Giveth is building a culture of giving that empowers and
+						rewards those who give -- to projects, to society, and
+						to the world. We aim to inspire our community to
+						participate in an ecosystem of collective support,
+						abundance and value-creation. Check out our{' '}
+						<RedirectButton
+							href='https://calendar.google.com/calendar/u/1?cid=Z2l2ZXRoZG90aW9AZ21haWwuY29t'
+							target='_blank'
+							rel='noreferrer'
+						>
+							Calendar
+						</RedirectButton>{' '}
+						and{' '}
+						<Link href='/join' passHref>
+							<a>
+								<RedirectButton>Join Page</RedirectButton>
+							</a>
+						</Link>{' '}
+						to get more involved.
 					</Lead>
 				</MiddleBody>
 			</Middle>
@@ -173,6 +190,12 @@ const Flower = styled.div`
 const MiddleBody = styled.div`
 	max-width: 800px;
 	position: relative;
+`;
+
+const RedirectButton = styled(GLink)`
+	color: ${brandColors.mustard[500]};
+	cursor: pointer;
+	font-size: 20px;
 `;
 
 const Middle = styled.div`

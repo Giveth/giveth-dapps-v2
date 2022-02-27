@@ -31,7 +31,7 @@ export const StyledHeader = styled(Row)<IHeader>`
 export const Logo = styled.div`
 	display: flex;
 	justify-content: center;
-	align-items: cneter;
+	align-items: center;
 	background: ${neutralColors.gray[100]};
 	box-shadow: ${props =>
 		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
@@ -52,8 +52,7 @@ interface IThemed {
 export const HeaderButton = styled(CButton)<IThemed>`
 	display: flex;
 	height: 50px;
-	color: white;
-	font-family: 'Red Hat Text';
+	font-family: 'Red Hat Text', sans-serif;
 	font-style: normal;
 	font-weight: normal;
 	font-size: 16px;
@@ -225,6 +224,9 @@ export const SmallCreateProject = styled(ButtonLink)`
 	}
 	box-shadow: ${props =>
 		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
+`;
+
+export const SmallCreateProjectParent = styled.div`
 	@media ${device.laptop} {
 		display: none;
 	}

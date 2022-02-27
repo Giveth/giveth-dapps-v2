@@ -10,3 +10,8 @@ export enum gqlEnums {
 	DESC = 'DESC',
 	ASC = 'ASC',
 }
+
+export enum EProjectStatus {
+	DRAFT = 'drafted',
+	ACTIVE = 'activate',
+}

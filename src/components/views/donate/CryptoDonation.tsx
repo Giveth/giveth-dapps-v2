@@ -4,11 +4,13 @@ import InputBox from '../../InputBox';
 import { useWeb3React } from '@web3-react/core';
 import { Contract } from '@ethersproject/contracts';
 import { useQuery } from '@apollo/client';
+import { Shadow } from '@/components/styled-components/Shadow';
 import BigNumber from 'bignumber.js';
 import {
 	Button,
 	Caption,
 	neutralColors,
+	semanticColors,
 	brandColors,
 	GLink,
 	B,
@@ -40,7 +42,18 @@ const xdaiExcluded = config.XDAI_EXCLUDED_COINS;
 const stableCoins = [xdaiChain.mainToken, 'DAI', 'USDT'];
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
-type SuccessFunction = (param: boolean) => void;
+interface ISuccessDonation {
+	transactionHash: string;
+	tokenSymbol: string;
+	subtotal: number;
+	givBackEligible?: boolean;
+	tooSlow?: boolean;
+}
+
+interface IInputBox {
+	error: boolean;
+	focused: boolean;
+}
 
 interface ISelectObj {
 	value: string;
@@ -58,14 +71,6 @@ interface IToken {
 	chainId: number;
 	symbol: string;
 	icon?: string;
-}
-
-interface ISuccessDonation {
-	transactionHash: string;
-	tokenSymbol: string;
-	subtotal: number;
-	givBackEligible?: boolean;
-	tooSlow?: boolean;
 }
 
 const customStyles = {
@@ -101,7 +106,7 @@ const customStyles = {
 };
 
 const CryptoDonation = (props: {
-	setSuccessDonation: SuccessFunction;
+	setSuccessDonation: any;
 	project: IProject;
 }) => {
 	const { chainId, account, library } = useWeb3React();
@@ -118,6 +123,7 @@ const CryptoDonation = (props: {
 	const [customInput, setCustomInput] = useState<any>();
 	const [tokenPrice, setTokenPrice] = useState<number>(1);
 	const [amountTyped, setAmountTyped] = useState('');
+	const [inputBoxFocused, setInputBoxFocused] = useState(false);
 	const [geminiModal, setGeminiModal] = useState(false);
 	const [txHash, setTxHash] = useState<any>();
 	const [erc20List, setErc20List] = useState<any>();
@@ -127,6 +133,7 @@ const CryptoDonation = (props: {
 	const [inProgress, setInProgress] = useState<any>();
 	const [anonymous, setAnonymous] = useState<boolean>(false);
 	// const [selectLoading, setSelectLoading] = useState(false);
+	const [error, setError] = useState<boolean>(false);
 	const [givBackEligible, setGivBackEligible] = useState(true);
 	const [showWalletModal, setShowWalletModal] = useState(false);
 	const [showDonateModal, setShowDonateModal] = useState(false);
@@ -306,7 +313,7 @@ const CryptoDonation = (props: {
 					showModal={showDonateModal}
 					setShowModal={setShowDonateModal}
 					setSuccessDonation={(successTxHash: ISuccessDonation) => {
-						setSuccessDonation(!!successTxHash);
+						setSuccessDonation(successTxHash);
 						setTxHash(successTxHash);
 					}}
 					project={project}
@@ -360,7 +367,7 @@ const CryptoDonation = (props: {
 							</SwitchCaption>
 						</XDaiContainer>
 					)}
-				<SearchContainer>
+				<SearchContainer error={error} focused={inputBoxFocused}>
 					<DropdownContainer>
 						<TokenPicker
 							tokenList={erc20List}
@@ -408,7 +415,9 @@ const CryptoDonation = (props: {
 													...erc20List,
 													pastedToken,
 												]);
-											setCustomInput(pastedToken?.symbol);
+											setCustomInput(
+												pastedToken?.address,
+											);
 											// setSelectLoading(false);
 										});
 									} catch (error) {
@@ -434,16 +443,21 @@ const CryptoDonation = (props: {
 						//   setShowDonateModal(false)
 						//   setAmountTyped(a)
 						// }}}
+						value={amountTyped}
+						error={error}
+						setError={setError}
 						errorHandler={{
 							condition: (value: any) =>
-								value >= 0 && value <= 0.0001,
+								value >= 0 && value <= 0.000001,
 							message: 'Set a valid amount',
 						}}
 						type='number'
 						onChange={val => {
 							const checkGIV = checkGIVTokenAvailability();
+							if (/^0+(?=\d)/.test(val)) return;
 							if (checkGIV) setAmountTyped(val);
 						}}
+						onFocus={(val: any) => setInputBoxFocused(!!val)}
 						placeholder='Amount'
 					/>
 				</SearchContainer>
@@ -464,7 +478,8 @@ const CryptoDonation = (props: {
 				<ToastContainer>
 					<FixedToast
 						message='This token is not eligible for GIVbacks.'
-						color={brandColors.mustard[600]}
+						color={brandColors.mustard[700]}
+						boldColor={brandColors.mustard[800]}
 						backgroundColor={brandColors.mustard[200]}
 						href='/givbacks'
 					/>
@@ -474,6 +489,7 @@ const CryptoDonation = (props: {
 					<FixedToast
 						message='This token is eligible for GIVbacks.'
 						color={brandColors.giv[300]}
+						boldColor={brandColors.giv[600]}
 						backgroundColor={brandColors.giv[100]}
 						href='/givbacks'
 					/>
@@ -550,6 +566,31 @@ const AvText = styled(GLink)`
 const SearchContainer = styled.div`
 	display: flex;
 	flex-direction: row;
+
+	border: ${(props: IInputBox) =>
+		props.error === true
+			? `2px solid ${semanticColors.punch[500]}`
+			: `2px solid ${neutralColors.gray[300]}`};
+	border-radius: 6px;
+
+	:focus,
+	:visited,
+	:active,
+	:hover {
+		border: 2px solid
+			${(props: IInputBox) =>
+				props.error === true
+					? semanticColors.punch[500]
+					: brandColors.giv[500]};
+		box-shadow: ${Shadow.Neutral[500]};
+	}
+
+	${(props: IInputBox) =>
+		!!props.focused &&
+		`
+	border: 2px solid ${brandColors.giv[500]};
+box-shadow: ${Shadow.Neutral[500]};
+	`}
 `;
 const DropdownContainer = styled.div`
 	width: 35%;

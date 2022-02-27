@@ -4,9 +4,11 @@ import styled from 'styled-components';
 
 interface IFToast {
 	message: string;
-	href: string;
-	color: any;
+	href?: string;
+	color: string;
+	boldColor?: string;
 	backgroundColor: string;
+	icon?: any;
 }
 
 interface IToastContainer {
@@ -14,13 +16,14 @@ interface IToastContainer {
 }
 
 const FixedToast = (props: IFToast) => {
-	const { message, color, backgroundColor, href } = props;
+	const { message, icon, color, backgroundColor, boldColor, href } = props;
 	return (
 		<Container color={backgroundColor} borderColor={color}>
+			{icon && <Icon>{icon()}</Icon>}
 			<Text color={color}>{message}</Text>
 			{href && (
 				<a href={href} target='_blank' rel='noreferrer'>
-					<Text color={color}>Learn More</Text>
+					<Text color={boldColor}>Learn More</Text>
 				</a>
 			)}
 		</Container>
@@ -34,6 +37,7 @@ const Container = styled.div`
 	padding: 13.5px 16px;
 	border: 1px solid ${(props: IToastContainer) => props.borderColor};
 	border-radius: 8px;
+	align-items: center;
 	a {
 		cursor: pointer;
 		font-weight: bold !important;
@@ -47,6 +51,10 @@ const Text = styled(B)`
 	color: ${props => props.color};
 	font-size: 14px;
 	line-height: 150%;
+`;
+
+const Icon = styled.div`
+	padding: 5px 5px 0 0;
 `;
 
 export default FixedToast;

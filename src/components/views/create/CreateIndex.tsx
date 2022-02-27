@@ -1,19 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import React, { useEffect, useRef, useState } from 'react';
 import {
 	H3,
 	H4,
 	P,
 	Button,
+	OulineButton,
 	brandColors,
 	neutralColors,
+	IconExternalLink,
+	Caption,
 } from '@giveth/ui-design-system';
 import { useMutation } from '@apollo/client';
-import { client } from '@/apollo/apolloClient';
 import { utils } from 'ethers';
-import SignInModal from '../../modals/SignInModal';
-import { WALLET_ADDRESS_IS_VALID, ADD_PROJECT } from '@/apollo/gql/gqlProjects';
+import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
+import Debounced from 'lodash.debounce';
+import { Toaster } from 'react-hot-toast';
+import { useRouter } from 'next/router';
+
+import SignInModal from '../../modals/SignInModal';
+import { ADD_PROJECT } from '@/apollo/gql/gqlProjects';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import { IProjectCreation } from '@/apollo/types/types';
 import {
@@ -24,90 +30,119 @@ import {
 	ImageInput,
 	WalletAddressInput,
 } from './Inputs';
-import { getImageFile } from '@/utils/index';
+import { getImageFile } from '@/utils';
 import useUser from '@/context/UserProvider';
 import Logger from '@/utils/Logger';
 import SuccessfulCreation from './SuccessfulCreation';
 import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
-import styled from 'styled-components';
+import {
+	isDescriptionHeavy,
+	titleValidation,
+	walletAddressValidation,
+} from '@/helpers/createProjectValidation';
+import { gToast, ToastType } from '@/components/toasts';
+import { isUserRegistered, slugToProjectView } from '@/lib/helpers';
 
-type Inputs = {
-	name: string;
-	description: string;
-	categories: any;
-	impactLocation: any;
-	image: any;
-	walletAddress: string;
-};
+export enum ECreateErrFields {
+	NAME = 'name',
+	DESCRIPTION = 'description',
+	WALLET_ADDRESS = 'walletAddress',
+}
+
+export interface ICreateProjectErrors {
+	[ECreateErrFields.NAME]: string;
+	[ECreateErrFields.DESCRIPTION]: string;
+	[ECreateErrFields.WALLET_ADDRESS]: string;
+}
 
 const CreateIndex = () => {
-	const {
-		register,
-		handleSubmit,
-		setValue,
-		formState: { errors },
-	} = useForm<Inputs>();
-	const { library } = useWeb3React();
+	const { library, chainId } = useWeb3React();
 	const [addProjectMutation] = useMutation(ADD_PROJECT);
+	const router = useRouter();
+
 	const [creationSuccessful, setCreationSuccessful] = useState<any>(null);
 	const [showSigninModal, setShowSigninModal] = useState(false);
+	const [showGuidelineModal, setShowGuidelineModal] = useState(false);
+	const [name, setName] = useState('');
+	const [description, setDescription] = useState('');
+	const [categories, setCategories] = useState([]);
+	const [impactLocation, setImpactLocation] = useState<any>('');
+	const [image, setImage] = useState<any>(null);
+	const [walletAddress, setWalletAddress] = useState('');
+	const [isLoading, setIsLoading] = useState(false);
+	const [errors, setErrors] = useState<ICreateProjectErrors>({
+		[ECreateErrFields.NAME]: 'Title is required',
+		[ECreateErrFields.DESCRIPTION]: '',
+		[ECreateErrFields.WALLET_ADDRESS]: '',
+	});
+
 	const {
 		state: { user, isSignedIn },
-		actions: { signIn },
+		actions: { showSignModal },
 	} = useUser();
 
-	const onSubmit: SubmitHandler<Inputs> = async data => {
+	const debouncedTitleValidation = useRef<any>();
+	const debouncedAddressValidation = useRef<any>();
+	const debouncedDescriptionValidation = useRef<any>();
+
+	const submitErrorHandler = (id: string, error: string) => {
+		document.getElementById(id)?.scrollIntoView({
+			behavior: 'smooth',
+		});
+		return gToast(error, {
+			type: ToastType.DANGER,
+			position: 'top-center',
+		});
+	};
+
+	const onSubmit = async (isDraft?: boolean) => {
 		try {
-			// check heavy description
-			const stringSize =
-				encodeURI(data?.description).split(/%..|./).length - 1;
-			if (stringSize > 4000000) {
-				// 4Mb tops max maybe?
-				// TODO: ADD TOAST HERE
-				return alert('Description too large');
+			if (!isSignedIn) {
+				return showSignModal();
+			}
+			if (!isUserRegistered(user)) {
+				// TODO: Show modal to register
+				return gToast('Please first register', {
+					type: ToastType.DANGER,
+					position: 'top-center',
+				});
+			}
+			for (let [key, value] of Object.entries(errors)) {
+				if (value) {
+					submitErrorHandler(key, value);
+					return;
+				}
 			}
 
-			// Check wallet
-			let address;
-			// Handle ENS address
-			if (isAddressENS(data.walletAddress)) {
-				address = await getAddressFromENS(data.walletAddress, library);
-			} else {
-				address = data.walletAddress;
-			}
-			// Check wallet valid
-			await client.query({
-				query: WALLET_ADDRESS_IS_VALID,
-				variables: {
-					address,
-				},
-			});
-			// Set categories
+			const address = isAddressENS(walletAddress)
+				? await getAddressFromENS(walletAddress, library)
+				: walletAddress;
+
 			const projectCategories = [];
-			for (const category in data.categories) {
+			for (const category in categories) {
 				projectCategories.push(category);
 			}
+
 			const projectData: IProjectCreation = {
-				title: data.name,
-				description: data.description,
-				impactLocation: data.impactLocation?.global
-					? 'Global'
-					: data.impactLocation,
+				title: name,
+				description,
+				impactLocation,
 				categories: projectCategories,
-				organisationId: 1,
+				organizationId: 1,
 				walletAddress: utils.getAddress(address),
 				imageStatic: null,
 				imageUpload: null,
+				isDraft: !!isDraft,
 			};
 
-			if (!isNaN(data?.image)) {
-				projectData.imageStatic = data.image?.toString();
-			} else if (data.image) {
-				projectData.imageUpload = await getImageFile(
-					data.image,
-					data.name,
-				);
+			if (!isNaN(image!)) {
+				projectData.imageStatic = image?.toString();
+			} else if (image) {
+				projectData.imageUpload = await getImageFile(image, name);
 			}
+
+			console.log(projectData);
+			setIsLoading(true);
 
 			const addedProject = await addProjectMutation({
 				variables: {
@@ -117,35 +152,89 @@ const CreateIndex = () => {
 
 			if (addedProject) {
 				// Success
-				setCreationSuccessful(addedProject?.data?.addProject);
+				setIsLoading(false);
+				const project = addedProject.data?.addProject;
+				!isDraft
+					? setCreationSuccessful(project)
+					: await router.push(slugToProjectView(project.slug));
 			}
 		} catch (e) {
+			setIsLoading(false);
 			const error = e as Error;
-			if (error.message === 'Access denied') {
-				console.log('Please first sign in');
-			} else {
-				Logger.captureException(error);
-			}
-			console.log({ error });
-			// TODO: TOAST ERROR
-			alert(JSON.stringify(error));
+			Logger.captureException(error);
+			gToast(JSON.stringify(error), {
+				type: ToastType.DANGER,
+				position: 'top-center',
+			});
 		}
 	};
-	const [showGuidelineModal, setShowGuidelineModal] = useState(false);
 
-	const createProject = (e: any) => {
-		e.preventDefault();
-		handleSubmit(onSubmit)();
-	};
-
-	const hasErrors = Object.entries(errors).length !== 0;
+	const hasErrors =
+		errors[ECreateErrFields.NAME] ||
+		errors[ECreateErrFields.WALLET_ADDRESS] ||
+		errors[ECreateErrFields.DESCRIPTION];
 
 	useEffect(() => {
 		if (isSignedIn) {
-			// Show guideline first thing
 			setShowGuidelineModal(true);
 		}
 	}, [isSignedIn]);
+
+	useEffect(() => {
+		const userAddress = user?.walletAddress;
+		if (userAddress) {
+			if (!isUserRegistered(user)) {
+				// TODO: Show modal to register
+				gToast('Please first register', {
+					type: ToastType.DANGER,
+					position: 'top-center',
+				});
+			}
+			setShowSigninModal(false);
+			setWalletAddress(userAddress);
+			walletAddressValidation(
+				userAddress,
+				library,
+				errors,
+				setErrors,
+				chainId,
+			);
+		}
+		if (!user) {
+			setShowSigninModal(true);
+		}
+	}, [user]);
+
+	useEffect(() => {
+		debouncedTitleValidation.current = Debounced(titleValidation, 1000);
+		debouncedAddressValidation.current = Debounced(
+			walletAddressValidation,
+			1000,
+		);
+		debouncedDescriptionValidation.current = Debounced(
+			isDescriptionHeavy,
+			1000,
+		);
+	}, []);
+
+	const handleInputChange = (value: string, id: string) => {
+		if (id === ECreateErrFields.NAME) {
+			setName(value);
+			debouncedTitleValidation.current(value, errors, setErrors);
+		} else if (id === ECreateErrFields.WALLET_ADDRESS) {
+			setWalletAddress(value);
+			debouncedAddressValidation.current(
+				value,
+				library,
+				errors,
+				setErrors,
+				chainId,
+			);
+		} else if (id === ECreateErrFields.DESCRIPTION) {
+			setDescription(value);
+			debouncedDescriptionValidation.current(value, errors, setErrors);
+		}
+	};
 
 	if (creationSuccessful) {
 		return <SuccessfulCreation project={creationSuccessful} />;
@@ -156,14 +245,7 @@ const CreateIndex = () => {
 			{showGuidelineModal && (
 				<ProjectGuidelineModal
 					showModal={showGuidelineModal}
-					setShowModal={val => {
-						if (val === false) {
-							if (!isSignedIn && signIn) {
-								signIn();
-							}
-						}
-						setShowGuidelineModal(val);
-					}}
+					setShowModal={setShowGuidelineModal}
 				/>
 			)}
 			{showSigninModal && (
@@ -175,46 +257,43 @@ const CreateIndex = () => {
 			{user && (
 				<CreateContainer>
 					<Title>Create a Project</Title>
-					<form>
-						{/* register your input into the hook by invoking the "register" function */}
+
+					<div>
 						<NameInput
-							{...register('name', { required: true })}
-							setValue={(val: string) => setValue('name', val)}
+							value={name}
+							setValue={e =>
+								handleInputChange(e, ECreateErrFields.NAME)
+							}
+							error={errors[ECreateErrFields.NAME]}
 						/>
 						<DescriptionInput
-							{...register('description', { required: true })}
-							setValue={(val: string) =>
-								setValue('description', val)
+							setValue={e =>
+								handleInputChange(
+									e,
+									ECreateErrFields.DESCRIPTION,
+								)
 							}
+							error={errors[ECreateErrFields.DESCRIPTION]}
 						/>
-						<CategoryInput
-							{...register('categories', { required: true })}
-							setValue={(val: Array<any>) =>
-								setValue('categories', val)
-							}
-						/>
-						<LocationInput
-							{...register('impactLocation')}
-							setValue={(val: string) =>
-								setValue('impactLocation', val)
-							}
-						/>
-						<ImageInput
-							{...register('image')}
-							setValue={(val: string) => setValue('image', val)}
-						/>
+						<CategoryInput setValue={setCategories} />
+						<LocationInput setValue={setImpactLocation} />
+						<ImageInput value={image} setValue={setImage} />
 						<WalletAddressInput
-							{...register('walletAddress', { required: true })}
-							setValue={(val: string) =>
-								setValue('walletAddress', val)
+							value={walletAddress}
+							setValue={e =>
+								handleInputChange(
+									e,
+									ECreateErrFields.WALLET_ADDRESS,
+								)
 							}
+							error={errors[ECreateErrFields.WALLET_ADDRESS]}
 						/>
 
 						<PublishTitle>{`Let's Publish!`}</PublishTitle>
 						<PublishList>
 							<li>
-								Newly published projects will be "unlisted"
-								until reviewed by our team.
+								Newly published projects will be
+								&quot;unlisted&quot; until reviewed by our team.
 							</li>
 							<li>
 								You can still access your project from your
@@ -222,20 +301,23 @@ const CreateIndex = () => {
 								project link!
 							</li>
 							<li>
-								You'll receive an email from us once your
+								You&apos;ll receive an email from us once your
 								project is listed.
 							</li>
 						</PublishList>
 						<Buttons>
-							<Button
-								label='PREVIEW'
+							<OulineButton
+								label='PREVIEW '
 								buttonType='primary'
-								// onClick={uploadImage}
+								disabled={isLoading}
+								icon={<IconExternalLink size={16} />}
+								onClick={() => onSubmit(true)}
 							/>
 							<Button
 								label='PUBLISH'
 								buttonType='primary'
-								onClick={createProject}
+								disabled={isLoading}
+								onClick={() => onSubmit(false)}
 							/>
 						</Buttons>
 						{hasErrors && (
@@ -243,9 +325,10 @@ const CreateIndex = () => {
 								Empty fields or errors, please check the values
 							</ErrorMessage>
 						)}
-					</form>
+					</div>
 				</CreateContainer>
 			)}
+			<Toaster containerStyle={{ top: '80px' }} />
 		</>
 	);
 };
@@ -255,16 +338,11 @@ const CreateContainer = styled.div`
 	flex-direction: column;
 	padding: 104px 0 154px 264px;
 	width: 677px;
-	form {
+	> div {
 		display: flex;
 		flex-direction: column;
 		margin: 48px 0;
 		width: 677px;
-	}
-	h5 {
-		font-weight: normal;
-		line-height: 36px;
-		letter-spacing: -0.005em;
 	}
 `;
 
@@ -272,17 +350,11 @@ const Buttons = styled.div`
 	display: flex;
 	flex-direction: row;
 	margin: 61px 0 32px 0;
-	* {
-		font-weight: bold;
-	}
 	button {
 		width: 100%;
-	}
-	button:first-child {
-		background: white;
-		color: ${brandColors.pinky[500]};
-		border: 2px solid ${brandColors.pinky[500]};
-		margin: 0 24px 0 0;
+		&:first-of-type {
+			margin-right: 10px;
+		}
 	}
 `;
 
@@ -297,8 +369,7 @@ const PublishTitle = styled(H4)`
 	font-weight: bold;
 `;
 
-const PublishList = styled.ul`
-	font-size: 14px;
+const PublishList = styled(Caption)`
 	color: ${neutralColors.gray[900]};
 `;
 

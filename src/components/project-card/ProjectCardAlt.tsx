@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
-
-import ProjectCardBadges from './ProjectCardBadges';
-import ProjectCardImage from './ProjectCardImage';
-import { IProject } from '../../apollo/types/types';
-import { htmlToText, noImgColor, noImgIcon } from '../../lib/helpers';
 import {
 	Caption,
 	P,
+	Overline,
 	neutralColors,
 	brandColors,
 	H6,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+
+import { Row } from '@/components/styled-components/Grid';
+import ProjectCardBadges from './ProjectCardBadges';
+import ProjectCardImage from './ProjectCardImage';
+import { IProject } from '@/apollo/types/types';
+import { htmlToText } from '@/lib/helpers';
 
 const cardWidth = '440px';
 const cardRadius = '12px';
@@ -21,24 +23,35 @@ const imgHeight = '200px';
 interface IProjectCard {
 	project: IProject;
 	noHearts?: boolean;
+	isNew?: boolean;
 }
 
+const ProjectByGivingBlock = () => {
+	return (
+		<GivingBlockContainer>
+			<Overline styleType='Small'>PROJECT BY: </Overline>
+			<img src='/images/giving-block-logo.svg' />
+		</GivingBlockContainer>
+	);
+};
+
 const ProjectCard = (props: IProjectCard) => {
-	const [rndColor, setRndColor] = useState(noImgColor);
+	const { noHearts, isNew, project } = props;
 	const {
 		title,
 		description,
 		image,
 		verified,
+		traceCampaignId,
 		totalReactions,
 		adminUser,
 		slug,
 		id,
-	} = props.project;
-	const { noHearts } = props;
+		totalDonations,
+		givingBlocksId,
+	} = project;
 
 	const name = adminUser?.name;
-
 	return (
 		<Wrapper>
 			<Wrapper2>
@@ -49,16 +62,17 @@ const ProjectCard = (props: IProjectCard) => {
 						cardRadius={cardRadius}
 					/>
 				</ImagePlaceholder>
-				{!noHearts && (
-					<ProjectCardBadges
-						cardWidth={cardWidth}
-						likes={totalReactions}
-						verified={verified}
-						projectHref={slug}
-						projectDescription={description}
-						projectId={id}
-					/>
-				)}
+				{givingBlocksId && <ProjectByGivingBlock />}
+				<ProjectCardBadges
+					cardWidth={cardWidth}
+					likes={totalReactions}
+					verified={verified}
+					traceable={!!traceCampaignId}
+					projectHref={slug}
+					projectDescription={description}
+					projectId={id}
+					noHearts={noHearts}
+				/>
 				<CardBody>
 					<Title>{title}</Title>
 					{name && (
@@ -72,22 +86,19 @@ const ProjectCard = (props: IProjectCard) => {
 						</Link>
 					)}
 					<Description>{htmlToText(description)}</Description>
-					<Captions>
-						<BodyCaption>Raised: $</BodyCaption>
-						<BodyCaption>Last updated: x days ago</BodyCaption>
-					</Captions>
+					{!isNew && (
+						<Captions>
+							<BodyCaption>
+								Raised: ${totalDonations?.toLocaleString()}
+							</BodyCaption>
+							{/* <BodyCaption>Last updated: x days ago</BodyCaption> */}
+						</Captions>
+					)}
 				</CardBody>
 			</Wrapper2>
 		</Wrapper>
 	);
 };
-
-const NoImg = styled.div`
-	background: ${(props: { rndColor: string }) => props.rndColor};
-	width: 100%;
-	height: 100%;
-	background-image: url(${noImgIcon});
-`;
 
 const BodyCaption = styled(Caption)`
 	color: ${neutralColors.gray[700]};
@@ -107,7 +118,7 @@ const Description = styled(P)`
 `;
 
 const CardBody = styled.div`
-	margin: 30px 24px 0 24px;
+	margin: 50px 24px 0 24px;
 	text-align: left;
 `;
 
@@ -121,12 +132,6 @@ const Title = styled(H6)`
 	color: ${brandColors.deep[500]};
 	height: 26px;
 	overflow: hidden;
-`;
-
-const Img = styled.img`
-	border-radius: ${cardRadius} ${cardRadius} 0 0;
-	width: ${cardWidth};
-	height: auto;
 `;
 
 const ImagePlaceholder = styled.div`
@@ -152,6 +157,19 @@ const Wrapper = styled.div`
 	height: 430px;
 	width: ${cardWidth};
 	border-radius: ${cardRadius};
+`;
+
+const GivingBlockContainer = styled(Row)`
+	position: absolute;
+	align-items: center;
+	border-radius: 0 12px 0 0;
+	color: ${neutralColors.gray[600]};
+	background: ${neutralColors.gray[200]};
+	margin-top: -42px;
+	padding: 8px 24px;
+	img {
+		padding-left: 10px;
+	}
 `;
 
 export default ProjectCard;

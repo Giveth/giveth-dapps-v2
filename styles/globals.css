@@ -20,6 +20,11 @@ a {
   outline: none;
 }
 
+/* Adding some useful classes */
+.w-100 {
+  width: 100%;
+}
+
 /* React-Select component */
 .select__menu {
   z-index: 10 !important;

@@ -1,39 +1,75 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { H5, Caption, brandColors } from '@giveth/ui-design-system';
 import dynamic from 'next/dynamic';
-import { InputContainer, Label } from './Create.sc';
 import styled from 'styled-components';
+import { InputContainer, InputErrorMessage, Label } from './Create.sc';
+import { GoodProjectDescription } from '@/components/modals/GoodProjectDescription';
+import { ECreateErrFields } from '@/components/views/create/CreateIndex';
 
 const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
 	ssr: false,
 });
 
-const NameInput = (props: any) => {
-	const { setValue } = props;
+const DescriptionInput = (props: {
+	setValue: (e: string) => void;
+	error: string;
+}) => {
+	const [showModal, setShowModal] = useState(false);
+	const { setValue, error } = props;
 	return (
 		<>
-			<H5>Tell us about your project...</H5>
+			{showModal && (
+				<GoodProjectDescription
+					showModal={showModal}
+					setShowModal={val => setShowModal(val)}
+				/>
+			)}
+
+			<H5 id={ECreateErrFields.DESCRIPTION}>
+				Tell us about your project...
+			</H5>
 			<div>
 				<CaptionContainer>
 					Aim for 200-500 words.{' '}
-					<span>How to write a good project description.</span>
+					<span onClick={() => setShowModal(true)}>
+						How to write a good project description.
+					</span>
 				</CaptionContainer>
 			</div>
-			<InputContainer>
+			<InputContainerStyled error={error}>
 				<Label>Project story</Label>
 				<RichTextInput
 					style={TextInputStyle}
 					rows={12}
 					autoFocus
-					onChange={(newValue: any) => {
-						setValue(newValue);
-						// console.log({ setValue, newValue, delta, source })
-					}}
+					onChange={setValue}
 				/>
-			</InputContainer>
+			</InputContainerStyled>
+			<ErrorStyled>{error || null}</ErrorStyled>
 		</>
 	);
 };
+
+const InputContainerStyled = styled(InputContainer)<{ error: string }>`
+	.ql-container.ql-snow,
+	.ql-toolbar.ql-snow {
+		border: ${props =>
+			props.error && `2px solid ${brandColors.pinky[500]}`};
+	}
+
+	&:focus-within {
+		.ql-toolbar.ql-snow,
+		.ql-container.ql-snow {
+			border: ${props =>
+				!props.error && `2px solid ${brandColors.giv[600]}`};
+		}
+	}
+`;
+
+const ErrorStyled = styled(InputErrorMessage)`
+	margin-top: -10px;
+	margin-bottom: 20px;
+`;
 
 const CaptionContainer = styled(Caption)`
 	height: 18px;
@@ -50,4 +86,4 @@ const TextInputStyle = {
 	fontFamily: 'body',
 };
 
-export default NameInput;
+export default DescriptionInput;

@@ -14,11 +14,11 @@ const SocialBox = (props: any) => {
 	const url = typeof window !== 'undefined' ? window?.location?.href : null;
 	return (
 		<Social isSuccess={props.isSuccess}>
-			<Lead>
+			<BLead>
 				{props?.isSuccess
 					? 'Share this with your friends'
 					: `Can't donate? Share this page instead.`}
-			</Lead>
+			</BLead>
 			<SocialItems>
 				<SocialItem isSuccess={props.isSuccess}>
 					<TwitterShareButton
@@ -67,12 +67,19 @@ const SocialBox = (props: any) => {
 	);
 };
 
+const BLead = styled(Lead)`
+	line-height: 30px;
+	font-weight: 400;
+	color: ${neutralColors.gray[900]};
+	z-index: 2;
+`;
+
 const Social = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	margin: ${(props: { isSuccess: boolean }) =>
-		props.isSuccess ? 0 : '12px 0'};
+		props.isSuccess ? 0 : '18px 0'};
 	color: ${neutralColors.gray[900]};
 	align-items: center;
 `;
@@ -90,8 +97,6 @@ const SocialItem = styled.div`
 		props.isSuccess ? `0 6px` : '0 12px'};
 	margin: ${(props: { isSuccess: boolean }) =>
 		props.isSuccess ? `0 12px` : '0'};
-	border: ${(props: { isSuccess: boolean }) =>
-		props.isSuccess ? `1px solid ${neutralColors.gray[400]}` : 'none'};
 `;
 
 export default SocialBox;
