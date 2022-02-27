@@ -131,7 +131,7 @@ const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
 				},
 			},
 		});
-		setAvatar(imageUploaded);
+		setAvatar(imageUploaded.upload);
 	};
 
 	const onSaveAvatar = async () => {
