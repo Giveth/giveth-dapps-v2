@@ -4,7 +4,6 @@ import Head from 'next/head';
 import { Caption, GLink, semanticColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useQuery } from '@apollo/client';
-import { Toaster } from 'react-hot-toast';
 
 import WarningBadge from '@/components/badges/WarningBadge';
 import ProjectHeader from './ProjectHeader';
@@ -131,7 +130,6 @@ const ProjectIndex = () => {
 					setIsDraft={setIsDraft}
 				/>
 			</BodyWrapper>
-			<Toaster containerStyle={{ top: '80px' }} />
 		</Wrapper>
 	);
 };

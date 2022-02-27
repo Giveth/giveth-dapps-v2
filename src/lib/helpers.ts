@@ -369,7 +369,9 @@ export const isMustSignRoute = (route: string) => {
 };
 
 export const showToastError = (err: any) => {
-	gToast(JSON.stringify(err.message || err), {
+	const errorMessage =
+		typeof err === 'string' ? err : JSON.stringify(err.message || err);
+	gToast(errorMessage, {
 		type: ToastType.DANGER,
 		position: 'top-center',
 	});

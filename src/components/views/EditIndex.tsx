@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Toaster } from 'react-hot-toast';
 
 import useUser from '@/context/UserProvider';
 import { client } from '@/apollo/apolloClient';
@@ -24,6 +23,7 @@ const EditIndex = () => {
 	useEffect(() => {
 		const userAddress = user?.walletAddress;
 		if (userAddress) {
+			setShowSigninModal(false);
 			client
 				.query({
 					query: FETCH_PROJECT_BY_ID,
@@ -45,7 +45,6 @@ const EditIndex = () => {
 				/>
 			)}
 			{project && <CreateIndex project={project} />}
-			<Toaster containerStyle={{ top: '80px' }} />
 		</>
 	);
 };

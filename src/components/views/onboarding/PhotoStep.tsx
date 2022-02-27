@@ -8,7 +8,6 @@ import { client } from '@/apollo/apolloClient';
 import { UPDATE_USER, UPLOAD_PROFILE_PHOTO } from '@/apollo/gql/gqlUser';
 import { useMutation } from '@apollo/client';
 import { gToast, ToastType } from '@/components/toasts';
-import { Toaster } from 'react-hot-toast';
 import ImageUploader from '@/components/ImageUploader';
 
 const PhotoStep: FC<IStep> = ({ setStep }) => {
@@ -71,7 +70,6 @@ const PhotoStep: FC<IStep> = ({ setStep }) => {
 					disabled={!url}
 				/>
 			</OnboardStep>
-			<Toaster />
 		</>
 	);
 };

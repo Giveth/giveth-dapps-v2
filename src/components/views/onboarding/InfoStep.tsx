@@ -13,7 +13,6 @@ import { ChangeEvent, FC, useEffect, useReducer, useState } from 'react';
 import styled from 'styled-components';
 import { IStep, OnboardActions, OnboardStep } from './common';
 import { OnboardSteps } from './Onboarding.view';
-import { Toaster } from 'react-hot-toast';
 
 interface IUserIfo {
 	email: string;
@@ -148,7 +147,6 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 					disabled={disabled}
 				/>
 			</OnboardStep>
-			<Toaster />
 		</>
 	);
 };

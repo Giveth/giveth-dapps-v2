@@ -51,6 +51,7 @@ import {
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { client } from '@/apollo/apolloClient';
+import Routes from '@/lib/constants/Routes';
 
 export enum ECreateErrFields {
 	NAME = 'name',
@@ -100,8 +101,6 @@ const CreateIndex = (props: { project?: IProjectEdition }) => {
 		[ECreateErrFields.WALLET_ADDRESS]: '',
 	});
 
-	console.log(project);
-
 	const {
 		state: { user, isSignedIn },
 		actions: { showSignModal },
@@ -120,9 +119,11 @@ const CreateIndex = (props: { project?: IProjectEdition }) => {
 	useEffect(() => {
 		const userAddress = user?.walletAddress;
 		if (userAddress) {
+			setShowSigninModal(false);
 			if (!isUserRegistered(user)) {
-				// TODO: Show modal to register
-				showToastError('Please first register');
+				showToastError('Please register to continue.');
+				router.push(Routes.Onboard);
+				return;
 			}
 			if (
 				isEditMode &&
@@ -131,7 +132,6 @@ const CreateIndex = (props: { project?: IProjectEdition }) => {
 				showToastError('Only project owner can edit this project');
 				router.back();
 			}
-			setShowSigninModal(false);
 			if (!isEditMode) {
 				setWalletAddress(userAddress);
 				walletAddressValidation(
@@ -197,11 +197,6 @@ const CreateIndex = (props: { project?: IProjectEdition }) => {
 			showSignModal();
 			return false;
 		}
-		if (!isUserRegistered(user)) {
-			// TODO: Show modal to register
-			showToastError('Please first register');
-			return false;
-		}
 		for (let [key, value] of Object.entries(errors)) {
 			if (value) {
 				submitErrorHandler(key, value);
@@ -224,7 +219,7 @@ const CreateIndex = (props: { project?: IProjectEdition }) => {
 				description,
 				impactLocation,
 				categories: categories.map(category => category.name),
-				organizationId: 1,
+				organisationId: 1,
 				walletAddress: utils.getAddress(address),
 				imageStatic: null,
 				imageUpload: await getImageFile(image, name),

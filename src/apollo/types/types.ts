@@ -56,7 +56,7 @@ export interface IProjectCreation {
 	description: string;
 	impactLocation?: any;
 	categories: any;
-	organizationId: number;
+	organisationId: number;
 	walletAddress: string;
 	imageStatic?: string | null;
 	imageUpload?: any;
