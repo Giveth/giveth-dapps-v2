@@ -13,8 +13,8 @@ const Routes = {
 	Terms: '/terms',
 	Partnerships: '/partnerships',
 	MyAccount,
-	MyProjects: MyAccount + '/projects',
-	MyDonations: MyAccount + '/donations',
+	MyProjects: MyAccount + '?tab=projects',
+	MyDonations: MyAccount + '?tab=donations',
 	GIVECONOMY: '/giveconomy',
 };
 

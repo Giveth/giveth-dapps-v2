@@ -224,7 +224,7 @@ const CreateIndex = (props: { project?: IProjectEdition }) => {
 				description,
 				impactLocation,
 				categories: categories.map(category => category.name),
-				organisationId: 1,
+				organizationId: 1,
 				walletAddress: utils.getAddress(address),
 				imageStatic: null,
 				imageUpload: await getImageFile(image, name),
