@@ -29,6 +29,8 @@ const PhotoStep: FC<IStep> = ({ setStep }) => {
 	const { getRootProps, getInputProps, open } = useDropzone({
 		accept: 'image/*',
 		multiple: false,
+		noClick: true,
+		noKeyboard: true,
 		onDrop: async acceptedFiles => {
 			setUploading(true);
 			setFile(acceptedFiles[0]);
