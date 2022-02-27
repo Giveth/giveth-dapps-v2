@@ -150,11 +150,9 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 							/>
 						)}
 						<UserInforRow>
-							<H3 weight={700} onClick={() => setShowModal(true)}>
-								{user.name}
-							</H3>
+							<H3 weight={700}>{user.name}</H3>
 							{user.url && (
-								<Website
+								<PinkLink
 									size='Big'
 									href={
 										user.url
@@ -165,9 +163,17 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 									}
 								>
 									{user.url}
-								</Website>
+								</PinkLink>
 							)}
 							<WalletContainer>
+								{myAccount && (
+									<PinkLink
+										size='Big'
+										onClick={() => setShowModal(true)}
+									>
+										Edit Profile
+									</PinkLink>
+								)}
 								<GLink size='Big'>{user.walletAddress}</GLink>
 								<WalletIconsContainer>
 									<CopyToClipboard
@@ -223,8 +229,9 @@ const UserInfoWithAvatarRow = styled(Row)`
 	gap: 24px;
 `;
 
-const Website = styled(GLink)`
+const PinkLink = styled(GLink)`
 	color: ${brandColors.pinky[500]};
+	cursor: pointer;
 `;
 
 const UserInforRow = styled(Row)`
