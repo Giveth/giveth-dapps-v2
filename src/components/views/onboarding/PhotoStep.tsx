@@ -53,17 +53,22 @@ const PhotoStep: FC<IStep> = ({ setStep }) => {
 	};
 
 	const onSave = async () => {
-		const { data: response } = await updateUser({
-			variables: {
-				avatar: url,
-			},
-		});
-		if (response.updateUser) {
-			setStep(OnboardSteps.DONE);
-		} else {
+		try {
+			const { data: response } = await updateUser({
+				variables: {
+					avatar: url,
+				},
+			});
+			if (response.updateUser) {
+				setStep(OnboardSteps.DONE);
+			} else {
+				throw 'updateUser false';
+			}
+		} catch (error) {
 			gToast('Failed to update your profile photo. Please try again.', {
 				type: ToastType.DANGER,
 			});
+			console.log(error);
 		}
 	};
 

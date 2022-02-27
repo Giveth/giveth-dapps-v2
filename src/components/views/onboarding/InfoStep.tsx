@@ -54,22 +54,26 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 
 	const onSave = async () => {
 		setDisabled(true);
-		const { data: response } = await updateUser({
-			variables: {
-				firstName,
-				lastName,
-				location,
-				website,
-			},
-		});
-		setDisabled(false);
-		if (response.updateUser) {
-			setStep(OnboardSteps.PHOTO);
-		} else {
+		try {
+			const { data: response } = await updateUser({
+				variables: {
+					firstName,
+					lastName,
+					location,
+					website,
+				},
+			});
+			if (response.updateUser) {
+				setStep(OnboardSteps.PHOTO);
+			} else {
+				throw 'updateUser false';
+			}
+		} catch (error) {
 			gToast('Failed to update your inforamtion. Please try again.', {
 				type: ToastType.DANGER,
 			});
 		}
+		setDisabled(false);
 	};
 
 	return (
