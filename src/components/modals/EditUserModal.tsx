@@ -12,89 +12,14 @@ import {
 } from '@giveth/ui-design-system';
 import { IModal, Modal } from './Modal';
 import { client } from '@/apollo/apolloClient';
-import { UPDATE_USER } from '@/apollo/gql/gqlUser';
+import { UPDATE_USER, UPLOAD_PROFILE_PHOTO } from '@/apollo/gql/gqlUser';
 import { IUser } from '@/apollo/types/types';
-import { FlexCenter } from '@/components/styled-components/Grid';
+import { FlexCenter, Row } from '@/components/styled-components/Grid';
 import { checkIfURLisValid } from '@/utils';
-
-interface IDropZone {
-	file: any;
-	handleFile: Dispatch<SetStateAction<any>>;
-}
-
-const DropZone = ({ file, handleFile }: IDropZone) => {
-	const {
-		getRootProps,
-		getInputProps,
-		isDragAccept,
-		isDragReject,
-		isFocused,
-	} = useDropzone({
-		onDrop: files => handleFile(files[0]),
-	});
-
-	return (
-		<DragZoneWrapper
-			{...getRootProps()}
-			isDragAccept={isDragAccept}
-			isDragReject={isDragReject}
-			isFocused={isFocused}
-			isFull={file}
-		>
-			<input {...getInputProps()} />
-			<Image
-				src='/images/icons/image.svg'
-				height={48}
-				width={48}
-				alt='image logo'
-			/>
-			{!!file ? (
-				<>
-					<P>The file was successfully uploaded.</P>
-					<P>{file.path}</P>
-				</>
-			) : (
-				<>
-					<P>
-						Drag &amp; drop an image here or{' '}
-						<span>Upload from computer.</span>
-					</P>
-					<P>Suggested image size min, 600px width.</P>
-				</>
-			)}
-		</DragZoneWrapper>
-	);
-};
-
-interface IDragZoneWrapper {
-	isDragAccept: boolean;
-	isDragReject: boolean;
-	isFocused: boolean;
-	isFull: boolean;
-}
-
-const DragZoneWrapper = styled.div<IDragZoneWrapper>`
-	border: 2px dashed
-		${props =>
-			props.isFull
-				? brandColors.giv[500]
-				: props.isDragAccept
-				? brandColors.pinky[500]
-				: props.isDragReject
-				? brandColors.mustard[500]
-				: props.isFocused
-				? brandColors.giv[500]
-				: neutralColors.gray[400]};
-	border-radius: 8px;
-	width: 100%;
-	min-width: 400px;
-	min-height: 172px;
-	padding: 24px;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-around;
-	align-items: center;
-`;
+import ImageUploader from '../ImageUploader';
+import { useMutation } from '@apollo/client';
+import { gToast, ToastType } from '../toasts';
+import { Toaster } from 'react-hot-toast';
 
 interface IInputProps {
 	examples: string;
@@ -163,11 +88,20 @@ const DummyLine = styled.br`
 	height: 13px;
 `;
 
+enum EditStatusType {
+	INFO,
+	PHOTO,
+}
+
 interface IEditUserModal extends IModal {
 	user: IUser;
 }
 
 const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
+	const [editStatus, setEditStatus] = useState<EditStatusType>(
+		EditStatusType.INFO,
+	);
+	const [avatar, setAvatar] = useState<string>();
 	const [newUser, setNewUser] = useState({
 		name: '',
 		firstName: user.firstName,
@@ -176,10 +110,9 @@ const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
 		email: user.email || '',
 		url: user.url || '',
 	});
-	const [newImage, setNewImage] = useState<boolean>(false);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const [file, setFile] = useState();
 	const router = useRouter();
+	const [updateUser] = useMutation(UPDATE_USER);
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target;
@@ -187,6 +120,39 @@ const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
 			...previousContent,
 			[name]: value,
 		}));
+	};
+
+	const onDrop = async (acceptedFiles: File[]) => {
+		const { data: imageUploaded } = await client.mutate({
+			mutation: UPLOAD_PROFILE_PHOTO,
+			variables: {
+				fileUpload: {
+					image: acceptedFiles[0],
+				},
+			},
+		});
+		setAvatar(imageUploaded);
+	};
+
+	const onSaveAvatar = async () => {
+		try {
+			const { data: response } = await updateUser({
+				variables: {
+					avatar,
+				},
+			});
+			if (response.updateUser) {
+				setEditStatus(EditStatusType.INFO);
+				setAvatar('');
+			} else {
+				throw 'updateUser false';
+			}
+		} catch (error) {
+			gToast('Failed to update your profile photo. Please try again.', {
+				type: ToastType.DANGER,
+			});
+			console.log(error);
+		}
 	};
 
 	const handleSubmit = async () => {
@@ -224,98 +190,104 @@ const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
 	}, [newUser, user]);
 
 	return (
-		<Modal
-			showModal={showModal}
-			setShowModal={setShowModal}
-			headerIcon={<></>}
-			headerTitle='Edit profile'
-			headerTitlePosition='left'
-		>
-			<Wrapper>
-				{newImage ? (
-					<>
-						<FlexCenter direction='column' gap='36px'>
-							<ProfilePicture
-								src={
-									user.avatar
-										? user.avatar
-										: '/images/avatar.svg'
-								}
-								alt={user.name}
-								height={128}
-								width={128}
-							/>
-							<DropZone file={file} handleFile={setFile} />
-							<Button
-								buttonType='secondary'
-								label='SAVE'
-								disabled
-							/>
-							<TextButton
-								buttonType='texty'
-								label='cancel'
-								onClick={() => setNewImage(false)}
-							/>
-						</FlexCenter>
-					</>
-				) : (
-					<>
-						<FlexCenter direction='column' gap='8px'>
-							<ProfilePicture
-								src={
-									user.avatar
-										? user.avatar
-										: '/images/avatar.svg'
-								}
-								alt={user.name}
-								height={80}
-								width={80}
-							/>
-							<FlexCenter direction='column'>
-								<TextButton
-									buttonType='texty'
-									color={brandColors.pinky[500]}
-									label='upload new picture'
-									onClick={() => setNewImage(true)}
+		<>
+			<Modal
+				showModal={showModal}
+				setShowModal={setShowModal}
+				headerIcon={<></>}
+				headerTitle='Edit profile'
+				headerTitlePosition='left'
+			>
+				<Wrapper>
+					{editStatus === EditStatusType.PHOTO ? (
+						<>
+							<Row flexDirection='column' gap='36px'>
+								<ImageUploader
+									onDrop={onDrop}
+									setUrl={setAvatar}
+									url={avatar}
+								/>
+								<Button
+									buttonType='secondary'
+									label='SAVE'
+									onClick={onSaveAvatar}
+									disabled={!avatar}
 								/>
 								<TextButton
 									buttonType='texty'
-									label='delete picture'
+									label='cancel'
+									onClick={() => {
+										setAvatar('');
+										setEditStatus(EditStatusType.INFO);
+									}}
 								/>
+							</Row>
+						</>
+					) : (
+						<>
+							<FlexCenter direction='column' gap='8px'>
+								<ProfilePicture
+									src={
+										user.avatar
+											? user.avatar
+											: '/images/avatar.svg'
+									}
+									alt={user.name}
+									height={80}
+									width={80}
+								/>
+								<FlexCenter direction='column'>
+									<TextButton
+										buttonType='texty'
+										color={brandColors.pinky[500]}
+										label='upload new picture'
+										onClick={() =>
+											setEditStatus(EditStatusType.PHOTO)
+										}
+									/>
+									<TextButton
+										buttonType='texty'
+										label='delete picture'
+										onClick={() => {
+											onSaveAvatar();
+										}}
+									/>
+								</FlexCenter>
 							</FlexCenter>
-						</FlexCenter>
-						<InputWrapper>
-							{inputFields.map(field => (
-								<Input
-									key={field.name}
-									handleChange={handleChange}
-									examples={field.examples}
-									explanation={field.explanation}
-									name={field.name}
-									placeholder={field.placeholder}
-									value={(newUser as any)[field.name]}
+							<InputWrapper>
+								{inputFields.map(field => (
+									<Input
+										key={field.name}
+										handleChange={handleChange}
+										examples={field.examples}
+										explanation={field.explanation}
+										name={field.name}
+										placeholder={field.placeholder}
+										value={(newUser as any)[field.name]}
+									/>
+								))}
+								<Button
+									buttonType='secondary'
+									label='SAVE'
+									disabled={
+										!newUser.firstName ||
+										!newUser.lastName ||
+										isLoading
+									}
+									onClick={handleSubmit}
 								/>
-							))}
-							<Button
-								buttonType='secondary'
-								label='SAVE'
-								disabled={
-									!newUser.firstName ||
-									!newUser.lastName ||
-									isLoading
-								}
-								onClick={handleSubmit}
-							/>
-							<TextButton
-								buttonType='texty'
-								label='cancel'
-								onClick={() => setShowModal(false)}
-							/>
-						</InputWrapper>
-					</>
-				)}
-			</Wrapper>
-		</Modal>
+								<TextButton
+									buttonType='texty'
+									label='cancel'
+									onClick={() => setShowModal(false)}
+								/>
+							</InputWrapper>
+						</>
+					)}
+				</Wrapper>
+			</Modal>
+			<Toaster />
+		</>
 	);
 };
 
