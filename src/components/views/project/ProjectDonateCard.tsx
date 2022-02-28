@@ -60,7 +60,9 @@ const ProjectDonateCard = ({
 		id,
 		givingBlocksId,
 	} = project || {};
-	const [reaction, setReaction] = useState<IReaction | undefined>(undefined);
+	const [reaction, setReaction] = useState<IReaction | undefined>(
+		project?.reaction,
+	);
 
 	const [heartedByUser, setHeartedByUser] = useState<boolean>(false);
 	const [showModal, setShowModal] = useState<boolean>(false);
@@ -106,7 +108,7 @@ const ProjectDonateCard = ({
 	};
 
 	const fetchProjectReaction = async () => {
-		if (user?.id) {
+		if (user?.id && id) {
 			try {
 				const { data } = await client.query({
 					query: FETCH_PROJECT_REACTION_BY_ID,
@@ -127,7 +129,7 @@ const ProjectDonateCard = ({
 
 	useEffect(() => {
 		fetchProjectReaction();
-	}, [user?.id]);
+	}, [id, user?.id]);
 
 	useEffect(() => {
 		setHeartedByUser(!!reaction?.id);
