@@ -50,7 +50,10 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 	const { email, firstName, lastName, location, website } = info;
 
 	const reducerInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-		const { name, value } = e.target;
+		const { name, value, pattern } = e.target;
+		if (pattern) {
+			console.log(pattern);
+		}
 		setInfo({ [name]: value });
 	};
 
@@ -93,6 +96,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 						<Input
 							placeholder='John'
 							name='firstName'
+							title='first name'
 							value={firstName}
 							onChange={reducerInputChange}
 						/>
@@ -103,6 +107,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 							placeholder='Doe'
 							name='lastName'
 							value={lastName}
+							title='last name'
 							onChange={reducerInputChange}
 						/>
 					</InputContainer>
@@ -115,6 +120,9 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 							name='email'
 							value={email}
 							onChange={reducerInputChange}
+							type='email'
+							title='Email'
+							pattern='/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/'
 						/>
 					</InputContainer>
 				</Section>
@@ -141,6 +149,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 							name='website'
 							value={website}
 							onChange={reducerInputChange}
+							type='url'
 						/>
 						<InputDesc size='Small'>
 							Your home page, blog, or company site.
@@ -184,16 +193,30 @@ const InputLabel = styled(Subline)`
 	color: ${brandColors.deep[500]};
 `;
 
+enum InputValidationType {
+	NORMAL,
+	WARNING,
+	ERROR,
+	SUCCESS,
+}
+interface IInput {
+	validation: InputValidationType;
+}
+
 const Input = styled.input`
 	width: 100%;
 	height: 56px;
-	border: 1px solid ${neutralColors.gray[300]};
+	border: 2px solid ${neutralColors.gray[300]};
 	border-radius: 8px;
 	padding: 15px 16px;
 	font-size: 16px;
 	line-height: 150%;
 	font-weight: 500;
 	font-family: 'Red Hat Text';
+	caret-color: ${brandColors.giv[300]};
+	:focus {
+		border: 2px solid ${neutralColors.gray[400]};
+	}
 	::placeholder {
 		color: ${neutralColors.gray[500]};
 	}
