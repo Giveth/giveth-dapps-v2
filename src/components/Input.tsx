@@ -5,7 +5,14 @@ import {
 	GLink,
 	semanticColors,
 } from '@giveth/ui-design-system';
-import { ChangeEvent, FC, HTMLInputTypeAttribute, useState } from 'react';
+import {
+	ChangeEvent,
+	FC,
+	HTMLInputTypeAttribute,
+	memo,
+	useEffect,
+	useState,
+} from 'react';
 import styled from 'styled-components';
 
 enum InputValidationType {
@@ -41,6 +48,7 @@ const Input: FC<IInput> = ({
 	placeholder,
 	label,
 	caption,
+	required,
 }) => {
 	const [validation, setValidation] = useState<{
 		status: InputValidationType;
@@ -49,34 +57,53 @@ const Input: FC<IInput> = ({
 		status: InputValidationType.NORMAL,
 		msg: undefined,
 	});
+
 	const ChangeHandle = (e: ChangeEvent<HTMLInputElement>) => {
-		const { value } = e.target;
 		onChange(e);
-		if (validators) {
-			const error = validators.find(
-				validator => !validator.pattern.test(value),
-			);
-			if (error) {
-				setValidation({
-					status: InputValidationType.ERROR,
-					msg: error.msg,
-				});
-			} else {
+	};
+
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			if (value.length === 0) {
+				if (required) {
+					setValidation({
+						status: InputValidationType.ERROR,
+						msg: `${label} is required`,
+					});
+				}
+				return;
+			}
+			if (validators) {
+				const error = validators.find(
+					validator => !validator.pattern.test(value),
+				);
+				if (error) {
+					setValidation({
+						status: InputValidationType.ERROR,
+						msg: error.msg,
+					});
+					return;
+				}
+			}
+			if (validation.status !== InputValidationType.NORMAL) {
 				setValidation({
 					status: InputValidationType.NORMAL,
 					msg: undefined,
 				});
 			}
-		}
-	};
+		}, 300);
+		return () => {
+			clearTimeout(timer);
+		};
+	}, [required, validators, value]);
 
 	return (
 		<InputContainer>
-			{label && <InputLabel>WEBSITE OR URL (OPTIONAL)</InputLabel>}
+			{label && <InputLabel>{label}</InputLabel>}
 			<InputField
 				placeholder={placeholder}
 				name={name}
-				value={value}
+				// value={value}
 				onChange={ChangeHandle}
 				type={type}
 				validation={validation.status}
@@ -177,4 +204,8 @@ const InputValidation = styled(GLink)<IInputField>`
 	}}; ;
 `;
 
-export default Input;
+function areEqual(prevProps: IInput, nextProps: IInput) {
+	return prevProps.value === nextProps.value;
+}
+
+export default memo(Input, areEqual);
