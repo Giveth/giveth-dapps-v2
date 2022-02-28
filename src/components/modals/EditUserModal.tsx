@@ -190,104 +190,101 @@ const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
 	}, [newUser, user]);
 
 	return (
-		<>
-			<Modal
-				showModal={showModal}
-				setShowModal={setShowModal}
-				headerIcon={<></>}
-				headerTitle='Edit profile'
-				headerTitlePosition='left'
-			>
-				<Wrapper>
-					{editStatus === EditStatusType.PHOTO ? (
-						<>
-							<Row flexDirection='column' gap='36px'>
-								<ImageUploader
-									onDrop={onDrop}
-									setUrl={setAvatar}
-									url={avatar}
-								/>
-								<Button
-									buttonType='secondary'
-									label='SAVE'
-									onClick={onSaveAvatar}
-									disabled={!avatar}
+		<Modal
+			showModal={showModal}
+			setShowModal={setShowModal}
+			headerIcon={<></>}
+			headerTitle='Edit profile'
+			headerTitlePosition='left'
+		>
+			<Wrapper>
+				{editStatus === EditStatusType.PHOTO ? (
+					<>
+						<Row flexDirection='column' gap='36px'>
+							<ImageUploader
+								onDrop={onDrop}
+								setUrl={setAvatar}
+								url={avatar}
+							/>
+							<Button
+								buttonType='secondary'
+								label='SAVE'
+								onClick={onSaveAvatar}
+								disabled={!avatar}
+							/>
+							<TextButton
+								buttonType='texty'
+								label='cancel'
+								onClick={() => {
+									setAvatar('');
+									setEditStatus(EditStatusType.INFO);
+								}}
+							/>
+						</Row>
+					</>
+				) : (
+					<>
+						<FlexCenter direction='column' gap='8px'>
+							<ProfilePicture
+								src={
+									user.avatar
+										? user.avatar
+										: '/images/avatar.svg'
+								}
+								alt={user.name}
+								height={80}
+								width={80}
+							/>
+							<FlexCenter direction='column'>
+								<TextButton
+									buttonType='texty'
+									color={brandColors.pinky[500]}
+									label='upload new picture'
+									onClick={() =>
+										setEditStatus(EditStatusType.PHOTO)
+									}
 								/>
 								<TextButton
 									buttonType='texty'
-									label='cancel'
+									label='delete picture'
 									onClick={() => {
-										setAvatar('');
-										setEditStatus(EditStatusType.INFO);
+										onSaveAvatar();
 									}}
 								/>
-							</Row>
-						</>
-					) : (
-						<>
-							<FlexCenter direction='column' gap='8px'>
-								<ProfilePicture
-									src={
-										user.avatar
-											? user.avatar
-											: '/images/avatar.svg'
-									}
-									alt={user.name}
-									height={80}
-									width={80}
-								/>
-								<FlexCenter direction='column'>
-									<TextButton
-										buttonType='texty'
-										color={brandColors.pinky[500]}
-										label='upload new picture'
-										onClick={() =>
-											setEditStatus(EditStatusType.PHOTO)
-										}
-									/>
-									<TextButton
-										buttonType='texty'
-										label='delete picture'
-										onClick={() => {
-											onSaveAvatar();
-										}}
-									/>
-								</FlexCenter>
 							</FlexCenter>
-							<InputWrapper>
-								{inputFields.map(field => (
-									<Input
-										key={field.name}
-										handleChange={handleChange}
-										examples={field.examples}
-										explanation={field.explanation}
-										name={field.name}
-										placeholder={field.placeholder}
-										value={(newUser as any)[field.name]}
-									/>
-								))}
-								<Button
-									buttonType='secondary'
-									label='SAVE'
-									disabled={
-										!newUser.firstName ||
-										!newUser.lastName ||
-										isLoading
-									}
-									onClick={handleSubmit}
+						</FlexCenter>
+						<InputWrapper>
+							{inputFields.map(field => (
+								<Input
+									key={field.name}
+									handleChange={handleChange}
+									examples={field.examples}
+									explanation={field.explanation}
+									name={field.name}
+									placeholder={field.placeholder}
+									value={(newUser as any)[field.name]}
 								/>
-								<TextButton
-									buttonType='texty'
-									label='cancel'
-									onClick={() => setShowModal(false)}
-								/>
-							</InputWrapper>
-						</>
-					)}
-				</Wrapper>
-			</Modal>
-			<Toaster />
-		</>
+							))}
+							<Button
+								buttonType='secondary'
+								label='SAVE'
+								disabled={
+									!newUser.firstName ||
+									!newUser.lastName ||
+									isLoading
+								}
+								onClick={handleSubmit}
+							/>
+							<TextButton
+								buttonType='texty'
+								label='cancel'
+								onClick={() => setShowModal(false)}
+							/>
+						</InputWrapper>
+					</>
+				)}
+			</Wrapper>
+		</Modal>
 	);
 };
 
