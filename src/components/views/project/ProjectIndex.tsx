@@ -48,7 +48,7 @@ const ProjectIndex = () => {
 	const totalDonations = donationsByProjectId?.totalCount;
 
 	const {
-		state: { isSignedIn },
+		state: { user },
 	} = useUser();
 
 	const router = useRouter();
@@ -65,8 +65,8 @@ const ProjectIndex = () => {
 		client
 			.query({
 				query: FETCH_PROJECT_BY_SLUG,
-				variables: { slug },
-				fetchPolicy: 'no-cache',
+				variables: { slug, connectedWalletUserId: user?.id },
+				fetchPolicy: 'network-only',
 			})
 			.then((res: { data: any }) => {
 				setProject(res.data.projectBySlug);
@@ -83,7 +83,7 @@ const ProjectIndex = () => {
 		if (slug) {
 			fetchProject();
 		}
-	}, [isSignedIn, slug]);
+	}, [user?.id, slug]);
 
 	return (
 		<Wrapper>
