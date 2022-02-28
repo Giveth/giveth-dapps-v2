@@ -12,13 +12,14 @@ import ProjectTabs from './ProjectTabs';
 import ProjectDonateCard from './ProjectDonateCard';
 import { mediaQueries } from '@/lib/helpers';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
-import { client } from '@/apollo/apolloClient';
+import { client, initializeApollo } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 import useUser from '@/context/UserProvider';
 import { useRouter } from 'next/router';
-import { IProject } from '@/apollo/types/types';
+import { IDonation, IProject } from '@/apollo/types/types';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import InfoBadge from '@/components/badges/InfoBadge';
+import { IDonationsByProjectId } from '@/apollo/types/gqlTypes';
 
 const ProjectDonations = dynamic(() => import('./ProjectDonations'));
 const ProjectUpdates = dynamic(() => import('./ProjectUpdates'));
@@ -33,19 +34,36 @@ const ProjectIndex = () => {
 	const [isActive, setIsActive] = useState<boolean>(true);
 	const [isDraft, setIsDraft] = useState<boolean>(false);
 	const [project, setProject] = useState<IProject>();
+	const [donations, setDonations] = useState<IDonation[]>([]);
+	const [totalDonations, setTotalDonations] = useState(0);
 	const { description = '', title, status, id = '' } = project || {};
 
-	const { data: donationsData } = useQuery(FETCH_PROJECT_DONATIONS, {
-		variables: {
-			projectId: parseInt(id),
-			skip: 0,
-			take: donationsPerPage,
-			orderBy: 'CreationDate',
-			direction: 'ASC',
-		},
-	});
-	const donationsByProjectId = donationsData?.donationsByProjectId;
-	const totalDonations = donationsByProjectId?.totalCount;
+	useEffect(() => {
+		if (!project?.id) return;
+		initializeApollo()
+			.query({
+				query: FETCH_PROJECT_DONATIONS,
+				variables: {
+					projectId: parseInt(project?.id),
+					skip: 0,
+					take: donationsPerPage,
+					orderBy: 'CreationDate',
+					direction: 'ASC',
+				},
+			})
+			.then(
+				(res: {
+					data: { donationsByProjectId: IDonationsByProjectId };
+				}) => {
+					const donationsByProjectId = res.data.donationsByProjectId;
+					setDonations(donationsByProjectId.donations);
+					setTotalDonations(donationsByProjectId.totalCount);
+					// const donationsByProjectId =
+					// 	donationsData?.donationsByProjectId;
+					// const totalDonations = donationsByProjectId?.totalCount;
+				},
+			);
+	}, [project?.id]);
 
 	const {
 		state: { user },
@@ -65,7 +83,10 @@ const ProjectIndex = () => {
 		client
 			.query({
 				query: FETCH_PROJECT_BY_SLUG,
-				variables: { slug, connectedWalletUserId: user?.id },
+				variables: {
+						slug,
+						connectedWalletUserId: Number(user?.id),
+					},
 				fetchPolicy: 'network-only',
 			})
 			.then((res: { data: any }) => {
@@ -83,7 +104,7 @@ const ProjectIndex = () => {
 		if (slug) {
 			fetchProject();
 		}
-	}, [user?.id, slug]);
+	}, [slug]);
 
 	return (
 		<Wrapper>
@@ -130,7 +151,10 @@ const ProjectIndex = () => {
 					)}
 					{activeTab === 2 && (
 						<ProjectDonations
-							donationsByProjectId={donationsByProjectId}
+							donationsByProjectId={{
+								donations,
+								totalCount: totalDonations,
+							}}
 							project={project!}
 							isActive={isActive}
 							isDraft={isDraft}
