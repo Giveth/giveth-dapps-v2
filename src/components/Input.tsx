@@ -42,9 +42,13 @@ const Input: FC<IInput> = ({
 	label,
 	caption,
 }) => {
-	const [validation, setValidation] = useState<InputValidationType>(
-		InputValidationType.NORMAL,
-	);
+	const [validation, setValidation] = useState<{
+		status: InputValidationType;
+		msg?: string;
+	}>({
+		status: InputValidationType.NORMAL,
+		msg: undefined,
+	});
 	const ChangeHandle = (e: ChangeEvent<HTMLInputElement>) => {
 		const { value } = e.target;
 		onChange(e);
@@ -53,9 +57,15 @@ const Input: FC<IInput> = ({
 				validator => !validator.pattern.test(value),
 			);
 			if (error) {
-				setValidation(InputValidationType.ERROR);
+				setValidation({
+					status: InputValidationType.ERROR,
+					msg: error.msg,
+				});
 			} else {
-				setValidation(InputValidationType.NORMAL);
+				setValidation({
+					status: InputValidationType.NORMAL,
+					msg: undefined,
+				});
 			}
 		}
 	};
@@ -69,12 +79,14 @@ const Input: FC<IInput> = ({
 				value={value}
 				onChange={ChangeHandle}
 				type={type}
-				validation={validation}
+				validation={validation.status}
 			/>
-			{caption && (
-				<InputDesc size='Small'>
-					Your home page, blog, or company site.
-				</InputDesc>
+			{validation.msg ? (
+				<InputValidation validation={validation.status} size='Small'>
+					{validation.msg}
+				</InputValidation>
+			) : (
+				<InputDesc size='Small'>{caption || '\u200C'}</InputDesc> //hidden char
 			)}
 		</InputContainer>
 	);
@@ -143,6 +155,26 @@ const InputField = styled.input<IInputField>`
 const InputDesc = styled(GLink)`
 	padding-top: 4px;
 	color: ${brandColors.deep[500]};
+	display: block;
+`;
+
+const InputValidation = styled(GLink)<IInputField>`
+	padding-top: 4px;
+	display: block;
+	color: ${props => {
+		switch (props.validation) {
+			case InputValidationType.NORMAL:
+				return neutralColors.gray[900];
+			case InputValidationType.WARNING:
+				return semanticColors.golden[600];
+			case InputValidationType.ERROR:
+				return semanticColors.punch[500];
+			case InputValidationType.SUCCESS:
+				return semanticColors.jade[500];
+			default:
+				return neutralColors.gray[300];
+		}
+	}}; ;
 `;
 
 export default Input;
