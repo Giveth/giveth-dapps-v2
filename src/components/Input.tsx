@@ -18,19 +18,29 @@ enum InputValidationType {
 interface IInput {
 	value: string;
 	onChange: any;
-	pattern?: RegExp;
-	type: HTMLInputTypeAttribute;
+	type?: HTMLInputTypeAttribute;
 	name: string;
 	placeholder: string;
+	label?: string;
+	required?: boolean;
+	caption?: string;
+	validators?: IInputValidator[];
+}
+
+interface IInputValidator {
+	pattern: RegExp;
+	msg: string;
 }
 
 const Input: FC<IInput> = ({
 	name,
 	value,
 	onChange,
-	type,
-	pattern,
+	type = 'text',
+	validators,
 	placeholder,
+	label,
+	caption,
 }) => {
 	const [validation, setValidation] = useState<InputValidationType>(
 		InputValidationType.NORMAL,
@@ -38,9 +48,11 @@ const Input: FC<IInput> = ({
 	const ChangeHandle = (e: ChangeEvent<HTMLInputElement>) => {
 		const { value } = e.target;
 		onChange(e);
-		if (pattern) {
-			const test = pattern.test(value);
-			if (!test) {
+		if (validators) {
+			const error = validators.find(
+				validator => !validator.pattern.test(value),
+			);
+			if (error) {
 				setValidation(InputValidationType.ERROR);
 			} else {
 				setValidation(InputValidationType.NORMAL);
@@ -48,11 +60,9 @@ const Input: FC<IInput> = ({
 		}
 	};
 
-	console.log(validation);
-
 	return (
 		<InputContainer>
-			<InputLabel>WEBSITE OR URL (OPTIONAL)</InputLabel>
+			{label && <InputLabel>WEBSITE OR URL (OPTIONAL)</InputLabel>}
 			<InputField
 				placeholder={placeholder}
 				name={name}
@@ -61,9 +71,11 @@ const Input: FC<IInput> = ({
 				type={type}
 				validation={validation}
 			/>
-			<InputDesc size='Small'>
-				Your home page, blog, or company site.
-			</InputDesc>
+			{caption && (
+				<InputDesc size='Small'>
+					Your home page, blog, or company site.
+				</InputDesc>
+			)}
 		</InputContainer>
 	);
 };
