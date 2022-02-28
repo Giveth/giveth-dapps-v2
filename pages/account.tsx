@@ -46,6 +46,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 	if (userFromCookie) {
 		const { data: userData } = await client.query({
 			query: GET_USER_BY_ADDRESS,
+			fetchPolicy: 'no-cache',
 			variables: {
 				address: userFromCookie?.walletAddress,
 			},
