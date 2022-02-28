@@ -118,7 +118,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 				variables: {
 					address: account?.toLowerCase(),
 				},
-				fetchPolicy: 'no-cache',
+				fetchPolicy: 'network-only',
 			})
 			.then((res: any) => {
 				return res.data?.userByAddress;
