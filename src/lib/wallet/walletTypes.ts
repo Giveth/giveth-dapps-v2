@@ -13,11 +13,15 @@ import { Web3ReactContextInterface } from '@web3-react/core/dist/types';
 import config from '@/configuration';
 import { TorusConnector } from '@/lib/wallet/torus-connector';
 
+const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
+
+const supportedChainIds = [1, 3, 4, 5, 42, 100];
 export const injectedConnector = new InjectedConnector({
-	supportedChainIds: [1, 3, 4, 5, 42, 100],
+	supportedChainIds,
 });
 export const walletconnectConnector = new WalletConnectConnector({
-	rpc: { 1: 'https://main-light.eth.linkpool.io' },
+	infuraId: INFURA_API_KEY,
+	supportedChainIds,
 	qrcode: true,
 });
 // export const portisConnector = new PortisConnector({
