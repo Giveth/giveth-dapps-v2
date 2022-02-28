@@ -1,7 +1,8 @@
-import { SkipOnboardingModal } from '@/components/modals/SkipOnboardingModal';
+import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
 import { Row } from '@/components/styled-components/Grid';
+import useUser from '@/context/UserProvider';
 import { Button, neutralColors } from '@giveth/ui-design-system';
-import { Dispatch, FC, SetStateAction, useState } from 'react';
+import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { OnboardSteps } from './Onboarding.view';
 
@@ -26,13 +27,32 @@ export const OnboardActions: FC<IOnboardActions> = ({
 	onLater,
 	disabled,
 }) => {
+	const [showSigninModal, setShowSigninModal] = useState(false);
+	const {
+		state: { isSignedIn },
+	} = useUser();
+
+	useEffect(() => {
+		if (!isSignedIn) {
+			setShowSigninModal(true);
+		}
+	}, [isSignedIn]);
+
+	const handleSave = () => {
+		if (!isSignedIn) {
+			setShowSigninModal(true);
+		} else {
+			onSave();
+		}
+	};
+
 	return (
 		<>
 			<OnboardActionsContianer>
 				<SaveButton
 					label={saveLabel}
 					disabled={disabled}
-					onClick={onSave}
+					onClick={handleSave}
 					size='medium'
 				/>
 				<SkipButton
@@ -42,6 +62,12 @@ export const OnboardActions: FC<IOnboardActions> = ({
 					onClick={onLater}
 				/>
 			</OnboardActionsContianer>
+			{showSigninModal && (
+				<WelcomeSigninModal
+					showModal={showSigninModal}
+					setShowModal={setShowSigninModal}
+				/>
+			)}
 		</>
 	);
 };
