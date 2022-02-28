@@ -16,20 +16,16 @@ export interface IStep {
 interface IOnboardActions {
 	onSave: any;
 	saveLabel: string;
+	onLater: any;
 	disabled: boolean;
 }
 
 export const OnboardActions: FC<IOnboardActions> = ({
 	onSave,
 	saveLabel,
+	onLater,
 	disabled,
 }) => {
-	const [showModal, setShowModal] = useState(false);
-
-	const handleSkip = () => {
-		setShowModal(true);
-	};
-
 	return (
 		<>
 			<OnboardActionsContianer>
@@ -43,15 +39,9 @@ export const OnboardActions: FC<IOnboardActions> = ({
 					label='Do it later'
 					size='medium'
 					buttonType='texty'
-					onClick={handleSkip}
+					onClick={onLater}
 				/>
 			</OnboardActionsContianer>
-			{showModal && (
-				<SkipOnboardingModal
-					showModal={showModal}
-					setShowModal={setShowModal}
-				/>
-			)}
 		</>
 	);
 };

@@ -67,6 +67,7 @@ const PhotoStep: FC<IStep> = ({ setStep }) => {
 				<OnboardActions
 					onSave={onSave}
 					saveLabel='SAVE'
+					onLater={() => setStep(OnboardSteps.DONE)}
 					disabled={!url}
 				/>
 			</OnboardStep>

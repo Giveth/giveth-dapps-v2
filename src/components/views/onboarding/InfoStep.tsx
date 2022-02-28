@@ -1,4 +1,5 @@
 import { UPDATE_USER } from '@/apollo/gql/gqlUser';
+import { SkipOnboardingModal } from '@/components/modals/SkipOnboardingModal';
 import { Row } from '@/components/styled-components/Grid';
 import { gToast, ToastType } from '@/components/toasts';
 import { useMutation } from '@apollo/client';
@@ -40,6 +41,11 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 	);
 	const [disabled, setDisabled] = useState(true);
 	const [updateUser] = useMutation(UPDATE_USER);
+	const [showModal, setShowModal] = useState(false);
+
+	const handleLater = () => {
+		setShowModal(true);
+	};
 
 	const { email, firstName, lastName, location, website } = info;
 
@@ -144,9 +150,16 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 				<OnboardActions
 					onSave={onSave}
 					saveLabel='SAVE & CONTINUE'
+					onLater={handleLater}
 					disabled={disabled}
 				/>
 			</OnboardStep>
+			{showModal && (
+				<SkipOnboardingModal
+					showModal={showModal}
+					setShowModal={setShowModal}
+				/>
+			)}
 		</>
 	);
 };
