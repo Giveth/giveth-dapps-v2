@@ -10,12 +10,12 @@ import walletConnectIcon from '/public//images/wallets/walletconnect.svg';
 import torusIcon from '/public//images/wallets/torus.svg';
 // import authereumIcon from '/public//images/wallets/authereum.svg';
 import { Web3ReactContextInterface } from '@web3-react/core/dist/types';
-import config from '@/configuration';
 import { TorusConnector } from '@/lib/wallet/torus-connector';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 
 const supportedChainIds = [1, 3, 4, 5, 42, 100];
+
 export const injectedConnector = new InjectedConnector({
 	supportedChainIds,
 });
@@ -33,7 +33,7 @@ export const walletconnectConnector = new WalletConnectConnector({
 // 	chainId: 1,
 // });
 export const torusConnector = new TorusConnector({
-	chainIds: [config.XDAI_NETWORK_NUMBER, config.MAINNET_NETWORK_NUMBER],
+	chainIds: supportedChainIds,
 });
 // torusConnector.supportedChainIds;
 // export const authereumConnector = new AuthereumConnector({ chainId: 42 });
