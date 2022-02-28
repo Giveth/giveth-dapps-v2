@@ -127,7 +127,7 @@ const ProjectDonateCard = ({
 
 	useEffect(() => {
 		fetchProjectReaction();
-	}, [user]);
+	}, [user?.id]);
 
 	useEffect(() => {
 		setHeartedByUser(!!reaction?.id);
