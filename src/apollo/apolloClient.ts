@@ -58,7 +58,7 @@ function createApolloClient() {
 				fetchPolicy: 'cache-and-network',
 			},
 			query: {
-				fetchPolicy: 'no-cache',
+				fetchPolicy: 'network-only',
 				// nextFetchPolicy: 'network-only',
 			},
 		},
