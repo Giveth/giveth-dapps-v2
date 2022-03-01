@@ -13,16 +13,17 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import CategoryBadge from '@/components/badges/CategoryBadge';
 import Routes from '@/lib/constants/Routes';
 import { mediaQueries, showToastError } from '@/lib/helpers';
-import QuestionBadge from '@/components/badges/QuestionBadge';
 import { IProject } from '@/apollo/types/types';
 import links from '@/lib/constants/links';
 import {
 	Button,
 	brandColors,
-	GLink,
 	neutralColors,
 	OulineButton,
 	Overline,
+	ButtonText,
+	Caption,
+	IconHelp,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import useUser from '@/context/UserProvider';
@@ -255,11 +256,20 @@ const ProjectDonateCard = ({
 				</BadgeWrapper>
 				{!isDraft && (
 					<GivBackNotif>
-						<GLink size='Medium' color={brandColors.giv[300]}>
+						<Caption color={brandColors.giv[300]}>
 							When you donate to verified projects, you get GIV
 							back.
-						</GLink>
-						<QuestionBadge />
+						</Caption>
+						<a
+							href='https://docs.giveth.io/giveconomy/givbacks'
+							target='_blank'
+							rel='noreferrer'
+						>
+							<GIVbackButton>Learn more</GIVbackButton>
+							<GIVbackQuestionIcon>
+								<IconHelp size={16} />
+							</GIVbackQuestionIcon>
+						</a>
 					</GivBackNotif>
 				)}
 				{isCategories && (
@@ -329,14 +339,30 @@ const CategoryWrapper = styled.div`
 `;
 
 const GivBackNotif = styled.div`
-	display: flex;
-	justify-content: center;
-	padding: 16px;
+	padding: 16px 16px 16px 48px;
 	background: rgba(231, 225, 255, 0.4);
 	border-radius: 8px;
 	border: 1px solid ${brandColors.giv[300]};
 	margin-top: 24px;
 	color: ${brandColors.giv[300]};
+	position: relative;
+`;
+
+const GIVbackQuestionIcon = styled.div`
+	position: absolute;
+	top: 19px;
+	left: 16px;
+`;
+
+const GIVbackButton = styled(ButtonText)`
+	margin-top: 16px;
+	color: ${brandColors.giv[300]};
+	display: block;
+	text-align: right;
+
+	&:hover {
+		color: ${brandColors.giv[400]};
+	}
 `;
 
 const BadgeWrapper = styled.div`
