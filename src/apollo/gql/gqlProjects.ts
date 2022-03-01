@@ -158,6 +158,21 @@ export const FETCH_PROJECT_UPDATES = gql`
 	}
 `;
 
+export const ADD_PROJECT_UPDATE = gql`
+	mutation ($projectId: Float!, $title: String!, $content: String!) {
+		addProjectUpdate(
+			projectId: $projectId
+			title: $title
+			content: $content
+		) {
+			id
+			projectId
+			userId
+			content
+		}
+	}
+`;
+
 export const FETCH_USER_LIKED_PROJECTS = gql`
 	query FetchUesrLikedProjects($take: Int, $skip: Int, $userId: Int!) {
 		likedProjectsByUserId(take: $take, skip: $skip, userId: $userId) {

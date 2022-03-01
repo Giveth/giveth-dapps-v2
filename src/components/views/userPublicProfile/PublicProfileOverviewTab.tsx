@@ -201,9 +201,13 @@ const Btn = styled(Button)`
 `;
 
 const IncompleteToast = styled.div`
-	width: 85%;
+	max-width: 1136px;
 	position: absolute;
 	top: 90px;
+	left: 0;
+	right: 0;
+	margin-left: auto;
+	margin-right: auto;
 	background-color: ${brandColors.mustard[200]};
 	border: 1px solid ${brandColors.mustard[700]};
 	border-radius: 8px;

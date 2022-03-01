@@ -63,23 +63,27 @@ const ProjectIndex = () => {
 		}
 	}, [status]);
 
+	const fetchProject = async () => {
+		client
+			.query({
+				query: FETCH_PROJECT_BY_SLUG,
+				variables: { slug },
+				fetchPolicy: 'no-cache',
+			})
+			.then((res: { data: any }) => {
+				setProject(res.data.projectBySlug);
+			})
+			.catch((err: any) =>
+				gToast(JSON.stringify(err.message || err), {
+					type: ToastType.DANGER,
+					position: 'top-center',
+				}),
+			);
+	};
+
 	useEffect(() => {
 		if (slug) {
-			client
-				.query({
-					query: FETCH_PROJECT_BY_SLUG,
-					variables: { slug },
-					fetchPolicy: 'no-cache',
-				})
-				.then((res: { data: any }) => {
-					setProject(res.data.projectBySlug);
-				})
-				.catch((err: any) =>
-					gToast(JSON.stringify(err.message || err), {
-						type: ToastType.DANGER,
-						position: 'top-center',
-					}),
-				);
+			fetchProject();
 		}
 	}, [isSignedIn, slug]);
 
@@ -120,7 +124,12 @@ const ProjectIndex = () => {
 					{activeTab === 0 && (
 						<RichTextViewer content={description} />
 					)}
-					{activeTab === 1 && <ProjectUpdates project={project} />}
+					{activeTab === 1 && (
+						<ProjectUpdates
+							project={project}
+							fetchProject={fetchProject}
+						/>
+					)}
 					{activeTab === 2 && (
 						<ProjectDonations
 							donationsByProjectId={donationsByProjectId}

@@ -19,11 +19,19 @@ const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {
 const ProjectTimeline = (props: {
 	projectUpdate?: IProjectUpdate;
 	creationDate?: string;
+	removeUpdate?: Function;
+	isOwner?: boolean;
 }) => {
-	const { projectUpdate, creationDate } = props;
+	const { projectUpdate, creationDate, removeUpdate, isOwner } = props;
 	if (creationDate) return <LaunchSection creationDate={creationDate} />;
 	else if (projectUpdate)
-		return <UpdatesSection projectUpdate={projectUpdate} />;
+		return (
+			<UpdatesSection
+				projectUpdate={projectUpdate}
+				removeUpdate={removeUpdate}
+				isOwner={isOwner}
+			/>
+		);
 	else return null;
 };
 
@@ -40,7 +48,12 @@ const LaunchSection = (props: { creationDate: string }) => {
 	);
 };
 
-const UpdatesSection = (props: { projectUpdate: IProjectUpdate }) => {
+const UpdatesSection = (props: {
+	projectUpdate: IProjectUpdate;
+	removeUpdate?: Function;
+	isOwner?: boolean;
+}) => {
+	// const { isOwner, removeUpdate } = props;
 	const { content, createdAt, title } = props.projectUpdate;
 	return (
 		<Wrapper>
@@ -50,6 +63,9 @@ const UpdatesSection = (props: { projectUpdate: IProjectUpdate }) => {
 				<Description>
 					<RichTextViewer content={content} />
 				</Description>
+				{/* {isOwner && (
+					<a onClick={() => removeUpdate && removeUpdate()}>remove</a>
+				)} */}
 			</Content>
 		</Wrapper>
 	);
