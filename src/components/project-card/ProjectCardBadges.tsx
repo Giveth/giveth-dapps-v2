@@ -113,7 +113,7 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 							<LikeBadge>{totalReactions}</LikeBadge>
 						)}
 						<HeartWrap active={!!reaction?.id} isHover={isHover}>
-							<Image
+							<ShareImageButton
 								src={
 									reaction?.userId &&
 									reaction?.userId === user?.id
@@ -121,9 +121,7 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 										: grayHeartIcon
 								}
 								alt='heart icon'
-								onClick={() => {
-									likeUnlikeProject();
-								}}
+								onClick={likeUnlikeProject}
 							/>
 							<ShareImageButton
 								src={shareIcon}
