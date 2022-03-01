@@ -3,7 +3,6 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { Caption, GLink, semanticColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { useQuery } from '@apollo/client';
 
 import WarningBadge from '@/components/badges/WarningBadge';
 import ProjectHeader from './ProjectHeader';

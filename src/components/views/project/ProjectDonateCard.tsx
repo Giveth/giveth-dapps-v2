@@ -1,4 +1,10 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, {
+	Dispatch,
+	SetStateAction,
+	useCallback,
+	useEffect,
+	useState,
+} from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -95,7 +101,7 @@ const ProjectDonateCard = ({
 				if (!reaction) {
 					const newReaction = await likeProject(id);
 					setReaction(newReaction);
-				} else {
+				} else if (reaction?.userId === user?.id) {
 					const successful = await unlikeProject(reaction.id);
 					if (successful) setReaction(undefined);
 				}
@@ -107,8 +113,11 @@ const ProjectDonateCard = ({
 		}
 	};
 
-	const fetchProjectReaction = async () => {
+	const fetchProjectReaction = useCallback(async () => {
 		if (user?.id && id) {
+			// Already fetched
+			if (user?.id === reaction?.userId) return;
+
 			try {
 				const { data } = await client.query({
 					query: FETCH_PROJECT_REACTION_BY_ID,
@@ -125,15 +134,15 @@ const ProjectDonateCard = ({
 		} else if (reaction) {
 			setReaction(undefined);
 		}
-	};
-
-	useEffect(() => {
-		fetchProjectReaction();
 	}, [id, user?.id]);
 
 	useEffect(() => {
-		setHeartedByUser(!!reaction?.id);
-	}, [project, reaction]);
+		fetchProjectReaction();
+	}, [fetchProjectReaction]);
+
+	useEffect(() => {
+		setHeartedByUser(!!reaction?.id && reaction?.userId === user?.id);
+	}, [project, reaction, user?.id]);
 
 	useEffect(() => {
 		if (adminUser?.walletAddress === user?.walletAddress && !!user) {

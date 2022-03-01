@@ -32,7 +32,7 @@ interface IProjectCardBadges {
 
 const ProjectCardBadges = (props: IProjectCardBadges) => {
 	const {
-		state: { isSignedIn },
+		state: { user, isSignedIn },
 		actions: { signIn },
 	} = useUser();
 
@@ -73,7 +73,7 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 					setReaction(newReaction);
 					if (newReaction)
 						setTotalReactions((totalReactions || 0) + 1);
-				} else {
+				} else if (reaction?.userId === user?.id) {
 					const successful = await unlikeProject(reaction.id);
 					if (successful) {
 						setReaction(undefined);
@@ -115,7 +115,11 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 						<HeartWrap active={!!reaction?.id} isHover={isHover}>
 							<Image
 								src={
-									reaction?.id ? redHeartIcon : grayHeartIcon
+									reaction?.id &&
+									reaction?.userId &&
+									reaction?.userId === user?.id
+										? redHeartIcon
+										: grayHeartIcon
 								}
 								alt='heart icon'
 								onClick={() => {

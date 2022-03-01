@@ -129,7 +129,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 			variables.category = categoryQuery;
 		if (search) variables.searchTerm = search;
 
-		setIsLoading(true);
+		if (!userIdChanged) setIsLoading(true);
 
 		initializeApollo()
 			.query({
