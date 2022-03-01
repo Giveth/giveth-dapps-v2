@@ -79,6 +79,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 					type: ToastType.SUCCESS,
 					title: 'Success',
 				});
+				return true;
 			} else {
 				throw 'Update User Failed';
 			}
@@ -89,6 +90,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 			});
 		}
 		setDisabled(false);
+		return false;
 	};
 
 	return (

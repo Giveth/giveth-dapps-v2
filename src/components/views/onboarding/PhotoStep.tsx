@@ -40,6 +40,7 @@ const PhotoStep: FC<IStep> = ({ setStep }) => {
 					type: ToastType.SUCCESS,
 					title: 'Success',
 				});
+				return true;
 			} else {
 				throw 'updateUser false';
 			}
@@ -50,6 +51,7 @@ const PhotoStep: FC<IStep> = ({ setStep }) => {
 			});
 			console.log(error);
 		}
+		return false;
 	};
 
 	return (

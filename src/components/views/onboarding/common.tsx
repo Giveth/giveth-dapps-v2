@@ -15,7 +15,7 @@ export interface IStep {
 	setStep: Dispatch<SetStateAction<OnboardSteps>>;
 }
 interface IOnboardActions {
-	onSave: any;
+	onSave: () => Promise<boolean>;
 	saveLabel: string;
 	onLater: any;
 	disabled: boolean;
@@ -29,20 +29,26 @@ export const OnboardActions: FC<IOnboardActions> = ({
 }) => {
 	const [showSigninModal, setShowSigninModal] = useState(false);
 	const {
-		state: { isSignedIn },
+		state: { user, isSignedIn },
+		actions: { reFetchUserData },
 	} = useUser();
 
 	useEffect(() => {
 		if (!isSignedIn) {
 			setShowSigninModal(true);
+		} else {
+			setShowSigninModal(false);
 		}
 	}, [isSignedIn]);
 
-	const handleSave = () => {
+	const handleSave = async () => {
 		if (!isSignedIn) {
 			setShowSigninModal(true);
 		} else {
-			onSave();
+			const res = await onSave();
+			if (res) {
+				reFetchUserData();
+			}
 		}
 	};
 
