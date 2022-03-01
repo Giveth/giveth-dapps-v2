@@ -3,17 +3,14 @@ import {
 	Container,
 	GLink,
 	Button,
-	H2,
 	H3,
 	H5,
-	IconCopy,
 	IconExternalLink,
 	Lead,
 	neutralColors,
-	P,
-	Subline,
 	Caption,
 } from '@giveth/ui-design-system';
+import { useRouter } from 'next/router';
 import { client } from '@/apollo/apolloClient';
 import { GET_USER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
 import { CopyToClipboard } from '@/components/CopyToClipboard';
@@ -70,8 +67,8 @@ interface IIncompleteToast {
 	absolute?: boolean;
 	close?: any;
 }
-
 const IncompleteProfileToast = ({ close, absolute }: IIncompleteToast) => {
+	const router = useRouter();
 	return (
 		<IncompleteToast absolute={absolute}>
 			<IncompleteProfile>
@@ -89,7 +86,7 @@ const IncompleteProfileToast = ({ close, absolute }: IIncompleteToast) => {
 					size='small'
 					label="LET'S DO IT"
 					buttonType='texty'
-					onClick={e => alert('modal here')}
+					onClick={e => router.push('/onboard')}
 				/>
 				{absolute && (
 					<img
@@ -223,7 +220,7 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 								</PinkLink>
 							)}
 							<WalletContainer>
-								{myAccount && (
+								{myAccount && user?.name && user?.email && (
 									<PinkLink
 										size='Big'
 										onClick={() => setShowModal(true)}

@@ -24,7 +24,7 @@ const PublicProfileOverviewTab: FC<IUserPublicProfileView> = ({ user }) => {
 				{
 					label: 'COMPLETE PROFILE',
 					buttonType: 'primary',
-					onClick: () => alert('here edit profile modal'),
+					onClick: () => router.push('/onboard'),
 				} as IButtonProps,
 			],
 		},
