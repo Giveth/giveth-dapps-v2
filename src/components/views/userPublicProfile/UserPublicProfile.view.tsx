@@ -59,12 +59,13 @@ interface IEmptyBox {
 export const NothingToSee = ({ title, heartIcon }: IEmptyBox) => {
 	return (
 		<NothingBox>
-			<img
+			<Image
 				src={
 					heartIcon
 						? '/images/heart-white.svg'
 						: '/images/empty-box.svg'
 				}
+				alt='nothing'
 			/>
 			<Lead>{title}</Lead>
 		</NothingBox>
