@@ -1,5 +1,8 @@
 import { UPDATE_USER } from '@/apollo/gql/gqlUser';
-import Input from '@/components/Input';
+import Input, {
+	IFormValidations,
+	InputValidationType,
+} from '@/components/Input';
 import { SkipOnboardingModal } from '@/components/modals/SkipOnboardingModal';
 import { Row } from '@/components/styled-components/Grid';
 import { gToast, ToastType } from '@/components/toasts';
@@ -43,6 +46,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 	const [disabled, setDisabled] = useState(true);
 	const [updateUser] = useMutation(UPDATE_USER);
 	const [showModal, setShowModal] = useState(false);
+	const [formValidation, setFormValidation] = useState<IFormValidations>();
 
 	const handleLater = () => {
 		setShowModal(true);
@@ -57,10 +61,6 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 		}
 		setInfo({ [name]: value });
 	};
-
-	useEffect(() => {
-		setDisabled(!(firstName.length > 0 && lastName.length > 0));
-	}, [firstName, lastName]);
 
 	const onSave = async () => {
 		setDisabled(true);
@@ -87,6 +87,14 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 		setDisabled(false);
 	};
 
+	useEffect(() => {
+		if (formValidation) {
+			const fvs = Object.values(formValidation);
+			console.log(fvs);
+			setDisabled(!fvs.every(fv => fv === InputValidationType.NORMAL));
+		}
+	}, [formValidation]);
+
 	return (
 		<>
 			<OnboardStep>
@@ -98,6 +106,8 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 						name='firstName'
 						value={firstName}
 						onChange={reducerInputChange}
+						setFormValidation={setFormValidation}
+						required
 					/>
 					<Input
 						label='LAST NAME'
@@ -105,6 +115,8 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 						name='lastName'
 						value={lastName}
 						onChange={reducerInputChange}
+						setFormValidation={setFormValidation}
+						required
 					/>
 				</Section>
 				<Section>
@@ -115,12 +127,14 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 						value={email}
 						onChange={reducerInputChange}
 						type='email'
+						required
+						setFormValidation={setFormValidation}
 						validators={[
-							{ pattern: /^.{5,}$/, msg: 'min 20 char' },
+							{ pattern: /^.{3,}$/, msg: 'Too Short' },
 							{
 								pattern:
 									/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-								msg: 'Email is not valid',
+								msg: 'Invalid Email Address',
 							},
 						]}
 					/>

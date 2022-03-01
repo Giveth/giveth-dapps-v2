@@ -7,15 +7,21 @@ import {
 } from '@giveth/ui-design-system';
 import {
 	ChangeEvent,
+	Dispatch,
 	FC,
 	HTMLInputTypeAttribute,
 	memo,
+	SetStateAction,
 	useEffect,
 	useState,
 } from 'react';
 import styled from 'styled-components';
 
-enum InputValidationType {
+export interface IFormValidations {
+	[key: string]: InputValidationType;
+}
+
+export enum InputValidationType {
 	NORMAL,
 	WARNING,
 	ERROR,
@@ -32,6 +38,7 @@ interface IInput {
 	required?: boolean;
 	caption?: string;
 	validators?: IInputValidator[];
+	setFormValidation?: Dispatch<SetStateAction<IFormValidations | undefined>>;
 }
 
 interface IInputValidator {
@@ -49,6 +56,7 @@ const Input: FC<IInput> = ({
 	label,
 	caption,
 	required,
+	setFormValidation,
 }) => {
 	const [validation, setValidation] = useState<{
 		status: InputValidationType;
@@ -70,6 +78,12 @@ const Input: FC<IInput> = ({
 						status: InputValidationType.ERROR,
 						msg: `${label} is required`,
 					});
+					if (setFormValidation) {
+						setFormValidation(formValidation => ({
+							...formValidation,
+							[name]: InputValidationType.ERROR,
+						}));
+					}
 				}
 				return;
 			}
@@ -82,6 +96,12 @@ const Input: FC<IInput> = ({
 						status: InputValidationType.ERROR,
 						msg: error.msg,
 					});
+					if (setFormValidation) {
+						setFormValidation(formValidation => ({
+							...formValidation,
+							[name]: InputValidationType.ERROR,
+						}));
+					}
 					return;
 				}
 			}
@@ -90,6 +110,12 @@ const Input: FC<IInput> = ({
 					status: InputValidationType.NORMAL,
 					msg: undefined,
 				});
+				if (setFormValidation) {
+					setFormValidation(formValidation => ({
+						...formValidation,
+						[name]: InputValidationType.NORMAL,
+					}));
+				}
 			}
 		}, 300);
 		return () => {
@@ -99,7 +125,7 @@ const Input: FC<IInput> = ({
 
 	return (
 		<InputContainer>
-			{label && <InputLabel>{label}</InputLabel>}
+			{label && <InputLabel required={required}>{label}</InputLabel>}
 			<InputField
 				placeholder={placeholder}
 				name={name}
@@ -123,9 +149,15 @@ const InputContainer = styled.div`
 	flex: 1;
 `;
 
-const InputLabel = styled(Subline)`
+const InputLabel = styled(Subline)<{ required?: boolean }>`
 	padding-bottom: 4px;
 	color: ${brandColors.deep[500]};
+	::after {
+		content: '*';
+		display: ${props => (props.required ? 'inline-block' : 'none')};
+		padding: 0 4px;
+		color: ${semanticColors.punch[500]};
+	}
 `;
 
 interface IInputField {
