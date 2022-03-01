@@ -123,6 +123,7 @@ const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 								placeholder='Type a title...'
 							/>
 							<RichTextInput
+								projectId={id}
 								value={newUpdate}
 								style={TextInputStyle}
 								rows={12}
