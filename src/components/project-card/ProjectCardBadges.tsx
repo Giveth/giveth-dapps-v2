@@ -115,7 +115,6 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 						<HeartWrap active={!!reaction?.id} isHover={isHover}>
 							<Image
 								src={
-									reaction?.id &&
 									reaction?.userId &&
 									reaction?.userId === user?.id
 										? redHeartIcon
