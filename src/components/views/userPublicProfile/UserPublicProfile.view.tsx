@@ -2,6 +2,7 @@ import {
 	brandColors,
 	Container,
 	GLink,
+	Button,
 	H2,
 	H3,
 	H5,
@@ -11,6 +12,7 @@ import {
 	neutralColors,
 	P,
 	Subline,
+	Caption,
 } from '@giveth/ui-design-system';
 import { client } from '@/apollo/apolloClient';
 import { GET_USER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
@@ -64,6 +66,44 @@ interface IEmptyBox {
 	heartIcon?: boolean;
 }
 
+interface IIncompleteToast {
+	absolute?: boolean;
+	close?: any;
+}
+
+const IncompleteProfileToast = ({ close, absolute }: IIncompleteToast) => {
+	return (
+		<IncompleteToast absolute={absolute}>
+			<IncompleteProfile>
+				<img src='/images/warning.svg' />
+				<div>
+					<Caption>Your profile is incomplete</Caption>
+					<Caption>
+						You can’t create project unless you complete your
+						profile.
+					</Caption>
+				</div>
+			</IncompleteProfile>
+			<LetsDoIt>
+				<Btn
+					size='small'
+					label="LET'S DO IT"
+					buttonType='texty'
+					onClick={e => alert('modal here')}
+				/>
+				{absolute && (
+					<img
+						onClick={close}
+						src='/images/x-icon-mustard.svg'
+						width='16px'
+						height='16px'
+					/>
+				)}
+			</LetsDoIt>
+		</IncompleteToast>
+	);
+};
+
 export const NothingToSee = ({ title, heartIcon }: IEmptyBox) => {
 	return (
 		<NothingBox>
@@ -85,6 +125,7 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 }) => {
 	const { chainId } = useWeb3React();
 	const [user, setUser] = useState(userFromSSR);
+	const [incompleteProfile, setIncompleteProfile] = useState<boolean>(false);
 	const [showWelcomeSignin, setShowWelcomeSignin] = useState<boolean>(false);
 	const [showModal, setShowModal] = useState<boolean>(false); // follow this state to refresh user content on screen
 
@@ -115,6 +156,11 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 			setShowWelcomeSignin(true);
 		}
 	}, [myAccount, isSignedIn, userFromContext]);
+
+	useEffect(() => {
+		setIncompleteProfile(!user?.name || !user?.email);
+	}, [user]);
+
 	if (!userFromContext)
 		return (
 			<NoUserContainer>
@@ -123,6 +169,12 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 		);
 	return (
 		<>
+			{incompleteProfile && user?.name && (
+				<IncompleteProfileToast
+					absolute={true}
+					close={() => setIncompleteProfile(false)}
+				/>
+			)}
 			{showModal && (
 				<EditUserModal
 					showModal={showModal}
@@ -150,6 +202,11 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 							/>
 						)}
 						<UserInforRow>
+							{incompleteProfile && !user?.name && (
+								<IncompleteProfileToast
+									close={() => setIncompleteProfile(false)}
+								/>
+							)}
 							<H3 weight={700} onClick={() => setShowModal(true)}>
 								{user.name}
 							</H3>
@@ -241,4 +298,78 @@ const WalletContainer = styled(Row)`
 const WalletIconsContainer = styled.div`
 	color: ${brandColors.pinky[500]};
 	cursor: pointer;
+`;
+
+const IncompleteToast = styled.div`
+	max-width: 1136px;
+	width: 100%;
+	position: ${(props: IIncompleteToast) =>
+		props.absolute ? 'absolute' : 'relative'};
+	top: ${(props: IIncompleteToast) => (props.absolute ? '90px' : '0')};
+	left: 0;
+	right: 0;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: ${brandColors.mustard[200]};
+	border: 1px solid ${brandColors.mustard[700]};
+	border-radius: 8px;
+	display: flex;
+	justify-content: space-between;
+`;
+
+const IncompleteProfile = styled.div`
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	padding: 17px;
+	align-items: flex-start;
+	div {
+		display: flex;
+		flex-direction: column;
+		color: ${brandColors.mustard[700]};
+		padding-left: 8px;
+		margin-top: -2px;
+	}
+	div:first-child {
+		font-weight: bold;
+	}
+`;
+
+const LetsDoIt = styled.div`
+	display: flex;
+	align-items: flex-start;
+	padding-right: 16px;
+	margin: 7px 0 0 0;
+	button {
+		border: none;
+		font-weight: bold;
+		color: ${brandColors.mustard[700]};
+		:hover {
+			border: none;
+			background: transparent;
+			color: ${brandColors.mustard[800]};
+		}
+	}
+	img {
+		cursor: pointer;
+		margin: 7px 0 0 0;
+	}
+`;
+
+const Btn = styled(Button)`
+	background-color: ${props =>
+		props.buttonType === 'secondary' && 'transparent'};
+	color: ${props =>
+		props.buttonType === 'secondary' && brandColors.pinky[500]};
+	border: 2px solid
+		${props => props.buttonType === 'secondary' && brandColors.pinky[500]};
+	:hover {
+		background-color: ${props =>
+			props.buttonType === 'secondary' && 'transparent'};
+		border: 2px solid
+			${props =>
+				props.buttonType === 'secondary' && brandColors.pinky[700]};
+		color: ${props =>
+			props.buttonType === 'secondary' && brandColors.pinky[700]};
+	}
 `;
