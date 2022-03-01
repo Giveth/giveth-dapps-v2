@@ -56,9 +56,6 @@ const ProjectIndex = () => {
 					const donationsByProjectId = res.data.donationsByProjectId;
 					setDonations(donationsByProjectId.donations);
 					setTotalDonations(donationsByProjectId.totalCount);
-					// const donationsByProjectId =
-					// 	donationsData?.donationsByProjectId;
-					// const totalDonations = donationsByProjectId?.totalCount;
 				},
 			);
 	}, [project?.id]);
