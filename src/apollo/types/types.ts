@@ -93,6 +93,7 @@ export interface IAdmin {
 
 export interface IReaction {
 	id: string;
+	userId: string;
 }
 
 export interface IDonation {
