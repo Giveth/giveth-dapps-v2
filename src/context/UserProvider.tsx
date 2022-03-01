@@ -74,7 +74,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 		localStorage.removeItem(LocalStorageTokenLabel);
 		if (active && account) {
 			// not sure what this does, commenging  because causing a bug
-			// fetchUser().then(setUser);
+			fetchUser().then(setUser);
 		} else {
 			user && setUser(undefined);
 		}

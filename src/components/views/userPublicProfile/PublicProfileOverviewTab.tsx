@@ -100,7 +100,6 @@ const PublicProfileOverviewTab: FC<IUserPublicProfileView> = ({ user }) => {
 
 	useEffect(() => {
 		const setupSections = async () => {
-			console.log({ user });
 			if (!user?.name) {
 				setSection(Sections.stranger);
 			} else if (!user?.totalDonated) {

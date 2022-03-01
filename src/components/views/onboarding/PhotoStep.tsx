@@ -15,7 +15,6 @@ const PhotoStep: FC<IStep> = ({ setStep }) => {
 	const [updateUser] = useMutation(UPDATE_USER);
 
 	const onDrop = async (acceptedFiles: File[]) => {
-		console.log('acceptedFiles', acceptedFiles);
 		const { data: imageUploaded } = await client.mutate({
 			mutation: UPLOAD_PROFILE_PHOTO,
 			variables: {
