@@ -97,7 +97,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 				<SectionHeader>How we should call you?</SectionHeader>
 				<Section>
 					<Input
-						label='FIRST NAME'
+						label='first name'
 						placeholder='John'
 						name='firstName'
 						value={firstName}
@@ -106,7 +106,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 						required
 					/>
 					<Input
-						label='LAST NAME'
+						label='last name'
 						placeholder='Doe'
 						name='lastName'
 						value={lastName}
@@ -117,28 +117,28 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 				</Section>
 				<Section>
 					<Input
-						label='EMAIL'
+						label='email'
 						placeholder='Example@Domain.com'
 						name='email'
 						value={email}
 						onChange={reducerInputChange}
 						type='email'
-						// required
-						// setFormValidation={setFormValidation}
-						// validators={[
-						// 	{ pattern: /^.{3,}$/, msg: 'Too Short' },
-						// 	{
-						// 		pattern:
-						// 			/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-						// 		msg: 'Invalid Email Address',
-						// 	},
-						// ]}
+						required
+						setFormValidation={setFormValidation}
+						validators={[
+							{ pattern: /^.{3,}$/, msg: 'Too Short' },
+							{
+								pattern:
+									/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+								msg: 'Invalid Email Address',
+							},
+						]}
 					/>
 				</Section>
 				<SectionHeader>Where are you?</SectionHeader>
 				<Section>
 					<Input
-						label='LOCATION (OPTIONAL)'
+						label='location (optional)'
 						placeholder='Portugal, Turkey,...'
 						name='location'
 						value={location}
@@ -150,7 +150,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 				</SectionHeader>
 				<Section>
 					<Input
-						label='WEBSITE OR URL'
+						label='website or url'
 						placeholder='Website'
 						name='website'
 						value={website}

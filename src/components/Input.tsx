@@ -150,6 +150,7 @@ const InputContainer = styled.div`
 `;
 
 const InputLabel = styled(Subline)<{ required?: boolean }>`
+	text-transform: uppercase;
 	padding-bottom: 4px;
 	color: ${brandColors.deep[500]};
 	::after {
