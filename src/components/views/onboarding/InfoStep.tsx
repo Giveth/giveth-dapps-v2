@@ -55,10 +55,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 	const { email, firstName, lastName, location, website } = info;
 
 	const reducerInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-		const { name, value, pattern } = e.target;
-		if (pattern) {
-			console.log(pattern);
-		}
+		const { name, value } = e.target;
 		setInfo({ [name]: value });
 	};
 
@@ -76,12 +73,17 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 			});
 			if (response.updateUser) {
 				setStep(OnboardSteps.PHOTO);
+				gToast('Profile informations updated.', {
+					type: ToastType.SUCCESS,
+					title: 'Success',
+				});
 			} else {
-				throw 'updateUser false';
+				throw 'Update User Failed';
 			}
-		} catch (error) {
+		} catch (error: any) {
 			gToast('Failed to update your inforamtion. Please try again.', {
 				type: ToastType.DANGER,
+				title: error.message,
 			});
 		}
 		setDisabled(false);
@@ -90,7 +92,6 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 	useEffect(() => {
 		if (formValidation) {
 			const fvs = Object.values(formValidation);
-			console.log(fvs);
 			setDisabled(!fvs.every(fv => fv === InputValidationType.NORMAL));
 		}
 	}, [formValidation]);
@@ -127,16 +128,16 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 						value={email}
 						onChange={reducerInputChange}
 						type='email'
-						required
-						setFormValidation={setFormValidation}
-						validators={[
-							{ pattern: /^.{3,}$/, msg: 'Too Short' },
-							{
-								pattern:
-									/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-								msg: 'Invalid Email Address',
-							},
-						]}
+						// required
+						// setFormValidation={setFormValidation}
+						// validators={[
+						// 	{ pattern: /^.{3,}$/, msg: 'Too Short' },
+						// 	{
+						// 		pattern:
+						// 			/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+						// 		msg: 'Invalid Email Address',
+						// 	},
+						// ]}
 					/>
 				</Section>
 				<SectionHeader>Where are you?</SectionHeader>
