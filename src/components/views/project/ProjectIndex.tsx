@@ -3,10 +3,10 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { Caption, GLink, semanticColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-
 import { useQuery } from '@apollo/client';
-import WarningBadge from '@/components/badges/WarningBadge';
+import { gToast, ToastType } from '@/components/toasts';
 
+import WarningBadge from '@/components/badges/WarningBadge';
 import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
 import ProjectDonateCard from './ProjectDonateCard';
@@ -17,10 +17,8 @@ import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 import useUser from '@/context/UserProvider';
 import { useRouter } from 'next/router';
 import { IProject } from '@/apollo/types/types';
-import { gToast, ToastType } from '@/components/toasts';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import InfoBadge from '@/components/badges/InfoBadge';
-import { Toaster } from 'react-hot-toast';
 
 const ProjectDonations = dynamic(() => import('./ProjectDonations'));
 const ProjectUpdates = dynamic(() => import('./ProjectUpdates'));
@@ -54,7 +52,7 @@ const ProjectIndex = () => {
 	} = useUser();
 
 	const router = useRouter();
-	const slug = router.query.slug as string;
+	const slug = router.query.projectIdSlug as string;
 
 	useEffect(() => {
 		if (status) {
@@ -133,7 +131,7 @@ const ProjectIndex = () => {
 					{activeTab === 2 && (
 						<ProjectDonations
 							donationsByProjectId={donationsByProjectId}
-							project={project}
+							project={project!}
 							isActive={isActive}
 							isDraft={isDraft}
 						/>
@@ -141,13 +139,12 @@ const ProjectIndex = () => {
 				</ContentWrapper>
 				<ProjectDonateCard
 					isDraft={isDraft}
-					project={project}
+					project={project!}
 					isActive={isActive}
 					setIsActive={setIsActive}
 					setIsDraft={setIsDraft}
 				/>
 			</BodyWrapper>
-			<Toaster containerStyle={{ top: '80px' }} />
 		</Wrapper>
 	);
 };

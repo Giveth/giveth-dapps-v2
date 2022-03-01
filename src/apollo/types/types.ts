@@ -35,12 +35,28 @@ export interface IProject {
 	};
 }
 
+export interface IProjectEdition {
+	id?: string;
+	title?: string;
+	image?: string;
+	description?: string;
+	walletAddress?: string;
+	impactLocation?: string;
+	categories: ICategory[];
+	adminUser: {
+		walletAddress?: string;
+	};
+	status: {
+		name?: string;
+	};
+}
+
 export interface IProjectCreation {
 	title: string;
 	description: string;
 	impactLocation?: any;
 	categories: any;
-	organizationId: number;
+	organisationId: number;
 	walletAddress: string;
 	imageStatic?: string | null;
 	imageUpload?: any;

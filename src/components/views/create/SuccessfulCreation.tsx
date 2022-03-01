@@ -7,7 +7,7 @@ import ProjectCard from '@/components/project-card/ProjectCardAlt';
 import { IProjectBySlug } from '@/apollo/types/types';
 import SocialBox from '../donate/SocialBox';
 import ConfettiAnimation from '../../animations/confetti';
-import { slugToProjectView } from '@/lib/helpers';
+import { slugToProjectView } from '@/lib/routeCreators';
 
 const SuccessfulCreation = (props: IProjectBySlug) => {
 	const { project } = props;

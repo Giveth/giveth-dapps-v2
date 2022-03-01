@@ -13,9 +13,10 @@ const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
 const DescriptionInput = (props: {
 	setValue: (e: string) => void;
 	error: string;
+	value: string;
 }) => {
 	const [showModal, setShowModal] = useState(false);
-	const { setValue, error } = props;
+	const { value, setValue, error } = props;
 	return (
 		<>
 			{showModal && (
@@ -40,9 +41,8 @@ const DescriptionInput = (props: {
 				<Label>Project story</Label>
 				<RichTextInput
 					style={TextInputStyle}
-					rows={12}
-					autoFocus
-					onChange={setValue}
+					setValue={setValue}
+					value={value}
 				/>
 			</InputContainerStyled>
 			<ErrorStyled>{error || null}</ErrorStyled>

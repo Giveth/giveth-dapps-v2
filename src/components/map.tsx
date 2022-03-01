@@ -18,6 +18,7 @@ type MyProps = {
 	index?: any;
 	handleCloseCall?: any;
 	extraComponent?: any;
+	defaultLocation?: string;
 	setLocation?: any;
 };
 type MyState = {
@@ -34,6 +35,15 @@ class Map extends Component<MyProps, MyState> {
 			coords: { lat: 41.3879, lng: 2.15899 },
 			address: '',
 		};
+	}
+
+	componentDidMount() {
+		const { defaultLocation } = this.props;
+		if (defaultLocation) {
+			if (defaultLocation === globalLocation) {
+				this.setState({ address: globalLocation });
+			} else this.handleSelect(this.props.defaultLocation);
+		}
 	}
 
 	handleSelect = (address: any) => {

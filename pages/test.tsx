@@ -1,8 +1,6 @@
 import Head from 'next/head';
-import toast from 'react-hot-toast';
 import styled from 'styled-components';
-import { Toaster } from 'react-hot-toast';
-import { gToast, ToastDirection, ToastType } from '@/components/toasts';
+import { gToast, ToastType } from '@/components/toasts';
 
 const TestRoute = () => {
 	const notify = () =>
@@ -20,7 +18,6 @@ const TestRoute = () => {
 			</Head>
 			<TestContainer>
 				<button onClick={notify}>Test</button>
-				<Toaster />
 			</TestContainer>
 		</>
 	);

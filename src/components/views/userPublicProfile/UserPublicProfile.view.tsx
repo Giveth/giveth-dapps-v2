@@ -191,16 +191,14 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 			<PubliCProfileHeader>
 				<Container>
 					<UserInfoWithAvatarRow>
-						{user.avatar ? (
-							<img src={user.avatar} alt={user.name} />
-						) : (
-							<Image
-								src='/images/avatar.svg'
-								width={128}
-								height={128}
-								alt='user avatar'
-							/>
-						)}
+						<Image
+							src={
+								user.avatar ? user.avatar : '/images/avatar.svg'
+							}
+							width={128}
+							height={128}
+							alt={user.name}
+						/>
 						<UserInforRow>
 							{incompleteProfile && !user?.name && (
 								<IncompleteProfileToast
@@ -211,7 +209,7 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 								{user.name}
 							</H3>
 							{user.url && (
-								<Website
+								<PinkLink
 									size='Big'
 									href={
 										user.url
@@ -222,9 +220,17 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 									}
 								>
 									{user.url}
-								</Website>
+								</PinkLink>
 							)}
 							<WalletContainer>
+								{myAccount && (
+									<PinkLink
+										size='Big'
+										onClick={() => setShowModal(true)}
+									>
+										Edit Profile
+									</PinkLink>
+								)}
 								<GLink size='Big'>{user.walletAddress}</GLink>
 								<WalletIconsContainer>
 									<CopyToClipboard
@@ -280,8 +286,9 @@ const UserInfoWithAvatarRow = styled(Row)`
 	gap: 24px;
 `;
 
-const Website = styled(GLink)`
+const PinkLink = styled(GLink)`
 	color: ${brandColors.pinky[500]};
+	cursor: pointer;
 `;
 
 const UserInforRow = styled(Row)`

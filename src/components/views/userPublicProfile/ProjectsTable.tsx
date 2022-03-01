@@ -13,7 +13,7 @@ import {
 import { useRouter } from 'next/router';
 import { smallFormatDate } from '@/lib/helpers';
 import { Row } from '@/components/styled-components/Grid';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
 import {
 	IProjectsTable,
@@ -21,6 +21,7 @@ import {
 	EDirection,
 	IOrder,
 } from './UserPublicProfile.view';
+import { idToProjectEdit } from '@/lib/routeCreators';
 
 interface IBadge {
 	mainColor?: any;
@@ -180,6 +181,9 @@ const ProjectsTable: FC<IProjectsTable> = ({
 										project?.status?.id !== '7'
 											? brandColors.pinky[500]
 											: brandColors.pinky[200]
+									}
+									onClick={() =>
+										router.push(idToProjectEdit(project.id))
 									}
 								>
 									Edit

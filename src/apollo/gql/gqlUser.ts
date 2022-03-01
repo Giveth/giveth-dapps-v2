@@ -104,22 +104,28 @@ export const FETCH_USER_DONATIONS = gql`
 	}
 `;
 
+export const UPLOAD_PROFILE_PHOTO = gql`
+	mutation ($fileUpload: FileUploadInputType!) {
+		upload(fileUpload: $fileUpload)
+	}
+`;
+
 export const UPDATE_USER = gql`
 	mutation UpdateUser(
 		$url: String
-		$name: String!
 		$location: String
 		$email: String
 		$lastName: String
 		$firstName: String
+		$avatar: String
 	) {
 		updateUser(
 			url: $url
-			name: $name
 			location: $location
 			email: $email
 			firstName: $firstName
 			lastName: $lastName
+			avatar: $avatar
 		)
 	}
 `;
