@@ -11,8 +11,7 @@ export const Arc = styled.div`
 /* Home, Projects */
 export const BigArc = styled(Arc)`
 	border-width: 250px;
-	border-color: ${brandColors.giv[100]};
-	opacity: 40%;
+	border-color: rgba(240, 238, 250);
 	top: -2340px;
 	right: 300px;
 	width: 3600px;

@@ -9,7 +9,7 @@ import styled from 'styled-components';
 const ProjectDonations = (props: {
 	donationsByProjectId: IDonationsByProjectId;
 	project?: IProject;
-	isActive: boolean;
+	isActive?: boolean;
 	isDraft: boolean;
 }) => {
 	const { donationsByProjectId, project, isActive, isDraft } = props;

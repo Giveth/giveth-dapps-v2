@@ -84,7 +84,7 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({
 	return (
 		<>
 			<UserContributeInfo>
-				<ContributeCard user={user} />
+				<ContributeCard user={user} myAccount={myAccount} />
 			</UserContributeInfo>
 			<ProjectsContainer>
 				{!loading && totalCount === 0 ? (

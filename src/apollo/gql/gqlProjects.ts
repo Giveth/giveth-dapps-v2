@@ -106,6 +106,7 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 				name
 			}
 			adminUser {
+				id
 				name
 				walletAddress
 			}
@@ -175,6 +176,21 @@ export const FETCH_PROJECT_UPDATES = gql`
 			reaction {
 				projectUpdateId
 			}
+		}
+	}
+`;
+
+export const ADD_PROJECT_UPDATE = gql`
+	mutation ($projectId: Float!, $title: String!, $content: String!) {
+		addProjectUpdate(
+			projectId: $projectId
+			title: $title
+			content: $content
+		) {
+			id
+			projectId
+			userId
+			content
 		}
 	}
 `;
