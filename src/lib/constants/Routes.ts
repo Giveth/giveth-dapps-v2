@@ -10,7 +10,7 @@ const Routes = {
 	Faq: '/faq',
 	Support: '/support',
 	Join: '/join',
-	Terms: '/terms',
+	Terms: '/tos',
 	Partnerships: '/partnerships',
 	MyAccount,
 	MyProjects: MyAccount + '?tab=projects',

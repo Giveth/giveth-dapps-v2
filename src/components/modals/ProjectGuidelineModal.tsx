@@ -1,94 +1,96 @@
-import { IModal, Modal } from '@/components/modals/Modal';
 import { FC } from 'react';
 import styled from 'styled-components';
-import { Button, P, Lead, neutralColors } from '@giveth/ui-design-system';
-import { ETheme, useGeneral } from '@/context/general.context';
+import { P, neutralColors, brandColors } from '@giveth/ui-design-system';
+import { IModal, Modal } from '@/components/modals/Modal';
+import { useRouter } from 'next/router';
+import Routes from '@/lib/constants/Routes';
+import links from '@/lib/constants/links';
 
 export const ProjectGuidelineModal: FC<IModal> = ({
 	showModal,
 	setShowModal,
 }) => {
-	const { theme } = useGeneral();
+	const router = useRouter();
 	return (
 		<Modal
 			showModal={showModal}
 			setShowModal={setShowModal}
 			hiddenClose={false}
 			headerIcon={<img src='/images/icons/lightbulb.svg' />}
-			headerTitle='Before you continue...'
+			headerTitle='Submission guidelines'
 			headerTitlePosition='left'
 		>
 			<Container>
-				<Title>Please read the project submission guidelines.</Title>
 				<Bullets>
 					<li>
-						<Lead>
+						<P>
 							Clear project descriptions explaining who they are
 							and what they want to do with the funds.
-						</Lead>
+						</P>
 					</li>
 					<li>
-						<Lead>A unique or custom banner photo.</Lead>
-					</li>
-
-					<li>
-						<Lead>
-							No violations of our Covenant and/or Terms of Use.
-						</Lead>
+						<P>A unique or custom banner photo.</P>
 					</li>
 
 					<li>
-						<Lead>
+						<P>
+							No violations of our{' '}
+							<InlineLink
+								onClick={() => router.push(links.COVENANT)}
+							>
+								Covenant
+							</InlineLink>{' '}
+							and/or{' '}
+							<InlineLink
+								onClick={() => router.push(Routes.Terms)}
+							>
+								Terms of Use
+							</InlineLink>
+							.
+						</P>
+					</li>
+
+					<li>
+						<P>
 							<Optional>(Optional)</Optional>Embedded photos,
 							videos or legitimate external links.
-						</Lead>
+						</P>
 					</li>
 
 					<li>
-						<Lead>
+						<P>
 							<Optional>(Optional)</Optional> For open-source
 							projects, a link to their repository.
-						</Lead>
+						</P>
 					</li>
 				</Bullets>
-
-				<OkButton
-					label='GOT IT'
-					onClick={() => setShowModal(false)}
-					buttonType={theme === ETheme.Dark ? 'primary' : 'secondary'}
-				/>
 			</Container>
 		</Modal>
 	);
 };
 
+const InlineLink = styled.span`
+	color: ${brandColors.pinky[500]};
+	cursor: pointer;
+`;
+
 const Container = styled.div`
-	width: 528px;
+	width: 350px;
 	text-align: left;
 	padding: 0 30px;
 `;
 
-const OkButton = styled(Button)`
-	width: 100%;
-	height: 48px;
-	margin: 48px auto 24px auto;
-`;
-
-const Title = styled(P)`
-	color: ${neutralColors.gray[800]};
-	font-weight: 400;
-	margin: 16px 0 36px 0;
-`;
-
 const Optional = styled.span`
-	color: ${neutralColors.gray[800]};
+	color: ${neutralColors.gray[700]};
 	padding: 0 5px 0 0;
 `;
 
 const Bullets = styled.ul`
+	padding-left: 17px;
 	list-style-image: url('/images/bullet_tiny.svg');
 	display: flex;
 	flex-direction: column;
+	margin-bottom: 30px;
 	li {
 		margin: 8px 0;
 		color: ${neutralColors.gray[900]};

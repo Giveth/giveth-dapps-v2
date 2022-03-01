@@ -1,5 +1,10 @@
 import styled from 'styled-components';
-import { neutralColors, GLink, brandColors } from '@giveth/ui-design-system';
+import {
+	neutralColors,
+	GLink,
+	brandColors,
+	semanticColors,
+} from '@giveth/ui-design-system';
 import { Regular_Input } from '@/components/styled-components/Input';
 
 export const InputContainer = styled.div`
@@ -19,13 +24,13 @@ export const TinyLabel = styled(GLink)`
 `;
 
 export const InputErrorMessage = styled.div`
-	color: ${brandColors.pinky[500]};
+	color: ${semanticColors.punch[500]};
 	font-size: 12px;
 	margin-top: 5px;
 `;
 
 export const InputWithError = styled(Regular_Input)<{ error: boolean }>`
-	border: ${props => props.error && `2px solid ${brandColors.pinky[500]}`};
+	border: ${props => props.error && `2px solid ${semanticColors.punch[500]}`};
 	&:focus-within {
 		border: ${props => !props.error && `2px solid ${brandColors.giv[600]}`};
 	}

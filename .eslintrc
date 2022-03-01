@@ -5,7 +5,13 @@
     "plugin:prettier/recommended"
   ],
   "rules": {
-    "react/no-unescaped-entities": "warn"
+    "react/no-unescaped-entities": "warn",
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ]
   },
   "settings": {
     "import/resolver": {

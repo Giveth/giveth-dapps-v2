@@ -23,6 +23,8 @@ const WalletAddressInput = (props: {
 		state: { user },
 	} = useUser();
 
+	const isDefaultAddress = compareAddresses(value, user?.walletAddress);
+
 	return (
 		<>
 			<H5 id={ECreateErrFields.WALLET_ADDRESS}>Receiving funds</H5>
@@ -40,17 +42,20 @@ const WalletAddressInput = (props: {
 					onChange={e => setValue(e.target.value)}
 					value={value}
 					error={!!error}
+					disabled={isDefaultAddress && !error}
 				/>
 				<InputErrorMessage>{error || null}</InputErrorMessage>
-				{compareAddresses(value, user?.walletAddress) && (
+				{isDefaultAddress && (
 					<TinyLabel>
 						This is the default wallet address associated with your
 						account. You can choose a different receiving address.
 					</TinyLabel>
 				)}
-				<ChangeAddress onClick={() => setValue('')}>
-					Change address
-				</ChangeAddress>
+				{isDefaultAddress && !error && (
+					<ChangeAddress onClick={() => setValue('')}>
+						Change address
+					</ChangeAddress>
+				)}
 			</InputContainer>
 		</>
 	);
