@@ -35,18 +35,13 @@ const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 	const isOwner = adminUser?.id === user?.id;
 	const [addUpdateMutation] = useMutation(ADD_PROJECT_UPDATE);
 	const { data } = useQuery(FETCH_PROJECT_UPDATES, {
-		variables: { projectId: parseInt(id || ''), take: 100, skip: 0 },
+		variables: {
+			projectId: parseInt(id || ''),
+			take: 100,
+			skip: 0,
+		},
 	});
-	const updates = data?.getProjectUpdates;
-	const sortedUpdates = updates
-		?.map((i: IFetchProjectUpdates) => i)
-		.sort((a: IProjectUpdate, b: IProjectUpdate) => {
-			return (
-				new Date(b.createdAt).getTime() -
-				new Date(a.createdAt).getTime()
-			);
-		});
-
+	const sortedUpdates = data?.getProjectUpdates;
 	const removeUpdate = async () => {};
 
 	const addUpdate = async () => {

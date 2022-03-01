@@ -162,12 +162,14 @@ export const FETCH_PROJECT_UPDATES = gql`
 		$take: Int!
 		$skip: Int!
 		$connectedWalletUserId: Int
+		$orderBy: OrderBy
 	) {
 		getProjectUpdates(
 			projectId: $projectId
 			take: $take
 			skip: $skip
 			connectedWalletUserId: $connectedWalletUserId
+			orderBy: $orderBy
 		) {
 			id
 			title
