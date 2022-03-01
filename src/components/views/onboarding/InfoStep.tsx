@@ -6,14 +6,9 @@ import Input, {
 import { SkipOnboardingModal } from '@/components/modals/SkipOnboardingModal';
 import { Row } from '@/components/styled-components/Grid';
 import { gToast, ToastType } from '@/components/toasts';
+import useUser from '@/context/UserProvider';
 import { useMutation } from '@apollo/client';
-import {
-	brandColors,
-	GLink,
-	H6,
-	neutralColors,
-	Subline,
-} from '@giveth/ui-design-system';
+import { H6, neutralColors } from '@giveth/ui-design-system';
 import { ChangeEvent, FC, useEffect, useReducer, useState } from 'react';
 import styled from 'styled-components';
 import { IStep, OnboardActions, OnboardStep } from './common';
@@ -36,6 +31,10 @@ const initialUserInfo: IUserIfo = {
 };
 
 const InfoStep: FC<IStep> = ({ setStep }) => {
+	const [disabled, setDisabled] = useState(true);
+	const [updateUser] = useMutation(UPDATE_USER);
+	const [showModal, setShowModal] = useState(false);
+	const [formValidation, setFormValidation] = useState<IFormValidations>();
 	const [info, setInfo] = useReducer(
 		(curValues: IUserIfo, newValues: object) => ({
 			...curValues,
@@ -43,10 +42,13 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 		}),
 		initialUserInfo,
 	);
-	const [disabled, setDisabled] = useState(true);
-	const [updateUser] = useMutation(UPDATE_USER);
-	const [showModal, setShowModal] = useState(false);
-	const [formValidation, setFormValidation] = useState<IFormValidations>();
+
+	useEffect(() => {
+		if (formValidation) {
+			const fvs = Object.values(formValidation);
+			setDisabled(!fvs.every(fv => fv === InputValidationType.NORMAL));
+		}
+	}, [formValidation]);
 
 	const handleLater = () => {
 		setShowModal(true);
@@ -88,13 +90,6 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 		}
 		setDisabled(false);
 	};
-
-	useEffect(() => {
-		if (formValidation) {
-			const fvs = Object.values(formValidation);
-			setDisabled(!fvs.every(fv => fv === InputValidationType.NORMAL));
-		}
-	}, [formValidation]);
 
 	return (
 		<>
