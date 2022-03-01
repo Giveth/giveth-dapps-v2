@@ -43,22 +43,21 @@ const PublicProfileLikedTab: FC<IUserPublicProfileView> = ({ user }) => {
 
 	return (
 		<>
-			{!loading && totalCount == 0 ? (
-				<NothingWrapper>
-					<NothingToSee
-						title='This user didn’t like any project yet!!'
-						heartIcon={true}
-					/>
-				</NothingWrapper>
-			) : (
-				<LikedContainer>
-					{projects?.map(project => (
+			<LikedContainer>
+				{!loading && totalCount == 0 ? (
+					<NothingWrapper>
+						<NothingToSee
+							title='This user didn’t like any project yet!!'
+							heartIcon={true}
+						/>
+					</NothingWrapper>
+				) : (
+					projects?.map(project => (
 						<ProjectCard key={project.id} project={project} />
-					))}
-					{loading && <Loading />}
-				</LikedContainer>
-			)}
-
+					))
+				)}
+				{loading && <Loading />}
+			</LikedContainer>
 			<Pagination
 				currentPage={page}
 				totalCount={totalCount}

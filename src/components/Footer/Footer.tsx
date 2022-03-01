@@ -159,9 +159,7 @@ export const Footer = () => {
 };
 
 const FooterContainer = styled.div`
-	position: relative;
 	padding: 35px 0 12px;
-	z-index: 2;
 `;
 
 const LeftContainer = styled(Row)`

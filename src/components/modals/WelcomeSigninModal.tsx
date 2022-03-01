@@ -12,15 +12,10 @@ import {
 } from '@giveth/ui-design-system';
 import { ETheme, useGeneral } from '@/context/general.context';
 
-export const WelcomeSigninModal: FC<IModal> = ({
-	showModal,
-	setShowModal,
-	callback,
-}) => {
+export const WelcomeSigninModal: FC<IModal> = ({ showModal, setShowModal }) => {
 	const { theme } = useGeneral();
 	const {
 		actions: { signIn },
-		state: { isSignedIn },
 	} = useUser();
 	return (
 		<Modal
@@ -43,10 +38,8 @@ export const WelcomeSigninModal: FC<IModal> = ({
 				<OkButton
 					label='SIGN IN'
 					onClick={async () => {
-						let signature: string | boolean = false;
-						signIn && (signature = await signIn());
+						signIn && (await signIn());
 						setShowModal(false);
-						!!signature && callback && callback();
 					}}
 					buttonType={theme === ETheme.Dark ? 'secondary' : 'primary'}
 				/>

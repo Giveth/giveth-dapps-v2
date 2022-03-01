@@ -1,7 +1,5 @@
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 import TwitterIcon from '/public/images/twitter.svg';
-import { TwitterShareButton } from 'react-share';
 import { Arc } from '@/components/styled-components/Arc';
 import {
 	B,
@@ -15,10 +13,6 @@ import {
 import styled from 'styled-components';
 
 const HomePurpleSection = () => {
-	const router = useRouter();
-	const url = typeof window !== 'undefined' ? window?.location?.href : null;
-	const shareTitle = `I am a Giver and you can be one too! 💙 @givethio. Let's Build the Future of Giving together! 🙌 🌈 #maketheworldabetterplace 🌏 💜`;
-
 	return (
 		<Wrapper>
 			<ArcSmall />
@@ -32,23 +26,13 @@ const HomePurpleSection = () => {
 				rewarded for creating positive change.
 			</GivingEffortless>
 			<GivingButtons>
-				<StartGiving
+				<StartGiving size='large' label='START GIVING' />
+				<TwitterButton
+					buttonType='texty'
 					size='large'
-					label='START GIVING'
-					onClick={() => router.push('/projects')}
+					label='Tweet this'
+					icon={<Image src={TwitterIcon} alt='twitter icon' />}
 				/>
-				<TwitterShareButton
-					title={shareTitle}
-					url={url || ''}
-					hashtags={['Giveth']}
-				>
-					<TwitterButton
-						buttonType='texty'
-						size='large'
-						label='Tweet this'
-						icon={<Image src={TwitterIcon} alt='twitter icon' />}
-					/>
-				</TwitterShareButton>
 			</GivingButtons>
 			<GIVeconomy>
 				<D3>The GIVeconomy</D3>
