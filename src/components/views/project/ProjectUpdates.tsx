@@ -107,8 +107,6 @@ const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 		}
 	};
 
-	const length = newUpdate?.length;
-
 	return (
 		<Wrapper>
 			{isOwner && (
