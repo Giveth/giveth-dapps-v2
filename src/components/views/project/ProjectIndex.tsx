@@ -79,9 +79,7 @@ const ProjectIndex = () => {
 		client
 			.query({
 				query: FETCH_PROJECT_BY_SLUG,
-				variables: { slug ,
-				connectedWalletUserId: Number(user?.id),
-					},
+				variables: { slug, connectedWalletUserId: Number(user?.id) },
 				fetchPolicy: 'network-only',
 			})
 			.then((res: { data: any }) => {
