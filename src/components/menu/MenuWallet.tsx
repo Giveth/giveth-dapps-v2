@@ -117,7 +117,7 @@ const MenuWallet: FC<IMenuWallet> = ({ setShowWalletModal }) => {
 					{walletMenuArray.map(i => (
 						<MenuItem
 							key={i.title}
-							onClick={() => goRoute(i.url, i.requiresSign)}
+							onClick={() => goRoute(i.url, i.requiresSign!)}
 							theme={theme}
 						>
 							{i.title}
@@ -143,8 +143,8 @@ const walletMenuArray = [
 		url: Routes.CreateProject,
 		requiresSign: true,
 	},
-	{ title: 'Report a bug', url: links.REPORT_ISSUE },
-	{ title: 'Support', url: Routes.Support },
+	{ title: 'Report a bug', url: links.REPORT_ISSUE, requiresSign: false },
+	{ title: 'Support', url: Routes.Support, requiresSign: false },
 ];
 
 const Wrapper = styled.div`

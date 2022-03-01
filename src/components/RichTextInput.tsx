@@ -164,19 +164,30 @@ const formats = [
 	'emoji',
 ];
 
-function TextRichWithQuill(props: {
-	value: string;
-	setValue: any;
-	style: any;
-}) {
-	const { value, setValue, style } = props;
+function TextRichWithQuill(props: any) {
+	const [content, setContent] = useState('');
 	const [mod, setMod] = useState<any>();
 
 	useEffect(() => {
 		setMod(modules());
 	}, []);
 
+	useEffect(() => {
+		!mod && setMod(modules(props.projectId));
+	}, []);
+
+	useEffect(() => {
+		props.value && setContent(props.value);
+	}, [props.value]);
+
+	const handleChange = (html: any) => {
+		setContent(html);
+		props.onChange(html);
+	};
+
 	if (!mod) return null;
+
+	const value = props.defaultValue && !content ? props.defaultValue : content;
 
 	return (
 		<QuillContainer>
