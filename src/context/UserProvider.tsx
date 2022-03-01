@@ -38,6 +38,7 @@ interface IUserContext {
 		signIn?: () => Promise<boolean | string>;
 		signOut?: () => void;
 		showSignModal: () => void;
+		reFetchUserData: () => void;
 	};
 }
 
@@ -51,6 +52,7 @@ const UserContext = createContext<IUserContext>({
 		signIn: async () => false,
 		signOut: () => {},
 		showSignModal: () => {},
+		reFetchUserData: () => {},
 	},
 });
 
@@ -196,6 +198,19 @@ export const UserProvider = (props: { children: ReactNode }) => {
 		}
 	}, [account, library, chainId]);
 
+	const reFetchUserData = () => {
+		fetchUser().then((res: any) => {
+			if (res) {
+				const newUser = new User(res);
+				Auth.setUser(newUser, setCookie, 'giveth_user');
+				setUser(newUser);
+			} else {
+				const noUser = new User({} as User);
+				setUser(noUser);
+			}
+		});
+	};
+
 	useEffect(() => {
 		if (account) {
 			const _user = Auth.getUser();
@@ -204,16 +219,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 				setUser(newUser);
 			} else {
 				Auth.logout();
-				fetchUser().then((res: any) => {
-					if (res) {
-						const newUser = new User(res);
-						Auth.setUser(newUser, setCookie, 'giveth_user');
-						setUser(newUser);
-					} else {
-						const noUser = new User({} as User);
-						setUser(noUser);
-					}
-				});
+				reFetchUserData();
 			}
 		} else {
 			if (user) setUser(undefined);
@@ -237,6 +243,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 					showSignModal: () => setShowWelcomeSignin(true),
 					signIn,
 					signOut,
+					reFetchUserData,
 				},
 			}}
 		>
