@@ -158,11 +158,19 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 		setIncompleteProfile(!user?.name || !user?.email);
 	}, [user]);
 
-	if (!userFromContext)
+	if (!userFromContext || (myAccount && !isSignedIn))
 		return (
-			<NoUserContainer>
-				<H5>Not logged in or user not found</H5>
-			</NoUserContainer>
+			<>
+				{showWelcomeSignin && (
+					<WelcomeSigninModal
+						showModal={true}
+						setShowModal={() => setShowWelcomeSignin(false)}
+					/>
+				)}
+				<NoUserContainer>
+					<H5>Not logged in or user not found</H5>
+				</NoUserContainer>
+			</>
 		);
 	return (
 		<>

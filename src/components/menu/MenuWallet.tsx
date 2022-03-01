@@ -11,6 +11,8 @@ import { mediaQueries } from '@/lib/helpers';
 import { networkInfo } from '@/lib/constants/NetworksObj';
 import useUser from '@/context/UserProvider';
 import links from '@/lib/constants/links';
+import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
+import { useRouter } from 'next/router';
 import {
 	brandColors,
 	neutralColors,
@@ -31,11 +33,22 @@ const MenuWallet: FC<IMenuWallet> = ({ setShowWalletModal }) => {
 	const [isMounted, setIsMounted] = useState(false);
 	const [balance, setBalance] = useState<string | null>(null);
 	const { chainId, deactivate, account, library } = useWeb3React();
+	const [showWelcomeSignin, setShowWelcomeSignin] = useState<boolean>(false);
+	const [queueRoute, setQueueRoute] = useState<string>('');
+	const router = useRouter();
 	const {
 		state: { user, isSignedIn },
 		actions: { signIn, signOut },
 	} = useUser();
 	const { theme } = useGeneral();
+
+	const goRoute = (url: string, requiresSign: boolean) => {
+		if (requiresSign && !isSignedIn) {
+			setQueueRoute(url);
+			return setShowWelcomeSignin(true);
+		}
+		router.push(url);
+	};
 
 	useEffect(() => {
 		if (!!account && !!library) {
@@ -55,56 +68,81 @@ const MenuWallet: FC<IMenuWallet> = ({ setShowWalletModal }) => {
 	}, []);
 
 	return (
-		<WalletMenuContainer
-			isMounted={isMounted}
-			theme={theme}
-			isSignedIn={isSignedIn || false}
-		>
-			<Title>WALLET</Title>
-			<Subtitle>
-				<LeftSection>
-					{balance + ' '}
-					<span>{networkToken}</span>
-				</LeftSection>
-				<StyledButton
-					onClick={() => {
-						window.localStorage.removeItem('selectedWallet');
-						setShowWalletModal(true);
+		<>
+			{showWelcomeSignin && (
+				<WelcomeSigninModal
+					callback={() => {
+						router.push(queueRoute);
+						setQueueRoute('');
 					}}
-				>
-					Change wallet
-				</StyledButton>
-			</Subtitle>
-			<Title>NETWORK</Title>
-			<Subtitle>
-				<LeftSection>{networkName}</LeftSection>
-				{chainId && (
-					<StyledButton onClick={() => switchNetworkHandler(chainId)}>
-						Switch network
+					showModal={true}
+					setShowModal={() => {
+						setShowWelcomeSignin(false);
+						setQueueRoute('');
+					}}
+				/>
+			)}
+			<WalletMenuContainer
+				isMounted={isMounted}
+				theme={theme}
+				isSignedIn={isSignedIn || false}
+			>
+				<Title>WALLET</Title>
+				<Subtitle>
+					<LeftSection>
+						{balance + ' '}
+						<span>{networkToken}</span>
+					</LeftSection>
+					<StyledButton
+						onClick={() => {
+							window.localStorage.removeItem('selectedWallet');
+							setShowWalletModal(true);
+						}}
+					>
+						Change wallet
 					</StyledButton>
-				)}
-			</Subtitle>
-			<Menus>
-				{walletMenuArray.map(i => (
-					<Link href={i.url} key={i.title} passHref>
-						<MenuItem theme={theme}>{i.title}</MenuItem>
-					</Link>
-				))}
-				{isSignedIn && (
-					<MenuItem onClick={signOut} theme={theme}>
-						Sign out
-					</MenuItem>
-				)}
-			</Menus>
-		</WalletMenuContainer>
+				</Subtitle>
+				<Title>NETWORK</Title>
+				<Subtitle>
+					<LeftSection>{networkName}</LeftSection>
+					{chainId && (
+						<StyledButton
+							onClick={() => switchNetworkHandler(chainId)}
+						>
+							Switch network
+						</StyledButton>
+					)}
+				</Subtitle>
+				<Menus>
+					{walletMenuArray.map(i => (
+						<MenuItem
+							key={i.title}
+							onClick={() => goRoute(i.url, i.requiresSign)}
+							theme={theme}
+						>
+							{i.title}
+						</MenuItem>
+					))}
+					{isSignedIn && (
+						<MenuItem onClick={signOut} theme={theme}>
+							Sign out
+						</MenuItem>
+					)}
+				</Menus>
+			</WalletMenuContainer>
+		</>
 	);
 };
 
 const walletMenuArray = [
-	{ title: 'My Account', url: Routes.MyAccount },
-	{ title: 'My Projects', url: Routes.MyProjects },
-	{ title: 'My Donations', url: Routes.MyDonations },
-	{ title: 'Create a Project', url: Routes.CreateProject },
+	{ title: 'My Account', url: Routes.MyAccount, requiresSign: true },
+	{ title: 'My Projects', url: Routes.MyProjects, requiresSign: true },
+	{ title: 'My Donations', url: Routes.MyDonations, requiresSign: true },
+	{
+		title: 'Create a Project',
+		url: Routes.CreateProject,
+		requiresSign: true,
+	},
 	{ title: 'Report a bug', url: links.REPORT_ISSUE },
 	{ title: 'Support', url: Routes.Support },
 ];
