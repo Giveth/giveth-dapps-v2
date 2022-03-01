@@ -94,7 +94,7 @@ const PublicProfileContributes: FC<IUserPublicProfileView> = ({
 						onClick={() => setTab(EPublicProfile.LIKED)}
 					>
 						Liked projects
-						{myAccount && user?.donationsCount != 0 && (
+						{myAccount && !!user.likedProjectsCount && (
 							<Count active={tab === EPublicProfile.LIKED}>
 								{user?.likedProjectsCount}
 							</Count>

@@ -109,6 +109,7 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 				name
 			}
 			adminUser {
+				id
 				name
 				walletAddress
 			}
@@ -161,12 +162,14 @@ export const FETCH_PROJECT_UPDATES = gql`
 		$take: Int!
 		$skip: Int!
 		$connectedWalletUserId: Int
+		$orderBy: OrderBy
 	) {
 		getProjectUpdates(
 			projectId: $projectId
 			take: $take
 			skip: $skip
 			connectedWalletUserId: $connectedWalletUserId
+			orderBy: $orderBy
 		) {
 			id
 			title
@@ -180,6 +183,21 @@ export const FETCH_PROJECT_UPDATES = gql`
 				projectUpdateId
 				userId
 			}
+		}
+	}
+`;
+
+export const ADD_PROJECT_UPDATE = gql`
+	mutation ($projectId: Float!, $title: String!, $content: String!) {
+		addProjectUpdate(
+			projectId: $projectId
+			title: $title
+			content: $content
+		) {
+			id
+			projectId
+			userId
+			content
 		}
 	}
 `;
