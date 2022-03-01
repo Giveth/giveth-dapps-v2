@@ -13,14 +13,21 @@ import { IUser } from '@/apollo/types/types';
 
 export interface IUserPublicProfileView {
 	user: IUser;
+	myAccount?: boolean;
 }
 
-const PublicProfileContributeCard: FC<IUserPublicProfileView> = ({ user }) => {
+const PublicProfileContributeCard: FC<IUserPublicProfileView> = ({
+	user,
+	myAccount,
+}) => {
 	return (
 		<Container>
-			<UserContributeTitle
-				weight={700}
-			>{`${user.name}’s donations & projects`}</UserContributeTitle>
+			{!myAccount && (
+				<UserContributeTitle
+					weight={700}
+				>{`${user.name}’s donations & projects`}</UserContributeTitle>
+			)}
+
 			<ContributeCardContainer>
 				<ContributeCard>
 					<ContributeCardTitles>donations</ContributeCardTitles>
