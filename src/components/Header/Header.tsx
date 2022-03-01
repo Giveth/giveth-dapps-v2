@@ -255,7 +255,9 @@ const Header: FC<IHeader> = () => {
 									<HBContainer>
 										<HBPic
 											src={
-												'/images/placeholders/profile.png'
+												user?.avatar
+													? user.avatar
+													: '/images/placeholders/profile.png'
 											}
 											alt='Profile Pic'
 											width={'24px'}
