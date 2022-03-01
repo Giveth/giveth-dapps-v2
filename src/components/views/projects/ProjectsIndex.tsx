@@ -11,14 +11,12 @@ import {
 	OulineButton,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { useQuery } from '@apollo/client';
 
 import { BigArc } from '@/components/styled-components/Arc';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import SearchBox from '@/components/SearchBox';
 import Routes from '@/lib/constants/Routes';
 import { capitalizeFirstLetter, mediaQueries } from '@/lib/helpers';
-import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { initializeApollo } from '@/apollo/apolloClient';
 import { ICategory, IProject } from '@/apollo/types/types';
@@ -28,6 +26,11 @@ import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
 import { Shadow } from '../../styled-components/Shadow';
 import useUser from '@/context/UserProvider';
 
+interface IProjectsView {
+	projects: IProject[];
+	totalCount: number;
+	categories: ICategory[];
+}
 interface ISelectObj {
 	value: string;
 	label: string;
@@ -71,12 +74,11 @@ const buildCategoryObj = (array: ICategory[]) => {
 	return newArray;
 };
 
-const ProjectsIndex = () => {
+const ProjectsIndex = (props: IProjectsView) => {
 	const {
 		state: { user },
 	} = useUser();
-	const { data } = useQuery(FETCH_ALL_PROJECTS, OPTIONS_HOME_PROJECTS);
-	const { projects, totalCount: _totalCount, categories } = data.projects;
+	const { projects, totalCount: _totalCount, categories } = props;
 
 	const [categoriesObj, setCategoriesObj] = useState<ISelectObj[]>();
 	const [selectedCategory, setSelectedCategory] =
@@ -105,13 +107,17 @@ const ProjectsIndex = () => {
 		else isFirstRender.current = false;
 	}, [selectedCategory.value, sortBy.label, search]);
 
-	const fetchProjects = (isLoadMore?: boolean, loadNum?: number) => {
+	const fetchProjects = (
+		isLoadMore?: boolean,
+		loadNum?: number,
+		userIdChanged: boolean = false,
+	) => {
 		const categoryQuery = selectedCategory.value;
 
 		const variables: IQueries = {
 			orderBy: { field: sortBy.value, direction: gqlEnums.DESC },
-			limit: projects.length,
-			skip: projects.length * (loadNum || 0),
+			limit: userIdChanged ? filteredProjects.length : projects.length,
+			skip: userIdChanged ? 0 : projects.length * (loadNum || 0),
 		};
 
 		if (user?.id) {
@@ -123,20 +129,21 @@ const ProjectsIndex = () => {
 			variables.category = categoryQuery;
 		if (search) variables.searchTerm = search;
 
-		setIsLoading(true);
+		if (!userIdChanged) setIsLoading(true);
 
 		initializeApollo()
 			.query({
 				query: FETCH_ALL_PROJECTS,
 				variables,
+				fetchPolicy: 'network-only',
 			})
 			.then((res: { data: { projects: IFetchAllProjects } }) => {
 				const data = res.data?.projects?.projects;
 				const count = res.data?.projects?.totalCount;
 				setTotalCount(count);
-				if (isLoadMore)
-					setFilteredProjects(filteredProjects.concat(data));
-				else setFilteredProjects(data);
+				setFilteredProjects(
+					isLoadMore ? filteredProjects.concat(data) : data,
+				);
 				setIsLoading(false);
 			})
 			.catch(() => {
@@ -144,6 +151,10 @@ const ProjectsIndex = () => {
 				/*TODO implement toast here for errors*/
 			});
 	};
+
+	useEffect(() => {
+		fetchProjects(false, 0, true);
+	}, [user?.id]);
 
 	const handleChange = (type: string, input: any) => {
 		pageNum.current = 0;

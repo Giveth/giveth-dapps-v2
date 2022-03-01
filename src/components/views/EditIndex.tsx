@@ -22,7 +22,7 @@ const EditIndex = () => {
 
 	useEffect(() => {
 		const userAddress = user?.walletAddress;
-		if (userAddress) {
+		if (userAddress && projectId) {
 			setShowSigninModal(false);
 			client
 				.query({
