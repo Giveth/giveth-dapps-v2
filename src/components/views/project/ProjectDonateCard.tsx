@@ -34,9 +34,9 @@ import { idToProjectEdit, slugToProjectDonate } from '@/lib/routeCreators';
 
 interface IProjectDonateCard {
 	project?: IProject;
-	isActive?: boolean;
+	isActive: boolean;
 	setIsActive: Dispatch<SetStateAction<boolean>>;
-	isDraft?: boolean;
+	isDraft: boolean;
 	setIsDraft: Dispatch<SetStateAction<boolean>>;
 }
 
