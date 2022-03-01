@@ -182,7 +182,7 @@ function TextRichWithQuill(props: any) {
 
 	const handleChange = (html: any) => {
 		setContent(html);
-		props.onChange(html);
+		props.setValue(html);
 	};
 
 	if (!mod) return null;
@@ -195,7 +195,6 @@ function TextRichWithQuill(props: any) {
 				modules={mod}
 				formats={formats}
 				theme='snow'
-				ref={props.ref}
 				id={props.id}
 				// name={props.name}
 				value={value}
