@@ -4,15 +4,15 @@ import QuillImageDropAndPaste from 'quill-image-drop-and-paste';
 import styled from 'styled-components';
 import 'react-quill/dist/quill.snow.css';
 import 'quill-emoji/dist/quill-emoji.css';
-
-import ImageUploader from './richImageUploader/imageUploader';
-import { UPLOAD_IMAGE } from '../apollo/gql/gqlProjects';
-import { client } from '../apollo/apolloClient';
 // @ts-ignore
 import MagicUrl from 'quill-magic-url';
 // @ts-ignore
 import * as Emoji from 'quill-emoji';
 import { neutralColors } from '@giveth/ui-design-system';
+
+import ImageUploader from './richImageUploader/imageUploader';
+import { UPLOAD_IMAGE } from '@/apollo/gql/gqlProjects';
+import { client } from '@/apollo/apolloClient';
 
 (window as any).Quill = Quill;
 
@@ -165,57 +165,35 @@ const formats = [
 ];
 
 function TextRichWithQuill(props: any) {
-	const [content, setContent] = useState('');
+	const { value, setValue, placeholder, withLimit, style, projectId } = props;
+
 	const [mod, setMod] = useState<any>();
 
 	useEffect(() => {
-		setMod(modules());
+		setMod(modules(projectId));
 	}, []);
-
-	useEffect(() => {
-		!mod && setMod(modules(props.projectId));
-	}, []);
-
-	useEffect(() => {
-		props.value && setContent(props.value);
-	}, [props.value]);
-
-	const handleChange = (html: any) => {
-		setContent(html);
-		props.setValue(html);
-	};
 
 	if (!mod) return null;
 
-	const value = props.defaultValue && !content ? props.defaultValue : content;
-
 	return (
-		<QuillContainer>
+		<>
 			<ReactQuill
 				modules={mod}
 				formats={formats}
 				theme='snow'
-				id={props.id}
-				// name={props.name}
 				value={value}
-				onChange={handleChange}
-				style={props.style}
-				placeholder={props?.placeholder}
+				onChange={setValue}
+				style={style}
+				placeholder={placeholder}
 			/>
-			{props?.withLimit && (
+			{withLimit && (
 				<Counter>
-					{value?.length} / {props?.withLimit}
+					{value?.length} / {withLimit}
 				</Counter>
 			)}
-		</QuillContainer>
+		</>
 	);
 }
-
-const QuillContainer = styled.div`
-	display: flex;
-	align-items: flex-end;
-	flex-direction: column-reverse;
-`;
 
 const Counter = styled.div`
 	position: absolute;

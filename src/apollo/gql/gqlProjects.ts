@@ -251,10 +251,37 @@ export const ADD_PROJECT = gql`
 			title
 			description
 			admin
+			adminUser {
+				name
+				walletAddress
+			}
 			image
 			impactLocation
 			slug
 			walletAddress
+			categories {
+				name
+			}
+		}
+	}
+`;
+
+export const EDIT_PROJECT = gql`
+	mutation editProject($projectId: Float!, $newProjectData: ProjectInput!) {
+		editProject(projectId: $projectId, newProjectData: $newProjectData) {
+			id
+			title
+			description
+			image
+			slug
+			creationDate
+			admin
+			adminUser {
+				name
+				walletAddress
+			}
+			walletAddress
+			impactLocation
 			categories {
 				name
 			}
@@ -323,24 +350,5 @@ export const ACTIVATE_PROJECT = gql`
 export const TITLE_IS_VALID = gql`
 	query IsValidTitleForProject($title: String!, $projectId: Float) {
 		isValidTitleForProject(title: $title, projectId: $projectId)
-	}
-`;
-
-export const EDIT_PROJECT = gql`
-	mutation editProject($projectId: Float!, $newProjectData: ProjectInput!) {
-		editProject(projectId: $projectId, newProjectData: $newProjectData) {
-			id
-			title
-			description
-			image
-			slug
-			creationDate
-			admin
-			walletAddress
-			impactLocation
-			categories {
-				name
-			}
-		}
 	}
 `;

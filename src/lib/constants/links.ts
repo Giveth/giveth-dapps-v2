@@ -1,11 +1,12 @@
+// Just for external links
+
 const links = {
 	BACKEND: 'https://serve.giveth.io/graphql',
 	FRONTEND: 'https://giveth-dapps-v2.vercel.app/',
-	REPORT_ISSUE: 'https://github.com/Giveth/giveth-io-typescript/issues/new',
+	REPORT_ISSUE: 'https://github.com/Giveth/giveth-dapps-v2/issues/new',
 	ASK_QUESTION: 'https://giveth.typeform.com/question',
 	FEATURE_REQUEST: 'https://giveth.typeform.com/featurerequest',
 	FEEDBACK: 'https://giveth.typeform.com/feedback',
-	GIVECONOMY: '/giveconomy',
 	DISCORD: 'https://discord.gg/Uq2TaXP9bC',
 	DISCOURSE: 'https://forum.giveth.io/',
 	GITHUB: 'https://github.com/Giveth/',

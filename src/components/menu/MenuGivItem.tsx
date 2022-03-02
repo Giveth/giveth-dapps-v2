@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { useWeb3React } from '@web3-react/core';
 import { Contract } from '@ethersproject/contracts';
+import { brandColors } from '@giveth/ui-design-system';
 // @ts-ignore
 import tokenAbi from 'human-standard-token-abi';
 
@@ -10,9 +11,8 @@ import { FlexCenter } from '../styled-components/Grid';
 import { Shadow } from '../styled-components/Shadow';
 import givIcon from '/public//images/GIV_menu_token.svg';
 import styled from 'styled-components';
-import { brandColors } from '@giveth/ui-design-system';
 import config from '@/configuration';
-import links from '@/lib/constants/links';
+import Routes from '@/lib/constants/Routes';
 
 const MenuGivItem = () => {
 	const context = useWeb3React();
@@ -46,7 +46,7 @@ const MenuGivItem = () => {
 	}, [account, chainId, active]);
 
 	return (
-		<GivMenu onClick={() => router.push(links.GIVECONOMY)}>
+		<GivMenu onClick={() => router.push(Routes.GIVECONOMY)}>
 			<Image width={24} height={24} src={givIcon} alt='giv icon' />
 			<GivBalance>
 				{parseFloat(String(givBalance)).toLocaleString('en-US')}{' '}
