@@ -263,9 +263,15 @@ const CreateIndex = (props: { project?: IProjectEdition }) => {
 				const _project = isEditMode
 					? addedProject.data?.editProject
 					: addedProject.data?.addProject;
-				!isEditMode && !drafted
-					? setCreationSuccessful(_project)
-					: await router.push(slugToProjectView(_project.slug));
+				if (drafted) {
+					await router.push(slugToProjectView(_project.slug));
+				} else {
+					if (!isEditMode || (isEditMode && isDraft)) {
+						setCreationSuccessful(_project);
+					} else {
+						await router.push(slugToProjectView(_project.slug));
+					}
+				}
 			}
 		} catch (e) {
 			setIsLoading(false);

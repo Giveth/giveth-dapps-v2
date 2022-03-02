@@ -1,16 +1,19 @@
-import React, { useEffect } from 'react';
+import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { H4, brandColors, P, Button } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import styled from 'styled-components';
 
 import ProjectCard from '@/components/project-card/ProjectCardAlt';
-import { IProjectBySlug } from '@/apollo/types/types';
+import { IProject } from '@/apollo/types/types';
 import SocialBox from '../donate/SocialBox';
 import ConfettiAnimation from '../../animations/confetti';
 import { slugToProjectView } from '@/lib/routeCreators';
 
-const SuccessfulCreation = (props: IProjectBySlug) => {
-	const { project } = props;
+const SuccessfulCreation = (props: {
+	project: IProject;
+	showSuccess?: Dispatch<SetStateAction<boolean>>;
+}) => {
+	const { project, showSuccess } = props;
 
 	useEffect(() => {
 		setTimeout(() => window.scrollTo(0, 0), 200);
@@ -34,7 +37,10 @@ const SuccessfulCreation = (props: IProjectBySlug) => {
 					share it with your friends.
 				</SuccessMessage>
 				<Link passHref href={slugToProjectView(project.slug)}>
-					<ProjectsButton label='VIEW PROJECT' />
+					<ProjectsButton
+						onClick={() => showSuccess && showSuccess(false)}
+						label='VIEW PROJECT'
+					/>
 				</Link>
 			</SucceessContainer>
 		);

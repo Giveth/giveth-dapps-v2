@@ -19,6 +19,7 @@ import { IDonation, IProject } from '@/apollo/types/types';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import InfoBadge from '@/components/badges/InfoBadge';
 import { IDonationsByProjectId } from '@/apollo/types/gqlTypes';
+import SuccessfulCreation from '@/components/views/create/SuccessfulCreation';
 
 const ProjectDonations = dynamic(() => import('./ProjectDonations'));
 const ProjectUpdates = dynamic(() => import('./ProjectUpdates'));
@@ -35,6 +36,8 @@ const ProjectIndex = () => {
 	const [project, setProject] = useState<IProject>();
 	const [donations, setDonations] = useState<IDonation[]>([]);
 	const [totalDonations, setTotalDonations] = useState(0);
+	const [creationSuccessful, setCreationSuccessful] = useState(false);
+
 	const { description = '', title, status, id = '' } = project || {};
 
 	useEffect(() => {
@@ -95,9 +98,18 @@ const ProjectIndex = () => {
 
 	useEffect(() => {
 		if (slug) {
-			fetchProject();
+			fetchProject().then();
 		}
 	}, [slug]);
+
+	if (creationSuccessful) {
+		return (
+			<SuccessfulCreation
+				showSuccess={setCreationSuccessful}
+				project={project as IProject}
+			/>
+		);
+	}
 
 	return (
 		<Wrapper>
@@ -160,6 +172,7 @@ const ProjectIndex = () => {
 					isActive={isActive}
 					setIsActive={setIsActive}
 					setIsDraft={setIsDraft}
+					setCreationSuccessful={setCreationSuccessful}
 				/>
 			</BodyWrapper>
 		</Wrapper>
@@ -167,10 +180,8 @@ const ProjectIndex = () => {
 };
 
 const DraftIndicator = styled.div`
-	//color: {semanticColors.link[600]};
-	color: #0083e0;
-	//background: {semanticColors.link[100]};
-	background: #cae9ff;
+	color: ${semanticColors.blueSky[600]};
+	background: ${semanticColors.blueSky[100]};
 	display: flex;
 	gap: 18px;
 	padding: 25px 150px;
