@@ -1,4 +1,10 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, {
+	Dispatch,
+	SetStateAction,
+	useCallback,
+	useEffect,
+	useState,
+} from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -60,7 +66,9 @@ const ProjectDonateCard = ({
 		id,
 		givingBlocksId,
 	} = project || {};
-	const [reaction, setReaction] = useState<IReaction | undefined>(undefined);
+	const [reaction, setReaction] = useState<IReaction | undefined>(
+		project?.reaction,
+	);
 
 	const [heartedByUser, setHeartedByUser] = useState<boolean>(false);
 	const [showModal, setShowModal] = useState<boolean>(false);
@@ -93,7 +101,7 @@ const ProjectDonateCard = ({
 				if (!reaction) {
 					const newReaction = await likeProject(id);
 					setReaction(newReaction);
-				} else {
+				} else if (reaction?.userId === user?.id) {
 					const successful = await unlikeProject(reaction.id);
 					if (successful) setReaction(undefined);
 				}
@@ -105,8 +113,11 @@ const ProjectDonateCard = ({
 		}
 	};
 
-	const fetchProjectReaction = async () => {
-		if (user?.id) {
+	const fetchProjectReaction = useCallback(async () => {
+		if (user?.id && id) {
+			// Already fetched
+			if (user?.id === reaction?.userId) return;
+
 			try {
 				const { data } = await client.query({
 					query: FETCH_PROJECT_REACTION_BY_ID,
@@ -123,15 +134,15 @@ const ProjectDonateCard = ({
 		} else if (reaction) {
 			setReaction(undefined);
 		}
-	};
+	}, [id, user?.id]);
 
 	useEffect(() => {
 		fetchProjectReaction();
-	}, [user]);
+	}, [fetchProjectReaction]);
 
 	useEffect(() => {
-		setHeartedByUser(!!reaction?.id);
-	}, [project, reaction]);
+		setHeartedByUser(!!reaction?.id && reaction?.userId === user?.id);
+	}, [project, reaction, user?.id]);
 
 	useEffect(() => {
 		if (adminUser?.walletAddress === user?.walletAddress && !!user) {

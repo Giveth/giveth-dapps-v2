@@ -26,6 +26,7 @@ const fetchProjects = async (userId: string | undefined = undefined) => {
 	const { data } = await client.query({
 		query: FETCH_HOME_PROJECTS,
 		variables,
+		fetchPolicy: 'network-only',
 	});
 
 	return data.projects;

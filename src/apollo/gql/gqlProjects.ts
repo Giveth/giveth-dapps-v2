@@ -22,6 +22,7 @@ export const FETCH_HOME_PROJECTS = gql`
 				traceCampaignId
 				reaction {
 					id
+					userId
 				}
 				totalReactions
 				adminUser {
@@ -64,6 +65,7 @@ export const FETCH_ALL_PROJECTS = gql`
 				traceCampaignId
 				reaction {
 					id
+					userId
 				}
 				totalReactions
 				adminUser {
@@ -99,6 +101,7 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 			givingBlocksId
 			reaction {
 				id
+				userId
 			}
 			totalReactions
 			traceCampaignId
@@ -145,6 +148,7 @@ export const FETCH_PROJECT_REACTION_BY_ID = gql`
 			id
 			reaction {
 				id
+				userId
 			}
 			totalReactions
 		}
@@ -174,6 +178,7 @@ export const FETCH_PROJECT_UPDATES = gql`
 			totalReactions
 			reaction {
 				projectUpdateId
+				userId
 			}
 		}
 	}
@@ -245,6 +250,7 @@ export const LIKE_PROJECT_MUTATION = gql`
 			id
 			projectId
 			reaction
+			userId
 		}
 	}
 `;
