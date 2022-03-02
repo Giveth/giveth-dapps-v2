@@ -1,6 +1,7 @@
 import { ISubgraphValue } from '@/context/subgraph.context';
 import {
 	IBalances,
+	IInfinitePositionReward,
 	ITokenDistroInfo,
 	IUnipool,
 	IUniswapV2Pair,
@@ -157,8 +158,15 @@ const transformUniswapPositions = (info: any): any => {
 		};
 	};
 
-	const { userStakedPositions, allPositions, userNotStakedPositions } = info;
-	return {
+	const {
+		userStakedPositions,
+		allPositions,
+		userNotStakedPositions,
+		infinitePositionRewardInfo,
+		infinitePositionInfo,
+	} = info;
+
+	const stakedInfo = {
 		userStakedPositions: userStakedPositions
 			? userStakedPositions.map(mapper)
 			: [],
@@ -167,6 +175,23 @@ const transformUniswapPositions = (info: any): any => {
 			: [],
 		allPositions: allPositions ? allPositions.map(mapper) : [],
 	};
+
+	if (infinitePositionRewardInfo && infinitePositionInfo) {
+		const infinitePositionReward: IInfinitePositionReward = {
+			lastRewardAmount: BN(infinitePositionRewardInfo.lastRewardAmount),
+			lastUpdateTimeStamp: Number(
+				infinitePositionRewardInfo.lastUpdateTimeStamp,
+			),
+		};
+		const infinitePosition = mapper(infinitePositionInfo);
+		return {
+			...stakedInfo,
+			infinitePositionReward,
+			infinitePosition,
+		};
+	}
+
+	return stakedInfo;
 };
 
 const transformUniswapV2Pair = (info: any): IUniswapV2Pair | undefined => {

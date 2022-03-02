@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactQuill, { Quill } from 'react-quill';
 import QuillImageDropAndPaste from 'quill-image-drop-and-paste';
+import styled from 'styled-components';
 import 'react-quill/dist/quill.snow.css';
 import 'quill-emoji/dist/quill-emoji.css';
 
@@ -11,6 +12,7 @@ import { client } from '../apollo/apolloClient';
 import MagicUrl from 'quill-magic-url';
 // @ts-ignore
 import * as Emoji from 'quill-emoji';
+import { neutralColors } from '@giveth/ui-design-system';
 
 (window as any).Quill = Quill;
 
@@ -162,30 +164,67 @@ const formats = [
 	'emoji',
 ];
 
-function TextRichWithQuill(props: {
-	value: string;
-	setValue: any;
-	style: any;
-}) {
-	const { value, setValue, style } = props;
+function TextRichWithQuill(props: any) {
+	const [content, setContent] = useState('');
 	const [mod, setMod] = useState<any>();
 
 	useEffect(() => {
 		setMod(modules());
 	}, []);
 
+	useEffect(() => {
+		!mod && setMod(modules(props.projectId));
+	}, []);
+
+	useEffect(() => {
+		props.value && setContent(props.value);
+	}, [props.value]);
+
+	const handleChange = (html: any) => {
+		setContent(html);
+		props.setValue(html);
+	};
+
 	if (!mod) return null;
 
+	const value = props.defaultValue && !content ? props.defaultValue : content;
+
 	return (
-		<ReactQuill
-			modules={mod}
-			formats={formats}
-			theme='snow'
-			value={value}
-			onChange={setValue}
-			style={style}
-		/>
+		<QuillContainer>
+			<ReactQuill
+				modules={mod}
+				formats={formats}
+				theme='snow'
+				id={props.id}
+				// name={props.name}
+				value={value}
+				onChange={handleChange}
+				style={props.style}
+				placeholder={props?.placeholder}
+			/>
+			{props?.withLimit && (
+				<Counter>
+					{value?.length} / {props?.withLimit}
+				</Counter>
+			)}
+		</QuillContainer>
 	);
 }
+
+const QuillContainer = styled.div`
+	display: flex;
+	align-items: flex-end;
+	flex-direction: column-reverse;
+`;
+
+const Counter = styled.div`
+	position: absolute;
+	background-color: ${neutralColors.gray[300]};
+	border-radius: 64px;
+	padding: 6px 10px;
+	z-index: 2;
+	margin: 0 20px 50px 0;
+	color: ${neutralColors.gray[700]};
+`;
 
 export default TextRichWithQuill;

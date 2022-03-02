@@ -8,6 +8,7 @@ import {
 	P,
 	H5,
 	Lead,
+	SublineBold,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
@@ -18,12 +19,19 @@ const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {
 const ProjectTimeline = (props: {
 	projectUpdate?: IProjectUpdate;
 	creationDate?: string;
+	removeUpdate?: Function;
+	isOwner?: boolean;
 }) => {
-	const { projectUpdate, creationDate } = props;
-
+	const { projectUpdate, creationDate, removeUpdate, isOwner } = props;
 	if (creationDate) return <LaunchSection creationDate={creationDate} />;
 	else if (projectUpdate)
-		return <UpdatesSection projectUpdate={projectUpdate} />;
+		return (
+			<UpdatesSection
+				projectUpdate={projectUpdate}
+				removeUpdate={removeUpdate}
+				isOwner={isOwner}
+			/>
+		);
 	else return null;
 };
 
@@ -40,7 +48,12 @@ const LaunchSection = (props: { creationDate: string }) => {
 	);
 };
 
-const UpdatesSection = (props: { projectUpdate: IProjectUpdate }) => {
+const UpdatesSection = (props: {
+	projectUpdate: IProjectUpdate;
+	removeUpdate?: Function;
+	isOwner?: boolean;
+}) => {
+	// const { isOwner, removeUpdate } = props;
 	const { content, createdAt, title } = props.projectUpdate;
 	return (
 		<Wrapper>
@@ -50,22 +63,40 @@ const UpdatesSection = (props: { projectUpdate: IProjectUpdate }) => {
 				<Description>
 					<RichTextViewer content={content} />
 				</Description>
+				{/* {isOwner && (
+					<a onClick={() => removeUpdate && removeUpdate()}>remove</a>
+				)} */}
 			</Content>
 		</Wrapper>
 	);
 };
 
-const TimelineSection = (props: { date: string; launch?: boolean }) => {
-	const date = new Date(props.date);
+export const TimelineSection = (props: {
+	date: string;
+	launch?: boolean;
+	newUpdate?: boolean;
+}) => {
+	const date = new Date(props?.date);
 	const year = date.getFullYear();
 	const month = date.toLocaleString('default', { month: 'short' });
 	const day = date.getDate();
 	return (
 		<TimelineStyled>
-			<MonthYear>{month}</MonthYear>
-			<Day>{day}</Day>
-			<MonthYear>{year}</MonthYear>
-			{!props.launch && <Border />}
+			{props.newUpdate ? (
+				<>
+					<NewUpdate>
+						<SublineBold>NEW UPDATE</SublineBold>
+					</NewUpdate>
+					<Border />
+				</>
+			) : (
+				<>
+					<MonthYear>{month}</MonthYear>
+					<Day>{day}</Day>
+					<MonthYear>{year}</MonthYear>
+					{!props.launch && <Border />}
+				</>
+			)}
 		</TimelineStyled>
 	);
 };
@@ -111,6 +142,11 @@ const Content = styled.div`
 const Wrapper = styled.div`
 	display: flex;
 	gap: 50px;
+`;
+
+const NewUpdate = styled.div`
+	text-align: center;
+	color: ${neutralColors.gray[600]};
 `;
 
 export default ProjectTimeline;

@@ -17,6 +17,7 @@ import { FC } from 'react';
 import { Row } from '../styled-components/Grid';
 import { Modal, IModal } from './Modal';
 import Link from 'next/link';
+import links from '@/lib/constants/links';
 
 interface IGIVBackExplainModal extends IModal {}
 
@@ -42,7 +43,7 @@ export const GIVBackExplainModal: FC<IGIVBackExplainModal> = ({
 					<GLink
 						onClick={() => setShowModal(false)}
 						target='_blank'
-						href='https://docs.giveth.io/giveconomy/givbacks'
+						href={links.GIVBACK_DOC}
 					>
 						<LinksRow justifyContent='center'>
 							Read More

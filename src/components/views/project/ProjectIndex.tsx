@@ -3,12 +3,13 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { Caption, GLink, semanticColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { gToast, ToastType } from '@/components/toasts';
 
 import WarningBadge from '@/components/badges/WarningBadge';
 import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
 import ProjectDonateCard from './ProjectDonateCard';
-import { mediaQueries, showToastError } from '@/lib/helpers';
+import { mediaQueries } from '@/lib/helpers';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { client, initializeApollo } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
@@ -74,21 +75,27 @@ const ProjectIndex = () => {
 		}
 	}, [status]);
 
+	const fetchProject = async () => {
+		client
+			.query({
+				query: FETCH_PROJECT_BY_SLUG,
+				variables: { slug, connectedWalletUserId: Number(user?.id) },
+				fetchPolicy: 'network-only',
+			})
+			.then((res: { data: any }) => {
+				setProject(res.data.projectBySlug);
+			})
+			.catch((err: any) =>
+				gToast(JSON.stringify(err.message || err), {
+					type: ToastType.DANGER,
+					position: 'top-center',
+				}),
+			);
+	};
+
 	useEffect(() => {
 		if (slug) {
-			client
-				.query({
-					query: FETCH_PROJECT_BY_SLUG,
-					variables: {
-						slug,
-						connectedWalletUserId: Number(user?.id),
-					},
-					fetchPolicy: 'network-only',
-				})
-				.then((res: { data: any }) => {
-					setProject(res.data.projectBySlug);
-				})
-				.catch(showToastError);
+			fetchProject();
 		}
 	}, [slug]);
 
@@ -129,14 +136,19 @@ const ProjectIndex = () => {
 					{activeTab === 0 && (
 						<RichTextViewer content={description} />
 					)}
-					{activeTab === 1 && <ProjectUpdates project={project} />}
+					{activeTab === 1 && (
+						<ProjectUpdates
+							project={project}
+							fetchProject={fetchProject}
+						/>
+					)}
 					{activeTab === 2 && (
 						<ProjectDonations
 							donationsByProjectId={{
 								donations,
 								totalCount: totalDonations,
 							}}
-							project={project}
+							project={project!}
 							isActive={isActive}
 							isDraft={isDraft}
 						/>
@@ -144,7 +156,7 @@ const ProjectIndex = () => {
 				</ContentWrapper>
 				<ProjectDonateCard
 					isDraft={isDraft}
-					project={project}
+					project={project!}
 					isActive={isActive}
 					setIsActive={setIsActive}
 					setIsDraft={setIsDraft}
