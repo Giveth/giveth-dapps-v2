@@ -261,7 +261,7 @@ const ProjectDonateCard = ({
 							back.
 						</Caption>
 						<a
-							href='https://docs.giveth.io/giveconomy/givbacks'
+							href={links.GIVBACK_DOC}
 							target='_blank'
 							rel='noreferrer'
 						>
