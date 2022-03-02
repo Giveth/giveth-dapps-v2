@@ -42,6 +42,7 @@ import { formatDate } from '@/lib/helpers';
 import { GIVBackExplainModal } from '../modals/GIVBackExplain';
 import { TopFiller, TopInnerContainer } from './commons';
 import { useWeb3React } from '@web3-react/core';
+import links from '@/lib/constants/links';
 
 export const TabGIVbacksTop = () => {
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
@@ -240,7 +241,7 @@ export const TabGIVbacksBottom = () => {
 							</InfoDesc>
 							<InfoReadMore
 								target='_blank'
-								href='https://docs.giveth.io/giveconomy/givbacks'
+								href={links.GIVBACK_DOC}
 							>
 								<span>Read More </span>
 								<IconExternalLink
