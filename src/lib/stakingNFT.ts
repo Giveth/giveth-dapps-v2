@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { utils, Contract } from 'ethers';
+import { utils, Contract, ethers } from 'ethers';
 import { TransactionResponse, Web3Provider } from '@ethersproject/providers';
 
 import { LiquidityPosition } from '@/types/nfts';
@@ -210,11 +210,11 @@ export const getReward = async (
 	tokenId: number,
 	uniswapV3StakerContract: Contract,
 	currentIncentiveKey?: (string | number)[] | null,
-) => {
+): Promise<ethers.BigNumber> => {
 	const { reward } = await uniswapV3StakerContract.getRewardInfo(
 		currentIncentiveKey,
 		tokenId,
 	);
 
-	return reward;
+	return reward || ethers.constants.Zero;
 };

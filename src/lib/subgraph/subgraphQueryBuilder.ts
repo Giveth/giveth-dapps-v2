@@ -6,6 +6,10 @@ import {
 import { getGivStakingConfig } from '@/helpers/networkProvider';
 import config from '@/configuration';
 
+const uniswapConfig = config.MAINNET_CONFIG.pools.find(
+	p => p.type === StakingType.UNISWAP,
+) as UniswapV3PoolStakingConfig;
+
 export class SubgraphQueryBuilder {
 	static getBalanceQuery = (address: string): string => {
 		return `balance(id: "${address.toLowerCase()}") {
@@ -71,7 +75,7 @@ export class SubgraphQueryBuilder {
 	};
 
 	private static getUniswapPositionsQuery = (address: string): string => {
-		return `userNotStakedPositions: uniswapPositions(where:{owner: "${address.toLowerCase()}",closed:false}){
+		const userPositionsQuery = `userNotStakedPositions: uniswapPositions(where:{owner: "${address.toLowerCase()}",closed:false}){
 			tokenId
 			token0
 			token1
@@ -100,7 +104,32 @@ export class SubgraphQueryBuilder {
 			tickUpper
 			staked
 			staker
-		}`;
+		}
+		`;
+
+		if (uniswapConfig?.infinitePositionId) {
+			return (
+				userPositionsQuery +
+				`infinitePositionRewardInfo: uniswapInfinitePosition(id: ${uniswapConfig.infinitePositionId}) {
+    			id
+    			lastRewardAmount
+  				lastUpdateTimeStamp
+  			}
+  			infinitePositionInfo: uniswapPosition(id: ${uniswapConfig.infinitePositionId}) {
+					tokenId
+					token0
+					token1
+					liquidity
+					tickLower
+					tickUpper
+					staked
+					staker
+  			}
+			`
+			);
+		}
+
+		return userPositionsQuery;
 	};
 
 	private static getPairInfoQuery = (address: string): string => {

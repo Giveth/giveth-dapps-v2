@@ -90,6 +90,11 @@ export interface IUniswapV3Position {
 	staked: boolean;
 }
 
+export interface IInfinitePositionReward {
+	lastRewardAmount: ethers.BigNumber;
+	lastUpdateTimeStamp: number;
+}
+
 export interface IUniswapV3Pool {
 	token0: string;
 	token1: string;
