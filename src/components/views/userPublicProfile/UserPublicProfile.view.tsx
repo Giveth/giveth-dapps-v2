@@ -13,7 +13,7 @@ import {
 import { useRouter } from 'next/router';
 import { CopyToClipboard } from '@/components/CopyToClipboard';
 import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import Image from 'next/image';
 import PublicProfileContributes from './PublicProfileContributes';
 import { IUser, IProject } from '@/apollo/types/types';
@@ -122,9 +122,14 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 	const [showWelcomeSignin, setShowWelcomeSignin] = useState<boolean>(false);
 	const [showModal, setShowModal] = useState<boolean>(false); // follow this state to refresh user content on screen
 	const [incompleteProfile, setIncompleteProfile] = useState<boolean>(false);
+
+	useEffect(() => {
+		setIncompleteProfile(!user?.name || !user?.email);
+	}, [user]);
+
 	return (
 		<>
-			{incompleteProfile && user?.name && (
+			{incompleteProfile && !user?.name && (
 				<IncompleteProfileToast
 					absolute={true}
 					close={() => setIncompleteProfile(false)}
@@ -142,11 +147,6 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 							alt={user.name}
 						/>
 						<UserInforRow>
-							{incompleteProfile && !user?.name && (
-								<IncompleteProfileToast
-									close={() => setIncompleteProfile(false)}
-								/>
-							)}
 							<H3 weight={700}>{user.name}</H3>
 							{user.url && (
 								<PinkLink
@@ -257,15 +257,14 @@ const WalletIconsContainer = styled.div`
 `;
 
 const IncompleteToast = styled.div`
-	max-width: 1136px;
 	width: 100%;
+	max-width: 1214px;
 	position: ${(props: IIncompleteToast) =>
 		props.absolute ? 'absolute' : 'relative'};
 	top: ${(props: IIncompleteToast) => (props.absolute ? '90px' : '0')};
 	left: 0;
 	right: 0;
-	margin-left: auto;
-	margin-right: auto;
+	margin: 0 auto;
 	background-color: ${brandColors.mustard[200]};
 	border: 1px solid ${brandColors.mustard[700]};
 	border-radius: 8px;
