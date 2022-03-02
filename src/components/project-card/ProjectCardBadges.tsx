@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
-import { FlexCenter } from '../styled-components/Grid';
+import { Row } from '../styled-components/Grid';
 import VerificationBadge from '../badges/VerificationBadge';
-import grayHeartIcon from '/public//images/heart_gray.svg';
-import redHeartIcon from '/public//images/heart_red.svg';
-import shareIcon from '/public//images/share.svg';
 import { IReaction } from '../../apollo/types/types';
 import useUser from '@/context/UserProvider';
-import { brandColors, Subline } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	IconHeart16,
+	IconHeartOutline16,
+	IconShare16,
+	neutralColors,
+	Subline,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import ShareModal from '../modals/ShareModal';
 import { likeProject, unlikeProject } from '@/lib/reaction';
@@ -109,26 +112,24 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 				</BadgeContainer>
 				{!noHearts && (
 					<BadgeContainer>
-						{Number(totalReactions) > 0 && (
-							<LikeBadge>{totalReactions}</LikeBadge>
-						)}
-						<HeartWrap active={!!reaction?.id} isHover={isHover}>
-							<ShareImageButton
-								src={
-									reaction?.userId &&
-									reaction?.userId === user?.id
-										? redHeartIcon
-										: grayHeartIcon
-								}
-								alt='heart icon'
-								onClick={likeUnlikeProject}
-							/>
-							<ShareImageButton
-								src={shareIcon}
-								alt='share icon'
-								onClick={() => setShowModal(true)}
-							/>
-						</HeartWrap>
+						<BadgeButtonContainer>
+							<BadgeButton onClick={likeUnlikeProject}>
+								{Number(totalReactions) > 0 && (
+									<LikeCount>{totalReactions}</LikeCount>
+								)}
+								{reaction?.userId &&
+								reaction?.userId === user?.id ? (
+									<IconHeart16
+										color={brandColors.pinky[500]}
+									/>
+								) : (
+									<IconHeartOutline16 />
+								)}
+							</BadgeButton>
+							<BadgeButton onClick={() => setShowModal(true)}>
+								<IconShare16 />
+							</BadgeButton>
+						</BadgeButtonContainer>
 					</BadgeContainer>
 				)}
 			</BadgeWrapper>
@@ -140,30 +141,26 @@ const BadgeContainer = styled.div`
 	display: flex;
 `;
 
-const ShareImageButton = styled(Image)`
-	cursor: pointer;
+const BadgeButtonContainer = styled(Row)`
+	gap: 3px;
 `;
 
-const HeartWrap = styled(FlexCenter)<{ active?: boolean; isHover?: boolean }>`
-	height: ${props => (props.isHover ? '72px' : '30px')};
-	width: 30px;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-around;
-	border-radius: 56px;
-	background: ${props => (props.active ? 'white' : brandColors.deep[800])};
-	transition: all 0.3s ease;
-
-	> span:nth-of-type(2) {
-		display: ${props => (props.isHover ? 'unset' : 'none !important')};
+const BadgeButton = styled(Row)`
+	gap: 3px;
+	padding: 6px 7px;
+	background: ${neutralColors.gray[100]};
+	align-items: center;
+	border-radius: 16px;
+	cursor: pointer;
+	transition: color 0.3s ease;
+	color: ${neutralColors.gray[800]};
+	box-shadow: 0px 3px 20px ${brandColors.giv[400]}21;
+	&:hover {
+		color: ${neutralColors.gray[900]};
 	}
 `;
 
-const LikeBadge = styled(Subline)`
-	color: white;
-	margin-right: 6px;
-	margin-top: 7px;
-`;
+const LikeCount = styled(Subline)``;
 
 const BadgeWrapper = styled.div<IBadgeWrapper>`
 	width: 100%;
