@@ -6,9 +6,8 @@ import {
 	FETCH_PROJECT_UPDATES,
 	ADD_PROJECT_UPDATE,
 } from '@/apollo/gql/gqlProjects';
-import { Toaster } from 'react-hot-toast';
+import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
 import { gToast, ToastType } from '@/components/toasts';
-import { IFetchProjectUpdates } from '@/apollo/types/gqlTypes';
 import ProjectTimeline, { TimelineSection } from './ProjectTimeline';
 import { IProject, IProjectUpdate } from '@/apollo/types/types';
 import styled from 'styled-components';
@@ -34,6 +33,7 @@ const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 	const [title, setTitle] = useState<string>('');
 	const isOwner = adminUser?.id === user?.id;
 	const [addUpdateMutation] = useMutation(ADD_PROJECT_UPDATE);
+	const [showWelcomeSignin, setShowWelcomeSignin] = useState<boolean>(false);
 	const { data } = useQuery(FETCH_PROJECT_UPDATES, {
 		variables: {
 			projectId: parseInt(id || ''),
@@ -46,6 +46,11 @@ const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 
 	const addUpdate = async () => {
 		try {
+			if (!isSignedIn) {
+				// sign first
+				setShowWelcomeSignin(true);
+				return;
+			}
 			if (!newUpdate) {
 				return gToast('Please add some content to your update', {
 					type: ToastType.DANGER,
@@ -102,13 +107,31 @@ const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 				title: 'Success!',
 				position: 'top-center',
 			});
-		} catch (error) {
-			console.log({ error });
+		} catch (error: any) {
+			return gToast(error?.message, {
+				type: ToastType.DANGER,
+				// direction: ToastDirection.RIGHT,
+				title: 'Error',
+				dismissLabel: 'OK',
+				position: 'top-center',
+			});
 		}
 	};
 
 	return (
 		<Wrapper>
+			{showWelcomeSignin && (
+				<WelcomeSigninModal
+					callback={() => {
+						addUpdate();
+						setShowWelcomeSignin(false);
+					}}
+					showModal={true}
+					setShowModal={() => {
+						setShowWelcomeSignin(false);
+					}}
+				/>
+			)}
 			{isOwner && (
 				<InputContainer>
 					<TimelineSection date='' newUpdate={true} />
@@ -178,7 +201,6 @@ const Title = styled(H5)`
 const InputContainer = styled.div`
 	display: flex;
 	flex-direction: row;
-	justify-content: flex-end;
 `;
 
 const Input = styled.input`
