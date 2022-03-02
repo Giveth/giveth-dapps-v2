@@ -22,6 +22,7 @@ import { useWeb3React } from '@web3-react/core';
 import EditUserModal from '@/components/modals/EditUserModal';
 import styled from 'styled-components';
 import { Row } from '@/components/styled-components/Grid';
+import useUser from '@/context/UserProvider';
 
 export enum EOrderBy {
 	TokenAmount = 'TokenAmount',
@@ -102,6 +103,8 @@ export const NothingToSee = ({ title, heartIcon }: IEmptyBox) => {
 	return (
 		<NothingBox>
 			<Image
+				width='100%'
+				height='100%'
 				src={
 					heartIcon
 						? '/images/heart-white.svg'
@@ -118,6 +121,9 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 	user,
 	myAccount,
 }) => {
+	const {
+		state: { isSignedIn },
+	} = useUser();
 	const { chainId } = useWeb3React();
 	const [showWelcomeSignin, setShowWelcomeSignin] = useState<boolean>(false);
 	const [showModal, setShowModal] = useState<boolean>(false); // follow this state to refresh user content on screen
@@ -125,7 +131,23 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 
 	useEffect(() => {
 		setIncompleteProfile(!user?.name || !user?.email);
-	}, [user]);
+		myAccount && setShowWelcomeSignin(!isSignedIn);
+	}, [user, isSignedIn]);
+
+	if (!user || (myAccount && !isSignedIn))
+		return (
+			<>
+				{showWelcomeSignin && (
+					<WelcomeSigninModal
+						showModal={true}
+						setShowModal={() => setShowWelcomeSignin(false)}
+					/>
+				)}
+				<NoUserContainer>
+					<H5>Not logged in or user not found</H5>
+				</NoUserContainer>
+			</>
+		);
 
 	return (
 		<>
@@ -327,4 +349,8 @@ const Btn = styled(Button)`
 		color: ${props =>
 			props.buttonType === 'secondary' && brandColors.pinky[700]};
 	}
+`;
+
+const NoUserContainer = styled.div`
+	padding: 200px;
 `;

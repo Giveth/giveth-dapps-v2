@@ -72,8 +72,11 @@ export const UserProvider = (props: { children: ReactNode }) => {
 
 	useEffect(() => {
 		localStorage.removeItem(LocalStorageTokenLabel);
+		if (!user) return;
 		if (active && account) {
-			// not sure what this does, commenging  because causing a bug
+			if (compareAddresses(account, user?.walletAddress!)) {
+				return;
+			}
 			fetchUser().then(setUser);
 		} else {
 			user && setUser(undefined);
@@ -216,7 +219,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 	useEffect(() => {
 		if (account) {
 			const _user = Auth.getUser();
-			if (compareAddresses(account, _user?.walletAddress)) {
+			if (compareAddresses(account, _user?.walletAddress!)) {
 				const newUser = new User(_user as User);
 				setUser(newUser);
 			} else {

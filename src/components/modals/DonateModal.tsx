@@ -174,7 +174,6 @@ const DonateModal = ({
 							transactionHash,
 							(res: transaction.IEthTxConfirmation) => {
 								try {
-									console.log({ res });
 									if (!res) return;
 									// toast.dismiss()
 									if (res?.tooSlow === true) {
