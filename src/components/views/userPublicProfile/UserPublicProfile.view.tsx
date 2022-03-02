@@ -130,19 +130,6 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 					close={() => setIncompleteProfile(false)}
 				/>
 			)}
-			{showModal && (
-				<EditUserModal
-					showModal={showModal}
-					setShowModal={setShowModal}
-					user={user}
-				/>
-			)}
-			{showWelcomeSignin && (
-				<WelcomeSigninModal
-					showModal={true}
-					setShowModal={() => setShowWelcomeSignin(false)}
-				/>
-			)}
 			<PubliCProfileHeader>
 				<Container>
 					<UserInfoWithAvatarRow>
@@ -160,9 +147,7 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 									close={() => setIncompleteProfile(false)}
 								/>
 							)}
-							<H3 weight={700} onClick={() => setShowModal(true)}>
-								{user.name}
-							</H3>
+							<H3 weight={700}>{user.name}</H3>
 							{user.url && (
 								<PinkLink
 									size='Big'
