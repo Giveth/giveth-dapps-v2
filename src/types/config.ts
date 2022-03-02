@@ -36,6 +36,7 @@ export interface UniswapV3PoolStakingConfig extends SimplePoolStakingConfig {
 	REWARD_TOKEN: string;
 	UNISWAP_V3_LP_POOL: string;
 	INCENTIVE_REFUNDEE_ADDRESS: string;
+	infinitePositionId?: number;
 }
 export interface BalancerPoolStakingConfig extends SimplePoolStakingConfig {
 	VAULT_ADDRESS: string;

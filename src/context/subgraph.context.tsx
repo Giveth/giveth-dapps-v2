@@ -11,6 +11,7 @@ import { fetchSubgraph } from '@/services/subgraph.service';
 import config from '@/configuration';
 import {
 	IBalances,
+	IInfinitePositionReward,
 	ITokenDistroInfo,
 	IUnipool,
 	IUniswapV2Pair,
@@ -36,6 +37,8 @@ export interface ISubgraphValue {
 	userStakedPositions: IUniswapV3Position[];
 	allPositions: IUniswapV3Position[];
 	uniswapV2EthGivPair?: IUniswapV2Pair;
+	infinitePositionReward?: IInfinitePositionReward;
+	infinitePosition?: IUniswapV3Position;
 }
 
 export interface ISubgraphContext {

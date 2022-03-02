@@ -134,3 +134,16 @@ export const OutOfRangeTooltip = styled(Subline)`
 export const IconHelpWraper = styled.div`
 	cursor: pointer;
 `;
+
+export const IconGift = styled.img`
+	cursor: pointer;
+	width: 20px;
+	height: 20px;
+`;
+
+export const GiftTooltip = styled.div`
+	color: ${neutralColors.gray[100]};
+	text-align: center;
+	width: 120px;
+	font-size: 0.8em;
+`;

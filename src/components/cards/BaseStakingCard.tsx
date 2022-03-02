@@ -1,9 +1,9 @@
-import config from '@/configuration';
-import { PoolStakingConfig, StakingType } from '@/types/config';
+import config from '../../configuration';
+import { PoolStakingConfig, StakingType } from '../../types/config';
 import React, { FC, useEffect, useState, ReactNode } from 'react';
 import { Row } from '../styled-components/Grid';
 import { IconWithTooltip } from '../IconWithToolTip';
-import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
+import { formatEthHelper, formatWeiHelper, Zero } from '../../helpers/number';
 import {
 	StakingPoolContainer,
 	StakingPoolExchangeRow,
@@ -27,13 +27,12 @@ import {
 	IconContainer,
 	IconHelpWraper,
 	GIVgardenTooltip,
+	IconGift,
+	GiftTooltip,
 } from './BaseStakingCard.sc';
-import styled from 'styled-components';
 import {
-	IconCalculator,
 	IconSpark,
 	brandColors,
-	neutralColors,
 	IconHelp,
 	IconExternalLink,
 } from '@giveth/ui-design-system';
@@ -54,6 +53,8 @@ import BigNumber from 'bignumber.js';
 import { WhatisGIVstreamModal } from '../modals/WhatisGIVstream';
 import { IconSushiswap } from '../Icons/Sushiswap';
 import { useWeb3React } from '@web3-react/core';
+import { UniV3APRModal } from '../modals/UNIv3APR';
+import { useLiquidityPositions } from '@/context';
 
 export const getPoolIconWithName = (pool: string) => {
 	switch (pool) {
@@ -83,6 +84,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	notif,
 }) => {
 	const [showAPRModal, setShowAPRModal] = useState(false);
+	const [showUniV3APRModal, setShowUniV3APRModal] = useState(false);
 	const [showStakeModal, setShowStakeModal] = useState(false);
 	const [showUnStakeModal, setShowUnStakeModal] = useState(false);
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
@@ -100,6 +102,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const isV3Staking = type === StakingType.UNISWAP;
 
 	const { apr, earned, stakedLpAmount, userNotStakedAmount } = stakeInfo;
+	const { minimumApr } = useLiquidityPositions();
 
 	useEffect(() => {
 		setRewardLiquidPart(tokenDistroHelper.getLiquidPart(earned));
@@ -169,9 +172,31 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									size={24}
 									color={brandColors.mustard[500]}
 								/>
-								<DetailValue>
-									{apr && formatEthHelper(apr, 2)}%
-								</DetailValue>
+								{isV3Staking ? (
+									<IconWithTooltip
+										direction={'top'}
+										icon={
+											<IconGift
+												src='/images/heart-ribbon.svg'
+												alt='gift'
+											/>
+										}
+									>
+										<GiftTooltip>
+											Provide a narrow range of liquidity
+											to maximize your rate of reward. The
+											average APR is{' '}
+											{formatEthHelper(apr, 2)}%, and the
+											minimum APR for full range liquidity
+											is {formatEthHelper(minimumApr, 2)}
+											%.
+										</GiftTooltip>
+									</IconWithTooltip>
+								) : (
+									<DetailValue>
+										{apr && formatEthHelper(apr, 2)}%
+									</DetailValue>
+								)}
 								<IconContainer
 									onClick={() => setShowAPRModal(true)}
 								>
@@ -181,9 +206,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 						</FirstDetail>
 						<Detail justifyContent='space-between'>
 							<DetailLabel>Claimable</DetailLabel>
-							<DetailValue>{`${formatWeiHelper(
-								rewardLiquidPart,
-							)} GIV`}</DetailValue>
+							<DetailValue>
+								{`${formatWeiHelper(rewardLiquidPart)} GIV`}
+							</DetailValue>
 						</Detail>
 						<Detail justifyContent='space-between'>
 							<Row gap='8px' alignItems='center'>
@@ -248,13 +273,17 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								? 'BUY GIV TOKENS'
 								: 'PROVIDE LIQUIDITY'
 						}
-						onClick={() =>
-							window.open(
-								type === StakingType.GIV_LM
-									? BUY_LINK
-									: provideLiquidityLink,
-							)
-						}
+						onClick={() => {
+							if (isV3Staking) {
+								setShowUniV3APRModal(true);
+							} else {
+								window.open(
+									type === StakingType.GIV_LM
+										? BUY_LINK
+										: provideLiquidityLink,
+								);
+							}
+						}}
 						buttonType='texty'
 						icon={
 							<IconExternalLink
@@ -271,6 +300,13 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					setShowModal={setShowAPRModal}
 					poolStakingConfig={poolStakingConfig}
 					maxAmount={userNotStakedAmount}
+				/>
+			)}
+			{showUniV3APRModal && (
+				<UniV3APRModal
+					showModal={showUniV3APRModal}
+					setShowModal={setShowUniV3APRModal}
+					poolStakingConfig={poolStakingConfig}
 				/>
 			)}
 			{showStakeModal &&
