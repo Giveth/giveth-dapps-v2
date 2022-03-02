@@ -15,7 +15,6 @@ const PhotoStep: FC<IStep> = ({ setStep }) => {
 	const [updateUser] = useMutation(UPDATE_USER);
 
 	const onDrop = async (acceptedFiles: File[]) => {
-		console.log('acceptedFiles', acceptedFiles);
 		const { data: imageUploaded } = await client.mutate({
 			mutation: UPLOAD_PROFILE_PHOTO,
 			variables: {
@@ -36,15 +35,22 @@ const PhotoStep: FC<IStep> = ({ setStep }) => {
 			});
 			if (response.updateUser) {
 				setStep(OnboardSteps.DONE);
+				gToast('Profile Photo updated.', {
+					type: ToastType.SUCCESS,
+					title: 'Success',
+				});
+				return true;
 			} else {
 				throw 'updateUser false';
 			}
-		} catch (error) {
-			gToast('Failed to update your profile photo. Please try again.', {
+		} catch (error: any) {
+			gToast('Failed to update your inforamtion. Please try again.', {
 				type: ToastType.DANGER,
+				title: error.message,
 			});
 			console.log(error);
 		}
+		return false;
 	};
 
 	return (
@@ -67,6 +73,7 @@ const PhotoStep: FC<IStep> = ({ setStep }) => {
 				<OnboardActions
 					onSave={onSave}
 					saveLabel='SAVE'
+					onLater={() => setStep(OnboardSteps.DONE)}
 					disabled={!url}
 				/>
 			</OnboardStep>

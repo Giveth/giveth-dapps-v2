@@ -1,5 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -19,7 +18,7 @@ import { checkIfURLisValid } from '@/utils';
 import ImageUploader from '../ImageUploader';
 import { useMutation } from '@apollo/client';
 import { gToast, ToastType } from '../toasts';
-import { Toaster } from 'react-hot-toast';
+import useUser from '@/context/UserProvider';
 
 interface IInputProps {
 	examples: string;
@@ -112,6 +111,9 @@ const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
 	});
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const router = useRouter();
+	const {
+		actions: { reFetchUserData },
+	} = useUser();
 	const [updateUser] = useMutation(UPDATE_USER);
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -142,21 +144,26 @@ const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
 				},
 			});
 			if (response.updateUser) {
+				reFetchUserData();
 				setEditStatus(EditStatusType.INFO);
-				setAvatar('');
+				gToast('Profile Photo updated.', {
+					type: ToastType.SUCCESS,
+					title: 'Success',
+				});
 			} else {
 				throw 'updateUser false';
 			}
-		} catch (error) {
-			gToast('Failed to update your profile photo. Please try again.', {
+		} catch (error: any) {
+			gToast('Failed to update your inforamtion. Please try again.', {
 				type: ToastType.DANGER,
+				title: error.message,
 			});
 			console.log(error);
 		}
 	};
 
 	const handleSubmit = async () => {
-		/* TO DO: ADD TOAST */
+		setIsLoading(true);
 		const { url } = newUser;
 		try {
 			if (url) {
@@ -172,122 +179,121 @@ const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
 				},
 			});
 			if (data.updateUser) {
-				setIsLoading(true);
-				router.replace(router.asPath);
+				reFetchUserData();
+				setIsLoading(false);
+				gToast('Profile informations updated.', {
+					type: ToastType.SUCCESS,
+					title: 'Success',
+				});
+				setShowModal(false);
 			} else {
-				return 'fail to change ';
+				throw 'Update User Failed.';
 			}
-		} catch (error) {
-			return 'some strange error';
+		} catch (error: any) {
+			gToast('Failed to update your inforamtion. Please try again.', {
+				type: ToastType.DANGER,
+				title: error.message,
+			});
 		}
 	};
 
-	useEffect(() => {
-		setIsLoading(false);
-		if (isLoading) {
-			setShowModal(false);
-		}
-	}, [newUser, user]);
-
 	return (
-		<>
-			<Modal
-				showModal={showModal}
-				setShowModal={setShowModal}
-				headerIcon={<></>}
-				headerTitle='Edit profile'
-				headerTitlePosition='left'
-			>
-				<Wrapper>
-					{editStatus === EditStatusType.PHOTO ? (
-						<>
-							<Row flexDirection='column' gap='36px'>
-								<ImageUploader
-									onDrop={onDrop}
-									setUrl={setAvatar}
-									url={avatar}
-								/>
-								<Button
-									buttonType='secondary'
-									label='SAVE'
-									onClick={onSaveAvatar}
-									disabled={!avatar}
+		<Modal
+			showModal={showModal}
+			setShowModal={setShowModal}
+			headerIcon={<></>}
+			headerTitle='Edit profile'
+			headerTitlePosition='left'
+		>
+			<Wrapper>
+				{editStatus === EditStatusType.PHOTO ? (
+					<>
+						<Row flexDirection='column' gap='36px'>
+							<ImageUploader
+								onDrop={onDrop}
+								setUrl={setAvatar}
+								url={avatar}
+							/>
+							<Button
+								buttonType='secondary'
+								label='SAVE'
+								onClick={onSaveAvatar}
+								disabled={!avatar}
+							/>
+							<TextButton
+								buttonType='texty'
+								label='cancel'
+								onClick={() => {
+									setAvatar('');
+									setEditStatus(EditStatusType.INFO);
+								}}
+							/>
+						</Row>
+					</>
+				) : (
+					<>
+						<FlexCenter direction='column' gap='8px'>
+							<ProfilePicture
+								src={
+									user.avatar
+										? user.avatar
+										: '/images/avatar.svg'
+								}
+								alt={user.name}
+								height={80}
+								width={80}
+							/>
+							<FlexCenter direction='column'>
+								<TextButton
+									buttonType='texty'
+									color={brandColors.pinky[500]}
+									label='upload new picture'
+									onClick={() =>
+										setEditStatus(EditStatusType.PHOTO)
+									}
 								/>
 								<TextButton
 									buttonType='texty'
-									label='cancel'
+									label='delete picture'
 									onClick={() => {
-										setAvatar('');
-										setEditStatus(EditStatusType.INFO);
+										onSaveAvatar();
 									}}
 								/>
-							</Row>
-						</>
-					) : (
-						<>
-							<FlexCenter direction='column' gap='8px'>
-								<ProfilePicture
-									src={
-										user.avatar
-											? user.avatar
-											: '/images/avatar.svg'
-									}
-									alt={user.name}
-									height={80}
-									width={80}
-								/>
-								<FlexCenter direction='column'>
-									<TextButton
-										buttonType='texty'
-										color={brandColors.pinky[500]}
-										label='upload new picture'
-										onClick={() =>
-											setEditStatus(EditStatusType.PHOTO)
-										}
-									/>
-									<TextButton
-										buttonType='texty'
-										label='delete picture'
-										onClick={() => {
-											onSaveAvatar();
-										}}
-									/>
-								</FlexCenter>
 							</FlexCenter>
-							<InputWrapper>
-								{inputFields.map(field => (
-									<Input
-										key={field.name}
-										handleChange={handleChange}
-										examples={field.examples}
-										explanation={field.explanation}
-										name={field.name}
-										placeholder={field.placeholder}
-										value={(newUser as any)[field.name]}
-									/>
-								))}
-								<Button
-									buttonType='secondary'
-									label='SAVE'
-									disabled={
-										!newUser.firstName ||
-										!newUser.lastName ||
-										isLoading
-									}
-									onClick={handleSubmit}
+						</FlexCenter>
+						<InputWrapper>
+							{inputFields.map(field => (
+								<Input
+									key={field.name}
+									handleChange={handleChange}
+									examples={field.examples}
+									explanation={field.explanation}
+									name={field.name}
+									placeholder={field.placeholder}
+									value={(newUser as any)[field.name]}
 								/>
-								<TextButton
-									buttonType='texty'
-									label='cancel'
-									onClick={() => setShowModal(false)}
-								/>
-							</InputWrapper>
-						</>
-					)}
-				</Wrapper>
-			</Modal>
-			<Toaster />
-		</>
+							))}
+							<Button
+								buttonType='secondary'
+								label='SAVE'
+								disabled={
+									!newUser.firstName ||
+									!newUser.lastName ||
+									!newUser.email ||
+									isLoading
+								}
+								onClick={handleSubmit}
+							/>
+							<TextButton
+								buttonType='texty'
+								label='cancel'
+								onClick={() => setShowModal(false)}
+							/>
+						</InputWrapper>
+					</>
+				)}
+			</Wrapper>
+		</Modal>
 	);
 };
 

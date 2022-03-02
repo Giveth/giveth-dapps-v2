@@ -1,14 +1,14 @@
 import { UPDATE_USER } from '@/apollo/gql/gqlUser';
+import Input, {
+	IFormValidations,
+	InputValidationType,
+} from '@/components/Input';
+import { SkipOnboardingModal } from '@/components/modals/SkipOnboardingModal';
 import { Row } from '@/components/styled-components/Grid';
 import { gToast, ToastType } from '@/components/toasts';
+import useUser from '@/context/UserProvider';
 import { useMutation } from '@apollo/client';
-import {
-	brandColors,
-	GLink,
-	H6,
-	neutralColors,
-	Subline,
-} from '@giveth/ui-design-system';
+import { H6, neutralColors } from '@giveth/ui-design-system';
 import { ChangeEvent, FC, useEffect, useReducer, useState } from 'react';
 import styled from 'styled-components';
 import { IStep, OnboardActions, OnboardStep } from './common';
@@ -31,6 +31,10 @@ const initialUserInfo: IUserIfo = {
 };
 
 const InfoStep: FC<IStep> = ({ setStep }) => {
+	const [disabled, setDisabled] = useState(true);
+	const [updateUser] = useMutation(UPDATE_USER);
+	const [showModal, setShowModal] = useState(false);
+	const [formValidation, setFormValidation] = useState<IFormValidations>();
 	const [info, setInfo] = useReducer(
 		(curValues: IUserIfo, newValues: object) => ({
 			...curValues,
@@ -38,8 +42,17 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 		}),
 		initialUserInfo,
 	);
-	const [disabled, setDisabled] = useState(true);
-	const [updateUser] = useMutation(UPDATE_USER);
+
+	useEffect(() => {
+		if (formValidation) {
+			const fvs = Object.values(formValidation);
+			setDisabled(!fvs.every(fv => fv === InputValidationType.NORMAL));
+		}
+	}, [formValidation]);
+
+	const handleLater = () => {
+		setShowModal(true);
+	};
 
 	const { email, firstName, lastName, location, website } = info;
 
@@ -47,10 +60,6 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 		const { name, value } = e.target;
 		setInfo({ [name]: value });
 	};
-
-	useEffect(() => {
-		setDisabled(!(firstName.length > 0 && lastName.length > 0));
-	}, [firstName, lastName]);
 
 	const onSave = async () => {
 		setDisabled(true);
@@ -66,15 +75,22 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 			});
 			if (response.updateUser) {
 				setStep(OnboardSteps.PHOTO);
+				gToast('Profile informations updated.', {
+					type: ToastType.SUCCESS,
+					title: 'Success',
+				});
+				return true;
 			} else {
-				throw 'updateUser false';
+				throw 'Update User Failed';
 			}
-		} catch (error) {
+		} catch (error: any) {
 			gToast('Failed to update your inforamtion. Please try again.', {
 				type: ToastType.DANGER,
+				title: error.message,
 			});
 		}
 		setDisabled(false);
+		return false;
 	};
 
 	return (
@@ -82,71 +98,82 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 			<OnboardStep>
 				<SectionHeader>How we should call you?</SectionHeader>
 				<Section>
-					<InputContainer>
-						<InputLabel>FIRST NAME</InputLabel>
-						<Input
-							placeholder='John'
-							name='firstName'
-							value={firstName}
-							onChange={reducerInputChange}
-						/>
-					</InputContainer>
-					<InputContainer>
-						<InputLabel>LAST NAME</InputLabel>
-						<Input
-							placeholder='Doe'
-							name='lastName'
-							value={lastName}
-							onChange={reducerInputChange}
-						/>
-					</InputContainer>
+					<Input
+						label='first name'
+						placeholder='John'
+						name='firstName'
+						value={firstName}
+						onChange={reducerInputChange}
+						setFormValidation={setFormValidation}
+						required
+					/>
+					<Input
+						label='last name'
+						placeholder='Doe'
+						name='lastName'
+						value={lastName}
+						onChange={reducerInputChange}
+						setFormValidation={setFormValidation}
+						required
+					/>
 				</Section>
 				<Section>
-					<InputContainer>
-						<InputLabel>EMAIL</InputLabel>
-						<Input
-							placeholder='Example@Domain.com'
-							name='email'
-							value={email}
-							onChange={reducerInputChange}
-						/>
-					</InputContainer>
+					<Input
+						label='email'
+						placeholder='Example@Domain.com'
+						name='email'
+						value={email}
+						onChange={reducerInputChange}
+						type='email'
+						required
+						setFormValidation={setFormValidation}
+						validators={[
+							{ pattern: /^.{3,}$/, msg: 'Too Short' },
+							{
+								pattern:
+									/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+								msg: 'Invalid Email Address',
+							},
+						]}
+					/>
 				</Section>
 				<SectionHeader>Where are you?</SectionHeader>
 				<Section>
-					<InputContainer>
-						<InputLabel>LOCATION (OPTIONAL)</InputLabel>
-						<Input
-							placeholder='Portugal, Turkey,...'
-							name='location'
-							value={location}
-							onChange={reducerInputChange}
-						/>
-					</InputContainer>
+					<Input
+						label='location (optional)'
+						placeholder='Portugal, Turkey,...'
+						name='location'
+						value={location}
+						onChange={reducerInputChange}
+					/>
 				</Section>
 				<SectionHeader>
 					Personal website or URL to somewhere special?
 				</SectionHeader>
 				<Section>
-					<InputContainer>
-						<InputLabel>WEBSITE OR URL (OPTIONAL)</InputLabel>
-						<Input
-							placeholder='Website'
-							name='website'
-							value={website}
-							onChange={reducerInputChange}
-						/>
-						<InputDesc size='Small'>
-							Your home page, blog, or company site.
-						</InputDesc>
-					</InputContainer>
+					<Input
+						label='website or url'
+						placeholder='Website'
+						name='website'
+						value={website}
+						onChange={reducerInputChange}
+						type='url'
+						caption='Your home page, blog, or company site.'
+					/>
 				</Section>
 				<OnboardActions
 					onSave={onSave}
 					saveLabel='SAVE & CONTINUE'
+					onLater={handleLater}
 					disabled={disabled}
 				/>
 			</OnboardStep>
+			{showModal && (
+				<SkipOnboardingModal
+					showModal={showModal}
+					setShowModal={setShowModal}
+				/>
+			)}
 		</>
 	);
 };
@@ -160,35 +187,6 @@ const Section = styled(Row)`
 const SectionHeader = styled(H6)`
 	padding-bottom: 16px;
 	border-bottom: 1px solid ${neutralColors.gray[400]};
-`;
-
-const InputContainer = styled.div`
-	flex: 1;
-`;
-
-const InputLabel = styled(Subline)`
-	padding-bottom: 4px;
-	color: ${brandColors.deep[500]};
-`;
-
-const Input = styled.input`
-	width: 100%;
-	height: 56px;
-	border: 1px solid ${neutralColors.gray[300]};
-	border-radius: 8px;
-	padding: 15px 16px;
-	font-size: 16px;
-	line-height: 150%;
-	font-weight: 500;
-	font-family: 'Red Hat Text';
-	::placeholder {
-		color: ${neutralColors.gray[500]};
-	}
-`;
-
-const InputDesc = styled(GLink)`
-	padding-top: 4px;
-	color: ${brandColors.deep[500]};
 `;
 
 export default InfoStep;

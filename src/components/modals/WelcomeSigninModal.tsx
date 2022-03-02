@@ -32,7 +32,7 @@ export const WelcomeSigninModal: FC<IModal> = ({
 			headerTitlePosition='left'
 		>
 			<Container>
-				<Title>Welcome to Giveth</Title>
+				{/* <Title>Welcome to Giveth</Title> */}
 				<Description>
 					You need to Sign your wallet to be able to use it on Giveth.
 				</Description>

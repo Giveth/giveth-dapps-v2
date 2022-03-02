@@ -1,7 +1,8 @@
-import { SkipOnboardingModal } from '@/components/modals/SkipOnboardingModal';
+import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
 import { Row } from '@/components/styled-components/Grid';
+import useUser from '@/context/UserProvider';
 import { Button, neutralColors } from '@giveth/ui-design-system';
-import { Dispatch, FC, SetStateAction, useState } from 'react';
+import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { OnboardSteps } from './Onboarding.view';
 
@@ -14,20 +15,41 @@ export interface IStep {
 	setStep: Dispatch<SetStateAction<OnboardSteps>>;
 }
 interface IOnboardActions {
-	onSave: any;
+	onSave: () => Promise<boolean>;
 	saveLabel: string;
+	onLater: any;
 	disabled: boolean;
 }
 
 export const OnboardActions: FC<IOnboardActions> = ({
 	onSave,
 	saveLabel,
+	onLater,
 	disabled,
 }) => {
-	const [showModal, setShowModal] = useState(false);
+	const [showSigninModal, setShowSigninModal] = useState(false);
+	const {
+		state: { user, isSignedIn },
+		actions: { reFetchUserData },
+	} = useUser();
 
-	const handleSkip = () => {
-		setShowModal(true);
+	useEffect(() => {
+		if (!isSignedIn) {
+			setShowSigninModal(true);
+		} else {
+			setShowSigninModal(false);
+		}
+	}, [isSignedIn]);
+
+	const handleSave = async () => {
+		if (!isSignedIn) {
+			setShowSigninModal(true);
+		} else {
+			const res = await onSave();
+			if (res) {
+				reFetchUserData();
+			}
+		}
 	};
 
 	return (
@@ -36,20 +58,20 @@ export const OnboardActions: FC<IOnboardActions> = ({
 				<SaveButton
 					label={saveLabel}
 					disabled={disabled}
-					onClick={onSave}
+					onClick={handleSave}
 					size='medium'
 				/>
 				<SkipButton
 					label='Do it later'
 					size='medium'
 					buttonType='texty'
-					onClick={handleSkip}
+					onClick={onLater}
 				/>
 			</OnboardActionsContianer>
-			{showModal && (
-				<SkipOnboardingModal
-					showModal={showModal}
-					setShowModal={setShowModal}
+			{showSigninModal && (
+				<WelcomeSigninModal
+					showModal={showSigninModal}
+					setShowModal={setShowSigninModal}
 				/>
 			)}
 		</>
