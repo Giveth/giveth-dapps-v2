@@ -188,41 +188,35 @@ const Header: FC<IHeader> = () => {
 				)}
 
 				<Row gap='8px'>
-					<Link href={Routes.CreateProject}>
-						<a>
-							<CreateProject
-								label='CREATE A PROJECT'
-								size='small'
+					<Link href={Routes.CreateProject} passHref>
+						<CreateProject
+							label='CREATE A PROJECT'
+							size='small'
+							theme={theme}
+							linkType={
+								theme === ETheme.Light ? 'primary' : 'secondary'
+							}
+						/>
+					</Link>
+					<SmallCreateProjectParent>
+						<Link href={Routes.CreateProject} passHref>
+							<SmallCreateProject
 								theme={theme}
+								label=''
+								icon={
+									<Image
+										src='/images/plus-white.svg'
+										width={16}
+										height={16}
+										alt='create project'
+									/>
+								}
 								linkType={
 									theme === ETheme.Light
 										? 'primary'
 										: 'secondary'
 								}
 							/>
-						</a>
-					</Link>
-					<SmallCreateProjectParent>
-						<Link href={Routes.CreateProject}>
-							<a>
-								<SmallCreateProject
-									theme={theme}
-									label=''
-									icon={
-										<Image
-											src='/images/plus-white.svg'
-											width={16}
-											height={16}
-											alt='create project'
-										/>
-									}
-									linkType={
-										theme === ETheme.Light
-											? 'primary'
-											: 'secondary'
-									}
-								/>
-							</a>
 						</Link>
 					</SmallCreateProjectParent>
 					{active && account && chainId ? (
@@ -261,7 +255,9 @@ const Header: FC<IHeader> = () => {
 									<HBContainer>
 										<HBPic
 											src={
-												'/images/placeholders/profile.png'
+												user?.avatar
+													? user.avatar
+													: '/images/placeholders/profile.png'
 											}
 											alt='Profile Pic'
 											width={'24px'}

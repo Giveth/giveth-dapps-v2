@@ -5,13 +5,12 @@ import {
 	IconInfo16,
 	Caption,
 	Button,
-	ButtonLink,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
 import { Row } from '../styled-components/Grid';
 import { Modal, IModal } from './Modal';
-import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 interface IWhatisGIVstreamModal extends IModal {}
 
@@ -19,6 +18,7 @@ export const SkipOnboardingModal: FC<IWhatisGIVstreamModal> = ({
 	showModal,
 	setShowModal,
 }) => {
+	const router = useRouter();
 	return (
 		<Modal
 			showModal={showModal}
@@ -43,13 +43,12 @@ export const SkipOnboardingModal: FC<IWhatisGIVstreamModal> = ({
 					label='OK, I’LL DO IT NOW'
 					onClick={() => setShowModal(false)}
 				/>
-				<Link href='/' passHref>
-					<CancelButton
-						size='small'
-						label='OK, I’LL DO IT LATER'
-						linkType='texty'
-					/>
-				</Link>
+				<CancelButton
+					size='small'
+					label='OK, I’LL DO IT LATER'
+					buttonType='texty'
+					onClick={() => router.back()}
+				/>
 			</SkipOnboardingModalContainer>
 		</Modal>
 	);
@@ -81,6 +80,6 @@ const OKButton = styled(Button)`
 	margin: 16px 0;
 `;
 
-const CancelButton = styled(ButtonLink)`
+const CancelButton = styled(Button)`
 	width: 100%;
 `;

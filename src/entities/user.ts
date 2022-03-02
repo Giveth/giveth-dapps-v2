@@ -13,6 +13,11 @@ export default class User implements IUser {
 	token!: string;
 	loginType!: string;
 	confirmed!: boolean;
+	projectsCount?: number;
+	totalReceived?: number;
+	totalDonated?: number;
+	likedProjectsCount?: number;
+	donationsCount?: number;
 
 	constructor(initUser: User) {
 		if (initUser) {
@@ -36,6 +41,11 @@ export default class User implements IUser {
 		this.location = dbUser.location;
 		this.name = dbUser.name;
 		this.url = dbUser.url;
+		this.projectsCount = dbUser.projectsCount;
+		this.totalReceived = dbUser.totalReceived;
+		this.totalDonated = dbUser.totalDonated;
+		this.likedProjectsCount = dbUser.likedProjectsCount;
+		this.donationsCount = dbUser.donationsCount;
 	}
 
 	setUserId(userId: string) {

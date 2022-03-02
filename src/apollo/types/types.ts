@@ -74,6 +74,7 @@ export interface IUser {
 	url?: string;
 	location?: string;
 	token?: string;
+	userId?: string;
 	totalDonated?: number;
 	totalReceived?: number;
 	projectsCount?: number;

@@ -2,29 +2,27 @@ import {
 	brandColors,
 	Container,
 	GLink,
-	Button,
 	H3,
-	H5,
 	IconExternalLink,
 	Lead,
 	neutralColors,
+	H5,
 	Caption,
+	Button,
 } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
-import { client } from '@/apollo/apolloClient';
-import { GET_USER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
 import { CopyToClipboard } from '@/components/CopyToClipboard';
 import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
-import useUser from '@/context/UserProvider';
 import { FC, useEffect, useState } from 'react';
-import styled from 'styled-components';
 import Image from 'next/image';
-import { Row } from '../../styled-components/Grid';
 import PublicProfileContributes from './PublicProfileContributes';
 import { IUser, IProject } from '@/apollo/types/types';
 import { networksParams } from '@/helpers/blockchain';
 import { useWeb3React } from '@web3-react/core';
 import EditUserModal from '@/components/modals/EditUserModal';
+import styled from 'styled-components';
+import { Row } from '@/components/styled-components/Grid';
+import useUser from '@/context/UserProvider';
 
 export enum EOrderBy {
 	TokenAmount = 'TokenAmount',
@@ -104,12 +102,15 @@ const IncompleteProfileToast = ({ close, absolute }: IIncompleteToast) => {
 export const NothingToSee = ({ title, heartIcon }: IEmptyBox) => {
 	return (
 		<NothingBox>
-			<img
+			<Image
+				width='100%'
+				height='100%'
 				src={
 					heartIcon
 						? '/images/heart-white.svg'
 						: '/images/empty-box.svg'
 				}
+				alt='nothing'
 			/>
 			<Lead>{title}</Lead>
 		</NothingBox>
@@ -117,48 +118,23 @@ export const NothingToSee = ({ title, heartIcon }: IEmptyBox) => {
 };
 
 const UserPublicProfileView: FC<IUserPublicProfileView> = ({
-	user: userFromSSR,
+	user,
 	myAccount,
 }) => {
+	const {
+		state: { isSignedIn },
+	} = useUser();
 	const { chainId } = useWeb3React();
-	const [user, setUser] = useState(userFromSSR);
-	const [incompleteProfile, setIncompleteProfile] = useState<boolean>(false);
 	const [showWelcomeSignin, setShowWelcomeSignin] = useState<boolean>(false);
 	const [showModal, setShowModal] = useState<boolean>(false); // follow this state to refresh user content on screen
-
-	const {
-		state: { isSignedIn, user: userFromContext },
-	} = useUser();
-
-	useEffect(() => {
-		const getUser = async () => {
-			try {
-				if (!userFromContext?.walletAddress) return;
-				const { data: userData } = await client.query({
-					query: GET_USER_BY_ADDRESS,
-					variables: {
-						address: userFromContext?.walletAddress,
-					},
-				});
-				setUser(userData?.userByAddress);
-			} catch (error) {
-				console.log({ error });
-			}
-		};
-		if (myAccount && userFromContext?.id !== user?.id) {
-			// fetch new user
-			getUser();
-		}
-		if (userFromContext && myAccount && !isSignedIn) {
-			setShowWelcomeSignin(true);
-		}
-	}, [myAccount, isSignedIn, userFromContext]);
+	const [incompleteProfile, setIncompleteProfile] = useState<boolean>(false);
 
 	useEffect(() => {
 		setIncompleteProfile(!user?.name || !user?.email);
-	}, [user]);
+		myAccount && setShowWelcomeSignin(!isSignedIn);
+	}, [user, isSignedIn]);
 
-	if (!userFromContext || (myAccount && !isSignedIn))
+	if (!user || (myAccount && !isSignedIn))
 		return (
 			<>
 				{showWelcomeSignin && (
@@ -172,25 +148,13 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 				</NoUserContainer>
 			</>
 		);
+
 	return (
 		<>
-			{incompleteProfile && user?.name && (
+			{incompleteProfile && !user?.name && (
 				<IncompleteProfileToast
 					absolute={true}
 					close={() => setIncompleteProfile(false)}
-				/>
-			)}
-			{showModal && (
-				<EditUserModal
-					showModal={showModal}
-					setShowModal={setShowModal}
-					user={user}
-				/>
-			)}
-			{showWelcomeSignin && (
-				<WelcomeSigninModal
-					showModal={true}
-					setShowModal={() => setShowWelcomeSignin(false)}
 				/>
 			)}
 			<PubliCProfileHeader>
@@ -205,14 +169,7 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 							alt={user.name}
 						/>
 						<UserInforRow>
-							{incompleteProfile && !user?.name && (
-								<IncompleteProfileToast
-									close={() => setIncompleteProfile(false)}
-								/>
-							)}
-							<H3 weight={700} onClick={() => setShowModal(true)}>
-								{user.name}
-							</H3>
+							<H3 weight={700}>{user.name}</H3>
 							{user.url && (
 								<PinkLink
 									size='Big'
@@ -260,6 +217,19 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 				</Container>
 			</PubliCProfileHeader>
 			<PublicProfileContributes user={user} myAccount={myAccount} />
+			{showModal && (
+				<EditUserModal
+					showModal={showModal}
+					setShowModal={setShowModal}
+					user={user}
+				/>
+			)}
+			{showWelcomeSignin && (
+				<WelcomeSigninModal
+					showModal={true}
+					setShowModal={() => setShowWelcomeSignin(false)}
+				/>
+			)}
 		</>
 	);
 };
@@ -276,10 +246,6 @@ const NothingBox = styled.div`
 	img {
 		padding-bottom: 21px;
 	}
-`;
-
-const NoUserContainer = styled.div`
-	padding: 200px;
 `;
 
 const PubliCProfileHeader = styled.div`
@@ -313,15 +279,14 @@ const WalletIconsContainer = styled.div`
 `;
 
 const IncompleteToast = styled.div`
-	max-width: 1136px;
 	width: 100%;
+	max-width: 1214px;
 	position: ${(props: IIncompleteToast) =>
 		props.absolute ? 'absolute' : 'relative'};
 	top: ${(props: IIncompleteToast) => (props.absolute ? '90px' : '0')};
 	left: 0;
 	right: 0;
-	margin-left: auto;
-	margin-right: auto;
+	margin: 0 auto;
 	background-color: ${brandColors.mustard[200]};
 	border: 1px solid ${brandColors.mustard[700]};
 	border-radius: 8px;
@@ -384,4 +349,8 @@ const Btn = styled(Button)`
 		color: ${props =>
 			props.buttonType === 'secondary' && brandColors.pinky[700]};
 	}
+`;
+
+const NoUserContainer = styled.div`
+	padding: 200px;
 `;
