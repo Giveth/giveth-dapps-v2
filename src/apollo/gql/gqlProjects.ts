@@ -267,7 +267,7 @@ export const CREATE_PROJECT = gql`
 `;
 
 export const UPDATE_PROJECT = gql`
-	mutation updateProject($projectId: Float!, $newProjectData: ProjectInput!) {
+	mutation ($projectId: Float!, $newProjectData: CreateProjectInput!) {
 		updateProject(projectId: $projectId, newProjectData: $newProjectData) {
 			id
 			title

@@ -11,6 +11,7 @@ import {
 	neutralColors,
 	brandColors,
 } from '@giveth/ui-design-system';
+
 import { Row } from './styled-components/Grid';
 import deleteIcon from '../../public/images/delete.png';
 import { client } from '@/apollo/apolloClient';
