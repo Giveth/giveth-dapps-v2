@@ -147,8 +147,6 @@ const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 								projectId={id}
 								value={newUpdate}
 								style={TextInputStyle}
-								rows={12}
-								autoFocus
 								setValue={setNewUpdate}
 								withLimit={UPDATE_LIMIT}
 								placeholder='Clear project description explaining who your are and what you want to do with the funds...'

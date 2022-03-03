@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { H5, Caption, brandColors } from '@giveth/ui-design-system';
+import {
+	H5,
+	Caption,
+	brandColors,
+	semanticColors,
+} from '@giveth/ui-design-system';
 import dynamic from 'next/dynamic';
 import styled from 'styled-components';
 import { InputContainer, InputErrorMessage, Label } from './Create.sc';
@@ -54,7 +59,7 @@ const InputContainerStyled = styled(InputContainer)<{ error: string }>`
 	.ql-container.ql-snow,
 	.ql-toolbar.ql-snow {
 		border: ${props =>
-			props.error && `2px solid ${brandColors.pinky[500]}`};
+			props.error && `2px solid ${semanticColors.punch[500]}`};
 	}
 
 	&:focus-within {

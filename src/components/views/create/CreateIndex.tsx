@@ -8,7 +8,7 @@ import {
 	IconExternalLink,
 	neutralColors,
 	OulineButton,
-	P,
+	H6,
 } from '@giveth/ui-design-system';
 import { useMutation } from '@apollo/client';
 import { utils } from 'ethers';
@@ -16,12 +16,13 @@ import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import Debounced from 'lodash.debounce';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 import SignInModal from '../../modals/SignInModal';
 import {
 	ACTIVATE_PROJECT,
-	ADD_PROJECT,
-	EDIT_PROJECT,
+	CREATE_PROJECT,
+	UPDATE_PROJECT,
 } from '@/apollo/gql/gqlProjects';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import { IProjectCreation, IProjectEdition } from '@/apollo/types/types';
@@ -33,7 +34,6 @@ import {
 	NameInput,
 	WalletAddressInput,
 } from './Inputs';
-import { getImageFile } from '@/utils';
 import useUser from '@/context/UserProvider';
 import Logger from '@/utils/Logger';
 import SuccessfulCreation from './SuccessfulCreation';
@@ -52,6 +52,8 @@ import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { client } from '@/apollo/apolloClient';
 import Routes from '@/lib/constants/Routes';
+import LightBulbIcon from '/public/images/icons/lightbulb.svg';
+import { Shadow } from '@/components/styled-components/Shadow';
 
 export enum ECreateErrFields {
 	NAME = 'name',
@@ -71,8 +73,8 @@ export interface ICategoryComponent {
 
 const CreateIndex = (props: { project?: IProjectEdition }) => {
 	const { library, chainId } = useWeb3React();
-	const [addProjectMutation] = useMutation(ADD_PROJECT);
-	const [editProjectMutation] = useMutation(EDIT_PROJECT);
+	const [addProjectMutation] = useMutation(CREATE_PROJECT);
+	const [editProjectMutation] = useMutation(UPDATE_PROJECT);
 	const router = useRouter();
 
 	const { project } = props;
@@ -111,7 +113,7 @@ const CreateIndex = (props: { project?: IProjectEdition }) => {
 	const debouncedDescriptionValidation = useRef<any>();
 
 	useEffect(() => {
-		if (isSignedIn) {
+		if (isSignedIn && !isEditMode) {
 			setShowGuidelineModal(true);
 		}
 	}, [isSignedIn]);
@@ -163,6 +165,12 @@ const CreateIndex = (props: { project?: IProjectEdition }) => {
 	const handleInputChange = (value: string, id: string) => {
 		if (id === ECreateErrFields.NAME) {
 			setName(value);
+			if (isEditMode && value === project.title) {
+				const _errors = { ...errors };
+				_errors[ECreateErrFields.NAME] = '';
+				setErrors(_errors);
+				return;
+			}
 			debouncedTitleValidation.current(value, errors, setErrors);
 		} else if (id === ECreateErrFields.WALLET_ADDRESS) {
 			setWalletAddress(value);
@@ -221,8 +229,7 @@ const CreateIndex = (props: { project?: IProjectEdition }) => {
 				categories: categories.map(category => category.name),
 				organisationId: 1,
 				walletAddress: utils.getAddress(address),
-				imageStatic: null,
-				imageUpload: await getImageFile(image, name),
+				image,
 				isDraft: !!drafted,
 			};
 
@@ -252,11 +259,17 @@ const CreateIndex = (props: { project?: IProjectEdition }) => {
 				// Success
 				setIsLoading(false);
 				const _project = isEditMode
-					? addedProject.data?.editProject
-					: addedProject.data?.addProject;
-				!isEditMode && !drafted
-					? setCreationSuccessful(_project)
-					: await router.push(slugToProjectView(_project.slug));
+					? addedProject.data?.updateProject
+					: addedProject.data?.createProject;
+				if (drafted) {
+					await router.push(slugToProjectView(_project.slug));
+				} else {
+					if (!isEditMode || (isEditMode && isDraft)) {
+						setCreationSuccessful(_project);
+					} else {
+						await router.push(slugToProjectView(_project.slug));
+					}
+				}
 			}
 		} catch (e) {
 			setIsLoading(false);
@@ -269,11 +282,6 @@ const CreateIndex = (props: { project?: IProjectEdition }) => {
 	if (creationSuccessful) {
 		return <SuccessfulCreation project={creationSuccessful} />;
 	}
-
-	const hasErrors =
-		errors[ECreateErrFields.NAME] ||
-		errors[ECreateErrFields.WALLET_ADDRESS] ||
-		errors[ECreateErrFields.DESCRIPTION];
 
 	return (
 		<>
@@ -290,109 +298,135 @@ const CreateIndex = (props: { project?: IProjectEdition }) => {
 				/>
 			)}
 			{user && (
-				<CreateContainer>
-					<Title>
-						{isEditMode ? 'Project details' : 'Create a Project'}
-					</Title>
-
-					<div>
-						<NameInput
-							value={name}
-							setValue={e =>
-								handleInputChange(e, ECreateErrFields.NAME)
-							}
-							error={errors[ECreateErrFields.NAME]}
-						/>
-						<DescriptionInput
-							setValue={e =>
-								handleInputChange(
-									e,
-									ECreateErrFields.DESCRIPTION,
-								)
-							}
-							error={errors[ECreateErrFields.DESCRIPTION]}
-							value={description}
-						/>
-						<CategoryInput
-							value={categories}
-							setValue={setCategories}
-						/>
-						<LocationInput
-							defaultValue={defaultImpactLocation}
-							setValue={setImpactLocation}
-						/>
-						<ImageInput value={image} setValue={setImage} />
-						<WalletAddressInput
-							value={walletAddress}
-							setValue={e =>
-								handleInputChange(
-									e,
-									ECreateErrFields.WALLET_ADDRESS,
-								)
-							}
-							error={errors[ECreateErrFields.WALLET_ADDRESS]}
-						/>
-
-						<PublishTitle>
+				<>
+					<CreateContainer>
+						<Title>
 							{isEditMode
-								? 'Publish edited project'
-								: `Let's Publish!`}
-						</PublishTitle>
-						<PublishList>
-							<li>
-								{isEditMode ? 'Edited' : 'Newly published'}{' '}
-								projects will be &quot;unlisted&quot; until
-								reviewed by our team {isEditMode && 'again'}.
-							</li>
-							<li>
-								You can still access your project from your
-								account and share it with your friends via the
-								project link!
-							</li>
-							<li>
-								You&apos;ll receive an email from us once your
-								project is listed.
-							</li>
-						</PublishList>
-						<Buttons>
-							{(!isEditMode || isDraft) && (
-								<OulineButton
-									label='PREVIEW '
+								? 'Project details'
+								: 'Create a Project'}
+						</Title>
+
+						<div>
+							<NameInput
+								value={name}
+								setValue={e =>
+									handleInputChange(e, ECreateErrFields.NAME)
+								}
+								error={errors[ECreateErrFields.NAME]}
+							/>
+							<DescriptionInput
+								value={description}
+								setValue={e =>
+									handleInputChange(
+										e,
+										ECreateErrFields.DESCRIPTION,
+									)
+								}
+								error={errors[ECreateErrFields.DESCRIPTION]}
+							/>
+							<CategoryInput
+								value={categories}
+								setValue={setCategories}
+							/>
+							<LocationInput
+								defaultValue={defaultImpactLocation}
+								setValue={setImpactLocation}
+							/>
+							<ImageInput
+								value={image}
+								setValue={setImage}
+								setIsLoading={setIsLoading}
+							/>
+							<WalletAddressInput
+								value={walletAddress}
+								setValue={e =>
+									handleInputChange(
+										e,
+										ECreateErrFields.WALLET_ADDRESS,
+									)
+								}
+								error={errors[ECreateErrFields.WALLET_ADDRESS]}
+							/>
+
+							<PublishTitle>
+								{isEditMode
+									? 'Publish edited project'
+									: `Let's Publish!`}
+							</PublishTitle>
+							<PublishList>
+								<li>
+									{isEditMode ? 'Edited' : 'Newly published'}{' '}
+									projects will be &quot;unlisted&quot; until
+									reviewed by our team {isEditMode && 'again'}
+									.
+								</li>
+								<li>
+									You can still access your project from your
+									account and share it with your friends via
+									the project link!
+								</li>
+								<li>
+									You&apos;ll receive an email from us once
+									your project is listed.
+								</li>
+							</PublishList>
+							<Buttons>
+								{(!isEditMode || isDraft) && (
+									<OulineButton
+										label='PREVIEW '
+										buttonType='primary'
+										disabled={isLoading}
+										icon={<IconExternalLink size={16} />}
+										onClick={() => onSubmit(true)}
+									/>
+								)}
+								<Button
+									label='PUBLISH'
 									buttonType='primary'
 									disabled={isLoading}
-									icon={<IconExternalLink size={16} />}
-									onClick={() => onSubmit(true)}
+									onClick={() => onSubmit(false)}
 								/>
-							)}
-							<Button
-								label='PUBLISH'
-								buttonType='primary'
-								disabled={isLoading}
-								onClick={() => onSubmit(false)}
-							/>
-						</Buttons>
-						{hasErrors && (
-							<ErrorMessage>
-								Empty fields or errors, please check the values
-							</ErrorMessage>
-						)}
-					</div>
-				</CreateContainer>
+							</Buttons>
+						</div>
+					</CreateContainer>
+					<Guidelines onClick={() => setShowGuidelineModal(true)}>
+						<Image src={LightBulbIcon} alt='Light Bulb Icon' />
+						<H6>Submission guidelines</H6>
+					</Guidelines>
+				</>
 			)}
 		</>
 	);
 };
 
+const Guidelines = styled.div`
+	width: 325px;
+	height: 87px;
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	padding: 28px;
+	border-radius: 8px;
+	box-shadow: ${Shadow.Dark[500]};
+	position: fixed;
+	top: 104px;
+	right: 10px;
+	cursor: pointer;
+
+	> h6 {
+		font-weight: 700;
+	}
+`;
+
 const CreateContainer = styled.div`
 	display: flex;
 	flex-direction: column;
-	padding: 104px 0 154px 264px;
-	width: 677px;
+	margin: 104px 0 154px 264px;
+	max-width: 720px;
 	> div {
 		display: flex;
 		flex-direction: column;
 		margin: 48px 0;
-		width: 677px;
 	}
 `;
 
@@ -423,11 +457,6 @@ const PublishTitle = styled(H4)`
 
 const PublishList = styled(Caption)`
 	color: ${neutralColors.gray[900]};
-`;
-
-const ErrorMessage = styled(P)`
-	color: ${brandColors.pinky[500]};
-	font-weight: bold;
 `;
 
 export default CreateIndex;

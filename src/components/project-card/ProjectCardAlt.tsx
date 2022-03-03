@@ -15,6 +15,7 @@ import ProjectCardBadges from './ProjectCardBadges';
 import ProjectCardImage from './ProjectCardImage';
 import { IProject } from '@/apollo/types/types';
 import { htmlToText } from '@/lib/helpers';
+import { Shadow } from '@/components/styled-components/Shadow';
 
 const cardWidth = '440px';
 const cardRadius = '12px';
@@ -54,7 +55,7 @@ const ProjectCard = (props: IProjectCard) => {
 	const name = adminUser?.name;
 	return (
 		<Wrapper>
-			<Wrapper2>
+			<Wrapper2 isNew={isNew}>
 				<ImagePlaceholder>
 					<ProjectCardImage
 						image={image}
@@ -63,16 +64,18 @@ const ProjectCard = (props: IProjectCard) => {
 					/>
 				</ImagePlaceholder>
 				{givingBlocksId && <ProjectByGivingBlock />}
-				<ProjectCardBadges
-					cardWidth={cardWidth}
-					likes={totalReactions}
-					verified={verified}
-					traceable={!!traceCampaignId}
-					projectHref={slug}
-					projectDescription={description}
-					projectId={id}
-					noHearts={noHearts}
-				/>
+				{!isNew && (
+					<ProjectCardBadges
+						cardWidth={cardWidth}
+						likes={totalReactions}
+						verified={verified}
+						traceable={!!traceCampaignId}
+						projectHref={slug}
+						projectDescription={description}
+						projectId={id}
+						noHearts={noHearts}
+					/>
+				)}
 				<CardBody>
 					<Title>{title}</Title>
 					{name && (
@@ -130,6 +133,7 @@ const Author = styled(P)`
 
 const Title = styled(H6)`
 	color: ${brandColors.deep[500]};
+	font-weight: 700;
 	height: 26px;
 	overflow: hidden;
 `;
@@ -142,7 +146,7 @@ const ImagePlaceholder = styled.div`
 	border-radius: 16px;
 `;
 
-const Wrapper2 = styled.div`
+const Wrapper2 = styled.div<{ isNew?: boolean }>`
 	position: relative;
 	height: 430px;
 	width: ${cardWidth};
@@ -150,6 +154,8 @@ const Wrapper2 = styled.div`
 	margin-top: 0;
 	z-index: 0;
 	transition: all 0.3s ease;
+	background: ${props => props.isNew && 'white'};
+	box-shadow: ${props => props.isNew && Shadow.Dark[500]};
 `;
 
 const Wrapper = styled.div`

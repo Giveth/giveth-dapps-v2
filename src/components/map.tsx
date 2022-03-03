@@ -42,7 +42,7 @@ class Map extends Component<MyProps, MyState> {
 		if (defaultLocation) {
 			if (defaultLocation === globalLocation) {
 				this.setState({ address: globalLocation });
-			} else this.handleSelect(this.props.defaultLocation);
+			} else this.handleSelect(defaultLocation);
 		}
 	}
 

@@ -10,7 +10,7 @@ export const Email_Input = styled.input`
 `;
 
 export const Regular_Input = styled.input`
-	width: 677px;
+	width: 100%;
 	height: 56px;
 	border: 1px solid #ebecf2;
 	border-radius: 8px;

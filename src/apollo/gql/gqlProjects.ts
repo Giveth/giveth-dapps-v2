@@ -244,17 +244,44 @@ export const WALLET_ADDRESS_IS_VALID = gql`
 	}
 `;
 
-export const ADD_PROJECT = gql`
-	mutation ($project: ProjectInput!) {
-		addProject(project: $project) {
+export const CREATE_PROJECT = gql`
+	mutation ($project: CreateProjectInput!) {
+		createProject(project: $project) {
 			id
 			title
 			description
 			admin
+			adminUser {
+				name
+				walletAddress
+			}
 			image
 			impactLocation
 			slug
 			walletAddress
+			categories {
+				name
+			}
+		}
+	}
+`;
+
+export const UPDATE_PROJECT = gql`
+	mutation ($projectId: Float!, $newProjectData: CreateProjectInput!) {
+		updateProject(projectId: $projectId, newProjectData: $newProjectData) {
+			id
+			title
+			description
+			image
+			slug
+			creationDate
+			admin
+			adminUser {
+				name
+				walletAddress
+			}
+			walletAddress
+			impactLocation
 			categories {
 				name
 			}
@@ -276,22 +303,6 @@ export const LIKE_PROJECT_MUTATION = gql`
 export const UNLIKE_PROJECT_MUTATION = gql`
 	mutation ($reactionId: Int!) {
 		unlikeProject(reactionId: $reactionId)
-	}
-`;
-
-export const LIKE_PROJECT_UPDATE_MUTATION = gql`
-	mutation ($projectUpdateId: Int!) {
-		likeProjectUpdate(projectUpdateId: $projectUpdateId) {
-			id
-			projectUpdateId
-			reaction
-		}
-	}
-`;
-
-export const UNLIKE_PROJECT_UPDATE_MUTATION = gql`
-	mutation ($reactionId: Int!) {
-		unlikeProjectUpdate(reactionId: $reactionId)
 	}
 `;
 
@@ -323,24 +334,5 @@ export const ACTIVATE_PROJECT = gql`
 export const TITLE_IS_VALID = gql`
 	query IsValidTitleForProject($title: String!, $projectId: Float) {
 		isValidTitleForProject(title: $title, projectId: $projectId)
-	}
-`;
-
-export const EDIT_PROJECT = gql`
-	mutation editProject($projectId: Float!, $newProjectData: ProjectInput!) {
-		editProject(projectId: $projectId, newProjectData: $newProjectData) {
-			id
-			title
-			description
-			image
-			slug
-			creationDate
-			admin
-			walletAddress
-			impactLocation
-			categories {
-				name
-			}
-		}
 	}
 `;

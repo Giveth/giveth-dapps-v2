@@ -45,6 +45,7 @@ interface IProjectDonateCard {
 	setIsActive: Dispatch<SetStateAction<boolean>>;
 	isDraft?: boolean;
 	setIsDraft: Dispatch<SetStateAction<boolean>>;
+	setCreationSuccessful: Dispatch<SetStateAction<boolean>>;
 }
 
 const ProjectDonateCard = ({
@@ -53,6 +54,7 @@ const ProjectDonateCard = ({
 	setIsActive,
 	isDraft,
 	setIsDraft,
+	setCreationSuccessful,
 }: IProjectDonateCard) => {
 	const {
 		state: { user, isSignedIn },
@@ -166,10 +168,7 @@ const ProjectDonateCard = ({
 				if (data.activateProject) {
 					setIsActive(true);
 					setIsDraft(false);
-					gToast('Project activated successfully', {
-						type: ToastType.SUCCESS,
-						position: 'top-center',
-					});
+					setCreationSuccessful(true);
 				}
 			} catch (e: any) {
 				showToastError(e);

@@ -1,4 +1,3 @@
-import links from '@/lib/constants/links';
 import Routes from '../../lib/constants/Routes';
 
 export const menuRoutes = [
@@ -14,7 +13,7 @@ export const menuRoutes = [
 	},
 	{
 		title: 'GIVeconomy',
-		href: links.GIVECONOMY,
+		href: Routes.GIVECONOMY,
 		desktopOnly: true,
 	},
 	{
