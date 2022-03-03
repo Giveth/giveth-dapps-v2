@@ -1,38 +1,27 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import {
-	P,
 	H5,
 	Caption,
 	brandColors,
 	neutralColors,
 } from '@giveth/ui-design-system';
-import { useDropzone } from 'react-dropzone';
 import styled from 'styled-components';
 import Image from 'next/image';
 
 import { OurImages } from '@/utils/constants';
-import { toBase64 } from '@/utils';
 import { InputContainer } from './Create.sc';
-import ImageIcon from '/public/images/icons/image.svg';
 import XIcon from '/public/images/icons/x.svg';
+import ImageUploader from '@/components/ImageUploader';
 
-const ImageInput = (props: { setValue: (x: any) => void; value: string }) => {
-	const { setValue, value } = props;
-	const { getRootProps, getInputProps } = useDropzone({
-		accept: 'image/*',
-		multiple: false,
-		onDrop: async acceptedFile => {
-			try {
-				const base64Image = await toBase64(acceptedFile[0]);
-				setValue(base64Image);
-			} catch (error) {
-				console.log({ error });
-			}
-		},
-	});
+const ImageInput = (props: {
+	setValue: Dispatch<SetStateAction<string>>;
+	value: string;
+	setIsLoading: Dispatch<SetStateAction<boolean>>;
+}) => {
+	const { setValue, value, setIsLoading } = props;
 
 	const pickBg = (index: number) => {
-		setValue(`/images/project_image${index}.png`);
+		setValue(`/images/defaultProjectImages/${index}.png`);
 	};
 
 	return (
@@ -45,24 +34,11 @@ const ImageInput = (props: { setValue: (x: any) => void; value: string }) => {
 			</div>
 
 			<InputContainer>
-				{value ? (
-					<DragContainer>
-						<ShowingImage src={value} />
-					</DragContainer>
-				) : (
-					<DragContainer {...getRootProps()}>
-						<input {...getInputProps()} />
-						<Image src={ImageIcon} alt='image icon' />
-						<P>
-							{`Drag & drop an image here or`}{' '}
-							<span>Upload from computer.</span>
-						</P>
-						<P>
-							Suggested image size min. 1200px width. Image size
-							up to 16Mb.
-						</P>
-					</DragContainer>
-				)}
+				<ImageUploader
+					setUrl={setValue}
+					url={value}
+					setIsUploading={setIsLoading}
+				/>
 				<CaptionContainer>
 					Select an image from our gallery.
 				</CaptionContainer>
@@ -76,7 +52,7 @@ const ImageInput = (props: { setValue: (x: any) => void; value: string }) => {
 							/>
 						);
 					})}
-					<RemoveBox onClick={() => setValue(null)}>
+					<RemoveBox onClick={() => setValue('')}>
 						<Image alt='x icon' src={XIcon} />
 					</RemoveBox>
 				</PickImageContainer>
@@ -88,24 +64,6 @@ const ImageInput = (props: { setValue: (x: any) => void; value: string }) => {
 const CaptionContainer = styled(Caption)`
 	height: 18px;
 	margin: 8.5px 0 0 0;
-	span {
-		cursor: pointer;
-		color: ${brandColors.pinky[500]};
-	}
-`;
-
-const DragContainer = styled.div`
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	border: 1px dotted ${neutralColors.gray[400]};
-	margin: 24px 0 16px 0;
-	padding: 64px 0;
-	color: ${brandColors.deep[500]};
-	img {
-		margin: 0 0 30px 0;
-	}
 	span {
 		cursor: pointer;
 		color: ${brandColors.pinky[500]};
@@ -137,11 +95,6 @@ const RemoveBox = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-`;
-
-const ShowingImage = styled.img`
-	width: 80%;
-	height: 100%;
 `;
 
 export default ImageInput;
