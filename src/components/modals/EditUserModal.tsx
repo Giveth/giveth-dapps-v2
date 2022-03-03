@@ -1,22 +1,21 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
+import { useMutation } from '@apollo/client';
 import {
 	Button,
 	brandColors,
 	GLink,
 	neutralColors,
-	P,
 } from '@giveth/ui-design-system';
+
 import { IModal, Modal } from './Modal';
 import { client } from '@/apollo/apolloClient';
-import { UPDATE_USER, UPLOAD_PROFILE_PHOTO } from '@/apollo/gql/gqlUser';
+import { UPDATE_USER } from '@/apollo/gql/gqlUser';
 import { IUser } from '@/apollo/types/types';
 import { FlexCenter, Row } from '@/components/styled-components/Grid';
 import { checkIfURLisValid } from '@/utils';
 import ImageUploader from '../ImageUploader';
-import { useMutation } from '@apollo/client';
 import { gToast, ToastType } from '../toasts';
 import useUser from '@/context/UserProvider';
 
@@ -61,7 +60,7 @@ const InputContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 3px;
-	font-family: Red Hat Text;
+	font-family: Red Hat Text, sans-serif;
 `;
 
 const InputPlaceholder = styled(GLink)`
@@ -73,7 +72,7 @@ const InputBox = styled.input`
 	border: 2px solid ${neutralColors.gray[300]};
 	border-radius: 8px;
 	padding: 4px;
-	font-family: Red Hat Text;
+	font-family: Red Hat Text, sans-serif;
 
 	::placeholder {
 		color: ${neutralColors.gray[500]};
@@ -100,7 +99,7 @@ const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
 	const [editStatus, setEditStatus] = useState<EditStatusType>(
 		EditStatusType.INFO,
 	);
-	const [avatar, setAvatar] = useState<string>();
+	const [avatar, setAvatar] = useState<string>('');
 	const [newUser, setNewUser] = useState({
 		name: '',
 		firstName: user.firstName,
@@ -110,7 +109,7 @@ const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
 		url: user.url || '',
 	});
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const router = useRouter();
+
 	const {
 		actions: { reFetchUserData },
 	} = useUser();
@@ -122,18 +121,6 @@ const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
 			...previousContent,
 			[name]: value,
 		}));
-	};
-
-	const onDrop = async (acceptedFiles: File[]) => {
-		const { data: imageUploaded } = await client.mutate({
-			mutation: UPLOAD_PROFILE_PHOTO,
-			variables: {
-				fileUpload: {
-					image: acceptedFiles[0],
-				},
-			},
-		});
-		setAvatar(imageUploaded.upload);
 	};
 
 	const onSaveAvatar = async () => {
@@ -154,7 +141,7 @@ const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
 				throw 'updateUser false';
 			}
 		} catch (error: any) {
-			gToast('Failed to update your inforamtion. Please try again.', {
+			gToast('Failed to update your information. Please try again.', {
 				type: ToastType.DANGER,
 				title: error.message,
 			});
@@ -181,7 +168,7 @@ const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
 			if (data.updateUser) {
 				reFetchUserData();
 				setIsLoading(false);
-				gToast('Profile informations updated.', {
+				gToast('Profile information updated.', {
 					type: ToastType.SUCCESS,
 					title: 'Success',
 				});
@@ -190,7 +177,7 @@ const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
 				throw 'Update User Failed.';
 			}
 		} catch (error: any) {
-			gToast('Failed to update your inforamtion. Please try again.', {
+			gToast('Failed to update your information. Please try again.', {
 				type: ToastType.DANGER,
 				title: error.message,
 			});
@@ -209,11 +196,7 @@ const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
 				{editStatus === EditStatusType.PHOTO ? (
 					<>
 						<Row flexDirection='column' gap='36px'>
-							<ImageUploader
-								onDrop={onDrop}
-								setUrl={setAvatar}
-								url={avatar}
-							/>
+							<ImageUploader setUrl={setAvatar} url={avatar} />
 							<Button
 								buttonType='secondary'
 								label='SAVE'
@@ -255,9 +238,7 @@ const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
 								<TextButton
 									buttonType='texty'
 									label='delete picture'
-									onClick={() => {
-										onSaveAvatar();
-									}}
+									onClick={onSaveAvatar}
 								/>
 							</FlexCenter>
 						</FlexCenter>
