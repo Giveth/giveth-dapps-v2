@@ -1,30 +1,18 @@
-import { Lead } from '@giveth/ui-design-system';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
+import Image from 'next/image';
+import { Lead } from '@giveth/ui-design-system';
+import { useMutation } from '@apollo/client';
+
 import { IStep, OnboardActions, OnboardStep } from './common';
 import { OnboardSteps } from './Onboarding.view';
-import Image from 'next/image';
-import { client } from '@/apollo/apolloClient';
-import { UPDATE_USER, UPLOAD_PROFILE_PHOTO } from '@/apollo/gql/gqlUser';
-import { useMutation } from '@apollo/client';
+import { UPDATE_USER } from '@/apollo/gql/gqlUser';
 import { gToast, ToastType } from '@/components/toasts';
 import ImageUploader from '@/components/ImageUploader';
 
 const PhotoStep: FC<IStep> = ({ setStep }) => {
-	const [url, setUrl] = useState<string>();
+	const [url, setUrl] = useState<string>('');
 	const [updateUser] = useMutation(UPDATE_USER);
-
-	const onDrop = async (acceptedFiles: File[]) => {
-		const { data: imageUploaded } = await client.mutate({
-			mutation: UPLOAD_PROFILE_PHOTO,
-			variables: {
-				fileUpload: {
-					image: acceptedFiles[0],
-				},
-			},
-		});
-		setUrl(imageUploaded.upload);
-	};
 
 	const onSave = async () => {
 		try {
@@ -44,7 +32,7 @@ const PhotoStep: FC<IStep> = ({ setStep }) => {
 				throw 'updateUser false';
 			}
 		} catch (error: any) {
-			gToast('Failed to update your inforamtion. Please try again.', {
+			gToast('Failed to update your information. Please try again.', {
 				type: ToastType.DANGER,
 				title: error.message,
 			});
@@ -67,9 +55,9 @@ const PhotoStep: FC<IStep> = ({ setStep }) => {
 				<Desc>
 					This is how you look like right now, strange! right?
 					<br />
-					Uploadsomething better can help with getting more funds!
+					Upload something better can help with getting more funds!
 				</Desc>
-				<ImageUploader onDrop={onDrop} setUrl={setUrl} url={url} />
+				<ImageUploader setUrl={setUrl} url={url} />
 				<OnboardActions
 					onSave={onSave}
 					saveLabel='SAVE'
