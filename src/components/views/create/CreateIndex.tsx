@@ -21,8 +21,8 @@ import Image from 'next/image';
 import SignInModal from '../../modals/SignInModal';
 import {
 	ACTIVATE_PROJECT,
-	ADD_PROJECT,
-	EDIT_PROJECT,
+	CREATE_PROJECT,
+	UPDATE_PROJECT,
 } from '@/apollo/gql/gqlProjects';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import { IProjectCreation, IProjectEdition } from '@/apollo/types/types';
@@ -34,7 +34,6 @@ import {
 	NameInput,
 	WalletAddressInput,
 } from './Inputs';
-import { getImageFile } from '@/utils';
 import useUser from '@/context/UserProvider';
 import Logger from '@/utils/Logger';
 import SuccessfulCreation from './SuccessfulCreation';
@@ -74,8 +73,8 @@ export interface ICategoryComponent {
 
 const CreateIndex = (props: { project?: IProjectEdition }) => {
 	const { library, chainId } = useWeb3React();
-	const [addProjectMutation] = useMutation(ADD_PROJECT);
-	const [editProjectMutation] = useMutation(EDIT_PROJECT);
+	const [addProjectMutation] = useMutation(CREATE_PROJECT);
+	const [editProjectMutation] = useMutation(UPDATE_PROJECT);
 	const router = useRouter();
 
 	const { project } = props;
@@ -230,8 +229,7 @@ const CreateIndex = (props: { project?: IProjectEdition }) => {
 				categories: categories.map(category => category.name),
 				organisationId: 1,
 				walletAddress: utils.getAddress(address),
-				imageStatic: null,
-				imageUpload: await getImageFile(image, name),
+				image,
 				isDraft: !!drafted,
 			};
 
@@ -261,8 +259,8 @@ const CreateIndex = (props: { project?: IProjectEdition }) => {
 				// Success
 				setIsLoading(false);
 				const _project = isEditMode
-					? addedProject.data?.editProject
-					: addedProject.data?.addProject;
+					? addedProject.data?.updateProject
+					: addedProject.data?.createProject;
 				if (drafted) {
 					await router.push(slugToProjectView(_project.slug));
 				} else {
@@ -317,6 +315,7 @@ const CreateIndex = (props: { project?: IProjectEdition }) => {
 								error={errors[ECreateErrFields.NAME]}
 							/>
 							<DescriptionInput
+								value={description}
 								setValue={e =>
 									handleInputChange(
 										e,
@@ -324,7 +323,6 @@ const CreateIndex = (props: { project?: IProjectEdition }) => {
 									)
 								}
 								error={errors[ECreateErrFields.DESCRIPTION]}
-								value={description}
 							/>
 							<CategoryInput
 								value={categories}
@@ -334,7 +332,11 @@ const CreateIndex = (props: { project?: IProjectEdition }) => {
 								defaultValue={defaultImpactLocation}
 								setValue={setImpactLocation}
 							/>
-							<ImageInput value={image} setValue={setImage} />
+							<ImageInput
+								value={image}
+								setValue={setImage}
+								setIsLoading={setIsLoading}
+							/>
 							<WalletAddressInput
 								value={walletAddress}
 								setValue={e =>

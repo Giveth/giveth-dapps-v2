@@ -58,8 +58,7 @@ export interface IProjectCreation {
 	categories: any;
 	organisationId: number;
 	walletAddress: string;
-	imageStatic?: string | null;
-	imageUpload?: any;
+	image?: string;
 	isDraft?: boolean;
 }
 

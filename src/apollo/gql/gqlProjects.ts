@@ -244,9 +244,9 @@ export const WALLET_ADDRESS_IS_VALID = gql`
 	}
 `;
 
-export const ADD_PROJECT = gql`
-	mutation ($project: ProjectInput!) {
-		addProject(project: $project) {
+export const CREATE_PROJECT = gql`
+	mutation ($project: CreateProjectInput!) {
+		createProject(project: $project) {
 			id
 			title
 			description
@@ -266,9 +266,9 @@ export const ADD_PROJECT = gql`
 	}
 `;
 
-export const EDIT_PROJECT = gql`
-	mutation editProject($projectId: Float!, $newProjectData: ProjectInput!) {
-		editProject(projectId: $projectId, newProjectData: $newProjectData) {
+export const UPDATE_PROJECT = gql`
+	mutation updateProject($projectId: Float!, $newProjectData: ProjectInput!) {
+		updateProject(projectId: $projectId, newProjectData: $newProjectData) {
 			id
 			title
 			description
@@ -303,22 +303,6 @@ export const LIKE_PROJECT_MUTATION = gql`
 export const UNLIKE_PROJECT_MUTATION = gql`
 	mutation ($reactionId: Int!) {
 		unlikeProject(reactionId: $reactionId)
-	}
-`;
-
-export const LIKE_PROJECT_UPDATE_MUTATION = gql`
-	mutation ($projectUpdateId: Int!) {
-		likeProjectUpdate(projectUpdateId: $projectUpdateId) {
-			id
-			projectUpdateId
-			reaction
-		}
-	}
-`;
-
-export const UNLIKE_PROJECT_UPDATE_MUTATION = gql`
-	mutation ($reactionId: Int!) {
-		unlikeProjectUpdate(reactionId: $reactionId)
 	}
 `;
 
