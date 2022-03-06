@@ -191,6 +191,7 @@ const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
 									validators={field.validators}
 									setFormValidation={setFormValidation}
 									size={InputSize.SMALL}
+									required={field.required}
 								/>
 							))}
 							<Button
