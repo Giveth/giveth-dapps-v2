@@ -14,12 +14,12 @@ import styled from 'styled-components';
 import { IStep, OnboardActions, OnboardStep } from './common';
 import { OnboardSteps } from './Onboarding.view';
 
-interface IUserIfo {
+export interface IUserIfo {
 	email: string;
 	firstName: string;
 	lastName: string;
 	location: string;
-	website: string;
+	url: string;
 }
 
 const initialUserInfo: IUserIfo = {
@@ -27,7 +27,7 @@ const initialUserInfo: IUserIfo = {
 	firstName: '',
 	lastName: '',
 	location: '',
-	website: '',
+	url: '',
 };
 
 const InfoStep: FC<IStep> = ({ setStep }) => {
@@ -54,7 +54,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 		setShowModal(true);
 	};
 
-	const { email, firstName, lastName, location, website } = info;
+	const { email, firstName, lastName, location, url } = info;
 
 	const reducerInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -70,7 +70,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 					firstName,
 					lastName,
 					location,
-					website,
+					url,
 				},
 			});
 			if (response.updateUser) {
@@ -154,11 +154,18 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 					<Input
 						label='website or url'
 						placeholder='Website'
-						name='website'
-						value={website}
+						name='url'
 						onChange={reducerInputChange}
 						type='url'
 						caption='Your home page, blog, or company site.'
+						value={url}
+						validators={[
+							{
+								pattern:
+									/^(?:http(s)?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
+								msg: 'Invalid URL',
+							},
+						]}
 					/>
 				</Section>
 				<OnboardActions
