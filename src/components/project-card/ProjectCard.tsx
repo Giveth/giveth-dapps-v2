@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Link from 'next/dist/client/link';
 import styled from 'styled-components';
 import {
 	GLink,
@@ -18,6 +17,7 @@ import { htmlToText } from '@/lib/helpers';
 import ProjectCardImage from './ProjectCardImage';
 import { slugToProjectDonate, slugToProjectView } from '@/lib/routeCreators';
 import { Row } from '../styled-components/Grid';
+import Link from 'next/link';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -76,14 +76,14 @@ const ProjectCard = (props: IProjectCard) => {
 					<Caption>Last updated: 5 days ago</Caption>
 				</Captions>
 				<ActionButtons>
-					<Link href={slugToProjectView(slug)}>
+					<Link href={slugToProjectView(slug)} passHref>
 						<LearnMoreButton
 							linkType='primary'
 							size='small'
 							label='LEARN MORE'
 						/>
 					</Link>
-					<Link href={slugToProjectDonate(slug)}>
+					<Link href={slugToProjectDonate(slug)} passHref>
 						<DonateButton
 							linkType='primary'
 							size='small'
