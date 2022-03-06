@@ -10,10 +10,9 @@ import {
 	ButtonLink,
 	OutlineLinkButton,
 } from '@giveth/ui-design-system';
-
 import ProjectCardBadges from './ProjectCardBadges';
 import { IProject } from '@/apollo/types/types';
-import { htmlToText } from '@/lib/helpers';
+import { calcBiggestUnitDiffernceTime, htmlToText } from '@/lib/helpers';
 import ProjectCardImage from './ProjectCardImage';
 import { slugToProjectDonate, slugToProjectView } from '@/lib/routeCreators';
 import { Row } from '../styled-components/Grid';
@@ -73,7 +72,9 @@ const ProjectCard = (props: IProjectCard) => {
 					<Caption>
 						Raised: ${Math.ceil(totalDonations as number)}
 					</Caption>
-					<Caption>Last updated: 5 days ago</Caption>
+					<Caption>
+						Last updated:{calcBiggestUnitDiffernceTime(updatedAt)}
+					</Caption>
 				</Captions>
 				<ActionButtons>
 					<Link href={slugToProjectView(slug)} passHref>
