@@ -280,10 +280,6 @@ const ProjectDonateCard = ({
 				)}
 				{!isDraft && (
 					<>
-						{' '}
-						<Link href={Routes.Projects} passHref>
-							<Links>View similar projects</Links>
-						</Link>
 						<br />
 						<Links
 							target='_blank'

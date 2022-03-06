@@ -57,17 +57,11 @@ const ProjectCard = (props: IProjectCard) => {
 		<Wrapper>
 			<Wrapper2 isNew={isNew}>
 				<ImagePlaceholder>
-					<ProjectCardImage
-						image={image}
-						cardWidth={cardWidth}
-						cardRadius={cardRadius}
-					/>
+					<ProjectCardImage image={image} />
 				</ImagePlaceholder>
 				{givingBlocksId && <ProjectByGivingBlock />}
 				{!isNew && (
 					<ProjectCardBadges
-						cardWidth={cardWidth}
-						likes={totalReactions}
 						verified={verified}
 						traceable={!!traceCampaignId}
 						projectHref={slug}
