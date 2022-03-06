@@ -1,4 +1,4 @@
-import { brandColors, IconX, neutralColors } from '@giveth/ui-design-system';
+import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import React, { ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
@@ -8,7 +8,7 @@ import {
 } from '@/components/modals/ModalHeader';
 import { ETheme, useGeneral } from '@/context/general.context';
 export interface IModal {
-	showModal: boolean;
+	showModal?: boolean;
 	setShowModal: (value: boolean) => void;
 	callback?: () => void;
 	hiddenClose?: boolean;
@@ -78,7 +78,7 @@ const ModalWrapper = styled.div`
 		props.theme === ETheme.Dark
 			? brandColors.giv[600]
 			: neutralColors.gray[100]};
-	box-shadow: 0px 3px 20px #21203c;
+	box-shadow: 0 3px 20px #21203c;
 	border-radius: 8px;
 	color: ${props =>
 		props.theme === ETheme.Dark

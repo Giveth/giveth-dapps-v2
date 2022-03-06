@@ -1,15 +1,15 @@
-import { IModal, Modal } from '@/components/modals/Modal';
 import { FC } from 'react';
 import styled from 'styled-components';
-import useUser from '@/context/UserProvider';
 import { IconWalletApprove } from '@giveth/ui-design-system/lib/cjs/components/icons/WalletApprove';
 import {
 	brandColors,
 	Button,
-	H5,
 	Lead,
 	neutralColors,
 } from '@giveth/ui-design-system';
+
+import { IModal, Modal } from '@/components/modals/Modal';
+import useUser from '@/context/UserProvider';
 import { ETheme, useGeneral } from '@/context/general.context';
 
 export const WelcomeSigninModal: FC<IModal> = ({
@@ -20,8 +20,8 @@ export const WelcomeSigninModal: FC<IModal> = ({
 	const { theme } = useGeneral();
 	const {
 		actions: { signIn },
-		state: { isSignedIn },
 	} = useUser();
+
 	return (
 		<Modal
 			showModal={showModal}
@@ -32,7 +32,6 @@ export const WelcomeSigninModal: FC<IModal> = ({
 			headerTitlePosition='left'
 		>
 			<Container>
-				{/* <Title>Welcome to Giveth</Title> */}
 				<Description>
 					You need to Sign your wallet to be able to use it on Giveth.
 				</Description>
@@ -80,11 +79,6 @@ const SkipButton = styled(Button)`
 		background: transparent;
 		color: ${brandColors.deep[200]};
 	}
-`;
-
-const Title = styled(H5)`
-	font-weight: 700;
-	font-size: 25px;
 `;
 
 const Description = styled(Lead)`

@@ -122,18 +122,6 @@ const CreateIndex = (props: { project?: IProjectEdition }) => {
 		const userAddress = user?.walletAddress;
 		if (userAddress) {
 			setShowSigninModal(false);
-			if (!isUserRegistered(user)) {
-				showToastError('Please register to continue.');
-				router.push(Routes.Onboard);
-				return;
-			}
-			if (
-				isEditMode &&
-				!compareAddresses(userAddress, project.adminUser.walletAddress)
-			) {
-				showToastError('Only project owner can edit this project');
-				router.back();
-			}
 			if (!isEditMode) {
 				setWalletAddress(userAddress);
 				walletAddressValidation(

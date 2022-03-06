@@ -39,6 +39,7 @@ export const ModalHeaderRow = styled(Row)`
 	gap: 14px;
 	padding: 24px 24px 8px;
 	position: relative;
+	align-items: center;
 `;
 
 const CloseModalButton = styled.div`
