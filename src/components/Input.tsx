@@ -28,6 +28,12 @@ export enum InputValidationType {
 	SUCCESS,
 }
 
+export enum InputSize {
+	SMALL,
+	MEDIUM,
+	LARGE,
+}
+
 interface IInput {
 	value: string;
 	onChange: any;
@@ -38,6 +44,7 @@ interface IInput {
 	required?: boolean;
 	caption?: string;
 	validators?: IInputValidator[];
+	size?: InputSize;
 	setFormValidation?: Dispatch<SetStateAction<IFormValidations | undefined>>;
 }
 
@@ -45,6 +52,19 @@ interface IInputValidator {
 	pattern: RegExp;
 	msg: string;
 }
+
+const InputSizeToLinkSize = (size: InputSize) => {
+	switch (size) {
+		case InputSize.SMALL:
+			return 'Tiny';
+		case InputSize.MEDIUM:
+			return 'Small';
+		case InputSize.LARGE:
+			return 'Medium';
+		default:
+			return 'Small';
+	}
+};
 
 const Input: FC<IInput> = ({
 	name,
@@ -56,6 +76,7 @@ const Input: FC<IInput> = ({
 	label,
 	caption,
 	required,
+	size = InputSize.MEDIUM,
 	setFormValidation,
 }) => {
 	const [validation, setValidation] = useState<{
@@ -84,6 +105,11 @@ const Input: FC<IInput> = ({
 							[name]: InputValidationType.ERROR,
 						}));
 					}
+				} else {
+					setValidation({
+						status: InputValidationType.NORMAL,
+						msg: undefined,
+					});
 				}
 				return;
 			}
@@ -125,21 +151,34 @@ const Input: FC<IInput> = ({
 
 	return (
 		<InputContainer>
-			{label && <InputLabel required={required}>{label}</InputLabel>}
+			{label && (
+				<InputLabel
+					size={InputSizeToLinkSize(size)}
+					required={required}
+				>
+					{label}
+				</InputLabel>
+			)}
 			<InputField
 				placeholder={placeholder}
 				name={name}
-				// value={value}
+				value={value}
 				onChange={ChangeHandle}
 				type={type}
 				validation={validation.status}
+				inputSize={size}
 			/>
 			{validation.msg ? (
-				<InputValidation validation={validation.status} size='Small'>
+				<InputValidation
+					validation={validation.status}
+					size={InputSizeToLinkSize(size)}
+				>
 					{validation.msg}
 				</InputValidation>
 			) : (
-				<InputDesc size='Small'>{caption || '\u200C'}</InputDesc> //hidden char
+				<InputDesc size={InputSizeToLinkSize(size)}>
+					{caption || '\u200C'}
+				</InputDesc> //hidden char
 			)}
 		</InputContainer>
 	);
@@ -149,7 +188,7 @@ const InputContainer = styled.div`
 	flex: 1;
 `;
 
-const InputLabel = styled(Subline)<{ required?: boolean }>`
+const InputLabel = styled(GLink)<{ required?: boolean }>`
 	text-transform: uppercase;
 	padding-bottom: 4px;
 	color: ${brandColors.deep[500]};
@@ -161,13 +200,28 @@ const InputLabel = styled(Subline)<{ required?: boolean }>`
 	}
 `;
 
-interface IInputField {
+interface IValidation {
 	validation: InputValidationType;
+}
+
+interface IInputField extends IValidation {
+	inputSize: InputSize;
 }
 
 const InputField = styled.input<IInputField>`
 	width: 100%;
-	height: 56px;
+	height: ${props => {
+		switch (props.inputSize) {
+			case InputSize.SMALL:
+				return '32px';
+			case InputSize.MEDIUM:
+				return '54px';
+			case InputSize.LARGE:
+				return '56px';
+			default:
+				break;
+		}
+	}};
 	border: 2px solid
 		${props => {
 			switch (props.validation) {
@@ -184,10 +238,32 @@ const InputField = styled.input<IInputField>`
 			}
 		}};
 	border-radius: 8px;
-	padding: 15px 16px;
-	font-size: 16px;
+	padding: ${props => {
+		switch (props.inputSize) {
+			case InputSize.SMALL:
+				return '8px';
+			case InputSize.MEDIUM:
+				return '15px 16px';
+			case InputSize.LARGE:
+				return '18px 16px';
+			default:
+				break;
+		}
+	}};
+	font-size: ${props => {
+		switch (props.inputSize) {
+			case InputSize.SMALL:
+				return '12px';
+			case InputSize.MEDIUM:
+				return '16px';
+			case InputSize.LARGE:
+				return '16px';
+			default:
+				break;
+		}
+	}};
 	line-height: 150%;
-	font-weight: 500;
+	/* font-weight: 500; */
 	font-family: 'Red Hat Text';
 	caret-color: ${brandColors.giv[300]};
 	:focus {
@@ -218,7 +294,7 @@ const InputDesc = styled(GLink)`
 	display: block;
 `;
 
-const InputValidation = styled(GLink)<IInputField>`
+const InputValidation = styled(GLink)<IValidation>`
 	padding-top: 4px;
 	display: block;
 	color: ${props => {
