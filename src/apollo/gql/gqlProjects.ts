@@ -73,12 +73,12 @@ export const FETCH_ALL_PROJECTS = gql`
 					name
 					walletAddress
 				}
+				updatedAt
 			}
 			totalCount
 			categories {
 				name
 			}
-			updatedAt
 		}
 	}
 `;
