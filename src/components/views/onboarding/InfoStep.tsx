@@ -14,7 +14,7 @@ import styled from 'styled-components';
 import { IStep, OnboardActions, OnboardStep } from './common';
 import { OnboardSteps } from './Onboarding.view';
 
-export interface IUserIfo {
+export interface IUserInfo {
 	email: string;
 	firstName: string;
 	lastName: string;
@@ -22,7 +22,7 @@ export interface IUserIfo {
 	url: string;
 }
 
-const initialUserInfo: IUserIfo = {
+const initialUserInfo: IUserInfo = {
 	email: '',
 	firstName: '',
 	lastName: '',
@@ -31,12 +31,12 @@ const initialUserInfo: IUserIfo = {
 };
 
 const InfoStep: FC<IStep> = ({ setStep }) => {
-	const [disabled, setDisabled] = useState(true);
+	const [disabled, setDisabled] = useState(false);
 	const [updateUser] = useMutation(UPDATE_USER);
 	const [showModal, setShowModal] = useState(false);
 	const [formValidation, setFormValidation] = useState<IFormValidations>();
 	const [info, setInfo] = useReducer(
-		(curValues: IUserIfo, newValues: object) => ({
+		(curValues: IUserInfo, newValues: object) => ({
 			...curValues,
 			...newValues,
 		}),

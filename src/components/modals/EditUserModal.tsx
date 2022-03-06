@@ -16,7 +16,7 @@ import Input, {
 	InputSize,
 	InputValidationType,
 } from '../Input';
-import { IUserIfo } from '../views/onboarding/InfoStep';
+import { IUserInfo } from '../views/onboarding/InfoStep';
 
 enum EditStatusType {
 	INFO,
@@ -28,14 +28,14 @@ interface IEditUserModal extends IModal {
 }
 
 const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
-	const [disabled, setDisabled] = useState(true);
+	const [disabled, setDisabled] = useState(false);
 	const [editStatus, setEditStatus] = useState<EditStatusType>(
 		EditStatusType.INFO,
 	);
 	const [avatar, setAvatar] = useState<string>('');
 	const [formValidation, setFormValidation] = useState<IFormValidations>();
 	const [info, setInfo] = useReducer(
-		(curValues: IUserIfo, newValues: object) => ({
+		(curValues: IUserInfo, newValues: object) => ({
 			...curValues,
 			...newValues,
 		}),
