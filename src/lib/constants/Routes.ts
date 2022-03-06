@@ -15,8 +15,12 @@ const Routes = {
 	MyAccount,
 	MyProjects: MyAccount + '?tab=projects',
 	MyDonations: MyAccount + '?tab=donations',
-	GIVECONOMY: '/giveconomy',
 	Onboard: '/onboard',
+	GIVECONOMY: '/giveconomy',
+	GIVgarden: '/givgarden',
+	GIVfarm: '/givfarm',
+	GIVstream: '/givstream',
+	GIVbacks: '/givbacks',
 };
 
 export default Routes;
