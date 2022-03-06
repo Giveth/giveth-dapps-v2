@@ -263,7 +263,7 @@ const inputFields = [
 
 const Wrapper = styled.div`
 	padding: 24px;
-	max-width: 448px;
+	min-width: 448px;
 	width: 100%;
 `;
 
