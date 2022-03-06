@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { Caption, GLink, semanticColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { gToast, ToastType } from '@/components/toasts';
 
 import WarningBadge from '@/components/badges/WarningBadge';
 import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
 import ProjectDonateCard from './ProjectDonateCard';
-import { mediaQueries } from '@/lib/helpers';
+import { mediaQueries, showToastError } from '@/lib/helpers';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { client, initializeApollo } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 import useUser from '@/context/UserProvider';
-import { useRouter } from 'next/router';
 import { IDonation, IProject } from '@/apollo/types/types';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import InfoBadge from '@/components/badges/InfoBadge';
@@ -38,15 +37,21 @@ const ProjectIndex = () => {
 	const [totalDonations, setTotalDonations] = useState(0);
 	const [creationSuccessful, setCreationSuccessful] = useState(false);
 
+	const {
+		state: { user },
+	} = useUser();
+
 	const { description = '', title, status, id = '' } = project || {};
+	const router = useRouter();
+	const slug = router.query.projectIdSlug as string;
 
 	useEffect(() => {
-		if (!project?.id) return;
+		if (!id) return;
 		initializeApollo()
 			.query({
 				query: FETCH_PROJECT_DONATIONS,
 				variables: {
-					projectId: parseInt(project?.id),
+					projectId: parseInt(id),
 					skip: 0,
 					take: donationsPerPage,
 					orderBy: 'CreationDate',
@@ -62,21 +67,7 @@ const ProjectIndex = () => {
 					setTotalDonations(donationsByProjectId.totalCount);
 				},
 			);
-	}, [project?.id]);
-
-	const {
-		state: { user },
-	} = useUser();
-
-	const router = useRouter();
-	const slug = router.query.projectIdSlug as string;
-
-	useEffect(() => {
-		if (status) {
-			setIsActive(status.name === EProjectStatus.ACTIVE);
-			setIsDraft(status.name === EProjectStatus.DRAFT);
-		}
-	}, [status]);
+	}, [id]);
 
 	const fetchProject = async () => {
 		client
@@ -85,16 +76,18 @@ const ProjectIndex = () => {
 				variables: { slug, connectedWalletUserId: Number(user?.id) },
 				fetchPolicy: 'network-only',
 			})
-			.then((res: { data: any }) => {
+			.then((res: { data: { projectBySlug: IProject } }) => {
 				setProject(res.data.projectBySlug);
 			})
-			.catch((err: any) =>
-				gToast(JSON.stringify(err.message || err), {
-					type: ToastType.DANGER,
-					position: 'top-center',
-				}),
-			);
+			.catch(showToastError);
 	};
+
+	useEffect(() => {
+		if (status) {
+			setIsActive(status.name === EProjectStatus.ACTIVE);
+			setIsDraft(status.name === EProjectStatus.DRAFT);
+		}
+	}, [status]);
 
 	useEffect(() => {
 		if (slug) {
@@ -136,7 +129,6 @@ const ProjectIndex = () => {
 					{!isActive && !isDraft && (
 						<GivBackNotif>
 							<WarningBadge />
-
 							<GLink
 								size='Medium'
 								color={semanticColors.golden[700]}
@@ -199,7 +191,7 @@ const GivBackNotif = styled.div`
 	background: ${semanticColors.golden[200]};
 	border-radius: 8px;
 	border: 1px solid ${semanticColors.golden[700]};
-	margin: 24px 0px 24px;
+	margin: 24px 0 24px;
 	max-width: 750px;
 	color: ${semanticColors.golden[700]};
 `;
