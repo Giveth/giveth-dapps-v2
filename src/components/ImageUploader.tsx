@@ -156,6 +156,7 @@ const UploadContainer = styled(Row)`
 
 const UploadInfoRow = styled(Row)`
 	flex: 1;
+	text-align: left;
 `;
 
 const DeleteRow = styled(Row)`
