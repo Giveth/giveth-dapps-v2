@@ -61,7 +61,7 @@ const ProjectCard = (props: IProjectCard) => {
 					projectDescription={description}
 					projectId={id}
 				/>
-				<ProjectCardImage image={image} cardRadius={cardRadius} />
+				<ProjectCardImage image={image} />
 			</ImagePlaceholder>
 			<CardBody isHover={isHover}>
 				<Title weight={700}>{title}</Title>
