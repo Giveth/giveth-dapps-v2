@@ -7,9 +7,9 @@ import {
 	H6,
 	brandColors,
 	neutralColors,
-	Button,
-	OulineButton,
 	Caption,
+	ButtonLink,
+	OutlineLinkButton,
 } from '@giveth/ui-design-system';
 
 import ProjectCardBadges from './ProjectCardBadges';
@@ -75,32 +75,35 @@ const ProjectCard = (props: IProjectCard) => {
 					</Caption>
 					<Caption>Last updated: 5 days ago</Caption>
 				</Captions>
-				<HoverButtons>
+				<ActionButtons>
 					<Link href={slugToProjectView(slug)}>
-						<a>
-							<OulineButton
-								buttonType='primary'
-								size='small'
-								label='LEARN MORE'
-							/>
-						</a>
+						<LearnMoreButton
+							linkType='primary'
+							size='small'
+							label='LEARN MORE'
+						/>
 					</Link>
 					<Link href={slugToProjectDonate(slug)}>
-						<a>
-							<Button
-								buttonType='primary'
-								size='small'
-								label='DONATE'
-							/>
-						</a>
+						<DonateButton
+							linkType='primary'
+							size='small'
+							label='DONATE'
+						/>
 					</Link>
-				</HoverButtons>
+				</ActionButtons>
 			</CardBody>
 		</Wrapper>
 	);
 };
 
-const HoverButtons = styled(Row)`
+const DonateButton = styled(ButtonLink)`
+	flex: 1;
+`;
+const LearnMoreButton = styled(OutlineLinkButton)`
+	flex: 1;
+`;
+
+const ActionButtons = styled(Row)`
 	gap: 16px;
 `;
 
