@@ -64,7 +64,7 @@ const ProjectCard = (props: IProjectCard) => {
 			</ImagePlaceholder>
 			<CardBody isHover={isHover}>
 				<Title weight={700}>{title}</Title>
-				<Link href={`/user/${adminUser?.walletAddress}`}>
+				<Link href={`/user/${adminUser?.walletAddress}`} passHref>
 					<Author size='Big'>{name || '\u200C'}</Author>
 				</Link>
 				<Description>{htmlToText(description)}</Description>
