@@ -1,10 +1,11 @@
 import Image from 'next/image';
+import styled from 'styled-components';
 import { Lead, neutralColors } from '@giveth/ui-design-system';
+
 import { IProject } from '@/apollo/types/types';
 import { IDonationsByProjectId } from '@/apollo/types/gqlTypes';
 import ProjectTotalFundCard from './ProjectTotalFundCard';
 import ProjectDonationTable from './ProjectDonationTable';
-import styled from 'styled-components';
 
 const ProjectDonations = (props: {
 	donationsByProjectId: IDonationsByProjectId;
@@ -13,34 +14,28 @@ const ProjectDonations = (props: {
 	isDraft: boolean;
 }) => {
 	const { donationsByProjectId, project, isActive, isDraft } = props;
-	const { totalDonations, walletAddress, id, traceCampaignId } =
-		project || {};
+	const { totalDonations, id, traceCampaignId } = project || {};
 	return (
-		<Wrapper>
+		<>
 			{totalDonations === 0 ? (
-				<>
-					{isActive && !isDraft && (
-						<MessageContainer>
-							<Image
-								src='/images/icons/package.svg'
-								alt='package icon'
-								height={32}
-								width={32}
-							/>
-							<MessageText>
-								It seems this project didn’t received any
-								donations yet!
-							</MessageText>
-						</MessageContainer>
-					)}
-				</>
+				isActive &&
+				!isDraft && (
+					<MessageContainer>
+						<Image
+							src='/images/icons/package.svg'
+							alt='package icon'
+							height={32}
+							width={32}
+						/>
+						<MessageText>
+							It seems this project has not received any donations
+							yet!
+						</MessageText>
+					</MessageContainer>
+				)
 			) : (
 				<>
-					<ProjectTotalFundCard
-						address={walletAddress}
-						totalFund={totalDonations}
-						showTrace={!!traceCampaignId}
-					/>
+					<ProjectTotalFundCard project={project} />
 					<ProjectDonationTable
 						donations={donationsByProjectId.donations}
 						id={id}
@@ -49,11 +44,9 @@ const ProjectDonations = (props: {
 					/>
 				</>
 			)}
-		</Wrapper>
+		</>
 	);
 };
-
-const Wrapper = styled.div``;
 
 const MessageContainer = styled.div`
 	height: 200px;

@@ -1,7 +1,7 @@
 import { FC, useContext, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import styled from 'styled-components';
-import { InputWithUnit } from '../input';
+import { InputWithUnit } from '../input/index';
 import { Row } from '../styled-components/Grid';
 import {
 	APRRow,

@@ -26,6 +26,7 @@ export interface IProject {
 	}[];
 	users: IUser[];
 	totalDonations?: number;
+	totalTraceDonations?: number;
 	totalProjectUpdates?: number;
 	traceCampaignId: string | null;
 	givingBlocksId?: string | null;
@@ -33,6 +34,7 @@ export interface IProject {
 		id?: string;
 		name?: string;
 	};
+	updatedAt: string;
 }
 
 export interface IProjectEdition {

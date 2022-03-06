@@ -29,6 +29,7 @@ export const FETCH_HOME_PROJECTS = gql`
 					name
 					walletAddress
 				}
+				updatedAt
 			}
 			totalCount
 		}
@@ -72,6 +73,7 @@ export const FETCH_ALL_PROJECTS = gql`
 					name
 					walletAddress
 				}
+				updatedAt
 			}
 			totalCount
 			categories {
@@ -97,6 +99,7 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 			walletAddress
 			totalProjectUpdates
 			totalDonations
+			totalTraceDonations
 			creationDate
 			givingBlocksId
 			reaction {

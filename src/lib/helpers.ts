@@ -29,10 +29,10 @@ export const DurationToYMDh = (ms: number) => {
 	let m = duration.getUTCMonth() - baseTime.getUTCMonth();
 	let d = duration.getUTCDate() - baseTime.getUTCDate();
 	let h = duration.getUTCHours() - baseTime.getUTCHours();
-	// let min = duration.getUTCMinutes() - baseTime.getUTCMinutes();
+	let min = duration.getUTCMinutes() - baseTime.getUTCMinutes();
 	// let sec = duration.getUTCSeconds() - baseTime.getUTCSeconds();
 
-	return { y, m, d, h };
+	return { y, m, d, h, min };
 };
 
 export const DurationToString = (ms: number, length: number = 3) => {
@@ -375,4 +375,18 @@ export const showToastError = (err: any) => {
 		type: ToastType.DANGER,
 		position: 'top-center',
 	});
+};
+
+export const calcBiggestUnitDiffernceTime = (_time: string) => {
+	const time = new Date(_time);
+	const diff: { [key: string]: number } = DurationToYMDh(
+		Date.now() - time.getTime(),
+	);
+	if (diff.y > 0) return ` ${diff.y} year${diff.y > 1 ? 's' : ''} ago`;
+	if (diff.m > 0) return ` ${diff.m} month${diff.m > 1 ? 's' : ''} ago`;
+	if (diff.d > 0) return ` ${diff.d} day${diff.d > 1 ? 's' : ''} ago`;
+	if (diff.h > 0) return ` ${diff.h} hour${diff.h > 1 ? 's' : ''} ago`;
+	if (diff.min > 0)
+		return ` ${diff.min} minute${diff.min > 1 ? 's' : ''} ago`;
+	return ' Just now';
 };

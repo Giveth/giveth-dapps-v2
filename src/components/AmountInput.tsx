@@ -2,10 +2,10 @@ import { GLink, neutralColors, brandColors } from '@giveth/ui-design-system';
 import { BigNumber, utils } from 'ethers';
 import { FC, useState, useCallback, Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
-import { formatWeiHelper } from '../helpers/number';
-import { PoolStakingConfig } from '../types/config';
+import { formatWeiHelper } from '@/helpers/number';
+import { PoolStakingConfig } from '@/types/config';
 import { Row } from './styled-components/Grid';
-import { NumericalInput } from './input';
+import { NumericalInput } from '@/components/input/index';
 interface IAmountInput {
 	maxAmount: BigNumber;
 	setAmount: Dispatch<SetStateAction<string>>;

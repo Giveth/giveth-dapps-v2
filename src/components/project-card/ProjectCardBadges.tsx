@@ -24,9 +24,7 @@ interface IProjectCardBadges {
 	totalReactions?: number;
 	verified?: boolean;
 	traceable?: boolean;
-	isHover?: boolean;
 	likes?: number;
-	cardWidth?: string;
 	projectHref: string;
 	projectDescription?: string;
 	projectId?: string | number;
@@ -42,7 +40,6 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 	const [showModal, setShowModal] = useState<boolean>(false);
 	const {
 		verified,
-		isHover,
 		traceable,
 		projectHref,
 		projectDescription,
