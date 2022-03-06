@@ -39,8 +39,8 @@ const ProjectCard = (props: IProjectCard) => {
 		totalDonations,
 		traceCampaignId,
 		id,
+		updatedAt,
 	} = props.project;
-
 	const [isHover, setIsHover] = useState(false);
 
 	const name = adminUser?.name;

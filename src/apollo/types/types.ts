@@ -33,6 +33,7 @@ export interface IProject {
 		id?: string;
 		name?: string;
 	};
+	updatedAt: string;
 }
 
 export interface IProjectEdition {
