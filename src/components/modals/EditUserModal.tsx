@@ -1,90 +1,22 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, useEffect, useReducer, useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { useMutation } from '@apollo/client';
-import {
-	Button,
-	brandColors,
-	GLink,
-	neutralColors,
-} from '@giveth/ui-design-system';
-
+import { Button, brandColors } from '@giveth/ui-design-system';
 import { IModal, Modal } from './Modal';
 import { client } from '@/apollo/apolloClient';
 import { UPDATE_USER } from '@/apollo/gql/gqlUser';
 import { IUser } from '@/apollo/types/types';
 import { FlexCenter, Row } from '@/components/styled-components/Grid';
-import { checkIfURLisValid } from '@/utils';
 import ImageUploader from '../ImageUploader';
 import { gToast, ToastType } from '../toasts';
 import useUser from '@/context/UserProvider';
-
-interface IInputProps {
-	examples: string;
-	explanation?: string;
-	handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-	name: string;
-	placeholder: string;
-	value?: string;
-}
-
-const Input = ({
-	examples,
-	explanation,
-	handleChange,
-	name,
-	placeholder,
-	value,
-}: IInputProps) => {
-	return (
-		<InputContainer>
-			<InputPlaceholder size='Tiny'>{placeholder}</InputPlaceholder>
-			<InputBox
-				onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-					handleChange(event)
-				}
-				name={name}
-				placeholder={examples}
-				value={value}
-			/>
-			{explanation ? (
-				<InputPlaceholder size='Tiny'>{explanation}</InputPlaceholder>
-			) : (
-				<DummyLine />
-			)}
-		</InputContainer>
-	);
-};
-
-const InputContainer = styled.div`
-	display: flex;
-	flex-direction: column;
-	gap: 3px;
-	font-family: Red Hat Text, sans-serif;
-`;
-
-const InputPlaceholder = styled(GLink)`
-	text-align: left;
-`;
-
-const InputBox = styled.input`
-	width: 100%;
-	border: 2px solid ${neutralColors.gray[300]};
-	border-radius: 8px;
-	padding: 4px;
-	font-family: Red Hat Text, sans-serif;
-
-	::placeholder {
-		color: ${neutralColors.gray[500]};
-		font-size: 12px;
-	}
-`;
-
-const DummyLine = styled.br`
-	content: '';
-	font-size: 10px;
-	height: 13px;
-`;
+import Input, {
+	IFormValidations,
+	InputSize,
+	InputValidationType,
+} from '../Input';
+import { IUserIfo } from '../views/onboarding/InfoStep';
 
 enum EditStatusType {
 	INFO,
@@ -96,31 +28,41 @@ interface IEditUserModal extends IModal {
 }
 
 const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
+	const [disabled, setDisabled] = useState(true);
 	const [editStatus, setEditStatus] = useState<EditStatusType>(
 		EditStatusType.INFO,
 	);
 	const [avatar, setAvatar] = useState<string>('');
-	const [newUser, setNewUser] = useState({
-		name: '',
-		firstName: user.firstName,
-		lastName: user.lastName || '',
-		location: user.location || '',
-		email: user.email || '',
-		url: user.url || '',
-	});
-	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [formValidation, setFormValidation] = useState<IFormValidations>();
+	const [info, setInfo] = useReducer(
+		(curValues: IUserIfo, newValues: object) => ({
+			...curValues,
+			...newValues,
+		}),
+		{
+			firstName: user.firstName || '',
+			lastName: user.lastName || '',
+			location: user.location || '',
+			email: user.email || '',
+			url: user.url || '',
+		},
+	);
 
 	const {
 		actions: { reFetchUserData },
 	} = useUser();
 	const [updateUser] = useMutation(UPDATE_USER);
 
-	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		const { name, value } = event.target;
-		setNewUser(previousContent => ({
-			...previousContent,
-			[name]: value,
-		}));
+	useEffect(() => {
+		if (formValidation) {
+			const fvs = Object.values(formValidation);
+			setDisabled(!fvs.every(fv => fv === InputValidationType.NORMAL));
+		}
+	}, [formValidation]);
+
+	const reducerInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = e.target;
+		setInfo({ [name]: value });
 	};
 
 	const onSaveAvatar = async () => {
@@ -150,24 +92,16 @@ const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
 	};
 
 	const handleSubmit = async () => {
-		setIsLoading(true);
-		const { url } = newUser;
+		setDisabled(true);
 		try {
-			if (url) {
-				const valid = await checkIfURLisValid(url);
-				if (!valid) {
-					return 'toast warning about url';
-				}
-			}
 			const { data } = await client.mutate({
 				mutation: UPDATE_USER,
 				variables: {
-					...newUser,
+					...info,
 				},
 			});
 			if (data.updateUser) {
 				reFetchUserData();
-				setIsLoading(false);
 				gToast('Profile information updated.', {
 					type: ToastType.SUCCESS,
 					title: 'Success',
@@ -182,6 +116,7 @@ const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
 				title: error.message,
 			});
 		}
+		setDisabled(false);
 	};
 
 	return (
@@ -246,23 +181,22 @@ const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
 							{inputFields.map(field => (
 								<Input
 									key={field.name}
-									handleChange={handleChange}
-									examples={field.examples}
-									explanation={field.explanation}
+									onChange={reducerInputChange}
 									name={field.name}
 									placeholder={field.placeholder}
-									value={(newUser as any)[field.name]}
+									value={(info as any)[field.name]}
+									label={field.label}
+									caption={field.caption}
+									type={field.type}
+									validators={field.validators}
+									setFormValidation={setFormValidation}
+									size={InputSize.SMALL}
 								/>
 							))}
 							<Button
 								buttonType='secondary'
 								label='SAVE'
-								disabled={
-									!newUser.firstName ||
-									!newUser.lastName ||
-									!newUser.email ||
-									isLoading
-								}
+								disabled={disabled}
 								onClick={handleSubmit}
 							/>
 							<TextButton
@@ -280,35 +214,50 @@ const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
 
 const inputFields = [
 	{
-		examples: 'John',
-		explanation: '',
+		label: 'first name',
+		placeholder: 'John',
 		name: 'firstName',
-		placeholder: 'First Name *',
+		required: true,
 	},
 	{
-		examples: 'Doe',
-		explanation: '',
+		label: 'last name',
+		placeholder: 'Doe',
 		name: 'lastName',
-		placeholder: 'Last Name *',
+		required: true,
 	},
 	{
-		examples: 'Your email address',
-		explanation:
-			'Email address we can use to communicate with you and send you project notifications.',
+		label: 'email',
+		placeholder: 'Example@Domain.com',
 		name: 'email',
-		placeholder: 'Email *',
+		type: 'email',
+		required: true,
+		validators: [
+			{ pattern: /^.{3,}$/, msg: 'Too Short' },
+			{
+				pattern:
+					/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+				msg: 'Invalid Email Address',
+			},
+		],
 	},
 	{
-		examples: 'Portugal, Turkey, ...',
-		explanation: '',
+		label: 'location (optional)',
+		placeholder: 'Portugal, Turkey,...',
 		name: 'location',
-		placeholder: 'Location',
 	},
 	{
-		examples: 'Website',
-		explanation: 'Your home page, blog, or company site.',
+		label: 'website or url',
+		placeholder: 'Website',
 		name: 'url',
-		placeholder: 'Website or URL',
+		type: 'url',
+		caption: 'Your home page, blog, or company site.',
+		validators: [
+			{
+				pattern:
+					/^(?:http(s)?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
+				msg: 'Invalid URL',
+			},
+		],
 	},
 ];
 
@@ -336,6 +285,7 @@ const InputWrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
+	text-align: left;
 `;
 
 export default EditUserModal;
