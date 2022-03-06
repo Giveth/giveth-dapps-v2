@@ -1,6 +1,6 @@
 import { useState, FC, useContext, useEffect } from 'react';
 import styled from 'styled-components';
-import { InputWithUnit } from '../input';
+import { InputWithUnit } from '../input/index';
 import { Row } from '../styled-components/Grid';
 import {
 	APRRow,

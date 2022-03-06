@@ -27,7 +27,7 @@ import {
 	PoolItems,
 	PreviousArrowButton,
 } from './common';
-import { InputWithUnit } from '../input';
+import { InputWithUnit } from '../input/index';
 import { Row } from '../styled-components/Grid';
 import { IClaimViewCardProps } from '../views/claim/Claim.view';
 import config from '@/configuration';
