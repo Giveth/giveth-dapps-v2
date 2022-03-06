@@ -1,21 +1,18 @@
 import { FC, useEffect, useState } from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
+import { GLink, H2, Lead } from '@giveth/ui-design-system';
+import { useWeb3React } from '@web3-react/core';
+
 import { Button } from '../styled-components/Button';
 import { Row } from '../styled-components/Grid';
 import { ArrowButton, Card } from './common';
 import useClaim, { GiveDropStateType } from '@/context/claim.context';
 import { IClaimViewCardProps } from '../views/claim/Claim.view';
 import { formatWeiHelper } from '@/helpers/number';
-import {
-	ButtonLink,
-	GLink,
-	H2,
-	Lead,
-	OutlineLinkButton,
-} from '@giveth/ui-design-system';
-import { useWeb3React } from '@web3-react/core';
 import WalletModal from '@/components/modals/WalletModal';
+import Routes from '@/lib/constants/Routes';
+
 interface IConnectCardContainerProps {
 	data: any;
 }
@@ -81,83 +78,8 @@ const ConnectButton = styled(Button)`
 	}
 `;
 
-const Span = styled.div`
-	display: inline-block;
-	font-size: 20px;
-	line-height: 26px;
-	text-transform: uppercase;
-`;
-
-const InputWithButtonContainer = styled.div`
-	width: 588px;
-`;
-
 const ClickableStrong = styled.strong`
 	cursor: pointer;
-`;
-
-const ClaimedContainer = styled.div`
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	position: relative;
-	@media only screen and (max-width: 1120px) {
-		margin-top: 64px;
-	}
-`;
-
-const SunImage = styled.div`
-	position: relative;
-	height: 0px;
-	@media only screen and (max-width: 1120px) {
-		display: none;
-	}
-`;
-
-const StarsImage = styled(SunImage)`
-	left: 75%;
-	top: -50px;
-`;
-
-const ClaimedTitle = styled.div`
-	font-family: 'Red Hat Text';
-	font-size: 64px;
-	font-weight: 700;
-	text-align: center;
-`;
-
-const ClaimedSubtitleContainer = styled.div`
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	gap: 8px;
-`;
-
-const ClaimedSubtitleA = styled.div`
-	font-family: 'Red Hat Text';
-	font-size: 21px;
-	text-align: center;
-	display: flex;
-	gap: 12px;
-`;
-
-const AddGivButton = styled.div`
-	cursor: pointer;
-`;
-
-const SocialButton = styled(OutlineLinkButton)`
-	width: 265px;
-`;
-
-const ExploreButton = styled(ButtonLink)`
-	width: 285px;
-`;
-
-const ClaimFromAnother = styled.span`
-	cursor: pointer;
-	color: #fed670;
-	margin-top: 4px;
 `;
 
 const WalletLink = styled(GLink)`
@@ -274,7 +196,7 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 				<span>
 					But there are more ways to get GIV! Try another address or
 					donate to verified projects to qualify for{' '}
-					<Link href='/givbacks' passHref>
+					<Link href={Routes.GIVbacks} passHref>
 						<ClickableStrong>GIVbacks</ClickableStrong>
 					</Link>
 					.

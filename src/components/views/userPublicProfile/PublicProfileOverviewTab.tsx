@@ -68,7 +68,7 @@ const PublicProfileOverviewTab: FC<IUserPublicProfileView> = ({ user }) => {
 				{
 					label: 'EXPLORE GIVBACKS',
 					buttonType: 'primary',
-					onClick: () => router.push(Routes.GIVBACKS),
+					onClick: () => router.push(Routes.GIVbacks),
 				} as IButtonProps,
 			],
 		},

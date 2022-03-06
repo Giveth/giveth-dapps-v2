@@ -77,7 +77,7 @@ const HomePurpleSection = () => {
 				</Lead>
 				<br />
 				<GIVeconomyUrl
-					href='/giveconomy'
+					href={Routes.GIVECONOMY}
 					target='_blank'
 					rel='noopener noreferrer'
 				>

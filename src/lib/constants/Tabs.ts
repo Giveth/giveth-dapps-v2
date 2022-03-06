@@ -1,22 +1,24 @@
+import Routes from '@/lib/constants/Routes';
+
 export const giveconomyTabs = [
 	{
 		label: 'Overview',
-		href: '/giveconomy',
+		href: Routes.GIVECONOMY,
 	},
 	{
 		label: 'GIVgarden',
-		href: '/givgarden',
+		href: Routes.GIVgarden,
 	},
 	{
 		label: 'GIVfarm',
-		href: '/givfarm',
+		href: Routes.GIVfarm,
 	},
 	{
 		label: 'GIVbacks',
-		href: '/givbacks',
+		href: Routes.GIVbacks,
 	},
 	{
 		label: 'GIVstream',
-		href: '/givstream',
+		href: Routes.GIVstream,
 	},
 ];

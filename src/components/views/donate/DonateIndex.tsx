@@ -25,6 +25,7 @@ import {
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import styled from 'styled-components';
+import Routes from '@/lib/constants/Routes';
 
 const CRYPTO_DONATION = 'Cryptocurrency';
 const FIAT_DONATION = 'Credit Card';
@@ -120,7 +121,7 @@ const ProjectsIndex = (props: IProjectBySlug) => {
 							GIV rewards from the GIVbacks program will be
 							distributed after the end of the current round.
 						</P>
-						<Link passHref href='/givbacks'>
+						<Link passHref href={Routes.GIVbacks}>
 							<LearnButton label='LEARN MORE' />
 						</Link>
 					</GivBackContainer>
@@ -149,7 +150,7 @@ const ProjectsIndex = (props: IProjectBySlug) => {
 							View on explorer
 						</a>
 					</GLink>
-					<Link passHref href='/projects'>
+					<Link passHref href={Routes.Projects}>
 						<ProjectsButton label='SEE MORE PROJECTS' />
 					</Link>
 				</Options>
@@ -206,7 +207,7 @@ const Wrapper = styled.div`
 	text-align: center;
 	padding: 137px 0;
 	align-items: center;
-	maring: 0 auto;
+	margin: 0 auto;
 `;
 const Sections = styled.div`
 	display: grid;
@@ -216,7 +217,7 @@ const Sections = styled.div`
 const Left = styled.div`
 	display: grid;
 	justify-content: center;
-	align-istems: center;
+	align-items: center;
 	grid-auto-flow: column;
 	z-index: 1;
 	grid-column: 1 / 2;
