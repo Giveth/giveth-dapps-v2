@@ -1,12 +1,13 @@
+import { useRouter } from 'next/router';
+import { FC, useEffect, useState } from 'react';
+import styled from 'styled-components';
 import {
 	brandColors,
 	Container,
 	neutralColors,
 	P,
 } from '@giveth/ui-design-system';
-import { useRouter } from 'next/router';
-import { FC, useEffect, useState } from 'react';
-import styled from 'styled-components';
+
 import { Row } from '../../styled-components/Grid';
 import PublicProfileDonationsTab from './PublicProfileDonationsTab';
 import PublicProfileLikedTab from './PublicProfileLikedTab';
@@ -159,7 +160,7 @@ const Count = styled.div`
 	color: white;
 	width: 24px;
 	height: 24px;
-	align-itmes: center;
+	align-items: center;
 	text-align: center;
 	border-radius: 50%;
 	font-size: 12px;

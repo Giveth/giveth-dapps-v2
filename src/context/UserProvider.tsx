@@ -5,7 +5,6 @@ import React, {
 	useEffect,
 	useState,
 } from 'react';
-import { useRouter } from 'next/router';
 import { useCookies } from 'react-cookie';
 import { useWeb3React } from '@web3-react/core';
 import { BigNumberish } from '@ethersproject/bignumber';
@@ -24,7 +23,6 @@ import User from '../entities/user';
 import { getLocalStorageUserLabel } from '@/services/auth';
 import useWallet from '@/hooks/walletHooks';
 import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
-import { isMustSignRoute } from '@/lib/helpers';
 import { IUser } from '@/apollo/types/types';
 import { CompleteProfile } from '@/components/modals/CompleteProfile';
 
@@ -64,7 +62,6 @@ const apolloClient = initializeApollo();
 export const UserProvider = (props: { children: ReactNode }) => {
 	const [cookie, setCookie, removeCookie] = useCookies(['giveth_user']);
 	const { account, active, library, chainId, deactivate } = useWeb3React();
-	const router = useRouter();
 	useWallet();
 
 	const [user, setUser] = useState<IUser | undefined>();
@@ -87,17 +84,6 @@ export const UserProvider = (props: { children: ReactNode }) => {
 			user && setUser(undefined);
 		}
 	}, [active, account]);
-
-	useEffect(() => {
-		if (
-			isEnabled &&
-			user &&
-			!user?.token &&
-			isMustSignRoute(router.route)
-		) {
-			setShowWelcomeSignin(true);
-		}
-	}, [isEnabled, user]);
 
 	useEffect(() => {
 		library?.on('block', () => {

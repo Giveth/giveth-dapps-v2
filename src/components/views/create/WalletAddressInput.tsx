@@ -10,7 +10,7 @@ import {
 } from './Create.sc';
 import useUser from '@/context/UserProvider';
 import { compareAddresses } from '@/lib/helpers';
-import { ECreateErrFields } from '@/components/views/create/CreateIndex';
+import { ECreateErrFields } from '@/components/views/create/CreateProject';
 
 const WalletAddressInput = (props: {
 	value: string;

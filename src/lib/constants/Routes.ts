@@ -16,6 +16,7 @@ const Routes = {
 	MyProjects: MyAccount + '?tab=projects',
 	MyDonations: MyAccount + '?tab=donations',
 	GIVECONOMY: '/giveconomy',
+	GIVBACKS: '/givbacks',
 	Onboard: '/onboard',
 };
 

@@ -1,10 +1,3 @@
-export const mustSignTabs = [
-	{
-		label: 'Create',
-		href: '/create',
-	},
-];
-
 export const giveconomyTabs = [
 	{
 		label: 'Overview',

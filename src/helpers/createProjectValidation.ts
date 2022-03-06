@@ -7,7 +7,7 @@ import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import {
 	ECreateErrFields,
 	ICreateProjectErrors,
-} from '@/components/views/create/CreateIndex';
+} from '@/components/views/create/CreateProject';
 
 export const titleValidation = (
 	title: string,

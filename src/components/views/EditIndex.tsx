@@ -5,21 +5,21 @@ import useUser from '@/context/UserProvider';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
 import { IProjectEdition } from '@/apollo/types/types';
-import CreateIndex from '@/components/views/create/CreateIndex';
 import {
 	compareAddresses,
 	isUserRegistered,
 	showToastError,
 } from '@/lib/helpers';
 import SignInModal from '@/components/modals/SignInModal';
+import CreateProject from '@/components/views/create/CreateProject';
 
 const EditIndex = () => {
 	const [project, setProject] = useState<IProjectEdition>();
 	const [showSigninModal, setShowSigninModal] = useState(false);
 
 	const {
-		state: { user },
-		actions: { showCompleteProfile },
+		state: { user, isSignedIn },
+		actions: { showCompleteProfile, showSignModal },
 	} = useUser();
 
 	const router = useRouter();
@@ -27,11 +27,15 @@ const EditIndex = () => {
 
 	useEffect(() => {
 		const userAddress = user?.walletAddress;
-		if (userAddress && projectId) {
+		if (userAddress) {
 			setShowSigninModal(false);
 			if (project) setProject(undefined);
 			if (!isUserRegistered(user)) {
 				showCompleteProfile();
+				return;
+			}
+			if (!isSignedIn) {
+				showSignModal();
 				return;
 			}
 			client
@@ -56,7 +60,7 @@ const EditIndex = () => {
 		} else {
 			setShowSigninModal(true);
 		}
-	}, [user]);
+	}, [user, isSignedIn]);
 
 	return (
 		<>
@@ -66,7 +70,7 @@ const EditIndex = () => {
 					closeModal={() => setShowSigninModal(false)}
 				/>
 			)}
-			{project && <CreateIndex project={project} />}
+			{isSignedIn && project && <CreateProject project={project} />}
 		</>
 	);
 };

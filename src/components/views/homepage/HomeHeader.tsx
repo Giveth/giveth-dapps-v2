@@ -1,12 +1,28 @@
 import { useRouter } from 'next/router';
-import { FlexCenter } from '@/components/styled-components/Grid';
-import Routes from '@/lib/constants/Routes';
-import { Arc } from '@/components/styled-components/Arc';
 import { H1, brandColors, Button } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
+import { FlexCenter } from '@/components/styled-components/Grid';
+import Routes from '@/lib/constants/Routes';
+import { Arc } from '@/components/styled-components/Arc';
+import useUser from '@/context/UserProvider';
+import { isUserRegistered } from '@/lib/helpers';
+
 const HomeHeader = () => {
 	const router = useRouter();
+	const {
+		state: { user },
+		actions: { showCompleteProfile },
+	} = useUser();
+
+	const handleCreateButton = () => {
+		if (isUserRegistered(user)) {
+			router.push(Routes.CreateProject);
+		} else {
+			showCompleteProfile();
+		}
+	};
+
 	return (
 		<Wrapper>
 			<Title weight={700}>Welcome to the future of giving</Title>
@@ -23,7 +39,7 @@ const HomeHeader = () => {
 				buttonType='texty'
 				size='large'
 				label='Create a Project'
-				onClick={() => router.push(Routes.CreateProject)}
+				onClick={handleCreateButton}
 			/>
 			<MustardArc />
 		</Wrapper>

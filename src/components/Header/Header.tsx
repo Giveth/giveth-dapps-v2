@@ -146,7 +146,7 @@ const Header: FC<IHeader> = () => {
 			>
 				<Row>
 					{isCreateRoute ? (
-						<BackBtn onClick={() => router.back()}>
+						<BackBtn onClick={router.back}>
 							<Logo>
 								<Image
 									width='26px'
@@ -197,25 +197,22 @@ const Header: FC<IHeader> = () => {
 						onClick={handleCreateButton}
 					/>
 					<SmallCreateProjectParent>
-						<Link href={Routes.CreateProject} passHref>
-							<SmallCreateProject
-								theme={theme}
-								label=''
-								icon={
-									<Image
-										src='/images/plus-white.svg'
-										width={16}
-										height={16}
-										alt='create project'
-									/>
-								}
-								linkType={
-									theme === ETheme.Light
-										? 'primary'
-										: 'secondary'
-								}
-							/>
-						</Link>
+						<SmallCreateProject
+							onClick={handleCreateButton}
+							theme={theme}
+							label=''
+							icon={
+								<Image
+									src='/images/plus-white.svg'
+									width={16}
+									height={16}
+									alt='create project'
+								/>
+							}
+							linkType={
+								theme === ETheme.Light ? 'primary' : 'secondary'
+							}
+						/>
 					</SmallCreateProjectParent>
 					{active && account && chainId ? (
 						<>
