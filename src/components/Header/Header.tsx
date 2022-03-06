@@ -174,11 +174,11 @@ const Header: FC<IHeader> = () => {
 				{showLinks && (
 					<HeaderLinks theme={theme}>
 						{menuRoutes.map((link, index) => (
-							<Link href={link.href} passHref key={index}>
+							<Link href={link.href[0]} passHref key={index}>
 								<HeaderLink
 									size='Big'
 									theme={theme}
-									active={router.route === link.href}
+									active={link.href.includes(router.route)}
 								>
 									{link.title}
 								</HeaderLink>

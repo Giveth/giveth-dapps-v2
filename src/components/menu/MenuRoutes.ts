@@ -1,29 +1,26 @@
-import Routes from '../../lib/constants/Routes';
+import Routes from '@/lib/constants/Routes';
 
 export const menuRoutes = [
 	{
 		title: 'Home',
-		href: Routes.Home,
-		desktopOnly: true,
+		href: [Routes.Home],
 	},
 	{
 		title: 'Projects',
-		href: Routes.Projects,
-		desktopOnly: true,
+		href: [Routes.Projects],
 	},
 	{
 		title: 'GIVeconomy',
-		href: Routes.GIVECONOMY,
-		desktopOnly: true,
+		href: [
+			Routes.GIVECONOMY,
+			Routes.GIVbacks,
+			Routes.GIVfarm,
+			Routes.GIVgarden,
+			Routes.GIVstream,
+		],
 	},
 	{
 		title: 'Community',
-		href: Routes.Join,
-		desktopOnly: true,
+		href: [Routes.Join],
 	},
-	// {
-	// 	title: 'Create a Project',
-	// 	href: Routes.CreateProject,
-	// 	desktopOnly: false,
-	// },
 ];
