@@ -8,6 +8,7 @@ import {
 	DELETE_PROJECT_UPDATE,
 	EDIT_PROJECT_UPDATE,
 } from '@/apollo/gql/gqlProjects';
+import { showToastError } from '@/lib/helpers';
 import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
 import { gToast, ToastType } from '@/components/toasts';
 import ProjectTimeline, { TimelineSection } from './ProjectTimeline';
@@ -120,13 +121,7 @@ const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 			return true;
 		} catch (error: any) {
 			console.log({ error });
-			return gToast(error?.message, {
-				type: ToastType.DANGER,
-				// direction: ToastDirection.RIGHT,
-				title: 'Error',
-				dismissLabel: 'OK',
-				position: 'top-center',
-			});
+			return showToastError(error);
 		}
 	};
 
@@ -193,12 +188,7 @@ const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 				position: 'top-center',
 			});
 		} catch (error: any) {
-			return gToast(error?.message, {
-				type: ToastType.DANGER,
-				title: 'Error',
-				dismissLabel: 'OK',
-				position: 'top-center',
-			});
+			return showToastError(error?.message);
 		}
 	};
 

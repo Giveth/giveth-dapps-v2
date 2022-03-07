@@ -11,17 +11,12 @@ export const RemoveUpdateModal: FC<IModal> = ({
 	setShowModal,
 	callback,
 }) => {
-	const { theme } = useGeneral();
 	return (
 		<Modal
 			showModal={showModal}
 			setShowModal={setShowModal}
 			hiddenClose={false}
-			headerIcon={
-				<Icon>
-					<IconTrash />
-				</Icon>
-			}
+			headerIcon={<IconTrash size={24} />}
 			headerTitle='Removing Update'
 			headerTitlePosition='left'
 		>
@@ -74,11 +69,4 @@ const NoButton = styled(Button)`
 
 const Description = styled(Lead)`
 	margin: 24px 0;
-`;
-
-const Icon = styled.div`
-	* {
-		width: 24px;
-		height: 24px;
-	}
 `;
