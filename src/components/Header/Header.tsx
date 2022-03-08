@@ -112,7 +112,7 @@ const Header: FC<IHeader> = () => {
 	}, [showHeader]);
 
 	useEffect(() => {
-		setIsGIVeconomyRoute(router.route.startsWith(Routes.GIVECONOMY));
+		setIsGIVeconomyRoute(router.route.startsWith('/giv'));
 		setIsCreateRoute(router.route.startsWith(Routes.CreateProject));
 	}, [router.route]);
 
