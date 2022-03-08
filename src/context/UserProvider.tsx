@@ -26,6 +26,7 @@ import useWallet from '@/hooks/walletHooks';
 import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
 import { isMustSignRoute } from '@/lib/helpers';
 import { IUser } from '@/apollo/types/types';
+import SignInModal from '@/components/modals/SignInModal';
 
 interface IUserContext {
 	state: {
@@ -64,6 +65,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 
 	const [balance, setBalance] = useState<string | null>(null);
 	const [showWelcomeSignin, setShowWelcomeSignin] = useState<boolean>(false);
+	const [showWalletModal, setShowWalletModal] = useState<boolean>(false);
 	useWallet();
 	const { account, active, library, chainId, deactivate } = useWeb3React();
 	const isEnabled = !!library?.getSigner() && !!account && !!chainId;
@@ -130,7 +132,10 @@ export const UserProvider = (props: { children: ReactNode }) => {
 	};
 
 	const signIn = async () => {
-		if (!library?.getSigner()) return false;
+		if (!library?.getSigner()) {
+			setShowWalletModal(true);
+			return;
+		}
 
 		const signedMessage = await signMessage(
 			process.env.NEXT_PUBLIC_OUR_SECRET as string,
@@ -163,12 +168,15 @@ export const UserProvider = (props: { children: ReactNode }) => {
 
 	const signOut = () => {
 		Auth.logout();
-		window.localStorage.removeItem('selectedWallet');
 		window.localStorage.removeItem(getLocalStorageUserLabel() + '_token');
-		removeCookie('giveth_user');
-		apolloClient.resetStore().then();
-		deactivate();
-		setUser(undefined);
+		if (user) {
+			const newUser = {
+				...user,
+				token: '',
+			};
+			Auth.setUser(newUser, setCookie, 'giveth_user');
+			setUser(newUser);
+		}
 	};
 
 	// const setToken = async () => {
@@ -256,6 +264,12 @@ export const UserProvider = (props: { children: ReactNode }) => {
 				<WelcomeSigninModal
 					showModal={true}
 					setShowModal={() => setShowWelcomeSignin(false)}
+				/>
+			)}
+			{showWalletModal && (
+				<SignInModal
+					showModal={showWalletModal}
+					closeModal={() => setShowWalletModal(false)}
 				/>
 			)}
 			{props.children}

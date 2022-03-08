@@ -28,8 +28,6 @@ import {
 	BackBtn,
 	MenuAndButtonContainer,
 	CoverLine,
-	MBContainer,
-	HeaderSmallMenuAndButtonContainer,
 	SmallCreateProjectParent,
 } from './Header.sc';
 import { useSubgraph } from '@/context/subgraph.context';
@@ -58,7 +56,6 @@ const Header: FC<IHeader> = () => {
 	const [showRewardMenu, setShowRewardMenu] = useState(false);
 	const [showUserMenu, setShowUserMenu] = useState(false);
 	const [showHeader, setShowHeader] = useState(true);
-	const [showSmallMenu, setShowSmallMenu] = useState(false);
 	const [showWalletModal, setShowWalletModal] = useState(false);
 	const [showSigninModal, setShowSigninModal] = useState(false);
 	const [isGIVeconomyRoute, setIsGIVeconomyRoute] = useState(false);
