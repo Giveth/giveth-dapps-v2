@@ -1,10 +1,8 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import TwitterIcon from '/public/images/twitter.svg';
+import Link from 'next/link';
 import { TwitterShareButton } from 'react-share';
-import { Arc } from '@/components/styled-components/Arc';
 import {
-	B,
 	Button,
 	brandColors,
 	D3,
@@ -12,7 +10,11 @@ import {
 	H2,
 	H3,
 } from '@giveth/ui-design-system';
+
 import styled from 'styled-components';
+import Routes from '@/lib/constants/Routes';
+import { Arc } from '@/components/styled-components/Arc';
+import TwitterIcon from '/public/images/twitter.svg';
 
 const HomePurpleSection = () => {
 	const router = useRouter();
@@ -35,7 +37,7 @@ const HomePurpleSection = () => {
 				<StartGiving
 					size='large'
 					label='START GIVING'
-					onClick={() => router.push('/projects')}
+					onClick={() => router.push(Routes.Projects)}
 				/>
 				<TwitterShareButton
 					title={shareTitle}
@@ -60,13 +62,9 @@ const HomePurpleSection = () => {
 					governance.
 				</Lead>
 				<br />
-				<GIVeconomyUrl
-					href='/giveconomy'
-					target='_blank'
-					rel='noopener noreferrer'
-				>
-					Learn more about GIVeconomy
-				</GIVeconomyUrl>
+				<Link href={Routes.GIVECONOMY} passHref>
+					<GIVeconomyUrl>Learn more about GIVeconomy</GIVeconomyUrl>
+				</Link>
 			</GIVeconomy>
 			<ForMakersGivers>
 				<ForMakersContainers>
@@ -82,6 +80,7 @@ const HomePurpleSection = () => {
 						buttonType='primary'
 						size='large'
 						label='CREATE A PROJECT'
+						onClick={() => router.push(Routes.CreateProject)}
 					/>
 				</ForMakersContainers>
 				<ForMakersContainers>
@@ -98,6 +97,7 @@ const HomePurpleSection = () => {
 						buttonType='primary'
 						size='large'
 						label='DONATE TO A PROJECT'
+						onClick={() => router.push(Routes.Projects)}
 					/>
 				</ForMakersContainers>
 			</ForMakersGivers>
