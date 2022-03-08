@@ -2,11 +2,13 @@ import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import React, { ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
+
 import {
 	ModalHeader,
 	ModalHeaderTitlePosition,
 } from '@/components/modals/ModalHeader';
 import { ETheme, useGeneral } from '@/context/general.context';
+
 export interface IModal {
 	showModal?: boolean;
 	setShowModal: (value: boolean) => void;
@@ -85,7 +87,6 @@ const ModalWrapper = styled.div`
 			? neutralColors.gray[100]
 			: brandColors.deep[900]};
 	position: relative;
-	// padding: 24px;
 	z-index: 10;
 	text-align: center;
 	max-height: 90vh;

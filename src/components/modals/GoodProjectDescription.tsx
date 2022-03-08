@@ -2,8 +2,10 @@ import { FC } from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
 import { Button, Lead, brandColors, H5 } from '@giveth/ui-design-system';
+
 import Routes from '@/lib/constants/Routes';
 import { IModal, Modal } from '@/components/modals/Modal';
+import { StyledScrollbars } from '@/components/modals/HarvestAll.sc';
 
 export const GoodProjectDescription: FC<IModal> = ({
 	showModal,
@@ -18,36 +20,48 @@ export const GoodProjectDescription: FC<IModal> = ({
 			headerTitle='How to write a great project description'
 			headerTitlePosition='left'
 		>
-			<Container>
-				<Title>
-					Try to use this structure as a guide when writing the
-					description
-				</Title>
-				<Description>Who?</Description>
-				<Description>What?</Description>
-				<Description>Why?</Description>
-				<Description>Where?</Description>
-				<Description>How?</Description>
-				<Description>When?</Description>
+			<StyledScrollbars
+				autoHeight
+				autoHeightMin={'20Vh'}
+				autoHeightMax={'70Vh'}
+				renderTrackHorizontal={props => (
+					<div
+						{...props}
+						style={{ display: 'none' }}
+						className='track-horizontal'
+					/>
+				)}
+			>
+				<Container>
+					<Title>
+						Try to use this structure as a guide when writing the
+						description
+					</Title>
+					<Description>Who?</Description>
+					<Description>What?</Description>
+					<Description>Why?</Description>
+					<Description>Where?</Description>
+					<Description>How?</Description>
+					<Description>When?</Description>
 
-				<LeadStyled>See how others have done it,</LeadStyled>
-				<Link href={Routes.Projects} passHref>
-					<LinkStyled>Browse examples.</LinkStyled>
-				</Link>
+					<LeadStyled>See how others have done it,</LeadStyled>
+					<Link href={Routes.Projects} passHref>
+						<LinkStyled>Browse examples.</LinkStyled>
+					</Link>
 
-				<LeadStyled>Read this blog post tutorial,</LeadStyled>
-				<LinkStyled href='https://knowhow.ncvo.org.uk/how-to/how-to-write-an-overview-of-a-nonprofit-organization'>
-					See how others have done it, Browse examples. Read this blog
-					post tutorial, How to write a fundraising project
-					description to increase donations.
-				</LinkStyled>
+					<LeadStyled>Read this blog post tutorial,</LeadStyled>
+					<LinkStyled href='https://knowhow.ncvo.org.uk/how-to/how-to-write-an-overview-of-a-nonprofit-organization'>
+						How to write a fundraising project description to
+						increase donations.
+					</LinkStyled>
 
-				<OkButton
-					label='DISMISS'
-					onClick={() => setShowModal(false)}
-					buttonType='texty'
-				/>
-			</Container>
+					<OkButton
+						label='DISMISS'
+						onClick={() => setShowModal(false)}
+						buttonType='texty'
+					/>
+				</Container>
+			</StyledScrollbars>
 		</Modal>
 	);
 };
@@ -63,7 +77,7 @@ const LinkStyled = styled.a`
 `;
 
 const Container = styled.div`
-	width: 528px;
+	max-width: 545px;
 	text-align: left;
 	padding: 20px 30px;
 `;
