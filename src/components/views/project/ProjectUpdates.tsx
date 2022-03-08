@@ -5,11 +5,15 @@ import dynamic from 'next/dynamic';
 import {
 	FETCH_PROJECT_UPDATES,
 	ADD_PROJECT_UPDATE,
+	DELETE_PROJECT_UPDATE,
+	EDIT_PROJECT_UPDATE,
 } from '@/apollo/gql/gqlProjects';
+import { showToastError } from '@/lib/helpers';
 import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
 import { gToast, ToastType } from '@/components/toasts';
 import ProjectTimeline, { TimelineSection } from './ProjectTimeline';
 import { IProject, IProjectUpdate } from '@/apollo/types/types';
+import { RemoveUpdateModal } from '@/components/modals/RemoveUpdateModal';
 import styled from 'styled-components';
 import {
 	brandColors,
@@ -31,8 +35,12 @@ const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 	} = useUser();
 	const [newUpdate, setNewUpdate] = useState<string>('');
 	const [title, setTitle] = useState<string>('');
+	const [currentUpdate, setCurrentUpdate] = useState<string>('');
+	const [showRemoveUpdateModal, setShowRemoveUpdateModal] = useState(false);
 	const isOwner = adminUser?.id === user?.id;
 	const [addUpdateMutation] = useMutation(ADD_PROJECT_UPDATE);
+	const [deleteUpdateMutation] = useMutation(DELETE_PROJECT_UPDATE);
+	const [editUpdateMutation] = useMutation(EDIT_PROJECT_UPDATE);
 	const [showWelcomeSignin, setShowWelcomeSignin] = useState<boolean>(false);
 	const { data } = useQuery(FETCH_PROJECT_UPDATES, {
 		variables: {
@@ -42,7 +50,80 @@ const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 		},
 	});
 	const sortedUpdates = data?.getProjectUpdates;
-	const removeUpdate = async () => {};
+
+	const editUpdate = async (
+		title: string,
+		content: string,
+		updateId: string,
+	) => {
+		try {
+			await editUpdateMutation({
+				variables: {
+					title,
+					content,
+					updateId: parseFloat(updateId!),
+				},
+				refetchQueries: [
+					{
+						query: FETCH_PROJECT_UPDATES,
+						variables: {
+							projectId: parseFloat(id!),
+							take: 100,
+							skip: 0,
+						},
+					},
+				],
+			});
+			props.fetchProject();
+			gToast(`Your update was edited`, {
+				type: ToastType.SUCCESS,
+				// direction: ToastDirection.RIGHT,
+				title: 'Success!',
+				position: 'top-center',
+			});
+			return true;
+		} catch (error: any) {
+			console.log({ error });
+			return gToast(error?.message, {
+				type: ToastType.DANGER,
+				// direction: ToastDirection.RIGHT,
+				title: 'Error',
+				dismissLabel: 'OK',
+				position: 'top-center',
+			});
+		}
+	};
+
+	const removeUpdate = async (updateId: string) => {
+		try {
+			await deleteUpdateMutation({
+				variables: {
+					updateId: parseFloat(updateId!),
+				},
+				refetchQueries: [
+					{
+						query: FETCH_PROJECT_UPDATES,
+						variables: {
+							projectId: parseFloat(id!),
+							take: 100,
+							skip: 0,
+						},
+					},
+				],
+			});
+			props.fetchProject();
+			gToast(`Your update was deleted`, {
+				type: ToastType.SUCCESS,
+				// direction: ToastDirection.RIGHT,
+				title: 'Success!',
+				position: 'top-center',
+			});
+			return true;
+		} catch (error: any) {
+			console.log({ error });
+			return showToastError(error);
+		}
+	};
 
 	const addUpdate = async () => {
 		try {
@@ -100,23 +181,26 @@ const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 			props.fetchProject();
 			return gToast(`Your update was created`, {
 				type: ToastType.SUCCESS,
-				// direction: ToastDirection.RIGHT,
 				title: 'Success!',
 				position: 'top-center',
 			});
 		} catch (error: any) {
-			return gToast(error?.message, {
-				type: ToastType.DANGER,
-				// direction: ToastDirection.RIGHT,
-				title: 'Error',
-				dismissLabel: 'OK',
-				position: 'top-center',
-			});
+			return showToastError(error?.message);
 		}
 	};
 
 	return (
 		<Wrapper>
+			{showRemoveUpdateModal && (
+				<RemoveUpdateModal
+					showModal={showRemoveUpdateModal}
+					setShowModal={setShowRemoveUpdateModal}
+					callback={async () => {
+						await removeUpdate(currentUpdate);
+						setShowRemoveUpdateModal(false);
+					}}
+				/>
+			)}
 			{showWelcomeSignin && (
 				<WelcomeSigninModal
 					callback={() => {
@@ -164,7 +248,17 @@ const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 						<ProjectTimeline
 							key={i.id}
 							projectUpdate={i}
-							removeUpdate={removeUpdate}
+							removeUpdate={() => {
+								setShowRemoveUpdateModal(true);
+								setCurrentUpdate(i.id);
+							}}
+							editUpdate={(
+								title: string,
+								content: string,
+								updateId: string,
+							) => {
+								editUpdate(title, content, updateId);
+							}}
 							isOwner={isOwner}
 						/>
 					),
