@@ -1,7 +1,7 @@
 import Link from 'next/link';
-import { htmlToText } from '@/lib/helpers';
-import { GLink, P, H5, brandColors, Button } from '@giveth/ui-design-system';
+import { GLink, P, H5, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { htmlToText } from '@/lib/helpers';
 
 interface IHomeBlogPost {
 	post: IBlogPost;
@@ -29,7 +29,7 @@ const HomeBlogPost = (props: IHomeBlogPost) => {
 			<AuthorContainer>
 				<GLink size='Medium'>{author}</GLink>
 				<GLink size='Medium'>{pubDate.split(' ')[0]}</GLink>
-				<Link href={link}>
+				<Link href={link} passHref>
 					<ReadMoreButton>READ MORE</ReadMoreButton>
 				</Link>
 			</AuthorContainer>
