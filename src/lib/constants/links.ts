@@ -18,6 +18,7 @@ const links = {
 	REDDIT: 'https://reddit.com/r/giveth',
 	WIKI: 'https://docs.giveth.io/',
 	COVENANT: 'https://docs.giveth.io/whatisgiveth/covenant/',
+	PROJECT_VERIFICATION: 'https://giveth.typeform.com/verification',
 };
 
 export default links;

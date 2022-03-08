@@ -54,8 +54,7 @@ const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 			if (!newUpdate) {
 				return gToast('Please add some content to your update', {
 					type: ToastType.DANGER,
-					// direction: ToastDirection.RIGHT,
-					title: 'Empty Updte',
+					title: 'Empty Update',
 					dismissLabel: 'OK',
 					position: 'top-center',
 				});
@@ -63,7 +62,6 @@ const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 			if (!title) {
 				return gToast('Please add a title to your update', {
 					type: ToastType.DANGER,
-					// direction: ToastDirection.RIGHT,
 					title: 'No Empty Title',
 					dismissLabel: 'OK',
 					position: 'top-center',
@@ -71,10 +69,9 @@ const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 			}
 			if (newUpdate.length > UPDATE_LIMIT) {
 				return gToast(
-					`Please add less than ${UPDATE_LIMIT} characters`,
+					`Please enter less than ${UPDATE_LIMIT} characters`,
 					{
 						type: ToastType.DANGER,
-						// direction: ToastDirection.RIGHT,
 						title: 'Update too long',
 						dismissLabel: 'OK',
 						position: 'top-center',
