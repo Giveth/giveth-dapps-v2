@@ -370,7 +370,7 @@ const CryptoDonation = (props: {
 				<SearchContainer error={error} focused={inputBoxFocused}>
 					<DropdownContainer>
 						<TokenPicker
-							tokenList={erc20List}
+							tokenList={[...new Set(erc20List)]}
 							selectedToken={selectedToken}
 							inputValue={customInput}
 							onChange={(i: any) => {

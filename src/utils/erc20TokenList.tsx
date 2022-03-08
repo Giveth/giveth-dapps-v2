@@ -926,6 +926,13 @@ const xDaiTokens = {
 		},
 		{
 			chainId: 100,
+			address: '0x5dF8339c5E282ee48c0c7cE8A7d01a73D38B3B27',
+			symbol: 'TEC',
+			name: 'Token Engineering Commons',
+			decimals: 18,
+		},
+		{
+			chainId: 100,
 			address: '0x981fb9ba94078a2275a8fc906898ea107b9462a8',
 			ethereumAddress: '0xd56dac73a4d6766464b38ec6d91eb45ce7457c44',
 			symbol: 'PAN',
