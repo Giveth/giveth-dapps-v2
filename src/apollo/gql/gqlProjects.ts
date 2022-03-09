@@ -253,6 +253,10 @@ export const FETCH_USER_LIKED_PROJECTS = gql`
 				categories {
 					name
 				}
+				reaction {
+					id
+					userId
+				}
 				qualityScore
 			}
 			totalCount

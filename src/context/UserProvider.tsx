@@ -1,6 +1,7 @@
 import React, {
 	createContext,
 	ReactNode,
+	useCallback,
 	useContext,
 	useEffect,
 	useState,
@@ -39,6 +40,8 @@ interface IUserContext {
 		showSignModal: () => void;
 		showCompleteProfile: () => void;
 		reFetchUserData: () => void;
+		incrementLikedProjectsCount: () => void;
+		decrementLikedProjectsCount: () => void;
 	};
 }
 
@@ -54,6 +57,8 @@ const UserContext = createContext<IUserContext>({
 		showSignModal: () => {},
 		showCompleteProfile: () => {},
 		reFetchUserData: () => {},
+		incrementLikedProjectsCount: () => {},
+		decrementLikedProjectsCount: () => {},
 	},
 });
 
@@ -99,7 +104,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 		return new User(localUser);
 	};
 
-	const fetchUser = () => {
+	const fetchUser = useCallback(() => {
 		return apolloClient
 			.query({
 				query: GET_USER_BY_ADDRESS,
@@ -112,9 +117,9 @@ export const UserProvider = (props: { children: ReactNode }) => {
 				return res.data?.userByAddress;
 			})
 			.catch(console.log);
-	};
+	}, [account]);
 
-	const signIn = async () => {
+	const signIn = useCallback(async () => {
 		if (!library?.getSigner()) return false;
 
 		const signedMessage = await signMessage(
@@ -144,9 +149,9 @@ export const UserProvider = (props: { children: ReactNode }) => {
 		}
 		localStorage.setItem(getLocalStorageUserLabel() + '_token', token);
 		return token;
-	};
+	}, [account, chainId, fetchUser, library, setCookie, user]);
 
-	const signOut = () => {
+	const signOut = useCallback(() => {
 		Auth.logout();
 		window.localStorage.removeItem('selectedWallet');
 		window.localStorage.removeItem(getLocalStorageUserLabel() + '_token');
@@ -154,7 +159,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 		apolloClient.resetStore().then();
 		deactivate();
 		setUser(undefined);
-	};
+	}, []);
 
 	const getBalance = () => {
 		library
@@ -171,20 +176,24 @@ export const UserProvider = (props: { children: ReactNode }) => {
 		}
 	}, [account, library, chainId]);
 
-	const reFetchUserData = () => {
-		fetchUser().then((res: any) => {
-			if (res) {
-				const newUser = new User(res);
-				Auth.setUser(newUser, setCookie, 'giveth_user');
-				if (user?.walletAddress === newUser.walletAddress) {
-					setUser({ ...newUser, token: user?.token });
+	const reFetchUserData = useCallback(() => {
+		fetchUser()
+			.then((res: any) => {
+				if (res) {
+					const newUser = new User(res);
+					Auth.setUser(newUser, setCookie, 'giveth_user');
+					if (user?.walletAddress === newUser.walletAddress) {
+						setUser({ ...newUser, token: user?.token });
+					}
+				} else {
+					const noUser = new User({} as User);
+					setUser(noUser);
 				}
-			} else {
-				const noUser = new User({} as User);
-				setUser(noUser);
-			}
-		});
-	};
+			})
+			.catch((e: Error) =>
+				console.error('Error on refetching user info', e),
+			);
+	}, [fetchUser, setCookie, user?.token, user?.walletAddress]);
 
 	useEffect(() => {
 		if (account) {
@@ -201,6 +210,24 @@ export const UserProvider = (props: { children: ReactNode }) => {
 		}
 	}, [account]);
 
+	const incrementLikedProjectsCount = useCallback(() => {
+		if (user) {
+			setUser({
+				...user,
+				likedProjectsCount: (user.likedProjectsCount || 0) + 1,
+			});
+		}
+	}, [user]);
+
+	const decrementLikedProjectsCount = useCallback(() => {
+		if (user) {
+			setUser({
+				...user,
+				likedProjectsCount: (user.likedProjectsCount || 1) - 1,
+			});
+		}
+	}, [user]);
+
 	return (
 		<UserContext.Provider
 			value={{
@@ -216,6 +243,8 @@ export const UserProvider = (props: { children: ReactNode }) => {
 					signIn,
 					signOut,
 					reFetchUserData,
+					incrementLikedProjectsCount,
+					decrementLikedProjectsCount,
 				},
 			}}
 		>
