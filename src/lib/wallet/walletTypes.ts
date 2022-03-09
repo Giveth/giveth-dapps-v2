@@ -16,9 +16,7 @@ const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 
 const supportedChainIds = [1, 3, 4, 5, 42, 100];
 
-export const injectedConnector = new InjectedConnector({
-	supportedChainIds,
-});
+export const injectedConnector = new InjectedConnector({});
 export const walletconnectConnector = new WalletConnectConnector({
 	infuraId: INFURA_API_KEY,
 	supportedChainIds,

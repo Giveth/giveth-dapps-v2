@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { TwitterShareButton } from 'react-share';
 import styled from 'styled-components';
@@ -51,7 +52,7 @@ const HomePurpleSection = () => {
 				<StartGiving
 					size='large'
 					label='START GIVING'
-					onClick={() => router.push('/projects')}
+					onClick={() => router.push(Routes.Projects)}
 				/>
 				<TwitterShareButton
 					title={shareTitle}
@@ -76,13 +77,9 @@ const HomePurpleSection = () => {
 					governance.
 				</Lead>
 				<br />
-				<GIVeconomyUrl
-					href={Routes.GIVECONOMY}
-					target='_blank'
-					rel='noopener noreferrer'
-				>
-					Learn more about GIVeconomy
-				</GIVeconomyUrl>
+				<Link href={Routes.GIVECONOMY} passHref>
+					<GIVeconomyUrl>Learn more about GIVeconomy</GIVeconomyUrl>
+				</Link>
 			</GIVeconomy>
 			<ForMakersGivers>
 				<ForMakersContainers>
@@ -115,6 +112,7 @@ const HomePurpleSection = () => {
 						buttonType='primary'
 						size='large'
 						label='DONATE TO A PROJECT'
+						onClick={() => router.push(Routes.Projects)}
 					/>
 				</ForMakersContainers>
 			</ForMakersGivers>
