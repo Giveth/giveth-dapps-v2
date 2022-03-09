@@ -22,7 +22,7 @@ import {
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import { Shadow } from '@/components/styled-components/Shadow';
 import CategoryBadge from '@/components/badges/CategoryBadge';
-import { mediaQueries, showToastError } from '@/lib/helpers';
+import { showToastError } from '@/lib/helpers';
 import { IProject } from '@/apollo/types/types';
 import links from '@/lib/constants/links';
 import useUser from '@/context/UserProvider';
@@ -37,6 +37,7 @@ import ArchiveIcon from '../../../../public/images/icons/archive.svg';
 import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
 import { idToProjectEdit, slugToProjectDonate } from '@/lib/routeCreators';
 import { VerificationModal } from '@/components/modals/VerificationModal';
+import { mediaQueries } from '@/utils/constants';
 
 interface IProjectDonateCard {
 	project?: IProject;
@@ -385,7 +386,7 @@ const Wrapper = styled.div`
 	flex-shrink: 0;
 	z-index: 20;
 
-	${mediaQueries['xl']} {
+	${mediaQueries.laptopL} {
 		position: sticky;
 		position: -webkit-sticky;
 		align-self: flex-start;

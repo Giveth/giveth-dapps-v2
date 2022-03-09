@@ -122,22 +122,6 @@ export const noImgIcon = '/images/GIV-icon-text.svg';
 export const isNoImg = (image: string | undefined) =>
 	!(image && !Number(image));
 
-export const breakPoints = {
-	sm: 500,
-	md: 768,
-	lg: 992,
-	xl: 1200,
-	xxl: 1440,
-};
-
-export const mediaQueries = {
-	sm: `@media (min-width: ${breakPoints.sm}px)`,
-	md: `@media (min-width: ${breakPoints.md}px)`,
-	lg: `@media (min-width: ${breakPoints.lg}px)`,
-	xl: `@media (min-width: ${breakPoints.xl}px)`,
-	xxl: `@media (min-width: ${breakPoints.xxl}px)`,
-};
-
 export const shortenAddress = (
 	address: string | null | undefined,
 	charsLength = 4,
@@ -152,14 +136,6 @@ export const shortenAddress = (
 	return `${address.slice(0, charsLength + prefixLength)}…${address.slice(
 		-charsLength,
 	)}`;
-};
-
-export const formatDateFromString = (date: string) => {
-	const nDate = new Date(date);
-	const year = nDate.getFullYear();
-	const month = nDate.toLocaleString('default', { month: 'short' });
-	const day = nDate.getDay();
-	return month + ' ' + day + ', ' + year;
 };
 
 export function formatTxLink(
