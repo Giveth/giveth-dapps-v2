@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { GLink, P, H5, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { htmlToText } from '@/lib/helpers';
@@ -15,23 +14,18 @@ interface IBlogPost {
 	pubDate: string;
 }
 
-const HomeBlogPost = (props: IHomeBlogPost) => {
-	const { post } = props;
+const HomeBlogPost = ({ post }: IHomeBlogPost) => {
 	const { title, description, link, pubDate, author } = post;
 	return (
 		<Wrapper>
-			<Link href={link}>
-				<a>
-					<Title weight={700}>{title}</Title>
-				</a>
-			</Link>
+			<a href={link}>
+				<Title weight={700}>{title}</Title>
+			</a>
 			<Description>{htmlToText(description)}</Description>
 			<AuthorContainer>
 				<GLink size='Medium'>{author}</GLink>
 				<GLink size='Medium'>{pubDate.split(' ')[0]}</GLink>
-				<Link href={link} passHref>
-					<ReadMoreButton>READ MORE</ReadMoreButton>
-				</Link>
+				<ReadMoreButton href={link}>READ MORE</ReadMoreButton>
 			</AuthorContainer>
 		</Wrapper>
 	);
