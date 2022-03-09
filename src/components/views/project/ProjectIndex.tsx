@@ -46,6 +46,7 @@ const ProjectIndex = () => {
 	const slug = router.query.projectIdSlug as string;
 
 	useEffect(() => {
+		console.log(project);
 		if (!id) return;
 		initializeApollo()
 			.query({
