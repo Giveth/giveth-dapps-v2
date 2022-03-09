@@ -34,7 +34,11 @@ interface IProjectCardBadges {
 const ProjectCardBadges = (props: IProjectCardBadges) => {
 	const {
 		state: { user, isSignedIn },
-		actions: { signIn },
+		actions: {
+			signIn,
+			incrementLikedProjectsCount,
+			decrementLikedProjectsCount,
+		},
 	} = useUser();
 
 	const [showModal, setShowModal] = useState<boolean>(false);
@@ -71,13 +75,16 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 				if (!reaction) {
 					const newReaction = await likeProject(projectId);
 					setReaction(newReaction);
-					if (newReaction)
+					if (newReaction) {
 						setTotalReactions((totalReactions || 0) + 1);
+						incrementLikedProjectsCount();
+					}
 				} else if (reaction?.userId === user?.id) {
 					const successful = await unlikeProject(reaction.id);
 					if (successful) {
 						setReaction(undefined);
 						setTotalReactions((totalReactions || 1) - 1);
+						decrementLikedProjectsCount();
 					}
 				}
 			} catch (e) {
