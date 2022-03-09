@@ -48,6 +48,7 @@ import { slugToProjectView } from '@/lib/routeCreators';
 import { client } from '@/apollo/apolloClient';
 import LightBulbIcon from '/public/images/icons/lightbulb.svg';
 import { Shadow } from '@/components/styled-components/Shadow';
+import { deviceSize, mediaQueries } from '@/utils/constants';
 
 export enum ECreateErrFields {
 	NAME = 'name',
@@ -253,6 +254,15 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 		return <SuccessfulCreation project={creationSuccessful} />;
 	}
 
+	const Guidelines = () => {
+		return (
+			<div onClick={() => setShowGuidelineModal(true)}>
+				<Image src={LightBulbIcon} alt='Light Bulb Icon' />
+				<H6>Submission guidelines</H6>
+			</div>
+		);
+	};
+
 	return (
 		<>
 			{showGuidelineModal && (
@@ -264,11 +274,16 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 			{user && (
 				<>
 					<CreateContainer>
-						<Title>
-							{isEditMode
-								? 'Project details'
-								: 'Create a Project'}
-						</Title>
+						<div>
+							<Title>
+								{isEditMode
+									? 'Project details'
+									: 'Create a Project'}
+							</Title>
+							<GuidelinesStyleTablet>
+								<Guidelines />
+							</GuidelinesStyleTablet>
+						</div>
 
 						<div>
 							<NameInput
@@ -353,44 +368,75 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 							</Buttons>
 						</div>
 					</CreateContainer>
-					<Guidelines onClick={() => setShowGuidelineModal(true)}>
-						<Image src={LightBulbIcon} alt='Light Bulb Icon' />
-						<H6>Submission guidelines</H6>
-					</Guidelines>
+					<GuidelinesStyleLaptop>
+						<Guidelines />
+					</GuidelinesStyleLaptop>
 				</>
 			)}
 		</>
 	);
 };
 
-const Guidelines = styled.div`
-	width: 325px;
-	height: 87px;
-	display: flex;
-	align-items: center;
-	gap: 20px;
-	padding: 28px;
-	border-radius: 8px;
-	box-shadow: ${Shadow.Dark[500]};
-	position: fixed;
-	top: 104px;
-	right: 10px;
-	cursor: pointer;
+const GuidelinesStyle = styled.div`
+	> div {
+		display: flex;
+		height: 87px;
+		align-items: center;
+		gap: 20px;
+		padding: 28px 35px 28px 28px;
+		border-radius: 8px;
+		box-shadow: ${Shadow.Dark[500]};
+		position: relative;
+		cursor: pointer;
+		margin-bottom: 20px;
 
-	> h6 {
-		font-weight: 700;
+		> h6 {
+			font-weight: 700;
+		}
+	}
+`;
+
+const GuidelinesStyleTablet = styled(GuidelinesStyle)`
+	display: flex;
+	${mediaQueries.laptop} {
+		display: none;
+	}
+`;
+
+const GuidelinesStyleLaptop = styled(GuidelinesStyle)`
+	display: none;
+	${mediaQueries.laptop} {
+		display: flex;
+		position: fixed;
+		top: 104px;
+		right: 10px;
 	}
 `;
 
 const CreateContainer = styled.div`
-	display: flex;
-	flex-direction: column;
-	margin: 104px 0 154px 264px;
-	max-width: 720px;
-	> div {
+	margin: 104px 42px 154px 40px;
+
+	${mediaQueries.desktop} {
+		margin-left: 264px;
+		width: ${deviceSize.desktop / 2 + 'px'};
+	}
+	${mediaQueries.laptopL} {
+		margin-left: 134px;
+		width: ${(deviceSize.laptopL * 7) / 12 + 'px'};
+	}
+	${mediaQueries.laptop} {
+		width: ${(deviceSize.laptop * 8) / 12 + 'px'};
+	}
+
+	> :nth-child(1) {
 		display: flex;
-		flex-direction: column;
-		margin: 48px 0;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		align-items: center;
+
+		> h3 {
+			margin-bottom: 20px;
+		}
 	}
 `;
 
@@ -398,13 +444,12 @@ const Buttons = styled.div`
 	display: flex;
 	justify-content: center;
 	flex-direction: row;
+	flex-wrap: wrap;
+	gap: 10px;
 	margin: 61px 0 32px 0;
 	button {
 		width: 100%;
 		max-width: 320px;
-		&:first-of-type {
-			margin-right: 10px;
-		}
 	}
 `;
 

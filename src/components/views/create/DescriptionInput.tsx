@@ -35,14 +35,12 @@ const DescriptionInput = (props: {
 			<H5 id={ECreateErrFields.DESCRIPTION}>
 				Tell us about your project...
 			</H5>
-			<div>
-				<CaptionContainer>
-					Aim for 200-500 words.{' '}
-					<span onClick={() => setShowModal(true)}>
-						How to write a good project description.
-					</span>
-				</CaptionContainer>
-			</div>
+			<CaptionContainer>
+				Aim for 200-500 words.{' '}
+				<span onClick={() => setShowModal(true)}>
+					How to write a good project description.
+				</span>
+			</CaptionContainer>
 			<InputContainerStyled error={error}>
 				<Label>Project story</Label>
 				<RichTextInput
@@ -78,7 +76,6 @@ const ErrorStyled = styled(InputErrorMessage)`
 `;
 
 const CaptionContainer = styled(Caption)`
-	height: 18px;
 	margin: 8.5px 0 0 0;
 	span {
 		cursor: pointer;
@@ -87,7 +84,6 @@ const CaptionContainer = styled(Caption)`
 `;
 
 const TextInputStyle = {
-	height: '250px',
 	marginTop: '4px',
 	fontFamily: 'body',
 };

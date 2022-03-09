@@ -177,7 +177,7 @@ function TextRichWithQuill(props: any) {
 
 	return (
 		<>
-			<ReactQuill
+			<ReactQuillStyled
 				modules={mod}
 				formats={formats}
 				theme='snow'
@@ -194,6 +194,12 @@ function TextRichWithQuill(props: any) {
 		</>
 	);
 }
+
+const ReactQuillStyled = styled(ReactQuill)`
+	> .ql-container {
+		height: 30rem;
+	}
+`;
 
 const Counter = styled.div`
 	position: absolute;
