@@ -1,3 +1,7 @@
+import { FC, useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { useWeb3React } from '@web3-react/core';
+import Image from 'next/image';
 import {
 	brandColors,
 	Container,
@@ -10,19 +14,16 @@ import {
 	Caption,
 	Button,
 } from '@giveth/ui-design-system';
-import { useRouter } from 'next/router';
+
 import { CopyToClipboard } from '@/components/CopyToClipboard';
 import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
-import { FC, useEffect, useState } from 'react';
-import Image from 'next/image';
 import PublicProfileContributes from './PublicProfileContributes';
 import { IUser, IProject } from '@/apollo/types/types';
 import { networksParams } from '@/helpers/blockchain';
-import { useWeb3React } from '@web3-react/core';
 import EditUserModal from '@/components/modals/EditUserModal';
-import styled from 'styled-components';
 import { Row } from '@/components/styled-components/Grid';
 import useUser from '@/context/UserProvider';
+import { isUserRegistered } from '@/lib/helpers';
 
 export enum EOrderBy {
 	TokenAmount = 'TokenAmount',
@@ -46,10 +47,6 @@ export interface IUserPublicProfileView {
 	myAccount?: boolean;
 }
 
-export interface IUserProfileProjectsView {
-	projects: IProject[];
-}
-
 export interface IProjectsTable {
 	projects: IProject[];
 	order: IOrder;
@@ -62,13 +59,15 @@ interface IEmptyBox {
 }
 
 interface IIncompleteToast {
-	absolute?: boolean;
-	close?: any;
+	close: () => void;
 }
-const IncompleteProfileToast = ({ close, absolute }: IIncompleteToast) => {
-	const router = useRouter();
+const IncompleteProfileToast = ({ close }: IIncompleteToast) => {
+	const {
+		actions: { showCompleteProfile },
+	} = useUser();
+
 	return (
-		<IncompleteToast absolute={absolute}>
+		<IncompleteToast>
 			<IncompleteProfile>
 				<img src='/images/warning.svg' />
 				<div>
@@ -84,16 +83,14 @@ const IncompleteProfileToast = ({ close, absolute }: IIncompleteToast) => {
 					size='small'
 					label="LET'S DO IT"
 					buttonType='texty'
-					onClick={e => router.push('/onboard')}
+					onClick={showCompleteProfile}
 				/>
-				{absolute && (
-					<img
-						onClick={close}
-						src='/images/x-icon-mustard.svg'
-						width='16px'
-						height='16px'
-					/>
-				)}
+				<img
+					onClick={close}
+					src='/images/x-icon-mustard.svg'
+					width='16px'
+					height='16px'
+				/>
 			</LetsDoIt>
 		</IncompleteToast>
 	);
@@ -127,10 +124,9 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 	const { chainId } = useWeb3React();
 	const [showWelcomeSignin, setShowWelcomeSignin] = useState<boolean>(false);
 	const [showModal, setShowModal] = useState<boolean>(false); // follow this state to refresh user content on screen
-	const [incompleteProfile, setIncompleteProfile] = useState<boolean>(false);
+	const [showIncompleteWarning, setShowIncompleteWarning] = useState(true);
 
 	useEffect(() => {
-		setIncompleteProfile(!user?.name || !user?.email);
 		myAccount && setShowWelcomeSignin(!isSignedIn);
 	}, [user, isSignedIn]);
 
@@ -151,19 +147,16 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 
 	return (
 		<>
-			{incompleteProfile && !user?.name && (
+			{!isUserRegistered(user) && showIncompleteWarning && (
 				<IncompleteProfileToast
-					absolute={true}
-					close={() => setIncompleteProfile(false)}
+					close={() => setShowIncompleteWarning(false)}
 				/>
 			)}
 			<PubliCProfileHeader>
 				<Container>
 					<UserInfoWithAvatarRow>
 						<Image
-							src={
-								user.avatar ? user.avatar : '/images/avatar.svg'
-							}
+							src={user.avatar || '/images/avatar.svg'}
 							width={128}
 							height={128}
 							alt={user.name}
@@ -281,9 +274,8 @@ const WalletIconsContainer = styled.div`
 const IncompleteToast = styled.div`
 	width: 100%;
 	max-width: 1214px;
-	position: ${(props: IIncompleteToast) =>
-		props.absolute ? 'absolute' : 'relative'};
-	top: ${(props: IIncompleteToast) => (props.absolute ? '90px' : '0')};
+	position: absolute;
+	top: 90px;
 	left: 0;
 	right: 0;
 	margin: 0 auto;

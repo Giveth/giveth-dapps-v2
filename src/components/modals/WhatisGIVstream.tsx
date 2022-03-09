@@ -1,7 +1,5 @@
-import config from '@/configuration';
 import {
 	P,
-	B,
 	H5,
 	neutralColors,
 	IconGIVStream,
@@ -16,6 +14,7 @@ import { FC } from 'react';
 import { Row } from '../styled-components/Grid';
 import { Modal, IModal } from './Modal';
 import Link from 'next/link';
+import Routes from '@/lib/constants/Routes';
 
 interface IWhatisGIVstreamModal extends IModal {}
 
@@ -45,7 +44,7 @@ export const WhatisGIVstreamModal: FC<IWhatisGIVstreamModal> = ({
 					2026 at which point the GIVeconomy will be full power!
 				</Desc>
 				<LinksRow alignItems='center' justifyContent='center'>
-					<Link href='/givstream' passHref>
+					<Link href={Routes.GIVstream} passHref>
 						<GLink onClick={() => setShowModal(false)}>
 							<LinksRow justifyContent='center'>
 								View Your GIVstream{' '}

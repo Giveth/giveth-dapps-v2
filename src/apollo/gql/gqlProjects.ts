@@ -205,6 +205,34 @@ export const ADD_PROJECT_UPDATE = gql`
 	}
 `;
 
+export const DELETE_PROJECT_UPDATE = gql`
+	mutation DeleteProjectUpdate($updateId: Float!) {
+		deleteProjectUpdate(updateId: $updateId)
+	}
+`;
+
+export const EDIT_PROJECT_UPDATE = gql`
+	mutation EditProjectUpdate(
+		$content: String!
+		$title: String!
+		$updateId: Float!
+	) {
+		editProjectUpdate(
+			content: $content
+			title: $title
+			updateId: $updateId
+		) {
+			id
+			title
+			projectId
+			userId
+			content
+			createdAt
+			isMain
+		}
+	}
+`;
+
 export const FETCH_USER_LIKED_PROJECTS = gql`
 	query FetchUesrLikedProjects($take: Int, $skip: Int, $userId: Int!) {
 		likedProjectsByUserId(take: $take, skip: $skip, userId: $userId) {
@@ -224,6 +252,10 @@ export const FETCH_USER_LIKED_PROJECTS = gql`
 				totalDonations
 				categories {
 					name
+				}
+				reaction {
+					id
+					userId
 				}
 				qualityScore
 			}

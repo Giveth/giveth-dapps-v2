@@ -30,6 +30,7 @@ import { useStakingNFT } from '@/hooks/useStakingNFT';
 import { StakingType } from '@/types/config';
 import { useWeb3React } from '@web3-react/core';
 import { ETheme, useGeneral } from '@/context/general.context';
+import Routes from '@/lib/constants/Routes';
 
 export const RewardMenu = () => {
 	const [isMounted, setIsMounted] = useState(false);
@@ -126,7 +127,7 @@ export const RewardMenu = () => {
 						</IconHelpWraper>
 					</FlowrateRow>
 				</FlowrateBox>
-				<Link href='/givstream' passHref>
+				<Link href={Routes.GIVstream} passHref>
 					<a>
 						<PartRow theme={theme}>
 							<PartInfo>
@@ -147,7 +148,7 @@ export const RewardMenu = () => {
 						</PartRow>
 					</a>
 				</Link>
-				<Link href='/givfarm' passHref>
+				<Link href={Routes.GIVfarm} passHref>
 					<a>
 						<PartRow theme={theme}>
 							<PartInfo>
@@ -170,7 +171,7 @@ export const RewardMenu = () => {
 						</PartRow>
 					</a>
 				</Link>
-				<Link href='/givbacks' passHref>
+				<Link href={Routes.GIVbacks} passHref>
 					<a>
 						<PartRow theme={theme}>
 							<PartInfo>
@@ -257,12 +258,6 @@ export const PartTitle = styled(Overline)`
 `;
 export const PartAmount = styled(Caption)``;
 export const PartUnit = styled(Caption)``;
-
-export const ArrowImage = styled(GLink)`
-	width: 40px;
-	cursor: pointer;
-	text-align: right;
-`;
 
 const IconHelpWraper = styled.div`
 	cursor: pointer;

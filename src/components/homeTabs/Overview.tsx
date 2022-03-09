@@ -21,6 +21,7 @@ import {
 } from './Overview.sc';
 import { IconGIV } from '../Icons/GIV';
 import config from '@/configuration';
+import Routes from '@/lib/constants/Routes';
 
 export const TabOverviewTop = () => {
 	return (
@@ -40,7 +41,7 @@ export const TabOverviewTop = () => {
 
 export const TabOverviewBottom = () => {
 	const goToClaim = () => {
-		router.push('/claim');
+		router.push(Routes.Claim);
 	};
 
 	return (
@@ -112,7 +113,7 @@ export const TabOverviewBottom = () => {
 					<ParticipateDataBlock
 						title='Earn'
 						button={
-							<Link href='/givfarm' passHref>
+							<Link href={Routes.GIVfarm} passHref>
 								<DataBlockButton label='SEE FARMS' />
 							</Link>
 						}
@@ -133,7 +134,7 @@ export const TabOverviewBottom = () => {
 						label='CLAIM YOUR GIV'
 						buttonType='primary'
 						onClick={goToClaim}
-					></ClaimCardButton>
+					/>
 				</ClaimCard>
 			</Container>
 		</OverviewBottomContainer>

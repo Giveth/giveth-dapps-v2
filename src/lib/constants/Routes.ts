@@ -1,4 +1,5 @@
 const MyAccount = '/account';
+const GIVstream = '/givstream';
 
 const Routes = {
 	Home: '/',
@@ -19,8 +20,10 @@ const Routes = {
 	GIVECONOMY: '/giveconomy',
 	GIVgarden: '/givgarden',
 	GIVfarm: '/givfarm',
-	GIVstream: '/givstream',
+	GIVstream,
+	GIVstream_FlowRate: GIVstream + '#flowRate',
 	GIVbacks: '/givbacks',
+	Claim: '/claim',
 };
 
 export default Routes;

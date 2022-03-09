@@ -5,16 +5,21 @@ import useUser from '@/context/UserProvider';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
 import { IProjectEdition } from '@/apollo/types/types';
-import CreateIndex from '@/components/views/create/CreateIndex';
-import { showToastError } from '@/lib/helpers';
+import {
+	compareAddresses,
+	isUserRegistered,
+	showToastError,
+} from '@/lib/helpers';
 import SignInModal from '@/components/modals/SignInModal';
+import CreateProject from '@/components/views/create/CreateProject';
 
 const EditIndex = () => {
 	const [project, setProject] = useState<IProjectEdition>();
 	const [showSigninModal, setShowSigninModal] = useState(false);
 
 	const {
-		state: { user },
+		state: { user, isSignedIn },
+		actions: { showCompleteProfile, showSignModal },
 	} = useUser();
 
 	const router = useRouter();
@@ -22,19 +27,40 @@ const EditIndex = () => {
 
 	useEffect(() => {
 		const userAddress = user?.walletAddress;
-		if (userAddress && projectId) {
+		if (userAddress) {
 			setShowSigninModal(false);
+			if (project) setProject(undefined);
+			if (!isUserRegistered(user)) {
+				showCompleteProfile();
+				return;
+			}
+			if (!isSignedIn) {
+				showSignModal();
+				return;
+			}
 			client
 				.query({
 					query: FETCH_PROJECT_BY_ID,
 					variables: { id: Number(projectId) },
 				})
-				.then((res: any) => setProject(res.data.projectById))
+				.then((res: any) => {
+					const project = res.data.projectById;
+					if (
+						!compareAddresses(
+							userAddress,
+							project.adminUser.walletAddress,
+						)
+					) {
+						showToastError(
+							'Only project owner can edit the project',
+						);
+					} else setProject(project);
+				})
 				.catch(showToastError);
 		} else {
 			setShowSigninModal(true);
 		}
-	}, [user]);
+	}, [user, isSignedIn]);
 
 	return (
 		<>
@@ -44,7 +70,7 @@ const EditIndex = () => {
 					closeModal={() => setShowSigninModal(false)}
 				/>
 			)}
-			{project && <CreateIndex project={project} />}
+			{isSignedIn && project && <CreateProject project={project} />}
 		</>
 	);
 };

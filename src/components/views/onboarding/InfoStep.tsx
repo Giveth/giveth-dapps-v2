@@ -1,3 +1,8 @@
+import { ChangeEvent, FC, useEffect, useReducer, useState } from 'react';
+import { useMutation } from '@apollo/client';
+import { H6, neutralColors } from '@giveth/ui-design-system';
+import styled from 'styled-components';
+
 import { UPDATE_USER } from '@/apollo/gql/gqlUser';
 import Input, {
 	IFormValidations,
@@ -6,11 +11,6 @@ import Input, {
 import { SkipOnboardingModal } from '@/components/modals/SkipOnboardingModal';
 import { Row } from '@/components/styled-components/Grid';
 import { gToast, ToastType } from '@/components/toasts';
-import useUser from '@/context/UserProvider';
-import { useMutation } from '@apollo/client';
-import { H6, neutralColors } from '@giveth/ui-design-system';
-import { ChangeEvent, FC, useEffect, useReducer, useState } from 'react';
-import styled from 'styled-components';
 import { IStep, OnboardActions, OnboardStep } from './common';
 import { OnboardSteps } from './Onboarding.view';
 
@@ -75,7 +75,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 			});
 			if (response.updateUser) {
 				setStep(OnboardSteps.PHOTO);
-				gToast('Profile informations updated.', {
+				gToast('Profile information updated.', {
 					type: ToastType.SUCCESS,
 					title: 'Success',
 				});
@@ -84,7 +84,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 				throw 'Update User Failed';
 			}
 		} catch (error: any) {
-			gToast('Failed to update your inforamtion. Please try again.', {
+			gToast('Failed to update your information. Please try again.', {
 				type: ToastType.DANGER,
 				title: error.message,
 			});

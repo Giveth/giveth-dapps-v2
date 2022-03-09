@@ -1,19 +1,22 @@
+import Lottie from 'react-lottie';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import styled from 'styled-components';
 import {
 	brandColors,
 	H4,
 	H6,
-	Lead,
 	neutralColors,
 	OutlineLinkButton,
 	P,
 } from '@giveth/ui-design-system';
-import { FC, useState } from 'react';
-import styled from 'styled-components';
-import { IStep, OnboardStep } from './common';
+
+import { OnboardStep } from './common';
 import { Row } from '@/components/styled-components/Grid';
 import CongratsAnimation from '@/animations/congrats.json';
-import Lottie from 'react-lottie';
-import Link from 'next/link';
+import Routes from '@/lib/constants/Routes';
+import useUser from '@/context/UserProvider';
+import { isUserRegistered } from '@/lib/helpers';
 
 const CongratsAnimationOptions = {
 	loop: true,
@@ -23,7 +26,22 @@ const CongratsAnimationOptions = {
 	},
 };
 
-const DoneStep: FC<IStep> = ({ setStep }) => {
+const DoneStep = () => {
+	const {
+		state: { user },
+		actions: { showCompleteProfile },
+	} = useUser();
+
+	const router = useRouter();
+
+	const handleCreateButton = () => {
+		if (isUserRegistered(user)) {
+			router.push(Routes.CreateProject);
+		} else {
+			showCompleteProfile();
+		}
+	};
+
 	return (
 		<>
 			<DoneStepContainer>
@@ -49,20 +67,21 @@ const DoneStep: FC<IStep> = ({ setStep }) => {
 								You can create a project and receive funds.
 							</ContributeCardDesc>
 						</div>
-						<Link href='/create' passHref>
-							<ContributeCardButton label='New project' />
-						</Link>
+						<ContributeCardButton
+							onClick={handleCreateButton}
+							label='New project'
+						/>
 					</ContributeCard>
 					<ContributeCard>
 						<div>
 							<ContributeCardTitle weight={700}>
-								Donate to projets
+								Donate to projects
 							</ContributeCardTitle>
 							<ContributeCardDesc>
 								Take a look and donate to projects
 							</ContributeCardDesc>
 						</div>
-						<Link href='/projects' passHref>
+						<Link href={Routes.Projects} passHref>
 							<ContributeCardButton label='View projects' />
 						</Link>
 					</ContributeCard>
@@ -70,7 +89,7 @@ const DoneStep: FC<IStep> = ({ setStep }) => {
 			</DoneStepContainer>
 			<GotoHomeWrapper>
 				<P>or go to homepage to start exploring</P>
-				<Link href='/' passHref>
+				<Link href={Routes.Home} passHref>
 					<GotoHomeLink as='a'>Home page</GotoHomeLink>
 				</Link>
 			</GotoHomeWrapper>
@@ -99,7 +118,6 @@ const DoneStepContainer = styled(OnboardStep)`
 
 const ContributeCardRow = styled(Row)`
 	gap: 24px;
-	gap: 16px;
 `;
 
 const ContributeCard = styled(Row)`

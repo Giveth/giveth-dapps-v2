@@ -3,17 +3,18 @@ import { keccak256 } from '@ethersproject/keccak256';
 import { Contract } from '@ethersproject/contracts';
 import { Web3Provider } from '@ethersproject/providers';
 import { promisify } from 'util';
-import { networkInfo } from './constants/NetworksObj';
 import cookie from 'cookie';
 // @ts-ignore
 import tokenAbi from 'human-standard-token-abi';
+
 import { BasicNetworkConfig, GasPreference } from '@/types/config';
 import { EWallets } from '@/lib/wallet/walletTypes';
 import { brandColors } from '@giveth/ui-design-system';
-import { giveconomyTabs, mustSignTabs } from '@/lib/constants/Tabs';
+import { giveconomyTabs } from '@/lib/constants/Tabs';
 import { IUser } from '@/apollo/types/types';
 import Routes from '@/lib/constants/Routes';
 import { gToast, ToastType } from '@/components/toasts';
+import { networkInfo } from './constants/NetworksObj';
 
 declare let window: any;
 
@@ -76,7 +77,7 @@ export const getGasPreference = (
 	networkConfig: BasicNetworkConfig,
 ): GasPreference => {
 	const selectedWallet = window.localStorage.getItem('selectedWallet');
-	// MetaMask works with gas preference cofnig
+	// MetaMask works with gas preference config
 	if (selectedWallet === EWallets.METAMASK)
 		return networkConfig.gasPreference || {};
 
@@ -359,13 +360,6 @@ export const isGivEconomyRoute = (route: string) => {
 		giveconomyTab => giveconomyTab.href === route,
 	);
 	return !!givEconomyRoute;
-};
-
-export const isMustSignRoute = (route: string) => {
-	const mustSignRoute = mustSignTabs.find(
-		mustSignTab => mustSignTab.href === route,
-	);
-	return !!mustSignRoute;
 };
 
 export const showToastError = (err: any) => {
