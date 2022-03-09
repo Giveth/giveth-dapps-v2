@@ -57,7 +57,11 @@ const ProjectDonateCard = ({
 }: IProjectDonateCard) => {
 	const {
 		state: { user, isSignedIn },
-		actions: { signIn },
+		actions: {
+			signIn,
+			incrementLikedProjectsCount,
+			decrementLikedProjectsCount,
+		},
 	} = useUser();
 
 	const {
@@ -102,10 +106,16 @@ const ProjectDonateCard = ({
 			try {
 				if (!reaction) {
 					const newReaction = await likeProject(id);
-					setReaction(newReaction);
+					if (newReaction) {
+						setReaction(newReaction);
+						incrementLikedProjectsCount();
+					}
 				} else if (reaction?.userId === user?.id) {
 					const successful = await unlikeProject(reaction.id);
-					if (successful) setReaction(undefined);
+					if (successful) {
+						setReaction(undefined);
+						decrementLikedProjectsCount();
+					}
 				}
 			} catch (e) {
 				console.error('Error on like/unlike project ', e);
