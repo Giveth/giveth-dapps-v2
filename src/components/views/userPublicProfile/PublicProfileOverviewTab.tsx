@@ -1,6 +1,7 @@
-import ContributeCard from './PublicProfileContributeCard';
-import { Row } from '@/components/styled-components/Grid';
 import { useRouter } from 'next/router';
+import { FC, useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { IButtonProps } from '@giveth/ui-design-system/lib/esm/components/buttons/type';
 import {
 	brandColors,
 	Container,
@@ -8,13 +9,28 @@ import {
 	QuoteText,
 	Button,
 } from '@giveth/ui-design-system';
-import { FC, useEffect, useState } from 'react';
-import styled from 'styled-components';
+
+import Routes from '@/lib/constants/Routes';
+import ContributeCard from './PublicProfileContributeCard';
+import { Row } from '@/components/styled-components/Grid';
 import { IUserPublicProfileView } from './UserPublicProfile.view';
-import { IButtonProps } from '@giveth/ui-design-system/lib/esm/components/buttons/type';
+import useUser from '@/context/UserProvider';
+import { isUserRegistered } from '@/lib/helpers';
 
 const PublicProfileOverviewTab: FC<IUserPublicProfileView> = ({ user }) => {
 	const router = useRouter();
+	const {
+		actions: { showCompleteProfile },
+	} = useUser();
+
+	const handleCreateButton = () => {
+		if (isUserRegistered(user)) {
+			router.push(Routes.CreateProject);
+		} else {
+			showCompleteProfile();
+		}
+	};
+
 	const Sections = {
 		stranger: {
 			title: 'Don’t be a stranger!',
@@ -24,7 +40,7 @@ const PublicProfileOverviewTab: FC<IUserPublicProfileView> = ({ user }) => {
 				{
 					label: 'COMPLETE PROFILE',
 					buttonType: 'primary',
-					onClick: () => router.push('/onboard'),
+					onClick: () => router.push(Routes.Onboard),
 				} as IButtonProps,
 			],
 		},
@@ -36,12 +52,12 @@ const PublicProfileOverviewTab: FC<IUserPublicProfileView> = ({ user }) => {
 				{
 					label: 'CREATE A PROJECT',
 					buttonType: 'primary',
-					onClick: () => router.push('/create'),
+					onClick: handleCreateButton,
 				} as IButtonProps,
 				{
 					label: 'VIEW PROJECTS',
 					buttonType: 'secondary',
-					onClick: () => router.push('/projects'),
+					onClick: () => router.push(Routes.Projects),
 				} as IButtonProps,
 			],
 		},
@@ -52,7 +68,7 @@ const PublicProfileOverviewTab: FC<IUserPublicProfileView> = ({ user }) => {
 				{
 					label: 'EXPLORE GIVBACKS',
 					buttonType: 'primary',
-					onClick: () => router.push('/givbacks'),
+					onClick: () => router.push(Routes.GIVbacks),
 				} as IButtonProps,
 			],
 		},
@@ -75,32 +91,28 @@ const PublicProfileOverviewTab: FC<IUserPublicProfileView> = ({ user }) => {
 	}, [user]);
 
 	return (
-		<>
-			<UserContributeInfo>
-				<ContributeCard user={user} myAccount={true} />
-				<Container>
-					<AccountHero title={title}>
-						<H1>{title}</H1>
-						<QuoteText>{subtitle}</QuoteText>
-						<Buttons>
-							{buttons.map((btn, index) => {
-								return (
-									<Btn
-										size='large'
-										key={index}
-										label={btn.label}
-										buttonType={btn.buttonType}
-										onClick={e =>
-											btn.onClick && btn.onClick(e)
-										}
-									/>
-								);
-							})}
-						</Buttons>
-					</AccountHero>
-				</Container>
-			</UserContributeInfo>
-		</>
+		<UserContributeInfo>
+			<ContributeCard user={user} myAccount={true} />
+			<Container>
+				<AccountHero title={title}>
+					<H1>{title}</H1>
+					<QuoteText>{subtitle}</QuoteText>
+					<Buttons>
+						{buttons.map((btn, index) => {
+							return (
+								<Btn
+									size='large'
+									key={index}
+									label={btn.label}
+									buttonType={btn.buttonType}
+									onClick={e => btn.onClick && btn.onClick(e)}
+								/>
+							);
+						})}
+					</Buttons>
+				</AccountHero>
+			</Container>
+		</UserContributeInfo>
 	);
 };
 

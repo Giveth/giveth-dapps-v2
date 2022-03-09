@@ -5,7 +5,6 @@ import React, {
 	useEffect,
 	useState,
 } from 'react';
-import { useRouter } from 'next/router';
 import { useCookies } from 'react-cookie';
 import { useWeb3React } from '@web3-react/core';
 import { BigNumberish } from '@ethersproject/bignumber';
@@ -24,8 +23,8 @@ import User from '../entities/user';
 import { getLocalStorageUserLabel } from '@/services/auth';
 import useWallet from '@/hooks/walletHooks';
 import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
-import { isMustSignRoute } from '@/lib/helpers';
 import { IUser } from '@/apollo/types/types';
+import { CompleteProfile } from '@/components/modals/CompleteProfile';
 
 interface IUserContext {
 	state: {
@@ -38,6 +37,7 @@ interface IUserContext {
 		signIn?: () => Promise<boolean | string>;
 		signOut?: () => void;
 		showSignModal: () => void;
+		showCompleteProfile: () => void;
 		reFetchUserData: () => void;
 	};
 }
@@ -52,6 +52,7 @@ const UserContext = createContext<IUserContext>({
 		signIn: async () => false,
 		signOut: () => {},
 		showSignModal: () => {},
+		showCompleteProfile: () => {},
 		reFetchUserData: () => {},
 	},
 });
@@ -59,16 +60,17 @@ const UserContext = createContext<IUserContext>({
 const apolloClient = initializeApollo();
 
 export const UserProvider = (props: { children: ReactNode }) => {
-	const [user, setUser] = useState<IUser | undefined>();
 	const [cookie, setCookie, removeCookie] = useCookies(['giveth_user']);
-
-	const [balance, setBalance] = useState<string | null>(null);
-	const [showWelcomeSignin, setShowWelcomeSignin] = useState<boolean>(false);
-	useWallet();
 	const { account, active, library, chainId, deactivate } = useWeb3React();
+	useWallet();
+
+	const [user, setUser] = useState<IUser | undefined>();
+	const [balance, setBalance] = useState<string | null>(null);
+	const [showWelcomeSignin, setShowWelcomeSignin] = useState(false);
+	const [showCompleteProfile, setShowCompleteProfile] = useState(false);
+
 	const isEnabled = !!library?.getSigner() && !!account && !!chainId;
 	const isSignedIn = isEnabled && !!user?.token;
-	const router = useRouter();
 
 	useEffect(() => {
 		localStorage.removeItem(LocalStorageTokenLabel);
@@ -82,23 +84,6 @@ export const UserProvider = (props: { children: ReactNode }) => {
 			user && setUser(undefined);
 		}
 	}, [active, account]);
-
-	useEffect(() => {
-		if (user) {
-			// setToken().then()
-		}
-	}, [user]);
-
-	useEffect(() => {
-		if (
-			isEnabled &&
-			user &&
-			!user?.token &&
-			isMustSignRoute(router.route)
-		) {
-			setShowWelcomeSignin(true);
-		}
-	}, [isEnabled, user]);
 
 	useEffect(() => {
 		library?.on('block', () => {
@@ -171,21 +156,6 @@ export const UserProvider = (props: { children: ReactNode }) => {
 		setUser(undefined);
 	};
 
-	// const setToken = async () => {
-	//   const signedMessage = await signMessage(
-	//     config.OUR_SECRET,
-	//     account,
-	//     chainId,
-	//     library.getSigner()
-	//   )
-	//   console.log('signedMessage', signedMessage)
-	//   if (!signedMessage) return false
-	//   const token = await getToken(account, signedMessage, chainId, user)
-	//   console.log('token', token)
-	//   localStorage.setItem(LocalStorageTokenLabel, token)
-	//   return true
-	// }
-
 	const getBalance = () => {
 		library
 			.getBalance(account)
@@ -241,20 +211,22 @@ export const UserProvider = (props: { children: ReactNode }) => {
 					isSignedIn,
 				},
 				actions: {
-					// updateUser,
-					// showSign,
-					// signModalContent,
-					// setToken
 					showSignModal: () => setShowWelcomeSignin(true),
+					showCompleteProfile: () => setShowCompleteProfile(true),
 					signIn,
 					signOut,
 					reFetchUserData,
 				},
 			}}
 		>
+			{showCompleteProfile && (
+				<CompleteProfile
+					closeModal={() => setShowCompleteProfile(false)}
+				/>
+			)}
 			{showWelcomeSignin && (
 				<WelcomeSigninModal
-					showModal={true}
+					showModal={showWelcomeSignin}
 					setShowModal={() => setShowWelcomeSignin(false)}
 				/>
 			)}

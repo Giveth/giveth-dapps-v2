@@ -1,8 +1,11 @@
 import { useRouter } from 'next/router';
-import Routes from '@/lib/constants/Routes';
-import { Arc } from '@/components/styled-components/Arc';
 import { D3, Lead, Button, H3, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+
+import Routes from '@/lib/constants/Routes';
+import { Arc } from '@/components/styled-components/Arc';
+import { isUserRegistered } from '@/lib/helpers';
+import useUser from '@/context/UserProvider';
 
 const content = [
 	{
@@ -29,6 +32,19 @@ const content = [
 
 const HomeChangeMakers = () => {
 	const router = useRouter();
+	const {
+		state: { user },
+		actions: { showCompleteProfile },
+	} = useUser();
+
+	const handleCreateButton = () => {
+		if (isUserRegistered(user)) {
+			router.push(Routes.CreateProject);
+		} else {
+			showCompleteProfile();
+		}
+	};
+
 	return (
 		<Wrapper>
 			<PurpleArc />
@@ -52,7 +68,7 @@ const HomeChangeMakers = () => {
 					buttonType='primary'
 					size='large'
 					label='CREATE A PROJECT'
-					onClick={() => router.push(Routes.CreateProject)}
+					onClick={handleCreateButton}
 				/>
 			</MiddleSection>
 			<EndSection>

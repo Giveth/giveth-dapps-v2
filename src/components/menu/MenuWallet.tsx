@@ -1,18 +1,9 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
 import { useWeb3React } from '@web3-react/core';
 import { formatEther } from '@ethersproject/units';
 import { BigNumberish } from '@ethersproject/bignumber';
-import { Shadow } from '../styled-components/Shadow';
-import { FlexCenter } from '../styled-components/Grid';
-import Routes from '@/lib/constants/Routes';
-import { mediaQueries } from '@/lib/helpers';
-import { networkInfo } from '@/lib/constants/NetworksObj';
-import useUser from '@/context/UserProvider';
-import links from '@/lib/constants/links';
-import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
 import { useRouter } from 'next/router';
+import styled from 'styled-components';
 import {
 	brandColors,
 	neutralColors,
@@ -20,10 +11,16 @@ import {
 	P,
 	Overline,
 } from '@giveth/ui-design-system';
-import styled from 'styled-components';
+
+import Routes from '@/lib/constants/Routes';
+import { networkInfo } from '@/lib/constants/NetworksObj';
+import useUser from '@/context/UserProvider';
+import links from '@/lib/constants/links';
+import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
 import { switchNetworkHandler } from '@/lib/wallet';
 import { MenuContainer } from './Menu.sc';
 import { ETheme, useGeneral } from '@/context/general.context';
+import { isUserRegistered } from '@/lib/helpers';
 
 interface IMenuWallet {
 	setShowWalletModal: Dispatch<SetStateAction<boolean>>;
@@ -32,17 +29,26 @@ interface IMenuWallet {
 const MenuWallet: FC<IMenuWallet> = ({ setShowWalletModal }) => {
 	const [isMounted, setIsMounted] = useState(false);
 	const [balance, setBalance] = useState<string | null>(null);
-	const { chainId, deactivate, account, library } = useWeb3React();
+	const { chainId, account, library } = useWeb3React();
 	const [showWelcomeSignin, setShowWelcomeSignin] = useState<boolean>(false);
 	const [queueRoute, setQueueRoute] = useState<string>('');
 	const router = useRouter();
 	const {
 		state: { user, isSignedIn },
-		actions: { signIn, signOut },
+		actions: { signOut, showCompleteProfile },
 	} = useUser();
 	const { theme } = useGeneral();
 
-	const goRoute = (url: string, requiresSign: boolean) => {
+	const goRoute = (input: {
+		url: string;
+		requiresSign: boolean;
+		requiresRegistration?: boolean;
+	}) => {
+		const { url, requiresSign, requiresRegistration } = input;
+		if (requiresRegistration && !isUserRegistered(user)) {
+			showCompleteProfile();
+			if (url === Routes.CreateProject) return;
+		}
 		if (requiresSign && !isSignedIn) {
 			setQueueRoute(url);
 			return setShowWelcomeSignin(true);
@@ -117,7 +123,7 @@ const MenuWallet: FC<IMenuWallet> = ({ setShowWalletModal }) => {
 					{walletMenuArray.map(i => (
 						<MenuItem
 							key={i.title}
-							onClick={() => goRoute(i.url, i.requiresSign!)}
+							onClick={() => goRoute(i)}
 							theme={theme}
 						>
 							{i.title}
@@ -135,23 +141,33 @@ const MenuWallet: FC<IMenuWallet> = ({ setShowWalletModal }) => {
 };
 
 const walletMenuArray = [
-	{ title: 'My Account', url: Routes.MyAccount, requiresSign: true },
-	{ title: 'My Projects', url: Routes.MyProjects, requiresSign: true },
-	{ title: 'My Donations', url: Routes.MyDonations, requiresSign: true },
+	{
+		title: 'My Account',
+		url: Routes.MyAccount,
+		requiresSign: true,
+		requiresRegistration: true,
+	},
+	{
+		title: 'My Projects',
+		url: Routes.MyProjects,
+		requiresSign: true,
+		requiresRegistration: true,
+	},
+	{
+		title: 'My Donations',
+		url: Routes.MyDonations,
+		requiresSign: true,
+		requiresRegistration: true,
+	},
 	{
 		title: 'Create a Project',
 		url: Routes.CreateProject,
 		requiresSign: true,
+		requiresRegistration: true,
 	},
 	{ title: 'Report a bug', url: links.REPORT_ISSUE, requiresSign: false },
 	{ title: 'Support', url: Routes.Support, requiresSign: false },
 ];
-
-const Wrapper = styled.div`
-	position: relative;
-	z-index: 1000;
-	color: ${brandColors.deep[800]};
-`;
 
 const MenuItem = styled.a`
 	height: 45px;
@@ -182,57 +198,6 @@ const Menus = styled.div`
 	margin-top: 15px;
 	padding: 0 !important;
 	/* border-bottom: 2px solid ${brandColors.giv[300]}; */
-`;
-
-const UserAvatar = styled(Image)`
-	border-radius: 50%;
-	width: 24px;
-	height: 24px;
-`;
-
-const UserDetails = styled.div`
-	display: none;
-
-	${mediaQueries.sm} {
-		display: unset;
-		padding-left: 8px;
-		padding-right: 13px;
-	}
-`;
-
-const WalletClosed = styled(FlexCenter)<{ isOpen: boolean }>`
-	position: relative;
-	z-index: 1080;
-	border-radius: 72px;
-	background: white;
-	height: 48px;
-	box-shadow: ${props => (props.isOpen ? 'none' : Shadow.Dark['500'])};
-	padding: 0 12.5px;
-	cursor: pointer;
-`;
-
-const WalletOpened = styled.div<{ isOpen: boolean }>`
-	background: white;
-	border-radius: 12px;
-	box-shadow: ${Shadow.Dark[500]};
-	width: 250px;
-	position: absolute;
-	right: 0;
-	top: 22px;
-	z-index: 1070;
-	padding: 40px 0 5px 0;
-	color: ${brandColors.deep[800]};
-	max-height: ${props => (props.isOpen ? '600px' : '0px')};
-	transition: max-height 0.25s ease-in, opacity 0.25s ease-in;
-	visibility: ${props => (props.isOpen ? 'visible' : 'hidden')};
-	opacity: ${props => (props.isOpen ? 1 : 0)};
-
-	> * {
-		opacity: ${props => (props.isOpen ? 1 : 0)};
-		transition: opacity 0.25s ease-in;
-		transition-delay: 0.25s;
-		padding: 0 16px;
-	}
 `;
 
 const StyledButton = styled(Subline)`

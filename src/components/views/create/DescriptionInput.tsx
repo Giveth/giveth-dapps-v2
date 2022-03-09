@@ -7,9 +7,10 @@ import {
 } from '@giveth/ui-design-system';
 import dynamic from 'next/dynamic';
 import styled from 'styled-components';
+
 import { InputContainer, InputErrorMessage, Label } from './Create.sc';
 import { GoodProjectDescription } from '@/components/modals/GoodProjectDescription';
-import { ECreateErrFields } from '@/components/views/create/CreateIndex';
+import { ECreateErrFields } from '@/components/views/create/CreateProject';
 
 const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
 	ssr: false,

@@ -3,7 +3,7 @@ import { FC, useState, useEffect } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { GLink, IconMenu24 } from '@giveth/ui-design-system';
+import { Button, GLink } from '@giveth/ui-design-system';
 
 import { Row } from '@/components/styled-components/Grid';
 import { ThemeType } from '@/context/theme.context';
@@ -22,14 +22,11 @@ import {
 	WalletButton,
 	WBInfo,
 	WBNetwork,
-	CreateProject,
 	SmallCreateProject,
 	Logo,
 	BackBtn,
 	MenuAndButtonContainer,
 	CoverLine,
-	MBContainer,
-	HeaderSmallMenuAndButtonContainer,
 	SmallCreateProjectParent,
 } from './Header.sc';
 import { useSubgraph } from '@/context/subgraph.context';
@@ -40,13 +37,8 @@ import SignInModal from '../modals/SignInModal';
 import MenuWallet from '@/components/menu/MenuWallet';
 import { ETheme, useGeneral } from '@/context/general.context';
 import { menuRoutes } from '../menu/MenuRoutes';
-import { HeaderSmallMenu } from '../menu/HeaderMenu';
 import useUser from '@/context/UserProvider';
-import {
-	checkLinkActive,
-	isGivEconomyRoute,
-	shortenAddress,
-} from '@/lib/helpers';
+import { isUserRegistered, shortenAddress } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
 
 export interface IHeader {
@@ -58,26 +50,23 @@ const Header: FC<IHeader> = () => {
 	const [showRewardMenu, setShowRewardMenu] = useState(false);
 	const [showUserMenu, setShowUserMenu] = useState(false);
 	const [showHeader, setShowHeader] = useState(true);
-	const [showSmallMenu, setShowSmallMenu] = useState(false);
 	const [showWalletModal, setShowWalletModal] = useState(false);
 	const [showSigninModal, setShowSigninModal] = useState(false);
 	const [isGIVeconomyRoute, setIsGIVeconomyRoute] = useState(false);
 	const [isCreateRoute, setIsCreateRoute] = useState(false);
+
 	const {
 		currentValues: { balances },
 	} = useSubgraph();
 	const {
 		state: { user },
+		actions: { showCompleteProfile },
 	} = useUser();
 	const { chainId, active, activate, account, library } = useWeb3React();
 	const { theme } = useGeneral();
 	const router = useRouter();
 
 	const showLinks = !isCreateRoute;
-
-	const handleHoverClickBalance = (show: boolean) => {
-		setShowRewardMenu(show);
-	};
 
 	useEffect(() => {
 		const selectedWalletName =
@@ -124,7 +113,7 @@ const Header: FC<IHeader> = () => {
 
 	useEffect(() => {
 		setIsGIVeconomyRoute(router.route.startsWith('/giv'));
-		setIsCreateRoute(router.route.startsWith('/create'));
+		setIsCreateRoute(router.route.startsWith(Routes.CreateProject));
 	}, [router.route]);
 
 	const handleModals = () => {
@@ -135,9 +124,20 @@ const Header: FC<IHeader> = () => {
 		}
 	};
 
+	const handleHoverClickBalance = (show: boolean) => {
+		setShowRewardMenu(show);
+	};
+
+	const handleCreateButton = () => {
+		if (isUserRegistered(user)) {
+			router.push(Routes.CreateProject);
+		} else {
+			showCompleteProfile();
+		}
+	};
+
 	return (
 		<>
-			{/* <HeaderPlaceholder /> */}
 			<StyledHeader
 				justifyContent='space-between'
 				alignItems='center'
@@ -146,7 +146,7 @@ const Header: FC<IHeader> = () => {
 			>
 				<Row>
 					{isCreateRoute ? (
-						<BackBtn onClick={() => router.back()}>
+						<BackBtn onClick={router.back}>
 							<Logo>
 								<Image
 									width='26px'
@@ -188,36 +188,31 @@ const Header: FC<IHeader> = () => {
 				)}
 
 				<Row gap='8px'>
-					<Link href={Routes.CreateProject} passHref>
-						<CreateProject
-							label='CREATE A PROJECT'
-							size='small'
+					<Button
+						label='CREATE A PROJECT'
+						size='small'
+						buttonType={
+							theme === ETheme.Light ? 'primary' : 'secondary'
+						}
+						onClick={handleCreateButton}
+					/>
+					<SmallCreateProjectParent>
+						<SmallCreateProject
+							onClick={handleCreateButton}
 							theme={theme}
+							label=''
+							icon={
+								<Image
+									src='/images/plus-white.svg'
+									width={16}
+									height={16}
+									alt='create project'
+								/>
+							}
 							linkType={
 								theme === ETheme.Light ? 'primary' : 'secondary'
 							}
 						/>
-					</Link>
-					<SmallCreateProjectParent>
-						<Link href={Routes.CreateProject} passHref>
-							<SmallCreateProject
-								theme={theme}
-								label=''
-								icon={
-									<Image
-										src='/images/plus-white.svg'
-										width={16}
-										height={16}
-										alt='create project'
-									/>
-								}
-								linkType={
-									theme === ETheme.Light
-										? 'primary'
-										: 'secondary'
-								}
-							/>
-						</Link>
 					</SmallCreateProjectParent>
 					{active && account && chainId ? (
 						<>

@@ -1,7 +1,9 @@
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { TwitterShareButton } from 'react-share';
+import styled from 'styled-components';
+import { Arc } from '@/components/styled-components/Arc';
 import {
 	Button,
 	brandColors,
@@ -11,14 +13,27 @@ import {
 	H3,
 } from '@giveth/ui-design-system';
 
-import styled from 'styled-components';
-import Routes from '@/lib/constants/Routes';
-import { Arc } from '@/components/styled-components/Arc';
 import TwitterIcon from '/public/images/twitter.svg';
+import useUser from '@/context/UserProvider';
+import { isSSRMode, isUserRegistered } from '@/lib/helpers';
+import Routes from '@/lib/constants/Routes';
 
 const HomePurpleSection = () => {
 	const router = useRouter();
-	const url = typeof window !== 'undefined' ? window?.location?.href : null;
+	const {
+		state: { user },
+		actions: { showCompleteProfile },
+	} = useUser();
+
+	const handleCreateButton = () => {
+		if (isUserRegistered(user)) {
+			router.push(Routes.CreateProject);
+		} else {
+			showCompleteProfile();
+		}
+	};
+
+	const url = !isSSRMode ? window?.location?.href : null;
 	const shareTitle = `I am a Giver and you can be one too! 💙 @givethio. Let's Build the Future of Giving together! 🙌 🌈 #maketheworldabetterplace 🌏 💜`;
 
 	return (
@@ -80,7 +95,7 @@ const HomePurpleSection = () => {
 						buttonType='primary'
 						size='large'
 						label='CREATE A PROJECT'
-						onClick={() => router.push(Routes.CreateProject)}
+						onClick={handleCreateButton}
 					/>
 				</ForMakersContainers>
 				<ForMakersContainers>
