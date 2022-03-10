@@ -272,7 +272,7 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 				/>
 			)}
 			{user && (
-				<>
+				<Container>
 					<CreateContainer>
 						<div>
 							<Title>
@@ -371,11 +371,16 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 					<GuidelinesStyleLaptop>
 						<Guidelines />
 					</GuidelinesStyleLaptop>
-				</>
+				</Container>
 			)}
 		</>
 	);
 };
+
+const Container = styled.div`
+	max-width: ${deviceSize.desktop + 'px'};
+	position: relative;
+`;
 
 const GuidelinesStyle = styled.div`
 	> div {
@@ -410,6 +415,10 @@ const GuidelinesStyleLaptop = styled(GuidelinesStyle)`
 		position: fixed;
 		top: 104px;
 		right: 10px;
+	}
+	${mediaQueries.desktop} {
+		left: ${deviceSize.desktop - 310 + 'px'};
+		right: unset;
 	}
 `;
 
