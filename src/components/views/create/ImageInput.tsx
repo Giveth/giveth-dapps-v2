@@ -62,7 +62,6 @@ const ImageInput = (props: {
 };
 
 const CaptionContainer = styled(Caption)`
-	height: 18px;
 	margin: 8.5px 0 0 0;
 	span {
 		cursor: pointer;
@@ -72,7 +71,7 @@ const CaptionContainer = styled(Caption)`
 
 const PickImageContainer = styled.div`
 	display: flex;
-	flex-direction: row;
+	flex-wrap: wrap;
 `;
 
 const ColorBox = styled.div`

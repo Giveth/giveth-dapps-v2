@@ -128,7 +128,6 @@ class Map extends Component<MyProps, MyState> {
 									position: 'absolute',
 									marginTop: '-40px',
 									zIndex: 2,
-									width: '677px',
 								}}
 							>
 								{loading && <div>Loading...</div>}
@@ -170,14 +169,7 @@ class Map extends Component<MyProps, MyState> {
 					)}
 				</PlacesAutocomplete>
 				<GoogleMapComponent
-					containerElement={
-						<div
-							style={{
-								height: `388px`,
-								width: '696.03px',
-							}}
-						/>
-					}
+					containerElement={<div style={{ height: `388px` }} />}
 					mapElement={
 						<div
 							style={{

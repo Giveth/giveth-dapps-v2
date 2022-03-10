@@ -298,7 +298,6 @@ const Input = styled.input`
 `;
 
 const TextInputStyle = {
-	height: '358px',
 	marginTop: '4px',
 	marginBottom: '100px',
 	fontFamily: 'body',

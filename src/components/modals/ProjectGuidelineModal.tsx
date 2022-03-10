@@ -36,7 +36,7 @@ export const ProjectGuidelineModal: FC<IModal> = ({
 						<P>
 							No violations of our{' '}
 							<InlineLink
-								onClick={() => router.push(links.COVENANT)}
+								onClick={() => router.push(links.COVENANT_DOC)}
 							>
 								Covenant
 							</InlineLink>{' '}
