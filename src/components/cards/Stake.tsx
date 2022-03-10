@@ -2,7 +2,7 @@ import { FC, useContext, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import styled from 'styled-components';
 import { InputWithUnit } from '../input/index';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 import {
 	APRRow,
 	ArrowButton,
@@ -184,7 +184,7 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 						See how much you could earn
 					</H5>
 					<div>
-						<Row
+						<Flex
 							alignItems={'center'}
 							justifyContent={'space-between'}
 						>
@@ -198,7 +198,7 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 							>{`Max ${utils.formatEther(
 								totalAmount.div(10),
 							)} GIV`}</MaxStakeGIV>
-						</Row>
+						</Flex>
 						<ImpactCardInput>
 							<InputWithUnit
 								type='number'
@@ -213,7 +213,7 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 					<PoolCardTitle>If you stake for 1 month:</PoolCardTitle>
 					<PoolCard>
 						<PoolItems>
-							<Row justifyContent='space-between'>
+							<Flex justifyContent='space-between'>
 								<PoolItem>APR</PoolItem>
 								<PoolItemBold>
 									<Image
@@ -224,19 +224,19 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 									/>
 									{formatEthHelper(APR ? APR : Zero)}%
 								</PoolItemBold>
-							</Row>
-							<Row justifyContent='space-between'>
+							</Flex>
+							<Flex justifyContent='space-between'>
 								<PoolItem>Claimable</PoolItem>
 								<PoolItemBold>
 									{formatWeiHelper(potentialClaim)} GIV
 								</PoolItemBold>
-							</Row>
-							<Row justifyContent='space-between'>
+							</Flex>
+							<Flex justifyContent='space-between'>
 								<PoolItem>Streaming</PoolItem>
 								<PoolItemBold>
 									{formatWeiHelper(earnEstimate)} GIV/week
 								</PoolItemBold>
-							</Row>
+							</Flex>
 						</PoolItems>
 					</PoolCard>
 				</PoolCardContainer>

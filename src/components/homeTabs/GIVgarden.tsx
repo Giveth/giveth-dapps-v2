@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { H1, Container, IconGIVGarden } from '@giveth/ui-design-system';
 
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 import {
 	GardenTopContainer,
 	GardenBottomContainer,
@@ -60,7 +60,7 @@ export const TabGardenTop = () => {
 		<GardenTopContainer>
 			<TopInnerContainer>
 				<TopFiller />
-				<Row justifyContent='space-between'>
+				<Flex justifyContent='space-between'>
 					<Left>
 						<Title>
 							GIVgarden
@@ -87,7 +87,7 @@ export const TabGardenTop = () => {
 							targetNetworks={[config.XDAI_NETWORK_NUMBER]}
 						/>
 					</Right>
-				</Row>
+				</Flex>
 			</TopInnerContainer>
 			{showModal && (
 				<HarvestAllModal
@@ -113,7 +113,7 @@ export const TabGardenBottom = () => {
 		<GardenBottomContainer>
 			<Container>
 				<Section1Title weight={700}>Vote & Earn</Section1Title>
-				<Row justifyContent='space-between' alignItems='flex-start'>
+				<Flex justifyContent='space-between' alignItems='flex-start'>
 					<Section1Subtitle size='small'>
 						GIV token holders influence the treasury, roadmap and
 						mission of the Giveth ecosystem. By voting in the
@@ -125,7 +125,7 @@ export const TabGardenBottom = () => {
 						size='large'
 						onClick={goToGarden}
 					/>
-				</Row>
+				</Flex>
 				<Section2Title weight={500}>
 					Three Pillars of Governance
 				</Section2Title>

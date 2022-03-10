@@ -8,7 +8,7 @@ import {
 } from '@giveth/ui-design-system';
 import { FC } from 'react';
 import styled from 'styled-components';
-import { Row } from '../../styled-components/Grid';
+import { Flex } from '../../styled-components/Flex';
 import { IUser } from '@/apollo/types/types';
 
 export interface IUserPublicProfileView {
@@ -54,7 +54,7 @@ const UserContributeTitle = styled(H5)`
 	margin-bottom: 16px;
 `;
 
-const ContributeCardContainer = styled(Row)`
+const ContributeCardContainer = styled(Flex)`
 	gap: 32px;
 `;
 

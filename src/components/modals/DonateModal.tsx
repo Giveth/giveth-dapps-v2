@@ -16,7 +16,7 @@ import { IModal, Modal } from '@/components/modals/Modal';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import { WrongNetworkModal } from '@/components/modals/WrongNetwork';
 import { IProject } from '../../apollo/types/types';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 import Logger from '../../utils/Logger';
 import { checkNetwork } from '../../utils';
 import { isAddressENS, getAddressFromENS } from '../../lib/wallet';
@@ -384,7 +384,7 @@ const DonateContainer = styled.div`
 	margin: -30px 0 0 0;
 `;
 
-const DonateTopTitle = styled(Row)`
+const DonateTopTitle = styled(Flex)`
 	gap: 14px;
 	h6 {
 		padding: 24px 0;

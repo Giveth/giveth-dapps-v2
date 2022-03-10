@@ -8,7 +8,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 import { Modal, IModal } from './Modal';
 import { useRouter } from 'next/router';
 
@@ -64,7 +64,7 @@ const Desc = styled(Lead)`
 	text-align: left;
 `;
 
-const AlertBox = styled(Row)`
+const AlertBox = styled(Flex)`
 	background: ${semanticColors.blueSky[100]};
 	color: ${semanticColors.blueSky[700]};
 	border: 1px solid ${semanticColors.blueSky[700]};

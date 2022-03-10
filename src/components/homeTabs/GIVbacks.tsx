@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 import {
 	Container,
 	IconExternalLink,
@@ -65,12 +65,12 @@ export const TabGIVbacksTop = () => {
 			<GIVbacksTopContainer>
 				<TopInnerContainer>
 					<TopFiller />
-					<Row justifyContent='space-between'>
+					<Flex justifyContent='space-between'>
 						<Left>
-							<Row alignItems='baseline' gap='16px'>
+							<Flex alignItems='baseline' gap='16px'>
 								<GBTitle>GIVbacks</GBTitle>
 								<IconGIVBack size={64} />
-							</Row>
+							</Flex>
 							<GBSubtitle size='medium'>
 								GIVbacks rewards donors to verified projects
 								with GIV, super-charging Giveth as a
@@ -99,7 +99,7 @@ export const TabGIVbacksTop = () => {
 								targetNetworks={[config.XDAI_NETWORK_NUMBER]}
 							/>
 						</Right>
-					</Row>
+					</Flex>
 				</TopInnerContainer>
 			</GIVbacksTopContainer>
 			{showHarvestModal && (
@@ -151,7 +151,7 @@ export const TabGIVbacksBottom = () => {
 	return (
 		<GIVbacksBottomContainer>
 			<Container>
-				<Row wrap={1} justifyContent='space-between'>
+				<Flex wrap={1} justifyContent='space-between'>
 					<GbDataBlock
 						title='Donor Rewards'
 						button={
@@ -184,9 +184,9 @@ export const TabGIVbacksBottom = () => {
 						owner, when you get your project verified, your donors
 						become eligible to receive GIVbacks.
 					</GbDataBlock>
-				</Row>
+				</Flex>
 				<GIVBackCard>
-					<Row justifyContent='space-between' alignItems='center'>
+					<Flex justifyContent='space-between' alignItems='center'>
 						<RoundSection>
 							<RoundTitle>GIVbacks Round {round}</RoundTitle>
 							<RoundInfo>
@@ -250,7 +250,7 @@ export const TabGIVbacksBottom = () => {
 								/>
 							</InfoReadMore>
 						</InfoSection>
-					</Row>
+					</Flex>
 				</GIVBackCard>
 			</Container>
 		</GIVbacksBottomContainer>

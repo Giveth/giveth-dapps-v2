@@ -1,7 +1,7 @@
 import { useState, FC, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { InputWithUnit } from '../input/index';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 import {
 	APRRow,
 	ArrowButton,
@@ -144,8 +144,8 @@ export const DonateCard: FC<IClaimViewCardProps> = ({ index }) => {
 						If you donate your GIVdrop
 					</H5>
 					<div>
-						<Row justifyContent={'space-between'}>
-							<Row gap='4px' alignItems='center'>
+						<Flex justifyContent={'space-between'}>
+							<Flex gap='4px' alignItems='center'>
 								<ImpactCardLabel>Your donation</ImpactCardLabel>
 								<IconWithTooltip
 									icon={<IconHelp size={16} />}
@@ -156,7 +156,7 @@ export const DonateCard: FC<IClaimViewCardProps> = ({ index }) => {
 										eligible for GIVbacks.
 									</GdropDonateTooltip>
 								</IconWithTooltip>
-							</Row>
+							</Flex>
 							<MaxStakeGIV
 								onClick={() =>
 									setDonation(
@@ -166,7 +166,7 @@ export const DonateCard: FC<IClaimViewCardProps> = ({ index }) => {
 							>{`Max ${utils.formatEther(
 								totalAmount.div(10),
 							)} GIV`}</MaxStakeGIV>
-						</Row>
+						</Flex>
 						<ImpactCardInput>
 							<InputWithUnit
 								type='number'
@@ -180,18 +180,18 @@ export const DonateCard: FC<IClaimViewCardProps> = ({ index }) => {
 				<PoolCardContainer>
 					<DonatePoolCard>
 						<PoolItems>
-							<Row justifyContent='space-between'>
+							<Flex justifyContent='space-between'>
 								<PoolItem>GIVbacks</PoolItem>
 								<PoolItemBold>
 									{formatWeiHelper(potentialClaim)} GIV
 								</PoolItemBold>
-							</Row>
-							<Row justifyContent='space-between'>
+							</Flex>
+							<Flex justifyContent='space-between'>
 								<PoolItem>Streaming</PoolItem>
 								<PoolItemBold>
 									{formatWeiHelper(earnEstimate)} GIV/week
 								</PoolItemBold>
-							</Row>
+							</Flex>
 						</PoolItems>
 					</DonatePoolCard>
 				</PoolCardContainer>

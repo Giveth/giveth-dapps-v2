@@ -5,7 +5,7 @@ import { GLink, H2, Lead } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 
 import { Button } from '../styled-components/Button';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 import { ArrowButton, Card } from './common';
 import useClaim, { GiveDropStateType } from '@/context/claim.context';
 import { IClaimViewCardProps } from '../views/claim/Claim.view';
@@ -60,7 +60,7 @@ const Desc = styled(Lead)`
 	margin-top: 22px;
 `;
 
-const ConnectRow = styled(Row)`
+const ConnectRow = styled(Flex)`
 	flex-direction: row;
 	gap: 16px;
 	align-items: flex-start;
@@ -87,7 +87,7 @@ const WalletLink = styled(GLink)`
 	text-decoration: underline;
 `;
 
-const WalletDisplayer = styled(Row)`
+const WalletDisplayer = styled(Flex)`
 	flex-direction: column;
 	align-items: center;
 	gap: 16px;

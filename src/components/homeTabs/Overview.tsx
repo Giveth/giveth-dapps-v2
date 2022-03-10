@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 import router from 'next/router';
 import { Container, Button } from '@giveth/ui-design-system';
 import {
@@ -52,7 +52,7 @@ export const TabOverviewBottom = () => {
 					Giveth is rewarding and empowering those who give to
 					projects, to society, and to the world!
 				</TabDesc>
-				<Row wrap={1} justifyContent='space-between'>
+				<Flex wrap={1} justifyContent='space-between'>
 					<EGDataBlock
 						title='GIV Token'
 						subtitle='Donate, earn, govern'
@@ -79,9 +79,9 @@ export const TabOverviewBottom = () => {
 						our community members become long-term stakeholders in
 						the Future of Giving.
 					</EGDataBlock>
-				</Row>
+				</Flex>
 				<Section2Title>How to participate</Section2Title>
-				<Row wrap={1} justifyContent='space-between'>
+				<Flex wrap={1} justifyContent='space-between'>
 					<ParticipateDataBlock
 						title='Give'
 						button={
@@ -121,7 +121,7 @@ export const TabOverviewBottom = () => {
 						Become a liquidity provider and stake tokens in the
 						GIVfarm to generate even more GIV in rewards.
 					</ParticipateDataBlock>
-				</Row>
+				</Flex>
 				<ClaimCard>
 					<ClaimCardTitle weight={900}>
 						Claim your GIVdrop

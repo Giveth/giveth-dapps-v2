@@ -10,7 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 import { MenuContainer } from './Menu.sc';
 import Image from 'next/image';
 import { switchNetworkHandler } from '@/lib/wallet';
@@ -132,12 +132,12 @@ export const RewardMenu = () => {
 						<PartRow theme={theme}>
 							<PartInfo>
 								<PartTitle as='span'>From Givstream</PartTitle>
-								<Row gap='4px'>
+								<Flex gap='4px'>
 									<PartAmount medium>
 										{formatWeiHelper(givStreamLiquidPart)}
 									</PartAmount>
 									<PartUnit>GIV</PartUnit>
-								</Row>
+								</Flex>
 							</PartInfo>
 							<Image
 								src='/images/rarrow1.svg'
@@ -155,12 +155,12 @@ export const RewardMenu = () => {
 								<PartTitle as='span'>
 									GIVFarm & Givgarden
 								</PartTitle>
-								<Row gap='4px'>
+								<Flex gap='4px'>
 									<PartAmount medium>
 										{formatWeiHelper(farmsLiquidPart)}
 									</PartAmount>
 									<PartUnit>GIV</PartUnit>
-								</Row>
+								</Flex>
 							</PartInfo>
 							<Image
 								src='/images/rarrow1.svg'
@@ -176,12 +176,12 @@ export const RewardMenu = () => {
 						<PartRow theme={theme}>
 							<PartInfo>
 								<PartTitle as='span'>GIVBacks</PartTitle>
-								<Row gap='4px'>
+								<Flex gap='4px'>
 									<PartAmount medium>
 										{formatWeiHelper(givbackLiquidPart)}
 									</PartAmount>
 									<PartUnit>GIV</PartUnit>
-								</Row>
+								</Flex>
 							</PartInfo>
 							<Image
 								src='/images/rarrow1.svg'
@@ -203,7 +203,7 @@ export const RewardMenu = () => {
 	);
 };
 
-export const NetworkRow = styled(Row)`
+export const NetworkRow = styled(Flex)`
 	justify-content: space-between;
 	align-items: center;
 `;
@@ -223,7 +223,7 @@ export const FlowrateBox = styled.div`
 	padding: 8px 16px;
 `;
 
-export const FlowrateRow = styled(Row)`
+export const FlowrateRow = styled(Flex)`
 	align-items: center;
 	margin-top: 8px;
 	gap: 4px;
@@ -237,7 +237,7 @@ export const FlowrateUnit = styled(P)`
 	color: ${brandColors.giv[200]};
 `;
 
-export const PartRow = styled(Row)`
+export const PartRow = styled(Flex)`
 	justify-content: space-between;
 	margin: 16px 0;
 	border-radius: 8px;

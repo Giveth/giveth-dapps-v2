@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 
 export interface ICardProps {
 	activeIndex: number;
@@ -95,7 +95,7 @@ export const PreviousArrowButton = styled(ArrowButton)`
 	transform: rotate(180deg);
 `;
 
-export const APRRow = styled(Row)`
+export const APRRow = styled(Flex)`
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: flex-end;

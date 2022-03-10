@@ -12,7 +12,7 @@ import {
 	brandColors,
 } from '@giveth/ui-design-system';
 
-import { Row } from './styled-components/Grid';
+import { Flex } from './styled-components/Flex';
 import deleteIcon from '../../public/images/delete.png';
 import { client } from '@/apollo/apolloClient';
 import { UPLOAD_PROFILE_PHOTO } from '@/apollo/gql/gqlUser';
@@ -102,13 +102,13 @@ const ImageUploader: FC<IImageUploader> = ({ setUrl, url, setIsUploading }) => {
 					>
 						<Subline>{file.name}</Subline>
 						{url && (
-							<Row justifyContent='space-between'>
+							<Flex justifyContent='space-between'>
 								<SublineBold>Uploaded</SublineBold>
 								<DeleteRow onClick={onDelete}>
 									<IconX size={16} />
 									<GLink size='Small'>Delete</GLink>
 								</DeleteRow>
-							</Row>
+							</Flex>
 						)}
 						<UplaodBar uploading={uploading} />
 					</UploadInfoRow>
@@ -149,17 +149,17 @@ const DropZone = styled.div`
 	}
 `;
 
-const UploadContainer = styled(Row)`
+const UploadContainer = styled(Flex)`
 	margin: 16px 0;
 	gap: 14px;
 `;
 
-const UploadInfoRow = styled(Row)`
+const UploadInfoRow = styled(Flex)`
 	flex: 1;
 	text-align: left;
 `;
 
-const DeleteRow = styled(Row)`
+const DeleteRow = styled(Flex)`
 	color: ${brandColors.pinky[500]};
 	gap: 4px;
 	cursor: pointer;

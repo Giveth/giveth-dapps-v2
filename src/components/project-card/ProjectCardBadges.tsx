@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 import VerificationBadge from '../badges/VerificationBadge';
 import { IReaction } from '../../apollo/types/types';
 import useUser from '@/context/UserProvider';
@@ -145,11 +145,11 @@ const BadgeContainer = styled.div`
 	display: flex;
 `;
 
-const BadgeButtonContainer = styled(Row)`
+const BadgeButtonContainer = styled(Flex)`
 	gap: 3px;
 `;
 
-const BadgeButton = styled(Row)`
+const BadgeButton = styled(Flex)`
 	gap: 3px;
 	padding: 6px 7px;
 	background: ${neutralColors.gray[100]};

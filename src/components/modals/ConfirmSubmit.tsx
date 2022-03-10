@@ -17,7 +17,7 @@ import ErrorAnimation from '@/animations/error.json';
 import styled from 'styled-components';
 import { FC } from 'react';
 import { AddGIVTokenButton } from '../AddGIVTokenButton';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 import { useWeb3React } from '@web3-react/core';
 
 const loadingAnimationOptions = {
@@ -47,7 +47,7 @@ const errorAnimationOptions = {
 	},
 };
 
-const AddTokenRow = styled(Row)`
+const AddTokenRow = styled(Flex)`
 	margin-top: 16px;
 	margin-bottom: 16px;
 `;

@@ -8,7 +8,7 @@ import {
 	P,
 } from '@giveth/ui-design-system';
 
-import { Row } from '../../styled-components/Grid';
+import { Flex } from '../../styled-components/Flex';
 import PublicProfileDonationsTab from './PublicProfileDonationsTab';
 import PublicProfileLikedTab from './PublicProfileLikedTab';
 import PublicProfileProjectsTab from './PublicProfileProjectsTab';
@@ -132,7 +132,7 @@ export default PublicProfileContributes;
 
 const PubliCProfileTabsAndProjectContainer = styled.div``;
 
-const PubliCProfileTabsContainer = styled(Row)`
+const PubliCProfileTabsContainer = styled(Flex)`
 	padding: 37px 0;
 	gap: 16px;
 `;

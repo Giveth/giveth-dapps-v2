@@ -1,7 +1,7 @@
 import { useState, FC, useContext, useEffect } from 'react';
 import Image from 'next/image';
 import styled from 'styled-components';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 import { ArrowButton, Card, PreviousArrowButton } from './common';
 import { IClaimViewCardProps } from '../views/claim/Claim.view';
 
@@ -58,7 +58,7 @@ const Desc = styled(Lead)`
 		width: 100%;
 	}
 `;
-const StreamRow = styled(Row)`
+const StreamRow = styled(Flex)`
 	padding: 20px 0;
 	height: 208px;
 `;
@@ -68,11 +68,11 @@ const StreamSubtitle = styled.div`
 	font-size: 16px;
 `;
 
-const StreamContainer = styled(Row)`
+const StreamContainer = styled(Flex)`
 	padding: 20px 0px;
 `;
 
-const StreamValueContainer = styled(Row)`
+const StreamValueContainer = styled(Flex)`
 	padding: 20px 60px;
 	gap: 12px;
 	@media only screen and (max-width: 1120px) {
@@ -86,7 +86,7 @@ const StreamValue = styled.div`
 	line-height: 66px;
 `;
 
-const StreamPlaceholder = styled(Row)`
+const StreamPlaceholder = styled(Flex)`
 	font-size: 32px;
 	color: #b9a7ff;
 	align-self: flex-end;

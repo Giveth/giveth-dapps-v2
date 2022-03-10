@@ -4,7 +4,7 @@ import { FC, useState, useCallback, Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 import { formatWeiHelper } from '../helpers/number';
 import { PoolStakingConfig } from '../types/config';
-import { Row } from './styled-components/Grid';
+import { Flex } from './styled-components/Flex';
 
 interface IAmountInput {
 	maxAmount: BigNumber;
@@ -103,7 +103,7 @@ export const USDInput: FC<IAmountInput> = ({
 	);
 };
 
-const InputLabelRow = styled(Row)``;
+const InputLabelRow = styled(Flex)``;
 const InputLabel = styled(GLink)`
 	display: flex;
 `;
@@ -149,7 +149,7 @@ export const Input = styled.input`
 	${props => (props.disabled ? `color: ${brandColors.giv[300]};` : '')}
 `;
 
-const FiltersRow = styled(Row)`
+const FiltersRow = styled(Flex)`
 	gap: 8px;
 `;
 
