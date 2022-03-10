@@ -67,16 +67,16 @@ interface ICol {
 export const Col = styled.div<ICol>`
 	flex: 0 0 auto;
 	${props => calculateWidth(props.xs)};
-	@media (min-width: 576px) {
+	@media (min-width: ${minWidth.sm}px) {
 		${props => calculateWidth(props.sm)};
 	}
-	@media (min-width: 768px) {
+	@media (min-width: ${minWidth.md}px) {
 		${props => calculateWidth(props.md)};
 	}
-	@media (min-width: 992px) {
+	@media (min-width: ${minWidth.lg}px) {
 		${props => calculateWidth(props.lg)};
 	}
-	@media (min-width: 1200px) {
+	@media (min-width: ${minWidth.xl}px) {
 		${props => calculateWidth(props.xl)};
 	}
 `;
