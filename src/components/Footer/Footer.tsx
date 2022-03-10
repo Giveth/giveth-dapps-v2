@@ -29,34 +29,34 @@ export const Footer = () => {
 			<ContainerStyled>
 				<LeftContainer wrap={1}>
 					<LinkColumn>
-						<Link href={Routes.Home} passHref>
+						<Link href={Routes.Home}>
 							<a>
 								<LinkItem color={textColor}>Home</LinkItem>
 							</a>
 						</Link>
-						<Link href={Routes.Projects} passHref>
+						<Link href={Routes.Projects}>
 							<a>
 								<LinkItem color={textColor}>Projects</LinkItem>
 							</a>
 						</Link>
-						<Link href={Routes.AboutUs} passHref>
+						<Link href={Routes.AboutUs}>
 							<a>
 								<LinkItem color={textColor}>About Us</LinkItem>
 							</a>
 						</Link>
-						<Link href={Routes.Faq} passHref>
+						<Link href={Routes.Faq}>
 							<a>
 								<LinkItem color={textColor}>FAQ</LinkItem>
 							</a>
 						</Link>
-						<Link href={Routes.Support} passHref>
+						<Link href={Routes.Support}>
 							<a>
 								<LinkItem color={textColor}>Support</LinkItem>
 							</a>
 						</Link>
 					</LinkColumn>
 					<LinkColumn>
-						<Link href={Routes.Join} passHref>
+						<Link href={Routes.Join}>
 							<a>
 								<LinkItem color={textColor}>
 									Join Our Community
@@ -76,7 +76,7 @@ export const Footer = () => {
 								Developer Docs
 							</LinkItem>
 						</a>
-						<Link href={Routes.Terms} passHref>
+						<Link href={Routes.Terms}>
 							<a>
 								<LinkItem color={textColor}>
 									Terms of Use
@@ -91,7 +91,7 @@ export const Footer = () => {
 						<a href={links.COMMONS_STACK}>
 							<LinkItem color={textColor}>Commons Stack</LinkItem>
 						</a>
-						<Link href={Routes.Partnerships} passHref>
+						<Link href={Routes.Partnerships}>
 							<a>
 								<LinkItem color={textColor}>
 									Partnerships
@@ -126,7 +126,7 @@ export const Footer = () => {
 					</SocialContainer>
 					<SupportUs>
 						<Caption medium>Support us</Caption>
-						<Link href={links.SUPPORT_US} passHref>
+						<Link href={links.SUPPORT_US}>
 							<a>
 								<CaptionRed medium>
 									&nbsp;with your Donation
