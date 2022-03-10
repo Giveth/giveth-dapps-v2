@@ -4,7 +4,6 @@ import { useWeb3React } from '@web3-react/core';
 import Image from 'next/image';
 import {
 	brandColors,
-	Container,
 	GLink,
 	H3,
 	IconExternalLink,
@@ -24,6 +23,7 @@ import EditUserModal from '@/components/modals/EditUserModal';
 import { Flex } from '@/components/styled-components/Flex';
 import useUser from '@/context/UserProvider';
 import { isUserRegistered } from '@/lib/helpers';
+import { Container } from '@/components/Grid';
 
 export enum EOrderBy {
 	TokenAmount = 'TokenAmount',

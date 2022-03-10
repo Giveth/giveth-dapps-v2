@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Flex } from '../styled-components/Flex';
 import {
-	Container,
 	IconExternalLink,
 	IconGIVBack,
 	P,
@@ -32,7 +31,6 @@ import {
 	InfoReadMore,
 } from './GIVbacks.sc';
 import { useTokenDistro } from '@/context/tokenDistro.context';
-import { Zero } from '@ethersproject/constants';
 import BigNumber from 'bignumber.js';
 import config from '@/configuration';
 import { HarvestAllModal } from '../modals/HarvestAll';
@@ -43,6 +41,7 @@ import { GIVBackExplainModal } from '../modals/GIVBackExplain';
 import { TopFiller, TopInnerContainer } from './commons';
 import { useWeb3React } from '@web3-react/core';
 import links from '@/lib/constants/links';
+import { Container } from '@/components/Grid';
 
 export const TabGIVbacksTop = () => {
 	const [showHarvestModal, setShowHarvestModal] = useState(false);

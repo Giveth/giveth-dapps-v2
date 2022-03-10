@@ -1,7 +1,6 @@
 import {
 	P,
 	brandColors,
-	Container,
 	IconDocs,
 	IconMedium,
 	IconGithub,
@@ -19,6 +18,7 @@ import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
 import { mediaQueries } from '@/utils/constants';
 import { Flex } from '@/components/styled-components/Flex';
+import { Container } from '@/components/Grid';
 
 export const Footer = () => {
 	const { theme } = useGeneral();

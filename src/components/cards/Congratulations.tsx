@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Button } from '../styled-components/Button';
 import { useEffect, useState } from 'react';
 import useClaim from '@/context/claim.context';
-import { Container, H2, Lead } from '@giveth/ui-design-system';
+import { H2, Lead } from '@giveth/ui-design-system';
 import Lottie from 'react-lottie';
 import { formatWeiHelper } from '@/helpers/number';
 import Image from 'next/image';
@@ -13,6 +13,7 @@ import { useTokenDistro } from '@/context/tokenDistro.context';
 import { Flex } from '../styled-components/Flex';
 import { AddGIVTokenButton } from '../AddGIVTokenButton';
 import { useWeb3React } from '@web3-react/core';
+import { Container } from '@/components/Grid';
 
 const SmileImage = styled.div`
 	position: absolute;

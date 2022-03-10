@@ -4,7 +4,6 @@ import { Flex } from '../styled-components/Flex';
 import {
 	B,
 	brandColors,
-	Container,
 	H1,
 	H3,
 	H6,
@@ -68,6 +67,7 @@ import { useWeb3React } from '@web3-react/core';
 import { IconGIV } from '../Icons/GIV';
 import Pagination from '../Pagination';
 import Routes from '@/lib/constants/Routes';
+import { Container } from '@/components/Grid';
 
 export const TabGIVstreamTop = () => {
 	const [showModal, setShowModal] = useState(false);

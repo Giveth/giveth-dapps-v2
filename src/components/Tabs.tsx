@@ -1,15 +1,11 @@
 import styled from 'styled-components';
 import { FC } from 'react';
-import {
-	brandColors,
-	Container,
-	GLink,
-	neutralColors,
-} from '@giveth/ui-design-system';
+import { brandColors, GLink, neutralColors } from '@giveth/ui-design-system';
 import { Flex } from './styled-components/Flex';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
+import { Container } from '@/components/Grid';
 
 const Tabs: FC = () => {
 	const { asPath } = useRouter();

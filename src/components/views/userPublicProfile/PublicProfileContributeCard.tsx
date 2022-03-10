@@ -1,15 +1,9 @@
-import {
-	brandColors,
-	Container,
-	H2,
-	H3,
-	H5,
-	Subline,
-} from '@giveth/ui-design-system';
+import { brandColors, H2, H3, H5, Subline } from '@giveth/ui-design-system';
 import { FC } from 'react';
 import styled from 'styled-components';
 import { Flex } from '../../styled-components/Flex';
 import { IUser } from '@/apollo/types/types';
+import { Container } from '@/components/Grid';
 
 export interface IUserPublicProfileView {
 	user: IUser;

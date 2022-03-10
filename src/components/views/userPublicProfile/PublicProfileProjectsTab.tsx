@@ -7,11 +7,7 @@ import ProjectCard from '@/components/project-card/ProjectCard';
 import ContributeCard from './PublicProfileContributeCard';
 import { Flex } from '@/components/styled-components/Flex';
 import { ETheme } from '@/context/general.context';
-import {
-	brandColors,
-	Container,
-	neutralColors,
-} from '@giveth/ui-design-system';
+import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
@@ -23,6 +19,7 @@ import {
 } from './UserPublicProfile.view';
 import ProjectsTable from './ProjectsTable';
 import { mediaQueries } from '@/utils/constants';
+import { Container } from '@/components/Grid';
 
 const itemPerPage = 10;
 

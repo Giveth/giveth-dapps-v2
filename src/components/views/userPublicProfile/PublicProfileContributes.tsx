@@ -1,19 +1,15 @@
 import { useRouter } from 'next/router';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import {
-	brandColors,
-	Container,
-	neutralColors,
-	P,
-} from '@giveth/ui-design-system';
+import { brandColors, neutralColors, P } from '@giveth/ui-design-system';
 
-import { Flex } from '../../styled-components/Flex';
+import { Flex } from '@/components/styled-components/Flex';
 import PublicProfileDonationsTab from './PublicProfileDonationsTab';
 import PublicProfileLikedTab from './PublicProfileLikedTab';
 import PublicProfileProjectsTab from './PublicProfileProjectsTab';
 import PublicProfileOverviewTab from './PublicProfileOverviewTab';
 import { IUserPublicProfileView } from './UserPublicProfile.view';
+import { Container } from '@/components/Grid';
 
 enum EPublicProfile {
 	OVERVIEW,

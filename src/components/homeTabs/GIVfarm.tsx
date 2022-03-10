@@ -16,7 +16,6 @@ import {
 	CopyWrapper,
 } from './GIVfarm.sc';
 import {
-	Container,
 	IconGIVFarm,
 	IconExternalLink,
 	GLink,
@@ -32,6 +31,7 @@ import { useFarms } from '@/context/farm.context';
 import { TopFiller, TopInnerContainer, ExtLink, ExtLinkRow } from './commons';
 import { useWeb3React } from '@web3-react/core';
 import { shortenAddress } from '@/lib/helpers';
+import { Container } from '@/components/Grid';
 
 const GIVfarmTabContainer = styled(Container)``;
 

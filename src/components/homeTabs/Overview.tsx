@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Flex } from '../styled-components/Flex';
 import router from 'next/router';
-import { Container, Button } from '@giveth/ui-design-system';
+import { Button } from '@giveth/ui-design-system';
 import {
 	OverviewTopContainer,
 	PreTitle,
@@ -22,6 +22,7 @@ import {
 import { IconGIV } from '../Icons/GIV';
 import config from '@/configuration';
 import Routes from '@/lib/constants/Routes';
+import { Container } from '@/components/Grid';
 
 export const TabOverviewTop = () => {
 	return (

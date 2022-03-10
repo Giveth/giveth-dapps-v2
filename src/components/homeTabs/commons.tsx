@@ -1,5 +1,6 @@
-import { brandColors, Container, GLink } from '@giveth/ui-design-system';
+import { brandColors, GLink } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { Container } from '@/components/Grid';
 import { Flex } from '../styled-components/Flex';
 
 export const TabContainer = styled.div``;

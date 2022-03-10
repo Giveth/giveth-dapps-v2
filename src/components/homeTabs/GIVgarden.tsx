@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { H1, Container, IconGIVGarden } from '@giveth/ui-design-system';
+import { H1, IconGIVGarden } from '@giveth/ui-design-system';
 
 import { Flex } from '../styled-components/Flex';
 import {
@@ -32,6 +32,7 @@ import { ethers } from 'ethers';
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import { TopFiller, TopInnerContainer } from './commons';
 import { useWeb3React } from '@web3-react/core';
+import { Container } from '@/components/Grid';
 
 const poolStakingConfig = getGivStakingConfig(config.XDAI_CONFIG);
 
