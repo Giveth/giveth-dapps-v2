@@ -11,7 +11,7 @@ import ProjectCard from '@/components/project-card/ProjectCard';
 import { IProject } from '@/apollo/types/types';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered } from '@/lib/helpers';
-import { FlexCenter } from '@/components/styled-components/Grid';
+import { FlexCenter } from '@/components/styled-components/Flex';
 import useUser from '@/context/UserProvider';
 import { mediaQueries } from '@/utils/constants';
 

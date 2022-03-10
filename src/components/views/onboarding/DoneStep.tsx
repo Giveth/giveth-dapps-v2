@@ -12,7 +12,7 @@ import {
 } from '@giveth/ui-design-system';
 
 import { OnboardStep } from './common';
-import { Row } from '@/components/styled-components/Grid';
+import { Flex } from '@/components/styled-components/Flex';
 import CongratsAnimation from '@/animations/congrats.json';
 import Routes from '@/lib/constants/Routes';
 import useUser from '@/context/UserProvider';
@@ -101,7 +101,7 @@ const CongratsContainer = styled.div`
 	position: relative;
 `;
 
-const CongratsText = styled(Row)`
+const CongratsText = styled(Flex)`
 	flex-direction: column;
 	position: absolute;
 	top: 40%;
@@ -116,11 +116,11 @@ const DoneStepContainer = styled(OnboardStep)`
 	width: 950px;
 `;
 
-const ContributeCardRow = styled(Row)`
+const ContributeCardRow = styled(Flex)`
 	gap: 24px;
 `;
 
-const ContributeCard = styled(Row)`
+const ContributeCard = styled(Flex)`
 	background: ${brandColors.giv[500]};
 	color: ${neutralColors.gray[100]};
 	text-align: center;
@@ -144,7 +144,7 @@ const ContributeCardButton = styled(OutlineLinkButton)`
 	width: 156px;
 `;
 
-const GotoHomeWrapper = styled(Row)`
+const GotoHomeWrapper = styled(Flex)`
 	margin-top: 17px;
 	flex-direction: column;
 	align-items: center;

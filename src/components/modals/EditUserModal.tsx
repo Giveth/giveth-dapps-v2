@@ -7,7 +7,7 @@ import { IModal, Modal } from './Modal';
 import { client } from '@/apollo/apolloClient';
 import { UPDATE_USER } from '@/apollo/gql/gqlUser';
 import { IUser } from '@/apollo/types/types';
-import { FlexCenter, Row } from '@/components/styled-components/Grid';
+import { FlexCenter, Flex } from '@/components/styled-components/Flex';
 import ImageUploader from '../ImageUploader';
 import { gToast, ToastType } from '../toasts';
 import useUser from '@/context/UserProvider';
@@ -130,7 +130,7 @@ const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
 			<Wrapper>
 				{editStatus === EditStatusType.PHOTO ? (
 					<>
-						<Row flexDirection='column' gap='36px'>
+						<Flex flexDirection='column' gap='36px'>
 							<ImageUploader setUrl={setAvatar} url={avatar} />
 							<Button
 								buttonType='secondary'
@@ -146,7 +146,7 @@ const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
 									setEditStatus(EditStatusType.INFO);
 								}}
 							/>
-						</Row>
+						</Flex>
 					</>
 				) : (
 					<>

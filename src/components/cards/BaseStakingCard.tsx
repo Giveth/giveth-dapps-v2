@@ -160,13 +160,13 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					<Details>
 						<FirstDetail justifyContent='space-between'>
 							<DetailLabel>APR</DetailLabel>
-							{/* <Row gap='8px' alignItems='center'>
+							{/* <Flex gap='8px' alignItems='center'>
 								<IconContainer
 									onClick={() => setShowAPRModal(true)}
 								>
 									<IconCalculator size={16} />
 								</IconContainer>
-							</Row> */}
+							</Flex> */}
 							<Flex gap='8px' alignItems='center'>
 								<IconSpark
 									size={24}

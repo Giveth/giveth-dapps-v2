@@ -5,7 +5,7 @@ import { IProject } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import ContributeCard from './PublicProfileContributeCard';
-import { Row } from '@/components/styled-components/Grid';
+import { Flex } from '@/components/styled-components/Flex';
 import { ETheme } from '@/context/general.context';
 import {
 	brandColors,
@@ -137,7 +137,7 @@ const UserContributeInfo = styled.div`
 	padding: 40px 0 60px;
 `;
 
-export const Loading = styled(Row)`
+export const Loading = styled(Flex)`
 	position: absolute;
 	left: 0;
 	right: 0;

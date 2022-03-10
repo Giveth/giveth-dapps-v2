@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import { Row } from '@/components/styled-components/Grid';
+import { Flex } from '@/components/styled-components/Flex';
 import StakingPoolCard from '@/components/cards/StakingPoolCard';
 import config from '@/configuration';
 import { StakingType } from '@/types/config';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	GIVfarmTopContainer,
 	Left,
@@ -53,12 +53,12 @@ export const TabGIVfarmTop = () => {
 		<GIVfarmTopContainer>
 			<TopInnerContainer>
 				<TopFiller />
-				<Row justifyContent='space-between'>
+				<Flex justifyContent='space-between'>
 					<Left>
-						<Row alignItems='baseline' gap='16px'>
+						<Flex alignItems='baseline' gap='16px'>
 							<Title>GIVfarm</Title>
 							<IconGIVFarm size={64} />
-						</Row>
+						</Flex>
 						<Subtitle size='medium'>
 							Stake tokens in the GIVfarm to grow your rewards.
 						</Subtitle>
@@ -76,7 +76,7 @@ export const TabGIVfarmTop = () => {
 							]}
 						/>
 					</Right>
-				</Row>
+				</Flex>
 			</TopInnerContainer>
 		</GIVfarmTopContainer>
 	);
@@ -91,7 +91,7 @@ export const TabGIVfarmBottom = () => {
 
 	return (
 		<GIVfarmTabContainer>
-			<Row alignItems='center' gap='24px'>
+			<Flex alignItems='center' gap='24px'>
 				<NetworkSelector />
 				<ExtLinkRow alignItems='center'>
 					<ExtLink
@@ -144,7 +144,7 @@ export const TabGIVfarmBottom = () => {
 						<IconCopy />
 					</CopyWrapper>
 				</ContractRow>
-			</Row>
+			</Flex>
 			{chainId === config.XDAI_NETWORK_NUMBER && (
 				<PoolRow justifyContent='center' gap='24px' wrap={1}>
 					{config.XDAI_CONFIG.pools.map(

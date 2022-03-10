@@ -12,7 +12,7 @@ import {
 
 import Routes from '@/lib/constants/Routes';
 import ContributeCard from './PublicProfileContributeCard';
-import { Row } from '@/components/styled-components/Grid';
+import { Flex } from '@/components/styled-components/Flex';
 import { IUserPublicProfileView } from './UserPublicProfile.view';
 import useUser from '@/context/UserProvider';
 import { isUserRegistered } from '@/lib/helpers';
@@ -145,7 +145,7 @@ const UserContributeInfo = styled.div`
 	padding: 40px 0 60px;
 `;
 
-const Buttons = styled(Row)`
+const Buttons = styled(Flex)`
 	margin: 40px 0 0 0;
 	gap: 12px;
 `;

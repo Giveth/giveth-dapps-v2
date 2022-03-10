@@ -21,7 +21,7 @@ import PublicProfileContributes from './PublicProfileContributes';
 import { IUser, IProject } from '@/apollo/types/types';
 import { networksParams } from '@/helpers/blockchain';
 import EditUserModal from '@/components/modals/EditUserModal';
-import { Row } from '@/components/styled-components/Grid';
+import { Flex } from '@/components/styled-components/Flex';
 import useUser from '@/context/UserProvider';
 import { isUserRegistered } from '@/lib/helpers';
 
@@ -246,7 +246,7 @@ const PubliCProfileHeader = styled.div`
 	background-color: ${neutralColors.gray[100]};
 `;
 
-const UserInfoWithAvatarRow = styled(Row)`
+const UserInfoWithAvatarRow = styled(Flex)`
 	gap: 24px;
 `;
 
@@ -255,14 +255,14 @@ const PinkLink = styled(GLink)`
 	cursor: pointer;
 `;
 
-const UserInforRow = styled(Row)`
+const UserInforRow = styled(Flex)`
 	flex-direction: column;
 	flex: 1;
 	justify-content: space-between;
 	align-items: flex-start;
 `;
 
-const WalletContainer = styled(Row)`
+const WalletContainer = styled(Flex)`
 	gap: 18px;
 `;
 

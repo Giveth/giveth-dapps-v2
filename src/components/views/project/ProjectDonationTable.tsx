@@ -16,7 +16,7 @@ import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { IDonation } from '@/apollo/types/types';
 import SearchBox from '@/components/SearchBox';
-import { Row } from '@/components/styled-components/Grid';
+import { Flex } from '@/components/styled-components/Flex';
 import Pagination from '@/components/Pagination';
 import { networksParams } from '@/helpers/blockchain';
 import { smallFormatDate } from '@/lib/helpers';
@@ -258,7 +258,7 @@ const DonationTableContainer = styled.div`
 	max-width: 750px;
 `;
 
-const TableHeader = styled(Row)`
+const TableHeader = styled(Flex)`
 	height: 40px;
 	border-bottom: 1px solid ${neutralColors.gray[400]};
 	align-items: center;
@@ -280,7 +280,7 @@ const RowWrapper = styled.div`
 	}
 `;
 
-const TableCell = styled(Row)`
+const TableCell = styled(Flex)`
 	height: 60px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
 	align-items: center;
