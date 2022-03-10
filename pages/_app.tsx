@@ -1,4 +1,5 @@
 import React from 'react';
+import Head from 'next/head';
 import type { AppProps } from 'next/app';
 import { Toaster } from 'react-hot-toast';
 import { CookiesProvider } from 'react-cookie';
@@ -28,6 +29,12 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 	return (
 		<>
+			<Head>
+				<meta
+					name='viewport'
+					content='width=device-width, initial-scale=1.0'
+				/>
+			</Head>
 			<GeneralProvider>
 				<ApolloProvider client={apolloClient}>
 					<Web3ReactProvider getLibrary={getLibrary}>
