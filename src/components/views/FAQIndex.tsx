@@ -23,13 +23,12 @@ const FAQIndex = () => {
 					Lectus urna orci vel commodo.
 				</Lead>
 				<SearchStyles>
-					{/*TODO implement search*/}
-					<SearchBox
-						onChange={() => {}}
-						placeholder='What are you looking for?'
-						value=''
-						reset={() => {}}
-					/>
+					{/*TODO implement search function*/}
+					{/*<SearchBox*/}
+					{/*	onChange={() => {}}*/}
+					{/*	placeholder='What are you looking for?'*/}
+					{/*	value=''*/}
+					{/*/>*/}
 				</SearchStyles>
 				<FAQContainer>
 					{FAQArray.map(i => (

@@ -129,7 +129,8 @@ const ProjectDonationTable = ({
 						</Tab>
 					)}
 				</Tabs>
-				<SearchBox onChange={() => {}} value='' reset={() => {}} />
+				{/*TODO Implement search function*/}
+				{/*<SearchBox onChange={() => {}} value='' />*/}
 			</UpperSection>
 			{activeTab === 0 && (
 				<DonationTableContainer>

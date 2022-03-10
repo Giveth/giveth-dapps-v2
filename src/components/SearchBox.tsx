@@ -2,22 +2,16 @@ import Image from 'next/image';
 import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import SearchIcon from '/public/images/search.svg';
-import ArrowIcon from '/public/images/arrow_left_searchbox.svg';
 
 const SearchBox = (props: {
 	onChange: (e: string) => void;
 	placeholder?: string;
 	value: string;
-	reset: () => void;
 }) => {
-	const { onChange, placeholder, value, reset } = props;
+	const { onChange, placeholder, value } = props;
 
 	return (
 		<Wrapper>
-			<Clear>
-				<Image onClick={reset} src={ArrowIcon} alt='Arrow Icon' />
-			</Clear>
-			<Border />
 			<Input
 				onChange={e => onChange(e.target.value)}
 				placeholder={placeholder || 'Search ...'}
@@ -30,11 +24,6 @@ const SearchBox = (props: {
 		</Wrapper>
 	);
 };
-
-const Clear = styled.div`
-	flex-shrink: 0;
-	cursor: pointer;
-`;
 
 const Border = styled.div`
 	border-right: 1px solid ${neutralColors.gray[400]};
@@ -61,7 +50,7 @@ const Input = styled.input`
 `;
 
 const Wrapper = styled.div`
-	min-width: 343px;
+	min-width: 150px;
 	width: 100%;
 	height: 54px;
 	border: 2px solid ${neutralColors.gray[300]};
