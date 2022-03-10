@@ -46,7 +46,6 @@ const ProjectIndex = () => {
 	const slug = router.query.projectIdSlug as string;
 
 	useEffect(() => {
-		console.log(project);
 		if (!id) return;
 		initializeApollo()
 			.query({
@@ -55,8 +54,7 @@ const ProjectIndex = () => {
 					projectId: parseInt(id),
 					skip: 0,
 					take: donationsPerPage,
-					orderBy: 'CreationDate',
-					direction: 'ASC',
+					orderBy: { field: 'CreationDate', direction: 'DESC' },
 				},
 			})
 			.then(
