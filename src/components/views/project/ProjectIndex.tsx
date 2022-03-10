@@ -9,7 +9,7 @@ import WarningBadge from '@/components/badges/WarningBadge';
 import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
 import ProjectDonateCard from './ProjectDonateCard';
-import { mediaQueries, showToastError } from '@/lib/helpers';
+import { showToastError } from '@/lib/helpers';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { client, initializeApollo } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
@@ -19,6 +19,7 @@ import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import InfoBadge from '@/components/badges/InfoBadge';
 import { IDonationsByProjectId } from '@/apollo/types/gqlTypes';
 import SuccessfulCreation from '@/components/views/create/SuccessfulCreation';
+import { mediaQueries } from '@/utils/constants';
 
 const ProjectDonations = dynamic(() => import('./ProjectDonations'));
 const ProjectUpdates = dynamic(() => import('./ProjectUpdates'));
@@ -202,7 +203,7 @@ const BodyWrapper = styled.div`
 	align-items: center;
 	flex-direction: column-reverse;
 
-	${mediaQueries['xl']} {
+	${mediaQueries.laptopL} {
 		align-items: unset;
 		flex-direction: row;
 		justify-content: space-between;
