@@ -51,7 +51,6 @@ const ProjectDonations = (props: {
 const MessageContainer = styled.div`
 	height: 200px;
 	width: 100%;
-	max-width: 750px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;

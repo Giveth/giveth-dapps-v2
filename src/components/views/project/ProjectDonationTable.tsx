@@ -221,14 +221,12 @@ const Wrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
-	max-width: 750px;
 `;
 
 const UpperSection = styled.div`
 	display: flex;
 	gap: 30px;
 	align-items: center;
-	max-width: 750px;
 `;
 
 const Tabs = styled.div`
@@ -255,7 +253,6 @@ const DonationTableContainer = styled.div`
 	display: grid;
 	grid-template-columns: 1.25fr 2fr 1fr 1fr 1fr;
 	width: 100%;
-	max-width: 750px;
 `;
 
 const TableHeader = styled(Row)`

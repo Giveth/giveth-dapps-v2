@@ -50,7 +50,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 	return (
 		<>
 			<Head>
-				{viewPort && <meta name='viewport' content='width=768' />}
+				{/* {viewPort && <meta name='viewport' content='width=768' />} */}
 			</Head>
 			<GeneralProvider>
 				<ApolloProvider client={apolloClient}>
@@ -65,7 +65,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 													<HeaderWrapper />
 													<Component {...pageProps} />
 													<FooterWrapper />
-													{showMobileModal && (
+													{/* {showMobileModal && (
 														<MobileModal
 															showModal={
 																showMobileModal
@@ -74,7 +74,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 																setShowMobileModal
 															}
 														/>
-													)}
+													)} */}
 												</UserProvider>
 											</CookiesProvider>
 										</FarmProvider>
