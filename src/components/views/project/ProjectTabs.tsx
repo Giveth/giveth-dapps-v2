@@ -7,7 +7,7 @@ import {
 	P,
 	neutralColors,
 } from '@giveth/ui-design-system';
-import { mediaQueries } from '@/lib/helpers';
+import { breakPoints, mediaQueries } from '@/lib/helpers';
 import styled from 'styled-components';
 
 interface IProjectTabs {
@@ -88,6 +88,19 @@ const Wrapper = styled.div`
 		position: sticky;
 		top: 200px;
 		z-index: 10;
+	}
+
+	@media (max-width: ${breakPoints['sm']}px) {
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		max-width: 100vw;
+		padding: 24px 16px;
+
+		::-webkit-scrollbar {
+			width: 0px;
+			height: 0px;
+			background-color: transparent;
+		}
 	}
 `;
 

@@ -1,5 +1,6 @@
 import ReactQuill from 'react-quill';
 import styled from 'styled-components';
+import { breakPoints } from '@/lib/helpers';
 
 const RichTextViewer = (props: { content?: string }) => {
 	return (
@@ -10,8 +11,6 @@ const RichTextViewer = (props: { content?: string }) => {
 };
 
 const Wrapper = styled.div`
-	max-width: 750px;
-
 	img {
 		max-width: 100%;
 	}
@@ -21,6 +20,10 @@ const Wrapper = styled.div`
 		&:hover {
 			text-decoration: underline !important;
 		}
+	}
+
+	@media (max-width: ${breakPoints['sm']}px) {
+		padding: 0px 16px;
 	}
 `;
 

@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import VerificationBadge from '@/components/badges/VerificationBadge';
-import { isNoImg, noImgColor, noImgIcon, mediaQueries } from '@/lib/helpers';
+import {
+	isNoImg,
+	noImgColor,
+	noImgIcon,
+	mediaQueries,
+	breakPoints,
+} from '@/lib/helpers';
 import { IProject } from '@/apollo/types/types';
 import { P, brandColors, H3, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
@@ -37,16 +43,18 @@ const ProjectHeader = (props: { project?: IProject }) => {
 	return (
 		<Wrapper image={image} ref={containerRef}>
 			<TitleSection>
-				<BadgeSection>
-					{verified && <VerificationBadge verified />}
-					{traceable && <VerificationBadge trace />}
-				</BadgeSection>
-				<Title fixSize={adjustTitle} weight={700}>
-					{title}
-				</Title>
-				<Link href={`/user/${adminUser?.walletAddress}`} passHref>
-					<Author>{name}</Author>
-				</Link>
+				<TitleContainer>
+					<BadgeSection>
+						{verified && <VerificationBadge verified />}
+						{traceable && <VerificationBadge trace />}
+					</BadgeSection>
+					<Title fixSize={adjustTitle} weight={700}>
+						{title}
+					</Title>
+					<Link href={`/user/${adminUser?.walletAddress}`} passHref>
+						<Author>{name}</Author>
+					</Link>
+				</TitleContainer>
 			</TitleSection>
 		</Wrapper>
 	);
@@ -72,14 +80,37 @@ const Wrapper = styled.div<{ image: string | undefined }>`
 
 const TitleSection = styled.div`
 	height: 100%;
-	padding: 35px 150px;
+	padding: 35px 0px;
 	display: flex;
-	flex-direction: column;
-	justify-content: end;
 	background: linear-gradient(
 		${neutralColors.gray[900]}00,
 		${brandColors.giv[900]}
 	);
+`;
+
+const TitleContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	justify-content: end;
+
+	width: 100%;
+	margin: 0 auto;
+
+	${mediaQueries['sm']} {
+		padding: 0 32px;
+	}
+
+	${mediaQueries['md']} {
+		padding: 0 40px;
+	}
+
+	${mediaQueries['xxl']} {
+		max-width: 1280px;
+	}
+
+	@media (max-width: ${breakPoints['sm']}px) {
+		padding: 0px 16px;
+	}
 `;
 
 const BadgeSection = styled.div`

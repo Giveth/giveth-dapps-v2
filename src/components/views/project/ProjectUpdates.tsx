@@ -8,7 +8,7 @@ import {
 	DELETE_PROJECT_UPDATE,
 	EDIT_PROJECT_UPDATE,
 } from '@/apollo/gql/gqlProjects';
-import { showToastError } from '@/lib/helpers';
+import { breakPoints, showToastError } from '@/lib/helpers';
 import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
 import { gToast, ToastType } from '@/components/toasts';
 import ProjectTimeline, { TimelineSection } from './ProjectTimeline';
@@ -270,6 +270,11 @@ const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 
 const Wrapper = styled.div`
 	margin-left: 20px;
+
+	@media (max-width: ${breakPoints['sm']}px) {
+		padding: 0px 16px;
+		margin-left: 0px;
+	}
 `;
 
 const Content = styled.div`

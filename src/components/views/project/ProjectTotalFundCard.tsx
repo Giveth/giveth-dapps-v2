@@ -11,6 +11,7 @@ import {
 import WalletIcon from '/public/images/wallet_donate_tab.svg';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { IProject } from '@/apollo/types/types';
+import { breakPoints } from '@/lib/helpers';
 
 const ProjectTotalFundCard = (props: { project?: IProject }) => {
 	const {
@@ -44,10 +45,13 @@ const ProjectTotalFundCard = (props: { project?: IProject }) => {
 
 const Wrapper = styled.div`
 	background: white;
-	max-width: 750px;
 	border-radius: 12px;
 	box-shadow: ${Shadow.Neutral[400]};
 	overflow: hidden;
+
+	@media (max-width: ${breakPoints['sm']}px) {
+		margin: 0px 16px;
+	}
 `;
 
 const UpperSection = styled.div`

@@ -9,7 +9,7 @@ import WarningBadge from '@/components/badges/WarningBadge';
 import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
 import ProjectDonateCard from './ProjectDonateCard';
-import { mediaQueries, showToastError } from '@/lib/helpers';
+import { breakPoints, mediaQueries, showToastError } from '@/lib/helpers';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { client, initializeApollo } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
@@ -105,69 +105,73 @@ const ProjectIndex = () => {
 	}
 
 	return (
-		<Wrapper>
-			<Head>
-				<title>{title} | Giveth</title>
-			</Head>
-			<ProjectHeader project={project} />
-			{isDraft && (
-				<DraftIndicator>
-					<InfoBadge />
-					<Caption medium>This is a preview of your project.</Caption>
-				</DraftIndicator>
-			)}
-			<BodyWrapper>
-				<ContentWrapper>
-					{!isDraft && (
-						<ProjectTabs
-							activeTab={activeTab}
-							setActiveTab={setActiveTab}
-							project={project}
-							totalDonations={totalDonations}
-						/>
-					)}
-					{!isActive && !isDraft && (
-						<GivBackNotif>
-							<WarningBadge />
-							<GLink
-								size='Medium'
-								color={semanticColors.golden[700]}
-							>
-								This project is not active.
-							</GLink>
-						</GivBackNotif>
-					)}
-					{activeTab === 0 && (
-						<RichTextViewer content={description} />
-					)}
-					{activeTab === 1 && (
-						<ProjectUpdates
-							project={project}
-							fetchProject={fetchProject}
-						/>
-					)}
-					{activeTab === 2 && (
-						<ProjectDonations
-							donationsByProjectId={{
-								donations,
-								totalCount: totalDonations,
-							}}
-							project={project!}
-							isActive={isActive}
-							isDraft={isDraft}
-						/>
-					)}
-				</ContentWrapper>
-				<ProjectDonateCard
-					isDraft={isDraft}
-					project={project!}
-					isActive={isActive}
-					setIsActive={setIsActive}
-					setIsDraft={setIsDraft}
-					setCreationSuccessful={setCreationSuccessful}
-				/>
-			</BodyWrapper>
-		</Wrapper>
+		<>
+			<Wrapper>
+				<Head>
+					<title>{title} | Giveth</title>
+				</Head>
+				<ProjectHeader project={project} />
+				{isDraft && (
+					<DraftIndicator>
+						<InfoBadge />
+						<Caption medium>
+							This is a preview of your project.
+						</Caption>
+					</DraftIndicator>
+				)}
+				<BodyWrapper>
+					<ContentWrapper>
+						{!isDraft && (
+							<ProjectTabs
+								activeTab={activeTab}
+								setActiveTab={setActiveTab}
+								project={project}
+								totalDonations={totalDonations}
+							/>
+						)}
+						{!isActive && !isDraft && (
+							<GivBackNotif>
+								<WarningBadge />
+								<GLink
+									size='Medium'
+									color={semanticColors.golden[700]}
+								>
+									This project is not active.
+								</GLink>
+							</GivBackNotif>
+						)}
+						{activeTab === 0 && (
+							<RichTextViewer content={description} />
+						)}
+						{activeTab === 1 && (
+							<ProjectUpdates
+								project={project}
+								fetchProject={fetchProject}
+							/>
+						)}
+						{activeTab === 2 && (
+							<ProjectDonations
+								donationsByProjectId={{
+									donations,
+									totalCount: totalDonations,
+								}}
+								project={project!}
+								isActive={isActive}
+								isDraft={isDraft}
+							/>
+						)}
+					</ContentWrapper>
+					<ProjectDonateCard
+						isDraft={isDraft}
+						project={project!}
+						isActive={isActive}
+						setIsActive={setIsActive}
+						setIsDraft={setIsDraft}
+						setCreationSuccessful={setCreationSuccessful}
+					/>
+				</BodyWrapper>
+			</Wrapper>
+		</>
 	);
 };
 
@@ -192,26 +196,38 @@ const GivBackNotif = styled.div`
 	border-radius: 8px;
 	border: 1px solid ${semanticColors.golden[700]};
 	margin: 24px 0 24px;
-	max-width: 750px;
 	color: ${semanticColors.golden[700]};
 `;
 
 const BodyWrapper = styled.div`
 	margin: 0 170px 0 150px;
 	display: flex;
-	align-items: center;
-	flex-direction: column-reverse;
+	align-items: unset;
+	flex-direction: row;
+	justify-content: space-between;
 
-	${mediaQueries['xl']} {
-		align-items: unset;
-		flex-direction: row;
-		justify-content: space-between;
+	width: 100%;
+	margin: 0 auto;
+
+	@media (max-width: ${breakPoints['sm']}px) {
+		min-height: calc(100vh - 312px);
+	}
+
+	${mediaQueries['sm']} {
+		padding: 0 32px;
+	}
+
+	${mediaQueries['md']} {
+		padding: 0 40px;
+	}
+
+	${mediaQueries['xxl']} {
+		max-width: 1280px;
 	}
 `;
 
 const ContentWrapper = styled.div`
 	flex-grow: 1;
-	padding-right: 48px;
 `;
 
 export default ProjectIndex;
