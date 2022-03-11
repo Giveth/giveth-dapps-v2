@@ -25,6 +25,7 @@ import { getLocalStorageUserLabel } from '@/services/auth';
 import useWallet from '@/hooks/walletHooks';
 import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
 import { IUser } from '@/apollo/types/types';
+import SignInModal from '@/components/modals/SignInModal';
 import { CompleteProfile } from '@/components/modals/CompleteProfile';
 
 interface IUserContext {
@@ -71,6 +72,8 @@ export const UserProvider = (props: { children: ReactNode }) => {
 
 	const [user, setUser] = useState<IUser | undefined>();
 	const [balance, setBalance] = useState<string | null>(null);
+	const [showWalletModal, setShowWalletModal] = useState<boolean>(false);
+	useWallet();
 	const [showWelcomeSignin, setShowWelcomeSignin] = useState(false);
 	const [showCompleteProfile, setShowCompleteProfile] = useState(false);
 
@@ -153,7 +156,6 @@ export const UserProvider = (props: { children: ReactNode }) => {
 
 	const signOut = useCallback(() => {
 		Auth.logout();
-		window.localStorage.removeItem('selectedWallet');
 		window.localStorage.removeItem(getLocalStorageUserLabel() + '_token');
 		removeCookie('giveth_user');
 		apolloClient.resetStore().then();
@@ -257,6 +259,12 @@ export const UserProvider = (props: { children: ReactNode }) => {
 				<WelcomeSigninModal
 					showModal={showWelcomeSignin}
 					setShowModal={() => setShowWelcomeSignin(false)}
+				/>
+			)}
+			{showWalletModal && (
+				<SignInModal
+					showModal={showWalletModal}
+					closeModal={() => setShowWalletModal(false)}
 				/>
 			)}
 			{props.children}
