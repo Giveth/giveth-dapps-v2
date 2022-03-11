@@ -19,6 +19,8 @@ import FixedToast from '@/components/FixedToast';
 import CheckBox from '@/components/Checkbox';
 import WalletModal from '@/components/modals/WalletModal';
 import DonateModal from '@/components/modals/DonateModal';
+import { ChangeNetworkModal } from '@/components/modals/ChangeNetwork';
+import { mediaQueries } from '@/lib/helpers';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
 import { IProject } from '../../../apollo/types/types';
@@ -41,6 +43,7 @@ const xdaiChain = config.SECONDARY_NETWORK;
 const xdaiExcluded = config.XDAI_EXCLUDED_COINS;
 const stableCoins = [xdaiChain.mainToken, 'DAI', 'USDT'];
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
+const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
 
 interface ISuccessDonation {
 	transactionHash: string;
@@ -99,6 +102,7 @@ const CryptoDonation = (props: {
 	const [showDonateModal, setShowDonateModal] = useState(false);
 	const [showInsufficientModal, setShowInsufficientModal] = useState(false);
 	const [showWelcomeSignin, setShowWelcomeSignin] = useState<boolean>(false);
+	const [showChangeNetworkModal, setShowChangeNetworkModal] = useState(false);
 
 	const tokenSymbol = selectedToken?.symbol;
 	const isXdai = networkId === xdaiChain.id;
@@ -113,6 +117,14 @@ const CryptoDonation = (props: {
 			if (isGivingBlockProject) netId = 'thegivingblock';
 			if (isGivingBlockProject && networkId === 3)
 				netId = 'ropsten_thegivingblock';
+			console.log({ isProduction });
+			// Show change network modal when needed
+			if (netId === 3 && isProduction) {
+				return setShowChangeNetworkModal(true);
+			}
+			if (netId !== 100 && netId !== 1 && netId !== 3) {
+				return setShowChangeNetworkModal(true);
+			}
 			let givIndex: number | undefined;
 			const erc20List: any = getERC20List(netId).tokens;
 			const tokens = erc20List.map((token: any, index: any) => {
@@ -256,6 +268,13 @@ const CryptoDonation = (props: {
 				showModal={geminiModal}
 				setShowModal={setGeminiModal}
 			/>
+			{showChangeNetworkModal && (
+				<ChangeNetworkModal
+					showModal={showChangeNetworkModal}
+					setShowModal={setShowChangeNetworkModal}
+					targetNetwork={100}
+				/>
+			)}
 			{showInsufficientModal && (
 				<InsufficientFundModal
 					showModal={showInsufficientModal}
@@ -526,7 +545,6 @@ const AvText = styled(GLink)`
 const SearchContainer = styled.div`
 	display: flex;
 	flex-direction: row;
-
 	border: ${(props: IInputBox) =>
 		props.error === true
 			? `2px solid ${semanticColors.punch[500]}`
@@ -544,7 +562,6 @@ const SearchContainer = styled.div`
 					: brandColors.giv[500]};
 		box-shadow: ${Shadow.Neutral[500]};
 	}
-
 	${(props: IInputBox) =>
 		!!props.focused &&
 		`
@@ -555,13 +572,19 @@ box-shadow: ${Shadow.Neutral[500]};
 const DropdownContainer = styled.div`
 	width: 35%;
 	height: 54px;
+	${mediaQueries['sm']} and (max-width: 850px) {
+		width: 50%;
+	}
 `;
 const XDaiContainer = styled.div`
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	padding: 8px 16px 18.5px 16px;
+	padding: 18.5px 0;
 	border-radius: 8px;
+	align-items: center;
+	word-wrap: break-word;
+	width: 100%;
 	div:first-child {
 		display: flex;
 		flex-direction: row;
@@ -570,11 +593,21 @@ const XDaiContainer = styled.div`
 	img {
 		padding-right: 12px;
 	}
+	${mediaQueries['sm']} and (max-width: 850px) {
+		flex-direction: column;
+		align-items: center;
+		margin-bottom: 20px;
+		div:first-child {
+			text-align: center;
+		}
+	}
 `;
 const SwitchCaption = styled(Caption)`
 	color: ${brandColors.pinky[500]};
 	cursor: pointer;
 	padding: 0 0 0 12px;
+	word-wrap: break-word;
+	width: 120px;
 `;
 
 const MainButton = styled(Button)`
@@ -586,11 +619,18 @@ const MainButton = styled(Button)`
 
 const CheckBoxContainer = styled.div`
 	margin: 24px 0;
+	width: 100%;
 	div:nth-child(2) {
 		color: ${neutralColors.gray[700]};
 		font-size: 12px;
 		margin: 4px 0 0 50px;
 		width: 422px;
+		width: 100%;
+	}
+	${mediaQueries['sm']} {
+		div:nth-child(2) {
+			margin: 14px 0 0 0;
+		}
 	}
 `;
 

@@ -11,6 +11,7 @@ import ConfettiAnimation from '../../animations/confetti';
 import RadioOnIcon from '/public/images/radio_on.svg';
 import RadioOffIcon from '/public/images/radio_off.svg';
 import { formatEtherscanLink } from '../../../utils';
+import { mediaQueries } from '@/lib/helpers';
 import SocialBox from './SocialBox';
 import {
 	H4,
@@ -210,9 +211,15 @@ const Wrapper = styled.div`
 	margin: 0 auto;
 `;
 const Sections = styled.div`
-	display: grid;
-	grid-template-columns: repeat(2, minmax(500px, 1fr));
-	grid-auto-rows: minmax(100px, auto);
+	${mediaQueries['md']} {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(500px, 1fr));
+		grid-auto-rows: minmax(100px, auto);
+	}
+	${mediaQueries['sm']} {
+		grid-template-columns: repeat(2, minmax(100px, 1fr));
+		padding: 0 40px;
+	}
 `;
 const Left = styled.div`
 	display: grid;
@@ -227,6 +234,12 @@ const Left = styled.div`
 	padding: 29px 0;
 	border-top-left-radius: 16px;
 	border-bottom-left-radius: 16px;
+	${mediaQueries['sm']} {
+		align-items: flex-start;
+		div:first-child {
+			padding: 0 1%;
+		}
+	}
 `;
 const Right = styled.div`
 	z-index: 1;
@@ -253,18 +266,26 @@ const RadioSubtitleText = styled(Subline)`
 `;
 const RadioBox = styled.div`
 	display: flex;
-	flex-direction: row;
-	justify-content: flex-start;
+	justify-content: space-between;
 	margin-top: 29px;
-	margin-bottom: 40px;
-	div:first-child {
-		margin-right: 32px;
+	flex-wrap: wrap;
+	${mediaQueries['sm']} {
+		flex-direction: column;
+	}
+	${mediaQueries['md']} {
+		flex-direction: row;
+	}
+
+	@media (max-width: 850px) {
+		/* Very unique size issue */
+		margin-bottom: 10px;
 	}
 `;
 const RadioTitleBox = styled.div`
 	display: flex;
 	flex-direction: row;
 	cursor: pointer;
+	margin-bottom: 10px;
 `;
 const SucceessContainer = styled.div`
 	display: flex;
