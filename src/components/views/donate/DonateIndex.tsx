@@ -11,7 +11,7 @@ import ConfettiAnimation from '../../animations/confetti';
 import RadioOnIcon from '/public/images/radio_on.svg';
 import RadioOffIcon from '/public/images/radio_off.svg';
 import { formatEtherscanLink } from '../../../utils';
-import { mediaQueries } from '@/lib/helpers';
+import { mediaQueries } from '@/utils/constants';
 import SocialBox from './SocialBox';
 import {
 	H4,
@@ -211,12 +211,12 @@ const Wrapper = styled.div`
 	margin: 0 auto;
 `;
 const Sections = styled.div`
-	${mediaQueries['md']} {
+	${mediaQueries['tablet']} {
 		display: grid;
 		grid-template-columns: repeat(2, minmax(500px, 1fr));
 		grid-auto-rows: minmax(100px, auto);
 	}
-	${mediaQueries['sm']} {
+	${mediaQueries['mobileL']} {
 		grid-template-columns: repeat(2, minmax(100px, 1fr));
 		padding: 0 40px;
 	}
@@ -234,7 +234,7 @@ const Left = styled.div`
 	padding: 29px 0;
 	border-top-left-radius: 16px;
 	border-bottom-left-radius: 16px;
-	${mediaQueries['sm']} {
+	${mediaQueries['mobileL']} {
 		align-items: flex-start;
 		div:first-child {
 			padding: 0 1%;
@@ -269,10 +269,10 @@ const RadioBox = styled.div`
 	justify-content: space-between;
 	margin-top: 29px;
 	flex-wrap: wrap;
-	${mediaQueries['sm']} {
+	${mediaQueries['mobileL']} {
 		flex-direction: column;
 	}
-	${mediaQueries['md']} {
+	${mediaQueries['tablet']} {
 		flex-direction: row;
 	}
 

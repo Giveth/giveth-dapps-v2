@@ -6,7 +6,6 @@ import Select, {
 	StylesConfig,
 } from 'react-select';
 import { defaultTheme } from 'react-select';
-import { mediaQueries } from '@/lib/helpers';
 import { neutralColors, P, B, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 

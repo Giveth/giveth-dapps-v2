@@ -20,7 +20,7 @@ import CheckBox from '@/components/Checkbox';
 import WalletModal from '@/components/modals/WalletModal';
 import DonateModal from '@/components/modals/DonateModal';
 import { ChangeNetworkModal } from '@/components/modals/ChangeNetwork';
-import { mediaQueries } from '@/lib/helpers';
+import { mediaQueries } from '@/utils/constants';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
 import { IProject } from '../../../apollo/types/types';
@@ -573,7 +573,7 @@ box-shadow: ${Shadow.Neutral[500]};
 const DropdownContainer = styled.div`
 	width: 35%;
 	height: 54px;
-	${mediaQueries['sm']} and (max-width: 850px) {
+	${mediaQueries['mobileL']} and (max-width: 850px) {
 		width: 50%;
 	}
 `;
@@ -594,7 +594,7 @@ const XDaiContainer = styled.div`
 	img {
 		padding-right: 12px;
 	}
-	${mediaQueries['sm']} and (max-width: 850px) {
+	${mediaQueries['mobileL']} and (max-width: 850px) {
 		flex-direction: column;
 		align-items: center;
 		margin-bottom: 20px;
@@ -628,7 +628,7 @@ const CheckBoxContainer = styled.div`
 		width: 422px;
 		width: 100%;
 	}
-	${mediaQueries['sm']} {
+	${mediaQueries['mobileL']} {
 		div:nth-child(2) {
 			margin: 14px 0 0 0;
 		}
