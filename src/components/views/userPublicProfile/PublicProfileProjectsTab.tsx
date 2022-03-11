@@ -82,7 +82,7 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({
 		fetchUserProjects();
 	}, [user, page, order.by, order.direction]);
 	return (
-		<>
+		<ProjectsTab>
 			<UserContributeInfo>
 				<ContributeCard user={user} myAccount={myAccount} />
 			</UserContributeInfo>
@@ -108,13 +108,15 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({
 				)}
 				{loading && <Loading />}
 			</ProjectsContainer>
-			<Pagination
-				currentPage={page}
-				totalCount={totalCount}
-				setPage={setPage}
-				itemPerPage={itemPerPage}
-			/>
-		</>
+			<PaginationContainer>
+				<Pagination
+					currentPage={page}
+					totalCount={totalCount}
+					setPage={setPage}
+					itemPerPage={itemPerPage}
+				/>
+			</PaginationContainer>
+		</ProjectsTab>
 	);
 };
 
@@ -131,6 +133,7 @@ export const ProjectsContainer = styled(Container)`
 
 const ProjectsTableWrapper = styled.div`
 	margin-left: 35px;
+	overflow: auto;
 `;
 
 const UserContributeInfo = styled.div`
@@ -170,4 +173,13 @@ const GridContainer = styled.div`
 	${mediaQueries.desktop} {
 		grid-template-columns: repeat(3, 1fr);
 	}
+`;
+
+const ProjectsTab = styled.div`
+	margin: 0 0 150px 0;
+`;
+
+const PaginationContainer = styled.div`
+	position: absolute;
+	right: 50px;
 `;
