@@ -207,6 +207,7 @@ const CryptoDonation = (props: {
 	// 		gwei && setGasPrice(Number(gwei));
 	// 		ethFromWei && setGasETHPrice(Number(ethFromWei) * 21000);
 	// 	});
+
 	// }, [networkId, selectedToken]);
 
 	const checkGIVTokenAvailability = () => {
