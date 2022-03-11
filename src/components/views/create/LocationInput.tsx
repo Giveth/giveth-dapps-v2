@@ -47,7 +47,6 @@ const LocationInput = (props: {
 };
 
 const CaptionContainer = styled(Caption)`
-	height: 18px;
 	margin: 8.5px 0 0 0;
 	span {
 		cursor: pointer;

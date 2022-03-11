@@ -13,8 +13,12 @@ import {
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import styled from 'styled-components';
+
 import { Row } from '@/components/styled-components/Grid';
 import { ETheme, useGeneral } from '@/context/general.context';
+import links from '@/lib/constants/links';
+import Routes from '@/lib/constants/Routes';
+import { mediaQueries } from '@/utils/constants';
 
 export const Footer = () => {
 	const { theme } = useGeneral();
@@ -22,169 +26,179 @@ export const Footer = () => {
 		theme === ETheme.Dark ? brandColors.deep[100] : brandColors.deep[800];
 	return (
 		<FooterContainer>
-			<Container>
-				<Row>
-					<LeftContainer wrap={1}>
-						<LinkColumn>
-							<Link href='/' passHref>
-								<a>
-									<LinkItem color={textColor}>Home</LinkItem>
-								</a>
-							</Link>
-							<Link href='/projects' passHref>
-								<a>
-									<LinkItem color={textColor}>
-										Projects
-									</LinkItem>
-								</a>
-							</Link>
-							<Link href='/about' passHref>
-								<a>
-									<LinkItem color={textColor}>
-										About Us
-									</LinkItem>
-								</a>
-							</Link>
-							<Link href='/faq' passHref>
-								<a>
-									<LinkItem color={textColor}>FAQ</LinkItem>
-								</a>
-							</Link>
-							<Link href='/support' passHref>
-								<a>
-									<LinkItem color={textColor}>
-										Support
-									</LinkItem>
-								</a>
-							</Link>
-						</LinkColumn>
-						<LinkColumn>
-							<Link href='/join' passHref>
-								<a>
-									<LinkItem color={textColor}>
-										Join Our Community
-									</LinkItem>
-								</a>
-							</Link>
-							<a href='https://docs.giveth.io/whatisgiveth/'>
+			<ContainerStyled>
+				<LeftContainer wrap={1}>
+					<LinkColumn>
+						<Link href={Routes.Home} passHref>
+							<a>
+								<LinkItem color={textColor}>Home</LinkItem>
+							</a>
+						</Link>
+						<Link href={Routes.Projects} passHref>
+							<a>
+								<LinkItem color={textColor}>Projects</LinkItem>
+							</a>
+						</Link>
+						<Link href={Routes.AboutUs} passHref>
+							<a>
+								<LinkItem color={textColor}>About Us</LinkItem>
+							</a>
+						</Link>
+						<Link href={Routes.Faq} passHref>
+							<a>
+								<LinkItem color={textColor}>FAQ</LinkItem>
+							</a>
+						</Link>
+						<Link href={Routes.Support} passHref>
+							<a>
+								<LinkItem color={textColor}>Support</LinkItem>
+							</a>
+						</Link>
+					</LinkColumn>
+					<LinkColumn>
+						<Link href={Routes.Join} passHref>
+							<a>
 								<LinkItem color={textColor}>
-									What is Giveth?
+									Join Our Community
 								</LinkItem>
 							</a>
-							<a href='https://docs.giveth.io/dapps/'>
+						</Link>
+						<a href={links.GIVETH_DOCS}>
+							<LinkItem color={textColor}>
+								What is Giveth?
+							</LinkItem>
+						</a>
+						<a href={links.USER_DOCS}>
+							<LinkItem color={textColor}>User Guides</LinkItem>
+						</a>
+						<a href={links.DEVELOPER_DOCS}>
+							<LinkItem color={textColor}>
+								Developer Docs
+							</LinkItem>
+						</a>
+						<Link href={Routes.Terms} passHref>
+							<a>
 								<LinkItem color={textColor}>
-									User Guides
+									Terms of Use
 								</LinkItem>
 							</a>
-							<a href='https://docs.giveth.io/dapps/givethioinstallation'>
+						</Link>
+					</LinkColumn>
+					<LinkColumn>
+						<a href={links.TRACE}>
+							<LinkItem color={textColor}>Giveth TRACE</LinkItem>
+						</a>
+						<a href={links.COMMONS_STACK}>
+							<LinkItem color={textColor}>Commons Stack</LinkItem>
+						</a>
+						<Link href={Routes.Partnerships} passHref>
+							<a>
 								<LinkItem color={textColor}>
-									Developer Docs
+									Partnerships
 								</LinkItem>
 							</a>
-							<Link href='/tos' passHref>
-								<a>
-									<LinkItem color={textColor}>
-										Terms of Use
-									</LinkItem>
-								</a>
-							</Link>
-						</LinkColumn>
-						<LinkColumn>
-							<a href='https://trace.giveth.io/'>
-								<LinkItem color={textColor}>
-									Giveth TRACE
-								</LinkItem>
+						</Link>
+						<a href={links.RECRUITEE}>
+							<LinkItem color={textColor}>We’re Hiring!</LinkItem>
+						</a>
+					</LinkColumn>
+				</LeftContainer>
+				<RightContainer color={textColor}>
+					<SocialContainer>
+						<a href={links.MEDIUM}>
+							<IconMedium size={24} color={textColor} />
+						</a>
+						<a href={links.GITHUB}>
+							<IconGithub size={24} color={textColor} />
+						</a>
+						<a href={links.REDDIT}>
+							<IconRedit size={24} color={textColor} />
+						</a>
+						<a href={links.TWITTER}>
+							<IconTwitter size={24} color={textColor} />
+						</a>
+						<a href={links.YOUTUBE}>
+							<IconYoutube size={24} color={textColor} />
+						</a>
+						<a href={links.DOCS}>
+							<IconDocs size={24} color={textColor} />
+						</a>
+					</SocialContainer>
+					<SupportUs>
+						<Caption medium>Support us</Caption>
+						<Link href={links.SUPPORT_US} passHref>
+							<a>
+								<CaptionRed medium>
+									&nbsp;with your Donation
+								</CaptionRed>
 							</a>
-							<a href='https://commonsstack.org/'>
-								<LinkItem color={textColor}>
-									Commons Stack
-								</LinkItem>
-							</a>
-							<Link href='/partnerships' passHref>
-								<a>
-									<LinkItem color={textColor}>
-										Partnerships
-									</LinkItem>
-								</a>
-							</Link>
-							<a href='https://giveth.recruitee.com/'>
-								<LinkItem color={textColor}>
-									We’re Hiring!
-								</LinkItem>
-							</a>
-						</LinkColumn>
-					</LeftContainer>
-					<RightContainer color={textColor}>
-						<SocialContainer>
-							<a href='https://medium.com/giveth/'>
-								<IconMedium size={24} color={textColor} />
-							</a>
-							<a href='https://github.com/giveth'>
-								<IconGithub size={24} color={textColor} />
-							</a>
-							<a href='https://reddit.com/r/giveth'>
-								<IconRedit size={24} color={textColor} />
-							</a>
-							<a href='https://twitter.com/givethio'>
-								<IconTwitter size={24} color={textColor} />
-							</a>
-							<a href='https://www.youtube.com/channel/UClfutpRoY0WTVnq0oB0E0wQ'>
-								<IconYoutube size={24} color={textColor} />
-							</a>
-							<a href='https://docs.giveth.io/'>
-								<IconDocs size={24} color={textColor} />
-							</a>
-						</SocialContainer>
-						<Row justifyContent='flex-end'>
-							<Caption medium>Support us</Caption>
-							<Link
-								href='/donate/giveth-2021:-retreat-to-the-future'
-								passHref
-							>
-								<a>
-									<CaptionRed medium>
-										&nbsp;with your Donation
-									</CaptionRed>
-								</a>
-							</Link>
-						</Row>
-						<CopyRights>
-							MMXX - No Rights Reserved - The Giveth DAC
-						</CopyRights>
-					</RightContainer>
-				</Row>
-			</Container>
+						</Link>
+					</SupportUs>
+					<CopyRights>
+						MMXX - No Rights Reserved - The Giveth DAC
+					</CopyRights>
+				</RightContainer>
+			</ContainerStyled>
 		</FooterContainer>
 	);
 };
+
+const ContainerStyled = styled(Container)`
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+`;
 
 const FooterContainer = styled.div`
 	position: relative;
 	padding: 35px 0 12px;
 	z-index: 2;
+	margin-bottom: 50px;
 `;
 
 const LeftContainer = styled(Row)`
-	flex: 1;
 	justify-content: space-between;
+	gap: 0;
+
+	${mediaQueries.laptopL} {
+		gap: 0 72px;
+	}
 `;
 
 const RightContainer = styled.div<{ color: string }>`
-	flex: 1;
+	text-align: left;
 	color: ${props => props.color};
+
+	${mediaQueries.laptop} {
+		text-align: right;
+	}
 `;
 
-const SocialContainer = styled(Row)`
-	gap: 40px;
-	justify-content: flex-end;
+const SupportUs = styled.div`
+	display: flex;
+
+	${mediaQueries.laptop} {
+		justify-content: flex-end;
+	}
+`;
+
+const SocialContainer = styled.div`
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px;
+	justify-content: space-between;
 	margin-bottom: 32px;
+
+	${mediaQueries.mobileL} {
+		gap: 40px;
+	}
 `;
 
 const LinkColumn = styled(Row)`
 	flex-direction: column;
 	gap: 8px;
-	padding-right: 16px;
 	margin-bottom: 32px;
+	width: 180px;
 `;
 
 const LinkItem = styled(P)<{ color: string }>`
@@ -197,5 +211,5 @@ const CaptionRed = styled(Caption)`
 `;
 
 const CopyRights = styled(Subline)`
-	text-align: right;
+	margin-top: 8px;
 `;

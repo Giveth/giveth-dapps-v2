@@ -1,4 +1,4 @@
-import { P, brandColors, neutralColors } from '@giveth/ui-design-system';
+import { P, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 interface ICheckBox {
@@ -19,8 +19,11 @@ const CheckBox = (props: {
 			checked={checked}
 			style={style}
 		>
-			<Box checked={checked} />
-			{checked ? <img src='/images/checkmark-2.svg' /> : <span />}
+			{checked ? (
+				<img src='/images/checkmark-2.svg' alt='checkmark' />
+			) : (
+				<span />
+			)}
 			<P>{title}</P>
 		</Wrapper>
 	);
@@ -29,8 +32,8 @@ const CheckBox = (props: {
 const Wrapper = styled.div<ICheckBox>`
 	cursor: pointer;
 	display: flex;
-	flex-direction: row;
 	align-items: center;
+	gap: 12px;
 	color: ${(props: any) =>
 		props.checked ? neutralColors.gray[900] : neutralColors.gray[700]};
 	img {
@@ -41,23 +44,14 @@ const Wrapper = styled.div<ICheckBox>`
 					: neutralColors.gray[400]};
 		border-radius: 4px;
 		padding: 8px 8px 8px 6.67px;
-		margin: 0 12px 0 0;
+		width: 28px;
 	}
 	span {
 		width: 28px;
 		height: 28px;
 		border-radius: 4px;
-		margin: 0 12px 0 0;
 		border: 2px solid ${neutralColors.gray[400]};
 	}
-`;
-
-const Box = styled.div<ICheckBox>`
-	display: flex;
-	width: 4px;
-	height: 4px;
-	justify-content: center;
-	align-items: center;
 `;
 
 export default CheckBox;

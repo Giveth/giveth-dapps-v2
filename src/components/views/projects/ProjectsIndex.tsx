@@ -16,11 +16,7 @@ import { BigArc } from '@/components/styled-components/Arc';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import SearchBox from '@/components/SearchBox';
 import Routes from '@/lib/constants/Routes';
-import {
-	capitalizeFirstLetter,
-	isUserRegistered,
-	mediaQueries,
-} from '@/lib/helpers';
+import { capitalizeFirstLetter, isUserRegistered } from '@/lib/helpers';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { initializeApollo } from '@/apollo/apolloClient';
 import { ICategory, IProject } from '@/apollo/types/types';
@@ -29,6 +25,7 @@ import { gqlEnums } from '@/apollo/types/gqlEnums';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
 import { Shadow } from '../../styled-components/Shadow';
 import useUser from '@/context/UserProvider';
+import { mediaQueries } from '@/utils/constants';
 
 interface IProjectsView {
 	projects: IProject[];
@@ -320,7 +317,7 @@ const StyledButton = styled(OulineButton)<{ transparent?: boolean }>`
 const SelectComponent = styled(P)`
 	width: calc(50% - 8px);
 
-	${mediaQueries['xl']} {
+	${mediaQueries.laptopL} {
 		width: 345px;
 	}
 `;
@@ -357,15 +354,15 @@ export const ProjectsContainer = styled.div`
 	gap: 25px;
 	margin-bottom: 64px;
 
-	${mediaQueries['lg']} {
+	${mediaQueries.laptop} {
 		grid-template-columns: repeat(2, 1fr);
 	}
 
-	${mediaQueries['xl']} {
+	${mediaQueries.laptopL} {
 		grid-template-columns: repeat(3, 1fr);
 	}
 
-	${mediaQueries['xxl']} {
+	${mediaQueries.desktop} {
 		grid-template-columns: repeat(4, 1fr);
 	}
 `;

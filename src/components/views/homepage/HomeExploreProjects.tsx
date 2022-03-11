@@ -10,9 +10,10 @@ import styled from 'styled-components';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import { IProject } from '@/apollo/types/types';
 import Routes from '@/lib/constants/Routes';
-import { isUserRegistered, mediaQueries } from '@/lib/helpers';
+import { isUserRegistered } from '@/lib/helpers';
 import { FlexCenter } from '@/components/styled-components/Grid';
 import useUser from '@/context/UserProvider';
+import { mediaQueries } from '@/utils/constants';
 
 interface IHomeExploreProjects {
 	projects: IProject[];
@@ -95,15 +96,15 @@ const ProjectsContainer = styled.div`
 	gap: 25px;
 	margin-bottom: 64px;
 
-	${mediaQueries['lg']} {
+	${mediaQueries.laptop} {
 		grid-template-columns: repeat(2, 1fr);
 	}
 
-	${mediaQueries['xl']} {
+	${mediaQueries.laptopL} {
 		grid-template-columns: repeat(3, 1fr);
 	}
 
-	${mediaQueries['xxl']} {
+	${mediaQueries.desktop} {
 		grid-template-columns: repeat(4, 1fr);
 	}
 `;

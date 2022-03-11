@@ -27,6 +27,7 @@ export const InputErrorMessage = styled.div`
 	color: ${semanticColors.punch[500]};
 	font-size: 12px;
 	margin-top: 5px;
+	word-break: break-word;
 `;
 
 export const InputWithError = styled(Regular_Input)<{ error: boolean }>`
