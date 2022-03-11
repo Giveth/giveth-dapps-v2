@@ -1,33 +1,29 @@
-import { FC, useEffect, useState } from 'react';
-import { IModal, Modal } from './Modal';
+import { FC, useState } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
+import Image from 'next/image';
+import { BigNumber } from 'ethers';
 import {
 	brandColors,
 	GLink,
-	H6,
 	neutralColors,
 	Subline,
 	SublineBold,
 } from '@giveth/ui-design-system';
-import { BigNumber } from 'ethers';
+
+import { IModal, Modal } from './Modal';
 import { Row } from '../styled-components/Grid';
 import { PoolStakingConfig } from '@/types/config';
 import { useTokenDistro } from '@/context/tokenDistro.context';
-import Image from 'next/image';
 import { WhatisGIVstreamModal } from './WhatisGIVstream';
+import Routes from '@/lib/constants/Routes';
 
 interface IAPRModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
 	maxAmount: BigNumber;
 }
 
-export const APRModal: FC<IAPRModalProps> = ({
-	showModal,
-	setShowModal,
-	poolStakingConfig,
-	maxAmount,
-}) => {
+export const APRModal: FC<IAPRModalProps> = ({ showModal, setShowModal }) => {
 	const [showWhatIsGIVstreamModal, setShowWhatIsGIVstreamModal] =
 		useState(false);
 	const { tokenDistroHelper } = useTokenDistro();
@@ -53,11 +49,11 @@ export const APRModal: FC<IAPRModalProps> = ({
 						<Desc>
 							A percentage of the GIV you earn from staking is
 							claimable immediately, and the remaining percent
-							goes into increasing your GIVstream flowrate. Over
+							goes into increasing your GIVstream flow-rate. Over
 							time, a greater percentage of your total earnings
 							will be claimable immediately following the
 							continued expansion of the{' '}
-							<Link href='/givstream#flowRate' passHref>
+							<Link href={Routes.GIVstream_FlowRate} passHref>
 								<GIViverseLink>GIViverse</GIViverseLink>
 							</Link>
 						</Desc>
@@ -102,13 +98,6 @@ const APRModalContainer = styled.div`
 const GIViverseLink = styled.span`
 	cursor: pointer;
 	color: ${brandColors.cyan[500]};
-`;
-const APRLabel = styled(H6)``;
-
-const InputLabel = styled(GLink)`
-	text-align: left;
-	color: ${neutralColors.gray[100]};
-	margin-bottom: 8px;
 `;
 
 const DescContainer = styled.div`

@@ -7,7 +7,7 @@ import {
 	InputWithError,
 	Label,
 } from './Create.sc';
-import { ECreateErrFields } from '@/components/views/create/CreateIndex';
+import { ECreateErrFields } from '@/components/views/create/CreateProject';
 
 const NameInput = (props: {
 	value: string;

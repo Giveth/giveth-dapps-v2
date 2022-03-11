@@ -3,7 +3,6 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import InputBox from '../../InputBox';
 import { useWeb3React } from '@web3-react/core';
 import { Contract } from '@ethersproject/contracts';
-import { useQuery } from '@apollo/client';
 import { Shadow } from '@/components/styled-components/Shadow';
 import BigNumber from 'bignumber.js';
 import {
@@ -35,6 +34,7 @@ import config from '@/configuration';
 import tokenAbi from 'human-standard-token-abi';
 
 import TokenPicker from './TokenPicker';
+import Routes from '@/lib/constants/Routes';
 
 const ethereumChain = config.PRIMARY_NETWORK;
 const xdaiChain = config.SECONDARY_NETWORK;
@@ -66,53 +66,13 @@ interface ISelectObj {
 	decimals?: number;
 }
 
-interface IToken {
-	name: string;
-	chainId: number;
-	symbol: string;
-	icon?: string;
-}
-
-const customStyles = {
-	control: () => ({
-		// match with the menu
-		borderRadius: '0 !important',
-		borderRightColor: 'transparent !important',
-		padding: '8px 0 0 16px !important',
-	}),
-	menu: (base: any) => ({
-		...base,
-		// override border radius to match the box
-		borderRadius: 0,
-		// beautify the word cut by adding a dash see https://caniuse.com/#search=hyphens for the compatibility
-		hyphens: 'auto',
-		// kill the gap
-		marginTop: 0,
-		textAlign: 'left',
-		// prevent menu to scroll y
-		wordWrap: 'break-word',
-		width: '280px',
-	}),
-	menuList: (base: any) => ({
-		...base,
-		borderRadius: 0,
-		// kill the white space on first and last option
-		padding: 0,
-	}),
-	singleValue: (base: any) => ({
-		...base,
-		padding: 0,
-	}),
-};
-
 const CryptoDonation = (props: {
 	setSuccessDonation: any;
 	project: IProject;
 }) => {
 	const { chainId, account, library } = useWeb3React();
 	const {
-		state: { isSignedIn, isEnabled, user, balance },
-		actions: { signIn },
+		state: { isSignedIn, isEnabled, balance },
 	} = useUser();
 	const { project, setSuccessDonation } = props;
 	const { ethPrice } = usePrice();
@@ -481,7 +441,7 @@ const CryptoDonation = (props: {
 						color={brandColors.mustard[700]}
 						boldColor={brandColors.mustard[800]}
 						backgroundColor={brandColors.mustard[200]}
-						href='/givbacks'
+						href={Routes.GIVbacks}
 					/>
 				</ToastContainer>
 			) : (
@@ -491,7 +451,7 @@ const CryptoDonation = (props: {
 						color={brandColors.giv[300]}
 						boldColor={brandColors.giv[600]}
 						backgroundColor={brandColors.giv[100]}
-						href='/givbacks'
+						href={Routes.GIVbacks}
 					/>
 				</ToastContainer>
 			)}
@@ -598,7 +558,7 @@ const DropdownContainer = styled.div`
 `;
 const XDaiContainer = styled.div`
 	display: flex;
-	flex: row;
+	flex-direction: row;
 	justify-content: space-between;
 	padding: 8px 16px 18.5px 16px;
 	border-radius: 8px;

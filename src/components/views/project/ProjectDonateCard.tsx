@@ -5,16 +5,9 @@ import React, {
 	useEffect,
 	useState,
 } from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
-import { Shadow } from '@/components/styled-components/Shadow';
-import CategoryBadge from '@/components/badges/CategoryBadge';
-import Routes from '@/lib/constants/Routes';
-import { mediaQueries, showToastError } from '@/lib/helpers';
-import { IProject } from '@/apollo/types/types';
-import links from '@/lib/constants/links';
+import styled from 'styled-components';
 import {
 	Button,
 	brandColors,
@@ -25,7 +18,13 @@ import {
 	Caption,
 	IconHelp,
 } from '@giveth/ui-design-system';
-import styled from 'styled-components';
+
+import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
+import { Shadow } from '@/components/styled-components/Shadow';
+import CategoryBadge from '@/components/badges/CategoryBadge';
+import { showToastError } from '@/lib/helpers';
+import { IProject } from '@/apollo/types/types';
+import links from '@/lib/constants/links';
 import useUser from '@/context/UserProvider';
 import ShareModal from '@/components/modals/ShareModal';
 import { IReaction } from '@/apollo/types/types';
@@ -36,8 +35,9 @@ import { likeProject, unlikeProject } from '@/lib/reaction';
 import DeactivateProjectModal from '@/components/modals/DeactivateProjectModal';
 import ArchiveIcon from '../../../../public/images/icons/archive.svg';
 import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
-import { gToast, ToastType } from '@/components/toasts';
 import { idToProjectEdit, slugToProjectDonate } from '@/lib/routeCreators';
+import { VerificationModal } from '@/components/modals/VerificationModal';
+import { mediaQueries } from '@/utils/constants';
 
 interface IProjectDonateCard {
 	project?: IProject;
@@ -58,7 +58,11 @@ const ProjectDonateCard = ({
 }: IProjectDonateCard) => {
 	const {
 		state: { user, isSignedIn },
-		actions: { signIn },
+		actions: {
+			signIn,
+			incrementLikedProjectsCount,
+			decrementLikedProjectsCount,
+		},
 	} = useUser();
 
 	const {
@@ -79,7 +83,7 @@ const ProjectDonateCard = ({
 	const [loading, setLoading] = useState(false);
 	const [isAdmin, setIsAdmin] = useState<boolean>(false);
 	const [deactivateModal, setDeactivateModal] = useState<boolean>(false);
-
+	const [showVerificationModal, setShowVerificationModal] = useState(false);
 	const isCategories = categories?.length > 0;
 
 	const router = useRouter();
@@ -103,10 +107,16 @@ const ProjectDonateCard = ({
 			try {
 				if (!reaction) {
 					const newReaction = await likeProject(id);
-					setReaction(newReaction);
+					if (newReaction) {
+						setReaction(newReaction);
+						incrementLikedProjectsCount();
+					}
 				} else if (reaction?.userId === user?.id) {
 					const successful = await unlikeProject(reaction.id);
-					if (successful) setReaction(undefined);
+					if (successful) {
+						setReaction(undefined);
+						decrementLikedProjectsCount();
+					}
 				}
 			} catch (e) {
 				console.error('Error on like/unlike project ', e);
@@ -178,6 +188,11 @@ const ProjectDonateCard = ({
 
 	return (
 		<>
+			{showVerificationModal && (
+				<VerificationModal
+					closeModal={() => setShowVerificationModal(false)}
+				/>
+			)}
 			{showModal && slug && (
 				<ShareModal
 					showModal={showModal}
@@ -225,6 +240,7 @@ const ProjectDonateCard = ({
 							<FullOutlineButton
 								buttonType='primary'
 								label='VERIFY YOUR PROJECT'
+								onClick={() => setShowVerificationModal(true)}
 							/>
 						) : (
 							<FullButton
@@ -380,7 +396,7 @@ const Wrapper = styled.div`
 	flex-shrink: 0;
 	z-index: 20;
 
-	${mediaQueries['xl']} {
+	${mediaQueries.laptopL} {
 		position: sticky;
 		position: -webkit-sticky;
 		align-self: flex-start;
@@ -404,8 +420,8 @@ const FullOutlineButton = styled(OulineButton)`
 
 const ArchiveButton = styled(Button)`
 	width: 100%;
-	margin: 12px 0px 0px;
-	padding-bottom: 0px;
+	margin: 12px 0 0;
+	padding-bottom: 0;
 	color: ${brandColors.giv[500]};
 
 	&:hover {

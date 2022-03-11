@@ -73,25 +73,35 @@ export const WETH: Record<string, string> = {
 	100: '',
 };
 
-const size = {
-	mobileS: '320px',
-	mobileM: '375px',
-	mobileL: '425px',
-	tablet: '768px',
-	laptop: '1024px',
-	laptopL: '1280px',
-	desktop: '1440px',
+export const deviceSize = {
+	mobileS: 320,
+	mobileM: 375,
+	mobileL: 425,
+	tablet: 768,
+	laptop: 1024,
+	laptopL: 1280,
+	desktop: 1440,
 };
 
 export const device = {
-	mobileS: `(min-width: ${size.mobileS})`,
-	mobileM: `(min-width: ${size.mobileM})`,
-	mobileL: `(min-width: ${size.mobileL})`,
-	tablet: `(min-width: ${size.tablet})`,
-	laptop: `(min-width: ${size.laptop})`,
-	laptopL: `(min-width: ${size.laptopL})`,
-	desktop: `(min-width: ${size.desktop})`,
-	desktopL: `(min-width: ${size.desktop})`,
+	mobileS: `(min-width: ${deviceSize.mobileS}px)`,
+	mobileM: `(min-width: ${deviceSize.mobileM}px)`,
+	mobileL: `(min-width: ${deviceSize.mobileL}px)`,
+	tablet: `(min-width: ${deviceSize.tablet}px)`,
+	laptop: `(min-width: ${deviceSize.laptop}px)`,
+	laptopL: `(min-width: ${deviceSize.laptopL}px)`,
+	desktop: `(min-width: ${deviceSize.desktop}px)`,
+	desktopL: `(min-width: ${deviceSize.desktop}px)`,
+};
+
+export const mediaQueries = {
+	mobileS: `@media (min-width: ${deviceSize.mobileS}px)`,
+	mobileM: `@media (min-width: ${deviceSize.mobileM}px)`,
+	mobileL: `@media (min-width: ${deviceSize.mobileL}px)`,
+	tablet: `@media (min-width: ${deviceSize.tablet}px)`,
+	laptop: `@media (min-width: ${deviceSize.laptop}px)`,
+	laptopL: `@media (min-width: ${deviceSize.laptopL}px)`,
+	desktop: `@media (min-width: ${deviceSize.desktop}px)`,
 };
 
 export const OurImages = [

@@ -1,9 +1,4 @@
 import { useRouter } from 'next/router';
-import ProjectCard from '@/components/project-card/ProjectCard';
-import { IProject } from '@/apollo/types/types';
-import Routes from '@/lib/constants/Routes';
-import { mediaQueries } from '@/lib/helpers';
-import { FlexCenter } from '@/components/styled-components/Grid';
 import {
 	Button,
 	H5,
@@ -11,6 +6,14 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+
+import ProjectCard from '@/components/project-card/ProjectCard';
+import { IProject } from '@/apollo/types/types';
+import Routes from '@/lib/constants/Routes';
+import { isUserRegistered } from '@/lib/helpers';
+import { FlexCenter } from '@/components/styled-components/Grid';
+import useUser from '@/context/UserProvider';
+import { mediaQueries } from '@/utils/constants';
 
 interface IHomeExploreProjects {
 	projects: IProject[];
@@ -20,7 +23,20 @@ interface IHomeExploreProjects {
 
 const HomeExploreProjects = (props: IHomeExploreProjects) => {
 	const { projects, totalCount, noTitle } = props;
+
 	const router = useRouter();
+	const {
+		state: { user },
+		actions: { showCompleteProfile },
+	} = useUser();
+
+	const handleCreateButton = () => {
+		if (isUserRegistered(user)) {
+			router.push(Routes.CreateProject);
+		} else {
+			showCompleteProfile();
+		}
+	};
 
 	return (
 		<Wrapper>
@@ -45,7 +61,7 @@ const HomeExploreProjects = (props: IHomeExploreProjects) => {
 					buttonType='texty'
 					size='large'
 					label='Create a Project'
-					onClick={() => router.push(Routes.CreateProject)}
+					onClick={handleCreateButton}
 				/>
 			</ButtonsWrapper>
 		</Wrapper>
@@ -80,15 +96,15 @@ const ProjectsContainer = styled.div`
 	gap: 25px;
 	margin-bottom: 64px;
 
-	${mediaQueries['lg']} {
+	${mediaQueries.laptop} {
 		grid-template-columns: repeat(2, 1fr);
 	}
 
-	${mediaQueries['xl']} {
+	${mediaQueries.laptopL} {
 		grid-template-columns: repeat(3, 1fr);
 	}
 
-	${mediaQueries['xxl']} {
+	${mediaQueries.desktop} {
 		grid-template-columns: repeat(4, 1fr);
 	}
 `;

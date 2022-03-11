@@ -4,29 +4,18 @@ import {
 	P,
 	Lead,
 	Button,
-	GLink,
-	OulineButton,
 	H5,
 	H6,
 	Caption,
 	Subline,
-	Title,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Row } from '../styled-components/Grid';
 import Scrollbars from 'react-custom-scrollbars';
+
+import { Row } from '../styled-components/Grid';
 
 export const HarvestAllModalContainer = styled.div`
 	width: 686px;
-`;
-
-export const StyledGivethIcon = styled.div`
-	margin-top: 48px;
-	margin-bottom: 23px;
-`;
-
-export const GIVAmount = styled(Title)`
-	color: ${neutralColors.gray[100]};
 `;
 
 export const USDAmount = styled(P)`
@@ -57,63 +46,6 @@ export const HarvestButton = styled(Button)`
 export const CancelButton = styled(Button)`
 	width: 316px;
 	margin: 0 auto 8px;
-`;
-
-export const WaitingModalContainer = styled.div`
-	width: 546px;
-	padding: 24px;
-`;
-
-export const WaitingMessage = styled(H6)`
-	color: ${neutralColors.gray[100]};
-	padding: 24px;
-	margin-top: 18px;
-	margin-bottom: 40px;
-`;
-
-export const ConfirmedModalContainer = styled.div`
-	width: 522px;
-	padding: 24px 86px;
-`;
-
-export const ConfirmedMessage = styled(H6)`
-	color: ${neutralColors.gray[100]};
-	margin-top: 16px;
-`;
-
-export const ConfirmedData = styled(Row)`
-	margin-top: 32px;
-`;
-
-export const CDFirst = styled(P)`
-	color: ${neutralColors.gray[100]};
-	text-align: left;
-	flex: 1;
-`;
-
-export const CDSecond = styled(P)`
-	color: ${neutralColors.gray[100]};
-	flex: 1;
-`;
-
-export const CDInfo = styled(Row)`
-	div:first-child {
-		color: ${neutralColors.gray[100]};
-	}
-	div:last-child {
-		color: ${brandColors.giv[300]};
-	}
-`;
-
-export const CDLink = styled(GLink)`
-	text-align: left;
-	display: block;
-	color: ${brandColors.cyan[500]};
-`;
-
-export const DoneButton = styled(OulineButton)`
-	padding: 16px 135px;
-	margin-top: 32px;
 `;
 
 export const SPTitle = styled(Row)`

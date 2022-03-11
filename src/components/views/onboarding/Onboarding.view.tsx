@@ -1,6 +1,7 @@
 import { B, brandColors, Container, H5 } from '@giveth/ui-design-system';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
+
 import DoneStep from './DoneStep';
 import InfoStep from './InfoStep';
 import PhotoStep from './PhotoStep';
@@ -30,7 +31,7 @@ const OnboardView = () => {
 			<OnboardHeader step={step} />
 			{step === OnboardSteps.INFO && <InfoStep setStep={setStep} />}
 			{step === OnboardSteps.PHOTO && <PhotoStep setStep={setStep} />}
-			{step === OnboardSteps.DONE && <DoneStep setStep={setStep} />}
+			{step === OnboardSteps.DONE && <DoneStep />}
 		</OnboardViewContainer>
 	);
 };

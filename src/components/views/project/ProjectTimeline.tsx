@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { IProjectUpdate } from '@/apollo/types/types';
 import {
@@ -9,26 +10,41 @@ import {
 	H5,
 	Lead,
 	SublineBold,
+	semanticColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { Row } from '@/components/styled-components/Grid';
 
 const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {
 	ssr: false,
 });
 
+const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
+	ssr: false,
+});
+
+const UPDATE_LIMIT = 2000;
+
+interface IContent {
+	isEditing?: boolean;
+}
+
 const ProjectTimeline = (props: {
 	projectUpdate?: IProjectUpdate;
 	creationDate?: string;
 	removeUpdate?: Function;
+	editUpdate?: Function;
 	isOwner?: boolean;
 }) => {
-	const { projectUpdate, creationDate, removeUpdate, isOwner } = props;
+	const { projectUpdate, creationDate, removeUpdate, editUpdate, isOwner } =
+		props;
 	if (creationDate) return <LaunchSection creationDate={creationDate} />;
 	else if (projectUpdate)
 		return (
 			<UpdatesSection
 				projectUpdate={projectUpdate}
 				removeUpdate={removeUpdate}
+				editUpdate={editUpdate}
 				isOwner={isOwner}
 			/>
 		);
@@ -51,21 +67,80 @@ const LaunchSection = (props: { creationDate: string }) => {
 const UpdatesSection = (props: {
 	projectUpdate: IProjectUpdate;
 	removeUpdate?: Function;
+	editUpdate?: Function;
 	isOwner?: boolean;
 }) => {
-	// const { isOwner, removeUpdate } = props;
-	const { content, createdAt, title } = props.projectUpdate;
+	const { isOwner, removeUpdate, editUpdate } = props;
+	const { content, createdAt, title, projectId, id } = props.projectUpdate;
+	const [isEditing, setIsEditing] = useState<boolean>(false);
+	const [updateContent, setUpdateContent] = useState<string>(content);
+	const [newTitle, setNewTitle] = useState<string>(title);
+
 	return (
 		<Wrapper>
 			<TimelineSection date={createdAt} />
-			<Content>
-				<Title>{title}</Title>
-				<Description>
-					<RichTextViewer content={content} />
-				</Description>
-				{/* {isOwner && (
-					<a onClick={() => removeUpdate && removeUpdate()}>remove</a>
-				)} */}
+			<Content isEditing={isEditing}>
+				<ContentSection>
+					{isEditing ? (
+						<Input
+							value={newTitle}
+							onChange={e => setNewTitle(e.target.value)}
+							placeholder='Type a title...'
+						/>
+					) : (
+						<Title>{title}</Title>
+					)}
+					<Description>
+						{isEditing ? (
+							<RichTextInput
+								projectId={projectId}
+								value={updateContent}
+								style={TextInputStyle}
+								setValue={setUpdateContent}
+								withLimit={UPDATE_LIMIT}
+								placeholder='Edit your project'
+							/>
+						) : (
+							<RichTextViewer content={content} />
+						)}
+					</Description>
+				</ContentSection>
+				{isOwner &&
+					(isEditing ? (
+						<AbsolutButtons>
+							<UpdateBtn
+								label='EDIT'
+								buttonType='texty'
+								onClick={async () => {
+									editUpdate &&
+										(await editUpdate(
+											newTitle,
+											updateContent,
+											id,
+										));
+									setIsEditing(false);
+								}}
+							/>
+							<CancelContainer
+								onClick={() => setIsEditing(false)}
+							>
+								<EditBtn label='CANCEL' buttonType='texty' />
+							</CancelContainer>
+						</AbsolutButtons>
+					) : (
+						<ExtraButtons>
+							<RemoveContainer
+								onClick={() => removeUpdate && removeUpdate()}
+							>
+								<RemoveBtn label='REMOVE' buttonType='texty' />
+								<img src='/images/trash.svg' />
+							</RemoveContainer>
+							<EditContainer onClick={() => setIsEditing(true)}>
+								<EditBtn label='EDIT' buttonType='texty' />
+								<img src='/images/edit.svg' />
+							</EditContainer>
+						</ExtraButtons>
+					))}
 			</Content>
 		</Wrapper>
 	);
@@ -135,6 +210,11 @@ const Title = styled(H5)`
 `;
 
 const Content = styled.div`
+	display: flex;
+	width: 100%;
+	flex-direction: ${(props: IContent) =>
+		props.isEditing ? 'row-reverse' : 'row'};
+	justify-content: space-between;
 	margin-top: 15px;
 	margin-bottom: 42px;
 `;
@@ -148,5 +228,80 @@ const NewUpdate = styled.div`
 	text-align: center;
 	color: ${neutralColors.gray[600]};
 `;
+
+const ExtraButtons = styled.div`
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	img {
+		width: 12px;
+	}
+`;
+
+const AbsolutButtons = styled(ExtraButtons)`
+	position: absolute;
+`;
+
+const RemoveContainer = styled(Row)`
+	display: flex;
+	flex-direction: row;
+	cursor: pointer;
+	img {
+		margin-left: -15px;
+	}
+`;
+
+const ContentSection = styled.div`
+	width: 100%;
+`;
+
+const EditContainer = styled(RemoveContainer)``;
+const CancelContainer = styled(RemoveContainer)``;
+const RemoveBtn = styled(Button)`
+	color: ${semanticColors.punch[200]};
+	:hover {
+		color: ${semanticColors.punch[200]};
+		background: transparent;
+	}
+`;
+
+const EditBtn = styled(Button)`
+	color: ${brandColors.deep[100]};
+	:hover {
+		color: ${brandColors.deep[100]};
+		background: transparent;
+	}
+`;
+
+const UpdateBtn = styled(Button)`
+	color: ${brandColors.pinky[500]};
+	:hover {
+		color: ${brandColors.pinky[600]};
+		background: transparent;
+	}
+`;
+
+const Input = styled.input`
+	padding: 0;
+	font-size: 25px;
+	line-height: 36px;
+	letter-spacing: -0.005em;
+	outline: none;
+	border: none;
+	background: transparent;
+	color: ${brandColors.deep[600]};
+	width: 100%;
+	margin: 30px 0 15px 0;
+	::placeholder {
+		color: ${neutralColors.gray[600]};
+	}
+`;
+
+const TextInputStyle = {
+	marginTop: '4px',
+	marginBottom: '100px',
+	fontFamily: 'body',
+	backgroundColor: 'white',
+};
 
 export default ProjectTimeline;

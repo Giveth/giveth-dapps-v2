@@ -7,9 +7,10 @@ import {
 } from '@giveth/ui-design-system';
 import dynamic from 'next/dynamic';
 import styled from 'styled-components';
+
 import { InputContainer, InputErrorMessage, Label } from './Create.sc';
 import { GoodProjectDescription } from '@/components/modals/GoodProjectDescription';
-import { ECreateErrFields } from '@/components/views/create/CreateIndex';
+import { ECreateErrFields } from '@/components/views/create/CreateProject';
 
 const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
 	ssr: false,
@@ -34,14 +35,12 @@ const DescriptionInput = (props: {
 			<H5 id={ECreateErrFields.DESCRIPTION}>
 				Tell us about your project...
 			</H5>
-			<div>
-				<CaptionContainer>
-					Aim for 200-500 words.{' '}
-					<span onClick={() => setShowModal(true)}>
-						How to write a good project description.
-					</span>
-				</CaptionContainer>
-			</div>
+			<CaptionContainer>
+				Aim for 200-500 words.{' '}
+				<span onClick={() => setShowModal(true)}>
+					How to write a good project description.
+				</span>
+			</CaptionContainer>
 			<InputContainerStyled error={error}>
 				<Label>Project story</Label>
 				<RichTextInput
@@ -77,7 +76,6 @@ const ErrorStyled = styled(InputErrorMessage)`
 `;
 
 const CaptionContainer = styled(Caption)`
-	height: 18px;
 	margin: 8.5px 0 0 0;
 	span {
 		cursor: pointer;
@@ -86,7 +84,6 @@ const CaptionContainer = styled(Caption)`
 `;
 
 const TextInputStyle = {
-	height: '250px',
 	marginTop: '4px',
 	fontFamily: 'body',
 };

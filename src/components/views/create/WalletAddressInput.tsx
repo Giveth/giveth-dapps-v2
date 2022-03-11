@@ -10,7 +10,7 @@ import {
 } from './Create.sc';
 import useUser from '@/context/UserProvider';
 import { compareAddresses } from '@/lib/helpers';
-import { ECreateErrFields } from '@/components/views/create/CreateIndex';
+import { ECreateErrFields } from '@/components/views/create/CreateProject';
 
 const WalletAddressInput = (props: {
 	value: string;
@@ -68,7 +68,6 @@ const ChangeAddress = styled(Caption)`
 `;
 
 const CaptionContainer = styled(Caption)`
-	height: 18px;
 	margin: 8.5px 0 0 0;
 	span {
 		cursor: pointer;

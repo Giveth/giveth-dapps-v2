@@ -2,7 +2,7 @@ import development from './config/development';
 import production from './config/production';
 import { GlobalConfig } from './types/config';
 
-const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
+export const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
 
 const envConfig = isProduction ? production : development;
 

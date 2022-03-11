@@ -3,17 +3,18 @@ import { keccak256 } from '@ethersproject/keccak256';
 import { Contract } from '@ethersproject/contracts';
 import { Web3Provider } from '@ethersproject/providers';
 import { promisify } from 'util';
-import { networkInfo } from './constants/NetworksObj';
 import cookie from 'cookie';
 // @ts-ignore
 import tokenAbi from 'human-standard-token-abi';
+
 import { BasicNetworkConfig, GasPreference } from '@/types/config';
 import { EWallets } from '@/lib/wallet/walletTypes';
 import { brandColors } from '@giveth/ui-design-system';
-import { giveconomyTabs, mustSignTabs } from '@/lib/constants/Tabs';
+import { giveconomyTabs } from '@/lib/constants/Tabs';
 import { IUser } from '@/apollo/types/types';
 import Routes from '@/lib/constants/Routes';
 import { gToast, ToastType } from '@/components/toasts';
+import { networkInfo } from './constants/NetworksObj';
 
 declare let window: any;
 
@@ -76,7 +77,7 @@ export const getGasPreference = (
 	networkConfig: BasicNetworkConfig,
 ): GasPreference => {
 	const selectedWallet = window.localStorage.getItem('selectedWallet');
-	// MetaMask works with gas preference cofnig
+	// MetaMask works with gas preference config
 	if (selectedWallet === EWallets.METAMASK)
 		return networkConfig.gasPreference || {};
 
@@ -121,22 +122,6 @@ export const noImgIcon = '/images/GIV-icon-text.svg';
 export const isNoImg = (image: string | undefined) =>
 	!(image && !Number(image));
 
-export const breakPoints = {
-	sm: 500,
-	md: 768,
-	lg: 992,
-	xl: 1200,
-	xxl: 1440,
-};
-
-export const mediaQueries = {
-	sm: `@media (min-width: ${breakPoints.sm}px)`,
-	md: `@media (min-width: ${breakPoints.md}px)`,
-	lg: `@media (min-width: ${breakPoints.lg}px)`,
-	xl: `@media (min-width: ${breakPoints.xl}px)`,
-	xxl: `@media (min-width: ${breakPoints.xxl}px)`,
-};
-
 export const shortenAddress = (
 	address: string | null | undefined,
 	charsLength = 4,
@@ -151,14 +136,6 @@ export const shortenAddress = (
 	return `${address.slice(0, charsLength + prefixLength)}…${address.slice(
 		-charsLength,
 	)}`;
-};
-
-export const formatDateFromString = (date: string) => {
-	const nDate = new Date(date);
-	const year = nDate.getFullYear();
-	const month = nDate.toLocaleString('default', { month: 'short' });
-	const day = nDate.getDay();
-	return month + ' ' + day + ', ' + year;
 };
 
 export function formatTxLink(
@@ -359,13 +336,6 @@ export const isGivEconomyRoute = (route: string) => {
 		giveconomyTab => giveconomyTab.href === route,
 	);
 	return !!givEconomyRoute;
-};
-
-export const isMustSignRoute = (route: string) => {
-	const mustSignRoute = mustSignTabs.find(
-		mustSignTab => mustSignTab.href === route,
-	);
-	return !!mustSignRoute;
 };
 
 export const showToastError = (err: any) => {

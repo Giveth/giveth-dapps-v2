@@ -1,11 +1,4 @@
-import React, {
-	FC,
-	Fragment,
-	useContext,
-	useEffect,
-	useRef,
-	useState,
-} from 'react';
+import React, { FC, Fragment, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Row } from '../styled-components/Grid';
 import {
@@ -74,6 +67,7 @@ import { TopFiller } from './commons';
 import { useWeb3React } from '@web3-react/core';
 import { IconGIV } from '../Icons/GIV';
 import Pagination from '../Pagination';
+import Routes from '@/lib/constants/Routes';
 
 export const TabGIVstreamTop = () => {
 	const [showModal, setShowModal] = useState(false);
@@ -285,7 +279,7 @@ export const TabGIVstreamBottom = () => {
 						<IGsDataBox
 							title='GIVfarm'
 							button={
-								<Link href='/givfarm' passHref>
+								<Link href={Routes.GIVfarm} passHref>
 									<GsButton
 										label='SEE OPPORTUNITIES'
 										linkType='primary'
@@ -339,12 +333,6 @@ export const GIVstreamProgress: FC<IGIVstreamProgressProps> = ({
 		</GIVstreamProgressContainer>
 	);
 };
-
-export enum GIVstreamDistributor {
-	Back,
-	Farm,
-	Garden,
-}
 
 const convetSourceTypeToIcon = (distributor: string) => {
 	switch (distributor.toLowerCase()) {
@@ -484,7 +472,7 @@ export const GIVstreamHistory: FC = () => {
 				setPage={setPage}
 				itemPerPage={itemPerPage}
 			/>
-			{loading && <HistoryLoading></HistoryLoading>}
+			{loading && <HistoryLoading />}
 		</HistoryContainer>
 	);
 };

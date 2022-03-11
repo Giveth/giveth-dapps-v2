@@ -1,5 +1,4 @@
 import { client } from '@/apollo/apolloClient';
-import { mediaQueries } from '@/lib/helpers';
 import { FETCH_USER_LIKED_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { IUserLikedProjects } from '@/apollo/types/gqlTypes';
 import { IProject } from '@/apollo/types/types';
@@ -9,6 +8,7 @@ import { FC, useEffect, useState } from 'react';
 import { Loading } from './PublicProfileProjectsTab';
 import { IUserPublicProfileView, NothingToSee } from './UserPublicProfile.view';
 import styled from 'styled-components';
+import { mediaQueries } from '@/utils/constants';
 
 const itemPerPage = 6;
 
@@ -83,13 +83,13 @@ const LikedContainer = styled.div`
 	margin-bottom: 64px;
 	padding: 0;
 	align-items: center;
-	${mediaQueries['lg']} {
+	${mediaQueries.laptop} {
 		grid-template-columns: repeat(2, 1fr);
 	}
-	${mediaQueries['xl']} {
+	${mediaQueries.laptopL} {
 		grid-template-columns: repeat(3, 1fr);
 	}
-	${mediaQueries['xxl']} {
+	${mediaQueries.desktop} {
 		grid-template-columns: repeat(3, 1fr);
 	}
 `;

@@ -1,13 +1,18 @@
 // Just for external links
 
-const links = {
+import { isProduction } from '@/configuration';
+import Routes from '@/lib/constants/Routes';
+
+const DOCS = 'https://docs.giveth.io/';
+
+const links: any = {
 	BACKEND: 'https://serve.giveth.io/graphql',
 	FRONTEND: 'https://giveth-dapps-v2.vercel.app/',
 	REPORT_ISSUE: 'https://github.com/Giveth/giveth-dapps-v2/issues/new',
 	ASK_QUESTION: 'https://giveth.typeform.com/question',
 	FEATURE_REQUEST: 'https://giveth.typeform.com/featurerequest',
 	FEEDBACK: 'https://giveth.typeform.com/feedback',
-	GIVBACK_DOC: 'https://docs.giveth.io/giveconomy/givbacks',
+	PROJECT_VERIFICATION: 'https://giveth.typeform.com/verification',
 	DISCORD: 'https://discord.gg/Uq2TaXP9bC',
 	DISCOURSE: 'https://forum.giveth.io/',
 	GITHUB: 'https://github.com/Giveth/',
@@ -16,8 +21,21 @@ const links = {
 	TWITTER: 'https://twitter.com/Givethio',
 	YOUTUBE: 'https://www.youtube.com/channel/UClfutpRoY0WTVnq0oB0E0wQ',
 	REDDIT: 'https://reddit.com/r/giveth',
-	WIKI: 'https://docs.giveth.io/',
-	COVENANT: 'https://docs.giveth.io/whatisgiveth/covenant/',
+	DOCS,
+	GIVBACK_DOC: DOCS + 'giveconomy/givbacks',
+	COVENANT_DOC: DOCS + 'whatisgiveth/covenant/',
+	GIVETH_DOCS: DOCS + 'whatisgiveth/',
+	USER_DOCS: DOCS + 'dapps/',
+	DEVELOPER_DOCS: DOCS + 'dapps/givethioinstallation',
+	TRACE: 'https://trace.giveth.io/',
+	COMMONS_STACK: 'https://commonsstack.org/',
+	RECRUITEE: 'https://giveth.recruitee.com/',
 };
+
+if (!isProduction) {
+	links.SUPPORT_US = Routes.Donate + '/giveth-2021:-retreat-to-the-future';
+} else {
+	links.SUPPORT_US = Routes.Donate + '/the-giveth-community-of-makers';
+}
 
 export default links;

@@ -7,7 +7,6 @@ import ProjectCard from '@/components/project-card/ProjectCard';
 import ContributeCard from './PublicProfileContributeCard';
 import { Row } from '@/components/styled-components/Grid';
 import { ETheme } from '@/context/general.context';
-import { mediaQueries } from '@/lib/helpers';
 import {
 	brandColors,
 	Container,
@@ -23,6 +22,7 @@ import {
 	NothingToSee,
 } from './UserPublicProfile.view';
 import ProjectsTable from './ProjectsTable';
+import { mediaQueries } from '@/utils/constants';
 
 const itemPerPage = 10;
 
@@ -161,13 +161,13 @@ const GridContainer = styled.div`
 	margin-bottom: 64px;
 	padding: 0;
 	align-items: center;
-	${mediaQueries['lg']} {
+	${mediaQueries.laptop} {
 		grid-template-columns: repeat(2, 1fr);
 	}
-	${mediaQueries['xl']} {
+	${mediaQueries.laptopL} {
 		grid-template-columns: repeat(3, 1fr);
 	}
-	${mediaQueries['xxl']} {
+	${mediaQueries.desktop} {
 		grid-template-columns: repeat(3, 1fr);
 	}
 `;

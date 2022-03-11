@@ -7,6 +7,7 @@ import CheckBox from '@/components/Checkbox';
 import { categoryList, maxSelectedCategory } from '@/lib/constants/Categories';
 import { ICategory } from '@/apollo/types/types';
 import { showToastError } from '@/lib/helpers';
+import { mediaQueries } from '@/utils/constants';
 
 const CategoryInput = (props: {
 	value: ICategory[];
@@ -37,6 +38,7 @@ const CategoryInput = (props: {
 
 	return (
 		<>
+			<br />
 			<H5>Please select a category.</H5>
 			<div>
 				<CaptionContainer>
@@ -45,7 +47,7 @@ const CategoryInput = (props: {
 				</CaptionContainer>
 			</div>
 			<InputContainer>
-				<CatgegoriesGrid>
+				<CategoriesGrid>
 					{categoryList.map(i => {
 						const checked = value.find(
 							(el: ICategory) => el.name === i.name,
@@ -59,7 +61,7 @@ const CategoryInput = (props: {
 							/>
 						);
 					})}
-				</CatgegoriesGrid>
+				</CategoriesGrid>
 			</InputContainer>
 		</>
 	);
@@ -73,12 +75,20 @@ const CaptionContainer = styled(Caption)`
 		color: ${brandColors.pinky[500]};
 	}
 `;
-const CatgegoriesGrid = styled.div`
+
+const CategoriesGrid = styled.div`
 	display: grid;
-	grid-template-columns: auto auto auto;
+	grid-template-columns: auto;
 	padding: 10px 10px 22px 10px;
 	div {
 		padding: 10px 0;
+	}
+
+	${mediaQueries.tablet} {
+		grid-template-columns: auto auto auto !important;
+	}
+	${mediaQueries.mobileM} {
+		grid-template-columns: auto auto;
 	}
 `;
 
