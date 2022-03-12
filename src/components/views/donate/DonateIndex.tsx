@@ -296,10 +296,16 @@ const SucceessContainer = styled.div`
 	padding: 0 39px;
 	color: ${brandColors.deep[900]};
 	height: 100%;
+	${mediaQueries['mobileS']} {
+		padding: 0;
+	}
 `;
 const SuccessMessage = styled(P)`
 	margin: -19px 0 16px 0;
 	color: ${brandColors.deep[900]};
+	${mediaQueries['mobileS']} {
+		margin: 16px 0;
+	}
 `;
 const Options = styled.div`
 	display: flex;
