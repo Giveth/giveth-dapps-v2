@@ -76,20 +76,26 @@ export const UserProvider = (props: { children: ReactNode }) => {
 	useWallet();
 	const [showWelcomeSignin, setShowWelcomeSignin] = useState(false);
 	const [showCompleteProfile, setShowCompleteProfile] = useState(false);
+	const [signInToken, setSignInToken] = useState<string | undefined>(
+		undefined,
+	);
 
 	const isEnabled = !!library?.getSigner() && !!account && !!chainId;
-	const isSignedIn = isEnabled && !!user?.token;
+	const isSignedIn = isEnabled && !!signInToken;
 
 	useEffect(() => {
 		localStorage.removeItem(LocalStorageTokenLabel);
-		if (!user) return;
 		if (active && account) {
 			if (compareAddresses(account, user?.walletAddress!)) {
 				return;
 			}
-			fetchUser().then(setUser);
+			fetchUser().then((newUser: IUser) => {
+				setUser(newUser);
+				setSignInToken(undefined);
+			});
 		} else {
-			user && setUser(undefined);
+			setUser(undefined);
+			setSignInToken(undefined);
 		}
 	}, [active, account]);
 
@@ -139,23 +145,25 @@ export const UserProvider = (props: { children: ReactNode }) => {
 		const token = await getToken(account, signedMessage, chainId, user);
 		const localUser = fetchLocalUser();
 
-		if (account !== localUser?.walletAddress) {
+		if (!compareAddresses(account, localUser?.walletAddress)) {
 			Auth.logout();
 			const DBUser = await fetchUser();
 			const newUser = new User(DBUser);
 			newUser.setToken(token);
 			Auth.setUser(newUser, setCookie, 'giveth_user');
+			setSignInToken(token);
 			await apolloClient.resetStore();
 			setUser(newUser);
 		} else {
 			localUser.setToken(token);
+			setSignInToken(token);
 			Auth.setUser(localUser, setCookie, 'giveth_user');
 			await apolloClient.resetStore();
 			setUser(localUser);
 		}
 		localStorage.setItem(getLocalStorageUserLabel() + '_token', token);
 		return token;
-	}, [account, chainId, fetchUser, library, setCookie, user]);
+	}, [account, chainId, fetchUser, library, user]);
 
 	const signOut = useCallback(() => {
 		Auth.logout();
@@ -167,8 +175,9 @@ export const UserProvider = (props: { children: ReactNode }) => {
 			};
 			Auth.setUser(newUser, setCookie, 'giveth_user');
 			setUser(newUser);
+			setSignInToken(undefined);
 		}
-	}, [setCookie, user]);
+	}, [user]);
 
 	const getBalance = () => {
 		library
@@ -191,12 +200,18 @@ export const UserProvider = (props: { children: ReactNode }) => {
 				if (res) {
 					const newUser = new User(res);
 					Auth.setUser(newUser, setCookie, 'giveth_user');
-					if (user?.walletAddress === newUser.walletAddress) {
+					if (
+						compareAddresses(
+							user?.walletAddress,
+							newUser.walletAddress,
+						)
+					) {
 						setUser({ ...newUser, token: user?.token });
 					}
 				} else {
 					const noUser = new User({} as User);
 					setUser(noUser);
+					setSignInToken(undefined);
 				}
 			})
 			.catch((e: Error) =>
@@ -210,32 +225,34 @@ export const UserProvider = (props: { children: ReactNode }) => {
 			if (compareAddresses(account, _user?.walletAddress!)) {
 				const newUser = new User(_user as User);
 				setUser(newUser);
+				setSignInToken(newUser?.token);
 			} else {
 				Auth.logout();
 				reFetchUserData();
 			}
 		} else {
-			if (user) setUser(undefined);
+			setUser(undefined);
+			setSignInToken(undefined);
 		}
 	}, [account]);
 
-	const incrementLikedProjectsCount = useCallback(() => {
+	const incrementLikedProjectsCount = () => {
 		if (user) {
 			setUser({
 				...user,
 				likedProjectsCount: (user.likedProjectsCount || 0) + 1,
 			});
 		}
-	}, [user]);
+	};
 
-	const decrementLikedProjectsCount = useCallback(() => {
+	const decrementLikedProjectsCount = () => {
 		if (user) {
 			setUser({
 				...user,
 				likedProjectsCount: (user.likedProjectsCount || 1) - 1,
 			});
 		}
-	}, [user]);
+	};
 
 	return (
 		<UserContext.Provider

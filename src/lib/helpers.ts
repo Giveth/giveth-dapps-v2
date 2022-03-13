@@ -88,8 +88,8 @@ export const getGasPreference = (
 export const isSSRMode = typeof window === 'undefined';
 
 export const compareAddresses = (
-	add1: string | undefined,
-	add2: string | undefined,
+	add1: string | undefined | null,
+	add2: string | undefined | null,
 ) => {
 	return add1?.toLowerCase() === add2?.toLowerCase();
 };
