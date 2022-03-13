@@ -133,7 +133,6 @@ const ProjectDonationTable = ({
 				<SearchBox
 					onChange={event => setSearchTerm(event)}
 					value={searchTerm}
-					reset={() => {}}
 				/>
 			</UpperSection>
 			{activeTab === 0 && (
