@@ -19,6 +19,7 @@ import {
 	P,
 	SublineBold,
 } from '@giveth/ui-design-system';
+import { mediaQueries } from '@/utils/constants';
 import Link from 'next/link';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -97,7 +98,7 @@ const PublicProfileDonationsTab: FC<IUserPublicProfileView> = ({ user }) => {
 	}, [user, page, order.by, order.direction]);
 
 	return (
-		<>
+		<DonationsTab>
 			<DonationTableWrapper>
 				{!loading && totalDonations === 0 ? (
 					<NothingWrapper>
@@ -112,13 +113,15 @@ const PublicProfileDonationsTab: FC<IUserPublicProfileView> = ({ user }) => {
 				)}
 				{loading && <Loading />}
 			</DonationTableWrapper>
-			<Pagination
-				currentPage={page}
-				totalCount={totalDonations}
-				setPage={setPage}
-				itemPerPage={itemPerPage}
-			/>
-		</>
+			<PaginationContainer>
+				<Pagination
+					currentPage={page}
+					totalCount={totalDonations}
+					setPage={setPage}
+					itemPerPage={itemPerPage}
+				/>
+			</PaginationContainer>
+		</DonationsTab>
 	);
 };
 
@@ -211,6 +214,19 @@ const DonationTable: FC<DonationTable> = ({
 const DonationTablecontainer = styled.div`
 	display: grid;
 	grid-template-columns: 1fr 5fr 1fr 1fr 1fr;
+	overflow: auto;
+	${mediaQueries.laptop} {
+		min-width: 1133px;
+	}
+	${mediaQueries.tablet} {
+		min-width: 1000px;
+	}
+	${mediaQueries.mobileL} {
+		min-width: 1133px;
+	}
+	${mediaQueries.mobileS} {
+		min-width: 1133px;
+	}
 `;
 
 const TabelHeader = styled(Row)`
@@ -283,4 +299,17 @@ const RowWrapper = styled.div`
 const TransactionLink = styled.a`
 	cursor: pointer;
 	color: ${brandColors.pinky[500]};
+`;
+
+const DonationsTab = styled.div`
+	margin: 0 0 150px 0;
+	${mediaQueries.mobileS} {
+		margin: 0 0 100px 0;
+	}
+`;
+
+const PaginationContainer = styled.div`
+	position: absolute;
+	margin: 16px;
+	right: 50px;
 `;

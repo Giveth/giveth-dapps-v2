@@ -40,7 +40,7 @@ const ProjectDonations = (props: {
 						donations={donationsByProjectId.donations}
 						id={id}
 						showTrace={!!traceCampaignId}
-						totalDonations={totalDonations}
+						totalDonations={donationsByProjectId.totalCount}
 					/>
 				</>
 			)}

@@ -55,8 +55,7 @@ const ProjectIndex = () => {
 					projectId: parseInt(id),
 					skip: 0,
 					take: donationsPerPage,
-					orderBy: 'CreationDate',
-					direction: 'ASC',
+					orderBy: { field: 'CreationDate', direction: 'DESC' },
 				},
 			})
 			.then(
