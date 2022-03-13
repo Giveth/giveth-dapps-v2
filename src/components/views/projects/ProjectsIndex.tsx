@@ -36,6 +36,7 @@ interface IProjectsView {
 	totalCount: number;
 	categories: ICategory[];
 }
+
 interface ISelectObj {
 	value: string;
 	label: string;
@@ -374,6 +375,7 @@ export const ProjectsContainer = styled.div`
 const Wrapper = styled.div`
 	padding: 166px 30px 4px 30px;
 	max-width: ${deviceSize.desktop + 'px'};
+	margin: 0 auto;
 `;
 
 const Title = styled(H3)`

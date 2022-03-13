@@ -138,7 +138,7 @@ const DropZone = styled.div`
 	justify-content: center;
 	border: 1px dotted ${neutralColors.gray[400]};
 	margin: 24px 0 16px 0;
-	padding: 64px 0;
+	padding: 64px 20px;
 	color: ${brandColors.deep[500]};
 	img {
 		margin: 0 0 30px 0;
