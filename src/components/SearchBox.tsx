@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import SearchIcon from '/public/images/search.svg';
+import { FlexCenter } from '@/components/styled-components/Grid';
 
 const SearchBox = (props: {
 	onChange: (e: string) => void;
@@ -18,12 +19,16 @@ const SearchBox = (props: {
 				value={value}
 			/>
 			<Border />
-			<div style={{ flexShrink: 0 }}>
+			<Search>
 				<Image src={SearchIcon} alt='Search Icon' />
-			</div>
+			</Search>
 		</Wrapper>
 	);
 };
+
+const Search = styled(FlexCenter)`
+	flex-shrink: 0;
+`;
 
 const Border = styled.div`
 	border-right: 1px solid ${neutralColors.gray[400]};
