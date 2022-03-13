@@ -71,6 +71,7 @@ const ProjectDonationTable = ({
 		direction: EDirection.DESC,
 	});
 	const [activeTab, setActiveTab] = useState<number>(0);
+	const [searchTerm, setSearchTerm] = useState<string>('');
 
 	const orderChangeHandler = (orderby: EOrderBy) => {
 		if (orderby === order.by) {
@@ -98,8 +99,8 @@ const ProjectDonationTable = ({
 					projectId: parseInt(id),
 					take: itemPerPage,
 					skip: page * itemPerPage,
-					orderBy: order.by,
-					direction: order.direction,
+					orderBy: { field: order.by, direction: order.direction },
+					searchTerm,
 				},
 			});
 			const { donationsByProjectId } = projectDonations;
@@ -108,7 +109,7 @@ const ProjectDonationTable = ({
 			}
 		};
 		fetchProjectDonations();
-	}, [page, order.by, order.direction, id]);
+	}, [page, order.by, order.direction, id, searchTerm]);
 
 	return (
 		<Wrapper>
@@ -129,7 +130,10 @@ const ProjectDonationTable = ({
 						</Tab>
 					)}
 				</Tabs>
-				<SearchBox onChange={() => {}} value='' reset={() => {}} />
+				<SearchBox
+					onChange={event => setSearchTerm(event)}
+					value={searchTerm}
+				/>
 			</UpperSection>
 			{activeTab === 0 && (
 				<DonationTableContainer>
@@ -208,7 +212,9 @@ const ProjectDonationTable = ({
 			)}
 			<Pagination
 				currentPage={page}
-				totalCount={totalDonations || 0}
+				totalCount={
+					!!searchTerm ? pageDonations.length : totalDonations || 0
+				}
 				setPage={setPage}
 				itemPerPage={itemPerPage}
 			/>

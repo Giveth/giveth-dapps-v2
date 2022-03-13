@@ -28,6 +28,7 @@ import {
 	MenuAndButtonContainer,
 	CoverLine,
 	SmallCreateProjectParent,
+	LargeCreateProject,
 } from './Header.sc';
 import { useSubgraph } from '@/context/subgraph.context';
 import { RewardMenu } from '@/components/menu/RewardMenu';
@@ -188,14 +189,16 @@ const Header: FC<IHeader> = () => {
 				)}
 
 				<Flex gap='8px'>
-					<Button
-						label='CREATE A PROJECT'
-						size='small'
-						buttonType={
-							theme === ETheme.Light ? 'primary' : 'secondary'
-						}
-						onClick={handleCreateButton}
-					/>
+          <LargeCreateProject>
+						<Button
+							label='CREATE A PROJECT'
+							size='small'
+							buttonType={
+								theme === ETheme.Light ? 'primary' : 'secondary'
+							}
+							onClick={handleCreateButton}
+						/>
+					</LargeCreateProject>
 					<SmallCreateProjectParent>
 						<SmallCreateProject
 							onClick={handleCreateButton}

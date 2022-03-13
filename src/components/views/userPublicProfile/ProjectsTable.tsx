@@ -21,6 +21,7 @@ import {
 	EDirection,
 	IOrder,
 } from './UserPublicProfile.view';
+import { mediaQueries } from '@/utils/constants';
 import { idToProjectEdit } from '@/lib/routeCreators';
 
 interface IBadge {
@@ -89,7 +90,7 @@ const ProjectsTable: FC<IProjectsTable> = ({
 
 	return (
 		<>
-			<DonationTablecontainer>
+			<ProjectTablecontainer>
 				<TableHeader
 					onClick={() => orderChangeHandler(EOrderBy.CreationDate)}
 				>
@@ -199,16 +200,27 @@ const ProjectsTable: FC<IProjectsTable> = ({
 						</TableCell>
 					</RowWrapper>
 				))}
-			</DonationTablecontainer>
+			</ProjectTablecontainer>
 		</>
 	);
 };
 
-const DonationTablecontainer = styled.div`
+const ProjectTablecontainer = styled.div`
 	display: grid;
 	grid-template-columns: 1.5fr 1fr 4fr 1.1fr 2fr 1.5fr 1fr;
-	width: 100%;
-	min-width: 1133px;
+	overflow: auto;
+	${mediaQueries.laptop} {
+		min-width: 1133px;
+	}
+	${mediaQueries.tablet} {
+		min-width: 1000px;
+	}
+	${mediaQueries.mobileL} {
+		min-width: 1133px;
+	}
+	${mediaQueries.mobileS} {
+		min-width: 1133px;
+	}
 `;
 
 const TableHeader = styled(Flex)`

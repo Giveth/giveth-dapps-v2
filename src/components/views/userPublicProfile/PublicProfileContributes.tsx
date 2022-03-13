@@ -9,7 +9,9 @@ import PublicProfileLikedTab from './PublicProfileLikedTab';
 import PublicProfileProjectsTab from './PublicProfileProjectsTab';
 import PublicProfileOverviewTab from './PublicProfileOverviewTab';
 import { IUserPublicProfileView } from './UserPublicProfile.view';
+  
 import { Container } from '@/components/Grid';
+import { mediaQueries } from '@/utils/constants';
 
 enum EPublicProfile {
 	OVERVIEW,
@@ -54,7 +56,7 @@ const PublicProfileContributes: FC<IUserPublicProfileView> = ({
 
 	return (
 		<PubliCProfileTabsAndProjectContainer>
-			<Container>
+			<ProfileContainer>
 				<PubliCProfileTabsContainer>
 					{myAccount && (
 						<PubliCProfileTab
@@ -111,15 +113,17 @@ const PublicProfileContributes: FC<IUserPublicProfileView> = ({
 					/>
 				)}
 				{tab === EPublicProfile.DONATIONS && (
-					<PublicProfileDonationsTab
-						user={user}
-						myAccount={myAccount}
-					/>
+					<DonationsTableWrapper>
+						<PublicProfileDonationsTab
+							user={user}
+							myAccount={myAccount}
+						/>
+					</DonationsTableWrapper>
 				)}
 				{tab === EPublicProfile.LIKED && (
 					<PublicProfileLikedTab user={user} myAccount={myAccount} />
 				)}
-			</Container>
+			</ProfileContainer>
 		</PubliCProfileTabsAndProjectContainer>
 	);
 };
@@ -128,16 +132,36 @@ export default PublicProfileContributes;
 
 const PubliCProfileTabsAndProjectContainer = styled.div``;
 
+const ProfileContainer = styled(Container)`
+	${mediaQueries.mobileL} {
+		padding: 0 0 0 10px !important;
+	}
+	${mediaQueries.mobileM} {
+		padding: 0 0 0 10px !important;
+	}
+	${mediaQueries.mobileS} {
+		padding: 0 0 0 10px !important;
+	}
+`;
+
 const PubliCProfileTabsContainer = styled(Flex)`
 	padding: 37px 0;
 	gap: 16px;
+	max-width: 600px;
+	overflow: auto;
+`;
+
+const DonationsTableWrapper = styled.div`
+	overflow: auto;
 `;
 
 const PubliCProfileTab = styled(P)<ITab>`
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	padding: 9px 16px;
+	padding: 9px 10px;
+	word-break: break-word;
+	white-space: nowrap;
 	cursor: pointer;
 	color: ${(props: ITab) =>
 		props.active ? brandColors.deep[600] : brandColors.pinky[500]};

@@ -16,7 +16,11 @@ import { BigArc } from '@/components/styled-components/Arc';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import SearchBox from '@/components/SearchBox';
 import Routes from '@/lib/constants/Routes';
-import { capitalizeFirstLetter, isUserRegistered } from '@/lib/helpers';
+import {
+	capitalizeFirstLetter,
+	isUserRegistered,
+	showToastError,
+} from '@/lib/helpers';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { initializeApollo } from '@/apollo/apolloClient';
 import { ICategory, IProject } from '@/apollo/types/types';
@@ -25,7 +29,7 @@ import { gqlEnums } from '@/apollo/types/gqlEnums';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
 import { Shadow } from '../../styled-components/Shadow';
 import useUser from '@/context/UserProvider';
-import { mediaQueries } from '@/utils/constants';
+import { deviceSize, mediaQueries } from '@/utils/constants';
 
 interface IProjectsView {
 	projects: IProject[];
@@ -149,9 +153,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 				);
 				setIsLoading(false);
 			})
-			.catch(() => {
+			.catch((err: any) => {
 				setIsLoading(false);
-				/*TODO implement toast here for errors*/
+				showToastError(err);
 			});
 	};
 
@@ -223,7 +227,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 						<Label />
 						<SearchBox
 							onChange={(e: string) => handleChange('search', e)}
-							reset={clearSearch}
 							placeholder='Search Projects ...'
 							value={searchValue}
 						/>
@@ -315,7 +318,12 @@ const StyledButton = styled(OulineButton)<{ transparent?: boolean }>`
 `;
 
 const SelectComponent = styled(P)`
-	width: calc(50% - 8px);
+	min-width: 200px;
+	width: 100%;
+
+	${mediaQueries.tablet} {
+		width: calc(50% - 8px);
+	}
 
 	${mediaQueries.laptopL} {
 		width: 345px;
@@ -361,14 +369,11 @@ export const ProjectsContainer = styled.div`
 	${mediaQueries.laptopL} {
 		grid-template-columns: repeat(3, 1fr);
 	}
-
-	${mediaQueries.desktop} {
-		grid-template-columns: repeat(4, 1fr);
-	}
 `;
 
 const Wrapper = styled.div`
 	padding: 166px 30px 4px 30px;
+	max-width: ${deviceSize.desktop + 'px'};
 `;
 
 const Title = styled(H3)`

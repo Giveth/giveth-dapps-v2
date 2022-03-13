@@ -2,17 +2,20 @@ import { gql } from '@apollo/client';
 
 export const FETCH_PROJECT_DONATIONS = gql`
 	query DonationsByProjectId(
-		$projectId: Float!
-		$take: Float
-		$skip: Float
-		$orderBy: SortField!
-		$direction: SortDirection!
+		$take: Int
+		$skip: Int
+		$traceable: Boolean
+		$projectId: Int!
+		$searchTerm: String
+		$orderBy: SortBy
 	) {
 		donationsByProjectId(
-			projectId: $projectId
 			take: $take
 			skip: $skip
-			orderBy: { field: $orderBy, direction: $direction }
+			traceable: $traceable
+			projectId: $projectId
+			searchTerm: $searchTerm
+			orderBy: $orderBy
 		) {
 			donations {
 				id
