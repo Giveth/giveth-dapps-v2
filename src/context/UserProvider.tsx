@@ -91,7 +91,6 @@ export const UserProvider = (props: { children: ReactNode }) => {
 			}
 			fetchUser().then((newUser: IUser) => {
 				setUser(newUser);
-				setSignInToken(undefined);
 			});
 		} else {
 			setUser(undefined);
@@ -156,10 +155,10 @@ export const UserProvider = (props: { children: ReactNode }) => {
 			setUser(newUser);
 		} else {
 			localUser.setToken(token);
-			setSignInToken(token);
 			Auth.setUser(localUser, setCookie, 'giveth_user');
 			await apolloClient.resetStore();
 			setUser(localUser);
+			setSignInToken(token);
 		}
 		localStorage.setItem(getLocalStorageUserLabel() + '_token', token);
 		return token;
@@ -228,6 +227,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 				setSignInToken(newUser?.token);
 			} else {
 				Auth.logout();
+				setSignInToken(undefined);
 				reFetchUserData();
 			}
 		} else {
