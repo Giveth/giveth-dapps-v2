@@ -54,7 +54,7 @@ export const OnboardActions: FC<IOnboardActions> = ({
 	return (
 		<>
 			<OnboardActionsContianer>
-				<Col xs={12} xl={7}>
+				<Col xs={12} md={7}>
 					<SaveButton
 						label={saveLabel}
 						disabled={disabled}
@@ -62,7 +62,7 @@ export const OnboardActions: FC<IOnboardActions> = ({
 						size='medium'
 					/>
 				</Col>
-				<Col xs={12} xl={2}>
+				<Col xs={12} md={2}>
 					<SkipButton
 						label='Do it later'
 						size='medium'
