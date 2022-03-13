@@ -58,8 +58,8 @@ const Header: FC<IHeader> = () => {
 		currentValues: { balances },
 	} = useSubgraph();
 	const {
-		state: { user, isEnabled },
-		actions: { showCompleteProfile, showSignInModal },
+		state: { user, isEnabled, isSignedIn },
+		actions: { showCompleteProfile, showSignInModal, showSignModal },
 	} = useUser();
 	const { chainId, active, activate, account, library } = useWeb3React();
 	const { theme } = useGeneral();
@@ -130,6 +130,8 @@ const Header: FC<IHeader> = () => {
 	const handleCreateButton = () => {
 		if (!isEnabled) {
 			showSignInModal(true);
+		} else if (!isSignedIn) {
+			showSignModal();
 		} else if (isUserRegistered(user)) {
 			router.push(Routes.CreateProject);
 		} else {
