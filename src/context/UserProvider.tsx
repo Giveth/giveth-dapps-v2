@@ -100,7 +100,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 		return () => {
 			library?.removeAllListeners('block');
 		};
-	}, []);
+	}, [library]);
 
 	const fetchLocalUser = (): User => {
 		const localUser = Auth.getUser() as User;
@@ -123,7 +123,10 @@ export const UserProvider = (props: { children: ReactNode }) => {
 	}, [account]);
 
 	const signIn = useCallback(async () => {
-		if (!library?.getSigner()) return false;
+		if (!library?.getSigner()) {
+			setShowWalletModal(true);
+			return;
+		}
 
 		const signedMessage = await signMessage(
 			process.env.NEXT_PUBLIC_OUR_SECRET as string,
@@ -157,11 +160,15 @@ export const UserProvider = (props: { children: ReactNode }) => {
 	const signOut = useCallback(() => {
 		Auth.logout();
 		window.localStorage.removeItem(getLocalStorageUserLabel() + '_token');
-		removeCookie('giveth_user');
-		apolloClient.resetStore().then();
-		deactivate();
-		setUser(undefined);
-	}, []);
+		if (user) {
+			const newUser = {
+				...user,
+				token: '',
+			};
+			Auth.setUser(newUser, setCookie, 'giveth_user');
+			setUser(newUser);
+		}
+	}, [setCookie, user]);
 
 	const getBalance = () => {
 		library
