@@ -70,7 +70,7 @@ const DonateModal = ({
 	const { account, library, chainId } = useWeb3React();
 	const {
 		state: { isSignedIn },
-		actions: { signIn },
+		actions: { showSignModal },
 	} = UserContext();
 	const [donating, setDonating] = useState(false);
 	const [donationSaved, setDonationSaved] = useState(false);
@@ -93,8 +93,8 @@ const DonateModal = ({
 			let traceable = false;
 			// Sign message for registered users to get user info, no need to sign for anonymous
 			if (!isSignedIn && !anonymous) {
-				const tokenFromSignin = signIn && (await signIn());
-				if (!tokenFromSignin) return;
+				showSignModal();
+				return;
 			}
 			if (!project?.walletAddress) {
 				// return Toast({
