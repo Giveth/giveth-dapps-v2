@@ -16,7 +16,11 @@ import { BigArc } from '@/components/styled-components/Arc';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import SearchBox from '@/components/SearchBox';
 import Routes from '@/lib/constants/Routes';
-import { capitalizeFirstLetter, isUserRegistered } from '@/lib/helpers';
+import {
+	capitalizeFirstLetter,
+	isUserRegistered,
+	showToastError,
+} from '@/lib/helpers';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { initializeApollo } from '@/apollo/apolloClient';
 import { ICategory, IProject } from '@/apollo/types/types';
@@ -149,9 +153,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 				);
 				setIsLoading(false);
 			})
-			.catch(() => {
+			.catch((err: any) => {
 				setIsLoading(false);
-				/*TODO implement toast here for errors*/
+				showToastError(err);
 			});
 	};
 
