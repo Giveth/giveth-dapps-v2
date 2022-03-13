@@ -27,7 +27,8 @@ const HomeHeader = () => {
 		<Wrapper>
 			<Title weight={700}>Welcome to the future of giving</Title>
 			<Subtitle>
-				Donate directly to social good projects with zero added fees.
+				Donate crypto directly to social good projects with zero added
+				fees.
 			</Subtitle>
 			<AllProjectsButton
 				buttonType='primary'
