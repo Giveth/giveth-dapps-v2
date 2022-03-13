@@ -9,7 +9,6 @@ import PublicProfileLikedTab from './PublicProfileLikedTab';
 import PublicProfileProjectsTab from './PublicProfileProjectsTab';
 import PublicProfileOverviewTab from './PublicProfileOverviewTab';
 import { IUserPublicProfileView } from './UserPublicProfile.view';
-  
 import { Container } from '@/components/Grid';
 import { mediaQueries } from '@/utils/constants';
 

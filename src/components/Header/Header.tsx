@@ -189,7 +189,7 @@ const Header: FC<IHeader> = () => {
 				)}
 
 				<Flex gap='8px'>
-          <LargeCreateProject>
+					<LargeCreateProject>
 						<Button
 							label='CREATE A PROJECT'
 							size='small'

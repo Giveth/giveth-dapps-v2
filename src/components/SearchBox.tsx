@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import SearchIcon from '/public/images/search.svg';
-import { FlexCenter } from '@/components/styled-components/Grid';
+import { FlexCenter } from './styled-components/Flex';
 
 const SearchBox = (props: {
 	onChange: (e: string) => void;
