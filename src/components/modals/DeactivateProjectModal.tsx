@@ -52,7 +52,7 @@ const DeactivateProjectModal = ({
 	);
 	const {
 		state: { isSignedIn },
-		actions: { signIn },
+		actions: { showSignModal },
 	} = useUser();
 
 	const fetchReasons = async () => {
@@ -73,9 +73,10 @@ const DeactivateProjectModal = ({
 	};
 
 	const handleConfirmButton = async () => {
-		if (!!tab && !!selectedReason && !!signIn) {
+		if (!!tab && !!selectedReason && !!showSignModal) {
 			if (!isSignedIn) {
-				await signIn();
+				showSignModal();
+				return;
 			}
 			const { data } = await client.mutate({
 				mutation: DEACTIVATE_PROJECT,

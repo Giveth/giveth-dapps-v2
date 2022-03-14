@@ -35,7 +35,7 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 	const {
 		state: { user, isSignedIn },
 		actions: {
-			signIn,
+			showSignModal,
 			incrementLikedProjectsCount,
 			decrementLikedProjectsCount,
 		},
@@ -57,15 +57,12 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 
 	const likeUnlikeProject = async () => {
 		if (!isSignedIn) {
-			if (signIn) {
-				const success = await signIn();
-				if (!success) return;
-			} else {
-				console.error('Sign in is not possible');
+			if (showSignModal) {
+				showSignModal();
+				return;
 			}
-			// setShowSigninModal(true);
-			// return;
 		}
+
 		if (loading) return;
 
 		if (projectId) {

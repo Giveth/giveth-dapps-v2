@@ -59,7 +59,7 @@ const ProjectDonateCard = ({
 	const {
 		state: { user, isSignedIn },
 		actions: {
-			signIn,
+			showSignModal,
 			incrementLikedProjectsCount,
 			decrementLikedProjectsCount,
 		},
@@ -90,14 +90,8 @@ const ProjectDonateCard = ({
 
 	const likeUnlikeProject = async () => {
 		if (!isSignedIn) {
-			if (signIn) {
-				const success = await signIn();
-				if (!success) return;
-			} else {
-				console.error('Sign in is not possible');
-			}
-			// setShowSigninModal(true);
-			// return;
+			showSignModal();
+			return;
 		}
 		if (loading) return;
 
@@ -168,8 +162,9 @@ const ProjectDonateCard = ({
 			setDeactivateModal(true);
 		} else {
 			try {
-				if (!isSignedIn && !!signIn) {
-					await signIn();
+				if (!isSignedIn) {
+					showSignModal();
+					return;
 				}
 				const { data } = await client.mutate({
 					mutation: ACTIVATE_PROJECT,
