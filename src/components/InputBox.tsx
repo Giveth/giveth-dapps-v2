@@ -69,12 +69,10 @@ const Box = styled.div`
 const Input = styled.input`
 	border-width: 0;
 	height: 100%;
-	width: 100%;
 	font-size: 16px;
 	font-weight: inherit;
 	background: inherit;
 	font-family: inherit;
-
 	&:focus {
 		outline: none;
 	}
@@ -86,7 +84,6 @@ const Input = styled.input`
 `;
 
 const Wrapper = styled.div`
-	min-width: 320px;
 	padding: 5px 16px;
 	display: flex;
 	align-items: center;

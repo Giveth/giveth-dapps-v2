@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import config from '@/configuration';
 import { IconEthereum } from '../Icons/Eth';
 import { IconXDAI } from '../Icons/XDAI';
-import { H4, B, neutralColors } from '@giveth/ui-design-system';
+import { H4, B, neutralColors, brandColors } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 interface IChangeNetworkModalProps extends IModal {
 	targetNetwork: number;
@@ -44,7 +44,7 @@ export const ChangeNetworkModal: FC<IChangeNetworkModalProps> = ({
 const ChangeNetworkModalContainer = styled.div`
 	width: 500px;
 	padding: 62px 60px;
-	color: ${neutralColors.gray[100]};
+	color: ${brandColors.giv[700]};
 `;
 
 const Title = styled(H4)`

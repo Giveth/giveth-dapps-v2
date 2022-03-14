@@ -29,6 +29,7 @@ const Wrapper = styled(FlexCenter)`
 
 const TextBadge = styled(Overline)`
 	padding-left: 0.5rem;
+	margin-right: 5px;
 `;
 
 export default VerificationBadge;

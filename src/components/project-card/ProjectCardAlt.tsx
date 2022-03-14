@@ -16,6 +16,7 @@ import ProjectCardImage from './ProjectCardImage';
 import { IProject } from '@/apollo/types/types';
 import { htmlToText } from '@/lib/helpers';
 import { Shadow } from '@/components/styled-components/Shadow';
+import { mediaQueries } from '@/utils/constants';
 
 const cardWidth = '440px';
 const cardRadius = '12px';
@@ -150,6 +151,9 @@ const Wrapper2 = styled.div<{ isNew?: boolean }>`
 	transition: all 0.3s ease;
 	background: ${props => props.isNew && 'white'};
 	box-shadow: ${props => props.isNew && Shadow.Dark[500]};
+	${mediaQueries['mobileL']} {
+		width: 100%;
+	}
 `;
 
 const Wrapper = styled.div`
@@ -157,6 +161,9 @@ const Wrapper = styled.div`
 	height: 430px;
 	width: ${cardWidth};
 	border-radius: ${cardRadius};
+	${mediaQueries['mobileL']} {
+		width: 100%;
+	}
 `;
 
 const GivingBlockContainer = styled(Flex)`
