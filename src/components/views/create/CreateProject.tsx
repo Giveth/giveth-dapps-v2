@@ -379,7 +379,9 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 
 const Container = styled.div`
 	max-width: ${deviceSize.desktop + 'px'};
+	margin: 0 auto;
 	position: relative;
+	display: flex;
 `;
 
 const GuidelinesStyle = styled.div`
@@ -412,13 +414,10 @@ const GuidelinesStyleLaptop = styled(GuidelinesStyle)`
 	display: none;
 	${mediaQueries.laptop} {
 		display: flex;
-		position: fixed;
-		top: 104px;
-		right: 10px;
-	}
-	${mediaQueries.desktop} {
-		left: ${deviceSize.desktop - 310 + 'px'};
-		right: unset;
+		> div {
+			position: sticky;
+			top: 104px;
+		}
 	}
 `;
 
