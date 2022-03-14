@@ -96,6 +96,10 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 		setReaction(props.reaction);
 	}, [props.reaction]);
 
+	useEffect(() => {
+		setTotalReactions(props.totalReactions);
+	}, [props.totalReactions]);
+
 	return (
 		<>
 			{showModal && (
