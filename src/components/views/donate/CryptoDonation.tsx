@@ -117,12 +117,11 @@ const CryptoDonation = (props: {
 			if (isGivingBlockProject) netId = 'thegivingblock';
 			if (isGivingBlockProject && networkId === 3)
 				netId = 'ropsten_thegivingblock';
-			console.log({ isProduction });
 			// Show change network modal when needed
-			if (netId === 3 && isProduction) {
-				return setShowChangeNetworkModal(true);
-			}
-			if (netId !== 100 && netId !== 1 && netId !== 3) {
+			if (
+				netId !== config.PRIMARY_NETWORK.id &&
+				netId !== config.SECONDARY_NETWORK.id
+			) {
 				return setShowChangeNetworkModal(true);
 			}
 			let givIndex: number | undefined;
