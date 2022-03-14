@@ -26,7 +26,7 @@ const config: EnvConfig = {
 		blockExplorerName: ['etherscan'],
 		blockExplorerUrls: ['https://etherscan.io/'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/aminlatifi/giveth-economy',
+			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-mainnet',
 
 		TOKEN_ADDRESS: '0x900db999074d9277c5da2a43f252d74366230da0',
 		WETH_TOKEN_ADDRESS: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
@@ -37,7 +37,7 @@ const config: EnvConfig = {
 				'https://app.uniswap.org/#/swap?outputCurrency=0x900db999074d9277c5da2a43f252d74366230da0',
 		},
 
-		nodeUrl: 'https://kovan.infura.io/v3/' + INFURA_API_KEY,
+		nodeUrl: 'https://mainnet.infura.io/v3/' + INFURA_API_KEY,
 
 		pools: [
 			{
@@ -61,7 +61,7 @@ const config: EnvConfig = {
 				description: '0.3% tier only',
 				provideLiquidityLink: `https://app.uniswap.org/#/add/ETH/0x900dB999074d9277c5DA2A43F252D74366230DA0/3000`,
 				unit: 'NFT',
-				infinitePositionId: 193935,
+				infinitePositionId: 192722,
 			},
 			{
 				POOL_ADDRESS: '0x7819f1532c49388106f7762328c51ee70edd134c',
