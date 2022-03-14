@@ -264,8 +264,6 @@ const inputFields = [
 
 const Wrapper = styled.div`
 	padding: 24px;
-	min-width: 448px;
-	width: 100%;
 `;
 
 const ProfilePicture = styled(Image)`
