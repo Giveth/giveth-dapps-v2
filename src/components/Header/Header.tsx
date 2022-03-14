@@ -34,7 +34,6 @@ import { useSubgraph } from '@/context/subgraph.context';
 import { RewardMenu } from '@/components/menu/RewardMenu';
 import WalletModal from '@/components/modals/WalletModal';
 import { walletsArray } from '@/lib/wallet/walletTypes';
-import SignInModal from '../modals/SignInModal';
 import MenuWallet from '@/components/menu/MenuWallet';
 import { ETheme, useGeneral } from '@/context/general.context';
 import { menuRoutes } from '../menu/MenuRoutes';
@@ -52,7 +51,6 @@ const Header: FC<IHeader> = () => {
 	const [showUserMenu, setShowUserMenu] = useState(false);
 	const [showHeader, setShowHeader] = useState(true);
 	const [showWalletModal, setShowWalletModal] = useState(false);
-	const [showSigninModal, setShowSigninModal] = useState(false);
 	const [isGIVeconomyRoute, setIsGIVeconomyRoute] = useState(false);
 	const [isCreateRoute, setIsCreateRoute] = useState(false);
 
@@ -60,8 +58,8 @@ const Header: FC<IHeader> = () => {
 		currentValues: { balances },
 	} = useSubgraph();
 	const {
-		state: { user },
-		actions: { showCompleteProfile },
+		state: { user, isEnabled, isSignedIn },
+		actions: { showCompleteProfile, showSignInModal, showSignModal },
 	} = useUser();
 	const { chainId, active, activate, account, library } = useWeb3React();
 	const { theme } = useGeneral();
@@ -121,7 +119,7 @@ const Header: FC<IHeader> = () => {
 		if (isGIVeconomyRoute) {
 			setShowWalletModal(true);
 		} else {
-			setShowSigninModal(true);
+			showSignInModal(true);
 		}
 	};
 
@@ -130,7 +128,11 @@ const Header: FC<IHeader> = () => {
 	};
 
 	const handleCreateButton = () => {
-		if (isUserRegistered(user)) {
+		if (!isEnabled) {
+			showSignInModal(true);
+		} else if (!isSignedIn) {
+			showSignModal();
+		} else if (isUserRegistered(user)) {
 			router.push(Routes.CreateProject);
 		} else {
 			showCompleteProfile();
@@ -305,12 +307,6 @@ const Header: FC<IHeader> = () => {
 				<WalletModal
 					showModal={showWalletModal}
 					setShowModal={setShowWalletModal}
-				/>
-			)}
-			{showSigninModal && (
-				<SignInModal
-					showModal={showSigninModal}
-					closeModal={() => setShowSigninModal(false)}
 				/>
 			)}
 		</>

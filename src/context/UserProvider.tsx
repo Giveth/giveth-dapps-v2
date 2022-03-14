@@ -40,6 +40,7 @@ interface IUserContext {
 		signOut?: () => void;
 		showSignModal: () => void;
 		showCompleteProfile: () => void;
+		showSignInModal: (e: boolean) => void;
 		reFetchUserData: () => void;
 		incrementLikedProjectsCount: () => void;
 		decrementLikedProjectsCount: () => void;
@@ -57,6 +58,7 @@ const UserContext = createContext<IUserContext>({
 		signOut: () => {},
 		showSignModal: () => {},
 		showCompleteProfile: () => {},
+		showSignInModal: () => {},
 		reFetchUserData: () => {},
 		incrementLikedProjectsCount: () => {},
 		decrementLikedProjectsCount: () => {},
@@ -67,7 +69,7 @@ const apolloClient = initializeApollo();
 
 export const UserProvider = (props: { children: ReactNode }) => {
 	const [cookie, setCookie, removeCookie] = useCookies(['giveth_user']);
-	const { account, active, library, chainId, deactivate } = useWeb3React();
+	const { account, active, library, chainId } = useWeb3React();
 	useWallet();
 
 	const [user, setUser] = useState<IUser | undefined>();
@@ -266,6 +268,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 				actions: {
 					showSignModal: () => setShowWelcomeSignin(true),
 					showCompleteProfile: () => setShowCompleteProfile(true),
+					showSignInModal: setShowWalletModal,
 					signIn,
 					signOut,
 					reFetchUserData,
