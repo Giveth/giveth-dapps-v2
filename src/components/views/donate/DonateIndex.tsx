@@ -309,6 +309,12 @@ const RadioBox = styled.div`
 	${mediaQueries['mobileL']} {
 		flex-direction: column;
 	}
+	${mediaQueries['mobileM']} {
+		flex-direction: column;
+	}
+	${mediaQueries['mobileS']} {
+		flex-direction: column;
+	}
 	${mediaQueries['tablet']} {
 		flex-direction: row;
 	}

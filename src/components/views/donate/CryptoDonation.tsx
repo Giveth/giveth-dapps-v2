@@ -632,6 +632,16 @@ const CheckBoxContainer = styled.div`
 			margin: 14px 0 0 0;
 		}
 	}
+	${mediaQueries['mobileM']} {
+		div:nth-child(2) {
+			margin: 14px 0 0 0;
+		}
+	}
+	${mediaQueries['mobileS']} {
+		div:nth-child(2) {
+			margin: 14px 0 0 0;
+		}
+	}
 `;
 
 const ToastContainer = styled.div`

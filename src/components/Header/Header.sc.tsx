@@ -20,7 +20,7 @@ export const StyledHeader = styled(Flex)<IHeader>`
 	right: 0;
 	top: ${props => (props.show ? 0 : '-100px')};
 	padding: 16px 32px;
-	z-index: 1050;
+	z-index: 2;
 	transition: top 0.3s ease;
 `;
 
