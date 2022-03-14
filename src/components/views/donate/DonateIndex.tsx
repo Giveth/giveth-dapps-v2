@@ -11,6 +11,7 @@ import ConfettiAnimation from '../../animations/confetti';
 import RadioOnIcon from '/public/images/radio_on.svg';
 import RadioOffIcon from '/public/images/radio_off.svg';
 import { formatEtherscanLink } from '../../../utils';
+import { useDeviceDetect } from '@/utils';
 import { mediaQueries } from '@/utils/constants';
 import SocialBox from './SocialBox';
 import {
@@ -31,10 +32,16 @@ import Routes from '@/lib/constants/Routes';
 const CRYPTO_DONATION = 'Cryptocurrency';
 const FIAT_DONATION = 'Credit Card';
 
+interface ICardMobile {
+	isHidden?: boolean;
+}
+
 const ProjectsIndex = (props: IProjectBySlug) => {
 	const { project } = props;
 	const [donationType, setDonationType] = useState(CRYPTO_DONATION);
 	const [isSuccess, setSuccess] = useState<any>(null);
+	const [hideMobileCard, setHideMobileCard] = useState<boolean>(true);
+	const { isMobile } = useDeviceDetect();
 
 	const { chainId: networkId } = useWeb3React();
 
@@ -159,32 +166,61 @@ const ProjectsIndex = (props: IProjectBySlug) => {
 		);
 	};
 
+	const _MobileProjectCard = () => {
+		if (isMobile) {
+			return (
+				<CardMobileWrapper
+					isHidden={hideMobileCard}
+					onClick={() => setHideMobileCard(!hideMobileCard)}
+				>
+					<SlideBtn />
+					{!hideMobileCard && (
+						<MobileCardContainer>
+							<ProjectCard
+								key={project.id}
+								project={project}
+								noHearts={true}
+							/>
+							<SocialBox project={project} />
+						</MobileCardContainer>
+					)}
+				</CardMobileWrapper>
+			);
+		} else {
+			return (
+				<Left>
+					<ProjectCard
+						key={project.id}
+						project={project}
+						noHearts={true}
+					/>
+				</Left>
+			);
+		}
+	};
+
 	return (
-		<Container>
-			<BigArc />
-			<Wrapper>
-				<Sections>
-					<Left>
-						<ProjectCard
-							key={project.id}
-							project={project}
-							noHearts={true}
-						/>
-					</Left>
-					<Right>
-						{isSuccess ? (
-							<SuccessView />
-						) : (
-							<>
-								<H4>Donate With</H4>
-								<TypeSelection />
-							</>
-						)}
-					</Right>
-				</Sections>
-				{!isSuccess && <SocialBox project={project} />}
-			</Wrapper>
-		</Container>
+		<>
+			<Container>
+				<BigArc />
+				<Wrapper>
+					<Sections>
+						{_MobileProjectCard()}
+						<Right>
+							{isSuccess ? (
+								<SuccessView />
+							) : (
+								<>
+									<H4>Donate With</H4>
+									<TypeSelection />
+								</>
+							)}
+						</Right>
+					</Sections>
+					{!isSuccess && !isMobile && <SocialBox project={project} />}
+				</Wrapper>
+			</Container>
+		</>
 	);
 };
 
@@ -211,6 +247,7 @@ const Wrapper = styled.div`
 	margin: 0 auto;
 `;
 const Sections = styled.div`
+	height: 100%;
 	${mediaQueries['tablet']} {
 		display: grid;
 		grid-template-columns: repeat(2, minmax(500px, 1fr));
@@ -344,6 +381,37 @@ const GivBackContainer = styled.div`
 		font-weight: bold;
 		margin: 0 0 8px 0;
 	}
+`;
+
+const CardMobileWrapper = styled.div`
+	flex-direction: column;
+	position: fixed;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	left: 0;
+	bottom: 0;
+	margin: 0;
+	-webkit-backface-visibility: hidden;
+	padding: 0 16px;
+	background-color: white;
+	z-index: 10;
+	box-shadow: 0px 3px 20px rgba(212, 218, 238, 0.7);
+	border-radius: 40px 40px 0px 0px;
+`;
+
+const MobileCardContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+`;
+
+const SlideBtn = styled.div`
+	width: 78px;
+	height: 0px;
+	margin: 16px 0;
+	border: 1.5px solid ${brandColors.giv[500]};
+	border-radius: 15%;
 `;
 
 export default ProjectsIndex;

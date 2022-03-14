@@ -154,6 +154,12 @@ const Wrapper2 = styled.div<{ isNew?: boolean }>`
 	${mediaQueries['mobileL']} {
 		width: 100%;
 	}
+	${mediaQueries['mobileM']} {
+		width: 100%;
+	}
+	${mediaQueries['mobileS']} {
+		width: 100%;
+	}
 `;
 
 const Wrapper = styled.div`
@@ -162,6 +168,12 @@ const Wrapper = styled.div`
 	width: ${cardWidth};
 	border-radius: ${cardRadius};
 	${mediaQueries['mobileL']} {
+		width: 100%;
+	}
+	${mediaQueries['mobileM']} {
+		width: 100%;
+	}
+	${mediaQueries['mobileS']} {
 		width: 100%;
 	}
 `;
