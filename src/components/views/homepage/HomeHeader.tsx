@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { H1, brandColors, Button } from '@giveth/ui-design-system';
+import { H1, brandColors, Button, Lead } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 import { FlexCenter } from '@/components/styled-components/Flex';
@@ -52,9 +52,8 @@ const Title = styled(H1)`
 	padding-top: 3rem;
 `;
 
-const Subtitle = styled.div`
-	font-size: 20px;
-	line-height: 30px;
+const Subtitle = styled(Lead)`
+	font-weight: 400;
 	margin: 23px 0;
 	padding-bottom: 30px;
 `;

@@ -9,6 +9,7 @@ import {
 	Subline,
 	H3,
 	OulineButton,
+	Lead,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
@@ -200,6 +201,12 @@ const ProjectsIndex = (props: IProjectsView) => {
 			<Wrapper>
 				<Title weight={700}>Projects</Title>
 
+				<Subtitle>
+					Explore the Giveth crypto fundraising platform and give
+					crypto directly to charities and social good projects with
+					zero fees on donations!
+				</Subtitle>
+
 				<FiltersSection>
 					<SelectComponent>
 						<Label>CATEGORY</Label>
@@ -348,7 +355,8 @@ const FiltersSection = styled.div`
 	padding: 32px 21px;
 	background: white;
 	border-radius: 16px;
-	margin-bottom: 14px;
+	margin-bottom: 32px;
+	margin-top: 50px;
 	display: flex;
 	flex-wrap: wrap;
 	gap: 16px;
@@ -379,7 +387,12 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled(H3)`
-	margin-bottom: 25px;
+	margin-bottom: 18px;
 `;
 
+const Subtitle = styled(Lead)`
+	margin-bottom: 25px;
+	font-weight: 400;
+	max-width: 1026px;
+`;
 export default ProjectsIndex;
