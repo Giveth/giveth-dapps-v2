@@ -74,7 +74,9 @@ export const WhatisGIVstreamModal: FC<IWhatisGIVstreamModal> = ({
 const WhatisGIVstreamContainer = styled.div`
 	padding: 24px 24px 24px;
 	background-image: ${props =>
-		props.theme === ETheme.Dark ? `url('/images/stream1.svg')` : ''};
+		props.theme === ETheme.Dark
+			? `url('/images/stream1.svg')`
+			: `url('/images/stream2.svg')`};
 	background-repeat: no-repeat;
 	width: 570px;
 `;
