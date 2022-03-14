@@ -4,6 +4,7 @@ import {
 	H5,
 	brandColors,
 	neutralColors,
+	H6,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
@@ -41,9 +42,15 @@ const HomeExploreProjects = (props: IHomeExploreProjects) => {
 	return (
 		<Wrapper>
 			{!noTitle && (
-				<Title>
-					Explore <span>{totalCount} Projects</span>
-				</Title>
+				<>
+					<Title>
+						Explore <span>{totalCount} Projects</span>
+					</Title>
+					<Subtitle>
+						Give crypto donations directly to social good projects
+						and charities
+					</Subtitle>
+				</>
 			)}
 			<ProjectsContainer>
 				{projects.map(project => (
@@ -95,6 +102,7 @@ const ProjectsContainer = styled.div`
 	display: grid;
 	gap: 25px;
 	margin-bottom: 64px;
+	margin-top: 28px;
 
 	${mediaQueries.laptop} {
 		grid-template-columns: repeat(2, 1fr);
@@ -110,12 +118,17 @@ const ProjectsContainer = styled.div`
 `;
 
 const Title = styled(H5)`
-	margin-bottom: 25px;
 	font-weight: 700;
 
 	span {
 		color: ${neutralColors.gray[700]};
 	}
+`;
+
+const Subtitle = styled(H6)`
+	font-weight: 400;
+	color: ${neutralColors.gray[700]};
+	margin-top: 4px;
 `;
 
 const Wrapper = styled.div`
