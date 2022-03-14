@@ -19,6 +19,7 @@ import { Flex } from './styled-components/Flex';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { IconEthereum } from './Icons/Eth';
+import { IconGnosisChain } from './Icons/GnosisChain';
 import { WhatisGIVstreamModal } from '@/components/modals/WhatisGIVstream';
 import { WrongNetworkInnerModal } from './modals/WrongNetwork';
 import { usePrice } from '@/context/price.context';
@@ -80,12 +81,12 @@ export const RewardCard: FC<IRewardCardProps> = ({
 									<IconEthereum size={16} />
 								)}
 								{network === config.XDAI_NETWORK_NUMBER && (
-									<IconXDAI size={16} fill={false} />
+									<IconGnosisChain size={16} fill={false} />
 								)}
 								<ChainName styleType='Small'>
 									{network === config.MAINNET_NETWORK_NUMBER
 										? 'ETH'
-										: 'XDAI'}
+										: 'GNO'}
 								</ChainName>
 							</ChainInfo>
 						</CardHeader>
