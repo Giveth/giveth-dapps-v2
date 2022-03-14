@@ -17,7 +17,7 @@ import {
 } from '@giveth/ui-design-system';
 import { TopContainer } from './commons';
 import { RewardCard } from '../RewardCard';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 
 export const GIVbacksTopContainer = styled(TopContainer)`
 	overflow: hidden;
@@ -66,7 +66,7 @@ export const GIVBackCard = styled.div`
 	position: relative;
 `;
 
-export const RoundSection = styled(Row)`
+export const RoundSection = styled(Flex)`
 	flex-direction: column;
 	align-content: stretch;
 	color: ${brandColors.giv[200]};
@@ -80,11 +80,11 @@ export const RoundInfo = styled.div`
 	margin: 38px 64px 32px 0;
 `;
 
-export const RoundInfoRow = styled(Row)`
+export const RoundInfoRow = styled(Flex)`
 	margin: 14px 0;
 `;
 
-export const RoundInfoTallRow = styled(Row)`
+export const RoundInfoTallRow = styled(Flex)`
 	margin: 32px 0;
 `;
 

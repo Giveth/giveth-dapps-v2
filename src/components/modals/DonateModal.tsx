@@ -16,7 +16,7 @@ import { IModal, Modal } from '@/components/modals/Modal';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import { WrongNetworkModal } from '@/components/modals/WrongNetwork';
 import { IProject } from '../../apollo/types/types';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 import Logger from '../../utils/Logger';
 import { checkNetwork } from '../../utils';
 import { isAddressENS, getAddressFromENS } from '../../lib/wallet';
@@ -69,8 +69,8 @@ const DonateModal = ({
 }: IDonateModal) => {
 	const { account, library, chainId } = useWeb3React();
 	const {
-		state: { user },
-		actions: { signIn },
+		state: { isSignedIn },
+		actions: { showSignModal },
 	} = UserContext();
 	const [donating, setDonating] = useState(false);
 	const [donationSaved, setDonationSaved] = useState(false);
@@ -91,12 +91,10 @@ const DonateModal = ({
 			//   ? isTraceable
 			//   : switchTraceable
 			let traceable = false;
-			let userTokenValidation: string | boolean = user?.token!;
 			// Sign message for registered users to get user info, no need to sign for anonymous
-			if (!userTokenValidation && !anonymous) {
-				const tokenFromSignin = signIn && (await signIn());
-				if (!tokenFromSignin) return;
-				userTokenValidation = tokenFromSignin;
+			if (!isSignedIn && !anonymous) {
+				showSignModal();
+				return;
 			}
 			if (!project?.walletAddress) {
 				// return Toast({
@@ -384,7 +382,7 @@ const DonateContainer = styled.div`
 	margin: -30px 0 0 0;
 `;
 
-const DonateTopTitle = styled(Row)`
+const DonateTopTitle = styled(Flex)`
 	gap: 14px;
 	h6 {
 		padding: 24px 0;

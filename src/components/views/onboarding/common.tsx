@@ -1,13 +1,12 @@
+import { Col, Row } from '@/components/Grid';
 import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
-import { Row } from '@/components/styled-components/Grid';
 import useUser from '@/context/UserProvider';
 import { Button, neutralColors } from '@giveth/ui-design-system';
 import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { OnboardSteps } from './Onboarding.view';
 
-export const OnboardStep = styled.div`
-	width: 750px;
+export const OnboardStep = styled(Col)`
 	margin: 0 auto;
 `;
 
@@ -55,18 +54,22 @@ export const OnboardActions: FC<IOnboardActions> = ({
 	return (
 		<>
 			<OnboardActionsContianer>
-				<SaveButton
-					label={saveLabel}
-					disabled={disabled}
-					onClick={handleSave}
-					size='medium'
-				/>
-				<SkipButton
-					label='Do it later'
-					size='medium'
-					buttonType='texty'
-					onClick={onLater}
-				/>
+				<Col xs={12} md={7}>
+					<SaveButton
+						label={saveLabel}
+						disabled={disabled}
+						onClick={handleSave}
+						size='medium'
+					/>
+				</Col>
+				<Col xs={12} md={2}>
+					<SkipButton
+						label='Do it later'
+						size='medium'
+						buttonType='texty'
+						onClick={onLater}
+					/>
+				</Col>
 			</OnboardActionsContianer>
 			{showSigninModal && (
 				<WelcomeSigninModal
@@ -85,7 +88,9 @@ const OnboardActionsContianer = styled(Row)`
 `;
 
 const SaveButton = styled(Button)`
-	width: 400px;
+	width: 100%;
 `;
 
-const SkipButton = styled(Button)``;
+const SkipButton = styled(Button)`
+	width: 100%;
+`;

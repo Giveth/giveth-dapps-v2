@@ -13,7 +13,7 @@ import {
 	semanticColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Row } from '@/components/styled-components/Grid';
+import { Flex } from '@/components/styled-components/Flex';
 
 const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {
 	ssr: false,
@@ -242,7 +242,7 @@ const AbsolutButtons = styled(ExtraButtons)`
 	position: absolute;
 `;
 
-const RemoveContainer = styled(Row)`
+const RemoveContainer = styled(Flex)`
 	display: flex;
 	flex-direction: row;
 	cursor: pointer;
@@ -298,7 +298,6 @@ const Input = styled.input`
 `;
 
 const TextInputStyle = {
-	height: '358px',
 	marginTop: '4px',
 	marginBottom: '100px',
 	fontFamily: 'body',

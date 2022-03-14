@@ -9,6 +9,7 @@ import {
 	Subline,
 	H3,
 	OulineButton,
+	Lead,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
@@ -19,7 +20,7 @@ import Routes from '@/lib/constants/Routes';
 import {
 	capitalizeFirstLetter,
 	isUserRegistered,
-	mediaQueries,
+	showToastError,
 } from '@/lib/helpers';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { initializeApollo } from '@/apollo/apolloClient';
@@ -29,12 +30,14 @@ import { gqlEnums } from '@/apollo/types/gqlEnums';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
 import { Shadow } from '../../styled-components/Shadow';
 import useUser from '@/context/UserProvider';
+import { deviceSize, mediaQueries } from '@/utils/constants';
 
 interface IProjectsView {
 	projects: IProject[];
 	totalCount: number;
 	categories: ICategory[];
 }
+
 interface ISelectObj {
 	value: string;
 	label: string;
@@ -152,9 +155,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 				);
 				setIsLoading(false);
 			})
-			.catch(() => {
+			.catch((err: any) => {
 				setIsLoading(false);
-				/*TODO implement toast here for errors*/
+				showToastError(err);
 			});
 	};
 
@@ -198,6 +201,12 @@ const ProjectsIndex = (props: IProjectsView) => {
 			<Wrapper>
 				<Title weight={700}>Projects</Title>
 
+				<Subtitle>
+					Explore the Giveth crypto fundraising platform and give
+					crypto directly to charities and social good projects with
+					zero fees on donations!
+				</Subtitle>
+
 				<FiltersSection>
 					<SelectComponent>
 						<Label>CATEGORY</Label>
@@ -226,7 +235,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 						<Label />
 						<SearchBox
 							onChange={(e: string) => handleChange('search', e)}
-							reset={clearSearch}
 							placeholder='Search Projects ...'
 							value={searchValue}
 						/>
@@ -318,9 +326,14 @@ const StyledButton = styled(OulineButton)<{ transparent?: boolean }>`
 `;
 
 const SelectComponent = styled(P)`
-	width: calc(50% - 8px);
+	min-width: 200px;
+	width: 100%;
 
-	${mediaQueries['xl']} {
+	${mediaQueries.tablet} {
+		width: calc(50% - 8px);
+	}
+
+	${mediaQueries.laptopL} {
 		width: 345px;
 	}
 `;
@@ -342,7 +355,8 @@ const FiltersSection = styled.div`
 	padding: 32px 21px;
 	background: white;
 	border-radius: 16px;
-	margin-bottom: 14px;
+	margin-bottom: 32px;
+	margin-top: 50px;
 	display: flex;
 	flex-wrap: wrap;
 	gap: 16px;
@@ -357,25 +371,28 @@ export const ProjectsContainer = styled.div`
 	gap: 25px;
 	margin-bottom: 64px;
 
-	${mediaQueries['lg']} {
+	${mediaQueries.laptop} {
 		grid-template-columns: repeat(2, 1fr);
 	}
 
-	${mediaQueries['xl']} {
+	${mediaQueries.laptopL} {
 		grid-template-columns: repeat(3, 1fr);
-	}
-
-	${mediaQueries['xxl']} {
-		grid-template-columns: repeat(4, 1fr);
 	}
 `;
 
 const Wrapper = styled.div`
 	padding: 166px 30px 4px 30px;
+	max-width: ${deviceSize.desktop + 'px'};
+	margin: 0 auto;
 `;
 
 const Title = styled(H3)`
-	margin-bottom: 25px;
+	margin-bottom: 18px;
 `;
 
+const Subtitle = styled(Lead)`
+	margin-bottom: 25px;
+	font-weight: 400;
+	max-width: 1026px;
+`;
 export default ProjectsIndex;

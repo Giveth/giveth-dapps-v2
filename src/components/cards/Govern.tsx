@@ -28,7 +28,7 @@ import {
 	PreviousArrowButton,
 } from './common';
 import { InputWithUnit } from '../input/index';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 import { IClaimViewCardProps } from '../views/claim/Claim.view';
 import config from '@/configuration';
 import { formatEthHelper, formatWeiHelper, Zero } from '@/helpers/number';
@@ -206,7 +206,7 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 						If you vote with GIV tokens
 					</H5>
 					<div>
-						<Row
+						<Flex
 							alignItems={'center'}
 							justifyContent={'space-between'}
 						>
@@ -222,7 +222,7 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 							>{`Max ${utils.formatEther(
 								totalAmount.div(10),
 							)} GIV`}</MaxStakeGIV>
-						</Row>
+						</Flex>
 						<ImpactCardInput>
 							<InputWithUnit
 								type='number'
@@ -237,7 +237,7 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 					<PoolCardTitle>If you wrap for 1 month:</PoolCardTitle>
 					<PoolCard>
 						<PoolItems>
-							<Row justifyContent='space-between'>
+							<Flex justifyContent='space-between'>
 								<PoolItem>APR</PoolItem>
 								<PoolItemBold>
 									<Image
@@ -248,19 +248,19 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 									/>
 									{formatEthHelper(apr ? apr : Zero)}%
 								</PoolItemBold>
-							</Row>
-							<Row justifyContent='space-between'>
+							</Flex>
+							<Flex justifyContent='space-between'>
 								<PoolItem>Claimable</PoolItem>
 								<PoolItemBold>
 									{formatWeiHelper(potentialClaim)} GIV
 								</PoolItemBold>
-							</Row>
-							<Row justifyContent='space-between'>
+							</Flex>
+							<Flex justifyContent='space-between'>
 								<PoolItem>Streaming</PoolItem>
 								<PoolItemBold>
 									{formatWeiHelper(earnEstimate)} GIV/week
 								</PoolItemBold>
-							</Row>
+							</Flex>
 						</PoolItems>
 					</PoolCard>
 				</PoolCardContainer>

@@ -1,7 +1,7 @@
 import { brandColors, H4, Lead } from '@giveth/ui-design-system';
 import React, { FC, ReactNode } from 'react';
 import styled from 'styled-components';
-import { Row } from './styled-components/Grid';
+import { Flex } from './styled-components/Flex';
 
 interface IDataBoxProps {
 	title: string;
@@ -10,7 +10,7 @@ interface IDataBoxProps {
 	className?: string;
 }
 
-const DataBoxContainer = styled(Row)`
+const DataBoxContainer = styled(Flex)`
 	flex-direction: column;
 	padding: 24px 24px 60px;
 	width: 363px;

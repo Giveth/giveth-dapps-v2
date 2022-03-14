@@ -7,14 +7,14 @@ import {
 	ButtonLink,
 } from '@giveth/ui-design-system';
 
-import { Row } from '@/components/styled-components/Grid';
+import { Flex } from '@/components/styled-components/Flex';
 import { Button as CButton } from '@/components/styled-components/Button';
 import { IHeader } from './Header';
-import { device } from '@/utils/constants';
+import { mediaQueries } from '@/utils/constants';
 import { ETheme } from '@/context/general.context';
 import { Shadow } from '@/components/styled-components/Shadow';
 
-export const StyledHeader = styled(Row)<IHeader>`
+export const StyledHeader = styled(Flex)<IHeader>`
 	position: fixed;
 	left: 0;
 	right: 0;
@@ -90,7 +90,7 @@ export const WBInfo = styled.div`
 `;
 
 export const WBNetwork = styled(GLink)`
-	font-family: 'Red Hat Text';
+	font-family: 'Red Hat Text', sans-serif;
 	font-style: normal;
 	font-weight: normal;
 	font-size: 10px;
@@ -113,9 +113,8 @@ export const HBContent = styled(GLink)`
 `;
 
 export const Title = styled.h1`
-	font-family: 'Red Hat Text';
+	font-family: 'Red Hat Text', sans-serif;
 	font-size: 16px;
-	//font-style: bold;
 	line-height: 24px;
 	letter-spacing: 0.02em;
 	text-align: left;
@@ -127,7 +126,7 @@ interface IHeaderLinkProps {
 	theme?: ETheme;
 }
 
-export const HeaderLinks = styled(Row)<IThemed>`
+export const HeaderLinks = styled(Flex)<IThemed>`
 	background-color: ${props =>
 		props.theme === ETheme.Dark ? brandColors.giv[900] : 'white'};
 	border: 1px solid
@@ -139,7 +138,7 @@ export const HeaderLinks = styled(Row)<IThemed>`
 	display: none;
 	box-shadow: ${props =>
 		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
-	@media ${device.laptopL} {
+	${mediaQueries.laptopL} {
 		display: flex;
 	}
 `;
@@ -181,8 +180,15 @@ export const SmallCreateProject = styled(ButtonLink)`
 		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
 `;
 
+export const LargeCreateProject = styled.div`
+	display: none;
+	${mediaQueries.laptop} {
+		display: unset;
+	}
+`;
+
 export const SmallCreateProjectParent = styled.div`
-	@media ${device.laptop} {
+	${mediaQueries.laptop} {
 		display: none;
 	}
 `;

@@ -1,15 +1,10 @@
-import {
-	brandColors,
-	Container,
-	H2,
-	H3,
-	H5,
-	Subline,
-} from '@giveth/ui-design-system';
+import { brandColors, H2, H3, H5, Subline } from '@giveth/ui-design-system';
+import { mediaQueries } from '@/utils/constants';
 import { FC } from 'react';
 import styled from 'styled-components';
-import { Row } from '../../styled-components/Grid';
+import { Flex } from '../../styled-components/Flex';
 import { IUser } from '@/apollo/types/types';
+import { Container } from '@/components/Grid';
 
 export interface IUserPublicProfileView {
 	user: IUser;
@@ -54,8 +49,19 @@ const UserContributeTitle = styled(H5)`
 	margin-bottom: 16px;
 `;
 
-const ContributeCardContainer = styled(Row)`
+const ContributeCardContainer = styled(Flex)`
 	gap: 32px;
+	justify-content: space-between;
+	${mediaQueries.mobileS} {
+		flex-direction: column;
+		align-items: center;
+	}
+	${mediaQueries.tablet} {
+		flex-direction: row;
+	}
+	${mediaQueries.laptop} {
+		flex-direction: row;
+	}
 `;
 
 const ContributeCard = styled.div`
@@ -66,6 +72,9 @@ const ContributeCard = styled.div`
 	padding: 24px;
 	width: 556px;
 	grid-template-columns: 1fr 1fr;
+	${mediaQueries.mobileS} {
+		width: 100%;
+	}
 `;
 
 const ContributeCardTitles = styled(Subline)`

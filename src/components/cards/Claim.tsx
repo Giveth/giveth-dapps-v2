@@ -1,7 +1,7 @@
 import { FC, useContext, useState } from 'react';
 import styled from 'styled-components';
 import { Button } from '../styled-components/Button';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 import { Card, Header, PreviousArrowButton } from './common';
 import { IClaimViewCardProps } from '../views/claim/Claim.view';
 import useClaim from '@/context/claim.context';
@@ -56,7 +56,7 @@ const MetamaskButton = styled.a`
 	cursor: pointer;
 `;
 
-const AddTokenRow = styled(Row)`
+const AddTokenRow = styled(Flex)`
 	margin-top: 16px;
 `;
 
@@ -109,7 +109,7 @@ const ClaimCard: FC<IClaimViewCardProps> = ({ index }) => {
 						Let&apos;s Build the Future of Giving, together.
 					</Desc>
 				</ClaimHeader>
-				<Row alignItems={'center'} justifyContent={'center'}>
+				<Flex alignItems={'center'} justifyContent={'center'}>
 					{/* <ClaimButton secondary onClick={onClaim}> */}
 					<ClaimButton
 						secondary
@@ -120,7 +120,7 @@ const ClaimCard: FC<IClaimViewCardProps> = ({ index }) => {
 					>
 						CLAIM
 					</ClaimButton>
-				</Row>
+				</Flex>
 				<AddTokenRow alignItems={'center'} justifyContent={'center'}>
 					<AddGIVTokenButton provider={library} />
 				</AddTokenRow>

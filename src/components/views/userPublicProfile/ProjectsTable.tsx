@@ -12,7 +12,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 import { smallFormatDate } from '@/lib/helpers';
-import { Row } from '@/components/styled-components/Grid';
+import { Flex } from '@/components/styled-components/Flex';
 import { FC } from 'react';
 import styled from 'styled-components';
 import {
@@ -21,6 +21,7 @@ import {
 	EDirection,
 	IOrder,
 } from './UserPublicProfile.view';
+import { mediaQueries } from '@/utils/constants';
 import { idToProjectEdit } from '@/lib/routeCreators';
 
 interface IBadge {
@@ -89,7 +90,7 @@ const ProjectsTable: FC<IProjectsTable> = ({
 
 	return (
 		<>
-			<DonationTablecontainer>
+			<ProjectTablecontainer>
 				<TableHeader
 					onClick={() => orderChangeHandler(EOrderBy.CreationDate)}
 				>
@@ -199,19 +200,30 @@ const ProjectsTable: FC<IProjectsTable> = ({
 						</TableCell>
 					</RowWrapper>
 				))}
-			</DonationTablecontainer>
+			</ProjectTablecontainer>
 		</>
 	);
 };
 
-const DonationTablecontainer = styled.div`
+const ProjectTablecontainer = styled.div`
 	display: grid;
 	grid-template-columns: 1.5fr 1fr 4fr 1.1fr 2fr 1.5fr 1fr;
-	width: 100%;
-	min-width: 1133px;
+	overflow: auto;
+	${mediaQueries.laptop} {
+		min-width: 1133px;
+	}
+	${mediaQueries.tablet} {
+		min-width: 1000px;
+	}
+	${mediaQueries.mobileL} {
+		min-width: 1133px;
+	}
+	${mediaQueries.mobileS} {
+		min-width: 1133px;
+	}
 `;
 
-const TableHeader = styled(Row)`
+const TableHeader = styled(Flex)`
 	height: 40px;
 	border-bottom: 1px solid ${neutralColors.gray[400]};
 	align-items: center;
@@ -230,7 +242,7 @@ const TableHeaderCentered = styled(TableHeader)`
 	justify-content: center;
 `;
 
-const TableCell = styled(Row)`
+const TableCell = styled(Flex)`
 	width: 100%;
 	height: 60px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
@@ -254,7 +266,7 @@ const RowWrapper = styled.div`
 	}
 `;
 
-const Actions = styled(Row)`
+const Actions = styled(Flex)`
 	gap: 10px;
 	* {
 		cursor: pointer;
@@ -262,7 +274,7 @@ const Actions = styled(Row)`
 	}
 `;
 
-const Badge = styled(Row)`
+const Badge = styled(Flex)`
 	align-items: center;
 	color: ${(props: IBadge) => props.mainColor![700]} !important;
 	background: ${(props: IBadge) => props.mainColor![100]};

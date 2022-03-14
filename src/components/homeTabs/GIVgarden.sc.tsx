@@ -14,7 +14,7 @@ import {
 } from '@giveth/ui-design-system';
 import { TopContainer } from './commons';
 import { RewardCard } from '../RewardCard';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 import { device } from '@/utils/constants';
 
 export const GardenTopContainer = styled(TopContainer)`
@@ -115,7 +115,7 @@ export const GovernanceLink = styled(GLink)`
 	margin-top: auto;
 `;
 
-export const GovernanceRaw = styled(Row)`
+export const GovernanceRaw = styled(Flex)`
 	margin-bottom: 120px;
 `;
 

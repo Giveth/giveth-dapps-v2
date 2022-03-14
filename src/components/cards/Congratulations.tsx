@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Button } from '../styled-components/Button';
 import { useEffect, useState } from 'react';
 import useClaim from '@/context/claim.context';
-import { Container, H2, Lead } from '@giveth/ui-design-system';
+import { H2, Lead } from '@giveth/ui-design-system';
 import Lottie from 'react-lottie';
 import { formatWeiHelper } from '@/helpers/number';
 import Image from 'next/image';
@@ -10,9 +10,10 @@ import SparkleBurstAnimation from '@/animations/sparkle-burst.json';
 import SparkleAnimation from '@/animations/sparkle.json';
 import BlowingAnimation from '@/animations/blowing.json';
 import { useTokenDistro } from '@/context/tokenDistro.context';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 import { AddGIVTokenButton } from '../AddGIVTokenButton';
 import { useWeb3React } from '@web3-react/core';
+import { Container } from '@/components/Grid';
 
 const SmileImage = styled.div`
 	position: absolute;
@@ -24,7 +25,7 @@ const SmileImage = styled.div`
 	}
 `;
 
-const ClaimedSubtitleA = styled(Row)`
+const ClaimedSubtitleA = styled(Flex)`
 	gap: 12px;
 	margin-top: 24px;
 	position: relative;
@@ -36,7 +37,7 @@ const AddGivButton = styled.div`
 
 const ClaimedSubtitleB = styled(Lead)``;
 
-const SocialButtonsContainer = styled(Row)`
+const SocialButtonsContainer = styled(Flex)`
 	flex-direction: column;
 	gap: 12px;
 	margin: 32px 0;
@@ -90,7 +91,7 @@ const CongHeader = styled(H2)`
 	position: relative;
 `;
 
-const CongContent = styled(Row)`
+const CongContent = styled(Flex)`
 	flex-direction: column;
 	padding-left: 200px;
 	@media only screen and (max-width: 990px) {

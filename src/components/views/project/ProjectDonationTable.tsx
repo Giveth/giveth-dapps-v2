@@ -16,7 +16,7 @@ import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { IDonation } from '@/apollo/types/types';
 import SearchBox from '@/components/SearchBox';
-import { Row } from '@/components/styled-components/Grid';
+import { Flex } from '@/components/styled-components/Flex';
 import Pagination from '@/components/Pagination';
 import { networksParams } from '@/helpers/blockchain';
 import { smallFormatDate } from '@/lib/helpers';
@@ -71,6 +71,7 @@ const ProjectDonationTable = ({
 		direction: EDirection.DESC,
 	});
 	const [activeTab, setActiveTab] = useState<number>(0);
+	const [searchTerm, setSearchTerm] = useState<string>('');
 
 	const orderChangeHandler = (orderby: EOrderBy) => {
 		if (orderby === order.by) {
@@ -98,8 +99,8 @@ const ProjectDonationTable = ({
 					projectId: parseInt(id),
 					take: itemPerPage,
 					skip: page * itemPerPage,
-					orderBy: order.by,
-					direction: order.direction,
+					orderBy: { field: order.by, direction: order.direction },
+					searchTerm,
 				},
 			});
 			const { donationsByProjectId } = projectDonations;
@@ -108,7 +109,7 @@ const ProjectDonationTable = ({
 			}
 		};
 		fetchProjectDonations();
-	}, [page, order.by, order.direction, id]);
+	}, [page, order.by, order.direction, id, searchTerm]);
 
 	return (
 		<Wrapper>
@@ -129,7 +130,10 @@ const ProjectDonationTable = ({
 						</Tab>
 					)}
 				</Tabs>
-				<SearchBox onChange={() => {}} value='' reset={() => {}} />
+				<SearchBox
+					onChange={event => setSearchTerm(event)}
+					value={searchTerm}
+				/>
 			</UpperSection>
 			{activeTab === 0 && (
 				<DonationTableContainer>
@@ -208,7 +212,9 @@ const ProjectDonationTable = ({
 			)}
 			<Pagination
 				currentPage={page}
-				totalCount={totalDonations || 0}
+				totalCount={
+					!!searchTerm ? pageDonations.length : totalDonations || 0
+				}
 				setPage={setPage}
 				itemPerPage={itemPerPage}
 			/>
@@ -255,7 +261,7 @@ const DonationTableContainer = styled.div`
 	width: 100%;
 `;
 
-const TableHeader = styled(Row)`
+const TableHeader = styled(Flex)`
 	height: 40px;
 	border-bottom: 1px solid ${neutralColors.gray[400]};
 	align-items: center;
@@ -277,7 +283,7 @@ const RowWrapper = styled.div`
 	}
 `;
 
-const TableCell = styled(Row)`
+const TableCell = styled(Flex)`
 	height: 60px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
 	align-items: center;

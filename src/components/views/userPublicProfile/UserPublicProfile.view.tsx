@@ -4,7 +4,6 @@ import { useWeb3React } from '@web3-react/core';
 import Image from 'next/image';
 import {
 	brandColors,
-	Container,
 	GLink,
 	H3,
 	IconExternalLink,
@@ -15,15 +14,17 @@ import {
 	Button,
 } from '@giveth/ui-design-system';
 
+import { mediaQueries } from '@/utils/constants';
 import { CopyToClipboard } from '@/components/CopyToClipboard';
 import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
 import PublicProfileContributes from './PublicProfileContributes';
 import { IUser, IProject } from '@/apollo/types/types';
 import { networksParams } from '@/helpers/blockchain';
 import EditUserModal from '@/components/modals/EditUserModal';
-import { Row } from '@/components/styled-components/Grid';
+import { Flex } from '@/components/styled-components/Flex';
 import useUser from '@/context/UserProvider';
 import { isUserRegistered } from '@/lib/helpers';
+import { Container } from '@/components/Grid';
 
 export enum EOrderBy {
 	TokenAmount = 'TokenAmount',
@@ -186,24 +187,30 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 										Edit Profile
 									</PinkLink>
 								)}
-								<GLink size='Big'>{user.walletAddress}</GLink>
-								<WalletIconsContainer>
-									<CopyToClipboard
-										text={user.walletAddress || ''}
-									/>
-								</WalletIconsContainer>
+								<AddressContainer>
+									<AddressText size='Big'>
+										{user.walletAddress}
+									</AddressText>
+									<AddressContainer>
+										<WalletIconsContainer>
+											<CopyToClipboard
+												text={user.walletAddress || ''}
+											/>
+										</WalletIconsContainer>
 
-								<WalletIconsContainer
-									onClick={() => {
-										if (chainId) {
-											window.open(
-												`${networksParams[chainId].blockExplorerUrls[0]}/address/${user.walletAddress}`,
-											);
-										}
-									}}
-								>
-									<IconExternalLink />
-								</WalletIconsContainer>
+										<WalletIconsContainer
+											onClick={() => {
+												if (chainId) {
+													window.open(
+														`${networksParams[chainId].blockExplorerUrls[0]}/address/${user.walletAddress}`,
+													);
+												}
+											}}
+										>
+											<IconExternalLink />
+										</WalletIconsContainer>
+									</AddressContainer>
+								</AddressContainer>
 							</WalletContainer>
 						</UserInforRow>
 					</UserInfoWithAvatarRow>
@@ -246,8 +253,17 @@ const PubliCProfileHeader = styled.div`
 	background-color: ${neutralColors.gray[100]};
 `;
 
-const UserInfoWithAvatarRow = styled(Row)`
+const UserInfoWithAvatarRow = styled(Flex)`
 	gap: 24px;
+	${mediaQueries.mobileS} {
+		flex-direction: column;
+	}
+	${mediaQueries.tablet} {
+		flex-direction: row;
+	}
+	${mediaQueries.laptop} {
+		flex-direction: row;
+	}
 `;
 
 const PinkLink = styled(GLink)`
@@ -255,15 +271,61 @@ const PinkLink = styled(GLink)`
 	cursor: pointer;
 `;
 
-const UserInforRow = styled(Row)`
+const UserInforRow = styled(Flex)`
 	flex-direction: column;
 	flex: 1;
 	justify-content: space-between;
 	align-items: flex-start;
+	${mediaQueries.mobileS} {
+		align-items: center;
+	}
+	${mediaQueries.tablet} {
+		align-items: flex-start;
+	}
+	${mediaQueries.laptop} {
+		align-items: flex-start;
+	}
 `;
 
-const WalletContainer = styled(Row)`
+const WalletContainer = styled(Flex)`
 	gap: 18px;
+	flex-direction: column;
+
+	${mediaQueries.mobileS} {
+		flex-direction: column;
+		align-items: center;
+		margin-top: 16px;
+		gap: 0;
+	}
+	${mediaQueries.tablet} {
+		flex-direction: row;
+		margin-top: 0;
+	}
+	${mediaQueries.laptop} {
+		flex-direction: row;
+		margin-top: 0;
+	}
+`;
+
+const AddressText = styled(GLink)`
+	${mediaQueries.mobileS} {
+		max-width: 250px;
+		overflow: auto;
+		margin: 0 5px;
+	}
+	${mediaQueries.tablet} {
+		max-width: 500px;
+	}
+`;
+
+const AddressContainer = styled(WalletContainer)`
+	flex-direction: row;
+	margin: 0;
+	${mediaQueries.mobileS} {
+		align-items: center;
+		justify-content: center;
+		gap: 5px;
+	}
 `;
 
 const WalletIconsContainer = styled.div`

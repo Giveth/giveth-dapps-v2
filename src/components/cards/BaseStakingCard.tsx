@@ -1,7 +1,7 @@
 import config from '../../configuration';
 import { PoolStakingConfig, StakingType } from '../../types/config';
 import React, { FC, useEffect, useState, ReactNode } from 'react';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { formatEthHelper, formatWeiHelper, Zero } from '../../helpers/number';
 import {
@@ -102,7 +102,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const isV3Staking = type === StakingType.UNISWAP;
 
 	const { apr, earned, stakedLpAmount, userNotStakedAmount } = stakeInfo;
-	const { minimumApr } = useLiquidityPositions();
+	const { minimumApr, maxApr } = useLiquidityPositions();
 
 	useEffect(() => {
 		setRewardLiquidPart(tokenDistroHelper.getLiquidPart(earned));
@@ -160,14 +160,14 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					<Details>
 						<FirstDetail justifyContent='space-between'>
 							<DetailLabel>APR</DetailLabel>
-							{/* <Row gap='8px' alignItems='center'>
+							{/* <Flex gap='8px' alignItems='center'>
 								<IconContainer
 									onClick={() => setShowAPRModal(true)}
 								>
 									<IconCalculator size={16} />
 								</IconContainer>
-							</Row> */}
-							<Row gap='8px' alignItems='center'>
+							</Flex> */}
+							<Flex gap='8px' alignItems='center'>
 								<IconSpark
 									size={24}
 									color={brandColors.mustard[500]}
@@ -185,6 +185,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 										<GiftTooltip>
 											Provide a narrow range of liquidity
 											to maximize your rate of reward. The
+											max APR for totally in range
+											liquidity is{' '}
+											{formatEthHelper(maxApr, 2)}%, the
 											average APR is{' '}
 											{formatEthHelper(apr, 2)}%, and the
 											minimum APR for full range liquidity
@@ -202,7 +205,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								>
 									<IconHelp size={16} />
 								</IconContainer>
-							</Row>
+							</Flex>
 						</FirstDetail>
 						<Detail justifyContent='space-between'>
 							<DetailLabel>Claimable</DetailLabel>
@@ -211,7 +214,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							</DetailValue>
 						</Detail>
 						<Detail justifyContent='space-between'>
-							<Row gap='8px' alignItems='center'>
+							<Flex gap='8px' alignItems='center'>
 								<DetailLabel>Streaming</DetailLabel>
 								<IconHelpWraper
 									onClick={() => {
@@ -220,13 +223,13 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								>
 									<IconHelp size={16} />
 								</IconHelpWraper>
-							</Row>
-							<Row gap='4px' alignItems='center'>
+							</Flex>
+							<Flex gap='4px' alignItems='center'>
 								<DetailValue>
 									{formatWeiHelper(rewardStream)}
 								</DetailValue>
 								<DetailUnit>GIV/week</DetailUnit>
-							</Row>
+							</Flex>
 						</Detail>
 					</Details>
 					<ClaimButton

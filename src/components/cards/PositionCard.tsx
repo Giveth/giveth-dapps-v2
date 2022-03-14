@@ -17,7 +17,7 @@ import {
 } from '@giveth/ui-design-system';
 
 import { LiquidityPosition } from '@/types/nfts';
-import { Row } from '@/components/styled-components/Grid';
+import { Flex } from '@/components/styled-components/Flex';
 import { IconWithTooltip } from '../IconWithToolTip';
 import LoadingAnimation from '@/animations/loading.json';
 import { Pending } from '../modals/HarvestAll.sc';
@@ -226,13 +226,13 @@ export const PositionInfo = styled.div`
 	color: ${neutralColors.gray[100]};
 `;
 
-export const PositionInfoRow = styled(Row)`
+export const PositionInfoRow = styled(Flex)`
 	font-size: 12px;
 	align-items: center;
 	gap: 8px;
 `;
 
-export const TokenAmountRow = styled(Row)`
+export const TokenAmountRow = styled(Flex)`
 	align-items: center;
 	gap: 4px;
 `;

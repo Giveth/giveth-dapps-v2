@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexCenter } from '../styled-components/Grid';
+import { FlexCenter } from '../styled-components/Flex';
 
 const QuestionBadge = () => {
 	return (

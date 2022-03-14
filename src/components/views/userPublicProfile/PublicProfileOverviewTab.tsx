@@ -2,20 +2,15 @@ import { useRouter } from 'next/router';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IButtonProps } from '@giveth/ui-design-system/lib/esm/components/buttons/type';
-import {
-	brandColors,
-	Container,
-	H1,
-	QuoteText,
-	Button,
-} from '@giveth/ui-design-system';
+import { brandColors, H1, QuoteText, Button } from '@giveth/ui-design-system';
 
 import Routes from '@/lib/constants/Routes';
 import ContributeCard from './PublicProfileContributeCard';
-import { Row } from '@/components/styled-components/Grid';
+import { Flex } from '@/components/styled-components/Flex';
 import { IUserPublicProfileView } from './UserPublicProfile.view';
 import useUser from '@/context/UserProvider';
 import { isUserRegistered } from '@/lib/helpers';
+import { Container } from '@/components/Grid';
 
 const PublicProfileOverviewTab: FC<IUserPublicProfileView> = ({ user }) => {
 	const router = useRouter();
@@ -145,7 +140,7 @@ const UserContributeInfo = styled.div`
 	padding: 40px 0 60px;
 `;
 
-const Buttons = styled(Row)`
+const Buttons = styled(Flex)`
 	margin: 40px 0 0 0;
 	gap: 12px;
 `;

@@ -1,18 +1,17 @@
+import React from 'react';
+import Head from 'next/head';
 import type { AppProps } from 'next/app';
 import { Toaster } from 'react-hot-toast';
 import { CookiesProvider } from 'react-cookie';
 import { Web3ReactProvider } from '@web3-react/core';
+import { ApolloProvider } from '@apollo/client';
+import { ExternalProvider, Web3Provider } from '@ethersproject/providers';
 
 import { FarmProvider } from '@/context/farm.context';
 import { NftsProvider } from '@/context/positions.context';
 import { TokenDistroProvider } from '@/context/tokenDistro.context';
-import { ApolloProvider } from '@apollo/client';
-import { MobileModal } from '@/components/modals/Mobile';
-import React, { useEffect, useState } from 'react';
 import { SubgraphProvider } from '@/context/subgraph.context';
-import Head from 'next/head';
 import { PriceProvider } from '@/context/price.context';
-import { ExternalProvider, Web3Provider } from '@ethersproject/providers';
 import { GeneralProvider } from '@/context/general.context';
 import { useApollo } from '@/apollo/apolloClient';
 import { UserProvider } from '@/context/UserProvider';
@@ -26,31 +25,15 @@ function getLibrary(provider: ExternalProvider) {
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
-	const [showMobileModal, setShowMobileModal] = useState(false);
-	const [viewPort, setViewPort] = useState(false);
 	const apolloClient = useApollo(pageProps);
-
-	useEffect(() => {
-		const windowResizeHandler = () => {
-			if (window.screen.width < 768) {
-				setShowMobileModal(true);
-				setViewPort(true);
-			} else {
-				setShowMobileModal(false);
-				setViewPort(false);
-			}
-		};
-		windowResizeHandler();
-		window.addEventListener('resize', windowResizeHandler);
-		return () => {
-			removeEventListener('resize', windowResizeHandler);
-		};
-	}, []);
 
 	return (
 		<>
 			<Head>
-				{/* {viewPort && <meta name='viewport' content='width=768' />} */}
+				<meta
+					name='viewport'
+					content='width=device-width, initial-scale=1.0'
+				/>
 			</Head>
 			<GeneralProvider>
 				<ApolloProvider client={apolloClient}>
@@ -65,16 +48,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 													<HeaderWrapper />
 													<Component {...pageProps} />
 													<FooterWrapper />
-													{/* {showMobileModal && (
-														<MobileModal
-															showModal={
-																showMobileModal
-															}
-															setShowModal={
-																setShowMobileModal
-															}
-														/>
-													)} */}
 												</UserProvider>
 											</CookiesProvider>
 										</FarmProvider>
@@ -89,4 +62,5 @@ function MyApp({ Component, pageProps }: AppProps) {
 		</>
 	);
 }
+
 export default MyApp;

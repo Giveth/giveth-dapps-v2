@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 import VerificationBadge from '../badges/VerificationBadge';
 import { IReaction } from '../../apollo/types/types';
 import useUser from '@/context/UserProvider';
@@ -35,7 +35,7 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 	const {
 		state: { user, isSignedIn },
 		actions: {
-			signIn,
+			showSignModal,
 			incrementLikedProjectsCount,
 			decrementLikedProjectsCount,
 		},
@@ -57,15 +57,12 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 
 	const likeUnlikeProject = async () => {
 		if (!isSignedIn) {
-			if (signIn) {
-				const success = await signIn();
-				if (!success) return;
-			} else {
-				console.error('Sign in is not possible');
+			if (showSignModal) {
+				showSignModal();
+				return;
 			}
-			// setShowSigninModal(true);
-			// return;
 		}
+
 		if (loading) return;
 
 		if (projectId) {
@@ -98,6 +95,10 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 	useEffect(() => {
 		setReaction(props.reaction);
 	}, [props.reaction]);
+
+	useEffect(() => {
+		setTotalReactions(props.totalReactions);
+	}, [props.totalReactions]);
 
 	return (
 		<>
@@ -145,11 +146,11 @@ const BadgeContainer = styled.div`
 	display: flex;
 `;
 
-const BadgeButtonContainer = styled(Row)`
+const BadgeButtonContainer = styled(Flex)`
 	gap: 3px;
 `;
 
-const BadgeButton = styled(Row)`
+const BadgeButton = styled(Flex)`
 	gap: 3px;
 	padding: 6px 7px;
 	background: ${neutralColors.gray[100]};

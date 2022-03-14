@@ -1,16 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import VerificationBadge from '@/components/badges/VerificationBadge';
-import {
-	isNoImg,
-	noImgColor,
-	noImgIcon,
-	mediaQueries,
-	breakPoints,
-} from '@/lib/helpers';
+import { isNoImg, noImgColor, noImgIcon } from '@/lib/helpers';
 import { IProject } from '@/apollo/types/types';
 import { P, brandColors, H3, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { mediaQueries } from '@/utils/constants';
 
 const ProjectHeader = (props: { project?: IProject }) => {
 	const { project } = props;
@@ -70,7 +65,7 @@ const Wrapper = styled.div<{ image: string | undefined }>`
 	height: 312px;
 	overflow: hidden;
 
-	${mediaQueries['xl']} {
+	${mediaQueries.laptopL} {
 		position: sticky;
 		top: -312px;
 		z-index: 10;

@@ -24,7 +24,7 @@ import { motion } from 'framer-motion';
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import { Shadow } from '@/components/styled-components/Shadow';
 import CategoryBadge from '@/components/badges/CategoryBadge';
-import { breakPoints, mediaQueries, showToastError } from '@/lib/helpers';
+import { showToastError } from '@/lib/helpers';
 import { IProject } from '@/apollo/types/types';
 import links from '@/lib/constants/links';
 import useUser from '@/context/UserProvider';
@@ -39,6 +39,7 @@ import ArchiveIcon from '../../../../public/images/icons/archive.svg';
 import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
 import { idToProjectEdit, slugToProjectDonate } from '@/lib/routeCreators';
 import { VerificationModal } from '@/components/modals/VerificationModal';
+import { mediaQueries } from '@/utils/constants';
 
 interface IProjectDonateCard {
 	project?: IProject;
@@ -60,7 +61,7 @@ const ProjectDonateCard = ({
 	const {
 		state: { user, isSignedIn },
 		actions: {
-			signIn,
+			showSignModal,
 			incrementLikedProjectsCount,
 			decrementLikedProjectsCount,
 		},
@@ -95,14 +96,8 @@ const ProjectDonateCard = ({
 
 	const likeUnlikeProject = async () => {
 		if (!isSignedIn) {
-			if (signIn) {
-				const success = await signIn();
-				if (!success) return;
-			} else {
-				console.error('Sign in is not possible');
-			}
-			// setShowSigninModal(true);
-			// return;
+			showSignModal();
+			return;
 		}
 		if (loading) return;
 
@@ -192,8 +187,9 @@ const ProjectDonateCard = ({
 			setDeactivateModal(true);
 		} else {
 			try {
-				if (!isSignedIn && !!signIn) {
-					await signIn();
+				if (!isSignedIn) {
+					showSignModal();
+					return;
 				}
 				const { data } = await client.mutate({
 					mutation: ACTIVATE_PROJECT,

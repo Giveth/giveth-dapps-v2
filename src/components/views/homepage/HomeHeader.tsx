@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router';
-import { H1, brandColors, Button } from '@giveth/ui-design-system';
+import { H1, brandColors, Button, Lead } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
-import { FlexCenter } from '@/components/styled-components/Grid';
+import { FlexCenter } from '@/components/styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
 import { Arc } from '@/components/styled-components/Arc';
 import useUser from '@/context/UserProvider';
@@ -27,7 +27,8 @@ const HomeHeader = () => {
 		<Wrapper>
 			<Title weight={700}>Welcome to the future of giving</Title>
 			<Subtitle>
-				Donate directly to social good projects with zero added fees.
+				Donate crypto directly to social good projects with zero added
+				fees.
 			</Subtitle>
 			<AllProjectsButton
 				buttonType='primary'
@@ -51,9 +52,7 @@ const Title = styled(H1)`
 	padding-top: 3rem;
 `;
 
-const Subtitle = styled.div`
-	font-size: 20px;
-	line-height: 30px;
+const Subtitle = styled(Lead)`
 	margin: 23px 0;
 	padding-bottom: 30px;
 `;

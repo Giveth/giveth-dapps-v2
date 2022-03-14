@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
-import { Row } from '@/components/styled-components/Grid';
+import { Flex } from '@/components/styled-components/Flex';
 import { H6, IconX } from '@giveth/ui-design-system';
 
 export type ModalHeaderTitlePosition = 'center' | 'left';
@@ -35,7 +35,7 @@ export const ModalHeader: React.FC<IModalHeader> = ({
 	);
 };
 
-export const ModalHeaderRow = styled(Row)`
+export const ModalHeaderRow = styled(Flex)`
 	gap: 14px;
 	padding: 24px 24px 8px;
 	position: relative;

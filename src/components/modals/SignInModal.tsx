@@ -12,11 +12,11 @@ import twitterIcon from '/public/images/social-tt.svg';
 import facebookIcon from '/public/images/social-fb2.svg';
 import discordIcon from '/public/images/social-disc.svg';
 import torusBrand from '/public/images/torus_pwr.svg';
-import { mediaQueries } from '@/lib/helpers';
 import { torusConnector } from '@/lib/wallet/walletTypes';
 import { H3, P, brandColors, neutralColors, B } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import WalletModal from './WalletModal';
+import { mediaQueries } from '@/utils/constants';
 
 interface ISignInModal {
 	showModal: boolean;
@@ -107,9 +107,9 @@ const BGContainer = styled.div`
 	width: 55%;
 	max-width: 640px;
 	background-color: ${brandColors.giv[500]};
-	background-image: url(images/sign_bg.svg);
+	background-image: url('images/sign_bg.svg');
 
-	${mediaQueries.lg} {
+	${mediaQueries.laptop} {
 		display: block;
 	}
 `;
@@ -122,7 +122,7 @@ const ContentContainer = styled.div`
 	align-self: center;
 	margin: auto;
 
-	${mediaQueries.lg} {
+	${mediaQueries.laptop} {
 		width: 45%;
 	}
 `;

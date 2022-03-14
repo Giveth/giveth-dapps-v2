@@ -12,7 +12,7 @@ import {
 } from '@giveth/ui-design-system';
 
 import { IModal, Modal } from './Modal';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 import { PoolStakingConfig } from '@/types/config';
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import { WhatisGIVstreamModal } from './WhatisGIVstream';
@@ -110,7 +110,7 @@ const DescContainer = styled.div`
 	margin-bottom: 16px;
 `;
 
-const AlertRow = styled(Row)`
+const AlertRow = styled(Flex)`
 	gap: 8px;
 	margin-bottom: 8px;
 `;

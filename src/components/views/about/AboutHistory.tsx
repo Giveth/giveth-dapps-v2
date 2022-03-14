@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FlexCenter } from '../../styled-components/Grid';
+import { FlexCenter } from '../../styled-components/Flex';
 import styled from 'styled-components';
 import {
 	brandColors,

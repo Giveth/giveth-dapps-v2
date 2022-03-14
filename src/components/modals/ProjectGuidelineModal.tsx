@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import styled from 'styled-components';
 import { P, neutralColors, brandColors } from '@giveth/ui-design-system';
+
 import { IModal, Modal } from '@/components/modals/Modal';
-import { useRouter } from 'next/router';
 import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
 
@@ -10,7 +10,6 @@ export const ProjectGuidelineModal: FC<IModal> = ({
 	showModal,
 	setShowModal,
 }) => {
-	const router = useRouter();
 	return (
 		<Modal
 			showModal={showModal}
@@ -24,8 +23,8 @@ export const ProjectGuidelineModal: FC<IModal> = ({
 				<Bullets>
 					<li>
 						<P>
-							Clear project descriptions explaining who they are
-							and what they want to do with the funds.
+							Clear project description explaining who the
+							organization is and what you will do with the funds.
 						</P>
 					</li>
 					<li>
@@ -36,13 +35,17 @@ export const ProjectGuidelineModal: FC<IModal> = ({
 						<P>
 							No violations of our{' '}
 							<InlineLink
-								onClick={() => router.push(links.COVENANT)}
+								target='_blank'
+								rel={'noopener noreferrer'}
+								href={links.COVENANT_DOC}
 							>
 								Covenant
 							</InlineLink>{' '}
 							and/or{' '}
 							<InlineLink
-								onClick={() => router.push(Routes.Terms)}
+								target='_blank'
+								rel={'noopener noreferrer'}
+								href={Routes.Terms}
 							>
 								Terms of Use
 							</InlineLink>
@@ -59,8 +62,8 @@ export const ProjectGuidelineModal: FC<IModal> = ({
 
 					<li>
 						<P>
-							<Optional>(Optional)</Optional> For open-source
-							projects, a link to their repository.
+							<Optional>(Optional)</Optional>A link to the
+							repository of open-source projects.
 						</P>
 					</li>
 				</Bullets>
@@ -69,7 +72,7 @@ export const ProjectGuidelineModal: FC<IModal> = ({
 	);
 };
 
-const InlineLink = styled.span`
+const InlineLink = styled.a`
 	color: ${brandColors.pinky[500]};
 	cursor: pointer;
 `;

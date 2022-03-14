@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 import {
 	brandColors,
 	neutralColors,
@@ -21,7 +21,7 @@ export const StakingPoolContainer = styled.div`
 	position: relative;
 	margin-bottom: 32px;
 `;
-export const StakingPoolExchangeRow = styled(Row)`
+export const StakingPoolExchangeRow = styled(Flex)`
 	margin: 16px;
 `;
 
@@ -34,7 +34,7 @@ export const StakingPoolBadge = styled.img`
 	top: 12px;
 	right: 0px;
 `;
-export const SPTitle = styled(Row)`
+export const SPTitle = styled(Flex)`
 	margin-top: 12px;
 	margin-bottom: 24px;
 `;
@@ -50,11 +50,11 @@ export const StakePoolInfoContainer = styled.div`
 export const Details = styled.div`
 	margin: 12px 0;
 `;
-export const FirstDetail = styled(Row)`
+export const FirstDetail = styled(Flex)`
 	margin-bottom: 28px;
 `;
 
-export const Detail = styled(Row)`
+export const Detail = styled(Flex)`
 	margin-bottom: 16px;
 `;
 export const GIVgardenTooltip = styled.div`
@@ -73,7 +73,7 @@ export const ClaimButton = styled(Button)`
 	width: 100%;
 `;
 
-export const StakeButtonsRow = styled(Row)`
+export const StakeButtonsRow = styled(Flex)`
 	margin: 16px 0;
 	gap: 16px;
 `;
@@ -82,7 +82,7 @@ export const StakeButton = styled(OulineButton)`
 	width: 100%;
 `;
 
-export const StakeContainer = styled(Row)`
+export const StakeContainer = styled(Flex)`
 	gap: 6px;
 	width: 100%;
 `;
@@ -119,7 +119,7 @@ export const Return = styled.img`
 	padding: 16px;
 `;
 
-export const OutOfRangeBadgeContianer = styled(Row)`
+export const OutOfRangeBadgeContianer = styled(Flex)`
 	padding: 3px 7px;
 	background-color: ${brandColors.giv[500]};
 	border-radius: 28px;

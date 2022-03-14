@@ -3,7 +3,7 @@ import { FETCH_USER_DONATIONS } from '@/apollo/gql/gqlUser';
 import { IUserDonations } from '@/apollo/types/gqlTypes';
 import { IWalletDonation } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
-import { Row } from '@/components/styled-components/Grid';
+import { Flex } from '@/components/styled-components/Flex';
 import { ETheme } from '@/context/general.context';
 import { networksParams } from '@/helpers/blockchain';
 import { smallFormatDate } from '@/lib/helpers';
@@ -19,6 +19,7 @@ import {
 	P,
 	SublineBold,
 } from '@giveth/ui-design-system';
+import { mediaQueries } from '@/utils/constants';
 import Link from 'next/link';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -97,7 +98,7 @@ const PublicProfileDonationsTab: FC<IUserPublicProfileView> = ({ user }) => {
 	}, [user, page, order.by, order.direction]);
 
 	return (
-		<>
+		<DonationsTab>
 			<DonationTableWrapper>
 				{!loading && totalDonations === 0 ? (
 					<NothingWrapper>
@@ -112,13 +113,15 @@ const PublicProfileDonationsTab: FC<IUserPublicProfileView> = ({ user }) => {
 				)}
 				{loading && <Loading />}
 			</DonationTableWrapper>
-			<Pagination
-				currentPage={page}
-				totalCount={totalDonations}
-				setPage={setPage}
-				itemPerPage={itemPerPage}
-			/>
-		</>
+			<PaginationContainer>
+				<Pagination
+					currentPage={page}
+					totalCount={totalDonations}
+					setPage={setPage}
+					itemPerPage={itemPerPage}
+				/>
+			</PaginationContainer>
+		</DonationsTab>
 	);
 };
 
@@ -211,9 +214,22 @@ const DonationTable: FC<DonationTable> = ({
 const DonationTablecontainer = styled.div`
 	display: grid;
 	grid-template-columns: 1fr 5fr 1fr 1fr 1fr;
+	overflow: auto;
+	${mediaQueries.laptop} {
+		min-width: 1133px;
+	}
+	${mediaQueries.tablet} {
+		min-width: 1000px;
+	}
+	${mediaQueries.mobileL} {
+		min-width: 1133px;
+	}
+	${mediaQueries.mobileS} {
+		min-width: 1133px;
+	}
 `;
 
-const TabelHeader = styled(Row)`
+const TabelHeader = styled(Flex)`
 	height: 40px;
 	border-bottom: 1px solid ${neutralColors.gray[400]};
 	align-items: center;
@@ -224,7 +240,7 @@ const TabelHeader = styled(Row)`
 	align-items: center;`}
 `;
 
-const TabelCell = styled(Row)`
+const TabelCell = styled(Flex)`
 	height: 60px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
 	align-items: center;
@@ -248,7 +264,7 @@ const CurrencyBadge = styled(SublineBold)`
 	color: ${neutralColors.gray[700]};
 `;
 
-const Loading = styled(Row)`
+const Loading = styled(Flex)`
 	position: absolute;
 	left: 0;
 	right: 0;
@@ -283,4 +299,17 @@ const RowWrapper = styled.div`
 const TransactionLink = styled.a`
 	cursor: pointer;
 	color: ${brandColors.pinky[500]};
+`;
+
+const DonationsTab = styled.div`
+	margin: 0 0 150px 0;
+	${mediaQueries.mobileS} {
+		margin: 0 0 100px 0;
+	}
+`;
+
+const PaginationContainer = styled.div`
+	position: absolute;
+	margin: 16px;
+	right: 50px;
 `;

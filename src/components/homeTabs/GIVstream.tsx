@@ -1,10 +1,9 @@
 import React, { FC, Fragment, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 import {
 	B,
 	brandColors,
-	Container,
 	H1,
 	H3,
 	H6,
@@ -68,6 +67,7 @@ import { useWeb3React } from '@web3-react/core';
 import { IconGIV } from '../Icons/GIV';
 import Pagination from '../Pagination';
 import Routes from '@/lib/constants/Routes';
+import { Container } from '@/components/Grid';
 
 export const TabGIVstreamTop = () => {
 	const [showModal, setShowModal] = useState(false);
@@ -98,12 +98,12 @@ export const TabGIVstreamTop = () => {
 			<GIVstreamTopContainer>
 				<GIVstreamTopInnerContainer>
 					<TopFiller />
-					<Row justifyContent='space-between'>
+					<Flex justifyContent='space-between'>
 						<Left>
-							<Row alignItems='baseline' gap='16px'>
+							<Flex alignItems='baseline' gap='16px'>
 								<GSTitle>GIVstream</GSTitle>
 								<IconGIVStream size={64} />
-							</Row>
+							</Flex>
 							<GSSubtitle size='medium'>
 								Welcome to the expanding GIViverse! The
 								GIVstream aligns community members with the long
@@ -126,7 +126,7 @@ export const TabGIVstreamTop = () => {
 								]}
 							/>
 						</Right>
-					</Row>
+					</Flex>
 				</GIVstreamTopInnerContainer>
 			</GIVstreamTopContainer>
 			{showModal && chainId && (
@@ -199,7 +199,7 @@ export const TabGIVstreamBottom = () => {
 					</IconWithTooltip>
 				</FlowRateRow>
 				<GIVstreamProgress percentage={percent} remainTime={remain} />
-				<Row wrap={1} justifyContent='space-between'>
+				<Flex wrap={1} justifyContent='space-between'>
 					<GsDataBlock
 						title='GIVstream'
 						button={
@@ -222,7 +222,7 @@ export const TabGIVstreamBottom = () => {
 						This way, as the GIVeconomy grows, so do the governance
 						rights of our community.
 					</GsDataBlock>
-				</Row>
+				</Flex>
 				<HistoryTitleRow>
 					<HistoryTitle>History</HistoryTitle>
 					<IconWithTooltip
@@ -244,7 +244,7 @@ export const TabGIVstreamBottom = () => {
 						Increase your GIVstream
 						<IconSpark size={32} color={brandColors.mustard[500]} />
 					</IncreaseSectionTitle>
-					<Row wrap={1} justifyContent='space-between'>
+					<Flex wrap={1} justifyContent='space-between'>
 						<IGsDataBox
 							title='GIVbacks'
 							button={
@@ -292,7 +292,7 @@ export const TabGIVstreamBottom = () => {
 							LP tokens in the GIVfarm. Get GIV rewards and
 							increase your GIVstream.
 						</IGsDataBox>
-					</Row>
+					</Flex>
 				</Container>
 			</IncreaseSection>
 		</GIVbacksBottomContainer>
@@ -338,10 +338,10 @@ const convetSourceTypeToIcon = (distributor: string) => {
 	switch (distributor.toLowerCase()) {
 		case 'givback':
 			return (
-				<Row gap='16px'>
+				<Flex gap='16px'>
 					<IconGIVBack size={24} color={brandColors.mustard[500]} />
 					<P>{` GIVbacks`}</P>
-				</Row>
+				</Flex>
 			);
 		case 'balancerlm':
 		case 'balancerlp':
@@ -351,24 +351,24 @@ const convetSourceTypeToIcon = (distributor: string) => {
 		case 'giveth':
 		case 'givhnypool':
 			return (
-				<Row gap='16px'>
+				<Flex gap='16px'>
 					<IconGIVFarm size={24} color={brandColors.mustard[500]} />
 					<P>{` GIVfarm`}</P>
-				</Row>
+				</Flex>
 			);
 		case 'gardenPool':
 			return (
-				<Row gap='16px'>
+				<Flex gap='16px'>
 					<IconGIVGarden size={24} color={brandColors.mustard[500]} />
 					<P>{` GIVgarden`}</P>
-				</Row>
+				</Flex>
 			);
 		case 'givdrop':
 			return (
-				<Row gap='16px'>
+				<Flex gap='16px'>
 					<IconGIV size={24} />
 					<P>{` GIVdrop`}</P>
-				</Row>
+				</Flex>
 			);
 		default:
 			return distributor; //'Unknown'

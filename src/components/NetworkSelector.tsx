@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import config from '../configuration';
 import { B, brandColors } from '@giveth/ui-design-system';
-import { Row } from './styled-components/Grid';
+import { Flex } from './styled-components/Flex';
 import { IconXDAI } from './Icons/XDAI';
 import { IconEthereum } from './Icons/Eth';
 import { BasicNetworkConfig } from '../types/config';
@@ -14,7 +14,7 @@ interface NetworkSelectorProps {
 	disabled?: boolean;
 }
 
-const NetworkSelectorContainer = styled(Row)<NetworkSelectorProps>`
+const NetworkSelectorContainer = styled(Flex)<NetworkSelectorProps>`
 	width: 270px;
 	height: 48px;
 	border-radius: 88px;
@@ -29,7 +29,7 @@ interface ISelecetor {
 	isSelected: boolean;
 }
 
-const Selector = styled(Row)<ISelecetor>`
+const Selector = styled(Flex)<ISelecetor>`
 	align-items: center;
 	padding: 12px 24px;
 	gap: 8px;

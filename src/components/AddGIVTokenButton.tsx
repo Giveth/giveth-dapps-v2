@@ -5,7 +5,7 @@ import { brandColors, P } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import { FC, useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Row } from './styled-components/Grid';
+import { Flex } from './styled-components/Flex';
 
 interface IAddGIVTokenButton {
 	provider: Web3Provider | null;
@@ -42,7 +42,7 @@ export const AddGIVTokenButton: FC<IAddGIVTokenButton> = ({
 	) : null;
 };
 
-const AddGivButton = styled(Row)`
+const AddGivButton = styled(Flex)`
 	cursor: pointer;
 	align-items: center;
 	gap: 8px;

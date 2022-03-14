@@ -23,7 +23,7 @@ import {
 	TooltipContent,
 } from './HarvestAll.sc';
 import Lottie from 'react-lottie';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 import styled from 'styled-components';
 import { PoolStakingConfig } from '@/types/config';
 import { StakingPoolImages } from '../StakingPoolImages';
@@ -318,7 +318,7 @@ const StakeModalContainer = styled.div`
 	padding: 24px 0;
 `;
 
-const StakeModalTitle = styled(Row)`
+const StakeModalTitle = styled(Flex)`
 	margin-bottom: 42px;
 `;
 
@@ -355,12 +355,12 @@ export const PositionInfo = styled.div`
 	color: ${neutralColors.gray[100]};
 `;
 
-export const PositionInfoRow = styled(Row)`
+export const PositionInfoRow = styled(Flex)`
 	align-items: center;
 	gap: 8px;
 `;
 
-export const TokenAmountRow = styled(Row)`
+export const TokenAmountRow = styled(Flex)`
 	align-items: center;
 	gap: 4px;
 `;

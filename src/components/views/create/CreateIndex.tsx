@@ -1,22 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import CreateProject from '@/components/views/create/CreateProject';
 import useUser from '@/context/UserProvider';
 import { isUserRegistered } from '@/lib/helpers';
-import SignInModal from '@/components/modals/SignInModal';
 
 const CreateIndex = () => {
 	const {
-		state: { user, isSignedIn },
-		actions: { showCompleteProfile, showSignModal },
+		state: { user, isSignedIn, isEnabled },
+		actions: { showCompleteProfile, showSignModal, showSignInModal },
 	} = useUser();
-	const userAddress = user?.walletAddress;
 	const isRegistered = isUserRegistered(user);
 
-	const [showSigninModal, setShowSigninModal] = useState(false);
-
 	useEffect(() => {
-		if (userAddress) {
-			showSigninModal && setShowSigninModal(false);
+		if (isEnabled) {
+			showSignInModal(false);
 			if (!isRegistered) {
 				showCompleteProfile();
 				return;
@@ -25,21 +21,11 @@ const CreateIndex = () => {
 				showSignModal();
 			}
 		} else {
-			setShowSigninModal(true);
+			showSignInModal(true);
 		}
 	}, [user, isSignedIn]);
 
-	return (
-		<>
-			{showSigninModal && (
-				<SignInModal
-					showModal={showSigninModal}
-					closeModal={() => setShowSigninModal(false)}
-				/>
-			)}
-			{isRegistered && isSignedIn && <CreateProject />}
-		</>
-	);
+	return isRegistered && isSignedIn ? <CreateProject /> : null;
 };
 
 export default CreateIndex;

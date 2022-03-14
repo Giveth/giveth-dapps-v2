@@ -2,7 +2,7 @@ import { FC, useState, useContext } from 'react';
 import Lottie from 'react-lottie';
 import { Modal, IModal } from './Modal';
 import { neutralColors, Button, H4 } from '@giveth/ui-design-system';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 import styled from 'styled-components';
 import { PoolStakingConfig } from '@/types/config';
 import { StakingPoolImages } from '../StakingPoolImages';
@@ -160,7 +160,7 @@ const UnStakeModalContainer = styled.div`
 	padding: 24px 0;
 `;
 
-const UnStakeModalTitle = styled(Row)`
+const UnStakeModalTitle = styled(Flex)`
 	margin-bottom: 42px;
 `;
 
@@ -179,7 +179,7 @@ const UnStakeButton = styled(Button)`
 	margin-bottom: 8px;
 `;
 
-const Pending = styled(Row)`
+const Pending = styled(Flex)`
 	margin-top: 32px;
 	margin-bottom: 8px;
 	line-height: 46px;

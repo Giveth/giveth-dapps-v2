@@ -13,7 +13,7 @@ import {
 } from '@giveth/ui-design-system';
 import { TopContainer } from './commons';
 import { RewardCard } from '../RewardCard';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 
 export const GIVfarmTopContainer = styled(TopContainer)`
 	overflow: hidden;
@@ -43,13 +43,13 @@ interface PoolRowProps {
 	disabled?: boolean;
 }
 
-export const PoolRow = styled(Row)<PoolRowProps>`
+export const PoolRow = styled(Flex)<PoolRowProps>`
 	margin: 24px 0;
 	opacity: ${props => (props.disabled ? '0.2' : '1')};
 	pointer-events: ${props => (props.disabled ? 'none' : 'auto')};
 `;
 
-export const ContractRow = styled(Row)`
+export const ContractRow = styled(Flex)`
 	gap: 8px;
 `;
 

@@ -5,14 +5,9 @@ import { IProject } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import ContributeCard from './PublicProfileContributeCard';
-import { Row } from '@/components/styled-components/Grid';
+import { Flex } from '@/components/styled-components/Flex';
 import { ETheme } from '@/context/general.context';
-import { mediaQueries } from '@/lib/helpers';
-import {
-	brandColors,
-	Container,
-	neutralColors,
-} from '@giveth/ui-design-system';
+import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
@@ -23,6 +18,8 @@ import {
 	NothingToSee,
 } from './UserPublicProfile.view';
 import ProjectsTable from './ProjectsTable';
+import { mediaQueries } from '@/utils/constants';
+import { Container } from '@/components/Grid';
 
 const itemPerPage = 10;
 
@@ -82,7 +79,7 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({
 		fetchUserProjects();
 	}, [user, page, order.by, order.direction]);
 	return (
-		<>
+		<ProjectsTab>
 			<UserContributeInfo>
 				<ContributeCard user={user} myAccount={myAccount} />
 			</UserContributeInfo>
@@ -108,13 +105,15 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({
 				)}
 				{loading && <Loading />}
 			</ProjectsContainer>
-			<Pagination
-				currentPage={page}
-				totalCount={totalCount}
-				setPage={setPage}
-				itemPerPage={itemPerPage}
-			/>
-		</>
+			<PaginationContainer>
+				<Pagination
+					currentPage={page}
+					totalCount={totalCount}
+					setPage={setPage}
+					itemPerPage={itemPerPage}
+				/>
+			</PaginationContainer>
+		</ProjectsTab>
 	);
 };
 
@@ -131,13 +130,14 @@ export const ProjectsContainer = styled(Container)`
 
 const ProjectsTableWrapper = styled.div`
 	margin-left: 35px;
+	overflow: auto;
 `;
 
 const UserContributeInfo = styled.div`
 	padding: 40px 0 60px;
 `;
 
-export const Loading = styled(Row)`
+export const Loading = styled(Flex)`
 	position: absolute;
 	left: 0;
 	right: 0;
@@ -161,13 +161,22 @@ const GridContainer = styled.div`
 	margin-bottom: 64px;
 	padding: 0;
 	align-items: center;
-	${mediaQueries['lg']} {
+	${mediaQueries.laptop} {
 		grid-template-columns: repeat(2, 1fr);
 	}
-	${mediaQueries['xl']} {
+	${mediaQueries.laptopL} {
 		grid-template-columns: repeat(3, 1fr);
 	}
-	${mediaQueries['xxl']} {
+	${mediaQueries.desktop} {
 		grid-template-columns: repeat(3, 1fr);
 	}
+`;
+
+const ProjectsTab = styled.div`
+	margin: 0 0 150px 0;
+`;
+
+const PaginationContainer = styled.div`
+	position: absolute;
+	right: 50px;
 `;

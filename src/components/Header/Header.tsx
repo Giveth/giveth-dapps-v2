@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { Button, GLink } from '@giveth/ui-design-system';
 
-import { Row } from '@/components/styled-components/Grid';
+import { Flex } from '@/components/styled-components/Flex';
 import { ThemeType } from '@/context/theme.context';
 import { formatWeiHelper } from '@/helpers/number';
 import { networksParams } from '@/helpers/blockchain';
@@ -28,12 +28,12 @@ import {
 	MenuAndButtonContainer,
 	CoverLine,
 	SmallCreateProjectParent,
+	LargeCreateProject,
 } from './Header.sc';
 import { useSubgraph } from '@/context/subgraph.context';
 import { RewardMenu } from '@/components/menu/RewardMenu';
 import WalletModal from '@/components/modals/WalletModal';
 import { walletsArray } from '@/lib/wallet/walletTypes';
-import SignInModal from '../modals/SignInModal';
 import MenuWallet from '@/components/menu/MenuWallet';
 import { ETheme, useGeneral } from '@/context/general.context';
 import { menuRoutes } from '../menu/MenuRoutes';
@@ -51,7 +51,6 @@ const Header: FC<IHeader> = () => {
 	const [showUserMenu, setShowUserMenu] = useState(false);
 	const [showHeader, setShowHeader] = useState(true);
 	const [showWalletModal, setShowWalletModal] = useState(false);
-	const [showSigninModal, setShowSigninModal] = useState(false);
 	const [isGIVeconomyRoute, setIsGIVeconomyRoute] = useState(false);
 	const [isCreateRoute, setIsCreateRoute] = useState(false);
 
@@ -59,8 +58,8 @@ const Header: FC<IHeader> = () => {
 		currentValues: { balances },
 	} = useSubgraph();
 	const {
-		state: { user },
-		actions: { showCompleteProfile },
+		state: { user, isEnabled, isSignedIn },
+		actions: { showCompleteProfile, showSignInModal, showSignModal },
 	} = useUser();
 	const { chainId, active, activate, account, library } = useWeb3React();
 	const { theme } = useGeneral();
@@ -120,7 +119,7 @@ const Header: FC<IHeader> = () => {
 		if (isGIVeconomyRoute) {
 			setShowWalletModal(true);
 		} else {
-			setShowSigninModal(true);
+			showSignInModal(true);
 		}
 	};
 
@@ -129,7 +128,11 @@ const Header: FC<IHeader> = () => {
 	};
 
 	const handleCreateButton = () => {
-		if (isUserRegistered(user)) {
+		if (!isEnabled) {
+			showSignInModal(true);
+		} else if (!isSignedIn) {
+			showSignModal();
+		} else if (isUserRegistered(user)) {
 			router.push(Routes.CreateProject);
 		} else {
 			showCompleteProfile();
@@ -144,7 +147,7 @@ const Header: FC<IHeader> = () => {
 				theme={theme}
 				show={showHeader}
 			>
-				<Row>
+				<Flex>
 					{isCreateRoute ? (
 						<BackBtn onClick={router.back}>
 							<Logo>
@@ -170,7 +173,7 @@ const Header: FC<IHeader> = () => {
 							</a>
 						</Link>
 					)}
-				</Row>
+				</Flex>
 				{showLinks && (
 					<HeaderLinks theme={theme}>
 						{menuRoutes.map((link, index) => (
@@ -187,15 +190,17 @@ const Header: FC<IHeader> = () => {
 					</HeaderLinks>
 				)}
 
-				<Row gap='8px'>
-					<Button
-						label='CREATE A PROJECT'
-						size='small'
-						buttonType={
-							theme === ETheme.Light ? 'primary' : 'secondary'
-						}
-						onClick={handleCreateButton}
-					/>
+				<Flex gap='8px'>
+					<LargeCreateProject>
+						<Button
+							label='CREATE A PROJECT'
+							size='small'
+							buttonType={
+								theme === ETheme.Light ? 'primary' : 'secondary'
+							}
+							onClick={handleCreateButton}
+						/>
+					</LargeCreateProject>
 					<SmallCreateProjectParent>
 						<SmallCreateProject
 							onClick={handleCreateButton}
@@ -296,18 +301,12 @@ const Header: FC<IHeader> = () => {
 							/>
 						</div>
 					)}
-				</Row>
+				</Flex>
 			</StyledHeader>
 			{showWalletModal && (
 				<WalletModal
 					showModal={showWalletModal}
 					setShowModal={setShowWalletModal}
-				/>
-			)}
-			{showSigninModal && (
-				<SignInModal
-					showModal={showSigninModal}
-					closeModal={() => setShowSigninModal(false)}
 				/>
 			)}
 		</>
