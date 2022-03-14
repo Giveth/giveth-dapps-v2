@@ -6,6 +6,8 @@ import { IconEthereum } from '../Icons/Eth';
 import { IconXDAI } from '../Icons/XDAI';
 import { H4, B, neutralColors, brandColors } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
+import { mediaQueries } from '@/utils/constants';
+
 interface IChangeNetworkModalProps extends IModal {
 	targetNetwork: number;
 }
@@ -45,10 +47,20 @@ const ChangeNetworkModalContainer = styled.div`
 	width: 500px;
 	padding: 62px 60px;
 	color: ${brandColors.giv[700]};
+	${mediaQueries['mobileS']} {
+		width: 100%;
+	}
+	${mediaQueries['mobileM']} {
+		width: 100%;
+	}
+	${mediaQueries['mobileL']} {
+		width: 100%;
+	}
 `;
 
 const Title = styled(H4)`
 	margin: 18px 0 24px;
+	color: ${brandColors.giv[700]};
 `;
 
 const Desc = styled(B)``;

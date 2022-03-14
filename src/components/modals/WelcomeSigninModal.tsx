@@ -11,6 +11,7 @@ import {
 import { IModal, Modal } from '@/components/modals/Modal';
 import useUser from '@/context/UserProvider';
 import { ETheme, useGeneral } from '@/context/general.context';
+import { mediaQueries } from '@/utils/constants';
 
 export const WelcomeSigninModal: FC<IModal> = ({
 	showModal,
@@ -62,6 +63,15 @@ export const WelcomeSigninModal: FC<IModal> = ({
 const Container = styled.div`
 	width: 528px;
 	padding: 48px 24px;
+	${mediaQueries['mobileS']} {
+		width: 100%;
+	}
+	${mediaQueries['mobileM']} {
+		width: 100%;
+	}
+	${mediaQueries['mobileL']} {
+		width: 100%;
+	}
 `;
 
 const OkButton = styled(Button)`

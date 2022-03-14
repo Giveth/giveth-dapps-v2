@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { IconFund } from '@giveth/ui-design-system/lib/cjs/components/icons/Fund';
 import { brandColors, Button, H5, Lead } from '@giveth/ui-design-system';
 import { ETheme, useGeneral } from '@/context/general.context';
+import { mediaQueries } from '@/utils/constants';
 
 export const InsufficientFundModal: FC<IModal> = ({
 	showModal,
@@ -42,6 +43,15 @@ const InsufficientFundContainer = styled.div`
 	height: 300px;
 	width: 528px;
 	padding: 24px;
+	${mediaQueries['mobileS']} {
+		width: 100%;
+	}
+	${mediaQueries['mobileM']} {
+		width: 100%;
+	}
+	${mediaQueries['mobileL']} {
+		width: 100%;
+	}
 `;
 
 const OkButton = styled(Button)`

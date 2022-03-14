@@ -23,6 +23,7 @@ import { isAddressENS, getAddressFromENS } from '../../lib/wallet';
 import { sendTransaction } from '../../lib/helpers';
 import * as transaction from '../../services/transaction';
 import { saveDonation, saveDonationTransaction } from '../../services/donation';
+import { mediaQueries } from '@/utils/constants';
 import FixedToast from '@/components/FixedToast';
 import config from '@/configuration';
 import styled from 'styled-components';
@@ -380,6 +381,15 @@ const DonateContainer = styled.div`
 	color: black;
 	padding: 0 24px 38px 24px;
 	margin: -30px 0 0 0;
+	${mediaQueries['mobileS']} {
+		width: 100%;
+	}
+	${mediaQueries['mobileM']} {
+		width: 100%;
+	}
+	${mediaQueries['mobileL']} {
+		width: 100%;
+	}
 `;
 
 const DonateTopTitle = styled(Flex)`

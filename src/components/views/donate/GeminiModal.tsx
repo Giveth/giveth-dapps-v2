@@ -4,10 +4,13 @@ import { TwitterShareButton } from 'react-share';
 // We need to add icon customization on the design system
 import { Button } from '../../styled-components/Button';
 import { P } from '@giveth/ui-design-system';
+import { useDeviceDetect } from '@/utils';
+import { mediaQueries } from '@/utils/constants';
 import styled from 'styled-components';
 
 const GeminiModal = ({ showModal, setShowModal }: any) => {
 	const url = typeof window !== 'undefined' ? window?.location?.href : null;
+	const { isMobile } = useDeviceDetect();
 	return (
 		<>
 			<Modal
@@ -24,9 +27,11 @@ const GeminiModal = ({ showModal, setShowModal }: any) => {
 						// right: [0, '15%', '25%'],
 						zIndex: 5,
 						alignItems: 'center',
-						padding: '3% 0',
+						padding: isMobile ? 0 : '3% 0',
 						flexDirection: 'column',
-						width: '600px',
+						width: isMobile ? '100%' : '600px',
+						height: isMobile ? '90vh' : 'auto',
+						justifyContent: isMobile ? 'center' : 'normal',
 						borderRadius: '2px',
 					}}
 				>
@@ -61,7 +66,11 @@ const GeminiModal = ({ showModal, setShowModal }: any) => {
 						Help us get GIV on Gemini!{' '}
 					</P>
 					<img
-						src='/images/twitter-modal.svg'
+						src={
+							isMobile
+								? '/images/twitter-modal-mobile.svg'
+								: '/images/twitter-modal.svg'
+						}
 						alt='tw-modal'
 						style={{ margin: '15px 0' }}
 					/>
@@ -119,6 +128,15 @@ const TwButton = styled(Button)`
 	height: 52px;
 	border: 2px solid white;
 	background-color: #00acee;
+	${mediaQueries['mobileS']} {
+		margin-top: 30px;
+	}
+	${mediaQueries['mobileM']} {
+		margin-top: 30px;
+	}
+	${mediaQueries['mobileL']} {
+		margin-top: 30px;
+	}
 `;
 
 const XButton = styled.div`

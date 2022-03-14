@@ -170,7 +170,6 @@ const ProjectsIndex = (props: IProjectBySlug) => {
 		if (isMobile) {
 			return (
 				<CardMobileWrapper
-					isHidden={hideMobileCard}
 					onClick={() => setHideMobileCard(!hideMobileCard)}
 				>
 					<SlideBtn />
