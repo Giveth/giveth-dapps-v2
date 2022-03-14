@@ -98,8 +98,6 @@ export const TooltipContent = styled(Subline)`
 	width: 200px;
 `;
 
-export const StyledScrollbars = styled.div``;
-
 export const HarvestBoxes = styled.div`
 	padding: 24px;
 `;
