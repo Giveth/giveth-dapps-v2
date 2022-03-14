@@ -80,7 +80,8 @@ const ModalWrapper = styled.div`
 		props.theme === ETheme.Dark
 			? brandColors.giv[600]
 			: neutralColors.gray[100]};
-	box-shadow: 0 3px 20px #21203c;
+	box-shadow: 0 3px 20px
+		${props => (props.theme === ETheme.Dark ? '#00000026' : '#21203c')};
 	border-radius: 8px;
 	color: ${props =>
 		props.theme === ETheme.Dark
