@@ -53,7 +53,6 @@ const Title = styled(H1)`
 `;
 
 const Subtitle = styled(Lead)`
-	font-weight: 400;
 	margin: 23px 0;
 	padding-bottom: 30px;
 `;
