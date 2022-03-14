@@ -36,13 +36,16 @@ const ERC721NftContext = createContext<{
 	loadingNftPositions: boolean;
 	apr: BigNumber;
 	minimumApr: BigNumber;
+	maxApr: BigNumber;
 	pool: Pool | null;
 } | null>(null);
 
-interface IPositionsInfo {
-	userPositionInfo: IUniswapV3Position;
-	poolInfo: IUniswapV3Pool;
-}
+const uniswapV3PoolStakingConfig = config.MAINNET_CONFIG.pools.find(
+	p => p.type === StakingType.UNISWAP,
+) as UniswapV3PoolStakingConfig;
+
+const { INCENTIVE_REWARD_AMOUNT, INCENTIVE_START_TIME, INCENTIVE_END_TIME } =
+	uniswapV3PoolStakingConfig || {};
 
 export const NftsProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	const network = config.MAINNET_NETWORK_NUMBER;
@@ -66,6 +69,7 @@ export const NftsProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	>([]);
 	const [apr, setApr] = useState<BigNumber>(Zero);
 	const [minimumApr, setMinimumApr] = useState<BigNumber>(Zero);
+	const [maxApr, setMaxApr] = useState<BigNumber>(Zero);
 	const [pool, setPool] = useState<Pool | null>(null);
 
 	const [loadingNftPositions, setLoadingNftPositions] = useState(false);
@@ -256,14 +260,17 @@ export const NftsProvider: FC<{ children: ReactNode }> = ({ children }) => {
 			_pool: Pool,
 			givIsToken0: boolean,
 		) => {
-			const ethPriceInGIV = _pool.priceOf(_pool.token1).toFixed(10);
-			// console.log('ethPriceInGIV: ', ethPriceInGIV);
-
 			const allLiquidityPositions = (await Promise.all(
 				allPositions.map(p => transformToLiquidityPosition(p, _pool)),
 			)) as LiquidityPosition[];
 
-			const totalETHValue = allLiquidityPositions
+			const currencyZero = (
+				givIsToken0
+					? allLiquidityPositions[0]._position?.amount0
+					: allLiquidityPositions[0]._position?.amount1
+			)?.multiply('0');
+
+			const totalGivValue = allLiquidityPositions
 				.flat()
 				.reduce((acc, { _position }) => {
 					if (!_position) return acc;
@@ -291,11 +298,11 @@ export const NftsProvider: FC<{ children: ReactNode }> = ({ children }) => {
 						let wethAmount = _position.amount1;
 
 						// calc value of GIV in terms of ETH
-						const ethValueGIV =
-							_position.pool.token0Price.quote(givAmount);
+						const givEthValue =
+							_position.pool.token1Price.quote(wethAmount);
 
 						// add values of all tokens in ETH
-						return acc?.add(ethValueGIV).add(wethAmount);
+						return acc?.add(givEthValue).add(givAmount);
 					} else {
 						// WETH is token0
 
@@ -306,31 +313,19 @@ export const NftsProvider: FC<{ children: ReactNode }> = ({ children }) => {
 						let givAmount = _position.amount1;
 
 						// calc value of GIV in terms of ETH
-						const ethValueGIV =
-							_position.pool.token1Price.quote(givAmount);
+						const givValueEth =
+							_position.pool.token0Price.quote(wethAmount);
 
 						// add values of all tokens in ETH
-						return acc?.add(ethValueGIV).add(wethAmount);
+						return acc?.add(givValueEth).add(givAmount);
 					}
-				}, allLiquidityPositions[0]._position?.amount1.multiply('0'));
+				}, currencyZero);
 
-			if (totalETHValue) {
-				const totalLiquidityEth = totalETHValue.toFixed(18);
-				// console.log('totalLiquidityEth:', totalLiquidityEth);
-
-				const uniswapV3PoolStakingConfig =
-					config.MAINNET_CONFIG.pools.find(
-						p => p.type === StakingType.UNISWAP,
-					) as UniswapV3PoolStakingConfig;
-				const {
-					INCENTIVE_REWARD_AMOUNT,
-					INCENTIVE_START_TIME,
-					INCENTIVE_END_TIME,
-				} = uniswapV3PoolStakingConfig;
+			if (totalGivValue) {
+				const totalLiquidityGiv = totalGivValue.toFixed(18);
 
 				const currentApr = new BigNumber(INCENTIVE_REWARD_AMOUNT)
-					.div(ethPriceInGIV)
-					.div(totalLiquidityEth)
+					.div(totalLiquidityGiv)
 					.times(31_536_000) // One year
 					.div(INCENTIVE_END_TIME - INCENTIVE_START_TIME)
 					.times(100);
@@ -341,6 +336,56 @@ export const NftsProvider: FC<{ children: ReactNode }> = ({ children }) => {
 		},
 		[transformToLiquidityPosition],
 	);
+
+	const calculateMaxPar = useCallback(
+		(givIsToken0: boolean, uniswapV3Pool: IUniswapV3Pool) => {
+			if (!uniswapV3Pool) return;
+			const { tick, liquidity } = uniswapV3Pool;
+			const tickBase = 1.0001;
+
+			const tickSpacing = 60; //{ 500: 10, 3000: 60, 10000: 200 }
+			const tickToPrice = (tick: number): number => {
+				return Math.pow(tickBase, tick);
+			};
+
+			// Compute the tick range. This code would work as well in Python: `tick // TICK_SPACING * TICK_SPACING`
+			// However, using floor() is more portable.
+			const bottomTick = Math.floor(tick / tickSpacing) * tickSpacing;
+			const topTick = bottomTick + tickSpacing;
+
+			// Compute the current price and adjust it to a human-readable format
+			const price = tickToPrice(tick);
+			// Both GIV and WETH decimal values are 18
+			// adjusted_price = price / (10 ** (decimals1 - decimals0))
+
+			// Compute square roots of prices corresponding to the bottom and top ticks
+			const sa = tickToPrice(Math.floor(bottomTick / 2));
+			const sb = tickToPrice(Math.floor(topTick / 2));
+			const sp = Math.sqrt(price);
+
+			// Compute real amounts of the two assets
+			const amount0 = new BigNumber(liquidity.toString())
+				.times(sb - sp)
+				.div(sp * sb);
+			const amount1 = new BigNumber(liquidity.toString()).times(sp - sa);
+			// Compute combined amount of liquidity in token:
+			// TODO: check if this price math is correct
+			const combinedAmountGiv = givIsToken0
+				? amount0.plus(amount1.div(price)).div(10 ** 18)
+				: amount1.plus(amount0.div(price)).div(10 ** 18);
+
+			const currentApr = new BigNumber(INCENTIVE_REWARD_AMOUNT)
+				.div(combinedAmountGiv)
+				.times(31_536_000) // One year
+				.div(INCENTIVE_END_TIME - INCENTIVE_START_TIME)
+				.times(100);
+
+			// Max APR
+			setMaxApr(currentApr);
+		},
+		[],
+	);
+
 	useEffect(() => {
 		const loadPositions = async () => {
 			try {
@@ -458,6 +503,11 @@ export const NftsProvider: FC<{ children: ReactNode }> = ({ children }) => {
 						),
 						calculateAverageApr(allPositions, _pool, givIsToken0),
 					]);
+					try {
+						calculateMaxPar(givIsToken0, uniswapV3Pool);
+					} catch (e) {
+						console.error('calculate max apr:', e);
+					}
 				}
 
 				setLoadingNftPositions(false);
@@ -489,6 +539,7 @@ export const NftsProvider: FC<{ children: ReactNode }> = ({ children }) => {
 				loadingNftPositions,
 				apr,
 				minimumApr,
+				maxApr,
 				pool,
 			}}
 		>
