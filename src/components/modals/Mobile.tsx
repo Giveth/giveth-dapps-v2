@@ -10,7 +10,7 @@ import {
 	SublineBold,
 	Subline,
 } from '@giveth/ui-design-system';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 
 interface IMobileModalProps extends IModal {}
 
@@ -22,7 +22,7 @@ export const MobileModal: FC<IMobileModalProps> = ({
 		<>
 			<Modal showModal={showModal} setShowModal={setShowModal}>
 				<ModalContainer>
-					<Row gap='8px' alignItems='center' />
+					<Flex gap='8px' alignItems='center' />
 					<DescContainer>
 						Please switch to desktop to enjoy the GIVeconomy DApp or
 						&nbsp;

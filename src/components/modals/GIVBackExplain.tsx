@@ -14,7 +14,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 import { Modal, IModal } from './Modal';
 import Link from 'next/link';
 import links from '@/lib/constants/links';
@@ -73,7 +73,7 @@ const GIVBackExplainContainer = styled.div`
 	color: ${neutralColors.gray[100]};
 `;
 
-const TitleRow = styled(Row)`
+const TitleRow = styled(Flex)`
 	gap: 16px;
 	margin-bottom: 41px;
 `;
@@ -82,7 +82,7 @@ const Desc = styled(P)`
 	margin-bottom: 41px;
 `;
 
-const LinksRow = styled(Row)`
+const LinksRow = styled(Flex)`
 	gap: 8px;
 	color: ${brandColors.cyan[500]};
 	margin-bottom: 24px;

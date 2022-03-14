@@ -1,4 +1,5 @@
-import { B, brandColors, Container, H5 } from '@giveth/ui-design-system';
+import { Container } from '@/components/Grid';
+import { B, brandColors, H5 } from '@giveth/ui-design-system';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 
@@ -110,6 +111,7 @@ const OnboardProgressbar = styled.div<IOnboard>`
 const OnboardProgressbarLabels = styled.div`
 	display: grid;
 	grid-template-columns: 1fr 2fr 2fr 1fr;
+	grid-gap: 45px;
 `;
 
 interface IOnboardProgressbarLabel {

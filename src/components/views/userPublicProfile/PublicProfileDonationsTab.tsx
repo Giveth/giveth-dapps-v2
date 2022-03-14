@@ -3,7 +3,7 @@ import { FETCH_USER_DONATIONS } from '@/apollo/gql/gqlUser';
 import { IUserDonations } from '@/apollo/types/gqlTypes';
 import { IWalletDonation } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
-import { Row } from '@/components/styled-components/Grid';
+import { Flex } from '@/components/styled-components/Flex';
 import { ETheme } from '@/context/general.context';
 import { networksParams } from '@/helpers/blockchain';
 import { smallFormatDate } from '@/lib/helpers';
@@ -229,7 +229,7 @@ const DonationTablecontainer = styled.div`
 	}
 `;
 
-const TabelHeader = styled(Row)`
+const TabelHeader = styled(Flex)`
 	height: 40px;
 	border-bottom: 1px solid ${neutralColors.gray[400]};
 	align-items: center;
@@ -240,7 +240,7 @@ const TabelHeader = styled(Row)`
 	align-items: center;`}
 `;
 
-const TabelCell = styled(Row)`
+const TabelCell = styled(Flex)`
 	height: 60px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
 	align-items: center;
@@ -264,7 +264,7 @@ const CurrencyBadge = styled(SublineBold)`
 	color: ${neutralColors.gray[700]};
 `;
 
-const Loading = styled(Row)`
+const Loading = styled(Flex)`
 	position: absolute;
 	left: 0;
 	right: 0;

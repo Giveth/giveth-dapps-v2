@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { H1, brandColors, Button } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
-import { FlexCenter } from '@/components/styled-components/Grid';
+import { FlexCenter } from '@/components/styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
 import { Arc } from '@/components/styled-components/Arc';
 import useUser from '@/context/UserProvider';

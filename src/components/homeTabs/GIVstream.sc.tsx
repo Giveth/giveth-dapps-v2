@@ -15,7 +15,7 @@ import {
 } from '@giveth/ui-design-system';
 import { TopContainer, TopInnerContainer } from './commons';
 import { RewardCard } from '../RewardCard';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 import { DataBox } from '../DataBox';
 
 export const GIVstreamTopContainer = styled(TopContainer)`
@@ -61,7 +61,7 @@ export const GsButton = styled(ButtonLink)`
 	padding: 24px 34px;
 `;
 
-export const FlowRateRow = styled(Row)`
+export const FlowRateRow = styled(Flex)`
 	margin-top: 48px;
 	color: ${neutralColors.gray[100]};
 `;
@@ -82,9 +82,9 @@ export const GIVstreamProgressContainer = styled.div`
 	margin: 40px 0 64px;
 `;
 
-export const GsPTitleRow = styled(Row)``;
+export const GsPTitleRow = styled(Flex)``;
 
-export const GsPTitle = styled(Row)``;
+export const GsPTitle = styled(Flex)``;
 
 export const GsPTooltip = styled(Subline)`
 	color: ${neutralColors.gray[100]};
@@ -118,7 +118,7 @@ export const Bar = styled.div<IBarProps>`
 	}
 `;
 
-export const PercentageRow = styled(Row)`
+export const PercentageRow = styled(Flex)`
 	margin-bottom: 5px;
 `;
 
@@ -137,7 +137,7 @@ export const IGsDataBox = styled(DataBox)`
 	margin-bottom: 16px;
 `;
 
-export const HistoryTitleRow = styled(Row)`
+export const HistoryTitleRow = styled(Flex)`
 	margin: 110px 0 40px;
 	align-items: center;
 	gap: 16px;

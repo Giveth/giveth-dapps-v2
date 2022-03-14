@@ -12,7 +12,7 @@ import {
 import styled from 'styled-components';
 import Scrollbars from 'react-custom-scrollbars';
 
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 
 export const HarvestAllModalContainer = styled.div`
 	width: 686px;
@@ -23,12 +23,12 @@ export const USDAmount = styled(P)`
 	color: ${brandColors.deep[200]};
 `;
 
-export const HelpRow = styled(Row)`
+export const HelpRow = styled(Flex)`
 	gap: 8px;
 	margin-bottom: 4px;
 `;
 
-export const RateRow = styled(Row)`
+export const RateRow = styled(Flex)`
 	gap: 4px;
 	margin-bottom: 32px;
 `;
@@ -48,7 +48,7 @@ export const CancelButton = styled(Button)`
 	margin: 0 auto 8px;
 `;
 
-export const SPTitle = styled(Row)`
+export const SPTitle = styled(Flex)`
 	margin-top: 12px;
 	margin-bottom: 24px;
 	color: ${neutralColors.gray[100]};
@@ -75,7 +75,7 @@ export const NothingToHarvest = styled(H6)`
 	margin-bottom: 32px;
 `;
 
-export const Pending = styled(Row)`
+export const Pending = styled(Flex)`
 	margin: 0 auto 16px;
 	width: 100%;
 	line-height: 50px;

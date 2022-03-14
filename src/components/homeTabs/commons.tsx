@@ -1,6 +1,7 @@
-import { brandColors, Container, GLink } from '@giveth/ui-design-system';
+import { brandColors, GLink } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Row } from '../styled-components/Grid';
+import { Container } from '@/components/Grid';
+import { Flex } from '../styled-components/Flex';
 
 export const TabContainer = styled.div``;
 
@@ -14,12 +15,12 @@ export const TopInnerContainer = styled(Container)`
 	flex-direction: column;
 	height: 370px;
 `;
-export const TopContainerRow = styled(Row)``;
+export const TopContainerRow = styled(Flex)``;
 export const TopFiller = styled.div`
 	flex: 1;
 `;
 
-export const ExtLinkRow = styled(Row)`
+export const ExtLinkRow = styled(Flex)`
 	color: ${brandColors.cyan[500]};
 	cursor: pointer;
 	gap: 4px;

@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { Button, GLink } from '@giveth/ui-design-system';
 
-import { Row } from '@/components/styled-components/Grid';
+import { Flex } from '@/components/styled-components/Flex';
 import { ThemeType } from '@/context/theme.context';
 import { formatWeiHelper } from '@/helpers/number';
 import { networksParams } from '@/helpers/blockchain';
@@ -145,7 +145,7 @@ const Header: FC<IHeader> = () => {
 				theme={theme}
 				show={showHeader}
 			>
-				<Row>
+				<Flex>
 					{isCreateRoute ? (
 						<BackBtn onClick={router.back}>
 							<Logo>
@@ -171,7 +171,7 @@ const Header: FC<IHeader> = () => {
 							</a>
 						</Link>
 					)}
-				</Row>
+				</Flex>
 				{showLinks && (
 					<HeaderLinks theme={theme}>
 						{menuRoutes.map((link, index) => (
@@ -188,7 +188,7 @@ const Header: FC<IHeader> = () => {
 					</HeaderLinks>
 				)}
 
-				<Row gap='8px'>
+				<Flex gap='8px'>
 					<LargeCreateProject>
 						<Button
 							label='CREATE A PROJECT'
@@ -299,7 +299,7 @@ const Header: FC<IHeader> = () => {
 							/>
 						</div>
 					)}
-				</Row>
+				</Flex>
 			</StyledHeader>
 			{showWalletModal && (
 				<WalletModal

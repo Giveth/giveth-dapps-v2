@@ -18,7 +18,7 @@ import FacebookIcon from '../../../public/images/social-fb.svg';
 import LinkedinIcon from '../../../public/images/social-linkedin.svg';
 import TwitterIcon from '../../../public/images/social-tw.svg';
 import ShareIcon from '../../../public/images/icons/share_dots.svg';
-import { FlexCenter } from '@/components/styled-components/Grid';
+import { FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import links from '@/lib/constants/links';
 

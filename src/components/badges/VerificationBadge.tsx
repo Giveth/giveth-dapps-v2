@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import { FlexCenter } from '../styled-components/Grid';
+import { FlexCenter } from '../styled-components/Flex';
 import TraceIcon from '/public//images/trace.svg';
 import VerifiedIcon from '/public//images/verified.svg';
 import { brandColors, Overline } from '@giveth/ui-design-system';

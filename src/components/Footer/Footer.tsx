@@ -1,7 +1,6 @@
 import {
 	P,
 	brandColors,
-	Container,
 	IconDocs,
 	IconMedium,
 	IconGithub,
@@ -14,11 +13,12 @@ import {
 import Link from 'next/link';
 import styled from 'styled-components';
 
-import { Row } from '@/components/styled-components/Grid';
 import { ETheme, useGeneral } from '@/context/general.context';
 import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
 import { mediaQueries } from '@/utils/constants';
+import { Flex } from '@/components/styled-components/Flex';
+import { Container } from '@/components/Grid';
 
 export const Footer = () => {
 	const { theme } = useGeneral();
@@ -156,7 +156,7 @@ const FooterContainer = styled.div`
 	margin-bottom: 50px;
 `;
 
-const LeftContainer = styled(Row)`
+const LeftContainer = styled(Flex)`
 	justify-content: space-between;
 	gap: 0;
 
@@ -194,7 +194,7 @@ const SocialContainer = styled.div`
 	}
 `;
 
-const LinkColumn = styled(Row)`
+const LinkColumn = styled(Flex)`
 	flex-direction: column;
 	gap: 8px;
 	margin-bottom: 32px;

@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import styled from 'styled-components';
-import { FlexCenter } from '../styled-components/Grid';
+import { FlexCenter } from '../styled-components/Flex';
 import WarningIcon from '../../../public/images/icons/warning_filled.svg';
 
 const WarningBadge = () => {

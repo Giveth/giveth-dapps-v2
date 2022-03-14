@@ -7,14 +7,14 @@ import {
 	ButtonLink,
 } from '@giveth/ui-design-system';
 
-import { Row } from '@/components/styled-components/Grid';
+import { Flex } from '@/components/styled-components/Flex';
 import { Button as CButton } from '@/components/styled-components/Button';
 import { IHeader } from './Header';
 import { mediaQueries } from '@/utils/constants';
 import { ETheme } from '@/context/general.context';
 import { Shadow } from '@/components/styled-components/Shadow';
 
-export const StyledHeader = styled(Row)<IHeader>`
+export const StyledHeader = styled(Flex)<IHeader>`
 	position: fixed;
 	left: 0;
 	right: 0;
@@ -126,7 +126,7 @@ interface IHeaderLinkProps {
 	theme?: ETheme;
 }
 
-export const HeaderLinks = styled(Row)<IThemed>`
+export const HeaderLinks = styled(Flex)<IThemed>`
 	background-color: ${props =>
 		props.theme === ETheme.Dark ? brandColors.giv[900] : 'white'};
 	border: 1px solid

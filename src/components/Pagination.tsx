@@ -2,7 +2,7 @@ import { ETheme, useGeneral } from '@/context/general.context';
 import { neutralColors, brandColors, Caption } from '@giveth/ui-design-system';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Row } from './styled-components/Grid';
+import { Flex } from './styled-components/Flex';
 
 interface IPagination {
 	setPage: Dispatch<SetStateAction<number>>;
@@ -95,7 +95,7 @@ interface IPaginationItem {
 	isActive?: boolean;
 }
 
-export const PaginationRow = styled(Row)`
+export const PaginationRow = styled(Flex)`
 	margin-top: 16px;
 `;
 

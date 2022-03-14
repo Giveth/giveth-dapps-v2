@@ -6,7 +6,7 @@ import {
 	neutralColors,
 	OulineButton,
 } from '@giveth/ui-design-system';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 import styled from 'styled-components';
 import { PoolStakingConfig } from '@/types/config';
 import { StakingPoolImages } from '../StakingPoolImages';
@@ -287,7 +287,7 @@ const StakeModalContainer = styled.div`
 	padding: 24px 0;
 `;
 
-const StakeModalTitle = styled(Row)`
+const StakeModalTitle = styled(Flex)`
 	margin-bottom: 42px;
 `;
 
@@ -312,7 +312,7 @@ const ConfirmButton = styled(Button)`
 	margin-bottom: 8px;
 `;
 
-const Pending = styled(Row)`
+const Pending = styled(Flex)`
 	margin-top: 32px;
 	margin-bottom: 8px;
 	line-height: 46px;

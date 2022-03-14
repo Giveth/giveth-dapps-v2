@@ -4,7 +4,6 @@ import { useWeb3React } from '@web3-react/core';
 import Image from 'next/image';
 import {
 	brandColors,
-	Container,
 	GLink,
 	H3,
 	IconExternalLink,
@@ -22,9 +21,10 @@ import PublicProfileContributes from './PublicProfileContributes';
 import { IUser, IProject } from '@/apollo/types/types';
 import { networksParams } from '@/helpers/blockchain';
 import EditUserModal from '@/components/modals/EditUserModal';
-import { Row } from '@/components/styled-components/Grid';
+import { Flex } from '@/components/styled-components/Flex';
 import useUser from '@/context/UserProvider';
 import { isUserRegistered } from '@/lib/helpers';
+import { Container } from '@/components/Grid';
 
 export enum EOrderBy {
 	TokenAmount = 'TokenAmount',
@@ -253,7 +253,7 @@ const PubliCProfileHeader = styled.div`
 	background-color: ${neutralColors.gray[100]};
 `;
 
-const UserInfoWithAvatarRow = styled(Row)`
+const UserInfoWithAvatarRow = styled(Flex)`
 	gap: 24px;
 	${mediaQueries.mobileS} {
 		flex-direction: column;
@@ -271,7 +271,7 @@ const PinkLink = styled(GLink)`
 	cursor: pointer;
 `;
 
-const UserInforRow = styled(Row)`
+const UserInforRow = styled(Flex)`
 	flex-direction: column;
 	flex: 1;
 	justify-content: space-between;
@@ -287,7 +287,7 @@ const UserInforRow = styled(Row)`
 	}
 `;
 
-const WalletContainer = styled(Row)`
+const WalletContainer = styled(Flex)`
 	gap: 18px;
 	flex-direction: column;
 

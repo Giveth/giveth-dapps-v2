@@ -15,7 +15,7 @@ import { IProject } from '@/apollo/types/types';
 import { calcBiggestUnitDiffernceTime, htmlToText } from '@/lib/helpers';
 import ProjectCardImage from './ProjectCardImage';
 import { slugToProjectDonate, slugToProjectView } from '@/lib/routeCreators';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 import Link from 'next/link';
 
 const cardRadius = '12px';
@@ -104,11 +104,11 @@ const LearnMoreButton = styled(OutlineLinkButton)`
 	flex: 1;
 `;
 
-const ActionButtons = styled(Row)`
+const ActionButtons = styled(Flex)`
 	gap: 16px;
 `;
 
-const Captions = styled(Row)`
+const Captions = styled(Flex)`
 	justify-content: space-between;
 	margin-bottom: 24px;
 	color: ${neutralColors.gray[700]};

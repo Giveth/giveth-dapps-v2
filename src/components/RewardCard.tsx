@@ -15,7 +15,7 @@ import React, { FC, MouseEventHandler, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IconGIV } from './Icons/GIV';
 import { IconXDAI } from './Icons/XDAI';
-import { Row } from './styled-components/Grid';
+import { Flex } from './styled-components/Flex';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { IconEthereum } from './Icons/Eth';
@@ -151,12 +151,12 @@ const RewadCardContainer = styled.div`
 	box-shadow: 0px 5px 16px rgba(0, 0, 0, 0.15);
 `;
 
-const CardHeader = styled(Row)`
+const CardHeader = styled(Flex)`
 	color: ${brandColors.deep[100]};
 	margin-bottom: 16px;
 `;
 
-const ChainInfo = styled(Row)`
+const ChainInfo = styled(Flex)`
 	gap: 4px;
 `;
 
@@ -164,7 +164,7 @@ const ChainName = styled(Overline)``;
 
 const CardTitle = styled(Caption)``;
 
-const AmountInfo = styled(Row)``;
+const AmountInfo = styled(Flex)``;
 
 const AmountUnit = styled(Lead)`
 	color: ${brandColors.deep[100]};
@@ -176,7 +176,7 @@ const Converted = styled(P)`
 	margin-bottom: 22px;
 `;
 
-const RateInfo = styled(Row)`
+const RateInfo = styled(Flex)`
 	margin-bottom: 12px;
 `;
 

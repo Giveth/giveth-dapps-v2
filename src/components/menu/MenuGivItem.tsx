@@ -7,7 +7,7 @@ import { brandColors } from '@giveth/ui-design-system';
 // @ts-ignore
 import tokenAbi from 'human-standard-token-abi';
 
-import { FlexCenter } from '../styled-components/Grid';
+import { FlexCenter } from '../styled-components/Flex';
 import { Shadow } from '../styled-components/Shadow';
 import givIcon from '/public//images/GIV_menu_token.svg';
 import styled from 'styled-components';

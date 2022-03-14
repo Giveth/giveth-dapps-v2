@@ -8,7 +8,7 @@ import {
 } from '@giveth/ui-design-system';
 import toast, { ToastPosition } from 'react-hot-toast';
 import styled from 'styled-components';
-import { Row } from '../styled-components/Grid';
+import { Flex } from '../styled-components/Flex';
 
 export enum ToastType {
 	INFO_PRIMARY,
@@ -97,7 +97,7 @@ export const gToast = (message: string, options: IToast) => {
 	);
 };
 
-const ToastContainer = styled(Row)<IToast>`
+const ToastContainer = styled(Flex)<IToast>`
 	min-width: 580px;
 	padding: 16px;
 	gap: 16px;

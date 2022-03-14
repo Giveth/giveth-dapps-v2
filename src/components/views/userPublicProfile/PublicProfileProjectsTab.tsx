@@ -5,13 +5,9 @@ import { IProject } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import ContributeCard from './PublicProfileContributeCard';
-import { Row } from '@/components/styled-components/Grid';
+import { Flex } from '@/components/styled-components/Flex';
 import { ETheme } from '@/context/general.context';
-import {
-	brandColors,
-	Container,
-	neutralColors,
-} from '@giveth/ui-design-system';
+import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
@@ -23,6 +19,7 @@ import {
 } from './UserPublicProfile.view';
 import ProjectsTable from './ProjectsTable';
 import { mediaQueries } from '@/utils/constants';
+import { Container } from '@/components/Grid';
 
 const itemPerPage = 10;
 
@@ -140,7 +137,7 @@ const UserContributeInfo = styled.div`
 	padding: 40px 0 60px;
 `;
 
-export const Loading = styled(Row)`
+export const Loading = styled(Flex)`
 	position: absolute;
 	left: 0;
 	right: 0;

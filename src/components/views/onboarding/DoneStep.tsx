@@ -12,11 +12,12 @@ import {
 } from '@giveth/ui-design-system';
 
 import { OnboardStep } from './common';
-import { Row } from '@/components/styled-components/Grid';
+import { Flex } from '@/components/styled-components/Flex';
 import CongratsAnimation from '@/animations/congrats.json';
 import Routes from '@/lib/constants/Routes';
 import useUser from '@/context/UserProvider';
 import { isUserRegistered } from '@/lib/helpers';
+import { Col, Row } from '@/components/Grid';
 
 const CongratsAnimationOptions = {
 	loop: true,
@@ -44,48 +45,55 @@ const DoneStep = () => {
 
 	return (
 		<>
-			<DoneStepContainer>
-				<CongratsContainer>
+			<DoneStepContainer xs={12} xl={10}>
+				<AnimationContainer>
 					<Lottie
 						options={CongratsAnimationOptions}
-						height={287}
-						width={750}
+						// height={287}
+						// width={750}
 						speed={0.8}
 					/>
+				</AnimationContainer>
+				<CongratsContainer>
 					<CongratsText>
 						<H4 weight={700}>Well done!</H4>
 						<P>Now your profile complete.</P>
 					</CongratsText>
+					<ContributeCardRow>
+						<Col xs={12} sm={8} md={6}>
+							<ContributeCard>
+								<div>
+									<ContributeCardTitle weight={700}>
+										Create a project
+									</ContributeCardTitle>
+									<ContributeCardDesc>
+										You can create a project and receive
+										funds.
+									</ContributeCardDesc>
+								</div>
+								<ContributeCardButton
+									onClick={handleCreateButton}
+									label='New project'
+								/>
+							</ContributeCard>
+						</Col>
+						<Col xs={12} sm={8} md={6}>
+							<ContributeCard>
+								<div>
+									<ContributeCardTitle weight={700}>
+										Donate to projects
+									</ContributeCardTitle>
+									<ContributeCardDesc>
+										Take a look and donate to projects
+									</ContributeCardDesc>
+								</div>
+								<Link href={Routes.Projects} passHref>
+									<ContributeCardButton label='View projects' />
+								</Link>
+							</ContributeCard>
+						</Col>
+					</ContributeCardRow>
 				</CongratsContainer>
-				<ContributeCardRow>
-					<ContributeCard>
-						<div>
-							<ContributeCardTitle weight={700}>
-								Create a project
-							</ContributeCardTitle>
-							<ContributeCardDesc>
-								You can create a project and receive funds.
-							</ContributeCardDesc>
-						</div>
-						<ContributeCardButton
-							onClick={handleCreateButton}
-							label='New project'
-						/>
-					</ContributeCard>
-					<ContributeCard>
-						<div>
-							<ContributeCardTitle weight={700}>
-								Donate to projects
-							</ContributeCardTitle>
-							<ContributeCardDesc>
-								Take a look and donate to projects
-							</ContributeCardDesc>
-						</div>
-						<Link href={Routes.Projects} passHref>
-							<ContributeCardButton label='View projects' />
-						</Link>
-					</ContributeCard>
-				</ContributeCardRow>
 			</DoneStepContainer>
 			<GotoHomeWrapper>
 				<P>or go to homepage to start exploring</P>
@@ -97,30 +105,38 @@ const DoneStep = () => {
 	);
 };
 
-const CongratsContainer = styled.div`
-	position: relative;
+const AnimationContainer = styled.div`
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 1;
 `;
 
-const CongratsText = styled(Row)`
-	flex-direction: column;
-	position: absolute;
-	top: 40%;
-	left: 50%;
-	transform: translateX(-50%);
+const CongratsContainer = styled.div`
+	position: relative;
+	padding: 48px 24px 24px;
+	z-index: 2;
+`;
+
+const CongratsText = styled.div`
+	text-align: center;
+	margin-bottom: 48px;
 `;
 
 const DoneStepContainer = styled(OnboardStep)`
 	background: ${neutralColors.gray[100]};
 	border-radius: 16px;
-	padding: 0 24px 24px;
-	width: 950px;
+	position: relative;
+	overflow: hidden;
 `;
 
 const ContributeCardRow = styled(Row)`
-	gap: 24px;
+	justify-content: center;
 `;
 
-const ContributeCard = styled(Row)`
+const ContributeCard = styled(Flex)`
 	background: ${brandColors.giv[500]};
 	color: ${neutralColors.gray[100]};
 	text-align: center;
@@ -132,7 +148,7 @@ const ContributeCard = styled(Row)`
 	align-items: center;
 	min-height: 212px;
 	background-image: url('/images/backgrounds/onboard-card.svg');
-	background-size: contain;
+	background-size: cover;
 `;
 
 const ContributeCardTitle = styled(H6)`
@@ -144,7 +160,7 @@ const ContributeCardButton = styled(OutlineLinkButton)`
 	width: 156px;
 `;
 
-const GotoHomeWrapper = styled(Row)`
+const GotoHomeWrapper = styled(Flex)`
 	margin-top: 17px;
 	flex-direction: column;
 	align-items: center;

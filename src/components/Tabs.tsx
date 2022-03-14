@@ -1,15 +1,11 @@
 import styled from 'styled-components';
 import { FC } from 'react';
-import {
-	brandColors,
-	Container,
-	GLink,
-	neutralColors,
-} from '@giveth/ui-design-system';
-import { Row } from './styled-components/Grid';
+import { brandColors, GLink, neutralColors } from '@giveth/ui-design-system';
+import { Flex } from './styled-components/Flex';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
+import { Container } from '@/components/Grid';
 
 const Tabs: FC = () => {
 	const { asPath } = useRouter();
@@ -18,7 +14,7 @@ const Tabs: FC = () => {
 		<>
 			<LabelsContainer>
 				<Container>
-					<Row gap='16px'>
+					<Flex gap='16px'>
 						{giveconomyTabs.map((tab, idx) => (
 							<Link key={idx} href={tab.href} passHref>
 								<Label
@@ -29,14 +25,14 @@ const Tabs: FC = () => {
 								</Label>
 							</Link>
 						))}
-					</Row>
+					</Flex>
 				</Container>
 			</LabelsContainer>
 		</>
 	);
 };
 
-const labelsContainer = styled(Row)``;
+const labelsContainer = styled(Flex)``;
 
 interface ILabelProps {
 	isActive: boolean;

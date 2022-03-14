@@ -8,13 +8,13 @@ import { DonateCard } from '@/components/cards/Donate';
 import { StreamCard } from '@/components/cards/Stream';
 import GovernCard from '@/components/cards/Govern';
 import InvestCard from '@/components/cards/Stake';
-import { Row } from '@/components/styled-components/Grid';
+import { Flex } from '@/components/styled-components/Flex';
 import useClaim, { GiveDropStateType } from '@/context/claim.context';
 import { useWeb3React } from '@web3-react/core';
 
 const stepsTitle = ['Connect', 'Donate', 'Govern', 'Stake', 'Stream', 'Claim'];
 
-const Steps = styled(Row)`
+const Steps = styled(Flex)`
 	height: 80px;
 `;
 

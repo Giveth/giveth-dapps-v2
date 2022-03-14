@@ -10,7 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
-import { Row } from '@/components/styled-components/Grid';
+import { Flex } from '@/components/styled-components/Flex';
 import ProjectCardBadges from './ProjectCardBadges';
 import ProjectCardImage from './ProjectCardImage';
 import { IProject } from '@/apollo/types/types';
@@ -159,7 +159,7 @@ const Wrapper = styled.div`
 	border-radius: ${cardRadius};
 `;
 
-const GivingBlockContainer = styled(Row)`
+const GivingBlockContainer = styled(Flex)`
 	position: absolute;
 	align-items: center;
 	border-radius: 0 12px 0 0;

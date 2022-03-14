@@ -35,12 +35,12 @@ export const Modal: React.FC<IModal> = ({
 	useEffect(() => {
 		const current = el.current;
 		const modalRoot = document.querySelector('body') as HTMLElement;
-		modalRoot.style.overflow = 'hidden';
+		modalRoot.style.overflowY = 'hidden';
 		if (modalRoot) {
 			modalRoot.appendChild(current);
 		}
 		return () => {
-			modalRoot.style.overflow = 'unset';
+			modalRoot.style.overflowY = 'unset';
 			modalRoot!.removeChild(current);
 		};
 	}, []);
