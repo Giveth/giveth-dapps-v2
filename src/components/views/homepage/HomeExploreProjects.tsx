@@ -14,7 +14,7 @@ import Routes from '@/lib/constants/Routes';
 import { isUserRegistered } from '@/lib/helpers';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import useUser from '@/context/UserProvider';
-import { mediaQueries } from '@/utils/constants';
+import { deviceSize, mediaQueries } from '@/utils/constants';
 
 interface IHomeExploreProjects {
 	projects: IProject[];
@@ -111,10 +111,6 @@ const ProjectsContainer = styled.div`
 	${mediaQueries.laptopL} {
 		grid-template-columns: repeat(3, 1fr);
 	}
-
-	${mediaQueries.desktop} {
-		grid-template-columns: repeat(4, 1fr);
-	}
 `;
 
 const Title = styled(H5)`
@@ -132,7 +128,9 @@ const Subtitle = styled(H6)`
 `;
 
 const Wrapper = styled.div`
-	margin: 60px 33px;
+	max-width: ${deviceSize.desktop + 'px'};
+	margin: 0 auto;
+	padding: 60px 33px;
 	color: ${neutralColors.gray[900]};
 	position: relative;
 `;

@@ -61,10 +61,8 @@ const ReadMoreButton = styled.a`
 
 const Wrapper = styled.div`
 	color: ${brandColors.deep[500]};
-	max-width: 420px;
-	min-height: 300px;
-	display: flex;
-	flex-direction: column;
+	padding-right: 50px;
+	padding-bottom: 50px;
 `;
 
 export default HomeBlogPost;

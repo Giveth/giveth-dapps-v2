@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { Email_Input } from '@/components/styled-components/Input';
+import React, { useState } from 'react';
 import {
 	H3,
 	brandColors,
@@ -9,7 +8,9 @@ import {
 	SublineBold,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+
 import { autopilotClient } from '@/services/autopilot';
+import { HomeContainer } from '@/components/views/homepage/Home.sc';
 
 function validateEmail(email: string): boolean {
 	const re =
@@ -67,7 +68,7 @@ const HomeGetUpdates = () => {
 						disabled={!validateEmail(email)}
 						label='SUBSCRIBE'
 						onClick={submitSubscription}
-					></SubscribeButton>
+					/>
 				</InputBox>
 			)}
 		</Wrapper>
@@ -82,11 +83,16 @@ const Title = styled(H3)`
 const InputBox = styled.div`
 	display: flex;
 	align-items: start;
+	flex-wrap: wrap;
 	gap: 16px;
 	margin-top: 24px;
 `;
 
-const EmailInput = styled(Email_Input)<{ error?: boolean }>`
+const EmailInput = styled.input<{ error?: boolean }>`
+	border: 1px solid #d7ddea;
+	border-radius: 56px;
+	padding: 14px 25px;
+	height: 50px;
 	&:focus {
 		outline: none !important;
 		border: 2px solid
@@ -102,17 +108,15 @@ const InvalidEmail = styled(SublineBold)`
 `;
 
 const SubscribeButton = styled(Button)`
-	height: 52px;
-	font-weight: bold;
-
 	&:disabled {
 		background-color: ${neutralColors.gray[400]};
 		color: white;
 	}
 `;
 
-const Wrapper = styled.div`
-	margin: 50px 150px;
+const Wrapper = styled(HomeContainer)`
+	margin-top: 50px;
+	margin-bottom: 50px;
 `;
 
 export default HomeGetUpdates;
