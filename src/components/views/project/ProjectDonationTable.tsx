@@ -20,6 +20,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import Pagination from '@/components/Pagination';
 import { networksParams } from '@/helpers/blockchain';
 import { smallFormatDate } from '@/lib/helpers';
+import { mediaQueries } from '@/utils/constants';
 
 const itemPerPage = 10;
 
@@ -56,6 +57,7 @@ interface IProjectDonationTable {
 	id?: string;
 	showTrace: boolean;
 	totalDonations?: number;
+	isMobile: boolean;
 }
 
 const ProjectDonationTable = ({
@@ -63,6 +65,7 @@ const ProjectDonationTable = ({
 	id,
 	showTrace,
 	totalDonations,
+	isMobile,
 }: IProjectDonationTable) => {
 	const [pageDonations, setPageDonations] = useState<IDonation[]>(donations);
 	const [page, setPage] = useState<number>(0);
@@ -148,15 +151,21 @@ const ProjectDonationTable = ({
 					<TableHeader>
 						<B>Donor</B>
 					</TableHeader>
-					<TableHeader>
-						<B>Currency</B>
-					</TableHeader>
-					<TableHeader
-						onClick={() => orderChangeHandler(EOrderBy.TokenAmount)}
-					>
-						<B>Amount</B>
-						{injectSortIcon(order, EOrderBy.TokenAmount)}
-					</TableHeader>
+					{!isMobile && (
+						<>
+							<TableHeader>
+								<B>Currency</B>
+							</TableHeader>
+							<TableHeader
+								onClick={() =>
+									orderChangeHandler(EOrderBy.TokenAmount)
+								}
+							>
+								<B>Amount</B>
+								{injectSortIcon(order, EOrderBy.TokenAmount)}
+							</TableHeader>
+						</>
+					)}
 					<TableHeader
 						onClick={() => orderChangeHandler(EOrderBy.UsdAmount)}
 					>
@@ -178,31 +187,39 @@ const ProjectDonationTable = ({
 										donation.user?.firstName}
 								</P>
 							</TableCell>
-							<TableCell>
-								<CurrencyBadge>
-									{donation.currency}
-								</CurrencyBadge>
-							</TableCell>
-							<TableCell>
-								<P>{donation.amount}</P>
-								<TransactionLink
-									href={
-										networksParams[
-											donation.transactionNetworkId
-										]
-											? `${
-													networksParams[
-														donation
-															.transactionNetworkId
-													].blockExplorerUrls[0]
-											  }/tx/${donation.transactionId}`
-											: ''
-									}
-									target='_blank'
-								>
-									<IconExternalLink size={16} />
-								</TransactionLink>
-							</TableCell>
+							{isMobile && (
+								<>
+									<TableCell>
+										<CurrencyBadge>
+											{donation.currency}
+										</CurrencyBadge>
+									</TableCell>
+									<TableCell>
+										<P>{donation.amount}</P>
+										<TransactionLink
+											href={
+												networksParams[
+													donation
+														.transactionNetworkId
+												]
+													? `${
+															networksParams[
+																donation
+																	.transactionNetworkId
+															]
+																.blockExplorerUrls[0]
+													  }/tx/${
+															donation.transactionId
+													  }`
+													: ''
+											}
+											target='_blank'
+										>
+											<IconExternalLink size={16} />
+										</TransactionLink>
+									</TableCell>
+								</>
+							)}
 							<TableCell>
 								<P>{donation.valueUsd?.toFixed(2)}$</P>
 							</TableCell>
@@ -257,8 +274,12 @@ const Tab = styled(H6)`
 const DonationTableContainer = styled.div`
 	margin-top: 12px;
 	display: grid;
-	grid-template-columns: 1.25fr 2fr 1fr 1fr 1fr;
+	grid-template-columns: 1.5fr 2fr 1fr;
 	width: 100%;
+
+	${mediaQueries.mobileL} {
+		grid-template-columns: 1.25fr 2fr 1fr 1fr 1fr;
+	}
 `;
 
 const TableHeader = styled(Flex)`

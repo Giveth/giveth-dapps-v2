@@ -1,6 +1,6 @@
 import ReactQuill from 'react-quill';
 import styled from 'styled-components';
-import { breakPoints } from '@/lib/helpers';
+import { mediaQueries } from '@/utils/constants';
 
 const RichTextViewer = (props: { content?: string }) => {
 	return (
@@ -22,7 +22,7 @@ const Wrapper = styled.div`
 		}
 	}
 
-	@media (max-width: ${breakPoints['sm']}px) {
+	${mediaQueries.tablet} {
 		padding: 0px 16px;
 	}
 `;

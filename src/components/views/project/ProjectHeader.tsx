@@ -65,7 +65,7 @@ const Wrapper = styled.div<{ image: string | undefined }>`
 	height: 312px;
 	overflow: hidden;
 
-	${mediaQueries.laptopL} {
+	${mediaQueries.tablet} {
 		position: sticky;
 		top: -312px;
 		z-index: 10;
@@ -91,20 +91,20 @@ const TitleContainer = styled.div`
 	width: 100%;
 	margin: 0 auto;
 
-	${mediaQueries['sm']} {
+	${mediaQueries.mobileS} {
+		padding: 0px 16px;
+	}
+
+	${mediaQueries.tablet} {
 		padding: 0 32px;
 	}
 
-	${mediaQueries['md']} {
+	${mediaQueries.laptop} {
 		padding: 0 40px;
 	}
 
-	${mediaQueries['xxl']} {
+	${mediaQueries.desktop} {
 		max-width: 1280px;
-	}
-
-	@media (max-width: ${breakPoints['sm']}px) {
-		padding: 0px 16px;
 	}
 `;
 

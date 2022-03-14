@@ -8,7 +8,7 @@ import {
 	DELETE_PROJECT_UPDATE,
 	EDIT_PROJECT_UPDATE,
 } from '@/apollo/gql/gqlProjects';
-import { breakPoints, showToastError } from '@/lib/helpers';
+import { showToastError } from '@/lib/helpers';
 import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
 import { gToast, ToastType } from '@/components/toasts';
 import ProjectTimeline, { TimelineSection } from './ProjectTimeline';
@@ -21,6 +21,7 @@ import {
 	Button,
 	neutralColors,
 } from '@giveth/ui-design-system';
+import { mediaQueries } from '@/utils/constants';
 
 const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
 	ssr: false,
@@ -269,11 +270,12 @@ const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 };
 
 const Wrapper = styled.div`
-	margin-left: 20px;
+	padding: 0px 16px;
+	margin-left: 0px;
 
-	@media (max-width: ${breakPoints['sm']}px) {
-		padding: 0px 16px;
-		margin-left: 0px;
+	${mediaQueries.tablet} {
+		margin-left: 20px;
+		padding: 0px;
 	}
 `;
 

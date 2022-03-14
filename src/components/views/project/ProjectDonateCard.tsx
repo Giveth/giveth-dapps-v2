@@ -44,6 +44,7 @@ import { mediaQueries } from '@/utils/constants';
 interface IProjectDonateCard {
 	project?: IProject;
 	isActive?: boolean;
+	isMobile: boolean;
 	setIsActive: Dispatch<SetStateAction<boolean>>;
 	isDraft?: boolean;
 	setIsDraft: Dispatch<SetStateAction<boolean>>;
@@ -53,6 +54,7 @@ interface IProjectDonateCard {
 const ProjectDonateCard = ({
 	project,
 	isActive,
+	isMobile,
 	setIsActive,
 	isDraft,
 	setIsDraft,
@@ -90,7 +92,6 @@ const ProjectDonateCard = ({
 
 	const router = useRouter();
 
-	const [isMobile, setIsMobile] = useState<boolean>(false);
 	const wrapperRef = useRef<HTMLDivElement>(null);
 	const [wrapperHeight, setWrapperHeight] = useState<number>(0);
 
@@ -166,21 +167,6 @@ const ProjectDonateCard = ({
 	useEffect(() => {
 		setWrapperHeight(wrapperRef?.current?.clientHeight || 0);
 	}, [wrapperRef, project]);
-
-	useEffect(() => {
-		const windowResizeHandler = () => {
-			if (window.screen.width < 501) {
-				setIsMobile(true);
-			} else {
-				setIsMobile(false);
-			}
-		};
-		windowResizeHandler();
-		window.addEventListener('resize', windowResizeHandler);
-		return () => {
-			removeEventListener('resize', windowResizeHandler);
-		};
-	}, []);
 
 	const handleProjectStatus = async () => {
 		if (isActive) {
@@ -425,31 +411,30 @@ const Wrapper = styled(motion.div)<{ initialPosition: number }>`
 	overflow: hidden;
 	width: 326px;
 	height: fit-content;
-	border-radius: 40px;
 	box-shadow: ${Shadow.Neutral['400']};
 	flex-shrink: 0;
 	z-index: 20;
-	position: sticky;
-	position: -webkit-sticky;
 	align-self: flex-start;
 
-	@media (max-width: ${breakPoints['sm']}px) {
+	${mediaQueries.mobileS} {
 		width: 100vw;
 		position: fixed;
 		bottom: calc(-${props => props.initialPosition}px + 168px);
 		border-radius: 40px 40px 0px 0px;
 	}
 
-	${mediaQueries['sm']} {
+	${mediaQueries.tablet} {
 		max-width: 225px;
+		position: sticky;
 		top: 168px;
+		border-radius: 40px;
 	}
 
-	${mediaQueries['md']} {
+	${mediaQueries.laptop} {
 		max-width: 285px;
 	}
 
-	${mediaQueries['xl']} {
+	${mediaQueries.laptopL} {
 		max-width: 325px;
 	}
 `;
