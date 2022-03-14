@@ -58,8 +58,8 @@ export const Modal: React.FC<IModal> = ({
 				/>
 				<StyledScrollbars
 					autoHeight
-					autoHeightMin={'20Vh'}
-					autoHeightMax={'80Vh'}
+					autoHeightMin={'calc(20Vh - 60px)'}
+					autoHeightMax={'calc(80Vh - 60px)'}
 				>
 					{children}
 				</StyledScrollbars>
