@@ -15,6 +15,7 @@ import { Flex } from '../styled-components/Flex';
 import { Modal, IModal } from './Modal';
 import Link from 'next/link';
 import Routes from '@/lib/constants/Routes';
+import { ETheme, useGeneral } from '@/context/general.context';
 
 interface IWhatisGIVstreamModal extends IModal {}
 
@@ -22,9 +23,11 @@ export const WhatisGIVstreamModal: FC<IWhatisGIVstreamModal> = ({
 	showModal,
 	setShowModal,
 }) => {
+	const { theme } = useGeneral();
+
 	return (
 		<Modal showModal={showModal} setShowModal={setShowModal}>
-			<WhatisGIVstreamContainer>
+			<WhatisGIVstreamContainer theme={theme}>
 				<TitleRow alignItems='center' justifyContent='center'>
 					<IconGIVStream size={24} />
 					<Title>What is the GIVstream?</Title>
@@ -46,18 +49,19 @@ export const WhatisGIVstreamModal: FC<IWhatisGIVstreamModal> = ({
 				<LinksRow alignItems='center' justifyContent='center'>
 					<Link href={Routes.GIVstream} passHref>
 						<GLink onClick={() => setShowModal(false)}>
-							<LinksRow justifyContent='center'>
+							<Flex justifyContent='center'>
 								View Your GIVstream{' '}
 								<IconExternalLink
 									size={16}
 									color={'currentColor'}
 								/>
-							</LinksRow>
+							</Flex>
 						</GLink>
 					</Link>
 				</LinksRow>
 				<GotItButton
 					label='GOT IT'
+					buttonType={theme === ETheme.Dark ? 'secondary' : 'primary'}
 					onClick={() => {
 						setShowModal(false);
 					}}
@@ -69,10 +73,10 @@ export const WhatisGIVstreamModal: FC<IWhatisGIVstreamModal> = ({
 
 const WhatisGIVstreamContainer = styled.div`
 	padding: 24px 24px 24px;
-	background-image: url('/images/stream1.svg');
+	background-image: ${props =>
+		props.theme === ETheme.Dark ? `url('/images/stream1.svg')` : ''};
 	background-repeat: no-repeat;
 	width: 570px;
-	color: ${neutralColors.gray[100]};
 `;
 
 const TitleRow = styled(Flex)`
