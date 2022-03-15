@@ -77,6 +77,8 @@ const config: EnvConfig = {
 				unit: 'LP',
 			},
 		],
+		regenStreams: [],
+		regenFarms: [],
 	},
 
 	XDAI_CONFIG: {
@@ -133,6 +135,12 @@ const config: EnvConfig = {
 				unit: 'LP',
 			},
 		],
+
+		uniswapV2Subgraph:
+			'https://api.thegraph.com/subgraphs/name/1hive/honeyswap-v2',
+
+		regenStreams: [],
+		regenFarms: [],
 	},
 };
 
