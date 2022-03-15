@@ -247,16 +247,12 @@ const TokenPicker = (props: {
 						DropdownIndicator,
 						IndicatorSeparator: null,
 						Option,
-						Control: (props: any) =>
-							Control({
-								...props,
-								isMobile,
-								closeMenu: () => setIsOpen(false),
-							}),
+						Control,
 					}}
 					noOptionsMessage={() => (
 						<NotFound emptyField={() => onChange('')} />
 					)}
+					isMobile={isMobile}
 					value={value}
 					inputValue={inputValue}
 					controlShouldRenderValue={false}
@@ -279,14 +275,14 @@ const TokenPicker = (props: {
 // styled components
 
 const Control = (props: any) => {
-	if (!props.isMobile) {
+	if (!props.selectProps.isMobile) {
 		return <components.Control {...props} />;
 	}
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column' }}>
 			<div>
 				<a
-					onClick={() => props.closeMenu()}
+					onClick={() => props.setIsOpen(false)}
 					style={{
 						float: 'right',
 						margin: '19px 12px 8px 0',
