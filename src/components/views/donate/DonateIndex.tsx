@@ -166,7 +166,7 @@ const ProjectsIndex = (props: IProjectBySlug) => {
 		);
 	};
 
-	const _MobileProjectCard = () => {
+	const ProjectCardSelector = () => {
 		if (isMobile) {
 			return (
 				<CardMobileWrapper
@@ -204,7 +204,7 @@ const ProjectsIndex = (props: IProjectBySlug) => {
 				<BigArc />
 				<Wrapper>
 					<Sections>
-						{_MobileProjectCard()}
+						<ProjectCardSelector />
 						<Right>
 							{isSuccess ? (
 								<SuccessView />
