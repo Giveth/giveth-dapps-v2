@@ -1,6 +1,5 @@
 import { FunctionComponent, ReactNode, useEffect, useState } from 'react';
 import Select, {
-	Props,
 	GroupBase,
 	components,
 	OptionProps,

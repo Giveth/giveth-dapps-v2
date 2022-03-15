@@ -216,6 +216,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 							value={selectedCategory}
 							onChange={e => handleChange('category', e)}
 							options={categoriesObj}
+							isMobile={false}
 						/>
 					</SelectComponent>
 					<SelectComponent>
@@ -229,6 +230,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 							isOptionSelected={(option, selectValue) =>
 								selectValue.some((i: any) => i.label === option)
 							}
+							isMobile={false}
 						/>
 					</SelectComponent>
 					<SearchComponent>
