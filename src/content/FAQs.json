@@ -29,7 +29,7 @@
 	},
 	{
 		"question": "What percentage of the donations go directly to the project?",
-		"answer": "100% of funds raised on Giveth go directly to the project. Giveth does not charge fees to givers or makers. There are minor fees when using the ethereum network, and if you use other exchanges or services, there are likely associated fees."
+		"answer": "100% of funds raised on Giveth go directly to the project. Giveth does not charge fees to givers or makers. There are minor fees when using the Ethereum network, and if you use other exchanges or services, there are likely associated fees."
 	},
 	{
 		"question": "How can I be sure my donations are making a difference?",
@@ -37,7 +37,7 @@
 	},
 	{
 		"question": "Can I donate on Giveth if I don't have crypto?",
-		"answer": "FIAT integration (donate funds from your credit card or bank account) is coming soon! Stay tuned...\r\n\r\nGiveth has also partnered with SDG Impact Fund to make it possible for donors to contribute tax-deductible donations, in fiat or crypto, to altruistic projects on the blockchain. This is a major development in finance innovation to effectively care for the commons. We are very close to having fiat options integrated with the Dapp. Until then, fiat donations will accepted here (https://www.sdgimpactfund.org/giveth-foundation). To learn more about the partnership between giveth and the SDG Impact Fund, please refer to this blog post (https://medium.com/giveth/giveth-2-0-next-level-community-philanthropy-f7e60d7e78cb)"
+		"answer": "FIAT integration (donate funds from your credit card or bank account) is coming soon! Stay tuned...\r\n\r\nGiveth has also partnered with SDG Impact Fund to make it possible for donors to contribute tax-deductible donations, in fiat or crypto, to altruistic projects on the blockchain. This is a major development in finance innovation to effectively care for the commons. We are very close to having fiat options integrated with the Dapp. Until then, fiat donations will accepted here: (https://www.sdgimpactfund.org/giveth-foundation). To learn more about the partnership between Giveth and the SDG Impact Fund, please refer to this blog post: (https://medium.com/giveth/giveth-2-0-next-level-community-philanthropy-f7e60d7e78cb)"
 	},
 	{
 		"question": "Is my donation tax deductible?",
