@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { D3, Lead, Button, H3, brandColors } from '@giveth/ui-design-system';
+import { H2, Lead, Button, H3, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 import Routes from '@/lib/constants/Routes';
