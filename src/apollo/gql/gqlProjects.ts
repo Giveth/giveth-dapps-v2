@@ -20,6 +20,7 @@ export const FETCH_HOME_PROJECTS = gql`
 				verified
 				totalDonations
 				traceCampaignId
+				givingBlocksId
 				reaction {
 					id
 					userId
