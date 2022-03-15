@@ -16,17 +16,17 @@ const content = [
 	{
 		title: 'Zero-Added Fees',
 		description:
-			'Create a Project or donate directly to for-good projects with zero fees added by Giveth.',
+			'Create a project or donate directly to for-good projects with zero fees added by Giveth.',
 	},
 	{
 		title: 'Project Verification',
 		description:
-			'Encourage project accountability by donating to trusted projects. Apply for verification to reward your donors with GIVbacks.',
+			'Encourage project accountability by donating to trusted projects. Apply for verification and your donors will be rewarded with GIVbacks.',
 	},
 	{
-		title: 'The Giving Economy',
+		title: 'The GIVeconomy',
 		description:
-			'Give, Earn and Govern using GIV and the GIVeconomy. Become a stakeholder in the future of philanthropy.',
+			'Give, earn and govern using GIV and the GIVeconomy. Get rewarded for being a GIVer.',
 	},
 ];
 
@@ -58,10 +58,10 @@ const HomeChangeMakers = () => {
 			</Lead>
 			<MiddleSection>
 				<Lead>
-					Add you project to Giveth to tap into the revolutionary
-					funding opportunities of the Ethereum Ecosystem. Start
-					raising funds within minutes. Creating a project is
-					absolutely free!
+					Establish your project on Giveth to tap into the
+					revolutionary funding opportunities of the Ethereum
+					Ecosystem. Start raising funds within minutes. Creating a
+					project is absolutely free!
 				</Lead>
 				<br />
 				<CreateProjectButton

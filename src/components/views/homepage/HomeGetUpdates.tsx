@@ -45,7 +45,7 @@ const HomeGetUpdates = () => {
 			<P>
 				{successSubscription
 					? 'Thank you for subscribing to Giveth newsletter. Our first news are coming to your inbox soon.'
-					: 'Subscribe to our newsletter and get all updates straight to your mailbox!'}
+					: 'Subscribe to our newsletter to get monthly updates straight to your mailbox!'}
 			</P>
 			{!successSubscription && (
 				<InputBox>
