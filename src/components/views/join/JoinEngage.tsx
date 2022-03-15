@@ -27,8 +27,8 @@ const JoinEngage = () => {
 				</LeadText>
 				<br />
 				<LeadText>
-					Follow our social media and come say hello in a channel
-					below, we look forward to welcoming you!
+					Follow our social media, and come say hello in a channel
+					below. We look forward to welcoming you!
 				</LeadText>
 				<div style={{ position: 'absolute' }}>
 					<Image src={YellowFlower} alt='yellowflower' />
