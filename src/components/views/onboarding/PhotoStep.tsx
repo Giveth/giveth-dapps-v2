@@ -53,9 +53,9 @@ const PhotoStep: FC<IStep> = ({ setStep }) => {
 					/>
 				</ProfilePicWrapper>
 				<Desc>
-					This is how you look like right now, strange! right?
+					This is how you look right now! Strange, right?
 					<br />
-					Upload something better can help with getting more funds!
+					Upload a photo that represents who you are.
 				</Desc>
 				<ImageUploader setUrl={setUrl} url={url} />
 				<OnboardActions
