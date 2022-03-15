@@ -112,7 +112,7 @@ export const TabGIVstreamTop = () => {
 						</Left>
 						<Right>
 							<GIVstreamRewardCard
-								wrongNetworkText='GIVstream is only available on Mainnet and xDAI.'
+								wrongNetworkText='GIVstream is only available on Mainnet and Gnosis Chain.'
 								liquidAmount={rewardLiquidPart}
 								stream={rewardStream}
 								actionLabel='HARVEST'

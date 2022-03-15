@@ -272,8 +272,7 @@ const Header: FC<IHeader> = () => {
 												Connected to{' '}
 												{networksParams[chainId]
 													? networksParams[chainId]
-															.nativeCurrency
-															.symbol
+															.chainName
 													: library?._network?.name}
 											</WBNetwork>
 										</WBInfo>

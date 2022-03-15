@@ -77,7 +77,7 @@ export const TabGardenTop = () => {
 					<Right>
 						<GardenRewardCard
 							title='Your GIVgarden rewards'
-							wrongNetworkText='GIVgarden is only available on xDAI.'
+							wrongNetworkText='GIVgarden is only available on Gnosis Chain.'
 							liquidAmount={earnedLiquidPart}
 							stream={earnedStream}
 							actionLabel='HARVEST'

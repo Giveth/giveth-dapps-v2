@@ -33,6 +33,7 @@ import SDG_Impact_Fund from '/public/images/partnerships/SDG_Impact_Fund.svg';
 import DappNode from '/public/images/partnerships/DappNode.svg';
 import Datafund from '/public/images/partnerships/Datafund.svg';
 import BrightID from '/public/images/partnerships/BrightID.svg';
+import Gnosis_Chain from '/public/images/partnerships/Gnosis_Chain.svg';
 
 export interface IPartner {
 	icon: any;
@@ -265,10 +266,10 @@ export const PartnershipArray: IPartner[] = [
 		link: 'https://mashable.com/article/ethereum-stolen-white-hat-group-rescued',
 	},
 	{
-		icon: XDAI,
-		title: 'xDAI',
+		icon: Gnosis_Chain,
+		title: 'Gnosis Chain',
 		description:
-			'The first-ever USD stable blockchain and multi-chain staking token.',
+			'Formerly the xDai Chain, Gnosis Chain provides stability, scalability and an extendable beacon chain framework.',
 		link: 'https://xdaichain.com',
 	},
 ];

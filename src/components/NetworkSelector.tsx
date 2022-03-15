@@ -4,6 +4,7 @@ import config from '../configuration';
 import { B, brandColors } from '@giveth/ui-design-system';
 import { Flex } from './styled-components/Flex';
 import { IconXDAI } from './Icons/XDAI';
+import { IconGnosisChain } from './Icons/GnosisChain';
 import { IconEthereum } from './Icons/Eth';
 import { BasicNetworkConfig } from '../types/config';
 import { ChangeNetworkModal } from './modals/ChangeNetwork';
@@ -15,7 +16,7 @@ interface NetworkSelectorProps {
 }
 
 const NetworkSelectorContainer = styled(Flex)<NetworkSelectorProps>`
-	width: 270px;
+	width: 344px;
 	height: 48px;
 	border-radius: 88px;
 	border: 1px solid ${brandColors.giv[600]};
@@ -37,7 +38,7 @@ const Selector = styled(Flex)<ISelecetor>`
 `;
 
 const XDaiSelecor = styled(Selector)`
-	width: 116px;
+	width: 179px;
 `;
 
 const EthSelector = styled(Selector)`
@@ -83,8 +84,8 @@ export const NetworkSelector = () => {
 							);
 						}}
 					>
-						<IconXDAI size={24} />
-						<B>xDai</B>
+						<IconGnosisChain size={24} />
+						<B>Gnosis Chain</B>
 					</XDaiSelecor>
 					<EthSelector
 						isSelected={

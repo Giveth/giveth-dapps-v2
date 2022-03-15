@@ -73,7 +73,7 @@ export const BalanceButton = styled(HeaderButton)`
 
 export const WalletButton = styled(HeaderButton)`
 	font-size: 14px;
-	width: 176px;
+	width: 200px;
 	padding: 6px 16px;
 `;
 
@@ -96,7 +96,7 @@ export const WBNetwork = styled(GLink)`
 	font-size: 10px;
 	line-height: 13px;
 	color: #b9a7ff;
-	width: 120px;
+	width: 123px;
 `;
 
 export const HBPic = styled.img`
