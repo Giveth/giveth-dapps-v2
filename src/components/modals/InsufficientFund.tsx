@@ -41,20 +41,8 @@ export const InsufficientFundModal: FC<IModal> = ({
 
 const InsufficientFundContainer = styled.div`
 	height: 300px;
-	width: 528px;
+	width: 100%;
 	padding: 24px;
-	${mediaQueries['mobileS']} {
-		width: 100%;
-	}
-	${mediaQueries['mobileM']} {
-		width: 100%;
-	}
-	${mediaQueries['mobileL']} {
-		width: 100%;
-	}
-	${mediaQueries['desktop']} {
-		width: 528px;
-	}
 	${mediaQueries['tablet']} {
 		width: 528px;
 	}
