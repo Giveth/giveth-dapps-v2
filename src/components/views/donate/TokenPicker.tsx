@@ -34,7 +34,8 @@ declare module 'react-select/dist/declarations/src/Select' {
 		IsMulti extends boolean,
 		Group extends GroupBase<Option>,
 	> {
-		isMobile: boolean;
+		isMobile?: boolean;
+		setIsOpen?: any;
 	}
 }
 
@@ -264,6 +265,7 @@ const TokenPicker = (props: {
 						<NotFound emptyField={() => onChange('')} />
 					)}
 					isMobile={isMobile}
+					setIsOpen={setIsOpen}
 					value={value}
 					inputValue={inputValue}
 					controlShouldRenderValue={false}
@@ -293,7 +295,7 @@ const Control = (props: any) => {
 		<div style={{ display: 'flex', flexDirection: 'column' }}>
 			<div>
 				<a
-					onClick={() => props.setIsOpen(false)}
+					onClick={() => props.selectProps.setIsOpen(false)}
 					style={{
 						float: 'right',
 						margin: '19px 12px 8px 0',
@@ -350,7 +352,7 @@ const Dropdown: FunctionComponent<DropdownProps> = ({
 	onClose,
 }) => {
 	return (
-		<div style={{ position: 'relative', zIndex: 12 }}>
+		<div style={{ position: 'relative', zIndex: 11 }}>
 			{target}
 			{isOpen ? <Menu>{children}</Menu> : null}
 			{isOpen ? <Blanket onClick={onClose} /> : null}
