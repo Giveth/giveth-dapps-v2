@@ -39,6 +39,7 @@ const ProjectCard = (props: IProjectCard) => {
 		traceCampaignId,
 		id,
 		updatedAt,
+		givingBlocksId,
 	} = props.project;
 	const [isHover, setIsHover] = useState(false);
 
@@ -63,6 +64,9 @@ const ProjectCard = (props: IProjectCard) => {
 				<ProjectCardImage image={image} />
 			</ImagePlaceholder>
 			<CardBody isHover={isHover}>
+				{givingBlocksId && (
+					<GivingBlockBadge src='/images/thegivingblock.svg' />
+				)}
 				<Title weight={700}>{title}</Title>
 				<Link href={`/user/${adminUser?.walletAddress}`} passHref>
 					<Author size='Big'>{name || '\u200C'}</Author>
@@ -163,6 +167,15 @@ const Wrapper = styled.div`
 	border-radius: ${cardRadius};
 	background: white;
 	overflow: hidden;
+`;
+
+const GivingBlockBadge = styled.img`
+	position: absolute;
+	top: -5%;
+	right: 0;
+	background: white;
+	padding: 4px 12px;
+	border-top-left-radius: 10px;
 `;
 
 export default ProjectCard;
