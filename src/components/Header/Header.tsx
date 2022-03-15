@@ -9,6 +9,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import { ThemeType } from '@/context/theme.context';
 import { formatWeiHelper } from '@/helpers/number';
 import { networksParams } from '@/helpers/blockchain';
+import { useDeviceDetect } from '@/utils';
 import {
 	ConnectButton,
 	HBBalanceLogo,
@@ -53,6 +54,7 @@ const Header: FC<IHeader> = () => {
 	const [showWalletModal, setShowWalletModal] = useState(false);
 	const [isGIVeconomyRoute, setIsGIVeconomyRoute] = useState(false);
 	const [isCreateRoute, setIsCreateRoute] = useState(false);
+	const { isMobile } = useDeviceDetect();
 
 	const {
 		currentValues: { balances },
@@ -238,6 +240,7 @@ const Header: FC<IHeader> = () => {
 											width={'24px'}
 											height={'24px'}
 										/>
+
 										<HBContent size='Big'>
 											{formatWeiHelper(balances.balance)}
 										</HBContent>

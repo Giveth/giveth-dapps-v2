@@ -343,7 +343,7 @@ const Dropdown: FunctionComponent<DropdownProps> = ({
 	onClose,
 }) => {
 	return (
-		<div style={{ position: 'relative', zIndex: 3 }}>
+		<div style={{ position: 'relative', zIndex: 12 }}>
 			{target}
 			{isOpen ? <Menu>{children}</Menu> : null}
 			{isOpen ? <Blanket onClick={onClose} /> : null}
@@ -382,7 +382,7 @@ const OverLay = styled.div`
 	right: 0;
 	bottom: 0;
 	background-color: rgba(79, 87, 106, 0.5);
-	z-index: 3;
+	z-index: 11;
 	cursor: pointer;
 `;
 
