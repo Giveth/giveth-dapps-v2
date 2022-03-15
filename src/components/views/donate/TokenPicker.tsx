@@ -352,11 +352,13 @@ const Dropdown: FunctionComponent<DropdownProps> = ({
 	onClose,
 }) => {
 	return (
-		<div style={{ position: 'relative', zIndex: 11 }}>
-			{target}
-			{isOpen ? <Menu>{children}</Menu> : null}
-			{isOpen ? <Blanket onClick={onClose} /> : null}
-		</div>
+		<>
+			<div style={{ zIndex: 1 }}>{target}</div>
+			<div style={{ position: 'relative', zIndex: 11 }}>
+				{isOpen ? <Menu>{children}</Menu> : null}
+				{isOpen ? <Blanket onClick={onClose} /> : null}
+			</div>
+		</>
 	);
 };
 const Svg = (p: JSX.IntrinsicElements['svg']) => (
