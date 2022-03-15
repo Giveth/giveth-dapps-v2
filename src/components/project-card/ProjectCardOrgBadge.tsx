@@ -6,19 +6,28 @@ import { neutralColors, Overline } from '@giveth/ui-design-system';
 interface IProjectCardOrgBadge {
 	image: string;
 	isHover: boolean;
+	show: boolean;
 }
 
-const ProjectCardOrgBadge = ({ image, isHover }: IProjectCardOrgBadge) => {
+const ProjectCardOrgBadge = ({
+	image,
+	isHover,
+	show,
+}: IProjectCardOrgBadge) => {
 	return (
-		<GivingBadgeContainer isHover={isHover}>
-			<GivingBlocksText>PROJECT BY:</GivingBlocksText>
-			<Image
-				src={image}
-				alt='The Giving Block icon.'
-				height={36}
-				width={78}
-			/>
-		</GivingBadgeContainer>
+		<>
+			{show && (
+				<GivingBadgeContainer isHover={isHover}>
+					<GivingBlocksText>PROJECT BY:</GivingBlocksText>
+					<Image
+						src={image}
+						alt='The Giving Block icon.'
+						height={36}
+						width={78}
+					/>
+				</GivingBadgeContainer>
+			)}
+		</>
 	);
 };
 

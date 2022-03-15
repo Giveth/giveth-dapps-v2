@@ -43,6 +43,7 @@ const ProjectCard = (props: IProjectCard) => {
 		traceCampaignId,
 		id,
 		updatedAt,
+		givingBlocksId,
 	} = props.project;
 	const [isHover, setIsHover] = useState(false);
 
@@ -66,6 +67,7 @@ const ProjectCard = (props: IProjectCard) => {
 				<ProjectCardOrgBadge
 					image={'/images/thegivingblock.svg'}
 					isHover={isHover}
+					show={!!givingBlocksId}
 				/>
 				<ProjectCardImage image={image} />
 			</ImagePlaceholder>
