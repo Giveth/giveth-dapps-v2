@@ -95,7 +95,7 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const [earnEstimate, setEarnEstimate] = useState<BigNumber>(Zero);
 	const [APR, setAPR] = useState<BigNumber>(Zero);
 	const { apr: univ3apr } = useLiquidityPositions();
-	const { tokenDistroHelper } = useTokenDistro();
+	const { givTokenDistroHelper } = useTokenDistro();
 	const { mainnetValues, xDaiValues } = useSubgraph();
 
 	useEffect(() => {
@@ -115,16 +115,16 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 			stackedWithApr.toFixed(0),
 		).mul(constants.WeiPerEther);
 		setPotentialClaim(
-			tokenDistroHelper.getLiquidPart(convertedStackedWithApr),
+			givTokenDistroHelper.getLiquidPart(convertedStackedWithApr),
 		);
 		setEarnEstimate(
-			tokenDistroHelper.getStreamPartTokenPerWeek(
+			givTokenDistroHelper.getStreamPartTokenPerWeek(
 				convertedStackedWithApr,
 			),
 		);
 		// setPotentialClaim(stackedWithApr.times(0.1));
 		// setEarnEstimate(stackedWithApr.times(0.9).div(52 * 5));
-	}, [APR, deposit, totalAmount, tokenDistroHelper]);
+	}, [APR, deposit, totalAmount, givTokenDistroHelper]);
 
 	const mounted = useRef(true);
 	useEffect(
