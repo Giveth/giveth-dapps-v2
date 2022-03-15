@@ -17,11 +17,6 @@ const SupportIndex = () => {
 				<ArcPurple />
 				<TextContainer>
 					<Title>How can we help you?</Title>
-					<Lead>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-						Vitae purus, quis sit pretium, a nunc. Volutpat euismod
-						semper porttitor eleifend.
-					</Lead>
 				</TextContainer>
 			</UpperSection>
 
