@@ -21,6 +21,7 @@ import {
 	HeaderLink,
 	StyledHeader,
 	WalletButton,
+	MobileWalletButton,
 	WBInfo,
 	WBNetwork,
 	SmallCreateProject,
@@ -241,9 +242,13 @@ const Header: FC<IHeader> = () => {
 											height={'24px'}
 										/>
 
-										<HBContent size='Big'>
-											{formatWeiHelper(balances.balance)}
-										</HBContent>
+										{!isMobile && (
+											<HBContent size='Big'>
+												{formatWeiHelper(
+													balances.balance,
+												)}
+											</HBContent>
+										)}
 									</HBContainer>
 									<CoverLine theme={theme} />
 								</BalanceButton>
@@ -254,35 +259,56 @@ const Header: FC<IHeader> = () => {
 								onMouseEnter={() => setShowUserMenu(true)}
 								onMouseLeave={() => setShowUserMenu(false)}
 							>
-								<WalletButton outline theme={theme}>
-									<HBContainer>
-										<HBPic
-											src={
-												user?.avatar
-													? user.avatar
-													: '/images/placeholders/profile.png'
-											}
-											alt='Profile Pic'
-											width={'24px'}
-											height={'24px'}
-										/>
-										<WBInfo>
-											<GLink size='Medium'>
-												{user?.name ||
-													shortenAddress(account)}
-											</GLink>
-											<WBNetwork size='Tiny'>
-												Connected to{' '}
-												{networksParams[chainId]
-													? networksParams[chainId]
-															.nativeCurrency
-															.symbol
-													: library?._network?.name}
-											</WBNetwork>
-										</WBInfo>
-									</HBContainer>
-									<CoverLine theme={theme} />
-								</WalletButton>
+								{isMobile ? (
+									<MobileWalletButton>
+										<HBContainer>
+											<HBPic
+												src={
+													user?.avatar
+														? user.avatar
+														: '/images/placeholders/profile.png'
+												}
+												alt='Profile Pic'
+												width={'24px'}
+												height={'24px'}
+											/>
+										</HBContainer>
+										<CoverLine theme={theme} />
+									</MobileWalletButton>
+								) : (
+									<WalletButton outline theme={theme}>
+										<HBContainer>
+											<HBPic
+												src={
+													user?.avatar
+														? user.avatar
+														: '/images/placeholders/profile.png'
+												}
+												alt='Profile Pic'
+												width={'24px'}
+												height={'24px'}
+											/>
+											<WBInfo>
+												<GLink size='Medium'>
+													{user?.name ||
+														shortenAddress(account)}
+												</GLink>
+												<WBNetwork size='Tiny'>
+													Connected to{' '}
+													{networksParams[chainId]
+														? networksParams[
+																chainId
+														  ].nativeCurrency
+																.symbol
+														: library?._network
+																?.name}
+												</WBNetwork>
+											</WBInfo>
+										</HBContainer>
+										<CoverLine theme={theme} />
+									</WalletButton>
+								)}
+
 								{showUserMenu && (
 									<MenuWallet
 										setShowWalletModal={setShowWalletModal}

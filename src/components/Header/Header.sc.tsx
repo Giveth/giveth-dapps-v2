@@ -77,6 +77,10 @@ export const WalletButton = styled(HeaderButton)`
 	padding: 6px 16px;
 `;
 
+export const MobileWalletButton = styled(HeaderButton)`
+	width: 100%;
+`;
+
 export const HBContainer = styled.div`
 	display: flex;
 	align-items: center;

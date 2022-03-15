@@ -4,6 +4,7 @@
 import React from 'react';
 import ERC20List from './erc20TokenList';
 import { networkInfo } from '@/lib/constants/NetworksObj';
+import { deviceSize } from '@/utils/constants';
 import config from '@/configuration';
 
 const xDaiChainId = 100;
@@ -29,6 +30,33 @@ export function pollEvery(fn: Function, delay: any) {
 		};
 	};
 }
+
+// export function useDeviceDetect() {
+// 	const [windowSize, setWindowSize] = React.useState<any>({
+// 		width: undefined,
+// 		height: undefined,
+// 	});
+// 	const [isMobile, setIsMobile] = React.useState<boolean>(false);
+// 	React.useMemo(() => {
+// 		function handleResize() {
+// 			setWindowSize({
+// 				width: window.innerWidth,
+// 				height: window.innerHeight,
+// 			});
+// 			if (!isMobile && window.innerWidth <= deviceSize.mobileL) {
+// 				setIsMobile(true);
+// 			} else if (isMobile && window.innerWidth > deviceSize.mobileL) {
+// 				setIsMobile(false);
+// 			}
+// 		}
+// 		if (typeof window === 'undefined') return;
+// 		window.addEventListener('resize', handleResize);
+// 		handleResize();
+// 		return () => window.removeEventListener('resize', handleResize);
+// 	}, [isMobile]);
+
+// 	return { isMobile };
+// }
 
 export function useDeviceDetect() {
 	const [isMobile, setMobile] = React.useState(false);
