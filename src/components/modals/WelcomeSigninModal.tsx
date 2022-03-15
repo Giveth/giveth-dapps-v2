@@ -34,11 +34,12 @@ export const WelcomeSigninModal: FC<IModal> = ({
 		>
 			<Container>
 				<Description>
-					You need to Sign your wallet to be able to use it on Giveth.
+					You need to authorize your wallet to be able to use it on
+					Giveth.
 				</Description>
 				<NoteDescription color='red'>
-					Note: only after you Sign your wallet, you can donate to
-					projects or receive donations.
+					Note: This is necessary to be able to donate to projects or
+					receive funding.
 				</NoteDescription>
 				<OkButton
 					label='SIGN IN'
