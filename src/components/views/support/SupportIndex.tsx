@@ -17,11 +17,11 @@ const SupportIndex = () => {
 				<ArcPurple />
 				<TextContainer>
 					<Title>How can we help you?</Title>
-					<Lead>
+					{/* <Lead>
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 						Vitae purus, quis sit pretium, a nunc. Volutpat euismod
 						semper porttitor eleifend.
-					</Lead>
+					</Lead> */}
 				</TextContainer>
 			</UpperSection>
 
@@ -42,6 +42,9 @@ const CardsSection = styled.div`
 	gap: 25px;
 	position: relative;
 	z-index: 3;
+	max-width: 1250px;
+	margin: -50px auto 0;
+	padding: 0 16px 48px;
 `;
 
 const cardsArray = [
