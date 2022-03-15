@@ -41,7 +41,7 @@ export const CompleteProfile = (props: { closeModal: () => void }) => {
 						<Lead>Better communicate with the community.</Lead>
 					</li>
 					<li>
-						<Lead>Let other know you a little better.</Lead>
+						<Lead>Let others know you a little better.</Lead>
 					</li>
 				</Bullets>
 				<OkButton
