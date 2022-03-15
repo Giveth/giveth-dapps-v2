@@ -17,7 +17,7 @@ export enum ETheme {
 const GlobalStyle = createGlobalStyle<{ theme: ETheme }>`
   body {
     background-color: ${props =>
-		props.theme === ETheme.Dark ? '#1b1657' : neutralColors.gray[200]};
+		props.theme === ETheme.Dark ? '#090446' : neutralColors.gray[200]};
 	color: ${props => (props.theme === ETheme.Dark ? 'white' : '#212529')};
   }
 `;
