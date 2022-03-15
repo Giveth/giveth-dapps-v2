@@ -17,11 +17,7 @@ const FAQIndex = () => {
 				<FlowerContainer>
 					<Image src={FlowerIcon} alt='flower' />
 				</FlowerContainer>
-				<Title>How can we help you?</Title>
-				<Lead>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-					Lectus urna orci vel commodo.
-				</Lead>
+				<Title>Frequently Asked Questions</Title>
 				<SearchStyles>
 					{/*TODO implement search function*/}
 					{/*<SearchBox*/}
