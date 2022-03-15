@@ -53,8 +53,8 @@ const HomeChangeMakers = () => {
 			<D3>Calling all Changemakers!</D3>
 			<br />
 			<Lead>
-				Do you have for-good project that&apos;s creating value for
-				society, for the environment or for the world?
+				Do you have a for-good project that&apos;s creating value for
+				society, for the environment, or for the world?
 			</Lead>
 			<MiddleSection>
 				<Lead>
