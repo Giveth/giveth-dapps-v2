@@ -7,6 +7,7 @@ const Routes = {
 	Projects: '/projects',
 	Project: '/project',
 	Donate: `/donate`,
+	User: `/user`,
 	AboutUs: '/about',
 	Faq: '/faq',
 	Support: '/support',

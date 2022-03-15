@@ -1,14 +1,6 @@
 import { neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
-export const Email_Input = styled.input`
-	width: 360px;
-	height: 52px;
-	border: 1px solid #d7ddea;
-	border-radius: 56px;
-	padding: 14px 25px;
-`;
-
 export const Regular_Input = styled.input`
 	width: 100%;
 	height: 56px;

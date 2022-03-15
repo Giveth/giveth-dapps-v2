@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import HomeBlogPost from './HomeBlogPost';
-import { IMediumBlogPost } from '@/apollo/types/types';
 import { P, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+
+import HomeBlogPost from './HomeBlogPost';
+import { IMediumBlogPost } from '@/apollo/types/types';
+import { HomeContainer } from '@/components/views/homepage/Home.sc';
+import { Col, Row } from '@/components/Grid';
+import { deviceSize } from '@/utils/constants';
 
 const HomeFromBlog = () => {
 	const [mediumPosts, setMediumPosts] = useState<IMediumBlogPost[]>();
@@ -20,31 +24,35 @@ const HomeFromBlog = () => {
 
 	return (
 		<Wrapper>
-			<Title>FROM OUR BLOG</Title>
-			{mediumPosts && (
-				<PostWrapper>
-					{mediumPosts.map((post: IMediumBlogPost) => (
-						<HomeBlogPost key={post.guid} post={post} />
-					))}
-				</PostWrapper>
-			)}
+			<Container>
+				<Title>FROM OUR BLOG</Title>
+				{mediumPosts && (
+					<Row>
+						{mediumPosts.map((post: IMediumBlogPost) => (
+							<Col md={6} key={post.guid}>
+								<HomeBlogPost post={post} />
+							</Col>
+						))}
+					</Row>
+				)}
+			</Container>
 		</Wrapper>
 	);
 };
-
-const PostWrapper = styled.div`
-	display: flex;
-	gap: 50px 160px;
-	flex-wrap: wrap;
-`;
 
 const Title = styled(P)`
 	color: ${brandColors.giv[500]};
 `;
 
-const Wrapper = styled.div`
+const Container = styled.div`
+	margin: 0 auto;
+	max-width: ${deviceSize.desktop + 'px'};
+`;
+
+const Wrapper = styled(HomeContainer)`
 	background: url('/images/curves_homepage.svg');
-	padding: 90px 150px;
+	padding-top: 90px;
+	padding-bottom: 40px;
 `;
 
 export default HomeFromBlog;

@@ -17,6 +17,9 @@ import TwitterIcon from '/public/images/twitter.svg';
 import useUser from '@/context/UserProvider';
 import { isSSRMode, isUserRegistered } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
+import { Col, Row } from '@/components/Grid';
+import { HomeContainer } from '@/components/views/homepage/Home.sc';
+import { deviceSize, mediaQueries } from '@/utils/constants';
 
 const HomePurpleSection = () => {
 	const router = useRouter();
@@ -40,82 +43,88 @@ const HomePurpleSection = () => {
 		<Wrapper>
 			<ArcSmall />
 			<ArcBig />
-			<div className='d-none d-lg-block'>
+			<MustardThing>
 				<ArcMustard />
 				<DotMustard />
-			</div>
-			<GivingEffortless weight={700}>
-				Giving is effortless and people all around the world are
-				rewarded for creating positive change.
-			</GivingEffortless>
-			<GivingButtons>
-				<StartGiving
-					size='large'
-					label='START GIVING'
-					onClick={() => router.push(Routes.Projects)}
-				/>
-				<TwitterShareButton
-					title={shareTitle}
-					url={url || ''}
-					hashtags={['Giveth']}
-				>
-					<TwitterButton
-						buttonType='texty'
+			</MustardThing>
+			<Container>
+				<GivingEffortless weight={700}>
+					Giving is effortless and people all around the world are
+					rewarded for creating positive change.
+				</GivingEffortless>
+				<GivingButtons>
+					<StartGiving
 						size='large'
-						label='Tweet this'
-						icon={<Image src={TwitterIcon} alt='twitter icon' />}
-					/>
-				</TwitterShareButton>
-			</GivingButtons>
-			<GIVeconomy>
-				<D3>The GIVeconomy</D3>
-				<br />
-				<Lead>
-					Our system connects the people on the ground directly to the
-					Givers with zero added fees. It creates an economy of giving
-					by rewarding donors and encouraging decentralized community
-					governance.
-				</Lead>
-				<br />
-				<Link href={Routes.GIVECONOMY} passHref>
-					<GIVeconomyUrl>Learn more about GIVeconomy</GIVeconomyUrl>
-				</Link>
-			</GIVeconomy>
-			<ForMakersGivers>
-				<ForMakersContainers>
-					<H3 weight={700}>For Projects</H3>
-					<br />
-					<Lead>
-						Create a project and start raising funds in crypto
-						within minutes. Get verified to reward your donors with
-						GIVbacks.
-					</Lead>
-					<br />
-					<ForMakersButton
-						buttonType='primary'
-						size='large'
-						label='CREATE A PROJECT'
-						onClick={handleCreateButton}
-					/>
-				</ForMakersContainers>
-				<ForMakersContainers>
-					<H3 weight={700}>For Givers</H3>
-					<br />
-					<Lead>
-						Donate to change-makers that are working hard to make a
-						difference. Earn GIV from GIVbacks when you donate to
-						verified projects and become a stakeholder in the future
-						of philanthropy.
-					</Lead>
-					<br />
-					<ForMakersButton
-						buttonType='primary'
-						size='large'
-						label='DONATE TO A PROJECT'
+						label='START GIVING'
 						onClick={() => router.push(Routes.Projects)}
 					/>
-				</ForMakersContainers>
-			</ForMakersGivers>
+					<TwitterShareButton
+						title={shareTitle}
+						url={url || ''}
+						hashtags={['Giveth']}
+					>
+						<TwitterButton
+							buttonType='texty'
+							size='large'
+							label='Tweet this'
+							icon={
+								<Image src={TwitterIcon} alt='twitter icon' />
+							}
+						/>
+					</TwitterShareButton>
+				</GivingButtons>
+				<GIVeconomy>
+					<H3 weight={700}>The GIVeconomy</H3>
+					<br />
+					<Lead>
+						Our system connects the people on the ground directly to
+						the Givers with zero added fees. It creates an economy
+						of giving by rewarding donors and encouraging
+						decentralized community governance.
+					</Lead>
+					<br />
+					<Link href={Routes.GIVECONOMY} passHref>
+						<GIVeconomyUrl>
+							Learn more about GIVeconomy
+						</GIVeconomyUrl>
+					</Link>
+				</GIVeconomy>
+				<ForMakersGivers>
+					<ForMakersContainers md={6}>
+						<H3 weight={700}>For Projects</H3>
+						<br />
+						<Lead>
+							Create a project and start raising funds in crypto
+							within minutes. Get verified to reward your donors
+							with GIVbacks.
+						</Lead>
+						<br />
+						<ForMakersButton
+							buttonType='primary'
+							size='large'
+							label='CREATE A PROJECT'
+							onClick={handleCreateButton}
+						/>
+					</ForMakersContainers>
+					<ForMakersContainers md={6}>
+						<H3 weight={700}>For Givers</H3>
+						<br />
+						<Lead>
+							Donate to change-makers that are working hard to
+							make a difference. Earn GIV from GIVbacks when you
+							donate to verified projects and become a stakeholder
+							in the future of philanthropy.
+						</Lead>
+						<br />
+						<ForMakersButton
+							buttonType='primary'
+							size='large'
+							label='DONATE TO A PROJECT'
+							onClick={() => router.push(Routes.Projects)}
+						/>
+					</ForMakersContainers>
+				</ForMakersGivers>
+			</Container>
 		</Wrapper>
 	);
 };
@@ -140,6 +149,14 @@ const DotMustard = styled(Arc)`
 	height: 142px;
 `;
 
+const MustardThing = styled.div`
+	display: none;
+
+	${mediaQueries.laptop} {
+		display: unset;
+	}
+`;
+
 const ArcBig = styled(Arc)`
 	border-width: 150px;
 	border-color: ${brandColors.giv[600]};
@@ -159,26 +176,23 @@ const ArcSmall = styled(Arc)`
 	height: 700px;
 `;
 
-const ForMakersGivers = styled.div`
+const ForMakersGivers = styled(Row)`
 	margin-top: 107px;
-	margin-bottom: 162px;
-	display: flex;
-	flex-wrap: wrap;
-	gap: 200px;
+	margin-bottom: 50px;
 `;
 
-const ForMakersContainers = styled.div`
+const ForMakersContainers = styled(Col)`
 	min-width: 350px;
 	max-width: 445px;
-	min-height: 320px;
 	display: flex;
 	flex-direction: column;
+	margin-bottom: 100px;
+	padding-right: 30px;
 `;
 
 const ForMakersButton = styled(Button)`
-	height: 66px;
-	padding: 0 80px;
-	margin-top: auto;
+	width: 300px;
+	margin-top: 24px;
 	align-self: start;
 `;
 
@@ -189,6 +203,7 @@ const GIVeconomy = styled.div`
 
 const GIVeconomyUrl = styled.a`
 	color: ${brandColors.mustard[500]} !important;
+	font-size: 16px;
 `;
 
 const GivingButtons = styled.div`
@@ -225,13 +240,20 @@ const GivingEffortless = styled(H2)`
 	max-width: 654px;
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled(HomeContainer)`
 	background: ${brandColors.giv[500]};
-	padding: 90px 120px;
+	padding-top: 90px;
 	color: white;
 	position: relative;
 	z-index: 2;
 	overflow: hidden;
+`;
+
+const Container = styled.div`
+	margin: 0 auto;
+	${mediaQueries.desktop} {
+		width: ${deviceSize.desktop + 'px'};
+	}
 `;
 
 export default HomePurpleSection;

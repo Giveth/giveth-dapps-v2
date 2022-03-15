@@ -7,7 +7,7 @@ import { IProject } from '@/apollo/types/types';
 import useUser from '@/context/UserProvider';
 import { useEffect, useState } from 'react';
 
-const projectsToFetch = 15;
+const projectsToFetch = 12;
 
 interface IHomeRoute {
 	projects: IProject[];
