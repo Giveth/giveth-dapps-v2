@@ -15,7 +15,7 @@ import {
 	Title,
 	ButtonLink,
 } from '@giveth/ui-design-system';
-import { TopContainer } from './commons';
+import { BottomContainer, TopContainer } from './commons';
 import { RewardCard } from '../RewardCard';
 import { Flex } from '../styled-components/Flex';
 
@@ -40,7 +40,7 @@ export const GBSubtitle = styled(QuoteText)``;
 
 export const GIVbackRewardCard = styled(RewardCard)``;
 
-export const GIVbacksBottomContainer = styled.div``;
+export const GIVbacksBottomContainer = styled(BottomContainer)``;
 
 export const GbDataBlock = styled(DataBlock)`
 	width: 460px;

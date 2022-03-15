@@ -47,7 +47,7 @@ export const TabGIVbacksTop = () => {
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
 	const [showGivBackExplain, setShowGivBackExplain] = useState(false);
 	const [givBackStream, setGivBackStream] = useState<BigNumber.Value>(0);
-	const { tokenDistroHelper } = useTokenDistro();
+	const { givTokenDistroHelper } = useTokenDistro();
 	const {
 		currentValues: { balances },
 	} = useSubgraph();
@@ -55,9 +55,9 @@ export const TabGIVbacksTop = () => {
 
 	useEffect(() => {
 		setGivBackStream(
-			tokenDistroHelper.getStreamPartTokenPerWeek(balances.givback),
+			givTokenDistroHelper.getStreamPartTokenPerWeek(balances.givback),
 		);
-	}, [balances, tokenDistroHelper]);
+	}, [balances, givTokenDistroHelper]);
 
 	return (
 		<>
@@ -123,29 +123,33 @@ export const TabGIVbacksBottom = () => {
 	const [round, setRound] = useState(0);
 	const [roundStartime, setRoundStartime] = useState(new Date());
 	const [roundEndTime, setRoundEndTime] = useState(new Date());
-	const { tokenDistroHelper } = useTokenDistro();
+	const { givTokenDistroHelper } = useTokenDistro();
 
 	useEffect(() => {
-		if (tokenDistroHelper) {
+		if (givTokenDistroHelper) {
 			const now = getNowUnixMS();
-			const deltaT = now - tokenDistroHelper.startTime.getTime();
+			const deltaT = now - givTokenDistroHelper.startTime.getTime();
 			const TwoWeek = 1_209_600_000;
 			const _round = Math.floor(deltaT / TwoWeek) + 1;
 			setRound(_round);
-			const _rounStartTime = new Date(tokenDistroHelper.startTime);
+			const _rounStartTime = new Date(givTokenDistroHelper.startTime);
 			_rounStartTime.setDate(
-				tokenDistroHelper.startTime.getDate() + (_round - 1) * 14,
+				givTokenDistroHelper.startTime.getDate() + (_round - 1) * 14,
 			);
-			_rounStartTime.setHours(tokenDistroHelper.startTime.getHours());
-			_rounStartTime.setMinutes(tokenDistroHelper.startTime.getMinutes());
+			_rounStartTime.setHours(givTokenDistroHelper.startTime.getHours());
+			_rounStartTime.setMinutes(
+				givTokenDistroHelper.startTime.getMinutes(),
+			);
 			setRoundStartime(_rounStartTime);
 			const _roundEndTime = new Date(_rounStartTime);
 			_roundEndTime.setDate(_rounStartTime.getDate() + 14);
-			_roundEndTime.setHours(tokenDistroHelper.startTime.getHours());
-			_roundEndTime.setMinutes(tokenDistroHelper.startTime.getMinutes());
+			_roundEndTime.setHours(givTokenDistroHelper.startTime.getHours());
+			_roundEndTime.setMinutes(
+				givTokenDistroHelper.startTime.getMinutes(),
+			);
 			setRoundEndTime(_roundEndTime);
 		}
-	}, [tokenDistroHelper]);
+	}, [givTokenDistroHelper]);
 
 	return (
 		<GIVbacksBottomContainer>
@@ -192,7 +196,7 @@ export const TabGIVbacksBottom = () => {
 								<RoundInfoRow justifyContent='space-between'>
 									<P>Start Date</P>
 									<P>
-										{tokenDistroHelper
+										{givTokenDistroHelper
 											? formatDate(roundStartime)
 											: '-'}
 									</P>
@@ -200,7 +204,7 @@ export const TabGIVbacksBottom = () => {
 								<RoundInfoRow justifyContent='space-between'>
 									<P>End Date</P>
 									<P>
-										{tokenDistroHelper
+										{givTokenDistroHelper
 											? formatDate(roundEndTime)
 											: '-'}
 									</P>
