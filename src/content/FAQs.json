@@ -21,11 +21,11 @@
 	},
 	{
 		"question": "Are there fees for creating a project?",
-		"answer": "Nope! Giveth will never charge any additional fees for creating projects on our platform. If you create a project on Giveth.io it creates an entry in our database that directly points to your chosen Ethereum wallet. You can do this as well with a brand new account that holds zero funds. \n There are minor fees when using the ethereum network, and if you use other exchanges or services, there are likely associated fees."
+		"answer": "Nope! Giveth will never charge any additional fees for creating projects on our platform. If you create a project on Giveth.io it creates an entry in our database that directly points to your chosen Ethereum wallet. You can do this as well with a brand new account that holds zero funds. \n There are minor fees when using the Ethereum network, and if you use other exchanges or services, there are likely associated fees."
 	},
 	{
 		"question": "I’m a donor. How do I know projects are getting my money?",
-		"answer": "Each project description page shows a list of all donations made to that project and by who. We believe that every human being should be able to transparently see their funds create good in the world. Transparency is the key to staying focused on the work at hand. You will get to see photos and receive frequent updates on the status of each project you've donated to."
+		"answer": "Each project description page shows a list of all donations made to that project and by whom. We believe that every human being should be able to transparently see their funds create good in the world. Transparency is the key to staying focused on the work at hand. You will get to see photos and receive frequent updates on the status of each project to which you've donated."
 	},
 	{
 		"question": "What percentage of the donations go directly to the project?",
