@@ -31,6 +31,7 @@ import { StakingType } from '@/types/config';
 import { useWeb3React } from '@web3-react/core';
 import { ETheme, useGeneral } from '@/context/general.context';
 import Routes from '@/lib/constants/Routes';
+import { networkInfo } from '@/lib/constants/NetworksObj';
 
 export const RewardMenu = () => {
 	const [isMounted, setIsMounted] = useState(false);
@@ -46,6 +47,7 @@ export const RewardMenu = () => {
 	const { balances } = currentValues;
 	const { allocatedTokens, claimed, givbackLiquidPart } = balances;
 	const { theme } = useGeneral();
+	const { networkName, networkToken } = networkInfo(chainId);
 
 	useEffect(() => {
 		setGIVstreamLiquidPart(
@@ -94,13 +96,12 @@ export const RewardMenu = () => {
 	useEffect(() => {
 		setIsMounted(true);
 	}, []);
-
 	return (
 		<>
 			<RewardMenuContainer isMounted={isMounted} theme={theme}>
-				<Overline>Network</Overline>
+				<Overline>NETWORK</Overline>
 				<NetworkRow>
-					<B>{library?._network?.name}</B>
+					<B>{networkName}</B>
 					<SwithNetwork onClick={() => switchNetworkHandler(chainId)}>
 						Switch network
 					</SwithNetwork>
