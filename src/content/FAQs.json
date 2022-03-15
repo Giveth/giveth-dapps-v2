@@ -61,11 +61,11 @@
 	},
 	{
 		"question": "What is Blockchain?",
-		"answer": "Simply, it is a secure form of digital cash that can be transferred anywhere in the world peer-to-peer, similar to email (where the emails server is replaced with a decentralized network). \n More technically, Bitcoin is a type of digital currency that uses cryptography and open source software to regulate the generation of units of currency and verify the transfer of funds, operating independently of a central bank. There is a distinction between Bitcoin, the digital currency, and Blockchain the technology, which has many additional potential use cases beyond the currency."
+		"answer": "Simply, it is a secure form of digital cash that can be transferred anywhere in the world peer-to-peer, similar to email's (where the emails server is replaced with a decentralized network). \n More technically, Bitcoin is a type of digital currency that uses cryptography and open source software to regulate the generation of units of currency and verify the transfer of funds, operating independently of a central bank. There is a distinction between Bitcoin the digital currency and Blockchain the technology, which has many additional potential use cases beyond the currency."
 	},
 	{
 		"question": "What is Ethereum?",
-		"answer": "It's the world's programmable blockchain.\r\nEthereum builds on Bitcoin's innovation, with some big differences.\r\nBoth let you use digital money without payment providers or banks. But Ethereum is programmable, so you can also use it for lots of different digital assets – even Bitcoin!\r\nThis also means Ethereum is for more than payments. It's a marketplace of financial services, games and apps that can't steal your data or censor you.\r\nSo step into the bazaar and give it a try..."
+		"answer": "It's the world's programmable blockchain.\r\nEthereum builds on Bitcoin's innovation with some big differences.\r\nBoth let you use digital money without payment providers or banks. But Ethereum is programmable, so you can also use it for many different digital assets – even Bitcoin!\r\nThis also means Ethereum is for more than just payments. It's a network of financial services, games and apps that can't steal your data or censor you.\r\nSo step into the bazaar, and give it a try..."
 	},
 	{
 		"question": "What is Giveth?",
