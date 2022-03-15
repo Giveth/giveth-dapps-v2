@@ -10,7 +10,7 @@ import {
 	ZeroBalances,
 } from '@/types/subgraph';
 import { ethers } from 'ethers';
-import { StakingType } from '@/types/config';
+import { RegenFarmType, StakingType, StreamType } from '@/types/config';
 
 const BN = ethers.BigNumber.from;
 
@@ -46,6 +46,13 @@ const transformBalanceInfo = (info: any): IBalances => {
 	const allocationCount = Number(info.allocationCount || 0);
 	const givDropClaimed = Boolean(info.givDropClaimed);
 
+	const foxAllocatedTokens = BN(info.foxAllocatedTokens || 0);
+	const foxClaimed = BN(info.foxClaimed || 0);
+	const rewardPerTokenPaidFoxHnyLm = BN(info.rewardPerTokenPaidFoxHnyLm || 0);
+	const rewardsFoxHnyLm = BN(info.rewardsFoxHnyLm || 0);
+	const foxHnyLp = BN(info.foxHnyLp || 0);
+	const foxHnyLpStaked = BN(info.foxHnyLpStaked || 0);
+
 	return {
 		balance,
 		allocatedTokens,
@@ -71,10 +78,19 @@ const transformBalanceInfo = (info: any): IBalances => {
 		givStaked,
 		allocationCount,
 		givDropClaimed,
+
+		foxAllocatedTokens,
+		foxClaimed,
+		rewardPerTokenPaidFoxHnyLm,
+		rewardsFoxHnyLm,
+		foxHnyLp,
+		foxHnyLpStaked,
 	};
 };
 
-const transformTokenDistroInfos = (info: any): ITokenDistroInfo => {
+const transformTokenDistroInfo = (info: any): ITokenDistroInfo | undefined => {
+	if (!info) return undefined;
+
 	const _startTime = info.startTime;
 	const _cliffTime = info.cliffTime;
 	const _duration = info.duration;
@@ -89,6 +105,7 @@ const transformTokenDistroInfos = (info: any): ITokenDistroInfo => {
 	const totalTokens = BN(info.totalTokens);
 
 	return {
+		contractAddress: info.id,
 		initialAmount,
 		lockedAmount,
 		totalTokens,
@@ -209,12 +226,12 @@ const transformUniswapV2Pair = (info: any): IUniswapV2Pair | undefined => {
 		reserve1,
 	};
 };
-export const transformSubgraphData = async (
-	data: any = {},
-): Promise<ISubgraphValue> => {
+export const transformSubgraphData = (data: any = {}): ISubgraphValue => {
 	return {
 		balances: transformBalanceInfo(data?.balances),
-		tokenDistroInfo: transformTokenDistroInfos(data?.tokenDistroInfos[0]),
+		tokenDistroInfo: transformTokenDistroInfo(data?.tokenDistroInfo),
+		[StreamType.FOX]: transformTokenDistroInfo(data[StreamType.FOX]),
+
 		[StakingType.GIV_LM]: transformUnipoolInfo(data[StakingType.GIV_LM]),
 		[StakingType.BALANCER]: transformUnipoolInfo(
 			data[StakingType.BALANCER],
@@ -225,6 +242,10 @@ export const transformSubgraphData = async (
 		[StakingType.SUSHISWAP]: transformUnipoolInfo(
 			data[StakingType.SUSHISWAP],
 		),
+		[RegenFarmType.FOX_HNY]: transformUnipoolInfo(
+			data[RegenFarmType.FOX_HNY],
+		),
+
 		uniswapV3Pool: transformUniswapV3Pool(data?.uniswapV3Pool),
 		...transformUniswapPositions(data),
 		uniswapV2EthGivPair: transformUniswapV2Pair(data?.uniswapV2EthGivPair),
