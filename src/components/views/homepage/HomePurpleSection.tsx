@@ -43,7 +43,7 @@ const HomePurpleSection = () => {
 		<Wrapper>
 			<ArcSmall />
 			<ArcBig />
-			<MustardThing className='d-none d-lg-block'>
+			<MustardThing>
 				<ArcMustard />
 				<DotMustard />
 			</MustardThing>
@@ -74,7 +74,7 @@ const HomePurpleSection = () => {
 					</TwitterShareButton>
 				</GivingButtons>
 				<GIVeconomy>
-					<D3>The GIVeconomy</D3>
+					<H3 weight={700}>The GIVeconomy</H3>
 					<br />
 					<Lead>
 						Our system connects the people on the ground directly to

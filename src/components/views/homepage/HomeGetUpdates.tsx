@@ -11,6 +11,7 @@ import styled from 'styled-components';
 
 import { autopilotClient } from '@/services/autopilot';
 import { HomeContainer } from '@/components/views/homepage/Home.sc';
+import { deviceSize } from '@/utils/constants';
 
 function validateEmail(email: string): boolean {
 	const re =
@@ -40,37 +41,41 @@ const HomeGetUpdates = () => {
 
 	return (
 		<Wrapper>
-			<Title weight={700}>
-				{successSubscription ? 'Subscribed!' : 'Get the latest updates'}
-			</Title>
-			<P>
-				{successSubscription
-					? 'Thank you for subscribing to Giveth newsletter. Our first news are coming to your inbox soon.'
-					: 'Subscribe to our newsletter and get all updates straight to your mailbox!'}
-			</P>
-			{!successSubscription && (
-				<InputBox>
-					<div>
-						<EmailInput
-							placeholder='Your email address'
-							error={error}
-							onChange={(
-								e: React.ChangeEvent<HTMLInputElement>,
-							) => setEmail(e.target.value)}
+			<Container>
+				<Title weight={700}>
+					{successSubscription
+						? 'Subscribed!'
+						: 'Get the latest updates'}
+				</Title>
+				<P>
+					{successSubscription
+						? 'Thank you for subscribing to Giveth newsletter. Our first news are coming to your inbox soon.'
+						: 'Subscribe to our newsletter and get all updates straight to your mailbox!'}
+				</P>
+				{!successSubscription && (
+					<InputBox>
+						<div>
+							<EmailInput
+								placeholder='Your email address'
+								error={error}
+								onChange={(
+									e: React.ChangeEvent<HTMLInputElement>,
+								) => setEmail(e.target.value)}
+							/>
+							{error && (
+								<InvalidEmail>
+									Please insert a valid email address!
+								</InvalidEmail>
+							)}
+						</div>
+						<SubscribeButton
+							disabled={!validateEmail(email)}
+							label='SUBSCRIBE'
+							onClick={submitSubscription}
 						/>
-						{error && (
-							<InvalidEmail>
-								Please insert a valid email address!
-							</InvalidEmail>
-						)}
-					</div>
-					<SubscribeButton
-						disabled={!validateEmail(email)}
-						label='SUBSCRIBE'
-						onClick={submitSubscription}
-					/>
-				</InputBox>
-			)}
+					</InputBox>
+				)}
+			</Container>
 		</Wrapper>
 	);
 };
@@ -112,6 +117,11 @@ const SubscribeButton = styled(Button)`
 		background-color: ${neutralColors.gray[400]};
 		color: white;
 	}
+`;
+
+const Container = styled.div`
+	margin: 0 auto;
+	max-width: ${deviceSize.desktop + 'px'};
 `;
 
 const Wrapper = styled(HomeContainer)`
