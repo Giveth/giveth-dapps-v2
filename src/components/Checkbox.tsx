@@ -1,4 +1,5 @@
 import { P, neutralColors } from '@giveth/ui-design-system';
+import { useDeviceDetect } from '@/utils';
 import styled from 'styled-components';
 
 interface ICheckBox {
@@ -13,6 +14,7 @@ const CheckBox = (props: {
 	style?: any;
 }) => {
 	const { onChange, checked, title, style } = props;
+	const { isMobile } = useDeviceDetect();
 	return (
 		<Wrapper
 			onClick={() => onChange(!checked)}
@@ -24,7 +26,9 @@ const CheckBox = (props: {
 			) : (
 				<span />
 			)}
-			<P>{title}</P>
+			<TitleBox>
+				<P>{title}</P>
+			</TitleBox>
 		</Wrapper>
 	);
 };
@@ -52,6 +56,10 @@ const Wrapper = styled.div<ICheckBox>`
 		border-radius: 4px;
 		border: 2px solid ${neutralColors.gray[400]};
 	}
+`;
+
+const TitleBox = styled.div`
+	padding-bottom: 15px;
 `;
 
 export default CheckBox;

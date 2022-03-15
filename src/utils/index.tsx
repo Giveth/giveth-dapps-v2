@@ -1,6 +1,7 @@
 // import Web3 from 'web3'
 // import { GET_PROJECT_BY_ADDRESS } from '../apollo/gql/projects'
 // import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
+import React from 'react';
 import ERC20List from './erc20TokenList';
 import { networkInfo } from '@/lib/constants/NetworksObj';
 import config from '@/configuration';
@@ -27,6 +28,27 @@ export function pollEvery(fn: Function, delay: any) {
 			clearTimeout(timer);
 		};
 	};
+}
+
+export function useDeviceDetect() {
+	const [isMobile, setMobile] = React.useState(false);
+
+	React.useEffect(() => {
+		const userAgent =
+			typeof window.navigator === 'undefined' ? '' : navigator.userAgent;
+		let mobile = Boolean(
+			userAgent.match(
+				/Android|BlackBerry|iPhone|iPod|Opera Mini|IEMobile/i,
+			),
+		);
+		// check width if device not found
+		if (!mobile && typeof window !== 'undefined') {
+			mobile = window.innerWidth <= 425;
+		}
+		setMobile(mobile);
+	}, []);
+
+	return { isMobile };
 }
 
 export function checkNetwork(networkId: number) {
