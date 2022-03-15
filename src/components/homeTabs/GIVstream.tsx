@@ -65,7 +65,7 @@ import { ITokenAllocation } from '@/types/subgraph';
 import { TopFiller } from './commons';
 import { useWeb3React } from '@web3-react/core';
 import { IconGIV } from '../Icons/GIV';
-import { supportedNetworks } from '@/utils/constants';
+import { givEconomySupportedNetworks } from '@/utils/constants';
 import RegenStreamBlock from '../RegenStreamBlock';
 import { Flex } from '../styled-components/Flex';
 import Pagination from '../Pagination';
@@ -182,7 +182,8 @@ export const TabGIVstreamBottom = () => {
 					</H3>
 					<IconGIVStream size={64} />
 					<H1>
-						{chainId && supportedNetworks.includes(chainId)
+						{chainId &&
+						givEconomySupportedNetworks.includes(chainId)
 							? formatWeiHelper(streamAmount)
 							: '0'}
 					</H1>

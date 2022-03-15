@@ -1,5 +1,5 @@
 import config from '@/configuration';
-import { supportedNetworks } from '@/utils/constants';
+import { givEconomySupportedNetworks } from '@/utils/constants';
 import { H3, Lead } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 import styled from 'styled-components';
@@ -38,7 +38,7 @@ const RegenStreamBlock = () => {
 							<RegenStream
 								streamConfig={streamConfig}
 								network={
-									supportedNetworks.includes(
+									givEconomySupportedNetworks.includes(
 										chainId as number,
 									)
 										? (chainId as number)
@@ -58,7 +58,7 @@ const RegenStreamBlock = () => {
 							<RegenStream
 								streamConfig={streamConfig}
 								network={
-									supportedNetworks.includes(
+									givEconomySupportedNetworks.includes(
 										chainId as number,
 									)
 										? (chainId as number)

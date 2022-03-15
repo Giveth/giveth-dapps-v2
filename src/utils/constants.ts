@@ -128,7 +128,7 @@ export const OurImages = [
 	},
 ];
 
-export const supportedNetworks = [
+export const givEconomySupportedNetworks = [
 	config.MAINNET_NETWORK_NUMBER,
 	config.XDAI_NETWORK_NUMBER,
 ];

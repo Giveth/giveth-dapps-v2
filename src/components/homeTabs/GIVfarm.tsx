@@ -32,7 +32,7 @@ import { useFarms } from '@/context/farm.context';
 import { TopFiller, TopInnerContainer, ExtLink, ExtLinkRow } from './commons';
 import { useWeb3React } from '@web3-react/core';
 import { GIVfrens } from '@/components/GIVfrens';
-import { supportedNetworks } from '@/utils/constants';
+import { givEconomySupportedNetworks } from '@/utils/constants';
 import { shortenAddress } from '@/lib/helpers';
 import { Container } from '@/components/Grid';
 
@@ -176,14 +176,15 @@ export const TabGIVfarmBottom = () => {
 				)}
 				{(!chainId ||
 					chainId === config.MAINNET_NETWORK_NUMBER ||
-					!supportedNetworks.includes(chainId)) && (
+					!givEconomySupportedNetworks.includes(chainId)) && (
 					<>
 						<PoolRow
 							justifyContent='center'
 							gap='24px'
 							wrap={1}
 							disabled={
-								!chainId || !supportedNetworks.includes(chainId)
+								!chainId ||
+								!givEconomySupportedNetworks.includes(chainId)
 							}
 						>
 							{config.MAINNET_CONFIG.pools.map(

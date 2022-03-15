@@ -9,7 +9,7 @@ import { BasicNetworkConfig } from '../types/config';
 import { ChangeNetworkModal } from './modals/ChangeNetwork';
 import { useWeb3React } from '@web3-react/core';
 import { switchNetwork } from '@/lib/wallet';
-import { supportedNetworks } from '@/utils/constants';
+import { givEconomySupportedNetworks } from '@/utils/constants';
 
 interface NetworkSelectorProps {
 	disabled?: boolean;
@@ -69,7 +69,7 @@ export const NetworkSelector = () => {
 		<>
 			{chainId ? (
 				<NetworkSelectorContainer
-					disabled={!supportedNetworks.includes(chainId)}
+					disabled={!givEconomySupportedNetworks.includes(chainId)}
 				>
 					<XDaiSelecor
 						isSelected={chainId === config.XDAI_NETWORK_NUMBER}
@@ -86,7 +86,7 @@ export const NetworkSelector = () => {
 					<EthSelector
 						isSelected={
 							chainId === config.MAINNET_NETWORK_NUMBER ||
-							!supportedNetworks.includes(chainId)
+							!givEconomySupportedNetworks.includes(chainId)
 						}
 						onClick={() => {
 							handleChangeNetwork(
