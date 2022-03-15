@@ -7,10 +7,7 @@ const AboutTeam = () => {
 	return (
 		<Wrapper>
 			<Title>Meet our team</Title>
-			<Caption>
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lectus
-				urna orci vel commodo.
-			</Caption>
+			<Caption></Caption>
 			<TeamCards>
 				{GivethTeam.map(i => (
 					<TeamCard key={i.name} member={i} />
