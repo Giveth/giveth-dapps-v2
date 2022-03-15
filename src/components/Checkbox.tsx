@@ -14,7 +14,6 @@ const CheckBox = (props: {
 	style?: any;
 }) => {
 	const { onChange, checked, title, style } = props;
-	const { isMobile } = useDeviceDetect();
 	return (
 		<Wrapper
 			onClick={() => onChange(!checked)}
