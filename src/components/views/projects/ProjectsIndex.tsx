@@ -202,7 +202,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				<Title weight={700}>Projects</Title>
 
 				<Subtitle>
-					Explore the Giveth crypto fundraising platform and give
+					Explore the Giveth crypto fundraising platform, and give
 					crypto directly to charities and social good projects with
 					zero fees on donations!
 				</Subtitle>
@@ -393,6 +393,7 @@ const Title = styled(H3)`
 `;
 
 const Subtitle = styled(Lead)`
+	position: relative;
 	margin-bottom: 25px;
 	font-weight: 400;
 	max-width: 1026px;
