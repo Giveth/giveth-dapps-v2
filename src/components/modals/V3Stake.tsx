@@ -19,7 +19,6 @@ import {
 	HelpRow,
 	Pending,
 	RateRow,
-	StyledScrollbars,
 	TooltipContent,
 } from './HarvestAll.sc';
 import Lottie from 'react-lottie';
@@ -42,7 +41,6 @@ import {
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import { formatWeiHelper } from '@/helpers/number';
 import { getUniswapV3StakerContract } from '@/lib/contracts';
-import { Scrollbars } from 'react-custom-scrollbars';
 import { useWeb3React } from '@web3-react/core';
 import { StakeState } from '@/lib/staking';
 
@@ -162,122 +160,107 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 				)}
 				{(stakeStatus === StakeState.UNKNOWN ||
 					stakeStatus === StakeState.CONFIRMING) && (
-					<StyledScrollbars
-						autoHeight
-						autoHeightMin={'20Vh'}
-						autoHeightMax={'70Vh'}
-					>
-						<InnerModalPositions>
-							{positions.map(position => (
-								<V3StakingCard
-									key={position.tokenId.toString()}
-									position={position}
-									isUnstaking={isUnstakingModal}
-									handleAction={
-										isUnstakingModal
-											? handleAction
-											: handleStakeUnstake
-									}
-									isConfirming={
-										stakeStatus === StakeState.CONFIRMING
-									}
-									selectedPosition={
-										position.tokenId === tokenIdState
-									}
-								/>
-							))}
-						</InnerModalPositions>
-					</StyledScrollbars>
+					<InnerModalPositions>
+						{positions.map(position => (
+							<V3StakingCard
+								key={position.tokenId.toString()}
+								position={position}
+								isUnstaking={isUnstakingModal}
+								handleAction={
+									isUnstakingModal
+										? handleAction
+										: handleStakeUnstake
+								}
+								isConfirming={
+									stakeStatus === StakeState.CONFIRMING
+								}
+								selectedPosition={
+									position.tokenId === tokenIdState
+								}
+							/>
+						))}
+					</InnerModalPositions>
 				)}
 				{(stakeStatus === StakeState.UNSTAKING ||
 					stakeStatus === StakeState.CONFIRM_UNSTAKE) && (
-					<Scrollbars
-						autoHeight
-						autoHeightMin={'20Vh'}
-						autoHeightMax={'70Vh'}
-					>
-						<HarvestContainer>
-							<HelpRow alignItems='center'>
-								<Caption>Rewards earned by your NFT</Caption>
-								<IconWithTooltip
-									icon={
-										<IconHelp
-											size={16}
-											color={brandColors.deep[100]}
-										/>
-									}
-									direction={'top'}
-								>
-									<TooltipContent>
-										When you unstake an NFT from this pool,
-										you also harvest any corresponding
-										rewards
-									</TooltipContent>
-								</IconWithTooltip>
-							</HelpRow>
-							<GIVBoxWithPrice amount={reward} />
-							<HelpRow alignItems='center'>
-								<Caption>
-									Added to your GIVstream flowrate
-								</Caption>
-								<IconWithTooltip
-									icon={
-										<IconHelp
-											size={16}
-											color={brandColors.deep[100]}
-										/>
-									}
-									direction={'top'}
-								>
-									<TooltipContent>
-										Increase you GIVstream flowrate when you
-										claim liquid rewards!
-									</TooltipContent>
-								</IconWithTooltip>
-							</HelpRow>
-							<RateRow alignItems='center'>
-								<IconGIVStream size={24} />
-								<GIVRate>{formatWeiHelper(stream)}</GIVRate>
-								<Lead>GIV/week</Lead>
-							</RateRow>
-							<HelpRow alignItems='center'>
-								<B>Claimable from GIVstream</B>
-							</HelpRow>
-							<GIVBoxWithPrice
-								amount={claimableNow.sub(givBackLiquidPart)}
-							/>
-							<HarvestButtonContainer>
-								{stakeStatus === StakeState.CONFIRM_UNSTAKE ? (
-									<Pending>
-										<Lottie
-											options={loadingAnimationOptions}
-											height={40}
-											width={40}
-										/>
-										&nbsp; PENDING
-									</Pending>
-								) : (
-									<HarvestButton
-										label='UNSTAKE &amp; HARVEST'
-										size='medium'
-										buttonType='primary'
-										onClick={() => {
-											handleStakeUnstake(0);
-										}}
+					<HarvestContainer>
+						<HelpRow alignItems='center'>
+							<Caption>Rewards earned by your NFT</Caption>
+							<IconWithTooltip
+								icon={
+									<IconHelp
+										size={16}
+										color={brandColors.deep[100]}
 									/>
-								)}
-								<CancelButton
-									label='CANCEL'
+								}
+								direction={'top'}
+							>
+								<TooltipContent>
+									When you unstake an NFT from this pool, you
+									also harvest any corresponding rewards
+								</TooltipContent>
+							</IconWithTooltip>
+						</HelpRow>
+						<GIVBoxWithPrice amount={reward} />
+						<HelpRow alignItems='center'>
+							<Caption>Added to your GIVstream flowrate</Caption>
+							<IconWithTooltip
+								icon={
+									<IconHelp
+										size={16}
+										color={brandColors.deep[100]}
+									/>
+								}
+								direction={'top'}
+							>
+								<TooltipContent>
+									Increase you GIVstream flowrate when you
+									claim liquid rewards!
+								</TooltipContent>
+							</IconWithTooltip>
+						</HelpRow>
+						<RateRow alignItems='center'>
+							<IconGIVStream size={24} />
+							<GIVRate>{formatWeiHelper(stream)}</GIVRate>
+							<Lead>GIV/week</Lead>
+						</RateRow>
+						<HelpRow alignItems='center'>
+							<B>Claimable from GIVstream</B>
+						</HelpRow>
+						<GIVBoxWithPrice
+							amount={claimableNow.sub(givBackLiquidPart)}
+						/>
+						<HarvestButtonContainer>
+							{stakeStatus === StakeState.CONFIRM_UNSTAKE ? (
+								<Pending>
+									<Lottie
+										options={loadingAnimationOptions}
+										height={40}
+										width={40}
+									/>
+									&nbsp; PENDING
+								</Pending>
+							) : (
+								<HarvestButton
+									label='UNSTAKE &amp; HARVEST'
 									size='medium'
-									buttonType='texty'
+									buttonType='primary'
 									onClick={() => {
-										setShowModal(false);
+										handleStakeUnstake(0);
 									}}
-									// disabled={claimState === ClaimState.WAITING}
 								/>
-							</HarvestButtonContainer>
-						</HarvestContainer>
-					</Scrollbars>
+							)}
+							<CancelButton
+								label='CANCEL'
+								size='medium'
+								buttonType='texty'
+								onClick={() => {
+									setShowModal(false);
+								}}
+								// disabled={claimState === ClaimState.WAITING}
+							/>
+						</HarvestButtonContainer>
+					</HarvestContainer>
 				)}
 				<InnerModalStates>
 					{chainId && stakeStatus === StakeState.REJECT && (
