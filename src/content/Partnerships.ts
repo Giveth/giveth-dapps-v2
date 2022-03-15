@@ -46,13 +46,13 @@ export const PartnershipArray: IPartner[] = [
 		icon: OneHive,
 		title: '1Hive',
 		description:
-			'A DAO creating open-source tools for community governance and public goods',
+			'A DAO creating open-source tools for community governance and public goods.',
 		link: 'https://about.1hive.org/',
 	},
 	{
 		icon: Alibre,
 		title: 'Alibre',
-		description: 'Financial Services for All',
+		description: 'Financial Services for All.',
 		link: 'https://alibre.io/',
 	},
 	{
@@ -130,7 +130,7 @@ export const PartnershipArray: IPartner[] = [
 		icon: iden3,
 		title: 'iden3',
 		description:
-			'An open-source set of tools for creating and managing self-sovereign identities on public blockchains',
+			'An open-source set of tools for creating and managing self-sovereign identities on public blockchains.',
 		link: 'https://iden3.io/',
 	},
 	{
@@ -170,7 +170,7 @@ export const PartnershipArray: IPartner[] = [
 	{
 		icon: Panvala,
 		title: 'Panvala',
-		description: 'The sustainable treasury for communities to share',
+		description: 'The sustainable treasury for communities to share.',
 		link: 'https://panvala.com/',
 	},
 	{
@@ -189,7 +189,7 @@ export const PartnershipArray: IPartner[] = [
 	{
 		icon: Rainbow_Rolls,
 		title: 'Rainbow Rolls',
-		description: 'Wiping away medical debt, one sheet at a time!.',
+		description: 'Wiping away medical debt, one sheet at a time!',
 		link: 'https://nftp.fun/',
 	},
 	{
