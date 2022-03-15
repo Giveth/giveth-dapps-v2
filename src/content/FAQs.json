@@ -69,14 +69,14 @@
 	},
 	{
 		"question": "What is Giveth?",
-		"answer": "Giveth is a community focused on building the future of giving using blockchain technology. There are a lot of projects in the Giveth Galaxy, but the core 2 projects are:\r\n\r\n- Giveth.io\r\n- beta.giveth.io\r\n\r\nYou can use Giveth to donate to projects or also propose projects that need funding, all using cryptocurrency and soon Fiat currencies!\r\nWe aim to foster a large network of organizations and to build a bright, transparent and decentralized Future of Giving."
+		"answer": "Giveth is a community focused on building the future of Giving using blockchain technology. There are a lot of projects in the Giveth Galaxy, but the core 2 projects are:\r\n\r\n- Giveth.io\r\n- beta.giveth.io.\r\n\r\n You can use Giveth to donate to projects or also propose projects that need funding, all using cryptocurrency and soon fiat currencies!\r\nWe aim to foster a large network of organizations and to build a bright, transparent and decentralized Future of Giving."
 	},
 	{
-		"question": "I still need more detail on how Giveth works, where can I find this?",
-		"answer": "For information about the DAO governing Giveth, please visit the Wiki (https://wiki.giveth.io). For developer documentation and user guides for the Donation Application please have a look at the Docs (https://docs.giveth.io). We always love to welcome you as well in our chatrooms, please visit the Join Page (https://giveth.io/join)"
+		"question": "I still need more detail on how Giveth works. Where can I find this?",
+		"answer": "For information about the DAO governing Giveth, please visit the Wiki (https://wiki.giveth.io). For developer documentation and user guides for the Donation Application please have a look at the docs (https://docs.giveth.io). We always love to welcome you as well in our chatrooms. Please visit the Join Page (https://giveth.io/join)."
 	},
 	{
 		"question": "Where can I see in detail what you are spending donations on?",
-		"answer": "One of the core values of Giveth is transparency. We invite everyone to have a look at our finances. As a Giver you can also ask us for an exclusive tour of the DApp (beta.giveth.io). The Giveth DAC has its own campaign with funding and payout milestones. The funds of that campaign are usually donated to individual's milestones. All movements are visible at a very granular level in the DApp as well as from an Ethereum blockchain explorer. Access to the DApp is gradually opened up to the wider public."
+		"answer": "One of the core values of Giveth is transparency. We invite everyone to have a look at our finances. As a Giver you can also ask us for an exclusive tour of the DApp (beta.giveth.io). The Giveth DAC has its own campaign with funding and payout milestones. The funds of that campaign are usually donated to individual's milestones. All movements are visible at a very granular level in the DApp as well as from an Ethereum blockchain explorer."
 	}
 ]
