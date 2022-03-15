@@ -17,6 +17,7 @@ import Input, {
 	InputValidationType,
 } from '../Input';
 import { IUserInfo } from '../views/onboarding/InfoStep';
+import { mediaQueries } from '@/utils/constants';
 
 enum EditStatusType {
 	INFO,
@@ -264,8 +265,9 @@ const inputFields = [
 
 const Wrapper = styled.div`
 	padding: 24px;
-	min-width: 448px;
-	width: 100%;
+	${mediaQueries.tablet} {
+		width: 448px;
+	}
 `;
 
 const ProfilePicture = styled(Image)`

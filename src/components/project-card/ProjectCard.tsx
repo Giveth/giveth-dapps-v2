@@ -17,6 +17,8 @@ import ProjectCardImage from './ProjectCardImage';
 import { slugToProjectDonate, slugToProjectView } from '@/lib/routeCreators';
 import { Flex } from '../styled-components/Flex';
 import Link from 'next/link';
+import Routes from '@/lib/constants/Routes';
+import { Row } from '@/components/Grid';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -49,7 +51,6 @@ const ProjectCard = (props: IProjectCard) => {
 		<Wrapper
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
-			className='shadow_1'
 		>
 			<ImagePlaceholder>
 				<ProjectCardBadges
@@ -68,7 +69,10 @@ const ProjectCard = (props: IProjectCard) => {
 					<GivingBlockBadge src='/images/thegivingblock.svg' />
 				)}
 				<Title weight={700}>{title}</Title>
-				<Link href={`/user/${adminUser?.walletAddress}`} passHref>
+				<Link
+					href={`${Routes.User}/${adminUser?.walletAddress}`}
+					passHref
+				>
 					<Author size='Big'>{name || '\u200C'}</Author>
 				</Link>
 				<Description>{htmlToText(description)}</Description>
@@ -108,7 +112,7 @@ const LearnMoreButton = styled(OutlineLinkButton)`
 	flex: 1;
 `;
 
-const ActionButtons = styled(Flex)`
+const ActionButtons = styled(Row)`
 	gap: 16px;
 `;
 

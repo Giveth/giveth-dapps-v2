@@ -13,7 +13,6 @@ import {
 
 import { Modal } from '@/components/modals/Modal';
 import { ETheme, useGeneral } from '@/context/general.context';
-import { StyledScrollbars } from '@/components/modals/HarvestAll.sc';
 import links from '@/lib/constants/links';
 
 export const VerificationModal = (props: { closeModal: () => void }) => {
@@ -27,63 +26,48 @@ export const VerificationModal = (props: { closeModal: () => void }) => {
 
 	return (
 		<Modal setShowModal={closeModal} hiddenClose>
-			<StyledScrollbars
-				autoHeight
-				autoHeightMin={'20Vh'}
-				autoHeightMax={'80Vh'}
-				renderTrackHorizontal={props => (
-					<div
-						{...props}
-						style={{ display: 'none' }}
-						className='track-horizontal'
-					/>
-				)}
-			>
-				<Container>
-					<Header>
-						<IconVerified size={54} color={brandColors.cyan[500]} />
-						<div>
-							<Title>Verify your project</Title>
-							<P>Make your project Traceable.</P>
-						</div>
-					</Header>
+			<Container>
+				<Header>
+					<IconVerified size={54} color={brandColors.cyan[500]} />
+					<div>
+						<Title>Verify your project</Title>
+						<P>Make your project Traceable.</P>
+					</div>
+				</Header>
 
-					<Description>
-						Verified is a top tier status for projects wishing to
-						join the GIVbacks program. The GIVbacks program is a
-						revolutionary concept that rewards donors to verified
-						projects with GIV tokens. By applying for a
-						&apos;Verified&apos; project status, you will be able to
-						make your project stand out and encourage more
-						donations. Getting your project verified also builds a
-						relationship of trust with your donors by demonstrating
-						your project&apos;s legitimacy and showing that the
-						funds are being used to create positive change.
-						<br />
-						<br />
-						This simple verification process requires some
-						additional information about your project and the
-						intended impact of your organization. If you would like
-						to apply to receive the &apos;Verified&apos; badge,
-						encourage more giving and give back to those who have
-						helped you reach your goals, please fill out this form.
-					</Description>
+				<Description>
+					Verified is a top tier status for projects wishing to join
+					the GIVbacks program. The GIVbacks program is a
+					revolutionary concept that rewards donors to verified
+					projects with GIV tokens. By applying for a
+					&apos;Verified&apos; project status, you will be able to
+					make your project stand out and encourage more donations.
+					Getting your project verified also builds a relationship of
+					trust with your donors by demonstrating your project&apos;s
+					legitimacy and showing that the funds are being used to
+					create positive change.
+					<br />
+					<br />
+					This simple verification process requires some additional
+					information about your project and the intended impact of
+					your organization. If you would like to apply to receive the
+					&apos;Verified&apos; badge, encourage more giving and give
+					back to those who have helped you reach your goals, please
+					fill out this form.
+				</Description>
 
-					<OkButton
-						label='PROCEED TO VERIFICATION  '
-						onClick={handleClick}
-						buttonType={
-							theme === ETheme.Dark ? 'primary' : 'secondary'
-						}
-						icon={<IconExternalLink />}
-					/>
-					<SkipButton
-						label='CANCEL'
-						onClick={closeModal}
-						buttonType='texty'
-					/>
-				</Container>
-			</StyledScrollbars>
+				<OkButton
+					label='PROCEED TO VERIFICATION  '
+					onClick={handleClick}
+					buttonType={theme === ETheme.Dark ? 'primary' : 'secondary'}
+					icon={<IconExternalLink />}
+				/>
+				<SkipButton
+					label='CANCEL'
+					onClick={closeModal}
+					buttonType='texty'
+				/>
+			</Container>
 		</Modal>
 	);
 };

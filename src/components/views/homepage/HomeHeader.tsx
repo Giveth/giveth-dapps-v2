@@ -7,6 +7,7 @@ import Routes from '@/lib/constants/Routes';
 import { Arc } from '@/components/styled-components/Arc';
 import useUser from '@/context/UserProvider';
 import { isUserRegistered } from '@/lib/helpers';
+import { mediaQueries } from '@/utils/constants';
 
 const HomeHeader = () => {
 	const router = useRouter();
@@ -82,6 +83,11 @@ const MustardArc = styled(Arc)`
 	left: -250px;
 	width: 360px;
 	height: 360px;
+	display: none;
+
+	${mediaQueries.tablet} {
+		display: unset;
+	}
 `;
 
 const Wrapper = styled(FlexCenter)`
