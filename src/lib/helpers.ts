@@ -31,9 +31,9 @@ export const DurationToYMDh = (ms: number) => {
 	let d = duration.getUTCDate() - baseTime.getUTCDate();
 	let h = duration.getUTCHours() - baseTime.getUTCHours();
 	let min = duration.getUTCMinutes() - baseTime.getUTCMinutes();
-	// let sec = duration.getUTCSeconds() - baseTime.getUTCSeconds();
+	let sec = duration.getUTCSeconds() - baseTime.getUTCSeconds();
 
-	return { y, m, d, h, min };
+	return { y, m, d, h, min, sec };
 };
 
 export const DurationToString = (ms: number, length: number = 3) => {

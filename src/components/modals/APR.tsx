@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useState, useMemo } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -13,7 +13,7 @@ import {
 
 import { IModal, Modal } from './Modal';
 import { Flex } from '../styled-components/Flex';
-import { PoolStakingConfig } from '@/types/config';
+import { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import { WhatisGIVstreamModal } from './WhatisGIVstream';
 import Routes from '@/lib/constants/Routes';
@@ -21,12 +21,22 @@ import Routes from '@/lib/constants/Routes';
 interface IAPRModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
 	maxAmount: BigNumber;
+	regenStreamConfig?: RegenStreamConfig;
 }
 
-export const APRModal: FC<IAPRModalProps> = ({ showModal, setShowModal }) => {
+export const APRModal: FC<IAPRModalProps> = ({
+	showModal,
+	setShowModal,
+	regenStreamConfig,
+}) => {
 	const [showWhatIsGIVstreamModal, setShowWhatIsGIVstreamModal] =
 		useState(false);
-	const { tokenDistroHelper } = useTokenDistro();
+	const { getTokenDistroHelper } = useTokenDistro();
+	const { rewardTokenSymbol = 'GIV', type } = regenStreamConfig || {};
+	const tokenDistroHelper = useMemo(
+		() => getTokenDistroHelper(type),
+		[getTokenDistroHelper, type],
+	);
 
 	return (
 		<>
@@ -47,12 +57,13 @@ export const APRModal: FC<IAPRModalProps> = ({ showModal, setShowModal }) => {
 							<SublineBold>IMPORTANT</SublineBold>
 						</AlertRow>
 						<Desc>
-							A percentage of the GIV you earn from staking is
-							claimable immediately, and the remaining percent
-							goes into increasing your GIVstream flow-rate. Over
-							time, a greater percentage of your total earnings
-							will be claimable immediately following the
-							continued expansion of the{' '}
+							A percentage of the {rewardTokenSymbol} you earn
+							from staking is claimable immediately, and the
+							remaining percent goes into increasing your{' '}
+							{rewardTokenSymbol}
+							stream flowrate. Over time, a greater percentage of
+							your total earnings will be claimable immediately
+							following the continued expansion of the{' '}
 							<Link href={Routes.GIVstream_FlowRate} passHref>
 								<GIViverseLink>GIViverse</GIViverseLink>
 							</Link>

@@ -16,6 +16,9 @@ export const TopInnerContainer = styled(Container)`
 	height: 370px;
 `;
 export const TopContainerRow = styled(Flex)``;
+export const BottomContainer = styled.div`
+	margin-top: 32px;
+`;
 export const TopFiller = styled.div`
 	flex: 1;
 `;

@@ -1,4 +1,4 @@
-import { useState, FC, useContext, useEffect } from 'react';
+import { useState, FC, useEffect } from 'react';
 import styled from 'styled-components';
 import { InputWithUnit } from '../input/index';
 import { Flex } from '../styled-components/Flex';
@@ -67,6 +67,7 @@ const DonateCardContainer = styled(Card)`
 		}
 	}
 `;
+
 const GdropDonateTooltip = styled(Subline)`
 	color: ${neutralColors.gray[100]};
 	width: 260px;
@@ -101,7 +102,7 @@ export const DonateCard: FC<IClaimViewCardProps> = ({ index }) => {
 		constants.Zero,
 	);
 	const [earnEstimate, setEarnEstimate] = useState<BigNumber>(Zero);
-	const { tokenDistroHelper } = useTokenDistro();
+	const { givTokenDistroHelper } = useTokenDistro();
 
 	useEffect(() => {
 		if (totalAmount) {
@@ -119,14 +120,14 @@ export const DonateCard: FC<IClaimViewCardProps> = ({ index }) => {
 			donationWithGivBacks.toFixed(0),
 		).mul(constants.WeiPerEther);
 		setPotentialClaim(
-			tokenDistroHelper.getLiquidPart(convertedStackedWithApr),
+			givTokenDistroHelper.getLiquidPart(convertedStackedWithApr),
 		);
 		setEarnEstimate(
-			tokenDistroHelper.getStreamPartTokenPerWeek(
+			givTokenDistroHelper.getStreamPartTokenPerWeek(
 				convertedStackedWithApr,
 			),
 		);
-	}, [donation, tokenDistroHelper]);
+	}, [donation, givTokenDistroHelper]);
 
 	return (
 		<DonateCardContainer activeIndex={step} index={index}>

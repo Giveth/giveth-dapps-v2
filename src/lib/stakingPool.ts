@@ -13,6 +13,8 @@ import config from '../configuration';
 import {
 	BalancerPoolStakingConfig,
 	PoolStakingConfig,
+	RegenFarmType,
+	RegenPoolStakingConfig,
 	SimplePoolStakingConfig,
 	StakingType,
 } from '@/types/config';
@@ -153,13 +155,22 @@ const getBalancerPoolStakingAPR = async (
 	return apr;
 };
 const getSimplePoolStakingAPR = async (
-	simplePoolStakingConfig: SimplePoolStakingConfig,
+	poolStakingConfig: SimplePoolStakingConfig | RegenPoolStakingConfig,
 	network: number,
 	provider: JsonRpcProvider,
 	unipool: IUnipool | undefined,
 ): Promise<APR> => {
-	const { LM_ADDRESS, POOL_ADDRESS } = simplePoolStakingConfig;
-	const tokenAddress = config.NETWORKS_CONFIG[network].TOKEN_ADDRESS;
+	const { LM_ADDRESS, POOL_ADDRESS } = poolStakingConfig;
+	const givTokenAddress = config.NETWORKS_CONFIG[network].TOKEN_ADDRESS;
+	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
+	const streamConfig =
+		regenStreamType &&
+		config.NETWORKS_CONFIG[network].regenStreams.find(
+			s => s.type === regenStreamType,
+		);
+	const tokenAddress = streamConfig
+		? streamConfig.rewardTokenAddress
+		: givTokenAddress;
 	const lmContract = new Contract(LM_ADDRESS, LM_ABI, provider);
 
 	let reserves;
@@ -211,6 +222,7 @@ const getSimplePoolStakingAPR = async (
 
 export const getUserStakeInfo = (
 	type: StakingType,
+	regenFarmType: RegenFarmType | undefined,
 	balance: IBalances,
 	unipoolHelper: UnipoolHelper | undefined,
 ): {
@@ -223,33 +235,44 @@ export const getUserStakeInfo = (
 	let stakedAmount = ethers.constants.Zero;
 	let notStakedAmount = ethers.constants.Zero;
 	let earned = ethers.constants.Zero;
-
-	switch (type) {
-		case StakingType.SUSHISWAP:
-			rewards = balance.rewardsSushiSwap;
-			rewardPerTokenPaid = balance.rewardPerTokenPaidSushiSwap;
-			stakedAmount = balance.sushiSwapLpStaked;
-			notStakedAmount = balance.sushiswapLp;
-			break;
-		case StakingType.HONEYSWAP:
-			rewards = balance.rewardsHoneyswap;
-			rewardPerTokenPaid = balance.rewardPerTokenPaidHoneyswap;
-			stakedAmount = balance.honeyswapLpStaked;
-			notStakedAmount = balance.honeyswapLp;
-			break;
-		case StakingType.BALANCER:
-			rewards = balance.rewardsBalancer;
-			rewardPerTokenPaid = balance.rewardPerTokenPaidBalancer;
-			stakedAmount = balance.balancerLpStaked;
-			notStakedAmount = balance.balancerLp;
-			break;
-		case StakingType.GIV_LM:
-			rewards = balance.rewardsGivLm;
-			rewardPerTokenPaid = balance.rewardPerTokenPaidGivLm;
-			stakedAmount = balance.givStaked;
-			notStakedAmount = balance.balance;
-			break;
-		default:
+	if (regenFarmType) {
+		switch (regenFarmType) {
+			case RegenFarmType.FOX_HNY:
+				rewards = balance.rewardsFoxHnyLm;
+				rewardPerTokenPaid = balance.rewardPerTokenPaidFoxHnyLm;
+				stakedAmount = balance.foxHnyLpStaked;
+				notStakedAmount = balance.foxHnyLp;
+				break;
+			default:
+		}
+	} else {
+		switch (type) {
+			case StakingType.SUSHISWAP:
+				rewards = balance.rewardsSushiSwap;
+				rewardPerTokenPaid = balance.rewardPerTokenPaidSushiSwap;
+				stakedAmount = balance.sushiSwapLpStaked;
+				notStakedAmount = balance.sushiswapLp;
+				break;
+			case StakingType.HONEYSWAP:
+				rewards = balance.rewardsHoneyswap;
+				rewardPerTokenPaid = balance.rewardPerTokenPaidHoneyswap;
+				stakedAmount = balance.honeyswapLpStaked;
+				notStakedAmount = balance.honeyswapLp;
+				break;
+			case StakingType.BALANCER:
+				rewards = balance.rewardsBalancer;
+				rewardPerTokenPaid = balance.rewardPerTokenPaidBalancer;
+				stakedAmount = balance.balancerLpStaked;
+				notStakedAmount = balance.balancerLp;
+				break;
+			case StakingType.GIV_LM:
+				rewards = balance.rewardsGivLm;
+				rewardPerTokenPaid = balance.rewardPerTokenPaidGivLm;
+				stakedAmount = balance.givStaked;
+				notStakedAmount = balance.balance;
+				break;
+			default:
+		}
 	}
 
 	if (unipoolHelper) {

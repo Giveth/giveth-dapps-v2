@@ -1,4 +1,7 @@
 import {
+	BasicNetworkConfig,
+	RegenPoolStakingConfig,
+	RegenStreamConfig,
 	SimplePoolStakingConfig,
 	StakingType,
 	UniswapV3PoolStakingConfig,
@@ -37,11 +40,18 @@ export class SubgraphQueryBuilder {
 			givStaked
 			allocationCount
 			givDropClaimed
+			
+			foxAllocatedTokens
+			foxClaimed
+			rewardPerTokenPaidFoxHnyLm
+			rewardsFoxHnyLm
+			foxHnyLp
+			foxHnyLpStaked
 		}`;
 	};
 
-	private static getTokenDistroInfoQuery = (): string => {
-		return `tokenDistroContractInfos(first:10){
+	private static getTokenDistroInfoQuery = (address: string): string => {
+		return `tokenDistroContractInfo(id: "${address.toLowerCase()}"){
 		  id
 		  initialAmount
 		  duration
@@ -51,6 +61,28 @@ export class SubgraphQueryBuilder {
 		  totalTokens
 		}
 		`;
+	};
+
+	private static generateTokenDistroInfoQueries = (
+		networkConfig: BasicNetworkConfig,
+	): string => {
+		const mainTokenDistroQuery = `
+		tokenDistroInfo: ${SubgraphQueryBuilder.getTokenDistroInfoQuery(
+			networkConfig.TOKEN_DISTRO_ADDRESS,
+		)}
+		`;
+
+		const regenFarmsTokenDistroQueries = networkConfig.regenStreams
+			.map((regenStream: RegenStreamConfig) => {
+				return `
+			${regenStream.type}: ${SubgraphQueryBuilder.getTokenDistroInfoQuery(
+					regenStream.tokenDistroAddress,
+				)}
+			`;
+			})
+			.join();
+
+		return mainTokenDistroQuery + regenFarmsTokenDistroQueries;
 	};
 
 	private static getUnipoolInfoQuery = (address: string): string => {
@@ -143,15 +175,15 @@ export class SubgraphQueryBuilder {
 	};
 
 	private static generateUnipoolInfoQueries = (
-		configs: SimplePoolStakingConfig[],
+		configs: Array<SimplePoolStakingConfig | RegenPoolStakingConfig>,
 	): string => {
 		return configs
-			.map(
-				c =>
-					`${c.type}: ${SubgraphQueryBuilder.getUnipoolInfoQuery(
-						c.LM_ADDRESS,
-					)}`,
-			)
+			.map((c: SimplePoolStakingConfig | RegenPoolStakingConfig) => {
+				const { regenFarmType, type } = c as RegenPoolStakingConfig;
+				return `${
+					regenFarmType || type
+				}: ${SubgraphQueryBuilder.getUnipoolInfoQuery(c.LM_ADDRESS)}`;
+			})
 			.join();
 	};
 
@@ -163,12 +195,13 @@ export class SubgraphQueryBuilder {
 		return `
 		{
 			balances: ${SubgraphQueryBuilder.getBalanceQuery(address)}
-			tokenDistroInfos: ${SubgraphQueryBuilder.getTokenDistroInfoQuery()}
+			${SubgraphQueryBuilder.generateTokenDistroInfoQueries(config.MAINNET_CONFIG)}
 			${SubgraphQueryBuilder.generateUnipoolInfoQueries([
 				getGivStakingConfig(config.MAINNET_CONFIG),
 				...config.MAINNET_CONFIG.pools.filter(
 					c => c.type !== StakingType.UNISWAP,
 				),
+				...config.XDAI_CONFIG.regenFarms,
 			])}
 			uniswapV3Pool: ${SubgraphQueryBuilder.getUniswapV3PoolQuery(
 				uniswapConfig.UNISWAP_V3_LP_POOL,
@@ -182,11 +215,11 @@ export class SubgraphQueryBuilder {
 		return `
 		{
 			balances: ${SubgraphQueryBuilder.getBalanceQuery(address)}
-			tokenDistroInfos: ${SubgraphQueryBuilder.getTokenDistroInfoQuery()}
-			
+			${SubgraphQueryBuilder.generateTokenDistroInfoQueries(config.XDAI_CONFIG)}
 			${SubgraphQueryBuilder.generateUnipoolInfoQueries([
 				getGivStakingConfig(config.XDAI_CONFIG),
 				...config.XDAI_CONFIG.pools,
+				...config.XDAI_CONFIG.regenFarms,
 			])}
 			
 			uniswapV2EthGivPair: ${SubgraphQueryBuilder.getPairInfoQuery(
