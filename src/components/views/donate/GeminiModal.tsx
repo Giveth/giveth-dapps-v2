@@ -4,7 +4,7 @@ import { TwitterShareButton } from 'react-share';
 // We need to add icon customization on the design system
 import { Button } from '../../styled-components/Button';
 import { P } from '@giveth/ui-design-system';
-import { useDeviceDetect } from '@/utils';
+import useDeviceDetect from '@/hooks/useDeviceDetect';
 import { mediaQueries } from '@/utils/constants';
 import styled from 'styled-components';
 

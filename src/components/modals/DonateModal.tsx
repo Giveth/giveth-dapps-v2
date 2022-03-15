@@ -376,19 +376,13 @@ const DonateModal = ({
 };
 
 const DonateContainer = styled.div`
-	width: 494px;
 	background: white;
 	color: black;
 	padding: 0 24px 38px 24px;
 	margin: -30px 0 0 0;
-	${mediaQueries['mobileS']} {
-		width: 100%;
-	}
-	${mediaQueries['mobileM']} {
-		width: 100%;
-	}
-	${mediaQueries['mobileL']} {
-		width: 100%;
+	width: 100%;
+	${mediaQueries['tablet']} {
+		width: 494px;
 	}
 `;
 

@@ -1,5 +1,4 @@
 import { P, neutralColors } from '@giveth/ui-design-system';
-import { useDeviceDetect } from '@/utils';
 import styled from 'styled-components';
 
 interface ICheckBox {

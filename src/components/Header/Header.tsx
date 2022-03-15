@@ -9,7 +9,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import { ThemeType } from '@/context/theme.context';
 import { formatWeiHelper } from '@/helpers/number';
 import { networksParams } from '@/helpers/blockchain';
-import { useDeviceDetect } from '@/utils';
+import useDeviceDetect from '@/hooks/useDeviceDetect';
 import {
 	ConnectButton,
 	HBBalanceLogo,

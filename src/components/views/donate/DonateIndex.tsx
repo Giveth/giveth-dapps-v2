@@ -11,7 +11,7 @@ import ConfettiAnimation from '../../animations/confetti';
 import RadioOnIcon from '/public/images/radio_on.svg';
 import RadioOffIcon from '/public/images/radio_off.svg';
 import { formatEtherscanLink } from '../../../utils';
-import { useDeviceDetect } from '@/utils';
+import useDeviceDetect from '@/hooks/useDeviceDetect';
 import { mediaQueries } from '@/utils/constants';
 import SocialBox from './SocialBox';
 import {
@@ -199,27 +199,25 @@ const ProjectsIndex = (props: IProjectBySlug) => {
 	};
 
 	return (
-		<>
-			<Container>
-				<BigArc />
-				<Wrapper>
-					<Sections>
-						<ProjectCardSelector />
-						<Right>
-							{isSuccess ? (
-								<SuccessView />
-							) : (
-								<>
-									<H4>Donate With</H4>
-									<TypeSelection />
-								</>
-							)}
-						</Right>
-					</Sections>
-					{!isSuccess && !isMobile && <SocialBox project={project} />}
-				</Wrapper>
-			</Container>
-		</>
+		<Container>
+			<BigArc />
+			<Wrapper>
+				<Sections>
+					<ProjectCardSelector />
+					<Right>
+						{isSuccess ? (
+							<SuccessView />
+						) : (
+							<>
+								<H4>Donate With</H4>
+								<TypeSelection />
+							</>
+						)}
+					</Right>
+				</Sections>
+				{!isSuccess && !isMobile && <SocialBox project={project} />}
+			</Wrapper>
+		</Container>
 	);
 };
 
