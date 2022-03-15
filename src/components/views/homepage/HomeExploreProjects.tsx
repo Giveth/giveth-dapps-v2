@@ -76,8 +76,7 @@ const HomeExploreProjects = (props: IHomeExploreProjects) => {
 };
 
 const AllProjectsButton = styled(Button)`
-	height: 66px;
-	padding: 0 80px;
+	width: 300px;
 `;
 
 const CreateProject = styled(Button)`
