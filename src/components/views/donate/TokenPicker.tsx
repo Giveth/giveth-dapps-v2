@@ -1,5 +1,7 @@
 import { FunctionComponent, ReactNode, useEffect, useState } from 'react';
 import Select, {
+	Props,
+	GroupBase,
 	components,
 	OptionProps,
 	OnChangeValue,
@@ -25,6 +27,16 @@ interface ISelectObj {
 interface ITokenPicker {
 	isOpen: boolean;
 	isMobile?: boolean;
+}
+
+declare module 'react-select/dist/declarations/src/Select' {
+	export interface Props<
+		Option,
+		IsMulti extends boolean,
+		Group extends GroupBase<Option>,
+	> {
+		isMobile: boolean;
+	}
 }
 
 const { colors } = defaultTheme;
