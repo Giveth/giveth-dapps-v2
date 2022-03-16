@@ -114,7 +114,7 @@ export const RewardMenu = () => {
 					</SwithNetwork>
 				</NetworkRow>
 				<FlowrateBox theme={theme}>
-					<Overline styleType='Small'>GIVStream Flowrate</Overline>
+					<Overline styleType='Small'>GIVstream Flowrate</Overline>
 					<FlowrateRow>
 						<Image
 							src='/images/icons/thunder.svg'
@@ -139,7 +139,7 @@ export const RewardMenu = () => {
 					<a>
 						<PartRow theme={theme}>
 							<PartInfo>
-								<PartTitle as='span'>From Givstream</PartTitle>
+								<PartTitle as='span'>From GIVstream</PartTitle>
 								<Flex gap='4px'>
 									<PartAmount medium>
 										{formatWeiHelper(givStreamLiquidPart)}
@@ -161,7 +161,7 @@ export const RewardMenu = () => {
 						<PartRow theme={theme}>
 							<PartInfo>
 								<PartTitle as='span'>
-									GIVFarm & Givgarden
+									GIVfarm & GIVgarden
 								</PartTitle>
 								<Flex gap='4px'>
 									<PartAmount medium>
@@ -183,7 +183,7 @@ export const RewardMenu = () => {
 					<a>
 						<PartRow theme={theme}>
 							<PartInfo>
-								<PartTitle as='span'>GIVBacks</PartTitle>
+								<PartTitle as='span'>GIVbacks</PartTitle>
 								<Flex gap='4px'>
 									<PartAmount medium>
 										{formatWeiHelper(givbackLiquidPart)}
