@@ -1,12 +1,12 @@
 // Just for external links
 
-import { isProduction } from '@/configuration';
+import config, { isProduction } from '@/configuration';
 import Routes from '@/lib/constants/Routes';
 
 const DOCS = 'https://docs.giveth.io/';
 
 const links: any = {
-	BACKEND: 'https://serve.giveth.io/graphql',
+	BACKEND: config.BACKEND_LINK,
 	FRONTEND: 'https://giveth-dapps-v2.vercel.app/',
 	REPORT_ISSUE: 'https://github.com/Giveth/giveth-dapps-v2/issues/new',
 	ASK_QUESTION: 'https://giveth.typeform.com/question',
