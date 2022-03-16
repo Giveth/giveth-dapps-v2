@@ -42,12 +42,11 @@ import {
 	IGsDataBox,
 	IncreaseSection,
 	IncreaseSectionTitle,
-	Left,
 	NoData,
 	PercentageRow,
-	Right,
 	TxHash,
 	TxSpan,
+	TitleCol,
 } from './GIVstream.sc';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { getHistory } from '@/services/subgraph.service';
@@ -62,7 +61,6 @@ import { HarvestAllModal } from '../modals/HarvestAll';
 import { Zero } from '@ethersproject/constants';
 import { useSubgraph } from '@/context';
 import { ITokenAllocation } from '@/types/subgraph';
-import { TopFiller } from './commons';
 import { useWeb3React } from '@web3-react/core';
 import { IconGIV } from '../Icons/GIV';
 import { givEconomySupportedNetworks } from '@/utils/constants';
@@ -70,7 +68,7 @@ import RegenStreamBlock from '../RegenStreamBlock';
 import { Flex } from '../styled-components/Flex';
 import Pagination from '../Pagination';
 import Routes from '@/lib/constants/Routes';
-import { Container } from '@/components/Grid';
+import { Container, Row, Col } from '@/components/Grid';
 
 export const TabGIVstreamTop = () => {
 	const [showModal, setShowModal] = useState(false);
@@ -100,9 +98,8 @@ export const TabGIVstreamTop = () => {
 		<>
 			<GIVstreamTopContainer>
 				<GIVstreamTopInnerContainer>
-					<TopFiller />
-					<Flex justifyContent='space-between'>
-						<Left>
+					<Row style={{ alignItems: 'flex-end' }}>
+						<TitleCol xs={12} sm={7} xl={8}>
 							<Flex alignItems='baseline' gap='16px'>
 								<GSTitle>GIVstream</GSTitle>
 								<IconGIVStream size={64} />
@@ -112,8 +109,8 @@ export const TabGIVstreamTop = () => {
 								GIVstream aligns community members with the long
 								term success of Giveth and the GIVeconomy.
 							</GSSubtitle>
-						</Left>
-						<Right>
+						</TitleCol>
+						<Col xs={12} sm={5} xl={4}>
 							<GIVstreamRewardCard
 								wrongNetworkText='GIVstream is only available on Mainnet and Gnosis Chain.'
 								liquidAmount={rewardLiquidPart}
@@ -128,8 +125,8 @@ export const TabGIVstreamTop = () => {
 									config.XDAI_NETWORK_NUMBER,
 								]}
 							/>
-						</Right>
-					</Flex>
+						</Col>
+					</Row>
 				</GIVstreamTopInnerContainer>
 			</GIVstreamTopContainer>
 			{showModal && chainId && (
@@ -176,7 +173,7 @@ export const TabGIVstreamBottom = () => {
 		<GIVstreamBottomContainer>
 			<Container>
 				<NetworkSelector />
-				<FlowRateRow alignItems='baseline' gap='8px'>
+				<FlowRateRow alignItems='baseline' gap='8px' wrap={1}>
 					<H3 id='flowRate' weight={700}>
 						Your Flowrate:
 					</H3>
@@ -214,30 +211,35 @@ export const TabGIVstreamBottom = () => {
 					</IconWithTooltip>
 				</HistoryTitleRow>
 				<GIVstreamHistory />
-				<Flex wrap={1} justifyContent='space-between'>
-					<GsDataBlock
-						title='GIVstream'
-						button={
-							<GsButton
-								label='LEARN MORE'
-								linkType='secondary'
-								size='large'
-								target='_blank'
-								href='https://docs.giveth.io/giveconomy/givstream'
-							/>
-						}
-					>
-						Your GIVstream provides a continuous flow of claimable
-						GIV until December 23, 2026. Anyone can get or increase
-						their GIVstream by participating in the GIVeconomy.
-					</GsDataBlock>
-					<GsDataBlock title='Expanding GIViverse'>
-						The GIVeconomy begins humbly but as time passes, the
-						GIViverse expands and more GIV flows from GIVstream.
-						This way, as the GIVeconomy grows, so do the governance
-						rights of our community.
-					</GsDataBlock>
-				</Flex>
+				<Row>
+					<Col xs={12} sm={6}>
+						<GsDataBlock
+							title='GIVstream'
+							button={
+								<GsButton
+									label='LEARN MORE'
+									linkType='secondary'
+									size='large'
+									target='_blank'
+									href='https://docs.giveth.io/giveconomy/givstream'
+								/>
+							}
+						>
+							Your GIVstream provides a continuous flow of
+							claimable GIV until December 23, 2026. Anyone can
+							get or increase their GIVstream by participating in
+							the GIVeconomy.
+						</GsDataBlock>
+					</Col>
+					<Col xs={12} sm={6}>
+						<GsDataBlock title='Expanding GIViverse'>
+							The GIVeconomy begins humbly but as time passes, the
+							GIViverse expands and more GIV flows from GIVstream.
+							This way, as the GIVeconomy grows, so do the
+							governance rights of our community.
+						</GsDataBlock>
+					</Col>
+				</Row>
 			</Container>
 			<IncreaseSection ref={increaseSecRef}>
 				<Container>
@@ -245,54 +247,62 @@ export const TabGIVstreamBottom = () => {
 						Increase your GIVstream
 						<IconSpark size={32} color={brandColors.mustard[500]} />
 					</IncreaseSectionTitle>
-					<Flex wrap={1} justifyContent='space-between'>
-						<IGsDataBox
-							title='GIVbacks'
-							button={
-								<GsButton
-									label='SEE PROJECTS'
-									linkType='primary'
-									size='medium'
-									href={Routes.Projects}
-								/>
-							}
-						>
-							Donate to verified projects on Giveth. Get GIV and
-							increase your GIVstream with the GIVbacks program.
-						</IGsDataBox>
-						<IGsDataBox
-							title='GIVgarden'
-							button={
-								<GsButton
-									label='SEE PROPOSALS'
-									linkType='primary'
-									size='medium'
-									href={config.GARDEN_LINK}
-									target='_blank'
-								/>
-							}
-						>
-							The GIVgarden is the decentralized governance
-							platform for the GIVeconomy. Increase your GIVstream
-							when you wrap GIV to vote.
-						</IGsDataBox>
-						<IGsDataBox
-							title='GIVfarm'
-							button={
-								<Link href={Routes.GIVfarm} passHref>
+					<Row>
+						<Col xs={12} sm={6} md={4}>
+							<IGsDataBox
+								title='GIVbacks'
+								button={
 									<GsButton
-										label='SEE OPPORTUNITIES'
+										label='SEE PROJECTS'
 										linkType='primary'
 										size='medium'
+										href={Routes.Project}
+										target='_blank'
 									/>
-								</Link>
-							}
-						>
-							Stake GIV, or become a liquidity provider and stake
-							LP tokens in the GIVfarm. Get GIV rewards and
-							increase your GIVstream.
-						</IGsDataBox>
-					</Flex>
+								}
+							>
+								Donate to verified projects on Giveth. Get GIV
+								and increase your GIVstream with the GIVbacks
+								program.
+							</IGsDataBox>
+						</Col>
+						<Col xs={12} sm={6} md={4}>
+							<IGsDataBox
+								title='GIVgarden'
+								button={
+									<GsButton
+										label='SEE PROPOSALS'
+										linkType='primary'
+										size='medium'
+										href={config.GARDEN_LINK}
+										target='_blank'
+									/>
+								}
+							>
+								The GIVgarden is the decentralized governance
+								platform for the GIVeconomy. Increase your
+								GIVstream when you wrap GIV to vote.
+							</IGsDataBox>
+						</Col>
+						<Col xs={12} sm={6} md={4}>
+							<IGsDataBox
+								title='GIVfarm'
+								button={
+									<Link href={Routes.GIVfarm} passHref>
+										<GsButton
+											label='SEE OPPORTUNITIES'
+											linkType='primary'
+											size='medium'
+										/>
+									</Link>
+								}
+							>
+								Stake GIV, or become a liquidity provider and
+								stake LP tokens in the GIVfarm. Get GIV rewards
+								and increase your GIVstream.
+							</IGsDataBox>
+						</Col>
+					</Row>
 				</Container>
 			</IncreaseSection>
 		</GIVstreamBottomContainer>

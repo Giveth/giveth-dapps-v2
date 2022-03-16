@@ -26,6 +26,7 @@ import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
 import { RegenRewardCard } from './RegenRewardCard';
 import { Flex } from './styled-components/Flex';
+import { Row, Col } from './Grid';
 
 interface RegenStreamProps {
 	network: number;
@@ -91,7 +92,7 @@ export const RegenStream: FC<RegenStreamProps> = ({
 	return (
 		<>
 			<RegenStreamContainer>
-				<Info>
+				<Info xs={12} sm={6} md={8} lg={9}>
 					<RegenStreamTitleRow>
 						{icon}
 						<H5>{streamConfig.rewardTokenSymbol} Flowrate</H5>
@@ -137,20 +138,20 @@ export const RegenStream: FC<RegenStreamProps> = ({
 					</PercentageRow>
 				</Info>
 				{showRewardCard && (
-					<RegenRewardCard
-						network={network}
-						streamConfig={streamConfig}
-						liquidAmount={rewardLiquidPart}
-					/>
+					<Col xs={12} sm={6} md={4} lg={3}>
+						<RegenRewardCard
+							network={network}
+							streamConfig={streamConfig}
+							liquidAmount={rewardLiquidPart}
+						/>
+					</Col>
 				)}
 			</RegenStreamContainer>
 		</>
 	);
 };
 
-const RegenStreamContainer = styled(Flex)`
-	gap: 24px;
-`;
+const RegenStreamContainer = styled(Row)``;
 
 const RegenStreamTitleRow = styled(Flex)`
 	gap: 8px;
@@ -171,6 +172,4 @@ const RegenStreamInfoRow = styled(Flex)`
 	margin-bottom: 24px;
 `;
 
-const Info = styled.div`
-	flex: 1;
-`;
+const Info = styled(Col)``;

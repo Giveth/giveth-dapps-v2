@@ -38,12 +38,11 @@ import { getNowUnixMS } from '@/helpers/time';
 import { useSubgraph } from '@/context';
 import { formatDate } from '@/lib/helpers';
 import { GIVBackExplainModal } from '../modals/GIVBackExplain';
-import { TopFiller, TopInnerContainer } from './commons';
+import { TopInnerContainer } from './commons';
 import { useWeb3React } from '@web3-react/core';
 import links from '@/lib/constants/links';
-import { Container } from '@/components/Grid';
+import { Col, Container, Row } from '@/components/Grid';
 import Routes from '@/lib/constants/Routes';
-import { useRouter } from 'next/router';
 
 export const TabGIVbacksTop = () => {
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
@@ -65,9 +64,8 @@ export const TabGIVbacksTop = () => {
 		<>
 			<GIVbacksTopContainer>
 				<TopInnerContainer>
-					<TopFiller />
-					<Flex justifyContent='space-between'>
-						<Left>
+					<Row style={{ alignItems: 'flex-end' }}>
+						<Col xs={12} sm={7} xl={8}>
 							<Flex alignItems='baseline' gap='16px'>
 								<GBTitle>GIVbacks</GBTitle>
 								<IconGIVBack size={64} />
@@ -77,8 +75,8 @@ export const TabGIVbacksTop = () => {
 								with GIV, super-charging Giveth as a
 								donor-driven force for good.
 							</GBSubtitle>
-						</Left>
-						<Right>
+						</Col>
+						<Col xs={12} sm={5} xl={4}>
 							<GIVbackRewardCard
 								title='Your GIVbacks rewards'
 								wrongNetworkText='GIVbacks is only available on Gnosis Chain.'
@@ -99,8 +97,8 @@ export const TabGIVbacksTop = () => {
 								network={chainId}
 								targetNetworks={[config.XDAI_NETWORK_NUMBER]}
 							/>
-						</Right>
-					</Flex>
+						</Col>
+					</Row>
 				</TopInnerContainer>
 			</GIVbacksTopContainer>
 			{showHarvestModal && (
@@ -126,7 +124,6 @@ export const TabGIVbacksBottom = () => {
 	const [roundStartime, setRoundStartime] = useState(new Date());
 	const [roundEndTime, setRoundEndTime] = useState(new Date());
 	const { givTokenDistroHelper } = useTokenDistro();
-	const router = useRouter();
 
 	useEffect(() => {
 		if (givTokenDistroHelper) {
@@ -157,102 +154,111 @@ export const TabGIVbacksBottom = () => {
 	return (
 		<GIVbacksBottomContainer>
 			<Container>
-				<Flex wrap={1} justifyContent='space-between'>
-					<GbDataBlock
-						title='Donor Rewards'
-						button={
-							<GbButton
-								label='DONATE TO EARN GIV'
-								linkType='secondary'
-								size='large'
-								href={Routes.Projects}
-							/>
-						}
-					>
-						When you donate to verified projects you qualify to
-						receive GIV tokens. Through GIVbacks, GIV empowers
-						donors with governance rights via the GIVgarden.
-					</GbDataBlock>
-					<GbDataBlock
-						title='Project Verification'
-						button={
-							<GbButton
-								label='VERIFY YOUR PROJECT'
-								linkType='secondary'
-								size='large'
-								href='https://giveth.typeform.com/verification'
-								target='_blank'
-							/>
-						}
-					>
-						Great projects make the GIVeconomy thrive! As a project
-						owner, when you get your project verified, your donors
-						become eligible to receive GIVbacks.
-					</GbDataBlock>
-				</Flex>
+				<Row>
+					<Col xs={12} sm={6}>
+						<GbDataBlock
+							title='Donor Rewards'
+							button={
+								<GbButton
+									label='DONATE TO EARN GIV'
+									linkType='secondary'
+									size='large'
+									href={Routes.Project}
+								/>
+							}
+						>
+							When you donate to verified projects you qualify to
+							receive GIV tokens. Through GIVbacks, GIV empowers
+							donors with governance rights via the GIVgarden.
+						</GbDataBlock>
+					</Col>
+					<Col xs={12} sm={6}>
+						<GbDataBlock
+							title='Project Verification'
+							button={
+								<GbButton
+									label='VERIFY YOUR PROJECT'
+									linkType='secondary'
+									size='large'
+									href='https://giveth.typeform.com/verification'
+									target='_blank'
+								/>
+							}
+						>
+							Great projects make the GIVeconomy thrive! As a
+							project owner, when you get your project verified,
+							your donors become eligible to receive GIVbacks.
+						</GbDataBlock>
+					</Col>
+				</Row>
 				<GIVBackCard>
-					<Flex justifyContent='space-between' alignItems='center'>
-						<RoundSection>
-							<RoundTitle>GIVbacks Round {round}</RoundTitle>
-							<RoundInfo>
-								<RoundInfoRow justifyContent='space-between'>
-									<P>Start Date</P>
-									<P>
-										{givTokenDistroHelper
-											? formatDate(roundStartime)
-											: '-'}
-									</P>
-								</RoundInfoRow>
-								<RoundInfoRow justifyContent='space-between'>
-									<P>End Date</P>
-									<P>
-										{givTokenDistroHelper
-											? formatDate(roundEndTime)
-											: '-'}
-									</P>
-								</RoundInfoRow>
-								<RoundInfoTallRow
-									justifyContent='space-between'
-									alignItems='center'
+					<Row>
+						<Col xs={12} md={8}>
+							<RoundSection>
+								<RoundTitle>GIVbacks Round {round}</RoundTitle>
+								<RoundInfo>
+									<RoundInfoRow justifyContent='space-between'>
+										<P>Start Date</P>
+										<P>
+											{givTokenDistroHelper
+												? formatDate(roundStartime)
+												: '-'}
+										</P>
+									</RoundInfoRow>
+									<RoundInfoRow justifyContent='space-between'>
+										<P>End Date</P>
+										<P>
+											{givTokenDistroHelper
+												? formatDate(roundEndTime)
+												: '-'}
+										</P>
+									</RoundInfoRow>
+									<RoundInfoTallRow
+										justifyContent='space-between'
+										alignItems='center'
+									>
+										<P>GIV Allocated to Round</P>
+										<GivAllocated>
+											1 Million GIV
+										</GivAllocated>
+									</RoundInfoTallRow>
+									<RoundButton
+										size='small'
+										label={'DONATE TO EARN GIV'}
+										linkType='primary'
+										href={Routes.Projects}
+									/>
+								</RoundInfo>
+							</RoundSection>
+						</Col>
+						<Col xs={12} md={4}>
+							<InfoSection>
+								<InfoImage src='/images/hands.svg' />
+								<InfoTitle weight={700}>
+									When you give you get GIV back!
+								</InfoTitle>
+								<InfoDesc>
+									Each GIVbacks round lasts two weeks. After
+									the End Date, the GIV Allocated to that
+									round is distributed to Givers who donated
+									to verified projects during the round.
+									Projects must apply for verification at
+									least 1 week prior to the Start Date in
+									order to be included in the round.
+								</InfoDesc>
+								<InfoReadMore
+									target='_blank'
+									href={links.GIVBACK_DOC}
 								>
-									<P>GIV Allocated to Round</P>
-									<GivAllocated>1 Million GIV</GivAllocated>
-								</RoundInfoTallRow>
-								<RoundButton
-									size='small'
-									label={'DONATE TO EARN GIV'}
-									buttonType='primary'
-									onClick={() => {
-										router.push(Routes.Projects);
-									}}
-								/>
-							</RoundInfo>
-						</RoundSection>
-						<InfoSection>
-							<InfoImage src='/images/hands.svg' />
-							<InfoTitle weight={700}>
-								When you give you get GIV back!
-							</InfoTitle>
-							<InfoDesc>
-								Each GIVbacks round lasts two weeks. After the
-								End Date, the GIV Allocated to that round is
-								distributed to Givers who donated to verified
-								projects during the round. Projects must apply
-								for verification at least 1 week prior to the
-								Start Date in order to be included in the round.
-							</InfoDesc>
-							<InfoReadMore
-								target='_blank'
-								href={links.GIVBACK_DOC}
-							>
-								<span>Read More </span>
-								<IconExternalLink
-									size={16}
-									color={brandColors.cyan[500]}
-								/>
-							</InfoReadMore>
-						</InfoSection>
-					</Flex>
+									<span>Read More </span>
+									<IconExternalLink
+										size={16}
+										color={brandColors.cyan[500]}
+									/>
+								</InfoReadMore>
+							</InfoSection>
+						</Col>
+					</Row>
 				</GIVBackCard>
 			</Container>
 		</GIVbacksBottomContainer>

@@ -31,7 +31,7 @@ const RegenStreamBlock = () => {
 				</GIVfrensLink>
 				.
 			</Desc>
-			<RegenStreamsContainer>
+			{/* <RegenStreamsContainer>
 				{regenStreams.map(streamConfig => {
 					return (
 						<RegenStreamContainer key={streamConfig.type}>
@@ -48,7 +48,7 @@ const RegenStreamBlock = () => {
 						</RegenStreamContainer>
 					);
 				})}
-			</RegenStreamsContainer>
+			</RegenStreamsContainer> */}
 			<RegenStreamsContainer>
 				{regenStreams.map(streamConfig => {
 					return (

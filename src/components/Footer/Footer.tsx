@@ -150,7 +150,6 @@ const FooterContainer = styled.div`
 	position: relative;
 	padding: 35px 0 12px;
 	z-index: 2;
-	margin-bottom: 50px;
 `;
 
 const LeftContainer = styled(Flex)`

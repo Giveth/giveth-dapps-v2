@@ -12,10 +12,9 @@ import {
 	brandColors,
 	GLink,
 } from '@giveth/ui-design-system';
-import { TopContainer, BottomContainer } from './commons';
-import { RewardCard } from '../RewardCard';
-import { Flex } from '../styled-components/Flex';
-import { device } from '@/utils/constants';
+import { TopContainer, BottomContainer, EnhancedRewardCard } from './commons';
+import { device, mediaQueries } from '@/utils/constants';
+import { Row } from '../Grid';
 
 export const GardenTopContainer = styled(TopContainer)`
 	overflow: hidden;
@@ -61,14 +60,19 @@ export const Title = styled(D1)`
 `;
 
 export const Subtitle = styled(QuoteText)`
-	/* margin-bottom: 48px; */
+	margin-bottom: 54px;
+	${mediaQueries.tablet} {
+		margin-bottom: 36px;
+	}
 `;
 
-export const GardenRewardCard = styled(RewardCard)`
-	/* position: absolute;
-	bottom: -37px; */
+export const GardenRewardCard = styled(EnhancedRewardCard)`
 	z-index: 1;
 	position: relative;
+	margin-bottom: 24px;
+	${mediaQueries.tablet} {
+		margin-bottom: 0px;
+	}
 `;
 
 export const GardenBottomContainer = styled(BottomContainer)``;
@@ -95,16 +99,9 @@ export const Section2Title = styled(H1)`
 
 export const GovernanceDB = styled(DataBlock)`
 	width: 100%;
-	min-height: 285px;
 	display: flex;
 	flex-flow: column nowrap;
 	align-items: flex-start;
-	@media ${device.tablet} {
-		width: calc(50% - 16px);
-	}
-	@media ${device.laptop} {
-		width: calc(33% - 16px);
-	}
 `;
 
 export const GovernanceLink = styled(GLink)`
@@ -115,7 +112,7 @@ export const GovernanceLink = styled(GLink)`
 	margin-top: auto;
 `;
 
-export const GovernanceRaw = styled(Flex)`
+export const GovernanceRaw = styled(Row)`
 	margin-bottom: 120px;
 `;
 
@@ -152,18 +149,19 @@ export const VoteCardDesc = styled(QuoteText)`
 
 export const VoteCardButton = styled(Button)`
 	display: block;
-	padding: 24px 73px;
 	margin-left: auto;
+	padding: 24px;
+	${mediaQueries.tablet} {
+		padding: 24px 73px;
+	}
 `;
 
 export const GardenIconContainer = styled.div`
 	position: absolute;
-	top: -50px;
-	right: 0;
+	top: 0;
+	right: -72px;
 	@media ${device.tablet} {
-	}
-	@media ${device.laptop} {
-		top: -50px;
+		top: -30px;
 		right: -56px;
 	}
 	@media ${device.laptopL} {

@@ -12,7 +12,7 @@ import {
 	ButtonLink,
 	D1,
 } from '@giveth/ui-design-system';
-import { TabContainer, TopContainer } from './commons';
+import { TopContainer } from './commons';
 import { device } from '@/utils/constants';
 
 export const OverviewBottomContainer = styled.div`
@@ -27,18 +27,15 @@ export const OverviewTopContainer = styled(TopContainer)`
 
 export const OverviewTitle = styled(D1)`
 	padding-bottom: 36px;
-	max-width: 989px;
 `;
 
 export const PreTitle = styled(D3)`
 	padding-top: 77px;
 	display: block;
-	color: #a3b0f6;
+	color: ${brandColors.deep[100]};
 `;
 
-export const SubTitle = styled(QuoteText)`
-	max-width: 907px;
-`;
+export const SubTitle = styled(QuoteText)``;
 
 export const ClaimCardButton = styled(Button)`
 	width: 300px;
@@ -51,7 +48,6 @@ export const TabTitle = styled(H1)`
 `;
 
 export const TabDesc = styled(QuoteText)`
-	max-width: 812px;
 	margin-bottom: 50px;
 `;
 
@@ -95,33 +91,8 @@ export const ClaimCardTitle = styled(H1)`
 	margin-bottom: 22px;
 `;
 
-export const EGDataBlock = styled(DataBlock)`
-	width: 100%;
-	margin-bottom: 64px;
-	@media ${device.tablet} {
-		width: calc(50% - 16px);
-	}
-	@media ${device.laptop} {
-		width: calc(33% - 16px);
-	}
-`;
-
-export const ParticipateDataBlock = styled(DataBlock)`
-	width: 100%;
-	display: flex;
-	flex-flow: column nowrap;
-	align-items: flex-start;
+export const DataBlockWithMargin = styled(DataBlock)`
 	margin-bottom: 32px;
-
-	div:nth-child(2) {
-		flex-grow: 1;
-	}
-	@media ${device.tablet} {
-		width: calc(50% - 16px);
-	}
-	@media ${device.laptop} {
-		width: calc(33% - 16px);
-	}
 `;
 
 export const DataBlockButton = styled(ButtonLink)`

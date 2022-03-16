@@ -13,10 +13,16 @@ import {
 	Subline,
 	ButtonLink,
 } from '@giveth/ui-design-system';
-import { TopContainer, TopInnerContainer, BottomContainer } from './commons';
-import { RewardCard } from '../RewardCard';
+import {
+	TopContainer,
+	TopInnerContainer,
+	BottomContainer,
+	EnhancedRewardCard,
+} from './commons';
 import { Flex } from '../styled-components/Flex';
 import { DataBox } from '../DataBox';
+import { mediaQueries } from '@/utils/constants';
+import { Col } from '../Grid';
 
 export const GIVstreamTopContainer = styled(TopContainer)`
 	overflow: hidden;
@@ -24,22 +30,17 @@ export const GIVstreamTopContainer = styled(TopContainer)`
 `;
 
 export const GIVstreamTopInnerContainer = styled(TopInnerContainer)`
-	/* overflow: hidden; */
 	&::before {
 		content: url('/images/stream.svg');
 		position: absolute;
-		right: 350px;
+		right: 20%;
 		top: calc(50% - 240px);
 		z-index: 0;
 	}
 `;
 
-export const Left = styled.div`
-	z-index: 1;
-`;
-
-export const Right = styled.div`
-	align-self: end;
+export const TitleCol = styled(Col)`
+	position: relative;
 `;
 
 export const GSTitle = styled(D1)`
@@ -47,15 +48,23 @@ export const GSTitle = styled(D1)`
 	margin-bottom: 24px;
 `;
 
-export const GSSubtitle = styled(QuoteText)``;
+export const GSSubtitle = styled(QuoteText)`
+	margin-bottom: 54px;
+	${mediaQueries.tablet} {
+		margin-bottom: 32px;
+	}
+`;
 
-export const GIVstreamRewardCard = styled(RewardCard)``;
+export const GIVstreamRewardCard = styled(EnhancedRewardCard)`
+	margin-bottom: 24px;
+	${mediaQueries.tablet} {
+		margin-bottom: 0px;
+	}
+`;
 
 export const GIVstreamBottomContainer = styled(BottomContainer)``;
 
-export const GsDataBlock = styled(DataBlock)`
-	width: 459px;
-`;
+export const GsDataBlock = styled(DataBlock)``;
 
 export const GsButton = styled(ButtonLink)`
 	padding: 24px 34px;
@@ -95,7 +104,6 @@ interface IBarProps {
 }
 export const Bar = styled.div<IBarProps>`
 	height: 12px;
-	width: 100%;
 
 	background: ${brandColors.giv[800]};
 	border-radius: 12px;
@@ -160,7 +168,6 @@ export const HistoryContainer = styled.div`
 export const HistoryLoading = styled.div`
 	background-color: ${brandColors.giv[800]}aa;
 	position: absolute;
-	width: 100%;
 	height: 100%;
 	top: 40px;
 	left: 0;

@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 export const Subtitle = styled(Lead)`
 	margin-bottom: 24px;
-	width: 40%;
 `;
 
 export const GIVfrensLink = styled(GLink)`
