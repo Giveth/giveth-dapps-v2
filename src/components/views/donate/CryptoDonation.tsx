@@ -113,7 +113,7 @@ const CryptoDonation = (props: {
 	const isXdai = networkId === xdaiChain.id;
 	const isGivingBlockProject = project?.givingBlocksId;
 	const stopPolling = useRef<any>(null);
-	const isGivBackEligible = givBackEligible && project?.verified;
+	const projectIsGivBackEligible = givBackEligible && project?.verified;
 
 	// Checks network changes to fetch proper token list
 	useEffect(() => {
@@ -311,7 +311,7 @@ const CryptoDonation = (props: {
 					price={tokenPrice}
 					setInProgress={setInProgress}
 					setUnconfirmed={setUnconfirmed}
-					givBackEligible={isGivBackEligible}
+					givBackEligible={projectIsGivBackEligible}
 					anonymous={anonymous}
 				/>
 			)}
@@ -462,7 +462,7 @@ const CryptoDonation = (props: {
 					{tokenSymbol}
 				</AvText>
 			</InputContainer>
-			{!givBackEligible ? (
+			{!givBackEligible && projectIsGivBackEligible ? (
 				<ToastContainer>
 					<FixedToast
 						message='This token is not eligible for GIVbacks.'
@@ -473,7 +473,7 @@ const CryptoDonation = (props: {
 					/>
 				</ToastContainer>
 			) : (
-				givBackEligible && (
+				projectIsGivBackEligible && (
 					<ToastContainer>
 						<FixedToast
 							message='This token is eligible for GIVbacks.'
