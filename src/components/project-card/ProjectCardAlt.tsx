@@ -151,7 +151,7 @@ const GivingBlockContainer = styled(Flex)`
 	border-radius: 0 12px 0 0;
 	color: ${neutralColors.gray[600]};
 	background: ${neutralColors.gray[200]};
-	margin-top: -42px;
+	margin-top: -30px;
 	padding: 8px 24px;
 	img {
 		padding-left: 10px;

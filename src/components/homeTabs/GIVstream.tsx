@@ -349,6 +349,7 @@ const convetSourceTypeToIcon = (distributor: string) => {
 		case 'honeyswaplp':
 		case 'givlm':
 		case 'giveth':
+		case 'givethlm':
 		case 'givhnypool':
 		case 'uniswappool':
 			return (

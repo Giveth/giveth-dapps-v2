@@ -26,6 +26,7 @@ import { sendTransaction } from '@/lib/helpers';
 import * as transaction from '../../services/transaction';
 import { saveDonation, saveDonationTransaction } from '@/services/donation';
 import FixedToast from '@/components/toasts/FixedToast';
+import { mediaQueries } from '@/utils/constants';
 import config from '@/configuration';
 
 interface IToken {
@@ -371,11 +372,14 @@ const DonateModal = ({
 };
 
 const DonateContainer = styled.div`
-	width: 494px;
 	background: white;
 	color: black;
 	padding: 0 24px 38px 24px;
 	margin: -30px 0 0 0;
+	width: 100%;
+	${mediaQueries['tablet']} {
+		width: 494px;
+	}
 `;
 
 const DonateTopTitle = styled(Flex)`

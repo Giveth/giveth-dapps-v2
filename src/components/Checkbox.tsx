@@ -24,7 +24,9 @@ const CheckBox = (props: {
 			) : (
 				<span />
 			)}
-			<P>{title}</P>
+			<TitleBox>
+				<P>{title}</P>
+			</TitleBox>
 		</Wrapper>
 	);
 };
@@ -52,6 +54,10 @@ const Wrapper = styled.div<ICheckBox>`
 		border-radius: 4px;
 		border: 2px solid ${neutralColors.gray[400]};
 	}
+`;
+
+const TitleBox = styled.div`
+	padding-bottom: 15px;
 `;
 
 export default CheckBox;

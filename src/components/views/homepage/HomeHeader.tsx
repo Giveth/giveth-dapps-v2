@@ -26,9 +26,9 @@ const HomeHeader = () => {
 
 	return (
 		<Wrapper>
-			<Title weight={700}>Welcome to the future of giving</Title>
+			<Title weight={700}>Welcome to the Future of Giving</Title>
 			<Subtitle>
-				Donate crypto directly to social good projects with zero added
+				Get rewarded for giving to for-good projects with zero added
 				fees.
 			</Subtitle>
 			<AllProjectsButton

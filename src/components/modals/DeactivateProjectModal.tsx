@@ -264,6 +264,7 @@ const WhyContent = ({
 					styles={selectCustomStyles}
 					value={selectedOption}
 					onChange={e => handleSelect(e)}
+					isMobile={false}
 				/>
 				<GLink>Or write your own reason:</GLink>
 				<InputBox

@@ -1,5 +1,12 @@
 import { useRouter } from 'next/router';
-import { H2, Lead, Button, H3, brandColors } from '@giveth/ui-design-system';
+import {
+	D3,
+	H2,
+	Lead,
+	Button,
+	H3,
+	brandColors,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 import Routes from '@/lib/constants/Routes';
@@ -19,17 +26,17 @@ const content = [
 	{
 		title: 'Zero-Added Fees',
 		description:
-			'Create a Project or donate directly to for-good projects with zero fees added by Giveth.',
+			'Create a project or donate directly to for-good projects with zero fees added by Giveth.',
 	},
 	{
 		title: 'Project Verification',
 		description:
-			'Encourage project accountability by donating to trusted projects. Apply for verification to reward your donors with GIVbacks.',
+			'Encourage project accountability by donating to trusted projects. Apply for verification and your donors will be rewarded with GIVbacks.',
 	},
 	{
-		title: 'The Giving Economy',
+		title: 'The GIVeconomy',
 		description:
-			'Give, Earn and Govern using GIV and the GIVeconomy. Become a stakeholder in the future of philanthropy.',
+			'Give, earn and govern using GIV and the GIVeconomy. Get rewarded for being a GIVer.',
 	},
 ];
 
@@ -53,40 +60,36 @@ const HomeChangeMakers = () => {
 			<PurpleArc />
 			<CyanArc />
 			<MustardArc />
-			<Container>
-				<UpperSection>
-					<H2 weight={700}>Calling all Changemakers!</H2>
-					<br />
-					<Lead>
-						Do you have for-good project that&apos;s creating value
-						for society, for the environment or for the world?
-					</Lead>
-				</UpperSection>
-				<MiddleSection>
-					<Lead>
-						Add you project to Giveth to tap into the revolutionary
-						funding opportunities of the Ethereum Ecosystem. Start
-						raising funds within minutes. Creating a project is
-						absolutely free!
-					</Lead>
-					<br />
-					<CreateProjectButton
-						buttonType='primary'
-						size='large'
-						label='CREATE A PROJECT'
-						onClick={handleCreateButton}
-					/>
-				</MiddleSection>
-				<EndSection>
-					{content.map(i => (
-						<EndItem md={6} key={i.title}>
-							<H3 weight={700}>{i.title}</H3>
-							<br />
-							<Lead>{i.description}</Lead>
-						</EndItem>
-					))}
-				</EndSection>
-			</Container>
+			<D3>Calling all Changemakers!</D3>
+			<br />
+			<Lead>
+				Do you have a for-good project that&apos;s creating value for
+				society, for the environment, or for the world?
+			</Lead>
+			<MiddleSection>
+				<Lead>
+					Establish your project on Giveth to tap into the
+					revolutionary funding opportunities of the Ethereum
+					Ecosystem. Start raising funds within minutes. Creating a
+					project is absolutely free!
+				</Lead>
+				<br />
+				<CreateProjectButton
+					buttonType='primary'
+					size='large'
+					label='CREATE A PROJECT'
+					onClick={handleCreateButton}
+				/>
+			</MiddleSection>
+			<EndSection>
+				{content.map(i => (
+					<EndItem key={i.title}>
+						<H3 weight={700}>{i.title}</H3>
+						<br />
+						<Lead>{i.description}</Lead>
+					</EndItem>
+				))}
+			</EndSection>
 		</Wrapper>
 	);
 };

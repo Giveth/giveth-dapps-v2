@@ -29,6 +29,7 @@ import {
 	CoverLine,
 	SmallCreateProjectParent,
 	LargeCreateProject,
+	MainLogoBtn,
 } from './Header.sc';
 import { useSubgraph } from '@/context/subgraph.context';
 import { RewardMenu } from '@/components/menu/RewardMenu';
@@ -39,6 +40,7 @@ import { ETheme, useGeneral } from '@/context/general.context';
 import { menuRoutes } from '../menu/MenuRoutes';
 import useUser from '@/context/UserProvider';
 import { isUserRegistered, shortenAddress } from '@/lib/helpers';
+import HeaderRoutesResponsive from './HeaderResponsiveRoutes';
 import Routes from '@/lib/constants/Routes';
 
 export interface IHeader {
@@ -160,18 +162,24 @@ const Header: FC<IHeader> = () => {
 							</Logo>
 						</BackBtn>
 					) : (
-						<Link href={Routes.Home}>
-							<a>
-								<Logo>
-									<Image
-										width='48px'
-										height='48px'
-										alt='Giveth logo'
-										src={`/images/logo/logo1.png`}
-									/>
-								</Logo>
-							</a>
-						</Link>
+						<>
+							<MainLogoBtn>
+								<Link href={Routes.Home}>
+									<a>
+										<Logo>
+											<Image
+												width='48px'
+												height='48px'
+												alt='Giveth logo'
+												src={`/images/logo/logo1.png`}
+											/>
+										</Logo>
+									</a>
+								</Link>
+							</MainLogoBtn>
+
+							<HeaderRoutesResponsive />
+						</>
 					)}
 				</Flex>
 				{showLinks && (
@@ -238,6 +246,7 @@ const Header: FC<IHeader> = () => {
 											width={'24px'}
 											height={'24px'}
 										/>
+
 										<HBContent size='Big'>
 											{formatWeiHelper(balances.balance)}
 										</HBContent>

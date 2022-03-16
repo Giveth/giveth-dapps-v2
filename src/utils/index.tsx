@@ -1,8 +1,10 @@
 // import Web3 from 'web3'
 // import { GET_PROJECT_BY_ADDRESS } from '../apollo/gql/projects'
 // import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
+import React from 'react';
 import ERC20List from './erc20TokenList';
 import { networkInfo } from '@/lib/constants/NetworksObj';
+import { deviceSize } from '@/utils/constants';
 import config from '@/configuration';
 
 const xDaiChainId = 100;

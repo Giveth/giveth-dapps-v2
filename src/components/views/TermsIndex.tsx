@@ -13,7 +13,7 @@ const TermsIndex = () => {
 			</FlowerContainer>
 			<Wrapper>
 				<Title>Terms of use</Title>
-				<Lead>Last updated December 23, 2020</Lead>
+				<Lead>Last updated December 23, 2021</Lead>
 				<TermsContainer>
 					{TermsArray.map(i => (
 						<Accordion

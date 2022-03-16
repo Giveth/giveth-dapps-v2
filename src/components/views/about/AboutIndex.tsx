@@ -16,6 +16,7 @@ import {
 	D3,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import links from '@/lib/constants/links';
 
 const tabTitles = ['Mission & Vision', 'History', 'Team'];
 
@@ -46,7 +47,9 @@ const AboutIndex = () => {
 					giving effortless, to reward people all over the world for
 					creating positive change.
 				</UpperCaption>
-				<UpperButton label='SUPPORT GIVETH'></UpperButton>
+				<Link href={links.SUPPORT_US}>
+					<UpperButton label='SUPPORT GIVETH'></UpperButton>
+				</Link>
 			</Upper>
 
 			<Middle>
