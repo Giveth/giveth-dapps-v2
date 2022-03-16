@@ -16,7 +16,7 @@ interface NetworkSelectorProps {
 }
 
 const NetworkSelectorContainer = styled(Flex)<NetworkSelectorProps>`
-	width: 344px;
+	width: 360px;
 	height: 48px;
 	border-radius: 88px;
 	border: 1px solid ${brandColors.giv[600]};
@@ -32,17 +32,18 @@ interface ISelecetor {
 
 const Selector = styled(Flex)<ISelecetor>`
 	align-items: center;
+	justify-content: center;
 	padding: 12px 24px;
 	gap: 8px;
 	${props => (props.isSelected ? `background: ${brandColors.giv[600]}` : '')}
 `;
 
 const XDaiSelecor = styled(Selector)`
-	width: 179px;
+	width: 50%;
 `;
 
 const EthSelector = styled(Selector)`
-	width: 154px;
+	width: 50%;
 `;
 
 export const NetworkSelector = () => {
