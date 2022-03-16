@@ -57,7 +57,7 @@ interface IProjectDonationTable {
 	id?: string;
 	showTrace: boolean;
 	totalDonations?: number;
-	isMobile: boolean;
+	isMobile?: boolean;
 }
 
 const ProjectDonationTable = ({
@@ -75,7 +75,6 @@ const ProjectDonationTable = ({
 	});
 	const [activeTab, setActiveTab] = useState<number>(0);
 	const [searchTerm, setSearchTerm] = useState<string>('');
-
 	const orderChangeHandler = (orderby: EOrderBy) => {
 		if (orderby === order.by) {
 			setOrder({
@@ -113,7 +112,6 @@ const ProjectDonationTable = ({
 		};
 		fetchProjectDonations();
 	}, [page, order.by, order.direction, id, searchTerm]);
-
 	return (
 		<Wrapper>
 			<UpperSection>
@@ -183,8 +181,10 @@ const ProjectDonationTable = ({
 							</TableCell>
 							<TableCell>
 								<P>
-									{donation.user?.name ||
-										donation.user?.firstName}
+									{donation?.anonymous
+										? 'Anonymous'
+										: donation.user?.name ||
+										  donation.user?.firstName}
 								</P>
 							</TableCell>
 							{!isMobile && (

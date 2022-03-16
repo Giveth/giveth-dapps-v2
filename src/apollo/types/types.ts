@@ -113,6 +113,7 @@ export interface IDonation {
 	transactionId?: string;
 	transactionNetworkId: number;
 	createdAt: string;
+	anonymous?: boolean;
 }
 
 export interface IWalletDonation extends IDonation {
