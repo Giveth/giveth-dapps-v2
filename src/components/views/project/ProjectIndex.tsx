@@ -18,7 +18,7 @@ import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import InfoBadge from '@/components/badges/InfoBadge';
 import { IDonationsByProjectId } from '@/apollo/types/gqlTypes';
 import SuccessfulCreation from '@/components/views/create/SuccessfulCreation';
-import { mediaQueries } from '@/utils/constants';
+import { deviceSize, mediaQueries } from '@/utils/constants';
 import InlineToast from '@/components/toasts/InlineToast';
 
 const ProjectDonations = dynamic(() => import('./ProjectDonations'));
@@ -37,6 +37,7 @@ const ProjectIndex = () => {
 	const [donations, setDonations] = useState<IDonation[]>([]);
 	const [totalDonations, setTotalDonations] = useState(0);
 	const [creationSuccessful, setCreationSuccessful] = useState(false);
+	const [isMobile, setIsMobile] = useState<boolean>(false);
 
 	const {
 		state: { user },
@@ -45,6 +46,26 @@ const ProjectIndex = () => {
 	const { description = '', title, status, id = '' } = project || {};
 	const router = useRouter();
 	const slug = router.query.projectIdSlug as string;
+
+	const fetchProject = async () => {
+		client
+			.query({
+				query: FETCH_PROJECT_BY_SLUG,
+				variables: { slug, connectedWalletUserId: Number(user?.id) },
+				fetchPolicy: 'network-only',
+			})
+			.then((res: { data: { projectBySlug: IProject } }) => {
+				setProject(res.data.projectBySlug);
+			})
+			.catch(showToastError);
+	};
+
+	useEffect(() => {
+		if (status) {
+			setIsActive(status.name === EProjectStatus.ACTIVE);
+			setIsDraft(status.name === EProjectStatus.DRAFT);
+		}
+	}, [status]);
 
 	useEffect(() => {
 		if (!id) return;
@@ -69,31 +90,26 @@ const ProjectIndex = () => {
 			);
 	}, [id]);
 
-	const fetchProject = async () => {
-		client
-			.query({
-				query: FETCH_PROJECT_BY_SLUG,
-				variables: { slug, connectedWalletUserId: Number(user?.id) },
-				fetchPolicy: 'network-only',
-			})
-			.then((res: { data: { projectBySlug: IProject } }) => {
-				setProject(res.data.projectBySlug);
-			})
-			.catch(showToastError);
-	};
-
-	useEffect(() => {
-		if (status) {
-			setIsActive(status.name === EProjectStatus.ACTIVE);
-			setIsDraft(status.name === EProjectStatus.DRAFT);
-		}
-	}, [status]);
-
 	useEffect(() => {
 		if (slug) {
 			fetchProject().then();
 		}
 	}, [slug]);
+
+	useEffect(() => {
+		const windowResizeHandler = () => {
+			if (window.screen.width < deviceSize.tablet) {
+				setIsMobile(true);
+			} else {
+				setIsMobile(false);
+			}
+		};
+		windowResizeHandler();
+		window.addEventListener('resize', windowResizeHandler);
+		return () => {
+			removeEventListener('resize', windowResizeHandler);
+		};
+	}, []);
 
 	if (creationSuccessful) {
 		return (
@@ -146,6 +162,7 @@ const ProjectIndex = () => {
 							project={project!}
 							isActive={isActive}
 							isDraft={isDraft}
+							isMobile={isMobile}
 						/>
 					)}
 				</ContentWrapper>
@@ -178,21 +195,35 @@ const Wrapper = styled.div`
 `;
 
 const BodyWrapper = styled.div`
-	margin: 0 170px 0 150px;
 	display: flex;
-	align-items: center;
-	flex-direction: column-reverse;
+	align-items: unset;
+	flex-direction: row;
+	justify-content: space-between;
+	margin: 0 auto;
 
-	${mediaQueries.laptopL} {
-		align-items: unset;
-		flex-direction: row;
-		justify-content: space-between;
+	${mediaQueries.mobileS} {
+		min-height: calc(100vh - 312px);
+	}
+
+	${mediaQueries.tablet} {
+		padding: 0 32px;
+	}
+
+	${mediaQueries.laptop} {
+		padding: 0 40px;
+	}
+
+	${mediaQueries.desktop} {
+		max-width: 1280px;
 	}
 `;
 
 const ContentWrapper = styled.div`
 	flex-grow: 1;
-	padding-right: 48px;
-`;
+	padding: 0 16px 0 16px;
 
+	${mediaQueries.tablet} {
+		padding: 0 24px 0 0;
+	}
+`;
 export default ProjectIndex;

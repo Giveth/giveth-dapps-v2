@@ -21,6 +21,7 @@ import {
 	Button,
 	neutralColors,
 } from '@giveth/ui-design-system';
+import { mediaQueries } from '@/utils/constants';
 
 const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
 	ssr: false,
@@ -269,7 +270,13 @@ const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 };
 
 const Wrapper = styled.div`
-	margin-left: 20px;
+	padding: 0px 16px;
+	margin-left: 0px;
+
+	${mediaQueries.tablet} {
+		margin-left: 20px;
+		padding: 0px;
+	}
 `;
 
 const Content = styled.div`
