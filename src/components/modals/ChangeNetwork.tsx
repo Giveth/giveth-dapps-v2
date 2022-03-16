@@ -3,9 +3,8 @@ import { Modal, IModal } from './Modal';
 import styled from 'styled-components';
 import config from '@/configuration';
 import { IconEthereum } from '../Icons/Eth';
-import { IconXDAI } from '../Icons/XDAI';
 import { IconGnosisChain } from '../Icons/GnosisChain';
-import { H4, B, neutralColors, brandColors } from '@giveth/ui-design-system';
+import { H4, B, brandColors } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 import { mediaQueries } from '@/utils/constants';
 import { ETheme, useGeneral } from '@/context/general.context';
@@ -49,7 +48,6 @@ export const ChangeNetworkModal: FC<IChangeNetworkModalProps> = ({
 };
 
 const ChangeNetworkModalContainer = styled.div`
-	width: 500px;
 	padding: 62px 60px;
 	color: ${brandColors.giv[700]};
 	width: 100%;
