@@ -120,7 +120,7 @@ export interface EnvConfig {
 	MAINNET_CONFIG: MainnetNetworkConfig;
 	XDAI_CONFIG: XDaiNetworkConfig;
 	GARDEN_LINK: string;
-	BACKEN_LINK: string;
+	BACKEND_LINK: string;
 }
 
 export interface GlobalConfig extends EnvConfig {
