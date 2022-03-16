@@ -61,7 +61,6 @@ import { HarvestAllModal } from '../modals/HarvestAll';
 import { Zero } from '@ethersproject/constants';
 import { useSubgraph } from '@/context';
 import { ITokenAllocation } from '@/types/subgraph';
-import { TopFiller } from './commons';
 import { useWeb3React } from '@web3-react/core';
 import { IconGIV } from '../Icons/GIV';
 import { givEconomySupportedNetworks } from '@/utils/constants';

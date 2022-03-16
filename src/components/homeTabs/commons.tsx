@@ -25,9 +25,6 @@ export const TopContainerRow = styled(Flex)``;
 export const BottomContainer = styled.div`
 	margin-top: 32px;
 `;
-export const TopFiller = styled.div`
-	flex: 1;
-`;
 
 export const ExtLinkRow = styled(Flex)`
 	color: ${brandColors.cyan[500]};
