@@ -28,6 +28,7 @@ const GeneralCard = (props: { content: IContent; isHorizontal?: boolean }) => {
 			</TitleBox>
 			<ButtonStyled
 				label={buttonLabel}
+				buttonType='primary'
 				onClick={() => window?.open(route, '_blank')?.focus()}
 			></ButtonStyled>
 		</Wrap>
@@ -38,6 +39,7 @@ const ButtonStyled = styled(Button)`
 	text-transform: uppercase;
 	margin: 24px auto 0 auto;
 	width: 265px;
+	height: 66px;
 	padding: 0;
 `;
 

@@ -88,7 +88,7 @@ const PublicProfileOverviewTab: FC<IUserPublicProfileView> = ({ user }) => {
 	return (
 		<UserContributeInfo>
 			<ContributeCard user={user} myAccount={true} />
-			<Container>
+			<CustomContainer>
 				<AccountHero title={title}>
 					<H1>{title}</H1>
 					<QuoteText>{subtitle}</QuoteText>
@@ -106,12 +106,16 @@ const PublicProfileOverviewTab: FC<IUserPublicProfileView> = ({ user }) => {
 						})}
 					</Buttons>
 				</AccountHero>
-			</Container>
+			</CustomContainer>
 		</UserContributeInfo>
 	);
 };
 
 export default PublicProfileOverviewTab;
+
+const CustomContainer = styled(Container)`
+	padding: 0px;
+`;
 
 const AccountHero = styled.div`
 	display: flex;
