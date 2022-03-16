@@ -15,6 +15,7 @@ import {
 
 export const StakingPoolContainer = styled.div`
 	width: 383px;
+	height: 486px;
 	border-radius: 8px;
 	background: ${brandColors.giv[600]};
 	color: ${neutralColors.gray[100]};
@@ -146,4 +147,13 @@ export const GiftTooltip = styled.div`
 	text-align: center;
 	width: 120px;
 	font-size: 0.8em;
+`;
+
+export const IntroIcon = styled.div`
+	cursor: pointer;
+	color: ${brandColors.deep[100]};
+	transition: color 0.3s ease;
+	:hover {
+		color: ${neutralColors.gray[100]};
+	}
 `;

@@ -8,14 +8,18 @@ import {
 	getUserStakeInfo,
 } from '@/lib/stakingPool';
 import { useSubgraph } from '@/context';
-import { PoolStakingConfig, StakingType } from '@/types/config';
+import {
+	PoolStakingConfig,
+	RegenPoolStakingConfig,
+	StakingType,
+} from '@/types/config';
 import { APR, UserStakeInfo } from '@/types/poolInfo';
 import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
 import { Zero } from '@/helpers/number';
 import { useWeb3React } from '@web3-react/core';
 
 export const useStakingPool = (
-	poolStakingConfig: PoolStakingConfig,
+	poolStakingConfig: PoolStakingConfig | RegenPoolStakingConfig,
 	network: number,
 ): {
 	apr: BigNumber | null;
@@ -37,9 +41,10 @@ export const useStakingPool = (
 
 	const stakePoolInfoPoll = useRef<NodeJS.Timer | null>(null);
 
-	const { type, LM_ADDRESS } = poolStakingConfig;
+	const { type, LM_ADDRESS, regenFarmType } =
+		poolStakingConfig as RegenPoolStakingConfig;
 
-	const unipool = currentValues[type];
+	const unipool = currentValues[regenFarmType || type];
 	const unipoolIsDefined = !!unipool;
 	const providerNetwork = library?.network?.chainId;
 
@@ -78,20 +83,15 @@ export const useStakingPool = (
 		};
 	}, [library, chainId, unipoolIsDefined, providerNetwork]);
 
-	const isMounted = useRef(true);
 	useEffect(() => {
-		return () => {
-			isMounted.current = false;
-		};
-	}, []);
-
-	useEffect(() => {
-		const unipoolInfo = currentValues[type];
+		const unipoolInfo = currentValues[regenFarmType || type];
 		if (unipoolInfo) {
 			const unipoolHelper = new UnipoolHelper(unipoolInfo);
-			setUserStakeInfo(getUserStakeInfo(type, balances, unipoolHelper));
+			setUserStakeInfo(
+				getUserStakeInfo(type, regenFarmType, balances, unipoolHelper),
+			);
 		}
-	}, [type, currentValues, balances]);
+	}, [type, regenFarmType, currentValues, balances]);
 
 	return {
 		apr,

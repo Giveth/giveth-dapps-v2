@@ -96,7 +96,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 	return (
 		<>
 			<OnboardStep xs={12} xl={8} sm={12}>
-				<SectionHeader>How we should call you?</SectionHeader>
+				<SectionHeader>What should we call you?</SectionHeader>
 				<Section>
 					<Col xs={12} md={6}>
 						<Input

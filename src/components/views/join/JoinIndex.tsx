@@ -10,7 +10,7 @@ const JoinIndex = () => {
 				<ArcCyan />
 				<ArcMustard />
 				<TextContainer>
-					<D3>Join our Community</D3>
+					<D3>Join our Community.</D3>
 					<H4>Building the Future of Giving.</H4>
 				</TextContainer>
 			</UpperSection>

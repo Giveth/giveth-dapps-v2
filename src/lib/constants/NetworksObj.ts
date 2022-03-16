@@ -40,7 +40,7 @@ export const networkInfo = (
 			break;
 		case 100:
 			network = {
-				networkName: 'xDAI',
+				networkName: 'Gnosis Chain',
 				networkToken: 'xDAI',
 				networkPrefix: 'https://blockscout.com/poa/xdai/',
 			};

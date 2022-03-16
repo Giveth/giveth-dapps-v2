@@ -18,18 +18,27 @@ const DonateRoute = (props: IProjectBySlug) => {
 export async function getServerSideProps(props: { query: { slug: string } }) {
 	const { query } = props;
 	const slug = decodeURI(query.slug).replace(/\s/g, '');
-	const { data } = await client.query({
-		query: FETCH_PROJECT_BY_SLUG,
-		variables: { slug },
-		fetchPolicy: 'no-cache',
-	});
-	const project = data.projectBySlug;
-
-	return {
-		props: {
-			project,
-		},
-	};
+	try {
+		const { data } = await client.query({
+			query: FETCH_PROJECT_BY_SLUG,
+			variables: { slug },
+			fetchPolicy: 'no-cache',
+		});
+		const project = data.projectBySlug;
+		return {
+			props: {
+				project,
+			},
+		};
+	} catch (error) {
+		console.log({ error });
+		return {
+			redirect: {
+				destination: '/',
+				permanent: false,
+			},
+		};
+	}
 }
 
 export default DonateRoute;

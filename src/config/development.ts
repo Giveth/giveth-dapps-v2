@@ -1,4 +1,9 @@
-import { EnvConfig, StakingType } from '@/types/config';
+import {
+	EnvConfig,
+	RegenFarmType,
+	StakingType,
+	StreamType,
+} from '@/types/config';
 import { gwei2wei } from '@/helpers/number';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
@@ -28,7 +33,7 @@ const config: EnvConfig = {
 		blockExplorerName: ['Etherscan'],
 		blockExplorerUrls: ['https://kovan.etherscan.io'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/mohammadranjbarz/giv-economy-kovan-deployment-seven',
+			'https://api.thegraph.com/subgraphs/name/mohammadranjbarz/giv-economy-kovan-develop',
 
 		TOKEN_ADDRESS: '0x29434A25abd94AE882aA883eea81585Aaa5b078D',
 		WETH_TOKEN_ADDRESS: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
@@ -79,6 +84,8 @@ const config: EnvConfig = {
 				unit: 'LP',
 			},
 		],
+		regenStreams: [],
+		regenFarms: [],
 	},
 
 	XDAI_CONFIG: {
@@ -99,7 +106,7 @@ const config: EnvConfig = {
 		blockExplorerName: ['Blockscout'],
 		blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/mohammadranjbarz/giv-economy-xdai-deployment-seven',
+			'https://api.thegraph.com/subgraphs/name/mohammadranjbarz/giv-economy-xdai-develop',
 
 		TOKEN_ADDRESS: '0x83a8eea6427985C523a0c4d9d3E62C051B6580d3',
 		MERKLE_ADDRESS: '0xc87403C70c9FBfb594d98d3B5E695BBE4C694188',
@@ -134,6 +141,44 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://app.sushi.com/add/0x83a8eea6427985C523a0c4d9d3E62C051B6580d3/0x736a98655049433f79dCcF5e54b887E8890b63D1',
 				unit: 'LP',
+			},
+		],
+
+		uniswapV2Subgraph:
+			'https://api.thegraph.com/subgraphs/name/1hive/honeyswap-v2',
+
+		regenStreams: [
+			{
+				tokenDistroAddress:
+					'0xCA29ec6F4218E230294993E0d77d5ece5a6573D8',
+				type: StreamType.FOX,
+				// title: 'FOXStream',
+				rewardTokenAddress:
+					'0x18cE354571ba71bC7b3d633b254954C5A9cfC195',
+				rewardTokenSymbol: 'FOX',
+				tokenAddressOnUniswapV2:
+					'0x21a42669643f45Bc0e086b8Fc2ed70c23D67509d',
+			},
+		],
+		regenFarms: [
+			{
+				POOL_ADDRESS: '0xD28C07F802212F04AF41834ec0CC81d2d283124B',
+				LM_ADDRESS: '0x06851400866e065972ff21e1ECdE035b4772736d',
+				type: StakingType.HONEYSWAP,
+				title: 'FOX / HNY',
+				description: '50% FOX, 50% HNY',
+				provideLiquidityLink:
+					'https://app.honeyswap.org/#/add/0x18cE354571ba71bC7b3d633b254954C5A9cfC195/0x69F79C9eA174d4659B18c7993c7EFbBbB58cF068',
+				unit: 'LP',
+				regenStreamType: StreamType.FOX,
+				regenFarmType: RegenFarmType.FOX_HNY,
+				regenFarmIntro: {
+					title: 'FOX',
+					description:
+						'ShapeShift is the free and open-source one-stop-shop for cross-chain DeFi. Buy, sell, send, receive, trade, and earn yield on your crypto across a growing number of protocols and chains with no added fees ever. FOX is the governance token of the ShapeShift DAO.',
+					link: 'https://shapeshift.com/',
+				},
+				regenFarmStartTime: 1646306818206,
 			},
 		],
 	},

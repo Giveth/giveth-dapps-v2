@@ -25,7 +25,7 @@ export const networksParams: {
 	},
 	100: {
 		chainId: '0x64',
-		chainName: 'xDAI Chain',
+		chainName: 'Gnosis Chain',
 		iconUrls: [
 			'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/xdai/info/logo.png',
 		],

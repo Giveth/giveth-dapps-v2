@@ -124,7 +124,7 @@ const WalletCheckButton = styled.button`
 	width: 114px;
 	height: 48.62px;
 	color: white;
-	background: #1b1657;
+	background: #090446;
 	border: 0;
 	border-radius: 88px;
 	cursor: pointer;

@@ -42,8 +42,8 @@ const CategoryInput = (props: {
 			<H5>Please select a category.</H5>
 			<div>
 				<CaptionContainer>
-					You can choose up to {maxSelectedCategory} category for your
-					project.
+					You can choose up to {maxSelectedCategory} categories for
+					your project.
 				</CaptionContainer>
 			</div>
 			<InputContainer>

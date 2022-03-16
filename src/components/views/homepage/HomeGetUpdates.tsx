@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { Email_Input } from '@/components/styled-components/Input';
+import React, { useState } from 'react';
 import {
 	H3,
 	brandColors,
@@ -9,7 +8,10 @@ import {
 	SublineBold,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+
 import { autopilotClient } from '@/services/autopilot';
+import { HomeContainer } from '@/components/views/homepage/Home.sc';
+import { deviceSize } from '@/utils/constants';
 
 function validateEmail(email: string): boolean {
 	const re =
@@ -39,37 +41,41 @@ const HomeGetUpdates = () => {
 
 	return (
 		<Wrapper>
-			<Title weight={700}>
-				{successSubscription ? 'Subscribed!' : 'Get the latest updates'}
-			</Title>
-			<P>
-				{successSubscription
-					? 'Thank you for subscribing to Giveth newsletter. Our first news are coming to your inbox soon.'
-					: 'Subscribe to our newsletter and get all updates straight to your mailbox!'}
-			</P>
-			{!successSubscription && (
-				<InputBox>
-					<div>
-						<EmailInput
-							placeholder='Your email address'
-							error={error}
-							onChange={(
-								e: React.ChangeEvent<HTMLInputElement>,
-							) => setEmail(e.target.value)}
+			<Container>
+				<Title weight={700}>
+					{successSubscription
+						? 'Subscribed!'
+						: 'Get the latest updates'}
+				</Title>
+				<P>
+					{successSubscription
+						? 'Thank you for subscribing to Giveth newsletter. Our first news are coming to your inbox soon.'
+						: 'Subscribe to our newsletter to get monthly updates straight to your mailbox!'}
+				</P>
+				{!successSubscription && (
+					<InputBox>
+						<div>
+							<EmailInput
+								placeholder='Your email address'
+								error={error}
+								onChange={(
+									e: React.ChangeEvent<HTMLInputElement>,
+								) => setEmail(e.target.value)}
+							/>
+							{error && (
+								<InvalidEmail>
+									Please insert a valid email address!
+								</InvalidEmail>
+							)}
+						</div>
+						<SubscribeButton
+							disabled={!validateEmail(email)}
+							label='SUBSCRIBE'
+							onClick={submitSubscription}
 						/>
-						{error && (
-							<InvalidEmail>
-								Please insert a valid email address!
-							</InvalidEmail>
-						)}
-					</div>
-					<SubscribeButton
-						disabled={!validateEmail(email)}
-						label='SUBSCRIBE'
-						onClick={submitSubscription}
-					></SubscribeButton>
-				</InputBox>
-			)}
+					</InputBox>
+				)}
+			</Container>
 		</Wrapper>
 	);
 };
@@ -82,11 +88,16 @@ const Title = styled(H3)`
 const InputBox = styled.div`
 	display: flex;
 	align-items: start;
+	flex-wrap: wrap;
 	gap: 16px;
 	margin-top: 24px;
 `;
 
-const EmailInput = styled(Email_Input)<{ error?: boolean }>`
+const EmailInput = styled.input<{ error?: boolean }>`
+	border: 1px solid #d7ddea;
+	border-radius: 56px;
+	padding: 14px 25px;
+	height: 50px;
 	&:focus {
 		outline: none !important;
 		border: 2px solid
@@ -102,17 +113,20 @@ const InvalidEmail = styled(SublineBold)`
 `;
 
 const SubscribeButton = styled(Button)`
-	height: 52px;
-	font-weight: bold;
-
 	&:disabled {
 		background-color: ${neutralColors.gray[400]};
 		color: white;
 	}
 `;
 
-const Wrapper = styled.div`
-	margin: 50px 150px;
+const Container = styled.div`
+	margin: 0 auto;
+	max-width: ${deviceSize.desktop + 'px'};
+`;
+
+const Wrapper = styled(HomeContainer)`
+	margin-top: 50px;
+	margin-bottom: 50px;
 `;
 
 export default HomeGetUpdates;

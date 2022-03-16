@@ -11,6 +11,7 @@ import {
 import { IModal, Modal } from '@/components/modals/Modal';
 import useUser from '@/context/UserProvider';
 import { ETheme, useGeneral } from '@/context/general.context';
+import { mediaQueries } from '@/utils/constants';
 
 export const WelcomeSigninModal: FC<IModal> = ({
 	showModal,
@@ -33,11 +34,12 @@ export const WelcomeSigninModal: FC<IModal> = ({
 		>
 			<Container>
 				<Description>
-					You need to Sign your wallet to be able to use it on Giveth.
+					You need to authorize your wallet to be able to use it on
+					Giveth.
 				</Description>
 				<NoteDescription color='red'>
-					Note: only after you Sign your wallet, you can donate to
-					projects or receive donations.
+					Note: This is necessary to be able to donate to projects or
+					receive funding.
 				</NoteDescription>
 				<OkButton
 					label='SIGN IN'
@@ -62,6 +64,15 @@ export const WelcomeSigninModal: FC<IModal> = ({
 const Container = styled.div`
 	width: 528px;
 	padding: 48px 24px;
+	${mediaQueries['mobileS']} {
+		width: 100%;
+	}
+	${mediaQueries['desktop']} {
+		width: 528px;
+	}
+	${mediaQueries['tablet']} {
+		width: 528px;
+	}
 `;
 
 const OkButton = styled(Button)`

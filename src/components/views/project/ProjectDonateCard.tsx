@@ -159,9 +159,10 @@ const ProjectDonateCard = ({
 	}, [project, reaction, user?.id]);
 
 	useEffect(() => {
-		if (adminUser?.walletAddress === user?.walletAddress && !!user) {
-			setIsAdmin(true);
-		}
+		setIsAdmin(
+			!!user?.walletAddress &&
+				adminUser?.walletAddress === user?.walletAddress,
+		);
 	}, [user, adminUser]);
 
 	useEffect(() => {

@@ -76,7 +76,7 @@ a {
 
 .quill > .ql-container > .ql-editor.ql-blank::before {
 	font-size: 16px;
-	font-family: Red Hat Text;
+	font-family: Red Hat Text, sans-serif;
 	font-style: normal;
 	font-weight: normal;
 	color: #82899a;

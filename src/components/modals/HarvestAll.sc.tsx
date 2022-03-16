@@ -10,7 +10,6 @@ import {
 	Subline,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import Scrollbars from 'react-custom-scrollbars';
 
 import { Flex } from '../styled-components/Flex';
 
@@ -98,8 +97,6 @@ export const HarvestAllPending = styled(Pending)`
 export const TooltipContent = styled(Subline)`
 	width: 200px;
 `;
-
-export const StyledScrollbars = styled(Scrollbars)``;
 
 export const HarvestBoxes = styled.div`
 	padding: 24px;

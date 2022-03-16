@@ -134,9 +134,6 @@ export const Footer = () => {
 							</a>
 						</Link>
 					</SupportUs>
-					<CopyRights>
-						MMXX - No Rights Reserved - The Giveth DAC
-					</CopyRights>
 				</RightContainer>
 			</ContainerStyled>
 		</FooterContainer>

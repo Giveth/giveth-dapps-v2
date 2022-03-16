@@ -1,9 +1,12 @@
 import config from '../../configuration';
-import { PoolStakingConfig, StakingType } from '../../types/config';
-import React, { FC, useEffect, useState, ReactNode } from 'react';
-import { Flex } from '../styled-components/Flex';
+import {
+	PoolStakingConfig,
+	RegenPoolStakingConfig,
+	StakingType,
+} from '@/types/config';
+import React, { FC, useEffect, useState, ReactNode, useMemo } from 'react';
 import { IconWithTooltip } from '../IconWithToolTip';
-import { formatEthHelper, formatWeiHelper, Zero } from '../../helpers/number';
+import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import {
 	StakingPoolContainer,
 	StakingPoolExchangeRow,
@@ -29,6 +32,7 @@ import {
 	GIVgardenTooltip,
 	IconGift,
 	GiftTooltip,
+	IntroIcon,
 } from './BaseStakingCard.sc';
 import {
 	IconSpark,
@@ -55,6 +59,15 @@ import { IconSushiswap } from '../Icons/Sushiswap';
 import { useWeb3React } from '@web3-react/core';
 import { UniV3APRModal } from '../modals/UNIv3APR';
 import { useLiquidityPositions } from '@/context';
+import StakingCardIntro from './StakingCardIntro';
+import { getNowUnixMS } from '@/helpers/time';
+import FarmCountDown from '../FarmCountDown';
+import { Flex } from '../styled-components/Flex';
+
+export enum StakeCardState {
+	NORMAL,
+	INTRO,
+}
 
 export const getPoolIconWithName = (pool: string) => {
 	switch (pool) {
@@ -73,7 +86,7 @@ export const getPoolIconWithName = (pool: string) => {
 	}
 };
 interface IBaseStakingCardProps {
-	poolStakingConfig: PoolStakingConfig;
+	poolStakingConfig: PoolStakingConfig | RegenPoolStakingConfig;
 	stakeInfo: any;
 	notif?: ReactNode;
 }
@@ -83,6 +96,8 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	poolStakingConfig,
 	notif,
 }) => {
+	const [state, setState] = useState(StakeCardState.NORMAL);
+	const [started, setStarted] = useState(true);
 	const [showAPRModal, setShowAPRModal] = useState(false);
 	const [showUniV3APRModal, setShowUniV3APRModal] = useState(false);
 	const [showStakeModal, setShowStakeModal] = useState(false);
@@ -92,9 +107,13 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		useState(false);
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
 	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
-	const { tokenDistroHelper } = useTokenDistro();
+	const { getTokenDistroHelper } = useTokenDistro();
 	const { setInfo } = useFarms();
 	const { chainId } = useWeb3React();
+	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
+	const tokenDistroHelper = useMemo(() => {
+		return getTokenDistroHelper(regenStreamType);
+	}, [getTokenDistroHelper, poolStakingConfig]);
 
 	const { type, title, description, provideLiquidityLink, BUY_LINK, unit } =
 		poolStakingConfig;
@@ -104,9 +123,22 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const { apr, earned, stakedLpAmount, userNotStakedAmount } = stakeInfo;
 	const { minimumApr, maxApr } = useLiquidityPositions();
 
+	const regenStreamConfig = useMemo(() => {
+		if (!regenStreamType) return undefined;
+		const networkConfig =
+			chainId === config.XDAI_NETWORK_NUMBER
+				? config.XDAI_CONFIG
+				: config.MAINNET_CONFIG;
+		return networkConfig.regenStreams.find(s => s.type === regenStreamType);
+	}, [chainId, regenStreamType]);
+
 	useEffect(() => {
-		setRewardLiquidPart(tokenDistroHelper.getLiquidPart(earned));
-		setRewardStream(tokenDistroHelper.getStreamPartTokenPerWeek(earned));
+		if (tokenDistroHelper) {
+			setRewardLiquidPart(tokenDistroHelper.getLiquidPart(earned));
+			setRewardStream(
+				tokenDistroHelper.getStreamPartTokenPerWeek(earned),
+			);
+		}
 	}, [earned, tokenDistroHelper]);
 
 	useEffect(() => {
@@ -115,187 +147,243 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		}
 	}, [chainId, earned, type]);
 
+	const rewardTokenSymbol = regenStreamConfig?.rewardTokenSymbol || 'GIV';
+	const { regenFarmStartTime, regenFarmIntro } =
+		poolStakingConfig as RegenPoolStakingConfig;
+
+	useEffect(() => {
+		setStarted(
+			regenFarmStartTime ? getNowUnixMS() > regenFarmStartTime : true,
+		);
+	}, [regenFarmStartTime]);
+
 	return (
 		<>
 			<StakingPoolContainer>
-				<StakingPoolExchangeRow gap='4px' alignItems='center'>
-					{getPoolIconWithName(type)}
-					<StakingPoolExchange styleType='Small'>
-						{type === StakingType.GIV_LM &&
-							chainId === config.XDAI_NETWORK_NUMBER &&
-							`GIVgarden `}
-						{type}
-					</StakingPoolExchange>
-					{chainId === config.XDAI_NETWORK_NUMBER &&
-						type === StakingType.GIV_LM && (
-							<IconWithTooltip
-								direction={'top'}
-								icon={
-									<IconHelp
-										color={brandColors.deep[100]}
-										size={12}
-									/>
-								}
-							>
-								<GIVgardenTooltip>
-									While staking GIV in this pool you are also
-									granted voting power (gGIV) in the
-									GIVgarden.
-								</GIVgardenTooltip>
-							</IconWithTooltip>
-						)}
-					<div style={{ flex: 1 }}></div>
-					{notif && notif}
-				</StakingPoolExchangeRow>
-				<SPTitle alignItems='center' gap='16px'>
-					<StakingPoolImages title={title} />
-					<div>
-						<StakingPoolLabel weight={900}>
-							{title}
-						</StakingPoolLabel>
-						<StakingPoolSubtitle>{description}</StakingPoolSubtitle>
-					</div>
-				</SPTitle>
-				<StakePoolInfoContainer>
-					<Details>
-						<FirstDetail justifyContent='space-between'>
-							<DetailLabel>APR</DetailLabel>
-							{/* <Flex gap='8px' alignItems='center'>
-								<IconContainer
-									onClick={() => setShowAPRModal(true)}
-								>
-									<IconCalculator size={16} />
-								</IconContainer>
-							</Flex> */}
-							<Flex gap='8px' alignItems='center'>
-								<IconSpark
-									size={24}
-									color={brandColors.mustard[500]}
-								/>
-								{isV3Staking ? (
+				{state === StakeCardState.NORMAL ? (
+					<>
+						<StakingPoolExchangeRow gap='4px' alignItems='center'>
+							{getPoolIconWithName(type)}
+							<StakingPoolExchange styleType='Small'>
+								{type === StakingType.GIV_LM &&
+									chainId === config.XDAI_NETWORK_NUMBER &&
+									`GIVgarden `}
+								{type}
+							</StakingPoolExchange>
+							{chainId === config.XDAI_NETWORK_NUMBER &&
+								type === StakingType.GIV_LM && (
 									<IconWithTooltip
 										direction={'top'}
 										icon={
-											<IconGift
-												src='/images/heart-ribbon.svg'
-												alt='gift'
+											<IconHelp
+												color={brandColors.deep[100]}
+												size={12}
 											/>
 										}
 									>
-										<GiftTooltip>
-											Provide a narrow range of liquidity
-											to maximize your rate of reward. The
-											max APR for totally in range
-											liquidity is{' '}
-											{formatEthHelper(maxApr, 2)}%, the
-											average APR is{' '}
-											{formatEthHelper(apr, 2)}%, and the
-											minimum APR for full range liquidity
-											is {formatEthHelper(minimumApr, 2)}
-											%.
-										</GiftTooltip>
+										<GIVgardenTooltip>
+											While staking GIV in this pool you
+											are also granted voting power (gGIV)
+											in the GIVgarden.
+										</GIVgardenTooltip>
 									</IconWithTooltip>
-								) : (
-									<DetailValue>
-										{apr && formatEthHelper(apr, 2)}%
-									</DetailValue>
 								)}
-								<IconContainer
-									onClick={() => setShowAPRModal(true)}
+							<div style={{ flex: 1 }}></div>
+							{notif && notif}
+							{regenFarmIntro && (
+								<IntroIcon
+									onClick={() =>
+										setState(StakeCardState.INTRO)
+									}
 								>
 									<IconHelp size={16} />
-								</IconContainer>
-							</Flex>
-						</FirstDetail>
-						<Detail justifyContent='space-between'>
-							<DetailLabel>Claimable</DetailLabel>
-							<DetailValue>
-								{`${formatWeiHelper(rewardLiquidPart)} GIV`}
-							</DetailValue>
-						</Detail>
-						<Detail justifyContent='space-between'>
-							<Flex gap='8px' alignItems='center'>
-								<DetailLabel>Streaming</DetailLabel>
-								<IconHelpWraper
-									onClick={() => {
-										setShowWhatIsGIVstreamModal(true);
-									}}
-								>
-									<IconHelp size={16} />
-								</IconHelpWraper>
-							</Flex>
-							<Flex gap='4px' alignItems='center'>
-								<DetailValue>
-									{formatWeiHelper(rewardStream)}
-								</DetailValue>
-								<DetailUnit>GIV/week</DetailUnit>
-							</Flex>
-						</Detail>
-					</Details>
-					<ClaimButton
-						disabled={earned.isZero()}
-						onClick={() => setShowHarvestModal(true)}
-						label='HARVEST REWARDS'
-						buttonType='primary'
-					/>
-					<StakeButtonsRow>
-						<StakeContainer flexDirection='column'>
-							<StakeButton
-								label='STAKE'
-								size='small'
-								disabled={userNotStakedAmount.isZero()}
-								onClick={() => setShowStakeModal(true)}
+								</IntroIcon>
+							)}
+						</StakingPoolExchangeRow>
+						<SPTitle alignItems='center' gap='16px'>
+							<StakingPoolImages title={title} />
+							<div>
+								<StakingPoolLabel weight={900}>
+									{title}
+								</StakingPoolLabel>
+								<StakingPoolSubtitle>
+									{description}
+								</StakingPoolSubtitle>
+							</div>
+						</SPTitle>
+						<StakePoolInfoContainer>
+							{started ? (
+								<Details>
+									<FirstDetail justifyContent='space-between'>
+										<DetailLabel>APR</DetailLabel>
+										<Flex gap='8px' alignItems='center'>
+											<IconSpark
+												size={24}
+												color={brandColors.mustard[500]}
+											/>
+											{isV3Staking ? (
+												<IconWithTooltip
+													direction={'top'}
+													icon={
+														<IconGift
+															src='/images/heart-ribbon.svg'
+															alt='gift'
+														/>
+													}
+												>
+													<GiftTooltip>
+														Provide a narrow range
+														of liquidity to maximize
+														your rate of reward. The
+														max APR for totally in
+														range liquidity is{' '}
+														{formatEthHelper(
+															maxApr,
+															2,
+														)}
+														%, the average APR is{' '}
+														{formatEthHelper(
+															apr,
+															2,
+														)}
+														%, and the minimum APR
+														for full range liquidity
+														is{' '}
+														{formatEthHelper(
+															minimumApr,
+															2,
+														)}
+														%.
+													</GiftTooltip>
+												</IconWithTooltip>
+											) : (
+												<DetailValue>
+													{apr &&
+														formatEthHelper(apr, 2)}
+													%
+												</DetailValue>
+											)}
+											<IconContainer
+												onClick={() =>
+													setShowAPRModal(true)
+												}
+											>
+												<IconHelp size={16} />
+											</IconContainer>
+										</Flex>
+									</FirstDetail>
+									<Detail justifyContent='space-between'>
+										<DetailLabel>Claimable</DetailLabel>
+										<DetailValue>
+											{`${formatWeiHelper(
+												rewardLiquidPart,
+											)} ${rewardTokenSymbol}`}
+										</DetailValue>
+									</Detail>
+									<Detail justifyContent='space-between'>
+										<Flex gap='8px' alignItems='center'>
+											<DetailLabel>Streaming</DetailLabel>
+											<IconHelpWraper
+												onClick={() => {
+													setShowWhatIsGIVstreamModal(
+														true,
+													);
+												}}
+											>
+												<IconHelp size={16} />
+											</IconHelpWraper>
+										</Flex>
+										<Flex gap='4px' alignItems='center'>
+											<DetailValue>
+												{formatWeiHelper(rewardStream)}
+											</DetailValue>
+											<DetailUnit>
+												{rewardTokenSymbol}/week
+											</DetailUnit>
+										</Flex>
+									</Detail>
+								</Details>
+							) : (
+								<FarmCountDown
+									startTime={regenFarmStartTime || 0}
+									setStarted={setStarted}
+								/>
+							)}
+							<ClaimButton
+								disabled={earned.isZero()}
+								onClick={() => setShowHarvestModal(true)}
+								label='HARVEST REWARDS'
+								buttonType='primary'
 							/>
-							<StakeAmount>
-								{isV3Staking
-									? `${userNotStakedAmount.toNumber()} ${unit}`
-									: `${formatWeiHelper(
-											userNotStakedAmount,
-									  )} ${unit}`}
-							</StakeAmount>
-						</StakeContainer>
-						<StakeContainer flexDirection='column'>
-							<StakeButton
-								label='UNSTAKE'
-								size='small'
-								disabled={stakedLpAmount.isZero()}
-								onClick={() => setShowUnStakeModal(true)}
-							/>
-							<StakeAmount>
-								{isV3Staking
-									? `${stakedLpAmount.toNumber()} ${unit}`
-									: `${formatWeiHelper(
-											stakedLpAmount,
-									  )} ${unit}`}
-							</StakeAmount>
-						</StakeContainer>
-					</StakeButtonsRow>
-					<LiquidityButton
-						label={
-							type === StakingType.GIV_LM
-								? 'BUY GIV TOKENS'
-								: 'PROVIDE LIQUIDITY'
-						}
-						onClick={() => {
-							if (isV3Staking) {
-								setShowUniV3APRModal(true);
-							} else {
-								window.open(
+							<StakeButtonsRow>
+								<StakeContainer flexDirection='column'>
+									<StakeButton
+										label='STAKE'
+										size='small'
+										disabled={userNotStakedAmount.isZero()}
+										onClick={() => setShowStakeModal(true)}
+									/>
+									<StakeAmount>
+										{isV3Staking
+											? `${userNotStakedAmount.toNumber()} ${unit}`
+											: `${formatWeiHelper(
+													userNotStakedAmount,
+											  )} ${unit}`}
+									</StakeAmount>
+								</StakeContainer>
+								<StakeContainer flexDirection='column'>
+									<StakeButton
+										label='UNSTAKE'
+										size='small'
+										disabled={stakedLpAmount.isZero()}
+										onClick={() =>
+											setShowUnStakeModal(true)
+										}
+									/>
+									<StakeAmount>
+										{isV3Staking
+											? `${stakedLpAmount.toNumber()} ${unit}`
+											: `${formatWeiHelper(
+													stakedLpAmount,
+											  )} ${unit}`}
+									</StakeAmount>
+								</StakeContainer>
+							</StakeButtonsRow>
+							<LiquidityButton
+								label={
 									type === StakingType.GIV_LM
-										? BUY_LINK
-										: provideLiquidityLink,
-								);
-							}
-						}}
-						buttonType='texty'
-						icon={
-							<IconExternalLink
-								size={16}
-								color={brandColors.deep[100]}
+										? 'BUY GIV TOKENS'
+										: 'PROVIDE LIQUIDITY'
+								}
+								onClick={() => {
+									if (isV3Staking) {
+										setShowUniV3APRModal(true);
+									} else {
+										window.open(
+											type === StakingType.GIV_LM
+												? BUY_LINK
+												: provideLiquidityLink,
+										);
+									}
+								}}
+								buttonType='texty'
+								icon={
+									<IconExternalLink
+										size={16}
+										color={brandColors.deep[100]}
+									/>
+								}
 							/>
+						</StakePoolInfoContainer>
+					</>
+				) : (
+					<StakingCardIntro
+						poolStakingConfig={
+							poolStakingConfig as RegenPoolStakingConfig
 						}
+						setState={setState}
 					/>
-				</StakePoolInfoContainer>
+				)}
 			</StakingPoolContainer>
 			{showAPRModal && (
 				<APRModal
@@ -303,6 +391,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					setShowModal={setShowAPRModal}
 					poolStakingConfig={poolStakingConfig}
 					maxAmount={userNotStakedAmount}
+					regenStreamConfig={regenStreamConfig}
 				/>
 			)}
 			{showUniV3APRModal && (
@@ -351,6 +440,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					poolStakingConfig={poolStakingConfig}
 					claimable={earned}
 					network={chainId}
+					regenStreamConfig={regenStreamConfig}
 				/>
 			)}
 			{showWhatIsGIVstreamModal && (

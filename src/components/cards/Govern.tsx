@@ -127,7 +127,7 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 	);
 	const [earnEstimate, setEarnEstimate] = useState<BigNumber>(Zero);
 	const [apr, setApr] = useState<APR>(null);
-	const { tokenDistroHelper } = useTokenDistro();
+	const { givTokenDistroHelper } = useTokenDistro();
 	const { xDaiValues } = useSubgraph();
 
 	useEffect(() => {
@@ -140,14 +140,14 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 			stackedWithApr.toFixed(0),
 		).mul(constants.WeiPerEther);
 		setPotentialClaim(
-			tokenDistroHelper.getLiquidPart(convertedStackedWithApr),
+			givTokenDistroHelper.getLiquidPart(convertedStackedWithApr),
 		);
 		setEarnEstimate(
-			tokenDistroHelper.getStreamPartTokenPerWeek(
+			givTokenDistroHelper.getStreamPartTokenPerWeek(
 				convertedStackedWithApr,
 			),
 		);
-	}, [apr, stacked, totalAmount, tokenDistroHelper]);
+	}, [apr, stacked, totalAmount, givTokenDistroHelper]);
 
 	useEffect(() => {
 		if (totalAmount) {

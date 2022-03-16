@@ -119,11 +119,10 @@ const ProjectIndex = () => {
 			/>
 		);
 	}
-
 	return (
 		<Wrapper>
 			<Head>
-				<title>{title} | Giveth</title>
+				<title>{title && `${title} |`} Giveth</title>
 			</Head>
 			<ProjectHeader project={project} />
 			{isDraft && (
@@ -134,7 +133,7 @@ const ProjectIndex = () => {
 			)}
 			<BodyWrapper>
 				<ContentWrapper>
-					{!isDraft && (
+					{project && !isDraft && (
 						<ProjectTabs
 							activeTab={activeTab}
 							setActiveTab={setActiveTab}
@@ -175,15 +174,16 @@ const ProjectIndex = () => {
 						/>
 					)}
 				</ContentWrapper>
-				<ProjectDonateCard
-					isDraft={isDraft}
-					isMobile={isMobile}
-					project={project!}
-					isActive={isActive}
-					setIsActive={setIsActive}
-					setIsDraft={setIsDraft}
-					setCreationSuccessful={setCreationSuccessful}
-				/>
+				{project && (
+					<ProjectDonateCard
+						isDraft={isDraft}
+						project={project!}
+						isActive={isActive}
+						setIsActive={setIsActive}
+						setIsDraft={setIsDraft}
+						setCreationSuccessful={setCreationSuccessful}
+					/>
+				)}
 			</BodyWrapper>
 		</Wrapper>
 	);

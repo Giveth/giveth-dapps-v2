@@ -1,11 +1,21 @@
 import { useRouter } from 'next/router';
-import { D3, Lead, Button, H3, brandColors } from '@giveth/ui-design-system';
+import {
+	D3,
+	H2,
+	Lead,
+	Button,
+	H3,
+	brandColors,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 import Routes from '@/lib/constants/Routes';
 import { Arc } from '@/components/styled-components/Arc';
 import { isUserRegistered } from '@/lib/helpers';
 import useUser from '@/context/UserProvider';
+import { HomeContainer } from '@/components/views/homepage/Home.sc';
+import { deviceSize, mediaQueries } from '@/utils/constants';
+import { Col, Row } from '@/components/Grid';
 
 const content = [
 	{
@@ -16,17 +26,17 @@ const content = [
 	{
 		title: 'Zero-Added Fees',
 		description:
-			'Create a Project or donate directly to for-good projects with zero fees added by Giveth.',
+			'Create a project or donate directly to for-good projects with zero fees added by Giveth.',
 	},
 	{
 		title: 'Project Verification',
 		description:
-			'Encourage project accountability by donating to trusted projects. Apply for verification to reward your donors with GIVbacks.',
+			'Encourage project accountability by donating to trusted projects. Apply for verification and your donors will be rewarded with GIVbacks.',
 	},
 	{
-		title: 'The Giving Economy',
+		title: 'The GIVeconomy',
 		description:
-			'Give, Earn and Govern using GIV and the GIVeconomy. Become a stakeholder in the future of philanthropy.',
+			'Give, earn and govern using GIV and the GIVeconomy. Get rewarded for being a GIVer.',
 	},
 ];
 
@@ -53,15 +63,15 @@ const HomeChangeMakers = () => {
 			<D3>Calling all Changemakers!</D3>
 			<br />
 			<Lead>
-				Do you have for-good project that&apos;s creating value for
-				society, for the environment or for the world?
+				Do you have a for-good project that&apos;s creating value for
+				society, for the environment, or for the world?
 			</Lead>
 			<MiddleSection>
 				<Lead>
-					Add you project to Giveth to tap into the revolutionary
-					funding opportunities of the Ethereum Ecosystem. Start
-					raising funds within minutes. Creating a project is
-					absolutely free!
+					Establish your project on Giveth to tap into the
+					revolutionary funding opportunities of the Ethereum
+					Ecosystem. Start raising funds within minutes. Creating a
+					project is absolutely free!
 				</Lead>
 				<br />
 				<CreateProjectButton
@@ -85,8 +95,7 @@ const HomeChangeMakers = () => {
 };
 
 const CreateProjectButton = styled(Button)`
-	height: 66px;
-	padding: 0 80px;
+	width: 300px;
 `;
 
 const PurpleArc = styled(Arc)`
@@ -104,43 +113,83 @@ const MustardArc = styled(Arc)`
 	width: 400px;
 	height: 400px;
 	border-width: 50px;
-	top: 20px;
-	right: -200px;
 	transform: rotate(-45deg);
+	top: -100px;
+	right: -350px;
+
+	${mediaQueries.tablet} {
+		right: -200px;
+		top: 200px;
+	}
+	${mediaQueries.laptopL} {
+		top: 20px;
+	}
 `;
 
 const CyanArc = styled(Arc)`
 	border-width: 50px;
 	border-color: ${`transparent ${brandColors.cyan[500]} ${brandColors.cyan[500]} transparent`};
 	transform: rotate(45deg);
-	top: 300px;
-	left: -150px;
 	width: 380px;
 	height: 380px;
+	top: 20px;
+	left: -350px;
+
+	${mediaQueries.tablet} {
+		display: none;
+	}
+	${mediaQueries.laptopL} {
+		display: unset;
+		top: 150px;
+		left: -150px;
+	}
 `;
 
-const EndItem = styled.div`
-	max-width: 440px;
+const EndItem = styled(Col)`
+	padding-bottom: 55px;
+	padding-right: 55px;
 `;
 
-const EndSection = styled.div`
-	display: flex;
-	flex-wrap: wrap;
-	gap: 70px 145px;
+const EndSection = styled(Row)`
 	margin-top: 190px;
 `;
 
-const MiddleSection = styled.div`
-	padding: 50px 130px;
+const UpperSection = styled.div`
+	${mediaQueries.laptopL} {
+		margin-left: -120px;
+	}
+	${mediaQueries.desktop} {
+		margin-left: unset;
+	}
 `;
 
-const Wrapper = styled.div`
+const MiddleSection = styled.div`
+	max-width: 670px;
+	margin: 50px 0;
+	${mediaQueries.laptopL} {
+		margin: 50px 130px;
+	}
+`;
+
+const Container = styled.div`
+	margin: 0 auto;
+	${mediaQueries.desktop} {
+		max-width: ${deviceSize.desktop + 'px'};
+	}
+`;
+
+const Wrapper = styled(HomeContainer)`
 	background: ${brandColors.giv[600]};
 	color: white;
-	padding: 130px 150px 200px 150px;
+	padding-top: 68px;
+	padding-bottom: 150px;
 	position: relative;
 	z-index: 2;
 	overflow: hidden;
+
+	${mediaQueries.laptopL} {
+		padding-top: 130px;
+	}
 `;
 
 export default HomeChangeMakers;

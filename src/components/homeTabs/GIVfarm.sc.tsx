@@ -11,7 +11,7 @@ import {
 	DataBlock,
 	brandColors,
 } from '@giveth/ui-design-system';
-import { TopContainer } from './commons';
+import { BottomContainer, TopContainer } from './commons';
 import { RewardCard } from '../RewardCard';
 import { Flex } from '../styled-components/Flex';
 
@@ -19,6 +19,7 @@ export const GIVfarmTopContainer = styled(TopContainer)`
 	overflow: hidden;
 	position: relative;
 `;
+export const GIVfarmBottomContainer = styled(BottomContainer)``;
 
 export const Left = styled.div`
 	width: 708px;

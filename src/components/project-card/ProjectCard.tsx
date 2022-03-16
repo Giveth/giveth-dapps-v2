@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Image from 'next/image';
 import styled from 'styled-components';
 import {
 	GLink,
@@ -10,13 +11,17 @@ import {
 	ButtonLink,
 	OutlineLinkButton,
 } from '@giveth/ui-design-system';
+import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectCardBadges from './ProjectCardBadges';
+import ProjectCardOrgBadge from './ProjectCardOrgBadge';
 import { IProject } from '@/apollo/types/types';
 import { calcBiggestUnitDiffernceTime, htmlToText } from '@/lib/helpers';
 import ProjectCardImage from './ProjectCardImage';
 import { slugToProjectDonate, slugToProjectView } from '@/lib/routeCreators';
 import { Flex } from '../styled-components/Flex';
 import Link from 'next/link';
+import Routes from '@/lib/constants/Routes';
+import { Row } from '@/components/Grid';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -39,6 +44,7 @@ const ProjectCard = (props: IProjectCard) => {
 		traceCampaignId,
 		id,
 		updatedAt,
+		givingBlocksId,
 	} = props.project;
 	const [isHover, setIsHover] = useState(false);
 
@@ -48,7 +54,6 @@ const ProjectCard = (props: IProjectCard) => {
 		<Wrapper
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
-			className='shadow_1'
 		>
 			<ImagePlaceholder>
 				<ProjectCardBadges
@@ -60,11 +65,22 @@ const ProjectCard = (props: IProjectCard) => {
 					projectDescription={description}
 					projectId={id}
 				/>
+				<ProjectCardOrgBadge
+					image={'/images/thegivingblock.svg'}
+					isHover={isHover}
+					show={!!givingBlocksId}
+				/>
 				<ProjectCardImage image={image} />
 			</ImagePlaceholder>
 			<CardBody isHover={isHover}>
+				{givingBlocksId && (
+					<GivingBlockBadge src='/images/thegivingblock.svg' />
+				)}
 				<Title weight={700}>{title}</Title>
-				<Link href={`/user/${adminUser?.walletAddress}`} passHref>
+				<Link
+					href={`${Routes.User}/${adminUser?.walletAddress}`}
+					passHref
+				>
 					<Author size='Big'>{name || '\u200C'}</Author>
 				</Link>
 				<Description>{htmlToText(description)}</Description>
@@ -104,7 +120,7 @@ const LearnMoreButton = styled(OutlineLinkButton)`
 	flex: 1;
 `;
 
-const ActionButtons = styled(Flex)`
+const ActionButtons = styled(Row)`
 	gap: 16px;
 `;
 
@@ -131,7 +147,7 @@ const CardBody = styled.div`
 		props.isHover ? '136px' : '200px'};
 	background-color: ${neutralColors.gray[100]};
 	transition: top 0.3s ease;
-	border-radius: 12px;
+	border-radius: 0px 12px 12px 12px;
 `;
 
 const Author = styled(GLink)`
@@ -163,6 +179,16 @@ const Wrapper = styled.div`
 	border-radius: ${cardRadius};
 	background: white;
 	overflow: hidden;
+	box-shadow: ${Shadow.Neutral[400]};
+`;
+
+const GivingBlockBadge = styled.img`
+	position: absolute;
+	top: -5%;
+	right: 0;
+	background: white;
+	padding: 4px 12px;
+	border-top-left-radius: 10px;
 `;
 
 export default ProjectCard;

@@ -1,4 +1,5 @@
 import { brandColors, semanticColors } from '@giveth/ui-design-system';
+import config from '@/configuration';
 
 export const networksParams: Record<number, any> = {
 	1: {
@@ -29,7 +30,7 @@ export const networksParams: Record<number, any> = {
 	},
 	100: {
 		chainId: '0x64',
-		chainName: 'xDAI Chain',
+		chainName: 'Gnosis Chain',
 		iconUrls: [
 			'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/xdai/info/logo.png',
 		],
@@ -52,7 +53,7 @@ export const chainName = (chainId: number) => {
 		case 4:
 			return 'Rinkeby';
 		case 100:
-			return 'xDai';
+			return 'Gnosis Chain';
 		case 42:
 			return 'Mainnet';
 		default:
@@ -125,4 +126,9 @@ export const OurImages = [
 		color: semanticColors.blueSky[500],
 		url: '',
 	},
+];
+
+export const givEconomySupportedNetworks = [
+	config.MAINNET_NETWORK_NUMBER,
+	config.XDAI_NETWORK_NUMBER,
 ];

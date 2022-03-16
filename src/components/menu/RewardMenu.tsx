@@ -31,6 +31,7 @@ import { StakingType } from '@/types/config';
 import { useWeb3React } from '@web3-react/core';
 import { ETheme, useGeneral } from '@/context/general.context';
 import Routes from '@/lib/constants/Routes';
+import { networkInfo } from '@/lib/constants/NetworksObj';
 
 export const RewardMenu = () => {
 	const [isMounted, setIsMounted] = useState(false);
@@ -39,26 +40,27 @@ export const RewardMenu = () => {
 	const [flowRateNow, setFlowRateNow] = useState<BigNumber.Value>(0);
 	const [showWhatIsGIVstreamModal, setShowWhatIsGIVstreamModal] =
 		useState(false);
-	const { tokenDistroHelper } = useTokenDistro();
+	const { givTokenDistroHelper } = useTokenDistro();
 	const { currentValues } = useSubgraph();
 	const { rewardBalance } = useStakingNFT();
 	const { chainId, library } = useWeb3React();
 	const { balances } = currentValues;
 	const { allocatedTokens, claimed, givbackLiquidPart } = balances;
 	const { theme } = useGeneral();
+	const { networkName, networkToken } = networkInfo(chainId);
 
 	useEffect(() => {
 		setGIVstreamLiquidPart(
-			tokenDistroHelper
+			givTokenDistroHelper
 				.getLiquidPart(allocatedTokens.sub(givbackLiquidPart))
 				.sub(claimed),
 		);
 		setFlowRateNow(
-			tokenDistroHelper.getStreamPartTokenPerWeek(
+			givTokenDistroHelper.getStreamPartTokenPerWeek(
 				allocatedTokens.sub(givbackLiquidPart),
 			),
 		);
-	}, [allocatedTokens, claimed, givbackLiquidPart, tokenDistroHelper]);
+	}, [allocatedTokens, claimed, givbackLiquidPart, givTokenDistroHelper]);
 
 	useEffect(() => {
 		let pools;
@@ -81,26 +83,32 @@ export const RewardMenu = () => {
 				if (unipoolInfo) {
 					const unipoolHelper = new UnipoolHelper(unipoolInfo);
 					_farmRewards = _farmRewards.add(
-						getUserStakeInfo(type, balances, unipoolHelper).earned,
+						getUserStakeInfo(
+							type,
+							undefined,
+							balances,
+							unipoolHelper,
+						).earned,
 					);
 				} else if (type === StakingType.UNISWAP) {
 					_farmRewards = _farmRewards.add(rewardBalance);
 				}
 			});
-			setFarmsLiquidPart(tokenDistroHelper.getLiquidPart(_farmRewards));
+			setFarmsLiquidPart(
+				givTokenDistroHelper.getLiquidPart(_farmRewards),
+			);
 		}
-	}, [balances, currentValues, chainId, rewardBalance, tokenDistroHelper]);
+	}, [balances, currentValues, chainId, rewardBalance, givTokenDistroHelper]);
 
 	useEffect(() => {
 		setIsMounted(true);
 	}, []);
-
 	return (
 		<>
 			<RewardMenuContainer isMounted={isMounted} theme={theme}>
-				<Overline>Network</Overline>
+				<Overline>NETWORK</Overline>
 				<NetworkRow>
-					<B>{library?._network?.name}</B>
+					<B>{networkName}</B>
 					<SwithNetwork onClick={() => switchNetworkHandler(chainId)}>
 						Switch network
 					</SwithNetwork>

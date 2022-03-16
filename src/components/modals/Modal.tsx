@@ -8,6 +8,7 @@ import {
 	ModalHeaderTitlePosition,
 } from '@/components/modals/ModalHeader';
 import { ETheme, useGeneral } from '@/context/general.context';
+import Scrollbars from 'react-custom-scrollbars';
 
 export interface IModal {
 	showModal?: boolean;
@@ -55,7 +56,13 @@ export const Modal: React.FC<IModal> = ({
 					closeModal={() => setShowModal(false)}
 					position={headerTitlePosition}
 				/>
-				{children}
+				<StyledScrollbars
+					autoHeight
+					autoHeightMin={'calc(20Vh - 60px)'}
+					autoHeightMax={'calc(80Vh - 60px)'}
+				>
+					{children}
+				</StyledScrollbars>
 			</ModalWrapper>
 		</Background>,
 		el.current,
@@ -80,7 +87,8 @@ const ModalWrapper = styled.div`
 		props.theme === ETheme.Dark
 			? brandColors.giv[600]
 			: neutralColors.gray[100]};
-	box-shadow: 0 3px 20px #21203c;
+	box-shadow: 0 3px 20px
+		${props => (props.theme === ETheme.Dark ? '#00000026' : '#21203c')};
 	border-radius: 8px;
 	color: ${props =>
 		props.theme === ETheme.Dark
@@ -92,3 +100,5 @@ const ModalWrapper = styled.div`
 	max-height: 90vh;
 	overflow: hidden;
 `;
+
+const StyledScrollbars = styled(Scrollbars)``;

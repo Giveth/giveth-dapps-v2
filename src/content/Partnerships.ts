@@ -33,6 +33,7 @@ import SDG_Impact_Fund from '/public/images/partnerships/SDG_Impact_Fund.svg';
 import DappNode from '/public/images/partnerships/DappNode.svg';
 import Datafund from '/public/images/partnerships/Datafund.svg';
 import BrightID from '/public/images/partnerships/BrightID.svg';
+import Gnosis_Chain from '/public/images/partnerships/Gnosis_Chain.svg';
 
 export interface IPartner {
 	icon: any;
@@ -46,13 +47,13 @@ export const PartnershipArray: IPartner[] = [
 		icon: OneHive,
 		title: '1Hive',
 		description:
-			'A DAO creating open-source tools for community governance and public goods',
+			'A DAO creating open-source tools for community governance and public goods.',
 		link: 'https://about.1hive.org/',
 	},
 	{
 		icon: Alibre,
 		title: 'Alibre',
-		description: 'Financial Services for All',
+		description: 'Financial Services for All.',
 		link: 'https://alibre.io/',
 	},
 	{
@@ -130,7 +131,7 @@ export const PartnershipArray: IPartner[] = [
 		icon: iden3,
 		title: 'iden3',
 		description:
-			'An open-source set of tools for creating and managing self-sovereign identities on public blockchains',
+			'An open-source set of tools for creating and managing self-sovereign identities on public blockchains.',
 		link: 'https://iden3.io/',
 	},
 	{
@@ -170,7 +171,7 @@ export const PartnershipArray: IPartner[] = [
 	{
 		icon: Panvala,
 		title: 'Panvala',
-		description: 'The sustainable treasury for communities to share',
+		description: 'The sustainable treasury for communities to share.',
 		link: 'https://panvala.com/',
 	},
 	{
@@ -189,7 +190,7 @@ export const PartnershipArray: IPartner[] = [
 	{
 		icon: Rainbow_Rolls,
 		title: 'Rainbow Rolls',
-		description: 'Wiping away medical debt, one sheet at a time!.',
+		description: 'Wiping away medical debt, one sheet at a time!',
 		link: 'https://nftp.fun/',
 	},
 	{
@@ -265,10 +266,10 @@ export const PartnershipArray: IPartner[] = [
 		link: 'https://mashable.com/article/ethereum-stolen-white-hat-group-rescued',
 	},
 	{
-		icon: XDAI,
-		title: 'xDAI',
+		icon: Gnosis_Chain,
+		title: 'Gnosis Chain',
 		description:
-			'The first-ever USD stable blockchain and multi-chain staking token.',
+			'Formerly the xDai Chain, Gnosis Chain provides stability, scalability and an extendable beacon chain framework.',
 		link: 'https://xdaichain.com',
 	},
 ];

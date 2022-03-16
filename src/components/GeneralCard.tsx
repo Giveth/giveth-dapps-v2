@@ -2,6 +2,8 @@ import Image from 'next/image';
 import { Shadow } from './styled-components/Shadow';
 import { P, Button, H4, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { mediaQueries } from '@/utils/constants';
+import { FlexCenter } from '@/components/styled-components/Flex';
 
 interface IContent {
 	icon: string;
@@ -28,8 +30,9 @@ const GeneralCard = (props: { content: IContent; isHorizontal?: boolean }) => {
 			</TitleBox>
 			<ButtonStyled
 				label={buttonLabel}
+				buttonType='primary'
 				onClick={() => window?.open(route, '_blank')?.focus()}
-			></ButtonStyled>
+			/>
 		</Wrap>
 	);
 };
@@ -38,6 +41,7 @@ const ButtonStyled = styled(Button)`
 	text-transform: uppercase;
 	margin: 24px auto 0 auto;
 	width: 265px;
+	height: 66px;
 	padding: 0;
 `;
 
@@ -59,16 +63,21 @@ const HorizontalTitleSection = styled.div`
 	padding: 0 0 0 84px;
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled(FlexCenter)`
 	z-index: 2;
 	background: white;
 	text-align: center;
 	color: ${brandColors.giv[800]};
-	width: 558px;
+	max-width: 558px;
+	width: 100%;
 	height: 500px;
 	border-radius: 12px;
 	box-shadow: ${Shadow.Dark[500]};
-	padding: 64px 85px;
+	flex-direction: column;
+
+	${mediaQueries.tablet} {
+		padding: 64px 85px;
+	}
 `;
 
 const HorizontalWrap = styled.div`
