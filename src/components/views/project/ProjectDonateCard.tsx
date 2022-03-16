@@ -3,6 +3,7 @@ import React, {
 	SetStateAction,
 	useCallback,
 	useEffect,
+	useRef,
 	useState,
 } from 'react';
 import Image from 'next/image';
@@ -18,6 +19,7 @@ import {
 	Caption,
 	IconHelp,
 } from '@giveth/ui-design-system';
+import { motion } from 'framer-motion';
 
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import { Shadow } from '@/components/styled-components/Shadow';
@@ -42,6 +44,7 @@ import { mediaQueries } from '@/utils/constants';
 interface IProjectDonateCard {
 	project?: IProject;
 	isActive?: boolean;
+	isMobile: boolean;
 	setIsActive: Dispatch<SetStateAction<boolean>>;
 	isDraft?: boolean;
 	setIsDraft: Dispatch<SetStateAction<boolean>>;
@@ -51,6 +54,7 @@ interface IProjectDonateCard {
 const ProjectDonateCard = ({
 	project,
 	isActive,
+	isMobile,
 	setIsActive,
 	isDraft,
 	setIsDraft,
@@ -87,6 +91,9 @@ const ProjectDonateCard = ({
 	const isCategories = categories?.length > 0;
 
 	const router = useRouter();
+
+	const wrapperRef = useRef<HTMLDivElement>(null);
+	const [wrapperHeight, setWrapperHeight] = useState<number>(0);
 
 	const likeUnlikeProject = async () => {
 		if (!isSignedIn) {
@@ -158,6 +165,10 @@ const ProjectDonateCard = ({
 		);
 	}, [user, adminUser]);
 
+	useEffect(() => {
+		setWrapperHeight(wrapperRef?.current?.clientHeight || 0);
+	}, [wrapperRef, project]);
+
 	const handleProjectStatus = async () => {
 		if (isActive) {
 			setDeactivateModal(true);
@@ -211,7 +222,13 @@ const ProjectDonateCard = ({
 					setIsActive={setIsActive}
 				/>
 			)}
-			<Wrapper>
+			<Wrapper
+				ref={wrapperRef}
+				initialPosition={wrapperHeight}
+				drag='y'
+				dragConstraints={{ top: -(wrapperHeight - 168), bottom: 120 }}
+			>
+				{isMobile && <BlueBar />}
 				{!!givingBlocksId && (
 					<GivingBlocksContainer>
 						<GivingBlocksText>PROJECT BY:</GivingBlocksText>
@@ -317,6 +334,15 @@ const ProjectDonateCard = ({
 	);
 };
 
+const BlueBar = styled.div`
+	width: 80px;
+	height: 3px;
+	background-color: ${brandColors.giv[500]};
+	margin: 0 auto 16px;
+	position: relative;
+	top: -8px;
+`;
+
 const GivingBlocksContainer = styled.div`
 	display: flex;
 	align-items: center;
@@ -378,7 +404,7 @@ const BadgeWrapper = styled.div`
 	justify-content: space-between;
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled(motion.div)<{ initialPosition: number }>`
 	margin-right: 26px;
 	margin-top: -32px;
 	background: white;
@@ -386,17 +412,31 @@ const Wrapper = styled.div`
 	overflow: hidden;
 	width: 326px;
 	height: fit-content;
-	border-radius: 40px;
-	position: relative;
 	box-shadow: ${Shadow.Neutral['400']};
 	flex-shrink: 0;
 	z-index: 20;
+	align-self: flex-start;
+
+	${mediaQueries.mobileS} {
+		width: 100vw;
+		position: fixed;
+		bottom: calc(-${props => props.initialPosition}px + 168px);
+		border-radius: 40px 40px 0px 0px;
+	}
+
+	${mediaQueries.tablet} {
+		max-width: 225px;
+		position: sticky;
+		top: 168px;
+		border-radius: 40px;
+	}
+
+	${mediaQueries.laptop} {
+		max-width: 285px;
+	}
 
 	${mediaQueries.laptopL} {
-		position: sticky;
-		position: -webkit-sticky;
-		align-self: flex-start;
-		top: 168px;
+		max-width: 325px;
 	}
 `;
 

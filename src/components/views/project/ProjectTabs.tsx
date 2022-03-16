@@ -82,7 +82,19 @@ const Wrapper = styled.div`
 	z-index: 10;
 	background-color: ${neutralColors.gray[200]};
 
-	${mediaQueries.laptopL} {
+	${mediaQueries.mobileS} {
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		max-width: calc(100vw - 32px);
+
+		::-webkit-scrollbar {
+			width: 0px;
+			height: 0px;
+			background-color: transparent;
+		}
+	}
+
+	${mediaQueries.tablet} {
 		padding: 16px 0 12px;
 		position: sticky;
 		top: 200px;

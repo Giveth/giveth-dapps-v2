@@ -33,6 +33,7 @@
 		"cookie": "^0.4.2",
 		"deepmerge": "^4.2.2",
 		"ethers": "^5.5.3",
+		"framer-motion": "^6.2.8",
 		"graphql": "^16.0.1",
 		"human-standard-token-abi": "^2.0.0",
 		"lodash.debounce": "^4.0.8",

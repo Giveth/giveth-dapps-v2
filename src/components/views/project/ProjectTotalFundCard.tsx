@@ -44,7 +44,6 @@ const ProjectTotalFundCard = (props: { project?: IProject }) => {
 
 const Wrapper = styled.div`
 	background: white;
-	max-width: 750px;
 	border-radius: 12px;
 	box-shadow: ${Shadow.Neutral[400]};
 	overflow: hidden;

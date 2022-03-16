@@ -12,8 +12,10 @@ const ProjectDonations = (props: {
 	project?: IProject;
 	isActive?: boolean;
 	isDraft: boolean;
+	isMobile: boolean;
 }) => {
-	const { donationsByProjectId, project, isActive, isDraft } = props;
+	const { donationsByProjectId, project, isActive, isDraft, isMobile } =
+		props;
 	const { totalDonations, id, traceCampaignId } = project || {};
 	return (
 		<>
@@ -41,6 +43,7 @@ const ProjectDonations = (props: {
 						id={id}
 						showTrace={!!traceCampaignId}
 						totalDonations={donationsByProjectId.totalCount}
+						isMobile={isMobile}
 					/>
 				</>
 			)}
@@ -51,7 +54,6 @@ const ProjectDonations = (props: {
 const MessageContainer = styled.div`
 	height: 200px;
 	width: 100%;
-	max-width: 750px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
