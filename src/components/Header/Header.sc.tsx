@@ -72,9 +72,26 @@ export const BalanceButton = styled(HeaderButton)`
 `;
 
 export const WalletButton = styled(HeaderButton)`
-	font-size: 14px;
-	width: 200px;
-	padding: 6px 16px;
+	${mediaQueries.mobileS} {
+		div:nth-child(2) {
+			display: none;
+		}
+		div:nth-child(1) {
+			width: 100%;
+			paddding: 6px;
+		}
+	}
+	${mediaQueries.tablet} {
+		font-size: 14px;
+		width: 200px;
+		padding: 6px 16px;
+		div:nth-child(1) {
+			width: 100%;
+		}
+		div:nth-child(2) {
+			display: flex;
+		}
+	}
 `;
 
 export const MobileWalletButton = styled(HeaderButton)`
@@ -114,6 +131,12 @@ export const HBBalanceLogo = styled(HBPic)`
 
 export const HBContent = styled(GLink)`
 	margin-left: 8px;
+	${mediaQueries.mobileS} {
+		display: none;
+	}
+	${mediaQueries.tablet} {
+		display: flex;
+	}
 `;
 
 export const Title = styled.h1`
@@ -212,4 +235,13 @@ export const CoverLine = styled.div<IThemed>`
 	top: 1px;
 	bottom: 4px;
 	border-radius: 48px;
+`;
+
+export const MainLogoBtn = styled.div`
+	${mediaQueries.mobileS} {
+		display: none;
+	}
+	${mediaQueries.laptopL} {
+		display: flex;
+	}
 `;
