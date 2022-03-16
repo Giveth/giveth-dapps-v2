@@ -21,9 +21,8 @@ const HeaderRoutesResponsive = () => {
 	const { theme } = useGeneral();
 
 	useEffect(() => {
-		setIsOpen(!isOpen);
+		isOpen && setIsOpen(!isOpen);
 	}, [activeIndex]);
-
 	return (
 		<Wrapper
 			onMouseEnter={() => setIsOpen(true)}
@@ -37,6 +36,7 @@ const HeaderRoutesResponsive = () => {
 				/>
 				<P>{activeMenu}</P>
 			</DrawerClosed>
+
 			<DrawerOpened isOpen={isOpen}>
 				<Image
 					src={'/images/drawer_menu_purple.svg'}
