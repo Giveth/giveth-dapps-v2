@@ -77,10 +77,10 @@ const HomePurpleSection = () => {
 					<H3 weight={700}>The GIVeconomy</H3>
 					<br />
 					<Lead>
-						Our system connects the people on the ground directly to
-						the Givers with zero added fees. It creates an economy
-						of giving by rewarding donors and encouraging
-						decentralized community governance.
+						Welcome to a future where we revolutionize economic
+						systems, regenerate the Earth, evolve human coordination
+						& create societies based on decentralization, freedom,
+						community and love.
 					</Lead>
 					<br />
 					<Link href={Routes.GIVECONOMY} passHref>
@@ -94,9 +94,9 @@ const HomePurpleSection = () => {
 						<H3 weight={700}>For Projects</H3>
 						<br />
 						<Lead>
-							Create a project and start raising funds in crypto
-							within minutes. Get verified to reward your donors
-							with GIVbacks.
+							Create a project within minutes and start raising
+							funds in crypto with zero added fees. Get verified
+							and your donors will be rewarded by GIVbacks.
 						</Lead>
 						<br />
 						<ForMakersButton
@@ -110,10 +110,11 @@ const HomePurpleSection = () => {
 						<H3 weight={700}>For Givers</H3>
 						<br />
 						<Lead>
-							Donate to change-makers that are working hard to
-							make a difference. Earn GIV from GIVbacks when you
-							donate to verified projects and become a stakeholder
-							in the future of philanthropy.
+							For the first time ever, there is an upside to
+							donating. When you donate crypto to verified
+							projects, you get rewarded with GIV from our
+							GIVbacks program. Enjoy liquid GIV and a GIV/week
+							flowrate from the GIVstream until 2026.
 						</Lead>
 						<br />
 						<ForMakersButton
