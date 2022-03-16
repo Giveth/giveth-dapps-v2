@@ -173,7 +173,7 @@ export const TabGIVstreamBottom = () => {
 		<GIVstreamBottomContainer>
 			<Container>
 				<NetworkSelector />
-				<FlowRateRow alignItems='baseline' gap='8px'>
+				<FlowRateRow alignItems='baseline' gap='8px' wrap={1}>
 					<H3 id='flowRate' weight={700}>
 						Your Flowrate:
 					</H3>

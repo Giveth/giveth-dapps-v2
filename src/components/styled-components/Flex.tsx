@@ -23,6 +23,7 @@ export const Flex = styled.div<IFlexProps>`
 	justify-content: ${props =>
 		props.justifyContent ? props.justifyContent : 'initial'};
 	gap: ${props => props.gap};
+	overflow: hidden;
 `;
 
 interface IFlexCenter {
