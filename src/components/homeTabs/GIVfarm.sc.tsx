@@ -1,20 +1,10 @@
 import styled from 'styled-components';
 
-import {
-	D1,
-	H1,
-	H2,
-	H3,
-	P,
-	Button,
-	QuoteText,
-	DataBlock,
-	brandColors,
-} from '@giveth/ui-design-system';
-import { BottomContainer, TopContainer } from './commons';
-import { RewardCard } from '../RewardCard';
+import { D1, QuoteText, brandColors } from '@giveth/ui-design-system';
+import { BottomContainer, EnhancedRewardCard, TopContainer } from './commons';
 import { Flex } from '../styled-components/Flex';
 import { Row } from '../Grid';
+import { mediaQueries } from '@/utils/constants';
 
 export const GIVfarmTopContainer = styled(TopContainer)`
 	overflow: hidden;
@@ -22,24 +12,24 @@ export const GIVfarmTopContainer = styled(TopContainer)`
 `;
 export const GIVfarmBottomContainer = styled(BottomContainer)``;
 
-export const Left = styled.div`
-	width: 708px;
-`;
-
-export const Right = styled.div`
-	align-self: end;
-`;
-
 export const Title = styled(D1)`
 	margin-top: 60px;
 	margin-bottom: 24px;
 `;
 
 export const Subtitle = styled(QuoteText)`
-	margin-bottom: 89px;
+	margin-bottom: 54px;
+	${mediaQueries.tablet} {
+		margin-bottom: 89px;
+	}
 `;
 
-export const GIVfarmRewardCard = styled(RewardCard)``;
+export const GIVfarmRewardCard = styled(EnhancedRewardCard)`
+	margin-bottom: 24px;
+	${mediaQueries.tablet} {
+		margin-bottom: 0px;
+	}
+`;
 
 interface PoolRowProps {
 	disabled?: boolean;
