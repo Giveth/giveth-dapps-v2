@@ -64,9 +64,7 @@ export const GIVstreamRewardCard = styled(EnhancedRewardCard)`
 
 export const GIVstreamBottomContainer = styled(BottomContainer)``;
 
-export const GsDataBlock = styled(DataBlock)`
-	width: 459px;
-`;
+export const GsDataBlock = styled(DataBlock)``;
 
 export const GsButton = styled(ButtonLink)`
 	padding: 24px 34px;
@@ -79,7 +77,6 @@ export const FlowRateRow = styled(Flex)`
 
 export const FlowRateTooltip = styled(Subline)`
 	color: ${neutralColors.gray[100]};
-	width: 260px;
 `;
 
 export const FlowRateUnit = styled(H4)`
@@ -99,14 +96,12 @@ export const GsPTitle = styled(Flex)``;
 
 export const GsPTooltip = styled(Subline)`
 	color: ${neutralColors.gray[100]};
-	width: 240px;
 `;
 interface IBarProps {
 	percentage: number;
 }
 export const Bar = styled.div<IBarProps>`
 	height: 12px;
-	width: 100%;
 
 	background: ${brandColors.giv[800]};
 	border-radius: 12px;
@@ -161,7 +156,6 @@ export const HistoryTitle = styled(H2)`
 
 export const HistoryTooltip = styled(Subline)`
 	color: ${neutralColors.gray[100]};
-	width: 265px;
 `;
 
 export const HistoryContainer = styled.div`
@@ -171,7 +165,6 @@ export const HistoryContainer = styled.div`
 export const HistoryLoading = styled.div`
 	background-color: ${brandColors.giv[800]}aa;
 	position: absolute;
-	width: 100%;
 	height: 100%;
 	top: 40px;
 	left: 0;
