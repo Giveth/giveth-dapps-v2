@@ -230,7 +230,11 @@ const CryptoDonation = (props: {
 	const pollToken = useCallback(() => {
 		clearPoll();
 		// Native token balance is provided by the Web3Provider
-		if (!selectedToken?.address) {
+		if (
+			!selectedToken?.address ||
+			selectedToken.symbol === 'XDAI' ||
+			selectedToken.symbol === 'ETH'
+		) {
 			return setSelectedTokenBalance(balance);
 		}
 		stopPolling.current = pollEvery(
