@@ -277,7 +277,7 @@ const CryptoDonation = (props: {
 				<ChangeNetworkModal
 					showModal={showChangeNetworkModal}
 					setShowModal={setShowChangeNetworkModal}
-					targetNetwork={100}
+					targetNetwork={config.MAINNET_NETWORK_NUMBER}
 				/>
 			)}
 			{showInsufficientModal && (

@@ -47,7 +47,9 @@ const EthSelector = styled(Selector)`
 
 export const NetworkSelector = () => {
 	const [showChangeNetworkModal, setShowChangeNetworkModal] = useState(false);
-	const [targetNetwork, setTargetNetwork] = useState(1);
+	const [targetNetwork, setTargetNetwork] = useState(
+		config.MAINNET_NETWORK_NUMBER,
+	);
 
 	const { chainId } = useWeb3React();
 
