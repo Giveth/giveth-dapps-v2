@@ -166,23 +166,23 @@ const CryptoDonation = (props: {
 
 	// Gets price of selected token
 	useEffect(() => {
+		console.log(selectedToken);
 		const setPrice = async () => {
 			if (
 				selectedToken?.symbol &&
 				stableCoins.includes(selectedToken.symbol)
 			) {
 				setTokenPrice(1);
-			} else if (selectedToken?.address && selectedToken.address) {
-				let chain = xdaiChain.name;
+			} else if (selectedToken?.address) {
+				let chain = ethereumChain.name.split(' ')[0].toLowerCase();
 				let tokenAddress: string | undefined = selectedToken.address;
 				if (isXdai) {
 					// coingecko doesn't have these tokens in xdai, so fetching price from ethereum
 					if (xdaiExcluded.includes(selectedToken.symbol!)) {
 						tokenAddress = selectedToken.ethereumAddress;
-						chain = ethereumChain.name;
+					} else {
+						chain = xdaiChain.name.toLowerCase();
 					}
-				} else {
-					chain = ethereumChain.name;
 				}
 				const fetchedPrice = await fetchPrice(
 					chain?.toLowerCase(),
