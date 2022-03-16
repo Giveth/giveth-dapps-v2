@@ -48,7 +48,6 @@ export const TabTitle = styled(H1)`
 `;
 
 export const TabDesc = styled(QuoteText)`
-	max-width: 812px;
 	margin-bottom: 50px;
 `;
 
@@ -92,33 +91,8 @@ export const ClaimCardTitle = styled(H1)`
 	margin-bottom: 22px;
 `;
 
-export const EGDataBlock = styled(DataBlock)`
-	width: 100%;
-	margin-bottom: 64px;
-	@media ${device.tablet} {
-		width: calc(50% - 16px);
-	}
-	@media ${device.laptop} {
-		width: calc(33% - 16px);
-	}
-`;
-
-export const ParticipateDataBlock = styled(DataBlock)`
-	width: 100%;
-	display: flex;
-	flex-flow: column nowrap;
-	align-items: flex-start;
+export const DataBlockWithMargin = styled(DataBlock)`
 	margin-bottom: 32px;
-
-	div:nth-child(2) {
-		flex-grow: 1;
-	}
-	@media ${device.tablet} {
-		width: calc(50% - 16px);
-	}
-	@media ${device.laptop} {
-		width: calc(33% - 16px);
-	}
 `;
 
 export const DataBlockButton = styled(ButtonLink)`

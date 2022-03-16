@@ -56,7 +56,7 @@ const Label = styled(GLink)<ILabelProps>`
 const LabelsContainer = styled.div`
 	padding: 120px 0 42px;
 	width: 100%;
-	overflow-x: scroll;
+	overflow-x: auto;
 `;
 
 export default Tabs;
