@@ -96,7 +96,7 @@ export const GivAllocated = styled(Title)`
 	color: ${neutralColors.gray[100]};
 `;
 
-export const RoundButton = styled(Button)`
+export const RoundButton = styled(ButtonLink)`
 	padding: 16px 55px;
 `;
 
