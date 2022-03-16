@@ -247,5 +247,4 @@ const ContentWrapper = styled.div`
 		padding: 0 24px 0 0;
 	}
 `;
-
 export default ProjectIndex;
