@@ -48,7 +48,6 @@ export const GIVbackRewardCard = styled(EnhancedRewardCard)``;
 export const GIVbacksBottomContainer = styled(BottomContainer)``;
 
 export const GbDataBlock = styled(DataBlock)`
-	width: 460px;
 	min-height: 285px;
 	display: flex;
 	flex-flow: column nowrap;

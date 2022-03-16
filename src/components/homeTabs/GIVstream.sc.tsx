@@ -77,6 +77,7 @@ export const FlowRateRow = styled(Flex)`
 
 export const FlowRateTooltip = styled(Subline)`
 	color: ${neutralColors.gray[100]};
+	width: 260px;
 `;
 
 export const FlowRateUnit = styled(H4)`
@@ -96,6 +97,7 @@ export const GsPTitle = styled(Flex)``;
 
 export const GsPTooltip = styled(Subline)`
 	color: ${neutralColors.gray[100]};
+	width: 240px;
 `;
 interface IBarProps {
 	percentage: number;
@@ -156,6 +158,7 @@ export const HistoryTitle = styled(H2)`
 
 export const HistoryTooltip = styled(Subline)`
 	color: ${neutralColors.gray[100]};
+	width: 265px;
 `;
 
 export const HistoryContainer = styled.div`

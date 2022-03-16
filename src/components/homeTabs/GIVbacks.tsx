@@ -153,40 +153,44 @@ export const TabGIVbacksBottom = () => {
 	return (
 		<GIVbacksBottomContainer>
 			<Container>
-				<Flex wrap={1} justifyContent='space-between'>
-					<GbDataBlock
-						title='Donor Rewards'
-						button={
-							<GbButton
-								label='DONATE TO EARN GIV'
-								linkType='secondary'
-								size='large'
-								href='https://giveth.io/projects'
-								target='_blank'
-							/>
-						}
-					>
-						When you donate to verified projects you qualify to
-						receive GIV tokens. Through GIVbacks, GIV empowers
-						donors with governance rights via the GIVgarden.
-					</GbDataBlock>
-					<GbDataBlock
-						title='Project Verification'
-						button={
-							<GbButton
-								label='VERIFY YOUR PROJECT'
-								linkType='secondary'
-								size='large'
-								href='https://giveth.typeform.com/verification'
-								target='_blank'
-							/>
-						}
-					>
-						Great projects make the GIVeconomy thrive! As a project
-						owner, when you get your project verified, your donors
-						become eligible to receive GIVbacks.
-					</GbDataBlock>
-				</Flex>
+				<Row>
+					<Col xs={12} sm={6}>
+						<GbDataBlock
+							title='Donor Rewards'
+							button={
+								<GbButton
+									label='DONATE TO EARN GIV'
+									linkType='secondary'
+									size='large'
+									href='https://giveth.io/projects'
+									target='_blank'
+								/>
+							}
+						>
+							When you donate to verified projects you qualify to
+							receive GIV tokens. Through GIVbacks, GIV empowers
+							donors with governance rights via the GIVgarden.
+						</GbDataBlock>
+					</Col>
+					<Col xs={12} sm={6}>
+						<GbDataBlock
+							title='Project Verification'
+							button={
+								<GbButton
+									label='VERIFY YOUR PROJECT'
+									linkType='secondary'
+									size='large'
+									href='https://giveth.typeform.com/verification'
+									target='_blank'
+								/>
+							}
+						>
+							Great projects make the GIVeconomy thrive! As a
+							project owner, when you get your project verified,
+							your donors become eligible to receive GIVbacks.
+						</GbDataBlock>
+					</Col>
+				</Row>
 				<GIVBackCard>
 					<Flex justifyContent='space-between' alignItems='center'>
 						<RoundSection>
