@@ -19,18 +19,19 @@ export const GIVfrens: FC<IGIVfrensProps> = ({ regenFarms, network }) => {
 	return (
 		<>
 			<H3 weight={700}>RegenFarms</H3>
-
-			<Subtitle>
-				Explore a multiverse of projects changing the world and earn
-				rewards for staking liquidity.&nbsp;
-				<GIVfrensLink
-					size='Big'
-					href='https://medium.com/giveth/farm-to-table-yields-with-decentralized-philanthropy-a5d71d28ef0d'
-				>
-					Learn more
-				</GIVfrensLink>
-				.
-			</Subtitle>
+			<Col md={8} lg={6}>
+				<Subtitle>
+					Explore a multiverse of projects changing the world and earn
+					rewards for staking liquidity.&nbsp;
+					<GIVfrensLink
+						size='Big'
+						href='https://medium.com/giveth/farm-to-table-yields-with-decentralized-philanthropy-a5d71d28ef0d'
+					>
+						Learn more
+					</GIVfrensLink>
+					.
+				</Subtitle>
+			</Col>
 			<PoolRow disabled={!chainId || chainId !== network}>
 				{regenFarms.map((poolStakingConfig, index) => {
 					return (
