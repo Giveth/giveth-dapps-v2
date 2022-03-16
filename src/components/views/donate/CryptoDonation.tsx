@@ -114,7 +114,9 @@ const CryptoDonation = (props: {
 	const isGivingBlockProject = project?.givingBlocksId;
 	const stopPolling = useRef<any>(null);
 	const projectIsGivBackEligible = givBackEligible && project?.verified;
-
+	const givingBlockReady = isGivingBlockProject
+		? networkId === ethereumChain.id
+		: true;
 	// Checks network changes to fetch proper token list
 	useEffect(() => {
 		let netId = networkId as Number | string;
@@ -507,7 +509,7 @@ const CryptoDonation = (props: {
 
 			{!isActive && <InlineToast message='This project is not active.' />}
 
-			{isEnabled && (
+			{isEnabled && givingBlockReady && (
 				<>
 					<MainButton
 						label='DONATE'
@@ -535,7 +537,7 @@ const CryptoDonation = (props: {
 					</AnotherWalletTxt>
 				</>
 			)}
-			{!isEnabled && (
+			{!isEnabled && !givingBlockReady && (
 				<MainButton
 					label='CONNECT WALLET'
 					onClick={() => setShowWalletModal(true)}
