@@ -249,12 +249,12 @@ const ProjectDonateCard = ({
 						<FullButton
 							buttonType='primary'
 							label='EDIT'
-							disabled={!isActive}
+							disabled={!isActive && !isDraft}
 							onClick={() =>
 								router.push(idToProjectEdit(project?.id || ''))
 							}
 						/>
-						{!verified ? (
+						{!verified && !isDraft ? (
 							<FullOutlineButton
 								buttonType='primary'
 								label='VERIFY YOUR PROJECT'
