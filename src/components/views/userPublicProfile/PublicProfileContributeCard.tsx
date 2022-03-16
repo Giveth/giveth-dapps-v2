@@ -16,7 +16,7 @@ const PublicProfileContributeCard: FC<IUserPublicProfileView> = ({
 	myAccount,
 }) => {
 	return (
-		<Container>
+		<CustomContainer>
 			{!myAccount && (
 				<UserContributeTitle
 					weight={700}
@@ -41,7 +41,7 @@ const PublicProfileContributeCard: FC<IUserPublicProfileView> = ({
 					<H5>${user.totalReceived}</H5>
 				</ContributeCard>
 			</ContributeCardContainer>
-		</Container>
+		</CustomContainer>
 	);
 };
 
@@ -79,6 +79,10 @@ const ContributeCard = styled.div`
 
 const ContributeCardTitles = styled(Subline)`
 	text-transform: uppercase;
+`;
+
+const CustomContainer = styled(Container)`
+	padding: 0px;
 `;
 
 export default PublicProfileContributeCard;

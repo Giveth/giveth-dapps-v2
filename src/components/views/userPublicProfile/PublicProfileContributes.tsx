@@ -133,13 +133,13 @@ const PubliCProfileTabsAndProjectContainer = styled.div``;
 
 const ProfileContainer = styled(Container)`
 	${mediaQueries.mobileL} {
-		padding: 0 0 0 10px !important;
+		padding: 0 10px 0 10px !important;
 	}
 	${mediaQueries.mobileM} {
-		padding: 0 0 0 10px !important;
+		padding: 0 10px 0 10px !important;
 	}
 	${mediaQueries.mobileS} {
-		padding: 0 0 0 10px !important;
+		padding: 0 10px 0 10px !important;
 	}
 `;
 

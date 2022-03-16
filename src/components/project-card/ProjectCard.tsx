@@ -11,6 +11,7 @@ import {
 	ButtonLink,
 	OutlineLinkButton,
 } from '@giveth/ui-design-system';
+import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectCardBadges from './ProjectCardBadges';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
 import { IProject } from '@/apollo/types/types';
@@ -175,6 +176,7 @@ const Wrapper = styled.div`
 	border-radius: ${cardRadius};
 	background: white;
 	overflow: hidden;
+	box-shadow: ${Shadow.Neutral[400]};
 `;
 
 export default ProjectCard;
