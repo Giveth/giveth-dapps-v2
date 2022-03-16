@@ -34,7 +34,7 @@ import { useWeb3React } from '@web3-react/core';
 import { GIVfrens } from '@/components/GIVfrens';
 import { givEconomySupportedNetworks } from '@/utils/constants';
 import { shortenAddress } from '@/lib/helpers';
-import { Container } from '@/components/Grid';
+import { Col, Container } from '@/components/Grid';
 
 const GIVfarmTabContainer = styled(Container)``;
 
@@ -91,7 +91,7 @@ export const TabGIVfarmBottom = () => {
 	return (
 		<GIVfarmBottomContainer>
 			<Container>
-				<Flex alignItems='center' gap='24px'>
+				<Flex alignItems='center' gap='24px' wrap={1}>
 					<NetworkSelector />
 					<ExtLinkRow alignItems='center'>
 						<ExtLink
@@ -147,26 +147,35 @@ export const TabGIVfarmBottom = () => {
 				</Flex>
 				{chainId === config.XDAI_NETWORK_NUMBER && (
 					<>
-						<PoolRow justifyContent='center' gap='24px' wrap={1}>
+						<PoolRow>
 							{config.XDAI_CONFIG.pools.map(
 								(poolStakingConfig, index) => {
 									return (
-										<StakingPoolCard
+										<Col
+											sm={6}
+											lg={4}
 											key={`staking_pool_card_xdai_${index}`}
-											network={config.XDAI_NETWORK_NUMBER}
-											poolStakingConfig={
-												poolStakingConfig
-											}
-										/>
+										>
+											<StakingPoolCard
+												network={
+													config.XDAI_NETWORK_NUMBER
+												}
+												poolStakingConfig={
+													poolStakingConfig
+												}
+											/>
+										</Col>
 									);
 								},
 							)}
-							<StakingPoolCard
-								network={config.XDAI_NETWORK_NUMBER}
-								poolStakingConfig={getGivStakingConfig(
-									config.XDAI_CONFIG,
-								)}
-							/>
+							<Col sm={6} lg={4}>
+								<StakingPoolCard
+									network={config.XDAI_NETWORK_NUMBER}
+									poolStakingConfig={getGivStakingConfig(
+										config.XDAI_CONFIG,
+									)}
+								/>
+							</Col>
 						</PoolRow>
 						<GIVfrens
 							regenFarms={config.XDAI_CONFIG.regenFarms}
@@ -179,9 +188,6 @@ export const TabGIVfarmBottom = () => {
 					!givEconomySupportedNetworks.includes(chainId)) && (
 					<>
 						<PoolRow
-							justifyContent='center'
-							gap='24px'
-							wrap={1}
 							disabled={
 								!chainId ||
 								!givEconomySupportedNetworks.includes(chainId)
@@ -191,34 +197,43 @@ export const TabGIVfarmBottom = () => {
 								(poolStakingConfig, index) => {
 									return poolStakingConfig.type ===
 										StakingType.UNISWAP ? (
-										<StakingPositionCard
+										<Col
+											sm={6}
+											lg={4}
 											key={`staking_pool_card_mainnet_${index}`}
-											network={
-												config.MAINNET_NETWORK_NUMBER
-											}
-											poolStakingConfig={
-												poolStakingConfig
-											}
-										/>
+										>
+											<StakingPositionCard
+												network={
+													config.MAINNET_NETWORK_NUMBER
+												}
+												poolStakingConfig={
+													poolStakingConfig
+												}
+											/>
+										</Col>
 									) : (
-										<StakingPoolCard
-											key={`staking_pool_card_mainnet_${index}`}
-											network={
-												config.MAINNET_NETWORK_NUMBER
-											}
-											poolStakingConfig={
-												poolStakingConfig
-											}
-										/>
+										<Col sm={6} lg={4}>
+											<StakingPoolCard
+												key={`staking_pool_card_mainnet_${index}`}
+												network={
+													config.MAINNET_NETWORK_NUMBER
+												}
+												poolStakingConfig={
+													poolStakingConfig
+												}
+											/>
+										</Col>
 									);
 								},
 							)}
-							<StakingPoolCard
-								network={config.MAINNET_NETWORK_NUMBER}
-								poolStakingConfig={getGivStakingConfig(
-									config.MAINNET_CONFIG,
-								)}
-							/>
+							<Col sm={6} lg={4}>
+								<StakingPoolCard
+									network={config.MAINNET_NETWORK_NUMBER}
+									poolStakingConfig={getGivStakingConfig(
+										config.MAINNET_CONFIG,
+									)}
+								/>
+							</Col>
 						</PoolRow>
 						<GIVfrens
 							regenFarms={config.MAINNET_CONFIG.regenFarms}

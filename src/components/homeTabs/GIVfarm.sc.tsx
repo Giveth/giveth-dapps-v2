@@ -14,6 +14,7 @@ import {
 import { BottomContainer, TopContainer } from './commons';
 import { RewardCard } from '../RewardCard';
 import { Flex } from '../styled-components/Flex';
+import { Row } from '../Grid';
 
 export const GIVfarmTopContainer = styled(TopContainer)`
 	overflow: hidden;
@@ -44,8 +45,9 @@ interface PoolRowProps {
 	disabled?: boolean;
 }
 
-export const PoolRow = styled(Flex)<PoolRowProps>`
-	margin: 24px 0;
+export const PoolRow = styled(Row)<PoolRowProps>`
+	margin-top: 24px;
+	margin-bottom: 24px;
 	opacity: ${props => (props.disabled ? '0.2' : '1')};
 	pointer-events: ${props => (props.disabled ? 'none' : 'auto')};
 `;

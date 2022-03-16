@@ -14,13 +14,13 @@ import {
 } from '@giveth/ui-design-system';
 
 export const StakingPoolContainer = styled.div`
-	width: 383px;
-	height: 486px;
+	height: 488px;
 	border-radius: 8px;
 	background: ${brandColors.giv[600]};
 	color: ${neutralColors.gray[100]};
 	position: relative;
 	margin-bottom: 32px;
+	padding: 1px 0;
 `;
 export const StakingPoolExchangeRow = styled(Flex)`
 	margin: 16px;
