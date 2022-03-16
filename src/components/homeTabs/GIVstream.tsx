@@ -42,10 +42,8 @@ import {
 	IGsDataBox,
 	IncreaseSection,
 	IncreaseSectionTitle,
-	Left,
 	NoData,
 	PercentageRow,
-	Right,
 	TxHash,
 	TxSpan,
 } from './GIVstream.sc';
@@ -70,7 +68,7 @@ import RegenStreamBlock from '../RegenStreamBlock';
 import { Flex } from '../styled-components/Flex';
 import Pagination from '../Pagination';
 import Routes from '@/lib/constants/Routes';
-import { Container } from '@/components/Grid';
+import { Container, Row, Col } from '@/components/Grid';
 
 export const TabGIVstreamTop = () => {
 	const [showModal, setShowModal] = useState(false);
@@ -100,9 +98,8 @@ export const TabGIVstreamTop = () => {
 		<>
 			<GIVstreamTopContainer>
 				<GIVstreamTopInnerContainer>
-					<TopFiller />
-					<Flex justifyContent='space-between'>
-						<Left>
+					<Row style={{ alignItems: 'flex-end' }}>
+						<Col xs={12} sm={7} xl={8}>
 							<Flex alignItems='baseline' gap='16px'>
 								<GSTitle>GIVstream</GSTitle>
 								<IconGIVStream size={64} />
@@ -112,8 +109,8 @@ export const TabGIVstreamTop = () => {
 								GIVstream aligns community members with the long
 								term success of Giveth and the GIVeconomy.
 							</GSSubtitle>
-						</Left>
-						<Right>
+						</Col>
+						<Col xs={12} sm={5} xl={4}>
 							<GIVstreamRewardCard
 								wrongNetworkText='GIVstream is only available on Mainnet and Gnosis Chain.'
 								liquidAmount={rewardLiquidPart}
@@ -128,8 +125,8 @@ export const TabGIVstreamTop = () => {
 									config.XDAI_NETWORK_NUMBER,
 								]}
 							/>
-						</Right>
-					</Flex>
+						</Col>
+					</Row>
 				</GIVstreamTopInnerContainer>
 			</GIVstreamTopContainer>
 			{showModal && chainId && (

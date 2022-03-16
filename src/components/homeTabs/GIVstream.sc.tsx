@@ -13,10 +13,15 @@ import {
 	Subline,
 	ButtonLink,
 } from '@giveth/ui-design-system';
-import { TopContainer, TopInnerContainer, BottomContainer } from './commons';
-import { RewardCard } from '../RewardCard';
+import {
+	TopContainer,
+	TopInnerContainer,
+	BottomContainer,
+	EnhancedRewardCard,
+} from './commons';
 import { Flex } from '../styled-components/Flex';
 import { DataBox } from '../DataBox';
+import { mediaQueries } from '@/utils/constants';
 
 export const GIVstreamTopContainer = styled(TopContainer)`
 	overflow: hidden;
@@ -47,9 +52,19 @@ export const GSTitle = styled(D1)`
 	margin-bottom: 24px;
 `;
 
-export const GSSubtitle = styled(QuoteText)``;
+export const GSSubtitle = styled(QuoteText)`
+	margin-bottom: 54px;
+	${mediaQueries.tablet} {
+		margin-bottom: 32px;
+	}
+`;
 
-export const GIVstreamRewardCard = styled(RewardCard)``;
+export const GIVstreamRewardCard = styled(EnhancedRewardCard)`
+	margin-bottom: 24px;
+	${mediaQueries.tablet} {
+		margin-bottom: 0px;
+	}
+`;
 
 export const GIVstreamBottomContainer = styled(BottomContainer)``;
 
