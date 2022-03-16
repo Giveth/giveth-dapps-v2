@@ -230,7 +230,11 @@ const CryptoDonation = (props: {
 	const pollToken = useCallback(() => {
 		clearPoll();
 		// Native token balance is provided by the Web3Provider
-		if (!selectedToken?.address) {
+		if (
+			!selectedToken?.address ||
+			selectedToken.symbol === 'XDAI' ||
+			selectedToken.symbol === 'ETH'
+		) {
 			return setSelectedTokenBalance(balance);
 		}
 		stopPolling.current = pollEvery(
@@ -470,15 +474,17 @@ const CryptoDonation = (props: {
 					/>
 				</ToastContainer>
 			) : (
-				<ToastContainer>
-					<FixedToast
-						message='This token is eligible for GIVbacks.'
-						color={brandColors.giv[300]}
-						boldColor={brandColors.giv[600]}
-						backgroundColor={brandColors.giv[100]}
-						href={Routes.GIVbacks}
-					/>
-				</ToastContainer>
+				givBackEligible && (
+					<ToastContainer>
+						<FixedToast
+							message='This token is eligible for GIVbacks.'
+							color={brandColors.giv[300]}
+							boldColor={brandColors.giv[600]}
+							backgroundColor={brandColors.giv[100]}
+							href={Routes.GIVbacks}
+						/>
+					</ToastContainer>
+				)
 			)}
 			<CheckBoxContainer>
 				<CheckBox

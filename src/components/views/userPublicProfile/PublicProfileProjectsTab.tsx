@@ -4,7 +4,6 @@ import { IUserProjects } from '@/apollo/types/gqlTypes';
 import { IProject } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import ProjectCard from '@/components/project-card/ProjectCard';
-import ContributeCard from './PublicProfileContributeCard';
 import { Flex } from '@/components/styled-components/Flex';
 import { ETheme } from '@/context/general.context';
 import { brandColors, neutralColors } from '@giveth/ui-design-system';
@@ -80,9 +79,6 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({
 	}, [user, page, order.by, order.direction]);
 	return (
 		<ProjectsTab>
-			<UserContributeInfo>
-				<ContributeCard user={user} myAccount={myAccount} />
-			</UserContributeInfo>
 			<ProjectsContainer>
 				{!loading && totalCount === 0 ? (
 					<NothingWrapper>
