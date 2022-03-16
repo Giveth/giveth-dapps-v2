@@ -12,7 +12,7 @@ import {
 	brandColors,
 	GLink,
 } from '@giveth/ui-design-system';
-import { TopContainer } from './commons';
+import { TopContainer, BottomContainer } from './commons';
 import { RewardCard } from '../RewardCard';
 import { Flex } from '../styled-components/Flex';
 import { device } from '@/utils/constants';
@@ -71,7 +71,7 @@ export const GardenRewardCard = styled(RewardCard)`
 	position: relative;
 `;
 
-export const GardenBottomContainer = styled.div``;
+export const GardenBottomContainer = styled(BottomContainer)``;
 
 export const Section1Title = styled(H3)`
 	margin-top: 80px;

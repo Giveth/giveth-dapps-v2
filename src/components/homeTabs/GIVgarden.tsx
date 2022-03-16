@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { H1, IconGIVGarden } from '@giveth/ui-design-system';
 
-import { Flex } from '../styled-components/Flex';
 import {
 	GardenTopContainer,
 	GardenBottomContainer,
@@ -32,13 +31,14 @@ import { ethers } from 'ethers';
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import { TopFiller, TopInnerContainer } from './commons';
 import { useWeb3React } from '@web3-react/core';
+import { Flex } from '../styled-components/Flex';
 import { Container } from '@/components/Grid';
 
 const poolStakingConfig = getGivStakingConfig(config.XDAI_CONFIG);
 
 export const TabGardenTop = () => {
 	const { chainId } = useWeb3React();
-	const { tokenDistroHelper } = useTokenDistro();
+	const { givTokenDistroHelper } = useTokenDistro();
 
 	const [showModal, setShowModal] = useState(false);
 	const [earnedLiquidPart, setEarnedLiquidPart] =
@@ -53,9 +53,9 @@ export const TabGardenTop = () => {
 	);
 
 	useEffect(() => {
-		setEarnedLiquidPart(tokenDistroHelper.getLiquidPart(earned));
-		setEarnedStream(tokenDistroHelper.getStreamPartTokenPerWeek(earned));
-	}, [earned, tokenDistroHelper]);
+		setEarnedLiquidPart(givTokenDistroHelper.getLiquidPart(earned));
+		setEarnedStream(givTokenDistroHelper.getStreamPartTokenPerWeek(earned));
+	}, [earned, givTokenDistroHelper]);
 
 	return (
 		<GardenTopContainer>

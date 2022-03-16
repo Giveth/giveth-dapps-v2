@@ -13,7 +13,7 @@ const ligthTheme = {
 
 const darkTheme = {
 	type: ThemeType.Dark,
-	bg: '#1b1657',
+	bg: '#090446',
 	fg: '#ffffff',
 };
 
