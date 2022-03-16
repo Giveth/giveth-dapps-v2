@@ -178,6 +178,7 @@ const ProjectIndex = () => {
 					<ProjectDonateCard
 						isDraft={isDraft}
 						project={project!}
+						isMobile={isMobile}
 						isActive={isActive}
 						setIsActive={setIsActive}
 						setIsDraft={setIsDraft}
