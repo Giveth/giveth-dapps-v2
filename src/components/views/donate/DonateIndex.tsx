@@ -393,6 +393,9 @@ const GivBackContainer = styled.div`
 		font-weight: bold;
 		margin: 0 0 8px 0;
 	}
+	${mediaQueries['mobileS']} {
+		width: 100%;
+	}
 `;
 
 const CardMobileWrapper = styled.div`
