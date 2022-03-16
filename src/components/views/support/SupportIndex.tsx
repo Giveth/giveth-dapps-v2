@@ -5,8 +5,9 @@ import reportIcon from '/public/images/report_issue.svg';
 import featureIcon from '/public/images/request_feature.svg';
 import SupportCard from '@/components/GeneralCard';
 import links from '@/lib/constants/links';
-import { Lead, brandColors, D3 } from '@giveth/ui-design-system';
+import { brandColors, D3 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { mediaQueries } from '@/utils/constants';
 
 const SupportIndex = () => {
 	return (
@@ -17,11 +18,6 @@ const SupportIndex = () => {
 				<ArcPurple />
 				<TextContainer>
 					<Title>How can we help you?</Title>
-					<Lead>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-						Vitae purus, quis sit pretium, a nunc. Volutpat euismod
-						semper porttitor eleifend.
-					</Lead>
 				</TextContainer>
 			</UpperSection>
 
@@ -37,11 +33,13 @@ const SupportIndex = () => {
 const CardsSection = styled.div`
 	display: flex;
 	justify-content: center;
-	margin-top: -50px;
 	flex-wrap: wrap;
 	gap: 25px;
 	position: relative;
 	z-index: 3;
+	max-width: 1250px;
+	margin: -50px auto 0;
+	padding: 0 16px 48px;
 `;
 
 const cardsArray = [
@@ -93,22 +91,32 @@ const ArcPurple = styled(Arc)`
 const ArcCyan = styled(Arc)`
 	border-width: 90px;
 	border-color: transparent transparent ${brandColors.cyan[500]} transparent;
-	bottom: -30px;
-	right: -230px;
 	width: 520px;
 	height: 520px;
 	transform: rotate(31deg);
 	z-index: 1;
+	bottom: -150px;
+	right: -430px;
+
+	${mediaQueries.laptop} {
+		right: -230px;
+		bottom: -30px;
+	}
 `;
 
 const DotCyan = styled(Arc)`
 	border-width: 55px;
 	border-color: ${brandColors.cyan[500]};
-	bottom: 235px;
-	right: 210px;
+	bottom: 100px;
+	right: 10px;
 	width: 100px;
 	height: 100px;
 	z-index: 1;
+
+	${mediaQueries.laptop} {
+		right: 210px;
+		bottom: 235px;
+	}
 `;
 
 const TextContainer = styled.div`
@@ -119,10 +127,14 @@ const TextContainer = styled.div`
 
 const UpperSection = styled.div`
 	background: ${brandColors.giv[500]};
-	padding: 150px 130px;
 	color: white;
 	overflow: hidden;
 	position: relative;
+	padding: 150px 30px;
+
+	${mediaQueries.tablet} {
+		padding: 150px 130px;
+	}
 `;
 
 const Title = styled(D3)`

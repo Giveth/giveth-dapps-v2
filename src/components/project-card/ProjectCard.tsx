@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Image from 'next/image';
 import styled from 'styled-components';
 import {
 	GLink,
@@ -10,7 +11,9 @@ import {
 	ButtonLink,
 	OutlineLinkButton,
 } from '@giveth/ui-design-system';
+import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectCardBadges from './ProjectCardBadges';
+import ProjectCardOrgBadge from './ProjectCardOrgBadge';
 import { IProject } from '@/apollo/types/types';
 import { calcBiggestUnitDiffernceTime, htmlToText } from '@/lib/helpers';
 import ProjectCardImage from './ProjectCardImage';
@@ -41,6 +44,7 @@ const ProjectCard = (props: IProjectCard) => {
 		traceCampaignId,
 		id,
 		updatedAt,
+		givingBlocksId,
 	} = props.project;
 	const [isHover, setIsHover] = useState(false);
 
@@ -60,6 +64,11 @@ const ProjectCard = (props: IProjectCard) => {
 					projectHref={slug}
 					projectDescription={description}
 					projectId={id}
+				/>
+				<ProjectCardOrgBadge
+					image={'/images/thegivingblock.svg'}
+					isHover={isHover}
+					show={!!givingBlocksId}
 				/>
 				<ProjectCardImage image={image} />
 			</ImagePlaceholder>
@@ -135,7 +144,7 @@ const CardBody = styled.div`
 		props.isHover ? '136px' : '200px'};
 	background-color: ${neutralColors.gray[100]};
 	transition: top 0.3s ease;
-	border-radius: 12px;
+	border-radius: 0px 12px 12px 12px;
 `;
 
 const Author = styled(GLink)`
@@ -167,6 +176,7 @@ const Wrapper = styled.div`
 	border-radius: ${cardRadius};
 	background: white;
 	overflow: hidden;
+	box-shadow: ${Shadow.Neutral[400]};
 `;
 
 export default ProjectCard;

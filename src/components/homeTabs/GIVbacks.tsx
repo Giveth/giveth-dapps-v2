@@ -42,6 +42,7 @@ import { TopInnerContainer } from './commons';
 import { useWeb3React } from '@web3-react/core';
 import links from '@/lib/constants/links';
 import { Col, Container, Row } from '@/components/Grid';
+import Routes from '@/lib/constants/Routes';
 
 export const TabGIVbacksTop = () => {
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
@@ -162,8 +163,7 @@ export const TabGIVbacksBottom = () => {
 									label='DONATE TO EARN GIV'
 									linkType='secondary'
 									size='large'
-									href='https://giveth.io/projects'
-									target='_blank'
+									href={Routes.Project}
 								/>
 							}
 						>
@@ -225,13 +225,8 @@ export const TabGIVbacksBottom = () => {
 									<RoundButton
 										size='small'
 										label={'DONATE TO EARN GIV'}
-										buttonType='primary'
-										onClick={() => {
-											window.open(
-												'https://giveth.io/projects',
-												'_blank',
-											);
-										}}
+										linkType='primary'
+										href={Routes.Projects}
 									/>
 								</RoundInfo>
 							</RoundSection>

@@ -53,7 +53,7 @@ export const chainName = (chainId: number) => {
 		case 4:
 			return 'Rinkeby';
 		case 100:
-			return 'xDai';
+			return 'Gnosis Chain';
 		case 42:
 			return 'Mainnet';
 		default:

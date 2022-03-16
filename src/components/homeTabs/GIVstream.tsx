@@ -256,7 +256,7 @@ export const TabGIVstreamBottom = () => {
 										label='SEE PROJECTS'
 										linkType='primary'
 										size='medium'
-										href='https://giveth.io/projects'
+										href={Routes.Project}
 										target='_blank'
 									/>
 								}
@@ -359,6 +359,7 @@ const convetSourceTypeToIcon = (distributor: string) => {
 		case 'honeyswaplp':
 		case 'givlm':
 		case 'giveth':
+		case 'givethlm':
 		case 'givhnypool':
 		case 'uniswappool':
 			return (
