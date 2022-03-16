@@ -77,7 +77,6 @@ export const RegenRewardCard: FC<IRegenRewardCardProps> = ({
 };
 
 const RewardCardContainer = styled.div`
-	width: 257px;
 	padding: 24px;
 	background-color: ${brandColors.giv[700]};
 	border-radius: 8px;
