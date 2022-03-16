@@ -118,11 +118,21 @@ const CryptoDonation = (props: {
 	// Checks network changes to fetch proper token list
 	useEffect(() => {
 		let netId = networkId as Number | string;
-		// Show change network modal when needed
+		// Show change network modal when needed'
+		console.log(xdaiChain.id);
+		console.log(netId);
+		console.log(config.PRIMARY_NETWORK.id);
+		console.log(netId !== 'thegivingblock');
+
+		console.log(netId !== 'rapsten_thegivingblock');
+
+		console.log(netId !== config.PRIMARY_NETWORK.id);
+
+		console.log(netId !== config.SECONDARY_NETWORK.id);
 		if (
 			netId !== 'thegivingblock' &&
 			netId !== 'rapsten_thegivingblock' &&
-			netId !== config.MAINNET_NETWORK_NUMBER &&
+			netId !== config.PRIMARY_NETWORK.id &&
 			netId !== config.SECONDARY_NETWORK.id
 		) {
 			return setShowChangeNetworkModal(true);
