@@ -22,7 +22,7 @@ import {
 import { IconGIV } from '../Icons/GIV';
 import config from '@/configuration';
 import Routes from '@/lib/constants/Routes';
-import { Container } from '@/components/Grid';
+import { Col, Container } from '@/components/Grid';
 
 export const TabOverviewTop = () => {
 	return (
@@ -30,11 +30,13 @@ export const TabOverviewTop = () => {
 			<Container>
 				<PreTitle as='span'>Welcome to the</PreTitle>
 				<OverviewTitle>GIVeconomy</OverviewTitle>
-				<SubTitle size='medium'>
-					The GIVeconomy empowers our collective of projects, donors,
-					builders, and community members to build the Future of
-					Giving.
-				</SubTitle>
+				<Col lg={9}>
+					<SubTitle size='medium'>
+						The GIVeconomy empowers our collective of projects,
+						donors, builders, and community members to build the
+						Future of Giving.
+					</SubTitle>
+				</Col>
 			</Container>
 		</OverviewTopContainer>
 	);

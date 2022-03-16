@@ -27,18 +27,15 @@ export const OverviewTopContainer = styled(TopContainer)`
 
 export const OverviewTitle = styled(D1)`
 	padding-bottom: 36px;
-	max-width: 989px;
 `;
 
 export const PreTitle = styled(D3)`
 	padding-top: 77px;
 	display: block;
-	color: #a3b0f6;
+	color: ${brandColors.deep[100]};
 `;
 
-export const SubTitle = styled(QuoteText)`
-	max-width: 907px;
-`;
+export const SubTitle = styled(QuoteText)``;
 
 export const ClaimCardButton = styled(Button)`
 	width: 300px;
