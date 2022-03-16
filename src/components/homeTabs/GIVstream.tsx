@@ -253,8 +253,7 @@ export const TabGIVstreamBottom = () => {
 									label='SEE PROJECTS'
 									linkType='primary'
 									size='medium'
-									href='https://giveth.io/projects'
-									target='_blank'
+									href={Routes.Projects}
 								/>
 							}
 						>
