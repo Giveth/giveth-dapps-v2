@@ -350,6 +350,7 @@ const DonateModal = ({
 					)}
 					<DonateButton
 						donating={donating}
+						disabled={donating}
 						label={donating ? 'DONATING' : 'DONATE'}
 						onClick={() => {
 							setDonating(!donating);
