@@ -73,9 +73,6 @@ const ProjectCard = (props: IProjectCard) => {
 				<ProjectCardImage image={image} />
 			</ImagePlaceholder>
 			<CardBody isHover={isHover}>
-				{givingBlocksId && (
-					<GivingBlockBadge src='/images/thegivingblock.svg' />
-				)}
 				<Title weight={700}>{title}</Title>
 				<Link
 					href={`${Routes.User}/${adminUser?.walletAddress}`}
