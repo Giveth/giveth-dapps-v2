@@ -15,9 +15,9 @@ import {
 	Title,
 	ButtonLink,
 } from '@giveth/ui-design-system';
-import { BottomContainer, TopContainer } from './commons';
-import { RewardCard } from '../RewardCard';
+import { BottomContainer, EnhancedRewardCard, TopContainer } from './commons';
 import { Flex } from '../styled-components/Flex';
+import { mediaQueries } from '@/utils/constants';
 
 export const GIVbacksTopContainer = styled(TopContainer)`
 	overflow: hidden;
@@ -36,9 +36,14 @@ export const GBTitle = styled(D1)`
 	margin-bottom: 24px;
 `;
 
-export const GBSubtitle = styled(QuoteText)``;
+export const GBSubtitle = styled(QuoteText)`
+	margin-bottom: 54px;
+	${mediaQueries.tablet} {
+		margin-bottom: 64px;
+	}
+`;
 
-export const GIVbackRewardCard = styled(RewardCard)``;
+export const GIVbackRewardCard = styled(EnhancedRewardCard)``;
 
 export const GIVbacksBottomContainer = styled(BottomContainer)``;
 

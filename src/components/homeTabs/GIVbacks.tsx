@@ -38,10 +38,10 @@ import { getNowUnixMS } from '@/helpers/time';
 import { useSubgraph } from '@/context';
 import { formatDate } from '@/lib/helpers';
 import { GIVBackExplainModal } from '../modals/GIVBackExplain';
-import { TopFiller, TopInnerContainer } from './commons';
+import { TopInnerContainer } from './commons';
 import { useWeb3React } from '@web3-react/core';
 import links from '@/lib/constants/links';
-import { Container } from '@/components/Grid';
+import { Col, Container, Row } from '@/components/Grid';
 
 export const TabGIVbacksTop = () => {
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
@@ -63,9 +63,8 @@ export const TabGIVbacksTop = () => {
 		<>
 			<GIVbacksTopContainer>
 				<TopInnerContainer>
-					<TopFiller />
-					<Flex justifyContent='space-between'>
-						<Left>
+					<Row style={{ alignItems: 'flex-end' }}>
+						<Col xs={12} sm={7} xl={8}>
 							<Flex alignItems='baseline' gap='16px'>
 								<GBTitle>GIVbacks</GBTitle>
 								<IconGIVBack size={64} />
@@ -75,8 +74,8 @@ export const TabGIVbacksTop = () => {
 								with GIV, super-charging Giveth as a
 								donor-driven force for good.
 							</GBSubtitle>
-						</Left>
-						<Right>
+						</Col>
+						<Col xs={12} sm={5} xl={4}>
 							<GIVbackRewardCard
 								title='Your GIVbacks rewards'
 								wrongNetworkText='GIVbacks is only available on Gnosis Chain.'
@@ -97,8 +96,8 @@ export const TabGIVbacksTop = () => {
 								network={chainId}
 								targetNetworks={[config.XDAI_NETWORK_NUMBER]}
 							/>
-						</Right>
-					</Flex>
+						</Col>
+					</Row>
 				</TopInnerContainer>
 			</GIVbacksTopContainer>
 			{showHarvestModal && (
