@@ -12,9 +12,7 @@ import {
 	brandColors,
 	GLink,
 } from '@giveth/ui-design-system';
-import { TopContainer, BottomContainer } from './commons';
-import { RewardCard } from '../RewardCard';
-import { Flex } from '../styled-components/Flex';
+import { TopContainer, BottomContainer, EnhancedRewardCard } from './commons';
 import { device, mediaQueries } from '@/utils/constants';
 import { Row } from '../Grid';
 
@@ -62,14 +60,19 @@ export const Title = styled(D1)`
 `;
 
 export const Subtitle = styled(QuoteText)`
-	/* margin-bottom: 48px; */
+	margin-bottom: 54px;
+	${mediaQueries.tablet} {
+		margin-bottom: 36px;
+	}
 `;
 
-export const GardenRewardCard = styled(RewardCard)`
-	/* position: absolute;
-	bottom: -37px; */
+export const GardenRewardCard = styled(EnhancedRewardCard)`
 	z-index: 1;
 	position: relative;
+	margin-bottom: 24px;
+	${mediaQueries.tablet} {
+		margin-bottom: 0px;
+	}
 `;
 
 export const GardenBottomContainer = styled(BottomContainer)``;
@@ -155,12 +158,10 @@ export const VoteCardButton = styled(Button)`
 
 export const GardenIconContainer = styled.div`
 	position: absolute;
-	top: -50px;
-	right: 0;
+	top: 0;
+	right: -72px;
 	@media ${device.tablet} {
-	}
-	@media ${device.laptop} {
-		top: -50px;
+		top: -30px;
 		right: -56px;
 	}
 	@media ${device.laptopL} {

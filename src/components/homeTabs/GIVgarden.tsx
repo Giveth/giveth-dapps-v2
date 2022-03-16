@@ -29,10 +29,10 @@ import BigNumber from 'bignumber.js';
 import { Zero } from '@ethersproject/constants';
 import { ethers } from 'ethers';
 import { useTokenDistro } from '@/context/tokenDistro.context';
-import { TopFiller, TopInnerContainer } from './commons';
+import { TopInnerContainer } from './commons';
 import { useWeb3React } from '@web3-react/core';
 import { Flex } from '../styled-components/Flex';
-import { Col, Container } from '@/components/Grid';
+import { Col, Container, Row } from '@/components/Grid';
 
 const poolStakingConfig = getGivStakingConfig(config.XDAI_CONFIG);
 
@@ -60,9 +60,8 @@ export const TabGardenTop = () => {
 	return (
 		<GardenTopContainer>
 			<TopInnerContainer>
-				<TopFiller />
-				<Flex justifyContent='space-between'>
-					<Left>
+				<Row style={{ alignItems: 'flex-end' }}>
+					<Col xs={12} sm={7} md={8}>
 						<Title>
 							GIVgarden
 							<GardenIconContainer>
@@ -73,8 +72,8 @@ export const TabGardenTop = () => {
 							The GIVgarden is the decentralized governance
 							platform for the GIVeconomy.
 						</Subtitle>
-					</Left>
-					<Right>
+					</Col>
+					<Col xs={12} sm={5} md={4}>
 						<GardenRewardCard
 							title='Your GIVgarden rewards'
 							wrongNetworkText='GIVgarden is only available on Gnosis Chain.'
@@ -87,8 +86,8 @@ export const TabGardenTop = () => {
 							network={chainId}
 							targetNetworks={[config.XDAI_NETWORK_NUMBER]}
 						/>
-					</Right>
-				</Flex>
+					</Col>
+				</Row>
 			</TopInnerContainer>
 			{showModal && (
 				<HarvestAllModal
