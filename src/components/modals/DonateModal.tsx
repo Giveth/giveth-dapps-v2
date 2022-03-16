@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import UserContext from '../../context/UserProvider';
 import Image from 'next/image';
+import styled from 'styled-components';
 import {
 	brandColors,
 	H3,
@@ -12,23 +13,21 @@ import {
 	Button,
 	semanticColors,
 } from '@giveth/ui-design-system';
+
 import { IModal, Modal } from '@/components/modals/Modal';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import { WrongNetworkModal } from '@/components/modals/WrongNetwork';
-import { IProject } from '../../apollo/types/types';
+import { IProject } from '@/apollo/types/types';
 import { Flex } from '../styled-components/Flex';
 import Logger from '../../utils/Logger';
-import { checkNetwork } from '../../utils';
-import { isAddressENS, getAddressFromENS } from '../../lib/wallet';
-import { sendTransaction } from '../../lib/helpers';
+import { checkNetwork } from '@/utils';
+import { isAddressENS, getAddressFromENS } from '@/lib/wallet';
+import { sendTransaction } from '@/lib/helpers';
 import * as transaction from '../../services/transaction';
-import { saveDonation, saveDonationTransaction } from '../../services/donation';
+import { saveDonation, saveDonationTransaction } from '@/services/donation';
+import FixedToast from '@/components/toasts/FixedToast';
 import { mediaQueries } from '@/utils/constants';
-import FixedToast from '@/components/FixedToast';
 import config from '@/configuration';
-import styled from 'styled-components';
-
-const xdaiChain = config.SECONDARY_NETWORK;
 
 interface IToken {
 	value: string;
@@ -56,7 +55,6 @@ interface IDonateModal extends IModal {
 const DonateModal = ({
 	showModal,
 	setShowModal,
-	closeParentModal,
 	project,
 	token,
 	userTokenBalance,
@@ -81,7 +79,6 @@ const DonateModal = ({
 
 	const avgPrice = price && price * amount;
 	const isGivingBlockProject = project?.givingBlocksId;
-	const isXdai = chainId === xdaiChain.id;
 	const confirmDonation = async () => {
 		try {
 			// Traceable by default if it comes from Trace only
@@ -133,7 +130,6 @@ const DonateModal = ({
 			const toAddress = isAddressENS(project.walletAddress!)
 				? await getAddressFromENS(project.walletAddress!, library)
 				: project.walletAddress;
-			const web3Provider = library;
 			await transaction.send(
 				library,
 				toAddress,
@@ -419,13 +415,13 @@ const DonatingBox = styled.div`
 const DonateButton = styled(Button)`
 	display: flex;
 	justify-content: center;
-	algin-items: center;
+	align-items: center;
 	border-color: transparent;
 	width: 100%;
 	background: ${(props: { donating: boolean }) =>
 		props.donating ? brandColors.giv[200] : brandColors.giv[500]};
 	:hover {
-		background: ${(props: { donating: boolean }) => brandColors.giv[700]};
+		background: ${brandColors.giv[700]};
 	}
 	* {
 		margin: auto 0;
@@ -437,7 +433,7 @@ const DonateButton = styled(Button)`
 const Buttons = styled.div`
 	display: flex;
 	flex-direction: column;
-	jusitfy-content: center;
+	justify-content: center;
 `;
 
 const CloseButton = styled(Button)`

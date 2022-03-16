@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Select, { StylesConfig } from 'react-select';
 import styled from 'styled-components';
@@ -186,7 +186,7 @@ const ConfirmButton = styled(Button)`
 const CancelButton = styled(Button)`
 	text-transform: uppercase;
 	width: 100%;
-	margin: 8px 0px;
+	margin: 8px 0;
 
 	&:hover {
 		background-color: transparent;
@@ -222,7 +222,7 @@ const bulletPointsText = [
 ];
 
 const CustomList = styled.ul`
-	list-style-image: url('../images/icons/bullet_icon.svg');
+	list-style-image: url('/images/icons/bullet_icon.svg');
 	padding-inline-start: 20px;
 `;
 

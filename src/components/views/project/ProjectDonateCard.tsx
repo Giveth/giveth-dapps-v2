@@ -44,7 +44,7 @@ import { mediaQueries } from '@/utils/constants';
 interface IProjectDonateCard {
 	project?: IProject;
 	isActive?: boolean;
-	isMobile: boolean;
+	isMobile?: boolean;
 	setIsActive: Dispatch<SetStateAction<boolean>>;
 	isDraft?: boolean;
 	setIsDraft: Dispatch<SetStateAction<boolean>>;
@@ -88,6 +88,7 @@ const ProjectDonateCard = ({
 	const [isAdmin, setIsAdmin] = useState<boolean>(false);
 	const [deactivateModal, setDeactivateModal] = useState<boolean>(false);
 	const [showVerificationModal, setShowVerificationModal] = useState(false);
+
 	const isCategories = categories?.length > 0;
 
 	const router = useRouter();
@@ -120,6 +121,7 @@ const ProjectDonateCard = ({
 					}
 				}
 			} catch (e) {
+				showToastError(e);
 				console.error('Error on like/unlike project ', e);
 			} finally {
 				setLoading(false);
@@ -143,6 +145,7 @@ const ProjectDonateCard = ({
 				});
 				setReaction(data?.projectById?.reaction);
 			} catch (e) {
+				showToastError(e);
 				console.error('Error on fetching project by id:', e);
 			}
 		} else if (reaction) {
@@ -245,6 +248,7 @@ const ProjectDonateCard = ({
 						<FullButton
 							buttonType='primary'
 							label='EDIT'
+							disabled={!isActive}
 							onClick={() =>
 								router.push(idToProjectEdit(project?.id || ''))
 							}
@@ -253,6 +257,7 @@ const ProjectDonateCard = ({
 							<FullOutlineButton
 								buttonType='primary'
 								label='VERIFY YOUR PROJECT'
+								disabled={!isActive}
 								onClick={() => setShowVerificationModal(true)}
 							/>
 						) : (
@@ -269,6 +274,7 @@ const ProjectDonateCard = ({
 							router.push(slugToProjectDonate(slug || ''))
 						}
 						label='DONATE'
+						disabled={!isActive}
 					/>
 				)}
 				<BadgeWrapper>
@@ -421,7 +427,7 @@ const Wrapper = styled(motion.div)<{ initialPosition: number }>`
 		width: 100vw;
 		position: fixed;
 		bottom: calc(-${props => props.initialPosition}px + 168px);
-		border-radius: 40px 40px 0px 0px;
+		border-radius: 40px 40px 0 0;
 	}
 
 	${mediaQueries.tablet} {

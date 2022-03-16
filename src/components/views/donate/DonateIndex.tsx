@@ -1,19 +1,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useWeb3React } from '@web3-react/core';
-import ProjectCard from '@/components/project-card/ProjectCardAlt';
-import { Shadow } from '@/components/styled-components/Shadow';
-import CryptoDonation from './CryptoDonation';
-import FiatDonation from './FiatDonation';
-import { IProjectBySlug } from '@/apollo/types/types';
-import { BigArc } from '@/components/styled-components/Arc';
-import ConfettiAnimation from '../../animations/confetti';
-import RadioOnIcon from '/public/images/radio_on.svg';
-import RadioOffIcon from '/public/images/radio_off.svg';
-import { formatEtherscanLink } from '../../../utils';
-import useDeviceDetect from '@/hooks/useDeviceDetect';
-import { mediaQueries } from '@/utils/constants';
-import SocialBox from './SocialBox';
 import {
 	H4,
 	brandColors,
@@ -25,16 +13,25 @@ import {
 	GLink,
 	Button,
 } from '@giveth/ui-design-system';
-import Link from 'next/link';
 import styled from 'styled-components';
+
+import ProjectCard from '@/components/project-card/ProjectCardAlt';
+import { Shadow } from '@/components/styled-components/Shadow';
+import CryptoDonation from './CryptoDonation';
+import FiatDonation from './FiatDonation';
+import { IProjectBySlug } from '@/apollo/types/types';
+import { BigArc } from '@/components/styled-components/Arc';
+import ConfettiAnimation from '../../animations/confetti';
+import RadioOnIcon from '/public/images/radio_on.svg';
+import RadioOffIcon from '/public/images/radio_off.svg';
+import { formatEtherscanLink } from '@/utils';
+import useDeviceDetect from '@/hooks/useDeviceDetect';
+import { mediaQueries } from '@/utils/constants';
+import SocialBox from './SocialBox';
 import Routes from '@/lib/constants/Routes';
 
 const CRYPTO_DONATION = 'Cryptocurrency';
 const FIAT_DONATION = 'Credit Card';
-
-interface ICardMobile {
-	isHidden?: boolean;
-}
 
 const ProjectsIndex = (props: IProjectBySlug) => {
 	const { project } = props;
@@ -227,6 +224,7 @@ const Container = styled.div`
 	background-color: rgba(246, 247, 249);
 	align-items: center;
 `;
+
 const ConfettiContainer = styled.div`
 	position: absolute;
 	top: 200px;
@@ -243,6 +241,7 @@ const Wrapper = styled.div`
 	align-items: center;
 	margin: 0 auto;
 `;
+
 const Sections = styled.div`
 	height: 100%;
 	${mediaQueries['tablet']} {
@@ -255,6 +254,7 @@ const Sections = styled.div`
 		padding: 0 40px;
 	}
 `;
+
 const Left = styled.div`
 	display: grid;
 	justify-content: center;
@@ -275,6 +275,7 @@ const Left = styled.div`
 		}
 	}
 `;
+
 const Right = styled.div`
 	z-index: 1;
 	grid-row: 1;
@@ -294,10 +295,12 @@ const RadioTitleText = styled(Lead)`
 	color: ${(props: { isSelected: boolean }) =>
 		props.isSelected ? brandColors.deep[900] : neutralColors.gray[600]};
 `;
+
 const RadioSubtitleText = styled(Subline)`
 	color: ${(props: { isSelected: boolean }) =>
 		props.isSelected ? brandColors.deep[900] : neutralColors.gray[600]};
 `;
+
 const RadioBox = styled.div`
 	display: flex;
 	justify-content: space-between;
@@ -321,12 +324,14 @@ const RadioBox = styled.div`
 		margin-bottom: 10px;
 	}
 `;
+
 const RadioTitleBox = styled.div`
 	display: flex;
 	flex-direction: row;
 	cursor: pointer;
 	margin-bottom: 10px;
 `;
+
 const SucceessContainer = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -340,6 +345,7 @@ const SucceessContainer = styled.div`
 		padding: 0;
 	}
 `;
+
 const SuccessMessage = styled(P)`
 	margin: -19px 0 16px 0;
 	color: ${brandColors.deep[900]};
@@ -347,6 +353,7 @@ const SuccessMessage = styled(P)`
 		margin: 16px 0;
 	}
 `;
+
 const Options = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -354,11 +361,13 @@ const Options = styled.div`
 	justify-content: center;
 	align-items: center;
 `;
+
 const ProjectsButton = styled(Button)`
 	width: 242px;
 	height: 48px;
 	font-size: 12px;
 `;
+
 const LearnButton = styled(Button)`
 	width: 200px;
 	height: 48px;
@@ -375,7 +384,7 @@ const GivBackContainer = styled.div`
 	height: 212px;
 	padding: 0 53px;
 	align-items: center;
-	background-image: url(/images/GIVeconomy_Banner.png);
+	background-image: url('/images/GIVeconomy_Banner.png');
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	border-radius: 12px;
@@ -400,8 +409,8 @@ const CardMobileWrapper = styled.div`
 	padding: 0 16px;
 	background-color: white;
 	z-index: 10;
-	box-shadow: 0px 3px 20px rgba(212, 218, 238, 0.7);
-	border-radius: 40px 40px 0px 0px;
+	box-shadow: 0 3px 20px rgba(212, 218, 238, 0.7);
+	border-radius: 40px 40px 0 0;
 `;
 
 const MobileCardContainer = styled.div`
@@ -411,7 +420,7 @@ const MobileCardContainer = styled.div`
 
 const SlideBtn = styled.div`
 	width: 78px;
-	height: 0px;
+	height: 0;
 	margin: 16px 0;
 	border: 1.5px solid ${brandColors.giv[500]};
 	border-radius: 15%;
