@@ -42,6 +42,8 @@ import { TopFiller, TopInnerContainer } from './commons';
 import { useWeb3React } from '@web3-react/core';
 import links from '@/lib/constants/links';
 import { Container } from '@/components/Grid';
+import Routes from '@/lib/constants/Routes';
+import { useRouter } from 'next/router';
 
 export const TabGIVbacksTop = () => {
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
@@ -124,6 +126,7 @@ export const TabGIVbacksBottom = () => {
 	const [roundStartime, setRoundStartime] = useState(new Date());
 	const [roundEndTime, setRoundEndTime] = useState(new Date());
 	const { givTokenDistroHelper } = useTokenDistro();
+	const router = useRouter();
 
 	useEffect(() => {
 		if (givTokenDistroHelper) {
@@ -162,8 +165,7 @@ export const TabGIVbacksBottom = () => {
 								label='DONATE TO EARN GIV'
 								linkType='secondary'
 								size='large'
-								href='https://giveth.io/projects'
-								target='_blank'
+								href={Routes.Projects}
 							/>
 						}
 					>
@@ -221,10 +223,7 @@ export const TabGIVbacksBottom = () => {
 									label={'DONATE TO EARN GIV'}
 									buttonType='primary'
 									onClick={() => {
-										window.open(
-											'https://giveth.io/projects',
-											'_blank',
-										);
+										router.push(Routes.Projects);
 									}}
 								/>
 							</RoundInfo>

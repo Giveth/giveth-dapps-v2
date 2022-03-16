@@ -87,8 +87,7 @@ export const TabOverviewBottom = () => {
 						title='Give'
 						button={
 							<DataBlockButton
-								href='https://giveth.io/projects'
-								target='_blank'
+								href={Routes.Projects}
 								label='DONATE TO PROJECTS'
 							/>
 						}
