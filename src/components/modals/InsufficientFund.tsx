@@ -2,8 +2,9 @@ import { IModal, Modal } from '@/components/modals/Modal';
 import { FC } from 'react';
 import styled from 'styled-components';
 import { IconFund } from '@giveth/ui-design-system/lib/cjs/components/icons/Fund';
-import { brandColors, Button, H5, Lead } from '@giveth/ui-design-system';
+import { Button, H5, Lead } from '@giveth/ui-design-system';
 import { ETheme, useGeneral } from '@/context/general.context';
+import { mediaQueries } from '@/utils/constants';
 
 export const InsufficientFundModal: FC<IModal> = ({
 	showModal,
@@ -40,8 +41,11 @@ export const InsufficientFundModal: FC<IModal> = ({
 
 const InsufficientFundContainer = styled.div`
 	height: 300px;
-	width: 528px;
+	width: 100%;
 	padding: 24px;
+	${mediaQueries['tablet']} {
+		width: 528px;
+	}
 `;
 
 const OkButton = styled(Button)`

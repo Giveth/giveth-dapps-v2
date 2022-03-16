@@ -57,7 +57,7 @@ const DoneStep = () => {
 				<CongratsContainer>
 					<CongratsText>
 						<H4 weight={700}>Well done!</H4>
-						<P>Now your profile complete.</P>
+						<P>Now your profile is complete.</P>
 					</CongratsText>
 					<ContributeCardRow>
 						<Col xs={12} sm={8} md={6}>
@@ -84,7 +84,7 @@ const DoneStep = () => {
 										Donate to projects
 									</ContributeCardTitle>
 									<ContributeCardDesc>
-										Take a look and donate to projects
+										Take a look and donate to projects.
 									</ContributeCardDesc>
 								</div>
 								<Link href={Routes.Projects} passHref>
@@ -96,7 +96,7 @@ const DoneStep = () => {
 				</CongratsContainer>
 			</DoneStepContainer>
 			<GotoHomeWrapper>
-				<P>or go to homepage to start exploring</P>
+				<P>or go to the homepage to start exploring.</P>
 				<Link href={Routes.Home} passHref>
 					<GotoHomeLink as='a'>Home page</GotoHomeLink>
 				</Link>

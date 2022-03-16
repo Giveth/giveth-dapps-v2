@@ -73,6 +73,9 @@ const ProjectCard = (props: IProjectCard) => {
 				<ProjectCardImage image={image} />
 			</ImagePlaceholder>
 			<CardBody isHover={isHover}>
+				{givingBlocksId && (
+					<GivingBlockBadge src='/images/thegivingblock.svg' />
+				)}
 				<Title weight={700}>{title}</Title>
 				<Link
 					href={`${Routes.User}/${adminUser?.walletAddress}`}
@@ -177,6 +180,15 @@ const Wrapper = styled.div`
 	background: white;
 	overflow: hidden;
 	box-shadow: ${Shadow.Neutral[400]};
+`;
+
+const GivingBlockBadge = styled.img`
+	position: absolute;
+	top: -5%;
+	right: 0;
+	background: white;
+	padding: 4px 12px;
+	border-top-left-radius: 10px;
 `;
 
 export default ProjectCard;
