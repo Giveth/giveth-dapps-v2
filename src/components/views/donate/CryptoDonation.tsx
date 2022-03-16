@@ -122,7 +122,7 @@ const CryptoDonation = (props: {
 		if (
 			netId !== 'thegivingblock' &&
 			netId !== 'rapsten_thegivingblock' &&
-			netId !== config.PRIMARY_NETWORK.id &&
+			netId !== config.MAINNET_NETWORK_NUMBER &&
 			netId !== config.SECONDARY_NETWORK.id
 		) {
 			return setShowChangeNetworkModal(true);
