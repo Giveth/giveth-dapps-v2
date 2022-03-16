@@ -33,10 +33,6 @@ import Routes from '@/lib/constants/Routes';
 const CRYPTO_DONATION = 'Cryptocurrency';
 const FIAT_DONATION = 'Credit Card';
 
-interface ICardMobile {
-	isHidden?: boolean;
-}
-
 const ProjectsIndex = (props: IProjectBySlug) => {
 	const { project } = props;
 	const [donationType, setDonationType] = useState(CRYPTO_DONATION);
@@ -228,6 +224,7 @@ const Container = styled.div`
 	background-color: rgba(246, 247, 249);
 	align-items: center;
 `;
+
 const ConfettiContainer = styled.div`
 	position: absolute;
 	top: 200px;
@@ -244,6 +241,7 @@ const Wrapper = styled.div`
 	align-items: center;
 	margin: 0 auto;
 `;
+
 const Sections = styled.div`
 	height: 100%;
 	${mediaQueries['tablet']} {
@@ -256,6 +254,7 @@ const Sections = styled.div`
 		padding: 0 40px;
 	}
 `;
+
 const Left = styled.div`
 	display: grid;
 	justify-content: center;
@@ -276,6 +275,7 @@ const Left = styled.div`
 		}
 	}
 `;
+
 const Right = styled.div`
 	z-index: 1;
 	grid-row: 1;
@@ -295,10 +295,12 @@ const RadioTitleText = styled(Lead)`
 	color: ${(props: { isSelected: boolean }) =>
 		props.isSelected ? brandColors.deep[900] : neutralColors.gray[600]};
 `;
+
 const RadioSubtitleText = styled(Subline)`
 	color: ${(props: { isSelected: boolean }) =>
 		props.isSelected ? brandColors.deep[900] : neutralColors.gray[600]};
 `;
+
 const RadioBox = styled.div`
 	display: flex;
 	justify-content: space-between;
@@ -322,12 +324,14 @@ const RadioBox = styled.div`
 		margin-bottom: 10px;
 	}
 `;
+
 const RadioTitleBox = styled.div`
 	display: flex;
 	flex-direction: row;
 	cursor: pointer;
 	margin-bottom: 10px;
 `;
+
 const SucceessContainer = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -341,6 +345,7 @@ const SucceessContainer = styled.div`
 		padding: 0;
 	}
 `;
+
 const SuccessMessage = styled(P)`
 	margin: -19px 0 16px 0;
 	color: ${brandColors.deep[900]};
@@ -348,6 +353,7 @@ const SuccessMessage = styled(P)`
 		margin: 16px 0;
 	}
 `;
+
 const Options = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -355,11 +361,13 @@ const Options = styled.div`
 	justify-content: center;
 	align-items: center;
 `;
+
 const ProjectsButton = styled(Button)`
 	width: 242px;
 	height: 48px;
 	font-size: 12px;
 `;
+
 const LearnButton = styled(Button)`
 	width: 200px;
 	height: 48px;
@@ -376,7 +384,7 @@ const GivBackContainer = styled.div`
 	height: 212px;
 	padding: 0 53px;
 	align-items: center;
-	background-image: url(/images/GIVeconomy_Banner.png);
+	background-image: url('/images/GIVeconomy_Banner.png');
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	border-radius: 12px;

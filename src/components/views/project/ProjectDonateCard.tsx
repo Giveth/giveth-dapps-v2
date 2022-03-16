@@ -44,7 +44,7 @@ import { mediaQueries } from '@/utils/constants';
 interface IProjectDonateCard {
 	project?: IProject;
 	isActive?: boolean;
-	isMobile: boolean;
+	isMobile?: boolean;
 	setIsActive: Dispatch<SetStateAction<boolean>>;
 	isDraft?: boolean;
 	setIsDraft: Dispatch<SetStateAction<boolean>>;
@@ -427,7 +427,7 @@ const Wrapper = styled(motion.div)<{ initialPosition: number }>`
 		width: 100vw;
 		position: fixed;
 		bottom: calc(-${props => props.initialPosition}px + 168px);
-		border-radius: 40px 40px 0px 0px;
+		border-radius: 40px 40px 0 0;
 	}
 
 	${mediaQueries.tablet} {
