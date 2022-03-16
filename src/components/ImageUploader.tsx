@@ -13,7 +13,6 @@ import {
 } from '@giveth/ui-design-system';
 
 import { Flex } from './styled-components/Flex';
-import deleteIcon from '../../public/images/delete.png';
 import { client } from '@/apollo/apolloClient';
 import { UPLOAD_PROFILE_PHOTO } from '@/apollo/gql/gqlUser';
 
@@ -67,13 +66,6 @@ const ImageUploader: FC<IImageUploader> = ({ setUrl, url, setIsUploading }) => {
 			{url ? (
 				<ShowingImage>
 					<img src={url} alt='uploaded image' width='100%' />
-					<Image
-						width={32}
-						height={32}
-						src={deleteIcon}
-						alt='delete icon'
-						onClick={onDelete}
-					/>
 				</ShowingImage>
 			) : (
 				<DropZone {...getRootProps()}>
@@ -94,7 +86,7 @@ const ImageUploader: FC<IImageUploader> = ({ setUrl, url, setIsUploading }) => {
 					</P>
 				</DropZone>
 			)}
-			{file && (
+			{file && (url || uploading) && (
 				<UploadContainer>
 					<UploadInfoRow
 						flexDirection='column'
@@ -119,15 +111,8 @@ const ImageUploader: FC<IImageUploader> = ({ setUrl, url, setIsUploading }) => {
 };
 
 const ShowingImage = styled.div`
-	position: relative;
 	> img {
 		border-radius: 8px;
-	}
-	> :nth-child(2) {
-		position: absolute !important;
-		right: 5px;
-		bottom: 10px;
-		cursor: pointer;
 	}
 `;
 

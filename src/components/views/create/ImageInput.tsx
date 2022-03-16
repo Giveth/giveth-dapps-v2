@@ -4,14 +4,14 @@ import {
 	Caption,
 	brandColors,
 	neutralColors,
+	IconTrash,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import Image from 'next/image';
 
 import { OurImages } from '@/utils/constants';
 import { InputContainer } from './Create.sc';
-import XIcon from '/public/images/icons/x.svg';
 import ImageUploader from '@/components/ImageUploader';
+import { FlexCenter } from '@/components/styled-components/Flex';
 
 const ImageInput = (props: {
 	setValue: Dispatch<SetStateAction<string>>;
@@ -52,14 +52,25 @@ const ImageInput = (props: {
 							/>
 						);
 					})}
-					<RemoveBox onClick={() => setValue('')}>
-						<Image alt='x icon' src={XIcon} />
-					</RemoveBox>
+					<div>
+						<Separator />
+						<RemoveBox
+							isActive={!!value}
+							onClick={() => value && setValue('')}
+						>
+							<IconTrash size={24} />
+							<div>REMOVE</div>
+						</RemoveBox>
+					</div>
 				</PickImageContainer>
 			</InputContainer>
 		</>
 	);
 };
+
+const Separator = styled.div`
+	border-left: 1px solid ${neutralColors.gray[400]};
+`;
 
 const CaptionContainer = styled(Caption)`
 	margin: 8.5px 0 0 0;
@@ -72,28 +83,47 @@ const CaptionContainer = styled(Caption)`
 const PickImageContainer = styled.div`
 	display: flex;
 	flex-wrap: wrap;
+	gap: 16px;
+	margin-top: 16px;
+
+	> :last-of-type {
+		display: flex;
+		gap: 16px;
+	}
 `;
 
 const ColorBox = styled.div`
 	width: 80px;
 	height: 80px;
 	border-radius: 8px;
-	margin: 16px 16px 16px 0;
 	background-color: ${props => props.color};
 	cursor: pointer;
 `;
 
-const RemoveBox = styled.div`
+const RemoveBox = styled(FlexCenter)<{ isActive: boolean }>`
 	width: 80px;
 	height: 80px;
-	border: 2px solid ${neutralColors.gray[400]};
+	border: 2px solid
+		${props =>
+			props.isActive ? neutralColors.gray[700] : neutralColors.gray[500]};
 	border-radius: 8px;
-	margin: 16px 16px 16px 0;
 	background-color: transparent;
-	cursor: pointer;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+	cursor: ${props => props.isActive && 'pointer'};
+	flex-direction: column;
+	color: ${props =>
+		props.isActive ? neutralColors.gray[700] : neutralColors.gray[500]};
+
+	> :first-child {
+		color: inherit;
+	}
+
+	> :last-child {
+		padding: 0;
+		color: inherit;
+		margin-top: 6px;
+		font-size: 12px;
+		font-weight: 700;
+	}
 `;
 
 export default ImageInput;
