@@ -1,9 +1,8 @@
 import { brandColors, Title, neutralColors, P } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { IconGIV } from './Icons/GIV';
 import { Flex } from './styled-components/Flex';
 
-export const GIVBoxWithPriceContainer = styled(Flex)`
+export const AmountBoxWithPriceContainer = styled(Flex)`
 	background-color: ${brandColors.giv[500]}66;
 	margin: 8px 0;
 	border-radius: 8px;
@@ -11,13 +10,11 @@ export const GIVBoxWithPriceContainer = styled(Flex)`
 	gap: 8px;
 `;
 
-export const GIVBoxWithPriceIcon = styled(IconGIV)``;
-
-export const GIVBoxWithPriceAmount = styled(Title)`
+export const AmountBoxWithPriceAmount = styled(Title)`
 	margin-left: 8px;
 	color: ${neutralColors.gray[100]};
 `;
 
-export const GIVBoxWithPriceUSD = styled(P)`
+export const AmountBoxWithPriceUSD = styled(P)`
 	color: ${brandColors.deep[100]};
 `;

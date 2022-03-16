@@ -1,9 +1,9 @@
 import React, { FC, Fragment, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { Flex } from '../styled-components/Flex';
 import {
 	B,
 	brandColors,
+	DataBlock,
 	H1,
 	H3,
 	H6,
@@ -20,10 +20,10 @@ import {
 	FlowRateRow,
 	FlowRateTooltip,
 	FlowRateUnit,
-	GIVbacksBottomContainer,
+	GIVstreamTopContainer,
 	GIVstreamProgressContainer,
 	GIVstreamRewardCard,
-	GIVstreamTopContainer,
+	GIVstreamBottomContainer,
 	GIVstreamTopInnerContainer,
 	Grid,
 	GsButton,
@@ -65,6 +65,9 @@ import { ITokenAllocation } from '@/types/subgraph';
 import { TopFiller } from './commons';
 import { useWeb3React } from '@web3-react/core';
 import { IconGIV } from '../Icons/GIV';
+import { givEconomySupportedNetworks } from '@/utils/constants';
+import RegenStreamBlock from '../RegenStreamBlock';
+import { Flex } from '../styled-components/Flex';
 import Pagination from '../Pagination';
 import Routes from '@/lib/constants/Routes';
 import { Container } from '@/components/Grid';
@@ -73,7 +76,7 @@ export const TabGIVstreamTop = () => {
 	const [showModal, setShowModal] = useState(false);
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
 	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
-	const { tokenDistroHelper } = useTokenDistro();
+	const { givTokenDistroHelper } = useTokenDistro();
 	const {
 		currentValues: { balances },
 	} = useSubgraph();
@@ -82,16 +85,16 @@ export const TabGIVstreamTop = () => {
 
 	useEffect(() => {
 		setRewardLiquidPart(
-			tokenDistroHelper
+			givTokenDistroHelper
 				.getLiquidPart(allocatedTokens.sub(givback))
 				.sub(claimed),
 		);
 		setRewardStream(
-			tokenDistroHelper.getStreamPartTokenPerWeek(
+			givTokenDistroHelper.getStreamPartTokenPerWeek(
 				allocatedTokens.sub(givback),
 			),
 		);
-	}, [allocatedTokens, claimed, givback, tokenDistroHelper]);
+	}, [allocatedTokens, claimed, givback, givTokenDistroHelper]);
 
 	return (
 		<>
@@ -112,7 +115,7 @@ export const TabGIVstreamTop = () => {
 						</Left>
 						<Right>
 							<GIVstreamRewardCard
-								wrongNetworkText='GIVstream is only available on Mainnet and xDAI.'
+								wrongNetworkText='GIVstream is only available on Mainnet and Gnosis Chain.'
 								liquidAmount={rewardLiquidPart}
 								stream={rewardStream}
 								actionLabel='HARVEST'
@@ -143,7 +146,7 @@ export const TabGIVstreamTop = () => {
 
 export const TabGIVstreamBottom = () => {
 	const { chainId } = useWeb3React();
-	const { tokenDistroHelper } = useTokenDistro();
+	const { givTokenDistroHelper } = useTokenDistro();
 
 	const [percent, setPercent] = useState(0);
 	const [remain, setRemain] = useState('');
@@ -155,26 +158,22 @@ export const TabGIVstreamBottom = () => {
 		currentValues: { balances },
 	} = useSubgraph();
 	const increaseSecRef = useRef<HTMLDivElement>(null);
-	const supportedNetworks = [
-		config.MAINNET_NETWORK_NUMBER,
-		config.XDAI_NETWORK_NUMBER,
-	];
 
 	useEffect(() => {
 		setStreamAmount(
-			tokenDistroHelper.getStreamPartTokenPerWeek(
+			givTokenDistroHelper.getStreamPartTokenPerWeek(
 				balances.allocatedTokens.sub(balances.givback),
 			),
 		);
-	}, [balances.allocatedTokens, balances.givback, tokenDistroHelper]);
+	}, [balances.allocatedTokens, balances.givback, givTokenDistroHelper]);
 
 	useEffect(() => {
-		setPercent(tokenDistroHelper.percent);
-		const _remain = DurationToString(tokenDistroHelper.remain);
+		setPercent(givTokenDistroHelper.percent);
+		const _remain = DurationToString(givTokenDistroHelper.remain);
 		setRemain(_remain);
-	}, [tokenDistroHelper]);
+	}, [givTokenDistroHelper]);
 	return (
-		<GIVbacksBottomContainer>
+		<GIVstreamBottomContainer>
 			<Container>
 				<NetworkSelector />
 				<FlowRateRow alignItems='baseline' gap='8px'>
@@ -183,7 +182,8 @@ export const TabGIVstreamBottom = () => {
 					</H3>
 					<IconGIVStream size={64} />
 					<H1>
-						{chainId && supportedNetworks.includes(chainId)
+						{chainId &&
+						givEconomySupportedNetworks.includes(chainId)
 							? formatWeiHelper(streamAmount)
 							: '0'}
 					</H1>
@@ -199,6 +199,21 @@ export const TabGIVstreamBottom = () => {
 					</IconWithTooltip>
 				</FlowRateRow>
 				<GIVstreamProgress percentage={percent} remainTime={remain} />
+				<RegenStreamBlock />
+				<HistoryTitleRow>
+					<HistoryTitle>History</HistoryTitle>
+					<IconWithTooltip
+						icon={<IconHelp size={16} />}
+						direction={'top'}
+					>
+						<HistoryTooltip>
+							Every time you claim GIV rewards from GIVbacks, the
+							GIVgarden, or the GIVfarm, your GIVstream flowrate
+							increases. Below is a summary.
+						</HistoryTooltip>
+					</IconWithTooltip>
+				</HistoryTitleRow>
+				<GIVstreamHistory />
 				<Flex wrap={1} justifyContent='space-between'>
 					<GsDataBlock
 						title='GIVstream'
@@ -223,20 +238,6 @@ export const TabGIVstreamBottom = () => {
 						rights of our community.
 					</GsDataBlock>
 				</Flex>
-				<HistoryTitleRow>
-					<HistoryTitle>History</HistoryTitle>
-					<IconWithTooltip
-						icon={<IconHelp size={16} />}
-						direction={'top'}
-					>
-						<HistoryTooltip>
-							Every time you claim GIV rewards from GIVbacks, the
-							GIVgarden, or the GIVfarm, your GIVstream flowrate
-							increases. Below is a summary.
-						</HistoryTooltip>
-					</IconWithTooltip>
-				</HistoryTitleRow>
-				<GIVstreamHistory />
 			</Container>
 			<IncreaseSection ref={increaseSecRef}>
 				<Container>
@@ -252,8 +253,7 @@ export const TabGIVstreamBottom = () => {
 									label='SEE PROJECTS'
 									linkType='primary'
 									size='medium'
-									href='https://giveth.io/projects'
-									target='_blank'
+									href={Routes.Projects}
 								/>
 							}
 						>
@@ -295,7 +295,7 @@ export const TabGIVstreamBottom = () => {
 					</Flex>
 				</Container>
 			</IncreaseSection>
-		</GIVbacksBottomContainer>
+		</GIVstreamBottomContainer>
 	);
 };
 
@@ -391,7 +391,7 @@ export const GIVstreamHistory: FC = () => {
 	} = useSubgraph();
 	const { allocationCount } = balances;
 
-	const { tokenDistroHelper } = useTokenDistro();
+	const { givTokenDistroHelper } = useTokenDistro();
 
 	useEffect(() => {
 		setPage(0);
@@ -439,7 +439,7 @@ export const GIVstreamHistory: FC = () => {
 								<B as='span'>
 									+
 									{formatWeiHelper(
-										tokenDistroHelper.getStreamPartTokenPerWeek(
+										givTokenDistroHelper.getStreamPartTokenPerWeek(
 											ethers.BigNumber.from(
 												tokenAllocation.amount,
 											),

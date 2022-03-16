@@ -28,7 +28,7 @@ import { PoolStakingConfig } from '@/types/config';
 import { StakingPoolImages } from '../StakingPoolImages';
 import V3StakingCard from '../cards/PositionCard';
 import { useLiquidityPositions, useSubgraph } from '@/context';
-import { GIVBoxWithPrice } from '../GIVBoxWithPrice';
+import { AmountBoxWithPrice } from '../AmountBoxWithPrice';
 import { IconWithTooltip } from '../IconWithToolTip';
 import LoadingAnimation from '@/animations/loading.json';
 import { exit, getReward, transfer } from '@/lib/stakingNFT';
@@ -67,7 +67,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 	const {
 		currentValues: { balances },
 	} = useSubgraph();
-	const { tokenDistroHelper } = useTokenDistro();
+	const { givTokenDistroHelper } = useTokenDistro();
 	const { chainId, library, account } = useWeb3React();
 	const { unstakedPositions, stakedPositions, currentIncentive } =
 		useLiquidityPositions();
@@ -133,14 +133,16 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 			currentIncentive.key,
 		);
 
-		const liquidReward = tokenDistroHelper.getLiquidPart(_reward);
+		const liquidReward = givTokenDistroHelper.getLiquidPart(_reward);
 		const streamPerWeek =
-			tokenDistroHelper.getStreamPartTokenPerWeek(_reward);
+			givTokenDistroHelper.getStreamPartTokenPerWeek(_reward);
 		setTokenId(tokenId);
 		setReward(liquidReward);
 		setStream(BigNumber.from(streamPerWeek.toFixed(0)));
-		setClaimableNow(tokenDistroHelper.getUserClaimableNow(balances));
-		setGivBackLiquidPart(tokenDistroHelper.getLiquidPart(balances.givback));
+		setClaimableNow(givTokenDistroHelper.getUserClaimableNow(balances));
+		setGivBackLiquidPart(
+			givTokenDistroHelper.getLiquidPart(balances.givback),
+		);
 		setStakeStatus(StakeState.UNSTAKING);
 	};
 
@@ -201,7 +203,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 								</TooltipContent>
 							</IconWithTooltip>
 						</HelpRow>
-						<GIVBoxWithPrice amount={reward} />
+						<AmountBoxWithPrice amount={reward} />
 						<HelpRow alignItems='center'>
 							<Caption>Added to your GIVstream flowrate</Caption>
 							<IconWithTooltip
@@ -227,7 +229,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 						<HelpRow alignItems='center'>
 							<B>Claimable from GIVstream</B>
 						</HelpRow>
-						<GIVBoxWithPrice
+						<AmountBoxWithPrice
 							amount={claimableNow.sub(givBackLiquidPart)}
 						/>
 						<HarvestButtonContainer>

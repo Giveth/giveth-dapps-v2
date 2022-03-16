@@ -42,7 +42,7 @@ export const hasClaimedAirDrop = async (address: string): Promise<boolean> => {
 			SubgraphQueryBuilder.getXDaiQuery(address),
 			config.XDAI_NETWORK_NUMBER,
 		);
-		const { balances } = await transformSubgraphData(response);
+		const { balances } = transformSubgraphData(response);
 		return balances.givDropClaimed;
 	} catch (e) {
 		console.error('Error on fetching subgraph');

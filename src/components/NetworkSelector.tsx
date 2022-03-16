@@ -3,19 +3,20 @@ import styled from 'styled-components';
 import config from '../configuration';
 import { B, brandColors } from '@giveth/ui-design-system';
 import { Flex } from './styled-components/Flex';
-import { IconXDAI } from './Icons/XDAI';
+import { IconGnosisChain } from './Icons/GnosisChain';
 import { IconEthereum } from './Icons/Eth';
 import { BasicNetworkConfig } from '../types/config';
 import { ChangeNetworkModal } from './modals/ChangeNetwork';
 import { useWeb3React } from '@web3-react/core';
 import { switchNetwork } from '@/lib/wallet';
+import { givEconomySupportedNetworks } from '@/utils/constants';
 
 interface NetworkSelectorProps {
 	disabled?: boolean;
 }
 
 const NetworkSelectorContainer = styled(Flex)<NetworkSelectorProps>`
-	width: 270px;
+	width: 344px;
 	height: 48px;
 	border-radius: 88px;
 	border: 1px solid ${brandColors.giv[600]};
@@ -37,7 +38,7 @@ const Selector = styled(Flex)<ISelecetor>`
 `;
 
 const XDaiSelecor = styled(Selector)`
-	width: 116px;
+	width: 179px;
 `;
 
 const EthSelector = styled(Selector)`
@@ -47,10 +48,6 @@ const EthSelector = styled(Selector)`
 export const NetworkSelector = () => {
 	const [showChangeNetworkModal, setShowChangeNetworkModal] = useState(false);
 	const [targetNetwork, setTargetNetwork] = useState(1);
-	const supportedNetworks = [
-		config.MAINNET_NETWORK_NUMBER,
-		config.XDAI_NETWORK_NUMBER,
-	];
 
 	const { chainId } = useWeb3React();
 
@@ -72,7 +69,7 @@ export const NetworkSelector = () => {
 		<>
 			{chainId ? (
 				<NetworkSelectorContainer
-					disabled={!supportedNetworks.includes(chainId)}
+					disabled={!givEconomySupportedNetworks.includes(chainId)}
 				>
 					<XDaiSelecor
 						isSelected={chainId === config.XDAI_NETWORK_NUMBER}
@@ -83,13 +80,13 @@ export const NetworkSelector = () => {
 							);
 						}}
 					>
-						<IconXDAI size={24} />
-						<B>xDai</B>
+						<IconGnosisChain size={24} />
+						<B>Gnosis Chain</B>
 					</XDaiSelecor>
 					<EthSelector
 						isSelected={
 							chainId === config.MAINNET_NETWORK_NUMBER ||
-							!supportedNetworks.includes(chainId)
+							!givEconomySupportedNetworks.includes(chainId)
 						}
 						onClick={() => {
 							handleChangeNetwork(

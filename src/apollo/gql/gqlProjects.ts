@@ -31,6 +31,7 @@ export const FETCH_HOME_PROJECTS = gql`
 					walletAddress
 				}
 				updatedAt
+				givingBlocksId
 			}
 			totalCount
 		}

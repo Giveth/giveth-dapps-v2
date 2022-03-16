@@ -13,7 +13,7 @@ import {
 	Subline,
 	ButtonLink,
 } from '@giveth/ui-design-system';
-import { TopContainer, TopInnerContainer } from './commons';
+import { TopContainer, TopInnerContainer, BottomContainer } from './commons';
 import { RewardCard } from '../RewardCard';
 import { Flex } from '../styled-components/Flex';
 import { DataBox } from '../DataBox';
@@ -51,7 +51,7 @@ export const GSSubtitle = styled(QuoteText)``;
 
 export const GIVstreamRewardCard = styled(RewardCard)``;
 
-export const GIVbacksBottomContainer = styled.div``;
+export const GIVstreamBottomContainer = styled(BottomContainer)``;
 
 export const GsDataBlock = styled(DataBlock)`
 	width: 459px;
@@ -123,6 +123,7 @@ export const PercentageRow = styled(Flex)`
 `;
 
 export const IncreaseSection = styled.div`
+	margin-top: 54px;
 	padding: 60px 0 32px;
 	background-image: url('/images/backgrounds/GIVGIVGIV.png');
 `;

@@ -9,7 +9,6 @@ import { Flex } from '@/components/styled-components/Flex';
 import { ThemeType } from '@/context/theme.context';
 import { formatWeiHelper } from '@/helpers/number';
 import { networksParams } from '@/helpers/blockchain';
-import useDeviceDetect from '@/hooks/useDeviceDetect';
 import {
 	ConnectButton,
 	HBBalanceLogo,
@@ -21,7 +20,6 @@ import {
 	HeaderLink,
 	StyledHeader,
 	WalletButton,
-	MobileWalletButton,
 	WBInfo,
 	WBNetwork,
 	SmallCreateProject,
@@ -31,6 +29,7 @@ import {
 	CoverLine,
 	SmallCreateProjectParent,
 	LargeCreateProject,
+	MainLogoBtn,
 } from './Header.sc';
 import { useSubgraph } from '@/context/subgraph.context';
 import { RewardMenu } from '@/components/menu/RewardMenu';
@@ -41,6 +40,7 @@ import { ETheme, useGeneral } from '@/context/general.context';
 import { menuRoutes } from '../menu/MenuRoutes';
 import useUser from '@/context/UserProvider';
 import { isUserRegistered, shortenAddress } from '@/lib/helpers';
+import HeaderRoutesResponsive from './HeaderResponsiveRoutes';
 import Routes from '@/lib/constants/Routes';
 
 export interface IHeader {
@@ -55,7 +55,6 @@ const Header: FC<IHeader> = () => {
 	const [showWalletModal, setShowWalletModal] = useState(false);
 	const [isGIVeconomyRoute, setIsGIVeconomyRoute] = useState(false);
 	const [isCreateRoute, setIsCreateRoute] = useState(false);
-	const { isMobile } = useDeviceDetect();
 
 	const {
 		currentValues: { balances },
@@ -163,18 +162,24 @@ const Header: FC<IHeader> = () => {
 							</Logo>
 						</BackBtn>
 					) : (
-						<Link href={Routes.Home}>
-							<a>
-								<Logo>
-									<Image
-										width='48px'
-										height='48px'
-										alt='Giveth logo'
-										src={`/images/logo/logo1.png`}
-									/>
-								</Logo>
-							</a>
-						</Link>
+						<>
+							<MainLogoBtn>
+								<Link href={Routes.Home}>
+									<a>
+										<Logo>
+											<Image
+												width='48px'
+												height='48px'
+												alt='Giveth logo'
+												src={`/images/logo/logo1.png`}
+											/>
+										</Logo>
+									</a>
+								</Link>
+							</MainLogoBtn>
+
+							<HeaderRoutesResponsive />
+						</>
 					)}
 				</Flex>
 				{showLinks && (
@@ -242,13 +247,9 @@ const Header: FC<IHeader> = () => {
 											height={'24px'}
 										/>
 
-										{!isMobile && (
-											<HBContent size='Big'>
-												{formatWeiHelper(
-													balances.balance,
-												)}
-											</HBContent>
-										)}
+										<HBContent size='Big'>
+											{formatWeiHelper(balances.balance)}
+										</HBContent>
 									</HBContainer>
 									<CoverLine theme={theme} />
 								</BalanceButton>
@@ -259,56 +260,34 @@ const Header: FC<IHeader> = () => {
 								onMouseEnter={() => setShowUserMenu(true)}
 								onMouseLeave={() => setShowUserMenu(false)}
 							>
-								{isMobile ? (
-									<MobileWalletButton>
-										<HBContainer>
-											<HBPic
-												src={
-													user?.avatar
-														? user.avatar
-														: '/images/placeholders/profile.png'
-												}
-												alt='Profile Pic'
-												width={'24px'}
-												height={'24px'}
-											/>
-										</HBContainer>
-										<CoverLine theme={theme} />
-									</MobileWalletButton>
-								) : (
-									<WalletButton outline theme={theme}>
-										<HBContainer>
-											<HBPic
-												src={
-													user?.avatar
-														? user.avatar
-														: '/images/placeholders/profile.png'
-												}
-												alt='Profile Pic'
-												width={'24px'}
-												height={'24px'}
-											/>
-											<WBInfo>
-												<GLink size='Medium'>
-													{user?.name ||
-														shortenAddress(account)}
-												</GLink>
-												<WBNetwork size='Tiny'>
-													Connected to{' '}
-													{networksParams[chainId]
-														? networksParams[
-																chainId
-														  ].nativeCurrency
-																.symbol
-														: library?._network
-																?.name}
-												</WBNetwork>
-											</WBInfo>
-										</HBContainer>
-										<CoverLine theme={theme} />
-									</WalletButton>
-								)}
-
+								<WalletButton outline theme={theme}>
+									<HBContainer>
+										<HBPic
+											src={
+												user?.avatar
+													? user.avatar
+													: '/images/placeholders/profile.png'
+											}
+											alt='Profile Pic'
+											width={'24px'}
+											height={'24px'}
+										/>
+										<WBInfo>
+											<GLink size='Medium'>
+												{user?.name ||
+													shortenAddress(account)}
+											</GLink>
+											<WBNetwork size='Tiny'>
+												Connected to{' '}
+												{networksParams[chainId]
+													? networksParams[chainId]
+															.chainName
+													: library?._network?.name}
+											</WBNetwork>
+										</WBInfo>
+									</HBContainer>
+									<CoverLine theme={theme} />
+								</WalletButton>
 								{showUserMenu && (
 									<MenuWallet
 										setShowWalletModal={setShowWalletModal}

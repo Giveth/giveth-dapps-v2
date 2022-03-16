@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import config from '@/configuration';
 import { IconEthereum } from '../Icons/Eth';
 import { IconXDAI } from '../Icons/XDAI';
+import { IconGnosisChain } from '../Icons/GnosisChain';
 import { H4, B, neutralColors, brandColors } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 import { mediaQueries } from '@/utils/constants';
@@ -28,7 +29,9 @@ export const ChangeNetworkModal: FC<IChangeNetworkModalProps> = ({
 	}, [chainId, setShowModal, targetNetwork]);
 
 	const NetworkName =
-		targetNetwork === config.MAINNET_NETWORK_NUMBER ? 'Ethereum' : 'xDAI';
+		targetNetwork === config.MAINNET_NETWORK_NUMBER
+			? 'Ethereum'
+			: 'Gnosis Chain';
 
 	return (
 		<Modal showModal={showModal} setShowModal={setShowModal}>
@@ -36,7 +39,7 @@ export const ChangeNetworkModal: FC<IChangeNetworkModalProps> = ({
 				{targetNetwork === config.MAINNET_NETWORK_NUMBER ? (
 					<IconEthereum size={64} />
 				) : (
-					<IconXDAI size={64} />
+					<IconGnosisChain size={64} />
 				)}
 				<Title theme={theme}>Switch to {NetworkName}</Title>
 				<Desc>Please switch your wallet network to {NetworkName}.</Desc>
