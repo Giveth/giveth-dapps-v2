@@ -117,48 +117,45 @@ const CryptoDonation = (props: {
 
 	// Checks network changes to fetch proper token list
 	useEffect(() => {
-		if (networkId) {
-			let netId = networkId as Number | string;
-			if (isGivingBlockProject) netId = 'thegivingblock';
-			if (isGivingBlockProject && networkId === 3)
-				netId = 'ropsten_thegivingblock';
-			// Show change network modal when needed
-			if (
-				netId !== config.PRIMARY_NETWORK.id &&
-				netId !== config.SECONDARY_NETWORK.id
-			) {
-				return setShowChangeNetworkModal(true);
-			}
-			let givIndex: number | undefined;
-			const erc20List: any = getERC20List(netId).tokens;
-			const tokens = erc20List.map((token: any, index: any) => {
-				token.value = token;
-				token.label = token.symbol;
-				if (
-					token.symbol === 'GIV' ||
-					token.symbol === 'TestGIV' ||
-					token.name === 'Giveth'
-				) {
-					givIndex = index;
-				}
-				return token;
-			});
-			const givToken = erc20List[givIndex!];
-			if (givToken && givIndex) {
-				tokens.splice(givIndex, 1);
-			}
-			tokens?.sort((a: any, b: any) => {
-				const tokenA = a.name.toUpperCase();
-				const tokenB = b.name.toUpperCase();
-				return tokenA < tokenB ? -1 : tokenA > tokenB ? 1 : 0;
-			});
-			if (givToken) {
-				tokens.splice(0, 0, givToken);
-			}
-			setErc20List(tokens);
-			setErc20OriginalList(tokens);
-			setSelectedToken(tokens[0]);
+		let netId = networkId as Number | string;
+		// Show change network modal when needed
+		if (
+			netId !== 'thegivingblock' &&
+			netId !== 'rapsten_thegivingblock' &&
+			netId !== config.PRIMARY_NETWORK.id &&
+			netId !== config.SECONDARY_NETWORK.id
+		) {
+			return setShowChangeNetworkModal(true);
 		}
+		let givIndex: number | undefined;
+		const erc20List: any = getERC20List(netId).tokens;
+		const tokens = erc20List.map((token: any, index: any) => {
+			token.value = token;
+			token.label = token.symbol;
+			if (
+				token.symbol === 'GIV' ||
+				token.symbol === 'TestGIV' ||
+				token.name === 'Giveth'
+			) {
+				givIndex = index;
+			}
+			return token;
+		});
+		const givToken = erc20List[givIndex!];
+		if (givToken && givIndex) {
+			tokens.splice(givIndex, 1);
+		}
+		tokens?.sort((a: any, b: any) => {
+			const tokenA = a.name.toUpperCase();
+			const tokenB = b.name.toUpperCase();
+			return tokenA < tokenB ? -1 : tokenA > tokenB ? 1 : 0;
+		});
+		if (givToken) {
+			tokens.splice(0, 0, givToken);
+		}
+		setErc20List(tokens);
+		setErc20OriginalList(tokens);
+		setSelectedToken(tokens[0]);
 	}, [networkId]);
 
 	// Polls selected token data
