@@ -76,6 +76,7 @@ const ProjectDonateCard = ({
 		adminUser,
 		id,
 		givingBlocksId,
+		verified,
 	} = project || {};
 	const [reaction, setReaction] = useState<IReaction | undefined>(
 		project?.reaction,
@@ -253,7 +254,7 @@ const ProjectDonateCard = ({
 								router.push(idToProjectEdit(project?.id || ''))
 							}
 						/>
-						{!isDraft ? (
+						{!verified ? (
 							<FullOutlineButton
 								buttonType='primary'
 								label='VERIFY YOUR PROJECT'
