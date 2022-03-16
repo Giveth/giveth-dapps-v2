@@ -147,6 +147,7 @@ const UserContributeInfo = styled.div`
 const Buttons = styled(Flex)`
 	margin: 40px 0 0 0;
 	gap: 12px;
+	flex-wrap: wrap;
 `;
 
 const Btn = styled(Button)`
@@ -165,4 +166,5 @@ const Btn = styled(Button)`
 		color: ${props =>
 			props.buttonType === 'secondary' && brandColors.pinky[700]};
 	}
+	min-width: 220px;
 `;
