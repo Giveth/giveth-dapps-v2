@@ -166,7 +166,6 @@ const CryptoDonation = (props: {
 
 	// Gets price of selected token
 	useEffect(() => {
-		console.log(selectedToken);
 		const setPrice = async () => {
 			if (
 				selectedToken?.symbol &&
