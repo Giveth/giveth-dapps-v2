@@ -46,6 +46,7 @@ import {
 	PercentageRow,
 	TxHash,
 	TxSpan,
+	TitleCol,
 } from './GIVstream.sc';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { getHistory } from '@/services/subgraph.service';
@@ -99,7 +100,7 @@ export const TabGIVstreamTop = () => {
 			<GIVstreamTopContainer>
 				<GIVstreamTopInnerContainer>
 					<Row style={{ alignItems: 'flex-end' }}>
-						<Col xs={12} sm={7} xl={8}>
+						<TitleCol xs={12} sm={7} xl={8}>
 							<Flex alignItems='baseline' gap='16px'>
 								<GSTitle>GIVstream</GSTitle>
 								<IconGIVStream size={64} />
@@ -109,7 +110,7 @@ export const TabGIVstreamTop = () => {
 								GIVstream aligns community members with the long
 								term success of Giveth and the GIVeconomy.
 							</GSSubtitle>
-						</Col>
+						</TitleCol>
 						<Col xs={12} sm={5} xl={4}>
 							<GIVstreamRewardCard
 								wrongNetworkText='GIVstream is only available on Mainnet and Gnosis Chain.'

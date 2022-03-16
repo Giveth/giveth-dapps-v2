@@ -22,6 +22,7 @@ import {
 import { Flex } from '../styled-components/Flex';
 import { DataBox } from '../DataBox';
 import { mediaQueries } from '@/utils/constants';
+import { Col } from '../Grid';
 
 export const GIVstreamTopContainer = styled(TopContainer)`
 	overflow: hidden;
@@ -29,22 +30,17 @@ export const GIVstreamTopContainer = styled(TopContainer)`
 `;
 
 export const GIVstreamTopInnerContainer = styled(TopInnerContainer)`
-	/* overflow: hidden; */
 	&::before {
 		content: url('/images/stream.svg');
 		position: absolute;
-		right: 350px;
+		right: 20%;
 		top: calc(50% - 240px);
 		z-index: 0;
 	}
 `;
 
-export const Left = styled.div`
-	z-index: 1;
-`;
-
-export const Right = styled.div`
-	align-self: end;
+export const TitleCol = styled(Col)`
+	position: relative;
 `;
 
 export const GSTitle = styled(D1)`
