@@ -193,7 +193,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 		if (!!account && !!library) {
 			getBalance();
 		}
-	}, [account, library, chainId]);
+	}, [account, user, library, chainId]);
 
 	const reFetchUserData = useCallback(() => {
 		fetchUser()

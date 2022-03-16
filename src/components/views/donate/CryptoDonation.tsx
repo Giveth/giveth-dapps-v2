@@ -113,52 +113,51 @@ const CryptoDonation = (props: {
 	const isXdai = networkId === xdaiChain.id;
 	const isGivingBlockProject = project?.givingBlocksId;
 	const stopPolling = useRef<any>(null);
-	const isGivBackEligible = givBackEligible && project?.verified;
-
+	const projectIsGivBackEligible = givBackEligible && project?.verified;
+	const givingBlockReady = isGivingBlockProject
+		? networkId === ethereumChain.id
+		: true;
 	// Checks network changes to fetch proper token list
 	useEffect(() => {
-		if (networkId) {
-			let netId = networkId as Number | string;
-			if (isGivingBlockProject) netId = 'thegivingblock';
-			if (isGivingBlockProject && networkId === 3)
-				netId = 'ropsten_thegivingblock';
-			// Show change network modal when needed
-			if (
-				netId !== config.PRIMARY_NETWORK.id &&
-				netId !== config.SECONDARY_NETWORK.id
-			) {
-				return setShowChangeNetworkModal(true);
-			}
-			let givIndex: number | undefined;
-			const erc20List: any = getERC20List(netId).tokens;
-			const tokens = erc20List.map((token: any, index: any) => {
-				token.value = token;
-				token.label = token.symbol;
-				if (
-					token.symbol === 'GIV' ||
-					token.symbol === 'TestGIV' ||
-					token.name === 'Giveth'
-				) {
-					givIndex = index;
-				}
-				return token;
-			});
-			const givToken = erc20List[givIndex!];
-			if (givToken && givIndex) {
-				tokens.splice(givIndex, 1);
-			}
-			tokens?.sort((a: any, b: any) => {
-				const tokenA = a.name.toUpperCase();
-				const tokenB = b.name.toUpperCase();
-				return tokenA < tokenB ? -1 : tokenA > tokenB ? 1 : 0;
-			});
-			if (givToken) {
-				tokens.splice(0, 0, givToken);
-			}
-			setErc20List(tokens);
-			setErc20OriginalList(tokens);
-			setSelectedToken(tokens[0]);
+		let netId = networkId as Number | string;
+		// Show change network modal when needed'
+		if (
+			netId !== 'thegivingblock' &&
+			netId !== 'rapsten_thegivingblock' &&
+			netId !== config.PRIMARY_NETWORK.id &&
+			netId !== config.SECONDARY_NETWORK.id
+		) {
+			return setShowChangeNetworkModal(true);
 		}
+		let givIndex: number | undefined;
+		const erc20List: any = getERC20List(netId).tokens;
+		const tokens = erc20List.map((token: any, index: any) => {
+			token.value = token;
+			token.label = token.symbol;
+			if (
+				token.symbol === 'GIV' ||
+				token.symbol === 'TestGIV' ||
+				token.name === 'Giveth'
+			) {
+				givIndex = index;
+			}
+			return token;
+		});
+		const givToken = erc20List[givIndex!];
+		if (givToken && givIndex) {
+			tokens.splice(givIndex, 1);
+		}
+		tokens?.sort((a: any, b: any) => {
+			const tokenA = a.name.toUpperCase();
+			const tokenB = b.name.toUpperCase();
+			return tokenA < tokenB ? -1 : tokenA > tokenB ? 1 : 0;
+		});
+		if (givToken) {
+			tokens.splice(0, 0, givToken);
+		}
+		setErc20List(tokens);
+		setErc20OriginalList(tokens);
+		setSelectedToken(tokens[0]);
 	}, [networkId]);
 
 	// Polls selected token data
@@ -175,17 +174,16 @@ const CryptoDonation = (props: {
 				stableCoins.includes(selectedToken.symbol)
 			) {
 				setTokenPrice(1);
-			} else if (selectedToken?.address && selectedToken.address) {
-				let chain = xdaiChain.name;
+			} else if (selectedToken?.address) {
+				let chain = ethereumChain.name.split(' ')[0].toLowerCase();
 				let tokenAddress: string | undefined = selectedToken.address;
 				if (isXdai) {
 					// coingecko doesn't have these tokens in xdai, so fetching price from ethereum
 					if (xdaiExcluded.includes(selectedToken.symbol!)) {
 						tokenAddress = selectedToken.ethereumAddress;
-						chain = ethereumChain.name;
+					} else {
+						chain = xdaiChain.name.toLowerCase();
 					}
-				} else {
-					chain = ethereumChain.name;
 				}
 				const fetchedPrice = await fetchPrice(
 					chain?.toLowerCase(),
@@ -233,7 +231,11 @@ const CryptoDonation = (props: {
 	const pollToken = useCallback(() => {
 		clearPoll();
 		// Native token balance is provided by the Web3Provider
-		if (!selectedToken?.address) {
+		if (
+			!selectedToken?.address ||
+			selectedToken.symbol === 'XDAI' ||
+			selectedToken.symbol === 'ETH'
+		) {
 			return setSelectedTokenBalance(balance);
 		}
 		stopPolling.current = pollEvery(
@@ -277,7 +279,11 @@ const CryptoDonation = (props: {
 				<ChangeNetworkModal
 					showModal={showChangeNetworkModal}
 					setShowModal={setShowChangeNetworkModal}
-					targetNetwork={100}
+					targetNetwork={
+						isGivingBlockProject
+							? config.MAINNET_NETWORK_NUMBER
+							: config.XDAI_NETWORK_NUMBER
+					}
 				/>
 			)}
 			{showInsufficientModal && (
@@ -307,7 +313,7 @@ const CryptoDonation = (props: {
 					price={tokenPrice}
 					setInProgress={setInProgress}
 					setUnconfirmed={setUnconfirmed}
-					givBackEligible={isGivBackEligible}
+					givBackEligible={projectIsGivBackEligible}
 					anonymous={anonymous}
 				/>
 			)}
@@ -458,7 +464,7 @@ const CryptoDonation = (props: {
 					{tokenSymbol}
 				</AvText>
 			</InputContainer>
-			{!givBackEligible ? (
+			{!givBackEligible && projectIsGivBackEligible ? (
 				<ToastContainer>
 					<FixedToast
 						message='This token is not eligible for GIVbacks.'
@@ -469,15 +475,17 @@ const CryptoDonation = (props: {
 					/>
 				</ToastContainer>
 			) : (
-				<ToastContainer>
-					<FixedToast
-						message='This token is eligible for GIVbacks.'
-						color={brandColors.giv[300]}
-						boldColor={brandColors.giv[600]}
-						backgroundColor={brandColors.giv[100]}
-						href={Routes.GIVbacks}
-					/>
-				</ToastContainer>
+				projectIsGivBackEligible && (
+					<ToastContainer>
+						<FixedToast
+							message='This token is eligible for GIVbacks.'
+							color={brandColors.giv[300]}
+							boldColor={brandColors.giv[600]}
+							backgroundColor={brandColors.giv[100]}
+							href={Routes.GIVbacks}
+						/>
+					</ToastContainer>
+				)
 			)}
 			<CheckBoxContainer>
 				<CheckBox
@@ -501,7 +509,7 @@ const CryptoDonation = (props: {
 
 			{!isActive && <InlineToast message='This project is not active.' />}
 
-			{isEnabled && (
+			{isEnabled && givingBlockReady && (
 				<>
 					<MainButton
 						label='DONATE'
@@ -529,7 +537,7 @@ const CryptoDonation = (props: {
 					</AnotherWalletTxt>
 				</>
 			)}
-			{!isEnabled && (
+			{!isEnabled && !givingBlockReady && (
 				<MainButton
 					label='CONNECT WALLET'
 					onClick={() => setShowWalletModal(true)}
