@@ -19,7 +19,7 @@ import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import InfoBadge from '@/components/badges/InfoBadge';
 import { IDonationsByProjectId } from '@/apollo/types/gqlTypes';
 import SuccessfulCreation from '@/components/views/create/SuccessfulCreation';
-import { mediaQueries } from '@/utils/constants';
+import { deviceSize, mediaQueries } from '@/utils/constants';
 
 const ProjectDonations = dynamic(() => import('./ProjectDonations'));
 const ProjectUpdates = dynamic(() => import('./ProjectUpdates'));
@@ -98,7 +98,7 @@ const ProjectIndex = () => {
 
 	useEffect(() => {
 		const windowResizeHandler = () => {
-			if (window.screen.width < 501) {
+			if (window.screen.width < deviceSize.tablet) {
 				setIsMobile(true);
 			} else {
 				setIsMobile(false);
@@ -121,75 +121,71 @@ const ProjectIndex = () => {
 	}
 
 	return (
-		<>
-			<Wrapper>
-				<Head>
-					<title>{title} | Giveth</title>
-				</Head>
-				<ProjectHeader project={project} />
-				{isDraft && (
-					<DraftIndicator>
-						<InfoBadge />
-						<Caption medium>
-							This is a preview of your project.
-						</Caption>
-					</DraftIndicator>
-				)}
-				<BodyWrapper>
-					<ContentWrapper>
-						{!isDraft && (
-							<ProjectTabs
-								activeTab={activeTab}
-								setActiveTab={setActiveTab}
-								project={project}
-								totalDonations={totalDonations}
-							/>
-						)}
-						{!isActive && !isDraft && (
-							<GivBackNotif>
-								<WarningBadge />
-								<GLink
-									size='Medium'
-									color={semanticColors.golden[700]}
-								>
-									This project is not active.
-								</GLink>
-							</GivBackNotif>
-						)}
-						{activeTab === 0 && (
-							<RichTextViewer content={description} />
-						)}
-						{activeTab === 1 && (
-							<ProjectUpdates
-								project={project}
-								fetchProject={fetchProject}
-							/>
-						)}
-						{activeTab === 2 && (
-							<ProjectDonations
-								donationsByProjectId={{
-									donations,
-									totalCount: totalDonations,
-								}}
-								project={project!}
-								isActive={isActive}
-								isDraft={isDraft}
-								isMobile={isMobile}
-							/>
-						)}
-					</ContentWrapper>
-					<ProjectDonateCard
-						isDraft={isDraft}
-						isMobile={isMobile}
-						project={project!}
-						isActive={isActive}
-						setIsActive={setIsActive}
-						setIsDraft={setIsDraft}
-						setCreationSuccessful={setCreationSuccessful}
-					/>
-				</BodyWrapper>
-			</Wrapper>
-		</>
+		<Wrapper>
+			<Head>
+				<title>{title} | Giveth</title>
+			</Head>
+			<ProjectHeader project={project} />
+			{isDraft && (
+				<DraftIndicator>
+					<InfoBadge />
+					<Caption medium>This is a preview of your project.</Caption>
+				</DraftIndicator>
+			)}
+			<BodyWrapper>
+				<ContentWrapper>
+					{!isDraft && (
+						<ProjectTabs
+							activeTab={activeTab}
+							setActiveTab={setActiveTab}
+							project={project}
+							totalDonations={totalDonations}
+						/>
+					)}
+					{!isActive && !isDraft && (
+						<GivBackNotif>
+							<WarningBadge />
+							<GLink
+								size='Medium'
+								color={semanticColors.golden[700]}
+							>
+								This project is not active.
+							</GLink>
+						</GivBackNotif>
+					)}
+					{activeTab === 0 && (
+						<RichTextViewer content={description} />
+					)}
+					{activeTab === 1 && (
+						<ProjectUpdates
+							project={project}
+							fetchProject={fetchProject}
+						/>
+					)}
+					{activeTab === 2 && (
+						<ProjectDonations
+							donationsByProjectId={{
+								donations,
+								totalCount: totalDonations,
+							}}
+							project={project!}
+							isActive={isActive}
+							isDraft={isDraft}
+							isMobile={isMobile}
+						/>
+					)}
+				</ContentWrapper>
+				<ProjectDonateCard
+					isDraft={isDraft}
+					isMobile={isMobile}
+					project={project!}
+					isActive={isActive}
+					setIsActive={setIsActive}
+					setIsDraft={setIsDraft}
+					setCreationSuccessful={setCreationSuccessful}
+				/>
+			</BodyWrapper>
+		</Wrapper>
 	);
 };
 
@@ -224,7 +220,6 @@ const BodyWrapper = styled.div`
 	flex-direction: row;
 	justify-content: space-between;
 
-	width: 100%;
 	margin: 0 auto;
 
 	${mediaQueries.mobileS} {
