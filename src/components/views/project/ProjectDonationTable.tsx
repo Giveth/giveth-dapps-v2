@@ -187,7 +187,7 @@ const ProjectDonationTable = ({
 										donation.user?.firstName}
 								</P>
 							</TableCell>
-							{isMobile && (
+							{!isMobile && (
 								<>
 									<TableCell>
 										<CurrencyBadge>
