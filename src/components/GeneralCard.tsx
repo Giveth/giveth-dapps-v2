@@ -3,6 +3,7 @@ import { Shadow } from './styled-components/Shadow';
 import { P, Button, H4, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { mediaQueries } from '@/utils/constants';
+import { FlexCenter } from '@/components/styled-components/Flex';
 
 interface IContent {
 	icon: string;
@@ -31,7 +32,7 @@ const GeneralCard = (props: { content: IContent; isHorizontal?: boolean }) => {
 				label={buttonLabel}
 				buttonType='primary'
 				onClick={() => window?.open(route, '_blank')?.focus()}
-			></ButtonStyled>
+			/>
 		</Wrap>
 	);
 };
@@ -62,7 +63,7 @@ const HorizontalTitleSection = styled.div`
 	padding: 0 0 0 84px;
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled(FlexCenter)`
 	z-index: 2;
 	background: white;
 	text-align: center;
@@ -72,10 +73,7 @@ const Wrapper = styled.div`
 	height: 500px;
 	border-radius: 12px;
 	box-shadow: ${Shadow.Dark[500]};
-	display: flex;
 	flex-direction: column;
-	align-items: center;
-	justify-content: center;
 
 	${mediaQueries.tablet} {
 		padding: 64px 85px;
