@@ -12,7 +12,7 @@ import {
 	ButtonLink,
 	D1,
 } from '@giveth/ui-design-system';
-import { TabContainer, TopContainer } from './commons';
+import { TopContainer } from './commons';
 import { device } from '@/utils/constants';
 
 export const OverviewBottomContainer = styled.div`
