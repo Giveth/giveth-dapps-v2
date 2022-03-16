@@ -9,6 +9,7 @@ import { gwei2wei } from '@/helpers/number';
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 
 const config: EnvConfig = {
+	BACKEN_LINK: 'https://serve.giveth.io/graphql',
 	MAINNET_NETWORK_NUMBER: 42, // Kovan
 	XDAI_NETWORK_NUMBER: 100, // xDAI
 

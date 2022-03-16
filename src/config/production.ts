@@ -4,6 +4,7 @@ import { gwei2wei } from '@/helpers/number';
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 
 const config: EnvConfig = {
+	BACKEN_LINK: 'https://mainnet.serve.giveth.io/graphql',
 	MAINNET_NETWORK_NUMBER: 1, // ETH
 	XDAI_NETWORK_NUMBER: 100, // xDAI
 
@@ -26,7 +27,7 @@ const config: EnvConfig = {
 		blockExplorerName: ['etherscan'],
 		blockExplorerUrls: ['https://etherscan.io/'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-mainnet',
+			'https://api.thegraph.com/subgraphs/name/aminlatifi/giveth-economy',
 
 		TOKEN_ADDRESS: '0x900db999074d9277c5da2a43f252d74366230da0',
 		WETH_TOKEN_ADDRESS: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
@@ -99,7 +100,7 @@ const config: EnvConfig = {
 		blockExplorerName: ['Blockscout'],
 		blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-xdai',
+			'https://api.thegraph.com/subgraphs/name/aminlatifi/giveth-economy-xdai',
 
 		TOKEN_ADDRESS: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		MERKLE_ADDRESS: '0xFad63adEFb8203F7605F25f6a921c8bf45604A5e',
