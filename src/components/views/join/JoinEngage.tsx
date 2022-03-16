@@ -23,7 +23,7 @@ const JoinEngage = () => {
 					changemakers. We are passionate people working together to
 					build a crypto-economic system that can reward giving to
 					good causes. Our project is open-source, decentralized,
-					altruistic, and community-led. Want to get more involved?
+					altruistic, and community-led.
 				</LeadText>
 				<br />
 				<LeadText>
@@ -71,7 +71,7 @@ const engageArray = [
 		title: 'Discourse',
 		caption:
 			'The Giveth forum is where we create discourse around new and existing proposals. We share ideas involving development and governance, cultivating discussions about important topics around our team and community.',
-		buttonLabel: 'join on discourse',
+		buttonLabel: 'join us on discourse',
 		route: links.DISCOURSE,
 	},
 	{
@@ -106,7 +106,7 @@ const consumeArray = [
 		title: 'Twitter',
 		caption:
 			'Connect with us on Twitter to stay up-to-date on exciting shares about the Future of Giving!',
-		buttonLabel: 'join on twitter',
+		buttonLabel: 'join us on twitter',
 		route: links.TWITTER,
 	},
 	{
@@ -151,10 +151,11 @@ const Section = styled.div`
 const CardsSection = styled.div`
 	display: flex;
 	justify-content: center;
-	margin-top: 50px;
+	margin: 50px auto 0px;
 	flex-wrap: wrap;
 	gap: 25px;
 	position: relative;
+	max-width: 1250px;
 	z-index: 3;
 `;
 const CardsConsumeSection = styled.div`

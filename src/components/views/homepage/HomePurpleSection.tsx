@@ -7,8 +7,8 @@ import { Arc } from '@/components/styled-components/Arc';
 import {
 	Button,
 	brandColors,
-	D3,
 	Lead,
+	GLink,
 	H2,
 	H3,
 } from '@giveth/ui-design-system';
@@ -63,14 +63,17 @@ const HomePurpleSection = () => {
 						url={url || ''}
 						hashtags={['Giveth']}
 					>
-						<TwitterButton
-							buttonType='texty'
-							size='large'
-							label='Tweet this'
-							icon={
-								<Image src={TwitterIcon} alt='twitter icon' />
-							}
-						/>
+						<TwitterButton>
+							<Image
+								src={TwitterIcon}
+								alt='twitter icon'
+								width={24}
+								height={24}
+							/>
+							<TwitterButtonText size='Big'>
+								Tweet this
+							</TwitterButtonText>
+						</TwitterButton>
 					</TwitterShareButton>
 				</GivingButtons>
 				<GIVeconomy>
@@ -225,15 +228,18 @@ const StartGiving = styled(Button)`
 	}
 `;
 
-const TwitterButton = styled(Button)`
+const TwitterButton = styled.div`
 	color: white;
 	height: 66px;
 	padding: 0 80px;
+	display: flex;
+	gap: 8px;
+	justify-content: center;
+	align-items: center;
+`;
 
-	&:hover {
-		background-color: transparent;
-		color: white;
-	}
+const TwitterButtonText = styled(GLink)`
+	font-weight: 700;
 `;
 
 const GivingEffortless = styled(H2)`
