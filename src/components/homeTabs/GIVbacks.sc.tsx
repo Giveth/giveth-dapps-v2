@@ -100,9 +100,7 @@ export const RoundButton = styled(Button)`
 	padding: 16px 55px;
 `;
 
-export const InfoSection = styled.div`
-	width: 433px;
-`;
+export const InfoSection = styled.div``;
 
 export const InfoImage = styled.img`
 	height: 103px;

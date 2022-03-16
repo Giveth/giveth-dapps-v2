@@ -192,71 +192,78 @@ export const TabGIVbacksBottom = () => {
 					</Col>
 				</Row>
 				<GIVBackCard>
-					<Flex justifyContent='space-between' alignItems='center'>
-						<RoundSection>
-							<RoundTitle>GIVbacks Round {round}</RoundTitle>
-							<RoundInfo>
-								<RoundInfoRow justifyContent='space-between'>
-									<P>Start Date</P>
-									<P>
-										{givTokenDistroHelper
-											? formatDate(roundStartime)
-											: '-'}
-									</P>
-								</RoundInfoRow>
-								<RoundInfoRow justifyContent='space-between'>
-									<P>End Date</P>
-									<P>
-										{givTokenDistroHelper
-											? formatDate(roundEndTime)
-											: '-'}
-									</P>
-								</RoundInfoRow>
-								<RoundInfoTallRow
-									justifyContent='space-between'
-									alignItems='center'
+					<Row>
+						<Col xs={12} md={8}>
+							<RoundSection>
+								<RoundTitle>GIVbacks Round {round}</RoundTitle>
+								<RoundInfo>
+									<RoundInfoRow justifyContent='space-between'>
+										<P>Start Date</P>
+										<P>
+											{givTokenDistroHelper
+												? formatDate(roundStartime)
+												: '-'}
+										</P>
+									</RoundInfoRow>
+									<RoundInfoRow justifyContent='space-between'>
+										<P>End Date</P>
+										<P>
+											{givTokenDistroHelper
+												? formatDate(roundEndTime)
+												: '-'}
+										</P>
+									</RoundInfoRow>
+									<RoundInfoTallRow
+										justifyContent='space-between'
+										alignItems='center'
+									>
+										<P>GIV Allocated to Round</P>
+										<GivAllocated>
+											1 Million GIV
+										</GivAllocated>
+									</RoundInfoTallRow>
+									<RoundButton
+										size='small'
+										label={'DONATE TO EARN GIV'}
+										buttonType='primary'
+										onClick={() => {
+											window.open(
+												'https://giveth.io/projects',
+												'_blank',
+											);
+										}}
+									/>
+								</RoundInfo>
+							</RoundSection>
+						</Col>
+						<Col xs={12} md={4}>
+							<InfoSection>
+								<InfoImage src='/images/hands.svg' />
+								<InfoTitle weight={700}>
+									When you give you get GIV back!
+								</InfoTitle>
+								<InfoDesc>
+									Each GIVbacks round lasts two weeks. After
+									the End Date, the GIV Allocated to that
+									round is distributed to Givers who donated
+									to verified projects during the round.
+									Projects must apply for verification at
+									least 1 week prior to the Start Date in
+									order to be included in the round.
+								</InfoDesc>
+								<InfoReadMore
+									target='_blank'
+									href={links.GIVBACK_DOC}
 								>
-									<P>GIV Allocated to Round</P>
-									<GivAllocated>1 Million GIV</GivAllocated>
-								</RoundInfoTallRow>
-								<RoundButton
-									size='small'
-									label={'DONATE TO EARN GIV'}
-									buttonType='primary'
-									onClick={() => {
-										window.open(
-											'https://giveth.io/projects',
-											'_blank',
-										);
-									}}
-								/>
-							</RoundInfo>
-						</RoundSection>
-						<InfoSection>
-							<InfoImage src='/images/hands.svg' />
-							<InfoTitle weight={700}>
-								When you give you get GIV back!
-							</InfoTitle>
-							<InfoDesc>
-								Each GIVbacks round lasts two weeks. After the
-								End Date, the GIV Allocated to that round is
-								distributed to Givers who donated to verified
-								projects during the round. Projects must apply
-								for verification at least 1 week prior to the
-								Start Date in order to be included in the round.
-							</InfoDesc>
-							<InfoReadMore
-								target='_blank'
-								href={links.GIVBACK_DOC}
-							>
-								<span>Read More </span>
-								<IconExternalLink
-									size={16}
-									color={brandColors.cyan[500]}
-								/>
-							</InfoReadMore>
-						</InfoSection>
-					</Flex>
+									<span>Read More </span>
+									<IconExternalLink
+										size={16}
+										color={brandColors.cyan[500]}
+									/>
+								</InfoReadMore>
+							</InfoSection>
+						</Col>
+					</Row>
 				</GIVBackCard>
 			</Container>
 		</GIVbacksBottomContainer>
