@@ -14,4 +14,5 @@ export enum gqlEnums {
 export enum EProjectStatus {
 	DRAFT = 'drafted',
 	ACTIVE = 'activate',
+	DEACTIVE = 'deactivate',
 }

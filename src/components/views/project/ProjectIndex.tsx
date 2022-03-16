@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Caption, GLink, semanticColors } from '@giveth/ui-design-system';
+import { Caption, semanticColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
-import WarningBadge from '@/components/badges/WarningBadge';
 import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
 import ProjectDonateCard from './ProjectDonateCard';
@@ -20,6 +19,7 @@ import InfoBadge from '@/components/badges/InfoBadge';
 import { IDonationsByProjectId } from '@/apollo/types/gqlTypes';
 import SuccessfulCreation from '@/components/views/create/SuccessfulCreation';
 import { mediaQueries } from '@/utils/constants';
+import InlineToast from '@/components/toasts/InlineToast';
 
 const ProjectDonations = dynamic(() => import('./ProjectDonations'));
 const ProjectUpdates = dynamic(() => import('./ProjectUpdates'));
@@ -127,15 +127,7 @@ const ProjectIndex = () => {
 						/>
 					)}
 					{!isActive && !isDraft && (
-						<GivBackNotif>
-							<WarningBadge />
-							<GLink
-								size='Medium'
-								color={semanticColors.golden[700]}
-							>
-								This project is not active.
-							</GLink>
-						</GivBackNotif>
+						<InlineToast message='This project is not active.' />
 					)}
 					{activeTab === 0 && (
 						<RichTextViewer content={description} />
@@ -182,18 +174,6 @@ const DraftIndicator = styled.div`
 
 const Wrapper = styled.div`
 	position: relative;
-`;
-
-const GivBackNotif = styled.div`
-	display: flex;
-	gap: 16px;
-	padding: 16px;
-	background: ${semanticColors.golden[200]};
-	border-radius: 8px;
-	border: 1px solid ${semanticColors.golden[700]};
-	margin: 24px 0 24px;
-	max-width: 750px;
-	color: ${semanticColors.golden[700]};
 `;
 
 const BodyWrapper = styled.div`

@@ -17,10 +17,7 @@ import { IProject } from '@/apollo/types/types';
 import { htmlToText } from '@/lib/helpers';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { mediaQueries } from '@/utils/constants';
-
-const cardWidth = '440px';
-const cardRadius = '12px';
-const imgHeight = '200px';
+import Routes from '@/lib/constants/Routes';
 
 interface IProjectCard {
 	project: IProject;
@@ -45,7 +42,6 @@ const ProjectCard = (props: IProjectCard) => {
 		image,
 		verified,
 		traceCampaignId,
-		totalReactions,
 		adminUser,
 		slug,
 		id,
@@ -55,45 +51,39 @@ const ProjectCard = (props: IProjectCard) => {
 
 	const name = adminUser?.name;
 	return (
-		<Wrapper>
-			<Wrapper2 isNew={isNew}>
-				<ImagePlaceholder>
-					<ProjectCardImage image={image} />
-				</ImagePlaceholder>
-				{givingBlocksId && <ProjectByGivingBlock />}
-				{!isNew && (
-					<ProjectCardBadges
-						verified={verified}
-						traceable={!!traceCampaignId}
-						projectHref={slug}
-						projectDescription={description}
-						projectId={id}
-						noHearts={noHearts}
-					/>
+		<Wrapper isNew={isNew}>
+			<ImagePlaceholder>
+				<ProjectCardImage image={image} />
+			</ImagePlaceholder>
+			{givingBlocksId && <ProjectByGivingBlock />}
+			{!isNew && (
+				<ProjectCardBadges
+					verified={verified}
+					traceable={!!traceCampaignId}
+					projectHref={slug}
+					projectDescription={description}
+					projectId={id}
+					noHearts={noHearts}
+				/>
+			)}
+			<CardBody>
+				<Title>{title}</Title>
+				{name && (
+					<Link href={`${Routes.User}/${adminUser?.walletAddress}`}>
+						<a>
+							<Author>{name}</Author>
+						</a>
+					</Link>
 				)}
-				<CardBody>
-					<Title>{title}</Title>
-					{name && (
-						<Link
-							href={`/user/${adminUser?.walletAddress}`}
-							passHref
-						>
-							<a>
-								<Author>{name}</Author>
-							</a>
-						</Link>
-					)}
-					<Description>{htmlToText(description)}</Description>
-					{!isNew && (
-						<Captions>
-							<BodyCaption>
-								Raised: ${totalDonations?.toLocaleString()}
-							</BodyCaption>
-							{/* <BodyCaption>Last updated: x days ago</BodyCaption> */}
-						</Captions>
-					)}
-				</CardBody>
-			</Wrapper2>
+				<Description>{htmlToText(description)}</Description>
+				{!isNew && (
+					<Captions>
+						<BodyCaption>
+							Raised: ${totalDonations?.toLocaleString()}
+						</BodyCaption>
+					</Captions>
+				)}
+			</CardBody>
 		</Wrapper>
 	);
 };
@@ -134,34 +124,23 @@ const Title = styled(H6)`
 `;
 
 const ImagePlaceholder = styled.div`
-	height: ${imgHeight};
+	height: 200px;
 	width: 100%;
 	position: relative;
 	overflow: hidden;
 	border-radius: 16px;
 `;
 
-const Wrapper2 = styled.div<{ isNew?: boolean }>`
+const Wrapper = styled.div<{ isNew?: boolean }>`
 	position: relative;
 	height: 430px;
-	width: ${cardWidth};
-	border-radius: ${cardRadius};
+	max-width: 440px;
+	border-radius: 12px;
 	margin-top: 0;
 	z-index: 0;
-	transition: all 0.3s ease;
 	background: ${props => props.isNew && 'white'};
 	box-shadow: ${props => props.isNew && Shadow.Dark[500]};
-	${mediaQueries['mobileL']} {
-		width: 100%;
-	}
-`;
-
-const Wrapper = styled.div`
-	position: relative;
-	height: 430px;
-	width: ${cardWidth};
-	border-radius: ${cardRadius};
-	${mediaQueries['mobileL']} {
+	${mediaQueries.mobileL} {
 		width: 100%;
 	}
 `;

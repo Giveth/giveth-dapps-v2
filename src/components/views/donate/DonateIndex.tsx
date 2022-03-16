@@ -1,18 +1,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useWeb3React } from '@web3-react/core';
-import ProjectCard from '@/components/project-card/ProjectCardAlt';
-import { Shadow } from '@/components/styled-components/Shadow';
-import CryptoDonation from './CryptoDonation';
-import FiatDonation from './FiatDonation';
-import { IProjectBySlug } from '@/apollo/types/types';
-import { BigArc } from '@/components/styled-components/Arc';
-import ConfettiAnimation from '../../animations/confetti';
-import RadioOnIcon from '/public/images/radio_on.svg';
-import RadioOffIcon from '/public/images/radio_off.svg';
-import { formatEtherscanLink } from '../../../utils';
-import { mediaQueries } from '@/utils/constants';
-import SocialBox from './SocialBox';
 import {
 	H4,
 	brandColors,
@@ -24,8 +13,20 @@ import {
 	GLink,
 	Button,
 } from '@giveth/ui-design-system';
-import Link from 'next/link';
 import styled from 'styled-components';
+
+import ProjectCard from '@/components/project-card/ProjectCardAlt';
+import { Shadow } from '@/components/styled-components/Shadow';
+import CryptoDonation from './CryptoDonation';
+import FiatDonation from './FiatDonation';
+import { IProjectBySlug } from '@/apollo/types/types';
+import { BigArc } from '@/components/styled-components/Arc';
+import ConfettiAnimation from '../../animations/confetti';
+import RadioOnIcon from '/public/images/radio_on.svg';
+import RadioOffIcon from '/public/images/radio_off.svg';
+import { formatEtherscanLink } from '@/utils';
+import { mediaQueries } from '@/utils/constants';
+import SocialBox from './SocialBox';
 import Routes from '@/lib/constants/Routes';
 
 const CRYPTO_DONATION = 'Cryptocurrency';

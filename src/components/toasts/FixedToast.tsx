@@ -37,13 +37,13 @@ const Container = styled.div`
 	padding: 13.5px 16px;
 	border: 1px solid ${(props: IToastContainer) => props.borderColor};
 	border-radius: 8px;
-	a {
+	> a {
 		cursor: pointer;
 		font-weight: bold !important;
 		word-wrap: break-word;
-		width: 110px;
+		max-width: 110px;
 	}
-	div:first-child {
+	> div:first-child {
 		margin-right: 4px;
 	}
 `;

@@ -3,8 +3,7 @@ import { FC } from 'react';
 import styled from 'styled-components';
 import { IconTrash } from '@giveth/ui-design-system/lib/cjs/components/icons/Trash';
 import { Button, Lead, brandColors } from '@giveth/ui-design-system';
-import { useGeneral } from '@/context/general.context';
-import FixedToast from '@/components/FixedToast';
+import FixedToast from '@/components/toasts/FixedToast';
 
 export const RemoveUpdateModal: FC<IModal> = ({
 	showModal,

@@ -1,9 +1,7 @@
 import styled from 'styled-components';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import InputBox from '../../InputBox';
 import { useWeb3React } from '@web3-react/core';
 import { Contract } from '@ethersproject/contracts';
-import { Shadow } from '@/components/styled-components/Shadow';
 import BigNumber from 'bignumber.js';
 import {
 	Button,
@@ -14,8 +12,11 @@ import {
 	GLink,
 	B,
 } from '@giveth/ui-design-system';
+
+import { Shadow } from '@/components/styled-components/Shadow';
+import InputBox from '../../InputBox';
 import useUser from '@/context/UserProvider';
-import FixedToast from '@/components/FixedToast';
+import FixedToast from '@/components/toasts/FixedToast';
 import CheckBox from '@/components/Checkbox';
 import WalletModal from '@/components/modals/WalletModal';
 import DonateModal from '@/components/modals/DonateModal';
@@ -23,10 +24,10 @@ import { ChangeNetworkModal } from '@/components/modals/ChangeNetwork';
 import { mediaQueries } from '@/utils/constants';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
-import { IProject } from '../../../apollo/types/types';
-import { getERC20Info } from '../../../lib/contracts';
-import { getERC20List, pollEvery } from '../../../utils';
-import { fetchPrice } from '../../../services/token';
+import { IProject } from '@/apollo/types/types';
+import { getERC20Info } from '@/lib/contracts';
+import { getERC20List, pollEvery } from '@/utils';
+import { fetchPrice } from '@/services/token';
 import { switchNetwork } from '@/lib/wallet';
 import { usePrice } from '@/context/price.context';
 import GeminiModal from './GeminiModal';
@@ -37,13 +38,14 @@ import tokenAbi from 'human-standard-token-abi';
 
 import TokenPicker from './TokenPicker';
 import Routes from '@/lib/constants/Routes';
+import InlineToast from '@/components/toasts/InlineToast';
+import { EProjectStatus } from '@/apollo/types/gqlEnums';
 
 const ethereumChain = config.PRIMARY_NETWORK;
 const xdaiChain = config.SECONDARY_NETWORK;
 const xdaiExcluded = config.XDAI_EXCLUDED_COINS;
 const stableCoins = [xdaiChain.mainToken, 'DAI', 'USDT'];
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
-const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
 
 interface ISuccessDonation {
 	transactionHash: string;
@@ -77,10 +79,13 @@ const CryptoDonation = (props: {
 	const {
 		state: { isSignedIn, isEnabled, balance },
 	} = useUser();
-	const { project, setSuccessDonation } = props;
 	const { ethPrice } = usePrice();
+
+	const { project, setSuccessDonation } = props;
+	const isActive = project.status?.name === EProjectStatus.ACTIVE;
 	const mainTokenPrice = new BigNumber(ethPrice).toNumber();
 	const networkId = chainId;
+
 	const [selectedToken, setSelectedToken] = useState<ISelectObj>();
 	const [selectedTokenBalance, setSelectedTokenBalance] = useState<any>();
 	const [customInput, setCustomInput] = useState<any>();
@@ -143,8 +148,8 @@ const CryptoDonation = (props: {
 				tokens.splice(givIndex, 1);
 			}
 			tokens?.sort((a: any, b: any) => {
-				var tokenA = a.name.toUpperCase();
-				var tokenB = b.name.toUpperCase();
+				const tokenA = a.name.toUpperCase();
+				const tokenB = b.name.toUpperCase();
 				return tokenA < tokenB ? -1 : tokenA > tokenB ? 1 : 0;
 			});
 			if (givToken) {
@@ -494,11 +499,17 @@ const CryptoDonation = (props: {
 				/>
 			)}
 
+			{!isActive && <InlineToast message='This project is not active.' />}
+
 			{isEnabled && (
 				<>
 					<MainButton
 						label='DONATE'
-						disabled={!amountTyped || parseInt(amountTyped) < 0}
+						disabled={
+							!isActive ||
+							!amountTyped ||
+							parseInt(amountTyped) < 0
+						}
 						size='large'
 						onClick={() => {
 							if (selectedTokenBalance < amountTyped) {
@@ -563,19 +574,21 @@ const SearchContainer = styled.div`
 		box-shadow: ${Shadow.Neutral[500]};
 	}
 	${(props: IInputBox) =>
-		!!props.focused &&
+		props.focused &&
 		`
-	border: 2px solid ${brandColors.giv[500]};
-box-shadow: ${Shadow.Neutral[500]};
-	`}
+		border: 2px solid ${brandColors.giv[500]};
+		box-shadow: ${Shadow.Neutral[500]};
+		`}
 `;
+
 const DropdownContainer = styled.div`
 	width: 35%;
 	height: 54px;
-	${mediaQueries['mobileL']} and (max-width: 850px) {
+	${mediaQueries.mobileL} {
 		width: 50%;
 	}
 `;
+
 const XDaiContainer = styled.div`
 	display: flex;
 	flex-direction: row;
@@ -593,7 +606,7 @@ const XDaiContainer = styled.div`
 	img {
 		padding-right: 12px;
 	}
-	${mediaQueries['mobileL']} and (max-width: 850px) {
+	${mediaQueries.mobileL} {
 		flex-direction: column;
 		align-items: center;
 		margin-bottom: 20px;
@@ -602,6 +615,7 @@ const XDaiContainer = styled.div`
 		}
 	}
 `;
+
 const SwitchCaption = styled(Caption)`
 	color: ${brandColors.pinky[500]};
 	cursor: pointer;
@@ -619,18 +633,10 @@ const MainButton = styled(Button)`
 
 const CheckBoxContainer = styled.div`
 	margin: 24px 0;
-	width: 100%;
-	div:nth-child(2) {
+	> div:nth-child(2) {
 		color: ${neutralColors.gray[700]};
 		font-size: 12px;
-		margin: 4px 0 0 50px;
-		width: 422px;
-		width: 100%;
-	}
-	${mediaQueries['mobileL']} {
-		div:nth-child(2) {
-			margin: 14px 0 0 0;
-		}
+		margin-top: 10px;
 	}
 `;
 
@@ -639,7 +645,7 @@ const ToastContainer = styled.div`
 `;
 
 const AnotherWalletTxt = styled(GLink)`
-	font-size 14px;
+	font-size: 14px;
 	color: ${neutralColors.gray[800]};
 	padding: 16px 0;
 	text-align: center;
