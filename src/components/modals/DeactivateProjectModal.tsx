@@ -12,6 +12,8 @@ import {
 	semanticColors,
 } from '@giveth/ui-design-system';
 import { client } from '@/apollo/apolloClient';
+import { useRouter } from 'next/router';
+
 import {
 	DEACTIVATE_PROJECT,
 	GET_STATUS_REASONS,
@@ -22,6 +24,7 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import useUser from '@/context/UserProvider';
 import { IModal, Modal } from './Modal';
 import ArchiveIcon from '../../../public/images/icons/archive_deep.svg';
+import Routes from '@/lib/constants/Routes';
 
 interface ISelectObj {
 	value: number;
@@ -347,26 +350,30 @@ interface IDonoContent {
 	show: boolean;
 }
 
-const DoneContent = ({ show }: IDonoContent) => (
-	<>
-		{show && (
-			<>
-				<Lead>
-					Your project was successfully deactivated. Please, consider
-					donating the fund that you received to another project on
-					Giveth.
-				</Lead>
-				<RedirectLink>Go to projects</RedirectLink>
-				<RedirectLink>Back to My account</RedirectLink>
-			</>
-		)}
-	</>
-);
+const DoneContent = ({ show }: IDonoContent) => {
+	const router = useRouter();
+	return show ? (
+		<>
+			<Lead>
+				Your project was successfully deactivated. Please, consider
+				donating the fund that you received to another project on
+				Giveth.
+			</Lead>
+			<RedirectLink onClick={() => router.push(Routes.Projects)}>
+				Go to projects
+			</RedirectLink>
+			<RedirectLink onClick={() => router.push(Routes.MyAccount)}>
+				Back to My account
+			</RedirectLink>
+		</>
+	) : null;
+};
 
 const RedirectLink = styled(P)`
 	display: block;
 	margin-top: 8px;
 	color: ${brandColors.pinky[500]};
+	cursor: pointer;
 `;
 
 export default DeactivateProjectModal;
