@@ -62,7 +62,7 @@ const config: EnvConfig = {
 				description: '0.3% tier only',
 				provideLiquidityLink: `https://app.uniswap.org/#/add/ETH/0x900dB999074d9277c5DA2A43F252D74366230DA0/3000`,
 				unit: 'NFT',
-				infinitePositionId: 192722,
+				infinitePositionId: 193935,
 			},
 			{
 				POOL_ADDRESS: '0x7819f1532c49388106f7762328c51ee70edd134c',
