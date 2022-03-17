@@ -67,8 +67,7 @@ const UserContext = createContext<IUserContext>({
 
 const apolloClient = initializeApollo();
 
-const USER_ENV_LABEL =
-	process.env.NEXT_PUBLIC_LOCAL_USER_LABEL || 'giveth_dapps_user';
+const USER_ENV_LABEL = getLocalStorageUserLabel();
 
 export const UserProvider = (props: { children: ReactNode }) => {
 	const [cookie, setCookie, removeCookie] = useCookies([USER_ENV_LABEL]);
