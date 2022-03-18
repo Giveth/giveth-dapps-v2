@@ -9,7 +9,7 @@ import {
 	EDIT_PROJECT_UPDATE,
 } from '@/apollo/gql/gqlProjects';
 import { showToastError } from '@/lib/helpers';
-import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
+import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
 import { gToast, ToastType } from '@/components/toasts';
 import ProjectTimeline, { TimelineSection } from './ProjectTimeline';
 import { IProject, IProjectUpdate } from '@/apollo/types/types';
@@ -121,7 +121,6 @@ const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 			});
 			return true;
 		} catch (error: any) {
-			console.log({ error });
 			return showToastError(error);
 		}
 	};
@@ -186,7 +185,7 @@ const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 				position: 'top-center',
 			});
 		} catch (error: any) {
-			return showToastError(error?.message);
+			return showToastError(error);
 		}
 	};
 
@@ -203,7 +202,7 @@ const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 				/>
 			)}
 			{showWelcomeSignin && (
-				<WelcomeSigninModal
+				<SignWithWalletModal
 					callback={() => {
 						addUpdate();
 						setShowWelcomeSignin(false);
@@ -270,12 +269,12 @@ const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 };
 
 const Wrapper = styled.div`
-	padding: 0px 16px;
-	margin-left: 0px;
+	padding: 0 16px;
+	margin-left: 0;
 
 	${mediaQueries.tablet} {
 		margin-left: 20px;
-		padding: 0px;
+		padding: 0;
 	}
 `;
 

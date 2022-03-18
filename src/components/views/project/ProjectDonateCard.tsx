@@ -32,7 +32,7 @@ import ShareModal from '@/components/modals/ShareModal';
 import { IReaction } from '@/apollo/types/types';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_REACTION_BY_ID } from '@/apollo/gql/gqlProjects';
-import SignInModal from '@/components/modals/SignInModal';
+import WelcomeModal from '@/components/modals/WelcomeModal';
 import { likeProject, unlikeProject } from '@/lib/reaction';
 import DeactivateProjectModal from '@/components/modals/DeactivateProjectModal';
 import ArchiveIcon from '../../../../public/images/icons/archive.svg';
@@ -63,7 +63,7 @@ const ProjectDonateCard = ({
 	const {
 		state: { user, isSignedIn },
 		actions: {
-			showSignModal,
+			showSignWithWallet,
 			incrementLikedProjectsCount,
 			decrementLikedProjectsCount,
 		},
@@ -99,7 +99,7 @@ const ProjectDonateCard = ({
 
 	const likeUnlikeProject = async () => {
 		if (!isSignedIn) {
-			showSignModal();
+			showSignWithWallet();
 			return;
 		}
 		if (loading) return;
@@ -123,7 +123,6 @@ const ProjectDonateCard = ({
 				}
 			} catch (e) {
 				showToastError(e);
-				console.error('Error on like/unlike project ', e);
 			} finally {
 				setLoading(false);
 			}
@@ -147,7 +146,6 @@ const ProjectDonateCard = ({
 				setReaction(data?.projectById?.reaction);
 			} catch (e) {
 				showToastError(e);
-				console.error('Error on fetching project by id:', e);
 			}
 		} else if (reaction) {
 			setReaction(undefined);
@@ -155,8 +153,8 @@ const ProjectDonateCard = ({
 	}, [id, user?.id]);
 
 	useEffect(() => {
-		fetchProjectReaction();
-	}, [fetchProjectReaction]);
+		fetchProjectReaction().then();
+	}, []);
 
 	useEffect(() => {
 		setHeartedByUser(!!reaction?.id && reaction?.userId === user?.id);
@@ -179,7 +177,7 @@ const ProjectDonateCard = ({
 		} else {
 			try {
 				if (!isSignedIn) {
-					showSignModal();
+					showSignWithWallet();
 					return;
 				}
 				const { data } = await client.mutate({
@@ -213,7 +211,7 @@ const ProjectDonateCard = ({
 				/>
 			)}
 			{showSigninModal && (
-				<SignInModal
+				<WelcomeModal
 					showModal={showSigninModal}
 					closeModal={() => setShowSigninModal(false)}
 				/>

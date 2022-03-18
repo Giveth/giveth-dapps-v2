@@ -13,14 +13,14 @@ import useUser from '@/context/UserProvider';
 import { ETheme, useGeneral } from '@/context/general.context';
 import { mediaQueries } from '@/utils/constants';
 
-export const WelcomeSigninModal: FC<IModal> = ({
+export const SignWithWalletModal: FC<IModal> = ({
 	showModal,
 	setShowModal,
 	callback,
 }) => {
 	const { theme } = useGeneral();
 	const {
-		actions: { signIn },
+		actions: { signToGetToken },
 	} = useUser();
 
 	return (
@@ -44,8 +44,7 @@ export const WelcomeSigninModal: FC<IModal> = ({
 				<OkButton
 					label='SIGN IN'
 					onClick={async () => {
-						let signature: string | boolean = false;
-						signIn && (signature = await signIn());
+						const signature = await signToGetToken();
 						setShowModal(false);
 						!!signature && callback && callback();
 					}}

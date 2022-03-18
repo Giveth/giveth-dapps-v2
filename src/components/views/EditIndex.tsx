@@ -10,16 +10,14 @@ import {
 	isUserRegistered,
 	showToastError,
 } from '@/lib/helpers';
-import SignInModal from '@/components/modals/SignInModal';
 import CreateProject from '@/components/views/create/CreateProject';
 
 const EditIndex = () => {
 	const [project, setProject] = useState<IProjectEdition>();
-	const [showSigninModal, setShowSigninModal] = useState(false);
 
 	const {
 		state: { user, isSignedIn },
-		actions: { showCompleteProfile, showSignModal },
+		actions: { showCompleteProfile, showSignWithWallet, showWelcomeModal },
 	} = useUser();
 
 	const router = useRouter();
@@ -28,14 +26,14 @@ const EditIndex = () => {
 	useEffect(() => {
 		const userAddress = user?.walletAddress;
 		if (userAddress) {
-			setShowSigninModal(false);
+			showWelcomeModal(false);
 			if (project) setProject(undefined);
 			if (!isUserRegistered(user)) {
 				showCompleteProfile();
 				return;
 			}
 			if (!isSignedIn) {
-				showSignModal();
+				showSignWithWallet();
 				return;
 			}
 			client
@@ -58,21 +56,11 @@ const EditIndex = () => {
 				})
 				.catch(showToastError);
 		} else {
-			setShowSigninModal(true);
+			showWelcomeModal(true);
 		}
 	}, [user, isSignedIn]);
 
-	return (
-		<>
-			{showSigninModal && (
-				<SignInModal
-					showModal={showSigninModal}
-					closeModal={() => setShowSigninModal(false)}
-				/>
-			)}
-			{isSignedIn && project && <CreateProject project={project} />}
-		</>
-	);
+	return isSignedIn && project ? <CreateProject project={project} /> : null;
 };
 
 export default EditIndex;

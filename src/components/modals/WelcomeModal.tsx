@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
-
+import { H3, P, brandColors, neutralColors, B } from '@giveth/ui-design-system';
+import styled from 'styled-components';
 import Image from 'next/image';
 import { useWeb3React } from '@web3-react/core';
 
@@ -13,27 +14,21 @@ import facebookIcon from '/public/images/social-fb2.svg';
 import discordIcon from '/public/images/social-disc.svg';
 import torusBrand from '/public/images/torus_pwr.svg';
 import { torusConnector } from '@/lib/wallet/walletTypes';
-import { H3, P, brandColors, neutralColors, B } from '@giveth/ui-design-system';
-import styled from 'styled-components';
 import WalletModal from './WalletModal';
 import { mediaQueries } from '@/utils/constants';
+import { showToastError } from '@/lib/helpers';
 
 interface ISignInModal {
 	showModal: boolean;
 	closeModal: () => void;
 }
 
-const SignInModal = ({ showModal, closeModal }: ISignInModal) => {
+const WelcomeModal = ({ showModal, closeModal }: ISignInModal) => {
 	const { activate } = useWeb3React();
 	const [showWalletModal, setShowWalletModal] = useState<boolean>(false);
 
 	const handleSocialConnection = (): void => {
-		activate(torusConnector)
-			.then(() => closeModal())
-			.catch((e: any) => {
-				// toast to inform error
-				console.log(e);
-			});
+		activate(torusConnector).then(closeModal).catch(showToastError);
 	};
 
 	return (
@@ -73,7 +68,7 @@ const SignInModal = ({ showModal, closeModal }: ISignInModal) => {
 								{socialArray.map(elem => (
 									<IconsContainer
 										key={elem.alt}
-										onClick={() => handleSocialConnection()}
+										onClick={handleSocialConnection}
 									>
 										{' '}
 										{/* best way to activate torus here? */}
@@ -107,7 +102,7 @@ const BGContainer = styled.div`
 	width: 55%;
 	max-width: 640px;
 	background-color: ${brandColors.giv[500]};
-	background-image: url('images/sign_bg.svg');
+	background-image: url('/images/sign_bg.svg');
 
 	${mediaQueries.laptop} {
 		display: block;
@@ -199,4 +194,4 @@ const socialArray = [
 	{ icon: discordIcon, alt: 'Discord icon.' },
 ];
 
-export default SignInModal;
+export default WelcomeModal;

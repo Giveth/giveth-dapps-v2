@@ -61,7 +61,7 @@ const Header: FC<IHeader> = () => {
 	} = useSubgraph();
 	const {
 		state: { user, isEnabled, isSignedIn },
-		actions: { showCompleteProfile, showSignInModal, showSignModal },
+		actions: { showCompleteProfile, showWelcomeModal, showSignWithWallet },
 	} = useUser();
 	const { chainId, active, activate, account, library } = useWeb3React();
 	const { theme } = useGeneral();
@@ -121,7 +121,7 @@ const Header: FC<IHeader> = () => {
 		if (isGIVeconomyRoute) {
 			setShowWalletModal(true);
 		} else {
-			showSignInModal(true);
+			showWelcomeModal(true);
 		}
 	};
 
@@ -131,9 +131,9 @@ const Header: FC<IHeader> = () => {
 
 	const handleCreateButton = () => {
 		if (!isEnabled) {
-			showSignInModal(true);
+			showWelcomeModal(true);
 		} else if (!isSignedIn) {
-			showSignModal();
+			showSignWithWallet();
 		} else if (isUserRegistered(user)) {
 			router.push(Routes.CreateProject);
 		} else {
