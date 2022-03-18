@@ -112,6 +112,11 @@ const ProjectDonationTable = ({
 		};
 		fetchProjectDonations();
 	}, [page, order.by, order.direction, id, searchTerm]);
+
+	useEffect(() => {
+		if (page !== 0) setPage(0);
+	}, [searchTerm]);
+
 	return (
 		<Wrapper>
 			<UpperSection>

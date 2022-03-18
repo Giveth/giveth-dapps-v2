@@ -256,7 +256,7 @@ export const TabGIVstreamBottom = () => {
 										label='SEE PROJECTS'
 										linkType='primary'
 										size='medium'
-										href={Routes.Project}
+										href={Routes.Projects}
 										target='_blank'
 									/>
 								}
