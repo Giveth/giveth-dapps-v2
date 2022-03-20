@@ -256,7 +256,7 @@ export const TabGIVstreamBottom = () => {
 										label='SEE PROJECTS'
 										linkType='primary'
 										size='medium'
-										href={Routes.Project}
+										href={Routes.Projects}
 										target='_blank'
 									/>
 								}
@@ -354,13 +354,9 @@ const convetSourceTypeToIcon = (distributor: string) => {
 				</Flex>
 			);
 		case 'balancerlm':
-		case 'balancerlp':
-		case 'shushiswaplp':
-		case 'honeyswaplp':
+		case 'givhnylm':
 		case 'givlm':
-		case 'giveth':
 		case 'givethlm':
-		case 'givhnypool':
 		case 'uniswappool':
 			return (
 				<Flex gap='16px'>

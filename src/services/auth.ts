@@ -1,5 +1,4 @@
-import { isSSRMode } from '../lib/helpers';
-import User from '../entities/user';
+import { isSSRMode } from '@/lib/helpers';
 import { IUser } from '@/apollo/types/types';
 
 export const getUser = (): IUser =>

@@ -9,7 +9,7 @@ const envConfig = isProduction ? production : development;
 const config: GlobalConfig = {
 	TOKEN_NAME: 'DRGIV',
 	WEB3_POLLING_INTERVAL: 15000,
-	SUBGRAPH_POLLING_INTERVAL: 1000,
+	SUBGRAPH_POLLING_INTERVAL: 5000,
 	TOKEN_PRECISION: 2,
 	PRIMARY_NETWORK: {
 		name: isProduction ? 'Ethereum Mainnet' : 'Ropsten',

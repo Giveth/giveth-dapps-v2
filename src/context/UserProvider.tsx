@@ -67,8 +67,10 @@ const UserContext = createContext<IUserContext>({
 
 const apolloClient = initializeApollo();
 
+const USER_ENV_LABEL = getLocalStorageUserLabel();
+
 export const UserProvider = (props: { children: ReactNode }) => {
-	const [cookie, setCookie, removeCookie] = useCookies(['giveth_user']);
+	const [cookie, setCookie, removeCookie] = useCookies([USER_ENV_LABEL]);
 	const { account, active, library, chainId } = useWeb3React();
 	useWallet();
 
@@ -151,13 +153,13 @@ export const UserProvider = (props: { children: ReactNode }) => {
 			const DBUser = await fetchUser();
 			const newUser = new User(DBUser);
 			newUser.setToken(token);
-			Auth.setUser(newUser, setCookie, 'giveth_user');
+			Auth.setUser(newUser, setCookie, USER_ENV_LABEL);
 			setSignInToken(token);
 			await apolloClient.resetStore();
 			setUser(newUser);
 		} else {
 			localUser.setToken(token);
-			Auth.setUser(localUser, setCookie, 'giveth_user');
+			Auth.setUser(localUser, setCookie, USER_ENV_LABEL);
 			await apolloClient.resetStore();
 			setUser(localUser);
 			setSignInToken(token);
@@ -174,7 +176,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 				...user,
 				token: '',
 			};
-			Auth.setUser(newUser, setCookie, 'giveth_user');
+			Auth.setUser(newUser, setCookie, USER_ENV_LABEL);
 			setUser(newUser);
 			setSignInToken(undefined);
 		}
@@ -200,7 +202,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 			.then((res: any) => {
 				if (res) {
 					const newUser = new User(res);
-					Auth.setUser(newUser, setCookie, 'giveth_user');
+					Auth.setUser(newUser, setCookie, USER_ENV_LABEL);
 					if (
 						compareAddresses(
 							user?.walletAddress,
