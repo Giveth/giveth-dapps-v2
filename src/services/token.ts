@@ -1,7 +1,9 @@
-import { IUser } from '@/apollo/types/types';
 import { ethers } from 'ethers';
-import { initializeApollo } from '../apollo/apolloClient';
-import { LOGIN_USER } from '../apollo/gql/gqlAuth';
+
+import { IUser } from '@/apollo/types/types';
+import { initializeApollo } from '@/apollo/apolloClient';
+import { LOGIN_USER } from '@/apollo/gql/gqlAuth';
+import { showToastError } from '@/lib/helpers';
 
 const apolloClient = initializeApollo();
 
@@ -28,10 +30,10 @@ export async function getToken(
 			const { data } = await apolloClient.mutate(mutate);
 			return data?.loginWallet?.token;
 		} catch (error) {
-			console.log('Error in token login: ', error);
+			showToastError(error);
 		}
 	} else {
-		console.log('Input data for getting token is incomplete');
+		showToastError('Input data for getting token is incomplete');
 	}
 }
 

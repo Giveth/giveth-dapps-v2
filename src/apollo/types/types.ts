@@ -65,7 +65,7 @@ export interface IProjectCreation {
 }
 
 export interface IUser {
-	id: string;
+	id?: string;
 	firstName?: string;
 	lastName?: string;
 	name?: string;

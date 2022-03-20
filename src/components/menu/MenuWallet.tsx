@@ -16,7 +16,7 @@ import Routes from '@/lib/constants/Routes';
 import { networkInfo } from '@/lib/constants/NetworksObj';
 import useUser from '@/context/UserProvider';
 import links from '@/lib/constants/links';
-import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
+import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
 import { switchNetworkHandler } from '@/lib/wallet';
 import { MenuContainer } from './Menu.sc';
 import { ETheme, useGeneral } from '@/context/general.context';
@@ -76,7 +76,7 @@ const MenuWallet: FC<IMenuWallet> = ({ setShowWalletModal }) => {
 	return (
 		<>
 			{showWelcomeSignin && (
-				<WelcomeSigninModal
+				<SignWithWalletModal
 					callback={() => {
 						router.push(queueRoute);
 						setQueueRoute('');

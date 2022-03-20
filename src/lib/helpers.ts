@@ -3,7 +3,6 @@ import { keccak256 } from '@ethersproject/keccak256';
 import { Contract } from '@ethersproject/contracts';
 import { Web3Provider } from '@ethersproject/providers';
 import { promisify } from 'util';
-import cookie from 'cookie';
 // @ts-ignore
 import tokenAbi from 'human-standard-token-abi';
 
@@ -17,10 +16,6 @@ import { gToast, ToastType } from '@/components/toasts';
 import { networkInfo } from './constants/NetworksObj';
 
 declare let window: any;
-
-export function parseCookies(req: any) {
-	return cookie.parse(req ? req.headers.cookie || '' : document.cookie);
-}
 
 export const DurationToYMDh = (ms: number) => {
 	let baseTime = new Date(0);
@@ -319,8 +314,6 @@ export async function signMessage(
 	}
 }
 
-export const LocalStorageTokenLabel = 'userToken';
-
 export const checkLinkActive = (route: string, href: string) => {
 	if (route === href) {
 		return true;
@@ -345,9 +338,10 @@ export const showToastError = (err: any) => {
 		type: ToastType.DANGER,
 		position: 'top-center',
 	});
+	console.log(err);
 };
 
-export const calcBiggestUnitDiffernceTime = (_time: string) => {
+export const calcBiggestUnitDifferenceTime = (_time: string) => {
 	const time = new Date(_time);
 	const diff: { [key: string]: number } = DurationToYMDh(
 		Date.now() - time.getTime(),
@@ -360,3 +354,15 @@ export const calcBiggestUnitDiffernceTime = (_time: string) => {
 		return ` ${diff.min} minute${diff.min > 1 ? 's' : ''} ago`;
 	return ' Just now';
 };
+
+export function getLocalTokenLabel(): string {
+	return getLocalUserLabel() + '_token';
+}
+
+export function getLocalUserLabel(): string {
+	return process.env.NEXT_PUBLIC_LOCAL_USER_LABEL
+		? process.env.NEXT_PUBLIC_LOCAL_USER_LABEL +
+				'_' +
+				process.env.NEXT_PUBLIC_ENV
+		: 'nextUser' + '_' + process.env.NEXT_PUBLIC_ENV;
+}

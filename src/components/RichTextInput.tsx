@@ -13,6 +13,7 @@ import { neutralColors } from '@giveth/ui-design-system';
 import ImageUploader from './richImageUploader/imageUploader';
 import { UPLOAD_IMAGE } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
+import { showToastError } from '@/lib/helpers';
 
 (window as any).Quill = Quill;
 
@@ -118,27 +119,10 @@ const modules = (projectId?: any) => {
 							},
 						},
 					});
-					const cachedImgs = JSON.parse(
-						(window as any)?.localStorage.getItem(
-							'cached-uploaded-imgs',
-						),
-					);
-					const cachedImgsArray = cachedImgs ? cachedImgs : [];
-					cachedImgsArray.push(
-						imageUploaded?.uploadImage?.projectImageId,
-					);
-					// TODO: THIS NEEDS TO HAPPEN FOR UPDATE ONLY
-					if (window.location.pathname.split('/')[1] === 'create') {
-						window?.localStorage.setItem(
-							'cached-uploaded-imgs',
-							JSON.stringify(cachedImgsArray),
-						);
-					}
 
 					return imageUploaded?.uploadImage?.url;
 				} catch (error) {
-					console.log({ error });
-					alert(JSON.stringify(error));
+					showToastError(error);
 					return null;
 				}
 			},

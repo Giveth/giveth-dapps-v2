@@ -25,7 +25,7 @@ const PublicProfileLikedTab: FC<IUserPublicProfileView> = ({ user }) => {
 			const { data: userLikedProjects } = await client.query({
 				query: FETCH_USER_LIKED_PROJECTS,
 				variables: {
-					userId: parseFloat(user.id) || -1,
+					userId: parseFloat(user.id || '') || -1,
 					take: itemPerPage,
 					skip: page * itemPerPage,
 				},

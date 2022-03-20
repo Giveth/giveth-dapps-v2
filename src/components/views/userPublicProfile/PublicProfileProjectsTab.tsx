@@ -60,7 +60,7 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({
 			const { data: userProjects } = await client.query({
 				query: FETCH_USER_PROJECTS,
 				variables: {
-					userId: parseFloat(user.id) || -1,
+					userId: parseFloat(user.id || '') || -1,
 					take: itemPerPage,
 					skip: page * itemPerPage,
 					orderBy: order.by,
