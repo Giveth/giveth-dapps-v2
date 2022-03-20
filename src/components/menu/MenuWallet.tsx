@@ -145,19 +145,16 @@ const walletMenuArray = [
 		title: 'My Account',
 		url: Routes.MyAccount,
 		requiresSign: true,
-		requiresRegistration: true,
 	},
 	{
 		title: 'My Projects',
 		url: Routes.MyProjects,
 		requiresSign: true,
-		requiresRegistration: true,
 	},
 	{
 		title: 'My Donations',
 		url: Routes.MyDonations,
 		requiresSign: true,
-		requiresRegistration: true,
 	},
 	{
 		title: 'Create a Project',
