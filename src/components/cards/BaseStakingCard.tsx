@@ -307,10 +307,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									<StakeButton
 										label='STAKE'
 										size='small'
-										disabled={
-											userNotStakedAmount.isZero() ||
-											isV3Staking
-										}
+										disabled={userNotStakedAmount.isZero()}
 										onClick={() => setShowStakeModal(true)}
 									/>
 									<StakeAmount>
