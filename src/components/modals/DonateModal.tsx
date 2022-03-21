@@ -87,7 +87,9 @@ const DonateModal = ({
 				return;
 			}
 			if (!project?.walletAddress) {
-				showToastError('There is no eth address assigned for this project');
+				showToastError(
+					'There is no eth address assigned for this project',
+				);
 			}
 
 			const isCorrectNetwork = checkNetwork(chainId!);
@@ -124,18 +126,21 @@ const DonateModal = ({
 				{
 					onTransactionHash: async (transactionHash: string) => {
 						// Save initial txn details to db
-						const { donationId, savedDonation, saveDonationErrors } =
-							await saveDonation(
-								account!,
-								toAddress,
-								transactionHash,
-								chainId!,
-								Number(amount),
-								token.symbol!,
-								Number(project.id),
-								token.address!,
-								anonymous!,
-							);
+						const {
+							donationId,
+							savedDonation,
+							saveDonationErrors,
+						} = await saveDonation(
+							account!,
+							toAddress,
+							transactionHash,
+							chainId!,
+							Number(amount),
+							token.symbol!,
+							Number(project.id),
+							token.address!,
+							anonymous!,
+						);
 						console.log('DONATION RESPONSE: ', {
 							donationId,
 							savedDonation,
@@ -199,7 +204,10 @@ const DonateModal = ({
 							0,
 							library,
 						);
-						await saveDonationTransaction(transactionHash, donationId);
+						await saveDonationTransaction(
+							transactionHash,
+							donationId,
+						);
 					},
 					onReceiptGenerated: (receipt: any) => {
 						console.log({ receipt });
@@ -250,7 +258,11 @@ const DonateModal = ({
 		<Modal showModal={showModal} setShowModal={setShowModal}>
 			<DonateContainer>
 				<DonateTopTitle>
-					<Image src='/images/wallet_icon.svg' width='32px' height='32px' />
+					<Image
+						src='/images/wallet_icon.svg'
+						width='32px'
+						height='32px'
+					/>
 					<H6>Donating</H6>
 				</DonateTopTitle>
 				<DonatingBox>
@@ -263,15 +275,19 @@ const DonateModal = ({
 					</H3>
 					{avgPrice && (
 						<H6>
-							{parseFloat(String(avgPrice)).toLocaleString('en-US', {
-								maximumFractionDigits: 6,
-							})}{' '}
+							{parseFloat(String(avgPrice)).toLocaleString(
+								'en-US',
+								{
+									maximumFractionDigits: 6,
+								},
+							)}{' '}
 							USD{' '}
 						</H6>
 					)}
 					<div style={{ margin: '12px 0 32px 0' }}>
 						<P>
-							To <B style={{ marginLeft: '6px' }}>{project.title}</B>
+							To{' '}
+							<B style={{ marginLeft: '6px' }}>{project.title}</B>
 						</P>
 					</div>
 				</DonatingBox>

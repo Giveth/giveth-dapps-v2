@@ -1,8 +1,16 @@
 import { gql } from '@apollo/client';
 
 export const FETCH_HOME_PROJECTS = gql`
-	query FetchAllProjects($limit: Int, $orderBy: OrderBy, $connectedWalletUserId: Int) {
-		projects(take: $limit, orderBy: $orderBy, connectedWalletUserId: $connectedWalletUserId) {
+	query FetchAllProjects(
+		$limit: Int
+		$orderBy: OrderBy
+		$connectedWalletUserId: Int
+	) {
+		projects(
+			take: $limit
+			orderBy: $orderBy
+			connectedWalletUserId: $connectedWalletUserId
+		) {
 			projects {
 				id
 				title
@@ -80,7 +88,10 @@ export const FETCH_ALL_PROJECTS = gql`
 
 export const FETCH_PROJECT_BY_SLUG = gql`
 	query ProjectBySlug($slug: String!, $connectedWalletUserId: Int) {
-		projectBySlug(slug: $slug, connectedWalletUserId: $connectedWalletUserId) {
+		projectBySlug(
+			slug: $slug
+			connectedWalletUserId: $connectedWalletUserId
+		) {
 			id
 			title
 			image
@@ -184,7 +195,11 @@ export const FETCH_PROJECT_UPDATES = gql`
 
 export const ADD_PROJECT_UPDATE = gql`
 	mutation ($projectId: Float!, $title: String!, $content: String!) {
-		addProjectUpdate(projectId: $projectId, title: $title, content: $content) {
+		addProjectUpdate(
+			projectId: $projectId
+			title: $title
+			content: $content
+		) {
 			id
 			projectId
 			userId
@@ -200,8 +215,16 @@ export const DELETE_PROJECT_UPDATE = gql`
 `;
 
 export const EDIT_PROJECT_UPDATE = gql`
-	mutation EditProjectUpdate($content: String!, $title: String!, $updateId: Float!) {
-		editProjectUpdate(content: $content, title: $title, updateId: $updateId) {
+	mutation EditProjectUpdate(
+		$content: String!
+		$title: String!
+		$updateId: Float!
+	) {
+		editProjectUpdate(
+			content: $content
+			title: $title
+			updateId: $updateId
+		) {
 			id
 			title
 			projectId

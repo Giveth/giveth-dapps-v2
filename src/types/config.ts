@@ -95,7 +95,11 @@ export interface BasicNetworkConfig {
 	blockExplorerName: string[];
 	subgraphAddress: string;
 	gasPreference: GasPreference;
-	pools: Array<SimplePoolStakingConfig | BalancerPoolStakingConfig | UniswapV3PoolStakingConfig>;
+	pools: Array<
+		| SimplePoolStakingConfig
+		| BalancerPoolStakingConfig
+		| UniswapV3PoolStakingConfig
+	>;
 	uniswapV2Subgraph?: string;
 
 	regenStreams: RegenStreamConfig[];

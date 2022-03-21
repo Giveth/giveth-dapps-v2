@@ -1,4 +1,10 @@
-import { ICategory, IDonation, IProject, IProjectUpdate, IWalletDonation } from './types';
+import {
+	ICategory,
+	IDonation,
+	IProject,
+	IProjectUpdate,
+	IWalletDonation,
+} from './types';
 
 export interface IFetchAllProjects {
 	projects: IProject[];

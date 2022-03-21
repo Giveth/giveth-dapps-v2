@@ -10,7 +10,9 @@ export const networksParams: Record<number, any> = {
 			symbol: 'ETH',
 			decimals: 18,
 		},
-		rpcUrls: ['https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'],
+		rpcUrls: [
+			'https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
+		],
 		blockExplorerUrls: ['https://etherscan.io'],
 	},
 	3: {
@@ -21,7 +23,9 @@ export const networksParams: Record<number, any> = {
 			symbol: 'ETH',
 			decimals: 18,
 		},
-		rpcUrls: ['https://ropsten.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'],
+		rpcUrls: [
+			'https://ropsten.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
+		],
 		blockExplorerUrls: ['https://ropsten.etherscan.io'],
 	},
 	42: {
@@ -32,7 +36,9 @@ export const networksParams: Record<number, any> = {
 			symbol: 'ETH',
 			decimals: 18,
 		},
-		rpcUrls: ['https://kovan.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'],
+		rpcUrls: [
+			'https://kovan.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
+		],
 		blockExplorerUrls: ['https://kovan.etherscan.io'],
 	},
 	100: {

@@ -43,8 +43,14 @@ import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { client } from '@/apollo/apolloClient';
 import { PROJECT_ACCEPTED_TOKENS } from '@/apollo/gql/gqlProjects';
 import { showToastError } from '@/lib/helpers';
-import { IProjectAcceptedToken, IProjectAcceptedTokensGQL } from '@/apollo/types/gqlTypes';
-import { filterTokens, prepareTokenList } from '@/components/views/donate/helpers';
+import {
+	IProjectAcceptedToken,
+	IProjectAcceptedTokensGQL,
+} from '@/apollo/types/gqlTypes';
+import {
+	filterTokens,
+	prepareTokenList,
+} from '@/components/views/donate/helpers';
 
 const xdaiExcluded = config.XDAI_EXCLUDED_COINS;
 const ethereumChain = config.PRIMARY_NETWORK;
@@ -65,7 +71,10 @@ interface IInputBox {
 	focused: boolean;
 }
 
-const CryptoDonation = (props: { setSuccessDonation: any; project: IProject }) => {
+const CryptoDonation = (props: {
+	setSuccessDonation: any;
+	project: IProject;
+}) => {
 	const { chainId: networkId, account, library } = useWeb3React();
 	const {
 		state: { isSignedIn, isEnabled, balance },
@@ -98,7 +107,8 @@ const CryptoDonation = (props: { setSuccessDonation: any; project: IProject }) =
 	const [showInsufficientModal, setShowInsufficientModal] = useState(false);
 	const [showWelcomeSignin, setShowWelcomeSignin] = useState<boolean>(false);
 	const [showChangeNetworkModal, setShowChangeNetworkModal] = useState(false);
-	const [acceptedTokens, setAcceptedTokens] = useState<IProjectAcceptedToken[]>();
+	const [acceptedTokens, setAcceptedTokens] =
+		useState<IProjectAcceptedToken[]>();
 
 	const stopPolling = useRef<any>(null);
 
@@ -106,7 +116,9 @@ const CryptoDonation = (props: { setSuccessDonation: any; project: IProject }) =
 	const isXdai = networkId === xdaiChain.id;
 	const isGivingBlockProject = project?.givingBlocksId;
 	const projectIsGivBackEligible = givBackEligible && project?.verified;
-	const givingBlockReady = isGivingBlockProject ? networkId === ethereumChain.id : true;
+	const givingBlockReady = isGivingBlockProject
+		? networkId === ethereumChain.id
+		: true;
 
 	useEffect(() => {
 		if (networkId && acceptedTokens) {
@@ -142,7 +154,10 @@ const CryptoDonation = (props: { setSuccessDonation: any; project: IProject }) =
 
 	useEffect(() => {
 		const setPrice = async () => {
-			if (selectedToken?.symbol && stableCoins.includes(selectedToken.symbol)) {
+			if (
+				selectedToken?.symbol &&
+				stableCoins.includes(selectedToken.symbol)
+			) {
 				setTokenPrice(1);
 			} else if (selectedToken?.symbol === ethereumChain.mainToken) {
 				mainTokenPrice && setTokenPrice(mainTokenPrice);
@@ -157,7 +172,11 @@ const CryptoDonation = (props: { setSuccessDonation: any; project: IProject }) =
 						chain = xdaiChain.name.toLowerCase();
 					}
 				}
-				const fetchedPrice = await fetchPrice(chain, tokenAddress, setTokenPrice);
+				const fetchedPrice = await fetchPrice(
+					chain,
+					tokenAddress,
+					setTokenPrice,
+				);
 				fetchedPrice && setTokenPrice(fetchedPrice);
 			}
 		};
@@ -200,8 +219,15 @@ const CryptoDonation = (props: { setSuccessDonation: any; project: IProject }) =
 			() => ({
 				request: async () => {
 					try {
-						const instance = new Contract(selectedToken.address!, tokenAbi, library);
-						return (await instance.balanceOf(account)) / 10 ** selectedToken.decimals!;
+						const instance = new Contract(
+							selectedToken.address!,
+							tokenAbi,
+							library,
+						);
+						return (
+							(await instance.balanceOf(account)) /
+							10 ** selectedToken.decimals!
+						);
 					} catch (e) {
 						return 0;
 					}
@@ -209,7 +235,8 @@ const CryptoDonation = (props: { setSuccessDonation: any; project: IProject }) =
 				onResult: (_balance: number) => {
 					if (
 						_balance !== undefined &&
-						(!selectedTokenBalance || selectedTokenBalance !== _balance)
+						(!selectedTokenBalance ||
+							selectedTokenBalance !== _balance)
 					) {
 						setSelectedTokenBalance(_balance);
 					}
@@ -221,7 +248,10 @@ const CryptoDonation = (props: { setSuccessDonation: any; project: IProject }) =
 
 	return (
 		<MainContainer>
-			<GeminiModal showModal={geminiModal} setShowModal={setGeminiModal} />
+			<GeminiModal
+				showModal={geminiModal}
+				setShowModal={setGeminiModal}
+			/>
 			{showChangeNetworkModal && (
 				<ChangeNetworkModal
 					showModal={showChangeNetworkModal}
@@ -240,7 +270,10 @@ const CryptoDonation = (props: { setSuccessDonation: any; project: IProject }) =
 				/>
 			)}
 			{showWalletModal && !txHash && (
-				<WalletModal showModal={showWalletModal} setShowModal={setShowWalletModal} />
+				<WalletModal
+					showModal={showWalletModal}
+					setShowModal={setShowWalletModal}
+				/>
 			)}
 			{showDonateModal && selectedToken && amountTyped && (
 				<DonateModal
@@ -268,27 +301,34 @@ const CryptoDonation = (props: { setSuccessDonation: any; project: IProject }) =
 						<div>
 							<img src='/images/gas_station.svg' />
 							<Caption color={neutralColors.gray[900]}>
-								Projects from The Giving Block only accept donations on mainnet.{' '}
+								Projects from The Giving Block only accept
+								donations on mainnet.{' '}
 							</Caption>
 						</div>
-						<SwitchCaption onClick={() => switchNetwork(ethereumChain.id)}>
+						<SwitchCaption
+							onClick={() => switchNetwork(ethereumChain.id)}
+						>
 							Switch network
 						</SwitchCaption>
 					</XDaiContainer>
 				)}
-				{!isGivingBlockProject && isEnabled && networkId !== xdaiChain.id && (
-					<XDaiContainer>
-						<div>
-							<img src='/images/gas_station.svg' />
-							<Caption color={neutralColors.gray[900]}>
-								Save on gas fees, switch to xDAI network.
-							</Caption>
-						</div>
-						<SwitchCaption onClick={() => switchNetwork(xdaiChain.id)}>
-							Switch network
-						</SwitchCaption>
-					</XDaiContainer>
-				)}
+				{!isGivingBlockProject &&
+					isEnabled &&
+					networkId !== xdaiChain.id && (
+						<XDaiContainer>
+							<div>
+								<img src='/images/gas_station.svg' />
+								<Caption color={neutralColors.gray[900]}>
+									Save on gas fees, switch to xDAI network.
+								</Caption>
+							</div>
+							<SwitchCaption
+								onClick={() => switchNetwork(xdaiChain.id)}
+							>
+								Switch network
+							</SwitchCaption>
+						</XDaiContainer>
+					)}
 				<SearchContainer error={error} focused={inputBoxFocused}>
 					<DropdownContainer>
 						<TokenPicker
@@ -300,7 +340,8 @@ const CryptoDonation = (props: { setSuccessDonation: any; project: IProject }) =
 								setCustomInput('');
 								setErc20List(erc20OriginalList);
 								let givBackEligible = erc20OriginalList?.find(
-									(t: IProjectAcceptedToken) => t.symbol === i.symbol,
+									(t: IProjectAcceptedToken) =>
+										t.symbol === i.symbol,
 								);
 								setGivBackEligible(givBackEligible);
 							}}
@@ -318,12 +359,18 @@ const CryptoDonation = (props: { setSuccessDonation: any; project: IProject }) =
 											if (!pastedToken) return;
 											const found = erc20List?.find(
 												(t: IProjectAcceptedToken) =>
-													t?.symbol === pastedToken?.symbol,
+													t?.symbol ===
+													pastedToken?.symbol,
 											);
 											!found &&
 												erc20List &&
-												setErc20List([...erc20List, pastedToken]);
-											setCustomInput(pastedToken?.address);
+												setErc20List([
+													...erc20List,
+													pastedToken,
+												]);
+											setCustomInput(
+												pastedToken?.address,
+											);
 											// setSelectLoading(false);
 										});
 									} catch (error) {
@@ -352,7 +399,8 @@ const CryptoDonation = (props: { setSuccessDonation: any; project: IProject }) =
 						error={error}
 						setError={setError}
 						errorHandler={{
-							condition: (value: any) => value >= 0 && value <= 0.000001,
+							condition: (value: any) =>
+								value >= 0 && value <= 0.000001,
 							message: 'Set a valid amount',
 						}}
 						type='number'
@@ -408,8 +456,9 @@ const CryptoDonation = (props: { setSuccessDonation: any; project: IProject }) =
 					onChange={() => setAnonymous(!anonymous)}
 				/>
 				<B>
-					By checking this, we won't consider your profile information as a donor for this
-					donation and won't show it on public pages.
+					By checking this, we won't consider your profile information
+					as a donor for this donation and won't show it on public
+					pages.
 				</B>
 			</CheckBoxContainer>
 
@@ -426,7 +475,11 @@ const CryptoDonation = (props: { setSuccessDonation: any; project: IProject }) =
 				<>
 					<MainButton
 						label='DONATE'
-						disabled={!isActive || !amountTyped || parseInt(amountTyped) < 0}
+						disabled={
+							!isActive ||
+							!amountTyped ||
+							parseInt(amountTyped) < 0
+						}
 						size='large'
 						onClick={() => {
 							if (selectedTokenBalance < amountTyped) {
@@ -440,12 +493,17 @@ const CryptoDonation = (props: { setSuccessDonation: any; project: IProject }) =
 					/>
 					<AnotherWalletTxt>
 						Want to use another wallet?{' '}
-						<a onClick={() => setShowWalletModal(true)}>Change Wallet</a>
+						<a onClick={() => setShowWalletModal(true)}>
+							Change Wallet
+						</a>
 					</AnotherWalletTxt>
 				</>
 			)}
 			{!isEnabled && !givingBlockReady && (
-				<MainButton label='CONNECT WALLET' onClick={() => setShowWalletModal(true)} />
+				<MainButton
+					label='CONNECT WALLET'
+					onClick={() => setShowWalletModal(true)}
+				/>
 			)}
 		</MainContainer>
 	);
@@ -480,7 +538,9 @@ const SearchContainer = styled.div`
 	:hover {
 		border: 2px solid
 			${(props: IInputBox) =>
-				props.error === true ? semanticColors.punch[500] : brandColors.giv[500]};
+				props.error === true
+					? semanticColors.punch[500]
+					: brandColors.giv[500]};
 		box-shadow: ${Shadow.Neutral[500]};
 	}
 	${(props: IInputBox) =>
@@ -537,7 +597,8 @@ const SwitchCaption = styled(Caption)`
 
 const MainButton = styled(Button)`
 	width: 100%;
-	background-color: ${props => (props.disabled ? brandColors.giv[200] : brandColors.giv[500])};
+	background-color: ${props =>
+		props.disabled ? brandColors.giv[200] : brandColors.giv[500]};
 	color: white;
 `;
 

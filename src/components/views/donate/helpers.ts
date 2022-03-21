@@ -9,7 +9,11 @@ export const prepareTokenList = (tokens: IProjectAcceptedToken[]) => {
 	let givIndex: number | undefined;
 	const _tokens: ISelectedToken[] = [...tokens];
 	tokens.forEach((token: IProjectAcceptedToken, index: number) => {
-		if (token.symbol === 'GIV' || token.symbol === 'TestGIV' || token.name === 'Giveth') {
+		if (
+			token.symbol === 'GIV' ||
+			token.symbol === 'TestGIV' ||
+			token.name === 'Giveth'
+		) {
 			givIndex = index;
 		}
 		_tokens[index] = {
@@ -38,6 +42,9 @@ export const prepareTokenList = (tokens: IProjectAcceptedToken[]) => {
 	return _tokens;
 };
 
-export const filterTokens = (tokens: IProjectAcceptedToken[], networkId: number) => {
+export const filterTokens = (
+	tokens: IProjectAcceptedToken[],
+	networkId: number,
+) => {
 	return tokens.filter(i => i.networkId === networkId);
 };

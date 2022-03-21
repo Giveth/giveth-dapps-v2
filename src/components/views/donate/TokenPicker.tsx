@@ -21,7 +21,11 @@ interface ITokenPicker {
 }
 
 declare module 'react-select/dist/declarations/src/Select' {
-	export interface Props<Option, IsMulti extends boolean, Group extends GroupBase<Option>> {
+	export interface Props<
+		Option,
+		IsMulti extends boolean,
+		Group extends GroupBase<Option>,
+	> {
 		isMobile?: boolean;
 		setIsOpen?: any;
 	}
@@ -60,7 +64,13 @@ const Option = ({ ...props }: OptionProps<IProjectAcceptedToken, false>) => {
 						{value.name} ({value.symbol})
 					</B>
 				</RowContainer>
-				{props.isSelected && <Img src='/images/checkmark.svg' width='10px' height='10px' />}
+				{props.isSelected && (
+					<Img
+						src='/images/checkmark.svg'
+						width='10px'
+						height='10px'
+					/>
+				)}
 			</OptionContainer>
 		</components.Option>
 	);
@@ -84,7 +94,14 @@ const TokenPicker = (props: {
 	selectedToken: IProjectAcceptedToken | undefined;
 	placeholder: string;
 }) => {
-	const { tokenList, onChange, onInputChange, inputValue, selectedToken, placeholder } = props;
+	const {
+		tokenList,
+		onChange,
+		onInputChange,
+		inputValue,
+		selectedToken,
+		placeholder,
+	} = props;
 	const { isMobile } = useDeviceDetect();
 	const [isOpen, setIsOpen] = useState(false);
 
@@ -161,14 +178,22 @@ const TokenPicker = (props: {
 		setIsOpen(!isOpen);
 	};
 
-	const onSelectChange = (value: OnChangeValue<IProjectAcceptedToken, false>) => {
+	const onSelectChange = (
+		value: OnChangeValue<IProjectAcceptedToken, false>,
+	) => {
 		toggleOpen();
 		onChange(value);
 	};
 
-	const filterOptions = (option: { data: IProjectAcceptedToken }, inputValue: string) => {
+	const filterOptions = (
+		option: { data: IProjectAcceptedToken },
+		inputValue: string,
+	) => {
 		const { address, name, symbol } = option.data;
-		if (address?.toLowerCase() === inputValue?.toLowerCase()?.replace(/ /g, '')) {
+		if (
+			address?.toLowerCase() ===
+			inputValue?.toLowerCase()?.replace(/ /g, '')
+		) {
 			return true;
 		}
 		return (
@@ -184,7 +209,11 @@ const TokenPicker = (props: {
 				isOpen={isOpen}
 				onClose={toggleOpen}
 				target={
-					<TargetContainer onClick={toggleOpen} isOpen={isOpen} isMobile={isMobile}>
+					<TargetContainer
+						onClick={toggleOpen}
+						isOpen={isOpen}
+						isMobile={isMobile}
+					>
 						<TokenContainer>
 							{selectedToken && (
 								<ImageIcon
@@ -198,11 +227,17 @@ const TokenPicker = (props: {
 									marginLeft: '-8px',
 								}}
 							>
-								{selectedToken ? selectedToken.symbol : 'Select a token'}
+								{selectedToken
+									? selectedToken.symbol
+									: 'Select a token'}
 							</P>
 						</TokenContainer>
 						<ArrowImg
-							src={!isOpen ? '/images/caret_down.svg' : '/images/caret_up.svg'}
+							src={
+								!isOpen
+									? '/images/caret_down.svg'
+									: '/images/caret_up.svg'
+							}
 							alt='arrow down'
 							width='8px'
 							height='6px'
@@ -219,7 +254,9 @@ const TokenPicker = (props: {
 						Option,
 						Control,
 					}}
-					noOptionsMessage={() => <NotFound emptyField={() => onChange('')} />}
+					noOptionsMessage={() => (
+						<NotFound emptyField={() => onChange('')} />
+					)}
 					isMobile={isMobile}
 					setIsOpen={setIsOpen}
 					value={selectedToken}
@@ -299,7 +336,12 @@ interface DropdownProps {
 	readonly target: ReactNode;
 	readonly onClose: () => void;
 }
-const Dropdown: FunctionComponent<DropdownProps> = ({ children, isOpen, target, onClose }) => {
+const Dropdown: FunctionComponent<DropdownProps> = ({
+	children,
+	isOpen,
+	target,
+	onClose,
+}) => {
 	return (
 		<>
 			<div style={{ zIndex: 1 }}>{target}</div>
@@ -311,7 +353,14 @@ const Dropdown: FunctionComponent<DropdownProps> = ({ children, isOpen, target, 
 	);
 };
 const Svg = (p: JSX.IntrinsicElements['svg']) => (
-	<svg width='24' height='24' viewBox='0 0 24 24' focusable='false' role='presentation' {...p} />
+	<svg
+		width='24'
+		height='24'
+		viewBox='0 0 24 24'
+		focusable='false'
+		role='presentation'
+		{...p}
+	/>
 );
 const DropdownIndicator = () => (
 	<div style={{ color: colors.neutral20, height: 24, width: 32 }}>
@@ -357,9 +406,12 @@ const TargetContainer = styled.div`
 	align-items: center;
 	border-right: 2px solid
 		${(props: ITokenPicker) =>
-			props.isMobile && props.isOpen ? 'rgba(79, 87, 106, 0.1)' : neutralColors.gray[300]};
+			props.isMobile && props.isOpen
+				? 'rgba(79, 87, 106, 0.1)'
+				: neutralColors.gray[300]};
 	img {
-		filter: ${(props: ITokenPicker) => props.isMobile && props.isOpen && 'brightness(70%)'};
+		filter: ${(props: ITokenPicker) =>
+			props.isMobile && props.isOpen && 'brightness(70%)'};
 	}
 `;
 

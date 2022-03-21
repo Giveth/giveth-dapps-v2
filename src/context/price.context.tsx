@@ -1,4 +1,11 @@
-import { createContext, FC, useCallback, useContext, useEffect, useState } from 'react';
+import {
+	createContext,
+	FC,
+	useCallback,
+	useContext,
+	useEffect,
+	useState,
+} from 'react';
 import BigNumber from 'bignumber.js';
 import { Zero } from '@/helpers/number';
 import { useSubgraph } from '@/context/subgraph.context';
@@ -56,9 +63,10 @@ export const PriceProvider: FC = ({ children }) => {
 	const [mainnetPrice, setMainnetPrice] = useState<BigNumber>(Zero);
 	const [xDaiPrice, setXDaiPrice] = useState<BigNumber>(Zero);
 	const [ethPrice, setEthPrice] = useState<BigNumber>(Zero);
-	const [mainnetThirdPartyTokensPrice, setMainnetThirdPartTokensPrice] = useState<{
-		[tokenAddress: string]: BigNumber;
-	}>({});
+	const [mainnetThirdPartyTokensPrice, setMainnetThirdPartTokensPrice] =
+		useState<{
+			[tokenAddress: string]: BigNumber;
+		}>({});
 	const [xDaiThirdPartyTokensPrice, setXDaiThirdPartTokensPrice] = useState<{
 		[tokenAddress: string]: BigNumber;
 	}>({});
@@ -67,10 +75,17 @@ export const PriceProvider: FC = ({ children }) => {
 		(tokenAddress: string, network: number): BigNumber => {
 			switch (network) {
 				case config.MAINNET_NETWORK_NUMBER:
-					return mainnetThirdPartyTokensPrice[tokenAddress.toLowerCase()] || Zero;
+					return (
+						mainnetThirdPartyTokensPrice[
+							tokenAddress.toLowerCase()
+						] || Zero
+					);
 
 				case config.XDAI_NETWORK_NUMBER:
-					return xDaiThirdPartyTokensPrice[tokenAddress.toLowerCase()] || Zero;
+					return (
+						xDaiThirdPartyTokensPrice[tokenAddress.toLowerCase()] ||
+						Zero
+					);
 			}
 			return Zero;
 		},
@@ -85,13 +100,24 @@ export const PriceProvider: FC = ({ children }) => {
 
 			switch (TOKEN_ADDRESS.toLowerCase()) {
 				case token0.toLowerCase():
-					setXDaiPrice(ethPrice.times(reserve1.toString()).div(reserve0.toString()));
+					setXDaiPrice(
+						ethPrice
+							.times(reserve1.toString())
+							.div(reserve0.toString()),
+					);
 					break;
 				case token1.toLowerCase():
-					setXDaiPrice(ethPrice.times(reserve0.toString()).div(reserve1.toString()));
+					setXDaiPrice(
+						ethPrice
+							.times(reserve0.toString())
+							.div(reserve1.toString()),
+					);
 					break;
 				default:
-					console.error('Non of UniswapV2Pair tokens is GIV, ', uniswapV2EthGivPair);
+					console.error(
+						'Non of UniswapV2Pair tokens is GIV, ',
+						uniswapV2EthGivPair,
+					);
 			}
 		}
 	}, [xDaiValues, ethPrice]);
@@ -116,13 +142,18 @@ export const PriceProvider: FC = ({ children }) => {
 
 	useEffect(() => {
 		// fetch('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD')
-		fetch('https://feathers.giveth.io/conversionRates?from=ETH&to=USD&interval=hourly')
+		fetch(
+			'https://feathers.giveth.io/conversionRates?from=ETH&to=USD&interval=hourly',
+		)
 			.then(async res => {
 				const data = await res.json();
 				setEthPrice(new BigNumber(data.rate));
 			})
 			.catch(error => {
-				console.error('Error on getting eth price from crypto-compare:', error);
+				console.error(
+					'Error on getting eth price from crypto-compare:',
+					error,
+				);
 			});
 
 		const { MAINNET_CONFIG, XDAI_CONFIG } = config;
@@ -134,7 +165,8 @@ export const PriceProvider: FC = ({ children }) => {
 				).then(price =>
 					setMainnetThirdPartTokensPrice({
 						...mainnetThirdPartyTokensPrice,
-						[streamConfig.tokenAddressOnUniswapV2.toLowerCase()]: price,
+						[streamConfig.tokenAddressOnUniswapV2.toLowerCase()]:
+							price,
 					}),
 				);
 			});
@@ -147,7 +179,8 @@ export const PriceProvider: FC = ({ children }) => {
 				).then(price => {
 					setXDaiThirdPartTokensPrice({
 						...xDaiThirdPartyTokensPrice,
-						[streamConfig.tokenAddressOnUniswapV2.toLowerCase()]: price,
+						[streamConfig.tokenAddressOnUniswapV2.toLowerCase()]:
+							price,
 					});
 				});
 			});

@@ -56,17 +56,25 @@ const ProjectsIndex = (props: IProjectBySlug) => {
 					<RadioTitleBox
 						onClick={() =>
 							setDonationType(
-								props.type === CRYPTO_DONATION ? CRYPTO_DONATION : FIAT_DONATION,
+								props.type === CRYPTO_DONATION
+									? CRYPTO_DONATION
+									: FIAT_DONATION,
 							)
 						}
 					>
-						{props.type === donationType ? <RadioOn /> : <RadioOff />}
+						{props.type === donationType ? (
+							<RadioOn />
+						) : (
+							<RadioOff />
+						)}
 						<div style={{ marginLeft: '16px' }}>
 							<RadioTitleText isSelected={isTypeSelected}>
 								{props.type}
 							</RadioTitleText>
 							<RadioSubtitleText isSelected={isTypeSelected}>
-								{props.type === CRYPTO_DONATION ? 'Zero Fees' : 'Bank Fees'}
+								{props.type === CRYPTO_DONATION
+									? 'Zero Fees'
+									: 'Bank Fees'}
 							</RadioSubtitleText>
 						</div>
 					</RadioTitleBox>
@@ -83,12 +91,16 @@ const ProjectsIndex = (props: IProjectBySlug) => {
 				{donationType === CRYPTO_DONATION ? (
 					<CryptoDonation
 						project={project}
-						setSuccessDonation={(successTx: any) => setSuccess(successTx)}
+						setSuccessDonation={(successTx: any) =>
+							setSuccess(successTx)
+						}
 					/>
 				) : (
 					<FiatDonation
 						project={project}
-						setSuccessDonation={(successTx: any) => setSuccess(successTx)}
+						setSuccessDonation={(successTx: any) =>
+							setSuccess(successTx)
+						}
 					/>
 				)}
 			</>
@@ -104,15 +116,15 @@ const ProjectsIndex = (props: IProjectBySlug) => {
 				<GiverH4>You're a giver now!</GiverH4>
 				{/* <Image src='/images/motivation.svg' alt='motivation' width='121px' height='121px' /> */}
 				<SuccessMessage>
-					Thank you for supporting The Giveth Community of Makers. Your contribution goes
-					a long way!
+					Thank you for supporting The Giveth Community of Makers.
+					Your contribution goes a long way!
 				</SuccessMessage>
 				{givBackEligible && (
 					<GivBackContainer>
 						<H6>You&#39;re eligible for GIVbacks!</H6>
 						<P>
-							GIV rewards from the GIVbacks program will be distributed after the end
-							of the current round.
+							GIV rewards from the GIVbacks program will be
+							distributed after the end of the current round.
 						</P>
 						<Link passHref href={Routes.GIVbacks}>
 							<LearnButton label='LEARN MORE' />
@@ -133,7 +145,10 @@ const ProjectsIndex = (props: IProjectBySlug) => {
 						}}
 					>
 						<a
-							href={formatEtherscanLink('Transaction', [networkId, txHash])}
+							href={formatEtherscanLink('Transaction', [
+								networkId,
+								txHash,
+							])}
 							target='_blank'
 							rel='noopener noreferrer'
 						>
@@ -151,7 +166,9 @@ const ProjectsIndex = (props: IProjectBySlug) => {
 	const ProjectCardSelector = () => {
 		if (isMobile) {
 			return (
-				<CardMobileWrapper onClick={() => setHideMobileCard(!hideMobileCard)}>
+				<CardMobileWrapper
+					onClick={() => setHideMobileCard(!hideMobileCard)}
+				>
 					<SlideBtn />
 					{!hideMobileCard && (
 						<MobileCardContainer>
