@@ -180,9 +180,7 @@ const V3StakingCard: FC<IV3StakeCardProps> = ({
 					<FullWidthButton
 						label={buttonLabel}
 						buttonType='primary'
-						onClick={() =>
-							handleAction(isUnstaking ? 0 : position.tokenId)
-						}
+						onClick={() => handleAction(position.tokenId)}
 					/>
 				)}
 				<FullWidthButton

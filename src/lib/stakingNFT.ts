@@ -70,7 +70,7 @@ export const exit = async (
 			provider,
 			true,
 		);
-
+		console.log(tokenId);
 		if (
 			!tokenId ||
 			!walletAddress ||

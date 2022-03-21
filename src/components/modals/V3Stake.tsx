@@ -87,17 +87,12 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 
 	const handleStakeUnstake = async (tokenId: number) => {
 		if (!account || !library) return;
-		if (!isUnstakingModal) {
-			setStakeStatus(StakeState.CONFIRMING);
-			setTokenId(tokenId);
-		} else {
-			await handleAction(tokenId);
-			setStakeStatus(StakeState.CONFIRM_UNSTAKE);
-		}
-		console.log(tokenId, account, library, currentIncentive);
+		setTokenId(tokenId);
+		setStakeStatus(StakeState.CONFIRMING);
+		// console.log(tokenId, account, library, currentIncentive);
 		const tx = isUnstakingModal
 			? await exit(
-					tokenIdState,
+					tokenId,
 					account,
 					library,
 					currentIncentive,
@@ -110,7 +105,6 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 					currentIncentive,
 					setStakeStatus,
 			  );
-		console.log(tx);
 		setTxStatus(tx);
 		try {
 			const { status } = await tx.wait();
@@ -144,7 +138,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 		setGivBackLiquidPart(
 			givTokenDistroHelper.getLiquidPart(balances.givback),
 		);
-		setStakeStatus(StakeState.UNSTAKING);
+		// setStakeStatus(StakeState.UNSTAKING);
 	};
 
 	return (
