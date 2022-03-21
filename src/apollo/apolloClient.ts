@@ -19,9 +19,8 @@ const ssrMode = isSSRMode;
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__';
 
 function createApolloClient() {
-	let userToken: string | null, userWalletAddress: string | null;
+	let userWalletAddress: string | null;
 	if (!ssrMode) {
-		userToken = localStorage.getItem(getLocalTokenLabel());
 		userWalletAddress = localStorage.getItem(getLocalUserLabel());
 	}
 
@@ -30,9 +29,9 @@ function createApolloClient() {
 	}) as unknown as ApolloLink;
 
 	const authLink = setContext((_, { headers }) => {
-		const currentToken = !ssrMode
+		const currentToken: string | null = !ssrMode
 			? localStorage.getItem(getLocalTokenLabel())
-			: userToken;
+			: null;
 
 		const mutation: any = {
 			Authorization: currentToken ? `Bearer ${currentToken}` : '',
