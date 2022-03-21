@@ -217,67 +217,48 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									<FirstDetail justifyContent='space-between'>
 										<DetailLabel>APR</DetailLabel>
 										<Flex gap='8px' alignItems='center'>
-											<IconSpark
-												size={24}
-												color={brandColors.mustard[500]}
-											/>
 											{isV3Staking ? (
-												<IconWithTooltip
-													direction={'top'}
-													icon={
-														<IconGift
-															src='/images/heart-ribbon.svg'
-															alt='gift'
-														/>
-													}
-												>
-													<GiftTooltip>
-														Provide a narrow range
-														of liquidity to maximize
-														your rate of reward. The
-														max APR for totally in
-														range liquidity is{' '}
-														{formatEthHelper(
-															maxApr,
-															2,
-														)}
-														%, the average APR is{' '}
-														{formatEthHelper(
-															apr,
-															2,
-														)}
-														%, and the minimum APR
-														for full range liquidity
-														is{' '}
-														{formatEthHelper(
-															minimumApr,
-															2,
-														)}
-														%.
-													</GiftTooltip>
-												</IconWithTooltip>
+												<div>N/A %</div>
 											) : (
-												<DetailValue>
-													{apr &&
-														formatEthHelper(apr, 2)}
-													%
-												</DetailValue>
+												<>
+													<IconSpark
+														size={24}
+														color={
+															brandColors
+																.mustard[500]
+														}
+													/>
+													<DetailValue>
+														{apr &&
+															formatEthHelper(
+																apr,
+																2,
+															)}
+														%
+													</DetailValue>
+													<IconContainer
+														onClick={() =>
+															setShowAPRModal(
+																true,
+															)
+														}
+													>
+														<IconHelp size={16} />
+													</IconContainer>
+												</>
 											)}
-											<IconContainer
-												onClick={() =>
-													setShowAPRModal(true)
-												}
-											>
-												<IconHelp size={16} />
-											</IconContainer>
 										</Flex>
 									</FirstDetail>
 									<Detail justifyContent='space-between'>
 										<DetailLabel>Claimable</DetailLabel>
 										<DetailValue>
-											{`${formatWeiHelper(
-												rewardLiquidPart,
-											)} ${rewardTokenSymbol}`}
+											{isV3Staking ? (
+												<div>N/A</div>
+											) : (
+												`${formatWeiHelper(
+													rewardLiquidPart,
+												)} ${rewardTokenSymbol}`
+											)}
 										</DetailValue>
 									</Detail>
 									<Detail justifyContent='space-between'>
@@ -295,7 +276,13 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 										</Flex>
 										<Flex gap='4px' alignItems='center'>
 											<DetailValue>
-												{formatWeiHelper(rewardStream)}
+												{isV3Staking ? (
+													<div>N/A</div>
+												) : (
+													formatWeiHelper(
+														rewardStream,
+													)
+												)}
 											</DetailValue>
 											<DetailUnit>
 												{rewardTokenSymbol}/week
@@ -310,7 +297,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								/>
 							)}
 							<ClaimButton
-								disabled={earned.isZero()}
+								disabled={earned.isZero() || isV3Staking}
 								onClick={() => setShowHarvestModal(true)}
 								label='HARVEST REWARDS'
 								buttonType='primary'
@@ -320,7 +307,10 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									<StakeButton
 										label='STAKE'
 										size='small'
-										disabled={userNotStakedAmount.isZero()}
+										disabled={
+											userNotStakedAmount.isZero() ||
+											isV3Staking
+										}
 										onClick={() => setShowStakeModal(true)}
 									/>
 									<StakeAmount>

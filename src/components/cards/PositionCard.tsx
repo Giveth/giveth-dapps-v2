@@ -70,7 +70,7 @@ const V3StakingCard: FC<IV3StakeCardProps> = ({
 }) => {
 	const { pool, tickLower, tickUpper } = position._position || {};
 
-	const buttonLabel = isUnstaking ? 'UNSTAKE & HARVEST' : 'STAKE';
+	const buttonLabel = isUnstaking ? 'UNSTAKE' : 'STAKE';
 
 	// Check price range
 	const below =
