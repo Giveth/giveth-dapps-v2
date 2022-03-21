@@ -70,7 +70,7 @@ export const exit = async (
 			provider,
 			true,
 		);
-
+		console.log(tokenId);
 		if (
 			!tokenId ||
 			!walletAddress ||
@@ -85,11 +85,11 @@ export const exit = async (
 				[currentIncentive.key, tokenId],
 			);
 
-		const claimRewardCalldata =
-			uniswapV3StakerContract.interface.encodeFunctionData(
-				'claimReward',
-				[currentIncentive.key[0] as string, walletAddress, 0],
-			);
+		// const claimRewardCalldata =
+		// 	uniswapV3StakerContract.interface.encodeFunctionData(
+		// 		'claimReward',
+		// 		[currentIncentive.key[0] as string, walletAddress, 0],
+		// 	);
 
 		const withdrawTokenCalldata =
 			uniswapV3StakerContract.interface.encodeFunctionData(
@@ -98,7 +98,7 @@ export const exit = async (
 			);
 
 		const tx = await uniswapV3StakerContract.multicall(
-			[unstakeCalldata, claimRewardCalldata, withdrawTokenCalldata],
+			[unstakeCalldata, withdrawTokenCalldata],
 			getGasPreference(config.NETWORKS_CONFIG[provider.network.chainId]),
 		);
 		handleStakeStatus(StakeState.SUBMITTING);
