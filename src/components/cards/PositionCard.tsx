@@ -181,9 +181,7 @@ const V3StakingCard: FC<IV3StakeCardProps> = ({
 						label={buttonLabel}
 						buttonType='primary'
 						onClick={() =>
-							handleAction(
-								isUnstakingModal ? 0 : position.tokenId,
-							)
+							handleAction(isUnstaking ? 0 : position.tokenId)
 						}
 					/>
 				)}
