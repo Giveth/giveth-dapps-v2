@@ -168,11 +168,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 								key={position.tokenId.toString()}
 								position={position}
 								isUnstaking={isUnstakingModal}
-								handleAction={
-									isUnstakingModal
-										? handleAction
-										: handleStakeUnstake
-								}
+								handleAction={handleStakeUnstake}
 								isConfirming={
 									stakeStatus === StakeState.CONFIRMING
 								}
