@@ -1,4 +1,5 @@
 import config from '../../configuration';
+import Image from 'next/image';
 import {
 	PoolStakingConfig,
 	RegenPoolStakingConfig,
@@ -33,6 +34,11 @@ import {
 	IconGift,
 	GiftTooltip,
 	IntroIcon,
+	DisableModal,
+	DisableModalContent,
+	DisableModalText,
+	DisableModalCloseButton,
+	DisableModalImage,
 } from './BaseStakingCard.sc';
 import {
 	IconSpark,
@@ -114,6 +120,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const tokenDistroHelper = useMemo(() => {
 		return getTokenDistroHelper(regenStreamType);
 	}, [getTokenDistroHelper, poolStakingConfig]);
+	const [disableModal, setDisableModal] = useState<boolean>(true);
 
 	const { type, title, description, provideLiquidityLink, BUY_LINK, unit } =
 		poolStakingConfig;
@@ -160,6 +167,33 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	return (
 		<>
 			<StakingPoolContainer>
+				{isV3Staking && disableModal && (
+					<DisableModal>
+						<DisableModalContent>
+							<DisableModalImage>
+								<Image
+									src='/images/icons/questionMarkGiv.svg'
+									height={24}
+									width={24}
+								/>
+							</DisableModalImage>
+							<div>
+								<DisableModalText weight={700}>
+									This pool is no longer available
+								</DisableModalText>
+								<br />
+								<DisableModalText>
+									Please unstake your tokens and check out
+									other available pools.
+								</DisableModalText>
+								<DisableModalCloseButton
+									label='GOT IT'
+									onClick={() => setDisableModal(false)}
+								/>
+							</div>
+						</DisableModalContent>
+					</DisableModal>
+				)}
 				{state === StakeCardState.NORMAL ? (
 					<>
 						<StakingPoolExchangeRow gap='4px' alignItems='center'>
@@ -307,7 +341,10 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									<StakeButton
 										label='STAKE'
 										size='small'
-										disabled={userNotStakedAmount.isZero()}
+										disabled={
+											userNotStakedAmount.isZero() ||
+											isV3Staking
+										}
 										onClick={() => setShowStakeModal(true)}
 									/>
 									<StakeAmount>
@@ -336,31 +373,33 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									</StakeAmount>
 								</StakeContainer>
 							</StakeButtonsRow>
-							<LiquidityButton
-								label={
-									type === StakingType.GIV_LM
-										? 'BUY GIV TOKENS'
-										: 'PROVIDE LIQUIDITY'
-								}
-								onClick={() => {
-									if (isV3Staking) {
-										setShowUniV3APRModal(true);
-									} else {
-										window.open(
-											type === StakingType.GIV_LM
-												? BUY_LINK
-												: provideLiquidityLink,
-										);
+							{!isV3Staking && (
+								<LiquidityButton
+									label={
+										type === StakingType.GIV_LM
+											? 'BUY GIV TOKENS'
+											: 'PROVIDE LIQUIDITY'
 									}
-								}}
-								buttonType='texty'
-								icon={
-									<IconExternalLink
-										size={16}
-										color={brandColors.deep[100]}
-									/>
-								}
-							/>
+									onClick={() => {
+										if (isV3Staking) {
+											setShowUniV3APRModal(true);
+										} else {
+											window.open(
+												type === StakingType.GIV_LM
+													? BUY_LINK
+													: provideLiquidityLink,
+											);
+										}
+									}}
+									buttonType='texty'
+									icon={
+										<IconExternalLink
+											size={16}
+											color={brandColors.deep[100]}
+										/>
+									}
+								/>
+							)}
 						</StakePoolInfoContainer>
 					</>
 				) : (
