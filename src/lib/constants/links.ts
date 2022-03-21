@@ -35,6 +35,7 @@ const links: any = {
 if (!isProduction) {
 	links.SUPPORT_US = Routes.Donate + '/giveth-2021:-retreat-to-the-future';
 } else {
+	links.FRONTEND = 'https://giveth.io/';
 	links.SUPPORT_US = Routes.Donate + '/the-giveth-community-of-makers';
 }
 

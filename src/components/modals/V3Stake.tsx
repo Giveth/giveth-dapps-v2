@@ -87,17 +87,12 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 
 	const handleStakeUnstake = async (tokenId: number) => {
 		if (!account || !library) return;
-
-		if (!isUnstakingModal) {
-			setStakeStatus(StakeState.CONFIRMING);
-			setTokenId(tokenId);
-		} else {
-			setStakeStatus(StakeState.CONFIRM_UNSTAKE);
-		}
-
+		setTokenId(tokenId);
+		setStakeStatus(StakeState.CONFIRMING);
+		// console.log(tokenId, account, library, currentIncentive);
 		const tx = isUnstakingModal
 			? await exit(
-					tokenIdState,
+					tokenId,
 					account,
 					library,
 					currentIncentive,
@@ -143,7 +138,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 		setGivBackLiquidPart(
 			givTokenDistroHelper.getLiquidPart(balances.givback),
 		);
-		setStakeStatus(StakeState.UNSTAKING);
+		// setStakeStatus(StakeState.UNSTAKING);
 	};
 
 	return (
@@ -168,11 +163,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 								key={position.tokenId.toString()}
 								position={position}
 								isUnstaking={isUnstakingModal}
-								handleAction={
-									isUnstakingModal
-										? handleAction
-										: handleStakeUnstake
-								}
+								handleAction={handleStakeUnstake}
 								isConfirming={
 									stakeStatus === StakeState.CONFIRMING
 								}
@@ -186,52 +177,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 				{(stakeStatus === StakeState.UNSTAKING ||
 					stakeStatus === StakeState.CONFIRM_UNSTAKE) && (
 					<HarvestContainer>
-						<HelpRow alignItems='center'>
-							<Caption>Rewards earned by your NFT</Caption>
-							<IconWithTooltip
-								icon={
-									<IconHelp
-										size={16}
-										color={brandColors.deep[100]}
-									/>
-								}
-								direction={'top'}
-							>
-								<TooltipContent>
-									When you unstake an NFT from this pool, you
-									also harvest any corresponding rewards
-								</TooltipContent>
-							</IconWithTooltip>
-						</HelpRow>
-						<AmountBoxWithPrice amount={reward} />
-						<HelpRow alignItems='center'>
-							<Caption>Added to your GIVstream flowrate</Caption>
-							<IconWithTooltip
-								icon={
-									<IconHelp
-										size={16}
-										color={brandColors.deep[100]}
-									/>
-								}
-								direction={'top'}
-							>
-								<TooltipContent>
-									Increase you GIVstream flowrate when you
-									claim liquid rewards!
-								</TooltipContent>
-							</IconWithTooltip>
-						</HelpRow>
-						<RateRow alignItems='center'>
-							<IconGIVStream size={24} />
-							<GIVRate>{formatWeiHelper(stream)}</GIVRate>
-							<Lead>GIV/week</Lead>
-						</RateRow>
-						<HelpRow alignItems='center'>
-							<B>Claimable from GIVstream</B>
-						</HelpRow>
-						<AmountBoxWithPrice
-							amount={claimableNow.sub(givBackLiquidPart)}
-						/>
+						<HelpRow>Please, unstake your NFT!</HelpRow>
 						<HarvestButtonContainer>
 							{stakeStatus === StakeState.CONFIRM_UNSTAKE ? (
 								<Pending>
@@ -244,7 +190,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 								</Pending>
 							) : (
 								<HarvestButton
-									label='UNSTAKE &amp; HARVEST'
+									label='UNSTAKE'
 									size='medium'
 									buttonType='primary'
 									onClick={() => {

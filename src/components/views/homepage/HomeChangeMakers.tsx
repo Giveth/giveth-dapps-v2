@@ -86,7 +86,7 @@ const HomeChangeMakers = () => {
 					<EndItem key={i.title}>
 						<H3 weight={700}>{i.title}</H3>
 						<br />
-						<Lead>{i.description}</Lead>
+						<ContentLead>{i.description}</ContentLead>
 					</EndItem>
 				))}
 			</EndSection>
@@ -150,8 +150,20 @@ const EndItem = styled(Col)`
 	padding-right: 55px;
 `;
 
-const EndSection = styled(Row)`
+const EndSection = styled.div`
 	margin-top: 190px;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+`;
+
+const ContentLead = styled(Lead)`
+	${mediaQueries.tablet} {
+		max-width: 330px;
+	}
+	${mediaQueries.laptop} {
+		max-width: 450px;
+	}
 `;
 
 const UpperSection = styled.div`
