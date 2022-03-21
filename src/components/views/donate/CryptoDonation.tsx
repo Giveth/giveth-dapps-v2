@@ -147,7 +147,7 @@ const CryptoDonation = (props: { setSuccessDonation: any; project: IProject }) =
 			} else if (selectedToken?.symbol === ethereumChain.mainToken) {
 				mainTokenPrice && setTokenPrice(mainTokenPrice);
 			} else if (selectedToken?.address) {
-				let chain = ethereumChain.name.split(' ')[0].toLowerCase();
+				let chain = 'ethereum';
 				let tokenAddress = selectedToken.address;
 				if (isXdai) {
 					// coingecko doesn't have these tokens in xdai, so fetching price from ethereum
@@ -161,7 +161,10 @@ const CryptoDonation = (props: { setSuccessDonation: any; project: IProject }) =
 				fetchedPrice && setTokenPrice(fetchedPrice);
 			}
 		};
-		setPrice().then();
+
+		if (selectedToken) {
+			setPrice().then();
+		}
 	}, [selectedToken, mainTokenPrice]);
 
 	const checkGIVTokenAvailability = () => {
@@ -183,9 +186,11 @@ const CryptoDonation = (props: { setSuccessDonation: any; project: IProject }) =
 
 	const pollToken = useCallback(() => {
 		clearPoll();
+		if (!selectedToken) {
+			return setSelectedTokenBalance(undefined);
+		}
 		// Native token balance is provided by the Web3Provider
 		if (
-			!selectedToken?.address ||
 			selectedToken.symbol === ethereumChain.mainToken ||
 			selectedToken.symbol === xdaiChain.mainToken
 		) {

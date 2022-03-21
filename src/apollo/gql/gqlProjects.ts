@@ -359,7 +359,6 @@ export const PROJECT_ACCEPTED_TOKENS = gql`
 			symbol
 			networkId
 			address
-			mainnetAddress
 			name
 			decimals
 		}
