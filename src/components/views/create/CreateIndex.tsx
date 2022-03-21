@@ -6,22 +6,22 @@ import { isUserRegistered } from '@/lib/helpers';
 const CreateIndex = () => {
 	const {
 		state: { user, isSignedIn, isEnabled },
-		actions: { showCompleteProfile, showSignModal, showSignInModal },
+		actions: { showCompleteProfile, showSignWithWallet, showWelcomeModal },
 	} = useUser();
 	const isRegistered = isUserRegistered(user);
 
 	useEffect(() => {
 		if (isEnabled) {
-			showSignInModal(false);
+			showWelcomeModal(false);
 			if (!isRegistered) {
 				showCompleteProfile();
 				return;
 			}
 			if (!isSignedIn) {
-				showSignModal();
+				showSignWithWallet();
 			}
 		} else {
-			showSignInModal(true);
+			showWelcomeModal(true);
 		}
 	}, [user, isSignedIn]);
 

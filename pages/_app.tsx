@@ -2,7 +2,6 @@ import React from 'react';
 import Head from 'next/head';
 import type { AppProps } from 'next/app';
 import { Toaster } from 'react-hot-toast';
-import { CookiesProvider } from 'react-cookie';
 import { Web3ReactProvider } from '@web3-react/core';
 import { ApolloProvider } from '@apollo/client';
 import { ExternalProvider, Web3Provider } from '@ethersproject/providers';
@@ -43,13 +42,11 @@ function MyApp({ Component, pageProps }: AppProps) {
 								<NftsProvider>
 									<PriceProvider>
 										<FarmProvider>
-											<CookiesProvider>
-												<UserProvider>
-													<HeaderWrapper />
-													<Component {...pageProps} />
-													<FooterWrapper />
-												</UserProvider>
-											</CookiesProvider>
+											<UserProvider>
+												<HeaderWrapper />
+												<Component {...pageProps} />
+												<FooterWrapper />
+											</UserProvider>
 										</FarmProvider>
 									</PriceProvider>
 								</NftsProvider>

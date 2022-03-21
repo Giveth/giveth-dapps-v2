@@ -23,7 +23,7 @@ import DonateModal from '@/components/modals/DonateModal';
 import { ChangeNetworkModal } from '@/components/modals/ChangeNetwork';
 import { mediaQueries } from '@/utils/constants';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
-import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
+import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
 import { IProject } from '@/apollo/types/types';
 import { getERC20Info } from '@/lib/contracts';
 import { getERC20List, pollEvery } from '@/utils';
@@ -501,7 +501,7 @@ const CryptoDonation = (props: {
 			</CheckBoxContainer>
 
 			{showWelcomeSignin && (
-				<WelcomeSigninModal
+				<SignWithWalletModal
 					showModal={true}
 					setShowModal={() => setShowWelcomeSignin(false)}
 				/>
@@ -645,16 +645,6 @@ const CheckBoxContainer = styled.div`
 		color: ${neutralColors.gray[700]};
 		font-size: 12px;
 		margin-top: 10px;
-	}
-	${mediaQueries['mobileM']} {
-		div:nth-child(2) {
-			margin: 14px 0 0 0;
-		}
-	}
-	${mediaQueries['mobileS']} {
-		div:nth-child(2) {
-			margin: 14px 0 0 0;
-		}
 	}
 `;
 

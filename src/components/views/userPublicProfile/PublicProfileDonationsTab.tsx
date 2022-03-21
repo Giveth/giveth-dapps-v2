@@ -79,7 +79,7 @@ const PublicProfileDonationsTab: FC<IUserPublicProfileView> = ({ user }) => {
 			const { data: userDonations } = await client.query({
 				query: FETCH_USER_DONATIONS,
 				variables: {
-					userId: parseFloat(user.id) || -1,
+					userId: parseFloat(user.id || '') || -1,
 					take: itemPerPage,
 					skip: page * itemPerPage,
 					orderBy: order.by,

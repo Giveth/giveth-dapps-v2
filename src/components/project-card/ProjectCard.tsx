@@ -15,7 +15,7 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectCardBadges from './ProjectCardBadges';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
 import { IProject } from '@/apollo/types/types';
-import { calcBiggestUnitDiffernceTime, htmlToText } from '@/lib/helpers';
+import { calcBiggestUnitDifferenceTime, htmlToText } from '@/lib/helpers';
 import ProjectCardImage from './ProjectCardImage';
 import { slugToProjectDonate, slugToProjectView } from '@/lib/routeCreators';
 import { Flex } from '../styled-components/Flex';
@@ -86,7 +86,7 @@ const ProjectCard = (props: IProjectCard) => {
 						Raised: ${Math.ceil(totalDonations as number)}
 					</Caption>
 					<Caption>
-						Last updated:{calcBiggestUnitDiffernceTime(updatedAt)}
+						Last updated:{calcBiggestUnitDifferenceTime(updatedAt)}
 					</Caption>
 				</Captions>
 				<ActionButtons>

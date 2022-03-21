@@ -1,5 +1,5 @@
 import { Col, Row } from '@/components/Grid';
-import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
+import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
 import useUser from '@/context/UserProvider';
 import { Button, neutralColors } from '@giveth/ui-design-system';
 import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
@@ -28,8 +28,8 @@ export const OnboardActions: FC<IOnboardActions> = ({
 }) => {
 	const [showSigninModal, setShowSigninModal] = useState(false);
 	const {
-		state: { user, isSignedIn },
-		actions: { reFetchUserData },
+		state: { isSignedIn },
+		actions: { reFetchUser },
 	} = useUser();
 
 	useEffect(() => {
@@ -46,7 +46,7 @@ export const OnboardActions: FC<IOnboardActions> = ({
 		} else {
 			const res = await onSave();
 			if (res) {
-				reFetchUserData();
+				reFetchUser();
 			}
 		}
 	};
@@ -72,7 +72,7 @@ export const OnboardActions: FC<IOnboardActions> = ({
 				</Col>
 			</OnboardActionsContianer>
 			{showSigninModal && (
-				<WelcomeSigninModal
+				<SignWithWalletModal
 					showModal={showSigninModal}
 					setShowModal={setShowSigninModal}
 				/>

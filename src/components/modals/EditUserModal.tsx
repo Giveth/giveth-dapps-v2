@@ -50,7 +50,7 @@ const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
 	);
 
 	const {
-		actions: { reFetchUserData },
+		actions: { reFetchUser },
 	} = useUser();
 	const [updateUser] = useMutation(UPDATE_USER);
 
@@ -74,7 +74,7 @@ const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
 				},
 			});
 			if (response.updateUser) {
-				reFetchUserData();
+				reFetchUser();
 				setEditStatus(EditStatusType.INFO);
 				gToast('Profile Photo updated.', {
 					type: ToastType.SUCCESS,
@@ -102,7 +102,7 @@ const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
 				},
 			});
 			if (data.updateUser) {
-				reFetchUserData();
+				reFetchUser();
 				gToast('Profile information updated.', {
 					type: ToastType.SUCCESS,
 					title: 'Success',

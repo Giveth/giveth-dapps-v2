@@ -16,7 +16,7 @@ import {
 
 import { mediaQueries } from '@/utils/constants';
 import { CopyToClipboard } from '@/components/CopyToClipboard';
-import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
+import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
 import PublicProfileContributes from './PublicProfileContributes';
 import { IUser, IProject } from '@/apollo/types/types';
 import { networksParams } from '@/helpers/blockchain';
@@ -135,7 +135,7 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 		return (
 			<>
 				{showWelcomeSignin && (
-					<WelcomeSigninModal
+					<SignWithWalletModal
 						showModal={true}
 						setShowModal={() => setShowWelcomeSignin(false)}
 					/>
@@ -225,7 +225,7 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 				/>
 			)}
 			{showWelcomeSignin && (
-				<WelcomeSigninModal
+				<SignWithWalletModal
 					showModal={true}
 					setShowModal={() => setShowWelcomeSignin(false)}
 				/>

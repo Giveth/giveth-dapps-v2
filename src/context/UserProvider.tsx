@@ -1,12 +1,10 @@
 import React, {
 	createContext,
 	ReactNode,
-	useCallback,
 	useContext,
 	useEffect,
 	useState,
 } from 'react';
-import { useCookies } from 'react-cookie';
 import { useWeb3React } from '@web3-react/core';
 import { BigNumberish } from '@ethersproject/bignumber';
 import { formatEther } from '@ethersproject/units';
@@ -15,18 +13,17 @@ import { initializeApollo } from '@/apollo/apolloClient';
 import { GET_USER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
 import {
 	compareAddresses,
-	LocalStorageTokenLabel,
+	getLocalTokenLabel,
+	getLocalUserLabel,
+	showToastError,
 	signMessage,
 } from '@/lib/helpers';
-import * as Auth from '../services/auth';
 import { getToken } from '@/services/token';
-import User from '../entities/user';
-import { getLocalStorageUserLabel } from '@/services/auth';
 import useWallet from '@/hooks/walletHooks';
-import { WelcomeSigninModal } from '@/components/modals/WelcomeSigninModal';
+import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
 import { IUser } from '@/apollo/types/types';
-import SignInModal from '@/components/modals/SignInModal';
-import { CompleteProfile } from '@/components/modals/CompleteProfile';
+import WelcomeModal from '@/components/modals/WelcomeModal';
+import { CompleteProfileModal } from '@/components/modals/CompleteProfileModal';
 
 interface IUserContext {
 	state: {
@@ -36,12 +33,12 @@ interface IUserContext {
 		isSignedIn?: boolean;
 	};
 	actions: {
-		signIn?: () => Promise<boolean | string>;
+		signToGetToken: () => Promise<boolean | string>;
 		signOut?: () => void;
-		showSignModal: () => void;
+		showSignWithWallet: () => void;
 		showCompleteProfile: () => void;
-		showSignInModal: (e: boolean) => void;
-		reFetchUserData: () => void;
+		showWelcomeModal: (e: boolean) => void;
+		reFetchUser: () => void;
 		incrementLikedProjectsCount: () => void;
 		decrementLikedProjectsCount: () => void;
 	};
@@ -54,12 +51,12 @@ const UserContext = createContext<IUserContext>({
 		isSignedIn: false,
 	},
 	actions: {
-		signIn: async () => false,
+		signToGetToken: async () => false,
 		signOut: () => {},
-		showSignModal: () => {},
+		showSignWithWallet: () => {},
 		showCompleteProfile: () => {},
-		showSignInModal: () => {},
-		reFetchUserData: () => {},
+		showWelcomeModal: () => {},
+		reFetchUser: () => {},
 		incrementLikedProjectsCount: () => {},
 		decrementLikedProjectsCount: () => {},
 	},
@@ -67,40 +64,23 @@ const UserContext = createContext<IUserContext>({
 
 const apolloClient = initializeApollo();
 
-const USER_ENV_LABEL = getLocalStorageUserLabel();
-
 export const UserProvider = (props: { children: ReactNode }) => {
-	const [cookie, setCookie, removeCookie] = useCookies([USER_ENV_LABEL]);
-	const { account, active, library, chainId } = useWeb3React();
+	const { account, library, chainId } = useWeb3React();
 	useWallet();
 
 	const [user, setUser] = useState<IUser | undefined>();
 	const [balance, setBalance] = useState<string | null>(null);
-	const [showWalletModal, setShowWalletModal] = useState<boolean>(false);
-	useWallet();
-	const [showWelcomeSignin, setShowWelcomeSignin] = useState(false);
+	const [showWelcomeModal, setShowWelcomeModal] = useState<boolean>(false);
+	const [showSignWithWallet, setShowSignWithWallet] = useState(false);
 	const [showCompleteProfile, setShowCompleteProfile] = useState(false);
-	const [signInToken, setSignInToken] = useState<string | undefined>(
-		undefined,
-	);
 
 	const isEnabled = !!library?.getSigner() && !!account && !!chainId;
-	const isSignedIn = isEnabled && !!signInToken;
+	const isSignedIn = isEnabled && !!user?.token;
 
 	useEffect(() => {
-		localStorage.removeItem(LocalStorageTokenLabel);
-		if (active && account) {
-			if (compareAddresses(account, user?.walletAddress!)) {
-				return;
-			}
-			fetchUser().then((newUser: IUser) => {
-				setUser(newUser);
-			});
-		} else {
-			setUser(undefined);
-			setSignInToken(undefined);
-		}
-	}, [active, account]);
+		if (account) reFetchUser();
+		else setUser(undefined);
+	}, [account]);
 
 	useEffect(() => {
 		library?.on('block', () => {
@@ -111,12 +91,13 @@ export const UserProvider = (props: { children: ReactNode }) => {
 		};
 	}, [library]);
 
-	const fetchLocalUser = (): User => {
-		const localUser = Auth.getUser() as User;
-		return new User(localUser);
-	};
+	useEffect(() => {
+		if (!!account && !!library) {
+			getBalance();
+		}
+	}, [account, user, library, chainId]);
 
-	const fetchUser = useCallback(() => {
+	const fetchUser = () => {
 		return apolloClient
 			.query({
 				query: GET_USER_BY_ADDRESS,
@@ -126,14 +107,40 @@ export const UserProvider = (props: { children: ReactNode }) => {
 				fetchPolicy: 'network-only',
 			})
 			.then((res: any) => {
-				return res.data?.userByAddress;
+				const newUser = res.data?.userByAddress;
+				const localAddress = localStorage.getItem(getLocalUserLabel());
+				if (compareAddresses(localAddress, newUser?.walletAddress)) {
+					const token = localStorage.getItem(getLocalTokenLabel());
+					return { ...newUser, token };
+				}
+				removeToken();
+				return newUser;
 			})
-			.catch(console.log);
-	}, [account]);
+			.catch(showToastError);
+	};
 
-	const signIn = useCallback(async () => {
+	const reFetchUser = () => {
+		fetchUser().then(setUser);
+	};
+
+	const setToken = (token: string) => {
+		localStorage.setItem(getLocalUserLabel(), user?.walletAddress || '');
+		localStorage.setItem(getLocalTokenLabel(), token);
+	};
+
+	const removeToken = () => {
+		localStorage.removeItem(getLocalUserLabel());
+		localStorage.removeItem(getLocalTokenLabel());
+	};
+
+	const signOut = () => {
+		removeToken();
+		setUser({ ...user, token: undefined });
+	};
+
+	const signToGetToken = async () => {
 		if (!library?.getSigner()) {
-			setShowWalletModal(true);
+			setShowWelcomeModal(true);
 			return;
 		}
 
@@ -146,41 +153,11 @@ export const UserProvider = (props: { children: ReactNode }) => {
 		if (!signedMessage) return false;
 
 		const token = await getToken(account, signedMessage, chainId, user);
-		const localUser = fetchLocalUser();
-
-		if (!compareAddresses(account, localUser?.walletAddress)) {
-			Auth.logout();
-			const DBUser = await fetchUser();
-			const newUser = new User(DBUser);
-			newUser.setToken(token);
-			Auth.setUser(newUser, setCookie, USER_ENV_LABEL);
-			setSignInToken(token);
-			await apolloClient.resetStore();
-			setUser(newUser);
-		} else {
-			localUser.setToken(token);
-			Auth.setUser(localUser, setCookie, USER_ENV_LABEL);
-			await apolloClient.resetStore();
-			setUser(localUser);
-			setSignInToken(token);
-		}
-		localStorage.setItem(getLocalStorageUserLabel() + '_token', token);
+		await apolloClient.resetStore();
+		setToken(token);
+		setUser({ ...user, token });
 		return token;
-	}, [account, chainId, fetchUser, library, user]);
-
-	const signOut = useCallback(() => {
-		Auth.logout();
-		window.localStorage.removeItem(getLocalStorageUserLabel() + '_token');
-		if (user) {
-			const newUser = {
-				...user,
-				token: '',
-			};
-			Auth.setUser(newUser, setCookie, USER_ENV_LABEL);
-			setUser(newUser);
-			setSignInToken(undefined);
-		}
-	}, [user]);
+	};
 
 	const getBalance = () => {
 		library
@@ -190,55 +167,6 @@ export const UserProvider = (props: { children: ReactNode }) => {
 			})
 			.catch(() => setBalance(null));
 	};
-
-	useEffect(() => {
-		if (!!account && !!library) {
-			getBalance();
-		}
-	}, [account, user, library, chainId]);
-
-	const reFetchUserData = useCallback(() => {
-		fetchUser()
-			.then((res: any) => {
-				if (res) {
-					const newUser = new User(res);
-					Auth.setUser(newUser, setCookie, USER_ENV_LABEL);
-					if (
-						compareAddresses(
-							user?.walletAddress,
-							newUser.walletAddress,
-						)
-					) {
-						setUser({ ...newUser, token: user?.token });
-					}
-				} else {
-					const noUser = new User({} as User);
-					setUser(noUser);
-					setSignInToken(undefined);
-				}
-			})
-			.catch((e: Error) =>
-				console.error('Error on refetching user info', e),
-			);
-	}, [fetchUser, setCookie, user?.token, user?.walletAddress]);
-
-	useEffect(() => {
-		if (account) {
-			const _user = Auth.getUser();
-			if (compareAddresses(account, _user?.walletAddress!)) {
-				const newUser = new User(_user as User);
-				setUser(newUser);
-				setSignInToken(newUser?.token);
-			} else {
-				Auth.logout();
-				setSignInToken(undefined);
-				reFetchUserData();
-			}
-		} else {
-			setUser(undefined);
-			setSignInToken(undefined);
-		}
-	}, [account]);
 
 	const incrementLikedProjectsCount = () => {
 		if (user) {
@@ -268,32 +196,32 @@ export const UserProvider = (props: { children: ReactNode }) => {
 					isSignedIn,
 				},
 				actions: {
-					showSignModal: () => setShowWelcomeSignin(true),
+					showSignWithWallet: () => setShowSignWithWallet(true),
 					showCompleteProfile: () => setShowCompleteProfile(true),
-					showSignInModal: setShowWalletModal,
-					signIn,
+					showWelcomeModal: setShowWelcomeModal,
+					signToGetToken,
 					signOut,
-					reFetchUserData,
+					reFetchUser,
 					incrementLikedProjectsCount,
 					decrementLikedProjectsCount,
 				},
 			}}
 		>
 			{showCompleteProfile && (
-				<CompleteProfile
+				<CompleteProfileModal
 					closeModal={() => setShowCompleteProfile(false)}
 				/>
 			)}
-			{showWelcomeSignin && (
-				<WelcomeSigninModal
-					showModal={showWelcomeSignin}
-					setShowModal={() => setShowWelcomeSignin(false)}
+			{showSignWithWallet && (
+				<SignWithWalletModal
+					showModal={showSignWithWallet}
+					setShowModal={() => setShowSignWithWallet(false)}
 				/>
 			)}
-			{showWalletModal && (
-				<SignInModal
-					showModal={showWalletModal}
-					closeModal={() => setShowWalletModal(false)}
+			{showWelcomeModal && (
+				<WelcomeModal
+					showModal={showWelcomeModal}
+					closeModal={() => setShowWelcomeModal(false)}
 				/>
 			)}
 			{props.children}

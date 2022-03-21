@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Flex } from '../styled-components/Flex';
 import VerificationBadge from '../badges/VerificationBadge';
-import { IReaction } from '../../apollo/types/types';
+import { IReaction } from '@/apollo/types/types';
 import useUser from '@/context/UserProvider';
 import {
 	brandColors,
@@ -35,7 +35,7 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 	const {
 		state: { user, isSignedIn },
 		actions: {
-			showSignModal,
+			showSignWithWallet,
 			incrementLikedProjectsCount,
 			decrementLikedProjectsCount,
 		},
@@ -57,10 +57,8 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 
 	const likeUnlikeProject = async () => {
 		if (!isSignedIn) {
-			if (showSignModal) {
-				showSignModal();
-				return;
-			}
+			showSignWithWallet();
+			return;
 		}
 
 		if (loading) return;
@@ -159,7 +157,7 @@ const BadgeButton = styled(Flex)`
 	cursor: pointer;
 	transition: color 0.3s ease;
 	color: ${neutralColors.gray[800]};
-	box-shadow: 0px 3px 20px ${brandColors.giv[400]}21;
+	box-shadow: 0 3px 20px ${brandColors.giv[400]}21;
 	&:hover {
 		color: ${neutralColors.gray[900]};
 	}

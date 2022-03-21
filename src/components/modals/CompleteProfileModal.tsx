@@ -13,7 +13,7 @@ import { Modal } from '@/components/modals/Modal';
 import { ETheme, useGeneral } from '@/context/general.context';
 import Routes from '@/lib/constants/Routes';
 
-export const CompleteProfile = (props: { closeModal: () => void }) => {
+export const CompleteProfileModal = (props: { closeModal: () => void }) => {
 	const { closeModal } = props;
 	const { theme } = useGeneral();
 

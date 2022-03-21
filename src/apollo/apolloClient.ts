@@ -5,8 +5,11 @@ import gql from 'graphql-tag';
 import { createUploadLink } from 'apollo-upload-client';
 import merge from 'deepmerge';
 import isEqual from 'lodash.isequal';
-import { getLocalStorageUserLabel } from '@/services/auth';
-import { isSSRMode } from '@/lib/helpers';
+import {
+	getLocalTokenLabel,
+	getLocalUserLabel,
+	isSSRMode,
+} from '@/lib/helpers';
 import links from '@/lib/constants/links';
 
 let apolloClient: any;
@@ -16,31 +19,24 @@ const ssrMode = isSSRMode;
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__';
 
 function createApolloClient() {
-	// Declare variable to store authToken
-	let token: any;
-	const appUser = getLocalStorageUserLabel();
+	let userWalletAddress: string | null;
+	if (!ssrMode) {
+		userWalletAddress = localStorage.getItem(getLocalUserLabel());
+	}
 
 	const httpLink = createUploadLink({
 		uri: links.BACKEND,
 	}) as unknown as ApolloLink;
 
 	const authLink = setContext((_, { headers }) => {
-		// get the authentication token from local storage if it exists
-		if (!ssrMode)
-			token = localStorage.getItem(getLocalStorageUserLabel() + '_token');
+		const currentToken: string | null = !ssrMode
+			? localStorage.getItem(getLocalTokenLabel())
+			: null;
 
-		// return the headers to the context so httpLink can read them
 		const mutation: any = {
-			Authorization: token ? `Bearer ${token}` : '',
+			Authorization: currentToken ? `Bearer ${currentToken}` : '',
 		};
-		if (!ssrMode && localStorage.getItem(appUser)) {
-			const userFromStorage = localStorage.getItem(appUser) as string;
-			const user = JSON.parse(userFromStorage);
-			const userAddress = user?.addresses && user.addresses[0];
-
-			if (userAddress) mutation['wallet-address'] = userAddress;
-		}
-
+		if (userWalletAddress) mutation['wallet-address'] = userWalletAddress;
 		return {
 			headers: {
 				...headers,
