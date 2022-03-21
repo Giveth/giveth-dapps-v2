@@ -128,7 +128,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const isV3Staking = type === StakingType.UNISWAP;
 
 	const { apr, earned, stakedLpAmount, userNotStakedAmount } = stakeInfo;
-	const { minimumApr, maxApr } = useLiquidityPositions();
 
 	const regenStreamConfig = useMemo(() => {
 		if (!regenStreamType) return undefined;
