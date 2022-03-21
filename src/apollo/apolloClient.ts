@@ -30,11 +30,14 @@ function createApolloClient() {
 	}) as unknown as ApolloLink;
 
 	const authLink = setContext((_, { headers }) => {
+		const currentToken = !ssrMode
+			? localStorage.getItem(getLocalTokenLabel())
+			: userToken;
+
 		const mutation: any = {
-			Authorization: userToken ? `Bearer ${userToken}` : '',
+			Authorization: currentToken ? `Bearer ${currentToken}` : '',
 		};
 		if (userWalletAddress) mutation['wallet-address'] = userWalletAddress;
-
 		return {
 			headers: {
 				...headers,
