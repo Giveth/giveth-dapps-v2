@@ -145,6 +145,7 @@ export const FETCH_PROJECT_BY_ID = gql`
 			status {
 				name
 			}
+			slug
 		}
 	}
 `;
