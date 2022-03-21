@@ -18,7 +18,7 @@ const config: GlobalConfig = {
 		mainToken: 'ETH',
 	},
 	SECONDARY_NETWORK: {
-		name: 'xDai',
+		name: 'Gnosis Chain',
 		id: 100,
 		chain: '0x64',
 		mainToken: 'XDAI',
