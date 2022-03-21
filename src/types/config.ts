@@ -24,7 +24,6 @@ export type PoolStakingConfig =
 	| SimplePoolStakingConfig
 	| BalancerPoolStakingConfig
 	| UniswapV3PoolStakingConfig
-	| UniswapV3PoolStakingConfig
 	| RegenPoolStakingConfig;
 
 export interface SimplePoolStakingConfig extends BasicStakingConfig {
@@ -96,11 +95,7 @@ export interface BasicNetworkConfig {
 	blockExplorerName: string[];
 	subgraphAddress: string;
 	gasPreference: GasPreference;
-	pools: Array<
-		| SimplePoolStakingConfig
-		| BalancerPoolStakingConfig
-		| UniswapV3PoolStakingConfig
-	>;
+	pools: Array<SimplePoolStakingConfig | BalancerPoolStakingConfig | UniswapV3PoolStakingConfig>;
 	uniswapV2Subgraph?: string;
 
 	regenStreams: RegenStreamConfig[];

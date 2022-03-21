@@ -1,4 +1,8 @@
-import { FunctionComponent, ReactNode, useEffect, useState } from 'react';
+import { FunctionComponent, ReactNode, useState } from 'react';
+import { defaultTheme } from 'react-select';
+import { neutralColors, P, B, brandColors } from '@giveth/ui-design-system';
+import styled from 'styled-components';
+import Image from 'next/image';
 import Select, {
 	GroupBase,
 	components,
@@ -6,34 +10,18 @@ import Select, {
 	OnChangeValue,
 	StylesConfig,
 } from 'react-select';
-import Image from 'next/image';
-import useDeviceDetect from '@/hooks/useDeviceDetect';
-import { defaultTheme } from 'react-select';
-import { neutralColors, P, B, brandColors } from '@giveth/ui-design-system';
-import XIcon from '/public/images/x-icon.svg';
-import styled from 'styled-components';
 
-interface ISelectObj {
-	value: string;
-	label: string;
-	chainId?: number;
-	symbol?: string;
-	icon?: string;
-	address?: string;
-	ethereumAddress?: string;
-	decimals?: number;
-}
+import useDeviceDetect from '@/hooks/useDeviceDetect';
+import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
+import XIcon from '/public/images/x-icon.svg';
+
 interface ITokenPicker {
 	isOpen: boolean;
 	isMobile?: boolean;
 }
 
 declare module 'react-select/dist/declarations/src/Select' {
-	export interface Props<
-		Option,
-		IsMulti extends boolean,
-		Group extends GroupBase<Option>,
-	> {
+	export interface Props<Option, IsMulti extends boolean, Group extends GroupBase<Option>> {
 		isMobile?: boolean;
 		setIsOpen?: any;
 	}
@@ -61,24 +49,18 @@ const ImageIcon = ({ ...props }: any) => {
 	);
 };
 
-const Option = ({ ...props }: OptionProps<ISelectObj, false>) => {
-	const value = props.data as any;
+const Option = ({ ...props }: OptionProps<IProjectAcceptedToken, false>) => {
+	const value = props.data;
 	return (
 		<components.Option {...props}>
 			<OptionContainer>
 				<RowContainer>
 					<ImageIcon value={value} />
-					<B style={{ color: neutralColors.gray[900] }}>
+					<B>
 						{value.name} ({value.symbol})
 					</B>
 				</RowContainer>
-				{props.isSelected && (
-					<Img
-						src='/images/checkmark.svg'
-						width='10px'
-						height='10px'
-					/>
-				)}
+				{props.isSelected && <Img src='/images/checkmark.svg' width='10px' height='10px' />}
 			</OptionContainer>
 		</components.Option>
 	);
@@ -95,26 +77,18 @@ const NotFound = ({ emptyField }: any) => {
 };
 
 const TokenPicker = (props: {
-	tokenList: ISelectObj[] | undefined;
+	tokenList: IProjectAcceptedToken[] | undefined;
 	onChange: any;
 	onInputChange: any;
 	inputValue?: any;
-	selectedToken: ISelectObj | undefined;
+	selectedToken: IProjectAcceptedToken | undefined;
 	placeholder: string;
 }) => {
-	const {
-		tokenList,
-		onChange,
-		onInputChange,
-		inputValue,
-		selectedToken,
-		placeholder,
-	} = props;
+	const { tokenList, onChange, onInputChange, inputValue, selectedToken, placeholder } = props;
 	const { isMobile } = useDeviceDetect();
-	const [value, setValue] = useState<ISelectObj | null>();
 	const [isOpen, setIsOpen] = useState(false);
 
-	const selectStyles: StylesConfig<ISelectObj, false> = {
+	const selectStyles: StylesConfig<IProjectAcceptedToken, false> = {
 		control: (base: any) => ({
 			...base,
 			minWidth: isMobile ? '90%' : 240,
@@ -186,30 +160,22 @@ const TokenPicker = (props: {
 	const toggleOpen = () => {
 		setIsOpen(!isOpen);
 	};
-	const onSelectChange = (value: OnChangeValue<ISelectObj, false>) => {
+
+	const onSelectChange = (value: OnChangeValue<IProjectAcceptedToken, false>) => {
 		toggleOpen();
-		setValue(value);
 		onChange(value);
 	};
 
-	const filterOptions = (option: any, inputValue: string) => {
-		if (
-			option.data.address?.toLowerCase() ===
-			inputValue?.toLowerCase()?.replace(/ /g, '')
-		) {
+	const filterOptions = (option: { data: IProjectAcceptedToken }, inputValue: string) => {
+		const { address, name, symbol } = option.data;
+		if (address?.toLowerCase() === inputValue?.toLowerCase()?.replace(/ /g, '')) {
 			return true;
 		}
 		return (
-			option.label.includes(inputValue?.toUpperCase()) ||
-			option.data.name
-				?.toLowerCase()
-				.includes(inputValue?.toLocaleLowerCase())
+			symbol.includes(inputValue?.toUpperCase()) ||
+			name?.toLowerCase().includes(inputValue?.toLocaleLowerCase())
 		);
 	};
-
-	useEffect(() => {
-		setValue(selectedToken);
-	}, [selectedToken]);
 
 	return (
 		<>
@@ -218,15 +184,11 @@ const TokenPicker = (props: {
 				isOpen={isOpen}
 				onClose={toggleOpen}
 				target={
-					<TargetContainer
-						onClick={toggleOpen}
-						isOpen={isOpen}
-						isMobile={isMobile}
-					>
+					<TargetContainer onClick={toggleOpen} isOpen={isOpen} isMobile={isMobile}>
 						<TokenContainer>
-							{value && (
+							{selectedToken && (
 								<ImageIcon
-									value={value}
+									value={selectedToken.symbol}
 									style={{ margin: '0 16px 0 4px' }}
 								/>
 							)}
@@ -236,15 +198,11 @@ const TokenPicker = (props: {
 									marginLeft: '-8px',
 								}}
 							>
-								{value ? `${value.label}` : 'Select a token'}
+								{selectedToken ? selectedToken.symbol : 'Select a token'}
 							</P>
 						</TokenContainer>
 						<ArrowImg
-							src={
-								!isOpen
-									? '/images/caret_down.svg'
-									: '/images/caret_up.svg'
-							}
+							src={!isOpen ? '/images/caret_down.svg' : '/images/caret_up.svg'}
 							alt='arrow down'
 							width='8px'
 							height='6px'
@@ -261,12 +219,10 @@ const TokenPicker = (props: {
 						Option,
 						Control,
 					}}
-					noOptionsMessage={() => (
-						<NotFound emptyField={() => onChange('')} />
-					)}
+					noOptionsMessage={() => <NotFound emptyField={() => onChange('')} />}
 					isMobile={isMobile}
 					setIsOpen={setIsOpen}
-					value={value}
+					value={selectedToken}
 					inputValue={inputValue}
 					controlShouldRenderValue={false}
 					hideSelectedOptions={false}
@@ -343,12 +299,7 @@ interface DropdownProps {
 	readonly target: ReactNode;
 	readonly onClose: () => void;
 }
-const Dropdown: FunctionComponent<DropdownProps> = ({
-	children,
-	isOpen,
-	target,
-	onClose,
-}) => {
+const Dropdown: FunctionComponent<DropdownProps> = ({ children, isOpen, target, onClose }) => {
 	return (
 		<>
 			<div style={{ zIndex: 1 }}>{target}</div>
@@ -360,14 +311,7 @@ const Dropdown: FunctionComponent<DropdownProps> = ({
 	);
 };
 const Svg = (p: JSX.IntrinsicElements['svg']) => (
-	<svg
-		width='24'
-		height='24'
-		viewBox='0 0 24 24'
-		focusable='false'
-		role='presentation'
-		{...p}
-	/>
+	<svg width='24' height='24' viewBox='0 0 24 24' focusable='false' role='presentation' {...p} />
 );
 const DropdownIndicator = () => (
 	<div style={{ color: colors.neutral20, height: 24, width: 32 }}>
@@ -409,23 +353,22 @@ const TargetContainer = styled.div`
 			: props.isOpen
 			? neutralColors.gray[200]
 			: 'transparent'};
-	border-radius: 6px 0px 0px 6px;
-	border: none;
+	border-radius: 6px 0 0 6px;
 	align-items: center;
 	border-right: 2px solid
 		${(props: ITokenPicker) =>
-			props.isMobile && props.isOpen
-				? 'rgba(79, 87, 106, 0.1)'
-				: neutralColors.gray[300]};
+			props.isMobile && props.isOpen ? 'rgba(79, 87, 106, 0.1)' : neutralColors.gray[300]};
 	img {
-		filter: ${(props: ITokenPicker) =>
-			props.isMobile && props.isOpen && 'brightness(70%)'};
+		filter: ${(props: ITokenPicker) => props.isMobile && props.isOpen && 'brightness(70%)'};
 	}
 `;
 
 const RowContainer = styled.div`
 	display: flex;
 	flex-direction: row;
+	> :last-child {
+		color: ${neutralColors.gray[900]};
+	}
 `;
 const OptionContainer = styled.div`
 	display: flex;
@@ -443,7 +386,6 @@ const Img = styled.img`
 const ArrowImg = styled.img`
 	margin-left: 5px;
 `;
-
 const NotFoundContainer = styled.div`
 	display: flex;
 	flex-direction: column;

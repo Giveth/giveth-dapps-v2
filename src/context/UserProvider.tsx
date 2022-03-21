@@ -1,10 +1,4 @@
-import React, {
-	createContext,
-	ReactNode,
-	useContext,
-	useEffect,
-	useState,
-} from 'react';
+import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { BigNumberish } from '@ethersproject/bignumber';
 import { formatEther } from '@ethersproject/units';
@@ -92,10 +86,10 @@ export const UserProvider = (props: { children: ReactNode }) => {
 	}, [library]);
 
 	useEffect(() => {
-		if (!!account && !!library) {
+		if (account && library) {
 			getBalance();
 		}
-	}, [account, user, library, chainId]);
+	}, [account, library, chainId]);
 
 	const fetchUser = () => {
 		return apolloClient
@@ -208,9 +202,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 			}}
 		>
 			{showCompleteProfile && (
-				<CompleteProfileModal
-					closeModal={() => setShowCompleteProfile(false)}
-				/>
+				<CompleteProfileModal closeModal={() => setShowCompleteProfile(false)} />
 			)}
 			{showSignWithWallet && (
 				<SignWithWalletModal

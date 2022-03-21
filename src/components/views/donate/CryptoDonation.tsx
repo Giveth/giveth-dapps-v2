@@ -26,7 +26,7 @@ import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
 import { IProject } from '@/apollo/types/types';
 import { getERC20Info } from '@/lib/contracts';
-import { getERC20List, pollEvery } from '@/utils';
+import { pollEvery } from '@/utils';
 import { fetchPrice } from '@/services/token';
 import { switchNetwork } from '@/lib/wallet';
 import { usePrice } from '@/context/price.context';
@@ -40,10 +40,15 @@ import TokenPicker from './TokenPicker';
 import Routes from '@/lib/constants/Routes';
 import InlineToast from '@/components/toasts/InlineToast';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
+import { client } from '@/apollo/apolloClient';
+import { PROJECT_ACCEPTED_TOKENS } from '@/apollo/gql/gqlProjects';
+import { showToastError } from '@/lib/helpers';
+import { IProjectAcceptedToken, IProjectAcceptedTokensGQL } from '@/apollo/types/gqlTypes';
+import { filterTokens, prepareTokenList } from '@/components/views/donate/helpers';
 
+const xdaiExcluded = config.XDAI_EXCLUDED_COINS;
 const ethereumChain = config.PRIMARY_NETWORK;
 const xdaiChain = config.SECONDARY_NETWORK;
-const xdaiExcluded = config.XDAI_EXCLUDED_COINS;
 const stableCoins = [xdaiChain.mainToken, 'DAI', 'USDT'];
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
@@ -60,22 +65,8 @@ interface IInputBox {
 	focused: boolean;
 }
 
-interface ISelectObj {
-	value: string;
-	label: string;
-	chainId?: number;
-	symbol?: string;
-	icon?: string;
-	address?: string;
-	ethereumAddress?: string;
-	decimals?: number;
-}
-
-const CryptoDonation = (props: {
-	setSuccessDonation: any;
-	project: IProject;
-}) => {
-	const { chainId, account, library } = useWeb3React();
+const CryptoDonation = (props: { setSuccessDonation: any; project: IProject }) => {
+	const { chainId: networkId, account, library } = useWeb3React();
 	const {
 		state: { isSignedIn, isEnabled, balance },
 	} = useUser();
@@ -84,9 +75,8 @@ const CryptoDonation = (props: {
 	const { project, setSuccessDonation } = props;
 	const isActive = project.status?.name === EProjectStatus.ACTIVE;
 	const mainTokenPrice = new BigNumber(ethPrice).toNumber();
-	const networkId = chainId;
 
-	const [selectedToken, setSelectedToken] = useState<ISelectObj>();
+	const [selectedToken, setSelectedToken] = useState<IProjectAcceptedToken>();
 	const [selectedTokenBalance, setSelectedTokenBalance] = useState<any>();
 	const [customInput, setCustomInput] = useState<any>();
 	const [tokenPrice, setTokenPrice] = useState<number>(1);
@@ -94,7 +84,7 @@ const CryptoDonation = (props: {
 	const [inputBoxFocused, setInputBoxFocused] = useState(false);
 	const [geminiModal, setGeminiModal] = useState(false);
 	const [txHash, setTxHash] = useState<any>();
-	const [erc20List, setErc20List] = useState<any>();
+	const [erc20List, setErc20List] = useState<IProjectAcceptedToken[]>();
 	const [erc20OriginalList, setErc20OriginalList] = useState<any>();
 	// TODO: Set this to a better flow, gotta discuss with design team but it is needed
 	const [unconfirmed, setUnconfirmed] = useState<any>();
@@ -108,109 +98,71 @@ const CryptoDonation = (props: {
 	const [showInsufficientModal, setShowInsufficientModal] = useState(false);
 	const [showWelcomeSignin, setShowWelcomeSignin] = useState<boolean>(false);
 	const [showChangeNetworkModal, setShowChangeNetworkModal] = useState(false);
+	const [acceptedTokens, setAcceptedTokens] = useState<IProjectAcceptedToken[]>();
+
+	const stopPolling = useRef<any>(null);
 
 	const tokenSymbol = selectedToken?.symbol;
 	const isXdai = networkId === xdaiChain.id;
 	const isGivingBlockProject = project?.givingBlocksId;
-	const stopPolling = useRef<any>(null);
 	const projectIsGivBackEligible = givBackEligible && project?.verified;
-	const givingBlockReady = isGivingBlockProject
-		? networkId === ethereumChain.id
-		: true;
-	// Checks network changes to fetch proper token list
-	useEffect(() => {
-		let netId = networkId as Number | string;
-		// Show change network modal when needed'
-		if (
-			netId !== 'thegivingblock' &&
-			netId !== 'rapsten_thegivingblock' &&
-			netId !== config.PRIMARY_NETWORK.id &&
-			netId !== config.SECONDARY_NETWORK.id
-		) {
-			return setShowChangeNetworkModal(true);
-		}
-		let givIndex: number | undefined;
-		const erc20List: any = getERC20List(netId).tokens;
-		const tokens = erc20List.map((token: any, index: any) => {
-			token.value = token;
-			token.label = token.symbol;
-			if (
-				token.symbol === 'GIV' ||
-				token.symbol === 'TestGIV' ||
-				token.name === 'Giveth'
-			) {
-				givIndex = index;
-			}
-			return token;
-		});
-		const givToken = erc20List[givIndex!];
-		if (givToken && givIndex) {
-			tokens.splice(givIndex, 1);
-		}
-		tokens?.sort((a: any, b: any) => {
-			const tokenA = a.name.toUpperCase();
-			const tokenB = b.name.toUpperCase();
-			return tokenA < tokenB ? -1 : tokenA > tokenB ? 1 : 0;
-		});
-		if (givToken) {
-			tokens.splice(0, 0, givToken);
-		}
-		setErc20List(tokens);
-		setErc20OriginalList(tokens);
-		setSelectedToken(tokens[0]);
-	}, [networkId]);
+	const givingBlockReady = isGivingBlockProject ? networkId === ethereumChain.id : true;
 
-	// Polls selected token data
+	useEffect(() => {
+		if (networkId && acceptedTokens) {
+			if (networkId !== ethereumChain.id && networkId !== xdaiChain.id) {
+				setErc20List(undefined);
+				return setShowChangeNetworkModal(true);
+			}
+			const filteredTokens = filterTokens(acceptedTokens, networkId);
+			const tokens = prepareTokenList(filteredTokens);
+			setErc20OriginalList(tokens);
+			setErc20List(tokens);
+			setSelectedToken(tokens[0]);
+		}
+	}, [networkId, acceptedTokens]);
+
 	useEffect(() => {
 		if (isEnabled) pollToken();
 		return () => clearPoll();
 	}, [selectedToken, isEnabled, account, networkId, balance]);
 
-	// Gets price of selected token
+	useEffect(() => {
+		client
+			.query({
+				query: PROJECT_ACCEPTED_TOKENS,
+				variables: { projectId: Number(project.id) },
+				fetchPolicy: 'no-cache',
+			})
+			.then((res: IProjectAcceptedTokensGQL) => {
+				setAcceptedTokens(res.data.getProjectAcceptTokens);
+			})
+			.catch(showToastError);
+	}, []);
+
 	useEffect(() => {
 		const setPrice = async () => {
-			if (
-				selectedToken?.symbol &&
-				stableCoins.includes(selectedToken.symbol)
-			) {
+			if (selectedToken?.symbol && stableCoins.includes(selectedToken.symbol)) {
 				setTokenPrice(1);
+			} else if (selectedToken?.symbol === ethereumChain.mainToken) {
+				mainTokenPrice && setTokenPrice(mainTokenPrice);
 			} else if (selectedToken?.address) {
 				let chain = ethereumChain.name.split(' ')[0].toLowerCase();
-				let tokenAddress: string | undefined = selectedToken.address;
+				let tokenAddress = selectedToken.address;
 				if (isXdai) {
 					// coingecko doesn't have these tokens in xdai, so fetching price from ethereum
 					if (xdaiExcluded.includes(selectedToken.symbol!)) {
-						tokenAddress = selectedToken.ethereumAddress;
+						tokenAddress = selectedToken.mainnetAddress || '';
 					} else {
 						chain = xdaiChain.name.toLowerCase();
 					}
 				}
-				const fetchedPrice = await fetchPrice(
-					chain?.toLowerCase(),
-					tokenAddress,
-					setTokenPrice,
-				);
+				const fetchedPrice = await fetchPrice(chain, tokenAddress, setTokenPrice);
 				fetchedPrice && setTokenPrice(fetchedPrice);
-			} else if (
-				selectedToken?.symbol &&
-				selectedToken.symbol === ethereumChain.mainToken
-			) {
-				mainTokenPrice && setTokenPrice(mainTokenPrice);
 			}
 		};
-		setPrice();
+		setPrice().then();
 	}, [selectedToken, mainTokenPrice]);
-
-	// Gets GAS price
-	// useEffect(() => {
-	// 	library?.getGasPrice().then((wei: any) => {
-	// 		const ethFromWei = formatEther(isXdai ? '1' : Number(wei));
-	// 		const gwei = isXdai ? 1 : formatUnits(wei, 'gwei');
-	// 		gwei && setGasPrice(Number(gwei));
-	// 		ethFromWei && setGasETHPrice(Number(ethFromWei) * 21000);
-	// 	});
-
-	// }, [networkId, selectedToken]);
 
 	const checkGIVTokenAvailability = () => {
 		if (!isGivingBlockProject) return true;
@@ -228,13 +180,14 @@ const CryptoDonation = (props: {
 			stopPolling.current = undefined;
 		}
 	};
+
 	const pollToken = useCallback(() => {
 		clearPoll();
 		// Native token balance is provided by the Web3Provider
 		if (
 			!selectedToken?.address ||
-			selectedToken.symbol === 'XDAI' ||
-			selectedToken.symbol === 'ETH'
+			selectedToken.symbol === ethereumChain.mainToken ||
+			selectedToken.symbol === xdaiChain.mainToken
 		) {
 			return setSelectedTokenBalance(balance);
 		}
@@ -242,15 +195,8 @@ const CryptoDonation = (props: {
 			() => ({
 				request: async () => {
 					try {
-						const instance = new Contract(
-							selectedToken.address!,
-							tokenAbi,
-							library,
-						);
-						return (
-							(await instance.balanceOf(account)) /
-							10 ** selectedToken.decimals!
-						);
+						const instance = new Contract(selectedToken.address!, tokenAbi, library);
+						return (await instance.balanceOf(account)) / 10 ** selectedToken.decimals!;
 					} catch (e) {
 						return 0;
 					}
@@ -258,8 +204,7 @@ const CryptoDonation = (props: {
 				onResult: (_balance: number) => {
 					if (
 						_balance !== undefined &&
-						(!selectedTokenBalance ||
-							selectedTokenBalance !== _balance)
+						(!selectedTokenBalance || selectedTokenBalance !== _balance)
 					) {
 						setSelectedTokenBalance(_balance);
 					}
@@ -271,10 +216,7 @@ const CryptoDonation = (props: {
 
 	return (
 		<MainContainer>
-			<GeminiModal
-				showModal={geminiModal}
-				setShowModal={setGeminiModal}
-			/>
+			<GeminiModal showModal={geminiModal} setShowModal={setGeminiModal} />
 			{showChangeNetworkModal && (
 				<ChangeNetworkModal
 					showModal={showChangeNetworkModal}
@@ -293,10 +235,7 @@ const CryptoDonation = (props: {
 				/>
 			)}
 			{showWalletModal && !txHash && (
-				<WalletModal
-					showModal={showWalletModal}
-					setShowModal={setShowWalletModal}
-				/>
+				<WalletModal showModal={showWalletModal} setShowModal={setShowWalletModal} />
 			)}
 			{showDonateModal && selectedToken && amountTyped && (
 				<DonateModal
@@ -319,69 +258,46 @@ const CryptoDonation = (props: {
 			)}
 
 			<InputContainer>
-				{isGivingBlockProject &&
-					networkId !== config.PRIMARY_NETWORK.id && (
-						<XDaiContainer>
-							<div>
-								<img src='/images/gas_station.svg' />
-								<Caption color={neutralColors.gray[900]}>
-									Projects from The Giving Block only accept
-									donations on mainnet.{' '}
-								</Caption>
-							</div>
-							<SwitchCaption
-								style={{}}
-								onClick={() => switchNetwork(1)}
-							>
-								Switch network
-							</SwitchCaption>
-						</XDaiContainer>
-					)}
-				{!isGivingBlockProject &&
-					isEnabled &&
-					networkId !== xdaiChain.id && (
-						<XDaiContainer>
-							<div>
-								<img src='/images/gas_station.svg' />
-								<Caption color={neutralColors.gray[900]}>
-									Save on gas fees, switch to xDAI network.
-								</Caption>
-							</div>
-							<SwitchCaption
-								onClick={() => switchNetwork(100)}
-								style={{
-									textAlign: 'right',
-								}}
-							>
-								Switch network
-							</SwitchCaption>
-						</XDaiContainer>
-					)}
+				{isGivingBlockProject && networkId !== ethereumChain.id && (
+					<XDaiContainer>
+						<div>
+							<img src='/images/gas_station.svg' />
+							<Caption color={neutralColors.gray[900]}>
+								Projects from The Giving Block only accept donations on mainnet.{' '}
+							</Caption>
+						</div>
+						<SwitchCaption onClick={() => switchNetwork(ethereumChain.id)}>
+							Switch network
+						</SwitchCaption>
+					</XDaiContainer>
+				)}
+				{!isGivingBlockProject && isEnabled && networkId !== xdaiChain.id && (
+					<XDaiContainer>
+						<div>
+							<img src='/images/gas_station.svg' />
+							<Caption color={neutralColors.gray[900]}>
+								Save on gas fees, switch to xDAI network.
+							</Caption>
+						</div>
+						<SwitchCaption onClick={() => switchNetwork(xdaiChain.id)}>
+							Switch network
+						</SwitchCaption>
+					</XDaiContainer>
+				)}
 				<SearchContainer error={error} focused={inputBoxFocused}>
 					<DropdownContainer>
 						<TokenPicker
-							tokenList={Array.from(new Set(erc20List))}
+							tokenList={erc20List}
 							selectedToken={selectedToken}
 							inputValue={customInput}
-							onChange={(i: any) => {
-								// setSelectedToken(i || selectedToken)
+							onChange={(i: IProjectAcceptedToken) => {
 								setSelectedToken(i);
-								// setIsComponentVisible(false)
 								setCustomInput('');
 								setErc20List(erc20OriginalList);
-								let givBackEligibilty: any =
-									erc20OriginalList?.find(
-										(t: any) => t?.symbol === i?.symbol,
-									);
-								if (
-									i?.symbol?.toUpperCase() ===
-										ethereumChain.mainToken ||
-									i?.symbol?.toUpperCase() ===
-										xdaiChain.mainToken
-								) {
-									givBackEligibilty = true;
-								}
-								setGivBackEligible(givBackEligibilty);
+								let givBackEligible = erc20OriginalList?.find(
+									(t: IProjectAcceptedToken) => t.symbol === i.symbol,
+								);
+								setGivBackEligible(givBackEligible);
 							}}
 							onInputChange={(i: string) => {
 								// It's a contract
@@ -392,32 +308,26 @@ const CryptoDonation = (props: {
 											library,
 											tokenAbi,
 											contractAddress: i,
-											chainId: networkId!,
+											networkId: networkId as number,
 										}).then(pastedToken => {
 											if (!pastedToken) return;
 											const found = erc20List?.find(
-												(t: any) =>
-													t?.symbol ===
-													pastedToken?.symbol,
+												(t: IProjectAcceptedToken) =>
+													t?.symbol === pastedToken?.symbol,
 											);
 											!found &&
-												setErc20List([
-													...erc20List,
-													pastedToken,
-												]);
-											setCustomInput(
-												pastedToken?.address,
-											);
+												erc20List &&
+												setErc20List([...erc20List, pastedToken]);
+											setCustomInput(pastedToken?.address);
 											// setSelectLoading(false);
 										});
 									} catch (error) {
 										// setSelectLoading(false);
-										console.log({ error });
+										showToastError(error);
 									}
 								} else {
 									setCustomInput(i);
-									erc20OriginalList &&
-										erc20OriginalList?.length > 0 &&
+									erc20OriginalList?.length > 0 &&
 										setErc20List([...erc20OriginalList]);
 								}
 							}}
@@ -437,8 +347,7 @@ const CryptoDonation = (props: {
 						error={error}
 						setError={setError}
 						errorHandler={{
-							condition: (value: any) =>
-								value >= 0 && value <= 0.000001,
+							condition: (value: any) => value >= 0 && value <= 0.000001,
 							message: 'Set a valid amount',
 						}}
 						type='number'
@@ -494,9 +403,8 @@ const CryptoDonation = (props: {
 					onChange={() => setAnonymous(!anonymous)}
 				/>
 				<B>
-					By checking this, we won't consider your profile information
-					as a donor for this donation and won't show it on public
-					pages.
+					By checking this, we won't consider your profile information as a donor for this
+					donation and won't show it on public pages.
 				</B>
 			</CheckBoxContainer>
 
@@ -513,11 +421,7 @@ const CryptoDonation = (props: {
 				<>
 					<MainButton
 						label='DONATE'
-						disabled={
-							!isActive ||
-							!amountTyped ||
-							parseInt(amountTyped) < 0
-						}
+						disabled={!isActive || !amountTyped || parseInt(amountTyped) < 0}
 						size='large'
 						onClick={() => {
 							if (selectedTokenBalance < amountTyped) {
@@ -531,17 +435,12 @@ const CryptoDonation = (props: {
 					/>
 					<AnotherWalletTxt>
 						Want to use another wallet?{' '}
-						<a onClick={() => setShowWalletModal(true)}>
-							Change Wallet
-						</a>
+						<a onClick={() => setShowWalletModal(true)}>Change Wallet</a>
 					</AnotherWalletTxt>
 				</>
 			)}
 			{!isEnabled && !givingBlockReady && (
-				<MainButton
-					label='CONNECT WALLET'
-					onClick={() => setShowWalletModal(true)}
-				/>
+				<MainButton label='CONNECT WALLET' onClick={() => setShowWalletModal(true)} />
 			)}
 		</MainContainer>
 	);
@@ -576,9 +475,7 @@ const SearchContainer = styled.div`
 	:hover {
 		border: 2px solid
 			${(props: IInputBox) =>
-				props.error === true
-					? semanticColors.punch[500]
-					: brandColors.giv[500]};
+				props.error === true ? semanticColors.punch[500] : brandColors.giv[500]};
 		box-shadow: ${Shadow.Neutral[500]};
 	}
 	${(props: IInputBox) =>
@@ -630,12 +527,12 @@ const SwitchCaption = styled(Caption)`
 	padding: 0 0 0 12px;
 	word-wrap: break-word;
 	width: 120px;
+	text-align: right;
 `;
 
 const MainButton = styled(Button)`
 	width: 100%;
-	background-color: ${props =>
-		props.disabled ? brandColors.giv[200] : brandColors.giv[500]};
+	background-color: ${props => (props.disabled ? brandColors.giv[200] : brandColors.giv[500])};
 	color: white;
 `;
 

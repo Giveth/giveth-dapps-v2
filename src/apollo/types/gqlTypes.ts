@@ -1,10 +1,4 @@
-import {
-	ICategory,
-	IDonation,
-	IProject,
-	IProjectUpdate,
-	IWalletDonation,
-} from './types';
+import { ICategory, IDonation, IProject, IProjectUpdate, IWalletDonation } from './types';
 
 export interface IFetchAllProjects {
 	projects: IProject[];
@@ -38,4 +32,20 @@ export interface IUserDonations {
 export interface IUserLikedProjects {
 	projects: IProject[];
 	totalCount: number;
+}
+
+export interface IProjectAcceptedTokensGQL {
+	data: {
+		getProjectAcceptTokens: IProjectAcceptedToken[];
+	};
+}
+
+export interface IProjectAcceptedToken {
+	id?: string;
+	symbol: string;
+	networkId: number;
+	address: string;
+	mainnetAddress?: string;
+	name: string;
+	decimals: number;
 }

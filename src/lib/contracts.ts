@@ -10,23 +10,16 @@ import config from '@/configuration';
 const mainnetConfig = config.MAINNET_CONFIG;
 const uniswapConfig = mainnetConfig.pools[0] as UniswapV3PoolStakingConfig;
 
-const { NFT_POSITIONS_MANAGER_ADDRESS, UNISWAP_V3_STAKER, UNISWAP_V3_LP_POOL } =
-	uniswapConfig;
+const { NFT_POSITIONS_MANAGER_ADDRESS, UNISWAP_V3_STAKER, UNISWAP_V3_LP_POOL } = uniswapConfig;
 
-export const getNftManagerPositionsContract = (
-	provider: Web3Provider | null,
-) => {
+export const getNftManagerPositionsContract = (provider: Web3Provider | null) => {
 	const signer = provider?.getSigner();
 
 	if (!signer) {
 		return;
 	}
 
-	return new Contract(
-		NFT_POSITIONS_MANAGER_ADDRESS,
-		NonfungiblePositionManagerABI,
-		signer,
-	);
+	return new Contract(NFT_POSITIONS_MANAGER_ADDRESS, NonfungiblePositionManagerABI, signer);
 };
 
 export const getUniswapV3StakerContract = (
@@ -61,15 +54,10 @@ interface IERC20Info {
 	library: Web3Provider;
 	tokenAbi: string;
 	contractAddress: string;
-	chainId: number;
+	networkId: number;
 }
 
-export async function getERC20Info({
-	library,
-	tokenAbi,
-	contractAddress,
-	chainId,
-}: IERC20Info) {
+export async function getERC20Info({ library, tokenAbi, contractAddress, networkId }: IERC20Info) {
 	try {
 		const instance = new Contract(contractAddress, tokenAbi, library);
 		const name = await instance.name();
@@ -79,12 +67,8 @@ export async function getERC20Info({
 			name,
 			symbol,
 			address: contractAddress,
-			label: symbol,
-			chainId,
+			networkId,
 			decimals,
-			value: {
-				symbol,
-			},
 		};
 		console.log({ ERC20Info });
 
