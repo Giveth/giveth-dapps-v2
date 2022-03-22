@@ -20,6 +20,7 @@ import { IDonationsByProjectId } from '@/apollo/types/gqlTypes';
 import SuccessfulCreation from '@/components/views/create/SuccessfulCreation';
 import { deviceSize, mediaQueries } from '@/utils/constants';
 import InlineToast from '@/components/toasts/InlineToast';
+import { ProjectMeta } from '@/lib/meta';
 
 const ProjectDonations = dynamic(() => import('./ProjectDonations'));
 const ProjectUpdates = dynamic(() => import('./ProjectUpdates'));
@@ -120,24 +121,11 @@ const ProjectIndex = (props: { project?: IProject }) => {
 		);
 	}
 
-	const metaDescription = project?.description?.slice(0, 100);
 	return (
 		<Wrapper>
 			<Head>
 				<title>{title && `${title} |`} Giveth</title>
-				<meta name='title' content={project?.title} />
-				<meta name='description' content={metaDescription} />
-				<meta property='og:type' content='website' />
-				<meta property='og:title' content={project?.title} />
-				<meta property='og:description' content={metaDescription} />
-				<meta property='og:image' content={project?.image} />
-				<meta property='twitter:card' content='summary_large_image' />
-				<meta property='twitter:title' content={project?.title} />
-				<meta
-					property='twitter:description'
-					content={metaDescription}
-				/>
-				<meta property='twitter:image' content={project?.image} />
+				<ProjectMeta project={project} preTitle='Check out' />
 			</Head>
 
 			<ProjectHeader project={project} />
