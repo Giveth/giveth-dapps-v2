@@ -33,24 +33,16 @@ declare module 'react-select/dist/declarations/src/Select' {
 
 const { colors } = defaultTheme;
 
-const ImageIcon = ({ ...props }: any) => {
-	const { value, style } = props;
+const ImageIcon = (props: { symbol: string }) => {
+	const { symbol } = props;
 	let image_path = '';
 	try {
-		require(`../../../../public/images/tokens/${value.symbol?.toLowerCase()}.png`);
-		image_path = `/images/tokens/${value.symbol?.toLowerCase()}.png`;
+		require(`../../../../public/images/tokens/${symbol?.toLowerCase()}.png`);
+		image_path = `/images/tokens/${symbol?.toLowerCase()}.png`;
 	} catch (err) {
 		image_path = '/images/tokens/eth.png'; //set default image path
 	}
-	return (
-		<Img
-			key={value?.symbol}
-			src={image_path}
-			style={{ marginRight: '16px', ...style }}
-			width='24px'
-			height='24px'
-		/>
-	);
+	return <Image alt={symbol} src={image_path} width='24px' height='24px' />;
 };
 
 const Option = ({ ...props }: OptionProps<IProjectAcceptedToken, false>) => {
@@ -59,16 +51,17 @@ const Option = ({ ...props }: OptionProps<IProjectAcceptedToken, false>) => {
 		<components.Option {...props}>
 			<OptionContainer>
 				<RowContainer>
-					<ImageIcon value={value} />
+					<ImageIcon symbol={value.symbol} />
 					<B>
 						{value.name} ({value.symbol})
 					</B>
 				</RowContainer>
 				{props.isSelected && (
-					<Img
+					<Image
 						src='/images/checkmark.svg'
 						width='10px'
 						height='10px'
+						alt={value.symbol}
 					/>
 				)}
 			</OptionContainer>
@@ -89,7 +82,7 @@ const NotFound = ({ emptyField }: any) => {
 const TokenPicker = (props: {
 	tokenList: IProjectAcceptedToken[] | undefined;
 	onChange: any;
-	onInputChange: any;
+	onInputChange?: any;
 	inputValue?: any;
 	selectedToken: IProjectAcceptedToken | undefined;
 	placeholder: string;
@@ -216,17 +209,9 @@ const TokenPicker = (props: {
 					>
 						<TokenContainer>
 							{selectedToken && (
-								<ImageIcon
-									value={selectedToken.symbol}
-									style={{ margin: '0 16px 0 4px' }}
-								/>
+								<ImageIcon symbol={selectedToken.symbol} />
 							)}
-							<P
-								style={{
-									color: neutralColors.gray[900],
-									marginLeft: '-8px',
-								}}
-							>
+							<P>
 								{selectedToken
 									? selectedToken.symbol
 									: 'Select a token'}
@@ -266,7 +251,7 @@ const TokenPicker = (props: {
 					isClearable={false}
 					menuIsOpen={isOpen}
 					onChange={onSelectChange}
-					onInputChange={onInputChange}
+					onInputChange={onInputChange && onInputChange}
 					options={tokenList}
 					styles={selectStyles}
 					tabSelectsValue={false}
@@ -417,23 +402,28 @@ const TargetContainer = styled.div`
 
 const RowContainer = styled.div`
 	display: flex;
-	flex-direction: row;
+	align-items: center;
+	gap: 8px;
+	> :first-child {
+		flex-shrink: 0;
+	}
 	> :last-child {
 		color: ${neutralColors.gray[900]};
 	}
 `;
 const OptionContainer = styled.div`
 	display: flex;
-	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
 `;
 const TokenContainer = styled.div`
 	display: flex;
-	flex-direction: row;
-`;
-const Img = styled.img`
-	margin-left: -10px;
+	align-items: center;
+	gap: 8px;
+
+	> :first-child {
+		flex-shrink: 0;
+	}
 `;
 const ArrowImg = styled.img`
 	margin-left: 5px;

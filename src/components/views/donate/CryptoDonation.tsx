@@ -345,56 +345,55 @@ const CryptoDonation = (props: {
 								);
 								setGivBackEligible(givBackEligible);
 							}}
-							onInputChange={(i: string) => {
-								// It's a contract
-								if (i?.length === 42) {
-									try {
-										// setSelectLoading(true);
-										getERC20Info({
-											library,
-											tokenAbi,
-											contractAddress: i,
-											networkId: networkId as number,
-										}).then(pastedToken => {
-											if (!pastedToken) return;
-											const found = erc20List?.find(
-												(t: IProjectAcceptedToken) =>
-													t?.symbol ===
-													pastedToken?.symbol,
-											);
-											!found &&
-												erc20List &&
-												setErc20List([
-													...erc20List,
-													pastedToken,
-												]);
-											setCustomInput(
-												pastedToken?.address,
-											);
-											// setSelectLoading(false);
-										});
-									} catch (error) {
-										// setSelectLoading(false);
-										showToastError(error);
-									}
-								} else {
-									setCustomInput(i);
-									erc20OriginalList?.length > 0 &&
-										setErc20List([...erc20OriginalList]);
-								}
-							}}
+							// TODO disabling custom token to discuss later
+							// onInputChange={(i: string) => {
+							// 	// It's a contract
+							// 	if (i?.length === 42) {
+							// 		try {
+							// 			// setSelectLoading(true);
+							// 			getERC20Info({
+							// 				library,
+							// 				tokenAbi,
+							// 				contractAddress: i,
+							// 				networkId: networkId as number,
+							// 			}).then(pastedToken => {
+							// 				if (!pastedToken) return;
+							// 				const found = erc20List?.find(
+							// 					(t: IProjectAcceptedToken) =>
+							// 						t?.symbol ===
+							// 						pastedToken?.symbol,
+							// 				);
+							// 				!found &&
+							// 					erc20List &&
+							// 					setErc20List([
+							// 						...erc20List,
+							// 						pastedToken,
+							// 					]);
+							// 				setCustomInput(
+							// 					pastedToken?.address,
+							// 				);
+							// 				// setSelectLoading(false);
+							// 			});
+							// 		} catch (error) {
+							// 			// setSelectLoading(false);
+							// 			showToastError(error);
+							// 		}
+							// 	} else {
+							// 		setCustomInput(i);
+							// 		erc20OriginalList?.length > 0 &&
+							// 			setErc20List([...erc20OriginalList]);
+							// 	}
+							// }}
 							placeholder={
-								isGivingBlockProject
-									? 'Search name'
-									: 'Search name or paste an address'
+								// TODO disabling custom token to discuss later
+								// isGivingBlockProject
+								// 	? 'Search name'
+								// 	: 'Search name or paste an address'
+								'Search name'
 							}
 						/>
 					</DropdownContainer>
 					<InputBox
-						// onChange={a => {
-						//   setShowDonateModal(false)
-						//   setAmountTyped(a)
-						// }}}
 						value={amountTyped}
 						error={error}
 						setError={setError}
@@ -525,7 +524,6 @@ const AvText = styled(GLink)`
 `;
 const SearchContainer = styled.div`
 	display: flex;
-	flex-direction: row;
 	border: ${(props: IInputBox) =>
 		props.error === true
 			? `2px solid ${semanticColors.punch[500]}`
@@ -554,6 +552,7 @@ const SearchContainer = styled.div`
 const DropdownContainer = styled.div`
 	width: 35%;
 	height: 54px;
+	min-width: 140px;
 	${mediaQueries.mobileL} {
 		width: 50%;
 	}
