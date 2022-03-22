@@ -29,11 +29,11 @@ const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {
 
 const donationsPerPage = 10;
 
-const ProjectIndex = () => {
+const ProjectIndex = (props: { project?: IProject }) => {
 	const [activeTab, setActiveTab] = useState(0);
 	const [isActive, setIsActive] = useState<boolean>(true);
 	const [isDraft, setIsDraft] = useState<boolean>(false);
-	const [project, setProject] = useState<IProject>();
+	const [project, setProject] = useState<IProject | undefined>(props.project);
 	const [donations, setDonations] = useState<IDonation[]>([]);
 	const [totalDonations, setTotalDonations] = useState(0);
 	const [creationSuccessful, setCreationSuccessful] = useState(false);
@@ -91,10 +91,10 @@ const ProjectIndex = () => {
 	}, [id]);
 
 	useEffect(() => {
-		if (slug) {
+		if (slug && user?.id) {
 			fetchProject().then();
 		}
-	}, [slug]);
+	}, [slug, user?.id]);
 
 	useEffect(() => {
 		const windowResizeHandler = () => {
@@ -119,24 +119,23 @@ const ProjectIndex = () => {
 			/>
 		);
 	}
+
+	const metaDescription = project?.description?.slice(0, 100);
 	return (
 		<Wrapper>
 			<Head>
 				<title>{title && `${title} |`} Giveth</title>
 				<meta name='title' content={project?.title} />
-				<meta name='description' content={project?.description} />
+				<meta name='description' content={metaDescription} />
 				<meta property='og:type' content='website' />
 				<meta property='og:title' content={project?.title} />
-				<meta
-					property='og:description'
-					content={project?.description}
-				/>
+				<meta property='og:description' content={metaDescription} />
 				<meta property='og:image' content={project?.image} />
 				<meta property='twitter:card' content='summary_large_image' />
 				<meta property='twitter:title' content={project?.title} />
 				<meta
 					property='twitter:description'
-					content={project?.description}
+					content={metaDescription}
 				/>
 				<meta property='twitter:image' content={project?.image} />
 			</Head>
