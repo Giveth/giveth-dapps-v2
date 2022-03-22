@@ -144,124 +144,118 @@ const ProjectDonationTable = ({
 				/>
 			</UpperSection>
 			{activeTab === 0 && (
-				<DonationTableContainer>
-					<TableHeader
-						onClick={() =>
-							orderChangeHandler(EOrderBy.CreationDate)
-						}
-					>
-						<B>Donated at</B>
-						{injectSortIcon(order, EOrderBy.CreationDate)}
-					</TableHeader>
-					<TableHeader>
-						<B>Donor</B>
-					</TableHeader>
-					<TableHeader>
-						<B>Network</B>
-					</TableHeader>
-					{!isMobile && (
-						<>
-							<TableHeader>
-								<B>Currency</B>
-							</TableHeader>
-							<TableHeader
-								onClick={() =>
-									orderChangeHandler(EOrderBy.TokenAmount)
-								}
-							>
-								<B>Amount</B>
-								{injectSortIcon(order, EOrderBy.TokenAmount)}
-							</TableHeader>
-						</>
-					)}
-					<TableHeader
-						onClick={() => orderChangeHandler(EOrderBy.UsdAmount)}
-					>
-						<B>USD Value</B>
-						{injectSortIcon(order, EOrderBy.UsdAmount)}
-					</TableHeader>
-					{pageDonations.map((donation, idx) => (
-						<RowWrapper key={idx}>
-							<TableCell>
-								<P>
-									{smallFormatDate(
-										new Date(donation.createdAt),
-									)}
-								</P>
-							</TableCell>
-							<TableCell>
-								<P>
-									{donation?.anonymous
-										? 'Anonymous'
-										: donation.user?.name ||
-										  donation.user?.firstName}
-								</P>
-							</TableCell>
-							<TableCell>
-								<P>
-									{donation?.transactionNetworkId ===
-									config.XDAI_NETWORK_NUMBER ? (
-										<NetworkCell>
-											<Image
-												alt='Gnosis chain logo'
-												src='/images/currencies/gnosisChain/24.svg'
-												height={24}
-												width={24}
-											/>
-											<P>Gnosis</P>
-										</NetworkCell>
-									) : (
-										<NetworkCell>
-											<Image
-												alt='Ethereum chain logo'
-												src='/images/currencies/eth/24.svg'
-												height={24}
-												width={24}
-											/>
-											<P>Ethereum</P>
-										</NetworkCell>
-									)}
-								</P>
-							</TableCell>
-							{!isMobile && (
-								<>
-									<TableCell>
-										<CurrencyBadge>
-											{donation.currency}
-										</CurrencyBadge>
-									</TableCell>
-									<TableCell>
-										<P>{donation.amount}</P>
-										<TransactionLink
-											href={
-												networksParams[
-													donation
-														.transactionNetworkId
-												]
-													? `${
-															networksParams[
-																donation
-																	.transactionNetworkId
-															]
-																.blockExplorerUrls[0]
-													  }/tx/${
-															donation.transactionId
-													  }`
-													: ''
-											}
-											target='_blank'
-										>
-											<IconExternalLink size={16} />
-										</TransactionLink>
-									</TableCell>
-								</>
-							)}
-							<TableCell>
-								<P>{donation.valueUsd?.toFixed(2)}$</P>
-							</TableCell>
-						</RowWrapper>
-					))}
-				</DonationTableContainer>
+				<DonationTableWrapper>
+					<DonationTableContainer>
+						<TableHeader
+							onClick={() =>
+								orderChangeHandler(EOrderBy.CreationDate)
+							}
+						>
+							<B>Donated at</B>
+							{injectSortIcon(order, EOrderBy.CreationDate)}
+						</TableHeader>
+						<TableHeader>
+							<B>Donor</B>
+						</TableHeader>
+						<TableHeader>
+							<B>Network</B>
+						</TableHeader>
+						<TableHeader>
+							<B>Currency</B>
+						</TableHeader>
+						<TableHeader
+							onClick={() =>
+								orderChangeHandler(EOrderBy.TokenAmount)
+							}
+						>
+							<B>Amount</B>
+							{injectSortIcon(order, EOrderBy.TokenAmount)}
+						</TableHeader>
+						<TableHeader
+							onClick={() =>
+								orderChangeHandler(EOrderBy.UsdAmount)
+							}
+						>
+							<B>USD Value</B>
+							{injectSortIcon(order, EOrderBy.UsdAmount)}
+						</TableHeader>
+						{pageDonations.map((donation, idx) => (
+							<RowWrapper key={idx}>
+								<TableCell>
+									<P>
+										{smallFormatDate(
+											new Date(donation.createdAt),
+										)}
+									</P>
+								</TableCell>
+								<TableCell>
+									<P>
+										{donation?.anonymous
+											? 'Anonymous'
+											: donation.user?.name ||
+											  donation.user?.firstName}
+									</P>
+								</TableCell>
+								<TableCell>
+									<P>
+										{donation?.transactionNetworkId ===
+										config.XDAI_NETWORK_NUMBER ? (
+											<NetworkCell>
+												<Image
+													alt='Gnosis chain logo'
+													src='/images/currencies/gnosisChain/24.svg'
+													height={24}
+													width={24}
+												/>
+												<P>Gnosis</P>
+											</NetworkCell>
+										) : (
+											<NetworkCell>
+												<Image
+													alt='Ethereum chain logo'
+													src='/images/currencies/eth/24.svg'
+													height={24}
+													width={24}
+												/>
+												<P>Ethereum</P>
+											</NetworkCell>
+										)}
+									</P>
+								</TableCell>
+								<TableCell>
+									<CurrencyBadge>
+										{donation.currency}
+									</CurrencyBadge>
+								</TableCell>
+								<TableCell>
+									<P>{donation.amount}</P>
+									<TransactionLink
+										href={
+											networksParams[
+												donation.transactionNetworkId
+											]
+												? `${
+														networksParams[
+															donation
+																.transactionNetworkId
+														].blockExplorerUrls[0]
+												  }/tx/${
+														donation.transactionId
+												  }`
+												: ''
+										}
+										target='_blank'
+									>
+										<IconExternalLink size={16} />
+									</TransactionLink>
+								</TableCell>
+								<TableCell>
+									<P>{donation.valueUsd?.toFixed(2)}$</P>
+								</TableCell>
+							</RowWrapper>
+						))}
+					</DonationTableContainer>
+				</DonationTableWrapper>
 			)}
 			<Pagination
 				currentPage={page}
@@ -307,15 +301,18 @@ const Tab = styled(H6)`
 	}
 `;
 
+const DonationTableWrapper = styled.div`
+	display: block;
+	overflow-x: scroll;
+	max-width: calc(100vw - 32px);
+`;
+
 const DonationTableContainer = styled.div`
 	margin-top: 12px;
 	display: grid;
-	grid-template-columns: 1.5fr 2fr 1fr;
 	width: 100%;
-
-	${mediaQueries.mobileL} {
-		grid-template-columns: 1.25fr 2fr 1.25fr 1fr 1fr 1fr;
-	}
+	grid-template-columns: 1.25fr 2fr 1.25fr 1fr 1fr 1fr;
+	min-width: 800px;
 `;
 
 const TableHeader = styled(Flex)`
