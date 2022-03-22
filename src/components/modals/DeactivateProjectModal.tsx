@@ -13,6 +13,7 @@ import {
 } from '@giveth/ui-design-system';
 import { client } from '@/apollo/apolloClient';
 import { useRouter } from 'next/router';
+import { AnimatePresence, motion } from 'framer-motion';
 
 import {
 	DEACTIVATE_PROJECT,
@@ -67,6 +68,7 @@ const DeactivateProjectModal = ({
 			label: elem.description,
 			value: elem.id,
 		}));
+		console.log(fetchedReasons);
 		setReasons(fetchedReasons);
 	};
 
@@ -269,15 +271,37 @@ const WhyContent = ({
 					onChange={e => handleSelect(e)}
 					isMobile={false}
 				/>
-				<GLink>Or write your own reason:</GLink>
-				<InputBox
-					placeholder="I'm deactivating because..."
-					rows={5}
-					value={textInput}
-					onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-						handleChange(e)
-					}
-				/>
+				<AnimatePresence>
+					{String(selectedOption?.value) === '5' && (
+						<motion.div
+							initial={{
+								height: 0,
+								opacity: 0,
+							}}
+							animate={{
+								height: 'auto',
+								opacity: 1,
+							}}
+							exit={{
+								height: 0,
+								opacity: 0,
+							}}
+							transition={{
+								duration: 1,
+							}}
+						>
+							<GLink>Or write your own reason:</GLink>
+							<InputBox
+								placeholder="I'm deactivating because..."
+								rows={5}
+								value={textInput}
+								onChange={(
+									e: React.ChangeEvent<HTMLTextAreaElement>,
+								) => handleChange(e)}
+							/>
+						</motion.div>
+					)}
+				</AnimatePresence>
 			</>
 		)}
 	</>
@@ -325,7 +349,7 @@ const selectCustomStyles: StylesConfig = {
 	}),
 };
 
-const InputBox = styled.textarea`
+const InputBox = styled(motion.textarea)`
 	display: block;
 	width: 100%;
 	resize: none;
@@ -355,8 +379,7 @@ const DoneContent = ({ show }: IDonoContent) => {
 	return show ? (
 		<>
 			<Lead>
-				Your project was successfully deactivated. Please, consider
-				donating the fund that you received to another project on
+				Your project was successfully deactivated. Thank you for using
 				Giveth.
 			</Lead>
 			<RedirectLink onClick={() => router.push(Routes.Projects)}>
