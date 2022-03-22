@@ -374,3 +374,17 @@ export const TITLE_IS_VALID = gql`
 		isValidTitleForProject(title: $title, projectId: $projectId)
 	}
 `;
+
+export const PROJECT_ACCEPTED_TOKENS = gql`
+	query GetProjectAcceptTokens($projectId: Float!) {
+		getProjectAcceptTokens(projectId: $projectId) {
+			id
+			symbol
+			networkId
+			address
+			name
+			decimals
+			mainnetAddress
+		}
+	}
+`;
