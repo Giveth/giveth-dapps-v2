@@ -384,6 +384,7 @@ export const PROJECT_ACCEPTED_TOKENS = gql`
 			address
 			name
 			decimals
+			mainnetAddress
 		}
 	}
 `;

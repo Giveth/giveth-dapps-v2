@@ -52,7 +52,6 @@ import {
 	prepareTokenList,
 } from '@/components/views/donate/helpers';
 
-const xdaiExcluded = config.XDAI_EXCLUDED_COINS;
 const ethereumChain = config.PRIMARY_NETWORK;
 const xdaiChain = config.SECONDARY_NETWORK;
 const stableCoins = [xdaiChain.mainToken, 'DAI', 'USDT'];
@@ -162,18 +161,17 @@ const CryptoDonation = (props: {
 			} else if (selectedToken?.symbol === ethereumChain.mainToken) {
 				mainTokenPrice && setTokenPrice(mainTokenPrice);
 			} else if (selectedToken?.address) {
-				let chain = 'ethereum';
 				let tokenAddress = selectedToken.address;
-				if (isXdai) {
-					// coingecko doesn't have these tokens in xdai, so fetching price from ethereum
-					if (xdaiExcluded.includes(selectedToken.symbol!)) {
-						tokenAddress = selectedToken.mainnetAddress || '';
-					} else {
-						chain = xdaiChain.name.toLowerCase();
-					}
+				// coingecko doesn't have these tokens in xdai, so fetching price from ethereum
+				if (isXdai && selectedToken.mainnetAddress) {
+					tokenAddress = selectedToken.mainnetAddress || '';
 				}
+				const coingeckoChainId =
+					!isXdai || selectedToken.mainnetAddress
+						? ethereumChain.id
+						: xdaiChain.id;
 				const fetchedPrice = await fetchPrice(
-					chain,
+					coingeckoChainId,
 					tokenAddress,
 					setTokenPrice,
 				);
