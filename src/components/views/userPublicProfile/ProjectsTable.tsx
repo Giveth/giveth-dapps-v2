@@ -57,12 +57,10 @@ const ProjectsTable: FC<IProjectsTable> = ({
 	const router = useRouter();
 
 	const setupBadge = (status: IStatus, listed?: boolean | null) => {
-		console.log(projects);
 		const Bull = () => <BulletPoint>&bull;</BulletPoint>;
 		let color,
 			title = '';
 
-		console.log(listed);
 		if (listed) {
 			color = semanticColors.jade;
 			title = 'Listed';
