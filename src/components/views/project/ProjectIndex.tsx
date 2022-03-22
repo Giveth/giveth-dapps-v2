@@ -123,7 +123,24 @@ const ProjectIndex = () => {
 		<Wrapper>
 			<Head>
 				<title>{title && `${title} |`} Giveth</title>
+				<meta name='title' content={project?.title} />
+				<meta name='description' content={project?.description} />
+				<meta property='og:type' content='website' />
+				<meta property='og:title' content={project?.title} />
+				<meta
+					property='og:description'
+					content={project?.description}
+				/>
+				<meta property='og:image' content={project?.image} />
+				<meta property='twitter:card' content='summary_large_image' />
+				<meta property='twitter:title' content={project?.title} />
+				<meta
+					property='twitter:description'
+					content={project?.description}
+				/>
+				<meta property='twitter:image' content={project?.image} />
 			</Head>
+
 			<ProjectHeader project={project} />
 			{isDraft && (
 				<DraftIndicator>
