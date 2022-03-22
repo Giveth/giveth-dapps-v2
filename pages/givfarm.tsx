@@ -1,7 +1,9 @@
-import GIVfarmView from '@/components/views/Farm.view';
-import { useGeneral, ETheme } from '@/context/general.context';
 import Head from 'next/head';
 import { useEffect } from 'react';
+
+import GIVfarmView from '@/components/views/Farm.view';
+import { useGeneral, ETheme } from '@/context/general.context';
+import { GiveconomyMeta } from '@/lib/meta';
 
 export default function GIVfarmRoute() {
 	const { setTheme } = useGeneral();
@@ -16,6 +18,7 @@ export default function GIVfarmRoute() {
 		<>
 			<Head>
 				<title>GIVfarm</title>
+				<GiveconomyMeta />
 			</Head>
 			<GIVfarmView />
 		</>
