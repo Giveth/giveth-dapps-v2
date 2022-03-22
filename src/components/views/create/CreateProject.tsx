@@ -394,7 +394,7 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 									disabled={isLoading || publish}
 									onClick={() => onSubmit(false)}
 								/>
-								<Link href={`/project/${project.slug!}`}>
+								<Link href={`/project/${project?.slug!}`}>
 									<OulineButton
 										label='CANCEL'
 										buttonType='primary'
