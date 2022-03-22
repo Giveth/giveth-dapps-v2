@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import styled from 'styled-components';
 import {
 	B,
@@ -21,6 +22,7 @@ import Pagination from '@/components/Pagination';
 import { networksParams } from '@/helpers/blockchain';
 import { smallFormatDate } from '@/lib/helpers';
 import { mediaQueries } from '@/utils/constants';
+import config from '@/configuration';
 
 const itemPerPage = 10;
 
@@ -154,6 +156,9 @@ const ProjectDonationTable = ({
 					<TableHeader>
 						<B>Donor</B>
 					</TableHeader>
+					<TableHeader>
+						<B>Network</B>
+					</TableHeader>
 					{!isMobile && (
 						<>
 							<TableHeader>
@@ -190,6 +195,32 @@ const ProjectDonationTable = ({
 										? 'Anonymous'
 										: donation.user?.name ||
 										  donation.user?.firstName}
+								</P>
+							</TableCell>
+							<TableCell>
+								<P>
+									{donation?.transactionNetworkId ===
+									config.XDAI_NETWORK_NUMBER ? (
+										<NetworkCell>
+											<Image
+												alt='Gnosis chain logo'
+												src='/images/currencies/gnosisChain/24.svg'
+												height={24}
+												width={24}
+											/>
+											<P>Gnosis</P>
+										</NetworkCell>
+									) : (
+										<NetworkCell>
+											<Image
+												alt='Ethereum chain logo'
+												src='/images/currencies/eth/24.svg'
+												height={24}
+												width={24}
+											/>
+											<P>Ethereum</P>
+										</NetworkCell>
+									)}
 								</P>
 							</TableCell>
 							{!isMobile && (
@@ -283,7 +314,7 @@ const DonationTableContainer = styled.div`
 	width: 100%;
 
 	${mediaQueries.mobileL} {
-		grid-template-columns: 1.25fr 2fr 1fr 1fr 1fr;
+		grid-template-columns: 1.25fr 2fr 1.25fr 1fr 1fr 1fr;
 	}
 `;
 
@@ -326,6 +357,11 @@ const CurrencyBadge = styled(SublineBold)`
 const TransactionLink = styled.a`
 	cursor: pointer;
 	color: ${brandColors.pinky[500]};
+`;
+
+const NetworkCell = styled.div`
+	display: flex;
+	gap: 8px;
 `;
 
 export default ProjectDonationTable;
