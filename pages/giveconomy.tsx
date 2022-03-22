@@ -1,7 +1,9 @@
 import Head from 'next/head';
+import { useEffect } from 'react';
+
 import HomeView from '@/components/views/Home.view';
 import { ETheme, useGeneral } from '@/context/general.context';
-import { useEffect } from 'react';
+import { GiveconomyMeta } from '@/lib/meta';
 
 export default function GIVeconomyRoute() {
 	const { setTheme } = useGeneral();
@@ -17,6 +19,7 @@ export default function GIVeconomyRoute() {
 		<>
 			<Head>
 				<title>GIVeconomy</title>
+				<GiveconomyMeta />
 			</Head>
 			<HomeView />
 		</>
