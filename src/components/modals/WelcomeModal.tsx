@@ -49,7 +49,7 @@ const WelcomeModal = ({ showModal, closeModal }: ISignInModal) => {
 					<ContentContainer>
 						<H3>Sign in to Giveth</H3>
 						<ContentSubtitle>
-							Please Sign in to your account and start using
+							Please sign in to your account and start using
 							Giveth.
 						</ContentSubtitle>
 						<IconContentContainer>
@@ -116,6 +116,7 @@ const ContentContainer = styled.div`
 	align-items: center;
 	align-self: center;
 	margin: auto;
+	padding: 10px;
 
 	${mediaQueries.laptop} {
 		width: 45%;
@@ -153,6 +154,8 @@ const EthIconContainer = styled(IconsContainer)`
 
 const SocialContentContainer = styled.div`
 	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
 	justify-content: space-between;
 	margin-bottom: 24px;
 `;

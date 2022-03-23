@@ -46,6 +46,7 @@ const HomeRoute = (props: IHomeRoute) => {
 			setTotalCount(totalCount);
 		});
 	}, [user]);
+
 	return (
 		<>
 			<Head>
