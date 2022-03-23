@@ -237,6 +237,8 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 		}
 	};
 
+	const streamName = regenStreamConfig ? 'RegenStream ' : 'GIVstream ';
+
 	const calcUSD = (amount: string) => {
 		const price = tokenPrice || givPrice;
 		return price.isNaN() ? '0' : price.times(amount).toFixed(2);
@@ -302,7 +304,8 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 										/>
 										<HelpRow alignItems='center'>
 											<Caption>
-												Added to your GIVstream flowrate
+												Added to your {streamName}
+												flowrate
 											</Caption>
 											<IconWithTooltip
 												icon={
@@ -317,7 +320,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 												direction={'top'}
 											>
 												<TooltipContent>
-													Increase you GIVstream
+													Increase you {streamName}
 													flowrate when you claim
 													liquid rewards!
 												</TooltipContent>
@@ -352,7 +355,8 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 										/>
 										<HelpRow alignItems='center'>
 											<Caption>
-												Added to your GIVstream flowrate
+												Added to your {streamName}
+												flowrate
 											</Caption>
 											<IconWithTooltip
 												icon={
@@ -367,7 +371,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 												direction={'top'}
 											>
 												<TooltipContent>
-													Increase you GIVstream
+													Increase you {streamName}
 													flowrate when you claim
 													liquid rewards!
 												</TooltipContent>
@@ -402,7 +406,8 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 										/>
 										<HelpRow alignItems='center'>
 											<Caption>
-												Your initial GIVstream flowrate
+												Your initial {streamName}
+												flowrate
 											</Caption>
 										</HelpRow>
 										<RateRow alignItems='center'>
@@ -417,7 +422,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 								{!claimableNow.isZero() && (
 									<>
 										<HelpRow alignItems='center'>
-											<B>Claimable from GIVstream</B>
+											<B>Claimable from {streamName}</B>
 										</HelpRow>
 										<AmountBoxWithPrice
 											amount={claimableNow.sub(
