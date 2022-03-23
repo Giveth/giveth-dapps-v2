@@ -20,7 +20,7 @@ import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { IconEthereum } from './Icons/Eth';
 import { IconGnosisChain } from './Icons/GnosisChain';
-import { WhatisGIVstreamModal } from '@/components/modals/WhatisGIVstream';
+import { WhatisStreamModal } from '@/components/modals/WhatisStream';
 import { WrongNetworkInnerModal } from './modals/WrongNetwork';
 import { usePrice } from '@/context/price.context';
 interface IRewardCardProps {
@@ -138,7 +138,7 @@ export const RewardCard: FC<IRewardCardProps> = ({
 				)}
 			</RewadCardContainer>
 			{showWhatIsGIVstreamModal && (
-				<WhatisGIVstreamModal
+				<WhatisStreamModal
 					showModal={showWhatIsGIVstreamModal}
 					setShowModal={setShowWhatIsGIVstreamModal}
 				/>
