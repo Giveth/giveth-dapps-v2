@@ -15,7 +15,6 @@ import { IModal, Modal } from './Modal';
 import { Flex } from '../styled-components/Flex';
 import { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 import { useTokenDistro } from '@/context/tokenDistro.context';
-import { WhatisGIVstreamModal } from './WhatisGIVstream';
 import Routes from '@/lib/constants/Routes';
 
 interface IAPRModalProps extends IModal {
@@ -29,8 +28,6 @@ export const APRModal: FC<IAPRModalProps> = ({
 	setShowModal,
 	regenStreamConfig,
 }) => {
-	const [showWhatIsGIVstreamModal, setShowWhatIsGIVstreamModal] =
-		useState(false);
 	const { getTokenDistroHelper } = useTokenDistro();
 	const { rewardTokenSymbol = 'GIV', type } = regenStreamConfig || {};
 	const tokenDistroHelper = useMemo(
@@ -89,12 +86,6 @@ export const APRModal: FC<IAPRModalProps> = ({
 					</DescContainer>
 				</APRModalContainer>
 			</Modal>
-			{showWhatIsGIVstreamModal && (
-				<WhatisGIVstreamModal
-					showModal={showWhatIsGIVstreamModal}
-					setShowModal={setShowWhatIsGIVstreamModal}
-				/>
-			)}
 		</>
 	);
 };
