@@ -159,7 +159,6 @@ const config: EnvConfig = {
 				rewardTokenSymbol: 'FOX',
 				tokenAddressOnUniswapV2:
 					'0x21a42669643f45Bc0e086b8Fc2ed70c23D67509d',
-				regenStreamEndDate: 1746306818206,
 			},
 		],
 		regenFarms: [
