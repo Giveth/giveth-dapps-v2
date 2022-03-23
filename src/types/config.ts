@@ -76,6 +76,7 @@ export interface RegenStreamConfig {
 	rewardTokenSymbol: string;
 	// For price purpose
 	tokenAddressOnUniswapV2: string;
+	regenStreamEndDate: number;
 }
 
 export interface BasicNetworkConfig {
