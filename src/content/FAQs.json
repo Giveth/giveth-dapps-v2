@@ -61,7 +61,7 @@
 	},
 	{
 		"question": "What is Blockchain?",
-		"answer": "Simply, it is a secure form of digital cash that can be transferred anywhere in the world peer-to-peer, similar to email's (where the emails server is replaced with a decentralized network). \n More technically, Bitcoin is a type of digital currency that uses cryptography and open source software to regulate the generation of units of currency and verify the transfer of funds, operating independently of a central bank. There is a distinction between Bitcoin the digital currency and Blockchain the technology, which has many additional potential use cases beyond the currency."
+		"answer": "In simple terms, a blockchain is a method of storing and transferring information. It can be considered a kind of database that is not stored in a single computer. Instead, many identical copies are distributed in several computers called nodes. Information on a blockchain is stored in a continuous chain of blocks with each block containing essential information (for example, transactions) and the cryptographic hash of the previous block. To change the information in any block, you have to make changes to all subsequent blocks. The content of the blocks is verified by the consensus of all nodes in the network. These two features makes it very difficult to alter any information already included in the blocks, and this difficulty increases with the number of nodes in the network."
 	},
 	{
 		"question": "What is Ethereum?",
