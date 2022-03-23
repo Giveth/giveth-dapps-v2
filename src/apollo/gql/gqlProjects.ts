@@ -145,6 +145,7 @@ export const FETCH_PROJECT_BY_ID = gql`
 			status {
 				name
 			}
+			slug
 		}
 	}
 `;
@@ -372,5 +373,19 @@ export const ACTIVATE_PROJECT = gql`
 export const TITLE_IS_VALID = gql`
 	query IsValidTitleForProject($title: String!, $projectId: Float) {
 		isValidTitleForProject(title: $title, projectId: $projectId)
+	}
+`;
+
+export const PROJECT_ACCEPTED_TOKENS = gql`
+	query GetProjectAcceptTokens($projectId: Float!) {
+		getProjectAcceptTokens(projectId: $projectId) {
+			id
+			symbol
+			networkId
+			address
+			name
+			decimals
+			mainnetAddress
+		}
 	}
 `;

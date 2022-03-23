@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import {
 	brandColors,
 	Button,
@@ -97,6 +98,8 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 		[ECreateErrFields.WALLET_ADDRESS]: '',
 	});
 
+	const [publish, setPublish] = useState<boolean>(true);
+
 	const {
 		state: { user },
 	} = useUser();
@@ -104,6 +107,32 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 	const debouncedTitleValidation = useRef<any>();
 	const debouncedAddressValidation = useRef<any>();
 	const debouncedDescriptionValidation = useRef<any>();
+
+	useEffect(() => {
+		console.log(project);
+		if (!project) return;
+		let imageComparator = image === '' ? null : image;
+		if (
+			name !== project.title ||
+			description !== project.description ||
+			JSON.stringify(categories) !== JSON.stringify(project.categories) ||
+			imageComparator !== project.image ||
+			walletAddress !== project.walletAddress ||
+			impactLocation !== project.impactLocation
+		) {
+			setPublish(false);
+		} else {
+			setPublish(true);
+		}
+	}, [
+		project,
+		name,
+		description,
+		categories,
+		image,
+		walletAddress,
+		impactLocation,
+	]);
 
 	useEffect(() => {
 		if (!isEditMode) {
@@ -362,9 +391,15 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 								<Button
 									label='PUBLISH'
 									buttonType='primary'
-									disabled={isLoading}
+									disabled={isLoading || publish}
 									onClick={() => onSubmit(false)}
 								/>
+								<Link href={`/project/${project?.slug!}`}>
+									<OulineButton
+										label='CANCEL'
+										buttonType='primary'
+									/>
+								</Link>
 							</Buttons>
 						</div>
 					</CreateContainer>

@@ -172,11 +172,7 @@ const ProjectsIndex = (props: IProjectBySlug) => {
 					<SlideBtn />
 					{!hideMobileCard && (
 						<MobileCardContainer>
-							<ProjectCard
-								key={project.id}
-								project={project}
-								noHearts={true}
-							/>
+							<ProjectCard project={project} noHearts={true} />
 							<SocialBox project={project} />
 						</MobileCardContainer>
 					)}
@@ -185,11 +181,7 @@ const ProjectsIndex = (props: IProjectBySlug) => {
 		} else {
 			return (
 				<Left>
-					<ProjectCard
-						key={project.id}
-						project={project}
-						noHearts={true}
-					/>
+					<ProjectCard project={project} noHearts={true} />
 				</Left>
 			);
 		}
@@ -244,33 +236,29 @@ const Wrapper = styled.div`
 
 const Sections = styled.div`
 	height: 100%;
-	${mediaQueries['tablet']} {
+	${mediaQueries.tablet} {
 		display: grid;
 		grid-template-columns: repeat(2, minmax(500px, 1fr));
 		grid-auto-rows: minmax(100px, auto);
 	}
-	${mediaQueries['mobileL']} {
+	${mediaQueries.mobileL} {
 		grid-template-columns: repeat(2, minmax(100px, 1fr));
 		padding: 0 40px;
 	}
 `;
 
 const Left = styled.div`
-	display: grid;
+	z-index: 1;
 	justify-content: center;
 	align-items: center;
-	grid-auto-flow: column;
-	z-index: 1;
-	grid-column: 1 / 2;
-	grid-row: 1;
 	background: ${neutralColors.gray[200]};
 	box-shadow: ${Shadow.Neutral[400]};
-	padding: 29px 0;
+	padding: 29px;
 	border-top-left-radius: 16px;
 	border-bottom-left-radius: 16px;
-	${mediaQueries['mobileL']} {
+	${mediaQueries.mobileL} {
 		align-items: flex-start;
-		div:first-child {
+		> div:first-child {
 			padding: 0 1%;
 		}
 	}
@@ -278,14 +266,13 @@ const Left = styled.div`
 
 const Right = styled.div`
 	z-index: 1;
-	grid-row: 1;
 	background: white;
 	text-align: left;
 	padding: 65px 32px 32px;
 	border-top-right-radius: 16px;
 	border-bottom-right-radius: 16px;
 	min-height: 620px;
-	h4 {
+	> h4 {
 		color: ${brandColors.deep[700]};
 		font-weight: bold;
 	}
@@ -306,15 +293,6 @@ const RadioBox = styled.div`
 	justify-content: space-between;
 	margin-top: 29px;
 	flex-wrap: wrap;
-	${mediaQueries['mobileL']} {
-		flex-direction: column;
-	}
-	${mediaQueries['mobileM']} {
-		flex-direction: column;
-	}
-	${mediaQueries['mobileS']} {
-		flex-direction: column;
-	}
 	${mediaQueries['tablet']} {
 		flex-direction: row;
 	}
@@ -393,7 +371,7 @@ const GivBackContainer = styled.div`
 		font-weight: bold;
 		margin: 0 0 8px 0;
 	}
-	${mediaQueries['mobileS']} {
+	${mediaQueries.mobileS} {
 		width: 100%;
 	}
 `;

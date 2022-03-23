@@ -10,13 +10,3 @@ export const gqlEnums = {
 	DESC: 'DESC',
 	ASC: 'ASC',
 };
-
-export const FETCH_LISTED_TOKENS = gql`
-	query FetchListedTokens {
-		tokens {
-			name
-			symbol
-			chainId
-		}
-	}
-`;

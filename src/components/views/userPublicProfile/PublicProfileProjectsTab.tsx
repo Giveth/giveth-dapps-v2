@@ -77,6 +77,7 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({
 		};
 		fetchUserProjects();
 	}, [user, page, order.by, order.direction]);
+
 	return (
 		<ProjectsTab>
 			<ProjectsContainer>
