@@ -39,3 +39,19 @@ export interface IUserLikedProjects {
 	projects: IProject[];
 	totalCount: number;
 }
+
+export interface IProjectAcceptedTokensGQL {
+	data: {
+		getProjectAcceptTokens: IProjectAcceptedToken[];
+	};
+}
+
+export interface IProjectAcceptedToken {
+	id?: string;
+	symbol: string;
+	networkId: number;
+	address: string;
+	mainnetAddress?: string;
+	name: string;
+	decimals: number;
+}

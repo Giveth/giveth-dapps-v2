@@ -2,9 +2,7 @@
 // import { GET_PROJECT_BY_ADDRESS } from '../apollo/gql/projects'
 // import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
 import React from 'react';
-import ERC20List from './erc20TokenList';
 import { networkInfo } from '@/lib/constants/NetworksObj';
-import { deviceSize } from '@/utils/constants';
 import config from '@/configuration';
 
 const xDaiChainId = 100;
@@ -35,25 +33,6 @@ export function checkNetwork(networkId: number) {
 	const isXdai = networkId === xDaiChainId;
 	return networkId === appNetworkId || isXdai;
 }
-
-export function base64ToBlob(base64: any) {
-	const binaryString = window.atob(base64);
-	const len = binaryString.length;
-	const bytes = new Uint8Array(len);
-	for (let i = 0; i < len; ++i) {
-		bytes[i] = binaryString.charCodeAt(i);
-	}
-
-	return new Blob([bytes], { type: 'application/pdf' });
-}
-
-export const toBase64 = (file: any) =>
-	new Promise((resolve, reject) => {
-		const reader = new FileReader();
-		reader.readAsDataURL(file);
-		reader.onload = () => resolve(reader.result);
-		reader.onerror = error => reject(error);
-	});
 
 export const getImageFile = async (base64Data: any, projectName: any) => {
 	const imageFile = await fetch(base64Data)
@@ -117,29 +96,6 @@ export const getImageFile = async (base64Data: any, projectName: any) => {
 //     console.log({ error })
 //   }
 // }
-
-export const getERC20List = ERC20List;
-
-export async function checkIfURLisValid(checkUrl: string) {
-	let url = checkUrl;
-	if (!/^(?:f|ht)tps?:\/\//.test(checkUrl)) {
-		url = 'https://' + url;
-	}
-	const pattern = new RegExp(
-		'^(https?:\\/\\/)?' + // protocol
-			'((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
-			'((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-			'(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-			'(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-			'(\\#[-a-z\\d_]*)?$',
-		'i',
-	);
-	return !!pattern.test(url);
-}
-
-export interface IPrefixes {
-	[networkID: number]: string;
-}
 
 export function formatEtherscanLink(type: any, data: any) {
 	switch (type) {

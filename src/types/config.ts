@@ -24,7 +24,6 @@ export type PoolStakingConfig =
 	| SimplePoolStakingConfig
 	| BalancerPoolStakingConfig
 	| UniswapV3PoolStakingConfig
-	| UniswapV3PoolStakingConfig
 	| RegenPoolStakingConfig;
 
 export interface SimplePoolStakingConfig extends BasicStakingConfig {
@@ -130,7 +129,6 @@ export interface GlobalConfig extends EnvConfig {
 	TOKEN_PRECISION: number;
 	PRIMARY_NETWORK: any;
 	SECONDARY_NETWORK: any;
-	XDAI_EXCLUDED_COINS: any;
 	NETWORKS_CONFIG: {
 		[key: number]: MainnetNetworkConfig | XDaiNetworkConfig;
 	};

@@ -38,6 +38,7 @@ const StakingCardIntro: FC<IStakingCardIntro> = ({
 				label='LEARN MORE'
 				href={regenFarmIntro?.link}
 				linkType='texty'
+				target='_blank'
 				icon={
 					<IconExternalLink size={16} color={brandColors.deep[100]} />
 				}

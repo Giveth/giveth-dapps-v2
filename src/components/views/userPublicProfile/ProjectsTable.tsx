@@ -56,7 +56,7 @@ const ProjectsTable: FC<IProjectsTable> = ({
 }) => {
 	const router = useRouter();
 
-	const setupBadge = (status: IStatus, listed?: boolean) => {
+	const setupBadge = (status: IStatus, listed?: boolean | null) => {
 		const Bull = () => <BulletPoint>&bull;</BulletPoint>;
 		let color,
 			title = '';
@@ -64,6 +64,9 @@ const ProjectsTable: FC<IProjectsTable> = ({
 		if (listed) {
 			color = semanticColors.jade;
 			title = 'Listed';
+		} else if (listed === null) {
+			color = semanticColors.blueSky;
+			title = 'Waiting for review';
 		} else {
 			color = semanticColors.golden;
 			title = 'Not Listed';
@@ -172,7 +175,7 @@ const ProjectsTable: FC<IProjectsTable> = ({
 							</B>
 						</TableCell>
 						<TableCell>
-							{setupBadge(project.status, !!project.listed)}
+							{setupBadge(project.status, project.listed)}
 						</TableCell>
 						<TableCell>
 							<Actions>
@@ -207,7 +210,7 @@ const ProjectsTable: FC<IProjectsTable> = ({
 
 const ProjectTablecontainer = styled.div`
 	display: grid;
-	grid-template-columns: 1.5fr 1fr 4fr 1.1fr 2fr 1.5fr 1fr;
+	grid-template-columns: 1.5fr 1fr 4fr 1.1fr 2fr 1.75fr 1fr;
 	overflow: auto;
 	${mediaQueries.laptop} {
 		min-width: 1133px;

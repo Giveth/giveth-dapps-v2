@@ -92,10 +92,10 @@ export const UserProvider = (props: { children: ReactNode }) => {
 	}, [library]);
 
 	useEffect(() => {
-		if (!!account && !!library) {
+		if (account && library) {
 			getBalance();
 		}
-	}, [account, user, library, chainId]);
+	}, [account, library, chainId]);
 
 	const fetchUser = () => {
 		return apolloClient

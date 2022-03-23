@@ -30,6 +30,7 @@ const links: any = {
 	TRACE: 'https://trace.giveth.io/',
 	COMMONS_STACK: 'https://commonsstack.org/',
 	RECRUITEE: 'https://giveth.recruitee.com/',
+	JOINGIVFRENS: 'https://giveth.typeform.com/regenfarms',
 };
 
 if (!isProduction) {
