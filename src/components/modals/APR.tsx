@@ -37,6 +37,7 @@ export const APRModal: FC<IAPRModalProps> = ({
 		() => getTokenDistroHelper(type),
 		[getTokenDistroHelper, type],
 	);
+	const streamName = regenStreamConfig ? 'RegenStream' : 'GIVstream';
 
 	return (
 		<>
@@ -74,7 +75,7 @@ export const APRModal: FC<IAPRModalProps> = ({
 							{tokenDistroHelper.GlobalReleasePercentage}%
 						</Desc>
 						<Desc>
-							Increasing your GIVstream:{' '}
+							Increasing your {streamName}:{' '}
 							{100 - tokenDistroHelper.GlobalReleasePercentage}%
 						</Desc>
 						<Whatis>
