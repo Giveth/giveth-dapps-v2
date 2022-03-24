@@ -60,7 +60,7 @@ import { useFarms } from '@/context/farm.context';
 import { constants } from 'ethers';
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import BigNumber from 'bignumber.js';
-import { WhatisGIVstreamModal } from '../modals/WhatisGIVstream';
+import { WhatisStreamModal } from '../modals/WhatisStream';
 import { IconSushiswap } from '../Icons/Sushiswap';
 import { useWeb3React } from '@web3-react/core';
 import { UniV3APRModal } from '../modals/UNIv3APR';
@@ -128,7 +128,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const isV3Staking = type === StakingType.UNISWAP;
 
 	const { apr, earned, stakedLpAmount, userNotStakedAmount } = stakeInfo;
-	const { minimumApr, maxApr } = useLiquidityPositions();
 
 	const regenStreamConfig = useMemo(() => {
 		if (!regenStreamType) return undefined;
@@ -470,9 +469,10 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				/>
 			)}
 			{showWhatIsGIVstreamModal && (
-				<WhatisGIVstreamModal
+				<WhatisStreamModal
 					showModal={showWhatIsGIVstreamModal}
 					setShowModal={setShowWhatIsGIVstreamModal}
+					regenStreamConfig={regenStreamConfig}
 				/>
 			)}
 		</>

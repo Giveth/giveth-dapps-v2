@@ -82,13 +82,6 @@ const WalletModal = ({
 	);
 };
 
-const CloseButton = styled.div`
-	position: absolute;
-	right: 24px;
-	top: 24px;
-	cursor: pointer;
-`;
-
 const IconsContainer = styled.div`
 	padding: 18px 20px 50px;
 	display: grid;
