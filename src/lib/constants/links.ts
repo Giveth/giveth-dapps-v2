@@ -7,7 +7,7 @@ const DOCS = 'https://docs.giveth.io/';
 
 const links: any = {
 	BACKEND: config.BACKEND_LINK,
-	FRONTEND: 'https://giveth-dapps-v2.vercel.app/',
+	FRONTEND: 'https://giveth.io/',
 	REPORT_ISSUE: 'https://github.com/Giveth/giveth-dapps-v2/issues/new',
 	ASK_QUESTION: 'https://giveth.typeform.com/question',
 	FEATURE_REQUEST: 'https://giveth.typeform.com/featurerequest',
@@ -36,7 +36,6 @@ const links: any = {
 if (!isProduction) {
 	links.SUPPORT_US = Routes.Donate + '/giveth-2021:-retreat-to-the-future';
 } else {
-	links.FRONTEND = 'https://giveth.io/';
 	links.SUPPORT_US = Routes.Donate + '/the-giveth-community-of-makers';
 }
 
