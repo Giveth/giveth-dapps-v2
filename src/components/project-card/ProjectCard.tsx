@@ -74,12 +74,18 @@ const ProjectCard = (props: IProjectCard) => {
 			</ImagePlaceholder>
 			<CardBody isHover={isHover}>
 				<Title weight={700}>{title}</Title>
-				<Link
-					href={`${Routes.User}/${adminUser?.walletAddress}`}
-					passHref
-				>
-					<Author size='Big'>{name || '\u200C'}</Author>
-				</Link>
+				{!!adminUser && !!!givingBlocksId ? (
+					<Link
+						href={`${Routes.User}/${adminUser?.walletAddress}`}
+						passHref
+					>
+						<Author size='Big'>{name || '\u200C'}</Author>
+					</Link>
+				) : (
+					<Author size='Big'>
+						<br />
+					</Author>
+				)}
 				<Description>{htmlToText(description)}</Description>
 				<Captions>
 					<Caption>
@@ -150,7 +156,6 @@ const CardBody = styled.div`
 const Author = styled(GLink)`
 	color: ${brandColors.pinky[500]};
 	margin-bottom: 16px;
-	cursor: pointer;
 	display: block;
 `;
 

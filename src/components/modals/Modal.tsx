@@ -38,16 +38,25 @@ export const Modal: React.FC<IModal> = ({
 		const modalRoot = document.querySelector('body') as HTMLElement;
 		modalRoot.style.overflowY = 'hidden';
 		if (modalRoot) {
+			modalRoot.addEventListener('keydown', handleKeyDown);
 			modalRoot.appendChild(current);
 		}
 		return () => {
+			modalRoot.removeEventListener('keydown', handleKeyDown);
 			modalRoot.style.overflowY = 'unset';
 			modalRoot!.removeChild(current);
 		};
 	}, []);
 
+	const handleKeyDown = (e: KeyboardEvent) => {
+		if (e.key === 'Escape') {
+			setShowModal(false);
+		}
+	};
+
 	return createPortal(
 		<Background>
+			<Surrounding onClick={() => setShowModal(false)} />
 			<ModalWrapper theme={customTheme || theme}>
 				<ModalHeader
 					hiddenClose={hiddenClose}
@@ -56,18 +65,27 @@ export const Modal: React.FC<IModal> = ({
 					closeModal={() => setShowModal(false)}
 					position={headerTitlePosition}
 				/>
-				<StyledScrollbars
+				<Scrollbars
 					autoHeight
 					autoHeightMin={'calc(20Vh - 60px)'}
 					autoHeightMax={'calc(80Vh - 60px)'}
+					renderTrackHorizontal={props => (
+						<div {...props} style={{ display: 'none' }} />
+					)}
 				>
 					{children}
-				</StyledScrollbars>
+				</Scrollbars>
 			</ModalWrapper>
 		</Background>,
 		el.current,
 	);
 };
+
+const Surrounding = styled.div`
+	position: absolute;
+	width: 100%;
+	height: 100%;
+`;
 
 const Background = styled.div`
 	width: 100%;
@@ -100,5 +118,3 @@ const ModalWrapper = styled.div`
 	max-height: 90vh;
 	overflow: hidden;
 `;
-
-const StyledScrollbars = styled(Scrollbars)``;
