@@ -2,13 +2,13 @@ import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import React, { ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
+import Scrollbars from 'react-custom-scrollbars';
 
 import {
 	ModalHeader,
 	ModalHeaderTitlePosition,
 } from '@/components/modals/ModalHeader';
 import { ETheme, useGeneral } from '@/context/general.context';
-import Scrollbars from 'react-custom-scrollbars';
 
 export interface IModal {
 	showModal?: boolean;
