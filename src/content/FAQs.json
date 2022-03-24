@@ -16,7 +16,7 @@
 		"answer": "The fundraising requirements are stated by each project, but there is no limit set. The project should set a realistic timeline for fundraising based on the amount of money to be raised."
 	},
 	{
-		"question": "I like your project, but right now I have no funds to donate. How else can I contribute?",
+		"question": "I love Giveth but right now I have no funds to donate, how else can I contribute?",
 		"answer": "We are a very inclusive Community and would love your help (in any way possible). \n Just join and come talk to us! We even have a special channel for you: #contributors."
 	},
 	{
@@ -37,11 +37,11 @@
 	},
 	{
 		"question": "Can I donate on Giveth if I don't have crypto?",
-		"answer": "FIAT integration (donate funds from your credit card or bank account) is coming soon! Stay tuned...\r\n\r\nGiveth has also partnered with SDG Impact Fund to make it possible for donors to contribute tax-deductible donations, in fiat or crypto, to altruistic projects on the blockchain. This is a major development in finance innovation to effectively care for the commons. We are very close to having fiat options integrated with the Dapp. Until then, fiat donations will accepted here: (https://www.sdgimpactfund.org/giveth-foundation). To learn more about the partnership between Giveth and the SDG Impact Fund, please refer to this blog post: (https://medium.com/giveth/giveth-2-0-next-level-community-philanthropy-f7e60d7e78cb)"
+		"answer": "Fiat integration (donate funds from your credit card or bank account) is coming soon! Stay tuned...\r\n\r\nGiveth has also partnered with SDG Impact Fund to make it possible for donors to contribute tax-deductible donations, in fiat or crypto, to altruistic projects on the blockchain. This is a major development in finance innovation to effectively care for the commons. We are very close to having fiat options integrated with the Dapp. Until then, fiat donations will accepted here: (<a href='https://www.sdgimpactfund.org/giveth-foundation' target='_blank' rel='noopener'>https://www.sdgimpactfund.org/giveth-foundation</a>). To learn more about the partnership between Giveth and the SDG Impact Fund, please refer to this blog post: (<a href='https://medium.com/giveth/giveth-2-0-next-level-community-philanthropy-f7e60d7e78cb' target='_blank' rel='noopener'>https://medium.com/giveth/giveth-2-0-next-level-community-philanthropy-f7e60d7e78cb</a>)"
 	},
 	{
 		"question": "Is my donation tax deductible?",
-		"answer": "Yes! Giveth is a 501c3 non-profit, and donations made to projects are tax deductible for US tax payers. However, you are responsible to consult with your tax attorney for legal or financial advice.\r\n\r\nGiveth is a Decentralized Altruistic Community and with the help of SDG impact fund (https://www.sdgimpactfund.org/) our DAO and community based organizational structure is represented as a non-profit 501c3 in the United States. \n We are a community-led project and will not derive any direct profit from the platform. We strive to model the DAC concept as one of the first not-for-profit blockchain based entities. We guarantee all funds will get recycled back into the Community that is ensuring the Giveth platform gets adopted widely."
+		"answer": "With the help of SDG impact fund, the Giveth DAO and community based organizational structure is represented as a non-profit 501c3 in the United States. We are a community-led project and will not derive any direct profit from the platform. We guarantee all funds will get recycled back into the Community that is ensuring the Giveth Platform becomes adopted widely."
 	},
 	{
 		"question": "Does the IRS recognize cryptocurrency donations?",
@@ -53,11 +53,11 @@
 	},
 	{
 		"question": "What is Tor.us?",
-		"answer": "For a more detailed answer, see Tor.us documentation (https://docs.tor.us). \n\"Torus is a user-friendly, fully open source and non-custodial key management system for DApps. It runs a Distributed Key Generation protocol that allows applications to access its generated keys via OAuths and thus existing user accounts. Try out the experience on the Tor.us Wallet (https://app.tor.us). \n Tor.us is the main way to sign on to and use Giveth.io. \nIt is our wallet option alongside Metamask (https://metamask.io)."
+		"answer": "For a more detailed answer, see Tor.us documentation (<a href='https://docs.tor.us' target='_blank' rel='noopener'>https://docs.tor.us</a>). \n\"Torus is a user-friendly, fully open source and non-custodial key management system for DApps. It runs a Distributed Key Generation protocol that allows applications to access its generated keys via OAuths and thus existing user accounts. Try out the experience on the Tor.us Wallet (<a href='https://app.tor.us' target='_blank' rel='noopener'>https://app.tor.us</a>). \n Tor.us is the main way to sign on to and use Giveth.io. \nIt is our wallet option alongside Metamask (<a href='https://metamask.io' target='_blank' rel='noopener'>https://metamask.io</a>)."
 	},
 	{
 		"question": "What is the difference between Bitcoin and Ethereum?",
-		"answer": "Bitcoin is intended to function as decentralized means of value transfer whereas Ethereum is a protocol that allows users to develop decentralized applications on top of a blockchain network. As prominent Ethereum developer Vlad Zamfir has confirmed on several occasions, Ethereum is “not money.” Ethereum’s native token, Ether (ETH) exists in order to facilitate the process of building and deploying distributed applications. Meanwhile, the Bitcoin currency exists on the Bitcoin blockchain to facilitate peer-to-peer (P2P) exchange of uncensorable, non-confiscatable money from cryptocompare.com (https://www.cryptocompare.com/coins/guides/what-s-the-difference-between-bitcoin-btc-and-ethereum-eth)."
+		"answer": "Bitcoin is intended to function as decentralized means of value transfer whereas Ethereum is a protocol that allows users to develop decentralized applications on top of a blockchain network. As prominent Ethereum developer Vlad Zamfir has confirmed on several occasions, Ethereum is “not money.” Ethereum’s native token, Ether (ETH) exists in order to facilitate the process of building and deploying distributed applications. Meanwhile, the Bitcoin currency exists on the Bitcoin blockchain to facilitate peer-to-peer (P2P) exchange of uncensorable, non-confiscatable money.<br/><br/> <a href='https://www.cryptocompare.com/coins/guides/what-s-the-difference-between-bitcoin-btc-and-ethereum-eth' target='_blank' rel='noopener'>From cryptocompare.com</a>."
 	},
 	{
 		"question": "What is Blockchain?",
@@ -65,18 +65,14 @@
 	},
 	{
 		"question": "What is Ethereum?",
-		"answer": "It's the world's programmable blockchain.\r\nEthereum builds on Bitcoin's innovation with some big differences.\r\nBoth let you use digital money without payment providers or banks. But Ethereum is programmable, so you can also use it for many different digital assets – even Bitcoin!\r\nThis also means Ethereum is for more than just payments. It's a network of financial services, games and apps that can't steal your data or censor you.\r\nSo step into the bazaar, and give it a try..."
+		"answer": "It's the world's programmable blockchain.<br/><br/>Ethereum builds on Bitcoin's innovation with some big differences.\r\nBoth let you use digital money without payment providers or banks. But Ethereum is programmable, so you can also use it for many different digital assets – even Bitcoin!\r\nThis also means Ethereum is for more than just payments. It's a network of financial services, games and apps that can't steal your data or censor you.\r\nSo step into the bazaar, and give it a try..."
 	},
 	{
 		"question": "What is Giveth?",
-		"answer": "Giveth is a community focused on building the Future of Giving using blockchain technology. There are a lot of projects in the Giveth Galaxy, but the core two projects are:\r\n\r\n Giveth.io\r\n and the GIVeconomy\r\n\r\n. You can use Giveth to donate to projects or also propose projects that need funding, all using cryptocurrency and soon fiat currencies!\r\n We aim to foster a large network of organizations and to build a bright, transparent and decentralized Future of Giving."
+		"answer": "Giveth is a community focused on building the Future of Giving using blockchain technology. There are a lot of projects in the Giveth Galaxy, but the core two projects are:\r\n\r\n <a href='https://giveth.io' target='_blank'rel='noopener'>Giveth.io</a>\r\n and the <a href='https://giv.giveth.io' target='_blank' rel='noopener'>GIVeconomy</a>\r\n\r\n. You can use Giveth to donate to projects or also propose projects that need funding, all using cryptocurrency and soon fiat currencies!\r\n We aim to foster a large network of organizations and to build a bright, transparent and decentralized Future of Giving."
 	},
 	{
 		"question": "I still need more detail on how Giveth works. Where can I find this?",
-		"answer": "For information about the DAO governing Giveth, please visit the Wiki (<a href='https://wiki.giveth.io'>https://wiki.giveth.io</a>). For developer documentation and user guides for the Donation Application please have a look at the docs (https://docs.giveth.io). You're always very welcome to join our chatrooms. Please visit the Join Page (https://giveth.io/join)."
-	},
-	{
-		"question": "Where can I see in detail what you are spending donations on?",
-		"answer": "One of the core values of Giveth is transparency. We invite everyone to have a look at our finances. As a Giver you can also ask us for an exclusive tour of the DApp (beta.giveth.io). The Giveth DAC has its own campaign with funding and payout milestones. The funds of that campaign are usually donated to individual's milestones. All movements are visible at a very granular level in the DApp as well as from an Ethereum blockchain explorer."
+		"answer": "For information about the DAO governing Giveth, how we work, as well as developer documentation and user guides for Giveth's platforms, have a look at the docs (<a href='https://docs.giveth.io' target='_blank' rel='noopener'>https://docs.giveth.io</a>). You're always very welcome to join our chatrooms. Please visit the <a href='https://giveth.io/join' target='_blank'>Join Page</a>."
 	}
 ]
