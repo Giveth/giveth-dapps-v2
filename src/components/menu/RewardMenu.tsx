@@ -20,7 +20,7 @@ import { useTokenDistro } from '@/context/tokenDistro.context';
 import { Zero } from '@ethersproject/constants';
 import { formatWeiHelper } from '@/helpers/number';
 import Link from 'next/link';
-import { WhatisStreamModal } from '@/components/modals/WhatisStream';
+import { WhatisGIVstreamModal } from '@/components/modals/WhatisGIVstream';
 import { useSubgraph } from '@/context';
 import { getGivStakingConfig } from '@/helpers/networkProvider';
 import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
@@ -202,7 +202,7 @@ export const RewardMenu = () => {
 				</Link>
 			</RewardMenuContainer>
 			{showWhatIsGIVstreamModal && (
-				<WhatisStreamModal
+				<WhatisGIVstreamModal
 					showModal={showWhatIsGIVstreamModal}
 					setShowModal={setShowWhatIsGIVstreamModal}
 				/>

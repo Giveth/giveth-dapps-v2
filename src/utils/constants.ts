@@ -15,19 +15,6 @@ export const networksParams: Record<number, any> = {
 		],
 		blockExplorerUrls: ['https://etherscan.io'],
 	},
-	3: {
-		chainId: '0x3',
-		chainName: 'Ropsten',
-		nativeCurrency: {
-			name: 'ETH',
-			symbol: 'ETH',
-			decimals: 18,
-		},
-		rpcUrls: [
-			'https://ropsten.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
-		],
-		blockExplorerUrls: ['https://ropsten.etherscan.io'],
-	},
 	42: {
 		chainId: '0x2A',
 		chainName: 'Kovan',

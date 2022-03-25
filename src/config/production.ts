@@ -84,7 +84,7 @@ const config: EnvConfig = {
 
 	XDAI_CONFIG: {
 		chainId: '0x64',
-		chainName: 'Gnosis Chain',
+		chainName: 'xDai',
 		nativeCurrency: {
 			name: 'XDAI',
 			symbol: 'XDAI',

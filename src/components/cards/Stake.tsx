@@ -28,7 +28,7 @@ import BigNumber from 'bignumber.js';
 import { formatEthHelper, formatWeiHelper, Zero } from '@/helpers/number';
 import { APR } from '@/types/poolInfo';
 import { getLPStakingAPR } from '@/lib/stakingPool';
-import { useSubgraph } from '@/context';
+import { useLiquidityPositions, useSubgraph } from '@/context';
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import { H2, H5, Lead } from '@giveth/ui-design-system';
 import { networkProviders } from '@/helpers/networkProvider';
@@ -94,6 +94,7 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 	);
 	const [earnEstimate, setEarnEstimate] = useState<BigNumber>(Zero);
 	const [APR, setAPR] = useState<BigNumber>(Zero);
+	const { apr: univ3apr } = useLiquidityPositions();
 	const { givTokenDistroHelper } = useTokenDistro();
 	const { mainnetValues, xDaiValues } = useSubgraph();
 
@@ -136,7 +137,7 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 	useEffect(() => {
 		const getMaxAPR = async (promises: Promise<APR>[]) => {
 			const stakePoolAPRs = await Promise.all(promises);
-			let maxApr = Zero;
+			let maxApr = univ3apr;
 			stakePoolAPRs.forEach(apr => {
 				maxApr = BigNumber.max(maxApr, apr || Zero);
 			});
@@ -165,7 +166,7 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 			promiseQueue.push(promise);
 		});
 		getMaxAPR(promiseQueue);
-	}, [mainnetValues, xDaiValues]);
+	}, [univ3apr]);
 
 	return (
 		<InvestCardContainer activeIndex={step} index={index}>

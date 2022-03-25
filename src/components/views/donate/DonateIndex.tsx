@@ -371,7 +371,7 @@ const GivBackContainer = styled.div`
 		font-weight: bold;
 		margin: 0 0 8px 0;
 	}
-	${mediaQueries.mobileS} {
+	${mediaQueries['mobileS']} {
 		width: 100%;
 	}
 `;

@@ -1,12 +1,11 @@
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
-
 import HomeIndex from '@/components/views/homepage/HomeIndex';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_HOME_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { gqlEnums } from '@/apollo/types/gqlEnums';
 import { IProject } from '@/apollo/types/types';
 import useUser from '@/context/UserProvider';
+import { useEffect, useState } from 'react';
 
 const projectsToFetch = 12;
 
@@ -47,7 +46,6 @@ const HomeRoute = (props: IHomeRoute) => {
 			setTotalCount(totalCount);
 		});
 	}, [user]);
-
 	return (
 		<>
 			<Head>

@@ -53,7 +53,6 @@ const fetchUniswapSubgraphTokenPrice = async (
 };
 
 const PriceContext = createContext<IPriceContext>(priceDefaultValue);
-
 export const PriceProvider: FC = ({ children }) => {
 	const { chainId } = useWeb3React();
 	const { xDaiValues } = useSubgraph();
@@ -64,9 +63,7 @@ export const PriceProvider: FC = ({ children }) => {
 	const [xDaiPrice, setXDaiPrice] = useState<BigNumber>(Zero);
 	const [ethPrice, setEthPrice] = useState<BigNumber>(Zero);
 	const [mainnetThirdPartyTokensPrice, setMainnetThirdPartTokensPrice] =
-		useState<{
-			[tokenAddress: string]: BigNumber;
-		}>({});
+		useState<{ [tokenAddress: string]: BigNumber }>({});
 	const [xDaiThirdPartyTokensPrice, setXDaiThirdPartTokensPrice] = useState<{
 		[tokenAddress: string]: BigNumber;
 	}>({});

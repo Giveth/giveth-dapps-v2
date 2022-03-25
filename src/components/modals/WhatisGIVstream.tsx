@@ -16,73 +16,41 @@ import { Modal, IModal } from './Modal';
 import Link from 'next/link';
 import Routes from '@/lib/constants/Routes';
 import { ETheme, useGeneral } from '@/context/general.context';
-import { RegenStreamConfig } from '@/types/config';
-import { useTokenDistro } from '@/context/tokenDistro.context';
 
-interface IWhatisStreamModal extends IModal {
-	regenStreamConfig?: RegenStreamConfig;
-}
+interface IWhatisGIVstreamModal extends IModal {}
 
-export const WhatisStreamModal: FC<IWhatisStreamModal> = ({
+export const WhatisGIVstreamModal: FC<IWhatisGIVstreamModal> = ({
 	showModal,
 	setShowModal,
-	regenStreamConfig,
 }) => {
 	const { theme } = useGeneral();
-	const { regenTokenDistroHelpers, givTokenDistroHelper } = useTokenDistro();
-	const { rewardTokenSymbol } = regenStreamConfig || {
-		rewardTokenSymbol: 'GIV',
-	};
-	const tokenDistroHelper = regenStreamConfig
-		? regenTokenDistroHelpers[regenStreamConfig?.type]
-		: givTokenDistroHelper;
 
 	return (
 		<Modal showModal={showModal} setShowModal={setShowModal}>
-			<WhatisStreamContainer theme={theme}>
+			<WhatisGIVstreamContainer theme={theme}>
 				<TitleRow alignItems='center' justifyContent='center'>
 					<IconGIVStream size={24} />
-					<Title>
-						What is
-						{regenStreamConfig
-							? ' a RegenStream?'
-							: ' the GIVstream?'}
-					</Title>
+					<Title>What is the GIVstream?</Title>
 				</TitleRow>
 				<Desc>
-					Welcome to the expanding
-					{regenStreamConfig
-						? ' Multiverse! The RegenStream aligns  '
-						: ' GIViverse! The GIVstream '}
-					community members with the long term success of
-					{regenStreamConfig
-						? ' platforms and DAOs that are value-aligned with Giveth.'
-						: ' Giveth and the GIVeconomy.'}
+					Welcome to the expanding GIViverse! The GIVstream aligns
+					community members with the long term success of Giveth and
+					the GIVeconomy.
 				</Desc>
 				<H5 weight={900}>How it Works </H5>
 				<Desc>
-					When you harvest {rewardTokenSymbol} rewards, a portion of
-					your {rewardTokenSymbol} is sent directly to your wallet and
-					the rest is added to your {rewardTokenSymbol}stream. As time
-					passes and the {rewardTokenSymbol}stream flows, a larger
-					portion of the total {rewardTokenSymbol} you get is sent
-					directly to you at the time of harvest. The
-					{rewardTokenSymbol}stream flows until{' '}
-					{new Date(tokenDistroHelper.endTime).toLocaleDateString(
-						'en-US',
-						{
-							day: 'numeric',
-							year: 'numeric',
-							month: 'short',
-						},
-					)}
-					.
+					When you harvest GIV rewards, a portion of your GIV is sent
+					directly to your wallet and the rest is added to your
+					GIVstream. As time passes and the GIVstream flows, a larger
+					portion of the total GIV you get is sent directly to you at
+					the time of harvest. The GIVstream flows until December 23,
+					2026 at which point the GIVeconomy will be full power!
 				</Desc>
 				<LinksRow alignItems='center' justifyContent='center'>
 					<Link href={Routes.GIVstream} passHref>
 						<GLink onClick={() => setShowModal(false)}>
 							<Flex justifyContent='center'>
-								View Your {rewardTokenSymbol}stream{' '}
+								View Your GIVstream{' '}
 								<IconExternalLink
 									size={16}
 									color={'currentColor'}
@@ -98,12 +66,12 @@ export const WhatisStreamModal: FC<IWhatisStreamModal> = ({
 						setShowModal(false);
 					}}
 				/>
-			</WhatisStreamContainer>
+			</WhatisGIVstreamContainer>
 		</Modal>
 	);
 };
 
-const WhatisStreamContainer = styled.div`
+const WhatisGIVstreamContainer = styled.div`
 	padding: 24px 24px 24px;
 	background-image: ${props =>
 		props.theme === ETheme.Dark

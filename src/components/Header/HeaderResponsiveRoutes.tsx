@@ -1,136 +1,125 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
-import { brandColors, IconX, neutralColors, P } from '@giveth/ui-design-system';
 
 import { headerRoutes } from './HeaderRoutes';
 import { Shadow } from '../styled-components/Shadow';
+import { P, brandColors } from '@giveth/ui-design-system';
 import { mediaQueries } from '@/utils/constants';
 import HeaderRoutesItem from './HeaderRouteItem';
 import { ETheme, useGeneral } from '@/context/general.context';
-import MenuPurple from '/public/images/drawer_menu_purple.svg';
-import MenuWhite from '/public/images/drawer_menu_white.svg';
-import { FlexCenter } from '@/components/styled-components/Flex';
+
+interface IDrawer {
+	isOpen?: boolean;
+}
 
 const HeaderRoutesResponsive = () => {
 	const router = useRouter();
+	const activeIndex = headerRoutes.findIndex(i => router.pathname === i.href);
+	const activeMenu = headerRoutes[activeIndex]?.title;
 	const [isOpen, setIsOpen] = useState(false);
 	const { theme } = useGeneral();
 
-	const activeIndex = headerRoutes.findIndex(i => router.pathname === i.href);
-	const activeMenu = headerRoutes[activeIndex]?.title;
-	const isDark = theme === ETheme.Dark;
-
 	useEffect(() => {
 		isOpen && setIsOpen(!isOpen);
-	}, [router.pathname]);
-
+	}, [activeIndex]);
 	return (
-		<>
-			<DrawerClosed onClick={() => setIsOpen(true)} isDark={isDark}>
+		<Wrapper
+			onMouseEnter={() => setIsOpen(true)}
+			onClick={() => setIsOpen(true)}
+			onMouseLeave={() => setIsOpen(false)}
+		>
+			<DrawerClosed isOpen={isOpen}>
 				<Image
-					src={isDark ? MenuWhite : MenuPurple}
+					src={'/images/drawer_menu_purple.svg'}
 					alt={'drawer menu'}
 				/>
-				{activeMenu && <P>{activeMenu}</P>}
+				<P>{activeMenu}</P>
 			</DrawerClosed>
-			{isOpen && (
-				<Modal>
-					<DrawerOpened isDark={isDark}>
-						<Image src={MenuPurple} alt={'drawer menu'} />
-						<HeaderItems>
-							{headerRoutes.map(i => (
-								<HeaderRoutesItem
-									key={i.title}
-									href={i.href}
-									title={i.title}
-								/>
-							))}
-						</HeaderItems>
-					</DrawerOpened>
-					<CloseButton
-						isDark={isDark}
-						onClick={() => setIsOpen(false)}
-					>
-						<IconX
-							size={24}
-							color={isDark ? 'white' : brandColors.giv[900]}
-						/>
-					</CloseButton>
-					<ModalSurrounding onClick={() => setIsOpen(false)} />
-				</Modal>
-			)}
-		</>
+
+			<DrawerOpened isOpen={isOpen}>
+				<Image
+					src={'/images/drawer_menu_purple.svg'}
+					alt={'drawer menu'}
+				/>
+				<HeaderItems>
+					{headerRoutes.map((i, index) => {
+						return (
+							<HeaderRoutesItem
+								key={i.title}
+								href={i.href}
+								title={i.title}
+								active={activeIndex === index}
+								theme={theme}
+							/>
+						);
+					})}
+				</HeaderItems>
+			</DrawerOpened>
+		</Wrapper>
 	);
 };
 
-const ModalSurrounding = styled.div`
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	background-color: ${neutralColors.gray[800]};
-	opacity: 0.7;
-	z-index: -1;
-`;
+const Image = styled.img``;
 
-const CloseButton = styled(FlexCenter)<{ isDark: boolean }>`
-	top: 16px;
-	width: 48px;
-	height: 48px;
-	border-radius: 50%;
-	right: 16px;
-	cursor: pointer;
-	margin-top: 12px;
-	background: ${props => (props.isDark ? brandColors.giv[900] : 'white')};
-`;
-
-const Modal = styled.div`
+const DrawerClosed = styled.div`
 	display: flex;
-	gap: 8px;
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	z-index: 10;
-`;
-
-const DrawerClosed = styled(FlexCenter)<{ isDark: boolean }>`
+	align-items: center;
+	justify-content: center;
 	gap: 11px;
 	border-radius: 72px;
-	box-shadow: ${Shadow.Dark[500]};
+	box-shadow: ${(props: IDrawer) =>
+		props.isOpen ? 'none' : Shadow.Dark['500']};
 	background: white;
 	padding: 0 14px;
 	height: 48px;
 	cursor: pointer;
-	color: ${props => (props.isDark ? 'white' : brandColors.deep[500])};
-	background: ${props => props.isDark && brandColors.giv[900]};
+	z-index: ${(props: IDrawer) => (props.isOpen ? '0' : '1080')};
+	color: ${brandColors.deep[500]};
+`;
+
+const DrawerOpened = styled.div`
+	position: absolute;
+	top: 10px;
+	width: 190px;
+	align-items: flex-start;
+	background: white;
+	display: ${(props: IDrawer) => (props.isOpen ? 'flex' : 'none')};
+	flex-direction: row;
+	padding: 15px 20px 20px 20px;
+	border-radius: 18px;
+	box-shadow: ${Shadow.Dark['500']};
+	transition: max-height 0.25s ease-in, opacity 0.25s ease-in;
+	visibility: ${(props: IDrawer) => (props.isOpen ? 'visible' : 'hidden')};
+	opacity: ${(props: IDrawer) => (props.isOpen ? 1 : 0)};
+	z-index: ${(props: IDrawer) => (props.isOpen ? '1080' : '0')};
+	> * {
+		opacity: ${props => (props.isOpen ? 1 : 0)};
+		transition: opacity 0.25s ease-in;
+		transition-delay: 0.25s;
+	}
+	${mediaQueries.mobileL} {
+		padding: 15px 20px 10px 20px;
+		img {
+			padding: 5px 0 0 0;
+		}
+	}
+`;
+const HeaderItems = styled.div`
 	display: flex;
+	flex-direction: column;
+`;
+
+const Wrapper = styled.div`
+	position: relative;
+	display: none;
+
+	${mediaQueries.mobileS} {
+		display: flex;
+	}
 	${mediaQueries.laptopL} {
 		display: none;
 	}
-`;
-
-const DrawerOpened = styled.div<{ isDark: boolean }>`
-	width: 209px;
-	height: fit-content;
-	display: flex;
-	align-items: flex-start;
-	gap: 11px;
-	background: ${props => (props.isDark ? brandColors.giv[900] : 'white')};
-	color: ${props => (props.isDark ? 'white' : brandColors.deep[500])};
-	padding: 16px;
-	margin-top: 12px;
-	margin-left: 29px;
-	border-radius: 18px;
-	box-shadow: ${Shadow.Dark[500]};
-`;
-
-const HeaderItems = styled.div`
-	display: flex;
-	gap: 24px;
-	flex-direction: column;
 `;
 
 export default HeaderRoutesResponsive;

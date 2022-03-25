@@ -48,6 +48,8 @@ interface IThemed {
 export const HeaderButton = styled(CButton)<IThemed>`
 	display: flex;
 	height: 50px;
+	font-family: 'Red Hat Text', sans-serif;
+	font-style: normal;
 	font-weight: normal;
 	font-size: 16px;
 	line-height: 22px;
@@ -70,11 +72,14 @@ export const BalanceButton = styled(HeaderButton)`
 `;
 
 export const WalletButton = styled(HeaderButton)`
-	div:nth-child(2) {
-		display: none;
-	}
-	div:nth-child(1) {
-		width: 100%;
+	${mediaQueries.mobileS} {
+		div:nth-child(2) {
+			display: none;
+		}
+		div:nth-child(1) {
+			width: 100%;
+			paddding: 6px;
+		}
 	}
 	${mediaQueries.tablet} {
 		font-size: 14px;
@@ -87,6 +92,10 @@ export const WalletButton = styled(HeaderButton)`
 			display: flex;
 		}
 	}
+`;
+
+export const MobileWalletButton = styled(HeaderButton)`
+	width: 100%;
 `;
 
 export const HBContainer = styled.div`
@@ -122,7 +131,9 @@ export const HBBalanceLogo = styled(HBPic)`
 
 export const HBContent = styled(GLink)`
 	margin-left: 8px;
-	display: none;
+	${mediaQueries.mobileS} {
+		display: none;
+	}
 	${mediaQueries.tablet} {
 		display: flex;
 	}
@@ -204,10 +215,6 @@ export const LargeCreateProject = styled.div`
 `;
 
 export const SmallCreateProjectParent = styled.div`
-	display: none;
-	${mediaQueries.mobileL} {
-		display: unset;
-	}
 	${mediaQueries.laptop} {
 		display: none;
 	}
@@ -231,7 +238,9 @@ export const CoverLine = styled.div<IThemed>`
 `;
 
 export const MainLogoBtn = styled.div`
-	display: none;
+	${mediaQueries.mobileS} {
+		display: none;
+	}
 	${mediaQueries.laptopL} {
 		display: flex;
 	}

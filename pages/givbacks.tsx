@@ -1,9 +1,7 @@
-import Head from 'next/head';
-import { useEffect } from 'react';
-
 import GIVbackView from '@/components/views/Back.view';
 import { useGeneral, ETheme } from '@/context/general.context';
-import { GiveconomyMeta } from '@/lib/meta';
+import Head from 'next/head';
+import { useEffect } from 'react';
 
 export default function GIVbacksRoute() {
 	const { setTheme } = useGeneral();
@@ -18,7 +16,6 @@ export default function GIVbacksRoute() {
 		<>
 			<Head>
 				<title>GIVbacks</title>
-				<GiveconomyMeta />
 			</Head>
 			<GIVbackView />
 		</>

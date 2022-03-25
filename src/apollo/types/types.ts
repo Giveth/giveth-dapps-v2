@@ -51,7 +51,6 @@ export interface IProjectEdition {
 	status: {
 		name?: string;
 	};
-	slug: string;
 }
 
 export interface IProjectCreation {

@@ -20,7 +20,6 @@ import { IDonationsByProjectId } from '@/apollo/types/gqlTypes';
 import SuccessfulCreation from '@/components/views/create/SuccessfulCreation';
 import { deviceSize, mediaQueries } from '@/utils/constants';
 import InlineToast from '@/components/toasts/InlineToast';
-import { ProjectMeta } from '@/lib/meta';
 
 const ProjectDonations = dynamic(() => import('./ProjectDonations'));
 const ProjectUpdates = dynamic(() => import('./ProjectUpdates'));
@@ -30,11 +29,11 @@ const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {
 
 const donationsPerPage = 10;
 
-const ProjectIndex = (props: { project?: IProject }) => {
+const ProjectIndex = () => {
 	const [activeTab, setActiveTab] = useState(0);
 	const [isActive, setIsActive] = useState<boolean>(true);
 	const [isDraft, setIsDraft] = useState<boolean>(false);
-	const [project, setProject] = useState<IProject | undefined>(props.project);
+	const [project, setProject] = useState<IProject>();
 	const [donations, setDonations] = useState<IDonation[]>([]);
 	const [totalDonations, setTotalDonations] = useState(0);
 	const [creationSuccessful, setCreationSuccessful] = useState(false);
@@ -92,10 +91,10 @@ const ProjectIndex = (props: { project?: IProject }) => {
 	}, [id]);
 
 	useEffect(() => {
-		if (slug && user?.id) {
+		if (slug) {
 			fetchProject().then();
 		}
-	}, [slug, user?.id]);
+	}, [slug]);
 
 	useEffect(() => {
 		const windowResizeHandler = () => {
@@ -120,14 +119,11 @@ const ProjectIndex = (props: { project?: IProject }) => {
 			/>
 		);
 	}
-
 	return (
 		<Wrapper>
 			<Head>
 				<title>{title && `${title} |`} Giveth</title>
-				<ProjectMeta project={project} preTitle='Check out' />
 			</Head>
-
 			<ProjectHeader project={project} />
 			{isDraft && (
 				<DraftIndicator>

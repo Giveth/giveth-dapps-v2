@@ -18,7 +18,7 @@ const config: GlobalConfig = {
 		mainToken: 'ETH',
 	},
 	SECONDARY_NETWORK: {
-		name: 'Gnosis Chain',
+		name: 'xDai',
 		id: 100,
 		chain: '0x64',
 		mainToken: 'XDAI',
@@ -28,7 +28,8 @@ const config: GlobalConfig = {
 		[envConfig.MAINNET_NETWORK_NUMBER]: envConfig.MAINNET_CONFIG,
 		[envConfig.XDAI_NETWORK_NUMBER]: envConfig.XDAI_CONFIG,
 	},
-	// Used for adding networks to user wallet, useless since just xDAI is not
+	XDAI_EXCLUDED_COINS: ['PAN', 'XNODE', 'USDT', 'CRV'],
+	// Used for adding netnworks to user wallet, useless since just xDAI is not
 	// included in metamask by default and its rpc endpoint is not infura
 	INFURA_API_KEY: process.env.NEXT_PUBLIC_INFURA_API_KEY,
 	BLOCKNATIVE_DAPP_ID: process.env.BLOCKNATIVE_DAPP_ID,

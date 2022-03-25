@@ -79,11 +79,6 @@ const Header: FC<IHeader> = () => {
 	}, [activate]);
 
 	useEffect(() => {
-		setIsGIVeconomyRoute(router.route.startsWith('/giv'));
-		setIsCreateRoute(router.route.startsWith(Routes.CreateProject));
-	}, [router.route]);
-
-	useEffect(() => {
 		const threshold = 0;
 		let lastScrollY = window.pageYOffset;
 		let ticking = false;
@@ -117,12 +112,21 @@ const Header: FC<IHeader> = () => {
 		return () => window.removeEventListener('scroll', onScroll);
 	}, [showHeader]);
 
+	useEffect(() => {
+		setIsGIVeconomyRoute(router.route.startsWith('/giv'));
+		setIsCreateRoute(router.route.startsWith(Routes.CreateProject));
+	}, [router.route]);
+
 	const handleModals = () => {
 		if (isGIVeconomyRoute) {
 			setShowWalletModal(true);
 		} else {
 			showWelcomeModal(true);
 		}
+	};
+
+	const handleHoverClickBalance = (show: boolean) => {
+		setShowRewardMenu(show);
 	};
 
 	const handleCreateButton = () => {
@@ -173,6 +177,7 @@ const Header: FC<IHeader> = () => {
 									</a>
 								</Link>
 							</MainLogoBtn>
+
 							<HeaderRoutesResponsive />
 						</>
 					)}
@@ -225,9 +230,13 @@ const Header: FC<IHeader> = () => {
 					{active && account && chainId ? (
 						<>
 							<MenuAndButtonContainer
-								onClick={() => setShowRewardMenu(true)}
-								onMouseEnter={() => setShowRewardMenu(true)}
-								onMouseLeave={() => setShowRewardMenu(false)}
+								onClick={() => handleHoverClickBalance(true)}
+								onMouseEnter={() =>
+									handleHoverClickBalance(true)
+								}
+								onMouseLeave={() =>
+									handleHoverClickBalance(false)
+								}
 							>
 								<BalanceButton outline theme={theme}>
 									<HBContainer>
@@ -287,14 +296,18 @@ const Header: FC<IHeader> = () => {
 							</MenuAndButtonContainer>
 						</>
 					) : (
-						<ConnectButton
-							buttonType='primary'
-							size='small'
-							label={
-								isGIVeconomyRoute ? 'CONNECT WALLET' : 'SIGN IN'
-							}
-							onClick={handleModals}
-						/>
+						<div>
+							<ConnectButton
+								buttonType='primary'
+								size='small'
+								label={
+									isGIVeconomyRoute
+										? 'CONNECT WALLET'
+										: 'SIGN IN'
+								}
+								onClick={handleModals}
+							/>
+						</div>
 					)}
 				</Flex>
 			</StyledHeader>

@@ -171,8 +171,8 @@ const ProjectDonateCard = ({
 		setWrapperHeight(wrapperRef?.current?.clientHeight || 0);
 	}, [wrapperRef, project]);
 
-	const handleProjectStatus = async (deactivate?: boolean) => {
-		if (deactivate) {
+	const handleProjectStatus = async () => {
+		if (isActive) {
 			setDeactivateModal(true);
 		} else {
 			try {
@@ -262,7 +262,7 @@ const ProjectDonateCard = ({
 						) : (
 							<FullButton
 								buttonType='primary'
-								onClick={() => handleProjectStatus(false)}
+								onClick={handleProjectStatus}
 								label='PUBLISH PROJECT'
 							/>
 						)}
@@ -331,7 +331,7 @@ const ProjectDonateCard = ({
 						size='small'
 						label={`${isActive ? 'DE' : ''}ACTIVATE PROJECT`}
 						icon={<Image src={ArchiveIcon} alt='Archive icon.' />}
-						onClick={() => handleProjectStatus(isActive)}
+						onClick={handleProjectStatus}
 					/>
 				)}
 			</Wrapper>

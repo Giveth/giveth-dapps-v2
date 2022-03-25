@@ -61,14 +61,14 @@ interface IERC20Info {
 	library: Web3Provider;
 	tokenAbi: string;
 	contractAddress: string;
-	networkId: number;
+	chainId: number;
 }
 
 export async function getERC20Info({
 	library,
 	tokenAbi,
 	contractAddress,
-	networkId,
+	chainId,
 }: IERC20Info) {
 	try {
 		const instance = new Contract(contractAddress, tokenAbi, library);
@@ -79,8 +79,12 @@ export async function getERC20Info({
 			name,
 			symbol,
 			address: contractAddress,
-			networkId,
+			label: symbol,
+			chainId,
 			decimals,
+			value: {
+				symbol,
+			},
 		};
 		console.log({ ERC20Info });
 

@@ -1,9 +1,7 @@
-import Head from 'next/head';
-import { useEffect } from 'react';
-
 import GIVgardenView from '@/components/views/Garden.view';
 import { useGeneral, ETheme } from '@/context/general.context';
-import { GiveconomyMeta } from '@/lib/meta';
+import Head from 'next/head';
+import { useEffect } from 'react';
 
 export default function GIVgardenRoute() {
 	const { setTheme } = useGeneral();
@@ -18,7 +16,6 @@ export default function GIVgardenRoute() {
 		<>
 			<Head>
 				<title>GIVgarden</title>
-				<GiveconomyMeta />
 			</Head>
 			<GIVgardenView />
 		</>

@@ -4,7 +4,6 @@ import { IUser } from '@/apollo/types/types';
 import { initializeApollo } from '@/apollo/apolloClient';
 import { LOGIN_USER } from '@/apollo/gql/gqlAuth';
 import { showToastError } from '@/lib/helpers';
-import config from '@/configuration';
 
 const apolloClient = initializeApollo();
 
@@ -39,13 +38,11 @@ export async function getToken(
 }
 
 export const fetchPrice = async (
-	chainId: number,
+	chain: string,
 	tokenAddress: string | undefined,
 	catchFunction: any,
 ) => {
 	try {
-		const chain =
-			chainId === config.PRIMARY_NETWORK.id ? 'ethereum' : 'xdai';
 		const fetchCall = await fetch(
 			`https://api.coingecko.com/api/v3/simple/token_price/${chain}?contract_addresses=${tokenAddress}&vs_currencies=usd`,
 		);

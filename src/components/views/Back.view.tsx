@@ -1,3 +1,4 @@
+import { Footer } from '../Footer/Footer';
 import { TabGIVbacksTop, TabGIVbacksBottom } from '../homeTabs/GIVbacks';
 
 import Tabs from '../Tabs';
