@@ -9,7 +9,7 @@ import ArrowUp from '/public/images/arrow_up.svg';
 
 const Accordion = (props: {
 	title: string;
-	description?: JSX.Element;
+	description?: JSX.Element | string;
 	children?: JSX.Element | JSX.Element[];
 }) => {
 	const [isOpen, setOpen] = useState(false);
