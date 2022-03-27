@@ -57,13 +57,12 @@ export const GIVfrens: FC<IGIVfrensProps> = ({ regenFarms, network }) => {
 				})}
 				<Col xs={12}>
 					<DaoCard>
-						<DaoCardTitle weight={900}>Your DAO?</DaoCardTitle>
+						<DaoCardTitle weight={900}>Add Your DAO</DaoCardTitle>
 						<DaoCardQuote size='small'>
-							Read about the requirements for becoming a Regen
-							Farm.
+							Apply to kickstart a RegenFarm for your for-good DAO
 						</DaoCardQuote>
 						<DaoCardButton
-							label='Join GIVfrens'
+							label='Apply Now'
 							linkType='primary'
 							href={links.JOINGIVFRENS}
 							target='_blank'
