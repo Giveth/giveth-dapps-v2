@@ -1,26 +1,34 @@
 import { useState } from 'react';
 import ReactHtmlParser from 'react-html-parser';
 import Image from 'next/image';
-import { Shadow } from './styled-components/Shadow';
-import ArrowDown from '/public/images/arrow_down.svg';
-import ArrowUp from '/public/images/arrow_up.svg';
 import { P, brandColors, Lead } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
-const Accordion = (props: { title: string; description: string }) => {
+import { Shadow } from './styled-components/Shadow';
+import ArrowDown from '/public/images/arrow_down.svg';
+import ArrowUp from '/public/images/arrow_up.svg';
+
+const Accordion = (props: {
+	title: string;
+	description?: string;
+	children?: any;
+}) => {
 	const [isOpen, setOpen] = useState(false);
 
 	const handleClick = () => setOpen(!isOpen);
-	const { title, description } = props;
+	const { title, description, children } = props;
 
 	return (
 		<Wrapper>
 			<HeadSection onClick={handleClick}>
 				<Title>{title}</Title>
-				<Image src={isOpen ? ArrowDown : ArrowUp} alt='arrow down' />
+				<Image src={isOpen ? ArrowDown : ArrowUp} alt='arrow icon' />
 			</HeadSection>
 			{isOpen && (
-				<BodySection>{ReactHtmlParser(description)}</BodySection>
+				<BodySection>
+					{description && ReactHtmlParser(description)}
+					{children && children}
+				</BodySection>
 			)}
 		</Wrapper>
 	);
@@ -30,12 +38,10 @@ const BodySection = styled(P)`
 	color: ${brandColors.giv[800]};
 	text-align: left;
 	margin-top: 16px;
+	padding: 0 20px 20px 20px;
 
 	a {
 		color: #007bff !important;
-		&:hover {
-			text-decoration: underline !important;
-		}
 	}
 `;
 
@@ -44,9 +50,15 @@ const Title = styled(Lead)`
 `;
 
 const HeadSection = styled.div`
+	padding: 20px;
 	cursor: pointer;
 	display: flex;
 	justify-content: space-between;
+	gap: 20px;
+
+	> :last-child {
+		flex-shrink: 0;
+	}
 `;
 
 const Wrapper = styled.div`
@@ -55,7 +67,6 @@ const Wrapper = styled.div`
 	border-radius: 12px;
 	box-shadow: ${Shadow.Neutral[500]};
 	background: white;
-	padding: 20px 32px 20px 20px;
 `;
 
 export default Accordion;
