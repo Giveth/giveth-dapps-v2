@@ -3,12 +3,14 @@ import React, { ReactElement } from 'react';
 import styled from 'styled-components';
 
 const ExternalLink = (props: {
-	children: ReactElement | string;
+	children?: ReactElement;
 	href: string;
+	title?: string;
 }) => {
+	const { children, href, title } = props;
 	return (
-		<StyledLink href={props.href} rel='noopener noreferrer' target='_blank'>
-			{props.children}
+		<StyledLink href={href} rel='noopener noreferrer' target='_blank'>
+			{title || children}
 		</StyledLink>
 	);
 };

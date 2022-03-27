@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import ReactHtmlParser from 'react-html-parser';
 import Image from 'next/image';
 import { P, brandColors, Lead } from '@giveth/ui-design-system';
 import styled from 'styled-components';
@@ -10,8 +9,8 @@ import ArrowUp from '/public/images/arrow_up.svg';
 
 const Accordion = (props: {
 	title: string;
-	description?: string;
-	children?: any;
+	description?: JSX.Element;
+	children?: JSX.Element | JSX.Element[];
 }) => {
 	const [isOpen, setOpen] = useState(false);
 
@@ -24,12 +23,7 @@ const Accordion = (props: {
 				<Title>{title}</Title>
 				<Image src={isOpen ? ArrowDown : ArrowUp} alt='arrow icon' />
 			</HeadSection>
-			{isOpen && (
-				<BodySection>
-					{description && ReactHtmlParser(description)}
-					{children && children}
-				</BodySection>
-			)}
+			{isOpen && <BodySection>{description || children}</BodySection>}
 		</Wrapper>
 	);
 };

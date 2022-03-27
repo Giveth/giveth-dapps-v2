@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 // import SearchBox from '../SearchBox';
 import Accordion from '../Accordion';
-import FAQJson from '@/content/FAQ.json';
+import faqContent from '@/content/FAQ';
 import { Arc } from '@/components/styled-components/Arc';
 import FlowerIcon from '/public//images/flower_faq.svg';
 import { Container } from '@/components/Grid';
@@ -31,9 +31,9 @@ const FAQIndex = () => {
 					{/*/>*/}
 				</SearchStyles>
 				<FAQContainer>
-					{Object.keys(FAQJson).map(i => (
+					{Object.keys(faqContent).map(i => (
 						<Accordion key={i} title={i}>
-							{FAQJson[i as TFAQ].map(faq => (
+							{faqContent[i as TFAQ].map(faq => (
 								<Accordion
 									key={faq.question}
 									title={faq.question}
