@@ -1,7 +1,6 @@
 import Link from 'next/link';
-import { Flex } from '../styled-components/Flex';
 import router from 'next/router';
-import { Button, DataBlock } from '@giveth/ui-design-system';
+import { Button } from '@giveth/ui-design-system';
 import {
 	OverviewTopContainer,
 	PreTitle,
@@ -103,11 +102,9 @@ export const TabOverviewBottom = () => {
 						<DataBlockWithMargin
 							title='Give'
 							button={
-								<DataBlockButton
-									href={Routes.Project}
-									target='_blank'
-									label='DONATE TO PROJECTS'
-								/>
+								<Link href={Routes.Projects} passHref>
+									<DataBlockButton label='DONATE TO PROJECTS' />
+								</Link>
 							}
 						>
 							Donate to empower change-makers that are working
