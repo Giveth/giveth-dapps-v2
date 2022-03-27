@@ -104,8 +104,7 @@ export const TabOverviewBottom = () => {
 							title='Give'
 							button={
 								<DataBlockButton
-									href={Routes.Project}
-									target='_blank'
+									href={Routes.Projects}
 									label='DONATE TO PROJECTS'
 								/>
 							}
