@@ -12,6 +12,8 @@ import {
 	H5,
 	Caption,
 	Button,
+	IconAlertTriangle,
+	IconX,
 } from '@giveth/ui-design-system';
 
 import { mediaQueries } from '@/utils/constants';
@@ -70,7 +72,7 @@ const IncompleteProfileToast = ({ close }: IIncompleteToast) => {
 	return (
 		<IncompleteToast>
 			<IncompleteProfile>
-				<img src='/images/warning.svg' />
+				<IconAlertTriangle size={16} color={brandColors.mustard[700]} />
 				<div>
 					<Caption>Your profile is incomplete</Caption>
 					<Caption>
@@ -86,12 +88,9 @@ const IncompleteProfileToast = ({ close }: IIncompleteToast) => {
 					buttonType='texty'
 					onClick={showCompleteProfile}
 				/>
-				<img
-					onClick={close}
-					src='/images/x-icon-mustard.svg'
-					width='16px'
-					height='16px'
-				/>
+				<div onClick={close}>
+					<IconX size={16} color={brandColors.mustard[700]} />
+				</div>
 			</LetsDoIt>
 		</IncompleteToast>
 	);
@@ -381,7 +380,7 @@ const LetsDoIt = styled.div`
 			color: ${brandColors.mustard[800]};
 		}
 	}
-	img {
+	> :last-child {
 		cursor: pointer;
 		margin: 7px 0 0 0;
 	}

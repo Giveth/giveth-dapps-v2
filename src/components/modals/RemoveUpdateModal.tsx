@@ -2,7 +2,12 @@ import { IModal, Modal } from '@/components/modals/Modal';
 import { FC } from 'react';
 import styled from 'styled-components';
 import { IconTrash } from '@giveth/ui-design-system/lib/cjs/components/icons/Trash';
-import { Button, Lead, brandColors } from '@giveth/ui-design-system';
+import {
+	Button,
+	Lead,
+	brandColors,
+	IconAlertTriangle,
+} from '@giveth/ui-design-system';
 import FixedToast from '@/components/toasts/FixedToast';
 
 export const RemoveUpdateModal: FC<IModal> = ({
@@ -27,7 +32,12 @@ export const RemoveUpdateModal: FC<IModal> = ({
 					message={`You can't undo this action`}
 					color={brandColors.mustard[700]}
 					backgroundColor={brandColors.mustard[200]}
-					icon={() => <img src='/images/warning.svg' />}
+					icon={
+						<IconAlertTriangle
+							size={16}
+							color={brandColors.mustard[700]}
+						/>
+					}
 				/>
 				<OkButton
 					label='YES, REMOVE IT'
