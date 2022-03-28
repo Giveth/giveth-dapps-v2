@@ -24,7 +24,7 @@ import { motion } from 'framer-motion';
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import { Shadow } from '@/components/styled-components/Shadow';
 import CategoryBadge from '@/components/badges/CategoryBadge';
-import { showToastError } from '@/lib/helpers';
+import { compareAddresses, showToastError } from '@/lib/helpers';
 import { IProject } from '@/apollo/types/types';
 import links from '@/lib/constants/links';
 import useUser from '@/context/UserProvider';
@@ -40,6 +40,9 @@ import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
 import { idToProjectEdit, slugToProjectDonate } from '@/lib/routeCreators';
 import { VerificationModal } from '@/components/modals/VerificationModal';
 import { mediaQueries } from '@/utils/constants';
+import ExternalLink from '@/components/ExternalLink';
+import InternalLink from '@/components/InternalLink';
+import Routes from '@/lib/constants/Routes';
 
 interface IProjectDonateCard {
 	project?: IProject;
@@ -162,10 +165,9 @@ const ProjectDonateCard = ({
 
 	useEffect(() => {
 		setIsAdmin(
-			!!user?.walletAddress &&
-				adminUser?.walletAddress === user?.walletAddress,
+			compareAddresses(adminUser?.walletAddress, user?.walletAddress),
 		);
-	}, [user, adminUser]);
+	}, [user]);
 
 	useEffect(() => {
 		setWrapperHeight(wrapperRef?.current?.clientHeight || 0);
@@ -288,22 +290,18 @@ const ProjectDonateCard = ({
 						onClick={likeUnlikeProject}
 					/>
 				</BadgeWrapper>
-				{!isDraft && (
+				{!isAdmin && verified && (
 					<GivBackNotif>
 						<Caption color={brandColors.giv[300]}>
 							When you donate to verified projects, you get GIV
 							back.
 						</Caption>
-						<a
-							href={links.GIVBACK_DOC}
-							target='_blank'
-							rel='noreferrer'
-						>
+						<ExternalLink href={links.GIVBACK_DOC}>
 							<GIVbackButton>Learn more</GIVbackButton>
 							<GIVbackQuestionIcon>
 								<IconHelp size={16} />
 							</GIVbackQuestionIcon>
-						</a>
+						</ExternalLink>
 					</GivBackNotif>
 				)}
 				{isCategories && (
@@ -313,17 +311,17 @@ const ProjectDonateCard = ({
 						))}
 					</CategoryWrapper>
 				)}
-				{!isDraft && (
-					<>
-						<br />
-						<Links
-							target='_blank'
+				{!isDraft && !isAdmin && (
+					<Links>
+						<ExternalLink
 							href={links.REPORT_ISSUE}
-							rel='noreferrer noopener'
-						>
-							Report an issue
-						</Links>
-					</>
+							title='Report an issue'
+						/>
+						<InternalLink
+							href={Routes.Projects}
+							title='View similar projects'
+						/>
+					</Links>
 				)}
 
 				{isAdmin && !isDraft && (
@@ -339,6 +337,13 @@ const ProjectDonateCard = ({
 		</>
 	);
 };
+
+const Links = styled.div`
+	color: ${brandColors.pinky[500]};
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+`;
 
 const BlueBar = styled.div`
 	width: 80px;
@@ -360,11 +365,6 @@ const GivingBlocksContainer = styled.div`
 const GivingBlocksText = styled(Overline)`
 	color: ${neutralColors.gray[600]};
 	font-size: 10px;
-`;
-
-const Links = styled.a`
-	font-size: 14px;
-	color: ${brandColors.pinky[500]} !important;
 `;
 
 const CategoryWrapper = styled.div`
