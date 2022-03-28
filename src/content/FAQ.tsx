@@ -214,30 +214,74 @@ const faqContent = {
 		},
 		{
 			question:
-				'Where can I see in detail how Giveth is spending their donations?',
+				'Where can I see in detail how Giveth is spending their funds?',
 			answer: (
 				<>
 					One of the core values of Giveth is transparency. We invite
 					everyone to have a look at our finances. Funding,
-					expenditures and payments relating to Giveth can be seen in
-					the{' '}
-					<a
-						href='https://trace.giveth.io/community/giveth-dac'
-						target='_blank'
-						rel='noopener noreferrer'
-					>
-						Giveth Community
-					</a>{' '}
-					on{' '}
-					<a
-						href='https://trace.giveth.io/'
-						target='_blank'
-						rel='noopener noreferrer'
-					>
-						Giveth TRACE
-					</a>
-					. All movements are visible at a very granular level in the
-					DApp as well as from an Ethereum blockchain explorer.
+					expenditures and payments relating to Giveth's Treasuries
+					can be seen in many places, including:
+					<ul>
+						<li>
+							<a
+								href='https://aragon.1hive.org/#/nrgiv/'
+								target='_blank'
+								rel='noopener noreferrer'
+							>
+								<b>nrGIV</b>
+							</a>{' '}
+							for Contributor Expenses and GIVbacks
+						</li>
+						<li>
+							<a
+								href='https://gardens.1hive.org/#/xdai/garden/0xb25f0ee2d26461e2b5b3d3ddafe197a0da677b98'
+								target='_blank'
+								rel='noopener noreferrer'
+							>
+								<b>GIVgarden</b>
+							</a>{' '}
+							for community initiatives and external funding
+							requests
+						</li>
+						<li>
+							Giveth Liquidity Multisig on{' '}
+							<a
+								href='https://gnosis-safe.io/app/eth:0xf924fF0f192f0c7c073161e0d62CE7635114e74f/balances'
+								target='_blank'
+								rel='noopener noreferrer'
+							>
+								<b>Mainnet</b>
+							</a>{' '}
+							and{' '}
+							<a
+								href='https://gnosis-safe.io/app/gno:0xf924fF0f192f0c7c073161e0d62CE7635114e74f/balances'
+								target='_blank'
+								rel='noopener noreferrer'
+							>
+								<b>Gnosis Chain</b>
+							</a>{' '}
+							for Liquidity creation for $GIV
+						</li>
+						<li>
+							Giveth Main Multisig on{' '}
+							<a
+								href='https://gnosis-safe.io/app/eth:0x4D9339dd97db55e3B9bCBE65dE39fF9c04d1C2cd/balances'
+								target='_blank'
+								rel='noopener noreferrer'
+							>
+								<b>Mainnet</b>
+							</a>{' '}
+							and{' '}
+							<a
+								href='https://gnosis-safe.io/app/gno:0x4D9339dd97db55e3B9bCBE65dE39fF9c04d1C2cd/balances'
+								target='_blank'
+								rel='noopener noreferrer'
+							>
+								<b>Gnosis Chain</b>
+							</a>{' '}
+							for Grants and Donations to Giveth
+						</li>
+					</ul>
 				</>
 			),
 		},
@@ -460,10 +504,9 @@ const faqContent = {
 				'I still need more detail on how Giveth works. Where can I find this?',
 			answer: (
 				<>
-					For information about the DAO governing Giveth, please visit
-					the <a href='https://wiki.giveth.io'>Wiki</a>. For developer
-					documentation and user guides for the Donation Application
-					please have a look at the{' '}
+					For information about how Giveth works, its governance
+					structure, developer documentation and user guides for the
+					Donation Application please have a look at the{' '}
 					<a
 						href='https://docs.giveth.io'
 						target='_blank'
@@ -528,7 +571,7 @@ const faqContent = {
 			answer: (
 				<>
 					GIV was deployed on Ethereum Mainnet and is used most
-					heavily on Gnosis (xDai). However, the GIViverse is
+					heavily on Gnosis Chain (xDai). However, the GIViverse is
 					multi-chained and GIV will likely be bridged/transferred to
 					other chains and Layer 2 networks.
 				</>
@@ -538,8 +581,8 @@ const faqContent = {
 			question: 'Why are you using the Gnosis (xDai) network?',
 			answer: (
 				<>
-					Giveth was part of the creation of the Gnosis (xDai) Network
-					and loves the low-gas fees!
+					Giveth was part of the creation of Gnosis Chain (formerly
+					xDai Network) and loves the low-gas fees!
 				</>
 			),
 		},
@@ -687,9 +730,9 @@ const faqContent = {
 				"Why can't I see my successfully claimed GIV in my wallet?",
 			answer: (
 				<>
-					The GIVdrop is on the Gnosis (xDai) Network. Ensure that
-					your wallet is connected to xDai and that you have added GIV
-					to your token list! The address for the GIV token on xDai is
+					The GIVdrop is on Gnosis Chain (xDai). Ensure that your
+					wallet is connected to xDai and that you have added GIV to
+					your token list! The address for the GIV token on xDai is
 					0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75.
 				</>
 			),
@@ -825,7 +868,7 @@ const faqContent = {
 				'I earned GIVbacks, but the GIVbacks page says my balance is zero. What happened?',
 			answer: (
 				<>
-					When you harvest GIV rewards on Gnosis (xDai) from the{' '}
+					When you harvest GIV rewards on Gnosis Chain (xDai) from the{' '}
 					<ExternalLink href={Routes.GIVgarden} title='GIVgarden' />
 					, <ExternalLink href={Routes.GIVfarm} title='GIVfarm' />, or{' '}
 					<ExternalLink href={Routes.GIVstream} title='GIVstream' />{' '}
@@ -940,8 +983,8 @@ const faqContent = {
 			question: 'How do I get a GIVstream?',
 			answer: (
 				<>
-					You can get (or increase) your GIVstream flow-rate on xDai
-					chain by donating (on Gnosis (xDai) or Mainnet) and getting{' '}
+					You can get (or increase) your GIVstream flow-rate on Gnosis
+					Chain by donating (on Gnosis (xDai) or Mainnet) and getting{' '}
 					<ExternalLink href={Routes.GIVbacks} title='GIVbacks' />, by
 					wrapping GIV to use in the{' '}
 					<ExternalLink href={Routes.GIVgarden} title='GIVgarden' />,
