@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import UserContext from '../../context/UserProvider';
-import Image from 'next/image';
 import styled from 'styled-components';
 import {
 	brandColors,
@@ -12,13 +11,14 @@ import {
 	neutralColors,
 	Button,
 	semanticColors,
+	IconInfo,
 } from '@giveth/ui-design-system';
+import { IconWalletApprove } from '@giveth/ui-design-system/lib/cjs/components/icons/WalletApprove';
 
 import { IModal, Modal } from '@/components/modals/Modal';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import { WrongNetworkModal } from '@/components/modals/WrongNetwork';
 import { IProject } from '@/apollo/types/types';
-import { Flex } from '../styled-components/Flex';
 import Logger from '../../utils/Logger';
 import { checkNetwork } from '@/utils';
 import { isAddressENS, getAddressFromENS } from '@/lib/wallet';
@@ -254,17 +254,16 @@ const DonateModal = ({
 			/>
 		);
 	}
+
 	return (
-		<Modal showModal={showModal} setShowModal={setShowModal}>
+		<Modal
+			showModal={showModal}
+			setShowModal={setShowModal}
+			headerTitle='Donating'
+			headerTitlePosition='left'
+			headerIcon={<IconWalletApprove size={32} />}
+		>
 			<DonateContainer>
-				<DonateTopTitle>
-					<Image
-						src='/images/wallet_icon.svg'
-						width='32px'
-						height='32px'
-					/>
-					<H6>Donating</H6>
-				</DonateTopTitle>
 				<DonatingBox>
 					<P>You are donating</P>
 					<H3>
@@ -293,14 +292,17 @@ const DonateModal = ({
 				</DonatingBox>
 				<Buttons>
 					{donationSaved && (
-						<ToastContainer>
-							<FixedToast
-								message='Your donation is being processed, you can close this modal.'
-								color={semanticColors.blueSky[700]}
-								backgroundColor={semanticColors.blueSky[100]}
-								icon={() => <img src='/images/info-icon.svg' />}
-							/>
-						</ToastContainer>
+						<FixedToast
+							message='Your donation is being processed, you can close this modal.'
+							color={semanticColors.blueSky[700]}
+							backgroundColor={semanticColors.blueSky[100]}
+							icon={
+								<IconInfo
+									size={16}
+									color={semanticColors.blueSky[700]}
+								/>
+							}
+						/>
 					)}
 					<DonateButton
 						donating={donating}
@@ -315,9 +317,7 @@ const DonateModal = ({
 						<CloseButton
 							label='CLOSE THIS MODAL'
 							buttonType='texty'
-							onClick={() => {
-								setShowModal(false);
-							}}
+							onClick={() => setShowModal(false)}
 						/>
 					)}
 				</Buttons>
@@ -329,20 +329,11 @@ const DonateModal = ({
 const DonateContainer = styled.div`
 	background: white;
 	color: black;
-	padding: 0 24px 38px 24px;
-	margin: -30px 0 0 0;
+	padding: 24px 24px 38px;
+	margin: 0;
 	width: 100%;
-	${mediaQueries['tablet']} {
+	${mediaQueries.tablet} {
 		width: 494px;
-	}
-`;
-
-const DonateTopTitle = styled(Flex)`
-	gap: 14px;
-	h6 {
-		padding: 24px 0;
-		font-weight: bold;
-		color: ${neutralColors.gray[900]};
 	}
 `;
 
@@ -389,6 +380,10 @@ const Buttons = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+
+	> :first-child {
+		margin: 15px 0;
+	}
 `;
 
 const CloseButton = styled(Button)`
@@ -396,10 +391,6 @@ const CloseButton = styled(Button)`
 	:hover {
 		background: transparent;
 	}
-`;
-
-const ToastContainer = styled.div`
-	margin: 15px 0;
 `;
 
 export default DonateModal;

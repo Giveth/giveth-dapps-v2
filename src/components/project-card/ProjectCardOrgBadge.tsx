@@ -40,7 +40,7 @@ const GivingBadgeContainer = styled.div<{ isHover: boolean }>`
 	gap: 8px;
 	padding: 0 24px;
 	position: absolute;
-	bottom: ${props => (props.isHover ? '88px' : '24px')};
+	bottom: ${props => (props.isHover ? '100px' : '24px')};
 	transition: bottom 0.3s ease;
 	border-radius: 0px 12px 0px 0px;
 `;
