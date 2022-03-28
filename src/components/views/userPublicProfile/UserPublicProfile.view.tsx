@@ -141,7 +141,7 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 					/>
 				)}
 				<NoUserContainer>
-					<H5>Not logged in or user not found</H5>
+					<H5>Not logged in</H5>
 				</NoUserContainer>
 			</>
 		);

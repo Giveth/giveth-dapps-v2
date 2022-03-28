@@ -11,7 +11,7 @@ const NoUserContainer = styled.div`
 
 const UserRoute: FC = () => {
 	const {
-		state: { isSignedIn, user },
+		state: { user },
 	} = useUser();
 	return (
 		<>

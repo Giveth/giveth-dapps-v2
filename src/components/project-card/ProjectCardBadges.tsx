@@ -14,6 +14,7 @@ import {
 import styled from 'styled-components';
 import ShareModal from '../modals/ShareModal';
 import { likeProject, unlikeProject } from '@/lib/reaction';
+import { showToastError } from '@/lib/helpers';
 
 interface IBadgeWrapper {
 	width?: string;
@@ -83,7 +84,7 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 					}
 				}
 			} catch (e) {
-				console.error('Error on like/unlike project ', e);
+				showToastError(e);
 			} finally {
 				setLoading(false);
 			}

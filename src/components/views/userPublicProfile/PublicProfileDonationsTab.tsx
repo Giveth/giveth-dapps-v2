@@ -45,7 +45,10 @@ const injectSortIcon = (order: IOrder, title: EOrderBy) => {
 	);
 };
 
-const PublicProfileDonationsTab: FC<IUserPublicProfileView> = ({ user }) => {
+const PublicProfileDonationsTab: FC<IUserPublicProfileView> = ({
+	myAccount,
+	user,
+}) => {
 	const [loading, setLoading] = useState(false);
 	const [donations, setDonations] = useState<IWalletDonation[]>([]);
 	const [totalDonations, setTotalDonations] = useState<number>(0);
@@ -102,7 +105,11 @@ const PublicProfileDonationsTab: FC<IUserPublicProfileView> = ({ user }) => {
 			<DonationTableWrapper>
 				{!loading && totalDonations === 0 ? (
 					<NothingWrapper>
-						<NothingToSee title='It seems this user didn’t donate to any project yet!' />
+						<NothingToSee
+							title={`${
+								myAccount ? "You haven't" : "This user hasn't"
+							} donated to any projects yet!`}
+						/>
 					</NothingWrapper>
 				) : (
 					<DonationTable
