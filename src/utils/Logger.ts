@@ -1,7 +1,7 @@
 import { init, captureException } from '@sentry/browser';
 
 if (typeof window === 'object') {
-	const sentryDsn = process.env.SENTRY_DSN;
+	const sentryDsn = process.env.NEXT_PUBLIC_SENTRY_DSN;
 	init({
 		dsn: sentryDsn,
 		tracesSampleRate: 1.0, // james: look at dropping this,
