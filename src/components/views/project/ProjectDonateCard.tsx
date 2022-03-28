@@ -252,14 +252,15 @@ const ProjectDonateCard = ({
 								router.push(idToProjectEdit(project?.id || ''))
 							}
 						/>
-						{!verified && !isDraft ? (
+						{!verified && !isDraft && (
 							<FullOutlineButton
 								buttonType='primary'
 								label='VERIFY YOUR PROJECT'
 								disabled={!isActive}
 								onClick={() => setShowVerificationModal(true)}
 							/>
-						) : (
+						)}
+						{isDraft && (
 							<FullButton
 								buttonType='primary'
 								onClick={() => handleProjectStatus(false)}
