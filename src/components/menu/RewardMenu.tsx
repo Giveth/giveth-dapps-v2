@@ -33,13 +33,19 @@ import { ETheme, useGeneral } from '@/context/general.context';
 import Routes from '@/lib/constants/Routes';
 import { networkInfo } from '@/lib/constants/NetworksObj';
 
-export const RewardMenu = () => {
+interface IRewardMenu {
+	showWhatIsGIVstreamModal: boolean;
+	setShowWhatIsGIVstreamModal: (value: boolean) => void;
+}
+
+export const RewardMenu = ({
+	showWhatIsGIVstreamModal,
+	setShowWhatIsGIVstreamModal,
+}: IRewardMenu) => {
 	const [isMounted, setIsMounted] = useState(false);
 	const [farmsLiquidPart, setFarmsLiquidPart] = useState(Zero);
 	const [givStreamLiquidPart, setGIVstreamLiquidPart] = useState(Zero);
 	const [flowRateNow, setFlowRateNow] = useState<BigNumber.Value>(0);
-	const [showWhatIsGIVstreamModal, setShowWhatIsGIVstreamModal] =
-		useState(false);
 	const { givTokenDistroHelper } = useTokenDistro();
 	const { currentValues } = useSubgraph();
 	const { rewardBalance } = useStakingNFT();
