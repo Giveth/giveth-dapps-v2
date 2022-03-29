@@ -33,6 +33,13 @@ import { GIVfrens } from '@/components/GIVfrens';
 import { givEconomySupportedNetworks } from '@/utils/constants';
 import { shortenAddress } from '@/lib/helpers';
 import { Col, Container, Row } from '@/components/Grid';
+import links from '@/lib/constants/links';
+import {
+	DaoCard,
+	DaoCardTitle,
+	DaoCardQuote,
+	DaoCardButton,
+} from '../GIVfrens.sc';
 
 const GIVfarmTabContainer = styled(Container)``;
 
@@ -233,11 +240,25 @@ export const TabGIVfarmBottom = () => {
 							</Col>
 						</PoolRow>
 						<GIVfrens
-							regenFarms={config.MAINNET_CONFIG.regenFarms}
-							network={config.MAINNET_NETWORK_NUMBER}
+							regenFarms={config.XDAI_CONFIG.regenFarms}
+							network={config.XDAI_NETWORK_NUMBER}
 						/>
 					</>
 				)}
+				<Col xs={12}>
+					<DaoCard>
+						<DaoCardTitle weight={900}>Add Your DAO</DaoCardTitle>
+						<DaoCardQuote size='small'>
+							Apply to kickstart a RegenFarm for your for-good DAO
+						</DaoCardQuote>
+						<DaoCardButton
+							label='Apply Now'
+							linkType='primary'
+							href={links.JOINGIVFRENS}
+							target='_blank'
+						/>
+					</DaoCard>
+				</Col>
 			</Container>
 		</GIVfarmBottomContainer>
 	);
