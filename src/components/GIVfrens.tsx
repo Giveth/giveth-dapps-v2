@@ -6,13 +6,15 @@ import {
 	DaoCardButton,
 	DaoCardQuote,
 	DaoCardTitle,
+	DAOContainer,
 	GIVfrensLink,
 	Subtitle,
+	DAOChangeNetwork,
 } from '@/components/GIVfrens.sc';
 import { PoolRow } from '@/components/homeTabs/GIVfarm.sc';
 import { useWeb3React } from '@web3-react/core';
 import StakingPoolCard from '@/components/cards/StakingPoolCard';
-import { Col } from './Grid';
+import { Col, Row } from './Grid';
 import links from '@/lib/constants/links';
 import config from '@/configuration';
 import { givEconomySupportedNetworks } from '@/utils/constants';
@@ -51,54 +53,36 @@ export const GIVfrens: FC<IGIVfrensProps> = ({ regenFarms, network }) => {
 						s => s.type === poolStakingConfig.regenStreamType,
 					);
 					return (
-						<>
-							<Col
-								xs={12}
-								sm={6}
-								lg={4}
-								key={`regen_staking_pool_card_${network}_${index}`}
-							>
-								<StakingPoolCard
-									network={network}
-									poolStakingConfig={poolStakingConfig}
-								/>
-							</Col>
-							<Col
-								xs={12}
-								sm={6}
-								lg={8}
-								key={`regen_staking_pool_card_${network}_${index}`}
-							>
-								{regenStream && (
-									<RegenStreamCard
-										streamConfig={regenStream}
-										network={
-											givEconomySupportedNetworks.includes(
-												chainId as number,
-											)
-												? (chainId as number)
-												: config.MAINNET_NETWORK_NUMBER
-										}
+						<DAOContainer
+							key={`regen_staking_pool_card_${network}_${index}`}
+							xs={12}
+						>
+							<Row>
+								<Col xs={12} sm={6} lg={4}>
+									<StakingPoolCard
+										network={network}
+										poolStakingConfig={poolStakingConfig}
 									/>
-								)}
-							</Col>
-						</>
+								</Col>
+								<Col xs={12} sm={6} lg={8}>
+									{regenStream && (
+										<RegenStreamCard
+											streamConfig={regenStream}
+											network={
+												givEconomySupportedNetworks.includes(
+													chainId as number,
+												)
+													? (chainId as number)
+													: config.MAINNET_NETWORK_NUMBER
+											}
+										/>
+									)}
+								</Col>
+							</Row>
+							<DAOChangeNetwork></DAOChangeNetwork>
+						</DAOContainer>
 					);
 				})}
-				<Col xs={12}>
-					<DaoCard>
-						<DaoCardTitle weight={900}>Add Your DAO</DaoCardTitle>
-						<DaoCardQuote size='small'>
-							Apply to kickstart a RegenFarm for your for-good DAO
-						</DaoCardQuote>
-						<DaoCardButton
-							label='Apply Now'
-							linkType='primary'
-							href={links.JOINGIVFRENS}
-							target='_blank'
-						/>
-					</DaoCard>
-				</Col>
 			</PoolRow>
 		</>
 	);
