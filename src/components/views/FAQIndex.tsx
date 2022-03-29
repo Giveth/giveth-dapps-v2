@@ -1,12 +1,16 @@
 import Image from 'next/image';
-import { brandColors, D3, Lead } from '@giveth/ui-design-system';
+import { brandColors, D3 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
-import SearchBox from '../SearchBox';
+// import SearchBox from '../SearchBox';
 import Accordion from '../Accordion';
-import FAQArray from '@/content/FAQs.json';
+import faqContent from '@/content/FAQ';
 import { Arc } from '@/components/styled-components/Arc';
 import FlowerIcon from '/public//images/flower_faq.svg';
+import { Container } from '@/components/Grid';
+import { deviceSize, mediaQueries } from '@/utils/constants';
+
+type TFAQ = 'General' | 'Giveth' | 'GIVeconomy';
 
 const FAQIndex = () => {
 	return (
@@ -27,12 +31,16 @@ const FAQIndex = () => {
 					{/*/>*/}
 				</SearchStyles>
 				<FAQContainer>
-					{FAQArray.map(i => (
-						<Accordion
-							key={i.question}
-							title={i.question}
-							description={i.answer}
-						/>
+					{Object.keys(faqContent).map(i => (
+						<Accordion key={i} title={i}>
+							{faqContent[i as TFAQ].map(faq => (
+								<Accordion
+									key={faq.question}
+									title={faq.question}
+									description={faq.answer}
+								/>
+							))}
+						</Accordion>
 					))}
 				</FAQContainer>
 			</Wrapper>
@@ -43,20 +51,24 @@ const FAQIndex = () => {
 const FlowerContainer = styled.div`
 	position: absolute;
 	right: 0;
-	bottom: 150px;
+	top: 150px;
 `;
 
 const PurpleArc = styled(Arc)`
 	border-width: 100px;
 	border-color: ${brandColors.deep[200]} ${brandColors.deep[200]} transparent
 		transparent;
-	bottom: 0;
-	left: -350px;
+	top: 100px;
+	left: -550px;
 	width: 700px;
 	height: 700px;
 	transform: rotate(45deg);
 	z-index: 0;
 	opacity: 0.2;
+
+	${mediaQueries.tablet} {
+		left: -350px;
+	}
 `;
 
 const MustardArc = styled(Arc)`
@@ -71,9 +83,11 @@ const MustardArc = styled(Arc)`
 	opacity: 0.3;
 `;
 
-const FAQContainer = styled.div`
-	margin: 0 150px 150px 150px;
+const FAQContainer = styled(Container)`
 	position: relative;
+	@media (max-width: ${deviceSize.mobileL + 'px'}) {
+		padding: 0;
+	}
 `;
 
 const SearchStyles = styled.div`

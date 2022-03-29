@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import TermsArray from '@/content/Terms.json';
+import TermsArray from '@/content/Terms';
 import Accordion from '../Accordion';
 import FlowerIcon from '/public//images/flower_terms.svg';
 import styled from 'styled-components';
