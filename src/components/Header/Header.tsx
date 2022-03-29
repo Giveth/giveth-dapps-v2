@@ -50,6 +50,7 @@ export interface IHeader {
 
 const Header: FC<IHeader> = () => {
 	const [showRewardMenu, setShowRewardMenu] = useState(false);
+	const [showRewardMenuModal, setShowRewardMenuModal] = useState(false);
 	const [showUserMenu, setShowUserMenu] = useState(false);
 	const [showHeader, setShowHeader] = useState(true);
 	const [showWalletModal, setShowWalletModal] = useState(false);
@@ -134,6 +135,12 @@ const Header: FC<IHeader> = () => {
 			router.push(Routes.CreateProject);
 		} else {
 			showCompleteProfile();
+		}
+	};
+
+	const handleRewardMenuOnLeave = () => {
+		if (!showRewardMenuModal) {
+			setShowRewardMenu(false);
 		}
 	};
 
@@ -227,7 +234,7 @@ const Header: FC<IHeader> = () => {
 							<MenuAndButtonContainer
 								onClick={() => setShowRewardMenu(true)}
 								onMouseEnter={() => setShowRewardMenu(true)}
-								onMouseLeave={() => setShowRewardMenu(false)}
+								onMouseLeave={handleRewardMenuOnLeave}
 							>
 								<BalanceButton outline theme={theme}>
 									<HBContainer>
@@ -244,7 +251,16 @@ const Header: FC<IHeader> = () => {
 									</HBContainer>
 									<CoverLine theme={theme} />
 								</BalanceButton>
-								{showRewardMenu && <RewardMenu />}
+								{showRewardMenu && (
+									<RewardMenu
+										showWhatIsGIVstreamModal={
+											showRewardMenuModal
+										}
+										setShowWhatIsGIVstreamModal={
+											setShowRewardMenuModal
+										}
+									/>
+								)}
 							</MenuAndButtonContainer>
 							<MenuAndButtonContainer
 								onClick={() => setShowUserMenu(true)}
