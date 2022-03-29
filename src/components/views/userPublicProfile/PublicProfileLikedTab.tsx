@@ -12,7 +12,10 @@ import { mediaQueries } from '@/utils/constants';
 
 const itemPerPage = 6;
 
-const PublicProfileLikedTab: FC<IUserPublicProfileView> = ({ user }) => {
+const PublicProfileLikedTab: FC<IUserPublicProfileView> = ({
+	myAccount,
+	user,
+}) => {
 	const [loading, setLoading] = useState(false);
 	const [projects, setProjects] = useState<IProject[]>([]);
 	const [totalCount, setTotalCount] = useState<number>(0);
@@ -46,7 +49,9 @@ const PublicProfileLikedTab: FC<IUserPublicProfileView> = ({ user }) => {
 			{!loading && totalCount == 0 ? (
 				<NothingWrapper>
 					<NothingToSee
-						title='This user didn’t like any project yet!!'
+						title={`${
+							myAccount ? "You haven't" : "This user hasn't"
+						} liked any projects yet!`}
 						heartIcon={true}
 					/>
 				</NothingWrapper>
