@@ -14,6 +14,9 @@ import { useWeb3React } from '@web3-react/core';
 import StakingPoolCard from '@/components/cards/StakingPoolCard';
 import { Col } from './Grid';
 import links from '@/lib/constants/links';
+import config from '@/configuration';
+import { givEconomySupportedNetworks } from '@/utils/constants';
+import { RegenStreamCard } from './RegenStreamCard';
 
 interface IGIVfrensProps {
 	regenFarms: RegenPoolStakingConfig[];
@@ -42,17 +45,44 @@ export const GIVfrens: FC<IGIVfrensProps> = ({ regenFarms, network }) => {
 			</Col>
 			<PoolRow disabled={!chainId || chainId !== network}>
 				{regenFarms.map((poolStakingConfig, index) => {
+					const regenStream = config.NETWORKS_CONFIG[
+						network
+					].regenStreams.find(
+						s => s.type === poolStakingConfig.regenStreamType,
+					);
 					return (
-						<Col
-							sm={6}
-							lg={4}
-							key={`regen_staking_pool_card_${network}_${index}`}
-						>
-							<StakingPoolCard
-								network={network}
-								poolStakingConfig={poolStakingConfig}
-							/>
-						</Col>
+						<>
+							<Col
+								xs={12}
+								sm={6}
+								lg={4}
+								key={`regen_staking_pool_card_${network}_${index}`}
+							>
+								<StakingPoolCard
+									network={network}
+									poolStakingConfig={poolStakingConfig}
+								/>
+							</Col>
+							<Col
+								xs={12}
+								sm={6}
+								lg={8}
+								key={`regen_staking_pool_card_${network}_${index}`}
+							>
+								{regenStream && (
+									<RegenStreamCard
+										streamConfig={regenStream}
+										network={
+											givEconomySupportedNetworks.includes(
+												chainId as number,
+											)
+												? (chainId as number)
+												: config.MAINNET_NETWORK_NUMBER
+										}
+									/>
+								)}
+							</Col>
+						</>
 					);
 				})}
 				<Col xs={12}>

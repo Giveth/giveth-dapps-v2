@@ -196,7 +196,6 @@ export const TabGIVstreamBottom = () => {
 					</IconWithTooltip>
 				</FlowRateRow>
 				<GIVstreamProgress percentage={percent} remainTime={remain} />
-				<RegenStreamBlock />
 				<HistoryTitleRow>
 					<HistoryTitle>History</HistoryTitle>
 					<IconWithTooltip
