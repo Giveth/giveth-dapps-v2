@@ -22,6 +22,8 @@ const links: any = {
 	YOUTUBE: 'https://www.youtube.com/channel/UClfutpRoY0WTVnq0oB0E0wQ',
 	REDDIT: 'https://reddit.com/r/giveth',
 	DOCS,
+	GIVFARM_DOCS: DOCS + 'giveconomy/givfarm',
+	GIVSTREAM_DOCS: DOCS + 'giveconomy/givstream',
 	GIVBACK_DOC: DOCS + 'giveconomy/givbacks',
 	COVENANT_DOC: DOCS + 'whatisgiveth/covenant/',
 	GIVETH_DOCS: DOCS + 'whatisgiveth/',

@@ -918,13 +918,10 @@ const faqContent = {
 					is the Giveth liquidity mining program that allows GIV
 					holders to provide liquidity and stake tokens to earn GIV
 					rewards. To learn more, check out the{' '}
-					<a
-						href='https://docs.giveth.io/giveconomy/givfarm/'
-						target='_blank'
-						rel='noreferrer'
-					>
-						GIVfarm documentation
-					</a>
+					<ExternalLink
+						href={links.GIVFARM_DOCS}
+						title='GIVfarm documentation'
+					/>
 					.
 				</>
 			),
@@ -942,13 +939,10 @@ const faqContent = {
 					is created, the GIViverse expands -- More GIV becomes liquid
 					and more GIV spreads out to our community of stakeholders.
 					To learn more, check out the{' '}
-					<a
-						href='https://docs.giveth.io/giveconomy/givstream/'
-						target='_blank'
-						rel='noreferrer'
-					>
-						GIVstream documentation
-					</a>
+					<ExternalLink
+						href={links.GIVSTREAM_DOCS}
+						title='GIVstream documentation'
+					/>
 					.
 				</>
 			),
