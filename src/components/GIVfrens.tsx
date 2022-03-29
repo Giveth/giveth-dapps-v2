@@ -1,11 +1,14 @@
 import { RegenPoolStakingConfig } from '@/types/config';
 import React, { FC } from 'react';
-import { H3 } from '@giveth/ui-design-system';
 import {
-	DaoCard,
-	DaoCardButton,
-	DaoCardQuote,
-	DaoCardTitle,
+	brandColors,
+	Button,
+	Caption,
+	H3,
+	IconInfo16,
+	neutralColors,
+} from '@giveth/ui-design-system';
+import {
 	DAOContainer,
 	GIVfrensLink,
 	Subtitle,
@@ -15,10 +18,12 @@ import { PoolRow } from '@/components/homeTabs/GIVfarm.sc';
 import { useWeb3React } from '@web3-react/core';
 import StakingPoolCard from '@/components/cards/StakingPoolCard';
 import { Col, Row } from './Grid';
-import links from '@/lib/constants/links';
 import config from '@/configuration';
 import { givEconomySupportedNetworks } from '@/utils/constants';
 import { RegenStreamCard } from './RegenStreamCard';
+import styled from 'styled-components';
+import { Flex } from './styled-components/Flex';
+import { switchNetwork } from '@/lib/wallet';
 
 interface IGIVfrensProps {
 	regenFarms: RegenPoolStakingConfig[];
@@ -45,7 +50,7 @@ export const GIVfrens: FC<IGIVfrensProps> = ({ regenFarms, network }) => {
 					.
 				</Subtitle>
 			</Col>
-			<PoolRow disabled={!chainId || chainId !== network}>
+			<PoolRow>
 				{regenFarms.map((poolStakingConfig, index) => {
 					const regenStream = config.NETWORKS_CONFIG[
 						network
@@ -79,7 +84,12 @@ export const GIVfrens: FC<IGIVfrensProps> = ({ regenFarms, network }) => {
 									)}
 								</Col>
 							</Row>
-							<DAOChangeNetwork></DAOChangeNetwork>
+							{chainId !== config.XDAI_NETWORK_NUMBER && (
+								<>
+									<DAOChangeNetwork />
+									<DAOChangeNetworkModal />
+								</>
+							)}
 						</DAOContainer>
 					);
 				})}
@@ -87,3 +97,49 @@ export const GIVfrens: FC<IGIVfrensProps> = ({ regenFarms, network }) => {
 		</>
 	);
 };
+
+const DAOChangeNetworkModal = () => {
+	return (
+		<DAOChangeNetworkModalContainer>
+			<Flex gap='16px'>
+				<IconInfo16 />
+				<Title>Switch network</Title>
+			</Flex>
+			<Desc>This RegenFarm is only available on Gnosis chain.</Desc>
+			<ChangeButton
+				buttonType='texty'
+				label='Switch to Gnosis Chain'
+				onClick={() => switchNetwork(config.XDAI_NETWORK_NUMBER)}
+			/>
+		</DAOChangeNetworkModalContainer>
+	);
+};
+
+const DAOChangeNetworkModalContainer = styled.div`
+	background-color: ${neutralColors.gray[100]};
+	color: ${brandColors.giv[300]};
+	border: 1px solid ${brandColors.giv[300]};
+	border-radius: 8px;
+	width: 320px;
+	z-index: 4;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	opacity: 2;
+	padding: 16px;
+`;
+
+const Title = styled(Caption)`
+	font-weight: bold;
+`;
+
+const Desc = styled(Caption)`
+	margin-left: 32px;
+	margin-bottom: 16px;
+`;
+
+const ChangeButton = styled(Button)`
+	color: ${brandColors.giv[300]};
+	margin-left: auto;
+`;
