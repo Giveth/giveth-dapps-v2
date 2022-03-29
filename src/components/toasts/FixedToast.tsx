@@ -8,7 +8,7 @@ interface IFToast {
 	color: string;
 	boldColor?: string;
 	backgroundColor: string;
-	icon?: any;
+	icon?: JSX.Element;
 }
 
 interface IToastContainer {
@@ -19,7 +19,7 @@ const FixedToast = (props: IFToast) => {
 	const { message, icon, color, backgroundColor, boldColor, href } = props;
 	return (
 		<Container color={backgroundColor} borderColor={color}>
-			{icon && <Icon>{icon()}</Icon>}
+			{icon && <Icon>{icon}</Icon>}
 			<Text color={color}>{message}</Text>
 			{href && (
 				<a href={href} target='_blank' rel='noreferrer'>
@@ -32,7 +32,7 @@ const FixedToast = (props: IFToast) => {
 
 const Container = styled.div`
 	display: flex;
-	flex-direction: row;
+	align-items: center;
 	background-color: ${props => props.color};
 	padding: 13.5px 16px;
 	border: 1px solid ${(props: IToastContainer) => props.borderColor};
