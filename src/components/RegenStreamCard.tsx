@@ -129,16 +129,15 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 						<StreamRateUnit>
 							{streamConfig.rewardTokenSymbol}/week
 						</StreamRateUnit>
-						<IconWithTooltip
+						{/* <IconWithTooltip
 							icon={<IconHelp size={16} />}
-							direction={'right'}
+							direction={'left'}
 						>
 							<GsPTooltip>
-								Time left for the{' '}
-								{streamConfig.rewardTokenSymbol}
-								stream to reach full power!
+								Your {streamConfig.rewardTokenSymbol}stream
+								flowrate
 							</GsPTooltip>
-						</IconWithTooltip>
+						</IconWithTooltip> */}
 					</RateRow>
 				</HeaderRow>
 				<div>

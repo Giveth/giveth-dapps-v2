@@ -58,7 +58,7 @@ export const APRModal: FC<IAPRModalProps> = ({
 							A percentage of the {rewardTokenSymbol} you earn
 							from staking is claimable immediately, and the
 							remaining percent goes into increasing your{' '}
-							{rewardTokenSymbol} stream flowrate. Over time, a
+							{rewardTokenSymbol}stream flowrate. Over time, a
 							greater percentage of your total earnings will be
 							claimable immediately.
 						</Desc>

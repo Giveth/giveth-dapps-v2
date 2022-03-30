@@ -252,7 +252,7 @@ export const TabGIVfarmBottom = () => {
 							Apply to kickstart a RegenFarm for your for-good DAO
 						</DaoCardQuote>
 						<DaoCardButton
-							label='Apply Now'
+							label='APPLY NOW'
 							linkType='primary'
 							href={links.JOINGIVFRENS}
 							target='_blank'
