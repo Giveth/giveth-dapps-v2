@@ -238,6 +238,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	};
 
 	const streamName = regenStreamConfig ? 'RegenStream ' : 'GIVstream ';
+	const modalTitle = regenStreamConfig ? 'RegenFarm Rewards' : title;
 
 	const calcUSD = (amount: string) => {
 		const price = tokenPrice || givPrice;
@@ -248,7 +249,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 		<Modal
 			showModal={showModal}
 			setShowModal={setShowModal}
-			headerTitle={title}
+			headerTitle={modalTitle}
 			headerTitlePosition={'left'}
 			// title='Your GIVgardens Rewards'
 		>
@@ -304,8 +305,8 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 										/>
 										<HelpRow alignItems='center'>
 											<Caption>
-												Added to your {streamName}
-												flowrate
+												Added to your {tokenSymbol}
+												stream flowrate
 											</Caption>
 											<IconWithTooltip
 												icon={
@@ -320,9 +321,9 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 												direction={'top'}
 											>
 												<TooltipContent>
-													Increase you {streamName}
-													flowrate when you claim
-													liquid rewards!
+													Increase you {tokenSymbol}
+													stream flowrate when you
+													claim liquid rewards!
 												</TooltipContent>
 											</IconWithTooltip>
 										</HelpRow>
@@ -355,8 +356,8 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 										/>
 										<HelpRow alignItems='center'>
 											<Caption>
-												Added to your {streamName}
-												flowrate
+												Added to your {tokenSymbol}
+												stream flowrate
 											</Caption>
 											<IconWithTooltip
 												icon={
@@ -371,9 +372,9 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 												direction={'top'}
 											>
 												<TooltipContent>
-													Increase you {streamName}
-													flowrate when you claim
-													liquid rewards!
+													Increase you {tokenSymbol}
+													stream flowrate when you
+													claim liquid rewards!
 												</TooltipContent>
 											</IconWithTooltip>
 										</HelpRow>
@@ -443,9 +444,8 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 								)}
 								<HarvestAllDesc>
 									When you harvest {tokenSymbol} rewards, all
-									liquid
-									{tokenSymbol} allocated to you is sent to
-									your wallet.
+									liquid {tokenSymbol} allocated to you is
+									sent to your wallet.
 								</HarvestAllDesc>
 								{state === HarvestStates.HARVEST && (
 									<HarvestButton
