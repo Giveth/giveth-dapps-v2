@@ -163,7 +163,7 @@ export const TabGIVbacksBottom = () => {
 									label='DONATE TO EARN GIV'
 									linkType='secondary'
 									size='large'
-									href={Routes.Project}
+									href={Routes.Projects}
 								/>
 							}
 						>
