@@ -1,19 +1,29 @@
 import { RegenPoolStakingConfig } from '@/types/config';
 import React, { FC } from 'react';
-import { H3 } from '@giveth/ui-design-system';
 import {
-	DaoCard,
-	DaoCardButton,
-	DaoCardQuote,
-	DaoCardTitle,
+	brandColors,
+	Button,
+	Caption,
+	H3,
+	IconInfo16,
+	neutralColors,
+} from '@giveth/ui-design-system';
+import {
+	DAOContainer,
 	GIVfrensLink,
 	Subtitle,
+	DAOChangeNetwork,
 } from '@/components/GIVfrens.sc';
 import { PoolRow } from '@/components/homeTabs/GIVfarm.sc';
 import { useWeb3React } from '@web3-react/core';
 import StakingPoolCard from '@/components/cards/StakingPoolCard';
-import { Col } from './Grid';
-import links from '@/lib/constants/links';
+import { Col, Row } from './Grid';
+import config from '@/configuration';
+import { givEconomySupportedNetworks } from '@/utils/constants';
+import { RegenStreamCard } from './RegenStreamCard';
+import styled from 'styled-components';
+import { Flex } from './styled-components/Flex';
+import { switchNetwork } from '@/lib/wallet';
 
 interface IGIVfrensProps {
 	regenFarms: RegenPoolStakingConfig[];
@@ -40,36 +50,96 @@ export const GIVfrens: FC<IGIVfrensProps> = ({ regenFarms, network }) => {
 					.
 				</Subtitle>
 			</Col>
-			<PoolRow disabled={!chainId || chainId !== network}>
+			<PoolRow>
 				{regenFarms.map((poolStakingConfig, index) => {
+					const regenStream = config.NETWORKS_CONFIG[
+						network
+					].regenStreams.find(
+						s => s.type === poolStakingConfig.regenStreamType,
+					);
 					return (
-						<Col
-							sm={6}
-							lg={4}
+						<DAOContainer
 							key={`regen_staking_pool_card_${network}_${index}`}
+							xs={12}
 						>
-							<StakingPoolCard
-								network={network}
-								poolStakingConfig={poolStakingConfig}
-							/>
-						</Col>
+							<Row>
+								<Col xs={12} sm={6} lg={4}>
+									<StakingPoolCard
+										network={network}
+										poolStakingConfig={poolStakingConfig}
+									/>
+								</Col>
+								<Col xs={12} sm={6} lg={8}>
+									{regenStream && (
+										<RegenStreamCard
+											streamConfig={regenStream}
+											network={
+												givEconomySupportedNetworks.includes(
+													chainId as number,
+												)
+													? (chainId as number)
+													: config.MAINNET_NETWORK_NUMBER
+											}
+										/>
+									)}
+								</Col>
+							</Row>
+							{chainId !== config.XDAI_NETWORK_NUMBER && (
+								<>
+									<DAOChangeNetwork />
+									<DAOChangeNetworkModal />
+								</>
+							)}
+						</DAOContainer>
 					);
 				})}
-				<Col xs={12}>
-					<DaoCard>
-						<DaoCardTitle weight={900}>Add Your DAO</DaoCardTitle>
-						<DaoCardQuote size='small'>
-							Apply to kickstart a RegenFarm for your for-good DAO
-						</DaoCardQuote>
-						<DaoCardButton
-							label='Apply Now'
-							linkType='primary'
-							href={links.JOINGIVFRENS}
-							target='_blank'
-						/>
-					</DaoCard>
-				</Col>
 			</PoolRow>
 		</>
 	);
 };
+
+const DAOChangeNetworkModal = () => {
+	return (
+		<DAOChangeNetworkModalContainer>
+			<Flex gap='16px'>
+				<IconInfo16 />
+				<Title>Switch network</Title>
+			</Flex>
+			<Desc>This RegenFarm is only available on Gnosis chain.</Desc>
+			<ChangeButton
+				buttonType='texty'
+				label='Switch to Gnosis Chain'
+				onClick={() => switchNetwork(config.XDAI_NETWORK_NUMBER)}
+			/>
+		</DAOChangeNetworkModalContainer>
+	);
+};
+
+const DAOChangeNetworkModalContainer = styled.div`
+	background-color: ${neutralColors.gray[100]};
+	color: ${brandColors.giv[300]};
+	border: 1px solid ${brandColors.giv[300]};
+	border-radius: 8px;
+	width: 320px;
+	z-index: 4;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	opacity: 2;
+	padding: 16px;
+`;
+
+const Title = styled(Caption)`
+	font-weight: bold;
+`;
+
+const Desc = styled(Caption)`
+	margin-left: 32px;
+	margin-bottom: 16px;
+`;
+
+const ChangeButton = styled(Button)`
+	color: ${brandColors.giv[300]};
+	margin-left: auto;
+`;
