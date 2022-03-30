@@ -15,7 +15,8 @@ import { isUserRegistered } from '@/lib/helpers';
 import useUser from '@/context/UserProvider';
 import { HomeContainer } from '@/components/views/homepage/Home.sc';
 import { deviceSize, mediaQueries } from '@/utils/constants';
-import { Col, Row } from '@/components/Grid';
+import { Col } from '@/components/Grid';
+import useModal from '@/context/ModalProvider';
 
 const content = [
 	{
@@ -44,8 +45,11 @@ const HomeChangeMakers = () => {
 	const router = useRouter();
 	const {
 		state: { user },
-		actions: { showCompleteProfile },
 	} = useUser();
+
+	const {
+		actions: { showCompleteProfile },
+	} = useModal();
 
 	const handleCreateButton = () => {
 		if (isUserRegistered(user)) {

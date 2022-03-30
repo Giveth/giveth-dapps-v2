@@ -11,14 +11,18 @@ import {
 	showToastError,
 } from '@/lib/helpers';
 import CreateProject from '@/components/views/create/CreateProject';
+import useModal from '@/context/ModalProvider';
 
 const EditIndex = () => {
 	const [project, setProject] = useState<IProjectEdition>();
 
 	const {
 		state: { user, isSignedIn },
-		actions: { showCompleteProfile, showSignWithWallet, showWelcomeModal },
 	} = useUser();
+
+	const {
+		actions: { showWelcomeModal, showSignWithWallet, showCompleteProfile },
+	} = useModal();
 
 	const router = useRouter();
 	const projectId = router?.query.projectIdSlug as string;
@@ -26,7 +30,6 @@ const EditIndex = () => {
 	useEffect(() => {
 		const userAddress = user?.walletAddress;
 		if (userAddress) {
-			showWelcomeModal(false);
 			if (project) setProject(undefined);
 			if (!isUserRegistered(user)) {
 				showCompleteProfile();
@@ -56,7 +59,7 @@ const EditIndex = () => {
 				})
 				.catch(showToastError);
 		} else {
-			showWelcomeModal(true);
+			showWelcomeModal();
 		}
 	}, [user, isSignedIn]);
 

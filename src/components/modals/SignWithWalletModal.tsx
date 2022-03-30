@@ -12,6 +12,7 @@ import { IModal, Modal } from '@/components/modals/Modal';
 import useUser from '@/context/UserProvider';
 import { ETheme, useGeneral } from '@/context/general.context';
 import { mediaQueries } from '@/utils/constants';
+import useModal from '@/context/ModalProvider';
 
 export const SignWithWalletModal: FC<IModal> = ({
 	showModal,
@@ -20,8 +21,12 @@ export const SignWithWalletModal: FC<IModal> = ({
 }) => {
 	const { theme } = useGeneral();
 	const {
+		state: { user },
 		actions: { signToGetToken },
 	} = useUser();
+	const {
+		actions: { showWelcomeModal },
+	} = useModal();
 
 	return (
 		<Modal
@@ -44,6 +49,9 @@ export const SignWithWalletModal: FC<IModal> = ({
 				<OkButton
 					label='SIGN IN'
 					onClick={async () => {
+						if (!user?.walletAddress) {
+							return showWelcomeModal();
+						}
 						const signature = await signToGetToken();
 						setShowModal(false);
 						!!signature && callback && callback();

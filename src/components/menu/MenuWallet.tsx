@@ -21,22 +21,27 @@ import { switchNetworkHandler } from '@/lib/wallet';
 import { MenuContainer } from './Menu.sc';
 import { ETheme, useGeneral } from '@/context/general.context';
 import { isUserRegistered } from '@/lib/helpers';
+import StorageLabel from '@/lib/localStorage';
+import useModal from '@/context/ModalProvider';
 
-interface IMenuWallet {
-	setShowWalletModal: Dispatch<SetStateAction<boolean>>;
-}
-
-const MenuWallet: FC<IMenuWallet> = ({ setShowWalletModal }) => {
+const MenuWallet = () => {
 	const [isMounted, setIsMounted] = useState(false);
 	const [balance, setBalance] = useState<string | null>(null);
 	const { chainId, account, library } = useWeb3React();
 	const [showWelcomeSignin, setShowWelcomeSignin] = useState<boolean>(false);
 	const [queueRoute, setQueueRoute] = useState<string>('');
+
 	const router = useRouter();
+
 	const {
 		state: { user, isSignedIn },
-		actions: { signOut, showCompleteProfile },
+		actions: { signOut },
 	} = useUser();
+
+	const {
+		actions: { showCompleteProfile, showWalletModal },
+	} = useModal();
+
 	const { theme } = useGeneral();
 
 	const goRoute = (input: {
@@ -101,8 +106,8 @@ const MenuWallet: FC<IMenuWallet> = ({ setShowWalletModal }) => {
 					</LeftSection>
 					<StyledButton
 						onClick={() => {
-							window.localStorage.removeItem('selectedWallet');
-							setShowWalletModal(true);
+							window.localStorage.removeItem(StorageLabel.WALLET);
+							showWalletModal();
 						}}
 					>
 						Change wallet

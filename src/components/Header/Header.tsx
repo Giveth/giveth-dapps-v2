@@ -33,7 +33,6 @@ import {
 } from './Header.sc';
 import { useSubgraph } from '@/context/subgraph.context';
 import { RewardMenu } from '@/components/menu/RewardMenu';
-import WalletModal from '@/components/modals/WalletModal';
 import { walletsArray } from '@/lib/wallet/walletTypes';
 import MenuWallet from '@/components/menu/MenuWallet';
 import { ETheme, useGeneral } from '@/context/general.context';
@@ -42,6 +41,8 @@ import useUser from '@/context/UserProvider';
 import { isUserRegistered, shortenAddress } from '@/lib/helpers';
 import HeaderRoutesResponsive from './HeaderResponsiveRoutes';
 import Routes from '@/lib/constants/Routes';
+import StorageLabel from '@/lib/localStorage';
+import useModal from '@/context/ModalProvider';
 
 export interface IHeader {
 	theme?: ThemeType;
@@ -52,7 +53,6 @@ const Header: FC<IHeader> = () => {
 	const [showRewardMenu, setShowRewardMenu] = useState(false);
 	const [showUserMenu, setShowUserMenu] = useState(false);
 	const [showHeader, setShowHeader] = useState(true);
-	const [showWalletModal, setShowWalletModal] = useState(false);
 	const [isGIVeconomyRoute, setIsGIVeconomyRoute] = useState(false);
 	const [isCreateRoute, setIsCreateRoute] = useState(false);
 
@@ -61,8 +61,15 @@ const Header: FC<IHeader> = () => {
 	} = useSubgraph();
 	const {
 		state: { user, isEnabled, isSignedIn },
-		actions: { showCompleteProfile, showWelcomeModal, showSignWithWallet },
 	} = useUser();
+	const {
+		actions: {
+			showWelcomeModal,
+			showSignWithWallet,
+			showCompleteProfile,
+			showWalletModal,
+		},
+	} = useModal();
 	const { chainId, active, activate, account, library } = useWeb3React();
 	const { theme } = useGeneral();
 	const router = useRouter();
@@ -70,8 +77,7 @@ const Header: FC<IHeader> = () => {
 	const showLinks = !isCreateRoute;
 
 	useEffect(() => {
-		const selectedWalletName =
-			window.localStorage.getItem('selectedWallet');
+		const selectedWalletName = localStorage.getItem(StorageLabel.WALLET);
 		const wallet = walletsArray.find(w => w.value === selectedWalletName);
 		if (wallet) {
 			activate(wallet.connector);
@@ -119,15 +125,15 @@ const Header: FC<IHeader> = () => {
 
 	const handleModals = () => {
 		if (isGIVeconomyRoute) {
-			setShowWalletModal(true);
+			showWalletModal();
 		} else {
-			showWelcomeModal(true);
+			showWelcomeModal();
 		}
 	};
 
 	const handleCreateButton = () => {
 		if (!isEnabled) {
-			showWelcomeModal(true);
+			showWelcomeModal();
 		} else if (!isSignedIn) {
 			showSignWithWallet();
 		} else if (isUserRegistered(user)) {
@@ -279,11 +285,7 @@ const Header: FC<IHeader> = () => {
 									</HBContainer>
 									<CoverLine theme={theme} />
 								</WalletButton>
-								{showUserMenu && (
-									<MenuWallet
-										setShowWalletModal={setShowWalletModal}
-									/>
-								)}
+								{showUserMenu && <MenuWallet />}
 							</MenuAndButtonContainer>
 						</>
 					) : (
@@ -298,12 +300,6 @@ const Header: FC<IHeader> = () => {
 					)}
 				</Flex>
 			</StyledHeader>
-			{showWalletModal && (
-				<WalletModal
-					showModal={showWalletModal}
-					setShowModal={setShowWalletModal}
-				/>
-			)}
 		</>
 	);
 };
