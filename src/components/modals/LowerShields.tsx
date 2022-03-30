@@ -2,17 +2,34 @@ import Image from 'next/image';
 import styled from 'styled-components';
 
 import { Modal } from '@/components/modals/Modal';
-import ShieldIcon from '/public/images/icons/shield.svg';
-import { Lead, Button, brandColors } from '@giveth/ui-design-system';
+import ShieldBlackIcon from '/public/images/icons/shield_black.svg';
+import ShieldWhiteIcon from '/public/images/icons/shield_white.svg';
+import {
+	Lead,
+	Button,
+	brandColors,
+	OulineButton,
+} from '@giveth/ui-design-system';
 import ExternalLink from '@/components/ExternalLink';
+import { ETheme, useGeneral } from '@/context/general.context';
 
 const LowerShields = (props: { setShowModal: (i: boolean) => void }) => {
 	const { setShowModal } = props;
+	const { theme } = useGeneral();
+	const isDark = theme === ETheme.Dark;
+
+	const closeModal = () => setShowModal(false);
 
 	return (
 		<Modal
 			setShowModal={setShowModal}
-			headerIcon={<Image src={ShieldIcon} width={24} height={24} />}
+			headerIcon={
+				<Image
+					src={isDark ? ShieldWhiteIcon : ShieldBlackIcon}
+					width={24}
+					height={24}
+				/>
+			}
 			headerTitle='Sorry to interrupt...'
 			headerTitlePosition='left'
 		>
@@ -31,7 +48,11 @@ const LowerShields = (props: { setShowModal: (i: boolean) => void }) => {
 						/>
 					</ExternalLinkStyled>
 				</Lead>
-				<Button label='OK' onClick={() => setShowModal(false)} />
+				{isDark ? (
+					<OulineButton label='OK' onClick={closeModal} />
+				) : (
+					<Button label='OK' onClick={closeModal} />
+				)}
 			</Container>
 		</Modal>
 	);
@@ -39,7 +60,7 @@ const LowerShields = (props: { setShowModal: (i: boolean) => void }) => {
 
 const ExternalLinkStyled = styled.span`
 	color: ${brandColors.pinky[500]};
-	font-size: 13px;
+	font-size: 16px;
 `;
 
 const Container = styled.div`
