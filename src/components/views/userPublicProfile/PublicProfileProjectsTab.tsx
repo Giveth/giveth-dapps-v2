@@ -83,7 +83,11 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({
 			<ProjectsContainer>
 				{!loading && totalCount === 0 ? (
 					<NothingWrapper>
-						<NothingToSee title="This user hasn't created any projects yet!" />
+						<NothingToSee
+							title={`${
+								myAccount ? "You haven't" : "This user hasn't"
+							} created any projects yet!`}
+						/>
 					</NothingWrapper>
 				) : myAccount ? (
 					<ProjectsTableWrapper>

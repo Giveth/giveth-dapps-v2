@@ -30,7 +30,7 @@ export const ChangeNetworkModal: FC<IChangeNetworkModalProps> = ({
 	const NetworkName =
 		targetNetwork === config.MAINNET_NETWORK_NUMBER
 			? 'Ethereum'
-			: 'Gnosis Chain';
+			: 'Ethereum or Gnosis Chain';
 
 	return (
 		<Modal showModal={showModal} setShowModal={setShowModal}>
@@ -38,7 +38,10 @@ export const ChangeNetworkModal: FC<IChangeNetworkModalProps> = ({
 				{targetNetwork === config.MAINNET_NETWORK_NUMBER ? (
 					<IconEthereum size={64} />
 				) : (
-					<IconGnosisChain size={64} />
+					<>
+						<IconEthereum size={64} />
+						<IconGnosisChain size={64} />
+					</>
 				)}
 				<Title theme={theme}>Switch to {NetworkName}</Title>
 				<Desc>Please switch your wallet network to {NetworkName}.</Desc>

@@ -1,16 +1,28 @@
+import { GetServerSideProps } from 'next';
+import Head from 'next/head';
+import { FC } from 'react';
+import styled from 'styled-components';
+import { Container } from '@/components/Grid';
+import { H3 } from '@giveth/ui-design-system';
+
 import { client } from '@/apollo/apolloClient';
 import { GET_USER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
 import { IUser } from '@/apollo/types/types';
 import UserPublicProfileView from '@/components/views/userPublicProfile/UserPublicProfile.view';
-import { GetServerSideProps } from 'next';
-import Head from 'next/head';
-import { FC } from 'react';
 
 interface IUserRouteProps {
-	user: IUser;
+	user?: IUser;
 }
 
 const UserRoute: FC<IUserRouteProps> = ({ user }) => {
+	if (!user) {
+		return (
+			<Container>
+				<NotFound>User not found</NotFound>
+			</Container>
+		);
+	}
+
 	return (
 		<>
 			<Head>
@@ -20,6 +32,10 @@ const UserRoute: FC<IUserRouteProps> = ({ user }) => {
 		</>
 	);
 };
+
+const NotFound = styled(H3)`
+	margin: 200px 0;
+`;
 
 export const getServerSideProps: GetServerSideProps = async context => {
 	const { query } = context;
