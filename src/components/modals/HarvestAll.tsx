@@ -423,7 +423,10 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 								{!claimableNow.isZero() && (
 									<>
 										<HelpRow alignItems='center'>
-											<B>Claimable from {streamName}</B>
+											<B>
+												Claimable from {tokenSymbol}
+												stream
+											</B>
 										</HelpRow>
 										<AmountBoxWithPrice
 											amount={claimableNow.sub(
