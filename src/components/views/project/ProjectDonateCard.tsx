@@ -40,6 +40,7 @@ import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
 import { idToProjectEdit, slugToProjectDonate } from '@/lib/routeCreators';
 import { VerificationModal } from '@/components/modals/VerificationModal';
 import { mediaQueries } from '@/utils/constants';
+import ProjectCardOrgBadge from '../../project-card/ProjectCardOrgBadge';
 import ExternalLink from '@/components/ExternalLink';
 import InternalLink from '@/components/InternalLink';
 import Routes from '@/lib/constants/Routes';
@@ -233,17 +234,15 @@ const ProjectDonateCard = ({
 				dragConstraints={{ top: -(wrapperHeight - 168), bottom: 120 }}
 			>
 				{isMobile && <BlueBar />}
-				{!!givingBlocksId && (
-					<GivingBlocksContainer>
-						<GivingBlocksText>PROJECT BY:</GivingBlocksText>
-						<Image
-							src='/images/thegivingblock.svg'
-							alt='The Giving Block icon.'
-							height={36}
-							width={126}
-						/>
-					</GivingBlocksContainer>
-				)}
+				<ProjectCardOrgBadge
+					organization={project?.organization?.label}
+					isHover={false}
+					show={
+						project?.organization?.label !== 'giveth' &&
+						project?.organization?.label !== 'trace'
+					}
+					isProjectView={true}
+				/>
 				{isAdmin ? (
 					<>
 						<FullButton
@@ -352,19 +351,6 @@ const BlueBar = styled.div`
 	margin: 0 auto 16px;
 	position: relative;
 	top: -8px;
-`;
-
-const GivingBlocksContainer = styled.div`
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 8px;
-	margin-bottom: 12px;
-`;
-
-const GivingBlocksText = styled(Overline)`
-	color: ${neutralColors.gray[600]};
-	font-size: 10px;
 `;
 
 const CategoryWrapper = styled.div`

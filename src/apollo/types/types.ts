@@ -35,6 +35,11 @@ export interface IProject {
 		name?: string;
 	};
 	updatedAt: string;
+	organization?: {
+		name: string;
+		label: string;
+		supportCustomTokens: boolean;
+	};
 }
 
 export interface IProjectEdition {

@@ -77,6 +77,11 @@ export const FETCH_ALL_PROJECTS = gql`
 					walletAddress
 				}
 				updatedAt
+				organization {
+					name
+					label
+					supportCustomTokens
+				}
 			}
 			totalCount
 			categories {
@@ -122,6 +127,11 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 			status {
 				id
 				name
+			}
+			organization {
+				name
+				label
+				supportCustomTokens
 			}
 		}
 	}

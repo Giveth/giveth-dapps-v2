@@ -45,11 +45,12 @@ const ProjectCard = (props: IProjectCard) => {
 		id,
 		updatedAt,
 		givingBlocksId,
+		organization,
 	} = props.project;
 	const [isHover, setIsHover] = useState(false);
 
 	const name = adminUser?.name;
-
+	console.log({ organization });
 	return (
 		<Wrapper
 			onMouseEnter={() => setIsHover(true)}
@@ -66,9 +67,12 @@ const ProjectCard = (props: IProjectCard) => {
 					projectId={id}
 				/>
 				<ProjectCardOrgBadge
-					image={'/images/thegivingblock.svg'}
+					organization={organization?.label}
 					isHover={isHover}
-					show={!!givingBlocksId}
+					show={
+						organization?.label !== 'giveth' &&
+						organization?.label !== 'trace'
+					}
 				/>
 				<ProjectCardImage image={image} />
 			</ImagePlaceholder>

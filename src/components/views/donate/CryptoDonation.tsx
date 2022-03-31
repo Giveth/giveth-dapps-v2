@@ -113,9 +113,12 @@ const CryptoDonation = (props: {
 
 	const tokenSymbol = selectedToken?.symbol;
 	const isXdai = networkId === xdaiChain.id;
-	const isGivingBlockProject = project?.givingBlocksId;
+	// const isGivingBlockProject = project?.givingBlocksId;
+	const isGivingBlockProject = project?.organization?.label === 'givingBlock';
+	const isChangeProject = project?.organization?.label === 'change';
+	const projectFromAnotherOrg = isGivingBlockProject || isChangeProject;
 	const projectIsGivBackEligible = givBackEligible && project?.verified;
-	const givingBlockReady = isGivingBlockProject
+	const givingBlockReady = projectFromAnotherOrg
 		? networkId === ethereumChain.id
 		: true;
 
@@ -185,7 +188,7 @@ const CryptoDonation = (props: {
 	}, [selectedToken, mainTokenPrice]);
 
 	const checkGIVTokenAvailability = () => {
-		if (!isGivingBlockProject) return true;
+		if (!projectFromAnotherOrg) return true;
 		if (selectedToken?.symbol === 'GIV') {
 			setGeminiModal(true);
 			return false;
@@ -255,7 +258,7 @@ const CryptoDonation = (props: {
 					showModal={showChangeNetworkModal}
 					setShowModal={setShowChangeNetworkModal}
 					targetNetwork={
-						isGivingBlockProject
+						projectFromAnotherOrg
 							? config.MAINNET_NETWORK_NUMBER
 							: config.XDAI_NETWORK_NUMBER
 					}
@@ -294,13 +297,13 @@ const CryptoDonation = (props: {
 			)}
 
 			<InputContainer>
-				{isGivingBlockProject && networkId !== ethereumChain.id && (
+				{projectFromAnotherOrg && networkId !== ethereumChain.id && (
 					<XDaiContainer>
 						<div>
 							<img src='/images/gas_station.svg' />
 							<Caption color={neutralColors.gray[900]}>
-								Projects from The Giving Block only accept
-								donations on mainnet.{' '}
+								Projects from {project?.organization?.name} only
+								accept donations on mainnet.{' '}
 							</Caption>
 						</div>
 						<SwitchCaption
@@ -310,7 +313,7 @@ const CryptoDonation = (props: {
 						</SwitchCaption>
 					</XDaiContainer>
 				)}
-				{!isGivingBlockProject &&
+				{!projectFromAnotherOrg &&
 					isEnabled &&
 					networkId !== xdaiChain.id && (
 						<XDaiContainer>
@@ -344,7 +347,7 @@ const CryptoDonation = (props: {
 								setGivBackEligible(givBackEligible);
 							}}
 							onInputChange={(i: string) => {
-								if (isGivingBlockProject) return;
+								if (projectFromAnotherOrg) return;
 								// It's a contract
 								if (i?.length === 42) {
 									try {
@@ -383,7 +386,7 @@ const CryptoDonation = (props: {
 								}
 							}}
 							placeholder={
-								isGivingBlockProject
+								projectFromAnotherOrg
 									? 'Search name'
 									: 'Search name or paste an address'
 							}

@@ -10,9 +10,9 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
-import { Flex } from '@/components/styled-components/Flex';
 import ProjectCardBadges from './ProjectCardBadges';
 import ProjectCardImage from './ProjectCardImage';
+import ProjectCardOrgBadge from './ProjectCardOrgBadge';
 import { IProject } from '@/apollo/types/types';
 import { htmlToText } from '@/lib/helpers';
 import { Shadow } from '@/components/styled-components/Shadow';
@@ -24,15 +24,6 @@ interface IProjectCard {
 	noHearts?: boolean;
 	isNew?: boolean;
 }
-
-const ProjectByGivingBlock = () => {
-	return (
-		<GivingBlockContainer>
-			<Overline styleType='Small'>PROJECT BY: </Overline>
-			<img src='/images/giving-block-logo.svg' />
-		</GivingBlockContainer>
-	);
-};
 
 const ProjectCard = (props: IProjectCard) => {
 	const { noHearts, isNew, project } = props;
@@ -50,12 +41,22 @@ const ProjectCard = (props: IProjectCard) => {
 	} = project;
 
 	const name = adminUser?.name;
+	const isChangeProject = project?.organization?.label === 'change';
+
 	return (
 		<Wrapper isNew={isNew}>
 			<ImagePlaceholder>
 				<ProjectCardImage image={image} />
 			</ImagePlaceholder>
-			{givingBlocksId && <ProjectByGivingBlock />}
+			<ProjectCardOrgBadge
+				organization={project?.organization?.label}
+				isHover={false}
+				show={
+					project?.organization?.label !== 'giveth' &&
+					project?.organization?.label !== 'trace'
+				}
+				isAbsolute={true}
+			/>
 			{!isNew && (
 				<ProjectCardBadges
 					verified={verified}
@@ -142,19 +143,6 @@ const Wrapper = styled.div<{ isNew?: boolean }>`
 	box-shadow: ${props => props.isNew && Shadow.Dark[500]};
 	${mediaQueries.mobileL} {
 		width: 100%;
-	}
-`;
-
-const GivingBlockContainer = styled(Flex)`
-	position: absolute;
-	align-items: center;
-	border-radius: 0 12px 0 0;
-	color: ${neutralColors.gray[600]};
-	background: ${neutralColors.gray[200]};
-	margin-top: -30px;
-	padding: 8px 24px;
-	img {
-		padding-left: 10px;
 	}
 `;
 
