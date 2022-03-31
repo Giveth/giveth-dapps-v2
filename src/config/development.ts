@@ -153,7 +153,7 @@ const config: EnvConfig = {
 				tokenDistroAddress:
 					'0xCA29ec6F4218E230294993E0d77d5ece5a6573D8',
 				type: StreamType.FOX,
-				title: 'ShapeShift DAO',
+				// title: 'FOXStream',
 				rewardTokenAddress:
 					'0x18cE354571ba71bC7b3d633b254954C5A9cfC195',
 				rewardTokenSymbol: 'FOX',
