@@ -190,7 +190,9 @@ const ProjectDonationTable = ({
 								</TableCell>
 								<TableCell>
 									<P>
-										{donation?.anonymous
+										{donation?.donationType === 'poignArt'
+											? 'PoignART'
+											: donation?.anonymous
 											? 'Anonymous'
 											: donation.user?.name ||
 											  donation.user?.firstName}

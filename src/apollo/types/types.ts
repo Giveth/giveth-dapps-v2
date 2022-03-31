@@ -114,6 +114,7 @@ export interface IDonation {
 	transactionId?: string;
 	transactionNetworkId: number;
 	createdAt: string;
+	donationType?: string;
 	anonymous?: boolean;
 }
 
