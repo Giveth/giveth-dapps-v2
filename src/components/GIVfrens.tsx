@@ -1,11 +1,19 @@
 import { RegenPoolStakingConfig } from '@/types/config';
 import React, { FC } from 'react';
 import { H3 } from '@giveth/ui-design-system';
-import { GIVfrensLink, Subtitle } from '@/components/GIVfrens.sc';
+import {
+	DaoCard,
+	DaoCardButton,
+	DaoCardQuote,
+	DaoCardTitle,
+	GIVfrensLink,
+	Subtitle,
+} from '@/components/GIVfrens.sc';
 import { PoolRow } from '@/components/homeTabs/GIVfarm.sc';
 import { useWeb3React } from '@web3-react/core';
 import StakingPoolCard from '@/components/cards/StakingPoolCard';
 import { Col } from './Grid';
+import links from '@/lib/constants/links';
 
 interface IGIVfrensProps {
 	regenFarms: RegenPoolStakingConfig[];
@@ -47,6 +55,21 @@ export const GIVfrens: FC<IGIVfrensProps> = ({ regenFarms, network }) => {
 						</Col>
 					);
 				})}
+				<Col xs={12}>
+					<DaoCard>
+						<DaoCardTitle weight={900}>Your DAO?</DaoCardTitle>
+						<DaoCardQuote size='small'>
+							Read about the requirements for becoming a Regen
+							Farm.
+						</DaoCardQuote>
+						<DaoCardButton
+							label='Join GIVfrens'
+							linkType='primary'
+							href={links.JOINGIVFRENS}
+							target='_blank'
+						/>
+					</DaoCard>
+				</Col>
 			</PoolRow>
 		</>
 	);

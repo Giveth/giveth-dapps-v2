@@ -3,6 +3,7 @@ import { keccak256 } from '@ethersproject/keccak256';
 import { Contract } from '@ethersproject/contracts';
 import { Web3Provider } from '@ethersproject/providers';
 import { promisify } from 'util';
+import { AddressZero } from '@ethersproject/constants';
 // @ts-ignore
 import tokenAbi from 'human-standard-token-abi';
 
@@ -175,7 +176,7 @@ export async function sendTransaction(
 		// }
 
 		// ERC20 TRANSFER
-		if (contractAddress) {
+		if (contractAddress && contractAddress !== AddressZero) {
 			const contract = new Contract(contractAddress, tokenAbi, web3);
 			const decimals = await contract.decimals.call();
 			txParams.value = ethers.utils.parseUnits(

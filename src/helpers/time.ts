@@ -17,21 +17,27 @@ const fetchServerTime = async () => {
 		return;
 	}
 
-	let now = Date.now();
-	now = now - (now % 1000);
+	const startTime = Date.now();
 
 	try {
 		fetching = true;
-		const response = await fetch(
-			'https://api.timezonedb.com/v2.1/get-time-zone?by=zone&format=json&key=LU8PKNDD9BUB&zone=GM',
-			{ mode: 'no-cors' },
-		);
+		const response = await fetch('/api/time', {
+			mode: 'cors',
+			cache: 'no-cache',
+			credentials: 'same-origin',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			redirect: 'follow',
+			referrerPolicy: 'no-referrer',
+		});
 
 		if (response.ok) {
 			const json = await response.json();
-			const { timestamp, gmtOffset } = json;
-			const unixMS = (timestamp - gmtOffset) * 1000;
-			timeDifference = unixMS - now;
+			const { unixTime } = json;
+			timeDifference = Math.floor(
+				(unixTime - startTime + unixTime - Date.now()) / 2,
+			);
 			initialized = true;
 			window.sessionStorage.setItem(
 				'timeDifference',

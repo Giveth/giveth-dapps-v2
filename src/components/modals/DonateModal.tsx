@@ -22,26 +22,18 @@ import { Flex } from '../styled-components/Flex';
 import Logger from '../../utils/Logger';
 import { checkNetwork } from '@/utils';
 import { isAddressENS, getAddressFromENS } from '@/lib/wallet';
-import { sendTransaction } from '@/lib/helpers';
+import { sendTransaction, showToastError } from '@/lib/helpers';
 import * as transaction from '../../services/transaction';
 import { saveDonation, saveDonationTransaction } from '@/services/donation';
 import FixedToast from '@/components/toasts/FixedToast';
 import { mediaQueries } from '@/utils/constants';
 import config from '@/configuration';
-
-interface IToken {
-	value: string;
-	label: string;
-	chainId?: number;
-	symbol?: string;
-	icon?: string;
-	address?: string;
-}
+import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 
 interface IDonateModal extends IModal {
 	closeParentModal?: () => void;
 	project: IProject;
-	token: IToken;
+	token: IProjectAcceptedToken;
 	amount: number;
 	price?: number;
 	userTokenBalance?: number;
@@ -95,12 +87,9 @@ const DonateModal = ({
 				return;
 			}
 			if (!project?.walletAddress) {
-				// return Toast({
-				//   content: 'There is no eth address assigned for this project',
-				//   type: 'error'
-				// })
-				// TODO: SET RIGHT MODAL
-				alert('There is no eth address assigned for this project');
+				showToastError(
+					'There is no eth address assigned for this project',
+				);
 			}
 
 			const isCorrectNetwork = checkNetwork(chainId!);
@@ -111,9 +100,7 @@ const DonateModal = ({
 			}
 
 			if (!amount || amount <= 0) {
-				// TODO: SET RIGHT MODAL
-				// return Toast({ content: 'Please set an amount', type: 'warn' })
-				alert('Please set an amount');
+				showToastError('Please set an amount');
 			}
 
 			if (userTokenBalance! < amount) {
@@ -162,8 +149,7 @@ const DonateModal = ({
 						setDonationSaved(true);
 						// onTransactionHash callback for event emitter
 						if (saveDonationErrors?.length > 0) {
-							// TODO: ADD TOAST
-							alert(JSON.stringify(saveDonationErrors));
+							showToastError(saveDonationErrors);
 						}
 						transaction.confirmEtherTransaction(
 							transactionHash,
@@ -202,19 +188,9 @@ const DonateModal = ({
 										});
 										setUnconfirmed(true);
 										if (res?.error) {
-											// Toast({
-											//   content: res?.error?.message,
-											//   type: 'error'
-											// })
-											// TODO
-											alert(res?.error?.message);
+											showToastError(res.error);
 										} else {
-											// Toast({
-											//   content: `Transaction couldn't be confirmed or it failed`,
-											//   type: 'error'
-											// })
-											// TODO
-											alert(
+											showToastError(
 												"Transaction couldn't be confirmed or it failed",
 											);
 										}
@@ -222,7 +198,7 @@ const DonateModal = ({
 								} catch (error) {
 									Logger.captureException(error);
 									console.log({ error });
-									// toast.dismiss()
+									showToastError(error);
 								}
 							},
 							0,
@@ -241,46 +217,22 @@ const DonateModal = ({
 							subtotal: amount,
 						});
 					},
-					onError: (error: any) => {
-						console.log({ error });
-						// toast.dismiss()
-						// the outside catch handles any error here
-						// Toast({
-						//   content: error?.error?.message || error?.message || error,
-						//   type: 'error'
-						// })
-					},
+					onError: showToastError,
 				},
 				traceable,
 			);
 
-			// Commented notify and instead we are using our own service
+			// Commented notify, and instead we are using our own service
 			// transaction.notify(transactionHash)
 		} catch (error: any) {
-			// toast.dismiss()
-			console.log({ error });
 			setDonating(false);
 			Logger.captureException(error);
 			if (
 				error?.data?.code === 'INSUFFICIENT_FUNDS' ||
 				error?.data?.code === 'UNPREDICTABLE_GAS_LIMIT'
 			) {
-				// TODO: change this to custom alert
-				// return triggerPopup('InsufficientFunds')
-				alert('Insufficient Funds');
-			}
-			// return Toast({
-			//   content:
-			//     error?.data?.data?.message ||
-			//     error?.data?.message ||
-			//     error?.error?.message ||
-			//     error?.message ||
-			//     error,
-			//   type: 'error'
-			// })
-
-			// TODO: Add toast for errors
-			alert(JSON.stringify(error));
+				showToastError('Insufficient Funds');
+			} else showToastError(error);
 		}
 	};
 
@@ -325,7 +277,9 @@ const DonateModal = ({
 						<H6>
 							{parseFloat(String(avgPrice)).toLocaleString(
 								'en-US',
-								{ maximumFractionDigits: 6 },
+								{
+									maximumFractionDigits: 6,
+								},
 							)}{' '}
 							USD{' '}
 						</H6>
