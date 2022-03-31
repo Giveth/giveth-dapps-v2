@@ -151,7 +151,7 @@ const config: EnvConfig = {
 		regenStreams: [
 			{
 				tokenDistroAddress:
-					'0xCA29ec6F4218E230294993E0d77d5ece5a6573D8',
+					'0xA9a37a14E562D0E1d335B4714E3455483ede7A9a',
 				type: StreamType.FOX,
 				title: 'ShapeShift DAO',
 				rewardTokenAddress:
@@ -164,7 +164,7 @@ const config: EnvConfig = {
 		regenFarms: [
 			{
 				POOL_ADDRESS: '0xD28C07F802212F04AF41834ec0CC81d2d283124B',
-				LM_ADDRESS: '0x06851400866e065972ff21e1ECdE035b4772736d',
+				LM_ADDRESS: '0x502EC7a040F486EE6Cb7d634D94764874B29dE68',
 				type: StakingType.HONEYSWAP,
 				title: 'FOX / HNY',
 				description: '50% FOX, 50% HNY',
