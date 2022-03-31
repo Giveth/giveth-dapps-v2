@@ -29,6 +29,7 @@ const WalletModal = ({
 		value: EWallets;
 	}) => {
 		if (selectedWallet !== selected.value) {
+			window.localStorage.removeItem('selectedWallet');
 			deactivate();
 			let timeOut = 0;
 			if (selectedWallet === EWallets.METAMASK) {
