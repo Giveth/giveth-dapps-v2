@@ -1,4 +1,9 @@
-import { EnvConfig, StakingType } from '@/types/config';
+import {
+	EnvConfig,
+	RegenFarmType,
+	StakingType,
+	StreamType,
+} from '@/types/config';
 import { gwei2wei } from '@/helpers/number';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
@@ -27,7 +32,7 @@ const config: EnvConfig = {
 		blockExplorerName: ['etherscan'],
 		blockExplorerUrls: ['https://etherscan.io/'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/aminlatifi/giveth-economy',
+			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-mainnet',
 
 		TOKEN_ADDRESS: '0x900db999074d9277c5da2a43f252d74366230da0',
 		WETH_TOKEN_ADDRESS: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
@@ -100,7 +105,7 @@ const config: EnvConfig = {
 		blockExplorerName: ['Blockscout'],
 		blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/aminlatifi/giveth-economy-xdai',
+			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-xdai',
 
 		TOKEN_ADDRESS: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		MERKLE_ADDRESS: '0xFad63adEFb8203F7605F25f6a921c8bf45604A5e',
@@ -140,8 +145,40 @@ const config: EnvConfig = {
 		uniswapV2Subgraph:
 			'https://api.thegraph.com/subgraphs/name/1hive/honeyswap-v2',
 
-		regenStreams: [],
-		regenFarms: [],
+		regenStreams: [
+			{
+				tokenDistroAddress:
+					'0xFB109Ac6c32929A8717f7C2cBce47B9a4E9985Bf',
+				type: StreamType.FOX,
+				title: 'ShapeShift DAO',
+				rewardTokenAddress:
+					'0x21a42669643f45bc0e086b8fc2ed70c23d67509d',
+				rewardTokenSymbol: 'FOX',
+				tokenAddressOnUniswapV2:
+					'0x21a42669643f45bc0e086b8fc2ed70c23d67509d',
+			},
+		],
+		regenFarms: [
+			{
+				POOL_ADDRESS: '0x8a0bee989c591142414ad67fb604539d917889df',
+				LM_ADDRESS: '0xBeD9fa28E68CF9e56812ff99e0fa4b2e0AbB5E97',
+				type: StakingType.HONEYSWAP,
+				title: 'FOX / HNY',
+				description: '50% FOX, 50% HNY',
+				provideLiquidityLink:
+					'https://app.honeyswap.org/#/add/0x21a42669643f45bc0e086b8fc2ed70c23d67509d/0x71850b7e9ee3f13ab46d67167341e4bdc905eef9?chainId=100',
+				unit: 'LP',
+				regenStreamType: StreamType.FOX,
+				regenFarmType: RegenFarmType.FOX_HNY,
+				regenFarmIntro: {
+					title: 'FOX',
+					description:
+						'ShapeShift is the free and open-source one-stop-shop for cross-chain DeFi. Buy, sell, send, receive, trade, and earn yield on your crypto across a growing number of protocols and chains with no added fees ever. FOX is the governance token of the ShapeShift DAO.',
+					link: 'https://shapeshift.com/',
+				},
+				regenFarmStartTime: 1649001600000,
+			},
+		],
 	},
 };
 
