@@ -64,7 +64,6 @@ import { ITokenAllocation } from '@/types/subgraph';
 import { useWeb3React } from '@web3-react/core';
 import { IconGIV } from '../Icons/GIV';
 import { givEconomySupportedNetworks } from '@/utils/constants';
-import RegenStreamBlock from '../RegenStreamBlock';
 import { Flex } from '../styled-components/Flex';
 import Pagination from '../Pagination';
 import Routes from '@/lib/constants/Routes';
@@ -196,7 +195,6 @@ export const TabGIVstreamBottom = () => {
 					</IconWithTooltip>
 				</FlowRateRow>
 				<GIVstreamProgress percentage={percent} remainTime={remain} />
-				<RegenStreamBlock />
 				<HistoryTitleRow>
 					<HistoryTitle>History</HistoryTitle>
 					<IconWithTooltip

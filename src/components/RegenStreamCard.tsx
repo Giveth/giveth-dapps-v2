@@ -9,12 +9,17 @@ import {
 import {
 	B,
 	brandColors,
+	Button,
+	Caption,
 	H4,
 	H5,
 	H6,
 	IconGIVStream,
 	IconHelp,
+	Lead,
 	P,
+	SemiTitle,
+	Subline,
 } from '@giveth/ui-design-system';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { RegenStreamConfig, StreamType } from '@/types/config';
@@ -24,14 +29,14 @@ import { formatWeiHelper } from '@/helpers/number';
 import { IconFox } from '@/components/Icons/Fox';
 import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
-import { RegenRewardCard } from './RegenRewardCard';
 import { Flex } from './styled-components/Flex';
-import { Row, Col } from './Grid';
+import { HarvestAllModal } from './modals/HarvestAll';
+import { usePrice } from '@/context/price.context';
+import { Col, Row } from './Grid';
 
 interface RegenStreamProps {
 	network: number;
 	streamConfig: RegenStreamConfig;
-	showRewardCard?: boolean;
 }
 
 export const getStreamIconWithType = (type: StreamType, size?: number) => {
@@ -43,11 +48,12 @@ export const getStreamIconWithType = (type: StreamType, size?: number) => {
 	}
 };
 
-export const RegenStream: FC<RegenStreamProps> = ({
+export const RegenStreamCard: FC<RegenStreamProps> = ({
 	network,
 	streamConfig,
-	showRewardCard = false,
 }) => {
+	const [showModal, setShowModal] = useState(false);
+	const [usdAmount, setUSDAmount] = useState('0');
 	const { regenTokenDistroHelpers } = useTokenDistro();
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
 	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
@@ -61,6 +67,26 @@ export const RegenStream: FC<RegenStreamProps> = ({
 		currentValues: { balances },
 	} = useSubgraph();
 	const tokenDistroHelper = regenTokenDistroHelpers[streamConfig.type];
+
+	const { getTokenPrice } = usePrice();
+
+	useEffect(() => {
+		const price = getTokenPrice(
+			streamConfig.tokenAddressOnUniswapV2,
+			network,
+		);
+		if (!price || price.isNaN()) return;
+
+		const usd = (+ethers.utils.formatEther(
+			price.times(rewardLiquidPart.toString()).toFixed(0),
+		)).toFixed(2);
+		setUSDAmount(usd);
+	}, [
+		getTokenPrice,
+		rewardLiquidPart,
+		network,
+		streamConfig.tokenAddressOnUniswapV2,
+	]);
 
 	useEffect(() => {
 		switch (streamConfig.type) {
@@ -92,30 +118,33 @@ export const RegenStream: FC<RegenStreamProps> = ({
 	return (
 		<>
 			<RegenStreamContainer>
-				<Info xs={12} sm={6} md={8} lg={9}>
-					<RegenStreamTitleRow>
+				<HeaderRow justifyContent='space-between' wrap={1}>
+					<Flex gap='8px'>
 						{icon}
-						<H5>{streamConfig.rewardTokenSymbol} Flowrate</H5>
+						<H5>{streamConfig.title}</H5>
+					</Flex>
+					<RateRow>
 						<IconGIVStream size={32} />
 						<StreamRate>{formatWeiHelper(rewardStream)}</StreamRate>
 						<StreamRateUnit>
 							{streamConfig.rewardTokenSymbol}/week
 						</StreamRateUnit>
-						<IconWithTooltip
+						{/* <IconWithTooltip
 							icon={<IconHelp size={16} />}
-							direction={'right'}
+							direction={'left'}
 						>
 							<GsPTooltip>
-								Time left for the{' '}
-								{streamConfig.rewardTokenSymbol}
-								stream to reach full power!
+								Your {streamConfig.rewardTokenSymbol}stream
+								flowrate
 							</GsPTooltip>
-						</IconWithTooltip>
-					</RegenStreamTitleRow>
+						</IconWithTooltip> */}
+					</RateRow>
+				</HeaderRow>
+				<div>
 					<RegenStreamInfoRow>
 						<Flex alignItems='flex-end' gap='6px'>
 							<H6>
-								{streamConfig.rewardTokenSymbol}stream prgress
+								{streamConfig.rewardTokenSymbol}stream progress
 							</H6>
 
 							<IconWithTooltip
@@ -129,34 +158,68 @@ export const RegenStream: FC<RegenStreamProps> = ({
 								</GsPTooltip>
 							</IconWithTooltip>
 						</Flex>
-						<P>{`Time remaining: ` + remainTime}</P>
 					</RegenStreamInfoRow>
 					<Bar percentage={percentage} />
 					<PercentageRow justifyContent='space-between'>
 						<B>{percentage?.toFixed(2)}%</B>
 						<B>100%</B>
 					</PercentageRow>
-				</Info>
-				{showRewardCard && (
-					<Col xs={12} sm={6} md={4} lg={3}>
-						<RegenRewardCard
-							network={network}
-							streamConfig={streamConfig}
-							liquidAmount={rewardLiquidPart}
-						/>
-					</Col>
+				</div>
+				<Remaining>{`Time remaining: ` + remainTime}</Remaining>
+				<HarvestContainer wrap={1}>
+					<div>
+						<AmountInfo alignItems='flex-end' gap='4px'>
+							{getStreamIconWithType(streamConfig.type, 24)}
+							<Amount>{formatWeiHelper(rewardLiquidPart)}</Amount>
+							<AmountUnit>
+								{streamConfig.rewardTokenSymbol}
+							</AmountUnit>
+						</AmountInfo>
+						<Converted>~${usdAmount}</Converted>
+					</div>
+					<HarvestButton
+						label={`HARVEST ${streamConfig.rewardTokenSymbol}`}
+						onClick={() => setShowModal(true)}
+						buttonType='primary'
+						disabled={rewardLiquidPart.isZero()}
+						size='large'
+					/>
+				</HarvestContainer>
+				{showModal && (
+					<HarvestAllModal
+						title={
+							streamConfig.rewardTokenSymbol + 'stream Rewards'
+						}
+						showModal={showModal}
+						setShowModal={setShowModal}
+						network={network}
+						regenStreamConfig={streamConfig}
+					/>
 				)}
 			</RegenStreamContainer>
 		</>
 	);
 };
 
-const RegenStreamContainer = styled(Row)``;
+const RegenStreamContainer = styled(Flex)`
+	height: 488px;
+	background-color: ${brandColors.giv[700]};
+	border-radius: 8px;
+	padding: 24px;
+	position: relative;
+	flex-direction: column;
+	justify-content: space-between;
+	overflow: hidden;
+`;
 
-const RegenStreamTitleRow = styled(Flex)`
+const HeaderRow = styled(Flex)`
+	margin-bottom: 76px;
+`;
+
+const RateRow = styled(Flex)`
 	gap: 8px;
 	align-items: flex-end;
-	margin-bottom: 26px;
+	overflow: hidden;
 `;
 
 const StreamRate = styled(H4)`
@@ -172,4 +235,39 @@ const RegenStreamInfoRow = styled(Flex)`
 	margin-bottom: 24px;
 `;
 
-const Info = styled(Col)``;
+const Remaining = styled(P)`
+	/* margin-top: 24px; */
+`;
+
+const HarvestContainer = styled(Flex)`
+	/* margin-top: 90px; */
+	padding-top: 24px;
+	border-top: 1px solid ${brandColors.giv[500]};
+	justify-content: space-between;
+	align-items: center;
+`;
+
+const AmountInfo = styled(Flex)`
+	align-items: center;
+`;
+
+const Amount = styled(Lead)`
+	margin-left: 4px;
+`;
+
+const AmountUnit = styled(Subline)`
+	color: ${brandColors.deep[100]};
+	padding-top: 6px;
+`;
+
+const Converted = styled(Caption)`
+	color: ${brandColors.deep[200]};
+	padding-top: 4px;
+	padding-left: 32px;
+`;
+
+const HarvestButton = styled(Button)`
+	width: auto;
+	padding-left: 64px;
+	padding-right: 64px;
+`;
