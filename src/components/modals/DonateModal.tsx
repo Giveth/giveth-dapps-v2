@@ -29,6 +29,7 @@ import FixedToast from '@/components/toasts/FixedToast';
 import { mediaQueries } from '@/utils/constants';
 import config from '@/configuration';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
+import useModal from '@/context/ModalProvider';
 
 interface IDonateModal extends IModal {
 	closeParentModal?: () => void;
@@ -61,8 +62,12 @@ const DonateModal = ({
 	const { account, library, chainId } = useWeb3React();
 	const {
 		state: { isSignedIn },
-		actions: { showSignWithWallet },
 	} = UserContext();
+
+	const {
+		actions: { showSignWithWallet },
+	} = useModal();
+
 	const [donating, setDonating] = useState(false);
 	const [donationSaved, setDonationSaved] = useState(false);
 	const [showInsufficientModal, setShowInsufficientModal] = useState(false);
@@ -71,6 +76,7 @@ const DonateModal = ({
 
 	const avgPrice = price && price * amount;
 	const isGivingBlockProject = project?.givingBlocksId;
+
 	const confirmDonation = async () => {
 		try {
 			// Traceable by default if it comes from Trace only

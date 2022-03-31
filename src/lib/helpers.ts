@@ -15,6 +15,7 @@ import { IUser } from '@/apollo/types/types';
 import Routes from '@/lib/constants/Routes';
 import { gToast, ToastType } from '@/components/toasts';
 import { networkInfo } from './constants/NetworksObj';
+import StorageLabel from '@/lib/localStorage';
 
 declare let window: any;
 
@@ -72,7 +73,7 @@ export const smallFormatDate = (date: Date) => {
 export const getGasPreference = (
 	networkConfig: BasicNetworkConfig,
 ): GasPreference => {
-	const selectedWallet = window.localStorage.getItem('selectedWallet');
+	const selectedWallet = window.localStorage.getItem(StorageLabel.WALLET);
 	// MetaMask works with gas preference config
 	if (selectedWallet === EWallets.METAMASK)
 		return networkConfig.gasPreference || {};
@@ -356,14 +357,7 @@ export const calcBiggestUnitDifferenceTime = (_time: string) => {
 	return ' Just now';
 };
 
-export function getLocalTokenLabel(): string {
-	return getLocalUserLabel() + '_token';
-}
-
-export function getLocalUserLabel(): string {
-	return process.env.NEXT_PUBLIC_LOCAL_USER_LABEL
-		? process.env.NEXT_PUBLIC_LOCAL_USER_LABEL +
-				'_' +
-				process.env.NEXT_PUBLIC_ENV
-		: 'nextUser' + '_' + process.env.NEXT_PUBLIC_ENV;
-}
+export const detectBrave = async () => {
+	// @ts-ignore
+	return (navigator.brave && (await navigator.brave.isBrave())) || false;
+};

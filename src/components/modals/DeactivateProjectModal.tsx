@@ -26,6 +26,7 @@ import useUser from '@/context/UserProvider';
 import { IModal, Modal } from './Modal';
 import ArchiveIcon from '../../../public/images/icons/archive_deep.svg';
 import Routes from '@/lib/constants/Routes';
+import useModal from '@/context/ModalProvider';
 
 interface ISelectObj {
 	value: number;
@@ -56,8 +57,11 @@ const DeactivateProjectModal = ({
 	);
 	const {
 		state: { isSignedIn },
-		actions: { showSignWithWallet },
 	} = useUser();
+
+	const {
+		actions: { showSignWithWallet },
+	} = useModal();
 
 	const fetchReasons = async () => {
 		const { data } = await client.query({
@@ -78,7 +82,7 @@ const DeactivateProjectModal = ({
 	};
 
 	const handleConfirmButton = async () => {
-		if (!!tab && !!selectedReason && !!showSignWithWallet) {
+		if (!!tab && !!selectedReason) {
 			if (!isSignedIn) {
 				showSignWithWallet();
 				return;

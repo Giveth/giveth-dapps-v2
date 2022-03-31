@@ -18,7 +18,6 @@ import {
 
 import { mediaQueries } from '@/utils/constants';
 import { CopyToClipboard } from '@/components/CopyToClipboard';
-import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
 import PublicProfileContributes from './PublicProfileContributes';
 import { IUser, IProject } from '@/apollo/types/types';
 import { networksParams } from '@/helpers/blockchain';
@@ -27,6 +26,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import useUser from '@/context/UserProvider';
 import { isUserRegistered } from '@/lib/helpers';
 import { Container } from '@/components/Grid';
+import useModal from '@/context/ModalProvider';
 
 export enum EOrderBy {
 	TokenAmount = 'TokenAmount',
@@ -64,10 +64,11 @@ interface IEmptyBox {
 interface IIncompleteToast {
 	close: () => void;
 }
+
 const IncompleteProfileToast = ({ close }: IIncompleteToast) => {
 	const {
 		actions: { showCompleteProfile },
-	} = useUser();
+	} = useModal();
 
 	return (
 		<IncompleteToast>
@@ -121,24 +122,24 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 	const {
 		state: { isSignedIn },
 	} = useUser();
+
+	const {
+		actions: { showSignWithWallet },
+	} = useModal();
+
 	const { chainId } = useWeb3React();
-	const [showWelcomeSignin, setShowWelcomeSignin] = useState<boolean>(false);
 	const [showModal, setShowModal] = useState<boolean>(false); // follow this state to refresh user content on screen
 	const [showIncompleteWarning, setShowIncompleteWarning] = useState(true);
 
 	useEffect(() => {
-		myAccount && setShowWelcomeSignin(!isSignedIn);
+		if (myAccount && !isSignedIn) {
+			showSignWithWallet();
+		}
 	}, [user, isSignedIn]);
 
 	if (!user || (myAccount && !isSignedIn))
 		return (
 			<>
-				{showWelcomeSignin && (
-					<SignWithWalletModal
-						showModal={true}
-						setShowModal={() => setShowWelcomeSignin(false)}
-					/>
-				)}
 				<NoUserContainer>
 					<H5>Not logged in</H5>
 				</NoUserContainer>
@@ -221,12 +222,6 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 					showModal={showModal}
 					setShowModal={setShowModal}
 					user={user}
-				/>
-			)}
-			{showWelcomeSignin && (
-				<SignWithWalletModal
-					showModal={true}
-					setShowModal={() => setShowWelcomeSignin(false)}
 				/>
 			)}
 		</>

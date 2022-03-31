@@ -5,12 +5,9 @@ import gql from 'graphql-tag';
 import { createUploadLink } from 'apollo-upload-client';
 import merge from 'deepmerge';
 import isEqual from 'lodash.isequal';
-import {
-	getLocalTokenLabel,
-	getLocalUserLabel,
-	isSSRMode,
-} from '@/lib/helpers';
+import { isSSRMode } from '@/lib/helpers';
 import links from '@/lib/constants/links';
+import StorageLabel from '@/lib/localStorage';
 
 let apolloClient: any;
 
@@ -21,7 +18,7 @@ export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__';
 function createApolloClient() {
 	let userWalletAddress: string | null;
 	if (!ssrMode) {
-		userWalletAddress = localStorage.getItem(getLocalUserLabel());
+		userWalletAddress = localStorage.getItem(StorageLabel.USER);
 	}
 
 	const httpLink = createUploadLink({
@@ -30,7 +27,7 @@ function createApolloClient() {
 
 	const authLink = setContext((_, { headers }) => {
 		const currentToken: string | null = !ssrMode
-			? localStorage.getItem(getLocalTokenLabel())
+			? localStorage.getItem(StorageLabel.TOKEN)
 			: null;
 
 		const mutation: any = {
