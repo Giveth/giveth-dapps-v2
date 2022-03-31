@@ -114,9 +114,9 @@ const CryptoDonation = (props: {
 	const tokenSymbol = selectedToken?.symbol;
 	const isXdai = networkId === xdaiChain.id;
 	// const isGivingBlockProject = project?.givingBlocksId;
-	const isGivingBlockProject = project?.organization?.label === 'givingBlock';
-	const isChangeProject = project?.organization?.label === 'change';
-	const projectFromAnotherOrg = isGivingBlockProject || isChangeProject;
+	const projectFromAnotherOrg =
+		project?.organization?.label !== 'giveth' &&
+		project?.organization?.label !== 'trace';
 	const projectIsGivBackEligible = givBackEligible && project?.verified;
 	const givingBlockReady = projectFromAnotherOrg
 		? networkId === ethereumChain.id
@@ -124,7 +124,12 @@ const CryptoDonation = (props: {
 
 	useEffect(() => {
 		if (networkId && acceptedTokens) {
-			if (networkId !== ethereumChain.id && networkId !== xdaiChain.id) {
+			if (projectFromAnotherOrg && networkId !== ethereumChain.id) {
+				setShowChangeNetworkModal(true);
+			} else if (
+				networkId !== ethereumChain.id &&
+				networkId !== xdaiChain.id
+			) {
 				setErc20List(undefined);
 				return setShowChangeNetworkModal(true);
 			}
