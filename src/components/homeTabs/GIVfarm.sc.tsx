@@ -38,7 +38,7 @@ interface PoolRowProps {
 export const PoolRow = styled(Row)<PoolRowProps>`
 	margin-top: 24px;
 	margin-bottom: 24px;
-	opacity: ${props => (props.disabled ? '0.2' : '1')};
+	opacity: ${props => (props.disabled ? '0.6' : '1')};
 	pointer-events: ${props => (props.disabled ? 'none' : 'auto')};
 `;
 

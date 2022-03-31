@@ -1,7 +1,6 @@
 import {
 	P,
 	H5,
-	neutralColors,
 	IconGIVStream,
 	Title,
 	GLink,
@@ -67,7 +66,7 @@ export const WhatisStreamModal: FC<IWhatisStreamModal> = ({
 					passes and the {rewardTokenSymbol}stream flows, a larger
 					portion of the total {rewardTokenSymbol} you get is sent
 					directly to you at the time of harvest. The
-					{rewardTokenSymbol}stream flows until{' '}
+					{' ' + rewardTokenSymbol}stream flows until{' '}
 					{new Date(tokenDistroHelper.endTime).toLocaleDateString(
 						'en-US',
 						{
@@ -78,19 +77,21 @@ export const WhatisStreamModal: FC<IWhatisStreamModal> = ({
 					)}
 					.
 				</Desc>
-				<LinksRow alignItems='center' justifyContent='center'>
-					<Link href={Routes.GIVstream} passHref>
-						<GLink onClick={() => setShowModal(false)}>
-							<Flex justifyContent='center'>
-								View Your {rewardTokenSymbol}stream{' '}
-								<IconExternalLink
-									size={16}
-									color={'currentColor'}
-								/>
-							</Flex>
-						</GLink>
-					</Link>
-				</LinksRow>
+				{!regenStreamConfig && (
+					<LinksRow alignItems='center' justifyContent='center'>
+						<Link href={Routes.GIVstream} passHref>
+							<GLink onClick={() => setShowModal(false)}>
+								<Flex justifyContent='center'>
+									View Your {rewardTokenSymbol}stream{' '}
+									<IconExternalLink
+										size={16}
+										color={'currentColor'}
+									/>
+								</Flex>
+							</GLink>
+						</Link>
+					</LinksRow>
+				)}
 				<GotItButton
 					label='GOT IT'
 					buttonType={theme === ETheme.Dark ? 'secondary' : 'primary'}

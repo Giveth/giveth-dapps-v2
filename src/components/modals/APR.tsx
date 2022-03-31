@@ -58,13 +58,9 @@ export const APRModal: FC<IAPRModalProps> = ({
 							A percentage of the {rewardTokenSymbol} you earn
 							from staking is claimable immediately, and the
 							remaining percent goes into increasing your{' '}
-							{rewardTokenSymbol}
-							stream flowrate. Over time, a greater percentage of
-							your total earnings will be claimable immediately
-							following the continued expansion of the{' '}
-							<Link href={Routes.GIVstream_FlowRate} passHref>
-								<GIViverseLink>GIViverse</GIViverseLink>
-							</Link>
+							{rewardTokenSymbol}stream flowrate. Over time, a
+							greater percentage of your total earnings will be
+							claimable immediately.
 						</Desc>
 						<DescTitle>Current Distribution:</DescTitle>
 						<Desc>
@@ -75,15 +71,6 @@ export const APRModal: FC<IAPRModalProps> = ({
 							Increasing your {streamName}:{' '}
 							{100 - tokenDistroHelper.GlobalReleasePercentage}%
 						</Desc>
-						<Whatis>
-							<a
-								href='https://docs.giveth.io/giveconomy/givstream/'
-								target='_blank'
-								rel='noreferrer'
-							>
-								Read More
-							</a>
-						</Whatis>
 					</DescContainer>
 				</APRModalContainer>
 			</Modal>
@@ -123,9 +110,4 @@ const Desc = styled(Subline)``;
 const DescTitle = styled(Subline)`
 	font-weight: bold;
 	margin-top: 8px;
-`;
-
-const Whatis = styled(GLink)`
-	cursor: pointer;
-	color: ${brandColors.cyan[500]};
 `;

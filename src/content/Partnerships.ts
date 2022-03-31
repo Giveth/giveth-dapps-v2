@@ -23,7 +23,6 @@ import SourceCred from '/public/images/partnerships/SourceCred.svg';
 import Meta_Gamma_Delta from '/public/images/partnerships/Meta_Gamma_Delta.svg';
 import clrfund from '/public/images/partnerships/clrfund.svg';
 import The_DAOist from '/public/images/partnerships/The_DAOist.svg';
-import XDAI from '/public/images/partnerships/XDAI.svg';
 import Rainbow_Rolls from '/public/images/partnerships/Rainbow_Rolls.svg';
 import Panvala from '/public/images/partnerships/Panvala.svg';
 import The_Giving_Block from '/public/images/partnerships/The_Giving_Block.svg';

@@ -38,7 +38,10 @@ const HeaderRoutesResponsive = () => {
 			{isOpen && (
 				<Modal>
 					<DrawerOpened isDark={isDark}>
-						<Image src={MenuPurple} alt={'drawer menu'} />
+						<Image
+							src={isDark ? MenuWhite : MenuPurple}
+							alt={'drawer menu'}
+						/>
 						<HeaderItems>
 							{headerRoutes.map(i => (
 								<HeaderRoutesItem

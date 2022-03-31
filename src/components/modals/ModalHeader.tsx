@@ -37,6 +37,7 @@ export const ModalHeader: React.FC<IModalHeader> = ({
 
 export const ModalHeaderRow = styled(Flex)`
 	gap: 14px;
+	min-height: 48px;
 	padding: 24px 24px 8px;
 	position: relative;
 	align-items: center;

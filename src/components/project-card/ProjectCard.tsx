@@ -147,7 +147,7 @@ const CardBody = styled.div`
 	left: 0;
 	right: 0;
 	top: ${(props: { isHover: boolean }) =>
-		props.isHover ? '136px' : '200px'};
+		props.isHover ? '124px' : '200px'};
 	background-color: ${neutralColors.gray[100]};
 	transition: top 0.3s ease;
 	border-radius: 0px 12px 12px 12px;
