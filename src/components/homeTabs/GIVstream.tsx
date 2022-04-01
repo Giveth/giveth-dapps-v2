@@ -208,7 +208,6 @@ export const TabGIVstreamBottom = () => {
 						</HistoryTooltip>
 					</IconWithTooltip>
 				</HistoryTitleRow>
-				<GIVstreamHistory />
 				<Row>
 					<Col xs={12} sm={6}>
 						<GsDataBlock
@@ -238,6 +237,7 @@ export const TabGIVstreamBottom = () => {
 						</GsDataBlock>
 					</Col>
 				</Row>
+				<GIVstreamHistory />
 			</Container>
 			<IncreaseSection ref={increaseSecRef}>
 				<Container>
