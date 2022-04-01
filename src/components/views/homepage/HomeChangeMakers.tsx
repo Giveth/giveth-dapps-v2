@@ -64,12 +64,14 @@ const HomeChangeMakers = () => {
 			<PurpleArc />
 			<CyanArc />
 			<MustardArc />
-			<D3>Calling all Changemakers!</D3>
-			<br />
-			<Lead>
-				Do you have a for-good project that&apos;s creating value for
-				society, for the environment, or for the world?
-			</Lead>
+			<TitleContainer>
+				<D3>Calling all Changemakers!</D3>
+				<br />
+				<Lead>
+					Do you have a for-good project that&apos;s creating value
+					for society, for the environment, or for the world?
+				</Lead>
+			</TitleContainer>
 			<MiddleSection>
 				<Lead>
 					Establish your project on Giveth to tap into the
@@ -97,6 +99,10 @@ const HomeChangeMakers = () => {
 		</Wrapper>
 	);
 };
+
+const TitleContainer = styled.div`
+	max-width: 1440px;
+`;
 
 const CreateProjectButton = styled(Button)`
 	width: 300px;
@@ -152,10 +158,12 @@ const CyanArc = styled(Arc)`
 const EndItem = styled(Col)`
 	padding-bottom: 55px;
 	padding-right: 55px;
+	max-width: 90vw;
 `;
 
 const EndSection = styled.div`
-	margin-top: 190px;
+	max-width: 1440px;
+	margin-top: auto 190px 0;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;

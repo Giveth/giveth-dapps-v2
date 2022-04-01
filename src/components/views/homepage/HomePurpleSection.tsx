@@ -187,6 +187,7 @@ const ArcSmall = styled(Arc)`
 const ForMakersGivers = styled(Row)`
 	margin-top: 107px;
 	margin-bottom: 50px;
+	justify-content: space-between;
 `;
 
 const ForMakersContainers = styled(Col)`
@@ -200,7 +201,7 @@ const ForMakersContainers = styled(Col)`
 
 const ForMakersButton = styled(Button)`
 	width: 300px;
-	margin-top: 24px;
+	margin-top: auto;
 	align-self: start;
 `;
 
