@@ -109,20 +109,32 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 	const debouncedDescriptionValidation = useRef<any>();
 
 	useEffect(() => {
-		console.log(project);
-		if (!project) return;
-		let imageComparator = image === '' ? null : image;
-		if (
-			name !== project.title ||
-			description !== project.description ||
-			JSON.stringify(categories) !== JSON.stringify(project.categories) ||
-			imageComparator !== project.image ||
-			walletAddress !== project.walletAddress ||
-			impactLocation !== project.impactLocation
-		) {
-			setPublish(false);
+		if (isEditMode) {
+			if (!project) return;
+			let imageComparator = image === '' ? null : image;
+			if (
+				name !== project.title ||
+				description !== project.description ||
+				JSON.stringify(categories) !==
+					JSON.stringify(project.categories) ||
+				imageComparator !== project.image ||
+				walletAddress !== project.walletAddress ||
+				impactLocation !== project.impactLocation
+			) {
+				setPublish(false);
+			} else {
+				setPublish(true);
+			}
 		} else {
-			setPublish(true);
+			if (
+				errors[ECreateErrFields.NAME] === '' &&
+				errors[ECreateErrFields.DESCRIPTION] === '' &&
+				errors[ECreateErrFields.WALLET_ADDRESS] === ''
+			) {
+				setPublish(false);
+			} else {
+				setPublish(true);
+			}
 		}
 	}, [
 		project,
@@ -132,6 +144,8 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 		image,
 		walletAddress,
 		impactLocation,
+		errors,
+		isEditMode,
 	]);
 
 	useEffect(() => {
