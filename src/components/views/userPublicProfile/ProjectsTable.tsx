@@ -66,7 +66,7 @@ const ProjectsTable: FC<IProjectsTable> = ({
 			title = 'Listed';
 		} else if (listed === null) {
 			color = semanticColors.blueSky;
-			title = 'Waiting for review';
+			title = 'Draft';
 		} else {
 			color = semanticColors.golden;
 			title = 'Not Listed';
