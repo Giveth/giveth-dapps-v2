@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
 import {
 	brandColors,
 	Button,
@@ -89,6 +88,7 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 		project?.walletAddress || '',
 	);
 	const [isLoading, setIsLoading] = useState(false);
+	const [publish, setPublish] = useState<boolean>(false);
 	const [impactLocation, setImpactLocation] = useState(
 		project?.impactLocation || '',
 	);
@@ -97,8 +97,6 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 		[ECreateErrFields.DESCRIPTION]: '',
 		[ECreateErrFields.WALLET_ADDRESS]: '',
 	});
-
-	const [publish, setPublish] = useState<boolean>(true);
 
 	const {
 		state: { user },
@@ -125,28 +123,8 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 			} else {
 				setPublish(true);
 			}
-		} else {
-			if (
-				errors[ECreateErrFields.NAME] === '' &&
-				errors[ECreateErrFields.DESCRIPTION] === '' &&
-				errors[ECreateErrFields.WALLET_ADDRESS] === ''
-			) {
-				setPublish(false);
-			} else {
-				setPublish(true);
-			}
 		}
-	}, [
-		project,
-		name,
-		description,
-		categories,
-		image,
-		walletAddress,
-		impactLocation,
-		errors,
-		isEditMode,
-	]);
+	}, [name, description, categories, image, walletAddress, impactLocation]);
 
 	useEffect(() => {
 		if (!isEditMode) {
@@ -408,12 +386,11 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 									disabled={isLoading || publish}
 									onClick={() => onSubmit(false)}
 								/>
-								<Link href={`/project/${project?.slug!}`}>
-									<OulineButton
-										label='CANCEL'
-										buttonType='primary'
-									/>
-								</Link>
+								<OulineButton
+									onClick={() => router.back()}
+									label='CANCEL'
+									buttonType='primary'
+								/>
 							</Buttons>
 						</div>
 					</CreateContainer>

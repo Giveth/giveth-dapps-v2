@@ -151,18 +151,10 @@ const formats = [
 function TextRichWithQuill(props: any) {
 	const { value, setValue, placeholder, withLimit, style, projectId } = props;
 
-	const [mod, setMod] = useState<any>();
-
-	useEffect(() => {
-		setMod(modules(projectId));
-	}, []);
-
-	if (!mod) return null;
-
 	return (
 		<>
 			<ReactQuillStyled
-				modules={mod}
+				modules={modules(projectId)}
 				formats={formats}
 				theme='snow'
 				value={value}
