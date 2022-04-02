@@ -131,6 +131,7 @@ const Wrapper = styled.div<{ isNew?: boolean }>`
 	position: relative;
 	height: 430px;
 	max-width: 440px;
+	min-width: 300px;
 	border-radius: 12px;
 	margin-top: 0;
 	z-index: 0;
