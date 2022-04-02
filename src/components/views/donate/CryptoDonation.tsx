@@ -51,6 +51,7 @@ import {
 	filterTokens,
 	prepareTokenList,
 } from '@/components/views/donate/helpers';
+import { ORGANIZATION } from '@/lib/constants/organizations';
 
 const ethereumChain = config.PRIMARY_NETWORK;
 const xdaiChain = config.SECONDARY_NETWORK;
@@ -81,7 +82,8 @@ const CryptoDonation = (props: {
 	const { ethPrice } = usePrice();
 
 	const { project, setSuccessDonation } = props;
-	const isActive = project.status?.name === EProjectStatus.ACTIVE;
+	const { organization, verified, id: projectId, status } = project;
+	const isActive = status?.name === EProjectStatus.ACTIVE;
 	const mainTokenPrice = new BigNumber(ethPrice).toNumber();
 
 	const [selectedToken, setSelectedToken] = useState<IProjectAcceptedToken>();
@@ -113,11 +115,10 @@ const CryptoDonation = (props: {
 
 	const tokenSymbol = selectedToken?.symbol;
 	const isXdai = networkId === xdaiChain.id;
-	// const isGivingBlockProject = project?.givingBlocksId;
 	const projectFromAnotherOrg =
-		project?.organization?.label !== 'giveth' &&
-		project?.organization?.label !== 'trace';
-	const projectIsGivBackEligible = givBackEligible && project?.verified;
+		organization?.label !== ORGANIZATION.giveth &&
+		organization?.label !== ORGANIZATION.trace;
+	const projectIsGivBackEligible = givBackEligible && verified;
 	const givingBlockReady = projectFromAnotherOrg
 		? networkId === ethereumChain.id
 		: true;
@@ -150,7 +151,7 @@ const CryptoDonation = (props: {
 		client
 			.query({
 				query: PROJECT_ACCEPTED_TOKENS,
-				variables: { projectId: Number(project.id) },
+				variables: { projectId: Number(projectId) },
 				fetchPolicy: 'no-cache',
 			})
 			.then((res: IProjectAcceptedTokensGQL) => {
@@ -307,8 +308,8 @@ const CryptoDonation = (props: {
 						<div>
 							<img src='/images/gas_station.svg' />
 							<Caption color={neutralColors.gray[900]}>
-								Projects from {project?.organization?.name} only
-								accept donations on mainnet.{' '}
+								Projects from {organization?.name} only accept
+								donations on mainnet.{' '}
 							</Caption>
 						</div>
 						<SwitchCaption

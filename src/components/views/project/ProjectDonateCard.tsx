@@ -14,7 +14,6 @@ import {
 	brandColors,
 	neutralColors,
 	OulineButton,
-	Overline,
 	ButtonText,
 	Caption,
 	IconHelp,
@@ -79,12 +78,9 @@ const ProjectDonateCard = ({
 		description,
 		adminUser,
 		id,
-		givingBlocksId,
 		verified,
+		organization,
 	} = project || {};
-	const [reaction, setReaction] = useState<IReaction | undefined>(
-		project?.reaction,
-	);
 
 	const [heartedByUser, setHeartedByUser] = useState<boolean>(false);
 	const [showModal, setShowModal] = useState<boolean>(false);
@@ -93,6 +89,9 @@ const ProjectDonateCard = ({
 	const [isAdmin, setIsAdmin] = useState<boolean>(false);
 	const [deactivateModal, setDeactivateModal] = useState<boolean>(false);
 	const [showVerificationModal, setShowVerificationModal] = useState(false);
+	const [reaction, setReaction] = useState<IReaction | undefined>(
+		project?.reaction,
+	);
 
 	const isCategories = categories?.length > 0;
 
@@ -235,12 +234,8 @@ const ProjectDonateCard = ({
 			>
 				{isMobile && <BlueBar />}
 				<ProjectCardOrgBadge
-					organization={project?.organization?.label}
+					organization={organization?.label}
 					isHover={false}
-					show={
-						project?.organization?.label !== 'giveth' &&
-						project?.organization?.label !== 'trace'
-					}
 					isProjectView={true}
 				/>
 				{isAdmin ? (

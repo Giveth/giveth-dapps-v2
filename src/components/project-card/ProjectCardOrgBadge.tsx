@@ -1,13 +1,12 @@
 import React from 'react';
-import Image from 'next/image';
 import styled from 'styled-components';
-import { Flex } from '@/components/styled-components/Flex';
 import { neutralColors, Overline } from '@giveth/ui-design-system';
 
+import { ORGANIZATION } from '@/lib/constants/organizations';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+
 interface IProjectCardOrgBadge {
-	image?: string;
 	isHover: boolean;
-	show: boolean;
 	organization?: string;
 	isAbsolute?: boolean;
 	isProjectView?: boolean;
@@ -16,10 +15,10 @@ interface IProjectCardOrgBadge {
 const setOrgImage = (org?: string) => {
 	let img = '';
 	switch (org) {
-		case 'givingBlock':
+		case ORGANIZATION.givingBlock:
 			img = '/images/thegivingblock.svg';
 			break;
-		case 'change':
+		case ORGANIZATION.change:
 			img = '/images/change.png';
 			break;
 	}
@@ -27,25 +26,25 @@ const setOrgImage = (org?: string) => {
 };
 
 const ProjectCardOrgBadge = ({
-	image,
 	isHover,
-	show,
 	organization,
 	isAbsolute,
 	isProjectView,
 }: IProjectCardOrgBadge) => {
-	const displayImg = image || setOrgImage(organization);
-	if (!displayImg || !show) return null;
-	console.log({ organization });
+	const displayImg = setOrgImage(organization);
+	const hideBadge =
+		organization === ORGANIZATION.giveth ||
+		organization === ORGANIZATION.trace ||
+		!displayImg;
+
+	if (hideBadge) return null;
+
 	const content = (
 		<>
-			<GivingBlocksText>PROJECT BY:</GivingBlocksText>
-			<Image
-				src={displayImg}
-				alt={organization || 'The Giving Block icon.'}
-				height={20}
-				width={78}
-			/>
+			<OrganizationText>PROJECT BY:  </OrganizationText>
+			<ImageContainer>
+				<img src={displayImg} alt={organization} />
+			</ImageContainer>
 		</>
 	);
 	return (
@@ -55,26 +54,31 @@ const ProjectCardOrgBadge = ({
 			) : isProjectView ? (
 				<ProjectViewContainer>{content}</ProjectViewContainer>
 			) : (
-				<GivingBadgeContainer isHover={isHover}>
+				<HomeViewContainer isHover={isHover}>
 					{content}
-				</GivingBadgeContainer>
+				</HomeViewContainer>
 			)}
 		</>
 	);
 };
 
-const GivingBadgeContainer = styled.div<{ isHover: boolean }>`
+const ImageContainer = styled.div`
+	max-width: 100px;
+	img {
+		width: 100%;
+		height: auto;
+	}
+`;
+
+const HomeViewContainer = styled(FlexCenter)<{ isHover: boolean }>`
 	height: 36px;
-	width: 200px;
 	background-color: ${neutralColors.gray[200]};
-	display: flex;
-	align-items: center;
 	gap: 8px;
 	padding: 0 24px;
 	position: absolute;
 	bottom: ${props => (props.isHover ? '100px' : '24px')};
 	transition: bottom 0.3s ease;
-	border-radius: 0px 12px 0px 0px;
+	border-top-right-radius: 12px;
 `;
 
 const AbsolutContainer = styled(Flex)`
@@ -90,15 +94,12 @@ const AbsolutContainer = styled(Flex)`
 	}
 `;
 
-const ProjectViewContainer = styled.div`
-	display: flex;
-	align-items: center;
-	justify-content: center;
+const ProjectViewContainer = styled(FlexCenter)`
 	gap: 8px;
 	margin-bottom: 12px;
 `;
 
-const GivingBlocksText = styled(Overline)`
+const OrganizationText = styled(Overline)`
 	color: ${neutralColors.gray[600]};
 	font-size: 10px;
 `;

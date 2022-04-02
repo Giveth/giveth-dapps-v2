@@ -1,9 +1,7 @@
 import React from 'react';
-import Link from 'next/link';
 import {
 	Caption,
 	P,
-	Overline,
 	neutralColors,
 	brandColors,
 	H6,
@@ -18,6 +16,7 @@ import { htmlToText } from '@/lib/helpers';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { mediaQueries } from '@/utils/constants';
 import Routes from '@/lib/constants/Routes';
+import InternalLink from '@/components/InternalLink';
 
 interface IProjectCard {
 	project: IProject;
@@ -37,11 +36,11 @@ const ProjectCard = (props: IProjectCard) => {
 		slug,
 		id,
 		totalDonations,
-		givingBlocksId,
+		organization,
 	} = project;
 
 	const name = adminUser?.name;
-	const isChangeProject = project?.organization?.label === 'change';
+	const orgLabel = organization?.label;
 
 	return (
 		<Wrapper isNew={isNew}>
@@ -49,12 +48,8 @@ const ProjectCard = (props: IProjectCard) => {
 				<ProjectCardImage image={image} />
 			</ImagePlaceholder>
 			<ProjectCardOrgBadge
-				organization={project?.organization?.label}
+				organization={orgLabel}
 				isHover={false}
-				show={
-					project?.organization?.label !== 'giveth' &&
-					project?.organization?.label !== 'trace'
-				}
 				isAbsolute={true}
 			/>
 			{!isNew && (
@@ -70,11 +65,11 @@ const ProjectCard = (props: IProjectCard) => {
 			<CardBody>
 				<Title>{title}</Title>
 				{name && (
-					<Link href={`${Routes.User}/${adminUser?.walletAddress}`}>
-						<a>
-							<Author>{name}</Author>
-						</a>
-					</Link>
+					<InternalLink
+						href={`${Routes.User}/${adminUser?.walletAddress}`}
+					>
+						<Author>{name}</Author>
+					</InternalLink>
 				)}
 				<Description>{htmlToText(description)}</Description>
 				{!isNew && (

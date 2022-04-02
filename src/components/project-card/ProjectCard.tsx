@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Image from 'next/image';
 import styled from 'styled-components';
 import {
 	GLink,
@@ -11,6 +10,8 @@ import {
 	ButtonLink,
 	OutlineLinkButton,
 } from '@giveth/ui-design-system';
+import Link from 'next/link';
+
 import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectCardBadges from './ProjectCardBadges';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
@@ -19,9 +20,9 @@ import { calcBiggestUnitDifferenceTime, htmlToText } from '@/lib/helpers';
 import ProjectCardImage from './ProjectCardImage';
 import { slugToProjectDonate, slugToProjectView } from '@/lib/routeCreators';
 import { Flex } from '../styled-components/Flex';
-import Link from 'next/link';
 import Routes from '@/lib/constants/Routes';
 import { Row } from '@/components/Grid';
+import { ORGANIZATION } from '@/lib/constants/organizations';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -44,13 +45,15 @@ const ProjectCard = (props: IProjectCard) => {
 		traceCampaignId,
 		id,
 		updatedAt,
-		givingBlocksId,
 		organization,
 	} = props.project;
 	const [isHover, setIsHover] = useState(false);
 
+	const isForeignOrg =
+		organization?.label !== ORGANIZATION.trace &&
+		organization?.label !== ORGANIZATION.giveth;
 	const name = adminUser?.name;
-	console.log({ organization });
+
 	return (
 		<Wrapper
 			onMouseEnter={() => setIsHover(true)}
@@ -69,16 +72,12 @@ const ProjectCard = (props: IProjectCard) => {
 				<ProjectCardOrgBadge
 					organization={organization?.label}
 					isHover={isHover}
-					show={
-						organization?.label !== 'giveth' &&
-						organization?.label !== 'trace'
-					}
 				/>
 				<ProjectCardImage image={image} />
 			</ImagePlaceholder>
 			<CardBody isHover={isHover}>
 				<Title weight={700}>{title}</Title>
-				{!!adminUser && !!!givingBlocksId ? (
+				{adminUser && !isForeignOrg ? (
 					<Link
 						href={`${Routes.User}/${adminUser?.walletAddress}`}
 						passHref
@@ -186,15 +185,6 @@ const Wrapper = styled.div`
 	background: white;
 	overflow: hidden;
 	box-shadow: ${Shadow.Neutral[400]};
-`;
-
-const GivingBlockBadge = styled.img`
-	position: absolute;
-	top: -5%;
-	right: 0;
-	background: white;
-	padding: 4px 12px;
-	border-top-left-radius: 10px;
 `;
 
 export default ProjectCard;
