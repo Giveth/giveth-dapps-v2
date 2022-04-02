@@ -15,6 +15,7 @@ import styled from 'styled-components';
 import ShareModal from '../modals/ShareModal';
 import { likeProject, unlikeProject } from '@/lib/reaction';
 import { showToastError } from '@/lib/helpers';
+import useModal from '@/context/ModalProvider';
 
 interface IBadgeWrapper {
 	width?: string;
@@ -35,12 +36,12 @@ interface IProjectCardBadges {
 const ProjectCardBadges = (props: IProjectCardBadges) => {
 	const {
 		state: { user, isSignedIn },
-		actions: {
-			showSignWithWallet,
-			incrementLikedProjectsCount,
-			decrementLikedProjectsCount,
-		},
+		actions: { incrementLikedProjectsCount, decrementLikedProjectsCount },
 	} = useUser();
+
+	const {
+		actions: { showSignWithWallet },
+	} = useModal();
 
 	const [showModal, setShowModal] = useState<boolean>(false);
 	const {

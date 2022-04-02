@@ -31,6 +31,7 @@ import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
 import { Shadow } from '../../styled-components/Shadow';
 import useUser from '@/context/UserProvider';
 import { deviceSize, mediaQueries } from '@/utils/constants';
+import useModal from '@/context/ModalProvider';
 
 interface IProjectsView {
 	projects: IProject[];
@@ -86,8 +87,11 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	const {
 		state: { user },
-		actions: { showCompleteProfile },
 	} = useUser();
+
+	const {
+		actions: { showCompleteProfile },
+	} = useModal();
 
 	const [categoriesObj, setCategoriesObj] = useState<ISelectObj[]>();
 	const [selectedCategory, setSelectedCategory] =

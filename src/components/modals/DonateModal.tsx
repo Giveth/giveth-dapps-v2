@@ -29,6 +29,8 @@ import FixedToast from '@/components/toasts/FixedToast';
 import { mediaQueries } from '@/utils/constants';
 import config from '@/configuration';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
+import useModal from '@/context/ModalProvider';
+import { ORGANIZATION } from '@/lib/constants/organizations';
 
 interface IDonateModal extends IModal {
 	closeParentModal?: () => void;
@@ -61,16 +63,26 @@ const DonateModal = ({
 	const { account, library, chainId } = useWeb3React();
 	const {
 		state: { isSignedIn },
-		actions: { showSignWithWallet },
 	} = UserContext();
+
+	const {
+		actions: { showSignWithWallet },
+	} = useModal();
+
 	const [donating, setDonating] = useState(false);
 	const [donationSaved, setDonationSaved] = useState(false);
 	const [showInsufficientModal, setShowInsufficientModal] = useState(false);
 	const [showWrongNetworkModal, setShowWrongNetworkModal] = useState(false);
+
 	if (!showModal) return null;
 
+	const { walletAddress, organization, id, title } = project || {};
+
 	const avgPrice = price && price * amount;
-	const isGivingBlockProject = project?.givingBlocksId;
+	const isForeignProject =
+		organization?.label !== ORGANIZATION.giveth &&
+		organization?.label !== ORGANIZATION.trace;
+
 	const confirmDonation = async () => {
 		try {
 			// Traceable by default if it comes from Trace only
@@ -86,14 +98,14 @@ const DonateModal = ({
 				showSignWithWallet();
 				return;
 			}
-			if (!project?.walletAddress) {
+			if (!walletAddress) {
 				showToastError(
 					'There is no eth address assigned for this project',
 				);
 			}
 
 			const isCorrectNetwork = checkNetwork(chainId!);
-			if (isGivingBlockProject && chainId !== config.PRIMARY_NETWORK.id)
+			if (isForeignProject && chainId !== config.PRIMARY_NETWORK.id)
 				return setShowWrongNetworkModal(true);
 			if (!isCorrectNetwork) {
 				return setShowWrongNetworkModal(true);
@@ -114,9 +126,9 @@ const DonateModal = ({
 			//   isLoading: true,
 			//   noAutoClose: true
 			// })
-			const toAddress = isAddressENS(project.walletAddress!)
-				? await getAddressFromENS(project.walletAddress!, library)
-				: project.walletAddress;
+			const toAddress = isAddressENS(walletAddress!)
+				? await getAddressFromENS(walletAddress!, library)
+				: walletAddress;
 			await transaction.send(
 				library,
 				toAddress,
@@ -137,7 +149,7 @@ const DonateModal = ({
 							chainId!,
 							Number(amount),
 							token.symbol!,
-							Number(project.id),
+							Number(id),
 							token.address!,
 							anonymous!,
 						);
@@ -285,8 +297,7 @@ const DonateModal = ({
 					)}
 					<div style={{ margin: '12px 0 32px 0' }}>
 						<P>
-							To{' '}
-							<B style={{ marginLeft: '6px' }}>{project.title}</B>
+							To <B style={{ marginLeft: '6px' }}>{title}</B>
 						</P>
 					</div>
 				</DonatingBox>

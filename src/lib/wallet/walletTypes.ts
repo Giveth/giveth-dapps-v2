@@ -51,7 +51,21 @@ export enum EWallets {
 	AUTHEREUM = 'authereum',
 }
 
-export const walletsArray = [
+export interface IWallet {
+	name: string;
+	value: EWallets;
+	image: any;
+	connector: TWalletConnector;
+}
+
+export const torusWallet: IWallet = {
+	name: 'Torus',
+	value: EWallets.TORUS,
+	image: torusIcon,
+	connector: torusConnector,
+};
+
+export const walletsArray: IWallet[] = [
 	{
 		name: 'MetaMask',
 		value: EWallets.METAMASK,
@@ -64,6 +78,7 @@ export const walletsArray = [
 		image: walletConnectIcon,
 		connector: walletconnectConnector,
 	},
+	torusWallet,
 	// {
 	// 	name: 'Portis',
 	// 	value: EWallets.PORTIS,
@@ -76,12 +91,6 @@ export const walletsArray = [
 	// 	image: fortmaticIcon,
 	// 	connector: fortmaticConnector,
 	// },
-	{
-		name: 'Torus',
-		value: EWallets.TORUS,
-		image: torusIcon,
-		connector: torusConnector,
-	},
 	// {
 	// 	name: 'Authereum',
 	// 	value: EWallets.AUTHEREUM,

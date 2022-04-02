@@ -5,6 +5,7 @@ import {
 } from '@/lib/wallet/walletTypes';
 import { switchNetwork as metamaskSwitchNetwork } from '@/lib/metamask';
 import config from '@/configuration';
+import StorageLabel from '@/lib/localStorage';
 
 // @DEV it's not tested yet! didn't have a multi-chain wallet to test
 const switchWalletConnectNetwork = async (chainId: number) => {
@@ -21,7 +22,7 @@ const switchWalletConnectNetwork = async (chainId: number) => {
 };
 
 export const switchNetwork = async (chainId: number) => {
-	const selectedWallet = window.localStorage.getItem('selectedWallet');
+	const selectedWallet = window.localStorage.getItem(StorageLabel.WALLET);
 	switch (selectedWallet) {
 		case EWallets.METAMASK:
 			await metamaskSwitchNetwork(chainId);
