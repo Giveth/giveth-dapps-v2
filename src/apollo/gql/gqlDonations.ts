@@ -30,6 +30,7 @@ export const FETCH_PROJECT_DONATIONS = gql`
 				transactionId
 				transactionNetworkId
 				createdAt
+				donationType
 			}
 			totalCount
 		}
