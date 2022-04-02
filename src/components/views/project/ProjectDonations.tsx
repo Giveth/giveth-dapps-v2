@@ -17,6 +17,7 @@ const ProjectDonations = (props: {
 	const { donationsByProjectId, project, isActive, isDraft, isMobile } =
 		props;
 	const { totalDonations, id, traceCampaignId } = project || {};
+	console.log({ totalDonations, donationsByProjectId });
 	return (
 		<>
 			{totalDonations === 0 ? (

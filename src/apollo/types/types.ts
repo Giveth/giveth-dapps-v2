@@ -29,12 +29,16 @@ export interface IProject {
 	totalTraceDonations?: number;
 	totalProjectUpdates?: number;
 	traceCampaignId: string | null;
-	givingBlocksId?: string | null;
 	status: {
 		id?: string;
 		name?: string;
 	};
 	updatedAt: string;
+	organization?: {
+		name: string;
+		label: string;
+		supportCustomTokens: boolean;
+	};
 }
 
 export interface IProjectEdition {
