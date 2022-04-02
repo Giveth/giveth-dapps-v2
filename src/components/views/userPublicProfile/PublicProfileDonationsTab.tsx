@@ -26,10 +26,10 @@ import styled from 'styled-components';
 import {
 	IUserPublicProfileView,
 	EOrderBy,
-	EDirection,
 	IOrder,
 	NothingToSee,
 } from './UserPublicProfile.view';
+import { EDirection } from '@/apollo/types/gqlEnums';
 
 const itemPerPage = 10;
 

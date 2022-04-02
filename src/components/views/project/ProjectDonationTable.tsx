@@ -13,6 +13,7 @@ import {
 	P,
 	SublineBold,
 } from '@giveth/ui-design-system';
+
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { IDonation } from '@/apollo/types/types';
@@ -21,8 +22,8 @@ import { Flex } from '@/components/styled-components/Flex';
 import Pagination from '@/components/Pagination';
 import { networksParams } from '@/helpers/blockchain';
 import { smallFormatDate } from '@/lib/helpers';
-import { mediaQueries } from '@/utils/constants';
 import config from '@/configuration';
+import { EDirection, EDonationType } from '@/apollo/types/gqlEnums';
 
 const itemPerPage = 10;
 
@@ -30,11 +31,6 @@ enum EOrderBy {
 	TokenAmount = 'TokenAmount',
 	UsdAmount = 'UsdAmount',
 	CreationDate = 'CreationDate',
-}
-
-enum EDirection {
-	DESC = 'DESC',
-	ASC = 'ASC',
 }
 
 interface IOrder {
@@ -59,7 +55,6 @@ interface IProjectDonationTable {
 	id?: string;
 	showTrace: boolean;
 	totalDonations?: number;
-	isMobile?: boolean;
 }
 
 const ProjectDonationTable = ({
@@ -67,7 +62,6 @@ const ProjectDonationTable = ({
 	id,
 	showTrace,
 	totalDonations,
-	isMobile,
 }: IProjectDonationTable) => {
 	const [pageDonations, setPageDonations] = useState<IDonation[]>(donations);
 	const [page, setPage] = useState<number>(0);
@@ -77,6 +71,7 @@ const ProjectDonationTable = ({
 	});
 	const [activeTab, setActiveTab] = useState<number>(0);
 	const [searchTerm, setSearchTerm] = useState<string>('');
+
 	const orderChangeHandler = (orderby: EOrderBy) => {
 		if (orderby === order.by) {
 			setOrder({
@@ -190,7 +185,8 @@ const ProjectDonationTable = ({
 								</TableCell>
 								<TableCell>
 									<P>
-										{donation?.donationType === 'poignArt'
+										{donation?.donationType ===
+										EDonationType.POIGNART
 											? 'PoignART'
 											: donation?.anonymous
 											? 'Anonymous'
