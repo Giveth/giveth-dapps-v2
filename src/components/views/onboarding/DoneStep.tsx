@@ -18,6 +18,7 @@ import Routes from '@/lib/constants/Routes';
 import useUser from '@/context/UserProvider';
 import { isUserRegistered } from '@/lib/helpers';
 import { Col, Row } from '@/components/Grid';
+import useModal from '@/context/ModalProvider';
 
 const CongratsAnimationOptions = {
 	loop: true,
@@ -30,8 +31,11 @@ const CongratsAnimationOptions = {
 const DoneStep = () => {
 	const {
 		state: { user },
-		actions: { showCompleteProfile },
 	} = useUser();
+
+	const {
+		actions: { showCompleteProfile },
+	} = useModal();
 
 	const router = useRouter();
 

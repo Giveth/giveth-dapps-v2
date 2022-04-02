@@ -31,7 +31,6 @@ import ShareModal from '@/components/modals/ShareModal';
 import { IReaction } from '@/apollo/types/types';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_REACTION_BY_ID } from '@/apollo/gql/gqlProjects';
-import WelcomeModal from '@/components/modals/WelcomeModal';
 import { likeProject, unlikeProject } from '@/lib/reaction';
 import DeactivateProjectModal from '@/components/modals/DeactivateProjectModal';
 import ArchiveIcon from '../../../../public/images/icons/archive.svg';
@@ -43,6 +42,7 @@ import ProjectCardOrgBadge from '../../project-card/ProjectCardOrgBadge';
 import ExternalLink from '@/components/ExternalLink';
 import InternalLink from '@/components/InternalLink';
 import Routes from '@/lib/constants/Routes';
+import useModal from '@/context/ModalProvider';
 
 interface IProjectDonateCard {
 	project?: IProject;
@@ -65,12 +65,12 @@ const ProjectDonateCard = ({
 }: IProjectDonateCard) => {
 	const {
 		state: { user, isSignedIn },
-		actions: {
-			showSignWithWallet,
-			incrementLikedProjectsCount,
-			decrementLikedProjectsCount,
-		},
+		actions: { incrementLikedProjectsCount, decrementLikedProjectsCount },
 	} = useUser();
+
+	const {
+		actions: { showSignWithWallet },
+	} = useModal();
 
 	const {
 		categories = [],
@@ -84,7 +84,6 @@ const ProjectDonateCard = ({
 
 	const [heartedByUser, setHeartedByUser] = useState<boolean>(false);
 	const [showModal, setShowModal] = useState<boolean>(false);
-	const [showSigninModal, setShowSigninModal] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [isAdmin, setIsAdmin] = useState<boolean>(false);
 	const [deactivateModal, setDeactivateModal] = useState<boolean>(false);
@@ -210,12 +209,6 @@ const ProjectDonateCard = ({
 					setShowModal={setShowModal}
 					projectHref={slug}
 					projectDescription={description}
-				/>
-			)}
-			{showSigninModal && (
-				<WelcomeModal
-					showModal={showSigninModal}
-					closeModal={() => setShowSigninModal(false)}
 				/>
 			)}
 			{deactivateModal && (

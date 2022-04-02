@@ -85,12 +85,10 @@ export const useStakingPool = (
 
 	useEffect(() => {
 		const unipoolInfo = currentValues[regenFarmType || type];
-		if (unipoolInfo) {
-			const unipoolHelper = new UnipoolHelper(unipoolInfo);
-			setUserStakeInfo(
-				getUserStakeInfo(type, regenFarmType, balances, unipoolHelper),
-			);
-		}
+		const unipoolHelper = unipoolInfo && new UnipoolHelper(unipoolInfo);
+		setUserStakeInfo(
+			getUserStakeInfo(type, regenFarmType, balances, unipoolHelper),
+		);
 	}, [type, regenFarmType, currentValues, balances]);
 
 	return {

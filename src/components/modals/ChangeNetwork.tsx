@@ -29,8 +29,8 @@ export const ChangeNetworkModal: FC<IChangeNetworkModalProps> = ({
 
 	const NetworkName =
 		targetNetwork === config.MAINNET_NETWORK_NUMBER
-			? 'Ethereum'
-			: 'Ethereum or Gnosis Chain';
+			? 'Ethereum Mainnet'
+			: 'Ethereum Mainnet or Gnosis Chain';
 
 	return (
 		<Modal showModal={showModal} setShowModal={setShowModal}>

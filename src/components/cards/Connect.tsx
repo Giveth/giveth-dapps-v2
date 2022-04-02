@@ -10,8 +10,8 @@ import { ArrowButton, Card } from './common';
 import useClaim, { GiveDropStateType } from '@/context/claim.context';
 import { IClaimViewCardProps } from '../views/claim/Claim.view';
 import { formatWeiHelper } from '@/helpers/number';
-import WalletModal from '@/components/modals/WalletModal';
 import Routes from '@/lib/constants/Routes';
+import useModal from '@/context/ModalProvider';
 
 interface IConnectCardContainerProps {
 	data: any;
@@ -131,10 +131,12 @@ const WalletCheckButton = styled.button`
 `;
 
 export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
-	const { account, deactivate } = useWeb3React();
-	const [showWalletModal, setShowWalletModal] = useState(false);
-	// Auto get claim data on wallet change
 	const [walletIsChanged, setWalletIsChanged] = useState(false);
+
+	const {
+		actions: { showWalletModal },
+	} = useModal();
+
 	const {
 		totalAmount,
 		giveDropState,
@@ -145,7 +147,10 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 		getClaimData,
 	} = useClaim();
 
+	const { account, deactivate } = useWeb3React();
+
 	useEffect(() => {
+		// Auto get claim data on wallet change
 		if (walletIsChanged && account) {
 			setWalletIsChanged(false);
 			getClaimData();
@@ -241,7 +246,7 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 										onClick={() => {
 											deactivate();
 											setWalletIsChanged(true);
-											setShowWalletModal(true);
+											showWalletModal();
 										}}
 									>
 										{btnLabel}
@@ -282,13 +287,6 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 				{giveDropState === GiveDropStateType.Success &&
 					step === index && <ArrowButton onClick={goNextStep} />}
 			</ConnectCardContainer>
-
-			{showWalletModal && (
-				<WalletModal
-					showModal={showWalletModal}
-					setShowModal={setShowWalletModal}
-				/>
-			)}
 		</>
 	);
 };

@@ -2,17 +2,21 @@ import React, { useEffect } from 'react';
 import CreateProject from '@/components/views/create/CreateProject';
 import useUser from '@/context/UserProvider';
 import { isUserRegistered } from '@/lib/helpers';
+import useModal from '@/context/ModalProvider';
 
 const CreateIndex = () => {
 	const {
 		state: { user, isSignedIn, isEnabled },
-		actions: { showCompleteProfile, showSignWithWallet, showWelcomeModal },
 	} = useUser();
+
+	const {
+		actions: { showWelcomeModal, showSignWithWallet, showCompleteProfile },
+	} = useModal();
+
 	const isRegistered = isUserRegistered(user);
 
 	useEffect(() => {
 		if (isEnabled) {
-			showWelcomeModal(false);
 			if (!isRegistered) {
 				showCompleteProfile();
 				return;
@@ -21,7 +25,7 @@ const CreateIndex = () => {
 				showSignWithWallet();
 			}
 		} else {
-			showWelcomeModal(true);
+			showWelcomeModal();
 		}
 	}, [user, isSignedIn]);
 

@@ -1,19 +1,6 @@
 import { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
-import useUser from '@/context/UserProvider';
 import dynamic from 'next/dynamic';
-import {
-	FETCH_PROJECT_UPDATES,
-	ADD_PROJECT_UPDATE,
-	DELETE_PROJECT_UPDATE,
-	EDIT_PROJECT_UPDATE,
-} from '@/apollo/gql/gqlProjects';
-import { showToastError } from '@/lib/helpers';
-import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
-import { gToast, ToastType } from '@/components/toasts';
-import ProjectTimeline, { TimelineSection } from './ProjectTimeline';
-import { IProject, IProjectUpdate } from '@/apollo/types/types';
-import { RemoveUpdateModal } from '@/components/modals/RemoveUpdateModal';
 import styled from 'styled-components';
 import {
 	brandColors,
@@ -21,7 +8,21 @@ import {
 	Button,
 	neutralColors,
 } from '@giveth/ui-design-system';
+
+import {
+	FETCH_PROJECT_UPDATES,
+	ADD_PROJECT_UPDATE,
+	DELETE_PROJECT_UPDATE,
+	EDIT_PROJECT_UPDATE,
+} from '@/apollo/gql/gqlProjects';
+import { showToastError } from '@/lib/helpers';
+import { gToast, ToastType } from '@/components/toasts';
+import ProjectTimeline, { TimelineSection } from './ProjectTimeline';
+import { IProject, IProjectUpdate } from '@/apollo/types/types';
+import { RemoveUpdateModal } from '@/components/modals/RemoveUpdateModal';
 import { mediaQueries } from '@/utils/constants';
+import useModal from '@/context/ModalProvider';
+import useUser from '@/context/UserProvider';
 
 const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
 	ssr: false,
@@ -31,18 +32,24 @@ const UPDATE_LIMIT = 2000;
 
 const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 	const { id, creationDate, adminUser } = props.project || {};
+
 	const {
 		state: { user, isSignedIn },
 	} = useUser();
+
+	const {
+		actions: { showSignWithWallet },
+	} = useModal();
+
 	const [newUpdate, setNewUpdate] = useState<string>('');
 	const [title, setTitle] = useState<string>('');
 	const [currentUpdate, setCurrentUpdate] = useState<string>('');
 	const [showRemoveUpdateModal, setShowRemoveUpdateModal] = useState(false);
-	const isOwner = adminUser?.id === user?.id;
+
 	const [addUpdateMutation] = useMutation(ADD_PROJECT_UPDATE);
 	const [deleteUpdateMutation] = useMutation(DELETE_PROJECT_UPDATE);
 	const [editUpdateMutation] = useMutation(EDIT_PROJECT_UPDATE);
-	const [showWelcomeSignin, setShowWelcomeSignin] = useState<boolean>(false);
+
 	const { data } = useQuery(FETCH_PROJECT_UPDATES, {
 		variables: {
 			projectId: parseInt(id || ''),
@@ -50,7 +57,9 @@ const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 			skip: 0,
 		},
 	});
+
 	const sortedUpdates = data?.getProjectUpdates;
+	const isOwner = adminUser?.id === user?.id;
 
 	const editUpdate = async (
 		title: string,
@@ -115,21 +124,19 @@ const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 			props.fetchProject();
 			gToast(`Your update was deleted`, {
 				type: ToastType.SUCCESS,
-				// direction: ToastDirection.RIGHT,
 				title: 'Success!',
 				position: 'top-center',
 			});
 			return true;
 		} catch (error: any) {
-			return showToastError(error);
+			showToastError(error);
 		}
 	};
 
 	const addUpdate = async () => {
 		try {
 			if (!isSignedIn) {
-				// sign first
-				setShowWelcomeSignin(true);
+				showSignWithWallet();
 				return;
 			}
 			if (!newUpdate) {
@@ -198,18 +205,6 @@ const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 					callback={async () => {
 						await removeUpdate(currentUpdate);
 						setShowRemoveUpdateModal(false);
-					}}
-				/>
-			)}
-			{showWelcomeSignin && (
-				<SignWithWalletModal
-					callback={() => {
-						addUpdate();
-						setShowWelcomeSignin(false);
-					}}
-					showModal={true}
-					setShowModal={() => {
-						setShowWelcomeSignin(false);
 					}}
 				/>
 			)}

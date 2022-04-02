@@ -15,6 +15,7 @@ import { isUserRegistered } from '@/lib/helpers';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import useUser from '@/context/UserProvider';
 import { deviceSize, mediaQueries } from '@/utils/constants';
+import useModal from '@/context/ModalProvider';
 
 interface IHomeExploreProjects {
 	projects: IProject[];
@@ -28,8 +29,11 @@ const HomeExploreProjects = (props: IHomeExploreProjects) => {
 	const router = useRouter();
 	const {
 		state: { user },
-		actions: { showCompleteProfile },
 	} = useUser();
+
+	const {
+		actions: { showCompleteProfile },
+	} = useModal();
 
 	const handleCreateButton = () => {
 		if (isUserRegistered(user)) {

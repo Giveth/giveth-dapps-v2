@@ -13,18 +13,20 @@ import { Modal } from '@/components/modals/Modal';
 import { ETheme, useGeneral } from '@/context/general.context';
 import Routes from '@/lib/constants/Routes';
 
-export const CompleteProfileModal = (props: { closeModal: () => void }) => {
-	const { closeModal } = props;
+export const CompleteProfileModal = (props: {
+	setShowModal: (x: boolean) => void;
+}) => {
+	const { setShowModal } = props;
 	const { theme } = useGeneral();
 
 	const handleClick = () => {
 		router.push(Routes.Onboard);
-		closeModal();
+		setShowModal(false);
 	};
 
 	return (
 		<Modal
-			setShowModal={closeModal}
+			setShowModal={setShowModal}
 			hiddenClose={false}
 			headerIcon={<IconProfile />}
 			headerTitle='Complete your profile'
@@ -51,7 +53,7 @@ export const CompleteProfileModal = (props: { closeModal: () => void }) => {
 				/>
 				<SkipButton
 					label='SKIP FOR NOW'
-					onClick={() => closeModal()}
+					onClick={() => setShowModal(false)}
 					buttonType='primary'
 				/>
 			</Container>

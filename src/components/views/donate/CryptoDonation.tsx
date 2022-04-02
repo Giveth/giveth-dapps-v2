@@ -18,14 +18,11 @@ import InputBox from '../../InputBox';
 import useUser from '@/context/UserProvider';
 import FixedToast from '@/components/toasts/FixedToast';
 import CheckBox from '@/components/Checkbox';
-import WalletModal from '@/components/modals/WalletModal';
 import DonateModal from '@/components/modals/DonateModal';
 import { ChangeNetworkModal } from '@/components/modals/ChangeNetwork';
 import { mediaQueries } from '@/utils/constants';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
-import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
 import { IProject } from '@/apollo/types/types';
-import { getERC20Info } from '@/lib/contracts';
 import { pollEvery } from '@/utils';
 import { fetchPrice } from '@/services/token';
 import { switchNetwork } from '@/lib/wallet';
@@ -52,6 +49,7 @@ import {
 	prepareTokenList,
 } from '@/components/views/donate/helpers';
 import { ORGANIZATION } from '@/lib/constants/organizations';
+import useModal from '@/context/ModalProvider';
 
 const ethereumChain = config.PRIMARY_NETWORK;
 const xdaiChain = config.SECONDARY_NETWORK;
@@ -80,6 +78,9 @@ const CryptoDonation = (props: {
 		state: { isSignedIn, isEnabled, balance },
 	} = useUser();
 	const { ethPrice } = usePrice();
+	const {
+		actions: { showWalletModal, showSignWithWallet },
+	} = useModal();
 
 	const { project, setSuccessDonation } = props;
 	const { organization, verified, id: projectId, status } = project;
@@ -103,10 +104,8 @@ const CryptoDonation = (props: {
 	// const [selectLoading, setSelectLoading] = useState(false);
 	const [error, setError] = useState<boolean>(false);
 	const [givBackEligible, setGivBackEligible] = useState(true);
-	const [showWalletModal, setShowWalletModal] = useState(false);
 	const [showDonateModal, setShowDonateModal] = useState(false);
 	const [showInsufficientModal, setShowInsufficientModal] = useState(false);
-	const [showWelcomeSignin, setShowWelcomeSignin] = useState<boolean>(false);
 	const [showChangeNetworkModal, setShowChangeNetworkModal] = useState(false);
 	const [acceptedTokens, setAcceptedTokens] =
 		useState<IProjectAcceptedToken[]>();
@@ -274,12 +273,6 @@ const CryptoDonation = (props: {
 				<InsufficientFundModal
 					showModal={showInsufficientModal}
 					setShowModal={setShowInsufficientModal}
-				/>
-			)}
-			{showWalletModal && !txHash && (
-				<WalletModal
-					showModal={showWalletModal}
-					setShowModal={setShowWalletModal}
 				/>
 			)}
 			{showDonateModal && selectedToken && amountTyped && (
@@ -466,13 +459,6 @@ const CryptoDonation = (props: {
 				</B>
 			</CheckBoxContainer>
 
-			{showWelcomeSignin && (
-				<SignWithWalletModal
-					showModal={true}
-					setShowModal={() => setShowWelcomeSignin(false)}
-				/>
-			)}
-
 			{!isActive && <InlineToast message='This project is not active.' />}
 
 			{isEnabled && givingBlockReady && (
@@ -490,24 +476,19 @@ const CryptoDonation = (props: {
 								return setShowInsufficientModal(true);
 							}
 							if (!isSignedIn && isEnabled) {
-								setShowWelcomeSignin(true);
+								return showSignWithWallet();
 							}
 							setShowDonateModal(true);
 						}}
 					/>
 					<AnotherWalletTxt>
 						Want to use another wallet?{' '}
-						<a onClick={() => setShowWalletModal(true)}>
-							Change Wallet
-						</a>
+						<a onClick={showWalletModal}>Change Wallet</a>
 					</AnotherWalletTxt>
 				</>
 			)}
 			{!isEnabled && !givingBlockReady && (
-				<MainButton
-					label='CONNECT WALLET'
-					onClick={() => setShowWalletModal(true)}
-				/>
+				<MainButton label='CONNECT WALLET' onClick={showWalletModal} />
 			)}
 		</MainContainer>
 	);
