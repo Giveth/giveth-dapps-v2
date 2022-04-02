@@ -29,7 +29,6 @@ export interface IProject {
 	totalTraceDonations?: number;
 	totalProjectUpdates?: number;
 	traceCampaignId: string | null;
-	givingBlocksId?: string | null;
 	status: {
 		id?: string;
 		name?: string;
