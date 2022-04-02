@@ -1,12 +1,6 @@
-import { client } from '@/apollo/apolloClient';
-import { FETCH_USER_DONATIONS } from '@/apollo/gql/gqlUser';
-import { IUserDonations } from '@/apollo/types/gqlTypes';
-import { IWalletDonation } from '@/apollo/types/types';
-import Pagination from '@/components/Pagination';
-import { Flex } from '@/components/styled-components/Flex';
-import { ETheme } from '@/context/general.context';
-import { networksParams } from '@/helpers/blockchain';
-import { smallFormatDate } from '@/lib/helpers';
+import Link from 'next/link';
+import { FC, useEffect, useState } from 'react';
+import styled from 'styled-components';
 import {
 	B,
 	brandColors,
@@ -19,10 +13,7 @@ import {
 	P,
 	SublineBold,
 } from '@giveth/ui-design-system';
-import { mediaQueries } from '@/utils/constants';
-import Link from 'next/link';
-import { FC, useEffect, useState } from 'react';
-import styled from 'styled-components';
+
 import {
 	IUserPublicProfileView,
 	EOrderBy,
@@ -30,6 +21,17 @@ import {
 	NothingToSee,
 } from './UserPublicProfile.view';
 import { EDirection } from '@/apollo/types/gqlEnums';
+import ExternalLink from '@/components/ExternalLink';
+import { slugToProjectView } from '@/lib/routeCreators';
+import { mediaQueries } from '@/utils/constants';
+import { client } from '@/apollo/apolloClient';
+import { FETCH_USER_DONATIONS } from '@/apollo/gql/gqlUser';
+import { IUserDonations } from '@/apollo/types/gqlTypes';
+import { IWalletDonation } from '@/apollo/types/types';
+import Pagination from '@/components/Pagination';
+import { Flex } from '@/components/styled-components/Flex';
+import { ETheme } from '@/context/general.context';
+import { smallFormatDate, transactionLink } from '@/lib/helpers';
 
 const itemPerPage = 10;
 
@@ -145,80 +147,72 @@ const DonationTable: FC<DonationTable> = ({
 	orderChangeHandler,
 }) => {
 	return (
-		<DonationTablecontainer>
-			<TabelHeader
+		<DonationTableContainer>
+			<TableHeader
 				onClick={() => orderChangeHandler(EOrderBy.CreationDate)}
 			>
 				<B>Donated at</B>
 				{injectSortIcon(order, EOrderBy.CreationDate)}
-			</TabelHeader>
-			<TabelHeader>
+			</TableHeader>
+			<TableHeader>
 				<B>Project</B>
-			</TabelHeader>
-			<TabelHeader>
+			</TableHeader>
+			<TableHeader>
 				<B>Currency</B>
-			</TabelHeader>
-			<TabelHeader
+			</TableHeader>
+			<TableHeader
 				onClick={() => orderChangeHandler(EOrderBy.TokenAmount)}
 			>
 				<B>Amount</B>
 				{injectSortIcon(order, EOrderBy.TokenAmount)}
-			</TabelHeader>
-			<TabelHeader onClick={() => orderChangeHandler(EOrderBy.UsdAmount)}>
+			</TableHeader>
+			<TableHeader onClick={() => orderChangeHandler(EOrderBy.UsdAmount)}>
 				<B>USD Value</B>
 				{injectSortIcon(order, EOrderBy.UsdAmount)}
-			</TabelHeader>
+			</TableHeader>
 			{donations.map((donation, idx) => (
 				<RowWrapper key={idx}>
-					<TabelCell>
+					<TableCell>
 						<P>{smallFormatDate(new Date(donation.createdAt))}</P>
-					</TabelCell>
-					<Link href={`/project/${donation.project.slug}`} passHref>
+					</TableCell>
+					<Link
+						href={slugToProjectView(donation.project.slug)}
+						passHref
+					>
 						<ProjectTitleCell>
 							<B>{donation.project.title}</B>
 							<IconLink24 />
 						</ProjectTitleCell>
 					</Link>
-					<TabelCell>
+					<TableCell>
 						<CurrencyBadge>{donation.currency}</CurrencyBadge>
-					</TabelCell>
-					<TabelCell>
+					</TableCell>
+					<TableCell>
 						<P>{donation.amount}</P>
-						<TransactionLink
-							href={
-								networksParams[donation.transactionNetworkId]
-									? `${
-											networksParams[
-												donation.transactionNetworkId
-											].blockExplorerUrls[0]
-									  }/tx/${donation.transactionId}`
-									: ''
-							}
-							target='_blank'
+						<ExternalLink
+							href={transactionLink(
+								donation.transactionNetworkId,
+								donation.transactionId,
+							)}
 						>
-							<IconExternalLink size={16} />
-						</TransactionLink>
-					</TabelCell>
-					<TabelCell>
-						<P>
-							{donation.valueUsd
-								? donation.valueUsd?.toLocaleString(
-										'en-US',
-										{
-											minimumFractionDigits: 0,
-											maximumFractionDigits: 4,
-										} || '',
-								  ) + ' USD'
-								: '-'}{' '}
-						</P>
-					</TabelCell>
+							<IconExternalLink
+								size={16}
+								color={brandColors.pinky[500]}
+							/>
+						</ExternalLink>
+					</TableCell>
+					<TableCell>
+						{donation.valueUsd && (
+							<P>{donation.valueUsd.toFixed(2)}$</P>
+						)}
+					</TableCell>
 				</RowWrapper>
 			))}
-		</DonationTablecontainer>
+		</DonationTableContainer>
 	);
 };
 
-const DonationTablecontainer = styled.div`
+const DonationTableContainer = styled.div`
 	display: grid;
 	grid-template-columns: 1fr 5fr 1fr 1fr 1fr;
 	overflow: auto;
@@ -236,7 +230,7 @@ const DonationTablecontainer = styled.div`
 	}
 `;
 
-const TabelHeader = styled(Flex)`
+const TableHeader = styled(Flex)`
 	height: 40px;
 	border-bottom: 1px solid ${neutralColors.gray[400]};
 	align-items: center;
@@ -247,14 +241,14 @@ const TabelHeader = styled(Flex)`
 	align-items: center;`}
 `;
 
-const TabelCell = styled(Flex)`
+const TableCell = styled(Flex)`
 	height: 60px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
 	align-items: center;
 	gap: 8px;
 `;
 
-const ProjectTitleCell = styled(TabelCell)`
+const ProjectTitleCell = styled(TableCell)`
 	cursor: pointer;
 	& > svg {
 		display: none;
@@ -301,11 +295,6 @@ const RowWrapper = styled.div`
 	& > div:first-child {
 		padding-left: 4px;
 	}
-`;
-
-const TransactionLink = styled.a`
-	cursor: pointer;
-	color: ${brandColors.pinky[500]};
 `;
 
 const DonationsTab = styled.div`

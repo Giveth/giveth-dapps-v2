@@ -20,10 +20,10 @@ import { IDonation } from '@/apollo/types/types';
 import SearchBox from '@/components/SearchBox';
 import { Flex } from '@/components/styled-components/Flex';
 import Pagination from '@/components/Pagination';
-import { networksParams } from '@/helpers/blockchain';
-import { smallFormatDate } from '@/lib/helpers';
+import { smallFormatDate, transactionLink } from '@/lib/helpers';
 import config from '@/configuration';
 import { EDirection, EDonationType } from '@/apollo/types/gqlEnums';
+import ExternalLink from '@/components/ExternalLink';
 
 const itemPerPage = 10;
 
@@ -174,8 +174,8 @@ const ProjectDonationTable = ({
 							<B>USD Value</B>
 							{injectSortIcon(order, EOrderBy.UsdAmount)}
 						</TableHeader>
-						{pageDonations.map((donation, idx) => (
-							<RowWrapper key={idx}>
+						{pageDonations.map(donation => (
+							<RowWrapper key={donation.id}>
 								<TableCell>
 									<P>
 										{smallFormatDate(
@@ -185,10 +185,10 @@ const ProjectDonationTable = ({
 								</TableCell>
 								<TableCell>
 									<P>
-										{donation?.donationType ===
+										{donation.donationType ===
 										EDonationType.POIGNART
 											? 'PoignART'
-											: donation?.anonymous
+											: donation.anonymous
 											? 'Anonymous'
 											: donation.user?.name ||
 											  donation.user?.firstName}
@@ -196,7 +196,7 @@ const ProjectDonationTable = ({
 								</TableCell>
 								<TableCell>
 									<P>
-										{donation?.transactionNetworkId ===
+										{donation.transactionNetworkId ===
 										config.XDAI_NETWORK_NUMBER ? (
 											<NetworkCell>
 												<Image
@@ -227,28 +227,22 @@ const ProjectDonationTable = ({
 								</TableCell>
 								<TableCell>
 									<P>{donation.amount}</P>
-									<TransactionLink
-										href={
-											networksParams[
-												donation.transactionNetworkId
-											]
-												? `${
-														networksParams[
-															donation
-																.transactionNetworkId
-														].blockExplorerUrls[0]
-												  }/tx/${
-														donation.transactionId
-												  }`
-												: ''
-										}
-										target='_blank'
+									<ExternalLink
+										href={transactionLink(
+											donation.transactionNetworkId,
+											donation.transactionId,
+										)}
 									>
-										<IconExternalLink size={16} />
-									</TransactionLink>
+										<IconExternalLink
+											size={16}
+											color={brandColors.pinky[500]}
+										/>
+									</ExternalLink>
 								</TableCell>
 								<TableCell>
-									<P>{donation.valueUsd?.toFixed(2)}$</P>
+									{donation.valueUsd && (
+										<P>{donation.valueUsd.toFixed(2)}$</P>
+									)}
 								</TableCell>
 							</RowWrapper>
 						))}
@@ -268,7 +262,7 @@ const ProjectDonationTable = ({
 };
 
 const Wrapper = styled.div`
-	margin: 50px 0px 32px;
+	margin: 50px 0 32px;
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
@@ -347,11 +341,6 @@ const CurrencyBadge = styled(SublineBold)`
 	border: 2px solid ${neutralColors.gray[400]};
 	border-radius: 50px;
 	color: ${neutralColors.gray[700]};
-`;
-
-const TransactionLink = styled.a`
-	cursor: pointer;
-	color: ${brandColors.pinky[500]};
 `;
 
 const NetworkCell = styled.div`
