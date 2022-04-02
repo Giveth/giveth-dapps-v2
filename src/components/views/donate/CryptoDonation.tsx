@@ -12,6 +12,8 @@ import {
 	GLink,
 	B,
 } from '@giveth/ui-design-system';
+// @ts-ignore
+import tokenAbi from 'human-standard-token-abi';
 
 import { Shadow } from '@/components/styled-components/Shadow';
 import InputBox from '../../InputBox';
@@ -29,10 +31,6 @@ import { switchNetwork } from '@/lib/wallet';
 import { usePrice } from '@/context/price.context';
 import GeminiModal from './GeminiModal';
 import config from '@/configuration';
-
-// @ts-ignore
-import tokenAbi from 'human-standard-token-abi';
-
 import TokenPicker from './TokenPicker';
 import Routes from '@/lib/constants/Routes';
 import InlineToast from '@/components/toasts/InlineToast';
@@ -50,6 +48,7 @@ import {
 } from '@/components/views/donate/helpers';
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import useModal from '@/context/ModalProvider';
+import { getERC20Info } from '@/lib/contracts';
 
 const ethereumChain = config.PRIMARY_NETWORK;
 const xdaiChain = config.SECONDARY_NETWORK;

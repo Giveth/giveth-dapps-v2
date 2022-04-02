@@ -79,8 +79,9 @@ const DonateModal = ({
 	const { walletAddress, organization, id, title } = project || {};
 
 	const avgPrice = price && price * amount;
-	const isGivingBlockProject =
-		organization?.label === ORGANIZATION.givingBlock;
+	const isForeignProject =
+		organization?.label !== ORGANIZATION.giveth &&
+		organization?.label !== ORGANIZATION.trace;
 
 	const confirmDonation = async () => {
 		try {
@@ -104,7 +105,7 @@ const DonateModal = ({
 			}
 
 			const isCorrectNetwork = checkNetwork(chainId!);
-			if (isGivingBlockProject && chainId !== config.PRIMARY_NETWORK.id)
+			if (isForeignProject && chainId !== config.PRIMARY_NETWORK.id)
 				return setShowWrongNetworkModal(true);
 			if (!isCorrectNetwork) {
 				return setShowWrongNetworkModal(true);
