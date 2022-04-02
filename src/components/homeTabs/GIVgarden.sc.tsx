@@ -139,6 +139,10 @@ export const VoteCard = styled.div`
 		top: 30px;
 		left: 40px;
 	}
+	@media ${device.mobileS} {
+		padding: 26px 201px 103px 33px;
+		width: ;
+	}
 `;
 
 export const VoteCardDesc = styled(QuoteText)`

@@ -33,6 +33,7 @@ import { TopInnerContainer } from './commons';
 import { useWeb3React } from '@web3-react/core';
 import { Flex } from '../styled-components/Flex';
 import { Col, Container, Row } from '@/components/Grid';
+import { device } from '@/utils/constants';
 
 const poolStakingConfig = getGivStakingConfig(config.XDAI_CONFIG);
 
@@ -113,7 +114,11 @@ export const TabGardenBottom = () => {
 		<GardenBottomContainer>
 			<Container>
 				<Section1Title weight={700}>Vote & Earn</Section1Title>
-				<Flex justifyContent='space-between' alignItems='flex-start'>
+				<Flex
+					justifyContent='space-between'
+					alignItems='flex-start'
+					{ ${device.mobileL} && flexDirection = 'column')}
+				>
 					<Section1Subtitle size='small'>
 						GIV token holders influence the treasury, roadmap and
 						mission of the Giveth ecosystem. By voting in the
