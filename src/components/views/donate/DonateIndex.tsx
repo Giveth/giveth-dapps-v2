@@ -116,8 +116,8 @@ const ProjectsIndex = (props: IProjectBySlug) => {
 				<GiverH4>You're a giver now!</GiverH4>
 				{/* <Image src='/images/motivation.svg' alt='motivation' width='121px' height='121px' /> */}
 				<SuccessMessage>
-					Thank you for supporting The Giveth Community of Makers.
-					Your contribution goes a long way!
+					Thank you for supporting {project?.title}. Your contribution
+					goes a long way!
 				</SuccessMessage>
 				{givBackEligible && (
 					<GivBackContainer>

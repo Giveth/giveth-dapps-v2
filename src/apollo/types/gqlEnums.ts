@@ -7,12 +7,19 @@ export enum gqlEnums {
 	TRACEABLE = 'Traceable',
 	HEARTS = 'Reactions',
 	DONATIONS = 'Donations',
-	DESC = 'DESC',
-	ASC = 'ASC',
 }
 
 export enum EProjectStatus {
 	DRAFT = 'drafted',
 	ACTIVE = 'activate',
 	DEACTIVE = 'deactivate',
+}
+
+export enum EDirection {
+	DESC = 'DESC',
+	ASC = 'ASC',
+}
+
+export enum EDonationType {
+	POIGNART = 'poignArt',
 }

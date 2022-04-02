@@ -4,22 +4,22 @@ import { useWeb3React } from '@web3-react/core';
 import Image from 'next/image';
 import {
 	brandColors,
+	Button,
+	Caption,
 	GLink,
 	H3,
+	H5,
+	IconAlertTriangle,
 	IconExternalLink,
+	IconX,
 	Lead,
 	neutralColors,
-	H5,
-	Caption,
-	Button,
-	IconAlertTriangle,
-	IconX,
 } from '@giveth/ui-design-system';
 
 import { mediaQueries } from '@/utils/constants';
 import { CopyToClipboard } from '@/components/CopyToClipboard';
 import PublicProfileContributes from './PublicProfileContributes';
-import { IUser, IProject } from '@/apollo/types/types';
+import { IProject, IUser } from '@/apollo/types/types';
 import { networksParams } from '@/helpers/blockchain';
 import EditUserModal from '@/components/modals/EditUserModal';
 import { Flex } from '@/components/styled-components/Flex';
@@ -27,17 +27,13 @@ import useUser from '@/context/UserProvider';
 import { isUserRegistered } from '@/lib/helpers';
 import { Container } from '@/components/Grid';
 import useModal from '@/context/ModalProvider';
+import { EDirection } from '@/apollo/types/gqlEnums';
 
 export enum EOrderBy {
 	TokenAmount = 'TokenAmount',
 	UsdAmount = 'UsdAmount',
 	CreationDate = 'CreationDate',
 	Donations = 'Donations',
-}
-
-export enum EDirection {
-	DESC = 'DESC',
-	ASC = 'ASC',
 }
 
 export interface IOrder {
