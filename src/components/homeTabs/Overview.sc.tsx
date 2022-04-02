@@ -27,12 +27,18 @@ export const OverviewTopContainer = styled(TopContainer)`
 
 export const OverviewTitle = styled(D1)`
 	padding-bottom: 36px;
+	@media ${device.mobileS} {
+		font-size: 4.4rem;
+	}
 `;
 
 export const PreTitle = styled(D3)`
 	padding-top: 77px;
 	display: block;
 	color: ${brandColors.deep[100]};
+	@media ${device.mobileS} {
+		font-size: 4.4rem;
+	}
 `;
 
 export const SubTitle = styled(QuoteText)``;
