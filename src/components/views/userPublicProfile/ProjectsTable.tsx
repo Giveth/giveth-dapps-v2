@@ -57,6 +57,7 @@ const ProjectsTable: FC<IProjectsTable> = ({
 	const router = useRouter();
 
 	const setupBadge = (status: IStatus, listed?: boolean | null) => {
+		console.log('projects', projects);
 		const Bull = () => <BulletPoint>&bull;</BulletPoint>;
 		let color,
 			title = '';
@@ -66,7 +67,7 @@ const ProjectsTable: FC<IProjectsTable> = ({
 			title = 'Listed';
 		} else if (listed === null) {
 			color = semanticColors.blueSky;
-			title = 'Draft';
+			title = 'Waiting for review';
 		} else {
 			color = semanticColors.golden;
 			title = 'Not Listed';
@@ -80,6 +81,10 @@ const ProjectsTable: FC<IProjectsTable> = ({
 			case '7':
 				color = semanticColors.punch;
 				title = 'Banned';
+				break;
+			case '8':
+				color = brandColors.cyan;
+				title = 'Draft';
 				break;
 		}
 
