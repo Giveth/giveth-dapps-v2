@@ -195,19 +195,6 @@ export const TabGIVstreamBottom = () => {
 					</IconWithTooltip>
 				</FlowRateRow>
 				<GIVstreamProgress percentage={percent} remainTime={remain} />
-				<HistoryTitleRow>
-					<HistoryTitle>History</HistoryTitle>
-					<IconWithTooltip
-						icon={<IconHelp size={16} />}
-						direction={'top'}
-					>
-						<HistoryTooltip>
-							Every time you claim GIV rewards from GIVbacks, the
-							GIVgarden, or the GIVfarm, your GIVstream flowrate
-							increases. Below is a summary.
-						</HistoryTooltip>
-					</IconWithTooltip>
-				</HistoryTitleRow>
 				<Row>
 					<Col xs={12} sm={6}>
 						<GsDataBlock
@@ -237,6 +224,19 @@ export const TabGIVstreamBottom = () => {
 						</GsDataBlock>
 					</Col>
 				</Row>
+				<HistoryTitleRow>
+					<HistoryTitle>History</HistoryTitle>
+					<IconWithTooltip
+						icon={<IconHelp size={16} />}
+						direction={'top'}
+					>
+						<HistoryTooltip>
+							Every time you claim GIV rewards from GIVbacks, the
+							GIVgarden, or the GIVfarm, your GIVstream flowrate
+							increases. Below is a summary.
+						</HistoryTooltip>
+					</IconWithTooltip>
+				</HistoryTitleRow>
 				<GIVstreamHistory />
 			</Container>
 			<IncreaseSection ref={increaseSecRef}>
