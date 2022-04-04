@@ -104,6 +104,7 @@ const ProjectCard = (props: IProjectCard) => {
 							linkType='primary'
 							size='small'
 							label='LEARN MORE'
+							aria-Lbel='Learn more about this project'
 						/>
 					</Link>
 					<Link href={slugToProjectDonate(slug)} passHref>

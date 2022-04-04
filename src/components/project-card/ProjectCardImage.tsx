@@ -1,5 +1,6 @@
 import { FC, memo, useState } from 'react';
 import styled from 'styled-components';
+import Image from 'next/image';
 import { isNoImg, noImgColor, noImgIcon } from '../../lib/helpers';
 
 interface IProjectCardImageProps {
@@ -13,7 +14,8 @@ const ProjectCardImage: FC<IProjectCardImageProps> = ({ image }) => {
 		<NoImg />
 	) : (
 		<Img
-			src={src}
+			src={src!}
+			layout='fill'
 			alt='project image'
 			onError={e => {
 				setSrc(undefined);
@@ -23,7 +25,7 @@ const ProjectCardImage: FC<IProjectCardImageProps> = ({ image }) => {
 	);
 };
 
-const Img = styled.img`
+const Img = styled(Image)`
 	height: 226px;
 	width: 100%;
 	object-fit: cover;

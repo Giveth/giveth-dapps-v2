@@ -1,6 +1,10 @@
 module.exports = {
 	reactStrictMode: true,
 	images: {
-		domains: ['gateway.pinata.cloud', 'giveth.mypinata.cloud'],
+		domains: [
+			'gateway.pinata.cloud',
+			'giveth.mypinata.cloud',
+			'static.tgbwidget.com',
+		],
 	},
 };
