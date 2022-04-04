@@ -23,6 +23,7 @@ import {
 } from './UserPublicProfile.view';
 import { mediaQueries } from '@/utils/constants';
 import { idToProjectEdit } from '@/lib/routeCreators';
+import { EProjectStatus } from '@/apollo/types/gqlEnums';
 
 interface IBadge {
 	mainColor?: any;
@@ -73,16 +74,16 @@ const ProjectsTable: FC<IProjectsTable> = ({
 			title = 'Not Listed';
 		}
 
-		switch (status.id) {
-			case '6':
+		switch (status.name) {
+			case EProjectStatus.DEACTIVE:
 				color = semanticColors.golden;
 				title = 'Not Listed';
 				break;
-			case '7':
+			case EProjectStatus.CANCEL:
 				color = semanticColors.punch;
 				title = 'Banned';
 				break;
-			case '8':
+			case EProjectStatus.DRAFT:
 				color = brandColors.cyan;
 				title = 'Draft';
 				break;

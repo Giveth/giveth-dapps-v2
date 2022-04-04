@@ -15,4 +15,5 @@ export enum EProjectStatus {
 	DRAFT = 'drafted',
 	ACTIVE = 'activate',
 	DEACTIVE = 'deactivate',
+	CANCEL = 'cancelled',
 }
