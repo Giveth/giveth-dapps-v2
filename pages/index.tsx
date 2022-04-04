@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import HomeIndex from '@/components/views/homepage/HomeIndex';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_HOME_PROJECTS } from '@/apollo/gql/gqlProjects';
-import { gqlEnums } from '@/apollo/types/gqlEnums';
+import { EDirection, gqlEnums } from '@/apollo/types/gqlEnums';
 import { IProject } from '@/apollo/types/types';
 import useUser from '@/context/UserProvider';
 
@@ -18,7 +18,7 @@ interface IHomeRoute {
 const fetchProjects = async (userId: string | undefined = undefined) => {
 	const variables: any = {
 		limit: projectsToFetch,
-		orderBy: { field: gqlEnums.QUALITYSCORE, direction: gqlEnums.DESC },
+		orderBy: { field: gqlEnums.QUALITYSCORE, direction: EDirection.DESC },
 	};
 
 	if (userId) {

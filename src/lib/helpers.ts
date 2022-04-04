@@ -16,6 +16,7 @@ import Routes from '@/lib/constants/Routes';
 import { gToast, ToastType } from '@/components/toasts';
 import { networkInfo } from './constants/NetworksObj';
 import StorageLabel from '@/lib/localStorage';
+import { networksParams } from '@/helpers/blockchain';
 
 declare let window: any;
 
@@ -360,4 +361,9 @@ export const calcBiggestUnitDifferenceTime = (_time: string) => {
 export const detectBrave = async () => {
 	// @ts-ignore
 	return (navigator.brave && (await navigator.brave.isBrave())) || false;
+};
+
+export const transactionLink = (networkId: number, txHash: string) => {
+	if (!networksParams[networkId]) return '';
+	return `${networksParams[networkId].blockExplorerUrls[0]}/tx/${txHash}`;
 };

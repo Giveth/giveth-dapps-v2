@@ -12,6 +12,8 @@ import {
 	GLink,
 	B,
 } from '@giveth/ui-design-system';
+// @ts-ignore
+import tokenAbi from 'human-standard-token-abi';
 
 import { Shadow } from '@/components/styled-components/Shadow';
 import InputBox from '../../InputBox';
@@ -29,10 +31,6 @@ import { switchNetwork } from '@/lib/wallet';
 import { usePrice } from '@/context/price.context';
 import GeminiModal from './GeminiModal';
 import config from '@/configuration';
-
-// @ts-ignore
-import tokenAbi from 'human-standard-token-abi';
-
 import TokenPicker from './TokenPicker';
 import Routes from '@/lib/constants/Routes';
 import InlineToast from '@/components/toasts/InlineToast';
@@ -48,7 +46,9 @@ import {
 	filterTokens,
 	prepareTokenList,
 } from '@/components/views/donate/helpers';
+import { ORGANIZATION } from '@/lib/constants/organizations';
 import useModal from '@/context/ModalProvider';
+import { getERC20Info } from '@/lib/contracts';
 
 const ethereumChain = config.PRIMARY_NETWORK;
 const xdaiChain = config.SECONDARY_NETWORK;
@@ -82,7 +82,8 @@ const CryptoDonation = (props: {
 	} = useModal();
 
 	const { project, setSuccessDonation } = props;
-	const isActive = project.status?.name === EProjectStatus.ACTIVE;
+	const { organization, verified, id: projectId, status } = project;
+	const isActive = status?.name === EProjectStatus.ACTIVE;
 	const mainTokenPrice = new BigNumber(ethPrice).toNumber();
 
 	const [selectedToken, setSelectedToken] = useState<IProjectAcceptedToken>();
@@ -112,15 +113,22 @@ const CryptoDonation = (props: {
 
 	const tokenSymbol = selectedToken?.symbol;
 	const isXdai = networkId === xdaiChain.id;
-	const isGivingBlockProject = project?.givingBlocksId;
-	const projectIsGivBackEligible = givBackEligible && project?.verified;
-	const givingBlockReady = isGivingBlockProject
+	const projectFromAnotherOrg =
+		organization?.label !== ORGANIZATION.giveth &&
+		organization?.label !== ORGANIZATION.trace;
+	const projectIsGivBackEligible = givBackEligible && verified;
+	const givingBlockReady = projectFromAnotherOrg
 		? networkId === ethereumChain.id
 		: true;
 
 	useEffect(() => {
 		if (networkId && acceptedTokens) {
-			if (networkId !== ethereumChain.id && networkId !== xdaiChain.id) {
+			if (projectFromAnotherOrg && networkId !== ethereumChain.id) {
+				setShowChangeNetworkModal(true);
+			} else if (
+				networkId !== ethereumChain.id &&
+				networkId !== xdaiChain.id
+			) {
 				setErc20List(undefined);
 				return setShowChangeNetworkModal(true);
 			}
@@ -141,7 +149,7 @@ const CryptoDonation = (props: {
 		client
 			.query({
 				query: PROJECT_ACCEPTED_TOKENS,
-				variables: { projectId: Number(project.id) },
+				variables: { projectId: Number(projectId) },
 				fetchPolicy: 'no-cache',
 			})
 			.then((res: IProjectAcceptedTokensGQL) => {
@@ -184,7 +192,7 @@ const CryptoDonation = (props: {
 	}, [selectedToken, mainTokenPrice]);
 
 	const checkGIVTokenAvailability = () => {
-		if (!isGivingBlockProject) return true;
+		if (!projectFromAnotherOrg) return true;
 		if (selectedToken?.symbol === 'GIV') {
 			setGeminiModal(true);
 			return false;
@@ -254,7 +262,7 @@ const CryptoDonation = (props: {
 					showModal={showChangeNetworkModal}
 					setShowModal={setShowChangeNetworkModal}
 					targetNetwork={
-						isGivingBlockProject
+						projectFromAnotherOrg
 							? config.MAINNET_NETWORK_NUMBER
 							: config.XDAI_NETWORK_NUMBER
 					}
@@ -287,12 +295,12 @@ const CryptoDonation = (props: {
 			)}
 
 			<InputContainer>
-				{isGivingBlockProject && networkId !== ethereumChain.id && (
+				{projectFromAnotherOrg && networkId !== ethereumChain.id && (
 					<XDaiContainer>
 						<div>
 							<img src='/images/gas_station.svg' />
 							<Caption color={neutralColors.gray[900]}>
-								Projects from The Giving Block only accept
+								Projects from {organization?.name} only accept
 								donations on mainnet.{' '}
 							</Caption>
 						</div>
@@ -303,7 +311,7 @@ const CryptoDonation = (props: {
 						</SwitchCaption>
 					</XDaiContainer>
 				)}
-				{!isGivingBlockProject &&
+				{!projectFromAnotherOrg &&
 					isEnabled &&
 					networkId !== xdaiChain.id && (
 						<XDaiContainer>
@@ -336,51 +344,49 @@ const CryptoDonation = (props: {
 								);
 								setGivBackEligible(givBackEligible);
 							}}
-							// TODO disabling custom token to discuss later
-							// onInputChange={(i: string) => {
-							// 	// It's a contract
-							// 	if (i?.length === 42) {
-							// 		try {
-							// 			// setSelectLoading(true);
-							// 			getERC20Info({
-							// 				library,
-							// 				tokenAbi,
-							// 				contractAddress: i,
-							// 				networkId: networkId as number,
-							// 			}).then(pastedToken => {
-							// 				if (!pastedToken) return;
-							// 				const found = erc20List?.find(
-							// 					(t: IProjectAcceptedToken) =>
-							// 						t?.symbol ===
-							// 						pastedToken?.symbol,
-							// 				);
-							// 				!found &&
-							// 					erc20List &&
-							// 					setErc20List([
-							// 						...erc20List,
-							// 						pastedToken,
-							// 					]);
-							// 				setCustomInput(
-							// 					pastedToken?.address,
-							// 				);
-							// 				// setSelectLoading(false);
-							// 			});
-							// 		} catch (error) {
-							// 			// setSelectLoading(false);
-							// 			showToastError(error);
-							// 		}
-							// 	} else {
-							// 		setCustomInput(i);
-							// 		erc20OriginalList?.length > 0 &&
-							// 			setErc20List([...erc20OriginalList]);
-							// 	}
-							// }}
+							onInputChange={(i: string) => {
+								if (projectFromAnotherOrg) return;
+								// It's a contract
+								if (i?.length === 42) {
+									try {
+										// setSelectLoading(true);
+										getERC20Info({
+											library,
+											tokenAbi,
+											contractAddress: i,
+											networkId: networkId as number,
+										}).then(pastedToken => {
+											if (!pastedToken) return;
+											const found = erc20List?.find(
+												(t: IProjectAcceptedToken) =>
+													t?.symbol ===
+													pastedToken?.symbol,
+											);
+											!found &&
+												erc20List &&
+												setErc20List([
+													...erc20List,
+													pastedToken,
+												]);
+											setCustomInput(
+												pastedToken?.address,
+											);
+											// setSelectLoading(false);
+										});
+									} catch (error) {
+										// setSelectLoading(false);
+										showToastError(error);
+									}
+								} else {
+									setCustomInput(i);
+									erc20OriginalList?.length > 0 &&
+										setErc20List([...erc20OriginalList]);
+								}
+							}}
 							placeholder={
-								// TODO disabling custom token to discuss later
-								// isGivingBlockProject
-								// 	? 'Search name'
-								// 	: 'Search name or paste an address'
-								'Search name'
+								projectFromAnotherOrg
+									? 'Search name'
+									: 'Search name or paste an address'
 							}
 						/>
 					</DropdownContainer>
