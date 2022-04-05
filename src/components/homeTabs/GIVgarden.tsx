@@ -20,7 +20,7 @@ import {
 	VoteCardDesc,
 	VoteCardButton,
 	GardenIconContainer,
-	GivGardenSectionDB,
+	GivGardenSection,
 } from './GIVgarden.sc';
 import { HarvestAllModal } from '../modals/HarvestAll';
 import config from '@/configuration';
@@ -115,7 +115,7 @@ export const TabGardenBottom = () => {
 		<GardenBottomContainer>
 			<Container>
 				<Section1Title weight={700}>Vote & Earn</Section1Title>
-				<GivGardenSectionDB>
+				<GivGardenSection>
 					<Section1Subtitle size='small'>
 						GIV token holders influence the treasury, roadmap and
 						mission of the Giveth ecosystem. By voting in the
@@ -127,7 +127,7 @@ export const TabGardenBottom = () => {
 						size='large'
 						onClick={goToGarden}
 					/>
-				</GivGardenSectionDB>
+				</GivGardenSection>
 				<Section2Title weight={500}>
 					Three Pillars of Governance
 				</Section2Title>

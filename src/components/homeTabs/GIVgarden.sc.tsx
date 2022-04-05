@@ -16,7 +16,7 @@ import { TopContainer, BottomContainer, EnhancedRewardCard } from './commons';
 import { device, mediaQueries, deviceSize } from '@/utils/constants';
 import { Row } from '../Grid';
 
-export const GivGardenSectionDB = styled(DataBlock)`
+export const GivGardenSection = styled.div`
 	justify-content: space-between;
 	align-items: flex-start;
 	${mediaQueries.mobileL} {
@@ -98,11 +98,8 @@ export const Section1Subtitle = styled(QuoteText)`
 export const OpenGardenButton = styled(Button)`
 	width: 251px;
 	padding: 24px;
-	@media (max-width: ${deviceSize.mobileL}px) {
-		margin-top: 15px;
-	}
+	margin-top: 15px;
 `;
-
 export const Section2Title = styled(H1)`
 	color: ${brandColors.giv[200]};
 	margin-top: 120px;
