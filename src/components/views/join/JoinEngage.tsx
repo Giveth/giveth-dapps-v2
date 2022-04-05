@@ -11,6 +11,7 @@ import twitter_icon from '/public/images/twitter_icon.svg';
 import youtube_icon from '/public/images/youtube_icon.svg';
 import reddit_icon from '/public/images/reddit_icon.svg';
 import links from '@/lib/constants/links';
+import { mediaQueries } from '@/utils/constants';
 import { Lead, brandColors, H2 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
@@ -128,10 +129,14 @@ const consumeArray = [
 ];
 
 const UpperSection = styled.div`
-	padding: 150px 0;
+	padding: 150px 0 36px;
 	color: white;
 	overflow: hidden;
 	position: relative;
+
+	${mediaQueries.tablet} {
+		padding: 150px 0;
+	}
 `;
 const LeadText = styled(Lead)`
 	color: ${brandColors.giv[900]};
@@ -151,18 +156,20 @@ const Section = styled.div`
 const CardsSection = styled.div`
 	display: flex;
 	justify-content: center;
-	margin: 50px auto 0px;
 	flex-wrap: wrap;
+	margin: 50px auto 0px;
 	gap: 25px;
 	position: relative;
 	max-width: 1250px;
 	z-index: 3;
+	padding: 18px;
 `;
 const CardsConsumeSection = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	padding: 18px;
 `;
 const BlueFlowerComponent = styled.div`
 	position: absolute;
