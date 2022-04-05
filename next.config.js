@@ -14,6 +14,16 @@ const moduleExports = {
 	},
 };
 
+console.log('NEXT_PUBLIC_ENV', NEXT_PUBLIC_ENV);
+console.log(
+	'NEXT_PUBLIC_SENTRY_PRODUCTION_PROJECT',
+	NEXT_PUBLIC_SENTRY_PRODUCTION_PROJECT,
+);
+console.log(
+	'NEXT_PUBLIC_SENTRY_STAGE_PROJECT',
+	NEXT_PUBLIC_SENTRY_STAGE_PROJECT,
+);
+
 const sentryWebpackPluginOptions = {
 	// Additional config options for the Sentry Webpack plugin. Keep in mind that
 	// the following options are set automatically, and overriding them is not
@@ -26,7 +36,7 @@ const sentryWebpackPluginOptions = {
 		NEXT_PUBLIC_ENV === 'production'
 			? process.env.NEXT_PUBLIC_SENTRY_PRODUCTION_PROJECT
 			: process.env.NEXT_PUBLIC_SENTRY_STAGE_PROJECT,
-	authToken: process.env.NEXT_PUBLIC_AUTH_TOKEN,
+	authToken: process.env.NEXT_PUBLIC_SENTRY_AUTH_TOKEN,
 	silent: true, // Suppresses all logs
 	// For all available options, see:
 	// https://github.com/getsentry/sentry-webpack-plugin#options.
