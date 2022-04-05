@@ -13,7 +13,7 @@ import {
 	D1,
 } from '@giveth/ui-design-system';
 import { TopContainer } from './commons';
-import { device } from '@/utils/constants';
+import { device, deviceSize } from '@/utils/constants';
 
 export const OverviewBottomContainer = styled.div`
 	background-image: url('/images/backgrounds/wave.svg');
@@ -47,6 +47,9 @@ export const ClaimCardButton = styled(Button)`
 	width: 300px;
 	margin-top: 36px;
 	margin-bottom: 36px;
+	@media (max-width: ${deviceSize.mobileS}px) {
+		width: 221px;
+	}
 `;
 
 export const TabTitle = styled(H1)`

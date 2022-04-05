@@ -13,8 +13,17 @@ import {
 	GLink,
 } from '@giveth/ui-design-system';
 import { TopContainer, BottomContainer, EnhancedRewardCard } from './commons';
-import { device, mediaQueries } from '@/utils/constants';
+import { device, mediaQueries, deviceSize } from '@/utils/constants';
 import { Row } from '../Grid';
+
+export const GivGardenSectionDB = styled(DataBlock)`
+	justify-content: space-between;
+	align-items: flex-start;
+	${mediaQueries.mobileL} {
+		display: flex;
+		flex-flow: column nowrap;
+	}
+`;
 
 export const GardenTopContainer = styled(TopContainer)`
 	overflow: hidden;
@@ -89,6 +98,9 @@ export const Section1Subtitle = styled(QuoteText)`
 export const OpenGardenButton = styled(Button)`
 	width: 251px;
 	padding: 24px;
+	@media (max-width: ${deviceSize.mobileL}px) {
+		margin-top: 15px;
+	}
 `;
 
 export const Section2Title = styled(H1)`
@@ -139,9 +151,13 @@ export const VoteCard = styled.div`
 		top: 30px;
 		left: 40px;
 	}
-	@media ${device.mobileS} {
-		padding: 26px 201px 103px 33px;
-		width: ;
+
+	@media (max-width: ${deviceSize.mobileL}px) {
+		padding: 148px 25px 117px 25px;
+		display: block;
+		background-image: url('/images/backgrounds/giv-outline.svg');
+		background-repeat: repeat;
+		background-position: top;
 	}
 `;
 
@@ -157,6 +173,9 @@ export const VoteCardButton = styled(Button)`
 	padding: 24px;
 	${mediaQueries.tablet} {
 		padding: 24px 73px;
+	}
+	@media (max-width: ${deviceSize.mobileM}px) {
+		margin: 15px 0 0 0;
 	}
 `;
 

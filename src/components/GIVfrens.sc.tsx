@@ -1,4 +1,4 @@
-import { device } from '@/utils/constants';
+import { device, deviceSize } from '@/utils/constants';
 import {
 	brandColors,
 	ButtonLink,
@@ -49,6 +49,11 @@ export const DaoCardButton = styled(ButtonLink)`
 	width: 300px;
 	margin-top: 36px;
 	margin-bottom: 12px;
+	@media (max-width: ${deviceSize.mobileL}px) {
+		display: block;
+		margin-left: auto;
+		width: 136px;
+	}
 `;
 
 export const DAOContainer = styled(Col)`
