@@ -14,11 +14,6 @@ const moduleExports = {
 	},
 };
 
-console.log(
-	'process.env.NEXT_PUBLIC_SENTRY_ORG',
-	process.env.NEXT_PUBLIC_SENTRY_ORG,
-);
-
 const sentryWebpackPluginOptions = {
 	// Additional config options for the Sentry Webpack plugin. Keep in mind that
 	// the following options are set automatically, and overriding them is not
