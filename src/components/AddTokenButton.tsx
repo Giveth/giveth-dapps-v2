@@ -1,4 +1,4 @@
-import { addGIVToken } from '@/lib/metamask';
+import { addToken } from '@/lib/metamask';
 import { EWallets } from '@/lib/wallet/walletTypes';
 import { Web3Provider } from '@ethersproject/providers';
 import { brandColors, P } from '@giveth/ui-design-system';
@@ -10,11 +10,15 @@ import { Flex } from './styled-components/Flex';
 interface IAddGIVTokenButton {
 	provider: Web3Provider | null;
 	showText?: boolean;
+	tokenSymbol?: string;
+	tokenAddress?: string;
 }
 
-export const AddGIVTokenButton: FC<IAddGIVTokenButton> = ({
+export const AddTokenButton: FC<IAddGIVTokenButton> = ({
 	provider,
 	showText = true,
+	tokenSymbol = 'GIV',
+	tokenAddress,
 }) => {
 	const [show, setShow] = useState(false);
 
@@ -27,7 +31,7 @@ export const AddGIVTokenButton: FC<IAddGIVTokenButton> = ({
 		<AddGivButton
 			onClick={() => {
 				if (provider) {
-					addGIVToken(provider);
+					addToken(provider, tokenAddress);
 				}
 			}}
 		>
@@ -37,7 +41,7 @@ export const AddGIVTokenButton: FC<IAddGIVTokenButton> = ({
 				width='32'
 				alt='Metamask logo.'
 			/>
-			{showText && <Desc>Add GIV to Metamask</Desc>}
+			{showText && <Desc>Add {tokenSymbol} to Metamask</Desc>}
 		</AddGivButton>
 	) : null;
 };
