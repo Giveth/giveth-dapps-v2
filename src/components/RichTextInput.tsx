@@ -123,7 +123,6 @@ const modules = (projectId?: any) => {
 					return imageUploaded?.uploadImage?.url;
 				} catch (error) {
 					showToastError(error);
-					return null;
 				}
 			},
 		},

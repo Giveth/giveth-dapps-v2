@@ -18,7 +18,7 @@ import { UPLOAD_PROFILE_PHOTO } from '@/apollo/gql/gqlUser';
 
 interface IImageUploader {
 	// multiple: boolean;
-	setUrl: Dispatch<SetStateAction<string>>;
+	setUrl: (url: string) => void;
 	url: string;
 	setIsUploading?: Dispatch<SetStateAction<boolean>>;
 }
