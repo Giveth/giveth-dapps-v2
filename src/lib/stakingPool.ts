@@ -509,24 +509,6 @@ export const stakeTokens = async (
 	}
 };
 
-export const approveStakeTokens = async (
-	amount: string,
-	userAddress: string,
-	lmAddress: string,
-	provider: Web3Provider | null,
-): Promise<TransactionResponse | undefined> => {
-	if (amount === '0') return;
-	if (!provider) {
-		console.error('Provider is null');
-		return;
-	}
-
-	const lmContract = new Contract(lmAddress, LM_ABI, provider);
-
-	const tx = await lmContract.approve(userAddress, amount);
-	console.log(tx);
-};
-
 export const harvestTokens = async (
 	lmAddress: string,
 	provider: Web3Provider | null,
