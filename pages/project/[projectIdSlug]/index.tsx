@@ -1,7 +1,12 @@
-import ProjectIndex from '@/components/views/project/ProjectIndex';
+import dynamic from 'next/dynamic';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 import { IProject } from '@/apollo/types/types';
+
+const ProjectIndex = dynamic(
+	() => import('@/components/views/project/ProjectIndex'),
+	{ ssr: false },
+);
 
 const ProjectRoute = (props: { project?: IProject }) => {
 	return <ProjectIndex project={props.project} />;
