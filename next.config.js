@@ -22,10 +22,7 @@ const sentryWebpackPluginOptions = {
 	//   urlPrefix, include, ignore
 	release: pjson.version,
 	org: process.env.NEXT_PUBLIC_SENTRY_ORG,
-	project:
-		process.env.NEXT_PUBLIC_ENV === 'production'
-			? process.env.NEXT_PUBLIC_SENTRY_PRODUCTION_PROJECT
-			: process.env.NEXT_PUBLIC_SENTRY_STAGE_PROJECT,
+	project: process.env.NEXT_PUBLIC_SENTRY_PROJECT,
 	authToken: process.env.NEXT_PUBLIC_SENTRY_AUTH_TOKEN,
 	silent: true, // Suppresses all logs
 	// For all available options, see:
