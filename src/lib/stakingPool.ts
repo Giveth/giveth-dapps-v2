@@ -46,9 +46,9 @@ export const getGivStakingAPR = async (
 		apr = totalSupply.isZero()
 			? Zero
 			: toBigNumber(rewardRate)
-					.div(totalSupply.toString())
-					.times('31536000')
-					.times('100');
+				.div(totalSupply.toString())
+				.times('31536000')
+				.times('100');
 	}
 
 	return apr;
@@ -145,10 +145,10 @@ const getBalancerPoolStakingAPR = async (
 		apr = totalSupply.isZero()
 			? null
 			: toBigNumber(rewardRate)
-					.div(totalSupply.toString())
-					.times('31536000')
-					.times('100')
-					.times(lp);
+				.div(totalSupply.toString())
+				.times('31536000')
+				.times('100')
+				.times(lp);
 	} catch (e) {
 		console.error('error on fetching balancer apr:', e);
 	}
@@ -208,11 +208,11 @@ const getSimplePoolStakingAPR = async (
 		apr = totalSupply.isZero()
 			? null
 			: toBigNumber(rewardRate)
-					.div(totalSupply.toString())
-					.times('31536000')
-					.times('100')
-					.times(lp)
-					.div(10 ** 18);
+				.div(totalSupply.toString())
+				.times('31536000')
+				.times('100')
+				.times(lp)
+				.div(10 ** 18);
 	} catch (e) {
 		console.error('error on fetching apr:', e);
 	}
@@ -495,20 +495,36 @@ export const stakeTokens = async (
 			config.NETWORKS_CONFIG[provider.network.chainId],
 		);
 		// const { status } = await txResponse.wait();
-		return await lmContract
-			.connect(signer.connectUnchecked())
-			.stakeWithPermit(
-				ethers.BigNumber.from(amount),
-				rawPermitCall.data,
-				{
-					gasLimit: 300_000,
-					...gasPreference,
-				},
-			);
+		return await lmContract.connect(signer.connectUnchecked()).stake(
+			ethers.BigNumber.from(amount),
+			// rawPermitCall.data,
+			{
+				gasLimit: 300_000,
+				...gasPreference,
+			},
+		);
 	} catch (e) {
 		console.error('Error on staking:', e);
 		return;
 	}
+};
+
+export const approveStakeTokens = async (
+	amount: string,
+	userAddress: string,
+	lmAddress: string,
+	provider: Web3Provider | null,
+): Promise<TransactionResponse | undefined> => {
+	if (amount === '0') return;
+	if (!provider) {
+		console.error('Provider is null');
+		return;
+	}
+
+	const lmContract = new Contract(lmAddress, LM_ABI, provider);
+
+	const tx = await lmContract.approve(userAddress, amount);
+	console.log(tx);
 };
 
 export const harvestTokens = async (
