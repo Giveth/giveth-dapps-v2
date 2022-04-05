@@ -1,4 +1,4 @@
-import { FC, useContext, useState } from 'react';
+import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { Button } from '../styled-components/Button';
 import { Flex } from '../styled-components/Flex';
@@ -9,7 +9,7 @@ import config from '@/configuration';
 import { GIVdropHarvestModal } from '../modals/GIVdropHarvestModal';
 import type { TransactionResponse } from '@ethersproject/providers';
 import { H2, Lead } from '@giveth/ui-design-system';
-import { AddGIVTokenButton } from '../AddGIVTokenButton';
+import { AddTokenButton } from '../AddTokenButton';
 import { useWeb3React } from '@web3-react/core';
 import { InjectedConnector } from '@web3-react/injected-connector';
 
@@ -74,12 +74,7 @@ const ClaimCard: FC<IClaimViewCardProps> = ({ index }) => {
 			return false;
 		}
 
-		if (chainId !== config.XDAI_NETWORK_NUMBER) {
-			// await walletCheck();
-			return false;
-		}
-
-		return true;
+		return chainId === config.XDAI_NETWORK_NUMBER;
 	};
 
 	const openHarvestModal = async () => {
@@ -122,7 +117,7 @@ const ClaimCard: FC<IClaimViewCardProps> = ({ index }) => {
 					</ClaimButton>
 				</Flex>
 				<AddTokenRow alignItems={'center'} justifyContent={'center'}>
-					<AddGIVTokenButton provider={library} />
+					<AddTokenButton provider={library} />
 				</AddTokenRow>
 				{step === index && (
 					<>
