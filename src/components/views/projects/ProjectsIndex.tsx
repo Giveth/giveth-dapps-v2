@@ -26,11 +26,12 @@ import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { initializeApollo } from '@/apollo/apolloClient';
 import { ICategory, IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
-import { gqlEnums } from '@/apollo/types/gqlEnums';
+import { EDirection, gqlEnums } from '@/apollo/types/gqlEnums';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
 import { Shadow } from '../../styled-components/Shadow';
 import useUser from '@/context/UserProvider';
 import { deviceSize, mediaQueries } from '@/utils/constants';
+import useModal from '@/context/ModalProvider';
 
 interface IProjectsView {
 	projects: IProject[];
@@ -63,7 +64,7 @@ const sortByObj = [
 	{
 		label: 'Oldest',
 		value: gqlEnums.CREATIONDATE,
-		direction: gqlEnums.ASC,
+		direction: EDirection.ASC,
 	},
 	{ label: 'Verified', value: gqlEnums.VERIFIED },
 	{ label: 'Traceable', value: gqlEnums.TRACEABLE },
@@ -86,8 +87,11 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	const {
 		state: { user },
-		actions: { showCompleteProfile },
 	} = useUser();
+
+	const {
+		actions: { showCompleteProfile },
+	} = useModal();
 
 	const [categoriesObj, setCategoriesObj] = useState<ISelectObj[]>();
 	const [selectedCategory, setSelectedCategory] =
@@ -124,7 +128,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 		const categoryQuery = selectedCategory.value;
 
 		const variables: IQueries = {
-			orderBy: { field: sortBy.value, direction: gqlEnums.DESC },
+			orderBy: { field: sortBy.value, direction: EDirection.DESC },
 			limit: userIdChanged ? filteredProjects.length : projects.length,
 			skip: userIdChanged ? 0 : projects.length * (loadNum || 0),
 		};

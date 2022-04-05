@@ -12,11 +12,10 @@ const ProjectDonations = (props: {
 	project?: IProject;
 	isActive?: boolean;
 	isDraft: boolean;
-	isMobile: boolean;
 }) => {
-	const { donationsByProjectId, project, isActive, isDraft, isMobile } =
-		props;
+	const { donationsByProjectId, project, isActive, isDraft } = props;
 	const { totalDonations, id, traceCampaignId } = project || {};
+	console.log({ totalDonations, donationsByProjectId });
 	return (
 		<>
 			{totalDonations === 0 ? (
@@ -43,7 +42,6 @@ const ProjectDonations = (props: {
 						id={id}
 						showTrace={!!traceCampaignId}
 						totalDonations={donationsByProjectId.totalCount}
-						isMobile={isMobile}
 					/>
 				</>
 			)}

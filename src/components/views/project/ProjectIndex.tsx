@@ -14,7 +14,7 @@ import { client, initializeApollo } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 import useUser from '@/context/UserProvider';
 import { IDonation, IProject } from '@/apollo/types/types';
-import { EProjectStatus } from '@/apollo/types/gqlEnums';
+import { EDirection, EProjectStatus, gqlEnums } from '@/apollo/types/gqlEnums';
 import InfoBadge from '@/components/badges/InfoBadge';
 import { IDonationsByProjectId } from '@/apollo/types/gqlTypes';
 import SuccessfulCreation from '@/components/views/create/SuccessfulCreation';
@@ -77,7 +77,10 @@ const ProjectIndex = (props: { project?: IProject }) => {
 					projectId: parseInt(id),
 					skip: 0,
 					take: donationsPerPage,
-					orderBy: { field: 'CreationDate', direction: 'DESC' },
+					orderBy: {
+						field: gqlEnums.CREATIONDATE,
+						direction: EDirection.DESC,
+					},
 				},
 			})
 			.then(
@@ -166,7 +169,6 @@ const ProjectIndex = (props: { project?: IProject }) => {
 							project={project!}
 							isActive={isActive}
 							isDraft={isDraft}
-							isMobile={isMobile}
 						/>
 					)}
 				</ContentWrapper>

@@ -15,14 +15,10 @@ import { smallFormatDate } from '@/lib/helpers';
 import { Flex } from '@/components/styled-components/Flex';
 import { FC } from 'react';
 import styled from 'styled-components';
-import {
-	IProjectsTable,
-	EOrderBy,
-	EDirection,
-	IOrder,
-} from './UserPublicProfile.view';
+import { IProjectsTable, EOrderBy, IOrder } from './UserPublicProfile.view';
 import { mediaQueries } from '@/utils/constants';
 import { idToProjectEdit } from '@/lib/routeCreators';
+import { EDirection } from '@/apollo/types/gqlEnums';
 
 interface IBadge {
 	mainColor?: any;

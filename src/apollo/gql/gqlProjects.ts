@@ -20,7 +20,6 @@ export const FETCH_HOME_PROJECTS = gql`
 				verified
 				totalDonations
 				traceCampaignId
-				givingBlocksId
 				reaction {
 					id
 					userId
@@ -31,7 +30,11 @@ export const FETCH_HOME_PROJECTS = gql`
 					walletAddress
 				}
 				updatedAt
-				givingBlocksId
+				organization {
+					name
+					label
+					supportCustomTokens
+				}
 			}
 			totalCount
 		}
@@ -66,7 +69,6 @@ export const FETCH_ALL_PROJECTS = gql`
 				verified
 				totalDonations
 				traceCampaignId
-				givingBlocksId
 				reaction {
 					id
 					userId
@@ -77,6 +79,11 @@ export const FETCH_ALL_PROJECTS = gql`
 					walletAddress
 				}
 				updatedAt
+				organization {
+					name
+					label
+					supportCustomTokens
+				}
 			}
 			totalCount
 			categories {
@@ -104,7 +111,6 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 			totalDonations
 			totalTraceDonations
 			creationDate
-			givingBlocksId
 			reaction {
 				id
 				userId
@@ -122,6 +128,11 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 			status {
 				id
 				name
+			}
+			organization {
+				name
+				label
+				supportCustomTokens
 			}
 		}
 	}
@@ -252,7 +263,6 @@ export const FETCH_USER_LIKED_PROJECTS = gql`
 				walletAddress
 				impactLocation
 				listed
-				givingBlocksId
 				totalDonations
 				categories {
 					name
