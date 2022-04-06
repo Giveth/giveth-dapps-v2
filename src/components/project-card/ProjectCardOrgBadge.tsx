@@ -1,51 +1,105 @@
 import React from 'react';
-import Image from 'next/image';
 import styled from 'styled-components';
 import { neutralColors, Overline } from '@giveth/ui-design-system';
 
+import { ORGANIZATION } from '@/lib/constants/organizations';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+
 interface IProjectCardOrgBadge {
-	image: string;
 	isHover: boolean;
-	show: boolean;
+	organization?: string;
+	isAbsolute?: boolean;
+	isProjectView?: boolean;
 }
 
+const setOrgImage = (org?: string) => {
+	let img = '';
+	switch (org) {
+		case ORGANIZATION.givingBlock:
+			img = '/images/thegivingblock.svg';
+			break;
+		case ORGANIZATION.change:
+			img = '/images/change.png';
+			break;
+	}
+	return img;
+};
+
 const ProjectCardOrgBadge = ({
-	image,
 	isHover,
-	show,
+	organization,
+	isAbsolute,
+	isProjectView,
 }: IProjectCardOrgBadge) => {
+	const displayImg = setOrgImage(organization);
+	const hideBadge =
+		organization === ORGANIZATION.giveth ||
+		organization === ORGANIZATION.trace ||
+		!displayImg;
+
+	if (hideBadge) return null;
+
+	const content = (
+		<>
+			<OrganizationText>PROJECT BY:  </OrganizationText>
+			<ImageContainer>
+				<img src={displayImg} alt={organization} />
+			</ImageContainer>
+		</>
+	);
 	return (
 		<>
-			{show && (
-				<GivingBadgeContainer isHover={isHover}>
-					<GivingBlocksText>PROJECT BY:</GivingBlocksText>
-					<Image
-						src={image}
-						alt='The Giving Block icon.'
-						height={36}
-						width={78}
-					/>
-				</GivingBadgeContainer>
+			{isAbsolute ? (
+				<AbsolutContainer>{content}</AbsolutContainer>
+			) : isProjectView ? (
+				<ProjectViewContainer>{content}</ProjectViewContainer>
+			) : (
+				<HomeViewContainer isHover={isHover}>
+					{content}
+				</HomeViewContainer>
 			)}
 		</>
 	);
 };
 
-const GivingBadgeContainer = styled.div<{ isHover: boolean }>`
+const ImageContainer = styled.div`
+	max-width: 100px;
+	img {
+		width: 100%;
+		height: auto;
+	}
+`;
+
+const HomeViewContainer = styled(FlexCenter)<{ isHover: boolean }>`
 	height: 36px;
-	width: 200px;
 	background-color: ${neutralColors.gray[200]};
-	display: flex;
-	align-items: center;
 	gap: 8px;
 	padding: 0 24px;
 	position: absolute;
 	bottom: ${props => (props.isHover ? '100px' : '24px')};
 	transition: bottom 0.3s ease;
-	border-radius: 0px 12px 0px 0px;
+	border-top-right-radius: 12px;
 `;
 
-const GivingBlocksText = styled(Overline)`
+const AbsolutContainer = styled(Flex)`
+	position: absolute;
+	align-items: center;
+	border-radius: 0 12px 0 0;
+	color: ${neutralColors.gray[600]};
+	background: ${neutralColors.gray[200]};
+	margin-top: -30px;
+	padding: 8px 24px;
+	img {
+		padding-left: 10px;
+	}
+`;
+
+const ProjectViewContainer = styled(FlexCenter)`
+	gap: 8px;
+	margin-bottom: 12px;
+`;
+
+const OrganizationText = styled(Overline)`
 	color: ${neutralColors.gray[600]};
 	font-size: 10px;
 `;

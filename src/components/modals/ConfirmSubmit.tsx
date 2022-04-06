@@ -1,6 +1,5 @@
 import config from '@/configuration';
 import {
-	B,
 	P,
 	brandColors,
 	Caption,
@@ -16,7 +15,7 @@ import TikAnimation from '@/animations/tik.json';
 import ErrorAnimation from '@/animations/error.json';
 import styled from 'styled-components';
 import { FC } from 'react';
-import { AddGIVTokenButton } from '../AddGIVTokenButton';
+import { AddTokenButton } from '../AddTokenButton';
 import { Flex } from '../styled-components/Flex';
 import { useWeb3React } from '@web3-react/core';
 
@@ -56,12 +55,16 @@ interface IConfirmSubmitProps {
 	title: string;
 	walletNetwork: number;
 	txHash?: string;
+	rewardTokenSymbol?: string;
+	rewardTokenAddress?: string;
 }
 
 export const SubmittedInnerModal: FC<IConfirmSubmitProps> = ({
 	title,
 	walletNetwork,
 	txHash,
+	rewardTokenSymbol,
+	rewardTokenAddress,
 }) => {
 	const { library } = useWeb3React();
 	return (
@@ -74,7 +77,11 @@ export const SubmittedInnerModal: FC<IConfirmSubmitProps> = ({
 			/>
 			<TxSubmit weight={700}>{txHash && 'Transaction pending'}</TxSubmit>
 			<AddTokenRow alignItems={'center'} justifyContent={'center'}>
-				<AddGIVTokenButton provider={library} />
+				<AddTokenButton
+					provider={library}
+					tokenSymbol={rewardTokenSymbol}
+					tokenAddress={rewardTokenAddress}
+				/>
 			</AddTokenRow>
 			{txHash && (
 				<BlockExplorerLink
@@ -97,6 +104,8 @@ export const ConfirmedInnerModal: FC<IConfirmSubmitProps> = ({
 	title,
 	walletNetwork,
 	txHash,
+	rewardTokenSymbol,
+	rewardTokenAddress,
 }) => {
 	const { library } = useWeb3React();
 
@@ -107,7 +116,11 @@ export const ConfirmedInnerModal: FC<IConfirmSubmitProps> = ({
 			<TxConfirm weight={700}>Transaction confirmed!</TxConfirm>
 			<Info>It may take a few minutes for the UI to update</Info>
 			<AddTokenRow alignItems={'center'} justifyContent={'center'}>
-				<AddGIVTokenButton provider={library} />
+				<AddTokenButton
+					provider={library}
+					tokenSymbol={rewardTokenSymbol}
+					tokenAddress={rewardTokenAddress}
+				/>
 			</AddTokenRow>
 			<BlockExplorerLink
 				href={`${config.NETWORKS_CONFIG[walletNetwork]?.blockExplorerUrls}

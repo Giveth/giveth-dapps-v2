@@ -1,3 +1,5 @@
+import { EDonationType } from '@/apollo/types/gqlEnums';
+
 export interface IProject {
 	id?: string;
 	title?: string;
@@ -29,12 +31,16 @@ export interface IProject {
 	totalTraceDonations?: number;
 	totalProjectUpdates?: number;
 	traceCampaignId: string | null;
-	givingBlocksId?: string | null;
 	status: {
 		id?: string;
 		name?: string;
 	};
 	updatedAt: string;
+	organization?: {
+		name: string;
+		label: string;
+		supportCustomTokens: boolean;
+	};
 }
 
 export interface IProjectEdition {
@@ -84,16 +90,6 @@ export interface IUser {
 	likedProjectsCount?: number;
 }
 
-export interface IAdmin {
-	name?: string;
-	totalDonations?: number;
-	donations: {
-		id: string;
-	}[];
-	traceCampaignId: string | null;
-	totalProjectUpdates?: number;
-}
-
 export interface IReaction {
 	id: string;
 	userId: string;
@@ -111,9 +107,10 @@ export interface IDonation {
 	amount: number;
 	currency: string;
 	valueUsd?: number;
-	transactionId?: string;
+	transactionId: string;
 	transactionNetworkId: number;
 	createdAt: string;
+	donationType?: EDonationType;
 	anonymous?: boolean;
 }
 

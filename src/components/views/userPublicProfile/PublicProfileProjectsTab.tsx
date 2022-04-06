@@ -12,13 +12,13 @@ import styled from 'styled-components';
 import {
 	IUserPublicProfileView,
 	EOrderBy,
-	EDirection,
 	IOrder,
 	NothingToSee,
 } from './UserPublicProfile.view';
 import ProjectsTable from './ProjectsTable';
 import { mediaQueries } from '@/utils/constants';
 import { Container } from '@/components/Grid';
+import { EDirection } from '@/apollo/types/gqlEnums';
 
 const itemPerPage = 10;
 
