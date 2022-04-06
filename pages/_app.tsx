@@ -42,11 +42,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 								<NftsProvider>
 									<PriceProvider>
 										<UserProvider>
-											<ModalProvider>
-												<HeaderWrapper />
-												<Component {...pageProps} />
-												<FooterWrapper />
-											</ModalProvider>
+											<HeaderWrapper />
+											<Component {...pageProps} />
+											<FooterWrapper />
 										</UserProvider>
 									</PriceProvider>
 								</NftsProvider>
