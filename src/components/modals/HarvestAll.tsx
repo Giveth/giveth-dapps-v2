@@ -486,6 +486,12 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 							title={title}
 							walletNetwork={network}
 							txHash={txHash}
+							rewardTokenSymbol={
+								regenStreamConfig?.rewardTokenSymbol
+							}
+							rewardTokenAddress={
+								regenStreamConfig?.rewardTokenAddress
+							}
 						/>
 					</HarvestAllModalContainer>
 				)}
@@ -495,6 +501,12 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 							title={title}
 							walletNetwork={network}
 							txHash={txHash}
+							rewardTokenSymbol={
+								regenStreamConfig?.rewardTokenSymbol
+							}
+							rewardTokenAddress={
+								regenStreamConfig?.rewardTokenAddress
+							}
 						/>
 					</HarvestAllModalContainer>
 				)}
