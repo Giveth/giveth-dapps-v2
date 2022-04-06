@@ -26,8 +26,6 @@ import { getGivStakingConfig } from '@/helpers/networkProvider';
 import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
 import { getUserStakeInfo } from '@/lib/stakingPool';
 import { constants } from 'ethers';
-import { useStakingNFT } from '@/hooks/useStakingNFT';
-import { StakingType } from '@/types/config';
 import { useWeb3React } from '@web3-react/core';
 import { ETheme, useGeneral } from '@/context/general.context';
 import Routes from '@/lib/constants/Routes';
@@ -48,12 +46,11 @@ export const RewardMenu = ({
 	const [flowRateNow, setFlowRateNow] = useState<BigNumber.Value>(0);
 	const { givTokenDistroHelper } = useTokenDistro();
 	const { currentValues } = useSubgraph();
-	const { rewardBalance } = useStakingNFT();
-	const { chainId, library } = useWeb3React();
+	const { chainId } = useWeb3React();
 	const { balances } = currentValues;
 	const { allocatedTokens, claimed, givbackLiquidPart } = balances;
 	const { theme } = useGeneral();
-	const { networkName, networkToken } = networkInfo(chainId);
+	const { networkName } = networkInfo(chainId);
 
 	useEffect(() => {
 		setGIVstreamLiquidPart(
@@ -96,15 +93,13 @@ export const RewardMenu = ({
 							unipoolHelper,
 						).earned,
 					);
-				} else if (type === StakingType.UNISWAP) {
-					_farmRewards = _farmRewards.add(rewardBalance);
 				}
 			});
 			setFarmsLiquidPart(
 				givTokenDistroHelper.getLiquidPart(_farmRewards),
 			);
 		}
-	}, [balances, currentValues, chainId, rewardBalance, givTokenDistroHelper]);
+	}, [balances, currentValues, chainId, givTokenDistroHelper]);
 
 	useEffect(() => {
 		setIsMounted(true);
