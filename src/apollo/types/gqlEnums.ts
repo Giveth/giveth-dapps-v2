@@ -13,6 +13,7 @@ export enum EProjectStatus {
 	DRAFT = 'drafted',
 	ACTIVE = 'activate',
 	DEACTIVE = 'deactivate',
+	CANCEL = 'cancelled',
 }
 
 export enum EDirection {

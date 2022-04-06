@@ -20,11 +20,8 @@ interface ITokenOptins {
 
 const fetchTokenInfo = async (
 	provider: JsonRpcProvider,
+	address: string,
 ): Promise<ITokenOptins | undefined> => {
-	const address =
-		provider.network.chainId === config.MAINNET_NETWORK_NUMBER
-			? MAINNET_CONFIG.TOKEN_ADDRESS
-			: XDAI_CONFIG.TOKEN_ADDRESS;
 	const contract = new Contract(address, UNI_ABI, provider);
 	try {
 		const [_decimal, _symbol]: [number, string] = await Promise.all([
@@ -43,9 +40,17 @@ const fetchTokenInfo = async (
 	return;
 };
 
-export async function addGIVToken(provider: JsonRpcProvider): Promise<void> {
+export async function addToken(
+	provider: JsonRpcProvider,
+	tokenAddress: string | undefined, // Default is GIV
+): Promise<void> {
+	const address =
+		tokenAddress ||
+		(provider.network.chainId === config.MAINNET_NETWORK_NUMBER
+			? MAINNET_CONFIG.TOKEN_ADDRESS
+			: XDAI_CONFIG.TOKEN_ADDRESS);
+	const tokenOptions = await fetchTokenInfo(provider, address);
 	const { ethereum } = window;
-	const tokenOptions = await fetchTokenInfo(provider);
 	if (tokenOptions) {
 		await ethereum.request({
 			method: 'wallet_watchAsset',
@@ -83,7 +88,7 @@ export async function switchNetwork(network: number): Promise<void> {
 	}
 }
 
-export async function addToken(
+export async function addToken_old(
 	tokenAddress: string,
 	tokenSymbol: string,
 	tokenDecimals: number,

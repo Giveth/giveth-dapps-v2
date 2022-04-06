@@ -34,7 +34,6 @@ import {
 	WalletAddressInput,
 } from './Inputs';
 import useUser from '@/context/UserProvider';
-import Logger from '@/utils/Logger';
 import SuccessfulCreation from './SuccessfulCreation';
 import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
 import {
@@ -49,6 +48,7 @@ import { client } from '@/apollo/apolloClient';
 import LightBulbIcon from '/public/images/icons/lightbulb.svg';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { deviceSize, mediaQueries } from '@/utils/constants';
+import { captureException } from '@sentry/nextjs';
 
 export enum ECreateErrFields {
 	NAME = 'name',
@@ -266,7 +266,7 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 		} catch (e) {
 			setIsLoading(false);
 			const error = e as Error;
-			Logger.captureException(error);
+			captureException(error);
 			showToastError(error);
 		}
 	};
