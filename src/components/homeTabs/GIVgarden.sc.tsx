@@ -13,7 +13,7 @@ import {
 	GLink,
 } from '@giveth/ui-design-system';
 import { TopContainer, BottomContainer, EnhancedRewardCard } from './commons';
-import { device, mediaQueries, deviceSize } from '@/utils/constants';
+import { device, mediaQueries } from '@/utils/constants';
 import { Row } from '../Grid';
 
 export const GivGardenSection = styled.div`
@@ -127,12 +127,12 @@ export const GovernanceRaw = styled(Row)`
 
 export const VoteCard = styled.div`
 	background-color: #3c14c5;
-	padding: 107px 103px 140px 231px;
-	background-image: url('/images/flower4.svg'),
-		url('/images/backgrounds/giv-outline.svg');
-	background-repeat: no-repeat, repeat;
-	background-position: bottom left, top;
 	border-radius: 8px;
+	padding: 148px 25px 117px 25px;
+	display: block;
+	background-image: url('/images/backgrounds/giv-outline.svg');
+	background-repeat: repeat;
+	background-position: top;
 	min-height: 480px;
 	margin: 80px 0 45px;
 	position: relative;
@@ -148,13 +148,12 @@ export const VoteCard = styled.div`
 		top: 30px;
 		left: 40px;
 	}
-
-	@media (max-width: ${deviceSize.mobileL}px) {
-		padding: 148px 25px 117px 25px;
-		display: block;
-		background-image: url('/images/backgrounds/giv-outline.svg');
-		background-repeat: repeat;
-		background-position: top;
+	${mediaQueries.tablet} {
+		padding: 107px 103px 140px 231px;
+		background-image: url('/images/flower4.svg'),
+			url('/images/backgrounds/giv-outline.svg');
+		background-repeat: no-repeat, repeat;
+		background-position: bottom left, top;
 	}
 `;
 
@@ -166,13 +165,10 @@ export const VoteCardDesc = styled(QuoteText)`
 
 export const VoteCardButton = styled(Button)`
 	display: block;
-	margin-left: auto;
+	margin: 15px auto 0 0;
 	padding: 24px;
 	${mediaQueries.tablet} {
 		padding: 24px 73px;
-	}
-	@media (max-width: ${deviceSize.mobileM}px) {
-		margin: 15px 0 0 0;
 	}
 `;
 

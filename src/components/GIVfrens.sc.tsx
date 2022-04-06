@@ -1,4 +1,4 @@
-import { device, deviceSize } from '@/utils/constants';
+import { device, mediaQueries } from '@/utils/constants';
 import {
 	brandColors,
 	ButtonLink,
@@ -46,13 +46,16 @@ export const DaoCardQuote = styled(QuoteText)`
 `;
 
 export const DaoCardButton = styled(ButtonLink)`
-	width: 300px;
 	margin-top: 36px;
 	margin-bottom: 12px;
-	@media (max-width: ${deviceSize.mobileL}px) {
-		display: block;
-		margin-left: auto;
-		width: 136px;
+	align-items: center;
+	display: block;
+	text-align: center;
+	margin-left: auto;
+	width: 136px;
+	${mediaQueries.tablet} {
+		margin: 36px auto 12px auto;
+		width: 300px;
 	}
 `;
 

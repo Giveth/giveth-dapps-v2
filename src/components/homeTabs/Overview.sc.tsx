@@ -13,7 +13,7 @@ import {
 	D1,
 } from '@giveth/ui-design-system';
 import { TopContainer } from './commons';
-import { device, deviceSize } from '@/utils/constants';
+import { device, mediaQueries } from '@/utils/constants';
 
 export const OverviewBottomContainer = styled.div`
 	background-image: url('/images/backgrounds/wave.svg');
@@ -27,28 +27,30 @@ export const OverviewTopContainer = styled(TopContainer)`
 
 export const OverviewTitle = styled(D1)`
 	padding-bottom: 36px;
-	@media ${device.mobileS} {
-		font-size: 4.4rem;
+	font-size: 4.4rem;
+	${mediaQueries.tablet} {
+		font-size: 6.69rem;
 	}
 `;
 
 export const PreTitle = styled(D3)`
 	padding-top: 77px;
 	display: block;
+	font-size: 4.4rem;
 	color: ${brandColors.deep[100]};
-	@media ${device.mobileS} {
-		font-size: 4.4rem;
+	${mediaQueries.tablet} {
+		font-size: 5.5rem;
 	}
 `;
 
 export const SubTitle = styled(QuoteText)``;
 
 export const ClaimCardButton = styled(Button)`
-	width: 300px;
+	width: 221px;
 	margin-top: 36px;
 	margin-bottom: 36px;
-	@media (max-width: ${deviceSize.mobileS}px) {
-		width: 221px;
+	${mediaQueries.tablet} {
+		width: 300px;
 	}
 `;
 
