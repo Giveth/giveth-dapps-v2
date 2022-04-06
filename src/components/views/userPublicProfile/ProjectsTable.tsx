@@ -11,10 +11,11 @@ import {
 	SublineBold,
 } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
-import { smallFormatDate } from '@/lib/helpers';
-import { Flex } from '@/components/styled-components/Flex';
 import { FC } from 'react';
 import styled from 'styled-components';
+
+import { smallFormatDate } from '@/lib/helpers';
+import { Flex } from '@/components/styled-components/Flex';
 import {
 	IProjectsTable,
 	EOrderBy,
@@ -66,7 +67,7 @@ const ProjectsTable: FC<IProjectsTable> = ({
 			title = 'Listed';
 		} else if (listed === null) {
 			color = semanticColors.blueSky;
-			title = 'Draft';
+			title = 'Waiting for review';
 		} else {
 			color = semanticColors.golden;
 			title = 'Not Listed';
