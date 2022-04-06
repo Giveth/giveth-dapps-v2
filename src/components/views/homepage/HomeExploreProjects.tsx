@@ -51,8 +51,7 @@ const HomeExploreProjects = (props: IHomeExploreProjects) => {
 						Explore <span>{totalCount} Projects</span>
 					</Title>
 					<Subtitle>
-						Give crypto donations directly to social good projects
-						and charities
+						Donate crypto directly to for-good projects.
 					</Subtitle>
 				</>
 			)}
