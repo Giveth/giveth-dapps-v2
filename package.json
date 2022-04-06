@@ -18,7 +18,7 @@
 		"@ethersproject/providers": "^5.5.0",
 		"@ethersproject/units": "^5.5.0",
 		"@giveth/ui-design-system": "^1.8.3",
-		"@sentry/browser": "^6.17.2",
+		"@sentry/nextjs": "^6.19.3",
 		"@toruslabs/torus-embed": "^1.20.2",
 		"@uniswap/v3-sdk": "^3.6.2-optimism-regenesis",
 		"@web3-react/authereum-connector": "^6.2.0",

@@ -152,10 +152,12 @@ const CyanArc = styled(Arc)`
 const EndItem = styled(Col)`
 	padding-bottom: 55px;
 	padding-right: 55px;
+	max-width: 90vw;
 `;
 
 const EndSection = styled.div`
-	margin-top: 190px;
+	max-width: 1440px;
+	margin-top: auto 190px 0;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;

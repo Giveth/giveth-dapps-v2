@@ -11,13 +11,13 @@ import SparkleAnimation from '@/animations/sparkle.json';
 import BlowingAnimation from '@/animations/blowing.json';
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import { Flex } from '../styled-components/Flex';
-import { AddGIVTokenButton } from '../AddGIVTokenButton';
+import { AddTokenButton } from '../AddTokenButton';
 import { useWeb3React } from '@web3-react/core';
 import { Container } from '@/components/Grid';
 
 const SmileImage = styled.div`
 	position: absolute;
-	height: 0px;
+	height: 0;
 	left: -264px;
 	top: -92px;
 	@media only screen and (max-width: 990px) {
@@ -189,10 +189,7 @@ export const CongratulationsCard = () => {
 						<Lead>
 							{formatWeiHelper(totalAmount.div(10))} GIV.{' '}
 						</Lead>
-						<AddGIVTokenButton
-							provider={library}
-							showText={false}
-						/>
+						<AddTokenButton provider={library} showText={false} />
 						<SmileImage>
 							<SparkleBurstContainer>
 								<Lottie

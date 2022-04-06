@@ -19,7 +19,6 @@ import { IModal, Modal } from '@/components/modals/Modal';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import { WrongNetworkModal } from '@/components/modals/WrongNetwork';
 import { IProject } from '@/apollo/types/types';
-import Logger from '../../utils/Logger';
 import { checkNetwork } from '@/utils';
 import { isAddressENS, getAddressFromENS } from '@/lib/wallet';
 import { sendTransaction, showToastError } from '@/lib/helpers';
@@ -31,6 +30,7 @@ import config from '@/configuration';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import useModal from '@/context/ModalProvider';
 import { ORGANIZATION } from '@/lib/constants/organizations';
+import { captureException } from '@sentry/nextjs';
 
 interface IDonateModal extends IModal {
 	closeParentModal?: () => void;
@@ -208,7 +208,6 @@ const DonateModal = ({
 										}
 									}
 								} catch (error) {
-									Logger.captureException(error);
 									console.log({ error });
 									showToastError(error);
 								}
@@ -238,7 +237,7 @@ const DonateModal = ({
 			// transaction.notify(transactionHash)
 		} catch (error: any) {
 			setDonating(false);
-			Logger.captureException(error);
+			captureException(error);
 			if (
 				error?.data?.code === 'INSUFFICIENT_FUNDS' ||
 				error?.data?.code === 'UNPREDICTABLE_GAS_LIMIT'
