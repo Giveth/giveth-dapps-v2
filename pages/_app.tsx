@@ -6,7 +6,6 @@ import { Web3ReactProvider } from '@web3-react/core';
 import { ApolloProvider } from '@apollo/client';
 import { ExternalProvider, Web3Provider } from '@ethersproject/providers';
 
-import { FarmProvider } from '@/context/farm.context';
 import { NftsProvider } from '@/context/positions.context';
 import { TokenDistroProvider } from '@/context/tokenDistro.context';
 import { SubgraphProvider } from '@/context/subgraph.context';
@@ -42,15 +41,12 @@ function MyApp({ Component, pageProps }: AppProps) {
 							<TokenDistroProvider>
 								<NftsProvider>
 									<PriceProvider>
-										<FarmProvider>
-											<UserProvider>
-												<ModalProvider>
+										<UserProvider>
+											<ModalProvider>
 													<HeaderWrapper />
-													<Component {...pageProps} />
-													<FooterWrapper />
-												</ModalProvider>
-											</UserProvider>
-										</FarmProvider>
+											<Component {...pageProps} />
+											<FooterWrapper /></ModalProvider>
+										</UserProvider>
 									</PriceProvider>
 								</NftsProvider>
 							</TokenDistroProvider>
