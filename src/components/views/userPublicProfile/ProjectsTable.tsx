@@ -55,7 +55,6 @@ const ProjectsTable: FC<IProjectsTable> = ({
 	const router = useRouter();
 
 	const setupBadge = (status: IStatus, listed?: boolean | null) => {
-		console.log('projects', projects);
 		const Bull = () => <BulletPoint>&bull;</BulletPoint>;
 		let color,
 			title = '';
