@@ -17,6 +17,8 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import links from '@/lib/constants/links';
+import { Container } from '@/components/Grid';
+import { mediaQueries } from '@/utils/constants';
 
 const tabTitles = ['Mission & Vision', 'History', 'Team'];
 
@@ -31,8 +33,10 @@ const AboutIndex = () => {
 	return (
 		<>
 			<Upper>
-				<ArcMustard />
-				<DotMustard />
+				<HideContainer>
+					<ArcMustard />
+					<DotMustard />
+				</HideContainer>
 				<TeamImageWrapper>
 					<img
 						width='100%'
@@ -40,16 +44,18 @@ const AboutIndex = () => {
 						alt='giveth team'
 					/>
 				</TeamImageWrapper>
-				<UpperTitle>Building the Future of Giving</UpperTitle>
-				<UpperCaption>
-					Giveth is a community focused on Building the Future of
-					Giving using blockchain technology. Our vision is to make
-					giving effortless, to reward people all over the world for
-					creating positive change.
-				</UpperCaption>
-				<Link href={links.SUPPORT_US}>
-					<UpperButton label='SUPPORT GIVETH'></UpperButton>
-				</Link>
+				<Container>
+					<UpperTitle>Building the Future of Giving</UpperTitle>
+					<UpperCaption>
+						Giveth is a community focused on Building the Future of
+						Giving using blockchain technology. Our vision is to
+						make giving effortless, to reward people all over the
+						world for creating positive change.
+					</UpperCaption>
+					<Link href={links.SUPPORT_US}>
+						<UpperButton label='SUPPORT GIVETH'></UpperButton>
+					</Link>
+				</Container>
 			</Upper>
 
 			<Middle>
@@ -93,8 +99,10 @@ const AboutIndex = () => {
 			</Middle>
 
 			<End>
-				<EndMustardArc />
-				<EndPurpleArc />
+				<HideContainer>
+					<EndMustardArc />
+					<EndPurpleArc />
+				</HideContainer>
 				<Tabs>
 					{tabTitles.map(i => (
 						<TabItem
@@ -132,7 +140,7 @@ const TabContent = styled.div`
 const TabItem = styled(P)`
 	background: white;
 	border-radius: 54px;
-	width: 176px;
+	min-width: 200px;
 	height: 45px;
 	color: ${brandColors.deep[500]};
 	display: flex;
@@ -149,7 +157,19 @@ const TabItem = styled(P)`
 const Tabs = styled.div`
 	display: flex;
 	flex-wrap: wrap;
+	align-items: center;
 	gap: 16px;
+
+	${mediaQueries.mobileS} {
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		gap: 8px;
+
+		::-webkit-scrollbar {
+			width: 0px;
+			height: 0px;
+			background-color: transparent;
+		}
 `;
 
 const EndPurpleArc = styled(Arc)`
@@ -177,9 +197,13 @@ const EndMustardArc = styled(Arc)`
 
 const End = styled.div`
 	background-image: url('/images/curves_about_us.svg');
-	padding: 90px 150px;
 	overflow: hidden;
 	position: relative;
+	padding: 72px 18px;
+
+	${mediaQueries.tablet} {
+		padding: 90px 150px;
+	}
 `;
 
 const Flower = styled.div`
@@ -188,6 +212,11 @@ const Flower = styled.div`
 	right: 0;
 	top: 50%;
 	transform: translateY(-50%);
+	display: none;
+
+	${mediaQueries.tablet} {
+		display: unset;
+	}
 `;
 
 const MiddleBody = styled.div`
@@ -203,9 +232,13 @@ const RedirectButton = styled(GLink)`
 
 const Middle = styled.div`
 	position: relative;
-	padding: 135px 0 185px 150px;
 	background: ${brandColors.giv[500]};
 	color: white;
+	padding: 72px 18px;
+
+	${mediaQueries.tablet} {
+		padding: 135px 240px 135px 135px;
+	}
 `;
 
 const UpperButton = styled(Button)`
@@ -252,6 +285,14 @@ const Upper = styled.div`
 	background-image: url('/images/GIV_light.svg');
 	overflow: hidden;
 	position: relative;
+`;
+
+const HideContainer = styled.div`
+	display: none;
+
+	${mediaQueries.laptop} {
+		display: unset;
+	}
 `;
 
 export default AboutIndex;

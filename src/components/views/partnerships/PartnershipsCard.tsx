@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { IPartner } from '@/content/Partnerships';
 import { H4, P, brandColors } from '@giveth/ui-design-system';
+import { mediaQueries } from '@/utils/constants';
 import styled from 'styled-components';
 
 const PartnershipsCard = ({ icon, title, description, link }: IPartner) => {
@@ -37,14 +38,12 @@ const Caption = styled(P)`
 
 const IconContainer = styled.div`
 	margin-bottom: 35px;
-	max-width: 255px;
 	max-height: 110px;
 `;
 
 const Wrapper = styled.a`
 	display: flex;
 	flex-direction: column;
-	width: 326px;
 	height: 393px;
 	color: ${brandColors.deep[800]};
 	background: white;
@@ -52,6 +51,11 @@ const Wrapper = styled.a`
 	box-shadow: ${Shadow.Neutral[500]};
 	padding: 70px 35px 40px 35px;
 	cursor: pointer;
+	width: 100%;
+
+	${mediaQueries.tablet} {
+		width: 326px;
+	}
 `;
 
 export default PartnershipsCard;

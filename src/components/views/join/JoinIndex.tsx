@@ -1,6 +1,7 @@
 import { Arc } from '@/components/styled-components/Arc';
 import { D3, H4, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { mediaQueries } from '@/utils/constants';
 
 const JoinIndex = () => {
 	return (
@@ -63,16 +64,32 @@ const TextContainer = styled.div`
 	* {
 		z-index: 2;
 	}
+
+	${mediaQueries.mobileS} {
+		margin-top: 16px;
+	}
+
+	${mediaQueries.tablet} {
+		margin-top: 0px;
+	}
 `;
 
 const UpperSection = styled.div`
 	background: ${brandColors.giv[500]};
 	background-image: url('/images/GIV_homepage.svg');
 	height: 794px;
-	padding: 150px 130px;
+
 	color: white;
 	overflow: hidden;
 	position: relative;
+
+	${mediaQueries.mobileS} {
+		padding: 18px;
+	}
+
+	${mediaQueries.tablet} {
+		padding: 150px 130px;
+	}
 `;
 
 export default JoinIndex;
