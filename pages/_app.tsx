@@ -43,9 +43,10 @@ function MyApp({ Component, pageProps }: AppProps) {
 									<PriceProvider>
 										<UserProvider>
 											<ModalProvider>
-													<HeaderWrapper />
-											<Component {...pageProps} />
-											<FooterWrapper /></ModalProvider>
+												<HeaderWrapper />
+												<Component {...pageProps} />
+												<FooterWrapper />
+											</ModalProvider>
 										</UserProvider>
 									</PriceProvider>
 								</NftsProvider>
