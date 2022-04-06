@@ -31,8 +31,6 @@ import {
 	IconContainer,
 	IconHelpWraper,
 	GIVgardenTooltip,
-	IconGift,
-	GiftTooltip,
 	IntroIcon,
 	DisableModal,
 	DisableModalContent,
@@ -64,7 +62,6 @@ import { WhatisStreamModal } from '../modals/WhatisStream';
 import { IconSushiswap } from '../Icons/Sushiswap';
 import { useWeb3React } from '@web3-react/core';
 import { UniV3APRModal } from '../modals/UNIv3APR';
-import { useLiquidityPositions } from '@/context';
 import StakingCardIntro from './StakingCardIntro';
 import { getNowUnixMS } from '@/helpers/time';
 import FarmCountDown from '../FarmCountDown';
@@ -149,9 +146,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 
 	useEffect(() => {
 		if (chainId) {
-			setInfo(chainId, type, earned);
+			if (!regenStreamConfig) setInfo(chainId, type, earned);
 		}
-	}, [chainId, earned, type]);
+	}, [chainId, earned, type, regenStreamConfig, setInfo]);
 
 	const rewardTokenSymbol = regenStreamConfig?.rewardTokenSymbol || 'GIV';
 	const { regenFarmStartTime, regenFarmIntro } =
