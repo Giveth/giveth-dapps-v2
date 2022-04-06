@@ -1,4 +1,8 @@
-import { FacebookShareButton, TwitterShareButton } from 'react-share';
+import {
+	FacebookShareButton,
+	TwitterShareButton,
+	LinkedinShareButton,
+} from 'react-share';
 import Image from 'next/image';
 import styled from 'styled-components';
 import {
@@ -48,6 +52,14 @@ const ShareModal = ({
 					>
 						<Image src={TwitterIcon} alt='twitter icon' />
 					</TwitterShareButton>
+				</SocialButtonContainer>
+				<SocialButtonContainer>
+					<LinkedinShareButton
+						title={'Check out on @Givethio'}
+						url={url}
+					>
+						<Image src={LinkedinIcon} alt='twitter icon' />
+					</LinkedinShareButton>
 				</SocialButtonContainer>
 				<SocialButtonContainer>
 					<FacebookShareButton

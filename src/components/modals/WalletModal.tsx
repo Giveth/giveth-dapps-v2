@@ -1,33 +1,38 @@
+import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { useWeb3React } from '@web3-react/core';
+import styled from 'styled-components';
+import { brandColors, H5, Lead, neutralColors } from '@giveth/ui-design-system';
+
 import {
 	EWallets,
-	TWalletConnector,
+	IWallet,
+	torusWallet,
 	useWalletName,
 	walletsArray,
 } from '@/lib/wallet/walletTypes';
-import { brandColors, H5, Lead, neutralColors } from '@giveth/ui-design-system';
 import { IModal, Modal } from '@/components/modals/Modal';
-import styled from 'styled-components';
 import { ETheme } from '@/context/general.context';
+import { detectBrave, showToastError } from '@/lib/helpers';
+import useModal from '@/context/ModalProvider';
+import StorageLabel from '@/lib/localStorage';
 
 interface IWalletModal extends IModal {
 	closeParentModal?: () => void;
 }
 
-const WalletModal = ({
-	showModal,
-	setShowModal,
-	closeParentModal,
-}: IWalletModal) => {
+const WalletModal = ({ setShowModal, closeParentModal }: IWalletModal) => {
 	const context = useWeb3React();
 	const { activate, deactivate } = context;
 	const selectedWallet = useWalletName(context);
+	const {
+		state: { lowerShields },
+		actions: { showLowerShields },
+	} = useModal();
 
-	const handleSelect = (selected: {
-		connector: TWalletConnector;
-		value: EWallets;
-	}) => {
+	const firstRender = useRef(true);
+
+	const handleSelect = (selected: IWallet) => {
 		if (selectedWallet !== selected.value) {
 			window.localStorage.removeItem('selectedWallet');
 			deactivate();
@@ -38,33 +43,46 @@ const WalletModal = ({
 			setTimeout(() => {
 				activate(selected.connector)
 					.then(() => {
-						window.localStorage.setItem(
-							'selectedWallet',
+						localStorage.setItem(
+							StorageLabel.WALLET,
 							selected.value,
 						);
-						closeParentModal ? closeParentModal() : undefined;
+						closeParentModal && closeParentModal();
 					})
-					.catch(e => {
-						// toast to inform error
-						console.log(e);
-					});
+					.catch(showToastError);
 			}, timeOut);
 		}
 		setShowModal(false);
 	};
 
-	if (!showModal) return null;
+	const checkLowerShields = async (selected: IWallet) => {
+		const isBrave = await detectBrave();
+		if (selected.value === EWallets.TORUS && isBrave) {
+			showLowerShields();
+		} else {
+			handleSelect(selected);
+		}
+	};
+
+	useEffect(() => {
+		if (!lowerShields && !firstRender.current) {
+			handleSelect(torusWallet);
+		}
+		if (firstRender.current) {
+			firstRender.current = false;
+		}
+	}, [lowerShields]);
 
 	return (
 		<Modal
-			showModal={showModal}
+			showModal={true}
 			setShowModal={setShowModal}
 			customTheme={ETheme.Light}
 		>
 			<IconsContainer>
 				{walletsArray.map(i => (
 					<WalletItem
-						onClick={() => handleSelect(i)}
+						onClick={() => checkLowerShields(i)}
 						key={i.value}
 						selected={selectedWallet === i.value}
 					>

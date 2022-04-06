@@ -23,7 +23,7 @@ const Wrapper = styled.div`
 	}
 
 	${mediaQueries.tablet} {
-		padding: 0px 16px;
+		padding: 0 16px;
 	}
 `;
 

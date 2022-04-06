@@ -11,19 +11,11 @@ import { formatEther } from '@ethersproject/units';
 
 import { initializeApollo } from '@/apollo/apolloClient';
 import { GET_USER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
-import {
-	compareAddresses,
-	getLocalTokenLabel,
-	getLocalUserLabel,
-	showToastError,
-	signMessage,
-} from '@/lib/helpers';
+import { compareAddresses, showToastError, signMessage } from '@/lib/helpers';
 import { getToken } from '@/services/token';
 import useWallet from '@/hooks/walletHooks';
-import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
 import { IUser } from '@/apollo/types/types';
-import WelcomeModal from '@/components/modals/WelcomeModal';
-import { CompleteProfileModal } from '@/components/modals/CompleteProfileModal';
+import StorageLabel from '@/lib/localStorage';
 
 interface IUserContext {
 	state: {
@@ -35,9 +27,6 @@ interface IUserContext {
 	actions: {
 		signToGetToken: () => Promise<boolean | string>;
 		signOut?: () => void;
-		showSignWithWallet: () => void;
-		showCompleteProfile: () => void;
-		showWelcomeModal: (e: boolean) => void;
 		reFetchUser: () => void;
 		incrementLikedProjectsCount: () => void;
 		decrementLikedProjectsCount: () => void;
@@ -53,9 +42,6 @@ const UserContext = createContext<IUserContext>({
 	actions: {
 		signToGetToken: async () => false,
 		signOut: () => {},
-		showSignWithWallet: () => {},
-		showCompleteProfile: () => {},
-		showWelcomeModal: () => {},
 		reFetchUser: () => {},
 		incrementLikedProjectsCount: () => {},
 		decrementLikedProjectsCount: () => {},
@@ -70,9 +56,6 @@ export const UserProvider = (props: { children: ReactNode }) => {
 
 	const [user, setUser] = useState<IUser | undefined>();
 	const [balance, setBalance] = useState<string | null>(null);
-	const [showWelcomeModal, setShowWelcomeModal] = useState<boolean>(false);
-	const [showSignWithWallet, setShowSignWithWallet] = useState(false);
-	const [showCompleteProfile, setShowCompleteProfile] = useState(false);
 
 	const isEnabled = !!library?.getSigner() && !!account && !!chainId;
 	const isSignedIn = isEnabled && !!user?.token;
@@ -108,9 +91,9 @@ export const UserProvider = (props: { children: ReactNode }) => {
 			})
 			.then((res: any) => {
 				const newUser = res.data?.userByAddress;
-				const localAddress = localStorage.getItem(getLocalUserLabel());
+				const localAddress = localStorage.getItem(StorageLabel.USER);
 				if (compareAddresses(localAddress, newUser?.walletAddress)) {
-					const token = localStorage.getItem(getLocalTokenLabel());
+					const token = localStorage.getItem(StorageLabel.TOKEN);
 					return { ...newUser, token };
 				}
 				removeToken();
@@ -124,13 +107,13 @@ export const UserProvider = (props: { children: ReactNode }) => {
 	};
 
 	const setToken = (token: string) => {
-		localStorage.setItem(getLocalUserLabel(), user?.walletAddress || '');
-		localStorage.setItem(getLocalTokenLabel(), token);
+		localStorage.setItem(StorageLabel.USER, user?.walletAddress || '');
+		localStorage.setItem(StorageLabel.TOKEN, token);
 	};
 
 	const removeToken = () => {
-		localStorage.removeItem(getLocalUserLabel());
-		localStorage.removeItem(getLocalTokenLabel());
+		localStorage.removeItem(StorageLabel.USER);
+		localStorage.removeItem(StorageLabel.TOKEN);
 	};
 
 	const signOut = () => {
@@ -139,11 +122,6 @@ export const UserProvider = (props: { children: ReactNode }) => {
 	};
 
 	const signToGetToken = async () => {
-		if (!library?.getSigner()) {
-			setShowWelcomeModal(true);
-			return;
-		}
-
 		const signedMessage = await signMessage(
 			process.env.NEXT_PUBLIC_OUR_SECRET as string,
 			account,
@@ -196,9 +174,6 @@ export const UserProvider = (props: { children: ReactNode }) => {
 					isSignedIn,
 				},
 				actions: {
-					showSignWithWallet: () => setShowSignWithWallet(true),
-					showCompleteProfile: () => setShowCompleteProfile(true),
-					showWelcomeModal: setShowWelcomeModal,
 					signToGetToken,
 					signOut,
 					reFetchUser,
@@ -207,23 +182,6 @@ export const UserProvider = (props: { children: ReactNode }) => {
 				},
 			}}
 		>
-			{showCompleteProfile && (
-				<CompleteProfileModal
-					closeModal={() => setShowCompleteProfile(false)}
-				/>
-			)}
-			{showSignWithWallet && (
-				<SignWithWalletModal
-					showModal={showSignWithWallet}
-					setShowModal={() => setShowSignWithWallet(false)}
-				/>
-			)}
-			{showWelcomeModal && (
-				<WelcomeModal
-					showModal={showWelcomeModal}
-					closeModal={() => setShowWelcomeModal(false)}
-				/>
-			)}
 			{props.children}
 		</UserContext.Provider>
 	);

@@ -13,6 +13,7 @@ import { PriceProvider } from '@/context/price.context';
 import { GeneralProvider } from '@/context/general.context';
 import { useApollo } from '@/apollo/apolloClient';
 import { UserProvider } from '@/context/UserProvider';
+import { ModalProvider } from '@/context/ModalProvider';
 import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
 import { FooterWrapper } from '@/components/Footer/FooterWrapper';
 
@@ -41,9 +42,10 @@ function MyApp({ Component, pageProps }: AppProps) {
 								<NftsProvider>
 									<PriceProvider>
 										<UserProvider>
-											<HeaderWrapper />
+											<ModalProvider>
+													<HeaderWrapper />
 											<Component {...pageProps} />
-											<FooterWrapper />
+											<FooterWrapper /></ModalProvider>
 										</UserProvider>
 									</PriceProvider>
 								</NftsProvider>

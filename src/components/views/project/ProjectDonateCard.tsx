@@ -14,7 +14,6 @@ import {
 	brandColors,
 	neutralColors,
 	OulineButton,
-	Overline,
 	ButtonText,
 	Caption,
 	IconHelp,
@@ -32,7 +31,6 @@ import ShareModal from '@/components/modals/ShareModal';
 import { IReaction } from '@/apollo/types/types';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_REACTION_BY_ID } from '@/apollo/gql/gqlProjects';
-import WelcomeModal from '@/components/modals/WelcomeModal';
 import { likeProject, unlikeProject } from '@/lib/reaction';
 import DeactivateProjectModal from '@/components/modals/DeactivateProjectModal';
 import ArchiveIcon from '../../../../public/images/icons/archive.svg';
@@ -40,9 +38,11 @@ import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
 import { idToProjectEdit, slugToProjectDonate } from '@/lib/routeCreators';
 import { VerificationModal } from '@/components/modals/VerificationModal';
 import { mediaQueries } from '@/utils/constants';
+import ProjectCardOrgBadge from '../../project-card/ProjectCardOrgBadge';
 import ExternalLink from '@/components/ExternalLink';
 import InternalLink from '@/components/InternalLink';
 import Routes from '@/lib/constants/Routes';
+import useModal from '@/context/ModalProvider';
 
 interface IProjectDonateCard {
 	project?: IProject;
@@ -65,12 +65,12 @@ const ProjectDonateCard = ({
 }: IProjectDonateCard) => {
 	const {
 		state: { user, isSignedIn },
-		actions: {
-			showSignWithWallet,
-			incrementLikedProjectsCount,
-			decrementLikedProjectsCount,
-		},
+		actions: { incrementLikedProjectsCount, decrementLikedProjectsCount },
 	} = useUser();
+
+	const {
+		actions: { showSignWithWallet },
+	} = useModal();
 
 	const {
 		categories = [],
@@ -78,20 +78,19 @@ const ProjectDonateCard = ({
 		description,
 		adminUser,
 		id,
-		givingBlocksId,
 		verified,
+		organization,
 	} = project || {};
-	const [reaction, setReaction] = useState<IReaction | undefined>(
-		project?.reaction,
-	);
 
 	const [heartedByUser, setHeartedByUser] = useState<boolean>(false);
 	const [showModal, setShowModal] = useState<boolean>(false);
-	const [showSigninModal, setShowSigninModal] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [isAdmin, setIsAdmin] = useState<boolean>(false);
 	const [deactivateModal, setDeactivateModal] = useState<boolean>(false);
 	const [showVerificationModal, setShowVerificationModal] = useState(false);
+	const [reaction, setReaction] = useState<IReaction | undefined>(
+		project?.reaction,
+	);
 
 	const isCategories = categories?.length > 0;
 
@@ -212,12 +211,6 @@ const ProjectDonateCard = ({
 					projectDescription={description}
 				/>
 			)}
-			{showSigninModal && (
-				<WelcomeModal
-					showModal={showSigninModal}
-					closeModal={() => setShowSigninModal(false)}
-				/>
-			)}
 			{deactivateModal && (
 				<DeactivateProjectModal
 					showModal={deactivateModal}
@@ -233,17 +226,11 @@ const ProjectDonateCard = ({
 				dragConstraints={{ top: -(wrapperHeight - 168), bottom: 120 }}
 			>
 				{isMobile && <BlueBar />}
-				{!!givingBlocksId && (
-					<GivingBlocksContainer>
-						<GivingBlocksText>PROJECT BY:</GivingBlocksText>
-						<Image
-							src='/images/thegivingblock.svg'
-							alt='The Giving Block icon.'
-							height={36}
-							width={126}
-						/>
-					</GivingBlocksContainer>
-				)}
+				<ProjectCardOrgBadge
+					organization={organization?.label}
+					isHover={false}
+					isProjectView={true}
+				/>
 				{isAdmin ? (
 					<>
 						<FullButton
@@ -352,19 +339,6 @@ const BlueBar = styled.div`
 	margin: 0 auto 16px;
 	position: relative;
 	top: -8px;
-`;
-
-const GivingBlocksContainer = styled.div`
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 8px;
-	margin-bottom: 12px;
-`;
-
-const GivingBlocksText = styled(Overline)`
-	color: ${neutralColors.gray[600]};
-	font-size: 10px;
 `;
 
 const CategoryWrapper = styled.div`

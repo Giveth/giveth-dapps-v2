@@ -15,7 +15,8 @@ import { isUserRegistered } from '@/lib/helpers';
 import useUser from '@/context/UserProvider';
 import { HomeContainer } from '@/components/views/homepage/Home.sc';
 import { deviceSize, mediaQueries } from '@/utils/constants';
-import { Col, Row } from '@/components/Grid';
+import { Col } from '@/components/Grid';
+import useModal from '@/context/ModalProvider';
 
 const content = [
 	{
@@ -44,8 +45,11 @@ const HomeChangeMakers = () => {
 	const router = useRouter();
 	const {
 		state: { user },
-		actions: { showCompleteProfile },
 	} = useUser();
+
+	const {
+		actions: { showCompleteProfile },
+	} = useModal();
 
 	const handleCreateButton = () => {
 		if (isUserRegistered(user)) {
@@ -148,10 +152,12 @@ const CyanArc = styled(Arc)`
 const EndItem = styled(Col)`
 	padding-bottom: 55px;
 	padding-right: 55px;
+	max-width: 90vw;
 `;
 
 const EndSection = styled.div`
-	margin-top: 190px;
+	max-width: 1440px;
+	margin-top: auto 190px 0;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
