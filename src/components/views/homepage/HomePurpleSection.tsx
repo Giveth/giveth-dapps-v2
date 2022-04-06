@@ -188,6 +188,7 @@ const ForMakersGivers = styled(Row)`
 	margin-top: 107px;
 	margin-bottom: 50px;
 	justify-content: space-between;
+	max-width: 1200px;
 `;
 
 const ForMakersContainers = styled(Col)`
@@ -201,7 +202,7 @@ const ForMakersContainers = styled(Col)`
 
 const ForMakersButton = styled(Button)`
 	width: 300px;
-	margin-top: auto;
+	margin-top: 24px;
 	align-self: start;
 `;
 
