@@ -4,6 +4,7 @@ import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
 import ProjectsIndex from '@/components/views/projects/ProjectsIndex';
 import { ICategory, IProject } from '@/apollo/types/types';
+import { ProjectsMeta } from '@/lib/meta';
 
 interface IProjectsRoute {
 	projects: IProject[];
@@ -17,6 +18,7 @@ const ProjectsRoute = (props: IProjectsRoute) => {
 		<>
 			<Head>
 				<title>Projects | Giveth</title>
+				<ProjectsMeta />
 			</Head>
 			<ProjectsIndex
 				projects={projects}

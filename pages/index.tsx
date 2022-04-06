@@ -7,6 +7,7 @@ import { FETCH_HOME_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { EDirection, gqlEnums } from '@/apollo/types/gqlEnums';
 import { IProject } from '@/apollo/types/types';
 import useUser from '@/context/UserProvider';
+import { HomeMeta } from '@/lib/meta';
 
 const projectsToFetch = 12;
 
@@ -52,6 +53,7 @@ const HomeRoute = (props: IHomeRoute) => {
 		<>
 			<Head>
 				<title>Home | Giveth</title>
+				<HomeMeta />
 			</Head>
 			<HomeIndex projects={projects} totalCount={totalCount} />
 		</>
