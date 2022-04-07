@@ -102,7 +102,7 @@ const CryptoDonation = (props: {
 	const [anonymous, setAnonymous] = useState<boolean>(false);
 	// const [selectLoading, setSelectLoading] = useState(false);
 	const [error, setError] = useState<boolean>(false);
-	const [givBackEligible, setGivBackEligible] = useState(true);
+	const [givBackEligible, setGivBackEligible] = useState<any>(true);
 	const [showDonateModal, setShowDonateModal] = useState(false);
 	const [showInsufficientModal, setShowInsufficientModal] = useState(false);
 	const [showChangeNetworkModal, setShowChangeNetworkModal] = useState(false);
@@ -110,13 +110,12 @@ const CryptoDonation = (props: {
 		useState<IProjectAcceptedToken[]>();
 
 	const stopPolling = useRef<any>(null);
-
 	const tokenSymbol = selectedToken?.symbol;
 	const isXdai = networkId === xdaiChain.id;
 	const projectFromAnotherOrg =
 		organization?.label !== ORGANIZATION.giveth &&
 		organization?.label !== ORGANIZATION.trace;
-	const projectIsGivBackEligible = givBackEligible && verified;
+	const projectIsGivBackEligible = !!verified;
 	const givingBlockReady = projectFromAnotherOrg
 		? networkId === ethereumChain.id
 		: true;
@@ -153,6 +152,7 @@ const CryptoDonation = (props: {
 				fetchPolicy: 'no-cache',
 			})
 			.then((res: IProjectAcceptedTokensGQL) => {
+				console.log({ res });
 				setAcceptedTokens(res.data.getProjectAcceptTokens);
 			})
 			.catch(showToastError);
@@ -289,7 +289,9 @@ const CryptoDonation = (props: {
 					price={tokenPrice}
 					setInProgress={setInProgress}
 					setUnconfirmed={setUnconfirmed}
-					givBackEligible={projectIsGivBackEligible}
+					givBackEligible={
+						projectIsGivBackEligible && givBackEligible
+					}
 					anonymous={anonymous}
 				/>
 			)}
@@ -338,11 +340,7 @@ const CryptoDonation = (props: {
 								setSelectedToken(i);
 								setCustomInput('');
 								setErc20List(erc20OriginalList);
-								let givBackEligible = erc20OriginalList?.find(
-									(t: IProjectAcceptedToken) =>
-										t.symbol === i.symbol,
-								);
-								setGivBackEligible(givBackEligible);
+								setGivBackEligible(i?.isGivbackEligible);
 							}}
 							onInputChange={(i: string) => {
 								if (projectFromAnotherOrg) return;
@@ -422,7 +420,27 @@ const CryptoDonation = (props: {
 					{tokenSymbol}
 				</AvText>
 			</InputContainer>
-			{!givBackEligible && projectIsGivBackEligible ? (
+			{!projectIsGivBackEligible ? (
+				<ToastContainer>
+					<FixedToast
+						message='This project is not eligible for GIVbacks.'
+						color={brandColors.mustard[700]}
+						boldColor={brandColors.mustard[800]}
+						backgroundColor={brandColors.mustard[200]}
+						href={Routes.GIVbacks}
+					/>
+				</ToastContainer>
+			) : givBackEligible ? (
+				<ToastContainer>
+					<FixedToast
+						message='This token is eligible for GIVbacks.'
+						color={brandColors.giv[300]}
+						boldColor={brandColors.giv[600]}
+						backgroundColor={brandColors.giv[100]}
+						href={Routes.GIVbacks}
+					/>
+				</ToastContainer>
+			) : (
 				<ToastContainer>
 					<FixedToast
 						message='This token is not eligible for GIVbacks.'
@@ -432,18 +450,6 @@ const CryptoDonation = (props: {
 						href={Routes.GIVbacks}
 					/>
 				</ToastContainer>
-			) : (
-				projectIsGivBackEligible && (
-					<ToastContainer>
-						<FixedToast
-							message='This token is eligible for GIVbacks.'
-							color={brandColors.giv[300]}
-							boldColor={brandColors.giv[600]}
-							backgroundColor={brandColors.giv[100]}
-							href={Routes.GIVbacks}
-						/>
-					</ToastContainer>
-				)
 			)}
 			<CheckBoxContainer>
 				<CheckBox
