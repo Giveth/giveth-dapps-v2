@@ -78,6 +78,10 @@ export const RoundSection = styled(Flex)`
 
 export const RoundTitle = styled(H2)`
 	margin: 22px 0;
+	font-size: 3rem;
+	${mediaQueries.mobileL} {
+		font-size: 3.25rem;
+	}
 `;
 
 export const RoundInfo = styled.div`
@@ -94,6 +98,11 @@ export const RoundInfoTallRow = styled(Flex)`
 
 export const GivAllocated = styled(Title)`
 	color: ${neutralColors.gray[100]};
+	font-size: 25px;
+	${mediaQueries.tablet} {
+		font-size 32px;
+	}
+
 `;
 
 export const RoundButton = styled(ButtonLink)`
