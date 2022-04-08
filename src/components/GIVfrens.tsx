@@ -43,7 +43,9 @@ export const GIVfrens: FC<IGIVfrensProps> = ({ regenFarms, network }) => {
 					rewards for staking liquidity.&nbsp;
 					<GIVfrensLink
 						size='Big'
-						href='https://docs.giveth.io/regenFarms'
+						href=' https://medium.com/giveth/regenfarms-the-next-generation-of-refi-opportunities-7a46f3cf1e09'
+						target='_blank'
+						rel='noreferrer'
 					>
 						Learn more
 					</GIVfrensLink>
