@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { Shadow } from './styled-components/Shadow';
 import { P, Button, H4, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 import { FlexCenter } from '@/components/styled-components/Flex';
 
 interface IContent {

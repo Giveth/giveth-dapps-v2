@@ -1,14 +1,15 @@
-import { FC, useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import styled from 'styled-components';
-import { H4, B, brandColors } from '@giveth/ui-design-system';
+import { H4, B, brandColors, Caption } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 import { ETheme, useGeneral } from '@/context/general.context';
 import config from '@/configuration';
 import { IconEthereum } from '../Icons/Eth';
 import { IconGnosisChain } from '../Icons/GnosisChain';
 import { Modal, IModal } from './Modal';
+import { switchNetwork } from '@/lib/wallet';
 
 interface IChangeNetworkModalProps extends IModal {
 	targetNetwork: number;
@@ -45,10 +46,21 @@ export const ChangeNetworkModal: FC<IChangeNetworkModalProps> = ({
 				)}
 				<Title theme={theme}>Switch to {NetworkName}</Title>
 				<B>Please switch your wallet network to {NetworkName}.</B>
+				<SwitchCaption
+					onClick={() => switchNetwork(config.MAINNET_NETWORK_NUMBER)}
+				>
+					Switch network
+				</SwitchCaption>
 			</ChangeNetworkModalContainer>
 		</Modal>
 	);
 };
+
+const SwitchCaption = styled(Caption)`
+	color: ${brandColors.pinky[500]};
+	cursor: pointer;
+	margin: 20px auto 0;
+`;
 
 const ChangeNetworkModalContainer = styled.div`
 	padding: 62px 60px;

@@ -20,7 +20,7 @@ import { gToast, ToastType } from '@/components/toasts';
 import ProjectTimeline, { TimelineSection } from './ProjectTimeline';
 import { IProject, IProjectUpdate } from '@/apollo/types/types';
 import { RemoveUpdateModal } from '@/components/modals/RemoveUpdateModal';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 import useModal from '@/context/ModalProvider';
 import useUser from '@/context/UserProvider';
 

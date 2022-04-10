@@ -14,7 +14,7 @@ import facebookIcon from '/public/images/social-fb2.svg';
 import discordIcon from '/public/images/social-disc.svg';
 import torusBrand from '/public/images/torus_pwr.svg';
 import { torusConnector } from '@/lib/wallet/walletTypes';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 import { showToastError } from '@/lib/helpers';
 import useModal from '@/context/ModalProvider';
 

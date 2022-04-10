@@ -21,10 +21,9 @@ import useUser from '@/context/UserProvider';
 import CheckBox from '@/components/Checkbox';
 import DonateModal from '@/components/modals/DonateModal';
 import { ChangeNetworkModal } from '@/components/modals/ChangeNetwork';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import { IProject } from '@/apollo/types/types';
-import { pollEvery } from '@/utils';
 import { fetchPrice } from '@/services/token';
 import { switchNetwork } from '@/lib/wallet';
 import { usePrice } from '@/context/price.context';
@@ -35,7 +34,7 @@ import InlineToast from '@/components/toasts/InlineToast';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { client } from '@/apollo/apolloClient';
 import { PROJECT_ACCEPTED_TOKENS } from '@/apollo/gql/gqlProjects';
-import { formatBalance, showToastError } from '@/lib/helpers';
+import { formatBalance, pollEvery, showToastError } from '@/lib/helpers';
 import {
 	IProjectAcceptedToken,
 	IProjectAcceptedTokensGQL,
@@ -56,7 +55,7 @@ const xdaiChain = config.SECONDARY_NETWORK;
 const stableCoins = [xdaiChain.mainToken, 'DAI', 'USDT'];
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
-interface ISuccessDonation {
+export interface ISuccessDonation {
 	transactionHash: string;
 	tokenSymbol: string;
 	subtotal: number;
@@ -70,7 +69,7 @@ interface IInputBox {
 }
 
 const CryptoDonation = (props: {
-	setSuccessDonation: any;
+	setSuccessDonation: (successDonation: ISuccessDonation) => void;
 	project: IProject;
 }) => {
 	const { chainId: networkId, account, library } = useWeb3React();
@@ -84,6 +83,11 @@ const CryptoDonation = (props: {
 
 	const { project, setSuccessDonation } = props;
 	const { organization, verified, id: projectId, status } = project;
+	const {
+		supportCustomTokens,
+		name: orgName,
+		label: orgLabel,
+	} = organization || {};
 	const isActive = status?.name === EProjectStatus.ACTIVE;
 	const mainTokenPrice = new BigNumber(ethPrice).toNumber();
 
@@ -91,7 +95,7 @@ const CryptoDonation = (props: {
 	const [selectedTokenBalance, setSelectedTokenBalance] = useState<any>();
 	const [customInput, setCustomInput] = useState<any>();
 	const [tokenPrice, setTokenPrice] = useState<number>(1);
-	const [amountTyped, setAmountTyped] = useState('');
+	const [amountTyped, setAmountTyped] = useState<number>();
 	const [inputBoxFocused, setInputBoxFocused] = useState(false);
 	const [geminiModal, setGeminiModal] = useState(false);
 	const [txHash, setTxHash] = useState<any>();
@@ -115,13 +119,7 @@ const CryptoDonation = (props: {
 	const stopPolling = useRef<any>(null);
 	const tokenSymbol = selectedToken?.symbol;
 	const isXdai = networkId === xdaiChain.id;
-	const projectFromAnotherOrg =
-		organization?.label !== ORGANIZATION.giveth &&
-		organization?.label !== ORGANIZATION.trace;
 	const projectIsGivBackEligible = !!verified;
-	const givingBlockReady = projectFromAnotherOrg
-		? networkId === ethereumChain.id
-		: true;
 
 	useEffect(() => {
 		if (networkId && acceptedTokens) {
@@ -129,13 +127,13 @@ const CryptoDonation = (props: {
 			const networkIds = getNetworkIds(acceptedTokens);
 			setAcceptedChains(networkIds);
 			if (filteredTokens.length < 1) {
-				return setShowChangeNetworkModal(true);
+				setShowChangeNetworkModal(true);
 			}
 			const tokens = prepareTokenList(filteredTokens);
 			setErc20OriginalList(tokens);
 			setErc20List(tokens);
 			setSelectedToken(tokens[0]);
-			setTokenIsGivBackEligible(tokens[0].isGivbackEligible);
+			setTokenIsGivBackEligible(tokens[0]?.isGivbackEligible);
 		}
 	}, [networkId, acceptedTokens]);
 
@@ -191,7 +189,7 @@ const CryptoDonation = (props: {
 	}, [selectedToken, mainTokenPrice]);
 
 	const checkGIVTokenAvailability = () => {
-		if (!projectFromAnotherOrg) return true;
+		if (orgLabel !== ORGANIZATION.givingBlock) return true;
 		if (selectedToken?.symbol === 'GIV') {
 			setGeminiModal(true);
 			return false;
@@ -251,7 +249,7 @@ const CryptoDonation = (props: {
 	}, [account, networkId, tokenSymbol, balance]);
 
 	const handleCustomToken = (i: string) => {
-		if (projectFromAnotherOrg) return;
+		if (!supportCustomTokens) return;
 		// It's a contract
 		if (i?.length === 42) {
 			try {
@@ -283,6 +281,25 @@ const CryptoDonation = (props: {
 		}
 	};
 
+	const handleDonate = () => {
+		if (selectedTokenBalance < amountTyped!) {
+			return setShowInsufficientModal(true);
+		}
+		if (!project.walletAddress) {
+			return showToastError(
+				'There is no eth address assigned for this project',
+			);
+		}
+		// Sign message for registered users to get user info, no need to sign for anonymous
+		if (!isSignedIn && !anonymous) {
+			return showSignWithWallet();
+		}
+		setShowDonateModal(true);
+	};
+
+	const donationDisabled =
+		!isActive || !amountTyped || amountTyped <= 0 || !selectedToken;
+
 	return (
 		<MainContainer>
 			{geminiModal && <GeminiModal setShowModal={setGeminiModal} />}
@@ -307,8 +324,7 @@ const CryptoDonation = (props: {
 					}}
 					project={project}
 					token={selectedToken}
-					userTokenBalance={selectedTokenBalance}
-					amount={parseFloat(amountTyped)}
+					amount={amountTyped}
 					price={tokenPrice}
 					setInProgress={setInProgress}
 					setUnconfirmed={setUnconfirmed}
@@ -326,9 +342,8 @@ const CryptoDonation = (props: {
 						<NetworkToast>
 							<div>
 								<Caption color={neutralColors.gray[900]}>
-									Projects from {organization?.name} only
-									accept donations on{' '}
-									{networkNames(acceptedChains)}.
+									Projects from {orgName} only accept
+									donations on {networkNames(acceptedChains)}.
 								</Caption>
 							</div>
 							<SwitchCaption
@@ -369,9 +384,9 @@ const CryptoDonation = (props: {
 							}}
 							onInputChange={handleCustomToken}
 							placeholder={
-								projectFromAnotherOrg
-									? 'Search name'
-									: 'Search name or paste an address'
+								supportCustomTokens
+									? 'Search name or paste an address'
+									: 'Search name'
 							}
 						/>
 					</DropdownContainer>
@@ -387,7 +402,7 @@ const CryptoDonation = (props: {
 						type='number'
 						onChange={val => {
 							const checkGIV = checkGIVTokenAvailability();
-							if (/^0+(?=\d)/.test(val)) return;
+							if (/^0+(?=\d)/.test(String(val))) return;
 							if (checkGIV) setAmountTyped(val);
 						}}
 						onFocus={(val: any) => setInputBoxFocused(!!val)}
@@ -422,25 +437,13 @@ const CryptoDonation = (props: {
 
 			{!isActive && <InlineToast message='This project is not active.' />}
 
-			{isEnabled && givingBlockReady && (
+			{isEnabled && (
 				<>
 					<MainButton
 						label='DONATE'
-						disabled={
-							!isActive ||
-							!amountTyped ||
-							parseInt(amountTyped) < 0
-						}
+						disabled={donationDisabled}
 						size='large'
-						onClick={() => {
-							if (selectedTokenBalance < amountTyped) {
-								return setShowInsufficientModal(true);
-							}
-							if (!isSignedIn && isEnabled) {
-								return showSignWithWallet();
-							}
-							setShowDonateModal(true);
-						}}
+						onClick={handleDonate}
 					/>
 					<AnotherWalletTxt>
 						Want to use another wallet?{' '}
@@ -448,7 +451,7 @@ const CryptoDonation = (props: {
 					</AnotherWalletTxt>
 				</>
 			)}
-			{!isEnabled && !givingBlockReady && (
+			{!isEnabled && (
 				<MainButton label='CONNECT WALLET' onClick={showWalletModal} />
 			)}
 		</MainContainer>

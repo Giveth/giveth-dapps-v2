@@ -1,9 +1,9 @@
 // Just for external links
-
 import config, { isProduction } from '@/configuration';
 import Routes from '@/lib/constants/Routes';
 
 const DOCS = 'https://docs.giveth.io/';
+const DISCOURSE = 'https://forum.giveth.io/';
 
 const links: any = {
 	BACKEND: config.BACKEND_LINK,
@@ -14,7 +14,8 @@ const links: any = {
 	FEEDBACK: 'https://giveth.typeform.com/feedback',
 	PROJECT_VERIFICATION: 'https://giveth.typeform.com/verification',
 	DISCORD: 'https://discord.gg/Uq2TaXP9bC',
-	DISCOURSE: 'https://forum.giveth.io/',
+	DISCOURSE,
+	GIVBACK_TOKENS_FORUM: 'https://forum.giveth.io/t/givbacks-token-list/253',
 	GITHUB: 'https://github.com/Giveth/',
 	TELEGRAM: 'https://t.me/Givethio',
 	MEDIUM: 'https://medium.com/giveth/',

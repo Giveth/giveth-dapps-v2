@@ -4,7 +4,7 @@ import { B, brandColors } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 
 import { switchNetwork } from '@/lib/wallet';
-import { givEconomySupportedNetworks } from '@/utils/constants';
+import { givEconomySupportedNetworks } from '@/lib/constants/constants';
 import { Flex } from './styled-components/Flex';
 import { IconGnosisChain } from './Icons/GnosisChain';
 import { IconEthereum } from './Icons/Eth';

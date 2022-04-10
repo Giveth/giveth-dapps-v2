@@ -4,7 +4,7 @@ import { D1, QuoteText, brandColors } from '@giveth/ui-design-system';
 import { BottomContainer, EnhancedRewardCard, TopContainer } from './commons';
 import { Flex } from '../styled-components/Flex';
 import { Row } from '../Grid';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 
 export const GIVfarmTopContainer = styled(TopContainer)`
 	overflow: hidden;

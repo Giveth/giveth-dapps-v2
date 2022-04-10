@@ -18,7 +18,7 @@ import {
 import styled from 'styled-components';
 import links from '@/lib/constants/links';
 import { Container } from '@/components/Grid';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 
 const tabTitles = ['Mission & Vision', 'History', 'Team'];
 

@@ -37,7 +37,7 @@ import ArchiveIcon from '../../../../public/images/icons/archive.svg';
 import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
 import { idToProjectEdit, slugToProjectDonate } from '@/lib/routeCreators';
 import { VerificationModal } from '@/components/modals/VerificationModal';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 import ProjectCardOrgBadge from '../../project-card/ProjectCardOrgBadge';
 import ExternalLink from '@/components/ExternalLink';
 import InternalLink from '@/components/InternalLink';

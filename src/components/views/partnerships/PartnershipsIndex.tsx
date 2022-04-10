@@ -3,7 +3,7 @@ import { PartnershipArray, IPartner } from '@/content/Partnerships';
 import { H2, brandColors, Lead, D3 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import PartnershipsCard from './PartnershipsCard';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 
 const PartnershipsIndex = () => {
 	return (

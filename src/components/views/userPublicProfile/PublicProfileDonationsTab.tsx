@@ -23,7 +23,7 @@ import {
 import { EDirection } from '@/apollo/types/gqlEnums';
 import ExternalLink from '@/components/ExternalLink';
 import { slugToProjectView } from '@/lib/routeCreators';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_USER_DONATIONS } from '@/apollo/gql/gqlUser';
 import { IUserDonations } from '@/apollo/types/gqlTypes';

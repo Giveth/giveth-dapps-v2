@@ -47,7 +47,7 @@ import { slugToProjectView } from '@/lib/routeCreators';
 import { client } from '@/apollo/apolloClient';
 import LightBulbIcon from '/public/images/icons/lightbulb.svg';
 import { Shadow } from '@/components/styled-components/Shadow';
-import { deviceSize, mediaQueries } from '@/utils/constants';
+import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { captureException } from '@sentry/nextjs';
 
 export enum ECreateErrFields {

@@ -14,7 +14,7 @@ import Routes from '@/lib/constants/Routes';
 import { isUserRegistered } from '@/lib/helpers';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import useUser from '@/context/UserProvider';
-import { deviceSize, mediaQueries } from '@/utils/constants';
+import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import useModal from '@/context/ModalProvider';
 
 interface IHomeExploreProjects {

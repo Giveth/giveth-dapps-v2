@@ -2,10 +2,8 @@ import { brandColors, GLink } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Container } from '@/components/Grid';
 import { Flex } from '../styled-components/Flex';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 import { RewardCard } from '../RewardCard';
-
-export const TabContainer = styled.div``;
 
 export const TopContainer = styled(Flex)`
 	background-image: url('/images/backgrounds/givup.svg');
@@ -21,7 +19,6 @@ export const TopInnerContainer = styled(Container)`
 	justify-content: flex-end;
 `;
 
-export const TopContainerRow = styled(Flex)``;
 export const BottomContainer = styled.div`
 	margin-top: 32px;
 `;

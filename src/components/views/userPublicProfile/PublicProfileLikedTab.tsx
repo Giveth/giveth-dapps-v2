@@ -8,7 +8,7 @@ import { FC, useEffect, useState } from 'react';
 import { Loading } from './PublicProfileProjectsTab';
 import { IUserPublicProfileView, NothingToSee } from './UserPublicProfile.view';
 import styled from 'styled-components';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 
 const itemPerPage = 6;
 

@@ -19,7 +19,7 @@ import { isSSRMode, isUserRegistered } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
 import { Col, Row } from '@/components/Grid';
 import { HomeContainer } from '@/components/views/homepage/Home.sc';
-import { deviceSize, mediaQueries } from '@/utils/constants';
+import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import useModal from '@/context/ModalProvider';
 
 const HomePurpleSection = () => {

@@ -8,7 +8,7 @@ import {
 	H4,
 	Lead,
 } from '@giveth/ui-design-system';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 
 const AboutHistory = () => {
 	const [sliderSection, setSliderSection] = useState<number>(0);

@@ -5,7 +5,7 @@ import { isNoImg, noImgColor, noImgIcon } from '@/lib/helpers';
 import { IProject } from '@/apollo/types/types';
 import { P, brandColors, H3, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 
 const ProjectHeader = (props: { project?: IProject }) => {
 	const { project } = props;

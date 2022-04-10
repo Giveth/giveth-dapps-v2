@@ -15,21 +15,15 @@ import { IconWalletApprove } from '@giveth/ui-design-system/lib/cjs/components/i
 import { captureException } from '@sentry/nextjs';
 
 import { IModal, Modal } from '@/components/modals/Modal';
-import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
-import { WrongNetworkModal } from '@/components/modals/WrongNetwork';
 import { IProject } from '@/apollo/types/types';
-import { checkNetwork } from '@/utils';
 import { isAddressENS, getAddressFromENS } from '@/lib/wallet';
 import { formatPrice, sendTransaction, showToastError } from '@/lib/helpers';
 import * as transaction from '../../services/transaction';
 import { saveDonation, saveDonationTransaction } from '@/services/donation';
 import FixedToast from '@/components/toasts/FixedToast';
-import { mediaQueries } from '@/utils/constants';
-import config from '@/configuration';
+import { mediaQueries } from '@/lib/constants/constants';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
-import useModal from '@/context/ModalProvider';
-import { ORGANIZATION } from '@/lib/constants/organizations';
-import UserContext from '../../context/UserProvider';
+import { ISuccessDonation } from '@/components/views/donate/CryptoDonation';
 
 interface IDonateModal extends IModal {
 	closeParentModal?: () => void;
@@ -37,11 +31,10 @@ interface IDonateModal extends IModal {
 	token: IProjectAcceptedToken;
 	amount: number;
 	price?: number;
-	userTokenBalance?: number;
 	anonymous?: boolean;
 	setInProgress?: any;
 	setUnconfirmed?: any;
-	setSuccessDonation?: any;
+	setSuccessDonation: (i: ISuccessDonation) => void;
 	givBackEligible?: boolean;
 }
 
@@ -49,7 +42,6 @@ const DonateModal = ({
 	setShowModal,
 	project,
 	token,
-	userTokenBalance,
 	amount,
 	price,
 	anonymous,
@@ -59,25 +51,13 @@ const DonateModal = ({
 	givBackEligible,
 }: IDonateModal) => {
 	const { account, library, chainId } = useWeb3React();
-	const {
-		state: { isSignedIn },
-	} = UserContext();
-
-	const {
-		actions: { showSignWithWallet },
-	} = useModal();
 
 	const [donating, setDonating] = useState(false);
 	const [donationSaved, setDonationSaved] = useState(false);
-	const [showInsufficientModal, setShowInsufficientModal] = useState(false);
-	const [showWrongNetworkModal, setShowWrongNetworkModal] = useState(false);
 
-	const { walletAddress, organization, id, title } = project || {};
+	const { walletAddress, id, title } = project || {};
 
 	const avgPrice = price && price * amount;
-	const isForeignProject =
-		organization?.label !== ORGANIZATION.giveth &&
-		organization?.label !== ORGANIZATION.trace;
 
 	const confirmDonation = async () => {
 		try {
@@ -89,39 +69,7 @@ const DonateModal = ({
 			//   ? isTraceable
 			//   : switchTraceable
 			let traceable = false;
-			// Sign message for registered users to get user info, no need to sign for anonymous
-			if (!isSignedIn && !anonymous) {
-				showSignWithWallet();
-				return;
-			}
-			if (!walletAddress) {
-				showToastError(
-					'There is no eth address assigned for this project',
-				);
-			}
 
-			const isCorrectNetwork = checkNetwork(chainId!);
-			if (isForeignProject && chainId !== config.PRIMARY_NETWORK.id)
-				return setShowWrongNetworkModal(true);
-			if (!isCorrectNetwork) {
-				return setShowWrongNetworkModal(true);
-			}
-
-			if (!amount || amount <= 0) {
-				showToastError('Please set an amount');
-			}
-
-			if (userTokenBalance! < amount) {
-				return setShowInsufficientModal(true);
-			}
-
-			// Toast({
-			//   content: 'Donation in progress...',
-			//   type: 'dark',
-			//   customPosition: 'top-left',
-			//   isLoading: true,
-			//   noAutoClose: true
-			// })
 			const toAddress = isAddressENS(walletAddress!)
 				? await getAddressFromENS(walletAddress!, library)
 				: walletAddress;
@@ -143,7 +91,7 @@ const DonateModal = ({
 							toAddress,
 							transactionHash,
 							chainId!,
-							Number(amount),
+							amount,
 							token.symbol!,
 							Number(id),
 							token.address!,
@@ -241,25 +189,6 @@ const DonateModal = ({
 			} else showToastError(error);
 		}
 	};
-
-	if (showInsufficientModal) {
-		return (
-			<InsufficientFundModal
-				showModal={showInsufficientModal}
-				setShowModal={setShowInsufficientModal}
-			/>
-		);
-	}
-
-	if (showWrongNetworkModal) {
-		return (
-			<WrongNetworkModal
-				showModal={showWrongNetworkModal}
-				setShowModal={setShowWrongNetworkModal}
-				targetNetworks={[config.XDAI_NETWORK_NUMBER]}
-			/>
-		);
-	}
 
 	return (
 		<Modal

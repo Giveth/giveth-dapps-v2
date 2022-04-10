@@ -4,7 +4,7 @@ import { Lead } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 import useDeviceDetect from '@/hooks/useDeviceDetect';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 // We need to add icon customization on the design system
 import { Button } from '../../styled-components/Button';
 import { isSSRMode } from '@/lib/helpers';

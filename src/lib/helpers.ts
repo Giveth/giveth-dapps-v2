@@ -380,3 +380,24 @@ export const transactionLink = (networkId: number, txHash: string) => {
 	if (!networksParams[networkId]) return '';
 	return `${networksParams[networkId].blockExplorerUrls[0]}/tx/${txHash}`;
 };
+
+export function pollEvery(fn: Function, delay: any) {
+	let timer: any = null;
+	// having trouble with this type
+	let stop = false;
+	const poll = async (request: any, onResult: Function) => {
+		const result = await request();
+		if (!stop) {
+			onResult(result);
+			timer = setTimeout(poll.bind(null, request, onResult), delay);
+		}
+	};
+	return (...params: any) => {
+		const { request, onResult } = fn(...params);
+		poll(request, onResult).then();
+		return () => {
+			stop = true;
+			clearTimeout(timer);
+		};
+	};
+}

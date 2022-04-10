@@ -1,7 +1,7 @@
 import { Arc } from '@/components/styled-components/Arc';
 import { D3, H4, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 
 const JoinIndex = () => {
 	return (
@@ -70,7 +70,7 @@ const TextContainer = styled.div`
 	}
 
 	${mediaQueries.tablet} {
-		margin-top: 0px;
+		margin-top: 0;
 	}
 `;
 

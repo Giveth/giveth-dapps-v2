@@ -6,7 +6,7 @@ import HomeBlogPost from './HomeBlogPost';
 import { IMediumBlogPost } from '@/apollo/types/types';
 import { HomeContainer } from '@/components/views/homepage/Home.sc';
 import { Col, Row } from '@/components/Grid';
-import { deviceSize } from '@/utils/constants';
+import { deviceSize } from '@/lib/constants/constants';
 
 const HomeFromBlog = () => {
 	const [mediumPosts, setMediumPosts] = useState<IMediumBlogPost[]>();

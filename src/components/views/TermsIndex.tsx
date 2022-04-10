@@ -4,7 +4,7 @@ import Accordion from '../Accordion';
 import FlowerIcon from '/public//images/flower_terms.svg';
 import styled from 'styled-components';
 import { brandColors, D3, Lead } from '@giveth/ui-design-system';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 
 const TermsIndex = () => {
 	return (

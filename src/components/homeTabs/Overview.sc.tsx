@@ -2,9 +2,6 @@ import styled from 'styled-components';
 import {
 	D3,
 	H1,
-	H2,
-	H3,
-	P,
 	Button,
 	QuoteText,
 	DataBlock,
@@ -13,7 +10,7 @@ import {
 	D1,
 } from '@giveth/ui-design-system';
 import { TopContainer } from './commons';
-import { device, mediaQueries } from '@/utils/constants';
+import { device, mediaQueries } from '@/lib/constants/constants';
 
 export const OverviewBottomContainer = styled.div`
 	background-image: url('/images/backgrounds/wave.svg');

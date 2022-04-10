@@ -18,7 +18,7 @@ import { EDirection, EProjectStatus, gqlEnums } from '@/apollo/types/gqlEnums';
 import InfoBadge from '@/components/badges/InfoBadge';
 import { IDonationsByProjectId } from '@/apollo/types/gqlTypes';
 import SuccessfulCreation from '@/components/views/create/SuccessfulCreation';
-import { deviceSize, mediaQueries } from '@/utils/constants';
+import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import InlineToast from '@/components/toasts/InlineToast';
 import { ProjectMeta } from '@/lib/meta';
 

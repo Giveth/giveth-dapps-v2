@@ -14,7 +14,7 @@ import ProjectCardOrgBadge from './ProjectCardOrgBadge';
 import { IProject } from '@/apollo/types/types';
 import { htmlToText } from '@/lib/helpers';
 import { Shadow } from '@/components/styled-components/Shadow';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 import Routes from '@/lib/constants/Routes';
 import InternalLink from '@/components/InternalLink';
 
