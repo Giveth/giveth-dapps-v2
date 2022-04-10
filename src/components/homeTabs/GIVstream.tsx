@@ -52,7 +52,7 @@ import { IconWithTooltip } from '../IconWithToolTip';
 import { getHistory } from '@/services/subgraph.service';
 import { formatWeiHelper } from '@/helpers/number';
 import config from '@/configuration';
-import { DurationToString } from '@/lib/helpers';
+import { durationToString } from '@/lib/helpers';
 import { NetworkSelector } from '@/components/NetworkSelector';
 import { constants, ethers } from 'ethers';
 import { useTokenDistro } from '@/context/tokenDistro.context';
@@ -165,7 +165,7 @@ export const TabGIVstreamBottom = () => {
 
 	useEffect(() => {
 		setPercent(givTokenDistroHelper.percent);
-		const _remain = DurationToString(givTokenDistroHelper.remain);
+		const _remain = durationToString(givTokenDistroHelper.remain);
 		setRemain(_remain);
 	}, [givTokenDistroHelper]);
 	return (

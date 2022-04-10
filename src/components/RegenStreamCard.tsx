@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useTokenDistro } from '@/context/tokenDistro.context';
-import { DurationToString } from '@/lib/helpers';
+import { durationToString } from '@/lib/helpers';
 import {
 	Bar,
 	GsPTooltip,
@@ -111,7 +111,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 	}, [claimedAmount, lockedAmount, tokenDistroHelper]);
 
 	const percentage = tokenDistroHelper?.percent || 0;
-	const remainTime = DurationToString(tokenDistroHelper?.remain || 0);
+	const remainTime = durationToString(tokenDistroHelper?.remain || 0);
 
 	const icon = getStreamIconWithType(streamConfig.type, 40);
 

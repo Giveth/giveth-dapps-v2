@@ -18,7 +18,6 @@ import tokenAbi from 'human-standard-token-abi';
 import { Shadow } from '@/components/styled-components/Shadow';
 import InputBox from '../../InputBox';
 import useUser from '@/context/UserProvider';
-import FixedToast from '@/components/toasts/FixedToast';
 import CheckBox from '@/components/Checkbox';
 import DonateModal from '@/components/modals/DonateModal';
 import { ChangeNetworkModal } from '@/components/modals/ChangeNetwork';
@@ -32,12 +31,11 @@ import { usePrice } from '@/context/price.context';
 import GeminiModal from './GeminiModal';
 import config from '@/configuration';
 import TokenPicker from './TokenPicker';
-import Routes from '@/lib/constants/Routes';
 import InlineToast from '@/components/toasts/InlineToast';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { client } from '@/apollo/apolloClient';
 import { PROJECT_ACCEPTED_TOKENS } from '@/apollo/gql/gqlProjects';
-import { showToastError } from '@/lib/helpers';
+import { formatBalance, showToastError } from '@/lib/helpers';
 import {
 	IProjectAcceptedToken,
 	IProjectAcceptedTokensGQL,
@@ -49,6 +47,7 @@ import {
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import useModal from '@/context/ModalProvider';
 import { getERC20Info } from '@/lib/contracts';
+import GIVBackToast from '@/components/views/donate/GIVBackToast';
 
 const ethereumChain = config.PRIMARY_NETWORK;
 const xdaiChain = config.SECONDARY_NETWORK;
@@ -102,7 +101,8 @@ const CryptoDonation = (props: {
 	const [anonymous, setAnonymous] = useState<boolean>(false);
 	// const [selectLoading, setSelectLoading] = useState(false);
 	const [error, setError] = useState<boolean>(false);
-	const [givBackEligible, setGivBackEligible] = useState<any>(true);
+	const [tokenIsGivBackEligible, setTokenIsGivBackEligible] =
+		useState<any>(true);
 	const [showDonateModal, setShowDonateModal] = useState(false);
 	const [showInsufficientModal, setShowInsufficientModal] = useState(false);
 	const [showChangeNetworkModal, setShowChangeNetworkModal] = useState(false);
@@ -122,16 +122,10 @@ const CryptoDonation = (props: {
 
 	useEffect(() => {
 		if (networkId && acceptedTokens) {
-			if (projectFromAnotherOrg && networkId !== ethereumChain.id) {
-				setShowChangeNetworkModal(true);
-			} else if (
-				networkId !== ethereumChain.id &&
-				networkId !== xdaiChain.id
-			) {
-				setErc20List(undefined);
+			const filteredTokens = filterTokens(acceptedTokens, networkId);
+			if (filteredTokens.length < 1) {
 				return setShowChangeNetworkModal(true);
 			}
-			const filteredTokens = filterTokens(acceptedTokens, networkId);
 			const tokens = prepareTokenList(filteredTokens);
 			setErc20OriginalList(tokens);
 			setErc20List(tokens);
@@ -152,7 +146,6 @@ const CryptoDonation = (props: {
 				fetchPolicy: 'no-cache',
 			})
 			.then((res: IProjectAcceptedTokensGQL) => {
-				console.log({ res });
 				setAcceptedTokens(res.data.getProjectAcceptTokens);
 			})
 			.catch(showToastError);
@@ -166,7 +159,7 @@ const CryptoDonation = (props: {
 			) {
 				setTokenPrice(1);
 			} else if (selectedToken?.symbol === ethereumChain.mainToken) {
-				mainTokenPrice && setTokenPrice(mainTokenPrice);
+				setTokenPrice(mainTokenPrice || 0);
 			} else if (selectedToken?.address) {
 				let tokenAddress = selectedToken.address;
 				// coingecko doesn't have these tokens in xdai, so fetching price from ethereum
@@ -182,7 +175,7 @@ const CryptoDonation = (props: {
 					tokenAddress,
 					setTokenPrice,
 				);
-				fetchedPrice && setTokenPrice(fetchedPrice);
+				setTokenPrice(fetchedPrice || 0);
 			}
 		};
 
@@ -251,12 +244,42 @@ const CryptoDonation = (props: {
 		)();
 	}, [account, networkId, tokenSymbol, balance]);
 
+	const handleCustomToken = (i: string) => {
+		if (projectFromAnotherOrg) return;
+		// It's a contract
+		if (i?.length === 42) {
+			try {
+				// setSelectLoading(true);
+				getERC20Info({
+					library,
+					tokenAbi,
+					contractAddress: i,
+					networkId: networkId as number,
+				}).then(pastedToken => {
+					if (!pastedToken) return;
+					const found = erc20List?.find(
+						(t: IProjectAcceptedToken) =>
+							t.symbol === pastedToken.symbol,
+					);
+					!found &&
+						erc20List &&
+						setErc20List([...erc20List, pastedToken]);
+					setCustomInput(pastedToken?.address);
+					// setSelectLoading(false);
+				});
+			} catch (error) {
+				// setSelectLoading(false);
+				showToastError(error);
+			}
+		} else {
+			setCustomInput(i);
+			setErc20List(erc20OriginalList);
+		}
+	};
+
 	return (
 		<MainContainer>
-			<GeminiModal
-				showModal={geminiModal}
-				setShowModal={setGeminiModal}
-			/>
+			{geminiModal && <GeminiModal setShowModal={setGeminiModal} />}
 			{showChangeNetworkModal && (
 				<ChangeNetworkModal
 					showModal={showChangeNetworkModal}
@@ -276,7 +299,6 @@ const CryptoDonation = (props: {
 			)}
 			{showDonateModal && selectedToken && amountTyped && (
 				<DonateModal
-					showModal={showDonateModal}
 					setShowModal={setShowDonateModal}
 					setSuccessDonation={(successTxHash: ISuccessDonation) => {
 						setSuccessDonation(successTxHash);
@@ -290,7 +312,7 @@ const CryptoDonation = (props: {
 					setInProgress={setInProgress}
 					setUnconfirmed={setUnconfirmed}
 					givBackEligible={
-						projectIsGivBackEligible && givBackEligible
+						projectIsGivBackEligible && tokenIsGivBackEligible
 					}
 					anonymous={anonymous}
 				/>
@@ -340,47 +362,9 @@ const CryptoDonation = (props: {
 								setSelectedToken(i);
 								setCustomInput('');
 								setErc20List(erc20OriginalList);
-								setGivBackEligible(i?.isGivbackEligible);
+								setTokenIsGivBackEligible(i?.isGivbackEligible);
 							}}
-							onInputChange={(i: string) => {
-								if (projectFromAnotherOrg) return;
-								// It's a contract
-								if (i?.length === 42) {
-									try {
-										// setSelectLoading(true);
-										getERC20Info({
-											library,
-											tokenAbi,
-											contractAddress: i,
-											networkId: networkId as number,
-										}).then(pastedToken => {
-											if (!pastedToken) return;
-											const found = erc20List?.find(
-												(t: IProjectAcceptedToken) =>
-													t?.symbol ===
-													pastedToken?.symbol,
-											);
-											!found &&
-												erc20List &&
-												setErc20List([
-													...erc20List,
-													pastedToken,
-												]);
-											setCustomInput(
-												pastedToken?.address,
-											);
-											// setSelectLoading(false);
-										});
-									} catch (error) {
-										// setSelectLoading(false);
-										showToastError(error);
-									}
-								} else {
-									setCustomInput(i);
-									erc20OriginalList?.length > 0 &&
-										setErc20List([...erc20OriginalList]);
-								}
-							}}
+							onInputChange={handleCustomToken}
 							placeholder={
 								projectFromAnotherOrg
 									? 'Search name'
@@ -407,50 +391,17 @@ const CryptoDonation = (props: {
 						placeholder='Amount'
 					/>
 				</SearchContainer>
-				<AvText>
-					{' '}
-					Available:{' '}
-					{parseFloat(selectedTokenBalance || 0).toLocaleString(
-						'en-US',
-						{
-							minimumFractionDigits: 2,
-							maximumFractionDigits: 6,
-						} || '',
-					)}{' '}
-					{tokenSymbol}
-				</AvText>
+				{selectedToken && (
+					<AvText>
+						Available: {formatBalance(selectedTokenBalance)}{' '}
+						{tokenSymbol}
+					</AvText>
+				)}
 			</InputContainer>
-			{!projectIsGivBackEligible ? (
-				<ToastContainer>
-					<FixedToast
-						message='This project is not eligible for GIVbacks.'
-						color={brandColors.mustard[700]}
-						boldColor={brandColors.mustard[800]}
-						backgroundColor={brandColors.mustard[200]}
-						href={Routes.GIVbacks}
-					/>
-				</ToastContainer>
-			) : givBackEligible ? (
-				<ToastContainer>
-					<FixedToast
-						message='This token is eligible for GIVbacks.'
-						color={brandColors.giv[300]}
-						boldColor={brandColors.giv[600]}
-						backgroundColor={brandColors.giv[100]}
-						href={Routes.GIVbacks}
-					/>
-				</ToastContainer>
-			) : (
-				<ToastContainer>
-					<FixedToast
-						message='This token is not eligible for GIVbacks.'
-						color={brandColors.mustard[700]}
-						boldColor={brandColors.mustard[800]}
-						backgroundColor={brandColors.mustard[200]}
-						href={Routes.GIVbacks}
-					/>
-				</ToastContainer>
-			)}
+			<GIVBackToast
+				projectEligible={projectIsGivBackEligible}
+				tokenEligible={tokenIsGivBackEligible}
+			/>
 			<CheckBoxContainer>
 				<CheckBox
 					title={'Make it anonymous'}
@@ -599,10 +550,6 @@ const CheckBoxContainer = styled.div`
 		font-size: 12px;
 		margin-top: 10px;
 	}
-`;
-
-const ToastContainer = styled.div`
-	margin: 12px 0;
 `;
 
 const AnotherWalletTxt = styled(GLink)`

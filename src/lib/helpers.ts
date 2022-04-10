@@ -20,7 +20,20 @@ import { networksParams } from '@/helpers/blockchain';
 
 declare let window: any;
 
-export const DurationToYMDh = (ms: number) => {
+export const formatBalance = (balance?: string | number) => {
+	return parseFloat(String(balance) || '0').toLocaleString('en-US', {
+		maximumFractionDigits: 6,
+		minimumFractionDigits: 2,
+	});
+};
+
+export const formatPrice = (balance?: string | number) => {
+	return parseFloat(String(balance) || '0').toLocaleString('en-US', {
+		maximumFractionDigits: 6,
+	});
+};
+
+export const durationToYMDh = (ms: number) => {
 	let baseTime = new Date(0);
 	let duration = new Date(ms);
 
@@ -34,8 +47,8 @@ export const DurationToYMDh = (ms: number) => {
 	return { y, m, d, h, min, sec };
 };
 
-export const DurationToString = (ms: number, length: number = 3) => {
-	const temp: { [key: string]: number } = DurationToYMDh(ms);
+export const durationToString = (ms: number, length: number = 3) => {
+	const temp: { [key: string]: number } = durationToYMDh(ms);
 	const res: string[] = [];
 	for (const key in temp) {
 		if (Object.prototype.hasOwnProperty.call(temp, key)) {
@@ -346,7 +359,7 @@ export const showToastError = (err: any) => {
 
 export const calcBiggestUnitDifferenceTime = (_time: string) => {
 	const time = new Date(_time);
-	const diff: { [key: string]: number } = DurationToYMDh(
+	const diff: { [key: string]: number } = durationToYMDh(
 		Date.now() - time.getTime(),
 	);
 	if (diff.y > 0) return ` ${diff.y} year${diff.y > 1 ? 's' : ''} ago`;
