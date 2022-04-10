@@ -71,6 +71,7 @@ const ImageContainer = styled.div`
 `;
 
 const HomeViewContainer = styled(FlexCenter)<{ isHover: boolean }>`
+	z-index: 10;
 	height: 36px;
 	background-color: ${neutralColors.gray[200]};
 	gap: 8px;
