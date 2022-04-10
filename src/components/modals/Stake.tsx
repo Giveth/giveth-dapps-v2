@@ -176,16 +176,24 @@ export const StakeModal: FC<IStakeModalProps> = ({
 								</StakeModalTitleText>
 							</StakeModalTitle>
 							<InnerModal>
-								<StakeStepsContainer>
-									<StakeStep>
-										<StakeStepTitle>Approve</StakeStepTitle>
-										<StakeStepNumber>1</StakeStepNumber>
-									</StakeStep>
-									<StakeStep>
-										<StakeStepTitle>Stake</StakeStepTitle>
-										<StakeStepNumber>2</StakeStepNumber>
-									</StakeStep>
-								</StakeStepsContainer>
+								{(stakeState === StakeState.APPROVE ||
+									stakeState === StakeState.APPROVING ||
+									stakeState === StakeState.WRAP) && (
+									<StakeStepsContainer>
+										<StakeStep>
+											<StakeStepTitle>
+												Approve
+											</StakeStepTitle>
+											<StakeStepNumber>1</StakeStepNumber>
+										</StakeStep>
+										<StakeStep>
+											<StakeStepTitle>
+												Stake
+											</StakeStepTitle>
+											<StakeStepNumber>2</StakeStepNumber>
+										</StakeStep>
+									</StakeStepsContainer>
+								)}
 								<AmountInput
 									setAmount={setAmount}
 									maxAmount={maxAmount}
