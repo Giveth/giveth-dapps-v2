@@ -351,8 +351,11 @@ const DonatingBox = styled.div`
 const DonateButton = styled(Button)`
 	background: ${(props: { donating: boolean }) =>
 		props.donating ? brandColors.giv[200] : brandColors.giv[500]};
-	:hover {
+	:hover:enabled {
 		background: ${brandColors.giv[700]};
+	}
+	:disabled {
+		cursor: not-allowed;
 	}
 	* {
 		margin: auto 0;
