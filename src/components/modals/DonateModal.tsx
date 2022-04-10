@@ -1,19 +1,18 @@
 import { useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
-import UserContext from '../../context/UserProvider';
 import styled from 'styled-components';
 import {
 	brandColors,
 	H3,
 	H6,
 	P,
-	B,
 	neutralColors,
 	Button,
 	semanticColors,
 	IconInfo,
 } from '@giveth/ui-design-system';
 import { IconWalletApprove } from '@giveth/ui-design-system/lib/cjs/components/icons/WalletApprove';
+import { captureException } from '@sentry/nextjs';
 
 import { IModal, Modal } from '@/components/modals/Modal';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
@@ -21,7 +20,7 @@ import { WrongNetworkModal } from '@/components/modals/WrongNetwork';
 import { IProject } from '@/apollo/types/types';
 import { checkNetwork } from '@/utils';
 import { isAddressENS, getAddressFromENS } from '@/lib/wallet';
-import { sendTransaction, showToastError } from '@/lib/helpers';
+import { formatPrice, sendTransaction, showToastError } from '@/lib/helpers';
 import * as transaction from '../../services/transaction';
 import { saveDonation, saveDonationTransaction } from '@/services/donation';
 import FixedToast from '@/components/toasts/FixedToast';
@@ -30,7 +29,7 @@ import config from '@/configuration';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import useModal from '@/context/ModalProvider';
 import { ORGANIZATION } from '@/lib/constants/organizations';
-import { captureException } from '@sentry/nextjs';
+import UserContext from '../../context/UserProvider';
 
 interface IDonateModal extends IModal {
 	closeParentModal?: () => void;
@@ -47,7 +46,6 @@ interface IDonateModal extends IModal {
 }
 
 const DonateModal = ({
-	showModal,
 	setShowModal,
 	project,
 	token,
@@ -73,8 +71,6 @@ const DonateModal = ({
 	const [donationSaved, setDonationSaved] = useState(false);
 	const [showInsufficientModal, setShowInsufficientModal] = useState(false);
 	const [showWrongNetworkModal, setShowWrongNetworkModal] = useState(false);
-
-	if (!showModal) return null;
 
 	const { walletAddress, organization, id, title } = project || {};
 
@@ -208,7 +204,6 @@ const DonateModal = ({
 										}
 									}
 								} catch (error) {
-									console.log({ error });
 									showToastError(error);
 								}
 							},
@@ -268,7 +263,7 @@ const DonateModal = ({
 
 	return (
 		<Modal
-			showModal={showModal}
+			showModal
 			setShowModal={setShowModal}
 			headerTitle='Donating'
 			headerTitlePosition='left'
@@ -278,27 +273,12 @@ const DonateModal = ({
 				<DonatingBox>
 					<P>You are donating</P>
 					<H3>
-						{parseFloat(String(amount)).toLocaleString('en-US', {
-							maximumFractionDigits: 6,
-						})}
-						{token.symbol}
+						{formatPrice(amount)} {token.symbol}
 					</H3>
-					{avgPrice && (
-						<H6>
-							{parseFloat(String(avgPrice)).toLocaleString(
-								'en-US',
-								{
-									maximumFractionDigits: 6,
-								},
-							)}{' '}
-							USD{' '}
-						</H6>
-					)}
-					<div style={{ margin: '12px 0 32px 0' }}>
-						<P>
-							To <B style={{ marginLeft: '6px' }}>{title}</B>
-						</P>
-					</div>
+					{avgPrice ? <H6>{formatPrice(avgPrice)} USD</H6> : null}
+					<P>
+						To <span>{title}</span>
+					</P>
 				</DonatingBox>
 				<Buttons>
 					{donationSaved && (
@@ -315,6 +295,7 @@ const DonateModal = ({
 						/>
 					)}
 					<DonateButton
+						buttonType='primary'
 						donating={donating}
 						disabled={donating}
 						label={donating ? 'DONATING' : 'DONATE'}
@@ -348,11 +329,8 @@ const DonateContainer = styled.div`
 `;
 
 const DonatingBox = styled.div`
-	display: flex;
-	flex-direction: column;
-	align-items: center;
 	color: ${brandColors.deep[900]};
-	div:first-child {
+	> :first-child {
 		margin-bottom: 8px;
 	}
 	h3 {
@@ -362,18 +340,15 @@ const DonatingBox = styled.div`
 		color: ${neutralColors.gray[700]};
 		margin-top: -5px;
 	}
-	div:last-child {
-		display: flex;
-		flex-direction: row;
+	> :last-child {
+		margin: 12px 0 32px 0;
+		> span {
+			font-weight: 500;
+		}
 	}
 `;
 
 const DonateButton = styled(Button)`
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	border-color: transparent;
-	width: 100%;
 	background: ${(props: { donating: boolean }) =>
 		props.donating ? brandColors.giv[200] : brandColors.giv[500]};
 	:hover:enabled {
