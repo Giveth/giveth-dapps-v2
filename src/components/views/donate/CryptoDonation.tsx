@@ -401,10 +401,12 @@ const CryptoDonation = (props: {
 					</AvText>
 				)}
 			</InputContainer>
-			<GIVBackToast
-				projectEligible={projectIsGivBackEligible}
-				tokenEligible={tokenIsGivBackEligible}
-			/>
+			{selectedToken && (
+				<GIVBackToast
+					projectEligible={projectIsGivBackEligible}
+					tokenEligible={tokenIsGivBackEligible}
+				/>
+			)}
 			<CheckBoxContainer>
 				<CheckBox
 					title={'Make it anonymous'}
