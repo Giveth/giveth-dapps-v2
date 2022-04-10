@@ -178,7 +178,8 @@ export const StakeModal: FC<IStakeModalProps> = ({
 							<InnerModal>
 								{(stakeState === StakeState.APPROVE ||
 									stakeState === StakeState.APPROVING ||
-									stakeState === StakeState.WRAP) && (
+									stakeState === StakeState.WRAP ||
+									stakeState === StakeState.WRAPPING) && (
 									<StakeStepsContainer>
 										<StakeStep>
 											<StakeStepTitle>
@@ -187,10 +188,30 @@ export const StakeModal: FC<IStakeModalProps> = ({
 											<StakeStepNumber>1</StakeStepNumber>
 										</StakeStep>
 										<StakeStep>
-											<StakeStepTitle>
+											<StakeStepTitle
+												disable={
+													!(
+														stakeState ===
+															StakeState.WRAP ||
+														stakeState ===
+															StakeState.WRAPPING
+													)
+												}
+											>
 												Stake
 											</StakeStepTitle>
-											<StakeStepNumber>2</StakeStepNumber>
+											<StakeStepNumber
+												disable={
+													!(
+														stakeState ===
+															StakeState.WRAP ||
+														stakeState ===
+															StakeState.WRAPPING
+													)
+												}
+											>
+												2
+											</StakeStepNumber>
 										</StakeStep>
 									</StakeStepsContainer>
 								)}
@@ -343,12 +364,22 @@ const StakeStep = styled(Flex)`
 	z-index: 1;
 `;
 
-const StakeStepTitle = styled(P)`
+interface IStakeStepState {
+	disable?: boolean;
+}
+
+const StakeStepTitle = styled(P)<IStakeStepState>`
 	margin-bottom: 8px;
+	color: ${props =>
+		props.disable ? brandColors.giv[300] : brandColors.giv['000']};
 `;
-const StakeStepNumber = styled(SublineBold)`
+const StakeStepNumber = styled(SublineBold)<IStakeStepState>`
+	color: ${props =>
+		props.disable ? brandColors.giv[300] : brandColors.giv['000']};
 	background-color: ${brandColors.giv[500]};
-	border: 3px solid ${brandColors.giv['000']};
+	border: 3px solid
+		${props =>
+			props.disable ? brandColors.giv[300] : brandColors.giv['000']};
 	border-radius: 18px;
 	width: 24px;
 `;
