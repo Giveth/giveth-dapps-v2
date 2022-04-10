@@ -1,10 +1,13 @@
 import React, { FC, useEffect, useState } from 'react';
 import { IModal, Modal } from './Modal';
 import {
+	brandColors,
 	Button,
 	H4,
 	neutralColors,
 	OulineButton,
+	P,
+	SublineBold,
 } from '@giveth/ui-design-system';
 import { Flex } from '../styled-components/Flex';
 import styled from 'styled-components';
@@ -173,6 +176,16 @@ export const StakeModal: FC<IStakeModalProps> = ({
 								</StakeModalTitleText>
 							</StakeModalTitle>
 							<InnerModal>
+								<StakeStepsContainer>
+									<StakeStep>
+										<StakeStepTitle>Approve</StakeStepTitle>
+										<StakeStepNumber>1</StakeStepNumber>
+									</StakeStep>
+									<StakeStep>
+										<StakeStepTitle>Stake</StakeStepTitle>
+										<StakeStepNumber>2</StakeStepNumber>
+									</StakeStep>
+								</StakeStepsContainer>
 								<AmountInput
 									setAmount={setAmount}
 									maxAmount={maxAmount}
@@ -282,13 +295,63 @@ export const StakeModal: FC<IStakeModalProps> = ({
 	);
 };
 
+// const StakeSteps = () => {
+// 	return (
+
+// 	)
+// }
+
+const StakeStepsContainer = styled(Flex)`
+	position: relative;
+	justify-content: space-evenly;
+	&::before {
+		content: '';
+		position: absolute;
+		width: 100%;
+		height: 1px;
+		border-top: 1px solid ${brandColors.giv[500]};
+		bottom: 11px;
+		z-index: 0;
+	}
+	&::after {
+		content: '';
+		position: absolute;
+		height: 1px;
+		border-top: 1px dashed ${brandColors.giv[500]};
+		left: -24px;
+		right: -24px;
+		bottom: 11px;
+		z-index: 0;
+	}
+	margin-bottom: 16px;
+`;
+
+const StakeStep = styled(Flex)`
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 61px;
+	position: relative;
+	z-index: 1;
+`;
+
+const StakeStepTitle = styled(P)`
+	margin-bottom: 8px;
+`;
+const StakeStepNumber = styled(SublineBold)`
+	background-color: ${brandColors.giv[500]};
+	border: 3px solid ${brandColors.giv['000']};
+	border-radius: 18px;
+	width: 24px;
+`;
+
 const StakeModalContainer = styled.div`
 	width: 370px;
 	padding-bottom: 24px;
 `;
 
 const StakeModalTitle = styled(Flex)`
-	margin-bottom: 42px;
+	margin-bottom: 16px;
 `;
 
 const StakeModalTitleText = styled(H4)`
