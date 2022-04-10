@@ -23,6 +23,7 @@ import { Flex } from '../styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
 import { Row } from '@/components/Grid';
 import { ORGANIZATION } from '@/lib/constants/organizations';
+import { mediaQueries } from '@/utils/constants';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -104,6 +105,7 @@ const ProjectCard = (props: IProjectCard) => {
 							linkType='primary'
 							size='small'
 							label='LEARN MORE'
+							aria-Lbel='Learn more about this project'
 						/>
 					</Link>
 					<Link href={slugToProjectDonate(slug)} passHref>
@@ -179,12 +181,19 @@ const ImagePlaceholder = styled.div`
 
 const Wrapper = styled.div`
 	position: relative;
-	height: 472px;
 	width: 100%;
 	border-radius: ${cardRadius};
 	background: white;
 	overflow: hidden;
 	box-shadow: ${Shadow.Neutral[400]};
+
+	${mediaQueries.mobileS} {
+		height: 536px;
+	}
+
+	${mediaQueries.tablet} {
+		height: 472px;
+	}
 `;
 
 export default ProjectCard;

@@ -20,7 +20,7 @@ import { mediaQueries } from '@/utils/constants';
 import { Flex } from '@/components/styled-components/Flex';
 import { Container } from '@/components/Grid';
 
-export const Footer = () => {
+const Footer = () => {
 	const { theme } = useGeneral();
 	const textColor =
 		theme === ETheme.Dark ? brandColors.deep[100] : brandColors.deep[800];
@@ -139,6 +139,8 @@ export const Footer = () => {
 		</FooterContainer>
 	);
 };
+
+export default Footer;
 
 const ContainerStyled = styled(Container)`
 	display: flex;

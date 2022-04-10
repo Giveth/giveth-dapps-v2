@@ -187,6 +187,8 @@ const ArcSmall = styled(Arc)`
 const ForMakersGivers = styled(Row)`
 	margin-top: 107px;
 	margin-bottom: 50px;
+	justify-content: space-between;
+	max-width: 1200px;
 `;
 
 const ForMakersContainers = styled(Col)`
@@ -205,8 +207,15 @@ const ForMakersButton = styled(Button)`
 `;
 
 const GIVeconomy = styled.div`
-	margin-top: 235px;
 	max-width: 800px;
+
+	${mediaQueries.mobileS} {
+		margin-top: 72px;
+	}
+
+	${mediaQueries.tablet} {
+		margin-top: 235px;
+	}
 `;
 
 const GIVeconomyUrl = styled.a`

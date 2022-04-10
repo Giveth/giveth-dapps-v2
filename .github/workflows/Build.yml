@@ -17,3 +17,8 @@ jobs:
         run: yarn lint
       - name: Build
         run: yarn build
+        env:
+          NEXT_PUBLIC_SENTRY_AUTH_TOKEN: ${{ secrets.NEXT_PUBLIC_SENTRY_AUTH_TOKEN }}
+          NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
+          NEXT_PUBLIC_SENTRY_ORG: ${{ secrets.NEXT_PUBLIC_SENTRY_ORG }}
+          NEXT_PUBLIC_SENTRY_PROJECT: ${{ secrets.NEXT_PUBLIC_SENTRY_PROJECT }}

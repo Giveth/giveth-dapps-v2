@@ -16,6 +16,15 @@ import { TopContainer, BottomContainer, EnhancedRewardCard } from './commons';
 import { device, mediaQueries } from '@/utils/constants';
 import { Row } from '../Grid';
 
+export const GivGardenSection = styled.div`
+	justify-content: space-between;
+	align-items: flex-start;
+	${mediaQueries.mobileL} {
+		display: flex;
+		flex-flow: column nowrap;
+	}
+`;
+
 export const GardenTopContainer = styled(TopContainer)`
 	overflow: hidden;
 	position: relative;
@@ -89,8 +98,8 @@ export const Section1Subtitle = styled(QuoteText)`
 export const OpenGardenButton = styled(Button)`
 	width: 251px;
 	padding: 24px;
+	margin-top: 15px;
 `;
-
 export const Section2Title = styled(H1)`
 	color: ${brandColors.giv[200]};
 	margin-top: 120px;
@@ -118,12 +127,12 @@ export const GovernanceRaw = styled(Row)`
 
 export const VoteCard = styled.div`
 	background-color: #3c14c5;
-	padding: 107px 103px 140px 231px;
-	background-image: url('/images/flower4.svg'),
-		url('/images/backgrounds/giv-outline.svg');
-	background-repeat: no-repeat, repeat;
-	background-position: bottom left, top;
 	border-radius: 8px;
+	padding: 148px 25px 117px 25px;
+	display: block;
+	background-image: url('/images/backgrounds/giv-outline.svg');
+	background-repeat: repeat;
+	background-position: top;
 	min-height: 480px;
 	margin: 80px 0 45px;
 	position: relative;
@@ -139,6 +148,13 @@ export const VoteCard = styled.div`
 		top: 30px;
 		left: 40px;
 	}
+	${mediaQueries.tablet} {
+		padding: 107px 103px 140px 231px;
+		background-image: url('/images/flower4.svg'),
+			url('/images/backgrounds/giv-outline.svg');
+		background-repeat: no-repeat, repeat;
+		background-position: bottom left, top;
+	}
 `;
 
 export const VoteCardDesc = styled(QuoteText)`
@@ -149,7 +165,7 @@ export const VoteCardDesc = styled(QuoteText)`
 
 export const VoteCardButton = styled(Button)`
 	display: block;
-	margin-left: auto;
+	margin: 15px auto 0 0;
 	padding: 24px;
 	${mediaQueries.tablet} {
 		padding: 24px 73px;

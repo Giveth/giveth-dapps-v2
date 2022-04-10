@@ -10,7 +10,7 @@ import StorageLabel from '@/lib/localStorage';
 // @DEV it's not tested yet! didn't have a multi-chain wallet to test
 const switchWalletConnectNetwork = async (chainId: number) => {
 	try {
-		await walletconnectConnector.walletConnectProvider.connector.updateSession(
+		await walletconnectConnector?.walletConnectProvider?.connector?.updateSession(
 			{
 				chainId,
 				accounts: [],

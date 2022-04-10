@@ -18,6 +18,14 @@ const TestRoute = () => {
 			</Head>
 			<TestContainer>
 				<button onClick={notify}>Test</button>
+				<button
+					type='button'
+					onClick={() => {
+						throw new Error('Sentry Frontend Error');
+					}}
+				>
+					Throw error
+				</button>
 			</TestContainer>
 		</>
 	);

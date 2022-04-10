@@ -14,7 +14,7 @@ import { Arc } from '@/components/styled-components/Arc';
 import { isUserRegistered } from '@/lib/helpers';
 import useUser from '@/context/UserProvider';
 import { HomeContainer } from '@/components/views/homepage/Home.sc';
-import { deviceSize, mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/utils/constants';
 import { Col } from '@/components/Grid';
 import useModal from '@/context/ModalProvider';
 
@@ -64,7 +64,7 @@ const HomeChangeMakers = () => {
 			<PurpleArc />
 			<CyanArc />
 			<MustardArc />
-			<D3>Calling all Changemakers!</D3>
+			<Title>Calling all Changemakers!</Title>
 			<br />
 			<Lead>
 				Do you have a for-good project that&apos;s creating value for
@@ -152,13 +152,21 @@ const CyanArc = styled(Arc)`
 const EndItem = styled(Col)`
 	padding-bottom: 55px;
 	padding-right: 55px;
+	max-width: calc(100vw - 36px);
 `;
 
 const EndSection = styled.div`
-	margin-top: 190px;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
+
+	${mediaQueries.mobileS} {
+		margin-top: 72px;
+	}
+
+	${mediaQueries.tablet} {
+		margin-top: 190px;
+	}
 `;
 
 const ContentLead = styled(Lead)`
@@ -187,10 +195,13 @@ const MiddleSection = styled.div`
 	}
 `;
 
-const Container = styled.div`
-	margin: 0 auto;
-	${mediaQueries.desktop} {
-		max-width: ${deviceSize.desktop + 'px'};
+const Title = styled(D3)`
+	${mediaQueries.mobileS} {
+		font-size: 4.5rem;
+	}
+
+	${mediaQueries.tablet} {
+		font-size: 5.5rem;
 	}
 `;
 
