@@ -176,10 +176,10 @@ export const StakeModal: FC<IStakeModalProps> = ({
 								</StakeModalTitleText>
 							</StakeModalTitle>
 							<InnerModal>
-								{(stakeState === StakeState.APPROVE ||
-									stakeState === StakeState.APPROVING ||
-									stakeState === StakeState.WRAP ||
-									stakeState === StakeState.WRAPPING) && (
+								{stakeState === StakeState.APPROVE ||
+								stakeState === StakeState.APPROVING ||
+								stakeState === StakeState.WRAP ||
+								stakeState === StakeState.WRAPPING ? (
 									<StakeStepsContainer>
 										<StakeStep>
 											<StakeStepTitle>
@@ -214,6 +214,8 @@ export const StakeModal: FC<IStakeModalProps> = ({
 											</StakeStepNumber>
 										</StakeStep>
 									</StakeStepsContainer>
+								) : (
+									<StakeStepsPlaceholder />
 								)}
 								<AmountInput
 									setAmount={setAmount}
@@ -396,6 +398,10 @@ const StakeModalTitle = styled(Flex)`
 const StakeModalTitleText = styled(H4)`
 	margin-left: 54px;
 	color: ${neutralColors.gray[100]};
+`;
+
+const StakeStepsPlaceholder = styled.div`
+	padding: 13px;
 `;
 
 const InnerModal = styled.div`
