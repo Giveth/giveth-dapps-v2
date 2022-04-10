@@ -5,8 +5,8 @@ import Routes from '@/lib/constants/Routes';
 import FixedToast from '@/components/toasts/FixedToast';
 
 const GIVBackToast = (props: {
-	projectEligible: boolean;
-	tokenEligible: boolean;
+	projectEligible?: boolean;
+	tokenEligible?: boolean;
 }) => {
 	const { projectEligible, tokenEligible } = props;
 	let message, color, boldColor, backgroundColor;

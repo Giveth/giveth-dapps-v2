@@ -42,6 +42,8 @@ import {
 } from '@/apollo/types/gqlTypes';
 import {
 	filterTokens,
+	getNetworkIds,
+	networkNames,
 	prepareTokenList,
 } from '@/components/views/donate/helpers';
 import { ORGANIZATION } from '@/lib/constants/organizations';
@@ -102,12 +104,13 @@ const CryptoDonation = (props: {
 	// const [selectLoading, setSelectLoading] = useState(false);
 	const [error, setError] = useState<boolean>(false);
 	const [tokenIsGivBackEligible, setTokenIsGivBackEligible] =
-		useState<any>(true);
+		useState<boolean>();
 	const [showDonateModal, setShowDonateModal] = useState(false);
 	const [showInsufficientModal, setShowInsufficientModal] = useState(false);
 	const [showChangeNetworkModal, setShowChangeNetworkModal] = useState(false);
 	const [acceptedTokens, setAcceptedTokens] =
 		useState<IProjectAcceptedToken[]>();
+	const [acceptedChains, setAcceptedChains] = useState<number[]>();
 
 	const stopPolling = useRef<any>(null);
 	const tokenSymbol = selectedToken?.symbol;
@@ -123,6 +126,8 @@ const CryptoDonation = (props: {
 	useEffect(() => {
 		if (networkId && acceptedTokens) {
 			const filteredTokens = filterTokens(acceptedTokens, networkId);
+			const networkIds = getNetworkIds(acceptedTokens);
+			setAcceptedChains(networkIds);
 			if (filteredTokens.length < 1) {
 				return setShowChangeNetworkModal(true);
 			}
@@ -130,6 +135,7 @@ const CryptoDonation = (props: {
 			setErc20OriginalList(tokens);
 			setErc20List(tokens);
 			setSelectedToken(tokens[0]);
+			setTokenIsGivBackEligible(tokens[0].isGivbackEligible);
 		}
 	}, [networkId, acceptedTokens]);
 
@@ -280,15 +286,10 @@ const CryptoDonation = (props: {
 	return (
 		<MainContainer>
 			{geminiModal && <GeminiModal setShowModal={setGeminiModal} />}
-			{showChangeNetworkModal && (
+			{showChangeNetworkModal && acceptedChains && (
 				<ChangeNetworkModal
-					showModal={showChangeNetworkModal}
 					setShowModal={setShowChangeNetworkModal}
-					targetNetwork={
-						projectFromAnotherOrg
-							? config.MAINNET_NETWORK_NUMBER
-							: config.XDAI_NETWORK_NUMBER
-					}
+					targetNetwork={acceptedChains[0]}
 				/>
 			)}
 			{showInsufficientModal && (
@@ -319,26 +320,28 @@ const CryptoDonation = (props: {
 			)}
 
 			<InputContainer>
-				{projectFromAnotherOrg && networkId !== ethereumChain.id && (
-					<XDaiContainer>
-						<div>
-							<img src='/images/gas_station.svg' />
-							<Caption color={neutralColors.gray[900]}>
-								Projects from {organization?.name} only accept
-								donations on mainnet.{' '}
-							</Caption>
-						</div>
-						<SwitchCaption
-							onClick={() => switchNetwork(ethereumChain.id)}
-						>
-							Switch network
-						</SwitchCaption>
-					</XDaiContainer>
-				)}
-				{!projectFromAnotherOrg &&
-					isEnabled &&
-					networkId !== xdaiChain.id && (
-						<XDaiContainer>
+				{networkId &&
+					acceptedChains &&
+					!acceptedChains.includes(networkId) && (
+						<NetworkToast>
+							<div>
+								<Caption color={neutralColors.gray[900]}>
+									Projects from {organization?.name} only
+									accept donations on{' '}
+									{networkNames(acceptedChains)}.
+								</Caption>
+							</div>
+							<SwitchCaption
+								onClick={() => switchNetwork(acceptedChains[0])}
+							>
+								Switch network
+							</SwitchCaption>
+						</NetworkToast>
+					)}
+				{networkId &&
+					networkId !== xdaiChain.id &&
+					acceptedChains?.includes(xdaiChain.id) && (
+						<NetworkToast>
 							<div>
 								<img src='/images/gas_station.svg' />
 								<Caption color={neutralColors.gray[900]}>
@@ -350,7 +353,7 @@ const CryptoDonation = (props: {
 							>
 								Switch network
 							</SwitchCaption>
-						</XDaiContainer>
+						</NetworkToast>
 					)}
 				<SearchContainer error={error} focused={inputBoxFocused}>
 					<DropdownContainer>
@@ -362,7 +365,7 @@ const CryptoDonation = (props: {
 								setSelectedToken(i);
 								setCustomInput('');
 								setErc20List(erc20OriginalList);
-								setTokenIsGivBackEligible(i?.isGivbackEligible);
+								setTokenIsGivBackEligible(i.isGivbackEligible);
 							}}
 							onInputChange={handleCustomToken}
 							placeholder={
@@ -459,6 +462,7 @@ const MainContainer = styled.div`
 const InputContainer = styled.div`
 	display: flex;
 	flex-direction: column;
+	margin-top: 18px;
 `;
 const AvText = styled(GLink)`
 	color: ${brandColors.deep[500]};
@@ -500,40 +504,24 @@ const DropdownContainer = styled.div`
 	}
 `;
 
-const XDaiContainer = styled.div`
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	padding: 18.5px 0;
-	border-radius: 8px;
-	align-items: center;
-	word-wrap: break-word;
+const NetworkToast = styled.div`
+	text-align: center;
 	width: 100%;
-	div:first-child {
+	margin: 0 auto 20px auto;
+	> div:first-child {
 		display: flex;
-		flex-direction: row;
 		color: ${neutralColors.gray[800]};
+		justify-content: center;
 	}
 	img {
 		padding-right: 12px;
-	}
-	${mediaQueries.mobileL} {
-		flex-direction: column;
-		align-items: center;
-		margin-bottom: 20px;
-		div:first-child {
-			text-align: center;
-		}
 	}
 `;
 
 const SwitchCaption = styled(Caption)`
 	color: ${brandColors.pinky[500]};
 	cursor: pointer;
-	padding: 0 0 0 12px;
-	word-wrap: break-word;
-	width: 120px;
-	text-align: right;
+	margin: 0 auto;
 `;
 
 const MainButton = styled(Button)`
