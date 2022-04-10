@@ -1,11 +1,16 @@
 import React from 'react';
 import Head from 'next/head';
+import dynamic from 'next/dynamic';
 
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { IProjectBySlug } from '@/apollo/types/types';
-import DonateIndex from '@/components/views/donate/DonateIndex';
 import { ProjectMeta } from '@/lib/meta';
+
+const DonateIndex = dynamic(
+	() => import('@/components/views/donate/DonateIndex'),
+	{ ssr: false },
+);
 
 const DonateRoute = (props: IProjectBySlug) => {
 	return (

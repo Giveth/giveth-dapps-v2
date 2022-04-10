@@ -377,7 +377,8 @@ const convetSourceTypeToIcon = (distributor: string) => {
 				</Flex>
 			);
 		default:
-			return distributor; //'Unknown'
+			// 'Unknown'
+			return distributor;
 			break;
 	}
 };

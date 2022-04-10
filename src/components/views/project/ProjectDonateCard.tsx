@@ -284,7 +284,9 @@ const ProjectDonateCard = ({
 							back.
 						</Caption>
 						<ExternalLink href={links.GIVBACK_DOC}>
-							<GIVbackButton>Learn more</GIVbackButton>
+							<GIVbackButton aria-label='Learn more about this project'>
+								Learn more
+							</GIVbackButton>
 							<GIVbackQuestionIcon>
 								<IconHelp size={16} />
 							</GIVbackQuestionIcon>

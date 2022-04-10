@@ -1,7 +1,8 @@
-import ProjectIndex from '@/components/views/project/ProjectIndex';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 import { IProject } from '@/apollo/types/types';
+
+import ProjectIndex from '@/components/views/project/ProjectIndex';
 
 const ProjectRoute = (props: { project?: IProject }) => {
 	return <ProjectIndex project={props.project} />;

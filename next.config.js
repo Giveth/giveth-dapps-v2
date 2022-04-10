@@ -4,19 +4,23 @@
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
 const { withSentryConfig } = require('@sentry/nextjs');
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+	enabled: process.env.ANALYZE === 'true',
+});
 var pjson = require('./package.json');
 
-const moduleExports = {
+const moduleExports = withBundleAnalyzer({
 	// Your existing module.exports
 	reactStrictMode: true,
 	images: {
 		domains: [
 			'gateway.pinata.cloud',
 			'giveth.mypinata.cloud',
+			'static.tgbwidget.com',
 			'images.unsplash.com',
 		],
 	},
-};
+});
 
 const sentryWebpackPluginOptions = {
 	// Additional config options for the Sentry Webpack plugin. Keep in mind that
