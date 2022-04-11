@@ -63,7 +63,7 @@ import { useSubgraph } from '@/context';
 import { ITokenAllocation } from '@/types/subgraph';
 import { useWeb3React } from '@web3-react/core';
 import { IconGIV } from '../Icons/GIV';
-import { givEconomySupportedNetworks } from '@/utils/constants';
+import { givEconomySupportedNetworks } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
 import Pagination from '../Pagination';
 import Routes from '@/lib/constants/Routes';

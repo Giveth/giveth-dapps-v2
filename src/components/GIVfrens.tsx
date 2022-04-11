@@ -19,7 +19,7 @@ import { useWeb3React } from '@web3-react/core';
 import StakingPoolCard from '@/components/cards/StakingPoolCard';
 import { Col, Row } from './Grid';
 import config from '@/configuration';
-import { givEconomySupportedNetworks } from '@/utils/constants';
+import { givEconomySupportedNetworks } from '@/lib/constants/constants';
 import { RegenStreamCard } from './RegenStreamCard';
 import styled from 'styled-components';
 import { Flex } from './styled-components/Flex';

@@ -16,7 +16,7 @@ import styled from 'styled-components';
 import { ETheme, useGeneral } from '@/context/general.context';
 import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '@/components/styled-components/Flex';
 import { Container } from '@/components/Grid';
 

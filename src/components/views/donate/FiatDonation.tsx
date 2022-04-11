@@ -2,14 +2,13 @@ import Image from 'next/image';
 import { IProject } from '@/apollo/types/types';
 import { Button, H4 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-
-type SuccessFunction = (param: boolean) => void;
+import { ISuccessDonation } from '@/components/views/donate/CryptoDonation';
 
 const FiatDonation = (props: {
 	project: IProject;
-	setSuccessDonation: SuccessFunction;
+	setSuccessDonation: (i: ISuccessDonation) => void;
 }) => {
-	const { setSuccessDonation } = props;
+	// const { setSuccessDonation } = props;
 
 	return (
 		<FiatContainer>
@@ -17,7 +16,7 @@ const FiatDonation = (props: {
 			<ButtonContainer>
 				<Button
 					label='CONTINUE WITH TRANSAK'
-					onClick={() => setSuccessDonation(true)}
+					// onClick={() => setSuccessDonation()}
 					disabled
 				/>
 			</ButtonContainer>

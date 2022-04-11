@@ -1,5 +1,5 @@
-import { brandColors, H2, H3, H5, Subline } from '@giveth/ui-design-system';
-import { mediaQueries } from '@/utils/constants';
+import { brandColors, H2, H5, Subline } from '@giveth/ui-design-system';
+import { mediaQueries } from '@/lib/constants/constants';
 import { FC } from 'react';
 import styled from 'styled-components';
 import { Flex } from '../../styled-components/Flex';

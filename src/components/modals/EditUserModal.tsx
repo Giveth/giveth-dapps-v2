@@ -17,7 +17,7 @@ import Input, {
 	InputValidationType,
 } from '../Input';
 import { IUserInfo } from '../views/onboarding/InfoStep';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 
 enum EditStatusType {
 	INFO,

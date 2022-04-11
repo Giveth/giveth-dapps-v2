@@ -1,4 +1,4 @@
-import { device, mediaQueries } from '@/utils/constants';
+import { device, mediaQueries } from '@/lib/constants/constants';
 import {
 	brandColors,
 	ButtonLink,

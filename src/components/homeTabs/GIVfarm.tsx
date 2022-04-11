@@ -30,7 +30,7 @@ import { useFarms } from '@/context/farm.context';
 import { TopInnerContainer, ExtLink, ExtLinkRow } from './commons';
 import { useWeb3React } from '@web3-react/core';
 import { GIVfrens } from '@/components/GIVfrens';
-import { givEconomySupportedNetworks } from '@/utils/constants';
+import { givEconomySupportedNetworks } from '@/lib/constants/constants';
 import { shortenAddress } from '@/lib/helpers';
 import { Col, Container, Row } from '@/components/Grid';
 import links from '@/lib/constants/links';

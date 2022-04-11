@@ -11,7 +11,7 @@ import twitter_icon from '/public/images/twitter_icon.svg';
 import youtube_icon from '/public/images/youtube_icon.svg';
 import reddit_icon from '/public/images/reddit_icon.svg';
 import links from '@/lib/constants/links';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 import { Lead, brandColors, H2 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 

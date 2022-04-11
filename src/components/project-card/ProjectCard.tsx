@@ -23,7 +23,7 @@ import { Flex } from '../styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
 import { Row } from '@/components/Grid';
 import { ORGANIZATION } from '@/lib/constants/organizations';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 
 const cardRadius = '12px';
 const imgHeight = '226px';

@@ -10,7 +10,7 @@ import {
 import { Flex } from '@/components/styled-components/Flex';
 import { Button as CButton } from '@/components/styled-components/Button';
 import { IHeader } from './Header';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 import { ETheme } from '@/context/general.context';
 import { Shadow } from '@/components/styled-components/Shadow';
 

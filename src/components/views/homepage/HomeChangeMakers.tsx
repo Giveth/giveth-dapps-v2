@@ -14,7 +14,7 @@ import { Arc } from '@/components/styled-components/Arc';
 import { isUserRegistered } from '@/lib/helpers';
 import useUser from '@/context/UserProvider';
 import { HomeContainer } from '@/components/views/homepage/Home.sc';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 import { Col } from '@/components/Grid';
 import useModal from '@/context/ModalProvider';
 

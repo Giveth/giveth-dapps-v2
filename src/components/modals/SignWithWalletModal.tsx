@@ -11,7 +11,7 @@ import {
 import { IModal, Modal } from '@/components/modals/Modal';
 import useUser from '@/context/UserProvider';
 import { ETheme, useGeneral } from '@/context/general.context';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 import useModal from '@/context/ModalProvider';
 
 export const SignWithWalletModal: FC<IModal> = ({
