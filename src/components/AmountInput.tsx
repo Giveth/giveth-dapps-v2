@@ -13,8 +13,6 @@ interface IAmountInput {
 	disabled?: boolean;
 }
 
-function valueToBigNumber(value: string) {}
-
 export const AmountInput: FC<IAmountInput> = ({
 	maxAmount,
 	setAmount,
@@ -22,6 +20,7 @@ export const AmountInput: FC<IAmountInput> = ({
 	disabled = false,
 }) => {
 	const [displayAmount, setDisplayAmount] = useState('');
+	const [activeStep, setActiveStep] = useState(0);
 
 	const setAmountPercentage = useCallback(
 		(percentage: number): void => {
@@ -37,6 +36,7 @@ export const AmountInput: FC<IAmountInput> = ({
 
 	const onUserInput = useCallback(value => {
 		setDisplayAmount(value);
+		setActiveStep(0);
 		let valueBn = BigNumber.from(0);
 
 		try {
@@ -81,34 +81,42 @@ export const AmountInput: FC<IAmountInput> = ({
 			</InputLabelRow>
 			<NumericalInput value={displayAmount} onUserInput={onUserInput} />
 			<FiltersRow>
-				<Filter
+				<Step
 					onClick={() => {
 						setAmountPercentage(25);
+						setActiveStep(25);
 					}}
+					active={activeStep === 25}
 				>
 					25%
-				</Filter>
-				<Filter
+				</Step>
+				<Step
 					onClick={() => {
 						setAmountPercentage(50);
+						setActiveStep(50);
 					}}
+					active={activeStep === 50}
 				>
 					50%
-				</Filter>
-				<Filter
+				</Step>
+				<Step
 					onClick={() => {
 						setAmountPercentage(75);
+						setActiveStep(75);
 					}}
+					active={activeStep === 75}
 				>
 					75%
-				</Filter>
-				<Filter
+				</Step>
+				<Step
 					onClick={() => {
 						setAmountPercentage(100);
+						setActiveStep(100);
 					}}
+					active={activeStep === 100}
 				>
 					100%
-				</Filter>
+				</Step>
 			</FiltersRow>
 		</>
 	);
@@ -131,10 +139,12 @@ const FiltersRow = styled(Flex)`
 	gap: 8px;
 `;
 
-const Filter = styled(GLink)`
+const Step = styled(GLink)<{ active: boolean }>`
 	padding: 8px 16px;
-	color: ${brandColors.deep[100]};
-	background: ${brandColors.giv[700]};
+	color: ${props =>
+		props.active ? neutralColors.gray[100] : brandColors.deep[100]};
+	background: ${props =>
+		props.active ? brandColors.cyan[500] : brandColors.giv[700]};
 	border-radius: 54px;
 	cursor: pointer;
 `;
