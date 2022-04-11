@@ -8,6 +8,7 @@ import {
 	H6,
 	Caption,
 	Subline,
+	B,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
@@ -65,7 +66,11 @@ export const StakePoolInfoContainer = styled.div`
 export const HarvestAllDesc = styled(P)`
 	text-align: justify;
 	color: ${neutralColors.gray[100]};
-	margin-bottom: 32px;
+	background-color: ${brandColors.giv[700]};
+	border-radius: 8px;
+	border: 1px solid ${brandColors.mustard[700]};
+	padding: 18px 16px;
+	margin: 28px 0 12px;
 `;
 
 export const NothingToHarvest = styled(H6)`
@@ -100,4 +105,28 @@ export const TooltipContent = styled(Subline)`
 
 export const HarvestBoxes = styled.div`
 	padding: 24px;
+`;
+
+export const BreakdownTableTitle = styled(B)`
+	color: ${brandColors.deep[100]};
+	text-align: left;
+`;
+
+export const BreakdownTableBody = styled.div``;
+
+export const BreakdownRow = styled.div`
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+`;
+
+export const BreakdownIcon = styled.div``;
+export const BreakdownTitle = styled(Flex)`
+	gap: 8px;
+`;
+export const BreakdownAmount = styled(B)``;
+export const BreakdownRate = styled(B)``;
+export const BreakdownUnit = styled(P)`
+	color: ${brandColors.giv[100]};
+	display: inline-block;
+	padding-left: 4px;
 `;

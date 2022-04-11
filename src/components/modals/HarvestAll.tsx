@@ -9,6 +9,7 @@ import {
 	IconGIVStream,
 	IconHelp,
 	Lead,
+	P,
 } from '@giveth/ui-design-system';
 import { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 import { StakingPoolImages } from '../StakingPoolImages';
@@ -38,6 +39,14 @@ import {
 	TooltipContent,
 	HarvestBoxes,
 	HarvestAllPending,
+	BreakdownTitle,
+	BreakdownAmount,
+	BreakdownIcon,
+	BreakdownRate,
+	BreakdownRow,
+	BreakdownTableBody,
+	BreakdownTableTitle,
+	BreakdownUnit,
 } from './HarvestAll.sc';
 import { Zero } from '@ethersproject/constants';
 import { ethers } from 'ethers';
@@ -251,7 +260,6 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 			setShowModal={setShowModal}
 			headerTitle={modalTitle}
 			headerTitlePosition={'left'}
-			// title='Your GIVgardens Rewards'
 		>
 			<>
 				{(state === HarvestStates.HARVEST ||
@@ -288,7 +296,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 										</div>
 									</SPTitle>
 								)}
-								{claimable && claimable.gt(0) && (
+								{/* {claimable && claimable.gt(0) && (
 									<>
 										<AmountBoxWithPrice
 											amount={rewardLiquidPart}
@@ -444,12 +452,88 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 											}
 										/>
 									</>
+								)} */}
+								{sum && sum.gt(0) && (
+									<>
+										<AmountBoxWithPrice
+											amount={sum}
+											price={calcUSD(
+												formatWeiHelper(
+													sum,
+													config.TOKEN_PRECISION,
+													false,
+												),
+											)}
+											tokenSymbol={
+												regenStreamConfig?.rewardTokenSymbol
+											}
+										/>
+										<HelpRow alignItems='center'>
+											<Caption>
+												Your new {tokenSymbol}
+												stream flowrate
+											</Caption>
+											<IconWithTooltip
+												icon={
+													<IconHelp
+														size={16}
+														color={
+															brandColors
+																.deep[100]
+														}
+													/>
+												}
+												direction={'top'}
+											>
+												<TooltipContent>
+													Increase you {tokenSymbol}
+													stream flowrate when you
+													claim liquid rewards!
+												</TooltipContent>
+											</IconWithTooltip>
+											<IconGIVStream size={24} />
+											<GIVRate>
+												{formatWeiHelper(rewardStream)}
+											</GIVRate>
+											<Lead>{tokenSymbol}/week</Lead>
+										</HelpRow>
+									</>
 								)}
 								<HarvestAllDesc>
-									When you harvest {tokenSymbol} rewards, all
-									liquid {tokenSymbol} allocated to you is
-									sent to your wallet.
+									When you harvest {tokenSymbol}
+									rewards anywhere in the GIVeconomy, all
+									liquid {tokenSymbol} allocated to you on
+									that chain is sent to your wallet. Your{' '}
+									{tokenSymbol}stream flowrate may also
+									increase. Below is the breakdown of rewards
+									you will get when you harvest.
 								</HarvestAllDesc>
+								<BreakdownTableTitle>
+									Rewards breakdown
+								</BreakdownTableTitle>
+								<BreakdownTableBody>
+									<BreakdownRow>
+										<BreakdownTitle>
+											<BreakdownIcon>
+												<IconGIVStream size={24} />
+											</BreakdownIcon>
+											<P>GIVstream</P>
+										</BreakdownTitle>
+										<BreakdownAmount>
+											40.09
+											<BreakdownUnit>
+												{tokenSymbol}
+											</BreakdownUnit>
+										</BreakdownAmount>
+										<BreakdownRate>
+											190
+											<BreakdownUnit>
+												{tokenSymbol}/week
+											</BreakdownUnit>
+										</BreakdownRate>
+									</BreakdownRow>
+								</BreakdownTableBody>
+
 								{state === HarvestStates.HARVEST && (
 									<HarvestButton
 										label='HARVEST'
