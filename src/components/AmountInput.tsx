@@ -74,6 +74,7 @@ export const AmountInput: FC<IAmountInput> = ({
 				<InputLabelAction
 					onClick={() => {
 						setAmountPercentage(100);
+						setActiveStep(100);
 					}}
 				>
 					Max
