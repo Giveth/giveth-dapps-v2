@@ -18,6 +18,7 @@ const moduleExports = withBundleAnalyzer({
 			'giveth.mypinata.cloud',
 			'static.tgbwidget.com',
 			'images.unsplash.com',
+			'cloudfront.net',
 		],
 	},
 });
