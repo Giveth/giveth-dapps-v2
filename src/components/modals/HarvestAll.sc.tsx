@@ -112,11 +112,15 @@ export const BreakdownTableTitle = styled(B)`
 	text-align: left;
 `;
 
-export const BreakdownTableBody = styled.div``;
+export const BreakdownTableBody = styled.div`
+	margin-bottom: 48px;
+`;
 
 export const BreakdownRow = styled.div`
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
+	border-bottom: 2px solid ${brandColors.giv[500]};
+	padding: 16px;
 `;
 
 export const BreakdownIcon = styled.div``;
@@ -126,7 +130,7 @@ export const BreakdownTitle = styled(Flex)`
 export const BreakdownAmount = styled(B)``;
 export const BreakdownRate = styled(B)``;
 export const BreakdownUnit = styled(P)`
-	color: ${brandColors.giv[100]};
+	color: ${brandColors.giv[200]};
 	display: inline-block;
 	padding-left: 4px;
 `;

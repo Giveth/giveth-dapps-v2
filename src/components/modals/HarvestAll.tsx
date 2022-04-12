@@ -6,6 +6,8 @@ import {
 	B,
 	brandColors,
 	Caption,
+	IconGIVBack,
+	IconGIVFarm,
 	IconGIVStream,
 	IconHelp,
 	Lead,
@@ -135,7 +137,11 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 			);
 		}
 		setClaimableNow(tokenDistroHelper.getUserClaimableNow(balances));
-
+		setRewardStream(
+			tokenDistroHelper.getStreamPartTokenPerWeek(
+				balances.allocatedTokens.sub(givback),
+			),
+		);
 		setGivBackStream(tokenDistroHelper.getStreamPartTokenPerWeek(givback));
 	}, [claimable, balances, tokenDistroHelper, givback]);
 
@@ -517,21 +523,95 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 											<BreakdownIcon>
 												<IconGIVStream size={24} />
 											</BreakdownIcon>
-											<P>GIVstream</P>
+											<P>{tokenSymbol}stream</P>
 										</BreakdownTitle>
 										<BreakdownAmount>
-											40.09
+											{formatWeiHelper(
+												claimableNow.sub(
+													givbackLiquidPart,
+												),
+												config.TOKEN_PRECISION,
+												false,
+											)}
 											<BreakdownUnit>
 												{tokenSymbol}
 											</BreakdownUnit>
 										</BreakdownAmount>
 										<BreakdownRate>
-											190
+											{formatWeiHelper(
+												rewardStream,
+												config.TOKEN_PRECISION,
+												false,
+											)}
 											<BreakdownUnit>
 												{tokenSymbol}/week
 											</BreakdownUnit>
 										</BreakdownRate>
 									</BreakdownRow>
+									{!regenStreamConfig && givback.gt(0) && (
+										<BreakdownRow>
+											<BreakdownTitle>
+												<BreakdownIcon>
+													<IconGIVBack size={24} />
+												</BreakdownIcon>
+												<P>GIVback</P>
+											</BreakdownTitle>
+											<BreakdownAmount>
+												{formatWeiHelper(
+													givbackLiquidPart,
+													config.TOKEN_PRECISION,
+													false,
+												)}
+												<BreakdownUnit>
+													{tokenSymbol}
+												</BreakdownUnit>
+											</BreakdownAmount>
+											<BreakdownRate>
+												{formatWeiHelper(
+													givBackStream,
+													config.TOKEN_PRECISION,
+													false,
+												)}
+												<BreakdownUnit>
+													{tokenSymbol}/week
+												</BreakdownUnit>
+											</BreakdownRate>
+										</BreakdownRow>
+									)}
+									{claimable && claimable.gt(0) && (
+										<BreakdownRow>
+											<BreakdownTitle>
+												<BreakdownIcon>
+													<IconGIVFarm size={24} />
+												</BreakdownIcon>
+												<P>
+													{regenStreamConfig
+														? 'RegenFarm'
+														: 'GIVfarm'}
+												</P>
+											</BreakdownTitle>
+											<BreakdownAmount>
+												{formatWeiHelper(
+													rewardLiquidPart,
+													config.TOKEN_PRECISION,
+													false,
+												)}
+												<BreakdownUnit>
+													{tokenSymbol}
+												</BreakdownUnit>
+											</BreakdownAmount>
+											<BreakdownRate>
+												{formatWeiHelper(
+													rewardStream,
+													config.TOKEN_PRECISION,
+													false,
+												)}
+												<BreakdownUnit>
+													{tokenSymbol}/week
+												</BreakdownUnit>
+											</BreakdownRate>
+										</BreakdownRow>
+									)}
 								</BreakdownTableBody>
 
 								{state === HarvestStates.HARVEST && (
