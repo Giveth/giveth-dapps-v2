@@ -37,10 +37,6 @@ import {
 	HarvestAllModalContainer,
 	HarvestButton,
 	HelpRow,
-	RateRow,
-	SPTitle,
-	StakingPoolLabel,
-	StakingPoolSubtitle,
 	NothingToHarvest,
 	TooltipContent,
 	HarvestBoxes,
@@ -57,6 +53,7 @@ import {
 	BreakdownSumRow,
 	BreakdownLiquidSum,
 	BreakdownStreamSum,
+	PoolIcon,
 } from './HarvestAll.sc';
 import { Zero } from '@ethersproject/constants';
 import { ethers } from 'ethers';
@@ -67,6 +64,8 @@ import { IconWithTooltip } from '../IconWithToolTip';
 import { AmountBoxWithPrice } from '@/components/AmountBoxWithPrice';
 import { usePrice } from '@/context/price.context';
 import { useWeb3React } from '@web3-react/core';
+import { type } from 'os';
+import { getPoolIconWithName } from '../cards/BaseStakingCard';
 
 interface IHarvestAllModalProps extends IModal {
 	title: string;
@@ -327,21 +326,6 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 					) : (
 						<HarvestAllModalContainer>
 							<HarvestBoxes>
-								{poolStakingConfig && (
-									<SPTitle alignItems='center' gap='16px'>
-										<StakingPoolImages
-											title={poolStakingConfig.title}
-										/>
-										<div>
-											<StakingPoolLabel weight={900}>
-												{poolStakingConfig.title}
-											</StakingPoolLabel>
-											<StakingPoolSubtitle>
-												{poolStakingConfig.description}
-											</StakingPoolSubtitle>
-										</div>
-									</SPTitle>
-								)}
 								{sumLiquid && sumLiquid.gt(0) && (
 									<>
 										<AmountBoxWithPrice
@@ -492,41 +476,51 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 											<BreakdownUnit></BreakdownUnit>
 										</BreakdownRow>
 									)}
-									{claimable && claimable.gt(0) && (
-										<BreakdownRow>
-											<BreakdownTitle>
-												<BreakdownIcon>
-													<IconGIVFarm size={24} />
-												</BreakdownIcon>
-												<P>
-													{regenStreamConfig
-														? 'RegenFarm'
-														: 'GIVfarm'}
-												</P>
-											</BreakdownTitle>
-											<BreakdownAmount>
-												{formatWeiHelper(
-													rewardLiquidPart,
-													config.TOKEN_PRECISION,
-													false,
-												)}
-											</BreakdownAmount>
-											<BreakdownUnit>
-												{tokenSymbol}
-											</BreakdownUnit>
-											<BreakdownRate>
-												+
-												{formatWeiHelper(
-													claimableStream,
-													config.TOKEN_PRECISION,
-													false,
-												)}
-											</BreakdownRate>
-											<BreakdownUnit>
-												{tokenSymbol}/week
-											</BreakdownUnit>
-										</BreakdownRow>
-									)}
+									{poolStakingConfig &&
+										claimable &&
+										claimable.gt(0) && (
+											<BreakdownRow>
+												<BreakdownTitle>
+													<BreakdownIcon>
+														<IconGIVFarm
+															size={24}
+														/>
+													</BreakdownIcon>
+													<P>
+														{regenStreamConfig
+															? 'RegenFarm'
+															: 'GIVfarm'}
+													</P>
+													{poolStakingConfig.title}
+													<PoolIcon>
+														{getPoolIconWithName(
+															poolStakingConfig.type,
+														)}
+													</PoolIcon>
+												</BreakdownTitle>
+												<BreakdownAmount>
+													{formatWeiHelper(
+														rewardLiquidPart,
+														config.TOKEN_PRECISION,
+														false,
+													)}
+												</BreakdownAmount>
+												<BreakdownUnit>
+													{tokenSymbol}
+												</BreakdownUnit>
+												<BreakdownRate>
+													+
+													{formatWeiHelper(
+														claimableStream,
+														config.TOKEN_PRECISION,
+														false,
+													)}
+												</BreakdownRate>
+												<BreakdownUnit>
+													{tokenSymbol}/week
+												</BreakdownUnit>
+											</BreakdownRow>
+										)}
 									<BreakdownSumRow>
 										<div></div>
 										<BreakdownLiquidSum>

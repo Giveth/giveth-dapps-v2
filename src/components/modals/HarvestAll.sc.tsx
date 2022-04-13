@@ -28,11 +28,6 @@ export const HelpRow = styled(Flex)`
 	margin-bottom: 4px;
 `;
 
-export const RateRow = styled(Flex)`
-	gap: 4px;
-	margin-bottom: 32px;
-`;
-
 export const GIVRate = styled(Lead)`
 	color: ${neutralColors.gray[100]};
 `;
@@ -47,17 +42,6 @@ export const CancelButton = styled(Button)`
 	width: 316px;
 	margin: 0 auto 8px;
 `;
-
-export const SPTitle = styled(Flex)`
-	margin-top: 12px;
-	margin-bottom: 24px;
-	color: ${neutralColors.gray[100]};
-	margin-left: -24px;
-`;
-
-export const StakingPoolLabel = styled(H5)``;
-
-export const StakingPoolSubtitle = styled(Caption)``;
 
 export const StakePoolInfoContainer = styled.div`
 	padding: 0 24px;
@@ -126,6 +110,7 @@ export const BreakdownRow = styled.div`
 export const BreakdownIcon = styled.div``;
 export const BreakdownTitle = styled(Flex)`
 	gap: 8px;
+	align-items: center;
 `;
 export const BreakdownAmount = styled(B)`
 	text-align: right;
@@ -160,4 +145,9 @@ export const BreakdownLiquidSum = styled(B)`
 `;
 export const BreakdownStreamSum = styled(B)`
 	text-align: right;
+`;
+
+export const PoolIcon = styled.div`
+	width: 16px;
+	height: 16px;
 `;
