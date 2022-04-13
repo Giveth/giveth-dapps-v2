@@ -53,6 +53,7 @@ import {
 	BreakdownTableBody,
 	BreakdownTableTitle,
 	BreakdownUnit,
+	GIVbackStreamDesc,
 } from './HarvestAll.sc';
 import { Zero } from '@ethersproject/constants';
 import { ethers } from 'ethers';
@@ -142,16 +143,11 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	useEffect(() => {
 		if (claimable) {
 			setRewardLiquidPart(tokenDistroHelper.getLiquidPart(claimable));
-			setRewardStream(
-				tokenDistroHelper.getStreamPartTokenPerWeek(claimable),
-			);
-		}
-		setClaimableNow(tokenDistroHelper.getUserClaimableNow(balances));
-		if (claimable) {
 			setClaimableStream(
 				tokenDistroHelper.getStreamPartTokenPerWeek(claimable),
 			);
 		}
+		setClaimableNow(tokenDistroHelper.getUserClaimableNow(balances));
 		let lockedAmount;
 		if (regenStreamConfig) {
 			switch (regenStreamConfig.type) {
@@ -170,6 +166,19 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 		setGivBackStream(tokenDistroHelper.getStreamPartTokenPerWeek(givback));
 	}, [claimable, balances, tokenDistroHelper, givback]);
 
+	//calculate Liquid Sum
+	// useEffect(() => {
+	// 	let _sum = rewardStream.add(givbackLiquidPart);
+	// 	if (claimableNow) {
+	// 		_sum = _sum.add(claimableNow);
+	// 	}
+	// 	if (_sum.isZero()) {
+	// 	} else {
+	// 		setSumLiquid(_sum);
+	// 	}
+	// }, [rewardLiquidPart, givbackLiquidPart, claimableNow]);
+
+	//calculate Stream Sum
 	useEffect(() => {
 		let _sum = rewardLiquidPart.add(givbackLiquidPart);
 		if (claimableNow) {
@@ -558,20 +567,59 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 												config.TOKEN_PRECISION,
 												false,
 											)}
-											<BreakdownUnit>
-												{tokenSymbol}
-											</BreakdownUnit>
 										</BreakdownAmount>
+										<BreakdownUnit>
+											{tokenSymbol}
+										</BreakdownUnit>
 										<BreakdownRate>
 											{formatWeiHelper(
 												rewardStream,
 												config.TOKEN_PRECISION,
 												false,
 											)}
-											<BreakdownUnit>
-												{tokenSymbol}/week
-											</BreakdownUnit>
 										</BreakdownRate>
+										<BreakdownUnit>
+											{tokenSymbol}/week
+										</BreakdownUnit>
+										{givBackStream != 0 && (
+											<>
+												<GIVbackStreamDesc>
+													Recieved from GIVbacks
+												</GIVbackStreamDesc>
+												<BreakdownRate>
+													+
+													{formatWeiHelper(
+														givBackStream,
+														config.TOKEN_PRECISION,
+														false,
+													)}
+												</BreakdownRate>
+												<BreakdownUnit>
+													{tokenSymbol}/week
+													<IconWithTooltip
+														icon={
+															<IconHelp
+																size={16}
+																color={
+																	brandColors
+																		.deep[100]
+																}
+															/>
+														}
+														direction={'left'}
+													>
+														<TooltipContent>
+															Your GIVstream
+															flowrate was
+															automatically
+															increased when
+															GIVbacks were
+															distributed.
+														</TooltipContent>
+													</IconWithTooltip>
+												</BreakdownUnit>
+											</>
+										)}
 									</BreakdownRow>
 									{!regenStreamConfig && givback.gt(0) && (
 										<BreakdownRow>
@@ -587,20 +635,12 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 													config.TOKEN_PRECISION,
 													false,
 												)}
-												<BreakdownUnit>
-													{tokenSymbol}
-												</BreakdownUnit>
 											</BreakdownAmount>
-											<BreakdownRate>
-												{formatWeiHelper(
-													givBackStream,
-													config.TOKEN_PRECISION,
-													false,
-												)}
-												<BreakdownUnit>
-													{tokenSymbol}/week
-												</BreakdownUnit>
-											</BreakdownRate>
+											<BreakdownUnit>
+												{tokenSymbol}
+											</BreakdownUnit>
+											<BreakdownRate></BreakdownRate>
+											<BreakdownUnit></BreakdownUnit>
 										</BreakdownRow>
 									)}
 									{claimable && claimable.gt(0) && (
@@ -621,20 +661,21 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 													config.TOKEN_PRECISION,
 													false,
 												)}
-												<BreakdownUnit>
-													{tokenSymbol}
-												</BreakdownUnit>
 											</BreakdownAmount>
+											<BreakdownUnit>
+												{tokenSymbol}
+											</BreakdownUnit>
 											<BreakdownRate>
+												+
 												{formatWeiHelper(
 													claimableStream,
 													config.TOKEN_PRECISION,
 													false,
 												)}
-												<BreakdownUnit>
-													{tokenSymbol}/week
-												</BreakdownUnit>
 											</BreakdownRate>
+											<BreakdownUnit>
+												{tokenSymbol}/week
+											</BreakdownUnit>
 										</BreakdownRow>
 									)}
 								</BreakdownTableBody>

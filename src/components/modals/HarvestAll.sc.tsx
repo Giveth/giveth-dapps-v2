@@ -118,7 +118,7 @@ export const BreakdownTableBody = styled.div`
 
 export const BreakdownRow = styled.div`
 	display: grid;
-	grid-template-columns: repeat(3, 1fr);
+	grid-template-columns: 3fr 1fr 1fr 1fr 1.5fr;
 	border-bottom: 2px solid ${brandColors.giv[500]};
 	padding: 16px;
 `;
@@ -127,10 +127,24 @@ export const BreakdownIcon = styled.div``;
 export const BreakdownTitle = styled(Flex)`
 	gap: 8px;
 `;
-export const BreakdownAmount = styled(B)``;
-export const BreakdownRate = styled(B)``;
+export const BreakdownAmount = styled(B)`
+	text-align: right;
+`;
+export const BreakdownRate = styled(B)`
+	text-align: right;
+`;
 export const BreakdownUnit = styled(P)`
 	color: ${brandColors.giv[200]};
 	display: inline-block;
 	padding-left: 4px;
+	text-align: left;
+	display: flex;
+	gap: 8px;
+`;
+
+export const GIVbackStreamDesc = styled(Caption)`
+	grid-column-start: 1;
+	grid-column-end: 4;
+	text-align: right;
+	color: ${brandColors.deep[100]};
 `;
