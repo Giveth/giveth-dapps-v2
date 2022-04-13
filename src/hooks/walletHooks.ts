@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useWeb3React } from '@web3-react/core';
+import { SafeAppConnector } from '@gnosis.pm/safe-apps-web3-react';
 import { injectedConnector } from '@/lib/wallet/walletTypes';
 
 const useWallet = () => {
@@ -22,24 +23,42 @@ const useEagerConnect = () => {
 	const { activate, active } = useWeb3React();
 
 	const [tried, setTried] = useState(false);
+	const [triedSafe, setTriedSafe] = useState(false);
 
 	useEffect(() => {
-		injectedConnector.isAuthorized().then((isAuthorized: boolean) => {
-			if (isAuthorized) {
-				activate(injectedConnector, undefined, true).catch(() =>
-					setTried(true),
-				);
-			} else {
-				setTried(true);
-			}
-		});
+		if (!triedSafe) {
+			const gnosisSafe = new SafeAppConnector();
+			gnosisSafe.isSafeApp().then(loadedInSafe => {
+				if (loadedInSafe) {
+					activate(gnosisSafe, undefined, true).catch(() => {
+						setTriedSafe(true);
+					});
+				} else {
+					setTriedSafe(true);
+				}
+			});
+		}
+	}, [activate, setTriedSafe, triedSafe]);
+
+	useEffect(() => {
+		if (!active && triedSafe) {
+			injectedConnector.isAuthorized().then((isAuthorized: boolean) => {
+				if (isAuthorized) {
+					activate(injectedConnector, undefined, true).catch(() =>
+						setTried(true),
+					);
+				} else {
+					setTried(true);
+				}
+			});
+		}
 	}, []);
 
 	useEffect(() => {
 		if (!tried && active) {
 			setTried(true);
 		}
-	}, [tried, active]);
+	}, [tried, active, triedSafe]);
 
 	return tried;
 };
