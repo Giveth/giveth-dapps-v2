@@ -148,3 +148,16 @@ export const GIVbackStreamDesc = styled(Caption)`
 	text-align: right;
 	color: ${brandColors.deep[100]};
 `;
+
+export const BreakdownSumRow = styled(BreakdownRow)`
+	border: none;
+	align-items: baseline;
+`;
+
+export const BreakdownLiquidSum = styled(B)`
+	text-align: right;
+	font-size: 24px;
+`;
+export const BreakdownStreamSum = styled(B)`
+	text-align: right;
+`;

@@ -54,6 +54,9 @@ import {
 	BreakdownTableTitle,
 	BreakdownUnit,
 	GIVbackStreamDesc,
+	BreakdownSumRow,
+	BreakdownLiquidSum,
+	BreakdownStreamSum,
 } from './HarvestAll.sc';
 import { Zero } from '@ethersproject/constants';
 import { ethers } from 'ethers';
@@ -524,6 +527,29 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 											</BreakdownUnit>
 										</BreakdownRow>
 									)}
+									<BreakdownSumRow>
+										<div></div>
+										<BreakdownLiquidSum>
+											{formatWeiHelper(
+												sumLiquid,
+												config.TOKEN_PRECISION,
+												false,
+											)}
+										</BreakdownLiquidSum>
+										<BreakdownUnit>
+											{tokenSymbol}
+										</BreakdownUnit>
+										<BreakdownStreamSum>
+											{formatWeiHelper(
+												sumStream,
+												config.TOKEN_PRECISION,
+												false,
+											)}
+										</BreakdownStreamSum>
+										<BreakdownUnit>
+											{tokenSymbol}/week
+										</BreakdownUnit>
+									</BreakdownSumRow>
 								</BreakdownTableBody>
 
 								{state === HarvestStates.HARVEST && (
