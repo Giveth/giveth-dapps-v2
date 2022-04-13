@@ -65,7 +65,6 @@ const ProjectIndex = (props: { project?: IProject }) => {
 			})
 			.catch((e: any) => {
 				// showToastError(e);
-				console.log({ e });
 				setNotAvailableProject(true);
 			});
 	};
