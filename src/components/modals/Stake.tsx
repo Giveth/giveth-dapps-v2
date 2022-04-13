@@ -77,7 +77,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 			console.error('library is null');
 			return;
 		}
-		console.log(permit);
+
 		// if (!GARDEN_ADDRESS) {
 		// 	console.error('GARDEN_ADDRESS is null');
 		// 	return;
@@ -118,6 +118,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 				library,
 				permit,
 			);
+			console.log(txResponse);
 			if (txResponse) {
 				setTxHash(txResponse.hash);
 				setStakeState(StakeState.CONFIRMING);
@@ -146,6 +147,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 				GARDEN_ADDRESS,
 				library,
 			);
+			console.log(txResponse);
 			if (txResponse) {
 				setTxHash(txResponse?.hash);
 				setStakeState(StakeState.CONFIRMING);

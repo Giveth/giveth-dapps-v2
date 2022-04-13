@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Contract, ethers } from 'ethers';
 
 import { abi as LM_ABI } from '../artifacts/UnipoolTokenDistributor.json';
@@ -355,7 +356,6 @@ export const approveERC20tokenTransfer = async (
 		console.error('Provider is null');
 		return false;
 	}
-
 	const signer = provider.getSigner();
 	const tokenContract = new Contract(poolAddress, ERC20_ABI, signer);
 	const allowance: BigNumber = await tokenContract.allowance(

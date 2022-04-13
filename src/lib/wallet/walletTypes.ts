@@ -23,10 +23,8 @@ const RPC_URLS: { [chainId: number]: string } = {
 	100: networksParams[100].rpcUrls[0],
 };
 
-export const injectedConnector = new InjectedConnector({});
+export const injectedConnector = new InjectedConnector({ supportedChainIds });
 export const walletconnectConnector = new WalletConnectConnector({
-	infuraId: INFURA_API_KEY,
-	supportedChainIds: supportedChainIds,
 	rpc: RPC_URLS,
 	qrcode: true,
 });
