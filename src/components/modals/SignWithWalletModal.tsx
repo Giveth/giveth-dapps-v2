@@ -13,6 +13,7 @@ import useUser from '@/context/UserProvider';
 import { ETheme, useGeneral } from '@/context/general.context';
 import { mediaQueries } from '@/lib/constants/constants';
 import useModal from '@/context/ModalProvider';
+import { useWeb3React } from '@web3-react/core';
 
 export const SignWithWalletModal: FC<IModal> = ({
 	showModal,
@@ -21,9 +22,9 @@ export const SignWithWalletModal: FC<IModal> = ({
 }) => {
 	const { theme } = useGeneral();
 	const {
-		state: { user },
 		actions: { signToGetToken },
 	} = useUser();
+	const { account } = useWeb3React();
 	const {
 		actions: { showWelcomeModal },
 	} = useModal();
@@ -49,7 +50,7 @@ export const SignWithWalletModal: FC<IModal> = ({
 				<OkButton
 					label='SIGN IN'
 					onClick={async () => {
-						if (!user?.walletAddress) {
+						if (!account) {
 							return showWelcomeModal();
 						}
 						const signature = await signToGetToken();
