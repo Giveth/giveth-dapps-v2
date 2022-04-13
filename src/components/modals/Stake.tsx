@@ -140,24 +140,12 @@ export const StakeModal: FC<IStakeModalProps> = ({
 		}
 		setStakeState(StakeState.WRAPPING);
 		try {
-			console.log(permit);
-			let txResponse = undefined;
-			if (permit) {
-				txResponse = wrapToken(
-					amount,
-					POOL_ADDRESS,
-					GARDEN_ADDRESS,
-					library,
-				);
-				console.log(txResponse);
-			} else {
-				txResponse = await wrapToken(
-					amount,
-					POOL_ADDRESS,
-					GARDEN_ADDRESS,
-					library,
-				);
-			}
+			const txResponse = await wrapToken(
+				amount,
+				POOL_ADDRESS,
+				GARDEN_ADDRESS,
+				library,
+			);
 			if (txResponse) {
 				setTxHash(txResponse?.hash);
 				setStakeState(StakeState.CONFIRMING);
