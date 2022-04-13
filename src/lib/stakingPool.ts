@@ -46,9 +46,9 @@ export const getGivStakingAPR = async (
 		apr = totalSupply.isZero()
 			? Zero
 			: toBigNumber(rewardRate)
-				.div(totalSupply.toString())
-				.times('31536000')
-				.times('100');
+					.div(totalSupply.toString())
+					.times('31536000')
+					.times('100');
 	}
 
 	return apr;
@@ -145,10 +145,10 @@ const getBalancerPoolStakingAPR = async (
 		apr = totalSupply.isZero()
 			? null
 			: toBigNumber(rewardRate)
-				.div(totalSupply.toString())
-				.times('31536000')
-				.times('100')
-				.times(lp);
+					.div(totalSupply.toString())
+					.times('31536000')
+					.times('100')
+					.times(lp);
 	} catch (e) {
 		console.error('error on fetching balancer apr:', e);
 	}
@@ -208,11 +208,11 @@ const getSimplePoolStakingAPR = async (
 		apr = totalSupply.isZero()
 			? null
 			: toBigNumber(rewardRate)
-				.div(totalSupply.toString())
-				.times('31536000')
-				.times('100')
-				.times(lp)
-				.div(10 ** 18);
+					.div(totalSupply.toString())
+					.times('31536000')
+					.times('100')
+					.times(lp)
+					.div(10 ** 18);
 	} catch (e) {
 		console.error('error on fetching apr:', e);
 	}
