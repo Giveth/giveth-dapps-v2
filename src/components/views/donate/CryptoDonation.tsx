@@ -20,7 +20,6 @@ import InputBox from '../../InputBox';
 import useUser from '@/context/UserProvider';
 import CheckBox from '@/components/Checkbox';
 import DonateModal from '@/components/modals/DonateModal';
-import { ChangeNetworkModal } from '@/components/modals/ChangeNetwork';
 import { mediaQueries } from '@/lib/constants/constants';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import { IProject } from '@/apollo/types/types';
@@ -49,6 +48,7 @@ import { ORGANIZATION } from '@/lib/constants/organizations';
 import useModal from '@/context/ModalProvider';
 import { getERC20Info } from '@/lib/contracts';
 import GIVBackToast from '@/components/views/donate/GIVBackToast';
+import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
 
 const ethereumChain = config.PRIMARY_NETWORK;
 const xdaiChain = config.SECONDARY_NETWORK;
@@ -304,14 +304,13 @@ const CryptoDonation = (props: {
 		<MainContainer>
 			{geminiModal && <GeminiModal setShowModal={setGeminiModal} />}
 			{showChangeNetworkModal && acceptedChains && (
-				<ChangeNetworkModal
+				<DonateWrongNetwork
 					setShowModal={setShowChangeNetworkModal}
-					targetNetwork={config.MAINNET_NETWORK_NUMBER}
+					targetNetworks={acceptedChains}
 				/>
 			)}
 			{showInsufficientModal && (
 				<InsufficientFundModal
-					showModal={showInsufficientModal}
 					setShowModal={setShowInsufficientModal}
 				/>
 			)}
@@ -347,20 +346,20 @@ const CryptoDonation = (props: {
 								</Caption>
 							</div>
 							<SwitchCaption
-								onClick={() => switchNetwork(acceptedChains[0])}
+								onClick={() => switchNetwork(ethereumChain.id)}
 							>
 								Switch network
 							</SwitchCaption>
 						</NetworkToast>
 					)}
 				{networkId &&
-					networkId !== xdaiChain.id &&
+					networkId === ethereumChain.id &&
 					acceptedChains?.includes(xdaiChain.id) && (
 						<NetworkToast>
 							<div>
 								<img src='/images/gas_station.svg' />
 								<Caption color={neutralColors.gray[900]}>
-									Save on gas fees, switch to xDAI network.
+									Save on gas fees, switch to Gnosis Chain.
 								</Caption>
 							</div>
 							<SwitchCaption
