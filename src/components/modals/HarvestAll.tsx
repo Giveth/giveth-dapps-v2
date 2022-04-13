@@ -167,18 +167,6 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	}, [claimable, balances, tokenDistroHelper, givback]);
 
 	//calculate Liquid Sum
-	// useEffect(() => {
-	// 	let _sum = rewardStream.add(givbackLiquidPart);
-	// 	if (claimableNow) {
-	// 		_sum = _sum.add(claimableNow);
-	// 	}
-	// 	if (_sum.isZero()) {
-	// 	} else {
-	// 		setSumLiquid(_sum);
-	// 	}
-	// }, [rewardLiquidPart, givbackLiquidPart, claimableNow]);
-
-	//calculate Stream Sum
 	useEffect(() => {
 		let _sum = rewardLiquidPart.add(givbackLiquidPart);
 		if (claimableNow) {
@@ -189,6 +177,21 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 			setSumLiquid(_sum);
 		}
 	}, [rewardLiquidPart, givbackLiquidPart, claimableNow]);
+
+	//calculate Stream Sum
+	useEffect(() => {
+		const _rewardStream = new BigNumber(rewardStream);
+		const _givBackStream = new BigNumber(givBackStream);
+		const _claimableStream = new BigNumber(claimableStream);
+		let _sum = _rewardStream.plus(_givBackStream);
+		if (_claimableStream) {
+			_sum = _sum.plus(_claimableStream);
+		}
+		if (_sum.isZero()) {
+		} else {
+			setSumStream(_sum);
+		}
+	}, [rewardStream, givBackStream, claimableStream]);
 
 	useEffect(() => {
 		if (
@@ -336,163 +339,6 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 										</div>
 									</SPTitle>
 								)}
-								{/* {claimable && claimable.gt(0) && (
-									<>
-										<AmountBoxWithPrice
-											amount={rewardLiquidPart}
-											price={calcUSD(
-												formatWeiHelper(
-													rewardLiquidPart,
-													config.TOKEN_PRECISION,
-													false,
-												),
-											)}
-											tokenSymbol={
-												regenStreamConfig?.rewardTokenSymbol
-											}
-										/>
-										<HelpRow alignItems='center'>
-											<Caption>
-												Added to your {tokenSymbol}
-												stream flowrate
-											</Caption>
-											<IconWithTooltip
-												icon={
-													<IconHelp
-														size={16}
-														color={
-															brandColors
-																.deep[100]
-														}
-													/>
-												}
-												direction={'top'}
-											>
-												<TooltipContent>
-													Increase you {tokenSymbol}
-													stream flowrate when you
-													claim liquid rewards!
-												</TooltipContent>
-											</IconWithTooltip>
-										</HelpRow>
-										<RateRow alignItems='center'>
-											<IconGIVStream size={24} />
-											<GIVRate>
-												{formatWeiHelper(rewardStream)}
-											</GIVRate>
-											<Lead>{tokenSymbol}/week</Lead>
-										</RateRow>
-									</>
-								)}
-								{givback.gt(0) && (
-									<>
-										<HelpRow alignItems='center'>
-											<B>Claimable from GIVbacks</B>
-										</HelpRow>
-										<AmountBoxWithPrice
-											amount={givbackLiquidPart}
-											price={calcUSD(
-												formatWeiHelper(
-													givbackLiquidPart,
-													config.TOKEN_PRECISION,
-													false,
-												),
-											)}
-											tokenSymbol={
-												regenStreamConfig?.rewardTokenSymbol
-											}
-										/>
-										<HelpRow alignItems='center'>
-											<Caption>
-												Added to your {tokenSymbol}
-												stream flowrate
-											</Caption>
-											<IconWithTooltip
-												icon={
-													<IconHelp
-														size={16}
-														color={
-															brandColors
-																.deep[100]
-														}
-													/>
-												}
-												direction={'top'}
-											>
-												<TooltipContent>
-													Increase you {tokenSymbol}
-													stream flowrate when you
-													claim liquid rewards!
-												</TooltipContent>
-											</IconWithTooltip>
-										</HelpRow>
-										<RateRow alignItems='center'>
-											<IconGIVStream size={24} />
-											<GIVRate>
-												{formatWeiHelper(givBackStream)}
-											</GIVRate>
-											<Lead>{tokenSymbol}/week</Lead>
-										</RateRow>
-									</>
-								)}
-								{givDrop.gt(Zero) && (
-									<>
-										<HelpRow alignItems='center'>
-											<B>Claimable from GIVdrop</B>
-										</HelpRow>
-										<AmountBoxWithPrice
-											amount={givDrop}
-											price={calcUSD(
-												formatWeiHelper(
-													givDrop,
-													config.TOKEN_PRECISION,
-													false,
-												),
-											)}
-											tokenSymbol={
-												regenStreamConfig?.rewardTokenSymbol
-											}
-										/>
-										<HelpRow alignItems='center'>
-											<Caption>
-												Your initial {streamName}
-												flowrate
-											</Caption>
-										</HelpRow>
-										<RateRow alignItems='center'>
-											<IconGIVStream size={24} />
-											<GIVRate>
-												{formatWeiHelper(givDropStream)}
-											</GIVRate>
-											<Lead>{tokenSymbol}/week</Lead>
-										</RateRow>
-									</>
-								)}
-								{!claimableNow.isZero() && (
-									<>
-										<HelpRow alignItems='center'>
-											<B>
-												Claimable from {tokenSymbol}
-												stream
-											</B>
-										</HelpRow>
-										<AmountBoxWithPrice
-											amount={claimableNow.sub(
-												givbackLiquidPart,
-											)}
-											price={calcUSD(
-												formatWeiHelper(
-													claimableNow,
-													config.TOKEN_PRECISION,
-													false,
-												),
-											)}
-											tokenSymbol={
-												regenStreamConfig?.rewardTokenSymbol
-											}
-										/>
-									</>
-								)} */}
 								{sumLiquid && sumLiquid.gt(0) && (
 									<>
 										<AmountBoxWithPrice
@@ -533,7 +379,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 											</IconWithTooltip>
 											<IconGIVStream size={24} />
 											<GIVRate>
-												{formatWeiHelper(rewardStream)}
+												{formatWeiHelper(sumStream)}
 											</GIVRate>
 											<Lead>{tokenSymbol}/week</Lead>
 										</HelpRow>
