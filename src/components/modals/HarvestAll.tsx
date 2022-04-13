@@ -13,7 +13,11 @@ import {
 	Lead,
 	P,
 } from '@giveth/ui-design-system';
-import { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
+import {
+	PoolStakingConfig,
+	RegenStreamConfig,
+	StreamType,
+} from '@/types/config';
 import { StakingPoolImages } from '../StakingPoolImages';
 import { formatWeiHelper } from '@/helpers/number';
 import { useSubgraph } from '@/context/subgraph.context';
@@ -104,14 +108,20 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	const { account, library } = useWeb3React();
 	const { currentIncentive, stakedPositions } = useLiquidityPositions();
 	const [txHash, setTxHash] = useState('');
-
+	//GIVdrop
 	const [givDrop, setGIVdrop] = useState(Zero);
 	const [givDropStream, setGIVdropStream] = useState<BigNumber.Value>(0);
+	//GIVstream
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(Zero);
 	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
+	//GIVfarm
 	const [claimableNow, setClaimableNow] = useState(Zero);
+	const [claimableStream, setClaimableStream] = useState<BigNumber.Value>(0);
+	//GIVback
 	const [givBackStream, setGivBackStream] = useState<BigNumber.Value>(0);
-	const [sum, setSum] = useState(Zero);
+	//Sum
+	const [sumLiquid, setSumLiquid] = useState(Zero);
+	const [sumStream, setSumStream] = useState<BigNumber.Value>(0);
 
 	const tokenDistroHelper = useMemo(
 		() => getTokenDistroHelper(regenStreamConfig?.type),
@@ -137,10 +147,25 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 			);
 		}
 		setClaimableNow(tokenDistroHelper.getUserClaimableNow(balances));
+		if (claimable) {
+			setClaimableStream(
+				tokenDistroHelper.getStreamPartTokenPerWeek(claimable),
+			);
+		}
+		let lockedAmount;
+		if (regenStreamConfig) {
+			switch (regenStreamConfig.type) {
+				case StreamType.FOX:
+					lockedAmount = balances.foxAllocatedTokens;
+					break;
+				default:
+					lockedAmount = ethers.constants.Zero;
+			}
+		} else {
+			lockedAmount = balances.allocatedTokens.sub(givback);
+		}
 		setRewardStream(
-			tokenDistroHelper.getStreamPartTokenPerWeek(
-				balances.allocatedTokens.sub(givback),
-			),
+			tokenDistroHelper.getStreamPartTokenPerWeek(lockedAmount),
 		);
 		setGivBackStream(tokenDistroHelper.getStreamPartTokenPerWeek(givback));
 	}, [claimable, balances, tokenDistroHelper, givback]);
@@ -152,7 +177,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 		}
 		if (_sum.isZero()) {
 		} else {
-			setSum(_sum);
+			setSumLiquid(_sum);
 		}
 	}, [rewardLiquidPart, givbackLiquidPart, claimableNow]);
 
@@ -270,7 +295,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 			<>
 				{(state === HarvestStates.HARVEST ||
 					state === HarvestStates.HARVESTING) &&
-					(sum.isZero() ? (
+					(sumLiquid.isZero() ? (
 						<HarvestAllModalContainer>
 							<NothingToHarvest>
 								You have nothing to claim
@@ -459,13 +484,13 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 										/>
 									</>
 								)} */}
-								{sum && sum.gt(0) && (
+								{sumLiquid && sumLiquid.gt(0) && (
 									<>
 										<AmountBoxWithPrice
-											amount={sum}
+											amount={sumLiquid}
 											price={calcUSD(
 												formatWeiHelper(
-													sum,
+													sumLiquid,
 													config.TOKEN_PRECISION,
 													false,
 												),
@@ -602,7 +627,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 											</BreakdownAmount>
 											<BreakdownRate>
 												{formatWeiHelper(
-													rewardStream,
+													claimableStream,
 													config.TOKEN_PRECISION,
 													false,
 												)}
