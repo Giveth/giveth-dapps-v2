@@ -1,5 +1,4 @@
 import React from 'react';
-import Modal from 'react-modal';
 import { H3, P, brandColors, neutralColors, B } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
@@ -35,7 +34,7 @@ const WelcomeModal = ({ setShowModal }: ISignInModal) => {
 	};
 
 	return (
-		<Modal isOpen={true} style={customStyles}>
+		<Modal>
 			<CloseButton onClick={closeModal}>
 				<Image src={closeIcon} alt='close' />
 			</CloseButton>
@@ -86,6 +85,7 @@ const CloseButton = styled.div`
 const ModalGrid = styled.div`
 	display: flex;
 	height: 100%;
+	background: white !important;
 `;
 
 const BGContainer = styled.div`
@@ -108,7 +108,6 @@ const ContentContainer = styled.div`
 	align-self: center;
 	margin: auto;
 	padding: 10px;
-
 	${mediaQueries.laptop} {
 		width: 45%;
 	}
@@ -164,22 +163,19 @@ const BreakLine = styled.hr`
 	border-top: 1px solid ${neutralColors.gray[300]};
 `;
 
-const customStyles = {
-	content: {
-		backgroundColor: 'white',
-		color: brandColors.deep[900],
-		maxWidth: '1440px',
-		maxHeight: '840px',
-		margin: 'auto',
-		inset: 0,
-		padding: 0,
-		border: 'none',
-	},
-	overlay: {
-		backgroundColor: 'rgb(9 4 70 / 70%)',
-		zIndex: 1060,
-	},
-};
+const Modal = styled.div`
+	position: absolute;
+	backgroundcolor: white;
+	color: ${brandColors.deep[900]};
+	maxwidth: 1440px;
+	maxheight: 840px;
+	margin: auto;
+	inset: 0;
+	padding: 0;
+	border: none;
+	backgroundcolor: 'rgb(9 4 70 / 70%)';
+	z-index: 10600;
+`;
 
 const socialArray = [
 	{ icon: googleIcon, alt: 'Google icon.' },
