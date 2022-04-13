@@ -26,6 +26,7 @@ import {
 } from './ConfirmSubmit';
 import { useWeb3React } from '@web3-react/core';
 import { StakeState } from '@/lib/staking';
+import ToggleSwitch from '../styled-components/Switch';
 
 interface IStakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
@@ -50,18 +51,17 @@ export const StakeModal: FC<IStakeModalProps> = ({
 	const [amount, setAmount] = useState('0');
 	const [txHash, setTxHash] = useState('');
 	const [stakeState, setStakeState] = useState<StakeState>(
-		StakeState.UNKNOWN,
+		StakeState.APPROVE,
 	);
 	const { chainId, library } = useWeb3React();
+	const [permit, setPermit] = useState<boolean>(false);
 
 	const { title, LM_ADDRESS, POOL_ADDRESS, GARDEN_ADDRESS } =
 		poolStakingConfig;
 
 	useEffect(() => {
 		if (GARDEN_ADDRESS) {
-			setStakeState(StakeState.APPROVE);
-		} else {
-			setStakeState(StakeState.STAKE);
+			setPermit(false);
 		}
 	}, [GARDEN_ADDRESS]);
 
@@ -77,27 +77,32 @@ export const StakeModal: FC<IStakeModalProps> = ({
 			console.error('library is null');
 			return;
 		}
-		if (!GARDEN_ADDRESS) {
-			console.error('GARDEN_ADDRESS is null');
-			return;
-		}
+		console.log(permit);
+		// if (!GARDEN_ADDRESS) {
+		// 	console.error('GARDEN_ADDRESS is null');
+		// 	return;
+		// }
 
 		setStakeState(StakeState.APPROVING);
 
 		const signer = library.getSigner();
+		console.log(signer);
 
 		const userAddress = await signer.getAddress();
-
+		console.log(userAddress);
 		const isApproved = await approveERC20tokenTransfer(
 			amount,
 			userAddress,
-			GARDEN_ADDRESS,
+			!GARDEN_ADDRESS ? LM_ADDRESS : GARDEN_ADDRESS!,
 			POOL_ADDRESS,
 			library,
 		);
-
 		if (isApproved) {
-			setStakeState(StakeState.WRAP);
+			if (GARDEN_ADDRESS) {
+				setStakeState(StakeState.WRAP);
+			} else {
+				setStakeState(StakeState.STAKE);
+			}
 		} else {
 			setStakeState(StakeState.APPROVE);
 		}
@@ -111,6 +116,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 				POOL_ADDRESS,
 				LM_ADDRESS,
 				library,
+				permit,
 			);
 			if (txResponse) {
 				setTxHash(txResponse.hash);
@@ -134,14 +140,26 @@ export const StakeModal: FC<IStakeModalProps> = ({
 		}
 		setStakeState(StakeState.WRAPPING);
 		try {
-			const txResponse = await wrapToken(
-				amount,
-				POOL_ADDRESS,
-				GARDEN_ADDRESS,
-				library,
-			);
+			console.log(permit);
+			let txResponse = undefined;
+			if (permit) {
+				txResponse = wrapToken(
+					amount,
+					POOL_ADDRESS,
+					GARDEN_ADDRESS,
+					library,
+				);
+				console.log(txResponse);
+			} else {
+				txResponse = await wrapToken(
+					amount,
+					POOL_ADDRESS,
+					GARDEN_ADDRESS,
+					library,
+				);
+			}
 			if (txResponse) {
-				setTxHash(txResponse.hash);
+				setTxHash(txResponse?.hash);
 				setStakeState(StakeState.CONFIRMING);
 				if (txResponse) {
 					const { status } = await txResponse.wait();
@@ -184,6 +202,14 @@ export const StakeModal: FC<IStakeModalProps> = ({
 										)
 									}
 								/>
+								{!GARDEN_ADDRESS && (
+									<ToggleContainer>
+										<ToggleSwitch
+											checked={permit}
+											setStateChange={setPermit}
+										/>
+									</ToggleContainer>
+								)}
 								{stakeState === StakeState.APPROVE && (
 									<ApproveButton
 										label={'APPROVE'}
@@ -330,4 +356,11 @@ const Pending = styled(Flex)`
 
 const CancelButton = styled(Button)`
 	width: 100%;
+`;
+
+const ToggleContainer = styled.div`
+	padding: 16px 0px 0px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 `;
