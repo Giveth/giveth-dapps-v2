@@ -97,7 +97,7 @@ export const TabGardenTop = () => {
 					showModal={showModal}
 					setShowModal={setShowModal}
 					poolStakingConfig={poolStakingConfig}
-					claimable={earned}
+					earned={earned}
 					network={config.XDAI_NETWORK_NUMBER}
 				/>
 			)}

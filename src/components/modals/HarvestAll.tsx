@@ -66,7 +66,7 @@ import { getPoolIconWithName } from '../cards/BaseStakingCard';
 interface IHarvestAllModalProps extends IModal {
 	title: string;
 	poolStakingConfig?: PoolStakingConfig;
-	claimable?: ethers.BigNumber;
+	earned?: ethers.BigNumber;
 	network: number;
 	regenStreamConfig?: RegenStreamConfig;
 }
@@ -93,7 +93,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	showModal,
 	setShowModal,
 	poolStakingConfig,
-	claimable,
+	earned,
 	network,
 	regenStreamConfig,
 }) => {
@@ -107,7 +107,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	const { account, library } = useWeb3React();
 	const { currentIncentive, stakedPositions } = useLiquidityPositions();
 	const [txHash, setTxHash] = useState('');
-	//GIVdrop
+	//GIVdrop TODO: Should we show Givdrop in new  design?
 	const [givDrop, setGIVdrop] = useState(ethers.constants.Zero);
 	const [givDropStream, setGIVdropStream] = useState<BigNumber>(Zero);
 	//GIVstream
@@ -116,8 +116,8 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	);
 	const [rewardStream, setRewardStream] = useState<BigNumber>(Zero);
 	//GIVfarm
-	const [claimableNow, setClaimableNow] = useState(ethers.constants.Zero);
-	const [claimableStream, setClaimableStream] = useState<BigNumber>(Zero);
+	const [earnedLiquid, setEarnedLiquid] = useState(ethers.constants.Zero);
+	const [earnedStream, setEarnedStream] = useState<BigNumber>(Zero);
 	//GIVback
 	const [givBackStream, setGivBackStream] = useState<BigNumber.Value>(0);
 	//Sum
@@ -143,13 +143,13 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	}, [getTokenPrice, givPrice, network, regenStreamConfig]);
 
 	useEffect(() => {
-		if (claimable) {
-			setRewardLiquidPart(tokenDistroHelper.getLiquidPart(claimable));
-			setClaimableStream(
-				tokenDistroHelper.getStreamPartTokenPerWeek(claimable),
+		if (earned) {
+			setRewardLiquidPart(tokenDistroHelper.getLiquidPart(earned));
+			setEarnedStream(
+				tokenDistroHelper.getStreamPartTokenPerWeek(earned),
 			);
 		}
-		setClaimableNow(tokenDistroHelper.getUserClaimableNow(balances));
+		setEarnedLiquid(tokenDistroHelper.getUserClaimableNow(balances));
 		let lockedAmount;
 		if (regenStreamConfig) {
 			switch (regenStreamConfig.type) {
@@ -166,19 +166,17 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 			tokenDistroHelper.getStreamPartTokenPerWeek(lockedAmount),
 		);
 		setGivBackStream(tokenDistroHelper.getStreamPartTokenPerWeek(givback));
-	}, [claimable, balances, tokenDistroHelper, givback]);
+	}, [earned, balances, tokenDistroHelper, givback]);
 
 	//calculate Liquid Sum
 	useEffect(() => {
-		setSumLiquid(rewardLiquidPart.add(givbackLiquidPart).add(claimableNow));
-	}, [rewardLiquidPart, givbackLiquidPart, claimableNow]);
+		setSumLiquid(rewardLiquidPart.add(givbackLiquidPart).add(earnedLiquid));
+	}, [rewardLiquidPart, givbackLiquidPart, earnedLiquid]);
 
 	//calculate Stream Sum
 	useEffect(() => {
-		setSumStream(
-			BigNumber.sum(rewardStream, givBackStream, claimableStream),
-		);
-	}, [rewardStream, givBackStream, claimableStream]);
+		setSumStream(BigNumber.sum(rewardStream, givBackStream, earnedStream));
+	}, [rewardStream, givBackStream, earnedStream]);
 
 	useEffect(() => {
 		if (
@@ -379,7 +377,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 										</BreakdownTitle>
 										<BreakdownAmount>
 											{formatWeiHelper(
-												claimableNow.sub(
+												earnedLiquid.sub(
 													givbackLiquidPart,
 												),
 												config.TOKEN_PRECISION,
@@ -462,8 +460,8 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 										</BreakdownRow>
 									)}
 									{poolStakingConfig &&
-										claimable &&
-										claimable.gt(0) && (
+										earned &&
+										earned.gt(0) && (
 											<BreakdownRow>
 												<BreakdownTitle>
 													<BreakdownIcon>
@@ -496,7 +494,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 												<BreakdownRate>
 													+
 													{formatWeiHelper(
-														claimableStream,
+														earnedStream,
 														config.TOKEN_PRECISION,
 														false,
 													)}
