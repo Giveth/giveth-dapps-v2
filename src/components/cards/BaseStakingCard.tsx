@@ -460,7 +460,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					showModal={showHarvestModal}
 					setShowModal={setShowHarvestModal}
 					poolStakingConfig={poolStakingConfig}
-					claimable={earned}
+					earned={earned}
 					network={chainId}
 					regenStreamConfig={regenStreamConfig}
 				/>
