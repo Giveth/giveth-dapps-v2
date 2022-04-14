@@ -164,9 +164,9 @@ export const TabGIVstreamBottom = () => {
 	}, [balances.allocatedTokens, balances.givback, givTokenDistroHelper]);
 
 	useEffect(() => {
-		setPercent(givTokenDistroHelper.percent);
 		const _remain = durationToString(givTokenDistroHelper.remain);
 		setRemain(_remain);
+		setPercent(givTokenDistroHelper.GlobalReleasePercentage);
 	}, [givTokenDistroHelper]);
 	return (
 		<GIVstreamBottomContainer>
@@ -326,8 +326,8 @@ export const GIVstreamProgress: FC<IGIVstreamProgressProps> = ({
 						direction={'right'}
 					>
 						<GsPTooltip>
-							Time left for all GIVstreams to flow & for the
-							GIViverse to reach full power!
+							Liquid GIV that has already flowed out of the
+							GIVstream
 						</GsPTooltip>
 					</IconWithTooltip>
 				</GsPTitle>
