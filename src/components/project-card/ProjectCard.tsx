@@ -33,21 +33,18 @@ interface IProjectCard {
 }
 
 const ProjectCard = (props: IProjectCard) => {
+	const { project } = props;
 	const {
 		title,
 		description,
 		image,
-		verified,
 		slug,
-		reaction,
-		totalReactions,
 		adminUser,
 		totalDonations,
-		traceCampaignId,
-		id,
 		updatedAt,
 		organization,
-	} = props.project;
+	} = project;
+
 	const [isHover, setIsHover] = useState(false);
 
 	const isForeignOrg =
@@ -61,15 +58,7 @@ const ProjectCard = (props: IProjectCard) => {
 			onMouseLeave={() => setIsHover(false)}
 		>
 			<ImagePlaceholder>
-				<ProjectCardBadges
-					totalReactions={totalReactions}
-					reaction={reaction}
-					verified={verified}
-					traceable={!!traceCampaignId}
-					projectHref={slug}
-					projectDescription={description}
-					projectId={id}
-				/>
+				<ProjectCardBadges project={project} />
 				<ProjectCardOrgBadge
 					organization={organization?.label}
 					isHover={isHover}
@@ -105,7 +94,7 @@ const ProjectCard = (props: IProjectCard) => {
 							linkType='primary'
 							size='small'
 							label='LEARN MORE'
-							aria-Lbel='Learn more about this project'
+							aria-label='Learn more about this project'
 						/>
 					</Link>
 					<Link href={slugToProjectDonate(slug)} passHref>
@@ -155,7 +144,7 @@ const CardBody = styled.div`
 		props.isHover ? '124px' : '200px'};
 	background-color: ${neutralColors.gray[100]};
 	transition: top 0.3s ease;
-	border-radius: 0px 12px 12px 12px;
+	border-radius: 0 12px 12px 12px;
 `;
 
 const Author = styled(GLink)`

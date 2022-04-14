@@ -24,7 +24,7 @@ const ProjectCardSelector = (props: { project: IProject }) => {
 				<SlideBtn />
 				{!hideMobileCard && (
 					<MobileCardContainer>
-						<ProjectCard project={project} noHearts={true} />
+						<ProjectCard project={project} />
 						<SocialBox project={project} />
 					</MobileCardContainer>
 				)}
@@ -33,7 +33,7 @@ const ProjectCardSelector = (props: { project: IProject }) => {
 	} else {
 		return (
 			<Left>
-				<ProjectCard project={project} noHearts={true} />
+				<ProjectCard project={project} />
 			</Left>
 		);
 	}
