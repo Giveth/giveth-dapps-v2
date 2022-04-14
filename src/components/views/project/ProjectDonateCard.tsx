@@ -204,16 +204,10 @@ const ProjectDonateCard = ({
 				/>
 			)}
 			{showModal && slug && (
-				<ShareModal
-					showModal={showModal}
-					setShowModal={setShowModal}
-					projectHref={slug}
-					projectDescription={description}
-				/>
+				<ShareModal setShowModal={setShowModal} projectHref={slug} />
 			)}
 			{deactivateModal && (
 				<DeactivateProjectModal
-					showModal={deactivateModal}
 					setShowModal={setDeactivateModal}
 					projectId={id}
 					setIsActive={setIsActive}

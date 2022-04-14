@@ -8,24 +8,23 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
-import ProjectCardBadges from './ProjectCardBadges';
 import ProjectCardImage from './ProjectCardImage';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
 import { IProject } from '@/apollo/types/types';
 import { htmlToText } from '@/lib/helpers';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { mediaQueries } from '@/lib/constants/constants';
-import Routes from '@/lib/constants/Routes';
 import InternalLink from '@/components/InternalLink';
+import { addressToUserView, slugToProjectView } from '@/lib/routeCreators';
+import VerificationBadge from '@/components/badges/VerificationBadge';
 
 interface IProjectCard {
 	project: IProject;
-	noHearts?: boolean;
 	isNew?: boolean;
 }
 
 const ProjectCard = (props: IProjectCard) => {
-	const { noHearts, isNew, project } = props;
+	const { isNew, project } = props;
 	const {
 		title,
 		description,
@@ -34,18 +33,19 @@ const ProjectCard = (props: IProjectCard) => {
 		traceCampaignId,
 		adminUser,
 		slug,
-		id,
 		totalDonations,
 		organization,
 	} = project;
 
-	const name = adminUser?.name;
+	const { name, walletAddress } = adminUser || {};
 	const orgLabel = organization?.label;
 
 	return (
 		<Wrapper isNew={isNew}>
 			<ImagePlaceholder>
-				<ProjectCardImage image={image} />
+				<InternalLink href={slugToProjectView(slug)}>
+					<ProjectCardImage image={image} />
+				</InternalLink>
 			</ImagePlaceholder>
 			<ProjectCardOrgBadge
 				organization={orgLabel}
@@ -53,45 +53,40 @@ const ProjectCard = (props: IProjectCard) => {
 				isAbsolute={true}
 			/>
 			{!isNew && (
-				<ProjectCardBadges
-					verified={verified}
-					traceable={!!traceCampaignId}
-					projectHref={slug}
-					projectDescription={description}
-					projectId={id}
-					noHearts={noHearts}
-				/>
+				<BadgeContainer>
+					{verified && <VerificationBadge verified />}
+					{traceCampaignId && <VerificationBadge trace />}
+				</BadgeContainer>
 			)}
 			<CardBody>
-				<Title>{title}</Title>
+				<InternalLink href={slugToProjectView(slug)}>
+					<Title>{title}</Title>
+				</InternalLink>
 				{name && (
-					<InternalLink
-						href={`${Routes.User}/${adminUser?.walletAddress}`}
-					>
+					<InternalLink href={addressToUserView(walletAddress!)}>
 						<Author>{name}</Author>
 					</InternalLink>
 				)}
 				<Description>{htmlToText(description)}</Description>
 				{!isNew && (
-					<Captions>
-						<BodyCaption>
-							Raised: ${totalDonations?.toLocaleString()}
-						</BodyCaption>
-					</Captions>
+					<BodyCaption>
+						Raised: ${totalDonations?.toLocaleString()}
+					</BodyCaption>
 				)}
 			</CardBody>
 		</Wrapper>
 	);
 };
 
-const BodyCaption = styled(Caption)`
-	color: ${neutralColors.gray[700]};
+const BadgeContainer = styled.div`
+	display: flex;
+	position: absolute;
+	padding: 16px;
 `;
 
-const Captions = styled.div`
-	display: flex;
-	justify-content: space-between;
+const BodyCaption = styled(Caption)`
 	margin-top: 14px;
+	color: ${neutralColors.gray[700]};
 `;
 
 const Description = styled(P)`
