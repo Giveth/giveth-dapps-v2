@@ -17,6 +17,8 @@ import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
 import SocialBox from '@/components/views/donate/SocialBox';
 import ExternalLink from '@/components/ExternalLink';
+import InternalLink from '@/components/InternalLink';
+import { slugToProjectView } from '@/lib/routeCreators';
 
 const SuccessView = (props: {
 	txLink: string;
@@ -31,8 +33,12 @@ const SuccessView = (props: {
 			</ConfettiContainer>
 			<GiverH4>You're a giver now!</GiverH4>
 			<SuccessMessage>
-				Thank you for supporting {project?.title}. Your contribution
-				goes a long way!
+				Thank you for supporting{' '}
+				<InternalLink
+					href={slugToProjectView(project.slug)}
+					title={project?.title}
+				/>
+				. Your contribution goes a long way!
 			</SuccessMessage>
 			{givBackEligible && (
 				<GivBackContainer>
@@ -92,9 +98,13 @@ const SucceessContainer = styled.div`
 `;
 
 const SuccessMessage = styled(P)`
+	position: relative;
 	margin: -19px 0 16px 0;
 	color: ${brandColors.deep[900]};
-	${mediaQueries['mobileS']} {
+	a {
+		font-weight: 500;
+	}
+	${mediaQueries.mobileS} {
 		margin: 16px 0;
 	}
 `;
