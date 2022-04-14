@@ -183,12 +183,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 					disabled={disabled}
 				/>
 			</OnboardStep>
-			{showModal && (
-				<SkipOnboardingModal
-					showModal={showModal}
-					setShowModal={setShowModal}
-				/>
-			)}
+			{showModal && <SkipOnboardingModal setShowModal={setShowModal} />}
 		</>
 	);
 };

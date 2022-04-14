@@ -287,10 +287,7 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 	return (
 		<>
 			{showGuidelineModal && (
-				<ProjectGuidelineModal
-					showModal={showGuidelineModal}
-					setShowModal={setShowGuidelineModal}
-				/>
+				<ProjectGuidelineModal setShowModal={setShowGuidelineModal} />
 			)}
 			{user && (
 				<Container>

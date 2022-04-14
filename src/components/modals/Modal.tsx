@@ -11,7 +11,6 @@ import {
 import { ETheme, useGeneral } from '@/context/general.context';
 
 export interface IModal {
-	showModal?: boolean;
 	setShowModal: (value: boolean) => void;
 	callback?: () => void;
 	hiddenClose?: boolean;

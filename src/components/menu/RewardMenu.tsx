@@ -203,10 +203,7 @@ export const RewardMenu = ({
 				</Link>
 			</RewardMenuContainer>
 			{showWhatIsGIVstreamModal && (
-				<WhatisStreamModal
-					showModal={showWhatIsGIVstreamModal}
-					setShowModal={setShowWhatIsGIVstreamModal}
-				/>
+				<WhatisStreamModal setShowModal={setShowWhatIsGIVstreamModal} />
 			)}
 		</>
 	);

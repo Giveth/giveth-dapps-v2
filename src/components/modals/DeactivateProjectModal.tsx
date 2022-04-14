@@ -105,7 +105,6 @@ const DeactivateProjectModal = ({
 
 	return (
 		<Modal
-			showModal
 			setShowModal={setShowModal}
 			headerIcon={
 				<Image

@@ -127,7 +127,6 @@ const ClaimCard: FC<IClaimViewCardProps> = ({ index }) => {
 			</ClaimCardContainer>
 			{showClaimModal && (
 				<GIVdropHarvestModal
-					showModal={showClaimModal}
 					setShowModal={setShowClaimModal}
 					network={config.XDAI_NETWORK_NUMBER}
 					givdropAmount={totalAmount}

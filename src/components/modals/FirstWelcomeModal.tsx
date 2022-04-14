@@ -13,15 +13,13 @@ import {
 import { IModal, Modal } from '@/components/modals/Modal';
 import { ETheme, useGeneral } from '@/context/general.context';
 
-export const FirstWelcomeModal: FC<IModal> = ({ showModal, setShowModal }) => {
+export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
 	const { theme } = useGeneral();
 	const router = useRouter();
 
 	return (
 		<Modal
-			showModal={showModal}
 			setShowModal={setShowModal}
-			hiddenClose={false}
 			headerIcon={<img src='/images/icons/donate.svg' />}
 			headerTitle={`Let's Donate`}
 			headerTitlePosition='left'

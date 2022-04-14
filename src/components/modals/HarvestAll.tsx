@@ -90,7 +90,6 @@ enum HarvestStates {
 
 export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	title,
-	showModal,
 	setShowModal,
 	poolStakingConfig,
 	earned,
@@ -274,7 +273,6 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 		}
 	};
 
-	const streamName = regenStreamConfig ? 'RegenStream ' : 'GIVstream ';
 	const modalTitle = regenStreamConfig ? 'RegenFarm Rewards' : title;
 
 	const calcUSD = (amount: string) => {
@@ -284,7 +282,6 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 
 	return (
 		<Modal
-			showModal={showModal}
 			setShowModal={setShowModal}
 			headerTitle={modalTitle}
 			headerTitlePosition={'left'}

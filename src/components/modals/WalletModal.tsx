@@ -75,11 +75,7 @@ const WalletModal = ({ setShowModal, closeParentModal }: IWalletModal) => {
 	}, [lowerShields]);
 
 	return (
-		<Modal
-			showModal={true}
-			setShowModal={setShowModal}
-			customTheme={ETheme.Light}
-		>
+		<Modal setShowModal={setShowModal} customTheme={ETheme.Light}>
 			<IconsContainer>
 				{walletsArray.map(i => (
 					<WalletItem

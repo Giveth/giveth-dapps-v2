@@ -14,7 +14,6 @@ import {
 import React, { FC, MouseEventHandler, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IconGIV } from './Icons/GIV';
-import { IconXDAI } from './Icons/XDAI';
 import { Flex } from './styled-components/Flex';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
@@ -138,10 +137,7 @@ export const RewardCard: FC<IRewardCardProps> = ({
 				)}
 			</RewadCardContainer>
 			{showWhatIsGIVstreamModal && (
-				<WhatisStreamModal
-					showModal={showWhatIsGIVstreamModal}
-					setShowModal={setShowWhatIsGIVstreamModal}
-				/>
+				<WhatisStreamModal setShowModal={setShowWhatIsGIVstreamModal} />
 			)}
 		</>
 	);

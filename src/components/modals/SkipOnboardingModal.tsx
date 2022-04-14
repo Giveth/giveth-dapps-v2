@@ -12,16 +12,10 @@ import { Flex } from '../styled-components/Flex';
 import { Modal, IModal } from './Modal';
 import { useRouter } from 'next/router';
 
-interface IWhatisGIVstreamModal extends IModal {}
-
-export const SkipOnboardingModal: FC<IWhatisGIVstreamModal> = ({
-	showModal,
-	setShowModal,
-}) => {
+export const SkipOnboardingModal: FC<IModal> = ({ setShowModal }) => {
 	const router = useRouter();
 	return (
 		<Modal
-			showModal={showModal}
 			setShowModal={setShowModal}
 			headerIcon={<IconInfo32 />}
 			headerTitle='Are you sure?'

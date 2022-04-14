@@ -3,7 +3,6 @@ import Link from 'next/link';
 import {
 	B,
 	brandColors,
-	DataBlock,
 	H1,
 	H3,
 	H6,
@@ -131,7 +130,6 @@ export const TabGIVstreamTop = () => {
 			{showModal && chainId && (
 				<HarvestAllModal
 					title='GIVstream Rewards'
-					showModal={showModal}
 					setShowModal={setShowModal}
 					network={chainId}
 				/>

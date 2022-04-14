@@ -73,11 +73,10 @@ interface IWrongNetworkModal extends IModal, IWrongNetworkInnerModal {}
 export const WrongNetworkModal: FC<IWrongNetworkModal> = ({
 	text,
 	targetNetworks,
-	showModal,
 	setShowModal,
 }) => {
 	return (
-		<Modal showModal={showModal} setShowModal={setShowModal} hiddenClose>
+		<Modal setShowModal={setShowModal} hiddenClose>
 			<WrongNetworkModalContainer>
 				<WrongNetworkModalTitle>
 					You&apos;re connected to the wrong network!

@@ -6,15 +6,10 @@ import { Button, Lead, brandColors, H5 } from '@giveth/ui-design-system';
 import Routes from '@/lib/constants/Routes';
 import { IModal, Modal } from '@/components/modals/Modal';
 
-export const GoodProjectDescription: FC<IModal> = ({
-	showModal,
-	setShowModal,
-}) => {
+export const GoodProjectDescription: FC<IModal> = ({ setShowModal }) => {
 	return (
 		<Modal
-			showModal={showModal}
 			setShowModal={setShowModal}
-			hiddenClose={false}
 			headerIcon={<img src='/images/icons/lightbulb.svg' />}
 			headerTitle='How to write a great project description'
 			headerTitlePosition='left'

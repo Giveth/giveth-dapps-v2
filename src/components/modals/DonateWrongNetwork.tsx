@@ -30,7 +30,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = ({
 	const NetworkName = getNetworkNames(targetNetworks, 'or');
 
 	return (
-		<Modal showModal setShowModal={setShowModal}>
+		<Modal setShowModal={setShowModal}>
 			<ModalContainer>
 				{!targetNetworks.includes(config.SECONDARY_NETWORK.id) ? (
 					<IconEthereum size={64} />
