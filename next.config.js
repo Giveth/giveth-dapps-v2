@@ -18,7 +18,7 @@ const moduleExports = withBundleAnalyzer({
 			'giveth.mypinata.cloud',
 			'static.tgbwidget.com',
 			'images.unsplash.com',
-			'cloudfront.net',
+			'd2m0e1zy3fwxmp.cloudfront.net', // temporal for CHANGE default image
 		],
 	},
 });
