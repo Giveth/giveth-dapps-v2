@@ -154,3 +154,8 @@ export const PoolIcon = styled.div`
 	width: 16px;
 	height: 16px;
 `;
+
+export const RateRow = styled(Flex)`
+	gap: 4px;
+	margin-bottom: 32px;
+`;
