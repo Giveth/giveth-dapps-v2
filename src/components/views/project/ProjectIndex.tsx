@@ -132,7 +132,8 @@ const ProjectIndex = (props: { project?: IProject }) => {
 		);
 	}
 
-	if (notAvailableProject) {
+	if (notAvailableProject || project?.status?.id === '7') {
+		// cancelled = 7
 		return <NotAvailableProject />;
 	}
 

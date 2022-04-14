@@ -49,6 +49,7 @@ const NotAvailableProject = () => {
 				src='/images/missing-project.svg'
 				width={122.69}
 				height={112}
+				alt='missing-project-image'
 			/>
 			<TitleText>Oops! This project is no longer available!</TitleText>
 			<SubtitleText>Take a look at similar projects</SubtitleText>
