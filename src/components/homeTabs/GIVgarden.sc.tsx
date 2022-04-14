@@ -31,7 +31,7 @@ export const GardenTopContainer = styled(TopContainer)`
 	&::after {
 		content: url('/images/flower3.svg');
 		position: absolute;
-		right: 0px;
+		right: 0;
 		bottom: -100px;
 		z-index: 0;
 	}
@@ -48,7 +48,7 @@ export const Right = styled.div`
 	&::before {
 		content: url('/images/flower1.svg');
 		position: absolute;
-		left: 0px;
+		left: 0;
 		top: -20px;
 		z-index: 0;
 	}
@@ -56,7 +56,7 @@ export const Right = styled.div`
 		content: url('/images/flower2.svg');
 		position: absolute;
 		left: 230px;
-		top: 0px;
+		top: 0;
 		z-index: 0;
 	}
 `;
@@ -80,7 +80,7 @@ export const GardenRewardCard = styled(EnhancedRewardCard)`
 	position: relative;
 	margin-bottom: 24px;
 	${mediaQueries.tablet} {
-		margin-bottom: 0px;
+		margin-bottom: 0;
 	}
 `;
 

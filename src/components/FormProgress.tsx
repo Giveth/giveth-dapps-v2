@@ -31,7 +31,7 @@ const ProgressContainer = styled.div`
 	grid-template-columns: repeat(3, 1fr);
 	justify-content: space-around;
 	align-items: center;
-	margin: 24px 0px 8px;
+	margin: 24px 0 8px;
 `;
 
 const ProgressIcon = styled.div<{ done: boolean }>`

@@ -147,7 +147,7 @@ const RewadCardContainer = styled.div`
 	position: relative;
 	background-color: ${brandColors.giv[700]};
 	padding: 24px 24px;
-	box-shadow: 0px 5px 16px rgba(0, 0, 0, 0.15);
+	box-shadow: 0 5px 16px rgba(0, 0, 0, 0.15);
 `;
 
 const CardHeader = styled(Flex)`

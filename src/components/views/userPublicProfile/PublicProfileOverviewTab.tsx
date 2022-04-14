@@ -115,7 +115,7 @@ const PublicProfileOverviewTab: FC<IUserPublicProfileView> = ({ user }) => {
 export default PublicProfileOverviewTab;
 
 const CustomContainer = styled(Container)`
-	padding: 0px;
+	padding: 0;
 `;
 
 const AccountHero = styled.div`

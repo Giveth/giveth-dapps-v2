@@ -75,7 +75,7 @@ const Wrapper = styled.div<{ image: string | undefined }>`
 
 const TitleSection = styled.div`
 	height: 100%;
-	padding: 35px 0px;
+	padding: 35px 0;
 	display: flex;
 	background: linear-gradient(
 		${neutralColors.gray[900]}00,
@@ -92,7 +92,7 @@ const TitleContainer = styled.div`
 	margin: 0 auto;
 
 	${mediaQueries.mobileS} {
-		padding: 0px 16px;
+		padding: 0 16px;
 	}
 
 	${mediaQueries.tablet} {
@@ -116,7 +116,7 @@ const Title = styled(H3)<{ fixSize: boolean }>`
 	color: white;
 	max-width: 770px;
 	font-size: ${props => (props.fixSize ? '18px' : '')};
-	margin: ${props => (props.fixSize ? '8px 0px' : '16px 0px')};
+	margin: ${props => (props.fixSize ? '8px 0' : '16px 0')};
 `;
 
 const Author = styled(P)`
