@@ -6,14 +6,11 @@ import { Button, H5, Lead } from '@giveth/ui-design-system';
 import { ETheme, useGeneral } from '@/context/general.context';
 import { mediaQueries } from '@/lib/constants/constants';
 
-export const InsufficientFundModal: FC<IModal> = ({
-	showModal,
-	setShowModal,
-}) => {
+export const InsufficientFundModal: FC<IModal> = ({ setShowModal }) => {
 	const { theme } = useGeneral();
 	return (
 		<Modal
-			showModal={showModal}
+			showModal
 			setShowModal={setShowModal}
 			hiddenClose={false}
 			headerIcon={<IconFund />}
