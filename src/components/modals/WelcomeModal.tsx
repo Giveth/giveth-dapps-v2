@@ -35,12 +35,12 @@ const WelcomeModal = ({ setShowModal }: ISignInModal) => {
 
 	return (
 		<Modal>
-			<CloseButton onClick={closeModal}>
-				<Image src={closeIcon} alt='close' />
-			</CloseButton>
 			<ModalGrid>
 				<BGContainer />
 				<ContentContainer>
+					<CloseButton onClick={closeModal}>
+						<Image src={closeIcon} alt='close' />
+					</CloseButton>
 					<H3>Sign in to Giveth</H3>
 					<ContentSubtitle>
 						Please sign in to your account and start using Giveth.
@@ -83,9 +83,19 @@ const CloseButton = styled.div`
 `;
 
 const ModalGrid = styled.div`
+	border-radius: 4px;
+	position: relative;
 	display: flex;
-	height: 100%;
+	width: 100%;
 	background: white !important;
+	height: 100%;
+	${mediaQueries.laptopL} {
+		max-width: 1440px;
+		max-height: 840px;
+		width: 85%;
+		height: 100%;
+		overflow: auto;
+	}
 `;
 
 const BGContainer = styled.div`
@@ -94,7 +104,6 @@ const BGContainer = styled.div`
 	max-width: 640px;
 	background-color: ${brandColors.giv[500]};
 	background-image: url('/images/sign_bg.svg');
-
 	${mediaQueries.laptop} {
 		display: block;
 	}
@@ -164,17 +173,18 @@ const BreakLine = styled.hr`
 `;
 
 const Modal = styled.div`
-	position: absolute;
+	position: fixed;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
 	backgroundcolor: white;
+	background: rgba(9, 4, 70, 0.7);
 	color: ${brandColors.deep[900]};
-	maxwidth: 1440px;
-	maxheight: 840px;
 	margin: auto;
-	inset: 0;
-	padding: 0;
 	border: none;
-	backgroundcolor: 'rgb(9 4 70 / 70%)';
-	z-index: 10600;
+	z-index: 1060;
 `;
 
 const socialArray = [
