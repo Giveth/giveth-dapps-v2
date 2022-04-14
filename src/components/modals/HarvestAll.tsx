@@ -3,7 +3,6 @@ import { IModal, Modal } from './Modal';
 import Lottie from 'react-lottie';
 import LoadingAnimation from '@/animations/loading.json';
 import {
-	B,
 	brandColors,
 	Caption,
 	IconGIVBack,
@@ -18,7 +17,7 @@ import {
 	RegenStreamConfig,
 	StreamType,
 } from '@/types/config';
-import { formatWeiHelper } from '@/helpers/number';
+import { formatWeiHelper, Zero } from '@/helpers/number';
 import { useSubgraph } from '@/context/subgraph.context';
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import { harvestTokens } from '@/lib/stakingPool';
@@ -54,7 +53,6 @@ import {
 	BreakdownStreamSum,
 	PoolIcon,
 } from './HarvestAll.sc';
-import { Zero } from '@ethersproject/constants';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { claimReward, fetchAirDropClaimData } from '@/lib/claim';
@@ -63,7 +61,6 @@ import { IconWithTooltip } from '../IconWithToolTip';
 import { AmountBoxWithPrice } from '@/components/AmountBoxWithPrice';
 import { usePrice } from '@/context/price.context';
 import { useWeb3React } from '@web3-react/core';
-import { type } from 'os';
 import { getPoolIconWithName } from '../cards/BaseStakingCard';
 
 interface IHarvestAllModalProps extends IModal {
@@ -111,29 +108,33 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	const { currentIncentive, stakedPositions } = useLiquidityPositions();
 	const [txHash, setTxHash] = useState('');
 	//GIVdrop
-	const [givDrop, setGIVdrop] = useState(Zero);
-	const [givDropStream, setGIVdropStream] = useState<BigNumber.Value>(0);
+	const [givDrop, setGIVdrop] = useState(ethers.constants.Zero);
+	const [givDropStream, setGIVdropStream] = useState<BigNumber>(Zero);
 	//GIVstream
-	const [rewardLiquidPart, setRewardLiquidPart] = useState(Zero);
-	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
+	const [rewardLiquidPart, setRewardLiquidPart] = useState(
+		ethers.constants.Zero,
+	);
+	const [rewardStream, setRewardStream] = useState<BigNumber>(Zero);
 	//GIVfarm
-	const [claimableNow, setClaimableNow] = useState(Zero);
-	const [claimableStream, setClaimableStream] = useState<BigNumber.Value>(0);
+	const [claimableNow, setClaimableNow] = useState(ethers.constants.Zero);
+	const [claimableStream, setClaimableStream] = useState<BigNumber>(Zero);
 	//GIVback
 	const [givBackStream, setGivBackStream] = useState<BigNumber.Value>(0);
 	//Sum
-	const [sumLiquid, setSumLiquid] = useState(Zero);
-	const [sumStream, setSumStream] = useState<BigNumber.Value>(0);
+	const [sumLiquid, setSumLiquid] = useState(ethers.constants.Zero);
+	const [sumStream, setSumStream] = useState<BigNumber>(Zero);
 
 	const tokenDistroHelper = useMemo(
 		() => getTokenDistroHelper(regenStreamConfig?.type),
 		[getTokenDistroHelper, regenStreamConfig],
 	);
 	const givback = useMemo<ethers.BigNumber>(() => {
-		return regenStreamConfig ? Zero : balances.givback;
+		return regenStreamConfig ? ethers.constants.Zero : balances.givback;
 	}, [regenStreamConfig, balances.givback]);
 	const givbackLiquidPart = useMemo<ethers.BigNumber>(() => {
-		return regenStreamConfig ? Zero : balances.givbackLiquidPart;
+		return regenStreamConfig
+			? ethers.constants.Zero
+			: balances.givbackLiquidPart;
 	}, [regenStreamConfig, balances.givbackLiquidPart]);
 	const tokenPrice = useMemo(() => {
 		return regenStreamConfig
@@ -169,29 +170,14 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 
 	//calculate Liquid Sum
 	useEffect(() => {
-		let _sum = rewardLiquidPart.add(givbackLiquidPart);
-		if (claimableNow) {
-			_sum = _sum.add(claimableNow);
-		}
-		if (_sum.isZero()) {
-		} else {
-			setSumLiquid(_sum);
-		}
+		setSumLiquid(rewardLiquidPart.add(givbackLiquidPart).add(claimableNow));
 	}, [rewardLiquidPart, givbackLiquidPart, claimableNow]);
 
 	//calculate Stream Sum
 	useEffect(() => {
-		const _rewardStream = new BigNumber(rewardStream);
-		const _givBackStream = new BigNumber(givBackStream);
-		const _claimableStream = new BigNumber(claimableStream);
-		let _sum = _rewardStream.plus(_givBackStream);
-		if (_claimableStream) {
-			_sum = _sum.plus(_claimableStream);
-		}
-		if (_sum.isZero()) {
-		} else {
-			setSumStream(_sum);
-		}
+		setSumStream(
+			BigNumber.sum(rewardStream, givBackStream, claimableStream),
+		);
 	}, [rewardStream, givBackStream, claimableStream]);
 
 	useEffect(() => {
