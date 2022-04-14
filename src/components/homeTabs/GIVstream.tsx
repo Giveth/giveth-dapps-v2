@@ -326,7 +326,8 @@ export const GIVstreamProgress: FC<IGIVstreamProgressProps> = ({
 						direction={'right'}
 					>
 						<GsPTooltip>
-							Liquidity of all GIVstreams on the GIViverse!
+							Liquid GIV that has already flowed out of the
+							GIVstream
 						</GsPTooltip>
 					</IconWithTooltip>
 				</GsPTitle>

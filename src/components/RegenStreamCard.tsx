@@ -152,9 +152,11 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 								direction={'right'}
 							>
 								<GsPTooltip>
-									Liquid {'	 '}
+									Liquid{'	 '}
 									{streamConfig.rewardTokenSymbol}
-									stream so far!
+									{'	 '}
+									that has already flowed out of the{' '}
+									{streamConfig.rewardTokenSymbol}stream
 								</GsPTooltip>
 							</IconWithTooltip>
 						</Flex>
