@@ -95,12 +95,7 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 	return (
 		<>
 			{showModal && (
-				<ShareModal
-					showModal={showModal}
-					setShowModal={setShowModal}
-					projectHref={slug}
-					projectDescription={description}
-				/>
+				<ShareModal setShowModal={setShowModal} projectHref={slug} />
 			)}
 			<BadgeWrapper>
 				<Flex>
