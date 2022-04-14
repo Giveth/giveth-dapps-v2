@@ -16,7 +16,7 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 import { CopyToClipboard } from '@/components/CopyToClipboard';
 import PublicProfileContributes from './PublicProfileContributes';
 import { IProject, IUser } from '@/apollo/types/types';

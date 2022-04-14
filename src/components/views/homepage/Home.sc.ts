@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 
 export const HomeContainer = styled.div`
 	padding-left: 18px;

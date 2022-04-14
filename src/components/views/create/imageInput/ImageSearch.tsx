@@ -57,6 +57,11 @@ const ImageSearch = (props: {
 			.catch(showToastError);
 	};
 
+	// It's required by Unsplash guidelines
+	const requestDownload = (downloadLocation: string) => {
+		unsplash.photos.trackDownload({ downloadLocation }).then();
+	};
+
 	const closePopup = () => {
 		setSearch('');
 		setImages(undefined);
@@ -65,6 +70,7 @@ const ImageSearch = (props: {
 	const handleSelect = (i: Basic) => {
 		setAttributes({ name: i.user.name, username: i.user.username });
 		setValue(i.urls.regular);
+		requestDownload(i.links.download_location);
 		closePopup();
 	};
 

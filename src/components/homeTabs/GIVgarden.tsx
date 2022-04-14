@@ -4,10 +4,8 @@ import { H1, IconGIVGarden } from '@giveth/ui-design-system';
 import {
 	GardenTopContainer,
 	GardenBottomContainer,
-	Left,
 	Title,
 	Subtitle,
-	Right,
 	GardenRewardCard,
 	GovernanceLink,
 	GovernanceDB,
@@ -32,9 +30,7 @@ import { ethers } from 'ethers';
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import { TopInnerContainer } from './commons';
 import { useWeb3React } from '@web3-react/core';
-import { Flex } from '../styled-components/Flex';
 import { Col, Container, Row } from '@/components/Grid';
-import { device } from '@/utils/constants';
 
 const poolStakingConfig = getGivStakingConfig(config.XDAI_CONFIG);
 

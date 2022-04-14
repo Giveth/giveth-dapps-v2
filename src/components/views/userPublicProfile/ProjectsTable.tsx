@@ -15,7 +15,7 @@ import { FC } from 'react';
 import styled from 'styled-components';
 
 import { IProjectsTable, EOrderBy, IOrder } from './UserPublicProfile.view';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 import { idToProjectEdit } from '@/lib/routeCreators';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { EDirection } from '@/apollo/types/gqlEnums';

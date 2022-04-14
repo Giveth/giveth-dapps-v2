@@ -10,7 +10,7 @@ import PublicProfileProjectsTab from './PublicProfileProjectsTab';
 import PublicProfileOverviewTab from './PublicProfileOverviewTab';
 import { IUserPublicProfileView } from './UserPublicProfile.view';
 import { Container } from '@/components/Grid';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 
 enum EPublicProfile {
 	OVERVIEW,

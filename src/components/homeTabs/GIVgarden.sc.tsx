@@ -13,7 +13,7 @@ import {
 	GLink,
 } from '@giveth/ui-design-system';
 import { TopContainer, BottomContainer, EnhancedRewardCard } from './commons';
-import { device, mediaQueries } from '@/utils/constants';
+import { device, mediaQueries } from '@/lib/constants/constants';
 import { Row } from '../Grid';
 
 export const GivGardenSection = styled.div`

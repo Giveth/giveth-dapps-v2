@@ -21,7 +21,7 @@ import {
 } from './commons';
 import { Flex } from '../styled-components/Flex';
 import { DataBox } from '../DataBox';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 import { Col } from '../Grid';
 
 export const GIVstreamTopContainer = styled(TopContainer)`

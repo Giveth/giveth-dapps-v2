@@ -1,8 +1,13 @@
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
+import { networksParams } from '@/helpers/blockchain';
 
 export interface ISelectedToken extends IProjectAcceptedToken {
 	value?: IProjectAcceptedToken;
 	label?: string;
+}
+
+interface INetworkIds {
+	[key: number]: boolean;
 }
 
 export const prepareTokenList = (tokens: IProjectAcceptedToken[]) => {
@@ -45,4 +50,25 @@ export const filterTokens = (
 	networkId: number,
 ) => {
 	return tokens.filter(i => i.networkId === networkId);
+};
+
+export const getNetworkIds = (tokens: IProjectAcceptedToken[]) => {
+	const networkIds: INetworkIds = {};
+	tokens.forEach(i => {
+		networkIds[i.networkId] = true;
+	});
+	return Object.keys(networkIds).map(i => Number(i));
+};
+
+export const networkNames = (acceptedChains: number[]) => {
+	return acceptedChains.map((i, index) => {
+		const name = networksParams[i]?.chainName;
+		const lastLoop = acceptedChains.length === index + 1;
+		return (
+			<span key={i}>
+				{name}
+				{!lastLoop && ', '}
+			</span>
+		);
+	});
 };

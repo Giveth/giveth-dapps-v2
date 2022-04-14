@@ -3,7 +3,7 @@ import { B } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 interface IFToast {
-	message: string;
+	message: string | JSX.Element;
 	href?: string;
 	color: string;
 	boldColor?: string;
@@ -52,6 +52,9 @@ const Text = styled(B)`
 	color: ${props => props.color};
 	font-size: 14px;
 	line-height: 150%;
+	> a {
+		font-weight: 700;
+	}
 `;
 
 const Icon = styled.div`

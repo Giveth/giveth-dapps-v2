@@ -30,7 +30,7 @@ import { EDirection, gqlEnums } from '@/apollo/types/gqlEnums';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
 import { Shadow } from '../../styled-components/Shadow';
 import useUser from '@/context/UserProvider';
-import { deviceSize, mediaQueries } from '@/utils/constants';
+import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import useModal from '@/context/ModalProvider';
 
 interface IProjectsView {

@@ -7,7 +7,7 @@ import Routes from '@/lib/constants/Routes';
 import { Arc } from '@/components/styled-components/Arc';
 import useUser from '@/context/UserProvider';
 import { isUserRegistered } from '@/lib/helpers';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 import useModal from '@/context/ModalProvider';
 
 const HomeHeader = () => {

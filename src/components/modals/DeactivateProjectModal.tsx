@@ -46,7 +46,6 @@ interface IDeactivateProjectModal extends IModal {
 const DeactivateProjectModal = ({
 	projectId,
 	setIsActive,
-	showModal,
 	setShowModal,
 }: IDeactivateProjectModal) => {
 	const [tab, setTab] = useState<number>(0);
@@ -106,7 +105,7 @@ const DeactivateProjectModal = ({
 
 	return (
 		<Modal
-			showModal={showModal}
+			showModal
 			setShowModal={setShowModal}
 			headerIcon={
 				<Image

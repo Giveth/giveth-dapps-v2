@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
 	FacebookShareButton,
 	TwitterShareButton,
@@ -13,6 +14,7 @@ import {
 	neutralColors,
 	OulineButton,
 } from '@giveth/ui-design-system';
+
 import { IModal, Modal } from './Modal';
 import FacebookIcon from '../../../public/images/social-fb.svg';
 import LinkedinIcon from '../../../public/images/social-linkedin.svg';
@@ -20,23 +22,30 @@ import TwitterIcon from '../../../public/images/social-tw.svg';
 import ShareIcon from '../../../public/images/icons/share_dots.svg';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
-import links from '@/lib/constants/links';
+import { slugToProjectView } from '@/lib/routeCreators';
+import { isSSRMode } from '@/lib/helpers';
 
 interface IShareModal extends IModal {
 	projectHref: string;
-	projectDescription?: string;
 }
 
-const ShareModal = ({
-	projectHref,
-	projectDescription,
-	showModal,
-	setShowModal,
-}: IShareModal) => {
-	const url: string = `${links.FRONTEND}project/${projectHref}`;
+const ShareModal = ({ projectHref, setShowModal }: IShareModal) => {
+	const [copyText, setCopyText] = useState('copy link');
+
+	if (isSSRMode) {
+		return null;
+	}
+
+	const url: string = window.location.origin + slugToProjectView(projectHref);
+
+	const handleCopy = () => {
+		navigator.clipboard.writeText(url);
+		setCopyText('copied!');
+	};
+
 	return (
 		<Modal
-			showModal={showModal}
+			showModal
 			setShowModal={setShowModal}
 			headerIcon={<Image src={ShareIcon} alt='share icon' />}
 			headerTitle='Share'
@@ -79,7 +88,8 @@ const ShareModal = ({
 					buttonType='texty'
 					color={brandColors.pinky[500]}
 					size='small'
-					label='copy link'
+					label={copyText}
+					onClick={handleCopy}
 				/>
 			</DashedWrapper>
 			<CustomOutlineButton
@@ -88,6 +98,7 @@ const ShareModal = ({
 				size='small'
 				label='dismiss'
 				marginBottom='16px'
+				onClick={() => setShowModal(false)}
 			/>
 		</Modal>
 	);
@@ -95,7 +106,7 @@ const ShareModal = ({
 
 const Subtitle = styled(H5)`
 	color: ${brandColors.deep[900]};
-	padding: 16px 0px 32px;
+	padding: 16px 0 32px;
 `;
 
 const SocialButtonContainer = styled(FlexCenter)`
@@ -112,7 +123,7 @@ const SocialButtonContainer = styled(FlexCenter)`
 `;
 
 const LeadText = styled(Lead)`
-	margin: 16px 0px;
+	margin: 16px 0;
 	color: ${brandColors.deep[900]};
 `;
 
@@ -124,7 +135,7 @@ const DashedWrapper = styled(FlexCenter)`
 `;
 
 const ProjectLink = styled(GLink)`
-	padding: 0px 24px;
+	padding: 0 24px;
 	color: ${neutralColors.gray[700]};
 `;
 
@@ -143,8 +154,7 @@ const CustomOutlineButton = styled(OulineButton)<ICustomOutlineButton>`
 	font-weight: 700;
 	border: none;
 	color: ${props => props.color};
-	margin: auto;
-	margin-bottom: ${props => props.marginBottom};
+	margin: ${props => `0 auto ${props.marginBottom}`};
 
 	&:hover {
 		color: ${props => props.color}70;
