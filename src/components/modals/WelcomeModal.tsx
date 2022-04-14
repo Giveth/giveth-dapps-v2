@@ -16,6 +16,7 @@ import { torusConnector } from '@/lib/wallet/walletTypes';
 import { mediaQueries } from '@/lib/constants/constants';
 import { showToastError } from '@/lib/helpers';
 import useModal from '@/context/ModalProvider';
+import { Modal } from './Modal';
 
 interface ISignInModal {
 	setShowModal: (x: boolean) => void;
@@ -34,7 +35,7 @@ const WelcomeModal = ({ setShowModal }: ISignInModal) => {
 	};
 
 	return (
-		<Modal>
+		<Modal showModal setShowModal={setShowModal} fullScreen hideHeader>
 			<ModalGrid>
 				<BGContainer />
 				<ContentContainer>
@@ -83,19 +84,11 @@ const CloseButton = styled.div`
 `;
 
 const ModalGrid = styled.div`
-	border-radius: 4px;
 	position: relative;
 	display: flex;
 	width: 100%;
 	background: white !important;
 	height: 100%;
-	${mediaQueries.laptopL} {
-		max-width: 1440px;
-		max-height: 840px;
-		width: 85%;
-		height: 100%;
-		overflow: auto;
-	}
 `;
 
 const BGContainer = styled.div`
@@ -104,6 +97,7 @@ const BGContainer = styled.div`
 	max-width: 640px;
 	background-color: ${brandColors.giv[500]};
 	background-image: url('/images/sign_bg.svg');
+	background-repeat: no-repeat;
 	${mediaQueries.laptop} {
 		display: block;
 	}
@@ -170,21 +164,6 @@ const BreakLine = styled.hr`
 	width: 45%;
 	margin: auto 0;
 	border-top: 1px solid ${neutralColors.gray[300]};
-`;
-
-const Modal = styled.div`
-	position: fixed;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 100%;
-	height: 100%;
-	backgroundcolor: white;
-	background: rgba(9, 4, 70, 0.7);
-	color: ${brandColors.deep[900]};
-	margin: auto;
-	border: none;
-	z-index: 1060;
 `;
 
 const socialArray = [

@@ -10,7 +10,11 @@ import {
 } from '@/components/modals/ModalHeader';
 import { ETheme, useGeneral } from '@/context/general.context';
 
-export interface IModal {
+interface ModalWrapperProps {
+	fullScreen?: boolean;
+}
+
+export interface IModal extends ModalWrapperProps {
 	showModal?: boolean;
 	setShowModal: (value: boolean) => void;
 	callback?: () => void;
@@ -19,6 +23,7 @@ export interface IModal {
 	headerTitle?: string;
 	headerIcon?: ReactNode;
 	customTheme?: ETheme;
+	hideHeader?: boolean;
 }
 
 export const Modal: React.FC<IModal> = ({
@@ -29,10 +34,11 @@ export const Modal: React.FC<IModal> = ({
 	headerTitle,
 	headerIcon,
 	customTheme,
+	hideHeader = false,
+	fullScreen = false,
 }) => {
 	const el = useRef(document.createElement('div'));
 	const { theme } = useGeneral();
-
 	useEffect(() => {
 		const current = el.current;
 		const modalRoot = document.querySelector('body') as HTMLElement;
@@ -53,25 +59,29 @@ export const Modal: React.FC<IModal> = ({
 			setShowModal(false);
 		}
 	};
-
+	const ScrollBarsNotFullScreenProps = {
+		autoHeight: true,
+		autoHeightMin: 'calc(20Vh - 60px)',
+		autoHeightMax: 'calc(80Vh - 60px)',
+	};
 	return createPortal(
 		<Background>
 			<Surrounding onClick={() => setShowModal(false)} />
-			<ModalWrapper theme={customTheme || theme}>
-				<ModalHeader
-					hiddenClose={hiddenClose}
-					title={headerTitle}
-					icon={headerIcon}
-					closeModal={() => setShowModal(false)}
-					position={headerTitlePosition}
-				/>
+			<ModalWrapper fullScreen={fullScreen} theme={customTheme || theme}>
+				{!hideHeader && (
+					<ModalHeader
+						hiddenClose={hiddenClose}
+						title={headerTitle}
+						icon={headerIcon}
+						closeModal={() => setShowModal(false)}
+						position={headerTitlePosition}
+					/>
+				)}
 				<Scrollbars
-					autoHeight
-					autoHeightMin={'calc(20Vh - 60px)'}
-					autoHeightMax={'calc(80Vh - 60px)'}
 					renderTrackHorizontal={props => (
 						<div {...props} style={{ display: 'none' }} />
 					)}
+					{...(fullScreen ? {} : ScrollBarsNotFullScreenProps)}
 				>
 					{children}
 				</Scrollbars>
@@ -100,14 +110,14 @@ const Background = styled.div`
 	z-index: 1060;
 `;
 
-const ModalWrapper = styled.div`
+const ModalWrapper = styled.div<ModalWrapperProps>`
 	background-color: ${props =>
 		props.theme === ETheme.Dark
 			? brandColors.giv[600]
 			: neutralColors.gray[100]};
 	box-shadow: 0 3px 20px
 		${props => (props.theme === ETheme.Dark ? '#00000026' : '#21203c')};
-	border-radius: 8px;
+	border-radius: ${props => (props.fullScreen ? '0px' : '8px')}
 	color: ${props =>
 		props.theme === ETheme.Dark
 			? neutralColors.gray[100]
@@ -115,6 +125,8 @@ const ModalWrapper = styled.div`
 	position: relative;
 	z-index: 10;
 	text-align: center;
-	max-height: 90vh;
+	max-height: ${props => (props.fullScreen ? 'none' : '90vh')};
+	width: ${props => (props.fullScreen ? '100%' : 'auto')};
+	height: ${props => (props.fullScreen ? '100%' : 'auto')};
 	overflow: hidden;
 `;
