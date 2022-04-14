@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-modal';
 import { H3, P, brandColors, neutralColors, B } from '@giveth/ui-design-system';
 import styled from 'styled-components';
@@ -13,16 +13,20 @@ import twitterIcon from '/public/images/social-tt.svg';
 import facebookIcon from '/public/images/social-fb2.svg';
 import discordIcon from '/public/images/social-disc.svg';
 import torusBrand from '/public/images/torus_pwr.svg';
-import { torusConnector } from '@/lib/wallet/walletTypes';
+import { EWallets, torusConnector } from '@/lib/wallet/walletTypes';
 import { mediaQueries } from '@/lib/constants/constants';
-import { showToastError } from '@/lib/helpers';
+import { detectBrave, showToastError } from '@/lib/helpers';
 import useModal from '@/context/ModalProvider';
+import StorageLabel from '@/lib/localStorage';
+import LowerShields from '@/components/modals/LowerShields';
 
 interface ISignInModal {
 	setShowModal: (x: boolean) => void;
 }
 
 const WelcomeModal = ({ setShowModal }: ISignInModal) => {
+	const [showLowerShields, setShowLowerShields] = useState<boolean>();
+
 	const { activate } = useWeb3React();
 	const {
 		actions: { showWalletModal },
@@ -30,49 +34,72 @@ const WelcomeModal = ({ setShowModal }: ISignInModal) => {
 
 	const closeModal = () => setShowModal(false);
 
-	const handleSocialConnection = (): void => {
-		activate(torusConnector).then(closeModal).catch(showToastError);
+	const checkIsBrave = async () => {
+		const isBrave = await detectBrave();
+		if (isBrave) {
+			setShowLowerShields(true);
+		} else {
+			connectTorus();
+		}
+	};
+
+	const connectTorus = (): void => {
+		activate(torusConnector)
+			.then(() => {
+				localStorage.setItem(StorageLabel.WALLET, EWallets.TORUS);
+				closeModal();
+			})
+			.catch(showToastError);
+	};
+
+	const onCloseLowerShields = () => {
+		connectTorus();
+		setShowLowerShields(false);
 	};
 
 	return (
-		<Modal isOpen={true} style={customStyles}>
-			<CloseButton onClick={closeModal}>
-				<Image src={closeIcon} alt='close' />
-			</CloseButton>
-			<ModalGrid>
-				<BGContainer />
-				<ContentContainer>
-					<H3>Sign in to Giveth</H3>
-					<ContentSubtitle>
-						Please sign in to your account and start using Giveth.
-					</ContentSubtitle>
-					<IconContentContainer>
-						<EthIconContainer onClick={showWalletModal}>
-							<Image src={ethIcon} alt='Ether icon' />
-							<B>Sign in with Ethereum</B>
-						</EthIconContainer>
-						<BreakPoint>
-							<BreakLine />
-							<P>or</P>
-							<BreakLine />
-						</BreakPoint>
-						<SocialContentContainer>
-							{socialArray.map(elem => (
-								<IconsContainer
-									key={elem.alt}
-									onClick={handleSocialConnection}
-								>
-									{' '}
-									{/* best way to activate torus here? */}
-									<Image src={elem.icon} alt={elem.alt} />
-								</IconsContainer>
-							))}
-						</SocialContentContainer>
-						<Image src={torusBrand} alt='Powered by Torus' />
-					</IconContentContainer>
-				</ContentContainer>
-			</ModalGrid>
-		</Modal>
+		<>
+			{showLowerShields && <LowerShields onClose={onCloseLowerShields} />}
+			<Modal isOpen={true} style={customStyles}>
+				<CloseButton onClick={closeModal}>
+					<Image src={closeIcon} alt='close' />
+				</CloseButton>
+				<ModalGrid>
+					<BGContainer />
+					<ContentContainer>
+						<H3>Sign in to Giveth</H3>
+						<ContentSubtitle>
+							Please sign in to your account and start using
+							Giveth.
+						</ContentSubtitle>
+						<IconContentContainer>
+							<EthIconContainer onClick={showWalletModal}>
+								<Image src={ethIcon} alt='Ether icon' />
+								<B>Sign in with Ethereum</B>
+							</EthIconContainer>
+							<BreakPoint>
+								<BreakLine />
+								<P>or</P>
+								<BreakLine />
+							</BreakPoint>
+							<SocialContentContainer>
+								{socialArray.map(elem => (
+									<IconsContainer
+										key={elem.alt}
+										onClick={checkIsBrave}
+									>
+										{' '}
+										{/* best way to activate torus here? */}
+										<Image src={elem.icon} alt={elem.alt} />
+									</IconsContainer>
+								))}
+							</SocialContentContainer>
+							<Image src={torusBrand} alt='Powered by Torus' />
+						</IconContentContainer>
+					</ContentContainer>
+				</ModalGrid>
+			</Modal>
+		</>
 	);
 };
 

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import { useWeb3React } from '@web3-react/core';
 import styled from 'styled-components';
@@ -14,27 +14,23 @@ import {
 import { IModal, Modal } from '@/components/modals/Modal';
 import { ETheme } from '@/context/general.context';
 import { detectBrave, showToastError } from '@/lib/helpers';
-import useModal from '@/context/ModalProvider';
 import StorageLabel from '@/lib/localStorage';
+import LowerShields from '@/components/modals/LowerShields';
 
 interface IWalletModal extends IModal {
 	closeParentModal?: () => void;
 }
 
 const WalletModal = ({ setShowModal, closeParentModal }: IWalletModal) => {
+	const [showLowerShields, setShowLowerShields] = useState<boolean>();
+
 	const context = useWeb3React();
 	const { activate, deactivate } = context;
 	const selectedWallet = useWalletName(context);
-	const {
-		state: { lowerShields },
-		actions: { showLowerShields },
-	} = useModal();
-
-	const firstRender = useRef(true);
 
 	const handleSelect = (selected: IWallet) => {
 		if (selectedWallet !== selected.value) {
-			window.localStorage.removeItem('selectedWallet');
+			window.localStorage.removeItem(StorageLabel.WALLET);
 			deactivate();
 			let timeOut = 0;
 			if (selectedWallet === EWallets.METAMASK) {
@@ -58,46 +54,41 @@ const WalletModal = ({ setShowModal, closeParentModal }: IWalletModal) => {
 	const checkLowerShields = async (selected: IWallet) => {
 		const isBrave = await detectBrave();
 		if (selected.value === EWallets.TORUS && isBrave) {
-			showLowerShields();
+			setShowLowerShields(true);
 		} else {
 			handleSelect(selected);
 		}
 	};
 
-	useEffect(() => {
-		if (!lowerShields && !firstRender.current) {
-			handleSelect(torusWallet);
-		}
-		if (firstRender.current) {
-			firstRender.current = false;
-		}
-	}, [lowerShields]);
+	const onCloseLowerShields = () => {
+		handleSelect(torusWallet);
+		setShowLowerShields(false);
+	};
 
 	return (
-		<Modal
-			showModal={true}
-			setShowModal={setShowModal}
-			customTheme={ETheme.Light}
-		>
-			<IconsContainer>
-				{walletsArray.map(i => (
-					<WalletItem
-						onClick={() => checkLowerShields(i)}
-						key={i.value}
-						selected={selectedWallet === i.value}
-					>
-						<Image
-							src={i.image}
-							alt={i.name}
-							height={64}
-							width={64}
-						/>
-						<WalletName>{i.name}</WalletName>
-						<WalletDesc>Connect with your {i.name}</WalletDesc>
-					</WalletItem>
-				))}
-			</IconsContainer>
-		</Modal>
+		<>
+			{showLowerShields && <LowerShields onClose={onCloseLowerShields} />}
+			<Modal setShowModal={setShowModal} customTheme={ETheme.Light}>
+				<IconsContainer>
+					{walletsArray.map(i => (
+						<WalletItem
+							onClick={() => checkLowerShields(i)}
+							key={i.value}
+							selected={selectedWallet === i.value}
+						>
+							<Image
+								src={i.image}
+								alt={i.name}
+								height={64}
+								width={64}
+							/>
+							<WalletName>{i.name}</WalletName>
+							<WalletDesc>Connect with your {i.name}</WalletDesc>
+						</WalletItem>
+					))}
+				</IconsContainer>
+			</Modal>
+		</>
 	);
 };
 
