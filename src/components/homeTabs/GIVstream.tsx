@@ -164,8 +164,17 @@ export const TabGIVstreamBottom = () => {
 	}, [balances.allocatedTokens, balances.givback, givTokenDistroHelper]);
 
 	useEffect(() => {
-		setPercent(givTokenDistroHelper.percent);
+		// setPercent(givTokenDistroHelper.percent);
 		const _remain = durationToString(givTokenDistroHelper.remain);
+		const rewardLiquidPart = balances.allocatedTokens
+			.sub(balances.givback)
+			.sub(balances.claimed);
+		const remainLiquidPercentage = formatWeiHelper(
+			givTokenDistroHelper.getLiquidPart(
+				givTokenDistroHelper.initialAmount.sub(rewardLiquidPart),
+			),
+		);
+		setPercent(parseInt(remainLiquidPercentage));
 		setRemain(_remain);
 	}, [givTokenDistroHelper]);
 	return (
@@ -326,8 +335,8 @@ export const GIVstreamProgress: FC<IGIVstreamProgressProps> = ({
 						direction={'right'}
 					>
 						<GsPTooltip>
-							Time left for all GIVstreams to flow & for the
-							GIViverse to reach full power!
+							Liquidity of all GIVstreams to flow & for the
+							GIViverse!
 						</GsPTooltip>
 					</IconWithTooltip>
 				</GsPTitle>
