@@ -136,15 +136,18 @@ export const GIVbackStreamDesc = styled(Caption)`
 
 export const BreakdownSumRow = styled(BreakdownRow)`
 	border: none;
-	align-items: baseline;
+	align-items: center;
 `;
 
 export const BreakdownLiquidSum = styled(B)`
 	text-align: right;
 	font-size: 24px;
 `;
-export const BreakdownStreamSum = styled(B)`
-	text-align: right;
+export const BreakdownStreamSum = styled(Flex)`
+	& > div {
+		font-size: 20px;
+		line-height: 24px;
+	}
 `;
 
 export const PoolIcon = styled.div`

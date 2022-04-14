@@ -18,7 +18,6 @@ import {
 	RegenStreamConfig,
 	StreamType,
 } from '@/types/config';
-import { StakingPoolImages } from '../StakingPoolImages';
 import { formatWeiHelper } from '@/helpers/number';
 import { useSubgraph } from '@/context/subgraph.context';
 import { useTokenDistro } from '@/context/tokenDistro.context';
@@ -534,11 +533,14 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 											{tokenSymbol}
 										</BreakdownUnit>
 										<BreakdownStreamSum>
-											{formatWeiHelper(
-												sumStream,
-												config.TOKEN_PRECISION,
-												false,
-											)}
+											<IconGIVStream size={24} />
+											<P>
+												{formatWeiHelper(
+													sumStream,
+													config.TOKEN_PRECISION,
+													false,
+												)}
+											</P>
 										</BreakdownStreamSum>
 										<BreakdownUnit>
 											{tokenSymbol}/week
