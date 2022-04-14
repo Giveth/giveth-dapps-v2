@@ -4,13 +4,12 @@ import { H4, B, brandColors, Caption } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 
 import { mediaQueries } from '@/lib/constants/constants';
-import { ETheme, useGeneral } from '@/context/general.context';
 import config from '@/configuration';
 import { IconEthereum } from '../Icons/Eth';
 import { IconGnosisChain } from '../Icons/GnosisChain';
 import { Modal, IModal } from './Modal';
 import { switchNetwork } from '@/lib/wallet';
-import { networkNames } from '@/components/views/donate/helpers';
+import { getNetworkNames } from '@/components/views/donate/helpers';
 
 interface IDonateWrongNetwork extends IModal {
 	targetNetworks: number[];
@@ -28,7 +27,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = ({
 		}
 	}, [chainId, targetNetworks]);
 
-	const NetworkName = networkNames(targetNetworks);
+	const NetworkName = getNetworkNames(targetNetworks, 'or');
 
 	return (
 		<Modal showModal setShowModal={setShowModal}>

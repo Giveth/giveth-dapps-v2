@@ -41,7 +41,7 @@ import {
 import {
 	filterTokens,
 	getNetworkIds,
-	networkNames,
+	getNetworkNames,
 	prepareTokenList,
 } from '@/components/views/donate/helpers';
 import { ORGANIZATION } from '@/lib/constants/organizations';
@@ -342,7 +342,8 @@ const CryptoDonation = (props: {
 							<div>
 								<Caption color={neutralColors.gray[900]}>
 									Projects from {orgName} only accept
-									donations on {networkNames(acceptedChains)}.
+									donations on{' '}
+									{getNetworkNames(acceptedChains, 'and')}.
 								</Caption>
 							</div>
 							<SwitchCaption

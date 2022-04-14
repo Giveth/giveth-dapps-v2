@@ -60,14 +60,14 @@ export const getNetworkIds = (tokens: IProjectAcceptedToken[]) => {
 	return Object.keys(networkIds).map(i => Number(i));
 };
 
-export const networkNames = (acceptedChains: number[]) => {
-	return acceptedChains.map((i, index) => {
+export const getNetworkNames = (networks: number[], text: string) => {
+	return networks.map((i, index) => {
 		const name = networksParams[i]?.chainName;
-		const lastLoop = acceptedChains.length === index + 1;
+		const lastLoop = networks.length === index + 1;
 		return (
 			<span key={i}>
 				{name}
-				{!lastLoop && ', '}
+				{!lastLoop && ' ' + text + ' '}
 			</span>
 		);
 	});
