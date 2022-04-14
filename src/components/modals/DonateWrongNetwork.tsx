@@ -4,39 +4,35 @@ import { H4, B, brandColors, Caption } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 
 import { mediaQueries } from '@/lib/constants/constants';
-import { ETheme, useGeneral } from '@/context/general.context';
 import config from '@/configuration';
 import { IconEthereum } from '../Icons/Eth';
 import { IconGnosisChain } from '../Icons/GnosisChain';
 import { Modal, IModal } from './Modal';
 import { switchNetwork } from '@/lib/wallet';
+import { getNetworkNames } from '@/components/views/donate/helpers';
 
-interface IChangeNetworkModalProps extends IModal {
-	targetNetwork: number;
+interface IDonateWrongNetwork extends IModal {
+	targetNetworks: number[];
 }
 
-export const ChangeNetworkModal: FC<IChangeNetworkModalProps> = ({
+export const DonateWrongNetwork: FC<IDonateWrongNetwork> = ({
 	setShowModal,
-	targetNetwork,
+	targetNetworks,
 }) => {
 	const { chainId } = useWeb3React();
-	const { theme } = useGeneral();
 
 	useEffect(() => {
-		if (chainId === targetNetwork) {
+		if (chainId && targetNetworks.includes(chainId)) {
 			setShowModal(false);
 		}
-	}, [chainId, targetNetwork]);
+	}, [chainId, targetNetworks]);
 
-	const NetworkName =
-		targetNetwork === config.MAINNET_NETWORK_NUMBER
-			? 'Ethereum Mainnet'
-			: 'Ethereum Mainnet or Gnosis Chain';
+	const NetworkName = getNetworkNames(targetNetworks, 'or');
 
 	return (
 		<Modal showModal setShowModal={setShowModal}>
-			<ChangeNetworkModalContainer>
-				{targetNetwork === config.MAINNET_NETWORK_NUMBER ? (
+			<ModalContainer>
+				{!targetNetworks.includes(config.SECONDARY_NETWORK.id) ? (
 					<IconEthereum size={64} />
 				) : (
 					<>
@@ -44,14 +40,14 @@ export const ChangeNetworkModal: FC<IChangeNetworkModalProps> = ({
 						<IconGnosisChain size={64} />
 					</>
 				)}
-				<Title theme={theme}>Switch to {NetworkName}</Title>
+				<Title>Switch to {NetworkName}</Title>
 				<B>Please switch your wallet network to {NetworkName}.</B>
 				<SwitchCaption
-					onClick={() => switchNetwork(config.MAINNET_NETWORK_NUMBER)}
+					onClick={() => switchNetwork(config.PRIMARY_NETWORK.id)}
 				>
 					Switch network
 				</SwitchCaption>
-			</ChangeNetworkModalContainer>
+			</ModalContainer>
 		</Modal>
 	);
 };
@@ -62,7 +58,7 @@ const SwitchCaption = styled(Caption)`
 	margin: 20px auto 0;
 `;
 
-const ChangeNetworkModalContainer = styled.div`
+const ModalContainer = styled.div`
 	padding: 62px 60px;
 	color: ${brandColors.giv[700]};
 	width: 100%;
@@ -73,6 +69,5 @@ const ChangeNetworkModalContainer = styled.div`
 
 const Title = styled(H4)`
 	margin: 18px 0 24px;
-	color: ${props =>
-		props.theme === ETheme.Dark ? 'white' : brandColors.giv[700]};
+	color: ${brandColors.giv[700]};
 `;

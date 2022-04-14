@@ -3,16 +3,21 @@ import { IModal, Modal } from './Modal';
 import Lottie from 'react-lottie';
 import LoadingAnimation from '@/animations/loading.json';
 import {
-	B,
 	brandColors,
 	Caption,
+	IconGIVBack,
+	IconGIVFarm,
 	IconGIVStream,
 	IconHelp,
 	Lead,
+	P,
 } from '@giveth/ui-design-system';
-import { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
-import { StakingPoolImages } from '../StakingPoolImages';
-import { formatWeiHelper } from '@/helpers/number';
+import {
+	PoolStakingConfig,
+	RegenStreamConfig,
+	StreamType,
+} from '@/types/config';
+import { formatWeiHelper, Zero } from '@/helpers/number';
 import { useSubgraph } from '@/context/subgraph.context';
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import { harvestTokens } from '@/lib/stakingPool';
@@ -30,16 +35,24 @@ import {
 	HarvestAllModalContainer,
 	HarvestButton,
 	HelpRow,
-	RateRow,
-	SPTitle,
-	StakingPoolLabel,
-	StakingPoolSubtitle,
 	NothingToHarvest,
 	TooltipContent,
 	HarvestBoxes,
 	HarvestAllPending,
+	BreakdownTitle,
+	BreakdownAmount,
+	BreakdownIcon,
+	BreakdownRate,
+	BreakdownRow,
+	BreakdownTableBody,
+	BreakdownTableTitle,
+	BreakdownUnit,
+	GIVbackStreamDesc,
+	BreakdownSumRow,
+	BreakdownLiquidSum,
+	BreakdownStreamSum,
+	PoolIcon,
 } from './HarvestAll.sc';
-import { Zero } from '@ethersproject/constants';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { claimReward, fetchAirDropClaimData } from '@/lib/claim';
@@ -48,11 +61,12 @@ import { IconWithTooltip } from '../IconWithToolTip';
 import { AmountBoxWithPrice } from '@/components/AmountBoxWithPrice';
 import { usePrice } from '@/context/price.context';
 import { useWeb3React } from '@web3-react/core';
+import { getPoolIconWithName } from '../cards/BaseStakingCard';
 
 interface IHarvestAllModalProps extends IModal {
 	title: string;
 	poolStakingConfig?: PoolStakingConfig;
-	claimable?: ethers.BigNumber;
+	earned?: ethers.BigNumber;
 	network: number;
 	regenStreamConfig?: RegenStreamConfig;
 }
@@ -79,7 +93,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	showModal,
 	setShowModal,
 	poolStakingConfig,
-	claimable,
+	earned,
 	network,
 	regenStreamConfig,
 }) => {
@@ -93,24 +107,34 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	const { account, library } = useWeb3React();
 	const { currentIncentive, stakedPositions } = useLiquidityPositions();
 	const [txHash, setTxHash] = useState('');
-
-	const [givDrop, setGIVdrop] = useState(Zero);
-	const [givDropStream, setGIVdropStream] = useState<BigNumber.Value>(0);
-	const [rewardLiquidPart, setRewardLiquidPart] = useState(Zero);
-	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
-	const [claimableNow, setClaimableNow] = useState(Zero);
+	//GIVdrop TODO: Should we show Givdrop in new  design?
+	const [givDrop, setGIVdrop] = useState(ethers.constants.Zero);
+	const [givDropStream, setGIVdropStream] = useState<BigNumber>(Zero);
+	//GIVstream
+	const [rewardLiquidPart, setRewardLiquidPart] = useState(
+		ethers.constants.Zero,
+	);
+	const [rewardStream, setRewardStream] = useState<BigNumber>(Zero);
+	//GIVfarm
+	const [earnedLiquid, setEarnedLiquid] = useState(ethers.constants.Zero);
+	const [earnedStream, setEarnedStream] = useState<BigNumber>(Zero);
+	//GIVback
 	const [givBackStream, setGivBackStream] = useState<BigNumber.Value>(0);
-	const [sum, setSum] = useState(Zero);
+	//Sum
+	const [sumLiquid, setSumLiquid] = useState(ethers.constants.Zero);
+	const [sumStream, setSumStream] = useState<BigNumber>(Zero);
 
 	const tokenDistroHelper = useMemo(
 		() => getTokenDistroHelper(regenStreamConfig?.type),
 		[getTokenDistroHelper, regenStreamConfig],
 	);
 	const givback = useMemo<ethers.BigNumber>(() => {
-		return regenStreamConfig ? Zero : balances.givback;
+		return regenStreamConfig ? ethers.constants.Zero : balances.givback;
 	}, [regenStreamConfig, balances.givback]);
 	const givbackLiquidPart = useMemo<ethers.BigNumber>(() => {
-		return regenStreamConfig ? Zero : balances.givbackLiquidPart;
+		return regenStreamConfig
+			? ethers.constants.Zero
+			: balances.givbackLiquidPart;
 	}, [regenStreamConfig, balances.givbackLiquidPart]);
 	const tokenPrice = useMemo(() => {
 		return regenStreamConfig
@@ -119,27 +143,40 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	}, [getTokenPrice, givPrice, network, regenStreamConfig]);
 
 	useEffect(() => {
-		if (claimable) {
-			setRewardLiquidPart(tokenDistroHelper.getLiquidPart(claimable));
-			setRewardStream(
-				tokenDistroHelper.getStreamPartTokenPerWeek(claimable),
+		if (earned) {
+			setRewardLiquidPart(tokenDistroHelper.getLiquidPart(earned));
+			setEarnedStream(
+				tokenDistroHelper.getStreamPartTokenPerWeek(earned),
 			);
 		}
-		setClaimableNow(tokenDistroHelper.getUserClaimableNow(balances));
-
-		setGivBackStream(tokenDistroHelper.getStreamPartTokenPerWeek(givback));
-	}, [claimable, balances, tokenDistroHelper, givback]);
-
-	useEffect(() => {
-		let _sum = rewardLiquidPart.add(givbackLiquidPart);
-		if (claimableNow) {
-			_sum = _sum.add(claimableNow);
-		}
-		if (_sum.isZero()) {
+		setEarnedLiquid(tokenDistroHelper.getUserClaimableNow(balances));
+		let lockedAmount;
+		if (regenStreamConfig) {
+			switch (regenStreamConfig.type) {
+				case StreamType.FOX:
+					lockedAmount = balances.foxAllocatedTokens;
+					break;
+				default:
+					lockedAmount = ethers.constants.Zero;
+			}
 		} else {
-			setSum(_sum);
+			lockedAmount = balances.allocatedTokens.sub(givback);
 		}
-	}, [rewardLiquidPart, givbackLiquidPart, claimableNow]);
+		setRewardStream(
+			tokenDistroHelper.getStreamPartTokenPerWeek(lockedAmount),
+		);
+		setGivBackStream(tokenDistroHelper.getStreamPartTokenPerWeek(givback));
+	}, [earned, balances, tokenDistroHelper, givback]);
+
+	//calculate Liquid Sum
+	useEffect(() => {
+		setSumLiquid(rewardLiquidPart.add(givbackLiquidPart).add(earnedLiquid));
+	}, [rewardLiquidPart, givbackLiquidPart, earnedLiquid]);
+
+	//calculate Stream Sum
+	useEffect(() => {
+		setSumStream(BigNumber.sum(rewardStream, givBackStream, earnedStream));
+	}, [rewardStream, givBackStream, earnedStream]);
 
 	useEffect(() => {
 		if (
@@ -251,12 +288,11 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 			setShowModal={setShowModal}
 			headerTitle={modalTitle}
 			headerTitlePosition={'left'}
-			// title='Your GIVgardens Rewards'
 		>
 			<>
 				{(state === HarvestStates.HARVEST ||
 					state === HarvestStates.HARVESTING) &&
-					(sum.isZero() ? (
+					(sumLiquid.isZero() ? (
 						<HarvestAllModalContainer>
 							<NothingToHarvest>
 								You have nothing to claim
@@ -273,28 +309,13 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 					) : (
 						<HarvestAllModalContainer>
 							<HarvestBoxes>
-								{poolStakingConfig && (
-									<SPTitle alignItems='center' gap='16px'>
-										<StakingPoolImages
-											title={poolStakingConfig.title}
-										/>
-										<div>
-											<StakingPoolLabel weight={900}>
-												{poolStakingConfig.title}
-											</StakingPoolLabel>
-											<StakingPoolSubtitle>
-												{poolStakingConfig.description}
-											</StakingPoolSubtitle>
-										</div>
-									</SPTitle>
-								)}
-								{claimable && claimable.gt(0) && (
+								{sumLiquid && sumLiquid.gt(0) && (
 									<>
 										<AmountBoxWithPrice
-											amount={rewardLiquidPart}
+											amount={sumLiquid}
 											price={calcUSD(
 												formatWeiHelper(
-													rewardLiquidPart,
+													sumLiquid,
 													config.TOKEN_PRECISION,
 													false,
 												),
@@ -305,7 +326,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 										/>
 										<HelpRow alignItems='center'>
 											<Caption>
-												Added to your {tokenSymbol}
+												Your new {tokenSymbol}
 												stream flowrate
 											</Caption>
 											<IconWithTooltip
@@ -326,130 +347,191 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 													claim liquid rewards!
 												</TooltipContent>
 											</IconWithTooltip>
-										</HelpRow>
-										<RateRow alignItems='center'>
 											<IconGIVStream size={24} />
 											<GIVRate>
-												{formatWeiHelper(rewardStream)}
+												{formatWeiHelper(sumStream)}
 											</GIVRate>
 											<Lead>{tokenSymbol}/week</Lead>
-										</RateRow>
-									</>
-								)}
-								{givback.gt(0) && (
-									<>
-										<HelpRow alignItems='center'>
-											<B>Claimable from GIVbacks</B>
 										</HelpRow>
-										<AmountBoxWithPrice
-											amount={givbackLiquidPart}
-											price={calcUSD(
-												formatWeiHelper(
-													givbackLiquidPart,
-													config.TOKEN_PRECISION,
-													false,
-												),
-											)}
-											tokenSymbol={
-												regenStreamConfig?.rewardTokenSymbol
-											}
-										/>
-										<HelpRow alignItems='center'>
-											<Caption>
-												Added to your {tokenSymbol}
-												stream flowrate
-											</Caption>
-											<IconWithTooltip
-												icon={
-													<IconHelp
-														size={16}
-														color={
-															brandColors
-																.deep[100]
-														}
-													/>
-												}
-												direction={'top'}
-											>
-												<TooltipContent>
-													Increase you {tokenSymbol}
-													stream flowrate when you
-													claim liquid rewards!
-												</TooltipContent>
-											</IconWithTooltip>
-										</HelpRow>
-										<RateRow alignItems='center'>
-											<IconGIVStream size={24} />
-											<GIVRate>
-												{formatWeiHelper(givBackStream)}
-											</GIVRate>
-											<Lead>{tokenSymbol}/week</Lead>
-										</RateRow>
-									</>
-								)}
-								{givDrop.gt(Zero) && (
-									<>
-										<HelpRow alignItems='center'>
-											<B>Claimable from GIVdrop</B>
-										</HelpRow>
-										<AmountBoxWithPrice
-											amount={givDrop}
-											price={calcUSD(
-												formatWeiHelper(
-													givDrop,
-													config.TOKEN_PRECISION,
-													false,
-												),
-											)}
-											tokenSymbol={
-												regenStreamConfig?.rewardTokenSymbol
-											}
-										/>
-										<HelpRow alignItems='center'>
-											<Caption>
-												Your initial {streamName}
-												flowrate
-											</Caption>
-										</HelpRow>
-										<RateRow alignItems='center'>
-											<IconGIVStream size={24} />
-											<GIVRate>
-												{formatWeiHelper(givDropStream)}
-											</GIVRate>
-											<Lead>{tokenSymbol}/week</Lead>
-										</RateRow>
-									</>
-								)}
-								{!claimableNow.isZero() && (
-									<>
-										<HelpRow alignItems='center'>
-											<B>
-												Claimable from {tokenSymbol}
-												stream
-											</B>
-										</HelpRow>
-										<AmountBoxWithPrice
-											amount={claimableNow.sub(
-												givbackLiquidPart,
-											)}
-											price={calcUSD(
-												formatWeiHelper(
-													claimableNow,
-													config.TOKEN_PRECISION,
-													false,
-												),
-											)}
-											tokenSymbol={
-												regenStreamConfig?.rewardTokenSymbol
-											}
-										/>
 									</>
 								)}
 								<HarvestAllDesc>
-									When you harvest {tokenSymbol} rewards, all
-									liquid {tokenSymbol} allocated to you is
-									sent to your wallet.
+									When you harvest {tokenSymbol}
+									rewards anywhere in the GIVeconomy, all
+									liquid {tokenSymbol} allocated to you on
+									that chain is sent to your wallet. Your{' '}
+									{tokenSymbol}stream flowrate may also
+									increase. Below is the breakdown of rewards
+									you will get when you harvest.
 								</HarvestAllDesc>
+								<BreakdownTableTitle>
+									Rewards breakdown
+								</BreakdownTableTitle>
+								<BreakdownTableBody>
+									<BreakdownRow>
+										<BreakdownTitle>
+											<BreakdownIcon>
+												<IconGIVStream size={24} />
+											</BreakdownIcon>
+											<P>{tokenSymbol}stream</P>
+										</BreakdownTitle>
+										<BreakdownAmount>
+											{formatWeiHelper(
+												earnedLiquid.sub(
+													givbackLiquidPart,
+												),
+												config.TOKEN_PRECISION,
+												false,
+											)}
+										</BreakdownAmount>
+										<BreakdownUnit>
+											{tokenSymbol}
+										</BreakdownUnit>
+										<BreakdownRate>
+											{formatWeiHelper(
+												rewardStream,
+												config.TOKEN_PRECISION,
+												false,
+											)}
+										</BreakdownRate>
+										<BreakdownUnit>
+											{tokenSymbol}/week
+										</BreakdownUnit>
+										{givBackStream != 0 && (
+											<>
+												<GIVbackStreamDesc>
+													Recieved from GIVbacks
+												</GIVbackStreamDesc>
+												<BreakdownRate>
+													+
+													{formatWeiHelper(
+														givBackStream,
+														config.TOKEN_PRECISION,
+														false,
+													)}
+												</BreakdownRate>
+												<BreakdownUnit>
+													{tokenSymbol}/week
+													<IconWithTooltip
+														icon={
+															<IconHelp
+																size={16}
+																color={
+																	brandColors
+																		.deep[100]
+																}
+															/>
+														}
+														direction={'left'}
+													>
+														<TooltipContent>
+															Your GIVstream
+															flowrate was
+															automatically
+															increased when
+															GIVbacks were
+															distributed.
+														</TooltipContent>
+													</IconWithTooltip>
+												</BreakdownUnit>
+											</>
+										)}
+									</BreakdownRow>
+									{!regenStreamConfig && givback.gt(0) && (
+										<BreakdownRow>
+											<BreakdownTitle>
+												<BreakdownIcon>
+													<IconGIVBack size={24} />
+												</BreakdownIcon>
+												<P>GIVback</P>
+											</BreakdownTitle>
+											<BreakdownAmount>
+												{formatWeiHelper(
+													givbackLiquidPart,
+													config.TOKEN_PRECISION,
+													false,
+												)}
+											</BreakdownAmount>
+											<BreakdownUnit>
+												{tokenSymbol}
+											</BreakdownUnit>
+											<BreakdownRate></BreakdownRate>
+											<BreakdownUnit></BreakdownUnit>
+										</BreakdownRow>
+									)}
+									{poolStakingConfig &&
+										earned &&
+										earned.gt(0) && (
+											<BreakdownRow>
+												<BreakdownTitle>
+													<BreakdownIcon>
+														<IconGIVFarm
+															size={24}
+														/>
+													</BreakdownIcon>
+													<P>
+														{regenStreamConfig
+															? 'RegenFarm'
+															: 'GIVfarm'}
+													</P>
+													{poolStakingConfig.title}
+													<PoolIcon>
+														{getPoolIconWithName(
+															poolStakingConfig.type,
+														)}
+													</PoolIcon>
+												</BreakdownTitle>
+												<BreakdownAmount>
+													{formatWeiHelper(
+														rewardLiquidPart,
+														config.TOKEN_PRECISION,
+														false,
+													)}
+												</BreakdownAmount>
+												<BreakdownUnit>
+													{tokenSymbol}
+												</BreakdownUnit>
+												<BreakdownRate>
+													+
+													{formatWeiHelper(
+														earnedStream,
+														config.TOKEN_PRECISION,
+														false,
+													)}
+												</BreakdownRate>
+												<BreakdownUnit>
+													{tokenSymbol}/week
+												</BreakdownUnit>
+											</BreakdownRow>
+										)}
+									<BreakdownSumRow>
+										<div></div>
+										<BreakdownLiquidSum>
+											{formatWeiHelper(
+												sumLiquid,
+												config.TOKEN_PRECISION,
+												false,
+											)}
+										</BreakdownLiquidSum>
+										<BreakdownUnit>
+											{tokenSymbol}
+										</BreakdownUnit>
+										<BreakdownStreamSum>
+											<IconGIVStream size={24} />
+											<P>
+												{formatWeiHelper(
+													sumStream,
+													config.TOKEN_PRECISION,
+													false,
+												)}
+											</P>
+										</BreakdownStreamSum>
+										<BreakdownUnit>
+											{tokenSymbol}/week
+										</BreakdownUnit>
+									</BreakdownSumRow>
+								</BreakdownTableBody>
+
 								{state === HarvestStates.HARVEST && (
 									<HarvestButton
 										label='HARVEST'
