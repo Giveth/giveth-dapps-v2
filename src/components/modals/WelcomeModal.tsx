@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { useWeb3React } from '@web3-react/core';
 
 import { Shadow } from '@/components/styled-components/Shadow';
-import closeIcon from '/public/images/close.svg';
 import ethIcon from '/public/images/tokens/eth.png';
 import googleIcon from '/public/images/google_icon.svg';
 import twitterIcon from '/public/images/social-tt.svg';
@@ -35,13 +34,10 @@ const WelcomeModal = ({ setShowModal }: ISignInModal) => {
 	};
 
 	return (
-		<Modal showModal setShowModal={setShowModal} fullScreen hideHeader>
+		<Modal showModal setShowModal={setShowModal} fullScreen hiddenHeader>
 			<ModalGrid>
 				<BGContainer />
 				<ContentContainer>
-					<CloseButton onClick={closeModal}>
-						<Image src={closeIcon} alt='close' />
-					</CloseButton>
 					<H3>Sign in to Giveth</H3>
 					<ContentSubtitle>
 						Please sign in to your account and start using Giveth.
@@ -75,13 +71,6 @@ const WelcomeModal = ({ setShowModal }: ISignInModal) => {
 		</Modal>
 	);
 };
-
-const CloseButton = styled.div`
-	position: absolute;
-	right: 24px;
-	top: 24px;
-	cursor: pointer;
-`;
 
 const ModalGrid = styled.div`
 	position: relative;

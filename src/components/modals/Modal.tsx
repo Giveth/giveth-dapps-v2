@@ -19,22 +19,22 @@ export interface IModal extends ModalWrapperProps {
 	setShowModal: (value: boolean) => void;
 	callback?: () => void;
 	hiddenClose?: boolean;
+	hiddenHeader?: boolean;
 	headerTitlePosition?: ModalHeaderTitlePosition;
 	headerTitle?: string;
 	headerIcon?: ReactNode;
 	customTheme?: ETheme;
-	hideHeader?: boolean;
 }
 
 export const Modal: React.FC<IModal> = ({
 	hiddenClose = false,
+	hiddenHeader = false,
 	setShowModal,
 	children,
 	headerTitlePosition,
 	headerTitle,
 	headerIcon,
 	customTheme,
-	hideHeader = false,
 	fullScreen = false,
 }) => {
 	const el = useRef(document.createElement('div'));
@@ -68,15 +68,14 @@ export const Modal: React.FC<IModal> = ({
 		<Background>
 			<Surrounding onClick={() => setShowModal(false)} />
 			<ModalWrapper fullScreen={fullScreen} theme={customTheme || theme}>
-				{!hideHeader && (
-					<ModalHeader
-						hiddenClose={hiddenClose}
-						title={headerTitle}
-						icon={headerIcon}
-						closeModal={() => setShowModal(false)}
-						position={headerTitlePosition}
-					/>
-				)}
+				<ModalHeader
+					hiddenClose={hiddenClose}
+					hiddenHeader={hiddenHeader}
+					title={headerTitle}
+					icon={headerIcon}
+					closeModal={() => setShowModal(false)}
+					position={headerTitlePosition}
+				/>
 				<Scrollbars
 					renderTrackHorizontal={props => (
 						<div {...props} style={{ display: 'none' }} />
@@ -117,7 +116,7 @@ const ModalWrapper = styled.div<ModalWrapperProps>`
 			: neutralColors.gray[100]};
 	box-shadow: 0 3px 20px
 		${props => (props.theme === ETheme.Dark ? '#00000026' : '#21203c')};
-	border-radius: ${props => (props.fullScreen ? '0px' : '8px')}
+	border-radius: ${props => (props.fullScreen ? '0px' : '8px')};
 	color: ${props =>
 		props.theme === ETheme.Dark
 			? neutralColors.gray[100]
