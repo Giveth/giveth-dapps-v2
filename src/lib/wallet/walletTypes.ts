@@ -11,16 +11,16 @@ import torusIcon from '/public//images/wallets/torus.svg';
 // import authereumIcon from '/public//images/wallets/authereum.svg';
 import { Web3ReactContextInterface } from '@web3-react/core/dist/types';
 import { TorusConnector } from '@/lib/wallet/torus-connector';
-import { networksParams } from '@/utils/constants';
+import config from '@/configuration';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 
 const supportedChainIds = [1, 3, 4, 5, 42, 100];
 const RPC_URLS: { [chainId: number]: string } = {
-	1: networksParams[1].rpcUrls[0],
-	3: networksParams[3].rpcUrls[0],
-	42: networksParams[42].rpcUrls[0],
-	100: networksParams[100].rpcUrls[0],
+	1: config.MAINNET_CONFIG.rpcUrls[0],
+	3: '',
+	42: '',
+	100: config.XDAI_CONFIG.rpcUrls[0],
 };
 
 export const injectedConnector = new InjectedConnector({ supportedChainIds });

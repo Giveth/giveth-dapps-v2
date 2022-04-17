@@ -28,7 +28,7 @@ import {
 import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
 import { Zero } from '@/helpers/number';
 import { IBalances, IUnipool } from '@/types/subgraph';
-import { getGasPreference, isSafeTx, checkSafeTxStatus } from '@/lib/helpers';
+import { getGasPreference } from '@/lib/helpers';
 
 const toBigNumber = (eb: ethers.BigNumber): BigNumber =>
 	new BigNumber(eb.toString());
