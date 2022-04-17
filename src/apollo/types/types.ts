@@ -1,4 +1,4 @@
-import { EDonationType } from '@/apollo/types/gqlEnums';
+import { EDonationType, EProjectStatus } from '@/apollo/types/gqlEnums';
 
 export interface IProject {
 	id?: string;
@@ -13,7 +13,7 @@ export interface IProject {
 	impactLocation?: string;
 	qualityScore?: number;
 	verified?: boolean;
-	listed?: boolean;
+	listed?: boolean | null;
 	categories: ICategory[];
 	reaction?: IReaction;
 	totalReactions: number;
@@ -33,7 +33,7 @@ export interface IProject {
 	traceCampaignId: string | null;
 	status: {
 		id?: string;
-		name?: string;
+		name?: EProjectStatus;
 	};
 	updatedAt: string;
 	organization?: {
