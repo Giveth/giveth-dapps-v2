@@ -1,5 +1,7 @@
+import dynamic from 'next/dynamic';
 import { useGeneral } from '@/context/general.context';
-import { Footer } from './Footer';
+
+const Footer = dynamic(() => import('./Footer'), { ssr: false });
 
 export const FooterWrapper = () => {
 	const { showFooter } = useGeneral();

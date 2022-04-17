@@ -37,7 +37,7 @@ import ArchiveIcon from '../../../../public/images/icons/archive.svg';
 import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
 import { idToProjectEdit, slugToProjectDonate } from '@/lib/routeCreators';
 import { VerificationModal } from '@/components/modals/VerificationModal';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 import ProjectCardOrgBadge from '../../project-card/ProjectCardOrgBadge';
 import ExternalLink from '@/components/ExternalLink';
 import InternalLink from '@/components/InternalLink';
@@ -204,16 +204,10 @@ const ProjectDonateCard = ({
 				/>
 			)}
 			{showModal && slug && (
-				<ShareModal
-					showModal={showModal}
-					setShowModal={setShowModal}
-					projectHref={slug}
-					projectDescription={description}
-				/>
+				<ShareModal setShowModal={setShowModal} projectHref={slug} />
 			)}
 			{deactivateModal && (
 				<DeactivateProjectModal
-					showModal={deactivateModal}
 					setShowModal={setDeactivateModal}
 					projectId={id}
 					setIsActive={setIsActive}
@@ -284,7 +278,9 @@ const ProjectDonateCard = ({
 							back.
 						</Caption>
 						<ExternalLink href={links.GIVBACK_DOC}>
-							<GIVbackButton>Learn more</GIVbackButton>
+							<GIVbackButton aria-label='Learn more about this project'>
+								Learn more
+							</GIVbackButton>
 							<GIVbackQuestionIcon>
 								<IconHelp size={16} />
 							</GIVbackQuestionIcon>

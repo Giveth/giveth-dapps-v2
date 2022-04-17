@@ -7,7 +7,7 @@ import CheckBox from '@/components/Checkbox';
 import { categoryList, maxSelectedCategory } from '@/lib/constants/Categories';
 import { ICategory } from '@/apollo/types/types';
 import { showToastError } from '@/lib/helpers';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 
 const CategoryInput = (props: {
 	value: ICategory[];

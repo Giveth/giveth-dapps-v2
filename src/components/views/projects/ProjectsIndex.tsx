@@ -30,7 +30,7 @@ import { EDirection, gqlEnums } from '@/apollo/types/gqlEnums';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
 import { Shadow } from '../../styled-components/Shadow';
 import useUser from '@/context/UserProvider';
-import { deviceSize, mediaQueries } from '@/utils/constants';
+import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import useModal from '@/context/ModalProvider';
 
 interface IProjectsView {
@@ -206,9 +206,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 				<Title weight={700}>Projects</Title>
 
 				<Subtitle>
-					Explore the Giveth crypto fundraising platform, and give
-					crypto directly to charities and social good projects with
-					zero fees on donations!
+					Support for-good projects, nonprofits & charities with
+					crypto donations. Give directly with zero added fees. Get
+					rewarded when you donate to verified projects!
 				</Subtitle>
 
 				<FiltersSection>

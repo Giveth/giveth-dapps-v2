@@ -7,7 +7,7 @@ import SupportCard from '@/components/GeneralCard';
 import links from '@/lib/constants/links';
 import { brandColors, D3 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 
 const SupportIndex = () => {
 	return (

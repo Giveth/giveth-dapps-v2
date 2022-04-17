@@ -8,7 +8,6 @@ import styled from 'styled-components';
 import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
 import ProjectDonateCard from './ProjectDonateCard';
-import { showToastError } from '@/lib/helpers';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { client, initializeApollo } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
@@ -18,12 +17,15 @@ import { EDirection, EProjectStatus, gqlEnums } from '@/apollo/types/gqlEnums';
 import InfoBadge from '@/components/badges/InfoBadge';
 import { IDonationsByProjectId } from '@/apollo/types/gqlTypes';
 import SuccessfulCreation from '@/components/views/create/SuccessfulCreation';
-import { deviceSize, mediaQueries } from '@/utils/constants';
+import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import InlineToast from '@/components/toasts/InlineToast';
 import { ProjectMeta } from '@/lib/meta';
 
 const ProjectDonations = dynamic(() => import('./ProjectDonations'));
 const ProjectUpdates = dynamic(() => import('./ProjectUpdates'));
+const NotAvailableProject = dynamic(() => import('./NotAvailableProject'), {
+	ssr: false,
+});
 const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {
 	ssr: false,
 });
@@ -39,6 +41,8 @@ const ProjectIndex = (props: { project?: IProject }) => {
 	const [totalDonations, setTotalDonations] = useState(0);
 	const [creationSuccessful, setCreationSuccessful] = useState(false);
 	const [isMobile, setIsMobile] = useState<boolean>(false);
+	const [notAvailableProject, setNotAvailableProject] =
+		useState<boolean>(false);
 
 	const {
 		state: { user },
@@ -49,6 +53,7 @@ const ProjectIndex = (props: { project?: IProject }) => {
 	const slug = router.query.projectIdSlug as string;
 
 	const fetchProject = async () => {
+		setNotAvailableProject(false);
 		client
 			.query({
 				query: FETCH_PROJECT_BY_SLUG,
@@ -58,7 +63,10 @@ const ProjectIndex = (props: { project?: IProject }) => {
 			.then((res: { data: { projectBySlug: IProject } }) => {
 				setProject(res.data.projectBySlug);
 			})
-			.catch(showToastError);
+			.catch((e: any) => {
+				// showToastError(e);
+				setNotAvailableProject(true);
+			});
 	};
 
 	useEffect(() => {
@@ -122,6 +130,11 @@ const ProjectIndex = (props: { project?: IProject }) => {
 				project={project as IProject}
 			/>
 		);
+	}
+
+	if (notAvailableProject || project?.status?.id === '7') {
+		// cancelled = 7
+		return <NotAvailableProject />;
 	}
 
 	return (

@@ -1,3 +1,4 @@
+import { mediaQueries } from '@/lib/constants/constants';
 import {
 	brandColors,
 	Caption,
@@ -98,7 +99,7 @@ export const gToast = (message: string, options: IToast) => {
 };
 
 const ToastContainer = styled(Flex)<IToast>`
-	min-width: 580px;
+	min-width: 250px;
 	padding: 16px;
 	gap: 16px;
 	align-items: center;
@@ -157,6 +158,9 @@ const ToastContainer = styled(Flex)<IToast>`
 			}
 		}};
 	border-radius: 8px;
+	${mediaQueries.laptop} {
+		min-width: 580px;
+	}
 `;
 
 const IconContainer = styled.div``;

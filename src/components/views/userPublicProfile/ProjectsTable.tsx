@@ -11,14 +11,16 @@ import {
 	SublineBold,
 } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
-import { smallFormatDate } from '@/lib/helpers';
-import { Flex } from '@/components/styled-components/Flex';
 import { FC } from 'react';
 import styled from 'styled-components';
+
 import { IProjectsTable, EOrderBy, IOrder } from './UserPublicProfile.view';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 import { idToProjectEdit } from '@/lib/routeCreators';
+import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { EDirection } from '@/apollo/types/gqlEnums';
+import { smallFormatDate } from '@/lib/helpers';
+import { Flex } from '@/components/styled-components/Flex';
 
 interface IBadge {
 	mainColor?: any;
@@ -68,14 +70,18 @@ const ProjectsTable: FC<IProjectsTable> = ({
 			title = 'Not Listed';
 		}
 
-		switch (status.id) {
-			case '6':
+		switch (status.name) {
+			case EProjectStatus.DEACTIVE:
 				color = semanticColors.golden;
 				title = 'Not Listed';
 				break;
-			case '7':
+			case EProjectStatus.CANCEL:
 				color = semanticColors.punch;
 				title = 'Banned';
+				break;
+			case EProjectStatus.DRAFT:
+				color = brandColors.cyan;
+				title = 'Draft';
 				break;
 		}
 

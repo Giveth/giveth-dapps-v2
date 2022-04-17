@@ -4,6 +4,7 @@ import Accordion from '../Accordion';
 import FlowerIcon from '/public//images/flower_terms.svg';
 import styled from 'styled-components';
 import { brandColors, D3, Lead } from '@giveth/ui-design-system';
+import { mediaQueries } from '@/lib/constants/constants';
 
 const TermsIndex = () => {
 	return (
@@ -31,6 +32,11 @@ const TermsIndex = () => {
 const FlowerContainer = styled.div`
 	position: absolute;
 	right: 0;
+	display: none;
+
+	${mediaQueries.tablet} {
+		display: unset;
+	}
 `;
 
 const TermsContainer = styled.div`
@@ -43,8 +49,17 @@ const Title = styled(D3)`
 `;
 
 const Wrapper = styled.div`
-	margin: 150px 270px;
 	position: relative;
+
+	${mediaQueries.mobileS} {
+		margin: 150px 0px;
+		padding: 0 18px;
+	}
+
+	${mediaQueries.tablet} {
+		margin: 150px 270px;
+		pading: 0px;
+	}
 `;
 
 export default TermsIndex;

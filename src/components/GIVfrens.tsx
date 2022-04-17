@@ -19,7 +19,7 @@ import { useWeb3React } from '@web3-react/core';
 import StakingPoolCard from '@/components/cards/StakingPoolCard';
 import { Col, Row } from './Grid';
 import config from '@/configuration';
-import { givEconomySupportedNetworks } from '@/utils/constants';
+import { givEconomySupportedNetworks } from '@/lib/constants/constants';
 import { RegenStreamCard } from './RegenStreamCard';
 import styled from 'styled-components';
 import { Flex } from './styled-components/Flex';
@@ -43,7 +43,9 @@ export const GIVfrens: FC<IGIVfrensProps> = ({ regenFarms, network }) => {
 					rewards for staking liquidity.&nbsp;
 					<GIVfrensLink
 						size='Big'
-						href='https://docs.giveth.io/regenFarms'
+						href=' https://medium.com/giveth/regenfarms-the-next-generation-of-refi-opportunities-7a46f3cf1e09'
+						target='_blank'
+						rel='noreferrer'
 					>
 						Learn more
 					</GIVfrensLink>

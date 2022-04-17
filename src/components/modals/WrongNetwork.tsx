@@ -4,7 +4,7 @@ import { FC } from 'react';
 import { Button } from '@giveth/ui-design-system';
 import { switchNetwork } from '@/lib/wallet';
 
-import { chainName } from '@/utils/constants';
+import { chainName } from '@/lib/constants/constants';
 import { Modal, IModal } from './Modal';
 
 import { useWeb3React } from '@web3-react/core';

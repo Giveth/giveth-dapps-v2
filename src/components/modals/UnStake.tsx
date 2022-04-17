@@ -158,7 +158,7 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 
 const UnStakeModalContainer = styled.div`
 	width: 370px;
-	padding: 24px 0;
+	padding-bottom: 24px;
 `;
 
 const UnStakeModalTitle = styled(Flex)`

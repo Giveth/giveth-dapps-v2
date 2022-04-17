@@ -27,7 +27,7 @@ const WalletModal = ({ setShowModal, closeParentModal }: IWalletModal) => {
 	const selectedWallet = useWalletName(context);
 	const {
 		state: { lowerShields },
-		actions: { showLowerShields },
+		actions: { showLowerShields, showFirstWelcomeModal },
 	} = useModal();
 
 	const firstRender = useRef(true);
@@ -48,6 +48,7 @@ const WalletModal = ({ setShowModal, closeParentModal }: IWalletModal) => {
 							selected.value,
 						);
 						closeParentModal && closeParentModal();
+						showFirstWelcomeModal();
 					})
 					.catch(showToastError);
 			}, timeOut);

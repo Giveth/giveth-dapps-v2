@@ -21,7 +21,20 @@ import axios from 'axios';
 
 declare let window: any;
 
-export const DurationToYMDh = (ms: number) => {
+export const formatBalance = (balance?: string | number) => {
+	return parseFloat(String(balance) || '0').toLocaleString('en-US', {
+		maximumFractionDigits: 6,
+		minimumFractionDigits: 2,
+	});
+};
+
+export const formatPrice = (balance?: string | number) => {
+	return parseFloat(String(balance) || '0').toLocaleString('en-US', {
+		maximumFractionDigits: 6,
+	});
+};
+
+export const durationToYMDh = (ms: number) => {
 	let baseTime = new Date(0);
 	let duration = new Date(ms);
 
@@ -35,8 +48,8 @@ export const DurationToYMDh = (ms: number) => {
 	return { y, m, d, h, min, sec };
 };
 
-export const DurationToString = (ms: number, length: number = 3) => {
-	const temp: { [key: string]: number } = DurationToYMDh(ms);
+export const durationToString = (ms: number, length: number = 3) => {
+	const temp: { [key: string]: number } = durationToYMDh(ms);
 	const res: string[] = [];
 	for (const key in temp) {
 		if (Object.prototype.hasOwnProperty.call(temp, key)) {
@@ -347,7 +360,7 @@ export const showToastError = (err: any) => {
 
 export const calcBiggestUnitDifferenceTime = (_time: string) => {
 	const time = new Date(_time);
-	const diff: { [key: string]: number } = DurationToYMDh(
+	const diff: { [key: string]: number } = durationToYMDh(
 		Date.now() - time.getTime(),
 	);
 	if (diff.y > 0) return ` ${diff.y} year${diff.y > 1 ? 's' : ''} ago`;
@@ -369,33 +382,23 @@ export const transactionLink = (networkId: number, txHash: string) => {
 	return `${networksParams[networkId].blockExplorerUrls[0]}/tx/${txHash}`;
 };
 
-const getSafeUrl = (hash: string, chainId: number) => {
-	let url = '';
-	switch (chainId) {
-		case 1:
-			url = 'https://safe-transaction.gnosis.io/api/v1/';
-			break;
-		case 100:
-			url = 'https://safe-transaction.xdai.gnosis.io/api/v1/';
-			break;
-	}
-	return url;
-};
-
-export const isSafeTx = async (hash: string, chainId: number) => {
-	const url = getSafeUrl(hash, chainId);
-
-	const checkTx = await axios.get(`${url}multisig-transactions/${hash}/`);
-	const { safeTxHash } = checkTx.data;
-	if (safeTxHash === hash) {
-		return true;
-	} else {
-		return false;
-	}
-};
-
-export const checkSafeTxStatus = async (
-	currentAllowance: string,
-): Promise<boolean> => {
-
-};
+export function pollEvery(fn: Function, delay: any) {
+	let timer: any = null;
+	// having trouble with this type
+	let stop = false;
+	const poll = async (request: any, onResult: Function) => {
+		const result = await request();
+		if (!stop) {
+			onResult(result);
+			timer = setTimeout(poll.bind(null, request, onResult), delay);
+		}
+	};
+	return (...params: any) => {
+		const { request, onResult } = fn(...params);
+		poll(request, onResult).then();
+		return () => {
+			stop = true;
+			clearTimeout(timer);
+		};
+	};
+}

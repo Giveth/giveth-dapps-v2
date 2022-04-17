@@ -1,173 +1,95 @@
 import React from 'react';
-import Modal from 'react-modal';
 import { TwitterShareButton } from 'react-share';
-// We need to add icon customization on the design system
-import { Button } from '../../styled-components/Button';
-import { P } from '@giveth/ui-design-system';
-import useDeviceDetect from '@/hooks/useDeviceDetect';
-import { mediaQueries } from '@/utils/constants';
+import { Lead } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
-const GeminiModal = ({ showModal, setShowModal }: any) => {
-	const url = typeof window !== 'undefined' ? window?.location?.href : null;
+import useDeviceDetect from '@/hooks/useDeviceDetect';
+import { mediaQueries } from '@/lib/constants/constants';
+// We need to add icon customization on the design system
+import { Button } from '../../styled-components/Button';
+import { isSSRMode } from '@/lib/helpers';
+import { Modal } from '@/components/modals/Modal';
+
+const GeminiModal = ({ setShowModal }: any) => {
+	const url = !isSSRMode ? window?.location?.href : null;
 	const { isMobile } = useDeviceDetect();
+	if (isSSRMode) return null;
 	return (
-		<>
-			<Modal
-				isOpen={showModal}
-				onRequestClose={() => setShowModal(false)}
-				style={customStyles}
-				//   contentLabel={props?.contentLabel}
-			>
-				<div
-					style={{
-						display: showModal ? 'flex' : 'none',
-						// position: 'absolute',
-						// top: '15%',
-						// right: [0, '15%', '25%'],
-						zIndex: 5,
-						alignItems: 'center',
-						padding: isMobile ? 0 : '3% 0',
-						flexDirection: 'column',
-						width: isMobile ? '100%' : '600px',
-						height: isMobile ? '90vh' : 'auto',
-						justifyContent: isMobile ? 'center' : 'normal',
-						borderRadius: '2px',
-					}}
-				>
-					<XButton
-						onClick={() => {
-							setShowModal(false);
-						}}
-					>
-						<img
-							src='/images/x-icon.svg'
-							alt='exit'
-							style={{ width: '100%', height: '100%' }}
-						/>
-					</XButton>
-					<P
-						style={{
-							marginTop: 3,
-							textAlign: 'center',
-							fontSize: '20px',
-						}}
-					>
-						Giving Block projects only accept donations listed on
-						Gemini
-					</P>
-					<P
-						style={{
-							marginBottom: 4,
-							textAlign: 'center',
-							fontSize: '20px',
-						}}
-					>
-						Help us get GIV on Gemini!{' '}
-					</P>
-					<img
-						src={
-							isMobile
-								? '/images/twitter-modal-mobile.svg'
-								: '/images/twitter-modal.svg'
+		<Modal showModal setShowModal={setShowModal}>
+			<Container>
+				<Lead>
+					Giving Block projects only accept donations listed on Gemini
+					- Help us get GIV on Gemini!
+				</Lead>
+				<img
+					src={
+						isMobile
+							? '/images/twitter-modal-mobile.svg'
+							: '/images/twitter-modal.svg'
+					}
+					alt='tw-modal'
+					style={{ margin: '15px 0' }}
+				/>
+				<TwButton>
+					<TwitterShareButton
+						beforeOnClick={() => setShowModal(false)}
+						title={
+							'Hey @gemini - I want to donate $GIV to this @thegivingblock project on @givethio! Help me support them by listing $GIV on gemini.com @tyler @cameron'
 						}
-						alt='tw-modal'
-						style={{ margin: '15px 0' }}
-					/>
-					<TwButton>
-						<TwitterShareButton
-							beforeOnClick={() => setShowModal(false)}
-							title={
-								'Hey @gemini - I want to donate $GIV to this @thegivingblock project on @givethio! Help me support them by listing $GIV on gemini.com @tyler @cameron'
-							}
-							url={url!}
-							hashtags={['gemini', 'giveth', 'giv', 'donation']}
-						>
-							<a
-								style={{
-									display: 'flex',
-									justifyContent: 'center',
-								}}
-							>
-								TWEET NOW{' '}
-								<img
-									src='/images/tw-icon.svg'
-									style={{ marginLeft: '6px' }}
-									alt='tweet-now'
-									width='15px'
-									height='15px'
-								/>
-							</a>
-						</TwitterShareButton>
-					</TwButton>
-					<P
-						onClick={() => {
-							setShowModal(false);
-						}}
-						style={{
-							textAlign: 'center',
-							fontWeight: 'bold',
-							fontSize: '12px',
-							cursor: 'pointer',
-							color: '#A3B0F6',
-							marginTop: '12px',
-						}}
+						url={url!}
+						hashtags={['gemini', 'giveth', 'giv', 'donation']}
 					>
-						CANCEL
-					</P>
-				</div>
-			</Modal>
-		</>
+						TWEET NOW
+						<img
+							src='/images/tw-icon.svg'
+							alt='tweet-now'
+							width='15px'
+							height='15px'
+						/>
+					</TwitterShareButton>
+				</TwButton>
+				<CancelBtn onClick={() => setShowModal(false)}>
+					CANCEL
+				</CancelBtn>
+			</Container>
+		</Modal>
 	);
 };
 
+const CancelBtn = styled.div`
+	font-weight: bold;
+	font-size: 12px;
+	cursor: pointer;
+	color: #a3b0f6;
+	margin: 12px 0;
+`;
+
+const Container = styled.div`
+	padding: 20px;
+	text-align: center;
+	max-width: 600px;
+
+	${mediaQueries.tablet} {
+		padding: 20px 60px;
+	}
+`;
+
 const TwButton = styled(Button)`
-	margin-top: 4;
+	margin: 4px auto;
 	color: white;
 	width: 240px;
 	height: 52px;
 	border: 2px solid white;
 	background-color: #00acee;
-	${mediaQueries['mobileS']} {
-		margin-top: 30px;
+	> * {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		margin: 0 auto;
 	}
-	${mediaQueries['mobileM']} {
-		margin-top: 30px;
-	}
-	${mediaQueries['mobileL']} {
+	${mediaQueries.mobileS} {
 		margin-top: 30px;
 	}
 `;
-
-const XButton = styled.div`
-	position: absolute;
-	top: 8px;
-	right: 8px;
-	fontsize: 3;
-	color: secondary;
-	cursor: pointer;
-`;
-
-const customStyles = {
-	content: {
-		zIndex: 40,
-		top: '50%',
-		left: '50%',
-		right: 'auto',
-		bottom: 'auto',
-		borderRadius: '12px',
-		borderColor: 'transparent',
-		marginRight: '-50%',
-		transform: 'translate(-50%, -50%)',
-	},
-	overlay: {
-		zIndex: 40,
-		top: 0,
-		left: 0,
-		right: 0,
-		bottom: 0,
-		backgroundColor: 'rgba(83, 38, 236, 0.2)',
-	},
-};
 
 export default GeminiModal;

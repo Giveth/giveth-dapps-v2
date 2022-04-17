@@ -6,7 +6,7 @@ import { brandColors, IconX, neutralColors, P } from '@giveth/ui-design-system';
 
 import { headerRoutes } from './HeaderRoutes';
 import { Shadow } from '../styled-components/Shadow';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 import HeaderRoutesItem from './HeaderRouteItem';
 import { ETheme, useGeneral } from '@/context/general.context';
 import MenuPurple from '/public/images/drawer_menu_purple.svg';

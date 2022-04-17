@@ -17,6 +17,7 @@ import { useWeb3React } from '@web3-react/core';
 import Debounced from 'lodash.debounce';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import { captureException } from '@sentry/nextjs';
 
 import {
 	ACTIVATE_PROJECT,
@@ -34,7 +35,6 @@ import {
 	WalletAddressInput,
 } from './Inputs';
 import useUser from '@/context/UserProvider';
-import Logger from '@/utils/Logger';
 import SuccessfulCreation from './SuccessfulCreation';
 import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
 import {
@@ -48,7 +48,7 @@ import { slugToProjectView } from '@/lib/routeCreators';
 import { client } from '@/apollo/apolloClient';
 import LightBulbIcon from '/public/images/icons/lightbulb.svg';
 import { Shadow } from '@/components/styled-components/Shadow';
-import { deviceSize, mediaQueries } from '@/utils/constants';
+import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 
 export enum ECreateErrFields {
 	NAME = 'name',
@@ -266,7 +266,7 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 		} catch (e) {
 			setIsLoading(false);
 			const error = e as Error;
-			Logger.captureException(error);
+			captureException(error);
 			showToastError(error);
 		}
 	};
@@ -386,11 +386,13 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 									disabled={isLoading || publish}
 									onClick={() => onSubmit(false)}
 								/>
-								<OulineButton
-									onClick={() => router.back()}
-									label='CANCEL'
-									buttonType='primary'
-								/>
+								{isEditMode && (
+									<OulineButton
+										onClick={() => router.back()}
+										label='CANCEL'
+										buttonType='primary'
+									/>
+								)}
 							</Buttons>
 						</div>
 					</CreateContainer>

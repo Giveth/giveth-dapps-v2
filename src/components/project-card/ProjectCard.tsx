@@ -23,6 +23,7 @@ import { Flex } from '../styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
 import { Row } from '@/components/Grid';
 import { ORGANIZATION } from '@/lib/constants/organizations';
+import { mediaQueries } from '@/lib/constants/constants';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -32,21 +33,18 @@ interface IProjectCard {
 }
 
 const ProjectCard = (props: IProjectCard) => {
+	const { project } = props;
 	const {
 		title,
 		description,
 		image,
-		verified,
 		slug,
-		reaction,
-		totalReactions,
 		adminUser,
 		totalDonations,
-		traceCampaignId,
-		id,
 		updatedAt,
 		organization,
-	} = props.project;
+	} = project;
+
 	const [isHover, setIsHover] = useState(false);
 
 	const isForeignOrg =
@@ -60,15 +58,7 @@ const ProjectCard = (props: IProjectCard) => {
 			onMouseLeave={() => setIsHover(false)}
 		>
 			<ImagePlaceholder>
-				<ProjectCardBadges
-					totalReactions={totalReactions}
-					reaction={reaction}
-					verified={verified}
-					traceable={!!traceCampaignId}
-					projectHref={slug}
-					projectDescription={description}
-					projectId={id}
-				/>
+				<ProjectCardBadges project={project} />
 				<ProjectCardOrgBadge
 					organization={organization?.label}
 					isHover={isHover}
@@ -104,6 +94,7 @@ const ProjectCard = (props: IProjectCard) => {
 							linkType='primary'
 							size='small'
 							label='LEARN MORE'
+							aria-label='Learn more about this project'
 						/>
 					</Link>
 					<Link href={slugToProjectDonate(slug)} passHref>
@@ -153,7 +144,7 @@ const CardBody = styled.div`
 		props.isHover ? '124px' : '200px'};
 	background-color: ${neutralColors.gray[100]};
 	transition: top 0.3s ease;
-	border-radius: 0px 12px 12px 12px;
+	border-radius: 0 12px 12px 12px;
 `;
 
 const Author = styled(GLink)`
@@ -179,12 +170,19 @@ const ImagePlaceholder = styled.div`
 
 const Wrapper = styled.div`
 	position: relative;
-	height: 472px;
 	width: 100%;
 	border-radius: ${cardRadius};
 	background: white;
 	overflow: hidden;
 	box-shadow: ${Shadow.Neutral[400]};
+
+	${mediaQueries.mobileS} {
+		height: 536px;
+	}
+
+	${mediaQueries.tablet} {
+		height: 472px;
+	}
 `;
 
 export default ProjectCard;

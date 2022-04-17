@@ -4,16 +4,13 @@ import styled from 'styled-components';
 import { IconFund } from '@giveth/ui-design-system/lib/cjs/components/icons/Fund';
 import { Button, H5, Lead } from '@giveth/ui-design-system';
 import { ETheme, useGeneral } from '@/context/general.context';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 
-export const InsufficientFundModal: FC<IModal> = ({
-	showModal,
-	setShowModal,
-}) => {
+export const InsufficientFundModal: FC<IModal> = ({ setShowModal }) => {
 	const { theme } = useGeneral();
 	return (
 		<Modal
-			showModal={showModal}
+			showModal
 			setShowModal={setShowModal}
 			hiddenClose={false}
 			headerIcon={<IconFund />}
