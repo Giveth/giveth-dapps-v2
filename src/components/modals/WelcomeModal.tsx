@@ -1,12 +1,10 @@
 import React from 'react';
-import Modal from 'react-modal';
 import { H3, P, brandColors, neutralColors, B } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { useWeb3React } from '@web3-react/core';
 
 import { Shadow } from '@/components/styled-components/Shadow';
-import closeIcon from '/public/images/close.svg';
 import ethIcon from '/public/images/tokens/eth.png';
 import googleIcon from '/public/images/google_icon.svg';
 import twitterIcon from '/public/images/social-tt.svg';
@@ -17,6 +15,7 @@ import { torusConnector } from '@/lib/wallet/walletTypes';
 import { mediaQueries } from '@/lib/constants/constants';
 import { showToastError } from '@/lib/helpers';
 import useModal from '@/context/ModalProvider';
+import { Modal } from './Modal';
 
 interface ISignInModal {
 	setShowModal: (x: boolean) => void;
@@ -35,10 +34,7 @@ const WelcomeModal = ({ setShowModal }: ISignInModal) => {
 	};
 
 	return (
-		<Modal isOpen={true} style={customStyles}>
-			<CloseButton onClick={closeModal}>
-				<Image src={closeIcon} alt='close' />
-			</CloseButton>
+		<Modal showModal setShowModal={setShowModal} fullScreen hiddenHeader>
 			<ModalGrid>
 				<BGContainer />
 				<ContentContainer>
@@ -76,15 +72,11 @@ const WelcomeModal = ({ setShowModal }: ISignInModal) => {
 	);
 };
 
-const CloseButton = styled.div`
-	position: absolute;
-	right: 24px;
-	top: 24px;
-	cursor: pointer;
-`;
-
 const ModalGrid = styled.div`
+	position: relative;
 	display: flex;
+	width: 100%;
+	background: white !important;
 	height: 100%;
 `;
 
@@ -94,7 +86,7 @@ const BGContainer = styled.div`
 	max-width: 640px;
 	background-color: ${brandColors.giv[500]};
 	background-image: url('/images/sign_bg.svg');
-
+	background-repeat: no-repeat;
 	${mediaQueries.laptop} {
 		display: block;
 	}
@@ -108,7 +100,6 @@ const ContentContainer = styled.div`
 	align-self: center;
 	margin: auto;
 	padding: 10px;
-
 	${mediaQueries.laptop} {
 		width: 45%;
 	}
@@ -163,23 +154,6 @@ const BreakLine = styled.hr`
 	margin: auto 0;
 	border-top: 1px solid ${neutralColors.gray[300]};
 `;
-
-const customStyles = {
-	content: {
-		backgroundColor: 'white',
-		color: brandColors.deep[900],
-		maxWidth: '1440px',
-		maxHeight: '840px',
-		margin: 'auto',
-		inset: 0,
-		padding: 0,
-		border: 'none',
-	},
-	overlay: {
-		backgroundColor: 'rgb(9 4 70 / 70%)',
-		zIndex: 1060,
-	},
-};
 
 const socialArray = [
 	{ icon: googleIcon, alt: 'Google icon.' },

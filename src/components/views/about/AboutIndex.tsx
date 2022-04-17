@@ -33,14 +33,12 @@ const AboutIndex = () => {
 	return (
 		<>
 			<Upper>
-				<HideContainer>
-					<ArcMustard />
-					<DotMustard />
-				</HideContainer>
 				<TeamImageWrapper>
-					<img
+					<Image
+						src={'/images/giveth-team-new.png'}
 						width='100%'
-						src='/images/giveth-team.jpg'
+						height='45vh'
+						layout='responsive'
 						alt='giveth team'
 					/>
 				</TeamImageWrapper>
@@ -170,6 +168,7 @@ const Tabs = styled.div`
 			height: 0;
 			background-color: transparent;
 		}
+	}
 `;
 
 const EndPurpleArc = styled(Arc)`
