@@ -7,7 +7,9 @@ import {
 	neutralColors,
 	OulineButton,
 	P,
+	Subline,
 	SublineBold,
+	IconHelp,
 } from '@giveth/ui-design-system';
 import { Flex } from '../styled-components/Flex';
 import styled from 'styled-components';
@@ -32,6 +34,8 @@ import { StakeState } from '@/lib/staking';
 import ToggleSwitch from '../styled-components/Switch';
 import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
 import { Contract, ethers } from 'ethers';
+import useUser from '@/context/UserProvider';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
 
 interface IStakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
@@ -64,6 +68,9 @@ export const StakeModal: FC<IStakeModalProps> = ({
 	const { title, LM_ADDRESS, POOL_ADDRESS, GARDEN_ADDRESS } =
 		poolStakingConfig;
 
+	const {
+		actions: { getBalance },
+	} = useUser();
 	useEffect(() => {
 		if (GARDEN_ADDRESS) {
 			setPermit(false);
@@ -103,6 +110,9 @@ export const StakeModal: FC<IStakeModalProps> = ({
 		});
 		return () => {
 			library.removeAllListeners('block');
+			library?.on('block', () => {
+				getBalance();
+			});
 		};
 	}, [library, amount, stakeState]);
 
@@ -204,6 +214,16 @@ export const StakeModal: FC<IStakeModalProps> = ({
 		}
 	};
 
+	const handlePermit = () => {
+		if (permit) {
+			setPermit(false);
+			setStakeState(StakeState.APPROVE);
+		} else {
+			setPermit(true);
+			setStakeState(StakeState.STAKE);
+		}
+	};
+
 	return (
 		<Modal showModal={showModal} setShowModal={setShowModal}>
 			<StakeModalContainer>
@@ -274,8 +294,16 @@ export const StakeModal: FC<IStakeModalProps> = ({
 									<ToggleContainer>
 										<ToggleSwitch
 											checked={permit}
-											setStateChange={setPermit}
+											disabled={
+												stakeState ===
+													StakeState.APPROVE ||
+												stakeState === StakeState.STAKE
+											}
+											setStateChange={handlePermit}
 										/>
+										<P>
+											{permit ? 'Permit' : 'Approve'} mode
+										</P>
 									</ToggleContainer>
 								)}
 								{stakeState === StakeState.APPROVE && (
@@ -495,4 +523,10 @@ const ToggleContainer = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	gap: 10px;
+`;
+
+const TooltipText = styled(Subline)`
+	color: ${neutralColors.gray[100]};
+	width: 150px;
 `;

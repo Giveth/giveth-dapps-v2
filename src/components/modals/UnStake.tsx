@@ -53,7 +53,6 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 		const tx = GARDEN_ADDRESS
 			? await unwrapToken(amount, GARDEN_ADDRESS, library)
 			: await withdrawTokens(amount, LM_ADDRESS, library);
-		console.log('unstale/unwrap', tx);
 
 		if (!tx) {
 			setStakeState(StakeState.UNKNOWN);
