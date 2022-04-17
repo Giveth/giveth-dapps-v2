@@ -35,7 +35,6 @@ import ToggleSwitch from '../styled-components/Switch';
 import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
 import { Contract, ethers } from 'ethers';
 import useUser from '@/context/UserProvider';
-import { IconWithTooltip } from '@/components/IconWithToolTip';
 
 interface IStakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
@@ -295,9 +294,12 @@ export const StakeModal: FC<IStakeModalProps> = ({
 										<ToggleSwitch
 											checked={permit}
 											disabled={
-												stakeState ===
-													StakeState.APPROVE ||
-												stakeState === StakeState.STAKE
+												!(
+													stakeState ===
+														StakeState.APPROVE ||
+													stakeState ===
+														StakeState.STAKE
+												)
 											}
 											setStateChange={handlePermit}
 										/>
@@ -524,9 +526,4 @@ const ToggleContainer = styled.div`
 	justify-content: center;
 	align-items: center;
 	gap: 10px;
-`;
-
-const TooltipText = styled(Subline)`
-	color: ${neutralColors.gray[100]};
-	width: 150px;
 `;

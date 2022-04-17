@@ -84,7 +84,7 @@ export const walletsArray: IWallet[] = [
 		image: walletConnectIcon,
 		connector: walletconnectConnector,
 	},
-	// torusWallet,
+	torusWallet,
 	// {
 	// 	name: 'Portis',
 	// 	value: EWallets.PORTIS,

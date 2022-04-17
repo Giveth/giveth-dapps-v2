@@ -1,20 +1,27 @@
-import React, { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
+import React, { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
-import { brandColors } from '@giveth/ui-design-system';
+import { brandColors, neutralColors } from '@giveth/ui-design-system';
 
 interface IToggleSwitch {
 	checked: boolean;
+	disabled: boolean;
 	setStateChange: Dispatch<SetStateAction<boolean>>;
 }
 
-const ToggleSwitch = ({ checked, setStateChange }: IToggleSwitch) => {
+const ToggleSwitch = ({ checked, disabled, setStateChange }: IToggleSwitch) => {
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
 		setStateChange(e.target.checked);
 
 	return (
 		<Label>
-			<Input checked={checked} type='checkbox' onChange={handleChange} />
-			<Switch checked={checked} />
+			<Input
+				checked={checked}
+				disabled={disabled}
+				type='checkbox'
+				onChange={handleChange}
+			/>
+
+			<Switch checked={checked} disabled={disabled} />
 		</Label>
 	);
 };
@@ -26,11 +33,12 @@ const Label = styled.label`
 	cursor: pointer;
 `;
 
-const Switch = styled.div<{ checked: boolean }>`
+const Switch = styled.div<{ checked: boolean; disabled: boolean }>`
 	position: relative;
 	width: 30px;
 	height: 16px;
-	background: ${brandColors.giv[700]};
+	background: ${props =>
+		props.disabled ? neutralColors.gray[700] : brandColors.giv[700]};
 	border-radius: 32px;
 	padding: 1px;
 	transition: 300ms all;
@@ -45,7 +53,11 @@ const Switch = styled.div<{ checked: boolean }>`
 		top: 50%;
 		left: 1px;
 		background: ${props =>
-			props.checked ? brandColors.pinky[500] : brandColors.pinky[200]};
+			props.checked
+				? brandColors.pinky[500]
+				: props.disabled
+				? neutralColors.gray[200]
+				: brandColors.pinky[200]};
 		border: 3px solid ${brandColors.giv['000']};
 		border-radius: 50%;
 		transform: translate(0, -50%);
