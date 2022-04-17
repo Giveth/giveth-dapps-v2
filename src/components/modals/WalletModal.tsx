@@ -16,6 +16,7 @@ import { ETheme } from '@/context/general.context';
 import { detectBrave, showToastError } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
 import LowerShields from '@/components/modals/LowerShields';
+import useModal from '@/context/ModalProvider';
 
 interface IWalletModal extends IModal {
 	closeParentModal?: () => void;
@@ -27,6 +28,9 @@ const WalletModal = ({ setShowModal, closeParentModal }: IWalletModal) => {
 	const context = useWeb3React();
 	const { activate, deactivate } = context;
 	const selectedWallet = useWalletName(context);
+	const {
+		actions: { showFirstWelcomeModal },
+	} = useModal();
 
 	const handleSelect = (selected: IWallet) => {
 		if (selectedWallet !== selected.value) {
@@ -44,6 +48,7 @@ const WalletModal = ({ setShowModal, closeParentModal }: IWalletModal) => {
 							selected.value,
 						);
 						closeParentModal && closeParentModal();
+						showFirstWelcomeModal();
 					})
 					.catch(showToastError);
 			}, timeOut);

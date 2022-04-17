@@ -110,7 +110,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 		);
 	}, [claimedAmount, lockedAmount, tokenDistroHelper]);
 
-	const percentage = tokenDistroHelper?.percent || 0;
+	const percentage = tokenDistroHelper?.GlobalReleasePercentage || 0;
 	const remainTime = durationToString(tokenDistroHelper?.remain || 0);
 
 	const icon = getStreamIconWithType(streamConfig.type, 40);
@@ -152,9 +152,11 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 								direction={'right'}
 							>
 								<GsPTooltip>
-									Time left for the{'	 '}
+									Liquid{'	 '}
 									{streamConfig.rewardTokenSymbol}
-									stream to reach full power!
+									{'	 '}
+									that has already flowed out of the{' '}
+									{streamConfig.rewardTokenSymbol}stream
 								</GsPTooltip>
 							</IconWithTooltip>
 						</Flex>

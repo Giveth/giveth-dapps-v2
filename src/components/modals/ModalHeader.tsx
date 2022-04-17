@@ -7,6 +7,7 @@ export type ModalHeaderTitlePosition = 'center' | 'left';
 
 export interface IModalHeader {
 	hiddenClose?: boolean;
+	hiddenHeader?: boolean;
 	title?: string;
 	icon?: ReactNode;
 	closeModal?: () => void;
@@ -15,12 +16,13 @@ export interface IModalHeader {
 
 export const ModalHeader: React.FC<IModalHeader> = ({
 	hiddenClose = false,
+	hiddenHeader = false,
 	title = '',
 	icon,
 	closeModal = () => {},
 	position = 'center',
 }) => {
-	return (
+	return !hiddenHeader ? (
 		<ModalHeaderRow
 			justifyContent={position === 'center' ? 'center' : 'flex-start'}
 		>
@@ -32,7 +34,11 @@ export const ModalHeader: React.FC<IModalHeader> = ({
 				</CloseModalButton>
 			)}
 		</ModalHeaderRow>
-	);
+	) : !hiddenClose ? (
+		<CloseModalButton onClick={closeModal}>
+			<IconX size={24} />
+		</CloseModalButton>
+	) : null;
 };
 
 export const ModalHeaderRow = styled(Flex)`
@@ -48,4 +54,5 @@ const CloseModalButton = styled.div`
 	top: 16px;
 	right: 16px;
 	cursor: pointer;
+	z-index: 1;
 `;
