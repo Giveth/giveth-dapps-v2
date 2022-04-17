@@ -7,7 +7,6 @@ import React, {
 } from 'react';
 import { useWeb3React } from '@web3-react/core';
 
-import LowerShields from '@/components/modals/LowerShields';
 import WalletModal from '@/components/modals/WalletModal';
 import WelcomeModal from '@/components/modals/WelcomeModal';
 import { FirstWelcomeModal } from '@/components/modals/FirstWelcomeModal';
@@ -15,11 +14,7 @@ import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
 import { CompleteProfileModal } from '@/components/modals/CompleteProfileModal';
 
 interface IModalContext {
-	state: {
-		lowerShields: boolean;
-	};
 	actions: {
-		showLowerShields: () => void;
 		showWalletModal: () => void;
 		showSignWithWallet: () => void;
 		showWelcomeModal: () => void;
@@ -29,11 +24,7 @@ interface IModalContext {
 }
 
 const ModalContext = createContext<IModalContext>({
-	state: {
-		lowerShields: false,
-	},
 	actions: {
-		showLowerShields: () => {},
 		showWalletModal: () => {},
 		showWelcomeModal: () => {},
 		showFirstWelcomeModal: () => {},
@@ -43,7 +34,6 @@ const ModalContext = createContext<IModalContext>({
 });
 
 export const ModalProvider = (props: { children: ReactNode }) => {
-	const [showLowerShields, setShowLowerShields] = useState(false);
 	const [showWalletModal, setShowWalletModal] = useState(false);
 	const [showWelcomeModal, setShowWelcomeModal] = useState(false);
 	const [showFirstWelcomeModal, setShowFirstWelcomeModal] = useState(false);
@@ -61,12 +51,8 @@ export const ModalProvider = (props: { children: ReactNode }) => {
 	return (
 		<ModalContext.Provider
 			value={{
-				state: {
-					lowerShields: showLowerShields,
-				},
 				actions: {
 					showSignWithWallet: () => setShowSignWithWallet(true),
-					showLowerShields: () => setShowLowerShields(true),
 					showWalletModal: () => setShowWalletModal(true),
 					showFirstWelcomeModal: () => setShowFirstWelcomeModal(true),
 					showCompleteProfile: () => setShowCompleteProfile(true),
@@ -74,9 +60,6 @@ export const ModalProvider = (props: { children: ReactNode }) => {
 				},
 			}}
 		>
-			{showLowerShields && (
-				<LowerShields setShowModal={setShowLowerShields} />
-			)}
 			{showWalletModal && (
 				<WalletModal setShowModal={setShowWalletModal} />
 			)}

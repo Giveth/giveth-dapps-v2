@@ -57,11 +57,17 @@ export const APRModal: FC<IAPRModalProps> = ({
 						<DescTitle>Current Distribution:</DescTitle>
 						<Desc>
 							Claimable immediately:{' '}
-							{tokenDistroHelper.GlobalReleasePercentage}%
+							{tokenDistroHelper.GlobalReleasePercentage.toFixed(
+								2,
+							)}
+							%
 						</Desc>
 						<Desc>
 							Increasing your {streamName}:{' '}
-							{100 - tokenDistroHelper.GlobalReleasePercentage}%
+							{(
+								100 - tokenDistroHelper.GlobalReleasePercentage
+							).toFixed(2)}
+							%
 						</Desc>
 					</DescContainer>
 				</APRModalContainer>

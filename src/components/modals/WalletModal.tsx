@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import { useWeb3React } from '@web3-react/core';
 import styled from 'styled-components';
@@ -14,27 +14,27 @@ import {
 import { IModal, Modal } from '@/components/modals/Modal';
 import { ETheme } from '@/context/general.context';
 import { detectBrave, showToastError } from '@/lib/helpers';
-import useModal from '@/context/ModalProvider';
 import StorageLabel from '@/lib/localStorage';
+import LowerShields from '@/components/modals/LowerShields';
+import useModal from '@/context/ModalProvider';
 
 interface IWalletModal extends IModal {
 	closeParentModal?: () => void;
 }
 
 const WalletModal = ({ setShowModal, closeParentModal }: IWalletModal) => {
+	const [showLowerShields, setShowLowerShields] = useState<boolean>();
+
 	const context = useWeb3React();
 	const { activate, deactivate } = context;
 	const selectedWallet = useWalletName(context);
 	const {
-		state: { lowerShields },
-		actions: { showLowerShields, showFirstWelcomeModal },
+		actions: { showFirstWelcomeModal },
 	} = useModal();
-
-	const firstRender = useRef(true);
 
 	const handleSelect = (selected: IWallet) => {
 		if (selectedWallet !== selected.value) {
-			window.localStorage.removeItem('selectedWallet');
+			window.localStorage.removeItem(StorageLabel.WALLET);
 			deactivate();
 			let timeOut = 0;
 			if (selectedWallet === EWallets.METAMASK) {
@@ -59,42 +59,41 @@ const WalletModal = ({ setShowModal, closeParentModal }: IWalletModal) => {
 	const checkLowerShields = async (selected: IWallet) => {
 		const isBrave = await detectBrave();
 		if (selected.value === EWallets.TORUS && isBrave) {
-			showLowerShields();
+			setShowLowerShields(true);
 		} else {
 			handleSelect(selected);
 		}
 	};
 
-	useEffect(() => {
-		if (!lowerShields && !firstRender.current) {
-			handleSelect(torusWallet);
-		}
-		if (firstRender.current) {
-			firstRender.current = false;
-		}
-	}, [lowerShields]);
+	const onCloseLowerShields = () => {
+		handleSelect(torusWallet);
+		setShowLowerShields(false);
+	};
 
 	return (
-		<Modal setShowModal={setShowModal} customTheme={ETheme.Light}>
-			<IconsContainer>
-				{walletsArray.map(i => (
-					<WalletItem
-						onClick={() => checkLowerShields(i)}
-						key={i.value}
-						selected={selectedWallet === i.value}
-					>
-						<Image
-							src={i.image}
-							alt={i.name}
-							height={64}
-							width={64}
-						/>
-						<WalletName>{i.name}</WalletName>
-						<WalletDesc>Connect with your {i.name}</WalletDesc>
-					</WalletItem>
-				))}
-			</IconsContainer>
-		</Modal>
+		<>
+			{showLowerShields && <LowerShields onClose={onCloseLowerShields} />}
+			<Modal setShowModal={setShowModal} customTheme={ETheme.Light}>
+				<IconsContainer>
+					{walletsArray.map(i => (
+						<WalletItem
+							onClick={() => checkLowerShields(i)}
+							key={i.value}
+							selected={selectedWallet === i.value}
+						>
+							<Image
+								src={i.image}
+								alt={i.name}
+								height={64}
+								width={64}
+							/>
+							<WalletName>{i.name}</WalletName>
+							<WalletDesc>Connect with your {i.name}</WalletDesc>
+						</WalletItem>
+					))}
+				</IconsContainer>
+			</Modal>
+		</>
 	);
 };
 
@@ -105,7 +104,7 @@ const IconsContainer = styled.div`
 	justify-content: center;
 	align-items: center;
 	flex-wrap: wrap;
-	background-color: ${neutralColors.gray['100']};
+	background-color: ${neutralColors.gray[100]};
 	grid-template-columns: 1fr 1fr;
 `;
 
@@ -116,7 +115,7 @@ interface IWalletItem {
 const WalletItem = styled.div<IWalletItem>`
 	background: radial-gradient(
 		#fff,
-		${props => (props.selected ? brandColors.giv['100'] : 'white')}
+		${props => (props.selected ? brandColors.giv[100] : 'white')}
 	);
 	flex-direction: column;
 	gap: 2px;
@@ -125,16 +124,16 @@ const WalletItem = styled.div<IWalletItem>`
 	cursor: pointer;
 
 	&:hover {
-		background: radial-gradient(#fff, ${neutralColors.gray['500']});
+		background: radial-gradient(#fff, ${neutralColors.gray[500]});
 	}
 `;
 
 const WalletName = styled(H5)`
-	color: ${neutralColors.gray['900']};
+	color: ${neutralColors.gray[900]};
 `;
 
 const WalletDesc = styled(Lead)`
-	color: ${neutralColors.gray['600']};
+	color: ${neutralColors.gray[600]};
 `;
 
 export default WalletModal;
