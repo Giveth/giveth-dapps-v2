@@ -79,10 +79,10 @@ const ProjectsTable: FC<IProjectsTable> = ({
 				color = semanticColors.punch;
 				title = 'Banned';
 				break;
-			case EProjectStatus.DRAFT:
-				color = brandColors.cyan;
-				title = 'Draft';
-				break;
+			// case EProjectStatus.DRAFT:
+			// 	color = brandColors.cyan;
+			// 	title = 'Draft';
+			// 	break;
 		}
 
 		return (
