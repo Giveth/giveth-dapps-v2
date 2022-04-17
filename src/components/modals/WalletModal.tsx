@@ -104,7 +104,7 @@ const IconsContainer = styled.div`
 	justify-content: center;
 	align-items: center;
 	flex-wrap: wrap;
-	background-color: ${neutralColors.gray['100']};
+	background-color: ${neutralColors.gray[100]};
 	grid-template-columns: 1fr 1fr;
 `;
 
@@ -115,7 +115,7 @@ interface IWalletItem {
 const WalletItem = styled.div<IWalletItem>`
 	background: radial-gradient(
 		#fff,
-		${props => (props.selected ? brandColors.giv['100'] : 'white')}
+		${props => (props.selected ? brandColors.giv[100] : 'white')}
 	);
 	flex-direction: column;
 	gap: 2px;
@@ -124,16 +124,16 @@ const WalletItem = styled.div<IWalletItem>`
 	cursor: pointer;
 
 	&:hover {
-		background: radial-gradient(#fff, ${neutralColors.gray['500']});
+		background: radial-gradient(#fff, ${neutralColors.gray[500]});
 	}
 `;
 
 const WalletName = styled(H5)`
-	color: ${neutralColors.gray['900']};
+	color: ${neutralColors.gray[900]};
 `;
 
 const WalletDesc = styled(Lead)`
-	color: ${neutralColors.gray['600']};
+	color: ${neutralColors.gray[600]};
 `;
 
 export default WalletModal;

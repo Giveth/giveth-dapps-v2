@@ -59,7 +59,7 @@ const WelcomeModal = ({ setShowModal }: ISignInModal) => {
 	return (
 		<>
 			{showLowerShields && <LowerShields onClose={onCloseLowerShields} />}
-			<Modal showModal setShowModal={setShowModal} fullScreen hiddenHeader>
+			<Modal setShowModal={setShowModal} fullScreen hiddenHeader>
 				<ModalGrid>
 					<BGContainer />
 					<ContentContainer>
