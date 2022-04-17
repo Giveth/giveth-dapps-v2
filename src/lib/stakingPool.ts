@@ -28,7 +28,7 @@ import {
 import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
 import { Zero } from '@/helpers/number';
 import { IBalances, IUnipool } from '@/types/subgraph';
-import { getGasPreference } from '@/lib/helpers';
+import { getGasPreference, isSafeTx, checkSafeTxStatus } from '@/lib/helpers';
 
 const toBigNumber = (eb: ethers.BigNumber): BigNumber =>
 	new BigNumber(eb.toString());
@@ -47,9 +47,9 @@ export const getGivStakingAPR = async (
 		apr = totalSupply.isZero()
 			? Zero
 			: toBigNumber(rewardRate)
-					.div(totalSupply.toString())
-					.times('31536000')
-					.times('100');
+				.div(totalSupply.toString())
+				.times('31536000')
+				.times('100');
 	}
 
 	return apr;
@@ -146,10 +146,10 @@ const getBalancerPoolStakingAPR = async (
 		apr = totalSupply.isZero()
 			? null
 			: toBigNumber(rewardRate)
-					.div(totalSupply.toString())
-					.times('31536000')
-					.times('100')
-					.times(lp);
+				.div(totalSupply.toString())
+				.times('31536000')
+				.times('100')
+				.times(lp);
 	} catch (e) {
 		console.error('error on fetching balancer apr:', e);
 	}
@@ -209,11 +209,11 @@ const getSimplePoolStakingAPR = async (
 		apr = totalSupply.isZero()
 			? null
 			: toBigNumber(rewardRate)
-					.div(totalSupply.toString())
-					.times('31536000')
-					.times('100')
-					.times(lp)
-					.div(10 ** 18);
+				.div(totalSupply.toString())
+				.times('31536000')
+				.times('100')
+				.times(lp)
+				.div(10 ** 18);
 	} catch (e) {
 		console.error('error on fetching apr:', e);
 	}
@@ -377,8 +377,7 @@ export const approveERC20tokenTransfer = async (
 			const approveZero = await tokenContract
 				.connect(signer.connectUnchecked())
 				.approve(spenderAddress, ethers.constants.Zero, gasPreference);
-			console.log('tx', approveZero);
-			if (approveZero.chainId === null && !!approveZero.hash) return true;
+
 			const { status } = await approveZero.wait();
 			if (!status) return false;
 		} catch (error) {
@@ -391,8 +390,7 @@ export const approveERC20tokenTransfer = async (
 		const approve = await tokenContract
 			.connect(signer.connectUnchecked())
 			.approve(spenderAddress, amountNumber, gasPreference);
-		console.log('tx', approve);
-		if (approve.chainId === null && !!approve.hash) return true;
+
 		const { status } = await approve.wait();
 		if (!status) return false;
 	} catch (error) {

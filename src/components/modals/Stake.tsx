@@ -27,6 +27,8 @@ import {
 import { useWeb3React } from '@web3-react/core';
 import { StakeState } from '@/lib/staking';
 import ToggleSwitch from '../styled-components/Switch';
+import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
+import { Contract, ethers } from 'ethers';
 
 interface IStakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
@@ -66,6 +68,42 @@ export const StakeModal: FC<IStakeModalProps> = ({
 	}, [GARDEN_ADDRESS]);
 
 	useEffect(() => {
+		library?.on('block', async () => {
+			const amountNumber = ethers.BigNumber.from(amount);
+			if (
+				amountNumber.gt(ethers.constants.Zero) &&
+				stakeState === StakeState.APPROVING
+			) {
+				const signer = library.getSigner();
+				const userAddress = await signer.getAddress();
+				const tokenContract = new Contract(
+					POOL_ADDRESS,
+					ERC20_ABI,
+					signer,
+				);
+				const allowance: BigNumber = await tokenContract.allowance(
+					userAddress,
+					!GARDEN_ADDRESS ? LM_ADDRESS : GARDEN_ADDRESS!,
+				);
+				const amountNumber = ethers.BigNumber.from(amount);
+				const allowanceNumber = ethers.BigNumber.from(
+					allowance.toString(),
+				);
+				if (amountNumber.lte(allowanceNumber)) {
+					if (GARDEN_ADDRESS) {
+						setStakeState(StakeState.WRAP);
+					} else {
+						setStakeState(StakeState.STAKE);
+					}
+				}
+			}
+		});
+		return () => {
+			library.removeAllListeners('block');
+		};
+	}, [library, amount, stakeState]);
+
+	useEffect(() => {
 		if (stakeState == StakeState.WRAP) {
 			setStakeState(StakeState.APPROVE);
 		}
@@ -86,10 +124,8 @@ export const StakeModal: FC<IStakeModalProps> = ({
 		setStakeState(StakeState.APPROVING);
 
 		const signer = library.getSigner();
-		console.log(signer);
 
 		const userAddress = await signer.getAddress();
-		console.log(userAddress);
 		const isApproved = await approveERC20tokenTransfer(
 			amount,
 			userAddress,
@@ -118,7 +154,6 @@ export const StakeModal: FC<IStakeModalProps> = ({
 				library,
 				permit,
 			);
-			console.log(txResponse);
 			if (txResponse) {
 				setTxHash(txResponse.hash);
 				setStakeState(StakeState.CONFIRMING);
@@ -147,7 +182,6 @@ export const StakeModal: FC<IStakeModalProps> = ({
 				GARDEN_ADDRESS,
 				library,
 			);
-			console.log(txResponse);
 			if (txResponse) {
 				setTxHash(txResponse?.hash);
 				setStakeState(StakeState.CONFIRMING);

@@ -16,7 +16,6 @@ import { getToken } from '@/services/token';
 import useWallet from '@/hooks/walletHooks';
 import { IUser } from '@/apollo/types/types';
 import StorageLabel from '@/lib/localStorage';
-
 interface IUserContext {
 	state: {
 		user?: IUser;

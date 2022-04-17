@@ -17,6 +17,7 @@ import { gToast, ToastType } from '@/components/toasts';
 import { networkInfo } from './constants/NetworksObj';
 import StorageLabel from '@/lib/localStorage';
 import { networksParams } from '@/helpers/blockchain';
+import axios from 'axios';
 
 declare let window: any;
 
@@ -366,4 +367,35 @@ export const detectBrave = async () => {
 export const transactionLink = (networkId: number, txHash: string) => {
 	if (!networksParams[networkId]) return '';
 	return `${networksParams[networkId].blockExplorerUrls[0]}/tx/${txHash}`;
+};
+
+const getSafeUrl = (hash: string, chainId: number) => {
+	let url = '';
+	switch (chainId) {
+		case 1:
+			url = 'https://safe-transaction.gnosis.io/api/v1/';
+			break;
+		case 100:
+			url = 'https://safe-transaction.xdai.gnosis.io/api/v1/';
+			break;
+	}
+	return url;
+};
+
+export const isSafeTx = async (hash: string, chainId: number) => {
+	const url = getSafeUrl(hash, chainId);
+
+	const checkTx = await axios.get(`${url}multisig-transactions/${hash}/`);
+	const { safeTxHash } = checkTx.data;
+	if (safeTxHash === hash) {
+		return true;
+	} else {
+		return false;
+	}
+};
+
+export const checkSafeTxStatus = async (
+	currentAllowance: string,
+): Promise<boolean> => {
+
 };

@@ -54,6 +54,7 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 			? await unwrapToken(amount, GARDEN_ADDRESS, library)
 			: await withdrawTokens(amount, LM_ADDRESS, library);
 		console.log('unstale/unwrap', tx);
+
 		if (!tx) {
 			setStakeState(StakeState.UNKNOWN);
 			setLabel('UNSTAKE');
@@ -63,9 +64,6 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 		setTxHash(tx.hash);
 		setStakeState(StakeState.SUBMITTING);
 
-		if (tx.hash !== null && tx.chainId === null) {
-			setStakeState(StakeState.CONFIRMED);
-		}
 		const { status } = await tx.wait();
 
 		if (status) {
