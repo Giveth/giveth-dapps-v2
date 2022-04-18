@@ -126,7 +126,8 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 	const { chainId } = useWeb3React();
 	const [showModal, setShowModal] = useState<boolean>(false); // follow this state to refresh user content on screen
 	const [showIncompleteWarning, setShowIncompleteWarning] = useState(true);
-
+	const notUserRegisteredAndShowIncompleteWarning =
+		!isUserRegistered(user) && showIncompleteWarning;
 	useEffect(() => {
 		if (myAccount && !isSignedIn) {
 			showSignWithWallet();
@@ -144,14 +145,16 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 
 	return (
 		<>
-			{!isUserRegistered(user) && showIncompleteWarning && (
+			{notUserRegisteredAndShowIncompleteWarning && (
 				<IncompleteProfileToast
 					close={() => setShowIncompleteWarning(false)}
 				/>
 			)}
 			<PubliCProfileHeader>
 				<Container>
-					<UserInfoWithAvatarRow>
+					<UserInfoWithAvatarRow
+						hasMarginTop={notUserRegisteredAndShowIncompleteWarning}
+					>
 						<Image
 							src={user.avatar || '/images/avatar.svg'}
 							width={128}
@@ -239,12 +242,14 @@ const PubliCProfileHeader = styled.div`
 	background-color: ${neutralColors.gray[100]};
 `;
 
-const UserInfoWithAvatarRow = styled(Flex)`
+const UserInfoWithAvatarRow = styled(Flex)<{ hasMarginTop: boolean }>`
 	gap: 24px;
 	${mediaQueries.mobileS} {
 		flex-direction: column;
+		margin-top: ${props => (props.hasMarginTop ? '60px' : '0px')};
 	}
 	${mediaQueries.tablet} {
+		margin-top: 0px;
 		flex-direction: row;
 	}
 	${mediaQueries.laptop} {
@@ -343,7 +348,7 @@ const IncompleteProfile = styled.div`
 	div {
 		display: flex;
 		flex-direction: column;
-		color: ${brandColors.mustard[700]};
+		color: ${brandColors.mustard[800]};
 		padding-left: 8px;
 		margin-top: -2px;
 	}
