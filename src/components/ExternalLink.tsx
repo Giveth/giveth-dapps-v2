@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const ExternalLink = (props: {
 	children?: ReactElement[] | ReactElement;
 	href: string;
-	title?: string | JSX.Element;
+	title?: string;
 	color?: string;
 }) => {
 	const { children, href, title, color } = props;

@@ -19,7 +19,7 @@ import {
 	EOrderBy,
 	IOrder,
 } from '@/components/views/userPublicProfile/UserPublicProfile.view';
-import SortIcon from '@/components/views/userPublicProfile/SortIcon';
+import SortIcon from '@/components/SortIcon';
 
 interface DonationTable {
 	donations: IWalletDonation[];
@@ -72,13 +72,12 @@ const DonationTable: FC<DonationTable> = ({
 								donation.transactionNetworkId,
 								donation.transactionId,
 							)}
-							title={
-								<IconExternalLink
-									size={16}
-									color={brandColors.pinky[500]}
-								/>
-							}
-						/>
+						>
+							<IconExternalLink
+								size={16}
+								color={brandColors.pinky[500]}
+							/>
+						</ExternalLink>
 					</TableCell>
 					<TableCell>
 						{donation.valueUsd &&

@@ -108,8 +108,9 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 										user.walletAddress,
 									)}
 									color={brandColors.pinky[500]}
-									title={<IconExternalLink />}
-								/>
+								>
+									<IconExternalLink />
+								</ExternalLink>
 							</AddressContainer>
 						</WalletContainer>
 					</UserInfoRow>
