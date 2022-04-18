@@ -135,10 +135,11 @@ const ContainerStyled = styled(Container)<{ hasMarginTop: boolean }>`
 	flex-direction: column;
 	margin-top: ${props => (props.hasMarginTop ? '60px' : '0px')};
 	> :first-child {
-		border-radius: 8px;
+		border-radius: 32px;
 	}
 	${mediaQueries.tablet} {
-		margin-top: 0px;
+		justify-content: flex-start;
+		margin-top: 0;
 		flex-direction: row;
 	}
 `;
