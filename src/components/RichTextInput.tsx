@@ -97,7 +97,7 @@ const modules = (projectId?: any) => {
 		'emoji-toolbar': true,
 		'emoji-textarea': true,
 		'emoji-shortname': true,
-		magicUrl: false,
+		magicUrl: true,
 		clipboard: {
 			// toggle to add extra line breaks when pasting HTML:
 			matchVisual: false,
