@@ -1,8 +1,9 @@
-import { ETheme, useGeneral } from '@/context/general.context';
-import { neutralColors, brandColors, Caption } from '@giveth/ui-design-system';
+import { neutralColors, Caption } from '@giveth/ui-design-system';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+
 import styled from 'styled-components';
-import { Flex } from './styled-components/Flex';
+import { FlexCenter } from './styled-components/Flex';
+import { ETheme, useGeneral } from '@/context/general.context';
 
 interface IPagination {
 	setPage: Dispatch<SetStateAction<number>>;
@@ -48,7 +49,7 @@ const Pagination = (props: IPagination) => {
 	return (
 		<>
 			{pageCount > 1 && (
-				<PaginationRow justifyContent={'flex-end'} gap='16px'>
+				<PaginationRow>
 					<PaginationItem
 						theme={theme}
 						onClick={() => {
@@ -88,18 +89,17 @@ const Pagination = (props: IPagination) => {
 	);
 };
 
-export default Pagination;
+const PaginationRow = styled(FlexCenter)`
+	margin-top: 16px;
+	gap: 16px;
+`;
 
 interface IPaginationItem {
 	disable?: boolean;
 	isActive?: boolean;
 }
 
-export const PaginationRow = styled(Flex)`
-	margin-top: 16px;
-`;
-
-export const PaginationItem = styled(Caption)<IPaginationItem>`
+const PaginationItem = styled(Caption)<IPaginationItem>`
 	${props =>
 		props.disable
 			? `color: ${
@@ -114,3 +114,5 @@ export const PaginationItem = styled(Caption)<IPaginationItem>`
 			  }`};
 	${props => (props.isActive ? `font-weight: bold;` : '')};
 `;
+
+export default Pagination;

@@ -11,6 +11,7 @@ import torusIcon from '/public//images/wallets/torus.svg';
 // import authereumIcon from '/public//images/wallets/authereum.svg';
 import { Web3ReactContextInterface } from '@web3-react/core/dist/types';
 import { TorusConnector } from '@/lib/wallet/torus-connector';
+import config from '@/configuration';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 
@@ -21,6 +22,10 @@ export const walletconnectConnector = new WalletConnectConnector({
 	infuraId: INFURA_API_KEY,
 	supportedChainIds,
 	qrcode: true,
+	rpc: {
+		[config.MAINNET_NETWORK_NUMBER]: config.MAINNET_CONFIG.nodeUrl,
+		[config.XDAI_NETWORK_NUMBER]: config.XDAI_CONFIG.nodeUrl,
+	},
 });
 // export const portisConnector = new PortisConnector({
 // 	dAppId: process.env.PORTIS_DAPP_ID as string,

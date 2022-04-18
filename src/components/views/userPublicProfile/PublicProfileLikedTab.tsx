@@ -1,14 +1,17 @@
+import { FC, useEffect, useState } from 'react';
+import styled from 'styled-components';
+
 import { client } from '@/apollo/apolloClient';
 import { FETCH_USER_LIKED_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { IUserLikedProjects } from '@/apollo/types/gqlTypes';
 import { IProject } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import ProjectCard from '@/components/project-card/ProjectCard';
-import { FC, useEffect, useState } from 'react';
-import { Loading } from './PublicProfileProjectsTab';
-import { IUserPublicProfileView, NothingToSee } from './UserPublicProfile.view';
-import styled from 'styled-components';
+import { Loading } from './projectsTab/PublicProfileProjectsTab';
+import { IUserPublicProfileView } from './UserPublicProfile.view';
 import { mediaQueries } from '@/lib/constants/constants';
+import NothingToSee from '@/components/views/userPublicProfile/NothingToSee';
+import { FlexCenter } from '@/components/styled-components/Flex';
 
 const itemPerPage = 6;
 
@@ -41,18 +44,18 @@ const PublicProfileLikedTab: FC<IUserPublicProfileView> = ({
 				setTotalCount(likedProjectsByUserId.totalCount);
 			}
 		};
-		fetchUserProjects();
+		fetchUserProjects().then();
 	}, [page, user]);
 
 	return (
-		<>
+		<Container>
 			{!loading && totalCount == 0 ? (
 				<NothingWrapper>
 					<NothingToSee
 						title={`${
 							myAccount ? "You haven't" : "This user hasn't"
 						} liked any projects yet!`}
-						heartIcon={true}
+						heartIcon
 					/>
 				</NothingWrapper>
 			) : (
@@ -63,18 +66,19 @@ const PublicProfileLikedTab: FC<IUserPublicProfileView> = ({
 					{loading && <Loading />}
 				</LikedContainer>
 			)}
-
 			<Pagination
 				currentPage={page}
 				totalCount={totalCount}
 				setPage={setPage}
 				itemPerPage={itemPerPage}
 			/>
-		</>
+		</Container>
 	);
 };
 
-export default PublicProfileLikedTab;
+const Container = styled.div`
+	margin-bottom: 80px;
+`;
 
 const NothingWrapper = styled.div`
 	position: relative;
@@ -85,7 +89,7 @@ const LikedContainer = styled.div`
 	display: grid;
 	position: relative;
 	gap: 24px;
-	margin-bottom: 64px;
+	margin-bottom: 40px;
 	padding: 0;
 	align-items: center;
 	${mediaQueries.laptop} {
@@ -94,7 +98,6 @@ const LikedContainer = styled.div`
 	${mediaQueries.laptopL} {
 		grid-template-columns: repeat(3, 1fr);
 	}
-	${mediaQueries.desktop} {
-		grid-template-columns: repeat(3, 1fr);
-	}
 `;
+
+export default PublicProfileLikedTab;

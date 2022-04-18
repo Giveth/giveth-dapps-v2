@@ -20,7 +20,7 @@ import { IDonation } from '@/apollo/types/types';
 import SearchBox from '@/components/SearchBox';
 import { Flex } from '@/components/styled-components/Flex';
 import Pagination from '@/components/Pagination';
-import { smallFormatDate, transactionLink } from '@/lib/helpers';
+import { smallFormatDate, formatTxLink } from '@/lib/helpers';
 import config from '@/configuration';
 import { EDirection, EDonationType } from '@/apollo/types/gqlEnums';
 import ExternalLink from '@/components/ExternalLink';
@@ -228,7 +228,7 @@ const ProjectDonationTable = ({
 								<TableCell>
 									<P>{donation.amount}</P>
 									<ExternalLink
-										href={transactionLink(
+										href={formatTxLink(
 											donation.transactionNetworkId,
 											donation.transactionId,
 										)}
@@ -295,7 +295,7 @@ const Tab = styled(H6)`
 
 const DonationTableWrapper = styled.div`
 	display: block;
-	overflow-x: scroll;
+	overflow-x: auto;
 	max-width: calc(100vw - 32px);
 `;
 

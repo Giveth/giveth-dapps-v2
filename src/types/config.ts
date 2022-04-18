@@ -90,7 +90,6 @@ export interface BasicNetworkConfig {
 		symbol: string; // 2-6 characters long
 		decimals: 18;
 	};
-	rpcUrls: string[];
 	blockExplorerUrls?: string[];
 	iconUrls?: string[]; // Currently ignored.
 	blockExplorerName: string[];

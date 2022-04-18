@@ -1,24 +1,24 @@
+import { neutralColors } from '@giveth/ui-design-system';
+import { FC, useEffect, useState } from 'react';
+import styled from 'styled-components';
+
+import {
+	IUserPublicProfileView,
+	EOrderBy,
+	IOrder,
+} from '../UserPublicProfile.view';
+import ProjectsTable from './ProjectsTable';
+import { mediaQueries } from '@/lib/constants/constants';
+import { Container } from '@/components/Grid';
+import { EDirection } from '@/apollo/types/gqlEnums';
+import NothingToSee from '@/components/views/userPublicProfile/NothingToSee';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_USER_PROJECTS } from '@/apollo/gql/gqlUser';
 import { IUserProjects } from '@/apollo/types/gqlTypes';
 import { IProject } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import ProjectCard from '@/components/project-card/ProjectCard';
-import { Flex } from '@/components/styled-components/Flex';
-import { ETheme } from '@/context/general.context';
-import { brandColors, neutralColors } from '@giveth/ui-design-system';
-import { FC, useEffect, useState } from 'react';
-import styled from 'styled-components';
-import {
-	IUserPublicProfileView,
-	EOrderBy,
-	IOrder,
-	NothingToSee,
-} from './UserPublicProfile.view';
-import ProjectsTable from './ProjectsTable';
-import { mediaQueries } from '@/lib/constants/constants';
-import { Container } from '@/components/Grid';
-import { EDirection } from '@/apollo/types/gqlEnums';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 
 const itemPerPage = 10;
 
@@ -36,10 +36,10 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({
 		direction: EDirection.DESC,
 	});
 
-	const orderChangeHandler = (orderby: EOrderBy) => {
-		if (orderby === order.by) {
+	const changeOrder = (orderBy: EOrderBy) => {
+		if (orderBy === order.by) {
 			setOrder({
-				by: orderby,
+				by: orderBy,
 				direction:
 					order.direction === EDirection.ASC
 						? EDirection.DESC
@@ -47,7 +47,7 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({
 			});
 		} else {
 			setOrder({
-				by: orderby,
+				by: orderBy,
 				direction: EDirection.DESC,
 			});
 		}
@@ -75,7 +75,7 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({
 				setTotalCount(projectsByUserId.totalCount);
 			}
 		};
-		fetchUserProjects();
+		fetchUserProjects().then();
 	}, [user, page, order.by, order.direction]);
 
 	return (
@@ -93,7 +93,7 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({
 					<ProjectsTableWrapper>
 						<ProjectsTable
 							projects={projects}
-							orderChangeHandler={orderChangeHandler}
+							changeOrder={changeOrder}
 							order={order}
 						/>
 					</ProjectsTableWrapper>
@@ -106,25 +106,21 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({
 				)}
 				{loading && <Loading />}
 			</ProjectsContainer>
-			<PaginationContainer>
-				<Pagination
-					currentPage={page}
-					totalCount={totalCount}
-					setPage={setPage}
-					itemPerPage={itemPerPage}
-				/>
-			</PaginationContainer>
+			<Pagination
+				currentPage={page}
+				totalCount={totalCount}
+				setPage={setPage}
+				itemPerPage={itemPerPage}
+			/>
 		</ProjectsTab>
 	);
 };
-
-export default PublicProfileProjectsTab;
 
 export const ProjectsContainer = styled(Container)`
 	display: grid;
 	position: relative;
 	gap: 24px;
-	margin-bottom: 64px;
+	margin-bottom: 40px;
 	padding: 0;
 	align-items: center;
 `;
@@ -134,20 +130,13 @@ const ProjectsTableWrapper = styled.div`
 	overflow: auto;
 `;
 
-const UserContributeInfo = styled.div`
-	padding: 40px 0 60px;
-`;
-
 export const Loading = styled(Flex)`
 	position: absolute;
 	left: 0;
 	right: 0;
 	top: 0;
 	bottom: 0;
-	background-color: ${props =>
-		props.theme === ETheme.Dark
-			? brandColors.giv[800]
-			: neutralColors.gray[200]}aa;
+	background-color: ${neutralColors.gray[200]}aa;
 `;
 
 const NothingWrapper = styled.div`
@@ -168,16 +157,10 @@ const GridContainer = styled.div`
 	${mediaQueries.laptopL} {
 		grid-template-columns: repeat(3, 1fr);
 	}
-	${mediaQueries.desktop} {
-		grid-template-columns: repeat(3, 1fr);
-	}
 `;
 
 const ProjectsTab = styled.div`
-	margin: 0 0 150px 0;
+	margin-bottom: 80px;
 `;
 
-const PaginationContainer = styled.div`
-	position: absolute;
-	right: 50px;
-`;
+export default PublicProfileProjectsTab;
