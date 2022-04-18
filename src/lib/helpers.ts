@@ -14,7 +14,6 @@ import { giveconomyTabs } from '@/lib/constants/Tabs';
 import { IUser } from '@/apollo/types/types';
 import Routes from '@/lib/constants/Routes';
 import { gToast, ToastType } from '@/components/toasts';
-import { networkInfo } from './constants/NetworksObj';
 import StorageLabel from '@/lib/localStorage';
 import { networksParams } from '@/helpers/blockchain';
 
@@ -27,11 +26,27 @@ export const formatBalance = (balance?: string | number) => {
 	});
 };
 
+export const formatUSD = (balance?: string | number) => {
+	return parseFloat(String(balance) || '0').toLocaleString('en-US', {
+		maximumFractionDigits: 2,
+	});
+};
+
 export const formatPrice = (balance?: string | number) => {
 	return parseFloat(String(balance) || '0').toLocaleString('en-US', {
 		maximumFractionDigits: 6,
 	});
 };
+
+export const formatTxLink = (networkId?: number, txHash?: string) => {
+	if (!networkId || !txHash || !networksParams[networkId]) return '';
+	return `${networksParams[networkId].blockExplorerUrls[0]}/tx/${txHash}`;
+};
+
+export function formatWalletLink(chainId?: number, address?: string) {
+	if (!address || !chainId || !networksParams[chainId]) return '';
+	return `${networksParams[chainId]?.blockExplorerUrls[0]}/address/${address}`;
+}
 
 export const durationToYMDh = (ms: number) => {
 	let baseTime = new Date(0);
@@ -148,13 +163,6 @@ export const shortenAddress = (
 		-charsLength,
 	)}`;
 };
-
-export function formatTxLink(
-	chainId: number | undefined,
-	hash: string | undefined,
-) {
-	return `${networkInfo(chainId).networkPrefix}tx/${hash}`;
-}
 
 export async function sendTransaction(
 	web3: Web3Provider,
@@ -376,11 +384,6 @@ export const detectBrave = async () => {
 	return (navigator.brave && (await navigator.brave.isBrave())) || false;
 };
 
-export const transactionLink = (networkId: number, txHash: string) => {
-	if (!networksParams[networkId]) return '';
-	return `${networksParams[networkId].blockExplorerUrls[0]}/tx/${txHash}`;
-};
-
 export function pollEvery(fn: Function, delay: any) {
 	let timer: any = null;
 	// having trouble with this type
@@ -401,3 +404,12 @@ export function pollEvery(fn: Function, delay: any) {
 		};
 	};
 }
+
+export const networkInfo = (networkId?: number) => {
+	if (!networkId || !networksParams[networkId]) return {};
+	const info = networksParams[networkId];
+	return {
+		networkName: info.chainName,
+		networkToken: info.nativeCurrency.symbol,
+	};
+};

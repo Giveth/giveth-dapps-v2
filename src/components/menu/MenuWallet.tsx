@@ -13,14 +13,13 @@ import {
 } from '@giveth/ui-design-system';
 
 import Routes from '@/lib/constants/Routes';
-import { networkInfo } from '@/lib/constants/NetworksObj';
 import useUser from '@/context/UserProvider';
 import links from '@/lib/constants/links';
 import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
 import { switchNetworkHandler } from '@/lib/wallet';
 import { MenuContainer } from './Menu.sc';
 import { ETheme, useGeneral } from '@/context/general.context';
-import { isUserRegistered } from '@/lib/helpers';
+import { isUserRegistered, networkInfo } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
 import useModal from '@/context/ModalProvider';
 
