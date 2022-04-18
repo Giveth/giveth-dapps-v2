@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { Flex } from '../../styled-components/Flex';
 import { IUser } from '@/apollo/types/types';
 import { Container } from '@/components/Grid';
+import { roundNumber } from '@/helpers/number';
 
 export interface IUserPublicProfileView {
 	user: IUser;
@@ -30,7 +31,7 @@ const PublicProfileContributeCard: FC<IUserPublicProfileView> = ({
 						Total amount donated
 					</ContributeCardTitles>
 					<H2>{user.donationsCount || 0}</H2>
-					<H5>${user.totalDonated || 0}</H5>
+					<H5>${roundNumber(user.totalDonated) || 0}</H5>
 				</ContributeCard>
 				<ContributeCard>
 					<ContributeCardTitles>Projects</ContributeCardTitles>
@@ -38,7 +39,7 @@ const PublicProfileContributeCard: FC<IUserPublicProfileView> = ({
 						Donation received
 					</ContributeCardTitles>
 					<H2>{user.projectsCount}</H2>
-					<H5>${user.totalReceived}</H5>
+					<H5>${roundNumber(user.totalReceived)}</H5>
 				</ContributeCard>
 			</ContributeCardContainer>
 		</CustomContainer>
