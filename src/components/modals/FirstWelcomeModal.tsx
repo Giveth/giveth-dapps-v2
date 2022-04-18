@@ -13,6 +13,10 @@ import {
 import { IModal, Modal } from '@/components/modals/Modal';
 import { ETheme, useGeneral } from '@/context/general.context';
 
+interface IText {
+	isDark?: boolean;
+}
+
 export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
 	const { theme } = useGeneral();
 	const router = useRouter();
@@ -25,11 +29,14 @@ export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
 			headerTitlePosition='left'
 		>
 			<Container>
-				<Title> Welcome to the future of giving</Title>
+				<Title isDark={theme === ETheme.Dark}>
+					{' '}
+					Welcome to the future of giving
+				</Title>
 				<LeadTitle>Here is the things that you can do now!</LeadTitle>
 				<Bullets>
 					<li>
-						<P>
+						<Paragraph isDark={theme === ETheme.Dark}>
 							Take a look at awesome{' '}
 							<InlineLink
 								target='_blank'
@@ -40,10 +47,10 @@ export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
 								projects
 							</InlineLink>{' '}
 							on Giveth.
-						</P>
+						</Paragraph>
 					</li>
 					<li>
-						<P>
+						<Paragraph isDark={theme === ETheme.Dark}>
 							You can also create a{' '}
 							<InlineLink
 								target='_blank'
@@ -53,11 +60,11 @@ export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
 								new project
 							</InlineLink>{' '}
 							and receive donations.
-						</P>
+						</Paragraph>
 					</li>
 
 					<li>
-						<P>
+						<Paragraph isDark={theme === ETheme.Dark}>
 							You can earn GIV token by{' '}
 							<InlineLink
 								target='_blank'
@@ -67,7 +74,7 @@ export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
 								donating to projects
 							</InlineLink>
 							.
-						</P>
+						</Paragraph>
 					</li>
 				</Bullets>
 				<DonateButton
@@ -89,7 +96,7 @@ const InlineLink = styled.a`
 `;
 
 const Title = styled(H5)`
-	color: ${brandColors.deep[900]};
+	color: ${(prop: IText) => (prop.isDark ? 'white' : brandColors.deep[900])};
 	font-weight: 700;
 	margin-bottom: 24px;
 `;
@@ -120,4 +127,8 @@ const Bullets = styled.ul`
 		margin: 8px 0;
 		color: ${neutralColors.gray[900]};
 	}
+`;
+
+const Paragraph = styled(P)`
+	color: ${(prop: IText) => (prop.isDark ? 'white' : brandColors.deep[900])};
 `;
