@@ -28,9 +28,6 @@ const config: EnvConfig = {
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
-		rpcUrls: [
-			'https://kovan.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
-		],
 		blockExplorerName: ['Etherscan'],
 		blockExplorerUrls: ['https://kovan.etherscan.io'],
 		subgraphAddress:
@@ -103,7 +100,6 @@ const config: EnvConfig = {
 			maxPriorityFeePerGas: gwei2wei('1'),
 		},
 
-		rpcUrls: ['https://rpc.xdaichain.com'],
 		blockExplorerName: ['Blockscout'],
 		blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
 		subgraphAddress:
