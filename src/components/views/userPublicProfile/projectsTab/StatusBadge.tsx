@@ -16,7 +16,7 @@ const StatusBadge = (props: { status: EProjectStatus }) => {
 	switch (status) {
 		case EProjectStatus.DEACTIVE:
 			backgroundColor = neutralColors.gray[300];
-			title = 'Deactive';
+			title = 'Deactivated';
 			color = neutralColors.gray[700];
 			break;
 		case EProjectStatus.CANCEL:

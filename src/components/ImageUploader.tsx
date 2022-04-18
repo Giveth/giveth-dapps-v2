@@ -78,7 +78,7 @@ const ImageUploader: FC<IImageUploader> = ({ setUrl, url, setIsUploading }) => {
 					/>
 					<P>
 						{`Drag & drop an image here or`}{' '}
-						<span onClick={open}>Upload from computer.</span>
+						<span onClick={open}>Upload from device.</span>
 					</P>
 					<P>
 						Suggested image size min. 600px width. Image size up to

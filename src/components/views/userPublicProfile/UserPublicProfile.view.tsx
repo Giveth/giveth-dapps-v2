@@ -57,7 +57,8 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 
 	const [showModal, setShowModal] = useState<boolean>(false); // follow this state to refresh user content on screen
 	const [showIncompleteWarning, setShowIncompleteWarning] = useState(true);
-
+	const notUserRegisteredAndShowIncompleteWarning =
+		!isUserRegistered(user) && showIncompleteWarning;
 	useEffect(() => {
 		if (myAccount && !isSignedIn) {
 			showSignWithWallet();
@@ -73,14 +74,16 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 
 	return (
 		<>
-			{!isUserRegistered(user) && showIncompleteWarning && (
+			{notUserRegisteredAndShowIncompleteWarning && (
 				<IncompleteProfileToast
 					close={() => setShowIncompleteWarning(false)}
 				/>
 			)}
 			<PublicProfileHeader>
-				<ContainerStyled>
-					<img
+				<ContainerStyled
+					hasMarginTop={notUserRegisteredAndShowIncompleteWarning}
+				>
+					<Image
 						src={user.avatar || '/images/avatar.svg'}
 						width={128}
 						height={128}
@@ -124,16 +127,18 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 	);
 };
 
-const ContainerStyled = styled(Container)`
+const ContainerStyled = styled(Container)<{ hasMarginTop: boolean }>`
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	gap: 24px;
 	flex-direction: column;
+	margin-top: ${props => (props.hasMarginTop ? '60px' : '0px')};
 	> :first-child {
 		border-radius: 8px;
 	}
 	${mediaQueries.tablet} {
+		margin-top: 0px;
 		flex-direction: row;
 	}
 `;
