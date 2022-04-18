@@ -21,10 +21,10 @@ export const formatEthHelper = (
 		? amt.lt(0.0001)
 			? '<0.0001'
 			: amt.toFormat({
-				groupSize: 3,
-				groupSeparator: ',',
-				decimalSeparator: '.',
-			})
+					groupSize: 3,
+					groupSeparator: ',',
+					decimalSeparator: '.',
+			  })
 		: amt.toFixed();
 };
 
