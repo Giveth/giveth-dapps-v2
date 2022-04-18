@@ -32,6 +32,7 @@ const FixedToast = (props: IFToast) => {
 
 const Container = styled.div`
 	display: flex;
+	flex-wrap: wrap;
 	align-items: center;
 	background-color: ${props => props.color};
 	padding: 13.5px 16px;
