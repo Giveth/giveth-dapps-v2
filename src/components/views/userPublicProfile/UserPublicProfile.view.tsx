@@ -80,7 +80,7 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 			)}
 			<PublicProfileHeader>
 				<ContainerStyled>
-					<Image
+					<img
 						src={user.avatar || '/images/avatar.svg'}
 						width={128}
 						height={128}
