@@ -295,7 +295,7 @@ const Tab = styled(H6)`
 
 const DonationTableWrapper = styled.div`
 	display: block;
-	overflow-x: scroll;
+	overflow-x: auto;
 	max-width: calc(100vw - 32px);
 `;
 
