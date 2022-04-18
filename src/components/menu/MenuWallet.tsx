@@ -27,7 +27,7 @@ const MenuWallet = () => {
 	const [isMounted, setIsMounted] = useState(false);
 	const [balance, setBalance] = useState<string | null>(null);
 	const { chainId, account, library } = useWeb3React();
-	const [showWelcomeSignin, setShowWelcomeSignin] = useState<boolean>(false);
+	const [SignWithWallet, setSignWithWallet] = useState<boolean>(false);
 	const [queueRoute, setQueueRoute] = useState<string>('');
 
 	const router = useRouter();
@@ -55,7 +55,7 @@ const MenuWallet = () => {
 		}
 		if (requiresSign && !isSignedIn) {
 			setQueueRoute(url);
-			return setShowWelcomeSignin(true);
+			return setSignWithWallet(true);
 		}
 		router.push(url);
 	};
@@ -79,15 +79,14 @@ const MenuWallet = () => {
 
 	return (
 		<>
-			{showWelcomeSignin && (
+			{SignWithWallet && (
 				<SignWithWalletModal
 					callback={() => {
 						router.push(queueRoute);
 						setQueueRoute('');
 					}}
-					showModal={true}
 					setShowModal={() => {
-						setShowWelcomeSignin(false);
+						setSignWithWallet(false);
 						setQueueRoute('');
 					}}
 				/>

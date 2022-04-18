@@ -47,7 +47,6 @@ const loadingAnimationOptions = {
 export const StakeModal: FC<IStakeModalProps> = ({
 	poolStakingConfig,
 	maxAmount,
-	showModal,
 	setShowModal,
 }) => {
 	const [amount, setAmount] = useState('0');
@@ -163,7 +162,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 	};
 
 	return (
-		<Modal showModal={showModal} setShowModal={setShowModal}>
+		<Modal setShowModal={setShowModal}>
 			<StakeModalContainer>
 				{stakeState !== StakeState.CONFIRMING &&
 					stakeState !== StakeState.CONFIRMED &&

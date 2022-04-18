@@ -15,7 +15,7 @@ const GeminiModal = ({ setShowModal }: any) => {
 	const { isMobile } = useDeviceDetect();
 	if (isSSRMode) return null;
 	return (
-		<Modal showModal setShowModal={setShowModal}>
+		<Modal setShowModal={setShowModal}>
 			<Container>
 				<Lead>
 					Giving Block projects only accept donations listed on Gemini

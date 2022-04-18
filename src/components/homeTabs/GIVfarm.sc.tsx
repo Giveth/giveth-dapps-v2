@@ -27,7 +27,7 @@ export const Subtitle = styled(QuoteText)`
 export const GIVfarmRewardCard = styled(EnhancedRewardCard)`
 	margin-bottom: 24px;
 	${mediaQueries.tablet} {
-		margin-bottom: 0px;
+		margin-bottom: 0;
 	}
 `;
 

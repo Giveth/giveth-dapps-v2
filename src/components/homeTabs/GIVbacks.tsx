@@ -10,8 +10,6 @@ import {
 	GIVbacksTopContainer,
 	GIVbacksBottomContainer,
 	GIVbackRewardCard,
-	Left,
-	Right,
 	GBSubtitle,
 	GBTitle,
 	GbDataBlock,
@@ -104,16 +102,12 @@ export const TabGIVbacksTop = () => {
 			{showHarvestModal && (
 				<HarvestAllModal
 					title='GIVbacks Rewards'
-					showModal={showHarvestModal}
 					setShowModal={setShowHarvestModal}
 					network={config.XDAI_NETWORK_NUMBER}
 				/>
 			)}
 			{showGivBackExplain && (
-				<GIVBackExplainModal
-					showModal={showGivBackExplain}
-					setShowModal={setShowGivBackExplain}
-				/>
+				<GIVBackExplainModal setShowModal={setShowGivBackExplain} />
 			)}
 		</>
 	);

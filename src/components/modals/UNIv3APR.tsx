@@ -9,12 +9,11 @@ interface IUniV3APRModal extends IModal {
 }
 
 export const UniV3APRModal: FC<IUniV3APRModal> = ({
-	showModal,
 	setShowModal,
 	poolStakingConfig,
 }) => {
 	return (
-		<Modal showModal={showModal} setShowModal={setShowModal}>
+		<Modal setShowModal={setShowModal}>
 			<APRModalContainer>
 				<P>
 					Concentrate your liquidity for higher APRs. The narrower

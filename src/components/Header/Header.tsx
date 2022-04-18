@@ -36,7 +36,7 @@ import { RewardMenu } from '@/components/menu/RewardMenu';
 import { walletsArray } from '@/lib/wallet/walletTypes';
 import MenuWallet from '@/components/menu/MenuWallet';
 import { ETheme, useGeneral } from '@/context/general.context';
-import { menuRoutes } from '../menu/MenuRoutes';
+import { menuRoutes } from '../menu/menuRoutes';
 import useUser from '@/context/UserProvider';
 import { isUserRegistered, shortenAddress } from '@/lib/helpers';
 import HeaderRoutesResponsive from './HeaderResponsiveRoutes';

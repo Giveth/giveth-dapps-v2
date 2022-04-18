@@ -117,11 +117,7 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 			</PublicProfileHeader>
 			<PublicProfileContributes user={user} myAccount={myAccount} />
 			{showModal && (
-				<EditUserModal
-					showModal={showModal}
-					setShowModal={setShowModal}
-					user={user}
-				/>
+				<EditUserModal setShowModal={setShowModal} user={user} />
 			)}
 		</>
 	);

@@ -34,7 +34,7 @@ export const ChangeNetworkModal: FC<IChangeNetworkModalProps> = ({
 			: 'Ethereum Mainnet or Gnosis Chain';
 
 	return (
-		<Modal showModal setShowModal={setShowModal}>
+		<Modal setShowModal={setShowModal}>
 			<ChangeNetworkModalContainer>
 				{targetNetwork === config.MAINNET_NETWORK_NUMBER ? (
 					<IconEthereum size={64} />

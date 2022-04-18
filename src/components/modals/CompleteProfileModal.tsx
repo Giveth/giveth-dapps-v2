@@ -27,7 +27,6 @@ export const CompleteProfileModal = (props: {
 	return (
 		<Modal
 			setShowModal={setShowModal}
-			hiddenClose={false}
 			headerIcon={<IconProfile />}
 			headerTitle='Complete your profile'
 			headerTitlePosition='left'

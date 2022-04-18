@@ -1,10 +1,6 @@
-import config from '@/configuration';
 import {
 	P,
-	B,
-	H5,
 	neutralColors,
-	IconGIVStream,
 	Title,
 	GLink,
 	brandColors,
@@ -16,17 +12,15 @@ import styled from 'styled-components';
 import { FC } from 'react';
 import { Flex } from '../styled-components/Flex';
 import { Modal, IModal } from './Modal';
-import Link from 'next/link';
 import links from '@/lib/constants/links';
 
 interface IGIVBackExplainModal extends IModal {}
 
 export const GIVBackExplainModal: FC<IGIVBackExplainModal> = ({
-	showModal,
 	setShowModal,
 }) => {
 	return (
-		<Modal showModal={showModal} setShowModal={setShowModal}>
+		<Modal setShowModal={setShowModal}>
 			<GIVBackExplainContainer>
 				<TitleRow alignItems='center' justifyContent='center'>
 					<IconGIVBack size={24} />

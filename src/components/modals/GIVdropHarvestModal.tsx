@@ -1,4 +1,4 @@
-import { FC, useState, useEffect, useContext } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { IModal, Modal } from './Modal';
 import {
 	ConfirmedInnerModal,
@@ -72,7 +72,6 @@ interface IGIVdropHarvestModal extends IModal {
 }
 
 export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
-	showModal,
 	setShowModal,
 	network,
 	givdropAmount,
@@ -210,11 +209,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 	};
 
 	return (
-		<Modal
-			showModal={showModal}
-			setShowModal={setShowModal}
-			headerTitle={'GIVdrop'}
-		>
+		<Modal setShowModal={setShowModal} headerTitle={'GIVdrop'}>
 			<HarvestAllModalContainer>
 				{(claimState === ClaimState.UNKNOWN ||
 					claimState === ClaimState.WAITING) && (

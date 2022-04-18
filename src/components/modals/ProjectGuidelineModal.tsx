@@ -6,15 +6,10 @@ import { IModal, Modal } from '@/components/modals/Modal';
 import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
 
-export const ProjectGuidelineModal: FC<IModal> = ({
-	showModal,
-	setShowModal,
-}) => {
+export const ProjectGuidelineModal: FC<IModal> = ({ setShowModal }) => {
 	return (
 		<Modal
-			showModal={showModal}
 			setShowModal={setShowModal}
-			hiddenClose={false}
 			headerIcon={<img src='/images/icons/lightbulb.svg' />}
 			headerTitle='Submission guidelines'
 			headerTitlePosition='left'

@@ -88,8 +88,8 @@ const Wrapper = styled.div`
 		max-width: calc(100vw - 32px);
 
 		::-webkit-scrollbar {
-			width: 0px;
-			height: 0px;
+			width: 0;
+			height: 0;
 			background-color: transparent;
 		}
 	}

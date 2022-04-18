@@ -157,7 +157,7 @@ const CardsSection = styled.div`
 	display: flex;
 	justify-content: center;
 	flex-wrap: wrap;
-	margin: 50px auto 0px;
+	margin: 50px auto 0;
 	gap: 25px;
 	position: relative;
 	max-width: 1250px;

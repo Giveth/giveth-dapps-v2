@@ -1,4 +1,4 @@
-import { FC, useState, useContext } from 'react';
+import { FC, useState } from 'react';
 import Lottie from 'react-lottie';
 import { Modal, IModal } from './Modal';
 import { neutralColors, Button, H4 } from '@giveth/ui-design-system';
@@ -34,7 +34,6 @@ interface IUnStakeModalProps extends IModal {
 export const UnStakeModal: FC<IUnStakeModalProps> = ({
 	poolStakingConfig,
 	maxAmount,
-	showModal,
 	setShowModal,
 }) => {
 	const [txHash, setTxHash] = useState('');
@@ -73,7 +72,7 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 	};
 
 	return (
-		<Modal showModal={showModal} setShowModal={setShowModal}>
+		<Modal setShowModal={setShowModal}>
 			<UnStakeModalContainer>
 				{(stakeState === StakeState.UNKNOWN ||
 					stakeState === StakeState.CONFIRMING) && (

@@ -66,7 +66,7 @@ const ContributeCardContainer = styled(Flex)`
 
 const ContributeCard = styled.div`
 	background: ${brandColors.giv['000']};
-	box-shadow: 0px 3px 20px rgba(212, 218, 238, 0.4);
+	box-shadow: 0 3px 20px rgba(212, 218, 238, 0.4);
 	border-radius: 12px;
 	display: grid;
 	padding: 24px;
@@ -82,7 +82,7 @@ const ContributeCardTitles = styled(Subline)`
 `;
 
 const CustomContainer = styled(Container)`
-	padding: 0px;
+	padding: 0;
 `;
 
 export default PublicProfileContributeCard;

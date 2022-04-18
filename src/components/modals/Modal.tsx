@@ -15,7 +15,7 @@ interface ModalWrapperProps {
 }
 
 export interface IModal extends ModalWrapperProps {
-	showModal?: boolean;
+	fullScreen?: boolean;
 	setShowModal: (value: boolean) => void;
 	callback?: () => void;
 	hiddenClose?: boolean;
@@ -39,6 +39,7 @@ export const Modal: React.FC<IModal> = ({
 }) => {
 	const el = useRef(document.createElement('div'));
 	const { theme } = useGeneral();
+
 	useEffect(() => {
 		const current = el.current;
 		const modalRoot = document.querySelector('body') as HTMLElement;
@@ -59,11 +60,13 @@ export const Modal: React.FC<IModal> = ({
 			setShowModal(false);
 		}
 	};
+
 	const ScrollBarsNotFullScreenProps = {
 		autoHeight: true,
 		autoHeightMin: 'calc(20Vh - 60px)',
 		autoHeightMax: 'calc(80Vh - 60px)',
 	};
+
 	return createPortal(
 		<Background>
 			<Surrounding onClick={() => setShowModal(false)} />
@@ -116,7 +119,7 @@ const ModalWrapper = styled.div<ModalWrapperProps>`
 			: neutralColors.gray[100]};
 	box-shadow: 0 3px 20px
 		${props => (props.theme === ETheme.Dark ? '#00000026' : '#21203c')};
-	border-radius: ${props => (props.fullScreen ? '0px' : '8px')};
+	border-radius: ${props => (props.fullScreen ? 0 : '8px')};
 	color: ${props =>
 		props.theme === ETheme.Dark
 			? neutralColors.gray[100]

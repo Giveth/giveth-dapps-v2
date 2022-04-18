@@ -137,7 +137,7 @@ const PublicProfileTab = styled(P)<ITab>`
 		props.active &&
 		`
 		background: ${neutralColors.gray[100]};
-		box-shadow: 0px 3px 20px rgba(212, 218, 238, 0.4);
+		box-shadow: 0 3px 20px rgba(212, 218, 238, 0.4);
 		border-radius: 50px;
 	`}
 `;

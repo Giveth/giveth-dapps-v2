@@ -200,7 +200,6 @@ const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 		<Wrapper>
 			{showRemoveUpdateModal && (
 				<RemoveUpdateModal
-					showModal={showRemoveUpdateModal}
 					setShowModal={setShowRemoveUpdateModal}
 					callback={async () => {
 						await removeUpdate(currentUpdate);
