@@ -48,7 +48,7 @@ enum LabelStatus {
 const OnboardHeader: FC<IOnboard> = ({ step }) => {
 	return (
 		<OnboardHeaderConatiner>
-			<H5 weight={700}>Complete your profile</H5>
+			<OnboardHeading weight={700}>Complete your profile</OnboardHeading>
 			<OnboardProgressbar step={step} />
 			<OnboardProgressbarLabels>
 				{StatesLabel.map((label, idx) => (
@@ -138,4 +138,8 @@ const OnboardProgressbarLabel = styled(B)<IOnboardProgressbarLabel>`
 				break;
 		}
 	}};
+`;
+
+const OnboardHeading = styled(H5)`
+	text-align: center;
 `;

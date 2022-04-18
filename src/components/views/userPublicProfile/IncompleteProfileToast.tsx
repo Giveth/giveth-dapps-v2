@@ -53,7 +53,7 @@ const IncompleteToast = styled.div`
 	right: 0;
 	margin: 0 auto;
 	background-color: ${brandColors.mustard[200]};
-	border: 1px solid ${brandColors.mustard[700]};
+	border: 1px solid ${brandColors.mustard[800]};
 	border-radius: 8px;
 	display: flex;
 	justify-content: space-between;
