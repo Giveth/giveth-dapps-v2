@@ -13,21 +13,20 @@ import {
 import ExternalLink from '@/components/ExternalLink';
 import { ETheme, useGeneral } from '@/context/general.context';
 
-const LowerShields = (props: { setShowModal: (i: boolean) => void }) => {
-	const { setShowModal } = props;
+const LowerShields = (props: { onClose: () => void }) => {
+	const { onClose } = props;
 	const { theme } = useGeneral();
 	const isDark = theme === ETheme.Dark;
 
-	const closeModal = () => setShowModal(false);
-
 	return (
 		<Modal
-			setShowModal={setShowModal}
+			setShowModal={onClose}
 			headerIcon={
 				<Image
 					src={isDark ? ShieldWhiteIcon : ShieldBlackIcon}
 					width={24}
 					height={24}
+					alt='shield icon'
 				/>
 			}
 			headerTitle='Sorry to interrupt...'
@@ -49,9 +48,9 @@ const LowerShields = (props: { setShowModal: (i: boolean) => void }) => {
 					</ExternalLinkStyled>
 				</Lead>
 				{isDark ? (
-					<OulineButton label='OK' onClick={closeModal} />
+					<OulineButton label='OK' onClick={onClose} />
 				) : (
-					<Button label='OK' onClick={closeModal} />
+					<Button label='OK' onClick={onClose} />
 				)}
 			</Container>
 		</Modal>

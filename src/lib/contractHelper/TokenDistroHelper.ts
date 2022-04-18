@@ -55,12 +55,10 @@ export class TokenDistroHelper {
 
 		const deltaTime = now - this.startTime.getTime();
 
-		const releasedAmount = new BigNumber(this.lockedAmount.toString())
-			.times(deltaTime)
+		const releasedAmount = this.lockedAmount
+			.mul(deltaTime)
 			.div(this.duration);
-		return this.initialAmount.add(
-			releasedAmount.toFixed(0, BigNumber.ROUND_DOWN),
-		);
+		return this.initialAmount.add(releasedAmount);
 	}
 
 	public getLiquidPart = (amount: ethers.BigNumber): ethers.BigNumber => {
@@ -100,9 +98,9 @@ export class TokenDistroHelper {
 
 	public get GlobalReleasePercentage(): number {
 		if (this.totalTokens.isZero()) return 0;
-		const initialPercent = this.getLiquidPart(this.totalTokens)
-			.mul(100)
-			.div(this.totalTokens);
-		return initialPercent.toNumber();
+		return new BigNumber(this.globallyClaimableNow.toString())
+			.times(100)
+			.div(this.totalTokens.toString())
+			.toNumber();
 	}
 }
