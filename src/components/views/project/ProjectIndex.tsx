@@ -52,7 +52,6 @@ const ProjectIndex = (props: { project?: IProject }) => {
 	const slug = router.query.projectIdSlug as string;
 
 	const fetchProject = async () => {
-		isCancelled && setIsCancelled(false);
 		client
 			.query({
 				query: FETCH_PROJECT_BY_SLUG,

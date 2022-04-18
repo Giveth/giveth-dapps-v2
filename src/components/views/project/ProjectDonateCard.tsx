@@ -165,7 +165,7 @@ const ProjectDonateCard = ({
 		setIsAdmin(
 			compareAddresses(adminUser?.walletAddress, user?.walletAddress),
 		);
-	}, [user]);
+	}, [user, adminUser]);
 
 	useEffect(() => {
 		setWrapperHeight(wrapperRef?.current?.clientHeight || 0);
