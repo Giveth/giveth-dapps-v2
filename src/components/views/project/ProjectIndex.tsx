@@ -41,8 +41,7 @@ const ProjectIndex = (props: { project?: IProject }) => {
 	const [totalDonations, setTotalDonations] = useState(0);
 	const [creationSuccessful, setCreationSuccessful] = useState(false);
 	const [isMobile, setIsMobile] = useState<boolean>(false);
-	const [notAvailableProject, setNotAvailableProject] =
-		useState<boolean>(false);
+	const [isCancelled, setIsCancelled] = useState<boolean>(false);
 
 	const {
 		state: { user },
@@ -53,7 +52,6 @@ const ProjectIndex = (props: { project?: IProject }) => {
 	const slug = router.query.projectIdSlug as string;
 
 	const fetchProject = async () => {
-		setNotAvailableProject(false);
 		client
 			.query({
 				query: FETCH_PROJECT_BY_SLUG,
@@ -63,16 +61,14 @@ const ProjectIndex = (props: { project?: IProject }) => {
 			.then((res: { data: { projectBySlug: IProject } }) => {
 				setProject(res.data.projectBySlug);
 			})
-			.catch((e: any) => {
-				// showToastError(e);
-				setNotAvailableProject(true);
-			});
+			.catch(() => setIsCancelled(true));
 	};
 
 	useEffect(() => {
 		if (status) {
 			setIsActive(status.name === EProjectStatus.ACTIVE);
 			setIsDraft(status.name === EProjectStatus.DRAFT);
+			setIsCancelled(status.name === EProjectStatus.CANCEL);
 		}
 	}, [status]);
 
@@ -132,8 +128,7 @@ const ProjectIndex = (props: { project?: IProject }) => {
 		);
 	}
 
-	if (notAvailableProject || project?.status?.id === '7') {
-		// cancelled = 7
+	if (isCancelled) {
 		return <NotAvailableProject />;
 	}
 
