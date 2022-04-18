@@ -16,7 +16,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import InternalLink from '@/components/InternalLink';
 import ListingBadge from '@/components/views/userPublicProfile/projectsTab/ListingBadge';
 import StatusBadge from '@/components/views/userPublicProfile/projectsTab/StatusBadge';
-import SortIcon from '@/components/views/userPublicProfile/SortIcon';
+import SortIcon from '@/components/SortIcon';
 import { IProject } from '@/apollo/types/types';
 import { Badge } from '@/components/views/userPublicProfile/StyledComponents';
 import { mediaQueries } from '@/lib/constants/constants';

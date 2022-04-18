@@ -66,14 +66,12 @@ const PublicProfileLikedTab: FC<IUserPublicProfileView> = ({
 					{loading && <Loading />}
 				</LikedContainer>
 			)}
-			<FlexCenter>
-				<Pagination
-					currentPage={page}
-					totalCount={totalCount}
-					setPage={setPage}
-					itemPerPage={itemPerPage}
-				/>
-			</FlexCenter>
+			<Pagination
+				currentPage={page}
+				totalCount={totalCount}
+				setPage={setPage}
+				itemPerPage={itemPerPage}
+			/>
 		</Container>
 	);
 };

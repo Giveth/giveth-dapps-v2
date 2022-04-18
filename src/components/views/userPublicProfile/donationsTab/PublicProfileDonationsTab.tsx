@@ -94,14 +94,12 @@ const PublicProfileDonationsTab: FC<IUserPublicProfileView> = ({
 				)}
 				{loading && <Loading />}
 			</DonationTableWrapper>
-			<FlexCenter>
-				<Pagination
-					currentPage={page}
-					totalCount={totalDonations}
-					setPage={setPage}
-					itemPerPage={itemPerPage}
-				/>
-			</FlexCenter>
+			<Pagination
+				currentPage={page}
+				totalCount={totalDonations}
+				setPage={setPage}
+				itemPerPage={itemPerPage}
+			/>
 		</DonationsTab>
 	);
 };

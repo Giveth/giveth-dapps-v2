@@ -106,14 +106,12 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({
 				)}
 				{loading && <Loading />}
 			</ProjectsContainer>
-			<FlexCenter>
-				<Pagination
-					currentPage={page}
-					totalCount={totalCount}
-					setPage={setPage}
-					itemPerPage={itemPerPage}
-				/>
-			</FlexCenter>
+			<Pagination
+				currentPage={page}
+				totalCount={totalCount}
+				setPage={setPage}
+				itemPerPage={itemPerPage}
+			/>
 		</ProjectsTab>
 	);
 };
