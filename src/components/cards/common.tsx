@@ -173,7 +173,7 @@ export const ImpactCardInput = styled.div`
 `;
 
 export const ImpactCard = styled.div`
-	padding: 0px;
+	padding: 0;
 	height: 180px;
 	display: flex;
 	flex-direction: column;

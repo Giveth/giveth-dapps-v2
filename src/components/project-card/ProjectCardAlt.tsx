@@ -1,41 +1,30 @@
 import React from 'react';
-import Link from 'next/link';
 import {
 	Caption,
 	P,
-	Overline,
 	neutralColors,
 	brandColors,
 	H6,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
-import { Flex } from '@/components/styled-components/Flex';
-import ProjectCardBadges from './ProjectCardBadges';
 import ProjectCardImage from './ProjectCardImage';
+import ProjectCardOrgBadge from './ProjectCardOrgBadge';
 import { IProject } from '@/apollo/types/types';
 import { htmlToText } from '@/lib/helpers';
 import { Shadow } from '@/components/styled-components/Shadow';
-import { mediaQueries } from '@/utils/constants';
-import Routes from '@/lib/constants/Routes';
+import { mediaQueries } from '@/lib/constants/constants';
+import InternalLink from '@/components/InternalLink';
+import { addressToUserView, slugToProjectView } from '@/lib/routeCreators';
+import VerificationBadge from '@/components/badges/VerificationBadge';
 
 interface IProjectCard {
 	project: IProject;
-	noHearts?: boolean;
 	isNew?: boolean;
 }
 
-const ProjectByGivingBlock = () => {
-	return (
-		<GivingBlockContainer>
-			<Overline styleType='Small'>PROJECT BY: </Overline>
-			<img src='/images/giving-block-logo.svg' />
-		</GivingBlockContainer>
-	);
-};
-
 const ProjectCard = (props: IProjectCard) => {
-	const { noHearts, isNew, project } = props;
+	const { isNew, project } = props;
 	const {
 		title,
 		description,
@@ -44,58 +33,60 @@ const ProjectCard = (props: IProjectCard) => {
 		traceCampaignId,
 		adminUser,
 		slug,
-		id,
 		totalDonations,
-		givingBlocksId,
+		organization,
 	} = project;
 
-	const name = adminUser?.name;
+	const { name, walletAddress } = adminUser || {};
+	const orgLabel = organization?.label;
+
 	return (
 		<Wrapper isNew={isNew}>
 			<ImagePlaceholder>
-				<ProjectCardImage image={image} />
+				<InternalLink href={slugToProjectView(slug)}>
+					<ProjectCardImage image={image} />
+				</InternalLink>
 			</ImagePlaceholder>
-			{givingBlocksId && <ProjectByGivingBlock />}
+			<ProjectCardOrgBadge
+				organization={orgLabel}
+				isHover={false}
+				isAbsolute={true}
+			/>
 			{!isNew && (
-				<ProjectCardBadges
-					verified={verified}
-					traceable={!!traceCampaignId}
-					projectHref={slug}
-					projectDescription={description}
-					projectId={id}
-					noHearts={noHearts}
-				/>
+				<BadgeContainer>
+					{verified && <VerificationBadge verified />}
+					{traceCampaignId && <VerificationBadge trace />}
+				</BadgeContainer>
 			)}
 			<CardBody>
-				<Title>{title}</Title>
+				<InternalLink href={slugToProjectView(slug)}>
+					<Title>{title}</Title>
+				</InternalLink>
 				{name && (
-					<Link href={`${Routes.User}/${adminUser?.walletAddress}`}>
-						<a>
-							<Author>{name}</Author>
-						</a>
-					</Link>
+					<InternalLink href={addressToUserView(walletAddress!)}>
+						<Author>{name}</Author>
+					</InternalLink>
 				)}
 				<Description>{htmlToText(description)}</Description>
 				{!isNew && (
-					<Captions>
-						<BodyCaption>
-							Raised: ${totalDonations?.toLocaleString()}
-						</BodyCaption>
-					</Captions>
+					<BodyCaption>
+						Raised: ${totalDonations?.toLocaleString()}
+					</BodyCaption>
 				)}
 			</CardBody>
 		</Wrapper>
 	);
 };
 
-const BodyCaption = styled(Caption)`
-	color: ${neutralColors.gray[700]};
+const BadgeContainer = styled.div`
+	display: flex;
+	position: absolute;
+	padding: 16px;
 `;
 
-const Captions = styled.div`
-	display: flex;
-	justify-content: space-between;
+const BodyCaption = styled(Caption)`
 	margin-top: 14px;
+	color: ${neutralColors.gray[700]};
 `;
 
 const Description = styled(P)`
@@ -135,6 +126,7 @@ const Wrapper = styled.div<{ isNew?: boolean }>`
 	position: relative;
 	height: 430px;
 	max-width: 440px;
+	min-width: 300px;
 	border-radius: 12px;
 	margin-top: 0;
 	z-index: 0;
@@ -142,19 +134,6 @@ const Wrapper = styled.div<{ isNew?: boolean }>`
 	box-shadow: ${props => props.isNew && Shadow.Dark[500]};
 	${mediaQueries.mobileL} {
 		width: 100%;
-	}
-`;
-
-const GivingBlockContainer = styled(Flex)`
-	position: absolute;
-	align-items: center;
-	border-radius: 0 12px 0 0;
-	color: ${neutralColors.gray[600]};
-	background: ${neutralColors.gray[200]};
-	margin-top: -30px;
-	padding: 8px 24px;
-	img {
-		padding-left: 10px;
 	}
 `;
 

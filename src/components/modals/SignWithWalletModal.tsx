@@ -11,23 +11,23 @@ import {
 import { IModal, Modal } from '@/components/modals/Modal';
 import useUser from '@/context/UserProvider';
 import { ETheme, useGeneral } from '@/context/general.context';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
+import useModal from '@/context/ModalProvider';
+import { useWeb3React } from '@web3-react/core';
 
-export const SignWithWalletModal: FC<IModal> = ({
-	showModal,
-	setShowModal,
-	callback,
-}) => {
+export const SignWithWalletModal: FC<IModal> = ({ setShowModal, callback }) => {
 	const { theme } = useGeneral();
 	const {
 		actions: { signToGetToken },
 	} = useUser();
+	const { account } = useWeb3React();
+	const {
+		actions: { showWelcomeModal },
+	} = useModal();
 
 	return (
 		<Modal
-			showModal={showModal}
 			setShowModal={setShowModal}
-			hiddenClose={false}
 			headerIcon={<IconWalletApprove />}
 			headerTitle='Sign Wallet'
 			headerTitlePosition='left'
@@ -44,6 +44,9 @@ export const SignWithWalletModal: FC<IModal> = ({
 				<OkButton
 					label='SIGN IN'
 					onClick={async () => {
+						if (!account) {
+							return showWelcomeModal();
+						}
 						const signature = await signToGetToken();
 						setShowModal(false);
 						!!signature && callback && callback();

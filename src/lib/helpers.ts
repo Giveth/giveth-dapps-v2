@@ -14,11 +14,41 @@ import { giveconomyTabs } from '@/lib/constants/Tabs';
 import { IUser } from '@/apollo/types/types';
 import Routes from '@/lib/constants/Routes';
 import { gToast, ToastType } from '@/components/toasts';
-import { networkInfo } from './constants/NetworksObj';
+import StorageLabel from '@/lib/localStorage';
+import { networksParams } from '@/helpers/blockchain';
 
 declare let window: any;
 
-export const DurationToYMDh = (ms: number) => {
+export const formatBalance = (balance?: string | number) => {
+	return parseFloat(String(balance) || '0').toLocaleString('en-US', {
+		maximumFractionDigits: 6,
+		minimumFractionDigits: 2,
+	});
+};
+
+export const formatUSD = (balance?: string | number) => {
+	return parseFloat(String(balance) || '0').toLocaleString('en-US', {
+		maximumFractionDigits: 2,
+	});
+};
+
+export const formatPrice = (balance?: string | number) => {
+	return parseFloat(String(balance) || '0').toLocaleString('en-US', {
+		maximumFractionDigits: 6,
+	});
+};
+
+export const formatTxLink = (networkId?: number, txHash?: string) => {
+	if (!networkId || !txHash || !networksParams[networkId]) return '';
+	return `${networksParams[networkId].blockExplorerUrls[0]}/tx/${txHash}`;
+};
+
+export function formatWalletLink(chainId?: number, address?: string) {
+	if (!address || !chainId || !networksParams[chainId]) return '';
+	return `${networksParams[chainId]?.blockExplorerUrls[0]}/address/${address}`;
+}
+
+export const durationToYMDh = (ms: number) => {
 	let baseTime = new Date(0);
 	let duration = new Date(ms);
 
@@ -32,8 +62,8 @@ export const DurationToYMDh = (ms: number) => {
 	return { y, m, d, h, min, sec };
 };
 
-export const DurationToString = (ms: number, length: number = 3) => {
-	const temp: { [key: string]: number } = DurationToYMDh(ms);
+export const durationToString = (ms: number, length: number = 3) => {
+	const temp: { [key: string]: number } = durationToYMDh(ms);
 	const res: string[] = [];
 	for (const key in temp) {
 		if (Object.prototype.hasOwnProperty.call(temp, key)) {
@@ -72,7 +102,7 @@ export const smallFormatDate = (date: Date) => {
 export const getGasPreference = (
 	networkConfig: BasicNetworkConfig,
 ): GasPreference => {
-	const selectedWallet = window.localStorage.getItem('selectedWallet');
+	const selectedWallet = window.localStorage.getItem(StorageLabel.WALLET);
 	// MetaMask works with gas preference config
 	if (selectedWallet === EWallets.METAMASK)
 		return networkConfig.gasPreference || {};
@@ -133,13 +163,6 @@ export const shortenAddress = (
 		-charsLength,
 	)}`;
 };
-
-export function formatTxLink(
-	chainId: number | undefined,
-	hash: string | undefined,
-) {
-	return `${networkInfo(chainId).networkPrefix}tx/${hash}`;
-}
 
 export async function sendTransaction(
 	web3: Web3Provider,
@@ -344,7 +367,7 @@ export const showToastError = (err: any) => {
 
 export const calcBiggestUnitDifferenceTime = (_time: string) => {
 	const time = new Date(_time);
-	const diff: { [key: string]: number } = DurationToYMDh(
+	const diff: { [key: string]: number } = durationToYMDh(
 		Date.now() - time.getTime(),
 	);
 	if (diff.y > 0) return ` ${diff.y} year${diff.y > 1 ? 's' : ''} ago`;
@@ -356,14 +379,37 @@ export const calcBiggestUnitDifferenceTime = (_time: string) => {
 	return ' Just now';
 };
 
-export function getLocalTokenLabel(): string {
-	return getLocalUserLabel() + '_token';
+export const detectBrave = async () => {
+	// @ts-ignore
+	return (navigator.brave && (await navigator.brave.isBrave())) || false;
+};
+
+export function pollEvery(fn: Function, delay: any) {
+	let timer: any = null;
+	// having trouble with this type
+	let stop = false;
+	const poll = async (request: any, onResult: Function) => {
+		const result = await request();
+		if (!stop) {
+			onResult(result);
+			timer = setTimeout(poll.bind(null, request, onResult), delay);
+		}
+	};
+	return (...params: any) => {
+		const { request, onResult } = fn(...params);
+		poll(request, onResult).then();
+		return () => {
+			stop = true;
+			clearTimeout(timer);
+		};
+	};
 }
 
-export function getLocalUserLabel(): string {
-	return process.env.NEXT_PUBLIC_LOCAL_USER_LABEL
-		? process.env.NEXT_PUBLIC_LOCAL_USER_LABEL +
-				'_' +
-				process.env.NEXT_PUBLIC_ENV
-		: 'nextUser' + '_' + process.env.NEXT_PUBLIC_ENV;
-}
+export const networkInfo = (networkId?: number) => {
+	if (!networkId || !networksParams[networkId]) return {};
+	const info = networksParams[networkId];
+	return {
+		networkName: info.chainName,
+		networkToken: info.nativeCurrency.symbol,
+	};
+};

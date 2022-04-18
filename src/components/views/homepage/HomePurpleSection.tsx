@@ -19,14 +19,18 @@ import { isSSRMode, isUserRegistered } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
 import { Col, Row } from '@/components/Grid';
 import { HomeContainer } from '@/components/views/homepage/Home.sc';
-import { deviceSize, mediaQueries } from '@/utils/constants';
+import { deviceSize, mediaQueries } from '@/lib/constants/constants';
+import useModal from '@/context/ModalProvider';
 
 const HomePurpleSection = () => {
 	const router = useRouter();
 	const {
 		state: { user },
-		actions: { showCompleteProfile },
 	} = useUser();
+
+	const {
+		actions: { showCompleteProfile },
+	} = useModal();
 
 	const handleCreateButton = () => {
 		if (isUserRegistered(user)) {
@@ -183,6 +187,8 @@ const ArcSmall = styled(Arc)`
 const ForMakersGivers = styled(Row)`
 	margin-top: 107px;
 	margin-bottom: 50px;
+	justify-content: space-between;
+	max-width: 1200px;
 `;
 
 const ForMakersContainers = styled(Col)`
@@ -201,8 +207,15 @@ const ForMakersButton = styled(Button)`
 `;
 
 const GIVeconomy = styled.div`
-	margin-top: 235px;
 	max-width: 800px;
+
+	${mediaQueries.mobileS} {
+		margin-top: 72px;
+	}
+
+	${mediaQueries.tablet} {
+		margin-top: 235px;
+	}
 `;
 
 const GIVeconomyUrl = styled.a`

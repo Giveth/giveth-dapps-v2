@@ -1,21 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
 	neutralColors,
-	brandColors,
 	semanticColors,
 	B,
 	GLink,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
-type OnChangeFunction = (e: any) => void;
-
-interface IInputBox {
-	error: boolean;
-}
+type OnChangeFunction = (e: number) => void;
 
 const InputBox = (props: {
-	value: string;
+	value?: number;
 	onChange: OnChangeFunction;
 	placeholder?: string;
 	type?: string;
@@ -37,23 +32,21 @@ const InputBox = (props: {
 	return (
 		<Box>
 			<Wrapper>
-				<B className='w-100 mr-2' color={neutralColors.gray[900]}>
-					<Input
-						id='input-box'
-						value={value}
-						type={type}
-						onChange={(e: any) => {
-							onChange(e.target.value);
-							setError(
-								errorHandler &&
-									errorHandler?.condition(e.target.value),
-							);
-						}}
-						onFocus={() => onFocus(true)}
-						onBlur={() => onFocus(false)}
-						placeholder={placeholder || 'Search Projects...'}
-					/>
-				</B>
+				<Input
+					id='input-box'
+					value={value}
+					type={type}
+					onChange={e => {
+						onChange(Number(e.target.value));
+						setError(
+							errorHandler &&
+								errorHandler?.condition(e.target.value),
+						);
+					}}
+					onFocus={() => onFocus(true)}
+					onBlur={() => onFocus(false)}
+					placeholder={placeholder || 'Search Projects...'}
+				/>
 			</Wrapper>
 			{error && <ErrorMsg>{errorHandler?.message}</ErrorMsg>}
 		</Box>
@@ -83,13 +76,9 @@ const Input = styled.input`
 	}
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled(B)`
 	padding: 5px 16px;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
 	margin: 0 auto;
-
 	height: 54px;
 	* {
 		width: 90%;

@@ -1,49 +1,65 @@
 import React, { useState } from 'react';
-import Modal from 'react-modal';
 import { H3, P, brandColors, neutralColors, B } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { useWeb3React } from '@web3-react/core';
 
 import { Shadow } from '@/components/styled-components/Shadow';
-import closeIcon from '/public/images/close.svg';
 import ethIcon from '/public/images/tokens/eth.png';
 import googleIcon from '/public/images/google_icon.svg';
 import twitterIcon from '/public/images/social-tt.svg';
 import facebookIcon from '/public/images/social-fb2.svg';
 import discordIcon from '/public/images/social-disc.svg';
 import torusBrand from '/public/images/torus_pwr.svg';
-import { torusConnector } from '@/lib/wallet/walletTypes';
-import WalletModal from './WalletModal';
-import { mediaQueries } from '@/utils/constants';
-import { showToastError } from '@/lib/helpers';
+import { EWallets, torusConnector } from '@/lib/wallet/walletTypes';
+import { mediaQueries } from '@/lib/constants/constants';
+import { detectBrave, showToastError } from '@/lib/helpers';
+import useModal from '@/context/ModalProvider';
+import StorageLabel from '@/lib/localStorage';
+import LowerShields from '@/components/modals/LowerShields';
+import { Modal } from './Modal';
 
 interface ISignInModal {
-	showModal: boolean;
-	closeModal: () => void;
+	setShowModal: (x: boolean) => void;
 }
 
-const WelcomeModal = ({ showModal, closeModal }: ISignInModal) => {
-	const { activate } = useWeb3React();
-	const [showWalletModal, setShowWalletModal] = useState<boolean>(false);
+const WelcomeModal = ({ setShowModal }: ISignInModal) => {
+	const [showLowerShields, setShowLowerShields] = useState<boolean>();
 
-	const handleSocialConnection = (): void => {
-		activate(torusConnector).then(closeModal).catch(showToastError);
+	const { activate } = useWeb3React();
+	const {
+		actions: { showWalletModal },
+	} = useModal();
+
+	const closeModal = () => setShowModal(false);
+
+	const checkIsBrave = async () => {
+		const isBrave = await detectBrave();
+		if (isBrave) {
+			setShowLowerShields(true);
+		} else {
+			connectTorus();
+		}
+	};
+
+	const connectTorus = (): void => {
+		activate(torusConnector)
+			.then(() => {
+				localStorage.setItem(StorageLabel.WALLET, EWallets.TORUS);
+				closeModal();
+			})
+			.catch(showToastError);
+	};
+
+	const onCloseLowerShields = () => {
+		connectTorus();
+		setShowLowerShields(false);
 	};
 
 	return (
 		<>
-			{showWalletModal && (
-				<WalletModal
-					showModal={showWalletModal}
-					setShowModal={setShowWalletModal}
-					closeParentModal={closeModal}
-				/>
-			)}
-			<Modal isOpen={showModal} style={customStyles}>
-				<CloseButton onClick={closeModal}>
-					<Image src={closeIcon} alt='close' />
-				</CloseButton>
+			{showLowerShields && <LowerShields onClose={onCloseLowerShields} />}
+			<Modal setShowModal={setShowModal} fullScreen hiddenHeader>
 				<ModalGrid>
 					<BGContainer />
 					<ContentContainer>
@@ -53,9 +69,7 @@ const WelcomeModal = ({ showModal, closeModal }: ISignInModal) => {
 							Giveth.
 						</ContentSubtitle>
 						<IconContentContainer>
-							<EthIconContainer
-								onClick={() => setShowWalletModal(true)}
-							>
+							<EthIconContainer onClick={showWalletModal}>
 								<Image src={ethIcon} alt='Ether icon' />
 								<B>Sign in with Ethereum</B>
 							</EthIconContainer>
@@ -68,7 +82,7 @@ const WelcomeModal = ({ showModal, closeModal }: ISignInModal) => {
 								{socialArray.map(elem => (
 									<IconsContainer
 										key={elem.alt}
-										onClick={handleSocialConnection}
+										onClick={checkIsBrave}
 									>
 										{' '}
 										{/* best way to activate torus here? */}
@@ -85,15 +99,11 @@ const WelcomeModal = ({ showModal, closeModal }: ISignInModal) => {
 	);
 };
 
-const CloseButton = styled.div`
-	position: absolute;
-	right: 24px;
-	top: 24px;
-	cursor: pointer;
-`;
-
 const ModalGrid = styled.div`
+	position: relative;
 	display: flex;
+	width: 100%;
+	background: white !important;
 	height: 100%;
 `;
 
@@ -103,7 +113,7 @@ const BGContainer = styled.div`
 	max-width: 640px;
 	background-color: ${brandColors.giv[500]};
 	background-image: url('/images/sign_bg.svg');
-
+	background-repeat: no-repeat;
 	${mediaQueries.laptop} {
 		display: block;
 	}
@@ -117,7 +127,6 @@ const ContentContainer = styled.div`
 	align-self: center;
 	margin: auto;
 	padding: 10px;
-
 	${mediaQueries.laptop} {
 		width: 45%;
 	}
@@ -172,23 +181,6 @@ const BreakLine = styled.hr`
 	margin: auto 0;
 	border-top: 1px solid ${neutralColors.gray[300]};
 `;
-
-const customStyles = {
-	content: {
-		backgroundColor: 'white',
-		color: brandColors.deep[900],
-		maxWidth: '1440px',
-		maxHeight: '840px',
-		margin: 'auto',
-		inset: 0,
-		padding: 0,
-		border: 'none',
-	},
-	overlay: {
-		backgroundColor: 'rgb(9 4 70 / 70%)',
-		zIndex: 1060,
-	},
-};
 
 const socialArray = [
 	{ icon: googleIcon, alt: 'Google icon.' },

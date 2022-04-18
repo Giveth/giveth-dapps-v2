@@ -6,7 +6,7 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { IProject } from '@/apollo/types/types';
 
@@ -88,8 +88,8 @@ const Wrapper = styled.div`
 		max-width: calc(100vw - 32px);
 
 		::-webkit-scrollbar {
-			width: 0px;
-			height: 0px;
+			width: 0;
+			height: 0;
 			background-color: transparent;
 		}
 	}

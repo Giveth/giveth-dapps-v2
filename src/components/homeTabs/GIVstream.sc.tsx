@@ -21,7 +21,7 @@ import {
 } from './commons';
 import { Flex } from '../styled-components/Flex';
 import { DataBox } from '../DataBox';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 import { Col } from '../Grid';
 
 export const GIVstreamTopContainer = styled(TopContainer)`
@@ -58,7 +58,7 @@ export const GSSubtitle = styled(QuoteText)`
 export const GIVstreamRewardCard = styled(EnhancedRewardCard)`
 	margin-bottom: 24px;
 	${mediaQueries.tablet} {
-		margin-bottom: 0px;
+		margin-bottom: 0;
 	}
 `;
 

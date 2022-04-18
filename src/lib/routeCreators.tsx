@@ -11,3 +11,7 @@ export const slugToProjectDonate = (slug: string) => {
 export const idToProjectEdit = (id?: string) => {
 	return Routes.Project + '/' + id + '/edit';
 };
+
+export const addressToUserView = (address: string) => {
+	return Routes.User + '/' + address;
+};

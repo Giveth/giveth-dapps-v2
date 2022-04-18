@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Image from 'next/image';
 import styled from 'styled-components';
 import {
 	GLink,
@@ -11,6 +10,8 @@ import {
 	ButtonLink,
 	OutlineLinkButton,
 } from '@giveth/ui-design-system';
+import Link from 'next/link';
+
 import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectCardBadges from './ProjectCardBadges';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
@@ -19,9 +20,10 @@ import { calcBiggestUnitDifferenceTime, htmlToText } from '@/lib/helpers';
 import ProjectCardImage from './ProjectCardImage';
 import { slugToProjectDonate, slugToProjectView } from '@/lib/routeCreators';
 import { Flex } from '../styled-components/Flex';
-import Link from 'next/link';
 import Routes from '@/lib/constants/Routes';
 import { Row } from '@/components/Grid';
+import { ORGANIZATION } from '@/lib/constants/organizations';
+import { mediaQueries } from '@/lib/constants/constants';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -31,23 +33,23 @@ interface IProjectCard {
 }
 
 const ProjectCard = (props: IProjectCard) => {
+	const { project } = props;
 	const {
 		title,
 		description,
 		image,
-		verified,
 		slug,
-		reaction,
-		totalReactions,
 		adminUser,
 		totalDonations,
-		traceCampaignId,
-		id,
 		updatedAt,
-		givingBlocksId,
-	} = props.project;
+		organization,
+	} = project;
+
 	const [isHover, setIsHover] = useState(false);
 
+	const isForeignOrg =
+		organization?.label !== ORGANIZATION.trace &&
+		organization?.label !== ORGANIZATION.giveth;
 	const name = adminUser?.name;
 
 	return (
@@ -56,25 +58,16 @@ const ProjectCard = (props: IProjectCard) => {
 			onMouseLeave={() => setIsHover(false)}
 		>
 			<ImagePlaceholder>
-				<ProjectCardBadges
-					totalReactions={totalReactions}
-					reaction={reaction}
-					verified={verified}
-					traceable={!!traceCampaignId}
-					projectHref={slug}
-					projectDescription={description}
-					projectId={id}
-				/>
+				<ProjectCardBadges project={project} />
 				<ProjectCardOrgBadge
-					image={'/images/thegivingblock.svg'}
+					organization={organization?.label}
 					isHover={isHover}
-					show={!!givingBlocksId}
 				/>
 				<ProjectCardImage image={image} />
 			</ImagePlaceholder>
 			<CardBody isHover={isHover}>
 				<Title weight={700}>{title}</Title>
-				{!!adminUser && !!!givingBlocksId ? (
+				{adminUser && !isForeignOrg ? (
 					<Link
 						href={`${Routes.User}/${adminUser?.walletAddress}`}
 						passHref
@@ -101,6 +94,7 @@ const ProjectCard = (props: IProjectCard) => {
 							linkType='primary'
 							size='small'
 							label='LEARN MORE'
+							aria-label='Learn more about this project'
 						/>
 					</Link>
 					<Link href={slugToProjectDonate(slug)} passHref>
@@ -150,7 +144,7 @@ const CardBody = styled.div`
 		props.isHover ? '124px' : '200px'};
 	background-color: ${neutralColors.gray[100]};
 	transition: top 0.3s ease;
-	border-radius: 0px 12px 12px 12px;
+	border-radius: 0 12px 12px 12px;
 `;
 
 const Author = styled(GLink)`
@@ -176,21 +170,19 @@ const ImagePlaceholder = styled.div`
 
 const Wrapper = styled.div`
 	position: relative;
-	height: 472px;
 	width: 100%;
 	border-radius: ${cardRadius};
 	background: white;
 	overflow: hidden;
 	box-shadow: ${Shadow.Neutral[400]};
-`;
 
-const GivingBlockBadge = styled.img`
-	position: absolute;
-	top: -5%;
-	right: 0;
-	background: white;
-	padding: 4px 12px;
-	border-top-left-radius: 10px;
+	${mediaQueries.mobileS} {
+		height: 536px;
+	}
+
+	${mediaQueries.tablet} {
+		height: 472px;
+	}
 `;
 
 export default ProjectCard;

@@ -4,9 +4,10 @@ import { useEffect, useState } from 'react';
 import HomeIndex from '@/components/views/homepage/HomeIndex';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_HOME_PROJECTS } from '@/apollo/gql/gqlProjects';
-import { gqlEnums } from '@/apollo/types/gqlEnums';
+import { EDirection, gqlEnums } from '@/apollo/types/gqlEnums';
 import { IProject } from '@/apollo/types/types';
 import useUser from '@/context/UserProvider';
+import { HomeMeta } from '@/lib/meta';
 
 const projectsToFetch = 12;
 
@@ -18,7 +19,7 @@ interface IHomeRoute {
 const fetchProjects = async (userId: string | undefined = undefined) => {
 	const variables: any = {
 		limit: projectsToFetch,
-		orderBy: { field: gqlEnums.QUALITYSCORE, direction: gqlEnums.DESC },
+		orderBy: { field: gqlEnums.QUALITYSCORE, direction: EDirection.DESC },
 	};
 
 	if (userId) {
@@ -52,13 +53,19 @@ const HomeRoute = (props: IHomeRoute) => {
 		<>
 			<Head>
 				<title>Home | Giveth</title>
+				<HomeMeta />
 			</Head>
 			<HomeIndex projects={projects} totalCount={totalCount} />
 		</>
 	);
 };
 
-export async function getServerSideProps() {
+export async function getServerSideProps({ res }: any) {
+	res.setHeader(
+		'Cache-Control',
+		'public, s-maxage=10, stale-while-revalidate=59',
+	);
+
 	const { projects, totalCount } = await fetchProjects();
 
 	return {

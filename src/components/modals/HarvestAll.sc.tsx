@@ -8,6 +8,7 @@ import {
 	H6,
 	Caption,
 	Subline,
+	B,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
@@ -27,11 +28,6 @@ export const HelpRow = styled(Flex)`
 	margin-bottom: 4px;
 `;
 
-export const RateRow = styled(Flex)`
-	gap: 4px;
-	margin-bottom: 32px;
-`;
-
 export const GIVRate = styled(Lead)`
 	color: ${neutralColors.gray[100]};
 `;
@@ -47,17 +43,6 @@ export const CancelButton = styled(Button)`
 	margin: 0 auto 8px;
 `;
 
-export const SPTitle = styled(Flex)`
-	margin-top: 12px;
-	margin-bottom: 24px;
-	color: ${neutralColors.gray[100]};
-	margin-left: -24px;
-`;
-
-export const StakingPoolLabel = styled(H5)``;
-
-export const StakingPoolSubtitle = styled(Caption)``;
-
 export const StakePoolInfoContainer = styled.div`
 	padding: 0 24px;
 `;
@@ -65,7 +50,11 @@ export const StakePoolInfoContainer = styled.div`
 export const HarvestAllDesc = styled(P)`
 	text-align: justify;
 	color: ${neutralColors.gray[100]};
-	margin-bottom: 32px;
+	background-color: ${brandColors.giv[700]};
+	border-radius: 8px;
+	border: 1px solid ${brandColors.mustard[700]};
+	padding: 18px 16px;
+	margin: 28px 0 12px;
 `;
 
 export const NothingToHarvest = styled(H6)`
@@ -100,4 +89,73 @@ export const TooltipContent = styled(Subline)`
 
 export const HarvestBoxes = styled.div`
 	padding: 24px;
+`;
+
+export const BreakdownTableTitle = styled(B)`
+	color: ${brandColors.deep[100]};
+	text-align: left;
+`;
+
+export const BreakdownTableBody = styled.div`
+	margin-bottom: 48px;
+`;
+
+export const BreakdownRow = styled.div`
+	display: grid;
+	grid-template-columns: 3fr 1fr 1fr 1fr 1.5fr;
+	border-bottom: 2px solid ${brandColors.giv[500]};
+	padding: 16px;
+`;
+
+export const BreakdownIcon = styled.div``;
+export const BreakdownTitle = styled(Flex)`
+	gap: 8px;
+	align-items: center;
+`;
+export const BreakdownAmount = styled(B)`
+	text-align: right;
+`;
+export const BreakdownRate = styled(B)`
+	text-align: right;
+`;
+export const BreakdownUnit = styled(P)`
+	color: ${brandColors.giv[200]};
+	display: inline-block;
+	padding-left: 4px;
+	text-align: left;
+	display: flex;
+	gap: 8px;
+`;
+
+export const GIVbackStreamDesc = styled(Caption)`
+	grid-column-start: 1;
+	grid-column-end: 4;
+	text-align: right;
+	color: ${brandColors.deep[100]};
+`;
+
+export const BreakdownSumRow = styled(BreakdownRow)`
+	border: none;
+	align-items: center;
+`;
+
+export const BreakdownLiquidSum = styled(B)`
+	text-align: right;
+	font-size: 24px;
+`;
+export const BreakdownStreamSum = styled(Flex)`
+	& > div {
+		font-size: 20px;
+		line-height: 24px;
+	}
+`;
+
+export const PoolIcon = styled.div`
+	width: 16px;
+	height: 16px;
+`;
+
+export const RateRow = styled(Flex)`
+	gap: 4px;
+	margin-bottom: 32px;
 `;

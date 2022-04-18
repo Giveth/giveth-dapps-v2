@@ -1,11 +1,9 @@
-import { FC, useState, useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import styled from 'styled-components';
-import Link from 'next/link';
 import Image from 'next/image';
 import { BigNumber } from 'ethers';
 import {
 	brandColors,
-	GLink,
 	neutralColors,
 	Subline,
 	SublineBold,
@@ -15,7 +13,6 @@ import { IModal, Modal } from './Modal';
 import { Flex } from '../styled-components/Flex';
 import { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 import { useTokenDistro } from '@/context/tokenDistro.context';
-import Routes from '@/lib/constants/Routes';
 
 interface IAPRModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
@@ -24,7 +21,6 @@ interface IAPRModalProps extends IModal {
 }
 
 export const APRModal: FC<IAPRModalProps> = ({
-	showModal,
 	setShowModal,
 	regenStreamConfig,
 }) => {
@@ -38,11 +34,7 @@ export const APRModal: FC<IAPRModalProps> = ({
 
 	return (
 		<>
-			<Modal
-				showModal={showModal}
-				setShowModal={setShowModal}
-				headerTitle={'APR'}
-			>
+			<Modal setShowModal={setShowModal} headerTitle={'APR'}>
 				<APRModalContainer>
 					<DescContainer>
 						<AlertRow alignItems='flex-end'>
@@ -65,11 +57,17 @@ export const APRModal: FC<IAPRModalProps> = ({
 						<DescTitle>Current Distribution:</DescTitle>
 						<Desc>
 							Claimable immediately:{' '}
-							{tokenDistroHelper.GlobalReleasePercentage}%
+							{tokenDistroHelper.GlobalReleasePercentage.toFixed(
+								2,
+							)}
+							%
 						</Desc>
 						<Desc>
 							Increasing your {streamName}:{' '}
-							{100 - tokenDistroHelper.GlobalReleasePercentage}%
+							{(
+								100 - tokenDistroHelper.GlobalReleasePercentage
+							).toFixed(2)}
+							%
 						</Desc>
 					</DescContainer>
 				</APRModalContainer>

@@ -8,22 +8,24 @@ import styled from 'styled-components';
 import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
 import ProjectDonateCard from './ProjectDonateCard';
-import { showToastError } from '@/lib/helpers';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { client, initializeApollo } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 import useUser from '@/context/UserProvider';
 import { IDonation, IProject } from '@/apollo/types/types';
-import { EProjectStatus } from '@/apollo/types/gqlEnums';
+import { EDirection, EProjectStatus, gqlEnums } from '@/apollo/types/gqlEnums';
 import InfoBadge from '@/components/badges/InfoBadge';
 import { IDonationsByProjectId } from '@/apollo/types/gqlTypes';
 import SuccessfulCreation from '@/components/views/create/SuccessfulCreation';
-import { deviceSize, mediaQueries } from '@/utils/constants';
+import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import InlineToast from '@/components/toasts/InlineToast';
 import { ProjectMeta } from '@/lib/meta';
 
 const ProjectDonations = dynamic(() => import('./ProjectDonations'));
 const ProjectUpdates = dynamic(() => import('./ProjectUpdates'));
+const NotAvailableProject = dynamic(() => import('./NotAvailableProject'), {
+	ssr: false,
+});
 const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {
 	ssr: false,
 });
@@ -39,6 +41,7 @@ const ProjectIndex = (props: { project?: IProject }) => {
 	const [totalDonations, setTotalDonations] = useState(0);
 	const [creationSuccessful, setCreationSuccessful] = useState(false);
 	const [isMobile, setIsMobile] = useState<boolean>(false);
+	const [isCancelled, setIsCancelled] = useState<boolean>(false);
 
 	const {
 		state: { user },
@@ -58,13 +61,14 @@ const ProjectIndex = (props: { project?: IProject }) => {
 			.then((res: { data: { projectBySlug: IProject } }) => {
 				setProject(res.data.projectBySlug);
 			})
-			.catch(showToastError);
+			.catch(() => setIsCancelled(true));
 	};
 
 	useEffect(() => {
 		if (status) {
 			setIsActive(status.name === EProjectStatus.ACTIVE);
 			setIsDraft(status.name === EProjectStatus.DRAFT);
+			setIsCancelled(status.name === EProjectStatus.CANCEL);
 		}
 	}, [status]);
 
@@ -77,7 +81,10 @@ const ProjectIndex = (props: { project?: IProject }) => {
 					projectId: parseInt(id),
 					skip: 0,
 					take: donationsPerPage,
-					orderBy: { field: 'CreationDate', direction: 'DESC' },
+					orderBy: {
+						field: gqlEnums.CREATIONDATE,
+						direction: EDirection.DESC,
+					},
 				},
 			})
 			.then(
@@ -119,6 +126,10 @@ const ProjectIndex = (props: { project?: IProject }) => {
 				project={project as IProject}
 			/>
 		);
+	}
+
+	if (isCancelled) {
+		return <NotAvailableProject />;
 	}
 
 	return (
@@ -166,7 +177,6 @@ const ProjectIndex = (props: { project?: IProject }) => {
 							project={project!}
 							isActive={isActive}
 							isDraft={isDraft}
-							isMobile={isMobile}
 						/>
 					)}
 				</ContentWrapper>

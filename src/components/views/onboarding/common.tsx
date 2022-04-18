@@ -1,10 +1,11 @@
-import { Col, Row } from '@/components/Grid';
-import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
-import useUser from '@/context/UserProvider';
 import { Button, neutralColors } from '@giveth/ui-design-system';
-import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, FC, SetStateAction, useEffect } from 'react';
 import styled from 'styled-components';
+
+import { Col, Row } from '@/components/Grid';
+import useUser from '@/context/UserProvider';
 import { OnboardSteps } from './Onboarding.view';
+import useModal from '@/context/ModalProvider';
 
 export const OnboardStep = styled(Col)`
 	margin: 0 auto;
@@ -26,23 +27,24 @@ export const OnboardActions: FC<IOnboardActions> = ({
 	onLater,
 	disabled,
 }) => {
-	const [showSigninModal, setShowSigninModal] = useState(false);
 	const {
 		state: { isSignedIn },
 		actions: { reFetchUser },
 	} = useUser();
 
+	const {
+		actions: { showSignWithWallet },
+	} = useModal();
+
 	useEffect(() => {
 		if (!isSignedIn) {
-			setShowSigninModal(true);
-		} else {
-			setShowSigninModal(false);
+			showSignWithWallet();
 		}
 	}, [isSignedIn]);
 
 	const handleSave = async () => {
 		if (!isSignedIn) {
-			setShowSigninModal(true);
+			showSignWithWallet();
 		} else {
 			const res = await onSave();
 			if (res) {
@@ -71,12 +73,6 @@ export const OnboardActions: FC<IOnboardActions> = ({
 					/>
 				</Col>
 			</OnboardActionsContianer>
-			{showSigninModal && (
-				<SignWithWalletModal
-					showModal={showSigninModal}
-					setShowModal={setShowSigninModal}
-				/>
-			)}
 		</>
 	);
 };

@@ -1,62 +1,6 @@
 import { brandColors, semanticColors } from '@giveth/ui-design-system';
 import config from '@/configuration';
 
-export const networksParams: Record<number, any> = {
-	1: {
-		chainId: '0x1',
-		chainName: 'Mainnet',
-		nativeCurrency: {
-			name: 'ETH',
-			symbol: 'ETH',
-			decimals: 18,
-		},
-		rpcUrls: [
-			'https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
-		],
-		blockExplorerUrls: ['https://etherscan.io'],
-	},
-	3: {
-		chainId: '0x3',
-		chainName: 'Ropsten',
-		nativeCurrency: {
-			name: 'ETH',
-			symbol: 'ETH',
-			decimals: 18,
-		},
-		rpcUrls: [
-			'https://ropsten.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
-		],
-		blockExplorerUrls: ['https://ropsten.etherscan.io'],
-	},
-	42: {
-		chainId: '0x2A',
-		chainName: 'Kovan',
-		nativeCurrency: {
-			name: 'Kovan ETH',
-			symbol: 'ETH',
-			decimals: 18,
-		},
-		rpcUrls: [
-			'https://kovan.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
-		],
-		blockExplorerUrls: ['https://kovan.etherscan.io'],
-	},
-	100: {
-		chainId: '0x64',
-		chainName: 'Gnosis Chain',
-		iconUrls: [
-			'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/xdai/info/logo.png',
-		],
-		nativeCurrency: {
-			name: 'xDAI',
-			symbol: 'xDAI',
-			decimals: 18,
-		},
-		rpcUrls: ['https://rpc.xdaichain.com'],
-		blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
-	},
-};
-
 export const chainName = (chainId: number) => {
 	switch (chainId) {
 		case 31337:
@@ -73,6 +17,7 @@ export const chainName = (chainId: number) => {
 			return 'Unknown';
 	}
 };
+
 export const NFT_POSITIONS_MANAGER_ADDRESS: Record<string, string> = {
 	4: '0xC36442b4a4522E871399CD717aBDD847Ab11FE88',
 	42: '0xC36442b4a4522E871399CD717aBDD847Ab11FE88',

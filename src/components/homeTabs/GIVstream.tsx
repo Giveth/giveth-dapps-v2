@@ -3,7 +3,6 @@ import Link from 'next/link';
 import {
 	B,
 	brandColors,
-	DataBlock,
 	H1,
 	H3,
 	H6,
@@ -52,7 +51,7 @@ import { IconWithTooltip } from '../IconWithToolTip';
 import { getHistory } from '@/services/subgraph.service';
 import { formatWeiHelper } from '@/helpers/number';
 import config from '@/configuration';
-import { DurationToString } from '@/lib/helpers';
+import { durationToString } from '@/lib/helpers';
 import { NetworkSelector } from '@/components/NetworkSelector';
 import { constants, ethers } from 'ethers';
 import { useTokenDistro } from '@/context/tokenDistro.context';
@@ -63,7 +62,7 @@ import { useSubgraph } from '@/context';
 import { ITokenAllocation } from '@/types/subgraph';
 import { useWeb3React } from '@web3-react/core';
 import { IconGIV } from '../Icons/GIV';
-import { givEconomySupportedNetworks } from '@/utils/constants';
+import { givEconomySupportedNetworks } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
 import Pagination from '../Pagination';
 import Routes from '@/lib/constants/Routes';
@@ -131,7 +130,6 @@ export const TabGIVstreamTop = () => {
 			{showModal && chainId && (
 				<HarvestAllModal
 					title='GIVstream Rewards'
-					showModal={showModal}
 					setShowModal={setShowModal}
 					network={chainId}
 				/>
@@ -164,9 +162,9 @@ export const TabGIVstreamBottom = () => {
 	}, [balances.allocatedTokens, balances.givback, givTokenDistroHelper]);
 
 	useEffect(() => {
-		setPercent(givTokenDistroHelper.percent);
-		const _remain = DurationToString(givTokenDistroHelper.remain);
+		const _remain = durationToString(givTokenDistroHelper.remain);
 		setRemain(_remain);
+		setPercent(givTokenDistroHelper.GlobalReleasePercentage);
 	}, [givTokenDistroHelper]);
 	return (
 		<GIVstreamBottomContainer>
@@ -195,20 +193,6 @@ export const TabGIVstreamBottom = () => {
 					</IconWithTooltip>
 				</FlowRateRow>
 				<GIVstreamProgress percentage={percent} remainTime={remain} />
-				<HistoryTitleRow>
-					<HistoryTitle>History</HistoryTitle>
-					<IconWithTooltip
-						icon={<IconHelp size={16} />}
-						direction={'top'}
-					>
-						<HistoryTooltip>
-							Every time you claim GIV rewards from GIVbacks, the
-							GIVgarden, or the GIVfarm, your GIVstream flowrate
-							increases. Below is a summary.
-						</HistoryTooltip>
-					</IconWithTooltip>
-				</HistoryTitleRow>
-				<GIVstreamHistory />
 				<Row>
 					<Col xs={12} sm={6}>
 						<GsDataBlock
@@ -238,6 +222,20 @@ export const TabGIVstreamBottom = () => {
 						</GsDataBlock>
 					</Col>
 				</Row>
+				<HistoryTitleRow>
+					<HistoryTitle>History</HistoryTitle>
+					<IconWithTooltip
+						icon={<IconHelp size={16} />}
+						direction={'top'}
+					>
+						<HistoryTooltip>
+							Every time you claim GIV rewards from GIVbacks, the
+							GIVgarden, or the GIVfarm, your GIVstream flowrate
+							increases. Below is a summary.
+						</HistoryTooltip>
+					</IconWithTooltip>
+				</HistoryTitleRow>
+				<GIVstreamHistory />
 			</Container>
 			<IncreaseSection ref={increaseSecRef}>
 				<Container>
@@ -326,8 +324,8 @@ export const GIVstreamProgress: FC<IGIVstreamProgressProps> = ({
 						direction={'right'}
 					>
 						<GsPTooltip>
-							Time left for all GIVstreams to flow & for the
-							GIViverse to reach full power!
+							Liquid GIV that has already flowed out of the
+							GIVstream
 						</GsPTooltip>
 					</IconWithTooltip>
 				</GsPTitle>
@@ -377,7 +375,8 @@ const convetSourceTypeToIcon = (distributor: string) => {
 				</Flex>
 			);
 		default:
-			return distributor; //'Unknown'
+			// 'Unknown'
+			return distributor;
 			break;
 	}
 };

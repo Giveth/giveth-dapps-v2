@@ -47,7 +47,6 @@ export const FETCH_USER_PROJECTS = gql`
 				walletAddress
 				impactLocation
 				listed
-				givingBlocksId
 				totalDonations
 				totalReactions
 				verified

@@ -11,7 +11,7 @@ import styled from 'styled-components';
 
 import { autopilotClient } from '@/services/autopilot';
 import { HomeContainer } from '@/components/views/homepage/Home.sc';
-import { deviceSize } from '@/utils/constants';
+import { deviceSize } from '@/lib/constants/constants';
 
 function validateEmail(email: string): boolean {
 	const re =

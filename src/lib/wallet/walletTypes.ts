@@ -11,6 +11,7 @@ import torusIcon from '/public//images/wallets/torus.svg';
 // import authereumIcon from '/public//images/wallets/authereum.svg';
 import { Web3ReactContextInterface } from '@web3-react/core/dist/types';
 import { TorusConnector } from '@/lib/wallet/torus-connector';
+import config from '@/configuration';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 
@@ -21,6 +22,10 @@ export const walletconnectConnector = new WalletConnectConnector({
 	infuraId: INFURA_API_KEY,
 	supportedChainIds,
 	qrcode: true,
+	rpc: {
+		[config.MAINNET_NETWORK_NUMBER]: config.MAINNET_CONFIG.nodeUrl,
+		[config.XDAI_NETWORK_NUMBER]: config.XDAI_CONFIG.nodeUrl,
+	},
 });
 // export const portisConnector = new PortisConnector({
 // 	dAppId: process.env.PORTIS_DAPP_ID as string,
@@ -51,7 +56,21 @@ export enum EWallets {
 	AUTHEREUM = 'authereum',
 }
 
-export const walletsArray = [
+export interface IWallet {
+	name: string;
+	value: EWallets;
+	image: any;
+	connector: TWalletConnector;
+}
+
+export const torusWallet: IWallet = {
+	name: 'Torus',
+	value: EWallets.TORUS,
+	image: torusIcon,
+	connector: torusConnector,
+};
+
+export const walletsArray: IWallet[] = [
 	{
 		name: 'MetaMask',
 		value: EWallets.METAMASK,
@@ -64,6 +83,7 @@ export const walletsArray = [
 		image: walletConnectIcon,
 		connector: walletconnectConnector,
 	},
+	torusWallet,
 	// {
 	// 	name: 'Portis',
 	// 	value: EWallets.PORTIS,
@@ -76,12 +96,6 @@ export const walletsArray = [
 	// 	image: fortmaticIcon,
 	// 	connector: fortmaticConnector,
 	// },
-	{
-		name: 'Torus',
-		value: EWallets.TORUS,
-		image: torusIcon,
-		connector: torusConnector,
-	},
 	// {
 	// 	name: 'Authereum',
 	// 	value: EWallets.AUTHEREUM,

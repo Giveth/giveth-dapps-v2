@@ -2,11 +2,9 @@ import styled from 'styled-components';
 
 import {
 	D1,
-	H1,
 	H2,
 	H5,
 	P,
-	Button,
 	QuoteText,
 	DataBlock,
 	brandColors,
@@ -17,7 +15,7 @@ import {
 } from '@giveth/ui-design-system';
 import { BottomContainer, EnhancedRewardCard, TopContainer } from './commons';
 import { Flex } from '../styled-components/Flex';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 
 export const GIVbacksTopContainer = styled(TopContainer)`
 	overflow: hidden;
@@ -78,6 +76,10 @@ export const RoundSection = styled(Flex)`
 
 export const RoundTitle = styled(H2)`
 	margin: 22px 0;
+	font-size: 3rem;
+	${mediaQueries.mobileL} {
+		font-size: 3.25rem;
+	}
 `;
 
 export const RoundInfo = styled.div`
@@ -94,6 +96,10 @@ export const RoundInfoTallRow = styled(Flex)`
 
 export const GivAllocated = styled(Title)`
 	color: ${neutralColors.gray[100]};
+	font-size: 25px;
+	${mediaQueries.tablet} {
+		font-size: 32px;
+	}
 `;
 
 export const RoundButton = styled(ButtonLink)`

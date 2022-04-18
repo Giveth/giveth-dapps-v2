@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { FC, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Flex } from './styled-components/Flex';
+import StorageLabel from '@/lib/localStorage';
 
 interface IAddGIVTokenButton {
 	provider: Web3Provider | null;
@@ -23,7 +24,7 @@ export const AddTokenButton: FC<IAddGIVTokenButton> = ({
 	const [show, setShow] = useState(false);
 
 	useEffect(() => {
-		const selectedWallet = window.localStorage.getItem('selectedWallet');
+		const selectedWallet = window.localStorage.getItem(StorageLabel.WALLET);
 		setShow(selectedWallet === EWallets.METAMASK);
 	}, []);
 

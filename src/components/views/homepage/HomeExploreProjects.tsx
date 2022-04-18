@@ -14,7 +14,8 @@ import Routes from '@/lib/constants/Routes';
 import { isUserRegistered } from '@/lib/helpers';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import useUser from '@/context/UserProvider';
-import { deviceSize, mediaQueries } from '@/utils/constants';
+import { deviceSize, mediaQueries } from '@/lib/constants/constants';
+import useModal from '@/context/ModalProvider';
 
 interface IHomeExploreProjects {
 	projects: IProject[];
@@ -28,8 +29,11 @@ const HomeExploreProjects = (props: IHomeExploreProjects) => {
 	const router = useRouter();
 	const {
 		state: { user },
-		actions: { showCompleteProfile },
 	} = useUser();
+
+	const {
+		actions: { showCompleteProfile },
+	} = useModal();
 
 	const handleCreateButton = () => {
 		if (isUserRegistered(user)) {
@@ -47,8 +51,7 @@ const HomeExploreProjects = (props: IHomeExploreProjects) => {
 						Explore <span>{totalCount} Projects</span>
 					</Title>
 					<Subtitle>
-						Give crypto donations directly to social good projects
-						and charities
+						Donate crypto directly to for-good projects.
 					</Subtitle>
 				</>
 			)}

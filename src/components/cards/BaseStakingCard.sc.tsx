@@ -31,11 +31,6 @@ export const StakingPoolExchange = styled(Overline)`
 	color: ${brandColors.deep[100]};
 `;
 
-export const StakingPoolBadge = styled.img`
-	position: absolute;
-	top: 12px;
-	right: 0px;
-`;
 export const SPTitle = styled(Flex)`
 	margin-top: 12px;
 	margin-bottom: 24px;

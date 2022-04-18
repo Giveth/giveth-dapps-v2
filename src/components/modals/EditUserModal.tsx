@@ -17,7 +17,7 @@ import Input, {
 	InputValidationType,
 } from '../Input';
 import { IUserInfo } from '../views/onboarding/InfoStep';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 
 enum EditStatusType {
 	INFO,
@@ -28,7 +28,7 @@ interface IEditUserModal extends IModal {
 	user: IUser;
 }
 
-const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
+const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 	const [disabled, setDisabled] = useState(false);
 	const [editStatus, setEditStatus] = useState<EditStatusType>(
 		EditStatusType.INFO,
@@ -122,7 +122,6 @@ const EditUserModal = ({ showModal, setShowModal, user }: IEditUserModal) => {
 
 	return (
 		<Modal
-			showModal={showModal}
 			setShowModal={setShowModal}
 			headerIcon={<></>}
 			headerTitle='Edit profile'

@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { Shadow } from './styled-components/Shadow';
 import { P, Button, H4, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { mediaQueries } from '@/utils/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 import { FlexCenter } from '@/components/styled-components/Flex';
 
 interface IContent {
@@ -26,7 +26,7 @@ const GeneralCard = (props: { content: IContent; isHorizontal?: boolean }) => {
 			<Image src={icon} alt='title' />
 			<TitleBox>
 				<Title>{title}</Title>
-				<P>{caption}</P>
+				<Caption>{caption}</Caption>
 			</TitleBox>
 			<ButtonStyled
 				label={buttonLabel}
@@ -43,10 +43,16 @@ const ButtonStyled = styled(Button)`
 	width: 265px;
 	height: 66px;
 	padding: 0;
+	min-height: 33px;
 `;
 
 const Title = styled(H4)`
 	margin-top: 10px;
+	max-width: calc(100vw - 72px);
+`;
+
+const Caption = styled(P)`
+	max-width: calc(100vw - 72px);
 `;
 
 const TitleSection = styled.div`
@@ -59,8 +65,16 @@ const HorizontalTitleSection = styled.div`
 	display: flex;
 	flex-direction: column;
 	text-align: left;
-	width: 485px;
-	padding: 0 0 0 84px;
+	max-width: calc(100vw - 72px);
+
+	${mediaQueries.mobileS} {
+		padding: 0;
+	}
+
+	${mediaQueries.tablet} {
+		padding: 0 0 0 84px;
+		width: 485px;
+	}
 `;
 
 const Wrapper = styled(FlexCenter)`
@@ -70,29 +84,40 @@ const Wrapper = styled(FlexCenter)`
 	color: ${brandColors.giv[800]};
 	max-width: 558px;
 	width: 100%;
-	height: 500px;
 	border-radius: 12px;
 	box-shadow: ${Shadow.Dark[500]};
 	flex-direction: column;
+	padding: 36px 32px;
 
 	${mediaQueries.tablet} {
 		padding: 64px 85px;
+		height: 500px;
 	}
 `;
 
 const HorizontalWrap = styled.div`
 	z-index: 2;
 	display: flex;
-	flex-direction: row;
 	background: white;
 	align-items: center;
 	color: ${brandColors.giv[800]};
-	width: 1141px;
-	height: 220px;
+
 	border-radius: 12px;
 	box-shadow: ${Shadow.Dark[500]};
-	padding: 75px 72px;
 	margin: 26px 0;
+
+	${mediaQueries.mobileS} {
+		flex-direction: column;
+		padding: 36px 32px;
+		max-width: calc(100vw - 36px);
+	}
+
+	${mediaQueries.tablet} {
+		flex-direction: row;
+		padding: 75px 72px;
+		max-width: 1141px;
+		height: 220px;
+	}
 `;
 
 export default GeneralCard;

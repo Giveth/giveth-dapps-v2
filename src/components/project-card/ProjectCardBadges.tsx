@@ -1,8 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Flex } from '../styled-components/Flex';
-import VerificationBadge from '../badges/VerificationBadge';
-import { IReaction } from '@/apollo/types/types';
-import useUser from '@/context/UserProvider';
 import {
 	brandColors,
 	IconHeart16,
@@ -12,48 +8,45 @@ import {
 	Subline,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+
 import ShareModal from '../modals/ShareModal';
 import { likeProject, unlikeProject } from '@/lib/reaction';
 import { showToastError } from '@/lib/helpers';
-
-interface IBadgeWrapper {
-	width?: string;
-}
+import useModal from '@/context/ModalProvider';
+import { Flex } from '../styled-components/Flex';
+import VerificationBadge from '../badges/VerificationBadge';
+import { IProject } from '@/apollo/types/types';
+import useUser from '@/context/UserProvider';
 
 interface IProjectCardBadges {
-	reaction?: IReaction;
-	totalReactions?: number;
-	verified?: boolean;
-	traceable?: boolean;
-	likes?: number;
-	projectHref: string;
-	projectDescription?: string;
-	projectId?: string | number;
-	noHearts?: boolean;
+	project: IProject;
 }
 
 const ProjectCardBadges = (props: IProjectCardBadges) => {
 	const {
 		state: { user, isSignedIn },
-		actions: {
-			showSignWithWallet,
-			incrementLikedProjectsCount,
-			decrementLikedProjectsCount,
-		},
+		actions: { incrementLikedProjectsCount, decrementLikedProjectsCount },
 	} = useUser();
 
+	const {
+		actions: { showSignWithWallet },
+	} = useModal();
+
 	const [showModal, setShowModal] = useState<boolean>(false);
+
+	const { project } = props;
 	const {
 		verified,
-		traceable,
-		projectHref,
-		projectDescription,
-		projectId,
-		noHearts,
-	} = props;
+		traceCampaignId,
+		slug,
+		description,
+		id: projectId,
+	} = project;
 
-	const [reaction, setReaction] = useState(props.reaction);
-	const [totalReactions, setTotalReactions] = useState(props.totalReactions);
+	const [reaction, setReaction] = useState(project.reaction);
+	const [totalReactions, setTotalReactions] = useState(
+		project.totalReactions,
+	);
 	const [loading, setLoading] = useState(false);
 
 	const likeUnlikeProject = async () => {
@@ -92,62 +85,42 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 	};
 
 	useEffect(() => {
-		setReaction(props.reaction);
-	}, [props.reaction]);
+		setReaction(project.reaction);
+	}, [project.reaction]);
 
 	useEffect(() => {
-		setTotalReactions(props.totalReactions);
-	}, [props.totalReactions]);
+		setTotalReactions(project.totalReactions);
+	}, [project.totalReactions]);
 
 	return (
 		<>
 			{showModal && (
-				<ShareModal
-					showModal={showModal}
-					setShowModal={setShowModal}
-					projectHref={projectHref}
-					projectDescription={projectDescription}
-				/>
+				<ShareModal setShowModal={setShowModal} projectHref={slug} />
 			)}
 			<BadgeWrapper>
-				<BadgeContainer>
+				<Flex>
 					{verified && <VerificationBadge verified />}
-					{traceable && <VerificationBadge trace />}
-				</BadgeContainer>
-				{!noHearts && (
-					<BadgeContainer>
-						<BadgeButtonContainer>
-							<BadgeButton onClick={likeUnlikeProject}>
-								{Number(totalReactions) > 0 && (
-									<LikeCount>{totalReactions}</LikeCount>
-								)}
-								{reaction?.userId &&
-								reaction?.userId === user?.id ? (
-									<IconHeart16
-										color={brandColors.pinky[500]}
-									/>
-								) : (
-									<IconHeartOutline16 />
-								)}
-							</BadgeButton>
-							<BadgeButton onClick={() => setShowModal(true)}>
-								<IconShare16 />
-							</BadgeButton>
-						</BadgeButtonContainer>
-					</BadgeContainer>
-				)}
+					{traceCampaignId && <VerificationBadge trace />}
+				</Flex>
+				<Flex gap='3px'>
+					<BadgeButton onClick={likeUnlikeProject}>
+						{Number(totalReactions) > 0 && (
+							<Subline>{totalReactions}</Subline>
+						)}
+						{reaction?.userId && reaction?.userId === user?.id ? (
+							<IconHeart16 color={brandColors.pinky[500]} />
+						) : (
+							<IconHeartOutline16 />
+						)}
+					</BadgeButton>
+					<BadgeButton onClick={() => setShowModal(true)}>
+						<IconShare16 />
+					</BadgeButton>
+				</Flex>
 			</BadgeWrapper>
 		</>
 	);
 };
-
-const BadgeContainer = styled.div`
-	display: flex;
-`;
-
-const BadgeButtonContainer = styled(Flex)`
-	gap: 3px;
-`;
 
 const BadgeButton = styled(Flex)`
 	gap: 3px;
@@ -164,9 +137,7 @@ const BadgeButton = styled(Flex)`
 	}
 `;
 
-const LikeCount = styled(Subline)``;
-
-const BadgeWrapper = styled.div<IBadgeWrapper>`
+const BadgeWrapper = styled.div`
 	width: 100%;
 	position: absolute;
 	z-index: 2;

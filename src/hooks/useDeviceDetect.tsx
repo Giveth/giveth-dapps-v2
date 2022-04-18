@@ -1,5 +1,5 @@
 import React from 'react';
-import { deviceSize } from '@/utils/constants';
+import { deviceSize } from '@/lib/constants/constants';
 
 // TODO: fix this so it relates the change of width
 // export function _useDeviceDetect() {

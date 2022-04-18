@@ -29,7 +29,7 @@ import { constants } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
 import { ETheme, useGeneral } from '@/context/general.context';
 import Routes from '@/lib/constants/Routes';
-import { networkInfo } from '@/lib/constants/NetworksObj';
+import { networkInfo } from '@/lib/helpers';
 
 interface IRewardMenu {
 	showWhatIsGIVstreamModal: boolean;
@@ -44,12 +44,14 @@ export const RewardMenu = ({
 	const [farmsLiquidPart, setFarmsLiquidPart] = useState(Zero);
 	const [givStreamLiquidPart, setGIVstreamLiquidPart] = useState(Zero);
 	const [flowRateNow, setFlowRateNow] = useState<BigNumber.Value>(0);
+
 	const { givTokenDistroHelper } = useTokenDistro();
 	const { currentValues } = useSubgraph();
 	const { chainId } = useWeb3React();
+	const { theme } = useGeneral();
+
 	const { balances } = currentValues;
 	const { allocatedTokens, claimed, givbackLiquidPart } = balances;
-	const { theme } = useGeneral();
 	const { networkName } = networkInfo(chainId);
 
 	useEffect(() => {
@@ -203,10 +205,7 @@ export const RewardMenu = ({
 				</Link>
 			</RewardMenuContainer>
 			{showWhatIsGIVstreamModal && (
-				<WhatisStreamModal
-					showModal={showWhatIsGIVstreamModal}
-					setShowModal={setShowWhatIsGIVstreamModal}
-				/>
+				<WhatisStreamModal setShowModal={setShowWhatIsGIVstreamModal} />
 			)}
 		</>
 	);

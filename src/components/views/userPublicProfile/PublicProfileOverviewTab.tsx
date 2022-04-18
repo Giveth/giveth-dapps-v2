@@ -8,15 +8,16 @@ import Routes from '@/lib/constants/Routes';
 import ContributeCard from './PublicProfileContributeCard';
 import { Flex } from '@/components/styled-components/Flex';
 import { IUserPublicProfileView } from './UserPublicProfile.view';
-import useUser from '@/context/UserProvider';
 import { isUserRegistered } from '@/lib/helpers';
 import { Container } from '@/components/Grid';
+import useModal from '@/context/ModalProvider';
 
 const PublicProfileOverviewTab: FC<IUserPublicProfileView> = ({ user }) => {
 	const router = useRouter();
+
 	const {
 		actions: { showCompleteProfile },
-	} = useUser();
+	} = useModal();
 
 	const handleCreateButton = () => {
 		if (isUserRegistered(user)) {
@@ -114,7 +115,7 @@ const PublicProfileOverviewTab: FC<IUserPublicProfileView> = ({ user }) => {
 export default PublicProfileOverviewTab;
 
 const CustomContainer = styled(Container)`
-	padding: 0px;
+	padding: 0;
 `;
 
 const AccountHero = styled.div`

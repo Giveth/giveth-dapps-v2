@@ -1,10 +1,11 @@
-import { brandColors, H2, H3, H5, Subline } from '@giveth/ui-design-system';
-import { mediaQueries } from '@/utils/constants';
+import { brandColors, H2, H5, Subline } from '@giveth/ui-design-system';
+import { mediaQueries } from '@/lib/constants/constants';
 import { FC } from 'react';
 import styled from 'styled-components';
 import { Flex } from '../../styled-components/Flex';
 import { IUser } from '@/apollo/types/types';
 import { Container } from '@/components/Grid';
+import { roundNumber } from '@/helpers/number';
 
 export interface IUserPublicProfileView {
 	user: IUser;
@@ -30,7 +31,7 @@ const PublicProfileContributeCard: FC<IUserPublicProfileView> = ({
 						Total amount donated
 					</ContributeCardTitles>
 					<H2>{user.donationsCount || 0}</H2>
-					<H5>${user.totalDonated || 0}</H5>
+					<H5>${roundNumber(user.totalDonated) || 0}</H5>
 				</ContributeCard>
 				<ContributeCard>
 					<ContributeCardTitles>Projects</ContributeCardTitles>
@@ -38,7 +39,7 @@ const PublicProfileContributeCard: FC<IUserPublicProfileView> = ({
 						Donation received
 					</ContributeCardTitles>
 					<H2>{user.projectsCount}</H2>
-					<H5>${user.totalReceived}</H5>
+					<H5>${roundNumber(user.totalReceived)}</H5>
 				</ContributeCard>
 			</ContributeCardContainer>
 		</CustomContainer>
@@ -66,7 +67,7 @@ const ContributeCardContainer = styled(Flex)`
 
 const ContributeCard = styled.div`
 	background: ${brandColors.giv['000']};
-	box-shadow: 0px 3px 20px rgba(212, 218, 238, 0.4);
+	box-shadow: 0 3px 20px rgba(212, 218, 238, 0.4);
 	border-radius: 12px;
 	display: grid;
 	padding: 24px;
@@ -82,7 +83,7 @@ const ContributeCardTitles = styled(Subline)`
 `;
 
 const CustomContainer = styled(Container)`
-	padding: 0px;
+	padding: 0;
 `;
 
 export default PublicProfileContributeCard;

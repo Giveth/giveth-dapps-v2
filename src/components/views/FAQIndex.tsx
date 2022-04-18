@@ -8,7 +8,7 @@ import faqContent from '@/content/FAQ';
 import { Arc } from '@/components/styled-components/Arc';
 import FlowerIcon from '/public//images/flower_faq.svg';
 import { Container } from '@/components/Grid';
-import { deviceSize, mediaQueries } from '@/utils/constants';
+import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 
 type TFAQ = 'General' | 'Giveth' | 'GIVeconomy';
 

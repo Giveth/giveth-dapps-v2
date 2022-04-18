@@ -28,7 +28,6 @@ const config: EnvConfig = {
 			// Keep it empty for automatic configuration
 		},
 
-		rpcUrls: [],
 		blockExplorerName: ['etherscan'],
 		blockExplorerUrls: ['https://etherscan.io/'],
 		subgraphAddress:
@@ -101,7 +100,6 @@ const config: EnvConfig = {
 			maxPriorityFeePerGas: gwei2wei('1'),
 		},
 
-		rpcUrls: ['https://rpc.xdaichain.com'],
 		blockExplorerName: ['Blockscout'],
 		blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
 		subgraphAddress:

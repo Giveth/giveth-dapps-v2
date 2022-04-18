@@ -1,85 +1,90 @@
+import { useState } from 'react';
 import Image from 'next/image';
 import { useWeb3React } from '@web3-react/core';
+import styled from 'styled-components';
+import { brandColors, H5, Lead, neutralColors } from '@giveth/ui-design-system';
+
 import {
 	EWallets,
-	TWalletConnector,
+	IWallet,
+	torusWallet,
 	useWalletName,
 	walletsArray,
 } from '@/lib/wallet/walletTypes';
-import { brandColors, H5, Lead, neutralColors } from '@giveth/ui-design-system';
-import { IModal, Modal } from '@/components/modals/Modal';
-import styled from 'styled-components';
+import { Modal } from '@/components/modals/Modal';
 import { ETheme } from '@/context/general.context';
+import { detectBrave, showToastError } from '@/lib/helpers';
+import StorageLabel from '@/lib/localStorage';
+import LowerShields from '@/components/modals/LowerShields';
+import useModal from '@/context/ModalProvider';
 
-interface IWalletModal extends IModal {
-	closeParentModal?: () => void;
-}
+const WalletModal = (props: { setShowModal: (i: boolean) => void }) => {
+	const { setShowModal } = props;
+	const [showLowerShields, setShowLowerShields] = useState<boolean>();
 
-const WalletModal = ({
-	showModal,
-	setShowModal,
-	closeParentModal,
-}: IWalletModal) => {
 	const context = useWeb3React();
 	const { activate, deactivate } = context;
 	const selectedWallet = useWalletName(context);
+	const {
+		actions: { showFirstWelcomeModal },
+	} = useModal();
 
-	const handleSelect = (selected: {
-		connector: TWalletConnector;
-		value: EWallets;
-	}) => {
+	const handleSelect = (selected: IWallet) => {
 		if (selectedWallet !== selected.value) {
-			window.localStorage.removeItem('selectedWallet');
+			localStorage.removeItem(StorageLabel.WALLET);
 			deactivate();
 			let timeOut = 0;
 			if (selectedWallet === EWallets.METAMASK) {
 				timeOut = 500;
 			}
 			setTimeout(() => {
+				localStorage.setItem(StorageLabel.WALLET, selected.value);
 				activate(selected.connector)
-					.then(() => {
-						window.localStorage.setItem(
-							'selectedWallet',
-							selected.value,
-						);
-						closeParentModal ? closeParentModal() : undefined;
-					})
-					.catch(e => {
-						// toast to inform error
-						console.log(e);
-					});
+					.then(showFirstWelcomeModal)
+					.catch(showToastError);
 			}, timeOut);
 		}
 		setShowModal(false);
 	};
 
-	if (!showModal) return null;
+	const checkLowerShields = async (selected: IWallet) => {
+		const isBrave = await detectBrave();
+		if (selected.value === EWallets.TORUS && isBrave) {
+			setShowLowerShields(true);
+		} else {
+			handleSelect(selected);
+		}
+	};
+
+	const onCloseLowerShields = () => {
+		handleSelect(torusWallet);
+		setShowLowerShields(false);
+	};
 
 	return (
-		<Modal
-			showModal={showModal}
-			setShowModal={setShowModal}
-			customTheme={ETheme.Light}
-		>
-			<IconsContainer>
-				{walletsArray.map(i => (
-					<WalletItem
-						onClick={() => handleSelect(i)}
-						key={i.value}
-						selected={selectedWallet === i.value}
-					>
-						<Image
-							src={i.image}
-							alt={i.name}
-							height={64}
-							width={64}
-						/>
-						<WalletName>{i.name}</WalletName>
-						<WalletDesc>Connect with your {i.name}</WalletDesc>
-					</WalletItem>
-				))}
-			</IconsContainer>
-		</Modal>
+		<>
+			{showLowerShields && <LowerShields onClose={onCloseLowerShields} />}
+			<Modal setShowModal={setShowModal} customTheme={ETheme.Light}>
+				<IconsContainer>
+					{walletsArray.map(i => (
+						<WalletItem
+							onClick={() => checkLowerShields(i)}
+							key={i.value}
+							selected={selectedWallet === i.value}
+						>
+							<Image
+								src={i.image}
+								alt={i.name}
+								height={64}
+								width={64}
+							/>
+							<WalletName>{i.name}</WalletName>
+							<WalletDesc>Connect with your {i.name}</WalletDesc>
+						</WalletItem>
+					))}
+				</IconsContainer>
+			</Modal>
+		</>
 	);
 };
 
@@ -90,18 +95,14 @@ const IconsContainer = styled.div`
 	justify-content: center;
 	align-items: center;
 	flex-wrap: wrap;
-	background-color: ${neutralColors.gray['100']};
+	background-color: ${neutralColors.gray[100]};
 	grid-template-columns: 1fr 1fr;
 `;
 
-interface IWalletItem {
-	selected: boolean;
-}
-
-const WalletItem = styled.div<IWalletItem>`
+const WalletItem = styled.div<{ selected: boolean }>`
 	background: radial-gradient(
 		#fff,
-		${props => (props.selected ? brandColors.giv['100'] : 'white')}
+		${props => (props.selected ? brandColors.giv[100] : 'white')}
 	);
 	flex-direction: column;
 	gap: 2px;
@@ -110,16 +111,16 @@ const WalletItem = styled.div<IWalletItem>`
 	cursor: pointer;
 
 	&:hover {
-		background: radial-gradient(#fff, ${neutralColors.gray['500']});
+		background: radial-gradient(#fff, ${neutralColors.gray[500]});
 	}
 `;
 
 const WalletName = styled(H5)`
-	color: ${neutralColors.gray['900']};
+	color: ${neutralColors.gray[900]};
 `;
 
 const WalletDesc = styled(Lead)`
-	color: ${neutralColors.gray['600']};
+	color: ${neutralColors.gray[600]};
 `;
 
 export default WalletModal;

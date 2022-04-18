@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useTokenDistro } from '@/context/tokenDistro.context';
-import { DurationToString } from '@/lib/helpers';
+import { durationToString } from '@/lib/helpers';
 import {
 	Bar,
 	GsPTooltip,
@@ -18,7 +18,6 @@ import {
 	IconHelp,
 	Lead,
 	P,
-	SemiTitle,
 	Subline,
 } from '@giveth/ui-design-system';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -32,7 +31,6 @@ import styled from 'styled-components';
 import { Flex } from './styled-components/Flex';
 import { HarvestAllModal } from './modals/HarvestAll';
 import { usePrice } from '@/context/price.context';
-import { Col, Row } from './Grid';
 
 interface RegenStreamProps {
 	network: number;
@@ -110,8 +108,8 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 		);
 	}, [claimedAmount, lockedAmount, tokenDistroHelper]);
 
-	const percentage = tokenDistroHelper?.percent || 0;
-	const remainTime = DurationToString(tokenDistroHelper?.remain || 0);
+	const percentage = tokenDistroHelper?.GlobalReleasePercentage || 0;
+	const remainTime = durationToString(tokenDistroHelper?.remain || 0);
 
 	const icon = getStreamIconWithType(streamConfig.type, 40);
 
@@ -152,9 +150,11 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 								direction={'right'}
 							>
 								<GsPTooltip>
-									Time left for the{'	 '}
+									Liquid{'	 '}
 									{streamConfig.rewardTokenSymbol}
-									stream to reach full power!
+									{'	 '}
+									that has already flowed out of the{' '}
+									{streamConfig.rewardTokenSymbol}stream
 								</GsPTooltip>
 							</IconWithTooltip>
 						</Flex>
@@ -190,7 +190,6 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 						title={
 							streamConfig.rewardTokenSymbol + 'stream Rewards'
 						}
-						showModal={showModal}
 						setShowModal={setShowModal}
 						network={network}
 						regenStreamConfig={streamConfig}

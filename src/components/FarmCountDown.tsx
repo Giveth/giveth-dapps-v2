@@ -3,7 +3,7 @@ import { Lead, Subline } from '@giveth/ui-design-system';
 import { FC, useEffect, useState } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
-import { DurationToString } from '@/lib/helpers';
+import { durationToString } from '@/lib/helpers';
 import { Flex } from './styled-components/Flex';
 
 interface IFarmCountDown {
@@ -31,7 +31,7 @@ const FarmCountDown: FC<IFarmCountDown> = ({ startTime, setStarted }) => {
 		>
 			<Subline>Coming soon</Subline>
 			<Timer>
-				{timer < 0 ? '-- : -- : --' : DurationToString(timer, 3)}
+				{timer < 0 ? '-- : -- : --' : durationToString(timer, 3)}
 			</Timer>
 		</FarmCountDownContainer>
 	);

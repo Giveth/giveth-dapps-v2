@@ -54,4 +54,5 @@ export interface IProjectAcceptedToken {
 	mainnetAddress?: string;
 	name: string;
 	decimals: number;
+	isGivbackEligible?: boolean;
 }

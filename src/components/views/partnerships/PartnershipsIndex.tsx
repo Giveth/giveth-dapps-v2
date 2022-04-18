@@ -3,6 +3,7 @@ import { PartnershipArray, IPartner } from '@/content/Partnerships';
 import { H2, brandColors, Lead, D3 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import PartnershipsCard from './PartnershipsCard';
+import { mediaQueries } from '@/lib/constants/constants';
 
 const PartnershipsIndex = () => {
 	return (
@@ -33,12 +34,17 @@ const PartnershipsIndex = () => {
 };
 
 const OurPartners = styled(H2)`
-	width: 326px;
-	height: 393px;
 	display: flex;
 	align-items: center;
 	text-align: left;
 	padding-right: 45px;
+	margin: 16px 0;
+
+	${mediaQueries.tablet} {
+		height: 393px;
+		margin: 0;
+		width: 326px;
+	}
 `;
 
 const PartnershipsContainer = styled.div`
@@ -46,6 +52,7 @@ const PartnershipsContainer = styled.div`
 	flex-wrap: wrap;
 	gap: 24px;
 	margin-top: 150px;
+	justify-content: center;
 `;
 
 const MustardArc = styled(Arc)`
@@ -93,10 +100,16 @@ const Title = styled(D3)`
 `;
 
 const Wrapper = styled.div`
-	padding: 190px 149px;
 	color: ${brandColors.giv[700]};
 	text-align: center;
 	position: relative;
+
+	${mediaQueries.mobileS} {
+		padding: 190px 18px 85px;
+	}
+	${mediaQueries.tablet} {
+		padding: 190px 149px;
+	}
 `;
 
 export default PartnershipsIndex;

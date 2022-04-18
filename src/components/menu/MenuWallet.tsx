@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { formatEther } from '@ethersproject/units';
 import { BigNumberish } from '@ethersproject/bignumber';
@@ -13,30 +13,34 @@ import {
 } from '@giveth/ui-design-system';
 
 import Routes from '@/lib/constants/Routes';
-import { networkInfo } from '@/lib/constants/NetworksObj';
 import useUser from '@/context/UserProvider';
 import links from '@/lib/constants/links';
 import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
 import { switchNetworkHandler } from '@/lib/wallet';
 import { MenuContainer } from './Menu.sc';
 import { ETheme, useGeneral } from '@/context/general.context';
-import { isUserRegistered } from '@/lib/helpers';
+import { isUserRegistered, networkInfo } from '@/lib/helpers';
+import StorageLabel from '@/lib/localStorage';
+import useModal from '@/context/ModalProvider';
 
-interface IMenuWallet {
-	setShowWalletModal: Dispatch<SetStateAction<boolean>>;
-}
-
-const MenuWallet: FC<IMenuWallet> = ({ setShowWalletModal }) => {
+const MenuWallet = () => {
 	const [isMounted, setIsMounted] = useState(false);
 	const [balance, setBalance] = useState<string | null>(null);
 	const { chainId, account, library } = useWeb3React();
-	const [showWelcomeSignin, setShowWelcomeSignin] = useState<boolean>(false);
+	const [SignWithWallet, setSignWithWallet] = useState<boolean>(false);
 	const [queueRoute, setQueueRoute] = useState<string>('');
+
 	const router = useRouter();
+
 	const {
 		state: { user, isSignedIn },
-		actions: { signOut, showCompleteProfile },
+		actions: { signOut },
 	} = useUser();
+
+	const {
+		actions: { showCompleteProfile, showWalletModal },
+	} = useModal();
+
 	const { theme } = useGeneral();
 
 	const goRoute = (input: {
@@ -51,7 +55,7 @@ const MenuWallet: FC<IMenuWallet> = ({ setShowWalletModal }) => {
 		}
 		if (requiresSign && !isSignedIn) {
 			setQueueRoute(url);
-			return setShowWelcomeSignin(true);
+			return setSignWithWallet(true);
 		}
 		router.push(url);
 	};
@@ -75,15 +79,14 @@ const MenuWallet: FC<IMenuWallet> = ({ setShowWalletModal }) => {
 
 	return (
 		<>
-			{showWelcomeSignin && (
+			{SignWithWallet && (
 				<SignWithWalletModal
 					callback={() => {
 						router.push(queueRoute);
 						setQueueRoute('');
 					}}
-					showModal={true}
 					setShowModal={() => {
-						setShowWelcomeSignin(false);
+						setSignWithWallet(false);
 						setQueueRoute('');
 					}}
 				/>
@@ -101,7 +104,8 @@ const MenuWallet: FC<IMenuWallet> = ({ setShowWalletModal }) => {
 					</LeftSection>
 					<StyledButton
 						onClick={() => {
-							setShowWalletModal(true);
+							window.localStorage.removeItem(StorageLabel.WALLET);
+							showWalletModal();
 						}}
 					>
 						Change wallet

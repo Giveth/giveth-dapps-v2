@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
 import {
 	brandColors,
 	Button,
@@ -18,6 +17,7 @@ import { useWeb3React } from '@web3-react/core';
 import Debounced from 'lodash.debounce';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import { captureException } from '@sentry/nextjs';
 
 import {
 	ACTIVATE_PROJECT,
@@ -35,7 +35,6 @@ import {
 	WalletAddressInput,
 } from './Inputs';
 import useUser from '@/context/UserProvider';
-import Logger from '@/utils/Logger';
 import SuccessfulCreation from './SuccessfulCreation';
 import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
 import {
@@ -49,7 +48,7 @@ import { slugToProjectView } from '@/lib/routeCreators';
 import { client } from '@/apollo/apolloClient';
 import LightBulbIcon from '/public/images/icons/lightbulb.svg';
 import { Shadow } from '@/components/styled-components/Shadow';
-import { deviceSize, mediaQueries } from '@/utils/constants';
+import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 
 export enum ECreateErrFields {
 	NAME = 'name',
@@ -89,6 +88,7 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 		project?.walletAddress || '',
 	);
 	const [isLoading, setIsLoading] = useState(false);
+	const [publish, setPublish] = useState<boolean>(false);
 	const [impactLocation, setImpactLocation] = useState(
 		project?.impactLocation || '',
 	);
@@ -97,8 +97,6 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 		[ECreateErrFields.DESCRIPTION]: '',
 		[ECreateErrFields.WALLET_ADDRESS]: '',
 	});
-
-	const [publish, setPublish] = useState<boolean>(true);
 
 	const {
 		state: { user },
@@ -109,30 +107,24 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 	const debouncedDescriptionValidation = useRef<any>();
 
 	useEffect(() => {
-		console.log(project);
-		if (!project) return;
-		let imageComparator = image === '' ? null : image;
-		if (
-			name !== project.title ||
-			description !== project.description ||
-			JSON.stringify(categories) !== JSON.stringify(project.categories) ||
-			imageComparator !== project.image ||
-			walletAddress !== project.walletAddress ||
-			impactLocation !== project.impactLocation
-		) {
-			setPublish(false);
-		} else {
-			setPublish(true);
+		if (isEditMode) {
+			if (!project) return;
+			let imageComparator = image === '' ? null : image;
+			if (
+				name !== project.title ||
+				description !== project.description ||
+				JSON.stringify(categories) !==
+					JSON.stringify(project.categories) ||
+				imageComparator !== project.image ||
+				walletAddress !== project.walletAddress ||
+				impactLocation !== project.impactLocation
+			) {
+				setPublish(false);
+			} else {
+				setPublish(true);
+			}
 		}
-	}, [
-		project,
-		name,
-		description,
-		categories,
-		image,
-		walletAddress,
-		impactLocation,
-	]);
+	}, [name, description, categories, image, walletAddress, impactLocation]);
 
 	useEffect(() => {
 		if (!isEditMode) {
@@ -274,7 +266,7 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 		} catch (e) {
 			setIsLoading(false);
 			const error = e as Error;
-			Logger.captureException(error);
+			captureException(error);
 			showToastError(error);
 		}
 	};
@@ -295,10 +287,7 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 	return (
 		<>
 			{showGuidelineModal && (
-				<ProjectGuidelineModal
-					showModal={showGuidelineModal}
-					setShowModal={setShowGuidelineModal}
-				/>
+				<ProjectGuidelineModal setShowModal={setShowGuidelineModal} />
 			)}
 			{user && (
 				<Container>
@@ -394,12 +383,13 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 									disabled={isLoading || publish}
 									onClick={() => onSubmit(false)}
 								/>
-								<Link href={`/project/${project?.slug!}`}>
+								{isEditMode && (
 									<OulineButton
+										onClick={() => router.back()}
 										label='CANCEL'
 										buttonType='primary'
 									/>
-								</Link>
+								)}
 							</Buttons>
 						</div>
 					</CreateContainer>

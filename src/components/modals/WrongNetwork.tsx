@@ -4,7 +4,7 @@ import { FC } from 'react';
 import { Button } from '@giveth/ui-design-system';
 import { switchNetwork } from '@/lib/wallet';
 
-import { chainName } from '@/utils/constants';
+import { chainName } from '@/lib/constants/constants';
 import { Modal, IModal } from './Modal';
 
 import { useWeb3React } from '@web3-react/core';
@@ -73,11 +73,10 @@ interface IWrongNetworkModal extends IModal, IWrongNetworkInnerModal {}
 export const WrongNetworkModal: FC<IWrongNetworkModal> = ({
 	text,
 	targetNetworks,
-	showModal,
 	setShowModal,
 }) => {
 	return (
-		<Modal showModal={showModal} setShowModal={setShowModal} hiddenClose>
+		<Modal setShowModal={setShowModal} hiddenClose>
 			<WrongNetworkModalContainer>
 				<WrongNetworkModalTitle>
 					You&apos;re connected to the wrong network!

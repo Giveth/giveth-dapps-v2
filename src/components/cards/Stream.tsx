@@ -7,7 +7,7 @@ import { IClaimViewCardProps } from '../views/claim/Claim.view';
 
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import { formatWeiHelper } from '@/helpers/number';
-import { DurationToString } from '@/lib/helpers';
+import { durationToString } from '@/lib/helpers';
 import { H2, Lead, H5 } from '@giveth/ui-design-system';
 import useClaim from '@/context/claim.context';
 
@@ -69,7 +69,7 @@ const StreamSubtitle = styled.div`
 `;
 
 const StreamContainer = styled(Flex)`
-	padding: 20px 0px;
+	padding: 20px 0;
 `;
 
 const StreamValueContainer = styled(Flex)`
@@ -109,7 +109,7 @@ export const StreamCard: FC<IClaimViewCardProps> = ({ index }) => {
 	}, [totalAmount, givTokenDistroHelper]);
 
 	useEffect(() => {
-		const _remain = DurationToString(givTokenDistroHelper.remain);
+		const _remain = durationToString(givTokenDistroHelper.remain);
 		setRemain(_remain);
 	}, [givTokenDistroHelper]);
 
