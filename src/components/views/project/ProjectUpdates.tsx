@@ -30,8 +30,12 @@ const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
 
 const UPDATE_LIMIT = 2000;
 
-const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
-	const { id, creationDate, adminUser } = props.project || {};
+const ProjectUpdates = (props: {
+	project?: IProject;
+	fetchProject: () => void;
+}) => {
+	const { project, fetchProject } = props;
+	const { id, creationDate, adminUser } = project || {};
 
 	const {
 		state: { user, isSignedIn },
@@ -84,7 +88,7 @@ const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 					},
 				],
 			});
-			props.fetchProject();
+			fetchProject();
 			gToast(`Your update was edited`, {
 				type: ToastType.SUCCESS,
 				// direction: ToastDirection.RIGHT,
@@ -121,7 +125,7 @@ const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 					},
 				],
 			});
-			props.fetchProject();
+			fetchProject();
 			gToast(`Your update was deleted`, {
 				type: ToastType.SUCCESS,
 				title: 'Success!',
@@ -185,7 +189,7 @@ const ProjectUpdates = (props: { project?: IProject; fetchProject?: any }) => {
 			});
 			setTitle('');
 			setNewUpdate(' ');
-			props.fetchProject();
+			fetchProject();
 			return gToast(`Your update was created`, {
 				type: ToastType.SUCCESS,
 				title: 'Success!',

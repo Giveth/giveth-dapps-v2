@@ -1,16 +1,18 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { brandColors, neutralColors, H4, H6 } from '@giveth/ui-design-system';
+
 import { client } from '@/apollo/apolloClient';
 import { IProject } from '@/apollo/types/types';
 import { FETCH_HOME_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { EDirection, gqlEnums } from '@/apollo/types/gqlEnums';
-import { brandColors, neutralColors, H4, H6 } from '@giveth/ui-design-system';
 import { mediaQueries } from '@/lib/constants/constants';
 import ProjectCard from '@/components/project-card/ProjectCard';
 
 const projectsToFetch = 12;
 const projectsToShow = 3;
+
 const NotAvailableProject = () => {
 	const [suggestedProjects, setSuggestedProjects] = useState<IProject[]>([]);
 	const [listPosition, setListPosition] = useState<number>(0);
@@ -128,8 +130,8 @@ const Slider = styled.div`
 `;
 
 const CaretRight = styled.img`
-	width: 48;
-	height: 48;
+	width: 48px;
+	height: 48px;
 	cursor: pointer;
 	margin: 0 24px;
 `;

@@ -75,7 +75,6 @@ const ProjectDonateCard = ({
 	const {
 		categories = [],
 		slug,
-		description,
 		adminUser,
 		id,
 		verified,
@@ -390,7 +389,7 @@ const Wrapper = styled(motion.div)<{ initialPosition: number }>`
 	height: fit-content;
 	box-shadow: ${Shadow.Neutral['400']};
 	flex-shrink: 0;
-	z-index: 20;
+	z-index: 10;
 	align-self: flex-start;
 
 	${mediaQueries.mobileS} {
