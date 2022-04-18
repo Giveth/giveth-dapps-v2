@@ -123,7 +123,6 @@ export const ClaimProvider: FC<Props> = ({ children }) => {
 			{children}
 			{showModal && (
 				<WrongNetworkModal
-					showModal={showModal}
 					setShowModal={setShowModal}
 					targetNetworks={[config.XDAI_NETWORK_NUMBER]}
 				/>

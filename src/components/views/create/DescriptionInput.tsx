@@ -27,7 +27,6 @@ const DescriptionInput = (props: {
 		<>
 			{showModal && (
 				<GoodProjectDescription
-					showModal={showModal}
 					setShowModal={val => setShowModal(val)}
 				/>
 			)}

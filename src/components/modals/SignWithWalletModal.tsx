@@ -15,11 +15,7 @@ import { mediaQueries } from '@/lib/constants/constants';
 import useModal from '@/context/ModalProvider';
 import { useWeb3React } from '@web3-react/core';
 
-export const SignWithWalletModal: FC<IModal> = ({
-	showModal,
-	setShowModal,
-	callback,
-}) => {
+export const SignWithWalletModal: FC<IModal> = ({ setShowModal, callback }) => {
 	const { theme } = useGeneral();
 	const {
 		actions: { signToGetToken },
@@ -31,9 +27,7 @@ export const SignWithWalletModal: FC<IModal> = ({
 
 	return (
 		<Modal
-			showModal={showModal}
 			setShowModal={setShowModal}
-			hiddenClose={false}
 			headerIcon={<IconWalletApprove />}
 			headerTitle='Sign Wallet'
 			headerTitlePosition='left'

@@ -11,18 +11,15 @@ import {
 	useWalletName,
 	walletsArray,
 } from '@/lib/wallet/walletTypes';
-import { IModal, Modal } from '@/components/modals/Modal';
+import { Modal } from '@/components/modals/Modal';
 import { ETheme } from '@/context/general.context';
 import { detectBrave, showToastError } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
 import LowerShields from '@/components/modals/LowerShields';
 import useModal from '@/context/ModalProvider';
 
-interface IWalletModal extends IModal {
-	closeParentModal?: () => void;
-}
-
-const WalletModal = ({ setShowModal, closeParentModal }: IWalletModal) => {
+const WalletModal = (props: { setShowModal: (i: boolean) => void }) => {
+	const { setShowModal } = props;
 	const [showLowerShields, setShowLowerShields] = useState<boolean>();
 
 	const context = useWeb3React();
@@ -34,22 +31,16 @@ const WalletModal = ({ setShowModal, closeParentModal }: IWalletModal) => {
 
 	const handleSelect = (selected: IWallet) => {
 		if (selectedWallet !== selected.value) {
-			window.localStorage.removeItem(StorageLabel.WALLET);
+			localStorage.removeItem(StorageLabel.WALLET);
 			deactivate();
 			let timeOut = 0;
 			if (selectedWallet === EWallets.METAMASK) {
 				timeOut = 500;
 			}
 			setTimeout(() => {
+				localStorage.setItem(StorageLabel.WALLET, selected.value);
 				activate(selected.connector)
-					.then(() => {
-						localStorage.setItem(
-							StorageLabel.WALLET,
-							selected.value,
-						);
-						closeParentModal && closeParentModal();
-						showFirstWelcomeModal();
-					})
+					.then(showFirstWelcomeModal)
 					.catch(showToastError);
 			}, timeOut);
 		}
@@ -108,11 +99,7 @@ const IconsContainer = styled.div`
 	grid-template-columns: 1fr 1fr;
 `;
 
-interface IWalletItem {
-	selected: boolean;
-}
-
-const WalletItem = styled.div<IWalletItem>`
+const WalletItem = styled.div<{ selected: boolean }>`
 	background: radial-gradient(
 		#fff,
 		${props => (props.selected ? brandColors.giv[100] : 'white')}

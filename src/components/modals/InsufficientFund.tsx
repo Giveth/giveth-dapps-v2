@@ -10,9 +10,7 @@ export const InsufficientFundModal: FC<IModal> = ({ setShowModal }) => {
 	const { theme } = useGeneral();
 	return (
 		<Modal
-			showModal
 			setShowModal={setShowModal}
-			hiddenClose={false}
 			headerIcon={<IconFund />}
 			headerTitle='Insufficient Fund'
 			headerTitlePosition='left'

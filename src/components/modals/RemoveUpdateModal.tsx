@@ -10,16 +10,10 @@ import {
 } from '@giveth/ui-design-system';
 import FixedToast from '@/components/toasts/FixedToast';
 
-export const RemoveUpdateModal: FC<IModal> = ({
-	showModal,
-	setShowModal,
-	callback,
-}) => {
+export const RemoveUpdateModal: FC<IModal> = ({ setShowModal, callback }) => {
 	return (
 		<Modal
-			showModal={showModal}
 			setShowModal={setShowModal}
-			hiddenClose={false}
 			headerIcon={<IconTrash size={24} />}
 			headerTitle='Removing Update'
 			headerTitlePosition='left'

@@ -68,7 +68,7 @@ const HorizontalTitleSection = styled.div`
 	max-width: calc(100vw - 72px);
 
 	${mediaQueries.mobileS} {
-		padding: 0px;
+		padding: 0;
 	}
 
 	${mediaQueries.tablet} {

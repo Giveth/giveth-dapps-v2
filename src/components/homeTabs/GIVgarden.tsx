@@ -90,7 +90,6 @@ export const TabGardenTop = () => {
 			{showModal && (
 				<HarvestAllModal
 					title='GIVgarden Rewards'
-					showModal={showModal}
 					setShowModal={setShowModal}
 					poolStakingConfig={poolStakingConfig}
 					earned={earned}

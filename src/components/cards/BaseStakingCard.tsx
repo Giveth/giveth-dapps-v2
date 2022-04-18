@@ -409,7 +409,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 			</StakingPoolContainer>
 			{showAPRModal && (
 				<APRModal
-					showModal={showAPRModal}
 					setShowModal={setShowAPRModal}
 					poolStakingConfig={poolStakingConfig}
 					maxAmount={userNotStakedAmount}
@@ -418,7 +417,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 			)}
 			{showUniV3APRModal && (
 				<UniV3APRModal
-					showModal={showUniV3APRModal}
 					setShowModal={setShowUniV3APRModal}
 					poolStakingConfig={poolStakingConfig}
 				/>
@@ -426,13 +424,11 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 			{showStakeModal &&
 				(isV3Staking ? (
 					<V3StakeModal
-						showModal={showStakeModal}
 						setShowModal={setShowStakeModal}
 						poolStakingConfig={poolStakingConfig}
 					/>
 				) : (
 					<StakeModal
-						showModal={showStakeModal}
 						setShowModal={setShowStakeModal}
 						poolStakingConfig={poolStakingConfig}
 						maxAmount={userNotStakedAmount}
@@ -442,13 +438,11 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				(isV3Staking ? (
 					<V3StakeModal
 						isUnstakingModal={true}
-						showModal={showUnStakeModal}
 						setShowModal={setShowUnStakeModal}
 						poolStakingConfig={poolStakingConfig}
 					/>
 				) : (
 					<UnStakeModal
-						showModal={showUnStakeModal}
 						setShowModal={setShowUnStakeModal}
 						poolStakingConfig={poolStakingConfig}
 						maxAmount={stakedLpAmount}
@@ -457,7 +451,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 			{showHarvestModal && chainId && (
 				<HarvestAllModal
 					title='GIVfarm Rewards'
-					showModal={showHarvestModal}
 					setShowModal={setShowHarvestModal}
 					poolStakingConfig={poolStakingConfig}
 					earned={earned}
@@ -467,7 +460,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 			)}
 			{showWhatIsGIVstreamModal && (
 				<WhatisStreamModal
-					showModal={showWhatIsGIVstreamModal}
 					setShowModal={setShowWhatIsGIVstreamModal}
 					regenStreamConfig={regenStreamConfig}
 				/>

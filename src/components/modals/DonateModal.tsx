@@ -192,7 +192,6 @@ const DonateModal = ({
 
 	return (
 		<Modal
-			showModal
 			setShowModal={setShowModal}
 			headerTitle='Donating'
 			headerTitlePosition='left'

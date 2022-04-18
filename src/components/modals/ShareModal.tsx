@@ -45,7 +45,6 @@ const ShareModal = ({ projectHref, setShowModal }: IShareModal) => {
 
 	return (
 		<Modal
-			showModal
 			setShowModal={setShowModal}
 			headerIcon={<Image src={ShareIcon} alt='share icon' />}
 			headerTitle='Share'

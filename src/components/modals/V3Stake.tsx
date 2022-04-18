@@ -4,23 +4,11 @@ import {
 	B,
 	brandColors,
 	Button,
-	Caption,
 	H4,
-	IconGIVStream,
-	IconHelp,
-	Lead,
 	neutralColors,
 	Overline,
 } from '@giveth/ui-design-system';
-import {
-	CancelButton,
-	GIVRate,
-	HarvestButton,
-	HelpRow,
-	Pending,
-	RateRow,
-	TooltipContent,
-} from './HarvestAll.sc';
+import { CancelButton, HarvestButton, HelpRow, Pending } from './HarvestAll.sc';
 import Lottie from 'react-lottie';
 import { Flex } from '../styled-components/Flex';
 import styled from 'styled-components';
@@ -28,8 +16,6 @@ import { PoolStakingConfig } from '@/types/config';
 import { StakingPoolImages } from '../StakingPoolImages';
 import V3StakingCard from '../cards/PositionCard';
 import { useLiquidityPositions, useSubgraph } from '@/context';
-import { AmountBoxWithPrice } from '../AmountBoxWithPrice';
-import { IconWithTooltip } from '../IconWithToolTip';
 import LoadingAnimation from '@/animations/loading.json';
 import { exit, getReward, transfer } from '@/lib/stakingNFT';
 import { BigNumber, constants } from 'ethers';
@@ -39,7 +25,6 @@ import {
 	SubmittedInnerModal,
 } from './ConfirmSubmit';
 import { useTokenDistro } from '@/context/tokenDistro.context';
-import { formatWeiHelper } from '@/helpers/number';
 import { getUniswapV3StakerContract } from '@/lib/contracts';
 import { useWeb3React } from '@web3-react/core';
 import { StakeState } from '@/lib/staking';
@@ -61,7 +46,6 @@ interface IV3StakeModalProps extends IModal {
 export const V3StakeModal: FC<IV3StakeModalProps> = ({
 	poolStakingConfig,
 	isUnstakingModal,
-	showModal,
 	setShowModal,
 }) => {
 	const {
@@ -142,7 +126,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 	};
 
 	return (
-		<Modal showModal={showModal} setShowModal={setShowModal}>
+		<Modal setShowModal={setShowModal}>
 			<StakeModalContainer>
 				{(stakeStatus === StakeState.UNKNOWN ||
 					stakeStatus === StakeState.CONFIRMING ||

@@ -52,13 +52,13 @@ const Wrapper = styled.div`
 	position: relative;
 
 	${mediaQueries.mobileS} {
-		margin: 150px 0px;
+		margin: 150px 0;
 		padding: 0 18px;
 	}
 
 	${mediaQueries.tablet} {
 		margin: 150px 270px;
-		pading: 0px;
+		padding: 0;
 	}
 `;
 

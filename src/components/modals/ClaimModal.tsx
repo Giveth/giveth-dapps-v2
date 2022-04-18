@@ -21,14 +21,13 @@ interface IClaimModal extends IModal {
 }
 
 export const ClaimModal: FC<IClaimModal> = ({
-	showModal,
 	setShowModal,
 	claimState,
 	network,
 	txStatus,
 }) => {
 	return (
-		<Modal showModal={showModal} setShowModal={setShowModal}>
+		<Modal setShowModal={setShowModal}>
 			{claimState === ClaimState.WAITING && (
 				<SubmittedInnerModal
 					title='Waiting confirmation.'

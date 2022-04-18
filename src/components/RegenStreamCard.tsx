@@ -18,7 +18,6 @@ import {
 	IconHelp,
 	Lead,
 	P,
-	SemiTitle,
 	Subline,
 } from '@giveth/ui-design-system';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -32,7 +31,6 @@ import styled from 'styled-components';
 import { Flex } from './styled-components/Flex';
 import { HarvestAllModal } from './modals/HarvestAll';
 import { usePrice } from '@/context/price.context';
-import { Col, Row } from './Grid';
 
 interface RegenStreamProps {
 	network: number;
@@ -192,7 +190,6 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 						title={
 							streamConfig.rewardTokenSymbol + 'stream Rewards'
 						}
-						showModal={showModal}
 						setShowModal={setShowModal}
 						network={network}
 						regenStreamConfig={streamConfig}

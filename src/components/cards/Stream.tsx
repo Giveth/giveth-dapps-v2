@@ -69,7 +69,7 @@ const StreamSubtitle = styled.div`
 `;
 
 const StreamContainer = styled(Flex)`
-	padding: 20px 0px;
+	padding: 20px 0;
 `;
 
 const StreamValueContainer = styled(Flex)`

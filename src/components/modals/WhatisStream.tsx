@@ -23,7 +23,6 @@ interface IWhatisStreamModal extends IModal {
 }
 
 export const WhatisStreamModal: FC<IWhatisStreamModal> = ({
-	showModal,
 	setShowModal,
 	regenStreamConfig,
 }) => {
@@ -37,7 +36,7 @@ export const WhatisStreamModal: FC<IWhatisStreamModal> = ({
 		: givTokenDistroHelper;
 
 	return (
-		<Modal showModal={showModal} setShowModal={setShowModal}>
+		<Modal setShowModal={setShowModal}>
 			<WhatisStreamContainer theme={theme}>
 				<TitleRow alignItems='center' justifyContent='center'>
 					<IconGIVStream size={24} />
