@@ -33,7 +33,7 @@ const ERC721NftContext = createContext<{
 } | null>(null);
 
 const uniswapV3PoolStakingConfig = config.MAINNET_CONFIG.pools.find(
-	p => p.type === StakingType.UNISWAP,
+	p => p.type === StakingType.UNISWAPV3,
 ) as UniswapV3PoolStakingConfig;
 
 const { INCENTIVE_REWARD_AMOUNT, INCENTIVE_START_TIME, INCENTIVE_END_TIME } =

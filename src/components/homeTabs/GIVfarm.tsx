@@ -200,7 +200,7 @@ export const TabGIVfarmBottom = () => {
 							{config.MAINNET_CONFIG.pools.map(
 								(poolStakingConfig, index) => {
 									return poolStakingConfig.type ===
-										StakingType.UNISWAP ? (
+										StakingType.UNISWAPV3 ? (
 										<Col
 											sm={6}
 											lg={4}

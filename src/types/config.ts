@@ -5,7 +5,8 @@ export interface BasicStakingConfig {
 }
 
 export enum StakingType {
-	UNISWAP = 'Uniswap V3',
+	UNISWAPV2 = 'Uniswap V2',
+	UNISWAPV3 = 'Uniswap V3',
 	BALANCER = 'Balancer',
 	SUSHISWAP = 'Sushiswap',
 	HONEYSWAP = 'Honeyswap',

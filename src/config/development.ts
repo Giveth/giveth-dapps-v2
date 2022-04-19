@@ -61,7 +61,7 @@ const config: EnvConfig = {
 					'0x5f672d71399d8cDbA64f596394b4f4381247E025',
 				POOL_ADDRESS: '0xa48C26fF05F47a2eEd88C09664de1cb604A21b01',
 				LM_ADDRESS: '0x1aD46D40648639f84a396Fef32132888038c5aA8',
-				type: StakingType.UNISWAP,
+				type: StakingType.UNISWAPV3,
 				title: 'GIV / ETH',
 				description: '0.3% tier only',
 				provideLiquidityLink: `https://app.uniswap.org/#/add/ETH/0x29434A25abd94AE882aA883eea81585Aaa5b078D/3000`,

@@ -154,7 +154,7 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 			promiseQueue.push(promise);
 		});
 		config.MAINNET_CONFIG.pools.forEach(poolStakingConfig => {
-			if (poolStakingConfig.type === StakingType.UNISWAP) return;
+			if (poolStakingConfig.type === StakingType.UNISWAPV3) return;
 
 			const promise: Promise<APR> = getLPStakingAPR(
 				poolStakingConfig,
