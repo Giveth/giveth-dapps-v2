@@ -25,8 +25,6 @@ export class SubgraphQueryBuilder {
 			rewardsSushiSwap
 			rewardPerTokenPaidHoneyswap
 			rewardsHoneyswap
-			rewardPerTokenPaidUniswap
-			rewardsUniswap
 			rewardPerTokenPaidBalancer
 			rewardsBalancer
 			givback

@@ -30,8 +30,6 @@ const transformBalanceInfo = (info: any): IBalances => {
 		info.rewardPerTokenPaidHoneyswap || 0,
 	);
 	const rewardsHoneyswap = BN(info.rewardsHoneyswap || 0);
-	const rewardPerTokenPaidUniswap = BN(info.rewardPerTokenPaidUniswap || 0);
-	const rewardsUniswap = BN(info.rewardsUniswap || 0);
 	const rewardPerTokenPaidBalancer = BN(info.rewardPerTokenPaidBalancer || 0);
 	const rewardsBalancer = BN(info.rewardsBalancer || 0);
 	const givback = BN(info.givback || 0);
@@ -63,8 +61,6 @@ const transformBalanceInfo = (info: any): IBalances => {
 		rewardsSushiSwap,
 		rewardPerTokenPaidHoneyswap,
 		rewardsHoneyswap,
-		rewardPerTokenPaidUniswap,
-		rewardsUniswap,
 		rewardPerTokenPaidBalancer,
 		rewardsBalancer,
 		givback,
