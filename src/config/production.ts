@@ -46,6 +46,32 @@ const config: EnvConfig = {
 
 		pools: [
 			{
+				POOL_ADDRESS: '0x8a6b25e33b12d1bb6929a8793961076bd1f9d3eb',
+				VAULT_ADDRESS: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+				POOL_ID:
+					'0x8a6b25e33b12d1bb6929a8793961076bd1f9d3eb00020000000000000000053f',
+				LM_ADDRESS: '0x4B319c068685aF260c91407B651918307df30061',
+				type: StakingType.UNISWAPV2,
+				title: 'GIV / ETH',
+				description: '50% GIV, 50% ETH',
+				provideLiquidityLink:
+					'https://kovan.app.balancer.fi/#/pool/0x8a6b25e33b12d1bb6929a8793961076bd1f9d3eb00020000000000000000053f',
+				unit: 'LP',
+			},
+			{
+				POOL_ADDRESS: '0x7819f1532c49388106f7762328c51ee70edd134c',
+				VAULT_ADDRESS: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+				POOL_ID:
+					'0x7819f1532c49388106f7762328c51ee70edd134c000200000000000000000109',
+				LM_ADDRESS: '0xc0dbDcA66a0636236fAbe1B3C16B1bD4C84bB1E1',
+				type: StakingType.BALANCER,
+				title: 'GIV / ETH',
+				description: '80% GIV, 20% ETH',
+				provideLiquidityLink:
+					'https://app.balancer.fi/#/pool/0x7819f1532c49388106f7762328c51ee70edd134c000200000000000000000109',
+				unit: 'LP',
+			},
+			{
 				INCENTIVE_START_TIME: 1640361600,
 				INCENTIVE_END_TIME: 1656086400,
 				INCENTIVE_REWARD_AMOUNT: 10000000,
@@ -67,19 +93,6 @@ const config: EnvConfig = {
 				provideLiquidityLink: `https://app.uniswap.org/#/add/ETH/0x900dB999074d9277c5DA2A43F252D74366230DA0/3000`,
 				unit: 'NFT',
 				infinitePositionId: 193935,
-			},
-			{
-				POOL_ADDRESS: '0x7819f1532c49388106f7762328c51ee70edd134c',
-				VAULT_ADDRESS: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-				POOL_ID:
-					'0x7819f1532c49388106f7762328c51ee70edd134c000200000000000000000109',
-				LM_ADDRESS: '0xc0dbDcA66a0636236fAbe1B3C16B1bD4C84bB1E1',
-				type: StakingType.BALANCER,
-				title: 'GIV / ETH',
-				description: '80% GIV, 20% ETH',
-				provideLiquidityLink:
-					'https://app.balancer.fi/#/pool/0x7819f1532c49388106f7762328c51ee70edd134c000200000000000000000109',
-				unit: 'LP',
 			},
 		],
 		regenStreams: [],
