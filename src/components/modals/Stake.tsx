@@ -124,10 +124,6 @@ export const StakeModal: FC<IStakeModalProps> = ({
 			console.error('library is null');
 			return;
 		}
-		// if (!GARDEN_ADDRESS) {
-		// 	console.error('GARDEN_ADDRESS is null');
-		// 	return;
-		// }
 
 		setStakeState(StakeState.APPROVING);
 
