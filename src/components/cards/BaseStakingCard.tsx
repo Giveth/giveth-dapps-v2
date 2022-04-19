@@ -80,7 +80,7 @@ export const getPoolIconWithName = (pool: string) => {
 			return <IconGIV size={16} />;
 		case StakingType.HONEYSWAP:
 			return <IconHoneyswap size={16} />;
-		case StakingType.UNISWAP:
+		case StakingType.UNISWAPV3:
 			return <IconUniswap size={16} />;
 		case StakingType.SUSHISWAP:
 			return <IconSushiswap size={16} />;
@@ -122,7 +122,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const { type, title, description, provideLiquidityLink, BUY_LINK, unit } =
 		poolStakingConfig;
 
-	const isV3Staking = type === StakingType.UNISWAP;
+	const isV3Staking = type === StakingType.UNISWAPV3;
 
 	const { apr, earned, stakedLpAmount, userNotStakedAmount } = stakeInfo;
 
