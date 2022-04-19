@@ -57,6 +57,7 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://kovan.app.balancer.fi/#/pool/0x8a6b25e33b12d1bb6929a8793961076bd1f9d3eb00020000000000000000053f',
 				unit: 'LP',
+				active: true,
 			},
 			{
 				POOL_ADDRESS: '0x8a6b25e33b12d1bb6929a8793961076bd1f9d3eb',
@@ -70,6 +71,7 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://kovan.app.balancer.fi/#/pool/0x8a6b25e33b12d1bb6929a8793961076bd1f9d3eb00020000000000000000053f',
 				unit: 'LP',
+				active: true,
 			},
 			{
 				INCENTIVE_START_TIME: 1640272200,
@@ -93,6 +95,7 @@ const config: EnvConfig = {
 				provideLiquidityLink: `https://app.uniswap.org/#/add/ETH/0x29434A25abd94AE882aA883eea81585Aaa5b078D/3000`,
 				unit: 'NFT',
 				infinitePositionId: 9985,
+				active: false,
 			},
 		],
 		regenStreams: [],
@@ -141,6 +144,7 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://app.honeyswap.org/#/add/0x83a8eea6427985C523a0c4d9d3E62C051B6580d3/0x69F79C9eA174d4659B18c7993c7EFbBbB58cF068',
 				unit: 'LP',
+				active: true,
 			},
 			{
 				POOL_ADDRESS: '0x437B0da7932b21F54488fD80Ee09b519a6f4d8AD',
@@ -151,6 +155,7 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://app.sushi.com/add/0x83a8eea6427985C523a0c4d9d3E62C051B6580d3/0x736a98655049433f79dCcF5e54b887E8890b63D1',
 				unit: 'LP',
+				active: true,
 			},
 		],
 
@@ -189,6 +194,7 @@ const config: EnvConfig = {
 					link: 'https://shapeshift.com/',
 				},
 				regenFarmStartTime: 1646306818206,
+				active: true,
 			},
 		],
 	},
