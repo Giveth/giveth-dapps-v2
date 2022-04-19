@@ -30,6 +30,7 @@ interface IUserContext {
 		reFetchUser: () => void;
 		incrementLikedProjectsCount: () => void;
 		decrementLikedProjectsCount: () => void;
+		getBalance: () => void;
 	};
 }
 
@@ -45,6 +46,7 @@ const UserContext = createContext<IUserContext>({
 		reFetchUser: () => {},
 		incrementLikedProjectsCount: () => {},
 		decrementLikedProjectsCount: () => {},
+		getBalance: () => {},
 	},
 });
 
@@ -179,6 +181,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 					reFetchUser,
 					incrementLikedProjectsCount,
 					decrementLikedProjectsCount,
+					getBalance,
 				},
 			}}
 		>
