@@ -80,6 +80,7 @@ export const getPoolIconWithName = (pool: string) => {
 			return <IconGIV size={16} />;
 		case StakingType.HONEYSWAP:
 			return <IconHoneyswap size={16} />;
+		case StakingType.UNISWAPV2:
 		case StakingType.UNISWAPV3:
 			return <IconUniswap size={16} />;
 		case StakingType.SUSHISWAP:
