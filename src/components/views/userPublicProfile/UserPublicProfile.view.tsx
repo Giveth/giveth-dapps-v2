@@ -59,6 +59,7 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 	const [showIncompleteWarning, setShowIncompleteWarning] = useState(true);
 	const notUserRegisteredAndShowIncompleteWarning =
 		!isUserRegistered(user) && showIncompleteWarning;
+
 	useEffect(() => {
 		if (myAccount && !isSignedIn) {
 			showSignWithWallet();
@@ -83,7 +84,7 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 				<ContainerStyled
 					hasMarginTop={notUserRegisteredAndShowIncompleteWarning}
 				>
-					<Image
+					<img
 						src={user.avatar || '/images/avatar.svg'}
 						width={128}
 						height={128}
