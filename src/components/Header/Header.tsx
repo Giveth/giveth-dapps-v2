@@ -78,14 +78,6 @@ const Header: FC<IHeader> = () => {
 	const showLinks = !isCreateRoute;
 
 	useEffect(() => {
-		const selectedWalletName = localStorage.getItem(StorageLabel.WALLET);
-		const wallet = walletsArray.find(w => w.value === selectedWalletName);
-		if (wallet) {
-			activate(wallet.connector);
-		}
-	}, [activate]);
-
-	useEffect(() => {
 		setIsGIVeconomyRoute(router.route.startsWith('/giv'));
 		setIsCreateRoute(router.route.startsWith(Routes.CreateProject));
 	}, [router.route]);
