@@ -17,14 +17,14 @@ const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 
 const supportedChainIds = [1, 3, 4, 5, 42, 100];
 
-export const injectedConnector = new InjectedConnector({});
+export const injectedConnector = new InjectedConnector({ supportedChainIds });
 export const walletconnectConnector = new WalletConnectConnector({
 	infuraId: INFURA_API_KEY,
 	supportedChainIds,
 	qrcode: true,
 	rpc: {
-		[config.MAINNET_NETWORK_NUMBER]: config.MAINNET_CONFIG.nodeUrl,
-		[config.XDAI_NETWORK_NUMBER]: config.XDAI_CONFIG.nodeUrl,
+		[config.MAINNET_NETWORK_NUMBER]: config.MAINNET_CONFIG.nodeURL,
+		[config.XDAI_NETWORK_NUMBER]: config.XDAI_CONFIG.nodeURL,
 	},
 });
 // export const portisConnector = new PortisConnector({
