@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
-import Image from 'next/image';
 import {
 	brandColors,
 	GLink,
@@ -17,7 +16,11 @@ import { IUser } from '@/apollo/types/types';
 import EditUserModal from '@/components/modals/EditUserModal';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import useUser from '@/context/UserProvider';
-import { formatWalletLink, isUserRegistered } from '@/lib/helpers';
+import {
+	formatWalletLink,
+	isUserRegistered,
+	shortenAddress,
+} from '@/lib/helpers';
 import { Container } from '@/components/Grid';
 import useModal from '@/context/ModalProvider';
 import { EDirection } from '@/apollo/types/gqlEnums';
@@ -104,9 +107,12 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 									</EditProfile>
 								)}
 								<AddressContainer>
-									<AddressText size='Big'>
+									<AddressTextNonMobile size='Big'>
 										{user.walletAddress}
-									</AddressText>
+									</AddressTextNonMobile>
+									<AddressTextMobile size='Big'>
+										{shortenAddress(user.walletAddress)}
+									</AddressTextMobile>
 									<ExternalLink
 										href={formatWalletLink(
 											chainId,
@@ -175,12 +181,18 @@ const WalletContainer = styled(Flex)`
 	}
 `;
 
-const AddressText = styled(GLink)`
-	max-width: 250px;
-	overflow: auto;
-	margin: 0 5px;
-	${mediaQueries.tablet} {
+const AddressTextNonMobile = styled(GLink)`
+	display: none;
+	${mediaQueries.mobileL} {
+		margin: 0 5px;
 		max-width: 500px;
+		display: unset;
+	}
+`;
+
+const AddressTextMobile = styled(GLink)`
+	${mediaQueries.mobileL} {
+		display: none;
 	}
 `;
 
