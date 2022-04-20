@@ -57,8 +57,9 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 
 	const [showModal, setShowModal] = useState<boolean>(false); // follow this state to refresh user content on screen
 	const [showIncompleteWarning, setShowIncompleteWarning] = useState(true);
-	const notUserRegisteredAndShowIncompleteWarning =
-		!isUserRegistered(user) && showIncompleteWarning;
+	const showCompleteToast =
+		!isUserRegistered(user) && showIncompleteWarning && myAccount;
+
 	useEffect(() => {
 		if (myAccount && !isSignedIn) {
 			showSignWithWallet();
@@ -74,50 +75,52 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 
 	return (
 		<>
-			{notUserRegisteredAndShowIncompleteWarning && (
-				<IncompleteProfileToast
-					close={() => setShowIncompleteWarning(false)}
-				/>
-			)}
 			<PublicProfileHeader>
-				<ContainerStyled
-					hasMarginTop={notUserRegisteredAndShowIncompleteWarning}
-				>
-					<Image
-						src={user.avatar || '/images/avatar.svg'}
-						width={128}
-						height={128}
-						alt={user.name}
-					/>
-					<UserInfoRow>
-						<H3 weight={700}>{user.name}</H3>
-						{user.email && <GLink size='Big'>{user.email}</GLink>}
-						<WalletContainer>
-							{myAccount && user?.name && user?.email && (
-								<PinkLink
-									size='Big'
-									onClick={() => setShowModal(true)}
-								>
-									Edit Profile
-								</PinkLink>
+				<Container>
+					{showCompleteToast && (
+						<IncompleteProfileToast
+							close={() => setShowIncompleteWarning(false)}
+						/>
+					)}
+					<UserInfo>
+						<Image
+							src={user.avatar || '/images/avatar.svg'}
+							width={128}
+							height={128}
+							alt={user.name}
+						/>
+						<UserInfoRow>
+							<H3 weight={700}>{user.name}</H3>
+							{user.email && (
+								<GLink size='Big'>{user.email}</GLink>
 							)}
-							<AddressContainer>
-								<AddressText size='Big'>
-									{user.walletAddress}
-								</AddressText>
-								<ExternalLink
-									href={formatWalletLink(
-										chainId,
-										user.walletAddress,
-									)}
-									color={brandColors.pinky[500]}
-								>
-									<IconExternalLink />
-								</ExternalLink>
-							</AddressContainer>
-						</WalletContainer>
-					</UserInfoRow>
-				</ContainerStyled>
+							<WalletContainer>
+								{myAccount && user?.name && user?.email && (
+									<EditProfile
+										size='Big'
+										onClick={() => setShowModal(true)}
+									>
+										Edit Profile
+									</EditProfile>
+								)}
+								<AddressContainer>
+									<AddressText size='Big'>
+										{user.walletAddress}
+									</AddressText>
+									<ExternalLink
+										href={formatWalletLink(
+											chainId,
+											user.walletAddress,
+										)}
+										color={brandColors.pinky[500]}
+									>
+										<IconExternalLink />
+									</ExternalLink>
+								</AddressContainer>
+							</WalletContainer>
+						</UserInfoRow>
+					</UserInfo>
+				</Container>
 			</PublicProfileHeader>
 			<PublicProfileContributes user={user} myAccount={myAccount} />
 			{showModal && (
@@ -127,32 +130,29 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 	);
 };
 
-const ContainerStyled = styled(Container)<{ hasMarginTop: boolean }>`
-	display: flex;
-	justify-content: center;
-	align-items: center;
+const UserInfo = styled(FlexCenter)`
 	gap: 24px;
+	margin-top: 32px;
 	flex-direction: column;
-	margin-top: ${props => (props.hasMarginTop ? '60px' : '0px')};
 	> :first-child {
 		border-radius: 32px;
 	}
 	${mediaQueries.tablet} {
 		justify-content: flex-start;
-		margin-top: 0;
 		flex-direction: row;
 	}
 `;
 
 const PublicProfileHeader = styled.div`
-	padding-top: 180px;
+	padding-top: 120px;
 	padding-bottom: 32px;
 	background-color: ${neutralColors.gray[100]};
 `;
 
-const PinkLink = styled(GLink)`
+const EditProfile = styled(GLink)`
 	color: ${brandColors.pinky[500]};
 	cursor: pointer;
+	flex-shrink: 0;
 `;
 
 const UserInfoRow = styled.div`
