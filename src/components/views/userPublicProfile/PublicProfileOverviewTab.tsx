@@ -2,15 +2,31 @@ import { useRouter } from 'next/router';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IButtonProps } from '@giveth/ui-design-system/lib/esm/components/buttons/type';
-import { brandColors, H1, QuoteText, Button } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	H1,
+	QuoteText,
+	Button,
+	OulineButton,
+} from '@giveth/ui-design-system';
 
 import Routes from '@/lib/constants/Routes';
 import ContributeCard from './PublicProfileContributeCard';
 import { Flex } from '@/components/styled-components/Flex';
-import { IUserPublicProfileView } from './UserPublicProfile.view';
 import { isUserRegistered } from '@/lib/helpers';
-import { Container } from '@/components/Grid';
 import useModal from '@/context/ModalProvider';
+import { IUserPublicProfileView } from '@/components/views/userPublicProfile/UserPublicProfile.view';
+import { mediaQueries } from '@/lib/constants/constants';
+
+interface IBtnProps extends IButtonProps {
+	outline?: boolean;
+}
+
+interface ISection {
+	title: string;
+	subtitle: string;
+	buttons: IBtnProps[];
+}
 
 const PublicProfileOverviewTab: FC<IUserPublicProfileView> = ({ user }) => {
 	const router = useRouter();
@@ -35,9 +51,8 @@ const PublicProfileOverviewTab: FC<IUserPublicProfileView> = ({ user }) => {
 			buttons: [
 				{
 					label: 'COMPLETE PROFILE',
-					buttonType: 'primary',
 					onClick: () => router.push(Routes.Onboard),
-				} as IButtonProps,
+				},
 			],
 		},
 		donate: {
@@ -47,14 +62,13 @@ const PublicProfileOverviewTab: FC<IUserPublicProfileView> = ({ user }) => {
 			buttons: [
 				{
 					label: 'CREATE A PROJECT',
-					buttonType: 'primary',
 					onClick: handleCreateButton,
-				} as IButtonProps,
+				},
 				{
 					label: 'VIEW PROJECTS',
-					buttonType: 'secondary',
 					onClick: () => router.push(Routes.Projects),
-				} as IButtonProps,
+					outline: true,
+				},
 			],
 		},
 		getGiv: {
@@ -63,14 +77,13 @@ const PublicProfileOverviewTab: FC<IUserPublicProfileView> = ({ user }) => {
 			buttons: [
 				{
 					label: 'EXPLORE GIVBACKS',
-					buttonType: 'primary',
 					onClick: () => router.push(Routes.GIVbacks),
-				} as IButtonProps,
+				},
 			],
 		},
 	};
 
-	const [section, setSection] = useState(Sections.getGiv);
+	const [section, setSection] = useState<ISection>(Sections.getGiv);
 	const { title, subtitle, buttons } = section;
 
 	useEffect(() => {
@@ -88,61 +101,56 @@ const PublicProfileOverviewTab: FC<IUserPublicProfileView> = ({ user }) => {
 
 	return (
 		<UserContributeInfo>
-			<ContributeCard user={user} myAccount={true} />
-			<CustomContainer>
-				<AccountHero title={title}>
-					<H1>{title}</H1>
-					<QuoteText>{subtitle}</QuoteText>
-					<Buttons>
-						{buttons.map((btn, index) => {
-							return (
-								<Btn
-									size='large'
-									key={index}
-									label={btn.label}
-									buttonType={btn.buttonType}
-									onClick={e => btn.onClick && btn.onClick(e)}
-								/>
-							);
-						})}
-					</Buttons>
-				</AccountHero>
-			</CustomContainer>
+			<ContributeCard user={user} myAccount />
+			<AccountHero leftAlign={title === Sections.donate.title}>
+				<H1>{title}</H1>
+				<QuoteText>{subtitle}</QuoteText>
+				<Buttons>
+					{buttons.map((btn, index) => {
+						const props: IButtonProps = {
+							size: 'large',
+							label: btn.label,
+							buttonType: 'primary',
+							onClick: btn.onClick,
+						};
+						if (btn.outline)
+							return <OulineButton key={index} {...props} />;
+						return <Button key={index} {...props} />;
+					})}
+				</Buttons>
+			</AccountHero>
 		</UserContributeInfo>
 	);
 };
 
-export default PublicProfileOverviewTab;
-
-const CustomContainer = styled(Container)`
-	padding: 0;
-`;
-
-const AccountHero = styled.div`
+const AccountHero = styled.div<{ leftAlign: boolean }>`
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-	height: 480px;
+	height: 580px;
 	background-image: url('/images/backgrounds/account-bg.png');
 	margin: 31px 0 0 0;
 	border-radius: 8px;
 	color: ${brandColors.giv[500]};
-	padding: 0 60px;
-	align-items: ${props =>
-		props.title === 'Start donating or raising funds'
-			? 'flex-start'
-			: 'center'};
+	padding: 0 15px;
+	align-items: ${props => (props.leftAlign ? 'flex-start' : 'center')};
+	text-align: ${props => (props.leftAlign ? 'left' : 'center')};
 	justify-content: center;
-	h1 {
+	> h1 {
 		font-weight: bold;
+		margin-bottom: 9px;
 	}
 	div {
 		font-size: 24px;
 	}
+	${mediaQueries.mobileL} {
+		height: 480px;
+		padding: 0 60px;
+	}
 `;
 
 const UserContributeInfo = styled.div`
-	padding: 40px 0 60px;
+	padding: 40px 10px 60px;
 `;
 
 const Buttons = styled(Flex)`
@@ -151,21 +159,4 @@ const Buttons = styled(Flex)`
 	flex-wrap: wrap;
 `;
 
-const Btn = styled(Button)`
-	background-color: ${props =>
-		props.buttonType === 'secondary' && 'transparent'};
-	color: ${props =>
-		props.buttonType === 'secondary' && brandColors.pinky[500]};
-	border: 2px solid
-		${props => props.buttonType === 'secondary' && brandColors.pinky[500]};
-	:hover {
-		background-color: ${props =>
-			props.buttonType === 'secondary' && 'transparent'};
-		border: 2px solid
-			${props =>
-				props.buttonType === 'secondary' && brandColors.pinky[700]};
-		color: ${props =>
-			props.buttonType === 'secondary' && brandColors.pinky[700]};
-	}
-	min-width: 220px;
-`;
+export default PublicProfileOverviewTab;
