@@ -57,7 +57,9 @@ const PublicProfileContributes: FC<IUserPublicProfileView> = ({
 
 	return (
 		<ProfileContainer>
-			{!myAccount && <ContributeCard user={user} />}
+			{!myAccount && tab === EPublicProfile.PROJECTS && (
+				<ContributeCard user={user} />
+			)}
 			<PublicProfileTabsContainer>
 				{myAccount && (
 					<PublicProfileTab
@@ -118,7 +120,7 @@ const PublicProfileContributes: FC<IUserPublicProfileView> = ({
 };
 
 const ProfileContainer = styled(Container)`
-	padding: 0 !important;
+	padding: 0 10px !important;
 `;
 
 const PublicProfileTabsContainer = styled(Flex)`

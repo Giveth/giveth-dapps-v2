@@ -126,7 +126,6 @@ export const ProjectsContainer = styled(Container)`
 `;
 
 const ProjectsTableWrapper = styled.div`
-	margin-left: 35px;
 	overflow: auto;
 `;
 

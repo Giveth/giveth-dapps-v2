@@ -150,7 +150,7 @@ const AccountHero = styled.div<{ leftAlign: boolean }>`
 `;
 
 const UserContributeInfo = styled.div`
-	padding: 40px 10px 60px;
+	padding: 40px 0 60px;
 `;
 
 const Buttons = styled(Flex)`
