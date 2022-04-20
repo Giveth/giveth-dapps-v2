@@ -46,16 +46,13 @@ const config: EnvConfig = {
 
 		pools: [
 			{
-				POOL_ADDRESS: '0x8a6b25e33b12d1bb6929a8793961076bd1f9d3eb',
-				VAULT_ADDRESS: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-				POOL_ID:
-					'0x8a6b25e33b12d1bb6929a8793961076bd1f9d3eb00020000000000000000053f',
-				LM_ADDRESS: '0x4B319c068685aF260c91407B651918307df30061',
+				POOL_ADDRESS: '0x6D5481911052a42c109F1f56354BEB07Ec430b85',
+				LM_ADDRESS: '0x9e4EcF5fE5F58C888C84338525422A1D0915f6ff',
 				type: StakingType.UNISWAPV2,
 				title: 'GIV / DAI',
 				description: '50% GIV, 50% DAI',
 				provideLiquidityLink:
-					'https://kovan.app.balancer.fi/#/pool/0x8a6b25e33b12d1bb6929a8793961076bd1f9d3eb00020000000000000000053f',
+					'https://app.uniswap.org/#/add/v2/0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa/0x29434A25abd94AE882aA883eea81585Aaa5b078D?chain=kovan',
 				unit: 'LP',
 				active: true,
 			},
