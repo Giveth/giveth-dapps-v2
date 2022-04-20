@@ -27,10 +27,14 @@ export class SubgraphQueryBuilder {
 			rewardsHoneyswap
 			rewardPerTokenPaidBalancer
 			rewardsBalancer
+			rewardPerTokenPaidUniswapV2GivDai
+			rewardsUniswapV2GivDai
 			givback
 			givbackLiquidPart
 			balancerLp
 			balancerLpStaked
+			uniswapV2GivDaiLp
+			uniswapV2GivDaiLpStaked
 			sushiswapLp
 			sushiSwapLpStaked
 			honeyswapLp 

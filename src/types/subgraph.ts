@@ -12,10 +12,14 @@ export interface IBalances {
 	rewardsHoneyswap: ethers.BigNumber;
 	rewardPerTokenPaidBalancer: ethers.BigNumber;
 	rewardsBalancer: ethers.BigNumber;
+	rewardPerTokenPaidUniswapV2GivDai: ethers.BigNumber;
+	rewardsUniswapV2GivDai: ethers.BigNumber;
 	givback: ethers.BigNumber;
 	givbackLiquidPart: ethers.BigNumber;
 	balancerLp: ethers.BigNumber;
 	balancerLpStaked: ethers.BigNumber;
+	uniswapV2GivDaiLp: ethers.BigNumber;
+	uniswapV2GivDaiLpStaked: ethers.BigNumber;
 	sushiswapLp: ethers.BigNumber;
 	sushiSwapLpStaked: ethers.BigNumber;
 	honeyswapLp: ethers.BigNumber;
@@ -43,10 +47,14 @@ export const ZeroBalances: IBalances = {
 	rewardsHoneyswap: constants.Zero,
 	rewardPerTokenPaidBalancer: constants.Zero,
 	rewardsBalancer: constants.Zero,
+	rewardPerTokenPaidUniswapV2GivDai: constants.Zero,
+	rewardsUniswapV2GivDai: constants.Zero,
 	givback: constants.Zero,
 	givbackLiquidPart: constants.Zero,
 	balancerLp: constants.Zero,
 	balancerLpStaked: constants.Zero,
+	uniswapV2GivDaiLp: constants.Zero,
+	uniswapV2GivDaiLpStaked: constants.Zero,
 	sushiswapLp: constants.Zero,
 	sushiSwapLpStaked: constants.Zero,
 	honeyswapLp: constants.Zero,
