@@ -1,6 +1,12 @@
 import { FunctionComponent, ReactNode, useState } from 'react';
 import { defaultTheme } from 'react-select';
-import { neutralColors, P, B, brandColors } from '@giveth/ui-design-system';
+import {
+	neutralColors,
+	P,
+	B,
+	brandColors,
+	Caption,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
 import Select, {
@@ -9,11 +15,13 @@ import Select, {
 	OptionProps,
 	OnChangeValue,
 	StylesConfig,
+	MenuListProps,
 } from 'react-select';
 
 import useDeviceDetect from '@/hooks/useDeviceDetect';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import XIcon from '/public/images/x-icon.svg';
+import GivbackEligibleIcon from '/public/images/givback-eligible.svg';
 
 interface ITokenPicker {
 	isOpen: boolean;
@@ -45,6 +53,18 @@ const ImageIcon = (props: { symbol: string }) => {
 	return <Image alt={symbol} src={image_path} width='24px' height='24px' />;
 };
 
+const MenuList = (props: MenuListProps<IProjectAcceptedToken, false>) => {
+	return (
+		<components.MenuList {...props}>
+			<GivBackIconContainer>
+				<Image alt='givback eligible icon' src={GivbackEligibleIcon} />
+				<Caption>GIVbacks eligible tokens</Caption>
+			</GivBackIconContainer>
+			{props.children}
+		</components.MenuList>
+	);
+};
+
 const Option = ({ ...props }: OptionProps<IProjectAcceptedToken, false>) => {
 	const value = props.data;
 	return (
@@ -53,8 +73,14 @@ const Option = ({ ...props }: OptionProps<IProjectAcceptedToken, false>) => {
 				<RowContainer>
 					<ImageIcon symbol={value.symbol} />
 					<B>
-						{value.name} ({value.symbol})
-					</B>
+						{value.name} ({value.symbol}){'  '}{' '}
+						{value?.isGivbackEligible && (
+							<Image
+								alt='givback eligible icon'
+								src={GivbackEligibleIcon}
+							/>
+						)}
+					</B>{' '}
 				</RowContainer>
 				{props.isSelected && (
 					<Image
@@ -238,6 +264,7 @@ const TokenPicker = (props: {
 						IndicatorSeparator: null,
 						Option,
 						Control,
+						MenuList,
 					}}
 					noOptionsMessage={() => (
 						<NotFound emptyField={() => onChange('')} />
@@ -406,6 +433,7 @@ const RowContainer = styled.div`
 	gap: 8px;
 	> :first-child {
 		flex-shrink: 0;
+		padding-right: 20px;
 	}
 	> :last-child {
 		color: ${neutralColors.gray[900]};
@@ -440,6 +468,20 @@ const NotFoundContainer = styled.div`
 		margin-top: 20px;
 		color: ${brandColors.pinky[500]};
 		cursor: pointer;
+	}
+`;
+
+const GivBackIconContainer = styled.div`
+	display: flex;
+	flex-direction: row;
+	padding: 8px 10px;
+	margin: 0 0 10px 0;
+	border-bottom: 1px solid ${neutralColors.gray[300]};
+	* {
+		color: ${brandColors.deep[600]};
+	}
+	div {
+		margin-left: 10px;
 	}
 `;
 
