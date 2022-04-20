@@ -33,7 +33,6 @@ import {
 } from './Header.sc';
 import { useSubgraph } from '@/context/subgraph.context';
 import { RewardMenu } from '@/components/menu/RewardMenu';
-import { walletsArray } from '@/lib/wallet/walletTypes';
 import MenuWallet from '@/components/menu/MenuWallet';
 import { ETheme, useGeneral } from '@/context/general.context';
 import { menuRoutes } from '../menu/menuRoutes';
@@ -41,7 +40,6 @@ import useUser from '@/context/UserProvider';
 import { isUserRegistered, shortenAddress } from '@/lib/helpers';
 import HeaderRoutesResponsive from './HeaderResponsiveRoutes';
 import Routes from '@/lib/constants/Routes';
-import StorageLabel from '@/lib/localStorage';
 import useModal from '@/context/ModalProvider';
 
 export interface IHeader {
@@ -76,14 +74,6 @@ const Header: FC<IHeader> = () => {
 	const router = useRouter();
 
 	const showLinks = !isCreateRoute;
-
-	useEffect(() => {
-		const selectedWalletName = localStorage.getItem(StorageLabel.WALLET);
-		const wallet = walletsArray.find(w => w.value === selectedWalletName);
-		if (wallet) {
-			activate(wallet.connector);
-		}
-	}, [activate]);
 
 	useEffect(() => {
 		setIsGIVeconomyRoute(router.route.startsWith('/giv'));

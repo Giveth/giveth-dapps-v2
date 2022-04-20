@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { zIndex } from '@/lib/constants/constants';
 import {
 	neutralColors,
 	brandColors,
@@ -6,7 +7,6 @@ import {
 	GLink,
 	ButtonLink,
 } from '@giveth/ui-design-system';
-
 import { Flex } from '@/components/styled-components/Flex';
 import { Button as CButton } from '@/components/styled-components/Button';
 import { IHeader } from './Header';
@@ -20,7 +20,7 @@ export const StyledHeader = styled(Flex)<IHeader>`
 	right: 0;
 	top: ${props => (props.show ? 0 : '-100px')};
 	padding: 16px 32px;
-	z-index: 11;
+	z-index: ${zIndex.HEADER};
 	transition: top 0.3s ease;
 `;
 

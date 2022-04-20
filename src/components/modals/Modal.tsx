@@ -9,6 +9,7 @@ import {
 	ModalHeaderTitlePosition,
 } from '@/components/modals/ModalHeader';
 import { ETheme, useGeneral } from '@/context/general.context';
+import { zIndex } from '@/lib/constants/constants';
 
 interface ModalWrapperProps {
 	fullScreen?: boolean;
@@ -109,7 +110,7 @@ const Background = styled.div`
 	align-items: center;
 	top: 0;
 	left: 0;
-	z-index: 1060;
+	z-index: ${zIndex.MODAL};
 `;
 
 const ModalWrapper = styled.div<ModalWrapperProps>`
