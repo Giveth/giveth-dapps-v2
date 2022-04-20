@@ -57,7 +57,7 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 
 	const [showModal, setShowModal] = useState<boolean>(false); // follow this state to refresh user content on screen
 	const [showIncompleteWarning, setShowIncompleteWarning] = useState(true);
-	const showCompleteToast =
+	const showCompleteProfile =
 		!isUserRegistered(user) && showIncompleteWarning && myAccount;
 
 	useEffect(() => {
@@ -77,13 +77,13 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 		<>
 			<PublicProfileHeader>
 				<Container>
-					{showCompleteToast && (
+					{showCompleteProfile && (
 						<IncompleteProfileToast
 							close={() => setShowIncompleteWarning(false)}
 						/>
 					)}
 					<UserInfo>
-						<Image
+						<img
 							src={user.avatar || '/images/avatar.svg'}
 							width={128}
 							height={128}
