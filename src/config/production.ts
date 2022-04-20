@@ -31,7 +31,7 @@ const config: EnvConfig = {
 		blockExplorerName: ['etherscan'],
 		blockExplorerUrls: ['https://etherscan.io/'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-mainnet',
+			'https://api.thegraph.com/subgraphs/name/aminlatifi/giveth-economy',
 
 		TOKEN_ADDRESS: '0x900db999074d9277c5da2a43f252d74366230da0',
 		WETH_TOKEN_ADDRESS: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
