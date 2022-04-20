@@ -128,7 +128,7 @@ const TokenPicker = (props: {
 		control: (base: any) => ({
 			...base,
 			minWidth: isMobile ? '90%' : 240,
-			maxWidth: isMobile ? '90%' : '280px',
+			maxWidth: isMobile ? '90%' : '100%',
 			margin: isMobile ? '8px 16px' : 8,
 			marginBottom: isMobile ? 3 : -3,
 			border: `2px solid ${neutralColors.gray[500]}`,
@@ -147,7 +147,7 @@ const TokenPicker = (props: {
 			...base,
 			borderRadius: 0,
 			padding: isMobile ? '0 15px' : 0,
-			width: isMobile ? '100%' : '280px',
+			width: isMobile ? '100%' : '320px',
 			height: isMobile ? '300px' : '220px',
 		}),
 		singleValue: (base: any) => ({
@@ -165,6 +165,7 @@ const TokenPicker = (props: {
 		}),
 		option: (provided, state) => ({
 			...provided,
+			width: '100%',
 			background: state.isSelected ? neutralColors.gray[200] : 'white',
 			':hover': {
 				background: neutralColors.gray[200],
@@ -436,6 +437,7 @@ const RowContainer = styled.div`
 		padding-right: 20px;
 	}
 	> :last-child {
+		width: 100%;
 		color: ${neutralColors.gray[900]};
 	}
 `;
