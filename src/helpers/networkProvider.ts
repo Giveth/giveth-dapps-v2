@@ -32,5 +32,6 @@ export const getGivStakingConfig = (
 		title: 'GIV',
 		description: '100% GIV',
 		unit: 'GIV',
+		active: true,
 	};
 };

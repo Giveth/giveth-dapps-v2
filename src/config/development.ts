@@ -46,6 +46,31 @@ const config: EnvConfig = {
 
 		pools: [
 			{
+				POOL_ADDRESS: '0x6D5481911052a42c109F1f56354BEB07Ec430b85',
+				LM_ADDRESS: '0x9e4EcF5fE5F58C888C84338525422A1D0915f6ff',
+				type: StakingType.UNISWAPV2,
+				title: 'GIV / DAI',
+				description: '50% GIV, 50% DAI',
+				provideLiquidityLink:
+					'https://app.uniswap.org/#/add/v2/0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa/0x29434A25abd94AE882aA883eea81585Aaa5b078D?chain=kovan',
+				unit: 'LP',
+				active: true,
+			},
+			{
+				POOL_ADDRESS: '0x8a6b25e33b12d1bb6929a8793961076bd1f9d3eb',
+				VAULT_ADDRESS: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+				POOL_ID:
+					'0x8a6b25e33b12d1bb6929a8793961076bd1f9d3eb00020000000000000000053f',
+				LM_ADDRESS: '0x4B319c068685aF260c91407B651918307df30061',
+				type: StakingType.BALANCER,
+				title: 'GIV / ETH',
+				description: '80% GIV, 20% ETH',
+				provideLiquidityLink:
+					'https://kovan.app.balancer.fi/#/pool/0x8a6b25e33b12d1bb6929a8793961076bd1f9d3eb00020000000000000000053f',
+				unit: 'LP',
+				active: true,
+			},
+			{
 				INCENTIVE_START_TIME: 1640272200,
 				INCENTIVE_END_TIME: 1655997000,
 				INCENTIVE_REWARD_AMOUNT: 10000000,
@@ -61,25 +86,13 @@ const config: EnvConfig = {
 					'0x5f672d71399d8cDbA64f596394b4f4381247E025',
 				POOL_ADDRESS: '0xa48C26fF05F47a2eEd88C09664de1cb604A21b01',
 				LM_ADDRESS: '0x1aD46D40648639f84a396Fef32132888038c5aA8',
-				type: StakingType.UNISWAP,
+				type: StakingType.UNISWAPV3,
 				title: 'GIV / ETH',
 				description: '0.3% tier only',
 				provideLiquidityLink: `https://app.uniswap.org/#/add/ETH/0x29434A25abd94AE882aA883eea81585Aaa5b078D/3000`,
 				unit: 'NFT',
 				infinitePositionId: 9985,
-			},
-			{
-				POOL_ADDRESS: '0x8a6b25e33b12d1bb6929a8793961076bd1f9d3eb',
-				VAULT_ADDRESS: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-				POOL_ID:
-					'0x8a6b25e33b12d1bb6929a8793961076bd1f9d3eb00020000000000000000053f',
-				LM_ADDRESS: '0x4B319c068685aF260c91407B651918307df30061',
-				type: StakingType.BALANCER,
-				title: 'GIV / ETH',
-				description: '80% GIV, 20% ETH',
-				provideLiquidityLink:
-					'https://kovan.app.balancer.fi/#/pool/0x8a6b25e33b12d1bb6929a8793961076bd1f9d3eb00020000000000000000053f',
-				unit: 'LP',
+				active: false,
 			},
 		],
 		regenStreams: [],
@@ -128,6 +141,7 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://app.honeyswap.org/#/add/0x83a8eea6427985C523a0c4d9d3E62C051B6580d3/0x69F79C9eA174d4659B18c7993c7EFbBbB58cF068',
 				unit: 'LP',
+				active: true,
 			},
 			{
 				POOL_ADDRESS: '0x437B0da7932b21F54488fD80Ee09b519a6f4d8AD',
@@ -138,6 +152,7 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://app.sushi.com/add/0x83a8eea6427985C523a0c4d9d3E62C051B6580d3/0x736a98655049433f79dCcF5e54b887E8890b63D1',
 				unit: 'LP',
+				active: true,
 			},
 		],
 
@@ -176,6 +191,7 @@ const config: EnvConfig = {
 					link: 'https://shapeshift.com/',
 				},
 				regenFarmStartTime: 1646306818206,
+				active: true,
 			},
 		],
 	},

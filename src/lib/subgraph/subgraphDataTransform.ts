@@ -32,10 +32,16 @@ const transformBalanceInfo = (info: any): IBalances => {
 	const rewardsHoneyswap = BN(info.rewardsHoneyswap || 0);
 	const rewardPerTokenPaidBalancer = BN(info.rewardPerTokenPaidBalancer || 0);
 	const rewardsBalancer = BN(info.rewardsBalancer || 0);
+	const rewardPerTokenPaidUniswapV2GivDai = BN(
+		info.rewardPerTokenPaidUniswapV2GivDai || 0,
+	);
+	const rewardsUniswapV2GivDai = BN(info.rewardsUniswapV2GivDai || 0);
 	const givback = BN(info.givback || 0);
 	const givbackLiquidPart = BN(info.givbackLiquidPart || 0);
 	const balancerLp = BN(info.balancerLp || 0);
 	const balancerLpStaked = BN(info.balancerLpStaked || 0);
+	const uniswapV2GivDaiLp = BN(info.uniswapV2GivDaiLp || 0);
+	const uniswapV2GivDaiLpStaked = BN(info.uniswapV2GivDaiLpStaked || 0);
 	const sushiswapLp = BN(info.sushiswapLp || 0);
 	const sushiSwapLpStaked = BN(info.sushiSwapLpStaked || 0);
 	const honeyswapLp = BN(info.honeyswapLp || 0);
@@ -63,10 +69,14 @@ const transformBalanceInfo = (info: any): IBalances => {
 		rewardsHoneyswap,
 		rewardPerTokenPaidBalancer,
 		rewardsBalancer,
+		rewardPerTokenPaidUniswapV2GivDai,
+		rewardsUniswapV2GivDai,
 		givback,
 		givbackLiquidPart,
 		balancerLp,
 		balancerLpStaked,
+		uniswapV2GivDaiLp,
+		uniswapV2GivDaiLpStaked,
 		sushiswapLp,
 		sushiSwapLpStaked,
 		honeyswapLp,
@@ -231,6 +241,9 @@ export const transformSubgraphData = (data: any = {}): ISubgraphValue => {
 		[StakingType.GIV_LM]: transformUnipoolInfo(data[StakingType.GIV_LM]),
 		[StakingType.BALANCER]: transformUnipoolInfo(
 			data[StakingType.BALANCER],
+		),
+		[StakingType.UNISWAPV2]: transformUnipoolInfo(
+			data[StakingType.UNISWAPV2],
 		),
 		[StakingType.HONEYSWAP]: transformUnipoolInfo(
 			data[StakingType.HONEYSWAP],

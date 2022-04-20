@@ -10,7 +10,7 @@ import { getGivStakingConfig } from '@/helpers/networkProvider';
 import config from '@/configuration';
 
 const uniswapConfig = config.MAINNET_CONFIG.pools.find(
-	p => p.type === StakingType.UNISWAP,
+	p => p.type === StakingType.UNISWAPV3,
 ) as UniswapV3PoolStakingConfig;
 
 export class SubgraphQueryBuilder {
@@ -27,10 +27,14 @@ export class SubgraphQueryBuilder {
 			rewardsHoneyswap
 			rewardPerTokenPaidBalancer
 			rewardsBalancer
+			rewardPerTokenPaidUniswapV2GivDai
+			rewardsUniswapV2GivDai
 			givback
 			givbackLiquidPart
 			balancerLp
 			balancerLpStaked
+			uniswapV2GivDaiLp
+			uniswapV2GivDaiLpStaked
 			sushiswapLp
 			sushiSwapLpStaked
 			honeyswapLp 
@@ -187,7 +191,7 @@ export class SubgraphQueryBuilder {
 
 	static getMainnetQuery = (address: string): string => {
 		const uniswapConfig = config.MAINNET_CONFIG.pools.find(
-			c => c.type === StakingType.UNISWAP,
+			c => c.type === StakingType.UNISWAPV3,
 		) as UniswapV3PoolStakingConfig;
 
 		return `
@@ -197,7 +201,7 @@ export class SubgraphQueryBuilder {
 			${SubgraphQueryBuilder.generateUnipoolInfoQueries([
 				getGivStakingConfig(config.MAINNET_CONFIG),
 				...config.MAINNET_CONFIG.pools.filter(
-					c => c.type !== StakingType.UNISWAP,
+					c => c.type !== StakingType.UNISWAPV3,
 				),
 				...config.XDAI_CONFIG.regenFarms,
 			])}
