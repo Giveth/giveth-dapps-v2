@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
-import useUser from '@/context/UserProvider';
 import {
 	P,
 	H5,
@@ -20,12 +19,8 @@ interface IText {
 
 export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
 	const { theme } = useGeneral();
-	const {
-		state: { user },
-	} = useUser();
 	const router = useRouter();
 
-	if (!user) return null;
 	return (
 		<Modal
 			setShowModal={setShowModal}
