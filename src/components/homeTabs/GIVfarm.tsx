@@ -49,24 +49,24 @@ const renderPools = (
 	pools
 		.filter(p => p.active === active)
 		.map((poolStakingConfig, index) => {
-			return poolStakingConfig.type === StakingType.UNISWAPV3 ? (
+			return (
 				<Col
 					sm={6}
 					lg={4}
 					key={`staking_pool_card_${network}_${index}`}
 				>
-					<StakingPositionCard
-						network={network}
-						poolStakingConfig={poolStakingConfig}
-					/>
-				</Col>
-			) : (
-				<Col sm={6} lg={4}>
-					<StakingPoolCard
-						key={`staking_pool_card_${network}_${index}`}
-						network={network}
-						poolStakingConfig={poolStakingConfig}
-					/>
+					{poolStakingConfig.type === StakingType.UNISWAPV3 ? (
+						<StakingPositionCard
+							network={network}
+							poolStakingConfig={poolStakingConfig}
+						/>
+					) : (
+						<StakingPoolCard
+							key={`staking_pool_card_${network}_${index}`}
+							network={network}
+							poolStakingConfig={poolStakingConfig}
+						/>
+					)}
 				</Col>
 			);
 		});
