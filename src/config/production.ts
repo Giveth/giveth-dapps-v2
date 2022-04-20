@@ -52,8 +52,8 @@ const config: EnvConfig = {
 					'0x8a6b25e33b12d1bb6929a8793961076bd1f9d3eb00020000000000000000053f',
 				LM_ADDRESS: '0x4B319c068685aF260c91407B651918307df30061',
 				type: StakingType.UNISWAPV2,
-				title: 'GIV / ETH',
-				description: '50% GIV, 50% ETH',
+				title: 'GIV / DAI',
+				description: '50% GIV, 50% DAI',
 				provideLiquidityLink:
 					'https://kovan.app.balancer.fi/#/pool/0x8a6b25e33b12d1bb6929a8793961076bd1f9d3eb00020000000000000000053f',
 				unit: 'LP',
