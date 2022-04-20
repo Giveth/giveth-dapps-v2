@@ -73,7 +73,9 @@ export const NftsProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
 	const mainnetConfig = config.MAINNET_CONFIG;
 
-	const uniswapConfig = mainnetConfig.pools[0] as UniswapV3PoolStakingConfig;
+	const uniswapConfig = mainnetConfig.pools.find(
+		c => c.type === StakingType.UNISWAPV3,
+	) as UniswapV3PoolStakingConfig;
 	const rewardToken = uniswapConfig.REWARD_TOKEN;
 	const poolAddress = uniswapConfig.UNISWAP_V3_LP_POOL;
 	const incentiveRefundeeAddress = uniswapConfig.INCENTIVE_REFUNDEE_ADDRESS;

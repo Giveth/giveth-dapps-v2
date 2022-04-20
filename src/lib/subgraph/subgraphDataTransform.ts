@@ -242,6 +242,9 @@ export const transformSubgraphData = (data: any = {}): ISubgraphValue => {
 		[StakingType.BALANCER]: transformUnipoolInfo(
 			data[StakingType.BALANCER],
 		),
+		[StakingType.UNISWAPV2]: transformUnipoolInfo(
+			data[StakingType.UNISWAPV2],
+		),
 		[StakingType.HONEYSWAP]: transformUnipoolInfo(
 			data[StakingType.HONEYSWAP],
 		),
