@@ -114,15 +114,22 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const { getTokenDistroHelper } = useTokenDistro();
 	const { setInfo } = useFarms();
 	const { chainId } = useWeb3React();
-	const { regenStreamType, farmStartTimeMS, regenFarmIntro } =
+	const { regenStreamType, regenFarmIntro } =
 		poolStakingConfig as RegenPoolStakingConfig;
 	const tokenDistroHelper = useMemo(() => {
 		return getTokenDistroHelper(regenStreamType);
 	}, [getTokenDistroHelper, poolStakingConfig]);
 	const [disableModal, setDisableModal] = useState<boolean>(true);
 
-	const { type, title, description, provideLiquidityLink, BUY_LINK, unit } =
-		poolStakingConfig;
+	const {
+		type,
+		title,
+		description,
+		provideLiquidityLink,
+		BUY_LINK,
+		unit,
+		farmStartTimeMS,
+	} = poolStakingConfig;
 
 	const isV3Staking = type === StakingType.UNISWAPV3;
 
@@ -169,6 +176,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									src='/images/icons/questionMarkGiv.svg'
 									height={24}
 									width={24}
+									alt='question'
 								/>
 							</DisableModalImage>
 							<div>
