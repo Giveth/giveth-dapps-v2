@@ -14,6 +14,7 @@ import {
 	Button,
 	neutralColors,
 	D3,
+	ButtonLink,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import links from '@/lib/constants/links';
@@ -27,8 +28,6 @@ const AboutTeam = dynamic(() => import('./AboutTeam'));
 
 const AboutIndex = () => {
 	const [activeTab, setActiveTab] = useState(tabTitles[0]);
-
-	const changeTab = (tab: string) => setActiveTab(tab);
 
 	return (
 		<>
@@ -50,7 +49,7 @@ const AboutIndex = () => {
 						make giving effortless, to reward people all over the
 						world for creating positive change.
 					</UpperCaption>
-					<Link href={links.SUPPORT_US}>
+					<Link href={links.SUPPORT_US} passHref>
 						<UpperButton label='SUPPORT GIVETH'></UpperButton>
 					</Link>
 				</Container>
@@ -87,9 +86,7 @@ const AboutIndex = () => {
 						</RedirectButton>{' '}
 						and{' '}
 						<Link href='/join' passHref>
-							<a>
-								<RedirectButton>Join Page</RedirectButton>
-							</a>
+							<RedirectButton>Join Page</RedirectButton>
 						</Link>{' '}
 						to get more involved.
 					</Lead>
@@ -104,7 +101,7 @@ const AboutIndex = () => {
 				<Tabs>
 					{tabTitles.map(i => (
 						<TabItem
-							onClick={() => changeTab(i)}
+							onClick={() => setActiveTab(i)}
 							className={activeTab === i ? 'active' : ''}
 							key={i}
 						>
@@ -240,8 +237,9 @@ const Middle = styled.div`
 	}
 `;
 
-const UpperButton = styled(Button)`
+const UpperButton = styled(ButtonLink)`
 	margin: 50px auto 180px auto;
+	width: fit-content;
 `;
 
 const UpperCaption = styled(Lead)`
