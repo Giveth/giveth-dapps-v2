@@ -6,6 +6,7 @@ import {
 import { switchNetwork as metamaskSwitchNetwork } from '@/lib/metamask';
 import config from '@/configuration';
 import StorageLabel from '@/lib/localStorage';
+import { showToastError } from './helpers';
 
 // @DEV it's not tested yet! didn't have a multi-chain wallet to test
 const switchWalletConnectNetwork = async (chainId: number) => {
@@ -37,12 +38,17 @@ export const switchNetwork = async (chainId: number) => {
 			break;
 
 		default:
-			(window as any)?.ethereum
-				.request({
-					method: 'wallet_switchEthereumChain',
-					params: [{ chainId: '0x' + chainId.toString(16) }],
-				})
-				.then();
+			const ethereum = (window as any)?.ethereum;
+			if (ethereum) {
+				ethereum
+					.request({
+						method: 'wallet_switchEthereumChain',
+						params: [{ chainId: '0x' + chainId.toString(16) }],
+					})
+					.then();
+			} else {
+				showToastError('Please connect your wallet');
+			}
 	}
 };
 
