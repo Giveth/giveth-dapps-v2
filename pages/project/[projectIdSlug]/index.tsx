@@ -1,11 +1,16 @@
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 import { IProject } from '@/apollo/types/types';
+import NotAvailableProject from '@/components/views/project/NotAvailableProject';
 
 import ProjectIndex from '@/components/views/project/ProjectIndex';
 
 const ProjectRoute = (props: { project?: IProject }) => {
-	return <ProjectIndex project={props.project} />;
+	return props.project ? (
+		<ProjectIndex project={props.project} />
+	) : (
+		<NotAvailableProject />
+	);
 };
 
 export async function getServerSideProps(props: {
