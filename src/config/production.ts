@@ -54,7 +54,7 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://app.uniswap.org/#/add/v2/0x6B175474E89094C44Da98b954EedeAC495271d0F/0x900dB999074d9277c5DA2A43F252D74366230DA0?chain=mainnet',
 				unit: 'LP',
-				farmStartTime: 1651345200000,
+				farmStartTimeMS: 1651345200000,
 				active: true,
 			},
 			{
@@ -190,7 +190,7 @@ const config: EnvConfig = {
 						'ShapeShift is the free and open-source one-stop-shop for cross-chain DeFi. Buy, sell, send, receive, trade, and earn yield on your crypto across a growing number of protocols and chains with no added fees ever. FOX is the governance token of the ShapeShift DAO.',
 					link: 'https://shapeshift.com/',
 				},
-				farmStartTime: 1649001600000,
+				farmStartTimeMS: 1649001600000,
 				active: true,
 			},
 		],

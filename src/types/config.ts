@@ -2,7 +2,7 @@ export interface BasicStakingConfig {
 	LM_ADDRESS: string;
 	GARDEN_ADDRESS?: string;
 	BUY_LINK?: string;
-	farmStartTime?: number;
+	farmStartTimeMS?: number;
 }
 
 export enum StakingType {

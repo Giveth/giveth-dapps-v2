@@ -114,7 +114,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const { getTokenDistroHelper } = useTokenDistro();
 	const { setInfo } = useFarms();
 	const { chainId } = useWeb3React();
-	const { regenStreamType, farmStartTime, regenFarmIntro } =
+	const { regenStreamType, farmStartTimeMS, regenFarmIntro } =
 		poolStakingConfig as RegenPoolStakingConfig;
 	const tokenDistroHelper = useMemo(() => {
 		return getTokenDistroHelper(regenStreamType);
@@ -155,8 +155,8 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const rewardTokenSymbol = regenStreamConfig?.rewardTokenSymbol || 'GIV';
 
 	useEffect(() => {
-		setStarted(farmStartTime ? getNowUnixMS() > farmStartTime : true);
-	}, [farmStartTime]);
+		setStarted(farmStartTimeMS ? getNowUnixMS() > farmStartTimeMS : true);
+	}, [farmStartTimeMS]);
 
 	return (
 		<>
@@ -320,7 +320,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								</Details>
 							) : (
 								<FarmCountDown
-									startTime={farmStartTime || 0}
+									startTime={farmStartTimeMS || 0}
 									setStarted={setStarted}
 								/>
 							)}
