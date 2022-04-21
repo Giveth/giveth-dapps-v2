@@ -216,7 +216,7 @@ const ProjectDonateCard = ({
 				ref={wrapperRef}
 				initialposition={wrapperHeight}
 				drag='y'
-				dragConstraints={{ top: -(wrapperHeight - 168), bottom: 120 }}
+				dragConstraints={{ top: -(wrapperHeight - 158), bottom: 130 }}
 			>
 				{isMobile && <BlueBar />}
 				<ProjectCardOrgBadge
@@ -398,7 +398,7 @@ const Wrapper = styled(motion.div)<{ initialposition: number }>`
 	${mediaQueries.mobileS} {
 		width: 100vw;
 		position: fixed;
-		bottom: calc(-${props => props.initialposition}px + 168px);
+		bottom: calc(-${props => props.initialposition}px + 158px);
 		border-radius: 40px 40px 0 0;
 	}
 
