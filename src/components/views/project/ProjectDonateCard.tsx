@@ -276,10 +276,13 @@ const ProjectDonateCard = ({
 							When you donate to verified projects, you get GIV
 							back.
 						</Caption>
+						<GIVbackButton
+							aria-label='Learn more about this project'
+							href={links.GIVBACK_DOC}
+						>
+							Learn more
+						</GIVbackButton>
 						<ExternalLink href={links.GIVBACK_DOC}>
-							<GIVbackButton aria-label='Learn more about this project'>
-								Learn more
-							</GIVbackButton>
 							<GIVbackQuestionIcon>
 								<IconHelp size={16} />
 							</GIVbackQuestionIcon>
