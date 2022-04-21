@@ -16,11 +16,15 @@ import {
 	DataBlockWithMargin,
 	ClaimCardQuote,
 	DataBlockButton,
+	VideoContainer,
+	VideoOverlay,
 } from './Overview.sc';
 import { IconGIV } from '../Icons/GIV';
 import config from '@/configuration';
 import Routes from '@/lib/constants/Routes';
 import { Col, Container, Row } from '@/components/Grid';
+import { useState } from 'react';
+import Image from 'next/image';
 
 export const TabOverviewTop = () => {
 	return (
@@ -37,6 +41,38 @@ export const TabOverviewTop = () => {
 				</Col>
 			</Container>
 		</OverviewTopContainer>
+	);
+};
+
+export const TabOverviewVideo = () => {
+	const [isPlaying, setIsPlaying] = useState(false);
+	const a = 10;
+	function handleVideoClick() {
+		const video: HTMLVideoElement = document.getElementById(
+			'video',
+		) as HTMLVideoElement;
+		if (video.paused) {
+			video.play();
+			setIsPlaying(true);
+		} else {
+			video.pause();
+			setIsPlaying(false);
+		}
+	}
+	return (
+		<VideoContainer>
+			<video id='video' onClick={handleVideoClick} width='100%'>
+				<source src='/video/GivEconomy.mp4' type='video/mp4' />
+			</video>
+			<VideoOverlay onClick={handleVideoClick} hidden={isPlaying}>
+				<Image
+					src='/images/video_play.svg'
+					width='90px'
+					height='90px'
+					alt='giveconomy video play button'
+				/>
+			</VideoOverlay>
+		</VideoContainer>
 	);
 };
 
