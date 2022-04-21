@@ -2,6 +2,7 @@ export interface BasicStakingConfig {
 	LM_ADDRESS: string;
 	GARDEN_ADDRESS?: string;
 	BUY_LINK?: string;
+	farmStartTimeMS?: number;
 }
 
 export enum StakingType {
@@ -62,7 +63,6 @@ export interface RegenPoolStakingConfig extends SimplePoolStakingConfig {
 		description: string;
 		link: string;
 	};
-	regenFarmStartTime?: number;
 }
 
 export interface GasPreference {
