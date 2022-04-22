@@ -77,28 +77,23 @@ const Wrapper = styled.div`
 	margin-bottom: 16px;
 	color: ${brandColors.deep[600]};
 	display: flex;
-	flex-wrap: wrap;
 	align-items: center;
-	z-index: 10;
+	z-index: 1;
 	background-color: ${neutralColors.gray[200]};
+	flex-wrap: nowrap;
+	overflow-x: auto;
+	max-width: calc(100vw - 32px);
 
-	${mediaQueries.mobileS} {
-		flex-wrap: nowrap;
-		overflow-x: auto;
-		max-width: calc(100vw - 32px);
-
-		::-webkit-scrollbar {
-			width: 0;
-			height: 0;
-			background-color: transparent;
-		}
+	::-webkit-scrollbar {
+		width: 0;
+		height: 0;
+		background-color: transparent;
 	}
 
 	${mediaQueries.tablet} {
 		padding: 16px 0 12px;
 		position: sticky;
 		top: 200px;
-		z-index: 10;
 	}
 `;
 
