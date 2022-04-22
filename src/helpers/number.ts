@@ -44,10 +44,3 @@ export const formatWeiHelper = (
 
 export const gwei2wei = (gweiAmount: string): string =>
 	ethers.utils.parseUnits(gweiAmount, 'gwei').toString();
-
-export const roundNumber = (number?: number, decimals: number = 2): string => {
-	if (number) {
-		const factor = Math.pow(10, decimals);
-		return (Math.round(number * factor) / factor).toFixed(decimals);
-	} else return '0';
-};
