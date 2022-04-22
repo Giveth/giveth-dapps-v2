@@ -1,9 +1,9 @@
 import { GLink, neutralColors, brandColors } from '@giveth/ui-design-system';
 import { BigNumber, utils } from 'ethers';
-import { FC, useState, useCallback, Dispatch, SetStateAction } from 'react';
+import { FC, useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { formatWeiHelper } from '../helpers/number';
-import { PoolStakingConfig } from '../types/config';
+import { formatWeiHelper } from '@/helpers/number';
+import { PoolStakingConfig } from '@/types/config';
 import { Flex } from './styled-components/Flex';
 
 interface IAmountInput {
