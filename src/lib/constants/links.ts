@@ -37,6 +37,7 @@ const links: any = {
 	COMMONS_STACK: 'https://commonsstack.org/',
 	RECRUITEE: 'https://giveth.recruitee.com/',
 	JOINGIVFRENS: 'https://giveth.typeform.com/regenfarms',
+	HISTORY: 'https://docs.giveth.io/whatisgiveth/history',
 	CALENDAR:
 		'https://calendar.google.com/calendar/u/1?cid=Z2l2ZXRoZG90aW9AZ21haWwuY29t',
 };

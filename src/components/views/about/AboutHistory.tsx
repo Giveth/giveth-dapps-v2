@@ -9,6 +9,7 @@ import {
 	Lead,
 } from '@giveth/ui-design-system';
 import { mediaQueries } from '@/lib/constants/constants';
+import links from '@/lib/constants/links';
 
 const AboutHistory = () => {
 	const [sliderSection, setSliderSection] = useState<number>(0);
@@ -146,7 +147,7 @@ const sliderContent = [
 		title: 'Take a dive into the History of Giveth',
 		body: (
 			<ReadMoreButton
-				href='https://docs.giveth.io/whatisgiveth/history/'
+				href={links.HISTORY}
 				target='_blank'
 				label='READ MORE'
 			/>
