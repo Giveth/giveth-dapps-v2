@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { TwitterShareButton } from 'react-share';
 import styled from 'styled-components';
-import { Arc } from '@/components/styled-components/Arc';
 import {
 	Button,
 	brandColors,
@@ -18,6 +17,7 @@ import useUser from '@/context/UserProvider';
 import { isSSRMode, isUserRegistered } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
 import { Col, Row } from '@/components/Grid';
+import { Arc } from '@/components/styled-components/Arc';
 import { HomeContainer } from '@/components/views/homepage/Home.sc';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import useModal from '@/context/ModalProvider';
@@ -208,10 +208,7 @@ const ForMakersButton = styled(Button)`
 
 const GIVeconomy = styled.div`
 	max-width: 800px;
-
-	${mediaQueries.mobileS} {
-		margin-top: 72px;
-	}
+	margin-top: 72px;
 
 	${mediaQueries.tablet} {
 		margin-top: 235px;

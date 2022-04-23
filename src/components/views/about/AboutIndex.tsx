@@ -150,20 +150,15 @@ const TabItem = styled(P)`
 
 const Tabs = styled.div`
 	display: flex;
-	flex-wrap: wrap;
 	align-items: center;
-	gap: 16px;
+	flex-wrap: nowrap;
+	overflow-x: auto;
+	gap: 8px;
 
-	${mediaQueries.mobileS} {
-		flex-wrap: nowrap;
-		overflow-x: auto;
-		gap: 8px;
-
-		::-webkit-scrollbar {
-			width: 0;
-			height: 0;
-			background-color: transparent;
-		}
+	::-webkit-scrollbar {
+		width: 0;
+		height: 0;
+		background-color: transparent;
 	}
 `;
 
@@ -253,28 +248,6 @@ const UpperTitle = styled(D3)`
 	margin-bottom: 32px;
 	text-align: center;
 	color: ${brandColors.giv[700]};
-`;
-
-const ArcMustard = styled(Arc)`
-	border-width: 90px;
-	border-color: transparent transparent ${brandColors.mustard[500]}
-		transparent;
-	top: 130px;
-	right: -230px;
-	width: 500px;
-	height: 500px;
-	transform: rotate(31deg);
-	z-index: 1;
-`;
-
-const DotMustard = styled(Arc)`
-	border-width: 45px;
-	border-color: ${brandColors.mustard[500]};
-	top: 300px;
-	right: 200px;
-	width: 87px;
-	height: 87px;
-	z-index: 1;
 `;
 
 const Upper = styled.div`

@@ -6,6 +6,7 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+
 import { mediaQueries } from '@/lib/constants/constants';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { IProject } from '@/apollo/types/types';
@@ -77,21 +78,17 @@ const Wrapper = styled.div`
 	margin-bottom: 16px;
 	color: ${brandColors.deep[600]};
 	display: flex;
-	flex-wrap: wrap;
 	align-items: center;
 	z-index: 10;
 	background-color: ${neutralColors.gray[200]};
+	flex-wrap: nowrap;
+	overflow-x: auto;
+	max-width: calc(100vw - 32px);
 
-	${mediaQueries.mobileS} {
-		flex-wrap: nowrap;
-		overflow-x: auto;
-		max-width: calc(100vw - 32px);
-
-		::-webkit-scrollbar {
-			width: 0;
-			height: 0;
-			background-color: transparent;
-		}
+	::-webkit-scrollbar {
+		width: 0;
+		height: 0;
+		background-color: transparent;
 	}
 
 	${mediaQueries.tablet} {

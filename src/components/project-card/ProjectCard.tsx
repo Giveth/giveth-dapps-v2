@@ -175,10 +175,7 @@ const Wrapper = styled.div`
 	background: white;
 	overflow: hidden;
 	box-shadow: ${Shadow.Neutral[400]};
-
-	${mediaQueries.mobileS} {
-		height: 536px;
-	}
+	height: 536px;
 
 	${mediaQueries.tablet} {
 		height: 472px;

@@ -11,7 +11,6 @@ import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
 
-import { mediaQueries } from '@/lib/constants/constants';
 import { IProject } from '@/apollo/types/types';
 import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
@@ -19,6 +18,7 @@ import SocialBox from '@/components/views/donate/SocialBox';
 import ExternalLink from '@/components/ExternalLink';
 import InternalLink from '@/components/InternalLink';
 import { slugToProjectView } from '@/lib/routeCreators';
+import { FlexCenter } from '@/components/styled-components/Flex';
 
 const SuccessView = (props: {
 	txLink: string;
@@ -89,32 +89,23 @@ const SucceessContainer = styled.div`
 	justify-content: space-around;
 	align-items: center;
 	text-align: center;
-	padding: 0 39px;
 	color: ${brandColors.deep[900]};
 	height: 100%;
-	${mediaQueries['mobileS']} {
-		padding: 0;
-	}
+	padding: 0;
 `;
 
 const SuccessMessage = styled(P)`
 	position: relative;
-	margin: -19px 0 16px 0;
+	margin: 16px 0;
 	color: ${brandColors.deep[900]};
 	a {
 		font-weight: 500;
 	}
-	${mediaQueries.mobileS} {
-		margin: 16px 0;
-	}
 `;
 
-const Options = styled.div`
-	display: flex;
+const Options = styled(FlexCenter)`
 	flex-direction: column;
 	width: 100%;
-	justify-content: center;
-	align-items: center;
 `;
 
 const ProjectsButton = styled(Button)`
@@ -135,7 +126,7 @@ const GivBackContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	width: 454px;
+	width: 100%;
 	height: 212px;
 	padding: 0 53px;
 	align-items: center;
@@ -147,9 +138,6 @@ const GivBackContainer = styled.div`
 	h6 {
 		font-weight: bold;
 		margin: 0 0 8px 0;
-	}
-	${mediaQueries.mobileS} {
-		width: 100%;
 	}
 `;
 

@@ -215,10 +215,7 @@ const BodyWrapper = styled.div`
 	flex-direction: row;
 	justify-content: space-between;
 	margin: 0 auto;
-
-	${mediaQueries.mobileS} {
-		min-height: calc(100vh - 312px);
-	}
+	min-height: calc(100vh - 312px);
 
 	${mediaQueries.tablet} {
 		padding: 0 32px;

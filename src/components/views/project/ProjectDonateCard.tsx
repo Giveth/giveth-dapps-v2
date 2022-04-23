@@ -385,19 +385,15 @@ const Wrapper = styled(motion.div)<{ initialPosition: number }>`
 	background: white;
 	padding: 32px;
 	overflow: hidden;
-	width: 326px;
 	height: fit-content;
 	box-shadow: ${Shadow.Neutral['400']};
 	flex-shrink: 0;
 	z-index: 10;
 	align-self: flex-start;
-
-	${mediaQueries.mobileS} {
-		width: 100vw;
-		position: fixed;
-		bottom: calc(-${props => props.initialPosition}px + 168px);
-		border-radius: 40px 40px 0 0;
-	}
+	width: 100vw;
+	position: fixed;
+	bottom: calc(-${props => props.initialPosition}px + 168px);
+	border-radius: 40px 40px 0 0;
 
 	${mediaQueries.tablet} {
 		max-width: 225px;
