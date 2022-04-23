@@ -31,10 +31,6 @@ const ClaimedSubtitleA = styled(Flex)`
 	position: relative;
 `;
 
-const AddGivButton = styled.div`
-	cursor: pointer;
-`;
-
 const ClaimedSubtitleB = styled(Lead)``;
 
 const SocialButtonsContainer = styled(Flex)`

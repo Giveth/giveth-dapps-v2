@@ -1,4 +1,4 @@
-import React, { FC, useContext } from 'react';
+import React, { FC } from 'react';
 
 import BaseStakingCard from './BaseStakingCard';
 import { PoolStakingConfig, RegenPoolStakingConfig } from '@/types/config';

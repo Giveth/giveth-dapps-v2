@@ -11,28 +11,21 @@ const Tabs: FC = () => {
 	const { asPath } = useRouter();
 
 	return (
-		<>
-			<LabelsContainer>
-				<Container>
-					<Flex gap='16px'>
-						{giveconomyTabs.map((tab, idx) => (
-							<Link key={idx} href={tab.href} passHref>
-								<Label
-									size='Big'
-									isActive={asPath === tab.href}
-								>
-									{tab.label}
-								</Label>
-							</Link>
-						))}
-					</Flex>
-				</Container>
-			</LabelsContainer>
-		</>
+		<LabelsContainer>
+			<Container>
+				<Flex gap='16px'>
+					{giveconomyTabs.map((tab, idx) => (
+						<Link key={idx} href={tab.href} passHref>
+							<Label size='Big' isActive={asPath === tab.href}>
+								{tab.label}
+							</Label>
+						</Link>
+					))}
+				</Flex>
+			</Container>
+		</LabelsContainer>
 	);
 };
-
-const labelsContainer = styled(Flex)``;
 
 interface ILabelProps {
 	isActive: boolean;

@@ -8,7 +8,7 @@ import {
 	QuoteText,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Col, Row } from './Grid';
+import { Col } from './Grid';
 
 export const Subtitle = styled(Lead)`
 	margin-bottom: 24px;

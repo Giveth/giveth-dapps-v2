@@ -64,7 +64,7 @@ export const TokenDistroProvider: FC = ({ children }) => {
 			setMainnetGivTokenDistro(
 				new TokenDistroHelper(mainnetValues.tokenDistroInfo),
 			);
-		let newRegenTokenDistroHelpers: IRegenTokenDistroHelpers = {};
+		const newRegenTokenDistroHelpers: IRegenTokenDistroHelpers = {};
 		config.MAINNET_CONFIG.regenStreams.forEach(({ type }) => {
 			const tokenDistroInfo = mainnetValues[type];
 			newRegenTokenDistroHelpers[type] = tokenDistroInfo
@@ -79,7 +79,7 @@ export const TokenDistroProvider: FC = ({ children }) => {
 			setXDaiGivTokenDistro(
 				new TokenDistroHelper(xDaiValues.tokenDistroInfo),
 			);
-		let newRegenTokenDistroHelpers: IRegenTokenDistroHelpers = {};
+		const newRegenTokenDistroHelpers: IRegenTokenDistroHelpers = {};
 		config.XDAI_CONFIG.regenStreams.forEach(({ type }) => {
 			const tokenDistroInfo = xDaiValues[type];
 			if (tokenDistroInfo) {

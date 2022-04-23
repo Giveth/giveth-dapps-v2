@@ -49,20 +49,20 @@ export function formatWalletLink(chainId?: number, address?: string) {
 }
 
 export const durationToYMDh = (ms: number) => {
-	let baseTime = new Date(0);
-	let duration = new Date(ms);
+	const baseTime = new Date(0);
+	const duration = new Date(ms);
 
-	let y = duration.getUTCFullYear() - baseTime.getUTCFullYear();
-	let m = duration.getUTCMonth() - baseTime.getUTCMonth();
-	let d = duration.getUTCDate() - baseTime.getUTCDate();
-	let h = duration.getUTCHours() - baseTime.getUTCHours();
-	let min = duration.getUTCMinutes() - baseTime.getUTCMinutes();
-	let sec = duration.getUTCSeconds() - baseTime.getUTCSeconds();
+	const y = duration.getUTCFullYear() - baseTime.getUTCFullYear();
+	const m = duration.getUTCMonth() - baseTime.getUTCMonth();
+	const d = duration.getUTCDate() - baseTime.getUTCDate();
+	const h = duration.getUTCHours() - baseTime.getUTCHours();
+	const min = duration.getUTCMinutes() - baseTime.getUTCMinutes();
+	const sec = duration.getUTCSeconds() - baseTime.getUTCSeconds();
 
 	return { y, m, d, h, min, sec };
 };
 
-export const durationToString = (ms: number, length: number = 3) => {
+export const durationToString = (ms: number, length = 3) => {
 	const temp: { [key: string]: number } = durationToYMDh(ms);
 	const res: string[] = [];
 	for (const key in temp) {

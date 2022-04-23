@@ -1,4 +1,4 @@
-import { FC, Dispatch, SetStateAction, useEffect } from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
 import Lottie from 'react-lottie';
 import Image from 'next/image';
@@ -13,7 +13,6 @@ import {
 	IconETH,
 	semanticColors,
 	Subline,
-	P,
 } from '@giveth/ui-design-system';
 
 import { LiquidityPosition } from '@/types/nfts';
@@ -31,26 +30,6 @@ const loadingAnimationOptions = {
 	},
 };
 
-const LoadingButtonContainer = styled.span`
-	display: flex;
-	place-items: center;
-`;
-
-const DummyDiv = styled.div`
-	width: 24px;
-`;
-
-interface ILoadingButton {
-	label: string;
-}
-
-const LoadingButton: FC<ILoadingButton> = ({ label }) => (
-	<LoadingButtonContainer>
-		<Lottie options={loadingAnimationOptions} height={24} width={24} />
-		{label}
-		<DummyDiv />
-	</LoadingButtonContainer>
-);
 interface IV3StakeCardProps {
 	position: LiquidityPosition;
 	isUnstaking?: boolean;
