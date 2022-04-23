@@ -214,9 +214,9 @@ const ProjectDonateCard = ({
 			)}
 			<Wrapper
 				ref={wrapperRef}
-				initialposition={wrapperHeight}
+				initialPosition={wrapperHeight}
 				drag='y'
-				dragConstraints={{ top: -(wrapperHeight - 158), bottom: 130 }}
+				dragConstraints={{ top: -(wrapperHeight - 168), bottom: 120 }}
 			>
 				{isMobile && <BlueBar />}
 				<ProjectCardOrgBadge
@@ -276,13 +276,10 @@ const ProjectDonateCard = ({
 							When you donate to verified projects, you get GIV
 							back.
 						</Caption>
-						<GIVbackButton
-							aria-label='Learn more about this project'
-							href={links.GIVBACK_DOC}
-						>
-							Learn more
-						</GIVbackButton>
 						<ExternalLink href={links.GIVBACK_DOC}>
+							<GIVbackButton aria-label='Learn more about this project'>
+								Learn more
+							</GIVbackButton>
 							<GIVbackQuestionIcon>
 								<IconHelp size={16} />
 							</GIVbackQuestionIcon>
@@ -382,7 +379,7 @@ const BadgeWrapper = styled.div`
 	justify-content: space-between;
 `;
 
-const Wrapper = styled(motion.div)<{ initialposition: number }>`
+const Wrapper = styled(motion.div)<{ initialPosition: number }>`
 	margin-right: 26px;
 	margin-top: -32px;
 	background: white;
@@ -398,7 +395,7 @@ const Wrapper = styled(motion.div)<{ initialposition: number }>`
 	${mediaQueries.mobileS} {
 		width: 100vw;
 		position: fixed;
-		bottom: calc(-${props => props.initialposition}px + 158px);
+		bottom: calc(-${props => props.initialPosition}px + 168px);
 		border-radius: 40px 40px 0 0;
 	}
 
