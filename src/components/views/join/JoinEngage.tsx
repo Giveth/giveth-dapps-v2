@@ -14,6 +14,7 @@ import links from '@/lib/constants/links';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Lead, brandColors, H2 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import JoinSubscriptionCard from './JoinSubscriptionCard';
 
 const JoinEngage = () => {
 	return (
@@ -48,6 +49,7 @@ const JoinEngage = () => {
 						{consumeArray.map(i => (
 							<Card key={i.title} content={i} isHorizontal />
 						))}
+						<JoinSubscriptionCard />
 					</CardsConsumeSection>
 					<BlueFlowerComponent>
 						<Image src={BlueFlower} alt='blueflower' />
