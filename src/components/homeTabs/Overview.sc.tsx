@@ -110,3 +110,33 @@ export const DataBlockButton = styled(ButtonLink)`
 export const ClaimCardQuote = styled(QuoteText)`
 	color: ${brandColors.giv[200]};
 `;
+
+export const VideoContainer = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	margin: auto;
+	width: 100%;
+	max-width: 1440px;
+	overflow: hidden;
+	margin-bottom: 100px;
+`;
+
+export const VideoOverlay = styled.div<{ hidden: boolean }>`
+	display: ${props => (props.hidden ? 'none' : 'flex')};
+	justify-content: center;
+	align-items: center;
+	left: 0px;
+	top: 0px;
+	bottom: 0px;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	background: rgba(0, 0, 0, 0.3);
+	transition: background 0.3s ease-in-out;
+
+	&:hover {
+		background: rgba(0, 0, 0, 0.5);
+	}
+`;
