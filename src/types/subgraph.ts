@@ -91,8 +91,8 @@ export interface ITokenDistroInfo {
 
 export interface IUnipool {
 	totalSupply: ethers.BigNumber;
-	lastUpdateTime: Date;
-	periodFinish: Date;
+	lastUpdateTime: number;
+	periodFinish: number;
 	rewardPerTokenStored: ethers.BigNumber;
 	rewardRate: ethers.BigNumber;
 }
