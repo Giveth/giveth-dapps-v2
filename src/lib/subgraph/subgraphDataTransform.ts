@@ -146,8 +146,8 @@ const transformUnipoolInfo = (info: any): IUnipool | undefined => {
 	const totalSupply = BN(info?.totalSupply || 0);
 	const rewardPerTokenStored = BN(info?.rewardPerTokenStored || 0);
 	const rewardRate = BN(info?.rewardRate || 0);
-	const lastUpdateTime = new Date(+(_lastUpdateTime.toString() + '000'));
-	const periodFinish = new Date(+(_periodFinish.toString() + '000'));
+	const lastUpdateTime = Number(_lastUpdateTime) * 1000;
+	const periodFinish = Number(_periodFinish) * 1000;
 
 	return {
 		totalSupply,
