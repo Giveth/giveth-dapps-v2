@@ -1,5 +1,5 @@
 ---
-name: Design Issue Template
+name: Graphic Design Issue Template
 about: Please select this template for any design request. It will automatically add
   Design label, feel free to add other labels as needed.
 title: ''

@@ -264,6 +264,12 @@ export const getUserStakeInfo = (
 				stakedAmount = balance.balancerLpStaked;
 				notStakedAmount = balance.balancerLp;
 				break;
+			case StakingType.UNISWAPV2:
+				rewards = balance.rewardsUniswapV2GivDai;
+				rewardPerTokenPaid = balance.rewardPerTokenPaidUniswapV2GivDai;
+				stakedAmount = balance.uniswapV2GivDaiLpStaked;
+				notStakedAmount = balance.uniswapV2GivDaiLp;
+				break;
 			case StakingType.GIV_LM:
 				rewards = balance.rewardsGivLm;
 				rewardPerTokenPaid = balance.rewardPerTokenPaidGivLm;

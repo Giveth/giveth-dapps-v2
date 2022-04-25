@@ -1,27 +1,24 @@
 import { brandColors, H2, H5, Subline } from '@giveth/ui-design-system';
-import { mediaQueries } from '@/lib/constants/constants';
 import { FC } from 'react';
 import styled from 'styled-components';
-import { Flex } from '../../styled-components/Flex';
-import { IUser } from '@/apollo/types/types';
-import { Container } from '@/components/Grid';
-import { roundNumber } from '@/helpers/number';
 
-export interface IUserPublicProfileView {
-	user: IUser;
-	myAccount?: boolean;
-}
+import { mediaQueries } from '@/lib/constants/constants';
+import { Flex } from '../../styled-components/Flex';
+import { IUserPublicProfileView } from '@/components/views/userPublicProfile/UserPublicProfile.view';
+import { formatUSD } from '@/lib/helpers';
 
 const PublicProfileContributeCard: FC<IUserPublicProfileView> = ({
 	user,
 	myAccount,
 }) => {
+	const userName = user?.name || 'Unknown';
+
 	return (
-		<CustomContainer>
+		<>
 			{!myAccount && (
 				<UserContributeTitle
 					weight={700}
-				>{`${user.name}’s donations & projects`}</UserContributeTitle>
+				>{`${userName}’s donations & projects`}</UserContributeTitle>
 			)}
 
 			<ContributeCardContainer>
@@ -31,36 +28,32 @@ const PublicProfileContributeCard: FC<IUserPublicProfileView> = ({
 						Total amount donated
 					</ContributeCardTitles>
 					<H2>{user.donationsCount || 0}</H2>
-					<H5>${roundNumber(user.totalDonated) || 0}</H5>
+					<H5>${formatUSD(user.totalDonated)}</H5>
 				</ContributeCard>
 				<ContributeCard>
 					<ContributeCardTitles>Projects</ContributeCardTitles>
 					<ContributeCardTitles>
 						Donation received
 					</ContributeCardTitles>
-					<H2>{user.projectsCount}</H2>
-					<H5>${roundNumber(user.totalReceived)}</H5>
+					<H2>{user.projectsCount || 0}</H2>
+					<H5>${formatUSD(user.totalReceived)}</H5>
 				</ContributeCard>
 			</ContributeCardContainer>
-		</CustomContainer>
+		</>
 	);
 };
 
 const UserContributeTitle = styled(H5)`
 	margin-bottom: 16px;
+	margin-top: 40px;
 `;
 
 const ContributeCardContainer = styled(Flex)`
 	gap: 32px;
 	justify-content: space-between;
-	${mediaQueries.mobileS} {
-		flex-direction: column;
-		align-items: center;
-	}
+	flex-direction: column;
+	align-items: center;
 	${mediaQueries.tablet} {
-		flex-direction: row;
-	}
-	${mediaQueries.laptop} {
 		flex-direction: row;
 	}
 `;
@@ -71,19 +64,12 @@ const ContributeCard = styled.div`
 	border-radius: 12px;
 	display: grid;
 	padding: 24px;
-	width: 556px;
 	grid-template-columns: 1fr 1fr;
-	${mediaQueries.mobileS} {
-		width: 100%;
-	}
+	width: 100%;
 `;
 
 const ContributeCardTitles = styled(Subline)`
 	text-transform: uppercase;
-`;
-
-const CustomContainer = styled(Container)`
-	padding: 0;
 `;
 
 export default PublicProfileContributeCard;

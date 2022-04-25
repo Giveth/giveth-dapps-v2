@@ -10,14 +10,16 @@ export interface IBalances {
 	rewardsSushiSwap: ethers.BigNumber;
 	rewardPerTokenPaidHoneyswap: ethers.BigNumber;
 	rewardsHoneyswap: ethers.BigNumber;
-	rewardPerTokenPaidUniswap: ethers.BigNumber;
-	rewardsUniswap: ethers.BigNumber;
 	rewardPerTokenPaidBalancer: ethers.BigNumber;
 	rewardsBalancer: ethers.BigNumber;
+	rewardPerTokenPaidUniswapV2GivDai: ethers.BigNumber;
+	rewardsUniswapV2GivDai: ethers.BigNumber;
 	givback: ethers.BigNumber;
 	givbackLiquidPart: ethers.BigNumber;
 	balancerLp: ethers.BigNumber;
 	balancerLpStaked: ethers.BigNumber;
+	uniswapV2GivDaiLp: ethers.BigNumber;
+	uniswapV2GivDaiLpStaked: ethers.BigNumber;
 	sushiswapLp: ethers.BigNumber;
 	sushiSwapLpStaked: ethers.BigNumber;
 	honeyswapLp: ethers.BigNumber;
@@ -43,14 +45,16 @@ export const ZeroBalances: IBalances = {
 	rewardsSushiSwap: constants.Zero,
 	rewardPerTokenPaidHoneyswap: constants.Zero,
 	rewardsHoneyswap: constants.Zero,
-	rewardPerTokenPaidUniswap: constants.Zero,
-	rewardsUniswap: constants.Zero,
 	rewardPerTokenPaidBalancer: constants.Zero,
 	rewardsBalancer: constants.Zero,
+	rewardPerTokenPaidUniswapV2GivDai: constants.Zero,
+	rewardsUniswapV2GivDai: constants.Zero,
 	givback: constants.Zero,
 	givbackLiquidPart: constants.Zero,
 	balancerLp: constants.Zero,
 	balancerLpStaked: constants.Zero,
+	uniswapV2GivDaiLp: constants.Zero,
+	uniswapV2GivDaiLpStaked: constants.Zero,
 	sushiswapLp: constants.Zero,
 	sushiSwapLpStaked: constants.Zero,
 	honeyswapLp: constants.Zero,
@@ -87,8 +91,8 @@ export interface ITokenDistroInfo {
 
 export interface IUnipool {
 	totalSupply: ethers.BigNumber;
-	lastUpdateTime: Date;
-	periodFinish: Date;
+	lastUpdateTime: number;
+	periodFinish: number;
 	rewardPerTokenStored: ethers.BigNumber;
 	rewardRate: ethers.BigNumber;
 }

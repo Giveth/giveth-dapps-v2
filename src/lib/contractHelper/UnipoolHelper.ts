@@ -2,6 +2,7 @@ import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { getNowUnixMS } from '@/helpers/time';
 import { IUnipool } from '@/types/subgraph';
+import { Zero } from '@/helpers/number';
 
 const toBN = (value: ethers.BigNumberish): BigNumber => {
 	return new BigNumber(value.toString());
@@ -9,10 +10,10 @@ const toBN = (value: ethers.BigNumberish): BigNumber => {
 
 export class UnipoolHelper {
 	private readonly totalSupply: BigNumber;
-	private readonly lastUpdateTime: Date;
-	private readonly periodFinish: Date;
+	private readonly lastUpdateTime: number;
+	private readonly periodFinish: number;
 	private readonly rewardPerTokenStored: BigNumber;
-	private readonly rewardRate: BigNumber;
+	private readonly _rewardRate: BigNumber;
 
 	constructor({
 		lastUpdateTime,
@@ -23,7 +24,7 @@ export class UnipoolHelper {
 	}: IUnipool) {
 		this.totalSupply = toBN(totalSupply);
 		this.lastUpdateTime = lastUpdateTime;
-		this.rewardRate = toBN(rewardRate);
+		this._rewardRate = toBN(rewardRate);
 		this.rewardPerTokenStored = toBN(rewardPerTokenStored);
 		this.periodFinish = periodFinish;
 	}
@@ -31,9 +32,14 @@ export class UnipoolHelper {
 	get lastTimeRewardApplicable(): BigNumber {
 		const lastTimeRewardApplicableMS: number = Math.min(
 			getNowUnixMS(),
-			this.periodFinish.getTime(),
+			this.periodFinish,
 		);
 		return toBN(Math.floor(lastTimeRewardApplicableMS / 1000));
+	}
+
+	get rewardRate(): BigNumber {
+		if (getNowUnixMS() > this.periodFinish) return Zero;
+		return this._rewardRate;
 	}
 
 	get rewardPerToken(): BigNumber {
@@ -42,7 +48,7 @@ export class UnipoolHelper {
 		}
 		return this.rewardPerTokenStored.plus(
 			this.lastTimeRewardApplicable
-				.minus(this.lastUpdateTime.getTime() / 1000)
+				.minus(this.lastUpdateTime / 1000)
 				.times(this.rewardRate)
 				.times(1e18)
 				.div(this.totalSupply)

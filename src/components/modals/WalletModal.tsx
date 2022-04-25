@@ -39,7 +39,7 @@ const WalletModal = (props: { setShowModal: (i: boolean) => void }) => {
 			}
 			setTimeout(() => {
 				localStorage.setItem(StorageLabel.WALLET, selected.value);
-				activate(selected.connector)
+				activate(selected.connector, showToastError, true)
 					.then(showFirstWelcomeModal)
 					.catch(showToastError);
 			}, timeOut);

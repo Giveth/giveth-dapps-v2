@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLiquidityPositions } from '@/context';
-import { UniswapV3PoolStakingConfig } from '@/types/config';
+import { StakingType, UniswapV3PoolStakingConfig } from '@/types/config';
 import { BigNumber } from '@ethersproject/bignumber';
 import config from '@/configuration';
 import { getUniswapV3StakerContract } from '@/lib/contracts';
@@ -16,10 +16,12 @@ export const useStakingNFT = () => {
 	);
 
 	const mainnetConfig = config.MAINNET_CONFIG;
-	const uniswapConfig = mainnetConfig.pools[0] as UniswapV3PoolStakingConfig;
-	const rewardToken = uniswapConfig.REWARD_TOKEN;
-	const poolAddress = uniswapConfig.UNISWAP_V3_LP_POOL;
-	const incentiveRefundeeAddress = uniswapConfig.INCENTIVE_REFUNDEE_ADDRESS;
+	const uniswapV3Config = mainnetConfig.pools.find(
+		c => c.type === StakingType.UNISWAPV3,
+	) as UniswapV3PoolStakingConfig;
+	const rewardToken = uniswapV3Config.REWARD_TOKEN;
+	const poolAddress = uniswapV3Config.UNISWAP_V3_LP_POOL;
+	const incentiveRefundeeAddress = uniswapV3Config.INCENTIVE_REFUNDEE_ADDRESS;
 
 	const currentIncentive = useMemo(() => {
 		if (
@@ -30,7 +32,7 @@ export const useStakingNFT = () => {
 		)
 			return { key: null };
 
-		const { INCENTIVE_START_TIME, INCENTIVE_END_TIME } = uniswapConfig;
+		const { INCENTIVE_START_TIME, INCENTIVE_END_TIME } = uniswapV3Config;
 
 		return {
 			key: [
@@ -46,7 +48,7 @@ export const useStakingNFT = () => {
 		poolAddress,
 		incentiveRefundeeAddress,
 		chainId,
-		uniswapConfig,
+		uniswapV3Config,
 	]);
 
 	const checkForRewards = useCallback(() => {

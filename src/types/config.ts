@@ -2,10 +2,12 @@ export interface BasicStakingConfig {
 	LM_ADDRESS: string;
 	GARDEN_ADDRESS?: string;
 	BUY_LINK?: string;
+	farmStartTimeMS?: number;
 }
 
 export enum StakingType {
-	UNISWAP = 'Uniswap V3',
+	UNISWAPV2 = 'UniswapV2',
+	UNISWAPV3 = 'UniswapV3',
 	BALANCER = 'Balancer',
 	SUSHISWAP = 'Sushiswap',
 	HONEYSWAP = 'Honeyswap',
@@ -33,6 +35,7 @@ export interface SimplePoolStakingConfig extends BasicStakingConfig {
 	description?: string;
 	provideLiquidityLink?: string;
 	unit: string;
+	active: boolean;
 }
 
 export interface UniswapV3PoolStakingConfig extends SimplePoolStakingConfig {
@@ -60,7 +63,6 @@ export interface RegenPoolStakingConfig extends SimplePoolStakingConfig {
 		description: string;
 		link: string;
 	};
-	regenFarmStartTime?: number;
 }
 
 export interface GasPreference {

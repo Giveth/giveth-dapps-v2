@@ -340,7 +340,7 @@ const CryptoDonation = (props: {
 					!acceptedChains.includes(networkId) && (
 						<NetworkToast>
 							<div>
-								<Caption color={neutralColors.gray[900]}>
+								<Caption medium>
 									Projects from {orgName} only accept
 									donations on{' '}
 									{getNetworkNames(acceptedChains, 'and')}.
@@ -359,7 +359,7 @@ const CryptoDonation = (props: {
 						<NetworkToast>
 							<div>
 								<img src='/images/gas_station.svg' />
-								<Caption color={neutralColors.gray[900]}>
+								<Caption medium>
 									Save on gas fees, switch to Gnosis Chain.
 								</Caption>
 							</div>
@@ -510,13 +510,16 @@ const DropdownContainer = styled.div`
 `;
 
 const NetworkToast = styled.div`
-	text-align: center;
+	display: flex;
+	gap: 10px;
 	width: 100%;
-	margin: 0 auto 20px auto;
+	margin-bottom: 20px;
+	color: ${neutralColors.gray[800]};
+	> :last-child {
+		flex-shrink: 0;
+	}
 	> div:first-child {
 		display: flex;
-		color: ${neutralColors.gray[800]};
-		justify-content: center;
 	}
 	img {
 		padding-right: 12px;

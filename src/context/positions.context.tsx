@@ -33,7 +33,7 @@ const ERC721NftContext = createContext<{
 } | null>(null);
 
 const uniswapV3PoolStakingConfig = config.MAINNET_CONFIG.pools.find(
-	p => p.type === StakingType.UNISWAP,
+	p => p.type === StakingType.UNISWAPV3,
 ) as UniswapV3PoolStakingConfig;
 
 const { INCENTIVE_REWARD_AMOUNT, INCENTIVE_START_TIME, INCENTIVE_END_TIME } =
@@ -73,7 +73,9 @@ export const NftsProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
 	const mainnetConfig = config.MAINNET_CONFIG;
 
-	const uniswapConfig = mainnetConfig.pools[0] as UniswapV3PoolStakingConfig;
+	const uniswapConfig = mainnetConfig.pools.find(
+		c => c.type === StakingType.UNISWAPV3,
+	) as UniswapV3PoolStakingConfig;
 	const rewardToken = uniswapConfig.REWARD_TOKEN;
 	const poolAddress = uniswapConfig.UNISWAP_V3_LP_POOL;
 	const incentiveRefundeeAddress = uniswapConfig.INCENTIVE_REFUNDEE_ADDRESS;
