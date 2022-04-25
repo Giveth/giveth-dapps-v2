@@ -1,8 +1,9 @@
-import { Shadow } from './styled-components/Shadow';
 import { P, Button, H4, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+
 import { mediaQueries } from '@/lib/constants/constants';
 import { FlexCenter } from '@/components/styled-components/Flex';
+import { Shadow } from './styled-components/Shadow';
 
 export const ButtonStyled = styled(Button)`
 	text-transform: uppercase;
@@ -35,10 +36,7 @@ export const HorizontalTitleSection = styled.div`
 	flex-direction: column;
 	text-align: left;
 	max-width: calc(100vw - 72px);
-
-	${mediaQueries.mobileS} {
-		padding: 0;
-	}
+	padding: 0;
 
 	${mediaQueries.tablet} {
 		padding: 0 0 0 84px;
@@ -71,16 +69,12 @@ export const HorizontalWrap = styled.div`
 	background: white;
 	align-items: center;
 	color: ${brandColors.giv[800]};
-
 	border-radius: 12px;
 	box-shadow: ${Shadow.Dark[500]};
 	margin: 26px 0;
-
-	${mediaQueries.mobileS} {
-		flex-direction: column;
-		padding: 36px 32px;
-		max-width: calc(100vw - 36px);
-	}
+	flex-direction: column;
+	padding: 36px 32px;
+	max-width: calc(100vw - 36px);
 
 	${mediaQueries.tablet} {
 		flex-direction: row;
