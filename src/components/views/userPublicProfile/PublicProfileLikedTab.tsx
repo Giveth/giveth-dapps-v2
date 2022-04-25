@@ -11,7 +11,6 @@ import { Loading } from './projectsTab/PublicProfileProjectsTab';
 import { IUserPublicProfileView } from './UserPublicProfile.view';
 import { mediaQueries } from '@/lib/constants/constants';
 import NothingToSee from '@/components/views/userPublicProfile/NothingToSee';
-import { FlexCenter } from '@/components/styled-components/Flex';
 
 const itemPerPage = 6;
 

@@ -10,6 +10,7 @@ import PublicProfileProjectsTab from './projectsTab/PublicProfileProjectsTab';
 import PublicProfileOverviewTab from './PublicProfileOverviewTab';
 import { IUserPublicProfileView } from './UserPublicProfile.view';
 import { Container } from '@/components/Grid';
+import ContributeCard from '@/components/views/userPublicProfile/PublicProfileContributeCard';
 
 enum EPublicProfile {
 	OVERVIEW,
@@ -52,8 +53,13 @@ const PublicProfileContributes: FC<IUserPublicProfileView> = ({
 		}
 	}, [router?.query?.tab]);
 
+	const userName = user?.name || 'Unknown';
+
 	return (
 		<ProfileContainer>
+			{!myAccount && tab === EPublicProfile.PROJECTS && (
+				<ContributeCard user={user} />
+			)}
 			<PublicProfileTabsContainer>
 				{myAccount && (
 					<PublicProfileTab
@@ -67,7 +73,7 @@ const PublicProfileContributes: FC<IUserPublicProfileView> = ({
 					active={tab === EPublicProfile.PROJECTS}
 					onClick={() => setTab(EPublicProfile.PROJECTS)}
 				>
-					{`${myAccount ? 'My ' : user.name + '’s'} projects`}
+					{`${myAccount ? 'My ' : userName + '’s'} projects`}
 					{myAccount && user?.projectsCount != 0 && (
 						<Count active={tab === EPublicProfile.PROJECTS}>
 							{user?.projectsCount}
@@ -98,7 +104,7 @@ const PublicProfileContributes: FC<IUserPublicProfileView> = ({
 				</PublicProfileTab>
 			</PublicProfileTabsContainer>
 			{tab === EPublicProfile.OVERVIEW && (
-				<PublicProfileOverviewTab user={user} myAccount={myAccount} />
+				<PublicProfileOverviewTab user={user} />
 			)}
 			{tab === EPublicProfile.PROJECTS && (
 				<PublicProfileProjectsTab user={user} myAccount={myAccount} />
@@ -114,7 +120,7 @@ const PublicProfileContributes: FC<IUserPublicProfileView> = ({
 };
 
 const ProfileContainer = styled(Container)`
-	padding: 0 !important;
+	padding: 0 10px !important;
 `;
 
 const PublicProfileTabsContainer = styled(Flex)`
