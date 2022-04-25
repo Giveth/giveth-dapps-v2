@@ -154,7 +154,6 @@ const Count = styled.div`
 	color: white;
 	width: 24px;
 	height: 24px;
-	align-items: center;
 	text-align: center;
 	border-radius: 50%;
 	font-size: 12px;
