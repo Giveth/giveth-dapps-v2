@@ -23,8 +23,8 @@ export const walletconnectConnector = new WalletConnectConnector({
 	supportedChainIds,
 	qrcode: true,
 	rpc: {
-		[config.MAINNET_NETWORK_NUMBER]: config.MAINNET_CONFIG.nodeURL,
-		[config.XDAI_NETWORK_NUMBER]: config.XDAI_CONFIG.nodeURL,
+		[config.MAINNET_NETWORK_NUMBER]: config.MAINNET_CONFIG.nodeUrl,
+		[config.XDAI_NETWORK_NUMBER]: config.XDAI_CONFIG.nodeUrl,
 	},
 });
 // export const portisConnector = new PortisConnector({
