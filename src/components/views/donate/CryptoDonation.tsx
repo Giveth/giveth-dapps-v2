@@ -388,7 +388,7 @@ const CryptoDonation = (props: {
 									? 'Search name or paste an address'
 									: 'Search name'
 							}
-							projectVerified={project?.verified}
+							projectVerified={project?.verified!}
 						/>
 					</DropdownContainer>
 					<InputBox
