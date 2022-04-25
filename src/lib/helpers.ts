@@ -4,12 +4,12 @@ import { Contract } from '@ethersproject/contracts';
 import { Web3Provider } from '@ethersproject/providers';
 import { promisify } from 'util';
 import { AddressZero } from '@ethersproject/constants';
+import { brandColors } from '@giveth/ui-design-system';
 // @ts-ignore
 import tokenAbi from 'human-standard-token-abi';
 
 import { BasicNetworkConfig, GasPreference } from '@/types/config';
 import { EWallets } from '@/lib/wallet/walletTypes';
-import { brandColors } from '@giveth/ui-design-system';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
 import { IUser } from '@/apollo/types/types';
 import Routes from '@/lib/constants/Routes';
@@ -20,20 +20,20 @@ import { networksParams } from '@/helpers/blockchain';
 declare let window: any;
 
 export const formatBalance = (balance?: string | number) => {
-	return parseFloat(String(balance) || '0').toLocaleString('en-US', {
+	return parseFloat(String(balance || 0)).toLocaleString('en-US', {
 		maximumFractionDigits: 6,
 		minimumFractionDigits: 2,
 	});
 };
 
 export const formatUSD = (balance?: string | number) => {
-	return parseFloat(String(balance) || '0').toLocaleString('en-US', {
+	return parseFloat(String(balance || 0)).toLocaleString('en-US', {
 		maximumFractionDigits: 2,
 	});
 };
 
 export const formatPrice = (balance?: string | number) => {
-	return parseFloat(String(balance) || '0').toLocaleString('en-US', {
+	return parseFloat(String(balance || 0)).toLocaleString('en-US', {
 		maximumFractionDigits: 6,
 	});
 };

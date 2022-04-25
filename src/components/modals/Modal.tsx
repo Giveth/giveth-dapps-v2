@@ -2,7 +2,7 @@ import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import React, { ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
-import Scrollbars from 'react-custom-scrollbars';
+import dynamic from 'next/dynamic';
 
 import {
 	ModalHeader,
@@ -10,6 +10,10 @@ import {
 } from '@/components/modals/ModalHeader';
 import { ETheme, useGeneral } from '@/context/general.context';
 import { zIndex } from '@/lib/constants/constants';
+
+const Scrollbars = dynamic(() => import('react-custom-scrollbars'), {
+	ssr: false,
+});
 
 interface ModalWrapperProps {
 	fullScreen?: boolean;

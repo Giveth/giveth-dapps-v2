@@ -45,18 +45,19 @@ const config: EnvConfig = {
 		nodeUrl: 'https://mainnet.infura.io/v3/' + INFURA_API_KEY,
 
 		pools: [
-			{
-				POOL_ADDRESS: '0xbeba1666c62c65e58770376de332891b09461eeb',
-				LM_ADDRESS: '0xa4523D703F663615Bd41606B46B58dEb2F926D98',
-				type: StakingType.UNISWAPV2,
-				title: 'GIV / DAI',
-				description: '50% GIV, 50% DAI',
-				provideLiquidityLink:
-					'https://app.uniswap.org/#/add/v2/0x6B175474E89094C44Da98b954EedeAC495271d0F/0x900dB999074d9277c5DA2A43F252D74366230DA0?chain=mainnet',
-				unit: 'LP',
-				farmStartTimeMS: 1651345200000,
-				active: true,
-			},
+			// Commenting while making sure the contracts work fine
+			// {
+			// 	POOL_ADDRESS: '0xbeba1666c62c65e58770376de332891b09461eeb',
+			// 	LM_ADDRESS: '0xa4523D703F663615Bd41606B46B58dEb2F926D98',
+			// 	type: StakingType.UNISWAPV2,
+			// 	title: 'GIV / DAI',
+			// 	description: '50% GIV, 50% DAI',
+			// 	provideLiquidityLink:
+			// 		'https://app.uniswap.org/#/add/v2/0x6B175474E89094C44Da98b954EedeAC495271d0F/0x900dB999074d9277c5DA2A43F252D74366230DA0?chain=mainnet',
+			// 	unit: 'LP',
+			// 	farmStartTimeMS: 1651345200000,
+			// 	active: true,
+			// },
 			{
 				POOL_ADDRESS: '0x7819f1532c49388106f7762328c51ee70edd134c',
 				VAULT_ADDRESS: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
@@ -117,7 +118,7 @@ const config: EnvConfig = {
 		blockExplorerName: ['Blockscout'],
 		blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-xdai',
+			'https://api.thegraph.com/subgraphs/name/aminlatifi/giveth-economy-xdai',
 
 		TOKEN_ADDRESS: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		MERKLE_ADDRESS: '0xFad63adEFb8203F7605F25f6a921c8bf45604A5e',
