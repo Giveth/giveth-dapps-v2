@@ -135,7 +135,7 @@ export const VideoOverlay = styled.div<{ hidden: boolean }>`
 	position: absolute;
 	background: rgba(0, 0, 0, 0.3);
 	transition: background 0.3s ease-in-out;
-
+	user-select: none;
 	&:hover {
 		background: rgba(0, 0, 0, 0.5);
 	}
