@@ -73,7 +73,9 @@ const SimilarProjects = (props: { slug: string }) => {
 					listPosition * projectsToShow + projectsToShow,
 				)
 				?.map(project => (
-					<ProjectCard key={project.id} project={project} />
+					<div className='fadeIn' key={project.id}>
+						<ProjectCard project={project} />
+					</div>
 				))}
 			<CaretRight
 				disabled={listPosition === pagesCount - 1}
