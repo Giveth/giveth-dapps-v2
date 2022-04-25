@@ -35,7 +35,7 @@ const PublicProfileContributeCard: FC<IUserPublicProfileView> = ({
 					<ContributeCardTitles>
 						Donation received
 					</ContributeCardTitles>
-					<H2>{user.projectsCount}</H2>
+					<H2>{user.projectsCount || 0}</H2>
 					<H5>${formatUSD(user.totalReceived)}</H5>
 				</ContributeCard>
 			</ContributeCardContainer>
