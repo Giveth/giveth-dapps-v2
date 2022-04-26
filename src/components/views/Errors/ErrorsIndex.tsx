@@ -1,7 +1,5 @@
-import { Arc } from '@/components/styled-components/Arc';
-import { D3, H4, brandColors } from '@giveth/ui-design-system';
-import styled from 'styled-components';
-import { mediaQueries } from '@/lib/constants/constants';
+import { D3 } from '@giveth/ui-design-system';
+import { statusCodes } from '@/lib/constants/constants';
 import Image from 'next/image';
 import error401 from '/public/images/icons/errors/401.svg';
 import error403 from '/public/images/icons/errors/403.svg';
@@ -16,9 +14,19 @@ import givFontLogo from '/public/images/icons/giv_font_logo.svg';
 import { useGeneral } from '@/context/general.context';
 import { useEffect } from 'react';
 import links from '@/lib/constants/links';
+import {
+	ErrorContainer,
+	ArcMustardBottom,
+	CustomBigWarningImage,
+	ArcMustardTop,
+	CustomH4,
+	CustomSmallWarningImage,
+	SocialContainer,
+	TextContainer,
+} from './ErrorsIndex.sc';
 
 interface IErrorProps {
-	statusCode: '401' | '403' | '404' | '500' | '502' | '503' | '504';
+	statusCode: typeof statusCodes[number];
 }
 
 const ErrorsIndex = ({ statusCode }: IErrorProps) => {
@@ -39,9 +47,17 @@ const ErrorsIndex = ({ statusCode }: IErrorProps) => {
 	}, []);
 
 	return (
-		<Container>
+		<ErrorContainer>
 			<ArcMustardTop />
 			<ArcMustardBottom />
+			<CustomBigWarningImage
+				src='/images/icons/warning.svg'
+				loading='lazy'
+			/>
+			<CustomSmallWarningImage
+				src='/images/icons/warning.svg'
+				loading='lazy'
+			/>
 			<TextContainer>
 				<Image
 					src={ErrorsObject[statusCode].image}
@@ -89,7 +105,7 @@ const ErrorsIndex = ({ statusCode }: IErrorProps) => {
 					/>
 				</a>
 			</SocialContainer>
-		</Container>
+		</ErrorContainer>
 	);
 };
 
@@ -123,89 +139,5 @@ const ErrorsObject = {
 		title: 'Gateway Timeout',
 	},
 };
-
-const SocialContainer = styled.div`
-	display: flex;
-	text-align: center;
-	gap: 16px;
-	justify-content: center;
-	position: absolute;
-	bottom: 16px;
-	left: 50%;
-	transform: translateX(-50%);
-	${mediaQueries.tablet} {
-		position: static;
-		bottom: 0;
-		left: 0;
-		transform: translateX(0);
-	}
-`;
-
-const ArcMustardTop = styled(Arc)`
-	border-width: 50px;
-	border-color: transparent ${brandColors.mustard[500]}
-		${brandColors.mustard[500]} transparent;
-	transform: rotate(135deg);
-	top: 100px;
-	right: -130px;
-	width: 260px;
-	height: 260px;
-	z-index: 0;
-	display: none;
-	${mediaQueries.tablet} {
-		display: unset;
-	}
-`;
-
-const CustomH4 = styled(H4)`
-	color: ${brandColors.mustard[500]};
-`;
-
-const ArcMustardBottom = styled(Arc)`
-	border-width: 50px;
-	border-color: transparent ${brandColors.mustard[500]}
-		${brandColors.mustard[500]} transparent;
-	transform: rotate(315deg);
-	bottom: 100px;
-	left: -130px;
-	width: 260px;
-	height: 260px;
-	z-index: 0;
-	display: none;
-	${mediaQueries.tablet} {
-		display: unset;
-	}
-`;
-
-const TextContainer = styled.div`
-	display: flex;
-	flex-direction: column;
-	text-align: center;
-	justify-content: center;
-	height: 100%;
-	gap: 20px;
-	padding: 0;
-	* {
-		z-index: 2;
-	}
-`;
-
-const Container = styled.div`
-	background: ${brandColors.giv[500]};
-	background-image: url('/images/GIV_homepage.svg');
-	height: 100vh;
-
-	color: white;
-	overflow: hidden;
-	position: relative;
-
-	${mediaQueries.mobileS} {
-		padding: 18px;
-	}
-
-	${mediaQueries.tablet} {
-		padding: 150px 130px;
-	}
-`;
 
 export default ErrorsIndex;

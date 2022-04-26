@@ -1,8 +1,11 @@
 import NextErrorComponent from 'next/error';
+import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
 
 import * as Sentry from '@sentry/nextjs';
+import { statusCodes } from '@/lib/constants/constants';
 
 const MyError = ({ statusCode, hasGetInitialPropsRun, err }) => {
+	console.log('statusCode', statusCode);
 	if (!hasGetInitialPropsRun && err) {
 		// getInitialProps is not called in case of
 		// https://github.com/vercel/next.js/issues/8592. As a workaround, we pass
@@ -10,13 +13,15 @@ const MyError = ({ statusCode, hasGetInitialPropsRun, err }) => {
 		Sentry.captureException(err);
 		// Flushing is not required in this case as it only happens on the client
 	}
-
+	if (statusCodes.includes(statusCode?.toString())) {
+		return <ErrorsIndex statusCode={statusCode?.toString()} />;
+	}
 	return <NextErrorComponent statusCode={statusCode} />;
 };
 
 MyError.getInitialProps = async context => {
 	const errorInitialProps = await NextErrorComponent.getInitialProps(context);
-
+	console.log('Context', context);
 	const { res, err, asPath } = context;
 
 	// Workaround for https://github.com/vercel/next.js/issues/8592, mark when
