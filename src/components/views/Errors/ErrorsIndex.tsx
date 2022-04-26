@@ -3,7 +3,12 @@ import { D3, H4, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { mediaQueries } from '@/lib/constants/constants';
 import Image from 'next/image';
-import Error401 from '/public/images/icons/errors/401.svg';
+import error401 from '/public/images/icons/errors/401.svg';
+import error403 from '/public/images/icons/errors/403.svg';
+import error404 from '/public/images/icons/errors/404.svg';
+import error500 from '/public/images/icons/errors/500.svg';
+import error502 from '/public/images/icons/errors/502.svg';
+import error504 from '/public/images/icons/errors/504.svg';
 import twitter from '/public/images/icons/twitter.svg';
 import discord from '/public/images/icons/discord.svg';
 import medium from '/public/images/icons/medium.svg';
@@ -12,7 +17,11 @@ import { useGeneral } from '@/context/general.context';
 import { useEffect } from 'react';
 import links from '@/lib/constants/links';
 
-const ErrorsIndex = () => {
+interface IErrorProps {
+	statusCode: '401' | '403' | '404' | '500' | '502' | '503' | '504';
+}
+
+const ErrorsIndex = ({ statusCode }: IErrorProps) => {
 	const { setShowFooter, setShowHeader } = useGeneral();
 	const {
 		TWITTER: twitterLink,
@@ -35,14 +44,14 @@ const ErrorsIndex = () => {
 			<ArcMustardBottom />
 			<TextContainer>
 				<Image
-					src={Error401}
+					src={ErrorsObject[statusCode].image}
 					width='100'
 					height='100'
 					alt='error icon'
 				/>
-				<D3>401</D3>
+				<D3>{statusCode}</D3>
 				<CustomH4>
-					<b>Oops!</b> Authorization Required
+					<b>Oops!</b> {ErrorsObject[statusCode].title}
 				</CustomH4>
 				<div>
 					<Image
@@ -82,6 +91,37 @@ const ErrorsIndex = () => {
 			</SocialContainer>
 		</Container>
 	);
+};
+
+const ErrorsObject = {
+	'401': {
+		image: error401,
+		title: 'Authorization Required',
+	},
+	'403': {
+		image: error403,
+		title: 'Acces Denied/Forbidden',
+	},
+	'404': {
+		image: error404,
+		title: 'Page Not Found...',
+	},
+	'500': {
+		image: error500,
+		title: 'Internal Server Error',
+	},
+	'502': {
+		image: error502,
+		title: 'Bad Gateway',
+	},
+	'503': {
+		image: error504,
+		title: 'Service is Temporarily Unavailable',
+	},
+	'504': {
+		image: error504,
+		title: 'Gateway Timeout',
+	},
 };
 
 const SocialContainer = styled.div`
