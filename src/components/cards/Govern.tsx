@@ -1,11 +1,4 @@
-import {
-	ChangeEvent,
-	FC,
-	useContext,
-	useEffect,
-	useRef,
-	useState,
-} from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import BigNumber from 'bignumber.js';
 import { utils, BigNumber as EthersBigNumber, constants } from 'ethers';
@@ -35,7 +28,7 @@ import { formatEthHelper, formatWeiHelper, Zero } from '@/helpers/number';
 import { getGivStakingAPR } from '@/lib/stakingPool';
 import { APR } from '@/types/poolInfo';
 import { useTokenDistro } from '@/context/tokenDistro.context';
-import { H2, H5, Lead, P } from '@giveth/ui-design-system';
+import { H2, H5, Lead } from '@giveth/ui-design-system';
 import { useSubgraph } from '@/context';
 import { StakingType } from '@/types/config';
 import useClaim from '@/context/claim.context';
@@ -99,23 +92,8 @@ const Desc = styled(Lead)`
 	margin-top: 22px;
 `;
 
-const GovernGIVToken = styled.div`
-	padding: 20px 30px;
-	height: 208px;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-`;
-
 const MaxStakeGIV = styled(MaxGIV)`
 	cursor: pointer;
-`;
-
-const GovernFooter = styled.div`
-	max-width: 500px;
-	font-size: 12px;
-	line-height: 18px;
-	margin-left: 3%;
 `;
 
 const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {

@@ -200,7 +200,6 @@ export const PriceProvider: FC = ({ children }) => {
 		}
 	}, [chainId, xDaiPrice, mainnetPrice]);
 
-	useEffect(() => {});
 	return (
 		<PriceContext.Provider
 			value={{

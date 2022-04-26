@@ -98,7 +98,6 @@ const CryptoDonation = (props: {
 	const [amountTyped, setAmountTyped] = useState<number>();
 	const [inputBoxFocused, setInputBoxFocused] = useState(false);
 	const [geminiModal, setGeminiModal] = useState(false);
-	const [txHash, setTxHash] = useState<any>();
 	const [erc20List, setErc20List] = useState<IProjectAcceptedToken[]>();
 	const [erc20OriginalList, setErc20OriginalList] = useState<any>();
 	// TODO: Set this to a better flow, gotta discuss with design team but it is needed
@@ -317,10 +316,7 @@ const CryptoDonation = (props: {
 			{showDonateModal && selectedToken && amountTyped && (
 				<DonateModal
 					setShowModal={setShowDonateModal}
-					setSuccessDonation={(successTxHash: ISuccessDonation) => {
-						setSuccessDonation(successTxHash);
-						setTxHash(successTxHash);
-					}}
+					setSuccessDonation={setSuccessDonation}
 					project={project}
 					token={selectedToken}
 					amount={amountTyped}

@@ -69,7 +69,7 @@ const Header: FC<IHeader> = () => {
 			showWalletModal,
 		},
 	} = useModal();
-	const { chainId, active, activate, account, library } = useWeb3React();
+	const { chainId, active, account, library } = useWeb3React();
 	const { theme } = useGeneral();
 	const router = useRouter();
 

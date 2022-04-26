@@ -4,7 +4,6 @@ import {
 	P,
 	Lead,
 	Button,
-	H5,
 	H6,
 	Caption,
 	Subline,

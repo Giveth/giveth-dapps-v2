@@ -6,6 +6,7 @@ import { formatWeiHelper } from '@/helpers/number';
 import { PoolStakingConfig } from '@/types/config';
 import { Flex } from './styled-components/Flex';
 import { NumericalInput } from '@/components/input/index';
+
 interface IAmountInput {
 	maxAmount: BigNumber;
 	setAmount: Dispatch<SetStateAction<string>>;

@@ -123,7 +123,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const fetchProjects = (
 		isLoadMore?: boolean,
 		loadNum?: number,
-		userIdChanged: boolean = false,
+		userIdChanged = false,
 	) => {
 		const categoryQuery = selectedCategory.value;
 

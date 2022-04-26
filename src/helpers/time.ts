@@ -1,5 +1,5 @@
 let initialized = false;
-let timeDifference: number = 0;
+let timeDifference = 0;
 let fetching = false;
 
 export const getNowUnixMS = (): number => {

@@ -38,7 +38,7 @@ export const getUniswapV3StakerContract = (
 	provider: Web3Provider | null,
 	isUnchecked?: boolean,
 ) => {
-	var signer;
+	let signer;
 
 	if (isUnchecked) {
 		signer = provider?.getSigner().connectUnchecked();

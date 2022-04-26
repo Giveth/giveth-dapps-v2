@@ -83,11 +83,6 @@ const APRModalContainer = styled.div`
 	text-align: left;
 `;
 
-const GIViverseLink = styled.span`
-	cursor: pointer;
-	color: ${brandColors.cyan[500]};
-`;
-
 const DescContainer = styled.div`
 	color: ${neutralColors.gray[100]};
 	background-color: ${brandColors.giv[700]};
