@@ -12,182 +12,49 @@ import {
 	IconInfo,
 } from '@giveth/ui-design-system';
 import { IconWalletApprove } from '@giveth/ui-design-system/lib/cjs/components/icons/WalletApprove';
-import { captureException } from '@sentry/nextjs';
 
-import { IModal, Modal } from '@/components/modals/Modal';
+import { Modal } from '@/components/modals/Modal';
 import { IProject } from '@/apollo/types/types';
-import { isAddressENS, getAddressFromENS } from '@/lib/wallet';
-import { formatPrice, sendTransaction, showToastError } from '@/lib/helpers';
-import * as transaction from '../../services/transaction';
-import { saveDonation, saveDonationTransaction } from '@/services/donation';
+import { formatPrice } from '@/lib/helpers';
 import FixedToast from '@/components/toasts/FixedToast';
 import { mediaQueries } from '@/lib/constants/constants';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { ISuccessDonation } from '@/components/views/donate/CryptoDonation';
+import { confirmDonation } from '@/components/views/donate/helpers';
 
-interface IDonateModal extends IModal {
-	closeParentModal?: () => void;
+export interface IDonateModalProps {
+	setShowModal: (i: boolean) => void;
 	project: IProject;
 	token: IProjectAcceptedToken;
 	amount: number;
 	price?: number;
 	anonymous?: boolean;
 	setInProgress?: any;
-	setUnconfirmed?: any;
 	setSuccessDonation: (i: ISuccessDonation) => void;
+	setUnconfirmed?: any;
 	givBackEligible?: boolean;
 }
 
-const DonateModal = ({
-	setShowModal,
-	project,
-	token,
-	amount,
-	price,
-	anonymous,
-	setInProgress,
-	setSuccessDonation,
-	setUnconfirmed,
-	givBackEligible,
-}: IDonateModal) => {
-	const { account, library, chainId } = useWeb3React();
+const DonateModal = (props: IDonateModalProps) => {
+	const { project, token, amount, price, setShowModal } = props;
+
+	const web3Context = useWeb3React();
 
 	const [donating, setDonating] = useState(false);
 	const [donationSaved, setDonationSaved] = useState(false);
 
-	const { walletAddress, id, title } = project || {};
+	const { title } = project || {};
 
 	const avgPrice = price && price * amount;
 
-	const confirmDonation = async () => {
-		try {
-			// Traceable by default if it comes from Trace only
-			// Depends on the toggle if it's an IO to Trace project
-			// let traceable = project?.fromTrace
-			//   ? true
-			//   : isTraceable
-			//   ? isTraceable
-			//   : switchTraceable
-			let traceable = false;
-
-			const toAddress = isAddressENS(walletAddress!)
-				? await getAddressFromENS(walletAddress!, library)
-				: walletAddress;
-			await transaction.send(
-				library,
-				toAddress,
-				token.address!,
-				amount,
-				sendTransaction,
-				{
-					onTransactionHash: async (transactionHash: string) => {
-						// Save initial txn details to db
-						const {
-							donationId,
-							savedDonation,
-							saveDonationErrors,
-						} = await saveDonation(
-							account!,
-							toAddress,
-							transactionHash,
-							chainId!,
-							amount,
-							token.symbol!,
-							Number(id),
-							token.address!,
-							anonymous!,
-						);
-						console.log('DONATION RESPONSE: ', {
-							donationId,
-							savedDonation,
-							saveDonationErrors,
-						});
-						setDonationSaved(true);
-						// onTransactionHash callback for event emitter
-						if (saveDonationErrors?.length > 0) {
-							showToastError(saveDonationErrors);
-						}
-						transaction.confirmEtherTransaction(
-							transactionHash,
-							(res: transaction.IEthTxConfirmation) => {
-								try {
-									if (!res) return;
-									// toast.dismiss()
-									if (res?.tooSlow === true) {
-										// Tx is being too slow
-										// toast.dismiss()
-										setSuccessDonation({
-											transactionHash,
-											tokenSymbol: token.symbol,
-											subtotal: amount,
-											givBackEligible,
-											tooSlow: true,
-										});
-										setInProgress(true);
-									} else if (res?.status) {
-										// Tx was successful
-										// toast.dismiss()
-										setSuccessDonation({
-											transactionHash,
-											tokenSymbol: token.symbol,
-											subtotal: amount,
-											givBackEligible,
-										});
-										setUnconfirmed(false);
-									} else {
-										// EVM reverted the transaction, it failed
-										setSuccessDonation({
-											transactionHash,
-											tokenSymbol: token.symbol,
-											subtotal: amount,
-											givBackEligible,
-										});
-										setUnconfirmed(true);
-										if (res?.error) {
-											showToastError(res.error);
-										} else {
-											showToastError(
-												"Transaction couldn't be confirmed or it failed",
-											);
-										}
-									}
-								} catch (error) {
-									showToastError(error);
-								}
-							},
-							0,
-							library,
-						);
-						await saveDonationTransaction(
-							transactionHash,
-							donationId,
-						);
-					},
-					onReceiptGenerated: (receipt: any) => {
-						console.log({ receipt });
-						setSuccessDonation({
-							transactionHash: receipt?.transactionHash,
-							tokenSymbol: token.symbol,
-							subtotal: amount,
-						});
-					},
-					onError: showToastError,
-				},
-				traceable,
-			);
-
-			// Commented notify, and instead we are using our own service
-			// transaction.notify(transactionHash)
-		} catch (error: any) {
-			setDonating(false);
-			captureException(error);
-			if (
-				error?.data?.code === 'INSUFFICIENT_FUNDS' ||
-				error?.data?.code === 'UNPREDICTABLE_GAS_LIMIT'
-			) {
-				showToastError('Insufficient Funds');
-			} else showToastError(error);
-		}
+	const handleDonate = () => {
+		setDonating(!donating);
+		confirmDonation({
+			...props,
+			setDonationSaved,
+			web3Context,
+			setDonating,
+		}).then();
 	};
 
 	return (
@@ -227,10 +94,7 @@ const DonateModal = ({
 						donating={donating}
 						disabled={donating}
 						label={donating ? 'DONATING' : 'DONATE'}
-						onClick={() => {
-							setDonating(!donating);
-							confirmDonation();
-						}}
+						onClick={handleDonate}
 					/>
 					{donationSaved && (
 						<CloseButton
