@@ -116,7 +116,7 @@ const ErrorsObject = {
 	},
 	'403': {
 		image: error403,
-		title: 'Acces Denied/Forbidden',
+		title: 'Access Denied/Forbidden',
 	},
 	'404': {
 		image: error404,

@@ -1,6 +1,6 @@
 import { Arc } from '@/components/styled-components/Arc';
 import { mediaQueries } from '@/lib/constants/constants';
-import { D3, H4, brandColors } from '@giveth/ui-design-system';
+import { H4, brandColors } from '@giveth/ui-design-system';
 
 import styled from 'styled-components';
 
@@ -29,6 +29,7 @@ export const CustomBigWarningImage = styled.img`
 	top: 100px;
 	left: -70px;
 	display: none;
+	user-select: none;
 	${mediaQueries.laptop} {
 		display: unset;
 	}
@@ -42,6 +43,35 @@ export const CustomSmallWarningImage = styled.img`
 	bottom: 100px;
 	right: 70px;
 	display: none;
+	user-select: none;
+	${mediaQueries.laptop} {
+		display: unset;
+	}
+`;
+
+export const CustomGearImage = styled.img`
+	opacity: 0.6;
+	position: absolute;
+	width: 120px;
+	height: 120px;
+	top: 70px;
+	left: -30px;
+	display: none;
+	user-select: none;
+	${mediaQueries.laptop} {
+		display: unset;
+	}
+`;
+
+export const CustomGearsImage = styled.img`
+	opacity: 0.6;
+	position: absolute;
+	width: 160px;
+	height: 160px;
+	bottom: 70px;
+	right: -30px;
+	display: none;
+	user-select: none;
 	${mediaQueries.laptop} {
 		display: unset;
 	}
@@ -66,6 +96,9 @@ export const ArcMustardTop = styled(Arc)`
 export const CustomH4 = styled(H4)`
 	color: ${brandColors.mustard[500]};
 `;
+export const MustardSpan = styled.span`
+	color: ${brandColors.mustard[500]};
+`;
 
 export const ArcMustardBottom = styled(Arc)`
 	border-width: 50px;
@@ -84,6 +117,8 @@ export const ArcMustardBottom = styled(Arc)`
 `;
 
 export const TextContainer = styled.div`
+	max-width: 900px;
+	margin: auto;
 	display: flex;
 	flex-direction: column;
 	text-align: center;
