@@ -1,11 +1,14 @@
 import { Web3Provider } from '@ethersproject/providers';
 import { Contract } from 'ethers';
-import { abi as UniswapV3PoolABI } from '@uniswap/v3-core/artifacts/contracts/UniswapV3Pool.sol/UniswapV3Pool.json';
-import { abi as NonfungiblePositionManagerABI } from '@uniswap/v3-periphery/artifacts/contracts/NonfungiblePositionManager.sol/NonfungiblePositionManager.json';
+import UniswapV3PoolJson from '@uniswap/v3-core/artifacts/contracts/UniswapV3Pool.sol/UniswapV3Pool.json';
+import NonfungiblePositionManagerJson from '@uniswap/v3-periphery/artifacts/contracts/NonfungiblePositionManager.sol/NonfungiblePositionManager.json';
 
 import UNISWAP_V3_STAKER_ABI from '@/artifacts/uniswap_v3_staker.json';
 import { StakingType, UniswapV3PoolStakingConfig } from '@/types/config';
 import config from '@/configuration';
+
+const { abi: UniswapV3PoolABI } = UniswapV3PoolJson;
+const { abi: NonfungiblePositionManagerABI } = NonfungiblePositionManagerJson;
 
 const mainnetConfig = config.MAINNET_CONFIG;
 const uniswapV3Config = mainnetConfig.pools.find(
