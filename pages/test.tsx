@@ -1,6 +1,8 @@
 import Head from 'next/head';
 import styled from 'styled-components';
 import { gToast, ToastType } from '@/components/toasts';
+import { GetServerSideProps } from 'next';
+import { countReset } from 'console';
 
 const TestRoute = () => {
 	const notify = () =>
@@ -32,6 +34,17 @@ const TestRoute = () => {
 };
 
 export default TestRoute;
+
+export const getServerSideProps: GetServerSideProps = async context => {
+	// let { statusCode } = context.res;
+	// statusCode = 500;
+	context.res.statusCode = 500;
+	return {
+		props: {
+			name: 'test',
+		},
+	};
+};
 
 const TestContainer = styled.div`
 	padding: 200px;

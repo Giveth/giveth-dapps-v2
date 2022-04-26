@@ -1,9 +1,10 @@
 import Image from 'next/image';
+import styled from 'styled-components';
+import { brandColors, D3, Lead } from '@giveth/ui-design-system';
+
 import TermsArray from '@/content/Terms';
 import Accordion from '../Accordion';
 import FlowerIcon from '/public//images/flower_terms.svg';
-import styled from 'styled-components';
-import { brandColors, D3, Lead } from '@giveth/ui-design-system';
 import { mediaQueries } from '@/lib/constants/constants';
 
 const TermsIndex = () => {
@@ -50,11 +51,8 @@ const Title = styled(D3)`
 
 const Wrapper = styled.div`
 	position: relative;
-
-	${mediaQueries.mobileS} {
-		margin: 150px 0;
-		padding: 0 18px;
-	}
+	margin: 150px 0;
+	padding: 0 18px;
 
 	${mediaQueries.tablet} {
 		margin: 150px 270px;

@@ -13,7 +13,7 @@ import { FETCH_USER_DONATIONS } from '@/apollo/gql/gqlUser';
 import { IUserDonations } from '@/apollo/types/gqlTypes';
 import { IWalletDonation } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+import { Flex } from '@/components/styled-components/Flex';
 import NothingToSee from '@/components/views/userPublicProfile/NothingToSee';
 import DonationTable from '@/components/views/userPublicProfile/donationsTab/DonationsTable';
 

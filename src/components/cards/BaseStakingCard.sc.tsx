@@ -159,7 +159,7 @@ export const DisableModal = styled.div`
 	width: 100%;
 	height: 100%;
 	background: transparent;
-	z-index: 99;
+	z-index: 10;
 	display: flex;
 	justify-content: center;
 	align-items: center;

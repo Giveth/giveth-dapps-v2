@@ -10,7 +10,7 @@ export interface IModalHeader {
 	hiddenHeader?: boolean;
 	title?: string;
 	icon?: ReactNode;
-	closeModal?: () => void;
+	closeModal: () => void;
 	position?: ModalHeaderTitlePosition;
 }
 
@@ -19,7 +19,7 @@ export const ModalHeader: React.FC<IModalHeader> = ({
 	hiddenHeader = false,
 	title = '',
 	icon,
-	closeModal = () => {},
+	closeModal,
 	position = 'center',
 }) => {
 	return !hiddenHeader ? (

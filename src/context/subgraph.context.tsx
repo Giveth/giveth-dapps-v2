@@ -31,7 +31,8 @@ export interface ISubgraphValue {
 	[StakingType.BALANCER]?: IUnipool;
 	[StakingType.SUSHISWAP]?: IUnipool;
 	[StakingType.HONEYSWAP]?: IUnipool;
-	[StakingType.UNISWAP]?: IUnipool;
+	[StakingType.UNISWAPV2]?: IUnipool;
+	[StakingType.UNISWAPV3]?: IUnipool;
 	userNotStakedPositions: IUniswapV3Position[];
 	userStakedPositions: IUniswapV3Position[];
 	allPositions: IUniswapV3Position[];

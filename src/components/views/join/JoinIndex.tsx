@@ -1,21 +1,20 @@
-import { Arc } from '@/components/styled-components/Arc';
 import { D3, H4, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+
 import { mediaQueries } from '@/lib/constants/constants';
+import { Arc } from '@/components/styled-components/Arc';
 
 const JoinIndex = () => {
 	return (
-		<>
-			<UpperSection>
-				<ArcBig />
-				<ArcCyan />
-				<ArcMustard />
-				<TextContainer>
-					<D3>Join our Community.</D3>
-					<H4>Building the Future of Giving.</H4>
-				</TextContainer>
-			</UpperSection>
-		</>
+		<UpperSection>
+			<ArcBig />
+			<ArcCyan />
+			<ArcMustard />
+			<TextContainer>
+				<D3>Join our Community.</D3>
+				<H4>Building the Future of Giving.</H4>
+			</TextContainer>
+		</UpperSection>
 	);
 };
 
@@ -61,12 +60,9 @@ const TextContainer = styled.div`
 	justify-content: center;
 	height: 100%;
 	padding: 0;
+	margin-top: 16px;
 	* {
 		z-index: 2;
-	}
-
-	${mediaQueries.mobileS} {
-		margin-top: 16px;
 	}
 
 	${mediaQueries.tablet} {
@@ -78,14 +74,10 @@ const UpperSection = styled.div`
 	background: ${brandColors.giv[500]};
 	background-image: url('/images/GIV_homepage.svg');
 	height: 794px;
-
 	color: white;
 	overflow: hidden;
 	position: relative;
-
-	${mediaQueries.mobileS} {
-		padding: 18px;
-	}
+	padding: 18px;
 
 	${mediaQueries.tablet} {
 		padding: 150px 130px;

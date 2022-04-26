@@ -1,5 +1,5 @@
-import React, { FC, Fragment, useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
+import { FC, Fragment, useEffect, useRef, useState } from 'react';
+
 import {
 	B,
 	brandColors,
@@ -38,7 +38,6 @@ import {
 	HistoryTitle,
 	HistoryTitleRow,
 	HistoryTooltip,
-	IGsDataBox,
 	IncreaseSection,
 	IncreaseSectionTitle,
 	NoData,
@@ -65,8 +64,8 @@ import { IconGIV } from '../Icons/GIV';
 import { givEconomySupportedNetworks } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
 import Pagination from '../Pagination';
-import Routes from '@/lib/constants/Routes';
 import { Container, Row, Col } from '@/components/Grid';
+import GivEconomyProjectCards from '../cards/GivEconomyProjectCards';
 
 export const TabGIVstreamTop = () => {
 	const [showModal, setShowModal] = useState(false);
@@ -243,62 +242,7 @@ export const TabGIVstreamBottom = () => {
 						Increase your GIVstream
 						<IconSpark size={32} color={brandColors.mustard[500]} />
 					</IncreaseSectionTitle>
-					<Row>
-						<Col xs={12} sm={6} md={4}>
-							<IGsDataBox
-								title='GIVbacks'
-								button={
-									<GsButton
-										label='SEE PROJECTS'
-										linkType='primary'
-										size='medium'
-										href={Routes.Projects}
-										target='_blank'
-									/>
-								}
-							>
-								Donate to verified projects on Giveth. Get GIV
-								and increase your GIVstream with the GIVbacks
-								program.
-							</IGsDataBox>
-						</Col>
-						<Col xs={12} sm={6} md={4}>
-							<IGsDataBox
-								title='GIVgarden'
-								button={
-									<GsButton
-										label='SEE PROPOSALS'
-										linkType='primary'
-										size='medium'
-										href={config.GARDEN_LINK}
-										target='_blank'
-									/>
-								}
-							>
-								The GIVgarden is the decentralized governance
-								platform for the GIVeconomy. Increase your
-								GIVstream when you wrap GIV to vote.
-							</IGsDataBox>
-						</Col>
-						<Col xs={12} sm={6} md={4}>
-							<IGsDataBox
-								title='GIVfarm'
-								button={
-									<Link href={Routes.GIVfarm} passHref>
-										<GsButton
-											label='SEE OPPORTUNITIES'
-											linkType='primary'
-											size='medium'
-										/>
-									</Link>
-								}
-							>
-								Stake GIV, or become a liquidity provider and
-								stake LP tokens in the GIVfarm. Get GIV rewards
-								and increase your GIVstream.
-							</IGsDataBox>
-						</Col>
-					</Row>
+					<GivEconomyProjectCards />
 				</Container>
 			</IncreaseSection>
 		</GIVstreamBottomContainer>
@@ -350,6 +294,7 @@ const convetSourceTypeToIcon = (distributor: string) => {
 				</Flex>
 			);
 		case 'balancerlm':
+		case 'uniswapv2givdailm':
 		case 'givhnylm':
 		case 'givlm':
 		case 'givethlm':
@@ -360,7 +305,7 @@ const convetSourceTypeToIcon = (distributor: string) => {
 					<P>{` GIVfarm`}</P>
 				</Flex>
 			);
-		case 'gardenPool':
+		case 'gardenpool':
 			return (
 				<Flex gap='16px'>
 					<IconGIVGarden size={24} color={brandColors.mustard[500]} />

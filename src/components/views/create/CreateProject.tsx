@@ -109,7 +109,7 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 	useEffect(() => {
 		if (isEditMode) {
 			if (!project) return;
-			let imageComparator = image === '' ? null : image;
+			const imageComparator = image === '' ? null : image;
 			if (
 				name !== project.title ||
 				description !== project.description ||
@@ -197,7 +197,7 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 	};
 
 	const isReadyToPublish = () => {
-		for (let [key, value] of Object.entries(errors)) {
+		for (const [key, value] of Object.entries(errors)) {
 			if (value) {
 				submitErrorHandler(key, value);
 				return false;

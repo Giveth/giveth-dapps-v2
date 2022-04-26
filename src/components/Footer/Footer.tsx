@@ -8,7 +8,6 @@ import {
 	IconYoutube,
 	IconTwitter,
 	Caption,
-	Subline,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import styled from 'styled-components';
@@ -174,6 +173,7 @@ const RightContainer = styled.div<{ color: string }>`
 
 const SupportUs = styled.div`
 	display: flex;
+	margin-bottom: 32px;
 
 	${mediaQueries.laptop} {
 		justify-content: flex-end;
@@ -206,8 +206,4 @@ const LinkItem = styled(P)<{ color: string }>`
 
 const CaptionRed = styled(Caption)`
 	color: ${brandColors.pinky[500]};
-`;
-
-const CopyRights = styled(Subline)`
-	margin-top: 8px;
 `;

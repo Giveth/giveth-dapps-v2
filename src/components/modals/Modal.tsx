@@ -2,13 +2,18 @@ import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import React, { ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
-import Scrollbars from 'react-custom-scrollbars';
+import dynamic from 'next/dynamic';
 
 import {
 	ModalHeader,
 	ModalHeaderTitlePosition,
 } from '@/components/modals/ModalHeader';
 import { ETheme, useGeneral } from '@/context/general.context';
+import { zIndex } from '@/lib/constants/constants';
+
+const Scrollbars = dynamic(() => import('react-custom-scrollbars'), {
+	ssr: false,
+});
 
 interface ModalWrapperProps {
 	fullScreen?: boolean;
@@ -109,7 +114,7 @@ const Background = styled.div`
 	align-items: center;
 	top: 0;
 	left: 0;
-	z-index: 1060;
+	z-index: ${zIndex.MODAL};
 `;
 
 const ModalWrapper = styled.div<ModalWrapperProps>`

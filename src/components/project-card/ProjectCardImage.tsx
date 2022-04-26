@@ -17,9 +17,7 @@ const ProjectCardImage: FC<IProjectCardImageProps> = ({ image }) => {
 			src={src!}
 			layout='fill'
 			alt='project image'
-			onError={e => {
-				setSrc(undefined);
-			}}
+			onError={() => setSrc(undefined)}
 			loading='lazy'
 		/>
 	);

@@ -2,24 +2,31 @@ import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Caption, semanticColors } from '@giveth/ui-design-system';
+import {
+	Caption,
+	Container,
+	H5,
+	semanticColors,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
 import ProjectDonateCard from './ProjectDonateCard';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
-import { client, initializeApollo } from '@/apollo/apolloClient';
+import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 import useUser from '@/context/UserProvider';
 import { IDonation, IProject } from '@/apollo/types/types';
 import { EDirection, EProjectStatus, gqlEnums } from '@/apollo/types/gqlEnums';
 import InfoBadge from '@/components/badges/InfoBadge';
-import { IDonationsByProjectId } from '@/apollo/types/gqlTypes';
+import { IDonationsByProjectIdGQL } from '@/apollo/types/gqlTypes';
 import SuccessfulCreation from '@/components/views/create/SuccessfulCreation';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import InlineToast from '@/components/toasts/InlineToast';
 import { ProjectMeta } from '@/lib/meta';
+import SimilarProjects from '@/components/views/project/SimilarProjects';
+import { showToastError } from '@/lib/helpers';
 
 const ProjectDonations = dynamic(() => import('./ProjectDonations'));
 const ProjectUpdates = dynamic(() => import('./ProjectUpdates'));
@@ -74,7 +81,7 @@ const ProjectIndex = (props: { project?: IProject }) => {
 
 	useEffect(() => {
 		if (!id) return;
-		initializeApollo()
+		client
 			.query({
 				query: FETCH_PROJECT_DONATIONS,
 				variables: {
@@ -87,15 +94,12 @@ const ProjectIndex = (props: { project?: IProject }) => {
 					},
 				},
 			})
-			.then(
-				(res: {
-					data: { donationsByProjectId: IDonationsByProjectId };
-				}) => {
-					const donationsByProjectId = res.data.donationsByProjectId;
-					setDonations(donationsByProjectId.donations);
-					setTotalDonations(donationsByProjectId.totalCount);
-				},
-			);
+			.then((res: IDonationsByProjectIdGQL) => {
+				const donationsByProjectId = res.data.donationsByProjectId;
+				setDonations(donationsByProjectId.donations);
+				setTotalDonations(donationsByProjectId.totalCount);
+			})
+			.catch(showToastError);
 	}, [id]);
 
 	useEffect(() => {
@@ -133,68 +137,80 @@ const ProjectIndex = (props: { project?: IProject }) => {
 	}
 
 	return (
-		<Wrapper>
-			<Head>
-				<title>{title && `${title} |`} Giveth</title>
-				<ProjectMeta project={project} preTitle='Check out' />
-			</Head>
+		<>
+			<Wrapper>
+				<Head>
+					<title>{title && `${title} |`} Giveth</title>
+					<ProjectMeta project={project} preTitle='Check out' />
+				</Head>
 
-			<ProjectHeader project={project} />
-			{isDraft && (
-				<DraftIndicator>
-					<InfoBadge />
-					<Caption medium>This is a preview of your project.</Caption>
-				</DraftIndicator>
-			)}
-			<BodyWrapper>
-				<ContentWrapper>
-					{project && !isDraft && (
-						<ProjectTabs
-							activeTab={activeTab}
-							setActiveTab={setActiveTab}
-							project={project}
-							totalDonations={totalDonations}
-						/>
-					)}
-					{!isActive && !isDraft && (
-						<InlineToast message='This project is not active.' />
-					)}
-					{activeTab === 0 && (
-						<RichTextViewer content={description} />
-					)}
-					{activeTab === 1 && (
-						<ProjectUpdates
-							project={project}
-							fetchProject={fetchProject}
-						/>
-					)}
-					{activeTab === 2 && (
-						<ProjectDonations
-							donationsByProjectId={{
-								donations,
-								totalCount: totalDonations,
-							}}
-							project={project!}
-							isActive={isActive}
-							isDraft={isDraft}
-						/>
-					)}
-				</ContentWrapper>
-				{project && (
-					<ProjectDonateCard
-						isDraft={isDraft}
-						project={project!}
-						isMobile={isMobile}
-						isActive={isActive}
-						setIsActive={setIsActive}
-						setIsDraft={setIsDraft}
-						setCreationSuccessful={setCreationSuccessful}
-					/>
+				<ProjectHeader project={project} />
+				{isDraft && (
+					<DraftIndicator>
+						<InfoBadge />
+						<Caption medium>
+							This is a preview of your project.
+						</Caption>
+					</DraftIndicator>
 				)}
-			</BodyWrapper>
-		</Wrapper>
+				<BodyWrapper>
+					<ContentWrapper>
+						{project && !isDraft && (
+							<ProjectTabs
+								activeTab={activeTab}
+								setActiveTab={setActiveTab}
+								project={project}
+								totalDonations={totalDonations}
+							/>
+						)}
+						{!isActive && !isDraft && (
+							<InlineToast message='This project is not active.' />
+						)}
+						{activeTab === 0 && (
+							<RichTextViewer content={description} />
+						)}
+						{activeTab === 1 && (
+							<ProjectUpdates
+								project={project}
+								fetchProject={fetchProject}
+							/>
+						)}
+						{activeTab === 2 && (
+							<ProjectDonations
+								donationsByProjectId={{
+									donations,
+									totalCount: totalDonations,
+								}}
+								project={project!}
+								isActive={isActive}
+								isDraft={isDraft}
+							/>
+						)}
+					</ContentWrapper>
+					{project && (
+						<ProjectDonateCard
+							isDraft={isDraft}
+							project={project!}
+							isMobile={isMobile}
+							isActive={isActive}
+							setIsActive={setIsActive}
+							setIsDraft={setIsDraft}
+							setCreationSuccessful={setCreationSuccessful}
+						/>
+					)}
+				</BodyWrapper>
+			</Wrapper>
+			<SimilarProjectsContainer>
+				<H5 weight={700}>Similar projects</H5>
+				<SimilarProjects slug={slug} />
+			</SimilarProjectsContainer>
+		</>
 	);
 };
+
+const SimilarProjectsContainer = styled(Container)`
+	margin-top: 60px;
+`;
 
 const DraftIndicator = styled.div`
 	color: ${semanticColors.blueSky[600]};
@@ -209,16 +225,11 @@ const Wrapper = styled.div`
 	position: relative;
 `;
 
-const BodyWrapper = styled.div`
+const BodyWrapper = styled(Container)`
 	display: flex;
-	align-items: unset;
-	flex-direction: row;
 	justify-content: space-between;
 	margin: 0 auto;
-
-	${mediaQueries.mobileS} {
-		min-height: calc(100vh - 312px);
-	}
+	min-height: calc(100vh - 312px);
 
 	${mediaQueries.tablet} {
 		padding: 0 32px;
@@ -241,4 +252,5 @@ const ContentWrapper = styled.div`
 		padding: 0 24px 0 0;
 	}
 `;
+
 export default ProjectIndex;

@@ -1,4 +1,7 @@
 import Image from 'next/image';
+import { Lead, brandColors, H2 } from '@giveth/ui-design-system';
+import styled from 'styled-components';
+
 import Card from '@/components/GeneralCard';
 import YellowFlower from '/public/images/yellow_flower.svg';
 import BlueFlower from '/public/images/blue_flower.svg';
@@ -12,49 +15,47 @@ import youtube_icon from '/public/images/youtube_icon.svg';
 import reddit_icon from '/public/images/reddit_icon.svg';
 import links from '@/lib/constants/links';
 import { mediaQueries } from '@/lib/constants/constants';
-import { Lead, brandColors, H2 } from '@giveth/ui-design-system';
-import styled from 'styled-components';
+import JoinSubscriptionCard from './JoinSubscriptionCard';
 
 const JoinEngage = () => {
 	return (
-		<>
-			<UpperSection>
-				<LeadText>
-					Giveth is first and foremost a community of givers and
-					changemakers. We are passionate people working together to
-					build a crypto-economic system that can reward giving to
-					good causes. Our project is open-source, decentralized,
-					altruistic, and community-led.
-				</LeadText>
-				<br />
-				<LeadText>
-					Follow our social media, and come say hello in a channel
-					below. We look forward to welcoming you!
-				</LeadText>
-				<div style={{ position: 'absolute' }}>
-					<Image src={YellowFlower} alt='yellowflower' />
-				</div>
-				<Section>
-					<Title>Engage</Title>
-					<CardsSection>
-						{engageArray.map(i => (
-							<Card key={i.title} content={i} />
-						))}
-					</CardsSection>
-				</Section>
-				<Section>
-					<Title>Consume</Title>
-					<CardsConsumeSection>
-						{consumeArray.map(i => (
-							<Card key={i.title} content={i} isHorizontal />
-						))}
-					</CardsConsumeSection>
-					<BlueFlowerComponent>
-						<Image src={BlueFlower} alt='blueflower' />
-					</BlueFlowerComponent>
-				</Section>
-			</UpperSection>
-		</>
+		<UpperSection>
+			<LeadText>
+				Giveth is first and foremost a community of givers and
+				changemakers. We are passionate people working together to build
+				a crypto-economic system that can reward giving to good causes.
+				Our project is open-source, decentralized, altruistic, and
+				community-led.
+			</LeadText>
+			<br />
+			<LeadText>
+				Follow our social media, and come say hello in a channel below.
+				We look forward to welcoming you!
+			</LeadText>
+			<div style={{ position: 'absolute' }}>
+				<Image src={YellowFlower} alt='yellow flower' />
+			</div>
+			<Section>
+				<Title>Engage</Title>
+				<CardsSection>
+					{engageArray.map(i => (
+						<Card key={i.title} content={i} />
+					))}
+				</CardsSection>
+			</Section>
+			<Section>
+				<Title>Consume</Title>
+				<CardsConsumeSection>
+					{consumeArray.map(i => (
+						<Card key={i.title} content={i} isHorizontal />
+					))}
+					<JoinSubscriptionCard />
+				</CardsConsumeSection>
+				<BlueFlowerComponent>
+					<Image src={BlueFlower} alt='blue flower' />
+				</BlueFlowerComponent>
+			</Section>
+		</UpperSection>
 	);
 };
 

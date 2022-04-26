@@ -440,7 +440,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 												<BreakdownIcon>
 													<IconGIVBack size={24} />
 												</BreakdownIcon>
-												<P>GIVback</P>
+												<P>GIVbacks</P>
 											</BreakdownTitle>
 											<BreakdownAmount>
 												{formatWeiHelper(

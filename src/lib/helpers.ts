@@ -4,12 +4,12 @@ import { Contract } from '@ethersproject/contracts';
 import { Web3Provider } from '@ethersproject/providers';
 import { promisify } from 'util';
 import { AddressZero } from '@ethersproject/constants';
+import { brandColors } from '@giveth/ui-design-system';
 // @ts-ignore
 import tokenAbi from 'human-standard-token-abi';
 
 import { BasicNetworkConfig, GasPreference } from '@/types/config';
 import { EWallets } from '@/lib/wallet/walletTypes';
-import { brandColors } from '@giveth/ui-design-system';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
 import { IUser } from '@/apollo/types/types';
 import Routes from '@/lib/constants/Routes';
@@ -20,20 +20,20 @@ import { networksParams } from '@/helpers/blockchain';
 declare let window: any;
 
 export const formatBalance = (balance?: string | number) => {
-	return parseFloat(String(balance) || '0').toLocaleString('en-US', {
+	return parseFloat(String(balance || 0)).toLocaleString('en-US', {
 		maximumFractionDigits: 6,
 		minimumFractionDigits: 2,
 	});
 };
 
 export const formatUSD = (balance?: string | number) => {
-	return parseFloat(String(balance) || '0').toLocaleString('en-US', {
+	return parseFloat(String(balance || 0)).toLocaleString('en-US', {
 		maximumFractionDigits: 2,
 	});
 };
 
 export const formatPrice = (balance?: string | number) => {
-	return parseFloat(String(balance) || '0').toLocaleString('en-US', {
+	return parseFloat(String(balance || 0)).toLocaleString('en-US', {
 		maximumFractionDigits: 6,
 	});
 };
@@ -49,20 +49,20 @@ export function formatWalletLink(chainId?: number, address?: string) {
 }
 
 export const durationToYMDh = (ms: number) => {
-	let baseTime = new Date(0);
-	let duration = new Date(ms);
+	const baseTime = new Date(0);
+	const duration = new Date(ms);
 
-	let y = duration.getUTCFullYear() - baseTime.getUTCFullYear();
-	let m = duration.getUTCMonth() - baseTime.getUTCMonth();
-	let d = duration.getUTCDate() - baseTime.getUTCDate();
-	let h = duration.getUTCHours() - baseTime.getUTCHours();
-	let min = duration.getUTCMinutes() - baseTime.getUTCMinutes();
-	let sec = duration.getUTCSeconds() - baseTime.getUTCSeconds();
+	const y = duration.getUTCFullYear() - baseTime.getUTCFullYear();
+	const m = duration.getUTCMonth() - baseTime.getUTCMonth();
+	const d = duration.getUTCDate() - baseTime.getUTCDate();
+	const h = duration.getUTCHours() - baseTime.getUTCHours();
+	const min = duration.getUTCMinutes() - baseTime.getUTCMinutes();
+	const sec = duration.getUTCSeconds() - baseTime.getUTCSeconds();
 
 	return { y, m, d, h, min, sec };
 };
 
-export const durationToString = (ms: number, length: number = 3) => {
+export const durationToString = (ms: number, length = 3) => {
 	const temp: { [key: string]: number } = durationToYMDh(ms);
 	const res: string[] = [];
 	for (const key in temp) {

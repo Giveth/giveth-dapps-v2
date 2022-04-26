@@ -7,13 +7,13 @@ import {
 	Lead,
 	neutralColors,
 } from '@giveth/ui-design-system';
+import { useWeb3React } from '@web3-react/core';
 
 import { IModal, Modal } from '@/components/modals/Modal';
 import useUser from '@/context/UserProvider';
 import { ETheme, useGeneral } from '@/context/general.context';
 import { mediaQueries } from '@/lib/constants/constants';
 import useModal from '@/context/ModalProvider';
-import { useWeb3React } from '@web3-react/core';
 
 export const SignWithWalletModal: FC<IModal> = ({ setShowModal, callback }) => {
 	const { theme } = useGeneral();
@@ -64,15 +64,12 @@ export const SignWithWalletModal: FC<IModal> = ({ setShowModal, callback }) => {
 };
 
 const Container = styled.div`
-	width: 528px;
 	padding: 48px 24px;
-	${mediaQueries['mobileS']} {
-		width: 100%;
-	}
-	${mediaQueries['desktop']} {
+	width: 100%;
+	${mediaQueries.desktop} {
 		width: 528px;
 	}
-	${mediaQueries['tablet']} {
+	${mediaQueries.tablet} {
 		width: 528px;
 	}
 `;

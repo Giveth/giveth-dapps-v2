@@ -98,7 +98,6 @@ const CryptoDonation = (props: {
 	const [amountTyped, setAmountTyped] = useState<number>();
 	const [inputBoxFocused, setInputBoxFocused] = useState(false);
 	const [geminiModal, setGeminiModal] = useState(false);
-	const [txHash, setTxHash] = useState<any>();
 	const [erc20List, setErc20List] = useState<IProjectAcceptedToken[]>();
 	const [erc20OriginalList, setErc20OriginalList] = useState<any>();
 	// TODO: Set this to a better flow, gotta discuss with design team but it is needed
@@ -317,10 +316,7 @@ const CryptoDonation = (props: {
 			{showDonateModal && selectedToken && amountTyped && (
 				<DonateModal
 					setShowModal={setShowDonateModal}
-					setSuccessDonation={(successTxHash: ISuccessDonation) => {
-						setSuccessDonation(successTxHash);
-						setTxHash(successTxHash);
-					}}
+					setSuccessDonation={setSuccessDonation}
 					project={project}
 					token={selectedToken}
 					amount={amountTyped}
@@ -340,7 +336,7 @@ const CryptoDonation = (props: {
 					!acceptedChains.includes(networkId) && (
 						<NetworkToast>
 							<div>
-								<Caption color={neutralColors.gray[900]}>
+								<Caption medium>
 									Projects from {orgName} only accept
 									donations on{' '}
 									{getNetworkNames(acceptedChains, 'and')}.
@@ -359,7 +355,7 @@ const CryptoDonation = (props: {
 						<NetworkToast>
 							<div>
 								<img src='/images/gas_station.svg' />
-								<Caption color={neutralColors.gray[900]}>
+								<Caption medium>
 									Save on gas fees, switch to Gnosis Chain.
 								</Caption>
 							</div>
@@ -388,6 +384,7 @@ const CryptoDonation = (props: {
 									? 'Search name or paste an address'
 									: 'Search name'
 							}
+							projectVerified={project?.verified!}
 						/>
 					</DropdownContainer>
 					<InputBox
@@ -510,13 +507,16 @@ const DropdownContainer = styled.div`
 `;
 
 const NetworkToast = styled.div`
-	text-align: center;
+	display: flex;
+	gap: 10px;
 	width: 100%;
-	margin: 0 auto 20px auto;
+	margin-bottom: 20px;
+	color: ${neutralColors.gray[800]};
+	> :last-child {
+		flex-shrink: 0;
+	}
 	> div:first-child {
 		display: flex;
-		color: ${neutralColors.gray[800]};
-		justify-content: center;
 	}
 	img {
 		padding-right: 12px;

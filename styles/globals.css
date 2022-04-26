@@ -21,10 +21,6 @@ a {
 	outline: none;
 }
 
-/* Adding some useful classes */
-.w-100 {
-	width: 100%;
-}
 
 /* React-Select component */
 .select__menu {
@@ -120,6 +116,21 @@ a {
 		background-color: #ffc9e2;
 	}
 }
+
+
+.fadeIn {
+	animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
 
 @font-face {
 	font-family: 'Red Hat Text';

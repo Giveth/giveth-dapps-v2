@@ -1,6 +1,7 @@
 import React from 'react';
 import { B } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import ExternalLink from '@/components/ExternalLink';
 
 interface IFToast {
 	message: string | JSX.Element;
@@ -22,9 +23,9 @@ const FixedToast = (props: IFToast) => {
 			{icon && <Icon>{icon}</Icon>}
 			<Text color={color}>{message}</Text>
 			{href && (
-				<a href={href} target='_blank' rel='noreferrer'>
+				<ExternalLink href={href}>
 					<Text color={boldColor}>Learn More</Text>
-				</a>
+				</ExternalLink>
 			)}
 		</Container>
 	);
@@ -38,13 +39,11 @@ const Container = styled.div`
 	border: 1px solid ${(props: IToastContainer) => props.borderColor};
 	border-radius: 8px;
 	> a {
-		cursor: pointer;
 		font-weight: bold !important;
 		word-wrap: break-word;
 		max-width: 110px;
-	}
-	> div:first-child {
-		margin-right: 4px;
+		flex-shrink: 0;
+		margin-left: 10px;
 	}
 `;
 

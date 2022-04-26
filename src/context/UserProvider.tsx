@@ -13,9 +13,9 @@ import { initializeApollo } from '@/apollo/apolloClient';
 import { GET_USER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
 import { compareAddresses, showToastError, signMessage } from '@/lib/helpers';
 import { getToken } from '@/services/token';
-import useWallet from '@/hooks/walletHooks';
 import { IUser } from '@/apollo/types/types';
 import StorageLabel from '@/lib/localStorage';
+import { walletsArray } from '@/lib/wallet/walletTypes';
 
 interface IUserContext {
 	state: {
@@ -51,14 +51,23 @@ const UserContext = createContext<IUserContext>({
 const apolloClient = initializeApollo();
 
 export const UserProvider = (props: { children: ReactNode }) => {
-	const { account, library, chainId } = useWeb3React();
-	useWallet();
+	const { account, library, chainId, activate } = useWeb3React();
 
 	const [user, setUser] = useState<IUser | undefined>();
 	const [balance, setBalance] = useState<string | null>(null);
 
 	const isEnabled = !!library?.getSigner() && !!account && !!chainId;
 	const isSignedIn = isEnabled && !!user?.token;
+
+	useEffect(() => {
+		const selectedWalletName = localStorage.getItem(StorageLabel.WALLET);
+		const wallet = walletsArray.find(w => w.value === selectedWalletName);
+		if (wallet) {
+			activate(wallet.connector, err => {
+				console.log('err', err);
+			});
+		}
+	}, [activate]);
 
 	useEffect(() => {
 		if (account) reFetchUser();

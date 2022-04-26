@@ -1,10 +1,6 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components';
 import { neutralColors, brandColors } from '@giveth/ui-design-system';
-
-interface IHasBG {
-	bg?: false;
-}
 
 const InputContainer = styled.div`
 	background: #310bb5;
@@ -41,66 +37,6 @@ const Unit = styled.span`
 	padding-right: 10px;
 	color: #cabaff;
 `;
-
-const Button = styled.button<IHasBG>`
-	border: 0;
-	border-radius: 24px;
-	height: 48px;
-	background: ${props => (props.bg ? props.bg : '#1B1657')};
-	color: #ffffff;
-	padding: 16px 32px;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 12px;
-	line-height: 18px;
-	text-transform: uppercase;
-	cursor: pointer;
-`;
-
-interface IWalletAddressInputWithButtonProps {
-	placeholder?: string;
-	btnLable?: string;
-	onSubmit: (address: string) => {};
-	onUpdate?: () => void;
-	walletAddress?: string;
-	disabled?: boolean;
-}
-
-export const WalletAddressInputWithButton: FC<
-	IWalletAddressInputWithButtonProps
-> = ({
-	placeholder,
-	btnLable,
-	onSubmit,
-	walletAddress = '',
-	disabled = false,
-	onUpdate = () => {},
-}) => {
-	const [value, setValue] = useState<string>(walletAddress);
-
-	useEffect(() => {
-		setValue(walletAddress);
-	}, [walletAddress]);
-
-	const onValueChange = (e: any) => {
-		onUpdate();
-		setValue(e.target.value);
-	};
-
-	return (
-		<InputContainer>
-			<Input
-				placeholder={placeholder}
-				value={value}
-				onChange={onValueChange}
-				disabled={disabled}
-			/>
-			<Button onClick={() => onSubmit(value)} disabled={disabled}>
-				{btnLable}
-			</Button>
-		</InputContainer>
-	);
-};
 
 const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`); // match escaped "." characters via in a non-capturing group
 

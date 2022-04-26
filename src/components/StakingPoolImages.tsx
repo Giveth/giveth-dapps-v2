@@ -5,6 +5,7 @@ import { IconEthereum } from './Icons/Eth';
 import { IconGIV } from './Icons/GIV';
 import { IconHoneyswap } from './Icons/Honeyswap';
 import { IconFox } from '@/components/Icons/Fox';
+import { IconDai } from '@/components/Icons/Dai';
 import { IconElk } from '@/components/Icons/Elk';
 interface IStakingPoolImagesProps {
 	title: string;
@@ -22,6 +23,8 @@ export const getCurIconWithName = (currency: string) => {
 			return <IconFox size={40} />;
 		case 'ELK':
 			return <IconElk size={40} />;
+		case 'DAI':
+			return <IconDai size={40} />;
 		default:
 			break;
 	}

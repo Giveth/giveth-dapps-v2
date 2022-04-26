@@ -1,11 +1,18 @@
 import { Contract, ethers } from 'ethers';
 
-import { abi as LM_ABI } from '../artifacts/UnipoolTokenDistributor.json';
-import { abi as UNI_ABI } from '../artifacts/UNI.json';
-import { abi as BAL_WEIGHTED_POOL_ABI } from '../artifacts/BalancerWeightedPool.json';
-import { abi as BAL_VAULT_ABI } from '../artifacts/BalancerVault.json';
-import { abi as TOKEN_MANAGER_ABI } from '../artifacts/HookedTokenManager.json';
-import { abi as ERC20_ABI } from '../artifacts/ERC20.json';
+import LM_Json from '../artifacts/UnipoolTokenDistributor.json';
+import UNI_Json from '../artifacts/UNI.json';
+import BAL_WEIGHTED_POOL_Json from '../artifacts/BalancerWeightedPool.json';
+import BAL_VAULT_Json from '../artifacts/BalancerVault.json';
+import TOKEN_MANAGER_Json from '../artifacts/HookedTokenManager.json';
+import ERC20_Json from '../artifacts/ERC20.json';
+
+const { abi: LM_ABI } = LM_Json;
+const { abi: UNI_ABI } = UNI_Json;
+const { abi: BAL_WEIGHTED_POOL_ABI } = BAL_WEIGHTED_POOL_Json;
+const { abi: BAL_VAULT_ABI } = BAL_VAULT_Json;
+const { abi: TOKEN_MANAGER_ABI } = TOKEN_MANAGER_Json;
+const { abi: ERC20_ABI } = ERC20_Json;
 
 import { APR } from '@/types/poolInfo';
 import BigNumber from 'bignumber.js';
@@ -264,6 +271,12 @@ export const getUserStakeInfo = (
 				rewardPerTokenPaid = balance.rewardPerTokenPaidBalancer;
 				stakedAmount = balance.balancerLpStaked;
 				notStakedAmount = balance.balancerLp;
+				break;
+			case StakingType.UNISWAPV2:
+				rewards = balance.rewardsUniswapV2GivDai;
+				rewardPerTokenPaid = balance.rewardPerTokenPaidUniswapV2GivDai;
+				stakedAmount = balance.uniswapV2GivDaiLpStaked;
+				notStakedAmount = balance.uniswapV2GivDaiLp;
 				break;
 			case StakingType.GIV_LM:
 				rewards = balance.rewardsGivLm;

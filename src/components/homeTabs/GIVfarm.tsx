@@ -1,8 +1,7 @@
-import styled from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
 import StakingPoolCard from '@/components/cards/StakingPoolCard';
 import config from '@/configuration';
-import { StakingType } from '@/types/config';
+import { BasicNetworkConfig, StakingType } from '@/types/config';
 import React, { useEffect, useState } from 'react';
 import {
 	GIVfarmTopContainer,
@@ -41,7 +40,34 @@ import {
 	DaoCardButton,
 } from '../GIVfrens.sc';
 
-const GIVfarmTabContainer = styled(Container)``;
+const renderPools = (
+	pools: BasicNetworkConfig['pools'],
+	network: number,
+	active: boolean,
+) =>
+	pools
+		.filter(p => p.active === active)
+		.map((poolStakingConfig, index) => {
+			return (
+				<Col
+					sm={6}
+					lg={4}
+					key={`staking_pool_card_${network}_${index}`}
+				>
+					{poolStakingConfig.type === StakingType.UNISWAPV3 ? (
+						<StakingPositionCard
+							poolStakingConfig={poolStakingConfig}
+						/>
+					) : (
+						<StakingPoolCard
+							key={`staking_pool_card_${network}_${index}`}
+							network={network}
+							poolStakingConfig={poolStakingConfig}
+						/>
+					)}
+				</Col>
+			);
+		});
 
 export const TabGIVfarmTop = () => {
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
@@ -152,25 +178,10 @@ export const TabGIVfarmBottom = () => {
 				{chainId === config.XDAI_NETWORK_NUMBER && (
 					<>
 						<PoolRow>
-							{config.XDAI_CONFIG.pools.map(
-								(poolStakingConfig, index) => {
-									return (
-										<Col
-											sm={6}
-											lg={4}
-											key={`staking_pool_card_xdai_${index}`}
-										>
-											<StakingPoolCard
-												network={
-													config.XDAI_NETWORK_NUMBER
-												}
-												poolStakingConfig={
-													poolStakingConfig
-												}
-											/>
-										</Col>
-									);
-								},
+							{renderPools(
+								config.XDAI_CONFIG.pools,
+								config.XDAI_NETWORK_NUMBER,
+								true,
 							)}
 							<Col sm={6} lg={4}>
 								<StakingPoolCard
@@ -180,6 +191,11 @@ export const TabGIVfarmBottom = () => {
 									)}
 								/>
 							</Col>
+							{renderPools(
+								config.XDAI_CONFIG.pools,
+								config.XDAI_NETWORK_NUMBER,
+								false,
+							)}
 						</PoolRow>
 						<GIVfrens
 							regenFarms={config.XDAI_CONFIG.regenFarms}
@@ -197,38 +213,10 @@ export const TabGIVfarmBottom = () => {
 								!givEconomySupportedNetworks.includes(chainId)
 							}
 						>
-							{config.MAINNET_CONFIG.pools.map(
-								(poolStakingConfig, index) => {
-									return poolStakingConfig.type ===
-										StakingType.UNISWAP ? (
-										<Col
-											sm={6}
-											lg={4}
-											key={`staking_pool_card_mainnet_${index}`}
-										>
-											<StakingPositionCard
-												network={
-													config.MAINNET_NETWORK_NUMBER
-												}
-												poolStakingConfig={
-													poolStakingConfig
-												}
-											/>
-										</Col>
-									) : (
-										<Col sm={6} lg={4}>
-											<StakingPoolCard
-												key={`staking_pool_card_mainnet_${index}`}
-												network={
-													config.MAINNET_NETWORK_NUMBER
-												}
-												poolStakingConfig={
-													poolStakingConfig
-												}
-											/>
-										</Col>
-									);
-								},
+							{renderPools(
+								config.MAINNET_CONFIG.pools,
+								config.MAINNET_NETWORK_NUMBER,
+								true,
 							)}
 							<Col sm={6} lg={4}>
 								<StakingPoolCard
@@ -238,6 +226,11 @@ export const TabGIVfarmBottom = () => {
 									)}
 								/>
 							</Col>
+							{renderPools(
+								config.MAINNET_CONFIG.pools,
+								config.MAINNET_NETWORK_NUMBER,
+								false,
+							)}
 						</PoolRow>
 						<GIVfrens
 							regenFarms={config.XDAI_CONFIG.regenFarms}

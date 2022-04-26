@@ -30,14 +30,18 @@ const transformBalanceInfo = (info: any): IBalances => {
 		info.rewardPerTokenPaidHoneyswap || 0,
 	);
 	const rewardsHoneyswap = BN(info.rewardsHoneyswap || 0);
-	const rewardPerTokenPaidUniswap = BN(info.rewardPerTokenPaidUniswap || 0);
-	const rewardsUniswap = BN(info.rewardsUniswap || 0);
 	const rewardPerTokenPaidBalancer = BN(info.rewardPerTokenPaidBalancer || 0);
 	const rewardsBalancer = BN(info.rewardsBalancer || 0);
+	const rewardPerTokenPaidUniswapV2GivDai = BN(
+		info.rewardPerTokenPaidUniswapV2GivDai || 0,
+	);
+	const rewardsUniswapV2GivDai = BN(info.rewardsUniswapV2GivDai || 0);
 	const givback = BN(info.givback || 0);
 	const givbackLiquidPart = BN(info.givbackLiquidPart || 0);
 	const balancerLp = BN(info.balancerLp || 0);
 	const balancerLpStaked = BN(info.balancerLpStaked || 0);
+	const uniswapV2GivDaiLp = BN(info.uniswapV2GivDaiLp || 0);
+	const uniswapV2GivDaiLpStaked = BN(info.uniswapV2GivDaiLpStaked || 0);
 	const sushiswapLp = BN(info.sushiswapLp || 0);
 	const sushiSwapLpStaked = BN(info.sushiSwapLpStaked || 0);
 	const honeyswapLp = BN(info.honeyswapLp || 0);
@@ -63,14 +67,16 @@ const transformBalanceInfo = (info: any): IBalances => {
 		rewardsSushiSwap,
 		rewardPerTokenPaidHoneyswap,
 		rewardsHoneyswap,
-		rewardPerTokenPaidUniswap,
-		rewardsUniswap,
 		rewardPerTokenPaidBalancer,
 		rewardsBalancer,
+		rewardPerTokenPaidUniswapV2GivDai,
+		rewardsUniswapV2GivDai,
 		givback,
 		givbackLiquidPart,
 		balancerLp,
 		balancerLpStaked,
+		uniswapV2GivDaiLp,
+		uniswapV2GivDaiLpStaked,
 		sushiswapLp,
 		sushiSwapLpStaked,
 		honeyswapLp,
@@ -140,8 +146,8 @@ const transformUnipoolInfo = (info: any): IUnipool | undefined => {
 	const totalSupply = BN(info?.totalSupply || 0);
 	const rewardPerTokenStored = BN(info?.rewardPerTokenStored || 0);
 	const rewardRate = BN(info?.rewardRate || 0);
-	const lastUpdateTime = new Date(+(_lastUpdateTime.toString() + '000'));
-	const periodFinish = new Date(+(_periodFinish.toString() + '000'));
+	const lastUpdateTime = Number(_lastUpdateTime) * 1000;
+	const periodFinish = Number(_periodFinish) * 1000;
 
 	return {
 		totalSupply,
@@ -235,6 +241,9 @@ export const transformSubgraphData = (data: any = {}): ISubgraphValue => {
 		[StakingType.GIV_LM]: transformUnipoolInfo(data[StakingType.GIV_LM]),
 		[StakingType.BALANCER]: transformUnipoolInfo(
 			data[StakingType.BALANCER],
+		),
+		[StakingType.UNISWAPV2]: transformUnipoolInfo(
+			data[StakingType.UNISWAPV2],
 		),
 		[StakingType.HONEYSWAP]: transformUnipoolInfo(
 			data[StakingType.HONEYSWAP],
