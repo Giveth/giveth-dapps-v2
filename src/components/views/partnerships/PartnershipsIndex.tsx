@@ -1,9 +1,10 @@
-import { Arc } from '@/components/styled-components/Arc';
-import { PartnershipArray, IPartner } from '@/content/Partnerships';
 import { H2, brandColors, Lead, D3 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+
 import PartnershipsCard from './PartnershipsCard';
 import { mediaQueries } from '@/lib/constants/constants';
+import { Arc } from '@/components/styled-components/Arc';
+import { PartnershipArray, IPartner } from '@/content/Partnerships';
 
 const PartnershipsIndex = () => {
 	return (
@@ -103,10 +104,7 @@ const Wrapper = styled.div`
 	color: ${brandColors.giv[700]};
 	text-align: center;
 	position: relative;
-
-	${mediaQueries.mobileS} {
-		padding: 190px 18px 85px;
-	}
+	padding: 190px 18px 85px;
 	${mediaQueries.tablet} {
 		padding: 190px 149px;
 	}

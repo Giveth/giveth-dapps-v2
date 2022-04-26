@@ -374,9 +374,8 @@ const Wrapper = styled(motion.div)<{ initialPosition: number }>`
 	flex-shrink: 0;
 	z-index: 10;
 	align-self: flex-start;
-	width: 100%;
+	width: 100vw;
 	position: fixed;
-	left: 0;
 	bottom: calc(-${props => props.initialPosition}px + 168px);
 	border-radius: 40px 40px 0 0;
 

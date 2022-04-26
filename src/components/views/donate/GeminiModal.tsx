@@ -75,7 +75,7 @@ const Container = styled.div`
 `;
 
 const TwButton = styled(Button)`
-	margin: 4px auto;
+	margin: 30px auto 4px;
 	color: white;
 	width: 240px;
 	height: 52px;
@@ -86,9 +86,6 @@ const TwButton = styled(Button)`
 		align-items: center;
 		gap: 6px;
 		margin: 0 auto;
-	}
-	${mediaQueries.mobileS} {
-		margin-top: 30px;
 	}
 `;
 

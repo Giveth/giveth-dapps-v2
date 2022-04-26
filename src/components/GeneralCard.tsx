@@ -8,6 +8,7 @@ import {
 	HorizontalWrap,
 	TitleSection,
 } from './GeneralCard.sc';
+
 interface IContent {
 	icon: string;
 	title: string;

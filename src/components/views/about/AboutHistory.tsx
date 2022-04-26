@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { FlexCenter } from '../../styled-components/Flex';
 import styled from 'styled-components';
 import {
 	brandColors,
@@ -8,7 +7,7 @@ import {
 	H4,
 	Lead,
 } from '@giveth/ui-design-system';
-import { mediaQueries } from '@/lib/constants/constants';
+import { FlexCenter } from '../../styled-components/Flex';
 import links from '@/lib/constants/links';
 
 const AboutHistory = () => {
@@ -72,11 +71,7 @@ const SliderTextSection = styled.div<{ active: boolean }>`
 	display: ${props => (props.active ? 'flex' : 'none')};
 	flex-direction: column;
 	place-items: center;
-	min-height: 170px;
-
-	${mediaQueries.mobileS} {
-		min-height: 390px;
-	}
+	min-height: 390px;
 `;
 
 const ReadMoreButton = styled(ButtonLink)`
@@ -95,11 +90,7 @@ const Title = styled(H3)`
 const End = styled.div`
 	text-align: center;
 	max-width: 840px;
-	margin: 134px auto 0 auto;
-
-	${mediaQueries.mobileS} {
-		margin-top: 72px;
-	}
+	margin: 72px auto 0;
 `;
 
 const Rect = styled(H4)`

@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { P, brandColors, H3, neutralColors } from '@giveth/ui-design-system';
+import styled from 'styled-components';
+
 import VerificationBadge from '@/components/badges/VerificationBadge';
 import { isNoImg, noImgColor, noImgIcon } from '@/lib/helpers';
 import { IProject } from '@/apollo/types/types';
-import { P, brandColors, H3, neutralColors } from '@giveth/ui-design-system';
-import styled from 'styled-components';
 import { mediaQueries } from '@/lib/constants/constants';
 import { addressToUserView } from '@/lib/routeCreators';
 
@@ -91,13 +92,9 @@ const TitleContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: end;
-
 	width: 100%;
 	margin: 0 auto;
-
-	${mediaQueries.mobileS} {
-		padding: 0 16px;
-	}
+	padding: 0 16px;
 
 	${mediaQueries.tablet} {
 		padding: 0 32px;

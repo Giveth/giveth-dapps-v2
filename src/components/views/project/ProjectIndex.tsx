@@ -228,7 +228,20 @@ const Wrapper = styled.div`
 const BodyWrapper = styled(Container)`
 	display: flex;
 	justify-content: space-between;
+	margin: 0 auto;
 	min-height: calc(100vh - 312px);
+
+	${mediaQueries.tablet} {
+		padding: 0 32px;
+	}
+
+	${mediaQueries.laptop} {
+		padding: 0 40px;
+	}
+
+	${mediaQueries.desktop} {
+		max-width: 1280px;
+	}
 `;
 
 const ContentWrapper = styled.div`

@@ -1,20 +1,21 @@
-import {
-	HorizontalWrap,
-	HorizontalTitleSection,
-	Title,
-	Caption,
-	ButtonStyled,
-} from '../../../components/GeneralCard.sc';
 import Image from 'next/image';
-import News_letter from '/public/images/news_letter.svg';
 import styled from 'styled-components';
 import {
 	brandColors,
 	neutralColors,
 	SublineBold,
 } from '@giveth/ui-design-system';
+
 import { mediaQueries } from '@/lib/constants/constants';
 import useNewsletterSubscription from '@/hooks/useNewsletterSubscription';
+import News_letter from '/public/images/news_letter.svg';
+import {
+	HorizontalWrap,
+	HorizontalTitleSection,
+	Title,
+	Caption,
+	ButtonStyled,
+} from '@/components/GeneralCard.sc';
 
 const JoinSubscriptionCard = () => {
 	const {
@@ -30,7 +31,7 @@ const JoinSubscriptionCard = () => {
 		: 'Subscribe to our newsletter';
 	const captionText = successSubscription
 		? 'Thank you for subscribing to Giveth newsletter. Our first news are coming to your inbox soon.'
-		: 'Subscribe to our newsletter to get the latest news, updates and amazing offfers delivered directly traight to your mailbox!';
+		: 'Subscribe to our newsletter to get the latest news, updates and amazing offers delivered directly straight to your mailbox!';
 	return (
 		<HorizontalWrap>
 			<Image src={News_letter} alt='title' />
@@ -72,7 +73,7 @@ const JoinSubscriptionCard = () => {
 };
 
 const CustomizedButtonStyled = styled(ButtonStyled)`
-	margin-top: 10;
+	margin-top: 10px;
 	&:disabled {
 		background-color: ${neutralColors.gray[400]};
 		color: white;
