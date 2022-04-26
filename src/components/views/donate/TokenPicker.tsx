@@ -36,6 +36,7 @@ declare module 'react-select/dist/declarations/src/Select' {
 	> {
 		isMobile?: boolean;
 		setIsOpen?: any;
+		projectVerified?: boolean;
 	}
 }
 
@@ -67,6 +68,7 @@ const MenuList = (props: MenuListProps<IProjectAcceptedToken, false>) => {
 
 const Option = ({ ...props }: OptionProps<IProjectAcceptedToken, false>) => {
 	const value = props.data;
+	const projectVerified = props.selectProps.projectVerified;
 	return (
 		<components.Option {...props}>
 			<OptionContainer>
@@ -74,7 +76,7 @@ const Option = ({ ...props }: OptionProps<IProjectAcceptedToken, false>) => {
 					<ImageIcon symbol={value.symbol} />
 					<B>
 						{value.name} ({value.symbol}){'  '}{' '}
-						{value?.isGivbackEligible && (
+						{value?.isGivbackEligible && projectVerified && (
 							<Image
 								alt='givback eligible icon'
 								src={GivbackEligibleIcon}
@@ -106,6 +108,7 @@ const NotFound = ({ emptyField }: any) => {
 };
 
 const TokenPicker = (props: {
+	projectVerified: boolean;
 	tokenList: IProjectAcceptedToken[] | undefined;
 	onChange: any;
 	onInputChange?: any;
@@ -120,6 +123,7 @@ const TokenPicker = (props: {
 		inputValue,
 		selectedToken,
 		placeholder,
+		projectVerified,
 	} = props;
 	const { isMobile } = useDeviceDetect();
 	const [isOpen, setIsOpen] = useState(false);
@@ -263,7 +267,9 @@ const TokenPicker = (props: {
 					components={{
 						DropdownIndicator,
 						IndicatorSeparator: null,
-						Option,
+						Option: (optionProps: any) => (
+							<Option {...optionProps} />
+						),
 						Control,
 						MenuList,
 					}}
@@ -271,6 +277,7 @@ const TokenPicker = (props: {
 						<NotFound emptyField={() => onChange('')} />
 					)}
 					isMobile={isMobile}
+					projectVerified={projectVerified}
 					setIsOpen={setIsOpen}
 					value={selectedToken}
 					inputValue={inputValue}
