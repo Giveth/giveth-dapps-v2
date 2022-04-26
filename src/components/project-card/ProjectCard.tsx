@@ -18,9 +18,12 @@ import ProjectCardOrgBadge from './ProjectCardOrgBadge';
 import { IProject } from '@/apollo/types/types';
 import { calcBiggestUnitDifferenceTime, htmlToText } from '@/lib/helpers';
 import ProjectCardImage from './ProjectCardImage';
-import { slugToProjectDonate, slugToProjectView } from '@/lib/routeCreators';
+import {
+	addressToUserView,
+	slugToProjectDonate,
+	slugToProjectView,
+} from '@/lib/routeCreators';
 import { Flex } from '../styled-components/Flex';
-import Routes from '@/lib/constants/Routes';
 import { Row } from '@/components/Grid';
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -69,7 +72,7 @@ const ProjectCard = (props: IProjectCard) => {
 				<Title weight={700}>{title}</Title>
 				{adminUser && !isForeignOrg ? (
 					<Link
-						href={`${Routes.User}/${adminUser?.walletAddress}`}
+						href={addressToUserView(adminUser?.walletAddress)}
 						passHref
 					>
 						<Author size='Big'>{name || '\u200C'}</Author>

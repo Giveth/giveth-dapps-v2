@@ -7,6 +7,7 @@ import VerificationBadge from '@/components/badges/VerificationBadge';
 import { isNoImg, noImgColor, noImgIcon } from '@/lib/helpers';
 import { IProject } from '@/apollo/types/types';
 import { mediaQueries } from '@/lib/constants/constants';
+import { addressToUserView } from '@/lib/routeCreators';
 
 const ProjectHeader = (props: { project?: IProject }) => {
 	const { project } = props;
@@ -47,7 +48,10 @@ const ProjectHeader = (props: { project?: IProject }) => {
 					<Title fixSize={adjustTitle} weight={700}>
 						{title}
 					</Title>
-					<Link href={`/user/${adminUser?.walletAddress}`} passHref>
+					<Link
+						href={addressToUserView(adminUser?.walletAddress)}
+						passHref
+					>
 						<Author>{name}</Author>
 					</Link>
 				</TitleContainer>

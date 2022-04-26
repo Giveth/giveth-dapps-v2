@@ -174,6 +174,7 @@ const RightContainer = styled.div<{ color: string }>`
 
 const SupportUs = styled.div`
 	display: flex;
+	margin-bottom: 32px;
 
 	${mediaQueries.laptop} {
 		justify-content: flex-end;

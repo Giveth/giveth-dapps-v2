@@ -79,7 +79,7 @@ const Wrapper = styled.div`
 	color: ${brandColors.deep[600]};
 	display: flex;
 	align-items: center;
-	z-index: 10;
+	z-index: 1;
 	background-color: ${neutralColors.gray[200]};
 	flex-wrap: nowrap;
 	overflow-x: auto;
@@ -95,7 +95,6 @@ const Wrapper = styled.div`
 		padding: 16px 0 12px;
 		position: sticky;
 		top: 200px;
-		z-index: 10;
 	}
 `;
 

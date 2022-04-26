@@ -2,13 +2,16 @@ import { isAddress } from 'ethers/lib/utils';
 import { Contract } from 'ethers';
 import { ClaimData } from '@/types/GIV';
 import config from '../configuration';
-import { abi as MERKLE_ABI } from '../artifacts/MerkleDrop.json';
-import { abi as TOKEN_DISTRO_ABI } from '../artifacts/TokenDistro.json';
+import MerkleDropJson from '../artifacts/MerkleDrop.json';
+import TOKEN_DISTRO_JSON from '../artifacts/TokenDistro.json';
 import { TransactionResponse, Web3Provider } from '@ethersproject/providers';
 import { fetchSubgraph } from '@/services/subgraph.service';
 import { SubgraphQueryBuilder } from '@/lib/subgraph/subgraphQueryBuilder';
 import { transformSubgraphData } from '@/lib/subgraph/subgraphDataTransform';
 import { getGasPreference } from '@/lib/helpers';
+
+const { abi: MERKLE_ABI } = MerkleDropJson;
+const { abi: TOKEN_DISTRO_ABI } = TOKEN_DISTRO_JSON;
 
 export const fetchAirDropClaimData = async (
 	address: string,

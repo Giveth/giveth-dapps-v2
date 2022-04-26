@@ -20,6 +20,12 @@ export interface IFetchProjectUpdates {
 	projectUpdate: IProjectUpdate;
 }
 
+export interface IDonationsByProjectIdGQL {
+	data: {
+		donationsByProjectId: IDonationsByProjectId;
+	};
+}
+
 export interface IDonationsByProjectId {
 	donations: IDonation[];
 	totalCount: number;
@@ -43,6 +49,14 @@ export interface IUserLikedProjects {
 export interface IProjectAcceptedTokensGQL {
 	data: {
 		getProjectAcceptTokens: IProjectAcceptedToken[];
+	};
+}
+
+export interface ISuggestedProjectsGQL {
+	data: {
+		similarProjectsBySlug: {
+			projects: IProject[];
+		};
 	};
 }
 

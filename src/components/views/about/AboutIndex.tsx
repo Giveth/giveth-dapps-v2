@@ -2,23 +2,26 @@ import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Arc } from '@/components/styled-components/Arc';
-import FlowerIcon from '/public/images/flower.svg';
-import AboutMission from './AboutMission';
 import {
 	H1,
 	Lead,
 	brandColors,
-	GLink,
 	P,
 	neutralColors,
 	D3,
 	ButtonLink,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+
 import links from '@/lib/constants/links';
 import { Container } from '@/components/Grid';
 import { mediaQueries } from '@/lib/constants/constants';
+import Routes from '@/lib/constants/Routes';
+import ExternalLink from '@/components/ExternalLink';
+import InternalLink from '@/components/InternalLink';
+import { Arc } from '@/components/styled-components/Arc';
+import FlowerIcon from '/public/images/flower.svg';
+import AboutMission from './AboutMission';
 
 const tabTitles = ['Mission & Vision', 'History', 'Team'];
 
@@ -49,7 +52,7 @@ const AboutIndex = () => {
 						world for creating positive change.
 					</UpperCaption>
 					<Link href={links.SUPPORT_US} passHref>
-						<UpperButton label='SUPPORT GIVETH'></UpperButton>
+						<UpperButton label='SUPPORT GIVETH' />
 					</Link>
 				</Container>
 			</Upper>
@@ -76,18 +79,10 @@ const AboutIndex = () => {
 						to the world. We aim to inspire our community to
 						participate in an ecosystem of collective support,
 						abundance and value-creation. Check out our{' '}
-						<RedirectButton
-							href='https://calendar.google.com/calendar/u/1?cid=Z2l2ZXRoZG90aW9AZ21haWwuY29t'
-							target='_blank'
-							rel='noreferrer'
-						>
-							Calendar
-						</RedirectButton>{' '}
+						<ExternalLink title='Calendar' href={links.CALENDAR} />{' '}
 						and{' '}
-						<Link href='/join' passHref>
-							<RedirectButton>Join Page</RedirectButton>
-						</Link>{' '}
-						to get more involved.
+						<InternalLink href={Routes.Join} title='Join Page' /> to
+						get more involved.
 					</Lead>
 				</MiddleBody>
 			</Middle>
@@ -212,12 +207,9 @@ const Flower = styled.div`
 const MiddleBody = styled.div`
 	max-width: 800px;
 	position: relative;
-`;
-
-const RedirectButton = styled(GLink)`
-	color: ${brandColors.mustard[500]};
-	cursor: pointer;
-	font-size: 20px;
+	a {
+		color: ${brandColors.mustard[500]};
+	}
 `;
 
 const Middle = styled.div`

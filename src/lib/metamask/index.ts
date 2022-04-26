@@ -1,8 +1,10 @@
 import { Contract } from 'ethers';
 import config from '@/configuration';
-import { abi as UNI_ABI } from '@/artifacts/UNI.json';
+import UNI_Json from '@/artifacts/UNI.json';
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { networksParams } from '@/helpers/blockchain';
+
+const { abi: UNI_ABI } = UNI_Json;
 
 declare let window: any;
 
