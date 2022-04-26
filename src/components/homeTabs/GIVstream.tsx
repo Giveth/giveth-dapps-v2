@@ -294,6 +294,7 @@ const convetSourceTypeToIcon = (distributor: string) => {
 				</Flex>
 			);
 		case 'balancerlm':
+		case 'uniswapv2givdailm':
 		case 'givhnylm':
 		case 'givlm':
 		case 'givethlm':
@@ -304,7 +305,7 @@ const convetSourceTypeToIcon = (distributor: string) => {
 					<P>{` GIVfarm`}</P>
 				</Flex>
 			);
-		case 'gardenPool':
+		case 'gardenpool':
 			return (
 				<Flex gap='16px'>
 					<IconGIVGarden size={24} color={brandColors.mustard[500]} />
