@@ -129,6 +129,16 @@ const SocialContainer = styled.div`
 	text-align: center;
 	gap: 16px;
 	justify-content: center;
+	position: absolute;
+	bottom: 16px;
+	left: 50%;
+	transform: translateX(-50%);
+	${mediaQueries.tablet} {
+		position: static;
+		bottom: 0;
+		left: 0;
+		transform: translateX(0);
+	}
 `;
 
 const ArcMustardTop = styled(Arc)`
