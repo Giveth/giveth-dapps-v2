@@ -189,7 +189,7 @@ const ProjectDonateCard = ({
 					setIsDraft(false);
 					setCreationSuccessful(true);
 				}
-			} catch (e: any) {
+			} catch (e) {
 				showToastError(e);
 			}
 		}
@@ -273,16 +273,11 @@ const ProjectDonateCard = ({
 				{!isAdmin && verified && (
 					<GivBackNotif>
 						<Caption color={brandColors.giv[300]}>
-							When you donate to verified projects, you get GIV
-							back.
+							When you donate to verified projects, you get
+							GIVback.
 						</Caption>
 						<ExternalLink href={links.GIVBACK_DOC}>
-							<GIVbackButton aria-label='Learn more about this project'>
-								Learn more
-							</GIVbackButton>
-							<GIVbackQuestionIcon>
-								<IconHelp size={16} />
-							</GIVbackQuestionIcon>
+							<IconHelp size={16} />
 						</ExternalLink>
 					</GivBackNotif>
 				)}
@@ -347,29 +342,18 @@ const CategoryWrapper = styled.div`
 `;
 
 const GivBackNotif = styled.div`
-	padding: 16px 16px 16px 48px;
+	padding: 16px;
 	background: rgba(231, 225, 255, 0.4);
 	border-radius: 8px;
 	border: 1px solid ${brandColors.giv[300]};
 	margin-top: 24px;
 	color: ${brandColors.giv[300]};
-	position: relative;
-`;
+	display: flex;
+	gap: 16px;
+	max-width: 420px;
 
-const GIVbackQuestionIcon = styled.div`
-	position: absolute;
-	top: 19px;
-	left: 16px;
-`;
-
-const GIVbackButton = styled(ButtonText)`
-	margin-top: 16px;
-	color: ${brandColors.giv[300]};
-	display: block;
-	text-align: right;
-
-	&:hover {
-		color: ${brandColors.giv[400]};
+	> a:last-child {
+		margin-top: 3px;
 	}
 `;
 
@@ -385,21 +369,18 @@ const Wrapper = styled(motion.div)<{ initialPosition: number }>`
 	background: white;
 	padding: 32px;
 	overflow: hidden;
-	width: 326px;
 	height: fit-content;
-	box-shadow: ${Shadow.Neutral['400']};
+	box-shadow: ${Shadow.Neutral[400]};
 	flex-shrink: 0;
 	z-index: 10;
 	align-self: flex-start;
-
-	${mediaQueries.mobileS} {
-		width: 100vw;
-		position: fixed;
-		bottom: calc(-${props => props.initialPosition}px + 168px);
-		border-radius: 40px 40px 0 0;
-	}
+	width: 100vw;
+	position: fixed;
+	bottom: calc(-${props => props.initialPosition}px + 168px);
+	border-radius: 40px 40px 0 0;
 
 	${mediaQueries.tablet} {
+		padding: 16px;
 		max-width: 225px;
 		position: sticky;
 		top: 168px;
@@ -411,6 +392,7 @@ const Wrapper = styled(motion.div)<{ initialPosition: number }>`
 	}
 
 	${mediaQueries.laptopL} {
+		padding: 32px;
 		max-width: 325px;
 	}
 `;

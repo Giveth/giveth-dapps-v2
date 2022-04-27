@@ -14,11 +14,7 @@ import { Flex } from '../styled-components/Flex';
 import { Modal, IModal } from './Modal';
 import links from '@/lib/constants/links';
 
-interface IGIVBackExplainModal extends IModal {}
-
-export const GIVBackExplainModal: FC<IGIVBackExplainModal> = ({
-	setShowModal,
-}) => {
+export const GIVBackExplainModal: FC<IModal> = ({ setShowModal }) => {
 	return (
 		<Modal setShowModal={setShowModal}>
 			<GIVBackExplainContainer>

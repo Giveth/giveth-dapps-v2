@@ -35,13 +35,7 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 	const [showModal, setShowModal] = useState<boolean>(false);
 
 	const { project } = props;
-	const {
-		verified,
-		traceCampaignId,
-		slug,
-		description,
-		id: projectId,
-	} = project;
+	const { verified, traceCampaignId, slug, id: projectId } = project;
 
 	const [reaction, setReaction] = useState(project.reaction);
 	const [totalReactions, setTotalReactions] = useState(

@@ -48,14 +48,6 @@ const ClaimButton = styled(Button)`
 	text-transform: uppercase;
 `;
 
-const MetamaskButton = styled.a`
-	width: 215px;
-	heigh: 32px;
-	margin-top: 12px;
-	background: transparent;
-	cursor: pointer;
-`;
-
 const AddTokenRow = styled(Flex)`
 	margin-top: 16px;
 `;

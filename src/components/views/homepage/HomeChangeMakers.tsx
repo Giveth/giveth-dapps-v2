@@ -1,12 +1,5 @@
 import { useRouter } from 'next/router';
-import {
-	D3,
-	H2,
-	Lead,
-	Button,
-	H3,
-	brandColors,
-} from '@giveth/ui-design-system';
+import { D3, Lead, Button, H3, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 import Routes from '@/lib/constants/Routes';
@@ -159,10 +152,7 @@ const EndSection = styled.div`
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
-
-	${mediaQueries.mobileS} {
-		margin-top: 72px;
-	}
+	margin-top: 72px;
 
 	${mediaQueries.tablet} {
 		margin-top: 190px;
@@ -178,15 +168,6 @@ const ContentLead = styled(Lead)`
 	}
 `;
 
-const UpperSection = styled.div`
-	${mediaQueries.laptopL} {
-		margin-left: -120px;
-	}
-	${mediaQueries.desktop} {
-		margin-left: unset;
-	}
-`;
-
 const MiddleSection = styled.div`
 	max-width: 670px;
 	margin: 50px 0;
@@ -196,9 +177,7 @@ const MiddleSection = styled.div`
 `;
 
 const Title = styled(D3)`
-	${mediaQueries.mobileS} {
-		font-size: 4.5rem;
-	}
+	font-size: 4.5rem;
 
 	${mediaQueries.tablet} {
 		font-size: 5.5rem;

@@ -3,9 +3,7 @@ import styled from 'styled-components';
 import {
 	D1,
 	H1,
-	H2,
 	H3,
-	P,
 	Button,
 	QuoteText,
 	DataBlock,

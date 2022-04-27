@@ -89,9 +89,7 @@ export const TabGIVbacksTop = () => {
 										? "Why don't I have GIVbacks?"
 										: undefined
 								}
-								subButtonCb={() => {
-									setShowGivBackExplain(true);
-								}}
+								subButtonCb={() => setShowGivBackExplain(true)}
 								network={chainId}
 								targetNetworks={[config.XDAI_NETWORK_NUMBER]}
 							/>

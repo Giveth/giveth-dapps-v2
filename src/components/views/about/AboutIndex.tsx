@@ -2,23 +2,26 @@ import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Arc } from '@/components/styled-components/Arc';
-import FlowerIcon from '/public/images/flower.svg';
-import AboutMission from './AboutMission';
 import {
 	H1,
 	Lead,
 	brandColors,
-	GLink,
 	P,
 	neutralColors,
 	D3,
 	ButtonLink,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+
 import links from '@/lib/constants/links';
 import { Container } from '@/components/Grid';
 import { mediaQueries } from '@/lib/constants/constants';
+import Routes from '@/lib/constants/Routes';
+import ExternalLink from '@/components/ExternalLink';
+import InternalLink from '@/components/InternalLink';
+import { Arc } from '@/components/styled-components/Arc';
+import FlowerIcon from '/public/images/flower.svg';
+import AboutMission from './AboutMission';
 
 const tabTitles = ['Mission & Vision', 'History', 'Team'];
 
@@ -49,7 +52,7 @@ const AboutIndex = () => {
 						world for creating positive change.
 					</UpperCaption>
 					<Link href={links.SUPPORT_US} passHref>
-						<UpperButton label='SUPPORT GIVETH'></UpperButton>
+						<UpperButton label='SUPPORT GIVETH' />
 					</Link>
 				</Container>
 			</Upper>
@@ -76,18 +79,10 @@ const AboutIndex = () => {
 						to the world. We aim to inspire our community to
 						participate in an ecosystem of collective support,
 						abundance and value-creation. Check out our{' '}
-						<RedirectButton
-							href='https://calendar.google.com/calendar/u/1?cid=Z2l2ZXRoZG90aW9AZ21haWwuY29t'
-							target='_blank'
-							rel='noreferrer'
-						>
-							Calendar
-						</RedirectButton>{' '}
+						<ExternalLink title='Calendar' href={links.CALENDAR} />{' '}
 						and{' '}
-						<Link href='/join' passHref>
-							<RedirectButton>Join Page</RedirectButton>
-						</Link>{' '}
-						to get more involved.
+						<InternalLink href={Routes.Join} title='Join Page' /> to
+						get more involved.
 					</Lead>
 				</MiddleBody>
 			</Middle>
@@ -150,20 +145,15 @@ const TabItem = styled(P)`
 
 const Tabs = styled.div`
 	display: flex;
-	flex-wrap: wrap;
 	align-items: center;
-	gap: 16px;
+	flex-wrap: nowrap;
+	overflow-x: auto;
+	gap: 8px;
 
-	${mediaQueries.mobileS} {
-		flex-wrap: nowrap;
-		overflow-x: auto;
-		gap: 8px;
-
-		::-webkit-scrollbar {
-			width: 0;
-			height: 0;
-			background-color: transparent;
-		}
+	::-webkit-scrollbar {
+		width: 0;
+		height: 0;
+		background-color: transparent;
 	}
 `;
 
@@ -217,12 +207,9 @@ const Flower = styled.div`
 const MiddleBody = styled.div`
 	max-width: 800px;
 	position: relative;
-`;
-
-const RedirectButton = styled(GLink)`
-	color: ${brandColors.mustard[500]};
-	cursor: pointer;
-	font-size: 20px;
+	a {
+		color: ${brandColors.mustard[500]};
+	}
 `;
 
 const Middle = styled.div`
@@ -253,28 +240,6 @@ const UpperTitle = styled(D3)`
 	margin-bottom: 32px;
 	text-align: center;
 	color: ${brandColors.giv[700]};
-`;
-
-const ArcMustard = styled(Arc)`
-	border-width: 90px;
-	border-color: transparent transparent ${brandColors.mustard[500]}
-		transparent;
-	top: 130px;
-	right: -230px;
-	width: 500px;
-	height: 500px;
-	transform: rotate(31deg);
-	z-index: 1;
-`;
-
-const DotMustard = styled(Arc)`
-	border-width: 45px;
-	border-color: ${brandColors.mustard[500]};
-	top: 300px;
-	right: 200px;
-	width: 87px;
-	height: 87px;
-	z-index: 1;
 `;
 
 const Upper = styled.div`

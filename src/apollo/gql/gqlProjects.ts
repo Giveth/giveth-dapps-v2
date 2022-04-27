@@ -400,3 +400,28 @@ export const PROJECT_ACCEPTED_TOKENS = gql`
 		}
 	}
 `;
+
+export const SIMILAR_PROJECTS = gql`
+	query SimilarProjectsBySlug($slug: String!, $take: Int, $skip: Int) {
+		similarProjectsBySlug(slug: $slug, take: $take, skip: $skip) {
+			projects {
+				id
+				title
+				image
+				slug
+				creationDate
+				description
+				adminUser {
+					name
+					walletAddress
+				}
+				totalDonations
+				updatedAt
+				organization {
+					name
+					label
+				}
+			}
+		}
+	}
+`;

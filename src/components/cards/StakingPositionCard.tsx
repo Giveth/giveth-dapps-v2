@@ -1,7 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
-import { BigNumber, utils } from 'ethers';
+import { BigNumber } from 'ethers';
 
-import { Zero } from '@/helpers/number';
 import BaseStakingCard from './BaseStakingCard';
 import { PoolStakingConfig } from '@/types/config';
 import { useLiquidityPositions } from '@/context';
@@ -20,13 +19,12 @@ const OutOfRangeBadge = () => (
 		<SublineBold>Out of Range</SublineBold>
 	</OutOfRangeBadgeContianer>
 );
+
 interface IStakingPositionCardProps {
-	network: number;
 	poolStakingConfig: PoolStakingConfig;
 }
 
 const StakingPositionCard: FC<IStakingPositionCardProps> = ({
-	network,
 	poolStakingConfig,
 }) => {
 	const { rewardBalance } = useStakingNFT();

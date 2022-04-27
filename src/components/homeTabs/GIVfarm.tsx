@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
 import StakingPoolCard from '@/components/cards/StakingPoolCard';
 import config from '@/configuration';
@@ -57,7 +56,6 @@ const renderPools = (
 				>
 					{poolStakingConfig.type === StakingType.UNISWAPV3 ? (
 						<StakingPositionCard
-							network={network}
 							poolStakingConfig={poolStakingConfig}
 						/>
 					) : (
