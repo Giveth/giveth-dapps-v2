@@ -11,6 +11,7 @@ import {
 } from '@giveth/ui-design-system';
 import { TopContainer } from './commons';
 import { device, mediaQueries } from '@/lib/constants/constants';
+import { Flex } from '../styled-components/Flex';
 
 export const OverviewBottomContainer = styled.div`
 	background-image: url('/images/backgrounds/wave.svg');
@@ -138,5 +139,12 @@ export const VideoOverlay = styled.div<{ hidden: boolean }>`
 	user-select: none;
 	&:hover {
 		background: rgba(0, 0, 0, 0.5);
+	}
+`;
+
+export const ClaimRow = styled(Flex)`
+	gap: 8px;
+	${mediaQueries.laptop} {
+		gap: 32px;
 	}
 `;

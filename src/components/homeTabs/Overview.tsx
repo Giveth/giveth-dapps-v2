@@ -18,6 +18,7 @@ import {
 	DataBlockButton,
 	VideoContainer,
 	VideoOverlay,
+	ClaimRow,
 } from './Overview.sc';
 import { IconGIV } from '../Icons/GIV';
 import config from '@/configuration';
@@ -202,7 +203,7 @@ export const TabOverviewBottom = () => {
 						Connect your wallet or check an ethereum address to see
 						your rewards.
 					</ClaimCardQuote>
-					<Flex alignItems='center' gap='32px'>
+					<ClaimRow alignItems='center'>
 						<ClaimCardButton
 							label='CLAIM YOUR GIV'
 							buttonType='primary'
@@ -223,7 +224,7 @@ export const TabOverviewBottom = () => {
 								Buy GIV token <IconExternalLink />
 							</ExtLinkCyan>
 						</Flex>
-					</Flex>
+					</ClaimRow>
 				</ClaimCard>
 				<GivEconomyProjectCards />
 			</Container>
