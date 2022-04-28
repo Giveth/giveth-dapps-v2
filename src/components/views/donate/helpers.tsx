@@ -1,16 +1,13 @@
 import { Web3ReactContextInterface } from '@web3-react/core/dist/types';
 import { captureException } from '@sentry/nextjs';
+import { Web3Provider } from '@ethersproject/providers';
 
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { networksParams } from '@/helpers/blockchain';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import { sendTransaction, showToastError } from '@/lib/helpers';
-import { saveDonation, saveDonationTransaction } from '@/services/donation';
+import { saveDonation } from '@/services/donation';
 import { IDonateModalProps } from '@/components/modals/DonateModal';
-import {
-	confirmEtherTransaction,
-	IEthTxConfirmation,
-} from '@/services/transaction';
 
 export interface ISelectedToken extends IProjectAcceptedToken {
 	value?: IProjectAcceptedToken;
@@ -165,6 +162,12 @@ interface IOnTransactionHash extends IConfirmDonation {
 	toAddress: string;
 }
 
+interface IEthTxConfirmation {
+	status: string;
+	tooSlow: boolean;
+	error?: any;
+}
+
 const onTransactionHash = async (props: IOnTransactionHash) => {
 	const {
 		amount,
@@ -207,7 +210,35 @@ const onTransactionHash = async (props: IOnTransactionHash) => {
 		0,
 		library,
 	).then();
-	await saveDonationTransaction(transactionHash, donationId);
+};
+
+const confirmEtherTransaction = async (
+	transactionHash: string,
+	callbackFunction: (i: any) => void,
+	count = 0,
+	web3: Web3Provider,
+) => {
+	try {
+		const MAX_INTENTS = 20; // one every second
+		const receipt = await web3?.getTransactionReceipt(transactionHash);
+		if (receipt !== null) {
+			callbackFunction({ ...receipt, tooSlow: false });
+		} else if (count >= MAX_INTENTS) {
+			callbackFunction({ tooSlow: true });
+		} else {
+			// Try again in 1 second
+			setTimeout(function () {
+				confirmEtherTransaction(
+					transactionHash,
+					callbackFunction,
+					++count,
+					web3,
+				);
+			}, 1000);
+		}
+	} catch (error) {
+		return callbackFunction({ error });
+	}
 };
 
 interface IConfirmTxCallback extends IOnTransactionHash {
