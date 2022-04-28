@@ -39,4 +39,6 @@ export const EnhancedRewardCard = styled(RewardCard)`
 	}
 `;
 
-export const ExtLink = styled(GLink)``;
+export const ExtLinkCyan = styled(GLink)`
+	color: ${brandColors.cyan[500]};
+`;

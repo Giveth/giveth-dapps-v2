@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import router from 'next/router';
-import { Button } from '@giveth/ui-design-system';
+import { Button, IconExternalLink, P } from '@giveth/ui-design-system';
 import {
 	OverviewTopContainer,
 	PreTitle,
@@ -18,6 +18,7 @@ import {
 	DataBlockButton,
 	VideoContainer,
 	VideoOverlay,
+	ClaimRow,
 } from './Overview.sc';
 import { IconGIV } from '../Icons/GIV';
 import config from '@/configuration';
@@ -26,6 +27,9 @@ import { Col, Container, Row } from '@/components/Grid';
 import { useRef, useState } from 'react';
 import Image from 'next/image';
 import GivEconomyProjectCards from '../cards/GivEconomyProjectCards';
+import { Flex } from '../styled-components/Flex';
+import { ExtLinkCyan } from './commons';
+import { useWeb3React } from '@web3-react/core';
 
 export const TabOverviewTop = () => {
 	return (
@@ -88,6 +92,8 @@ export const TabOverviewVideo = () => {
 };
 
 export const TabOverviewBottom = () => {
+	const { chainId } = useWeb3React();
+
 	const goToClaim = () => {
 		router.push(Routes.Claim);
 	};
@@ -197,11 +203,28 @@ export const TabOverviewBottom = () => {
 						Connect your wallet or check an ethereum address to see
 						your rewards.
 					</ClaimCardQuote>
-					<ClaimCardButton
-						label='CLAIM YOUR GIV'
-						buttonType='primary'
-						onClick={goToClaim}
-					/>
+					<ClaimRow alignItems='center'>
+						<ClaimCardButton
+							label='CLAIM YOUR GIV'
+							buttonType='primary'
+							onClick={goToClaim}
+						/>
+						<Flex gap='8px'>
+							<P>Didn’t get the GIVdrop?</P>
+							<ExtLinkCyan
+								size='Big'
+								target='_blank'
+								rel='noreferrer'
+								href={
+									chainId === config.XDAI_NETWORK_NUMBER
+										? config.XDAI_CONFIG.GIV.BUY_LINK
+										: config.MAINNET_CONFIG.GIV.BUY_LINK
+								}
+							>
+								Buy GIV token <IconExternalLink />
+							</ExtLinkCyan>
+						</Flex>
+					</ClaimRow>
 				</ClaimCard>
 				<GivEconomyProjectCards />
 			</Container>
