@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Container, H5 } from '@giveth/ui-design-system';
 
 import { client } from '@/apollo/apolloClient';
 import { SIMILAR_PROJECTS } from '@/apollo/gql/gqlProjects';
@@ -59,33 +60,41 @@ const SimilarProjects = (props: { slug: string }) => {
 			.catch(showToastError);
 	}, []);
 
+	if (!suggestedProjects || suggestedProjects.length === 0) return null;
 	return (
-		<Container>
-			<CaretLeft
-				onClick={() => moveList(-1)}
-				disabled={listPosition === 0}
-			>
-				<img src={'/images/caret_right.svg'} alt='caret right' />
-			</CaretLeft>
-			{suggestedProjects
-				?.slice(
-					listPosition * projectsToShow,
-					listPosition * projectsToShow + projectsToShow,
-				)
-				?.map(project => (
-					<div className='fadeIn' key={project.id}>
-						<ProjectCard project={project} />
-					</div>
-				))}
-			<CaretRight
-				disabled={listPosition === pagesCount - 1}
-				onClick={() => moveList(1)}
-			>
-				<img src={'/images/caret_right.svg'} alt='caret right' />
-			</CaretRight>
-		</Container>
+		<ContainerStyled>
+			<H5 weight={700}>Similar projects</H5>
+			<SliderContainer>
+				<CaretLeft
+					onClick={() => moveList(-1)}
+					disabled={listPosition === 0}
+				>
+					<img src={'/images/caret_right.svg'} alt='caret right' />
+				</CaretLeft>
+				{suggestedProjects
+					?.slice(
+						listPosition * projectsToShow,
+						listPosition * projectsToShow + projectsToShow,
+					)
+					?.map(project => (
+						<div className='fadeIn' key={project.id}>
+							<ProjectCard project={project} />
+						</div>
+					))}
+				<CaretRight
+					disabled={listPosition === pagesCount - 1}
+					onClick={() => moveList(1)}
+				>
+					<img src={'/images/caret_right.svg'} alt='caret right' />
+				</CaretRight>
+			</SliderContainer>
+		</ContainerStyled>
 	);
 };
+
+const ContainerStyled = styled(Container)`
+	margin-top: 60px;
+`;
 
 const CaretRight = styled(FlexCenter)<{ disabled: boolean }>`
 	width: 48px;
@@ -107,7 +116,7 @@ const CaretLeft = styled(CaretRight)`
 	left: -24px;
 `;
 
-const Container = styled.div`
+const SliderContainer = styled.div`
 	display: grid;
 	width: 100%;
 	max-width: ${deviceSize.laptopL + 'px'};
