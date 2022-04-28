@@ -2,12 +2,7 @@ import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import {
-	Caption,
-	Container,
-	H5,
-	semanticColors,
-} from '@giveth/ui-design-system';
+import { Caption, Container, semanticColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 import ProjectHeader from './ProjectHeader';
@@ -200,17 +195,10 @@ const ProjectIndex = (props: { project?: IProject }) => {
 					)}
 				</BodyWrapper>
 			</Wrapper>
-			<SimilarProjectsContainer>
-				<H5 weight={700}>Similar projects</H5>
-				<SimilarProjects slug={slug} />
-			</SimilarProjectsContainer>
+			<SimilarProjects slug={slug} />
 		</>
 	);
 };
-
-const SimilarProjectsContainer = styled(Container)`
-	margin-top: 60px;
-`;
 
 const DraftIndicator = styled.div`
 	color: ${semanticColors.blueSky[600]};
