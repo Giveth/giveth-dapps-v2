@@ -1,8 +1,5 @@
 // import transakSDK from '@transak/transak-sdk'
-import {
-	SAVE_DONATION,
-	SAVE_DONATION_TRANSACTION,
-} from '@/apollo/gql/gqlDonations';
+import { SAVE_DONATION } from '@/apollo/gql/gqlDonations';
 import { client } from '@/apollo/apolloClient';
 
 export async function saveDonation(
@@ -86,32 +83,6 @@ export async function saveDonationFromTransak(
 		donationId,
 		saveDonationErrors,
 		savedDonation: saveDonationErrors.length === 0,
-	};
-}
-
-export async function saveDonationTransaction(
-	hash: string,
-	donationId: number,
-) {
-	const saveDonationTransactionErrors = [];
-	let savedDonationTransaction: any = 0;
-	try {
-		const { data } = await client.mutate({
-			mutation: SAVE_DONATION_TRANSACTION,
-			variables: {
-				transactionId: hash?.toString(),
-				donationId,
-				// anonymous: false
-			},
-		});
-		savedDonationTransaction = data;
-	} catch (error) {
-		saveDonationTransactionErrors.push(error);
-	}
-
-	return {
-		savedDonationTransaction,
-		saveDonationTransactionErrors,
 	};
 }
 
