@@ -38,7 +38,7 @@ const InsufficientFundContainer = styled.div`
 	height: 300px;
 	width: 100%;
 	padding: 24px;
-	${mediaQueries['tablet']} {
+	${mediaQueries.tablet} {
 		width: 528px;
 	}
 `;

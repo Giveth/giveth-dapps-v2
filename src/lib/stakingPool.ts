@@ -183,7 +183,6 @@ const getSimplePoolStakingAPR = async (
 	let reserves;
 	let totalSupply: ethers.BigNumber;
 	let rewardRate: ethers.BigNumber;
-
 	const poolContract = new Contract(POOL_ADDRESS, UNI_ABI, provider);
 	let apr = null;
 	try {
@@ -358,7 +357,7 @@ const permitTokens = async (
 
 export const approveERC20tokenTransfer = async (
 	amount: string,
-	owenerAddress: string,
+	ownerAddress: string,
 	spenderAddress: string,
 	poolAddress: string,
 	provider: Web3Provider | null,
@@ -370,10 +369,9 @@ export const approveERC20tokenTransfer = async (
 	}
 
 	const signer = provider.getSigner();
-
 	const tokenContract = new Contract(poolAddress, ERC20_ABI, signer);
 	const allowance: BigNumber = await tokenContract.allowance(
-		owenerAddress,
+		ownerAddress,
 		spenderAddress,
 	);
 
@@ -485,6 +483,7 @@ export const stakeTokens = async (
 	poolAddress: string,
 	lmAddress: string,
 	provider: Web3Provider | null,
+	permit: boolean,
 ): Promise<TransactionResponse | undefined> => {
 	if (amount === '0') return;
 	if (!provider) {
@@ -496,28 +495,36 @@ export const stakeTokens = async (
 
 	const lmContract = new Contract(lmAddress, LM_ABI, signer);
 
-	const rawPermitCall = await permitTokens(
-		provider,
-		poolAddress,
-		lmAddress,
-		amount,
-	);
-
 	try {
 		const gasPreference = getGasPreference(
 			config.NETWORKS_CONFIG[provider.network.chainId],
 		);
-		// const { status } = await txResponse.wait();
-		return await lmContract
-			.connect(signer.connectUnchecked())
-			.stakeWithPermit(
-				ethers.BigNumber.from(amount),
-				rawPermitCall.data,
-				{
+
+		if (permit) {
+			const rawPermitCall = await permitTokens(
+				provider,
+				poolAddress,
+				lmAddress,
+				amount,
+			);
+			return await lmContract
+				.connect(signer.connectUnchecked())
+				.stakeWithPermit(
+					ethers.BigNumber.from(amount),
+					rawPermitCall.data,
+					{
+						gasLimit: 300_000,
+						...gasPreference,
+					},
+				);
+		} else {
+			return await lmContract
+				.connect(signer.connectUnchecked())
+				.stake(ethers.BigNumber.from(amount), {
 					gasLimit: 300_000,
 					...gasPreference,
-				},
-			);
+				});
+		}
 	} catch (e) {
 		console.error('Error on staking:', e);
 		return;

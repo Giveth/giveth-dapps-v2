@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Head from 'next/head';
 import type { AppProps } from 'next/app';
 import { Toaster } from 'react-hot-toast';
 import { Web3ReactProvider } from '@web3-react/core';
 import { ApolloProvider } from '@apollo/client';
 import { ExternalProvider, Web3Provider } from '@ethersproject/providers';
+import NProgress from 'nprogress';
 
 import { NftsProvider } from '@/context/positions.context';
 import { TokenDistroProvider } from '@/context/tokenDistro.context';
@@ -18,13 +19,35 @@ import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
 import { FooterWrapper } from '@/components/Footer/FooterWrapper';
 
 import '../styles/globals.css';
+import { useRouter } from 'next/router';
 
 function getLibrary(provider: ExternalProvider) {
 	return new Web3Provider(provider);
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
+	const router = useRouter();
 	const apolloClient = useApollo(pageProps);
+
+	useEffect(() => {
+		const handleStart = (url: string) => {
+			console.log(`Loading: ${url}`);
+			NProgress.start();
+		};
+		const handleStop = () => {
+			NProgress.done();
+		};
+
+		router.events.on('routeChangeStart', handleStart);
+		router.events.on('routeChangeComplete', handleStop);
+		router.events.on('routeChangeError', handleStop);
+
+		return () => {
+			router.events.off('routeChangeStart', handleStart);
+			router.events.off('routeChangeComplete', handleStop);
+			router.events.off('routeChangeError', handleStop);
+		};
+	}, [router]);
 
 	return (
 		<>

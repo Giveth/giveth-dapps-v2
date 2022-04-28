@@ -111,6 +111,9 @@ const TitleContainer = styled.div`
 
 const BadgeSection = styled.div`
 	align-self: baseline;
+	> :first-child {
+		margin-bottom: 3px;
+	}
 `;
 
 const Title = styled(H3)<{ fixSize: boolean }>`
