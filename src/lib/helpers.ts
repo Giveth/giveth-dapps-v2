@@ -169,18 +169,16 @@ export async function sendTransaction(
 	params: any,
 	txCallbacks: any,
 	contractAddress: string,
-	fromSigner: any,
 	// traceableDonation = false
 ) {
 	try {
-		let web3Provider = web3;
 		let txn = null;
 		const txParams: any = {
 			to: params?.to,
 			// value: params?.value
 		};
 
-		web3Provider = fromSigner;
+		const fromSigner = web3.getSigner();
 
 		// TRACEABLE DONATION
 		// if (traceableDonation) {
@@ -206,37 +204,21 @@ export async function sendTransaction(
 				params?.value,
 				parseInt(decimals),
 			);
-			const instance = contract.connect(web3.getSigner());
-
-			if (fromSigner) {
-				txn = await instance.transfer(txParams?.to, txParams?.value);
-				txCallbacks?.onTransactionHash(txn?.hash, txn?.from);
-				return txn;
-			}
-			const from = await fromSigner.getAccounts();
-			return instance
-				.transfer(txParams?.to, txParams?.value)
-				.send({
-					from: from[0],
-				})
-				.on('transactionHash', txCallbacks?.onTransactionHash)
-				.on('receipt', function (receipt: any) {
-					console.log('receipt>>>', receipt);
-					txCallbacks?.onReceiptGenerated(receipt);
-				})
-				.on('error', (error: any) => txCallbacks?.onError(error)); // If a out of gas error, the second parameter is the receipt.
+			const instance = contract.connect(fromSigner);
+			txn = await instance.transfer(txParams?.to, txParams?.value);
+			txCallbacks?.onTransactionHash(txn?.hash);
+			return;
 		}
 
 		// REGULAR ETH TRANSFER
 		txParams.value = ethers.utils.parseEther(params?.value);
 		if (!txCallbacks || fromSigner) {
 			// gets hash and checks until it's mined
-			txn = await web3Provider.sendTransaction(txParams);
-			txCallbacks?.onTransactionHash(txn?.hash, txn?.from);
+			txn = await fromSigner.sendTransaction(txParams);
+			txCallbacks?.onTransactionHash(txn?.hash);
 		}
 
 		console.log('stTxn ---> : ', { txn });
-		return txn;
 	} catch (error: any) {
 		console.log('Error sending transaction: ', { error });
 		throw error;

@@ -135,14 +135,10 @@ export const ErrorContainer = styled.div`
 	background: ${brandColors.giv[500]};
 	background-image: url('/images/GIV_homepage.svg');
 	height: 100vh;
-
 	color: white;
 	overflow: hidden;
 	position: relative;
-
-	${mediaQueries.mobileS} {
-		padding: 18px;
-	}
+	padding: 18px;
 
 	${mediaQueries.tablet} {
 		padding: 150px 130px;
