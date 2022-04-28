@@ -289,8 +289,7 @@ const CryptoDonation = (props: {
 				'There is no eth address assigned for this project',
 			);
 		}
-		// Sign message for registered users to get user info, no need to sign for anonymous
-		if (!isSignedIn && !anonymous) {
+		if (!isSignedIn) {
 			return showSignWithWallet();
 		}
 		setShowDonateModal(true);
@@ -354,7 +353,7 @@ const CryptoDonation = (props: {
 					acceptedChains?.includes(xdaiChain.id) && (
 						<NetworkToast>
 							<div>
-								<img src='/images/gas_station.svg' />
+								<img src='/images/gas_station.svg' alt='gas' />
 								<Caption medium>
 									Save on gas fees, switch to Gnosis Chain.
 								</Caption>
