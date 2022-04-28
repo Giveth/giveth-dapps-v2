@@ -28,7 +28,7 @@ const Wrapper = styled(FlexCenter)`
 	flex-direction: column;
 	width: 100%;
 	background-image: url('/images/backgrounds/background-2.png');
-	padding: 160px 35px;
+	padding: 160px 5px;
 `;
 
 const TitleText = styled(H4)`
