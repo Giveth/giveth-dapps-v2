@@ -21,8 +21,7 @@ const ProjectsIndex = (props: IProjectBySlug) => {
 
 	const { chainId } = useWeb3React();
 
-	const givBackEligible = isSuccess?.givBackEligible;
-	const txHash = isSuccess?.transactionHash;
+	const { givBackEligible, txHash } = isSuccess || {};
 
 	return (
 		<>
