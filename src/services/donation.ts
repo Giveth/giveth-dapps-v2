@@ -1,49 +1,54 @@
 // import transakSDK from '@transak/transak-sdk'
 import { SAVE_DONATION } from '@/apollo/gql/gqlDonations';
 import { client } from '@/apollo/apolloClient';
+import { IConfirmDonation } from '@/components/views/donate/helpers';
 
-export async function saveDonation(
-	fromAddress: string,
-	toAddress: string,
-	transactionId: string,
-	transactionNetworkId: number,
-	amount: number,
-	token: string,
-	projectId: number,
-	tokenAddress: string,
-	isAnonymous: boolean,
-) {
-	const saveDonationErrors = [];
-	let donationId: any = 0;
+interface IOnTxHash extends IConfirmDonation {
+	txHash: string;
+	toAddress: string;
+}
+
+export async function saveDonation(props: IOnTxHash) {
+	const {
+		web3Context,
+		toAddress,
+		txHash: transactionId,
+		amount,
+		token,
+		project,
+		anonymous,
+	} = props;
+
+	const { account: fromAddress, chainId } = web3Context;
+	const { address: tokenAddress, symbol } = token;
+	const projectId = Number(project.id);
+
+	let donationId = 0;
 	try {
 		const { data } = await client.mutate({
 			mutation: SAVE_DONATION,
 			variables: {
-				chainId: transactionNetworkId,
+				chainId,
 				fromAddress,
 				toAddress,
 				transactionId,
-				transactionNetworkId,
+				transactionNetworkId: chainId,
 				amount,
-				token,
+				token: symbol,
 				projectId,
 				transakId: null,
 				transakStatus: null,
 				tokenAddress,
-				anonymous: isAnonymous,
+				anonymous,
 			},
 		});
-		const { saveDonation: saveDonationId } = data;
-		donationId = saveDonationId;
+		const { saveDonation } = data;
+		donationId = saveDonation;
 	} catch (error) {
-		console.log({ error });
-		saveDonationErrors.push(error);
+		throw error;
 	}
-	return {
-		donationId,
-		saveDonationErrors,
-		savedDonation: saveDonationErrors.length === 0,
-	};
+	console.log('DONATION SUCCESS: ', { donationId });
+	return donationId;
 }
 
 export async function saveDonationFromTransak(
