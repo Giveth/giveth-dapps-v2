@@ -131,5 +131,10 @@ export const confirmDonation = async (props: IConfirmDonation) => {
 		if (code === ('INSUFFICIENT_FUNDS' || 'UNPREDICTABLE_GAS_LIMIT')) {
 			showToastError('Insufficient Funds');
 		} else showToastError(error);
+		captureException(error, {
+			tags: {
+				section: 'confirmDonation',
+			},
+		});
 	}
 };

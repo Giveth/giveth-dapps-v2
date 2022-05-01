@@ -8,6 +8,7 @@ import { brandColors } from '@giveth/ui-design-system';
 // @ts-ignore
 import abi from 'human-standard-token-abi';
 
+import { captureException } from '@sentry/nextjs';
 import { BasicNetworkConfig, GasPreference } from '@/types/config';
 import { EWallets } from '@/lib/wallet/walletTypes';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
@@ -206,6 +207,11 @@ export async function sendTransaction(
 			txCallbacks.onReceipt(error.replacement.hash);
 			return;
 		}
+		captureException(error, {
+			tags: {
+				section: 'sendTransaction',
+			},
+		});
 		throw error;
 	}
 }
@@ -301,6 +307,11 @@ export async function signMessage(
 		return signedMessage;
 	} catch (error) {
 		console.log('Signing Error!', { error });
+		captureException(error, {
+			tags: {
+				section: 'signError',
+			},
+		});
 		return false;
 	}
 }

@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import React, { useEffect, useState } from 'react';
 import { Container, H5 } from '@giveth/ui-design-system';
 
+import { captureException } from '@sentry/nextjs';
 import { client } from '@/apollo/apolloClient';
 import { SIMILAR_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { IProject } from '@/apollo/types/types';
@@ -57,7 +58,14 @@ const SimilarProjects = (props: { slug: string }) => {
 				const { projects } = similarProjectsBySlug;
 				setSuggestedProjects(projects);
 			})
-			.catch(showToastError);
+			.catch((error: unknown) => {
+				showToastError(error);
+				captureException(error, {
+					tags: {
+						section: 'fetchSimilarProjects',
+					},
+				});
+			});
 	}, []);
 
 	if (!suggestedProjects || suggestedProjects.length === 0) return null;

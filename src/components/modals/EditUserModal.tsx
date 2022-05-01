@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import { useMutation } from '@apollo/client';
 import { Button, brandColors } from '@giveth/ui-design-system';
+import { captureException } from '@sentry/nextjs';
 import { IModal, Modal } from './Modal';
 import { client } from '@/apollo/apolloClient';
 import { UPDATE_USER } from '@/apollo/gql/gqlUser';
@@ -89,6 +90,11 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 				title: error.message,
 			});
 			console.log(error);
+			captureException(error, {
+				tags: {
+					section: 'onSaveAvatar',
+				},
+			});
 		}
 	};
 
@@ -115,6 +121,11 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 			gToast('Failed to update your information. Please try again.', {
 				type: ToastType.DANGER,
 				title: error.message,
+			});
+			captureException(error, {
+				tags: {
+					section: 'Submit Edit User Modal',
+				},
 			});
 		}
 		setDisabled(false);

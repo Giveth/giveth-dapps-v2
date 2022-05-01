@@ -3,6 +3,7 @@ import { Contract } from 'ethers';
 import UniswapV3PoolJson from '@uniswap/v3-core/artifacts/contracts/UniswapV3Pool.sol/UniswapV3Pool.json';
 import NonfungiblePositionManagerJson from '@uniswap/v3-periphery/artifacts/contracts/NonfungiblePositionManager.sol/NonfungiblePositionManager.json';
 
+import { captureException } from '@sentry/nextjs';
 import UNISWAP_V3_STAKER_ABI from '@/artifacts/uniswap_v3_staker.json';
 import { StakingType, UniswapV3PoolStakingConfig } from '@/types/config';
 import config from '@/configuration';
@@ -92,6 +93,11 @@ export async function getERC20Info({
 		return ERC20Info;
 	} catch (error) {
 		console.log({ error });
+		captureException(error, {
+			tags: {
+				section: 'getERC20Info',
+			},
+		});
 		return false;
 	}
 }

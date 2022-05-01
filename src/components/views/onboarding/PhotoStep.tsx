@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { Lead } from '@giveth/ui-design-system';
 import { useMutation } from '@apollo/client';
 
+import { captureException } from '@sentry/nextjs';
 import { IStep, OnboardActions, OnboardStep } from './common';
 import { OnboardSteps } from './Onboarding.view';
 import { UPDATE_USER } from '@/apollo/gql/gqlUser';
@@ -35,6 +36,11 @@ const PhotoStep: FC<IStep> = ({ setStep }) => {
 			gToast('Failed to update your information. Please try again.', {
 				type: ToastType.DANGER,
 				title: error.message,
+			});
+			captureException(error, {
+				tags: {
+					section: 'PhotoStepSave',
+				},
 			});
 			console.log(error);
 		}

@@ -1,3 +1,4 @@
+import { captureException } from '@sentry/nextjs';
 import { client } from '@/apollo/apolloClient';
 import {
 	TITLE_IS_VALID,
@@ -33,6 +34,11 @@ export const titleValidation = (
 			.catch((err: any) => {
 				_errors[ECreateErrFields.NAME] = err.message;
 				setErrors(_errors);
+				captureException(err, {
+					tags: {
+						section: 'titleValidation',
+					},
+				});
 			});
 	}
 };
@@ -62,6 +68,12 @@ export const walletAddressValidation = (
 			.catch((err: any) => {
 				_errors[ECreateErrFields.WALLET_ADDRESS] = err.message;
 				setErrors(_errors);
+
+				captureException(err, {
+					tags: {
+						section: 'walletAddressValidation',
+					},
+				});
 			});
 
 	if (isAddressENS(walletAddress)) {

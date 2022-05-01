@@ -11,6 +11,7 @@ import styled from 'styled-components';
 import Debounced from 'lodash.debounce';
 import { neutralColors, Subline } from '@giveth/ui-design-system';
 
+import { captureException } from '@sentry/nextjs';
 import SearchBox from '@/components/SearchBox';
 import { showToastError } from '@/lib/helpers';
 import { Shadow } from '@/components/styled-components/Shadow';
@@ -54,7 +55,14 @@ const ImageSearch = (props: {
 					setImages(res.response?.results);
 				}
 			})
-			.catch(showToastError);
+			.catch(error => {
+				showToastError(error);
+				captureException(error, {
+					tags: {
+						section: 'fethPhotosUnsplashSearch',
+					},
+				});
+			});
 	};
 
 	// It's required by Unsplash guidelines

@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { Caption, Container, semanticColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
+import { captureException } from '@sentry/nextjs';
 import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
 import ProjectDonateCard from './ProjectDonateCard';
@@ -63,7 +64,14 @@ const ProjectIndex = (props: { project?: IProject }) => {
 			.then((res: { data: { projectBySlug: IProject } }) => {
 				setProject(res.data.projectBySlug);
 			})
-			.catch(() => setIsCancelled(true));
+			.catch((error: unknown) => {
+				setIsCancelled(true);
+				captureException(error, {
+					tags: {
+						section: 'fetchProject',
+					},
+				});
+			});
 	};
 
 	useEffect(() => {
@@ -94,7 +102,14 @@ const ProjectIndex = (props: { project?: IProject }) => {
 				setDonations(donationsByProjectId.donations);
 				setTotalDonations(donationsByProjectId.totalCount);
 			})
-			.catch(showToastError);
+			.catch((error: unknown) => {
+				showToastError(error);
+				captureException(error, {
+					tags: {
+						section: 'fetchProjectDonation',
+					},
+				});
+			});
 	}, [id]);
 
 	useEffect(() => {

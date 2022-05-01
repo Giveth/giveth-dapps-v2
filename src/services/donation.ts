@@ -1,4 +1,5 @@
 // import transakSDK from '@transak/transak-sdk'
+import { captureException } from '@sentry/nextjs';
 import { SAVE_DONATION } from '@/apollo/gql/gqlDonations';
 import { client } from '@/apollo/apolloClient';
 import { IConfirmDonation } from '@/components/views/donate/helpers';
@@ -45,6 +46,11 @@ export async function saveDonation(props: IOnTxHash) {
 		const { saveDonation } = data;
 		donationId = saveDonation;
 	} catch (error) {
+		captureException(error, {
+			tags: {
+				section: 'saveDonation',
+			},
+		});
 		throw error;
 	}
 	console.log('DONATION SUCCESS: ', { donationId });
@@ -83,6 +89,11 @@ export async function saveDonationFromTransak(
 	} catch (error) {
 		console.log({ error });
 		saveDonationErrors.push(error);
+		captureException(error, {
+			tags: {
+				section: 'saveDonationFromTransak',
+			},
+		});
 	}
 	return {
 		donationId,

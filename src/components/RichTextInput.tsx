@@ -10,6 +10,7 @@ import MagicUrl from 'quill-magic-url';
 import * as Emoji from 'quill-emoji';
 import { neutralColors } from '@giveth/ui-design-system';
 
+import { captureException } from '@sentry/nextjs';
 import ImageUploader from './richImageUploader/imageUploader';
 import { UPLOAD_IMAGE } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
@@ -123,6 +124,11 @@ const modules = (projectId?: any) => {
 					return imageUploaded?.uploadImage?.url;
 				} catch (error) {
 					showToastError(error);
+					captureException(error, {
+						tags: {
+							section: 'QuillRichTextInput',
+						},
+					});
 				}
 			},
 		},

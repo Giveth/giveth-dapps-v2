@@ -7,6 +7,7 @@ import {
 	useState,
 } from 'react';
 import { useWeb3React } from '@web3-react/core';
+import { captureException } from '@sentry/nextjs';
 import { fetchSubgraph } from '@/services/subgraph.service';
 import config from '@/configuration';
 import {
@@ -81,6 +82,11 @@ export const SubgraphProvider: FC = ({ children }) => {
 			setMainnetSubgraphValue(transformSubgraphData(response));
 		} catch (e) {
 			console.error('Error on query mainnet subgraph:', e);
+			captureException(e, {
+				tags: {
+					section: 'fetchMainnetSubgraph',
+				},
+			});
 		}
 	}, []);
 
@@ -93,6 +99,11 @@ export const SubgraphProvider: FC = ({ children }) => {
 			setXDaiSubgraphValue(transformSubgraphData(response));
 		} catch (e) {
 			console.error('Error on query xDai subgraph:', e);
+			captureException(e, {
+				tags: {
+					section: 'fetchxDaiSubgraph',
+				},
+			});
 		}
 	}, []);
 

@@ -13,6 +13,7 @@ import {
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { useWeb3React } from '@web3-react/core';
+import { captureException } from '@sentry/nextjs';
 import { IModal, Modal } from './Modal';
 import LoadingAnimation from '@/animations/loading.json';
 import {
@@ -270,6 +271,11 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 					? HarvestStates.HARVEST
 					: HarvestStates.ERROR,
 			);
+			captureException(error, {
+				tags: {
+					section: 'onHarvest',
+				},
+			});
 		}
 	};
 

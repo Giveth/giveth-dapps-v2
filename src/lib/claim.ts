@@ -1,6 +1,7 @@
 import { isAddress } from 'ethers/lib/utils';
 import { Contract } from 'ethers';
 import { TransactionResponse, Web3Provider } from '@ethersproject/providers';
+import { captureException } from '@sentry/nextjs';
 import { ClaimData } from '@/types/GIV';
 import config from '../configuration';
 import MerkleDropJson from '../artifacts/MerkleDrop.json';
@@ -35,6 +36,11 @@ export const fetchAirDropClaimData = async (
 	} catch (e) {
 		// eslint-disable-next-line no-console
 		console.error(e);
+		captureException(e, {
+			tags: {
+				section: 'fetcherAirDropClaimData',
+			},
+		});
 		return undefined;
 	}
 };
@@ -49,6 +55,11 @@ export const hasClaimedAirDrop = async (address: string): Promise<boolean> => {
 		return balances.givDropClaimed;
 	} catch (e) {
 		console.error('Error on fetching subgraph');
+		captureException(e, {
+			tags: {
+				section: 'hasClaimedAirDrop',
+			},
+		});
 		// It's better to continue givDrop if subgraph is unreachable
 		return false;
 	}
@@ -77,6 +88,11 @@ export const claimAirDrop = async (
 			.claim(...args, getGasPreference(config.XDAI_CONFIG));
 	} catch (error) {
 		console.error('Error on claiming GIVdrop:', error);
+		captureException(error, {
+			tags: {
+				section: 'claimAirDrop',
+			},
+		});
 	}
 };
 
@@ -101,6 +117,11 @@ export const claimReward = async (
 		return await tokenDistro.claim(getGasPreference(networkConfig));
 	} catch (error) {
 		console.error('Error on claiming token distro reward:', error);
+		captureException(error, {
+			tags: {
+				section: 'claimReward',
+			},
+		});
 	}
 
 	// showPendingClaim(network, tx.hash);

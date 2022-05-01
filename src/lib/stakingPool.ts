@@ -5,6 +5,7 @@ import {
 	TransactionResponse,
 	Web3Provider,
 } from '@ethersproject/providers';
+import { captureException } from '@sentry/nextjs';
 import {
 	BalancerPoolStakingConfig,
 	PoolStakingConfig,
@@ -156,6 +157,11 @@ const getBalancerPoolStakingAPR = async (
 					.times(lp);
 	} catch (e) {
 		console.error('error on fetching balancer apr:', e);
+		captureException(e, {
+			tags: {
+				section: 'getBalancerPoolStakingAPR',
+			},
+		});
 	}
 	return apr;
 };
@@ -219,6 +225,11 @@ const getSimplePoolStakingAPR = async (
 					.div(10 ** 18);
 	} catch (e) {
 		console.error('error on fetching apr:', e);
+		captureException(e, {
+			tags: {
+				section: 'getSimplePoolStakingAPR',
+			},
+		});
 	}
 
 	return apr;
@@ -392,6 +403,11 @@ export const approveERC20tokenTransfer = async (
 			if (!status) return false;
 		} catch (error) {
 			console.log('Error on Zero Approve', error);
+			captureException(error, {
+				tags: {
+					section: 'approveERC20tokenTransfer',
+				},
+			});
 			return false;
 		}
 	}
@@ -405,6 +421,11 @@ export const approveERC20tokenTransfer = async (
 		if (!status) return false;
 	} catch (error) {
 		console.log('Error on Amount Approve:', error);
+		captureException(error, {
+			tags: {
+				section: 'approveERC20tokenTransfer',
+			},
+		});
 		return false;
 	}
 	return true;
@@ -440,6 +461,11 @@ export const wrapToken = async (
 			);
 	} catch (error) {
 		console.log('Error on wrapping token:', error);
+		captureException(error, {
+			tags: {
+				section: 'wrapToken',
+			},
+		});
 	}
 };
 
@@ -472,6 +498,11 @@ export const unwrapToken = async (
 			);
 	} catch (error) {
 		console.log('Error on unwrapping token:', error);
+		captureException(error, {
+			tags: {
+				section: 'unwrapToken',
+			},
+		});
 		return;
 	}
 };
@@ -525,6 +556,11 @@ export const stakeTokens = async (
 		}
 	} catch (e) {
 		console.error('Error on staking:', e);
+		captureException(e, {
+			tags: {
+				section: 'stakeTokens',
+			},
+		});
 		return;
 	}
 };
@@ -551,6 +587,11 @@ export const harvestTokens = async (
 		);
 	} catch (error) {
 		console.error('Error on harvesting:', Error);
+		captureException(error, {
+			tags: {
+				section: 'harvestTokens',
+			},
+		});
 	}
 };
 
@@ -579,5 +620,10 @@ export const withdrawTokens = async (
 		);
 	} catch (e) {
 		console.error('Error on withdrawing:', e);
+		captureException(e, {
+			tags: {
+				section: 'withdrawTokens',
+			},
+		});
 	}
 };

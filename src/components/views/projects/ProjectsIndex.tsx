@@ -13,6 +13,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
+import { captureException } from '@sentry/nextjs';
 import { BigArc } from '@/components/styled-components/Arc';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import SearchBox from '@/components/SearchBox';
@@ -162,6 +163,11 @@ const ProjectsIndex = (props: IProjectsView) => {
 			.catch((err: any) => {
 				setIsLoading(false);
 				showToastError(err);
+				captureException(err, {
+					tags: {
+						section: 'fetchAllProjects',
+					},
+				});
 			});
 	};
 

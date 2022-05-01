@@ -1,3 +1,5 @@
+import { captureException } from '@sentry/nextjs';
+
 let initialized = false;
 let timeDifference = 0;
 let fetching = false;
@@ -46,6 +48,11 @@ const fetchServerTime = async () => {
 		}
 	} catch (e) {
 		console.error('Error in getting time:', e);
+		captureException(e, {
+			tags: {
+				section: 'fetcherServerTime',
+			},
+		});
 	} finally {
 		fetching = false;
 	}
