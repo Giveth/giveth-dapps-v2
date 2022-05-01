@@ -74,6 +74,7 @@ const JoinSubscriptionCard = () => {
 
 const CustomizedButtonStyled = styled(ButtonStyled)`
 	margin-top: 10px;
+	min-width: 280px;
 	&:disabled {
 		background-color: ${neutralColors.gray[400]};
 		color: white;
