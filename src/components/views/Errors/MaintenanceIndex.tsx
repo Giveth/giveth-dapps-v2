@@ -1,8 +1,8 @@
-import { useGeneral } from '@/context/general.context';
 import { H1, H4 } from '@giveth/ui-design-system';
-import links from '@/lib/constants/links';
 import Image from 'next/image';
 import { useEffect } from 'react';
+import links from '@/lib/constants/links';
+import { useGeneral } from '@/context/general.context';
 import givFontLogo from '/public/images/icons/giv_font_logo.svg';
 import twitter from '/public/images/icons/twitter.svg';
 import discord from '/public/images/icons/discord.svg';

@@ -7,8 +7,8 @@ import {
 	useCallback,
 } from 'react';
 import { ethers } from 'ethers';
-import config from '@/configuration';
 import { useWeb3React } from '@web3-react/core';
+import config from '@/configuration';
 
 export interface FarmContext {
 	totalEarned: ethers.BigNumber;

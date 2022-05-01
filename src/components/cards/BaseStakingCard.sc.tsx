@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { Flex } from '../styled-components/Flex';
 import {
 	brandColors,
 	neutralColors,
@@ -12,6 +11,7 @@ import {
 	OulineButton,
 	Subline,
 } from '@giveth/ui-design-system';
+import { Flex } from '../styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 
 export const StakingPoolContainer = styled.div`

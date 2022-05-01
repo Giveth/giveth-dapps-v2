@@ -1,4 +1,3 @@
-import ConfettiAnimation from '@/components/animations/confetti';
 import {
 	brandColors,
 	Button,
@@ -10,6 +9,7 @@ import {
 import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
+import ConfettiAnimation from '@/components/animations/confetti';
 
 import { IProject } from '@/apollo/types/types';
 import links from '@/lib/constants/links';

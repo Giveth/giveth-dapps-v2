@@ -14,6 +14,10 @@ import {
 	IconSpark,
 	P,
 } from '@giveth/ui-design-system';
+import { constants, ethers } from 'ethers';
+import BigNumber from 'bignumber.js';
+import { Zero } from '@ethersproject/constants';
+import { useWeb3React } from '@web3-react/core';
 import {
 	Bar,
 	FlowRateRow,
@@ -52,14 +56,10 @@ import { formatWeiHelper } from '@/helpers/number';
 import config from '@/configuration';
 import { durationToString } from '@/lib/helpers';
 import { NetworkSelector } from '@/components/NetworkSelector';
-import { constants, ethers } from 'ethers';
 import { useTokenDistro } from '@/context/tokenDistro.context';
-import BigNumber from 'bignumber.js';
 import { HarvestAllModal } from '../modals/HarvestAll';
-import { Zero } from '@ethersproject/constants';
 import { useSubgraph } from '@/context';
 import { ITokenAllocation } from '@/types/subgraph';
-import { useWeb3React } from '@web3-react/core';
 import { IconGIV } from '../Icons/GIV';
 import { givEconomySupportedNetworks } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';

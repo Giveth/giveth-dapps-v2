@@ -1,3 +1,4 @@
+import { ethers } from 'ethers';
 import { ISubgraphValue } from '@/context/subgraph.context';
 import {
 	IBalances,
@@ -9,7 +10,6 @@ import {
 	IUniswapV3Position,
 	ZeroBalances,
 } from '@/types/subgraph';
-import { ethers } from 'ethers';
 import { RegenFarmType, StakingType, StreamType } from '@/types/config';
 
 const BN = ethers.BigNumber.from;

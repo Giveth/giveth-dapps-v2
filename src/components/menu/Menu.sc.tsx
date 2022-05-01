@@ -1,6 +1,6 @@
-import { ETheme } from '@/context/general.context';
 import { brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { ETheme } from '@/context/general.context';
 import { Shadow } from '../styled-components/Shadow';
 
 interface isMounted {

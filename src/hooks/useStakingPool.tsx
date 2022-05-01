@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 
+import { useWeb3React } from '@web3-react/core';
 import {
 	getGivStakingAPR,
 	getLPStakingAPR,
@@ -16,7 +17,6 @@ import {
 import { APR, UserStakeInfo } from '@/types/poolInfo';
 import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
 import { Zero } from '@/helpers/number';
-import { useWeb3React } from '@web3-react/core';
 
 export const useStakingPool = (
 	poolStakingConfig: PoolStakingConfig | RegenPoolStakingConfig,

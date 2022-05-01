@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { H1, IconGIVGarden } from '@giveth/ui-design-system';
 
+import BigNumber from 'bignumber.js';
+import { Zero } from '@ethersproject/constants';
+import { ethers } from 'ethers';
+import { useWeb3React } from '@web3-react/core';
 import {
 	GardenTopContainer,
 	GardenBottomContainer,
@@ -24,12 +28,8 @@ import { HarvestAllModal } from '../modals/HarvestAll';
 import config from '@/configuration';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import { getGivStakingConfig } from '@/helpers/networkProvider';
-import BigNumber from 'bignumber.js';
-import { Zero } from '@ethersproject/constants';
-import { ethers } from 'ethers';
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import { TopInnerContainer } from './commons';
-import { useWeb3React } from '@web3-react/core';
 import { Col, Container, Row } from '@/components/Grid';
 
 const poolStakingConfig = getGivStakingConfig(config.XDAI_CONFIG);

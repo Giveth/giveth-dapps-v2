@@ -8,9 +8,9 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
+import { useRouter } from 'next/router';
 import { Flex } from '../styled-components/Flex';
 import { Modal, IModal } from './Modal';
-import { useRouter } from 'next/router';
 
 export const SkipOnboardingModal: FC<IModal> = ({ setShowModal }) => {
 	const router = useRouter();

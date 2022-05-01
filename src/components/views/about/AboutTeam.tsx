@@ -1,7 +1,7 @@
-import TeamCard from '@/components/TeamCard';
-import GivethTeam from '@/content/GivethTeam.json';
 import { Lead, brandColors, H2 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import TeamCard from '@/components/TeamCard';
+import GivethTeam from '@/content/GivethTeam.json';
 
 const AboutTeam = () => {
 	return (

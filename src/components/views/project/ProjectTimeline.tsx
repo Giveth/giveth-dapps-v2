@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
-import { IProjectUpdate } from '@/apollo/types/types';
 import {
 	Button,
 	brandColors,
@@ -13,6 +12,7 @@ import {
 	semanticColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { IProjectUpdate } from '@/apollo/types/types';
 import { Flex } from '@/components/styled-components/Flex';
 
 const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {

@@ -1,6 +1,6 @@
-import { formatWeiHelper } from '@/helpers/number';
 import { ethers } from 'ethers';
 import { FC } from 'react';
+import { formatWeiHelper } from '@/helpers/number';
 import {
 	AmountBoxWithPriceContainer,
 	AmountBoxWithPriceAmount,

@@ -1,9 +1,9 @@
 import Image from 'next/image';
+import { H4, P, brandColors } from '@giveth/ui-design-system';
+import styled from 'styled-components';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { IPartner } from '@/content/Partnerships';
-import { H4, P, brandColors } from '@giveth/ui-design-system';
 import { mediaQueries } from '@/lib/constants/constants';
-import styled from 'styled-components';
 
 const PartnershipsCard = ({ icon, title, description, link }: IPartner) => {
 	return (

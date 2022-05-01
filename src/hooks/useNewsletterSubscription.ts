@@ -1,5 +1,5 @@
-import { autopilotClient } from '@/services/autopilot';
 import { useState } from 'react';
+import { autopilotClient } from '@/services/autopilot';
 
 function validateEmail(email: string): boolean {
 	const re =

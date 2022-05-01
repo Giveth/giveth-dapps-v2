@@ -6,6 +6,7 @@ import {
 	useEffect,
 	useState,
 } from 'react';
+import { useWeb3React } from '@web3-react/core';
 import { fetchSubgraph } from '@/services/subgraph.service';
 import config from '@/configuration';
 import {
@@ -21,7 +22,6 @@ import {
 import { SubgraphQueryBuilder } from '@/lib/subgraph/subgraphQueryBuilder';
 import { transformSubgraphData } from '@/lib/subgraph/subgraphDataTransform';
 import { RegenFarmType, StakingType, StreamType } from '@/types/config';
-import { useWeb3React } from '@web3-react/core';
 
 export interface ISubgraphValue {
 	balances: IBalances;

@@ -1,7 +1,7 @@
 import { Contract } from 'ethers';
+import { JsonRpcProvider } from '@ethersproject/providers';
 import config from '@/configuration';
 import UNI_Json from '@/artifacts/UNI.json';
-import { JsonRpcProvider } from '@ethersproject/providers';
 import { networksParams } from '@/helpers/blockchain';
 
 const { abi: UNI_ABI } = UNI_Json;

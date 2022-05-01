@@ -1,4 +1,3 @@
-import { device, mediaQueries } from '@/lib/constants/constants';
 import {
 	brandColors,
 	ButtonLink,
@@ -8,6 +7,7 @@ import {
 	QuoteText,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { device, mediaQueries } from '@/lib/constants/constants';
 import { Col } from './Grid';
 
 export const Subtitle = styled(Lead)`

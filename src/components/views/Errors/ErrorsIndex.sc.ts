@@ -1,8 +1,7 @@
+import { H4, brandColors } from '@giveth/ui-design-system';
+import styled from 'styled-components';
 import { Arc } from '@/components/styled-components/Arc';
 import { mediaQueries } from '@/lib/constants/constants';
-import { H4, brandColors } from '@giveth/ui-design-system';
-
-import styled from 'styled-components';
 
 export const SocialContainer = styled.div`
 	display: flex;

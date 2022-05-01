@@ -1,4 +1,3 @@
-import { RegenPoolStakingConfig } from '@/types/config';
 import React, { FC } from 'react';
 import {
 	brandColors,
@@ -8,6 +7,9 @@ import {
 	IconInfo16,
 	neutralColors,
 } from '@giveth/ui-design-system';
+import { useWeb3React } from '@web3-react/core';
+import styled from 'styled-components';
+import { RegenPoolStakingConfig } from '@/types/config';
 import {
 	DAOContainer,
 	GIVfrensLink,
@@ -15,13 +17,11 @@ import {
 	DAOChangeNetwork,
 } from '@/components/GIVfrens.sc';
 import { PoolRow } from '@/components/homeTabs/GIVfarm.sc';
-import { useWeb3React } from '@web3-react/core';
 import StakingPoolCard from '@/components/cards/StakingPoolCard';
 import { Col, Row } from './Grid';
 import config from '@/configuration';
 import { givEconomySupportedNetworks } from '@/lib/constants/constants';
 import { RegenStreamCard } from './RegenStreamCard';
-import styled from 'styled-components';
 import { Flex } from './styled-components/Flex';
 import { switchNetwork } from '@/lib/wallet';
 

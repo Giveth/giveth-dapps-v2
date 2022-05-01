@@ -1,18 +1,18 @@
 import styled from 'styled-components';
-import { Button } from '../styled-components/Button';
 import { useEffect, useState } from 'react';
-import useClaim from '@/context/claim.context';
 import { H2, Lead } from '@giveth/ui-design-system';
 import Lottie from 'react-lottie';
-import { formatWeiHelper } from '@/helpers/number';
 import Image from 'next/image';
+import { useWeb3React } from '@web3-react/core';
+import { Button } from '../styled-components/Button';
+import useClaim from '@/context/claim.context';
+import { formatWeiHelper } from '@/helpers/number';
 import SparkleBurstAnimation from '@/animations/sparkle-burst.json';
 import SparkleAnimation from '@/animations/sparkle.json';
 import BlowingAnimation from '@/animations/blowing.json';
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import { Flex } from '../styled-components/Flex';
 import { AddTokenButton } from '../AddTokenButton';
-import { useWeb3React } from '@web3-react/core';
 import { Container } from '@/components/Grid';
 
 const SmileImage = styled.div`

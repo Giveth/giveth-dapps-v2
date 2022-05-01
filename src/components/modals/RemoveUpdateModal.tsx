@@ -1,4 +1,3 @@
-import { IModal, Modal } from '@/components/modals/Modal';
 import { FC } from 'react';
 import styled from 'styled-components';
 import { IconTrash } from '@giveth/ui-design-system/lib/cjs/components/icons/Trash';
@@ -8,6 +7,7 @@ import {
 	brandColors,
 	IconAlertTriangle,
 } from '@giveth/ui-design-system';
+import { IModal, Modal } from '@/components/modals/Modal';
 import FixedToast from '@/components/toasts/FixedToast';
 
 export const RemoveUpdateModal: FC<IModal> = ({ setShowModal, callback }) => {

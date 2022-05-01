@@ -14,7 +14,6 @@ import {
 	brandColors,
 	neutralColors,
 	OulineButton,
-	ButtonText,
 	Caption,
 	IconHelp,
 } from '@giveth/ui-design-system';

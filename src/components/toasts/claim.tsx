@@ -1,5 +1,5 @@
-import { networksParams } from '@/helpers/blockchain';
 import toast from 'react-hot-toast';
+import { networksParams } from '@/helpers/blockchain';
 
 export function showPendingClaim(network: number, txHash: string): void {
 	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}/tx/${txHash}`;
