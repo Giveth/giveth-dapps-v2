@@ -1,5 +1,3 @@
-import config from '@/configuration';
-import { formatWeiHelper, Zero } from '@/helpers/number';
 import {
 	brandColors,
 	Caption,
@@ -13,10 +11,12 @@ import {
 } from '@giveth/ui-design-system';
 import React, { FC, MouseEventHandler, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { IconGIV } from './Icons/GIV';
-import { Flex } from './styled-components/Flex';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
+import { IconGIV } from './Icons/GIV';
+import { Flex } from './styled-components/Flex';
+import { formatWeiHelper, Zero } from '@/helpers/number';
+import config from '@/configuration';
 import { IconEthereum } from './Icons/Eth';
 import { IconGnosisChain } from './Icons/GnosisChain';
 import { WhatisStreamModal } from '@/components/modals/WhatisStream';

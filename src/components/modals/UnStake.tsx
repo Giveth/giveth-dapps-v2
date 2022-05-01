@@ -1,12 +1,13 @@
 import { FC, useState } from 'react';
 import Lottie from 'react-lottie';
-import { Modal, IModal } from './Modal';
 import { neutralColors, Button, H4 } from '@giveth/ui-design-system';
-import { Flex } from '../styled-components/Flex';
 import styled from 'styled-components';
+import { BigNumber } from 'ethers';
+import { useWeb3React } from '@web3-react/core';
+import { Modal, IModal } from './Modal';
+import { Flex } from '../styled-components/Flex';
 import { PoolStakingConfig } from '@/types/config';
 import { StakingPoolImages } from '../StakingPoolImages';
-import { BigNumber } from 'ethers';
 import { AmountInput } from '../AmountInput';
 import { unwrapToken, withdrawTokens } from '@/lib/stakingPool';
 import LoadingAnimation from '@/animations/loading.json';
@@ -15,7 +16,6 @@ import {
 	ErrorInnerModal,
 	SubmittedInnerModal,
 } from './ConfirmSubmit';
-import { useWeb3React } from '@web3-react/core';
 import { StakeState } from '@/lib/staking';
 
 const loadingAnimationOptions = {

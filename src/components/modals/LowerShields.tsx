@@ -1,15 +1,15 @@
 import Image from 'next/image';
 import styled from 'styled-components';
 
-import { Modal } from '@/components/modals/Modal';
-import ShieldBlackIcon from '/public/images/icons/shield_black.svg';
-import ShieldWhiteIcon from '/public/images/icons/shield_white.svg';
 import {
 	Lead,
 	Button,
 	brandColors,
 	OulineButton,
 } from '@giveth/ui-design-system';
+import { Modal } from '@/components/modals/Modal';
+import ShieldBlackIcon from '/public/images/icons/shield_black.svg';
+import ShieldWhiteIcon from '/public/images/icons/shield_white.svg';
 import ExternalLink from '@/components/ExternalLink';
 import { ETheme, useGeneral } from '@/context/general.context';
 

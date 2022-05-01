@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { zIndex } from '@/lib/constants/constants';
 import {
 	neutralColors,
 	brandColors,
@@ -7,6 +6,7 @@ import {
 	GLink,
 	ButtonLink,
 } from '@giveth/ui-design-system';
+import { zIndex } from '@/lib/constants/constants';
 import { Flex } from '@/components/styled-components/Flex';
 import { Button as CButton } from '@/components/styled-components/Button';
 import { IHeader } from './Header';

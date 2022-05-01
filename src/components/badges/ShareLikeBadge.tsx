@@ -2,9 +2,9 @@ import Image from 'next/image';
 import HeartGrayIcon from '/public/images/heart_gray.svg';
 import HeartRedIcon from '/public/images/heart_red.svg';
 import ShareIcon from '/public/images/share.svg';
-import { Shadow } from '../styled-components/Shadow';
 import styled from 'styled-components';
 import { neutralColors, GLink } from '@giveth/ui-design-system';
+import { Shadow } from '../styled-components/Shadow';
 
 const ShareLikeBadge = (props: {
 	type: 'share' | 'like';

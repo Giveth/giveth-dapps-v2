@@ -11,15 +11,15 @@ import {
 import { Pool, Position } from '@uniswap/v3-sdk';
 import { Token } from '@uniswap/sdk-core';
 
+import BigNumber from 'bignumber.js';
+import { useWeb3React } from '@web3-react/core';
 import { LiquidityPosition } from '@/types/nfts';
 import config from '@/configuration';
 import { StakingType, UniswapV3PoolStakingConfig } from '@/types/config';
-import { useSubgraph } from '.';
 import { getUniswapV3TokenURI } from '@/services/subgraph.service';
 import { Zero } from '@/helpers/number';
-import BigNumber from 'bignumber.js';
 import { IUniswapV3Position } from '@/types/subgraph';
-import { useWeb3React } from '@web3-react/core';
+import { useSubgraph } from '.';
 
 const ERC721NftContext = createContext<{
 	stakedPositions: LiquidityPosition[];

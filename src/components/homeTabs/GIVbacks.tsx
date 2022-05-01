@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Flex } from '../styled-components/Flex';
 import {
 	IconExternalLink,
 	IconGIVBack,
 	P,
 	brandColors,
 } from '@giveth/ui-design-system';
+import BigNumber from 'bignumber.js';
+import { useWeb3React } from '@web3-react/core';
+import { Flex } from '../styled-components/Flex';
 import {
 	GIVbacksTopContainer,
 	GIVbacksBottomContainer,
@@ -29,7 +31,6 @@ import {
 	InfoReadMore,
 } from './GIVbacks.sc';
 import { useTokenDistro } from '@/context/tokenDistro.context';
-import BigNumber from 'bignumber.js';
 import config from '@/configuration';
 import { HarvestAllModal } from '../modals/HarvestAll';
 import { getNowUnixMS } from '@/helpers/time';
@@ -37,7 +38,6 @@ import { useSubgraph } from '@/context';
 import { formatDate } from '@/lib/helpers';
 import { GIVBackExplainModal } from '../modals/GIVBackExplain';
 import { TopInnerContainer } from './commons';
-import { useWeb3React } from '@web3-react/core';
 import links from '@/lib/constants/links';
 import { Col, Container, Row } from '@/components/Grid';
 import Routes from '@/lib/constants/Routes';

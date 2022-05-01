@@ -1,8 +1,17 @@
+import React, { useEffect, useState } from 'react';
+import {
+	IconGIVFarm,
+	IconExternalLink,
+	GLink,
+	IconCopy,
+} from '@giveth/ui-design-system';
+import { BigNumber } from 'bignumber.js';
+import { constants } from 'ethers';
+import { useWeb3React } from '@web3-react/core';
 import { Flex } from '@/components/styled-components/Flex';
 import StakingPoolCard from '@/components/cards/StakingPoolCard';
 import config from '@/configuration';
 import { BasicNetworkConfig, StakingType } from '@/types/config';
-import React, { useEffect, useState } from 'react';
 import {
 	GIVfarmTopContainer,
 	Subtitle,
@@ -13,21 +22,12 @@ import {
 	CopyWrapper,
 	GIVfarmBottomContainer,
 } from './GIVfarm.sc';
-import {
-	IconGIVFarm,
-	IconExternalLink,
-	GLink,
-	IconCopy,
-} from '@giveth/ui-design-system';
 import { NetworkSelector } from '@/components/NetworkSelector';
 import StakingPositionCard from '@/components/cards/StakingPositionCard';
 import { getGivStakingConfig } from '@/helpers/networkProvider';
-import { BigNumber } from 'bignumber.js';
-import { constants } from 'ethers';
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import { useFarms } from '@/context/farm.context';
-import { TopInnerContainer, ExtLink, ExtLinkRow } from './commons';
-import { useWeb3React } from '@web3-react/core';
+import { TopInnerContainer, ExtLinkRow } from './commons';
 import { GIVfrens } from '@/components/GIVfrens';
 import { givEconomySupportedNetworks } from '@/lib/constants/constants';
 import { shortenAddress } from '@/lib/helpers';
@@ -124,18 +124,18 @@ export const TabGIVfarmBottom = () => {
 				<Flex alignItems='center' gap='24px' wrap={1}>
 					<NetworkSelector />
 					<ExtLinkRow alignItems='center'>
-						<ExtLink
+						<GLink
 							size='Big'
 							target='_blank'
 							rel='noreferrer'
 							href='https://omni.xdaichain.com/bridge'
 						>
 							Bridge your GIV
-						</ExtLink>
+						</GLink>
 						<IconExternalLink />
 					</ExtLinkRow>
 					<ExtLinkRow alignItems='center'>
-						<ExtLink
+						<GLink
 							size='Big'
 							target='_blank'
 							rel='noreferrer'
@@ -146,7 +146,7 @@ export const TabGIVfarmBottom = () => {
 							}
 						>
 							Buy GIV token
-						</ExtLink>
+						</GLink>
 						<IconExternalLink />
 					</ExtLinkRow>
 					<ContractRow>

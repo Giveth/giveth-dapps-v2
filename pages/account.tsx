@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { H5 } from '@giveth/ui-design-system';
-import UserPublicProfileView from '@/components/views/userPublicProfile/UserPublicProfile.view';
 import Head from 'next/head';
 import { FC } from 'react';
+import UserPublicProfileView from '@/components/views/userPublicProfile/UserPublicProfile.view';
 import useUser from '@/context/UserProvider';
 
 const NoUserContainer = styled.div`

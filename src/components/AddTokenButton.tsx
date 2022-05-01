@@ -1,10 +1,10 @@
-import { addToken } from '@/lib/metamask';
-import { EWallets } from '@/lib/wallet/walletTypes';
 import { Web3Provider } from '@ethersproject/providers';
 import { brandColors, P } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import { FC, useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { EWallets } from '@/lib/wallet/walletTypes';
+import { addToken } from '@/lib/metamask';
 import { Flex } from './styled-components/Flex';
 import StorageLabel from '@/lib/localStorage';
 

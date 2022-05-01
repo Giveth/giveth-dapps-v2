@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
-import { Flex } from '@/components/styled-components/Flex';
 import { H6, IconX } from '@giveth/ui-design-system';
+import { Flex } from '@/components/styled-components/Flex';
 
 export type ModalHeaderTitlePosition = 'center' | 'left';
 

@@ -1,4 +1,24 @@
 import { Contract, ethers } from 'ethers';
+import BigNumber from 'bignumber.js';
+import {
+	JsonRpcProvider,
+	TransactionResponse,
+	Web3Provider,
+} from '@ethersproject/providers';
+import {
+	BalancerPoolStakingConfig,
+	PoolStakingConfig,
+	RegenFarmType,
+	RegenPoolStakingConfig,
+	SimplePoolStakingConfig,
+	StakingType,
+} from '@/types/config';
+import config from '../configuration';
+import { APR } from '@/types/poolInfo';
+import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
+import { Zero } from '@/helpers/number';
+import { IBalances, IUnipool } from '@/types/subgraph';
+import { getGasPreference } from '@/lib/helpers';
 
 import LM_Json from '../artifacts/UnipoolTokenDistributor.json';
 import UNI_Json from '../artifacts/UNI.json';
@@ -13,28 +33,6 @@ const { abi: BAL_WEIGHTED_POOL_ABI } = BAL_WEIGHTED_POOL_Json;
 const { abi: BAL_VAULT_ABI } = BAL_VAULT_Json;
 const { abi: TOKEN_MANAGER_ABI } = TOKEN_MANAGER_Json;
 const { abi: ERC20_ABI } = ERC20_Json;
-
-import { APR } from '@/types/poolInfo';
-import BigNumber from 'bignumber.js';
-import config from '../configuration';
-import {
-	BalancerPoolStakingConfig,
-	PoolStakingConfig,
-	RegenFarmType,
-	RegenPoolStakingConfig,
-	SimplePoolStakingConfig,
-	StakingType,
-} from '@/types/config';
-
-import {
-	JsonRpcProvider,
-	TransactionResponse,
-	Web3Provider,
-} from '@ethersproject/providers';
-import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
-import { Zero } from '@/helpers/number';
-import { IBalances, IUnipool } from '@/types/subgraph';
-import { getGasPreference } from '@/lib/helpers';
 
 const toBigNumber = (eb: ethers.BigNumber): BigNumber =>
 	new BigNumber(eb.toString());
@@ -183,7 +181,6 @@ const getSimplePoolStakingAPR = async (
 	let reserves;
 	let totalSupply: ethers.BigNumber;
 	let rewardRate: ethers.BigNumber;
-
 	const poolContract = new Contract(POOL_ADDRESS, UNI_ABI, provider);
 	let apr = null;
 	try {
@@ -358,7 +355,7 @@ const permitTokens = async (
 
 export const approveERC20tokenTransfer = async (
 	amount: string,
-	owenerAddress: string,
+	ownerAddress: string,
 	spenderAddress: string,
 	poolAddress: string,
 	provider: Web3Provider | null,
@@ -370,10 +367,9 @@ export const approveERC20tokenTransfer = async (
 	}
 
 	const signer = provider.getSigner();
-
 	const tokenContract = new Contract(poolAddress, ERC20_ABI, signer);
 	const allowance: BigNumber = await tokenContract.allowance(
-		owenerAddress,
+		ownerAddress,
 		spenderAddress,
 	);
 
@@ -485,6 +481,7 @@ export const stakeTokens = async (
 	poolAddress: string,
 	lmAddress: string,
 	provider: Web3Provider | null,
+	permit: boolean,
 ): Promise<TransactionResponse | undefined> => {
 	if (amount === '0') return;
 	if (!provider) {
@@ -496,28 +493,36 @@ export const stakeTokens = async (
 
 	const lmContract = new Contract(lmAddress, LM_ABI, signer);
 
-	const rawPermitCall = await permitTokens(
-		provider,
-		poolAddress,
-		lmAddress,
-		amount,
-	);
-
 	try {
 		const gasPreference = getGasPreference(
 			config.NETWORKS_CONFIG[provider.network.chainId],
 		);
-		// const { status } = await txResponse.wait();
-		return await lmContract
-			.connect(signer.connectUnchecked())
-			.stakeWithPermit(
-				ethers.BigNumber.from(amount),
-				rawPermitCall.data,
-				{
+
+		if (permit) {
+			const rawPermitCall = await permitTokens(
+				provider,
+				poolAddress,
+				lmAddress,
+				amount,
+			);
+			return await lmContract
+				.connect(signer.connectUnchecked())
+				.stakeWithPermit(
+					ethers.BigNumber.from(amount),
+					rawPermitCall.data,
+					{
+						gasLimit: 300_000,
+						...gasPreference,
+					},
+				);
+		} else {
+			return await lmContract
+				.connect(signer.connectUnchecked())
+				.stake(ethers.BigNumber.from(amount), {
 					gasLimit: 300_000,
 					...gasPreference,
-				},
-			);
+				});
+		}
 	} catch (e) {
 		console.error('Error on staking:', e);
 		return;

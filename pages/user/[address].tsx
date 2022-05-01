@@ -2,8 +2,8 @@ import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { FC } from 'react';
 import styled from 'styled-components';
-import { Container } from '@/components/Grid';
 import { H3 } from '@giveth/ui-design-system';
+import { Container } from '@/components/Grid';
 
 import { client } from '@/apollo/apolloClient';
 import { GET_USER_BY_ADDRESS } from '@/apollo/gql/gqlUser';

@@ -1,4 +1,3 @@
-import config from '@/configuration';
 import {
 	P,
 	brandColors,
@@ -10,14 +9,15 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import Lottie from 'react-lottie';
+import styled from 'styled-components';
+import { FC } from 'react';
+import { useWeb3React } from '@web3-react/core';
+import config from '@/configuration';
 import LoadingAnimation from '@/animations/loading.json';
 import TikAnimation from '@/animations/tik.json';
 import ErrorAnimation from '@/animations/error.json';
-import styled from 'styled-components';
-import { FC } from 'react';
 import { AddTokenButton } from '../AddTokenButton';
 import { Flex } from '../styled-components/Flex';
-import { useWeb3React } from '@web3-react/core';
 
 const loadingAnimationOptions = {
 	loop: true,

@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
-import config from '@/configuration';
 import styled from 'styled-components';
+import { useWeb3React } from '@web3-react/core';
+import config from '@/configuration';
 import { CongratulationsCard } from '@/components/cards/Congratulations';
 import ClaimCard from '@/components/cards/Claim';
 import { ConnectCard } from '@/components/cards/Connect';
@@ -10,7 +11,6 @@ import GovernCard from '@/components/cards/Govern';
 import InvestCard from '@/components/cards/Stake';
 import { Flex } from '@/components/styled-components/Flex';
 import useClaim, { GiveDropStateType } from '@/context/claim.context';
-import { useWeb3React } from '@web3-react/core';
 
 const stepsTitle = ['Connect', 'Donate', 'Govern', 'Stake', 'Stream', 'Claim'];
 

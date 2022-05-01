@@ -1,8 +1,7 @@
 import Head from 'next/head';
 import styled from 'styled-components';
-import { gToast, ToastType } from '@/components/toasts';
 import { GetServerSideProps } from 'next';
-import { countReset } from 'console';
+import { gToast, ToastType } from '@/components/toasts';
 
 const TestRoute = () => {
 	const notify = () =>

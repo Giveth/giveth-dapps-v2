@@ -10,9 +10,9 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
+import Link from 'next/link';
 import { Flex } from '../styled-components/Flex';
 import { Modal, IModal } from './Modal';
-import Link from 'next/link';
 import Routes from '@/lib/constants/Routes';
 import { ETheme, useGeneral } from '@/context/general.context';
 import { RegenStreamConfig } from '@/types/config';

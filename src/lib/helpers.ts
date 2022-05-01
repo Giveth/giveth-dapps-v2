@@ -1,9 +1,9 @@
+import { promisify } from 'util';
 import { parseUnits, parseEther } from '@ethersproject/units';
 import { keccak256 } from '@ethersproject/keccak256';
 import { Contract } from '@ethersproject/contracts';
 import { Web3Provider } from '@ethersproject/providers';
 import { AddressZero } from '@ethersproject/constants';
-import { promisify } from 'util';
 import { brandColors } from '@giveth/ui-design-system';
 // @ts-ignore
 import abi from 'human-standard-token-abi';
