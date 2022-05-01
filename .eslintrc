@@ -1,4 +1,7 @@
 {
+  "plugins": [
+    "import",
+  ],
   "extends": [
     "next/core-web-vitals",
     "plugin:@next/next/recommended",
@@ -6,6 +9,9 @@
   ],
   "rules": {
     "react/no-unescaped-entities": "warn",
+    "import/order": ["error", {
+      "groups": ["builtin", "external", ["internal", "parent", "sibling"], "index", "object", "type"]
+    }],
     "prettier/prettier": [
       "error",
       {
