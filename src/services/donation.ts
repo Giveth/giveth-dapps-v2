@@ -1,8 +1,8 @@
 // import transakSDK from '@transak/transak-sdk'
+import { captureException } from '@sentry/nextjs';
 import { SAVE_DONATION } from '@/apollo/gql/gqlDonations';
 import { client } from '@/apollo/apolloClient';
 import { IConfirmDonation } from '@/components/views/donate/helpers';
-import { captureException } from '@sentry/nextjs';
 
 interface IOnTxHash extends IConfirmDonation {
 	txHash: string;
@@ -102,40 +102,6 @@ export async function saveDonationFromTransak(
 	};
 }
 
-<<<<<<< HEAD
-export async function saveDonationTransaction(
-	hash: string,
-	donationId: number,
-) {
-	const saveDonationTransactionErrors = [];
-	let savedDonationTransaction: any = 0;
-	try {
-		const { data } = await client.mutate({
-			mutation: SAVE_DONATION_TRANSACTION,
-			variables: {
-				transactionId: hash?.toString(),
-				donationId,
-				// anonymous: false
-			},
-		});
-		savedDonationTransaction = data;
-	} catch (error) {
-		saveDonationTransactionErrors.push(error);
-		captureException(error, {
-			tags: {
-				section: 'saveDonationTransaction',
-			},
-		});
-	}
-
-	return {
-		savedDonationTransaction,
-		saveDonationTransactionErrors,
-	};
-}
-
-=======
->>>>>>> a593d91e1758ec1208b0371d2b9ed2b71d820206
 // export async function startTransakDonation({ project, setSuccess }) {
 //   const request = await fetch(`/api/transak`)
 //   const response = await request.json()
