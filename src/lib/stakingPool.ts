@@ -202,13 +202,16 @@ const getSimplePoolStakingAPR = async (
 				lmContract.rewardRate(),
 			]);
 		}
-		reserves = _reserves.map(toBigNumber);
-		if (_token0.toLowerCase() !== tokenAddress.toLowerCase())
-			reserves.reverse();
+		let tokenReseve = toBigNumber(
+			_token0.toLowerCase() !== tokenAddress.toLowerCase()
+				? _reserves[1]
+				: _reserves[0],
+		);
+
 		const lp = toBigNumber(_poolTotalSupply)
 			.times(10 ** 18)
 			.div(2)
-			.div(reserves[0]);
+			.div(tokenReseve);
 		apr = totalSupply.isZero()
 			? null
 			: toBigNumber(rewardRate)
