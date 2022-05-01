@@ -1,9 +1,9 @@
 import Image from 'next/image';
-import { FlexCenter } from './styled-components/Flex';
 import githubIcon from '/public/images/github_purple.svg';
 import twitterIcon from '/public/images/twitter_purple.svg';
 import { brandColors, H5, Overline } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { FlexCenter } from './styled-components/Flex';
 
 interface IMember {
 	name: string;

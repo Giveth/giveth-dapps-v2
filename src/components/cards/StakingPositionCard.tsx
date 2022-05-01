@@ -1,6 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import { BigNumber } from 'ethers';
 
+import { SublineBold } from '@giveth/ui-design-system';
 import BaseStakingCard from './BaseStakingCard';
 import { PoolStakingConfig } from '@/types/config';
 import { useLiquidityPositions } from '@/context';
@@ -10,7 +11,6 @@ import {
 	OutOfRangeBadgeContianer,
 	OutOfRangeTooltip,
 } from './BaseStakingCard.sc';
-import { SublineBold } from '@giveth/ui-design-system';
 import { IconWithTooltip } from '../IconWithToolTip';
 
 const OutOfRangeBadge = () => (

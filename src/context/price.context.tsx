@@ -7,11 +7,11 @@ import {
 	useState,
 } from 'react';
 import BigNumber from 'bignumber.js';
+import { useWeb3React } from '@web3-react/core';
 import { Zero } from '@/helpers/number';
 import { useSubgraph } from '@/context/subgraph.context';
 import config from '@/configuration';
 import { useLiquidityPositions } from '@/context/positions.context';
-import { useWeb3React } from '@web3-react/core';
 
 export interface IPriceContext {
 	givPrice: BigNumber;

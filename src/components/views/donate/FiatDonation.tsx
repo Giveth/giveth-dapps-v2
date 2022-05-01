@@ -1,7 +1,7 @@
 import Image from 'next/image';
-import { IProject } from '@/apollo/types/types';
 import { Button, H4 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { IProject } from '@/apollo/types/types';
 import { ISuccessDonation } from '@/components/views/donate/CryptoDonation';
 
 const FiatDonation = (props: {

@@ -1,5 +1,5 @@
-import MaintenanceIndex from '@/components/views/Errors/MaintenanceIndex';
 import React from 'react';
+import MaintenanceIndex from '@/components/views/Errors/MaintenanceIndex';
 
 const Maintenance = () => {
 	return <MaintenanceIndex />;

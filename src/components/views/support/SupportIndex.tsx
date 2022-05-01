@@ -1,3 +1,5 @@
+import { brandColors, D3 } from '@giveth/ui-design-system';
+import styled from 'styled-components';
 import { Arc } from '@/components/styled-components/Arc';
 import questionIcon from '/public/images/ask_question.svg';
 import feedbackIcon from '/public/images/feedback.svg';
@@ -5,8 +7,6 @@ import reportIcon from '/public/images/report_issue.svg';
 import featureIcon from '/public/images/request_feature.svg';
 import SupportCard from '@/components/GeneralCard';
 import links from '@/lib/constants/links';
-import { brandColors, D3 } from '@giveth/ui-design-system';
-import styled from 'styled-components';
 import { mediaQueries } from '@/lib/constants/constants';
 
 const SupportIndex = () => {

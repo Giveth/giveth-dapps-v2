@@ -1,10 +1,10 @@
 import { isAddress } from 'ethers/lib/utils';
 import { Contract } from 'ethers';
+import { TransactionResponse, Web3Provider } from '@ethersproject/providers';
 import { ClaimData } from '@/types/GIV';
 import config from '../configuration';
 import MerkleDropJson from '../artifacts/MerkleDrop.json';
 import TOKEN_DISTRO_JSON from '../artifacts/TokenDistro.json';
-import { TransactionResponse, Web3Provider } from '@ethersproject/providers';
 import { fetchSubgraph } from '@/services/subgraph.service';
 import { SubgraphQueryBuilder } from '@/lib/subgraph/subgraphQueryBuilder';
 import { transformSubgraphData } from '@/lib/subgraph/subgraphDataTransform';

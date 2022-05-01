@@ -1,8 +1,8 @@
+import { promisify } from 'util';
 import { ethers } from 'ethers';
 import { keccak256 } from '@ethersproject/keccak256';
 import { Contract } from '@ethersproject/contracts';
 import { Web3Provider } from '@ethersproject/providers';
-import { promisify } from 'util';
 import { AddressZero } from '@ethersproject/constants';
 import { brandColors } from '@giveth/ui-design-system';
 // @ts-ignore

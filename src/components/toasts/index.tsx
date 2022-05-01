@@ -1,4 +1,3 @@
-import { mediaQueries } from '@/lib/constants/constants';
 import {
 	brandColors,
 	Caption,
@@ -9,6 +8,7 @@ import {
 } from '@giveth/ui-design-system';
 import toast, { ToastPosition } from 'react-hot-toast';
 import styled from 'styled-components';
+import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
 
 export enum ToastType {

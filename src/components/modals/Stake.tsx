@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState } from 'react';
-import { IModal, Modal } from './Modal';
 import {
 	brandColors,
 	Button,
@@ -9,29 +8,30 @@ import {
 	P,
 	SublineBold,
 } from '@giveth/ui-design-system';
-import { Flex } from '../styled-components/Flex';
 import styled from 'styled-components';
+import { BigNumber } from 'ethers';
+import Lottie from 'react-lottie';
+import { useWeb3React } from '@web3-react/core';
+import { Contract, ethers } from 'ethers';
+import { IModal, Modal } from './Modal';
+import { Flex } from '../styled-components/Flex';
 import { PoolStakingConfig } from '@/types/config';
 import { StakingPoolImages } from '../StakingPoolImages';
-import { BigNumber } from 'ethers';
 import { AmountInput } from '../AmountInput';
 import {
 	approveERC20tokenTransfer,
 	stakeTokens,
 	wrapToken,
 } from '@/lib/stakingPool';
-import Lottie from 'react-lottie';
 import LoadingAnimation from '../../animations/loading.json';
 import {
 	ConfirmedInnerModal,
 	ErrorInnerModal,
 	SubmittedInnerModal,
 } from './ConfirmSubmit';
-import { useWeb3React } from '@web3-react/core';
 import { StakeState } from '@/lib/staking';
 import ToggleSwitch from '../styled-components/Switch';
 import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
-import { Contract, ethers } from 'ethers';
 import useUser from '@/context/UserProvider';
 
 interface IStakeModalProps extends IModal {

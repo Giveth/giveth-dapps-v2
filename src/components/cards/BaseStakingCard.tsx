@@ -1,11 +1,20 @@
-import config from '../../configuration';
 import Image from 'next/image';
+import React, { FC, useEffect, useState, ReactNode, useMemo } from 'react';
+import {
+	IconSpark,
+	brandColors,
+	IconHelp,
+	IconExternalLink,
+} from '@giveth/ui-design-system';
+import { constants } from 'ethers';
+import BigNumber from 'bignumber.js';
+import { useWeb3React } from '@web3-react/core';
+import config from '../../configuration';
 import {
 	PoolStakingConfig,
 	RegenPoolStakingConfig,
 	StakingType,
 } from '@/types/config';
-import React, { FC, useEffect, useState, ReactNode, useMemo } from 'react';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import {
@@ -38,12 +47,6 @@ import {
 	DisableModalCloseButton,
 	DisableModalImage,
 } from './BaseStakingCard.sc';
-import {
-	IconSpark,
-	brandColors,
-	IconHelp,
-	IconExternalLink,
-} from '@giveth/ui-design-system';
 import { APRModal } from '../modals/APR';
 import { StakeModal } from '../modals/Stake';
 import { UnStakeModal } from '../modals/UnStake';
@@ -55,12 +58,9 @@ import { IconBalancer } from '../Icons/Balancer';
 import { IconUniswap } from '../Icons/Uniswap';
 import { HarvestAllModal } from '../modals/HarvestAll';
 import { useFarms } from '@/context/farm.context';
-import { constants } from 'ethers';
 import { useTokenDistro } from '@/context/tokenDistro.context';
-import BigNumber from 'bignumber.js';
 import { WhatisStreamModal } from '../modals/WhatisStream';
 import { IconSushiswap } from '../Icons/Sushiswap';
-import { useWeb3React } from '@web3-react/core';
 import { UniV3APRModal } from '../modals/UNIv3APR';
 import StakingCardIntro from './StakingCardIntro';
 import { getNowUnixMS } from '@/helpers/time';

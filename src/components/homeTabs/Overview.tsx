@@ -1,6 +1,9 @@
 import Link from 'next/link';
 import router from 'next/router';
 import { Button, IconExternalLink, P } from '@giveth/ui-design-system';
+import { useRef, useState } from 'react';
+import Image from 'next/image';
+import { useWeb3React } from '@web3-react/core';
 import {
 	OverviewTopContainer,
 	PreTitle,
@@ -24,12 +27,9 @@ import { IconGIV } from '../Icons/GIV';
 import config from '@/configuration';
 import Routes from '@/lib/constants/Routes';
 import { Col, Container, Row } from '@/components/Grid';
-import { useRef, useState } from 'react';
-import Image from 'next/image';
 import GivEconomyProjectCards from '../cards/GivEconomyProjectCards';
 import { Flex } from '../styled-components/Flex';
 import { ExtLinkCyan } from './commons';
-import { useWeb3React } from '@web3-react/core';
 
 export const TabOverviewTop = () => {
 	return (

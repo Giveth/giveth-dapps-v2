@@ -1,5 +1,5 @@
-import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
 import React from 'react';
+import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
 
 const Custom404 = () => {
 	return <ErrorsIndex statusCode='404' />;

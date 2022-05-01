@@ -1,6 +1,9 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import styled from 'styled-components';
+import { BigNumber as EthersBigNumber, constants, utils } from 'ethers';
+import BigNumber from 'bignumber.js';
+import { H2, H5, Lead } from '@giveth/ui-design-system';
 import { InputWithUnit } from '../input/index';
 import { Flex } from '../styled-components/Flex';
 import {
@@ -22,15 +25,12 @@ import {
 } from './common';
 import { IClaimViewCardProps } from '../views/claim/Claim.view';
 import useClaim from '@/context/claim.context';
-import { BigNumber as EthersBigNumber, constants, utils } from 'ethers';
 import config from '@/configuration';
-import BigNumber from 'bignumber.js';
 import { formatEthHelper, formatWeiHelper, Zero } from '@/helpers/number';
 import { APR } from '@/types/poolInfo';
 import { getLPStakingAPR } from '@/lib/stakingPool';
 import { useSubgraph } from '@/context';
 import { useTokenDistro } from '@/context/tokenDistro.context';
-import { H2, H5, Lead } from '@giveth/ui-design-system';
 import { networkProviders } from '@/helpers/networkProvider';
 import { StakingType } from '@/types/config';
 

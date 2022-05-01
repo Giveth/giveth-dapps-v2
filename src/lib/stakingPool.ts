@@ -1,4 +1,24 @@
 import { Contract, ethers } from 'ethers';
+import BigNumber from 'bignumber.js';
+import {
+	JsonRpcProvider,
+	TransactionResponse,
+	Web3Provider,
+} from '@ethersproject/providers';
+import {
+	BalancerPoolStakingConfig,
+	PoolStakingConfig,
+	RegenFarmType,
+	RegenPoolStakingConfig,
+	SimplePoolStakingConfig,
+	StakingType,
+} from '@/types/config';
+import config from '../configuration';
+import { APR } from '@/types/poolInfo';
+import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
+import { Zero } from '@/helpers/number';
+import { IBalances, IUnipool } from '@/types/subgraph';
+import { getGasPreference } from '@/lib/helpers';
 
 import LM_Json from '../artifacts/UnipoolTokenDistributor.json';
 import UNI_Json from '../artifacts/UNI.json';
@@ -13,28 +33,6 @@ const { abi: BAL_WEIGHTED_POOL_ABI } = BAL_WEIGHTED_POOL_Json;
 const { abi: BAL_VAULT_ABI } = BAL_VAULT_Json;
 const { abi: TOKEN_MANAGER_ABI } = TOKEN_MANAGER_Json;
 const { abi: ERC20_ABI } = ERC20_Json;
-
-import { APR } from '@/types/poolInfo';
-import BigNumber from 'bignumber.js';
-import config from '../configuration';
-import {
-	BalancerPoolStakingConfig,
-	PoolStakingConfig,
-	RegenFarmType,
-	RegenPoolStakingConfig,
-	SimplePoolStakingConfig,
-	StakingType,
-} from '@/types/config';
-
-import {
-	JsonRpcProvider,
-	TransactionResponse,
-	Web3Provider,
-} from '@ethersproject/providers';
-import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
-import { Zero } from '@/helpers/number';
-import { IBalances, IUnipool } from '@/types/subgraph';
-import { getGasPreference } from '@/lib/helpers';
 
 const toBigNumber = (eb: ethers.BigNumber): BigNumber =>
 	new BigNumber(eb.toString());

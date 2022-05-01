@@ -1,9 +1,9 @@
+import { JsonRpcProvider } from '@ethersproject/providers';
 import {
 	BasicNetworkConfig,
 	SimplePoolStakingConfig,
 	StakingType,
 } from '@/types/config';
-import { JsonRpcProvider } from '@ethersproject/providers';
 import config from '../configuration';
 
 const { NETWORKS_CONFIG } = config;

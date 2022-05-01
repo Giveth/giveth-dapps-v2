@@ -6,11 +6,11 @@ import {
 	useEffect,
 	useState,
 } from 'react';
+import { Zero, AddressZero } from '@ethersproject/constants';
+import { useWeb3React } from '@web3-react/core';
 import config from '@/configuration';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
-import { Zero, AddressZero } from '@ethersproject/constants';
 import { useSubgraph } from '@/context/subgraph.context';
-import { useWeb3React } from '@web3-react/core';
 import { StreamType } from '@/types/config';
 
 export interface IRegenTokenDistroHelpers {

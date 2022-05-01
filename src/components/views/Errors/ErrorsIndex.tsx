@@ -1,6 +1,7 @@
 import { D3 } from '@giveth/ui-design-system';
-import { statusCodes } from '@/lib/constants/constants';
 import Image from 'next/image';
+import { useEffect } from 'react';
+import { statusCodes } from '@/lib/constants/constants';
 import error401 from '/public/images/icons/errors/401.svg';
 import error403 from '/public/images/icons/errors/403.svg';
 import error404 from '/public/images/icons/errors/404.svg';
@@ -12,7 +13,6 @@ import discord from '/public/images/icons/discord.svg';
 import medium from '/public/images/icons/medium.svg';
 import givFontLogo from '/public/images/icons/giv_font_logo.svg';
 import { useGeneral } from '@/context/general.context';
-import { useEffect } from 'react';
 import links from '@/lib/constants/links';
 import {
 	ErrorContainer,

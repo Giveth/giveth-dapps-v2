@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import Head from 'next/head';
-import type { AppProps } from 'next/app';
 import { Toaster } from 'react-hot-toast';
 import { Web3ReactProvider } from '@web3-react/core';
 import { ApolloProvider } from '@apollo/client';
 import { ExternalProvider, Web3Provider } from '@ethersproject/providers';
 import NProgress from 'nprogress';
 
+import { useRouter } from 'next/router';
 import { NftsProvider } from '@/context/positions.context';
 import { TokenDistroProvider } from '@/context/tokenDistro.context';
 import { SubgraphProvider } from '@/context/subgraph.context';
@@ -19,7 +19,7 @@ import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
 import { FooterWrapper } from '@/components/Footer/FooterWrapper';
 
 import '../styles/globals.css';
-import { useRouter } from 'next/router';
+import type { AppProps } from 'next/app';
 
 function getLibrary(provider: ExternalProvider) {
 	return new Web3Provider(provider);

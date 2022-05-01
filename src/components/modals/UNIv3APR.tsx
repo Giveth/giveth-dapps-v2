@@ -1,7 +1,7 @@
 import { FC } from 'react';
-import { Modal, IModal } from './Modal';
 import styled from 'styled-components';
 import { P, Button } from '@giveth/ui-design-system';
+import { Modal, IModal } from './Modal';
 import { PoolStakingConfig } from '@/types/config';
 
 interface IUniV3APRModal extends IModal {

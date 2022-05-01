@@ -1,11 +1,4 @@
 import React, { FC, useEffect, useState } from 'react';
-import { useTokenDistro } from '@/context/tokenDistro.context';
-import { durationToString } from '@/lib/helpers';
-import {
-	Bar,
-	GsPTooltip,
-	PercentageRow,
-} from '@/components/homeTabs/GIVstream.sc';
 import {
 	B,
 	brandColors,
@@ -20,14 +13,21 @@ import {
 	P,
 	Subline,
 } from '@giveth/ui-design-system';
+import { constants, ethers } from 'ethers';
+import BigNumber from 'bignumber.js';
+import styled from 'styled-components';
+import { useTokenDistro } from '@/context/tokenDistro.context';
+import { durationToString } from '@/lib/helpers';
+import {
+	Bar,
+	GsPTooltip,
+	PercentageRow,
+} from '@/components/homeTabs/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { RegenStreamConfig, StreamType } from '@/types/config';
 import { useSubgraph } from '@/context';
-import { constants, ethers } from 'ethers';
 import { formatWeiHelper } from '@/helpers/number';
 import { IconFox } from '@/components/Icons/Fox';
-import BigNumber from 'bignumber.js';
-import styled from 'styled-components';
 import { Flex } from './styled-components/Flex';
 import { HarvestAllModal } from './modals/HarvestAll';
 import { usePrice } from '@/context/price.context';

@@ -1,8 +1,8 @@
+import Link from 'next/link';
 import { Row, Col } from '@/components/Grid';
 import Routes from '@/lib/constants/Routes';
 import { GsButton, IGsDataBox } from '../homeTabs/GIVstream.sc';
 import config from '@/configuration';
-import Link from 'next/link';
 
 const GivEconomyProjectCards = () => {
 	return (

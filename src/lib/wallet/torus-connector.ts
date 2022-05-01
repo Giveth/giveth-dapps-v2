@@ -1,8 +1,8 @@
 import { AbstractConnector } from '@web3-react/abstract-connector';
 import { ConnectorUpdate } from '@web3-react/types';
 import TorusInpageProvider from '@toruslabs/torus-embed/dist/types/inpage-provider';
-import config from '@/configuration';
 import { Maybe } from '@toruslabs/torus-embed';
+import config from '@/configuration';
 import type Torus from '@toruslabs/torus-embed';
 
 interface TorusConnectorArguments {

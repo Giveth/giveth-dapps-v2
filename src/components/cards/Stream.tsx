@@ -1,6 +1,7 @@
 import { useState, FC, useEffect } from 'react';
 import Image from 'next/image';
 import styled from 'styled-components';
+import { H2, Lead, H5 } from '@giveth/ui-design-system';
 import { Flex } from '../styled-components/Flex';
 import { ArrowButton, Card, PreviousArrowButton } from './common';
 import { IClaimViewCardProps } from '../views/claim/Claim.view';
@@ -8,7 +9,6 @@ import { IClaimViewCardProps } from '../views/claim/Claim.view';
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import { formatWeiHelper } from '@/helpers/number';
 import { durationToString } from '@/lib/helpers';
-import { H2, Lead, H5 } from '@giveth/ui-design-system';
 import useClaim from '@/context/claim.context';
 
 const StreamCardContainer = styled(Card)`
