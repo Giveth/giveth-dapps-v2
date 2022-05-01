@@ -57,11 +57,8 @@ const stableCoins = [xdaiChain.mainToken, 'DAI', 'USDT'];
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
 export interface ISuccessDonation {
-	transactionHash: string;
-	tokenSymbol: string;
-	subtotal: number;
+	txHash: string;
 	givBackEligible?: boolean;
-	tooSlow?: boolean;
 }
 
 interface IInputBox {
@@ -70,7 +67,7 @@ interface IInputBox {
 }
 
 const CryptoDonation = (props: {
-	setSuccessDonation: (successDonation: ISuccessDonation) => void;
+	setSuccessDonation: (i: ISuccessDonation) => void;
 	project: IProject;
 }) => {
 	const { chainId: networkId, account, library } = useWeb3React();
@@ -101,9 +98,6 @@ const CryptoDonation = (props: {
 	const [geminiModal, setGeminiModal] = useState(false);
 	const [erc20List, setErc20List] = useState<IProjectAcceptedToken[]>();
 	const [erc20OriginalList, setErc20OriginalList] = useState<any>();
-	// TODO: Set this to a better flow, gotta discuss with design team but it is needed
-	const [unconfirmed, setUnconfirmed] = useState<any>();
-	const [inProgress, setInProgress] = useState<any>();
 	const [anonymous, setAnonymous] = useState<boolean>(false);
 	// const [selectLoading, setSelectLoading] = useState(false);
 	const [error, setError] = useState<boolean>(false);
@@ -307,8 +301,7 @@ const CryptoDonation = (props: {
 				'There is no eth address assigned for this project',
 			);
 		}
-		// Sign message for registered users to get user info, no need to sign for anonymous
-		if (!isSignedIn && !anonymous) {
+		if (!isSignedIn) {
 			return showSignWithWallet();
 		}
 		setShowDonateModal(true);
@@ -339,12 +332,10 @@ const CryptoDonation = (props: {
 					token={selectedToken}
 					amount={amountTyped}
 					price={tokenPrice}
-					setInProgress={setInProgress}
-					setUnconfirmed={setUnconfirmed}
+					anonymous={anonymous}
 					givBackEligible={
 						projectIsGivBackEligible && tokenIsGivBackEligible
 					}
-					anonymous={anonymous}
 				/>
 			)}
 
@@ -372,7 +363,7 @@ const CryptoDonation = (props: {
 					acceptedChains?.includes(xdaiChain.id) && (
 						<NetworkToast>
 							<div>
-								<img src='/images/gas_station.svg' />
+								<img src='/images/gas_station.svg' alt='gas' />
 								<Caption medium>
 									Save on gas fees, switch to Gnosis Chain.
 								</Caption>

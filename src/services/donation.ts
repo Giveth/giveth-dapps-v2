@@ -1,58 +1,60 @@
 // import transakSDK from '@transak/transak-sdk'
-import { captureException } from '@sentry/nextjs';
-import {
-	SAVE_DONATION,
-	SAVE_DONATION_TRANSACTION,
-} from '@/apollo/gql/gqlDonations';
+import { SAVE_DONATION } from '@/apollo/gql/gqlDonations';
 import { client } from '@/apollo/apolloClient';
+import { IConfirmDonation } from '@/components/views/donate/helpers';
+import { captureException } from '@sentry/nextjs';
 
-export async function saveDonation(
-	fromAddress: string,
-	toAddress: string,
-	transactionId: string,
-	transactionNetworkId: number,
-	amount: number,
-	token: string,
-	projectId: number,
-	tokenAddress: string,
-	isAnonymous: boolean,
-) {
-	const saveDonationErrors = [];
-	let donationId: any = 0;
+interface IOnTxHash extends IConfirmDonation {
+	txHash: string;
+	toAddress: string;
+}
+
+export async function saveDonation(props: IOnTxHash) {
+	const {
+		web3Context,
+		toAddress,
+		txHash: transactionId,
+		amount,
+		token,
+		project,
+		anonymous,
+	} = props;
+
+	const { account: fromAddress, chainId } = web3Context;
+	const { address: tokenAddress, symbol } = token;
+	const projectId = Number(project.id);
+
+	let donationId = 0;
 	try {
 		const { data } = await client.mutate({
 			mutation: SAVE_DONATION,
 			variables: {
-				chainId: transactionNetworkId,
+				chainId,
 				fromAddress,
 				toAddress,
 				transactionId,
-				transactionNetworkId,
+				transactionNetworkId: chainId,
 				amount,
-				token,
+				token: symbol,
 				projectId,
 				transakId: null,
 				transakStatus: null,
 				tokenAddress,
-				anonymous: isAnonymous,
+				anonymous,
 			},
 		});
-		const { saveDonation: saveDonationId } = data;
-		donationId = saveDonationId;
+		const { saveDonation } = data;
+		donationId = saveDonation;
 	} catch (error) {
-		console.log({ error });
-		saveDonationErrors.push(error);
 		captureException(error, {
 			tags: {
 				section: 'saveDonation',
 			},
 		});
+		throw error;
 	}
-	return {
-		donationId,
-		saveDonationErrors,
-		savedDonation: saveDonationErrors.length === 0,
-	};
+	console.log('DONATION SUCCESS: ', { donationId });
+	return donationId;
 }
 
 export async function saveDonationFromTransak(
@@ -100,6 +102,7 @@ export async function saveDonationFromTransak(
 	};
 }
 
+<<<<<<< HEAD
 export async function saveDonationTransaction(
 	hash: string,
 	donationId: number,
@@ -131,6 +134,8 @@ export async function saveDonationTransaction(
 	};
 }
 
+=======
+>>>>>>> a593d91e1758ec1208b0371d2b9ed2b71d820206
 // export async function startTransakDonation({ project, setSuccess }) {
 //   const request = await fetch(`/api/transak`)
 //   const response = await request.json()

@@ -1,12 +1,12 @@
 import { promisify } from 'util';
-import { ethers } from 'ethers';
+import { parseUnits, parseEther } from '@ethersproject/units';
 import { keccak256 } from '@ethersproject/keccak256';
 import { Contract } from '@ethersproject/contracts';
 import { Web3Provider } from '@ethersproject/providers';
 import { AddressZero } from '@ethersproject/constants';
 import { brandColors } from '@giveth/ui-design-system';
 // @ts-ignore
-import tokenAbi from 'human-standard-token-abi';
+import abi from 'human-standard-token-abi';
 
 import { captureException } from '@sentry/nextjs';
 import { BasicNetworkConfig, GasPreference } from '@/types/config';
@@ -167,61 +167,46 @@ export const shortenAddress = (
 
 export async function sendTransaction(
 	web3: Web3Provider,
-	params: any,
-	txCallbacks: any,
+	params: { to: string; value: string },
+	txCallbacks: {
+		onTxHash: (hash: string) => void;
+		onReceipt: (receipt: any) => void;
+	},
 	contractAddress: string,
-	// traceableDonation = false
 ) {
 	try {
-		let txn = null;
+		let tx;
 		const txParams: any = {
-			to: params?.to,
-			// value: params?.value
+			to: params.to,
 		};
 
 		const fromSigner = web3.getSigner();
-
-		// TRACEABLE DONATION
-		// if (traceableDonation) {
-		//   //
-		//   // DEV: 0x279277482F13aeF92914317a0417DD591145aDc9
-		//   // RELEASE: 0xC59dCE5CCC065A4b51A2321F857466A25ca49B40
-		//   // TRACE: 0x30f938fED5dE6e06a9A7Cd2Ac3517131C317B1E7
-		//
-		//   // TODO !!!!!!!!!!!!
-		//   const givethBridgeCurrent = new GivethBridge(
-		//     web3,
-		//     process.env.NEXT_PUBLIC_GIVETH_BRIDGE_ADDRESS
-		//   )
-		//   console.log({ givethBridgeCurrent })
-		//   return alert('This is a trace donation, do something NOW!')
-		// }
-
-		// ERC20 TRANSFER
 		if (contractAddress && contractAddress !== AddressZero) {
-			const contract = new Contract(contractAddress, tokenAbi, web3);
+			// ERC20 TRANSFER
+			const contract = new Contract(contractAddress, abi, fromSigner);
 			const decimals = await contract.decimals.call();
-			txParams.value = ethers.utils.parseUnits(
-				params?.value,
-				parseInt(decimals),
-			);
-			const instance = contract.connect(fromSigner);
-			txn = await instance.transfer(txParams?.to, txParams?.value);
-			txCallbacks?.onTransactionHash(txn?.hash);
-			return;
+			txParams.value = parseUnits(params.value, parseInt(decimals));
+			tx = await contract.transfer(txParams.to, txParams.value);
+		} else {
+			// REGULAR ETH TRANSFER
+			txParams.value = parseEther(params.value);
+			tx = await fromSigner.sendTransaction(txParams);
 		}
 
-		// REGULAR ETH TRANSFER
-		txParams.value = ethers.utils.parseEther(params?.value);
-		if (!txCallbacks || fromSigner) {
-			// gets hash and checks until it's mined
-			txn = await fromSigner.sendTransaction(txParams);
-			txCallbacks?.onTransactionHash(txn?.hash);
+		txCallbacks.onTxHash(tx.hash);
+		const receipt = await tx.wait();
+		if (receipt.status) {
+			txCallbacks.onReceipt(tx.hash);
 		}
 
-		console.log('stTxn ---> : ', { txn });
+		console.log('stTxn ---> : ', { tx, receipt });
 	} catch (error: any) {
 		console.log('Error sending transaction: ', { error });
+		if (error.replacement && !error.cancelled) {
+			// Speed up the process by replacing the transaction
+			txCallbacks.onReceipt(error.replacement.hash);
+			return;
+		}
 		captureException(error, {
 			tags: {
 				section: 'sendTransaction',
@@ -355,7 +340,7 @@ export const showToastError = (err: any) => {
 		type: ToastType.DANGER,
 		position: 'top-center',
 	});
-	console.log(err);
+	console.log({ err });
 };
 
 export const calcBiggestUnitDifferenceTime = (_time: string) => {
