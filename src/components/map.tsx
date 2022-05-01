@@ -10,6 +10,7 @@ import PlacesAutocomplete, {
 	getLatLng,
 } from 'react-places-autocomplete';
 
+import { captureException } from '@sentry/nextjs';
 import { Regular_Input } from '@/components/styled-components/Input';
 import CheckBox from '@/components/Checkbox';
 import { globalLocation } from '@/lib/constants/projects';
@@ -58,7 +59,14 @@ class Map extends Component<MyProps, MyState> {
 					coords: latLng,
 				});
 			})
-			.catch((error: any) => console.error('Error: ', error));
+			.catch((error: any) => {
+				console.error('Error: ', error);
+				captureException(error, {
+					tags: {
+						section: 'Map',
+					},
+				});
+			});
 	};
 
 	render() {

@@ -13,6 +13,7 @@ import { BigNumber } from 'ethers';
 import Lottie from 'react-lottie';
 import { useWeb3React } from '@web3-react/core';
 import { Contract, ethers } from 'ethers';
+import { captureException } from '@sentry/nextjs';
 import { IModal, Modal } from './Modal';
 import { Flex } from '../styled-components/Flex';
 import { PoolStakingConfig } from '@/types/config';
@@ -172,6 +173,11 @@ export const StakeModal: FC<IStakeModalProps> = ({
 			setStakeState(
 				err?.code === 4001 ? StakeState.STAKE : StakeState.ERROR,
 			);
+			captureException(err, {
+				tags: {
+					section: 'onStake',
+				},
+			});
 		}
 	};
 
@@ -204,6 +210,11 @@ export const StakeModal: FC<IStakeModalProps> = ({
 			setStakeState(
 				err?.code === 4001 ? StakeState.WRAP : StakeState.ERROR,
 			);
+			captureException(err, {
+				tags: {
+					section: 'onWrap',
+				},
+			});
 		}
 	};
 

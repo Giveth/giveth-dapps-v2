@@ -1,4 +1,5 @@
 // import transakSDK from '@transak/transak-sdk'
+import { captureException } from '@sentry/nextjs';
 import {
 	SAVE_DONATION,
 	SAVE_DONATION_TRANSACTION,
@@ -41,6 +42,11 @@ export async function saveDonation(
 	} catch (error) {
 		console.log({ error });
 		saveDonationErrors.push(error);
+		captureException(error, {
+			tags: {
+				section: 'saveDonation',
+			},
+		});
 	}
 	return {
 		donationId,
@@ -81,6 +87,11 @@ export async function saveDonationFromTransak(
 	} catch (error) {
 		console.log({ error });
 		saveDonationErrors.push(error);
+		captureException(error, {
+			tags: {
+				section: 'saveDonationFromTransak',
+			},
+		});
 	}
 	return {
 		donationId,
@@ -107,6 +118,11 @@ export async function saveDonationTransaction(
 		savedDonationTransaction = data;
 	} catch (error) {
 		saveDonationTransactionErrors.push(error);
+		captureException(error, {
+			tags: {
+				section: 'saveDonationTransaction',
+			},
+		});
 	}
 
 	return {

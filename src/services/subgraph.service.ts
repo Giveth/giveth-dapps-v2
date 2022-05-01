@@ -1,3 +1,4 @@
+import { captureException } from '@sentry/nextjs';
 import config from '@/configuration';
 import { ITokenAllocation } from '@/types/subgraph';
 
@@ -58,6 +59,11 @@ export const getHistory = async (
 		return tokenAllocations;
 	} catch (error) {
 		console.error('Error in getting History from Subgraph', error);
+		captureException(error, {
+			tags: {
+				section: 'getHistory',
+			},
+		});
 		return [];
 	}
 };

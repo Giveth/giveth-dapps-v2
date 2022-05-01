@@ -12,6 +12,7 @@ import {
 	Overline,
 } from '@giveth/ui-design-system';
 
+import { captureException } from '@sentry/nextjs';
 import Routes from '@/lib/constants/Routes';
 import useUser from '@/context/UserProvider';
 import links from '@/lib/constants/links';
@@ -67,7 +68,14 @@ const MenuWallet = () => {
 				.then((_balance: BigNumberish) => {
 					setBalance(parseFloat(formatEther(_balance)).toFixed(3));
 				})
-				.catch(() => setBalance(null));
+				.catch((error: unknown) => {
+					setBalance(null);
+					captureException(error, {
+						tags: {
+							section: 'getBalance',
+						},
+					});
+				});
 		}
 	}, [account, library, chainId]);
 

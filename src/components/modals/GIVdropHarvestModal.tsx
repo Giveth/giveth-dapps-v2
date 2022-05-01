@@ -13,6 +13,7 @@ import BigNumber from 'bignumber.js';
 import Lottie from 'react-lottie';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
+import { captureException } from '@sentry/nextjs';
 import { IModal, Modal } from './Modal';
 import {
 	ConfirmedInnerModal,
@@ -205,6 +206,11 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 		} catch (e) {
 			setClaimState(ClaimState.ERROR);
 			console.error(e);
+			captureException(e, {
+				tags: {
+					section: 'onClaimGivDropHarvestModal',
+				},
+			});
 		}
 	};
 

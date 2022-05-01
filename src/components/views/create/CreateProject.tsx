@@ -266,8 +266,12 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 		} catch (e) {
 			setIsLoading(false);
 			const error = e as Error;
-			captureException(error);
 			showToastError(error);
+			captureException(error, {
+				tags: {
+					section: 'CreateProjectSubmit',
+				},
+			});
 		}
 	};
 

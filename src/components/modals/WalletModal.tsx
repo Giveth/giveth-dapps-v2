@@ -4,6 +4,7 @@ import { useWeb3React } from '@web3-react/core';
 import styled from 'styled-components';
 import { brandColors, H5, Lead, neutralColors } from '@giveth/ui-design-system';
 
+import { captureException } from '@sentry/nextjs';
 import {
 	EWallets,
 	IWallet,
@@ -41,7 +42,14 @@ const WalletModal = (props: { setShowModal: (i: boolean) => void }) => {
 				localStorage.setItem(StorageLabel.WALLET, selected.value);
 				activate(selected.connector, showToastError, true)
 					.then(showFirstWelcomeModal)
-					.catch(showToastError);
+					.catch(error => {
+						showToastError(error);
+						captureException(error, {
+							tags: {
+								section: 'activateWallet',
+							},
+						});
+					});
 			}, timeOut);
 		}
 		setShowModal(false);

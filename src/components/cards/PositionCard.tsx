@@ -15,6 +15,7 @@ import {
 	Subline,
 } from '@giveth/ui-design-system';
 
+import { captureException } from '@sentry/nextjs';
 import { LiquidityPosition } from '@/types/nfts';
 import { Flex } from '@/components/styled-components/Flex';
 import { IconWithTooltip } from '../IconWithToolTip';
@@ -69,7 +70,12 @@ const V3StakingCard: FC<IV3StakeCardProps> = ({
 		if (!tokenURI) return {};
 		try {
 			return JSON.parse(atob(tokenURI.slice(STARTS_WITH.length)));
-		} catch {
+		} catch (error) {
+			captureException(error, {
+				tags: {
+					section: 'parseUri',
+				},
+			});
 			return {};
 		}
 	};

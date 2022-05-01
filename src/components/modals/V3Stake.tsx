@@ -11,6 +11,7 @@ import Lottie from 'react-lottie';
 import styled from 'styled-components';
 import { BigNumber, constants } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
+import { captureException } from '@sentry/nextjs';
 import { IModal, Modal } from './Modal';
 import { CancelButton, HarvestButton, HelpRow, Pending } from './HarvestAll.sc';
 import { Flex } from '../styled-components/Flex';
@@ -97,8 +98,13 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 			} else {
 				setStakeStatus(StakeState.ERROR);
 			}
-		} catch {
+		} catch (error) {
 			setStakeStatus(StakeState.UNKNOWN);
+			captureException(error, {
+				tags: {
+					section: 'handleStakeUnstake',
+				},
+			});
 		}
 	};
 

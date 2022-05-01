@@ -1,4 +1,5 @@
 import { Web3Provider } from '@ethersproject/providers';
+import { captureException } from '@sentry/nextjs';
 
 export interface IEthTxConfirmation {
 	status: string;
@@ -34,6 +35,11 @@ export async function confirmEtherTransaction(
 			}, 1000);
 		}
 	} catch (error) {
+		captureException(error, {
+			tags: {
+				section: 'confirmEtherTransaction',
+			},
+		});
 		return callbackFunction({ error });
 	}
 }

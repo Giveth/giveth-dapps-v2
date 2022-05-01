@@ -15,6 +15,7 @@ import {
 // @ts-ignore
 import tokenAbi from 'human-standard-token-abi';
 
+import { captureException } from '@sentry/nextjs';
 import { Shadow } from '@/components/styled-components/Shadow';
 import InputBox from '../../InputBox';
 import useUser from '@/context/UserProvider';
@@ -151,7 +152,14 @@ const CryptoDonation = (props: {
 			.then((res: IProjectAcceptedTokensGQL) => {
 				setAcceptedTokens(res.data.getProjectAcceptTokens);
 			})
-			.catch(showToastError);
+			.catch((error: unknown) => {
+				showToastError(error);
+				captureException(error, {
+					tags: {
+						section: 'Crypto Donation UseEffect',
+					},
+				});
+			});
 	}, []);
 
 	useEffect(() => {
@@ -230,6 +238,11 @@ const CryptoDonation = (props: {
 							10 ** selectedToken.decimals!
 						);
 					} catch (e) {
+						captureException(e, {
+							tags: {
+								section: 'Polltoken pollEvery',
+							},
+						});
 						return 0;
 					}
 				},
@@ -273,6 +286,11 @@ const CryptoDonation = (props: {
 			} catch (error) {
 				// setSelectLoading(false);
 				showToastError(error);
+				captureException(error, {
+					tags: {
+						section: 'handleCustomToken',
+					},
+				});
 			}
 		} else {
 			setCustomInput(i);

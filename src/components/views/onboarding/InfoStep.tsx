@@ -3,6 +3,7 @@ import { useMutation } from '@apollo/client';
 import { H6, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
+import { captureException } from '@sentry/nextjs';
 import { UPDATE_USER } from '@/apollo/gql/gqlUser';
 import Input, {
 	IFormValidations,
@@ -87,6 +88,11 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 			gToast('Failed to update your information. Please try again.', {
 				type: ToastType.DANGER,
 				title: error.message,
+			});
+			captureException(error, {
+				tags: {
+					section: 'InfoStepOnSave',
+				},
 			});
 		}
 		setDisabled(false);

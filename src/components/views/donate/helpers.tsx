@@ -150,7 +150,11 @@ export const confirmDonation = async (props: IConfirmDonation) => {
 		// transaction.notify(transactionHash)
 	} catch (error: any) {
 		setDonating(false);
-		captureException(error);
+		captureException(error, {
+			tags: {
+				section: 'confirmDonation',
+			},
+		});
 		if (
 			error?.data?.code === 'INSUFFICIENT_FUNDS' ||
 			error?.data?.code === 'UNPREDICTABLE_GAS_LIMIT'
@@ -268,5 +272,10 @@ const confirmTxCallback = (props: IConfirmTxCallback) => {
 		}
 	} catch (error) {
 		showToastError(error);
+		captureException(error, {
+			tags: {
+				section: 'ConfirmTxCallback',
+			},
+		});
 	}
 };
