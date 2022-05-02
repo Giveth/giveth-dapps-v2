@@ -60,6 +60,8 @@ const fetchUniswapSubgraphTokenPrice = async (
 
 const PriceContext = createContext<IPriceContext>(priceDefaultValue);
 
+PriceContext.displayName = 'PriceContext';
+
 export const PriceProvider: FC = ({ children }) => {
 	const { chainId } = useWeb3React();
 	const { xDaiValues } = useSubgraph();

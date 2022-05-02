@@ -51,6 +51,8 @@ const UserContext = createContext<IUserContext>({
 	},
 });
 
+UserContext.displayName = 'UserContext';
+
 const apolloClient = initializeApollo();
 
 export const UserProvider = (props: { children: ReactNode }) => {

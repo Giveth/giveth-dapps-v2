@@ -45,6 +45,8 @@ const initialValue = {
 };
 export const ClaimContext = createContext<IClaimContext>(initialValue);
 
+ClaimContext.displayName = 'ClaimContext';
+
 type Props = {
 	children?: ReactNode;
 };

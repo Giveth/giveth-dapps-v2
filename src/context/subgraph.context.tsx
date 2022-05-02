@@ -62,6 +62,8 @@ export const SubgraphContext = createContext<ISubgraphContext>({
 	xDaiValues: defaultSubgraphValue,
 });
 
+SubgraphContext.displayName = 'SubgraphContext';
+
 export const SubgraphProvider: FC = ({ children }) => {
 	const { account, chainId } = useWeb3React();
 

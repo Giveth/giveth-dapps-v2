@@ -34,11 +34,13 @@ const defaultTokenDistroHelper = new TokenDistroHelper({
 	endTime: new Date(),
 });
 
-export const BalanceContext = createContext<ITokenDistroContext>({
+export const TokenDistroContext = createContext<ITokenDistroContext>({
 	givTokenDistroHelper: defaultTokenDistroHelper,
 	regenTokenDistroHelpers: {},
 	getTokenDistroHelper: () => defaultTokenDistroHelper,
 });
+
+TokenDistroContext.displayName = 'TokenDistroContext';
 
 export const TokenDistroProvider: FC = ({ children }) => {
 	const { chainId } = useWeb3React();
@@ -121,7 +123,7 @@ export const TokenDistroProvider: FC = ({ children }) => {
 	);
 
 	return (
-		<BalanceContext.Provider
+		<TokenDistroContext.Provider
 			value={{
 				givTokenDistroHelper: currentGivTokenDistroInfo,
 				regenTokenDistroHelpers: currentRegenTokenDistroHelpers,
@@ -129,15 +131,15 @@ export const TokenDistroProvider: FC = ({ children }) => {
 			}}
 		>
 			{children}
-		</BalanceContext.Provider>
+		</TokenDistroContext.Provider>
 	);
 };
 
 export function useTokenDistro() {
-	const context = useContext(BalanceContext);
+	const context = useContext(TokenDistroContext);
 
 	if (!context) {
-		throw new Error('Token balance context not found!');
+		throw new Error('Token distro context not found!');
 	}
 
 	return context;
