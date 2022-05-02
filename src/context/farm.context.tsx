@@ -22,6 +22,8 @@ export const FarmContext = createContext<FarmContext>({
 	},
 });
 
+FarmContext.displayName = 'FarmContext';
+
 interface IInfos {
 	[key: string]: ethers.BigNumber;
 }

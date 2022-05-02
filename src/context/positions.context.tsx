@@ -33,6 +33,8 @@ const ERC721NftContext = createContext<{
 	pool: Pool | null;
 } | null>(null);
 
+ERC721NftContext.displayName = 'ERC721NftContext';
+
 const uniswapV3PoolStakingConfig = config.MAINNET_CONFIG.pools.find(
 	p => p.type === StakingType.UNISWAPV3,
 ) as UniswapV3PoolStakingConfig;
