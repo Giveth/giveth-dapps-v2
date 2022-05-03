@@ -10,8 +10,12 @@ import styled from 'styled-components';
 
 const SocialBox = (props: any) => {
 	const { project } = props;
-	const shareTitle = `I am a Giver and you can be one too! 💙 @givethio. Let's Build the Future of Giving together! 🙌 🌈 #maketheworldabetterplace 🌏 💜`;
-	const url = typeof window !== 'undefined' ? window?.location?.href : null;
+	const shareTitle = `Our project is raising funds in crypto on @givethio! 🙌
+Donate directly on Ethereum Mainnet or @gnosischain w/ no fees or intermediaries.👇`;
+	const projectUrl =
+		typeof window !== 'undefined'
+			? `${window.location.origin}/project/${project?.slug}`
+			: null;
 	return (
 		<Social isSuccess={props.isSuccess}>
 			<BLead>
@@ -23,7 +27,7 @@ const SocialBox = (props: any) => {
 				<SocialItem isSuccess={props.isSuccess}>
 					<TwitterShareButton
 						title={shareTitle}
-						url={url || ''}
+						url={projectUrl || ''}
 						hashtags={['Giveth']}
 					>
 						<Image
@@ -38,7 +42,7 @@ const SocialBox = (props: any) => {
 					<LinkedinShareButton
 						title={shareTitle}
 						summary={project?.description}
-						url={url || ''}
+						url={projectUrl || ''}
 					>
 						<Image
 							src={'/images/social-linkedin.svg'}
@@ -51,7 +55,7 @@ const SocialBox = (props: any) => {
 				<SocialItem isSuccess={props.isSuccess}>
 					<FacebookShareButton
 						quote={shareTitle}
-						url={url || ''}
+						url={projectUrl || ''}
 						hashtag='#Giveth'
 					>
 						<Image
