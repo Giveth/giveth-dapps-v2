@@ -1,4 +1,5 @@
 import { promisify } from 'util';
+import { unescape } from 'lodash';
 import { parseUnits, parseEther } from '@ethersproject/units';
 import { keccak256 } from '@ethersproject/keccak256';
 import { Contract } from '@ethersproject/contracts';
@@ -17,8 +18,6 @@ import Routes from '@/lib/constants/Routes';
 import { gToast, ToastType } from '@/components/toasts';
 import StorageLabel from '@/lib/localStorage';
 import { networksParams } from '@/helpers/blockchain';
-
-import { unescape } from 'lodash';
 
 declare let window: any;
 
