@@ -21,7 +21,9 @@ import {
 	ContractRow,
 	CopyWrapper,
 	GIVfarmBottomContainer,
+	ArchivedPoolsToggle,
 } from './GIVfarm.sc';
+import RadioTitle from '@/components/views/donate/RadioTitle';
 import { NetworkSelector } from '@/components/NetworkSelector';
 import StakingPositionCard from '@/components/cards/StakingPositionCard';
 import { getGivStakingConfig } from '@/helpers/networkProvider';
@@ -44,9 +46,10 @@ const renderPools = (
 	pools: BasicNetworkConfig['pools'],
 	network: number,
 	active: boolean,
-) =>
-	pools
-		.filter(p => p.active === active)
+	showArchivedPools?: boolean,
+) => {
+	return pools
+		.filter(p => (showArchivedPools ? p : p.active === active))
 		.map((poolStakingConfig, index) => {
 			return (
 				<Col
@@ -68,6 +71,7 @@ const renderPools = (
 				</Col>
 			);
 		});
+};
 
 export const TabGIVfarmTop = () => {
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
@@ -117,6 +121,7 @@ export const TabGIVfarmTop = () => {
 
 export const TabGIVfarmBottom = () => {
 	const { chainId } = useWeb3React();
+	const [showArchivedPools, setArchivedPools] = useState(false);
 
 	return (
 		<GIVfarmBottomContainer>
@@ -175,6 +180,14 @@ export const TabGIVfarmBottom = () => {
 						</CopyWrapper>
 					</ContractRow>
 				</Flex>
+				<ArchivedPoolsToggle>
+					<RadioTitle
+						title='Show archived pools'
+						toggleRadio={() => setArchivedPools(!showArchivedPools)}
+						isSelected={showArchivedPools}
+					/>
+				</ArchivedPoolsToggle>
+
 				{chainId === config.XDAI_NETWORK_NUMBER && (
 					<>
 						<PoolRow>
@@ -182,6 +195,7 @@ export const TabGIVfarmBottom = () => {
 								config.XDAI_CONFIG.pools,
 								config.XDAI_NETWORK_NUMBER,
 								true,
+								showArchivedPools,
 							)}
 							<Col sm={6} lg={4}>
 								<StakingPoolCard
@@ -191,11 +205,6 @@ export const TabGIVfarmBottom = () => {
 									)}
 								/>
 							</Col>
-							{renderPools(
-								config.XDAI_CONFIG.pools,
-								config.XDAI_NETWORK_NUMBER,
-								false,
-							)}
 						</PoolRow>
 						<GIVfrens
 							regenFarms={config.XDAI_CONFIG.regenFarms}
@@ -217,6 +226,7 @@ export const TabGIVfarmBottom = () => {
 								config.MAINNET_CONFIG.pools,
 								config.MAINNET_NETWORK_NUMBER,
 								true,
+								showArchivedPools,
 							)}
 							<Col sm={6} lg={4}>
 								<StakingPoolCard
@@ -226,11 +236,6 @@ export const TabGIVfarmBottom = () => {
 									)}
 								/>
 							</Col>
-							{renderPools(
-								config.MAINNET_CONFIG.pools,
-								config.MAINNET_NETWORK_NUMBER,
-								false,
-							)}
 						</PoolRow>
 						<GIVfrens
 							regenFarms={config.XDAI_CONFIG.regenFarms}
