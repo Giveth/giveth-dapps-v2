@@ -232,6 +232,7 @@ export const CoverLine = styled.div<IThemed>`
 
 export const MainLogoBtn = styled.div`
 	display: none;
+	cursor: pointer;
 	${mediaQueries.laptopL} {
 		display: flex;
 	}
