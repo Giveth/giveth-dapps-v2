@@ -18,6 +18,8 @@ import { gToast, ToastType } from '@/components/toasts';
 import StorageLabel from '@/lib/localStorage';
 import { networksParams } from '@/helpers/blockchain';
 
+import { unescape } from 'lodash';
+
 declare let window: any;
 
 export const formatBalance = (balance?: string | number) => {
@@ -127,12 +129,13 @@ export const isUserRegistered = (user?: IUser) => {
 
 export const htmlToText = (text?: string) => {
 	if (!text) return;
-	return text
+	const formattedText = text
+		.replace(/<[^>]+>/g, '')
 		.replace(/<\/(?:.|\n)*?>/gm, ' ') // replace closing tags w/ a space
 		.replace(/<(?:.|\n)*?>/gm, '') // strip opening tags
 		.trim();
+	return unescape(formattedText);
 };
-
 export const capitalizeFirstLetter = (string: string) => {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 };
