@@ -24,7 +24,6 @@ import {
 	WBNetwork,
 	SmallCreateProject,
 	Logo,
-	BackBtn,
 	MenuAndButtonContainer,
 	CoverLine,
 	SmallCreateProjectParent,
@@ -149,16 +148,14 @@ const Header: FC<IHeader> = () => {
 		>
 			<Flex>
 				{isCreateRoute ? (
-					<BackBtn onClick={router.back}>
-						<Logo>
-							<Image
-								width='26px'
-								height='26px'
-								alt='Giveth logo'
-								src={`/images/back-2.svg`}
-							/>{' '}
-						</Logo>
-					</BackBtn>
+					<Logo onClick={router.back}>
+						<Image
+							width='26px'
+							height='26px'
+							alt='Giveth logo'
+							src={`/images/back-2.svg`}
+						/>
+					</Logo>
 				) : (
 					<>
 						<MainLogoBtn>

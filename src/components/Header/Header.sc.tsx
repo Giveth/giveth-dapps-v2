@@ -24,7 +24,7 @@ export const StyledHeader = styled(Flex)<IHeader>`
 	transition: top 0.3s ease;
 `;
 
-export const Logo = styled.div`
+export const Logo = styled.a`
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -35,9 +35,6 @@ export const Logo = styled.div`
 	padding: 8px;
 	width: 64px;
 	height: 64px;
-`;
-
-export const BackBtn = styled.a`
 	cursor: pointer;
 `;
 
@@ -232,7 +229,6 @@ export const CoverLine = styled.div<IThemed>`
 
 export const MainLogoBtn = styled.div`
 	display: none;
-	cursor: pointer;
 	${mediaQueries.laptopL} {
 		display: flex;
 	}
