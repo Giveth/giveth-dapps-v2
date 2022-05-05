@@ -27,6 +27,7 @@ import Rainbow_Rolls from '/public/images/partnerships/Rainbow_Rolls.svg';
 import Panvala from '/public/images/partnerships/Panvala.svg';
 import The_Giving_Block from '/public/images/partnerships/The_Giving_Block.svg';
 import Token_Engineering_Commons from '/public/images/partnerships/Token_Engineering_Commons.svg';
+import Change from '/public/images/partnerships/Change.svg';
 import OneHive from '/public/images/partnerships/1Hive.svg';
 import SDG_Impact_Fund from '/public/images/partnerships/SDG_Impact_Fund.svg';
 import DappNode from '/public/images/partnerships/DappNode.svg';
@@ -270,5 +271,11 @@ export const PartnershipArray: IPartner[] = [
 		description:
 			'Formerly the xDai Chain, Gnosis Chain provides stability, scalability and an extendable beacon chain framework.',
 		link: 'https://xdaichain.com',
+	},
+	{
+		icon: Change,
+		title: 'Change',
+		description: 'Donate cryptocurrency to 200K+ nonprofits.',
+		link: 'https://getchange.io/',
 	},
 ];
