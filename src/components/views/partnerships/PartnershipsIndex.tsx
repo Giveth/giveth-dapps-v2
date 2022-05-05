@@ -7,6 +7,12 @@ import { Arc } from '@/components/styled-components/Arc';
 import { PartnershipArray, IPartner } from '@/content/Partnerships';
 
 const PartnershipsIndex = () => {
+	function sortPartners(x: IPartner, y: IPartner) {
+		return x.title.localeCompare(y.title);
+	}
+
+	const sortedPartnerships = PartnershipArray.sort(sortPartners);
+
 	return (
 		<div style={{ position: 'relative', overflow: 'hidden' }}>
 			<MustardArc />
@@ -19,7 +25,7 @@ const PartnershipsIndex = () => {
 				</Caption>
 				<PartnershipsContainer>
 					<OurPartners>Our partners and friends</OurPartners>
-					{PartnershipArray.map((partner: IPartner) => (
+					{sortedPartnerships.map((partner: IPartner) => (
 						<PartnershipsCard
 							key={partner.title}
 							description={partner.description}
