@@ -41,7 +41,10 @@ const HomePurpleSection = () => {
 	};
 
 	const url = !isSSRMode ? window?.location?.href : null;
-	const shareTitle = `I am a Giver and you can be one too! 💙 @givethio. Let's Build the Future of Giving together! 🙌 🌈 #maketheworldabetterplace 🌏 💜`;
+	const shareTitle = `Imagine a future where...
+Giving is effortless and people all around the world are rewarded for creating positive change.
+	
+Explore @givethio to support this vision for the Future of Giving. 💜`;
 
 	return (
 		<Wrapper>

@@ -5,12 +5,8 @@ import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { networksParams } from '@/helpers/blockchain';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import { sendTransaction, showToastError } from '@/lib/helpers';
-import { saveDonation, saveDonationTransaction } from '@/services/donation';
+import { saveDonation } from '@/services/donation';
 import { IDonateModalProps } from '@/components/modals/DonateModal';
-import {
-	confirmEtherTransaction,
-	IEthTxConfirmation,
-} from '@/services/transaction';
 
 export interface ISelectedToken extends IProjectAcceptedToken {
 	value?: IProjectAcceptedToken;
@@ -84,7 +80,7 @@ export const getNetworkNames = (networks: number[], text: string) => {
 	});
 };
 
-interface IConfirmDonation extends IDonateModalProps {
+export interface IConfirmDonation extends IDonateModalProps {
 	setDonationSaved: (value: boolean) => void;
 	web3Context: Web3ReactContextInterface;
 	setDonating: (value: boolean) => void;
@@ -98,175 +94,47 @@ export const confirmDonation = async (props: IConfirmDonation) => {
 		setSuccessDonation,
 		web3Context,
 		setDonating,
+		setDonationSaved,
+		givBackEligible,
 	} = props;
 
 	const { library } = web3Context;
 	const { walletAddress } = project;
+	const { address } = token;
 
 	try {
-		// Traceable by default if it comes from Trace only
-		// Depends on the toggle if it's an IO to Trace project
-		// let traceable = project?.fromTrace
-		//   ? true
-		//   : isTraceable
-		//   ? isTraceable
-		//   : switchTraceable
-		// let traceable = false;
-
 		const toAddress = isAddressENS(walletAddress!)
 			? await getAddressFromENS(walletAddress!, library)
 			: walletAddress;
 
 		const transactionObj = {
 			to: toAddress,
-			// I CHANGED THIS: IMPORTANT
-			// value: ethers.utils.parseEther(subtotal.toString())
 			value: amount.toString(),
 		};
 
 		const txCallbacks = {
-			onTransactionHash: (transactionHash: string) =>
-				onTransactionHash({ transactionHash, toAddress, ...props }),
-			onReceiptGenerated: (receipt: any) => {
-				console.log({ receipt });
-				setSuccessDonation({
-					transactionHash: receipt?.transactionHash,
-					tokenSymbol: token.symbol,
-					subtotal: amount,
-				});
+			onTxHash: async (txHash: string) => {
+				await saveDonation({ txHash, toAddress, ...props });
+				setDonationSaved(true);
 			},
-			onError: showToastError,
+			onReceipt: (txHash: string) => {
+				setSuccessDonation({ txHash, givBackEligible });
+			},
 		};
 
-		await sendTransaction(
-			library,
-			transactionObj,
-			txCallbacks,
-			token.address,
-			// traceable,
-		);
-
-		// Commented notify, and instead we are using our own service
-		// transaction.notify(transactionHash)
+		await sendTransaction(library, transactionObj, txCallbacks, address);
 	} catch (error: any) {
 		setDonating(false);
+		setDonationSaved(false);
 		captureException(error);
-		if (
-			error?.data?.code === 'INSUFFICIENT_FUNDS' ||
-			error?.data?.code === 'UNPREDICTABLE_GAS_LIMIT'
-		) {
+		const code = error.data?.code;
+		if (code === ('INSUFFICIENT_FUNDS' || 'UNPREDICTABLE_GAS_LIMIT')) {
 			showToastError('Insufficient Funds');
 		} else showToastError(error);
-	}
-};
-
-interface IOnTransactionHash extends IConfirmDonation {
-	transactionHash: string;
-	toAddress: string;
-}
-
-const onTransactionHash = async (props: IOnTransactionHash) => {
-	const {
-		amount,
-		token,
-		anonymous,
-		setDonationSaved,
-		transactionHash,
-		project,
-		web3Context,
-		toAddress,
-	} = props;
-	const { id: projectId } = project;
-	const { account, library, chainId } = web3Context;
-	// Save initial txn details to db
-	const { donationId, savedDonation, saveDonationErrors } =
-		await saveDonation(
-			account!,
-			toAddress,
-			transactionHash,
-			chainId!,
-			amount,
-			token.symbol!,
-			Number(projectId),
-			token.address!,
-			anonymous!,
-		);
-	console.log('DONATION RESPONSE: ', {
-		donationId,
-		savedDonation,
-		saveDonationErrors,
-	});
-	setDonationSaved(true);
-	// onTransactionHash callback for event emitter
-	if (saveDonationErrors?.length > 0) {
-		showToastError(saveDonationErrors);
-	}
-	confirmEtherTransaction(
-		transactionHash,
-		(res: IEthTxConfirmation) => confirmTxCallback({ res, ...props }),
-		0,
-		library,
-	).then();
-	await saveDonationTransaction(transactionHash, donationId);
-};
-
-interface IConfirmTxCallback extends IOnTransactionHash {
-	res: IEthTxConfirmation;
-}
-
-const confirmTxCallback = (props: IConfirmTxCallback) => {
-	const {
-		res,
-		transactionHash,
-		setSuccessDonation,
-		setInProgress,
-		setUnconfirmed,
-		amount,
-		token,
-		givBackEligible,
-	} = props;
-	try {
-		if (!res) return;
-		// toast.dismiss()
-		if (res?.tooSlow === true) {
-			// Tx is being too slow
-			// toast.dismiss()
-			setSuccessDonation({
-				transactionHash,
-				tokenSymbol: token.symbol,
-				subtotal: amount,
-				givBackEligible,
-				tooSlow: true,
-			});
-			setInProgress(true);
-		} else if (res?.status) {
-			// Tx was successful
-			// toast.dismiss()
-			setSuccessDonation({
-				transactionHash,
-				tokenSymbol: token.symbol,
-				subtotal: amount,
-				givBackEligible,
-			});
-			setUnconfirmed(false);
-		} else {
-			// EVM reverted the transaction, it failed
-			setSuccessDonation({
-				transactionHash,
-				tokenSymbol: token.symbol,
-				subtotal: amount,
-				givBackEligible,
-			});
-			setUnconfirmed(true);
-			if (res?.error) {
-				showToastError(res.error);
-			} else {
-				showToastError(
-					"Transaction couldn't be confirmed or it failed",
-				);
-			}
-		}
-	} catch (error) {
-		showToastError(error);
+		captureException(error, {
+			tags: {
+				section: 'confirmDonation',
+			},
+		});
 	}
 };

@@ -1,7 +1,7 @@
 import NextErrorComponent from 'next/error';
-import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
-
 import * as Sentry from '@sentry/nextjs';
+
+import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
 import { statusCodes } from '@/lib/constants/constants';
 
 const MyError = ({ statusCode, hasGetInitialPropsRun, err }) => {

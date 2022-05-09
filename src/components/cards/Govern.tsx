@@ -3,6 +3,8 @@ import Image from 'next/image';
 import BigNumber from 'bignumber.js';
 import { utils, BigNumber as EthersBigNumber, constants } from 'ethers';
 import styled from 'styled-components';
+import { H2, H5, Lead } from '@giveth/ui-design-system';
+import { captureException } from '@sentry/nextjs';
 import {
 	APRRow,
 	ArrowButton,
@@ -28,7 +30,6 @@ import { formatEthHelper, formatWeiHelper, Zero } from '@/helpers/number';
 import { getGivStakingAPR } from '@/lib/stakingPool';
 import { APR } from '@/types/poolInfo';
 import { useTokenDistro } from '@/context/tokenDistro.context';
-import { H2, H5, Lead } from '@giveth/ui-design-system';
 import { useSubgraph } from '@/context';
 import { StakingType } from '@/types/config';
 import useClaim from '@/context/claim.context';
@@ -151,7 +152,14 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 				.then(_apr => {
 					mounted.current && setApr(_apr);
 				})
-				.catch(e => console.error('Error on fetching APR:', e));
+				.catch(e => {
+					console.error('Error on fetching APR:', e);
+					captureException(e, {
+						tags: {
+							section: 'getGivStakingAPR',
+						},
+					});
+				});
 		};
 
 		cb();

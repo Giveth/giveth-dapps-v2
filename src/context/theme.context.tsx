@@ -24,6 +24,8 @@ export const ThemeContext = createContext({
 	},
 });
 
+ThemeContext.displayName = 'ThemeContext';
+
 type Props = {
 	children?: ReactNode;
 };

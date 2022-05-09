@@ -95,12 +95,3 @@ export const SAVE_DONATION = gql`
 		)
 	}
 `;
-
-export const SAVE_DONATION_TRANSACTION = gql`
-	mutation ($transactionId: String!, $donationId: Float!) {
-		saveDonationTransaction(
-			transactionId: $transactionId
-			donationId: $donationId
-		)
-	}
-`;

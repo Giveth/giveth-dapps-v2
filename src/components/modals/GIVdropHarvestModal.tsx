@@ -1,4 +1,19 @@
 import { FC, useState, useEffect } from 'react';
+import {
+	B,
+	IconHelp,
+	brandColors,
+	Caption,
+	IconGIVStream,
+	Lead,
+} from '@giveth/ui-design-system';
+import { ethers, constants } from 'ethers';
+import { Zero } from '@ethersproject/constants';
+import BigNumber from 'bignumber.js';
+import Lottie from 'react-lottie';
+import styled from 'styled-components';
+import { useWeb3React } from '@web3-react/core';
+import { captureException } from '@sentry/nextjs';
 import { IModal, Modal } from './Modal';
 import {
 	ConfirmedInnerModal,
@@ -18,34 +33,20 @@ import {
 	TooltipContent,
 } from './HarvestAll.sc';
 import { formatWeiHelper } from '@/helpers/number';
-import {
-	B,
-	IconHelp,
-	brandColors,
-	Caption,
-	IconGIVStream,
-	Lead,
-} from '@giveth/ui-design-system';
 import { IconWithTooltip } from '../IconWithToolTip';
-import { ethers, constants } from 'ethers';
 import { AmountBoxWithPrice } from '../AmountBoxWithPrice';
 import { useTokenDistro } from '@/context/tokenDistro.context';
-import { Zero } from '@ethersproject/constants';
-import BigNumber from 'bignumber.js';
-import Lottie from 'react-lottie';
 import LoadingAnimation from '@/animations/loading.json';
 import { claimAirDrop } from '@/lib/claim';
-import type { TransactionResponse } from '@ethersproject/providers';
 import {
 	showPendingClaim,
 	showConfirmedClaim,
 	showFailedClaim,
 } from '../toasts/claim';
 import config from '@/configuration';
-import styled from 'styled-components';
 import { useSubgraph } from '@/context';
-import { useWeb3React } from '@web3-react/core';
 import { usePrice } from '@/context/price.context';
+import type { TransactionResponse } from '@ethersproject/providers';
 
 const loadingAnimationOptions = {
 	loop: true,
@@ -205,6 +206,11 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 		} catch (e) {
 			setClaimState(ClaimState.ERROR);
 			console.error(e);
+			captureException(e, {
+				tags: {
+					section: 'onClaimGivDropHarvestModal',
+				},
+			});
 		}
 	};
 

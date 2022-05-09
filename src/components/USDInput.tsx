@@ -2,6 +2,7 @@ import { GLink, neutralColors, brandColors } from '@giveth/ui-design-system';
 import { BigNumber, utils } from 'ethers';
 import { FC, useState, useCallback } from 'react';
 import styled from 'styled-components';
+import { captureException } from '@sentry/nextjs';
 import { formatWeiHelper } from '@/helpers/number';
 import { PoolStakingConfig } from '@/types/config';
 import { Flex } from './styled-components/Flex';
@@ -36,6 +37,11 @@ export const USDInput: FC<IAmountInput> = ({
 			temp = utils.parseUnits(value || '0').toString();
 		} catch (error) {
 			console.log('number is not acceptable');
+			captureException(error, {
+				tags: {
+					section: 'USDInput',
+				},
+			});
 			return;
 		}
 		setDisplayAmount(value);

@@ -11,9 +11,9 @@ import {
 	P,
 	semanticColors,
 } from '@giveth/ui-design-system';
-import { client } from '@/apollo/apolloClient';
 import { useRouter } from 'next/router';
 import { AnimatePresence, motion } from 'framer-motion';
+import { client } from '@/apollo/apolloClient';
 
 import {
 	DEACTIVATE_PROJECT,

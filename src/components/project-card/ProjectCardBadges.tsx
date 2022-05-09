@@ -9,6 +9,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
+import { captureException } from '@sentry/nextjs';
 import ShareModal from '../modals/ShareModal';
 import { likeProject, unlikeProject } from '@/lib/reaction';
 import { showToastError } from '@/lib/helpers';
@@ -72,6 +73,11 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 				}
 			} catch (e) {
 				showToastError(e);
+				captureException(e, {
+					tags: {
+						section: 'likeUnlikeProject',
+					},
+				});
 			} finally {
 				setLoading(false);
 			}

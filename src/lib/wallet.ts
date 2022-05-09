@@ -1,3 +1,4 @@
+import { captureException } from '@sentry/nextjs';
 import {
 	EWallets,
 	torusConnector,
@@ -19,6 +20,11 @@ const switchWalletConnectNetwork = async (chainId: number) => {
 		);
 	} catch (switchError: any) {
 		console.error(switchError);
+		captureException(switchError, {
+			tags: {
+				section: 'switchWalletConnectNetwork',
+			},
+		});
 	}
 };
 

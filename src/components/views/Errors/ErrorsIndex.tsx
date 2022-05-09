@@ -1,6 +1,8 @@
 import { D3 } from '@giveth/ui-design-system';
-import { statusCodes } from '@/lib/constants/constants';
 import Image from 'next/image';
+import { useEffect } from 'react';
+import Link from 'next/link';
+import { statusCodes } from '@/lib/constants/constants';
 import error401 from '/public/images/icons/errors/401.svg';
 import error403 from '/public/images/icons/errors/403.svg';
 import error404 from '/public/images/icons/errors/404.svg';
@@ -12,7 +14,6 @@ import discord from '/public/images/icons/discord.svg';
 import medium from '/public/images/icons/medium.svg';
 import givFontLogo from '/public/images/icons/giv_font_logo.svg';
 import { useGeneral } from '@/context/general.context';
-import { useEffect } from 'react';
 import links from '@/lib/constants/links';
 import {
 	ErrorContainer,
@@ -23,6 +24,8 @@ import {
 	CustomSmallWarningImage,
 	SocialContainer,
 	TextContainer,
+	StyledImage,
+	LogoContainer,
 } from './ErrorsIndex.sc';
 
 interface IErrorProps {
@@ -69,14 +72,16 @@ const ErrorsIndex = ({ statusCode }: IErrorProps) => {
 				<CustomH4>
 					<b>Oops!</b> {ErrorsObject[statusCode].title}
 				</CustomH4>
-				<div>
-					<Image
-						src={givFontLogo}
-						width='150'
-						height='100'
-						alt='giveth logo'
-					/>
-				</div>
+				<LogoContainer>
+					<Link href='/' passHref>
+						<StyledImage
+							src={givFontLogo}
+							width='150'
+							height='50'
+							alt='giveth logo'
+						/>
+					</Link>
+				</LogoContainer>
 			</TextContainer>
 			<SocialContainer>
 				<a href={discordLink} target='_blank' rel='noreferrer noopener'>

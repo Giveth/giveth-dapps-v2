@@ -11,15 +11,16 @@ import {
 import { Pool, Position } from '@uniswap/v3-sdk';
 import { Token } from '@uniswap/sdk-core';
 
+import BigNumber from 'bignumber.js';
+import { useWeb3React } from '@web3-react/core';
+import { captureException } from '@sentry/nextjs';
 import { LiquidityPosition } from '@/types/nfts';
 import config from '@/configuration';
 import { StakingType, UniswapV3PoolStakingConfig } from '@/types/config';
-import { useSubgraph } from '.';
 import { getUniswapV3TokenURI } from '@/services/subgraph.service';
 import { Zero } from '@/helpers/number';
-import BigNumber from 'bignumber.js';
 import { IUniswapV3Position } from '@/types/subgraph';
-import { useWeb3React } from '@web3-react/core';
+import { useSubgraph } from '.';
 
 const ERC721NftContext = createContext<{
 	stakedPositions: LiquidityPosition[];
@@ -31,6 +32,8 @@ const ERC721NftContext = createContext<{
 	// maxApr: BigNumber;
 	pool: Pool | null;
 } | null>(null);
+
+ERC721NftContext.displayName = 'ERC721NftContext';
 
 const uniswapV3PoolStakingConfig = config.MAINNET_CONFIG.pools.find(
 	p => p.type === StakingType.UNISWAPV3,
@@ -133,6 +136,11 @@ export const NftsProvider: FC<{ children: ReactNode }> = ({ children }) => {
 						});
 					} catch (err) {
 						console.log('error', err);
+						captureException(err, {
+							tags: {
+								section: 'transformToLiquidityPosition',
+							},
+						});
 					}
 				}
 
@@ -143,7 +151,12 @@ export const NftsProvider: FC<{ children: ReactNode }> = ({ children }) => {
 					uri: '',
 					_position,
 				};
-			} catch {
+			} catch (error) {
+				captureException(error, {
+					tags: {
+						section: 'transformToLiquidityPosition',
+					},
+				});
 				return null;
 			}
 		},
@@ -450,6 +463,11 @@ export const NftsProvider: FC<{ children: ReactNode }> = ({ children }) => {
 								'Error on fetching uri of token ' + tokenId,
 								e,
 							);
+							captureException(e, {
+								tags: {
+									section: 'downloadURI',
+								},
+							});
 						}
 					}
 
@@ -508,6 +526,11 @@ export const NftsProvider: FC<{ children: ReactNode }> = ({ children }) => {
 			} catch (e) {
 				setLoadingNftPositions(false);
 				console.log(`getAddressInfo failed: ${e}`);
+				captureException(e, {
+					tags: {
+						section: 'getAddressInfo',
+					},
+				});
 			}
 		};
 		loadPositions();

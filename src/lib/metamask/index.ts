@@ -1,7 +1,8 @@
 import { Contract } from 'ethers';
+import { JsonRpcProvider } from '@ethersproject/providers';
+import { captureException } from '@sentry/nextjs';
 import config from '@/configuration';
 import UNI_Json from '@/artifacts/UNI.json';
-import { JsonRpcProvider } from '@ethersproject/providers';
 import { networksParams } from '@/helpers/blockchain';
 
 const { abi: UNI_ABI } = UNI_Json;
@@ -38,6 +39,11 @@ const fetchTokenInfo = async (
 		};
 	} catch (error) {
 		console.error('error in fetchTokenInfo', error);
+		captureException(error, {
+			tags: {
+				section: 'fetchTokenInfo',
+			},
+		});
 	}
 	return;
 };
@@ -87,6 +93,11 @@ export async function switchNetwork(network: number): Promise<void> {
 		if (switchError.code === 4902) {
 			addNetwork(network);
 		}
+		captureException(switchError, {
+			tags: {
+				section: 'switchNetwork',
+			},
+		});
 	}
 }
 
@@ -119,5 +130,10 @@ export async function addToken_old(
 		}
 	} catch (error) {
 		console.log(error);
+		captureException(error, {
+			tags: {
+				section: 'addToken',
+			},
+		});
 	}
 }

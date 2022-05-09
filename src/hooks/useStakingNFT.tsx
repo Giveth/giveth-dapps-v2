@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { BigNumber } from '@ethersproject/bignumber';
+import { useWeb3React } from '@web3-react/core';
+import { captureException } from '@sentry/nextjs';
 import { useLiquidityPositions } from '@/context';
 import { StakingType, UniswapV3PoolStakingConfig } from '@/types/config';
-import { BigNumber } from '@ethersproject/bignumber';
 import config from '@/configuration';
 import { getUniswapV3StakerContract } from '@/lib/contracts';
 import { getReward } from '@/lib/stakingNFT';
-import { useWeb3React } from '@web3-react/core';
 
 export const useStakingNFT = () => {
 	const { account, chainId, library } = useWeb3React();
@@ -79,7 +80,13 @@ export const useStakingNFT = () => {
 					BigNumber.from(0),
 				);
 				setRewardBalance(allRewards);
-			} catch {}
+			} catch (error) {
+				captureException(error, {
+					tags: {
+						section: 'checkForRewards',
+					},
+				});
+			}
 		};
 		load();
 	}, [account, chainId, currentIncentive.key, stakedPositions, library]);

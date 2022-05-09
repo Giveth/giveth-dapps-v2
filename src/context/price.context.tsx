@@ -7,11 +7,12 @@ import {
 	useState,
 } from 'react';
 import BigNumber from 'bignumber.js';
+import { useWeb3React } from '@web3-react/core';
+import { captureException } from '@sentry/nextjs';
 import { Zero } from '@/helpers/number';
 import { useSubgraph } from '@/context/subgraph.context';
 import config from '@/configuration';
 import { useLiquidityPositions } from '@/context/positions.context';
-import { useWeb3React } from '@web3-react/core';
 
 export interface IPriceContext {
 	givPrice: BigNumber;
@@ -48,11 +49,18 @@ const fetchUniswapSubgraphTokenPrice = async (
 		return new BigNumber(data?.token?.derivedETH || 0);
 	} catch (e) {
 		console.error('Error fetching token price:', tokenAddress, e);
+		captureException(e, {
+			tags: {
+				section: 'fetUniswapSubgraphTokenPrice',
+			},
+		});
 		return Zero;
 	}
 };
 
 const PriceContext = createContext<IPriceContext>(priceDefaultValue);
+
+PriceContext.displayName = 'PriceContext';
 
 export const PriceProvider: FC = ({ children }) => {
 	const { chainId } = useWeb3React();
@@ -154,6 +162,11 @@ export const PriceProvider: FC = ({ children }) => {
 					'Error on getting eth price from crypto-compare:',
 					error,
 				);
+				captureException(error, {
+					tags: {
+						section: 'fetEthPrice',
+					},
+				});
 			});
 
 		const { MAINNET_CONFIG, XDAI_CONFIG } = config;

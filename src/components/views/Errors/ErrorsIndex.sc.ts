@@ -1,8 +1,8 @@
+import { H4, brandColors } from '@giveth/ui-design-system';
+import styled from 'styled-components';
+import Image from 'next/image';
 import { Arc } from '@/components/styled-components/Arc';
 import { mediaQueries } from '@/lib/constants/constants';
-import { H4, brandColors } from '@giveth/ui-design-system';
-
-import styled from 'styled-components';
 
 export const SocialContainer = styled.div`
 	display: flex;
@@ -143,4 +143,12 @@ export const ErrorContainer = styled.div`
 	${mediaQueries.tablet} {
 		padding: 150px 130px;
 	}
+`;
+
+export const LogoContainer = styled.div`
+	margin-top: 25px;
+`;
+
+export const StyledImage = styled(Image)`
+	cursor: pointer;
 `;

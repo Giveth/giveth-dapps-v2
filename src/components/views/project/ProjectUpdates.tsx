@@ -9,6 +9,7 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 
+import { captureException } from '@sentry/nextjs';
 import {
 	FETCH_PROJECT_UPDATES,
 	ADD_PROJECT_UPDATE,
@@ -98,6 +99,11 @@ const ProjectUpdates = (props: {
 			return true;
 		} catch (error: any) {
 			console.log({ error });
+			captureException(error, {
+				tags: {
+					section: 'editProjectUpdate',
+				},
+			});
 			return gToast(error?.message, {
 				type: ToastType.DANGER,
 				// direction: ToastDirection.RIGHT,
@@ -134,6 +140,11 @@ const ProjectUpdates = (props: {
 			return true;
 		} catch (error: any) {
 			showToastError(error);
+			captureException(error, {
+				tags: {
+					section: 'removeProjectUpdate',
+				},
+			});
 		}
 	};
 
@@ -196,6 +207,11 @@ const ProjectUpdates = (props: {
 				position: 'top-center',
 			});
 		} catch (error: any) {
+			captureException(error, {
+				tags: {
+					section: 'addProjectUpdate',
+				},
+			});
 			return showToastError(error);
 		}
 	};

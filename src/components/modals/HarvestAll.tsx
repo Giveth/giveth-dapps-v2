@@ -1,7 +1,5 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
-import { IModal, Modal } from './Modal';
 import Lottie from 'react-lottie';
-import LoadingAnimation from '@/animations/loading.json';
 import {
 	brandColors,
 	Caption,
@@ -12,6 +10,12 @@ import {
 	Lead,
 	P,
 } from '@giveth/ui-design-system';
+import { ethers } from 'ethers';
+import BigNumber from 'bignumber.js';
+import { useWeb3React } from '@web3-react/core';
+import { captureException } from '@sentry/nextjs';
+import { IModal, Modal } from './Modal';
+import LoadingAnimation from '@/animations/loading.json';
 import {
 	PoolStakingConfig,
 	RegenStreamConfig,
@@ -53,14 +57,11 @@ import {
 	BreakdownStreamSum,
 	PoolIcon,
 } from './HarvestAll.sc';
-import { ethers } from 'ethers';
-import BigNumber from 'bignumber.js';
 import { claimReward, fetchAirDropClaimData } from '@/lib/claim';
 import config from '@/configuration';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { AmountBoxWithPrice } from '@/components/AmountBoxWithPrice';
 import { usePrice } from '@/context/price.context';
-import { useWeb3React } from '@web3-react/core';
 import { getPoolIconWithName } from '../cards/BaseStakingCard';
 
 interface IHarvestAllModalProps extends IModal {
@@ -270,6 +271,11 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 					? HarvestStates.HARVEST
 					: HarvestStates.ERROR,
 			);
+			captureException(error, {
+				tags: {
+					section: 'onHarvest',
+				},
+			});
 		}
 	};
 

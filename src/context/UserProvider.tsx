@@ -9,6 +9,7 @@ import { useWeb3React } from '@web3-react/core';
 import { BigNumberish } from '@ethersproject/bignumber';
 import { formatEther } from '@ethersproject/units';
 
+import { captureException } from '@sentry/nextjs';
 import { initializeApollo } from '@/apollo/apolloClient';
 import { GET_USER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
 import { compareAddresses, showToastError, signMessage } from '@/lib/helpers';
@@ -49,6 +50,8 @@ const UserContext = createContext<IUserContext>({
 		getBalance: () => {},
 	},
 });
+
+UserContext.displayName = 'UserContext';
 
 const apolloClient = initializeApollo();
 
@@ -110,7 +113,14 @@ export const UserProvider = (props: { children: ReactNode }) => {
 				removeToken();
 				return newUser;
 			})
-			.catch(showToastError);
+			.catch((error: unknown) => {
+				showToastError(error);
+				captureException(error, {
+					tags: {
+						section: 'fetchUser',
+					},
+				});
+			});
 	};
 
 	const reFetchUser = () => {
@@ -154,7 +164,14 @@ export const UserProvider = (props: { children: ReactNode }) => {
 			.then((_balance: BigNumberish) => {
 				setBalance(parseFloat(formatEther(_balance)).toFixed(3));
 			})
-			.catch(() => setBalance(null));
+			.catch((error: unknown) => {
+				setBalance(null);
+				captureException(error, {
+					tags: {
+						section: 'getBalance',
+					},
+				});
+			});
 	};
 
 	const incrementLikedProjectsCount = () => {

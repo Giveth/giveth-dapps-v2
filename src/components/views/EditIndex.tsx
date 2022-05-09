@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
+import { captureException } from '@sentry/nextjs';
 import useUser from '@/context/UserProvider';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
@@ -57,7 +58,14 @@ const EditIndex = () => {
 						);
 					} else setProject(project);
 				})
-				.catch(showToastError);
+				.catch((error: unknown) => {
+					showToastError(error);
+					captureException(error, {
+						tags: {
+							section: 'EditIndex',
+						},
+					});
+				});
 		} else {
 			showWelcomeModal();
 		}

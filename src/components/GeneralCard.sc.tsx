@@ -79,7 +79,7 @@ export const HorizontalWrap = styled.div`
 	${mediaQueries.tablet} {
 		flex-direction: row;
 		padding: 45px 72px;
-		max-width: 1141px;
+		max-width: 1000px;
 		min-height: 220px;
 		width: 100%;
 	}

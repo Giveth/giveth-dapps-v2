@@ -1,4 +1,3 @@
-import { RegenPoolStakingConfig } from '@/types/config';
 import {
 	brandColors,
 	ButtonLink,
@@ -10,6 +9,7 @@ import {
 } from '@giveth/ui-design-system';
 import { Dispatch, FC, SetStateAction } from 'react';
 import styled from 'styled-components';
+import { RegenPoolStakingConfig } from '@/types/config';
 import { getCurIconWithName } from '../StakingPoolImages';
 import { Flex } from '../styled-components/Flex';
 import { StakeCardState } from './BaseStakingCard';

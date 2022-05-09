@@ -1,5 +1,15 @@
 import { useState, FC, useEffect } from 'react';
 import styled from 'styled-components';
+import { utils, BigNumber as EthersBigNumber, constants } from 'ethers';
+import BigNumber from 'bignumber.js';
+import {
+	Subline,
+	neutralColors,
+	IconHelp,
+	H2,
+	H5,
+	Lead,
+} from '@giveth/ui-design-system';
 import { InputWithUnit } from '../input/index';
 import { Flex } from '../styled-components/Flex';
 import {
@@ -19,18 +29,8 @@ import {
 	PreviousArrowButton,
 } from './common';
 import { IClaimViewCardProps } from '@/components/views/claim/Claim.view';
-import { utils, BigNumber as EthersBigNumber, constants } from 'ethers';
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import { formatWeiHelper, Zero } from '@/helpers/number';
-import BigNumber from 'bignumber.js';
-import {
-	Subline,
-	neutralColors,
-	IconHelp,
-	H2,
-	H5,
-	Lead,
-} from '@giveth/ui-design-system';
 import { IconWithTooltip } from '../IconWithToolTip';
 import useClaim from '@/context/claim.context';
 

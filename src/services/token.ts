@@ -1,5 +1,6 @@
 import { ethers } from 'ethers';
 
+import { captureException } from '@sentry/nextjs';
 import { IUser } from '@/apollo/types/types';
 import { initializeApollo } from '@/apollo/apolloClient';
 import { LOGIN_USER } from '@/apollo/gql/gqlAuth';
@@ -32,6 +33,11 @@ export async function getToken(
 			return data?.loginWallet?.token;
 		} catch (error) {
 			showToastError(error);
+			captureException(error, {
+				tags: {
+					section: 'getToken',
+				},
+			});
 		}
 	} else {
 		showToastError('Input data for getting token is incomplete');
@@ -53,5 +59,10 @@ export const fetchPrice = async (
 		return parseFloat(data[Object.keys(data)[0]]?.usd?.toFixed(2));
 	} catch (error) {
 		catchFunction(0);
+		captureException(error, {
+			tags: {
+				section: 'fetchPrice',
+			},
+		});
 	}
 };

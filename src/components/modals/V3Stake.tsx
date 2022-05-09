@@ -1,5 +1,4 @@
 import { FC, useState } from 'react';
-import { IModal, Modal } from './Modal';
 import {
 	B,
 	brandColors,
@@ -8,17 +7,20 @@ import {
 	neutralColors,
 	Overline,
 } from '@giveth/ui-design-system';
-import { CancelButton, HarvestButton, HelpRow, Pending } from './HarvestAll.sc';
 import Lottie from 'react-lottie';
-import { Flex } from '../styled-components/Flex';
 import styled from 'styled-components';
+import { BigNumber, constants } from 'ethers';
+import { useWeb3React } from '@web3-react/core';
+import { captureException } from '@sentry/nextjs';
+import { IModal, Modal } from './Modal';
+import { CancelButton, HarvestButton, HelpRow, Pending } from './HarvestAll.sc';
+import { Flex } from '../styled-components/Flex';
 import { PoolStakingConfig } from '@/types/config';
 import { StakingPoolImages } from '../StakingPoolImages';
 import V3StakingCard from '../cards/PositionCard';
 import { useLiquidityPositions, useSubgraph } from '@/context';
 import LoadingAnimation from '@/animations/loading.json';
 import { exit, getReward, transfer } from '@/lib/stakingNFT';
-import { BigNumber, constants } from 'ethers';
 import {
 	ConfirmedInnerModal,
 	ErrorInnerModal,
@@ -26,7 +28,6 @@ import {
 } from './ConfirmSubmit';
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import { getUniswapV3StakerContract } from '@/lib/contracts';
-import { useWeb3React } from '@web3-react/core';
 import { StakeState } from '@/lib/staking';
 
 const loadingAnimationOptions = {
@@ -97,8 +98,13 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 			} else {
 				setStakeStatus(StakeState.ERROR);
 			}
-		} catch {
+		} catch (error) {
 			setStakeStatus(StakeState.UNKNOWN);
+			captureException(error, {
+				tags: {
+					section: 'handleStakeUnstake',
+				},
+			});
 		}
 	};
 

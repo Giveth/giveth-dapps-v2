@@ -1,4 +1,3 @@
-import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import styled from 'styled-components';
 import {
 	brandColors,
@@ -6,6 +5,7 @@ import {
 	semanticColors,
 	SublineBold,
 } from '@giveth/ui-design-system';
+import { EProjectStatus } from '@/apollo/types/gqlEnums';
 
 const StatusBadge = (props: { status: EProjectStatus }) => {
 	const { status } = props;

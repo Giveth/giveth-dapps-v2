@@ -1,4 +1,25 @@
 import { Contract, ethers } from 'ethers';
+import BigNumber from 'bignumber.js';
+import {
+	JsonRpcProvider,
+	TransactionResponse,
+	Web3Provider,
+} from '@ethersproject/providers';
+import { captureException } from '@sentry/nextjs';
+import {
+	BalancerPoolStakingConfig,
+	PoolStakingConfig,
+	RegenFarmType,
+	RegenPoolStakingConfig,
+	SimplePoolStakingConfig,
+	StakingType,
+} from '@/types/config';
+import config from '../configuration';
+import { APR } from '@/types/poolInfo';
+import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
+import { Zero } from '@/helpers/number';
+import { IBalances, IUnipool } from '@/types/subgraph';
+import { getGasPreference } from '@/lib/helpers';
 
 import LM_Json from '../artifacts/UnipoolTokenDistributor.json';
 import UNI_Json from '../artifacts/UNI.json';
@@ -13,28 +34,6 @@ const { abi: BAL_WEIGHTED_POOL_ABI } = BAL_WEIGHTED_POOL_Json;
 const { abi: BAL_VAULT_ABI } = BAL_VAULT_Json;
 const { abi: TOKEN_MANAGER_ABI } = TOKEN_MANAGER_Json;
 const { abi: ERC20_ABI } = ERC20_Json;
-
-import { APR } from '@/types/poolInfo';
-import BigNumber from 'bignumber.js';
-import config from '../configuration';
-import {
-	BalancerPoolStakingConfig,
-	PoolStakingConfig,
-	RegenFarmType,
-	RegenPoolStakingConfig,
-	SimplePoolStakingConfig,
-	StakingType,
-} from '@/types/config';
-
-import {
-	JsonRpcProvider,
-	TransactionResponse,
-	Web3Provider,
-} from '@ethersproject/providers';
-import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
-import { Zero } from '@/helpers/number';
-import { IBalances, IUnipool } from '@/types/subgraph';
-import { getGasPreference } from '@/lib/helpers';
 
 const toBigNumber = (eb: ethers.BigNumber): BigNumber =>
 	new BigNumber(eb.toString());
@@ -158,6 +157,11 @@ const getBalancerPoolStakingAPR = async (
 					.times(lp);
 	} catch (e) {
 		console.error('error on fetching balancer apr:', e);
+		captureException(e, {
+			tags: {
+				section: 'getBalancerPoolStakingAPR',
+			},
+		});
 	}
 	return apr;
 };
@@ -224,6 +228,11 @@ const getSimplePoolStakingAPR = async (
 					.div(10 ** 18);
 	} catch (e) {
 		console.error('error on fetching apr:', e);
+		captureException(e, {
+			tags: {
+				section: 'getSimplePoolStakingAPR',
+			},
+		});
 	}
 
 	return apr;
@@ -397,6 +406,11 @@ export const approveERC20tokenTransfer = async (
 			if (!status) return false;
 		} catch (error) {
 			console.log('Error on Zero Approve', error);
+			captureException(error, {
+				tags: {
+					section: 'approveERC20tokenTransfer',
+				},
+			});
 			return false;
 		}
 	}
@@ -410,6 +424,11 @@ export const approveERC20tokenTransfer = async (
 		if (!status) return false;
 	} catch (error) {
 		console.log('Error on Amount Approve:', error);
+		captureException(error, {
+			tags: {
+				section: 'approveERC20tokenTransfer',
+			},
+		});
 		return false;
 	}
 	return true;
@@ -445,6 +464,11 @@ export const wrapToken = async (
 			);
 	} catch (error) {
 		console.log('Error on wrapping token:', error);
+		captureException(error, {
+			tags: {
+				section: 'wrapToken',
+			},
+		});
 	}
 };
 
@@ -477,6 +501,11 @@ export const unwrapToken = async (
 			);
 	} catch (error) {
 		console.log('Error on unwrapping token:', error);
+		captureException(error, {
+			tags: {
+				section: 'unwrapToken',
+			},
+		});
 		return;
 	}
 };
@@ -530,6 +559,11 @@ export const stakeTokens = async (
 		}
 	} catch (e) {
 		console.error('Error on staking:', e);
+		captureException(e, {
+			tags: {
+				section: 'stakeTokens',
+			},
+		});
 		return;
 	}
 };
@@ -556,6 +590,11 @@ export const harvestTokens = async (
 		);
 	} catch (error) {
 		console.error('Error on harvesting:', Error);
+		captureException(error, {
+			tags: {
+				section: 'harvestTokens',
+			},
+		});
 	}
 };
 
@@ -584,5 +623,10 @@ export const withdrawTokens = async (
 		);
 	} catch (e) {
 		console.error('Error on withdrawing:', e);
+		captureException(e, {
+			tags: {
+				section: 'withdrawTokens',
+			},
+		});
 	}
 };

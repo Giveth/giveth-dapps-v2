@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import { useWeb3React } from '@web3-react/core';
 
+import { captureException } from '@sentry/nextjs';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ethIcon from '/public/images/tokens/eth.png';
 import googleIcon from '/public/images/google_icon.svg';
@@ -48,7 +49,14 @@ const WelcomeModal = ({ setShowModal }: ISignInModal) => {
 				localStorage.setItem(StorageLabel.WALLET, EWallets.TORUS);
 				closeModal();
 			})
-			.catch(showToastError);
+			.catch(error => {
+				showToastError(error);
+				captureException(error, {
+					tags: {
+						section: 'connectTorus',
+					},
+				});
+			});
 	};
 
 	const onCloseLowerShields = () => {

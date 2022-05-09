@@ -33,6 +33,8 @@ const ModalContext = createContext<IModalContext>({
 	},
 });
 
+ModalContext.displayName = 'ModalContext';
+
 export const ModalProvider = (props: { children: ReactNode }) => {
 	const [showWalletModal, setShowWalletModal] = useState(false);
 	const [showWelcomeModal, setShowWelcomeModal] = useState(false);

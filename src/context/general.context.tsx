@@ -40,6 +40,8 @@ export const GeneralContext = createContext<IGeneralContext>({
 	setShowFooter: showFooter => {},
 });
 
+GeneralContext.displayName = 'GeneralContext';
+
 export const GeneralProvider: FC = ({ children }) => {
 	const [theme, setTheme] = useState<ETheme>(ETheme.Light);
 	const [showHeader, setShowHeader] = useState(true);

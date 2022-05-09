@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { utils, Contract, ethers } from 'ethers';
 import { TransactionResponse, Web3Provider } from '@ethersproject/providers';
 
+import { captureException } from '@sentry/nextjs';
 import { LiquidityPosition } from '@/types/nfts';
 import {
 	getNftManagerPositionsContract,
@@ -55,6 +56,11 @@ export const transfer = async (
 		return tx;
 	} catch (e) {
 		console.warn(e);
+		captureException(e, {
+			tags: {
+				section: 'transferStakingNFT',
+			},
+		});
 	}
 };
 
@@ -105,6 +111,11 @@ export const exit = async (
 		return tx;
 	} catch (e) {
 		console.warn(e);
+		captureException(e, {
+			tags: {
+				section: 'exitStakingNFT',
+			},
+		});
 	}
 };
 
@@ -176,6 +187,11 @@ export const claim = async (
 		);
 	} catch (e) {
 		console.warn(e);
+		captureException(e, {
+			tags: {
+				section: 'claimStakingNFT',
+			},
+		});
 	}
 };
 
@@ -203,6 +219,11 @@ export const stake = async (
 		);
 	} catch (e) {
 		console.warn(e);
+		captureException(e, {
+			tags: {
+				section: 'stakesNFT',
+			},
+		});
 	}
 };
 

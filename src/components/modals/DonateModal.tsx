@@ -29,9 +29,7 @@ export interface IDonateModalProps {
 	amount: number;
 	price?: number;
 	anonymous?: boolean;
-	setInProgress?: any;
 	setSuccessDonation: (i: ISuccessDonation) => void;
-	setUnconfirmed?: any;
 	givBackEligible?: boolean;
 }
 
@@ -48,7 +46,7 @@ const DonateModal = (props: IDonateModalProps) => {
 	const avgPrice = price && price * amount;
 
 	const handleDonate = () => {
-		setDonating(!donating);
+		setDonating(true);
 		confirmDonation({
 			...props,
 			setDonationSaved,
@@ -91,7 +89,6 @@ const DonateModal = (props: IDonateModalProps) => {
 					)}
 					<DonateButton
 						buttonType='primary'
-						donating={donating}
 						disabled={donating}
 						label={donating ? 'DONATING' : 'DONATE'}
 						onClick={handleDonate}
@@ -141,8 +138,8 @@ const DonatingBox = styled.div`
 `;
 
 const DonateButton = styled(Button)`
-	background: ${(props: { donating: boolean }) =>
-		props.donating ? brandColors.giv[200] : brandColors.giv[500]};
+	background: ${(props: { disabled: boolean }) =>
+		props.disabled ? brandColors.giv[200] : brandColors.giv[500]};
 	:hover:enabled {
 		background: ${brandColors.giv[700]};
 	}

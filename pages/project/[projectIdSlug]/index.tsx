@@ -1,3 +1,4 @@
+import { captureException } from '@sentry/nextjs';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 import { IProject } from '@/apollo/types/types';
@@ -28,6 +29,11 @@ export async function getServerSideProps(props: {
 		};
 	} catch (e) {
 		console.log({ e });
+		captureException(e, {
+			tags: {
+				section: 'ProjectSSR',
+			},
+		});
 		return {
 			props: {
 				project: null,

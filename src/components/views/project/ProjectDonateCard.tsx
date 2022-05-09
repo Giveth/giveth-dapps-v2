@@ -14,12 +14,12 @@ import {
 	brandColors,
 	neutralColors,
 	OulineButton,
-	ButtonText,
 	Caption,
 	IconHelp,
 } from '@giveth/ui-design-system';
 import { motion } from 'framer-motion';
 
+import { captureException } from '@sentry/nextjs';
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import { Shadow } from '@/components/styled-components/Shadow';
 import CategoryBadge from '@/components/badges/CategoryBadge';
@@ -124,6 +124,11 @@ const ProjectDonateCard = ({
 				}
 			} catch (e) {
 				showToastError(e);
+				captureException(e, {
+					tags: {
+						section: 'likeUnline Project Donate',
+					},
+				});
 			} finally {
 				setLoading(false);
 			}
@@ -147,6 +152,11 @@ const ProjectDonateCard = ({
 				setReaction(data?.projectById?.reaction);
 			} catch (e) {
 				showToastError(e);
+				captureException(e, {
+					tags: {
+						section: 'fetchProjectReaction',
+					},
+				});
 			}
 		} else if (reaction) {
 			setReaction(undefined);
@@ -191,6 +201,11 @@ const ProjectDonateCard = ({
 				}
 			} catch (e) {
 				showToastError(e);
+				captureException(e, {
+					tags: {
+						section: 'handleProjectStatus',
+					},
+				});
 			}
 		}
 	};

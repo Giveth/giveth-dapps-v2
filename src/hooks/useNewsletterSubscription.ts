@@ -1,5 +1,6 @@
-import { autopilotClient } from '@/services/autopilot';
 import { useState } from 'react';
+import { captureException } from '@sentry/nextjs';
+import { autopilotClient } from '@/services/autopilot';
 
 function validateEmail(email: string): boolean {
 	const re =
@@ -24,7 +25,14 @@ const useNewsletterSubscription = () => {
 				},
 			})
 			.then(() => setSuccessSubscription(true))
-			.catch(e => console.log(e.response));
+			.catch(e => {
+				console.log(e.response);
+				captureException(e, {
+					tags: {
+						section: 'submitNewsletterSubscription',
+					},
+				});
+			});
 	};
 	return {
 		submitSubscription,

@@ -18,6 +18,7 @@ import Select, {
 	MenuListProps,
 } from 'react-select';
 
+import { captureException } from '@sentry/nextjs';
 import useDeviceDetect from '@/hooks/useDeviceDetect';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import XIcon from '/public/images/x-icon.svg';
@@ -50,6 +51,11 @@ const ImageIcon = (props: { symbol: string }) => {
 		image_path = `/images/tokens/${symbol?.toLowerCase()}.png`;
 	} catch (err) {
 		image_path = '/images/tokens/eth.png'; //set default image path
+		captureException(err, {
+			tags: {
+				section: 'TokenPickerImageIcon',
+			},
+		});
 	}
 	return <Image alt={symbol} src={image_path} width='24px' height='24px' />;
 };

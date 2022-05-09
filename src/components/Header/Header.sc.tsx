@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { zIndex } from '@/lib/constants/constants';
 import {
 	neutralColors,
 	brandColors,
@@ -7,6 +6,7 @@ import {
 	GLink,
 	ButtonLink,
 } from '@giveth/ui-design-system';
+import { zIndex } from '@/lib/constants/constants';
 import { Flex } from '@/components/styled-components/Flex';
 import { Button as CButton } from '@/components/styled-components/Button';
 import { IHeader } from './Header';
@@ -24,7 +24,7 @@ export const StyledHeader = styled(Flex)<IHeader>`
 	transition: top 0.3s ease;
 `;
 
-export const Logo = styled.div`
+export const Logo = styled.a`
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -35,9 +35,6 @@ export const Logo = styled.div`
 	padding: 8px;
 	width: 64px;
 	height: 64px;
-`;
-
-export const BackBtn = styled.a`
 	cursor: pointer;
 `;
 

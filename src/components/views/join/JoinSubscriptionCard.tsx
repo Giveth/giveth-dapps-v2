@@ -40,12 +40,7 @@ const JoinSubscriptionCard = () => {
 				<Caption fullWidth>{captionText} </Caption>
 				{!successSubscription && (
 					<SubscriptionActionWrapper>
-						<div
-							style={{
-								width: '100%',
-								position: 'relative',
-							}}
-						>
+						<InputWrapper>
 							<EmailInput
 								placeholder='Your Email Address'
 								error={error}
@@ -58,7 +53,7 @@ const JoinSubscriptionCard = () => {
 									Please insert a valid email address!
 								</InvalidEmail>
 							)}
-						</div>
+						</InputWrapper>
 						<CustomizedButtonStyled
 							disabled={!validateEmail(email)}
 							label='Subscribe'
@@ -74,6 +69,7 @@ const JoinSubscriptionCard = () => {
 
 const CustomizedButtonStyled = styled(ButtonStyled)`
 	margin-top: 10px;
+	min-width: 280px;
 	&:disabled {
 		background-color: ${neutralColors.gray[400]};
 		color: white;
@@ -96,7 +92,6 @@ const EmailInput = styled.input<{ error?: boolean }>`
 	padding: 14px 25px;
 	height: 50px;
 	width: 100%;
-	min-width: 300px;
 	max-width: 600px;
 	&:focus {
 		outline: none !important;
@@ -117,6 +112,11 @@ const SubscriptionActionWrapper = styled.div`
 	${mediaQueries.tablet} {
 		flex-direction: row;
 	}
+`;
+
+const InputWrapper = styled.div`
+	width: 100%;
+	position: relative;
 `;
 
 export default JoinSubscriptionCard;

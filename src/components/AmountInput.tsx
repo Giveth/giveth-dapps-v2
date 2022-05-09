@@ -2,6 +2,7 @@ import { GLink, neutralColors, brandColors } from '@giveth/ui-design-system';
 import { BigNumber, utils } from 'ethers';
 import { FC, useState, useCallback, Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
+import { captureException } from '@sentry/nextjs';
 import { formatWeiHelper } from '@/helpers/number';
 import { PoolStakingConfig } from '@/types/config';
 import { Flex } from './styled-components/Flex';
@@ -44,6 +45,11 @@ export const AmountInput: FC<IAmountInput> = ({
 			valueBn = utils.parseUnits(value);
 		} catch (error) {
 			console.debug(`Failed to parse input amount: "${value}"`, error);
+			captureException(error, {
+				tags: {
+					section: 'AmountInput',
+				},
+			});
 		}
 
 		setAmount(valueBn.toString());
