@@ -50,6 +50,7 @@ const renderPools = (
 ) => {
 	return pools
 		.filter(p => (showArchivedPools ? p : p.active === active))
+		.sort(p => (p.active ? -1 : 1))
 		.map((poolStakingConfig, index) => {
 			return (
 				<Col
@@ -191,12 +192,6 @@ export const TabGIVfarmBottom = () => {
 				{chainId === config.XDAI_NETWORK_NUMBER && (
 					<>
 						<PoolRow>
-							{renderPools(
-								config.XDAI_CONFIG.pools,
-								config.XDAI_NETWORK_NUMBER,
-								true,
-								showArchivedPools,
-							)}
 							<Col sm={6} lg={4}>
 								<StakingPoolCard
 									network={config.XDAI_NETWORK_NUMBER}
@@ -205,6 +200,12 @@ export const TabGIVfarmBottom = () => {
 									)}
 								/>
 							</Col>
+							{renderPools(
+								config.XDAI_CONFIG.pools,
+								config.XDAI_NETWORK_NUMBER,
+								true,
+								showArchivedPools,
+							)}
 						</PoolRow>
 						<GIVfrens
 							regenFarms={config.XDAI_CONFIG.regenFarms}
@@ -222,12 +223,6 @@ export const TabGIVfarmBottom = () => {
 								!givEconomySupportedNetworks.includes(chainId)
 							}
 						>
-							{renderPools(
-								config.MAINNET_CONFIG.pools,
-								config.MAINNET_NETWORK_NUMBER,
-								true,
-								showArchivedPools,
-							)}
 							<Col sm={6} lg={4}>
 								<StakingPoolCard
 									network={config.MAINNET_NETWORK_NUMBER}
@@ -236,6 +231,12 @@ export const TabGIVfarmBottom = () => {
 									)}
 								/>
 							</Col>
+							{renderPools(
+								config.MAINNET_CONFIG.pools,
+								config.MAINNET_NETWORK_NUMBER,
+								true,
+								showArchivedPools,
+							)}
 						</PoolRow>
 						<GIVfrens
 							regenFarms={config.XDAI_CONFIG.regenFarms}
