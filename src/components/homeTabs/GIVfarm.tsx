@@ -45,11 +45,10 @@ import {
 const renderPools = (
 	pools: BasicNetworkConfig['pools'],
 	network: number,
-	active: boolean,
 	showArchivedPools?: boolean,
 ) => {
 	return pools
-		.filter(p => (showArchivedPools ? p : p.active === active))
+		.filter(p => (showArchivedPools ? true : !!p.active))
 		.sort(p => (p.active ? -1 : 1))
 		.map((poolStakingConfig, index) => {
 			return (
@@ -203,7 +202,6 @@ export const TabGIVfarmBottom = () => {
 							{renderPools(
 								config.XDAI_CONFIG.pools,
 								config.XDAI_NETWORK_NUMBER,
-								true,
 								showArchivedPools,
 							)}
 						</PoolRow>
@@ -234,7 +232,6 @@ export const TabGIVfarmBottom = () => {
 							{renderPools(
 								config.MAINNET_CONFIG.pools,
 								config.MAINNET_NETWORK_NUMBER,
-								true,
 								showArchivedPools,
 							)}
 						</PoolRow>
