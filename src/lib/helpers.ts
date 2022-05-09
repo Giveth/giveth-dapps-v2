@@ -1,4 +1,5 @@
 import { promisify } from 'util';
+import { unescape } from 'lodash';
 import { parseUnits, parseEther } from '@ethersproject/units';
 import { keccak256 } from '@ethersproject/keccak256';
 import { Contract } from '@ethersproject/contracts';
@@ -127,12 +128,13 @@ export const isUserRegistered = (user?: IUser) => {
 
 export const htmlToText = (text?: string) => {
 	if (!text) return;
-	return text
+	const formattedText = text
+		.replace(/<[^>]+>/g, '')
 		.replace(/<\/(?:.|\n)*?>/gm, ' ') // replace closing tags w/ a space
 		.replace(/<(?:.|\n)*?>/gm, '') // strip opening tags
 		.trim();
+	return unescape(formattedText);
 };
-
 export const capitalizeFirstLetter = (string: string) => {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 };
