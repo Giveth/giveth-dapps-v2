@@ -227,7 +227,7 @@ const ProjectDonationTable = ({
 								</TableCell>
 								<TableCell>
 									<P>{donation.amount}</P>
-									{!donation.anonymous && 
+									{!donation.anonymous && (
 										<ExternalLink
 											href={formatTxLink(
 												donation.transactionNetworkId,
@@ -239,7 +239,7 @@ const ProjectDonationTable = ({
 												color={brandColors.pinky[500]}
 											/>
 										</ExternalLink>
-									}
+									)}
 								</TableCell>
 								<TableCell>
 									{donation.valueUsd && (
