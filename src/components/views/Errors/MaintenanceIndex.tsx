@@ -1,6 +1,7 @@
 import { H1, H4 } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import { useEffect } from 'react';
+import Link from 'next/link';
 import links from '@/lib/constants/links';
 import { useGeneral } from '@/context/general.context';
 import givFontLogo from '/public/images/icons/giv_font_logo.svg';
@@ -17,6 +18,8 @@ import {
 	CustomGearImage,
 	CustomGearsImage,
 	MustardSpan,
+	LogoContainer,
+	StyledImage,
 } from './ErrorsIndex.sc';
 const MaintenanceIndex = () => {
 	const { setShowFooter, setShowHeader } = useGeneral();
@@ -60,14 +63,16 @@ const MaintenanceIndex = () => {
 						</b>
 					</H4>
 				</div>
-				<div>
-					<Image
-						src={givFontLogo}
-						width='150'
-						height='100'
-						alt='giveth logo'
-					/>
-				</div>
+				<LogoContainer>
+					<Link href='/' passHref>
+						<StyledImage
+							src={givFontLogo}
+							width='150'
+							height='50'
+							alt='giveth logo'
+						/>
+					</Link>
+				</LogoContainer>
 			</TextContainer>
 			<SocialContainer>
 				<a href={discordLink} target='_blank' rel='noreferrer noopener'>
