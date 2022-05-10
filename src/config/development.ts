@@ -95,8 +95,39 @@ const config: EnvConfig = {
 				active: false,
 			},
 		],
-		regenStreams: [],
-		regenFarms: [],
+		regenStreams: [
+			{
+				tokenDistroAddress: '0x00',
+				type: StreamType.CULT,
+				title: 'CULT DAO',
+				rewardTokenAddress: '0x00',
+				rewardTokenSymbol: 'CULT',
+				tokenAddressOnUniswapV2: '0x00',
+			},
+		],
+		regenFarms: [
+			{
+				POOL_ADDRESS: '0x00',
+				LM_ADDRESS: '0x00',
+				type: StakingType.UNISWAPV2,
+				network: 1,
+				title: 'CULT / ETH',
+				description: '50% CULT, 50% ETH',
+				provideLiquidityLink:
+					'https://app.honeyswap.org/#/add/0x00/0x00',
+				unit: 'LP',
+				regenStreamType: StreamType.CULT,
+				regenFarmType: RegenFarmType.CULT_ETH,
+				regenFarmIntro: {
+					title: 'CULT',
+					description:
+						'The purpose of CULT is to empower and fund those building and contributing towards our decentralized future. Our society is built to make it as difficut as possible to break away from societal, economic and other norms.',
+					link: 'https://cultdao.io/',
+				},
+				farmStartTimeMS: 1646306818206,
+				active: true,
+			},
+		],
 	},
 
 	XDAI_CONFIG: {
@@ -177,6 +208,7 @@ const config: EnvConfig = {
 				POOL_ADDRESS: '0xD28C07F802212F04AF41834ec0CC81d2d283124B',
 				LM_ADDRESS: '0x06851400866e065972ff21e1ECdE035b4772736d',
 				type: StakingType.HONEYSWAP,
+				network: 100,
 				title: 'FOX / HNY',
 				description: '50% FOX, 50% HNY',
 				provideLiquidityLink:
