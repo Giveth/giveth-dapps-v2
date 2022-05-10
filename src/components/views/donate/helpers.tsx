@@ -92,6 +92,7 @@ export const confirmDonation = async (props: IConfirmDonation) => {
 		amount,
 		token,
 		setSuccessDonation,
+		setShowFailedModal,
 		web3Context,
 		setDonating,
 		setDonationSaved,
@@ -126,11 +127,13 @@ export const confirmDonation = async (props: IConfirmDonation) => {
 	} catch (error: any) {
 		setDonating(false);
 		setDonationSaved(false);
-		captureException(error);
 		const code = error.data?.code;
 		if (code === ('INSUFFICIENT_FUNDS' || 'UNPREDICTABLE_GAS_LIMIT')) {
 			showToastError('Insufficient Funds');
-		} else showToastError(error);
+		} else {
+			setShowFailedModal(true);
+			showToastError(error);
+		}
 		captureException(error, {
 			tags: {
 				section: 'confirmDonation',

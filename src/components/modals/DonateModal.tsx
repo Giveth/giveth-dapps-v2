@@ -24,6 +24,7 @@ import { confirmDonation } from '@/components/views/donate/helpers';
 
 export interface IDonateModalProps {
 	setShowModal: (i: boolean) => void;
+	setShowFailedModal: (i: boolean) => void;
 	project: IProject;
 	token: IProjectAcceptedToken;
 	amount: number;

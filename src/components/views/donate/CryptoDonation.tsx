@@ -50,6 +50,7 @@ import useModal from '@/context/ModalProvider';
 import { getERC20Info } from '@/lib/contracts';
 import GIVBackToast from '@/components/views/donate/GIVBackToast';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
+import FailedDonation from '@/components/modals/FaliedDonation';
 
 const ethereumChain = config.PRIMARY_NETWORK;
 const xdaiChain = config.SECONDARY_NETWORK;
@@ -109,6 +110,7 @@ const CryptoDonation = (props: {
 	const [acceptedTokens, setAcceptedTokens] =
 		useState<IProjectAcceptedToken[]>();
 	const [acceptedChains, setAcceptedChains] = useState<number[]>();
+	const [showFailedModal, setShowFailedModal] = useState(false);
 
 	const stopPolling = useRef<any>(null);
 	const tokenSymbol = selectedToken?.symbol;
@@ -328,6 +330,7 @@ const CryptoDonation = (props: {
 				<DonateModal
 					setShowModal={setShowDonateModal}
 					setSuccessDonation={setSuccessDonation}
+					setShowFailedModal={setShowFailedModal}
 					project={project}
 					token={selectedToken}
 					amount={amountTyped}
@@ -337,6 +340,9 @@ const CryptoDonation = (props: {
 						projectIsGivBackEligible && tokenIsGivBackEligible
 					}
 				/>
+			)}
+			{showFailedModal && (
+				<FailedDonation setShowModal={setShowFailedModal} />
 			)}
 
 			<InputContainer>
