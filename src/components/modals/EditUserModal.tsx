@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useMutation } from '@apollo/client';
 import { Button, brandColors } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
-import { IModal, Modal } from './Modal';
+import { Modal } from './Modal';
 import { client } from '@/apollo/apolloClient';
 import { UPDATE_USER } from '@/apollo/gql/gqlUser';
 import { IUser } from '@/apollo/types/types';
@@ -19,6 +19,7 @@ import Input, {
 } from '../Input';
 import { IUserInfo } from '../views/onboarding/InfoStep';
 import { mediaQueries } from '@/lib/constants/constants';
+import { IModal } from '@/types/common';
 
 enum EditStatusType {
 	INFO,

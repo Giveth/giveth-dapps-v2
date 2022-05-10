@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import { H3, P, brandColors, neutralColors, B } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
@@ -19,12 +19,9 @@ import useModal from '@/context/ModalProvider';
 import StorageLabel from '@/lib/localStorage';
 import LowerShields from '@/components/modals/LowerShields';
 import { Modal } from './Modal';
+import { IModal } from '@/types/common';
 
-interface ISignInModal {
-	setShowModal: (x: boolean) => void;
-}
-
-const WelcomeModal = ({ setShowModal }: ISignInModal) => {
+const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 	const [showLowerShields, setShowLowerShields] = useState<boolean>();
 
 	const { activate } = useWeb3React();

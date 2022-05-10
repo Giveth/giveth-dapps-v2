@@ -12,7 +12,7 @@ import styled from 'styled-components';
 import { BigNumber, constants } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
-import { IModal, Modal } from './Modal';
+import { Modal } from './Modal';
 import { CancelButton, HarvestButton, HelpRow, Pending } from './HarvestAll.sc';
 import { Flex } from '../styled-components/Flex';
 import { PoolStakingConfig } from '@/types/config';
@@ -29,6 +29,7 @@ import {
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import { getUniswapV3StakerContract } from '@/lib/contracts';
 import { StakeState } from '@/lib/staking';
+import { IModal } from '@/types/common';
 
 const loadingAnimationOptions = {
 	loop: true,

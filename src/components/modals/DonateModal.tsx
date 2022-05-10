@@ -21,9 +21,9 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { ISuccessDonation } from '@/components/views/donate/CryptoDonation';
 import { confirmDonation } from '@/components/views/donate/helpers';
+import { IModal } from '@/types/common';
 
-export interface IDonateModalProps {
-	setShowModal: (i: boolean) => void;
+export interface IDonateModalProps extends IModal {
 	project: IProject;
 	token: IProjectAcceptedToken;
 	amount: number;
