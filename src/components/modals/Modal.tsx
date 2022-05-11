@@ -1,5 +1,5 @@
 import { brandColors, neutralColors } from '@giveth/ui-design-system';
-import React, { ReactNode, useEffect, useRef } from 'react';
+import { FC, ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import dynamic from 'next/dynamic';
@@ -19,7 +19,7 @@ interface ModalWrapperProps {
 	fullScreen?: boolean;
 }
 
-export interface IModal extends ModalWrapperProps {
+interface IModal extends ModalWrapperProps {
 	fullScreen?: boolean;
 	setShowModal: (value: boolean) => void;
 	callback?: () => void;
@@ -32,7 +32,7 @@ export interface IModal extends ModalWrapperProps {
 	headerColor?: string;
 }
 
-export const Modal: React.FC<IModal> = ({
+export const Modal: FC<IModal> = ({
 	hiddenClose = false,
 	hiddenHeader = false,
 	setShowModal,

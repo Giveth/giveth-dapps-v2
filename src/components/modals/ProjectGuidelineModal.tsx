@@ -2,9 +2,10 @@ import { FC } from 'react';
 import styled from 'styled-components';
 import { P, neutralColors, brandColors } from '@giveth/ui-design-system';
 
-import { IModal, Modal } from '@/components/modals/Modal';
+import { Modal } from '@/components/modals/Modal';
 import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
+import { IModal } from '@/types/common';
 
 export const ProjectGuidelineModal: FC<IModal> = ({ setShowModal }) => {
 	return (

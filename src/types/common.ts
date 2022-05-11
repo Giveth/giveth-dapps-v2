@@ -1,3 +1,3 @@
-export interface IModalProps {
+export interface IModal {
 	setShowModal: (showModal: boolean) => void;
 }

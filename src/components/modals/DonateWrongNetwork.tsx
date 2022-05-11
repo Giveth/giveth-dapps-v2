@@ -7,9 +7,10 @@ import { mediaQueries } from '@/lib/constants/constants';
 import config from '@/configuration';
 import { IconEthereum } from '../Icons/Eth';
 import { IconGnosisChain } from '../Icons/GnosisChain';
-import { Modal, IModal } from './Modal';
+import { Modal } from './Modal';
 import { switchNetwork } from '@/lib/wallet';
 import { getNetworkNames } from '@/components/views/donate/helpers';
+import { IModal } from '@/types/common';
 
 interface IDonateWrongNetwork extends IModal {
 	targetNetworks: number[];

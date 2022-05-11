@@ -4,7 +4,7 @@ import { neutralColors, Button, H4 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { BigNumber } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
-import { Modal, IModal } from './Modal';
+import { Modal } from './Modal';
 import { Flex } from '../styled-components/Flex';
 import { PoolStakingConfig } from '@/types/config';
 import { StakingPoolImages } from '../StakingPoolImages';
@@ -17,6 +17,7 @@ import {
 	SubmittedInnerModal,
 } from './ConfirmSubmit';
 import { StakeState } from '@/lib/staking';
+import { IModal } from '@/types/common';
 
 const loadingAnimationOptions = {
 	loop: true,
@@ -26,6 +27,7 @@ const loadingAnimationOptions = {
 		preserveAspectRatio: 'xMidYMid slice',
 	},
 };
+
 interface IUnStakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
 	maxAmount: BigNumber;

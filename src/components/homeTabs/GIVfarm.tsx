@@ -187,7 +187,6 @@ export const TabGIVfarmBottom = () => {
 						isSelected={showArchivedPools}
 					/>
 				</ArchivedPoolsToggle>
-
 				{chainId === config.XDAI_NETWORK_NUMBER && (
 					<>
 						<PoolRow>
@@ -236,8 +235,8 @@ export const TabGIVfarmBottom = () => {
 							)}
 						</PoolRow>
 						<GIVfrens
-							regenFarms={config.XDAI_CONFIG.regenFarms}
-							network={config.XDAI_NETWORK_NUMBER}
+							regenFarms={config.MAINNET_CONFIG.regenFarms}
+							network={config.MAINNET_NETWORK_NUMBER}
 						/>
 					</>
 				)}

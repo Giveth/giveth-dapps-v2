@@ -14,7 +14,7 @@ import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
-import { IModal, Modal } from './Modal';
+import { Modal } from './Modal';
 import LoadingAnimation from '@/animations/loading.json';
 import {
 	PoolStakingConfig,
@@ -63,6 +63,7 @@ import { IconWithTooltip } from '../IconWithToolTip';
 import { AmountBoxWithPrice } from '@/components/AmountBoxWithPrice';
 import { usePrice } from '@/context/price.context';
 import { getPoolIconWithName } from '../cards/BaseStakingCard';
+import { IModal } from '@/types/common';
 
 interface IHarvestAllModalProps extends IModal {
 	title: string;

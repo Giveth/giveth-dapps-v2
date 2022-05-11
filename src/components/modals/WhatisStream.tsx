@@ -12,11 +12,12 @@ import styled from 'styled-components';
 import { FC } from 'react';
 import Link from 'next/link';
 import { Flex } from '../styled-components/Flex';
-import { Modal, IModal } from './Modal';
+import { Modal } from './Modal';
 import Routes from '@/lib/constants/Routes';
 import { ETheme, useGeneral } from '@/context/general.context';
 import { RegenStreamConfig } from '@/types/config';
 import { useTokenDistro } from '@/context/tokenDistro.context';
+import { IModal } from '@/types/common';
 
 interface IWhatisStreamModal extends IModal {
 	regenStreamConfig?: RegenStreamConfig;

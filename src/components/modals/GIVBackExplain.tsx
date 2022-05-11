@@ -11,8 +11,9 @@ import {
 import styled from 'styled-components';
 import { FC } from 'react';
 import { Flex } from '../styled-components/Flex';
-import { Modal, IModal } from './Modal';
+import { Modal } from './Modal';
 import links from '@/lib/constants/links';
+import { IModal } from '@/types/common';
 
 export const GIVBackExplainModal: FC<IModal> = ({ setShowModal }) => {
 	return (

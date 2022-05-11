@@ -261,6 +261,12 @@ export const getUserStakeInfo = (
 				stakedAmount = balance.foxHnyLpStaked;
 				notStakedAmount = balance.foxHnyLp;
 				break;
+			case RegenFarmType.CULT_ETH:
+				rewards = balance.rewardsCultEthLm;
+				rewardPerTokenPaid = balance.rewardPerTokenPaidCultEthLm;
+				stakedAmount = balance.cultEthLpStaked;
+				notStakedAmount = balance.cultEthLp;
+				break;
 			default:
 		}
 	} else {
