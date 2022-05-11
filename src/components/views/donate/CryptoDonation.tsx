@@ -34,7 +34,12 @@ import InlineToast from '@/components/toasts/InlineToast';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { client } from '@/apollo/apolloClient';
 import { PROJECT_ACCEPTED_TOKENS } from '@/apollo/gql/gqlProjects';
-import { formatBalance, pollEvery, showToastError } from '@/lib/helpers';
+import {
+	formatBalance,
+	formatTxLink,
+	pollEvery,
+	showToastError,
+} from '@/lib/helpers';
 import {
 	IProjectAcceptedToken,
 	IProjectAcceptedTokensGQL,
@@ -111,6 +116,7 @@ const CryptoDonation = (props: {
 		useState<IProjectAcceptedToken[]>();
 	const [acceptedChains, setAcceptedChains] = useState<number[]>();
 	const [showFailedModal, setShowFailedModal] = useState(false);
+	const [txHash, setTxHash] = useState<string>();
 
 	const stopPolling = useRef<any>(null);
 	const tokenSymbol = selectedToken?.symbol;
@@ -331,6 +337,7 @@ const CryptoDonation = (props: {
 					setShowModal={setShowDonateModal}
 					setSuccessDonation={setSuccessDonation}
 					setShowFailedModal={setShowFailedModal}
+					setTxHash={setTxHash}
 					project={project}
 					token={selectedToken}
 					amount={amountTyped}
@@ -342,7 +349,10 @@ const CryptoDonation = (props: {
 				/>
 			)}
 			{showFailedModal && (
-				<FailedDonation setShowModal={setShowFailedModal} />
+				<FailedDonation
+					txUrl={formatTxLink(networkId, txHash)}
+					setShowModal={setShowFailedModal}
+				/>
 			)}
 
 			<InputContainer>

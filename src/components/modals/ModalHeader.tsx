@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
-import { H6, IconX } from '@giveth/ui-design-system';
+import { brandColors, H6, IconX } from '@giveth/ui-design-system';
 import { Flex } from '@/components/styled-components/Flex';
 
 export type ModalHeaderTitlePosition = 'center' | 'left';
@@ -12,6 +12,7 @@ export interface IModalHeader {
 	icon?: ReactNode;
 	closeModal: () => void;
 	position?: ModalHeaderTitlePosition;
+	color?: string;
 }
 
 export const ModalHeader: React.FC<IModalHeader> = ({
@@ -21,16 +22,18 @@ export const ModalHeader: React.FC<IModalHeader> = ({
 	icon,
 	closeModal,
 	position = 'center',
+	color,
 }) => {
 	return !hiddenHeader ? (
 		<ModalHeaderRow
 			justifyContent={position === 'center' ? 'center' : 'flex-start'}
+			color={color}
 		>
 			{icon}
 			<H6 weight={700}>{title}</H6>
 			{!hiddenClose && (
 				<CloseModalButton onClick={closeModal}>
-					<IconX size={24} />
+					<IconX color={brandColors.deep[900]} size={24} />
 				</CloseModalButton>
 			)}
 		</ModalHeaderRow>
@@ -41,12 +44,13 @@ export const ModalHeader: React.FC<IModalHeader> = ({
 	) : null;
 };
 
-export const ModalHeaderRow = styled(Flex)`
+export const ModalHeaderRow = styled(Flex)<{ color?: string }>`
 	gap: 14px;
 	min-height: 48px;
 	padding: 24px 24px 8px;
 	position: relative;
 	align-items: center;
+	color: ${props => props.color || 'inherit'};
 `;
 
 const CloseModalButton = styled.div`
