@@ -31,7 +31,7 @@ const config: EnvConfig = {
 		blockExplorerName: ['Etherscan'],
 		blockExplorerUrls: ['https://kovan.etherscan.io'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/mohammadranjbarz/giv-economy-kovan-develop',
+			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-kovan-staging',
 
 		TOKEN_ADDRESS: '0x29434A25abd94AE882aA883eea81585Aaa5b078D',
 		WETH_TOKEN_ADDRESS: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
@@ -97,24 +97,27 @@ const config: EnvConfig = {
 		],
 		regenStreams: [
 			{
-				tokenDistroAddress: '0x00',
+				tokenDistroAddress:
+					'0xBb974e08774544a361BCF496fE61DaB9Df29AFFc',
 				type: StreamType.CULT,
 				title: 'CULT DAO',
-				rewardTokenAddress: '0x00',
+				rewardTokenAddress:
+					'0x3e4d3FadEE2338D420bb5E5cB26aAd96c165476c',
 				rewardTokenSymbol: 'CULT',
-				tokenAddressOnUniswapV2: '0x00',
+				tokenAddressOnUniswapV2:
+					'0xf0f9d895aca5c8678f706fb8216fa22957685a13',
 			},
 		],
 		regenFarms: [
 			{
-				POOL_ADDRESS: '0x00',
-				LM_ADDRESS: '0x00',
+				POOL_ADDRESS: '0x6bb32725aa31b1a99e7c782e0605b0fb57e4b9e6',
+				LM_ADDRESS: '0x9d23d449af3e2c07a286688c85ff5d3d4c219d79',
 				type: StakingType.UNISWAPV2,
-				network: 1,
+				network: 42,
 				title: 'CULT / ETH',
 				description: '50% CULT, 50% ETH',
 				provideLiquidityLink:
-					'https://app.honeyswap.org/#/add/0x00/0x00',
+					'https://app.uniswap.org/#/add/v2/0x3e4d3FadEE2338D420bb5E5cB26aAd96c165476c/ETH?chain=kovan',
 				unit: 'LP',
 				regenStreamType: StreamType.CULT,
 				regenFarmType: RegenFarmType.CULT_ETH,

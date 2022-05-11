@@ -88,12 +88,15 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 		network,
 		streamConfig.tokenAddressOnUniswapV2,
 	]);
-
 	useEffect(() => {
 		switch (streamConfig.type) {
 			case StreamType.FOX:
 				setLockedAmount(balances.foxAllocatedTokens);
 				setClaimedAmount(balances.foxClaimed);
+				break;
+			case StreamType.CULT:
+				setLockedAmount(balances.cultAllocatedTokens);
+				setClaimedAmount(balances.cultClaimed);
 				break;
 			default:
 				setLockedAmount(ethers.constants.Zero);

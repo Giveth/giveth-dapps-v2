@@ -42,6 +42,8 @@ export interface ISubgraphValue {
 	infinitePosition?: IUniswapV3Position;
 	[StreamType.FOX]?: ITokenDistroInfo;
 	[RegenFarmType.FOX_HNY]?: IUnipool;
+	[StreamType.CULT]?: ITokenDistroInfo;
+	[RegenFarmType.CULT_ETH]?: IUnipool;
 }
 
 export interface ISubgraphContext {

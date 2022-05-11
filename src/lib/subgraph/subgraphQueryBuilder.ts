@@ -49,6 +49,13 @@ export class SubgraphQueryBuilder {
 			rewardsFoxHnyLm
 			foxHnyLp
 			foxHnyLpStaked
+
+			cultAllocatedTokens
+			cultClaimed
+			rewardPerTokenPaidCultEthLm
+			rewardsCultEthLm
+			cultEthLp
+			cultEthLpStaked	
 		}`;
 	};
 
