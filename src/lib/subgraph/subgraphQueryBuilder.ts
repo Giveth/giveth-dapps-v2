@@ -210,6 +210,7 @@ export class SubgraphQueryBuilder {
 				...config.MAINNET_CONFIG.pools.filter(
 					c => c.type !== StakingType.UNISWAPV3,
 				),
+				...config.MAINNET_CONFIG.regenFarms,
 				...config.XDAI_CONFIG.regenFarms,
 			])}
 			uniswapV3Pool: ${SubgraphQueryBuilder.getUniswapV3PoolQuery(

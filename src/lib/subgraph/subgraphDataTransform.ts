@@ -253,6 +253,7 @@ export const transformSubgraphData = (data: any = {}): ISubgraphValue => {
 		balances: transformBalanceInfo(data?.balances),
 		tokenDistroInfo: transformTokenDistroInfo(data?.tokenDistroInfo),
 		[StreamType.FOX]: transformTokenDistroInfo(data[StreamType.FOX]),
+		[StreamType.CULT]: transformTokenDistroInfo(data[StreamType.CULT]),
 
 		[StakingType.GIV_LM]: transformUnipoolInfo(data[StakingType.GIV_LM]),
 		[StakingType.BALANCER]: transformUnipoolInfo(
