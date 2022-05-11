@@ -4,10 +4,10 @@ import styled from 'styled-components';
 import { Modal } from '@/components/modals/Modal';
 import { mediaQueries } from '@/lib/constants/constants';
 import { FlexCenter } from '@/components/styled-components/Flex';
-import { IModalProps } from '@/types/common';
+import { IModal } from '@/types/common';
 import ExternalLink from '@/components/ExternalLink';
 
-interface IProps extends IModalProps {
+interface IProps extends IModal {
 	txUrl?: string;
 }
 
