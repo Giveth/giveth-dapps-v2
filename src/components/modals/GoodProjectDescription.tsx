@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import { Button, Lead, brandColors, H5 } from '@giveth/ui-design-system';
 
 import Routes from '@/lib/constants/Routes';
-import { IModal, Modal } from '@/components/modals/Modal';
+import { Modal } from '@/components/modals/Modal';
+import { IModal } from '@/types/common';
 
 export const GoodProjectDescription: FC<IModal> = ({ setShowModal }) => {
 	return (

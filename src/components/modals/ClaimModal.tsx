@@ -1,10 +1,11 @@
 import { FC } from 'react';
-import { IModal, Modal } from './Modal';
+import { Modal } from './Modal';
 import {
 	ConfirmedInnerModal,
 	ErrorInnerModal,
 	SubmittedInnerModal,
 } from './ConfirmSubmit';
+import { IModal } from '@/types/common';
 
 enum ClaimState {
 	UNKNOWN,

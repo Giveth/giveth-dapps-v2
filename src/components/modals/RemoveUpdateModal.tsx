@@ -7,10 +7,15 @@ import {
 	brandColors,
 	IconAlertTriangle,
 } from '@giveth/ui-design-system';
-import { IModal, Modal } from '@/components/modals/Modal';
+import { Modal } from '@/components/modals/Modal';
 import FixedToast from '@/components/toasts/FixedToast';
+import { IModal } from '@/types/common';
 
-export const RemoveUpdateModal: FC<IModal> = ({ setShowModal, callback }) => {
+interface IProps extends IModal {
+	callback: () => void;
+}
+
+export const RemoveUpdateModal: FC<IProps> = ({ setShowModal, callback }) => {
 	return (
 		<Modal
 			setShowModal={setShowModal}

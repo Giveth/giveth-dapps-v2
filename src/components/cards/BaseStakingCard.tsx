@@ -417,8 +417,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 			{showAPRModal && (
 				<APRModal
 					setShowModal={setShowAPRModal}
-					poolStakingConfig={poolStakingConfig}
-					maxAmount={userNotStakedAmount}
 					regenStreamConfig={regenStreamConfig}
 				/>
 			)}

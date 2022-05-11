@@ -9,13 +9,18 @@ import {
 } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 
-import { IModal, Modal } from '@/components/modals/Modal';
+import { Modal } from '@/components/modals/Modal';
 import useUser from '@/context/UserProvider';
 import { ETheme, useGeneral } from '@/context/general.context';
 import { mediaQueries } from '@/lib/constants/constants';
 import useModal from '@/context/ModalProvider';
+import { IModal } from '@/types/common';
 
-export const SignWithWalletModal: FC<IModal> = ({ setShowModal, callback }) => {
+interface IProps extends IModal {
+	callback?: () => void;
+}
+
+export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 	const { theme } = useGeneral();
 	const {
 		actions: { signToGetToken },

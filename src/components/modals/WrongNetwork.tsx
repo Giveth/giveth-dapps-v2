@@ -7,7 +7,8 @@ import { InjectedConnector } from '@web3-react/injected-connector';
 import { switchNetwork } from '@/lib/wallet';
 
 import { chainName } from '@/lib/constants/constants';
-import { Modal, IModal } from './Modal';
+import { Modal } from './Modal';
+import { IModal } from '@/types/common';
 
 interface IWrongNetworkInnerModal {
 	text?: string;
@@ -21,7 +22,6 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 	const { account, activate } = useWeb3React();
 
 	const checkWalletAndSwitchNetwork = async (network: number) => {
-		console.log(`address`, account);
 		if (!account) {
 			await activate(new InjectedConnector({}));
 		}

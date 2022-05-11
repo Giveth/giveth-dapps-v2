@@ -1,7 +1,6 @@
 import { FC, useMemo } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import { BigNumber } from 'ethers';
 import {
 	brandColors,
 	neutralColors,
@@ -9,14 +8,13 @@ import {
 	SublineBold,
 } from '@giveth/ui-design-system';
 
-import { IModal, Modal } from './Modal';
+import { Modal } from './Modal';
 import { Flex } from '../styled-components/Flex';
-import { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
+import { RegenStreamConfig } from '@/types/config';
 import { useTokenDistro } from '@/context/tokenDistro.context';
+import { IModal } from '@/types/common';
 
 interface IAPRModalProps extends IModal {
-	poolStakingConfig: PoolStakingConfig;
-	maxAmount: BigNumber;
 	regenStreamConfig?: RegenStreamConfig;
 }
 
@@ -33,46 +31,40 @@ export const APRModal: FC<IAPRModalProps> = ({
 	const streamName = regenStreamConfig ? 'RegenStream' : 'GIVstream';
 
 	return (
-		<>
-			<Modal setShowModal={setShowModal} headerTitle={'APR'}>
-				<APRModalContainer>
-					<DescContainer>
-						<AlertRow alignItems='flex-end'>
-							<Image
-								width={24}
-								height={24}
-								src='/images/alert.svg'
-								alt='alert'
-							/>
-							<SublineBold>IMPORTANT</SublineBold>
-						</AlertRow>
-						<Desc>
-							A percentage of the {rewardTokenSymbol} you earn
-							from staking is claimable immediately, and the
-							remaining percent goes into increasing your{' '}
-							{rewardTokenSymbol}stream flowrate. Over time, a
-							greater percentage of your total earnings will be
-							claimable immediately.
-						</Desc>
-						<DescTitle>Current Distribution:</DescTitle>
-						<Desc>
-							Claimable immediately:{' '}
-							{tokenDistroHelper.GlobalReleasePercentage.toFixed(
-								2,
-							)}
-							%
-						</Desc>
-						<Desc>
-							Increasing your {streamName}:{' '}
-							{(
-								100 - tokenDistroHelper.GlobalReleasePercentage
-							).toFixed(2)}
-							%
-						</Desc>
-					</DescContainer>
-				</APRModalContainer>
-			</Modal>
-		</>
+		<Modal setShowModal={setShowModal} headerTitle={'APR'}>
+			<APRModalContainer>
+				<DescContainer>
+					<AlertRow alignItems='flex-end'>
+						<Image
+							width={24}
+							height={24}
+							src='/images/alert.svg'
+							alt='alert'
+						/>
+						<SublineBold>IMPORTANT</SublineBold>
+					</AlertRow>
+					<Desc>
+						A percentage of the {rewardTokenSymbol} you earn from
+						staking is claimable immediately, and the remaining
+						percent goes into increasing your {rewardTokenSymbol}
+						stream flowrate. Over time, a greater percentage of your
+						total earnings will be claimable immediately.
+					</Desc>
+					<DescTitle>Current Distribution:</DescTitle>
+					<Desc>
+						Claimable immediately:{' '}
+						{tokenDistroHelper.GlobalReleasePercentage.toFixed(2)}%
+					</Desc>
+					<Desc>
+						Increasing your {streamName}:{' '}
+						{(
+							100 - tokenDistroHelper.GlobalReleasePercentage
+						).toFixed(2)}
+						%
+					</Desc>
+				</DescContainer>
+			</APRModalContainer>
+		</Modal>
 	);
 };
 

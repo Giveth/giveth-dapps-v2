@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import Image from 'next/image';
 import { useWeb3React } from '@web3-react/core';
 import styled from 'styled-components';
@@ -18,9 +18,9 @@ import { detectBrave, showToastError } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
 import LowerShields from '@/components/modals/LowerShields';
 import useModal from '@/context/ModalProvider';
+import { IModal } from '@/types/common';
 
-const WalletModal = (props: { setShowModal: (i: boolean) => void }) => {
-	const { setShowModal } = props;
+const WalletModal: FC<IModal> = ({ setShowModal }) => {
 	const [showLowerShields, setShowLowerShields] = useState<boolean>();
 
 	const context = useWeb3React();
