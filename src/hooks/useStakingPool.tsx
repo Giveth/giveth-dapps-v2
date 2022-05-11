@@ -43,7 +43,6 @@ export const useStakingPool = (
 
 	const { type, LM_ADDRESS, regenFarmType } =
 		poolStakingConfig as RegenPoolStakingConfig;
-
 	const unipool = currentValues[regenFarmType || type];
 	const unipoolIsDefined = !!unipool;
 	const providerNetwork = library?.network?.chainId;
@@ -90,7 +89,6 @@ export const useStakingPool = (
 			getUserStakeInfo(type, regenFarmType, balances, unipoolHelper),
 		);
 	}, [type, regenFarmType, currentValues, balances]);
-
 	return {
 		apr,
 		...userStakeInfo,

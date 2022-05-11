@@ -135,7 +135,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const isInactive = !active || type === StakingType.UNISWAPV3;
 
 	const { apr, earned, stakedLpAmount, userNotStakedAmount } = stakeInfo;
-
 	const regenStreamConfig = useMemo(() => {
 		if (!regenStreamType) return undefined;
 		const networkConfig =
@@ -153,7 +152,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 			);
 		}
 	}, [earned, tokenDistroHelper]);
-
 	useEffect(() => {
 		if (chainId) {
 			if (!regenStreamConfig) setInfo(chainId, type, earned);
@@ -347,7 +345,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 										label='STAKE'
 										size='small'
 										disabled={
-											userNotStakedAmount.isZero() ||
+											userNotStakedAmount?.isZero() ||
 											isInactive
 										}
 										onClick={() => setShowStakeModal(true)}

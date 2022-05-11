@@ -34,6 +34,13 @@ export interface IBalances {
 	rewardsFoxHnyLm: ethers.BigNumber;
 	foxHnyLp: ethers.BigNumber;
 	foxHnyLpStaked: ethers.BigNumber;
+
+	cultAllocatedTokens: ethers.BigNumber;
+	cultClaimed: ethers.BigNumber;
+	rewardPerTokenPaidCultEthLm: ethers.BigNumber;
+	rewardsCultEthLm: ethers.BigNumber;
+	cultEthLpStaked: ethers.BigNumber;
+	cultEthLp: ethers.BigNumber;
 }
 export const ZeroBalances: IBalances = {
 	balance: constants.Zero,
@@ -69,6 +76,13 @@ export const ZeroBalances: IBalances = {
 	rewardsFoxHnyLm: constants.Zero,
 	foxHnyLp: constants.Zero,
 	foxHnyLpStaked: constants.Zero,
+
+	cultAllocatedTokens: constants.Zero,
+	cultClaimed: constants.Zero,
+	rewardPerTokenPaidCultEthLm: constants.Zero,
+	rewardsCultEthLm: constants.Zero,
+	cultEthLpStaked: constants.Zero,
+	cultEthLp: constants.Zero,
 };
 
 export interface ITokenAllocation {

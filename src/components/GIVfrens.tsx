@@ -34,6 +34,7 @@ export const GIVfrens: FC<IGIVfrensProps> = ({ regenFarms, network }) => {
 	const { chainId } = useWeb3React();
 
 	if (regenFarms.length === 0) return null;
+
 	return (
 		<>
 			<H3 weight={700}>RegenFarms</H3>
@@ -86,7 +87,7 @@ export const GIVfrens: FC<IGIVfrensProps> = ({ regenFarms, network }) => {
 									)}
 								</Col>
 							</Row>
-							{chainId !== config.XDAI_NETWORK_NUMBER && (
+							{chainId !== poolStakingConfig?.network && (
 								<>
 									<DAOChangeNetwork />
 									<DAOChangeNetworkModal />

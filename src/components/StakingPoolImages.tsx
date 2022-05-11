@@ -7,6 +7,7 @@ import { IconHoneyswap } from './Icons/Honeyswap';
 import { IconFox } from '@/components/Icons/Fox';
 import { IconDai } from '@/components/Icons/Dai';
 import { IconElk } from '@/components/Icons/Elk';
+import { IconCult } from '@/components/Icons/Cult';
 interface IStakingPoolImagesProps {
 	title: string;
 }
@@ -25,6 +26,8 @@ export const getCurIconWithName = (currency: string) => {
 			return <IconElk size={40} />;
 		case 'DAI':
 			return <IconDai size={40} />;
+		case 'CULT':
+			return <IconCult size={40} />;
 		default:
 			break;
 	}
