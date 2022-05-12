@@ -18,8 +18,8 @@ import {
 	IconHelp,
 } from '@giveth/ui-design-system';
 import { motion } from 'framer-motion';
-
 import { captureException } from '@sentry/nextjs';
+
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import { Shadow } from '@/components/styled-components/Shadow';
 import CategoryBadge from '@/components/badges/CategoryBadge';
