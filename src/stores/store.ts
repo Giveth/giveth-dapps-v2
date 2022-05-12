@@ -1,9 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
-import subgraphReducer from './subgraph.store';
+import { subgraphApiSlice } from './subgraph-api-slice';
+// import subgraphReducer from './subgraph.store';
 
 export const store = configureStore({
 	reducer: {
-		subgraph: subgraphReducer,
+		[subgraphApiSlice.reducerPath]: subgraphApiSlice.reducer,
+	},
+	middleware: getDefaultMiddleware => {
+		return getDefaultMiddleware().concat(subgraphApiSlice.middleware);
 	},
 });
 

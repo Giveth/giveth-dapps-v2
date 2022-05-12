@@ -1,19 +1,22 @@
 import Head from 'next/head';
 import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
-import { useSelector, useDispatch } from 'react-redux';
+// import { useSelector, useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
 import { useEffect } from 'react';
 import { gToast, ToastType } from '@/components/toasts';
-import { RootState } from '@/stores/store';
-import { updateXDaiValues } from '@/stores/subgraph.store';
+import { useGetSubgraphValuesQuery } from '@/stores/subgraph-api-slice';
+// import { RootState } from '@/stores/store';
 
 const TestRoute = () => {
-	const xDaiValues = useSelector(
-		(state: RootState) => state.subgraph.xDaiValues,
-	);
-	const dispatch = useDispatch();
-	const { library } = useWeb3React();
+	// const xDaiValues = useSelector(
+	// 	(state: RootState) => state.subgraph.xDaiValues,
+	// );
+	const { library, chainId, account } = useWeb3React();
+	const { data, isLoading, error, refetch } = useGetSubgraphValuesQuery({
+		chain: chainId,
+		userAddress: account,
+	});
 
 	const notify = () =>
 		gToast('Testeeee', {
@@ -24,7 +27,7 @@ const TestRoute = () => {
 			position: 'bottom-center',
 		});
 
-	console.log('xDaiValues', xDaiValues);
+	// console.log('xDaiValues', xDaiValues);
 	useEffect(() => {
 		if (!library) return;
 		library.on('block', (evt: any) => {
@@ -35,6 +38,7 @@ const TestRoute = () => {
 			library.removeAllListeners('block');
 		};
 	}, [library]);
+	console.log('****data', data);
 
 	return (
 		<>
@@ -42,7 +46,11 @@ const TestRoute = () => {
 				<title>Terms of use | Giveth</title>
 			</Head>
 			<TestContainer>
-				<button onClick={() => dispatch(updateXDaiValues())}>
+				<button
+					onClick={() => {
+						refetch();
+					}}
+				>
 					Dispatch
 				</button>
 				<button onClick={notify}>Test</button>

@@ -93,14 +93,14 @@ export const subgraphSlice = createSlice({
 			// which detects changes to a "draft state" and produces a brand new
 			// immutable state based off those changes
 			// state.value += 1;
-			console.log('state', state);
+			// console.log('state', state);
 		},
 		updateXDaiValues: state => {
 			// state.value -= 1;
 		},
 		updateMainnetValues: (state, action: PayloadAction<string>) => {
 			// state.value -= 1;
-			state.mainnetValues = fetchMainnetInfo(action.payload);
+			// state.mainnetValues = fetchMainnetInfo(action.payload);
 		},
 		incrementByAmount: (state, action: PayloadAction<number>) => {
 			// state.value += action.payload;

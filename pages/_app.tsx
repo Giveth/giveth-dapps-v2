@@ -20,6 +20,7 @@ import { FooterWrapper } from '@/components/Footer/FooterWrapper';
 
 import '../styles/globals.css';
 import { store } from '@/stores/store';
+import { SubgraphProvider } from '@/context/subgraph.context';
 import type { AppProps } from 'next/app';
 
 function getLibrary(provider: ExternalProvider) {
@@ -62,21 +63,21 @@ function MyApp({ Component, pageProps }: AppProps) {
 				<GeneralProvider>
 					<ApolloProvider client={apolloClient}>
 						<Web3ReactProvider getLibrary={getLibrary}>
-							{/* <SubgraphProvider> */}
-							<TokenDistroProvider>
-								<NftsProvider>
-									<PriceProvider>
-										<UserProvider>
-											<ModalProvider>
-												<HeaderWrapper />
-												<Component {...pageProps} />
-												<FooterWrapper />
-											</ModalProvider>
-										</UserProvider>
-									</PriceProvider>
-								</NftsProvider>
-							</TokenDistroProvider>
-							{/* </SubgraphProvider> */}
+							<SubgraphProvider>
+								<TokenDistroProvider>
+									<NftsProvider>
+										<PriceProvider>
+											<UserProvider>
+												<ModalProvider>
+													<HeaderWrapper />
+													<Component {...pageProps} />
+													<FooterWrapper />
+												</ModalProvider>
+											</UserProvider>
+										</PriceProvider>
+									</NftsProvider>
+								</TokenDistroProvider>
+							</SubgraphProvider>
 						</Web3ReactProvider>
 					</ApolloProvider>
 				</GeneralProvider>
