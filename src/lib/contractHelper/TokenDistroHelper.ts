@@ -88,6 +88,10 @@ export class TokenDistroHelper {
 				allocatedTokens = userBalance.foxAllocatedTokens;
 				claimed = userBalance.foxClaimed;
 				break;
+			case StreamType.CULT:
+				allocatedTokens = userBalance.cultAllocatedTokens;
+				claimed = userBalance.cultClaimed;
+				break;
 			default:
 				allocatedTokens = userBalance.allocatedTokens;
 				claimed = userBalance.claimed;
