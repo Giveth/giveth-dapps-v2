@@ -92,10 +92,12 @@ export const confirmDonation = async (props: IConfirmDonation) => {
 		amount,
 		token,
 		setSuccessDonation,
+		setShowFailedModal,
 		web3Context,
 		setDonating,
 		setDonationSaved,
 		givBackEligible,
+		setTxHash,
 	} = props;
 
 	const { library } = web3Context;
@@ -115,6 +117,7 @@ export const confirmDonation = async (props: IConfirmDonation) => {
 		const txCallbacks = {
 			onTxHash: async (txHash: string) => {
 				await saveDonation({ txHash, toAddress, ...props });
+				setTxHash(txHash);
 				setDonationSaved(true);
 			},
 			onReceipt: (txHash: string) => {
@@ -126,11 +129,17 @@ export const confirmDonation = async (props: IConfirmDonation) => {
 	} catch (error: any) {
 		setDonating(false);
 		setDonationSaved(false);
-		captureException(error);
 		const code = error.data?.code;
 		if (code === ('INSUFFICIENT_FUNDS' || 'UNPREDICTABLE_GAS_LIMIT')) {
 			showToastError('Insufficient Funds');
-		} else showToastError(error);
+		} else if (error.replacement && error.cancelled === true) {
+			setTxHash(error.replacement.hash);
+			setShowFailedModal(true);
+			showToastError('Transaction cancelled!');
+		} else {
+			setShowFailedModal(true);
+			showToastError(error);
+		}
 		captureException(error, {
 			tags: {
 				section: 'confirmDonation',

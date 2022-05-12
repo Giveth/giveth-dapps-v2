@@ -24,6 +24,8 @@ import { confirmDonation } from '@/components/views/donate/helpers';
 import { IModal } from '@/types/common';
 
 export interface IDonateModalProps extends IModal {
+	setShowFailedModal: (i: boolean) => void;
+	setTxHash: (i: string) => void;
 	project: IProject;
 	token: IProjectAcceptedToken;
 	amount: number;

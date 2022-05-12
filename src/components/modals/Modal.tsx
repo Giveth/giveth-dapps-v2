@@ -29,6 +29,7 @@ interface IModal extends ModalWrapperProps {
 	headerTitle?: string;
 	headerIcon?: ReactNode;
 	customTheme?: ETheme;
+	headerColor?: string;
 }
 
 export const Modal: FC<IModal> = ({
@@ -41,6 +42,7 @@ export const Modal: FC<IModal> = ({
 	headerIcon,
 	customTheme,
 	fullScreen = false,
+	headerColor,
 }) => {
 	const el = useRef(document.createElement('div'));
 	const { theme } = useGeneral();
@@ -83,6 +85,7 @@ export const Modal: FC<IModal> = ({
 					icon={headerIcon}
 					closeModal={() => setShowModal(false)}
 					position={headerTitlePosition}
+					color={headerColor}
 				/>
 				<Scrollbars
 					renderTrackHorizontal={props => (
