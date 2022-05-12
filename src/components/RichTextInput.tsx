@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+// eslint-disable-next-line import/named
 import ReactQuill, { Quill } from 'react-quill';
 import QuillImageDropAndPaste from 'quill-image-drop-and-paste';
 import styled from 'styled-components';
