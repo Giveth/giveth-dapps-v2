@@ -97,6 +97,7 @@ export const FETCH_USER_DONATIONS = gql`
 					slug
 				}
 				createdAt
+				status
 			}
 			totalCount
 		}
