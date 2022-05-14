@@ -172,7 +172,7 @@ export async function sendTransaction(
 	web3: Web3Provider,
 	params: { to: string; value: string },
 	txCallbacks: {
-		onTxHash: (hash: string) => void;
+		onTxHash: (hash: string, nonce: number) => void;
 		onReceipt: (receipt: any) => void;
 	},
 	contractAddress: string,
@@ -196,7 +196,7 @@ export async function sendTransaction(
 			tx = await fromSigner.sendTransaction(txParams);
 		}
 
-		txCallbacks.onTxHash(tx.hash);
+		txCallbacks.onTxHash(tx.hash, tx.nonce);
 		const receipt = await tx.wait();
 		if (receipt.status) {
 			txCallbacks.onReceipt(tx.hash);
