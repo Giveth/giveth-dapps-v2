@@ -24,6 +24,8 @@ import { smallFormatDate, formatTxLink } from '@/lib/helpers';
 import config from '@/configuration';
 import { EDirection, EDonationType } from '@/apollo/types/gqlEnums';
 import ExternalLink from '@/components/ExternalLink';
+import ETHIcon from '/public/images/currencies/eth/24.svg';
+import GnosisIcon from '/public/images/currencies/gnosisChain/24.svg';
 
 const itemPerPage = 10;
 
@@ -146,24 +148,18 @@ const ProjectDonationTable = ({
 								orderChangeHandler(EOrderBy.CreationDate)
 							}
 						>
-							<B>Donated at</B>
+							Donated at
 							{injectSortIcon(order, EOrderBy.CreationDate)}
 						</TableHeader>
-						<TableHeader>
-							<B>Donor</B>
-						</TableHeader>
-						<TableHeader>
-							<B>Network</B>
-						</TableHeader>
-						<TableHeader>
-							<B>Currency</B>
-						</TableHeader>
+						<TableHeader>Donor</TableHeader>
+						<TableHeader>Network</TableHeader>
+						<TableHeader>Currency</TableHeader>
 						<TableHeader
 							onClick={() =>
 								orderChangeHandler(EOrderBy.TokenAmount)
 							}
 						>
-							<B>Amount</B>
+							Amount
 							{injectSortIcon(order, EOrderBy.TokenAmount)}
 						</TableHeader>
 						<TableHeader
@@ -171,53 +167,42 @@ const ProjectDonationTable = ({
 								orderChangeHandler(EOrderBy.UsdAmount)
 							}
 						>
-							<B>USD Value</B>
+							USD Value
 							{injectSortIcon(order, EOrderBy.UsdAmount)}
 						</TableHeader>
 						{pageDonations.map(donation => (
 							<RowWrapper key={donation.id}>
 								<TableCell>
-									<P>
-										{smallFormatDate(
-											new Date(donation.createdAt),
-										)}
-									</P>
+									{smallFormatDate(
+										new Date(donation.createdAt),
+									)}
 								</TableCell>
 								<TableCell>
-									<P>
-										{donation.donationType ===
-										EDonationType.POIGNART
-											? 'PoignART'
-											: donation.anonymous
-											? 'Anonymous'
-											: donation.user?.name ||
-											  donation.user?.firstName}
-									</P>
+									{donation.donationType ===
+									EDonationType.POIGNART
+										? 'PoignART'
+										: donation.anonymous
+										? 'Anonymous'
+										: donation.user?.name ||
+										  donation.user?.firstName}
 								</TableCell>
 								<TableCell>
+									<Image
+										alt='chain logo'
+										src={
+											donation.transactionNetworkId ===
+											config.XDAI_NETWORK_NUMBER
+												? GnosisIcon
+												: ETHIcon
+										}
+										height={24}
+										width={24}
+									/>
 									<P>
 										{donation.transactionNetworkId ===
-										config.XDAI_NETWORK_NUMBER ? (
-											<NetworkCell>
-												<Image
-													alt='Gnosis chain logo'
-													src='/images/currencies/gnosisChain/24.svg'
-													height={24}
-													width={24}
-												/>
-												<P>Gnosis</P>
-											</NetworkCell>
-										) : (
-											<NetworkCell>
-												<Image
-													alt='Ethereum chain logo'
-													src='/images/currencies/eth/24.svg'
-													height={24}
-													width={24}
-												/>
-												<P>Ethereum</P>
-											</NetworkCell>
-										)}
+										config.XDAI_NETWORK_NUMBER
+											? 'Gnosis'
+											: 'Ethereum'}
 									</P>
 								</TableCell>
 								<TableCell>
@@ -309,10 +294,11 @@ const DonationTableContainer = styled.div`
 	min-width: 800px;
 `;
 
-const TableHeader = styled(Flex)`
+const TableHeader = styled(B)`
 	height: 40px;
 	border-bottom: 1px solid ${neutralColors.gray[400]};
 	align-items: center;
+	display: flex;
 	${props =>
 		props.onClick &&
 		`cursor: pointer;
@@ -343,11 +329,6 @@ const CurrencyBadge = styled(SublineBold)`
 	border: 2px solid ${neutralColors.gray[400]};
 	border-radius: 50px;
 	color: ${neutralColors.gray[700]};
-`;
-
-const NetworkCell = styled.div`
-	display: flex;
-	gap: 8px;
 `;
 
 export default ProjectDonationTable;
