@@ -9,10 +9,11 @@ import {
 import BigNumber from 'bignumber.js';
 import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
+import { useSelector } from 'react-redux';
 import { Zero } from '@/helpers/number';
-import { useSubgraph } from '@/context/subgraph.context';
 import config from '@/configuration';
 import { useLiquidityPositions } from '@/context/positions.context';
+import { RootState } from '@/stores/store';
 
 export interface IPriceContext {
 	givPrice: BigNumber;
@@ -64,7 +65,9 @@ PriceContext.displayName = 'PriceContext';
 
 export const PriceProvider: FC = ({ children }) => {
 	const { chainId } = useWeb3React();
-	const { xDaiValues } = useSubgraph();
+	const xDaiValues = useSelector(
+		(state: RootState) => state.subgraph.xDaiValues,
+	);
 	const { pool } = useLiquidityPositions();
 
 	const [currentPrice, setCurrentPrice] = useState<BigNumber>(Zero);
