@@ -16,6 +16,7 @@ import {
 import { constants, ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import { durationToString } from '@/lib/helpers';
 import {
@@ -25,12 +26,12 @@ import {
 } from '@/components/homeTabs/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { RegenStreamConfig, StreamType } from '@/types/config';
-import { useSubgraph } from '@/context';
-import { formatWeiHelper } from '@/helpers/number';
+import { BN, formatWeiHelper } from '@/helpers/number';
 import { IconFox } from '@/components/Icons/Fox';
 import { Flex } from './styled-components/Flex';
 import { HarvestAllModal } from './modals/HarvestAll';
 import { usePrice } from '@/context/price.context';
+import { RootState } from '@/stores/store';
 
 interface RegenStreamProps {
 	network: number;
@@ -61,9 +62,9 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 	const [claimedAmount, setClaimedAmount] = useState<ethers.BigNumber>(
 		constants.Zero,
 	);
-	const {
-		currentValues: { balances },
-	} = useSubgraph();
+	const { balances } = useSelector(
+		(state: RootState) => state.subgraph.currentValues,
+	);
 	const tokenDistroHelper = regenTokenDistroHelpers[streamConfig.type];
 
 	const { getTokenPrice } = usePrice();
@@ -89,8 +90,8 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 	useEffect(() => {
 		switch (streamConfig.type) {
 			case StreamType.FOX:
-				setLockedAmount(balances.foxAllocatedTokens);
-				setClaimedAmount(balances.foxClaimed);
+				setLockedAmount(BN(balances.foxAllocatedTokens));
+				setClaimedAmount(BN(balances.foxClaimed));
 				break;
 			default:
 				setLockedAmount(ethers.constants.Zero);
