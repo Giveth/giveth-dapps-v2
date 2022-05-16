@@ -74,7 +74,12 @@ const ProjectCard = (props: IProjectCard) => {
 					/>
 					<ProjectCardImage image={image} />
 				</ImagePlaceholder>
-				<CardBody isHover={isHover}>
+				<CardBody
+					isHover={isHover}
+					isGivingBlock={
+						organization?.label === ORGANIZATION.givingBlock
+					}
+				>
 					<AnimatePresence>
 						{isHover && (
 							<LastUpdatedContainer
@@ -221,7 +226,7 @@ const Description = styled(P)`
 	margin-bottom: 16px;
 `;
 
-const CardBody = styled.div`
+const CardBody = styled.div<{ isGivingBlock?: boolean; isHover?: boolean }>`
 	padding: 24px;
 	position: absolute;
 	left: 0;
@@ -229,10 +234,10 @@ const CardBody = styled.div`
 	top: 200px;
 	background-color: ${neutralColors.gray[100]};
 	transition: top 0.3s ease;
-	border-radius: 0 12px 12px 12px;
+	border-radius: ${props =>
+		props.isGivingBlock ? '0 12px 12px 12px' : '12px'};
 	${mediaQueries.desktop} {
-		top: ${(props: { isHover: boolean }) =>
-			props.isHover ? '114px' : '200px'};
+		top: ${props => (props.isHover ? '114px' : '200px')};
 	}
 `;
 
