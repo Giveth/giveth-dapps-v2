@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, MouseEvent } from 'react';
 import {
 	brandColors,
 	IconHeart16,
@@ -36,7 +36,7 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 	const [showModal, setShowModal] = useState<boolean>(false);
 
 	const { project } = props;
-	const { verified, traceCampaignId, slug, id: projectId } = project;
+	const { traceCampaignId, slug, id: projectId } = project;
 
 	const [reaction, setReaction] = useState(project.reaction);
 	const [totalReactions, setTotalReactions] = useState(
@@ -44,7 +44,8 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 	);
 	const [loading, setLoading] = useState(false);
 
-	const likeUnlikeProject = async () => {
+	const likeUnlikeProject = async (e: MouseEvent<HTMLElement>) => {
+		e.stopPropagation();
 		if (!isSignedIn) {
 			showSignWithWallet();
 			return;
@@ -99,7 +100,7 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 			)}
 			<BadgeWrapper>
 				<Flex>
-					{verified && <VerificationBadge verified />}
+					{/* {verified && <VerificationBadge verified />} */}
 					{traceCampaignId && <VerificationBadge trace />}
 				</Flex>
 				<Flex gap='3px'>
@@ -113,7 +114,12 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 							<IconHeartOutline16 />
 						)}
 					</BadgeButton>
-					<BadgeButton onClick={() => setShowModal(true)}>
+					<BadgeButton
+						onClick={e => {
+							e.stopPropagation();
+							setShowModal(true);
+						}}
+					>
 						<IconShare16 />
 					</BadgeButton>
 				</Flex>

@@ -75,7 +75,7 @@ export const Modal: FC<IModal> = ({
 	};
 
 	return createPortal(
-		<Background>
+		<Background onClick={e => e.stopPropagation()}>
 			<Surrounding onClick={() => setShowModal(false)} />
 			<ModalWrapper fullScreen={fullScreen} theme={customTheme || theme}>
 				<ModalHeader
