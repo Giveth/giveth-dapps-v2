@@ -99,10 +99,7 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 				<ShareModal setShowModal={setShowModal} projectHref={slug} />
 			)}
 			<BadgeWrapper>
-				<Flex>
-					{/* {verified && <VerificationBadge verified />} */}
-					{traceCampaignId && <VerificationBadge trace />}
-				</Flex>
+				<Flex>{traceCampaignId && <VerificationBadge trace />}</Flex>
 				<Flex gap='3px'>
 					<BadgeButton onClick={likeUnlikeProject}>
 						{Number(totalReactions) > 0 && (
