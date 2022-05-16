@@ -15,7 +15,6 @@ import {
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 
-import { AnimatePresence, motion } from 'framer-motion';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectCardBadges from './ProjectCardBadges';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
@@ -80,30 +79,18 @@ const ProjectCard = (props: IProjectCard) => {
 						organization?.label === ORGANIZATION.givingBlock
 					}
 				>
-					<AnimatePresence>
-						{isHover && (
-							<LastUpdatedContainer
-								as={motion.div}
-								initial={{
-									opacity: 0,
-								}}
-								animate={{
-									opacity: 1,
-								}}
-								transition={{
-									duration: 0.4,
-								}}
-							>
-								Last updated:
-								{calcBiggestUnitDifferenceTime(updatedAt)}
-							</LastUpdatedContainer>
-						)}
-					</AnimatePresence>
-					<a href={slugToProjectView(slug)}>
-						<Title weight={700} isHover={isHover}>
-							{title}
-						</Title>
-					</a>
+					<div style={{ position: 'relative' }}>
+						<LastUpdatedContainer isHover={isHover}>
+							Last updated:
+							{calcBiggestUnitDifferenceTime(updatedAt)}
+						</LastUpdatedContainer>
+
+						<a href={slugToProjectView(slug)}>
+							<Title weight={700} isHover={isHover}>
+								{title}
+							</Title>
+						</a>
+					</div>
 					{adminUser && !isForeignOrg ? (
 						<Link
 							href={addressToUserView(adminUser?.walletAddress)}
@@ -200,14 +187,18 @@ const BadgesContainer = styled(Flex)`
 	min-height: 25px;
 `;
 
-const LastUpdatedContainer = styled(Subline)`
-	display: none;
+const LastUpdatedContainer = styled(Subline)<{ isHover?: boolean }>`
+	position: absolute;
+	bottom: 20px;
 	background-color: ${neutralColors.gray[300]};
 	color: ${neutralColors.gray[700]};
 	padding: 2px 8px;
 	border-radius: 4px;
-	${mediaQueries.desktop} {
+	${mediaQueries.laptop} {
+		transition: opacity 0.3s ease-in-out;
 		display: inline;
+		opacity: ${props => (props.isHover ? 1 : 0)};
+		bottom: 30px;
 	}
 `;
 
@@ -227,7 +218,8 @@ const Description = styled(P)`
 `;
 
 const CardBody = styled.div<{ isGivingBlock?: boolean; isHover?: boolean }>`
-	padding: 24px;
+	padding: 26px;
+	padding-top: 32px;
 	position: absolute;
 	left: 0;
 	right: 0;
@@ -237,7 +229,7 @@ const CardBody = styled.div<{ isGivingBlock?: boolean; isHover?: boolean }>`
 	border-radius: ${props =>
 		props.isGivingBlock ? '0 12px 12px 12px' : '12px'};
 	${mediaQueries.desktop} {
-		top: ${props => (props.isHover ? '114px' : '200px')};
+		top: ${props => (props.isHover ? '130px' : '200px')};
 	}
 `;
 
