@@ -55,14 +55,15 @@ export const useStakingPool = (
 				providerNetwork === network &&
 				unipoolIsDefined
 			) {
+				const unipoolHelper = unipool && new UnipoolHelper(unipool);
 				const promise: Promise<APR> =
 					type === StakingType.GIV_LM
-						? getGivStakingAPR(LM_ADDRESS, network, unipool)
+						? getGivStakingAPR(LM_ADDRESS, network, unipoolHelper)
 						: getLPStakingAPR(
 								poolStakingConfig,
 								network,
 								library,
-								unipool,
+								unipoolHelper,
 						  );
 				promise.then(setApr);
 			} else {
@@ -83,12 +84,11 @@ export const useStakingPool = (
 	}, [library, chainId, unipoolIsDefined, providerNetwork]);
 
 	useEffect(() => {
-		const unipoolInfo = currentValues[regenFarmType || type];
-		const unipoolHelper = unipoolInfo && new UnipoolHelper(unipoolInfo);
+		const unipoolHelper = unipool && new UnipoolHelper(unipool);
 		setUserStakeInfo(
 			getUserStakeInfo(type, regenFarmType, balances, unipoolHelper),
 		);
-	}, [type, regenFarmType, currentValues, balances]);
+	}, [type, regenFarmType, balances, unipool]);
 	return {
 		apr,
 		...userStakeInfo,

@@ -33,6 +33,7 @@ import { useSubgraph } from '@/context';
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import { networkProviders } from '@/helpers/networkProvider';
 import { StakingType } from '@/types/config';
+import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
 
 const InvestCardContainer = styled(Card)`
 	::before {
@@ -145,22 +146,28 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 
 		const promiseQueue: Promise<APR>[] = [];
 		config.XDAI_CONFIG.pools.forEach(poolStakingConfig => {
+			const unipool = xDaiValues[poolStakingConfig.type];
+			const unipoolHelper = unipool && new UnipoolHelper(unipool);
+
 			const promise: Promise<APR> = getLPStakingAPR(
 				poolStakingConfig,
 				config.XDAI_NETWORK_NUMBER,
 				networkProviders[config.XDAI_NETWORK_NUMBER],
-				xDaiValues[poolStakingConfig.type],
+				unipoolHelper,
 			);
 			promiseQueue.push(promise);
 		});
 		config.MAINNET_CONFIG.pools.forEach(poolStakingConfig => {
 			if (poolStakingConfig.type === StakingType.UNISWAPV3) return;
 
+			const unipool = mainnetValues[poolStakingConfig.type];
+			const unipoolHelper = unipool && new UnipoolHelper(unipool);
+
 			const promise: Promise<APR> = getLPStakingAPR(
 				poolStakingConfig,
 				config.MAINNET_NETWORK_NUMBER,
 				networkProviders[config.MAINNET_NETWORK_NUMBER],
-				mainnetValues[poolStakingConfig.type],
+				unipoolHelper,
 			);
 			promiseQueue.push(promise);
 		});
