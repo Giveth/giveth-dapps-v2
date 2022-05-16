@@ -1,13 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { subgraphApiSlice } from './subgraph-api-slice';
-// import subgraphReducer from './subgraph.store';
+import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
+// import { subgraphApiSlice } from './subgraph-api-slice';
+import subgraphReducer from './subgraph.store';
 
 export const store = configureStore({
 	reducer: {
-		[subgraphApiSlice.reducerPath]: subgraphApiSlice.reducer,
-	},
-	middleware: getDefaultMiddleware => {
-		return getDefaultMiddleware().concat(subgraphApiSlice.middleware);
+		subgraph: subgraphReducer,
 	},
 });
 
@@ -15,3 +12,9 @@ export const store = configureStore({
 export type RootState = ReturnType<typeof store.getState>;
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch;
+export type AppThunk<ReturnType = void> = ThunkAction<
+	ReturnType,
+	RootState,
+	unknown,
+	Action<string>
+>;
