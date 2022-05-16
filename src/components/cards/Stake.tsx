@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { BigNumber as EthersBigNumber, constants, utils } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { H2, H5, Lead } from '@giveth/ui-design-system';
+import { useSelector } from 'react-redux';
 import { InputWithUnit } from '../input/index';
 import { Flex } from '../styled-components/Flex';
 import {
@@ -29,10 +30,10 @@ import config from '@/configuration';
 import { formatEthHelper, formatWeiHelper, Zero } from '@/helpers/number';
 import { APR } from '@/types/poolInfo';
 import { getLPStakingAPR } from '@/lib/stakingPool';
-import { useSubgraph } from '@/context';
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import { networkProviders } from '@/helpers/networkProvider';
 import { StakingType } from '@/types/config';
+import { RootState } from '@/stores/store';
 
 const InvestCardContainer = styled(Card)`
 	::before {
@@ -95,7 +96,9 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const [earnEstimate, setEarnEstimate] = useState<BigNumber>(Zero);
 	const [APR, setAPR] = useState<BigNumber>(Zero);
 	const { givTokenDistroHelper } = useTokenDistro();
-	const { mainnetValues, xDaiValues } = useSubgraph();
+	const { xDaiValues, mainnetValues } = useSelector(
+		(state: RootState) => state.subgraph,
+	);
 
 	useEffect(() => {
 		if (totalAmount) {
