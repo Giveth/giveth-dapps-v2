@@ -5,8 +5,9 @@ import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { networksParams } from '@/helpers/blockchain';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import { sendTransaction, showToastError } from '@/lib/helpers';
-import { saveDonation } from '@/services/donation';
+import { saveDonation, updateDonation } from '@/services/donation';
 import { IDonateModalProps } from '@/components/modals/DonateModal';
+import { EDonationStatus } from '@/apollo/types/gqlEnums';
 
 export interface ISelectedToken extends IProjectAcceptedToken {
 	value?: IProjectAcceptedToken;
@@ -103,6 +104,7 @@ export const confirmDonation = async (props: IConfirmDonation) => {
 	const { library } = web3Context;
 	const { walletAddress } = project;
 	const { address } = token;
+	let donationId = 0;
 
 	try {
 		const toAddress = isAddressENS(walletAddress!)
@@ -115,12 +117,13 @@ export const confirmDonation = async (props: IConfirmDonation) => {
 		};
 
 		const txCallbacks = {
-			onTxHash: async (txHash: string) => {
-				await saveDonation({ txHash, toAddress, ...props });
+			onTxHash: async (txHash: string, nonce: number) => {
+				donationId = await saveDonation({ nonce, txHash, ...props });
 				setTxHash(txHash);
 				setDonationSaved(true);
 			},
-			onReceipt: (txHash: string) => {
+			onReceipt: async (txHash: string) => {
+				updateDonation(donationId, EDonationStatus.VERIFIED);
 				setSuccessDonation({ txHash, givBackEligible });
 			},
 		};
@@ -136,6 +139,7 @@ export const confirmDonation = async (props: IConfirmDonation) => {
 			setTxHash(error.replacement.hash);
 			setShowFailedModal(true);
 			showToastError('Transaction cancelled!');
+			updateDonation(donationId, EDonationStatus.FAILED);
 		} else {
 			setShowFailedModal(true);
 			showToastError(error);
