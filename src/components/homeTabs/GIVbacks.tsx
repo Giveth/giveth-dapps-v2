@@ -7,6 +7,7 @@ import {
 } from '@giveth/ui-design-system';
 import BigNumber from 'bignumber.js';
 import { useWeb3React } from '@web3-react/core';
+import { useSelector } from 'react-redux';
 import { Flex } from '../styled-components/Flex';
 import {
 	GIVbacksTopContainer,
@@ -34,27 +35,29 @@ import { useTokenDistro } from '@/context/tokenDistro.context';
 import config from '@/configuration';
 import { HarvestAllModal } from '../modals/HarvestAll';
 import { getNowUnixMS } from '@/helpers/time';
-import { useSubgraph } from '@/context';
 import { formatDate } from '@/lib/helpers';
 import { GIVBackExplainModal } from '../modals/GIVBackExplain';
 import { TopInnerContainer } from './commons';
 import links from '@/lib/constants/links';
 import { Col, Container, Row } from '@/components/Grid';
 import Routes from '@/lib/constants/Routes';
+import { RootState } from '@/stores/store';
+import { BN } from '@/helpers/number';
 
 export const TabGIVbacksTop = () => {
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
 	const [showGivBackExplain, setShowGivBackExplain] = useState(false);
 	const [givBackStream, setGivBackStream] = useState<BigNumber.Value>(0);
 	const { givTokenDistroHelper } = useTokenDistro();
-	const {
-		currentValues: { balances },
-	} = useSubgraph();
+	const { balances } = useSelector(
+		(state: RootState) => state.subgraph.currentValues,
+	);
 	const { chainId } = useWeb3React();
 
 	useEffect(() => {
+		const _givback = BN(balances.givback);
 		setGivBackStream(
-			givTokenDistroHelper.getStreamPartTokenPerWeek(balances.givback),
+			givTokenDistroHelper.getStreamPartTokenPerWeek(_givback),
 		);
 	}, [balances, givTokenDistroHelper]);
 
@@ -78,14 +81,14 @@ export const TabGIVbacksTop = () => {
 							<GIVbackRewardCard
 								title='Your GIVbacks rewards'
 								wrongNetworkText='GIVbacks is only available on Gnosis Chain.'
-								liquidAmount={balances?.givbackLiquidPart}
+								liquidAmount={BN(balances?.givbackLiquidPart)}
 								stream={givBackStream}
 								actionLabel='HARVEST'
 								actionCb={() => {
 									setShowHarvestModal(true);
 								}}
 								subButtonLabel={
-									balances?.givbackLiquidPart?.isZero()
+									BN(balances?.givbackLiquidPart)?.isZero()
 										? "Why don't I have GIVbacks?"
 										: undefined
 								}
