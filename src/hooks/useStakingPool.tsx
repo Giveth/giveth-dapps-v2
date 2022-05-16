@@ -3,12 +3,12 @@ import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 
 import { useWeb3React } from '@web3-react/core';
+import { useSelector } from 'react-redux';
 import {
 	getGivStakingAPR,
 	getLPStakingAPR,
 	getUserStakeInfo,
 } from '@/lib/stakingPool';
-import { useSubgraph } from '@/context';
 import {
 	PoolStakingConfig,
 	RegenPoolStakingConfig,
@@ -17,33 +17,35 @@ import {
 import { APR, UserStakeInfo } from '@/types/poolInfo';
 import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
 import { Zero } from '@/helpers/number';
+import { RootState } from '@/stores/store';
 
-export const useStakingPool = (
-	poolStakingConfig: PoolStakingConfig | RegenPoolStakingConfig,
-	network: number,
-): {
+export interface IStakeInfo {
 	apr: BigNumber | null;
 	earned: ethers.BigNumber;
 	stakedAmount: ethers.BigNumber;
 	notStakedAmount: ethers.BigNumber;
-} => {
-	const { library, chainId } = useWeb3React();
-	const { currentValues } = useSubgraph();
+}
 
-	const { balances } = currentValues;
-
+export const useStakingPool = (
+	poolStakingConfig: PoolStakingConfig | RegenPoolStakingConfig,
+	network: number,
+): IStakeInfo => {
 	const [apr, setApr] = useState<BigNumber | null>(null);
 	const [userStakeInfo, setUserStakeInfo] = useState<UserStakeInfo>({
 		earned: ethers.constants.Zero,
 		notStakedAmount: ethers.constants.Zero,
 		stakedAmount: ethers.constants.Zero,
 	});
-
 	const stakePoolInfoPoll = useRef<NodeJS.Timer | null>(null);
 
+	const { library, chainId } = useWeb3React();
+	const currentValues = useSelector(
+		(state: RootState) => state.subgraph.currentValues,
+	);
+
+	const { balances } = currentValues;
 	const { type, LM_ADDRESS, regenFarmType } =
 		poolStakingConfig as RegenPoolStakingConfig;
-
 	const unipool = currentValues[regenFarmType || type];
 	const unipoolIsDefined = !!unipool;
 	const providerNetwork = library?.network?.chainId;

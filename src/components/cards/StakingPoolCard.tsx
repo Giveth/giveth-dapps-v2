@@ -19,9 +19,9 @@ const StakingPoolCard: FC<IStakingPoolCardProps> = ({
 
 	const stakeInfo = {
 		apr: apr,
-		userNotStakedAmount: notStakedAmount,
+		notStakedAmount: notStakedAmount,
 		earned: earned,
-		stakedLpAmount: stakedAmount,
+		stakedAmount: stakedAmount,
 	};
 
 	return (
