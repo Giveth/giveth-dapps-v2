@@ -5,6 +5,7 @@ import { utils, BigNumber as EthersBigNumber, constants } from 'ethers';
 import styled from 'styled-components';
 import { H2, H5, Lead } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
+import { useSelector } from 'react-redux';
 import {
 	APRRow,
 	ArrowButton,
@@ -30,9 +31,9 @@ import { formatEthHelper, formatWeiHelper, Zero } from '@/helpers/number';
 import { getGivStakingAPR } from '@/lib/stakingPool';
 import { APR } from '@/types/poolInfo';
 import { useTokenDistro } from '@/context/tokenDistro.context';
-import { useSubgraph } from '@/context';
 import { StakingType } from '@/types/config';
 import useClaim from '@/context/claim.context';
+import { RootState } from '@/stores/store';
 
 const GovernCardContainer = styled(Card)`
 	padding-left: 254px;
@@ -107,7 +108,9 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const [earnEstimate, setEarnEstimate] = useState<BigNumber>(Zero);
 	const [apr, setApr] = useState<APR>(null);
 	const { givTokenDistroHelper } = useTokenDistro();
-	const { xDaiValues } = useSubgraph();
+	const xDaiValues = useSelector(
+		(state: RootState) => state.subgraph.xDaiValues,
+	);
 
 	useEffect(() => {
 		let _stacked = 0;
