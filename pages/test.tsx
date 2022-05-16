@@ -3,9 +3,12 @@ import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 // import { useSelector, useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { gToast, ToastType } from '@/components/toasts';
-import { useGetSubgraphValuesQuery } from '@/stores/subgraph-api-slice';
+import { useAppDispatch } from '@/stores/hooks';
+import { fetchXDaiInfoAsync } from '@/stores/subgraph.store';
+import { RootState } from '@/stores/store';
 // import { RootState } from '@/stores/store';
 
 const TestRoute = () => {
@@ -13,10 +16,14 @@ const TestRoute = () => {
 	// 	(state: RootState) => state.subgraph.xDaiValues,
 	// );
 	const { library, chainId, account } = useWeb3React();
-	const { data, isLoading, error, refetch } = useGetSubgraphValuesQuery({
-		chain: chainId,
-		userAddress: account,
-	});
+	const dispatch = useAppDispatch();
+	const xDaiValues = useSelector(
+		(state: RootState) => state.subgraph.xDaiValues,
+	);
+	// const { data, isLoading, error, refetch } = useGetSubgraphValuesQuery({
+	// 	chain: chainId,
+	// 	userAddress: account,
+	// });
 
 	const notify = () =>
 		gToast('Testeeee', {
@@ -28,17 +35,19 @@ const TestRoute = () => {
 		});
 
 	// console.log('xDaiValues', xDaiValues);
-	useEffect(() => {
-		if (!library) return;
-		library.on('block', (evt: any) => {
-			console.log('evt', evt);
-			// dispatch(updateXDaiValues());
-		});
-		return () => {
-			library.removeAllListeners('block');
-		};
-	}, [library]);
-	console.log('****data', data);
+	// useEffect(() => {
+	// 	if (!library) return;
+	// 	library.on('block', (evt: any) => {
+	// 		console.log('evt', evt);
+	// 		// dispatch(updateXDaiValues());
+	// 	});
+	// 	return () => {
+	// 		library.removeAllListeners('block');
+	// 	};
+	// }, [library]);
+	// console.log('****data', data);
+
+	console.log('xDaiValues', xDaiValues);
 
 	return (
 		<>
@@ -48,7 +57,9 @@ const TestRoute = () => {
 			<TestContainer>
 				<button
 					onClick={() => {
-						refetch();
+						if (account) {
+							dispatch(fetchXDaiInfoAsync(account));
+						}
 					}}
 				>
 					Dispatch
