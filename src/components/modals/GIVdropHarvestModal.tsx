@@ -14,6 +14,7 @@ import Lottie from 'react-lottie';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
+import { useSelector } from 'react-redux';
 import { IModal, Modal } from './Modal';
 import {
 	ConfirmedInnerModal,
@@ -32,7 +33,7 @@ import {
 	RateRow,
 	TooltipContent,
 } from './HarvestAll.sc';
-import { formatWeiHelper } from '@/helpers/number';
+import { BN, formatWeiHelper } from '@/helpers/number';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { AmountBoxWithPrice } from '../AmountBoxWithPrice';
 import { useTokenDistro } from '@/context/tokenDistro.context';
@@ -44,8 +45,8 @@ import {
 	showFailedClaim,
 } from '../toasts/claim';
 import config from '@/configuration';
-import { useSubgraph } from '@/context';
 import { usePrice } from '@/context/price.context';
+import { RootState } from '@/stores/store';
 import type { TransactionResponse } from '@ethersproject/providers';
 
 const loadingAnimationOptions = {
@@ -91,20 +92,19 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 		ClaimState.UNKNOWN,
 	);
 	const { givTokenDistroHelper } = useTokenDistro();
-	const {
-		currentValues: { balances },
-	} = useSubgraph();
+	const { balances } = useSelector(
+		(state: RootState) => state.subgraph.currentValues,
+	);
 	const { givPrice } = usePrice();
 
 	const { account, library } = useWeb3React();
 
 	useEffect(() => {
+		const bnGIVback = BN(balances.givback);
 		setClaimableNow(givTokenDistroHelper.getUserClaimableNow(balances));
-		setGivBackLiquidPart(
-			givTokenDistroHelper.getLiquidPart(balances.givback),
-		);
+		setGivBackLiquidPart(givTokenDistroHelper.getLiquidPart(bnGIVback));
 		setGivBackStream(
-			givTokenDistroHelper.getStreamPartTokenPerWeek(balances.givback),
+			givTokenDistroHelper.getStreamPartTokenPerWeek(bnGIVback),
 		);
 	}, [balances, givTokenDistroHelper]);
 
@@ -249,7 +249,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 								</RateRow>
 							</>
 						)}
-						{!balances.givback.isZero() && (
+						{!BN(balances.givback).isZero() && (
 							<>
 								<HelpRow alignItems='center'>
 									<B>Claimable from GIVbacks</B>
