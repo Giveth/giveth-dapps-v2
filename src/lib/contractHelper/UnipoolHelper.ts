@@ -9,7 +9,7 @@ const toBN = (value: ethers.BigNumberish): BigNumber => {
 };
 
 export class UnipoolHelper {
-	private readonly totalSupply: BigNumber;
+	readonly totalSupply: BigNumber;
 	private readonly lastUpdateTime: number;
 	private readonly periodFinish: number;
 	private readonly rewardPerTokenStored: BigNumber;
