@@ -15,7 +15,6 @@ import { likeProject, unlikeProject } from '@/lib/reaction';
 import { showToastError } from '@/lib/helpers';
 import useModal from '@/context/ModalProvider';
 import { Flex } from '../styled-components/Flex';
-import VerificationBadge from '../badges/VerificationBadge';
 import { IProject } from '@/apollo/types/types';
 import useUser from '@/context/UserProvider';
 
@@ -36,7 +35,7 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 	const [showModal, setShowModal] = useState<boolean>(false);
 
 	const { project } = props;
-	const { traceCampaignId, slug, id: projectId } = project;
+	const { slug, id: projectId } = project;
 
 	const [reaction, setReaction] = useState(project.reaction);
 	const [totalReactions, setTotalReactions] = useState(
@@ -99,7 +98,6 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 				<ShareModal setShowModal={setShowModal} projectHref={slug} />
 			)}
 			<BadgeWrapper>
-				<Flex>{traceCampaignId && <VerificationBadge trace />}</Flex>
 				<Flex gap='3px'>
 					<BadgeButton onClick={likeUnlikeProject}>
 						{Number(totalReactions) > 0 && (
@@ -145,7 +143,7 @@ const BadgeWrapper = styled.div`
 	position: absolute;
 	z-index: 2;
 	display: flex;
-	justify-content: space-between;
+	justify-content: flex-end;
 	padding: 16px;
 `;
 

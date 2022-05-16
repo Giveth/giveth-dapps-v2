@@ -15,6 +15,7 @@ import {
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 
+import { AnimatePresence, motion } from 'framer-motion';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectCardBadges from './ProjectCardBadges';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
@@ -74,15 +75,30 @@ const ProjectCard = (props: IProjectCard) => {
 					<ProjectCardImage image={image} />
 				</ImagePlaceholder>
 				<CardBody isHover={isHover}>
-					{isHover && (
-						<LastUpdatedContainer>
-							Last updated:
-							{calcBiggestUnitDifferenceTime(updatedAt)}
-						</LastUpdatedContainer>
-					)}
-					<Title weight={700} isHover={isHover}>
-						{title}
-					</Title>
+					<AnimatePresence>
+						{isHover && (
+							<LastUpdatedContainer
+								as={motion.div}
+								initial={{
+									opacity: 0,
+								}}
+								animate={{
+									opacity: 1,
+								}}
+								transition={{
+									duration: 0.4,
+								}}
+							>
+								Last updated:
+								{calcBiggestUnitDifferenceTime(updatedAt)}
+							</LastUpdatedContainer>
+						)}
+					</AnimatePresence>
+					<a href={slugToProjectView(slug)}>
+						<Title weight={700} isHover={isHover}>
+							{title}
+						</Title>
+					</a>
 					{adminUser && !isForeignOrg ? (
 						<Link
 							href={addressToUserView(adminUser?.walletAddress)}
@@ -176,15 +192,18 @@ const GivBackIconContainer = styled.div`
 `;
 
 const BadgesContainer = styled(Flex)`
-	min-height: 22px;
+	min-height: 25px;
 `;
 
 const LastUpdatedContainer = styled(Subline)`
-	display: inline;
+	display: none;
 	background-color: ${neutralColors.gray[300]};
 	color: ${neutralColors.gray[700]};
 	padding: 2px 8px;
 	border-radius: 4px;
+	${mediaQueries.desktop} {
+		display: inline;
+	}
 `;
 
 const ActionButtons = styled(Row)`
