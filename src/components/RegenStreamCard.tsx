@@ -96,8 +96,8 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 				setClaimedAmount(BN(balances.foxClaimed));
 				break;
 			case StreamType.CULT:
-				setLockedAmount(balances.cultAllocatedTokens);
-				setClaimedAmount(balances.cultClaimed);
+				setLockedAmount(BN(balances.cultAllocatedTokens));
+				setClaimedAmount(BN(balances.cultClaimed));
 				break;
 			default:
 				setLockedAmount(ethers.constants.Zero);

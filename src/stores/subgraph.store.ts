@@ -33,6 +33,7 @@ export interface ISubgraphState {
 	infinitePositionReward?: IInfinitePositionReward;
 	infinitePosition?: IUniswapV3Position;
 	[StreamType.FOX]?: ITokenDistroInfo;
+	[StreamType.CULT]?: ITokenDistroInfo;
 	[RegenFarmType.FOX_HNY]?: IUnipool;
 }
 
