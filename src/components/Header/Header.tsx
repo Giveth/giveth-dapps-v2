@@ -59,8 +59,14 @@ const Header: FC<IHeader> = () => {
 	const [isCreateRoute, setIsCreateRoute] = useState(false);
 
 	const dispatch = useAppDispatch();
+	const { chainId, active, account, library } = useWeb3React();
 	const { balances } = useSelector(
-		(state: RootState) => state.subgraph.currentValues,
+		(state: RootState) =>
+			state.subgraph[
+				chainId === config.MAINNET_NETWORK_NUMBER
+					? 'mainnetValues'
+					: 'xDaiValues'
+			],
 	);
 	const {
 		state: { user, isEnabled, isSignedIn },
@@ -73,7 +79,6 @@ const Header: FC<IHeader> = () => {
 			showWalletModal,
 		},
 	} = useModal();
-	const { chainId, active, account, library } = useWeb3React();
 	const { theme } = useGeneral();
 	const router = useRouter();
 

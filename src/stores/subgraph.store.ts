@@ -172,7 +172,6 @@ export const subgraphSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-// export const { updateMainnetValues, updateXDaiValues, incrementByAmount } =
-// 	subgraphSlice.actions;
+// export const {} = subgraphSlice.actions;
 
 export default subgraphSlice.reducer;
