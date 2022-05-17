@@ -35,6 +35,7 @@ export interface ISubgraphState {
 	[StreamType.FOX]?: ITokenDistroInfo;
 	[StreamType.CULT]?: ITokenDistroInfo;
 	[RegenFarmType.FOX_HNY]?: IUnipool;
+	[RegenFarmType.CULT_ETH]?: IUnipool;
 }
 
 const defaultSubgraphValue: ISubgraphState = {

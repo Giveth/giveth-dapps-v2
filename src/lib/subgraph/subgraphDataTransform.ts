@@ -50,14 +50,12 @@ const transformBalanceInfo = (info: any): IBalances => {
 	const foxHnyLp = info.foxHnyLp || 0;
 	const foxHnyLpStaked = info.foxHnyLpStaked || 0;
 
-	const cultAllocatedTokens = BN(info.cultAllocatedTokens || 0);
-	const cultClaimed = BN(info.cultClaimed || 0);
-	const rewardPerTokenPaidCultEthLm = BN(
-		info.rewardPerTokenPaidCultEthLm || 0,
-	);
-	const rewardsCultEthLm = BN(info.rewardsCultEthLm || 0);
-	const cultEthLp = BN(info.cultEthLp || 0);
-	const cultEthLpStaked = BN(info.cultEthLpStaked || 0);
+	const cultAllocatedTokens = info.cultAllocatedTokens || 0;
+	const cultClaimed = info.cultClaimed || 0;
+	const rewardPerTokenPaidCultEthLm = info.rewardPerTokenPaidCultEthLm || 0;
+	const rewardsCultEthLm = info.rewardsCultEthLm || 0;
+	const cultEthLp = info.cultEthLp || 0;
+	const cultEthLpStaked = info.cultEthLpStaked || 0;
 
 	return {
 		balance,

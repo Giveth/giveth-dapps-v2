@@ -91,7 +91,7 @@ export class TokenDistroHelper {
 				break;
 			case StreamType.CULT:
 				allocatedTokens = userBalance.cultAllocatedTokens;
-				claimed = userBalance.cultClaimed;
+				claimed = BN(userBalance.cultClaimed);
 				break;
 			default:
 				allocatedTokens = userBalance.allocatedTokens;
