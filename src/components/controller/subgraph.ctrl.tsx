@@ -1,12 +1,12 @@
 import { useWeb3React } from '@web3-react/core';
 import { useEffect } from 'react';
-import {
-	fetchCurrentInfoAsync,
-	fetchMainnetInfoAsync,
-	fetchXDaiInfoAsync,
-} from '@/features/subgraph/subgraph.slice';
 import { useAppDispatch } from '@/features/hooks';
 import config from '@/configuration';
+import {
+	fetchXDaiInfoAsync,
+	fetchMainnetInfoAsync,
+	fetchCurrentInfoAsync,
+} from '@/features/subgraph/subgraph.thunks';
 
 const SubgraphController = () => {
 	const dispatch = useAppDispatch();
