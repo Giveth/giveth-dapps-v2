@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, MouseEvent } from 'react';
 import {
 	brandColors,
 	IconHeart16,
@@ -15,15 +15,16 @@ import { likeProject, unlikeProject } from '@/lib/reaction';
 import { showToastError } from '@/lib/helpers';
 import useModal from '@/context/ModalProvider';
 import { Flex } from '../styled-components/Flex';
-import VerificationBadge from '../badges/VerificationBadge';
 import { IProject } from '@/apollo/types/types';
 import useUser from '@/context/UserProvider';
 
-interface IProjectCardBadges {
+interface IProjectCardLikeAndShareButtons {
 	project: IProject;
 }
 
-const ProjectCardBadges = (props: IProjectCardBadges) => {
+const ProjectCardLikeAndShareButtons = (
+	props: IProjectCardLikeAndShareButtons,
+) => {
 	const {
 		state: { user, isSignedIn },
 		actions: { incrementLikedProjectsCount, decrementLikedProjectsCount },
@@ -36,7 +37,7 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 	const [showModal, setShowModal] = useState<boolean>(false);
 
 	const { project } = props;
-	const { verified, traceCampaignId, slug, id: projectId } = project;
+	const { slug, id: projectId } = project;
 
 	const [reaction, setReaction] = useState(project.reaction);
 	const [totalReactions, setTotalReactions] = useState(
@@ -44,7 +45,8 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 	);
 	const [loading, setLoading] = useState(false);
 
-	const likeUnlikeProject = async () => {
+	const likeUnlikeProject = async (e: MouseEvent<HTMLElement>) => {
+		e.stopPropagation();
 		if (!isSignedIn) {
 			showSignWithWallet();
 			return;
@@ -98,10 +100,6 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 				<ShareModal setShowModal={setShowModal} projectHref={slug} />
 			)}
 			<BadgeWrapper>
-				<Flex>
-					{verified && <VerificationBadge verified />}
-					{traceCampaignId && <VerificationBadge trace />}
-				</Flex>
 				<Flex gap='3px'>
 					<BadgeButton onClick={likeUnlikeProject}>
 						{Number(totalReactions) > 0 && (
@@ -113,7 +111,12 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 							<IconHeartOutline16 />
 						)}
 					</BadgeButton>
-					<BadgeButton onClick={() => setShowModal(true)}>
+					<BadgeButton
+						onClick={e => {
+							e.stopPropagation();
+							setShowModal(true);
+						}}
+					>
 						<IconShare16 />
 					</BadgeButton>
 				</Flex>
@@ -142,8 +145,8 @@ const BadgeWrapper = styled.div`
 	position: absolute;
 	z-index: 2;
 	display: flex;
-	justify-content: space-between;
+	justify-content: flex-end;
 	padding: 16px;
 `;
 
-export default ProjectCardBadges;
+export default ProjectCardLikeAndShareButtons;
