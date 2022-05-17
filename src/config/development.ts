@@ -124,7 +124,7 @@ const config: EnvConfig = {
 				regenFarmIntro: {
 					title: 'CULT',
 					description:
-						'The purpose of CULT is to empower and fund those building and contributing towards our decentralized future. Our society is built to make it as difficut as possible to break away from societal, economic and other norms.',
+						'The purpose of CULT is to empower and fund those building and contributing towards our decentralized future.',
 					link: 'https://cultdao.io/',
 				},
 				farmStartTimeMS: 1646306818206,

@@ -361,10 +361,9 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 								)}
 								<HarvestAllDesc>
 									When you harvest {tokenSymbol}
-									rewards anywhere in the GIVeconomy, all
-									liquid {tokenSymbol} allocated to you on
-									that chain is sent to your wallet. Your{' '}
-									{tokenSymbol}stream flowrate may also
+									rewards, all liquid {tokenSymbol} allocated
+									to you on that chain is sent to your wallet.
+									Your {tokenSymbol}stream flowrate may also
 									increase. Below is the breakdown of rewards
 									you will get when you harvest.
 								</HarvestAllDesc>

@@ -31,7 +31,6 @@ const StakingPositionCard: FC<IStakingPositionCardProps> = ({
 	const { apr, unstakedPositions, stakedPositions } = useLiquidityPositions();
 	const [oneOfPositionsOutOfRange, setOneOfPositionsOutOfRange] =
 		useState(false);
-
 	const stakeInfo = {
 		apr: apr,
 		userNotStakedAmount: BigNumber.from(unstakedPositions.length),
