@@ -28,6 +28,7 @@ import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { RegenStreamConfig, StreamType } from '@/types/config';
 import { BN, formatWeiHelper } from '@/helpers/number';
 import { IconFox } from '@/components/Icons/Fox';
+import { IconCult } from '@/components/Icons/Cult';
 import { Flex } from './styled-components/Flex';
 import { HarvestAllModal } from './modals/HarvestAll';
 import { usePrice } from '@/context/price.context';
@@ -42,6 +43,8 @@ export const getStreamIconWithType = (type: StreamType, size?: number) => {
 	switch (type) {
 		case StreamType.FOX:
 			return <IconFox size={size} />;
+		case StreamType.CULT:
+			return <IconCult size={size} />;
 		default:
 			break;
 	}
@@ -86,12 +89,15 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 		network,
 		streamConfig.tokenAddressOnUniswapV2,
 	]);
-
 	useEffect(() => {
 		switch (streamConfig.type) {
 			case StreamType.FOX:
 				setLockedAmount(BN(balances.foxAllocatedTokens));
 				setClaimedAmount(BN(balances.foxClaimed));
+				break;
+			case StreamType.CULT:
+				setLockedAmount(balances.cultAllocatedTokens);
+				setClaimedAmount(balances.cultClaimed);
 				break;
 			default:
 				setLockedAmount(ethers.constants.Zero);
@@ -111,7 +117,6 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 
 	const percentage = tokenDistroHelper?.GlobalReleasePercentage || 0;
 	const remainTime = durationToString(tokenDistroHelper?.remain || 0);
-
 	const icon = getStreamIconWithType(streamConfig.type, 40);
 
 	return (

@@ -10,8 +10,9 @@ import {
 	brandColors,
 } from '@giveth/ui-design-system';
 
-import { IModal, Modal } from '@/components/modals/Modal';
+import { Modal } from '@/components/modals/Modal';
 import { ETheme, useGeneral } from '@/context/general.context';
+import { IModal } from '@/types/common';
 
 interface IText {
 	isDark?: boolean;

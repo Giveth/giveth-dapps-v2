@@ -8,6 +8,7 @@ import {
 } from './AmountBoxWithPrice.sc';
 import { IconGIV } from '@/components/Icons/GIV';
 import { IconFox } from '@/components/Icons/Fox';
+import { IconCult } from '@/components/Icons/Cult';
 
 interface IGIVBoxWithPriceProps {
 	amount: ethers.BigNumber;
@@ -19,6 +20,8 @@ const getTokenIconBySymbol = (tokenSymbol: string) => {
 	switch (tokenSymbol) {
 		case 'FOX':
 			return <IconFox size={40} />;
+		case 'CULT':
+			return <IconCult size={40} />;
 		case 'GIV':
 		default:
 			return <IconGIV size={40} />;

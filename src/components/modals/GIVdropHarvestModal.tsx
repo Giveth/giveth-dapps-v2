@@ -15,7 +15,7 @@ import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
 import { useSelector } from 'react-redux';
-import { IModal, Modal } from './Modal';
+import { Modal } from './Modal';
 import {
 	ConfirmedInnerModal,
 	ErrorInnerModal,
@@ -47,6 +47,7 @@ import {
 import config from '@/configuration';
 import { usePrice } from '@/context/price.context';
 import { RootState } from '@/stores/store';
+import { IModal } from '@/types/common';
 import type { TransactionResponse } from '@ethersproject/providers';
 
 const loadingAnimationOptions = {

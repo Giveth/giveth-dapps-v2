@@ -50,6 +50,15 @@ const transformBalanceInfo = (info: any): IBalances => {
 	const foxHnyLp = info.foxHnyLp || 0;
 	const foxHnyLpStaked = info.foxHnyLpStaked || 0;
 
+	const cultAllocatedTokens = BN(info.cultAllocatedTokens || 0);
+	const cultClaimed = BN(info.cultClaimed || 0);
+	const rewardPerTokenPaidCultEthLm = BN(
+		info.rewardPerTokenPaidCultEthLm || 0,
+	);
+	const rewardsCultEthLm = BN(info.rewardsCultEthLm || 0);
+	const cultEthLp = BN(info.cultEthLp || 0);
+	const cultEthLpStaked = BN(info.cultEthLpStaked || 0);
+
 	return {
 		balance,
 		allocatedTokens,
@@ -84,6 +93,13 @@ const transformBalanceInfo = (info: any): IBalances => {
 		rewardsFoxHnyLm,
 		foxHnyLp,
 		foxHnyLpStaked,
+
+		cultAllocatedTokens,
+		cultClaimed,
+		rewardPerTokenPaidCultEthLm,
+		rewardsCultEthLm,
+		cultEthLp,
+		cultEthLpStaked,
 	};
 };
 
@@ -230,6 +246,7 @@ export const transformSubgraphData = (data: any = {}): ISubgraphValue => {
 		balances: transformBalanceInfo(data?.balances),
 		tokenDistroInfo: transformTokenDistroInfo(data?.tokenDistroInfo),
 		[StreamType.FOX]: transformTokenDistroInfo(data[StreamType.FOX]),
+		[StreamType.CULT]: transformTokenDistroInfo(data[StreamType.CULT]),
 
 		[StakingType.GIV_LM]: transformUnipoolInfo(data[StakingType.GIV_LM]),
 		[StakingType.BALANCER]: transformUnipoolInfo(
@@ -246,6 +263,9 @@ export const transformSubgraphData = (data: any = {}): ISubgraphValue => {
 		),
 		[RegenFarmType.FOX_HNY]: transformUnipoolInfo(
 			data[RegenFarmType.FOX_HNY],
+		),
+		[RegenFarmType.CULT_ETH]: transformUnipoolInfo(
+			data[RegenFarmType.CULT_ETH],
 		),
 
 		uniswapV3Pool: transformUniswapV3Pool(data?.uniswapV3Pool),

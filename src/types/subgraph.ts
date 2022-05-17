@@ -32,6 +32,13 @@ export interface IBalances {
 	rewardsFoxHnyLm: string;
 	foxHnyLp: string;
 	foxHnyLpStaked: string;
+
+	cultAllocatedTokens: string;
+	cultClaimed: string;
+	rewardPerTokenPaidCultEthLm: string;
+	rewardsCultEthLm: string;
+	cultEthLpStaked: string;
+	cultEthLp: string;
 }
 export const ZeroBalances: IBalances = {
 	balance: '0',
@@ -67,6 +74,13 @@ export const ZeroBalances: IBalances = {
 	rewardsFoxHnyLm: '0',
 	foxHnyLp: '0',
 	foxHnyLpStaked: '0',
+
+	cultAllocatedTokens: '0',
+	cultClaimed: '0',
+	rewardPerTokenPaidCultEthLm: '0',
+	rewardsCultEthLm: '0',
+	cultEthLpStaked: '0',
+	cultEthLp: '0',
 };
 
 export interface ITokenAllocation {

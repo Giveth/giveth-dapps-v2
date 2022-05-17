@@ -34,6 +34,7 @@ import { useTokenDistro } from '@/context/tokenDistro.context';
 import { StakingType } from '@/types/config';
 import useClaim from '@/context/claim.context';
 import { RootState } from '@/stores/store';
+import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
 
 const GovernCardContainer = styled(Card)`
 	padding-left: 254px;
@@ -147,10 +148,13 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 
 	useEffect(() => {
 		const cb = () => {
+			const unipool = xDaiValues[StakingType.GIV_LM];
+			const unipoolHelper = unipool && new UnipoolHelper(unipool);
+
 			getGivStakingAPR(
 				config.XDAI_CONFIG.GIV.LM_ADDRESS,
 				config.XDAI_NETWORK_NUMBER,
-				xDaiValues[StakingType.GIV_LM],
+				unipoolHelper,
 			)
 				.then(_apr => {
 					mounted.current && setApr(_apr);

@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import router from 'next/router';
 import styled from 'styled-components';
 import { IconProfile } from '@giveth/ui-design-system/lib/cjs/components/icons/Profile';
@@ -12,11 +13,9 @@ import {
 import { Modal } from '@/components/modals/Modal';
 import { ETheme, useGeneral } from '@/context/general.context';
 import Routes from '@/lib/constants/Routes';
+import { IModal } from '@/types/common';
 
-export const CompleteProfileModal = (props: {
-	setShowModal: (x: boolean) => void;
-}) => {
-	const { setShowModal } = props;
+export const CompleteProfileModal: FC<IModal> = ({ setShowModal }) => {
 	const { theme } = useGeneral();
 
 	const handleClick = () => {

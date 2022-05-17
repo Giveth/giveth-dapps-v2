@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { H4 } from '@giveth/ui-design-system';
 
 import CryptoDonation, {
 	ISuccessDonation,
@@ -18,6 +19,7 @@ const DonationTypes = (props: {
 
 	return (
 		<>
+			<H4 weight={700}>Donate With</H4>
 			<RadioBox>
 				<RadioTitle
 					title='Cryptocurrency'

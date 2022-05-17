@@ -15,7 +15,7 @@ import {
 	OulineButton,
 } from '@giveth/ui-design-system';
 
-import { IModal, Modal } from './Modal';
+import { Modal } from './Modal';
 import FacebookIcon from '../../../public/images/social-fb.svg';
 import LinkedinIcon from '../../../public/images/social-linkedin.svg';
 import TwitterIcon from '../../../public/images/social-tw.svg';
@@ -24,6 +24,7 @@ import { FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { isSSRMode } from '@/lib/helpers';
+import { IModal } from '@/types/common';
 
 interface IShareModal extends IModal {
 	projectHref: string;

@@ -16,10 +16,12 @@ export enum StakingType {
 
 export enum RegenFarmType {
 	FOX_HNY = 'FOX_HNY_FARM',
+	CULT_ETH = 'CULT_ETH_FARM',
 }
 
 export enum StreamType {
 	FOX = 'FOX_STREAM',
+	CULT = 'CULT_STREAM',
 }
 
 export type PoolStakingConfig =
@@ -36,6 +38,7 @@ export interface SimplePoolStakingConfig extends BasicStakingConfig {
 	provideLiquidityLink?: string;
 	unit: string;
 	active: boolean;
+	network?: number;
 }
 
 export interface UniswapV3PoolStakingConfig extends SimplePoolStakingConfig {

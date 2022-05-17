@@ -39,6 +39,7 @@ const DonationTable: FC<DonationTable> = ({
 				<SortIcon order={order} title={EOrderBy.CreationDate} />
 			</TableHeader>
 			<TableHeader>Project</TableHeader>
+			<TableHeader>Status</TableHeader>
 			<TableHeader>Currency</TableHeader>
 			<TableHeader onClick={() => changeOrder(EOrderBy.TokenAmount)}>
 				Amount
@@ -62,6 +63,7 @@ const DonationTable: FC<DonationTable> = ({
 							<IconLink24 />
 						</ProjectTitleCell>
 					</Link>
+					<TableCell>{donation.status}</TableCell>
 					<TableCell>
 						<CurrencyBadge>{donation.currency}</CurrencyBadge>
 					</TableCell>
@@ -111,7 +113,7 @@ const TableCell = styled(P)<{ bold?: boolean }>`
 
 const DonationTableContainer = styled.div`
 	display: grid;
-	grid-template-columns: 1fr 4fr 1fr 1fr 1fr;
+	grid-template-columns: 1fr 4fr 1fr 1fr 1fr 1fr;
 	overflow: auto;
 	min-width: 900px;
 	margin: 0 10px;

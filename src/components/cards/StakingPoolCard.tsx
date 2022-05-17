@@ -16,7 +16,6 @@ const StakingPoolCard: FC<IStakingPoolCardProps> = ({
 		poolStakingConfig,
 		network,
 	);
-
 	const stakeInfo = {
 		apr: apr,
 		notStakedAmount: notStakedAmount,

@@ -159,7 +159,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 			);
 		}
 	}, [earned, tokenDistroHelper]);
-
 	useEffect(() => {
 		if (chainId) {
 			if (!regenStreamConfig) setInfo(chainId, type, earned);
@@ -425,8 +424,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 			{showAPRModal && (
 				<APRModal
 					setShowModal={setShowAPRModal}
-					poolStakingConfig={poolStakingConfig}
-					maxAmount={userNotStakedAmount}
 					regenStreamConfig={regenStreamConfig}
 				/>
 			)}
