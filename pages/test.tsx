@@ -2,9 +2,11 @@ import Head from 'next/head';
 import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 import { useWeb3React } from '@web3-react/core';
+import { useEffect } from 'react';
 import { gToast, ToastType } from '@/components/toasts';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { fetchXDaiInfoAsync } from '@/features/subgraph/subgraph.thunks';
+import { fetchUserByAddress } from '@/features/user/user.slice';
 
 const TestRoute = () => {
 	// const xDaiValues = useSelector(
@@ -39,6 +41,10 @@ const TestRoute = () => {
 	// 	};
 	// }, [library]);
 	// console.log('****data', data);
+
+	useEffect(() => {
+		dispatch(fetchUserByAddress({ address: account }));
+	}, []);
 
 	console.log('xDaiValues', xDaiValues);
 
