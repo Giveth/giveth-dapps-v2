@@ -5,7 +5,6 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { Button, GLink } from '@giveth/ui-design-system';
 
-import { useSelector } from 'react-redux';
 import { Flex } from '@/components/styled-components/Flex';
 import { ThemeType } from '@/context/theme.context';
 import { formatWeiHelper } from '@/helpers/number';
@@ -40,10 +39,7 @@ import { isUserRegistered, shortenAddress } from '@/lib/helpers';
 import HeaderRoutesResponsive from './HeaderResponsiveRoutes';
 import Routes from '@/lib/constants/Routes';
 import useModal from '@/context/ModalProvider';
-import { RootState } from '@/stores/store';
-import config from '@/configuration';
-import { fetchCurrentInfoAsync } from '@/stores/subgraph.store';
-import { useAppDispatch } from '@/stores/hooks';
+import { currentValuesHelper, useAppSelector } from '@/stores/hooks';
 
 export interface IHeader {
 	theme?: ThemeType;
@@ -58,15 +54,9 @@ const Header: FC<IHeader> = () => {
 	const [isGIVeconomyRoute, setIsGIVeconomyRoute] = useState(false);
 	const [isCreateRoute, setIsCreateRoute] = useState(false);
 
-	const dispatch = useAppDispatch();
 	const { chainId, active, account, library } = useWeb3React();
-	const { balances } = useSelector(
-		(state: RootState) =>
-			state.subgraph[
-				chainId === config.MAINNET_NETWORK_NUMBER
-					? 'mainnetValues'
-					: 'xDaiValues'
-			],
+	const { balances } = useAppSelector(
+		state => state.subgraph[currentValuesHelper(chainId)],
 	);
 	const {
 		state: { user, isEnabled, isSignedIn },
@@ -83,28 +73,6 @@ const Header: FC<IHeader> = () => {
 	const router = useRouter();
 
 	const showLinks = !isCreateRoute;
-
-	//Should move to seprate compnent
-	useEffect(() => {
-		const _account = account ?? '';
-		const _chainId = chainId ?? 0;
-		const interval = setInterval(() => {
-			// if (chainId === config.XDAI_NETWORK_NUMBER) {
-			// 	dispatch(fetchXDaiInfoAsync(_account));
-			// } else {
-			// 	dispatch(fetchMainnetInfoAsync(_account));
-			// }
-			dispatch(
-				fetchCurrentInfoAsync({
-					userAddress: _account,
-					chainId: _chainId,
-				}),
-			);
-		}, config.SUBGRAPH_POLLING_INTERVAL);
-		return () => {
-			clearInterval(interval);
-		};
-	}, [account, chainId]);
 
 	useEffect(() => {
 		setIsGIVeconomyRoute(router.route.startsWith('/giv'));
