@@ -8,11 +8,10 @@ import {
 } from 'react';
 import { AddressZero } from '@ethersproject/constants';
 import { useWeb3React } from '@web3-react/core';
-import { useSelector } from 'react-redux';
 import config from '@/configuration';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { StreamType } from '@/types/config';
-import { RootState } from '@/stores/store';
+import { useAppSelector } from '@/features/hooks';
 
 export interface IRegenTokenDistroHelpers {
 	[key: string]: TokenDistroHelper;
@@ -60,8 +59,8 @@ export const TokenDistroProvider: FC = ({ children }) => {
 	const [xDaiRegenTokenDistroHelpers, setXDaiRegenTokenDistroHelpers] =
 		useState<IRegenTokenDistroHelpers>({});
 
-	const { mainnetValues, xDaiValues } = useSelector(
-		(state: RootState) => state.subgraph,
+	const { mainnetValues, xDaiValues } = useAppSelector(
+		state => state.subgraph,
 	);
 
 	useEffect(() => {

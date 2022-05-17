@@ -39,7 +39,7 @@ import { isUserRegistered, shortenAddress } from '@/lib/helpers';
 import HeaderRoutesResponsive from './HeaderResponsiveRoutes';
 import Routes from '@/lib/constants/Routes';
 import useModal from '@/context/ModalProvider';
-import { currentValuesHelper, useAppSelector } from '@/stores/hooks';
+import { currentValuesHelper, useAppSelector } from '@/features/hooks';
 
 export interface IHeader {
 	theme?: ThemeType;

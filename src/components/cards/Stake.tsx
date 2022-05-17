@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { BigNumber as EthersBigNumber, constants, utils } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { H2, H5, Lead } from '@giveth/ui-design-system';
-import { useSelector } from 'react-redux';
 import { InputWithUnit } from '../input/index';
 import { Flex } from '../styled-components/Flex';
 import {
@@ -33,8 +32,8 @@ import { getLPStakingAPR } from '@/lib/stakingPool';
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import { networkProviders } from '@/helpers/networkProvider';
 import { StakingType } from '@/types/config';
-import { RootState } from '@/stores/store';
 import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
+import { useAppSelector } from '@/features/hooks';
 
 const InvestCardContainer = styled(Card)`
 	::before {
@@ -97,8 +96,8 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const [earnEstimate, setEarnEstimate] = useState<BigNumber>(Zero);
 	const [APR, setAPR] = useState<BigNumber>(Zero);
 	const { givTokenDistroHelper } = useTokenDistro();
-	const { xDaiValues, mainnetValues } = useSelector(
-		(state: RootState) => state.subgraph,
+	const { xDaiValues, mainnetValues } = useAppSelector(
+		state => state.subgraph,
 	);
 
 	useEffect(() => {

@@ -1,6 +1,6 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 // import { subgraphApiSlice } from './subgraph-api-slice';
-import subgraphReducer from './subgraph.store';
+import subgraphReducer from './subgraph/subgraph.slice';
 
 export const store = configureStore({
 	reducer: {

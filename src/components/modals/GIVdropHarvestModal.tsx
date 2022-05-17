@@ -14,7 +14,6 @@ import Lottie from 'react-lottie';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
-import { useSelector } from 'react-redux';
 import { Modal } from './Modal';
 import {
 	ConfirmedInnerModal,
@@ -46,8 +45,8 @@ import {
 } from '../toasts/claim';
 import config from '@/configuration';
 import { usePrice } from '@/context/price.context';
-import { RootState } from '@/stores/store';
 import { IModal } from '@/types/common';
+import { useAppSelector } from '@/features/hooks';
 import type { TransactionResponse } from '@ethersproject/providers';
 
 const loadingAnimationOptions = {
@@ -93,9 +92,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 		ClaimState.UNKNOWN,
 	);
 	const { givTokenDistroHelper } = useTokenDistro();
-	const { balances } = useSelector(
-		(state: RootState) => state.subgraph.currentValues,
-	);
+	const { balances } = useAppSelector(state => state.subgraph.currentValues);
 	const { givPrice } = usePrice();
 
 	const { account, library } = useWeb3React();

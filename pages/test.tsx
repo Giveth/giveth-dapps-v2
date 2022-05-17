@@ -4,11 +4,9 @@ import { GetServerSideProps } from 'next';
 // import { useSelector, useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
 // import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { gToast, ToastType } from '@/components/toasts';
-import { useAppDispatch } from '@/stores/hooks';
-import { fetchXDaiInfoAsync } from '@/stores/subgraph.store';
-import { RootState } from '@/stores/store';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { fetchXDaiInfoAsync } from '@/features/subgraph/subgraph.slice';
 // import { RootState } from '@/stores/store';
 
 const TestRoute = () => {
@@ -17,9 +15,7 @@ const TestRoute = () => {
 	// );
 	const { library, chainId, account } = useWeb3React();
 	const dispatch = useAppDispatch();
-	const xDaiValues = useSelector(
-		(state: RootState) => state.subgraph.xDaiValues,
-	);
+	const xDaiValues = useAppSelector(state => state.subgraph.xDaiValues);
 	// const { data, isLoading, error, refetch } = useGetSubgraphValuesQuery({
 	// 	chain: chainId,
 	// 	userAddress: account,

@@ -4,8 +4,8 @@ import {
 	fetchCurrentInfoAsync,
 	fetchMainnetInfoAsync,
 	fetchXDaiInfoAsync,
-} from '@/stores/subgraph.store';
-import { useAppDispatch } from '@/stores/hooks';
+} from '@/features/subgraph/subgraph.slice';
+import { useAppDispatch } from '@/features/hooks';
 import config from '@/configuration';
 
 const SubgraphController = () => {

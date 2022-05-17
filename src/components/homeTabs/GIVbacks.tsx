@@ -7,7 +7,6 @@ import {
 } from '@giveth/ui-design-system';
 import BigNumber from 'bignumber.js';
 import { useWeb3React } from '@web3-react/core';
-import { useSelector } from 'react-redux';
 import { Flex } from '../styled-components/Flex';
 import {
 	GIVbacksTopContainer,
@@ -41,17 +40,15 @@ import { TopInnerContainer } from './commons';
 import links from '@/lib/constants/links';
 import { Col, Container, Row } from '@/components/Grid';
 import Routes from '@/lib/constants/Routes';
-import { RootState } from '@/stores/store';
 import { BN } from '@/helpers/number';
+import { useAppSelector } from '@/features/hooks';
 
 export const TabGIVbacksTop = () => {
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
 	const [showGivBackExplain, setShowGivBackExplain] = useState(false);
 	const [givBackStream, setGivBackStream] = useState<BigNumber.Value>(0);
 	const { givTokenDistroHelper } = useTokenDistro();
-	const { balances } = useSelector(
-		(state: RootState) => state.subgraph.currentValues,
-	);
+	const { balances } = useAppSelector(state => state.subgraph.currentValues);
 	const { chainId } = useWeb3React();
 
 	useEffect(() => {

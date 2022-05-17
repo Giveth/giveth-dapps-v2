@@ -14,7 +14,6 @@ import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
-import { useSelector } from 'react-redux';
 import { Modal } from './Modal';
 import LoadingAnimation from '@/animations/loading.json';
 import {
@@ -63,8 +62,8 @@ import { IconWithTooltip } from '../IconWithToolTip';
 import { AmountBoxWithPrice } from '@/components/AmountBoxWithPrice';
 import { usePrice } from '@/context/price.context';
 import { getPoolIconWithName } from '../cards/BaseStakingCard';
-import { RootState } from '@/stores/store';
 import { IModal } from '@/types/common';
+import { useAppSelector } from '@/features/hooks';
 
 interface IHarvestAllModalProps extends IModal {
 	title: string;
@@ -101,9 +100,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 }) => {
 	const [state, setState] = useState<HarvestStates>(HarvestStates.HARVEST);
 	const tokenSymbol = regenStreamConfig?.rewardTokenSymbol || 'GIV';
-	const { balances } = useSelector(
-		(state: RootState) => state.subgraph.currentValues,
-	);
+	const { balances } = useAppSelector(state => state.subgraph.currentValues);
 	const { getTokenDistroHelper } = useTokenDistro();
 	const { givPrice, getTokenPrice } = usePrice();
 	const { account, library } = useWeb3React();

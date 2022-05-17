@@ -16,7 +16,6 @@ import { Zero } from '@ethersproject/constants';
 import Link from 'next/link';
 import { constants } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
-import { useSelector } from 'react-redux';
 import { Flex } from '../styled-components/Flex';
 import { MenuContainer } from './Menu.sc';
 import { switchNetworkHandler } from '@/lib/wallet';
@@ -30,7 +29,7 @@ import { getUserStakeInfo } from '@/lib/stakingPool';
 import { ETheme, useGeneral } from '@/context/general.context';
 import Routes from '@/lib/constants/Routes';
 import { networkInfo } from '@/lib/helpers';
-import { RootState } from '@/stores/store';
+import { useAppSelector } from '@/features/hooks';
 
 interface IRewardMenu {
 	showWhatIsGIVstreamModal: boolean;
@@ -46,9 +45,7 @@ export const RewardMenu = ({
 	const [givStreamLiquidPart, setGIVstreamLiquidPart] = useState(Zero);
 	const [flowRateNow, setFlowRateNow] = useState<BigNumber.Value>(0);
 
-	const currentValues = useSelector(
-		(state: RootState) => state.subgraph.currentValues,
-	);
+	const currentValues = useAppSelector(state => state.subgraph.currentValues);
 	const { givTokenDistroHelper } = useTokenDistro();
 	const { chainId } = useWeb3React();
 	const { theme } = useGeneral();

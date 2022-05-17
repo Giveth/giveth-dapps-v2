@@ -14,14 +14,13 @@ import { Token } from '@uniswap/sdk-core';
 import BigNumber from 'bignumber.js';
 import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
-import { useSelector } from 'react-redux';
 import { LiquidityPosition } from '@/types/nfts';
 import config from '@/configuration';
 import { StakingType, UniswapV3PoolStakingConfig } from '@/types/config';
 import { getUniswapV3TokenURI } from '@/services/subgraph.service';
 import { Zero } from '@/helpers/number';
 import { IUniswapV3Position } from '@/types/subgraph';
-import { RootState } from '@/stores/store';
+import { useAppSelector } from '@/features/hooks';
 
 const ERC721NftContext = createContext<{
 	stakedPositions: LiquidityPosition[];
@@ -44,9 +43,7 @@ const { INCENTIVE_REWARD_AMOUNT, INCENTIVE_START_TIME, INCENTIVE_END_TIME } =
 	uniswapV3PoolStakingConfig || {};
 
 export const NftsProvider: FC<{ children: ReactNode }> = ({ children }) => {
-	const mainnetValues = useSelector(
-		(state: RootState) => state.subgraph.mainnetValues,
-	);
+	const mainnetValues = useAppSelector(state => state.subgraph.mainnetValues);
 	const { chainId, library } = useWeb3React();
 
 	const network = config.MAINNET_NETWORK_NUMBER;

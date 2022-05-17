@@ -3,7 +3,6 @@ import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 
 import { useWeb3React } from '@web3-react/core';
-import { useSelector } from 'react-redux';
 import {
 	getGivStakingAPR,
 	getLPStakingAPR,
@@ -17,7 +16,7 @@ import {
 import { APR, UserStakeInfo } from '@/types/poolInfo';
 import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
 import { Zero } from '@/helpers/number';
-import { RootState } from '@/stores/store';
+import { useAppSelector } from '@/features/hooks';
 
 export interface IStakeInfo {
 	apr: BigNumber | null;
@@ -39,9 +38,7 @@ export const useStakingPool = (
 	const stakePoolInfoPoll = useRef<NodeJS.Timer | null>(null);
 
 	const { library, chainId } = useWeb3React();
-	const currentValues = useSelector(
-		(state: RootState) => state.subgraph.currentValues,
-	);
+	const currentValues = useAppSelector(state => state.subgraph.currentValues);
 
 	const { balances } = currentValues;
 	const { type, LM_ADDRESS, regenFarmType } =

@@ -16,7 +16,6 @@ import {
 import { constants, ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import { durationToString } from '@/lib/helpers';
 import {
@@ -32,7 +31,7 @@ import { IconCult } from '@/components/Icons/Cult';
 import { Flex } from './styled-components/Flex';
 import { HarvestAllModal } from './modals/HarvestAll';
 import { usePrice } from '@/context/price.context';
-import { RootState } from '@/stores/store';
+import { useAppSelector } from '@/features/hooks';
 
 interface RegenStreamProps {
 	network: number;
@@ -65,9 +64,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 	const [claimedAmount, setClaimedAmount] = useState<ethers.BigNumber>(
 		constants.Zero,
 	);
-	const { balances } = useSelector(
-		(state: RootState) => state.subgraph.currentValues,
-	);
+	const { balances } = useAppSelector(state => state.subgraph.currentValues);
 	const tokenDistroHelper = regenTokenDistroHelpers[streamConfig.type];
 
 	const { getTokenPrice } = usePrice();

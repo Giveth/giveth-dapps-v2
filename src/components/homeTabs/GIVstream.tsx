@@ -18,7 +18,6 @@ import { constants, ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { Zero } from '@ethersproject/constants';
 import { useWeb3React } from '@web3-react/core';
-import { useSelector } from 'react-redux';
 import {
 	Bar,
 	FlowRateRow,
@@ -66,16 +65,14 @@ import { Flex } from '../styled-components/Flex';
 import Pagination from '../Pagination';
 import { Container, Row, Col } from '@/components/Grid';
 import GivEconomyProjectCards from '../cards/GivEconomyProjectCards';
-import { RootState } from '@/stores/store';
+import { useAppSelector } from '@/features/hooks';
 
 export const TabGIVstreamTop = () => {
 	const [showModal, setShowModal] = useState(false);
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
 	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
 	const { givTokenDistroHelper } = useTokenDistro();
-	const { balances } = useSelector(
-		(state: RootState) => state.subgraph.currentValues,
-	);
+	const { balances } = useAppSelector(state => state.subgraph.currentValues);
 	const { allocatedTokens, claimed, givback } = balances;
 	const { chainId } = useWeb3React();
 
@@ -152,9 +149,7 @@ export const TabGIVstreamBottom = () => {
 	const [streamAmount, setStreamAmount] = useState<BigNumber>(
 		new BigNumber(0),
 	);
-	const { balances } = useSelector(
-		(state: RootState) => state.subgraph.currentValues,
-	);
+	const { balances } = useAppSelector(state => state.subgraph.currentValues);
 	const increaseSecRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
@@ -343,9 +338,7 @@ export const GIVstreamHistory: FC = () => {
 	>([]);
 	const [loading, setLoading] = useState(true);
 	const [page, setPage] = useState(0);
-	const { balances } = useSelector(
-		(state: RootState) => state.subgraph.currentValues,
-	);
+	const { balances } = useAppSelector(state => state.subgraph.currentValues);
 	const { allocationCount } = balances;
 
 	const { givTokenDistroHelper } = useTokenDistro();

@@ -12,7 +12,6 @@ import styled from 'styled-components';
 import { BigNumber, constants } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
-import { useSelector } from 'react-redux';
 import { Modal } from './Modal';
 import { CancelButton, HarvestButton, HelpRow, Pending } from './HarvestAll.sc';
 import { Flex } from '../styled-components/Flex';
@@ -30,9 +29,9 @@ import {
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import { getUniswapV3StakerContract } from '@/lib/contracts';
 import { StakeState } from '@/lib/staking';
-import { RootState } from '@/stores/store';
 import { BN } from '@/helpers/number';
 import { IModal } from '@/types/common';
+import { useAppSelector } from '@/features/hooks';
 
 const loadingAnimationOptions = {
 	loop: true,
@@ -53,9 +52,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 	isUnstakingModal,
 	setShowModal,
 }) => {
-	const { balances } = useSelector(
-		(state: RootState) => state.subgraph.currentValues,
-	);
+	const { balances } = useAppSelector(state => state.subgraph.currentValues);
 	const { givTokenDistroHelper } = useTokenDistro();
 	const { chainId, library, account } = useWeb3React();
 	const { unstakedPositions, stakedPositions, currentIncentive } =
