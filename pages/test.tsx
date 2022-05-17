@@ -1,13 +1,10 @@
 import Head from 'next/head';
 import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
-// import { useSelector, useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
-// import { useEffect } from 'react';
 import { gToast, ToastType } from '@/components/toasts';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { fetchXDaiInfoAsync } from '@/features/subgraph/subgraph.slice';
-// import { RootState } from '@/stores/store';
+import { fetchXDaiInfoAsync } from '@/features/subgraph/subgraph.thunks';
 
 const TestRoute = () => {
 	// const xDaiValues = useSelector(
