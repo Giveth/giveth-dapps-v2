@@ -18,11 +18,13 @@ import { Flex } from '../styled-components/Flex';
 import { IProject } from '@/apollo/types/types';
 import useUser from '@/context/UserProvider';
 
-interface IProjectCardBadges {
+interface IProjectCardLikeAndShareButtons {
 	project: IProject;
 }
 
-const ProjectCardBadges = (props: IProjectCardBadges) => {
+const ProjectCardLikeAndShareButtons = (
+	props: IProjectCardLikeAndShareButtons,
+) => {
 	const {
 		state: { user, isSignedIn },
 		actions: { incrementLikedProjectsCount, decrementLikedProjectsCount },
@@ -147,4 +149,4 @@ const BadgeWrapper = styled.div`
 	padding: 16px;
 `;
 
-export default ProjectCardBadges;
+export default ProjectCardLikeAndShareButtons;

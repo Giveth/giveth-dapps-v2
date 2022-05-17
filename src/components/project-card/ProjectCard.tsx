@@ -16,7 +16,7 @@ import {
 import Link from 'next/link';
 
 import { Shadow } from '@/components/styled-components/Shadow';
-import ProjectCardBadges from './ProjectCardBadges';
+import ProjectCardBadges from './ProjectCardLikeAndShareButtons';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
 import { IProject } from '@/apollo/types/types';
 import { calcBiggestUnitDifferenceTime, htmlToText } from '@/lib/helpers';
@@ -75,8 +75,8 @@ const ProjectCard = (props: IProjectCard) => {
 				</ImagePlaceholder>
 				<CardBody
 					isHover={isHover}
-					isGivingBlock={
-						organization?.label === ORGANIZATION.givingBlock
+					isOtherOrganization={
+						organization?.label !== ORGANIZATION.giveth
 					}
 				>
 					<div style={{ position: 'relative' }}>
@@ -217,7 +217,10 @@ const Description = styled(P)`
 	margin-bottom: 16px;
 `;
 
-const CardBody = styled.div<{ isGivingBlock?: boolean; isHover?: boolean }>`
+const CardBody = styled.div<{
+	isOtherOrganization?: boolean;
+	isHover?: boolean;
+}>`
 	padding: 26px;
 	padding-top: 32px;
 	position: absolute;
@@ -227,7 +230,7 @@ const CardBody = styled.div<{ isGivingBlock?: boolean; isHover?: boolean }>`
 	background-color: ${neutralColors.gray[100]};
 	transition: top 0.3s ease;
 	border-radius: ${props =>
-		props.isGivingBlock ? '0 12px 12px 12px' : '12px'};
+		props.isOtherOrganization ? '0 12px 12px 12px' : '12px'};
 	${mediaQueries.desktop} {
 		top: ${props => (props.isHover ? '130px' : '200px')};
 	}
