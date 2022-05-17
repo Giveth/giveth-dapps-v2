@@ -5,10 +5,7 @@ import {
 	B,
 	brandColors,
 	H6,
-	IconArrowBottom,
-	IconArrowTop,
 	IconExternalLink,
-	IconSort16,
 	neutralColors,
 	P,
 	SublineBold,
@@ -24,6 +21,7 @@ import { smallFormatDate, formatTxLink } from '@/lib/helpers';
 import config from '@/configuration';
 import { EDirection, EDonationType } from '@/apollo/types/gqlEnums';
 import ExternalLink from '@/components/ExternalLink';
+import SortIcon from '@/components/SortIcon';
 import ETHIcon from '/public/images/currencies/eth/24.svg';
 import GnosisIcon from '/public/images/currencies/gnosisChain/24.svg';
 
@@ -39,18 +37,6 @@ interface IOrder {
 	by: EOrderBy;
 	direction: EDirection;
 }
-
-const injectSortIcon = (order: IOrder, title: EOrderBy) => {
-	return order.by === title ? (
-		order.direction === EDirection.DESC ? (
-			<IconArrowBottom size={16} />
-		) : (
-			<IconArrowTop size={16} />
-		)
-	) : (
-		<IconSort16 />
-	);
-};
 
 interface IProjectDonationTable {
 	donations: IDonation[];
@@ -74,10 +60,10 @@ const ProjectDonationTable = ({
 	const [activeTab, setActiveTab] = useState<number>(0);
 	const [searchTerm, setSearchTerm] = useState<string>('');
 
-	const orderChangeHandler = (orderby: EOrderBy) => {
-		if (orderby === order.by) {
+	const orderChangeHandler = (orderBy: EOrderBy) => {
+		if (orderBy === order.by) {
 			setOrder({
-				by: orderby,
+				by: orderBy,
 				direction:
 					order.direction === EDirection.ASC
 						? EDirection.DESC
@@ -85,7 +71,7 @@ const ProjectDonationTable = ({
 			});
 		} else {
 			setOrder({
-				by: orderby,
+				by: orderBy,
 				direction: EDirection.DESC,
 			});
 		}
@@ -149,9 +135,13 @@ const ProjectDonationTable = ({
 							}
 						>
 							Donated at
-							{injectSortIcon(order, EOrderBy.CreationDate)}
+							<SortIcon
+								order={order}
+								title={EOrderBy.CreationDate}
+							/>
 						</TableHeader>
 						<TableHeader>Donor</TableHeader>
+						<TableHeader>Status</TableHeader>
 						<TableHeader>Network</TableHeader>
 						<TableHeader>Currency</TableHeader>
 						<TableHeader
@@ -160,7 +150,10 @@ const ProjectDonationTable = ({
 							}
 						>
 							Amount
-							{injectSortIcon(order, EOrderBy.TokenAmount)}
+							<SortIcon
+								order={order}
+								title={EOrderBy.TokenAmount}
+							/>
 						</TableHeader>
 						<TableHeader
 							onClick={() =>
@@ -168,7 +161,10 @@ const ProjectDonationTable = ({
 							}
 						>
 							USD Value
-							{injectSortIcon(order, EOrderBy.UsdAmount)}
+							<SortIcon
+								order={order}
+								title={EOrderBy.UsdAmount}
+							/>
 						</TableHeader>
 						{pageDonations.map(donation => (
 							<RowWrapper key={donation.id}>
@@ -186,6 +182,7 @@ const ProjectDonationTable = ({
 										: donation.user?.name ||
 										  donation.user?.firstName}
 								</TableCell>
+								<TableCell>{donation.status}</TableCell>
 								<TableCell>
 									<Image
 										alt='chain logo'
@@ -290,7 +287,7 @@ const DonationTableContainer = styled.div`
 	margin-top: 12px;
 	display: grid;
 	width: 100%;
-	grid-template-columns: 1.25fr 2fr 1.25fr 1fr 1fr 1fr;
+	grid-template-columns: 1.25fr 2fr 1fr 1.25fr 1fr 1fr 1fr;
 	min-width: 800px;
 `;
 

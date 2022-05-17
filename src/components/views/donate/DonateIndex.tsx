@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
-import { H4, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 import { ISuccessDonation } from './CryptoDonation';
@@ -37,13 +36,10 @@ const ProjectsIndex = (props: IProjectBySlug) => {
 								givBackEligible={givBackEligible!}
 							/>
 						) : (
-							<>
-								<H4>Donate With</H4>
-								<DonationTypes
-									project={project}
-									setSuccess={setSuccess}
-								/>
-							</>
+							<DonationTypes
+								project={project}
+								setSuccess={setSuccess}
+							/>
 						)}
 					</Right>
 				</Sections>
@@ -81,10 +77,6 @@ const Right = styled.div<{ isMobile: boolean }>`
 	padding: 65px 32px 32px;
 	border-radius: ${props => (props.isMobile ? '16px' : '0 16px 16px 0')};
 	min-height: 620px;
-	> h4 {
-		color: ${brandColors.deep[700]};
-		font-weight: bold;
-	}
 `;
 
 export default ProjectsIndex;

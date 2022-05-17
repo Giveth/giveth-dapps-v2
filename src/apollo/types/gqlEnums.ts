@@ -24,3 +24,9 @@ export enum EDirection {
 export enum EDonationType {
 	POIGNART = 'poignArt',
 }
+
+export enum EDonationStatus {
+	PENDING = 'pending',
+	VERIFIED = 'verified',
+	FAILED = 'failed',
+}
