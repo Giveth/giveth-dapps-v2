@@ -22,7 +22,6 @@ import {
 	StreamType,
 } from '@/types/config';
 import { BN, formatWeiHelper, Zero } from '@/helpers/number';
-import { useTokenDistro } from '@/context/tokenDistro.context';
 import { harvestTokens } from '@/lib/stakingPool';
 import { claimUnstakeStake } from '@/lib/stakingNFT';
 import { useLiquidityPositions } from '@/context';
@@ -64,12 +63,14 @@ import { usePrice } from '@/context/price.context';
 import { getPoolIconWithName } from '../cards/BaseStakingCard';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
+import type { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 
 interface IHarvestAllModalProps extends IModal {
 	title: string;
 	poolStakingConfig?: PoolStakingConfig;
 	earned?: ethers.BigNumber;
 	network: number;
+	tokenDistroHelper?: TokenDistroHelper;
 	regenStreamConfig?: RegenStreamConfig;
 }
 
@@ -96,12 +97,12 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	poolStakingConfig,
 	earned,
 	network,
+	tokenDistroHelper,
 	regenStreamConfig,
 }) => {
 	const [state, setState] = useState<HarvestStates>(HarvestStates.HARVEST);
 	const tokenSymbol = regenStreamConfig?.rewardTokenSymbol || 'GIV';
 	const { balances } = useAppSelector(state => state.subgraph.currentValues);
-	const { getTokenDistroHelper } = useTokenDistro();
 	const { givPrice, getTokenPrice } = usePrice();
 	const { account, library } = useWeb3React();
 	const { currentIncentive, stakedPositions } = useLiquidityPositions();
@@ -123,10 +124,6 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	const [sumLiquid, setSumLiquid] = useState(ethers.constants.Zero);
 	const [sumStream, setSumStream] = useState<BigNumber>(Zero);
 
-	const tokenDistroHelper = useMemo(
-		() => getTokenDistroHelper(regenStreamConfig?.type),
-		[getTokenDistroHelper, regenStreamConfig],
-	);
 	const givback = useMemo<ethers.BigNumber>(() => {
 		return regenStreamConfig ? ethers.constants.Zero : BN(balances.givback);
 	}, [regenStreamConfig, balances.givback]);
@@ -142,6 +139,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	}, [getTokenPrice, givPrice, network, regenStreamConfig]);
 
 	useEffect(() => {
+		if (!tokenDistroHelper) return;
 		const bnAllocatedTokens = BN(balances.allocatedTokens);
 		if (earned) {
 			setRewardLiquidPart(tokenDistroHelper.getLiquidPart(earned));
@@ -179,6 +177,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	}, [rewardStream, givBackStream, earnedStream]);
 
 	useEffect(() => {
+		if (!tokenDistroHelper) return;
 		if (
 			!regenStreamConfig &&
 			network === config.XDAI_NETWORK_NUMBER &&
@@ -204,7 +203,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	]);
 
 	const onHarvest = async () => {
-		if (!library || !account) return;
+		if (!library || !account || !tokenDistroHelper) return;
 		setState(HarvestStates.HARVESTING);
 		try {
 			if (poolStakingConfig) {
