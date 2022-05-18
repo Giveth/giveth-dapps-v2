@@ -10,10 +10,10 @@ import { formatWeiHelper } from '@/helpers/number';
 import SparkleBurstAnimation from '@/animations/sparkle-burst.json';
 import SparkleAnimation from '@/animations/sparkle.json';
 import BlowingAnimation from '@/animations/blowing.json';
-import { useTokenDistro } from '@/context/tokenDistro.context';
 import { Flex } from '../styled-components/Flex';
 import { AddTokenButton } from '../AddTokenButton';
 import { Container } from '@/components/Grid';
+import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 
 const SmileImage = styled.div`
 	position: absolute;
@@ -154,9 +154,9 @@ const BlowingContainer = styled.div`
 
 export const CongratulationsCard = () => {
 	const [streamValue, setStreamValue] = useState<string>('0');
-	const { givTokenDistroHelper } = useTokenDistro();
 	const { totalAmount, resetWallet } = useClaim();
 	const { library } = useWeb3React();
+	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 
 	useEffect(() => {
 		setStreamValue(
