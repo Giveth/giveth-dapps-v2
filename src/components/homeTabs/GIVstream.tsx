@@ -56,7 +56,7 @@ import { BN, formatWeiHelper } from '@/helpers/number';
 import config from '@/configuration';
 import { durationToString } from '@/lib/helpers';
 import { NetworkSelector } from '@/components/NetworkSelector';
-import { useTokenDistro } from '@/context/tokenDistro.context';
+import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { HarvestAllModal } from '../modals/HarvestAll';
 import { ITokenAllocation } from '@/types/subgraph';
 import { IconGIV } from '../Icons/GIV';
@@ -71,7 +71,7 @@ export const TabGIVstreamTop = () => {
 	const [showModal, setShowModal] = useState(false);
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
 	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
-	const { givTokenDistroHelper } = useTokenDistro();
+	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const { balances } = useAppSelector(state => state.subgraph.currentValues);
 	const { allocatedTokens, claimed, givback } = balances;
 	const { chainId } = useWeb3React();
@@ -133,6 +133,7 @@ export const TabGIVstreamTop = () => {
 					title='GIVstream Rewards'
 					setShowModal={setShowModal}
 					network={chainId}
+					tokenDistroHelper={givTokenDistroHelper}
 				/>
 			)}
 		</>
@@ -141,7 +142,7 @@ export const TabGIVstreamTop = () => {
 
 export const TabGIVstreamBottom = () => {
 	const { chainId } = useWeb3React();
-	const { givTokenDistroHelper } = useTokenDistro();
+	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 
 	const [percent, setPercent] = useState(0);
 	const [remain, setRemain] = useState('');
@@ -341,7 +342,7 @@ export const GIVstreamHistory: FC = () => {
 	const { balances } = useAppSelector(state => state.subgraph.currentValues);
 	const { allocationCount } = balances;
 
-	const { givTokenDistroHelper } = useTokenDistro();
+	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 
 	useEffect(() => {
 		setPage(0);

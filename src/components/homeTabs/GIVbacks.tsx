@@ -30,7 +30,7 @@ import {
 	GivAllocated,
 	InfoReadMore,
 } from './GIVbacks.sc';
-import { useTokenDistro } from '@/context/tokenDistro.context';
+import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import config from '@/configuration';
 import { HarvestAllModal } from '../modals/HarvestAll';
 import { getNowUnixMS } from '@/helpers/time';
@@ -47,7 +47,7 @@ export const TabGIVbacksTop = () => {
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
 	const [showGivBackExplain, setShowGivBackExplain] = useState(false);
 	const [givBackStream, setGivBackStream] = useState<BigNumber.Value>(0);
-	const { givTokenDistroHelper } = useTokenDistro();
+	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const { balances } = useAppSelector(state => state.subgraph.currentValues);
 	const { chainId } = useWeb3React();
 
@@ -102,6 +102,7 @@ export const TabGIVbacksTop = () => {
 					title='GIVbacks Rewards'
 					setShowModal={setShowHarvestModal}
 					network={config.XDAI_NETWORK_NUMBER}
+					tokenDistroHelper={givTokenDistroHelper}
 				/>
 			)}
 			{showGivBackExplain && (
@@ -115,7 +116,7 @@ export const TabGIVbacksBottom = () => {
 	const [round, setRound] = useState(0);
 	const [roundStartime, setRoundStartime] = useState(new Date());
 	const [roundEndTime, setRoundEndTime] = useState(new Date());
-	const { givTokenDistroHelper } = useTokenDistro();
+	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 
 	useEffect(() => {
 		if (givTokenDistroHelper) {

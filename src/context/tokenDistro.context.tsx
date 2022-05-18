@@ -24,7 +24,7 @@ export interface ITokenDistroContext {
 	) => TokenDistroHelper;
 }
 
-const defaultTokenDistroHelper = new TokenDistroHelper({
+export const defaultTokenDistroHelper = new TokenDistroHelper({
 	contractAddress: AddressZero,
 	initialAmount: '0',
 	lockedAmount: '0',
