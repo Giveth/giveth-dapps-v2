@@ -11,6 +11,7 @@ var pjson = require('./package.json');
 
 const moduleExports = withBundleAnalyzer({
 	// Your existing module.exports
+	basePath: 'https://www.giveth.io/',
 	reactStrictMode: true,
 	images: {
 		domains: [

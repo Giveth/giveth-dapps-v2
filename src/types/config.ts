@@ -117,6 +117,9 @@ interface MainnetNetworkConfig extends BasicNetworkConfig {
 interface XDaiNetworkConfig extends BasicNetworkConfig {
 	MERKLE_ADDRESS: string;
 }
+interface MicroservicesConfig {
+	authentication: string;
+}
 
 export interface EnvConfig {
 	MAINNET_NETWORK_NUMBER: number;
@@ -125,6 +128,7 @@ export interface EnvConfig {
 	XDAI_CONFIG: XDaiNetworkConfig;
 	GARDEN_LINK: string;
 	BACKEND_LINK: string;
+	MICROSERVICES: MicroservicesConfig;
 }
 
 export interface GlobalConfig extends EnvConfig {

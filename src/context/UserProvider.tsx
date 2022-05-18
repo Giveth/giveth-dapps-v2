@@ -5,6 +5,7 @@ import React, {
 	useEffect,
 	useState,
 } from 'react';
+import { useRouter } from 'next/router';
 import { useWeb3React } from '@web3-react/core';
 import { BigNumberish } from '@ethersproject/bignumber';
 import { formatEther } from '@ethersproject/units';
@@ -12,11 +13,18 @@ import { formatEther } from '@ethersproject/units';
 import { captureException } from '@sentry/nextjs';
 import { initializeApollo } from '@/apollo/apolloClient';
 import { GET_USER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
-import { compareAddresses, showToastError, signMessage } from '@/lib/helpers';
+import {
+	compareAddresses,
+	showToastError,
+	signMessage,
+	postData,
+	createSiweMessage,
+} from '@/lib/helpers';
 import { getToken } from '@/services/token';
 import { IUser } from '@/apollo/types/types';
 import StorageLabel from '@/lib/localStorage';
 import { walletsArray } from '@/lib/wallet/walletTypes';
+import config from '@/configuration';
 
 interface IUserContext {
 	state: {
@@ -60,6 +68,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 
 	const [user, setUser] = useState<IUser | undefined>();
 	const [balance, setBalance] = useState<string | null>(null);
+	const router = useRouter();
 
 	const isEnabled = !!library?.getSigner() && !!account && !!chainId;
 	const isSignedIn = isEnabled && !!user?.token;
@@ -143,19 +152,34 @@ export const UserProvider = (props: { children: ReactNode }) => {
 	};
 
 	const signToGetToken = async () => {
-		const signedMessage = await signMessage(
-			process.env.NEXT_PUBLIC_OUR_SECRET as string,
-			account,
-			chainId,
-			library.getSigner(),
+		const siweMessage: any = await createSiweMessage(
+			account!,
+			chainId!,
+			router.basePath,
+			'Login into Giveth services',
 		);
-		if (!signedMessage) return false;
+		const { nonce, message } = siweMessage;
+		const signature = await library.getSigner().signMessage(message);
 
-		const token = await getToken(account, signedMessage, chainId, user);
+		if (!signature) return false;
+
+		const token = await getToken(signature, message, nonce);
+		const authorizedToken = await authorizeToken(token.jwt);
 		await apolloClient.resetStore();
-		setToken(token);
-		setUser({ ...user, token });
-		return token;
+		setToken(authorizedToken);
+		setUser({ ...user, token: authorizedToken });
+
+		return authorizedToken;
+	};
+
+	const authorizeToken = async (jwt: string) => {
+		const authorization = await postData(
+			`${config.MICROSERVICES.authentication}/authorization`,
+			{
+				jwt,
+			},
+		);
+		return authorization.jwt;
 	};
 
 	const getBalance = () => {

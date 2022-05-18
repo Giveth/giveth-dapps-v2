@@ -154,3 +154,8 @@ export interface IProjectUpdate {
 	title: string;
 	userId: string;
 }
+
+export interface ISiweMessage {
+	nonce: string;
+	message: string;
+}

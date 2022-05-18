@@ -7,6 +7,7 @@ import { Contract } from '@ethersproject/contracts';
 import { Web3Provider } from '@ethersproject/providers';
 import { AddressZero } from '@ethersproject/constants';
 import { brandColors } from '@giveth/ui-design-system';
+import { SiweMessage } from 'siwe';
 // @ts-ignore
 import abi from 'human-standard-token-abi';
 
@@ -14,11 +15,12 @@ import { captureException } from '@sentry/nextjs';
 import { BasicNetworkConfig, GasPreference } from '@/types/config';
 import { EWallets } from '@/lib/wallet/walletTypes';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
-import { IUser } from '@/apollo/types/types';
+import { IUser, ISiweMessage } from '@/apollo/types/types';
 import Routes from '@/lib/constants/Routes';
 import { gToast, ToastType } from '@/components/toasts';
 import StorageLabel from '@/lib/localStorage';
 import { networksParams } from '@/helpers/blockchain';
+import config from '@/configuration';
 
 declare let window: any;
 
@@ -393,4 +395,56 @@ export const networkInfo = (networkId?: number) => {
 		networkName: info.chainName,
 		networkToken: info.nativeCurrency.symbol,
 	};
+};
+
+export const postData = async (url: string, data: object) => {
+	const response = await fetch(url, {
+		method: 'POST',
+		cache: 'no-cache',
+		credentials: 'same-origin',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		redirect: 'follow',
+		referrerPolicy: 'no-referrer',
+		body: JSON.stringify(data),
+	});
+	return response.json();
+};
+
+export const createSiweMessage = async (
+	address: string,
+	chainId: number,
+	host: string,
+	statement: string,
+) => {
+	try {
+		let domain = host;
+
+		if (typeof window !== 'undefined') {
+			domain = window.location.hostname;
+		}
+		const nonceResponse: any = await fetch(
+			`${config.MICROSERVICES.authentication}/nonce`,
+		).then(n => {
+			return n.json();
+		});
+		const nonce = nonceResponse.message;
+		const siweMessage = new SiweMessage({
+			domain,
+			address,
+			nonce,
+			statement,
+			uri: origin,
+			version: '1',
+			chainId,
+		});
+		return {
+			message: siweMessage.prepareMessage(),
+			nonce,
+		};
+	} catch (error) {
+		console.log({ error });
+		return false;
+	}
 };
