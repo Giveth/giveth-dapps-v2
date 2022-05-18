@@ -35,7 +35,7 @@ import {
 import { BN, formatWeiHelper } from '@/helpers/number';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { AmountBoxWithPrice } from '../AmountBoxWithPrice';
-import { useTokenDistro } from '@/context/tokenDistro.context';
+import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import LoadingAnimation from '@/animations/loading.json';
 import { claimAirDrop } from '@/lib/claim';
 import {
@@ -91,7 +91,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 	const [claimState, setClaimState] = useState<ClaimState>(
 		ClaimState.UNKNOWN,
 	);
-	const { givTokenDistroHelper } = useTokenDistro();
+	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const { balances } = useAppSelector(state => state.subgraph.currentValues);
 	const { givPrice } = usePrice();
 
