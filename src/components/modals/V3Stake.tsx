@@ -26,7 +26,7 @@ import {
 	ErrorInnerModal,
 	SubmittedInnerModal,
 } from './ConfirmSubmit';
-import { useTokenDistro } from '@/context/tokenDistro.context';
+import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { getUniswapV3StakerContract } from '@/lib/contracts';
 import { StakeState } from '@/lib/staking';
 import { BN } from '@/helpers/number';
@@ -53,7 +53,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 	setShowModal,
 }) => {
 	const { balances } = useAppSelector(state => state.subgraph.currentValues);
-	const { givTokenDistroHelper } = useTokenDistro();
+	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const { chainId, library, account } = useWeb3React();
 	const { unstakedPositions, stakedPositions, currentIncentive } =
 		useLiquidityPositions();
