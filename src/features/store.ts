@@ -1,10 +1,11 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 // import { subgraphApiSlice } from './subgraph-api-slice';
 import subgraphReducer from './subgraph/subgraph.slice';
-
+import userReducer from './user/user.slice';
 export const store = configureStore({
 	reducer: {
 		subgraph: subgraphReducer,
+		user: userReducer,
 	},
 });
 
