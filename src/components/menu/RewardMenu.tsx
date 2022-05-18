@@ -20,7 +20,7 @@ import { Flex } from '../styled-components/Flex';
 import { MenuContainer } from './Menu.sc';
 import { switchNetworkHandler } from '@/lib/wallet';
 import config from '@/configuration';
-import { useTokenDistro } from '@/context/tokenDistro.context';
+import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { BN, formatWeiHelper } from '@/helpers/number';
 import { WhatisStreamModal } from '@/components/modals/WhatisStream';
 import { getGivStakingConfig } from '@/helpers/networkProvider';
@@ -46,7 +46,7 @@ export const RewardMenu = ({
 	const [flowRateNow, setFlowRateNow] = useState<BigNumber.Value>(0);
 
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
-	const { givTokenDistroHelper } = useTokenDistro();
+	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const { chainId } = useWeb3React();
 	const { theme } = useGeneral();
 
@@ -207,7 +207,10 @@ export const RewardMenu = ({
 				</Link>
 			</RewardMenuContainer>
 			{showWhatIsGIVstreamModal && (
-				<WhatisStreamModal setShowModal={setShowWhatIsGIVstreamModal} />
+				<WhatisStreamModal
+					tokenDistroHelper={givTokenDistroHelper}
+					setShowModal={setShowWhatIsGIVstreamModal}
+				/>
 			)}
 		</>
 	);
