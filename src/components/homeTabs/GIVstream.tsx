@@ -52,13 +52,12 @@ import {
 } from './GIVstream.sc';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { getHistory } from '@/services/subgraph.service';
-import { formatWeiHelper } from '@/helpers/number';
+import { BN, formatWeiHelper } from '@/helpers/number';
 import config from '@/configuration';
 import { durationToString } from '@/lib/helpers';
 import { NetworkSelector } from '@/components/NetworkSelector';
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import { HarvestAllModal } from '../modals/HarvestAll';
-import { useSubgraph } from '@/context';
 import { ITokenAllocation } from '@/types/subgraph';
 import { IconGIV } from '../Icons/GIV';
 import { givEconomySupportedNetworks } from '@/lib/constants/constants';
@@ -66,27 +65,30 @@ import { Flex } from '../styled-components/Flex';
 import Pagination from '../Pagination';
 import { Container, Row, Col } from '@/components/Grid';
 import GivEconomyProjectCards from '../cards/GivEconomyProjectCards';
+import { useAppSelector } from '@/features/hooks';
 
 export const TabGIVstreamTop = () => {
 	const [showModal, setShowModal] = useState(false);
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
 	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
 	const { givTokenDistroHelper } = useTokenDistro();
-	const {
-		currentValues: { balances },
-	} = useSubgraph();
+	const { balances } = useAppSelector(state => state.subgraph.currentValues);
 	const { allocatedTokens, claimed, givback } = balances;
 	const { chainId } = useWeb3React();
 
 	useEffect(() => {
+		const _allocatedTokens = BN(allocatedTokens);
+		const _givback = BN(givback);
+		const _claimed = BN(claimed);
+
 		setRewardLiquidPart(
 			givTokenDistroHelper
-				.getLiquidPart(allocatedTokens.sub(givback))
-				.sub(claimed),
+				.getLiquidPart(_allocatedTokens.sub(_givback))
+				.sub(_claimed),
 		);
 		setRewardStream(
 			givTokenDistroHelper.getStreamPartTokenPerWeek(
-				allocatedTokens.sub(givback),
+				_allocatedTokens.sub(givback),
 			),
 		);
 	}, [allocatedTokens, claimed, givback, givTokenDistroHelper]);
@@ -147,15 +149,16 @@ export const TabGIVstreamBottom = () => {
 	const [streamAmount, setStreamAmount] = useState<BigNumber>(
 		new BigNumber(0),
 	);
-	const {
-		currentValues: { balances },
-	} = useSubgraph();
+	const { balances } = useAppSelector(state => state.subgraph.currentValues);
 	const increaseSecRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
+		const _allocatedTokens = BN(balances.allocatedTokens);
+		const _givback = BN(balances.givback);
+
 		setStreamAmount(
 			givTokenDistroHelper.getStreamPartTokenPerWeek(
-				balances.allocatedTokens.sub(balances.givback),
+				_allocatedTokens.sub(_givback),
 			),
 		);
 	}, [balances.allocatedTokens, balances.givback, givTokenDistroHelper]);
@@ -335,9 +338,7 @@ export const GIVstreamHistory: FC = () => {
 	>([]);
 	const [loading, setLoading] = useState(true);
 	const [page, setPage] = useState(0);
-	const {
-		currentValues: { balances },
-	} = useSubgraph();
+	const { balances } = useAppSelector(state => state.subgraph.currentValues);
 	const { allocationCount } = balances;
 
 	const { givTokenDistroHelper } = useTokenDistro();

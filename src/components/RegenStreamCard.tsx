@@ -25,13 +25,13 @@ import {
 } from '@/components/homeTabs/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { RegenStreamConfig, StreamType } from '@/types/config';
-import { useSubgraph } from '@/context';
-import { formatWeiHelper } from '@/helpers/number';
+import { BN, formatWeiHelper } from '@/helpers/number';
 import { IconFox } from '@/components/Icons/Fox';
 import { IconCult } from '@/components/Icons/Cult';
 import { Flex } from './styled-components/Flex';
 import { HarvestAllModal } from './modals/HarvestAll';
 import { usePrice } from '@/context/price.context';
+import { useAppSelector } from '@/features/hooks';
 
 interface RegenStreamProps {
 	network: number;
@@ -64,9 +64,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 	const [claimedAmount, setClaimedAmount] = useState<ethers.BigNumber>(
 		constants.Zero,
 	);
-	const {
-		currentValues: { balances },
-	} = useSubgraph();
+	const { balances } = useAppSelector(state => state.subgraph.currentValues);
 	const tokenDistroHelper = regenTokenDistroHelpers[streamConfig.type];
 
 	const { getTokenPrice } = usePrice();
@@ -91,12 +89,12 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 	useEffect(() => {
 		switch (streamConfig.type) {
 			case StreamType.FOX:
-				setLockedAmount(balances.foxAllocatedTokens);
-				setClaimedAmount(balances.foxClaimed);
+				setLockedAmount(BN(balances.foxAllocatedTokens));
+				setClaimedAmount(BN(balances.foxClaimed));
 				break;
 			case StreamType.CULT:
-				setLockedAmount(balances.cultAllocatedTokens);
-				setClaimedAmount(balances.cultClaimed);
+				setLockedAmount(BN(balances.cultAllocatedTokens));
+				setClaimedAmount(BN(balances.cultClaimed));
 				break;
 			default:
 				setLockedAmount(ethers.constants.Zero);

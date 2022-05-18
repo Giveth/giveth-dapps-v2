@@ -34,9 +34,9 @@ const StakingPositionCard: FC<IStakingPositionCardProps> = ({
 
 	const stakeInfo = {
 		apr: apr,
-		userNotStakedAmount: BigNumber.from(unstakedPositions.length),
+		notStakedAmount: BigNumber.from(unstakedPositions.length),
 		earned: rewardBalance,
-		stakedLpAmount: BigNumber.from(stakedPositions.length),
+		stakedAmount: BigNumber.from(stakedPositions.length),
 	};
 
 	useEffect(() => {

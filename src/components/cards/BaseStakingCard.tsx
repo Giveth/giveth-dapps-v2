@@ -16,7 +16,7 @@ import {
 	StakingType,
 } from '@/types/config';
 import { IconWithTooltip } from '../IconWithToolTip';
-import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
+import { BN, formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import {
 	StakingPoolContainer,
 	StakingPoolExchangeRow,
@@ -66,6 +66,7 @@ import StakingCardIntro from './StakingCardIntro';
 import { getNowUnixMS } from '@/helpers/time';
 import FarmCountDown from '../FarmCountDown';
 import { Flex } from '../styled-components/Flex';
+import { IStakeInfo } from '@/hooks/useStakingPool';
 
 export enum StakeCardState {
 	NORMAL,
@@ -91,7 +92,7 @@ export const getPoolIconWithName = (pool: string) => {
 };
 interface IBaseStakingCardProps {
 	poolStakingConfig: PoolStakingConfig | RegenPoolStakingConfig;
-	stakeInfo: any;
+	stakeInfo: IStakeInfo;
 	notif?: ReactNode;
 }
 
@@ -134,7 +135,13 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 
 	const isInactive = !active || type === StakingType.UNISWAPV3;
 
-	const { apr, earned, stakedLpAmount, userNotStakedAmount } = stakeInfo;
+	const {
+		apr,
+		earned,
+		stakedAmount: stakedLpAmount,
+		notStakedAmount: userNotStakedAmount,
+	} = stakeInfo;
+
 	const regenStreamConfig = useMemo(() => {
 		if (!regenStreamType) return undefined;
 		const networkConfig =
@@ -345,7 +352,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 										label='STAKE'
 										size='small'
 										disabled={
-											userNotStakedAmount?.isZero() ||
+											BN(userNotStakedAmount).isZero() ||
 											isInactive
 										}
 										onClick={() => setShowStakeModal(true)}

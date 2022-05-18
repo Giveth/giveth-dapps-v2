@@ -30,10 +30,10 @@ import { formatEthHelper, formatWeiHelper, Zero } from '@/helpers/number';
 import { getGivStakingAPR } from '@/lib/stakingPool';
 import { APR } from '@/types/poolInfo';
 import { useTokenDistro } from '@/context/tokenDistro.context';
-import { useSubgraph } from '@/context';
 import { StakingType } from '@/types/config';
 import useClaim from '@/context/claim.context';
 import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
+import { useAppSelector } from '@/features/hooks';
 
 const GovernCardContainer = styled(Card)`
 	padding-left: 254px;
@@ -108,7 +108,7 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const [earnEstimate, setEarnEstimate] = useState<BigNumber>(Zero);
 	const [apr, setApr] = useState<APR>(null);
 	const { givTokenDistroHelper } = useTokenDistro();
-	const { xDaiValues } = useSubgraph();
+	const xDaiValues = useAppSelector(state => state.subgraph.xDaiValues);
 
 	useEffect(() => {
 		let _stacked = 0;

@@ -7,9 +7,9 @@ import { ExternalProvider, Web3Provider } from '@ethersproject/providers';
 import NProgress from 'nprogress';
 
 import { useRouter } from 'next/router';
+import { Provider } from 'react-redux';
 import { NftsProvider } from '@/context/positions.context';
 import { TokenDistroProvider } from '@/context/tokenDistro.context';
-import { SubgraphProvider } from '@/context/subgraph.context';
 import { PriceProvider } from '@/context/price.context';
 import { GeneralProvider } from '@/context/general.context';
 import { useApollo } from '@/apollo/apolloClient';
@@ -19,6 +19,8 @@ import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
 import { FooterWrapper } from '@/components/Footer/FooterWrapper';
 
 import '../styles/globals.css';
+import { store } from '@/features/store';
+import SubgraphController from '@/components/controller/subgraph.ctrl';
 import type { AppProps } from 'next/app';
 
 function getLibrary(provider: ExternalProvider) {
@@ -57,27 +59,29 @@ function MyApp({ Component, pageProps }: AppProps) {
 					content='width=device-width, initial-scale=1.0'
 				/>
 			</Head>
-			<GeneralProvider>
-				<ApolloProvider client={apolloClient}>
-					<Web3ReactProvider getLibrary={getLibrary}>
-						<SubgraphProvider>
+			<Provider store={store}>
+				<GeneralProvider>
+					<ApolloProvider client={apolloClient}>
+						<Web3ReactProvider getLibrary={getLibrary}>
 							<TokenDistroProvider>
 								<NftsProvider>
 									<PriceProvider>
 										<UserProvider>
 											<ModalProvider>
+												<SubgraphController />
 												<HeaderWrapper />
 												<Component {...pageProps} />
 												<FooterWrapper />
+												{/* <ModalHandler /> */}
 											</ModalProvider>
 										</UserProvider>
 									</PriceProvider>
 								</NftsProvider>
 							</TokenDistroProvider>
-						</SubgraphProvider>
-					</Web3ReactProvider>
-				</ApolloProvider>
-			</GeneralProvider>
+						</Web3ReactProvider>
+					</ApolloProvider>
+				</GeneralProvider>
+			</Provider>
 			<Toaster containerStyle={{ top: '80px' }} />
 		</>
 	);

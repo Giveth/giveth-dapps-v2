@@ -18,7 +18,7 @@ import { Flex } from '../styled-components/Flex';
 import { PoolStakingConfig } from '@/types/config';
 import { StakingPoolImages } from '../StakingPoolImages';
 import V3StakingCard from '../cards/PositionCard';
-import { useLiquidityPositions, useSubgraph } from '@/context';
+import { useLiquidityPositions } from '@/context';
 import LoadingAnimation from '@/animations/loading.json';
 import { exit, getReward, transfer } from '@/lib/stakingNFT';
 import {
@@ -29,7 +29,9 @@ import {
 import { useTokenDistro } from '@/context/tokenDistro.context';
 import { getUniswapV3StakerContract } from '@/lib/contracts';
 import { StakeState } from '@/lib/staking';
+import { BN } from '@/helpers/number';
 import { IModal } from '@/types/common';
+import { useAppSelector } from '@/features/hooks';
 
 const loadingAnimationOptions = {
 	loop: true,
@@ -50,9 +52,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 	isUnstakingModal,
 	setShowModal,
 }) => {
-	const {
-		currentValues: { balances },
-	} = useSubgraph();
+	const { balances } = useAppSelector(state => state.subgraph.currentValues);
 	const { givTokenDistroHelper } = useTokenDistro();
 	const { chainId, library, account } = useWeb3React();
 	const { unstakedPositions, stakedPositions, currentIncentive } =
@@ -112,7 +112,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 	const handleAction = async (tokenId: number) => {
 		const uniswapV3StakerContract = getUniswapV3StakerContract(library);
 		if (!library || !uniswapV3StakerContract) return;
-
+		const bnGIVback = BN(balances.givback);
 		const _reward = await getReward(
 			tokenId,
 			uniswapV3StakerContract,
@@ -126,9 +126,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 		setReward(liquidReward);
 		setStream(BigNumber.from(streamPerWeek.toFixed(0)));
 		setClaimableNow(givTokenDistroHelper.getUserClaimableNow(balances));
-		setGivBackLiquidPart(
-			givTokenDistroHelper.getLiquidPart(balances.givback),
-		);
+		setGivBackLiquidPart(givTokenDistroHelper.getLiquidPart(bnGIVback));
 		// setStakeStatus(StakeState.UNSTAKING);
 	};
 

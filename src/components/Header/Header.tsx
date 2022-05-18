@@ -30,7 +30,6 @@ import {
 	LargeCreateProject,
 	MainLogoBtn,
 } from './Header.sc';
-import { useSubgraph } from '@/context/subgraph.context';
 import { RewardMenu } from '@/components/menu/RewardMenu';
 import MenuWallet from '@/components/menu/MenuWallet';
 import { ETheme, useGeneral } from '@/context/general.context';
@@ -40,6 +39,7 @@ import { isUserRegistered, shortenAddress } from '@/lib/helpers';
 import HeaderRoutesResponsive from './HeaderResponsiveRoutes';
 import Routes from '@/lib/constants/Routes';
 import useModal from '@/context/ModalProvider';
+import { currentValuesHelper, useAppSelector } from '@/features/hooks';
 
 export interface IHeader {
 	theme?: ThemeType;
@@ -54,9 +54,10 @@ const Header: FC<IHeader> = () => {
 	const [isGIVeconomyRoute, setIsGIVeconomyRoute] = useState(false);
 	const [isCreateRoute, setIsCreateRoute] = useState(false);
 
-	const {
-		currentValues: { balances },
-	} = useSubgraph();
+	const { chainId, active, account, library } = useWeb3React();
+	const { balances } = useAppSelector(
+		state => state.subgraph[currentValuesHelper(chainId)],
+	);
 	const {
 		state: { user, isEnabled, isSignedIn },
 	} = useUser();
@@ -68,7 +69,6 @@ const Header: FC<IHeader> = () => {
 			showWalletModal,
 		},
 	} = useModal();
-	const { chainId, active, account, library } = useWeb3React();
 	const { theme } = useGeneral();
 	const router = useRouter();
 

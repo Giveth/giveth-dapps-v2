@@ -6,12 +6,12 @@ import {
 	useEffect,
 	useState,
 } from 'react';
-import { Zero, AddressZero } from '@ethersproject/constants';
+import { AddressZero } from '@ethersproject/constants';
 import { useWeb3React } from '@web3-react/core';
 import config from '@/configuration';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
-import { useSubgraph } from '@/context/subgraph.context';
 import { StreamType } from '@/types/config';
+import { useAppSelector } from '@/features/hooks';
 
 export interface IRegenTokenDistroHelpers {
 	[key: string]: TokenDistroHelper;
@@ -26,12 +26,12 @@ export interface ITokenDistroContext {
 
 const defaultTokenDistroHelper = new TokenDistroHelper({
 	contractAddress: AddressZero,
-	initialAmount: Zero,
-	lockedAmount: Zero,
-	totalTokens: Zero,
-	startTime: new Date(),
-	cliffTime: new Date(),
-	endTime: new Date(),
+	initialAmount: '0',
+	lockedAmount: '0',
+	totalTokens: '0',
+	startTime: 0,
+	cliffTime: 0,
+	endTime: 0,
 });
 
 export const TokenDistroContext = createContext<ITokenDistroContext>({
@@ -44,8 +44,6 @@ TokenDistroContext.displayName = 'TokenDistroContext';
 
 export const TokenDistroProvider: FC = ({ children }) => {
 	const { chainId } = useWeb3React();
-
-	const { mainnetValues, xDaiValues } = useSubgraph();
 
 	const [currentGivTokenDistroInfo, setCurrentGivTokenDistroInfo] =
 		useState<TokenDistroHelper>(defaultTokenDistroHelper);
@@ -60,6 +58,10 @@ export const TokenDistroProvider: FC = ({ children }) => {
 		useState<IRegenTokenDistroHelpers>({});
 	const [xDaiRegenTokenDistroHelpers, setXDaiRegenTokenDistroHelpers] =
 		useState<IRegenTokenDistroHelpers>({});
+
+	const { mainnetValues, xDaiValues } = useAppSelector(
+		state => state.subgraph,
+	);
 
 	useEffect(() => {
 		if (mainnetValues?.tokenDistroInfo)
