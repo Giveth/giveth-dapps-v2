@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import {
@@ -11,23 +11,20 @@ import {
 import { Modal } from './Modal';
 import { Flex } from '../styled-components/Flex';
 import { RegenStreamConfig } from '@/types/config';
-import { useTokenDistro } from '@/context/tokenDistro.context';
 import { IModal } from '@/types/common';
+import type { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 
 interface IAPRModalProps extends IModal {
+	tokenDistroHelper?: TokenDistroHelper;
 	regenStreamConfig?: RegenStreamConfig;
 }
 
 export const APRModal: FC<IAPRModalProps> = ({
 	setShowModal,
+	tokenDistroHelper,
 	regenStreamConfig,
 }) => {
-	const { getTokenDistroHelper } = useTokenDistro();
 	const { rewardTokenSymbol = 'GIV', type } = regenStreamConfig || {};
-	const tokenDistroHelper = useMemo(
-		() => getTokenDistroHelper(type),
-		[getTokenDistroHelper, type],
-	);
 	const streamName = regenStreamConfig ? 'RegenStream' : 'GIVstream';
 
 	return (
@@ -53,12 +50,13 @@ export const APRModal: FC<IAPRModalProps> = ({
 					<DescTitle>Current Distribution:</DescTitle>
 					<Desc>
 						Claimable immediately:{' '}
-						{tokenDistroHelper.GlobalReleasePercentage.toFixed(2)}%
+						{tokenDistroHelper?.GlobalReleasePercentage.toFixed(2)}%
 					</Desc>
 					<Desc>
 						Increasing your {streamName}:{' '}
 						{(
-							100 - tokenDistroHelper.GlobalReleasePercentage
+							100 -
+							(tokenDistroHelper?.GlobalReleasePercentage || 0)
 						).toFixed(2)}
 						%
 					</Desc>
