@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUser } from '@/apollo/types/types';
-import { fetchUserByAddress } from './user.thunks';
+import { fetchUserByAddress, signToGetToken } from './user.thunks';
 import StorageLabel from '@/lib/localStorage';
 
 const initialState: {
@@ -37,19 +37,26 @@ export const userSlice = createSlice({
 		},
 	},
 	extraReducers: builder => {
-		builder.addCase(
-			fetchUserByAddress.fulfilled,
-			(
-				state,
-				action: PayloadAction<{
-					data: {
-						userByAddress: IUser;
-					};
-				}>,
-			) => {
-				state.userData = action.payload.data?.userByAddress;
-			},
-		);
+		builder
+			.addCase(
+				fetchUserByAddress.fulfilled,
+				(
+					state,
+					action: PayloadAction<{
+						data: {
+							userByAddress: IUser;
+						};
+					}>,
+				) => {
+					state.userData = action.payload.data?.userByAddress;
+				},
+			)
+			.addCase(signToGetToken.fulfilled, (state, action) => {
+				console.log('SignIn Action', action);
+				state.token = action.payload;
+				localStorage.setItem(StorageLabel.TOKEN, action.payload);
+				state.isSignedIn = true;
+			});
 	},
 });
 export const { setIsEnabled, setIsSignedIn, setToken, signOut } =

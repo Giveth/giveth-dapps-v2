@@ -6,7 +6,10 @@ import { useEffect } from 'react';
 import { gToast, ToastType } from '@/components/toasts';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { fetchXDaiInfoAsync } from '@/features/subgraph/subgraph.thunks';
-import { fetchUserByAddress } from '@/features/user/user.thunks';
+import {
+	fetchUserByAddress,
+	signToGetToken,
+} from '@/features/user/user.thunks';
 
 const TestRoute = () => {
 	// const xDaiValues = useSelector(
@@ -17,6 +20,7 @@ const TestRoute = () => {
 	console.log('userTest', user);
 	const dispatch = useAppDispatch();
 	const xDaiValues = useAppSelector(state => state.subgraph.xDaiValues);
+
 	// const { data, isLoading, error, refetch } = useGetSubgraphValuesQuery({
 	// 	chain: chainId,
 	// 	userAddress: account,
@@ -48,6 +52,17 @@ const TestRoute = () => {
 		if (account) dispatch(fetchUserByAddress(account));
 	}, [account]);
 
+	const handleSignIn = () => {
+		dispatch(
+			signToGetToken({
+				message: process.env.NEXT_PUBLIC_OUR_SECRET as string,
+				address: account,
+				chainId,
+				signer: library?.getSigner(),
+			}),
+		);
+	};
+
 	return (
 		<>
 			<Head>
@@ -72,6 +87,7 @@ const TestRoute = () => {
 				>
 					Throw error
 				</button>
+				<button onClick={handleSignIn}>SignIn</button>
 			</TestContainer>
 		</>
 	);
