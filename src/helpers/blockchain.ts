@@ -1,3 +1,5 @@
+import { ethers } from 'ethers';
+
 interface NetworkParam {
 	chainId: string;
 	chainName: string;
@@ -77,3 +79,6 @@ export const networksParams: {
 		blockExplorerUrls: ['https://kovan.etherscan.io'],
 	},
 };
+
+export const gwei2wei = (gweiAmount: string): string =>
+	ethers.utils.parseUnits(gweiAmount, 'gwei').toString();
