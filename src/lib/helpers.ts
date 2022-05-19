@@ -15,7 +15,7 @@ import { captureException } from '@sentry/nextjs';
 import { BasicNetworkConfig, GasPreference } from '@/types/config';
 import { EWallets } from '@/lib/wallet/walletTypes';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
-import { IUser, ISiweMessage } from '@/apollo/types/types';
+import { IUser } from '@/apollo/types/types';
 import Routes from '@/lib/constants/Routes';
 import { gToast, ToastType } from '@/components/toasts';
 import StorageLabel from '@/lib/localStorage';

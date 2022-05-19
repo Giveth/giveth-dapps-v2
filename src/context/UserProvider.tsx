@@ -155,7 +155,7 @@ export const UserProvider = (props: { children: ReactNode }) => {
 		const siweMessage: any = await createSiweMessage(
 			account!,
 			chainId!,
-			router.basePath,
+			router.pathname,
 			'Login into Giveth services',
 		);
 		const { nonce, message } = siweMessage;
