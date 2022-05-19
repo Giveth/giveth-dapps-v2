@@ -1,5 +1,4 @@
 import { ethers } from 'ethers';
-import { ISubgraphValue } from '@/context/subgraph.context';
 import {
 	IBalances,
 	IInfinitePositionReward,
@@ -11,6 +10,7 @@ import {
 	ZeroBalances,
 } from '@/types/subgraph';
 import { RegenFarmType, StakingType, StreamType } from '@/types/config';
+import type { ISubgraphState } from '@/features/subgraph/subgraph.types';
 
 const transformBalanceInfo = (info: any): IBalances => {
 	if (!info) return ZeroBalances;
@@ -239,7 +239,7 @@ const transformUniswapV2Pair = (info: any): IUniswapV2Pair | undefined => {
 		reserve1,
 	};
 };
-export const transformSubgraphData = (data: any = {}): ISubgraphValue => {
+export const transformSubgraphData = (data: any = {}): ISubgraphState => {
 	return {
 		balances: transformBalanceInfo(data?.balances),
 		tokenDistroInfo: transformTokenDistroInfo(data?.tokenDistroInfo),
