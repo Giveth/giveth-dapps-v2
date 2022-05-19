@@ -51,8 +51,6 @@ export const useLiquidityPositions = () => {
 	const rewardToken = uniswapConfig.REWARD_TOKEN;
 	const poolAddress = uniswapConfig.UNISWAP_V3_LP_POOL;
 	const incentiveRefundeeAddress = uniswapConfig.INCENTIVE_REFUNDEE_ADDRESS;
-	console.log('userStakedPositions', userStakedPositions);
-	console.log('userNotStakedPositions', userNotStakedPositions);
 
 	const currentIncentive = useMemo(() => {
 		if (
