@@ -20,6 +20,7 @@ import { FooterWrapper } from '@/components/Footer/FooterWrapper';
 import '../styles/globals.css';
 import { store } from '@/features/store';
 import SubgraphController from '@/components/controller/subgraph.ctrl';
+import UserController from '@/components/controller/user.ctrl';
 import type { AppProps } from 'next/app';
 
 function getLibrary(provider: ExternalProvider) {
@@ -67,6 +68,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 									<UserProvider>
 										<ModalProvider>
 											<SubgraphController />
+											<UserController />
 											<HeaderWrapper />
 											<Component {...pageProps} />
 											<FooterWrapper />

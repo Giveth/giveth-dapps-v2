@@ -1,13 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUser } from '@/apollo/types/types';
 import { fetchUserByAddress } from './user.thunks';
+import StorageLabel from '@/lib/localStorage';
 
 const initialState: {
 	userData?: IUser;
+	token?: string;
 	isEnabled: boolean;
 	isSignedIn: boolean;
 } = {
 	userData: undefined,
+	token: undefined,
 	isEnabled: false,
 	isSignedIn: false,
 };
@@ -15,7 +18,24 @@ const initialState: {
 export const userSlice = createSlice({
 	name: 'user',
 	initialState,
-	reducers: {},
+	reducers: {
+		setIsEnabled: (state, action: PayloadAction<boolean>) => {
+			state.isEnabled = action.payload;
+		},
+		setIsSignedIn: (state, action: PayloadAction<boolean>) => {
+			state.isSignedIn = action.payload;
+		},
+		setToken: (state, action: PayloadAction<string>) => {
+			state.token = action.payload;
+		},
+		signOut: state => {
+			localStorage.removeItem(StorageLabel.USER);
+			localStorage.removeItem(StorageLabel.TOKEN);
+			state.token = undefined;
+			state.isSignedIn = false;
+			state.userData = undefined;
+		},
+	},
 	extraReducers: builder => {
 		builder.addCase(
 			fetchUserByAddress.fulfilled,
@@ -32,5 +52,6 @@ export const userSlice = createSlice({
 		);
 	},
 });
-
+export const { setIsEnabled, setIsSignedIn, setToken, signOut } =
+	userSlice.actions;
 export default userSlice.reducer;
