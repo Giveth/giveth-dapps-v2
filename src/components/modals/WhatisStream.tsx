@@ -16,25 +16,23 @@ import { Modal } from './Modal';
 import Routes from '@/lib/constants/Routes';
 import { ETheme, useGeneral } from '@/context/general.context';
 import { RegenStreamConfig } from '@/types/config';
-import { useTokenDistro } from '@/context/tokenDistro.context';
 import { IModal } from '@/types/common';
+import type { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 
 interface IWhatisStreamModal extends IModal {
+	tokenDistroHelper?: TokenDistroHelper;
 	regenStreamConfig?: RegenStreamConfig;
 }
 
 export const WhatisStreamModal: FC<IWhatisStreamModal> = ({
 	setShowModal,
+	tokenDistroHelper,
 	regenStreamConfig,
 }) => {
 	const { theme } = useGeneral();
-	const { regenTokenDistroHelpers, givTokenDistroHelper } = useTokenDistro();
 	const { rewardTokenSymbol } = regenStreamConfig || {
 		rewardTokenSymbol: 'GIV',
 	};
-	const tokenDistroHelper = regenStreamConfig
-		? regenTokenDistroHelpers[regenStreamConfig?.type]
-		: givTokenDistroHelper;
 
 	return (
 		<Modal setShowModal={setShowModal}>
@@ -67,14 +65,13 @@ export const WhatisStreamModal: FC<IWhatisStreamModal> = ({
 					portion of the total {rewardTokenSymbol} you get is sent
 					directly to you at the time of harvest. The
 					{' ' + rewardTokenSymbol}stream flows until{' '}
-					{new Date(tokenDistroHelper.endTime).toLocaleDateString(
-						'en-US',
-						{
-							day: 'numeric',
-							year: 'numeric',
-							month: 'short',
-						},
-					)}
+					{new Date(
+						tokenDistroHelper?.endTime || 0,
+					).toLocaleDateString('en-US', {
+						day: 'numeric',
+						year: 'numeric',
+						month: 'short',
+					})}
 					.
 				</Desc>
 				{!regenStreamConfig && (

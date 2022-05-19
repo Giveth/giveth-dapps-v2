@@ -8,7 +8,6 @@ export const fetchXDaiInfoAsync = createAsyncThunk(
 	async (userAddress: string) => {
 		const response = await fetchXDaiInfo(userAddress);
 		// The value we return becomes the `fulfilled` action payload
-		console.log(response);
 		return response;
 	},
 );
@@ -18,7 +17,6 @@ export const fetchMainnetInfoAsync = createAsyncThunk(
 	async (userAddress: string) => {
 		const response = await fetchXDaiInfo(userAddress);
 		// The value we return becomes the `fulfilled` action payload
-		console.log(response);
 		return response;
 	},
 );
@@ -31,7 +29,6 @@ export const fetchCurrentInfoAsync = createAsyncThunk(
 				? await fetchMainnetInfo(props.userAddress)
 				: await fetchXDaiInfo(props.userAddress);
 		// The value we return becomes the `fulfilled` action payload
-		console.log(response);
 		return { response, chainId: props.chainId };
 	},
 );

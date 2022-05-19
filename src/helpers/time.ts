@@ -5,7 +5,7 @@ let timeDifference = 0;
 let fetching = false;
 
 export const getNowUnixMS = (): number => {
-	if (!initialized && !fetching) {
+	if (!initialized && !fetching && typeof window !== 'undefined') {
 		fetchServerTime();
 	}
 	return Date.now() + timeDifference;

@@ -6,7 +6,7 @@ import { Flex } from '../styled-components/Flex';
 import { ArrowButton, Card, PreviousArrowButton } from './common';
 import { IClaimViewCardProps } from '../views/claim/Claim.view';
 
-import { useTokenDistro } from '@/context/tokenDistro.context';
+import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { formatWeiHelper } from '@/helpers/number';
 import { durationToString } from '@/lib/helpers';
 import useClaim from '@/context/claim.context';
@@ -98,7 +98,7 @@ export const StreamCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const [streamValue, setStreamValue] = useState<string>('0');
 	const [remain, setRemain] = useState('');
 
-	const { givTokenDistroHelper } = useTokenDistro();
+	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 
 	useEffect(() => {
 		setStreamValue(

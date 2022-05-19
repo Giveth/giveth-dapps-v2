@@ -27,7 +27,7 @@ import RadioTitle from '@/components/views/donate/RadioTitle';
 import { NetworkSelector } from '@/components/NetworkSelector';
 import StakingPositionCard from '@/components/cards/StakingPositionCard';
 import { getGivStakingConfig } from '@/helpers/networkProvider';
-import { useTokenDistro } from '@/context/tokenDistro.context';
+import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { useFarms } from '@/context/farm.context';
 import { TopInnerContainer, ExtLinkRow } from './commons';
 import { GIVfrens } from '@/components/GIVfrens';
@@ -76,7 +76,7 @@ const renderPools = (
 export const TabGIVfarmTop = () => {
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
 	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
-	const { givTokenDistroHelper } = useTokenDistro();
+	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const { totalEarned } = useFarms();
 	const { chainId } = useWeb3React();
 
