@@ -4,7 +4,6 @@ import {
 	StakingType,
 	StreamType,
 } from '@/types/config';
-import { gwei2wei } from '@/helpers/number';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 
@@ -110,8 +109,8 @@ const config: EnvConfig = {
 		},
 
 		gasPreference: {
-			maxFeePerGas: gwei2wei('2'),
-			maxPriorityFeePerGas: gwei2wei('1'),
+			maxFeePerGas: '2000000000',
+			maxPriorityFeePerGas: '1000000000',
 		},
 
 		blockExplorerName: ['Blockscout'],
