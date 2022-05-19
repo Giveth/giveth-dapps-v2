@@ -24,7 +24,6 @@ import {
 import { BN, formatWeiHelper, Zero } from '@/helpers/number';
 import { harvestTokens } from '@/lib/stakingPool';
 import { claimUnstakeStake } from '@/lib/stakingNFT';
-import { useLiquidityPositions } from '@/context';
 import {
 	ConfirmedInnerModal,
 	ErrorInnerModal,
@@ -63,6 +62,7 @@ import { usePrice } from '@/context/price.context';
 import { getPoolIconWithName } from '../cards/BaseStakingCard';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
+import { LiquidityPosition } from '@/types/nfts';
 import type { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 
 interface IHarvestAllModalProps extends IModal {
@@ -72,6 +72,10 @@ interface IHarvestAllModalProps extends IModal {
 	network: number;
 	tokenDistroHelper?: TokenDistroHelper;
 	regenStreamConfig?: RegenStreamConfig;
+	stakedPositions?: LiquidityPosition[];
+	currentIncentive?: {
+		key?: (string | number)[] | null | undefined;
+	};
 }
 
 const loadingAnimationOptions = {
@@ -99,13 +103,14 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	network,
 	tokenDistroHelper,
 	regenStreamConfig,
+	stakedPositions,
+	currentIncentive,
 }) => {
 	const [state, setState] = useState<HarvestStates>(HarvestStates.HARVEST);
 	const tokenSymbol = regenStreamConfig?.rewardTokenSymbol || 'GIV';
 	const { balances } = useAppSelector(state => state.subgraph.currentValues);
 	const { givPrice, getTokenPrice } = usePrice();
 	const { account, library } = useWeb3React();
-	const { currentIncentive, stakedPositions } = useLiquidityPositions();
 	const [txHash, setTxHash] = useState('');
 	//GIVdrop TODO: Should we show Givdrop in new  design?
 	const [givDrop, setGIVdrop] = useState(ethers.constants.Zero);
@@ -212,6 +217,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 						'NFT_POSITIONS_MANAGER_ADDRESS',
 					)
 				) {
+					if (!currentIncentive || !stakedPositions) return;
 					//NFT Harvest
 					const txResponse = await claimUnstakeStake(
 						account,
