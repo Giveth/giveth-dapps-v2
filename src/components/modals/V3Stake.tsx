@@ -18,7 +18,6 @@ import { Flex } from '../styled-components/Flex';
 import { PoolStakingConfig } from '@/types/config';
 import { StakingPoolImages } from '../StakingPoolImages';
 import V3StakingCard from '../cards/PositionCard';
-import { useLiquidityPositions } from '@/context';
 import LoadingAnimation from '@/animations/loading.json';
 import { exit, getReward, transfer } from '@/lib/stakingNFT';
 import {
@@ -32,6 +31,7 @@ import { StakeState } from '@/lib/staking';
 import { BN } from '@/helpers/number';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
+import { LiquidityPosition } from '@/types/nfts';
 
 const loadingAnimationOptions = {
 	loop: true,
@@ -45,18 +45,24 @@ const loadingAnimationOptions = {
 interface IV3StakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
 	isUnstakingModal?: boolean;
+	stakedPositions: LiquidityPosition[];
+	unstakedPositions: LiquidityPosition[];
+	currentIncentive: {
+		key?: (string | number)[] | null | undefined;
+	};
 }
 
 export const V3StakeModal: FC<IV3StakeModalProps> = ({
 	poolStakingConfig,
 	isUnstakingModal,
+	stakedPositions,
+	unstakedPositions,
+	currentIncentive,
 	setShowModal,
 }) => {
 	const { balances } = useAppSelector(state => state.subgraph.currentValues);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const { chainId, library, account } = useWeb3React();
-	const { unstakedPositions, stakedPositions, currentIncentive } =
-		useLiquidityPositions();
 	const positions = isUnstakingModal ? stakedPositions : unstakedPositions;
 	const { title } = poolStakingConfig;
 	const [stakeStatus, setStakeStatus] = useState<StakeState>(
