@@ -18,9 +18,7 @@ export const userSlice = createSlice({
 	reducers: {},
 	extraReducers: builder => {
 		builder.addCase(fetchUserByAddress.fulfilled, (state, action) => {
-			console.log('action', action.payload.data.userByAddress);
-			console.log('state', state);
-			state.userData = action.payload.data.userByAddress;
+			state.userData = action.payload.data?.userByAddress;
 		});
 	},
 });

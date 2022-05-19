@@ -13,6 +13,8 @@ const TestRoute = () => {
 	// 	(state: RootState) => state.subgraph.xDaiValues,
 	// );
 	const { library, chainId, account } = useWeb3React();
+	const user = useAppSelector(state => state.user);
+	console.log('userTest', user);
 	const dispatch = useAppDispatch();
 	const xDaiValues = useAppSelector(state => state.subgraph.xDaiValues);
 	// const { data, isLoading, error, refetch } = useGetSubgraphValuesQuery({
@@ -45,8 +47,6 @@ const TestRoute = () => {
 	useEffect(() => {
 		if (account) dispatch(fetchUserByAddress(account));
 	}, [account]);
-
-	console.log('xDaiValues', xDaiValues);
 
 	return (
 		<>

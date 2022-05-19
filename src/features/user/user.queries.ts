@@ -1,5 +1,5 @@
-export const getUserByAddress = (address: string) => `query {
-    userByAddress(address: "${address}") {
+export const getUserByAddress = `query UserByAddress($address: String!) {
+    userByAddress(address: $address) {
         id
         firstName
         lastName
@@ -13,5 +13,6 @@ export const getUserByAddress = (address: string) => `query {
         totalReceived
         likedProjectsCount
         projectsCount
-        donationsCount                    }
-  }`;
+        donationsCount
+    }
+}`;
