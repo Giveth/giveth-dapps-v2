@@ -11,7 +11,7 @@ import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
 import { Zero } from '@/helpers/number';
 import config from '@/configuration';
-import { useLiquidityPositions } from '@/context/positions.context';
+import { useLiquidityPositions } from '@/hooks/useLiquidityPositions';
 import { useAppSelector } from '@/features/hooks';
 
 export interface IPriceContext {

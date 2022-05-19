@@ -1,8 +1,18 @@
 import { useState, useEffect } from 'react';
 import { shallowEqual } from 'react-redux';
+import { AddressZero } from '@ethersproject/constants';
 import { useAppSelector } from '@/features/hooks';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
-import { defaultTokenDistroHelper } from '@/context/tokenDistro.context';
+
+export const defaultTokenDistroHelper = new TokenDistroHelper({
+	contractAddress: AddressZero,
+	initialAmount: '0',
+	lockedAmount: '0',
+	totalTokens: '0',
+	startTime: 0,
+	cliffTime: 0,
+	endTime: 0,
+});
 
 const useGIVTokenDistroHelper = () => {
 	const [givTokenDistroHelper, setGIVTokenDistroHelper] =
