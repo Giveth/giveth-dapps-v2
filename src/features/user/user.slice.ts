@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUser } from '@/apollo/types/types';
 import { fetchUserByAddress } from './user.thunks';
 
@@ -17,9 +17,19 @@ export const userSlice = createSlice({
 	initialState,
 	reducers: {},
 	extraReducers: builder => {
-		builder.addCase(fetchUserByAddress.fulfilled, (state, action) => {
-			state.userData = action.payload.data?.userByAddress;
-		});
+		builder.addCase(
+			fetchUserByAddress.fulfilled,
+			(
+				state,
+				action: PayloadAction<{
+					data: {
+						userByAddress: IUser;
+					};
+				}>,
+			) => {
+				state.userData = action.payload.data?.userByAddress;
+			},
+		);
 	},
 });
 
