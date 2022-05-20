@@ -29,9 +29,9 @@ function createApolloClient() {
 		const currentToken: string | null = !ssrMode
 			? localStorage.getItem(StorageLabel.TOKEN)
 			: null;
-
 		const mutation: any = {
 			Authorization: currentToken ? `Bearer ${currentToken}` : '',
+			authVersion: '2',
 		};
 		if (userWalletAddress) mutation['wallet-address'] = userWalletAddress;
 		return {

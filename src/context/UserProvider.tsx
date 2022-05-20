@@ -16,7 +16,6 @@ import { GET_USER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
 import {
 	compareAddresses,
 	showToastError,
-	signMessage,
 	postData,
 	createSiweMessage,
 } from '@/lib/helpers';
@@ -164,14 +163,15 @@ export const UserProvider = (props: { children: ReactNode }) => {
 		if (!signature) return false;
 
 		const token = await getToken(signature, message, nonce);
-		const authorizedToken = await authorizeToken(token.jwt);
+		// const authorizedToken = await authorizeToken(token.jwt);
+		const authorizedToken = token.jwt;
 		await apolloClient.resetStore();
 		setToken(authorizedToken);
 		setUser({ ...user, token: authorizedToken });
-
 		return authorizedToken;
 	};
 
+	// Trying out, not needed as every query/mutation authorizes the token on backend
 	const authorizeToken = async (jwt: string) => {
 		const authorization = await postData(
 			`${config.MICROSERVICES.authentication}/authorization`,
