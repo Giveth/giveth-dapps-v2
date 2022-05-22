@@ -48,21 +48,6 @@ const TestRoute = () => {
 	// }, [library]);
 	// console.log('****data', data);
 
-	useEffect(() => {
-		if (account) dispatch(fetchUserByAddress(account));
-	}, [account]);
-
-	const handleSignIn = () => {
-		dispatch(
-			signToGetToken({
-				message: process.env.NEXT_PUBLIC_OUR_SECRET as string,
-				address: account,
-				chainId,
-				signer: library?.getSigner(),
-			}),
-		);
-	};
-
 	return (
 		<>
 			<Head>

@@ -3,7 +3,7 @@ import { shallowEqual } from 'react-redux';
 import { useAppSelector } from '@/features/hooks';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { StreamType } from '@/types/config';
-import { defaultTokenDistroHelper } from '@/context/tokenDistro.context';
+import { defaultTokenDistroHelper } from './useGIVTokenDistroHelper';
 
 const useRegenTokenDistroHelper = (streamType: StreamType) => {
 	const [regenTokenDistroHelper, setRegenTokenDistroHelper] =

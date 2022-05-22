@@ -2,15 +2,14 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { BigNumber } from '@ethersproject/bignumber';
 import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
-import { useLiquidityPositions } from '@/context';
 import { StakingType, UniswapV3PoolStakingConfig } from '@/types/config';
 import config from '@/configuration';
 import { getUniswapV3StakerContract } from '@/lib/contracts';
 import { getReward } from '@/lib/stakingNFT';
+import { LiquidityPosition } from '@/types/nfts';
 
-export const useStakingNFT = () => {
+export const useStakingNFT = (stakedPositions: LiquidityPosition[]) => {
 	const { account, chainId, library } = useWeb3React();
-	const { stakedPositions } = useLiquidityPositions();
 
 	const [rewardBalance, setRewardBalance] = useState<BigNumber>(
 		BigNumber.from(0),
