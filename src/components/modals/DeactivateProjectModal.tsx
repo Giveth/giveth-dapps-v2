@@ -22,12 +22,11 @@ import {
 import QuestionBadge from '@/components/badges/QuestionBadge';
 import FormProgress from '@/components/FormProgress';
 import { Shadow } from '@/components/styled-components/Shadow';
-import useUser from '@/context/UserProvider';
 import { Modal } from './Modal';
 import ArchiveIcon from '../../../public/images/icons/archive_deep.svg';
 import Routes from '@/lib/constants/Routes';
 import { IModal } from '@/types/common';
-import { useAppDispatch } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.sclie';
 
 interface ISelectObj {
@@ -58,10 +57,7 @@ const DeactivateProjectModal = ({
 		undefined,
 	);
 	const dispatch = useAppDispatch();
-	const {
-		state: { isSignedIn },
-	} = useUser();
-
+	const isSignedIn = useAppSelector(state => state.user.isSignedIn);
 	const fetchReasons = async () => {
 		const { data } = await client.query({
 			query: GET_STATUS_REASONS,

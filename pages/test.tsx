@@ -3,16 +3,16 @@ import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 import { useWeb3React } from '@web3-react/core';
 import { gToast, ToastType } from '@/components/toasts';
-import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { useAppDispatch } from '@/features/hooks';
 import { fetchXDaiInfoAsync } from '@/features/subgraph/subgraph.thunks';
 
 const TestRoute = () => {
 	// const xDaiValues = useSelector(
 	// 	(state: RootState) => state.subgraph.xDaiValues,
 	// );
-	const { library, chainId, account } = useWeb3React();
+	const { account } = useWeb3React();
 	const dispatch = useAppDispatch();
-	const xDaiValues = useAppSelector(state => state.subgraph.xDaiValues);
+
 	// const { data, isLoading, error, refetch } = useGetSubgraphValuesQuery({
 	// 	chain: chainId,
 	// 	userAddress: account,

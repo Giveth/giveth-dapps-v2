@@ -26,7 +26,6 @@ import CategoryBadge from '@/components/badges/CategoryBadge';
 import { compareAddresses, showToastError } from '@/lib/helpers';
 import { IProject } from '@/apollo/types/types';
 import links from '@/lib/constants/links';
-import useUser from '@/context/UserProvider';
 import ShareModal from '@/components/modals/ShareModal';
 import { IReaction } from '@/apollo/types/types';
 import { client } from '@/apollo/apolloClient';
@@ -42,8 +41,12 @@ import ProjectCardOrgBadge from '../../project-card/ProjectCardOrgBadge';
 import ExternalLink from '@/components/ExternalLink';
 import InternalLink from '@/components/InternalLink';
 import Routes from '@/lib/constants/Routes';
-import { useAppDispatch } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.sclie';
+import {
+	incrementLikedProjectsCount,
+	decrementLikedProjectsCount,
+} from '@/features/user/user.slice';
 
 interface IProjectDonateCard {
 	project?: IProject;
@@ -65,10 +68,7 @@ const ProjectDonateCard = ({
 	setCreationSuccessful,
 }: IProjectDonateCard) => {
 	const dispatch = useAppDispatch();
-	const {
-		state: { user, isSignedIn },
-		actions: { incrementLikedProjectsCount, decrementLikedProjectsCount },
-	} = useUser();
+	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
 
 	const {
 		categories = [],
@@ -111,13 +111,13 @@ const ProjectDonateCard = ({
 					const newReaction = await likeProject(id);
 					if (newReaction) {
 						setReaction(newReaction);
-						incrementLikedProjectsCount();
+						dispatch(incrementLikedProjectsCount());
 					}
 				} else if (reaction?.userId === user?.id) {
 					const successful = await unlikeProject(reaction.id);
 					if (successful) {
 						setReaction(undefined);
-						decrementLikedProjectsCount();
+						dispatch(decrementLikedProjectsCount());
 					}
 				}
 			} catch (e) {

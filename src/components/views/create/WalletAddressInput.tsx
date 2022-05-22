@@ -3,9 +3,9 @@ import { H5, Caption, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 import { InputContainer, TinyLabel } from './Create.sc';
-import useUser from '@/context/UserProvider';
 import { compareAddresses } from '@/lib/helpers';
 import { ECreateErrFields } from '@/components/views/create/CreateProject';
+import { useAppSelector } from '@/features/hooks';
 import InputBox from '@/components/InputBox';
 
 const WalletAddressInput = (props: {
@@ -14,11 +14,7 @@ const WalletAddressInput = (props: {
 	error: string;
 }) => {
 	const { value, setValue, error } = props;
-
-	const {
-		state: { user },
-	} = useUser();
-
+	const user = useAppSelector(state => state.user?.userData);
 	const isDefaultAddress = compareAddresses(value, user?.walletAddress);
 
 	return (
