@@ -70,9 +70,7 @@ const Header: FC<IHeader> = () => {
 	const { isEnabled, isSignedIn, userData } = useAppSelector(
 		state => state.user,
 	);
-	// const {
-	// 	state: { user, isEnabled, isSignedIn },
-	// } = useUser();
+
 	const { theme } = useGeneral();
 	const router = useRouter();
 

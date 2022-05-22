@@ -203,7 +203,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 			<BigArc />
 			<Wrapper>
 				<Title weight={700}>Projects</Title>
-
 				<Subtitle>
 					Support for-good projects, nonprofits & charities with
 					crypto donations. Give directly with zero added fees. Get

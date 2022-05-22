@@ -40,6 +40,18 @@ export const userSlice = createSlice({
 			state.token = undefined;
 			state.isSignedIn = false;
 		},
+		incrementLikedProjectsCount: state => {
+			if (state.userData) {
+				state.userData.likedProjectsCount =
+					(state.userData.likedProjectsCount || 0) + 1;
+			}
+		},
+		decrementLikedProjectsCount: state => {
+			if (state.userData) {
+				state.userData.likedProjectsCount =
+					(state.userData.likedProjectsCount || 1) - 1;
+			}
+		},
 	},
 	extraReducers: builder => {
 		builder
@@ -88,6 +100,13 @@ export const userSlice = createSlice({
 			});
 	},
 });
-export const { setIsEnabled, setIsSignedIn, setToken, setBalance, signOut } =
-	userSlice.actions;
+export const {
+	setIsEnabled,
+	setIsSignedIn,
+	setToken,
+	setBalance,
+	signOut,
+	incrementLikedProjectsCount,
+	decrementLikedProjectsCount,
+} = userSlice.actions;
 export default userSlice.reducer;
