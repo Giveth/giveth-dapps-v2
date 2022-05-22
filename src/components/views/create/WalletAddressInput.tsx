@@ -2,15 +2,11 @@ import React from 'react';
 import { H5, Caption, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
-import {
-	InputContainer,
-	InputErrorMessage,
-	InputWithError,
-	TinyLabel,
-} from './Create.sc';
+import { InputContainer, TinyLabel } from './Create.sc';
 import useUser from '@/context/UserProvider';
 import { compareAddresses } from '@/lib/helpers';
 import { ECreateErrFields } from '@/components/views/create/CreateProject';
+import InputBox from '@/components/InputBox';
 
 const WalletAddressInput = (props: {
 	value: string;
@@ -36,15 +32,14 @@ const WalletAddressInput = (props: {
 			</div>
 
 			<InputContainer>
-				<TinyLabel>Receiving address</TinyLabel>
-				<InputWithError
+				<InputBox
+					label='Receiving address'
 					placeholder='My Wallet Address'
-					onChange={e => setValue(e.target.value)}
+					onChange={setValue}
 					value={value}
-					error={!!error}
+					error={error}
 					disabled={isDefaultAddress && !error}
 				/>
-				<InputErrorMessage>{error || null}</InputErrorMessage>
 				{isDefaultAddress && (
 					<TinyLabel>
 						This is the default wallet address associated with your

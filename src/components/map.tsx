@@ -11,7 +11,7 @@ import PlacesAutocomplete, {
 } from 'react-places-autocomplete';
 
 import { captureException } from '@sentry/nextjs';
-import { Regular_Input } from '@/components/styled-components/Input';
+import { Input } from '@/components/styled-components/Input';
 import CheckBox from '@/components/Checkbox';
 import { globalLocation } from '@/lib/constants/projects';
 
@@ -111,7 +111,7 @@ class Map extends Component<MyProps, MyState> {
 						loading,
 					}) => (
 						<div>
-							<Regular_Input
+							<Input
 								{...getInputProps({
 									placeholder: isGlobal
 										? 'Global Impact'
