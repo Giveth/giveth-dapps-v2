@@ -26,8 +26,9 @@ import useUser from '@/context/UserProvider';
 import { Modal } from './Modal';
 import ArchiveIcon from '../../../public/images/icons/archive_deep.svg';
 import Routes from '@/lib/constants/Routes';
-import useModal from '@/context/ModalProvider';
 import { IModal } from '@/types/common';
+import { useAppDispatch } from '@/features/hooks';
+import { setShowSignWithWallet } from '@/features/modal/modal.sclie';
 
 interface ISelectObj {
 	value: number;
@@ -56,13 +57,10 @@ const DeactivateProjectModal = ({
 	const [selectedReason, setSelectedReason] = useState<ISelectObj | any>(
 		undefined,
 	);
+	const dispatch = useAppDispatch();
 	const {
 		state: { isSignedIn },
 	} = useUser();
-
-	const {
-		actions: { showSignWithWallet },
-	} = useModal();
 
 	const fetchReasons = async () => {
 		const { data } = await client.query({
@@ -85,7 +83,7 @@ const DeactivateProjectModal = ({
 	const handleConfirmButton = async () => {
 		if (!!tab && !!selectedReason) {
 			if (!isSignedIn) {
-				showSignWithWallet();
+				dispatch(setShowSignWithWallet(true));
 				return;
 			}
 			const { data } = await client.mutate({

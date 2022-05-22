@@ -11,7 +11,8 @@ import useClaim, { GiveDropStateType } from '@/context/claim.context';
 import { IClaimViewCardProps } from '../views/claim/Claim.view';
 import { formatWeiHelper } from '@/helpers/number';
 import Routes from '@/lib/constants/Routes';
-import useModal from '@/context/ModalProvider';
+import { useAppDispatch } from '@/features/hooks';
+import { setShowWalletModal } from '@/features/modal/modal.sclie';
 
 interface IConnectCardContainerProps {
 	data: any;
@@ -133,9 +134,7 @@ const WalletCheckButton = styled.button`
 export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const [walletIsChanged, setWalletIsChanged] = useState(false);
 
-	const {
-		actions: { showWalletModal },
-	} = useModal();
+	const dispatch = useAppDispatch();
 
 	const {
 		totalAmount,
@@ -246,7 +245,7 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 										onClick={() => {
 											deactivate();
 											setWalletIsChanged(true);
-											showWalletModal();
+											dispatch(setShowWalletModal(true));
 										}}
 									>
 										{btnLabel}

@@ -1,10 +1,12 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 // import { subgraphApiSlice } from './subgraph-api-slice';
 import subgraphReducer from './subgraph/subgraph.slice';
+import modalReducer from './modal/modal.sclie';
 
 export const store = configureStore({
 	reducer: {
 		subgraph: subgraphReducer,
+		modal: modalReducer,
 	},
 });
 

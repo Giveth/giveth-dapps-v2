@@ -13,8 +13,9 @@ import { Modal } from '@/components/modals/Modal';
 import useUser from '@/context/UserProvider';
 import { ETheme, useGeneral } from '@/context/general.context';
 import { mediaQueries } from '@/lib/constants/constants';
-import useModal from '@/context/ModalProvider';
 import { IModal } from '@/types/common';
+import { useAppDispatch } from '@/features/hooks';
+import { setShowWelcomeModal } from '@/features/modal/modal.sclie';
 
 interface IProps extends IModal {
 	callback?: () => void;
@@ -26,9 +27,7 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 		actions: { signToGetToken },
 	} = useUser();
 	const { account } = useWeb3React();
-	const {
-		actions: { showWelcomeModal },
-	} = useModal();
+	const dispatch = useAppDispatch();
 
 	return (
 		<Modal
@@ -50,7 +49,7 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 					label='SIGN IN'
 					onClick={async () => {
 						if (!account) {
-							return showWelcomeModal();
+							return dispatch(setShowWelcomeModal(true));
 						}
 						const signature = await signToGetToken();
 						setShowModal(false);

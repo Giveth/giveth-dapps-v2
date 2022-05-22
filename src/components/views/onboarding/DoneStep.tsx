@@ -18,7 +18,8 @@ import Routes from '@/lib/constants/Routes';
 import useUser from '@/context/UserProvider';
 import { isUserRegistered } from '@/lib/helpers';
 import { Col, Row } from '@/components/Grid';
-import useModal from '@/context/ModalProvider';
+import { useAppDispatch } from '@/features/hooks';
+import { setShowCompleteProfile } from '@/features/modal/modal.sclie';
 
 const CongratsAnimationOptions = {
 	loop: true,
@@ -29,21 +30,17 @@ const CongratsAnimationOptions = {
 };
 
 const DoneStep = () => {
+	const router = useRouter();
+	const dispatch = useAppDispatch();
 	const {
 		state: { user },
 	} = useUser();
-
-	const {
-		actions: { showCompleteProfile },
-	} = useModal();
-
-	const router = useRouter();
 
 	const handleCreateButton = () => {
 		if (isUserRegistered(user)) {
 			router.push(Routes.CreateProject);
 		} else {
-			showCompleteProfile();
+			dispatch(setShowCompleteProfile(true));
 		}
 	};
 
