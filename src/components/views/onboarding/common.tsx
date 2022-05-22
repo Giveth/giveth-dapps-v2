@@ -5,7 +5,8 @@ import styled from 'styled-components';
 import { Col, Row } from '@/components/Grid';
 import useUser from '@/context/UserProvider';
 import { OnboardSteps } from './Onboarding.view';
-import useModal from '@/context/ModalProvider';
+import { useAppDispatch } from '@/features/hooks';
+import { setShowSignWithWallet } from '@/features/modal/modal.sclie';
 
 export const OnboardStep = styled(Col)`
 	margin: 0 auto;
@@ -27,24 +28,21 @@ export const OnboardActions: FC<IOnboardActions> = ({
 	onLater,
 	disabled,
 }) => {
+	const dispatch = useAppDispatch();
 	const {
 		state: { isSignedIn },
 		actions: { reFetchUser },
 	} = useUser();
 
-	const {
-		actions: { showSignWithWallet },
-	} = useModal();
-
 	useEffect(() => {
 		if (!isSignedIn) {
-			showSignWithWallet();
+			dispatch(setShowSignWithWallet(true));
 		}
 	}, [isSignedIn]);
 
 	const handleSave = async () => {
 		if (!isSignedIn) {
-			showSignWithWallet();
+			dispatch(setShowSignWithWallet(true));
 		} else {
 			const res = await onSave();
 			if (res) {
