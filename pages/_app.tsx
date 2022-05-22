@@ -66,6 +66,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 								<UserProvider>
 									<ModalProvider>
 										<SubgraphController />
+										<UserController />
 										<HeaderWrapper />
 										<Component {...pageProps} />
 										<FooterWrapper />
