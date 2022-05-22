@@ -46,8 +46,7 @@ export interface IUserPublicProfileView {
 
 const UserPublicProfileView: FC<IUserPublicProfileView> = ({ myAccount }) => {
 	const dispatch = useAppDispatch();
-	const { isSignedIn } = useAppSelector(state => state.user);
-	const userData = useAppSelector(state => state.user.userData);
+	const { isSignedIn, userData } = useAppSelector(state => state.user);
 
 	const { chainId } = useWeb3React();
 

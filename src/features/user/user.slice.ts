@@ -68,11 +68,6 @@ export const userSlice = createSlice({
 					const localAddress = localStorage
 						.getItem(StorageLabel.USER)
 						?.toLocaleLowerCase();
-					console.log(
-						'localAddress',
-						localAddress,
-						action.payload.data.userByAddress.walletAddress,
-					);
 					if (
 						compareAddresses(
 							localAddress,
@@ -89,7 +84,6 @@ export const userSlice = createSlice({
 				},
 			)
 			.addCase(signToGetToken.fulfilled, (state, action) => {
-				console.log('SignIn Action', action);
 				state.token = action.payload;
 				localStorage.setItem(
 					StorageLabel.USER,

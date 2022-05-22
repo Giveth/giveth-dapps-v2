@@ -2,7 +2,7 @@ import { useWeb3React } from '@web3-react/core';
 import { useEffect } from 'react';
 import { formatEther } from '@ethersproject/units';
 import { captureException } from '@sentry/nextjs';
-import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { useAppDispatch } from '@/features/hooks';
 import {
 	setBalance,
 	setIsEnabled,
@@ -18,30 +18,6 @@ const UserController = () => {
 	const { account, library, chainId, activate } = useWeb3React();
 	const dispatch = useAppDispatch();
 	const token = !isSSRMode ? localStorage.getItem(StorageLabel.TOKEN) : null;
-	const isEnabled = useAppSelector(state => state.user.isEnabled);
-	const isSignIn = useAppSelector(state => state.user.isSignedIn);
-	console.log('UserController', isEnabled, isSignIn);
-	const getBalance = () => {
-		if (account && library) {
-			library
-				.getBalance(account)
-				.then((_balance: string) => {
-					const balance = parseFloat(formatEther(_balance)).toFixed(
-						3,
-					);
-					console.log('balance', balance);
-					dispatch(setBalance(balance));
-				})
-				.catch((error: unknown) => {
-					dispatch(setBalance(null));
-					captureException(error, {
-						tags: {
-							section: 'getBalance',
-						},
-					});
-				});
-		}
-	};
 
 	useEffect(() => {
 		const selectedWalletName = localStorage.getItem(StorageLabel.WALLET);
@@ -75,16 +51,30 @@ const UserController = () => {
 	useEffect(() => {
 		if (account && library) {
 			library?.on('block', () => {
-				getBalance();
+				//Getting balance on every block
+				if (account && library) {
+					library
+						.getBalance(account)
+						.then((_balance: string) => {
+							const balance = parseFloat(
+								formatEther(_balance),
+							).toFixed(3);
+							dispatch(setBalance(balance));
+						})
+						.catch((error: unknown) => {
+							dispatch(setBalance(null));
+							captureException(error, {
+								tags: {
+									section: 'getBalance',
+								},
+							});
+						});
+				}
 			});
 		}
 		return () => {
 			library?.removeAllListeners('block');
 		};
-	}, [library]);
-
-	useEffect(() => {
-		getBalance();
 	}, [account, library, chainId]);
 
 	return null;

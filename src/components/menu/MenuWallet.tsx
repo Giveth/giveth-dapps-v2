@@ -39,7 +39,6 @@ const MenuWallet = () => {
 	const dispatch = useAppDispatch();
 	const { isSignedIn, userData } = useAppSelector(state => state.user);
 	const { theme } = useGeneral();
-	console.log('isSignedIn', isSignedIn);
 	const goRoute = (input: {
 		url: string;
 		requiresSign: boolean;

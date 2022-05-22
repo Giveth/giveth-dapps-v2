@@ -11,7 +11,6 @@ const NoUserContainer = styled.div`
 
 const UserRoute: FC = () => {
 	const user = useAppSelector(state => state.user.userData);
-	console.log('user', user);
 	return (
 		<>
 			<Head>

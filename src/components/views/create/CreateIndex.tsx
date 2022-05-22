@@ -15,13 +15,11 @@ const CreateIndex = () => {
 		isSignedIn,
 		userData: user,
 	} = useAppSelector(state => state.user);
-	console.log('Hiii', user);
 	const isRegistered = isUserRegistered(user);
 
 	useEffect(() => {
 		if (isEnabled) {
 			if (!isRegistered) {
-				console.log('Hiii');
 				dispatch(setShowCompleteProfile(true));
 				return;
 			}
