@@ -24,23 +24,30 @@ import {
 	WBNetwork,
 	SmallCreateProject,
 	Logo,
-	BackBtn,
 	MenuAndButtonContainer,
 	CoverLine,
 	SmallCreateProjectParent,
 	LargeCreateProject,
 	MainLogoBtn,
 } from './Header.sc';
-import { useSubgraph } from '@/context/subgraph.context';
 import { RewardMenu } from '@/components/menu/RewardMenu';
 import MenuWallet from '@/components/menu/MenuWallet';
 import { ETheme, useGeneral } from '@/context/general.context';
 import { menuRoutes } from '../menu/menuRoutes';
-import useUser from '@/context/UserProvider';
 import { isUserRegistered, shortenAddress } from '@/lib/helpers';
 import HeaderRoutesResponsive from './HeaderResponsiveRoutes';
 import Routes from '@/lib/constants/Routes';
-import useModal from '@/context/ModalProvider';
+import {
+	currentValuesHelper,
+	useAppDispatch,
+	useAppSelector,
+} from '@/features/hooks';
+import {
+	setShowWalletModal,
+	setShowWelcomeModal,
+	setShowSignWithWallet,
+	setShowCompleteProfile,
+} from '@/features/modal/modal.sclie';
 
 export interface IHeader {
 	theme?: ThemeType;
@@ -55,21 +62,15 @@ const Header: FC<IHeader> = () => {
 	const [isGIVeconomyRoute, setIsGIVeconomyRoute] = useState(false);
 	const [isCreateRoute, setIsCreateRoute] = useState(false);
 
-	const {
-		currentValues: { balances },
-	} = useSubgraph();
-	const {
-		state: { user, isEnabled, isSignedIn },
-	} = useUser();
-	const {
-		actions: {
-			showWelcomeModal,
-			showSignWithWallet,
-			showCompleteProfile,
-			showWalletModal,
-		},
-	} = useModal();
 	const { chainId, active, account, library } = useWeb3React();
+	const { balances } = useAppSelector(
+		state => state.subgraph[currentValuesHelper(chainId)],
+	);
+	const dispatch = useAppDispatch();
+	const { isEnabled, isSignedIn, userData } = useAppSelector(
+		state => state.user,
+	);
+
 	const { theme } = useGeneral();
 	const router = useRouter();
 
@@ -116,21 +117,21 @@ const Header: FC<IHeader> = () => {
 
 	const handleModals = () => {
 		if (isGIVeconomyRoute) {
-			showWalletModal();
+			dispatch(setShowWalletModal(true));
 		} else {
-			showWelcomeModal();
+			dispatch(setShowWelcomeModal(true));
 		}
 	};
 
 	const handleCreateButton = () => {
 		if (!isEnabled) {
-			showWelcomeModal();
+			dispatch(setShowWelcomeModal(true));
 		} else if (!isSignedIn) {
-			showSignWithWallet();
-		} else if (isUserRegistered(user)) {
+			dispatch(setShowSignWithWallet(true));
+		} else if (isUserRegistered(userData)) {
 			router.push(Routes.CreateProject);
 		} else {
-			showCompleteProfile();
+			dispatch(setShowCompleteProfile(true));
 		}
 	};
 
@@ -141,172 +142,164 @@ const Header: FC<IHeader> = () => {
 	};
 
 	return (
-		<>
-			<StyledHeader
-				justifyContent='space-between'
-				alignItems='center'
-				theme={theme}
-				show={showHeader}
-			>
-				<Flex>
-					{isCreateRoute ? (
-						<BackBtn onClick={router.back}>
-							<Logo>
-								<Image
-									width='26px'
-									height='26px'
-									alt='Giveth logo'
-									src={`/images/back-2.svg`}
-								/>{' '}
-							</Logo>
-						</BackBtn>
-					) : (
-						<>
-							<MainLogoBtn>
-								<Link href={Routes.Home}>
-									<a>
-										<Logo>
-											<Image
-												width='48px'
-												height='48px'
-												alt='Giveth logo'
-												src={`/images/logo/logo1.png`}
-											/>
-										</Logo>
-									</a>
-								</Link>
-							</MainLogoBtn>
-							<HeaderRoutesResponsive />
-						</>
-					)}
-				</Flex>
-				{showLinks && (
-					<HeaderLinks theme={theme}>
-						{menuRoutes.map((link, index) => (
-							<Link href={link.href[0]} passHref key={index}>
-								<HeaderLink
-									size='Big'
-									theme={theme}
-									active={link.href.includes(router.route)}
-								>
-									{link.title}
-								</HeaderLink>
-							</Link>
-						))}
-					</HeaderLinks>
-				)}
-
-				<Flex gap='8px'>
-					<LargeCreateProject>
-						<Button
-							label='CREATE A PROJECT'
-							size='small'
-							buttonType={
-								theme === ETheme.Light ? 'primary' : 'secondary'
-							}
-							onClick={handleCreateButton}
+		<StyledHeader
+			justifyContent='space-between'
+			alignItems='center'
+			theme={theme}
+			show={showHeader}
+		>
+			<Flex>
+				{isCreateRoute ? (
+					<Logo onClick={router.back}>
+						<Image
+							width='26px'
+							height='26px'
+							alt='Giveth logo'
+							src={`/images/back-2.svg`}
 						/>
-					</LargeCreateProject>
-					<SmallCreateProjectParent>
-						<SmallCreateProject
-							onClick={handleCreateButton}
-							theme={theme}
-							label=''
-							icon={
-								<Image
-									src='/images/plus-white.svg'
-									width={16}
-									height={16}
-									alt='create project'
-								/>
-							}
-							linkType={
-								theme === ETheme.Light ? 'primary' : 'secondary'
-							}
-						/>
-					</SmallCreateProjectParent>
-					{active && account && chainId ? (
-						<>
-							<MenuAndButtonContainer
-								onClick={() => setShowRewardMenu(true)}
-								onMouseEnter={() => setShowRewardMenu(true)}
-								onMouseLeave={handleRewardMenuOnLeave}
-							>
-								<BalanceButton outline theme={theme}>
-									<HBContainer>
-										<HBBalanceLogo
-											src={'/images/logo/logo.svg'}
-											alt='Profile Pic'
-											width={'24px'}
-											height={'24px'}
-										/>
-
-										<HBContent size='Big'>
-											{formatWeiHelper(balances.balance)}
-										</HBContent>
-									</HBContainer>
-									<CoverLine theme={theme} />
-								</BalanceButton>
-								{showRewardMenu && (
-									<RewardMenu
-										showWhatIsGIVstreamModal={
-											showRewardMenuModal
-										}
-										setShowWhatIsGIVstreamModal={
-											setShowRewardMenuModal
-										}
+					</Logo>
+				) : (
+					<>
+						<MainLogoBtn>
+							<Link href={Routes.Home} passHref>
+								<Logo>
+									<Image
+										width='48px'
+										height='48px'
+										alt='Giveth logo'
+										src={`/images/logo/logo1.png`}
 									/>
-								)}
-							</MenuAndButtonContainer>
-							<MenuAndButtonContainer
-								onClick={() => setShowUserMenu(true)}
-								onMouseEnter={() => setShowUserMenu(true)}
-								onMouseLeave={() => setShowUserMenu(false)}
+								</Logo>
+							</Link>
+						</MainLogoBtn>
+						<HeaderRoutesResponsive />
+					</>
+				)}
+			</Flex>
+			{showLinks && (
+				<HeaderLinks theme={theme}>
+					{menuRoutes.map((link, index) => (
+						<Link href={link.href[0]} passHref key={index}>
+							<HeaderLink
+								size='Big'
+								theme={theme}
+								active={link.href.includes(router.route)}
 							>
-								<WalletButton outline theme={theme}>
-									<HBContainer>
-										<HBPic
-											src={
-												user?.avatar
-													? user.avatar
-													: '/images/placeholders/profile.png'
-											}
-											alt='Profile Pic'
-											width={'24px'}
-											height={'24px'}
-										/>
-										<WBInfo>
-											<GLink size='Medium'>
-												{user?.name ||
-													shortenAddress(account)}
-											</GLink>
-											<WBNetwork size='Tiny'>
-												Connected to{' '}
-												{networksParams[chainId]
-													? networksParams[chainId]
-															.chainName
-													: library?._network?.name}
-											</WBNetwork>
-										</WBInfo>
-									</HBContainer>
-									<CoverLine theme={theme} />
-								</WalletButton>
-								{showUserMenu && <MenuWallet />}
-							</MenuAndButtonContainer>
-						</>
-					) : (
-						<ConnectButton
-							buttonType='primary'
-							size='small'
-							label={
-								isGIVeconomyRoute ? 'CONNECT WALLET' : 'SIGN IN'
-							}
-							onClick={handleModals}
-						/>
-					)}
-				</Flex>
-			</StyledHeader>
-		</>
+								{link.title}
+							</HeaderLink>
+						</Link>
+					))}
+				</HeaderLinks>
+			)}
+
+			<Flex gap='8px'>
+				<LargeCreateProject>
+					<Button
+						label='CREATE A PROJECT'
+						size='small'
+						buttonType={
+							theme === ETheme.Light ? 'primary' : 'secondary'
+						}
+						onClick={handleCreateButton}
+					/>
+				</LargeCreateProject>
+				<SmallCreateProjectParent>
+					<SmallCreateProject
+						onClick={handleCreateButton}
+						theme={theme}
+						label=''
+						icon={
+							<Image
+								src='/images/plus-white.svg'
+								width={16}
+								height={16}
+								alt='create project'
+							/>
+						}
+						linkType={
+							theme === ETheme.Light ? 'primary' : 'secondary'
+						}
+					/>
+				</SmallCreateProjectParent>
+				{active && account && chainId ? (
+					<>
+						<MenuAndButtonContainer
+							onClick={() => setShowRewardMenu(true)}
+							onMouseEnter={() => setShowRewardMenu(true)}
+							onMouseLeave={handleRewardMenuOnLeave}
+						>
+							<BalanceButton outline theme={theme}>
+								<HBContainer>
+									<HBBalanceLogo
+										src={'/images/logo/logo.svg'}
+										alt='Profile Pic'
+										width={'24px'}
+										height={'24px'}
+									/>
+
+									<HBContent size='Big'>
+										{formatWeiHelper(balances.balance)}
+									</HBContent>
+								</HBContainer>
+								<CoverLine theme={theme} />
+							</BalanceButton>
+							{showRewardMenu && (
+								<RewardMenu
+									showWhatIsGIVstreamModal={
+										showRewardMenuModal
+									}
+									setShowWhatIsGIVstreamModal={
+										setShowRewardMenuModal
+									}
+								/>
+							)}
+						</MenuAndButtonContainer>
+						<MenuAndButtonContainer
+							onClick={() => setShowUserMenu(true)}
+							onMouseEnter={() => setShowUserMenu(true)}
+							onMouseLeave={() => setShowUserMenu(false)}
+						>
+							<WalletButton outline theme={theme}>
+								<HBContainer>
+									<HBPic
+										src={
+											userData?.avatar
+												? userData.avatar
+												: '/images/placeholders/profile.png'
+										}
+										alt='Profile Pic'
+										width={'24px'}
+										height={'24px'}
+									/>
+									<WBInfo>
+										<GLink size='Medium'>
+											{userData?.name ||
+												shortenAddress(account)}
+										</GLink>
+										<WBNetwork size='Tiny'>
+											Connected to{' '}
+											{networksParams[chainId]
+												? networksParams[chainId]
+														.chainName
+												: library?._network?.name}
+										</WBNetwork>
+									</WBInfo>
+								</HBContainer>
+								<CoverLine theme={theme} />
+							</WalletButton>
+							{showUserMenu && <MenuWallet />}
+						</MenuAndButtonContainer>
+					</>
+				) : (
+					<ConnectButton
+						buttonType='primary'
+						size='small'
+						label={isGIVeconomyRoute ? 'CONNECT WALLET' : 'SIGN IN'}
+						onClick={handleModals}
+					/>
+				)}
+			</Flex>
+		</StyledHeader>
 	);
 };
 

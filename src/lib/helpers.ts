@@ -1,4 +1,6 @@
 import { promisify } from 'util';
+// eslint-disable-next-line import/named
+import { unescape } from 'lodash';
 import { parseUnits, parseEther } from '@ethersproject/units';
 import { keccak256 } from '@ethersproject/keccak256';
 import { Contract } from '@ethersproject/contracts';
@@ -127,12 +129,13 @@ export const isUserRegistered = (user?: IUser) => {
 
 export const htmlToText = (text?: string) => {
 	if (!text) return;
-	return text
+	const formattedText = text
+		.replace(/<[^>]+>/g, '')
 		.replace(/<\/(?:.|\n)*?>/gm, ' ') // replace closing tags w/ a space
 		.replace(/<(?:.|\n)*?>/gm, '') // strip opening tags
 		.trim();
+	return unescape(formattedText);
 };
-
 export const capitalizeFirstLetter = (string: string) => {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 };
@@ -169,7 +172,7 @@ export async function sendTransaction(
 	web3: Web3Provider,
 	params: { to: string; value: string },
 	txCallbacks: {
-		onTxHash: (hash: string) => void;
+		onTxHash: (hash: string, nonce: number) => void;
 		onReceipt: (receipt: any) => void;
 	},
 	contractAddress: string,
@@ -193,7 +196,7 @@ export async function sendTransaction(
 			tx = await fromSigner.sendTransaction(txParams);
 		}
 
-		txCallbacks.onTxHash(tx.hash);
+		txCallbacks.onTxHash(tx.hash, tx.nonce);
 		const receipt = await tx.wait();
 		if (receipt.status) {
 			txCallbacks.onReceipt(tx.hash);

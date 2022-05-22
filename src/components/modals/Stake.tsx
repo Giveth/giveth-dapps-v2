@@ -14,7 +14,7 @@ import Lottie from 'react-lottie';
 import { useWeb3React } from '@web3-react/core';
 import { Contract, ethers } from 'ethers';
 import { captureException } from '@sentry/nextjs';
-import { IModal, Modal } from './Modal';
+import { Modal } from './Modal';
 import { Flex } from '../styled-components/Flex';
 import { PoolStakingConfig } from '@/types/config';
 import { StakingPoolImages } from '../StakingPoolImages';
@@ -33,7 +33,7 @@ import {
 import { StakeState } from '@/lib/staking';
 import ToggleSwitch from '../styled-components/Switch';
 import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
-import useUser from '@/context/UserProvider';
+import { IModal } from '@/types/common';
 
 interface IStakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
@@ -64,9 +64,6 @@ export const StakeModal: FC<IStakeModalProps> = ({
 	const { title, LM_ADDRESS, POOL_ADDRESS, GARDEN_ADDRESS } =
 		poolStakingConfig;
 	const [permit, setPermit] = useState<boolean>(false);
-	const {
-		actions: { getBalance },
-	} = useUser();
 
 	useEffect(() => {
 		if (GARDEN_ADDRESS) {
@@ -113,9 +110,6 @@ export const StakeModal: FC<IStakeModalProps> = ({
 		});
 		return () => {
 			library.removeAllListeners('block');
-			library?.on('block', () => {
-				getBalance();
-			});
 		};
 	}, [library, amount, stakeState]);
 

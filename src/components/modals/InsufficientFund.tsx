@@ -2,9 +2,10 @@ import { FC } from 'react';
 import styled from 'styled-components';
 import { IconFund } from '@giveth/ui-design-system/lib/cjs/components/icons/Fund';
 import { Button, H5, Lead } from '@giveth/ui-design-system';
-import { IModal, Modal } from '@/components/modals/Modal';
+import { Modal } from '@/components/modals/Modal';
 import { ETheme, useGeneral } from '@/context/general.context';
 import { mediaQueries } from '@/lib/constants/constants';
+import { IModal } from '@/types/common';
 
 export const InsufficientFundModal: FC<IModal> = ({ setShowModal }) => {
 	const { theme } = useGeneral();

@@ -5,26 +5,21 @@ import styled from 'styled-components';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
 import { Arc } from '@/components/styled-components/Arc';
-import useUser from '@/context/UserProvider';
 import { isUserRegistered } from '@/lib/helpers';
 import { mediaQueries } from '@/lib/constants/constants';
-import useModal from '@/context/ModalProvider';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { setShowCompleteProfile } from '@/features/modal/modal.sclie';
 
 const HomeHeader = () => {
 	const router = useRouter();
-	const {
-		state: { user },
-	} = useUser();
-
-	const {
-		actions: { showCompleteProfile },
-	} = useModal();
+	const dispatch = useAppDispatch();
+	const user = useAppSelector(state => state.user.userData);
 
 	const handleCreateButton = () => {
 		if (isUserRegistered(user)) {
 			router.push(Routes.CreateProject);
 		} else {
-			showCompleteProfile();
+			dispatch(setShowCompleteProfile(true));
 		}
 	};
 

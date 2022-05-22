@@ -34,7 +34,6 @@ import {
 	NameInput,
 	WalletAddressInput,
 } from './Inputs';
-import useUser from '@/context/UserProvider';
 import SuccessfulCreation from './SuccessfulCreation';
 import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
 import {
@@ -49,6 +48,7 @@ import { client } from '@/apollo/apolloClient';
 import LightBulbIcon from '/public/images/icons/lightbulb.svg';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
+import { useAppSelector } from '@/features/hooks';
 
 export enum ECreateErrFields {
 	NAME = 'name',
@@ -92,16 +92,13 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 	const [impactLocation, setImpactLocation] = useState(
 		project?.impactLocation || '',
 	);
+	const user = useAppSelector(state => state.user?.userData);
 	const [errors, setErrors] = useState<ICreateProjectErrors>({
 		[ECreateErrFields.NAME]: isEditMode ? '' : 'Title is required',
 		[ECreateErrFields.DESCRIPTION]: '',
 		[ECreateErrFields.WALLET_ADDRESS]: '',
 	});
 	const [formChange, setFormChange] = useState(false);
-
-	const {
-		state: { user },
-	} = useUser();
 
 	const debouncedTitleValidation = useRef<any>();
 	const debouncedAddressValidation = useRef<any>();

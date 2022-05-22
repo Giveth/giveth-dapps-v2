@@ -18,15 +18,14 @@ import {
 	IconHelp,
 } from '@giveth/ui-design-system';
 import { motion } from 'framer-motion';
-
 import { captureException } from '@sentry/nextjs';
+
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import { Shadow } from '@/components/styled-components/Shadow';
 import CategoryBadge from '@/components/badges/CategoryBadge';
 import { compareAddresses, showToastError } from '@/lib/helpers';
 import { IProject } from '@/apollo/types/types';
 import links from '@/lib/constants/links';
-import useUser from '@/context/UserProvider';
 import ShareModal from '@/components/modals/ShareModal';
 import { IReaction } from '@/apollo/types/types';
 import { client } from '@/apollo/apolloClient';
@@ -42,7 +41,12 @@ import ProjectCardOrgBadge from '../../project-card/ProjectCardOrgBadge';
 import ExternalLink from '@/components/ExternalLink';
 import InternalLink from '@/components/InternalLink';
 import Routes from '@/lib/constants/Routes';
-import useModal from '@/context/ModalProvider';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { setShowSignWithWallet } from '@/features/modal/modal.sclie';
+import {
+	incrementLikedProjectsCount,
+	decrementLikedProjectsCount,
+} from '@/features/user/user.slice';
 
 interface IProjectDonateCard {
 	project?: IProject;
@@ -63,14 +67,8 @@ const ProjectDonateCard = ({
 	setIsDraft,
 	setCreationSuccessful,
 }: IProjectDonateCard) => {
-	const {
-		state: { user, isSignedIn },
-		actions: { incrementLikedProjectsCount, decrementLikedProjectsCount },
-	} = useUser();
-
-	const {
-		actions: { showSignWithWallet },
-	} = useModal();
+	const dispatch = useAppDispatch();
+	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
 
 	const {
 		categories = [],
@@ -100,7 +98,7 @@ const ProjectDonateCard = ({
 
 	const likeUnlikeProject = async () => {
 		if (!isSignedIn) {
-			showSignWithWallet();
+			dispatch(setShowSignWithWallet(true));
 			return;
 		}
 		if (loading) return;
@@ -113,13 +111,13 @@ const ProjectDonateCard = ({
 					const newReaction = await likeProject(id);
 					if (newReaction) {
 						setReaction(newReaction);
-						incrementLikedProjectsCount();
+						dispatch(incrementLikedProjectsCount());
 					}
 				} else if (reaction?.userId === user?.id) {
 					const successful = await unlikeProject(reaction.id);
 					if (successful) {
 						setReaction(undefined);
-						decrementLikedProjectsCount();
+						dispatch(decrementLikedProjectsCount());
 					}
 				}
 			} catch (e) {
@@ -187,7 +185,7 @@ const ProjectDonateCard = ({
 		} else {
 			try {
 				if (!isSignedIn) {
-					showSignWithWallet();
+					dispatch(setShowSignWithWallet(true));
 					return;
 				}
 				const { data } = await client.mutate({

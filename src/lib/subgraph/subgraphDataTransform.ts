@@ -1,5 +1,4 @@
 import { ethers } from 'ethers';
-import { ISubgraphValue } from '@/context/subgraph.context';
 import {
 	IBalances,
 	IInfinitePositionReward,
@@ -11,51 +10,52 @@ import {
 	ZeroBalances,
 } from '@/types/subgraph';
 import { RegenFarmType, StakingType, StreamType } from '@/types/config';
-
-const BN = ethers.BigNumber.from;
+import type { ISubgraphState } from '@/features/subgraph/subgraph.types';
 
 const transformBalanceInfo = (info: any): IBalances => {
 	if (!info) return ZeroBalances;
 
-	const balance = BN(info.balance || 0);
-	const allocatedTokens = BN(info.allocatedTokens || 0);
-	const claimed = BN(info.claimed || 0);
-	const rewardPerTokenPaidGivLm = BN(info.rewardPerTokenPaidGivLm || 0);
-	const rewardsGivLm = BN(info.rewardsGivLm || 0);
-	const rewardPerTokenPaidSushiSwap = BN(
-		info.rewardPerTokenPaidSushiSwap || 0,
-	);
-	const rewardsSushiSwap = BN(info.rewardsSushiSwap || 0);
-	const rewardPerTokenPaidHoneyswap = BN(
-		info.rewardPerTokenPaidHoneyswap || 0,
-	);
-	const rewardsHoneyswap = BN(info.rewardsHoneyswap || 0);
-	const rewardPerTokenPaidBalancer = BN(info.rewardPerTokenPaidBalancer || 0);
-	const rewardsBalancer = BN(info.rewardsBalancer || 0);
-	const rewardPerTokenPaidUniswapV2GivDai = BN(
-		info.rewardPerTokenPaidUniswapV2GivDai || 0,
-	);
-	const rewardsUniswapV2GivDai = BN(info.rewardsUniswapV2GivDai || 0);
-	const givback = BN(info.givback || 0);
-	const givbackLiquidPart = BN(info.givbackLiquidPart || 0);
-	const balancerLp = BN(info.balancerLp || 0);
-	const balancerLpStaked = BN(info.balancerLpStaked || 0);
-	const uniswapV2GivDaiLp = BN(info.uniswapV2GivDaiLp || 0);
-	const uniswapV2GivDaiLpStaked = BN(info.uniswapV2GivDaiLpStaked || 0);
-	const sushiswapLp = BN(info.sushiswapLp || 0);
-	const sushiSwapLpStaked = BN(info.sushiSwapLpStaked || 0);
-	const honeyswapLp = BN(info.honeyswapLp || 0);
-	const honeyswapLpStaked = BN(info.honeyswapLpStaked || 0);
-	const givStaked = BN(info.givStaked || 0);
+	const balance = info.balance || 0;
+	const allocatedTokens = info.allocatedTokens || 0;
+	const claimed = info.claimed || 0;
+	const rewardPerTokenPaidGivLm = info.rewardPerTokenPaidGivLm || 0;
+	const rewardsGivLm = info.rewardsGivLm || 0;
+	const rewardPerTokenPaidSushiSwap = info.rewardPerTokenPaidSushiSwap || 0;
+	const rewardsSushiSwap = info.rewardsSushiSwap || 0;
+	const rewardPerTokenPaidHoneyswap = info.rewardPerTokenPaidHoneyswap || 0;
+	const rewardsHoneyswap = info.rewardsHoneyswap || 0;
+	const rewardPerTokenPaidBalancer = info.rewardPerTokenPaidBalancer || 0;
+	const rewardsBalancer = info.rewardsBalancer || 0;
+	const rewardPerTokenPaidUniswapV2GivDai =
+		info.rewardPerTokenPaidUniswapV2GivDai || 0;
+	const rewardsUniswapV2GivDai = info.rewardsUniswapV2GivDai || 0;
+	const givback = info.givback || 0;
+	const givbackLiquidPart = info.givbackLiquidPart || 0;
+	const balancerLp = info.balancerLp || 0;
+	const balancerLpStaked = info.balancerLpStaked || 0;
+	const uniswapV2GivDaiLp = info.uniswapV2GivDaiLp || 0;
+	const uniswapV2GivDaiLpStaked = info.uniswapV2GivDaiLpStaked || 0;
+	const sushiswapLp = info.sushiswapLp || 0;
+	const sushiSwapLpStaked = info.sushiSwapLpStaked || 0;
+	const honeyswapLp = info.honeyswapLp || 0;
+	const honeyswapLpStaked = info.honeyswapLpStaked || 0;
+	const givStaked = info.givStaked || 0;
 	const allocationCount = Number(info.allocationCount || 0);
 	const givDropClaimed = Boolean(info.givDropClaimed);
 
-	const foxAllocatedTokens = BN(info.foxAllocatedTokens || 0);
-	const foxClaimed = BN(info.foxClaimed || 0);
-	const rewardPerTokenPaidFoxHnyLm = BN(info.rewardPerTokenPaidFoxHnyLm || 0);
-	const rewardsFoxHnyLm = BN(info.rewardsFoxHnyLm || 0);
-	const foxHnyLp = BN(info.foxHnyLp || 0);
-	const foxHnyLpStaked = BN(info.foxHnyLpStaked || 0);
+	const foxAllocatedTokens = info.foxAllocatedTokens || 0;
+	const foxClaimed = info.foxClaimed || 0;
+	const rewardPerTokenPaidFoxHnyLm = info.rewardPerTokenPaidFoxHnyLm || 0;
+	const rewardsFoxHnyLm = info.rewardsFoxHnyLm || 0;
+	const foxHnyLp = info.foxHnyLp || 0;
+	const foxHnyLpStaked = info.foxHnyLpStaked || 0;
+
+	const cultAllocatedTokens = info.cultAllocatedTokens || 0;
+	const cultClaimed = info.cultClaimed || 0;
+	const rewardPerTokenPaidCultEthLm = info.rewardPerTokenPaidCultEthLm || 0;
+	const rewardsCultEthLm = info.rewardsCultEthLm || 0;
+	const cultEthLp = info.cultEthLp || 0;
+	const cultEthLpStaked = info.cultEthLpStaked || 0;
 
 	return {
 		balance,
@@ -91,6 +91,13 @@ const transformBalanceInfo = (info: any): IBalances => {
 		rewardsFoxHnyLm,
 		foxHnyLp,
 		foxHnyLpStaked,
+
+		cultAllocatedTokens,
+		cultClaimed,
+		rewardPerTokenPaidCultEthLm,
+		rewardsCultEthLm,
+		cultEthLp,
+		cultEthLpStaked,
 	};
 };
 
@@ -101,14 +108,14 @@ const transformTokenDistroInfo = (info: any): ITokenDistroInfo | undefined => {
 	const _cliffTime = info.cliffTime;
 	const _duration = info.duration;
 
-	const startTime = new Date(+(_startTime.toString() + '000'));
-	const cliffTime = new Date(+(_cliffTime.toString() + '000'));
+	const startTime = +(_startTime.toString() + '000');
+	const cliffTime = +(_cliffTime.toString() + '000');
 	const duration = +(_duration.toString() + '000');
 
-	const endTime = new Date(startTime.getTime() + duration);
-	const initialAmount = BN(info.initialAmount);
-	const lockedAmount = BN(info.lockedAmount);
-	const totalTokens = BN(info.totalTokens);
+	const endTime = startTime + duration;
+	const initialAmount = info.initialAmount;
+	const lockedAmount = info.lockedAmount;
+	const totalTokens = info.totalTokens;
 
 	return {
 		contractAddress: info.id,
@@ -123,9 +130,9 @@ const transformTokenDistroInfo = (info: any): ITokenDistroInfo | undefined => {
 
 const transformUniswapV3Pool = (info: any): IUniswapV3Pool | undefined => {
 	if (!info) return undefined;
-	const sqrtPriceX96 = BN(info.sqrtPriceX96);
+	const sqrtPriceX96 = info.sqrtPriceX96;
 	const tick = Number(info.tick);
-	const liquidity = BN(info.liquidity);
+	const liquidity = info.liquidity;
 	const token0 = info.token0;
 	const token1 = info.token1;
 	return {
@@ -143,9 +150,9 @@ const transformUnipoolInfo = (info: any): IUnipool | undefined => {
 	const _lastUpdateTime = info?.lastUpdateTime || '0';
 	const _periodFinish = info?.periodFinish || '0';
 
-	const totalSupply = BN(info?.totalSupply || 0);
-	const rewardPerTokenStored = BN(info?.rewardPerTokenStored || 0);
-	const rewardRate = BN(info?.rewardRate || 0);
+	const totalSupply = info?.totalSupply || 0;
+	const rewardPerTokenStored = info?.rewardPerTokenStored || 0;
+	const rewardRate = info?.rewardRate || 0;
 	const lastUpdateTime = Number(_lastUpdateTime) * 1000;
 	const periodFinish = Number(_periodFinish) * 1000;
 
@@ -162,7 +169,7 @@ const transformUniswapPositions = (info: any): any => {
 	if (!info) return {};
 	const mapper = (info: any): IUniswapV3Position => {
 		const tokenId = Number(info?.tokenId || 0);
-		const liquidity = BN(info?.liquidity);
+		const liquidity = info?.liquidity;
 		const tickLower = Number(info?.tickLower);
 		const tickUpper = Number(info?.tickUpper);
 		const staked = Boolean(info?.staked);
@@ -201,7 +208,7 @@ const transformUniswapPositions = (info: any): any => {
 
 	if (infinitePositionRewardInfo && infinitePositionInfo) {
 		const infinitePositionReward: IInfinitePositionReward = {
-			lastRewardAmount: BN(infinitePositionRewardInfo.lastRewardAmount),
+			lastRewardAmount: infinitePositionRewardInfo.lastRewardAmount,
 			lastUpdateTimeStamp: Number(
 				infinitePositionRewardInfo.lastUpdateTimeStamp,
 			),
@@ -222,8 +229,8 @@ const transformUniswapV2Pair = (info: any): IUniswapV2Pair | undefined => {
 	const token0 = info?.token0 || ethers.constants.AddressZero;
 	const token1 = info?.token1 || ethers.constants.AddressZero;
 
-	const reserve0 = BN(info?.reserve0 || 1);
-	const reserve1 = BN(info?.reserve1 || 1);
+	const reserve0 = info?.reserve0 || 1;
+	const reserve1 = info?.reserve1 || 1;
 
 	return {
 		token0,
@@ -232,11 +239,12 @@ const transformUniswapV2Pair = (info: any): IUniswapV2Pair | undefined => {
 		reserve1,
 	};
 };
-export const transformSubgraphData = (data: any = {}): ISubgraphValue => {
+export const transformSubgraphData = (data: any = {}): ISubgraphState => {
 	return {
 		balances: transformBalanceInfo(data?.balances),
 		tokenDistroInfo: transformTokenDistroInfo(data?.tokenDistroInfo),
 		[StreamType.FOX]: transformTokenDistroInfo(data[StreamType.FOX]),
+		[StreamType.CULT]: transformTokenDistroInfo(data[StreamType.CULT]),
 
 		[StakingType.GIV_LM]: transformUnipoolInfo(data[StakingType.GIV_LM]),
 		[StakingType.BALANCER]: transformUnipoolInfo(
@@ -253,6 +261,9 @@ export const transformSubgraphData = (data: any = {}): ISubgraphValue => {
 		),
 		[RegenFarmType.FOX_HNY]: transformUnipoolInfo(
 			data[RegenFarmType.FOX_HNY],
+		),
+		[RegenFarmType.CULT_ETH]: transformUnipoolInfo(
+			data[RegenFarmType.CULT_ETH],
 		),
 
 		uniswapV3Pool: transformUniswapV3Pool(data?.uniswapV3Pool),

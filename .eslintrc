@@ -23,7 +23,8 @@
       {
         "endOfLine": "auto"
       }
-    ]
+    ],
+    "import/named": "error"
   },
   "settings": {
     "import/resolver": {

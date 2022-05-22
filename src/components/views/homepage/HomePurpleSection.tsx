@@ -13,30 +13,25 @@ import {
 } from '@giveth/ui-design-system';
 
 import TwitterIcon from '/public/images/twitter.svg';
-import useUser from '@/context/UserProvider';
 import { isSSRMode, isUserRegistered } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
 import { Col, Row } from '@/components/Grid';
 import { Arc } from '@/components/styled-components/Arc';
 import { HomeContainer } from '@/components/views/homepage/Home.sc';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
-import useModal from '@/context/ModalProvider';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { setShowCompleteProfile } from '@/features/modal/modal.sclie';
 
 const HomePurpleSection = () => {
 	const router = useRouter();
-	const {
-		state: { user },
-	} = useUser();
-
-	const {
-		actions: { showCompleteProfile },
-	} = useModal();
+	const dispatch = useAppDispatch();
+	const user = useAppSelector(state => state.user.userData);
 
 	const handleCreateButton = () => {
 		if (isUserRegistered(user)) {
 			router.push(Routes.CreateProject);
 		} else {
-			showCompleteProfile();
+			dispatch(setShowCompleteProfile(true));
 		}
 	};
 

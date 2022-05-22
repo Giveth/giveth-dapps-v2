@@ -31,6 +31,10 @@ export const GIVfarmRewardCard = styled(EnhancedRewardCard)`
 	}
 `;
 
+export const ArchivedPoolsToggle = styled.div`
+	margin-top: 25px;
+`;
+
 interface PoolRowProps {
 	disabled?: boolean;
 }

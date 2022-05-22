@@ -1,4 +1,8 @@
-import { EDonationType, EProjectStatus } from '@/apollo/types/gqlEnums';
+import {
+	EDonationStatus,
+	EDonationType,
+	EProjectStatus,
+} from '@/apollo/types/gqlEnums';
 
 export interface IProject {
 	id?: string;
@@ -81,7 +85,6 @@ export interface IUser {
 	walletAddress?: string;
 	url?: string;
 	location?: string;
-	token?: string;
 	userId?: string;
 	totalDonated?: number;
 	totalReceived?: number;
@@ -112,6 +115,7 @@ export interface IDonation {
 	createdAt: string;
 	donationType?: EDonationType;
 	anonymous?: boolean;
+	status: EDonationStatus;
 }
 
 export interface IWalletDonation extends IDonation {

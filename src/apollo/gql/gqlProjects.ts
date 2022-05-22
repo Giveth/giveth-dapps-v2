@@ -411,6 +411,7 @@ export const SIMILAR_PROJECTS = gql`
 				slug
 				creationDate
 				description
+				verified
 				adminUser {
 					name
 					walletAddress

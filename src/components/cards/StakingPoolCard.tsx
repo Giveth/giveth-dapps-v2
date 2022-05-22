@@ -16,12 +16,11 @@ const StakingPoolCard: FC<IStakingPoolCardProps> = ({
 		poolStakingConfig,
 		network,
 	);
-
 	const stakeInfo = {
 		apr: apr,
-		userNotStakedAmount: notStakedAmount,
+		notStakedAmount: notStakedAmount,
 		earned: earned,
-		stakedLpAmount: stakedAmount,
+		stakedAmount: stakedAmount,
 	};
 
 	return (

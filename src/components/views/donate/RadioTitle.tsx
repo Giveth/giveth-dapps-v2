@@ -7,17 +7,19 @@ import {
 	neutralColors,
 	Subline,
 } from '@giveth/ui-design-system';
+import { useGeneral, ETheme } from '@/context/general.context';
 
 import RadioOnIcon from '../../../../public/images/radio_on.svg';
 import RadioOffIcon from '../../../../public/images/radio_off.svg';
 
 const RadioTitle = (props: {
 	title: string;
-	subtitle: string;
+	subtitle?: string;
 	isSelected: boolean;
 	toggleRadio: () => void;
 }) => {
 	const { title, subtitle, isSelected, toggleRadio } = props;
+	const { theme } = useGeneral();
 
 	return (
 		<RadioTitleBox onClick={toggleRadio}>
@@ -26,7 +28,12 @@ const RadioTitle = (props: {
 				alt='radio icon'
 			/>
 			<div>
-				<RadioTitleText isSelected={isSelected}>{title}</RadioTitleText>
+				<RadioTitleText
+					isSelected={isSelected}
+					isDark={theme === ETheme.Dark}
+				>
+					{title}
+				</RadioTitleText>
 				<RadioSubtitleText isSelected={isSelected}>
 					{subtitle}
 				</RadioSubtitleText>
@@ -46,8 +53,12 @@ const RadioTitleBox = styled.div`
 `;
 
 const RadioTitleText = styled(Lead)`
-	color: ${(props: { isSelected: boolean }) =>
-		props.isSelected ? brandColors.deep[900] : neutralColors.gray[600]};
+	color: ${(props: { isSelected: boolean; isDark: boolean }) =>
+		props.isSelected
+			? props.isDark
+				? 'white'
+				: brandColors.deep[900]
+			: neutralColors.gray[600]};
 `;
 
 const RadioSubtitleText = styled(Subline)`

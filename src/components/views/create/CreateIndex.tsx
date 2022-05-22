@@ -1,31 +1,33 @@
 import React, { useEffect } from 'react';
 import CreateProject from '@/components/views/create/CreateProject';
-import useUser from '@/context/UserProvider';
 import { isUserRegistered } from '@/lib/helpers';
-import useModal from '@/context/ModalProvider';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import {
+	setShowCompleteProfile,
+	setShowSignWithWallet,
+	setShowWelcomeModal,
+} from '@/features/modal/modal.sclie';
 
 const CreateIndex = () => {
+	const dispatch = useAppDispatch();
 	const {
-		state: { user, isSignedIn, isEnabled },
-	} = useUser();
-
-	const {
-		actions: { showWelcomeModal, showSignWithWallet, showCompleteProfile },
-	} = useModal();
-
+		isEnabled,
+		isSignedIn,
+		userData: user,
+	} = useAppSelector(state => state.user);
 	const isRegistered = isUserRegistered(user);
 
 	useEffect(() => {
 		if (isEnabled) {
 			if (!isRegistered) {
-				showCompleteProfile();
+				dispatch(setShowCompleteProfile(true));
 				return;
 			}
 			if (!isSignedIn) {
-				showSignWithWallet();
+				dispatch(setShowSignWithWallet(true));
 			}
 		} else {
-			showWelcomeModal();
+			dispatch(setShowWelcomeModal(true));
 		}
 	}, [user, isSignedIn]);
 

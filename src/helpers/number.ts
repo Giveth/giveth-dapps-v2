@@ -3,6 +3,7 @@ import { ethers } from 'ethers';
 import config from '@/configuration';
 
 export const Zero = new BigNumber(0);
+export const BN = ethers.BigNumber.from;
 
 export const formatEthHelper = (
 	amount: BigNumber.Value,
@@ -41,6 +42,3 @@ export const formatWeiHelper = (
 	}
 	return formatEthHelper(amountEth, decimals, format);
 };
-
-export const gwei2wei = (gweiAmount: string): string =>
-	ethers.utils.parseUnits(gweiAmount, 'gwei').toString();

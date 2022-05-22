@@ -4,7 +4,7 @@ import {
 	StakingType,
 	StreamType,
 } from '@/types/config';
-import { gwei2wei } from '@/helpers/number';
+import { gwei2wei } from '@/helpers/blockchain';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 
@@ -31,7 +31,7 @@ const config: EnvConfig = {
 		blockExplorerName: ['Etherscan'],
 		blockExplorerUrls: ['https://kovan.etherscan.io'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/mohammadranjbarz/giv-economy-kovan-develop',
+			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-kovan-staging',
 
 		TOKEN_ADDRESS: '0x29434A25abd94AE882aA883eea81585Aaa5b078D',
 		WETH_TOKEN_ADDRESS: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
@@ -95,8 +95,42 @@ const config: EnvConfig = {
 				active: false,
 			},
 		],
-		regenStreams: [],
-		regenFarms: [],
+		regenStreams: [
+			{
+				tokenDistroAddress:
+					'0xBb974e08774544a361BCF496fE61DaB9Df29AFFc',
+				type: StreamType.CULT,
+				title: 'CULT DAO',
+				rewardTokenAddress:
+					'0x3e4d3FadEE2338D420bb5E5cB26aAd96c165476c',
+				rewardTokenSymbol: 'CULT',
+				tokenAddressOnUniswapV2:
+					'0xf0f9d895aca5c8678f706fb8216fa22957685a13',
+			},
+		],
+		regenFarms: [
+			{
+				POOL_ADDRESS: '0x6bb32725aa31b1a99e7c782e0605b0fb57e4b9e6',
+				LM_ADDRESS: '0x9d23d449af3e2c07a286688c85ff5d3d4c219d79',
+				type: StakingType.UNISWAPV2,
+				network: 42,
+				title: 'CULT / ETH',
+				description: '50% CULT, 50% ETH',
+				provideLiquidityLink:
+					'https://app.uniswap.org/#/add/v2/0x3e4d3FadEE2338D420bb5E5cB26aAd96c165476c/ETH?chain=kovan',
+				unit: 'LP',
+				regenStreamType: StreamType.CULT,
+				regenFarmType: RegenFarmType.CULT_ETH,
+				regenFarmIntro: {
+					title: 'CULT',
+					description:
+						'The purpose of CULT is to empower and fund those building and contributing towards our decentralized future.',
+					link: 'https://cultdao.io/',
+				},
+				farmStartTimeMS: 1646306818206,
+				active: true,
+			},
+		],
 	},
 
 	XDAI_CONFIG: {
@@ -116,7 +150,7 @@ const config: EnvConfig = {
 		blockExplorerName: ['Blockscout'],
 		blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/mohammadranjbarz/giv-economy-xdai-develop',
+			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-xdai-staging',
 
 		TOKEN_ADDRESS: '0x83a8eea6427985C523a0c4d9d3E62C051B6580d3',
 		MERKLE_ADDRESS: '0xc87403C70c9FBfb594d98d3B5E695BBE4C694188',
@@ -177,6 +211,7 @@ const config: EnvConfig = {
 				POOL_ADDRESS: '0xD28C07F802212F04AF41834ec0CC81d2d283124B',
 				LM_ADDRESS: '0x06851400866e065972ff21e1ECdE035b4772736d',
 				type: StakingType.HONEYSWAP,
+				network: 100,
 				title: 'FOX / HNY',
 				description: '50% FOX, 50% HNY',
 				provideLiquidityLink:

@@ -6,6 +6,7 @@ import { IProject } from '@/apollo/types/types';
 import { IDonationsByProjectId } from '@/apollo/types/gqlTypes';
 import ProjectTotalFundCard from './ProjectTotalFundCard';
 import ProjectDonationTable from './ProjectDonationTable';
+import { FlexCenter } from '@/components/styled-components/Flex';
 
 const ProjectDonations = (props: {
 	donationsByProjectId: IDonationsByProjectId;
@@ -49,13 +50,10 @@ const ProjectDonations = (props: {
 	);
 };
 
-const MessageContainer = styled.div`
+const MessageContainer = styled(FlexCenter)`
 	height: 200px;
 	width: 100%;
-	display: flex;
 	flex-direction: column;
-	justify-content: center;
-	align-items: center;
 	gap: 32px;
 `;
 

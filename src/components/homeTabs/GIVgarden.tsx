@@ -28,7 +28,7 @@ import { HarvestAllModal } from '../modals/HarvestAll';
 import config from '@/configuration';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import { getGivStakingConfig } from '@/helpers/networkProvider';
-import { useTokenDistro } from '@/context/tokenDistro.context';
+import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { TopInnerContainer } from './commons';
 import { Col, Container, Row } from '@/components/Grid';
 
@@ -36,7 +36,7 @@ const poolStakingConfig = getGivStakingConfig(config.XDAI_CONFIG);
 
 export const TabGardenTop = () => {
 	const { chainId } = useWeb3React();
-	const { givTokenDistroHelper } = useTokenDistro();
+	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 
 	const [showModal, setShowModal] = useState(false);
 	const [earnedLiquidPart, setEarnedLiquidPart] =
@@ -94,6 +94,7 @@ export const TabGardenTop = () => {
 					poolStakingConfig={poolStakingConfig}
 					earned={earned}
 					network={config.XDAI_NETWORK_NUMBER}
+					tokenDistroHelper={givTokenDistroHelper}
 				/>
 			)}
 		</GardenTopContainer>

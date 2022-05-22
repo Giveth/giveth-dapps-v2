@@ -21,11 +21,13 @@ import {
 	ContractRow,
 	CopyWrapper,
 	GIVfarmBottomContainer,
+	ArchivedPoolsToggle,
 } from './GIVfarm.sc';
+import RadioTitle from '@/components/views/donate/RadioTitle';
 import { NetworkSelector } from '@/components/NetworkSelector';
 import StakingPositionCard from '@/components/cards/StakingPositionCard';
 import { getGivStakingConfig } from '@/helpers/networkProvider';
-import { useTokenDistro } from '@/context/tokenDistro.context';
+import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { useFarms } from '@/context/farm.context';
 import { TopInnerContainer, ExtLinkRow } from './commons';
 import { GIVfrens } from '@/components/GIVfrens';
@@ -43,10 +45,11 @@ import {
 const renderPools = (
 	pools: BasicNetworkConfig['pools'],
 	network: number,
-	active: boolean,
-) =>
-	pools
-		.filter(p => p.active === active)
+	showArchivedPools?: boolean,
+) => {
+	return pools
+		.filter(p => (showArchivedPools ? true : !!p.active))
+		.sort(p => (p.active ? -1 : 1))
 		.map((poolStakingConfig, index) => {
 			return (
 				<Col
@@ -68,11 +71,12 @@ const renderPools = (
 				</Col>
 			);
 		});
+};
 
 export const TabGIVfarmTop = () => {
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
 	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
-	const { givTokenDistroHelper } = useTokenDistro();
+	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const { totalEarned } = useFarms();
 	const { chainId } = useWeb3React();
 
@@ -117,6 +121,7 @@ export const TabGIVfarmTop = () => {
 
 export const TabGIVfarmBottom = () => {
 	const { chainId } = useWeb3React();
+	const [showArchivedPools, setArchivedPools] = useState(false);
 
 	return (
 		<GIVfarmBottomContainer>
@@ -175,14 +180,16 @@ export const TabGIVfarmBottom = () => {
 						</CopyWrapper>
 					</ContractRow>
 				</Flex>
+				<ArchivedPoolsToggle>
+					<RadioTitle
+						title='Show archived pools'
+						toggleRadio={() => setArchivedPools(!showArchivedPools)}
+						isSelected={showArchivedPools}
+					/>
+				</ArchivedPoolsToggle>
 				{chainId === config.XDAI_NETWORK_NUMBER && (
 					<>
 						<PoolRow>
-							{renderPools(
-								config.XDAI_CONFIG.pools,
-								config.XDAI_NETWORK_NUMBER,
-								true,
-							)}
 							<Col sm={6} lg={4}>
 								<StakingPoolCard
 									network={config.XDAI_NETWORK_NUMBER}
@@ -194,7 +201,7 @@ export const TabGIVfarmBottom = () => {
 							{renderPools(
 								config.XDAI_CONFIG.pools,
 								config.XDAI_NETWORK_NUMBER,
-								false,
+								showArchivedPools,
 							)}
 						</PoolRow>
 						<GIVfrens
@@ -213,11 +220,6 @@ export const TabGIVfarmBottom = () => {
 								!givEconomySupportedNetworks.includes(chainId)
 							}
 						>
-							{renderPools(
-								config.MAINNET_CONFIG.pools,
-								config.MAINNET_NETWORK_NUMBER,
-								true,
-							)}
 							<Col sm={6} lg={4}>
 								<StakingPoolCard
 									network={config.MAINNET_NETWORK_NUMBER}
@@ -229,12 +231,12 @@ export const TabGIVfarmBottom = () => {
 							{renderPools(
 								config.MAINNET_CONFIG.pools,
 								config.MAINNET_NETWORK_NUMBER,
-								false,
+								showArchivedPools,
 							)}
 						</PoolRow>
 						<GIVfrens
-							regenFarms={config.XDAI_CONFIG.regenFarms}
-							network={config.XDAI_NETWORK_NUMBER}
+							regenFarms={config.MAINNET_CONFIG.regenFarms}
+							network={config.MAINNET_NETWORK_NUMBER}
 						/>
 					</>
 				)}

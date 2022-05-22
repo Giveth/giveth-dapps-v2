@@ -16,7 +16,6 @@ import {
 import { constants, ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
-import { useTokenDistro } from '@/context/tokenDistro.context';
 import { durationToString } from '@/lib/helpers';
 import {
 	Bar,
@@ -25,12 +24,14 @@ import {
 } from '@/components/homeTabs/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { RegenStreamConfig, StreamType } from '@/types/config';
-import { useSubgraph } from '@/context';
-import { formatWeiHelper } from '@/helpers/number';
+import { BN, formatWeiHelper } from '@/helpers/number';
 import { IconFox } from '@/components/Icons/Fox';
+import { IconCult } from '@/components/Icons/Cult';
 import { Flex } from './styled-components/Flex';
 import { HarvestAllModal } from './modals/HarvestAll';
 import { usePrice } from '@/context/price.context';
+import { useAppSelector } from '@/features/hooks';
+import useRegenTokenDistroHelper from '@/hooks/useRegenTokenDistroHelper';
 
 interface RegenStreamProps {
 	network: number;
@@ -41,6 +42,8 @@ export const getStreamIconWithType = (type: StreamType, size?: number) => {
 	switch (type) {
 		case StreamType.FOX:
 			return <IconFox size={size} />;
+		case StreamType.CULT:
+			return <IconCult size={size} />;
 		default:
 			break;
 	}
@@ -52,7 +55,6 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 }) => {
 	const [showModal, setShowModal] = useState(false);
 	const [usdAmount, setUSDAmount] = useState('0');
-	const { regenTokenDistroHelpers } = useTokenDistro();
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
 	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
 	const [lockedAmount, setLockedAmount] = useState<ethers.BigNumber>(
@@ -61,10 +63,11 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 	const [claimedAmount, setClaimedAmount] = useState<ethers.BigNumber>(
 		constants.Zero,
 	);
-	const {
-		currentValues: { balances },
-	} = useSubgraph();
-	const tokenDistroHelper = regenTokenDistroHelpers[streamConfig.type];
+	const { regenTokenDistroHelper } = useRegenTokenDistroHelper(
+		streamConfig.type,
+	);
+	const currentValues = useAppSelector(state => state.subgraph.currentValues);
+	const { balances } = currentValues;
 
 	const { getTokenPrice } = usePrice();
 
@@ -85,12 +88,15 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 		network,
 		streamConfig.tokenAddressOnUniswapV2,
 	]);
-
 	useEffect(() => {
 		switch (streamConfig.type) {
 			case StreamType.FOX:
-				setLockedAmount(balances.foxAllocatedTokens);
-				setClaimedAmount(balances.foxClaimed);
+				setLockedAmount(BN(balances.foxAllocatedTokens));
+				setClaimedAmount(BN(balances.foxClaimed));
+				break;
+			case StreamType.CULT:
+				setLockedAmount(BN(balances.cultAllocatedTokens));
+				setClaimedAmount(BN(balances.cultClaimed));
 				break;
 			default:
 				setLockedAmount(ethers.constants.Zero);
@@ -99,18 +105,18 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 	}, [streamConfig.type, balances]);
 
 	useEffect(() => {
-		if (!tokenDistroHelper) return;
 		setRewardLiquidPart(
-			tokenDistroHelper.getLiquidPart(lockedAmount).sub(claimedAmount),
+			regenTokenDistroHelper
+				.getLiquidPart(lockedAmount)
+				.sub(claimedAmount),
 		);
 		setRewardStream(
-			tokenDistroHelper.getStreamPartTokenPerWeek(lockedAmount),
+			regenTokenDistroHelper.getStreamPartTokenPerWeek(lockedAmount),
 		);
-	}, [claimedAmount, lockedAmount, tokenDistroHelper]);
+	}, [claimedAmount, lockedAmount, regenTokenDistroHelper]);
 
-	const percentage = tokenDistroHelper?.GlobalReleasePercentage || 0;
-	const remainTime = durationToString(tokenDistroHelper?.remain || 0);
-
+	const percentage = regenTokenDistroHelper?.GlobalReleasePercentage || 0;
+	const remainTime = durationToString(regenTokenDistroHelper?.remain || 0);
 	const icon = getStreamIconWithType(streamConfig.type, 40);
 
 	return (
@@ -193,6 +199,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 						setShowModal={setShowModal}
 						network={network}
 						regenStreamConfig={streamConfig}
+						tokenDistroHelper={regenTokenDistroHelper}
 					/>
 				)}
 			</RegenStreamContainer>

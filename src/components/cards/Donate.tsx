@@ -29,10 +29,10 @@ import {
 	PreviousArrowButton,
 } from './common';
 import { IClaimViewCardProps } from '@/components/views/claim/Claim.view';
-import { useTokenDistro } from '@/context/tokenDistro.context';
 import { formatWeiHelper, Zero } from '@/helpers/number';
 import { IconWithTooltip } from '../IconWithToolTip';
 import useClaim from '@/context/claim.context';
+import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 
 const DonatePoolCard = styled(PoolCard)`
 	height: 127px;
@@ -102,7 +102,7 @@ export const DonateCard: FC<IClaimViewCardProps> = ({ index }) => {
 		constants.Zero,
 	);
 	const [earnEstimate, setEarnEstimate] = useState<BigNumber>(Zero);
-	const { givTokenDistroHelper } = useTokenDistro();
+	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 
 	useEffect(() => {
 		if (totalAmount) {
