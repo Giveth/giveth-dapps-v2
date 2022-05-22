@@ -12,7 +12,6 @@ import ProjectDonateCard from './ProjectDonateCard';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
-import useUser from '@/context/UserProvider';
 import { IDonation, IProject } from '@/apollo/types/types';
 import { EDirection, EProjectStatus, gqlEnums } from '@/apollo/types/gqlEnums';
 import InfoBadge from '@/components/badges/InfoBadge';
@@ -23,6 +22,7 @@ import InlineToast from '@/components/toasts/InlineToast';
 import { ProjectMeta } from '@/lib/meta';
 import SimilarProjects from '@/components/views/project/SimilarProjects';
 import { showToastError } from '@/lib/helpers';
+import { useAppSelector } from '@/features/hooks';
 
 const ProjectDonations = dynamic(() => import('./ProjectDonations'));
 const ProjectUpdates = dynamic(() => import('./ProjectUpdates'));
@@ -45,10 +45,7 @@ const ProjectIndex = (props: { project?: IProject }) => {
 	const [creationSuccessful, setCreationSuccessful] = useState(false);
 	const [isMobile, setIsMobile] = useState<boolean>(false);
 	const [isCancelled, setIsCancelled] = useState<boolean>(false);
-
-	const {
-		state: { user },
-	} = useUser();
+	const user = useAppSelector(state => state.user.userData);
 
 	const { description = '', title, status, id = '' } = project || {};
 	const router = useRouter();

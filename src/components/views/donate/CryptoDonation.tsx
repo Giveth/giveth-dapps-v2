@@ -18,7 +18,6 @@ import tokenAbi from 'human-standard-token-abi';
 import { captureException } from '@sentry/nextjs';
 import { Shadow } from '@/components/styled-components/Shadow';
 import InputBox from '../../InputBox';
-import useUser from '@/context/UserProvider';
 import CheckBox from '@/components/Checkbox';
 import DonateModal from '@/components/modals/DonateModal';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -55,7 +54,7 @@ import { getERC20Info } from '@/lib/contracts';
 import GIVBackToast from '@/components/views/donate/GIVBackToast';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
 import FailedDonation from '@/components/modals/FailedDonation';
-import { useAppDispatch } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import {
 	setShowSignWithWallet,
 	setShowWalletModal,
@@ -82,9 +81,9 @@ const CryptoDonation = (props: {
 }) => {
 	const { chainId: networkId, account, library } = useWeb3React();
 	const dispatch = useAppDispatch();
-	const {
-		state: { isSignedIn, isEnabled, balance },
-	} = useUser();
+	const { isEnabled, isSignedIn, balance } = useAppSelector(
+		state => state.user,
+	);
 	const { ethPrice } = usePrice();
 
 	const { project, setSuccessDonation } = props;

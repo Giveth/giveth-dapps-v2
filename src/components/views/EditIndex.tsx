@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { captureException } from '@sentry/nextjs';
-import useUser from '@/context/UserProvider';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
 import { IProjectEdition } from '@/apollo/types/types';
@@ -12,7 +11,7 @@ import {
 	showToastError,
 } from '@/lib/helpers';
 import CreateProject from '@/components/views/create/CreateProject';
-import { useAppDispatch } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import {
 	setShowCompleteProfile,
 	setShowSignWithWallet,
@@ -23,10 +22,7 @@ const EditIndex = () => {
 	const [project, setProject] = useState<IProjectEdition>();
 
 	const dispatch = useAppDispatch();
-	const {
-		state: { user, isSignedIn },
-	} = useUser();
-
+	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
 	const router = useRouter();
 	const projectId = router?.query.projectIdSlug as string;
 

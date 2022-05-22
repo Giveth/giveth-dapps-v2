@@ -11,13 +11,13 @@ import { Provider } from 'react-redux';
 import { PriceProvider } from '@/context/price.context';
 import { GeneralProvider } from '@/context/general.context';
 import { useApollo } from '@/apollo/apolloClient';
-import { UserProvider } from '@/context/UserProvider';
 import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
 import { FooterWrapper } from '@/components/Footer/FooterWrapper';
 
 import '../styles/globals.css';
 import { store } from '@/features/store';
 import SubgraphController from '@/components/controller/subgraph.ctrl';
+import UserController from '@/components/controller/user.ctrl';
 import ModalController from '@/components/controller/modal.ctrl';
 import type { AppProps } from 'next/app';
 
@@ -62,13 +62,14 @@ function MyApp({ Component, pageProps }: AppProps) {
 					<ApolloProvider client={apolloClient}>
 						<Web3ReactProvider getLibrary={getLibrary}>
 							<PriceProvider>
-								<UserProvider>
-									<SubgraphController />
-									<HeaderWrapper />
-									<Component {...pageProps} />
-									<FooterWrapper />
-									<ModalController />
-								</UserProvider>
+								{/* <UserProvider> */}
+								<SubgraphController />
+								<UserController />
+								<HeaderWrapper />
+								<Component {...pageProps} />
+								<FooterWrapper />
+								<ModalController />
+								{/* </UserProvider> */}
 							</PriceProvider>
 						</Web3ReactProvider>
 					</ApolloProvider>
