@@ -38,8 +38,17 @@ import useUser from '@/context/UserProvider';
 import { isUserRegistered, shortenAddress } from '@/lib/helpers';
 import HeaderRoutesResponsive from './HeaderResponsiveRoutes';
 import Routes from '@/lib/constants/Routes';
-import useModal from '@/context/ModalProvider';
-import { currentValuesHelper, useAppSelector } from '@/features/hooks';
+import {
+	currentValuesHelper,
+	useAppDispatch,
+	useAppSelector,
+} from '@/features/hooks';
+import {
+	setShowWalletModal,
+	setShowWelcomeModal,
+	setShowSignWithWallet,
+	setShowCompleteProfile,
+} from '@/features/modal/modal.sclie';
 
 export interface IHeader {
 	theme?: ThemeType;
@@ -58,17 +67,11 @@ const Header: FC<IHeader> = () => {
 	const { balances } = useAppSelector(
 		state => state.subgraph[currentValuesHelper(chainId)],
 	);
+	const dispatch = useAppDispatch();
 	const {
 		state: { user, isEnabled, isSignedIn },
 	} = useUser();
-	const {
-		actions: {
-			showWelcomeModal,
-			showSignWithWallet,
-			showCompleteProfile,
-			showWalletModal,
-		},
-	} = useModal();
+
 	const { theme } = useGeneral();
 	const router = useRouter();
 
@@ -115,21 +118,21 @@ const Header: FC<IHeader> = () => {
 
 	const handleModals = () => {
 		if (isGIVeconomyRoute) {
-			showWalletModal();
+			dispatch(setShowWalletModal(true));
 		} else {
-			showWelcomeModal();
+			dispatch(setShowWelcomeModal(true));
 		}
 	};
 
 	const handleCreateButton = () => {
 		if (!isEnabled) {
-			showWelcomeModal();
+			dispatch(setShowWelcomeModal(true));
 		} else if (!isSignedIn) {
-			showSignWithWallet();
+			dispatch(setShowSignWithWallet(true));
 		} else if (isUserRegistered(user)) {
 			router.push(Routes.CreateProject);
 		} else {
-			showCompleteProfile();
+			dispatch(setShowCompleteProfile(true));
 		}
 	};
 

@@ -6,17 +6,16 @@ import {
 	IconX,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import useModal from '@/context/ModalProvider';
 import { mediaQueries } from '@/lib/constants/constants';
+import { useAppDispatch } from '@/features/hooks';
+import { setShowCompleteProfile } from '@/features/modal/modal.sclie';
 
 interface IIncompleteToast {
 	close: () => void;
 }
 
 const IncompleteProfileToast = ({ close }: IIncompleteToast) => {
-	const {
-		actions: { showCompleteProfile },
-	} = useModal();
+	const dispatch = useAppDispatch();
 
 	return (
 		<IncompleteToast>
@@ -37,7 +36,7 @@ const IncompleteProfileToast = ({ close }: IIncompleteToast) => {
 				size='small'
 				label="LET'S DO IT"
 				buttonType='texty'
-				onClick={showCompleteProfile}
+				onClick={() => dispatch(setShowCompleteProfile(true))}
 			/>
 		</IncompleteToast>
 	);
