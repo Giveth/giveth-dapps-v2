@@ -15,12 +15,9 @@ export const fetchUserByAddress = createAsyncThunk(
 
 export const signToGetToken = createAsyncThunk(
 	'user/signToGetToken',
-	async (
-		{ message, address, chainId, signer }: ISignToGetToken,
-		{ getState },
-	) => {
+	async ({ address, chainId, signer }: ISignToGetToken, { getState }) => {
 		const signedMessage = await signMessage(
-			message,
+			process.env.NEXT_PUBLIC_OUR_SECRET as string,
 			address,
 			chainId,
 			signer,

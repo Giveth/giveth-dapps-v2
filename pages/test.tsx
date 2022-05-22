@@ -2,14 +2,10 @@ import Head from 'next/head';
 import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 import { useWeb3React } from '@web3-react/core';
-import { useEffect } from 'react';
 import { gToast, ToastType } from '@/components/toasts';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { fetchXDaiInfoAsync } from '@/features/subgraph/subgraph.thunks';
-import {
-	fetchUserByAddress,
-	signToGetToken,
-} from '@/features/user/user.thunks';
+import { signToGetToken } from '@/features/user/user.thunks';
 
 const TestRoute = () => {
 	// const xDaiValues = useSelector(
@@ -47,7 +43,15 @@ const TestRoute = () => {
 	// 	};
 	// }, [library]);
 	// console.log('****data', data);
-
+	function handleSignIn() {
+		dispatch(
+			signToGetToken({
+				address: account,
+				chainId,
+				signer: library?.getSigner(),
+			}),
+		);
+	}
 	return (
 		<>
 			<Head>
