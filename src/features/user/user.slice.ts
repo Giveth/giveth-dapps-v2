@@ -39,7 +39,6 @@ export const userSlice = createSlice({
 			localStorage.removeItem(StorageLabel.TOKEN);
 			state.token = undefined;
 			state.isSignedIn = false;
-			state.userData = undefined;
 		},
 	},
 	extraReducers: builder => {
@@ -71,6 +70,8 @@ export const userSlice = createSlice({
 						state.token =
 							localStorage.getItem(StorageLabel.TOKEN) ??
 							undefined;
+					} else {
+						state.token = undefined;
 					}
 					state.userData = action.payload.data?.userByAddress;
 				},

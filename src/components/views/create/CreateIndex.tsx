@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import CreateProject from '@/components/views/create/CreateProject';
-import useUser from '@/context/UserProvider';
 import { isUserRegistered } from '@/lib/helpers';
-import { useAppDispatch } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import {
 	setShowCompleteProfile,
 	setShowSignWithWallet,
@@ -12,14 +11,17 @@ import {
 const CreateIndex = () => {
 	const dispatch = useAppDispatch();
 	const {
-		state: { user, isSignedIn, isEnabled },
-	} = useUser();
-
+		isEnabled,
+		isSignedIn,
+		userData: user,
+	} = useAppSelector(state => state.user);
+	console.log('Hiii', user);
 	const isRegistered = isUserRegistered(user);
 
 	useEffect(() => {
 		if (isEnabled) {
 			if (!isRegistered) {
+				console.log('Hiii');
 				dispatch(setShowCompleteProfile(true));
 				return;
 			}

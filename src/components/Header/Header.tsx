@@ -34,7 +34,6 @@ import { RewardMenu } from '@/components/menu/RewardMenu';
 import MenuWallet from '@/components/menu/MenuWallet';
 import { ETheme, useGeneral } from '@/context/general.context';
 import { menuRoutes } from '../menu/menuRoutes';
-import useUser from '@/context/UserProvider';
 import { isUserRegistered, shortenAddress } from '@/lib/helpers';
 import HeaderRoutesResponsive from './HeaderResponsiveRoutes';
 import Routes from '@/lib/constants/Routes';
@@ -68,10 +67,12 @@ const Header: FC<IHeader> = () => {
 		state => state.subgraph[currentValuesHelper(chainId)],
 	);
 	const dispatch = useAppDispatch();
-	const {
-		state: { user, isEnabled, isSignedIn },
-	} = useUser();
-
+	const { isEnabled, isSignedIn, userData } = useAppSelector(
+		state => state.user,
+	);
+	// const {
+	// 	state: { user, isEnabled, isSignedIn },
+	// } = useUser();
 	const { theme } = useGeneral();
 	const router = useRouter();
 
@@ -129,7 +130,7 @@ const Header: FC<IHeader> = () => {
 			dispatch(setShowWelcomeModal(true));
 		} else if (!isSignedIn) {
 			dispatch(setShowSignWithWallet(true));
-		} else if (isUserRegistered(user)) {
+		} else if (isUserRegistered(userData)) {
 			router.push(Routes.CreateProject);
 		} else {
 			dispatch(setShowCompleteProfile(true));
@@ -264,8 +265,8 @@ const Header: FC<IHeader> = () => {
 								<HBContainer>
 									<HBPic
 										src={
-											user?.avatar
-												? user.avatar
+											userData?.avatar
+												? userData.avatar
 												: '/images/placeholders/profile.png'
 										}
 										alt='Profile Pic'
@@ -274,7 +275,7 @@ const Header: FC<IHeader> = () => {
 									/>
 									<WBInfo>
 										<GLink size='Medium'>
-											{user?.name ||
+											{userData?.name ||
 												shortenAddress(account)}
 										</GLink>
 										<WBNetwork size='Tiny'>

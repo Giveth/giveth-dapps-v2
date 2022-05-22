@@ -14,7 +14,6 @@ import {
 
 import { captureException } from '@sentry/nextjs';
 import Routes from '@/lib/constants/Routes';
-import useUser from '@/context/UserProvider';
 import links from '@/lib/constants/links';
 import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
 import { switchNetworkHandler } from '@/lib/wallet';
@@ -22,11 +21,12 @@ import { MenuContainer } from './Menu.sc';
 import { ETheme, useGeneral } from '@/context/general.context';
 import { isUserRegistered, networkInfo } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
-import { useAppDispatch } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import {
 	setShowCompleteProfile,
 	setShowWalletModal,
 } from '@/features/modal/modal.sclie';
+import { signOut } from '@/features/user/user.slice';
 
 const MenuWallet = () => {
 	const [isMounted, setIsMounted] = useState(false);
@@ -37,19 +37,16 @@ const MenuWallet = () => {
 
 	const router = useRouter();
 	const dispatch = useAppDispatch();
-	const {
-		state: { user, isSignedIn },
-		actions: { signOut },
-	} = useUser();
+	const { isSignedIn, userData } = useAppSelector(state => state.user);
 	const { theme } = useGeneral();
-
+	console.log('isSignedIn', isSignedIn);
 	const goRoute = (input: {
 		url: string;
 		requiresSign: boolean;
 		requiresRegistration?: boolean;
 	}) => {
 		const { url, requiresSign, requiresRegistration } = input;
-		if (requiresRegistration && !isUserRegistered(user)) {
+		if (requiresRegistration && !isUserRegistered(userData)) {
 			dispatch(setShowCompleteProfile(true));
 			if (url === Routes.CreateProject) return;
 		}
@@ -140,7 +137,10 @@ const MenuWallet = () => {
 						</MenuItem>
 					))}
 					{isSignedIn && (
-						<MenuItem onClick={signOut} theme={theme}>
+						<MenuItem
+							onClick={() => dispatch(signOut())}
+							theme={theme}
+						>
 							Sign out
 						</MenuItem>
 					)}

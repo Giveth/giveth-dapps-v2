@@ -1,5 +1,5 @@
 export interface ISignToGetToken {
-	address: string | undefined | null;
-	chainId?: number;
-	signer?: any;
+	address: string;
+	chainId: number;
+	signer: any;
 }

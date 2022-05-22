@@ -15,7 +15,10 @@ export const fetchUserByAddress = createAsyncThunk(
 
 export const signToGetToken = createAsyncThunk(
 	'user/signToGetToken',
-	async ({ address, chainId, signer }: ISignToGetToken, { getState }) => {
+	async (
+		{ address, chainId, signer }: ISignToGetToken,
+		{ getState, dispatch },
+	) => {
 		const signedMessage = await signMessage(
 			process.env.NEXT_PUBLIC_OUR_SECRET as string,
 			address,
@@ -23,8 +26,17 @@ export const signToGetToken = createAsyncThunk(
 			signer,
 		);
 		if (signedMessage) {
-			const { user } = getState() as { user: RootState['user'] };
-			return getToken(address, signedMessage, chainId, user);
+			const state = getState() as RootState;
+			console.log('getToken State', state.user.userData);
+			if (!state.user.userData) {
+				await dispatch(fetchUserByAddress(address));
+			}
+			return getToken(
+				address,
+				signedMessage,
+				chainId,
+				state.user.userData,
+			);
 		} else {
 			return Promise.reject('Signing failed');
 		}
