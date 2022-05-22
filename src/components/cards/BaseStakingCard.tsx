@@ -69,6 +69,7 @@ import { IStakeInfo } from '@/hooks/useStakingPool';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { useAppSelector } from '@/features/hooks';
 import { ITokenDistroInfo } from '@/types/subgraph';
+import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
 	NORMAL,
@@ -96,12 +97,20 @@ interface IBaseStakingCardProps {
 	poolStakingConfig: PoolStakingConfig | RegenPoolStakingConfig;
 	stakeInfo: IStakeInfo;
 	notif?: ReactNode;
+	stakedPositions?: LiquidityPosition[];
+	unstakedPositions?: LiquidityPosition[];
+	currentIncentive?: {
+		key?: (string | number)[] | null | undefined;
+	};
 }
 
 const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	stakeInfo,
 	poolStakingConfig,
 	notif,
+	stakedPositions,
+	unstakedPositions,
+	currentIncentive,
 }) => {
 	const [state, setState] = useState(StakeCardState.NORMAL);
 	const [started, setStarted] = useState(true);
@@ -459,6 +468,13 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					<V3StakeModal
 						setShowModal={setShowStakeModal}
 						poolStakingConfig={poolStakingConfig}
+						stakedPositions={stakedPositions || []}
+						unstakedPositions={unstakedPositions || []}
+						currentIncentive={
+							currentIncentive || {
+								key: undefined,
+							}
+						}
 					/>
 				) : (
 					<StakeModal
@@ -473,6 +489,13 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 						isUnstakingModal={true}
 						setShowModal={setShowUnStakeModal}
 						poolStakingConfig={poolStakingConfig}
+						stakedPositions={stakedPositions || []}
+						unstakedPositions={unstakedPositions || []}
+						currentIncentive={
+							currentIncentive || {
+								key: undefined,
+							}
+						}
 					/>
 				) : (
 					<UnStakeModal
@@ -490,6 +513,8 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					network={chainId}
 					tokenDistroHelper={tokenDistroHelper}
 					regenStreamConfig={regenStreamConfig}
+					stakedPositions={stakedPositions}
+					currentIncentive={currentIncentive}
 				/>
 			)}
 			{showWhatIsGIVstreamModal && (

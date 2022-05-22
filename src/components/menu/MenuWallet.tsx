@@ -22,7 +22,11 @@ import { MenuContainer } from './Menu.sc';
 import { ETheme, useGeneral } from '@/context/general.context';
 import { isUserRegistered, networkInfo } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
-import useModal from '@/context/ModalProvider';
+import { useAppDispatch } from '@/features/hooks';
+import {
+	setShowCompleteProfile,
+	setShowWalletModal,
+} from '@/features/modal/modal.sclie';
 
 const MenuWallet = () => {
 	const [isMounted, setIsMounted] = useState(false);
@@ -32,16 +36,11 @@ const MenuWallet = () => {
 	const [queueRoute, setQueueRoute] = useState<string>('');
 
 	const router = useRouter();
-
+	const dispatch = useAppDispatch();
 	const {
 		state: { user, isSignedIn },
 		actions: { signOut },
 	} = useUser();
-
-	const {
-		actions: { showCompleteProfile, showWalletModal },
-	} = useModal();
-
 	const { theme } = useGeneral();
 
 	const goRoute = (input: {
@@ -51,7 +50,7 @@ const MenuWallet = () => {
 	}) => {
 		const { url, requiresSign, requiresRegistration } = input;
 		if (requiresRegistration && !isUserRegistered(user)) {
-			showCompleteProfile();
+			dispatch(setShowCompleteProfile(true));
 			if (url === Routes.CreateProject) return;
 		}
 		if (requiresSign && !isSignedIn) {
@@ -113,7 +112,7 @@ const MenuWallet = () => {
 					<StyledButton
 						onClick={() => {
 							window.localStorage.removeItem(StorageLabel.WALLET);
-							showWalletModal();
+							dispatch(setShowWalletModal(true));
 						}}
 					>
 						Change wallet

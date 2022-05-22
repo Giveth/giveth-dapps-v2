@@ -22,10 +22,11 @@ import {
 	shortenAddress,
 } from '@/lib/helpers';
 import { Container } from '@/components/Grid';
-import useModal from '@/context/ModalProvider';
 import { EDirection } from '@/apollo/types/gqlEnums';
 import ExternalLink from '@/components/ExternalLink';
 import IncompleteProfileToast from '@/components/views/userPublicProfile/IncompleteProfileToast';
+import { useAppDispatch } from '@/features/hooks';
+import { setShowSignWithWallet } from '@/features/modal/modal.sclie';
 
 export enum EOrderBy {
 	TokenAmount = 'TokenAmount',
@@ -48,13 +49,10 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 	user,
 	myAccount,
 }) => {
+	const dispatch = useAppDispatch();
 	const {
 		state: { isSignedIn },
 	} = useUser();
-
-	const {
-		actions: { showSignWithWallet },
-	} = useModal();
 
 	const { chainId } = useWeb3React();
 
@@ -65,7 +63,7 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 
 	useEffect(() => {
 		if (myAccount && !isSignedIn) {
-			showSignWithWallet();
+			dispatch(setShowSignWithWallet(true));
 		}
 	}, [user, isSignedIn]);
 

@@ -42,7 +42,8 @@ import ProjectCardOrgBadge from '../../project-card/ProjectCardOrgBadge';
 import ExternalLink from '@/components/ExternalLink';
 import InternalLink from '@/components/InternalLink';
 import Routes from '@/lib/constants/Routes';
-import useModal from '@/context/ModalProvider';
+import { useAppDispatch } from '@/features/hooks';
+import { setShowSignWithWallet } from '@/features/modal/modal.sclie';
 
 interface IProjectDonateCard {
 	project?: IProject;
@@ -63,14 +64,11 @@ const ProjectDonateCard = ({
 	setIsDraft,
 	setCreationSuccessful,
 }: IProjectDonateCard) => {
+	const dispatch = useAppDispatch();
 	const {
 		state: { user, isSignedIn },
 		actions: { incrementLikedProjectsCount, decrementLikedProjectsCount },
 	} = useUser();
-
-	const {
-		actions: { showSignWithWallet },
-	} = useModal();
 
 	const {
 		categories = [],
@@ -100,7 +98,7 @@ const ProjectDonateCard = ({
 
 	const likeUnlikeProject = async () => {
 		if (!isSignedIn) {
-			showSignWithWallet();
+			dispatch(setShowSignWithWallet(true));
 			return;
 		}
 		if (loading) return;
@@ -187,7 +185,7 @@ const ProjectDonateCard = ({
 		} else {
 			try {
 				if (!isSignedIn) {
-					showSignWithWallet();
+					dispatch(setShowSignWithWallet(true));
 					return;
 				}
 				const { data } = await client.mutate({

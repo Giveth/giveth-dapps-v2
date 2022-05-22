@@ -40,8 +40,6 @@ const TestRoute = () => {
 	// }, [library]);
 	// console.log('****data', data);
 
-	console.log('xDaiValues', xDaiValues);
-
 	return (
 		<>
 			<Head>

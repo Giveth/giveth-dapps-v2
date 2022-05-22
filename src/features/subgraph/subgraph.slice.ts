@@ -6,7 +6,7 @@ import {
 	fetchXDaiInfoAsync,
 	fetchMainnetInfoAsync,
 } from './subgraph.thunks';
-import { ISubgraphState } from './subgraph.types';
+import type { ISubgraphState } from './subgraph.types';
 
 export const defaultSubgraphValues: ISubgraphState = {
 	balances: ZeroBalances,
