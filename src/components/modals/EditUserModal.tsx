@@ -141,25 +141,23 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 		>
 			<Wrapper>
 				{editStatus === EditStatusType.PHOTO ? (
-					<>
-						<Flex flexDirection='column' gap='36px'>
-							<ImageUploader setUrl={setAvatar} url={avatar} />
-							<Button
-								buttonType='secondary'
-								label='SAVE'
-								onClick={onSaveAvatar}
-								disabled={!avatar}
-							/>
-							<TextButton
-								buttonType='texty'
-								label='cancel'
-								onClick={() => {
-									setAvatar('');
-									setEditStatus(EditStatusType.INFO);
-								}}
-							/>
-						</Flex>
-					</>
+					<Flex flexDirection='column' gap='36px'>
+						<ImageUploader setUrl={setAvatar} url={avatar} />
+						<Button
+							buttonType='secondary'
+							label='SAVE'
+							onClick={onSaveAvatar}
+							disabled={!avatar}
+						/>
+						<TextButton
+							buttonType='texty'
+							label='cancel'
+							onClick={() => {
+								setAvatar('');
+								setEditStatus(EditStatusType.INFO);
+							}}
+						/>
+					</Flex>
 				) : (
 					<>
 						<FlexCenter direction='column' gap='8px'>

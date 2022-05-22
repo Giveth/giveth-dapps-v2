@@ -11,7 +11,9 @@ export const ProjectGuidelineModal: FC<IModal> = ({ setShowModal }) => {
 	return (
 		<Modal
 			setShowModal={setShowModal}
-			headerIcon={<img src='/images/icons/lightbulb.svg' />}
+			headerIcon={
+				<img src='/images/icons/lightbulb.svg' alt='light bulb' />
+			}
 			headerTitle='Submission guidelines'
 			headerTitlePosition='left'
 		>
