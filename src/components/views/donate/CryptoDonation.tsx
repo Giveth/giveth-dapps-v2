@@ -17,7 +17,7 @@ import tokenAbi from 'human-standard-token-abi';
 
 import { captureException } from '@sentry/nextjs';
 import { Shadow } from '@/components/styled-components/Shadow';
-import InputBox from '../../InputBox';
+import InputBox from '../create/InputBox';
 import useUser from '@/context/UserProvider';
 import CheckBox from '@/components/Checkbox';
 import DonateModal from '@/components/modals/DonateModal';
@@ -316,7 +316,11 @@ const CryptoDonation = (props: {
 	};
 
 	const donationDisabled =
-		!isActive || !amountTyped || amountTyped <= 0 || !selectedToken;
+		!isActive ||
+		!amountTyped ||
+		amountTyped <= 0 ||
+		!selectedToken ||
+		error;
 
 	return (
 		<MainContainer>
@@ -417,8 +421,7 @@ const CryptoDonation = (props: {
 						error={error}
 						setError={setError}
 						errorHandler={{
-							condition: (value: any) =>
-								value >= 0 && value <= 0.000001,
+							condition: value => value >= 0 && value <= 0.000001,
 							message: 'Set a valid amount',
 						}}
 						type='number'
