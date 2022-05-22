@@ -8,11 +8,13 @@ const initialState: {
 	token?: string;
 	isEnabled: boolean;
 	isSignedIn: boolean;
+	balance: string | null;
 } = {
 	userData: undefined,
 	token: undefined,
 	isEnabled: false,
 	isSignedIn: false,
+	balance: null,
 };
 
 export const userSlice = createSlice({
@@ -27,6 +29,9 @@ export const userSlice = createSlice({
 		},
 		setToken: (state, action: PayloadAction<string>) => {
 			state.token = action.payload;
+		},
+		setBalance: (state, action: PayloadAction<string | null>) => {
+			state.balance = action.payload;
 		},
 		signOut: state => {
 			localStorage.removeItem(StorageLabel.USER);
@@ -63,6 +68,6 @@ export const userSlice = createSlice({
 			});
 	},
 });
-export const { setIsEnabled, setIsSignedIn, setToken, signOut } =
+export const { setIsEnabled, setIsSignedIn, setToken, setBalance, signOut } =
 	userSlice.actions;
 export default userSlice.reducer;
