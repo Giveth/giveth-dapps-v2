@@ -25,11 +25,11 @@ export const signToGetToken = createAsyncThunk(
 			chainId,
 			signer,
 		);
-		console.log('signedMessage', signedMessage);
-		if (!signedMessage) {
-			Promise.reject(new Error('signIn failed'));
+		if (signedMessage) {
+			const { user } = getState() as { user: RootState['user'] };
+			return getToken(address, signedMessage, chainId, user);
+		} else {
+			return Promise.reject('Signing failed');
 		}
-		const { user } = getState() as { user: RootState['user'] };
-		return getToken(address, signedMessage, chainId, user);
 	},
 );

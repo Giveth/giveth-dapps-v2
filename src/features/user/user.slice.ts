@@ -54,6 +54,10 @@ export const userSlice = createSlice({
 			.addCase(signToGetToken.fulfilled, (state, action) => {
 				console.log('SignIn Action', action);
 				state.token = action.payload;
+				localStorage.setItem(
+					StorageLabel.USER,
+					action.meta.arg.address || '',
+				);
 				localStorage.setItem(StorageLabel.TOKEN, action.payload);
 				state.isSignedIn = true;
 			});
