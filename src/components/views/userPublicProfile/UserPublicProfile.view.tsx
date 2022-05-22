@@ -15,7 +15,6 @@ import PublicProfileContributes from './PublicProfileContributes';
 import { IUser } from '@/apollo/types/types';
 import EditUserModal from '@/components/modals/EditUserModal';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
-import useUser from '@/context/UserProvider';
 import {
 	formatWalletLink,
 	isUserRegistered,
@@ -26,6 +25,7 @@ import useModal from '@/context/ModalProvider';
 import { EDirection } from '@/apollo/types/gqlEnums';
 import ExternalLink from '@/components/ExternalLink';
 import IncompleteProfileToast from '@/components/views/userPublicProfile/IncompleteProfileToast';
+import { useAppSelector } from '@/features/hooks';
 
 export enum EOrderBy {
 	TokenAmount = 'TokenAmount',
@@ -44,14 +44,11 @@ export interface IUserPublicProfileView {
 	myAccount?: boolean;
 }
 
-const UserPublicProfileView: FC<IUserPublicProfileView> = ({
-	user,
-	myAccount,
-}) => {
-	const {
-		state: { isSignedIn },
-	} = useUser();
+const UserPublicProfileView: FC<IUserPublicProfileView> = ({ myAccount }) => {
+	const { isSignedIn } = useAppSelector(state => state.user);
+	const userData = useAppSelector(state => state.user.userData);
 
+	console.log('UserPublic', userData);
 	const {
 		actions: { showSignWithWallet },
 	} = useModal();
@@ -61,15 +58,15 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 	const [showModal, setShowModal] = useState<boolean>(false); // follow this state to refresh user content on screen
 	const [showIncompleteWarning, setShowIncompleteWarning] = useState(true);
 	const showCompleteProfile =
-		!isUserRegistered(user) && showIncompleteWarning && myAccount;
+		!isUserRegistered(userData) && showIncompleteWarning && myAccount;
 
 	useEffect(() => {
 		if (myAccount && !isSignedIn) {
 			showSignWithWallet();
 		}
-	}, [user, isSignedIn]);
+	}, [userData, isSignedIn]);
 
-	if (!user || (myAccount && !isSignedIn))
+	if (!userData || (myAccount && !isSignedIn))
 		return (
 			<NoUserContainer>
 				<H5>Not logged in</H5>
@@ -87,36 +84,40 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 					)}
 					<UserInfo>
 						<img
-							src={user.avatar || '/images/avatar.svg'}
+							src={userData?.avatar || '/images/avatar.svg'}
 							width={128}
 							height={128}
-							alt={user.name}
+							alt={userData?.name}
 						/>
 						<UserInfoRow>
-							<H3 weight={700}>{user.name}</H3>
-							{user.email && (
-								<GLink size='Big'>{user.email}</GLink>
+							<H3 weight={700}>{userData?.name}</H3>
+							{userData?.email && (
+								<GLink size='Big'>{userData?.email}</GLink>
 							)}
 							<WalletContainer>
-								{myAccount && user?.name && user?.email && (
-									<EditProfile
-										size='Big'
-										onClick={() => setShowModal(true)}
-									>
-										Edit Profile
-									</EditProfile>
-								)}
+								{myAccount &&
+									userData?.name &&
+									userData?.email && (
+										<EditProfile
+											size='Big'
+											onClick={() => setShowModal(true)}
+										>
+											Edit Profile
+										</EditProfile>
+									)}
 								<AddressContainer>
 									<AddressTextNonMobile size='Big'>
-										{user.walletAddress}
+										{userData?.walletAddress}
 									</AddressTextNonMobile>
 									<AddressTextMobile size='Big'>
-										{shortenAddress(user.walletAddress)}
+										{shortenAddress(
+											userData?.walletAddress,
+										)}
 									</AddressTextMobile>
 									<ExternalLink
 										href={formatWalletLink(
 											chainId,
-											user.walletAddress,
+											userData?.walletAddress,
 										)}
 										color={brandColors.pinky[500]}
 									>
@@ -128,9 +129,9 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 					</UserInfo>
 				</Container>
 			</PublicProfileHeader>
-			<PublicProfileContributes user={user} myAccount={myAccount} />
+			<PublicProfileContributes user={userData} myAccount={myAccount} />
 			{showModal && (
-				<EditUserModal setShowModal={setShowModal} user={user} />
+				<EditUserModal setShowModal={setShowModal} user={userData} />
 			)}
 		</>
 	);

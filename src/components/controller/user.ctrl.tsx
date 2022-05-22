@@ -12,15 +12,15 @@ import {
 import { isSSRMode } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
+import { walletsArray } from '@/lib/wallet/walletTypes';
 
 const UserController = () => {
-	const { account, library, chainId } = useWeb3React();
+	const { account, library, chainId, activate } = useWeb3React();
 	const dispatch = useAppDispatch();
 	const token = !isSSRMode ? localStorage.getItem(StorageLabel.TOKEN) : null;
 	const isEnabled = useAppSelector(state => state.user.isEnabled);
 	const isSignIn = useAppSelector(state => state.user.isSignedIn);
 	console.log('UserController', isEnabled, isSignIn);
-
 	const getBalance = () => {
 		if (account && library) {
 			library
@@ -42,6 +42,16 @@ const UserController = () => {
 				});
 		}
 	};
+
+	useEffect(() => {
+		const selectedWalletName = localStorage.getItem(StorageLabel.WALLET);
+		const wallet = walletsArray.find(w => w.value === selectedWalletName);
+		if (wallet) {
+			activate(wallet.connector, err => {
+				console.log('err', err);
+			});
+		}
+	}, [activate]);
 
 	useEffect(() => {
 		if (account) dispatch(fetchUserByAddress(account));

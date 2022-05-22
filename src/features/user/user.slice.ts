@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUser } from '@/apollo/types/types';
 import { fetchUserByAddress, signToGetToken } from './user.thunks';
 import StorageLabel from '@/lib/localStorage';
+import { compareAddresses } from '@/lib/helpers';
 
 const initialState: {
 	userData?: IUser;
@@ -53,6 +54,24 @@ export const userSlice = createSlice({
 						};
 					}>,
 				) => {
+					const localAddress = localStorage
+						.getItem(StorageLabel.USER)
+						?.toLocaleLowerCase();
+					console.log(
+						'localAddress',
+						localAddress,
+						action.payload.data.userByAddress.walletAddress,
+					);
+					if (
+						compareAddresses(
+							localAddress,
+							action.payload.data.userByAddress.walletAddress,
+						)
+					) {
+						state.token =
+							localStorage.getItem(StorageLabel.TOKEN) ??
+							undefined;
+					}
 					state.userData = action.payload.data?.userByAddress;
 				},
 			)
@@ -61,7 +80,7 @@ export const userSlice = createSlice({
 				state.token = action.payload;
 				localStorage.setItem(
 					StorageLabel.USER,
-					action.meta.arg.address || '',
+					action.meta.arg.address?.toLocaleLowerCase() || '',
 				);
 				localStorage.setItem(StorageLabel.TOKEN, action.payload);
 				state.isSignedIn = true;
