@@ -17,7 +17,7 @@ import tokenAbi from 'human-standard-token-abi';
 
 import { captureException } from '@sentry/nextjs';
 import { Shadow } from '@/components/styled-components/Shadow';
-import InputBox from '../create/InputBox';
+import InputBox from './InputBox';
 import useUser from '@/context/UserProvider';
 import CheckBox from '@/components/Checkbox';
 import DonateModal from '@/components/modals/DonateModal';
