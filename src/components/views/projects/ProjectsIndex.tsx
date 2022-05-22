@@ -32,7 +32,8 @@ import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
 import { Shadow } from '../../styled-components/Shadow';
 import useUser from '@/context/UserProvider';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
-import useModal from '@/context/ModalProvider';
+import { useAppDispatch } from '@/features/hooks';
+import { setShowCompleteProfile } from '@/features/modal/modal.sclie';
 
 interface IProjectsView {
 	projects: IProject[];
@@ -90,10 +91,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 		state: { user },
 	} = useUser();
 
-	const {
-		actions: { showCompleteProfile },
-	} = useModal();
-
 	const [categoriesObj, setCategoriesObj] = useState<ISelectObj[]>();
 	const [selectedCategory, setSelectedCategory] =
 		useState<ISelectObj>(allCategoryObj);
@@ -105,11 +102,11 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const [searchValue, setSearchValue] = useState<string>('');
 	const [totalCount, setTotalCount] = useState(_totalCount);
 
+	const dispatch = useAppDispatch();
+	const router = useRouter();
 	const isFirstRender = useRef(true);
 	const debouncedSearch = useRef<any>();
 	const pageNum = useRef(0);
-
-	const router = useRouter();
 
 	useEffect(() => {
 		setCategoriesObj(buildCategoryObj(categories));
@@ -199,7 +196,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 		if (isUserRegistered(user)) {
 			router.push(Routes.CreateProject);
 		} else {
-			showCompleteProfile();
+			dispatch(setShowCompleteProfile(true));
 		}
 	};
 
