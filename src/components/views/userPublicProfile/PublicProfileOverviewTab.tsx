@@ -14,9 +14,10 @@ import Routes from '@/lib/constants/Routes';
 import ContributeCard from './PublicProfileContributeCard';
 import { Flex } from '@/components/styled-components/Flex';
 import { isUserRegistered } from '@/lib/helpers';
-import useModal from '@/context/ModalProvider';
 import { IUserPublicProfileView } from '@/components/views/userPublicProfile/UserPublicProfile.view';
 import { mediaQueries } from '@/lib/constants/constants';
+import { useAppDispatch } from '@/features/hooks';
+import { setShowCompleteProfile } from '@/features/modal/modal.sclie';
 
 interface IBtnProps extends IButtonProps {
 	outline?: boolean;
@@ -30,16 +31,13 @@ interface ISection {
 
 const PublicProfileOverviewTab: FC<IUserPublicProfileView> = ({ user }) => {
 	const router = useRouter();
-
-	const {
-		actions: { showCompleteProfile },
-	} = useModal();
+	const dispatch = useAppDispatch();
 
 	const handleCreateButton = () => {
 		if (isUserRegistered(user)) {
 			router.push(Routes.CreateProject);
 		} else {
-			showCompleteProfile();
+			dispatch(setShowCompleteProfile(true));
 		}
 	};
 

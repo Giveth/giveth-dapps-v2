@@ -13,10 +13,14 @@ import { captureException } from '@sentry/nextjs';
 import ShareModal from '../modals/ShareModal';
 import { likeProject, unlikeProject } from '@/lib/reaction';
 import { showToastError } from '@/lib/helpers';
-import useModal from '@/context/ModalProvider';
 import { Flex } from '../styled-components/Flex';
 import { IProject } from '@/apollo/types/types';
-import useUser from '@/context/UserProvider';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { setShowSignWithWallet } from '@/features/modal/modal.sclie';
+import {
+	decrementLikedProjectsCount,
+	incrementLikedProjectsCount,
+} from '@/features/user/user.slice';
 
 interface IProjectCardLikeAndShareButtons {
 	project: IProject;
@@ -25,30 +29,21 @@ interface IProjectCardLikeAndShareButtons {
 const ProjectCardLikeAndShareButtons = (
 	props: IProjectCardLikeAndShareButtons,
 ) => {
-	const {
-		state: { user, isSignedIn },
-		actions: { incrementLikedProjectsCount, decrementLikedProjectsCount },
-	} = useUser();
-
-	const {
-		actions: { showSignWithWallet },
-	} = useModal();
-
 	const [showModal, setShowModal] = useState<boolean>(false);
-
 	const { project } = props;
 	const { slug, id: projectId } = project;
-
 	const [reaction, setReaction] = useState(project.reaction);
 	const [totalReactions, setTotalReactions] = useState(
 		project.totalReactions,
 	);
 	const [loading, setLoading] = useState(false);
+	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
+	const dispatch = useAppDispatch();
 
 	const likeUnlikeProject = async (e: MouseEvent<HTMLElement>) => {
 		e.stopPropagation();
 		if (!isSignedIn) {
-			showSignWithWallet();
+			dispatch(setShowSignWithWallet(true));
 			return;
 		}
 
@@ -63,14 +58,14 @@ const ProjectCardLikeAndShareButtons = (
 					setReaction(newReaction);
 					if (newReaction) {
 						setTotalReactions((totalReactions || 0) + 1);
-						incrementLikedProjectsCount();
+						dispatch(incrementLikedProjectsCount());
 					}
 				} else if (reaction?.userId === user?.id) {
 					const successful = await unlikeProject(reaction.id);
 					if (successful) {
 						setReaction(undefined);
 						setTotalReactions((totalReactions || 1) - 1);
-						decrementLikedProjectsCount();
+						dispatch(decrementLikedProjectsCount());
 					}
 				}
 			} catch (e) {

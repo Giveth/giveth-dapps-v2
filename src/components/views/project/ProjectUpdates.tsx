@@ -22,8 +22,8 @@ import ProjectTimeline, { TimelineSection } from './ProjectTimeline';
 import { IProject, IProjectUpdate } from '@/apollo/types/types';
 import { RemoveUpdateModal } from '@/components/modals/RemoveUpdateModal';
 import { mediaQueries } from '@/lib/constants/constants';
-import useModal from '@/context/ModalProvider';
-import useUser from '@/context/UserProvider';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { setShowSignWithWallet } from '@/features/modal/modal.sclie';
 
 const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
 	ssr: false,
@@ -38,13 +38,8 @@ const ProjectUpdates = (props: {
 	const { project, fetchProject } = props;
 	const { id, creationDate, adminUser } = project || {};
 
-	const {
-		state: { user, isSignedIn },
-	} = useUser();
-
-	const {
-		actions: { showSignWithWallet },
-	} = useModal();
+	const dispatch = useAppDispatch();
+	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
 
 	const [newUpdate, setNewUpdate] = useState<string>('');
 	const [title, setTitle] = useState<string>('');
@@ -151,7 +146,7 @@ const ProjectUpdates = (props: {
 	const addUpdate = async () => {
 		try {
 			if (!isSignedIn) {
-				showSignWithWallet();
+				dispatch(setShowSignWithWallet(true));
 				return;
 			}
 			if (!newUpdate) {

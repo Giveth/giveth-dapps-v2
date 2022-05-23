@@ -22,6 +22,7 @@ import { IconGnosisChain } from './Icons/GnosisChain';
 import { WhatisStreamModal } from '@/components/modals/WhatisStream';
 import { WrongNetworkInnerModal } from './modals/WrongNetwork';
 import { usePrice } from '@/context/price.context';
+import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 interface IRewardCardProps {
 	title?: string;
 	liquidAmount: ethers.BigNumber;
@@ -57,6 +58,7 @@ export const RewardCard: FC<IRewardCardProps> = ({
 	const [showWhatIsGIVstreamModal, setShowWhatIsGIVstreamModal] =
 		useState(false);
 	const { givPrice } = usePrice();
+	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	useEffect(() => {
 		const price = tokenPrice || givPrice;
 		if (!price || price.isNaN()) return;
@@ -137,7 +139,10 @@ export const RewardCard: FC<IRewardCardProps> = ({
 				)}
 			</RewadCardContainer>
 			{showWhatIsGIVstreamModal && (
-				<WhatisStreamModal setShowModal={setShowWhatIsGIVstreamModal} />
+				<WhatisStreamModal
+					setShowModal={setShowWhatIsGIVstreamModal}
+					tokenDistroHelper={givTokenDistroHelper}
+				/>
 			)}
 		</>
 	);

@@ -4,6 +4,7 @@ import { Zero } from '@ethersproject/constants';
 import { getNowUnixMS } from '@/helpers/time';
 import { IBalances, ITokenDistroInfo } from '@/types/subgraph';
 import { StreamType } from '@/types/config';
+import { BN } from '@/helpers/number';
 
 export class TokenDistroHelper {
 	public readonly contractAddress: string;
@@ -28,12 +29,12 @@ export class TokenDistroHelper {
 		readonly streamType?: StreamType,
 	) {
 		this.contractAddress = contractAddress;
-		this.initialAmount = initialAmount;
-		this.lockedAmount = lockedAmount;
-		this.totalTokens = totalTokens;
-		this.startTime = startTime;
-		this.cliffTime = cliffTime;
-		this.endTime = endTime;
+		this.initialAmount = BN(initialAmount);
+		this.lockedAmount = BN(lockedAmount);
+		this.totalTokens = BN(totalTokens);
+		this.startTime = new Date(startTime);
+		this.cliffTime = new Date(cliffTime);
+		this.endTime = new Date(endTime);
 		this.duration = this.endTime.getTime() - this.startTime.getTime();
 	}
 
@@ -86,18 +87,18 @@ export class TokenDistroHelper {
 		switch (this.streamType) {
 			case StreamType.FOX:
 				allocatedTokens = userBalance.foxAllocatedTokens;
-				claimed = userBalance.foxClaimed;
+				claimed = BN(userBalance.foxClaimed);
 				break;
 			case StreamType.CULT:
 				allocatedTokens = userBalance.cultAllocatedTokens;
-				claimed = userBalance.cultClaimed;
+				claimed = BN(userBalance.cultClaimed);
 				break;
 			default:
 				allocatedTokens = userBalance.allocatedTokens;
-				claimed = userBalance.claimed;
+				claimed = BN(userBalance.claimed);
 		}
 
-		return this.getLiquidPart(allocatedTokens).sub(claimed);
+		return this.getLiquidPart(BN(allocatedTokens)).sub(claimed);
 	}
 
 	public get GlobalReleasePercentage(): number {

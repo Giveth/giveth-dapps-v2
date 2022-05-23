@@ -29,11 +29,11 @@ import config from '@/configuration';
 import { formatEthHelper, formatWeiHelper, Zero } from '@/helpers/number';
 import { APR } from '@/types/poolInfo';
 import { getLPStakingAPR } from '@/lib/stakingPool';
-import { useSubgraph } from '@/context';
-import { useTokenDistro } from '@/context/tokenDistro.context';
+import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { networkProviders } from '@/helpers/networkProvider';
 import { StakingType } from '@/types/config';
 import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
+import { useAppSelector } from '@/features/hooks';
 
 const InvestCardContainer = styled(Card)`
 	::before {
@@ -95,8 +95,10 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 	);
 	const [earnEstimate, setEarnEstimate] = useState<BigNumber>(Zero);
 	const [APR, setAPR] = useState<BigNumber>(Zero);
-	const { givTokenDistroHelper } = useTokenDistro();
-	const { mainnetValues, xDaiValues } = useSubgraph();
+	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
+	const { xDaiValues, mainnetValues } = useAppSelector(
+		state => state.subgraph,
+	);
 
 	useEffect(() => {
 		if (totalAmount) {

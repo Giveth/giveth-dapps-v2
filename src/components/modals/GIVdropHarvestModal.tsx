@@ -32,10 +32,10 @@ import {
 	RateRow,
 	TooltipContent,
 } from './HarvestAll.sc';
-import { formatWeiHelper } from '@/helpers/number';
+import { BN, formatWeiHelper } from '@/helpers/number';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { AmountBoxWithPrice } from '../AmountBoxWithPrice';
-import { useTokenDistro } from '@/context/tokenDistro.context';
+import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import LoadingAnimation from '@/animations/loading.json';
 import { claimAirDrop } from '@/lib/claim';
 import {
@@ -44,9 +44,9 @@ import {
 	showFailedClaim,
 } from '../toasts/claim';
 import config from '@/configuration';
-import { useSubgraph } from '@/context';
 import { usePrice } from '@/context/price.context';
 import { IModal } from '@/types/common';
+import { useAppSelector } from '@/features/hooks';
 import type { TransactionResponse } from '@ethersproject/providers';
 
 const loadingAnimationOptions = {
@@ -91,21 +91,18 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 	const [claimState, setClaimState] = useState<ClaimState>(
 		ClaimState.UNKNOWN,
 	);
-	const { givTokenDistroHelper } = useTokenDistro();
-	const {
-		currentValues: { balances },
-	} = useSubgraph();
+	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
+	const { balances } = useAppSelector(state => state.subgraph.currentValues);
 	const { givPrice } = usePrice();
 
 	const { account, library } = useWeb3React();
 
 	useEffect(() => {
+		const bnGIVback = BN(balances.givback);
 		setClaimableNow(givTokenDistroHelper.getUserClaimableNow(balances));
-		setGivBackLiquidPart(
-			givTokenDistroHelper.getLiquidPart(balances.givback),
-		);
+		setGivBackLiquidPart(givTokenDistroHelper.getLiquidPart(bnGIVback));
 		setGivBackStream(
-			givTokenDistroHelper.getStreamPartTokenPerWeek(balances.givback),
+			givTokenDistroHelper.getStreamPartTokenPerWeek(bnGIVback),
 		);
 	}, [balances, givTokenDistroHelper]);
 
@@ -250,7 +247,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 								</RateRow>
 							</>
 						)}
-						{!balances.givback.isZero() && (
+						{!BN(balances.givback).isZero() && (
 							<>
 								<HelpRow alignItems='center'>
 									<B>Claimable from GIVbacks</B>

@@ -4,7 +4,7 @@ import {
 	StakingType,
 	StreamType,
 } from '@/types/config';
-import { gwei2wei } from '@/helpers/number';
+import { gwei2wei } from '@/helpers/blockchain';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 const BASE_ROUTE = 'https://serve.giveth.io';
@@ -128,7 +128,7 @@ const config: EnvConfig = {
 				regenFarmIntro: {
 					title: 'CULT',
 					description:
-						'The purpose of CULT is to empower and fund those building and contributing towards our decentralized future. Our society is built to make it as difficut as possible to break away from societal, economic and other norms.',
+						'The purpose of CULT is to empower and fund those building and contributing towards our decentralized future.',
 					link: 'https://cultdao.io/',
 				},
 				farmStartTimeMS: 1646306818206,

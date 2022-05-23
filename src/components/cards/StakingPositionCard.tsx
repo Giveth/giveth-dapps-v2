@@ -4,7 +4,6 @@ import { BigNumber } from 'ethers';
 import { SublineBold } from '@giveth/ui-design-system';
 import BaseStakingCard from './BaseStakingCard';
 import { PoolStakingConfig } from '@/types/config';
-import { useLiquidityPositions } from '@/context';
 import { useStakingNFT } from '@/hooks/useStakingNFT';
 import { YellowDot } from './PositionCard';
 import {
@@ -12,6 +11,7 @@ import {
 	OutOfRangeTooltip,
 } from './BaseStakingCard.sc';
 import { IconWithTooltip } from '../IconWithToolTip';
+import { useLiquidityPositions } from '@/hooks/useLiquidityPositions';
 
 const OutOfRangeBadge = () => (
 	<OutOfRangeBadgeContianer alignItems='center'>
@@ -27,16 +27,16 @@ interface IStakingPositionCardProps {
 const StakingPositionCard: FC<IStakingPositionCardProps> = ({
 	poolStakingConfig,
 }) => {
-	const { rewardBalance } = useStakingNFT();
-	const { apr, unstakedPositions, stakedPositions } = useLiquidityPositions();
+	const { apr, unstakedPositions, stakedPositions, currentIncentive } =
+		useLiquidityPositions();
+	const { rewardBalance } = useStakingNFT(stakedPositions);
 	const [oneOfPositionsOutOfRange, setOneOfPositionsOutOfRange] =
 		useState(false);
-
 	const stakeInfo = {
 		apr: apr,
-		userNotStakedAmount: BigNumber.from(unstakedPositions.length),
+		notStakedAmount: BigNumber.from(unstakedPositions.length),
 		earned: rewardBalance,
-		stakedLpAmount: BigNumber.from(stakedPositions.length),
+		stakedAmount: BigNumber.from(stakedPositions.length),
 	};
 
 	useEffect(() => {
@@ -63,6 +63,9 @@ const StakingPositionCard: FC<IStakingPositionCardProps> = ({
 		<BaseStakingCard
 			stakeInfo={stakeInfo}
 			poolStakingConfig={poolStakingConfig}
+			stakedPositions={stakedPositions}
+			unstakedPositions={unstakedPositions}
+			currentIncentive={currentIncentive}
 			notif={
 				oneOfPositionsOutOfRange && (
 					<IconWithTooltip

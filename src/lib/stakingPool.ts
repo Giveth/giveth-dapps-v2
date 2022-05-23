@@ -17,7 +17,7 @@ import {
 import config from '../configuration';
 import { APR } from '@/types/poolInfo';
 import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
-import { Zero } from '@/helpers/number';
+import { BN, Zero } from '@/helpers/number';
 import { IBalances } from '@/types/subgraph';
 import { getGasPreference } from '@/lib/helpers';
 
@@ -258,50 +258,52 @@ export const getUserStakeInfo = (
 	if (regenFarmType) {
 		switch (regenFarmType) {
 			case RegenFarmType.FOX_HNY:
-				rewards = balance.rewardsFoxHnyLm;
-				rewardPerTokenPaid = balance.rewardPerTokenPaidFoxHnyLm;
-				stakedAmount = balance.foxHnyLpStaked;
-				notStakedAmount = balance.foxHnyLp;
+				rewards = BN(balance.rewardsFoxHnyLm);
+				rewardPerTokenPaid = BN(balance.rewardPerTokenPaidFoxHnyLm);
+				stakedAmount = BN(balance.foxHnyLpStaked);
+				notStakedAmount = BN(balance.foxHnyLp);
 				break;
 			case RegenFarmType.CULT_ETH:
-				rewards = balance.rewardsCultEthLm;
-				rewardPerTokenPaid = balance.rewardPerTokenPaidCultEthLm;
-				stakedAmount = balance.cultEthLpStaked;
-				notStakedAmount = balance.cultEthLp;
+				rewards = BN(balance.rewardsCultEthLm);
+				rewardPerTokenPaid = BN(balance.rewardPerTokenPaidCultEthLm);
+				stakedAmount = BN(balance.cultEthLpStaked);
+				notStakedAmount = BN(balance.cultEthLp);
 				break;
 			default:
 		}
 	} else {
 		switch (type) {
 			case StakingType.SUSHISWAP:
-				rewards = balance.rewardsSushiSwap;
-				rewardPerTokenPaid = balance.rewardPerTokenPaidSushiSwap;
-				stakedAmount = balance.sushiSwapLpStaked;
-				notStakedAmount = balance.sushiswapLp;
+				rewards = BN(balance.rewardsSushiSwap);
+				rewardPerTokenPaid = BN(balance.rewardPerTokenPaidSushiSwap);
+				stakedAmount = BN(balance.sushiSwapLpStaked);
+				notStakedAmount = BN(balance.sushiswapLp);
 				break;
 			case StakingType.HONEYSWAP:
-				rewards = balance.rewardsHoneyswap;
-				rewardPerTokenPaid = balance.rewardPerTokenPaidHoneyswap;
-				stakedAmount = balance.honeyswapLpStaked;
-				notStakedAmount = balance.honeyswapLp;
+				rewards = BN(balance.rewardsHoneyswap);
+				rewardPerTokenPaid = BN(balance.rewardPerTokenPaidHoneyswap);
+				stakedAmount = BN(balance.honeyswapLpStaked);
+				notStakedAmount = BN(balance.honeyswapLp);
 				break;
 			case StakingType.BALANCER:
-				rewards = balance.rewardsBalancer;
-				rewardPerTokenPaid = balance.rewardPerTokenPaidBalancer;
-				stakedAmount = balance.balancerLpStaked;
-				notStakedAmount = balance.balancerLp;
+				rewards = BN(balance.rewardsBalancer);
+				rewardPerTokenPaid = BN(balance.rewardPerTokenPaidBalancer);
+				stakedAmount = BN(balance.balancerLpStaked);
+				notStakedAmount = BN(balance.balancerLp);
 				break;
 			case StakingType.UNISWAPV2:
-				rewards = balance.rewardsUniswapV2GivDai;
-				rewardPerTokenPaid = balance.rewardPerTokenPaidUniswapV2GivDai;
-				stakedAmount = balance.uniswapV2GivDaiLpStaked;
-				notStakedAmount = balance.uniswapV2GivDaiLp;
+				rewards = BN(balance.rewardsUniswapV2GivDai);
+				rewardPerTokenPaid = BN(
+					balance.rewardPerTokenPaidUniswapV2GivDai,
+				);
+				stakedAmount = BN(balance.uniswapV2GivDaiLpStaked);
+				notStakedAmount = BN(balance.uniswapV2GivDaiLp);
 				break;
 			case StakingType.GIV_LM:
-				rewards = balance.rewardsGivLm;
-				rewardPerTokenPaid = balance.rewardPerTokenPaidGivLm;
-				stakedAmount = balance.givStaked;
-				notStakedAmount = balance.balance;
+				rewards = BN(balance.rewardsGivLm);
+				rewardPerTokenPaid = BN(balance.rewardPerTokenPaidGivLm);
+				stakedAmount = BN(balance.givStaked);
+				notStakedAmount = BN(balance.balance);
 				break;
 			default:
 		}

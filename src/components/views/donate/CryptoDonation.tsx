@@ -17,8 +17,7 @@ import tokenAbi from 'human-standard-token-abi';
 
 import { captureException } from '@sentry/nextjs';
 import { Shadow } from '@/components/styled-components/Shadow';
-import InputBox from '../../InputBox';
-import useUser from '@/context/UserProvider';
+import InputBox from './InputBox';
 import CheckBox from '@/components/Checkbox';
 import DonateModal from '@/components/modals/DonateModal';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -51,11 +50,15 @@ import {
 	prepareTokenList,
 } from '@/components/views/donate/helpers';
 import { ORGANIZATION } from '@/lib/constants/organizations';
-import useModal from '@/context/ModalProvider';
 import { getERC20Info } from '@/lib/contracts';
 import GIVBackToast from '@/components/views/donate/GIVBackToast';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
 import FailedDonation from '@/components/modals/FailedDonation';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import {
+	setShowSignWithWallet,
+	setShowWalletModal,
+} from '@/features/modal/modal.sclie';
 
 const ethereumChain = config.PRIMARY_NETWORK;
 const xdaiChain = config.SECONDARY_NETWORK;
@@ -77,13 +80,11 @@ const CryptoDonation = (props: {
 	project: IProject;
 }) => {
 	const { chainId: networkId, account, library } = useWeb3React();
-	const {
-		state: { isSignedIn, isEnabled, balance },
-	} = useUser();
+	const dispatch = useAppDispatch();
+	const { isEnabled, isSignedIn, balance } = useAppSelector(
+		state => state.user,
+	);
 	const { ethPrice } = usePrice();
-	const {
-		actions: { showWalletModal, showSignWithWallet },
-	} = useModal();
 
 	const { project, setSuccessDonation } = props;
 	const { organization, verified, id: projectId, status } = project;
@@ -310,13 +311,17 @@ const CryptoDonation = (props: {
 			);
 		}
 		if (!isSignedIn) {
-			return showSignWithWallet();
+			return dispatch(setShowSignWithWallet(true));
 		}
 		setShowDonateModal(true);
 	};
 
 	const donationDisabled =
-		!isActive || !amountTyped || amountTyped <= 0 || !selectedToken;
+		!isActive ||
+		!amountTyped ||
+		amountTyped <= 0 ||
+		!selectedToken ||
+		error;
 
 	return (
 		<MainContainer>
@@ -417,8 +422,7 @@ const CryptoDonation = (props: {
 						error={error}
 						setError={setError}
 						errorHandler={{
-							condition: (value: any) =>
-								value >= 0 && value <= 0.000001,
+							condition: value => value >= 0 && value <= 0.000001,
 							message: 'Set a valid amount',
 						}}
 						type='number'
@@ -469,12 +473,17 @@ const CryptoDonation = (props: {
 					/>
 					<AnotherWalletTxt>
 						Want to use another wallet?{' '}
-						<a onClick={showWalletModal}>Change Wallet</a>
+						<a onClick={() => dispatch(setShowWalletModal(true))}>
+							Change Wallet
+						</a>
 					</AnotherWalletTxt>
 				</>
 			)}
 			{!isEnabled && (
-				<MainButton label='CONNECT WALLET' onClick={showWalletModal} />
+				<MainButton
+					label='CONNECT WALLET'
+					onClick={() => dispatch(setShowWalletModal(true))}
+				/>
 			)}
 		</MainContainer>
 	);

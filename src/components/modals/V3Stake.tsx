@@ -18,7 +18,6 @@ import { Flex } from '../styled-components/Flex';
 import { PoolStakingConfig } from '@/types/config';
 import { StakingPoolImages } from '../StakingPoolImages';
 import V3StakingCard from '../cards/PositionCard';
-import { useLiquidityPositions, useSubgraph } from '@/context';
 import LoadingAnimation from '@/animations/loading.json';
 import { exit, getReward, transfer } from '@/lib/stakingNFT';
 import {
@@ -26,10 +25,13 @@ import {
 	ErrorInnerModal,
 	SubmittedInnerModal,
 } from './ConfirmSubmit';
-import { useTokenDistro } from '@/context/tokenDistro.context';
+import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { getUniswapV3StakerContract } from '@/lib/contracts';
 import { StakeState } from '@/lib/staking';
+import { BN } from '@/helpers/number';
 import { IModal } from '@/types/common';
+import { useAppSelector } from '@/features/hooks';
+import { LiquidityPosition } from '@/types/nfts';
 
 const loadingAnimationOptions = {
 	loop: true,
@@ -43,20 +45,24 @@ const loadingAnimationOptions = {
 interface IV3StakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
 	isUnstakingModal?: boolean;
+	stakedPositions: LiquidityPosition[];
+	unstakedPositions: LiquidityPosition[];
+	currentIncentive: {
+		key?: (string | number)[] | null | undefined;
+	};
 }
 
 export const V3StakeModal: FC<IV3StakeModalProps> = ({
 	poolStakingConfig,
 	isUnstakingModal,
+	stakedPositions,
+	unstakedPositions,
+	currentIncentive,
 	setShowModal,
 }) => {
-	const {
-		currentValues: { balances },
-	} = useSubgraph();
-	const { givTokenDistroHelper } = useTokenDistro();
+	const { balances } = useAppSelector(state => state.subgraph.currentValues);
+	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const { chainId, library, account } = useWeb3React();
-	const { unstakedPositions, stakedPositions, currentIncentive } =
-		useLiquidityPositions();
 	const positions = isUnstakingModal ? stakedPositions : unstakedPositions;
 	const { title } = poolStakingConfig;
 	const [stakeStatus, setStakeStatus] = useState<StakeState>(
@@ -112,7 +118,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 	const handleAction = async (tokenId: number) => {
 		const uniswapV3StakerContract = getUniswapV3StakerContract(library);
 		if (!library || !uniswapV3StakerContract) return;
-
+		const bnGIVback = BN(balances.givback);
 		const _reward = await getReward(
 			tokenId,
 			uniswapV3StakerContract,
@@ -126,9 +132,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 		setReward(liquidReward);
 		setStream(BigNumber.from(streamPerWeek.toFixed(0)));
 		setClaimableNow(givTokenDistroHelper.getUserClaimableNow(balances));
-		setGivBackLiquidPart(
-			givTokenDistroHelper.getLiquidPart(balances.givback),
-		);
+		setGivBackLiquidPart(givTokenDistroHelper.getLiquidPart(bnGIVback));
 		// setStakeStatus(StakeState.UNSTAKING);
 	};
 

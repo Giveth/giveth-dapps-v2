@@ -16,7 +16,7 @@ import {
 	StakingType,
 } from '@/types/config';
 import { IconWithTooltip } from '../IconWithToolTip';
-import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
+import { BN, formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import {
 	StakingPoolContainer,
 	StakingPoolExchangeRow,
@@ -58,7 +58,6 @@ import { IconBalancer } from '../Icons/Balancer';
 import { IconUniswap } from '../Icons/Uniswap';
 import { HarvestAllModal } from '../modals/HarvestAll';
 import { useFarms } from '@/context/farm.context';
-import { useTokenDistro } from '@/context/tokenDistro.context';
 import { WhatisStreamModal } from '../modals/WhatisStream';
 import { IconSushiswap } from '../Icons/Sushiswap';
 import { UniV3APRModal } from '../modals/UNIv3APR';
@@ -66,6 +65,11 @@ import StakingCardIntro from './StakingCardIntro';
 import { getNowUnixMS } from '@/helpers/time';
 import FarmCountDown from '../FarmCountDown';
 import { Flex } from '../styled-components/Flex';
+import { IStakeInfo } from '@/hooks/useStakingPool';
+import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
+import { useAppSelector } from '@/features/hooks';
+import { ITokenDistroInfo } from '@/types/subgraph';
+import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
 	NORMAL,
@@ -91,14 +95,22 @@ export const getPoolIconWithName = (pool: string) => {
 };
 interface IBaseStakingCardProps {
 	poolStakingConfig: PoolStakingConfig | RegenPoolStakingConfig;
-	stakeInfo: any;
+	stakeInfo: IStakeInfo;
 	notif?: ReactNode;
+	stakedPositions?: LiquidityPosition[];
+	unstakedPositions?: LiquidityPosition[];
+	currentIncentive?: {
+		key?: (string | number)[] | null | undefined;
+	};
 }
 
 const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	stakeInfo,
 	poolStakingConfig,
 	notif,
+	stakedPositions,
+	unstakedPositions,
+	currentIncentive,
 }) => {
 	const [state, setState] = useState(StakeCardState.NORMAL);
 	const [started, setStarted] = useState(true);
@@ -111,15 +123,14 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		useState(false);
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
 	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
-	const { getTokenDistroHelper } = useTokenDistro();
+	const [tokenDistroHelper, setTokenDistroHelper] =
+		useState<TokenDistroHelper>();
+	const [disableModal, setDisableModal] = useState<boolean>(true);
 	const { setInfo } = useFarms();
 	const { chainId } = useWeb3React();
+	const currentValues = useAppSelector(state => state.subgraph.currentValues);
 	const { regenStreamType, regenFarmIntro } =
 		poolStakingConfig as RegenPoolStakingConfig;
-	const tokenDistroHelper = useMemo(() => {
-		return getTokenDistroHelper(regenStreamType);
-	}, [getTokenDistroHelper, poolStakingConfig]);
-	const [disableModal, setDisableModal] = useState<boolean>(true);
 
 	const {
 		type,
@@ -134,7 +145,13 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 
 	const isInactive = !active || type === StakingType.UNISWAPV3;
 
-	const { apr, earned, stakedLpAmount, userNotStakedAmount } = stakeInfo;
+	const {
+		apr,
+		earned,
+		stakedAmount: stakedLpAmount,
+		notStakedAmount: userNotStakedAmount,
+	} = stakeInfo;
+
 	const regenStreamConfig = useMemo(() => {
 		if (!regenStreamType) return undefined;
 		const networkConfig =
@@ -143,6 +160,25 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				: config.MAINNET_CONFIG;
 		return networkConfig.regenStreams.find(s => s.type === regenStreamType);
 	}, [chainId, regenStreamType]);
+
+	useEffect(() => {
+		if (regenStreamType) {
+			const streamInfo: ITokenDistroInfo | undefined =
+				currentValues[regenStreamType];
+			if (!streamInfo) return;
+			setTokenDistroHelper(
+				new TokenDistroHelper(streamInfo, regenStreamType),
+			);
+		} else {
+			if (!currentValues.tokenDistroInfo) return;
+			setTokenDistroHelper(
+				new TokenDistroHelper(
+					currentValues.tokenDistroInfo,
+					regenStreamType,
+				),
+			);
+		}
+	}, [currentValues, poolStakingConfig, regenStreamType]);
 
 	useEffect(() => {
 		if (tokenDistroHelper) {
@@ -345,7 +381,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 										label='STAKE'
 										size='small'
 										disabled={
-											userNotStakedAmount?.isZero() ||
+											BN(userNotStakedAmount).isZero() ||
 											isInactive
 										}
 										onClick={() => setShowStakeModal(true)}
@@ -417,6 +453,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 			{showAPRModal && (
 				<APRModal
 					setShowModal={setShowAPRModal}
+					tokenDistroHelper={tokenDistroHelper}
 					regenStreamConfig={regenStreamConfig}
 				/>
 			)}
@@ -431,6 +468,13 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					<V3StakeModal
 						setShowModal={setShowStakeModal}
 						poolStakingConfig={poolStakingConfig}
+						stakedPositions={stakedPositions || []}
+						unstakedPositions={unstakedPositions || []}
+						currentIncentive={
+							currentIncentive || {
+								key: undefined,
+							}
+						}
 					/>
 				) : (
 					<StakeModal
@@ -445,6 +489,13 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 						isUnstakingModal={true}
 						setShowModal={setShowUnStakeModal}
 						poolStakingConfig={poolStakingConfig}
+						stakedPositions={stakedPositions || []}
+						unstakedPositions={unstakedPositions || []}
+						currentIncentive={
+							currentIncentive || {
+								key: undefined,
+							}
+						}
 					/>
 				) : (
 					<UnStakeModal
@@ -460,12 +511,16 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					poolStakingConfig={poolStakingConfig}
 					earned={earned}
 					network={chainId}
+					tokenDistroHelper={tokenDistroHelper}
 					regenStreamConfig={regenStreamConfig}
+					stakedPositions={stakedPositions}
+					currentIncentive={currentIncentive}
 				/>
 			)}
 			{showWhatIsGIVstreamModal && (
 				<WhatisStreamModal
 					setShowModal={setShowWhatIsGIVstreamModal}
+					tokenDistroHelper={tokenDistroHelper}
 					regenStreamConfig={regenStreamConfig}
 				/>
 			)}

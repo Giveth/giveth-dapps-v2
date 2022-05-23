@@ -20,16 +20,16 @@ import { Flex } from '../styled-components/Flex';
 import { MenuContainer } from './Menu.sc';
 import { switchNetworkHandler } from '@/lib/wallet';
 import config from '@/configuration';
-import { useTokenDistro } from '@/context/tokenDistro.context';
-import { formatWeiHelper } from '@/helpers/number';
+import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
+import { BN, formatWeiHelper } from '@/helpers/number';
 import { WhatisStreamModal } from '@/components/modals/WhatisStream';
-import { useSubgraph } from '@/context';
 import { getGivStakingConfig } from '@/helpers/networkProvider';
 import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
 import { getUserStakeInfo } from '@/lib/stakingPool';
 import { ETheme, useGeneral } from '@/context/general.context';
 import Routes from '@/lib/constants/Routes';
 import { networkInfo } from '@/lib/helpers';
+import { useAppSelector } from '@/features/hooks';
 
 interface IRewardMenu {
 	showWhatIsGIVstreamModal: boolean;
@@ -45,27 +45,29 @@ export const RewardMenu = ({
 	const [givStreamLiquidPart, setGIVstreamLiquidPart] = useState(Zero);
 	const [flowRateNow, setFlowRateNow] = useState<BigNumber.Value>(0);
 
-	const { givTokenDistroHelper } = useTokenDistro();
-	const { currentValues } = useSubgraph();
+	const currentValues = useAppSelector(state => state.subgraph.currentValues);
+	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const { chainId } = useWeb3React();
 	const { theme } = useGeneral();
 
-	const { balances } = currentValues;
-	const { allocatedTokens, claimed, givbackLiquidPart } = balances;
+	const { givbackLiquidPart } = currentValues.balances;
 	const { networkName } = networkInfo(chainId);
 
 	useEffect(() => {
+		const _allocatedTokens = BN(currentValues.balances.allocatedTokens);
+		const _givbackLiquidPart = BN(currentValues.balances.givbackLiquidPart);
+		const _claimed = BN(currentValues.balances.claimed);
 		setGIVstreamLiquidPart(
 			givTokenDistroHelper
-				.getLiquidPart(allocatedTokens.sub(givbackLiquidPart))
-				.sub(claimed),
+				.getLiquidPart(_allocatedTokens.sub(_givbackLiquidPart))
+				.sub(_claimed),
 		);
 		setFlowRateNow(
 			givTokenDistroHelper.getStreamPartTokenPerWeek(
-				allocatedTokens.sub(givbackLiquidPart),
+				_allocatedTokens.sub(_givbackLiquidPart),
 			),
 		);
-	}, [allocatedTokens, claimed, givbackLiquidPart, givTokenDistroHelper]);
+	}, [currentValues, givTokenDistroHelper]);
 
 	useEffect(() => {
 		let pools;
@@ -91,7 +93,7 @@ export const RewardMenu = ({
 						getUserStakeInfo(
 							type,
 							undefined,
-							balances,
+							currentValues.balances,
 							unipoolHelper,
 						).earned,
 					);
@@ -101,7 +103,7 @@ export const RewardMenu = ({
 				givTokenDistroHelper.getLiquidPart(_farmRewards),
 			);
 		}
-	}, [balances, currentValues, chainId, givTokenDistroHelper]);
+	}, [currentValues, chainId, givTokenDistroHelper]);
 
 	useEffect(() => {
 		setIsMounted(true);
@@ -205,7 +207,10 @@ export const RewardMenu = ({
 				</Link>
 			</RewardMenuContainer>
 			{showWhatIsGIVstreamModal && (
-				<WhatisStreamModal setShowModal={setShowWhatIsGIVstreamModal} />
+				<WhatisStreamModal
+					tokenDistroHelper={givTokenDistroHelper}
+					setShowModal={setShowWhatIsGIVstreamModal}
+				/>
 			)}
 		</>
 	);

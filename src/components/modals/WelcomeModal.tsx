@@ -15,19 +15,18 @@ import torusBrand from '/public/images/torus_pwr.svg';
 import { EWallets, torusConnector } from '@/lib/wallet/walletTypes';
 import { mediaQueries } from '@/lib/constants/constants';
 import { detectBrave, showToastError } from '@/lib/helpers';
-import useModal from '@/context/ModalProvider';
 import StorageLabel from '@/lib/localStorage';
 import LowerShields from '@/components/modals/LowerShields';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
+import { useAppDispatch } from '@/features/hooks';
+import { setShowWalletModal } from '@/features/modal/modal.sclie';
 
 const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 	const [showLowerShields, setShowLowerShields] = useState<boolean>();
 
 	const { activate } = useWeb3React();
-	const {
-		actions: { showWalletModal },
-	} = useModal();
+	const dispatch = useAppDispatch();
 
 	const closeModal = () => setShowModal(false);
 
@@ -74,7 +73,11 @@ const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 							Giveth.
 						</ContentSubtitle>
 						<IconContentContainer>
-							<EthIconContainer onClick={showWalletModal}>
+							<EthIconContainer
+								onClick={() =>
+									dispatch(setShowWalletModal(true))
+								}
+							>
 								<Image src={ethIcon} alt='Ether icon' />
 								<B>Sign in with Ethereum</B>
 							</EthIconContainer>
