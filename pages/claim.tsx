@@ -4,7 +4,6 @@ import { useEffect } from 'react';
 import ClaimView from '@/components/views/claim/Claim.view';
 import { ClaimProvider } from '@/context/claim.context';
 import { ETheme, useGeneral } from '@/context/general.context';
-import { GiveconomyMeta } from '@/lib/meta';
 
 export default function GIVdropRoute() {
 	const { setShowHeader, setTheme } = useGeneral();
@@ -22,7 +21,6 @@ export default function GIVdropRoute() {
 		<>
 			<Head>
 				<title>GIVdrop</title>
-				<GiveconomyMeta />
 			</Head>
 			<ClaimProvider>
 				<ClaimView />
