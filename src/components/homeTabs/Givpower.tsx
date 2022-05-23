@@ -1,15 +1,35 @@
 import Image from 'next/image';
 import { useWeb3React } from '@web3-react/core';
+import {
+	brandColors,
+	H3,
+	H4,
+	IconRocketInSpace32,
+	QuoteText,
+} from '@giveth/ui-design-system';
 import { Col, Row } from '../Grid';
 import { Flex } from '../styled-components/Flex';
 import { TopInnerContainer } from './commons';
-import { GIVpowerTopContainer, Title, Subtitle } from './Givpower.sc';
+import {
+	GIVpowerTopContainer,
+	Title,
+	Subtitle,
+	LearnMoreButton,
+	HeadingSectionContainer,
+	HeadingTextContainer,
+	FeaturesCardContainer,
+	FeaturesCardHeading,
+	FeaturesCardSubheading,
+	FeaturesCardItemsContainer,
+	FeaturesCardItem,
+} from './Givpower.sc';
 import RocketImage from '../../../public/images/rocket.svg';
 import { GIVstreamRewardCard } from './GIVstream.sc';
 import config from '@/configuration';
 import { BN } from '@/helpers/number';
-
-export default function TabPowerTop() {
+import Growth from '../../../public/images/growth.svg';
+import GivStake from '../../../public/images/giv_stake.svg';
+export function TabPowerTop() {
 	const { chainId } = useWeb3React();
 	return (
 		<GIVpowerTopContainer>
@@ -47,5 +67,60 @@ export default function TabPowerTop() {
 				</Row>
 			</TopInnerContainer>
 		</GIVpowerTopContainer>
+	);
+}
+
+export function TabPowerBottom() {
+	return (
+		<TopInnerContainer>
+			<H3 weight={700}>Boost Projects with GIVpower</H3>
+			<br />
+			<HeadingSectionContainer>
+				<HeadingTextContainer>
+					<QuoteText size='small'>
+						Support verified projects using “Boost”. Projects backed
+						by GIVpower will benefit from matching funds & more
+						GIVbacks for their donors.
+					</QuoteText>
+				</HeadingTextContainer>
+				<LearnMoreButton label='Learn More'>Hello</LearnMoreButton>
+			</HeadingSectionContainer>
+			<FeaturesCardContainer>
+				<FeaturesCardHeading weight={700}>
+					How does GIVpower work?
+				</FeaturesCardHeading>
+				<FeaturesCardSubheading size='small'>
+					With GIVpower, you can support verified projects, while
+					earning rewards on your GIV.
+				</FeaturesCardSubheading>
+				<FeaturesCardItemsContainer>
+					<FeaturesCardItem>
+						<Image
+							height='68'
+							src={GivStake}
+							alt='givpower stake and lock icon'
+						/>
+						<H4>Stake & lock GIV </H4>
+					</FeaturesCardItem>
+					<FeaturesCardItem>
+						<div>
+							<IconRocketInSpace32
+								size={65}
+								color={brandColors.mustard[500]}
+							/>
+						</div>
+						<H4>Boost Projects</H4>
+					</FeaturesCardItem>
+					<FeaturesCardItem>
+						<Image
+							height='70'
+							src={Growth}
+							alt='givpower earn yield icon'
+						/>
+						<H4>Earn a Yield</H4>
+					</FeaturesCardItem>
+				</FeaturesCardItemsContainer>
+			</FeaturesCardContainer>
+		</TopInnerContainer>
 	);
 }
