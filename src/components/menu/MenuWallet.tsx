@@ -26,6 +26,7 @@ import {
 	setShowCompleteProfile,
 	setShowWalletModal,
 } from '@/features/modal/modal.sclie';
+import { logoutToken } from '@/services/token';
 import { signOut } from '@/features/user/user.slice';
 
 const MenuWallet = () => {
@@ -37,7 +38,7 @@ const MenuWallet = () => {
 
 	const router = useRouter();
 	const dispatch = useAppDispatch();
-	const { isSignedIn, userData } = useAppSelector(state => state.user);
+	const { isSignedIn, userData, token } = useAppSelector(state => state.user);
 	const { theme } = useGeneral();
 	const goRoute = (input: {
 		url: string;
@@ -137,7 +138,10 @@ const MenuWallet = () => {
 					))}
 					{isSignedIn && (
 						<MenuItem
-							onClick={() => dispatch(signOut())}
+							onClick={async () => {
+								await logoutToken(token!);
+								dispatch(signOut());
+							}}
 							theme={theme}
 						>
 							Sign out

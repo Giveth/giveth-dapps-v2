@@ -59,6 +59,12 @@ export async function getToken(
 	);
 }
 
+export async function logoutToken(jwt: string) {
+	return await postData(`${config.MICROSERVICES.authentication}/logout`, {
+		jwt,
+	});
+}
+
 export const fetchPrice = async (
 	chainId: number,
 	tokenAddress: string | undefined,
