@@ -13,22 +13,19 @@ import {
 } from '@giveth/ui-design-system';
 
 import TwitterIcon from '/public/images/twitter.svg';
-import useUser from '@/context/UserProvider';
 import { isSSRMode, isUserRegistered } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
 import { Col, Row } from '@/components/Grid';
 import { Arc } from '@/components/styled-components/Arc';
 import { HomeContainer } from '@/components/views/homepage/Home.sc';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
-import { useAppDispatch } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.sclie';
 
 const HomePurpleSection = () => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
-	const {
-		state: { user },
-	} = useUser();
+	const user = useAppSelector(state => state.user.userData);
 
 	const handleCreateButton = () => {
 		if (isUserRegistered(user)) {

@@ -5,11 +5,10 @@ import styled from 'styled-components';
 import Routes from '@/lib/constants/Routes';
 import { Arc } from '@/components/styled-components/Arc';
 import { isUserRegistered } from '@/lib/helpers';
-import useUser from '@/context/UserProvider';
 import { HomeContainer } from '@/components/views/homepage/Home.sc';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Col } from '@/components/Grid';
-import { useAppDispatch } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.sclie';
 
 const content = [
@@ -38,10 +37,7 @@ const content = [
 const HomeChangeMakers = () => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
-
-	const {
-		state: { user },
-	} = useUser();
+	const user = useAppSelector(state => state.user.userData);
 
 	const handleCreateButton = () => {
 		if (isUserRegistered(user)) {

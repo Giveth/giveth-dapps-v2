@@ -85,7 +85,6 @@ export interface IUser {
 	walletAddress?: string;
 	url?: string;
 	location?: string;
-	token?: string;
 	userId?: string;
 	totalDonated?: number;
 	totalReceived?: number;

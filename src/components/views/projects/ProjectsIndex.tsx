@@ -30,9 +30,8 @@ import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
 import { EDirection, gqlEnums } from '@/apollo/types/gqlEnums';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
 import { Shadow } from '../../styled-components/Shadow';
-import useUser from '@/context/UserProvider';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
-import { useAppDispatch } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.sclie';
 
 interface IProjectsView {
@@ -86,10 +85,7 @@ const buildCategoryObj = (array: ICategory[]) => {
 
 const ProjectsIndex = (props: IProjectsView) => {
 	const { projects, totalCount: _totalCount, categories } = props;
-
-	const {
-		state: { user },
-	} = useUser();
+	const user = useAppSelector(state => state.user.userData);
 
 	const [categoriesObj, setCategoriesObj] = useState<ISelectObj[]>();
 	const [selectedCategory, setSelectedCategory] =
@@ -207,7 +203,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 			<BigArc />
 			<Wrapper>
 				<Title weight={700}>Projects</Title>
-
 				<Subtitle>
 					Support for-good projects, nonprofits & charities with
 					crypto donations. Give directly with zero added fees. Get

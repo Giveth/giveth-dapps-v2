@@ -15,10 +15,9 @@ import { OnboardStep } from './common';
 import { Flex } from '@/components/styled-components/Flex';
 import CongratsAnimation from '@/animations/congrats.json';
 import Routes from '@/lib/constants/Routes';
-import useUser from '@/context/UserProvider';
 import { isUserRegistered } from '@/lib/helpers';
 import { Col, Row } from '@/components/Grid';
-import { useAppDispatch } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.sclie';
 
 const CongratsAnimationOptions = {
@@ -32,9 +31,7 @@ const CongratsAnimationOptions = {
 const DoneStep = () => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
-	const {
-		state: { user },
-	} = useUser();
+	const user = useAppSelector(state => state.user.userData);
 
 	const handleCreateButton = () => {
 		if (isUserRegistered(user)) {

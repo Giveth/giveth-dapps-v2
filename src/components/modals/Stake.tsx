@@ -33,7 +33,6 @@ import {
 import { StakeState } from '@/lib/staking';
 import ToggleSwitch from '../styled-components/Switch';
 import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
-import useUser from '@/context/UserProvider';
 import { IModal } from '@/types/common';
 
 interface IStakeModalProps extends IModal {
@@ -65,9 +64,6 @@ export const StakeModal: FC<IStakeModalProps> = ({
 	const { title, LM_ADDRESS, POOL_ADDRESS, GARDEN_ADDRESS } =
 		poolStakingConfig;
 	const [permit, setPermit] = useState<boolean>(false);
-	const {
-		actions: { getBalance },
-	} = useUser();
 
 	useEffect(() => {
 		if (GARDEN_ADDRESS) {
@@ -114,9 +110,6 @@ export const StakeModal: FC<IStakeModalProps> = ({
 		});
 		return () => {
 			library.removeAllListeners('block');
-			library?.on('block', () => {
-				getBalance();
-			});
 		};
 	}, [library, amount, stakeState]);
 
