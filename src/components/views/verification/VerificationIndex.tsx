@@ -46,7 +46,12 @@ const VerificationIndex = () => {
 						<ProgressBar step={step} />
 					</MenuSeparator>
 					{MenuList.map((item, index) => (
-						<MenuTitle isActive={index <= step} key={item}>
+						<MenuTitle
+							hover={index < step}
+							isActive={index <= step}
+							key={item}
+							onClick={() => index < step && setStep(index)}
+						>
 							{item}
 							{index < step && (
 								<CheckCircle>
@@ -155,10 +160,11 @@ const MenuSeparator = styled.div`
 	border-radius: 5px;
 `;
 
-const MenuTitle = styled(B)<{ isActive?: boolean }>`
+const MenuTitle = styled(B)<{ isActive?: boolean; hover?: boolean }>`
 	display: flex;
 	gap: 10px;
 	margin-bottom: 16px;
+	cursor: ${props => (props.hover ? 'pointer' : 'default')};
 	color: ${props =>
 		props.isActive ? neutralColors.gray[900] : neutralColors.gray[700]};
 `;
