@@ -4,8 +4,9 @@ import { captureException } from '@sentry/nextjs';
 import { IUser } from '@/apollo/types/types';
 import { initializeApollo } from '@/apollo/apolloClient';
 import { LOGIN_USER } from '@/apollo/gql/gqlAuth';
-import { showToastError, postData } from '@/lib/helpers';
+import { showToastError } from '@/lib/helpers';
 import config from '@/configuration';
+import { postRequest } from '@/helpers/requests';
 
 const apolloClient = initializeApollo();
 
@@ -49,7 +50,7 @@ export async function getToken(
 	message: string,
 	nonce: string,
 ) {
-	return await postData(
+	return await postRequest(
 		`${config.MICROSERVICES.authentication}/authentication`,
 		{
 			signature,
@@ -60,7 +61,7 @@ export async function getToken(
 }
 
 export async function logoutToken(jwt: string) {
-	return await postData(`${config.MICROSERVICES.authentication}/logout`, {
+	return await postRequest(`${config.MICROSERVICES.authentication}/logout`, {
 		jwt,
 	});
 }

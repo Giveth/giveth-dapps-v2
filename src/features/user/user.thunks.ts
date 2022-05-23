@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import gqlRequest from '@/helpers/gqlRequest';
+import { gqlRequest } from '@/helpers/requests';
 import { GET_USER_BY_ADDRESS } from './user.queries';
 import { ISignToGetToken } from './user.types';
 import { createSiweMessage } from '@/lib/helpers';
