@@ -94,6 +94,7 @@ export const userSlice = createSlice({
 			});
 	},
 });
+
 export const {
 	setIsEnabled,
 	setIsSignedIn,
@@ -103,4 +104,5 @@ export const {
 	incrementLikedProjectsCount,
 	decrementLikedProjectsCount,
 } = userSlice.actions;
+
 export default userSlice.reducer;
