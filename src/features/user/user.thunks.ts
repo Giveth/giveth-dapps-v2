@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import gqlRequest from '@/helpers/gqlRequest';
 import { GET_USER_BY_ADDRESS } from './user.queries';
 import { ISignToGetToken } from './user.types';
-import { signMessage, createSiweMessage } from '@/lib/helpers';
+import { createSiweMessage } from '@/lib/helpers';
 import { getToken } from '@/services/token';
 import { RootState } from '../store';
 
