@@ -1,19 +1,20 @@
 import { FC } from 'react';
 import styled from 'styled-components';
 import { P, neutralColors, brandColors } from '@giveth/ui-design-system';
+import Image from 'next/image';
 
 import { Modal } from '@/components/modals/Modal';
 import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
 import { IModal } from '@/types/common';
+import { Bullets } from '@/components/styled-components/Bullets';
+import BulbIcon from '/public/images/icons/lightbulb.svg';
 
 export const ProjectGuidelineModal: FC<IModal> = ({ setShowModal }) => {
 	return (
 		<Modal
 			setShowModal={setShowModal}
-			headerIcon={
-				<img src='/images/icons/lightbulb.svg' alt='light bulb' />
-			}
+			headerIcon={<Image src={BulbIcon} alt='light bulb' />}
 			headerTitle='Submission guidelines'
 			headerTitlePosition='left'
 		>
@@ -78,22 +79,10 @@ const InlineLink = styled.a`
 const Container = styled.div`
 	width: 350px;
 	text-align: left;
-	padding: 0 30px;
+	padding: 0 30px 30px;
 `;
 
 const Optional = styled.span`
 	color: ${neutralColors.gray[700]};
 	padding: 0 5px 0 0;
-`;
-
-const Bullets = styled.ul`
-	padding-left: 17px;
-	list-style-image: url('/images/bullet_tiny.svg');
-	display: flex;
-	flex-direction: column;
-	margin-bottom: 30px;
-	li {
-		margin: 8px 0;
-		color: ${neutralColors.gray[900]};
-	}
 `;

@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import {
 	B,
+	brandColors,
 	Button,
 	IconCheck,
 	neutralColors,
@@ -13,6 +14,7 @@ import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import BulbIcon from '/public/images/icons/lightbulb.svg';
 import ContentSelector from '@/components/views/verification/ContentSelector';
+import HintModal from '@/components/views/verification/HintModal';
 
 const MenuList = [
 	'Before you start',
@@ -26,10 +28,13 @@ const MenuList = [
 	'Done',
 ];
 
+const stepsCount = MenuList.length;
+
 const VerificationIndex = () => {
 	const title = 'The Giveth Community of Makers';
 
 	const [step, setStep] = useState(0);
+	const [showModal, setShowModal] = useState(false);
 
 	return (
 		<Container>
@@ -37,11 +42,13 @@ const VerificationIndex = () => {
 				<MenuSection>
 					<MenuTitle>Verified status for</MenuTitle>
 					<MenuTitle isActive>{title}</MenuTitle>
-					<MenuSeparator />
+					<MenuSeparator>
+						<ProgressBar step={step} />
+					</MenuSeparator>
 					{MenuList.map((item, index) => (
 						<MenuTitle isActive={index <= step} key={item}>
 							{item}
-							{index <= step && (
+							{index < step && (
 								<CheckCircle>
 									<IconCheck color='white' size={10} />
 								</CheckCircle>
@@ -55,7 +62,7 @@ const VerificationIndex = () => {
 							Auto save
 							<SaveCircle />
 						</SaveSection>
-						<GuideSection>
+						<GuideSection onClick={() => setShowModal(true)}>
 							<Image src={BulbIcon} alt='light bulb' />
 						</GuideSection>
 					</AbsoluteSection>
@@ -71,7 +78,7 @@ const VerificationIndex = () => {
 								label='<     PREVIOUS'
 							/>
 							<Button
-								disabled={step === MenuList.length - 1}
+								disabled={step === stepsCount - 1}
 								onClick={() => setStep(step + 1)}
 								label='NEXT     >'
 							/>
@@ -79,6 +86,7 @@ const VerificationIndex = () => {
 					</div>
 				</ContentSection>
 			</InnerContainer>
+			{showModal && <HintModal setShowModal={setShowModal} />}
 		</Container>
 	);
 };
@@ -133,10 +141,17 @@ const ContentSeparator = styled.hr`
 	margin: 10px 0;
 `;
 
-const MenuSeparator = styled.hr`
+const ProgressBar = styled.div<{ step: number }>`
+	background: ${brandColors.giv[500]};
+	border-radius: 5px;
+	width: ${props => (props.step / stepsCount) * 100}%;
+	height: 100%;
+`;
+
+const MenuSeparator = styled.div`
 	margin: 25px 0;
-	border: 1.5px solid ${neutralColors.gray[300]};
 	background: ${neutralColors.gray[300]};
+	height: 3px;
 	border-radius: 5px;
 `;
 
