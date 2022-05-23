@@ -7,7 +7,6 @@ import { Contract } from '@ethersproject/contracts';
 import { Web3Provider } from '@ethersproject/providers';
 import { AddressZero } from '@ethersproject/constants';
 import { brandColors } from '@giveth/ui-design-system';
-import { SiweMessage } from 'siwe';
 // @ts-ignore
 import abi from 'human-standard-token-abi';
 
@@ -415,6 +414,7 @@ export const createSiweMessage = async (
 			return n.json();
 		});
 		const nonce = nonceResponse.message;
+		const { SiweMessage } = await import('siwe');
 		const siweMessage = new SiweMessage({
 			domain,
 			address,
