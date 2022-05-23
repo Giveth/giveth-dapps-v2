@@ -28,7 +28,6 @@ const useLeaveConfirm = ({
 			}
 		};
 		if (shouldConfirm) {
-			console.log('hereeeeeeeeeeeee', shouldConfirm);
 			Router.events.on('routeChangeStart', onRouteChangeStart);
 			window.addEventListener('beforeunload', onberforeunload);
 		}
