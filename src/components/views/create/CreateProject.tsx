@@ -49,6 +49,7 @@ import LightBulbIcon from '/public/images/icons/lightbulb.svg';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { useAppSelector } from '@/features/hooks';
+import useLeaveConfirm from '@/hooks/useLeaveConfirm';
 
 export enum ECreateErrFields {
 	NAME = 'name',
@@ -103,6 +104,7 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 	const debouncedTitleValidation = useRef<any>();
 	const debouncedAddressValidation = useRef<any>();
 	const debouncedDescriptionValidation = useRef<any>();
+	useLeaveConfirm({ shouldConfirm: formChange });
 
 	useEffect(() => {
 		if (isEditMode) {
@@ -155,17 +157,6 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 			1000,
 		);
 	}, []);
-
-	useEffect(() => {
-		const onberforeunload = function (event: any) {
-			event.returnValue = 'Write something clever here..';
-		};
-		if (formChange)
-			window.addEventListener('beforeunload', onberforeunload);
-		return () => {
-			window.removeEventListener('beforeunload', onberforeunload);
-		};
-	}, [formChange]);
 
 	const handleInputChange = (value: string, id: string) => {
 		if (id === ECreateErrFields.NAME) {
@@ -320,6 +311,7 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 							<NameInput
 								value={name}
 								setValue={e => {
+									console.log('name');
 									setFormChange(true);
 									handleInputChange(e, ECreateErrFields.NAME);
 								}}
@@ -328,6 +320,7 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 							<DescriptionInput
 								value={description}
 								setValue={e => {
+									console.log('name');
 									setFormChange(true);
 									handleInputChange(
 										e,
@@ -339,6 +332,7 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 							<CategoryInput
 								value={categories}
 								setValue={category => {
+									console.log('category');
 									setFormChange(true);
 									setCategories(category);
 								}}
@@ -346,6 +340,7 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 							<LocationInput
 								defaultValue={defaultImpactLocation}
 								setValue={location => {
+									console.log('location');
 									setFormChange(true);
 									setImpactLocation(location);
 								}}
@@ -353,6 +348,7 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 							<ImageInput
 								value={image}
 								setValue={img => {
+									console.log('image');
 									setFormChange(true);
 									setImage(img);
 								}}
@@ -361,6 +357,7 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 							<WalletAddressInput
 								value={walletAddress}
 								setValue={e => {
+									console.log('walletAddress');
 									setFormChange(true);
 									handleInputChange(
 										e,
