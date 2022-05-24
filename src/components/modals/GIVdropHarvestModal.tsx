@@ -92,7 +92,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 	);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const { balances } = useAppSelector(state => state.subgraph.currentValues);
-	const { givPrice } = useAppSelector(state => state.price);
+	const { givPrice } = useAppSelector(state => state.price.priceValues);
 
 	const { account, library } = useWeb3React();
 

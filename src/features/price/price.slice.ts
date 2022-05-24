@@ -1,11 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Zero } from '@/helpers/number';
-import type { IPriceState } from './price.types';
+import type { IPriceState, IPriceValues } from './price.types';
 import BigNumber from 'bignumber.js';
 
-const initialState: IPriceState = {
+export const priceValues: IPriceValues = {
 	givPrice: Zero,
 	ethPrice: Zero,
+};
+
+const initialState: IPriceState = {
+	priceValues,
 	mainnetThirdPartyTokensPrice: {},
 	xDaiThirdPartyTokensPrice: {},
 };
@@ -15,10 +19,10 @@ export const priceSlice = createSlice({
 	initialState,
 	reducers: {
 		setGivPrice: (state, action: PayloadAction<BigNumber>) => {
-			state.givPrice = action.payload;
+			state.priceValues.givPrice = action.payload;
 		},
 		setEthPrice: (state, action: PayloadAction<BigNumber>) => {
-			state.ethPrice = action.payload;
+			state.priceValues.ethPrice = action.payload;
 		},
 		setMainnetThirdPartTokensPrice: (
 			state,

@@ -12,8 +12,8 @@ import {
 import React, { FC, MouseEventHandler, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ethers } from 'ethers';
-import { useAppSelector } from '@/features/hooks';
 import BigNumber from 'bignumber.js';
+import { useAppSelector } from '@/features/hooks';
 import { IconGIV } from './Icons/GIV';
 import { Flex } from './styled-components/Flex';
 import { formatWeiHelper, Zero } from '@/helpers/number';
@@ -57,7 +57,7 @@ export const RewardCard: FC<IRewardCardProps> = ({
 	const [usdAmount, setUSDAmount] = useState('0');
 	const [showWhatIsGIVstreamModal, setShowWhatIsGIVstreamModal] =
 		useState(false);
-	const { givPrice } = useAppSelector(state => state.price);
+	const { givPrice } = useAppSelector(state => state.price.priceValues);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	useEffect(() => {
 		const price = tokenPrice || givPrice;

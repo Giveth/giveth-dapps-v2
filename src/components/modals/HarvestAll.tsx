@@ -10,7 +10,6 @@ import {
 	Lead,
 	P,
 } from '@giveth/ui-design-system';
-import { getTokenPrice } from '@/features/price/price.thunks';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { useWeb3React } from '@web3-react/core';
@@ -25,6 +24,7 @@ import {
 import { BN, formatWeiHelper, Zero } from '@/helpers/number';
 import { harvestTokens } from '@/lib/stakingPool';
 import { claimUnstakeStake } from '@/lib/stakingNFT';
+import { getTokenPrice } from '@/features/price/price.thunks';
 import {
 	ConfirmedInnerModal,
 	ErrorInnerModal,
@@ -61,7 +61,7 @@ import { IconWithTooltip } from '../IconWithToolTip';
 import { AmountBoxWithPrice } from '@/components/AmountBoxWithPrice';
 import { getPoolIconWithName } from '../cards/BaseStakingCard';
 import { IModal } from '@/types/common';
-import { useAppSelector } from '@/features/hooks';
+import { useAppSelector, useAppDispatch } from '@/features/hooks';
 import { LiquidityPosition } from '@/types/nfts';
 import type { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 
@@ -106,11 +106,14 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	stakedPositions,
 	currentIncentive,
 }) => {
+	const dispatch = useAppDispatch();
 	const [state, setState] = useState<HarvestStates>(HarvestStates.HARVEST);
 	const tokenSymbol = regenStreamConfig?.rewardTokenSymbol || 'GIV';
 	const { balances } = useAppSelector(state => state.subgraph.currentValues);
-	const { givPrice } = useAppSelector(state => state.price);
+	const { givPrice } = useAppSelector(state => state.price.priceValues);
+
 	const { account, library } = useWeb3React();
+	const [tokenPrice, setTokenPrice] = useState<BigNumber>(Zero);
 	const [txHash, setTxHash] = useState('');
 	//GIVdrop TODO: Should we show Givdrop in new  design?
 	const [givDrop, setGIVdrop] = useState(ethers.constants.Zero);
@@ -137,14 +140,25 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 			? ethers.constants.Zero
 			: BN(balances.givbackLiquidPart);
 	}, [regenStreamConfig, balances.givbackLiquidPart]);
-	const tokenPrice = useMemo(() => {
-		return regenStreamConfig
-			? getTokenPrice({
-					tokenAddress: regenStreamConfig.tokenAddressOnUniswapV2,
-					network,
-			  })
-			: givPrice;
-	}, [getTokenPrice, givPrice, network, regenStreamConfig]);
+
+	useEffect(() => {
+		const getPrice = async () => {
+			let price: any = Zero;
+			if (regenStreamConfig) {
+				price = await dispatch(
+					getTokenPrice({
+						tokenAddress: regenStreamConfig.tokenAddressOnUniswapV2,
+						network,
+					}),
+				);
+				console.log({ AAAA: price });
+			} else {
+				price = givPrice;
+			}
+			setTokenPrice(price);
+		};
+		getPrice();
+	}, [givPrice, network, regenStreamConfig]);
 
 	useEffect(() => {
 		if (!tokenDistroHelper) return;
@@ -288,9 +302,8 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	};
 
 	const modalTitle = regenStreamConfig ? 'RegenFarm Rewards' : title;
-
 	const calcUSD = (amount: string) => {
-		const price = tokenPrice?.payload || givPrice;
+		const price = tokenPrice || givPrice;
 		return price.isNaN() ? '0' : price.times(amount).toFixed(2);
 	};
 

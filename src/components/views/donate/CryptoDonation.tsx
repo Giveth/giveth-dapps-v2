@@ -83,7 +83,7 @@ const CryptoDonation = (props: {
 	const { isEnabled, isSignedIn, balance } = useAppSelector(
 		state => state.user,
 	);
-	const { ethPrice } = useAppSelector(state => state.price);
+	const { ethPrice } = useAppSelector(state => state.price.priceValues);
 	const { project, setSuccessDonation } = props;
 	const { organization, verified, id: projectId, status } = project;
 	const {

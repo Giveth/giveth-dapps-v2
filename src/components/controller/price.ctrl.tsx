@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useWeb3React } from '@web3-react/core';
+import { captureException } from '@sentry/nextjs';
+import BigNumber from 'bignumber.js';
 import { Zero } from '@/helpers/number';
 import { useAppSelector, useAppDispatch } from '@/features/hooks';
 import { useLiquidityPositions } from '@/hooks/useLiquidityPositions';
-import { captureException } from '@sentry/nextjs';
 import {
 	setGivPrice,
 	setEthPrice,
 	setMainnetThirdPartTokensPrice,
 	setXDaiThirdPartTokensPrice,
 } from '@/features/price/price.slice';
-import BigNumber from 'bignumber.js';
 import config from '@/configuration';
 
 const fetchUniswapSubgraphTokenPrice = async (
@@ -53,11 +53,9 @@ const PriceController = () => {
 	const [mainnetPrice, setMainnetPrice] = useState<BigNumber>(Zero);
 	const xDaiValues = useAppSelector(state => state.subgraph.xDaiValues);
 
-	const {
-		ethPrice,
-		mainnetThirdPartyTokensPrice,
-		xDaiThirdPartyTokensPrice,
-	} = useAppSelector(state => state.price);
+	const { mainnetThirdPartyTokensPrice, xDaiThirdPartyTokensPrice } =
+		useAppSelector(state => state.price);
+	const { ethPrice } = useAppSelector(state => state.price.priceValues);
 
 	useEffect(() => {
 		const { uniswapV2EthGivPair } = xDaiValues;

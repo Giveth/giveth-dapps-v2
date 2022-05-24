@@ -1,4 +1,9 @@
-import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
+import {
+	configureStore,
+	ThunkAction,
+	Action,
+	getDefaultMiddleware,
+} from '@reduxjs/toolkit';
 // import { subgraphApiSlice } from './subgraph-api-slice';
 import priceReducer from './price/price.slice';
 import subgraphReducer from './subgraph/subgraph.slice';
@@ -11,6 +16,21 @@ export const store = configureStore({
 		modal: modalReducer,
 		user: userReducer,
 	},
+	// NOTE: This is the only way I could find to avoid the serialized warning/error for BigNumbers
+	// If you guys have a better solution please let me know :)
+	middleware: getDefaultMiddleware =>
+		getDefaultMiddleware({
+			serializableCheck: {
+				ignoredActions: [
+					'price/setGivPrice',
+					'price/setEthPrice',
+					'price/setXDaiThirdPartTokensPrice',
+					'price/getTokenPrice',
+					'price/getTokenPrice/fulfilled',
+				],
+				ignoredPaths: ['price'],
+			},
+		}),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
