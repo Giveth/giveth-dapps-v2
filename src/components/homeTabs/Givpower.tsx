@@ -6,6 +6,7 @@ import {
 	H4,
 	IconRocketInSpace32,
 	QuoteText,
+	Lead,
 } from '@giveth/ui-design-system';
 import { Col, Row } from '../Grid';
 import { Flex } from '../styled-components/Flex';
@@ -22,6 +23,7 @@ import {
 	FeaturesCardSubheading,
 	FeaturesCardItemsContainer,
 	FeaturesCardItem,
+	FeaturesCardBottomText,
 } from './Givpower.sc';
 import RocketImage from '../../../public/images/rocket.svg';
 import { GIVstreamRewardCard } from './GIVstream.sc';
@@ -100,7 +102,11 @@ export function TabPowerBottom() {
 							src={GivStake}
 							alt='givpower stake and lock icon'
 						/>
-						<H4>Stake & lock GIV </H4>
+						<H4 weight={700}>Stake & lock GIV </H4>
+						<Lead>Stake & lock GIV to get GIVpower.</Lead>
+						<FeaturesCardBottomText>
+							GET GIVPOWER
+						</FeaturesCardBottomText>
 					</FeaturesCardItem>
 					<FeaturesCardItem>
 						<div>
@@ -109,7 +115,14 @@ export function TabPowerBottom() {
 								color={brandColors.mustard[500]}
 							/>
 						</div>
-						<H4>Boost Projects</H4>
+						<H4 weight={700}>Boost Projects</H4>
+						<Lead>
+							Boost your favourite projects to help them rise
+							through the ranks.
+						</Lead>
+						<FeaturesCardBottomText>
+							BOOST PROJECTS
+						</FeaturesCardBottomText>
 					</FeaturesCardItem>
 					<FeaturesCardItem>
 						<Image
@@ -117,7 +130,13 @@ export function TabPowerBottom() {
 							src={Growth}
 							alt='givpower earn yield icon'
 						/>
-						<H4>Earn a Yield</H4>
+						<H4 weight={700}>Earn a Yield</H4>
+						<Lead>
+							The longer you lock, the greater your rewards.
+						</Lead>
+						<FeaturesCardBottomText>
+							SEE REWARDS
+						</FeaturesCardBottomText>
 					</FeaturesCardItem>
 				</FeaturesCardItemsContainer>
 			</FeaturesCardContainer>

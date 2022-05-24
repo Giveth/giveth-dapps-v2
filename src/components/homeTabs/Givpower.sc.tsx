@@ -1,5 +1,11 @@
 import styled from 'styled-components';
-import { D1, H1, QuoteText } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	ButtonText,
+	D1,
+	H1,
+	QuoteText,
+} from '@giveth/ui-design-system';
 import { BottomContainer, TopContainer } from './commons';
 import { mediaQueries } from '@/lib/constants/constants';
 import { ButtonStyled } from '../GeneralCard.sc';
@@ -67,11 +73,13 @@ export const FeaturesCardSubheading = styled(QuoteText)`
 export const FeaturesCardItemsContainer = styled.div`
 	display: flex;
 	flex-direction: column;
-	gap: 20px;
-	margin-top: 40px;
+	margin-top: 60px;
+	gap: 40px;
 	${mediaQueries.desktop} {
 		flex-direction: row;
 		justify-content: space-between;
+		gap: 20px;
+		margin-top: 106px;
 	}
 `;
 
@@ -79,4 +87,11 @@ export const FeaturesCardItem = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
+	max-width: 300px;
+	margin: auto;
+`;
+
+export const FeaturesCardBottomText = styled(ButtonText)`
+	color: ${brandColors.mustard[500]};
+	margin-top: 3px;
 `;
