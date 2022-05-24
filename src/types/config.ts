@@ -12,6 +12,7 @@ export enum StakingType {
 	SUSHISWAP = 'Sushiswap',
 	HONEYSWAP = 'Honeyswap',
 	GIV_LM = 'Staking',
+	GIVPOWER = 'GIVpower Staking',
 }
 
 export enum RegenFarmType {
