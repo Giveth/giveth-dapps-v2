@@ -12,6 +12,7 @@ import {
 import React, { FC, MouseEventHandler, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ethers } from 'ethers';
+import { useAppSelector } from '@/features/hooks';
 import BigNumber from 'bignumber.js';
 import { IconGIV } from './Icons/GIV';
 import { Flex } from './styled-components/Flex';
@@ -21,7 +22,6 @@ import { IconEthereum } from './Icons/Eth';
 import { IconGnosisChain } from './Icons/GnosisChain';
 import { WhatisStreamModal } from '@/components/modals/WhatisStream';
 import { WrongNetworkInnerModal } from './modals/WrongNetwork';
-import { usePrice } from '@/context/price.context';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 interface IRewardCardProps {
 	title?: string;
@@ -57,7 +57,7 @@ export const RewardCard: FC<IRewardCardProps> = ({
 	const [usdAmount, setUSDAmount] = useState('0');
 	const [showWhatIsGIVstreamModal, setShowWhatIsGIVstreamModal] =
 		useState(false);
-	const { givPrice } = usePrice();
+	const { givPrice } = useAppSelector(state => state.price);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	useEffect(() => {
 		const price = tokenPrice || givPrice;

@@ -44,7 +44,6 @@ import {
 	showFailedClaim,
 } from '../toasts/claim';
 import config from '@/configuration';
-import { usePrice } from '@/context/price.context';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
 import type { TransactionResponse } from '@ethersproject/providers';
@@ -93,7 +92,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 	);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const { balances } = useAppSelector(state => state.subgraph.currentValues);
-	const { givPrice } = usePrice();
+	const { givPrice } = useAppSelector(state => state.price);
 
 	const { account, library } = useWeb3React();
 

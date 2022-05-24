@@ -29,8 +29,8 @@ import { IconFox } from '@/components/Icons/Fox';
 import { IconCult } from '@/components/Icons/Cult';
 import { Flex } from './styled-components/Flex';
 import { HarvestAllModal } from './modals/HarvestAll';
-import { usePrice } from '@/context/price.context';
-import { useAppSelector } from '@/features/hooks';
+import { useAppSelector, useAppDispatch } from '@/features/hooks';
+import { getTokenPrice } from '@/features/price/price.thunks';
 import useRegenTokenDistroHelper from '@/hooks/useRegenTokenDistroHelper';
 
 interface RegenStreamProps {
@@ -53,6 +53,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 	network,
 	streamConfig,
 }) => {
+	const dispatch = useAppDispatch();
 	const [showModal, setShowModal] = useState(false);
 	const [usdAmount, setUSDAmount] = useState('0');
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
@@ -69,19 +70,22 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
 	const { balances } = currentValues;
 
-	const { getTokenPrice } = usePrice();
-
 	useEffect(() => {
-		const price = getTokenPrice(
-			streamConfig.tokenAddressOnUniswapV2,
-			network,
-		);
-		if (!price || price.isNaN()) return;
+		const getPrice = async () => {
+			const price: any = await dispatch(
+				getTokenPrice({
+					tokenAddress: streamConfig.tokenAddressOnUniswapV2,
+					network,
+				}),
+			);
+			if (!price || price?.payload?.isNaN()) return;
 
-		const usd = (+ethers.utils.formatEther(
-			price.times(rewardLiquidPart.toString()).toFixed(0),
-		)).toFixed(2);
-		setUSDAmount(usd);
+			const usd = (+ethers.utils.formatEther(
+				price?.payload?.times(rewardLiquidPart.toString()).toFixed(0),
+			)).toFixed(2);
+			setUSDAmount(usd);
+		};
+		getPrice();
 	}, [
 		getTokenPrice,
 		rewardLiquidPart,

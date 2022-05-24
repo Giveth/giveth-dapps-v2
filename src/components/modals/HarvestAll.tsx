@@ -10,6 +10,7 @@ import {
 	Lead,
 	P,
 } from '@giveth/ui-design-system';
+import { getTokenPrice } from '@/features/price/price.thunks';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { useWeb3React } from '@web3-react/core';
@@ -58,7 +59,6 @@ import { claimReward, fetchAirDropClaimData } from '@/lib/claim';
 import config from '@/configuration';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { AmountBoxWithPrice } from '@/components/AmountBoxWithPrice';
-import { usePrice } from '@/context/price.context';
 import { getPoolIconWithName } from '../cards/BaseStakingCard';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
@@ -109,7 +109,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	const [state, setState] = useState<HarvestStates>(HarvestStates.HARVEST);
 	const tokenSymbol = regenStreamConfig?.rewardTokenSymbol || 'GIV';
 	const { balances } = useAppSelector(state => state.subgraph.currentValues);
-	const { givPrice, getTokenPrice } = usePrice();
+	const { givPrice } = useAppSelector(state => state.price);
 	const { account, library } = useWeb3React();
 	const [txHash, setTxHash] = useState('');
 	//GIVdrop TODO: Should we show Givdrop in new  design?
@@ -139,7 +139,10 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	}, [regenStreamConfig, balances.givbackLiquidPart]);
 	const tokenPrice = useMemo(() => {
 		return regenStreamConfig
-			? getTokenPrice(regenStreamConfig.tokenAddressOnUniswapV2, network)
+			? getTokenPrice({
+					tokenAddress: regenStreamConfig.tokenAddressOnUniswapV2,
+					network,
+			  })
 			: givPrice;
 	}, [getTokenPrice, givPrice, network, regenStreamConfig]);
 
@@ -287,7 +290,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	const modalTitle = regenStreamConfig ? 'RegenFarm Rewards' : title;
 
 	const calcUSD = (amount: string) => {
-		const price = tokenPrice || givPrice;
+		const price = tokenPrice?.payload || givPrice;
 		return price.isNaN() ? '0' : price.times(amount).toFixed(2);
 	};
 

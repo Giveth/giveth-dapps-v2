@@ -8,7 +8,6 @@ import NProgress from 'nprogress';
 
 import { useRouter } from 'next/router';
 import { Provider } from 'react-redux';
-import { PriceProvider } from '@/context/price.context';
 import { GeneralProvider } from '@/context/general.context';
 import { useApollo } from '@/apollo/apolloClient';
 import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
@@ -62,17 +61,17 @@ function MyApp({ Component, pageProps }: AppProps) {
 				<GeneralProvider>
 					<ApolloProvider client={apolloClient}>
 						<Web3ReactProvider getLibrary={getLibrary}>
-							<PriceProvider>
-								{/* <UserProvider> */}
-								<SubgraphController />
-								<UserController />
-								<HeaderWrapper />
-								<Component {...pageProps} />
-								<FooterWrapper />
-								<ModalController />
-								<PriceController />
-								{/* </UserProvider> */}
-							</PriceProvider>
+							{/* <PriceProvider> */}
+							{/* <UserProvider> */}
+							<SubgraphController />
+							<UserController />
+							<HeaderWrapper />
+							<Component {...pageProps} />
+							<FooterWrapper />
+							<ModalController />
+							<PriceController />
+							{/* </UserProvider> */}
+							{/* </PriceProvider> */}
 						</Web3ReactProvider>
 					</ApolloProvider>
 				</GeneralProvider>

@@ -25,7 +25,6 @@ import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import { IProject } from '@/apollo/types/types';
 import { fetchPrice } from '@/services/token';
 import { switchNetwork } from '@/lib/wallet';
-import { usePrice } from '@/context/price.context';
 import GeminiModal from './GeminiModal';
 import config from '@/configuration';
 import TokenPicker from './TokenPicker';
@@ -84,8 +83,7 @@ const CryptoDonation = (props: {
 	const { isEnabled, isSignedIn, balance } = useAppSelector(
 		state => state.user,
 	);
-	const { ethPrice } = usePrice();
-
+	const { ethPrice } = useAppSelector(state => state.price);
 	const { project, setSuccessDonation } = props;
 	const { organization, verified, id: projectId, status } = project;
 	const {
