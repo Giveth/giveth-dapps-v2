@@ -3,7 +3,8 @@ import { useEffect } from 'react';
 
 import GIVstreamView from '@/components/views/Stream.view';
 import { useGeneral, ETheme } from '@/context/general.context';
-import { GiveconomyMeta } from '@/lib/meta';
+import { givstreamMetatags } from '@/content/metatags';
+import { GeneralMetatags } from '@/components/Metatag';
 
 export default function GIVstreamRoute() {
 	const { setTheme } = useGeneral();
@@ -17,8 +18,7 @@ export default function GIVstreamRoute() {
 	return (
 		<>
 			<Head>
-				<title>GIVstream</title>
-				<GiveconomyMeta />
+				<GeneralMetatags info={givstreamMetatags} />
 			</Head>
 			<GIVstreamView />
 		</>
