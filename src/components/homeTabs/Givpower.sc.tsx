@@ -11,6 +11,7 @@ import {
 import { BottomContainer, TopContainer } from './commons';
 import { mediaQueries } from '@/lib/constants/constants';
 import { ButtonStyled } from '../GeneralCard.sc';
+import { Arc } from '../styled-components/Arc';
 
 export const GIVpowerTopContainer = styled(TopContainer)`
 	overflow: hidden;
@@ -106,10 +107,10 @@ export const CenteredHeader = styled(H2)`
 `;
 
 export const BenefitsCardsContainer = styled.div`
-	position: relative;
 	display: flex;
 	flex-direction: column;
-	margin-top: 20px;
+	margin: 20px 0px;
+
 	${mediaQueries.laptop} {
 		gap: 20px;
 		flex-direction: row;
@@ -126,6 +127,7 @@ export const BenefitsCard = styled.div`
 	border-radius: 8px;
 	position: relative;
 	margin-top: 30px;
+	overflow: hidden;
 	background-image: url('/images/backgrounds/giv-outlined-bright-opacity.png');
 	${mediaQueries.tablet} {
 		padding: 60px;
@@ -150,4 +152,36 @@ export const BenefitsCardTextContainer = styled.div`
 
 export const BenefitsCardHeading = styled(H3)`
 	margin-bottom: 40px;
+`;
+
+export const ArcMustardTop = styled(Arc)`
+	border-color: ${brandColors.mustard[500]} ${brandColors.mustard[500]}
+		transparent transparent;
+	width: 600px;
+	height: 600px;
+	border-width: 50px;
+	transform: rotate(-45deg);
+	top: -100px;
+	right: -300px;
+	display: none;
+	${mediaQueries.laptop} {
+		top: 0px;
+		display: unset;
+	}
+	z-index: 0;
+`;
+export const ArcMustardBottom = styled(Arc)`
+	border-color: ${brandColors.cyan[500]} ${brandColors.cyan[500]} transparent
+		transparent;
+	width: 600px;
+	height: 600px;
+	border-width: 50px;
+	transform: rotate(-224deg);
+	left: -300px;
+	display: none;
+	${mediaQueries.laptop} {
+		bottom: -25px;
+		display: unset;
+	}
+	z-index: 0;
 `;
