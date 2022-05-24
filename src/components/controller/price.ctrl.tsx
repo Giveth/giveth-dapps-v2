@@ -49,13 +49,15 @@ const PriceController = () => {
 	const dispatch = useAppDispatch();
 	const { chainId } = useWeb3React();
 	const { pool } = useLiquidityPositions();
-	const [xDaiPrice, setXDaiPrice] = useState<BigNumber>(Zero);
-	const [mainnetPrice, setMainnetPrice] = useState<BigNumber>(Zero);
+	const [xDaiPrice, setXDaiPrice] = useState<string>('0');
+	const [mainnetPrice, setMainnetPrice] = useState<string>('0');
 	const xDaiValues = useAppSelector(state => state.subgraph.xDaiValues);
 
-	const { mainnetThirdPartyTokensPrice, xDaiThirdPartyTokensPrice } =
-		useAppSelector(state => state.price);
-	const { ethPrice } = useAppSelector(state => state.price.priceValues);
+	const {
+		mainnetThirdPartyTokensPrice,
+		xDaiThirdPartyTokensPrice,
+		ethPrice,
+	} = useAppSelector(state => state.price);
 
 	useEffect(() => {
 		const { uniswapV2EthGivPair } = xDaiValues;
@@ -66,16 +68,18 @@ const PriceController = () => {
 			switch (TOKEN_ADDRESS.toLowerCase()) {
 				case token0.toLowerCase():
 					setXDaiPrice(
-						ethPrice
+						new BigNumber(ethPrice)
 							.times(reserve1.toString())
-							.div(reserve0.toString()),
+							.div(reserve0.toString())
+							.toString(),
 					);
 					break;
 				case token1.toLowerCase():
 					setXDaiPrice(
-						ethPrice
+						new BigNumber(ethPrice)
 							.times(reserve0.toString())
-							.div(reserve1.toString()),
+							.div(reserve1.toString())
+							.toString(),
 					);
 					break;
 				default:
@@ -92,11 +96,19 @@ const PriceController = () => {
 			const { token1, token0, token0Price, token1Price } = pool;
 			switch (config.MAINNET_CONFIG.TOKEN_ADDRESS.toLowerCase()) {
 				case token0.address.toLowerCase():
-					setMainnetPrice(ethPrice.times(token0Price.toFixed(18)));
+					setMainnetPrice(
+						new BigNumber(ethPrice)
+							.times(token0Price.toFixed(18))
+							.toString(),
+					);
 					break;
 
 				case token1.address.toLowerCase():
-					setMainnetPrice(ethPrice.times(token1Price.toFixed(18)));
+					setMainnetPrice(
+						new BigNumber(ethPrice)
+							.times(token1Price.toFixed(18))
+							.toString(),
+					);
 					break;
 
 				default:
@@ -112,7 +124,8 @@ const PriceController = () => {
 		)
 			.then(async res => {
 				const data = await res.json();
-				dispatch(setEthPrice(new BigNumber(data.rate)));
+				console.log({ data });
+				dispatch(setEthPrice(data.rate.toString()));
 			})
 			.catch(error => {
 				console.error(

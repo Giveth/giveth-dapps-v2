@@ -92,7 +92,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 	);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const { balances } = useAppSelector(state => state.subgraph.currentValues);
-	const { givPrice } = useAppSelector(state => state.price.priceValues);
+	const { givPrice } = useAppSelector(state => state.price);
 
 	const { account, library } = useWeb3React();
 
@@ -122,7 +122,9 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 	}, [givdropAmount, givTokenDistroHelper, claimableNow, givBackLiquidPart]);
 
 	const calcUSD = (amount: string) => {
-		return givPrice.isNaN() ? '0' : givPrice.times(amount).toFixed(2);
+		return new BigNumber(givPrice).isNaN()
+			? '0'
+			: new BigNumber(givPrice).times(amount).toFixed(2);
 	};
 
 	const onClaim = async () => {

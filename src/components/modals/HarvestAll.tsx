@@ -110,7 +110,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	const [state, setState] = useState<HarvestStates>(HarvestStates.HARVEST);
 	const tokenSymbol = regenStreamConfig?.rewardTokenSymbol || 'GIV';
 	const { balances } = useAppSelector(state => state.subgraph.currentValues);
-	const { givPrice } = useAppSelector(state => state.price.priceValues);
+	const { givPrice } = useAppSelector(state => state.price);
 
 	const { account, library } = useWeb3React();
 	const [tokenPrice, setTokenPrice] = useState<BigNumber>(Zero);
@@ -151,7 +151,6 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 						network,
 					}),
 				);
-				console.log({ AAAA: price });
 			} else {
 				price = givPrice;
 			}
@@ -303,8 +302,8 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 
 	const modalTitle = regenStreamConfig ? 'RegenFarm Rewards' : title;
 	const calcUSD = (amount: string) => {
-		const price = tokenPrice || givPrice;
-		return price.isNaN() ? '0' : price.times(amount).toFixed(2);
+		const price = new BigNumber(tokenPrice) || new BigNumber(givPrice);
+		return price?.isNaN() ? '0' : price.times(amount).toFixed(2);
 	};
 
 	return (

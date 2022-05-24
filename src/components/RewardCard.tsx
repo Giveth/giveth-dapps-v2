@@ -57,12 +57,11 @@ export const RewardCard: FC<IRewardCardProps> = ({
 	const [usdAmount, setUSDAmount] = useState('0');
 	const [showWhatIsGIVstreamModal, setShowWhatIsGIVstreamModal] =
 		useState(false);
-	const { givPrice } = useAppSelector(state => state.price.priceValues);
+	const { givPrice } = useAppSelector(state => state.price);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	useEffect(() => {
-		const price = tokenPrice || givPrice;
+		const price = tokenPrice || new BigNumber(givPrice);
 		if (!price || price.isNaN()) return;
-
 		const usd = (+ethers.utils.formatEther(
 			price.times(liquidAmount.toString()).toFixed(0),
 		)).toFixed(2);
