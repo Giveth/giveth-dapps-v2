@@ -24,7 +24,8 @@ export const StakingPoolContainer = styled.div`
 	padding: 1px 0;
 `;
 export const StakingPoolExchangeRow = styled(Flex)`
-	margin: 16px;
+	margin: 16px 16px 0;
+	height: 21px;
 `;
 
 export const StakingPoolExchange = styled(Overline)`
@@ -32,7 +33,7 @@ export const StakingPoolExchange = styled(Overline)`
 `;
 
 export const SPTitle = styled(Flex)`
-	margin-top: 12px;
+	margin-top: 2px;
 	margin-bottom: 24px;
 `;
 
@@ -197,4 +198,25 @@ export const DisableModalCloseButton = styled(OulineButton)`
 export const DisableModalImage = styled.div`
 	width: 36px;
 	color: ${brandColors.giv[500]};
+`;
+
+export const CardTag = styled.div`
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 68px;
+	height: 104px;
+	border-bottom-left-radius: 28px;
+	background-color: ${brandColors.giv[700]};
+	padding: 11px;
+`;
+
+export const GIVpowerLogoCardTag = styled.div`
+	background-color: ${brandColors.pinky[500]};
+	border-radius: 16px;
+	color: white;
+	text-align: center;
+	padding: 8px 15px 4px;
+	position: absolute;
+	bottom: 11px;
 `;

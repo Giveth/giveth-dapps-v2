@@ -5,6 +5,8 @@ import {
 	brandColors,
 	IconHelp,
 	IconExternalLink,
+	IconLock16,
+	IconRocketInSpace16,
 } from '@giveth/ui-design-system';
 import { constants } from 'ethers';
 import BigNumber from 'bignumber.js';
@@ -46,6 +48,8 @@ import {
 	DisableModalText,
 	DisableModalCloseButton,
 	DisableModalImage,
+	CardTag,
+	GIVpowerLogoCardTag,
 } from './BaseStakingCard.sc';
 import { APRModal } from '../modals/APR';
 import { StakeModal } from '../modals/Stake';
@@ -200,8 +204,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		setStarted(farmStartTimeMS ? getNowUnixMS() > farmStartTimeMS : true);
 	}, [farmStartTimeMS]);
 
-	// if(isInactive) return null
-
 	return (
 		<>
 			<StakingPoolContainer>
@@ -235,6 +237,13 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				)}
 				{state === StakeCardState.NORMAL ? (
 					<>
+						{type === StakingType.GIVPOWER && (
+							<CardTag>
+								<GIVpowerLogoCardTag>
+									<IconRocketInSpace16 />
+								</GIVpowerLogoCardTag>
+							</CardTag>
+						)}
 						<StakingPoolExchangeRow gap='4px' alignItems='center'>
 							{getPoolIconWithName(type)}
 							<StakingPoolExchange styleType='Small'>
@@ -413,31 +422,48 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								</StakeContainer>
 							</StakeButtonsRow>
 							{!isInactive && (
-								<LiquidityButton
-									label={
-										type === StakingType.GIV_LM
-											? 'BUY GIV TOKENS'
-											: 'PROVIDE LIQUIDITY'
-									}
-									onClick={() => {
-										if (isInactive) {
-											setShowUniV3APRModal(true);
-										} else {
-											window.open(
-												type === StakingType.GIV_LM
-													? BUY_LINK
-													: provideLiquidityLink,
-											);
+								<Flex>
+									<LiquidityButton
+										label={
+											type === StakingType.GIV_LM ||
+											StakingType.GIVPOWER
+												? 'BUY GIV TOKENS'
+												: 'PROVIDE LIQUIDITY'
 										}
-									}}
-									buttonType='texty'
-									icon={
-										<IconExternalLink
-											size={16}
-											color={brandColors.deep[100]}
+										onClick={() => {
+											if (isInactive) {
+												setShowUniV3APRModal(true);
+											} else {
+												window.open(
+													type === StakingType.GIV_LM
+														? BUY_LINK
+														: provideLiquidityLink,
+												);
+											}
+										}}
+										buttonType='texty'
+										icon={
+											<IconExternalLink
+												size={16}
+												color={brandColors.deep[100]}
+											/>
+										}
+									/>
+									{type === StakingType.GIVPOWER && (
+										<LiquidityButton
+											label='MANAGE GIV'
+											onClick={() => {}}
+											buttonType='texty'
+											icon={
+												<IconLock16
+													color={
+														brandColors.deep[100]
+													}
+												/>
+											}
 										/>
-									}
-								/>
+									)}
+								</Flex>
 							)}
 						</StakePoolInfoContainer>
 					</>
