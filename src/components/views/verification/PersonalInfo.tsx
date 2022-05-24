@@ -1,4 +1,4 @@
-import { H6 } from '@giveth/ui-design-system';
+import { brandColors, H6 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import InputBox from '@/components/InputBox';
 import { Flex } from '@/components/styled-components/Flex';
@@ -26,7 +26,11 @@ const PersonalInfo = () => {
 					label='What is your email address?'
 					value={'lauren@giveth.io'}
 				/>
-				<ButtonStyled label='VERIFY EMAIL ADDRESS' size='small' />
+				<ButtonStyled
+					color={brandColors.giv[500]}
+					label='VERIFY EMAIL ADDRESS'
+					size='small'
+				/>
 			</EmailSection>
 		</>
 	);
