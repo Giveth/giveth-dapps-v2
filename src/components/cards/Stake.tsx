@@ -160,7 +160,8 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 			promiseQueue.push(promise);
 		});
 		config.MAINNET_CONFIG.pools.forEach(poolStakingConfig => {
-			if (poolStakingConfig.type === StakingType.UNISWAPV3) return;
+			if (poolStakingConfig.type === StakingType.UNISWAPV3_ETH_GIV)
+				return;
 
 			const unipool = mainnetValues[poolStakingConfig.type];
 			const unipoolHelper = unipool && new UnipoolHelper(unipool);

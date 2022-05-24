@@ -8,6 +8,8 @@ export interface IBalances {
 	rewardsSushiSwap: string;
 	rewardPerTokenPaidHoneyswap: string;
 	rewardsHoneyswap: string;
+	rewardPerTokenPaidHoneyswapGivDai: string;
+	rewardsHoneyswapGivDai: string;
 	rewardPerTokenPaidBalancer: string;
 	rewardsBalancer: string;
 	rewardPerTokenPaidUniswapV2GivDai: string;
@@ -22,6 +24,8 @@ export interface IBalances {
 	sushiSwapLpStaked: string;
 	honeyswapLp: string;
 	honeyswapLpStaked: string;
+	honeyswapGivDaiLp: string;
+	honeyswapGivDaiLpStaked: string;
 	givStaked: string;
 	allocationCount: number;
 	givDropClaimed: boolean;
@@ -50,6 +54,8 @@ export const ZeroBalances: IBalances = {
 	rewardsSushiSwap: '0',
 	rewardPerTokenPaidHoneyswap: '0',
 	rewardsHoneyswap: '0',
+	rewardPerTokenPaidHoneyswapGivDai: '0',
+	rewardsHoneyswapGivDai: '0',
 	rewardPerTokenPaidBalancer: '0',
 	rewardsBalancer: '0',
 	rewardPerTokenPaidUniswapV2GivDai: '0',
@@ -64,6 +70,8 @@ export const ZeroBalances: IBalances = {
 	sushiSwapLpStaked: '0',
 	honeyswapLp: '0',
 	honeyswapLpStaked: '0',
+	honeyswapGivDaiLp: '0',
+	honeyswapGivDaiLpStaked: '0',
 	givStaked: '0',
 	allocationCount: 0,
 	givDropClaimed: false,
