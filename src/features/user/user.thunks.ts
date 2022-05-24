@@ -3,8 +3,9 @@ import { gqlRequest } from '@/helpers/requests';
 import { GET_USER_BY_ADDRESS } from './user.queries';
 import { ISignToGetToken } from './user.types';
 import { createSiweMessage } from '@/lib/helpers';
-import { getToken } from '@/services/token';
 import { RootState } from '../store';
+import { postRequest } from '@/helpers/requests';
+import config from '@/configuration';
 
 export const fetchUserByAddress = createAsyncThunk(
 	'user/fetchUser',
@@ -34,7 +35,14 @@ export const signToGetToken = createAsyncThunk(
 				if (!state.user.userData) {
 					await dispatch(fetchUserByAddress(address));
 				}
-				const token = await getToken(signature, message, nonce);
+				const token = await postRequest(
+					`${config.MICROSERVICES.authentication}/authentication`,
+					{
+						signature,
+						message,
+						nonce,
+					},
+				);
 				return token.jwt;
 			} else {
 				return Promise.reject('Signing failed');
@@ -43,5 +51,17 @@ export const signToGetToken = createAsyncThunk(
 			console.log({ error });
 			return Promise.reject('Signing failed');
 		}
+	},
+);
+
+export const signOut = createAsyncThunk(
+	'user/signOut',
+	async (token: string) => {
+		return await postRequest(
+			`${config.MICROSERVICES.authentication}/logout`,
+			{
+				jwt: token,
+			},
+		);
 	},
 );

@@ -6,7 +6,6 @@ import { initializeApollo } from '@/apollo/apolloClient';
 import { LOGIN_USER } from '@/apollo/gql/gqlAuth';
 import { showToastError } from '@/lib/helpers';
 import config from '@/configuration';
-import { postRequest } from '@/helpers/requests';
 
 const apolloClient = initializeApollo();
 
@@ -43,27 +42,6 @@ export async function __oldWay_getToken(
 	} else {
 		showToastError('Input data for getting token is incomplete');
 	}
-}
-
-export async function getToken(
-	signature: string,
-	message: string,
-	nonce: string,
-) {
-	return await postRequest(
-		`${config.MICROSERVICES.authentication}/authentication`,
-		{
-			signature,
-			message,
-			nonce,
-		},
-	);
-}
-
-export async function logoutToken(jwt: string) {
-	return await postRequest(`${config.MICROSERVICES.authentication}/logout`, {
-		jwt,
-	});
 }
 
 export const fetchPrice = async (

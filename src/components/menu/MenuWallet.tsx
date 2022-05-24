@@ -26,8 +26,7 @@ import {
 	setShowCompleteProfile,
 	setShowWalletModal,
 } from '@/features/modal/modal.sclie';
-import { logoutToken } from '@/services/token';
-import { signOut } from '@/features/user/user.slice';
+import { signOut } from '@/features/user/user.thunks';
 
 const MenuWallet = () => {
 	const [isMounted, setIsMounted] = useState(false);
@@ -138,10 +137,7 @@ const MenuWallet = () => {
 					))}
 					{isSignedIn && (
 						<MenuItem
-							onClick={async () => {
-								await logoutToken(token!);
-								dispatch(signOut());
-							}}
+							onClick={() => dispatch(signOut(token!))}
 							theme={theme}
 						>
 							Sign out
