@@ -23,7 +23,12 @@ import {
 	FeaturesCardSubheading,
 	FeaturesCardItemsContainer,
 	FeaturesCardItem,
-	FeaturesCardBottomText,
+	CenteredHeader,
+	BenefitsCardsContainer,
+	BenefitsCard,
+	BenefitsCardTextContainer,
+	BenefitsCardHeading,
+	CardBottomText,
 } from './Givpower.sc';
 import RocketImage from '../../../public/images/rocket.svg';
 import { GIVstreamRewardCard } from './GIVstream.sc';
@@ -104,9 +109,7 @@ export function TabPowerBottom() {
 						/>
 						<H4 weight={700}>Stake & lock GIV </H4>
 						<Lead>Stake & lock GIV to get GIVpower.</Lead>
-						<FeaturesCardBottomText>
-							GET GIVPOWER
-						</FeaturesCardBottomText>
+						<CardBottomText>GET GIVPOWER</CardBottomText>
 					</FeaturesCardItem>
 					<FeaturesCardItem>
 						<div>
@@ -120,9 +123,7 @@ export function TabPowerBottom() {
 							Boost your favourite projects to help them rise
 							through the ranks.
 						</Lead>
-						<FeaturesCardBottomText>
-							BOOST PROJECTS
-						</FeaturesCardBottomText>
+						<CardBottomText>BOOST PROJECTS</CardBottomText>
 					</FeaturesCardItem>
 					<FeaturesCardItem>
 						<Image
@@ -134,12 +135,55 @@ export function TabPowerBottom() {
 						<Lead>
 							The longer you lock, the greater your rewards.
 						</Lead>
-						<FeaturesCardBottomText>
-							SEE REWARDS
-						</FeaturesCardBottomText>
+						<CardBottomText>SEE REWARDS</CardBottomText>
 					</FeaturesCardItem>
 				</FeaturesCardItemsContainer>
 			</FeaturesCardContainer>
+			<CenteredHeader weight={700}>
+				Win-win for GIVers & Projects
+			</CenteredHeader>
+			<BenefitsCardsContainer>
+				<BenefitsCard>
+					<BenefitsCardHeading weight={700}>
+						For GIVers
+					</BenefitsCardHeading>
+					<BenefitsCardTextContainer>
+						<QuoteText size='small'>
+							Stake GIV to get GIVpower & earn rewards.
+						</QuoteText>
+						<QuoteText size='small'>
+							Lock your GIV to increase your rewards multiplier.
+						</QuoteText>
+						<QuoteText size='small'>
+							Donate to the top-boosted projects to get more
+							GIVbacks.
+						</QuoteText>
+						<br />
+						<CardBottomText>GET GIVPOWER</CardBottomText>
+					</BenefitsCardTextContainer>
+				</BenefitsCard>
+				<BenefitsCard>
+					<BenefitsCardHeading weight={700}>
+						For Projects
+					</BenefitsCardHeading>
+					<BenefitsCardTextContainer>
+						<QuoteText size='small'>
+							Fire up your community to get more boosts & improve
+							your rank.
+						</QuoteText>
+						<QuoteText size='small'>
+							Top-ranked projects get funding from the Giveth
+							Matching Pool.
+						</QuoteText>
+						<QuoteText size='small'>
+							The higher your rank, the more GIVbacks your donors
+							receive.
+						</QuoteText>
+						<br />
+						<CardBottomText>GET GIVPOWER</CardBottomText>
+					</BenefitsCardTextContainer>
+				</BenefitsCard>
+			</BenefitsCardsContainer>
 		</TopInnerContainer>
 	);
 }

@@ -4,6 +4,8 @@ import {
 	ButtonText,
 	D1,
 	H1,
+	H2,
+	H3,
 	QuoteText,
 } from '@giveth/ui-design-system';
 import { BottomContainer, TopContainer } from './commons';
@@ -56,9 +58,12 @@ export const FeaturesCardContainer = styled.div`
 	border-radius: 8px;
 	min-height: 480px;
 	margin: 80px 0 45px;
-	padding: 76px 60px;
+	padding: 26px 20px;
 	position: relative;
 	text-align: center;
+	${mediaQueries.tablet} {
+		padding: 76px 60px;
+	}
 `;
 export const FeaturesCardHeading = styled(H1)`
 	text-align: center;
@@ -91,7 +96,58 @@ export const FeaturesCardItem = styled.div`
 	margin: auto;
 `;
 
-export const FeaturesCardBottomText = styled(ButtonText)`
+export const CardBottomText = styled(ButtonText)`
 	color: ${brandColors.mustard[500]};
 	margin-top: 3px;
+`;
+
+export const CenteredHeader = styled(H2)`
+	text-align: center;
+`;
+
+export const BenefitsCardsContainer = styled.div`
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	margin-top: 20px;
+	${mediaQueries.laptop} {
+		gap: 20px;
+		flex-direction: row;
+	}
+`;
+
+export const BenefitsCard = styled.div`
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	padding: 30px;
+	text-align: center;
+	background-color: #4c32e3;
+	border-radius: 8px;
+	position: relative;
+	margin-top: 30px;
+	background-image: url('/images/backgrounds/giv-outlined-bright-opacity.png');
+	${mediaQueries.tablet} {
+		padding: 60px;
+	}
+	${mediaQueries.desktop} {
+		display: row;
+		width: 50%;
+	}
+`;
+
+export const BenefitsCardTextContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	margin: auto;
+	${mediaQueries.desktop} {
+		display: row;
+		width: 50%;
+		width: 360px;
+	}
+`;
+
+export const BenefitsCardHeading = styled(H3)`
+	margin-bottom: 40px;
 `;
