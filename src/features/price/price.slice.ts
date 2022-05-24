@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import BigNumber from 'bignumber.js';
 import { Zero } from '@/helpers/number';
 import type { IPriceState, IPriceValues } from './price.types';
-import BigNumber from 'bignumber.js';
 
 export const priceValues: IPriceValues = {
 	givPrice: Zero,

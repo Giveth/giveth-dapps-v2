@@ -1,9 +1,4 @@
-import {
-	configureStore,
-	ThunkAction,
-	Action,
-	getDefaultMiddleware,
-} from '@reduxjs/toolkit';
+import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 // import { subgraphApiSlice } from './subgraph-api-slice';
 import priceReducer from './price/price.slice';
 import subgraphReducer from './subgraph/subgraph.slice';
