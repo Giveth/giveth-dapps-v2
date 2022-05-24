@@ -5,10 +5,13 @@ import { ITokenAllocation } from '@/types/subgraph';
 export const fetchSubgraph = async (
 	query: string,
 	network: number,
+	customLink?: string,
 ): Promise<any> => {
 	const reqBody = { query };
 	let uri;
-	if (network === config.MAINNET_NETWORK_NUMBER) {
+	if (customLink) {
+		uri = customLink;
+	} else if (network === config.MAINNET_NETWORK_NUMBER) {
 		uri = config.MAINNET_CONFIG.subgraphAddress;
 	} else if (network === config.XDAI_NETWORK_NUMBER) {
 		uri = config.XDAI_CONFIG.subgraphAddress;

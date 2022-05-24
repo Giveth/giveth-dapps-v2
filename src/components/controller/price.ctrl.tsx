@@ -11,6 +11,7 @@ import {
 	setMainnetThirdPartTokensPrice,
 	setXDaiThirdPartTokensPrice,
 } from '@/features/price/price.slice';
+import { fetchSubgraph } from '@/services/subgraph.service';
 import config from '@/configuration';
 
 const fetchUniswapSubgraphTokenPrice = async (
@@ -20,19 +21,17 @@ const fetchUniswapSubgraphTokenPrice = async (
 	if (!subgraphUrl || !tokenAddress) return Zero;
 
 	try {
-		const query = `
-		{
-			token(id:"${tokenAddress.toLowerCase()}") {
-				derivedETH
+		const data = await fetchSubgraph(
+			`
+			{
+				token(id:"${tokenAddress.toLowerCase()}") {
+					derivedETH
+				}
 			}
-		}
-		`;
-		const body = { query };
-		const res = await fetch(subgraphUrl, {
-			method: 'POST',
-			body: JSON.stringify(body),
-		});
-		const { data } = await res.json();
+		`,
+			0,
+			subgraphUrl,
+		);
 		return new BigNumber(data?.token?.derivedETH || 0);
 	} catch (e) {
 		console.error('Error fetching token price:', tokenAddress, e);
