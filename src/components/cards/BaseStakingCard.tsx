@@ -144,8 +144,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		active,
 	} = poolStakingConfig;
 
-	const isInactive = !active || type === StakingType.UNISWAPV3_ETH_GIV;
-
 	const {
 		apr,
 		earned,
@@ -201,12 +199,10 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		setStarted(farmStartTimeMS ? getNowUnixMS() > farmStartTimeMS : true);
 	}, [farmStartTimeMS]);
 
-	// if(isInactive) return null
-
 	return (
 		<>
 			<StakingPoolContainer>
-				{isInactive && disableModal && (
+				{!active && disableModal && (
 					<DisableModal>
 						<DisableModalContent>
 							<DisableModalImage>
@@ -291,9 +287,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									<FirstDetail justifyContent='space-between'>
 										<DetailLabel>APR</DetailLabel>
 										<Flex gap='8px' alignItems='center'>
-											{isInactive ? (
-												<div>N/A %</div>
-											) : (
+											{active ? (
 												<>
 													<IconSpark
 														size={24}
@@ -320,18 +314,20 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 														<IconHelp size={16} />
 													</IconContainer>
 												</>
+											) : (
+												<div>N/A %</div>
 											)}
 										</Flex>
 									</FirstDetail>
 									<Detail justifyContent='space-between'>
 										<DetailLabel>Claimable</DetailLabel>
 										<DetailValue>
-											{isInactive ? (
-												<div>N/A</div>
-											) : (
+											{active ? (
 												`${formatWeiHelper(
 													rewardLiquidPart,
 												)} ${rewardTokenSymbol}`
+											) : (
+												<div>N/A</div>
 											)}
 										</DetailValue>
 									</Detail>
@@ -350,12 +346,12 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 										</Flex>
 										<Flex gap='4px' alignItems='center'>
 											<DetailValue>
-												{isInactive ? (
-													<div>N/A</div>
-												) : (
+												{active ? (
 													formatWeiHelper(
 														rewardStream,
 													)
+												) : (
+													<div>N/A</div>
 												)}
 											</DetailValue>
 											<DetailUnit>
@@ -371,7 +367,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								/>
 							)}
 							<ClaimButton
-								disabled={earned.isZero() || isInactive}
+								disabled={!active || earned.isZero()}
 								onClick={() => setShowHarvestModal(true)}
 								label='HARVEST REWARDS'
 								buttonType='primary'
@@ -382,13 +378,13 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 										label='STAKE'
 										size='small'
 										disabled={
-											BN(userNotStakedAmount).isZero() ||
-											isInactive
+											!active ||
+											BN(userNotStakedAmount).isZero()
 										}
 										onClick={() => setShowStakeModal(true)}
 									/>
 									<StakeAmount>
-										{isInactive
+										{type === StakingType.UNISWAPV3_ETH_GIV
 											? `${userNotStakedAmount.toNumber()} ${unit}`
 											: `${formatWeiHelper(
 													userNotStakedAmount,
@@ -405,7 +401,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 										}
 									/>
 									<StakeAmount>
-										{isInactive
+										{type === StakingType.UNISWAPV3_ETH_GIV
 											? `${stakedLpAmount.toNumber()} ${unit}`
 											: `${formatWeiHelper(
 													stakedLpAmount,
@@ -413,7 +409,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									</StakeAmount>
 								</StakeContainer>
 							</StakeButtonsRow>
-							{!isInactive && (
+							{active && (
 								<LiquidityButton
 									label={
 										type === StakingType.GIV_LM
@@ -421,7 +417,10 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 											: 'PROVIDE LIQUIDITY'
 									}
 									onClick={() => {
-										if (isInactive) {
+										if (
+											type ===
+											StakingType.UNISWAPV3_ETH_GIV
+										) {
 											setShowUniV3APRModal(true);
 										} else {
 											window.open(
@@ -465,7 +464,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				/>
 			)}
 			{showStakeModal &&
-				(isInactive ? (
+				(type === StakingType.UNISWAPV3_ETH_GIV ? (
 					<V3StakeModal
 						setShowModal={setShowStakeModal}
 						poolStakingConfig={poolStakingConfig}
@@ -485,7 +484,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					/>
 				))}
 			{showUnStakeModal &&
-				(isInactive ? (
+				(type === StakingType.UNISWAPV3_ETH_GIV ? (
 					<V3StakeModal
 						isUnstakingModal={true}
 						setShowModal={setShowUnStakeModal}
