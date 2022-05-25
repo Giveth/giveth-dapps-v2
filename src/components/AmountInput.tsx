@@ -4,7 +4,7 @@ import { FC, useState, useCallback, Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
 import { formatWeiHelper } from '@/helpers/number';
-import { PoolStakingConfig } from '@/types/config';
+import { PoolStakingConfig, StakingPlatform } from '@/types/config';
 import { Flex } from './styled-components/Flex';
 import { NumericalInput } from '@/components/input/index';
 
@@ -60,23 +60,15 @@ export const AmountInput: FC<IAmountInput> = ({
 			<InputLabelRow justifyContent='space-between'>
 				<InputLabel>
 					<InputLabelText>Available: </InputLabelText>
-					{poolStakingConfig.type === 'Staking' ? (
-						<InputLabelValue>
-							&nbsp;
-							{formatWeiHelper(maxAmount)}
-							&nbsp;
-							{poolStakingConfig.title}
-							&nbsp;
-						</InputLabelValue>
-					) : (
-						<InputLabelValue>
-							&nbsp;
-							{formatWeiHelper(maxAmount)}
-							&nbsp;
-							{poolStakingConfig.title}
-							&nbsp;LP
-						</InputLabelValue>
-					)}
+					<InputLabelValue>
+						&nbsp;
+						{formatWeiHelper(maxAmount)}
+						&nbsp;
+						{poolStakingConfig.title}
+						&nbsp;
+						{poolStakingConfig.platform !==
+							StakingPlatform.GIVETH && 'LP'}
+					</InputLabelValue>
 				</InputLabel>
 				<InputLabelAction
 					onClick={() => {

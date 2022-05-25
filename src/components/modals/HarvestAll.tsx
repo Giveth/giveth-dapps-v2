@@ -484,7 +484,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 													{poolStakingConfig.title}
 													<PoolIcon>
 														{getPoolIconWithName(
-															poolStakingConfig.type,
+															poolStakingConfig.platform,
 														)}
 													</PoolIcon>
 												</BreakdownTitle>

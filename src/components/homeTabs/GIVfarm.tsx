@@ -57,7 +57,8 @@ const renderPools = (
 					lg={4}
 					key={`staking_pool_card_${network}_${index}`}
 				>
-					{poolStakingConfig.type === StakingType.UNISWAPV3 ? (
+					{poolStakingConfig.type ===
+					StakingType.UNISWAPV3_ETH_GIV ? (
 						<StakingPositionCard
 							poolStakingConfig={poolStakingConfig}
 						/>
