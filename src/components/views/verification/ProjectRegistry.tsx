@@ -1,8 +1,9 @@
 import { H6, Lead, neutralColors, P } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useState } from 'react';
 import RadioTitle from '../donate/RadioTitle';
-
 export default function ProjectRegistry() {
+	const [isNonProfit, setIsNonProfit] = useState(true);
 	return (
 		<>
 			<H6 weight={700}>Project registry</H6>
@@ -16,18 +17,19 @@ export default function ProjectRegistry() {
 					Having obtained non-profit status is not a requirement but
 					it is helpful for the verification process
 				</RadioSectionSubTitle>
-				<div style={{ display: 'flex', gap: '160px' }}>
+				<br />
+				<RadioContainer>
 					<RadioTitle
 						title='Yes'
-						toggleRadio={() => null}
-						isSelected={true}
+						toggleRadio={() => setIsNonProfit(true)}
+						isSelected={isNonProfit}
 					/>
 					<RadioTitle
 						title='No'
-						toggleRadio={() => null}
-						isSelected={false}
+						toggleRadio={() => setIsNonProfit(false)}
+						isSelected={!isNonProfit}
 					/>
-				</div>
+				</RadioContainer>
 			</RadioSectionContainer>
 		</>
 	);
@@ -47,4 +49,9 @@ const RadioSectionTitle = styled(Lead)`
 const RadioSectionSubTitle = styled(P)`
 	color: ${neutralColors.gray[700]};
 	margin-bottom: 8px;
+`;
+
+const RadioContainer = styled.div`
+	display: flex;
+	gap: 160px;
 `;
