@@ -173,13 +173,13 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 
 	//calculate Liquid Sum
 	useEffect(() => {
-		setSumLiquid(rewardLiquidPart.add(givbackLiquidPart).add(earnedLiquid));
-	}, [rewardLiquidPart, givbackLiquidPart, earnedLiquid]);
+		setSumLiquid(rewardLiquidPart.add(earnedLiquid)); // earnedLiquid includes the givback liquid part
+	}, [rewardLiquidPart, earnedLiquid]);
 
 	//calculate Stream Sum
 	useEffect(() => {
-		setSumStream(BigNumber.sum(rewardStream, givBackStream, earnedStream));
-	}, [rewardStream, givBackStream, earnedStream]);
+		setSumStream(BigNumber.sum(rewardStream, earnedStream)); // earnedLiquid includes the givback stream part
+	}, [rewardStream, earnedStream]);
 
 	useEffect(() => {
 		if (!tokenDistroHelper) return;
