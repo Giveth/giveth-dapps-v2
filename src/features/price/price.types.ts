@@ -1,10 +1,12 @@
-import BigNumber from 'bignumber.js';
-
 export interface IPriceState {
 	givPrice: string;
 	ethPrice: string;
-	mainnetThirdPartyTokensPrice: { [tokenAddress: string]: BigNumber };
-	xDaiThirdPartyTokensPrice: { [tokenAddress: string]: BigNumber };
+	mainnetPrice: string | undefined;
+	xDaiPrice: string | undefined;
+	mainnetThirdPartyTokensPrice:
+		| { [tokenAddress: string]: string }
+		| undefined;
+	xDaiThirdPartyTokensPrice: { [tokenAddress: string]: string } | undefined;
 }
 
 export interface IGetTokenPrice {

@@ -151,10 +151,11 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 						network,
 					}),
 				);
+				setTokenPrice(price?.payload);
 			} else {
 				price = givPrice;
+				setTokenPrice(price);
 			}
-			setTokenPrice(price);
 		};
 		getPrice();
 	}, [givPrice, network, regenStreamConfig]);

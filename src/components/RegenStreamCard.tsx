@@ -72,16 +72,16 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 
 	useEffect(() => {
 		const getPrice = async () => {
-			const price: any = await dispatch(
+			const priceData: any = await dispatch(
 				getTokenPrice({
 					tokenAddress: streamConfig.tokenAddressOnUniswapV2,
 					network,
 				}),
 			);
-			if (!price || price?.payload?.isNaN()) return;
-
+			const price = new BigNumber(priceData?.payload);
+			if (!price || price?.isNaN()) return;
 			const usd = (+ethers.utils.formatEther(
-				price?.payload?.times(rewardLiquidPart.toString()).toFixed(0),
+				price.times(rewardLiquidPart.toString()).toFixed(0),
 			)).toFixed(2);
 			setUSDAmount(usd);
 		};
