@@ -32,7 +32,7 @@ const config: EnvConfig = {
 		blockExplorerName: ['Etherscan'],
 		blockExplorerUrls: ['https://kovan.etherscan.io'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/mohammadranjbarz/giv-economy-kovan-deployment-seven',
+			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-kovan-staging',
 
 		TOKEN_ADDRESS: '0x29434A25abd94AE882aA883eea81585Aaa5b078D',
 		WETH_TOKEN_ADDRESS: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
@@ -155,7 +155,7 @@ const config: EnvConfig = {
 		blockExplorerName: ['Blockscout'],
 		blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/mohammadranjbarz/giv-economy-xdai-deployment-seven',
+			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-xdai-staging',
 
 		TOKEN_ADDRESS: '0x83a8eea6427985C523a0c4d9d3E62C051B6580d3',
 		MERKLE_ADDRESS: '0xc87403C70c9FBfb594d98d3B5E695BBE4C694188',
