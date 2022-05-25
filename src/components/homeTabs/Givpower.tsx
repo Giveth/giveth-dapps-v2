@@ -7,6 +7,7 @@ import {
 	IconRocketInSpace32,
 	QuoteText,
 	Lead,
+	H1,
 } from '@giveth/ui-design-system';
 import { Col, Row } from '../Grid';
 import { Flex } from '../styled-components/Flex';
@@ -31,6 +32,13 @@ import {
 	CardBottomText,
 	ArcMustardTop,
 	ArcMustardBottom,
+	GivpowerCTAContainer,
+	GivpowerCTASubheading,
+	Circle,
+	HeaderAndCirclesContainer,
+	GivpowerCTAButton,
+	GivpowerCTAButtonOutlined,
+	GivpowerCTAButtonContainer,
 } from './Givpower.sc';
 import RocketImage from '../../../public/images/rocket.svg';
 import { GIVstreamRewardCard } from './GIVstream.sc';
@@ -142,9 +150,14 @@ export function TabPowerBottom() {
 						</FeaturesCardItem>
 					</FeaturesCardItemsContainer>
 				</FeaturesCardContainer>
-				<CenteredHeader weight={700}>
-					Win-win for GIVers & Projects
-				</CenteredHeader>
+				<HeaderAndCirclesContainer>
+					<Circle size={350} />
+					<Circle size={700} />
+					<Circle size={1150} />
+					<CenteredHeader weight={700}>
+						Win-win for GIVers & Projects
+					</CenteredHeader>
+				</HeaderAndCirclesContainer>
 			</Container>
 			<div style={{ position: 'relative', overflow: 'hidden' }}>
 				<ArcMustardTop />
@@ -193,9 +206,27 @@ export function TabPowerBottom() {
 							</BenefitsCardTextContainer>
 						</BenefitsCard>
 					</BenefitsCardsContainer>
-					
 				</Container>
 			</div>
+			<Container>
+				<GivpowerCTAContainer>
+					<H1 weight={700}>Stake GIV to get GIVpower</H1>
+					<GivpowerCTASubheading size='small'>
+						Lock your GIV to increase your multiplier.
+					</GivpowerCTASubheading>
+					<GivpowerCTAButtonContainer>
+						<GivpowerCTAButton
+							label='GET GIVPOWER'
+							size='large'
+							buttonType='primary'
+						/>
+						<GivpowerCTAButtonOutlined
+							label='GET GIV'
+							size='large'
+						/>
+					</GivpowerCTAButtonContainer>
+				</GivpowerCTAContainer>
+			</Container>
 		</>
 	);
 }

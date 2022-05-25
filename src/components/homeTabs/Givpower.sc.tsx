@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 import {
 	brandColors,
+	Button,
 	ButtonText,
 	D1,
 	H1,
 	H2,
 	H3,
+	OulineButton,
 	QuoteText,
 } from '@giveth/ui-design-system';
 import { BottomContainer, TopContainer } from './commons';
@@ -62,6 +64,7 @@ export const FeaturesCardContainer = styled.div`
 	padding: 26px 20px;
 	position: relative;
 	text-align: center;
+	z-index: 1;
 	${mediaQueries.tablet} {
 		padding: 76px 60px;
 	}
@@ -108,9 +111,10 @@ export const CenteredHeader = styled(H2)`
 
 export const BenefitsCardsContainer = styled.div`
 	display: flex;
+
 	flex-direction: column;
 	margin: 20px 0px;
-
+	padding-bottom: 60px;
 	${mediaQueries.laptop} {
 		gap: 20px;
 		flex-direction: row;
@@ -150,6 +154,10 @@ export const BenefitsCardTextContainer = styled.div`
 	}
 `;
 
+export const HeaderAndCirclesContainer = styled.div`
+	position: relative;
+`;
+
 export const BenefitsCardHeading = styled(H3)`
 	margin-bottom: 40px;
 `;
@@ -180,8 +188,81 @@ export const ArcMustardBottom = styled(Arc)`
 	left: -300px;
 	display: none;
 	${mediaQueries.laptop} {
-		bottom: -25px;
+		bottom: 30px;
 		display: unset;
 	}
 	z-index: 0;
+`;
+export const Circle = styled.div<{ size: number }>`
+	position: absolute;
+	border-radius: 50%;
+	border-style: solid;
+	border-width: 2px;
+	width: ${props => props.size / 4}px;
+	height: ${props => props.size / 4}px;
+	border-color: ${brandColors.giv[200]};
+	opacity: 0.1;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 0;
+	overflow: hidden;
+	${mediaQueries.mobileL} {
+		width: ${props => props.size / 3.2}px;
+		height: ${props => props.size / 3.2}px;
+	}
+	${mediaQueries.tablet} {
+		width: ${props => props.size / 2}px;
+		height: ${props => props.size / 2}px;
+	}
+	${mediaQueries.laptop} {
+		width: ${props => props.size / 1.3}px;
+		height: ${props => props.size / 1.3}px;
+	}
+	${mediaQueries.desktop} {
+		width: ${props => props.size}px;
+		height: ${props => props.size}px;
+	}
+`;
+
+export const GivpowerCTAContainer = styled.div`
+	background-image: url('/images/backgrounds/giv-outline.svg');
+	width: 100%;
+	padding: 20px 0;
+	text-align: center;
+	${mediaQueries.tablet} {
+		padding: 40px 0;
+	}
+`;
+
+export const GivpowerCTASubheading = styled(QuoteText)`
+	color: ${brandColors.giv[200]};
+	margin-top: 8px;
+	margin-bottom: 16px;
+`;
+
+export const GivpowerCTAButtonContainer = styled.div`
+	display: flex;
+	justify-content: center;
+	gap: 16px;
+	margin-top: 40px;
+	flex-direction: column;
+	${mediaQueries.tablet} {
+		flex-direction: row;
+	}
+`;
+export const GivpowerCTAButton = styled(Button)`
+	width: 250px;
+	margin: 0 auto;
+	${mediaQueries.tablet} {
+		margin: 0;
+	}
+`;
+
+export const GivpowerCTAButtonOutlined = styled(OulineButton)`
+	width: 250px;
+	margin: 0 auto;
+	${mediaQueries.tablet} {
+		margin: 0;
+	}
 `;
