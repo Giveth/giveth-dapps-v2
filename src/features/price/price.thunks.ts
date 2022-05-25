@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import BigNumber from 'bignumber.js';
+import { captureException } from '@sentry/nextjs';
 import { RootState } from '../store';
 import { Zero } from '@/helpers/number';
-import { captureException } from '@sentry/nextjs';
 import { fetchSubgraph } from '@/services/subgraph.service';
 import config from '@/configuration';
 import { IGetTokenPrice } from './price.types';
