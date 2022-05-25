@@ -31,7 +31,6 @@ import { APR } from '@/types/poolInfo';
 import { getLPStakingAPR } from '@/lib/stakingPool';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { networkProviders } from '@/helpers/networkProvider';
-import { StakingType } from '@/types/config';
 import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
 import { useAppSelector } from '@/features/hooks';
 
@@ -160,7 +159,7 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 			promiseQueue.push(promise);
 		});
 		config.MAINNET_CONFIG.pools.forEach(poolStakingConfig => {
-			if (poolStakingConfig.type === StakingType.UNISWAPV3) return;
+			if (poolStakingConfig.active === false) return;
 
 			const unipool = mainnetValues[poolStakingConfig.type];
 			const unipoolHelper = unipool && new UnipoolHelper(unipool);
