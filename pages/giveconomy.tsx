@@ -3,7 +3,8 @@ import { useEffect } from 'react';
 
 import HomeView from '@/components/views/Home.view';
 import { ETheme, useGeneral } from '@/context/general.context';
-import { GiveconomyMeta } from '@/lib/meta';
+import { giveconomyMetatags } from '@/content/metatags';
+import { GeneralMetatags } from '@/components/Metatag';
 
 export default function GIVeconomyRoute() {
 	const { setTheme } = useGeneral();
@@ -18,8 +19,7 @@ export default function GIVeconomyRoute() {
 	return (
 		<>
 			<Head>
-				<title>GIVeconomy</title>
-				<GiveconomyMeta />
+				<GeneralMetatags info={giveconomyMetatags} />
 			</Head>
 			<HomeView />
 		</>

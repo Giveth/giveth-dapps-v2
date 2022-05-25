@@ -6,7 +6,7 @@ import { captureException } from '@sentry/nextjs';
 import { IProjectBySlug } from '@/apollo/types/types';
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
-import { ProjectMeta } from '@/lib/meta';
+import { ProjectMeta } from '@/components/Metatag';
 
 const DonateIndex = dynamic(
 	() => import('@/components/views/donate/DonateIndex'),

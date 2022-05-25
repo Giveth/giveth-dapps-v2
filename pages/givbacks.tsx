@@ -3,7 +3,8 @@ import { useEffect } from 'react';
 
 import GIVbackView from '@/components/views/Back.view';
 import { useGeneral, ETheme } from '@/context/general.context';
-import { GiveconomyMeta } from '@/lib/meta';
+import { givbacksMetatags } from '@/content/metatags';
+import { GeneralMetatags } from '@/components/Metatag';
 
 export default function GIVbacksRoute() {
 	const { setTheme } = useGeneral();
@@ -17,8 +18,7 @@ export default function GIVbacksRoute() {
 	return (
 		<>
 			<Head>
-				<title>GIVbacks</title>
-				<GiveconomyMeta />
+				<GeneralMetatags info={givbacksMetatags} />
 			</Head>
 			<GIVbackView />
 		</>

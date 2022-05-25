@@ -14,17 +14,23 @@ export interface ISubgraphState {
 	tokenDistroInfo?: ITokenDistroInfo;
 	uniswapV3Pool?: IUniswapV3Pool;
 	[StakingType.GIV_LM]?: IUnipool;
-	[StakingType.BALANCER]?: IUnipool;
-	[StakingType.SUSHISWAP]?: IUnipool;
-	[StakingType.HONEYSWAP]?: IUnipool;
-	[StakingType.UNISWAPV2]?: IUnipool;
-	[StakingType.UNISWAPV3]?: IUnipool;
+	[StakingType.GIVPOWER]?: IUnipool;
+	[StakingType.BALANCER_ETH_GIV]?: IUnipool;
+	[StakingType.SUSHISWAP_ETH_GIV]?: IUnipool;
+	[StakingType.HONEYSWAP_GIV_HNY]?: IUnipool;
+	[StakingType.HONEYSWAP_GIV_DAI]?: IUnipool;
+	[StakingType.UNISWAPV2_GIV_DAI]?: IUnipool;
+	[StakingType.UNISWAPV3_ETH_GIV]?: IUnipool;
+	[StakingType.HONEYSWAP_FOX_HNY]?: IUnipool;
+	[StakingType.UNISWAPV2_CULT_ETH]?: IUnipool;
+
 	userNotStakedPositions: IUniswapV3Position[];
 	userStakedPositions: IUniswapV3Position[];
 	allPositions: IUniswapV3Position[];
 	uniswapV2EthGivPair?: IUniswapV2Pair;
 	infinitePositionReward?: IInfinitePositionReward;
 	infinitePosition?: IUniswapV3Position;
+
 	[StreamType.FOX]?: ITokenDistroInfo;
 	[StreamType.CULT]?: ITokenDistroInfo;
 	[RegenFarmType.FOX_HNY]?: IUnipool;

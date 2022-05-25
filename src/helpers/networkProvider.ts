@@ -2,6 +2,7 @@ import { JsonRpcProvider } from '@ethersproject/providers';
 import {
 	BasicNetworkConfig,
 	SimplePoolStakingConfig,
+	StakingPlatform,
 	StakingType,
 } from '@/types/config';
 import config from '../configuration';
@@ -29,6 +30,8 @@ export const getGivStakingConfig = (
 		...networkConfig.GIV,
 		POOL_ADDRESS: networkConfig.TOKEN_ADDRESS,
 		type: StakingType.GIV_LM,
+		platform: StakingPlatform.GIVETH,
+		platformTitle: 'GIVGARDEN',
 		title: 'GIV',
 		description: '100% GIV',
 		unit: 'GIV',

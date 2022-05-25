@@ -66,7 +66,7 @@ export const getLPStakingAPR = async (
 	if (!provider) {
 		return Zero;
 	}
-	if (poolStakingConfig.type === StakingType.BALANCER) {
+	if (poolStakingConfig.type === StakingType.BALANCER_ETH_GIV) {
 		return getBalancerPoolStakingAPR(
 			poolStakingConfig as BalancerPoolStakingConfig,
 			network,
@@ -273,25 +273,33 @@ export const getUserStakeInfo = (
 		}
 	} else {
 		switch (type) {
-			case StakingType.SUSHISWAP:
+			case StakingType.SUSHISWAP_ETH_GIV:
 				rewards = BN(balance.rewardsSushiSwap);
 				rewardPerTokenPaid = BN(balance.rewardPerTokenPaidSushiSwap);
 				stakedAmount = BN(balance.sushiSwapLpStaked);
 				notStakedAmount = BN(balance.sushiswapLp);
 				break;
-			case StakingType.HONEYSWAP:
+			case StakingType.HONEYSWAP_GIV_HNY:
 				rewards = BN(balance.rewardsHoneyswap);
 				rewardPerTokenPaid = BN(balance.rewardPerTokenPaidHoneyswap);
 				stakedAmount = BN(balance.honeyswapLpStaked);
 				notStakedAmount = BN(balance.honeyswapLp);
 				break;
-			case StakingType.BALANCER:
+			case StakingType.HONEYSWAP_GIV_DAI:
+				rewards = BN(balance.rewardsHoneyswapGivDai);
+				rewardPerTokenPaid = BN(
+					balance.rewardPerTokenPaidHoneyswapGivDai,
+				);
+				stakedAmount = BN(balance.honeyswapGivDaiLpStaked);
+				notStakedAmount = BN(balance.honeyswapGivDaiLp);
+				break;
+			case StakingType.BALANCER_ETH_GIV:
 				rewards = BN(balance.rewardsBalancer);
 				rewardPerTokenPaid = BN(balance.rewardPerTokenPaidBalancer);
 				stakedAmount = BN(balance.balancerLpStaked);
 				notStakedAmount = BN(balance.balancerLp);
 				break;
-			case StakingType.UNISWAPV2:
+			case StakingType.UNISWAPV2_GIV_DAI:
 				rewards = BN(balance.rewardsUniswapV2GivDai);
 				rewardPerTokenPaid = BN(
 					balance.rewardPerTokenPaidUniswapV2GivDai,
