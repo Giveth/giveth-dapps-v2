@@ -212,6 +212,7 @@ const config: EnvConfig = {
 				LM_ADDRESS: '0xDAEa66Adc97833781139373DF5B3bcEd3fdda5b1',
 				type: StakingType.GIVPOWER,
 				platform: StakingPlatform.GIVETH,
+				platformTitle: 'GIVPOWER STAKING',
 				title: 'GIV',
 				description: '100% GIV',
 				provideLiquidityLink:
