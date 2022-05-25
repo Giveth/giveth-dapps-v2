@@ -23,6 +23,7 @@ const Routes = {
 	GIVfarm: '/givfarm',
 	GIVstream,
 	GIVstream_FlowRate: GIVstream + '#flowRate',
+	GIVpower: '/givpower',
 	GIVbacks: '/givbacks',
 	Claim: '/claim',
 };
