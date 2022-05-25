@@ -1,11 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { IGetTokenPrice } from './price.types';
 import BigNumber from 'bignumber.js';
 import { RootState } from '../store';
 import { Zero } from '@/helpers/number';
 import { captureException } from '@sentry/nextjs';
 import { fetchSubgraph } from '@/services/subgraph.service';
 import config from '@/configuration';
+import { IGetTokenPrice } from './price.types';
 
 const fetchUniswapSubgraphTokenPrice = async (
 	subgraphUrl: string | undefined,
