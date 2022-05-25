@@ -8,12 +8,15 @@ import {
 import { gwei2wei } from '@/helpers/blockchain';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
+const BASE_ROUTE = 'https://mainnet.serve.giveth.io';
 
 const config: EnvConfig = {
 	BACKEND_LINK: 'https://mainnet.serve.giveth.io/graphql',
 	MAINNET_NETWORK_NUMBER: 1, // ETH
 	XDAI_NETWORK_NUMBER: 100, // xDAI
-
+	MICROSERVICES: {
+		authentication: `${BASE_ROUTE}/siweauthmicroservice/v1`,
+	},
 	GARDEN_LINK:
 		'https://gardens.1hive.org/#/xdai/garden/0xb25f0ee2d26461e2b5b3d3ddafe197a0da677b98',
 
