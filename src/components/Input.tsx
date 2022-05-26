@@ -15,6 +15,7 @@ import {
 	useState,
 } from 'react';
 import styled from 'styled-components';
+import { Shadow } from '@/components/styled-components/Shadow';
 
 export interface IFormValidations {
 	[key: string]: InputValidationType;
@@ -35,16 +36,17 @@ export enum InputSize {
 
 interface IInput {
 	value: string;
-	onChange: any;
+	onChange?: any;
 	type?: HTMLInputTypeAttribute;
 	name: string;
-	placeholder: string;
+	placeholder?: string;
 	label?: string;
 	required?: boolean;
 	caption?: string;
 	validators?: IInputValidator[];
 	size?: InputSize;
 	setFormValidation?: Dispatch<SetStateAction<IFormValidations | undefined>>;
+	disabled?: boolean;
 }
 
 interface IInputValidator {
@@ -77,6 +79,7 @@ const Input: FC<IInput> = ({
 	required,
 	size = InputSize.MEDIUM,
 	setFormValidation,
+	disabled,
 }) => {
 	const [validation, setValidation] = useState<{
 		status: InputValidationType;
@@ -86,8 +89,8 @@ const Input: FC<IInput> = ({
 		msg: undefined,
 	});
 
-	const ChangeHandle = (e: ChangeEvent<HTMLInputElement>) => {
-		onChange(e);
+	const changeHandle = (e: ChangeEvent<HTMLInputElement>) => {
+		onChange && onChange(e);
 	};
 
 	useEffect(() => {
@@ -152,6 +155,7 @@ const Input: FC<IInput> = ({
 		<InputContainer>
 			{label && (
 				<InputLabel
+					disabled={disabled}
 					size={InputSizeToLinkSize(size)}
 					required={required}
 				>
@@ -162,10 +166,11 @@ const Input: FC<IInput> = ({
 				placeholder={placeholder}
 				name={name}
 				value={value}
-				onChange={ChangeHandle}
+				onChange={changeHandle}
 				type={type}
 				validation={validation.status}
 				inputSize={size}
+				disabled={disabled}
 			/>
 			{validation.msg ? (
 				<InputValidation
@@ -187,10 +192,10 @@ const InputContainer = styled.div`
 	flex: 1;
 `;
 
-const InputLabel = styled(GLink)<{ required?: boolean }>`
-	text-transform: uppercase;
+const InputLabel = styled(GLink)<{ required?: boolean; disabled?: boolean }>`
 	padding-bottom: 4px;
-	color: ${brandColors.deep[500]};
+	color: ${props =>
+		props.disabled ? neutralColors.gray[600] : brandColors.deep[500]};
 	::after {
 		content: '*';
 		display: ${props => (props.required ? 'inline-block' : 'none')};
@@ -263,14 +268,15 @@ const InputField = styled.input<IInputField>`
 	}};
 	line-height: 150%;
 	/* font-weight: 500; */
-	font-family: 'Red Hat Text';
+	font-family: 'Red Hat Text', sans-serif;
 	caret-color: ${brandColors.giv[300]};
+	box-shadow: ${Shadow.Neutral[400]};
 	:focus {
 		border: 2px solid
 			${props => {
 				switch (props.validation) {
 					case InputValidationType.NORMAL:
-						return neutralColors.gray[500];
+						return brandColors.giv[600];
 					case InputValidationType.WARNING:
 						return semanticColors.golden[700];
 					case InputValidationType.ERROR:
@@ -278,9 +284,12 @@ const InputField = styled.input<IInputField>`
 					case InputValidationType.SUCCESS:
 						return semanticColors.jade[700];
 					default:
-						return neutralColors.gray[500];
+						return brandColors.giv[600];
 				}
 			}};
+	}
+	:disabled {
+		background: ${neutralColors.gray[300]};
 	}
 	::placeholder {
 		color: ${neutralColors.gray[500]};

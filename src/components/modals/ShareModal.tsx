@@ -76,7 +76,7 @@ const ShareModal = ({ projectHref, setShowModal }: IShareModal) => {
 						quote='Check out on @Givethio'
 						url={url}
 					>
-						<Image src={FacebookIcon} alt='twitter icon' />
+						<Image src={FacebookIcon} alt='facebook icon' />
 					</FacebookShareButton>
 				</SocialButtonContainer>
 			</FlexCenter>

@@ -4,9 +4,8 @@ import { Badge } from '@/components/views/userPublicProfile/StyledComponents';
 
 const ListingBadge = (props: { listed: boolean | null }) => {
 	const { listed } = props;
-	const Bull = () => <BulletPoint>&bull;</BulletPoint>;
-	let color,
-		title = '';
+
+	let color, title;
 
 	if (listed) {
 		color = semanticColors.jade;
@@ -21,7 +20,7 @@ const ListingBadge = (props: { listed: boolean | null }) => {
 
 	return (
 		<BadgeStyled mainColor={color}>
-			<Bull />
+			<BulletPoint>&bull;</BulletPoint>
 			<SublineBold>{title}</SublineBold>
 		</BadgeStyled>
 	);

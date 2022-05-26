@@ -60,7 +60,7 @@ const Header: FC<IHeader> = () => {
 	const [showUserMenu, setShowUserMenu] = useState(false);
 	const [showHeader, setShowHeader] = useState(true);
 	const [isGIVeconomyRoute, setIsGIVeconomyRoute] = useState(false);
-	const [isCreateRoute, setIsCreateRoute] = useState(false);
+	const [showBackBtn, setShowBackBtn] = useState(false);
 
 	const { chainId, active, account, library } = useWeb3React();
 	const { balances } = useAppSelector(
@@ -74,11 +74,12 @@ const Header: FC<IHeader> = () => {
 	const { theme } = useGeneral();
 	const router = useRouter();
 
-	const showLinks = !isCreateRoute;
-
 	useEffect(() => {
 		setIsGIVeconomyRoute(router.route.startsWith('/giv'));
-		setIsCreateRoute(router.route.startsWith(Routes.CreateProject));
+		setShowBackBtn(
+			router.route.startsWith(Routes.CreateProject) ||
+				router.route.startsWith(Routes.Verification),
+		);
 	}, [router.route]);
 
 	useEffect(() => {
@@ -149,7 +150,7 @@ const Header: FC<IHeader> = () => {
 			show={showHeader}
 		>
 			<Flex>
-				{isCreateRoute ? (
+				{showBackBtn ? (
 					<Logo onClick={router.back}>
 						<Image
 							width='26px'
@@ -176,7 +177,7 @@ const Header: FC<IHeader> = () => {
 					</>
 				)}
 			</Flex>
-			{showLinks && (
+			{!showBackBtn && (
 				<HeaderLinks theme={theme}>
 					{menuRoutes.map((link, index) => (
 						<Link href={link.href[0]} passHref key={index}>
