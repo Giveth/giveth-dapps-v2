@@ -57,7 +57,11 @@ export default function ProjectRegistry() {
 				</RadioContainer>
 			</RadioSectionContainer>
 			<br />
-			<ProjectRegistryNonProfit />
+			{isNonProfit ? (
+				<ProjectRegistryNonProfit />
+			) : (
+				<ProjectRegistryProfit />
+			)}
 		</>
 	);
 }
@@ -75,13 +79,39 @@ function ProjectRegistryNonProfit() {
 				where the team can look up and confirm your status.
 			</Lead>
 			<br />
-			<Label>Please enter full link</Label>
-			<Input
-				value={link}
+			<LinkInputContainer>
+				<Label>Please enter full link</Label>
+				<Input
+					value={link}
+					name='link'
+					placeholder='https://'
+					onChange={(e: ChangeEvent<HTMLInputElement>) => {
+						setLink(e.target.value);
+					}}
+				/>
+			</LinkInputContainer>
+		</>
+	);
+}
+
+function ProjectRegistryProfit() {
+	const [description, setDescription] = useState('');
+	return (
+		<>
+			<Lead>
+				Okay, it sounds like your project is not a registered
+				non-profit. Please tell us a bit about how your organization is
+				structured.
+			</Lead>
+			<br />
+			<DescriptionInput
+				value={description}
 				name='link'
-				placeholder='https://'
-				onChange={(e: ChangeEvent<HTMLInputElement>) => {
-					setLink(e.target.value);
+				placeholder='eg. "We are a decentralized autonomous organization that works toward the development of web3
+				applications"'
+				onChange={e => {
+					console.log(e.target.value);
+					setDescription(e.target.value);
 				}}
 			/>
 		</>
@@ -107,4 +137,23 @@ const RadioSectionSubTitle = styled(P)`
 const RadioContainer = styled.div`
 	display: flex;
 	gap: 160px;
+`;
+
+const LinkInputContainer = styled.div`
+	width: 70%;
+	max-width: '520px';
+`;
+
+const DescriptionInput = styled.textarea`
+	width: 100%;
+	border-radius: 8px;
+	font-family: 'Red Hat Text', sans-serif;
+	font-size: 1rem;
+	border: 2px solid ${neutralColors.gray[300]};
+	padding: 16px;
+	height: 274px;
+	resize: none;
+	::placeholder {
+		color: ${neutralColors.gray[500]};
+	}
 `;
