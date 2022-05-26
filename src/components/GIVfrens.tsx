@@ -36,7 +36,6 @@ interface IChangeNetworkModal {
 
 export const GIVfrens: FC<IGIVfrensProps> = ({ regenFarms, network }) => {
 	const { chainId } = useWeb3React();
-	console.log({ chainId });
 	if (regenFarms.length === 0) return null;
 
 	return (
@@ -59,7 +58,6 @@ export const GIVfrens: FC<IGIVfrensProps> = ({ regenFarms, network }) => {
 			</Col>
 			<PoolRow>
 				{regenFarms.map((poolStakingConfig, index) => {
-					console.log({ chainId });
 					const regenStream = config.NETWORKS_CONFIG[
 						network
 					].regenStreams.find(
