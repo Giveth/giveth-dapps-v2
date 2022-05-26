@@ -132,8 +132,9 @@ const config: EnvConfig = {
 				regenFarmType: RegenFarmType.CULT_ETH,
 				regenFarmIntro: {
 					title: 'CULT',
-					description:
-						'The purpose of CULT is to empower and fund those building and contributing towards our decentralized future.',
+					description: `The purpose of CULT is to empower those building and contributing to our decentralized future.
+					Our society makes it as difficult as possible to break away from societal, economic and other norms, and CULT serves to fund and support those who are working to take back our future. CULT is a reminder that the power in people is stronger than the people in power. CULT is the governance token of the Cult DAO. Every transaction of the CULT token allows you to contribute & fast-forward economic & societal change by contributing a 0.4% tax to the treasury. 
+					Fight from within until you get out, or change the system in doing so.`,
 					link: 'https://cultdao.io/',
 				},
 				farmStartTimeMS: 1646306818206,
