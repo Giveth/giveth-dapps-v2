@@ -61,8 +61,14 @@ export const StakeModal: FC<IStakeModalProps> = ({
 	);
 	const { chainId, library } = useWeb3React();
 
-	const { title, LM_ADDRESS, POOL_ADDRESS, GARDEN_ADDRESS } =
-		poolStakingConfig;
+	const {
+		title,
+		LM_ADDRESS,
+		POOL_ADDRESS,
+		GARDEN_ADDRESS,
+		TOKEN_ADDRESS,
+		regenFarmIntro,
+	} = poolStakingConfig;
 	const [permit, setPermit] = useState<boolean>(false);
 
 	useEffect(() => {
@@ -384,6 +390,8 @@ export const StakeModal: FC<IStakeModalProps> = ({
 						title={title}
 						walletNetwork={chainId}
 						txHash={txHash}
+						rewardTokenAddress={TOKEN_ADDRESS}
+						rewardTokenSymbol={regenFarmIntro?.title}
 					/>
 				)}
 				{chainId && stakeState === StakeState.CONFIRMED && (
@@ -391,6 +399,8 @@ export const StakeModal: FC<IStakeModalProps> = ({
 						title={title}
 						walletNetwork={chainId}
 						txHash={txHash}
+						rewardTokenAddress={TOKEN_ADDRESS}
+						rewardTokenSymbol={regenFarmIntro?.title}
 					/>
 				)}
 				{chainId && stakeState === StakeState.ERROR && (
@@ -398,6 +408,8 @@ export const StakeModal: FC<IStakeModalProps> = ({
 						title='Something went wrong!'
 						walletNetwork={chainId}
 						txHash={txHash}
+						rewardTokenAddress={TOKEN_ADDRESS}
+						rewardTokenSymbol={regenFarmIntro?.title}
 					/>
 				)}
 			</StakeModalContainer>

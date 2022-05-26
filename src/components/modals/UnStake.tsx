@@ -46,7 +46,8 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 	);
 	const { library, chainId } = useWeb3React();
 
-	const { title, LM_ADDRESS, GARDEN_ADDRESS } = poolStakingConfig;
+	const { title, LM_ADDRESS, GARDEN_ADDRESS, TOKEN_ADDRESS, regenFarmIntro } =
+		poolStakingConfig;
 
 	const onWithdraw = async () => {
 		setLabel('PENDING UNSTAKE');
@@ -135,13 +136,17 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 						title={title}
 						walletNetwork={chainId}
 						txHash={txHash}
+						rewardTokenAddress={TOKEN_ADDRESS}
+						rewardTokenSymbol={regenFarmIntro?.title}
 					/>
 				)}
 				{chainId && stakeState === StakeState.CONFIRMED && (
 					<ConfirmedInnerModal
-						title='Successful transaction.'
+						title={title}
 						walletNetwork={chainId}
 						txHash={txHash}
+						rewardTokenAddress={TOKEN_ADDRESS}
+						rewardTokenSymbol={regenFarmIntro?.title}
 					/>
 				)}
 				{chainId && stakeState === StakeState.ERROR && (
@@ -149,6 +154,8 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 						title='Something went wrong!'
 						walletNetwork={chainId}
 						txHash={txHash}
+						rewardTokenAddress={TOKEN_ADDRESS}
+						rewardTokenSymbol={regenFarmIntro?.title}
 					/>
 				)}
 			</UnStakeModalContainer>
