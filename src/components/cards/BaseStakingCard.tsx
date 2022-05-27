@@ -480,6 +480,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					<StakeModal
 						setShowModal={setShowStakeModal}
 						poolStakingConfig={poolStakingConfig}
+						regenStreamConfig={regenStreamConfig}
 						maxAmount={userNotStakedAmount}
 					/>
 				))}
@@ -501,6 +502,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					<UnStakeModal
 						setShowModal={setShowUnStakeModal}
 						poolStakingConfig={poolStakingConfig}
+						regenStreamConfig={regenStreamConfig}
 						maxAmount={stakedLpAmount}
 					/>
 				))}
