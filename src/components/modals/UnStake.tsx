@@ -6,7 +6,6 @@ import { BigNumber } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
 import { Modal } from './Modal';
 import { Flex } from '../styled-components/Flex';
-import { PoolStakingConfig } from '@/types/config';
 import { StakingPoolImages } from '../StakingPoolImages';
 import { AmountInput } from '../AmountInput';
 import { unwrapToken, withdrawTokens } from '@/lib/stakingPool';
@@ -18,6 +17,7 @@ import {
 } from './ConfirmSubmit';
 import { StakeState } from '@/lib/staking';
 import { IModal } from '@/types/common';
+import type { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 
 const loadingAnimationOptions = {
 	loop: true,
@@ -30,11 +30,13 @@ const loadingAnimationOptions = {
 
 interface IUnStakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
+	regenStreamConfig?: RegenStreamConfig;
 	maxAmount: BigNumber;
 }
 
 export const UnStakeModal: FC<IUnStakeModalProps> = ({
 	poolStakingConfig,
+	regenStreamConfig,
 	maxAmount,
 	setShowModal,
 }) => {
@@ -46,8 +48,7 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 	);
 	const { library, chainId } = useWeb3React();
 
-	const { title, LM_ADDRESS, GARDEN_ADDRESS, TOKEN_ADDRESS, regenFarmIntro } =
-		poolStakingConfig;
+	const { title, LM_ADDRESS, GARDEN_ADDRESS } = poolStakingConfig;
 
 	const onWithdraw = async () => {
 		setLabel('PENDING UNSTAKE');
@@ -136,8 +137,10 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 						title={title}
 						walletNetwork={chainId}
 						txHash={txHash}
-						rewardTokenAddress={TOKEN_ADDRESS}
-						rewardTokenSymbol={regenFarmIntro?.title}
+						rewardTokenAddress={
+							regenStreamConfig?.rewardTokenAddress
+						}
+						rewardTokenSymbol={regenStreamConfig?.rewardTokenSymbol}
 					/>
 				)}
 				{chainId && stakeState === StakeState.CONFIRMED && (
@@ -145,8 +148,10 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 						title={title}
 						walletNetwork={chainId}
 						txHash={txHash}
-						rewardTokenAddress={TOKEN_ADDRESS}
-						rewardTokenSymbol={regenFarmIntro?.title}
+						rewardTokenAddress={
+							regenStreamConfig?.rewardTokenAddress
+						}
+						rewardTokenSymbol={regenStreamConfig?.rewardTokenSymbol}
 					/>
 				)}
 				{chainId && stakeState === StakeState.ERROR && (
@@ -154,8 +159,10 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 						title='Something went wrong!'
 						walletNetwork={chainId}
 						txHash={txHash}
-						rewardTokenAddress={TOKEN_ADDRESS}
-						rewardTokenSymbol={regenFarmIntro?.title}
+						rewardTokenAddress={
+							regenStreamConfig?.rewardTokenAddress
+						}
+						rewardTokenSymbol={regenStreamConfig?.rewardTokenSymbol}
 					/>
 				)}
 			</UnStakeModalContainer>
