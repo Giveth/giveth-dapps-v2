@@ -120,7 +120,6 @@ const config: EnvConfig = {
 			{
 				POOL_ADDRESS: '0x6bb32725aa31b1a99e7c782e0605b0fb57e4b9e6',
 				LM_ADDRESS: '0x9d23d449af3e2c07a286688c85ff5d3d4c219d79',
-				TOKEN_ADDRESS: '0x3e4d3FadEE2338D420bb5E5cB26aAd96c165476c',
 				type: StakingType.UNISWAPV2_CULT_ETH,
 				platform: StakingPlatform.UNISWAP,
 				network: 42,
@@ -235,7 +234,6 @@ const config: EnvConfig = {
 			{
 				POOL_ADDRESS: '0xD28C07F802212F04AF41834ec0CC81d2d283124B',
 				LM_ADDRESS: '0x06851400866e065972ff21e1ECdE035b4772736d',
-				TOKEN_ADDRESS: '0x18ce354571ba71bc7b3d633b254954c5a9cfc195',
 				type: StakingType.HONEYSWAP_FOX_HNY,
 				platform: StakingPlatform.HONEYSWAP,
 				network: 100,

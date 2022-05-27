@@ -42,7 +42,6 @@ export type PoolStakingConfig =
 
 export interface SimplePoolStakingConfig extends BasicStakingConfig {
 	POOL_ADDRESS: string;
-	TOKEN_ADDRESS?: string;
 	type: StakingType;
 	platform: StakingPlatform;
 	title: string;
@@ -51,7 +50,6 @@ export interface SimplePoolStakingConfig extends BasicStakingConfig {
 	unit: string;
 	active: boolean;
 	network?: number;
-	regenFarmIntro?: RegenFarmIntroConfig;
 }
 
 export interface UniswapV3PoolStakingConfig extends SimplePoolStakingConfig {
