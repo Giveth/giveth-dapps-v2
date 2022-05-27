@@ -16,7 +16,6 @@ import { Contract, ethers } from 'ethers';
 import { captureException } from '@sentry/nextjs';
 import { Modal } from './Modal';
 import { Flex } from '../styled-components/Flex';
-import { PoolStakingConfig } from '@/types/config';
 import { StakingPoolImages } from '../StakingPoolImages';
 import { AmountInput } from '../AmountInput';
 import {
@@ -34,9 +33,11 @@ import { StakeState } from '@/lib/staking';
 import ToggleSwitch from '../styled-components/Switch';
 import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
 import { IModal } from '@/types/common';
+import type { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 
 interface IStakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
+	regenStreamConfig?: RegenStreamConfig;
 	maxAmount: BigNumber;
 }
 
@@ -51,25 +52,20 @@ const loadingAnimationOptions = {
 
 export const StakeModal: FC<IStakeModalProps> = ({
 	poolStakingConfig,
+	regenStreamConfig,
 	maxAmount,
 	setShowModal,
 }) => {
 	const [amount, setAmount] = useState('0');
 	const [txHash, setTxHash] = useState('');
+	const [permit, setPermit] = useState<boolean>(false);
 	const [stakeState, setStakeState] = useState<StakeState>(
 		StakeState.APPROVE,
 	);
 	const { chainId, library } = useWeb3React();
 
-	const {
-		title,
-		LM_ADDRESS,
-		POOL_ADDRESS,
-		GARDEN_ADDRESS,
-		TOKEN_ADDRESS,
-		regenFarmIntro,
-	} = poolStakingConfig;
-	const [permit, setPermit] = useState<boolean>(false);
+	const { title, LM_ADDRESS, POOL_ADDRESS, GARDEN_ADDRESS } =
+		poolStakingConfig;
 
 	useEffect(() => {
 		if (GARDEN_ADDRESS) {
@@ -390,8 +386,10 @@ export const StakeModal: FC<IStakeModalProps> = ({
 						title={title}
 						walletNetwork={chainId}
 						txHash={txHash}
-						rewardTokenAddress={TOKEN_ADDRESS}
-						rewardTokenSymbol={regenFarmIntro?.title}
+						rewardTokenAddress={
+							regenStreamConfig?.rewardTokenAddress
+						}
+						rewardTokenSymbol={regenStreamConfig?.rewardTokenSymbol}
 					/>
 				)}
 				{chainId && stakeState === StakeState.CONFIRMED && (
@@ -399,8 +397,10 @@ export const StakeModal: FC<IStakeModalProps> = ({
 						title={title}
 						walletNetwork={chainId}
 						txHash={txHash}
-						rewardTokenAddress={TOKEN_ADDRESS}
-						rewardTokenSymbol={regenFarmIntro?.title}
+						rewardTokenAddress={
+							regenStreamConfig?.rewardTokenAddress
+						}
+						rewardTokenSymbol={regenStreamConfig?.rewardTokenSymbol}
 					/>
 				)}
 				{chainId && stakeState === StakeState.ERROR && (
@@ -408,8 +408,10 @@ export const StakeModal: FC<IStakeModalProps> = ({
 						title='Something went wrong!'
 						walletNetwork={chainId}
 						txHash={txHash}
-						rewardTokenAddress={TOKEN_ADDRESS}
-						rewardTokenSymbol={regenFarmIntro?.title}
+						rewardTokenAddress={
+							regenStreamConfig?.rewardTokenAddress
+						}
+						rewardTokenSymbol={regenStreamConfig?.rewardTokenSymbol}
 					/>
 				)}
 			</StakeModalContainer>
