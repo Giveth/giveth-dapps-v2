@@ -135,10 +135,15 @@ export const confirmDonation = async (props: IConfirmDonation) => {
 		const code = error.data?.code;
 		if (code === ('INSUFFICIENT_FUNDS' || 'UNPREDICTABLE_GAS_LIMIT')) {
 			showToastError('Insufficient Funds');
-		} else if (error.replacement && error.cancelled === true) {
-			setTxHash(error.replacement.hash);
+		} else if (
+			(error.replacement && error.cancelled === true) ||
+			error.reason === 'transaction failed'
+		) {
+			setTxHash(error.replacement?.hash || error.transactionHash);
 			setShowFailedModal(true);
-			showToastError('Transaction cancelled!');
+			showToastError(
+				`Transaction ${error.cancelled ? 'cancelled' : 'failed'}!`,
+			);
 			updateDonation(donationId, EDonationStatus.FAILED);
 		} else {
 			setShowFailedModal(true);
