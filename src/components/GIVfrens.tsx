@@ -107,7 +107,8 @@ export const GIVfrens: FC<IGIVfrensProps> = ({ regenFarms, network }) => {
 };
 
 const DAOChangeNetworkModal = ({ network }: IChangeNetworkModal) => {
-	const networkLabel = network === 100 ? 'Gnosis chain' : 'Mainnet';
+	const networkLabel =
+		network === config.XDAI_NETWORK_NUMBER ? 'Gnosis chain' : 'Mainnet';
 	return (
 		<DAOChangeNetworkModalContainer>
 			<Flex gap='16px'>
