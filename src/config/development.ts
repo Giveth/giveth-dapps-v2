@@ -103,6 +103,8 @@ const config: EnvConfig = {
 				active: false,
 			},
 		],
+		uniswapV2Subgraph:
+			'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
 		regenStreams: [
 			{
 				tokenDistroAddress:
