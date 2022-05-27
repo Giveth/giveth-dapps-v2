@@ -63,3 +63,13 @@ export const DAOContainer = styled(Col)`
 	position: relative;
 	padding-top: 24px;
 `;
+
+export const DAOChangeNetwork = styled.div`
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	backdrop-filter: blur(2px);
+	z-index: 2;
+`;
