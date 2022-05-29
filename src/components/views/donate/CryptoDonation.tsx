@@ -59,6 +59,7 @@ import {
 	setShowSignWithWallet,
 	setShowWalletModal,
 } from '@/features/modal/modal.sclie';
+import usePurpleList from '@/hooks/usePurpleList';
 
 const ethereumChain = config.PRIMARY_NETWORK;
 const xdaiChain = config.SECONDARY_NETWORK;
@@ -85,6 +86,7 @@ const CryptoDonation = (props: {
 		state => state.user,
 	);
 	const { ethPrice } = usePrice();
+	const isPurpleListed = usePurpleList();
 
 	const { project, setSuccessDonation } = props;
 	const { organization, verified, id: projectId, status } = project;
@@ -446,6 +448,7 @@ const CryptoDonation = (props: {
 				<GIVBackToast
 					projectEligible={projectIsGivBackEligible}
 					tokenEligible={tokenIsGivBackEligible}
+					userEligible={!isPurpleListed}
 				/>
 			)}
 			<CheckBoxContainer>

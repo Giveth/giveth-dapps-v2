@@ -203,9 +203,8 @@ export async function sendTransaction(
 			txCallbacks.onReceipt(tx.hash);
 		}
 
-		console.log('stTxn ---> : ', { tx, receipt });
+		console.log('Tx ---> : ', { tx, receipt });
 	} catch (error: any) {
-		console.log('Error sending transaction: ', { error });
 		if (error.replacement && !error.cancelled) {
 			// Speed up the process by replacing the transaction
 			txCallbacks.onReceipt(error.replacement.hash);
