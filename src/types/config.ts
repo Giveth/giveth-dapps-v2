@@ -118,7 +118,7 @@ export interface BasicNetworkConfig {
 		| BalancerPoolStakingConfig
 		| UniswapV3PoolStakingConfig
 	>;
-	uniswapV2Subgraph?: string;
+	uniswapV2Subgraph: string;
 
 	regenStreams: RegenStreamConfig[];
 	regenFarms: RegenPoolStakingConfig[];
