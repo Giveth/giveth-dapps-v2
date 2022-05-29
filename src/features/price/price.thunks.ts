@@ -7,7 +7,7 @@ import {
 } from './price.services';
 
 export const fetchEthPriceAsync = createAsyncThunk(
-	'subgraph/fetchEthPrice',
+	'price/fetchEthPrice',
 	async () => {
 		const rate = await fetchEthPrice();
 		return rate;
@@ -15,7 +15,7 @@ export const fetchEthPriceAsync = createAsyncThunk(
 );
 
 export const fetchGIVPriceAsync = createAsyncThunk(
-	'subgraph/fetchGIVPrice',
+	'price/fetchGIVPrice',
 	async (chainId: number) => {
 		if (chainId === config.MAINNET_NETWORK_NUMBER) {
 			return await fetchMainnetTokenPrice(
@@ -27,7 +27,7 @@ export const fetchGIVPriceAsync = createAsyncThunk(
 );
 
 export const fetchMainnetThirdPartyTokensPriceAsync = createAsyncThunk(
-	'subgraph/fetchMainnetThirdPartyTokensPrice',
+	'price/fetchMainnetThirdPartyTokensPrice',
 	async () => {
 		const promises: Promise<string>[] = [];
 		config.MAINNET_CONFIG.regenStreams.forEach(streamConfig => {
@@ -48,7 +48,7 @@ export const fetchMainnetThirdPartyTokensPriceAsync = createAsyncThunk(
 );
 
 export const fetchGnosisThirdPartyTokensPriceAsync = createAsyncThunk(
-	'subgraph/fetchGnosisThirdPartyTokensPric',
+	'price/fetchGnosisThirdPartyTokensPric',
 	async () => {
 		const promises: Promise<string>[] = [];
 		config.XDAI_CONFIG.regenStreams.forEach(streamConfig => {
