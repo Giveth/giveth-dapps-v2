@@ -5,7 +5,6 @@ import {
 	fetchCurrentInfoAsync,
 	fetchXDaiInfoAsync,
 	fetchMainnetInfoAsync,
-	fetchEthPriceAsync,
 } from './subgraph.thunks';
 import type { ISubgraphState } from './subgraph.types';
 
@@ -20,23 +19,11 @@ const initialState: {
 	currentValues: ISubgraphState;
 	mainnetValues: ISubgraphState;
 	xDaiValues: ISubgraphState;
-	ethPrice: string;
-	givPrice: string;
-	mainnetThirdPartyTokensPrice: {
-		[tokenAddress: string]: string;
-	};
-	xDaiThirdPartyTokensPrice: {
-		[tokenAddress: string]: string;
-	};
 	status: string;
 } = {
 	currentValues: defaultSubgraphValues,
 	mainnetValues: defaultSubgraphValues,
 	xDaiValues: defaultSubgraphValues,
-	ethPrice: '0',
-	givPrice: '0',
-	mainnetThirdPartyTokensPrice: {},
-	xDaiThirdPartyTokensPrice: {},
 	status: 'idle',
 };
 
@@ -63,10 +50,6 @@ export const subgraphSlice = createSlice({
 			.addCase(fetchMainnetInfoAsync.fulfilled, (state, action) => {
 				state.status = 'idle';
 				state.mainnetValues = action.payload;
-			})
-			.addCase(fetchEthPriceAsync.fulfilled, (state, action) => {
-				state.status = 'idle';
-				state.ethPrice = action.payload;
 			});
 	},
 });
