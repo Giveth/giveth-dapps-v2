@@ -17,15 +17,12 @@ export const fetchEthPriceAsync = createAsyncThunk(
 export const fetchGIVPriceAsync = createAsyncThunk(
 	'subgraph/fetchGIVPrice',
 	async (chainId: number) => {
-		if (chainId === config.XDAI_NETWORK_NUMBER) {
-			return await fetchGnosisTokenPrice(
-				config.XDAI_CONFIG.TOKEN_ADDRESS,
-			);
-		} else if (chainId === config.MAINNET_NETWORK_NUMBER) {
+		if (chainId === config.MAINNET_NETWORK_NUMBER) {
 			return await fetchMainnetTokenPrice(
 				config.MAINNET_CONFIG.TOKEN_ADDRESS,
 			);
 		}
+		return await fetchGnosisTokenPrice(config.XDAI_CONFIG.TOKEN_ADDRESS);
 	},
 );
 
