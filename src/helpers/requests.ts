@@ -79,6 +79,7 @@ export function postRequest(
 
 export function gqlRequest(
 	url: string,
+	authorization: boolean = false,
 	query: string,
 	variables: {} = {},
 	additionalHeaders: HeadersInit = {},
@@ -86,7 +87,7 @@ export function gqlRequest(
 ) {
 	return postRequest(
 		url,
-		true,
+		authorization,
 		{
 			query,
 			variables,
