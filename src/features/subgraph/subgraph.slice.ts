@@ -5,6 +5,7 @@ import {
 	fetchCurrentInfoAsync,
 	fetchXDaiInfoAsync,
 	fetchMainnetInfoAsync,
+	fetchEthPriceAsync,
 } from './subgraph.thunks';
 import type { ISubgraphState } from './subgraph.types';
 
@@ -62,6 +63,10 @@ export const subgraphSlice = createSlice({
 			.addCase(fetchMainnetInfoAsync.fulfilled, (state, action) => {
 				state.status = 'idle';
 				state.mainnetValues = action.payload;
+			})
+			.addCase(fetchEthPriceAsync.fulfilled, (state, action) => {
+				state.status = 'idle';
+				state.ethPrice = action.payload;
 			});
 	},
 });
