@@ -31,7 +31,7 @@ import { IReaction } from '@/apollo/types/types';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_REACTION_BY_ID } from '@/apollo/gql/gqlProjects';
 import { likeProject, unlikeProject } from '@/lib/reaction';
-import DeactivateProjectModal from '@/components/modals/DeactivateProjectModal';
+import DeactivateProjectModal from '@/components/modals/deactivateProject/DeactivateProjectIndex';
 import ArchiveIcon from '../../../../public/images/icons/archive.svg';
 import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
 import { idToProjectEdit, slugToProjectDonate } from '@/lib/routeCreators';

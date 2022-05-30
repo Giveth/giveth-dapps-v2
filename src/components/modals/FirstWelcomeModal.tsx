@@ -1,18 +1,14 @@
 import { FC } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
-import {
-	P,
-	H5,
-	Button,
-	Lead,
-	neutralColors,
-	brandColors,
-} from '@giveth/ui-design-system';
+import { H5, Button, Lead, brandColors } from '@giveth/ui-design-system';
 
 import { Modal } from '@/components/modals/Modal';
 import { ETheme, useGeneral } from '@/context/general.context';
 import { IModal } from '@/types/common';
+import { Bullets } from '@/components/styled-components/Bullets';
+import Routes from '@/lib/constants/Routes';
+import ExternalLink from '@/components/ExternalLink';
 
 interface IText {
 	isDark?: boolean;
@@ -31,70 +27,59 @@ export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
 		>
 			<Container>
 				<Title isDark={theme === ETheme.Dark}>
-					{' '}
 					Welcome to the future of giving
 				</Title>
 				<LeadTitle>Here is the things that you can do now!</LeadTitle>
 				<Bullets>
-					<li>
-						<Paragraph isDark={theme === ETheme.Dark}>
-							Take a look at awesome{' '}
-							<InlineLink
-								target='_blank'
-								rel={'noopener noreferrer'}
-								href={'/projects'}
-							>
-								{' '}
-								projects
-							</InlineLink>{' '}
-							on Giveth.
-						</Paragraph>
-					</li>
-					<li>
-						<Paragraph isDark={theme === ETheme.Dark}>
-							You can also create a{' '}
-							<InlineLink
-								target='_blank'
-								rel={'noopener noreferrer'}
-								href={'/create'}
-							>
-								new project
-							</InlineLink>{' '}
-							and receive donations.
-						</Paragraph>
-					</li>
-
-					<li>
-						<Paragraph isDark={theme === ETheme.Dark}>
-							You can earn GIV token by{' '}
-							<InlineLink
-								target='_blank'
-								rel={'noopener noreferrer'}
-								href={'/projects'}
-							>
-								donating to projects
-							</InlineLink>
-							.
-						</Paragraph>
-					</li>
+					<Paragraph isDark={theme === ETheme.Dark}>
+						Take a look at awesome{' '}
+						<ExternalLink
+							href={Routes.Projects}
+							title='projects'
+							color={brandColors.pinky[500]}
+						/>{' '}
+						on Giveth.
+					</Paragraph>
+					<Paragraph isDark={theme === ETheme.Dark}>
+						You can also create a{' '}
+						<ExternalLink
+							href={Routes.CreateProject}
+							title='new project'
+							color={brandColors.pinky[500]}
+						/>{' '}
+						and receive donations.
+					</Paragraph>
+					<Paragraph isDark={theme === ETheme.Dark}>
+						You can earn GIV token by{' '}
+						<ExternalLink
+							href={Routes.Projects}
+							title='donating to projects'
+							color={brandColors.pinky[500]}
+						/>
+						.
+					</Paragraph>
 				</Bullets>
-				<DonateButton
-					label='Donate to a project'
-					onClick={() => {
-						router.push('/projects');
-						setShowModal(false);
-					}}
-					buttonType={theme === ETheme.Dark ? 'secondary' : 'primary'}
-				/>
+				<Buttons>
+					<DonateButton
+						label='Donate to a project'
+						onClick={() => {
+							router.push(Routes.Projects);
+							setShowModal(false);
+						}}
+						buttonType={
+							theme === ETheme.Dark ? 'secondary' : 'primary'
+						}
+					/>
+					<Button
+						buttonType='texty'
+						label='CLOSE'
+						onClick={() => setShowModal(false)}
+					/>
+				</Buttons>
 			</Container>
 		</Modal>
 	);
 };
-
-const InlineLink = styled.a`
-	color: ${brandColors.pinky[500]};
-	cursor: pointer;
-`;
 
 const Title = styled(H5)`
 	color: ${(prop: IText) => (prop.isDark ? 'white' : brandColors.deep[900])};
@@ -109,7 +94,13 @@ const LeadTitle = styled(Lead)`
 const DonateButton = styled(Button)`
 	width: 300px;
 	height: 48px;
-	margin: 48px auto 0;
+`;
+
+const Buttons = styled.div`
+	padding-top: 20px;
+	> * {
+		margin: 20px auto 0;
+	}
 `;
 
 const Container = styled.div`
@@ -118,18 +109,7 @@ const Container = styled.div`
 	padding: 26px 33px;
 `;
 
-const Bullets = styled.ul`
-	padding-left: 17px;
-	list-style-image: url('/images/bullet_tiny.svg');
-	display: flex;
-	flex-direction: column;
-	margin-bottom: 30px;
-	li {
-		margin: 8px 0;
-		color: ${neutralColors.gray[900]};
-	}
-`;
-
-const Paragraph = styled(P)`
+const Paragraph = styled.li`
 	color: ${(prop: IText) => (prop.isDark ? 'white' : brandColors.deep[900])};
+	font-size: 20px;
 `;

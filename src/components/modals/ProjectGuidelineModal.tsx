@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import styled from 'styled-components';
-import { P, neutralColors, brandColors } from '@giveth/ui-design-system';
+import { neutralColors, brandColors, P } from '@giveth/ui-design-system';
 import Image from 'next/image';
 
 import { Modal } from '@/components/modals/Modal';
@@ -9,6 +9,7 @@ import links from '@/lib/constants/links';
 import { IModal } from '@/types/common';
 import { Bullets } from '@/components/styled-components/Bullets';
 import BulbIcon from '/public/images/icons/lightbulb.svg';
+import ExternalLink from '@/components/ExternalLink';
 
 export const ProjectGuidelineModal: FC<IModal> = ({ setShowModal }) => {
 	return (
@@ -21,49 +22,32 @@ export const ProjectGuidelineModal: FC<IModal> = ({ setShowModal }) => {
 			<Container>
 				<Bullets>
 					<li>
-						<P>
-							Clear project description explaining who the
-							organization is and what you will do with the funds.
-						</P>
+						Clear project description explaining who the
+						organization is and what you will do with the funds.
+					</li>
+					<li>A unique or custom banner photo.</li>
+					<li>
+						No violations of our{' '}
+						<ExternalLink
+							href={links.COVENANT_DOC}
+							title='Covenant'
+							color={brandColors.pinky[500]}
+						/>{' '}
+						and/or{' '}
+						<ExternalLink
+							href={Routes.Terms}
+							title='Terms of Use'
+							color={brandColors.pinky[500]}
+						/>
+						.
 					</li>
 					<li>
-						<P>A unique or custom banner photo.</P>
+						<Optional>(Optional)</Optional>Embedded photos, videos
+						or legitimate external links.
 					</li>
-
 					<li>
-						<P>
-							No violations of our{' '}
-							<InlineLink
-								target='_blank'
-								rel={'noopener noreferrer'}
-								href={links.COVENANT_DOC}
-							>
-								Covenant
-							</InlineLink>{' '}
-							and/or{' '}
-							<InlineLink
-								target='_blank'
-								rel={'noopener noreferrer'}
-								href={Routes.Terms}
-							>
-								Terms of Use
-							</InlineLink>
-							.
-						</P>
-					</li>
-
-					<li>
-						<P>
-							<Optional>(Optional)</Optional>Embedded photos,
-							videos or legitimate external links.
-						</P>
-					</li>
-
-					<li>
-						<P>
-							<Optional>(Optional)</Optional>A link to the
-							repository of open-source projects.
-						</P>
+						<Optional>(Optional)</Optional>A link to the repository
+						of open-source projects.
 					</li>
 				</Bullets>
 			</Container>
@@ -71,12 +55,7 @@ export const ProjectGuidelineModal: FC<IModal> = ({ setShowModal }) => {
 	);
 };
 
-const InlineLink = styled.a`
-	color: ${brandColors.pinky[500]};
-	cursor: pointer;
-`;
-
-const Container = styled.div`
+const Container = styled(P)`
 	width: 350px;
 	text-align: left;
 	padding: 0 30px 30px;
