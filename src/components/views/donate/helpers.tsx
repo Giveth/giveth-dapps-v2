@@ -104,7 +104,8 @@ export const confirmDonation = async (props: IConfirmDonation) => {
 	const { library } = web3Context;
 	const { walletAddress } = project;
 	const { address } = token;
-	let donationId = 0;
+	let donationId = 0,
+		donationSaved = false;
 
 	try {
 		const toAddress = isAddressENS(walletAddress!)
@@ -118,32 +119,46 @@ export const confirmDonation = async (props: IConfirmDonation) => {
 
 		const txCallbacks = {
 			onTxHash: async (txHash: string, nonce: number) => {
-				donationId = await saveDonation({ nonce, txHash, ...props });
 				setTxHash(txHash);
-				setDonationSaved(true);
+				saveDonation({ nonce, txHash, ...props })
+					.then(res => {
+						donationId = res;
+						setDonationSaved(true);
+						donationSaved = true;
+					})
+					.catch(() => {
+						showToastError('Error saving donation!');
+						setShowFailedModal(true);
+						setDonating(false);
+					});
 			},
 			onReceipt: async (txHash: string) => {
 				updateDonation(donationId, EDonationStatus.VERIFIED);
-				setSuccessDonation({ txHash, givBackEligible });
+				donationSaved &&
+					setSuccessDonation({ txHash, givBackEligible });
 			},
 		};
 
 		await sendTransaction(library, transactionObj, txCallbacks, address);
 	} catch (error: any) {
-		setDonating(false);
-		setDonationSaved(false);
 		const code = error.data?.code;
 		if (code === ('INSUFFICIENT_FUNDS' || 'UNPREDICTABLE_GAS_LIMIT')) {
 			showToastError('Insufficient Funds');
-		} else if (error.replacement && error.cancelled === true) {
-			setTxHash(error.replacement.hash);
-			setShowFailedModal(true);
-			showToastError('Transaction cancelled!');
+		} else if (
+			(error.replacement && error.cancelled === true) ||
+			error.reason === 'transaction failed'
+		) {
+			setTxHash(error.replacement?.hash || error.transactionHash);
+			showToastError(
+				`Transaction ${error.cancelled ? 'cancelled' : 'failed'}!`,
+			);
 			updateDonation(donationId, EDonationStatus.FAILED);
 		} else {
-			setShowFailedModal(true);
 			showToastError(error);
 		}
+		setShowFailedModal(true);
+		setDonating(false);
+		setDonationSaved(false);
 		captureException(error, {
 			tags: {
 				section: 'confirmDonation',
