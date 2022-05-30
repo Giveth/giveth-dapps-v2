@@ -9,6 +9,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 import styled from 'styled-components';
+import { InjectedConnector } from '@web3-react/injected-connector';
 import { RegenPoolStakingConfig } from '@/types/config';
 import {
 	DAOContainer,
@@ -107,8 +108,18 @@ export const GIVfrens: FC<IGIVfrensProps> = ({ regenFarms, network }) => {
 };
 
 const DAOChangeNetworkModal = ({ network }: IChangeNetworkModal) => {
+	const { account, activate } = useWeb3React();
 	const networkLabel =
 		network === config.XDAI_NETWORK_NUMBER ? 'Gnosis chain' : 'Mainnet';
+
+	const checkWalletAndSwitchNetwork = async (network: number) => {
+		if (!account) {
+			await activate(new InjectedConnector({}));
+		}
+		if (account) {
+			await switchNetwork(network);
+		}
+	};
 	return (
 		<DAOChangeNetworkModalContainer>
 			<Flex gap='16px'>
@@ -119,7 +130,7 @@ const DAOChangeNetworkModal = ({ network }: IChangeNetworkModal) => {
 			<ChangeButton
 				buttonType='texty'
 				label={`Switch to ${networkLabel}`}
-				onClick={() => switchNetwork(network)}
+				onClick={() => checkWalletAndSwitchNetwork(network)}
 			/>
 		</DAOChangeNetworkModalContainer>
 	);
