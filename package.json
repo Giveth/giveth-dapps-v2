@@ -13,7 +13,6 @@
 		"styled-components": "^5"
 	},
 	"dependencies": {
-		"@apollo/client": "^3.4.16",
 		"@ethersproject/contracts": "^5.5.0",
 		"@ethersproject/providers": "^5.5.0",
 		"@ethersproject/units": "^5.5.0",
@@ -26,13 +25,10 @@
 		"@web3-react/core": "^6.1.9",
 		"@web3-react/injected-connector": "^6.0.7",
 		"@web3-react/walletconnect-connector": "^6.2.13",
-		"apollo-upload-client": "^16.0.0",
-		"axios": "^0.25.0",
 		"bignumber.js": "^9.0.1",
 		"deepmerge": "^4.2.2",
 		"ethers": "^5.6.5",
 		"framer-motion": "^6.2.8",
-		"graphql": "^16.0.1",
 		"human-standard-token-abi": "^2.0.0",
 		"lodash.debounce": "^4.0.8",
 		"lodash.isequal": "^4.5.0",
@@ -62,7 +58,6 @@
 	},
 	"devDependencies": {
 		"@next/bundle-analyzer": "^12.1.4",
-		"@types/apollo-upload-client": "^14.1.0",
 		"@types/axios": "^0.14.0",
 		"@types/lodash.debounce": "^4.0.6",
 		"@types/lodash.isequal": "^4.5.5",
