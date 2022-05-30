@@ -1,5 +1,3 @@
-import { gql } from '@apollo/client';
-
 export const FETCH_PROJECT_DONATIONS = `
 	query DonationsByProjectId(
 		$take: Int

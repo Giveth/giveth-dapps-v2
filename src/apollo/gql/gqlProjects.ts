@@ -1,5 +1,3 @@
-import { gql } from '@apollo/client';
-
 export const FETCH_HOME_PROJECTS = `
 	query FetchAllProjects(
 		$limit: Int

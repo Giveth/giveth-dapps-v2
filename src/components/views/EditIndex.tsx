@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { captureException } from '@sentry/nextjs';
-import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
 import { IProjectEdition } from '@/apollo/types/types';
 import {
@@ -17,6 +16,7 @@ import {
 	setShowSignWithWallet,
 	setShowWelcomeModal,
 } from '@/features/modal/modal.sclie';
+import { backendGQLRequest } from '@/helpers/requests';
 
 const EditIndex = () => {
 	const [project, setProject] = useState<IProjectEdition>();
@@ -38,11 +38,10 @@ const EditIndex = () => {
 				dispatch(setShowSignWithWallet(true));
 				return;
 			}
-			client
-				.query({
-					query: FETCH_PROJECT_BY_ID,
-					variables: { id: Number(projectId) },
-				})
+			backendGQLRequest({
+				query: FETCH_PROJECT_BY_ID,
+				variables: { id: Number(projectId) },
+			})
 				.then((res: any) => {
 					const project = res.data.projectById;
 					if (
