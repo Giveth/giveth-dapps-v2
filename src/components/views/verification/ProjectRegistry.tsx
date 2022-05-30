@@ -1,4 +1,10 @@
-import { H6, Lead, neutralColors, P } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	H6,
+	Lead,
+	neutralColors,
+	P,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { ChangeEvent, useState } from 'react';
 import Select, { StylesConfig } from 'react-select';
@@ -27,7 +33,7 @@ const selectCustomStyles: StylesConfig = {
 			borderColor: `${neutralColors.gray[500]}`,
 		},
 		'&:focus-within': {
-			borderColor: `${neutralColors.gray[500]}`,
+			borderColor: `${brandColors.giv[500]}`,
 		},
 	}),
 	option: (styles, { isFocused, isSelected }) => ({
