@@ -159,6 +159,9 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 				case StreamType.FOX:
 					lockedAmount = BN(balances.foxAllocatedTokens);
 					break;
+				case StreamType.CULT:
+					lockedAmount = BN(balances.cultAllocatedTokens);
+					break;
 				default:
 					lockedAmount = ethers.constants.Zero;
 			}
@@ -169,17 +172,17 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 			tokenDistroHelper.getStreamPartTokenPerWeek(lockedAmount),
 		);
 		setGivBackStream(tokenDistroHelper.getStreamPartTokenPerWeek(givback));
-	}, [earned, balances, tokenDistroHelper, givback]);
+	}, [earned, balances, tokenDistroHelper, givback, regenStreamConfig]);
 
 	//calculate Liquid Sum
 	useEffect(() => {
-		setSumLiquid(rewardLiquidPart.add(givbackLiquidPart).add(earnedLiquid));
-	}, [rewardLiquidPart, givbackLiquidPart, earnedLiquid]);
+		setSumLiquid(rewardLiquidPart.add(earnedLiquid)); // earnedLiquid includes the givback liquid part
+	}, [rewardLiquidPart, earnedLiquid]);
 
 	//calculate Stream Sum
 	useEffect(() => {
-		setSumStream(BigNumber.sum(rewardStream, givBackStream, earnedStream));
-	}, [rewardStream, givBackStream, earnedStream]);
+		setSumStream(BigNumber.sum(rewardStream, earnedStream)); // earnedStream includes the givback stream part
+	}, [rewardStream, earnedStream]);
 
 	useEffect(() => {
 		if (!tokenDistroHelper) return;
@@ -484,7 +487,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 													{poolStakingConfig.title}
 													<PoolIcon>
 														{getPoolIconWithName(
-															poolStakingConfig.type,
+															poolStakingConfig.platform,
 														)}
 													</PoolIcon>
 												</BreakdownTitle>

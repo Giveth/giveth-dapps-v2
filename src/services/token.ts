@@ -9,7 +9,7 @@ import config from '@/configuration';
 
 const apolloClient = initializeApollo();
 
-export async function getToken(
+export async function __oldWay_getToken(
 	walletAddress: string | null | undefined,
 	signature: string,
 	networkId: number | undefined,

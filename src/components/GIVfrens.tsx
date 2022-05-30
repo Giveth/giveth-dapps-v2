@@ -30,9 +30,12 @@ interface IGIVfrensProps {
 	network: number;
 }
 
+interface IChangeNetworkModal {
+	network: number;
+}
+
 export const GIVfrens: FC<IGIVfrensProps> = ({ regenFarms, network }) => {
 	const { chainId } = useWeb3React();
-
 	if (regenFarms.length === 0) return null;
 
 	return (
@@ -90,7 +93,9 @@ export const GIVfrens: FC<IGIVfrensProps> = ({ regenFarms, network }) => {
 							{chainId !== poolStakingConfig?.network && (
 								<>
 									<DAOChangeNetwork />
-									<DAOChangeNetworkModal />
+									<DAOChangeNetworkModal
+										network={poolStakingConfig.network!}
+									/>
 								</>
 							)}
 						</DAOContainer>
@@ -101,18 +106,20 @@ export const GIVfrens: FC<IGIVfrensProps> = ({ regenFarms, network }) => {
 	);
 };
 
-const DAOChangeNetworkModal = () => {
+const DAOChangeNetworkModal = ({ network }: IChangeNetworkModal) => {
+	const networkLabel =
+		network === config.XDAI_NETWORK_NUMBER ? 'Gnosis chain' : 'Mainnet';
 	return (
 		<DAOChangeNetworkModalContainer>
 			<Flex gap='16px'>
 				<IconInfo16 />
 				<Title>Switch network</Title>
 			</Flex>
-			<Desc>This RegenFarm is only available on Gnosis chain.</Desc>
+			<Desc>This RegenFarm is only available on {networkLabel}</Desc>
 			<ChangeButton
 				buttonType='texty'
-				label='Switch to Gnosis Chain'
-				onClick={() => switchNetwork(config.XDAI_NETWORK_NUMBER)}
+				label={`Switch to ${networkLabel}`}
+				onClick={() => switchNetwork(network)}
 			/>
 		</DAOChangeNetworkModalContainer>
 	);

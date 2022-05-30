@@ -44,24 +44,27 @@ export interface IUserPublicProfileView {
 	myAccount?: boolean;
 }
 
-const UserPublicProfileView: FC<IUserPublicProfileView> = ({ myAccount }) => {
+const UserPublicProfileView: FC<IUserPublicProfileView> = ({
+	myAccount,
+	user,
+}) => {
 	const dispatch = useAppDispatch();
-	const { isSignedIn, userData } = useAppSelector(state => state.user);
+	const { isSignedIn } = useAppSelector(state => state.user);
 
 	const { chainId } = useWeb3React();
 
 	const [showModal, setShowModal] = useState<boolean>(false); // follow this state to refresh user content on screen
 	const [showIncompleteWarning, setShowIncompleteWarning] = useState(true);
 	const showCompleteProfile =
-		!isUserRegistered(userData) && showIncompleteWarning && myAccount;
+		!isUserRegistered(user) && showIncompleteWarning && myAccount;
 
 	useEffect(() => {
 		if (myAccount && !isSignedIn) {
 			dispatch(setShowSignWithWallet(true));
 		}
-	}, [userData, isSignedIn]);
+	}, [user, isSignedIn]);
 
-	if (!userData || (myAccount && !isSignedIn))
+	if (!user || (myAccount && !isSignedIn))
 		return (
 			<NoUserContainer>
 				<H5>Not logged in</H5>
@@ -79,40 +82,36 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({ myAccount }) => {
 					)}
 					<UserInfo>
 						<img
-							src={userData?.avatar || '/images/avatar.svg'}
+							src={user?.avatar || '/images/avatar.svg'}
 							width={128}
 							height={128}
-							alt={userData?.name}
+							alt={user?.name}
 						/>
 						<UserInfoRow>
-							<H3 weight={700}>{userData?.name}</H3>
-							{userData?.email && (
-								<GLink size='Big'>{userData?.email}</GLink>
+							<H3 weight={700}>{user?.name}</H3>
+							{user?.email && (
+								<GLink size='Big'>{user?.email}</GLink>
 							)}
 							<WalletContainer>
-								{myAccount &&
-									userData?.name &&
-									userData?.email && (
-										<EditProfile
-											size='Big'
-											onClick={() => setShowModal(true)}
-										>
-											Edit Profile
-										</EditProfile>
-									)}
+								{myAccount && user?.name && user?.email && (
+									<EditProfile
+										size='Big'
+										onClick={() => setShowModal(true)}
+									>
+										Edit Profile
+									</EditProfile>
+								)}
 								<AddressContainer>
 									<AddressTextNonMobile size='Big'>
-										{userData?.walletAddress}
+										{user?.walletAddress}
 									</AddressTextNonMobile>
 									<AddressTextMobile size='Big'>
-										{shortenAddress(
-											userData?.walletAddress,
-										)}
+										{shortenAddress(user?.walletAddress)}
 									</AddressTextMobile>
 									<ExternalLink
 										href={formatWalletLink(
 											chainId,
-											userData?.walletAddress,
+											user?.walletAddress,
 										)}
 										color={brandColors.pinky[500]}
 									>
@@ -124,9 +123,9 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({ myAccount }) => {
 					</UserInfo>
 				</Container>
 			</PublicProfileHeader>
-			<PublicProfileContributes user={userData} myAccount={myAccount} />
+			<PublicProfileContributes user={user} myAccount={myAccount} />
 			{showModal && (
-				<EditUserModal setShowModal={setShowModal} user={userData} />
+				<EditUserModal setShowModal={setShowModal} user={user} />
 			)}
 		</>
 	);

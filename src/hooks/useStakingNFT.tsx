@@ -17,7 +17,7 @@ export const useStakingNFT = (stakedPositions: LiquidityPosition[]) => {
 
 	const mainnetConfig = config.MAINNET_CONFIG;
 	const uniswapV3Config = mainnetConfig.pools.find(
-		c => c.type === StakingType.UNISWAPV3,
+		c => c.type === StakingType.UNISWAPV3_ETH_GIV,
 	) as UniswapV3PoolStakingConfig;
 	const rewardToken = uniswapV3Config.REWARD_TOKEN;
 	const poolAddress = uniswapV3Config.UNISWAP_V3_LP_POOL;

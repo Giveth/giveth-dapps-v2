@@ -49,6 +49,7 @@ import LightBulbIcon from '/public/images/icons/lightbulb.svg';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { useAppSelector } from '@/features/hooks';
+import useLeaveConfirm from '@/hooks/useLeaveConfirm';
 
 export enum ECreateErrFields {
 	NAME = 'name',
@@ -98,10 +99,12 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 		[ECreateErrFields.DESCRIPTION]: '',
 		[ECreateErrFields.WALLET_ADDRESS]: '',
 	});
+	const [formChange, setFormChange] = useState(false);
 
 	const debouncedTitleValidation = useRef<any>();
 	const debouncedAddressValidation = useRef<any>();
 	const debouncedDescriptionValidation = useRef<any>();
+	useLeaveConfirm({ shouldConfirm: formChange });
 
 	useEffect(() => {
 		if (isEditMode) {
@@ -307,42 +310,60 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 						<div>
 							<NameInput
 								value={name}
-								setValue={e =>
-									handleInputChange(e, ECreateErrFields.NAME)
-								}
+								setValue={e => {
+									console.log('name');
+									setFormChange(true);
+									handleInputChange(e, ECreateErrFields.NAME);
+								}}
 								error={errors[ECreateErrFields.NAME]}
 							/>
 							<DescriptionInput
 								value={description}
-								setValue={e =>
+								setValue={e => {
+									console.log('name');
+									setFormChange(true);
 									handleInputChange(
 										e,
 										ECreateErrFields.DESCRIPTION,
-									)
-								}
+									);
+								}}
 								error={errors[ECreateErrFields.DESCRIPTION]}
 							/>
 							<CategoryInput
 								value={categories}
-								setValue={setCategories}
+								setValue={category => {
+									console.log('category');
+									setFormChange(true);
+									setCategories(category);
+								}}
 							/>
 							<LocationInput
 								defaultValue={defaultImpactLocation}
-								setValue={setImpactLocation}
+								setValue={location => {
+									console.log('location');
+									setFormChange(true);
+									setImpactLocation(location);
+								}}
 							/>
 							<ImageInput
 								value={image}
-								setValue={setImage}
+								setValue={img => {
+									console.log('image');
+									setFormChange(true);
+									setImage(img);
+								}}
 								setIsLoading={setIsLoading}
 							/>
 							<WalletAddressInput
 								value={walletAddress}
-								setValue={e =>
+								setValue={e => {
+									console.log('walletAddress');
+									setFormChange(true);
 									handleInputChange(
 										e,
 										ECreateErrFields.WALLET_ADDRESS,
-									)
-								}
+									);
+								}}
 								error={errors[ECreateErrFields.WALLET_ADDRESS]}
 							/>
 

@@ -24,6 +24,9 @@ const transformBalanceInfo = (info: any): IBalances => {
 	const rewardsSushiSwap = info.rewardsSushiSwap || 0;
 	const rewardPerTokenPaidHoneyswap = info.rewardPerTokenPaidHoneyswap || 0;
 	const rewardsHoneyswap = info.rewardsHoneyswap || 0;
+	const rewardPerTokenPaidHoneyswapGivDai =
+		info.rewardPerTokenPaidHoneyswapGivDai || 0;
+	const rewardsHoneyswapGivDai = info.rewardsHoneyswapGivDai || 0;
 	const rewardPerTokenPaidBalancer = info.rewardPerTokenPaidBalancer || 0;
 	const rewardsBalancer = info.rewardsBalancer || 0;
 	const rewardPerTokenPaidUniswapV2GivDai =
@@ -39,6 +42,8 @@ const transformBalanceInfo = (info: any): IBalances => {
 	const sushiSwapLpStaked = info.sushiSwapLpStaked || 0;
 	const honeyswapLp = info.honeyswapLp || 0;
 	const honeyswapLpStaked = info.honeyswapLpStaked || 0;
+	const honeyswapGivDaiLp = info.honeyswapGivDaiLp || 0;
+	const honeyswapGivDaiLpStaked = info.honeyswapGivDaiLpStaked || 0;
 	const givStaked = info.givStaked || 0;
 	const allocationCount = Number(info.allocationCount || 0);
 	const givDropClaimed = Boolean(info.givDropClaimed);
@@ -67,6 +72,8 @@ const transformBalanceInfo = (info: any): IBalances => {
 		rewardsSushiSwap,
 		rewardPerTokenPaidHoneyswap,
 		rewardsHoneyswap,
+		rewardPerTokenPaidHoneyswapGivDai,
+		rewardsHoneyswapGivDai,
 		rewardPerTokenPaidBalancer,
 		rewardsBalancer,
 		rewardPerTokenPaidUniswapV2GivDai,
@@ -81,6 +88,8 @@ const transformBalanceInfo = (info: any): IBalances => {
 		sushiSwapLpStaked,
 		honeyswapLp,
 		honeyswapLpStaked,
+		honeyswapGivDaiLp,
+		honeyswapGivDaiLpStaked,
 		givStaked,
 		allocationCount,
 		givDropClaimed,
@@ -247,17 +256,20 @@ export const transformSubgraphData = (data: any = {}): ISubgraphState => {
 		[StreamType.CULT]: transformTokenDistroInfo(data[StreamType.CULT]),
 
 		[StakingType.GIV_LM]: transformUnipoolInfo(data[StakingType.GIV_LM]),
-		[StakingType.BALANCER]: transformUnipoolInfo(
-			data[StakingType.BALANCER],
+		[StakingType.BALANCER_ETH_GIV]: transformUnipoolInfo(
+			data[StakingType.BALANCER_ETH_GIV],
 		),
-		[StakingType.UNISWAPV2]: transformUnipoolInfo(
-			data[StakingType.UNISWAPV2],
+		[StakingType.UNISWAPV2_GIV_DAI]: transformUnipoolInfo(
+			data[StakingType.UNISWAPV2_GIV_DAI],
 		),
-		[StakingType.HONEYSWAP]: transformUnipoolInfo(
-			data[StakingType.HONEYSWAP],
+		[StakingType.HONEYSWAP_GIV_HNY]: transformUnipoolInfo(
+			data[StakingType.HONEYSWAP_GIV_HNY],
 		),
-		[StakingType.SUSHISWAP]: transformUnipoolInfo(
-			data[StakingType.SUSHISWAP],
+		[StakingType.HONEYSWAP_GIV_DAI]: transformUnipoolInfo(
+			data[StakingType.HONEYSWAP_GIV_DAI],
+		),
+		[StakingType.SUSHISWAP_ETH_GIV]: transformUnipoolInfo(
+			data[StakingType.SUSHISWAP_ETH_GIV],
 		),
 		[RegenFarmType.FOX_HNY]: transformUnipoolInfo(
 			data[RegenFarmType.FOX_HNY],
