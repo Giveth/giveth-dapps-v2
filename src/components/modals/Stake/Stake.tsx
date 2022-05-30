@@ -40,7 +40,7 @@ interface IStakeModalProps extends IModal {
 	maxAmount: BigNumber;
 }
 
-const loadingAnimationOptions = {
+export const loadingAnimationOptions = {
 	loop: true,
 	autoplay: true,
 	animationData: LoadingAnimation,
@@ -402,7 +402,7 @@ export const StakeInnerModal = styled.div`
 	padding: 0 24px;
 `;
 
-const ApproveButton = styled(OulineButton)`
+export const ApproveButton = styled(OulineButton)`
 	width: 100%;
 	margin-top: 32px;
 	margin-bottom: 8px;
@@ -414,7 +414,7 @@ const ConfirmButton = styled(Button)`
 	margin-bottom: 8px;
 `;
 
-const Pending = styled(Flex)`
+export const Pending = styled(Flex)`
 	margin-top: 32px;
 	margin-bottom: 8px;
 	line-height: 46px;

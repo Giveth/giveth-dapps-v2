@@ -2,9 +2,16 @@ import { brandColors, H5, IconRocketInSpace32 } from '@giveth/ui-design-system';
 import { BigNumber } from 'ethers';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
+import Lottie from 'react-lottie';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
-import { StakeInnerModal, StakeModalContainer } from './Stake';
+import {
+	ApproveButton,
+	loadingAnimationOptions,
+	Pending,
+	StakeInnerModal,
+	StakeModalContainer,
+} from './Stake';
 import { StakeState } from '@/lib/staking';
 import StakeSteps from './StakeSteps';
 import { AmountInput } from '@/components/AmountInput';
@@ -52,6 +59,23 @@ const StakeLockModal: FC<IStakeLockModalProps> = ({
 					<SectionTitle weight={700}>Rounds</SectionTitle>
 					<LockSlider />
 					<LockInfo />
+					{stakeState === StakeState.APPROVE && (
+						<ApproveButton
+							label={'APPROVE'}
+							onClick={() => {}}
+							disabled={amount == '0' || maxAmount.lt(amount)}
+						/>
+					)}
+					{stakeState === StakeState.APPROVING && (
+						<Pending>
+							<Lottie
+								options={loadingAnimationOptions}
+								height={40}
+								width={40}
+							/>
+							&nbsp;APPROVE PENDING
+						</Pending>
+					)}
 				</StakeInnerModal>
 			</StakeModalContainer>
 		</Modal>
