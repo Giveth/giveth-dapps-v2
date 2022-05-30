@@ -62,8 +62,8 @@ export function getRequest(
 
 export function postRequest(
 	url: string,
-	authorization: boolean = false,
 	body: {} = {},
+	authorization: boolean = false,
 	additionalHeaders: HeadersInit = {},
 	additionalOptions: RequestInit = {},
 ) {
@@ -77,39 +77,37 @@ export function postRequest(
 	);
 }
 
+interface IGraphQLBody {
+	query?: string;
+	mutation?: string;
+	variables?: {};
+}
+
 export function gqlRequest(
 	url: string,
+	body: IGraphQLBody,
 	authorization: boolean = false,
-	query: string,
-	variables: {} = {},
 	additionalHeaders: HeadersInit = {},
 	additionalOptions: RequestInit = {},
 ) {
 	return postRequest(
 		url,
+		body,
 		authorization,
-		{
-			query,
-			variables,
-		},
 		additionalHeaders,
 		additionalOptions,
 	);
 }
 
 export function backendGQLRequest(
-	query: string,
-	variables: {} = {},
+	body: IGraphQLBody,
 	additionalHeaders: HeadersInit = {},
 	additionalOptions: RequestInit = {},
 ) {
 	return postRequest(
 		links.BACKEND,
+		body,
 		true,
-		{
-			query,
-			variables,
-		},
 		additionalHeaders,
 		additionalOptions,
 	);
