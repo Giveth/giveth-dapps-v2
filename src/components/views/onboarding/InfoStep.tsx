@@ -1,10 +1,8 @@
 import { ChangeEvent, FC, useEffect, useReducer, useState } from 'react';
-import { useMutation } from '@apollo/client';
 import { H6, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 import { captureException } from '@sentry/nextjs';
-import { UPDATE_USER } from '@/apollo/gql/gqlUser';
 import Input, {
 	IFormValidations,
 	InputValidationType,
@@ -14,6 +12,8 @@ import { gToast, ToastType } from '@/components/toasts';
 import { IStep, OnboardActions, OnboardStep } from './common';
 import { OnboardSteps } from './Onboarding.view';
 import { Col, Row } from '@/components/Grid';
+import { backendGQLRequest } from '@/helpers/requests';
+import { UPDATE_USER } from '@/apollo/gql/gqlUser';
 
 export interface IUserInfo {
 	email: string;
@@ -33,7 +33,6 @@ const initialUserInfo: IUserInfo = {
 
 const InfoStep: FC<IStep> = ({ setStep }) => {
 	const [disabled, setDisabled] = useState(false);
-	const [updateUser] = useMutation(UPDATE_USER);
 	const [showModal, setShowModal] = useState(false);
 	const [formValidation, setFormValidation] = useState<IFormValidations>();
 	const [info, setInfo] = useReducer(
@@ -65,7 +64,8 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 	const onSave = async () => {
 		setDisabled(true);
 		try {
-			const { data: response } = await updateUser({
+			const { data: response } = await backendGQLRequest({
+				mutation: UPDATE_USER,
 				variables: {
 					email,
 					firstName,

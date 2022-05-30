@@ -2,22 +2,22 @@ import { FC, useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { Lead } from '@giveth/ui-design-system';
-import { useMutation } from '@apollo/client';
 
 import { captureException } from '@sentry/nextjs';
 import { IStep, OnboardActions, OnboardStep } from './common';
 import { OnboardSteps } from './Onboarding.view';
-import { UPDATE_USER } from '@/apollo/gql/gqlUser';
 import { gToast, ToastType } from '@/components/toasts';
 import ImageUploader from '@/components/ImageUploader';
+import { UPDATE_USER } from '@/apollo/gql/gqlUser';
+import { backendGQLRequest } from '@/helpers/requests';
 
 const PhotoStep: FC<IStep> = ({ setStep }) => {
 	const [url, setUrl] = useState<string>('');
-	const [updateUser] = useMutation(UPDATE_USER);
 
 	const onSave = async () => {
 		try {
-			const { data: response } = await updateUser({
+			const { data: response } = await backendGQLRequest({
+				mutation: UPDATE_USER,
 				variables: {
 					avatar: url,
 				},

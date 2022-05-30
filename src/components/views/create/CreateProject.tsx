@@ -10,7 +10,6 @@ import {
 	OulineButton,
 	H6,
 } from '@giveth/ui-design-system';
-import { useMutation } from '@apollo/client';
 import { utils } from 'ethers';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
@@ -69,8 +68,6 @@ export interface ICategoryComponent {
 
 const CreateProject = (props: { project?: IProjectEdition }) => {
 	const { library, chainId } = useWeb3React();
-	const [addProjectMutation] = useMutation(CREATE_PROJECT);
-	const [editProjectMutation] = useMutation(UPDATE_PROJECT);
 	const router = useRouter();
 
 	const { project } = props;
@@ -228,13 +225,15 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 			setIsLoading(true);
 
 			const addedProject = isEditMode
-				? await editProjectMutation({
+				? await backendGQLRequest({
+						mutation: UPDATE_PROJECT,
 						variables: {
 							newProjectData: projectData,
 							projectId: parseFloat(project.id as string),
 						},
 				  })
-				: await addProjectMutation({
+				: await backendGQLRequest({
+						mutation: CREATE_PROJECT,
 						variables: {
 							project: { ...projectData },
 						},

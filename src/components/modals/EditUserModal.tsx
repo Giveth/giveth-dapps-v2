@@ -1,7 +1,6 @@
 import React, { ChangeEvent, useEffect, useReducer, useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import { useMutation } from '@apollo/client';
 import { Button, brandColors } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import { useWeb3React } from '@web3-react/core';
@@ -55,7 +54,6 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 
 	const dispatch = useAppDispatch();
 	const { account } = useWeb3React();
-	const [updateUser] = useMutation(UPDATE_USER);
 
 	useEffect(() => {
 		if (formValidation) {
@@ -71,7 +69,8 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 
 	const onSaveAvatar = async () => {
 		try {
-			const { data: response } = await updateUser({
+			const { data: response } = await backendGQLRequest({
+				query: UPDATE_USER,
 				variables: {
 					avatar,
 				},

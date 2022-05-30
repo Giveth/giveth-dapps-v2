@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
 import dynamic from 'next/dynamic';
 import styled from 'styled-components';
 import {
@@ -24,6 +23,7 @@ import { RemoveUpdateModal } from '@/components/modals/RemoveUpdateModal';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.sclie';
+import { backendGQLRequest } from '@/helpers/requests';
 
 const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
 	ssr: false,
@@ -46,11 +46,8 @@ const ProjectUpdates = (props: {
 	const [currentUpdate, setCurrentUpdate] = useState<string>('');
 	const [showRemoveUpdateModal, setShowRemoveUpdateModal] = useState(false);
 
-	const [addUpdateMutation] = useMutation(ADD_PROJECT_UPDATE);
-	const [deleteUpdateMutation] = useMutation(DELETE_PROJECT_UPDATE);
-	const [editUpdateMutation] = useMutation(EDIT_PROJECT_UPDATE);
-
-	const { data } = useQuery(FETCH_PROJECT_UPDATES, {
+	const { data } = backendGQLRequest({
+		query: FETCH_PROJECT_UPDATES,
 		variables: {
 			projectId: parseInt(id || ''),
 			take: 100,
@@ -67,22 +64,13 @@ const ProjectUpdates = (props: {
 		updateId: string,
 	) => {
 		try {
-			await editUpdateMutation({
+			await backendGQLRequest({
+				mutation: EDIT_PROJECT_UPDATE,
 				variables: {
 					title,
 					content,
 					updateId: parseFloat(updateId!),
 				},
-				refetchQueries: [
-					{
-						query: FETCH_PROJECT_UPDATES,
-						variables: {
-							projectId: parseFloat(id!),
-							take: 100,
-							skip: 0,
-						},
-					},
-				],
 			});
 			fetchProject();
 			gToast(`Your update was edited`, {
@@ -111,20 +99,11 @@ const ProjectUpdates = (props: {
 
 	const removeUpdate = async (updateId: string) => {
 		try {
-			await deleteUpdateMutation({
+			await backendGQLRequest({
+				mutation: DELETE_PROJECT_UPDATE,
 				variables: {
 					updateId: parseFloat(updateId!),
 				},
-				refetchQueries: [
-					{
-						query: FETCH_PROJECT_UPDATES,
-						variables: {
-							projectId: parseFloat(id!),
-							take: 100,
-							skip: 0,
-						},
-					},
-				],
 			});
 			fetchProject();
 			gToast(`Your update was deleted`, {
@@ -176,22 +155,13 @@ const ProjectUpdates = (props: {
 					},
 				);
 			}
-			await addUpdateMutation({
+			await backendGQLRequest({
+				mutation: ADD_PROJECT_UPDATE,
 				variables: {
 					projectId: parseFloat(id!),
 					content: newUpdate,
 					title: title,
 				},
-				refetchQueries: [
-					{
-						query: FETCH_PROJECT_UPDATES,
-						variables: {
-							projectId: parseFloat(id!),
-							take: 100,
-							skip: 0,
-						},
-					},
-				],
 			});
 			setTitle('');
 			setNewUpdate(' ');
