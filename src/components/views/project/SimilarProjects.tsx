@@ -51,7 +51,6 @@ const SimilarProjects = (props: { slug: string }) => {
 					slug,
 					take: projectsToFetch,
 				},
-				fetchPolicy: 'no-cache',
 			})
 			.then((res: ISuggestedProjectsGQL) => {
 				const { similarProjectsBySlug } = res.data;

@@ -151,7 +151,6 @@ const CryptoDonation = (props: {
 			.query({
 				query: PROJECT_ACCEPTED_TOKENS,
 				variables: { projectId: Number(projectId) },
-				fetchPolicy: 'no-cache',
 			})
 			.then((res: IProjectAcceptedTokensGQL) => {
 				setAcceptedTokens(res.data.getProjectAcceptTokens);

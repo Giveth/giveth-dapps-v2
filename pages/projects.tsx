@@ -36,7 +36,6 @@ export async function getServerSideProps() {
 	const { data } = await backendGQLRequest({
 		query: FETCH_ALL_PROJECTS,
 		...OPTIONS_HOME_PROJECTS,
-		fetchPolicy: 'network-only',
 	});
 
 	const { projects, totalCount, categories } = data.projects;

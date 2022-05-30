@@ -142,7 +142,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 			.query({
 				query: FETCH_ALL_PROJECTS,
 				variables,
-				fetchPolicy: 'network-only',
 			})
 			.then((res: { data: { projects: IFetchAllProjects } }) => {
 				const data = res.data?.projects?.projects;

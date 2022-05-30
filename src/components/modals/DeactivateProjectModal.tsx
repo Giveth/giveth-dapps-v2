@@ -62,7 +62,6 @@ const DeactivateProjectModal = ({
 	const fetchReasons = async () => {
 		const { data } = await backendGQLRequest({
 			query: GET_STATUS_REASONS,
-			fetchPolicy: 'no-cache',
 		});
 		const fetchedReasons = data.getStatusReasons.map((elem: any) => ({
 			label: elem.description,

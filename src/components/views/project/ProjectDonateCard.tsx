@@ -146,7 +146,6 @@ const ProjectDonateCard = ({
 						id: Number(id),
 						connectedWalletUserId: Number(user?.id),
 					},
-					fetchPolicy: 'no-cache',
 				});
 				setReaction(data?.projectById?.reaction);
 			} catch (e) {

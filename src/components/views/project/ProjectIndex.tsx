@@ -56,7 +56,6 @@ const ProjectIndex = (props: { project?: IProject }) => {
 			.query({
 				query: FETCH_PROJECT_BY_SLUG,
 				variables: { slug, connectedWalletUserId: Number(user?.id) },
-				fetchPolicy: 'network-only',
 			})
 			.then((res: { data: { projectBySlug: IProject } }) => {
 				setProject(res.data.projectBySlug);

@@ -19,7 +19,6 @@ export async function getServerSideProps(props: {
 		const { data } = await backendGQLRequest({
 			query: FETCH_PROJECT_BY_SLUG,
 			variables: { slug },
-			fetchPolicy: 'no-cache',
 		});
 
 		return {
