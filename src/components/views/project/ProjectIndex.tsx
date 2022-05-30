@@ -19,10 +19,10 @@ import { IDonationsByProjectIdGQL } from '@/apollo/types/gqlTypes';
 import SuccessfulCreation from '@/components/views/create/SuccessfulCreation';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import InlineToast from '@/components/toasts/InlineToast';
-import { ProjectMeta } from '@/lib/meta';
 import SimilarProjects from '@/components/views/project/SimilarProjects';
 import { showToastError } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
+import { ProjectMeta } from '@/components/Metatag';
 
 const ProjectDonations = dynamic(() => import('./ProjectDonations'));
 const ProjectUpdates = dynamic(() => import('./ProjectUpdates'));

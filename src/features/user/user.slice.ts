@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUser } from '@/apollo/types/types';
-import { fetchUserByAddress, signToGetToken } from './user.thunks';
+import { fetchUserByAddress, signToGetToken, signOut } from './user.thunks';
 import StorageLabel from '@/lib/localStorage';
 import { compareAddresses } from '@/lib/helpers';
 
@@ -33,12 +33,6 @@ export const userSlice = createSlice({
 		},
 		setBalance: (state, action: PayloadAction<string | null>) => {
 			state.balance = action.payload;
-		},
-		signOut: state => {
-			localStorage.removeItem(StorageLabel.USER);
-			localStorage.removeItem(StorageLabel.TOKEN);
-			state.token = undefined;
-			state.isSignedIn = false;
 		},
 		incrementLikedProjectsCount: state => {
 			if (state.userData) {
@@ -91,6 +85,12 @@ export const userSlice = createSlice({
 				);
 				localStorage.setItem(StorageLabel.TOKEN, action.payload);
 				state.isSignedIn = true;
+			})
+			.addCase(signOut.fulfilled, state => {
+				localStorage.removeItem(StorageLabel.USER);
+				localStorage.removeItem(StorageLabel.TOKEN);
+				state.token = undefined;
+				state.isSignedIn = false;
 			});
 	},
 });
@@ -99,7 +99,6 @@ export const {
 	setIsSignedIn,
 	setToken,
 	setBalance,
-	signOut,
 	incrementLikedProjectsCount,
 	decrementLikedProjectsCount,
 } = userSlice.actions;

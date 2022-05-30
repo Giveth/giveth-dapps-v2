@@ -1,4 +1,10 @@
-import { H6, Lead, neutralColors, P } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	H6,
+	Lead,
+	neutralColors,
+	P,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { ChangeEvent, useState } from 'react';
 import Select, { StylesConfig } from 'react-select';
@@ -12,49 +18,6 @@ const options = [
 	{ value: 'chicago', label: 'Chicago' },
 	{ value: 'san francisco', label: 'San Francisco' },
 ];
-
-const selectCustomStyles: StylesConfig = {
-	control: styles => ({
-		...styles,
-		width: '70%',
-		maxWidth: '520px',
-		borderColor: neutralColors.gray[300],
-		borderWidth: '2px',
-		borderRadius: '8px',
-		boxShadow: 'none',
-		padding: '8px',
-		'&:hover': {
-			borderColor: `${neutralColors.gray[500]}`,
-		},
-		'&:focus-within': {
-			borderColor: `${neutralColors.gray[500]}`,
-		},
-	}),
-	option: (styles, { isFocused, isSelected }) => ({
-		padding: '8px',
-		borderRadius: '4px',
-		backgroundColor: isSelected
-			? neutralColors.gray[300]
-			: isFocused
-			? neutralColors.gray[200]
-			: 'white',
-		color: isSelected ? neutralColors.gray[900] : neutralColors.gray[800],
-		'&:click': {
-			backgroundColor: neutralColors.gray[300],
-		},
-	}),
-	menu: styles => ({
-		...styles,
-		width: '70%',
-		maxWidth: '520px',
-		border: '0px',
-		borderRadius: '8px',
-		boxShadow: Shadow.Neutral[500],
-		'&:focus-within': {
-			border: `2px solid ${neutralColors.gray[300]}`,
-		},
-	}),
-};
 
 export default function ProjectRegistry() {
 	const [isNonProfit, setIsNonProfit] = useState(true);
@@ -148,6 +111,49 @@ function ProjectRegistryProfit() {
 	);
 }
 
+const selectCustomStyles: StylesConfig = {
+	control: styles => ({
+		...styles,
+		width: '70%',
+		maxWidth: '520px',
+		borderColor: neutralColors.gray[300],
+		borderWidth: '2px',
+		borderRadius: '8px',
+		boxShadow: 'none',
+		padding: '8px',
+		'&:hover': {
+			borderColor: `${neutralColors.gray[500]}`,
+		},
+		'&:focus-within': {
+			borderColor: `${brandColors.giv[500]}`,
+		},
+	}),
+	option: (styles, { isFocused, isSelected }) => ({
+		padding: '8px',
+		borderRadius: '4px',
+		backgroundColor: isSelected
+			? neutralColors.gray[300]
+			: isFocused
+			? neutralColors.gray[200]
+			: 'white',
+		color: isSelected ? neutralColors.gray[900] : neutralColors.gray[800],
+		'&:click': {
+			backgroundColor: neutralColors.gray[300],
+		},
+	}),
+	menu: styles => ({
+		...styles,
+		width: '70%',
+		maxWidth: '520px',
+		border: '0px',
+		borderRadius: '8px',
+		boxShadow: Shadow.Neutral[500],
+		'&:focus-within': {
+			border: `2px solid ${neutralColors.gray[300]}`,
+		},
+	}),
+};
+
 const RadioSectionContainer = styled.div`
 	width: 100%;
 	background-color: ${neutralColors.gray[200]};
@@ -190,6 +196,6 @@ const DescriptionInput = styled.textarea`
 		border-color: ${neutralColors.gray[500]};
 	}
 	:focus-within {
-		border-color: ${neutralColors.gray[500]};
+		border-color: ${brandColors.giv[500]};
 	}
 `;

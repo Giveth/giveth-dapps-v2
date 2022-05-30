@@ -60,6 +60,12 @@ export interface ISuggestedProjectsGQL {
 	};
 }
 
+export interface ICheckPurpleListGQL {
+	data: {
+		walletAddressIsPurpleListed: boolean;
+	};
+}
+
 export interface IProjectAcceptedToken {
 	id?: string;
 	symbol: string;

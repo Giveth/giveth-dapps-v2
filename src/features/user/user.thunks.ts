@@ -1,44 +1,69 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import gqlRequest from '@/helpers/gqlRequest';
+import { backendGQLRequest } from '@/helpers/requests';
 import { GET_USER_BY_ADDRESS } from './user.queries';
 import { ISignToGetToken } from './user.types';
-import { signMessage } from '@/lib/helpers';
-import { getToken } from '@/services/token';
+import { createSiweMessage } from '@/lib/helpers';
 import { RootState } from '../store';
+import { postRequest } from '@/helpers/requests';
+import config from '@/configuration';
 
 export const fetchUserByAddress = createAsyncThunk(
 	'user/fetchUser',
 	async (address: string) => {
-		return gqlRequest(GET_USER_BY_ADDRESS, { address });
+		return backendGQLRequest(GET_USER_BY_ADDRESS, { address });
 	},
 );
 
 export const signToGetToken = createAsyncThunk(
 	'user/signToGetToken',
 	async (
-		{ address, chainId, signer }: ISignToGetToken,
+		{ address, chainId, signer, pathname }: ISignToGetToken,
 		{ getState, dispatch },
 	) => {
-		const signedMessage = await signMessage(
-			process.env.NEXT_PUBLIC_OUR_SECRET as string,
-			address,
-			chainId,
-			signer,
-		);
-		if (signedMessage) {
-			const state = getState() as RootState;
-			console.log('getToken State', state.user.userData);
-			if (!state.user.userData) {
-				await dispatch(fetchUserByAddress(address));
-			}
-			return getToken(
-				address,
-				signedMessage,
-				chainId,
-				state.user.userData,
+		try {
+			const siweMessage: any = await createSiweMessage(
+				address!,
+				chainId!,
+				pathname!,
+				'Login into Giveth services',
 			);
-		} else {
+			const { nonce, message } = siweMessage;
+			const signature = await signer.signMessage(message);
+			if (signature) {
+				const state = getState() as RootState;
+				console.log('getToken State', state.user.userData);
+				if (!state.user.userData) {
+					await dispatch(fetchUserByAddress(address));
+				}
+				const token = await postRequest(
+					`${config.MICROSERVICES.authentication}/authentication`,
+					true,
+					{
+						signature,
+						message,
+						nonce,
+					},
+				);
+				return token.jwt;
+			} else {
+				return Promise.reject('Signing failed');
+			}
+		} catch (error) {
+			console.log({ error });
 			return Promise.reject('Signing failed');
 		}
+	},
+);
+
+export const signOut = createAsyncThunk(
+	'user/signOut',
+	async (token: string) => {
+		return await postRequest(
+			`${config.MICROSERVICES.authentication}/logout`,
+			true,
+			{
+				jwt: token,
+			},
+		);
 	},
 );

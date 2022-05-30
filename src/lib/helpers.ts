@@ -19,6 +19,7 @@ import Routes from '@/lib/constants/Routes';
 import { gToast, ToastType } from '@/components/toasts';
 import StorageLabel from '@/lib/localStorage';
 import { networksParams } from '@/helpers/blockchain';
+import config from '@/configuration';
 
 declare let window: any;
 
@@ -202,9 +203,8 @@ export async function sendTransaction(
 			txCallbacks.onReceipt(tx.hash);
 		}
 
-		console.log('stTxn ---> : ', { tx, receipt });
+		console.log('Tx ---> : ', { tx, receipt });
 	} catch (error: any) {
-		console.log('Error sending transaction: ', { error });
 		if (error.replacement && !error.cancelled) {
 			// Speed up the process by replacing the transaction
 			txCallbacks.onReceipt(error.replacement.hash);
@@ -393,4 +393,42 @@ export const networkInfo = (networkId?: number) => {
 		networkName: info.chainName,
 		networkToken: info.nativeCurrency.symbol,
 	};
+};
+
+export const createSiweMessage = async (
+	address: string,
+	chainId: number,
+	host: string,
+	statement: string,
+) => {
+	try {
+		let domain = host;
+
+		if (typeof window !== 'undefined') {
+			domain = window.location.hostname;
+		}
+		const nonceResponse: any = await fetch(
+			`${config.MICROSERVICES.authentication}/nonce`,
+		).then(n => {
+			return n.json();
+		});
+		const nonce = nonceResponse.message;
+		const { SiweMessage } = await import('siwe');
+		const siweMessage = new SiweMessage({
+			domain,
+			address,
+			nonce,
+			statement,
+			uri: origin,
+			version: '1',
+			chainId,
+		});
+		return {
+			message: siweMessage.prepareMessage(),
+			nonce,
+		};
+	} catch (error) {
+		console.log({ error });
+		return false;
+	}
 };

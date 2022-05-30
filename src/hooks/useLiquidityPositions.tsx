@@ -46,7 +46,7 @@ export const useLiquidityPositions = () => {
 	const mainnetConfig = config.MAINNET_CONFIG;
 
 	const uniswapConfig = mainnetConfig.pools.find(
-		c => c.type === StakingType.UNISWAPV3,
+		c => c.type === StakingType.UNISWAPV3_ETH_GIV,
 	) as UniswapV3PoolStakingConfig;
 	const rewardToken = uniswapConfig.REWARD_TOKEN;
 	const poolAddress = uniswapConfig.UNISWAP_V3_LP_POOL;
