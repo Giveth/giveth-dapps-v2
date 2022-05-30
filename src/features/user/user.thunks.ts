@@ -10,7 +10,10 @@ import config from '@/configuration';
 export const fetchUserByAddress = createAsyncThunk(
 	'user/fetchUser',
 	async (address: string) => {
-		return backendGQLRequest(GET_USER_BY_ADDRESS, { address });
+		return backendGQLRequest({
+			query: GET_USER_BY_ADDRESS,
+			variables: { address },
+		});
 	},
 );
 
@@ -37,12 +40,12 @@ export const signToGetToken = createAsyncThunk(
 				}
 				const token = await postRequest(
 					`${config.MICROSERVICES.authentication}/authentication`,
-					true,
 					{
 						signature,
 						message,
 						nonce,
 					},
+					true,
 				);
 				return token.jwt;
 			} else {
@@ -60,10 +63,10 @@ export const signOut = createAsyncThunk(
 	async (token: string) => {
 		return await postRequest(
 			`${config.MICROSERVICES.authentication}/logout`,
-			true,
 			{
 				jwt: token,
 			},
+			true,
 		);
 	},
 );

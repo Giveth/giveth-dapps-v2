@@ -23,9 +23,8 @@ export const fetchMainnetTokenPrice = async (
 	};
 	const { data } = await gqlRequest(
 		config.MAINNET_CONFIG.uniswapV2Subgraph,
+		{ query, variables },
 		false,
-		query,
-		variables,
 	);
 	const tokenEthPrice = new BigNumber(data.token.derivedETH);
 	const daiEthPrice = new BigNumber(data.daitoken.derivedETH);
@@ -41,9 +40,8 @@ export const fetchGnosisTokenPrice = async (
 	};
 	const { data } = await gqlRequest(
 		config.XDAI_CONFIG.uniswapV2Subgraph,
+		{ query, variables },
 		false,
-		query,
-		variables,
 	);
 	return data?.token?.derivedETH || '0';
 };

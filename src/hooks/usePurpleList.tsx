@@ -11,7 +11,10 @@ export default function usePurpleList() {
 
 	useEffect(() => {
 		if (address) {
-			backendGQLRequest(CHECK_PURPLE_LIST, { address })
+			backendGQLRequest({
+				query: CHECK_PURPLE_LIST,
+				variables: { address },
+			})
 				.then((res: ICheckPurpleListGQL) => {
 					setIsPurpleList(res.data?.walletAddressIsPurpleListed);
 				})
