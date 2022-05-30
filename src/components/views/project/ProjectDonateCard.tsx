@@ -28,7 +28,6 @@ import { IProject } from '@/apollo/types/types';
 import links from '@/lib/constants/links';
 import ShareModal from '@/components/modals/ShareModal';
 import { IReaction } from '@/apollo/types/types';
-import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_REACTION_BY_ID } from '@/apollo/gql/gqlProjects';
 import { likeProject, unlikeProject } from '@/lib/reaction';
 import DeactivateProjectModal from '@/components/modals/DeactivateProjectModal';
@@ -188,7 +187,7 @@ const ProjectDonateCard = ({
 					dispatch(setShowSignWithWallet(true));
 					return;
 				}
-				const { data } = await client.mutate({
+				const { data } = await backendGQLRequest({
 					mutation: ACTIVATE_PROJECT,
 					variables: { projectId: Number(id) },
 				});

@@ -6,5 +6,4 @@ export const OPTIONS_HOME_PROJECTS = {
 		skip: 0,
 		orderBy: { field: gqlEnums.QUALITYSCORE, direction: EDirection.DESC },
 	},
-	notifyOnNetworkStatusChange: true,
 };

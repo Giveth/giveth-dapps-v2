@@ -1,5 +1,4 @@
 import { captureException } from '@sentry/nextjs';
-import { client } from '@/apollo/apolloClient';
 import {
 	TITLE_IS_VALID,
 	WALLET_ADDRESS_IS_VALID,
@@ -9,6 +8,7 @@ import {
 	ECreateErrFields,
 	ICreateProjectErrors,
 } from '@/components/views/create/CreateProject';
+import { backendGQLRequest } from './requests';
 
 export const titleValidation = (
 	title: string,
@@ -20,13 +20,12 @@ export const titleValidation = (
 		_errors[ECreateErrFields.NAME] = 'Title is required';
 		setErrors(_errors);
 	} else {
-		client
-			.query({
-				query: TITLE_IS_VALID,
-				variables: {
-					title,
-				},
-			})
+		backendGQLRequest({
+			query: TITLE_IS_VALID,
+			variables: {
+				title,
+			},
+		})
 			.then(() => {
 				_errors[ECreateErrFields.NAME] = '';
 				setErrors(_errors);
@@ -54,13 +53,12 @@ export const walletAddressValidation = (
 	let address = walletAddress;
 
 	const queryFunc = () =>
-		client
-			.query({
-				query: WALLET_ADDRESS_IS_VALID,
-				variables: {
-					address,
-				},
-			})
+		backendGQLRequest({
+			query: WALLET_ADDRESS_IS_VALID,
+			variables: {
+				address,
+			},
+		})
 			.then(() => {
 				_errors[ECreateErrFields.WALLET_ADDRESS] = '';
 				setErrors(_errors);

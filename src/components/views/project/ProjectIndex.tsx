@@ -10,7 +10,6 @@ import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
 import ProjectDonateCard from './ProjectDonateCard';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
-import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 import { IDonation, IProject } from '@/apollo/types/types';
 import { EDirection, EProjectStatus, gqlEnums } from '@/apollo/types/gqlEnums';
@@ -23,6 +22,7 @@ import SimilarProjects from '@/components/views/project/SimilarProjects';
 import { showToastError } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import { ProjectMeta } from '@/components/Metatag';
+import { backendGQLRequest } from '@/helpers/requests';
 
 const ProjectDonations = dynamic(() => import('./ProjectDonations'));
 const ProjectUpdates = dynamic(() => import('./ProjectUpdates'));
@@ -52,11 +52,10 @@ const ProjectIndex = (props: { project?: IProject }) => {
 	const slug = router.query.projectIdSlug as string;
 
 	const fetchProject = async () => {
-		client
-			.query({
-				query: FETCH_PROJECT_BY_SLUG,
-				variables: { slug, connectedWalletUserId: Number(user?.id) },
-			})
+		backendGQLRequest({
+			query: FETCH_PROJECT_BY_SLUG,
+			variables: { slug, connectedWalletUserId: Number(user?.id) },
+		})
 			.then((res: { data: { projectBySlug: IProject } }) => {
 				setProject(res.data.projectBySlug);
 			})
@@ -80,19 +79,18 @@ const ProjectIndex = (props: { project?: IProject }) => {
 
 	useEffect(() => {
 		if (!id) return;
-		client
-			.query({
-				query: FETCH_PROJECT_DONATIONS,
-				variables: {
-					projectId: parseInt(id),
-					skip: 0,
-					take: donationsPerPage,
-					orderBy: {
-						field: gqlEnums.CREATIONDATE,
-						direction: EDirection.DESC,
-					},
+		backendGQLRequest({
+			query: FETCH_PROJECT_DONATIONS,
+			variables: {
+				projectId: parseInt(id),
+				skip: 0,
+				take: donationsPerPage,
+				orderBy: {
+					field: gqlEnums.CREATIONDATE,
+					direction: EDirection.DESC,
 				},
-			})
+			},
+		})
 			.then((res: IDonationsByProjectIdGQL) => {
 				const donationsByProjectId = res.data.donationsByProjectId;
 				setDonations(donationsByProjectId.donations);

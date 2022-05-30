@@ -13,8 +13,8 @@ import {
 } from '@giveth/ui-design-system';
 
 import { Flex } from './styled-components/Flex';
-import { client } from '@/apollo/apolloClient';
 import { UPLOAD_PROFILE_PHOTO } from '@/apollo/gql/gqlUser';
+import { backendGQLRequest } from '@/helpers/requests';
 
 interface IImageUploader {
 	// multiple: boolean;
@@ -28,7 +28,7 @@ const ImageUploader: FC<IImageUploader> = ({ setUrl, url, setIsUploading }) => {
 	const [uploading, setUploading] = useState(false);
 
 	const onDrop = async (acceptedFiles: File[]) => {
-		const { data: imageUploaded } = await client.mutate({
+		const { data: imageUploaded } = await backendGQLRequest({
 			mutation: UPLOAD_PROFILE_PHOTO,
 			variables: {
 				fileUpload: {

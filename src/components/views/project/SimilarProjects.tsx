@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { Container, H5 } from '@giveth/ui-design-system';
 
 import { captureException } from '@sentry/nextjs';
-import { client } from '@/apollo/apolloClient';
 import { SIMILAR_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { IProject } from '@/apollo/types/types';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
@@ -13,6 +12,7 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import { showToastError } from '@/lib/helpers';
 import { ISuggestedProjectsGQL } from '@/apollo/types/gqlTypes';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
+import { backendGQLRequest } from '@/helpers/requests';
 
 const projectsToFetch = 12;
 
@@ -44,14 +44,13 @@ const SimilarProjects = (props: { slug: string }) => {
 	};
 
 	useEffect(() => {
-		client
-			.query({
-				query: SIMILAR_PROJECTS,
-				variables: {
-					slug,
-					take: projectsToFetch,
-				},
-			})
+		backendGQLRequest({
+			query: SIMILAR_PROJECTS,
+			variables: {
+				slug,
+				take: projectsToFetch,
+			},
+		})
 			.then((res: ISuggestedProjectsGQL) => {
 				const { similarProjectsBySlug } = res.data;
 				const { projects } = similarProjectsBySlug;

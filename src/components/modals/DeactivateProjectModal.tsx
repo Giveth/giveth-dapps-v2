@@ -13,7 +13,6 @@ import {
 } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 import { AnimatePresence, motion } from 'framer-motion';
-import { client } from '@/apollo/apolloClient';
 
 import {
 	DEACTIVATE_PROJECT,
@@ -82,7 +81,7 @@ const DeactivateProjectModal = ({
 				dispatch(setShowSignWithWallet(true));
 				return;
 			}
-			const { data } = await client.mutate({
+			const { data } = await backendGQLRequest({
 				mutation: DEACTIVATE_PROJECT,
 				variables: {
 					projectId: Number(projectId),

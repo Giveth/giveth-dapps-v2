@@ -14,8 +14,8 @@ import { neutralColors } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import ImageUploader from './richImageUploader/imageUploader';
 import { UPLOAD_IMAGE } from '@/apollo/gql/gqlProjects';
-import { client } from '@/apollo/apolloClient';
 import { showToastError } from '@/lib/helpers';
+import { backendGQLRequest } from '@/helpers/requests';
 
 (window as any).Quill = Quill;
 
@@ -110,7 +110,7 @@ const modules = (projectId?: any) => {
 			upload: async (file: any) => {
 				try {
 					console.log('Uploading image, please wait...');
-					const { data: imageUploaded } = await client.mutate({
+					const { data: imageUploaded } = await backendGQLRequest({
 						mutation: UPLOAD_IMAGE,
 						variables: {
 							imageUpload: {

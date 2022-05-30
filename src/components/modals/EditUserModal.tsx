@@ -6,7 +6,6 @@ import { Button, brandColors } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import { useWeb3React } from '@web3-react/core';
 import { Modal } from './Modal';
-import { client } from '@/apollo/apolloClient';
 import { UPDATE_USER } from '@/apollo/gql/gqlUser';
 import { IUser } from '@/apollo/types/types';
 import { FlexCenter, Flex } from '@/components/styled-components/Flex';
@@ -22,6 +21,7 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { IModal } from '@/types/common';
 import { useAppDispatch } from '@/features/hooks';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
+import { backendGQLRequest } from '@/helpers/requests';
 
 enum EditStatusType {
 	INFO,
@@ -103,7 +103,7 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 	const handleSubmit = async () => {
 		setDisabled(true);
 		try {
-			const { data } = await client.mutate({
+			const { data } = await backendGQLRequest({
 				mutation: UPDATE_USER,
 				variables: {
 					...info,

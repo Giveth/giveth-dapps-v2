@@ -4,8 +4,8 @@ import {
 	CREATE_DONATION,
 	UPDATE_DONATION_STATUS,
 } from '@/apollo/gql/gqlDonations';
-import { client } from '@/apollo/apolloClient';
 import { IConfirmDonation } from '@/components/views/donate/helpers';
+import { backendGQLRequest } from '@/helpers/requests';
 
 interface IOnTxHash extends IConfirmDonation {
 	txHash: string;
@@ -13,18 +13,16 @@ interface IOnTxHash extends IConfirmDonation {
 }
 
 export const updateDonation = (donationId: number, status: string) => {
-	client
-		.mutate({
-			mutation: UPDATE_DONATION_STATUS,
-			variables: { donationId, status },
-		})
-		.catch((err: unknown) =>
-			captureException(err, {
-				tags: {
-					section: 'updateDonation',
-				},
-			}),
-		);
+	backendGQLRequest({
+		mutation: UPDATE_DONATION_STATUS,
+		variables: { donationId, status },
+	}).catch((err: unknown) =>
+		captureException(err, {
+			tags: {
+				section: 'updateDonation',
+			},
+		}),
+	);
 };
 
 export async function saveDonation(props: IOnTxHash) {
@@ -37,7 +35,7 @@ export async function saveDonation(props: IOnTxHash) {
 
 	let donationId = 0;
 	try {
-		const { data } = await client.mutate({
+		const { data } = await backendGQLRequest({
 			mutation: CREATE_DONATION,
 			variables: {
 				transactionId: txHash,

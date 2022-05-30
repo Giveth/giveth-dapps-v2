@@ -44,12 +44,12 @@ import {
 import { compareAddresses, showToastError } from '@/lib/helpers';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { slugToProjectView } from '@/lib/routeCreators';
-import { client } from '@/apollo/apolloClient';
 import LightBulbIcon from '/public/images/icons/lightbulb.svg';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { useAppSelector } from '@/features/hooks';
 import useLeaveConfirm from '@/hooks/useLeaveConfirm';
+import { backendGQLRequest } from '@/helpers/requests';
 
 export enum ECreateErrFields {
 	NAME = 'name',
@@ -241,7 +241,7 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 				  });
 
 			if (isDraft && !drafted) {
-				await client.mutate({
+				await backendGQLRequest({
 					mutation: ACTIVATE_PROJECT,
 					variables: { projectId: Number(project.id) },
 				});

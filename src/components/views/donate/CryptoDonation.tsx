@@ -30,7 +30,6 @@ import config from '@/configuration';
 import TokenPicker from './TokenPicker';
 import InlineToast from '@/components/toasts/InlineToast';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
-import { client } from '@/apollo/apolloClient';
 import { PROJECT_ACCEPTED_TOKENS } from '@/apollo/gql/gqlProjects';
 import {
 	formatBalance,
@@ -59,6 +58,7 @@ import {
 	setShowWalletModal,
 } from '@/features/modal/modal.sclie';
 import usePurpleList from '@/hooks/usePurpleList';
+import { backendGQLRequest } from '@/helpers/requests';
 
 const ethereumChain = config.PRIMARY_NETWORK;
 const xdaiChain = config.SECONDARY_NETWORK;
@@ -147,11 +147,10 @@ const CryptoDonation = (props: {
 	}, [selectedToken, isEnabled, account, networkId, balance]);
 
 	useEffect(() => {
-		client
-			.query({
-				query: PROJECT_ACCEPTED_TOKENS,
-				variables: { projectId: Number(projectId) },
-			})
+		backendGQLRequest({
+			query: PROJECT_ACCEPTED_TOKENS,
+			variables: { projectId: Number(projectId) },
+		})
 			.then((res: IProjectAcceptedTokensGQL) => {
 				setAcceptedTokens(res.data.getProjectAcceptTokens);
 			})

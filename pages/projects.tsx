@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import { addApolloState, initializeApollo } from '@/apollo/apolloClient';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
 import ProjectsIndex from '@/components/views/projects/ProjectsIndex';
@@ -31,17 +30,15 @@ const ProjectsRoute = (props: IProjectsRoute) => {
 };
 
 export async function getServerSideProps() {
-	const apolloClient = initializeApollo();
-
 	const { data } = await backendGQLRequest({
 		query: FETCH_ALL_PROJECTS,
 		...OPTIONS_HOME_PROJECTS,
 	});
 
-	const { projects, totalCount, categories } = data.projects;
-	return addApolloState(apolloClient, {
-		props: { projects, totalCount, categories },
-	});
+	// const { projects, totalCount, categories } = data.projects;
+	// return addApolloState(apolloClient, {
+	// 	props: { projects, totalCount, categories },
+	// });
 }
 
 export default ProjectsRoute;

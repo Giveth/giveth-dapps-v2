@@ -2,12 +2,10 @@ import { ethers } from 'ethers';
 
 import { captureException } from '@sentry/nextjs';
 import { IUser } from '@/apollo/types/types';
-import { initializeApollo } from '@/apollo/apolloClient';
 import { LOGIN_USER } from '@/apollo/gql/gqlAuth';
 import { showToastError } from '@/lib/helpers';
 import config from '@/configuration';
-
-const apolloClient = initializeApollo();
+import { backendGQLRequest } from '@/helpers/requests';
 
 export async function __oldWay_getToken(
 	walletAddress: string | null | undefined,
@@ -29,7 +27,7 @@ export async function __oldWay_getToken(
 					networkId,
 				},
 			};
-			const { data } = await apolloClient.mutate(mutate);
+			const { data } = await backendGQLRequest(mutate);
 			return data?.loginWallet?.token;
 		} catch (error) {
 			showToastError(error);
