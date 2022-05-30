@@ -14,23 +14,23 @@ import Lottie from 'react-lottie';
 import { useWeb3React } from '@web3-react/core';
 import { Contract, ethers } from 'ethers';
 import { captureException } from '@sentry/nextjs';
-import { Modal } from './Modal';
-import { Flex } from '../styled-components/Flex';
-import { StakingPoolImages } from '../StakingPoolImages';
-import { AmountInput } from '../AmountInput';
+import { Modal } from '../Modal';
+import { Flex } from '../../styled-components/Flex';
+import { StakingPoolImages } from '../../StakingPoolImages';
+import { AmountInput } from '../../AmountInput';
 import {
 	approveERC20tokenTransfer,
 	stakeTokens,
 	wrapToken,
 } from '@/lib/stakingPool';
-import LoadingAnimation from '../../animations/loading.json';
+import LoadingAnimation from '../../../animations/loading.json';
 import {
 	ConfirmedInnerModal,
 	ErrorInnerModal,
 	SubmittedInnerModal,
-} from './ConfirmSubmit';
+} from '../ConfirmSubmit';
 import { StakeState } from '@/lib/staking';
-import ToggleSwitch from '../styled-components/Switch';
+import ToggleSwitch from '../../styled-components/Switch';
 import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
 import { IModal } from '@/types/common';
 import type { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
@@ -479,7 +479,7 @@ const StakeStepNumber = styled(SublineBold)<IStakeStepState>`
 	width: 24px;
 `;
 
-const StakeModalContainer = styled.div`
+export const StakeModalContainer = styled.div`
 	width: 370px;
 	padding-bottom: 24px;
 `;

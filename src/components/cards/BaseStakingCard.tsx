@@ -53,7 +53,7 @@ import {
 	StakingPoolSubtitle,
 } from './BaseStakingCard.sc';
 import { APRModal } from '../modals/APR';
-import { StakeModal } from '../modals/Stake';
+import { StakeModal } from '../modals/Stake/Stake';
 import { UnStakeModal } from '../modals/UnStake';
 import { StakingPoolImages } from '../StakingPoolImages';
 import { V3StakeModal } from '../modals/V3Stake';
@@ -74,6 +74,7 @@ import { IStakeInfo } from '@/hooks/useStakingPool';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { useAppSelector } from '@/features/hooks';
 import { ITokenDistroInfo } from '@/types/subgraph';
+import StakeLockModal from '../modals/Stake/StakeLock';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -121,6 +122,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const [showAPRModal, setShowAPRModal] = useState(false);
 	const [showUniV3APRModal, setShowUniV3APRModal] = useState(false);
 	const [showStakeModal, setShowStakeModal] = useState(false);
+	const [showStakeLockModal, setShowStakeLockModal] = useState(false);
 	const [showUnStakeModal, setShowUnStakeModal] = useState(false);
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
 	const [showWhatIsGIVstreamModal, setShowWhatIsGIVstreamModal] =
@@ -203,6 +205,12 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	useEffect(() => {
 		setStarted(farmStartTimeMS ? getNowUnixMS() > farmStartTimeMS : true);
 	}, [farmStartTimeMS]);
+
+	useEffect(() => {
+		if (type === StakingType.GIVPOWER) {
+			setShowStakeLockModal(true);
+		}
+	}, []);
 
 	return (
 		<>
@@ -550,6 +558,14 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					setShowModal={setShowWhatIsGIVstreamModal}
 					tokenDistroHelper={tokenDistroHelper}
 					regenStreamConfig={regenStreamConfig}
+				/>
+			)}
+			{showStakeLockModal && (
+				<StakeLockModal
+					setShowModal={setShowStakeLockModal}
+					poolStakingConfig={poolStakingConfig}
+					regenStreamConfig={regenStreamConfig}
+					maxAmount={userNotStakedAmount}
 				/>
 			)}
 		</>
