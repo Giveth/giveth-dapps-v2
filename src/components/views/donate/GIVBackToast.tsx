@@ -9,14 +9,19 @@ import ExternalLink from '@/components/ExternalLink';
 const GIVBackToast = (props: {
 	projectEligible?: boolean;
 	tokenEligible?: boolean;
+	userEligible?: boolean;
 }) => {
-	const { projectEligible, tokenEligible } = props;
-	let message, color, boldColor, backgroundColor;
-	if (!projectEligible) {
-		message = 'This project is not eligible for GIVbacks.';
-		color = brandColors.mustard[700];
-		boldColor = brandColors.mustard[800];
+	const { projectEligible, tokenEligible, userEligible } = props;
+	let message,
+		color = brandColors.mustard[700],
+		boldColor = brandColors.mustard[800],
 		backgroundColor = brandColors.mustard[200];
+
+	if (!userEligible) {
+		message =
+			'This wallet address is associated with a Giveth project, therefore, donations made from this address are not eligible for GIVbacks.';
+	} else if (!projectEligible) {
+		message = 'This project is not eligible for GIVbacks.';
 	} else if (tokenEligible) {
 		message = 'This token is eligible for GIVbacks.';
 		color = brandColors.giv[300];
@@ -35,9 +40,6 @@ const GIVBackToast = (props: {
 				.
 			</>
 		);
-		color = brandColors.mustard[700];
-		boldColor = brandColors.mustard[800];
-		backgroundColor = brandColors.mustard[200];
 	}
 
 	return (

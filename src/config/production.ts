@@ -1,18 +1,22 @@
 import {
 	EnvConfig,
 	RegenFarmType,
+	StakingPlatform,
 	StakingType,
 	StreamType,
 } from '@/types/config';
 import { gwei2wei } from '@/helpers/blockchain';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
+const BASE_ROUTE = 'https://mainnet.serve.giveth.io';
 
 const config: EnvConfig = {
 	BACKEND_LINK: 'https://mainnet.serve.giveth.io/graphql',
 	MAINNET_NETWORK_NUMBER: 1, // ETH
 	XDAI_NETWORK_NUMBER: 100, // xDAI
-
+	MICROSERVICES: {
+		authentication: `${BASE_ROUTE}/siweauthmicroservice/v1`,
+	},
 	GARDEN_LINK:
 		'https://gardens.1hive.org/#/xdai/garden/0xb25f0ee2d26461e2b5b3d3ddafe197a0da677b98',
 
@@ -34,6 +38,7 @@ const config: EnvConfig = {
 			'https://api.thegraph.com/subgraphs/name/aminlatifi/giveth-economy',
 
 		TOKEN_ADDRESS: '0x900db999074d9277c5da2a43f252d74366230da0',
+		tokenAddressOnUniswapV2: '0x900db999074d9277c5da2a43f252d74366230da0',
 		WETH_TOKEN_ADDRESS: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
 		TOKEN_DISTRO_ADDRESS: '0x87dE995F6744B75bBe0255A973081142aDb61f4d',
 		GIV: {
@@ -48,7 +53,8 @@ const config: EnvConfig = {
 			{
 				POOL_ADDRESS: '0xbeba1666c62c65e58770376de332891b09461eeb',
 				LM_ADDRESS: '0xa4523D703F663615Bd41606B46B58dEb2F926D98',
-				type: StakingType.UNISWAPV2,
+				type: StakingType.UNISWAPV2_GIV_DAI,
+				platform: StakingPlatform.UNISWAP,
 				title: 'GIV / DAI',
 				description: '50% GIV, 50% DAI',
 				provideLiquidityLink:
@@ -63,7 +69,8 @@ const config: EnvConfig = {
 				POOL_ID:
 					'0x7819f1532c49388106f7762328c51ee70edd134c000200000000000000000109',
 				LM_ADDRESS: '0xc0dbDcA66a0636236fAbe1B3C16B1bD4C84bB1E1',
-				type: StakingType.BALANCER,
+				type: StakingType.BALANCER_ETH_GIV,
+				platform: StakingPlatform.BALANCER,
 				title: 'GIV / ETH',
 				description: '80% GIV, 20% ETH',
 				provideLiquidityLink:
@@ -87,7 +94,8 @@ const config: EnvConfig = {
 					'0x34d27210cC319EC5281bDc4DC2ad8FbcF4EAEAEB',
 				POOL_ADDRESS: '', //it's used in uniswap v2
 				LM_ADDRESS: '', //it's used in uniswap v2
-				type: StakingType.UNISWAPV3,
+				type: StakingType.UNISWAPV3_ETH_GIV,
+				platform: StakingPlatform.UNISWAP,
 				title: 'GIV / ETH',
 				description: '0.3% tier only',
 				provideLiquidityLink: `https://app.uniswap.org/#/add/ETH/0x900dB999074d9277c5DA2A43F252D74366230DA0/3000`,
@@ -96,6 +104,8 @@ const config: EnvConfig = {
 				active: false,
 			},
 		],
+		uniswapV2Subgraph:
+			'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
 		regenStreams: [],
 		regenFarms: [],
 	},
@@ -117,9 +127,10 @@ const config: EnvConfig = {
 		blockExplorerName: ['Blockscout'],
 		blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-xdai',
+			'https://api.thegraph.com/subgraphs/name/aminlatifi/giveth-economy-xdai',
 
 		TOKEN_ADDRESS: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
+		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		MERKLE_ADDRESS: '0xFad63adEFb8203F7605F25f6a921c8bf45604A5e',
 		TOKEN_DISTRO_ADDRESS: '0xc0dbDcA66a0636236fAbe1B3C16B1bD4C84bB1E1',
 
@@ -135,7 +146,8 @@ const config: EnvConfig = {
 			{
 				POOL_ADDRESS: '0x08ea9f608656A4a775EF73f5B187a2F1AE2ae10e',
 				LM_ADDRESS: '0x4B9EfAE862a1755F7CEcb021856D467E86976755',
-				type: StakingType.HONEYSWAP,
+				type: StakingType.HONEYSWAP_GIV_HNY,
+				platform: StakingPlatform.HONEYSWAP,
 				title: 'GIV / HNY',
 				description: '50% GIV, 50% HNY',
 				provideLiquidityLink:
@@ -146,7 +158,8 @@ const config: EnvConfig = {
 			{
 				POOL_ADDRESS: '0x55FF0cef43F0DF88226E9D87D09fA036017F5586',
 				LM_ADDRESS: '0xfB429010C1e9D08B7347F968a7d88f0207807EF0',
-				type: StakingType.SUSHISWAP,
+				type: StakingType.SUSHISWAP_ETH_GIV,
+				platform: StakingPlatform.SUSHISWAP,
 				title: 'GIV / ETH',
 				description: '50% ETH, 50% GIV',
 				provideLiquidityLink:
@@ -176,7 +189,8 @@ const config: EnvConfig = {
 			{
 				POOL_ADDRESS: '0x8a0bee989c591142414ad67fb604539d917889df',
 				LM_ADDRESS: '0x502EC7a040F486EE6Cb7d634D94764874B29dE68',
-				type: StakingType.HONEYSWAP,
+				type: StakingType.HONEYSWAP_FOX_HNY,
+				platform: StakingPlatform.HONEYSWAP,
 				title: 'FOX / HNY',
 				description: '50% FOX, 50% HNY',
 				provideLiquidityLink:

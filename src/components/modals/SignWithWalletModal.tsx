@@ -8,6 +8,7 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
+import { useRouter } from 'next/router';
 
 import { Modal } from '@/components/modals/Modal';
 import { ETheme, useGeneral } from '@/context/general.context';
@@ -24,6 +25,8 @@ interface IProps extends IModal {
 export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 	const { theme } = useGeneral();
 	const { account, library, chainId } = useWeb3React();
+	const router = useRouter();
+
 	const dispatch = useAppDispatch();
 
 	return (
@@ -53,8 +56,10 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 								address: account,
 								chainId,
 								signer: library?.getSigner(),
+								pathname: router.pathname,
 							}),
 						);
+						console.log({ signature });
 						setShowModal(false);
 						!!signature && callback && callback();
 					}}
