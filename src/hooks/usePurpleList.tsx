@@ -2,7 +2,7 @@ import { useWeb3React } from '@web3-react/core';
 import { useEffect, useState } from 'react';
 import { CHECK_PURPLE_LIST } from '@/apollo/gql/gqlPurpleList';
 import { ICheckPurpleListGQL } from '@/apollo/types/gqlTypes';
-import { gqlRequest } from '@/helpers/requests';
+import { backendGQLRequest } from '@/helpers/requests';
 
 export default function usePurpleList() {
 	const { account: address } = useWeb3React();
@@ -11,7 +11,7 @@ export default function usePurpleList() {
 
 	useEffect(() => {
 		if (address) {
-			gqlRequest(CHECK_PURPLE_LIST, { address })
+			backendGQLRequest(CHECK_PURPLE_LIST, { address })
 				.then((res: ICheckPurpleListGQL) => {
 					setIsPurpleList(res.data?.walletAddressIsPurpleListed);
 				})

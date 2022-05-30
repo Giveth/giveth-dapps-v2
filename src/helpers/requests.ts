@@ -2,14 +2,17 @@ import { isSSRMode } from '@/lib/helpers';
 import links from '@/lib/constants/links';
 import StorageLabel from '@/lib/localStorage';
 
-export function postRequest(
+export function sendRequest(
 	url: string,
-	body: {} = {},
+	method: 'POST' | 'GET',
+	authorization: boolean = false,
+	body?: {},
 	additionalHeaders: HeadersInit = {},
 	additionalOptions: RequestInit = {},
 ) {
 	const token = !isSSRMode ? localStorage.getItem(StorageLabel.TOKEN) : null;
-	const Authorization = token ? `Bearer ${token}` : undefined;
+	const Authorization =
+		authorization && token ? `Bearer ${token}` : undefined;
 	const defaultHeaders = {
 		'Content-Type': 'application/json',
 		...additionalHeaders,
@@ -22,7 +25,7 @@ export function postRequest(
 		: { ...defaultHeaders };
 	try {
 		return fetch(url, {
-			method: 'POST',
+			method,
 			headers,
 			body: JSON.stringify(body),
 			...additionalOptions,
@@ -41,7 +44,60 @@ export function postRequest(
 	}
 }
 
+export function getRequest(
+	url: string,
+	authorization: boolean = false,
+	additionalHeaders: HeadersInit = {},
+	additionalOptions: RequestInit = {},
+) {
+	return sendRequest(
+		url,
+		'GET',
+		authorization,
+		undefined,
+		additionalHeaders,
+		additionalOptions,
+	);
+}
+
+export function postRequest(
+	url: string,
+	authorization: boolean = false,
+	body: {} = {},
+	additionalHeaders: HeadersInit = {},
+	additionalOptions: RequestInit = {},
+) {
+	return sendRequest(
+		url,
+		'POST',
+		authorization,
+		body,
+		additionalHeaders,
+		additionalOptions,
+	);
+}
+
 export function gqlRequest(
+	url: string,
+	authorization: boolean = false,
+	query: string,
+	variables: {} = {},
+	additionalHeaders: HeadersInit = {},
+	additionalOptions: RequestInit = {},
+) {
+	return postRequest(
+		url,
+		authorization,
+		{
+			query,
+			variables,
+		},
+		additionalHeaders,
+		additionalOptions,
+	);
+}
+
+export function backendGQLRequest(
 	query: string,
 	variables: {} = {},
 	additionalHeaders: HeadersInit = {},
@@ -49,6 +105,7 @@ export function gqlRequest(
 ) {
 	return postRequest(
 		links.BACKEND,
+		true,
 		{
 			query,
 			variables,

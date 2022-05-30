@@ -15,7 +15,12 @@ export const defaultSubgraphValues: ISubgraphState = {
 	allPositions: [],
 };
 
-const initialState = {
+const initialState: {
+	currentValues: ISubgraphState;
+	mainnetValues: ISubgraphState;
+	xDaiValues: ISubgraphState;
+	status: string;
+} = {
 	currentValues: defaultSubgraphValues,
 	mainnetValues: defaultSubgraphValues,
 	xDaiValues: defaultSubgraphValues,
@@ -28,9 +33,6 @@ export const subgraphSlice = createSlice({
 	reducers: {},
 	extraReducers: builder => {
 		builder
-			.addCase(fetchCurrentInfoAsync.pending, state => {
-				state.status = 'loading';
-			})
 			.addCase(fetchCurrentInfoAsync.fulfilled, (state, action) => {
 				state.status = 'idle';
 				state.currentValues = action.payload.response;
@@ -41,30 +43,13 @@ export const subgraphSlice = createSlice({
 					state.xDaiValues = action.payload.response;
 				}
 			})
-			.addCase(fetchCurrentInfoAsync.rejected, state => {
-				state.status = 'failed';
-			});
-		builder
-			.addCase(fetchXDaiInfoAsync.pending, state => {
-				state.status = 'loading';
-			})
 			.addCase(fetchXDaiInfoAsync.fulfilled, (state, action) => {
 				state.status = 'idle';
 				state.xDaiValues = action.payload;
 			})
-			.addCase(fetchXDaiInfoAsync.rejected, state => {
-				state.status = 'failed';
-			});
-		builder
-			.addCase(fetchMainnetInfoAsync.pending, state => {
-				state.status = 'loading';
-			})
 			.addCase(fetchMainnetInfoAsync.fulfilled, (state, action) => {
 				state.status = 'idle';
 				state.mainnetValues = action.payload;
-			})
-			.addCase(fetchMainnetInfoAsync.rejected, state => {
-				state.status = 'failed';
 			});
 	},
 });
