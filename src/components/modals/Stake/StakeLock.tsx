@@ -9,6 +9,7 @@ import { StakeState } from '@/lib/staking';
 import StakeSteps from './StakeSteps';
 import { AmountInput } from '@/components/AmountInput';
 import LockSlider from './LockSlider';
+import LockInfo from './LockInfo';
 import type { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 
 interface IStakeLockModalProps extends IModal {
@@ -50,6 +51,7 @@ const StakeLockModal: FC<IStakeLockModalProps> = ({
 					/>
 					<SectionTitle weight={700}>Rounds</SectionTitle>
 					<LockSlider />
+					<LockInfo />
 				</StakeInnerModal>
 			</StakeModalContainer>
 		</Modal>
