@@ -45,6 +45,5 @@ export const fetchGnosisTokenPrice = async (
 		query,
 		variables,
 	);
-	console.log('data', data);
-	return '10';
+	return data?.token?.derivedETH || '0';
 };
