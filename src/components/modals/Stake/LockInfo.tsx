@@ -6,9 +6,12 @@ import {
 	H6,
 	IconHelp,
 	IconSpark,
+	neutralColors,
+	Subline,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
 
 const LockInfo = () => {
 	return (
@@ -18,7 +21,15 @@ const LockInfo = () => {
 				<MultiPlyValue weight={700}>
 					x2
 					<MultiPlyHelp>
-						<IconHelp size={16} />
+						<IconWithTooltip
+							icon={<IconHelp size={16} />}
+							direction={'top'}
+						>
+							<LockInfoooltip>
+								The longer you lock your GIV, the greater your
+								APR & GIVpower.
+							</LockInfoooltip>
+						</IconWithTooltip>
 					</MultiPlyHelp>
 				</MultiPlyValue>
 			</Flex>
@@ -26,7 +37,15 @@ const LockInfo = () => {
 				<LockInfoRowTitle medium>
 					APR
 					<LockInfoRowHelp>
-						<IconHelp size={16} />
+						<IconWithTooltip
+							icon={<IconHelp size={16} />}
+							direction={'right'}
+						>
+							<LockInfoooltip>
+								This is you rate of return for this set of GIV
+								tokens.
+							</LockInfoooltip>
+						</IconWithTooltip>
 					</LockInfoRowHelp>
 				</LockInfoRowTitle>
 				<LockInfoRowValue>
@@ -40,7 +59,15 @@ const LockInfo = () => {
 				<LockInfoRowTitle medium>
 					GIVpower
 					<LockInfoRowHelp>
-						<IconHelp size={16} />
+						<IconWithTooltip
+							icon={<IconHelp size={16} />}
+							direction={'right'}
+						>
+							<LockInfoooltip>
+								GIVpower allows you to support verified projects
+								on Giveth while earning rewards.
+							</LockInfoooltip>
+						</IconWithTooltip>
 					</LockInfoRowHelp>
 				</LockInfoRowTitle>
 				<LockInfoRowValue>0</LockInfoRowValue>
@@ -49,7 +76,15 @@ const LockInfo = () => {
 				<LockInfoRowTitle medium>
 					gGIV
 					<LockInfoRowHelp>
-						<IconHelp size={16} />
+						<IconWithTooltip
+							icon={<IconHelp size={16} />}
+							direction={'right'}
+						>
+							<LockInfoooltip>
+								gGIV is your nontransferable GIVgarden voting
+								power, given at a 1:1 ratio with staked GIV.
+							</LockInfoooltip>
+						</IconWithTooltip>
 					</LockInfoRowHelp>
 				</LockInfoRowTitle>
 				<LockInfoRowValue>0</LockInfoRowValue>
@@ -113,6 +148,11 @@ const LockInfoRowSpark = styled.div`
 	&:hover {
 		color: ${brandColors.mustard[400]};
 	}
+`;
+
+const LockInfoooltip = styled(Subline)`
+	color: ${neutralColors.gray[100]};
+	width: 160px;
 `;
 
 export default LockInfo;
