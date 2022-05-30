@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import styled from 'styled-components';
 import {
@@ -43,19 +43,25 @@ const ProjectUpdates = (props: {
 
 	const [newUpdate, setNewUpdate] = useState<string>('');
 	const [title, setTitle] = useState<string>('');
+	const [sortedUpdates, setSortedUpdates] = useState<IProjectUpdate[]>([]);
 	const [currentUpdate, setCurrentUpdate] = useState<string>('');
 	const [showRemoveUpdateModal, setShowRemoveUpdateModal] = useState(false);
 
-	const { data } = backendGQLRequest({
-		query: FETCH_PROJECT_UPDATES,
-		variables: {
-			projectId: parseInt(id || ''),
-			take: 100,
-			skip: 0,
-		},
-	});
+	useEffect(() => {
+		async function fetchSortedUpdates() {
+			const { data } = await backendGQLRequest({
+				query: FETCH_PROJECT_UPDATES,
+				variables: {
+					projectId: parseInt(id || ''),
+					take: 100,
+					skip: 0,
+				},
+			});
+			setSortedUpdates(data?.getProjectUpdates);
+		}
+		fetchSortedUpdates();
+	}, [id]);
 
-	const sortedUpdates = data?.getProjectUpdates;
 	const isOwner = adminUser?.id === user?.id;
 
 	const editUpdate = async (
