@@ -29,7 +29,7 @@ export const fetchMainnetTokenPrice = async (
 	);
 	const tokenEthPrice = new BigNumber(data.token.derivedETH);
 	const daiEthPrice = new BigNumber(data.daitoken.derivedETH);
-	return givEth.div(daiEth).toString();
+	return tokenEthPrice.div(daiEthPrice).toString();
 };
 
 export const fetchGnosisTokenPrice = async (
