@@ -39,6 +39,7 @@ const config: EnvConfig = {
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-kovan-staging',
 
 		TOKEN_ADDRESS: '0x29434A25abd94AE882aA883eea81585Aaa5b078D',
+		tokenAddressOnUniswapV2: '0x900db999074d9277c5da2a43f252d74366230da0',
 		WETH_TOKEN_ADDRESS: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
 		TOKEN_DISTRO_ADDRESS: '0x2C84Ab41b53C52959a794830fe296Fd717c33337',
 		GIV: {
@@ -165,6 +166,7 @@ const config: EnvConfig = {
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-xdai-staging',
 
 		TOKEN_ADDRESS: '0x83a8eea6427985C523a0c4d9d3E62C051B6580d3',
+		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		MERKLE_ADDRESS: '0xc87403C70c9FBfb594d98d3B5E695BBE4C694188',
 		TOKEN_DISTRO_ADDRESS: '0x18a46865AAbAf416a970eaA8625CFC430D2364A1',
 
