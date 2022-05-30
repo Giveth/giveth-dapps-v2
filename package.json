@@ -43,6 +43,7 @@
 		"quill-image-drop-and-paste": "^1.2.10",
 		"quill-image-resize-module": "^3.0.0",
 		"quill-magic-url": "^4.1.4",
+		"rc-slider": "^10.0.0",
 		"react": "^18.0.0",
 		"react-custom-scrollbars": "^4.2.1",
 		"react-dom": "^18.0.0",
