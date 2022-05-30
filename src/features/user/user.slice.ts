@@ -65,7 +65,7 @@ export const userSlice = createSlice({
 					if (
 						compareAddresses(
 							localAddress,
-							action.payload.data?.userByAddress?.walletAddress,
+							action.payload.data.userByAddress?.walletAddress,
 						)
 					) {
 						state.token =
