@@ -5,6 +5,7 @@ import Select, { StylesConfig } from 'react-select';
 import RadioTitle from '../donate/RadioTitle';
 import Input from '@/components/Input';
 import { Label } from '../create/Create.sc';
+import { Shadow } from '@/components/styled-components/Shadow';
 
 const options = [
 	{ value: 'new york', label: 'New York' },
@@ -15,14 +16,43 @@ const options = [
 const selectCustomStyles: StylesConfig = {
 	control: styles => ({
 		...styles,
+		width: '70%',
+		maxWidth: '520px',
 		borderColor: neutralColors.gray[300],
 		borderWidth: '2px',
 		borderRadius: '8px',
 		boxShadow: 'none',
 		padding: '8px',
+		'&:hover': {
+			borderColor: `${neutralColors.gray[500]}`,
+		},
+		'&:focus-within': {
+			borderColor: `${neutralColors.gray[500]}`,
+		},
+	}),
+	option: (styles, { isFocused, isSelected }) => ({
+		padding: '8px',
+		borderRadius: '4px',
+		backgroundColor: isSelected
+			? neutralColors.gray[300]
+			: isFocused
+			? neutralColors.gray[200]
+			: 'white',
+		color: isSelected ? neutralColors.gray[900] : neutralColors.gray[800],
+		'&:click': {
+			backgroundColor: neutralColors.gray[300],
+		},
+	}),
+	menu: styles => ({
+		...styles,
 		width: '70%',
-
 		maxWidth: '520px',
+		border: '0px',
+		borderRadius: '8px',
+		boxShadow: Shadow.Neutral[500],
+		'&:focus-within': {
+			border: `2px solid ${neutralColors.gray[300]}`,
+		},
 	}),
 };
 
@@ -155,5 +185,11 @@ const DescriptionInput = styled.textarea`
 	resize: none;
 	::placeholder {
 		color: ${neutralColors.gray[500]};
+	}
+	:hover {
+		border-color: ${neutralColors.gray[500]};
+	}
+	:focus-within {
+		border-color: ${neutralColors.gray[500]};
 	}
 `;
