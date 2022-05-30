@@ -11,7 +11,6 @@ import {
 	SublineBold,
 } from '@giveth/ui-design-system';
 
-import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { IDonation } from '@/apollo/types/types';
 import SearchBox from '@/components/SearchBox';
@@ -24,6 +23,7 @@ import ExternalLink from '@/components/ExternalLink';
 import SortIcon from '@/components/SortIcon';
 import ETHIcon from '/public/images/currencies/eth/24.svg';
 import GnosisIcon from '/public/images/currencies/gnosisChain/24.svg';
+import { backendGQLRequest } from '@/helpers/requests';
 
 const itemPerPage = 10;
 
@@ -80,7 +80,7 @@ const ProjectDonationTable = ({
 	useEffect(() => {
 		if (!id) return;
 		const fetchProjectDonations = async () => {
-			const { data: projectDonations } = await client.query({
+			const { data: projectDonations } = await backendGQLRequest({
 				query: FETCH_PROJECT_DONATIONS,
 				variables: {
 					projectId: parseInt(id),

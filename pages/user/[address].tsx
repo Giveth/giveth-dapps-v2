@@ -5,10 +5,10 @@ import styled from 'styled-components';
 import { H3 } from '@giveth/ui-design-system';
 import { Container } from '@/components/Grid';
 
-import { client } from '@/apollo/apolloClient';
 import { GET_USER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
 import { IUser } from '@/apollo/types/types';
 import UserPublicProfileView from '@/components/views/userPublicProfile/UserPublicProfile.view';
+import { backendGQLRequest } from '@/helpers/requests';
 
 interface IUserRouteProps {
 	user?: IUser;
@@ -44,7 +44,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 	const address = Array.isArray(queryAddress)
 		? queryAddress[0].toLowerCase()
 		: queryAddress.toLowerCase();
-	const { data: userData } = await client.query({
+	const { data: userData } = await backendGQLRequest({
 		query: GET_USER_BY_ADDRESS,
 		variables: {
 			address: address,

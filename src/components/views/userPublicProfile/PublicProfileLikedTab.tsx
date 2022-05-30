@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { client } from '@/apollo/apolloClient';
 import { FETCH_USER_LIKED_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { IUserLikedProjects } from '@/apollo/types/gqlTypes';
 import { IProject } from '@/apollo/types/types';
@@ -11,6 +10,7 @@ import { Loading } from './projectsTab/PublicProfileProjectsTab';
 import { IUserPublicProfileView } from './UserPublicProfile.view';
 import { mediaQueries } from '@/lib/constants/constants';
 import NothingToSee from '@/components/views/userPublicProfile/NothingToSee';
+import { backendGQLRequest } from '@/helpers/requests';
 
 const itemPerPage = 6;
 
@@ -27,7 +27,7 @@ const PublicProfileLikedTab: FC<IUserPublicProfileView> = ({
 		if (!user) return;
 		const fetchUserProjects = async () => {
 			setLoading(true);
-			const { data: userLikedProjects } = await client.query({
+			const { data: userLikedProjects } = await backendGQLRequest({
 				query: FETCH_USER_LIKED_PROJECTS,
 				variables: {
 					userId: parseFloat(user.id || '') || -1,

@@ -8,7 +8,6 @@ import {
 	IOrder,
 } from '../UserPublicProfile.view';
 import { EDirection } from '@/apollo/types/gqlEnums';
-import { client } from '@/apollo/apolloClient';
 import { FETCH_USER_DONATIONS } from '@/apollo/gql/gqlUser';
 import { IUserDonations } from '@/apollo/types/gqlTypes';
 import { IWalletDonation } from '@/apollo/types/types';
@@ -16,6 +15,7 @@ import Pagination from '@/components/Pagination';
 import { Flex } from '@/components/styled-components/Flex';
 import NothingToSee from '@/components/views/userPublicProfile/NothingToSee';
 import DonationTable from '@/components/views/userPublicProfile/donationsTab/DonationsTable';
+import { backendGQLRequest } from '@/helpers/requests';
 
 const itemPerPage = 10;
 
@@ -53,7 +53,7 @@ const PublicProfileDonationsTab: FC<IUserPublicProfileView> = ({
 		if (!user) return;
 		const fetchUserDonations = async () => {
 			setLoading(true);
-			const { data: userDonations } = await client.query({
+			const { data: userDonations } = await backendGQLRequest({
 				query: FETCH_USER_DONATIONS,
 				variables: {
 					userId: parseFloat(user.id || '') || -1,

@@ -28,6 +28,7 @@ import Routes from '@/lib/constants/Routes';
 import { IModal } from '@/types/common';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.sclie';
+import { backendGQLRequest } from '@/helpers/requests';
 
 interface ISelectObj {
 	value: number;
@@ -59,7 +60,7 @@ const DeactivateProjectModal = ({
 	const dispatch = useAppDispatch();
 	const isSignedIn = useAppSelector(state => state.user.isSignedIn);
 	const fetchReasons = async () => {
-		const { data } = await client.query({
+		const { data } = await backendGQLRequest({
 			query: GET_STATUS_REASONS,
 			fetchPolicy: 'no-cache',
 		});

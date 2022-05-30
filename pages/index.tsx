@@ -2,13 +2,13 @@ import Head from 'next/head';
 import { useEffect, useState } from 'react';
 
 import HomeIndex from '@/components/views/homepage/HomeIndex';
-import { client } from '@/apollo/apolloClient';
 import { FETCH_HOME_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { EDirection, gqlEnums } from '@/apollo/types/gqlEnums';
 import { IProject } from '@/apollo/types/types';
 import { useAppSelector } from '@/features/hooks';
 import { homeMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
+import { backendGQLRequest } from '@/helpers/requests';
 
 const projectsToFetch = 12;
 
@@ -26,7 +26,7 @@ const fetchProjects = async (userId: string | undefined = undefined) => {
 	if (userId) {
 		variables.connectedWalletUserId = Number(userId);
 	}
-	const { data } = await client.query({
+	const { data } = await backendGQLRequest({
 		query: FETCH_HOME_PROJECTS,
 		variables,
 		fetchPolicy: 'network-only',

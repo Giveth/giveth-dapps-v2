@@ -47,6 +47,7 @@ import {
 	incrementLikedProjectsCount,
 	decrementLikedProjectsCount,
 } from '@/features/user/user.slice';
+import { backendGQLRequest } from '@/helpers/requests';
 
 interface IProjectDonateCard {
 	project?: IProject;
@@ -139,7 +140,7 @@ const ProjectDonateCard = ({
 			if (user?.id === reaction?.userId) return;
 
 			try {
-				const { data } = await client.query({
+				const { data } = await backendGQLRequest({
 					query: FETCH_PROJECT_REACTION_BY_ID,
 					variables: {
 						id: Number(id),

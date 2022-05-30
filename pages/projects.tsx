@@ -6,6 +6,7 @@ import ProjectsIndex from '@/components/views/projects/ProjectsIndex';
 import { ICategory, IProject } from '@/apollo/types/types';
 import { projectsMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
+import { backendGQLRequest } from '@/helpers/requests';
 
 interface IProjectsRoute {
 	projects: IProject[];
@@ -32,7 +33,7 @@ const ProjectsRoute = (props: IProjectsRoute) => {
 export async function getServerSideProps() {
 	const apolloClient = initializeApollo();
 
-	const { data } = await apolloClient.query({
+	const { data } = await backendGQLRequest({
 		query: FETCH_ALL_PROJECTS,
 		...OPTIONS_HOME_PROJECTS,
 		fetchPolicy: 'network-only',

@@ -12,13 +12,13 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { Container } from '@/components/Grid';
 import { EDirection } from '@/apollo/types/gqlEnums';
 import NothingToSee from '@/components/views/userPublicProfile/NothingToSee';
-import { client } from '@/apollo/apolloClient';
 import { FETCH_USER_PROJECTS } from '@/apollo/gql/gqlUser';
 import { IUserProjects } from '@/apollo/types/gqlTypes';
 import { IProject } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import { Flex } from '@/components/styled-components/Flex';
+import { backendGQLRequest } from '@/helpers/requests';
 
 const itemPerPage = 10;
 
@@ -57,7 +57,7 @@ const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({
 		if (!user) return;
 		const fetchUserProjects = async () => {
 			setLoading(true);
-			const { data: userProjects } = await client.query({
+			const { data: userProjects } = await backendGQLRequest({
 				query: FETCH_USER_PROJECTS,
 				variables: {
 					userId: parseFloat(user.id || '') || -1,

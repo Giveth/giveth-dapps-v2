@@ -5,8 +5,8 @@ import dynamic from 'next/dynamic';
 import { captureException } from '@sentry/nextjs';
 import { IProjectBySlug } from '@/apollo/types/types';
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
-import { client } from '@/apollo/apolloClient';
 import { ProjectMeta } from '@/components/Metatag';
+import { backendGQLRequest } from '@/helpers/requests';
 
 const DonateIndex = dynamic(
 	() => import('@/components/views/donate/DonateIndex'),
@@ -29,7 +29,7 @@ export async function getServerSideProps(props: { query: { slug: string } }) {
 	const { query } = props;
 	const slug = decodeURI(query.slug).replace(/\s/g, '');
 	try {
-		const { data } = await client.query({
+		const { data } = await backendGQLRequest({
 			query: FETCH_PROJECT_BY_SLUG,
 			variables: { slug },
 			fetchPolicy: 'no-cache',
