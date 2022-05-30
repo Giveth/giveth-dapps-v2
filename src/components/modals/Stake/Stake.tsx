@@ -236,7 +236,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 									Stake
 								</StakeModalTitleText>
 							</StakeModalTitle>
-							<InnerModal>
+							<StakeInnerModal>
 								<StakeSteps stakeState={stakeState} />
 								<AmountInput
 									setAmount={setAmount}
@@ -337,7 +337,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 										setShowModal(false);
 									}}
 								/>
-							</InnerModal>
+							</StakeInnerModal>
 						</>
 					)}
 				{chainId && stakeState === StakeState.CONFIRMING && (
@@ -398,7 +398,7 @@ const StakeModalTitleText = styled(H4)`
 	color: ${neutralColors.gray[100]};
 `;
 
-const InnerModal = styled.div`
+export const StakeInnerModal = styled.div`
 	padding: 0 24px;
 `;
 
