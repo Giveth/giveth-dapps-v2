@@ -19,10 +19,12 @@ export const fetchGIVPriceAsync = createAsyncThunk(
 	async (chainId: number) => {
 		if (chainId === config.MAINNET_NETWORK_NUMBER) {
 			return await fetchMainnetTokenPrice(
-				config.MAINNET_CONFIG.TOKEN_ADDRESS,
+				config.MAINNET_CONFIG.tokenAddressOnUniswapV2,
 			);
 		}
-		return await fetchGnosisTokenPrice(config.XDAI_CONFIG.TOKEN_ADDRESS);
+		return await fetchGnosisTokenPrice(
+			config.XDAI_CONFIG.tokenAddressOnUniswapV2,
+		);
 	},
 );
 

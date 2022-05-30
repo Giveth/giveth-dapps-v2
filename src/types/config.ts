@@ -98,6 +98,7 @@ export interface RegenStreamConfig {
 
 export interface BasicNetworkConfig {
 	TOKEN_ADDRESS: string;
+	tokenAddressOnUniswapV2: string; // For price purpose
 	TOKEN_DISTRO_ADDRESS: string;
 	GIV: BasicStakingConfig;
 	nodeUrl: string;
