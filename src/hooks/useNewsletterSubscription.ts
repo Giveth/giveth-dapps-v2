@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { captureException } from '@sentry/nextjs';
-import { autopilotClient } from '@/services/autopilot';
+import { postRequest } from '@/helpers/requests';
 
 function validateEmail(email: string): boolean {
 	const re =
@@ -16,14 +16,20 @@ const useNewsletterSubscription = () => {
 	const error: boolean = !validateEmail(email) && email !== '';
 
 	const submitSubscription = () => {
-		autopilotClient
-			.post('/contact', {
+		postRequest(
+			'https://api2.autopilothq.com/v1/contact',
+			{
 				contact: {
 					Email: email,
 					_autopilot_list:
 						'contactlist_6C5203EA-9A4E-4868-B5A9-7D943441E9CB',
 				},
-			})
+			},
+			false,
+			{
+				autopilotapikey: process.env.NEXT_PUBLIC_AUTOPILOT_ID as string,
+			},
+		)
 			.then(() => setSuccessSubscription(true))
 			.catch(e => {
 				console.log(e.response);
