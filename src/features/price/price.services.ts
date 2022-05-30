@@ -27,7 +27,7 @@ export const fetchMainnetTokenPrice = async (
 		query,
 		variables,
 	);
-	const givEth = new BigNumber(data.givtoken.derivedETH);
+	const tokenEthPrice = new BigNumber(data.token.derivedETH);
 	const daiEth = new BigNumber(data.daitoken.derivedETH);
 	return givEth.div(daiEth).toString();
 };
