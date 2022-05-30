@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-export const FETCH_PROJECT_DONATIONS = gql`
+export const FETCH_PROJECT_DONATIONS = `
 	query DonationsByProjectId(
 		$take: Int
 		$skip: Int
@@ -38,7 +38,7 @@ export const FETCH_PROJECT_DONATIONS = gql`
 	}
 `;
 
-export const WALLET_DONATIONS = gql`
+export const WALLET_DONATIONS = `
 	query donationsFromWallets($fromWalletAddresses: [String!]!) {
 		donationsFromWallets(fromWalletAddresses: $fromWalletAddresses) {
 			transactionId
@@ -65,7 +65,7 @@ export const WALLET_DONATIONS = gql`
 	}
 `;
 
-export const SAVE_DONATION = gql`
+export const SAVE_DONATION = `
 	mutation (
 		$chainId: Float!
 		$fromAddress: String!
@@ -97,7 +97,7 @@ export const SAVE_DONATION = gql`
 	}
 `;
 
-export const CREATE_DONATION = gql`
+export const CREATE_DONATION = `
 	mutation (
 		$transactionId: String!
 		$transactionNetworkId: Float!
@@ -123,7 +123,7 @@ export const CREATE_DONATION = gql`
 	}
 `;
 
-export const UPDATE_DONATION_STATUS = gql`
+export const UPDATE_DONATION_STATUS = `
 	mutation ($status: String!, $donationId: Float!) {
 		updateDonationStatus(status: $status, donationId: $donationId) {
 			id

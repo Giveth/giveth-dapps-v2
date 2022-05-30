@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-export const LOGIN_USER = gql`
+export const LOGIN_USER = `
 	mutation DoLoginWallet(
 		$walletAddress: String!
 		$signature: String!

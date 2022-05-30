@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-export const GET_USER_BY_ADDRESS = gql`
+export const GET_USER_BY_ADDRESS = `
 	query UserByAddress($address: String!) {
 		userByAddress(address: $address) {
 			id
@@ -21,7 +21,7 @@ export const GET_USER_BY_ADDRESS = gql`
 	}
 `;
 
-export const FETCH_USER_PROJECTS = gql`
+export const FETCH_USER_PROJECTS = `
 	query FetchUserProjects(
 		$take: Float
 		$skip: Float
@@ -64,7 +64,7 @@ export const FETCH_USER_PROJECTS = gql`
 	}
 `;
 
-export const FETCH_USER_DONATIONS = gql`
+export const FETCH_USER_DONATIONS = `
 	query FetchUserProjects(
 		$take: Int
 		$skip: Int
@@ -104,13 +104,13 @@ export const FETCH_USER_DONATIONS = gql`
 	}
 `;
 
-export const UPLOAD_PROFILE_PHOTO = gql`
+export const UPLOAD_PROFILE_PHOTO = `
 	mutation ($fileUpload: FileUploadInputType!) {
 		upload(fileUpload: $fileUpload)
 	}
 `;
 
-export const UPDATE_USER = gql`
+export const UPDATE_USER = `
 	mutation UpdateUser(
 		$url: String
 		$location: String

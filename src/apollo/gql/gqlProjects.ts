@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-export const FETCH_HOME_PROJECTS = gql`
+export const FETCH_HOME_PROJECTS = `
 	query FetchAllProjects(
 		$limit: Int
 		$orderBy: OrderBy
@@ -41,7 +41,7 @@ export const FETCH_HOME_PROJECTS = gql`
 	}
 `;
 
-export const FETCH_ALL_PROJECTS = gql`
+export const FETCH_ALL_PROJECTS = `
 	query FetchAllProjects(
 		$limit: Int
 		$skip: Int
@@ -93,7 +93,7 @@ export const FETCH_ALL_PROJECTS = gql`
 	}
 `;
 
-export const FETCH_PROJECT_BY_SLUG = gql`
+export const FETCH_PROJECT_BY_SLUG = `
 	query ProjectBySlug($slug: String!, $connectedWalletUserId: Int) {
 		projectBySlug(
 			slug: $slug
@@ -138,7 +138,7 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 	}
 `;
 
-export const FETCH_PROJECT_BY_ID = gql`
+export const FETCH_PROJECT_BY_ID = `
 	query ProjectById($id: Float!) {
 		projectById(id: $id) {
 			id
@@ -161,7 +161,7 @@ export const FETCH_PROJECT_BY_ID = gql`
 	}
 `;
 
-export const FETCH_PROJECT_REACTION_BY_ID = gql`
+export const FETCH_PROJECT_REACTION_BY_ID = `
 	query ProjectById($id: Float!, $connectedWalletUserId: Int) {
 		projectById(id: $id, connectedWalletUserId: $connectedWalletUserId) {
 			id
@@ -174,7 +174,7 @@ export const FETCH_PROJECT_REACTION_BY_ID = gql`
 	}
 `;
 
-export const FETCH_PROJECT_UPDATES = gql`
+export const FETCH_PROJECT_UPDATES = `
 	query GetProjectUpdates(
 		$projectId: Int!
 		$take: Int!
@@ -205,7 +205,7 @@ export const FETCH_PROJECT_UPDATES = gql`
 	}
 `;
 
-export const ADD_PROJECT_UPDATE = gql`
+export const ADD_PROJECT_UPDATE = `
 	mutation ($projectId: Float!, $title: String!, $content: String!) {
 		addProjectUpdate(
 			projectId: $projectId
@@ -220,13 +220,13 @@ export const ADD_PROJECT_UPDATE = gql`
 	}
 `;
 
-export const DELETE_PROJECT_UPDATE = gql`
+export const DELETE_PROJECT_UPDATE = `
 	mutation DeleteProjectUpdate($updateId: Float!) {
 		deleteProjectUpdate(updateId: $updateId)
 	}
 `;
 
-export const EDIT_PROJECT_UPDATE = gql`
+export const EDIT_PROJECT_UPDATE = `
 	mutation EditProjectUpdate(
 		$content: String!
 		$title: String!
@@ -248,7 +248,7 @@ export const EDIT_PROJECT_UPDATE = gql`
 	}
 `;
 
-export const FETCH_USER_LIKED_PROJECTS = gql`
+export const FETCH_USER_LIKED_PROJECTS = `
 	query FetchUesrLikedProjects($take: Int, $skip: Int, $userId: Int!) {
 		likedProjectsByUserId(take: $take, skip: $skip, userId: $userId) {
 			projects {
@@ -277,7 +277,7 @@ export const FETCH_USER_LIKED_PROJECTS = gql`
 		}
 	}
 `;
-export const UPLOAD_IMAGE = gql`
+export const UPLOAD_IMAGE = `
 	mutation ($imageUpload: ImageUpload!) {
 		uploadImage(imageUpload: $imageUpload) {
 			url
@@ -287,13 +287,13 @@ export const UPLOAD_IMAGE = gql`
 	}
 `;
 
-export const WALLET_ADDRESS_IS_VALID = gql`
+export const WALLET_ADDRESS_IS_VALID = `
 	query WalletAddressIsValid($address: String!) {
 		walletAddressIsValid(address: $address)
 	}
 `;
 
-export const CREATE_PROJECT = gql`
+export const CREATE_PROJECT = `
 	mutation ($project: CreateProjectInput!) {
 		createProject(project: $project) {
 			id
@@ -315,7 +315,7 @@ export const CREATE_PROJECT = gql`
 	}
 `;
 
-export const UPDATE_PROJECT = gql`
+export const UPDATE_PROJECT = `
 	mutation ($projectId: Float!, $newProjectData: CreateProjectInput!) {
 		updateProject(projectId: $projectId, newProjectData: $newProjectData) {
 			id
@@ -338,7 +338,7 @@ export const UPDATE_PROJECT = gql`
 	}
 `;
 
-export const LIKE_PROJECT_MUTATION = gql`
+export const LIKE_PROJECT_MUTATION = `
 	mutation ($projectId: Int!) {
 		likeProject(projectId: $projectId) {
 			id
@@ -349,13 +349,13 @@ export const LIKE_PROJECT_MUTATION = gql`
 	}
 `;
 
-export const UNLIKE_PROJECT_MUTATION = gql`
+export const UNLIKE_PROJECT_MUTATION = `
 	mutation ($reactionId: Int!) {
 		unlikeProject(reactionId: $reactionId)
 	}
 `;
 
-export const GET_STATUS_REASONS = gql`
+export const GET_STATUS_REASONS = `
 	query {
 		getStatusReasons(statusId: 6) {
 			id
@@ -368,25 +368,25 @@ export const GET_STATUS_REASONS = gql`
 	}
 `;
 
-export const DEACTIVATE_PROJECT = gql`
+export const DEACTIVATE_PROJECT = `
 	mutation ($projectId: Float!, $reasonId: Float) {
 		deactivateProject(projectId: $projectId, reasonId: $reasonId)
 	}
 `;
 
-export const ACTIVATE_PROJECT = gql`
+export const ACTIVATE_PROJECT = `
 	mutation ($projectId: Float!) {
 		activateProject(projectId: $projectId)
 	}
 `;
 
-export const TITLE_IS_VALID = gql`
+export const TITLE_IS_VALID = `
 	query IsValidTitleForProject($title: String!, $projectId: Float) {
 		isValidTitleForProject(title: $title, projectId: $projectId)
 	}
 `;
 
-export const PROJECT_ACCEPTED_TOKENS = gql`
+export const PROJECT_ACCEPTED_TOKENS = `
 	query GetProjectAcceptTokens($projectId: Float!) {
 		getProjectAcceptTokens(projectId: $projectId) {
 			id
@@ -401,7 +401,7 @@ export const PROJECT_ACCEPTED_TOKENS = gql`
 	}
 `;
 
-export const SIMILAR_PROJECTS = gql`
+export const SIMILAR_PROJECTS = `
 	query SimilarProjectsBySlug($slug: String!, $take: Int, $skip: Int) {
 		similarProjectsBySlug(slug: $slug, take: $take, skip: $skip) {
 			projects {
