@@ -57,6 +57,7 @@ import { StakeModal } from '../modals/Stake';
 import { UnStakeModal } from '../modals/UnStake';
 import { StakingPoolImages } from '../StakingPoolImages';
 import { V3StakeModal } from '../modals/V3Stake';
+import { GIVPowerExplainModal } from '../modals/GIVPowerExplain';
 import { IconGIV } from '../Icons/GIV';
 import { IconHoneyswap } from '../Icons/Honeyswap';
 import { IconBalancer } from '../Icons/Balancer';
@@ -119,6 +120,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const [state, setState] = useState(StakeCardState.NORMAL);
 	const [started, setStarted] = useState(true);
 	const [showAPRModal, setShowAPRModal] = useState(false);
+	const [showGIVPowerExplain, setShowGIVPowerExplain] = useState(false);
 	const [showUniV3APRModal, setShowUniV3APRModal] = useState(false);
 	const [showStakeModal, setShowStakeModal] = useState(false);
 	const [showUnStakeModal, setShowUnStakeModal] = useState(false);
@@ -239,7 +241,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					<>
 						{type === StakingType.GIVPOWER && (
 							<CardTag>
-								<GIVpowerLogoCardTag>
+								<GIVpowerLogoCardTag
+									onClick={() => setShowGIVPowerExplain(true)}
+								>
 									<IconRocketInSpace16 />
 								</GIVpowerLogoCardTag>
 							</CardTag>
@@ -482,6 +486,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					tokenDistroHelper={tokenDistroHelper}
 					regenStreamConfig={regenStreamConfig}
 				/>
+			)}
+			{showGIVPowerExplain && (
+				<GIVPowerExplainModal setShowModal={setShowGIVPowerExplain} />
 			)}
 			{showUniV3APRModal && (
 				<UniV3APRModal

@@ -212,6 +212,7 @@ export const CardTag = styled.div`
 `;
 
 export const GIVpowerLogoCardTag = styled.div`
+	cursor: pointer;
 	background-color: ${brandColors.pinky[500]};
 	border-radius: 16px;
 	color: white;
