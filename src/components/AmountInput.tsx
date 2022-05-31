@@ -12,7 +12,7 @@ interface IAmountInput {
 	maxAmount: BigNumber;
 	setAmount: Dispatch<SetStateAction<string>>;
 	poolStakingConfig: PoolStakingConfig;
-	disabled?: boolean;
+	disabled: boolean;
 }
 
 export const AmountInput: FC<IAmountInput> = ({
@@ -79,7 +79,11 @@ export const AmountInput: FC<IAmountInput> = ({
 					Max
 				</InputLabelAction>
 			</InputLabelRow>
-			<NumericalInput value={displayAmount} onUserInput={onUserInput} />
+			<NumericalInput
+				value={displayAmount}
+				onUserInput={onUserInput}
+				disabled={disabled}
+			/>
 			<FiltersRow>
 				<Step
 					onClick={() => {
