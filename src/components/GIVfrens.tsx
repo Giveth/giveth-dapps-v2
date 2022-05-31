@@ -10,7 +10,6 @@ import {
 import { InjectedConnector } from '@web3-react/injected-connector';
 import { useWeb3React } from '@web3-react/core';
 import styled from 'styled-components';
-import { InjectedConnector } from '@web3-react/injected-connector';
 import { RegenPoolStakingConfig } from '@/types/config';
 import {
 	DAOContainer,
