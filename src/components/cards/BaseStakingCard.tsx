@@ -122,7 +122,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const [showAPRModal, setShowAPRModal] = useState(false);
 	const [showUniV3APRModal, setShowUniV3APRModal] = useState(false);
 	const [showStakeModal, setShowStakeModal] = useState(false);
-	const [showStakeLockModal, setShowStakeLockModal] = useState(false);
 	const [showUnStakeModal, setShowUnStakeModal] = useState(false);
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
 	const [showWhatIsGIVstreamModal, setShowWhatIsGIVstreamModal] =
@@ -205,12 +204,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	useEffect(() => {
 		setStarted(farmStartTimeMS ? getNowUnixMS() > farmStartTimeMS : true);
 	}, [farmStartTimeMS]);
-
-	useEffect(() => {
-		if (type === StakingType.GIVPOWER) {
-			setShowStakeLockModal(true);
-		}
-	}, []);
 
 	return (
 		<>
@@ -498,7 +491,14 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				/>
 			)}
 			{showStakeModal &&
-				(type === StakingType.UNISWAPV3_ETH_GIV ? (
+				(type === StakingType.GIVPOWER ? (
+					<StakeLockModal
+						setShowModal={setShowStakeModal}
+						poolStakingConfig={poolStakingConfig}
+						regenStreamConfig={regenStreamConfig}
+						maxAmount={userNotStakedAmount}
+					/>
+				) : type === StakingType.UNISWAPV3_ETH_GIV ? (
 					<V3StakeModal
 						setShowModal={setShowStakeModal}
 						poolStakingConfig={poolStakingConfig}
@@ -558,14 +558,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					setShowModal={setShowWhatIsGIVstreamModal}
 					tokenDistroHelper={tokenDistroHelper}
 					regenStreamConfig={regenStreamConfig}
-				/>
-			)}
-			{showStakeLockModal && (
-				<StakeLockModal
-					setShowModal={setShowStakeLockModal}
-					poolStakingConfig={poolStakingConfig}
-					regenStreamConfig={regenStreamConfig}
-					maxAmount={userNotStakedAmount}
 				/>
 			)}
 		</>
