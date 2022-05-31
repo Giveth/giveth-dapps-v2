@@ -45,37 +45,43 @@ const StakeLockModal: FC<IStakeLockModalProps> = ({
 			<StakeModalContainer>
 				<StakeInnerModal>
 					<StakeSteps stakeState={stakeState} />
-					<SectionTitle weight={700}>Locking tokens</SectionTitle>
-					<AmountInput
-						setAmount={setAmount}
-						maxAmount={maxAmount}
-						poolStakingConfig={poolStakingConfig}
-						disabled={
-							!(
-								stakeState === StakeState.APPROVE ||
-								stakeState === StakeState.STAKE
-							)
-						}
-					/>
-					<SectionTitle weight={700}>Rounds</SectionTitle>
-					<LockSlider setRound={setRound} round={round} />
-					<LockInfo />
-					{stakeState === StakeState.APPROVE && (
-						<ApproveButton
-							label={'APPROVE'}
-							onClick={() => {}}
-							disabled={amount == '0' || maxAmount.lt(amount)}
-						/>
-					)}
-					{stakeState === StakeState.APPROVING && (
-						<Pending>
-							<Lottie
-								options={loadingAnimationOptions}
-								height={40}
-								width={40}
+					{(stakeState === StakeState.APPROVE ||
+						stakeState === StakeState.APPROVING) && (
+						<>
+							<SectionTitle weight={700}>
+								Locking tokens
+							</SectionTitle>
+							<AmountInput
+								setAmount={setAmount}
+								maxAmount={maxAmount}
+								poolStakingConfig={poolStakingConfig}
+								disabled={stakeState === StakeState.APPROVING}
 							/>
-							&nbsp;APPROVE PENDING
-						</Pending>
+							<SectionTitle weight={700}>Rounds</SectionTitle>
+							<LockSlider setRound={setRound} round={round} />
+							<LockInfo />
+							{stakeState === StakeState.APPROVE && (
+								<ApproveButton
+									label={'APPROVE'}
+									onClick={() => {
+										setStakeState(StakeState.APPROVING);
+									}}
+									disabled={
+										amount == '0' || maxAmount.lt(amount)
+									}
+								/>
+							)}
+							{stakeState === StakeState.APPROVING && (
+								<Pending>
+									<Lottie
+										options={loadingAnimationOptions}
+										height={40}
+										width={40}
+									/>
+									&nbsp;APPROVE PENDING
+								</Pending>
+							)}
+						</>
 					)}
 				</StakeInnerModal>
 			</StakeModalContainer>
