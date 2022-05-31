@@ -31,6 +31,7 @@ const StakeLockModal: FC<IStakeLockModalProps> = ({
 	setShowModal,
 }) => {
 	const [amount, setAmount] = useState('0');
+	const [round, setRound] = useState(0);
 	const [stakeState, setStakeState] = useState<StakeState>(
 		StakeState.APPROVE,
 	);
@@ -57,7 +58,7 @@ const StakeLockModal: FC<IStakeLockModalProps> = ({
 						}
 					/>
 					<SectionTitle weight={700}>Rounds</SectionTitle>
-					<LockSlider />
+					<LockSlider setRound={setRound} round={round} />
 					<LockInfo />
 					{stakeState === StakeState.APPROVE && (
 						<ApproveButton
