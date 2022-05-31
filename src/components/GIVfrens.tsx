@@ -115,6 +115,7 @@ const DAOChangeNetworkModal = ({ network }: IChangeNetworkModal) => {
 	const checkWalletAndSwitchNetwork = async (network: number) => {
 		if (!account) {
 			await activate(new InjectedConnector({}));
+			await switchNetwork(network);
 		}
 		if (account) {
 			await switchNetwork(network);
