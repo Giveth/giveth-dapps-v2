@@ -9,6 +9,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 import styled from 'styled-components';
+import { InjectedConnector } from '@web3-react/injected-connector';
 import { RegenPoolStakingConfig } from '@/types/config';
 import {
 	DAOContainer,
@@ -23,7 +24,6 @@ import config from '@/configuration';
 import { givEconomySupportedNetworks } from '@/lib/constants/constants';
 import { RegenStreamCard } from './RegenStreamCard';
 import { Flex } from './styled-components/Flex';
-import { InjectedConnector } from '@web3-react/injected-connector';
 import { switchNetwork } from '@/lib/wallet';
 
 interface IGIVfrensProps {
@@ -115,6 +115,7 @@ const DAOChangeNetworkModal = ({ network }: IChangeNetworkModal) => {
 	const checkWalletAndSwitchNetwork = async (network: number) => {
 		if (!account) {
 			await activate(new InjectedConnector({}));
+			await switchNetwork(network);
 		}
 		if (account) {
 			await switchNetwork(network);
