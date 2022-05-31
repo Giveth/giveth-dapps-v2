@@ -15,6 +15,7 @@ import {
 	useState,
 } from 'react';
 import styled from 'styled-components';
+import { IIconProps } from '@giveth/ui-design-system/lib/esm/components/icons/giv-economy/type';
 import { Shadow } from '@/components/styled-components/Shadow';
 
 export interface IFormValidations {
@@ -47,6 +48,7 @@ interface IInput {
 	size?: InputSize;
 	setFormValidation?: Dispatch<SetStateAction<IFormValidations | undefined>>;
 	disabled?: boolean;
+	LeftIcon?: React.ReactElement<IIconProps>;
 }
 
 interface IInputValidator {
@@ -80,6 +82,7 @@ const Input: FC<IInput> = ({
 	size = InputSize.MEDIUM,
 	setFormValidation,
 	disabled,
+	LeftIcon,
 }) => {
 	const [validation, setValidation] = useState<{
 		status: InputValidationType;
@@ -162,16 +165,20 @@ const Input: FC<IInput> = ({
 					{label}
 				</InputLabel>
 			)}
-			<InputField
-				placeholder={placeholder}
-				name={name}
-				value={value}
-				onChange={changeHandle}
-				type={type}
-				validation={validation.status}
-				inputSize={size}
-				disabled={disabled}
-			/>
+			<InputWrapper>
+				{LeftIcon && LeftIcon}
+				<InputField
+					placeholder={placeholder}
+					name={name}
+					value={value}
+					onChange={changeHandle}
+					type={type}
+					validation={validation.status}
+					inputSize={size}
+					disabled={disabled}
+					hasLeftIcon={!!LeftIcon}
+				/>
+			</InputWrapper>
 			{validation.msg ? (
 				<InputValidation
 					validation={validation.status}
@@ -210,6 +217,7 @@ interface IValidation {
 
 interface IInputField extends IValidation {
 	inputSize: InputSize;
+	hasLeftIcon?: boolean;
 }
 
 const InputField = styled.input<IInputField>`
@@ -254,6 +262,8 @@ const InputField = styled.input<IInputField>`
 				break;
 		}
 	}};
+	padding-left: ${props => props.hasLeftIcon && '60px'};
+
 	font-size: ${props => {
 		switch (props.inputSize) {
 			case InputSize.SMALL:
@@ -319,6 +329,23 @@ const InputValidation = styled(GLink)<IValidation>`
 				return neutralColors.gray[300];
 		}
 	}}; ;
+`;
+
+const InputWrapper = styled.div`
+	position: relative;
+	display: flex;
+	> svg {
+		position: absolute;
+		transform: translateY(-50%);
+		padding-left: 20px;
+		padding-right: 8px;
+		border-right: 1px solid ${neutralColors.gray[400]};
+		width: 50px;
+		height: 20px;
+		top: 50%;
+		left: 0;
+		overflow: hidden;
+	}
 `;
 
 function areEqual(prevProps: IInput, nextProps: IInput) {
