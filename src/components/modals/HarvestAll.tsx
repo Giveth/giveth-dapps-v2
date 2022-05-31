@@ -58,7 +58,6 @@ import { claimReward, fetchAirDropClaimData } from '@/lib/claim';
 import config from '@/configuration';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { AmountBoxWithPrice } from '@/components/AmountBoxWithPrice';
-import { usePrice } from '@/context/price.context';
 import { getPoolIconWithName } from '../cards/BaseStakingCard';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
@@ -109,7 +108,11 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	const [state, setState] = useState<HarvestStates>(HarvestStates.HARVEST);
 	const tokenSymbol = regenStreamConfig?.rewardTokenSymbol || 'GIV';
 	const { balances } = useAppSelector(state => state.subgraph.currentValues);
-	const { givPrice, getTokenPrice } = usePrice();
+	const {
+		mainnetThirdPartyTokensPrice,
+		xDaiThirdPartyTokensPrice,
+		givPrice,
+	} = useAppSelector(state => state.price);
 	const { account, library } = useWeb3React();
 	const [txHash, setTxHash] = useState('');
 	//GIVdrop TODO: Should we show Givdrop in new  design?
@@ -138,10 +141,15 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 			: BN(balances.givbackLiquidPart);
 	}, [regenStreamConfig, balances.givbackLiquidPart]);
 	const tokenPrice = useMemo(() => {
-		return regenStreamConfig
-			? getTokenPrice(regenStreamConfig.tokenAddressOnUniswapV2, network)
+		const currentPrice =
+			network === config.MAINNET_NETWORK_NUMBER
+				? mainnetThirdPartyTokensPrice
+				: xDaiThirdPartyTokensPrice;
+		const price = regenStreamConfig
+			? currentPrice[regenStreamConfig.tokenAddressOnUniswapV2]
 			: givPrice;
-	}, [getTokenPrice, givPrice, network, regenStreamConfig]);
+		return new BigNumber(price);
+	}, [givPrice, network, regenStreamConfig]);
 
 	useEffect(() => {
 		if (!tokenDistroHelper) return;
@@ -159,6 +167,9 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 				case StreamType.FOX:
 					lockedAmount = BN(balances.foxAllocatedTokens);
 					break;
+				case StreamType.CULT:
+					lockedAmount = BN(balances.cultAllocatedTokens);
+					break;
 				default:
 					lockedAmount = ethers.constants.Zero;
 			}
@@ -169,7 +180,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 			tokenDistroHelper.getStreamPartTokenPerWeek(lockedAmount),
 		);
 		setGivBackStream(tokenDistroHelper.getStreamPartTokenPerWeek(givback));
-	}, [earned, balances, tokenDistroHelper, givback]);
+	}, [earned, balances, tokenDistroHelper, givback, regenStreamConfig]);
 
 	//calculate Liquid Sum
 	useEffect(() => {
@@ -287,7 +298,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	const modalTitle = regenStreamConfig ? 'RegenFarm Rewards' : title;
 
 	const calcUSD = (amount: string) => {
-		const price = tokenPrice || givPrice;
+		const price = tokenPrice || new BigNumber(givPrice);
 		return price.isNaN() ? '0' : price.times(amount).toFixed(2);
 	};
 

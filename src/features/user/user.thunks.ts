@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { gqlRequest } from '@/helpers/requests';
+import { backendGQLRequest } from '@/helpers/requests';
 import { GET_USER_BY_ADDRESS } from './user.queries';
 import { ISignToGetToken } from './user.types';
 import { createSiweMessage } from '@/lib/helpers';
@@ -10,7 +10,7 @@ import config from '@/configuration';
 export const fetchUserByAddress = createAsyncThunk(
 	'user/fetchUser',
 	async (address: string) => {
-		return gqlRequest(GET_USER_BY_ADDRESS, { address });
+		return backendGQLRequest(GET_USER_BY_ADDRESS, { address });
 	},
 );
 
@@ -37,6 +37,7 @@ export const signToGetToken = createAsyncThunk(
 				}
 				const token = await postRequest(
 					`${config.MICROSERVICES.authentication}/authentication`,
+					true,
 					{
 						signature,
 						message,
@@ -59,6 +60,7 @@ export const signOut = createAsyncThunk(
 	async (token: string) => {
 		return await postRequest(
 			`${config.MICROSERVICES.authentication}/logout`,
+			true,
 			{
 				jwt: token,
 			},

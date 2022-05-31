@@ -69,14 +69,16 @@ export interface BalancerPoolStakingConfig extends SimplePoolStakingConfig {
 	POOL_ID: string;
 }
 
+export interface RegenFarmIntroConfig {
+	title: string;
+	description: string;
+	link: string;
+}
+
 export interface RegenPoolStakingConfig extends SimplePoolStakingConfig {
 	regenStreamType: StreamType;
 	regenFarmType: RegenFarmType;
-	regenFarmIntro?: {
-		title: string;
-		description: string;
-		link: string;
-	};
+	regenFarmIntro?: RegenFarmIntroConfig;
 }
 
 export interface GasPreference {
@@ -96,6 +98,7 @@ export interface RegenStreamConfig {
 
 export interface BasicNetworkConfig {
 	TOKEN_ADDRESS: string;
+	tokenAddressOnUniswapV2: string; // For price purpose in test env, on production this must have the same value of `TOKEN_ADDRESS`
 	TOKEN_DISTRO_ADDRESS: string;
 	GIV: BasicStakingConfig;
 	nodeUrl: string;
@@ -116,7 +119,7 @@ export interface BasicNetworkConfig {
 		| BalancerPoolStakingConfig
 		| UniswapV3PoolStakingConfig
 	>;
-	uniswapV2Subgraph?: string;
+	uniswapV2Subgraph: string;
 
 	regenStreams: RegenStreamConfig[];
 	regenFarms: RegenPoolStakingConfig[];

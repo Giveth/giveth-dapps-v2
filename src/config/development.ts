@@ -39,6 +39,7 @@ const config: EnvConfig = {
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-kovan-staging',
 
 		TOKEN_ADDRESS: '0x29434A25abd94AE882aA883eea81585Aaa5b078D',
+		tokenAddressOnUniswapV2: '0x900db999074d9277c5da2a43f252d74366230da0',
 		WETH_TOKEN_ADDRESS: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
 		TOKEN_DISTRO_ADDRESS: '0x2C84Ab41b53C52959a794830fe296Fd717c33337',
 		GIV: {
@@ -103,6 +104,8 @@ const config: EnvConfig = {
 				active: false,
 			},
 		],
+		uniswapV2Subgraph:
+			'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
 		regenStreams: [
 			{
 				tokenDistroAddress:
@@ -132,8 +135,7 @@ const config: EnvConfig = {
 				regenFarmType: RegenFarmType.CULT_ETH,
 				regenFarmIntro: {
 					title: 'CULT',
-					description:
-						'The purpose of CULT is to empower and fund those building and contributing towards our decentralized future.',
+					description: `The purpose of CULT is to empower those building and contributing to our decentralized future. Our society makes it as difficult as possible to break away from societal, economic and other norms, and CULT serves to fund and support those who are working to take back our future. CULT is a reminder that the power in people is stronger than the people in power.\n\n CULT is the governance token of the Cult DAO. Every transaction of the CULT token allows you to contribute & fast-forward economic & societal change by contributing a 0.4% tax to the treasury. Fight from within until you get out, or change the system in doing so.`,
 					link: 'https://cultdao.io/',
 				},
 				farmStartTimeMS: 1646306818206,
@@ -162,6 +164,7 @@ const config: EnvConfig = {
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-xdai-staging',
 
 		TOKEN_ADDRESS: '0x83a8eea6427985C523a0c4d9d3E62C051B6580d3',
+		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		MERKLE_ADDRESS: '0xc87403C70c9FBfb594d98d3B5E695BBE4C694188',
 		TOKEN_DISTRO_ADDRESS: '0x18a46865AAbAf416a970eaA8625CFC430D2364A1',
 

@@ -11,14 +11,31 @@ declare let window: any;
 
 const { MAINNET_CONFIG, XDAI_CONFIG } = config;
 
-const tokenImage =
-	'https://raw.githubusercontent.com/Giveth/giveth-design-assets/master/02-logos/GIV%20Token/GIVToken_200x200.png';
+const getTokenImage = (symbol: string): string | undefined => {
+	let _symbol = symbol.toLowerCase();
+
+	// GIV test token, DRGIV, DRGIV2, DRGIV3, ...
+	if (_symbol.startsWith('drgiv')) _symbol = 'giv';
+	// TestFox, etc
+	else if (_symbol.startsWith('test')) _symbol = _symbol.slice(4);
+
+	switch (_symbol) {
+		case 'giv':
+			return 'https://raw.githubusercontent.com/Giveth/giveth-design-assets/master/02-logos/GIV%20Token/GIVToken_200x200.png';
+		case 'cult':
+			return 'https://raw.githubusercontent.com/Giveth/giveth-dapps-v2/develop/public/images/currencies/cult/64.svg';
+		case 'fox':
+			return 'https://raw.githubusercontent.com/Giveth/giveth-dapps-v2/develop/public/images/currencies/fox/64.svg';
+	}
+
+	return undefined;
+};
 
 interface ITokenOptins {
 	address: string;
 	symbol: string;
 	decimals: number;
-	image: string;
+	image?: string;
 }
 
 const fetchTokenInfo = async (
@@ -35,7 +52,7 @@ const fetchTokenInfo = async (
 			address: address,
 			symbol: _symbol,
 			decimals: _decimal,
-			image: tokenImage,
+			image: getTokenImage(_symbol),
 		};
 	} catch (error) {
 		console.error('error in fetchTokenInfo', error);

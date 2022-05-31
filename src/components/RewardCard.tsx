@@ -21,8 +21,8 @@ import { IconEthereum } from './Icons/Eth';
 import { IconGnosisChain } from './Icons/GnosisChain';
 import { WhatisStreamModal } from '@/components/modals/WhatisStream';
 import { WrongNetworkInnerModal } from './modals/WrongNetwork';
-import { usePrice } from '@/context/price.context';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
+import { useAppSelector } from '@/features/hooks';
 interface IRewardCardProps {
 	title?: string;
 	liquidAmount: ethers.BigNumber;
@@ -57,10 +57,10 @@ export const RewardCard: FC<IRewardCardProps> = ({
 	const [usdAmount, setUSDAmount] = useState('0');
 	const [showWhatIsGIVstreamModal, setShowWhatIsGIVstreamModal] =
 		useState(false);
-	const { givPrice } = usePrice();
+	const givPrice = useAppSelector(state => state.price.givPrice);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	useEffect(() => {
-		const price = tokenPrice || givPrice;
+		const price = tokenPrice || new BigNumber(givPrice);
 		if (!price || price.isNaN()) return;
 
 		const usd = (+ethers.utils.formatEther(

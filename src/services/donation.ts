@@ -58,9 +58,10 @@ export async function saveDonation(props: IOnTxHash) {
 				section: 'createDonation',
 			},
 		});
+		console.log(error);
 		throw error;
 	}
-	console.log('DONATION SUCCESS: ', { donationId });
+	console.log('DONATION ID: ', { donationId });
 	return donationId;
 }
 
