@@ -12,6 +12,7 @@ import RadioTitle from '../donate/RadioTitle';
 import Input from '@/components/Input';
 import { Label } from '../create/Create.sc';
 import { Shadow } from '@/components/styled-components/Shadow';
+import { TextArea } from '@/components/styled-components/TextArea';
 
 const options = [
 	{ value: 'new york', label: 'New York' },
@@ -97,15 +98,12 @@ function ProjectRegistryProfit() {
 				structured.
 			</Lead>
 			<br />
-			<DescriptionInput
+			<TextArea
 				value={description}
 				name='link'
 				placeholder='eg. "We are a decentralized autonomous organization that works toward the development of web3
 				applications"'
-				onChange={e => {
-					console.log(e.target.value);
-					setDescription(e.target.value);
-				}}
+				onChange={e => setDescription(e.target.value)}
 			/>
 		</>
 	);
@@ -177,25 +175,5 @@ const RadioContainer = styled.div`
 
 const LinkInputContainer = styled.div`
 	width: 70%;
-	max-width: '520px';
-`;
-
-const DescriptionInput = styled.textarea`
-	width: 100%;
-	border-radius: 8px;
-	font-family: 'Red Hat Text', sans-serif;
-	font-size: 1rem;
-	border: 2px solid ${neutralColors.gray[300]};
-	padding: 16px;
-	height: 274px;
-	resize: none;
-	::placeholder {
-		color: ${neutralColors.gray[500]};
-	}
-	:hover {
-		border-color: ${neutralColors.gray[500]};
-	}
-	:focus-within {
-		border-color: ${brandColors.giv[500]};
-	}
+	max-width: 520px;
 `;

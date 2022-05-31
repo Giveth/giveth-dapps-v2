@@ -23,7 +23,7 @@ export default function ProjectContact() {
 
 	return (
 		<>
-			<H6 weight={700}>Project registry</H6>
+			<H6 weight={700}>Project Social Media</H6>
 			<br />
 			<InfoWrapper>
 				<IconInfoInline color={neutralColors.gray[700]} />
@@ -104,5 +104,5 @@ const PInline = styled(P)`
 `;
 const InputWrapper = styled.div`
 	width: 70%;
-	max-width: '520px';
+	max-width: 520px;
 `;
