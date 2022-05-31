@@ -6,13 +6,14 @@ import {
 } from '@/apollo/gql/gqlDonations';
 import { client } from '@/apollo/apolloClient';
 import { IConfirmDonation } from '@/components/views/donate/helpers';
+import { EDonationStatus } from '@/apollo/types/gqlEnums';
 
 interface IOnTxHash extends IConfirmDonation {
 	txHash: string;
 	nonce: number;
 }
 
-export const updateDonation = (donationId: number, status: string) => {
+export const updateDonation = (donationId: number, status: EDonationStatus) => {
 	client
 		.mutate({
 			mutation: UPDATE_DONATION_STATUS,

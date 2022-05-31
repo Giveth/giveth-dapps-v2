@@ -2,6 +2,7 @@ import { useWeb3React } from '@web3-react/core';
 import { useEffect } from 'react';
 import { formatEther } from '@ethersproject/units';
 import { captureException } from '@sentry/nextjs';
+import { InjectedConnector } from '@web3-react/injected-connector';
 import { useAppDispatch } from '@/features/hooks';
 import {
 	setBalance,
@@ -22,9 +23,11 @@ const UserController = () => {
 	useEffect(() => {
 		const selectedWalletName = localStorage.getItem(StorageLabel.WALLET);
 		const wallet = walletsArray.find(w => w.value === selectedWalletName);
-		if (wallet) {
-			activate(wallet.connector, err => {
-				console.log('err', err);
+		if (wallet && wallet.connector instanceof InjectedConnector) {
+			wallet.connector.isAuthorized().then(isAuthorized => {
+				if (isAuthorized) {
+					activate(wallet.connector, console.log).then();
+				}
 			});
 		}
 	}, [activate]);

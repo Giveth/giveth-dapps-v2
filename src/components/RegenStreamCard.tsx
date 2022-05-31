@@ -29,9 +29,9 @@ import { IconFox } from '@/components/Icons/Fox';
 import { IconCult } from '@/components/Icons/Cult';
 import { Flex } from './styled-components/Flex';
 import { HarvestAllModal } from './modals/HarvestAll';
-import { usePrice } from '@/context/price.context';
 import { useAppSelector } from '@/features/hooks';
 import useRegenTokenDistroHelper from '@/hooks/useRegenTokenDistroHelper';
+import config from '@/configuration';
 
 interface RegenStreamProps {
 	network: number;
@@ -68,13 +68,16 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 	);
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
 	const { balances } = currentValues;
-
-	const { getTokenPrice } = usePrice();
+	const { mainnetThirdPartyTokensPrice, xDaiThirdPartyTokensPrice } =
+		useAppSelector(state => state.price);
 
 	useEffect(() => {
-		const price = getTokenPrice(
-			streamConfig.tokenAddressOnUniswapV2,
-			network,
+		const currentPrice =
+			network === config.MAINNET_NETWORK_NUMBER
+				? mainnetThirdPartyTokensPrice
+				: xDaiThirdPartyTokensPrice;
+		const price = new BigNumber(
+			currentPrice[streamConfig.tokenAddressOnUniswapV2],
 		);
 		if (!price || price.isNaN()) return;
 
@@ -83,10 +86,11 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 		)).toFixed(2);
 		setUSDAmount(usd);
 	}, [
-		getTokenPrice,
 		rewardLiquidPart,
 		network,
 		streamConfig.tokenAddressOnUniswapV2,
+		mainnetThirdPartyTokensPrice,
+		xDaiThirdPartyTokensPrice,
 	]);
 	useEffect(() => {
 		switch (streamConfig.type) {
