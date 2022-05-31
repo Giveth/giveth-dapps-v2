@@ -4,7 +4,7 @@ import PersonalInfo from '@/components/views/verification/PersonalInfo';
 import SocialProfile from '@/components/views/verification/SocialProfile';
 import ProjectRegistry from './ProjectRegistry';
 import ProjectContact from './ProjectContact';
-import ManagingFunds from '@/components/views/verification/ManagingFunds';
+import ManageFundsIndex from '@/components/views/verification/manageFunds/ManageFundsIndex';
 
 interface IContentSelector {
 	step: number;
@@ -23,7 +23,7 @@ const ContentSelector: FC<IContentSelector> = ({ step }) => {
 		case 4:
 			return <ProjectContact />;
 		case 6:
-			return <ManagingFunds />;
+			return <ManageFundsIndex />;
 		default:
 			return null;
 	}
