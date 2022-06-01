@@ -12,7 +12,7 @@ interface IAmountInput {
 	maxAmount: BigNumber;
 	setAmount: Dispatch<SetStateAction<string>>;
 	poolStakingConfig: PoolStakingConfig;
-	disabled: boolean;
+	disabled?: boolean;
 }
 
 export const AmountInput: FC<IAmountInput> = ({
