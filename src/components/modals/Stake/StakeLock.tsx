@@ -83,6 +83,12 @@ const StakeLockModal: FC<IStakeLockModalProps> = ({
 							)}
 						</>
 					)}
+					{(stakeState === StakeState.STAKE ||
+						stakeState === StakeState.STAKING) && (
+						<>
+							<LockInfo />
+						</>
+					)}
 				</StakeInnerModal>
 			</StakeModalContainer>
 		</Modal>
