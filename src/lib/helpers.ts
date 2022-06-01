@@ -121,6 +121,7 @@ export const compareAddresses = (
 	add1: string | undefined | null,
 	add2: string | undefined | null,
 ) => {
+	if (!add1 || !add2) return false;
 	return add1?.toLowerCase() === add2?.toLowerCase();
 };
 
