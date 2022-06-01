@@ -7,6 +7,8 @@ import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
 import {
 	ApproveButton,
+	CancelButton,
+	ConfirmButton,
 	loadingAnimationOptions,
 	Pending,
 	StakeInnerModal,
@@ -17,6 +19,7 @@ import StakeSteps from './StakeSteps';
 import { AmountInput } from '@/components/AmountInput';
 import LockSlider from './LockSlider';
 import LockInfo from './LockInfo';
+import StakingBrief from './StakingBrief';
 import type { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 
 interface IStakeLockModalProps extends IModal {
@@ -30,11 +33,9 @@ const StakeLockModal: FC<IStakeLockModalProps> = ({
 	maxAmount,
 	setShowModal,
 }) => {
-	const [amount, setAmount] = useState('0');
-	const [round, setRound] = useState(0);
-	const [stakeState, setStakeState] = useState<StakeState>(
-		StakeState.APPROVE,
-	);
+	const [amount, setAmount] = useState('120');
+	const [round, setRound] = useState(2);
+	const [stakeState, setStakeState] = useState<StakeState>(StakeState.WRAP);
 	return (
 		<Modal
 			setShowModal={setShowModal}
@@ -83,12 +84,40 @@ const StakeLockModal: FC<IStakeLockModalProps> = ({
 							)}
 						</>
 					)}
-					{(stakeState === StakeState.STAKE ||
-						stakeState === StakeState.STAKING) && (
+					{(stakeState === StakeState.WRAP ||
+						stakeState === StakeState.WRAPPING) && (
 						<>
+							<StakingBrief round={round} amount={amount} />
 							<LockInfo />
+							{stakeState === StakeState.WRAP && (
+								<ConfirmButton
+									label={'STAKE & LOCK'}
+									onClick={() => {}}
+									disabled={
+										amount == '0' || maxAmount.lt(amount)
+									}
+									buttonType='primary'
+								/>
+							)}
+							{stakeState === StakeState.WRAPPING && (
+								<Pending>
+									<Lottie
+										options={loadingAnimationOptions}
+										height={40}
+										width={40}
+									/>
+									&nbsp;STAKE PENDING
+								</Pending>
+							)}
 						</>
 					)}
+					<CancelButton
+						buttonType='texty'
+						label='CANCEL'
+						onClick={() => {
+							setShowModal(false);
+						}}
+					/>
 				</StakeInnerModal>
 			</StakeModalContainer>
 		</Modal>

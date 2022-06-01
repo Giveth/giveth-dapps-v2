@@ -408,7 +408,7 @@ export const ApproveButton = styled(OulineButton)`
 	margin-bottom: 8px;
 `;
 
-const ConfirmButton = styled(Button)`
+export const ConfirmButton = styled(Button)`
 	width: 100%;
 	margin-top: 32px;
 	margin-bottom: 8px;
@@ -430,7 +430,7 @@ export const Pending = styled(Flex)`
 	}
 `;
 
-const CancelButton = styled(Button)`
+export const CancelButton = styled(Button)`
 	width: 100%;
 `;
 
