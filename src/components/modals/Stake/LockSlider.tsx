@@ -25,7 +25,7 @@ const LockSlider: FC<ILockSlider> = ({ round, setRound }) => {
 				min={0}
 				max={maxRound}
 				railStyle={{ backgroundColor: brandColors.giv[800] }}
-				trackStyle={{ backgroundColor: brandColors.giv[900] }}
+				trackStyle={{ backgroundColor: brandColors.giv[200] }}
 				handleStyle={{
 					backgroundColor: brandColors.giv[500],
 					border: '3px solid #F6F3FF',

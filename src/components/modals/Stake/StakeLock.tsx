@@ -35,7 +35,9 @@ const StakeLockModal: FC<IStakeLockModalProps> = ({
 }) => {
 	const [amount, setAmount] = useState('120');
 	const [round, setRound] = useState(2);
-	const [stakeState, setStakeState] = useState<StakeState>(StakeState.WRAP);
+	const [stakeState, setStakeState] = useState<StakeState>(
+		StakeState.APPROVE,
+	);
 	return (
 		<Modal
 			setShowModal={setShowModal}
