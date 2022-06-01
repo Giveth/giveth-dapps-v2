@@ -24,7 +24,7 @@ import {
 // }
 
 export default function Milestones() {
-	const [startDate, setStartDate] = useState(new Date());
+	const [startDate, setStartDate] = useState<Date | undefined>();
 	const [file, setFile] = useState<File>();
 	// const [uploading, setUploading] = useState(false);
 
