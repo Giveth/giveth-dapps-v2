@@ -54,7 +54,7 @@ import {
 } from './BaseStakingCard.sc';
 import { APRModal } from '../modals/APR';
 import { StakeModal } from '../modals/Stake/Stake';
-import { UnStakeModal } from '../modals/UnStake';
+import { UnStakeModal } from '../modals/Unstake/UnStake';
 import { StakingPoolImages } from '../StakingPoolImages';
 import { V3StakeModal } from '../modals/V3Stake';
 import { IconGIV } from '../Icons/GIV';

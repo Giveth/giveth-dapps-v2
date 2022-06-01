@@ -4,17 +4,17 @@ import { neutralColors, Button, H4 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { BigNumber } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
-import { Modal } from './Modal';
-import { Flex } from '../styled-components/Flex';
-import { StakingPoolImages } from '../StakingPoolImages';
-import { AmountInput } from '../AmountInput';
+import { Modal } from '../Modal';
+import { Flex } from '../../styled-components/Flex';
+import { StakingPoolImages } from '../../StakingPoolImages';
+import { AmountInput } from '../../AmountInput';
 import { unwrapToken, withdrawTokens } from '@/lib/stakingPool';
 import LoadingAnimation from '@/animations/loading.json';
 import {
 	ConfirmedInnerModal,
 	ErrorInnerModal,
 	SubmittedInnerModal,
-} from './ConfirmSubmit';
+} from '../ConfirmSubmit';
 import { StakeState } from '@/lib/staking';
 import { IModal } from '@/types/common';
 import type { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
