@@ -78,6 +78,7 @@ const ProjectCard = (props: IProjectCard) => {
 					isOtherOrganization={
 						organization?.label !== ORGANIZATION.giveth
 					}
+					isVerified={verified}
 				>
 					<div style={{ position: 'relative' }}>
 						<LastUpdatedContainer isHover={isHover}>
@@ -110,35 +111,40 @@ const ProjectCard = (props: IProjectCard) => {
 						</PriceText>
 						<RaisedText> Raised</RaisedText>
 					</Flex>
-					<Hr />
-					<BadgesContainer gap='16px'>
-						{verified && (
-							<>
-								<Flex alignItems='center' gap='4px'>
-									<IconVerified
-										size={16}
-										color={semanticColors.jade[500]}
-									/>
-									<VerifiedText>VERIFIED</VerifiedText>
-								</Flex>
-								<Flex alignItems='center' gap='2px'>
-									<GivBackIconContainer>
-										<IconGIVBack
-											size={24}
-											color={brandColors.giv[500]}
+					{verified && (
+						<>
+							<Hr />
+							<Flex gap='16px'>
+								<>
+									<Flex alignItems='center' gap='4px'>
+										<IconVerified
+											size={16}
+											color={semanticColors.jade[500]}
 										/>
-									</GivBackIconContainer>
-									<GivBackText>GIVBACK ELIGIBLE</GivBackText>
-								</Flex>
-							</>
-						)}
-					</BadgesContainer>
+										<VerifiedText>VERIFIED</VerifiedText>
+									</Flex>
+									<Flex alignItems='center' gap='2px'>
+										<GivBackIconContainer>
+											<IconGIVBack
+												size={24}
+												color={brandColors.giv[500]}
+											/>
+										</GivBackIconContainer>
+										<GivBackText>
+											GIVBACK ELIGIBLE
+										</GivBackText>
+									</Flex>
+								</>
+							</Flex>
+						</>
+					)}
 					<ActionButtons>
 						<Link href={slugToProjectDonate(slug)} passHref>
 							<CustomizedDonateButton
 								linkType='primary'
 								size='small'
 								label='DONATE'
+								isHover={isHover}
 							/>
 						</Link>
 					</ActionButtons>
@@ -152,10 +158,12 @@ const DonateButton = styled(ButtonLink)`
 	flex: 1;
 `;
 
-const CustomizedDonateButton = styled(DonateButton)`
+const CustomizedDonateButton = styled(DonateButton)<{ isHover: boolean }>`
 	margin: 25px 0;
-	${mediaQueries.desktop} {
+	${mediaQueries.laptop} {
 		margin: 25px 12px;
+		opacity: ${props => (props.isHover ? '1' : '0')};
+		transition: opacity 0.3s ease-in-out;
 	}
 `;
 
@@ -181,10 +189,6 @@ const GivBackIconContainer = styled.div`
 	display: flex;
 	align-items: center;
 	transform: scale(0.8);
-`;
-
-const BadgesContainer = styled(Flex)`
-	min-height: 25px;
 `;
 
 const LastUpdatedContainer = styled(Subline)<{ isHover?: boolean }>`
@@ -220,19 +224,30 @@ const Description = styled(P)`
 const CardBody = styled.div<{
 	isOtherOrganization?: boolean;
 	isHover?: boolean;
+	isVerified?: boolean;
 }>`
 	padding: 26px;
 	padding-top: 32px;
 	position: absolute;
 	left: 0;
 	right: 0;
-	top: 200px;
+	top: ${props => (props.isVerified ? '192px' : '227px')};
 	background-color: ${neutralColors.gray[100]};
 	transition: top 0.3s ease;
 	border-radius: ${props =>
 		props.isOtherOrganization ? '0 12px 12px 12px' : '12px'};
-	${mediaQueries.desktop} {
-		top: ${props => (props.isHover ? '130px' : '200px')};
+	${mediaQueries.laptop} {
+		top: ${props => {
+			if (props.isHover && props.isVerified) {
+				return '109px';
+			} else if (props.isHover && !props.isVerified) {
+				return '151px';
+			} else if (!props.isVerified) {
+				return '221px';
+			} else if (props.isVerified) {
+				return '186px';
+			}
+		}};
 	}
 `;
 
@@ -261,13 +276,15 @@ const ImagePlaceholder = styled.div`
 const Wrapper = styled.div`
 	position: relative;
 	width: 100%;
+	max-width: 443px;
 	border-radius: ${cardRadius};
+	margin: 0 auto;
 	background: white;
 	overflow: hidden;
 	box-shadow: ${Shadow.Neutral[400]};
 	height: 536px;
 	cursor: pointer;
-	${mediaQueries.desktop} {
+	${mediaQueries.laptop} {
 		height: 472px;
 	}
 `;
