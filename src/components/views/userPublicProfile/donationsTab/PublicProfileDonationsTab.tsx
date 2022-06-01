@@ -7,7 +7,7 @@ import {
 	EOrderBy,
 	IOrder,
 } from '../UserPublicProfile.view';
-import { EDirection } from '@/apollo/types/gqlEnums';
+import { EDirection, EDonationStatus } from '@/apollo/types/gqlEnums';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_USER_DONATIONS } from '@/apollo/gql/gqlUser';
 import { IUserDonations } from '@/apollo/types/gqlTypes';
@@ -61,6 +61,7 @@ const PublicProfileDonationsTab: FC<IUserPublicProfileView> = ({
 					skip: page * itemPerPage,
 					orderBy: order.by,
 					direction: order.direction,
+					status: !myAccount ? EDonationStatus.VERIFIED : null,
 				},
 			});
 			setLoading(false);
@@ -90,6 +91,7 @@ const PublicProfileDonationsTab: FC<IUserPublicProfileView> = ({
 						donations={donations}
 						order={order}
 						changeOrder={changeOrder}
+						myAccount={myAccount}
 					/>
 				)}
 				{loading && <Loading />}
