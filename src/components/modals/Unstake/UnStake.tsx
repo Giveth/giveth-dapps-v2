@@ -1,6 +1,12 @@
 import { FC, useState } from 'react';
 import Lottie from 'react-lottie';
-import { neutralColors, Button, H4 } from '@giveth/ui-design-system';
+import {
+	neutralColors,
+	Button,
+	H4,
+	IconUnlock16,
+	IconLock16,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { BigNumber } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
@@ -17,7 +23,11 @@ import {
 } from '../ConfirmSubmit';
 import { StakeState } from '@/lib/staking';
 import { IModal } from '@/types/common';
-import type { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
+import {
+	PoolStakingConfig,
+	RegenStreamConfig,
+	StakingType,
+} from '@/types/config';
 
 const loadingAnimationOptions = {
 	loop: true,
@@ -94,6 +104,21 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 								maxAmount={maxAmount}
 								poolStakingConfig={poolStakingConfig}
 							/>
+							{poolStakingConfig.type ===
+								StakingType.GIVPOWER && (
+								<LockInfoContainer>
+									<Flex>
+										<div>
+											<IconUnlock16 />
+										</div>
+									</Flex>
+									<Flex>
+										<div>
+											<IconLock16 />
+										</div>
+									</Flex>
+								</LockInfoContainer>
+							)}
 							{label === 'UNSTAKE' && (
 								<UnStakeButton
 									label={label}
@@ -187,6 +212,8 @@ const UnStakeModalTitleText = styled(H4)`
 const InnerModal = styled.div`
 	padding: 0 24px;
 `;
+
+const LockInfoContainer = styled.div``;
 
 const UnStakeButton = styled(Button)`
 	width: 100%;
