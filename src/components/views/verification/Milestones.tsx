@@ -8,12 +8,11 @@ import {
 import { useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import styled from 'styled-components';
-import { useDropzone } from 'react-dropzone';
 import { TextArea } from '@/components/styled-components/TextArea';
 import {
 	StyledDatePicker,
 	DatePickerWrapper,
-} from '@/components/datePickers/DatePicker.styles';
+} from '@/components/styled-components/DatePicker';
 import ImageUploader from '@/components/ImageUploader';
 
 export default function Milestones() {
@@ -22,18 +21,6 @@ export default function Milestones() {
 	const [url, setUrl] = useState<string>('');
 	const [uploading, setUploading] = useState(false);
 
-	const { getRootProps, getInputProps, open } = useDropzone({
-		accept: 'image/*',
-		multiple: false,
-		noClick: true,
-		noKeyboard: true,
-		onDrop: async (acceptedFiles: File[]) => {
-			setFile(acceptedFiles[0]);
-			// setUploading(true);
-			// await onDrop(acceptedFiles);
-			// setUploading(false);
-		},
-	});
 	return (
 		<>
 			<H6 weight={700}>Activity and Milestones</H6>
