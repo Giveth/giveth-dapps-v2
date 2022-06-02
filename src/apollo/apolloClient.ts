@@ -47,9 +47,13 @@ function createApolloClient() {
 
 	const errorLink = onError(({ graphQLErrors, networkError, operation }) => {
 		if (graphQLErrors)
-			graphQLErrors.forEach(({ message, locations, path }) =>
-				console.log(`[GraphQL error]: ${message}`, { locations, path }),
-			);
+			graphQLErrors.forEach(({ message, locations, path }) => {
+				console.log(`[GraphQL error]: ${message}`, { locations, path });
+				if (message.toLowerCase().includes('authentication required')) {
+					//   removes token and user from store
+					store.dispatch(signOut());
+				}
+			});
 
 		if (networkError) console.log(`[Network error]: ${networkError}`);
 		const { response } = operation.getContext();
