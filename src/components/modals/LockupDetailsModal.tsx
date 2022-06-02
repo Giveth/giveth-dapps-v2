@@ -1,9 +1,7 @@
 import {
 	neutralColors,
 	brandColors,
-	Button,
 	IconRocketInSpace32,
-	IconArrowLeft,
 	IconHelp,
 	IconUnlock32,
 	H5,
