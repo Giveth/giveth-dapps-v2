@@ -11,7 +11,7 @@ interface IContentSelector {
 }
 
 const ContentSelector: FC<IContentSelector> = ({ step }) => {
-	switch ((step = 6)) {
+	switch (step) {
 		case 0:
 			return <BeforeStart />;
 		case 1:
