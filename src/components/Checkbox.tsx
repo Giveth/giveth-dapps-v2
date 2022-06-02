@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 interface ICheckBox {
 	checked?: boolean | undefined;
+	checkColor?: string;
 }
 
 const CheckBox = (props: {
@@ -11,13 +12,15 @@ const CheckBox = (props: {
 	title: string;
 	checked: boolean | undefined;
 	style?: any;
+	checkColor?: string;
 }) => {
-	const { onChange, checked, title, style } = props;
+	const { onChange, checked, title, style, checkColor } = props;
 	return (
 		<Wrapper
 			onClick={() => onChange(!checked)}
 			checked={checked}
 			style={style}
+			checkColor={checkColor}
 		>
 			{checked ? (
 				<img src='/images/checkmark-2.svg' alt='checkmark' />
@@ -51,7 +54,8 @@ const Wrapper = styled.div<ICheckBox>`
 		width: 28px;
 		height: 28px;
 		border-radius: 4px;
-		border: 2px solid ${neutralColors.gray[400]};
+		border: 2px solid
+			${props => props.checkColor ?? neutralColors.gray[400]};
 	}
 `;
 

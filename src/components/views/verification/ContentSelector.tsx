@@ -4,13 +4,14 @@ import PersonalInfo from '@/components/views/verification/PersonalInfo';
 import SocialProfile from '@/components/views/verification/SocialProfile';
 import ProjectRegistry from './ProjectRegistry';
 import ProjectContact from './ProjectContact';
+import TermsAndConditions from './TermsAndConditions';
 
 interface IContentSelector {
 	step: number;
 }
 
 const ContentSelector: FC<IContentSelector> = ({ step }) => {
-	switch (step) {
+	switch ((step = 6)) {
 		case 0:
 			return <BeforeStart />;
 		case 1:
@@ -21,6 +22,8 @@ const ContentSelector: FC<IContentSelector> = ({ step }) => {
 			return <ProjectRegistry />;
 		case 4:
 			return <ProjectContact />;
+		case 6:
+			return <TermsAndConditions />;
 		default:
 			return null;
 	}
