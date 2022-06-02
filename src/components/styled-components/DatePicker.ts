@@ -1,4 +1,4 @@
-import { neutralColors } from '@giveth/ui-design-system';
+import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import DatePicker from 'react-datepicker';
 import styled from 'styled-components';
 import { Shadow } from './Shadow';
@@ -9,12 +9,14 @@ export const StyledDatePicker = styled(DatePicker)<{ hasRightIcon?: boolean }>`
 	border: 2px solid ${neutralColors.gray[300]};
 	padding: 15px 16px;
 	padding-right: 50px;
-
 	::placeholder {
 		color: ${neutralColors.gray[500]};
 	}
 	:hover {
 		box-shadow: ${Shadow.Neutral[400]};
+	}
+	:focus-within {
+		border-color: ${brandColors.giv[600]};
 	}
 `;
 
