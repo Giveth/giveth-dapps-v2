@@ -67,6 +67,7 @@ import { useFarms } from '@/context/farm.context';
 import { WhatisStreamModal } from '../modals/WhatisStream';
 import { IconSushiswap } from '../Icons/Sushiswap';
 import { UniV3APRModal } from '../modals/UNIv3APR';
+import { LockupDetailsModal } from '../modals/LockupDetailsModal';
 import StakingCardIntro from './StakingCardIntro';
 import { getNowUnixMS } from '@/helpers/time';
 import FarmCountDown from '../FarmCountDown';
@@ -122,6 +123,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const [showAPRModal, setShowAPRModal] = useState(false);
 	const [showGIVPowerExplain, setShowGIVPowerExplain] = useState(false);
 	const [showUniV3APRModal, setShowUniV3APRModal] = useState(false);
+	const [showLockupDetailsModal, setShowLockupDetailsModal] = useState(false);
 	const [showStakeModal, setShowStakeModal] = useState(false);
 	const [showUnStakeModal, setShowUnStakeModal] = useState(false);
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
@@ -456,7 +458,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									{type === StakingType.GIVPOWER && (
 										<LiquidityButton
 											label='MANAGE GIV'
-											onClick={() => {}}
+											onClick={() => {
+												setShowLockupDetailsModal(true);
+											}}
 											buttonType='texty'
 											icon={
 												<IconLock16
@@ -495,6 +499,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					setShowModal={setShowUniV3APRModal}
 					poolStakingConfig={poolStakingConfig}
 				/>
+			)}
+			{showLockupDetailsModal && (
+				<LockupDetailsModal setShowModal={setShowLockupDetailsModal} />
 			)}
 			{showStakeModal &&
 				(type === StakingType.UNISWAPV3_ETH_GIV ? (

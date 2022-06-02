@@ -1,10 +1,11 @@
 import {
-	P,
 	neutralColors,
-	GLink,
 	brandColors,
 	Button,
 	IconRocketInSpace32,
+	IconArrowLeft,
+	IconHelp,
+	IconUnlock32,
 	H5,
 	H6,
 } from '@giveth/ui-design-system';
@@ -12,85 +13,128 @@ import styled from 'styled-components';
 import { FC } from 'react';
 import { Flex } from '../styled-components/Flex';
 import { Modal } from './Modal';
-import links from '@/lib/constants/links';
 import { IModal } from '@/types/common';
+import { IconWithTooltip } from '../IconWithToolTip';
 
 export const LockupDetailsModal: FC<IModal> = ({ setShowModal }) => {
 	return (
 		<Modal
 			setShowModal={setShowModal}
-			headerTitle='GIVpower'
+			headerTitle='Lockup Details'
 			headerTitlePosition='left'
 			headerIcon={<IconRocketInSpace32 />}
 		>
-			<GIVPowerExplainContainer>
-				<GivPowerContainer>
-					<H6>You have</H6>
-					<AmountContainer>
-						<IconRocketInSpace32 color={brandColors.mustard[500]} />
-						<H5>0</H5>
-						<H6>GIVpower</H6>
-					</AmountContainer>
-				</GivPowerContainer>
+			<LockupDetailsContainer>
 				<Desc>
-					You can boost your favorite projects with GIVpower or
-					delegate to community top supporters. GIVpower allows you to
-					influence the ranking of projects on Giveth. Get GIVpower
-					when you stake &amp; lock GIV. Top ranked projects from
-					GIVpower get additional matching funds &amp; their donors
-					get more GIVbacks.
-					<GLink
-						onClick={() => setShowModal(false)}
-						target='_blank'
-						href={links.GIVPOWER_DOC}
-					>
-						<LinksRow> Learn More</LinksRow>
-					</GLink>
+					Review your staked GIV, lockup periods, multipliers &amp;
+					earnings.
 				</Desc>
+				<Subtitle>Available to unstake</Subtitle>
+				<UnstakeContainer>
+					<div>
+						<IconUnlock32 />
+						<CloseText>
+							<Subtitle>150</Subtitle>
+							<H6>GIV</H6>
+						</CloseText>
+					</div>
+					<div>
+						<H6>10%</H6>
+						<CloseText>
+							<H6>APR</H6>
+							<IconWithTooltip
+								icon={<IconHelp />}
+								direction='top'
+							>
+								<H6>APR</H6>
+							</IconWithTooltip>
+						</CloseText>
+					</div>
+				</UnstakeContainer>
 
-				<BoostButton
-					label='BOOST PROJECT'
-					onClick={() => {
-						setShowModal(false);
-					}}
-				/>
-			</GIVPowerExplainContainer>
+				<LockedContainer>
+					<Subtitle>Locked GIV</Subtitle>
+				</LockedContainer>
+
+				<StakedContainer>
+					<SubtitleWithTooltip>
+						<Subtitle>Total staked GIV</Subtitle>
+						<IconWithTooltip icon={<IconHelp />} direction='top'>
+							<H6>some explanation here</H6>
+						</IconWithTooltip>
+					</SubtitleWithTooltip>
+
+					<TotalContainer>
+						<SubtitleH5>150</SubtitleH5>
+						<H6>GIV</H6>
+					</TotalContainer>
+				</StakedContainer>
+			</LockupDetailsContainer>
 		</Modal>
 	);
 };
 
-const GIVPowerExplainContainer = styled.div`
-	padding: 24px 24px 24px;
+const LockupDetailsContainer = styled.div`
+	padding: 24px 32px 24px;
 	background-repeat: no-repeat;
-	width: 448px;
+	width: 552px;
 	color: ${neutralColors.gray[100]};
-`;
-
-const GivPowerContainer = styled(Flex)`
-	flex-direction: column;
-	align-items: center;
-	background-color: ${brandColors.giv[500]};
-	padding: 24px;
-	margin: 0 0 24px 0;
-	gap: 11px;
-	border-radius: 16px;
-`;
-
-const AmountContainer = styled(Flex)`
-	align-items: center;
-	gap: 11px;
-`;
-
-const Desc = styled(P)`
-	margin-bottom: 41px;
 	text-align: left;
 `;
 
-const LinksRow = styled(Flex)`
-	color: ${brandColors.cyan[500]};
+const Desc = styled(H6)`
+	margin: 0 0 24px 0;
 `;
 
-const BoostButton = styled(Button)`
-	width: 316px;
-	margin: 0 auto;
+const BlueContainer = styled(Flex)`
+	background-color: ${brandColors.giv[500]};
+	text-align: center;
+	padding: 18.5px;
+	margin: 0 0 24px 0;
+	border-radius: 16px;
+`;
+
+const UnstakeContainer = styled(BlueContainer)`
+	display: flex;
+	justify-content: space-between;
+	margin: 24px 0 0 0;
+	div {
+		display: flex;
+		align-items: center;
+		gap: 14px;
+	}
+`;
+
+const CloseText = styled.div`
+	gap: 4px !important;
+`;
+
+const LockedContainer = styled.div`
+	margin: 24px 0 0 0;
+`;
+
+const StakedContainer = styled.div`
+	margin: 24px 0;
+`;
+
+const TotalContainer = styled(BlueContainer)`
+	display: flex;
+	justify-content: center;
+	margin: 24px 0 0 0;
+	gap: 4px;
+	align-items: center;
+`;
+
+const Subtitle = styled(H6)`
+	font-weight: 700;
+`;
+
+const SubtitleWithTooltip = styled(Subtitle)`
+	display: flex;
+	flex-direction: row;
+	gap: 4px;
+`;
+
+const SubtitleH5 = styled(H5)`
+	font-weight: 700;
 `;
