@@ -173,12 +173,13 @@ const SectionStyle = styled.div`
 	border-radius: 16px;
 	box-shadow: ${Shadow.Neutral[400]};
 	background: white;
-	height: 765px;
+	min-height: 765px;
 `;
 
 const MenuSection = styled(SectionStyle)`
 	padding: 24px;
 	width: 250px;
+	max-height: 765px;
 `;
 
 const ContentSection = styled(SectionStyle)`
@@ -195,7 +196,8 @@ const InnerContainer = styled(Flex)`
 `;
 
 const Container = styled(FlexCenter)`
-	height: 100vh;
+	padding-top: 100px;
+	height: 100%;
 	background-image: url('/images/backgrounds/Verification_GIV.svg');
 `;
 
