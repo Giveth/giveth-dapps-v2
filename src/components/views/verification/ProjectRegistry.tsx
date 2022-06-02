@@ -20,8 +20,16 @@ const options = [
 	{ value: 'san francisco', label: 'San Francisco' },
 ];
 
+enum ProjectRegistryStates {
+	NOTSELECTED = 'notselected',
+	YES = 'yes',
+	NO = 'no',
+}
+
 export default function ProjectRegistry() {
-	const [isNonProfit, setIsNonProfit] = useState(true);
+	const [isNonProfit, setIsNonProfit] = useState<ProjectRegistryStates>(
+		ProjectRegistryStates.NOTSELECTED,
+	);
 
 	return (
 		<>
@@ -40,20 +48,27 @@ export default function ProjectRegistry() {
 				<RadioContainer>
 					<RadioTitle
 						title='Yes'
-						toggleRadio={() => setIsNonProfit(true)}
-						isSelected={isNonProfit}
+						toggleRadio={() =>
+							setIsNonProfit(ProjectRegistryStates.YES)
+						}
+						isSelected={isNonProfit === ProjectRegistryStates.YES}
 					/>
 					<RadioTitle
 						title='No'
-						toggleRadio={() => setIsNonProfit(false)}
-						isSelected={!isNonProfit}
+						toggleRadio={() =>
+							setIsNonProfit(ProjectRegistryStates.NO)
+						}
+						isSelected={isNonProfit === ProjectRegistryStates.NO}
 					/>
 				</RadioContainer>
 			</RadioSectionContainer>
 			<br />
-			{isNonProfit ? (
+
+			{isNonProfit === ProjectRegistryStates.YES && (
 				<ProjectRegistryNonProfit />
-			) : (
+			)}
+
+			{isNonProfit === ProjectRegistryStates.NO && (
 				<ProjectRegistryProfit />
 			)}
 		</>
