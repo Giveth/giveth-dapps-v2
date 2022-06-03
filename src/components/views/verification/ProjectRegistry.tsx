@@ -8,7 +8,7 @@ import {
 import styled from 'styled-components';
 import { ChangeEvent, useState } from 'react';
 import Select, { StylesConfig } from 'react-select';
-import RadioTitle from '../donate/RadioTitle';
+import RadioButton from '../../RadioButton';
 import Input from '@/components/Input';
 import { Label } from '../create/Create.sc';
 import { Shadow } from '@/components/styled-components/Shadow';
@@ -20,8 +20,16 @@ const options = [
 	{ value: 'san francisco', label: 'San Francisco' },
 ];
 
+enum ProjectRegistryStates {
+	NOTSELECTED = 'notselected',
+	YES = 'yes',
+	NO = 'no',
+}
+
 export default function ProjectRegistry() {
-	const [isNonProfit, setIsNonProfit] = useState(true);
+	const [isNonProfit, setIsNonProfit] = useState<ProjectRegistryStates>(
+		ProjectRegistryStates.NOTSELECTED,
+	);
 
 	return (
 		<>
@@ -38,22 +46,29 @@ export default function ProjectRegistry() {
 				</RadioSectionSubTitle>
 				<br />
 				<RadioContainer>
-					<RadioTitle
+					<RadioButton
 						title='Yes'
-						toggleRadio={() => setIsNonProfit(true)}
-						isSelected={isNonProfit}
+						toggleRadio={() =>
+							setIsNonProfit(ProjectRegistryStates.YES)
+						}
+						isSelected={isNonProfit === ProjectRegistryStates.YES}
 					/>
-					<RadioTitle
+					<RadioButton
 						title='No'
-						toggleRadio={() => setIsNonProfit(false)}
-						isSelected={!isNonProfit}
+						toggleRadio={() =>
+							setIsNonProfit(ProjectRegistryStates.NO)
+						}
+						isSelected={isNonProfit === ProjectRegistryStates.NO}
 					/>
 				</RadioContainer>
 			</RadioSectionContainer>
 			<br />
-			{isNonProfit ? (
+
+			{isNonProfit === ProjectRegistryStates.YES && (
 				<ProjectRegistryNonProfit />
-			) : (
+			)}
+
+			{isNonProfit === ProjectRegistryStates.NO && (
 				<ProjectRegistryProfit />
 			)}
 		</>
