@@ -71,12 +71,14 @@ export const FETCH_USER_DONATIONS = gql`
 		$userId: Int!
 		$orderBy: SortField!
 		$direction: SortDirection!
+		$status: String
 	) {
 		donationsByUserId(
 			take: $take
 			skip: $skip
 			orderBy: { field: $orderBy, direction: $direction }
 			userId: $userId
+			status: $status
 		) {
 			donations {
 				id

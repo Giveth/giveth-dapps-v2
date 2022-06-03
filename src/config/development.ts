@@ -207,8 +207,8 @@ const config: EnvConfig = {
 				LM_ADDRESS: '0xe2c436E177C39A5D18AF6923Fc2Fc673f4729C05',
 				type: StakingType.HONEYSWAP_GIV_DAI,
 				platform: StakingPlatform.HONEYSWAP,
-				title: 'GIV / DAI',
-				description: '50% GIV, 50% DAI',
+				title: 'GIV / xDAI',
+				description: '50% GIV, 50% xDAI',
 				provideLiquidityLink:
 					'https://app.honeyswap.org/#/add/0x83a8eea6427985C523a0c4d9d3E62C051B6580d3/0x97c4dD5cE204b8c1F2f3B8fBfBBDC771d867d18c',
 				unit: 'LP',

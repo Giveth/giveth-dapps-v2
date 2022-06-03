@@ -39,8 +39,6 @@ import { VerificationModal } from '@/components/modals/VerificationModal';
 import { mediaQueries } from '@/lib/constants/constants';
 import ProjectCardOrgBadge from '../../project-card/ProjectCardOrgBadge';
 import ExternalLink from '@/components/ExternalLink';
-import InternalLink from '@/components/InternalLink';
-import Routes from '@/lib/constants/Routes';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.sclie';
 import {
@@ -95,6 +93,11 @@ const ProjectDonateCard = ({
 
 	const wrapperRef = useRef<HTMLDivElement>(null);
 	const [wrapperHeight, setWrapperHeight] = useState<number>(0);
+
+	const scrollToSimilarProjects = () => {
+		const el = document.getElementById('similar-projects');
+		if (el) el.scrollIntoView({ behavior: 'smooth' });
+	};
 
 	const likeUnlikeProject = async () => {
 		if (!isSignedIn) {
@@ -307,10 +310,9 @@ const ProjectDonateCard = ({
 							href={links.REPORT_ISSUE}
 							title='Report an issue'
 						/>
-						<InternalLink
-							href={Routes.Projects}
-							title='View similar projects'
-						/>
+						<div onClick={scrollToSimilarProjects}>
+							View similar projects
+						</div>
 					</Links>
 				)}
 
@@ -333,6 +335,9 @@ const Links = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
+	> div {
+		cursor: pointer;
+	}
 `;
 
 const BlueBar = styled.div`

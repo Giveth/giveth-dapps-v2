@@ -17,7 +17,7 @@ const UserRoute: FC = () => {
 				<title>Giveth | {user?.name}</title>
 			</Head>
 			{user ? (
-				<UserPublicProfileView user={user} myAccount={true} />
+				<UserPublicProfileView user={user} myAccount />
 			) : (
 				<NoUserContainer>
 					<H5>Not logged in or user not found</H5>
