@@ -8,7 +8,7 @@ import {
 import styled from 'styled-components';
 import { ChangeEvent, useState } from 'react';
 import Select, { StylesConfig } from 'react-select';
-import RadioTitle from '../donate/RadioTitle';
+import RadioButton from '../../RadioButton';
 import Input from '@/components/Input';
 import { Label } from '../create/Create.sc';
 import { Shadow } from '@/components/styled-components/Shadow';
@@ -46,14 +46,14 @@ export default function ProjectRegistry() {
 				</RadioSectionSubTitle>
 				<br />
 				<RadioContainer>
-					<RadioTitle
+					<RadioButton
 						title='Yes'
 						toggleRadio={() =>
 							setIsNonProfit(ProjectRegistryStates.YES)
 						}
 						isSelected={isNonProfit === ProjectRegistryStates.YES}
 					/>
-					<RadioTitle
+					<RadioButton
 						title='No'
 						toggleRadio={() =>
 							setIsNonProfit(ProjectRegistryStates.NO)
