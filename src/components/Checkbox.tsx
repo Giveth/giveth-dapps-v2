@@ -1,61 +1,45 @@
-import { P, neutralColors } from '@giveth/ui-design-system';
+import { neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-
-interface ICheckBox {
-	checked?: boolean | undefined;
-	checkColor?: string;
-}
+import Image from 'next/image';
+import { FlexCenter } from '@/components/styled-components/Flex';
+import CheckIcon from '/public/images/checkmark-2.svg';
 
 const CheckBox = (props: {
-	onChange: (e: any) => void;
-	value?: any;
+	onChange: (e: boolean) => void;
 	title: string;
-	checked: boolean | undefined;
-	style?: any;
-	checkColor?: string;
+	checked?: boolean;
+	disabled?: boolean;
 }) => {
-	const { onChange, checked, title, style, checkColor } = props;
+	const { onChange, checked, title, disabled } = props;
 	return (
 		<Wrapper
-			onClick={() => onChange(!checked)}
-			checked={checked}
-			style={style}
-			checkColor={checkColor}
+			onClick={() => !disabled && onChange(!checked)}
+			disabled={disabled}
 		>
-			{checked ? (
-				<img src='/images/checkmark-2.svg' alt='checkmark' />
-			) : (
-				<span />
-			)}
-			<P>{title}</P>
+			<FlexCenter>
+				{checked && <Image src={CheckIcon} alt='checkmark' />}
+			</FlexCenter>
+			<div>{title}</div>
 		</Wrapper>
 	);
 };
 
-const Wrapper = styled.div<ICheckBox>`
+const Wrapper = styled.div<{ disabled?: boolean }>`
 	cursor: pointer;
 	display: flex;
 	align-items: center;
 	gap: 12px;
-	color: ${(props: any) =>
-		props.checked ? neutralColors.gray[900] : neutralColors.gray[700]};
-	img {
+	color: ${props =>
+		props.disabled ? neutralColors.gray[600] : neutralColors.gray[900]};
+	> div:first-child {
 		border: 2px solid
-			${(props: any) =>
-				props.checked
-					? neutralColors.gray[900]
-					: neutralColors.gray[400]};
+			${props =>
+				props.disabled
+					? neutralColors.gray[400]
+					: neutralColors.gray[900]};
 		border-radius: 4px;
-		padding: 8px 8px 8px 6.67px;
-		width: 28px;
-	}
-	span {
-		flex-shrink: 0;
-		width: 28px;
-		height: 28px;
-		border-radius: 4px;
-		border: 2px solid
-			${props => props.checkColor ?? neutralColors.gray[400]};
+		width: 24px;
+		height: 24px;
 	}
 `;
 

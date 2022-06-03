@@ -25,7 +25,7 @@ const ContentSelector: FC<IContentSelector> = ({ step }) => {
 			return <ProjectContact />;
 		case 5:
 			return <Milestones />;
-		case 6:
+		case 7:
 			return <TermsAndConditions />;
 		default:
 			return null;
