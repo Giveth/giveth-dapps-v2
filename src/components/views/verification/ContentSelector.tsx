@@ -4,6 +4,7 @@ import PersonalInfo from '@/components/views/verification/PersonalInfo';
 import SocialProfile from '@/components/views/verification/SocialProfile';
 import ProjectRegistry from './ProjectRegistry';
 import ProjectContact from './ProjectContact';
+import TermsAndConditions from './TermsAndConditions';
 import Milestones from './Milestones';
 
 interface IContentSelector {
@@ -24,6 +25,8 @@ const ContentSelector: FC<IContentSelector> = ({ step }) => {
 			return <ProjectContact />;
 		case 5:
 			return <Milestones />;
+		case 7:
+			return <TermsAndConditions />;
 		default:
 			return null;
 	}
