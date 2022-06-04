@@ -7,7 +7,7 @@ import CryptoDonation, {
 } from '@/components/views/donate/CryptoDonation';
 import FiatDonation from '@/components/views/donate/FiatDonation';
 import { IProject } from '@/apollo/types/types';
-import RadioTitle from '@/components/views/donate/RadioTitle';
+import RadioButton from '@/components/RadioButton';
 
 const DonationTypes = (props: {
 	project: IProject;
@@ -21,13 +21,13 @@ const DonationTypes = (props: {
 		<>
 			<H4 weight={700}>Donate With</H4>
 			<RadioBox>
-				<RadioTitle
+				<RadioButton
 					title='Cryptocurrency'
 					toggleRadio={() => setIsCrypto(true)}
 					isSelected={isCrypto}
 					subtitle='Zero Fees'
 				/>
-				<RadioTitle
+				<RadioButton
 					title='Credit Card'
 					toggleRadio={() => setIsCrypto(false)}
 					isSelected={!isCrypto}

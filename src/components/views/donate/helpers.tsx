@@ -149,6 +149,7 @@ export const confirmDonation = async (props: IConfirmDonation) => {
 			error.reason === 'transaction failed'
 		) {
 			setTxHash(error.replacement?.hash || error.transactionHash);
+			setShowFailedModal(true);
 			showToastError(
 				`Transaction ${error.cancelled ? 'cancelled' : 'failed'}!`,
 			);

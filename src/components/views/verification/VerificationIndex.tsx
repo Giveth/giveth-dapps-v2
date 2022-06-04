@@ -177,8 +177,8 @@ const SectionStyle = styled.div`
 
 const MenuSection = styled(SectionStyle)`
 	padding: 24px;
-	height: 765px;
 	width: 250px;
+	max-height: 765px;
 `;
 
 const ContentSection = styled(SectionStyle)`

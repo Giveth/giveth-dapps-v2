@@ -23,7 +23,7 @@ import {
 	GIVfarmBottomContainer,
 	ArchivedPoolsToggle,
 } from './GIVfarm.sc';
-import RadioTitle from '@/components/views/donate/RadioTitle';
+import RadioButton from '@/components/RadioButton';
 import { NetworkSelector } from '@/components/NetworkSelector';
 import StakingPositionCard from '@/components/cards/StakingPositionCard';
 import { getGivStakingConfig } from '@/helpers/networkProvider';
@@ -182,7 +182,7 @@ export const TabGIVfarmBottom = () => {
 					</ContractRow>
 				</Flex>
 				<ArchivedPoolsToggle>
-					<RadioTitle
+					<RadioButton
 						title='Show archived pools'
 						toggleRadio={() => setArchivedPools(!showArchivedPools)}
 						isSelected={showArchivedPools}
