@@ -42,12 +42,6 @@ const ManageFundsIndex = () => {
 				project raises? Please provide detailed funding/budget
 				information as well as an overall roadmap or action plan of the
 				project.
-				<PStyled>
-					Note: It is acceptable for donations to be used for salaries
-					and other internal expenses of the project. The idea is that
-					the funds are being used to support the project and that the
-					project, as a whole, is benefiting society.
-				</PStyled>
 				<DescriptionInput
 					value={description}
 					name='link'
@@ -59,6 +53,7 @@ const ManageFundsIndex = () => {
 				<AddressDescription>
 					Please provide additional Ethereum wallet addresses used for
 					managing funds within your project.
+					<P>This is optional</P>
 				</AddressDescription>
 				<OutlineStyled
 					onClick={() => setShowAddressModal(true)}
@@ -90,18 +85,18 @@ const OutlineStyled = styled(OulineButton)`
 `;
 
 const AddressDescription = styled(P)`
-	color: ${neutralColors.gray[800]};
-	margin-bottom: 24px;
-`;
-
-const PStyled = styled(P)`
-	color: ${neutralColors.gray[700]};
-	margin-bottom: 24px;
+	color: ${neutralColors.gray[900]};
 	margin-top: 8px;
+	margin-bottom: 24px;
+	> * {
+		margin-top: 4px;
+		color: ${neutralColors.gray[800]};
+	}
 `;
 
 const DescriptionInput = styled(TextArea)`
-	margin-bottom: 62px;
+	margin-bottom: 32px;
+	margin-top: 24px;
 	height: 180px;
 `;
 
