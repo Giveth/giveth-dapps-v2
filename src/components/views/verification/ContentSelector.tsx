@@ -6,6 +6,7 @@ import ProjectRegistry from './ProjectRegistry';
 import ProjectContact from './ProjectContact';
 import TermsAndConditions from './TermsAndConditions';
 import Milestones from './Milestones';
+import Done from '@/components/views/verification/Done';
 
 interface IContentSelector {
 	step: number;
@@ -27,6 +28,8 @@ const ContentSelector: FC<IContentSelector> = ({ step }) => {
 			return <Milestones />;
 		case 7:
 			return <TermsAndConditions />;
+		case 8:
+			return <Done />;
 		default:
 			return null;
 	}
