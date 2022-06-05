@@ -1,18 +1,12 @@
-import {
-	brandColors,
-	H6,
-	Lead,
-	neutralColors,
-	P,
-} from '@giveth/ui-design-system';
+import { H6, Lead, neutralColors, P } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { ChangeEvent, useState } from 'react';
-import Select, { StylesConfig } from 'react-select';
-import RadioTitle from '../donate/RadioTitle';
+import Select from 'react-select';
+import RadioButton from '../../RadioButton';
 import Input from '@/components/Input';
 import { Label } from '../create/Create.sc';
-import { Shadow } from '@/components/styled-components/Shadow';
 import { TextArea } from '@/components/styled-components/TextArea';
+import selectCustomStyles from '@/lib/constants/selectCustomStyles';
 
 const options = [
 	{ value: 'new york', label: 'New York' },
@@ -20,8 +14,16 @@ const options = [
 	{ value: 'san francisco', label: 'San Francisco' },
 ];
 
+enum ProjectRegistryStates {
+	NOTSELECTED = 'notselected',
+	YES = 'yes',
+	NO = 'no',
+}
+
 export default function ProjectRegistry() {
-	const [isNonProfit, setIsNonProfit] = useState(true);
+	const [isNonProfit, setIsNonProfit] = useState<ProjectRegistryStates>(
+		ProjectRegistryStates.NOTSELECTED,
+	);
 
 	return (
 		<>
@@ -38,22 +40,29 @@ export default function ProjectRegistry() {
 				</RadioSectionSubTitle>
 				<br />
 				<RadioContainer>
-					<RadioTitle
+					<RadioButton
 						title='Yes'
-						toggleRadio={() => setIsNonProfit(true)}
-						isSelected={isNonProfit}
+						toggleRadio={() =>
+							setIsNonProfit(ProjectRegistryStates.YES)
+						}
+						isSelected={isNonProfit === ProjectRegistryStates.YES}
 					/>
-					<RadioTitle
+					<RadioButton
 						title='No'
-						toggleRadio={() => setIsNonProfit(false)}
-						isSelected={!isNonProfit}
+						toggleRadio={() =>
+							setIsNonProfit(ProjectRegistryStates.NO)
+						}
+						isSelected={isNonProfit === ProjectRegistryStates.NO}
 					/>
 				</RadioContainer>
 			</RadioSectionContainer>
 			<br />
-			{isNonProfit ? (
+
+			{isNonProfit === ProjectRegistryStates.YES && (
 				<ProjectRegistryNonProfit />
-			) : (
+			)}
+
+			{isNonProfit === ProjectRegistryStates.NO && (
 				<ProjectRegistryProfit />
 			)}
 		</>
@@ -108,49 +117,6 @@ function ProjectRegistryProfit() {
 		</>
 	);
 }
-
-const selectCustomStyles: StylesConfig = {
-	control: styles => ({
-		...styles,
-		width: '70%',
-		maxWidth: '520px',
-		borderColor: neutralColors.gray[300],
-		borderWidth: '2px',
-		borderRadius: '8px',
-		boxShadow: 'none',
-		padding: '8px',
-		'&:hover': {
-			borderColor: `${neutralColors.gray[500]}`,
-		},
-		'&:focus-within': {
-			borderColor: `${brandColors.giv[500]}`,
-		},
-	}),
-	option: (styles, { isFocused, isSelected }) => ({
-		padding: '8px',
-		borderRadius: '4px',
-		backgroundColor: isSelected
-			? neutralColors.gray[300]
-			: isFocused
-			? neutralColors.gray[200]
-			: 'white',
-		color: isSelected ? neutralColors.gray[900] : neutralColors.gray[800],
-		'&:click': {
-			backgroundColor: neutralColors.gray[300],
-		},
-	}),
-	menu: styles => ({
-		...styles,
-		width: '70%',
-		maxWidth: '520px',
-		border: '0px',
-		borderRadius: '8px',
-		boxShadow: Shadow.Neutral[500],
-		'&:focus-within': {
-			border: `2px solid ${neutralColors.gray[300]}`,
-		},
-	}),
-};
 
 const RadioSectionContainer = styled.div`
 	width: 100%;

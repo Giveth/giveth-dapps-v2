@@ -120,6 +120,7 @@ class Map extends Component<MyProps, MyState> {
 								})}
 								disabled={isGlobal}
 							/>
+							<br />
 							<CheckBox
 								title='This project has a global impact'
 								checked={isGlobal}
@@ -128,7 +129,6 @@ class Map extends Component<MyProps, MyState> {
 									setLocation(loc);
 									this.setState({ address: loc });
 								}}
-								style={{ marginTop: '20px' }}
 							/>
 							<div
 								className='autocomplete-dropdown-container'

@@ -57,7 +57,11 @@ export const signToGetToken = createAsyncThunk(
 
 export const signOut = createAsyncThunk(
 	'user/signOut',
-	async (token: string) => {
+	async (token?: string | null) => {
+		// this is in the case we fail to grab the token from local storage
+		//  but still want to remove the whole user
+		if (!token) return Promise.resolve(true);
+
 		return await postRequest(
 			`${config.MICROSERVICES.authentication}/logout`,
 			true,

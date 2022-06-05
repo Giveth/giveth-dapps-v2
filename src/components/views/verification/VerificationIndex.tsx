@@ -4,7 +4,6 @@ import {
 	B,
 	brandColors,
 	Button,
-	IconCheck,
 	neutralColors,
 	semanticColors,
 	SublineBold,
@@ -15,6 +14,7 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import BulbIcon from '/public/images/icons/lightbulb.svg';
 import ContentSelector from '@/components/views/verification/ContentSelector';
 import HintModal from '@/components/views/verification/HintModal';
+import CheckCircle from '@/components/views/verification/CheckCircle';
 
 const MenuList = [
 	'Before you start',
@@ -53,11 +53,7 @@ const VerificationIndex = () => {
 							onClick={() => index < step && setStep(index)}
 						>
 							{item}
-							{index < step && (
-								<CheckCircle>
-									<IconCheck color='white' size={10} />
-								</CheckCircle>
-							)}
+							{index < step && <CheckCircle />}
 						</MenuTitle>
 					))}
 				</MenuSection>
@@ -103,25 +99,13 @@ const AbsoluteSection = styled(Flex)`
 	gap: 23px;
 `;
 
-const GreenCircle = styled.div`
-	border-radius: 50%;
-	border: 2px solid ${semanticColors.jade[100]};
-	background: ${semanticColors.jade[500]};
-`;
-
-const SaveCircle = styled(GreenCircle)`
+const SaveCircle = styled.div`
 	width: 10px;
 	height: 10px;
 	margin-top: 5px;
-`;
-
-const CheckCircle = styled(GreenCircle)`
-	width: 24px;
-	height: 24px;
-	border-width: 3px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+	border-radius: 50%;
+	border: 2px solid ${semanticColors.jade[100]};
+	background: ${semanticColors.jade[500]};
 `;
 
 const SaveSection = styled(SublineBold)`
@@ -173,12 +157,12 @@ const SectionStyle = styled.div`
 	border-radius: 16px;
 	box-shadow: ${Shadow.Neutral[400]};
 	background: white;
-	height: 765px;
 `;
 
 const MenuSection = styled(SectionStyle)`
 	padding: 24px;
 	width: 250px;
+	max-height: 765px;
 `;
 
 const ContentSection = styled(SectionStyle)`
@@ -194,9 +178,11 @@ const InnerContainer = styled(Flex)`
 	gap: 28px;
 `;
 
-const Container = styled(FlexCenter)`
-	height: 100vh;
+const Container = styled(Flex)`
+	min-height: 100vh;
+	justify-content: center;
 	background-image: url('/images/backgrounds/Verification_GIV.svg');
+	padding: 165px 0 50px;
 `;
 
 export default VerificationIndex;

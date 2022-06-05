@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import Image from 'next/image';
 import styled from 'styled-components';
 import {
@@ -9,40 +9,46 @@ import {
 } from '@giveth/ui-design-system';
 import { useGeneral, ETheme } from '@/context/general.context';
 
-import RadioOnIcon from '../../../../public/images/radio_on.svg';
-import RadioOffIcon from '../../../../public/images/radio_off.svg';
+import RadioOnIcon from '/public/images/radio_on.svg';
+import RadioOffIcon from '/public/images/radio_off.svg';
 
-const RadioTitle = (props: {
+interface IProps {
+	isSelected: boolean;
 	title: string;
 	subtitle?: string;
-	isSelected: boolean;
 	toggleRadio: () => void;
+}
+
+const RadioButton: FC<IProps> = ({
+	title,
+	subtitle,
+	isSelected,
+	toggleRadio,
 }) => {
-	const { title, subtitle, isSelected, toggleRadio } = props;
 	const { theme } = useGeneral();
 
 	return (
-		<RadioTitleBox onClick={toggleRadio}>
+		<Container onClick={toggleRadio}>
 			<Image
 				src={isSelected ? RadioOnIcon : RadioOffIcon}
 				alt='radio icon'
 			/>
 			<div>
-				<RadioTitleText
+				<RadioTitle
 					isSelected={isSelected}
 					isDark={theme === ETheme.Dark}
 				>
 					{title}
-				</RadioTitleText>
-				<RadioSubtitleText isSelected={isSelected}>
+				</RadioTitle>
+				<RadioSubtitle isSelected={isSelected}>
 					{subtitle}
-				</RadioSubtitleText>
+				</RadioSubtitle>
 			</div>
-		</RadioTitleBox>
+		</Container>
 	);
 };
 
-const RadioTitleBox = styled.div`
+const Container = styled.div`
 	display: flex;
 	cursor: pointer;
 	margin-bottom: 10px;
@@ -52,8 +58,8 @@ const RadioTitleBox = styled.div`
 	}
 `;
 
-const RadioTitleText = styled(Lead)`
-	color: ${(props: { isSelected: boolean; isDark: boolean }) =>
+const RadioTitle = styled(Lead)<{ isDark: boolean; isSelected: boolean }>`
+	color: ${props =>
 		props.isSelected
 			? props.isDark
 				? 'white'
@@ -61,9 +67,9 @@ const RadioTitleText = styled(Lead)`
 			: neutralColors.gray[600]};
 `;
 
-const RadioSubtitleText = styled(Subline)`
-	color: ${(props: { isSelected: boolean }) =>
+const RadioSubtitle = styled(Subline)<{ isSelected: boolean }>`
+	color: ${props =>
 		props.isSelected ? brandColors.deep[900] : neutralColors.gray[600]};
 `;
 
-export default RadioTitle;
+export default RadioButton;
