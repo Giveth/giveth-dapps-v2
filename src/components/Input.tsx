@@ -263,7 +263,6 @@ const InputField = styled.input<IInputField>`
 		}
 	}};
 	padding-left: ${props => props.hasLeftIcon && '60px'};
-
 	font-size: ${props => {
 		switch (props.inputSize) {
 			case InputSize.SMALL:
@@ -280,7 +279,7 @@ const InputField = styled.input<IInputField>`
 	/* font-weight: 500; */
 	font-family: 'Red Hat Text', sans-serif;
 	caret-color: ${brandColors.giv[300]};
-	box-shadow: ${Shadow.Neutral[400]};
+	box-shadow: none;
 	:focus {
 		border: 2px solid
 			${props => {
@@ -297,6 +296,9 @@ const InputField = styled.input<IInputField>`
 						return brandColors.giv[600];
 				}
 			}};
+	}
+	:hover {
+		box-shadow: ${Shadow.Neutral[400]};
 	}
 	:disabled {
 		background: ${neutralColors.gray[300]};

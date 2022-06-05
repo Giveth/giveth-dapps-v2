@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { brandColors, neutralColors } from '@giveth/ui-design-system';
+import { Shadow } from '@/components/styled-components/Shadow';
 
 interface ITextareaProps {
 	height?: string;
@@ -18,7 +19,7 @@ export const TextArea = styled.textarea<ITextareaProps>`
 		color: ${neutralColors.gray[500]};
 	}
 	:hover {
-		border-color: ${neutralColors.gray[500]};
+		box-shadow: ${Shadow.Neutral[400]};
 	}
 	:focus-within {
 		border-color: ${brandColors.giv[600]};
