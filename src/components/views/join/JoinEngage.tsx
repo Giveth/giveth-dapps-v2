@@ -16,6 +16,9 @@ import reddit_icon from '/public/images/reddit_icon.svg';
 import links from '@/lib/constants/links';
 import { mediaQueries } from '@/lib/constants/constants';
 import JoinSubscriptionCard from './JoinSubscriptionCard';
+import { FlexCenter } from '@/components/styled-components/Flex';
+import { Absolute } from '@/components/styled-components/Position';
+import { ButtonStyled } from '@/components/GeneralCard.sc';
 
 const JoinEngage = () => {
 	return (
@@ -29,12 +32,22 @@ const JoinEngage = () => {
 			</LeadText>
 			<br />
 			<LeadText>
-				Follow our social media, and come say hello in a channel below.
+				You can join our Community Call every Thursday in Discord,
+				follow our social media, or come say hello in a channel below.
 				We look forward to welcoming you!
 			</LeadText>
-			<div style={{ position: 'absolute' }}>
+			<br />
+			<FlexCenter>
+				<ButtonStyled
+					buttonType='primary'
+					label='Add to Calendar'
+					onClick={() => window.open(links.ADD_TO_CALENDAR)}
+				/>
+			</FlexCenter>
+
+			<Absolute>
 				<Image src={YellowFlower} alt='yellow flower' />
-			</div>
+			</Absolute>
 			<Section>
 				<Title>Engage</Title>
 				<CardsSection>
