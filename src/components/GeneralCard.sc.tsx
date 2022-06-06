@@ -7,11 +7,22 @@ import { Shadow } from './styled-components/Shadow';
 
 export const ButtonStyled = styled(Button)`
 	text-transform: uppercase;
-	margin: 24px auto 0 auto;
-	width: 265px;
-	height: 66px;
+	margin: 24px auto 0;
+	width: 200px;
+	height: 50px;
 	padding: 0;
 	min-height: 33px;
+	* {
+		font-size: 12px !important;
+	}
+
+	${mediaQueries.mobileL} {
+		width: 265px;
+		height: 66px;
+		* {
+			font-size: 14px !important;
+		}
+	}
 `;
 
 export const Title = styled(H4)`
@@ -36,10 +47,9 @@ export const HorizontalTitleSection = styled.div`
 	flex-direction: column;
 	text-align: left;
 	max-width: calc(100vw - 72px);
-	padding: 0;
 
 	${mediaQueries.tablet} {
-		padding: 0 0 0 84px;
+		padding: 0 15px 0 70px;
 		width: ${(props: { fullWidth?: boolean }) =>
 			props.fullWidth ? '100%' : '485px'};
 	}
@@ -71,16 +81,17 @@ export const HorizontalWrap = styled.div`
 	color: ${brandColors.giv[800]};
 	border-radius: 12px;
 	box-shadow: ${Shadow.Dark[500]};
-	margin: 26px 0;
 	flex-direction: column;
 	padding: 36px 32px;
 	max-width: calc(100vw - 36px);
 
 	${mediaQueries.tablet} {
 		flex-direction: row;
-		padding: 45px 72px;
-		max-width: 1000px;
+		padding: 36px 32px;
 		min-height: 220px;
 		width: 100%;
+	}
+	${mediaQueries.desktop} {
+		padding: 45px 72px;
 	}
 `;
