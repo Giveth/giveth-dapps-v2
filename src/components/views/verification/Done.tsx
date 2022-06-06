@@ -1,31 +1,48 @@
-import { B, brandColors, H4, neutralColors, P } from '@giveth/ui-design-system';
+import {
+	B,
+	brandColors,
+	Button,
+	H4,
+	neutralColors,
+	P,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import React from 'react';
 import ConfettiAnimation from '@/components/animations/confetti';
 import CheckCircle from '@/components/views/verification/CheckCircle';
+import { ContentSeparator, BtnContainer } from './VerificationIndex';
 
 const Done = () => {
 	return (
-		<Container>
-			<H4 weight={700}>Congratulations</H4>
-			<P>
-				Your application has been submitted! The Verification Team will
-				send an email once it has been reviewed.
-			</P>
-			<ConfettiContainer>
-				<ConfettiAnimation size={600} />
-			</ConfettiContainer>
-			<StagesContainer>
-				<Submitted>
-					Form submited
-					<CheckCircle />
-				</Submitted>
-				<Line>------</Line>
-				<Waiting>Waiting for verification</Waiting>
-				<Line>------</Line>
-				<Voila>Voila! Verified badge</Voila>
-			</StagesContainer>
-		</Container>
+		<>
+			<Container>
+				<H4 weight={700}>Congratulations</H4>
+				<P>
+					Your application has been submitted! The Verification Team
+					will send an email once it has been reviewed.
+				</P>
+				<ConfettiContainer>
+					<ConfettiAnimation size={600} />
+				</ConfettiContainer>
+				<StagesContainer>
+					<Submitted>
+						Form submited
+						<CheckCircle />
+					</Submitted>
+					<Line>------</Line>
+					<Waiting>Waiting for verification</Waiting>
+					<Line>------</Line>
+					<Voila>Voila! Verified badge</Voila>
+				</StagesContainer>
+			</Container>
+			<div>
+				<ContentSeparator />
+				<BtnContainer>
+					<Button label='<     PREVIOUS' />
+					<Button disabled label='NEXT     >' />
+				</BtnContainer>
+			</div>
+		</>
 	);
 };
 

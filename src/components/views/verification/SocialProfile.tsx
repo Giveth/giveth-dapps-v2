@@ -1,5 +1,11 @@
 import Image from 'next/image';
-import { H6, IconTwitter, neutralColors, P } from '@giveth/ui-design-system';
+import {
+	Button,
+	H6,
+	IconTwitter,
+	neutralColors,
+	P,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
@@ -9,52 +15,62 @@ import InstagramIcon from '/public/images/icons/social/instagram.svg';
 import YoutubeIcon from '/public/images/icons/social/youtube.svg';
 import DiscordIcon from '/public/images/icons/social/discord.svg';
 import { ButtonRemove } from './common';
+import { ContentSeparator, BtnContainer } from './VerificationIndex';
 
 const SocialProfile = () => {
 	return (
 		<>
-			<H6 weight={700}>Personal Social Media</H6>
-			<br />
-			<Description>
-				<Attention>i</Attention>
-				Please connect to your personal social media profiles. At least
-				one is required.
-			</Description>
-			<ButtonsSection>
-				<ButtonRow>
-					<ButtonSocial color='#00ACEE'>
-						<IconTwitter />
-						@LAURENLUZ
-					</ButtonSocial>
-					<ButtonRemove />
-				</ButtonRow>
-				<ButtonRow>
-					<ButtonSocial color='#3B5998'>
-						<Image src={FacebookIcon} alt='facebook icon' />
-						@LAURENLUZ
-					</ButtonSocial>
-					<ButtonRemove />
-				</ButtonRow>
-				<ButtonRow>
-					<ButtonSocial color='#CD486B'>
-						<Image src={InstagramIcon} alt='instagram icon' />
-						@LAURENLUZ
-					</ButtonSocial>
-					<ButtonRemove />
-				</ButtonRow>
-				<ButtonRow>
-					<ButtonSocial color='#F7003B'>
-						<Image src={YoutubeIcon} alt='youtube icon' />
-						CONNECT TO YOUTUBE
-					</ButtonSocial>
-				</ButtonRow>
-				<ButtonRow>
-					<ButtonSocial color='#7700D5'>
-						<Image src={DiscordIcon} alt='discord icon' />
-						CONNECT TO DISCORD
-					</ButtonSocial>
-				</ButtonRow>
-			</ButtonsSection>
+			<div>
+				<H6 weight={700}>Personal Social Media</H6>
+				<br />
+				<Description>
+					<Attention>i</Attention>
+					Please connect to your personal social media profiles. At
+					least one is required.
+				</Description>
+				<ButtonsSection>
+					<ButtonRow>
+						<ButtonSocial color='#00ACEE'>
+							<IconTwitter />
+							@LAURENLUZ
+						</ButtonSocial>
+						<ButtonRemove />
+					</ButtonRow>
+					<ButtonRow>
+						<ButtonSocial color='#3B5998'>
+							<Image src={FacebookIcon} alt='facebook icon' />
+							@LAURENLUZ
+						</ButtonSocial>
+						<ButtonRemove />
+					</ButtonRow>
+					<ButtonRow>
+						<ButtonSocial color='#CD486B'>
+							<Image src={InstagramIcon} alt='instagram icon' />
+							@LAURENLUZ
+						</ButtonSocial>
+						<ButtonRemove />
+					</ButtonRow>
+					<ButtonRow>
+						<ButtonSocial color='#F7003B'>
+							<Image src={YoutubeIcon} alt='youtube icon' />
+							CONNECT TO YOUTUBE
+						</ButtonSocial>
+					</ButtonRow>
+					<ButtonRow>
+						<ButtonSocial color='#7700D5'>
+							<Image src={DiscordIcon} alt='discord icon' />
+							CONNECT TO DISCORD
+						</ButtonSocial>
+					</ButtonRow>
+				</ButtonsSection>
+			</div>
+			<div>
+				<ContentSeparator />
+				<BtnContainer>
+					<Button label='<     PREVIOUS' />
+					<Button label='NEXT     >' />
+				</BtnContainer>
+			</div>
 		</>
 	);
 };

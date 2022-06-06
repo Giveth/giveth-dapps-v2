@@ -1,4 +1,4 @@
-import { H6, Lead, neutralColors, P } from '@giveth/ui-design-system';
+import { Button, H6, Lead, neutralColors, P } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { ChangeEvent, useState } from 'react';
 import Select from 'react-select';
@@ -7,6 +7,7 @@ import Input from '@/components/Input';
 import { Label } from '../create/Create.sc';
 import { TextArea } from '@/components/styled-components/TextArea';
 import selectCustomStyles from '@/lib/constants/selectCustomStyles';
+import { BtnContainer, ContentSeparator } from './VerificationIndex';
 
 const options = [
 	{ value: 'new york', label: 'New York' },
@@ -27,44 +28,57 @@ export default function ProjectRegistry() {
 
 	return (
 		<>
-			<H6 weight={700}>Project registry</H6>
-			<br />
-			<RadioSectionContainer>
-				<RadioSectionTitle>
-					Is your project part of a registered non-profit
-					organization?
-				</RadioSectionTitle>
-				<RadioSectionSubTitle>
-					Having obtained non-profit status is not a requirement but
-					it is helpful for the verification process
-				</RadioSectionSubTitle>
+			<div>
+				<H6 weight={700}>Project registry</H6>
 				<br />
-				<RadioContainer>
-					<RadioButton
-						title='Yes'
-						toggleRadio={() =>
-							setIsNonProfit(ProjectRegistryStates.YES)
-						}
-						isSelected={isNonProfit === ProjectRegistryStates.YES}
-					/>
-					<RadioButton
-						title='No'
-						toggleRadio={() =>
-							setIsNonProfit(ProjectRegistryStates.NO)
-						}
-						isSelected={isNonProfit === ProjectRegistryStates.NO}
-					/>
-				</RadioContainer>
-			</RadioSectionContainer>
-			<br />
+				<RadioSectionContainer>
+					<RadioSectionTitle>
+						Is your project part of a registered non-profit
+						organization?
+					</RadioSectionTitle>
+					<RadioSectionSubTitle>
+						Having obtained non-profit status is not a requirement
+						but it is helpful for the verification process
+					</RadioSectionSubTitle>
+					<br />
+					<RadioContainer>
+						<RadioButton
+							title='Yes'
+							toggleRadio={() =>
+								setIsNonProfit(ProjectRegistryStates.YES)
+							}
+							isSelected={
+								isNonProfit === ProjectRegistryStates.YES
+							}
+						/>
+						<RadioButton
+							title='No'
+							toggleRadio={() =>
+								setIsNonProfit(ProjectRegistryStates.NO)
+							}
+							isSelected={
+								isNonProfit === ProjectRegistryStates.NO
+							}
+						/>
+					</RadioContainer>
+				</RadioSectionContainer>
+				<br />
 
-			{isNonProfit === ProjectRegistryStates.YES && (
-				<ProjectRegistryNonProfit />
-			)}
+				{isNonProfit === ProjectRegistryStates.YES && (
+					<ProjectRegistryNonProfit />
+				)}
 
-			{isNonProfit === ProjectRegistryStates.NO && (
-				<ProjectRegistryProfit />
-			)}
+				{isNonProfit === ProjectRegistryStates.NO && (
+					<ProjectRegistryProfit />
+				)}
+			</div>
+			<div>
+				<ContentSeparator />
+				<BtnContainer>
+					<Button label='<     PREVIOUS' />
+					<Button label='NEXT     >' />
+				</BtnContainer>
+			</div>
 		</>
 	);
 }
