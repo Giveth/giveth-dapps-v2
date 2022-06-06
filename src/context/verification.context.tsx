@@ -23,7 +23,7 @@ export const VerificationProvider = ({
 	const [projectData, setProjectData] = useState<IProject | {}>({});
 	const router = useRouter();
 	const { slug } = router.query;
-	console.log('Slug', slug);
+
 	useEffect(() => {
 		async function getProjectData() {
 			if (slug) {
