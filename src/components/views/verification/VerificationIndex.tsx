@@ -14,6 +14,7 @@ import BulbIcon from '/public/images/icons/lightbulb.svg';
 import ContentSelector from '@/components/views/verification/ContentSelector';
 import HintModal from '@/components/views/verification/HintModal';
 import CheckCircle from '@/components/views/verification/CheckCircle';
+import { useVerificationData } from '@/context/verification.context';
 
 const MenuList = [
 	'Before you start',
@@ -31,9 +32,8 @@ const stepsCount = MenuList.length;
 
 const VerificationIndex = () => {
 	const title = 'The Giveth Community of Makers';
-
-	const [step, setStep] = useState(1);
 	const [showModal, setShowModal] = useState(false);
+	const { step, setStep } = useVerificationData();
 
 	return (
 		<Container>

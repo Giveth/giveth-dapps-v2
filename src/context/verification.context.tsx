@@ -3,13 +3,19 @@ import { useRouter } from 'next/router';
 import { IProjectVerification } from '@/apollo/types/types';
 import { client } from '@/apollo/apolloClient';
 import { getCurrentProjectVerificationFormQuery } from '@/apollo/gql/gqlVerification';
-
+import type { Dispatch, SetStateAction } from 'react';
 interface IVerificationContext {
 	verificationData?: IProjectVerification;
+	step: number;
+	setStep: Dispatch<SetStateAction<number>>;
 }
 
 const VerificationContext = createContext<IVerificationContext>({
 	verificationData: undefined,
+	step: 0,
+	setStep: num => {
+		console.log('setStep not initialed yet!');
+	},
 });
 
 VerificationContext.displayName = 'VerificationContext';
@@ -19,6 +25,7 @@ export const VerificationProvider = ({
 }: {
 	children: React.ReactNode;
 }) => {
+	const [step, setStep] = useState(1);
 	const [verificationData, setVerificationData] =
 		useState<IProjectVerification>();
 	const router = useRouter();
@@ -42,7 +49,9 @@ export const VerificationProvider = ({
 	}, [slug]);
 
 	return (
-		<VerificationContext.Provider value={{ verificationData }}>
+		<VerificationContext.Provider
+			value={{ verificationData, step, setStep }}
+		>
 			{children}
 		</VerificationContext.Provider>
 	);
