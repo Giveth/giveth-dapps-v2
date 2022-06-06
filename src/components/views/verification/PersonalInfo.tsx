@@ -7,7 +7,9 @@ import { ContentSeparator, BtnContainer } from './VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
 
 const PersonalInfo = () => {
-	const { setStep } = useVerificationData();
+	const { verificationData, setStep } = useVerificationData();
+	console.log('verificationData', verificationData);
+
 	return (
 		<>
 			<div>
@@ -15,20 +17,20 @@ const PersonalInfo = () => {
 				<br />
 				<Input
 					label='What is your full name?'
-					value={'Lauren Luz'}
+					value={`${verificationData?.user.firstName} ${verificationData?.user.lastName}`}
 					disabled
 					name='name'
 				/>
 				<Input
 					label='Your wallet address'
-					value={'0x6d97d65adff6771b31671443a6b9512104312d3d'}
+					value={verificationData?.user.walletAddress || ''}
 					disabled
 					name='walletAddress'
 				/>
 				<EmailSection>
 					<Input
 						label='What is your email address?'
-						value={'lauren@giveth.io'}
+						value={verificationData?.user.email || ''}
 						name='email'
 					/>
 					<ButtonStyled

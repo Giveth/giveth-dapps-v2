@@ -132,6 +132,9 @@ export const VERIFICATION_CREATE = gql`
 			user {
 				id
 				walletAddress
+				firstName
+				lastName
+				email
 			}
 			project {
 				id
