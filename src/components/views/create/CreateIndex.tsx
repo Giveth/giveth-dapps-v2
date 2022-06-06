@@ -22,9 +22,13 @@ const CreateIndex = () => {
 			if (!isRegistered) {
 				dispatch(setShowCompleteProfile(true));
 				return;
+			} else {
+				dispatch(setShowCompleteProfile(false));
 			}
 			if (!isSignedIn) {
 				dispatch(setShowSignWithWallet(true));
+			} else {
+				dispatch(setShowSignWithWallet(false));
 			}
 		} else {
 			dispatch(setShowWelcomeModal(true));
