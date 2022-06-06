@@ -143,7 +143,7 @@ const consumeArray = [
 ];
 
 const UpperSection = styled.div`
-	padding: 150px 0 36px;
+	padding: 18% 0;
 	color: white;
 	overflow: hidden;
 	position: relative;
