@@ -8,13 +8,19 @@ import {
 	semanticColors,
 	SublineBold,
 } from '@giveth/ui-design-system';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import BulbIcon from '/public/images/icons/lightbulb.svg';
 import ContentSelector from '@/components/views/verification/ContentSelector';
 import HintModal from '@/components/views/verification/HintModal';
 import CheckCircle from '@/components/views/verification/CheckCircle';
+import {
+	getCurrentProjectVerificationFormQuery,
+	VERIFICATION_CREATE,
+} from '@/apollo/gql/gqlVerification';
+import { useVerificationData } from '@/context/verification.context';
+import { client } from '@/apollo/apolloClient';
 
 const MenuList = [
 	'Before you start',
@@ -35,6 +41,42 @@ const VerificationIndex = () => {
 
 	const [step, setStep] = useState(0);
 	const [showModal, setShowModal] = useState(false);
+	const { projectData } = useVerificationData();
+
+	useEffect(() => {
+		async function getVerificationData() {
+			const verificationData = await client.query({
+				query: getCurrentProjectVerificationFormQuery,
+				variables: {
+					projectId: Number(projectData?.id),
+				},
+			});
+			console.log('verificationData', verificationData);
+		}
+		if (projectData?.id) {
+			getVerificationData();
+		}
+	}, [projectData?.id]);
+
+	const saveStep = () => {
+		async function sendReq() {
+			switch (step) {
+				case 0:
+					const { data } = await client.mutate({
+						mutation: VERIFICATION_CREATE,
+						variables: {
+							projectId: Number(projectData?.id),
+						},
+					});
+					break;
+				case 1:
+				default:
+					break;
+			}
+		}
+
+		sendReq();
+	};
 
 	return (
 		<Container>
@@ -80,7 +122,7 @@ const VerificationIndex = () => {
 							/>
 							<Button
 								disabled={step === stepsCount - 1}
-								onClick={() => setStep(step + 1)}
+								onClick={() => saveStep()}
 								label='NEXT     >'
 							/>
 						</BtnContainer>

@@ -5,11 +5,11 @@ import { backendGQLRequest } from '@/helpers/requests';
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlVerification';
 
 interface IVerificationContext {
-	projectData: IProject | {};
+	projectData?: IProject;
 }
 
 const VerificationContext = createContext<IVerificationContext>({
-	projectData: {},
+	projectData: undefined,
 });
 
 VerificationContext.displayName = 'VerificationContext';
@@ -19,7 +19,7 @@ export const VerificationProvider = ({
 }: {
 	children: React.ReactNode;
 }) => {
-	const [projectData, setProjectData] = useState<IProject | {}>({});
+	const [projectData, setProjectData] = useState<IProject>();
 	const router = useRouter();
 	const { slug } = router.query;
 	console.log('Slug', slug);
@@ -32,7 +32,7 @@ export const VerificationProvider = ({
 							slug,
 						});
 					console.log('Dattaaa', projectData.data.projectBySlug);
-					setProjectData(projectData);
+					setProjectData(projectData.data.projectBySlug);
 				} catch (error) {
 					console.log('error', error);
 				}
