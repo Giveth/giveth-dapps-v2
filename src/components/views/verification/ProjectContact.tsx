@@ -15,6 +15,7 @@ import {
 import styled from 'styled-components';
 import Input from '@/components/Input';
 import { ContentSeparator, BtnContainer } from './VerificationIndex';
+import { useVerificationData } from '@/context/verification.context';
 
 export default function ProjectContact() {
 	const [twitterUrl, setTwitterUrl] = useState('');
@@ -22,6 +23,7 @@ export default function ProjectContact() {
 	const [instagramUrl, setInstagramUrl] = useState('');
 	const [youtubeUrl, setYoutubeUrl] = useState('');
 	const [linkedinUrl, setLinkedinUrl] = useState('');
+	const { setStep } = useVerificationData();
 
 	return (
 		<>
@@ -102,8 +104,8 @@ export default function ProjectContact() {
 			<div>
 				<ContentSeparator />
 				<BtnContainer>
-					<Button label='<     PREVIOUS' />
-					<Button label='NEXT     >' />
+					<Button onClick={() => setStep(3)} label='<     PREVIOUS' />
+					<Button onClick={() => setStep(5)} label='NEXT     >' />
 				</BtnContainer>
 			</div>
 		</>

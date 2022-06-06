@@ -8,6 +8,7 @@ import { Label } from '../create/Create.sc';
 import { TextArea } from '@/components/styled-components/TextArea';
 import selectCustomStyles from '@/lib/constants/selectCustomStyles';
 import { BtnContainer, ContentSeparator } from './VerificationIndex';
+import { useVerificationData } from '@/context/verification.context';
 
 const options = [
 	{ value: 'new york', label: 'New York' },
@@ -25,6 +26,7 @@ export default function ProjectRegistry() {
 	const [isNonProfit, setIsNonProfit] = useState<ProjectRegistryStates>(
 		ProjectRegistryStates.NOTSELECTED,
 	);
+	const { setStep } = useVerificationData();
 
 	return (
 		<>
@@ -75,8 +77,8 @@ export default function ProjectRegistry() {
 			<div>
 				<ContentSeparator />
 				<BtnContainer>
-					<Button label='<     PREVIOUS' />
-					<Button label='NEXT     >' />
+					<Button onClick={() => setStep(2)} label='<     PREVIOUS' />
+					<Button onClick={() => setStep(4)} label='NEXT     >' />
 				</BtnContainer>
 			</div>
 		</>

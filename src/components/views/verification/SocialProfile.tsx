@@ -16,8 +16,10 @@ import YoutubeIcon from '/public/images/icons/social/youtube.svg';
 import DiscordIcon from '/public/images/icons/social/discord.svg';
 import { ButtonRemove } from './common';
 import { ContentSeparator, BtnContainer } from './VerificationIndex';
+import { useVerificationData } from '@/context/verification.context';
 
 const SocialProfile = () => {
+	const { setStep } = useVerificationData();
 	return (
 		<>
 			<div>
@@ -67,8 +69,8 @@ const SocialProfile = () => {
 			<div>
 				<ContentSeparator />
 				<BtnContainer>
-					<Button label='<     PREVIOUS' />
-					<Button label='NEXT     >' />
+					<Button onClick={() => setStep(1)} label='<     PREVIOUS' />
+					<Button onClick={() => setStep(3)} label='NEXT     >' />
 				</BtnContainer>
 			</div>
 		</>

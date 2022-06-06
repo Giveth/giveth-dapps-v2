@@ -16,12 +16,14 @@ import {
 } from '@/components/styled-components/DatePicker';
 import ImageUploader from '@/components/ImageUploader';
 import { ContentSeparator, BtnContainer } from './VerificationIndex';
+import { useVerificationData } from '@/context/verification.context';
 
 export default function Milestones() {
 	const [startDate, setStartDate] = useState<Date | undefined>();
 	const [file, setFile] = useState<File>();
 	const [url, setUrl] = useState<string>('');
 	const [uploading, setUploading] = useState(false);
+	const { setStep } = useVerificationData();
 
 	return (
 		<>
@@ -74,8 +76,8 @@ export default function Milestones() {
 			<div>
 				<ContentSeparator />
 				<BtnContainer>
-					<Button label='<     PREVIOUS' />
-					<Button label='NEXT     >' />
+					<Button onClick={() => setStep(4)} label='<     PREVIOUS' />
+					<Button onClick={() => setStep(6)} label='NEXT     >' />
 				</BtnContainer>
 			</div>
 		</>

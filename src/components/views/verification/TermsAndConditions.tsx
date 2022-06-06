@@ -5,9 +5,11 @@ import CheckBox from '@/components/Checkbox';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { Relative } from '@/components/styled-components/Position';
 import { ContentSeparator, BtnContainer } from './VerificationIndex';
+import { useVerificationData } from '@/context/verification.context';
 
 export default function TermsAndConditions() {
 	const [accepted, setAccepted] = useState(false);
+	const { setStep } = useVerificationData();
 	return (
 		<>
 			<Lead>
@@ -57,8 +59,8 @@ export default function TermsAndConditions() {
 			<div>
 				<ContentSeparator />
 				<BtnContainer>
-					<Button label='<     PREVIOUS' />
-					<Button label='NEXT     >' />
+					<Button onClick={() => setStep(6)} label='<     PREVIOUS' />
+					<Button onClick={() => setStep(8)} label='NEXT     >' />
 				</BtnContainer>
 			</div>
 		</>

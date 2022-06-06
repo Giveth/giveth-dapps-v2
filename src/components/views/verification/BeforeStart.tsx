@@ -2,8 +2,11 @@ import { brandColors, Button, H6, Lead } from '@giveth/ui-design-system';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
 import { ContentSeparator, BtnContainer } from './VerificationIndex';
+import { useVerificationData } from '@/context/verification.context';
 
 const BeforeStart = () => {
+	const { setStep } = useVerificationData();
+
 	// const saveStep = () => {
 	// 	async function sendReq() {
 	// 		switch (step) {
@@ -57,7 +60,7 @@ const BeforeStart = () => {
 				<ContentSeparator />
 				<BtnContainer>
 					<Button disabled label='<     PREVIOUS' />
-					<Button label='NEXT     >' />
+					<Button onClick={() => setStep(1)} label='NEXT     >' />
 				</BtnContainer>
 			</div>
 		</>

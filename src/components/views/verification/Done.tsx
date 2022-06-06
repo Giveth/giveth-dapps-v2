@@ -11,8 +11,10 @@ import React from 'react';
 import ConfettiAnimation from '@/components/animations/confetti';
 import CheckCircle from '@/components/views/verification/CheckCircle';
 import { ContentSeparator, BtnContainer } from './VerificationIndex';
+import { useVerificationData } from '@/context/verification.context';
 
 const Done = () => {
+	const { setStep } = useVerificationData();
 	return (
 		<>
 			<Container>
@@ -38,7 +40,7 @@ const Done = () => {
 			<div>
 				<ContentSeparator />
 				<BtnContainer>
-					<Button label='<     PREVIOUS' />
+					<Button onClick={() => setStep(7)} label='<     PREVIOUS' />
 					<Button disabled label='NEXT     >' />
 				</BtnContainer>
 			</div>

@@ -12,6 +12,7 @@ import AddAddressModal from '@/components/views/verification/manageFunds/AddAddr
 import UserAddress from '@/components/views/verification/manageFunds/UserAddress';
 import { TextArea } from '@/components/styled-components/TextArea';
 import { ContentSeparator, BtnContainer } from '../VerificationIndex';
+import { useVerificationData } from '@/context/verification.context';
 
 export interface IAddress {
 	walletAddress: string;
@@ -23,6 +24,7 @@ const ManageFundsIndex = () => {
 	const [description, setDescription] = useState('');
 	const [showAddressModal, setShowAddressModal] = useState(false);
 	const [addresses, setAddresses] = useState<IAddress[]>([]);
+	const { setStep } = useVerificationData();
 
 	const addAddress = (addressObj: IAddress) => {
 		setAddresses([...addresses, addressObj]);
@@ -75,8 +77,8 @@ const ManageFundsIndex = () => {
 			<div>
 				<ContentSeparator />
 				<BtnContainer>
-					<Button label='<     PREVIOUS' />
-					<Button label='NEXT     >' />
+					<Button onClick={() => setStep(5)} label='<     PREVIOUS' />
+					<Button onClick={() => setStep(7)} label='NEXT     >' />
 				</BtnContainer>
 			</div>
 			{showAddressModal && (

@@ -4,8 +4,10 @@ import { Flex } from '@/components/styled-components/Flex';
 import { ButtonStyled } from './common.styled';
 import Input from '@/components/Input';
 import { ContentSeparator, BtnContainer } from './VerificationIndex';
+import { useVerificationData } from '@/context/verification.context';
 
 const PersonalInfo = () => {
+	const { setStep } = useVerificationData();
 	return (
 		<>
 			<div>
@@ -39,8 +41,8 @@ const PersonalInfo = () => {
 			<div>
 				<ContentSeparator />
 				<BtnContainer>
-					<Button label='<     PREVIOUS' />
-					<Button label='NEXT     >' />
+					<Button onClick={() => setStep(0)} label='<     PREVIOUS' />
+					<Button onClick={() => setStep(2)} label='NEXT     >' />
 				</BtnContainer>
 			</div>
 		</>
