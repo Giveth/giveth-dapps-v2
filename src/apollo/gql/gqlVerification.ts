@@ -143,8 +143,8 @@ export const VERIFICATION_CREATE = gql`
 `;
 
 export const getCurrentProjectVerificationFormQuery = gql`
-	query getCurrentProjectVerificationForm($projectId: Float!) {
-		getCurrentProjectVerificationForm(projectId: $projectId) {
+	query getCurrentProjectVerificationForm($slug: String!) {
+		getCurrentProjectVerificationForm(slug: $slug) {
 			id
 			isTermAndConditionsAccepted
 			projectRegistry {
