@@ -4,6 +4,25 @@ import links from '@/lib/constants/links';
 import { ContentSeparator, BtnContainer } from './VerificationIndex';
 
 const BeforeStart = () => {
+	// const saveStep = () => {
+	// 	async function sendReq() {
+	// 		switch (step) {
+	// 			case 0:
+	// 				const { data } = await client.mutate({
+	// 					mutation: VERIFICATION_CREATE,
+	// 					variables: {
+	// 						projectId: Number(projectData?.id),
+	// 					},
+	// 				});
+	// 				break;
+	// 			case 1:
+	// 			default:
+	// 				break;
+	// 		}
+	// 	}
+
+	// 	sendReq();
+	// };
 	return (
 		<>
 			<div>

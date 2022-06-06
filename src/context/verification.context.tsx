@@ -1,15 +1,15 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { IProject } from '@/apollo/types/types';
-import { backendGQLRequest } from '@/helpers/requests';
-import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlVerification';
+import { IProjectVerification } from '@/apollo/types/types';
+import { client } from '@/apollo/apolloClient';
+import { getCurrentProjectVerificationFormQuery } from '@/apollo/gql/gqlVerification';
 
 interface IVerificationContext {
-	projectData?: IProject;
+	verificationData?: IProjectVerification;
 }
 
 const VerificationContext = createContext<IVerificationContext>({
-	projectData: undefined,
+	verificationData: undefined,
 });
 
 VerificationContext.displayName = 'VerificationContext';
@@ -19,30 +19,30 @@ export const VerificationProvider = ({
 }: {
 	children: React.ReactNode;
 }) => {
-	const [projectData, setProjectData] = useState<IProject>();
+	const [verificationData, setVerificationData] =
+		useState<IProjectVerification>();
 	const router = useRouter();
 	const { slug } = router.query;
-	console.log('Slug', slug);
+
 	useEffect(() => {
-		async function getProjectData() {
-			if (slug) {
-				try {
-					const projectData: { data: { projectBySlug: IProject } } =
-						await backendGQLRequest(FETCH_PROJECT_BY_SLUG, {
-							slug,
-						});
-					console.log('Dattaaa', projectData.data.projectBySlug);
-					setProjectData(projectData.data.projectBySlug);
-				} catch (error) {
-					console.log('error', error);
-				}
-			}
+		async function getVerificationData() {
+			const verificationRes = await client.query({
+				query: getCurrentProjectVerificationFormQuery,
+				variables: {
+					slug,
+				},
+			});
+			const projectverification: IProjectVerification =
+				verificationRes.data.getCurrentProjectVerificationForm;
+			setVerificationData(projectverification);
 		}
-		getProjectData();
+		if (slug) {
+			getVerificationData();
+		}
 	}, [slug]);
 
 	return (
-		<VerificationContext.Provider value={{ projectData }}>
+		<VerificationContext.Provider value={{ verificationData }}>
 			{children}
 		</VerificationContext.Provider>
 	);
