@@ -23,6 +23,8 @@ import config from '@/configuration';
 
 declare let window: any;
 
+export const fullPath = (path: string) => `${config.FRONTEND_LINK}${path}`;
+
 export const formatBalance = (balance?: string | number) => {
 	return parseFloat(String(balance || 0)).toLocaleString('en-US', {
 		maximumFractionDigits: 6,

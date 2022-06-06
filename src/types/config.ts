@@ -142,6 +142,7 @@ export interface EnvConfig {
 	XDAI_CONFIG: XDaiNetworkConfig;
 	GARDEN_LINK: string;
 	BACKEND_LINK: string;
+	FRONTEND_LINK: string;
 	MICROSERVICES: MicroservicesConfig;
 }
 
