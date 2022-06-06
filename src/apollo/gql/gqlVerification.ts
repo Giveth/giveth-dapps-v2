@@ -178,6 +178,9 @@ export const getCurrentProjectVerificationFormQuery = gql`
 			user {
 				id
 				walletAddress
+				firstName
+				lastName
+				email
 			}
 			project {
 				id
