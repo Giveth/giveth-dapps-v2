@@ -8,6 +8,9 @@ interface IVerificationContext {
 	verificationData?: IProjectVerification;
 	step: number;
 	setStep: Dispatch<SetStateAction<number>>;
+	setVerificationData: Dispatch<
+		SetStateAction<IProjectVerification | undefined>
+	>;
 }
 
 const VerificationContext = createContext<IVerificationContext>({
@@ -15,6 +18,9 @@ const VerificationContext = createContext<IVerificationContext>({
 	step: 0,
 	setStep: num => {
 		console.log('setStep not initialed yet!');
+	},
+	setVerificationData: pr => {
+		console.log('setVerificationData not initialed yet!');
 	},
 });
 
@@ -33,15 +39,17 @@ export const VerificationProvider = ({
 
 	useEffect(() => {
 		async function getVerificationData() {
-			const verificationRes = await client.query({
-				query: getCurrentProjectVerificationFormQuery,
-				variables: {
-					slug,
-				},
-			});
-			const projectverification: IProjectVerification =
-				verificationRes.data.getCurrentProjectVerificationForm;
-			setVerificationData(projectverification);
+			try {
+				const verificationRes = await client.query({
+					query: getCurrentProjectVerificationFormQuery,
+					variables: {
+						slug,
+					},
+				});
+				const projectverification: IProjectVerification =
+					verificationRes.data.getCurrentProjectVerificationForm;
+				setVerificationData(projectverification);
+			} catch (error) {}
 		}
 		if (slug) {
 			getVerificationData();
@@ -50,7 +58,7 @@ export const VerificationProvider = ({
 
 	return (
 		<VerificationContext.Provider
-			value={{ verificationData, step, setStep }}
+			value={{ verificationData, setVerificationData, step, setStep }}
 		>
 			{children}
 		</VerificationContext.Provider>
