@@ -1,31 +1,44 @@
 import { brandColors, Button, H6, Lead } from '@giveth/ui-design-system';
+import { useRouter } from 'next/router';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
 import { ContentSeparator, BtnContainer } from './VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
+import { client } from '@/apollo/apolloClient';
+import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
+import { VERIFICATION_CREATE } from '@/apollo/gql/gqlVerification';
 
 const BeforeStart = () => {
-	const { setStep } = useVerificationData();
+	const { verificationData, setVerificationData, setStep } =
+		useVerificationData();
+	const router = useRouter();
+	const { slug } = router.query;
 
-	// const saveStep = () => {
-	// 	async function sendReq() {
-	// 		switch (step) {
-	// 			case 0:
-	// 				const { data } = await client.mutate({
-	// 					mutation: VERIFICATION_CREATE,
-	// 					variables: {
-	// 						projectId: Number(projectData?.id),
-	// 					},
-	// 				});
-	// 				break;
-	// 			case 1:
-	// 			default:
-	// 				break;
-	// 		}
-	// 	}
+	const saveStep = () => {
+		async function sendReq() {
+			const { data: projectData } = await client.query({
+				query: FETCH_PROJECT_BY_SLUG,
+				variables: {
+					slug,
+				},
+			});
+			const id = projectData.projectBySlug.id;
+			const { data } = await client.mutate({
+				mutation: VERIFICATION_CREATE,
+				variables: {
+					projectId: Number(id),
+				},
+			});
+			setVerificationData(data.createProjectVerificationForm);
+			setStep(1);
+		}
 
-	// 	sendReq();
-	// };
+		if (verificationData?.id) {
+			setStep(1);
+		} else {
+			sendReq();
+		}
+	};
 	return (
 		<>
 			<div>
@@ -60,7 +73,7 @@ const BeforeStart = () => {
 				<ContentSeparator />
 				<BtnContainer>
 					<Button disabled label='<     PREVIOUS' />
-					<Button onClick={() => setStep(1)} label='NEXT     >' />
+					<Button onClick={() => saveStep()} label='NEXT     >' />
 				</BtnContainer>
 			</div>
 		</>

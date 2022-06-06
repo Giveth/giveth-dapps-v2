@@ -31,7 +31,7 @@ export const VerificationProvider = ({
 }: {
 	children: React.ReactNode;
 }) => {
-	const [step, setStep] = useState(1);
+	const [step, setStep] = useState(0);
 	const [verificationData, setVerificationData] =
 		useState<IProjectVerification>();
 	const router = useRouter();
