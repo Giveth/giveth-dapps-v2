@@ -1,20 +1,10 @@
-import {
-	B,
-	brandColors,
-	Button,
-	H4,
-	neutralColors,
-	P,
-} from '@giveth/ui-design-system';
+import { B, brandColors, H4, neutralColors, P } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import React from 'react';
 import ConfettiAnimation from '@/components/animations/confetti';
 import CheckCircle from '@/components/views/verification/CheckCircle';
-import { ContentSeparator, BtnContainer } from './VerificationIndex';
-import { useVerificationData } from '@/context/verification.context';
 
 const Done = () => {
-	const { setStep } = useVerificationData();
 	return (
 		<>
 			<Container>
@@ -37,13 +27,6 @@ const Done = () => {
 					<Voila>Voila! Verified badge</Voila>
 				</StagesContainer>
 			</Container>
-			<div>
-				<ContentSeparator />
-				<BtnContainer>
-					<Button onClick={() => setStep(7)} label='<     PREVIOUS' />
-					<Button disabled label='NEXT     >' />
-				</BtnContainer>
-			</div>
 		</>
 	);
 };
