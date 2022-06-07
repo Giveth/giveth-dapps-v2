@@ -91,12 +91,10 @@ export const GIVfrens: FC<IGIVfrensProps> = ({ regenFarms, network }) => {
 									)}
 								</Col>
 							</Row>
-							{chainId !== poolStakingConfig?.network && (
+							{!chainId && (
 								<>
 									<DAOChangeNetwork />
-									<DAOChangeNetworkModal
-										network={poolStakingConfig.network!}
-									/>
+									<DAOChangeNetworkModal network={network} />
 								</>
 							)}
 						</DAOContainer>
