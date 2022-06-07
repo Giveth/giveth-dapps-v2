@@ -6,26 +6,28 @@ import CheckCircle from '@/components/views/verification/CheckCircle';
 
 const Done = () => {
 	return (
-		<Container>
-			<H4 weight={700}>Congratulations</H4>
-			<P>
-				Your application has been submitted! The Verification Team will
-				send an email once it has been reviewed.
-			</P>
-			<ConfettiContainer>
-				<ConfettiAnimation size={600} />
-			</ConfettiContainer>
-			<StagesContainer>
-				<Submitted>
-					Form submited
-					<CheckCircle />
-				</Submitted>
-				<Line>------</Line>
-				<Waiting>Waiting for verification</Waiting>
-				<Line>------</Line>
-				<Voila>Voila! Verified badge</Voila>
-			</StagesContainer>
-		</Container>
+		<>
+			<Container>
+				<H4 weight={700}>Congratulations</H4>
+				<P>
+					Your application has been submitted! The Verification Team
+					will send an email once it has been reviewed.
+				</P>
+				<ConfettiContainer>
+					<ConfettiAnimation size={600} />
+				</ConfettiContainer>
+				<StagesContainer>
+					<Submitted>
+						Form submited
+						<CheckCircle />
+					</Submitted>
+					<Line>------</Line>
+					<Waiting>Waiting for verification</Waiting>
+					<Line>------</Line>
+					<Voila>Voila! Verified badge</Voila>
+				</StagesContainer>
+			</Container>
+		</>
 	);
 };
 

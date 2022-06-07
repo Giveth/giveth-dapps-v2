@@ -1,16 +1,27 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { captureException } from '@sentry/nextjs';
-import { IProject } from '@/apollo/types/types';
-import { backendGQLRequest } from '@/helpers/requests';
-import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlVerification';
-
+import { IProjectVerification } from '@/apollo/types/types';
+import { client } from '@/apollo/apolloClient';
+import { getCurrentProjectVerificationFormQuery } from '@/apollo/gql/gqlVerification';
+import type { Dispatch, SetStateAction } from 'react';
 interface IVerificationContext {
-	projectData: IProject | {};
+	verificationData?: IProjectVerification;
+	step: number;
+	setStep: Dispatch<SetStateAction<number>>;
+	setVerificationData: Dispatch<
+		SetStateAction<IProjectVerification | undefined>
+	>;
 }
 
 const VerificationContext = createContext<IVerificationContext>({
-	projectData: {},
+	verificationData: undefined,
+	step: 0,
+	setStep: num => {
+		console.log('setStep not initialed yet!');
+	},
+	setVerificationData: pr => {
+		console.log('setVerificationData not initialed yet!');
+	},
 });
 
 VerificationContext.displayName = 'VerificationContext';
@@ -20,34 +31,35 @@ export const VerificationProvider = ({
 }: {
 	children: React.ReactNode;
 }) => {
-	const [projectData, setProjectData] = useState<IProject | {}>({});
+	const [step, setStep] = useState(0);
+	const [verificationData, setVerificationData] =
+		useState<IProjectVerification>();
 	const router = useRouter();
 	const { slug } = router.query;
 
 	useEffect(() => {
-		async function getProjectData() {
-			if (slug) {
-				try {
-					const projectData: { data: { projectBySlug: IProject } } =
-						await backendGQLRequest(FETCH_PROJECT_BY_SLUG, {
-							slug,
-						});
-
-					setProjectData(projectData);
-				} catch (error) {
-					captureException(error, {
-						tags: {
-							section: 'verificationContext',
-						},
-					});
-				}
-			}
+		async function getVerificationData() {
+			try {
+				const verificationRes = await client.query({
+					query: getCurrentProjectVerificationFormQuery,
+					variables: {
+						slug,
+					},
+				});
+				const projectverification: IProjectVerification =
+					verificationRes.data.getCurrentProjectVerificationForm;
+				setVerificationData(projectverification);
+			} catch (error) {}
 		}
-		getProjectData();
+		if (slug) {
+			getVerificationData();
+		}
 	}, [slug]);
 
 	return (
-		<VerificationContext.Provider value={{ projectData }}>
+		<VerificationContext.Provider
+			value={{ verificationData, setVerificationData, step, setStep }}
+		>
 			{children}
 		</VerificationContext.Provider>
 	);

@@ -3,7 +3,6 @@ import Image from 'next/image';
 import {
 	B,
 	brandColors,
-	Button,
 	neutralColors,
 	semanticColors,
 	SublineBold,
@@ -15,6 +14,7 @@ import BulbIcon from '/public/images/icons/lightbulb.svg';
 import ContentSelector from '@/components/views/verification/ContentSelector';
 import HintModal from '@/components/views/verification/HintModal';
 import CheckCircle from '@/components/views/verification/CheckCircle';
+import { useVerificationData } from '@/context/verification.context';
 
 const MenuList = [
 	'Before you start',
@@ -32,9 +32,8 @@ const stepsCount = MenuList.length;
 
 const VerificationIndex = () => {
 	const title = 'The Giveth Community of Makers';
-
-	const [step, setStep] = useState(0);
 	const [showModal, setShowModal] = useState(false);
+	const { step, setStep } = useVerificationData();
 
 	return (
 		<Container>
@@ -67,24 +66,7 @@ const VerificationIndex = () => {
 							<Image src={BulbIcon} alt='light bulb' />
 						</GuideSection>
 					</AbsoluteSection>
-					<div>
-						<ContentSelector step={step} />
-					</div>
-					<div>
-						<ContentSeparator />
-						<BtnContainer>
-							<Button
-								disabled={step === 0}
-								onClick={() => setStep(step - 1)}
-								label='<     PREVIOUS'
-							/>
-							<Button
-								disabled={step === stepsCount - 1}
-								onClick={() => setStep(step + 1)}
-								label='NEXT     >'
-							/>
-						</BtnContainer>
-					</div>
+					<ContentSelector step={step} />
 				</ContentSection>
 			</InnerContainer>
 			{showModal && <HintModal setShowModal={setShowModal} />}
@@ -121,11 +103,11 @@ const GuideSection = styled(FlexCenter)`
 	cursor: pointer;
 `;
 
-const BtnContainer = styled(Flex)`
+export const BtnContainer = styled(Flex)`
 	justify-content: space-between;
 `;
 
-const ContentSeparator = styled.hr`
+export const ContentSeparator = styled.hr`
 	border: 0.5px solid ${neutralColors.gray[300]};
 	margin: 10px 0;
 `;

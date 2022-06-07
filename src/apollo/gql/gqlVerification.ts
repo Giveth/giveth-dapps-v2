@@ -1,3 +1,5 @@
+import { gql } from '@apollo/client';
+
 export const GET_CURRENT_PROJECT_VERIFICATION_FORM = `
 query getCurrentProjectVerificationForm($projectId: Float!){
     getCurrentProjectVerificationForm(projectId: $projectId) {
@@ -90,6 +92,104 @@ export const FETCH_PROJECT_BY_SLUG = `
 				label
 				supportCustomTokens
 			}
+		}
+	}
+`;
+
+export const VERIFICATION_CREATE = gql`
+	mutation createProjectVerificationForm($projectId: Float!) {
+		createProjectVerificationForm(projectId: $projectId) {
+			id
+			isTermAndConditionsAccepted
+			projectRegistry {
+				organizationDescription
+				isNonProfitOrganization
+				organizationCountry
+				organizationWebsite
+			}
+			projectContacts {
+				youtube
+				instagram
+				linkedin
+				facebook
+				instagram
+				twitter
+			}
+			milestones {
+				mission
+				foundationDate
+				achievedMilestones
+				achievedMilestonesProof
+			}
+			managingFunds {
+				description
+				relatedAddresses {
+					address
+					networkId
+					title
+				}
+			}
+			user {
+				id
+				walletAddress
+				firstName
+				lastName
+				email
+			}
+			project {
+				id
+				slug
+			}
+			status
+		}
+	}
+`;
+
+export const getCurrentProjectVerificationFormQuery = gql`
+	query getCurrentProjectVerificationForm($slug: String!) {
+		getCurrentProjectVerificationForm(slug: $slug) {
+			id
+			isTermAndConditionsAccepted
+			projectRegistry {
+				organizationDescription
+				isNonProfitOrganization
+				organizationCountry
+				organizationWebsite
+			}
+			projectContacts {
+				youtube
+				instagram
+				linkedin
+				facebook
+				instagram
+				twitter
+			}
+			milestones {
+				mission
+				foundationDate
+				achievedMilestones
+				achievedMilestonesProof
+			}
+			managingFunds {
+				description
+				relatedAddresses {
+					address
+					networkId
+					title
+				}
+			}
+			user {
+				id
+				walletAddress
+				firstName
+				lastName
+				email
+			}
+			project {
+				id
+				slug
+			}
+			status
 		}
 	}
 `;

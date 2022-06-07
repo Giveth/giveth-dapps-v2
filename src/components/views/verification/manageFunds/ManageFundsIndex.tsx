@@ -1,4 +1,5 @@
 import {
+	Button,
 	H6,
 	Lead,
 	neutralColors,
@@ -10,6 +11,8 @@ import { useState } from 'react';
 import AddAddressModal from '@/components/views/verification/manageFunds/AddAddressModal';
 import UserAddress from '@/components/views/verification/manageFunds/UserAddress';
 import { TextArea } from '@/components/styled-components/TextArea';
+import { ContentSeparator, BtnContainer } from '../VerificationIndex';
+import { useVerificationData } from '@/context/verification.context';
 
 export interface IAddress {
 	walletAddress: string;
@@ -21,6 +24,7 @@ const ManageFundsIndex = () => {
 	const [description, setDescription] = useState('');
 	const [showAddressModal, setShowAddressModal] = useState(false);
 	const [addresses, setAddresses] = useState<IAddress[]>([]);
+	const { setStep } = useVerificationData();
 
 	const addAddress = (addressObj: IAddress) => {
 		setAddresses([...addresses, addressObj]);
@@ -34,40 +38,49 @@ const ManageFundsIndex = () => {
 
 	return (
 		<>
-			<H6 weight={700}>Managing funds</H6>
-			<Lead>
-				<br />
-				The funds raised are expected to be used for public benefit and
-				not for personal gain. How will you use the funds that your
-				project raises? Please provide detailed funding/budget
-				information as well as an overall roadmap or action plan of the
-				project.
-				<DescriptionInput
-					value={description}
-					name='link'
-					placeholder='eg. "We are a decentralized autonomous organization that works toward the development of web3
+			<div>
+				<H6 weight={700}>Managing funds</H6>
+				<Lead>
+					<br />
+					The funds raised are expected to be used for public benefit
+					and not for personal gain. How will you use the funds that
+					your project raises? Please provide detailed funding/budget
+					information as well as an overall roadmap or action plan of
+					the project.
+					<DescriptionInput
+						value={description}
+						name='link'
+						placeholder='eg. "We are a decentralized autonomous organization that works toward the development of web3
 				applications"'
-					onChange={e => setDescription(e.target.value)}
-				/>
-				<div>Additional address</div>
-				<AddressDescription>
-					Please provide additional Ethereum wallet addresses used for
-					managing funds within your project.
-					<P>This is optional</P>
-				</AddressDescription>
-				<OutlineStyled
-					onClick={() => setShowAddressModal(true)}
-					label='ADD ADDRESS'
-					buttonType='primary'
-				/>
-				{addresses.map((address, index) => (
-					<UserAddress
-						remove={() => removeAddress(index)}
-						address={address}
-						key={address.title}
+						onChange={e => setDescription(e.target.value)}
 					/>
-				))}
-			</Lead>
+					<div>Additional address</div>
+					<AddressDescription>
+						Please provide additional Ethereum wallet addresses used
+						for managing funds within your project.
+						<P>This is optional</P>
+					</AddressDescription>
+					<OutlineStyled
+						onClick={() => setShowAddressModal(true)}
+						label='ADD ADDRESS'
+						buttonType='primary'
+					/>
+					{addresses.map((address, index) => (
+						<UserAddress
+							remove={() => removeAddress(index)}
+							address={address}
+							key={address.title}
+						/>
+					))}
+				</Lead>
+			</div>
+			<div>
+				<ContentSeparator />
+				<BtnContainer>
+					<Button onClick={() => setStep(5)} label='<     PREVIOUS' />
+					<Button onClick={() => setStep(7)} label='NEXT     >' />
+				</BtnContainer>
+			</div>
 			{showAddressModal && (
 				<AddAddressModal
 					addAddress={addAddress}

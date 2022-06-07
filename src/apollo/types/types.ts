@@ -158,3 +158,59 @@ export interface ISiweMessage {
 	nonce: string;
 	message: string;
 }
+
+export interface IProjectRegistry {
+	isNonProfitOrganization?: boolean;
+	organizationCountry?: string;
+	organizationWebsite?: string;
+	organizationDescription?: string;
+}
+
+export interface IProjectContacts {
+	twitter?: string;
+	facebook?: string;
+	linkedin?: string;
+	instagram?: string;
+	youtube?: string;
+}
+
+export interface IProjectMilestones {
+	foundationDate?: Date;
+	mission?: string;
+	achievedMilestones?: string;
+	achievedMilestonesProof?: string;
+}
+
+export interface IProjectManagingFunds {
+	description: string;
+	relatedAddresses: RelatedAddress[];
+}
+
+export interface RelatedAddress {
+	title: string;
+	address: string;
+	networkId: number;
+}
+export interface IProjectVerification {
+	id: string;
+	isTermAndConditionsAccepted: boolean;
+	emailConfirmationToken?: string;
+	emailConfirmationSent?: boolean;
+	emailConfirmationSentAt?: string;
+	emailConfirmedAt?: string;
+	emailConfirmed?: boolean;
+	projectRegistry?: IProjectRegistry;
+	projectContacts?: IProjectContacts;
+	milestones?: IProjectMilestones;
+	managingFunds?: IProjectManagingFunds;
+	user: IUser;
+	project: IProjectUpdate;
+	status: PROJECT_VERIFICATION_STATUSES;
+}
+
+export enum PROJECT_VERIFICATION_STATUSES {
+	VERIFIED = 'verified',
+	DRAFT = 'draft',
+	SUBMITTED = 'submitted',
+	REJECTED = 'rejected',
+}
