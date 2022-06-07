@@ -1,10 +1,10 @@
 import Image from 'next/image';
-import React, { FC, useEffect, useState, ReactNode, useMemo } from 'react';
+import React, { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 import {
-	IconSpark,
 	brandColors,
-	IconHelp,
 	IconExternalLink,
+	IconHelp,
+	IconSpark,
 } from '@giveth/ui-design-system';
 import { constants } from 'ethers';
 import BigNumber from 'bignumber.js';
@@ -13,39 +13,40 @@ import config from '../../configuration';
 import {
 	PoolStakingConfig,
 	RegenPoolStakingConfig,
+	StakingPlatform,
 	StakingType,
 } from '@/types/config';
 import { IconWithTooltip } from '../IconWithToolTip';
-import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
+import { BN, formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import {
-	StakingPoolContainer,
-	StakingPoolExchangeRow,
-	SPTitle,
-	StakingPoolLabel,
-	StakingPoolSubtitle,
-	Details,
-	FirstDetail,
+	ClaimButton,
 	Detail,
 	DetailLabel,
-	DetailValue,
-	ClaimButton,
-	StakeButton,
-	StakingPoolExchange,
-	StakePoolInfoContainer,
+	Details,
 	DetailUnit,
-	StakeButtonsRow,
-	StakeContainer,
-	StakeAmount,
-	LiquidityButton,
+	DetailValue,
+	DisableModal,
+	DisableModalCloseButton,
+	DisableModalContent,
+	DisableModalImage,
+	DisableModalText,
+	FirstDetail,
+	GIVgardenTooltip,
 	IconContainer,
 	IconHelpWraper,
-	GIVgardenTooltip,
 	IntroIcon,
-	DisableModal,
-	DisableModalContent,
-	DisableModalText,
-	DisableModalCloseButton,
-	DisableModalImage,
+	LiquidityButton,
+	SPTitle,
+	StakeAmount,
+	StakeButton,
+	StakeButtonsRow,
+	StakeContainer,
+	StakePoolInfoContainer,
+	StakingPoolContainer,
+	StakingPoolExchange,
+	StakingPoolExchangeRow,
+	StakingPoolLabel,
+	StakingPoolSubtitle,
 } from './BaseStakingCard.sc';
 import { APRModal } from '../modals/APR';
 import { StakeModal } from '../modals/Stake';
@@ -58,7 +59,6 @@ import { IconBalancer } from '../Icons/Balancer';
 import { IconUniswap } from '../Icons/Uniswap';
 import { HarvestAllModal } from '../modals/HarvestAll';
 import { useFarms } from '@/context/farm.context';
-import { useTokenDistro } from '@/context/tokenDistro.context';
 import { WhatisStreamModal } from '../modals/WhatisStream';
 import { IconSushiswap } from '../Icons/Sushiswap';
 import { UniV3APRModal } from '../modals/UNIv3APR';
@@ -66,24 +66,28 @@ import StakingCardIntro from './StakingCardIntro';
 import { getNowUnixMS } from '@/helpers/time';
 import FarmCountDown from '../FarmCountDown';
 import { Flex } from '../styled-components/Flex';
+import { IStakeInfo } from '@/hooks/useStakingPool';
+import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
+import { useAppSelector } from '@/features/hooks';
+import { ITokenDistroInfo } from '@/types/subgraph';
+import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
 	NORMAL,
 	INTRO,
 }
 
-export const getPoolIconWithName = (pool: string) => {
-	switch (pool) {
-		case StakingType.BALANCER:
+export const getPoolIconWithName = (platform: StakingPlatform) => {
+	switch (platform) {
+		case StakingPlatform.BALANCER:
 			return <IconBalancer size={16} />;
-		case StakingType.GIV_LM:
+		case StakingPlatform.GIVETH:
 			return <IconGIV size={16} />;
-		case StakingType.HONEYSWAP:
+		case StakingPlatform.HONEYSWAP:
 			return <IconHoneyswap size={16} />;
-		case StakingType.UNISWAPV2:
-		case StakingType.UNISWAPV3:
+		case StakingPlatform.UNISWAP:
 			return <IconUniswap size={16} />;
-		case StakingType.SUSHISWAP:
+		case StakingPlatform.SUSHISWAP:
 			return <IconSushiswap size={16} />;
 		default:
 			break;
@@ -91,14 +95,22 @@ export const getPoolIconWithName = (pool: string) => {
 };
 interface IBaseStakingCardProps {
 	poolStakingConfig: PoolStakingConfig | RegenPoolStakingConfig;
-	stakeInfo: any;
+	stakeInfo: IStakeInfo;
 	notif?: ReactNode;
+	stakedPositions?: LiquidityPosition[];
+	unstakedPositions?: LiquidityPosition[];
+	currentIncentive?: {
+		key?: (string | number)[] | null | undefined;
+	};
 }
 
 const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	stakeInfo,
 	poolStakingConfig,
 	notif,
+	stakedPositions,
+	unstakedPositions,
+	currentIncentive,
 }) => {
 	const [state, setState] = useState(StakeCardState.NORMAL);
 	const [started, setStarted] = useState(true);
@@ -111,18 +123,18 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		useState(false);
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
 	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
-	const { getTokenDistroHelper } = useTokenDistro();
+	const [tokenDistroHelper, setTokenDistroHelper] =
+		useState<TokenDistroHelper>();
+	const [disableModal, setDisableModal] = useState<boolean>(true);
 	const { setInfo } = useFarms();
 	const { chainId } = useWeb3React();
+	const currentValues = useAppSelector(state => state.subgraph.currentValues);
 	const { regenStreamType, regenFarmIntro } =
 		poolStakingConfig as RegenPoolStakingConfig;
-	const tokenDistroHelper = useMemo(() => {
-		return getTokenDistroHelper(regenStreamType);
-	}, [getTokenDistroHelper, poolStakingConfig]);
-	const [disableModal, setDisableModal] = useState<boolean>(true);
 
 	const {
 		type,
+		platform,
 		title,
 		description,
 		provideLiquidityLink,
@@ -132,9 +144,12 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		active,
 	} = poolStakingConfig;
 
-	const isInactive = !active || type === StakingType.UNISWAPV3;
-
-	const { apr, earned, stakedLpAmount, userNotStakedAmount } = stakeInfo;
+	const {
+		apr,
+		earned,
+		stakedAmount: stakedLpAmount,
+		notStakedAmount: userNotStakedAmount,
+	} = stakeInfo;
 
 	const regenStreamConfig = useMemo(() => {
 		if (!regenStreamType) return undefined;
@@ -146,6 +161,25 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	}, [chainId, regenStreamType]);
 
 	useEffect(() => {
+		if (regenStreamType) {
+			const streamInfo: ITokenDistroInfo | undefined =
+				currentValues[regenStreamType];
+			if (!streamInfo) return;
+			setTokenDistroHelper(
+				new TokenDistroHelper(streamInfo, regenStreamType),
+			);
+		} else {
+			if (!currentValues.tokenDistroInfo) return;
+			setTokenDistroHelper(
+				new TokenDistroHelper(
+					currentValues.tokenDistroInfo,
+					regenStreamType,
+				),
+			);
+		}
+	}, [currentValues, poolStakingConfig, regenStreamType]);
+
+	useEffect(() => {
 		if (tokenDistroHelper) {
 			setRewardLiquidPart(tokenDistroHelper.getLiquidPart(earned));
 			setRewardStream(
@@ -153,7 +187,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 			);
 		}
 	}, [earned, tokenDistroHelper]);
-
 	useEffect(() => {
 		if (chainId) {
 			if (!regenStreamConfig) setInfo(chainId, type, earned);
@@ -166,12 +199,10 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		setStarted(farmStartTimeMS ? getNowUnixMS() > farmStartTimeMS : true);
 	}, [farmStartTimeMS]);
 
-	// if(isInactive) return null
-
 	return (
 		<>
 			<StakingPoolContainer>
-				{isInactive && disableModal && (
+				{!active && disableModal && (
 					<DisableModal>
 						<DisableModalContent>
 							<DisableModalImage>
@@ -202,12 +233,12 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				{state === StakeCardState.NORMAL ? (
 					<>
 						<StakingPoolExchangeRow gap='4px' alignItems='center'>
-							{getPoolIconWithName(type)}
+							{getPoolIconWithName(platform)}
 							<StakingPoolExchange styleType='Small'>
 								{type === StakingType.GIV_LM &&
 									chainId === config.XDAI_NETWORK_NUMBER &&
 									`GIVgarden `}
-								{type}
+								{platform}
 							</StakingPoolExchange>
 							{chainId === config.XDAI_NETWORK_NUMBER &&
 								type === StakingType.GIV_LM && (
@@ -256,9 +287,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									<FirstDetail justifyContent='space-between'>
 										<DetailLabel>APR</DetailLabel>
 										<Flex gap='8px' alignItems='center'>
-											{isInactive ? (
-												<div>N/A %</div>
-											) : (
+											{active ? (
 												<>
 													<IconSpark
 														size={24}
@@ -285,18 +314,20 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 														<IconHelp size={16} />
 													</IconContainer>
 												</>
+											) : (
+												<div>N/A %</div>
 											)}
 										</Flex>
 									</FirstDetail>
 									<Detail justifyContent='space-between'>
 										<DetailLabel>Claimable</DetailLabel>
 										<DetailValue>
-											{isInactive ? (
-												<div>N/A</div>
-											) : (
+											{active ? (
 												`${formatWeiHelper(
 													rewardLiquidPart,
 												)} ${rewardTokenSymbol}`
+											) : (
+												<div>N/A</div>
 											)}
 										</DetailValue>
 									</Detail>
@@ -315,12 +346,12 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 										</Flex>
 										<Flex gap='4px' alignItems='center'>
 											<DetailValue>
-												{isInactive ? (
-													<div>N/A</div>
-												) : (
+												{active ? (
 													formatWeiHelper(
 														rewardStream,
 													)
+												) : (
+													<div>N/A</div>
 												)}
 											</DetailValue>
 											<DetailUnit>
@@ -336,7 +367,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								/>
 							)}
 							<ClaimButton
-								disabled={earned.isZero() || isInactive}
+								disabled={!active || earned.isZero()}
 								onClick={() => setShowHarvestModal(true)}
 								label='HARVEST REWARDS'
 								buttonType='primary'
@@ -347,13 +378,13 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 										label='STAKE'
 										size='small'
 										disabled={
-											userNotStakedAmount.isZero() ||
-											isInactive
+											!active ||
+											BN(userNotStakedAmount).isZero()
 										}
 										onClick={() => setShowStakeModal(true)}
 									/>
 									<StakeAmount>
-										{isInactive
+										{type === StakingType.UNISWAPV3_ETH_GIV
 											? `${userNotStakedAmount.toNumber()} ${unit}`
 											: `${formatWeiHelper(
 													userNotStakedAmount,
@@ -370,7 +401,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 										}
 									/>
 									<StakeAmount>
-										{isInactive
+										{type === StakingType.UNISWAPV3_ETH_GIV
 											? `${stakedLpAmount.toNumber()} ${unit}`
 											: `${formatWeiHelper(
 													stakedLpAmount,
@@ -378,7 +409,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									</StakeAmount>
 								</StakeContainer>
 							</StakeButtonsRow>
-							{!isInactive && (
+							{active && (
 								<LiquidityButton
 									label={
 										type === StakingType.GIV_LM
@@ -386,7 +417,10 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 											: 'PROVIDE LIQUIDITY'
 									}
 									onClick={() => {
-										if (isInactive) {
+										if (
+											type ===
+											StakingType.UNISWAPV3_ETH_GIV
+										) {
 											setShowUniV3APRModal(true);
 										} else {
 											window.open(
@@ -419,8 +453,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 			{showAPRModal && (
 				<APRModal
 					setShowModal={setShowAPRModal}
-					poolStakingConfig={poolStakingConfig}
-					maxAmount={userNotStakedAmount}
+					tokenDistroHelper={tokenDistroHelper}
 					regenStreamConfig={regenStreamConfig}
 				/>
 			)}
@@ -431,29 +464,45 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				/>
 			)}
 			{showStakeModal &&
-				(isInactive ? (
+				(type === StakingType.UNISWAPV3_ETH_GIV ? (
 					<V3StakeModal
 						setShowModal={setShowStakeModal}
 						poolStakingConfig={poolStakingConfig}
+						stakedPositions={stakedPositions || []}
+						unstakedPositions={unstakedPositions || []}
+						currentIncentive={
+							currentIncentive || {
+								key: undefined,
+							}
+						}
 					/>
 				) : (
 					<StakeModal
 						setShowModal={setShowStakeModal}
 						poolStakingConfig={poolStakingConfig}
+						regenStreamConfig={regenStreamConfig}
 						maxAmount={userNotStakedAmount}
 					/>
 				))}
 			{showUnStakeModal &&
-				(isInactive ? (
+				(type === StakingType.UNISWAPV3_ETH_GIV ? (
 					<V3StakeModal
 						isUnstakingModal={true}
 						setShowModal={setShowUnStakeModal}
 						poolStakingConfig={poolStakingConfig}
+						stakedPositions={stakedPositions || []}
+						unstakedPositions={unstakedPositions || []}
+						currentIncentive={
+							currentIncentive || {
+								key: undefined,
+							}
+						}
 					/>
 				) : (
 					<UnStakeModal
 						setShowModal={setShowUnStakeModal}
 						poolStakingConfig={poolStakingConfig}
+						regenStreamConfig={regenStreamConfig}
 						maxAmount={stakedLpAmount}
 					/>
 				))}
@@ -464,12 +513,16 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					poolStakingConfig={poolStakingConfig}
 					earned={earned}
 					network={chainId}
+					tokenDistroHelper={tokenDistroHelper}
 					regenStreamConfig={regenStreamConfig}
+					stakedPositions={stakedPositions}
+					currentIncentive={currentIncentive}
 				/>
 			)}
 			{showWhatIsGIVstreamModal && (
 				<WhatisStreamModal
 					setShowModal={setShowWhatIsGIVstreamModal}
+					tokenDistroHelper={tokenDistroHelper}
 					regenStreamConfig={regenStreamConfig}
 				/>
 			)}

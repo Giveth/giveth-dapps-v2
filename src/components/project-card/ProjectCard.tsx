@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import {
 	GLink,
@@ -6,14 +6,17 @@ import {
 	H6,
 	brandColors,
 	neutralColors,
-	Caption,
 	ButtonLink,
-	OutlineLinkButton,
+	B,
+	Subline,
+	IconVerified,
+	semanticColors,
+	IconGIVBack,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 
 import { Shadow } from '@/components/styled-components/Shadow';
-import ProjectCardBadges from './ProjectCardBadges';
+import ProjectCardBadges from './ProjectCardLikeAndShareButtons';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
 import { IProject } from '@/apollo/types/types';
 import { calcBiggestUnitDifferenceTime, htmlToText } from '@/lib/helpers';
@@ -23,10 +26,10 @@ import {
 	slugToProjectDonate,
 	slugToProjectView,
 } from '@/lib/routeCreators';
-import { Flex } from '../styled-components/Flex';
 import { Row } from '@/components/Grid';
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { mediaQueries } from '@/lib/constants/constants';
+import { Flex } from '../styled-components/Flex';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -46,6 +49,7 @@ const ProjectCard = (props: IProjectCard) => {
 		totalDonations,
 		updatedAt,
 		organization,
+		verified,
 	} = project;
 
 	const [isHover, setIsHover] = useState(false);
@@ -56,98 +60,195 @@ const ProjectCard = (props: IProjectCard) => {
 	const name = adminUser?.name;
 
 	return (
-		<Wrapper
-			onMouseEnter={() => setIsHover(true)}
-			onMouseLeave={() => setIsHover(false)}
-		>
-			<ImagePlaceholder>
-				<ProjectCardBadges project={project} />
-				<ProjectCardOrgBadge
-					organization={organization?.label}
+		<Link href={slugToProjectView(slug)} passHref>
+			<Wrapper
+				onMouseEnter={() => setIsHover(true)}
+				onMouseLeave={() => setIsHover(false)}
+			>
+				<ImagePlaceholder>
+					<ProjectCardBadges project={project} />
+					<ProjectCardOrgBadge
+						organization={organization?.label}
+						isHover={isHover}
+					/>
+					<ProjectCardImage image={image} />
+				</ImagePlaceholder>
+				<CardBody
 					isHover={isHover}
-				/>
-				<ProjectCardImage image={image} />
-			</ImagePlaceholder>
-			<CardBody isHover={isHover}>
-				<Title weight={700}>{title}</Title>
-				{adminUser && !isForeignOrg ? (
-					<Link
-						href={addressToUserView(adminUser?.walletAddress)}
-						passHref
-					>
-						<Author size='Big'>{name || '\u200C'}</Author>
-					</Link>
-				) : (
-					<Author size='Big'>
-						<br />
-					</Author>
-				)}
-				<Description>{htmlToText(description)}</Description>
-				<Captions>
-					<Caption>
-						Raised: ${Math.ceil(totalDonations as number)}
-					</Caption>
-					<Caption>
-						Last updated:{calcBiggestUnitDifferenceTime(updatedAt)}
-					</Caption>
-				</Captions>
-				<ActionButtons>
-					<Link href={slugToProjectView(slug)} passHref>
-						<LearnMoreButton
-							linkType='primary'
-							size='small'
-							label='LEARN MORE'
-							aria-label='Learn more about this project'
-						/>
-					</Link>
-					<Link href={slugToProjectDonate(slug)} passHref>
-						<DonateButton
-							linkType='primary'
-							size='small'
-							label='DONATE'
-						/>
-					</Link>
-				</ActionButtons>
-			</CardBody>
-		</Wrapper>
+					isOtherOrganization={
+						organization?.label !== ORGANIZATION.giveth
+					}
+					isVerified={verified}
+				>
+					<div style={{ position: 'relative' }}>
+						<LastUpdatedContainer isHover={isHover}>
+							Last updated:
+							{calcBiggestUnitDifferenceTime(updatedAt)}
+						</LastUpdatedContainer>
+
+						<a href={slugToProjectView(slug)}>
+							<Title weight={700} isHover={isHover}>
+								{title}
+							</Title>
+						</a>
+					</div>
+					{adminUser && !isForeignOrg ? (
+						<Link
+							href={addressToUserView(adminUser?.walletAddress)}
+							passHref
+						>
+							<Author size='Big'>{name || '\u200C'}</Author>
+						</Link>
+					) : (
+						<Author size='Big'>
+							<br />
+						</Author>
+					)}
+					<Description>{htmlToText(description)}</Description>
+					<Flex alignItems='center' gap='4px'>
+						<PriceText>
+							${Math.ceil(totalDonations as number)}
+						</PriceText>
+						<RaisedText> Raised</RaisedText>
+					</Flex>
+					{verified && (
+						<>
+							<Hr />
+							<Flex gap='16px'>
+								<>
+									<Flex alignItems='center' gap='4px'>
+										<IconVerified
+											size={16}
+											color={semanticColors.jade[500]}
+										/>
+										<VerifiedText>VERIFIED</VerifiedText>
+									</Flex>
+									<Flex alignItems='center' gap='2px'>
+										<GivBackIconContainer>
+											<IconGIVBack
+												size={24}
+												color={brandColors.giv[500]}
+											/>
+										</GivBackIconContainer>
+										<GivBackText>
+											GIVBACK ELIGIBLE
+										</GivBackText>
+									</Flex>
+								</>
+							</Flex>
+						</>
+					)}
+					<ActionButtons>
+						<Link href={slugToProjectDonate(slug)} passHref>
+							<CustomizedDonateButton
+								linkType='primary'
+								size='small'
+								label='DONATE'
+								isHover={isHover}
+							/>
+						</Link>
+					</ActionButtons>
+				</CardBody>
+			</Wrapper>
+		</Link>
 	);
 };
 
 const DonateButton = styled(ButtonLink)`
 	flex: 1;
 `;
-const LearnMoreButton = styled(OutlineLinkButton)`
-	flex: 1;
+
+const CustomizedDonateButton = styled(DonateButton)<{ isHover: boolean }>`
+	margin: 25px 0;
+	${mediaQueries.laptop} {
+		margin: 25px 12px;
+		opacity: ${props => (props.isHover ? '1' : '0')};
+		transition: opacity 0.3s ease-in-out;
+	}
+`;
+
+const PriceText = styled(B)`
+	display: inline;
+	color: ${neutralColors.gray[800]};
+`;
+
+const RaisedText = styled(Subline)`
+	display: inline;
+	color: ${neutralColors.gray[700]};
+`;
+
+const VerifiedText = styled(Subline)`
+	color: ${semanticColors.jade[500]};
+`;
+
+const GivBackText = styled(Subline)`
+	color: ${brandColors.giv[500]};
+`;
+
+const GivBackIconContainer = styled.div`
+	display: flex;
+	align-items: center;
+	transform: scale(0.8);
+`;
+
+const LastUpdatedContainer = styled(Subline)<{ isHover?: boolean }>`
+	position: absolute;
+	bottom: 20px;
+	background-color: ${neutralColors.gray[300]};
+	color: ${neutralColors.gray[700]};
+	padding: 2px 8px;
+	border-radius: 4px;
+	${mediaQueries.laptop} {
+		transition: opacity 0.3s ease-in-out;
+		display: inline;
+		opacity: ${props => (props.isHover ? 1 : 0)};
+		bottom: 30px;
+	}
 `;
 
 const ActionButtons = styled(Row)`
 	gap: 16px;
 `;
 
-const Captions = styled(Flex)`
-	justify-content: space-between;
-	margin-bottom: 24px;
-	color: ${neutralColors.gray[700]};
-	text-overflow: ellipsis;
+const Hr = styled.hr`
+	border: 1px solid ${neutralColors.gray[300]};
 `;
 
 const Description = styled(P)`
-	height: 120px;
+	height: 75px;
 	overflow: hidden;
 	color: ${neutralColors.gray[800]};
 	margin-bottom: 16px;
 `;
 
-const CardBody = styled.div`
-	padding: 24px;
+const CardBody = styled.div<{
+	isOtherOrganization?: boolean;
+	isHover?: boolean;
+	isVerified?: boolean;
+}>`
+	padding: 26px;
+	padding-top: 32px;
 	position: absolute;
 	left: 0;
 	right: 0;
-	top: ${(props: { isHover: boolean }) =>
-		props.isHover ? '124px' : '200px'};
+	top: ${props => (props.isVerified ? '192px' : '227px')};
 	background-color: ${neutralColors.gray[100]};
 	transition: top 0.3s ease;
-	border-radius: 0 12px 12px 12px;
+	border-radius: ${props =>
+		props.isOtherOrganization ? '0 12px 12px 12px' : '12px'};
+	${mediaQueries.laptop} {
+		top: ${props => {
+			if (props.isHover && props.isVerified) {
+				return '109px';
+			} else if (props.isHover && !props.isVerified) {
+				return '151px';
+			} else if (!props.isVerified) {
+				return '221px';
+			} else if (props.isVerified) {
+				return '186px';
+			}
+		}};
+	}
 `;
 
 const Author = styled(GLink)`
@@ -156,8 +257,9 @@ const Author = styled(GLink)`
 	display: block;
 `;
 
-const Title = styled(H6)`
-	color: ${brandColors.deep[700]};
+const Title = styled(H6)<{ isHover?: boolean }>`
+	color: ${props =>
+		props.isHover ? brandColors.pinky[500] : brandColors.deep[700]};
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
@@ -174,13 +276,15 @@ const ImagePlaceholder = styled.div`
 const Wrapper = styled.div`
 	position: relative;
 	width: 100%;
+	max-width: 443px;
 	border-radius: ${cardRadius};
+	margin: 0 auto;
 	background: white;
 	overflow: hidden;
 	box-shadow: ${Shadow.Neutral[400]};
 	height: 536px;
-
-	${mediaQueries.tablet} {
+	cursor: pointer;
+	${mediaQueries.laptop} {
 		height: 472px;
 	}
 `;

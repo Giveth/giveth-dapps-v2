@@ -22,11 +22,12 @@ import {
 import QuestionBadge from '@/components/badges/QuestionBadge';
 import FormProgress from '@/components/FormProgress';
 import { Shadow } from '@/components/styled-components/Shadow';
-import useUser from '@/context/UserProvider';
-import { IModal, Modal } from './Modal';
+import { Modal } from './Modal';
 import ArchiveIcon from '../../../public/images/icons/archive_deep.svg';
 import Routes from '@/lib/constants/Routes';
-import useModal from '@/context/ModalProvider';
+import { IModal } from '@/types/common';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { setShowSignWithWallet } from '@/features/modal/modal.sclie';
 
 interface ISelectObj {
 	value: number;
@@ -38,6 +39,7 @@ const buttonLabels: { [key: string]: string }[] = [
 	{ confirm: 'deactivate this project', cancel: 'cancel' },
 	{ confirm: '', cancel: 'close' },
 ];
+
 interface IDeactivateProjectModal extends IModal {
 	projectId?: string;
 	setIsActive: Dispatch<SetStateAction<boolean>>;
@@ -54,14 +56,8 @@ const DeactivateProjectModal = ({
 	const [selectedReason, setSelectedReason] = useState<ISelectObj | any>(
 		undefined,
 	);
-	const {
-		state: { isSignedIn },
-	} = useUser();
-
-	const {
-		actions: { showSignWithWallet },
-	} = useModal();
-
+	const dispatch = useAppDispatch();
+	const isSignedIn = useAppSelector(state => state.user.isSignedIn);
 	const fetchReasons = async () => {
 		const { data } = await client.query({
 			query: GET_STATUS_REASONS,
@@ -83,7 +79,7 @@ const DeactivateProjectModal = ({
 	const handleConfirmButton = async () => {
 		if (!!tab && !!selectedReason) {
 			if (!isSignedIn) {
-				showSignWithWallet();
+				dispatch(setShowSignWithWallet(true));
 				return;
 			}
 			const { data } = await client.mutate({

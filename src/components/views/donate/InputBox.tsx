@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import {
 	neutralColors,
 	semanticColors,
@@ -7,28 +7,30 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
-type OnChangeFunction = (e: number) => void;
-
-const InputBox = (props: {
+interface IInputBox {
 	value?: number;
-	onChange: OnChangeFunction;
+	onChange: (e: number) => void;
 	placeholder?: string;
 	type?: string;
-	errorHandler?: any;
+	errorHandler: {
+		condition: (i: number) => boolean;
+		message: string;
+	};
 	setError?: any;
 	error?: any;
 	onFocus?: any;
+}
+
+const InputBox: FC<IInputBox> = ({
+	value,
+	onChange,
+	error,
+	setError,
+	errorHandler,
+	type,
+	placeholder,
+	onFocus,
 }) => {
-	const {
-		value,
-		onChange,
-		error,
-		setError,
-		errorHandler,
-		type,
-		placeholder,
-		onFocus,
-	} = props;
 	return (
 		<Box>
 			<Wrapper>
@@ -37,15 +39,13 @@ const InputBox = (props: {
 					value={value}
 					type={type}
 					onChange={e => {
-						onChange(Number(e.target.value));
-						setError(
-							errorHandler &&
-								errorHandler?.condition(e.target.value),
-						);
+						const num = Number(e.target.value);
+						onChange(num);
+						setError(errorHandler.condition(num));
 					}}
 					onFocus={() => onFocus(true)}
 					onBlur={() => onFocus(false)}
-					placeholder={placeholder || 'Search Projects...'}
+					placeholder={placeholder}
 				/>
 			</Wrapper>
 			{error && <ErrorMsg>{errorHandler?.message}</ErrorMsg>}

@@ -13,7 +13,7 @@ const links: any = {
 	FEATURE_REQUEST: 'https://giveth.typeform.com/featurerequest',
 	FEEDBACK: 'https://giveth.typeform.com/feedback',
 	PROJECT_VERIFICATION: 'https://giveth.typeform.com/verification',
-	DISCORD: 'https://discord.gg/Uq2TaXP9bC',
+	DISCORD: 'https://discord.giveth.io',
 	DISCOURSE,
 	GIVBACK_TOKENS_FORUM: 'https://forum.giveth.io/t/givbacks-token-list/253',
 	GITHUB: 'https://github.com/Giveth/',
@@ -40,6 +40,8 @@ const links: any = {
 	HISTORY: 'https://docs.giveth.io/whatisgiveth/history',
 	CALENDAR:
 		'https://calendar.google.com/calendar/u/1?cid=Z2l2ZXRoZG90aW9AZ21haWwuY29t',
+	ADD_TO_CALENDAR:
+		'https://calendar.google.com/event?action=TEMPLATE&tmeid=dWZydnNoNjVmb2NvNDNrZ2htMmtzaDNydGZfMjAyMjA2MDlUMTUwMDAwWiBnaXZldGhkb3Rpb0Bt&tmsrc=givethdotio%40gmail.com&scp=ALL',
 };
 
 if (!isProduction) {

@@ -8,8 +8,9 @@ import { ETheme, useGeneral } from '@/context/general.context';
 import config from '@/configuration';
 import { IconEthereum } from '../Icons/Eth';
 import { IconGnosisChain } from '../Icons/GnosisChain';
-import { Modal, IModal } from './Modal';
+import { Modal } from './Modal';
 import { switchNetwork } from '@/lib/wallet';
+import { IModal } from '@/types/common';
 
 interface IChangeNetworkModalProps extends IModal {
 	targetNetwork: number;

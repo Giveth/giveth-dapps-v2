@@ -27,7 +27,7 @@ import RadioTitle from '@/components/views/donate/RadioTitle';
 import { NetworkSelector } from '@/components/NetworkSelector';
 import StakingPositionCard from '@/components/cards/StakingPositionCard';
 import { getGivStakingConfig } from '@/helpers/networkProvider';
-import { useTokenDistro } from '@/context/tokenDistro.context';
+import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { useFarms } from '@/context/farm.context';
 import { TopInnerContainer, ExtLinkRow } from './commons';
 import { GIVfrens } from '@/components/GIVfrens';
@@ -57,7 +57,8 @@ const renderPools = (
 					lg={4}
 					key={`staking_pool_card_${network}_${index}`}
 				>
-					{poolStakingConfig.type === StakingType.UNISWAPV3 ? (
+					{poolStakingConfig.type ===
+					StakingType.UNISWAPV3_ETH_GIV ? (
 						<StakingPositionCard
 							poolStakingConfig={poolStakingConfig}
 						/>
@@ -76,7 +77,7 @@ const renderPools = (
 export const TabGIVfarmTop = () => {
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
 	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
-	const { givTokenDistroHelper } = useTokenDistro();
+	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const { totalEarned } = useFarms();
 	const { chainId } = useWeb3React();
 
@@ -187,7 +188,6 @@ export const TabGIVfarmBottom = () => {
 						isSelected={showArchivedPools}
 					/>
 				</ArchivedPoolsToggle>
-
 				{chainId === config.XDAI_NETWORK_NUMBER && (
 					<>
 						<PoolRow>
@@ -236,8 +236,8 @@ export const TabGIVfarmBottom = () => {
 							)}
 						</PoolRow>
 						<GIVfrens
-							regenFarms={config.XDAI_CONFIG.regenFarms}
-							network={config.XDAI_NETWORK_NUMBER}
+							regenFarms={config.MAINNET_CONFIG.regenFarms}
+							network={config.MAINNET_NETWORK_NUMBER}
 						/>
 					</>
 				)}

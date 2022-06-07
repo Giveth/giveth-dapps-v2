@@ -8,6 +8,7 @@ export const FETCH_PROJECT_DONATIONS = gql`
 		$projectId: Int!
 		$searchTerm: String
 		$orderBy: SortBy
+		$status: String
 	) {
 		donationsByProjectId(
 			take: $take
@@ -16,6 +17,7 @@ export const FETCH_PROJECT_DONATIONS = gql`
 			projectId: $projectId
 			searchTerm: $searchTerm
 			orderBy: $orderBy
+			status: $status
 		) {
 			donations {
 				id
@@ -31,6 +33,7 @@ export const FETCH_PROJECT_DONATIONS = gql`
 				transactionNetworkId
 				createdAt
 				donationType
+				status
 			}
 			totalCount
 		}
@@ -93,5 +96,41 @@ export const SAVE_DONATION = gql`
 			tokenAddress: $tokenAddress
 			anonymous: $anonymous
 		)
+	}
+`;
+
+export const CREATE_DONATION = gql`
+	mutation (
+		$transactionId: String!
+		$transactionNetworkId: Float!
+		$nonce: Float!
+		$amount: Float!
+		$token: String!
+		$projectId: Float!
+		$transakId: String
+		$tokenAddress: String
+		$anonymous: Boolean
+	) {
+		createDonation(
+			transactionId: $transactionId
+			transactionNetworkId: $transactionNetworkId
+			nonce: $nonce
+			amount: $amount
+			token: $token
+			projectId: $projectId
+			transakId: $transakId
+			tokenAddress: $tokenAddress
+			anonymous: $anonymous
+		)
+	}
+`;
+
+export const UPDATE_DONATION_STATUS = gql`
+	mutation ($status: String!, $donationId: Float!) {
+		updateDonationStatus(status: $status, donationId: $donationId) {
+			id
+			status
+			verifyErrorMessage
+		}
 	}
 `;

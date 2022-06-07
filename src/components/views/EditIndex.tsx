@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { captureException } from '@sentry/nextjs';
-import useUser from '@/context/UserProvider';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
 import { IProjectEdition } from '@/apollo/types/types';
@@ -12,19 +11,18 @@ import {
 	showToastError,
 } from '@/lib/helpers';
 import CreateProject from '@/components/views/create/CreateProject';
-import useModal from '@/context/ModalProvider';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import {
+	setShowCompleteProfile,
+	setShowSignWithWallet,
+	setShowWelcomeModal,
+} from '@/features/modal/modal.sclie';
 
 const EditIndex = () => {
 	const [project, setProject] = useState<IProjectEdition>();
 
-	const {
-		state: { user, isSignedIn },
-	} = useUser();
-
-	const {
-		actions: { showWelcomeModal, showSignWithWallet, showCompleteProfile },
-	} = useModal();
-
+	const dispatch = useAppDispatch();
+	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
 	const router = useRouter();
 	const projectId = router?.query.projectIdSlug as string;
 
@@ -33,11 +31,11 @@ const EditIndex = () => {
 		if (userAddress) {
 			if (project) setProject(undefined);
 			if (!isUserRegistered(user)) {
-				showCompleteProfile();
+				dispatch(setShowCompleteProfile(true));
 				return;
 			}
 			if (!isSignedIn) {
-				showSignWithWallet();
+				dispatch(setShowSignWithWallet(true));
 				return;
 			}
 			client
@@ -67,7 +65,7 @@ const EditIndex = () => {
 					});
 				});
 		} else {
-			showWelcomeModal();
+			dispatch(setShowWelcomeModal(true));
 		}
 	}, [user, isSignedIn]);
 

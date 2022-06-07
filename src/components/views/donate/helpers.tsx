@@ -5,8 +5,9 @@ import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { networksParams } from '@/helpers/blockchain';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import { sendTransaction, showToastError } from '@/lib/helpers';
-import { saveDonation } from '@/services/donation';
+import { saveDonation, updateDonation } from '@/services/donation';
 import { IDonateModalProps } from '@/components/modals/DonateModal';
+import { EDonationStatus } from '@/apollo/types/gqlEnums';
 
 export interface ISelectedToken extends IProjectAcceptedToken {
 	value?: IProjectAcceptedToken;
@@ -92,15 +93,19 @@ export const confirmDonation = async (props: IConfirmDonation) => {
 		amount,
 		token,
 		setSuccessDonation,
+		setShowFailedModal,
 		web3Context,
 		setDonating,
 		setDonationSaved,
 		givBackEligible,
+		setTxHash,
 	} = props;
 
 	const { library } = web3Context;
 	const { walletAddress } = project;
 	const { address } = token;
+	let donationId = 0,
+		donationSaved = false;
 
 	try {
 		const toAddress = isAddressENS(walletAddress!)
@@ -113,24 +118,48 @@ export const confirmDonation = async (props: IConfirmDonation) => {
 		};
 
 		const txCallbacks = {
-			onTxHash: async (txHash: string) => {
-				await saveDonation({ txHash, toAddress, ...props });
-				setDonationSaved(true);
+			onTxHash: async (txHash: string, nonce: number) => {
+				setTxHash(txHash);
+				saveDonation({ nonce, txHash, ...props })
+					.then(res => {
+						donationId = res;
+						setDonationSaved(true);
+						donationSaved = true;
+					})
+					.catch(() => {
+						showToastError('Error saving donation!');
+						setShowFailedModal(true);
+						setDonating(false);
+					});
 			},
-			onReceipt: (txHash: string) => {
-				setSuccessDonation({ txHash, givBackEligible });
+			onReceipt: async (txHash: string) => {
+				updateDonation(donationId, EDonationStatus.VERIFIED);
+				donationSaved &&
+					setSuccessDonation({ txHash, givBackEligible });
 			},
 		};
 
 		await sendTransaction(library, transactionObj, txCallbacks, address);
 	} catch (error: any) {
-		setDonating(false);
-		setDonationSaved(false);
-		captureException(error);
 		const code = error.data?.code;
 		if (code === ('INSUFFICIENT_FUNDS' || 'UNPREDICTABLE_GAS_LIMIT')) {
 			showToastError('Insufficient Funds');
-		} else showToastError(error);
+		} else if (
+			(error.replacement && error.cancelled === true) ||
+			error.reason === 'transaction failed'
+		) {
+			setTxHash(error.replacement?.hash || error.transactionHash);
+			setShowFailedModal(true);
+			showToastError(
+				`Transaction ${error.cancelled ? 'cancelled' : 'failed'}!`,
+			);
+			updateDonation(donationId, EDonationStatus.FAILED);
+		} else {
+			showToastError(error);
+		}
+		setShowFailedModal(true);
+		setDonating(false);
+		setDonationSaved(false);
 		captureException(error, {
 			tags: {
 				section: 'confirmDonation',

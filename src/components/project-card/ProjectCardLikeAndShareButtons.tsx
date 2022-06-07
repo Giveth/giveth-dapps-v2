@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, MouseEvent } from 'react';
 import {
 	brandColors,
 	IconHeart16,
@@ -13,40 +13,37 @@ import { captureException } from '@sentry/nextjs';
 import ShareModal from '../modals/ShareModal';
 import { likeProject, unlikeProject } from '@/lib/reaction';
 import { showToastError } from '@/lib/helpers';
-import useModal from '@/context/ModalProvider';
 import { Flex } from '../styled-components/Flex';
-import VerificationBadge from '../badges/VerificationBadge';
 import { IProject } from '@/apollo/types/types';
-import useUser from '@/context/UserProvider';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { setShowSignWithWallet } from '@/features/modal/modal.sclie';
+import {
+	decrementLikedProjectsCount,
+	incrementLikedProjectsCount,
+} from '@/features/user/user.slice';
 
-interface IProjectCardBadges {
+interface IProjectCardLikeAndShareButtons {
 	project: IProject;
 }
 
-const ProjectCardBadges = (props: IProjectCardBadges) => {
-	const {
-		state: { user, isSignedIn },
-		actions: { incrementLikedProjectsCount, decrementLikedProjectsCount },
-	} = useUser();
-
-	const {
-		actions: { showSignWithWallet },
-	} = useModal();
-
+const ProjectCardLikeAndShareButtons = (
+	props: IProjectCardLikeAndShareButtons,
+) => {
 	const [showModal, setShowModal] = useState<boolean>(false);
-
 	const { project } = props;
-	const { verified, traceCampaignId, slug, id: projectId } = project;
-
+	const { slug, id: projectId } = project;
 	const [reaction, setReaction] = useState(project.reaction);
 	const [totalReactions, setTotalReactions] = useState(
 		project.totalReactions,
 	);
 	const [loading, setLoading] = useState(false);
+	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
+	const dispatch = useAppDispatch();
 
-	const likeUnlikeProject = async () => {
+	const likeUnlikeProject = async (e: MouseEvent<HTMLElement>) => {
+		e.stopPropagation();
 		if (!isSignedIn) {
-			showSignWithWallet();
+			dispatch(setShowSignWithWallet(true));
 			return;
 		}
 
@@ -61,14 +58,14 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 					setReaction(newReaction);
 					if (newReaction) {
 						setTotalReactions((totalReactions || 0) + 1);
-						incrementLikedProjectsCount();
+						dispatch(incrementLikedProjectsCount());
 					}
 				} else if (reaction?.userId === user?.id) {
 					const successful = await unlikeProject(reaction.id);
 					if (successful) {
 						setReaction(undefined);
 						setTotalReactions((totalReactions || 1) - 1);
-						decrementLikedProjectsCount();
+						dispatch(decrementLikedProjectsCount());
 					}
 				}
 			} catch (e) {
@@ -98,10 +95,6 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 				<ShareModal setShowModal={setShowModal} projectHref={slug} />
 			)}
 			<BadgeWrapper>
-				<Flex>
-					{verified && <VerificationBadge verified />}
-					{traceCampaignId && <VerificationBadge trace />}
-				</Flex>
 				<Flex gap='3px'>
 					<BadgeButton onClick={likeUnlikeProject}>
 						{Number(totalReactions) > 0 && (
@@ -113,7 +106,12 @@ const ProjectCardBadges = (props: IProjectCardBadges) => {
 							<IconHeartOutline16 />
 						)}
 					</BadgeButton>
-					<BadgeButton onClick={() => setShowModal(true)}>
+					<BadgeButton
+						onClick={e => {
+							e.stopPropagation();
+							setShowModal(true);
+						}}
+					>
 						<IconShare16 />
 					</BadgeButton>
 				</Flex>
@@ -142,8 +140,8 @@ const BadgeWrapper = styled.div`
 	position: absolute;
 	z-index: 2;
 	display: flex;
-	justify-content: space-between;
+	justify-content: flex-end;
 	padding: 16px;
 `;
 
-export default ProjectCardBadges;
+export default ProjectCardLikeAndShareButtons;

@@ -3,7 +3,8 @@ import { useEffect } from 'react';
 
 import GIVfarmView from '@/components/views/Farm.view';
 import { useGeneral, ETheme } from '@/context/general.context';
-import { GiveconomyMeta } from '@/lib/meta';
+import { givfarmMetatags } from '@/content/metatags';
+import { GeneralMetatags } from '@/components/Metatag';
 
 export default function GIVfarmRoute() {
 	const { setTheme } = useGeneral();
@@ -17,8 +18,7 @@ export default function GIVfarmRoute() {
 	return (
 		<>
 			<Head>
-				<title>GIVfarm</title>
-				<GiveconomyMeta />
+				<GeneralMetatags info={givfarmMetatags} />
 			</Head>
 			<GIVfarmView />
 		</>

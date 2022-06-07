@@ -17,8 +17,8 @@ import {
 import config from '../configuration';
 import { APR } from '@/types/poolInfo';
 import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
-import { Zero } from '@/helpers/number';
-import { IBalances, IUnipool } from '@/types/subgraph';
+import { BN, Zero } from '@/helpers/number';
+import { IBalances } from '@/types/subgraph';
 import { getGasPreference } from '@/lib/helpers';
 
 import LM_Json from '../artifacts/UnipoolTokenDistributor.json';
@@ -41,7 +41,7 @@ const toBigNumber = (eb: ethers.BigNumber): BigNumber =>
 export const getGivStakingAPR = async (
 	lmAddress: string,
 	network: number,
-	unipool: IUnipool | undefined,
+	unipool: UnipoolHelper | undefined,
 ): Promise<APR> => {
 	let apr: BigNumber = Zero;
 
@@ -51,10 +51,7 @@ export const getGivStakingAPR = async (
 
 		apr = totalSupply.isZero()
 			? Zero
-			: toBigNumber(rewardRate)
-					.div(totalSupply.toString())
-					.times('31536000')
-					.times('100');
+			: rewardRate.div(totalSupply).times('31536000').times('100');
 	}
 
 	return apr;
@@ -64,24 +61,24 @@ export const getLPStakingAPR = async (
 	poolStakingConfig: PoolStakingConfig,
 	network: number,
 	provider: JsonRpcProvider | null,
-	unipool: IUnipool | undefined,
+	unipoolHelper: UnipoolHelper | undefined,
 ): Promise<APR> => {
 	if (!provider) {
 		return Zero;
 	}
-	if (poolStakingConfig.type === StakingType.BALANCER) {
+	if (poolStakingConfig.type === StakingType.BALANCER_ETH_GIV) {
 		return getBalancerPoolStakingAPR(
 			poolStakingConfig as BalancerPoolStakingConfig,
 			network,
 			provider,
-			unipool,
+			unipoolHelper,
 		);
 	} else {
 		return getSimplePoolStakingAPR(
 			poolStakingConfig,
 			network,
 			provider,
-			unipool,
+			unipoolHelper,
 		);
 	}
 };
@@ -90,7 +87,7 @@ const getBalancerPoolStakingAPR = async (
 	balancerPoolStakingConfig: BalancerPoolStakingConfig,
 	network: number,
 	provider: JsonRpcProvider,
-	unipool: IUnipool | undefined,
+	unipool: UnipoolHelper | undefined,
 ): Promise<APR> => {
 	const { LM_ADDRESS, POOL_ADDRESS, VAULT_ADDRESS, POOL_ID } =
 		balancerPoolStakingConfig;
@@ -121,8 +118,8 @@ const getBalancerPoolStakingAPR = async (
 			poolContract.getNormalizedWeights(),
 		]);
 
-		let totalSupply: ethers.BigNumber;
-		let rewardRate: ethers.BigNumber;
+		let totalSupply: BigNumber;
+		let rewardRate: BigNumber;
 
 		if (unipool) {
 			totalSupply = unipool.totalSupply;
@@ -131,6 +128,9 @@ const getBalancerPoolStakingAPR = async (
 			[totalSupply, rewardRate] = await Promise.all([
 				lmContract.totalSupply(),
 				lmContract.rewardRate(),
+			]).then(([_totalSupply, _rewardRate]) => [
+				toBigNumber(_totalSupply as ethers.BigNumber),
+				toBigNumber(_rewardRate as ethers.BigNumber),
 			]);
 		}
 
@@ -150,8 +150,8 @@ const getBalancerPoolStakingAPR = async (
 
 		apr = totalSupply.isZero()
 			? null
-			: toBigNumber(rewardRate)
-					.div(totalSupply.toString())
+			: rewardRate
+					.div(totalSupply)
 					.times('31536000')
 					.times('100')
 					.times(lp);
@@ -169,7 +169,7 @@ const getSimplePoolStakingAPR = async (
 	poolStakingConfig: SimplePoolStakingConfig | RegenPoolStakingConfig,
 	network: number,
 	provider: JsonRpcProvider,
-	unipool: IUnipool | undefined,
+	unipoolHelper: UnipoolHelper | undefined,
 ): Promise<APR> => {
 	const { LM_ADDRESS, POOL_ADDRESS } = poolStakingConfig;
 	const givTokenAddress = config.NETWORKS_CONFIG[network].TOKEN_ADDRESS;
@@ -184,9 +184,8 @@ const getSimplePoolStakingAPR = async (
 		: givTokenAddress;
 	const lmContract = new Contract(LM_ADDRESS, LM_ABI, provider);
 
-	let reserves;
-	let totalSupply: ethers.BigNumber;
-	let rewardRate: ethers.BigNumber;
+	let totalSupply: BigNumber;
+	let rewardRate: BigNumber;
 	const poolContract = new Contract(POOL_ADDRESS, UNI_ABI, provider);
 	let apr = null;
 	try {
@@ -199,13 +198,16 @@ const getSimplePoolStakingAPR = async (
 			poolContract.token0(),
 			poolContract.totalSupply(),
 		]);
-		if (unipool) {
-			totalSupply = unipool.totalSupply;
-			rewardRate = unipool.rewardRate;
+		if (unipoolHelper) {
+			totalSupply = unipoolHelper.totalSupply;
+			rewardRate = unipoolHelper.rewardRate;
 		} else {
 			[totalSupply, rewardRate] = await Promise.all([
 				lmContract.totalSupply(),
 				lmContract.rewardRate(),
+			]).then(([_totalSupply, _rewardRate]) => [
+				toBigNumber(_totalSupply as ethers.BigNumber),
+				toBigNumber(_rewardRate as ethers.BigNumber),
 			]);
 		}
 		let tokenReseve = toBigNumber(
@@ -220,8 +222,8 @@ const getSimplePoolStakingAPR = async (
 			.div(tokenReseve);
 		apr = totalSupply.isZero()
 			? null
-			: toBigNumber(rewardRate)
-					.div(totalSupply.toString())
+			: rewardRate
+					.div(totalSupply)
 					.times('31536000')
 					.times('100')
 					.times(lp)
@@ -256,44 +258,60 @@ export const getUserStakeInfo = (
 	if (regenFarmType) {
 		switch (regenFarmType) {
 			case RegenFarmType.FOX_HNY:
-				rewards = balance.rewardsFoxHnyLm;
-				rewardPerTokenPaid = balance.rewardPerTokenPaidFoxHnyLm;
-				stakedAmount = balance.foxHnyLpStaked;
-				notStakedAmount = balance.foxHnyLp;
+				rewards = BN(balance.rewardsFoxHnyLm);
+				rewardPerTokenPaid = BN(balance.rewardPerTokenPaidFoxHnyLm);
+				stakedAmount = BN(balance.foxHnyLpStaked);
+				notStakedAmount = BN(balance.foxHnyLp);
+				break;
+			case RegenFarmType.CULT_ETH:
+				rewards = BN(balance.rewardsCultEthLm);
+				rewardPerTokenPaid = BN(balance.rewardPerTokenPaidCultEthLm);
+				stakedAmount = BN(balance.cultEthLpStaked);
+				notStakedAmount = BN(balance.cultEthLp);
 				break;
 			default:
 		}
 	} else {
 		switch (type) {
-			case StakingType.SUSHISWAP:
-				rewards = balance.rewardsSushiSwap;
-				rewardPerTokenPaid = balance.rewardPerTokenPaidSushiSwap;
-				stakedAmount = balance.sushiSwapLpStaked;
-				notStakedAmount = balance.sushiswapLp;
+			case StakingType.SUSHISWAP_ETH_GIV:
+				rewards = BN(balance.rewardsSushiSwap);
+				rewardPerTokenPaid = BN(balance.rewardPerTokenPaidSushiSwap);
+				stakedAmount = BN(balance.sushiSwapLpStaked);
+				notStakedAmount = BN(balance.sushiswapLp);
 				break;
-			case StakingType.HONEYSWAP:
-				rewards = balance.rewardsHoneyswap;
-				rewardPerTokenPaid = balance.rewardPerTokenPaidHoneyswap;
-				stakedAmount = balance.honeyswapLpStaked;
-				notStakedAmount = balance.honeyswapLp;
+			case StakingType.HONEYSWAP_GIV_HNY:
+				rewards = BN(balance.rewardsHoneyswap);
+				rewardPerTokenPaid = BN(balance.rewardPerTokenPaidHoneyswap);
+				stakedAmount = BN(balance.honeyswapLpStaked);
+				notStakedAmount = BN(balance.honeyswapLp);
 				break;
-			case StakingType.BALANCER:
-				rewards = balance.rewardsBalancer;
-				rewardPerTokenPaid = balance.rewardPerTokenPaidBalancer;
-				stakedAmount = balance.balancerLpStaked;
-				notStakedAmount = balance.balancerLp;
+			case StakingType.HONEYSWAP_GIV_DAI:
+				rewards = BN(balance.rewardsHoneyswapGivDai);
+				rewardPerTokenPaid = BN(
+					balance.rewardPerTokenPaidHoneyswapGivDai,
+				);
+				stakedAmount = BN(balance.honeyswapGivDaiLpStaked);
+				notStakedAmount = BN(balance.honeyswapGivDaiLp);
 				break;
-			case StakingType.UNISWAPV2:
-				rewards = balance.rewardsUniswapV2GivDai;
-				rewardPerTokenPaid = balance.rewardPerTokenPaidUniswapV2GivDai;
-				stakedAmount = balance.uniswapV2GivDaiLpStaked;
-				notStakedAmount = balance.uniswapV2GivDaiLp;
+			case StakingType.BALANCER_ETH_GIV:
+				rewards = BN(balance.rewardsBalancer);
+				rewardPerTokenPaid = BN(balance.rewardPerTokenPaidBalancer);
+				stakedAmount = BN(balance.balancerLpStaked);
+				notStakedAmount = BN(balance.balancerLp);
+				break;
+			case StakingType.UNISWAPV2_GIV_DAI:
+				rewards = BN(balance.rewardsUniswapV2GivDai);
+				rewardPerTokenPaid = BN(
+					balance.rewardPerTokenPaidUniswapV2GivDai,
+				);
+				stakedAmount = BN(balance.uniswapV2GivDaiLpStaked);
+				notStakedAmount = BN(balance.uniswapV2GivDaiLp);
 				break;
 			case StakingType.GIV_LM:
-				rewards = balance.rewardsGivLm;
-				rewardPerTokenPaid = balance.rewardPerTokenPaidGivLm;
-				stakedAmount = balance.givStaked;
-				notStakedAmount = balance.balance;
+				rewards = BN(balance.rewardsGivLm);
+				rewardPerTokenPaid = BN(balance.rewardPerTokenPaidGivLm);
+				stakedAmount = BN(balance.givStaked);
+				notStakedAmount = BN(balance.balance);
 				break;
 			default:
 		}

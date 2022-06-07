@@ -4,6 +4,7 @@ import { neutralColors, Overline } from '@giveth/ui-design-system';
 
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+import { mediaQueries } from '@/lib/constants/constants';
 
 interface IProjectCardOrgBadge {
 	isHover: boolean;
@@ -77,9 +78,12 @@ const HomeViewContainer = styled(FlexCenter)<{ isHover: boolean }>`
 	gap: 8px;
 	padding: 0 24px;
 	position: absolute;
-	bottom: ${props => (props.isHover ? '100px' : '24px')};
+	bottom: 32px;
 	transition: bottom 0.3s ease;
 	border-top-right-radius: 12px;
+	${mediaQueries.laptop} {
+		bottom: ${props => (props.isHover ? '116px' : '39px')};
+	}
 `;
 
 const AbsolutContainer = styled(Flex)`

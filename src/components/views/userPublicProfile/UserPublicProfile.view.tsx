@@ -15,17 +15,17 @@ import PublicProfileContributes from './PublicProfileContributes';
 import { IUser } from '@/apollo/types/types';
 import EditUserModal from '@/components/modals/EditUserModal';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
-import useUser from '@/context/UserProvider';
 import {
 	formatWalletLink,
 	isUserRegistered,
 	shortenAddress,
 } from '@/lib/helpers';
 import { Container } from '@/components/Grid';
-import useModal from '@/context/ModalProvider';
 import { EDirection } from '@/apollo/types/gqlEnums';
 import ExternalLink from '@/components/ExternalLink';
 import IncompleteProfileToast from '@/components/views/userPublicProfile/IncompleteProfileToast';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { setShowSignWithWallet } from '@/features/modal/modal.sclie';
 
 export enum EOrderBy {
 	TokenAmount = 'TokenAmount',
@@ -45,16 +45,11 @@ export interface IUserPublicProfileView {
 }
 
 const UserPublicProfileView: FC<IUserPublicProfileView> = ({
-	user,
 	myAccount,
+	user,
 }) => {
-	const {
-		state: { isSignedIn },
-	} = useUser();
-
-	const {
-		actions: { showSignWithWallet },
-	} = useModal();
+	const dispatch = useAppDispatch();
+	const { isSignedIn } = useAppSelector(state => state.user);
 
 	const { chainId } = useWeb3React();
 
@@ -65,7 +60,7 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 
 	useEffect(() => {
 		if (myAccount && !isSignedIn) {
-			showSignWithWallet();
+			dispatch(setShowSignWithWallet(true));
 		}
 	}, [user, isSignedIn]);
 
@@ -87,15 +82,15 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 					)}
 					<UserInfo>
 						<img
-							src={user.avatar || '/images/avatar.svg'}
+							src={user?.avatar || '/images/avatar.svg'}
 							width={128}
 							height={128}
-							alt={user.name}
+							alt={user?.name}
 						/>
 						<UserInfoRow>
-							<H3 weight={700}>{user.name}</H3>
-							{user.email && (
-								<GLink size='Big'>{user.email}</GLink>
+							<H3 weight={700}>{user?.name}</H3>
+							{user?.email && (
+								<GLink size='Big'>{user?.email}</GLink>
 							)}
 							<WalletContainer>
 								{myAccount && user?.name && user?.email && (
@@ -108,15 +103,15 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 								)}
 								<AddressContainer>
 									<AddressTextNonMobile size='Big'>
-										{user.walletAddress}
+										{user?.walletAddress}
 									</AddressTextNonMobile>
 									<AddressTextMobile size='Big'>
-										{shortenAddress(user.walletAddress)}
+										{shortenAddress(user?.walletAddress)}
 									</AddressTextMobile>
 									<ExternalLink
 										href={formatWalletLink(
 											chainId,
-											user.walletAddress,
+											user?.walletAddress,
 										)}
 										color={brandColors.pinky[500]}
 									>

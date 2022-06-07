@@ -10,7 +10,7 @@ import { getGivStakingConfig } from '@/helpers/networkProvider';
 import config from '@/configuration';
 
 const uniswapConfig = config.MAINNET_CONFIG.pools.find(
-	p => p.type === StakingType.UNISWAPV3,
+	p => p.type === StakingType.UNISWAPV3_ETH_GIV,
 ) as UniswapV3PoolStakingConfig;
 
 export class SubgraphQueryBuilder {
@@ -25,6 +25,8 @@ export class SubgraphQueryBuilder {
 			rewardsSushiSwap
 			rewardPerTokenPaidHoneyswap
 			rewardsHoneyswap
+			rewardPerTokenPaidHoneyswapGivDai
+			rewardsHoneyswapGivDai
 			rewardPerTokenPaidBalancer
 			rewardsBalancer
 			rewardPerTokenPaidUniswapV2GivDai
@@ -39,6 +41,8 @@ export class SubgraphQueryBuilder {
 			sushiSwapLpStaked
 			honeyswapLp 
 			honeyswapLpStaked 
+			honeyswapGivDaiLp 
+			honeyswapGivDaiLpStaked 
 			givStaked
 			allocationCount
 			givDropClaimed
@@ -49,6 +53,13 @@ export class SubgraphQueryBuilder {
 			rewardsFoxHnyLm
 			foxHnyLp
 			foxHnyLpStaked
+
+			cultAllocatedTokens
+			cultClaimed
+			rewardPerTokenPaidCultEthLm
+			rewardsCultEthLm
+			cultEthLp
+			cultEthLpStaked	
 		}`;
 	};
 
@@ -191,7 +202,7 @@ export class SubgraphQueryBuilder {
 
 	static getMainnetQuery = (address: string): string => {
 		const uniswapConfig = config.MAINNET_CONFIG.pools.find(
-			c => c.type === StakingType.UNISWAPV3,
+			c => c.type === StakingType.UNISWAPV3_ETH_GIV,
 		) as UniswapV3PoolStakingConfig;
 
 		return `
@@ -201,8 +212,9 @@ export class SubgraphQueryBuilder {
 			${SubgraphQueryBuilder.generateUnipoolInfoQueries([
 				getGivStakingConfig(config.MAINNET_CONFIG),
 				...config.MAINNET_CONFIG.pools.filter(
-					c => c.type !== StakingType.UNISWAPV3,
+					c => c.type !== StakingType.UNISWAPV3_ETH_GIV,
 				),
+				...config.MAINNET_CONFIG.regenFarms,
 				...config.XDAI_CONFIG.regenFarms,
 			])}
 			uniswapV3Pool: ${SubgraphQueryBuilder.getUniswapV3PoolQuery(
@@ -226,7 +238,7 @@ export class SubgraphQueryBuilder {
 			
 			uniswapV2EthGivPair: ${SubgraphQueryBuilder.getPairInfoQuery(
 				config.XDAI_CONFIG.pools.find(
-					c => c.type === StakingType.SUSHISWAP,
+					c => c.type === StakingType.SUSHISWAP_ETH_GIV,
 				)?.POOL_ADDRESS || '',
 			)}
 		}

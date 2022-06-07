@@ -5,25 +5,30 @@ import {
 	B,
 	brandColors,
 	H6,
-	IconArrowBottom,
-	IconArrowTop,
 	IconExternalLink,
-	IconSort16,
 	neutralColors,
 	P,
-	SublineBold,
 } from '@giveth/ui-design-system';
 
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
-import { IDonation } from '@/apollo/types/types';
+import { IDonation, IProject } from '@/apollo/types/types';
 import SearchBox from '@/components/SearchBox';
 import { Flex } from '@/components/styled-components/Flex';
 import Pagination from '@/components/Pagination';
-import { smallFormatDate, formatTxLink } from '@/lib/helpers';
+import { smallFormatDate, formatTxLink, compareAddresses } from '@/lib/helpers';
 import config from '@/configuration';
-import { EDirection, EDonationType } from '@/apollo/types/gqlEnums';
+import {
+	EDirection,
+	EDonationStatus,
+	EDonationType,
+} from '@/apollo/types/gqlEnums';
 import ExternalLink from '@/components/ExternalLink';
+import SortIcon from '@/components/SortIcon';
+import ETHIcon from '/public/images/currencies/eth/24.svg';
+import GnosisIcon from '/public/images/currencies/gnosisChain/24.svg';
+import { useAppSelector } from '@/features/hooks';
+import DonationStatus from '@/components/badges/DonationStatusBadge';
 
 const itemPerPage = 10;
 
@@ -38,30 +43,16 @@ interface IOrder {
 	direction: EDirection;
 }
 
-const injectSortIcon = (order: IOrder, title: EOrderBy) => {
-	return order.by === title ? (
-		order.direction === EDirection.DESC ? (
-			<IconArrowBottom size={16} />
-		) : (
-			<IconArrowTop size={16} />
-		)
-	) : (
-		<IconSort16 />
-	);
-};
-
 interface IProjectDonationTable {
 	donations: IDonation[];
-	id?: string;
-	showTrace: boolean;
 	totalDonations?: number;
+	project?: IProject;
 }
 
 const ProjectDonationTable = ({
 	donations,
-	id,
-	showTrace,
 	totalDonations,
+	project,
 }: IProjectDonationTable) => {
 	const [pageDonations, setPageDonations] = useState<IDonation[]>(donations);
 	const [page, setPage] = useState<number>(0);
@@ -72,10 +63,18 @@ const ProjectDonationTable = ({
 	const [activeTab, setActiveTab] = useState<number>(0);
 	const [searchTerm, setSearchTerm] = useState<string>('');
 
-	const orderChangeHandler = (orderby: EOrderBy) => {
-		if (orderby === order.by) {
+	const user = useAppSelector(state => state.user.userData);
+
+	const { id, traceCampaignId, adminUser } = project || {};
+	const isAdmin = compareAddresses(
+		adminUser?.walletAddress,
+		user?.walletAddress,
+	);
+
+	const orderChangeHandler = (orderBy: EOrderBy) => {
+		if (orderBy === order.by) {
 			setOrder({
-				by: orderby,
+				by: orderBy,
 				direction:
 					order.direction === EDirection.ASC
 						? EDirection.DESC
@@ -83,7 +82,7 @@ const ProjectDonationTable = ({
 			});
 		} else {
 			setOrder({
-				by: orderby,
+				by: orderBy,
 				direction: EDirection.DESC,
 			});
 		}
@@ -100,6 +99,7 @@ const ProjectDonationTable = ({
 					skip: page * itemPerPage,
 					orderBy: { field: order.by, direction: order.direction },
 					searchTerm,
+					status: isAdmin ? null : EDonationStatus.VERIFIED,
 				},
 			});
 			const { donationsByProjectId } = projectDonations;
@@ -107,7 +107,7 @@ const ProjectDonationTable = ({
 				setPageDonations(donationsByProjectId.donations);
 			}
 		};
-		fetchProjectDonations();
+		fetchProjectDonations().then();
 	}, [page, order.by, order.direction, id, searchTerm]);
 
 	useEffect(() => {
@@ -124,7 +124,7 @@ const ProjectDonationTable = ({
 					>
 						Donations
 					</Tab>
-					{showTrace && (
+					{!!traceCampaignId && (
 						<Tab
 							onClick={() => setActiveTab(1)}
 							className={activeTab === 1 ? 'active' : ''}
@@ -140,93 +140,88 @@ const ProjectDonationTable = ({
 			</UpperSection>
 			{activeTab === 0 && (
 				<DonationTableWrapper>
-					<DonationTableContainer>
+					<DonationTableContainer isAdmin={isAdmin}>
 						<TableHeader
 							onClick={() =>
 								orderChangeHandler(EOrderBy.CreationDate)
 							}
 						>
-							<B>Donated at</B>
-							{injectSortIcon(order, EOrderBy.CreationDate)}
+							Donated at
+							<SortIcon
+								order={order}
+								title={EOrderBy.CreationDate}
+							/>
 						</TableHeader>
-						<TableHeader>
-							<B>Donor</B>
-						</TableHeader>
-						<TableHeader>
-							<B>Network</B>
-						</TableHeader>
-						<TableHeader>
-							<B>Currency</B>
-						</TableHeader>
+						<TableHeader>Donor</TableHeader>
+						{isAdmin && <TableHeader>Status</TableHeader>}
+						<TableHeader>Network</TableHeader>
 						<TableHeader
 							onClick={() =>
 								orderChangeHandler(EOrderBy.TokenAmount)
 							}
 						>
-							<B>Amount</B>
-							{injectSortIcon(order, EOrderBy.TokenAmount)}
+							Amount
+							<SortIcon
+								order={order}
+								title={EOrderBy.TokenAmount}
+							/>
 						</TableHeader>
 						<TableHeader
 							onClick={() =>
 								orderChangeHandler(EOrderBy.UsdAmount)
 							}
 						>
-							<B>USD Value</B>
-							{injectSortIcon(order, EOrderBy.UsdAmount)}
+							USD Value
+							<SortIcon
+								order={order}
+								title={EOrderBy.UsdAmount}
+							/>
 						</TableHeader>
 						{pageDonations.map(donation => (
 							<RowWrapper key={donation.id}>
 								<TableCell>
-									<P>
-										{smallFormatDate(
-											new Date(donation.createdAt),
-										)}
-									</P>
+									{smallFormatDate(
+										new Date(donation.createdAt),
+									)}
 								</TableCell>
 								<TableCell>
-									<P>
-										{donation.donationType ===
-										EDonationType.POIGNART
-											? 'PoignART'
-											: donation.anonymous
-											? 'Anonymous'
-											: donation.user?.name ||
-											  donation.user?.firstName}
-									</P>
+									{donation.donationType ===
+									EDonationType.POIGNART
+										? 'PoignART'
+										: donation.anonymous
+										? 'Anonymous'
+										: donation.user?.name ||
+										  donation.user?.firstName}
 								</TableCell>
+								{isAdmin && (
+									<TableCell>
+										<DonationStatus
+											status={donation.status}
+										/>
+									</TableCell>
+								)}
 								<TableCell>
+									<Image
+										alt='chain logo'
+										src={
+											donation.transactionNetworkId ===
+											config.XDAI_NETWORK_NUMBER
+												? GnosisIcon
+												: ETHIcon
+										}
+										height={24}
+										width={24}
+									/>
 									<P>
 										{donation.transactionNetworkId ===
-										config.XDAI_NETWORK_NUMBER ? (
-											<NetworkCell>
-												<Image
-													alt='Gnosis chain logo'
-													src='/images/currencies/gnosisChain/24.svg'
-													height={24}
-													width={24}
-												/>
-												<P>Gnosis</P>
-											</NetworkCell>
-										) : (
-											<NetworkCell>
-												<Image
-													alt='Ethereum chain logo'
-													src='/images/currencies/eth/24.svg'
-													height={24}
-													width={24}
-												/>
-												<P>Ethereum</P>
-											</NetworkCell>
-										)}
+										config.XDAI_NETWORK_NUMBER
+											? 'Gnosis'
+											: 'Ethereum'}
 									</P>
 								</TableCell>
 								<TableCell>
-									<CurrencyBadge>
-										{donation.currency}
-									</CurrencyBadge>
-								</TableCell>
-								<TableCell>
-									<P>{donation.amount}</P>
+									<B>{donation.amount}</B>
+									<Currency>{donation.currency}</Currency>
 									{!donation.anonymous && (
 										<ExternalLink
 											href={formatTxLink(
@@ -262,6 +257,10 @@ const ProjectDonationTable = ({
 		</Wrapper>
 	);
 };
+
+const Currency = styled.div`
+	color: ${neutralColors.gray[600]};
+`;
 
 const Wrapper = styled.div`
 	margin: 50px 0 32px;
@@ -301,18 +300,22 @@ const DonationTableWrapper = styled.div`
 	max-width: calc(100vw - 32px);
 `;
 
-const DonationTableContainer = styled.div`
+const DonationTableContainer = styled.div<{ isAdmin?: boolean }>`
 	margin-top: 12px;
 	display: grid;
 	width: 100%;
-	grid-template-columns: 1.25fr 2fr 1.25fr 1fr 1fr 1fr;
+	grid-template-columns: ${props =>
+		props.isAdmin
+			? '1.25fr 2fr 1fr 1.25fr 1fr 1fr'
+			: '1.25fr 2fr 1.25fr 1fr 1fr'};
 	min-width: 800px;
 `;
 
-const TableHeader = styled(Flex)`
+const TableHeader = styled(B)`
 	height: 40px;
 	border-bottom: 1px solid ${neutralColors.gray[400]};
 	align-items: center;
+	display: flex;
 	${props =>
 		props.onClick &&
 		`cursor: pointer;
@@ -335,18 +338,6 @@ const TableCell = styled(Flex)`
 	height: 60px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
 	align-items: center;
-	gap: 8px;
-`;
-
-const CurrencyBadge = styled(SublineBold)`
-	padding: 2px 8px;
-	border: 2px solid ${neutralColors.gray[400]};
-	border-radius: 50px;
-	color: ${neutralColors.gray[700]};
-`;
-
-const NetworkCell = styled.div`
-	display: flex;
 	gap: 8px;
 `;
 

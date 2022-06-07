@@ -30,16 +30,24 @@ import {
 	LargeCreateProject,
 	MainLogoBtn,
 } from './Header.sc';
-import { useSubgraph } from '@/context/subgraph.context';
 import { RewardMenu } from '@/components/menu/RewardMenu';
 import MenuWallet from '@/components/menu/MenuWallet';
 import { ETheme, useGeneral } from '@/context/general.context';
 import { menuRoutes } from '../menu/menuRoutes';
-import useUser from '@/context/UserProvider';
 import { isUserRegistered, shortenAddress } from '@/lib/helpers';
 import HeaderRoutesResponsive from './HeaderResponsiveRoutes';
 import Routes from '@/lib/constants/Routes';
-import useModal from '@/context/ModalProvider';
+import {
+	currentValuesHelper,
+	useAppDispatch,
+	useAppSelector,
+} from '@/features/hooks';
+import {
+	setShowWalletModal,
+	setShowWelcomeModal,
+	setShowSignWithWallet,
+	setShowCompleteProfile,
+} from '@/features/modal/modal.sclie';
 
 export interface IHeader {
 	theme?: ThemeType;
@@ -54,21 +62,15 @@ const Header: FC<IHeader> = () => {
 	const [isGIVeconomyRoute, setIsGIVeconomyRoute] = useState(false);
 	const [isCreateRoute, setIsCreateRoute] = useState(false);
 
-	const {
-		currentValues: { balances },
-	} = useSubgraph();
-	const {
-		state: { user, isEnabled, isSignedIn },
-	} = useUser();
-	const {
-		actions: {
-			showWelcomeModal,
-			showSignWithWallet,
-			showCompleteProfile,
-			showWalletModal,
-		},
-	} = useModal();
 	const { chainId, active, account, library } = useWeb3React();
+	const { balances } = useAppSelector(
+		state => state.subgraph[currentValuesHelper(chainId)],
+	);
+	const dispatch = useAppDispatch();
+	const { isEnabled, isSignedIn, userData } = useAppSelector(
+		state => state.user,
+	);
+
 	const { theme } = useGeneral();
 	const router = useRouter();
 
@@ -115,21 +117,21 @@ const Header: FC<IHeader> = () => {
 
 	const handleModals = () => {
 		if (isGIVeconomyRoute) {
-			showWalletModal();
+			dispatch(setShowWalletModal(true));
 		} else {
-			showWelcomeModal();
+			dispatch(setShowWelcomeModal(true));
 		}
 	};
 
 	const handleCreateButton = () => {
 		if (!isEnabled) {
-			showWelcomeModal();
+			dispatch(setShowWelcomeModal(true));
 		} else if (!isSignedIn) {
-			showSignWithWallet();
-		} else if (isUserRegistered(user)) {
+			dispatch(setShowSignWithWallet(true));
+		} else if (isUserRegistered(userData)) {
 			router.push(Routes.CreateProject);
 		} else {
-			showCompleteProfile();
+			dispatch(setShowCompleteProfile(true));
 		}
 	};
 
@@ -261,8 +263,8 @@ const Header: FC<IHeader> = () => {
 								<HBContainer>
 									<HBPic
 										src={
-											user?.avatar
-												? user.avatar
+											userData?.avatar
+												? userData.avatar
 												: '/images/placeholders/profile.png'
 										}
 										alt='Profile Pic'
@@ -271,7 +273,7 @@ const Header: FC<IHeader> = () => {
 									/>
 									<WBInfo>
 										<GLink size='Medium'>
-											{user?.name ||
+											{userData?.name ||
 												shortenAddress(account)}
 										</GLink>
 										<WBNetwork size='Tiny'>

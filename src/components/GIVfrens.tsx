@@ -7,6 +7,7 @@ import {
 	IconInfo16,
 	neutralColors,
 } from '@giveth/ui-design-system';
+import { InjectedConnector } from '@web3-react/injected-connector';
 import { useWeb3React } from '@web3-react/core';
 import styled from 'styled-components';
 import { RegenPoolStakingConfig } from '@/types/config';
@@ -30,10 +31,14 @@ interface IGIVfrensProps {
 	network: number;
 }
 
+interface IChangeNetworkModal {
+	network: number;
+}
+
 export const GIVfrens: FC<IGIVfrensProps> = ({ regenFarms, network }) => {
 	const { chainId } = useWeb3React();
-
 	if (regenFarms.length === 0) return null;
+
 	return (
 		<>
 			<H3 weight={700}>RegenFarms</H3>
@@ -86,10 +91,12 @@ export const GIVfrens: FC<IGIVfrensProps> = ({ regenFarms, network }) => {
 									)}
 								</Col>
 							</Row>
-							{chainId !== config.XDAI_NETWORK_NUMBER && (
+							{chainId !== poolStakingConfig?.network && (
 								<>
 									<DAOChangeNetwork />
-									<DAOChangeNetworkModal />
+									<DAOChangeNetworkModal
+										network={poolStakingConfig.network!}
+									/>
 								</>
 							)}
 						</DAOContainer>
@@ -100,18 +107,31 @@ export const GIVfrens: FC<IGIVfrensProps> = ({ regenFarms, network }) => {
 	);
 };
 
-const DAOChangeNetworkModal = () => {
+const DAOChangeNetworkModal = ({ network }: IChangeNetworkModal) => {
+	const { account, activate } = useWeb3React();
+	const networkLabel =
+		network === config.XDAI_NETWORK_NUMBER ? 'Gnosis chain' : 'Mainnet';
+
+	const checkWalletAndSwitchNetwork = async (network: number) => {
+		if (!account) {
+			await activate(new InjectedConnector({}));
+			await switchNetwork(network);
+		}
+		if (account) {
+			await switchNetwork(network);
+		}
+	};
 	return (
 		<DAOChangeNetworkModalContainer>
 			<Flex gap='16px'>
 				<IconInfo16 />
 				<Title>Switch network</Title>
 			</Flex>
-			<Desc>This RegenFarm is only available on Gnosis chain.</Desc>
+			<Desc>This RegenFarm is only available on {networkLabel}</Desc>
 			<ChangeButton
 				buttonType='texty'
-				label='Switch to Gnosis Chain'
-				onClick={() => switchNetwork(config.XDAI_NETWORK_NUMBER)}
+				label={`Switch to ${networkLabel}`}
+				onClick={() => checkWalletAndSwitchNetwork(network)}
 			/>
 		</DAOChangeNetworkModalContainer>
 	);

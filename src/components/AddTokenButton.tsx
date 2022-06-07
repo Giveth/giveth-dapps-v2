@@ -27,7 +27,6 @@ export const AddTokenButton: FC<IAddGIVTokenButton> = ({
 		const selectedWallet = window.localStorage.getItem(StorageLabel.WALLET);
 		setShow(selectedWallet === EWallets.METAMASK);
 	}, []);
-
 	return show ? (
 		<AddGivButton
 			onClick={() => {

@@ -12,17 +12,22 @@ import ProjectDonateCard from './ProjectDonateCard';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
-import useUser from '@/context/UserProvider';
 import { IDonation, IProject } from '@/apollo/types/types';
-import { EDirection, EProjectStatus, gqlEnums } from '@/apollo/types/gqlEnums';
+import {
+	EDirection,
+	EDonationStatus,
+	EProjectStatus,
+	gqlEnums,
+} from '@/apollo/types/gqlEnums';
 import InfoBadge from '@/components/badges/InfoBadge';
 import { IDonationsByProjectIdGQL } from '@/apollo/types/gqlTypes';
 import SuccessfulCreation from '@/components/views/create/SuccessfulCreation';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import InlineToast from '@/components/toasts/InlineToast';
-import { ProjectMeta } from '@/lib/meta';
 import SimilarProjects from '@/components/views/project/SimilarProjects';
-import { showToastError } from '@/lib/helpers';
+import { compareAddresses, showToastError } from '@/lib/helpers';
+import { useAppSelector } from '@/features/hooks';
+import { ProjectMeta } from '@/components/Metatag';
 
 const ProjectDonations = dynamic(() => import('./ProjectDonations'));
 const ProjectUpdates = dynamic(() => import('./ProjectUpdates'));
@@ -45,14 +50,21 @@ const ProjectIndex = (props: { project?: IProject }) => {
 	const [creationSuccessful, setCreationSuccessful] = useState(false);
 	const [isMobile, setIsMobile] = useState<boolean>(false);
 	const [isCancelled, setIsCancelled] = useState<boolean>(false);
+	const user = useAppSelector(state => state.user.userData);
 
 	const {
-		state: { user },
-	} = useUser();
-
-	const { description = '', title, status, id = '' } = project || {};
+		adminUser,
+		description = '',
+		title,
+		status,
+		id = '',
+	} = project || {};
 	const router = useRouter();
 	const slug = router.query.projectIdSlug as string;
+	const isAdmin = compareAddresses(
+		adminUser?.walletAddress,
+		user?.walletAddress,
+	);
 
 	const fetchProject = async () => {
 		client
@@ -91,6 +103,7 @@ const ProjectIndex = (props: { project?: IProject }) => {
 					projectId: parseInt(id),
 					skip: 0,
 					take: donationsPerPage,
+					status: isAdmin ? null : EDonationStatus.VERIFIED,
 					orderBy: {
 						field: gqlEnums.CREATIONDATE,
 						direction: EDirection.DESC,

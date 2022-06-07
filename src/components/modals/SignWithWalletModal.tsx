@@ -8,22 +8,26 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
+import { useRouter } from 'next/router';
 
-import { IModal, Modal } from '@/components/modals/Modal';
-import useUser from '@/context/UserProvider';
+import { Modal } from '@/components/modals/Modal';
 import { ETheme, useGeneral } from '@/context/general.context';
 import { mediaQueries } from '@/lib/constants/constants';
-import useModal from '@/context/ModalProvider';
+import { IModal } from '@/types/common';
+import { useAppDispatch } from '@/features/hooks';
+import { setShowWelcomeModal } from '@/features/modal/modal.sclie';
+import { signToGetToken } from '@/features/user/user.thunks';
 
-export const SignWithWalletModal: FC<IModal> = ({ setShowModal, callback }) => {
+interface IProps extends IModal {
+	callback?: () => void;
+}
+
+export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 	const { theme } = useGeneral();
-	const {
-		actions: { signToGetToken },
-	} = useUser();
-	const { account } = useWeb3React();
-	const {
-		actions: { showWelcomeModal },
-	} = useModal();
+	const { account, library, chainId } = useWeb3React();
+	const router = useRouter();
+
+	const dispatch = useAppDispatch();
 
 	return (
 		<Modal
@@ -45,9 +49,17 @@ export const SignWithWalletModal: FC<IModal> = ({ setShowModal, callback }) => {
 					label='SIGN IN'
 					onClick={async () => {
 						if (!account) {
-							return showWelcomeModal();
+							return dispatch(setShowWelcomeModal(true));
 						}
-						const signature = await signToGetToken();
+						const signature = await dispatch(
+							signToGetToken({
+								address: account,
+								chainId,
+								signer: library?.getSigner(),
+								pathname: router.pathname,
+							}),
+						);
+						console.log({ signature });
 						setShowModal(false);
 						!!signature && callback && callback();
 					}}

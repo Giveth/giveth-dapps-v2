@@ -13,9 +13,9 @@ import { IProject } from '@/apollo/types/types';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered } from '@/lib/helpers';
 import { FlexCenter } from '@/components/styled-components/Flex';
-import useUser from '@/context/UserProvider';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
-import useModal from '@/context/ModalProvider';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { setShowCompleteProfile } from '@/features/modal/modal.sclie';
 
 interface IHomeExploreProjects {
 	projects: IProject[];
@@ -27,19 +27,14 @@ const HomeExploreProjects = (props: IHomeExploreProjects) => {
 	const { projects, totalCount, noTitle } = props;
 
 	const router = useRouter();
-	const {
-		state: { user },
-	} = useUser();
-
-	const {
-		actions: { showCompleteProfile },
-	} = useModal();
+	const dispatch = useAppDispatch();
+	const user = useAppSelector(state => state.user.userData);
 
 	const handleCreateButton = () => {
 		if (isUserRegistered(user)) {
 			router.push(Routes.CreateProject);
 		} else {
-			showCompleteProfile();
+			dispatch(setShowCompleteProfile(true));
 		}
 	};
 

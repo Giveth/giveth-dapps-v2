@@ -14,7 +14,6 @@ import {
 
 import { captureException } from '@sentry/nextjs';
 import Routes from '@/lib/constants/Routes';
-import useUser from '@/context/UserProvider';
 import links from '@/lib/constants/links';
 import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
 import { switchNetworkHandler } from '@/lib/wallet';
@@ -22,7 +21,12 @@ import { MenuContainer } from './Menu.sc';
 import { ETheme, useGeneral } from '@/context/general.context';
 import { isUserRegistered, networkInfo } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
-import useModal from '@/context/ModalProvider';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import {
+	setShowCompleteProfile,
+	setShowWalletModal,
+} from '@/features/modal/modal.sclie';
+import { signOut } from '@/features/user/user.thunks';
 
 const MenuWallet = () => {
 	const [isMounted, setIsMounted] = useState(false);
@@ -32,26 +36,17 @@ const MenuWallet = () => {
 	const [queueRoute, setQueueRoute] = useState<string>('');
 
 	const router = useRouter();
-
-	const {
-		state: { user, isSignedIn },
-		actions: { signOut },
-	} = useUser();
-
-	const {
-		actions: { showCompleteProfile, showWalletModal },
-	} = useModal();
-
+	const dispatch = useAppDispatch();
+	const { isSignedIn, userData, token } = useAppSelector(state => state.user);
 	const { theme } = useGeneral();
-
 	const goRoute = (input: {
 		url: string;
 		requiresSign: boolean;
 		requiresRegistration?: boolean;
 	}) => {
 		const { url, requiresSign, requiresRegistration } = input;
-		if (requiresRegistration && !isUserRegistered(user)) {
-			showCompleteProfile();
+		if (requiresRegistration && !isUserRegistered(userData)) {
+			dispatch(setShowCompleteProfile(true));
 			if (url === Routes.CreateProject) return;
 		}
 		if (requiresSign && !isSignedIn) {
@@ -113,7 +108,7 @@ const MenuWallet = () => {
 					<StyledButton
 						onClick={() => {
 							window.localStorage.removeItem(StorageLabel.WALLET);
-							showWalletModal();
+							dispatch(setShowWalletModal(true));
 						}}
 					>
 						Change wallet
@@ -141,7 +136,10 @@ const MenuWallet = () => {
 						</MenuItem>
 					))}
 					{isSignedIn && (
-						<MenuItem onClick={signOut} theme={theme}>
+						<MenuItem
+							onClick={() => dispatch(signOut(token!))}
+							theme={theme}
+						>
 							Sign out
 						</MenuItem>
 					)}

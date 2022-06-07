@@ -6,8 +6,9 @@ import { client } from '@/apollo/apolloClient';
 import { FETCH_HOME_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { EDirection, gqlEnums } from '@/apollo/types/gqlEnums';
 import { IProject } from '@/apollo/types/types';
-import useUser from '@/context/UserProvider';
-import { HomeMeta } from '@/lib/meta';
+import { useAppSelector } from '@/features/hooks';
+import { homeMetatags } from '@/content/metatags';
+import { GeneralMetatags } from '@/components/Metatag';
 
 const projectsToFetch = 12;
 
@@ -35,10 +36,7 @@ const fetchProjects = async (userId: string | undefined = undefined) => {
 };
 
 const HomeRoute = (props: IHomeRoute) => {
-	const {
-		state: { user },
-	} = useUser();
-
+	const user = useAppSelector(state => state.user.userData);
 	const [projects, setProjects] = useState(props.projects);
 	const [totalCount, setTotalCount] = useState(props.totalCount);
 
@@ -52,8 +50,7 @@ const HomeRoute = (props: IHomeRoute) => {
 	return (
 		<>
 			<Head>
-				<title>Home | Giveth</title>
-				<HomeMeta />
+				<GeneralMetatags info={homeMetatags} />
 			</Head>
 			<HomeIndex projects={projects} totalCount={totalCount} />
 		</>

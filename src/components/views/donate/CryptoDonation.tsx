@@ -17,8 +17,7 @@ import tokenAbi from 'human-standard-token-abi';
 
 import { captureException } from '@sentry/nextjs';
 import { Shadow } from '@/components/styled-components/Shadow';
-import InputBox from '../../InputBox';
-import useUser from '@/context/UserProvider';
+import InputBox from './InputBox';
 import CheckBox from '@/components/Checkbox';
 import DonateModal from '@/components/modals/DonateModal';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -26,7 +25,6 @@ import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import { IProject } from '@/apollo/types/types';
 import { fetchPrice } from '@/services/token';
 import { switchNetwork } from '@/lib/wallet';
-import { usePrice } from '@/context/price.context';
 import GeminiModal from './GeminiModal';
 import config from '@/configuration';
 import TokenPicker from './TokenPicker';
@@ -34,7 +32,12 @@ import InlineToast from '@/components/toasts/InlineToast';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { client } from '@/apollo/apolloClient';
 import { PROJECT_ACCEPTED_TOKENS } from '@/apollo/gql/gqlProjects';
-import { formatBalance, pollEvery, showToastError } from '@/lib/helpers';
+import {
+	formatBalance,
+	formatTxLink,
+	pollEvery,
+	showToastError,
+} from '@/lib/helpers';
 import {
 	IProjectAcceptedToken,
 	IProjectAcceptedTokensGQL,
@@ -46,10 +49,16 @@ import {
 	prepareTokenList,
 } from '@/components/views/donate/helpers';
 import { ORGANIZATION } from '@/lib/constants/organizations';
-import useModal from '@/context/ModalProvider';
 import { getERC20Info } from '@/lib/contracts';
 import GIVBackToast from '@/components/views/donate/GIVBackToast';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
+import FailedDonation from '@/components/modals/FailedDonation';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import {
+	setShowSignWithWallet,
+	setShowWalletModal,
+} from '@/features/modal/modal.sclie';
+import usePurpleList from '@/hooks/usePurpleList';
 
 const ethereumChain = config.PRIMARY_NETWORK;
 const xdaiChain = config.SECONDARY_NETWORK;
@@ -71,13 +80,12 @@ const CryptoDonation = (props: {
 	project: IProject;
 }) => {
 	const { chainId: networkId, account, library } = useWeb3React();
-	const {
-		state: { isSignedIn, isEnabled, balance },
-	} = useUser();
-	const { ethPrice } = usePrice();
-	const {
-		actions: { showWalletModal, showSignWithWallet },
-	} = useModal();
+	const dispatch = useAppDispatch();
+	const { isEnabled, isSignedIn, balance } = useAppSelector(
+		state => state.user,
+	);
+	const ethPrice = useAppSelector(state => state.price.ethPrice);
+	const isPurpleListed = usePurpleList();
 
 	const { project, setSuccessDonation } = props;
 	const { organization, verified, id: projectId, status } = project;
@@ -109,6 +117,8 @@ const CryptoDonation = (props: {
 	const [acceptedTokens, setAcceptedTokens] =
 		useState<IProjectAcceptedToken[]>();
 	const [acceptedChains, setAcceptedChains] = useState<number[]>();
+	const [showFailedModal, setShowFailedModal] = useState(false);
+	const [txHash, setTxHash] = useState<string>();
 
 	const stopPolling = useRef<any>(null);
 	const tokenSymbol = selectedToken?.symbol;
@@ -302,13 +312,17 @@ const CryptoDonation = (props: {
 			);
 		}
 		if (!isSignedIn) {
-			return showSignWithWallet();
+			return dispatch(setShowSignWithWallet(true));
 		}
 		setShowDonateModal(true);
 	};
 
 	const donationDisabled =
-		!isActive || !amountTyped || amountTyped <= 0 || !selectedToken;
+		!isActive ||
+		!amountTyped ||
+		amountTyped <= 0 ||
+		!selectedToken ||
+		error;
 
 	return (
 		<MainContainer>
@@ -328,6 +342,8 @@ const CryptoDonation = (props: {
 				<DonateModal
 					setShowModal={setShowDonateModal}
 					setSuccessDonation={setSuccessDonation}
+					setShowFailedModal={setShowFailedModal}
+					setTxHash={setTxHash}
 					project={project}
 					token={selectedToken}
 					amount={amountTyped}
@@ -336,6 +352,12 @@ const CryptoDonation = (props: {
 					givBackEligible={
 						projectIsGivBackEligible && tokenIsGivBackEligible
 					}
+				/>
+			)}
+			{showFailedModal && (
+				<FailedDonation
+					txUrl={formatTxLink(networkId, txHash)}
+					setShowModal={setShowFailedModal}
 				/>
 			)}
 
@@ -401,8 +423,7 @@ const CryptoDonation = (props: {
 						error={error}
 						setError={setError}
 						errorHandler={{
-							condition: (value: any) =>
-								value >= 0 && value <= 0.000001,
+							condition: value => value >= 0 && value <= 0.000001,
 							message: 'Set a valid amount',
 						}}
 						type='number'
@@ -426,6 +447,7 @@ const CryptoDonation = (props: {
 				<GIVBackToast
 					projectEligible={projectIsGivBackEligible}
 					tokenEligible={tokenIsGivBackEligible}
+					userEligible={!isPurpleListed}
 				/>
 			)}
 			<CheckBoxContainer>
@@ -453,12 +475,17 @@ const CryptoDonation = (props: {
 					/>
 					<AnotherWalletTxt>
 						Want to use another wallet?{' '}
-						<a onClick={showWalletModal}>Change Wallet</a>
+						<a onClick={() => dispatch(setShowWalletModal(true))}>
+							Change Wallet
+						</a>
 					</AnotherWalletTxt>
 				</>
 			)}
 			{!isEnabled && (
-				<MainButton label='CONNECT WALLET' onClick={showWalletModal} />
+				<MainButton
+					label='CONNECT WALLET'
+					onClick={() => dispatch(setShowWalletModal(true))}
+				/>
 			)}
 		</MainContainer>
 	);

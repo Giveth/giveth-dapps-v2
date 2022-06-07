@@ -1,5 +1,5 @@
 import { brandColors, neutralColors } from '@giveth/ui-design-system';
-import React, { ReactNode, useEffect, useRef } from 'react';
+import { FC, ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import dynamic from 'next/dynamic';
@@ -19,7 +19,7 @@ interface ModalWrapperProps {
 	fullScreen?: boolean;
 }
 
-export interface IModal extends ModalWrapperProps {
+interface IModal extends ModalWrapperProps {
 	fullScreen?: boolean;
 	setShowModal: (value: boolean) => void;
 	callback?: () => void;
@@ -29,9 +29,10 @@ export interface IModal extends ModalWrapperProps {
 	headerTitle?: string;
 	headerIcon?: ReactNode;
 	customTheme?: ETheme;
+	headerColor?: string;
 }
 
-export const Modal: React.FC<IModal> = ({
+export const Modal: FC<IModal> = ({
 	hiddenClose = false,
 	hiddenHeader = false,
 	setShowModal,
@@ -41,6 +42,7 @@ export const Modal: React.FC<IModal> = ({
 	headerIcon,
 	customTheme,
 	fullScreen = false,
+	headerColor,
 }) => {
 	const el = useRef(document.createElement('div'));
 	const { theme } = useGeneral();
@@ -73,7 +75,7 @@ export const Modal: React.FC<IModal> = ({
 	};
 
 	return createPortal(
-		<Background>
+		<Background onClick={e => e.stopPropagation()}>
 			<Surrounding onClick={() => setShowModal(false)} />
 			<ModalWrapper fullScreen={fullScreen} theme={customTheme || theme}>
 				<ModalHeader
@@ -83,6 +85,7 @@ export const Modal: React.FC<IModal> = ({
 					icon={headerIcon}
 					closeModal={() => setShowModal(false)}
 					position={headerTitlePosition}
+					color={headerColor}
 				/>
 				<Scrollbars
 					renderTrackHorizontal={props => (

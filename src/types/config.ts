@@ -4,22 +4,34 @@ export interface BasicStakingConfig {
 	BUY_LINK?: string;
 	farmStartTimeMS?: number;
 }
-
-export enum StakingType {
-	UNISWAPV2 = 'UniswapV2',
-	UNISWAPV3 = 'UniswapV3',
+export enum StakingPlatform {
+	GIVETH = 'Staking',
+	UNISWAP = 'Uniswap',
 	BALANCER = 'Balancer',
-	SUSHISWAP = 'Sushiswap',
 	HONEYSWAP = 'Honeyswap',
-	GIV_LM = 'Staking',
+	SUSHISWAP = 'Sushiswap',
+}
+export enum StakingType {
+	UNISWAPV2_GIV_DAI = 'UniswapV2_GIV_DAI',
+	UNISWAPV3_ETH_GIV = 'UniswapV3', // ETH-GIV
+	BALANCER_ETH_GIV = 'Balancer', // ETH-GIV
+	SUSHISWAP_ETH_GIV = 'Sushiswap', // ETH-GIV
+	HONEYSWAP_GIV_HNY = 'Honeyswap_GIV_HNY',
+	HONEYSWAP_GIV_DAI = 'Honeyswap_GIV_DAI',
+	GIV_LM = 'GIV_LM',
+
+	HONEYSWAP_FOX_HNY = 'Honeyswap_FOX_HNY',
+	UNISWAPV2_CULT_ETH = 'UniswapV2_CULT_ETH',
 }
 
 export enum RegenFarmType {
 	FOX_HNY = 'FOX_HNY_FARM',
+	CULT_ETH = 'CULT_ETH_FARM',
 }
 
 export enum StreamType {
 	FOX = 'FOX_STREAM',
+	CULT = 'CULT_STREAM',
 }
 
 export type PoolStakingConfig =
@@ -31,11 +43,13 @@ export type PoolStakingConfig =
 export interface SimplePoolStakingConfig extends BasicStakingConfig {
 	POOL_ADDRESS: string;
 	type: StakingType;
+	platform: StakingPlatform;
 	title: string;
 	description?: string;
 	provideLiquidityLink?: string;
 	unit: string;
 	active: boolean;
+	network?: number;
 }
 
 export interface UniswapV3PoolStakingConfig extends SimplePoolStakingConfig {
@@ -55,14 +69,16 @@ export interface BalancerPoolStakingConfig extends SimplePoolStakingConfig {
 	POOL_ID: string;
 }
 
+export interface RegenFarmIntroConfig {
+	title: string;
+	description: string;
+	link: string;
+}
+
 export interface RegenPoolStakingConfig extends SimplePoolStakingConfig {
 	regenStreamType: StreamType;
 	regenFarmType: RegenFarmType;
-	regenFarmIntro?: {
-		title: string;
-		description: string;
-		link: string;
-	};
+	regenFarmIntro?: RegenFarmIntroConfig;
 }
 
 export interface GasPreference {
@@ -82,6 +98,7 @@ export interface RegenStreamConfig {
 
 export interface BasicNetworkConfig {
 	TOKEN_ADDRESS: string;
+	tokenAddressOnUniswapV2: string; // For price purpose in test env, on production this must have the same value of `TOKEN_ADDRESS`
 	TOKEN_DISTRO_ADDRESS: string;
 	GIV: BasicStakingConfig;
 	nodeUrl: string;
@@ -102,7 +119,7 @@ export interface BasicNetworkConfig {
 		| BalancerPoolStakingConfig
 		| UniswapV3PoolStakingConfig
 	>;
-	uniswapV2Subgraph?: string;
+	uniswapV2Subgraph: string;
 
 	regenStreams: RegenStreamConfig[];
 	regenFarms: RegenPoolStakingConfig[];
@@ -114,6 +131,9 @@ interface MainnetNetworkConfig extends BasicNetworkConfig {
 interface XDaiNetworkConfig extends BasicNetworkConfig {
 	MERKLE_ADDRESS: string;
 }
+interface MicroservicesConfig {
+	authentication: string;
+}
 
 export interface EnvConfig {
 	MAINNET_NETWORK_NUMBER: number;
@@ -122,6 +142,7 @@ export interface EnvConfig {
 	XDAI_CONFIG: XDaiNetworkConfig;
 	GARDEN_LINK: string;
 	BACKEND_LINK: string;
+	MICROSERVICES: MicroservicesConfig;
 }
 
 export interface GlobalConfig extends EnvConfig {

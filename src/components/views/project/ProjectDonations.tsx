@@ -6,6 +6,7 @@ import { IProject } from '@/apollo/types/types';
 import { IDonationsByProjectId } from '@/apollo/types/gqlTypes';
 import ProjectTotalFundCard from './ProjectTotalFundCard';
 import ProjectDonationTable from './ProjectDonationTable';
+import { FlexCenter } from '@/components/styled-components/Flex';
 
 const ProjectDonations = (props: {
 	donationsByProjectId: IDonationsByProjectId;
@@ -14,7 +15,7 @@ const ProjectDonations = (props: {
 	isDraft: boolean;
 }) => {
 	const { donationsByProjectId, project, isActive, isDraft } = props;
-	const { totalDonations, id, traceCampaignId } = project || {};
+	const { totalDonations } = project || {};
 
 	return (
 		<>
@@ -39,9 +40,8 @@ const ProjectDonations = (props: {
 					<ProjectTotalFundCard project={project} />
 					<ProjectDonationTable
 						donations={donationsByProjectId.donations}
-						id={id}
-						showTrace={!!traceCampaignId}
 						totalDonations={donationsByProjectId.totalCount}
+						project={project}
 					/>
 				</>
 			)}
@@ -49,13 +49,10 @@ const ProjectDonations = (props: {
 	);
 };
 
-const MessageContainer = styled.div`
+const MessageContainer = styled(FlexCenter)`
 	height: 200px;
 	width: 100%;
-	display: flex;
 	flex-direction: column;
-	justify-content: center;
-	align-items: center;
 	gap: 32px;
 `;
 

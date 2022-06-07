@@ -30,31 +30,31 @@ import {
 	GivAllocated,
 	InfoReadMore,
 } from './GIVbacks.sc';
-import { useTokenDistro } from '@/context/tokenDistro.context';
+import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import config from '@/configuration';
 import { HarvestAllModal } from '../modals/HarvestAll';
 import { getNowUnixMS } from '@/helpers/time';
-import { useSubgraph } from '@/context';
 import { formatDate } from '@/lib/helpers';
 import { GIVBackExplainModal } from '../modals/GIVBackExplain';
 import { TopInnerContainer } from './commons';
 import links from '@/lib/constants/links';
 import { Col, Container, Row } from '@/components/Grid';
 import Routes from '@/lib/constants/Routes';
+import { BN } from '@/helpers/number';
+import { useAppSelector } from '@/features/hooks';
 
 export const TabGIVbacksTop = () => {
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
 	const [showGivBackExplain, setShowGivBackExplain] = useState(false);
 	const [givBackStream, setGivBackStream] = useState<BigNumber.Value>(0);
-	const { givTokenDistroHelper } = useTokenDistro();
-	const {
-		currentValues: { balances },
-	} = useSubgraph();
+	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
+	const { balances } = useAppSelector(state => state.subgraph.currentValues);
 	const { chainId } = useWeb3React();
 
 	useEffect(() => {
+		const _givback = BN(balances.givback);
 		setGivBackStream(
-			givTokenDistroHelper.getStreamPartTokenPerWeek(balances.givback),
+			givTokenDistroHelper.getStreamPartTokenPerWeek(_givback),
 		);
 	}, [balances, givTokenDistroHelper]);
 
@@ -78,14 +78,14 @@ export const TabGIVbacksTop = () => {
 							<GIVbackRewardCard
 								title='Your GIVbacks rewards'
 								wrongNetworkText='GIVbacks is only available on Gnosis Chain.'
-								liquidAmount={balances?.givbackLiquidPart}
+								liquidAmount={BN(balances?.givbackLiquidPart)}
 								stream={givBackStream}
 								actionLabel='HARVEST'
 								actionCb={() => {
 									setShowHarvestModal(true);
 								}}
 								subButtonLabel={
-									balances?.givbackLiquidPart?.isZero()
+									BN(balances?.givbackLiquidPart)?.isZero()
 										? "Why don't I have GIVbacks?"
 										: undefined
 								}
@@ -102,6 +102,7 @@ export const TabGIVbacksTop = () => {
 					title='GIVbacks Rewards'
 					setShowModal={setShowHarvestModal}
 					network={config.XDAI_NETWORK_NUMBER}
+					tokenDistroHelper={givTokenDistroHelper}
 				/>
 			)}
 			{showGivBackExplain && (
@@ -115,7 +116,7 @@ export const TabGIVbacksBottom = () => {
 	const [round, setRound] = useState(0);
 	const [roundStartime, setRoundStartime] = useState(new Date());
 	const [roundEndTime, setRoundEndTime] = useState(new Date());
-	const { givTokenDistroHelper } = useTokenDistro();
+	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 
 	useEffect(() => {
 		if (givTokenDistroHelper) {

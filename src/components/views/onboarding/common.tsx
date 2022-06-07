@@ -2,10 +2,12 @@ import { Button, neutralColors } from '@giveth/ui-design-system';
 import { Dispatch, FC, SetStateAction, useEffect } from 'react';
 import styled from 'styled-components';
 
+import { useWeb3React } from '@web3-react/core';
 import { Col, Row } from '@/components/Grid';
-import useUser from '@/context/UserProvider';
 import { OnboardSteps } from './Onboarding.view';
-import useModal from '@/context/ModalProvider';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { setShowSignWithWallet } from '@/features/modal/modal.sclie';
+import { fetchUserByAddress } from '@/features/user/user.thunks';
 
 export const OnboardStep = styled(Col)`
 	margin: 0 auto;
@@ -27,28 +29,22 @@ export const OnboardActions: FC<IOnboardActions> = ({
 	onLater,
 	disabled,
 }) => {
-	const {
-		state: { isSignedIn },
-		actions: { reFetchUser },
-	} = useUser();
-
-	const {
-		actions: { showSignWithWallet },
-	} = useModal();
-
+	const dispatch = useAppDispatch();
+	const isSignedIn = useAppSelector(state => state.user.isSignedIn);
+	const { account } = useWeb3React();
 	useEffect(() => {
 		if (!isSignedIn) {
-			showSignWithWallet();
+			dispatch(setShowSignWithWallet(true));
 		}
 	}, [isSignedIn]);
 
 	const handleSave = async () => {
 		if (!isSignedIn) {
-			showSignWithWallet();
+			dispatch(setShowSignWithWallet(true));
 		} else {
 			const res = await onSave();
 			if (res) {
-				reFetchUser();
+				account && dispatch(fetchUserByAddress(account));
 			}
 		}
 	};

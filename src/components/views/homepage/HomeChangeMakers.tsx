@@ -5,11 +5,11 @@ import styled from 'styled-components';
 import Routes from '@/lib/constants/Routes';
 import { Arc } from '@/components/styled-components/Arc';
 import { isUserRegistered } from '@/lib/helpers';
-import useUser from '@/context/UserProvider';
 import { HomeContainer } from '@/components/views/homepage/Home.sc';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Col } from '@/components/Grid';
-import useModal from '@/context/ModalProvider';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { setShowCompleteProfile } from '@/features/modal/modal.sclie';
 
 const content = [
 	{
@@ -36,19 +36,14 @@ const content = [
 
 const HomeChangeMakers = () => {
 	const router = useRouter();
-	const {
-		state: { user },
-	} = useUser();
-
-	const {
-		actions: { showCompleteProfile },
-	} = useModal();
+	const dispatch = useAppDispatch();
+	const user = useAppSelector(state => state.user.userData);
 
 	const handleCreateButton = () => {
 		if (isUserRegistered(user)) {
 			router.push(Routes.CreateProject);
 		} else {
-			showCompleteProfile();
+			dispatch(setShowCompleteProfile(true));
 		}
 	};
 

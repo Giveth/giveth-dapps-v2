@@ -14,19 +14,16 @@ import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
-import { IModal, Modal } from './Modal';
+import { Modal } from './Modal';
 import LoadingAnimation from '@/animations/loading.json';
 import {
 	PoolStakingConfig,
 	RegenStreamConfig,
 	StreamType,
 } from '@/types/config';
-import { formatWeiHelper, Zero } from '@/helpers/number';
-import { useSubgraph } from '@/context/subgraph.context';
-import { useTokenDistro } from '@/context/tokenDistro.context';
+import { BN, formatWeiHelper, Zero } from '@/helpers/number';
 import { harvestTokens } from '@/lib/stakingPool';
 import { claimUnstakeStake } from '@/lib/stakingNFT';
-import { useLiquidityPositions } from '@/context';
 import {
 	ConfirmedInnerModal,
 	ErrorInnerModal,
@@ -61,15 +58,24 @@ import { claimReward, fetchAirDropClaimData } from '@/lib/claim';
 import config from '@/configuration';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { AmountBoxWithPrice } from '@/components/AmountBoxWithPrice';
-import { usePrice } from '@/context/price.context';
 import { getPoolIconWithName } from '../cards/BaseStakingCard';
+import { IModal } from '@/types/common';
+import { useAppSelector } from '@/features/hooks';
+import { LiquidityPosition } from '@/types/nfts';
+import { Flex } from '../styled-components/Flex';
+import type { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 
 interface IHarvestAllModalProps extends IModal {
 	title: string;
 	poolStakingConfig?: PoolStakingConfig;
 	earned?: ethers.BigNumber;
 	network: number;
+	tokenDistroHelper?: TokenDistroHelper;
 	regenStreamConfig?: RegenStreamConfig;
+	stakedPositions?: LiquidityPosition[];
+	currentIncentive?: {
+		key?: (string | number)[] | null | undefined;
+	};
 }
 
 const loadingAnimationOptions = {
@@ -95,17 +101,20 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	poolStakingConfig,
 	earned,
 	network,
+	tokenDistroHelper,
 	regenStreamConfig,
+	stakedPositions,
+	currentIncentive,
 }) => {
 	const [state, setState] = useState<HarvestStates>(HarvestStates.HARVEST);
 	const tokenSymbol = regenStreamConfig?.rewardTokenSymbol || 'GIV';
+	const { balances } = useAppSelector(state => state.subgraph.currentValues);
 	const {
-		currentValues: { balances },
-	} = useSubgraph();
-	const { getTokenDistroHelper } = useTokenDistro();
-	const { givPrice, getTokenPrice } = usePrice();
+		mainnetThirdPartyTokensPrice,
+		xDaiThirdPartyTokensPrice,
+		givPrice,
+	} = useAppSelector(state => state.price);
 	const { account, library } = useWeb3React();
-	const { currentIncentive, stakedPositions } = useLiquidityPositions();
 	const [txHash, setTxHash] = useState('');
 	//GIVdrop TODO: Should we show Givdrop in new  design?
 	const [givDrop, setGIVdrop] = useState(ethers.constants.Zero);
@@ -124,25 +133,28 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	const [sumLiquid, setSumLiquid] = useState(ethers.constants.Zero);
 	const [sumStream, setSumStream] = useState<BigNumber>(Zero);
 
-	const tokenDistroHelper = useMemo(
-		() => getTokenDistroHelper(regenStreamConfig?.type),
-		[getTokenDistroHelper, regenStreamConfig],
-	);
 	const givback = useMemo<ethers.BigNumber>(() => {
-		return regenStreamConfig ? ethers.constants.Zero : balances.givback;
+		return regenStreamConfig ? ethers.constants.Zero : BN(balances.givback);
 	}, [regenStreamConfig, balances.givback]);
 	const givbackLiquidPart = useMemo<ethers.BigNumber>(() => {
 		return regenStreamConfig
 			? ethers.constants.Zero
-			: balances.givbackLiquidPart;
+			: BN(balances.givbackLiquidPart);
 	}, [regenStreamConfig, balances.givbackLiquidPart]);
 	const tokenPrice = useMemo(() => {
-		return regenStreamConfig
-			? getTokenPrice(regenStreamConfig.tokenAddressOnUniswapV2, network)
+		const currentPrice =
+			network === config.MAINNET_NETWORK_NUMBER
+				? mainnetThirdPartyTokensPrice
+				: xDaiThirdPartyTokensPrice;
+		const price = regenStreamConfig
+			? currentPrice[regenStreamConfig.tokenAddressOnUniswapV2]
 			: givPrice;
-	}, [getTokenPrice, givPrice, network, regenStreamConfig]);
+		return new BigNumber(price);
+	}, [givPrice, network, regenStreamConfig]);
 
 	useEffect(() => {
+		if (!tokenDistroHelper) return;
+		const bnAllocatedTokens = BN(balances.allocatedTokens);
 		if (earned) {
 			setRewardLiquidPart(tokenDistroHelper.getLiquidPart(earned));
 			setEarnedStream(
@@ -154,31 +166,35 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 		if (regenStreamConfig) {
 			switch (regenStreamConfig.type) {
 				case StreamType.FOX:
-					lockedAmount = balances.foxAllocatedTokens;
+					lockedAmount = BN(balances.foxAllocatedTokens);
+					break;
+				case StreamType.CULT:
+					lockedAmount = BN(balances.cultAllocatedTokens);
 					break;
 				default:
 					lockedAmount = ethers.constants.Zero;
 			}
 		} else {
-			lockedAmount = balances.allocatedTokens.sub(givback);
+			lockedAmount = bnAllocatedTokens.sub(givback);
 		}
 		setRewardStream(
 			tokenDistroHelper.getStreamPartTokenPerWeek(lockedAmount),
 		);
 		setGivBackStream(tokenDistroHelper.getStreamPartTokenPerWeek(givback));
-	}, [earned, balances, tokenDistroHelper, givback]);
+	}, [earned, balances, tokenDistroHelper, givback, regenStreamConfig]);
 
 	//calculate Liquid Sum
 	useEffect(() => {
-		setSumLiquid(rewardLiquidPart.add(givbackLiquidPart).add(earnedLiquid));
-	}, [rewardLiquidPart, givbackLiquidPart, earnedLiquid]);
+		setSumLiquid(rewardLiquidPart.add(earnedLiquid)); // earnedLiquid includes the givback liquid part
+	}, [rewardLiquidPart, earnedLiquid]);
 
 	//calculate Stream Sum
 	useEffect(() => {
-		setSumStream(BigNumber.sum(rewardStream, givBackStream, earnedStream));
-	}, [rewardStream, givBackStream, earnedStream]);
+		setSumStream(BigNumber.sum(rewardStream, earnedStream)); // earnedStream includes the givback stream part
+	}, [rewardStream, earnedStream]);
 
 	useEffect(() => {
+		if (!tokenDistroHelper) return;
 		if (
 			!regenStreamConfig &&
 			network === config.XDAI_NETWORK_NUMBER &&
@@ -204,7 +220,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	]);
 
 	const onHarvest = async () => {
-		if (!library || !account) return;
+		if (!library || !account || !tokenDistroHelper) return;
 		setState(HarvestStates.HARVESTING);
 		try {
 			if (poolStakingConfig) {
@@ -213,6 +229,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 						'NFT_POSITIONS_MANAGER_ADDRESS',
 					)
 				) {
+					if (!currentIncentive || !stakedPositions) return;
 					//NFT Harvest
 					const txResponse = await claimUnstakeStake(
 						account,
@@ -282,7 +299,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	const modalTitle = regenStreamConfig ? 'RegenFarm Rewards' : title;
 
 	const calcUSD = (amount: string) => {
-		const price = tokenPrice || givPrice;
+		const price = tokenPrice || new BigNumber(givPrice);
 		return price.isNaN() ? '0' : price.times(amount).toFixed(2);
 	};
 
@@ -360,10 +377,9 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 								)}
 								<HarvestAllDesc>
 									When you harvest {tokenSymbol}
-									rewards anywhere in the GIVeconomy, all
-									liquid {tokenSymbol} allocated to you on
-									that chain is sent to your wallet. Your{' '}
-									{tokenSymbol}stream flowrate may also
+									rewards, all liquid {tokenSymbol} allocated
+									to you on that chain is sent to your wallet.
+									Your {tokenSymbol}stream flowrate may also
 									increase. Below is the breakdown of rewards
 									you will get when you harvest.
 								</HarvestAllDesc>
@@ -403,10 +419,9 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 										{givBackStream != 0 && (
 											<>
 												<GIVbackStreamDesc>
-													Recieved from GIVbacks
+													[ Recieved from GIVbacks
 												</GIVbackStreamDesc>
 												<BreakdownRate>
-													+
 													{formatWeiHelper(
 														givBackStream,
 														config.TOKEN_PRECISION,
@@ -417,13 +432,18 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 													{tokenSymbol}/week
 													<IconWithTooltip
 														icon={
-															<IconHelp
-																size={16}
-																color={
-																	brandColors
-																		.deep[100]
-																}
-															/>
+															<Flex gap='4px'>
+																<IconHelp
+																	size={16}
+																	color={
+																		brandColors
+																			.deep[100]
+																	}
+																/>
+																<GIVbackStreamDesc>
+																	]
+																</GIVbackStreamDesc>
+															</Flex>
 														}
 														direction={'left'}
 													>
@@ -480,7 +500,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 													{poolStakingConfig.title}
 													<PoolIcon>
 														{getPoolIconWithName(
-															poolStakingConfig.type,
+															poolStakingConfig.platform,
 														)}
 													</PoolIcon>
 												</BreakdownTitle>

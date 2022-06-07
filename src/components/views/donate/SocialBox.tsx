@@ -10,8 +10,15 @@ import styled from 'styled-components';
 
 const SocialBox = (props: any) => {
 	const { project } = props;
-	const shareTitle = `Our project is raising funds in crypto on @givethio! 🙌
+	const shareTitleTwitter = `Our project is raising funds in crypto on @givethio! 🙌
 Donate directly on Ethereum Mainnet or @gnosischain w/ no fees or intermediaries.👇`;
+
+	const shareTitleFacebookAndLinkedin = `Our project is raising funds in crypto on @givethio!
+	Donate directly on Ethereum Mainnet or Gnosis Chain with no fees or intermediaries.
+	
+	Here's the link to our project:
+	`;
+
 	const projectUrl =
 		typeof window !== 'undefined'
 			? `${window.location.origin}/project/${project?.slug}`
@@ -26,7 +33,7 @@ Donate directly on Ethereum Mainnet or @gnosischain w/ no fees or intermediaries
 			<SocialItems>
 				<SocialItem isSuccess={props.isSuccess}>
 					<TwitterShareButton
-						title={shareTitle}
+						title={shareTitleTwitter}
 						url={projectUrl || ''}
 						hashtags={['Giveth']}
 					>
@@ -40,7 +47,7 @@ Donate directly on Ethereum Mainnet or @gnosischain w/ no fees or intermediaries
 				</SocialItem>
 				<SocialItem isSuccess={props.isSuccess}>
 					<LinkedinShareButton
-						title={shareTitle}
+						title={shareTitleFacebookAndLinkedin}
 						summary={project?.description}
 						url={projectUrl || ''}
 					>
@@ -54,7 +61,7 @@ Donate directly on Ethereum Mainnet or @gnosischain w/ no fees or intermediaries
 				</SocialItem>
 				<SocialItem isSuccess={props.isSuccess}>
 					<FacebookShareButton
-						quote={shareTitle}
+						quote={shareTitleFacebookAndLinkedin}
 						url={projectUrl || ''}
 						hashtag='#Giveth'
 					>

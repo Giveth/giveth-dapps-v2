@@ -1,18 +1,21 @@
 import Image from 'next/image';
-import { Overline } from '@giveth/ui-design-system';
+import { IconVerified, Overline } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 import { FlexCenter } from '../styled-components/Flex';
 import TraceIcon from '/public//images/trace.svg';
-import VerifiedIcon from '/public//images/verified.svg';
 
 const VerificationBadge = (props: { verified?: boolean; trace?: boolean }) => {
 	const { verified, trace } = props;
 	const text = verified ? 'VERIFIED' : trace ? 'TRACE' : '';
-	const icon = verified ? VerifiedIcon : trace ? TraceIcon : '';
+
 	return (
 		<Wrapper>
-			<Image src={icon} alt='badge icon' />
+			{verified ? (
+				<IconVerified />
+			) : trace ? (
+				<Image src={TraceIcon} alt='badge icon' />
+			) : null}
 			<TextBadge styleType='Small'>{text}</TextBadge>
 		</Wrapper>
 	);

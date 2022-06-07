@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import Image from 'next/image';
 import { useWeb3React } from '@web3-react/core';
 import styled from 'styled-components';
@@ -17,18 +17,17 @@ import { ETheme } from '@/context/general.context';
 import { detectBrave, showToastError } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
 import LowerShields from '@/components/modals/LowerShields';
-import useModal from '@/context/ModalProvider';
+import { IModal } from '@/types/common';
+import { setShowFirstWelcomeModal } from '@/features/modal/modal.sclie';
+import { useAppDispatch } from '@/features/hooks';
 
-const WalletModal = (props: { setShowModal: (i: boolean) => void }) => {
-	const { setShowModal } = props;
+const WalletModal: FC<IModal> = ({ setShowModal }) => {
 	const [showLowerShields, setShowLowerShields] = useState<boolean>();
 
 	const context = useWeb3React();
 	const { activate, deactivate } = context;
 	const selectedWallet = useWalletName(context);
-	const {
-		actions: { showFirstWelcomeModal },
-	} = useModal();
+	const dispatch = useAppDispatch();
 
 	const handleSelect = (selected: IWallet) => {
 		if (selectedWallet !== selected.value) {
@@ -41,7 +40,9 @@ const WalletModal = (props: { setShowModal: (i: boolean) => void }) => {
 			setTimeout(() => {
 				localStorage.setItem(StorageLabel.WALLET, selected.value);
 				activate(selected.connector, showToastError, true)
-					.then(showFirstWelcomeModal)
+					.then(() => {
+						dispatch(setShowFirstWelcomeModal(true));
+					})
 					.catch(error => {
 						showToastError(error);
 						captureException(error, {
