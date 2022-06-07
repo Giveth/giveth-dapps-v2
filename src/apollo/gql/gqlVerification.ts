@@ -193,3 +193,58 @@ export const getCurrentProjectVerificationFormQuery = gql`
 		}
 	}
 `;
+
+export const UPDATE_PROJECT_VERIFICATION_FORM = gql`
+	mutation updateProjectVerificationForm(
+		$projectVerificationUpdateInput: ProjectVerificationUpdateInput!
+	) {
+		updateProjectVerificationForm(
+			projectVerificationUpdateInput: $projectVerificationUpdateInput
+		) {
+			id
+			isTermAndConditionsAccepted
+			emailConfirmationToken
+			emailConfirmationSent
+			emailConfirmationSentAt
+			emailConfirmedAt
+			emailConfirmed
+			projectRegistry {
+				organizationDescription
+				isNonProfitOrganization
+				organizationCountry
+				organizationWebsite
+			}
+			projectContacts {
+				youtube
+				instagram
+				linkedin
+				facebook
+				instagram
+				twitter
+			}
+			milestones {
+				mission
+				foundationDate
+				achievedMilestones
+				achievedMilestonesProof
+			}
+			managingFunds {
+				description
+				relatedAddresses {
+					address
+					networkId
+					title
+				}
+			}
+			user {
+				id
+				walletAddress
+			}
+			project {
+				id
+				slug
+			}
+			status
+		}
+	}
+`;
