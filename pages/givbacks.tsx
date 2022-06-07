@@ -18,6 +18,7 @@ export default function GIVbacksRoute() {
 	return (
 		<>
 			<Head>
+				<title>{givbacksMetatags.title}</title>
 				<GeneralMetatags info={givbacksMetatags} />
 			</Head>
 			<GIVbackView />

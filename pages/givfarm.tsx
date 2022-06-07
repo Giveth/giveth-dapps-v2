@@ -18,6 +18,7 @@ export default function GIVfarmRoute() {
 	return (
 		<>
 			<Head>
+				<title>{givfarmMetatags.title}</title>
 				<GeneralMetatags info={givfarmMetatags} />
 			</Head>
 			<GIVfarmView />

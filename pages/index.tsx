@@ -50,6 +50,7 @@ const HomeRoute = (props: IHomeRoute) => {
 	return (
 		<>
 			<Head>
+				<title>{homeMetatags.title}</title>
 				<GeneralMetatags info={homeMetatags} />
 			</Head>
 			<HomeIndex projects={projects} totalCount={totalCount} />

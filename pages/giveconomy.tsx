@@ -19,6 +19,7 @@ export default function GIVeconomyRoute() {
 	return (
 		<>
 			<Head>
+				<title>{giveconomyMetatags.title}</title>
 				<GeneralMetatags info={giveconomyMetatags} />
 			</Head>
 			<HomeView />

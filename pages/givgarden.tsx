@@ -18,6 +18,7 @@ export default function GIVgardenRoute() {
 	return (
 		<>
 			<Head>
+				<title>{givgardenMetatags.title}</title>
 				<GeneralMetatags info={givgardenMetatags} />
 			</Head>
 			<GIVgardenView />

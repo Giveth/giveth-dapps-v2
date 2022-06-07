@@ -12,7 +12,6 @@ export interface IMetaTags {
 export const GeneralMetatags: FC<{ info: IMetaTags }> = ({ info }) => {
 	return (
 		<>
-			<title>{info.title}</title>
 			<meta name='title' content={info.title} />
 			<meta name='description' content={info.desc} />
 

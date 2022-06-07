@@ -7,6 +7,7 @@ const AboutRoute = () => {
 	return (
 		<>
 			<Head>
+				<title>{aboutMetatags.title}</title>
 				<GeneralMetatags info={aboutMetatags} />
 			</Head>
 			<AboutIndex />

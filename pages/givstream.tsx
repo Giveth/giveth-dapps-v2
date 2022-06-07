@@ -18,6 +18,7 @@ export default function GIVstreamRoute() {
 	return (
 		<>
 			<Head>
+				<title>{givstreamMetatags.title}</title>
 				<GeneralMetatags info={givstreamMetatags} />
 			</Head>
 			<GIVstreamView />
