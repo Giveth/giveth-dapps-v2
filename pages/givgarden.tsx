@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import { useEffect } from 'react';
 
 import GIVgardenView from '@/components/views/Garden.view';
@@ -17,9 +16,7 @@ export default function GIVgardenRoute() {
 	}, [setTheme]);
 	return (
 		<>
-			<Head>
-				<GeneralMetatags info={givgardenMetatags} />
-			</Head>
+			<GeneralMetatags info={givgardenMetatags} />
 			<GIVgardenView />
 		</>
 	);
