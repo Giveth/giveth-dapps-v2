@@ -125,7 +125,6 @@ const config: EnvConfig = {
 				LM_ADDRESS: '0xa479103c2618aD514653B53F064Bc6c9dC35a30b',
 				type: StakingType.UNISWAPV2_CULT_ETH,
 				platform: StakingPlatform.UNISWAP,
-				network: 1,
 				title: 'CULT / ETH',
 				description: '50% CULT, 50% ETH',
 				provideLiquidityLink:
