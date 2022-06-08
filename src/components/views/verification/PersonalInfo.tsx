@@ -7,13 +7,16 @@ import Input from '@/components/Input';
 import { ContentSeparator, BtnContainer } from './VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
 import { client } from '@/apollo/apolloClient';
-import { UPDATE_PROJECT_VERIFICATION_FORM } from '@/apollo/gql/gqlVerification';
+import {
+	SEND_EMAIL_VERIFICATION,
+	UPDATE_PROJECT_VERIFICATION_FORM,
+} from '@/apollo/gql/gqlVerification';
 const PersonalInfo = () => {
 	const { verificationData, setStep } = useVerificationData();
 	console.log('verificationData', verificationData);
 	const [email, setEmail] = useState(verificationData?.user.email || '');
-	const sendEmail = async () => {
-		await client.mutate({
+	const sendPersonalInfo = async () => {
+		return await client.mutate({
 			mutation: UPDATE_PROJECT_VERIFICATION_FORM,
 			variables: {
 				projectVerificationUpdateInput: {
@@ -31,6 +34,26 @@ const PersonalInfo = () => {
 			},
 		});
 	};
+	const sendEmail = async () => {
+		return await client.mutate({
+			mutation: SEND_EMAIL_VERIFICATION,
+			variables: {
+				projectVerificationFormId: Number(verificationData?.id),
+			},
+		});
+	};
+
+	const handleFormSubmit = async () => {
+		try {
+			const personalInfoRes = await sendPersonalInfo();
+			console.log('personalInfoRes', personalInfoRes);
+			const emailRes = await sendEmail();
+			console.log('emailRes', emailRes);
+		} catch (error) {
+			console.log('SubmitError', error);
+		}
+	};
+
 	return (
 		<>
 			<div>
@@ -61,7 +84,7 @@ const PersonalInfo = () => {
 						color={brandColors.giv[500]}
 						label='VERIFY EMAIL ADDRESS'
 						size='small'
-						onClick={sendEmail}
+						onClick={handleFormSubmit}
 					/>
 				</EmailSection>
 			</div>
