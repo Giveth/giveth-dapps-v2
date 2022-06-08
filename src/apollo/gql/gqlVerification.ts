@@ -96,7 +96,7 @@ export const FETCH_PROJECT_BY_SLUG = `
 	}
 `;
 
-export const VERIFICATION_CREATE = gql`
+export const CREATE_PROJECT_VERIFICATION = gql`
 	mutation createProjectVerificationForm($projectId: Float!) {
 		createProjectVerificationForm(projectId: $projectId) {
 			id
@@ -145,7 +145,7 @@ export const VERIFICATION_CREATE = gql`
 	}
 `;
 
-export const getCurrentProjectVerificationFormQuery = gql`
+export const FETCH_PROJECT_VERIFICATION = gql`
 	query getCurrentProjectVerificationForm($slug: String!) {
 		getCurrentProjectVerificationForm(slug: $slug) {
 			id
@@ -184,6 +184,56 @@ export const getCurrentProjectVerificationFormQuery = gql`
 				firstName
 				lastName
 				email
+			}
+			project {
+				id
+				slug
+			}
+			status
+		}
+	}
+`;
+
+export const UPDATE_PROJECT_VERIFICATION = gql`
+	mutation updateProjectVerificationForm(
+		$projectVerificationUpdateInput: ProjectVerificationUpdateInput!
+	) {
+		updateProjectVerificationForm(
+			projectVerificationUpdateInput: $projectVerificationUpdateInput
+		) {
+			id
+			isTermAndConditionsAccepted
+			projectRegistry {
+				organizationDescription
+				isNonProfitOrganization
+				organizationCountry
+				organizationWebsite
+			}
+			projectContacts {
+				youtube
+				instagram
+				linkedin
+				facebook
+				instagram
+				twitter
+			}
+			milestones {
+				mission
+				foundationDate
+				achievedMilestones
+				achievedMilestonesProof
+			}
+			managingFunds {
+				description
+				relatedAddresses {
+					address
+					networkId
+					title
+				}
+			}
+			user {
+				id
+				walletAddress
 			}
 			project {
 				id
