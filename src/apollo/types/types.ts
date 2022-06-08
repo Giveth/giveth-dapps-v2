@@ -214,3 +214,23 @@ export enum PROJECT_VERIFICATION_STATUSES {
 	SUBMITTED = 'submitted',
 	REJECTED = 'rejected',
 }
+
+export interface ProjectVerificationUpdateInput {
+	step: PROJECT_VERIFICATION_STEPS;
+	projectVerificationId: number;
+	projectRegistry?: IProjectRegistry;
+	projectContacts?: IProjectContacts;
+	milestones?: IProjectMilestones;
+	managingFunds?: IProjectManagingFunds;
+	isTermAndConditionsAccepted?: boolean;
+}
+
+export enum PROJECT_VERIFICATION_STEPS {
+	PERSONAL_INFO = 'personalInfo',
+	PROJECT_REGISTRY = 'projectRegistry',
+	PROJECT_CONTACTS = 'projectContacts',
+	MANAGING_FUNDS = 'managingFunds',
+	MILESTONES = 'milestones',
+	TERM_AND_CONDITION = 'termAndCondition',
+	SUBMIT = 'submit',
+}

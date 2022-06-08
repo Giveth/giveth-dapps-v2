@@ -6,7 +6,7 @@ import { ContentSeparator, BtnContainer } from './VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
-import { VERIFICATION_CREATE } from '@/apollo/gql/gqlVerification';
+import { CREATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
 
 const BeforeStart = () => {
 	const { verificationData, setVerificationData, setStep } =
@@ -24,7 +24,7 @@ const BeforeStart = () => {
 			});
 			const id = projectData.projectBySlug.id;
 			const { data } = await client.mutate({
-				mutation: VERIFICATION_CREATE,
+				mutation: CREATE_PROJECT_VERIFICATION,
 				variables: {
 					projectId: Number(id),
 				},
