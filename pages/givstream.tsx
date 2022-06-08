@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import { useEffect } from 'react';
 
 import GIVstreamView from '@/components/views/Stream.view';
@@ -17,9 +16,7 @@ export default function GIVstreamRoute() {
 	}, [setTheme]);
 	return (
 		<>
-			<Head>
-				<GeneralMetatags info={givstreamMetatags} />
-			</Head>
+			<GeneralMetatags info={givstreamMetatags} />
 			<GIVstreamView />
 		</>
 	);

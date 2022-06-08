@@ -41,6 +41,8 @@ const links: any = {
 	HISTORY: 'https://docs.giveth.io/whatisgiveth/history',
 	CALENDAR:
 		'https://calendar.google.com/calendar/u/1?cid=Z2l2ZXRoZG90aW9AZ21haWwuY29t',
+	ADD_TO_CALENDAR:
+		'https://calendar.google.com/event?action=TEMPLATE&tmeid=dWZydnNoNjVmb2NvNDNrZ2htMmtzaDNydGZfMjAyMjA2MDlUMTUwMDAwWiBnaXZldGhkb3Rpb0Bt&tmsrc=givethdotio%40gmail.com&scp=ALL',
 };
 
 if (!isProduction) {
