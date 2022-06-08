@@ -9,7 +9,7 @@ import { useVerificationData } from '@/context/verification.context';
 import { client } from '@/apollo/apolloClient';
 import {
 	SEND_EMAIL_VERIFICATION,
-	UPDATE_PROJECT_VERIFICATION_FORM,
+	UPDATE_PROJECT_VERIFICATION,
 } from '@/apollo/gql/gqlVerification';
 const PersonalInfo = () => {
 	const { verificationData, setStep } = useVerificationData();
@@ -17,7 +17,7 @@ const PersonalInfo = () => {
 	const [email, setEmail] = useState(verificationData?.user.email || '');
 	const sendPersonalInfo = async () => {
 		return await client.mutate({
-			mutation: UPDATE_PROJECT_VERIFICATION_FORM,
+			mutation: UPDATE_PROJECT_VERIFICATION,
 			variables: {
 				projectVerificationUpdateInput: {
 					step: 'personalInfo',
