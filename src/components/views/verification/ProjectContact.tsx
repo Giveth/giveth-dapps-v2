@@ -16,14 +16,51 @@ import styled from 'styled-components';
 import Input from '@/components/Input';
 import { ContentSeparator, BtnContainer } from './VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
+import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
+import { client } from '@/apollo/apolloClient';
+import { PROJECT_VERIFICATION_STEPS } from '@/apollo/types/types';
 
 export default function ProjectContact() {
-	const [twitterUrl, setTwitterUrl] = useState('');
-	const [facebookUrl, setFacebookUrl] = useState('');
-	const [instagramUrl, setInstagramUrl] = useState('');
-	const [youtubeUrl, setYoutubeUrl] = useState('');
-	const [linkedinUrl, setLinkedinUrl] = useState('');
-	const { setStep } = useVerificationData();
+	const { verificationData, setVerificationData, setStep } =
+		useVerificationData();
+	const { twitter, facebook, linkedin, instagram, youtube } =
+		verificationData?.projectContacts || {};
+	const [twitterUrl, setTwitterUrl] = useState(twitter || '');
+	const [facebookUrl, setFacebookUrl] = useState(facebook || '');
+	const [instagramUrl, setInstagramUrl] = useState(instagram || '');
+	const [youtubeUrl, setYoutubeUrl] = useState(youtube || '');
+	const [linkedinUrl, setLinkedinUrl] = useState(linkedin || '');
+	const [isChanged, setIsChanged] = useState(false);
+
+	const handleNext = () => {
+		async function sendReq() {
+			const { data } = await client.mutate({
+				mutation: UPDATE_PROJECT_VERIFICATION,
+				variables: {
+					projectVerificationUpdateInput: {
+						projectVerificationId: Number(verificationData?.id),
+						step: PROJECT_VERIFICATION_STEPS.PROJECT_CONTACTS,
+						projectContacts: {
+							facebook: facebookUrl,
+							instagram: instagramUrl,
+							linkedin: linkedinUrl,
+							twitter: twitterUrl,
+							youtube: youtubeUrl,
+						},
+					},
+				},
+			});
+			setVerificationData(data.updateProjectVerificationForm);
+
+			setStep(5);
+		}
+
+		if (isChanged) {
+			sendReq();
+		} else {
+			setStep(5);
+		}
+	};
 
 	return (
 		<>
@@ -45,6 +82,7 @@ export default function ProjectContact() {
 						value={twitterUrl}
 						name='Twitter'
 						onChange={(e: ChangeEvent<HTMLInputElement>) => {
+							setIsChanged(true);
 							setTwitterUrl(e.target.value);
 						}}
 						LeftIcon={
@@ -57,6 +95,7 @@ export default function ProjectContact() {
 						value={facebookUrl}
 						name='Facebook'
 						onChange={(e: ChangeEvent<HTMLInputElement>) => {
+							setIsChanged(true);
 							setFacebookUrl(e.target.value);
 						}}
 						LeftIcon={
@@ -69,6 +108,7 @@ export default function ProjectContact() {
 						value={linkedinUrl}
 						name='Linkedin'
 						onChange={(e: ChangeEvent<HTMLInputElement>) => {
+							setIsChanged(true);
 							setLinkedinUrl(e.target.value);
 						}}
 						LeftIcon={
@@ -81,6 +121,7 @@ export default function ProjectContact() {
 						value={instagramUrl}
 						name='Instagram'
 						onChange={(e: ChangeEvent<HTMLInputElement>) => {
+							setIsChanged(true);
 							setInstagramUrl(e.target.value);
 						}}
 						LeftIcon={
@@ -93,6 +134,7 @@ export default function ProjectContact() {
 						value={youtubeUrl}
 						name='Youtube'
 						onChange={(e: ChangeEvent<HTMLInputElement>) => {
+							setIsChanged(true);
 							setYoutubeUrl(e.target.value);
 						}}
 						LeftIcon={
@@ -105,7 +147,7 @@ export default function ProjectContact() {
 				<ContentSeparator />
 				<BtnContainer>
 					<Button onClick={() => setStep(3)} label='<     PREVIOUS' />
-					<Button onClick={() => setStep(5)} label='NEXT     >' />
+					<Button onClick={() => handleNext()} label='NEXT     >' />
 				</BtnContainer>
 			</div>
 		</>
