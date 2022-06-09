@@ -258,6 +258,7 @@ export const SEND_EMAIL_VERIFICATION = gql`
 			emailConfirmationSentAt
 			emailConfirmedAt
 			emailConfirmed
+			emailConfirmationTokenExpiredAt
 			projectRegistry {
 				organizationDescription
 				isNonProfitOrganization

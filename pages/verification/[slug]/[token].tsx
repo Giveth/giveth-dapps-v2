@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { brandColors, H6, Lead, neutralColors } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	H6,
+	Lead,
+	neutralColors,
+	semanticColors,
+} from '@giveth/ui-design-system';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -14,6 +20,8 @@ import check_stars from '/public/images/icons/check_stars.svg';
 import failed_stars from '/public/images/icons/failed_stars.svg';
 import { mediaQueries } from '@/lib/constants/constants';
 import LoadingAnimation from '@/animations/loading_giv.json';
+import { SEND_EMAIL_VERIFICATION_TOKEN } from '@/apollo/gql/gqlVerification';
+import { client } from '@/apollo/apolloClient';
 
 const loadingAnimationOptions = {
 	loop: true,
@@ -61,6 +69,24 @@ export default function Token() {
 	useEffect(() => {
 		setShowFooter(false);
 	}, []);
+
+	useEffect(() => {
+		if (token) {
+			client
+				.mutate({
+					mutation: SEND_EMAIL_VERIFICATION_TOKEN,
+					variables: {
+						emailConfirmationToken: token,
+					},
+				})
+				.then((res: unknown) => {
+					setStatus(Status.Verified);
+				})
+				.catch((err: unknown) => {
+					setStatus(Status.Rejected);
+				});
+		}
+	}, [token]);
 
 	return (
 		<Container>
@@ -120,7 +146,7 @@ function Rejected() {
 				height={80}
 				alt='success icon'
 			/>
-			<H6 weight={700}>Well Done</H6>
+			<RejectedHeader weight={700}>Oh crap!</RejectedHeader>
 			<Lead>
 				This link is expired or not exist anymore, you have to verify
 				your email again.
@@ -206,4 +232,8 @@ const StyledButton = styled(ButtonStyled)`
 const LeadContainer = styled.div`
 	color: ${neutralColors.gray[700]};
 	max-width: 500px;
+`;
+
+const RejectedHeader = styled(H6)`
+	color: ${semanticColors.punch[500]};
 `;
