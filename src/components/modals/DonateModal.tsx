@@ -22,9 +22,10 @@ import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { ISuccessDonation } from '@/components/views/donate/CryptoDonation';
 import { confirmDonation } from '@/components/views/donate/helpers';
 import { IModal } from '@/types/common';
+import { EDonationFailedType } from '@/components/modals/FailedDonation';
 
 export interface IDonateModalProps extends IModal {
-	setShowFailedModal: (i: boolean) => void;
+	setFailedModalType: (i: EDonationFailedType) => void;
 	setTxHash: (i: string) => void;
 	project: IProject;
 	token: IProjectAcceptedToken;

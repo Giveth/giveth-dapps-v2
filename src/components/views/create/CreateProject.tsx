@@ -213,6 +213,7 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 	const onSubmit = async (drafted?: boolean) => {
 		try {
 			if (!isReadyToPublish()) return;
+			setFormChange(false);
 
 			const address = isAddressENS(walletAddress)
 				? await getAddressFromENS(walletAddress, library)

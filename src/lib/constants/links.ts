@@ -38,8 +38,11 @@ const links: any = {
 	RECRUITEE: 'https://giveth.recruitee.com/',
 	JOINGIVFRENS: 'https://giveth.typeform.com/regenfarms',
 	HISTORY: 'https://docs.giveth.io/whatisgiveth/history',
+	DISCORD_SUPPORT: 'https://discord.gg/TeWHtAjNQT',
 	CALENDAR:
 		'https://calendar.google.com/calendar/u/1?cid=Z2l2ZXRoZG90aW9AZ21haWwuY29t',
+	ADD_TO_CALENDAR:
+		'https://calendar.google.com/event?action=TEMPLATE&tmeid=dWZydnNoNjVmb2NvNDNrZ2htMmtzaDNydGZfMjAyMjA2MDlUMTUwMDAwWiBnaXZldGhkb3Rpb0Bt&tmsrc=givethdotio%40gmail.com&scp=ALL',
 };
 
 if (!isProduction) {

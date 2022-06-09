@@ -36,7 +36,7 @@ const config: EnvConfig = {
 		blockExplorerName: ['etherscan'],
 		blockExplorerUrls: ['https://etherscan.io/'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/aminlatifi/giveth-economy',
+			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-mainnet',
 
 		TOKEN_ADDRESS: '0x900db999074d9277c5da2a43f252d74366230da0',
 		tokenAddressOnUniswapV2: '0x900db999074d9277c5da2a43f252d74366230da0',
@@ -107,8 +107,41 @@ const config: EnvConfig = {
 		],
 		uniswapV2Subgraph:
 			'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
-		regenStreams: [],
-		regenFarms: [],
+		regenStreams: [
+			{
+				tokenDistroAddress:
+					'0x73f2D115C2cBAa3b5F477A78F7A7CD348D8b70a2',
+				type: StreamType.CULT,
+				title: 'CULT DAO',
+				rewardTokenAddress:
+					'0xf0f9D895aCa5c8678f706FB8216fa22957685A13',
+				rewardTokenSymbol: 'CULT',
+				tokenAddressOnUniswapV2:
+					'0xf0f9D895aCa5c8678f706FB8216fa22957685A13',
+			},
+		],
+		regenFarms: [
+			{
+				POOL_ADDRESS: '0x5281E311734869C64ca60eF047fd87759397EFe6',
+				LM_ADDRESS: '0xa479103c2618aD514653B53F064Bc6c9dC35a30b',
+				type: StakingType.UNISWAPV2_CULT_ETH,
+				platform: StakingPlatform.UNISWAP,
+				title: 'CULT / ETH',
+				description: '50% CULT, 50% ETH',
+				provideLiquidityLink:
+					'https://app.uniswap.org/#/add/v2/0xf0f9D895aCa5c8678f706FB8216fa22957685A13/ETH?chain=mainnet',
+				unit: 'LP',
+				regenStreamType: StreamType.CULT,
+				regenFarmType: RegenFarmType.CULT_ETH,
+				regenFarmIntro: {
+					title: 'CULT',
+					description: `The purpose of CULT is to empower those building and contributing to our decentralized future. Our society makes it as difficult as possible to break away from societal, economic and other norms, and CULT serves to fund and support those who are working to take back our future. CULT is a reminder that the power in people is stronger than the people in power.\n\n CULT is the governance token of the Cult DAO. Every transaction of the CULT token allows you to contribute & fast-forward economic & societal change by contributing a 0.4% tax to the treasury. Fight from within until you get out, or change the system in doing so.`,
+					link: 'https://cultdao.io/',
+				},
+				farmStartTimeMS: 1655218800000,
+				active: true,
+			},
+		],
 	},
 
 	XDAI_CONFIG: {

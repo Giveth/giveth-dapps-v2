@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import { useEffect } from 'react';
 
 import GIVbackView from '@/components/views/Back.view';
@@ -17,9 +16,7 @@ export default function GIVbacksRoute() {
 	}, [setTheme]);
 	return (
 		<>
-			<Head>
-				<GeneralMetatags info={givbacksMetatags} />
-			</Head>
+			<GeneralMetatags info={givbacksMetatags} />
 			<GIVbackView />
 		</>
 	);
