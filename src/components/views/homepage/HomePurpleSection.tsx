@@ -158,7 +158,7 @@ const DotMustard = styled(Arc)`
 const MustardThing = styled.div`
 	display: none;
 
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		display: unset;
 	}
 `;

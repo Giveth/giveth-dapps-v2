@@ -405,7 +405,7 @@ const Wrapper = styled(motion.div)<{ initialPosition: number }>`
 		border-radius: 40px;
 	}
 
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		max-width: 285px;
 	}
 

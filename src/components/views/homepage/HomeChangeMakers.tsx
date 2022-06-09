@@ -158,7 +158,7 @@ const ContentLead = styled(Lead)`
 	${mediaQueries.tablet} {
 		max-width: 330px;
 	}
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		max-width: 450px;
 	}
 `;

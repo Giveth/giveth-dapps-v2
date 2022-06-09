@@ -15,6 +15,8 @@ import ContentSelector from '@/components/views/verification/ContentSelector';
 import HintModal from '@/components/views/verification/HintModal';
 import CheckCircle from '@/components/views/verification/CheckCircle';
 import { useVerificationData } from '@/context/verification.context';
+import { Col, Row } from '@/components/Grid';
+import { deviceSize } from '@/lib/constants/constants';
 
 const MenuList = [
 	'Before you start',
@@ -38,7 +40,7 @@ const VerificationIndex = () => {
 	return (
 		<Container>
 			<InnerContainer>
-				<MenuSection>
+				<MenuSection sm={3.75} md={2.75}>
 					<MenuTitle>Verified status for</MenuTitle>
 					<MenuTitle isActive>{title}</MenuTitle>
 					<MenuSeparator>
@@ -56,7 +58,7 @@ const VerificationIndex = () => {
 						</MenuTitle>
 					))}
 				</MenuSection>
-				<ContentSection>
+				<ContentSection sm={8} md={9}>
 					<AbsoluteSection>
 						<SaveSection>
 							Auto save
@@ -109,7 +111,7 @@ export const BtnContainer = styled(Flex)`
 
 export const ContentSeparator = styled.hr`
 	border: 0.5px solid ${neutralColors.gray[300]};
-	margin: 10px 0;
+	margin: 64px 0 10px;
 `;
 
 const ProgressBar = styled.div<{ step: number }>`
@@ -135,29 +137,27 @@ const MenuTitle = styled(B)<{ isActive?: boolean; hover?: boolean }>`
 		props.isActive ? neutralColors.gray[900] : neutralColors.gray[700]};
 `;
 
-const SectionStyle = styled.div`
+const MenuSection = styled(Col)`
+	padding: 24px;
+	max-height: 765px;
 	border-radius: 16px;
 	box-shadow: ${Shadow.Neutral[400]};
 	background: white;
 `;
 
-const MenuSection = styled(SectionStyle)`
+const ContentSection = styled(Col)`
 	padding: 24px;
-	width: 250px;
-	max-height: 765px;
-`;
-
-const ContentSection = styled(SectionStyle)`
-	width: 800px;
-	padding: 24px;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
 	position: relative;
+	border-radius: 16px;
+	box-shadow: ${Shadow.Neutral[400]};
+	background: white;
 `;
 
-const InnerContainer = styled(Flex)`
-	gap: 28px;
+const InnerContainer = styled(Row)`
+	max-width: ${deviceSize.laptopL + 'px'};
+	margin-right: 34px;
+	margin-left: 34px;
+	justify-content: space-between;
 `;
 
 const Container = styled(Flex)`
