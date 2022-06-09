@@ -46,10 +46,12 @@ export default function ProjectRegistry() {
 	const [link, setLink] = useState(
 		projectRegistry?.organizationWebsite || '',
 	);
+	const [loading, setloading] = useState(false);
 	const [isChanged, setIsChanged] = useState(false);
 
 	const handleNext = () => {
 		async function sendReq() {
+			setloading(true);
 			const { data } = await client.mutate({
 				mutation: UPDATE_PROJECT_VERIFICATION,
 				variables: {
@@ -69,7 +71,7 @@ export default function ProjectRegistry() {
 				},
 			});
 			setVerificationData(data.updateProjectVerificationForm);
-
+			setloading(false);
 			setStep(4);
 		}
 
@@ -209,7 +211,11 @@ export default function ProjectRegistry() {
 				<ContentSeparator />
 				<BtnContainer>
 					<Button onClick={() => setStep(2)} label='<     PREVIOUS' />
-					<Button onClick={() => handleNext()} label='NEXT     >' />
+					<Button
+						onClick={() => !loading && handleNext()}
+						loading={loading}
+						label='NEXT     >'
+					/>
 				</BtnContainer>
 			</div>
 		</>
