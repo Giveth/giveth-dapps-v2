@@ -206,6 +206,7 @@ export interface IProjectVerification {
 	user: IUser;
 	project: IProjectUpdate;
 	status: PROJECT_VERIFICATION_STATUSES;
+	lastStep: PROJECT_VERIFICATION_STEPS;
 }
 
 export enum PROJECT_VERIFICATION_STATUSES {
