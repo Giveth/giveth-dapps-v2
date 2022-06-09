@@ -243,3 +243,12 @@ export const UPDATE_PROJECT_VERIFICATION = gql`
 		}
 	}
 `;
+
+export const FETCH_ALLOWED_COUNTRIES = gql`
+	query {
+		getAllowedCountries {
+			name
+			code
+		}
+	}
+`;
