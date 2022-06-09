@@ -1,6 +1,6 @@
 import { Button, H6, Lead, neutralColors, P } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import Select from 'react-select';
 import RadioButton from '../../RadioButton';
 import Input from '@/components/Input';
@@ -10,14 +10,11 @@ import selectCustomStyles from '@/lib/constants/selectCustomStyles';
 import { BtnContainer, ContentSeparator } from './VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
 import { client } from '@/apollo/apolloClient';
-import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
+import {
+	FETCH_ALLOWED_COUNTRIES,
+	UPDATE_PROJECT_VERIFICATION,
+} from '@/apollo/gql/gqlVerification';
 import { PROJECT_VERIFICATION_STEPS } from '@/apollo/types/types';
-
-const options: IOption[] = [
-	{ value: 'new york', label: 'New York' },
-	{ value: 'chicago', label: 'Chicago' },
-	{ value: 'san francisco', label: 'San Francisco' },
-];
 
 enum ProjectRegistryStates {
 	NOTSELECTED = 'notselected',
@@ -34,6 +31,7 @@ export default function ProjectRegistry() {
 	const { verificationData, setVerificationData, setStep } =
 		useVerificationData();
 	const { projectRegistry } = verificationData || {};
+	const [countries, setCountries] = useState<IOption[]>([]);
 	const [isNonProfit, setIsNonProfit] = useState<ProjectRegistryStates>(
 		projectRegistry
 			? projectRegistry.isNonProfitOrganization
@@ -44,10 +42,7 @@ export default function ProjectRegistry() {
 	const [description, setDescription] = useState(
 		projectRegistry?.organizationDescription || '',
 	);
-	const selectedContry = options.find(
-		option => option.value === projectRegistry?.organizationCountry,
-	);
-	const [country, setCountry] = useState<IOption | undefined>(selectedContry);
+	const [country, setCountry] = useState<IOption>();
 	const [link, setLink] = useState(
 		projectRegistry?.organizationWebsite || '',
 	);
@@ -84,6 +79,32 @@ export default function ProjectRegistry() {
 			setStep(4);
 		}
 	};
+
+	useEffect(() => {
+		async function fetchCountries() {
+			const { data } = await client.query({
+				query: FETCH_ALLOWED_COUNTRIES,
+			});
+			const _countries = data.getAllowedCountries.map(
+				(_country: any) => ({
+					label: _country.name,
+					value: _country.name,
+				}),
+			);
+			setCountries(_countries);
+			const selectedContry = data.getAllowedCountries.find(
+				(_country: any) =>
+					_country.name === projectRegistry?.organizationCountry,
+			);
+			if (selectedContry) {
+				setCountry({
+					label: selectedContry.name,
+					value: selectedContry.name,
+				});
+			}
+		}
+		fetchCountries();
+	}, []);
 
 	return (
 		<>
@@ -130,7 +151,7 @@ export default function ProjectRegistry() {
 						<Lead>In which country are you registered?</Lead>
 						<br />
 						<Select
-							options={options}
+							options={countries}
 							styles={selectCustomStyles}
 							value={country}
 							onChange={(option: any) => {
