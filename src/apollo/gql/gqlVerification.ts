@@ -47,6 +47,7 @@ query getCurrentProjectVerificationForm($projectId: Float!){
                slug
              }
              status
+			 lastStep
              }
      }
 `;
@@ -141,6 +142,7 @@ export const CREATE_PROJECT_VERIFICATION = gql`
 				slug
 			}
 			status
+			lastStep
 		}
 	}
 `;
@@ -190,6 +192,7 @@ export const FETCH_PROJECT_VERIFICATION = gql`
 				slug
 			}
 			status
+			lastStep
 		}
 	}
 `;
@@ -240,6 +243,7 @@ export const UPDATE_PROJECT_VERIFICATION = gql`
 				slug
 			}
 			status
+			lastStep
 		}
 	}
 `;
