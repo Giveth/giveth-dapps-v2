@@ -9,8 +9,11 @@ import { TextArea } from '@/components/styled-components/TextArea';
 import selectCustomStyles from '@/lib/constants/selectCustomStyles';
 import { BtnContainer, ContentSeparator } from './VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
+import { client } from '@/apollo/apolloClient';
+import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
+import { PROJECT_VERIFICATION_STEPS } from '@/apollo/types/types';
 
-const options = [
+const options: IOption[] = [
 	{ value: 'new york', label: 'New York' },
 	{ value: 'chicago', label: 'Chicago' },
 	{ value: 'san francisco', label: 'San Francisco' },
@@ -22,11 +25,65 @@ enum ProjectRegistryStates {
 	NO = 'no',
 }
 
+interface IOption {
+	value: string;
+	label: string;
+}
+
 export default function ProjectRegistry() {
+	const { verificationData, setVerificationData, setStep } =
+		useVerificationData();
+	const { projectRegistry } = verificationData || {};
 	const [isNonProfit, setIsNonProfit] = useState<ProjectRegistryStates>(
-		ProjectRegistryStates.NOTSELECTED,
+		projectRegistry
+			? projectRegistry.isNonProfitOrganization
+				? ProjectRegistryStates.YES
+				: ProjectRegistryStates.NO
+			: ProjectRegistryStates.NOTSELECTED,
 	);
-	const { setStep } = useVerificationData();
+	const [description, setDescription] = useState(
+		projectRegistry?.organizationDescription || '',
+	);
+	const selectedContry = options.find(
+		option => option.value === projectRegistry?.organizationCountry,
+	);
+	const [country, setCountry] = useState<IOption | undefined>(selectedContry);
+	const [link, setLink] = useState(
+		projectRegistry?.organizationWebsite || '',
+	);
+	const [isChanged, setIsChanged] = useState(false);
+
+	const handleNext = () => {
+		async function sendReq() {
+			const { data } = await client.mutate({
+				mutation: UPDATE_PROJECT_VERIFICATION,
+				variables: {
+					projectVerificationUpdateInput: {
+						projectVerificationId: Number(verificationData?.id),
+						step: PROJECT_VERIFICATION_STEPS.PROJECT_REGISTRY,
+						projectRegistry: {
+							isNonProfitOrganization:
+								isNonProfit === ProjectRegistryStates.YES
+									? true
+									: false,
+							organizationCountry: country?.value,
+							organizationWebsite: link,
+							organizationDescription: description,
+						},
+					},
+				},
+			});
+			setVerificationData(data.updateProjectVerificationForm);
+
+			setStep(4);
+		}
+
+		if (isChanged) {
+			sendReq();
+		} else {
+			setStep(4);
+		}
+	};
 
 	return (
 		<>
@@ -46,18 +103,20 @@ export default function ProjectRegistry() {
 					<RadioContainer>
 						<RadioButton
 							title='Yes'
-							toggleRadio={() =>
-								setIsNonProfit(ProjectRegistryStates.YES)
-							}
+							toggleRadio={() => {
+								setIsChanged(true);
+								setIsNonProfit(ProjectRegistryStates.YES);
+							}}
 							isSelected={
 								isNonProfit === ProjectRegistryStates.YES
 							}
 						/>
 						<RadioButton
 							title='No'
-							toggleRadio={() =>
-								setIsNonProfit(ProjectRegistryStates.NO)
-							}
+							toggleRadio={() => {
+								setIsChanged(true);
+								setIsNonProfit(ProjectRegistryStates.NO);
+							}}
 							isSelected={
 								isNonProfit === ProjectRegistryStates.NO
 							}
@@ -67,69 +126,71 @@ export default function ProjectRegistry() {
 				<br />
 
 				{isNonProfit === ProjectRegistryStates.YES && (
-					<ProjectRegistryNonProfit />
+					<>
+						<Lead>In which country are you registered?</Lead>
+						<br />
+						<Select
+							options={options}
+							styles={selectCustomStyles}
+							value={country}
+							onChange={(option: any) => {
+								setIsChanged(true);
+								setCountry(option);
+							}}
+						/>
+						<br />
+						<Lead>
+							Please provide a link to your country's government
+							registry where the team can look up and confirm your
+							status.
+						</Lead>
+						<br />
+						<LinkInputContainer>
+							<Label>Please enter full link</Label>
+							<Input
+								value={link}
+								name='link'
+								placeholder='https://'
+								onChange={(
+									e: ChangeEvent<HTMLInputElement>,
+								) => {
+									setIsChanged(true);
+									setLink(e.target.value);
+								}}
+							/>
+						</LinkInputContainer>
+					</>
 				)}
 
 				{isNonProfit === ProjectRegistryStates.NO && (
-					<ProjectRegistryProfit />
+					<>
+						<Lead>
+							Okay, it sounds like your project is not a
+							registered non-profit. Please tell us a bit about
+							how your organization is structured.
+						</Lead>
+						<br />
+						<TextArea
+							value={description}
+							name='link'
+							placeholder='eg. "We are a decentralized autonomous organization that works toward the development of web3
+						applications"'
+							onChange={e => {
+								setIsChanged(true);
+								setDescription(e.target.value);
+							}}
+							required
+						/>
+					</>
 				)}
 			</div>
 			<div>
 				<ContentSeparator />
 				<BtnContainer>
 					<Button onClick={() => setStep(2)} label='<     PREVIOUS' />
-					<Button onClick={() => setStep(4)} label='NEXT     >' />
+					<Button onClick={() => handleNext()} label='NEXT     >' />
 				</BtnContainer>
 			</div>
-		</>
-	);
-}
-
-function ProjectRegistryNonProfit() {
-	const [link, setLink] = useState('');
-	return (
-		<>
-			<Lead>In which country are you registered?</Lead>
-			<br />
-			<Select options={options} styles={selectCustomStyles} />
-			<br />
-			<Lead>
-				Please provide a link to your country's government registry
-				where the team can look up and confirm your status.
-			</Lead>
-			<br />
-			<LinkInputContainer>
-				<Label>Please enter full link</Label>
-				<Input
-					value={link}
-					name='link'
-					placeholder='https://'
-					onChange={(e: ChangeEvent<HTMLInputElement>) => {
-						setLink(e.target.value);
-					}}
-				/>
-			</LinkInputContainer>
-		</>
-	);
-}
-
-function ProjectRegistryProfit() {
-	const [description, setDescription] = useState('');
-	return (
-		<>
-			<Lead>
-				Okay, it sounds like your project is not a registered
-				non-profit. Please tell us a bit about how your organization is
-				structured.
-			</Lead>
-			<br />
-			<TextArea
-				value={description}
-				name='link'
-				placeholder='eg. "We are a decentralized autonomous organization that works toward the development of web3
-				applications"'
-				onChange={e => setDescription(e.target.value)}
-			/>
 		</>
 	);
 }
