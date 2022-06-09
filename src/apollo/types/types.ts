@@ -47,6 +47,12 @@ export interface IProject {
 	};
 }
 
+export interface IWalletAddress {
+	address?: string;
+	isRecipient?: boolean;
+	networkId?: number;
+}
+
 export interface IProjectEdition {
 	id?: string;
 	title?: string;

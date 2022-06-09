@@ -25,7 +25,11 @@ import {
 	UPDATE_PROJECT,
 } from '@/apollo/gql/gqlProjects';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
-import { IProjectCreation, IProjectEdition } from '@/apollo/types/types';
+import {
+	IProjectCreation,
+	IProjectEdition,
+	IWalletAddress,
+} from '@/apollo/types/types';
 import {
 	CategoryInput,
 	DescriptionInput,
@@ -50,17 +54,20 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { useAppSelector } from '@/features/hooks';
 import useLeaveConfirm from '@/hooks/useLeaveConfirm';
+import config from '@/configuration';
 
 export enum ECreateErrFields {
 	NAME = 'name',
 	DESCRIPTION = 'description',
 	WALLET_ADDRESS = 'walletAddress',
+	SECONDARY_WALLET_ADDRESS = 'secondaryWalletAddress',
 }
 
 export interface ICreateProjectErrors {
 	[ECreateErrFields.NAME]: string;
 	[ECreateErrFields.DESCRIPTION]: string;
 	[ECreateErrFields.WALLET_ADDRESS]: string;
+	[ECreateErrFields.SECONDARY_WALLET_ADDRESS]: string;
 }
 
 export interface ICategoryComponent {
@@ -85,9 +92,17 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 	const [description, setDescription] = useState(project?.description || '');
 	const [categories, setCategories] = useState(project?.categories || []);
 	const [image, setImage] = useState(project?.image || '');
+
 	const [walletAddress, setWalletAddress] = useState(
 		project?.walletAddress || '',
 	);
+	const [mainAddress, setMainAddress] = useState<IWalletAddress>({
+		address: project?.walletAddress || '',
+	});
+	const [secondaryAddress, setSecondaryAddress] = useState<IWalletAddress>(
+		{},
+	);
+
 	const [isLoading, setIsLoading] = useState(false);
 	const [publish, setPublish] = useState<boolean>(false);
 	const [impactLocation, setImpactLocation] = useState(
@@ -98,6 +113,7 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 		[ECreateErrFields.NAME]: isEditMode ? '' : 'Title is required',
 		[ECreateErrFields.DESCRIPTION]: '',
 		[ECreateErrFields.WALLET_ADDRESS]: '',
+		[ECreateErrFields.SECONDARY_WALLET_ADDRESS]: '',
 	});
 	const [formChange, setFormChange] = useState(false);
 
@@ -135,13 +151,13 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 	useEffect(() => {
 		const userAddress = user?.walletAddress || '';
 		if (!isEditMode) {
-			setWalletAddress(userAddress);
+			setMainAddress({ address: userAddress });
 			walletAddressValidation(
 				userAddress,
 				library,
 				errors,
 				setErrors,
-				chainId,
+				config.PRIMARY_NETWORK.id,
 			);
 		}
 	}, [user]);
@@ -158,6 +174,34 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 		);
 	}, []);
 
+	const handleWalletInputChange = (value: string, networkId: number) => {
+		const isMainnet = networkId === config.PRIMARY_NETWORK.id;
+		if (isEditMode && compareAddresses(value, project?.walletAddress)) {
+			const _errors = { ...errors };
+			_errors[ECreateErrFields.WALLET_ADDRESS] = '';
+			setErrors(_errors);
+			return;
+		}
+		if (isMainnet) {
+			setMainAddress({
+				address: value,
+				networkId,
+			});
+		} else {
+			setSecondaryAddress({
+				address: value,
+				networkId,
+			});
+		}
+		debouncedAddressValidation.current(
+			value,
+			library,
+			errors,
+			setErrors,
+			networkId,
+		);
+	};
+
 	const handleInputChange = (value: string, id: string) => {
 		if (id === ECreateErrFields.NAME) {
 			setName(value);
@@ -168,21 +212,6 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 				return;
 			}
 			debouncedTitleValidation.current(value, errors, setErrors);
-		} else if (id === ECreateErrFields.WALLET_ADDRESS) {
-			setWalletAddress(value);
-			if (isEditMode && compareAddresses(value, project?.walletAddress)) {
-				const _errors = { ...errors };
-				_errors[ECreateErrFields.WALLET_ADDRESS] = '';
-				setErrors(_errors);
-				return;
-			}
-			debouncedAddressValidation.current(
-				value,
-				library,
-				errors,
-				setErrors,
-				chainId,
-			);
 		} else if (id === ECreateErrFields.DESCRIPTION) {
 			setDescription(value);
 			debouncedDescriptionValidation.current(value, errors, setErrors);
@@ -356,18 +385,38 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 								setIsLoading={setIsLoading}
 							/>
 							<WalletAddressInput
-								value={walletAddress}
+								title='Primary Address'
+								networkId={config.PRIMARY_NETWORK.id}
+								value={mainAddress.address}
 								setValue={e => {
-									console.log('walletAddress');
+									console.log('mainAddress');
 									setFormChange(true);
-									handleInputChange(
+									handleWalletInputChange(
 										e,
-										ECreateErrFields.WALLET_ADDRESS,
+										config.PRIMARY_NETWORK.id,
 									);
 								}}
 								error={errors[ECreateErrFields.WALLET_ADDRESS]}
 							/>
-
+							<WalletAddressInput
+								title='xDAI Address'
+								networkId={config.SECONDARY_NETWORK.id}
+								value={secondaryAddress.address}
+								setValue={e => {
+									console.log('xDaiAddress');
+									setFormChange(true);
+									handleWalletInputChange(
+										e,
+										config.SECONDARY_NETWORK.id,
+									);
+								}}
+								error={
+									errors[
+										ECreateErrFields
+											.SECONDARY_WALLET_ADDRESS
+									]
+								}
+							/>
 							<PublishTitle>
 								{isEditMode
 									? 'Publish edited project'
