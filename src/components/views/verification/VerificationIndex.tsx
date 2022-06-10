@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 import Image from 'next/image';
 import {
-	B,
-	brandColors,
 	neutralColors,
 	semanticColors,
 	SublineBold,
@@ -13,51 +11,21 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import BulbIcon from '/public/images/icons/lightbulb.svg';
 import ContentSelector from '@/components/views/verification/ContentSelector';
 import HintModal from '@/components/views/verification/HintModal';
-import CheckCircle from '@/components/views/verification/CheckCircle';
-import { useVerificationData } from '@/context/verification.context';
 import { Col, Row } from '@/components/Grid';
-import { deviceSize } from '@/lib/constants/constants';
-
-const MenuList = [
-	'Before you start',
-	'Personal info',
-	'Social profiles',
-	'Project registry',
-	'Project contact',
-	'Milestones',
-	'Managing funds',
-	'Terms & Conditions',
-	'Done',
-];
-
-const stepsCount = MenuList.length;
+import { deviceSize, mediaQueries } from '@/lib/constants/constants';
+import useDetectDevice from '@/hooks/useDetectDevice';
+import DesktopMenu from '@/components/views/verification/menu/DesktopMenu';
+import MobileMenu from '@/components/views/verification/menu/MobileMenu';
 
 const VerificationIndex = () => {
-	const title = 'The Giveth Community of Makers';
 	const [showModal, setShowModal] = useState(false);
-	const { step, setStep } = useVerificationData();
+	const device = useDetectDevice();
+	const isMobile = device.isMobile;
 
 	return (
 		<Container>
 			<InnerContainer>
-				<MenuSection sm={3.75} md={2.75}>
-					<MenuTitle>Verified status for</MenuTitle>
-					<MenuTitle isActive>{title}</MenuTitle>
-					<MenuSeparator>
-						<ProgressBar step={step} />
-					</MenuSeparator>
-					{MenuList.map((item, index) => (
-						<MenuTitle
-							hover={index < step}
-							isActive={index <= step}
-							key={item}
-							onClick={() => index < step && setStep(index)}
-						>
-							{item}
-							{index < step && <CheckCircle />}
-						</MenuTitle>
-					))}
-				</MenuSection>
+				{isMobile ? <MobileMenu /> : <DesktopMenu />}
 				<ContentSection sm={8} md={9}>
 					<AbsoluteSection>
 						<SaveSection>
@@ -68,7 +36,7 @@ const VerificationIndex = () => {
 							<Image src={BulbIcon} alt='light bulb' />
 						</GuideSection>
 					</AbsoluteSection>
-					<ContentSelector step={step} />
+					<ContentSelector />
 				</ContentSection>
 			</InnerContainer>
 			{showModal && <HintModal setShowModal={setShowModal} />}
@@ -114,50 +82,29 @@ export const ContentSeparator = styled.hr`
 	margin: 64px 0 10px;
 `;
 
-const ProgressBar = styled.div<{ step: number }>`
-	background: ${brandColors.giv[500]};
-	border-radius: 5px;
-	width: ${props => (props.step / stepsCount) * 100}%;
-	height: 100%;
-`;
-
-const MenuSeparator = styled.div`
-	margin: 25px 0;
-	background: ${neutralColors.gray[300]};
-	height: 3px;
-	border-radius: 5px;
-`;
-
-const MenuTitle = styled(B)<{ isActive?: boolean; hover?: boolean }>`
-	display: flex;
-	gap: 10px;
-	margin-bottom: 16px;
-	cursor: ${props => (props.hover ? 'pointer' : 'default')};
-	color: ${props =>
-		props.isActive ? neutralColors.gray[900] : neutralColors.gray[700]};
-`;
-
-const MenuSection = styled(Col)`
-	padding: 24px;
-	max-height: 765px;
-	border-radius: 16px;
-	box-shadow: ${Shadow.Neutral[400]};
-	background: white;
-`;
-
 const ContentSection = styled(Col)`
 	padding: 24px;
 	position: relative;
 	border-radius: 16px;
 	box-shadow: ${Shadow.Neutral[400]};
 	background: white;
+	display: flex;
+	justify-content: space-between;
+	flex-direction: column;
+	min-height: 765px;
 `;
 
 const InnerContainer = styled(Row)`
 	max-width: ${deviceSize.laptopL + 'px'};
-	margin-right: 34px;
-	margin-left: 34px;
+	margin-right: 16px;
+	margin-left: 16px;
 	justify-content: space-between;
+	width: 100%;
+
+	${mediaQueries.mobileL} {
+		margin-right: 34px;
+		margin-left: 34px;
+	}
 `;
 
 const Container = styled(Flex)`

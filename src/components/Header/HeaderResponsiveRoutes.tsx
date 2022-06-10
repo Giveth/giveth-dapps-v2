@@ -9,8 +9,8 @@ import { Shadow } from '../styled-components/Shadow';
 import { mediaQueries } from '@/lib/constants/constants';
 import HeaderRoutesItem from './HeaderRouteItem';
 import { ETheme, useGeneral } from '@/context/general.context';
-import MenuPurple from '/public/images/drawer_menu_purple.svg';
-import MenuWhite from '/public/images/drawer_menu_white.svg';
+import MenuPurple from '/public/images/menu/drawer_menu_purple.svg';
+import MenuWhite from '/public/images/menu/drawer_menu_white.svg';
 import { FlexCenter } from '@/components/styled-components/Flex';
 
 const HeaderRoutesResponsive = () => {

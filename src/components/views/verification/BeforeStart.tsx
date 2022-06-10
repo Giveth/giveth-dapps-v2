@@ -6,16 +6,12 @@ import { ContentSeparator, BtnContainer } from './VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
 import { client } from '@/apollo/apolloClient';
 import { CREATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
-import useDetectDevice from '@/hooks/useDetectDevice';
 
 const BeforeStart = () => {
 	const { verificationData, setVerificationData, setStep } =
 		useVerificationData();
 	const router = useRouter();
 	const { slug } = router.query;
-
-	const device = useDetectDevice();
-	console.log('device', device);
 
 	const saveStep = () => {
 		async function sendReq() {
@@ -30,9 +26,10 @@ const BeforeStart = () => {
 		if (verificationData?.id) {
 			setStep(1);
 		} else {
-			sendReq();
+			sendReq().then();
 		}
 	};
+
 	return (
 		<>
 			<div>
