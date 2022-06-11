@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import { addApolloState, initializeApollo } from '@/apollo/apolloClient';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
@@ -17,9 +16,7 @@ const ProjectsRoute = (props: IProjectsRoute) => {
 	const { projects, totalCount, categories } = props;
 	return (
 		<>
-			<Head>
-				<GeneralMetatags info={projectsMetatags} />
-			</Head>
+			<GeneralMetatags info={projectsMetatags} />
 			<ProjectsIndex
 				projects={projects}
 				totalCount={totalCount}

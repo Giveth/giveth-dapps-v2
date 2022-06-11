@@ -21,6 +21,7 @@ export function sendRequest(
 		? {
 				...defaultHeaders,
 				Authorization,
+				authVersion: '2',
 		  }
 		: { ...defaultHeaders };
 	try {

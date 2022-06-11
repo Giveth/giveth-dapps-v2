@@ -5,6 +5,7 @@ import {
 	neutralColors,
 	SublineBold,
 } from '@giveth/ui-design-system';
+import { ChangeEvent } from 'react';
 
 import { mediaQueries } from '@/lib/constants/constants';
 import useNewsletterSubscription from '@/hooks/useNewsletterSubscription';
@@ -44,9 +45,9 @@ const JoinSubscriptionCard = () => {
 							<EmailInput
 								placeholder='Your Email Address'
 								error={error}
-								onChange={(
-									e: React.ChangeEvent<HTMLInputElement>,
-								) => setEmail(e.target.value)}
+								onChange={(e: ChangeEvent<HTMLInputElement>) =>
+									setEmail(e.target.value)
+								}
 							/>
 							{error && (
 								<InvalidEmail>
@@ -68,8 +69,6 @@ const JoinSubscriptionCard = () => {
 };
 
 const CustomizedButtonStyled = styled(ButtonStyled)`
-	margin-top: 10px;
-	min-width: 280px;
 	&:disabled {
 		background-color: ${neutralColors.gray[400]};
 		color: white;

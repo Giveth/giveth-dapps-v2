@@ -12,6 +12,7 @@ const BASE_ROUTE = 'https://serve.giveth.io';
 
 const config: EnvConfig = {
 	BACKEND_LINK: `${BASE_ROUTE}/graphql`,
+	FRONTEND_LINK: 'https://staging.giveth.io',
 	MICROSERVICES: {
 		authentication: `${BASE_ROUTE}/siweauthmicroservice/v1`,
 	},
@@ -125,7 +126,6 @@ const config: EnvConfig = {
 				LM_ADDRESS: '0x9d23d449af3e2c07a286688c85ff5d3d4c219d79',
 				type: StakingType.UNISWAPV2_CULT_ETH,
 				platform: StakingPlatform.UNISWAP,
-				network: 42,
 				title: 'CULT / ETH',
 				description: '50% CULT, 50% ETH',
 				provideLiquidityLink:
@@ -207,8 +207,8 @@ const config: EnvConfig = {
 				LM_ADDRESS: '0xe2c436E177C39A5D18AF6923Fc2Fc673f4729C05',
 				type: StakingType.HONEYSWAP_GIV_DAI,
 				platform: StakingPlatform.HONEYSWAP,
-				title: 'GIV / DAI',
-				description: '50% GIV, 50% DAI',
+				title: 'GIV / xDAI',
+				description: '50% GIV, 50% xDAI',
 				provideLiquidityLink:
 					'https://app.honeyswap.org/#/add/0x83a8eea6427985C523a0c4d9d3E62C051B6580d3/0x97c4dD5cE204b8c1F2f3B8fBfBBDC771d867d18c',
 				unit: 'LP',
@@ -251,7 +251,6 @@ const config: EnvConfig = {
 				LM_ADDRESS: '0x06851400866e065972ff21e1ECdE035b4772736d',
 				type: StakingType.HONEYSWAP_FOX_HNY,
 				platform: StakingPlatform.HONEYSWAP,
-				network: 100,
 				title: 'FOX / HNY',
 				description: '50% FOX, 50% HNY',
 				provideLiquidityLink:

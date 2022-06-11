@@ -14,48 +14,62 @@ import twitter_icon from '/public/images/twitter_icon.svg';
 import youtube_icon from '/public/images/youtube_icon.svg';
 import reddit_icon from '/public/images/reddit_icon.svg';
 import links from '@/lib/constants/links';
-import { mediaQueries } from '@/lib/constants/constants';
 import JoinSubscriptionCard from './JoinSubscriptionCard';
+import { FlexCenter } from '@/components/styled-components/Flex';
+import { ButtonStyled } from '@/components/GeneralCard.sc';
+import { Container } from '@/components/Grid';
 
 const JoinEngage = () => {
 	return (
-		<UpperSection>
-			<LeadText>
-				Giveth is first and foremost a community of givers and
-				changemakers. We are passionate people working together to build
-				a crypto-economic system that can reward giving to good causes.
-				Our project is open-source, decentralized, altruistic, and
-				community-led.
-			</LeadText>
-			<br />
-			<LeadText>
-				Follow our social media, and come say hello in a channel below.
-				We look forward to welcoming you!
-			</LeadText>
-			<div style={{ position: 'absolute' }}>
+		<>
+			<ContainerStyled>
+				<LeadText>
+					Giveth is first and foremost a community of givers and
+					changemakers. We are passionate people working together to
+					build a crypto-economic system that can reward giving to
+					good causes. Our project is open-source, decentralized,
+					altruistic, and community-led.
+				</LeadText>
+				<br />
+				<LeadText>
+					You can join our Community Call every Thursday in Discord,
+					follow our social media, or come say hello in a channel
+					below. We look forward to welcoming you!
+				</LeadText>
+				<br />
+				<FlexCenter>
+					<ButtonStyled
+						buttonType='primary'
+						label='Add to Calendar'
+						onClick={() => window.open(links.ADD_TO_CALENDAR)}
+					/>
+				</FlexCenter>
+
+				<Section>
+					<Title>Engage</Title>
+					<CardsSection>
+						{engageArray.map(i => (
+							<Card key={i.title} content={i} />
+						))}
+					</CardsSection>
+				</Section>
+				<Section>
+					<Title>Consume</Title>
+					<CardsConsumeSection>
+						{consumeArray.map(i => (
+							<Card key={i.title} content={i} isHorizontal />
+						))}
+						<JoinSubscriptionCard />
+					</CardsConsumeSection>
+				</Section>
+			</ContainerStyled>
+			<YellowFlowerComponent>
 				<Image src={YellowFlower} alt='yellow flower' />
-			</div>
-			<Section>
-				<Title>Engage</Title>
-				<CardsSection>
-					{engageArray.map(i => (
-						<Card key={i.title} content={i} />
-					))}
-				</CardsSection>
-			</Section>
-			<Section>
-				<Title>Consume</Title>
-				<CardsConsumeSection>
-					{consumeArray.map(i => (
-						<Card key={i.title} content={i} isHorizontal />
-					))}
-					<JoinSubscriptionCard />
-				</CardsConsumeSection>
-				<BlueFlowerComponent>
-					<Image src={BlueFlower} alt='blue flower' />
-				</BlueFlowerComponent>
-			</Section>
-		</UpperSection>
+			</YellowFlowerComponent>
+			<BlueFlowerComponent>
+				<Image src={BlueFlower} alt='blue flower' />
+			</BlueFlowerComponent>
+		</>
 	);
 };
 
@@ -129,30 +143,27 @@ const consumeArray = [
 	},
 ];
 
-const UpperSection = styled.div`
-	padding: 150px 0 36px;
-	color: white;
-	overflow: hidden;
+const ContainerStyled = styled(Container)`
+	max-width: 1205px;
+	margin-bottom: 80px;
+	margin-top: 80px;
 	position: relative;
-
-	${mediaQueries.tablet} {
-		padding: 150px 0;
-	}
+	z-index: 1;
 `;
 const LeadText = styled(Lead)`
 	color: ${brandColors.giv[900]};
-	margin: 0 20%;
+	max-width: 900px;
+	margin: 0 auto;
 `;
 const Title = styled(H2)`
 	color: ${brandColors.giv[700]};
-	margin: 7% 20%;
+	margin: 100px auto;
 	position: relative;
 	z-index: 1;
 `;
 const Section = styled.div`
 	position: relative;
 	text-align: center;
-	margin: 2% 0 0 0;
 `;
 const CardsSection = styled.div`
 	display: flex;
@@ -161,21 +172,22 @@ const CardsSection = styled.div`
 	margin: 50px auto 0;
 	gap: 25px;
 	position: relative;
-	max-width: 1250px;
 	z-index: 3;
-	padding: 18px;
 `;
-const CardsConsumeSection = styled.div`
-	display: flex;
+const CardsConsumeSection = styled(FlexCenter)`
 	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	padding: 18px;
+	gap: 25px;
 `;
 const BlueFlowerComponent = styled.div`
 	position: absolute;
 	right: 0;
-	top: -100px;
+	top: 3100px;
+	z-index: 0;
+`;
+const YellowFlowerComponent = styled.div`
+	position: absolute;
+	left: 0;
+	top: 1100px;
 	z-index: 0;
 `;
 

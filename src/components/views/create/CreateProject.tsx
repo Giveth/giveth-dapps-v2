@@ -25,7 +25,11 @@ import {
 	UPDATE_PROJECT,
 } from '@/apollo/gql/gqlProjects';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
-import { IProjectCreation, IProjectEdition } from '@/apollo/types/types';
+import {
+	IProject,
+	IProjectCreation,
+	IProjectEdition,
+} from '@/apollo/types/types';
 import {
 	CategoryInput,
 	DescriptionInput,
@@ -79,7 +83,7 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 	const isDraft = project?.status.name === EProjectStatus.DRAFT;
 	const defaultImpactLocation = project?.impactLocation || '';
 
-	const [creationSuccessful, setCreationSuccessful] = useState<any>(null);
+	const [creationSuccessful, setCreationSuccessful] = useState<IProject>();
 	const [showGuidelineModal, setShowGuidelineModal] = useState(false);
 	const [name, setName] = useState(project?.title || '');
 	const [description, setDescription] = useState(project?.description || '');
@@ -209,6 +213,7 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 	const onSubmit = async (drafted?: boolean) => {
 		try {
 			if (!isReadyToPublish()) return;
+			setFormChange(false);
 
 			const address = isAddressENS(walletAddress)
 				? await getAddressFromENS(walletAddress, library)

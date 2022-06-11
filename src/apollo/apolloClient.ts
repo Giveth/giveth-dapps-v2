@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { ApolloClient, InMemoryCache, ApolloLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
+import { onError } from '@apollo/client/link/error';
 import gql from 'graphql-tag';
 import { createUploadLink } from 'apollo-upload-client';
 import merge from 'deepmerge';
@@ -8,6 +9,8 @@ import isEqual from 'lodash.isequal';
 import { isSSRMode } from '@/lib/helpers';
 import links from '@/lib/constants/links';
 import StorageLabel from '@/lib/localStorage';
+import { store } from '@/features/store';
+import { signOut } from '@/features/user/user.thunks';
 
 let apolloClient: any;
 
@@ -42,9 +45,30 @@ function createApolloClient() {
 		};
 	});
 
+	const errorLink = onError(({ graphQLErrors, networkError, operation }) => {
+		if (graphQLErrors)
+			graphQLErrors.forEach(({ message, locations, path }) => {
+				console.log(`[GraphQL error]: ${message}`, { locations, path });
+				if (message.toLowerCase().includes('authentication required')) {
+					//   removes token and user from store
+					store.dispatch(signOut());
+				}
+			});
+
+		if (networkError) console.log(`[Network error]: ${networkError}`);
+		const { response } = operation.getContext();
+		if (response.status === 401) {
+			//   removes token and user from store
+			const currentToken: string | null = !ssrMode
+				? localStorage.getItem(StorageLabel.TOKEN)
+				: null;
+			store.dispatch(signOut(currentToken));
+		}
+	});
+
 	return new ApolloClient({
 		ssrMode,
-		link: authLink.concat(httpLink),
+		link: errorLink.concat(authLink.concat(httpLink)),
 		cache: new InMemoryCache(),
 		defaultOptions: {
 			watchQuery: {

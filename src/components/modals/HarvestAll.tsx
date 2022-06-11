@@ -62,6 +62,7 @@ import { getPoolIconWithName } from '../cards/BaseStakingCard';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
 import { LiquidityPosition } from '@/types/nfts';
+import { Flex } from '../styled-components/Flex';
 import type { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 
 interface IHarvestAllModalProps extends IModal {
@@ -418,10 +419,9 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 										{givBackStream != 0 && (
 											<>
 												<GIVbackStreamDesc>
-													Recieved from GIVbacks
+													[ Recieved from GIVbacks
 												</GIVbackStreamDesc>
 												<BreakdownRate>
-													+
 													{formatWeiHelper(
 														givBackStream,
 														config.TOKEN_PRECISION,
@@ -432,13 +432,18 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 													{tokenSymbol}/week
 													<IconWithTooltip
 														icon={
-															<IconHelp
-																size={16}
-																color={
-																	brandColors
-																		.deep[100]
-																}
-															/>
+															<Flex gap='4px'>
+																<IconHelp
+																	size={16}
+																	color={
+																		brandColors
+																			.deep[100]
+																	}
+																/>
+																<GIVbackStreamDesc>
+																	]
+																</GIVbackStreamDesc>
+															</Flex>
 														}
 														direction={'left'}
 													>

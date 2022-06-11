@@ -52,7 +52,9 @@ import { ORGANIZATION } from '@/lib/constants/organizations';
 import { getERC20Info } from '@/lib/contracts';
 import GIVBackToast from '@/components/views/donate/GIVBackToast';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
-import FailedDonation from '@/components/modals/FailedDonation';
+import FailedDonation, {
+	EDonationFailedType,
+} from '@/components/modals/FailedDonation';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import {
 	setShowSignWithWallet,
@@ -117,7 +119,8 @@ const CryptoDonation = (props: {
 	const [acceptedTokens, setAcceptedTokens] =
 		useState<IProjectAcceptedToken[]>();
 	const [acceptedChains, setAcceptedChains] = useState<number[]>();
-	const [showFailedModal, setShowFailedModal] = useState(false);
+	const [failedModalType, setFailedModalType] =
+		useState<EDonationFailedType>();
 	const [txHash, setTxHash] = useState<string>();
 
 	const stopPolling = useRef<any>(null);
@@ -342,7 +345,7 @@ const CryptoDonation = (props: {
 				<DonateModal
 					setShowModal={setShowDonateModal}
 					setSuccessDonation={setSuccessDonation}
-					setShowFailedModal={setShowFailedModal}
+					setFailedModalType={setFailedModalType}
 					setTxHash={setTxHash}
 					project={project}
 					token={selectedToken}
@@ -354,10 +357,11 @@ const CryptoDonation = (props: {
 					}
 				/>
 			)}
-			{showFailedModal && (
+			{failedModalType && (
 				<FailedDonation
 					txUrl={formatTxLink(networkId, txHash)}
-					setShowModal={setShowFailedModal}
+					setShowModal={() => setFailedModalType(undefined)}
+					type={failedModalType}
 				/>
 			)}
 
