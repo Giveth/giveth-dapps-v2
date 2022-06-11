@@ -6,6 +6,8 @@ import {
 	IconUnlock32,
 	H5,
 	H6,
+	B,
+	P,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
@@ -52,6 +54,24 @@ export const LockupDetailsModal: FC<IModal> = ({ setShowModal }) => {
 
 				<LockedContainer>
 					<Subtitle>Locked GIV</Subtitle>
+					<LockedTable>
+						<TableHeader>GIV Amount</TableHeader>
+						<TableHeader>Rounds Locked for</TableHeader>
+						<TableHeader>Multiplier</TableHeader>
+						<TableHeader>APR</TableHeader>
+						<TableHeader>Unlock Date</TableHeader>
+						{[1, 2, 3, 4, 5, 6, 7, 8].map(() => {
+							return (
+								<RowWrapper>
+									<TableCell>823</TableCell>
+									<TableCell>2 Rounds</TableCell>
+									<TableCell>x2</TableCell>
+									<TableCell>55%</TableCell>
+									<TableCell>20 April, 2023</TableCell>
+								</RowWrapper>
+							);
+						})}
+					</LockedTable>
 				</LockedContainer>
 
 				<StakedContainer>
@@ -73,7 +93,7 @@ export const LockupDetailsModal: FC<IModal> = ({ setShowModal }) => {
 };
 
 const LockupDetailsContainer = styled.div`
-	padding: 24px 32px 24px;
+	padding: 24px;
 	background-repeat: no-repeat;
 	width: 552px;
 	color: ${neutralColors.gray[100]};
@@ -135,4 +155,38 @@ const SubtitleWithTooltip = styled(Subtitle)`
 
 const SubtitleH5 = styled(H5)`
 	font-weight: 700;
+`;
+
+const LockedTable = styled.div`
+	display: grid;
+	grid-template-columns: 1fr 2fr 1fr 1fr 2fr;
+	overflow: auto;
+	min-width: 489px;
+	height: 364px;
+	margin: 10px 0 0 0;
+	color: ${brandColors.deep[100]};
+`;
+
+const TableHeader = styled(B)`
+	display: flex;
+	height: 40px;
+	border-bottom: 1px solid ${brandColors.deep[100]};
+	align-items: center;
+	padding: 32px 29px 32px 0;
+	margin: 8px 0;
+`;
+
+const RowWrapper = styled.div`
+	display: contents;
+	& > div:first-child {
+		padding-left: 4px;
+	}
+`;
+
+const TableCell = styled(P)`
+	display: flex;
+	height: 60px;
+	border-bottom: 1px solid ${brandColors.deep[100]};
+	align-items: center;
+	gap: 8px;
 `;
