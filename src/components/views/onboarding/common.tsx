@@ -32,6 +32,7 @@ export const OnboardActions: FC<IOnboardActions> = ({
 	const dispatch = useAppDispatch();
 	const isSignedIn = useAppSelector(state => state.user.isSignedIn);
 	const { account } = useWeb3React();
+
 	useEffect(() => {
 		if (!isSignedIn) {
 			dispatch(setShowSignWithWallet(true));

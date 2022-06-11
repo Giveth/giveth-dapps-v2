@@ -19,16 +19,14 @@ const CreateIndex = () => {
 
 	useEffect(() => {
 		if (isEnabled) {
-			if (!isRegistered) {
-				dispatch(setShowCompleteProfile(true));
-				return;
-			} else {
-				dispatch(setShowCompleteProfile(false));
-			}
 			if (!isSignedIn) {
 				dispatch(setShowSignWithWallet(true));
+				return;
+			}
+			if (!isRegistered && isSignedIn) {
+				dispatch(setShowCompleteProfile(true));
 			} else {
-				dispatch(setShowSignWithWallet(false));
+				dispatch(setShowCompleteProfile(false));
 			}
 		} else {
 			dispatch(setShowWelcomeModal(true));

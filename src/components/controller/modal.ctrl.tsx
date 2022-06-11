@@ -22,6 +22,7 @@ const ModalController = () => {
 		showWalletModal,
 		showWelcomeModal,
 	} = useAppSelector(state => state.modal);
+	const isSignedIn = useAppSelector(state => state.user.isSignedIn);
 	const dispatch = useAppDispatch();
 
 	const { active } = useWeb3React();
@@ -31,6 +32,12 @@ const ModalController = () => {
 			dispatch(setShowWelcomeModal(false));
 		}
 	}, [active]);
+
+	useEffect(() => {
+		if (isSignedIn && showSignWithWallet) {
+			dispatch(setShowSignWithWallet(false));
+		}
+	}, [isSignedIn]);
 
 	return (
 		<>
