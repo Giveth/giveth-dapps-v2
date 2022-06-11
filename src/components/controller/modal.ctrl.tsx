@@ -12,7 +12,7 @@ import {
 	setShowFirstWelcomeModal,
 	setShowWalletModal,
 	setShowSignWithWallet,
-} from '@/features/modal/modal.sclie';
+} from '@/features/modal/modal.slice';
 
 const ModalController = () => {
 	const {

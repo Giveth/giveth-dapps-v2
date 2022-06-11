@@ -20,7 +20,7 @@ import LowerShields from '@/components/modals/LowerShields';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { useAppDispatch } from '@/features/hooks';
-import { setShowWalletModal } from '@/features/modal/modal.sclie';
+import { setShowWalletModal } from '@/features/modal/modal.slice';
 
 const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 	const [showLowerShields, setShowLowerShields] = useState<boolean>();
