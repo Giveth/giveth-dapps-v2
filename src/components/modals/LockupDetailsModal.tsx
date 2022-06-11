@@ -60,9 +60,9 @@ export const LockupDetailsModal: FC<IModal> = ({ setShowModal }) => {
 						<TableHeader>Multiplier</TableHeader>
 						<TableHeader>APR</TableHeader>
 						<TableHeader>Unlock Date</TableHeader>
-						{[1, 2, 3, 4, 5, 6, 7, 8].map(() => {
+						{[1, 2, 3, 4, 5, 6, 7, 8].map((i, key) => {
 							return (
-								<RowWrapper>
+								<RowWrapper key={key}>
 									<TableCell>823</TableCell>
 									<TableCell>2 Rounds</TableCell>
 									<TableCell>x2</TableCell>
