@@ -26,8 +26,8 @@ const moduleExports = withBundleAnalyzer({
 		// ssr and displayName are configured by default
 		styledComponents: true,
 	},
-	webpack(config, { isServer }) {
-		if (isServer) {
+	webpack: (config, { isServer, dev }) => {
+		if (isServer && !dev) {
 			generateRobotsTxt();
 		}
 		return config;
