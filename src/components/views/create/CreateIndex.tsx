@@ -27,8 +27,6 @@ const CreateIndex = () => {
 			}
 			if (!isRegistered && isSignedIn) {
 				dispatch(setShowCompleteProfile(true));
-			} else {
-				dispatch(setShowCompleteProfile(false));
 			}
 		} else {
 			dispatch(setShowWelcomeModal(true));
