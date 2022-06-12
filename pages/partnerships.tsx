@@ -1,12 +1,11 @@
-import Head from 'next/head';
+import { GeneralMetatags } from '@/components/Metatag';
 import PartnershipsIndex from '@/components/views/partnerships/PartnershipsIndex';
+import { partnershipMetatags } from '@/content/metatags';
 
 const PartnershipsRoute = () => {
 	return (
 		<>
-			<Head>
-				<title>Partnerships | Giveth</title>
-			</Head>
+			<GeneralMetatags info={partnershipMetatags} />
 			<PartnershipsIndex />
 		</>
 	);
