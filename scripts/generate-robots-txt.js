@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const publicPath = path.join(__dirname, 'public');
+const publicPath = path.join(__dirname, '..', 'public');
 
 function generateRobotsTxt() {
 	console.log('VERCEL_ENV: ', process.env.VERCEL_ENV);
@@ -22,7 +22,7 @@ function generateRobotsTxt() {
 			} public/robots.txt`,
 		);
 	} catch (error) {
-		console.log(`Cannot Generate a public/robots.txt`);
+		console.log(`Cannot Generate a public/robots.txt`, error);
 	}
 }
 

@@ -8,6 +8,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 	enabled: process.env.ANALYZE === 'true',
 });
 var pjson = require('./package.json');
+const generateRobotsTxt = require('./scripts/generate-robots-txt');
 
 const moduleExports = withBundleAnalyzer({
 	// Your existing module.exports
@@ -24,6 +25,12 @@ const moduleExports = withBundleAnalyzer({
 	compiler: {
 		// ssr and displayName are configured by default
 		styledComponents: true,
+	},
+	webpack(config, { isServer }) {
+		if (isServer) {
+			generateRobotsTxt();
+		}
+		return config;
 	},
 });
 
