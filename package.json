@@ -3,6 +3,7 @@
 	"version": "2.0.8",
 	"private": true,
 	"scripts": {
+		"prebuild": "./scripts/generate-robots-txt.js",
 		"build": "next build",
 		"dev": "next dev",
 		"lint": "eslint . --ext .ts --ext .tsx",
