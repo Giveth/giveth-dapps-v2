@@ -309,7 +309,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 			headerTitle={modalTitle}
 			headerTitlePosition={'left'}
 		>
-			<>
+			<HarvestAllModalContainer>
 				{(state === HarvestStates.HARVEST ||
 					state === HarvestStates.HARVESTING) &&
 					(sumLiquid.isZero() ? (
@@ -624,7 +624,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 						/>
 					</HarvestAllModalContainer>
 				)}
-			</>
+			</HarvestAllModalContainer>
 		</Modal>
 	);
 };
