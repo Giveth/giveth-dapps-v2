@@ -3,19 +3,24 @@ import { useEffect } from 'react';
 
 import ClaimView from '@/components/views/claim/Claim.view';
 import { ClaimProvider } from '@/context/claim.context';
-import { ETheme, useGeneral } from '@/context/general.context';
+import { useAppDispatch } from '@/features/hooks';
+import {
+	setDarkTheme,
+	setLightTheme,
+	setShowHeader,
+} from '@/features/general/general.sclie';
 
 export default function GIVdropRoute() {
-	const { setShowHeader, setTheme } = useGeneral();
+	const dispatch = useAppDispatch();
 
 	useEffect(() => {
-		setShowHeader(false);
-		setTheme(ETheme.Dark);
+		dispatch(setShowHeader(false));
+		dispatch(setDarkTheme());
 		return () => {
-			setShowHeader(true);
-			setTheme(ETheme.Light);
+			dispatch(setShowHeader(true));
+			dispatch(setLightTheme());
 		};
-	}, [setShowHeader, setTheme]);
+	}, [dispatch]);
 
 	return (
 		<>
