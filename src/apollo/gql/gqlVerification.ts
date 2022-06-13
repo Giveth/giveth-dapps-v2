@@ -5,6 +5,7 @@ query getCurrentProjectVerificationForm($projectId: Float!){
     getCurrentProjectVerificationForm(projectId: $projectId) {
              id
              isTermAndConditionsAccepted
+			 email
              emailConfirmationToken
              emailConfirmationSent
              emailConfirmationSentAt
@@ -101,6 +102,7 @@ export const CREATE_PROJECT_VERIFICATION = gql`
 		createProjectVerificationForm(slug: $slug) {
 			id
 			isTermAndConditionsAccepted
+			email
 			projectRegistry {
 				organizationDescription
 				isNonProfitOrganization
@@ -150,6 +152,7 @@ export const FETCH_PROJECT_VERIFICATION = gql`
 		getCurrentProjectVerificationForm(slug: $slug) {
 			id
 			isTermAndConditionsAccepted
+			email
 			emailConfirmationToken
 			emailConfirmationSent
 			emailConfirmationSentAt
@@ -210,6 +213,7 @@ export const UPDATE_PROJECT_VERIFICATION = gql`
 		) {
 			id
 			isTermAndConditionsAccepted
+			email
 			emailConfirmationToken
 			emailConfirmationSent
 			emailConfirmationSentAt
@@ -269,6 +273,7 @@ export const SEND_EMAIL_VERIFICATION = gql`
 		) {
 			id
 			isTermAndConditionsAccepted
+			email
 			emailConfirmationToken
 			emailConfirmationSent
 			emailConfirmationSentAt
@@ -331,6 +336,7 @@ export const SEND_EMAIL_VERIFICATION_TOKEN = gql`
 		) {
 			id
 			isTermAndConditionsAccepted
+			email
 			emailConfirmationToken
 			emailConfirmationSent
 			emailConfirmationSentAt
