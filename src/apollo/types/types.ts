@@ -205,7 +205,7 @@ export interface IProjectVerification {
 	managingFunds?: IProjectManagingFunds;
 	emailConfirmationTokenExpiredAt?: string;
 	user: IUser;
-	project: IProjectUpdate;
+	project: IProject;
 	status: PROJECT_VERIFICATION_STATUSES;
 }
 

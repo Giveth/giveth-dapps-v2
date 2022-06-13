@@ -5,7 +5,6 @@ import links from '@/lib/constants/links';
 import { ContentSeparator, BtnContainer } from './VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
 import { client } from '@/apollo/apolloClient';
-import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 import { CREATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
 
 const BeforeStart = () => {
@@ -16,18 +15,9 @@ const BeforeStart = () => {
 
 	const saveStep = () => {
 		async function sendReq() {
-			const { data: projectData } = await client.query({
-				query: FETCH_PROJECT_BY_SLUG,
-				variables: {
-					slug,
-				},
-			});
-			const id = projectData.projectBySlug.id;
 			const { data } = await client.mutate({
 				mutation: CREATE_PROJECT_VERIFICATION,
-				variables: {
-					projectId: Number(id),
-				},
+				variables: { slug },
 			});
 			setVerificationData(data.createProjectVerificationForm);
 			setStep(1);
@@ -36,9 +26,10 @@ const BeforeStart = () => {
 		if (verificationData?.id) {
 			setStep(1);
 		} else {
-			sendReq();
+			sendReq().then();
 		}
 	};
+
 	return (
 		<>
 			<div>

@@ -190,10 +190,12 @@ const PersonalInfo = () => {
 };
 
 const EmailSection = styled(Flex)`
-	gap: 24px;
+	gap: 0 24px;
 	align-items: center;
+	flex-wrap: wrap;
 	> :first-child {
 		width: 100%;
+		min-width: 250px;
 	}
 `;
 

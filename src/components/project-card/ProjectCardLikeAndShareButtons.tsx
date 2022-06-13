@@ -16,7 +16,7 @@ import { showToastError } from '@/lib/helpers';
 import { Flex } from '../styled-components/Flex';
 import { IProject } from '@/apollo/types/types';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { setShowSignWithWallet } from '@/features/modal/modal.sclie';
+import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import {
 	decrementLikedProjectsCount,
 	incrementLikedProjectsCount,

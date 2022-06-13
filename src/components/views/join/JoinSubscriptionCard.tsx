@@ -5,6 +5,7 @@ import {
 	neutralColors,
 	SublineBold,
 } from '@giveth/ui-design-system';
+import { ChangeEvent } from 'react';
 
 import { mediaQueries } from '@/lib/constants/constants';
 import useNewsletterSubscription from '@/hooks/useNewsletterSubscription';
@@ -27,11 +28,28 @@ const JoinSubscriptionCard = () => {
 		successSubscription,
 	} = useNewsletterSubscription();
 	const titleText = successSubscription
-		? 'Subscribed!'
+		? `You're In!`
 		: 'Subscribe to our newsletter';
-	const captionText = successSubscription
-		? 'Thank you for subscribing to Giveth newsletter. Our first news are coming to your inbox soon.'
-		: 'Subscribe to our newsletter to get the latest news, updates and amazing offers delivered directly straight to your mailbox!';
+	const captionText = successSubscription ? (
+		<span>
+			We just sent you an email to confirm your subscription! Once you do,
+			you'll receive the next issue of our newsletter in your inbox. If
+			you'd like to view previous issues, visit our{' '}
+			<StyledLink
+				href='http://news.giveth.io/'
+				target='_blank'
+				rel='noreferrer'
+			>
+				GIVnews page
+			</StyledLink>
+			.
+		</span>
+	) : (
+		<span>
+			Subscribe to our newsletter to get the latest news, updates and
+			amazing offers delivered directly straight to your mailbox!
+		</span>
+	);
 	return (
 		<HorizontalWrap>
 			<Image src={News_letter} alt='title' />
@@ -39,28 +57,39 @@ const JoinSubscriptionCard = () => {
 				<Title>{titleText}</Title>
 				<Caption fullWidth>{captionText} </Caption>
 				{!successSubscription && (
-					<SubscriptionActionWrapper>
-						<InputWrapper>
-							<EmailInput
-								placeholder='Your Email Address'
-								error={error}
-								onChange={(
-									e: React.ChangeEvent<HTMLInputElement>,
-								) => setEmail(e.target.value)}
+					<form
+						action='http://news.giveth.io/add_subscriber'
+						method='post'
+						id='revue-form'
+						name='revue-form'
+						target='_blank'
+						onSubmit={submitSubscription}
+					>
+						<SubscriptionActionWrapper>
+							<InputWrapper>
+								<EmailInput
+									placeholder='Your Email Address'
+									error={error}
+									name='member[email]'
+									id='member_email'
+									onChange={(
+										e: ChangeEvent<HTMLInputElement>,
+									) => setEmail(e.target.value)}
+								/>
+								{error && (
+									<InvalidEmail>
+										Please insert a valid email address!
+									</InvalidEmail>
+								)}
+							</InputWrapper>
+							<CustomizedButtonStyled
+								disabled={!validateEmail(email)}
+								label='Subscribe'
+								buttonType='primary'
+								type='submit'
 							/>
-							{error && (
-								<InvalidEmail>
-									Please insert a valid email address!
-								</InvalidEmail>
-							)}
-						</InputWrapper>
-						<CustomizedButtonStyled
-							disabled={!validateEmail(email)}
-							label='Subscribe'
-							buttonType='primary'
-							onClick={submitSubscription}
-						/>
-					</SubscriptionActionWrapper>
+						</SubscriptionActionWrapper>
+					</form>
 				)}
 			</HorizontalTitleSection>
 		</HorizontalWrap>
@@ -68,8 +97,6 @@ const JoinSubscriptionCard = () => {
 };
 
 const CustomizedButtonStyled = styled(ButtonStyled)`
-	margin-top: 10px;
-	min-width: 280px;
 	&:disabled {
 		background-color: ${neutralColors.gray[400]};
 		color: white;
@@ -117,6 +144,11 @@ const SubscriptionActionWrapper = styled.div`
 const InputWrapper = styled.div`
 	width: 100%;
 	position: relative;
+`;
+
+const StyledLink = styled.a`
+	color: ${brandColors.pinky[500]};
+	cursor: pointer;
 `;
 
 export default JoinSubscriptionCard;

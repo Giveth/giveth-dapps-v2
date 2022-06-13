@@ -97,8 +97,8 @@ export const FETCH_PROJECT_BY_SLUG = `
 `;
 
 export const CREATE_PROJECT_VERIFICATION = gql`
-	mutation createProjectVerificationForm($projectId: Float!) {
-		createProjectVerificationForm(projectId: $projectId) {
+	mutation createProjectVerificationForm($slug: String!) {
+		createProjectVerificationForm(slug: $slug) {
 			id
 			isTermAndConditionsAccepted
 			projectRegistry {
@@ -194,6 +194,7 @@ export const FETCH_PROJECT_VERIFICATION = gql`
 			project {
 				id
 				slug
+				title
 			}
 			status
 		}

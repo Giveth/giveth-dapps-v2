@@ -20,7 +20,7 @@ import { Arc } from '@/components/styled-components/Arc';
 import { HomeContainer } from '@/components/views/homepage/Home.sc';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { setShowCompleteProfile } from '@/features/modal/modal.sclie';
+import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 
 const HomePurpleSection = () => {
 	const router = useRouter();
@@ -158,7 +158,7 @@ const DotMustard = styled(Arc)`
 const MustardThing = styled.div`
 	display: none;
 
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		display: unset;
 	}
 `;

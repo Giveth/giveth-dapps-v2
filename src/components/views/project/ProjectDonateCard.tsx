@@ -40,7 +40,7 @@ import { mediaQueries } from '@/lib/constants/constants';
 import ProjectCardOrgBadge from '../../project-card/ProjectCardOrgBadge';
 import ExternalLink from '@/components/ExternalLink';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { setShowSignWithWallet } from '@/features/modal/modal.sclie';
+import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import {
 	incrementLikedProjectsCount,
 	decrementLikedProjectsCount,
@@ -405,7 +405,7 @@ const Wrapper = styled(motion.div)<{ initialPosition: number }>`
 		border-radius: 40px;
 	}
 
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		max-width: 285px;
 	}
 

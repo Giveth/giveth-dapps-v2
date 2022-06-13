@@ -20,7 +20,7 @@ import LowerShields from '@/components/modals/LowerShields';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { useAppDispatch } from '@/features/hooks';
-import { setShowWalletModal } from '@/features/modal/modal.sclie';
+import { setShowWalletModal } from '@/features/modal/modal.slice';
 
 const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 	const [showLowerShields, setShowLowerShields] = useState<boolean>();
@@ -122,7 +122,7 @@ const BGContainer = styled.div`
 	background-color: ${brandColors.giv[500]};
 	background-image: url('/images/sign_bg.svg');
 	background-repeat: no-repeat;
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		display: block;
 	}
 `;
@@ -135,7 +135,7 @@ const ContentContainer = styled.div`
 	align-self: center;
 	margin: auto;
 	padding: 10px;
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		width: 45%;
 	}
 `;
