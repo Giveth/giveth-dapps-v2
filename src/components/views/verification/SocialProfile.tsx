@@ -2,6 +2,7 @@ import Image from 'next/image';
 import {
 	Button,
 	H6,
+	IconInfo,
 	IconTwitter,
 	neutralColors,
 	P,
@@ -24,9 +25,8 @@ const SocialProfile = () => {
 		<>
 			<div>
 				<H6 weight={700}>Personal Social Media</H6>
-				<br />
 				<Description>
-					<Attention>i</Attention>
+					<IconInfo color={neutralColors.gray[700]} />
 					Please connect to your personal social media profiles. At
 					least one is required.
 				</Description>
@@ -101,19 +101,15 @@ const ButtonSocial = styled(FlexCenter)<{ color?: string }>`
 	cursor: pointer;
 `;
 
-const Attention = styled(FlexCenter)`
-	width: 16px;
-	font-size: 14px;
-	height: 16px;
-	border-radius: 50%;
-	border: 1px solid ${neutralColors.gray[600]};
-`;
-
 const Description = styled(P)`
 	display: flex;
+	margin-top: 24px;
 	align-items: center;
 	gap: 10px;
 	color: ${neutralColors.gray[700]};
+	> :first-child {
+		flex-shrink: 0;
+	}
 `;
 
 export default SocialProfile;

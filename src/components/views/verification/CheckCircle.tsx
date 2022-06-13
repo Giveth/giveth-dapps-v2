@@ -16,6 +16,7 @@ const Container = styled(FlexCenter)`
 	border-radius: 50%;
 	border: 3px solid ${semanticColors.jade[100]};
 	background: ${semanticColors.jade[500]};
+	flex-shrink: 0;
 `;
 
 export default CheckCircle;

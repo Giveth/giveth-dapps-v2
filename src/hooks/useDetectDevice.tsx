@@ -4,7 +4,7 @@ import { deviceSize } from '@/lib/constants/constants';
 
 function getWidth(): number {
 	if (isSSRMode) {
-		return 0;
+		return 2000;
 	}
 	const { innerWidth: width } = window;
 	return width;

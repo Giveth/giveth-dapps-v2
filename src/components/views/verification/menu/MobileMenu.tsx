@@ -6,8 +6,8 @@ import { useVerificationData } from '@/context/verification.context';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { ProgressBar } from '@/components/views/verification/common';
 import menuList from '@/components/views/verification/menu/menuList';
-import MenuIcon from '/public/images/menu/drawer_menu_black.svg';
 import MenuModal from '@/components/views/verification/menu/MenuModal';
+import MenuIcon from '/public/images/menu/drawer_menu_black.svg';
 
 const MobileMenu = () => {
 	const [showMenu, setShowMenu] = useState(false);

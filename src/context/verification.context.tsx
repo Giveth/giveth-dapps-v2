@@ -1,4 +1,10 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import {
+	createContext,
+	ReactNode,
+	useContext,
+	useEffect,
+	useState,
+} from 'react';
 import { useRouter } from 'next/router';
 import { captureException } from '@sentry/nextjs';
 import { IProjectVerification } from '@/apollo/types/types';
@@ -28,11 +34,7 @@ const VerificationContext = createContext<IVerificationContext>({
 
 VerificationContext.displayName = 'VerificationContext';
 
-export const VerificationProvider = ({
-	children,
-}: {
-	children: React.ReactNode;
-}) => {
+export const VerificationProvider = ({ children }: { children: ReactNode }) => {
 	const [step, setStep] = useState(0);
 	const [verificationData, setVerificationData] =
 		useState<IProjectVerification>();
