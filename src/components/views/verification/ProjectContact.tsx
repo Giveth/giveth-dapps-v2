@@ -6,6 +6,7 @@ import {
 	IconFacebook,
 	IconInfo,
 	IconInstagram,
+	IconLink,
 	IconLinkedin,
 	IconTwitter,
 	IconYoutube,
@@ -19,17 +20,19 @@ import { useVerificationData } from '@/context/verification.context';
 import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
 import { client } from '@/apollo/apolloClient';
 import { PROJECT_VERIFICATION_STEPS } from '@/apollo/types/types';
+import { regexList } from '@/lib/helpers';
 
 export default function ProjectContact() {
 	const { verificationData, setVerificationData, setStep } =
 		useVerificationData();
-	const { twitter, facebook, linkedin, instagram, youtube } =
+	const { twitter, facebook, linkedin, instagram, youtube, website } =
 		verificationData?.projectContacts || {};
 	const [twitterUrl, setTwitterUrl] = useState(twitter || '');
 	const [facebookUrl, setFacebookUrl] = useState(facebook || '');
 	const [instagramUrl, setInstagramUrl] = useState(instagram || '');
 	const [youtubeUrl, setYoutubeUrl] = useState(youtube || '');
 	const [linkedinUrl, setLinkedinUrl] = useState(linkedin || '');
+	const [websiteUrl, setWebsiteUrl] = useState(website || '');
 	const [isChanged, setIsChanged] = useState(false);
 
 	const handleNext = () => {
@@ -67,13 +70,13 @@ export default function ProjectContact() {
 			<div>
 				<H6 weight={700}>Project Social Media</H6>
 				<InfoWrapper>
-					<IconInfo color={neutralColors.gray[700]} />
+					<IconInfo color={neutralColors.gray[900]} />
 					<PInline>
-						Please provide links to the social media accounts owned
-						by the organization or project.
+						Connect your project's social media accounts to connect
+						with your donors and build trust!
 					</PInline>
 				</InfoWrapper>
-				<br />
+				<PStyled>This is optional</PStyled>
 				<InputWrapper>
 					<Input
 						label='Twitter'
@@ -87,6 +90,7 @@ export default function ProjectContact() {
 						LeftIcon={
 							<IconTwitter color={neutralColors.gray[600]} />
 						}
+						validators={validators.twitter}
 					/>
 					<Input
 						label='Facebook'
@@ -140,6 +144,17 @@ export default function ProjectContact() {
 							<IconYoutube color={neutralColors.gray[600]} />
 						}
 					/>
+					<Input
+						label='Website'
+						placeholder='https://'
+						value={websiteUrl}
+						name='Website'
+						onChange={(e: ChangeEvent<HTMLInputElement>) => {
+							setIsChanged(true);
+							setWebsiteUrl(e.target.value);
+						}}
+						LeftIcon={<IconLink color={neutralColors.gray[600]} />}
+					/>
 				</InputWrapper>
 			</div>
 			<div>
@@ -153,6 +168,20 @@ export default function ProjectContact() {
 	);
 }
 
+const validators = {
+	twitter: [
+		{
+			pattern: regexList.twitter,
+			msg: 'Invalid twitter URL',
+		},
+	],
+};
+
+const PStyled = styled(P)`
+	color: ${neutralColors.gray[700]};
+	margin: 8px 0 24px;
+`;
+
 const InfoWrapper = styled.div`
 	display: flex;
 	align-items: center;
@@ -165,7 +194,7 @@ const InfoWrapper = styled.div`
 
 const PInline = styled(P)`
 	display: inline;
-	color: ${neutralColors.gray[700]};
+	color: ${neutralColors.gray[900]};
 `;
 
 const InputWrapper = styled.div`

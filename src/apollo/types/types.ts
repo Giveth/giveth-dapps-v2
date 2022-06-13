@@ -172,6 +172,7 @@ export interface IProjectContacts {
 	linkedin?: string;
 	instagram?: string;
 	youtube?: string;
+	website?: string;
 }
 
 export interface IProjectMilestones {

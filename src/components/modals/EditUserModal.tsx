@@ -22,6 +22,7 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { IModal } from '@/types/common';
 import { useAppDispatch } from '@/features/hooks';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
+import { regexList } from '@/lib/helpers';
 
 enum EditStatusType {
 	INFO,
@@ -246,8 +247,7 @@ const inputFields = [
 		validators: [
 			{ pattern: /^.{3,}$/, msg: 'Too Short' },
 			{
-				pattern:
-					/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+				pattern: regexList.email,
 				msg: 'Invalid Email Address',
 			},
 		],
@@ -265,8 +265,7 @@ const inputFields = [
 		caption: 'Your home page, blog, or company site.',
 		validators: [
 			{
-				pattern:
-					/^(?:http(s)?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
+				pattern: regexList.url,
 				msg: 'Invalid URL',
 			},
 		],

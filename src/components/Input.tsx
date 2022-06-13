@@ -342,8 +342,8 @@ const InputWrapper = styled.div`
 		padding-left: 20px;
 		padding-right: 8px;
 		border-right: 1px solid ${neutralColors.gray[400]};
-		width: 50px;
-		height: 20px;
+		width: 52px;
+		height: 23px;
 		top: 50%;
 		left: 0;
 		overflow: hidden;
