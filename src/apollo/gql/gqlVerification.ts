@@ -18,13 +18,9 @@ query getCurrentProjectVerificationForm($projectId: Float!){
                organizationWebsite
              }
              projectContacts {
-               youtube
-               instagram
-               linkedin
-               facebook
-               instagram
-               twitter
-             }
+				name
+				url
+			}
              milestones {
                mission
                foundationDate
@@ -111,12 +107,8 @@ export const CREATE_PROJECT_VERIFICATION = gql`
 				organizationWebsite
 			}
 			projectContacts {
-				youtube
-				instagram
-				linkedin
-				facebook
-				instagram
-				twitter
+				name
+				url
 			}
 			milestones {
 				mission
@@ -168,12 +160,8 @@ export const FETCH_PROJECT_VERIFICATION = gql`
 				organizationWebsite
 			}
 			projectContacts {
-				youtube
-				instagram
-				linkedin
-				facebook
-				instagram
-				twitter
+				name
+				url
 			}
 			milestones {
 				mission
@@ -230,12 +218,8 @@ export const UPDATE_PROJECT_VERIFICATION = gql`
 				organizationWebsite
 			}
 			projectContacts {
-				youtube
-				instagram
-				linkedin
-				facebook
-				instagram
-				twitter
+				name
+				url
 			}
 			milestones {
 				mission
@@ -295,12 +279,8 @@ export const SEND_EMAIL_VERIFICATION = gql`
 				fullName
 			}
 			projectContacts {
-				youtube
-				instagram
-				linkedin
-				facebook
-				instagram
-				twitter
+				name
+				url
 			}
 			milestones {
 				mission
@@ -357,12 +337,8 @@ export const SEND_EMAIL_VERIFICATION_TOKEN = gql`
 				fullName
 			}
 			projectContacts {
-				youtube
-				instagram
-				linkedin
-				facebook
-				instagram
-				twitter
+				name
+				url
 			}
 			milestones {
 				mission
