@@ -113,7 +113,7 @@ const Right = styled(Col)`
 	margin-top: 30px;
 	text-align: center;
 	color: ${brandColors.deep[900]};
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		margin-top: 0;
 	}
 `;
