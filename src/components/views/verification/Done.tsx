@@ -3,8 +3,11 @@ import styled from 'styled-components';
 import React from 'react';
 import ConfettiAnimation from '@/components/animations/confetti';
 import CheckCircle from '@/components/views/verification/CheckCircle';
+import useDetectDevice from '@/hooks/useDetectDevice';
 
 const Done = () => {
+	const device = useDetectDevice();
+	const isMobile = device.isMobile;
 	return (
 		<>
 			<Container>
@@ -14,16 +17,16 @@ const Done = () => {
 					will send an email once it has been reviewed.
 				</P>
 				<ConfettiContainer>
-					<ConfettiAnimation size={600} />
+					<ConfettiAnimation size={isMobile ? 200 : 600} />
 				</ConfettiContainer>
 				<StagesContainer>
 					<Submitted>
 						Form submited
 						<CheckCircle />
 					</Submitted>
-					<Line>------</Line>
+					<Line />
 					<Waiting>Waiting for verification</Waiting>
-					<Line>------</Line>
+					<Line />
 					<Voila>Voila! Verified badge</Voila>
 				</StagesContainer>
 			</Container>
@@ -32,7 +35,8 @@ const Done = () => {
 };
 
 const Line = styled.div`
-	color: ${neutralColors.gray[300]};
+	border-bottom: 1px dashed ${neutralColors.gray[300]};
+	width: 20px;
 `;
 
 const Voila = styled.div`
@@ -46,11 +50,13 @@ const Waiting = styled.div`
 const Submitted = styled.div`
 	display: flex;
 	gap: 10px;
+	align-items: center;
 `;
 
 const StagesContainer = styled(B)`
 	display: flex;
 	justify-content: center;
+	align-items: center;
 	margin-top: 140px;
 	gap: 20px;
 `;

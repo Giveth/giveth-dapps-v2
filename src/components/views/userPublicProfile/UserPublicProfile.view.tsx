@@ -25,7 +25,7 @@ import { EDirection } from '@/apollo/types/gqlEnums';
 import ExternalLink from '@/components/ExternalLink';
 import IncompleteProfileToast from '@/components/views/userPublicProfile/IncompleteProfileToast';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { setShowSignWithWallet } from '@/features/modal/modal.sclie';
+import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 
 export enum EOrderBy {
 	TokenAmount = 'TokenAmount',

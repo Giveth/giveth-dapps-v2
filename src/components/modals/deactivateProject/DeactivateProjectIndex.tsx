@@ -20,7 +20,7 @@ import { Modal } from '../Modal';
 import ArchiveIcon from '../../../../public/images/icons/archive_deep.svg';
 import { IModal } from '@/types/common';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { setShowSignWithWallet } from '@/features/modal/modal.sclie';
+import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import DoneContent from './DoneContent';
 import DeactivatingContent from './DeactivatingContent';
 import WhyContent from './WhyContent';

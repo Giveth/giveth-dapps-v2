@@ -5,7 +5,6 @@ import { Shadow } from '@/components/styled-components/Shadow';
 const selectCustomStyles: StylesConfig = {
 	control: styles => ({
 		...styles,
-		width: '70%',
 		maxWidth: '520px',
 		borderColor: neutralColors.gray[300],
 		borderWidth: '2px',

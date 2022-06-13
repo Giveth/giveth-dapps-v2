@@ -59,7 +59,7 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import {
 	setShowSignWithWallet,
 	setShowWalletModal,
-} from '@/features/modal/modal.sclie';
+} from '@/features/modal/modal.slice';
 import usePurpleList from '@/hooks/usePurpleList';
 
 const ethereumChain = config.PRIMARY_NETWORK;

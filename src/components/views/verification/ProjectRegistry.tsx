@@ -9,6 +9,7 @@ import { TextArea } from '@/components/styled-components/TextArea';
 import selectCustomStyles from '@/lib/constants/selectCustomStyles';
 import { BtnContainer, ContentSeparator } from './VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
+import { mediaQueries } from '@/lib/constants/constants';
 
 const options = [
 	{ value: 'new york', label: 'New York' },
@@ -32,7 +33,6 @@ export default function ProjectRegistry() {
 		<>
 			<div>
 				<H6 weight={700}>Project registry</H6>
-				<br />
 				<RadioSectionContainer>
 					<RadioSectionTitle>
 						Is your project part of a registered non-profit
@@ -135,6 +135,7 @@ function ProjectRegistryProfit() {
 }
 
 const RadioSectionContainer = styled.div`
+	margin-top: 29px;
 	width: 100%;
 	background-color: ${neutralColors.gray[200]};
 	border-radius: 16px;
@@ -152,10 +153,12 @@ const RadioSectionSubTitle = styled(P)`
 
 const RadioContainer = styled.div`
 	display: flex;
-	gap: 160px;
+	gap: 100px;
+	${mediaQueries.mobileL} {
+		gap: 160px;
+	}
 `;
 
 const LinkInputContainer = styled.div`
-	width: 70%;
 	max-width: 520px;
 `;

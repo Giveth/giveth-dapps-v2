@@ -9,7 +9,7 @@ import { HomeContainer } from '@/components/views/homepage/Home.sc';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Col } from '@/components/Grid';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { setShowCompleteProfile } from '@/features/modal/modal.sclie';
+import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 
 const content = [
 	{
@@ -158,7 +158,7 @@ const ContentLead = styled(Lead)`
 	${mediaQueries.tablet} {
 		max-width: 330px;
 	}
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		max-width: 450px;
 	}
 `;

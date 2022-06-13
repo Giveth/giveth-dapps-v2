@@ -150,7 +150,7 @@ const GridContainer = styled.div`
 	margin-bottom: 64px;
 	padding: 0;
 	align-items: center;
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		grid-template-columns: repeat(2, 1fr);
 	}
 	${mediaQueries.laptopL} {

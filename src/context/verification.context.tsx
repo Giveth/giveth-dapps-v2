@@ -1,9 +1,17 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import {
+	createContext,
+	ReactNode,
+	useContext,
+	useEffect,
+	useState,
+} from 'react';
 import { useRouter } from 'next/router';
+import { captureException } from '@sentry/nextjs';
 import { IProjectVerification } from '@/apollo/types/types';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
 import { findStepByName } from '@/lib/verification';
+import { showToastError } from '@/lib/helpers';
 import type { Dispatch, SetStateAction } from 'react';
 interface IVerificationContext {
 	verificationData?: IProjectVerification;
@@ -27,11 +35,7 @@ const VerificationContext = createContext<IVerificationContext>({
 
 VerificationContext.displayName = 'VerificationContext';
 
-export const VerificationProvider = ({
-	children,
-}: {
-	children: React.ReactNode;
-}) => {
+export const VerificationProvider = ({ children }: { children: ReactNode }) => {
 	const [step, setStep] = useState(0);
 	const [verificationData, setVerificationData] =
 		useState<IProjectVerification>();
@@ -43,18 +47,23 @@ export const VerificationProvider = ({
 			try {
 				const verificationRes = await client.query({
 					query: FETCH_PROJECT_VERIFICATION,
-					variables: {
-						slug,
+					variables: { slug },
+				});
+				const projectVerification: IProjectVerification =
+					verificationRes.data.getCurrentProjectVerificationForm;
+				setVerificationData(projectVerification);
+				setStep(findStepByName(projectVerification.lastStep) + 1);
+			} catch (error) {
+				showToastError(error);
+				captureException(error, {
+					tags: {
+						section: 'getVerificationData',
 					},
 				});
-				const projectverification: IProjectVerification =
-					verificationRes.data.getCurrentProjectVerificationForm;
-				setVerificationData(projectverification);
-				setStep(findStepByName(projectverification.lastStep) + 1);
-			} catch (error) {}
+			}
 		}
 		if (slug) {
-			getVerificationData();
+			getVerificationData().then();
 		}
 	}, [slug]);
 
