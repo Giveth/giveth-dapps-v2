@@ -11,10 +11,10 @@ import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
 
 import { Modal } from '@/components/modals/Modal';
-import { ETheme, useGeneral } from '@/context/general.context';
+import { ETheme } from '@/features/general/general.sclie';
 import { mediaQueries } from '@/lib/constants/constants';
 import { IModal } from '@/types/common';
-import { useAppDispatch } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowWelcomeModal } from '@/features/modal/modal.sclie';
 import { signToGetToken } from '@/features/user/user.thunks';
 
@@ -23,7 +23,7 @@ interface IProps extends IModal {
 }
 
 export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
-	const { theme } = useGeneral();
+	const theme = useAppSelector(state => state.general.theme);
 	const { account, library, chainId } = useWeb3React();
 	const router = useRouter();
 
