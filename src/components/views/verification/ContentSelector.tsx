@@ -8,12 +8,11 @@ import ManageFundsIndex from '@/components/views/verification/manageFunds/Manage
 import TermsAndConditions from './TermsAndConditions';
 import Milestones from './Milestones';
 import Done from '@/components/views/verification/Done';
+import { useVerificationData } from '@/context/verification.context';
 
-interface IContentSelector {
-	step: number;
-}
+const ContentSelector: FC = () => {
+	const { step } = useVerificationData();
 
-const ContentSelector: FC<IContentSelector> = ({ step }) => {
 	switch (step) {
 		case 0:
 			return <BeforeStart />;

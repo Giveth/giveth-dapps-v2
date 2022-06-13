@@ -26,9 +26,10 @@ const BeforeStart = () => {
 		if (verificationData?.id) {
 			setStep(1);
 		} else {
-			sendReq();
+			sendReq().then();
 		}
 	};
+
 	return (
 		<>
 			<div>

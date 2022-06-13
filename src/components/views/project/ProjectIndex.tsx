@@ -139,7 +139,6 @@ const ProjectIndex = (props: { project?: IProject }) => {
 				setIsMobile(false);
 			}
 		};
-		windowResizeHandler();
 		window.addEventListener('resize', windowResizeHandler);
 		return () => {
 			removeEventListener('resize', windowResizeHandler);
@@ -251,7 +250,7 @@ const BodyWrapper = styled(Container)`
 		padding: 0 32px;
 	}
 
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		padding: 0 40px;
 	}
 

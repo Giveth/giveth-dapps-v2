@@ -66,9 +66,8 @@ export default function ProjectContact() {
 		<>
 			<div>
 				<H6 weight={700}>Project Social Media</H6>
-				<br />
 				<InfoWrapper>
-					<IconInfoInline color={neutralColors.gray[700]} />
+					<IconInfo color={neutralColors.gray[700]} />
 					<PInline>
 						Please provide links to the social media accounts owned
 						by the organization or project.
@@ -158,16 +157,17 @@ const InfoWrapper = styled.div`
 	display: flex;
 	align-items: center;
 	gap: 8px;
+	margin-top: 25px;
+	> :first-child {
+		flex-shrink: 0;
+	}
 `;
 
-const IconInfoInline = styled(IconInfo)`
-	display: inline;
-`;
 const PInline = styled(P)`
 	display: inline;
 	color: ${neutralColors.gray[700]};
 `;
+
 const InputWrapper = styled.div`
-	width: 70%;
 	max-width: 520px;
 `;
