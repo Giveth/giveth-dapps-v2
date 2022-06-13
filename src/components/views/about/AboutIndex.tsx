@@ -251,7 +251,7 @@ const Upper = styled.div`
 const HideContainer = styled.div`
 	display: none;
 
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		display: unset;
 	}
 `;

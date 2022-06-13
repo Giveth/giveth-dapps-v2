@@ -15,6 +15,7 @@ import {
 	UPDATE_PROJECT_VERIFICATION,
 } from '@/apollo/gql/gqlVerification';
 import { PROJECT_VERIFICATION_STEPS } from '@/apollo/types/types';
+import { mediaQueries } from '@/lib/constants/constants';
 
 enum ProjectRegistryStates {
 	NOTSELECTED = 'notselected',
@@ -112,7 +113,6 @@ export default function ProjectRegistry() {
 		<>
 			<div>
 				<H6 weight={700}>Project registry</H6>
-				<br />
 				<RadioSectionContainer>
 					<RadioSectionTitle>
 						Is your project part of a registered non-profit
@@ -223,6 +223,7 @@ export default function ProjectRegistry() {
 }
 
 const RadioSectionContainer = styled.div`
+	margin-top: 29px;
 	width: 100%;
 	background-color: ${neutralColors.gray[200]};
 	border-radius: 16px;
@@ -240,10 +241,12 @@ const RadioSectionSubTitle = styled(P)`
 
 const RadioContainer = styled.div`
 	display: flex;
-	gap: 160px;
+	gap: 100px;
+	${mediaQueries.mobileL} {
+		gap: 160px;
+	}
 `;
 
 const LinkInputContainer = styled.div`
-	width: 70%;
 	max-width: 520px;
 `;

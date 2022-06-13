@@ -15,7 +15,7 @@ import { isUserRegistered } from '@/lib/helpers';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { setShowCompleteProfile } from '@/features/modal/modal.sclie';
+import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 
 interface IHomeExploreProjects {
 	projects: IProject[];
@@ -101,7 +101,7 @@ const ProjectsContainer = styled.div`
 	margin-bottom: 64px;
 	margin-top: 28px;
 
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		grid-template-columns: repeat(2, 1fr);
 	}
 

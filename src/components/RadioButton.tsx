@@ -53,6 +53,9 @@ const Container = styled.div`
 	cursor: pointer;
 	margin-bottom: 10px;
 
+	> :first-child {
+		flex-shrink: 0;
+	}
 	> :last-child {
 		margin-left: 16px;
 	}

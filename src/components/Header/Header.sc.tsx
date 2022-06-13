@@ -195,7 +195,7 @@ export const SmallCreateProject = styled(ButtonLink)`
 
 export const LargeCreateProject = styled.div`
 	display: none;
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		display: unset;
 	}
 `;
@@ -205,7 +205,7 @@ export const SmallCreateProjectParent = styled.div`
 	${mediaQueries.mobileL} {
 		display: unset;
 	}
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		display: none;
 	}
 `;

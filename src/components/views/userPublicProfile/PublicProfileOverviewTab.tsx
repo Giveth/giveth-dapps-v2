@@ -17,7 +17,7 @@ import { isUserRegistered } from '@/lib/helpers';
 import { IUserPublicProfileView } from '@/components/views/userPublicProfile/UserPublicProfile.view';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch } from '@/features/hooks';
-import { setShowCompleteProfile } from '@/features/modal/modal.sclie';
+import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 
 interface IBtnProps extends IButtonProps {
 	outline?: boolean;
