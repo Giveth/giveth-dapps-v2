@@ -18,6 +18,7 @@ import SubgraphController from '@/components/controller/subgraph.ctrl';
 import UserController from '@/components/controller/user.ctrl';
 import ModalController from '@/components/controller/modal.ctrl';
 import PriceController from '@/components/controller/price.ctrl';
+import GeneralController from '@/components/controller/general.ctrl';
 import type { AppProps } from 'next/app';
 
 function getLibrary(provider: ExternalProvider) {
@@ -59,6 +60,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 			<Provider store={store}>
 				<ApolloProvider client={apolloClient}>
 					<Web3ReactProvider getLibrary={getLibrary}>
+						<GeneralController />
 						<PriceController />
 						<SubgraphController />
 						<UserController />
