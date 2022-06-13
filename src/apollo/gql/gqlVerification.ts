@@ -188,6 +188,7 @@ export const FETCH_PROJECT_VERIFICATION = gql`
 			project {
 				id
 				slug
+				title
 			}
 			status
 		}

@@ -105,7 +105,7 @@ const Container = styled.div`
 	overflow: auto;
 	min-width: 900px;
 
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		min-width: 1000px;
 	}
 `;

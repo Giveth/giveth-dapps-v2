@@ -40,6 +40,7 @@ const Wrapper = styled.div<{ disabled?: boolean }>`
 		border-radius: 4px;
 		width: 24px;
 		height: 24px;
+		flex-shrink: 0;
 	}
 `;
 

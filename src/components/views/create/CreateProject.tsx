@@ -451,14 +451,14 @@ const GuidelinesStyle = styled.div`
 
 const GuidelinesStyleTablet = styled(GuidelinesStyle)`
 	display: flex;
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		display: none;
 	}
 `;
 
 const GuidelinesStyleLaptop = styled(GuidelinesStyle)`
 	display: none;
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		display: flex;
 		> div {
 			position: sticky;
@@ -478,8 +478,8 @@ const CreateContainer = styled.div`
 		margin-left: 134px;
 		width: ${(deviceSize.laptopL * 7) / 12 + 'px'};
 	}
-	${mediaQueries.laptop} {
-		width: ${(deviceSize.laptop * 8) / 12 + 'px'};
+	${mediaQueries.laptopS} {
+		width: ${(deviceSize.laptopS * 8) / 12 + 'px'};
 	}
 
 	> :nth-child(1) {
