@@ -390,3 +390,12 @@ export const SEND_EMAIL_VERIFICATION_TOKEN = gql`
 		}
 	}
 `;
+
+export const FETCH_ALLOWED_COUNTRIES = gql`
+	query {
+		getAllowedCountries {
+			name
+			code
+		}
+	}
+`;
