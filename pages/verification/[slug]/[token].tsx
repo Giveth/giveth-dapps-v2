@@ -210,7 +210,7 @@ const InnerContainer = styled(Flex)<{ status: Status; imageAddress: string }>`
 		width: 100%;
 		background-repeat: no-repeat;
 	}
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		min-height: 765px;
 	}
 `;
