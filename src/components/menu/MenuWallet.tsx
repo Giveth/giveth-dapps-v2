@@ -18,7 +18,6 @@ import links from '@/lib/constants/links';
 import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
 import { switchNetworkHandler } from '@/lib/wallet';
 import { MenuContainer } from './Menu.sc';
-import { ETheme, useGeneral } from '@/context/general.context';
 import { isUserRegistered, networkInfo } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -27,6 +26,7 @@ import {
 	setShowWalletModal,
 } from '@/features/modal/modal.sclie';
 import { signOut } from '@/features/user/user.thunks';
+import { ETheme } from '@/features/general/general.sclie';
 
 const MenuWallet = () => {
 	const [isMounted, setIsMounted] = useState(false);
@@ -38,7 +38,7 @@ const MenuWallet = () => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 	const { isSignedIn, userData, token } = useAppSelector(state => state.user);
-	const { theme } = useGeneral();
+	const theme = useAppSelector(state => state.general.theme);
 	const goRoute = (input: {
 		url: string;
 		requiresSign: boolean;
