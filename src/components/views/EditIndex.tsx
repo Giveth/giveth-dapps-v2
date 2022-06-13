@@ -16,7 +16,7 @@ import {
 	setShowCompleteProfile,
 	setShowSignWithWallet,
 	setShowWelcomeModal,
-} from '@/features/modal/modal.sclie';
+} from '@/features/modal/modal.slice';
 
 const EditIndex = () => {
 	const [project, setProject] = useState<IProjectEdition>();

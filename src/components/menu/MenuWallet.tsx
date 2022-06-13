@@ -25,7 +25,7 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import {
 	setShowCompleteProfile,
 	setShowWalletModal,
-} from '@/features/modal/modal.sclie';
+} from '@/features/modal/modal.slice';
 import { signOut } from '@/features/user/user.thunks';
 
 const MenuWallet = () => {
