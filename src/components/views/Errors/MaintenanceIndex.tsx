@@ -3,7 +3,6 @@ import Image from 'next/image';
 import { useEffect } from 'react';
 import Link from 'next/link';
 import links from '@/lib/constants/links';
-import { useGeneral } from '@/context/general.context';
 import givFontLogo from '/public/images/icons/giv_font_logo.svg';
 import twitter from '/public/images/icons/twitter.svg';
 import discord from '/public/images/icons/discord.svg';
@@ -21,8 +20,15 @@ import {
 	LogoContainer,
 	StyledImage,
 } from './ErrorsIndex.sc';
+import {
+	hideHeaderFooter,
+	showHeaderFooter,
+} from '@/features/general/general.sclie';
+import { useAppDispatch } from '@/features/hooks';
+
 const MaintenanceIndex = () => {
-	const { setShowFooter, setShowHeader } = useGeneral();
+	const dispatch = useAppDispatch();
+
 	const {
 		TWITTER: twitterLink,
 		DISCORD: discordLink,
@@ -30,13 +36,11 @@ const MaintenanceIndex = () => {
 	} = links;
 
 	useEffect(() => {
-		setShowFooter(false);
-		setShowHeader(false);
+		dispatch(hideHeaderFooter());
 		return () => {
-			setShowFooter(true);
-			setShowHeader(true);
+			dispatch(showHeaderFooter());
 		};
-	}, []);
+	}, [dispatch]);
 
 	return (
 		<ErrorContainer>
