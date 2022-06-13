@@ -15,8 +15,8 @@ import { ETheme } from '@/features/general/general.sclie';
 import { mediaQueries } from '@/lib/constants/constants';
 import { IModal } from '@/types/common';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { setShowWelcomeModal } from '@/features/modal/modal.sclie';
 import { signToGetToken } from '@/features/user/user.thunks';
+import { setShowWelcomeModal } from '@/features/modal/modal.sclie';
 
 interface IProps extends IModal {
 	callback?: () => void;
@@ -59,7 +59,6 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 								pathname: router.pathname,
 							}),
 						);
-						console.log({ signature });
 						setShowModal(false);
 						!!signature && callback && callback();
 					}}

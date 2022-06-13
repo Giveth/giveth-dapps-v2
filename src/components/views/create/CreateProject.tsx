@@ -316,7 +316,6 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 							<NameInput
 								value={name}
 								setValue={e => {
-									console.log('name');
 									setFormChange(true);
 									handleInputChange(e, ECreateErrFields.NAME);
 								}}
@@ -325,7 +324,6 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 							<DescriptionInput
 								value={description}
 								setValue={e => {
-									console.log('name');
 									setFormChange(true);
 									handleInputChange(
 										e,
@@ -337,7 +335,6 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 							<CategoryInput
 								value={categories}
 								setValue={category => {
-									console.log('category');
 									setFormChange(true);
 									setCategories(category);
 								}}
@@ -345,7 +342,6 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 							<LocationInput
 								defaultValue={defaultImpactLocation}
 								setValue={location => {
-									console.log('location');
 									setFormChange(true);
 									setImpactLocation(location);
 								}}
@@ -353,7 +349,6 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 							<ImageInput
 								value={image}
 								setValue={img => {
-									console.log('image');
 									setFormChange(true);
 									setImage(img);
 								}}
@@ -362,7 +357,6 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 							<WalletAddressInput
 								value={walletAddress}
 								setValue={e => {
-									console.log('walletAddress');
 									setFormChange(true);
 									handleInputChange(
 										e,

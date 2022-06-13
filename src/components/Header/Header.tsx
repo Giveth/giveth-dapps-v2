@@ -40,13 +40,13 @@ import {
 	useAppDispatch,
 	useAppSelector,
 } from '@/features/hooks';
+import { ETheme } from '@/features/general/general.sclie';
 import {
 	setShowWalletModal,
 	setShowWelcomeModal,
 	setShowSignWithWallet,
 	setShowCompleteProfile,
-} from '@/features/modal/modal.sclie';
-import { ETheme } from '@/features/general/general.sclie';
+} from '@/features/modal/modal.slice';
 
 export interface IHeader {
 	theme?: ETheme;
