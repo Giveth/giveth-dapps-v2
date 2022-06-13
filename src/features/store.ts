@@ -4,6 +4,7 @@ import subgraphReducer from './subgraph/subgraph.slice';
 import modalReducer from './modal/modal.sclie';
 import userReducer from './user/user.slice';
 import priceReducer from './price/price.slice';
+import generalReducer from './general/general.sclie';
 
 export const store = configureStore({
 	reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
 		modal: modalReducer,
 		user: userReducer,
 		price: priceReducer,
+		general: generalReducer,
 	},
 });
 
