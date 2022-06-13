@@ -16,7 +16,7 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { IModal } from '@/types/common';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { signToGetToken } from '@/features/user/user.thunks';
-import { setShowWelcomeModal } from '@/features/modal/modal.sclie';
+import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 
 interface IProps extends IModal {
 	callback?: () => void;
