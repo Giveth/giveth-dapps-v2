@@ -22,7 +22,7 @@ const PersonalInfo = () => {
 	const { verificationData, setStep, setVerificationData } =
 		useVerificationData();
 	console.log('verificationData', verificationData);
-	const [email, setEmail] = useState(verificationData?.user.email || '');
+	const [email, setEmail] = useState(verificationData?.email || '');
 	const [resetMail, setResetMail] = useState(false);
 	const [timer, setTimer] = useState(0);
 	const [canReSendEmail, setCanReSendEmail] = useState(false);
@@ -157,7 +157,7 @@ const PersonalInfo = () => {
 							<ResendEmailButton
 								color={brandColors.giv[500]}
 								label={
-									canReSendEmail
+									canReSendEmail || timer === 0
 										? 'RE-SEND EMAIL'
 										: `RE-SEND EMAIL IN ${addZero(
 												durationToYMDh(timer).min,
@@ -168,7 +168,7 @@ const PersonalInfo = () => {
 								size='small'
 								onClick={handleFormSubmit}
 								disabled={!canReSendEmail}
-								loading={timer === 0 || isSentMailLoading}
+								loading={isSentMailLoading}
 							/>
 							<LightBotton
 								onClick={() => setResetMail(true)}

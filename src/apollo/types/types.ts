@@ -199,6 +199,7 @@ export interface IProjectVerification {
 	emailConfirmationSentAt?: string;
 	emailConfirmedAt?: string;
 	emailConfirmed?: boolean;
+	email?: string;
 	projectRegistry?: IProjectRegistry;
 	projectContacts?: IProjectContacts;
 	milestones?: IProjectMilestones;
