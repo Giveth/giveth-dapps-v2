@@ -6,6 +6,7 @@ import { createSiweMessage } from '@/lib/helpers';
 import { RootState } from '../store';
 import { postRequest } from '@/helpers/requests';
 import config from '@/configuration';
+import StorageLabel from '@/lib/localStorage';
 
 export const fetchUserByAddress = createAsyncThunk(
 	'user/fetchUser',
@@ -31,7 +32,6 @@ export const signToGetToken = createAsyncThunk(
 			const signature = await signer.signMessage(message);
 			if (signature) {
 				const state = getState() as RootState;
-				console.log('getToken State', state.user.userData);
 				if (!state.user.userData) {
 					await dispatch(fetchUserByAddress(address));
 				}
@@ -44,6 +44,10 @@ export const signToGetToken = createAsyncThunk(
 						nonce,
 					},
 				);
+				localStorage.setItem(StorageLabel.USER, address);
+				localStorage.setItem(StorageLabel.TOKEN, token.jwt);
+				// When token is fetched, user should be fetched again to get email address
+				await dispatch(fetchUserByAddress(address));
 				return token.jwt;
 			} else {
 				return Promise.reject('Signing failed');

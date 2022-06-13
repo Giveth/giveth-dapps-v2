@@ -128,6 +128,7 @@ export const compareAddresses = (
 };
 
 export const isUserRegistered = (user?: IUser) => {
+	// You should check if user is isSignedIn then call this function
 	return Boolean(user && user.name && user.email);
 };
 
@@ -140,6 +141,7 @@ export const htmlToText = (text?: string) => {
 		.trim();
 	return unescape(formattedText);
 };
+
 export const capitalizeFirstLetter = (string: string) => {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 };

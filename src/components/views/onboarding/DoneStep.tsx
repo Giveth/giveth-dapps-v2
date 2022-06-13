@@ -18,7 +18,7 @@ import Routes from '@/lib/constants/Routes';
 import { isUserRegistered } from '@/lib/helpers';
 import { Col, Row } from '@/components/Grid';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { setShowCompleteProfile } from '@/features/modal/modal.sclie';
+import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 
 const CongratsAnimationOptions = {
 	loop: true,

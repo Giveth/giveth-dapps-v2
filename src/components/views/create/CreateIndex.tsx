@@ -6,7 +6,7 @@ import {
 	setShowCompleteProfile,
 	setShowSignWithWallet,
 	setShowWelcomeModal,
-} from '@/features/modal/modal.sclie';
+} from '@/features/modal/modal.slice';
 
 const CreateIndex = () => {
 	const dispatch = useAppDispatch();
@@ -25,8 +25,6 @@ const CreateIndex = () => {
 			}
 			if (!isRegistered && isSignedIn) {
 				dispatch(setShowCompleteProfile(true));
-			} else {
-				dispatch(setShowCompleteProfile(false));
 			}
 		} else {
 			dispatch(setShowWelcomeModal(true));
