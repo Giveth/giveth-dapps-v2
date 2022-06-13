@@ -150,6 +150,12 @@ export const FETCH_PROJECT_VERIFICATION = gql`
 		getCurrentProjectVerificationForm(slug: $slug) {
 			id
 			isTermAndConditionsAccepted
+			emailConfirmationToken
+			emailConfirmationSent
+			emailConfirmationSentAt
+			emailConfirmedAt
+			emailConfirmed
+			emailConfirmationTokenExpiredAt
 			projectRegistry {
 				organizationDescription
 				isNonProfitOrganization
@@ -204,6 +210,12 @@ export const UPDATE_PROJECT_VERIFICATION = gql`
 		) {
 			id
 			isTermAndConditionsAccepted
+			emailConfirmationToken
+			emailConfirmationSent
+			emailConfirmationSentAt
+			emailConfirmedAt
+			emailConfirmed
+			emailConfirmationTokenExpiredAt
 			projectRegistry {
 				organizationDescription
 				isNonProfitOrganization
@@ -235,6 +247,134 @@ export const UPDATE_PROJECT_VERIFICATION = gql`
 			user {
 				id
 				walletAddress
+				firstName
+				lastName
+				email
+			}
+			project {
+				id
+				slug
+			}
+			status
+		}
+	}
+`;
+
+export const SEND_EMAIL_VERIFICATION = gql`
+	mutation projectVerificationSendEmailConfirmation(
+		$projectVerificationFormId: Float!
+	) {
+		projectVerificationSendEmailConfirmation(
+			projectVerificationFormId: $projectVerificationFormId
+		) {
+			id
+			isTermAndConditionsAccepted
+			emailConfirmationToken
+			emailConfirmationSent
+			emailConfirmationSentAt
+			emailConfirmedAt
+			emailConfirmed
+			emailConfirmationTokenExpiredAt
+			projectRegistry {
+				organizationDescription
+				isNonProfitOrganization
+				organizationCountry
+				organizationWebsite
+			}
+			personalInfo {
+				email
+				walletAddress
+				fullName
+			}
+			projectContacts {
+				youtube
+				instagram
+				linkedin
+				facebook
+				instagram
+				twitter
+			}
+			milestones {
+				mission
+				foundationDate
+				achievedMilestones
+				achievedMilestonesProof
+			}
+			managingFunds {
+				description
+				relatedAddresses {
+					address
+					networkId
+					title
+				}
+			}
+			user {
+				id
+				walletAddress
+				firstName
+				lastName
+				email
+			}
+			project {
+				id
+				slug
+			}
+			status
+		}
+	}
+`;
+
+export const SEND_EMAIL_VERIFICATION_TOKEN = gql`
+	mutation projectVerificationConfirmEmail($emailConfirmationToken: String!) {
+		projectVerificationConfirmEmail(
+			emailConfirmationToken: $emailConfirmationToken
+		) {
+			id
+			isTermAndConditionsAccepted
+			emailConfirmationToken
+			emailConfirmationSent
+			emailConfirmationSentAt
+			emailConfirmedAt
+			emailConfirmed
+			projectRegistry {
+				organizationDescription
+				isNonProfitOrganization
+				organizationCountry
+				organizationWebsite
+			}
+			personalInfo {
+				email
+				walletAddress
+				fullName
+			}
+			projectContacts {
+				youtube
+				instagram
+				linkedin
+				facebook
+				instagram
+				twitter
+			}
+			milestones {
+				mission
+				foundationDate
+				achievedMilestones
+				achievedMilestonesProof
+			}
+			managingFunds {
+				description
+				relatedAddresses {
+					address
+					networkId
+					title
+				}
+			}
+			user {
+				id
+				walletAddress
+				firstName
+				lastName
+				email
 			}
 			project {
 				id

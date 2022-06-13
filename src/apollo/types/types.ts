@@ -203,6 +203,7 @@ export interface IProjectVerification {
 	projectContacts?: IProjectContacts;
 	milestones?: IProjectMilestones;
 	managingFunds?: IProjectManagingFunds;
+	emailConfirmationTokenExpiredAt?: string;
 	user: IUser;
 	project: IProject;
 	status: PROJECT_VERIFICATION_STATUSES;
