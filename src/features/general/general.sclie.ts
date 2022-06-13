@@ -22,6 +22,14 @@ export const GeneralSlice = createSlice({
 		setLightTheme: state => {
 			state.theme = ETheme.Light;
 		},
+		showHeaderFooter: state => {
+			state.showHeader = true;
+			state.showFooter = true;
+		},
+		hideHeaderFooter: state => {
+			state.showHeader = false;
+			state.showFooter = false;
+		},
 		setShowHeader: (state, action: PayloadAction<boolean>) => {
 			state.showHeader = action.payload;
 		},
@@ -31,6 +39,13 @@ export const GeneralSlice = createSlice({
 	},
 });
 
-export const { setDarkTheme, setLightTheme } = GeneralSlice.actions;
+export const {
+	setDarkTheme,
+	setLightTheme,
+	showHeaderFooter,
+	hideHeaderFooter,
+	setShowHeader,
+	setShowFooter,
+} = GeneralSlice.actions;
 
 export default GeneralSlice.reducer;
