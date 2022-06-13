@@ -10,6 +10,7 @@ import { captureException } from '@sentry/nextjs';
 import { IProjectVerification } from '@/apollo/types/types';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
+import { findStepByName } from '@/lib/verification';
 import { showToastError } from '@/lib/helpers';
 import type { Dispatch, SetStateAction } from 'react';
 interface IVerificationContext {
@@ -51,6 +52,7 @@ export const VerificationProvider = ({ children }: { children: ReactNode }) => {
 				const projectVerification: IProjectVerification =
 					verificationRes.data.getCurrentProjectVerificationForm;
 				setVerificationData(projectVerification);
+				setStep(findStepByName(projectVerification.lastStep) + 1);
 			} catch (error) {
 				showToastError(error);
 				captureException(error, {
