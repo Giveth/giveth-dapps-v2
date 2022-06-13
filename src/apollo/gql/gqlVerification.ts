@@ -150,6 +150,12 @@ export const FETCH_PROJECT_VERIFICATION = gql`
 		getCurrentProjectVerificationForm(slug: $slug) {
 			id
 			isTermAndConditionsAccepted
+			emailConfirmationToken
+			emailConfirmationSent
+			emailConfirmationSentAt
+			emailConfirmedAt
+			emailConfirmed
+			emailConfirmationTokenExpiredAt
 			projectRegistry {
 				organizationDescription
 				isNonProfitOrganization
@@ -203,6 +209,12 @@ export const UPDATE_PROJECT_VERIFICATION = gql`
 		) {
 			id
 			isTermAndConditionsAccepted
+			emailConfirmationToken
+			emailConfirmationSent
+			emailConfirmationSentAt
+			emailConfirmedAt
+			emailConfirmed
+			emailConfirmationTokenExpiredAt
 			projectRegistry {
 				organizationDescription
 				isNonProfitOrganization
@@ -234,6 +246,9 @@ export const UPDATE_PROJECT_VERIFICATION = gql`
 			user {
 				id
 				walletAddress
+				firstName
+				lastName
+				email
 			}
 			project {
 				id
@@ -295,6 +310,9 @@ export const SEND_EMAIL_VERIFICATION = gql`
 			user {
 				id
 				walletAddress
+				firstName
+				lastName
+				email
 			}
 			project {
 				id
@@ -353,6 +371,9 @@ export const SEND_EMAIL_VERIFICATION_TOKEN = gql`
 			user {
 				id
 				walletAddress
+				firstName
+				lastName
+				email
 			}
 			project {
 				id
