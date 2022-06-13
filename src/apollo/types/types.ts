@@ -200,6 +200,7 @@ export interface IProjectVerification {
 	emailConfirmationSentAt?: string;
 	emailConfirmedAt?: string;
 	emailConfirmed?: boolean;
+	email?: string;
 	projectRegistry?: IProjectRegistry;
 	projectContacts?: IProjectContacts;
 	milestones?: IProjectMilestones;
@@ -208,6 +209,7 @@ export interface IProjectVerification {
 	user: IUser;
 	project: IProject;
 	status: PROJECT_VERIFICATION_STATUSES;
+	lastStep: PROJECT_VERIFICATION_STEPS;
 }
 
 export enum PROJECT_VERIFICATION_STATUSES {

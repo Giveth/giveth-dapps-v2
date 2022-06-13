@@ -102,7 +102,7 @@ const Input: FC<IInput> = ({
 				if (required) {
 					setValidation({
 						status: InputValidationType.ERROR,
-						msg: `${label} is required`,
+						msg: `${label || name} is required`,
 					});
 					if (setFormValidation) {
 						setFormValidation(formValidation => ({

@@ -5,6 +5,7 @@ query getCurrentProjectVerificationForm($projectId: Float!){
     getCurrentProjectVerificationForm(projectId: $projectId) {
              id
              isTermAndConditionsAccepted
+			 email
              emailConfirmationToken
              emailConfirmationSent
              emailConfirmationSentAt
@@ -17,13 +18,9 @@ query getCurrentProjectVerificationForm($projectId: Float!){
                organizationWebsite
              }
              projectContacts {
-               youtube
-               instagram
-               linkedin
-               facebook
-               instagram
-               twitter
-             }
+				name
+				url
+			}
              milestones {
                mission
                foundationDate
@@ -47,6 +44,7 @@ query getCurrentProjectVerificationForm($projectId: Float!){
                slug
              }
              status
+			 lastStep
              }
      }
 `;
@@ -101,6 +99,7 @@ export const CREATE_PROJECT_VERIFICATION = gql`
 		createProjectVerificationForm(slug: $slug) {
 			id
 			isTermAndConditionsAccepted
+			email
 			projectRegistry {
 				organizationDescription
 				isNonProfitOrganization
@@ -108,12 +107,8 @@ export const CREATE_PROJECT_VERIFICATION = gql`
 				organizationWebsite
 			}
 			projectContacts {
-				youtube
-				instagram
-				linkedin
-				facebook
-				instagram
-				twitter
+				name
+				url
 			}
 			milestones {
 				mission
@@ -141,6 +136,7 @@ export const CREATE_PROJECT_VERIFICATION = gql`
 				slug
 			}
 			status
+			lastStep
 		}
 	}
 `;
@@ -150,6 +146,7 @@ export const FETCH_PROJECT_VERIFICATION = gql`
 		getCurrentProjectVerificationForm(slug: $slug) {
 			id
 			isTermAndConditionsAccepted
+			email
 			emailConfirmationToken
 			emailConfirmationSent
 			emailConfirmationSentAt
@@ -163,12 +160,8 @@ export const FETCH_PROJECT_VERIFICATION = gql`
 				organizationWebsite
 			}
 			projectContacts {
-				youtube
-				instagram
-				linkedin
-				facebook
-				instagram
-				twitter
+				name
+				url
 			}
 			milestones {
 				mission
@@ -197,6 +190,7 @@ export const FETCH_PROJECT_VERIFICATION = gql`
 				title
 			}
 			status
+			lastStep
 		}
 	}
 `;
@@ -210,6 +204,7 @@ export const UPDATE_PROJECT_VERIFICATION = gql`
 		) {
 			id
 			isTermAndConditionsAccepted
+			email
 			emailConfirmationToken
 			emailConfirmationSent
 			emailConfirmationSentAt
@@ -223,12 +218,8 @@ export const UPDATE_PROJECT_VERIFICATION = gql`
 				organizationWebsite
 			}
 			projectContacts {
-				youtube
-				instagram
-				linkedin
-				facebook
-				instagram
-				twitter
+				name
+				url
 			}
 			milestones {
 				mission
@@ -269,6 +260,7 @@ export const SEND_EMAIL_VERIFICATION = gql`
 		) {
 			id
 			isTermAndConditionsAccepted
+			email
 			emailConfirmationToken
 			emailConfirmationSent
 			emailConfirmationSentAt
@@ -287,12 +279,8 @@ export const SEND_EMAIL_VERIFICATION = gql`
 				fullName
 			}
 			projectContacts {
-				youtube
-				instagram
-				linkedin
-				facebook
-				instagram
-				twitter
+				name
+				url
 			}
 			milestones {
 				mission
@@ -331,6 +319,7 @@ export const SEND_EMAIL_VERIFICATION_TOKEN = gql`
 		) {
 			id
 			isTermAndConditionsAccepted
+			email
 			emailConfirmationToken
 			emailConfirmationSent
 			emailConfirmationSentAt
@@ -348,12 +337,8 @@ export const SEND_EMAIL_VERIFICATION_TOKEN = gql`
 				fullName
 			}
 			projectContacts {
-				youtube
-				instagram
-				linkedin
-				facebook
-				instagram
-				twitter
+				name
+				url
 			}
 			milestones {
 				mission
@@ -381,6 +366,16 @@ export const SEND_EMAIL_VERIFICATION_TOKEN = gql`
 				slug
 			}
 			status
+			lastStep
+		}
+	}
+`;
+
+export const FETCH_ALLOWED_COUNTRIES = gql`
+	query {
+		getAllowedCountries {
+			name
+			code
 		}
 	}
 `;
