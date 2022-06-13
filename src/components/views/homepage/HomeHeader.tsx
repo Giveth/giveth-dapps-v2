@@ -8,7 +8,7 @@ import { Arc } from '@/components/styled-components/Arc';
 import { isUserRegistered } from '@/lib/helpers';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { setShowCompleteProfile } from '@/features/modal/modal.sclie';
+import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 
 const HomeHeader = () => {
 	const router = useRouter();
