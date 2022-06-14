@@ -26,9 +26,10 @@ import {
 } from '@/apollo/gql/gqlProjects';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import {
+	IWalletAddress,
+	IProject,
 	IProjectCreation,
 	IProjectEdition,
-	IWalletAddress,
 } from '@/apollo/types/types';
 import {
 	CategoryInput,
@@ -86,7 +87,7 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 	const isDraft = project?.status.name === EProjectStatus.DRAFT;
 	const defaultImpactLocation = project?.impactLocation || '';
 
-	const [creationSuccessful, setCreationSuccessful] = useState<any>(null);
+	const [creationSuccessful, setCreationSuccessful] = useState<IProject>();
 	const [showGuidelineModal, setShowGuidelineModal] = useState(false);
 	const [name, setName] = useState(project?.title || '');
 	const [description, setDescription] = useState(project?.description || '');
@@ -341,7 +342,6 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 							<NameInput
 								value={name}
 								setValue={e => {
-									console.log('name');
 									setFormChange(true);
 									handleInputChange(e, ECreateErrFields.NAME);
 								}}
@@ -350,7 +350,6 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 							<DescriptionInput
 								value={description}
 								setValue={e => {
-									console.log('name');
 									setFormChange(true);
 									handleInputChange(
 										e,
@@ -362,7 +361,6 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 							<CategoryInput
 								value={categories}
 								setValue={category => {
-									console.log('category');
 									setFormChange(true);
 									setCategories(category);
 								}}
@@ -370,7 +368,6 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 							<LocationInput
 								defaultValue={defaultImpactLocation}
 								setValue={location => {
-									console.log('location');
 									setFormChange(true);
 									setImpactLocation(location);
 								}}
@@ -378,7 +375,6 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 							<ImageInput
 								value={image}
 								setValue={img => {
-									console.log('image');
 									setFormChange(true);
 									setImage(img);
 								}}
@@ -389,7 +385,6 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 								networkId={config.PRIMARY_NETWORK.id}
 								value={mainAddress.address}
 								setValue={e => {
-									console.log('mainAddress');
 									setFormChange(true);
 									handleWalletInputChange(
 										e,

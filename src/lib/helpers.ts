@@ -23,6 +23,8 @@ import config from '@/configuration';
 
 declare let window: any;
 
+export const fullPath = (path: string) => `${config.FRONTEND_LINK}${path}`;
+
 export const formatBalance = (balance?: string | number) => {
 	return parseFloat(String(balance || 0)).toLocaleString('en-US', {
 		maximumFractionDigits: 6,
@@ -126,6 +128,7 @@ export const compareAddresses = (
 };
 
 export const isUserRegistered = (user?: IUser) => {
+	// You should check if user is isSignedIn then call this function
 	return Boolean(user && user.name && user.email);
 };
 
@@ -138,6 +141,7 @@ export const htmlToText = (text?: string) => {
 		.trim();
 	return unescape(formattedText);
 };
+
 export const capitalizeFirstLetter = (string: string) => {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 };

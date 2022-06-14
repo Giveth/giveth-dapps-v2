@@ -12,7 +12,7 @@ import { IClaimViewCardProps } from '../views/claim/Claim.view';
 import { formatWeiHelper } from '@/helpers/number';
 import Routes from '@/lib/constants/Routes';
 import { useAppDispatch } from '@/features/hooks';
-import { setShowWalletModal } from '@/features/modal/modal.sclie';
+import { setShowWalletModal } from '@/features/modal/modal.slice';
 
 interface IConnectCardContainerProps {
 	data: any;
