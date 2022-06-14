@@ -3,7 +3,6 @@ import {
 	Button,
 	H6,
 	IconInfo,
-	IconTwitter,
 	neutralColors,
 	P,
 } from '@giveth/ui-design-system';
@@ -11,16 +10,27 @@ import styled from 'styled-components';
 
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
-import FacebookIcon from '/public/images/icons/social/facebook.svg';
-import InstagramIcon from '/public/images/icons/social/instagram.svg';
-import YoutubeIcon from '/public/images/icons/social/youtube.svg';
 import DiscordIcon from '/public/images/icons/social/discord.svg';
-import { ButtonRemove } from './common';
 import { ContentSeparator, BtnContainer } from './VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
+import { client } from '@/apollo/apolloClient';
+import { SEND_NEW_SOCIAL_MEDIA } from '@/apollo/gql/gqlVerification';
+
+async function handleSocialSubmit(socialNetwork: string, id: number) {
+	const res = await client.mutate({
+		mutation: SEND_NEW_SOCIAL_MEDIA,
+		variables: {
+			socialNetwork,
+			projectVerificationId: id,
+		},
+	});
+	console.log('Res', res);
+	window.open('https://www.varzesh3.com/', '_blank');
+}
 
 const SocialProfile = () => {
 	const { setStep } = useVerificationData();
+	const { verificationData } = useVerificationData();
 	return (
 		<>
 			<div>
@@ -31,7 +41,7 @@ const SocialProfile = () => {
 					least one is required.
 				</Description>
 				<ButtonsSection>
-					<ButtonRow>
+					{/* <ButtonRow>
 						<ButtonSocial color='#00ACEE'>
 							<IconTwitter />
 							@LAURENLUZ
@@ -57,9 +67,19 @@ const SocialProfile = () => {
 							<Image src={YoutubeIcon} alt='youtube icon' />
 							CONNECT TO YOUTUBE
 						</ButtonSocial>
-					</ButtonRow>
+					</ButtonRow> */}
 					<ButtonRow>
-						<ButtonSocial color='#7700D5'>
+						<ButtonSocial
+							color='#7700D5'
+							onClick={() => {
+								if (verificationData?.id) {
+									handleSocialSubmit(
+										'discord',
+										Number(verificationData?.id),
+									);
+								}
+							}}
+						>
 							<Image src={DiscordIcon} alt='discord icon' />
 							CONNECT TO DISCORD
 						</ButtonSocial>
