@@ -10,6 +10,7 @@ import {
 	FC,
 	HTMLInputTypeAttribute,
 	memo,
+	ReactElement,
 	SetStateAction,
 	useEffect,
 	useState,
@@ -37,7 +38,7 @@ export enum InputSize {
 
 interface IInput {
 	value: string;
-	onChange?: any;
+	onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 	type?: HTMLInputTypeAttribute;
 	name: string;
 	placeholder?: string;
@@ -48,7 +49,7 @@ interface IInput {
 	size?: InputSize;
 	setFormValidation?: Dispatch<SetStateAction<IFormValidations | undefined>>;
 	disabled?: boolean;
-	LeftIcon?: React.ReactElement<IIconProps>;
+	LeftIcon?: ReactElement<IIconProps>;
 }
 
 interface IInputValidator {
@@ -115,6 +116,12 @@ const Input: FC<IInput> = ({
 						status: InputValidationType.NORMAL,
 						msg: undefined,
 					});
+					if (setFormValidation) {
+						setFormValidation(formValidation => ({
+							...formValidation,
+							[name]: InputValidationType.NORMAL,
+						}));
+					}
 				}
 				return;
 			}

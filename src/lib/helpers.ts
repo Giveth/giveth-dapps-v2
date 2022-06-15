@@ -28,6 +28,14 @@ export const regexList = {
 	url: /^(?:http(s)?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
 	twitter:
 		/(?:https?:)?\/\/(?:www\.|m\.)?twitter\.com\/(\w{2,15})\/?(?:\?\S+)?(?:\#\S+)?$/,
+	facebook:
+		/(?:(?:http|https):\/\/)?(?:www.)?facebook.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[?\w\-]*\/)?(?:profile.php\?id=(?=\d.*))?([\w\-]*)?/,
+	instagram:
+		/(?:https?:)?\/\/(?:www\.|m\.)?instagram\.com\/(\w{2,15})\/?(?:\?\S+)?(?:\#\S+)?$/,
+	linkedIn: /^(http(s)?:\/\/)?([\w]+\.)?linkedin\.com\/(pub|in|profile)/,
+	youtube:
+		/^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/,
+	tooShort: /^.{3,}$/,
 };
 
 export const fullPath = (path: string) => `${config.FRONTEND_LINK}${path}`;

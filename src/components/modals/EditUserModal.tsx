@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useReducer, useState } from 'react';
+import React, { ChangeEvent, useReducer, useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { useMutation } from '@apollo/client';
@@ -12,17 +12,14 @@ import { IUser } from '@/apollo/types/types';
 import { FlexCenter, Flex } from '@/components/styled-components/Flex';
 import ImageUploader from '../ImageUploader';
 import { gToast, ToastType } from '../toasts';
-import Input, {
-	IFormValidations,
-	InputSize,
-	InputValidationType,
-} from '../Input';
+import Input, { IFormValidations, InputSize } from '../Input';
 import { IUserInfo } from '../views/onboarding/InfoStep';
 import { mediaQueries } from '@/lib/constants/constants';
 import { IModal } from '@/types/common';
 import { useAppDispatch } from '@/features/hooks';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
 import { regexList } from '@/lib/helpers';
+import useFormValidation from '@/hooks/useFormValidation';
 
 enum EditStatusType {
 	INFO,
@@ -34,7 +31,7 @@ interface IEditUserModal extends IModal {
 }
 
 const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
-	const [disabled, setDisabled] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 	const [editStatus, setEditStatus] = useState<EditStatusType>(
 		EditStatusType.INFO,
 	);
@@ -58,12 +55,7 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 	const { account } = useWeb3React();
 	const [updateUser] = useMutation(UPDATE_USER);
 
-	useEffect(() => {
-		if (formValidation) {
-			const fvs = Object.values(formValidation);
-			setDisabled(!fvs.every(fv => fv === InputValidationType.NORMAL));
-		}
-	}, [formValidation]);
+	const isFormValid = useFormValidation(formValidation);
 
 	const reducerInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -102,7 +94,7 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 	};
 
 	const handleSubmit = async () => {
-		setDisabled(true);
+		setIsLoading(true);
 		try {
 			const { data } = await client.mutate({
 				mutation: UPDATE_USER,
@@ -131,7 +123,7 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 				},
 			});
 		}
-		setDisabled(false);
+		setIsLoading(false);
 	};
 
 	return (
@@ -209,7 +201,7 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 							<Button
 								buttonType='secondary'
 								label='SAVE'
-								disabled={disabled}
+								disabled={isLoading || !isFormValid}
 								onClick={handleSubmit}
 							/>
 							<TextButton
@@ -245,7 +237,7 @@ const inputFields = [
 		type: 'email',
 		required: true,
 		validators: [
-			{ pattern: /^.{3,}$/, msg: 'Too Short' },
+			{ pattern: regexList.tooShort, msg: 'Too Short' },
 			{
 				pattern: regexList.email,
 				msg: 'Invalid Email Address',

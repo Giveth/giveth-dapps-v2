@@ -1,19 +1,18 @@
-import { ChangeEvent, FC, useEffect, useReducer, useState } from 'react';
+import { ChangeEvent, FC, useReducer, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { H6, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
 
 import { UPDATE_USER } from '@/apollo/gql/gqlUser';
-import Input, {
-	IFormValidations,
-	InputValidationType,
-} from '@/components/Input';
+import Input, { IFormValidations } from '@/components/Input';
 import { SkipOnboardingModal } from '@/components/modals/SkipOnboardingModal';
 import { gToast, ToastType } from '@/components/toasts';
 import { IStep, OnboardActions, OnboardStep } from './common';
 import { OnboardSteps } from './Onboarding.view';
 import { Col, Row } from '@/components/Grid';
+import useFormValidation from '@/hooks/useFormValidation';
+import { regexList } from '@/lib/helpers';
 
 export interface IUserInfo {
 	email: string;
@@ -32,7 +31,7 @@ const initialUserInfo: IUserInfo = {
 };
 
 const InfoStep: FC<IStep> = ({ setStep }) => {
-	const [disabled, setDisabled] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 	const [updateUser] = useMutation(UPDATE_USER);
 	const [showModal, setShowModal] = useState(false);
 	const [formValidation, setFormValidation] = useState<IFormValidations>();
@@ -44,12 +43,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 		initialUserInfo,
 	);
 
-	useEffect(() => {
-		if (formValidation) {
-			const fvs = Object.values(formValidation);
-			setDisabled(!fvs.every(fv => fv === InputValidationType.NORMAL));
-		}
-	}, [formValidation]);
+	const isFormValid = useFormValidation(formValidation);
 
 	const handleLater = () => {
 		setShowModal(true);
@@ -63,7 +57,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 	};
 
 	const onSave = async () => {
-		setDisabled(true);
+		setIsLoading(true);
 		try {
 			const { data: response } = await updateUser({
 				variables: {
@@ -95,7 +89,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 				},
 			});
 		}
-		setDisabled(false);
+		setIsLoading(false);
 		return false;
 	};
 
@@ -137,10 +131,12 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 							required
 							setFormValidation={setFormValidation}
 							validators={[
-								{ pattern: /^.{3,}$/, msg: 'Too Short' },
 								{
-									pattern:
-										/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+									pattern: regexList.tooShort,
+									msg: 'Too Short',
+								},
+								{
+									pattern: regexList.email,
 									msg: 'Invalid Email Address',
 								},
 							]}
@@ -174,8 +170,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 							value={url}
 							validators={[
 								{
-									pattern:
-										/^(?:http(s)?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
+									pattern: regexList.url,
 									msg: 'Invalid URL',
 								},
 							]}
@@ -186,7 +181,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 					onSave={onSave}
 					saveLabel='SAVE & CONTINUE'
 					onLater={handleLater}
-					disabled={disabled}
+					disabled={isLoading || !isFormValid}
 				/>
 			</OnboardStep>
 			{showModal && <SkipOnboardingModal setShowModal={setShowModal} />}
