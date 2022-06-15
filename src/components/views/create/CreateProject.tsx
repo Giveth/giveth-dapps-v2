@@ -60,14 +60,14 @@ import config from '@/configuration';
 export enum ECreateErrFields {
 	NAME = 'name',
 	DESCRIPTION = 'description',
-	WALLET_ADDRESS = 'walletAddress',
+	MAIN_WALLET_ADDRESS = 'mainWalletAddress',
 	SECONDARY_WALLET_ADDRESS = 'secondaryWalletAddress',
 }
 
 export interface ICreateProjectErrors {
 	[ECreateErrFields.NAME]: string;
 	[ECreateErrFields.DESCRIPTION]: string;
-	[ECreateErrFields.WALLET_ADDRESS]: string;
+	[ECreateErrFields.MAIN_WALLET_ADDRESS]: string;
 	[ECreateErrFields.SECONDARY_WALLET_ADDRESS]: string;
 }
 
@@ -76,7 +76,7 @@ export interface ICategoryComponent {
 }
 
 const CreateProject = (props: { project?: IProjectEdition }) => {
-	const { library, chainId } = useWeb3React();
+	const { library } = useWeb3React();
 	const [addProjectMutation] = useMutation(CREATE_PROJECT);
 	const [editProjectMutation] = useMutation(UPDATE_PROJECT);
 	const router = useRouter();
@@ -94,15 +94,18 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 	const [categories, setCategories] = useState(project?.categories || []);
 	const [image, setImage] = useState(project?.image || '');
 
-	const [walletAddress, setWalletAddress] = useState(
-		project?.walletAddress || '',
-	);
 	const [mainAddress, setMainAddress] = useState<IWalletAddress>({
-		address: project?.walletAddress || '',
+		address: project?.addresses?.find(
+			(a: IWalletAddress) => a.networkId === config.PRIMARY_NETWORK.id,
+		)?.address,
+		networkId: config.PRIMARY_NETWORK.id,
 	});
-	const [secondaryAddress, setSecondaryAddress] = useState<IWalletAddress>(
-		{},
-	);
+	const [secondaryAddress, setSecondaryAddress] = useState<IWalletAddress>({
+		address: project?.addresses?.find(
+			(a: IWalletAddress) => a.networkId === config.SECONDARY_NETWORK.id,
+		)?.address,
+		networkId: config.SECONDARY_NETWORK.id,
+	});
 
 	const [isLoading, setIsLoading] = useState(false);
 	const [publish, setPublish] = useState<boolean>(false);
@@ -113,7 +116,7 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 	const [errors, setErrors] = useState<ICreateProjectErrors>({
 		[ECreateErrFields.NAME]: isEditMode ? '' : 'Title is required',
 		[ECreateErrFields.DESCRIPTION]: '',
-		[ECreateErrFields.WALLET_ADDRESS]: '',
+		[ECreateErrFields.MAIN_WALLET_ADDRESS]: '',
 		[ECreateErrFields.SECONDARY_WALLET_ADDRESS]: '',
 	});
 	const [formChange, setFormChange] = useState(false);
@@ -133,7 +136,16 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 				JSON.stringify(categories) !==
 					JSON.stringify(project.categories) ||
 				imageComparator !== project.image ||
-				walletAddress !== project.walletAddress ||
+				mainAddress !==
+					project.addresses?.find(
+						(a: IWalletAddress) =>
+							a.networkId === config.PRIMARY_NETWORK.id,
+					).address ||
+				secondaryAddress !==
+					project.addresses?.find(
+						(a: IWalletAddress) =>
+							a.networkId === config.SECONDARY_NETWORK.id,
+					).address ||
 				impactLocation !== project.impactLocation
 			) {
 				setPublish(false);
@@ -141,7 +153,15 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 				setPublish(true);
 			}
 		}
-	}, [name, description, categories, image, walletAddress, impactLocation]);
+	}, [
+		name,
+		description,
+		categories,
+		image,
+		JSON.stringify(mainAddress),
+		JSON.stringify(secondaryAddress),
+		impactLocation,
+	]);
 
 	useEffect(() => {
 		if (!isEditMode) {
@@ -152,7 +172,10 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 	useEffect(() => {
 		const userAddress = user?.walletAddress || '';
 		if (!isEditMode) {
-			setMainAddress({ address: userAddress });
+			setMainAddress({
+				address: userAddress,
+				networkId: config.PRIMARY_NETWORK.id,
+			});
 			walletAddressValidation(
 				userAddress,
 				library,
@@ -162,7 +185,6 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 			);
 		}
 	}, [user]);
-
 	useEffect(() => {
 		debouncedTitleValidation.current = Debounced(titleValidation, 1000);
 		debouncedAddressValidation.current = Debounced(
@@ -177,9 +199,19 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 
 	const handleWalletInputChange = (value: string, networkId: number) => {
 		const isMainnet = networkId === config.PRIMARY_NETWORK.id;
-		if (isEditMode && compareAddresses(value, project?.walletAddress)) {
+		if (
+			isEditMode &&
+			compareAddresses(
+				value,
+				isMainnet ? mainAddress?.address : secondaryAddress?.address,
+			)
+		) {
 			const _errors = { ...errors };
-			_errors[ECreateErrFields.WALLET_ADDRESS] = '';
+			if (isMainnet) {
+				_errors[ECreateErrFields.MAIN_WALLET_ADDRESS] = '';
+			} else {
+				_errors[ECreateErrFields.SECONDARY_WALLET_ADDRESS] = '';
+			}
 			setErrors(_errors);
 			return;
 		}
@@ -240,10 +272,15 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 		try {
 			if (!isReadyToPublish()) return;
 			setFormChange(false);
+			const mainAddressValidated = isAddressENS(mainAddress?.address)
+				? await getAddressFromENS(mainAddress?.address, library)
+				: mainAddress?.address;
 
-			const address = isAddressENS(walletAddress)
-				? await getAddressFromENS(walletAddress, library)
-				: walletAddress;
+			const secondaryAddressValidated = isAddressENS(
+				secondaryAddress.address,
+			)
+				? await getAddressFromENS(secondaryAddress?.address, library)
+				: secondaryAddress?.address;
 
 			const projectData: IProjectCreation = {
 				title: name,
@@ -251,7 +288,16 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 				impactLocation,
 				categories: categories.map(category => category.name),
 				organisationId: 1,
-				walletAddress: utils.getAddress(address),
+				addresses: [
+					{
+						address: utils.getAddress(mainAddressValidated),
+						networkId: config.PRIMARY_NETWORK.id,
+					},
+					{
+						address: utils.getAddress(secondaryAddressValidated),
+						networkId: config.SECONDARY_NETWORK.id,
+					},
+				],
 				image,
 				isDraft: !!drafted,
 			};
@@ -297,6 +343,7 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 		} catch (e) {
 			setIsLoading(false);
 			const error = e as Error;
+			console.log({ e });
 			showToastError(error);
 			captureException(error, {
 				tags: {
@@ -318,7 +365,6 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 			</div>
 		);
 	};
-
 	return (
 		<>
 			{showGuidelineModal && (
@@ -391,7 +437,9 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 										config.PRIMARY_NETWORK.id,
 									);
 								}}
-								error={errors[ECreateErrFields.WALLET_ADDRESS]}
+								error={
+									errors[ECreateErrFields.MAIN_WALLET_ADDRESS]
+								}
 							/>
 							<WalletAddressInput
 								title='xDAI Address'

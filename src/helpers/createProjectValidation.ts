@@ -55,7 +55,7 @@ export const walletAddressValidation = (
 	let address = walletAddress;
 	const isMain = chainId === config.PRIMARY_NETWORK.id;
 	const errorField = isMain
-		? ECreateErrFields.WALLET_ADDRESS
+		? ECreateErrFields.MAIN_WALLET_ADDRESS
 		: ECreateErrFields.SECONDARY_WALLET_ADDRESS;
 
 	const queryFunc = () =>

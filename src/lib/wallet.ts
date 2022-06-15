@@ -58,11 +58,12 @@ export const switchNetwork = async (chainId: number) => {
 	}
 };
 
-export function isAddressENS(ens: string) {
+export function isAddressENS(ens: string | undefined) {
+	if (!ens) return false;
 	return ens?.toLowerCase().indexOf('.eth') > -1;
 }
 
-export async function getAddressFromENS(ens: string, web3: any) {
+export async function getAddressFromENS(ens: string | undefined, web3: any) {
 	const isEns = isAddressENS(ens);
 	if (!isEns) return new Error('Error addressNotENS');
 

@@ -28,7 +28,7 @@ const WalletAddressInput = (props: {
 			<H5
 				id={
 					networkId
-						? ECreateErrFields.WALLET_ADDRESS
+						? ECreateErrFields.MAIN_WALLET_ADDRESS
 						: ECreateErrFields.SECONDARY_WALLET_ADDRESS
 				}
 			>
