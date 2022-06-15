@@ -17,13 +17,57 @@ import {
 import ImageUploader from '@/components/ImageUploader';
 import { ContentSeparator, BtnContainer } from './VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
+import { client } from '@/apollo/apolloClient';
+import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
+import { PROJECT_VERIFICATION_STEPS } from '@/apollo/types/types';
 
 export default function Milestones() {
 	const [startDate, setStartDate] = useState<Date | undefined>();
 	const [file, setFile] = useState<File>();
-	const [url, setUrl] = useState<string>('');
 	const [uploading, setUploading] = useState(false);
-	const { setStep } = useVerificationData();
+	const [loading, setloading] = useState(false);
+	const [isChanged, setIsChanged] = useState(false);
+
+	const { verificationData, setVerificationData, setStep } =
+		useVerificationData();
+	const { milestones } = verificationData || {};
+	const [mission, setMission] = useState(milestones?.mission || '');
+	const [achievedMilestones, setAchievedMilestones] = useState(
+		milestones?.achievedMilestones || '',
+	);
+	const [url, setUrl] = useState<string>(
+		milestones?.achievedMilestonesProof || '',
+	);
+
+	const handleNext = () => {
+		async function sendReq() {
+			setloading(true);
+			const { data } = await client.mutate({
+				mutation: UPDATE_PROJECT_VERIFICATION,
+				variables: {
+					projectVerificationUpdateInput: {
+						projectVerificationId: Number(verificationData?.id),
+						step: PROJECT_VERIFICATION_STEPS.MILESTONES,
+						milestones: {
+							foundationDate: startDate,
+							mission,
+							achievedMilestones,
+							achievedMilestonesProof: file,
+						},
+					},
+				},
+			});
+			setVerificationData(data.updateProjectVerificationForm);
+			setloading(false);
+			setStep(6);
+		}
+
+		if (isChanged) {
+			sendReq();
+		} else {
+			setStep(6);
+		}
+	};
 
 	return (
 		<>
@@ -37,7 +81,10 @@ export default function Milestones() {
 					<IconChevronDown color={neutralColors.gray[600]} />
 					<StyledDatePicker
 						selected={startDate}
-						onChange={(date: Date) => setStartDate(date)}
+						onChange={(date: Date) => {
+							setIsChanged(true);
+							setStartDate(date);
+						}}
 						dateFormat='MM/yyyy'
 						showMonthYearPicker
 						showPopperArrow={false}
@@ -52,7 +99,14 @@ export default function Milestones() {
 					Please describe how your project is benefiting society and
 					the world at large.
 				</Paragraph>
-				<TextArea height='82px' />
+				<TextArea
+					value={mission}
+					height='82px'
+					onChange={e => {
+						setIsChanged(true);
+						setMission(e.target.value);
+					}}
+				/>
 				<LeadStyled>
 					Which milestones has your organization/project achieved
 					since conception? This question is required.
@@ -61,7 +115,14 @@ export default function Milestones() {
 					Please provide links to photos, videos, testimonials or
 					other evidence of your project's impact.
 				</Paragraph>
-				<TextArea height='82px' />
+				<TextArea
+					value={achievedMilestones}
+					height='82px'
+					onChange={e => {
+						setIsChanged(true);
+						setAchievedMilestones(e.target.value);
+					}}
+				/>
 				<LeadStyled>
 					If you cannot provide links to evidence of milestones that
 					have already been achieved, you can upload proof here.
@@ -73,7 +134,11 @@ export default function Milestones() {
 				<ContentSeparator />
 				<BtnContainer>
 					<Button onClick={() => setStep(4)} label='<     PREVIOUS' />
-					<Button onClick={() => setStep(6)} label='NEXT     >' />
+					<Button
+						onClick={() => handleNext()}
+						loading={loading}
+						label='NEXT     >'
+					/>
 				</BtnContainer>
 			</div>
 		</>
