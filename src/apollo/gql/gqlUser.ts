@@ -131,3 +131,11 @@ export const UPDATE_USER = gql`
 		)
 	}
 `;
+
+export const VALIDATE_TOKEN = gql`
+	query {
+		me {
+			walletAddress
+		}
+	}
+`;
