@@ -52,7 +52,7 @@ export default function Milestones() {
 							foundationDate: startDate,
 							mission,
 							achievedMilestones,
-							achievedMilestonesProof: file,
+							achievedMilestonesProof: url,
 						},
 					},
 				},
@@ -128,7 +128,11 @@ export default function Milestones() {
 					have already been achieved, you can upload proof here.
 				</LeadStyled>
 				<Paragraph>Upload photo</Paragraph>
-				<ImageUploader url={url} setUrl={setUrl} />
+				<ImageUploader
+					url={url}
+					setUrl={setUrl}
+					setIsUploading={setUploading}
+				/>
 			</div>
 			<div>
 				<ContentSeparator />
@@ -137,6 +141,7 @@ export default function Milestones() {
 					<Button
 						onClick={() => handleNext()}
 						loading={loading}
+						disabled={uploading}
 						label='NEXT     >'
 					/>
 				</BtnContainer>
