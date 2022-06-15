@@ -27,9 +27,10 @@ import { VALIDATE_TOKEN } from '@/apollo/gql/gqlUser';
 import { useAppDispatch } from '@/features/hooks';
 import { signOut } from '@/features/user/user.thunks';
 import { setShowSignWithWallet } from '@/features/modal/modal.sclie';
+import { EDonationFailedType } from '@/components/modals/FailedDonation';
 
 export interface IDonateModalProps extends IModal {
-	setShowFailedModal: (i: boolean) => void;
+	setFailedModalType: (i: EDonationFailedType) => void;
 	setTxHash: (i: string) => void;
 	project: IProject;
 	token: IProjectAcceptedToken;
