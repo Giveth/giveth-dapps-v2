@@ -24,7 +24,7 @@ const ModalController = () => {
 		showWelcomeModal,
 	} = useAppSelector(state => state.modal);
 
-	const { userData } = useAppSelector(state => state.user);
+	const { userData, isSignedIn } = useAppSelector(state => state.user);
 	const isRegistered = isUserRegistered(userData);
 
 	const dispatch = useAppDispatch();
@@ -42,6 +42,12 @@ const ModalController = () => {
 			dispatch(setShowWelcomeModal(false));
 		}
 	}, [active]);
+
+	useEffect(() => {
+		if (isSignedIn && showSignWithWallet) {
+			dispatch(setShowSignWithWallet(false));
+		}
+	}, [isSignedIn]);
 
 	return (
 		<>

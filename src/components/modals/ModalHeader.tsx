@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
-import { brandColors, H6, IconX } from '@giveth/ui-design-system';
+import { H6, IconX } from '@giveth/ui-design-system';
 import { Flex } from '@/components/styled-components/Flex';
 
 export type ModalHeaderTitlePosition = 'center' | 'left';
@@ -33,7 +33,7 @@ export const ModalHeader: React.FC<IModalHeader> = ({
 			<H6 weight={700}>{title}</H6>
 			{!hiddenClose && (
 				<CloseModalButton onClick={closeModal}>
-					<IconX color={brandColors.deep[900]} size={24} />
+					<IconX size={24} />
 				</CloseModalButton>
 			)}
 		</ModalHeaderRow>
