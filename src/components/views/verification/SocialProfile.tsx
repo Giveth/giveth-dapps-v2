@@ -8,6 +8,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
+import { useRouter } from 'next/router';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import DiscordIcon from '/public/images/icons/social/discord.svg';
@@ -25,12 +26,15 @@ async function handleSocialSubmit(socialNetwork: string, id: number) {
 		},
 	});
 	console.log('Res', res);
-	window.open('https://www.varzesh3.com/', '_blank');
+	window.open(res.data.addNewSocialProfile, '_blank');
 }
 
 const SocialProfile = () => {
 	const { setStep } = useVerificationData();
 	const { verificationData } = useVerificationData();
+	const router = useRouter();
+	console.log('Router', router.query);
+
 	return (
 		<>
 			<div>
