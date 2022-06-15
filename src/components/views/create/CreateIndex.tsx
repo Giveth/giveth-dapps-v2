@@ -22,8 +22,6 @@ const CreateIndex = () => {
 			if (!isSignedIn) {
 				dispatch(setShowSignWithWallet(true));
 				return;
-			} else {
-				dispatch(setShowSignWithWallet(false));
 			}
 			if (!isRegistered && isSignedIn) {
 				dispatch(setShowCompleteProfile(true));
