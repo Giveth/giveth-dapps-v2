@@ -86,7 +86,6 @@ const JoinSubscriptionCard = () => {
 								disabled={!validateEmail(email)}
 								label='Subscribe'
 								buttonType='primary'
-								type='submit'
 							/>
 						</SubscriptionActionWrapper>
 					</form>

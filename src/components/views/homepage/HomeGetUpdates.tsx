@@ -85,7 +85,6 @@ const HomeGetUpdates = () => {
 							<SubscribeButton
 								disabled={!validateEmail(email)}
 								label='SUBSCRIBE'
-								type='submit'
 							/>
 						</InputBox>
 					</form>
