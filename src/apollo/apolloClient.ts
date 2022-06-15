@@ -46,6 +46,8 @@ function createApolloClient() {
 	});
 
 	const errorLink = onError(({ graphQLErrors, networkError, operation }) => {
+		console.log('graphQLErrors', graphQLErrors);
+		console.log('networkError', networkError);
 		if (graphQLErrors)
 			graphQLErrors.forEach(({ message, locations, path }) => {
 				console.log(`[GraphQL error]: ${message}`, { locations, path });
