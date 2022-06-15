@@ -175,7 +175,7 @@ export interface IProjectContacts {
 }
 
 export interface IProjectMilestones {
-	foundationDate?: Date;
+	foundationDate?: string;
 	mission?: string;
 	achievedMilestones?: string;
 	achievedMilestonesProof?: string;
