@@ -8,7 +8,7 @@ import {
 import { gwei2wei } from '@/helpers/blockchain';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
-const BASE_ROUTE = 'https://serve.giveth.io';
+const BASE_ROUTE = 'https://dev.k8s.giveth.io';
 
 const config: EnvConfig = {
 	BACKEND_LINK: `${BASE_ROUTE}/graphql`,
