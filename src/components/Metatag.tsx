@@ -59,7 +59,10 @@ export const ProjectMeta = (props: {
 				content={(preTitle || '') + ' ' + project?.title}
 			/>
 			<meta property='twitter:description' content={metaDescription} />
-			<meta property='twitter:image' content={project?.image} />
+			<meta
+				property='twitter:image'
+				content='https://www.mindful.org/content/uploads/What-Happens-When-We-Reconnect-with-Nature.jpg'
+			/>
 		</>
 	);
 };
