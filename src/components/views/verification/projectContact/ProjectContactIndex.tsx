@@ -22,12 +22,12 @@ import {
 	IProjectContact,
 	PROJECT_VERIFICATION_STEPS,
 } from '@/apollo/types/types';
-import { regexList } from '@/lib/helpers';
 import { OutlineStyled } from '@/components/views/verification/common.styled';
 import AddSocialModal from '@/components/views/verification/projectContact/AddSocialModal';
 import { EMainSocials } from '@/components/views/verification/common.types';
 import { WebsiteInput } from '@/components/views/verification/projectContact/common';
 import useFormValidation from '@/hooks/useFormValidation';
+import { validators } from '@/lib/constants/regex';
 
 export default function ProjectContactIndex() {
 	const { verificationData, setVerificationData, setStep } =
@@ -174,7 +174,7 @@ export default function ProjectContactIndex() {
 						LeftIcon={
 							<IconTwitter color={neutralColors.gray[600]} />
 						}
-						validators={validators.twitter}
+						validators={[validators.twitter]}
 						setFormValidation={setFormValidation}
 					/>
 					<Input
@@ -189,7 +189,7 @@ export default function ProjectContactIndex() {
 						LeftIcon={
 							<IconFacebook color={neutralColors.gray[600]} />
 						}
-						validators={validators.facebook}
+						validators={[validators.facebook]}
 						setFormValidation={setFormValidation}
 					/>
 					<Input
@@ -204,7 +204,7 @@ export default function ProjectContactIndex() {
 						LeftIcon={
 							<IconLinkedin color={neutralColors.gray[600]} />
 						}
-						validators={validators.linkedIn}
+						validators={[validators.linkedIn]}
 						setFormValidation={setFormValidation}
 					/>
 					<Input
@@ -219,7 +219,7 @@ export default function ProjectContactIndex() {
 						LeftIcon={
 							<IconInstagram color={neutralColors.gray[600]} />
 						}
-						validators={validators.instagram}
+						validators={[validators.instagram]}
 						setFormValidation={setFormValidation}
 					/>
 					<Input
@@ -234,7 +234,7 @@ export default function ProjectContactIndex() {
 						LeftIcon={
 							<IconYoutube color={neutralColors.gray[600]} />
 						}
-						validators={validators.youtube}
+						validators={[validators.youtube]}
 						setFormValidation={setFormValidation}
 					/>
 					<WebsiteInput
@@ -281,39 +281,6 @@ export default function ProjectContactIndex() {
 		</>
 	);
 }
-
-const validators = {
-	twitter: [
-		{
-			pattern: regexList.twitter,
-			msg: 'Invalid twitter URL',
-		},
-	],
-	facebook: [
-		{
-			pattern: regexList.facebook,
-			msg: 'Invalid facebook URL',
-		},
-	],
-	linkedIn: [
-		{
-			pattern: regexList.linkedIn,
-			msg: 'Invalid linkedIn URL',
-		},
-	],
-	instagram: [
-		{
-			pattern: regexList.instagram,
-			msg: 'Invalid instagram URL',
-		},
-	],
-	youtube: [
-		{
-			pattern: regexList.youtube,
-			msg: 'Invalid youtube URL',
-		},
-	],
-};
 
 const PStyled = styled(P)`
 	color: ${neutralColors.gray[700]};

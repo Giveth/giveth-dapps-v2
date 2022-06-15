@@ -12,7 +12,7 @@ import { IStep, OnboardActions, OnboardStep } from './common';
 import { OnboardSteps } from './Onboarding.view';
 import { Col, Row } from '@/components/Grid';
 import useFormValidation from '@/hooks/useFormValidation';
-import { regexList } from '@/lib/helpers';
+import { validators } from '@/lib/constants/regex';
 
 export interface IUserInfo {
 	email: string;
@@ -130,16 +130,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 							type='email'
 							required
 							setFormValidation={setFormValidation}
-							validators={[
-								{
-									pattern: regexList.tooShort,
-									msg: 'Too Short',
-								},
-								{
-									pattern: regexList.email,
-									msg: 'Invalid Email Address',
-								},
-							]}
+							validators={[validators.email, validators.tooShort]}
 						/>
 					</Col>
 				</Section>
@@ -168,12 +159,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 							type='url'
 							caption='Your home page, blog, or company site.'
 							value={url}
-							validators={[
-								{
-									pattern: regexList.url,
-									msg: 'Invalid URL',
-								},
-							]}
+							validators={[validators.url]}
 						/>
 					</Col>
 				</Section>

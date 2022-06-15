@@ -18,8 +18,8 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { IModal } from '@/types/common';
 import { useAppDispatch } from '@/features/hooks';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
-import { regexList } from '@/lib/helpers';
 import useFormValidation from '@/hooks/useFormValidation';
+import { validators } from '@/lib/constants/regex';
 
 enum EditStatusType {
 	INFO,
@@ -236,13 +236,7 @@ const inputFields = [
 		name: 'email',
 		type: 'email',
 		required: true,
-		validators: [
-			{ pattern: regexList.tooShort, msg: 'Too Short' },
-			{
-				pattern: regexList.email,
-				msg: 'Invalid Email Address',
-			},
-		],
+		validators: [validators.email, validators.tooShort],
 	},
 	{
 		label: 'location (optional)',
@@ -255,12 +249,7 @@ const inputFields = [
 		name: 'url',
 		type: 'url',
 		caption: 'Your home page, blog, or company site.',
-		validators: [
-			{
-				pattern: regexList.url,
-				msg: 'Invalid URL',
-			},
-		],
+		validators: [validators.url],
 	},
 ];
 

@@ -4,10 +4,10 @@ import styled from 'styled-components';
 import { IModal } from '@/types/common';
 import { Modal } from '@/components/modals/Modal';
 import Input, { IFormValidations } from '@/components/Input';
-import { regexList } from '@/lib/helpers';
 import { mediaQueries } from '@/lib/constants/constants';
 import { IProjectContact } from '@/apollo/types/types';
 import useFormValidation from '@/hooks/useFormValidation';
+import { validators } from '@/lib/constants/regex';
 
 interface IProps extends IModal {
 	addSocial: (i: IProjectContact) => void;
@@ -38,7 +38,7 @@ const AddSocialModal: FC<IProps> = ({ setShowModal, addSocial }) => {
 					name='socialMediaTitle'
 					placeholder='Discord'
 					value={name}
-					validators={validators.name}
+					validators={[validators.tooShort]}
 					onChange={e => setName(e.target.value)}
 					setFormValidation={setFormValidation}
 					required
@@ -48,7 +48,7 @@ const AddSocialModal: FC<IProps> = ({ setShowModal, addSocial }) => {
 					name='socialMediaAddress'
 					placeholder='https://www.example.com/...'
 					value={url}
-					validators={validators.url}
+					validators={[validators.url]}
 					onChange={e => setUrl(e.target.value)}
 					setFormValidation={setFormValidation}
 					required
@@ -85,21 +85,6 @@ const Buttons = styled.div`
 		width: 100%;
 	}
 `;
-
-const validators = {
-	name: [
-		{
-			pattern: regexList.tooShort,
-			msg: 'Too short',
-		},
-	],
-	url: [
-		{
-			pattern: regexList.url,
-			msg: 'Invalid URL',
-		},
-	],
-};
 
 const Container = styled.div`
 	width: 100vw;
