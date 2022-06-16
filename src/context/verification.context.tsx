@@ -51,6 +51,7 @@ export const VerificationProvider = ({ children }: { children: ReactNode }) => {
 				});
 				const projectVerification: IProjectVerification =
 					verificationRes.data.getCurrentProjectVerificationForm;
+				console.log('projectVerification', projectVerification);
 				setVerificationData(projectVerification);
 				setStep(findStepByName(projectVerification.lastStep) + 1);
 			} catch (error) {

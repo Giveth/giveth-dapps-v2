@@ -15,7 +15,7 @@ import FacebookIcon from '/public/images/icons/social/facebook.svg';
 import InstagramIcon from '/public/images/icons/social/instagram.svg';
 import YoutubeIcon from '/public/images/icons/social/youtube.svg';
 import DiscordIcon from '/public/images/icons/social/discord.svg';
-import { ButtonRemove } from './common';
+import { RemoveButton } from './common';
 import { ContentSeparator, BtnContainer } from './VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
 
@@ -36,21 +36,21 @@ const SocialProfile = () => {
 							<IconTwitter />
 							@LAURENLUZ
 						</ButtonSocial>
-						<ButtonRemove />
+						<RemoveButton />
 					</ButtonRow>
 					<ButtonRow>
 						<ButtonSocial color='#3B5998'>
 							<Image src={FacebookIcon} alt='facebook icon' />
 							@LAURENLUZ
 						</ButtonSocial>
-						<ButtonRemove />
+						<RemoveButton />
 					</ButtonRow>
 					<ButtonRow>
 						<ButtonSocial color='#CD486B'>
 							<Image src={InstagramIcon} alt='instagram icon' />
 							@LAURENLUZ
 						</ButtonSocial>
-						<ButtonRemove />
+						<RemoveButton />
 					</ButtonRow>
 					<ButtonRow>
 						<ButtonSocial color='#F7003B'>

@@ -167,16 +167,13 @@ export interface IProjectRegistry {
 	organizationDescription?: string;
 }
 
-export interface IProjectContacts {
-	twitter?: string;
-	facebook?: string;
-	linkedin?: string;
-	instagram?: string;
-	youtube?: string;
+export interface IProjectContact {
+	name: string;
+	url: string;
 }
 
 export interface IProjectMilestones {
-	foundationDate?: Date;
+	foundationDate?: string;
 	mission?: string;
 	achievedMilestones?: string;
 	achievedMilestonesProof?: string;
@@ -197,7 +194,7 @@ export interface IProjectVerification {
 	emailConfirmed?: boolean;
 	email?: string;
 	projectRegistry?: IProjectRegistry;
-	projectContacts?: IProjectContacts;
+	projectContacts?: IProjectContact[];
 	milestones?: IProjectMilestones;
 	managingFunds?: IProjectManagingFunds;
 	emailConfirmationTokenExpiredAt?: string;
@@ -218,7 +215,7 @@ export interface ProjectVerificationUpdateInput {
 	step: PROJECT_VERIFICATION_STEPS;
 	projectVerificationId: number;
 	projectRegistry?: IProjectRegistry;
-	projectContacts?: IProjectContacts;
+	projectContacts?: IProjectContact[];
 	milestones?: IProjectMilestones;
 	managingFunds?: IProjectManagingFunds;
 	isTermAndConditionsAccepted?: boolean;

@@ -1,11 +1,4 @@
-import {
-	Button,
-	H6,
-	Lead,
-	neutralColors,
-	OulineButton,
-	P,
-} from '@giveth/ui-design-system';
+import { Button, H6, Lead, neutralColors, P } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useState } from 'react';
 
@@ -18,6 +11,7 @@ import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
 import { PROJECT_VERIFICATION_STEPS } from '@/apollo/types/types';
 import { client } from '@/apollo/apolloClient';
 import { showToastError } from '@/lib/helpers';
+import { OutlineStyled } from '../common.styled';
 
 export interface IAddress {
 	address: string;
@@ -141,12 +135,6 @@ const ManageFundsIndex = () => {
 		</>
 	);
 };
-
-const OutlineStyled = styled(OulineButton)`
-	padding-left: 100px;
-	padding-right: 100px;
-	margin-bottom: 24px;
-`;
 
 const AddressDescription = styled(P)`
 	color: ${neutralColors.gray[900]};
