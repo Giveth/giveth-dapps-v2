@@ -22,8 +22,6 @@ import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
 import { PROJECT_VERIFICATION_STEPS } from '@/apollo/types/types';
 
 export default function Milestones() {
-	const [startDate, setStartDate] = useState<Date | undefined>();
-	const [file, setFile] = useState<File>();
 	const [uploading, setUploading] = useState(false);
 	const [loading, setloading] = useState(false);
 	const [isChanged, setIsChanged] = useState(false);
@@ -31,6 +29,11 @@ export default function Milestones() {
 	const { verificationData, setVerificationData, setStep } =
 		useVerificationData();
 	const { milestones } = verificationData || {};
+	const [startDate, setStartDate] = useState<Date | undefined>(
+		milestones?.foundationDate
+			? new Date(milestones?.foundationDate)
+			: undefined,
+	);
 	const [mission, setMission] = useState(milestones?.mission || '');
 	const [achievedMilestones, setAchievedMilestones] = useState(
 		milestones?.achievedMilestones || '',
@@ -49,7 +52,7 @@ export default function Milestones() {
 						projectVerificationId: Number(verificationData?.id),
 						step: PROJECT_VERIFICATION_STEPS.MILESTONES,
 						milestones: {
-							foundationDate: startDate,
+							foundationDate: startDate?.toString(),
 							mission,
 							achievedMilestones,
 							achievedMilestonesProof: url,
