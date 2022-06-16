@@ -3,17 +3,20 @@ import BeforeStart from '@/components/views/verification/BeforeStart';
 import PersonalInfo from '@/components/views/verification/PersonalInfo';
 import SocialProfile from '@/components/views/verification/SocialProfile';
 import ProjectRegistry from './ProjectRegistry';
-import ProjectContact from './ProjectContact';
+import ProjectContactIndex from './projectContact/ProjectContactIndex';
 import ManageFundsIndex from '@/components/views/verification/manageFunds/ManageFundsIndex';
 import TermsAndConditions from './TermsAndConditions';
 import Milestones from './Milestones';
 import Done from '@/components/views/verification/Done';
 import { useVerificationData } from '@/context/verification.context';
+import Loading from './Loading';
 
 const ContentSelector: FC = () => {
 	const { step } = useVerificationData();
 
 	switch (step) {
+		case -1:
+			return <Loading />;
 		case 0:
 			return <BeforeStart />;
 		case 1:
@@ -23,7 +26,7 @@ const ContentSelector: FC = () => {
 		case 3:
 			return <ProjectRegistry />;
 		case 4:
-			return <ProjectContact />;
+			return <ProjectContactIndex />;
 		case 5:
 			return <Milestones />;
 		case 6:

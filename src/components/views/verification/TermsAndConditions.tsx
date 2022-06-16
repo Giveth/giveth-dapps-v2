@@ -6,10 +6,44 @@ import { FlexCenter } from '@/components/styled-components/Flex';
 import { Relative } from '@/components/styled-components/Position';
 import { ContentSeparator, BtnContainer } from './VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
+import { client } from '@/apollo/apolloClient';
+import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
+import { PROJECT_VERIFICATION_STEPS } from '@/apollo/types/types';
 
 export default function TermsAndConditions() {
-	const [accepted, setAccepted] = useState(false);
-	const { setStep } = useVerificationData();
+	const [loading, setloading] = useState(false);
+	const [isChanged, setIsChanged] = useState(false);
+
+	const { verificationData, setVerificationData, setStep } =
+		useVerificationData();
+	const [accepted, setAccepted] = useState(
+		verificationData?.isTermAndConditionsAccepted || false,
+	);
+
+	const handleNext = () => {
+		async function sendReq() {
+			setloading(true);
+			const { data } = await client.mutate({
+				mutation: UPDATE_PROJECT_VERIFICATION,
+				variables: {
+					projectVerificationUpdateInput: {
+						projectVerificationId: Number(verificationData?.id),
+						step: PROJECT_VERIFICATION_STEPS.TERM_AND_CONDITION,
+						isTermAndConditionsAccepted: accepted,
+					},
+				},
+			});
+			setVerificationData(data.updateProjectVerificationForm);
+			setloading(false);
+			setStep(8);
+		}
+
+		if (isChanged) {
+			sendReq();
+		} else {
+			setStep(8);
+		}
+	};
 	return (
 		<>
 			<Lead>
@@ -53,14 +87,22 @@ export default function TermsAndConditions() {
 				<CheckBox
 					title='I accept all of the Giveth community terms and conditions.'
 					checked={accepted}
-					onChange={setAccepted}
+					onChange={e => {
+						setIsChanged(true);
+						setAccepted(e);
+					}}
 				/>
 			</Lead>
 			<div>
 				<ContentSeparator />
 				<BtnContainer>
 					<Button onClick={() => setStep(6)} label='<     PREVIOUS' />
-					<Button onClick={() => setStep(8)} label='NEXT     >' />
+					<Button
+						onClick={() => handleNext()}
+						loading={loading}
+						disabled={!accepted}
+						label='NEXT     >'
+					/>
 				</BtnContainer>
 			</div>
 		</>

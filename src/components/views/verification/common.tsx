@@ -4,11 +4,19 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { ButtonStyled } from '@/components/views/verification/common.styled';
+import { FC } from 'react';
+import {
+	ButtonStyled,
+	RemoveBtn,
+} from '@/components/views/verification/common.styled';
 import menuList from '@/components/views/verification/menu/menuList';
 import { useVerificationData } from '@/context/verification.context';
 
-export const ButtonRemove = () => {
+interface IRemoveBtnProps {
+	onClick?: () => void;
+}
+
+export const RemoveButton: FC<IRemoveBtnProps> = ({ onClick }) => {
 	return (
 		<ButtonStyled
 			label='REMOVE'
@@ -16,7 +24,16 @@ export const ButtonRemove = () => {
 			size='small'
 			icon={<IconTrash />}
 			background={neutralColors.gray[300]}
+			onClick={onClick && onClick}
 		/>
+	);
+};
+
+export const RemoveIcon: FC<IRemoveBtnProps> = ({ onClick }) => {
+	return (
+		<RemoveBtn onClick={onClick}>
+			<IconTrash color={neutralColors.gray[700]} />
+		</RemoveBtn>
 	);
 };
 

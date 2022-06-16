@@ -10,8 +10,8 @@ import { captureException } from '@sentry/nextjs';
 import { IProjectVerification } from '@/apollo/types/types';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
-import { findStepByName } from '@/lib/verification';
 import { showToastError } from '@/lib/helpers';
+import { findStepByName } from '@/lib/verification';
 import type { Dispatch, SetStateAction } from 'react';
 interface IVerificationContext {
 	verificationData?: IProjectVerification;
@@ -24,7 +24,7 @@ interface IVerificationContext {
 
 const VerificationContext = createContext<IVerificationContext>({
 	verificationData: undefined,
-	step: 0,
+	step: -1,
 	setStep: num => {
 		console.log('setStep not initialed yet!');
 	},
@@ -36,7 +36,7 @@ const VerificationContext = createContext<IVerificationContext>({
 VerificationContext.displayName = 'VerificationContext';
 
 export const VerificationProvider = ({ children }: { children: ReactNode }) => {
-	const [step, setStep] = useState(0);
+	const [step, setStep] = useState(-1);
 	const [verificationData, setVerificationData] =
 		useState<IProjectVerification>();
 	const router = useRouter();

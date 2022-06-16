@@ -25,7 +25,7 @@ const DesktopMenu = () => {
 					onClick={() => index < step && setStep(index)}
 				>
 					{item}
-					{index < step && <CheckCircle />}
+					{(index < step || step === 8) && <CheckCircle />}
 				</MenuTitle>
 			))}
 		</MenuSection>

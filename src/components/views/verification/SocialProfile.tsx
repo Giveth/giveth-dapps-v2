@@ -50,21 +50,21 @@ const SocialProfile = () => {
 							<IconTwitter />
 							@LAURENLUZ
 						</ButtonSocial>
-						<ButtonRemove />
+						<RemoveButton />
 					</ButtonRow>
 					<ButtonRow>
 						<ButtonSocial color='#3B5998'>
 							<Image src={FacebookIcon} alt='facebook icon' />
 							@LAURENLUZ
 						</ButtonSocial>
-						<ButtonRemove />
+						<RemoveButton />
 					</ButtonRow>
 					<ButtonRow>
 						<ButtonSocial color='#CD486B'>
 							<Image src={InstagramIcon} alt='instagram icon' />
 							@LAURENLUZ
 						</ButtonSocial>
-						<ButtonRemove />
+						<RemoveButton />
 					</ButtonRow>
 					<ButtonRow>
 						<ButtonSocial color='#F7003B'>
