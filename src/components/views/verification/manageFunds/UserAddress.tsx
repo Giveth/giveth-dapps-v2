@@ -6,17 +6,17 @@ import Input from '@/components/Input';
 import { RelatedAddress } from '@/apollo/types/types';
 
 interface IProps {
-	address: RelatedAddress;
+	addressObj: RelatedAddress;
 	remove: () => void;
 }
 
-const UserAddress: FC<IProps> = ({ address, remove }) => {
-	const { title, walletAddress } = address;
+const UserAddress: FC<IProps> = ({ addressObj, remove }) => {
+	const { title, address } = addressObj;
 	return (
 		<Container>
 			<Input
 				disabled
-				value={walletAddress}
+				value={address}
 				label={title}
 				name='walletAddress'
 			/>
