@@ -4,8 +4,10 @@ import React from 'react';
 import ConfettiAnimation from '@/components/animations/confetti';
 import CheckCircle from '@/components/views/verification/CheckCircle';
 import useDetectDevice from '@/hooks/useDetectDevice';
+import { useVerificationData } from '@/context/verification.context';
 
 const Done = () => {
+	const { verificationData } = useVerificationData();
 	const device = useDetectDevice();
 	const isMobile = device.isMobile;
 	return (
@@ -21,7 +23,7 @@ const Done = () => {
 				</ConfettiContainer>
 				<StagesContainer>
 					<Submitted>
-						Form submited
+						Form {verificationData?.status}
 						<CheckCircle />
 					</Submitted>
 					<Line />
