@@ -21,7 +21,7 @@ const networkOptions = [
 		},
 		label: 'Ethereum Mainnet',
 		name: 'Ethereum',
-		isGivbackEligible: true,
+		isGivbackEligible: false,
 	},
 	{
 		value: {
@@ -29,23 +29,21 @@ const networkOptions = [
 		},
 		label: 'Gnosis',
 		name: 'Gnosis',
-		isGivbackEligible: true,
+		isGivbackEligible: false,
 	},
 ];
 
 const AddAddressModal: FC<IProps> = ({ setShowModal, addAddress }) => {
-	const [walletAddress, setWalletAddress] = useState(
-		'0x6d97d65adff6771b31671443a6b9512104312d3d',
-	);
-	const [title, setTitle] = useState('Address #1');
+	const [address, setAddress] = useState('');
+	const [title, setTitle] = useState('');
 	const [selectedNetwork, setSelectedNetwork] = useState<ISelectedNetwork>();
 	const [customInput, setCustomInput] = useState('');
 
 	const handleSubmit = () => {
 		addAddress({
-			walletAddress,
+			address,
 			title,
-			network: selectedNetwork?.label || '',
+			networkId: selectedNetwork?.label || '',
 		});
 		setShowModal(false);
 	};
@@ -79,9 +77,9 @@ const AddAddressModal: FC<IProps> = ({ setShowModal, addAddress }) => {
 				<br />
 				<Input
 					onChange={(e: ChangeEvent<HTMLInputElement>) =>
-						setWalletAddress(e.target.value)
+						setAddress(e.target.value)
 					}
-					value={walletAddress}
+					value={address}
 					name='Address'
 					label='Receiving address'
 					caption='Enter the related address.'
