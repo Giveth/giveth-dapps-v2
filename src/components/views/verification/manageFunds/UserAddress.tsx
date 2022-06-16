@@ -3,10 +3,10 @@ import { FC } from 'react';
 import { IconTrash, neutralColors } from '@giveth/ui-design-system';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import Input from '@/components/Input';
-import { IAddress } from '@/components/views/verification/manageFunds/ManageFundsIndex';
+import { RelatedAddress } from '@/apollo/types/types';
 
 interface IProps {
-	address: IAddress;
+	address: RelatedAddress;
 	remove: () => void;
 }
 
