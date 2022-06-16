@@ -17,6 +17,6 @@ export const findStepByName = (step: PROJECT_VERIFICATION_STEPS): number => {
 		case PROJECT_VERIFICATION_STEPS.SUBMIT:
 			return 8;
 		default:
-			return -1;
+			return 0;
 	}
 };
