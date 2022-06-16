@@ -22,13 +22,13 @@ import { showToastError } from '@/lib/helpers';
 export interface IAddress {
 	address: string;
 	title: string;
-	networkId: string;
+	networkId: number;
 }
 
 const ManageFundsIndex = () => {
 	const [loading, setLoading] = useState(false);
 	const [showAddressModal, setShowAddressModal] = useState(false);
-	const { setStep, setVerificationData, verificationData, step } =
+	const { setStep, setVerificationData, verificationData } =
 		useVerificationData();
 	console.log('verificationData', verificationData);
 	const [addresses, setAddresses] = useState<IAddress[]>(
@@ -72,6 +72,7 @@ const ManageFundsIndex = () => {
 				setLoading(false);
 				setStep(7);
 			} catch (error) {
+				showToastError('Something went wrong');
 				console.log('err', error);
 			} finally {
 				setLoading(false);
@@ -123,13 +124,18 @@ const ManageFundsIndex = () => {
 				<ContentSeparator />
 				<BtnContainer>
 					<Button onClick={() => setStep(5)} label='<     PREVIOUS' />
-					<Button onClick={handleNext} label='NEXT     >' />
+					<Button
+						onClick={handleNext}
+						label='NEXT     >'
+						loading={loading}
+					/>
 				</BtnContainer>
 			</div>
 			{showAddressModal && (
 				<AddAddressModal
 					addAddress={addAddress}
 					setShowModal={setShowAddressModal}
+					addresses={addresses}
 				/>
 			)}
 		</>

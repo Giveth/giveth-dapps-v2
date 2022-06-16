@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import React, { ChangeEvent, FC, useState } from 'react';
 import { IconWalletOutline } from '@giveth/ui-design-system/lib/cjs/components/icons/WalletOutline';
 import { Button } from '@giveth/ui-design-system';
+import { ethers } from 'ethers';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import Input from '@/components/Input';
@@ -9,43 +10,60 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { IAddress } from '@/components/views/verification/manageFunds/ManageFundsIndex';
 import SelectNetwork from '@/components/views/verification/manageFunds/SelectNetwork';
 import { ISelectedNetwork } from '@/components/views/verification/manageFunds/types';
-
+import config from '@/configuration';
+import { showToastError } from '@/lib/helpers';
 interface IProps extends IModal {
 	addAddress: (address: IAddress) => void;
+	addresses: IAddress[];
 }
 
 const networkOptions = [
 	{
-		value: {
-			name: 'Ethereum',
-		},
+		value: config.PRIMARY_NETWORK.id,
 		label: 'Ethereum Mainnet',
 		name: 'Ethereum',
 		isGivbackEligible: false,
 	},
 	{
-		value: {
-			name: 'Gnosis',
-		},
+		value: config.SECONDARY_NETWORK.id,
 		label: 'Gnosis',
 		name: 'Gnosis',
 		isGivbackEligible: false,
 	},
 ];
 
-const AddAddressModal: FC<IProps> = ({ setShowModal, addAddress }) => {
+const AddAddressModal: FC<IProps> = ({
+	setShowModal,
+	addAddress,
+	addresses,
+}) => {
 	const [address, setAddress] = useState('');
 	const [title, setTitle] = useState('');
 	const [selectedNetwork, setSelectedNetwork] = useState<ISelectedNetwork>();
 	const [customInput, setCustomInput] = useState('');
 
-	const handleSubmit = () => {
-		addAddress({
-			address,
-			title,
-			networkId: selectedNetwork?.label || '',
+	const handleSubmit = async () => {
+		const isDuplicate = addresses.some(item => {
+			return item.title === title;
 		});
-		setShowModal(false);
+		if (address && title && selectedNetwork) {
+			//TODO: Check ENS Addresses
+			if (!ethers.utils.isAddress(address)) {
+				showToastError('The address in not valid');
+				return;
+			} else if (isDuplicate) {
+				showToastError('Please provide a unique title');
+				return;
+			}
+			addAddress({
+				address,
+				title,
+				networkId: selectedNetwork.value,
+			});
+			setShowModal(false);
+		} else {
+			showToastError('Please provide all values');
+		}
 	};
 
 	return (
@@ -60,7 +78,7 @@ const AddAddressModal: FC<IProps> = ({ setShowModal, addAddress }) => {
 					tokenList={networkOptions}
 					selectedNetwork={selectedNetwork}
 					inputValue={customInput}
-					onChange={setSelectedNetwork}
+					onChange={e => setSelectedNetwork(e)}
 					placeholder='Search network name'
 					onInputChange={setCustomInput}
 				/>
@@ -91,7 +109,12 @@ const AddAddressModal: FC<IProps> = ({ setShowModal, addAddress }) => {
 						buttonType='secondary'
 						onClick={handleSubmit}
 					/>
-					<Button size='small' label='CANCEL' buttonType='texty' />
+					<Button
+						size='small'
+						label='CANCEL'
+						buttonType='texty'
+						onClick={() => setShowModal(false)}
+					/>
 				</Buttons>
 			</Container>
 		</Modal>
