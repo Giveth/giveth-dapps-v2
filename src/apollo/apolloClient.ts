@@ -57,7 +57,10 @@ function createApolloClient() {
 
 		if (networkError) console.log(`[Network error]: ${networkError}`);
 		const { response } = operation.getContext();
-		if (response.status === 401) {
+		if (
+			response.status === 401 ||
+			response.data.errors[0].message === 'unAuthorized'
+		) {
 			//   removes token and user from store
 			const currentToken: string | null = !ssrMode
 				? localStorage.getItem(StorageLabel.TOKEN)
