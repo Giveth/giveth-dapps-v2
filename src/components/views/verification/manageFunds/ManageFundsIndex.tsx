@@ -85,7 +85,6 @@ const ManageFundsIndex = () => {
 
 	return (
 		<>
-			<h6>{step}</h6>
 			<div>
 				<H6 weight={700}>Managing funds</H6>
 				<Lead>
