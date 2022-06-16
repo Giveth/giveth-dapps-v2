@@ -25,6 +25,11 @@ const gqlRes = `{
 		name
 		url
 	}
+	socialProfiles {
+		socialNetworkId
+		socialNetwork
+		isVerified
+	}
 	milestones {
 		mission
 		foundationDate
