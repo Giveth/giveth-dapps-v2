@@ -1,11 +1,4 @@
-import {
-	Button,
-	H6,
-	Lead,
-	neutralColors,
-	OulineButton,
-	P,
-} from '@giveth/ui-design-system';
+import { Button, H6, Lead, neutralColors, P } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useState } from 'react';
 import AddAddressModal from '@/components/views/verification/manageFunds/AddAddressModal';
@@ -13,6 +6,7 @@ import UserAddress from '@/components/views/verification/manageFunds/UserAddress
 import { TextArea } from '@/components/styled-components/TextArea';
 import { ContentSeparator, BtnContainer } from '../VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
+import { OutlineStyled } from '../common.styled';
 
 export interface IAddress {
 	walletAddress: string;
@@ -90,12 +84,6 @@ const ManageFundsIndex = () => {
 		</>
 	);
 };
-
-const OutlineStyled = styled(OulineButton)`
-	padding-left: 100px;
-	padding-right: 100px;
-	margin-bottom: 24px;
-`;
 
 const AddressDescription = styled(P)`
 	color: ${neutralColors.gray[900]};
