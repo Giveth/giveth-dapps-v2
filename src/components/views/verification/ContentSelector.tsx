@@ -9,11 +9,14 @@ import TermsAndConditions from './TermsAndConditions';
 import Milestones from './Milestones';
 import Done from '@/components/views/verification/Done';
 import { useVerificationData } from '@/context/verification.context';
+import Loading from './Loading';
 
 const ContentSelector: FC = () => {
 	const { step } = useVerificationData();
 
 	switch (step) {
+		case -1:
+			return <Loading />;
 		case 0:
 			return <BeforeStart />;
 		case 1:
