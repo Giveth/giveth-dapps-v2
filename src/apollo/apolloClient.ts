@@ -58,8 +58,8 @@ function createApolloClient() {
 		const { response } = operation.getContext();
 
 		if (
-			response.status === 401 ||
-			response.data.errors[0].message === 'unAuthorized'
+			response?.status === 401 ||
+			response?.data?.errors[0]?.message === 'unAuthorized'
 		) {
 			//   removes token and user from store
 			const currentToken: string | null = !ssrMode
