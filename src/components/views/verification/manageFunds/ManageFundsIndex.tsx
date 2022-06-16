@@ -122,6 +122,7 @@ const ManageFundsIndex = () => {
 						onClick={handleNext}
 						label='NEXT     >'
 						loading={loading}
+						disabled={!description}
 					/>
 				</BtnContainer>
 			</div>
