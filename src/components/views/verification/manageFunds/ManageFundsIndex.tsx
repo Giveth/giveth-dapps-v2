@@ -15,18 +15,15 @@ import { TextArea } from '@/components/styled-components/TextArea';
 import { ContentSeparator, BtnContainer } from '../VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
 import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
-import {
-	PROJECT_VERIFICATION_STEPS,
-	RelatedAddress,
-} from '@/apollo/types/types';
+import { PROJECT_VERIFICATION_STEPS } from '@/apollo/types/types';
 import { client } from '@/apollo/apolloClient';
 import { showToastError } from '@/lib/helpers';
 
-// export interface IAddress {
-// 	address: string;
-// 	title: string;
-// 	networkId: string;
-// }
+export interface IAddress {
+	address: string;
+	title: string;
+	networkId: string;
+}
 
 const ManageFundsIndex = () => {
 	const [loading, setLoading] = useState(false);
@@ -34,14 +31,14 @@ const ManageFundsIndex = () => {
 	const { setStep, setVerificationData, verificationData, step } =
 		useVerificationData();
 	console.log('verificationData', verificationData);
-	const [addresses, setAddresses] = useState<RelatedAddress[]>(
+	const [addresses, setAddresses] = useState<IAddress[]>(
 		verificationData?.managingFunds?.relatedAddresses || [],
 	);
 	const [description, setDescription] = useState(
 		verificationData?.managingFunds?.description || '',
 	);
 
-	const addAddress = (addressObj: RelatedAddress) => {
+	const addAddress = (addressObj: IAddress) => {
 		setAddresses([...addresses, addressObj]);
 	};
 
@@ -85,6 +82,7 @@ const ManageFundsIndex = () => {
 
 	return (
 		<>
+			<h6>{step}</h6>
 			<div>
 				<H6 weight={700}>Managing funds</H6>
 				<Lead>
@@ -126,11 +124,7 @@ const ManageFundsIndex = () => {
 				<ContentSeparator />
 				<BtnContainer>
 					<Button onClick={() => setStep(5)} label='<     PREVIOUS' />
-					<Button
-						onClick={handleNext}
-						label='NEXT     >'
-						loading={loading}
-					/>
+					<Button onClick={handleNext} label='NEXT     >' />
 				</BtnContainer>
 			</div>
 			{showAddressModal && (

@@ -3,6 +3,7 @@ import {
 	EDonationType,
 	EProjectStatus,
 } from '@/apollo/types/gqlEnums';
+import { IAddress } from '@/components/views/verification/manageFunds/ManageFundsIndex';
 
 export interface IProject {
 	id?: string;
@@ -183,14 +184,9 @@ export interface IProjectMilestones {
 
 export interface IProjectManagingFunds {
 	description: string;
-	relatedAddresses: RelatedAddress[];
+	relatedAddresses: IAddress[];
 }
 
-export interface RelatedAddress {
-	title: string;
-	address: string;
-	networkId: number;
-}
 export interface IProjectVerification {
 	id: string;
 	isTermAndConditionsAccepted: boolean;

@@ -6,12 +6,12 @@ import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import Input from '@/components/Input';
 import { mediaQueries } from '@/lib/constants/constants';
+import { IAddress } from '@/components/views/verification/manageFunds/ManageFundsIndex';
 import SelectNetwork from '@/components/views/verification/manageFunds/SelectNetwork';
 import { ISelectedNetwork } from '@/components/views/verification/manageFunds/types';
-import { RelatedAddress } from '@/apollo/types/types';
 
 interface IProps extends IModal {
-	addAddress: (address: RelatedAddress) => void;
+	addAddress: (address: IAddress) => void;
 }
 
 const networkOptions = [
@@ -43,7 +43,7 @@ const AddAddressModal: FC<IProps> = ({ setShowModal, addAddress }) => {
 		addAddress({
 			address,
 			title,
-			networkId: 1,
+			networkId: selectedNetwork?.label || '',
 		});
 		setShowModal(false);
 	};

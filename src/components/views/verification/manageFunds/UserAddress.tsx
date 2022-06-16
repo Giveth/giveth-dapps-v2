@@ -3,20 +3,20 @@ import { FC } from 'react';
 import { IconTrash, neutralColors } from '@giveth/ui-design-system';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import Input from '@/components/Input';
-import { RelatedAddress } from '@/apollo/types/types';
+import { IAddress } from '@/components/views/verification/manageFunds/ManageFundsIndex';
 
 interface IProps {
-	addressObj: RelatedAddress;
+	address: IAddress;
 	remove: () => void;
 }
 
-const UserAddress: FC<IProps> = ({ addressObj, remove }) => {
-	const { title, address } = addressObj;
+const UserAddress: FC<IProps> = ({ address, remove }) => {
+	const { title, address: walletAddress } = address;
 	return (
 		<Container>
 			<Input
 				disabled
-				value={address}
+				value={walletAddress}
 				label={title}
 				name='walletAddress'
 			/>
