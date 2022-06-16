@@ -24,11 +24,10 @@ export const GeneralMetatags: FC<{ info: IMetaTags }> = ({ info }) => {
 			<meta property='og:description' content={info.desc} />
 			<meta property='og:image' content={info.image} />
 
-			<meta property='twitter:card' content='summary' />
-			<meta property='twitter:url' content={info.url} />
-			<meta property='twitter:title' content={info.title} />
-			<meta property='twitter:description' content={info.desc} />
-			<meta property='twitter:image' content={info.image} />
+			<meta name='twitter:url' content={info.url} />
+			<meta name='twitter:title' content={info.title} />
+			<meta name='twitter:description' content={info.desc} />
+			<meta name='twitter:image' content={info.image} />
 			<meta name='twitter:card' content='summary_large_image' />
 		</Head>
 	);
@@ -47,6 +46,7 @@ export const ProjectMeta = (props: {
 				content={(preTitle || '') + ' ' + project?.title}
 			/>
 			<meta name='description' content={metaDescription} />
+
 			<meta property='og:type' content='website' />
 			<meta
 				property='og:title'
@@ -54,14 +54,15 @@ export const ProjectMeta = (props: {
 			/>
 			<meta property='og:description' content={metaDescription} />
 			<meta property='og:image' content={project?.image} />
-			<meta property='twitter:card' content='summary_large_image' />
+
+			<meta name='twitter:card' content='summary' />
 			<meta
-				property='twitter:title'
+				name='twitter:title'
 				content={(preTitle || '') + ' ' + project?.title}
 			/>
-			<meta property='twitter:description' content={metaDescription} />
+			<meta name='twitter:description' content={metaDescription} />
 			<meta
-				property='twitter:image'
+				name='twitter:image'
 				content='https://www.mindful.org/content/uploads/What-Happens-When-We-Reconnect-with-Nature.jpg'
 			/>
 		</>
