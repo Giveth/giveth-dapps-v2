@@ -10,6 +10,7 @@ export interface IMetaTags {
 	url: string;
 	type?: string;
 }
+
 export const GeneralMetatags: FC<{ info: IMetaTags }> = ({ info }) => {
 	return (
 		<Head>
@@ -23,7 +24,7 @@ export const GeneralMetatags: FC<{ info: IMetaTags }> = ({ info }) => {
 			<meta property='og:description' content={info.desc} />
 			<meta property='og:image' content={info.image} />
 
-			<meta property='twitter:card' content='summary_large_image' />
+			<meta property='twitter:card' content='summary' />
 			<meta property='twitter:url' content={info.url} />
 			<meta property='twitter:title' content={info.title} />
 			<meta property='twitter:description' content={info.desc} />
