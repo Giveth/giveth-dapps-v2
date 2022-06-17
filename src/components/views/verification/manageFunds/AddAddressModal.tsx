@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, { ChangeEvent, FC, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { IconWalletOutline } from '@giveth/ui-design-system/lib/cjs/components/icons/WalletOutline';
 import { Button } from '@giveth/ui-design-system';
 import { ethers } from 'ethers';
@@ -12,6 +12,7 @@ import SelectNetwork from '@/components/views/verification/manageFunds/SelectNet
 import { ISelectedNetwork } from '@/components/views/verification/manageFunds/types';
 import config from '@/configuration';
 import { showToastError } from '@/lib/helpers';
+
 interface IProps extends IModal {
 	addAddress: (address: IAddress) => void;
 	addresses: IAddress[];
@@ -22,13 +23,11 @@ const networkOptions = [
 		value: config.PRIMARY_NETWORK.id,
 		label: 'Ethereum Mainnet',
 		name: 'Ethereum',
-		isGivbackEligible: false,
 	},
 	{
 		value: config.SECONDARY_NETWORK.id,
 		label: 'Gnosis',
 		name: 'Gnosis',
-		isGivbackEligible: false,
 	},
 ];
 
@@ -40,12 +39,9 @@ const AddAddressModal: FC<IProps> = ({
 	const [address, setAddress] = useState('');
 	const [title, setTitle] = useState('');
 	const [selectedNetwork, setSelectedNetwork] = useState<ISelectedNetwork>();
-	const [customInput, setCustomInput] = useState('');
 
 	const handleSubmit = async () => {
-		const isDuplicate = addresses.some(item => {
-			return item.title === title;
-		});
+		const isDuplicate = addresses.some(item => item.title === title);
 		if (address && title && selectedNetwork) {
 			//TODO: Check ENS Addresses
 			if (!ethers.utils.isAddress(address)) {
@@ -75,18 +71,13 @@ const AddAddressModal: FC<IProps> = ({
 		>
 			<Container>
 				<SelectNetwork
-					tokenList={networkOptions}
+					networkOptions={networkOptions}
 					selectedNetwork={selectedNetwork}
-					inputValue={customInput}
-					onChange={e => setSelectedNetwork(e)}
-					placeholder='Search network name'
-					onInputChange={setCustomInput}
+					onChange={setSelectedNetwork}
 				/>
 				<br />
 				<Input
-					onChange={(e: ChangeEvent<HTMLInputElement>) =>
-						setTitle(e.target.value)
-					}
+					onChange={e => setTitle(e.target.value)}
 					value={title}
 					name='AddressTitle'
 					label='Address Title'
@@ -94,9 +85,7 @@ const AddAddressModal: FC<IProps> = ({
 				/>
 				<br />
 				<Input
-					onChange={(e: ChangeEvent<HTMLInputElement>) =>
-						setAddress(e.target.value)
-					}
+					onChange={e => setAddress(e.target.value)}
 					value={address}
 					name='Address'
 					label='Receiving address'
