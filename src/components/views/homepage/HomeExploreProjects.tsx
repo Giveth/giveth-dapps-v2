@@ -15,7 +15,7 @@ import { isUserRegistered } from '@/lib/helpers';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { setShowCompleteProfile } from '@/features/modal/modal.sclie';
+import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 
 interface IHomeExploreProjects {
 	projects: IProject[];

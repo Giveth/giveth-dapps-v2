@@ -8,6 +8,7 @@ import { FlexCenter } from '@/components/styled-components/Flex';
 import { IModal } from '@/types/common';
 import ExternalLink from '@/components/ExternalLink';
 import DangerIcon from '/public/images/icons/danger_triangle.svg';
+import links from '@/lib/constants/links';
 
 export enum EDonationFailedType {
 	REJECTED = 'REJECTED',
@@ -25,7 +26,7 @@ const FailedDonation: FC<IProps> = ({ setShowModal, txUrl, type }) => {
 	const messageContent = () => {
 		switch (type) {
 			case EDonationFailedType.REJECTED:
-				return <div>User denied the transaction!</div>;
+				return <div>Transaction was rejected!</div>;
 			case EDonationFailedType.CANCELLED:
 				return (
 					<div>
@@ -35,10 +36,14 @@ const FailedDonation: FC<IProps> = ({ setShowModal, txUrl, type }) => {
 				);
 			case EDonationFailedType.NOT_SAVED:
 				return (
-					<div>
+					<NotSaved>
 						<p>Your donation has NOT been saved!</p>
-						Please contact our support team.
-					</div>
+						<ExternalLink
+							href={links.DISCORD_SUPPORT}
+							title='Please contact our support team'
+						/>
+						.
+					</NotSaved>
 				);
 			default:
 				return (
@@ -67,6 +72,13 @@ const FailedDonation: FC<IProps> = ({ setShowModal, txUrl, type }) => {
 		</Modal>
 	);
 };
+
+const NotSaved = styled.div`
+	> :last-child {
+		font-weight: 500;
+		text-decoration: underline;
+	}
+`;
 
 const Content = styled(Lead)`
 	border-radius: 16px;

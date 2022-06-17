@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import { useEffect } from 'react';
 
 import GIVfarmView from '@/components/views/Farm.view';
@@ -17,9 +16,7 @@ export default function GIVfarmRoute() {
 	}, [setTheme]);
 	return (
 		<>
-			<Head>
-				<GeneralMetatags info={givfarmMetatags} />
-			</Head>
+			<GeneralMetatags info={givfarmMetatags} />
 			<GIVfarmView />
 		</>
 	);

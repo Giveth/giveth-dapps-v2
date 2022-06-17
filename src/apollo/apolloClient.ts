@@ -54,9 +54,9 @@ function createApolloClient() {
 					store.dispatch(signOut());
 				}
 			});
-
 		if (networkError) console.log(`[Network error]: ${networkError}`);
 		const { response } = operation.getContext();
+
 		if (
 			response?.status === 401 ||
 			response?.data?.errors[0]?.message === 'unAuthorized'

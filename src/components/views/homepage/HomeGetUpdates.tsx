@@ -27,36 +27,67 @@ const HomeGetUpdates = () => {
 			<Container>
 				<Title weight={700}>
 					{successSubscription
-						? 'Subscribed!'
+						? `You're In!`
 						: 'Get the latest updates'}
 				</Title>
 				<P>
-					{successSubscription
-						? 'Thank you for subscribing to Giveth newsletter. Our first news are coming to your inbox soon.'
-						: 'Subscribe to our newsletter to get monthly updates straight to your mailbox!'}
+					{successSubscription ? (
+						<span>
+							We just sent you an email to confirm your
+							subscription!
+							<br />
+							Once you do, you'll receive the next issue of our
+							newsletter in your inbox. If you'd like to view
+							previous issues, visit our{' '}
+							<StyledLink
+								href='http://news.giveth.io/'
+								target='_blank'
+								rel='noreferrer'
+							>
+								GIVnews page
+							</StyledLink>
+							.
+						</span>
+					) : (
+						<span>
+							Subscribe to our newsletter to get the latest news,
+							updates and amazing offers delivered directly
+							straight to your mailbox!
+						</span>
+					)}
 				</P>
 				{!successSubscription && (
-					<InputBox>
-						<div>
-							<EmailInput
-								placeholder='Your email address'
-								error={error}
-								onChange={(
-									e: React.ChangeEvent<HTMLInputElement>,
-								) => setEmail(e.target.value)}
+					<form
+						action='http://news.giveth.io/add_subscriber'
+						method='post'
+						id='revue-form'
+						name='revue-form'
+						target='_blank'
+						onSubmit={submitSubscription}
+					>
+						<InputBox>
+							<div>
+								<EmailInput
+									placeholder='Your email address'
+									error={error}
+									onChange={(
+										e: React.ChangeEvent<HTMLInputElement>,
+									) => setEmail(e.target.value)}
+									name='member[email]'
+									id='member_email'
+								/>
+								{error && (
+									<InvalidEmail>
+										Please insert a valid email address!
+									</InvalidEmail>
+								)}
+							</div>
+							<SubscribeButton
+								disabled={!validateEmail(email)}
+								label='SUBSCRIBE'
 							/>
-							{error && (
-								<InvalidEmail>
-									Please insert a valid email address!
-								</InvalidEmail>
-							)}
-						</div>
-						<SubscribeButton
-							disabled={!validateEmail(email)}
-							label='SUBSCRIBE'
-							onClick={submitSubscription}
-						/>
-					</InputBox>
+						</InputBox>
+					</form>
 				)}
 			</Container>
 		</Wrapper>
@@ -110,6 +141,11 @@ const Container = styled.div`
 const Wrapper = styled(HomeContainer)`
 	margin-top: 50px;
 	margin-bottom: 50px;
+`;
+
+const StyledLink = styled.a`
+	color: ${brandColors.pinky[500]};
+	cursor: pointer;
 `;
 
 export default HomeGetUpdates;
