@@ -285,7 +285,7 @@ const Menu = styled.div`
 	box-shadow: ${Shadow.Neutral[400]};
 	margin-top: 8px;
 	position: absolute;
-	z-index: 20;
+	z-index: 13;
 `;
 
 const Blanket = styled.div`
@@ -294,7 +294,7 @@ const Blanket = styled.div`
 	top: 0;
 	right: 0;
 	position: fixed;
-	z-index: 1;
+	z-index: 12;
 `;
 
 const Control = (props: any) => {
