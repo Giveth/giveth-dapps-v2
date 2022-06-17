@@ -1,24 +1,36 @@
 import { Button, H6, Lead, neutralColors, P } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useState } from 'react';
+
 import AddAddressModal from '@/components/views/verification/manageFunds/AddAddressModal';
 import UserAddress from '@/components/views/verification/manageFunds/UserAddress';
 import { TextArea } from '@/components/styled-components/TextArea';
 import { ContentSeparator, BtnContainer } from '../VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
+import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
+import { PROJECT_VERIFICATION_STEPS } from '@/apollo/types/types';
+import { client } from '@/apollo/apolloClient';
+import { showToastError } from '@/lib/helpers';
 import { OutlineStyled } from '../common.styled';
 
 export interface IAddress {
-	walletAddress: string;
+	address: string;
 	title: string;
-	network: string;
+	networkId: number;
 }
 
 const ManageFundsIndex = () => {
-	const [description, setDescription] = useState('');
+	const [loading, setLoading] = useState(false);
 	const [showAddressModal, setShowAddressModal] = useState(false);
-	const [addresses, setAddresses] = useState<IAddress[]>([]);
-	const { setStep } = useVerificationData();
+	const { setStep, setVerificationData, verificationData } =
+		useVerificationData();
+	console.log('verificationData', verificationData);
+	const [addresses, setAddresses] = useState<IAddress[]>(
+		verificationData?.managingFunds?.relatedAddresses || [],
+	);
+	const [description, setDescription] = useState(
+		verificationData?.managingFunds?.description || '',
+	);
 
 	const addAddress = (addressObj: IAddress) => {
 		setAddresses([...addresses, addressObj]);
@@ -28,6 +40,39 @@ const ManageFundsIndex = () => {
 		const newAddresses = [...addresses];
 		newAddresses.splice(index, 1);
 		setAddresses(newAddresses);
+	};
+
+	const handleNext = () => {
+		async function sendReq() {
+			try {
+				if (!description) {
+					showToastError('Please enter a description');
+				}
+				setLoading(true);
+				const { data } = await client.mutate({
+					mutation: UPDATE_PROJECT_VERIFICATION,
+					variables: {
+						projectVerificationUpdateInput: {
+							projectVerificationId: Number(verificationData?.id),
+							step: PROJECT_VERIFICATION_STEPS.MANAGING_FUNDS,
+							managingFunds: {
+								description,
+								relatedAddresses: addresses,
+							},
+						},
+					},
+				});
+				setVerificationData(data.updateProjectVerificationForm);
+				setLoading(false);
+				setStep(7);
+			} catch (error) {
+				showToastError('Something went wrong');
+				console.log('err', error);
+			} finally {
+				setLoading(false);
+			}
+		}
+		sendReq();
 	};
 
 	return (
@@ -47,6 +92,7 @@ const ManageFundsIndex = () => {
 						placeholder='eg. "We are a decentralized autonomous organization that works toward the development of web3
 				applications"'
 						onChange={e => setDescription(e.target.value)}
+						required
 					/>
 					<div>Additional address</div>
 					<AddressDescription>
@@ -72,13 +118,19 @@ const ManageFundsIndex = () => {
 				<ContentSeparator />
 				<BtnContainer>
 					<Button onClick={() => setStep(5)} label='<     PREVIOUS' />
-					<Button onClick={() => setStep(7)} label='NEXT     >' />
+					<Button
+						onClick={handleNext}
+						label='NEXT     >'
+						loading={loading}
+						disabled={!description}
+					/>
 				</BtnContainer>
 			</div>
 			{showAddressModal && (
 				<AddAddressModal
 					addAddress={addAddress}
 					setShowModal={setShowAddressModal}
+					addresses={addresses}
 				/>
 			)}
 		</>

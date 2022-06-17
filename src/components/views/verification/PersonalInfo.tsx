@@ -1,6 +1,6 @@
 import { brandColors, Button, H6 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Flex } from '@/components/styled-components/Flex';
 import { ButtonStyled } from './common.styled';
 import Input from '@/components/Input';
@@ -130,9 +130,7 @@ const PersonalInfo = () => {
 								key='1'
 								label='What is your email address?'
 								value={email}
-								onChange={(
-									e: ChangeEvent<HTMLInputElement>,
-								) => {
+								onChange={e => {
 									setEmail(e.target.value);
 								}}
 								name='email'
