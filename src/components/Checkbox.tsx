@@ -1,8 +1,6 @@
-import { neutralColors } from '@giveth/ui-design-system';
+import { IconCheck, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import Image from 'next/image';
 import { FlexCenter } from '@/components/styled-components/Flex';
-import CheckIcon from '/public/images/checkmark-2.svg';
 
 const CheckBox = (props: {
 	onChange: (e: boolean) => void;
@@ -16,9 +14,7 @@ const CheckBox = (props: {
 			onClick={() => !disabled && onChange(!checked)}
 			disabled={disabled}
 		>
-			<FlexCenter>
-				{checked && <Image src={CheckIcon} alt='checkmark' />}
-			</FlexCenter>
+			<FlexCenter>{checked && <IconCheck />}</FlexCenter>
 			<div>{title}</div>
 		</Wrapper>
 	);
