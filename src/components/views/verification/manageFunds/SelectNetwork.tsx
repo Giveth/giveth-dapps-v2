@@ -4,6 +4,8 @@ import {
 	B,
 	IconCaretUp,
 	IconCaretDown,
+	brandColors,
+	IconCheck,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
@@ -57,14 +59,7 @@ const Option: ComponentType<OptionProps<ISelectedNetwork>> = props => {
 					<ImageIcon label={label} />
 					<B>{label}</B>
 				</RowContainer>
-				{isSelected && (
-					<Image
-						src='/images/checkmark.svg'
-						width='10px'
-						height='10px'
-						alt={label}
-					/>
-				)}
+				{isSelected && <IconCheck color={brandColors.giv[500]} />}
 			</OptionContainer>
 		</components.Option>
 	);
