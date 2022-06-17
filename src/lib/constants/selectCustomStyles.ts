@@ -16,32 +16,27 @@ const selectCustomStyles: StylesConfig = {
 			boxShadow: `${Shadow.Neutral[400]}`,
 		},
 		'&:focus-within': {
-			borderColor: `${brandColors.giv[500]}`,
+			borderColor: `${brandColors.giv[600]}`,
 		},
 	}),
 	option: (styles, { isFocused, isSelected }) => ({
 		padding: '8px',
+		margin: '7px',
+		fontWeight: 500,
 		borderRadius: '4px',
 		backgroundColor: isSelected
 			? neutralColors.gray[300]
 			: isFocused
 			? neutralColors.gray[200]
 			: 'white',
-		color: isSelected ? neutralColors.gray[900] : neutralColors.gray[800],
-		'&:click': {
-			backgroundColor: neutralColors.gray[300],
-		},
+		color: isSelected ? neutralColors.gray[900] : neutralColors.gray[700],
 	}),
 	menu: styles => ({
 		...styles,
-		width: '70%',
+		marginTop: 0,
 		maxWidth: '520px',
-		border: '0px',
 		borderRadius: '8px',
 		boxShadow: Shadow.Neutral[500],
-		'&:focus-within': {
-			border: `2px solid ${neutralColors.gray[300]}`,
-		},
 	}),
 };
 
