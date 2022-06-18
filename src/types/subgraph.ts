@@ -117,6 +117,15 @@ export interface IUnipool {
 	rewardRate: string;
 }
 
+export interface IGIVPowers {
+	id: string;
+	initialDate: number;
+	locksCreated: number;
+	roundDuration: number;
+	totalGIVPower: string;
+	totalGIVLocked: string;
+}
+
 export interface IUniswapV3Position {
 	tokenId: number;
 	token0: string;

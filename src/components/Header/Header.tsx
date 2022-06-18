@@ -47,7 +47,7 @@ import {
 	setShowWelcomeModal,
 	setShowSignWithWallet,
 	setShowCompleteProfile,
-} from '@/features/modal/modal.sclie';
+} from '@/features/modal/modal.slice';
 
 export interface IHeader {
 	theme?: ThemeType;

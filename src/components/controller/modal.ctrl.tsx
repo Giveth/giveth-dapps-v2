@@ -12,7 +12,8 @@ import {
 	setShowFirstWelcomeModal,
 	setShowWalletModal,
 	setShowSignWithWallet,
-} from '@/features/modal/modal.sclie';
+} from '@/features/modal/modal.slice';
+import { isUserRegistered } from '@/lib/helpers';
 
 const ModalController = () => {
 	const {
@@ -22,15 +23,31 @@ const ModalController = () => {
 		showWalletModal,
 		showWelcomeModal,
 	} = useAppSelector(state => state.modal);
+
+	const { userData, isSignedIn } = useAppSelector(state => state.user);
+	const isRegistered = isUserRegistered(userData);
+
 	const dispatch = useAppDispatch();
 
 	const { active } = useWeb3React();
+
+	useEffect(() => {
+		if (isRegistered && showCompleteProfile) {
+			dispatch(setShowCompleteProfile(false));
+		}
+	}, [isRegistered]);
 
 	useEffect(() => {
 		if (showWelcomeModal) {
 			dispatch(setShowWelcomeModal(false));
 		}
 	}, [active]);
+
+	useEffect(() => {
+		if (isSignedIn && showSignWithWallet) {
+			dispatch(setShowSignWithWallet(false));
+		}
+	}, [isSignedIn]);
 
 	return (
 		<>

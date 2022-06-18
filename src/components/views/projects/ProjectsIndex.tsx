@@ -32,7 +32,7 @@ import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
 import { Shadow } from '../../styled-components/Shadow';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { setShowCompleteProfile } from '@/features/modal/modal.sclie';
+import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 
 interface IProjectsView {
 	projects: IProject[];

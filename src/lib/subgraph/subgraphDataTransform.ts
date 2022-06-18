@@ -14,7 +14,6 @@ import type { ISubgraphState } from '@/features/subgraph/subgraph.types';
 
 const transformBalanceInfo = (info: any): IBalances => {
 	if (!info) return ZeroBalances;
-
 	const balance = info.balance || 0;
 	const allocatedTokens = info.allocatedTokens || 0;
 	const claimed = info.claimed || 0;

@@ -1,5 +1,4 @@
 import { GetServerSideProps } from 'next';
-import Head from 'next/head';
 import { FC } from 'react';
 import styled from 'styled-components';
 import { H3 } from '@giveth/ui-design-system';
@@ -9,6 +8,7 @@ import { client } from '@/apollo/apolloClient';
 import { GET_USER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
 import { IUser } from '@/apollo/types/types';
 import UserPublicProfileView from '@/components/views/userPublicProfile/UserPublicProfile.view';
+import { GeneralMetatags } from '@/components/Metatag';
 
 interface IUserRouteProps {
 	user?: IUser;
@@ -25,9 +25,17 @@ const UserRoute: FC<IUserRouteProps> = ({ user }) => {
 
 	return (
 		<>
-			<Head>
-				<title>Giveth | {user.name}</title>
-			</Head>
+			<GeneralMetatags
+				info={{
+					title: `Giveth | ${
+						user.name || `${user.firstName} ${user.lastName}`
+					} User Profile`,
+					desc: 'See the donations, projects & other public information about this user.',
+					image:
+						user.avatar || 'https://i.ibb.co/HTbdCdd/Thumbnail.png',
+					url: `https://giveth.io/user/${user.walletAddress}`,
+				}}
+			/>
 			<UserPublicProfileView user={user} />
 		</>
 	);
