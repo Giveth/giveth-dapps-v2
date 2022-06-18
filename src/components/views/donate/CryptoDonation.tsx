@@ -322,7 +322,7 @@ const CryptoDonation = (props: {
 		if (selectedTokenBalance < amountTyped!) {
 			return setShowInsufficientModal(true);
 		}
-		if (!mainProjectAddress) {
+		if (!mainProjectAddress && !secondaryProjectAddress) {
 			return showToastError(
 				'There is no eth address assigned for this project',
 			);
@@ -361,8 +361,6 @@ const CryptoDonation = (props: {
 					setFailedModalType={setFailedModalType}
 					setTxHash={setTxHash}
 					project={project}
-					mainProjectAddress={mainProjectAddress}
-					secondaryProjectAdress={secondaryProjectAddress}
 					token={selectedToken}
 					amount={amountTyped}
 					price={tokenPrice}
