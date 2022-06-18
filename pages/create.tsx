@@ -1,12 +1,11 @@
-import Head from 'next/head';
+import { GeneralMetatags } from '@/components/Metatag';
 import CreateView from '@/components/views/create/CreateIndex';
+import { createProjectMetatags } from '@/content/metatags';
 
 const CreateRoute = () => {
 	return (
 		<>
-			<Head>
-				<title>Create a Project | Giveth</title>
-			</Head>
+			<GeneralMetatags info={createProjectMetatags} />
 			<CreateView />
 		</>
 	);
