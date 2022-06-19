@@ -44,7 +44,7 @@ const WalletAddressInput = (props: {
 					label='Receiving address'
 					placeholder='My Wallet Address'
 					onChange={setValue}
-					value={value}
+					value={value || ''}
 					error={error}
 					// disabled={isDefaultAddress && !error} // why are we doing this?
 				/>
