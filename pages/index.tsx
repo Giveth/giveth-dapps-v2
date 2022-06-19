@@ -62,7 +62,6 @@ export async function getServerSideProps({ res }: any) {
 
 	try {
 		const { projects, totalCount } = await fetchProjects();
-		console.log('hereee', projects, totalCount);
 		return {
 			props: {
 				projects,
