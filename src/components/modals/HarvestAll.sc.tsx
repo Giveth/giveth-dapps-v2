@@ -16,6 +16,7 @@ import { Flex } from '../styled-components/Flex';
 
 export const HarvestAllModalContainer = styled.div`
 	width: 100%;
+	min-height: 100px;
 	${mediaQueries.tablet} {
 		width: 686px;
 	}
