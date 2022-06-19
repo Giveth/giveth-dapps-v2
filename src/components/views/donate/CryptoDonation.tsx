@@ -516,40 +516,30 @@ const MainContainer = styled.div`
 	height: 60%;
 	justify-content: space-between;
 `;
+
 const InputContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	margin-top: 18px;
 `;
+
 const AvText = styled(GLink)`
 	color: ${brandColors.deep[500]};
 	padding: 4px 0 0 5px;
 `;
-const SearchContainer = styled.div`
-	display: flex;
-	border: ${(props: IInputBox) =>
-		props.error === true
-			? `2px solid ${semanticColors.punch[500]}`
-			: `2px solid ${neutralColors.gray[300]}`};
-	border-radius: 6px;
 
-	:focus,
-	:visited,
-	:active,
+const SearchContainer = styled.div<IInputBox>`
+	display: flex;
+	border: 2px solid
+		${props =>
+			props.error === true
+				? semanticColors.punch[500]
+				: neutralColors.gray[300]};
+	border-radius: 8px;
+	box-shadow: ${props => props.focused && Shadow.Neutral[500]};
 	:hover {
-		border: 2px solid
-			${(props: IInputBox) =>
-				props.error === true
-					? semanticColors.punch[500]
-					: brandColors.giv[500]};
 		box-shadow: ${Shadow.Neutral[500]};
 	}
-	${(props: IInputBox) =>
-		props.focused &&
-		`
-		border: 2px solid ${brandColors.giv[500]};
-		box-shadow: ${Shadow.Neutral[500]};
-		`}
 `;
 
 const DropdownContainer = styled.div`
@@ -605,7 +595,7 @@ const AnotherWalletTxt = styled(GLink)`
 	color: ${neutralColors.gray[800]};
 	padding: 16px 0;
 	text-align: center;
-	a {
+	> a {
 		color: ${brandColors.pinky[500]};
 		cursor: pointer;
 	}
