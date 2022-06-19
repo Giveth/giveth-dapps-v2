@@ -11,8 +11,8 @@ import { Flex } from '@/components/styled-components/Flex';
 import { Button as CButton } from '@/components/styled-components/Button';
 import { IHeader } from './Header';
 import { mediaQueries } from '@/lib/constants/constants';
-import { ETheme } from '@/context/general.context';
 import { Shadow } from '@/components/styled-components/Shadow';
+import { ETheme } from '@/features/general/general.sclie';
 
 export const StyledHeader = styled(Flex)<IHeader>`
 	position: fixed;

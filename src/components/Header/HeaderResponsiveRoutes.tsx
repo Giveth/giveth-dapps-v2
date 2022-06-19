@@ -8,15 +8,16 @@ import { headerRoutes } from './HeaderRoutes';
 import { Shadow } from '../styled-components/Shadow';
 import { mediaQueries } from '@/lib/constants/constants';
 import HeaderRoutesItem from './HeaderRouteItem';
-import { ETheme, useGeneral } from '@/context/general.context';
 import MenuPurple from '/public/images/menu/drawer_menu_purple.svg';
 import MenuWhite from '/public/images/menu/drawer_menu_white.svg';
 import { FlexCenter } from '@/components/styled-components/Flex';
+import { useAppSelector } from '@/features/hooks';
+import { ETheme } from '@/features/general/general.sclie';
 
 const HeaderRoutesResponsive = () => {
 	const router = useRouter();
 	const [isOpen, setIsOpen] = useState(false);
-	const { theme } = useGeneral();
+	const theme = useAppSelector(state => state.general.theme);
 
 	const activeIndex = headerRoutes.findIndex(i => router.pathname === i.href);
 	const activeMenu = headerRoutes[activeIndex]?.title;

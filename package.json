@@ -43,7 +43,7 @@
 		"quill-emoji": "^0.2.0",
 		"quill-image-drop-and-paste": "^1.2.10",
 		"quill-image-resize-module": "^3.0.0",
-		"quill-magic-url": "^4.1.4",
+		"quill-magic-url": "4.1.4",
 		"react": "^18.0.0",
 		"react-custom-scrollbars": "^4.2.1",
 		"react-datepicker": "^4.8.0",

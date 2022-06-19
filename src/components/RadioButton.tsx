@@ -7,7 +7,8 @@ import {
 	neutralColors,
 	Subline,
 } from '@giveth/ui-design-system';
-import { useGeneral, ETheme } from '@/context/general.context';
+import { ETheme } from '@/features/general/general.sclie';
+import { useAppSelector } from '@/features/hooks';
 
 import RadioOnIcon from '/public/images/radio_on.svg';
 import RadioOffIcon from '/public/images/radio_off.svg';
@@ -25,7 +26,7 @@ const RadioButton: FC<IProps> = ({
 	isSelected,
 	toggleRadio,
 }) => {
-	const { theme } = useGeneral();
+	const theme = useAppSelector(state => state.general.theme);
 
 	return (
 		<Container onClick={toggleRadio}>

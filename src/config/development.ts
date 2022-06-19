@@ -9,6 +9,8 @@ import { gwei2wei } from '@/helpers/blockchain';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 const BASE_ROUTE = 'https://serve.giveth.io';
+// IMPORTANT: Using dev to make it work until staging is merged
+// const BASE_ROUTE = 'https://dev.serve.giveth.io';
 
 const config: EnvConfig = {
 	BACKEND_LINK: `${BASE_ROUTE}/graphql`,
@@ -168,7 +170,7 @@ const config: EnvConfig = {
 		MERKLE_ADDRESS: '0xc87403C70c9FBfb594d98d3B5E695BBE4C694188',
 		TOKEN_DISTRO_ADDRESS: '0x18a46865AAbAf416a970eaA8625CFC430D2364A1',
 
-		nodeUrl: 'https://rpc.xdaichain.com/',
+		nodeUrl: 'https://rpc.gnosischain.com/',
 
 		GIV: {
 			LM_ADDRESS: '0xDAEa66Adc97833781139373DF5B3bcEd3fdda5b1',

@@ -1,12 +1,11 @@
-import Head from 'next/head';
+import { GeneralMetatags } from '@/components/Metatag';
 import SupportIndex from '@/components/views/support/SupportIndex';
+import { supportMetatags } from '@/content/metatags';
 
 const SupportRoute = () => {
 	return (
 		<>
-			<Head>
-				<title>Support | Giveth</title>
-			</Head>
+			<GeneralMetatags info={supportMetatags} />
 			<SupportIndex />
 		</>
 	);

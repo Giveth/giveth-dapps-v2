@@ -12,7 +12,8 @@ import CopyLink from '@/components/CopyLink';
 import { Col, Row, Container } from '@/components/Grid';
 import { mediaQueries } from '@/lib/constants/constants';
 import { fullPath } from '@/lib/helpers';
-import { useGeneral } from '@/context/general.context';
+import { setShowFooter } from '@/features/general/general.sclie';
+import { useAppDispatch } from '@/features/hooks';
 
 const SuccessfulCreation = (props: {
 	project: IProject;
@@ -21,12 +22,11 @@ const SuccessfulCreation = (props: {
 	const { project, showSuccess } = props;
 	const { slug } = project;
 	const projectPath = slugToProjectView(slug);
-
-	const { setShowFooter } = useGeneral();
+	const dispatch = useAppDispatch();
 
 	useEffect(() => {
 		setTimeout(() => window.scrollTo(0, 0), 200);
-		setShowFooter(false);
+		dispatch(setShowFooter(false));
 	}, []);
 
 	return (

@@ -4,8 +4,9 @@ import { useRouter } from 'next/router';
 import { H5, Button, Lead, brandColors } from '@giveth/ui-design-system';
 
 import { Modal } from '@/components/modals/Modal';
-import { ETheme, useGeneral } from '@/context/general.context';
 import { IModal } from '@/types/common';
+import { useAppSelector } from '@/features/hooks';
+import { ETheme } from '@/features/general/general.sclie';
 import { Bullets } from '@/components/styled-components/Bullets';
 import Routes from '@/lib/constants/Routes';
 import ExternalLink from '@/components/ExternalLink';
@@ -15,7 +16,7 @@ interface IText {
 }
 
 export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
-	const { theme } = useGeneral();
+	const theme = useAppSelector(state => state.general.theme);
 	const router = useRouter();
 
 	return (

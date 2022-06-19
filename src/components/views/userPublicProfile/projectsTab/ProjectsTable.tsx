@@ -1,6 +1,7 @@
 import {
 	B,
 	brandColors,
+	IconHeart,
 	neutralColors,
 	P,
 	semanticColors,
@@ -41,8 +42,8 @@ const ProjectsTable: FC<IProjectsTable> = ({
 			<TableHeader>Status</TableHeader>
 			<TableHeader>Project</TableHeader>
 			<TableHeader>
-				Likes{' '}
-				<img src='/images/heart-black.svg' width='24px' height='24px' />
+				Likes 
+				<IconHeart />
 			</TableHeader>
 			<TableHeader onClick={() => changeOrder(EOrderBy.Donations)}>
 				Total Raised

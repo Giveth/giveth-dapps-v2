@@ -5674,7 +5674,7 @@ quill-image-resize-module@^3.0.0:
     quill "^1.2.2"
     raw-loader "^0.5.1"
 
-quill-magic-url@^4.1.4:
+quill-magic-url@4.1.4:
   version "4.1.4"
   resolved "https://registry.yarnpkg.com/quill-magic-url/-/quill-magic-url-4.1.4.tgz#05a2f5373d26e738b3eedcde93c56e067f837b26"
   integrity sha512-FBPrqsr4bA6l5LmKHdBQ3sgcp1bnBkNlrzRMOlOkRlfDXMoJxfsECpIkt9TCgsJ39EGY7goA0GgR4fFbEb6Pqw==

@@ -12,15 +12,16 @@ import {
 import Link from 'next/link';
 import styled from 'styled-components';
 
-import { ETheme, useGeneral } from '@/context/general.context';
 import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '@/components/styled-components/Flex';
 import { Container } from '@/components/Grid';
+import { useAppSelector } from '@/features/hooks';
+import { ETheme } from '@/features/general/general.sclie';
 
 const Footer = () => {
-	const { theme } = useGeneral();
+	const theme = useAppSelector(state => state.general.theme);
 	const textColor =
 		theme === ETheme.Dark ? brandColors.deep[100] : brandColors.deep[800];
 	return (

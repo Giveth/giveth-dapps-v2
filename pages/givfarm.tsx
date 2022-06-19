@@ -1,19 +1,20 @@
 import { useEffect } from 'react';
 
 import GIVfarmView from '@/components/views/Farm.view';
-import { useGeneral, ETheme } from '@/context/general.context';
 import { givfarmMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
+import { setDarkTheme, setLightTheme } from '@/features/general/general.sclie';
+import { useAppDispatch } from '@/features/hooks';
 
 export default function GIVfarmRoute() {
-	const { setTheme } = useGeneral();
+	const dispatch = useAppDispatch();
 
 	useEffect(() => {
-		setTheme(ETheme.Dark);
+		dispatch(setDarkTheme());
 		return () => {
-			setTheme(ETheme.Light);
+			dispatch(setLightTheme());
 		};
-	}, [setTheme]);
+	}, [dispatch]);
 	return (
 		<>
 			<GeneralMetatags info={givfarmMetatags} />

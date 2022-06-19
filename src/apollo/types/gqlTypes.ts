@@ -66,6 +66,14 @@ export interface ICheckPurpleListGQL {
 	};
 }
 
+export interface IMeGQL {
+	data: {
+		me: {
+			walletAddress: string;
+		};
+	};
+}
+
 export interface IProjectAcceptedToken {
 	id?: string;
 	symbol: string;

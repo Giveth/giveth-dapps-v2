@@ -15,6 +15,7 @@ export interface IProject {
 	admin?: string;
 	description?: string;
 	walletAddress?: string;
+	addresses?: IWalletAddress[];
 	impactLocation?: string;
 	qualityScore?: number;
 	verified?: boolean;
@@ -48,12 +49,19 @@ export interface IProject {
 	};
 }
 
+export interface IWalletAddress {
+	address?: string;
+	isRecipient?: boolean;
+	networkId?: number;
+}
+
 export interface IProjectEdition {
 	id?: string;
 	title?: string;
 	image?: string;
 	description?: string;
 	walletAddress?: string;
+	addresses?: any;
 	impactLocation?: string;
 	categories: ICategory[];
 	adminUser: {
@@ -71,7 +79,8 @@ export interface IProjectCreation {
 	impactLocation?: any;
 	categories: any;
 	organisationId: number;
-	walletAddress: string;
+	walletAddress?: string;
+	addresses?: any;
 	image?: string;
 	isDraft?: boolean;
 }
