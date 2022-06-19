@@ -1,14 +1,15 @@
 import Head from 'next/head';
 import { useEffect } from 'react';
 import VerificationIndex from '@/components/views/verification/VerificationIndex';
-import { useGeneral } from '@/context/general.context';
+import { setShowFooter } from '@/features/general/general.sclie';
 import { VerificationProvider } from '@/context/verification.context';
+import { useAppDispatch } from '@/features/hooks';
 
 const VerificationRoute = () => {
-	const { setShowFooter } = useGeneral();
+	const dispatch = useAppDispatch();
 
 	useEffect(() => {
-		setShowFooter(false);
+		dispatch(setShowFooter(false));
 	}, []);
 
 	return (

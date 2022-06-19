@@ -11,9 +11,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { ButtonStyled } from '@/components/GeneralCard.sc';
-import { useGeneral } from '@/context/general.context';
+import { useAppDispatch } from '@/features/hooks';
+import { setShowFooter } from '@/features/general/general.sclie';
 import { Shadow } from '@/components/styled-components/Shadow';
 import givFontLogo from '/public/images/icons/giv_font_logo.svg';
 import check_stars from '/public/images/icons/check_stars.svg';
@@ -22,6 +23,7 @@ import { mediaQueries } from '@/lib/constants/constants';
 import LoadingAnimation from '@/animations/loading_giv.json';
 import { SEND_EMAIL_VERIFICATION_TOKEN } from '@/apollo/gql/gqlVerification';
 import { client } from '@/apollo/apolloClient';
+import { slugToVerification } from '@/lib/routeCreators';
 
 const loadingAnimationOptions = {
 	loop: true,
@@ -31,16 +33,18 @@ const loadingAnimationOptions = {
 		preserveAspectRatio: 'xMidYMid slice',
 	},
 };
+
 enum Status {
 	Pending = 'Pending',
 	Verified = 'Verified',
 	Rejected = 'Rejected',
 }
+
 export default function Token() {
 	const LazyLottie = dynamic(() => import('react-lottie'));
-	const { setShowFooter } = useGeneral();
+	const dispatch = useAppDispatch();
 	const router = useRouter();
-	const { slug, token } = router.query;
+	const { token } = router.query;
 	const [status, setStatus] = useState<Status>(Status.Pending);
 
 	const imageAddress = `/images/backgrounds/email-verification-bg-${
@@ -55,19 +59,19 @@ export default function Token() {
 				return <Rejected />;
 			default:
 				return (
-					<Flex justifyContent='center' alignItems='center'>
+					<FlexCenter>
 						<LazyLottie
 							options={loadingAnimationOptions}
 							height={150}
 							width={150}
 						/>
-					</Flex>
+					</FlexCenter>
 				);
 		}
 	}
 
 	useEffect(() => {
-		setShowFooter(false);
+		dispatch(setShowFooter(false));
 	}, []);
 
 	useEffect(() => {
@@ -79,12 +83,8 @@ export default function Token() {
 						emailConfirmationToken: token,
 					},
 				})
-				.then((res: unknown) => {
-					setStatus(Status.Verified);
-				})
-				.catch((err: unknown) => {
-					setStatus(Status.Rejected);
-				});
+				.then(() => setStatus(Status.Verified))
+				.catch(() => setStatus(Status.Rejected));
 		}
 	}, [token]);
 
@@ -100,7 +100,7 @@ export default function Token() {
 
 function Verified() {
 	const router = useRouter();
-	const { slug, token } = router.query;
+	const { slug } = router.query;
 
 	return (
 		<>
@@ -115,7 +115,7 @@ function Verified() {
 				Your email has been verified! <br />
 				You can now close this page and continue verifying your project.
 			</Lead>
-			<Link href={`/verification/${slug}`} passHref>
+			<Link href={slugToVerification(slug as string)} passHref>
 				<StyledButton size='small' label='CONTINUE VERIFICATION' />
 			</Link>
 			<ImageContainer>
@@ -135,9 +135,6 @@ function Verified() {
 }
 
 function Rejected() {
-	const router = useRouter();
-	const { slug, token } = router.query;
-
 	return (
 		<>
 			<Image
@@ -196,7 +193,7 @@ const InnerContainer = styled(Flex)<{ status: Status; imageAddress: string }>`
 	height: 100%;
 	position: relative;
 	overflow: hidden;
-	box-shadow: 0px 3px 20px ${Shadow.Neutral[400]};
+	box-shadow: 0 3px 20px ${Shadow.Neutral[400]};
 	::before {
 		display: ${props =>
 			props.status === Status.Pending ? 'none' : 'block'};
