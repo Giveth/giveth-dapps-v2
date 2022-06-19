@@ -8,6 +8,8 @@ import { sendTransaction, showToastError } from '@/lib/helpers';
 import { saveDonation, updateDonation } from '@/services/donation';
 import { IDonateModalProps } from '@/components/modals/DonateModal';
 import { EDonationStatus } from '@/apollo/types/gqlEnums';
+import { EDonationFailedType } from '@/components/modals/FailedDonation';
+import config from '@/configuration';
 
 export interface ISelectedToken extends IProjectAcceptedToken {
 	value?: IProjectAcceptedToken;
@@ -90,19 +92,23 @@ export interface IConfirmDonation extends IDonateModalProps {
 export const confirmDonation = async (props: IConfirmDonation) => {
 	const {
 		project,
+		mainProjectAddress,
+		secondaryProjectAdress,
 		amount,
 		token,
 		setSuccessDonation,
-		setShowFailedModal,
+		setFailedModalType,
 		web3Context,
 		setDonating,
 		setDonationSaved,
 		givBackEligible,
 		setTxHash,
 	} = props;
-
-	const { library } = web3Context;
-	const { walletAddress } = project;
+	const { library, chainId } = web3Context;
+	const walletAddress =
+		chainId === config.PRIMARY_NETWORK.id
+			? mainProjectAddress
+			: secondaryProjectAdress;
 	const { address } = token;
 	let donationId = 0,
 		donationSaved = false;
@@ -127,8 +133,7 @@ export const confirmDonation = async (props: IConfirmDonation) => {
 						donationSaved = true;
 					})
 					.catch(() => {
-						showToastError('Error saving donation!');
-						setShowFailedModal(true);
+						setFailedModalType(EDonationFailedType.NOT_SAVED);
 						setDonating(false);
 					});
 			},
@@ -141,23 +146,23 @@ export const confirmDonation = async (props: IConfirmDonation) => {
 
 		await sendTransaction(library, transactionObj, txCallbacks, address);
 	} catch (error: any) {
-		const code = error.data?.code;
-		if (code === ('INSUFFICIENT_FUNDS' || 'UNPREDICTABLE_GAS_LIMIT')) {
-			showToastError('Insufficient Funds');
-		} else if (
+		if (
 			(error.replacement && error.cancelled === true) ||
 			error.reason === 'transaction failed'
 		) {
 			setTxHash(error.replacement?.hash || error.transactionHash);
-			setShowFailedModal(true);
-			showToastError(
-				`Transaction ${error.cancelled ? 'cancelled' : 'failed'}!`,
+			setFailedModalType(
+				error.cancelled
+					? EDonationFailedType.CANCELLED
+					: EDonationFailedType.FAILED,
 			);
 			updateDonation(donationId, EDonationStatus.FAILED);
+		} else if (error.code === 4001) {
+			setFailedModalType(EDonationFailedType.REJECTED);
 		} else {
 			showToastError(error);
+			setFailedModalType(EDonationFailedType.FAILED);
 		}
-		setShowFailedModal(true);
 		setDonating(false);
 		setDonationSaved(false);
 		captureException(error, {

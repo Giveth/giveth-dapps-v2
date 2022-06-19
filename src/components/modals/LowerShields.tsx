@@ -5,12 +5,13 @@ import { Lead, Button, OulineButton } from '@giveth/ui-design-system';
 import { Modal } from '@/components/modals/Modal';
 import ShieldBlackIcon from '/public/images/icons/shield_black.svg';
 import ShieldWhiteIcon from '/public/images/icons/shield_white.svg';
-import { ETheme, useGeneral } from '@/context/general.context';
+import { useAppSelector } from '@/features/hooks';
+import { ETheme } from '@/features/general/general.sclie';
 import ShieldImage from '/public/images/brave-shield.png';
 
 const LowerShields = (props: { onClose: () => void }) => {
 	const { onClose } = props;
-	const { theme } = useGeneral();
+	const theme = useAppSelector(state => state.general.theme);
 	const isDark = theme === ETheme.Dark;
 
 	return (

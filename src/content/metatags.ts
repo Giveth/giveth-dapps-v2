@@ -53,3 +53,45 @@ export const giveconomyMetatags = {
 	image: 'https://i.ibb.co/HTbdCdd/Thumbnail.png',
 	url: 'https://giveth.io/giveconomy',
 };
+
+export const supportMetatags = {
+	title: 'Need Support? The Giveth team is here Help',
+	desc: `Have a question? Need to report an issue, leave feedback or request a new feature? We're here and we'd love to hear from you!`,
+	image: 'https://i.ibb.co/HTbdCdd/Thumbnail.png',
+	url: 'https://giveth.io/support',
+};
+
+export const partnershipMetatags = {
+	title: 'Learn about the partners helping us build the Future of Giving',
+	desc: `Learn more about our partnerships & friends in the Ethereum Community helping us build the Future of Giving. From Gnosis Chain to 1Hive, ShapeShift DAO & more!`,
+	image: 'https://i.ibb.co/HTbdCdd/Thumbnail.png',
+	url: 'https://giveth.io/partnerships',
+};
+
+export const joinMetatags = {
+	title: 'Join Giveth and contribute to the Future of Giving!',
+	desc: `Learn the best ways to get involved with Giveth. From joining our discord, participating in governance, contributing part time or even full time roles with us!`,
+	image: 'https://i.ibb.co/HTbdCdd/Thumbnail.png',
+	url: 'https://giveth.io/join',
+};
+
+export const faqMetatags = {
+	title: 'FAQ (Frequently Asked Questions) | Giveth',
+	desc: `Get your questions answered, and learn about key definitions about Blockchain in general, Giveth, and the GIVeconomy!`,
+	image: 'https://i.ibb.co/HTbdCdd/Thumbnail.png',
+	url: 'https://giveth.io/faq',
+};
+
+export const createProjectMetatags = {
+	title: 'Create a Project on Giveth with Zero Fees',
+	desc: `Post your for-good or nonprofit project to start raising money through crypto for free with zero added fees + donors get rewarded when you verify your project!`,
+	image: 'https://i.ibb.co/HTbdCdd/Thumbnail.png',
+	url: 'https://giveth.io/create',
+};
+
+export const claimMetatags = {
+	title: 'Claim Your GIVdrop!',
+	desc: `If you were an early supporter of Giveth before our public launch, enter your address to check if you are eligible for our GIVdrop!`,
+	image: 'https://i.ibb.co/HTbdCdd/Thumbnail.png',
+	url: 'https://giveth.io/claim',
+};

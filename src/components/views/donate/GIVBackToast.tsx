@@ -19,7 +19,7 @@ const GIVBackToast = (props: {
 
 	if (!userEligible) {
 		message =
-			'This wallet address is associated with a Giveth project, therefore, donations made from this address are not eligible for GIVbacks.';
+			'Your currently connected wallet address is associated with a Giveth project, therefore donations made from this address are not eligible for GIVbacks.';
 	} else if (!projectEligible) {
 		message = 'This project is not eligible for GIVbacks.';
 	} else if (tokenEligible) {

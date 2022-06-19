@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import Image from 'next/image';
 import {
 	FacebookShareButton,
@@ -7,9 +7,17 @@ import {
 } from 'react-share';
 import { Lead, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { fullPath } from '@/lib/helpers';
+import { IProject } from '@/apollo/types/types';
+import { slugToProjectView } from '@/lib/routeCreators';
 
-const SocialBox = (props: any) => {
-	const { project } = props;
+interface ISocialBox {
+	project: IProject;
+	isSuccess?: boolean;
+}
+
+const SocialBox: FC<ISocialBox> = ({ project, isSuccess }) => {
+	const { description, slug } = project;
 	const shareTitleTwitter = `Our project is raising funds in crypto on @givethio! 🙌
 Donate directly on Ethereum Mainnet or @gnosischain w/ no fees or intermediaries.👇`;
 
@@ -19,19 +27,17 @@ Donate directly on Ethereum Mainnet or @gnosischain w/ no fees or intermediaries
 	Here's the link to our project:
 	`;
 
-	const projectUrl =
-		typeof window !== 'undefined'
-			? `${window.location.origin}/project/${project?.slug}`
-			: null;
+	const projectUrl = fullPath(slugToProjectView(slug));
+
 	return (
-		<Social isSuccess={props.isSuccess}>
+		<Social isSuccess={isSuccess}>
 			<BLead>
-				{props?.isSuccess
+				{isSuccess
 					? 'Share this with your friends'
 					: `Can't donate? Share this page instead.`}
 			</BLead>
 			<SocialItems>
-				<SocialItem isSuccess={props.isSuccess}>
+				<SocialItem isSuccess={isSuccess}>
 					<TwitterShareButton
 						title={shareTitleTwitter}
 						url={projectUrl || ''}
@@ -45,10 +51,10 @@ Donate directly on Ethereum Mainnet or @gnosischain w/ no fees or intermediaries
 						/>
 					</TwitterShareButton>
 				</SocialItem>
-				<SocialItem isSuccess={props.isSuccess}>
+				<SocialItem isSuccess={isSuccess}>
 					<LinkedinShareButton
 						title={shareTitleFacebookAndLinkedin}
-						summary={project?.description}
+						summary={description}
 						url={projectUrl || ''}
 					>
 						<Image
@@ -59,7 +65,7 @@ Donate directly on Ethereum Mainnet or @gnosischain w/ no fees or intermediaries
 						/>
 					</LinkedinShareButton>
 				</SocialItem>
-				<SocialItem isSuccess={props.isSuccess}>
+				<SocialItem isSuccess={isSuccess}>
 					<FacebookShareButton
 						quote={shareTitleFacebookAndLinkedin}
 						url={projectUrl || ''}
@@ -85,12 +91,11 @@ const BLead = styled(Lead)`
 	z-index: 2;
 `;
 
-const Social = styled.div`
+const Social = styled.div<{ isSuccess?: boolean }>`
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	margin: ${(props: { isSuccess: boolean }) =>
-		props.isSuccess ? 0 : '18px 0'};
+	margin: ${props => (props.isSuccess ? 0 : '18px 0')};
 	color: ${neutralColors.gray[900]};
 	align-items: center;
 `;
@@ -101,13 +106,11 @@ const SocialItems = styled.div`
 	justify-content: center;
 	margin: 8px 0 0 0;
 `;
-const SocialItem = styled.div`
+const SocialItem = styled.div<{ isSuccess?: boolean }>`
 	cursor: pointer;
 	border-radius: 8px;
-	padding: ${(props: { isSuccess: boolean }) =>
-		props.isSuccess ? `0 6px` : '0 12px'};
-	margin: ${(props: { isSuccess: boolean }) =>
-		props.isSuccess ? `0 12px` : '0'};
+	padding: ${props => (props.isSuccess ? `0 6px` : '0 12px')};
+	margin: ${props => (props.isSuccess ? `0 12px` : '0')};
 `;
 
 export default SocialBox;

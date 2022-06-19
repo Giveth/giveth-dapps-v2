@@ -15,16 +15,22 @@ import { IconWalletApprove } from '@giveth/ui-design-system/lib/cjs/components/i
 
 import { Modal } from '@/components/modals/Modal';
 import { IProject } from '@/apollo/types/types';
-import { formatPrice } from '@/lib/helpers';
+import { compareAddresses, formatPrice } from '@/lib/helpers';
 import FixedToast from '@/components/toasts/FixedToast';
 import { mediaQueries } from '@/lib/constants/constants';
-import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
+import { IMeGQL, IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { ISuccessDonation } from '@/components/views/donate/CryptoDonation';
 import { confirmDonation } from '@/components/views/donate/helpers';
 import { IModal } from '@/types/common';
+import { EDonationFailedType } from '@/components/modals/FailedDonation';
+import { client } from '@/apollo/apolloClient';
+import { VALIDATE_TOKEN } from '@/apollo/gql/gqlUser';
+import { useAppDispatch } from '@/features/hooks';
+import { signOut } from '@/features/user/user.thunks';
+import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 
 export interface IDonateModalProps extends IModal {
-	setShowFailedModal: (i: boolean) => void;
+	setFailedModalType: (i: EDonationFailedType) => void;
 	setTxHash: (i: string) => void;
 	project: IProject;
 	token: IProjectAcceptedToken;
@@ -33,12 +39,15 @@ export interface IDonateModalProps extends IModal {
 	anonymous?: boolean;
 	setSuccessDonation: (i: ISuccessDonation) => void;
 	givBackEligible?: boolean;
+	mainProjectAddress?: string;
+	secondaryProjectAdress?: string;
 }
 
 const DonateModal = (props: IDonateModalProps) => {
 	const { project, token, amount, price, setShowModal } = props;
 
 	const web3Context = useWeb3React();
+	const dispatch = useAppDispatch();
 
 	const [donating, setDonating] = useState(false);
 	const [donationSaved, setDonationSaved] = useState(false);
@@ -47,8 +56,31 @@ const DonateModal = (props: IDonateModalProps) => {
 
 	const avgPrice = price && price * amount;
 
-	const handleDonate = () => {
+	const validateToken = () => {
 		setDonating(true);
+		client
+			.query({
+				query: VALIDATE_TOKEN,
+				fetchPolicy: 'no-cache',
+			})
+			.then((res: IMeGQL) => {
+				const address = res.data?.me?.walletAddress;
+				if (compareAddresses(address, web3Context.account)) {
+					handleDonate();
+				} else {
+					handleFailedValidation();
+				}
+			})
+			.catch(handleFailedValidation);
+	};
+
+	const handleFailedValidation = () => {
+		dispatch(signOut());
+		dispatch(setShowSignWithWallet(true));
+		setShowModal(false);
+	};
+
+	const handleDonate = () => {
 		confirmDonation({
 			...props,
 			setDonationSaved,
@@ -93,7 +125,7 @@ const DonateModal = (props: IDonateModalProps) => {
 						buttonType='primary'
 						disabled={donating}
 						label={donating ? 'DONATING' : 'DONATE'}
-						onClick={handleDonate}
+						onClick={validateToken}
 					/>
 					{donationSaved && (
 						<CloseButton

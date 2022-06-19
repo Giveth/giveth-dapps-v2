@@ -1,9 +1,9 @@
 import dynamic from 'next/dynamic';
-import { useGeneral } from '@/context/general.context';
+import { useAppSelector } from '@/features/hooks';
 
 const Footer = dynamic(() => import('./Footer'), { ssr: false });
 
 export const FooterWrapper = () => {
-	const { showFooter } = useGeneral();
+	const showFooter = useAppSelector(state => state.general.showFooter);
 	return showFooter ? <Footer /> : null;
 };

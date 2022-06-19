@@ -59,13 +59,13 @@ export const userSlice = createSlice({
 						};
 					}>,
 				) => {
-					const localAddress = localStorage
-						.getItem(StorageLabel.USER)
-						?.toLocaleLowerCase();
+					const localAddress = localStorage.getItem(
+						StorageLabel.USER,
+					);
 					if (
 						compareAddresses(
 							localAddress,
-							action.payload.data.userByAddress?.walletAddress,
+							action.payload.data?.userByAddress?.walletAddress,
 						)
 					) {
 						state.token =
@@ -73,17 +73,15 @@ export const userSlice = createSlice({
 							undefined;
 					} else {
 						state.token = undefined;
+						state.isSignedIn = false;
+						localStorage.removeItem(StorageLabel.USER);
+						localStorage.removeItem(StorageLabel.TOKEN);
 					}
 					state.userData = action.payload.data?.userByAddress;
 				},
 			)
 			.addCase(signToGetToken.fulfilled, (state, action) => {
 				state.token = action.payload;
-				localStorage.setItem(
-					StorageLabel.USER,
-					action.meta.arg.address?.toLocaleLowerCase() || '',
-				);
-				localStorage.setItem(StorageLabel.TOKEN, action.payload);
 				state.isSignedIn = true;
 			})
 			.addCase(signOut.fulfilled, state => {

@@ -92,14 +92,17 @@ export const GIVfrens: FC<IGIVfrensProps> = ({ regenFarms, network }) => {
 									)}
 								</Col>
 							</Row>
-							{chainId !== poolStakingConfig?.network && (
-								<>
-									<DAOChangeNetwork />
-									<DAOChangeNetworkModal
-										network={poolStakingConfig.network!}
-									/>
-								</>
-							)}
+							{chainId !== config.MAINNET_NETWORK_NUMBER &&
+								chainId !== config.XDAI_NETWORK_NUMBER && (
+									<>
+										<DAOChangeNetwork />
+										<DAOChangeNetworkModal
+											network={
+												config.MAINNET_NETWORK_NUMBER
+											}
+										/>
+									</>
+								)}
 						</DAOContainer>
 					);
 				})}

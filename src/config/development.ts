@@ -9,9 +9,12 @@ import { gwei2wei } from '@/helpers/blockchain';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 const BASE_ROUTE = 'https://serve.giveth.io';
+// IMPORTANT: Using dev to make it work until staging is merged
+// const BASE_ROUTE = 'https://dev.serve.giveth.io';
 
 const config: EnvConfig = {
 	BACKEND_LINK: `${BASE_ROUTE}/graphql`,
+	FRONTEND_LINK: 'https://staging.giveth.io',
 	MICROSERVICES: {
 		authentication: `${BASE_ROUTE}/siweauthmicroservice/v1`,
 	},
@@ -125,7 +128,6 @@ const config: EnvConfig = {
 				LM_ADDRESS: '0x9d23d449af3e2c07a286688c85ff5d3d4c219d79',
 				type: StakingType.UNISWAPV2_CULT_ETH,
 				platform: StakingPlatform.UNISWAP,
-				network: 42,
 				title: 'CULT / ETH',
 				description: '50% CULT, 50% ETH',
 				provideLiquidityLink:
@@ -168,7 +170,7 @@ const config: EnvConfig = {
 		MERKLE_ADDRESS: '0xc87403C70c9FBfb594d98d3B5E695BBE4C694188',
 		TOKEN_DISTRO_ADDRESS: '0x18a46865AAbAf416a970eaA8625CFC430D2364A1',
 
-		nodeUrl: 'https://rpc.xdaichain.com/',
+		nodeUrl: 'https://rpc.gnosischain.com/',
 
 		GIV: {
 			LM_ADDRESS: '0xDAEa66Adc97833781139373DF5B3bcEd3fdda5b1',
@@ -251,7 +253,6 @@ const config: EnvConfig = {
 				LM_ADDRESS: '0x06851400866e065972ff21e1ECdE035b4772736d',
 				type: StakingType.HONEYSWAP_FOX_HNY,
 				platform: StakingPlatform.HONEYSWAP,
-				network: 100,
 				title: 'FOX / HNY',
 				description: '50% FOX, 50% HNY',
 				provideLiquidityLink:

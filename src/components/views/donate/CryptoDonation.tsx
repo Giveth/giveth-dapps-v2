@@ -42,6 +42,7 @@ import {
 	IProjectAcceptedToken,
 	IProjectAcceptedTokensGQL,
 } from '@/apollo/types/gqlTypes';
+import { IWalletAddress } from '@/apollo/types/types';
 import {
 	filterTokens,
 	getNetworkIds,
@@ -52,12 +53,14 @@ import { ORGANIZATION } from '@/lib/constants/organizations';
 import { getERC20Info } from '@/lib/contracts';
 import GIVBackToast from '@/components/views/donate/GIVBackToast';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
-import FailedDonation from '@/components/modals/FailedDonation';
+import FailedDonation, {
+	EDonationFailedType,
+} from '@/components/modals/FailedDonation';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import {
 	setShowSignWithWallet,
 	setShowWalletModal,
-} from '@/features/modal/modal.sclie';
+} from '@/features/modal/modal.slice';
 import usePurpleList from '@/hooks/usePurpleList';
 
 const ethereumChain = config.PRIMARY_NETWORK;
@@ -88,7 +91,13 @@ const CryptoDonation = (props: {
 	const isPurpleListed = usePurpleList();
 
 	const { project, setSuccessDonation } = props;
-	const { organization, verified, id: projectId, status } = project;
+	const {
+		organization,
+		verified,
+		id: projectId,
+		status,
+		addresses,
+	} = project;
 	const {
 		supportCustomTokens,
 		name: orgName,
@@ -97,6 +106,12 @@ const CryptoDonation = (props: {
 	const isActive = status?.name === EProjectStatus.ACTIVE;
 	const mainTokenPrice = new BigNumber(ethPrice).toNumber();
 
+	const mainProjectAddress = addresses?.find(
+		(a: IWalletAddress) => a.networkId === config.PRIMARY_NETWORK.id,
+	)?.address;
+	const secondaryProjectAddress = addresses?.find(
+		(a: IWalletAddress) => a.networkId === config.SECONDARY_NETWORK.id,
+	)?.address;
 	const [selectedToken, setSelectedToken] = useState<IProjectAcceptedToken>();
 	const [selectedTokenBalance, setSelectedTokenBalance] = useState<any>();
 	const [customInput, setCustomInput] = useState<any>();
@@ -117,7 +132,8 @@ const CryptoDonation = (props: {
 	const [acceptedTokens, setAcceptedTokens] =
 		useState<IProjectAcceptedToken[]>();
 	const [acceptedChains, setAcceptedChains] = useState<number[]>();
-	const [showFailedModal, setShowFailedModal] = useState(false);
+	const [failedModalType, setFailedModalType] =
+		useState<EDonationFailedType>();
 	const [txHash, setTxHash] = useState<string>();
 
 	const stopPolling = useRef<any>(null);
@@ -306,7 +322,7 @@ const CryptoDonation = (props: {
 		if (selectedTokenBalance < amountTyped!) {
 			return setShowInsufficientModal(true);
 		}
-		if (!project.walletAddress) {
+		if (!mainProjectAddress && !secondaryProjectAddress) {
 			return showToastError(
 				'There is no eth address assigned for this project',
 			);
@@ -342,9 +358,11 @@ const CryptoDonation = (props: {
 				<DonateModal
 					setShowModal={setShowDonateModal}
 					setSuccessDonation={setSuccessDonation}
-					setShowFailedModal={setShowFailedModal}
+					setFailedModalType={setFailedModalType}
 					setTxHash={setTxHash}
 					project={project}
+					mainProjectAddress={mainProjectAddress}
+					secondaryProjectAdress={secondaryProjectAddress}
 					token={selectedToken}
 					amount={amountTyped}
 					price={tokenPrice}
@@ -354,10 +372,11 @@ const CryptoDonation = (props: {
 					}
 				/>
 			)}
-			{showFailedModal && (
+			{failedModalType && (
 				<FailedDonation
 					txUrl={formatTxLink(networkId, txHash)}
-					setShowModal={setShowFailedModal}
+					setShowModal={() => setFailedModalType(undefined)}
+					type={failedModalType}
 				/>
 			)}
 
@@ -497,40 +516,30 @@ const MainContainer = styled.div`
 	height: 60%;
 	justify-content: space-between;
 `;
+
 const InputContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	margin-top: 18px;
 `;
+
 const AvText = styled(GLink)`
 	color: ${brandColors.deep[500]};
 	padding: 4px 0 0 5px;
 `;
-const SearchContainer = styled.div`
-	display: flex;
-	border: ${(props: IInputBox) =>
-		props.error === true
-			? `2px solid ${semanticColors.punch[500]}`
-			: `2px solid ${neutralColors.gray[300]}`};
-	border-radius: 6px;
 
-	:focus,
-	:visited,
-	:active,
+const SearchContainer = styled.div<IInputBox>`
+	display: flex;
+	border: 2px solid
+		${props =>
+			props.error === true
+				? semanticColors.punch[500]
+				: neutralColors.gray[300]};
+	border-radius: 8px;
+	box-shadow: ${props => props.focused && Shadow.Neutral[500]};
 	:hover {
-		border: 2px solid
-			${(props: IInputBox) =>
-				props.error === true
-					? semanticColors.punch[500]
-					: brandColors.giv[500]};
 		box-shadow: ${Shadow.Neutral[500]};
 	}
-	${(props: IInputBox) =>
-		props.focused &&
-		`
-		border: 2px solid ${brandColors.giv[500]};
-		box-shadow: ${Shadow.Neutral[500]};
-		`}
 `;
 
 const DropdownContainer = styled.div`
@@ -586,7 +595,7 @@ const AnotherWalletTxt = styled(GLink)`
 	color: ${neutralColors.gray[800]};
 	padding: 16px 0;
 	text-align: center;
-	a {
+	> a {
 		color: ${brandColors.pinky[500]};
 		cursor: pointer;
 	}

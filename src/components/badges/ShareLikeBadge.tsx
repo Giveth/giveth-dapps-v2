@@ -1,26 +1,34 @@
-import Image from 'next/image';
-import HeartGrayIcon from '/public/images/heart_gray.svg';
-import HeartRedIcon from '/public/images/heart_red.svg';
-import ShareIcon from '/public/images/share.svg';
 import styled from 'styled-components';
-import { neutralColors, GLink } from '@giveth/ui-design-system';
+import {
+	neutralColors,
+	GLink,
+	IconShare,
+	brandColors,
+	IconHeartOutline,
+	IconHeart,
+} from '@giveth/ui-design-system';
 import { Shadow } from '../styled-components/Shadow';
 
 const ShareLikeBadge = (props: {
 	type: 'share' | 'like';
 	active?: boolean;
-	onClick?: () => void;
+	onClick: () => void;
 }) => {
 	const { type, active, onClick } = props;
 	const isShare = type === 'share';
 	const text = isShare ? 'Share' : 'Like';
-	const icon = isShare ? ShareIcon : active ? HeartRedIcon : HeartGrayIcon;
+	const icon = isShare ? (
+		<IconShare color={neutralColors.gray[500]} />
+	) : active ? (
+		<IconHeart color={brandColors.pinky[500]} />
+	) : (
+		<IconHeartOutline color={neutralColors.gray[500]} />
+	);
+
 	return (
 		<Wrapper onClick={onClick}>
-			<Image src={icon} alt='badge icon' />
-			<BadgeText size='Medium' className='mx-auto'>
-				{text}
-			</BadgeText>
+			{icon}
+			<BadgeText size='Medium'>{text}</BadgeText>
 		</Wrapper>
 	);
 };
@@ -33,7 +41,7 @@ const Wrapper = styled.div`
 	padding: 0 18px;
 	background: white;
 	border-radius: 48px;
-	box-shadow: ${Shadow.Neutral['400']};
+	box-shadow: ${Shadow.Neutral[400]};
 	cursor: pointer;
 `;
 

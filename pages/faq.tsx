@@ -1,12 +1,11 @@
-import Head from 'next/head';
+import { GeneralMetatags } from '@/components/Metatag';
 import FAQIndex from '@/components/views/FAQIndex';
+import { faqMetatags } from '@/content/metatags';
 
 const FAQRoute = () => {
 	return (
 		<div style={{ position: 'relative' }}>
-			<Head>
-				<title>FAQ | Giveth</title>
-			</Head>
+			<GeneralMetatags info={faqMetatags} />
 			<FAQIndex />
 		</div>
 	);

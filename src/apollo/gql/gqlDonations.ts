@@ -8,6 +8,7 @@ export const FETCH_PROJECT_DONATIONS = gql`
 		$projectId: Int!
 		$searchTerm: String
 		$orderBy: SortBy
+		$status: String
 	) {
 		donationsByProjectId(
 			take: $take
@@ -16,6 +17,7 @@ export const FETCH_PROJECT_DONATIONS = gql`
 			projectId: $projectId
 			searchTerm: $searchTerm
 			orderBy: $orderBy
+			status: $status
 		) {
 			donations {
 				id
