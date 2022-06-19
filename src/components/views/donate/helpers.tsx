@@ -9,6 +9,7 @@ import { saveDonation, updateDonation } from '@/services/donation';
 import { IDonateModalProps } from '@/components/modals/DonateModal';
 import { EDonationStatus } from '@/apollo/types/gqlEnums';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
+import config from '@/configuration';
 
 export interface ISelectedToken extends IProjectAcceptedToken {
 	value?: IProjectAcceptedToken;
@@ -91,6 +92,8 @@ export interface IConfirmDonation extends IDonateModalProps {
 export const confirmDonation = async (props: IConfirmDonation) => {
 	const {
 		project,
+		mainProjectAddress,
+		secondaryProjectAdress,
 		amount,
 		token,
 		setSuccessDonation,
@@ -101,9 +104,11 @@ export const confirmDonation = async (props: IConfirmDonation) => {
 		givBackEligible,
 		setTxHash,
 	} = props;
-
-	const { library } = web3Context;
-	const { walletAddress } = project;
+	const { library, chainId } = web3Context;
+	const walletAddress =
+		chainId === config.PRIMARY_NETWORK.id
+			? mainProjectAddress
+			: secondaryProjectAdress;
 	const { address } = token;
 	let donationId = 0,
 		donationSaved = false;

@@ -42,6 +42,7 @@ import {
 	IProjectAcceptedToken,
 	IProjectAcceptedTokensGQL,
 } from '@/apollo/types/gqlTypes';
+import { IWalletAddress } from '@/apollo/types/types';
 import {
 	filterTokens,
 	getNetworkIds,
@@ -90,7 +91,13 @@ const CryptoDonation = (props: {
 	const isPurpleListed = usePurpleList();
 
 	const { project, setSuccessDonation } = props;
-	const { organization, verified, id: projectId, status } = project;
+	const {
+		organization,
+		verified,
+		id: projectId,
+		status,
+		addresses,
+	} = project;
 	const {
 		supportCustomTokens,
 		name: orgName,
@@ -99,6 +106,12 @@ const CryptoDonation = (props: {
 	const isActive = status?.name === EProjectStatus.ACTIVE;
 	const mainTokenPrice = new BigNumber(ethPrice).toNumber();
 
+	const mainProjectAddress = addresses?.find(
+		(a: IWalletAddress) => a.networkId === config.PRIMARY_NETWORK.id,
+	)?.address;
+	const secondaryProjectAddress = addresses?.find(
+		(a: IWalletAddress) => a.networkId === config.SECONDARY_NETWORK.id,
+	)?.address;
 	const [selectedToken, setSelectedToken] = useState<IProjectAcceptedToken>();
 	const [selectedTokenBalance, setSelectedTokenBalance] = useState<any>();
 	const [customInput, setCustomInput] = useState<any>();
@@ -309,7 +322,7 @@ const CryptoDonation = (props: {
 		if (selectedTokenBalance < amountTyped!) {
 			return setShowInsufficientModal(true);
 		}
-		if (!project.walletAddress) {
+		if (!mainProjectAddress && !secondaryProjectAddress) {
 			return showToastError(
 				'There is no eth address assigned for this project',
 			);
@@ -348,6 +361,8 @@ const CryptoDonation = (props: {
 					setFailedModalType={setFailedModalType}
 					setTxHash={setTxHash}
 					project={project}
+					mainProjectAddress={mainProjectAddress}
+					secondaryProjectAdress={secondaryProjectAddress}
 					token={selectedToken}
 					amount={amountTyped}
 					price={tokenPrice}

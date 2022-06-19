@@ -748,7 +748,7 @@
     "@ethersproject/properties" "^5.6.0"
     "@ethersproject/strings" "^5.6.0"
 
-"@giveth/ui-design-system@^1.8.6":
+"@giveth/ui-design-system@^1.8.8":
   version "1.8.8"
   resolved "https://registry.yarnpkg.com/@giveth/ui-design-system/-/ui-design-system-1.8.8.tgz#5d5faf1e1fd41266ae9fb3b733dfc7fd10f2108a"
   integrity sha512-jSrB40D6DUnSHon8R58pBMyjq0WPXCJuSpf/YCBHX8awf6P3LnyxkHcBkKWE5ayp0EOP7x/Xq2e9NMebBhTdQg==
@@ -5630,7 +5630,7 @@ quill-image-resize-module@^3.0.0:
     quill "^1.2.2"
     raw-loader "^0.5.1"
 
-quill-magic-url@^4.1.4:
+quill-magic-url@4.1.4:
   version "4.1.4"
   resolved "https://registry.yarnpkg.com/quill-magic-url/-/quill-magic-url-4.1.4.tgz#05a2f5373d26e738b3eedcde93c56e067f837b26"
   integrity sha512-FBPrqsr4bA6l5LmKHdBQ3sgcp1bnBkNlrzRMOlOkRlfDXMoJxfsECpIkt9TCgsJ39EGY7goA0GgR4fFbEb6Pqw==
