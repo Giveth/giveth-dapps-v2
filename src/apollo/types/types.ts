@@ -184,6 +184,13 @@ export interface IProjectManagingFunds {
 	relatedAddresses: IAddress[];
 }
 
+export interface ISocialProfile {
+	id: string;
+	isVerified: boolean;
+	socialNetwork: string;
+	socialNetworkId: string;
+}
+
 export interface IProjectVerification {
 	id: string;
 	isTermAndConditionsAccepted: boolean;
@@ -200,6 +207,7 @@ export interface IProjectVerification {
 	emailConfirmationTokenExpiredAt?: string;
 	user: IUser;
 	project: IProject;
+	socialProfiles?: ISocialProfile[];
 	status: PROJECT_VERIFICATION_STATUSES;
 	lastStep: PROJECT_VERIFICATION_STEPS;
 }

@@ -29,6 +29,7 @@ const gqlRes = `{
 		socialNetworkId
 		socialNetwork
 		isVerified
+		id
 	}
 	milestones {
 		mission

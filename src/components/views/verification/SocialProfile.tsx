@@ -9,24 +9,42 @@ import {
 import styled from 'styled-components';
 
 import { useRouter } from 'next/router';
+import { useCallback, useMemo } from 'react';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import DiscordIcon from '/public/images/icons/social/discord.svg';
+import LinkedinIcon from '/public/images/icons/social/Linkedin.svg';
 import { ContentSeparator, BtnContainer } from './VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
 import { client } from '@/apollo/apolloClient';
 import { SEND_NEW_SOCIAL_MEDIA } from '@/apollo/gql/gqlVerification';
+import { RemoveButton } from './common';
+import { gToast, ToastType } from '@/components/toasts';
+import { ISocialProfile } from '@/apollo/types/types';
 
-async function handleSocialSubmit(socialNetwork: string, id: number) {
-	const res = await client.mutate({
-		mutation: SEND_NEW_SOCIAL_MEDIA,
-		variables: {
-			socialNetwork,
-			projectVerificationId: id,
-		},
-	});
-	console.log('Res', res);
-	window.open(res.data.addNewSocialProfile, '_blank');
+async function handleSocialSubmit(
+	socialNetwork: string,
+	hasSocialData: boolean,
+	id?: number,
+) {
+	if (hasSocialData) {
+		if (id) {
+			const res = await client.mutate({
+				mutation: SEND_NEW_SOCIAL_MEDIA,
+				variables: {
+					socialNetwork,
+					projectVerificationId: id,
+				},
+			});
+			console.log('Res', res);
+			window.open(res.data.addNewSocialProfile, '_blank');
+		}
+	} else {
+		gToast(`You already connected a ${socialNetwork} profile`, {
+			type: ToastType.INFO_PRIMARY,
+			position: 'top-center',
+		});
+	}
 }
 
 const SocialProfile = () => {
@@ -34,6 +52,26 @@ const SocialProfile = () => {
 	const { verificationData } = useVerificationData();
 	const router = useRouter();
 	console.log('Router', router.query);
+
+	const findSocialMedia = useCallback(
+		(socialName: string): ISocialProfile | undefined => {
+			const res = verificationData?.socialProfiles?.find(
+				socialProfile => socialProfile.socialNetwork === socialName,
+			);
+			return res;
+		},
+		[verificationData],
+	);
+
+	const discordData = useMemo(
+		() => findSocialMedia('discord'),
+		[findSocialMedia],
+	);
+
+	const linkedinData = useMemo(
+		() => findSocialMedia('linkedin'),
+		[findSocialMedia],
+	);
 
 	return (
 		<>
@@ -76,17 +114,36 @@ const SocialProfile = () => {
 						<ButtonSocial
 							color='#7700D5'
 							onClick={() => {
-								if (verificationData?.id) {
-									handleSocialSubmit(
-										'discord',
-										Number(verificationData?.id),
-									);
-								}
+								handleSocialSubmit(
+									'discord',
+									discordData === undefined,
+									Number(verificationData?.id),
+								);
 							}}
 						>
 							<Image src={DiscordIcon} alt='discord icon' />
-							CONNECT TO DISCORD
+							{discordData?.socialNetworkId ??
+								'CONNECT TO DISCORD'}
 						</ButtonSocial>
+						{discordData?.socialNetworkId && <RemoveButton />}
+					</ButtonRow>
+					<ButtonRow>
+						<ButtonSocial
+							color='#0077B5
+							'
+							onClick={() => {
+								handleSocialSubmit(
+									'linkedin',
+									linkedinData === undefined,
+									Number(verificationData?.id),
+								);
+							}}
+						>
+							<Image src={LinkedinIcon} alt='discord icon' />
+							{linkedinData?.socialNetworkId ??
+								'CONNECT TO LINKEDIN'}
+						</ButtonSocial>
+						{linkedinData?.socialNetworkId && <RemoveButton />}
 					</ButtonRow>
 				</ButtonsSection>
 			</div>
