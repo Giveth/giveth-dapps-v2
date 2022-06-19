@@ -53,7 +53,14 @@ export const VerificationProvider = ({ children }: { children: ReactNode }) => {
 					verificationRes.data.getCurrentProjectVerificationForm;
 				setVerificationData(projectVerification);
 				setStep(findStepByName(projectVerification.lastStep) + 1);
-			} catch (error) {
+			} catch (error: any) {
+				if (
+					error.message ===
+					'There is not any project verification form for this project'
+				) {
+					setStep(0);
+				}
+
 				showToastError(error);
 				captureException(error, {
 					tags: {
