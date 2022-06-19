@@ -27,18 +27,27 @@ const ProjectsRoute = (props: IProjectsRoute) => {
 };
 
 export async function getServerSideProps() {
-	const apolloClient = initializeApollo();
+	try {
+		const apolloClient = initializeApollo();
 
-	const { data } = await apolloClient.query({
-		query: FETCH_ALL_PROJECTS,
-		...OPTIONS_HOME_PROJECTS,
-		fetchPolicy: 'network-only',
-	});
+		const { data } = await apolloClient.query({
+			query: FETCH_ALL_PROJECTS,
+			...OPTIONS_HOME_PROJECTS,
+			fetchPolicy: 'network-only',
+		});
 
-	const { projects, totalCount, categories } = data.projects;
-	return addApolloState(apolloClient, {
-		props: { projects, totalCount, categories },
-	});
+		const { projects, totalCount, categories } = data.projects;
+		return addApolloState(apolloClient, {
+			props: { projects, totalCount, categories },
+		});
+	} catch (error) {
+		return {
+			redirect: {
+				destination: '/maintenance',
+				permanent: false,
+			},
+		};
+	}
 }
 
 export default ProjectsRoute;

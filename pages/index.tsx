@@ -60,14 +60,23 @@ export async function getServerSideProps({ res }: any) {
 		'public, s-maxage=10, stale-while-revalidate=59',
 	);
 
-	const { projects, totalCount } = await fetchProjects();
-
-	return {
-		props: {
-			projects,
-			totalCount,
-		},
-	};
+	try {
+		const { projects, totalCount } = await fetchProjects();
+		console.log('hereee', projects, totalCount);
+		return {
+			props: {
+				projects,
+				totalCount,
+			},
+		};
+	} catch (error) {
+		return {
+			redirect: {
+				destination: '/maintenance',
+				permanent: false,
+			},
+		};
+	}
 }
 
 export default HomeRoute;
