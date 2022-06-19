@@ -11,7 +11,7 @@ interface IProps {
 }
 
 const UserAddress: FC<IProps> = ({ address, remove }) => {
-	const { title, walletAddress } = address;
+	const { title, address: walletAddress } = address;
 	return (
 		<Container>
 			<Input

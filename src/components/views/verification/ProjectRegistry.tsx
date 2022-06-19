@@ -1,6 +1,6 @@
 import { Button, H6, Lead, neutralColors, P } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Select from 'react-select';
 import RadioButton from '../../RadioButton';
 import Input from '@/components/Input';
@@ -174,9 +174,7 @@ export default function ProjectRegistry() {
 								value={link}
 								name='link'
 								placeholder='https://'
-								onChange={(
-									e: ChangeEvent<HTMLInputElement>,
-								) => {
+								onChange={e => {
 									setIsChanged(true);
 									setLink(e.target.value);
 								}}
