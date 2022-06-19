@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import { useEffect } from 'react';
 
 import ClaimView from '@/components/views/claim/Claim.view';
@@ -9,6 +8,8 @@ import {
 	setLightTheme,
 	setShowHeader,
 } from '@/features/general/general.sclie';
+import { claimMetatags } from '@/content/metatags';
+import { GeneralMetatags } from '@/components/Metatag';
 
 export default function GIVdropRoute() {
 	const dispatch = useAppDispatch();
@@ -24,9 +25,7 @@ export default function GIVdropRoute() {
 
 	return (
 		<>
-			<Head>
-				<title>GIVdrop</title>
-			</Head>
+			<GeneralMetatags info={claimMetatags} />
 			<ClaimProvider>
 				<ClaimView />
 			</ClaimProvider>
