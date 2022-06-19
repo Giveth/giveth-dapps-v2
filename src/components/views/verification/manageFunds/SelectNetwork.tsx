@@ -4,9 +4,10 @@ import {
 	B,
 	IconCaretUp,
 	IconCaretDown,
+	brandColors,
+	IconCheck,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import Image from 'next/image';
 import Select, {
 	components,
 	OptionProps,
@@ -16,6 +17,8 @@ import Select, {
 
 import { ISelectedNetwork } from '@/components/views/verification/manageFunds/types';
 import selectCustomStyles from '@/lib/constants/selectCustomStyles';
+import { IconGnosisChain } from '@/components/Icons/GnosisChain';
+import { IconEthereum } from '@/components/Icons/Eth';
 
 interface IProps {
 	networkOptions?: ISelectedNetwork[];
@@ -54,32 +57,17 @@ const Option: ComponentType<OptionProps<ISelectedNetwork>> = props => {
 		<components.Option {...props}>
 			<OptionContainer>
 				<RowContainer>
-					<ImageIcon label={label} />
+					{label === 'Gnosis' ? (
+						<IconGnosisChain size={24} />
+					) : (
+						<IconEthereum size={24} />
+					)}
 					<B>{label}</B>
 				</RowContainer>
-				{isSelected && (
-					<Image
-						src='/images/checkmark.svg'
-						width='10px'
-						height='10px'
-						alt={label}
-					/>
-				)}
+				{isSelected && <IconCheck color={brandColors.giv[500]} />}
 			</OptionContainer>
 		</components.Option>
 	);
-};
-
-const ImageIcon = (props: { label: string }) => {
-	const { label } = props;
-	let image_path = '';
-
-	if (label === 'Gnosis') {
-		image_path = '/images/currencies/xdai/40.svg';
-	} else {
-		image_path = '/images/currencies/eth/40.svg';
-	}
-	return <Image alt={label} src={image_path} width='24px' height='24px' />;
 };
 
 const selectStyles: StylesConfig = {
