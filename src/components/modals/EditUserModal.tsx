@@ -172,24 +172,6 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 								/>
 							</FlexCenter>
 						</FlexCenter>
-						{/* <form onSubmit={handleSubmit(onSubmit)}>
-							<input
-								defaultValue={user.firstName}
-								{...register('firstName')}
-							/>
-
-							<input
-								defaultValue={user.lastName}
-								{...register('lastName', {
-									required: true,
-								})}
-							/>
-							{errors.lastName && (
-								<span>This field is required</span>
-							)}
-
-							<input type='submit' />
-						</form> */}
 						<form onSubmit={handleSubmit(onSubmit)}>
 							<InputWrapper>
 								{inputFields.map(field => (

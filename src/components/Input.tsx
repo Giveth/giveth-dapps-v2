@@ -71,12 +71,6 @@ const Input: FC<IInput> = ({
 		? InputValidationType.ERROR
 		: InputValidationType.NORMAL;
 
-	console.log(
-		'registerOptions.required',
-		typeof registerOptions.required,
-		registerOptions.required === true,
-	);
-
 	return (
 		<InputContainer>
 			{label && (
