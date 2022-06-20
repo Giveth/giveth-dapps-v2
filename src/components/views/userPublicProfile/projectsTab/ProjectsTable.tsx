@@ -100,7 +100,7 @@ const ProjectsTable: FC<IProjectsTable> = ({
 
 const Container = styled.div`
 	display: grid;
-	grid-template-columns: 1.5fr 1.1fr 3fr 1.1fr 1.5fr 1.75fr 1fr;
+	grid-template-columns: 1.5fr 1.1fr 4fr 1.1fr 1.5fr 1.75fr 1fr;
 	overflow: auto;
 	min-width: 900px;
 
@@ -159,7 +159,8 @@ const Actions = styled(Flex)<{ isCancelled: boolean }>`
 
 const ProjectTitle = styled.div`
 	display: flex;
-	gap: 10px;
+	flex-wrap: wrap;
+	gap: 0 10px;
 `;
 
 export default ProjectsTable;
