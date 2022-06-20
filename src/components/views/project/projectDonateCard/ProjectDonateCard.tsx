@@ -1,5 +1,6 @@
 import React, {
 	Dispatch,
+	FC,
 	SetStateAction,
 	useCallback,
 	useEffect,
@@ -24,7 +25,7 @@ import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import { Shadow } from '@/components/styled-components/Shadow';
 import CategoryBadge from '@/components/badges/CategoryBadge';
 import { compareAddresses, showToastError } from '@/lib/helpers';
-import { IProject } from '@/apollo/types/types';
+import { EVerificationStatus, IProject } from '@/apollo/types/types';
 import links from '@/lib/constants/links';
 import ShareModal from '@/components/modals/ShareModal';
 import { IReaction } from '@/apollo/types/types';
@@ -32,12 +33,16 @@ import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_REACTION_BY_ID } from '@/apollo/gql/gqlProjects';
 import { likeProject, unlikeProject } from '@/lib/reaction';
 import DeactivateProjectModal from '@/components/modals/deactivateProject/DeactivateProjectIndex';
-import ArchiveIcon from '../../../../public/images/icons/archive.svg';
+import ArchiveIcon from '../../../../../public/images/icons/archive.svg';
 import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
-import { idToProjectEdit, slugToProjectDonate } from '@/lib/routeCreators';
+import {
+	idToProjectEdit,
+	slugToProjectDonate,
+	slugToVerification,
+} from '@/lib/routeCreators';
 import { VerificationModal } from '@/components/modals/VerificationModal';
 import { mediaQueries } from '@/lib/constants/constants';
-import ProjectCardOrgBadge from '../../project-card/ProjectCardOrgBadge';
+import ProjectCardOrgBadge from '../../../project-card/ProjectCardOrgBadge';
 import ExternalLink from '@/components/ExternalLink';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
@@ -45,6 +50,7 @@ import {
 	incrementLikedProjectsCount,
 	decrementLikedProjectsCount,
 } from '@/features/user/user.slice';
+import VerificationStatus from '@/components/views/project/projectDonateCard/VerificationStatus';
 
 interface IProjectDonateCard {
 	project?: IProject;
@@ -56,7 +62,7 @@ interface IProjectDonateCard {
 	setCreationSuccessful: Dispatch<SetStateAction<boolean>>;
 }
 
-const ProjectDonateCard = ({
+const ProjectDonateCard: FC<IProjectDonateCard> = ({
 	project,
 	isActive,
 	isMobile,
@@ -64,7 +70,7 @@ const ProjectDonateCard = ({
 	isDraft,
 	setIsDraft,
 	setCreationSuccessful,
-}: IProjectDonateCard) => {
+}) => {
 	const dispatch = useAppDispatch();
 	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
 
@@ -75,6 +81,7 @@ const ProjectDonateCard = ({
 		id,
 		verified,
 		organization,
+		projectVerificationForm,
 	} = project || {};
 
 	const [heartedByUser, setHeartedByUser] = useState<boolean>(false);
@@ -88,6 +95,10 @@ const ProjectDonateCard = ({
 	);
 
 	const isCategories = categories?.length > 0;
+	const verStatus = verified
+		? EVerificationStatus.VERIFIED
+		: projectVerificationForm?.status;
+	const isVerDraft = verStatus === EVerificationStatus.DRAFT;
 
 	const router = useRouter();
 
@@ -250,7 +261,7 @@ const ProjectDonateCard = ({
 								router.push(idToProjectEdit(project?.id || ''))
 							}
 						/>
-						{!verified && !isDraft && (
+						{!verified && !isDraft && !verStatus && (
 							<FullOutlineButton
 								buttonType='primary'
 								label='VERIFY YOUR PROJECT'
@@ -258,6 +269,15 @@ const ProjectDonateCard = ({
 								onClick={() => setShowVerificationModal(true)}
 							/>
 						)}
+						{isVerDraft && (
+							<ExternalLink href={slugToVerification(slug)}>
+								<FullOutlineButton
+									buttonType='primary'
+									label='RESUME VERIFICATION'
+								/>
+							</ExternalLink>
+						)}
+						<VerificationStatus status={verStatus} />
 						{isDraft && (
 							<FullButton
 								buttonType='primary'
@@ -321,7 +341,7 @@ const ProjectDonateCard = ({
 						buttonType='texty'
 						size='small'
 						label={`${isActive ? 'DE' : ''}ACTIVATE PROJECT`}
-						icon={<Image src={ArchiveIcon} alt='Archive icon.' />}
+						icon={<Image src={ArchiveIcon} alt='Archive icon' />}
 						onClick={() => handleProjectStatus(isActive)}
 					/>
 				)}

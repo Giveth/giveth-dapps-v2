@@ -1,6 +1,6 @@
 import { semanticColors, SublineBold } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Badge } from '@/components/views/userPublicProfile/projectsTab/StyledComponents';
+import { Badge } from '@/components/styled-components/Badge';
 
 const ListingBadge = (props: { listed: boolean | null }) => {
 	const { listed } = props;

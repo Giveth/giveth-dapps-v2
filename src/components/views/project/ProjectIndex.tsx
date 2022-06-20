@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
 import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
-import ProjectDonateCard from './ProjectDonateCard';
+import ProjectDonateCard from './projectDonateCard/ProjectDonateCard';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
