@@ -35,7 +35,6 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 	const [disabled, setDisabled] = useState(false);
 	const [updateUser] = useMutation(UPDATE_USER);
 	const [showModal, setShowModal] = useState(false);
-	const user = useAppSelector(state => state.user.userData);
 	const {
 		register,
 		handleSubmit,
@@ -99,12 +98,12 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 							<Input
 								name='firstName'
 								label='first name'
-								defaultValue={user?.firstName}
 								placeholder='John'
 								register={register}
 								registerOptions={{
 									required: true,
 								}}
+								error={errors.firstName}
 							/>
 						</Col>
 						<Col xs={12} md={6}>
@@ -112,11 +111,11 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 								label='last name'
 								placeholder='Doe'
 								name='lastName'
-								defaultValue={user?.lastName}
 								register={register}
 								registerOptions={{
 									required: true,
 								}}
+								error={errors.lastName}
 							/>
 						</Col>
 						<Col xs={12} md={6}>
@@ -124,7 +123,6 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 								name='email'
 								label='email'
 								placeholder='Example@Domain.com'
-								defaultValue={user?.email}
 								register={register}
 								type='email'
 								registerOptions={{
@@ -138,6 +136,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 										message: 'Too Short',
 									},
 								}}
+								error={errors.email}
 							/>
 						</Col>
 					</Section>
@@ -148,7 +147,6 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 								label='location (optional)'
 								placeholder='Portugal, Turkey,...'
 								name='location'
-								defaultValue={user?.location}
 								register={register}
 							/>
 						</Col>
@@ -162,17 +160,16 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 								label='website or url'
 								placeholder='Website'
 								name='url'
-								defaultValue={user?.url}
 								register={register}
 								type='url'
 								caption='Your home page, blog, or company site.'
 								registerOptions={{
-									required: true,
 									pattern: {
 										value: /^(?:http(s)?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
 										message: 'Invalid URL',
 									},
 								}}
+								error={errors.url}
 							/>
 						</Col>
 					</Section>
