@@ -52,7 +52,11 @@ export const VerificationProvider = ({ children }: { children: ReactNode }) => {
 				const projectVerification: IProjectVerification =
 					verificationRes.data.getCurrentProjectVerificationForm;
 				setVerificationData(projectVerification);
-				setStep(findStepByName(projectVerification.lastStep) + 1);
+				if (!projectVerification.emailConfirmed) {
+					setStep(1);
+				} else {
+					setStep(findStepByName(projectVerification.lastStep) + 1);
+				}
 			} catch (error: any) {
 				if (
 					error?.message ===
