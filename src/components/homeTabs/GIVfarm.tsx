@@ -30,17 +30,12 @@ import { getGivStakingConfig } from '@/helpers/networkProvider';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { useFarms } from '@/context/farm.context';
 import { TopInnerContainer, ExtLinkRow } from './commons';
-import { GIVfrens } from '@/components/GIVfrens';
 import { givEconomySupportedNetworks } from '@/lib/constants/constants';
 import { shortenAddress } from '@/lib/helpers';
 import { Col, Container, Row } from '@/components/Grid';
-import links from '@/lib/constants/links';
-import {
-	DaoCard,
-	DaoCardTitle,
-	DaoCardQuote,
-	DaoCardButton,
-} from '../GIVfrens.sc';
+
+import { GIVfrens } from '@/components/givfarm/GIVfrens';
+import { GIVpower } from '@/components/givfarm/GIVpower';
 
 const renderPools = (
 	pools: BasicNetworkConfig['pools'],
@@ -191,20 +186,13 @@ export const TabGIVfarmBottom = () => {
 				{chainId === config.XDAI_NETWORK_NUMBER && (
 					<>
 						<PoolRow>
-							<Col sm={6} lg={4}>
-								<StakingPoolCard
-									network={config.XDAI_NETWORK_NUMBER}
-									poolStakingConfig={getGivStakingConfig(
-										config.XDAI_CONFIG,
-									)}
-								/>
-							</Col>
 							{renderPools(
 								config.XDAI_CONFIG.pools,
 								config.XDAI_NETWORK_NUMBER,
 								showArchivedPools,
 							)}
 						</PoolRow>
+						<GIVpower />
 						<GIVfrens
 							regenFarms={config.XDAI_CONFIG.regenFarms}
 							network={config.XDAI_NETWORK_NUMBER}
@@ -241,20 +229,7 @@ export const TabGIVfarmBottom = () => {
 						/>
 					</>
 				)}
-				<Col xs={12}>
-					<DaoCard>
-						<DaoCardTitle weight={900}>Add Your DAO</DaoCardTitle>
-						<DaoCardQuote size='small'>
-							Apply to kickstart a RegenFarm for your for-good DAO
-						</DaoCardQuote>
-						<DaoCardButton
-							label='APPLY NOW'
-							linkType='primary'
-							href={links.JOINGIVFRENS}
-							target='_blank'
-						/>
-					</DaoCard>
-				</Col>
+				<Col xs={12}></Col>
 			</Container>
 		</GIVfarmBottomContainer>
 	);
