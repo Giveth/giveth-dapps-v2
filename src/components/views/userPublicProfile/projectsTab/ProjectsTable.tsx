@@ -19,7 +19,7 @@ import StatusBadge from '@/components/views/userPublicProfile/projectsTab/Status
 import SortIcon from '@/components/SortIcon';
 import { EVerificationStatus, IProject } from '@/apollo/types/types';
 import { mediaQueries } from '@/lib/constants/constants';
-import VerificationBadge from '@/components/views/userPublicProfile/projectsTab/VerificationBadge';
+import VerificationBadge from '@/components/VerificationBadge';
 
 interface IProjectsTable {
 	projects: IProject[];
