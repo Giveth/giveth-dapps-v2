@@ -53,8 +53,8 @@ import {
 	StakingPoolSubtitle,
 } from './BaseStakingCard.sc';
 import { APRModal } from '../modals/APR';
-import { StakeModal } from '../modals/Stake';
-import { UnStakeModal } from '../modals/UnStake';
+import { StakeModal } from '../modals/Stake/Stake';
+import { UnStakeModal } from '../modals/Unstake/UnStake';
 import { StakingPoolImages } from '../StakingPoolImages';
 import { V3StakeModal } from '../modals/V3Stake';
 import { IconGIV } from '../Icons/GIV';
@@ -74,6 +74,7 @@ import { IStakeInfo } from '@/hooks/useStakingPool';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { useAppSelector } from '@/features/hooks';
 import { ITokenDistroInfo } from '@/types/subgraph';
+import StakeLockModal from '../modals/Stake/StakeLock';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -490,7 +491,14 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				/>
 			)}
 			{showStakeModal &&
-				(type === StakingType.UNISWAPV3_ETH_GIV ? (
+				(type === StakingType.GIVPOWER ? (
+					<StakeLockModal
+						setShowModal={setShowStakeModal}
+						poolStakingConfig={poolStakingConfig}
+						regenStreamConfig={regenStreamConfig}
+						maxAmount={userNotStakedAmount}
+					/>
+				) : type === StakingType.UNISWAPV3_ETH_GIV ? (
 					<V3StakeModal
 						setShowModal={setShowStakeModal}
 						poolStakingConfig={poolStakingConfig}
