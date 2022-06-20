@@ -70,7 +70,7 @@ const SimilarProjects = (props: { slug: string }) => {
 
 	if (!suggestedProjects || suggestedProjects.length === 0) return null;
 	return (
-		<ContainerStyled>
+		<ContainerStyled id='similar-projects'>
 			<H5 weight={700}>Similar projects</H5>
 			<SliderContainer>
 				<CaretLeft

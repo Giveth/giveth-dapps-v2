@@ -62,6 +62,7 @@ import { getPoolIconWithName } from '../cards/BaseStakingCard';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
 import { LiquidityPosition } from '@/types/nfts';
+import { Flex } from '../styled-components/Flex';
 import type { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 
 interface IHarvestAllModalProps extends IModal {
@@ -308,11 +309,11 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 			headerTitle={modalTitle}
 			headerTitlePosition={'left'}
 		>
-			<>
+			<HarvestAllModalContainer>
 				{(state === HarvestStates.HARVEST ||
 					state === HarvestStates.HARVESTING) &&
 					(sumLiquid.isZero() ? (
-						<HarvestAllModalContainer>
+						<>
 							<NothingToHarvest>
 								You have nothing to claim
 							</NothingToHarvest>
@@ -324,9 +325,9 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 									setShowModal(false);
 								}}
 							/>
-						</HarvestAllModalContainer>
+						</>
 					) : (
-						<HarvestAllModalContainer>
+						<>
 							<HarvestBoxes>
 								{sumLiquid && sumLiquid.gt(0) && (
 									<>
@@ -418,10 +419,9 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 										{givBackStream != 0 && (
 											<>
 												<GIVbackStreamDesc>
-													Recieved from GIVbacks
+													[ Recieved from GIVbacks
 												</GIVbackStreamDesc>
 												<BreakdownRate>
-													+
 													{formatWeiHelper(
 														givBackStream,
 														config.TOKEN_PRECISION,
@@ -432,13 +432,18 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 													{tokenSymbol}/week
 													<IconWithTooltip
 														icon={
-															<IconHelp
-																size={16}
-																color={
-																	brandColors
-																		.deep[100]
-																}
-															/>
+															<Flex gap='4px'>
+																<IconHelp
+																	size={16}
+																	color={
+																		brandColors
+																			.deep[100]
+																	}
+																/>
+																<GIVbackStreamDesc>
+																	]
+																</GIVbackStreamDesc>
+															</Flex>
 														}
 														direction={'left'}
 													>
@@ -578,48 +583,38 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 									}}
 								/>
 							</HarvestBoxes>
-						</HarvestAllModalContainer>
+						</>
 					))}
 				{state === HarvestStates.SUBMITTED && (
-					<HarvestAllModalContainer>
-						<SubmittedInnerModal
-							title={title}
-							walletNetwork={network}
-							txHash={txHash}
-							rewardTokenSymbol={
-								regenStreamConfig?.rewardTokenSymbol
-							}
-							rewardTokenAddress={
-								regenStreamConfig?.rewardTokenAddress
-							}
-						/>
-					</HarvestAllModalContainer>
+					<SubmittedInnerModal
+						title={title}
+						walletNetwork={network}
+						txHash={txHash}
+						rewardTokenSymbol={regenStreamConfig?.rewardTokenSymbol}
+						rewardTokenAddress={
+							regenStreamConfig?.rewardTokenAddress
+						}
+					/>
 				)}
 				{state === HarvestStates.CONFIRMED && (
-					<HarvestAllModalContainer>
-						<ConfirmedInnerModal
-							title={title}
-							walletNetwork={network}
-							txHash={txHash}
-							rewardTokenSymbol={
-								regenStreamConfig?.rewardTokenSymbol
-							}
-							rewardTokenAddress={
-								regenStreamConfig?.rewardTokenAddress
-							}
-						/>
-					</HarvestAllModalContainer>
+					<ConfirmedInnerModal
+						title={title}
+						walletNetwork={network}
+						txHash={txHash}
+						rewardTokenSymbol={regenStreamConfig?.rewardTokenSymbol}
+						rewardTokenAddress={
+							regenStreamConfig?.rewardTokenAddress
+						}
+					/>
 				)}
 				{state === HarvestStates.ERROR && (
-					<HarvestAllModalContainer>
-						<ErrorInnerModal
-							title='Something went wrong!'
-							walletNetwork={network}
-							txHash={txHash}
-						/>
-					</HarvestAllModalContainer>
+					<ErrorInnerModal
+						title='Something went wrong!'
+						walletNetwork={network}
+						txHash={txHash}
+					/>
 				)}
-			</>
+			</HarvestAllModalContainer>
 		</Modal>
 	);
 };

@@ -7,9 +7,9 @@ import {
 	IconInfo16,
 	neutralColors,
 } from '@giveth/ui-design-system';
+import { InjectedConnector } from '@web3-react/injected-connector';
 import { useWeb3React } from '@web3-react/core';
 import styled from 'styled-components';
-import { InjectedConnector } from '@web3-react/injected-connector';
 import { RegenPoolStakingConfig } from '@/types/config';
 import {
 	DAOContainer,
@@ -91,14 +91,17 @@ export const GIVfrens: FC<IGIVfrensProps> = ({ regenFarms, network }) => {
 									)}
 								</Col>
 							</Row>
-							{chainId !== poolStakingConfig?.network && (
-								<>
-									<DAOChangeNetwork />
-									<DAOChangeNetworkModal
-										network={poolStakingConfig.network!}
-									/>
-								</>
-							)}
+							{chainId !== config.MAINNET_NETWORK_NUMBER &&
+								chainId !== config.XDAI_NETWORK_NUMBER && (
+									<>
+										<DAOChangeNetwork />
+										<DAOChangeNetworkModal
+											network={
+												config.MAINNET_NETWORK_NUMBER
+											}
+										/>
+									</>
+								)}
 						</DAOContainer>
 					);
 				})}
@@ -115,6 +118,7 @@ const DAOChangeNetworkModal = ({ network }: IChangeNetworkModal) => {
 	const checkWalletAndSwitchNetwork = async (network: number) => {
 		if (!account) {
 			await activate(new InjectedConnector({}));
+			await switchNetwork(network);
 		}
 		if (account) {
 			await switchNetwork(network);

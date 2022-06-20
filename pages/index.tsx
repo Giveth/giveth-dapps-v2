@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import { useEffect, useState } from 'react';
 
 import HomeIndex from '@/components/views/homepage/HomeIndex';
@@ -49,9 +48,7 @@ const HomeRoute = (props: IHomeRoute) => {
 
 	return (
 		<>
-			<Head>
-				<GeneralMetatags info={homeMetatags} />
-			</Head>
+			<GeneralMetatags info={homeMetatags} />
 			<HomeIndex projects={projects} totalCount={totalCount} />
 		</>
 	);

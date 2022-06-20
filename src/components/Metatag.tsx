@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { IProject } from '@/apollo/types/types';
 import { htmlToText } from '@/lib/helpers';
 import type { FC } from 'react';
@@ -11,7 +12,7 @@ export interface IMetaTags {
 }
 export const GeneralMetatags: FC<{ info: IMetaTags }> = ({ info }) => {
 	return (
-		<>
+		<Head>
 			<title>{info.title}</title>
 			<meta name='title' content={info.title} />
 			<meta name='description' content={info.desc} />
@@ -28,7 +29,7 @@ export const GeneralMetatags: FC<{ info: IMetaTags }> = ({ info }) => {
 			<meta property='twitter:description' content={info.desc} />
 			<meta property='twitter:image' content={info.image} />
 			<meta name='twitter:card' content='summary_large_image' />
-		</>
+		</Head>
 	);
 };
 

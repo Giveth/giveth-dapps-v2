@@ -8,7 +8,7 @@ import {
 import styled from 'styled-components';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch } from '@/features/hooks';
-import { setShowCompleteProfile } from '@/features/modal/modal.sclie';
+import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 
 interface IIncompleteToast {
 	close: () => void;

@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { Button, GLink } from '@giveth/ui-design-system';
 
 import { Flex } from '@/components/styled-components/Flex';
-import { ThemeType } from '@/context/theme.context';
 import { formatWeiHelper } from '@/helpers/number';
 import { networksParams } from '@/helpers/blockchain';
 import {
@@ -32,7 +31,6 @@ import {
 } from './Header.sc';
 import { RewardMenu } from '@/components/menu/RewardMenu';
 import MenuWallet from '@/components/menu/MenuWallet';
-import { ETheme, useGeneral } from '@/context/general.context';
 import { menuRoutes } from '../menu/menuRoutes';
 import { isUserRegistered, shortenAddress } from '@/lib/helpers';
 import HeaderRoutesResponsive from './HeaderResponsiveRoutes';
@@ -42,15 +40,16 @@ import {
 	useAppDispatch,
 	useAppSelector,
 } from '@/features/hooks';
+import { ETheme } from '@/features/general/general.sclie';
 import {
 	setShowWalletModal,
 	setShowWelcomeModal,
 	setShowSignWithWallet,
 	setShowCompleteProfile,
-} from '@/features/modal/modal.sclie';
+} from '@/features/modal/modal.slice';
 
 export interface IHeader {
-	theme?: ThemeType;
+	theme?: ETheme;
 	show?: boolean;
 }
 
@@ -70,8 +69,7 @@ const Header: FC<IHeader> = () => {
 	const { isEnabled, isSignedIn, userData } = useAppSelector(
 		state => state.user,
 	);
-
-	const { theme } = useGeneral();
+	const theme = useAppSelector(state => state.general.theme);
 	const router = useRouter();
 
 	const showLinks = !isCreateRoute;

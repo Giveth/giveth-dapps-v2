@@ -6,7 +6,7 @@ import { useWeb3React } from '@web3-react/core';
 import { Col, Row } from '@/components/Grid';
 import { OnboardSteps } from './Onboarding.view';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { setShowSignWithWallet } from '@/features/modal/modal.sclie';
+import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
 
 export const OnboardStep = styled(Col)`
@@ -32,6 +32,7 @@ export const OnboardActions: FC<IOnboardActions> = ({
 	const dispatch = useAppDispatch();
 	const isSignedIn = useAppSelector(state => state.user.isSignedIn);
 	const { account } = useWeb3React();
+
 	useEffect(() => {
 		if (!isSignedIn) {
 			dispatch(setShowSignWithWallet(true));

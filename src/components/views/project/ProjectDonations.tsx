@@ -15,7 +15,7 @@ const ProjectDonations = (props: {
 	isDraft: boolean;
 }) => {
 	const { donationsByProjectId, project, isActive, isDraft } = props;
-	const { totalDonations, id, traceCampaignId } = project || {};
+	const { totalDonations } = project || {};
 
 	return (
 		<>
@@ -40,9 +40,8 @@ const ProjectDonations = (props: {
 					<ProjectTotalFundCard project={project} />
 					<ProjectDonationTable
 						donations={donationsByProjectId.donations}
-						id={id}
-						showTrace={!!traceCampaignId}
 						totalDonations={donationsByProjectId.totalCount}
+						project={project}
 					/>
 				</>
 			)}

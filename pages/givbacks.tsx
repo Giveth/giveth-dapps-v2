@@ -1,25 +1,23 @@
-import Head from 'next/head';
 import { useEffect } from 'react';
 
 import GIVbackView from '@/components/views/Back.view';
-import { useGeneral, ETheme } from '@/context/general.context';
 import { givbacksMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
+import { useAppDispatch } from '@/features/hooks';
+import { setDarkTheme, setLightTheme } from '@/features/general/general.sclie';
 
 export default function GIVbacksRoute() {
-	const { setTheme } = useGeneral();
+	const dispatch = useAppDispatch();
 
 	useEffect(() => {
-		setTheme(ETheme.Dark);
+		dispatch(setDarkTheme());
 		return () => {
-			setTheme(ETheme.Light);
+			dispatch(setLightTheme());
 		};
-	}, [setTheme]);
+	}, [dispatch]);
 	return (
 		<>
-			<Head>
-				<GeneralMetatags info={givbacksMetatags} />
-			</Head>
+			<GeneralMetatags info={givbacksMetatags} />
 			<GIVbackView />
 		</>
 	);
