@@ -4,7 +4,6 @@ import {
 	IconHeart,
 	neutralColors,
 	P,
-	semanticColors,
 } from '@giveth/ui-design-system';
 import { FC } from 'react';
 import styled from 'styled-components';
@@ -18,9 +17,9 @@ import InternalLink from '@/components/InternalLink';
 import ListingBadge from '@/components/views/userPublicProfile/projectsTab/ListingBadge';
 import StatusBadge from '@/components/views/userPublicProfile/projectsTab/StatusBadge';
 import SortIcon from '@/components/SortIcon';
-import { IProject } from '@/apollo/types/types';
-import { Badge } from '@/components/views/userPublicProfile/StyledComponents';
+import { EVerificationStatus, IProject } from '@/apollo/types/types';
 import { mediaQueries } from '@/lib/constants/constants';
+import VerificationBadge from '@/components/views/userPublicProfile/projectsTab/VerificationBadge';
 
 interface IProjectsTable {
 	projects: IProject[];
@@ -54,6 +53,9 @@ const ProjectsTable: FC<IProjectsTable> = ({
 			{projects?.map(project => {
 				const status = project.status.name;
 				const isCancelled = status === EProjectStatus.CANCEL;
+				const verStatus = project.verified
+					? EVerificationStatus.VERIFIED
+					: project.projectVerificationForm?.status;
 				return (
 					<RowWrapper key={project.id}>
 						<TableCell>
@@ -65,11 +67,7 @@ const ProjectsTable: FC<IProjectsTable> = ({
 						<TableCell bold>
 							<ProjectTitle>
 								{project.title}
-								{project.verified && (
-									<Badge mainColor={semanticColors.jade}>
-										Verified
-									</Badge>
-								)}
+								<VerificationBadge status={verStatus} />
 							</ProjectTitle>
 						</TableCell>
 						<TableCell>{project.totalReactions}</TableCell>
@@ -160,9 +158,8 @@ const Actions = styled(Flex)<{ isCancelled: boolean }>`
 `;
 
 const ProjectTitle = styled.div`
-	> :last-child {
-		margin-left: 7px;
-	}
+	display: flex;
+	gap: 10px;
 `;
 
 export default ProjectsTable;

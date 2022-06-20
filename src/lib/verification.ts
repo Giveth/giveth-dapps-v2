@@ -1,20 +1,20 @@
-import { PROJECT_VERIFICATION_STEPS } from '@/apollo/types/types';
+import { EVerificationSteps } from '@/apollo/types/types';
 
-export const findStepByName = (step: PROJECT_VERIFICATION_STEPS): number => {
+export const findStepByName = (step: EVerificationSteps): number => {
 	switch (step) {
-		case PROJECT_VERIFICATION_STEPS.PERSONAL_INFO:
+		case EVerificationSteps.PERSONAL_INFO:
 			return 1;
-		case PROJECT_VERIFICATION_STEPS.PROJECT_REGISTRY:
+		case EVerificationSteps.PROJECT_REGISTRY:
 			return 3;
-		case PROJECT_VERIFICATION_STEPS.PROJECT_CONTACTS:
+		case EVerificationSteps.PROJECT_CONTACTS:
 			return 4;
-		case PROJECT_VERIFICATION_STEPS.MILESTONES:
+		case EVerificationSteps.MILESTONES:
 			return 5;
-		case PROJECT_VERIFICATION_STEPS.MANAGING_FUNDS:
+		case EVerificationSteps.MANAGING_FUNDS:
 			return 6;
-		case PROJECT_VERIFICATION_STEPS.TERM_AND_CONDITION:
+		case EVerificationSteps.TERM_AND_CONDITION:
 			return 7;
-		case PROJECT_VERIFICATION_STEPS.SUBMIT:
+		case EVerificationSteps.SUBMIT:
 			return 8;
 		default:
 			return 0;

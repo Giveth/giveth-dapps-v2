@@ -8,7 +8,7 @@ import { ContentSeparator, BtnContainer } from './VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
 import { client } from '@/apollo/apolloClient';
 import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
-import { PROJECT_VERIFICATION_STEPS } from '@/apollo/types/types';
+import { EVerificationSteps } from '@/apollo/types/types';
 
 export default function TermsAndConditions() {
 	const [loading, setloading] = useState(false);
@@ -28,7 +28,7 @@ export default function TermsAndConditions() {
 				variables: {
 					projectVerificationUpdateInput: {
 						projectVerificationId: Number(verificationData?.id),
-						step: PROJECT_VERIFICATION_STEPS.TERM_AND_CONDITION,
+						step: EVerificationSteps.TERM_AND_CONDITION,
 						isTermAndConditionsAccepted: accepted,
 					},
 				},

@@ -8,7 +8,7 @@ import { TextArea } from '@/components/styled-components/TextArea';
 import { ContentSeparator, BtnContainer } from '../VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
 import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
-import { PROJECT_VERIFICATION_STEPS } from '@/apollo/types/types';
+import { EVerificationSteps } from '@/apollo/types/types';
 import { client } from '@/apollo/apolloClient';
 import { showToastError } from '@/lib/helpers';
 import { OutlineStyled } from '../common.styled';
@@ -54,7 +54,7 @@ const ManageFundsIndex = () => {
 					variables: {
 						projectVerificationUpdateInput: {
 							projectVerificationId: Number(verificationData?.id),
-							step: PROJECT_VERIFICATION_STEPS.MANAGING_FUNDS,
+							step: EVerificationSteps.MANAGING_FUNDS,
 							managingFunds: {
 								description,
 								relatedAddresses: addresses,
