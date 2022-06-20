@@ -14,7 +14,7 @@ import {
 	FETCH_ALLOWED_COUNTRIES,
 	UPDATE_PROJECT_VERIFICATION,
 } from '@/apollo/gql/gqlVerification';
-import { PROJECT_VERIFICATION_STEPS } from '@/apollo/types/types';
+import { EVerificationSteps } from '@/apollo/types/types';
 import { mediaQueries } from '@/lib/constants/constants';
 
 enum ProjectRegistryStates {
@@ -58,12 +58,10 @@ export default function ProjectRegistry() {
 				variables: {
 					projectVerificationUpdateInput: {
 						projectVerificationId: Number(verificationData?.id),
-						step: PROJECT_VERIFICATION_STEPS.PROJECT_REGISTRY,
+						step: EVerificationSteps.PROJECT_REGISTRY,
 						projectRegistry: {
 							isNonProfitOrganization:
-								isNonProfit === ProjectRegistryStates.YES
-									? true
-									: false,
+								isNonProfit === ProjectRegistryStates.YES,
 							organizationCountry: country?.value,
 							organizationWebsite: link,
 							organizationDescription: description,

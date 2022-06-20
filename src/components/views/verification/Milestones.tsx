@@ -19,7 +19,7 @@ import { ContentSeparator, BtnContainer } from './VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
 import { client } from '@/apollo/apolloClient';
 import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
-import { PROJECT_VERIFICATION_STEPS } from '@/apollo/types/types';
+import { EVerificationSteps } from '@/apollo/types/types';
 
 export default function Milestones() {
 	const [uploading, setUploading] = useState(false);
@@ -50,7 +50,7 @@ export default function Milestones() {
 				variables: {
 					projectVerificationUpdateInput: {
 						projectVerificationId: Number(verificationData?.id),
-						step: PROJECT_VERIFICATION_STEPS.MILESTONES,
+						step: EVerificationSteps.MILESTONES,
 						milestones: {
 							foundationDate: startDate?.toString(),
 							mission,

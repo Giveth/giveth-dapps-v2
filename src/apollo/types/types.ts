@@ -47,6 +47,7 @@ export interface IProject {
 		label: string;
 		supportCustomTokens: boolean;
 	};
+	projectVerificationForm?: IProjectVerification;
 }
 
 export interface IWalletAddress {
@@ -217,19 +218,19 @@ export interface IProjectVerification {
 	user: IUser;
 	project: IProject;
 	socialProfiles?: ISocialProfile[];
-	status: PROJECT_VERIFICATION_STATUSES;
-	lastStep: PROJECT_VERIFICATION_STEPS;
+	status: EVerificationStatus;
+	lastStep: EVerificationSteps;
 }
 
-export enum PROJECT_VERIFICATION_STATUSES {
+export enum EVerificationStatus {
 	VERIFIED = 'verified',
 	DRAFT = 'draft',
 	SUBMITTED = 'submitted',
 	REJECTED = 'rejected',
 }
 
-export interface ProjectVerificationUpdateInput {
-	step: PROJECT_VERIFICATION_STEPS;
+export interface IProjectVerificationUpdateInput {
+	step: EVerificationSteps;
 	projectVerificationId: number;
 	projectRegistry?: IProjectRegistry;
 	projectContacts?: IProjectContact[];
@@ -238,7 +239,7 @@ export interface ProjectVerificationUpdateInput {
 	isTermAndConditionsAccepted?: boolean;
 }
 
-export enum PROJECT_VERIFICATION_STEPS {
+export enum EVerificationSteps {
 	PERSONAL_INFO = 'personalInfo',
 	PROJECT_REGISTRY = 'projectRegistry',
 	PROJECT_CONTACTS = 'projectContacts',

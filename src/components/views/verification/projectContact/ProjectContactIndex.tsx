@@ -18,10 +18,7 @@ import { BtnContainer, ContentSeparator } from '../VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
 import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
 import { client } from '@/apollo/apolloClient';
-import {
-	IProjectContact,
-	PROJECT_VERIFICATION_STEPS,
-} from '@/apollo/types/types';
+import { IProjectContact, EVerificationSteps } from '@/apollo/types/types';
 import { OutlineStyled } from '@/components/views/verification/common.styled';
 import AddSocialModal from '@/components/views/verification/projectContact/AddSocialModal';
 import { EMainSocials } from '@/components/views/verification/common.types';
@@ -133,7 +130,7 @@ export default function ProjectContactIndex() {
 				variables: {
 					projectVerificationUpdateInput: {
 						projectVerificationId: Number(verificationData?.id),
-						step: PROJECT_VERIFICATION_STEPS.PROJECT_CONTACTS,
+						step: EVerificationSteps.PROJECT_CONTACTS,
 						projectContacts: createSocials(),
 					},
 				},

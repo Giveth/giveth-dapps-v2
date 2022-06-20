@@ -1,6 +1,6 @@
 import { semanticColors, SublineBold } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Badge } from '@/components/views/userPublicProfile/StyledComponents';
+import { Badge } from '@/components/views/userPublicProfile/projectsTab/StyledComponents';
 
 const ListingBadge = (props: { listed: boolean | null }) => {
 	const { listed } = props;
@@ -19,17 +19,12 @@ const ListingBadge = (props: { listed: boolean | null }) => {
 	}
 
 	return (
-		<BadgeStyled mainColor={color}>
+		<Badge mainColor={color}>
 			<BulletPoint>&bull;</BulletPoint>
 			<SublineBold>{title}</SublineBold>
-		</BadgeStyled>
+		</Badge>
 	);
 };
-
-const BadgeStyled = styled(Badge)`
-	display: flex;
-	align-items: center;
-`;
 
 const BulletPoint = styled.div`
 	font-size: 18px;
