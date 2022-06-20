@@ -101,7 +101,10 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 								placeholder='John'
 								register={register}
 								registerOptions={{
-									required: true,
+									required: {
+										value: true,
+										message: 'First name is required',
+									},
 								}}
 								error={errors.firstName}
 							/>
@@ -113,7 +116,10 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 								name='lastName'
 								register={register}
 								registerOptions={{
-									required: true,
+									required: {
+										value: true,
+										message: 'Last name is required',
+									},
 								}}
 								error={errors.lastName}
 							/>
@@ -126,7 +132,10 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 								register={register}
 								type='email'
 								registerOptions={{
-									required: true,
+									required: {
+										value: true,
+										message: 'Email is required',
+									},
 									pattern: {
 										value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 										message: 'Invalid Email Address',

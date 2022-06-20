@@ -217,20 +217,29 @@ const inputFields = [
 		label: 'first name',
 		placeholder: 'John',
 		name: 'firstName',
-		required: true,
+		required: {
+			value: true,
+			message: 'First name is required',
+		},
 	},
 	{
 		label: 'last name',
 		placeholder: 'Doe',
 		name: 'lastName',
-		required: true,
+		required: {
+			value: true,
+			message: 'Last name is required',
+		},
 	},
 	{
 		label: 'email',
 		placeholder: 'Example@Domain.com',
 		name: 'email',
 		type: 'email',
-		required: true,
+		required: {
+			value: true,
+			message: 'Email is required',
+		},
 		validators: {
 			minLength: { value: 3, message: 'Too Short' },
 			pattern: {
