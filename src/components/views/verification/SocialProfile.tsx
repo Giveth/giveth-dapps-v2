@@ -3,24 +3,100 @@ import {
 	Button,
 	H6,
 	IconInfo,
-	IconTwitter,
 	neutralColors,
 	P,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
+import { useRouter } from 'next/router';
+import { useCallback, useMemo } from 'react';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
-import FacebookIcon from '/public/images/icons/social/facebook.svg';
-import InstagramIcon from '/public/images/icons/social/instagram.svg';
-import YoutubeIcon from '/public/images/icons/social/youtube.svg';
 import DiscordIcon from '/public/images/icons/social/discord.svg';
-import { RemoveButton } from './common';
+import LinkedinIcon from '/public/images/icons/social/linkedin.svg';
 import { ContentSeparator, BtnContainer } from './VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
+import { client } from '@/apollo/apolloClient';
+import {
+	FETCH_PROJECT_VERIFICATION,
+	REMOVE_SOCIAL_MEDIA,
+	SEND_NEW_SOCIAL_MEDIA,
+} from '@/apollo/gql/gqlVerification';
+import { RemoveButton } from './common';
+import { gToast, ToastType } from '@/components/toasts';
+import { ISocialProfile } from '@/apollo/types/types';
+
+async function handleSocialSubmit(
+	socialNetwork: string,
+	notAuthorized: boolean,
+	id?: number,
+) {
+	if (notAuthorized) {
+		if (id) {
+			const res = await client.mutate({
+				mutation: SEND_NEW_SOCIAL_MEDIA,
+				variables: {
+					socialNetwork,
+					projectVerificationId: id,
+				},
+			});
+			console.log('Res', res);
+			window.open(res.data.addNewSocialProfile, '_blank');
+		}
+	} else {
+		gToast(`You already connected a ${socialNetwork} profile`, {
+			type: ToastType.INFO_PRIMARY,
+			position: 'top-center',
+		});
+	}
+}
 
 const SocialProfile = () => {
 	const { setStep } = useVerificationData();
+	const { verificationData, setVerificationData } = useVerificationData();
+	const router = useRouter();
+
+	const { slug } = router.query;
+
+	const findSocialMedia = useCallback(
+		(socialName: string): ISocialProfile | undefined => {
+			const res = verificationData?.socialProfiles?.find(
+				socialProfile => socialProfile.socialNetwork === socialName,
+			);
+			return res;
+		},
+		[verificationData],
+	);
+
+	const discordData = useMemo(
+		() => findSocialMedia('discord'),
+		[findSocialMedia],
+	);
+
+	const linkedinData = useMemo(
+		() => findSocialMedia('linkedin'),
+		[findSocialMedia],
+	);
+
+	async function handleSocialRemove(id?: number) {
+		if (id) {
+			await client.mutate({
+				mutation: REMOVE_SOCIAL_MEDIA,
+				variables: {
+					socialProfileId: id,
+				},
+			});
+
+			if (slug) {
+				const { data } = await client.query({
+					query: FETCH_PROJECT_VERIFICATION,
+					variables: { slug },
+				});
+				setVerificationData(data.getCurrentProjectVerificationForm);
+			}
+		}
+	}
+
 	return (
 		<>
 			<div>
@@ -31,7 +107,7 @@ const SocialProfile = () => {
 					least one is required.
 				</Description>
 				<ButtonsSection>
-					<ButtonRow>
+					{/* <ButtonRow>
 						<ButtonSocial color='#00ACEE'>
 							<IconTwitter />
 							@LAURENLUZ
@@ -57,12 +133,53 @@ const SocialProfile = () => {
 							<Image src={YoutubeIcon} alt='youtube icon' />
 							CONNECT TO YOUTUBE
 						</ButtonSocial>
+					</ButtonRow> */}
+					<ButtonRow>
+						<ButtonSocial
+							color='#7700D5'
+							onClick={() => {
+								handleSocialSubmit(
+									'discord',
+									discordData === undefined,
+									Number(verificationData?.id),
+								);
+							}}
+						>
+							<Image src={DiscordIcon} alt='discord icon' />
+							{discordData?.socialNetworkId ??
+								'CONNECT TO DISCORD'}
+						</ButtonSocial>
+						{discordData?.socialNetworkId && (
+							<RemoveButton
+								onClick={() =>
+									handleSocialRemove(+discordData?.id)
+								}
+							/>
+						)}
 					</ButtonRow>
 					<ButtonRow>
-						<ButtonSocial color='#7700D5'>
-							<Image src={DiscordIcon} alt='discord icon' />
-							CONNECT TO DISCORD
+						<ButtonSocial
+							color='#0077B5
+							'
+							onClick={() => {
+								handleSocialSubmit(
+									'linkedin',
+									linkedinData === undefined,
+									Number(verificationData?.id),
+								);
+							}}
+						>
+							<Image src={LinkedinIcon} alt='linkedin icon' />
+							{linkedinData?.socialNetworkId ??
+								'CONNECT TO LINKEDIN'}
 						</ButtonSocial>
+						{linkedinData?.socialNetworkId && (
+							<RemoveButton
+								onClick={() =>
+									handleSocialRemove(+linkedinData?.id)
+								}
+							/>
+						)}
 					</ButtonRow>
 				</ButtonsSection>
 			</div>
