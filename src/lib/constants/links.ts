@@ -12,7 +12,6 @@ const links: any = {
 	ASK_QUESTION: 'https://giveth.typeform.com/question',
 	FEATURE_REQUEST: 'https://giveth.typeform.com/featurerequest',
 	FEEDBACK: 'https://giveth.typeform.com/feedback',
-	PROJECT_VERIFICATION: 'https://giveth.typeform.com/verification',
 	DISCORD: 'https://discord.giveth.io',
 	DISCOURSE,
 	GIVBACK_TOKENS_FORUM: 'https://forum.giveth.io/t/givbacks-token-list/253',

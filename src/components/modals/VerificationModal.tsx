@@ -1,4 +1,3 @@
-import router from 'next/router';
 import styled from 'styled-components';
 import {
 	brandColors,
@@ -11,17 +10,20 @@ import {
 	P,
 } from '@giveth/ui-design-system';
 
+import { useRouter } from 'next/router';
 import { Modal } from '@/components/modals/Modal';
-import links from '@/lib/constants/links';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.sclie';
+import Routes from '@/lib/constants/Routes';
 
 export const VerificationModal = (props: { closeModal: () => void }) => {
+	const router = useRouter();
+	const slug = router.query.projectIdSlug as string;
 	const { closeModal } = props;
 	const theme = useAppSelector(state => state.general.theme);
 
 	const handleClick = () => {
-		router.push(links.PROJECT_VERIFICATION);
+		router.push(`${Routes.Verification}/${slug}`);
 		closeModal();
 	};
 
