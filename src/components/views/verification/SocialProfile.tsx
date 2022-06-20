@@ -28,10 +28,10 @@ import { ISocialProfile } from '@/apollo/types/types';
 
 async function handleSocialSubmit(
 	socialNetwork: string,
-	hasSocialData: boolean,
+	notAuthorized: boolean,
 	id?: number,
 ) {
-	if (hasSocialData) {
+	if (notAuthorized) {
 		if (id) {
 			const res = await client.mutate({
 				mutation: SEND_NEW_SOCIAL_MEDIA,
