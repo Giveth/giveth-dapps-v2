@@ -213,6 +213,12 @@ export const SEND_NEW_SOCIAL_MEDIA = gql`
 	}
 `;
 
+export const REMOVE_SOCIAL_MEDIA = gql`
+	mutation removeSocialProfile($socialProfileId: Int!) {
+		removeSocialProfile(socialProfileId: $socialProfileId)
+	}
+`;
+
 export const FETCH_ALLOWED_COUNTRIES = gql`
 	query {
 		getAllowedCountries {

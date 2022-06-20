@@ -17,7 +17,11 @@ import LinkedinIcon from '/public/images/icons/social/Linkedin.svg';
 import { ContentSeparator, BtnContainer } from './VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
 import { client } from '@/apollo/apolloClient';
-import { SEND_NEW_SOCIAL_MEDIA } from '@/apollo/gql/gqlVerification';
+import {
+	FETCH_PROJECT_VERIFICATION,
+	REMOVE_SOCIAL_MEDIA,
+	SEND_NEW_SOCIAL_MEDIA,
+} from '@/apollo/gql/gqlVerification';
 import { RemoveButton } from './common';
 import { gToast, ToastType } from '@/components/toasts';
 import { ISocialProfile } from '@/apollo/types/types';
@@ -49,9 +53,10 @@ async function handleSocialSubmit(
 
 const SocialProfile = () => {
 	const { setStep } = useVerificationData();
-	const { verificationData } = useVerificationData();
+	const { verificationData, setVerificationData } = useVerificationData();
 	const router = useRouter();
-	console.log('Router', router.query);
+
+	const { slug } = router.query;
 
 	const findSocialMedia = useCallback(
 		(socialName: string): ISocialProfile | undefined => {
@@ -72,6 +77,25 @@ const SocialProfile = () => {
 		() => findSocialMedia('linkedin'),
 		[findSocialMedia],
 	);
+
+	async function handleSocialRemove(id?: number) {
+		if (id) {
+			await client.mutate({
+				mutation: REMOVE_SOCIAL_MEDIA,
+				variables: {
+					socialProfileId: id,
+				},
+			});
+
+			if (slug) {
+				const { data } = await client.query({
+					query: FETCH_PROJECT_VERIFICATION,
+					variables: { slug },
+				});
+				setVerificationData(data.getCurrentProjectVerificationForm);
+			}
+		}
+	}
 
 	return (
 		<>
@@ -125,7 +149,13 @@ const SocialProfile = () => {
 							{discordData?.socialNetworkId ??
 								'CONNECT TO DISCORD'}
 						</ButtonSocial>
-						{discordData?.socialNetworkId && <RemoveButton />}
+						{discordData?.socialNetworkId && (
+							<RemoveButton
+								onClick={() =>
+									handleSocialRemove(+discordData?.id)
+								}
+							/>
+						)}
 					</ButtonRow>
 					<ButtonRow>
 						<ButtonSocial
@@ -139,11 +169,17 @@ const SocialProfile = () => {
 								);
 							}}
 						>
-							<Image src={LinkedinIcon} alt='discord icon' />
+							<Image src={LinkedinIcon} alt='linkedin icon' />
 							{linkedinData?.socialNetworkId ??
 								'CONNECT TO LINKEDIN'}
 						</ButtonSocial>
-						{linkedinData?.socialNetworkId && <RemoveButton />}
+						{linkedinData?.socialNetworkId && (
+							<RemoveButton
+								onClick={() =>
+									handleSocialRemove(+linkedinData?.id)
+								}
+							/>
+						)}
 					</ButtonRow>
 				</ButtonsSection>
 			</div>
