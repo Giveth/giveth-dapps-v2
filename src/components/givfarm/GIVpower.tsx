@@ -13,6 +13,7 @@ import config from '@/configuration';
 import { getGivStakingConfig } from '@/helpers/networkProvider';
 import { Col, Row } from '../Grid';
 import DAOChangeNetworkModal from './DAOChangeNetworkModal';
+import { GIVpowerDescCard } from './GIVpowerDescCard';
 
 interface IGIVpowerProps {}
 
@@ -35,7 +36,7 @@ export const GIVpower: FC<IGIVpowerProps> = () => {
 			<PoolRow>
 				<DAOContainer key={`givpower_staking_pool_card`} xs={12}>
 					<Row>
-						<Col xs={12} sm={6} lg={4}>
+						<Col xs={12} md={6} lg={4}>
 							<StakingPoolCard
 								network={chainId || config.XDAI_NETWORK_NUMBER}
 								poolStakingConfig={getGivStakingConfig(
@@ -43,8 +44,8 @@ export const GIVpower: FC<IGIVpowerProps> = () => {
 								)}
 							/>
 						</Col>
-						<Col xs={12} sm={6} lg={8}>
-							<div></div>
+						<Col xs={12} md={6} lg={8}>
+							<GIVpowerDescCard />
 						</Col>
 					</Row>
 					{chainId !== config.MAINNET_NETWORK_NUMBER &&
