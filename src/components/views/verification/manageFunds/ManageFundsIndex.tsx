@@ -24,7 +24,6 @@ const ManageFundsIndex = () => {
 	const [showAddressModal, setShowAddressModal] = useState(false);
 	const { setStep, setVerificationData, verificationData } =
 		useVerificationData();
-	console.log('verificationData', verificationData);
 	const [addresses, setAddresses] = useState<IAddress[]>(
 		verificationData?.managingFunds?.relatedAddresses || [],
 	);
