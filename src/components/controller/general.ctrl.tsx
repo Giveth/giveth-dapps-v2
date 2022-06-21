@@ -1,6 +1,6 @@
 import { neutralColors } from '@giveth/ui-design-system';
 import { createGlobalStyle } from 'styled-components';
-import { ETheme } from '@/features/general/general.sclie';
+import { ETheme } from '@/features/general/general.slice';
 import { useAppSelector } from '@/features/hooks';
 
 const GeneralController = () => {

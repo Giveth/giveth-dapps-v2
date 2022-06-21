@@ -1,18 +1,19 @@
 import { useEffect } from 'react';
 import Head from 'next/head';
 
-import { ETheme, useGeneral } from '@/context/general.context';
 import GivPowerView from '@/components/views/Power.view';
+import { setDarkTheme, setLightTheme } from '@/features/general/general.slice';
+import { useAppDispatch } from '@/features/hooks';
 
 export default function GivPower() {
-	const { setTheme } = useGeneral();
+	const dispatch = useAppDispatch();
 
 	useEffect(() => {
-		setTheme(ETheme.Dark);
+		dispatch(setDarkTheme());
 		return () => {
-			setTheme(ETheme.Light);
+			dispatch(setLightTheme());
 		};
-	}, [setTheme]);
+	}, [dispatch]);
 
 	return (
 		<>

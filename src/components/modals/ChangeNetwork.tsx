@@ -11,7 +11,7 @@ import { Modal } from './Modal';
 import { switchNetwork } from '@/lib/wallet';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
-import { ETheme } from '@/features/general/general.sclie';
+import { ETheme } from '@/features/general/general.slice';
 
 interface IChangeNetworkModalProps extends IModal {
 	targetNetwork: number;

@@ -13,7 +13,7 @@ import {
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
-import { ETheme } from '@/features/general/general.sclie';
+import { ETheme } from '@/features/general/general.slice';
 
 interface IText {
 	isDark?: boolean;
