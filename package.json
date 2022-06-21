@@ -1,6 +1,6 @@
 {
 	"name": "givethdapp",
-	"version": "2.0.8",
+	"version": "2.0.9",
 	"private": true,
 	"scripts": {
 		"build": "next build",
@@ -49,6 +49,7 @@
 		"react-dom": "^18.0.0",
 		"react-dropzone": "^11.5.3",
 		"react-google-maps": "^9.4.5",
+		"react-hook-form": "^7.32.2",
 		"react-hot-toast": "^2.1.1",
 		"react-lottie": "^1.2.3",
 		"react-places-autocomplete": "^7.3.0",

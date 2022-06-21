@@ -1,4 +1,5 @@
 import { captureException } from '@sentry/nextjs';
+import { ethers } from 'ethers';
 import {
 	EWallets,
 	torusConnector,
@@ -79,3 +80,20 @@ export const switchNetworkHandler = (chainId: number | undefined) => {
 		switchNetwork(config.XDAI_NETWORK_NUMBER);
 	}
 };
+
+export async function isAddressValid(
+	address: string,
+	web3: any,
+): Promise<boolean> {
+	if (web3) {
+		if (isAddressENS(address)) {
+			const actualAddress = await getAddressFromENS(address, web3);
+			if (actualAddress) return true;
+			return false;
+		} else {
+			return ethers.utils.isAddress(address);
+		}
+	} else {
+		throw new Error('Web3 is not initialized');
+	}
+}
