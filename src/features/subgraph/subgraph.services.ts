@@ -31,8 +31,23 @@ export const fetchXDaiInfo = async (userAddress = '') => {
 			SubgraphQueryBuilder.getXDaiQuery(userAddress),
 			config.XDAI_NETWORK_NUMBER,
 		);
-		console.log({ response });
-		return transformSubgraphData(response);
+		// TODO: Doing this here while the real subgraph is ready
+		const givPowers = await fetchSubgraph(
+			SubgraphQueryBuilder.getGIVPowersInfoQuery(userAddress),
+			config.XDAI_NETWORK_NUMBER,
+			true,
+		);
+		const powerLocks = await fetchSubgraph(
+			SubgraphQueryBuilder.getPowerLocksInfoQuery(userAddress),
+			config.XDAI_NETWORK_NUMBER,
+			true,
+		);
+		console.log({
+			response,
+			givPowers,
+			powerLocks,
+		});
+		return transformSubgraphData({ ...response, givPowers });
 	} catch (e) {
 		console.error('Error on query xDai subgraph:', e);
 		captureException(e, {
