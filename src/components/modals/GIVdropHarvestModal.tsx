@@ -109,6 +109,8 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 		setGivDropStream(
 			givTokenDistroHelper.getStreamPartTokenPerWeek(givdropAmount),
 		);
+		console.log('givdropAmount', givdropAmount);
+		console.log('givTokenDistroHelper', givTokenDistroHelper);
 		const amount = new BigNumber(givdropAmount.mul(9).div(10).toString());
 		const percent = new BigNumber(givTokenDistroHelper.percent / 100);
 		const givDropAcc = amount
