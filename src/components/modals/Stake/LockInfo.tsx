@@ -25,10 +25,10 @@ const LockInfo = () => {
 							icon={<IconHelp size={16} />}
 							direction={'top'}
 						>
-							<LockInfoooltip>
+							<LockInfotooltip>
 								The longer you lock your GIV, the greater your
 								APR & GIVpower.
-							</LockInfoooltip>
+							</LockInfotooltip>
 						</IconWithTooltip>
 					</MultiPlyHelp>
 				</MultiPlyValue>
@@ -41,10 +41,10 @@ const LockInfo = () => {
 							icon={<IconHelp size={16} />}
 							direction={'right'}
 						>
-							<LockInfoooltip>
+							<LockInfotooltip>
 								This is you rate of return for this set of GIV
 								tokens.
-							</LockInfoooltip>
+							</LockInfotooltip>
 						</IconWithTooltip>
 					</LockInfoRowHelp>
 				</LockInfoRowTitle>
@@ -63,10 +63,10 @@ const LockInfo = () => {
 							icon={<IconHelp size={16} />}
 							direction={'right'}
 						>
-							<LockInfoooltip>
+							<LockInfotooltip>
 								GIVpower allows you to support verified projects
 								on Giveth while earning rewards.
-							</LockInfoooltip>
+							</LockInfotooltip>
 						</IconWithTooltip>
 					</LockInfoRowHelp>
 				</LockInfoRowTitle>
@@ -80,10 +80,10 @@ const LockInfo = () => {
 							icon={<IconHelp size={16} />}
 							direction={'right'}
 						>
-							<LockInfoooltip>
+							<LockInfotooltip>
 								gGIV is your nontransferable GIVgarden voting
 								power, given at a 1:1 ratio with staked GIV.
-							</LockInfoooltip>
+							</LockInfotooltip>
 						</IconWithTooltip>
 					</LockInfoRowHelp>
 				</LockInfoRowTitle>
@@ -150,7 +150,7 @@ const LockInfoRowSpark = styled.div`
 	}
 `;
 
-const LockInfoooltip = styled(Subline)`
+const LockInfotooltip = styled(Subline)`
 	color: ${neutralColors.gray[100]};
 	width: 160px;
 `;

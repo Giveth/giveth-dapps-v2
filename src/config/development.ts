@@ -216,19 +216,6 @@ const config: EnvConfig = {
 				unit: 'LP',
 				active: true,
 			},
-			{
-				POOL_ADDRESS: '0x9ff80789b74d1d2b7cf5a568ea82409c2b327861',
-				LM_ADDRESS: '0xDAEa66Adc97833781139373DF5B3bcEd3fdda5b1',
-				type: StakingType.GIVPOWER,
-				platform: StakingPlatform.GIVETH,
-				platformTitle: 'GIVPOWER STAKING',
-				title: 'GIV',
-				description: '100% GIV',
-				provideLiquidityLink:
-					'https://app.honeyswap.org/#/swap?outputCurrency=0x83a8eea6427985C523a0c4d9d3E62C051B6580d3',
-				unit: 'GIV',
-				active: true,
-			},
 		],
 
 		uniswapV2Subgraph:
