@@ -39,7 +39,7 @@ import {
 	GivpowerCTAButton,
 	GivpowerCTAButtonOutlined,
 	GivpowerCTAButtonContainer,
-} from './GIVpower.sc';
+} from './Givpower.sc';
 import RocketImage from '../../../public/images/rocket.svg';
 import { GIVstreamRewardCard } from './GIVstream.sc';
 import config from '@/configuration';
