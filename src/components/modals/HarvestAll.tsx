@@ -407,11 +407,20 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 											{tokenSymbol}
 										</BreakdownUnit>
 										<BreakdownRate>
-											{formatWeiHelper(
-												rewardStream,
-												config.TOKEN_PRECISION,
-												false,
-											)}
+											{Number(
+												formatWeiHelper(
+													rewardStream,
+													config.TOKEN_PRECISION,
+													false,
+												),
+											) -
+												Number(
+													formatWeiHelper(
+														givBackStream,
+														config.TOKEN_PRECISION,
+														false,
+													),
+												)}
 										</BreakdownRate>
 										<BreakdownUnit>
 											{tokenSymbol}/week
@@ -419,7 +428,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 										{givBackStream != 0 && (
 											<>
 												<GIVbackStreamDesc>
-													[ Recieved from GIVbacks
+													Recieved from GIVbacks
 												</GIVbackStreamDesc>
 												<BreakdownRate>
 													{formatWeiHelper(
@@ -440,9 +449,6 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 																			.deep[100]
 																	}
 																/>
-																<GIVbackStreamDesc>
-																	]
-																</GIVbackStreamDesc>
 															</Flex>
 														}
 														direction={'left'}
