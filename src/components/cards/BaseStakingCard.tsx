@@ -76,6 +76,8 @@ import { useAppSelector } from '@/features/hooks';
 import { ITokenDistroInfo } from '@/types/subgraph';
 import StakeLockModal from '../modals/Stake/StakeLock';
 import type { LiquidityPosition } from '@/types/nfts';
+import { LockupDetailsModal } from '../modals/LockupDetailsModal';
+import { GIVPowerExplainModal } from '../modals/GIVPowerExplain';
 
 export enum StakeCardState {
 	NORMAL,
@@ -124,6 +126,8 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const [showStakeModal, setShowStakeModal] = useState(false);
 	const [showUnStakeModal, setShowUnStakeModal] = useState(false);
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
+	const [showLockupDetailsModal, setShowLockupDetailsModal] = useState(false);
+	const [showGIVPowerExplain, setShowGIVPowerExplain] = useState(false);
 	const [showWhatIsGIVstreamModal, setShowWhatIsGIVstreamModal] =
 		useState(false);
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
@@ -239,7 +243,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				{state === StakeCardState.NORMAL ? (
 					<>
 						{type === StakingType.GIVPOWER && (
-							<CardTag>
+							<CardTag
+								onClick={() => setShowGIVPowerExplain(true)}
+							>
 								<GIVpowerLogoCardTag>
 									<IconRocketInSpace16 />
 								</GIVpowerLogoCardTag>
@@ -453,7 +459,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									{type === StakingType.GIVPOWER && (
 										<LiquidityButton
 											label='MANAGE GIV'
-											onClick={() => {}}
+											onClick={() => {
+												setShowLockupDetailsModal(true);
+											}}
 											buttonType='texty'
 											icon={
 												<IconLock16
@@ -477,6 +485,18 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					/>
 				)}
 			</StakingPoolContainer>
+			{showLockupDetailsModal && (
+				<LockupDetailsModal
+					setShowModal={setShowLockupDetailsModal}
+					regenStreamConfig={regenStreamConfig}
+				/>
+			)}
+			{showGIVPowerExplain && (
+				<GIVPowerExplainModal
+					setShowModal={setShowGIVPowerExplain}
+					regenStreamConfig={regenStreamConfig}
+				/>
+			)}
 			{showAPRModal && (
 				<APRModal
 					setShowModal={setShowAPRModal}
