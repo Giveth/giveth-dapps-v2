@@ -26,6 +26,7 @@ const links = {
 	GIVFARM_DOCS: DOCS + 'giveconomy/givfarm',
 	GIVSTREAM_DOCS: DOCS + 'giveconomy/givstream',
 	GIVBACK_DOC: DOCS + 'giveconomy/givbacks',
+	GIVPOWER_DOC: DOCS + 'giveconomy/givpower',
 	COVENANT_DOC: DOCS + 'whatisgiveth/covenant/',
 	GIVETH_DOCS: DOCS + 'whatisgiveth/',
 	USER_DOCS: DOCS + 'dapps/',
