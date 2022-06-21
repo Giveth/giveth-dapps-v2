@@ -25,6 +25,9 @@ const moduleExports = withBundleAnalyzer({
 	compiler: {
 		// ssr and displayName are configured by default
 		styledComponents: true,
+		removeConsole: {
+			exclude: ['error'],
+		},
 	},
 	webpack: (config, { isServer, dev }) => {
 		if (isServer && !dev) {

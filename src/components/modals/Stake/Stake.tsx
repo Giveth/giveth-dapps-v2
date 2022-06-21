@@ -1,12 +1,10 @@
 import React, { FC, useEffect, useState } from 'react';
 import {
-	brandColors,
 	Button,
 	H4,
 	neutralColors,
 	OulineButton,
 	P,
-	SublineBold,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { BigNumber } from 'ethers';
@@ -14,25 +12,26 @@ import Lottie from 'react-lottie';
 import { useWeb3React } from '@web3-react/core';
 import { Contract, ethers } from 'ethers';
 import { captureException } from '@sentry/nextjs';
-import { Modal } from './Modal';
-import { Flex } from '../styled-components/Flex';
-import { StakingPoolImages } from '../StakingPoolImages';
-import { AmountInput } from '../AmountInput';
+import { Modal } from '../Modal';
+import { Flex } from '../../styled-components/Flex';
+import { StakingPoolImages } from '../../StakingPoolImages';
+import { AmountInput } from '../../AmountInput';
 import {
 	approveERC20tokenTransfer,
 	stakeTokens,
 	wrapToken,
 } from '@/lib/stakingPool';
-import LoadingAnimation from '../../animations/loading.json';
+import LoadingAnimation from '../../../animations/loading.json';
 import {
 	ConfirmedInnerModal,
 	ErrorInnerModal,
 	SubmittedInnerModal,
-} from './ConfirmSubmit';
+} from '../ConfirmSubmit';
 import { StakeState } from '@/lib/staking';
-import ToggleSwitch from '../styled-components/Switch';
+import ToggleSwitch from '../../styled-components/Switch';
 import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
 import { IModal } from '@/types/common';
+import StakeSteps from './StakeSteps';
 import type { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 
 interface IStakeModalProps extends IModal {
@@ -41,7 +40,7 @@ interface IStakeModalProps extends IModal {
 	maxAmount: BigNumber;
 }
 
-const loadingAnimationOptions = {
+export const loadingAnimationOptions = {
 	loop: true,
 	autoplay: true,
 	animationData: LoadingAnimation,
@@ -237,48 +236,8 @@ export const StakeModal: FC<IStakeModalProps> = ({
 									Stake
 								</StakeModalTitleText>
 							</StakeModalTitle>
-							<InnerModal>
-								{stakeState === StakeState.APPROVE ||
-								stakeState === StakeState.APPROVING ||
-								stakeState === StakeState.WRAP ||
-								stakeState === StakeState.WRAPPING ? (
-									<StakeStepsContainer>
-										<StakeStep>
-											<StakeStepTitle>
-												Approve
-											</StakeStepTitle>
-											<StakeStepNumber>1</StakeStepNumber>
-										</StakeStep>
-										<StakeStep>
-											<StakeStepTitle
-												disable={
-													!(
-														stakeState ===
-															StakeState.WRAP ||
-														stakeState ===
-															StakeState.WRAPPING
-													)
-												}
-											>
-												Stake
-											</StakeStepTitle>
-											<StakeStepNumber
-												disable={
-													!(
-														stakeState ===
-															StakeState.WRAP ||
-														stakeState ===
-															StakeState.WRAPPING
-													)
-												}
-											>
-												2
-											</StakeStepNumber>
-										</StakeStep>
-									</StakeStepsContainer>
-								) : (
-									<StakeStepsPlaceholder />
-								)}
+							<StakeInnerModal>
+								<StakeSteps stakeState={stakeState} />
 								<AmountInput
 									setAmount={setAmount}
 									maxAmount={maxAmount}
@@ -378,7 +337,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 										setShowModal(false);
 									}}
 								/>
-							</InnerModal>
+							</StakeInnerModal>
 						</>
 					)}
 				{chainId && stakeState === StakeState.CONFIRMING && (
@@ -425,61 +384,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 // 	)
 // }
 
-const StakeStepsContainer = styled(Flex)`
-	position: relative;
-	justify-content: space-evenly;
-	&::before {
-		content: '';
-		position: absolute;
-		width: 100%;
-		height: 1px;
-		border-top: 1px solid ${brandColors.giv[500]};
-		bottom: 11px;
-		z-index: 0;
-	}
-	&::after {
-		content: '';
-		position: absolute;
-		height: 1px;
-		border-top: 1px dashed ${brandColors.giv[500]};
-		left: -24px;
-		right: -24px;
-		bottom: 11px;
-		z-index: 0;
-	}
-	margin-bottom: 16px;
-`;
-
-const StakeStep = styled(Flex)`
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	width: 61px;
-	position: relative;
-	z-index: 1;
-`;
-
-interface IStakeStepState {
-	disable?: boolean;
-}
-
-const StakeStepTitle = styled(P)<IStakeStepState>`
-	margin-bottom: 8px;
-	color: ${props =>
-		props.disable ? brandColors.giv[300] : brandColors.giv['000']};
-`;
-const StakeStepNumber = styled(SublineBold)<IStakeStepState>`
-	color: ${props =>
-		props.disable ? brandColors.giv[300] : brandColors.giv['000']};
-	background-color: ${brandColors.giv[500]};
-	border: 3px solid
-		${props =>
-			props.disable ? brandColors.giv[300] : brandColors.giv['000']};
-	border-radius: 18px;
-	width: 24px;
-`;
-
-const StakeModalContainer = styled.div`
+export const StakeModalContainer = styled.div`
 	width: 370px;
 	padding-bottom: 24px;
 `;
@@ -493,27 +398,23 @@ const StakeModalTitleText = styled(H4)`
 	color: ${neutralColors.gray[100]};
 `;
 
-const StakeStepsPlaceholder = styled.div`
-	padding: 13px;
-`;
-
-const InnerModal = styled.div`
+export const StakeInnerModal = styled.div`
 	padding: 0 24px;
 `;
 
-const ApproveButton = styled(OulineButton)`
+export const ApproveButton = styled(OulineButton)`
 	width: 100%;
 	margin-top: 32px;
 	margin-bottom: 8px;
 `;
 
-const ConfirmButton = styled(Button)`
+export const ConfirmButton = styled(Button)`
 	width: 100%;
 	margin-top: 32px;
 	margin-bottom: 8px;
 `;
 
-const Pending = styled(Flex)`
+export const Pending = styled(Flex)`
 	margin-top: 32px;
 	margin-bottom: 8px;
 	line-height: 46px;
@@ -529,7 +430,7 @@ const Pending = styled(Flex)`
 	}
 `;
 
-const CancelButton = styled(Button)`
+export const CancelButton = styled(Button)`
 	width: 100%;
 `;
 

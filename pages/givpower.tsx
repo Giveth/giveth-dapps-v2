@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
-import Head from 'next/head';
-
-import GivPowerView from '@/components/views/Power.view';
-import { setDarkTheme, setLightTheme } from '@/features/general/general.slice';
+import GIVpowerView from '@/components/views/Power.view';
+import { GeneralMetatags } from '@/components/Metatag';
+import { setDarkTheme, setLightTheme } from '@/features/general/general.sclie';
 import { useAppDispatch } from '@/features/hooks';
+import { givpowerMetatags } from '@/content/metatags';
 
-export default function GivPower() {
+export default function GIVpowerRoute() {
 	const dispatch = useAppDispatch();
 
 	useEffect(() => {
@@ -14,13 +14,10 @@ export default function GivPower() {
 			dispatch(setLightTheme());
 		};
 	}, [dispatch]);
-
 	return (
 		<>
-			<Head>
-				<title>GIVpower</title>
-			</Head>
-			<GivPowerView />
+			<GeneralMetatags info={givpowerMetatags} />
+			<GIVpowerView />
 		</>
 	);
 }

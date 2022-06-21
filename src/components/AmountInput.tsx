@@ -79,7 +79,11 @@ export const AmountInput: FC<IAmountInput> = ({
 					Max
 				</InputLabelAction>
 			</InputLabelRow>
-			<NumericalInput value={displayAmount} onUserInput={onUserInput} />
+			<NumericalInput
+				value={displayAmount}
+				onUserInput={onUserInput}
+				disabled={disabled}
+			/>
 			<FiltersRow>
 				<Step
 					onClick={() => {

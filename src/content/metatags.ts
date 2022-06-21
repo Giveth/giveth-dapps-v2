@@ -33,6 +33,13 @@ export const givgardenMetatags = {
 	url: 'https://giveth.io/givgarden',
 };
 
+export const givpowerMetatags = {
+	title: 'GIVpower: Boost Projects with GIVpower6',
+	desc: 'With GIVpower, you can support verified projects, while earning rewards on your GIV.',
+	image: 'https://i.ibb.co/HTbdCdd/Thumbnail.png',
+	url: 'https://giveth.io/givpower',
+};
+
 export const projectsMetatags = {
 	title: 'Give directly to for-good projects with crypto & zero fees',
 	desc: 'Support for-good projects, nonprofits & charities with crypto donations. Give directly with zero added fees. Get rewarded when you donate to verified projects!',

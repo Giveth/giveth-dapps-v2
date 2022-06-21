@@ -4,6 +4,8 @@ import {
 	brandColors,
 	IconExternalLink,
 	IconHelp,
+	IconLock16,
+	IconRocketInSpace16,
 	IconSpark,
 } from '@giveth/ui-design-system';
 import { constants } from 'ethers';
@@ -19,6 +21,7 @@ import {
 import { IconWithTooltip } from '../IconWithToolTip';
 import { BN, formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import {
+	CardTag,
 	ClaimButton,
 	Detail,
 	DetailLabel,
@@ -32,6 +35,7 @@ import {
 	DisableModalText,
 	FirstDetail,
 	GIVgardenTooltip,
+	GIVpowerLogoCardTag,
 	IconContainer,
 	IconHelpWraper,
 	IntroIcon,
@@ -49,8 +53,8 @@ import {
 	StakingPoolSubtitle,
 } from './BaseStakingCard.sc';
 import { APRModal } from '../modals/APR';
-import { StakeModal } from '../modals/Stake';
-import { UnStakeModal } from '../modals/UnStake';
+import { StakeModal } from '../modals/Stake/Stake';
+import { UnStakeModal } from '../modals/Unstake/UnStake';
 import { StakingPoolImages } from '../StakingPoolImages';
 import { V3StakeModal } from '../modals/V3Stake';
 import { IconGIV } from '../Icons/GIV';
@@ -70,6 +74,7 @@ import { IStakeInfo } from '@/hooks/useStakingPool';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { useAppSelector } from '@/features/hooks';
 import { ITokenDistroInfo } from '@/types/subgraph';
+import StakeLockModal from '../modals/Stake/StakeLock';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -135,6 +140,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const {
 		type,
 		platform,
+		platformTitle,
 		title,
 		description,
 		provideLiquidityLink,
@@ -232,13 +238,17 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				)}
 				{state === StakeCardState.NORMAL ? (
 					<>
+						{type === StakingType.GIVPOWER && (
+							<CardTag>
+								<GIVpowerLogoCardTag>
+									<IconRocketInSpace16 />
+								</GIVpowerLogoCardTag>
+							</CardTag>
+						)}
 						<StakingPoolExchangeRow gap='4px' alignItems='center'>
 							{getPoolIconWithName(platform)}
 							<StakingPoolExchange styleType='Small'>
-								{type === StakingType.GIV_LM &&
-									chainId === config.XDAI_NETWORK_NUMBER &&
-									`GIVgarden `}
-								{platform}
+								{platformTitle || platform}
 							</StakingPoolExchange>
 							{chainId === config.XDAI_NETWORK_NUMBER &&
 								type === StakingType.GIV_LM && (
@@ -410,34 +420,51 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								</StakeContainer>
 							</StakeButtonsRow>
 							{active && (
-								<LiquidityButton
-									label={
-										type === StakingType.GIV_LM
-											? 'BUY GIV TOKENS'
-											: 'PROVIDE LIQUIDITY'
-									}
-									onClick={() => {
-										if (
-											type ===
-											StakingType.UNISWAPV3_ETH_GIV
-										) {
-											setShowUniV3APRModal(true);
-										} else {
-											window.open(
-												type === StakingType.GIV_LM
-													? BUY_LINK
-													: provideLiquidityLink,
-											);
+								<Flex>
+									<LiquidityButton
+										label={
+											type === StakingType.GIV_LM ||
+											StakingType.GIVPOWER
+												? 'BUY GIV TOKENS'
+												: 'PROVIDE LIQUIDITY'
 										}
-									}}
-									buttonType='texty'
-									icon={
-										<IconExternalLink
-											size={16}
-											color={brandColors.deep[100]}
+										onClick={() => {
+											if (
+												type ===
+												StakingType.UNISWAPV3_ETH_GIV
+											) {
+												setShowUniV3APRModal(true);
+											} else {
+												window.open(
+													type === StakingType.GIV_LM
+														? BUY_LINK
+														: provideLiquidityLink,
+												);
+											}
+										}}
+										buttonType='texty'
+										icon={
+											<IconExternalLink
+												size={16}
+												color={brandColors.deep[100]}
+											/>
+										}
+									/>
+									{type === StakingType.GIVPOWER && (
+										<LiquidityButton
+											label='MANAGE GIV'
+											onClick={() => {}}
+											buttonType='texty'
+											icon={
+												<IconLock16
+													color={
+														brandColors.deep[100]
+													}
+												/>
+											}
 										/>
-									}
-								/>
+									)}
+								</Flex>
 							)}
 						</StakePoolInfoContainer>
 					</>
@@ -464,7 +491,14 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				/>
 			)}
 			{showStakeModal &&
-				(type === StakingType.UNISWAPV3_ETH_GIV ? (
+				(type === StakingType.GIVPOWER ? (
+					<StakeLockModal
+						setShowModal={setShowStakeModal}
+						poolStakingConfig={poolStakingConfig}
+						regenStreamConfig={regenStreamConfig}
+						maxAmount={userNotStakedAmount}
+					/>
+				) : type === StakingType.UNISWAPV3_ETH_GIV ? (
 					<V3StakeModal
 						setShowModal={setShowStakeModal}
 						poolStakingConfig={poolStakingConfig}
