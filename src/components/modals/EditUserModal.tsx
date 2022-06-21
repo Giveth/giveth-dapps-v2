@@ -178,11 +178,10 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 									<Input
 										defaultValue={(user as any)[field.name]}
 										key={field.name}
-										name={field.name}
+										registerName={field.name}
 										label={field.label}
 										placeholder={field.placeholder}
 										caption={field.caption}
-										// type={field.type}
 										size={InputSize.SMALL}
 										register={register}
 										error={(errors as any)[field.name]}

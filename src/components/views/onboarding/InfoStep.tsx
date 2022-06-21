@@ -96,7 +96,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 					<Section>
 						<Col xs={12} md={6}>
 							<Input
-								name='firstName'
+								registerName='firstName'
 								label='first name'
 								placeholder='John'
 								register={register}
@@ -113,7 +113,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 							<Input
 								label='last name'
 								placeholder='Doe'
-								name='lastName'
+								registerName='lastName'
 								register={register}
 								registerOptions={{
 									required: {
@@ -126,7 +126,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 						</Col>
 						<Col xs={12} md={6}>
 							<Input
-								name='email'
+								registerName='email'
 								label='email'
 								placeholder='Example@Domain.com'
 								register={register}
@@ -155,7 +155,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 							<Input
 								label='location (optional)'
 								placeholder='Portugal, Turkey,...'
-								name='location'
+								registerName='location'
 								register={register}
 							/>
 						</Col>
@@ -168,7 +168,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 							<Input
 								label='website or url'
 								placeholder='Website'
-								name='url'
+								registerName='url'
 								register={register}
 								type='url'
 								caption='Your home page, blog, or company site.'

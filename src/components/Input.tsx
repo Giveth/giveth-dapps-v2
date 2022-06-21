@@ -4,12 +4,12 @@ import {
 	GLink,
 	semanticColors,
 } from '@giveth/ui-design-system';
-import { FC, HTMLInputTypeAttribute } from 'react';
+import { FC, InputHTMLAttributes } from 'react';
 import styled from 'styled-components';
 import type {
 	FieldError,
-	UseFormRegister,
 	RegisterOptions,
+	UseFormRegister,
 } from 'react-hook-form';
 
 export interface IFormValidations {
@@ -29,11 +29,8 @@ export enum InputSize {
 	LARGE,
 }
 
-interface IInput {
-	name: string;
-	type?: HTMLInputTypeAttribute;
-	defaultValue?: string;
-	placeholder?: string;
+interface IInput extends InputHTMLAttributes<HTMLInputElement> {
+	registerName: string;
 	label?: string;
 	caption?: string;
 	size?: InputSize;
@@ -56,16 +53,14 @@ const InputSizeToLinkSize = (size: InputSize) => {
 };
 
 const Input: FC<IInput> = ({
-	name,
-	type = 'text',
-	defaultValue,
-	placeholder = '',
+	registerName,
 	label,
 	caption,
 	size = InputSize.MEDIUM,
 	register,
 	registerOptions = { required: false },
 	error,
+	...rest
 }) => {
 	const validationStatus = error
 		? InputValidationType.ERROR
@@ -82,12 +77,10 @@ const Input: FC<IInput> = ({
 				</InputLabel>
 			)}
 			<InputField
-				defaultValue={defaultValue}
-				placeholder={placeholder}
-				type={type}
 				validation={validationStatus}
 				inputSize={size}
-				{...register(name, registerOptions)}
+				{...register(registerName, registerOptions)}
+				{...rest}
 			/>
 			{error?.message ? (
 				<InputValidation
