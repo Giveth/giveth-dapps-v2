@@ -75,9 +75,9 @@ import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { useAppSelector } from '@/features/hooks';
 import { ITokenDistroInfo } from '@/types/subgraph';
 import StakeLockModal from '../modals/Stake/StakeLock';
-import type { LiquidityPosition } from '@/types/nfts';
 import { LockupDetailsModal } from '../modals/LockupDetailsModal';
 import { GIVPowerExplainModal } from '../modals/GIVPowerExplain';
+import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
 	NORMAL,
@@ -486,16 +486,10 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				)}
 			</StakingPoolContainer>
 			{showLockupDetailsModal && (
-				<LockupDetailsModal
-					setShowModal={setShowLockupDetailsModal}
-					regenStreamConfig={regenStreamConfig}
-				/>
+				<LockupDetailsModal setShowModal={setShowLockupDetailsModal} />
 			)}
 			{showGIVPowerExplain && (
-				<GIVPowerExplainModal
-					setShowModal={setShowGIVPowerExplain}
-					regenStreamConfig={regenStreamConfig}
-				/>
+				<GIVPowerExplainModal setShowModal={setShowGIVPowerExplain} />
 			)}
 			{showAPRModal && (
 				<APRModal
