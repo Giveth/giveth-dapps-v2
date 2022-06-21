@@ -44,6 +44,7 @@ export class TokenDistroHelper {
 
 	get percent(): number {
 		const { duration, remain } = this;
+		if (!duration) return 0;
 		return (Math.max(duration - remain, 0) / duration) * 100;
 	}
 
