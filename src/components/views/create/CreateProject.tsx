@@ -54,7 +54,7 @@ import LightBulbIcon from '/public/images/icons/lightbulb.svg';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { useAppSelector } from '@/features/hooks';
-import useLeaveConfirm from '@/hooks/useLeaveConfirm';
+// import useLeaveConfirm from '@/hooks/useLeaveConfirm';
 import config from '@/configuration';
 
 export enum ECreateErrFields {
@@ -124,7 +124,7 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 	const debouncedTitleValidation = useRef<any>();
 	const debouncedAddressValidation = useRef<any>();
 	const debouncedDescriptionValidation = useRef<any>();
-	useLeaveConfirm({ shouldConfirm: formChange });
+	// useLeaveConfirm({ shouldConfirm: formChange });
 
 	useEffect(() => {
 		if (isEditMode) {
@@ -442,11 +442,11 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 								}
 							/>
 							<WalletAddressInput
-								title='xDAI Address'
+								title='Gnosis Address'
 								networkId={config.SECONDARY_NETWORK.id}
 								value={secondaryAddress.address}
 								setValue={e => {
-									console.log('xDaiAddress');
+									console.log('gnosisAddress');
 									setFormChange(true);
 									handleWalletInputChange(
 										e,
