@@ -1,6 +1,6 @@
 import { isSSRMode } from '@/lib/helpers';
-import links from '@/lib/constants/links';
 import StorageLabel from '@/lib/localStorage';
+import config from '@/configuration';
 
 export function sendRequest(
 	url: string,
@@ -105,7 +105,7 @@ export function backendGQLRequest(
 	additionalOptions: RequestInit = {},
 ) {
 	return postRequest(
-		links.BACKEND,
+		config.BACKEND_LINK,
 		true,
 		{
 			query,

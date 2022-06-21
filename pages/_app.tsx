@@ -8,7 +8,6 @@ import NProgress from 'nprogress';
 
 import { useRouter } from 'next/router';
 import { Provider } from 'react-redux';
-import { GeneralProvider } from '@/context/general.context';
 import { useApollo } from '@/apollo/apolloClient';
 import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
 import { FooterWrapper } from '@/components/Footer/FooterWrapper';
@@ -19,6 +18,7 @@ import SubgraphController from '@/components/controller/subgraph.ctrl';
 import UserController from '@/components/controller/user.ctrl';
 import ModalController from '@/components/controller/modal.ctrl';
 import PriceController from '@/components/controller/price.ctrl';
+import GeneralController from '@/components/controller/general.ctrl';
 import type { AppProps } from 'next/app';
 
 function getLibrary(provider: ExternalProvider) {
@@ -59,19 +59,18 @@ function MyApp({ Component, pageProps }: AppProps) {
 				<html lang='en'></html>
 			</Head>
 			<Provider store={store}>
-				<GeneralProvider>
-					<ApolloProvider client={apolloClient}>
-						<Web3ReactProvider getLibrary={getLibrary}>
-							<PriceController />
-							<SubgraphController />
-							<UserController />
-							<HeaderWrapper />
-							<Component {...pageProps} />
-							<FooterWrapper />
-							<ModalController />
-						</Web3ReactProvider>
-					</ApolloProvider>
-				</GeneralProvider>
+				<ApolloProvider client={apolloClient}>
+					<Web3ReactProvider getLibrary={getLibrary}>
+						<GeneralController />
+						<PriceController />
+						<SubgraphController />
+						<UserController />
+						<HeaderWrapper />
+						<Component {...pageProps} />
+						<FooterWrapper />
+						<ModalController />
+					</Web3ReactProvider>
+				</ApolloProvider>
 			</Provider>
 			<Toaster containerStyle={{ top: '80px' }} />
 		</>

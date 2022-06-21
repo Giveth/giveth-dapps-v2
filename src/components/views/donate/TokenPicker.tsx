@@ -1,11 +1,16 @@
-import { FunctionComponent, ReactNode, useState } from 'react';
-import { defaultTheme } from 'react-select';
+import { useState } from 'react';
 import {
 	neutralColors,
 	P,
-	B,
 	brandColors,
 	Caption,
+	IconGIVBack,
+	IconCheck,
+	B,
+	IconCaretUp,
+	IconCaretDown,
+	IconSearch,
+	IconX,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
@@ -20,8 +25,8 @@ import Select, {
 
 import useDeviceDetect from '@/hooks/useDeviceDetect';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
-import XIcon from '/public/images/x-icon.svg';
-import GivbackEligibleIcon from '/public/images/givback-eligible.svg';
+import { FlexCenter } from '@/components/styled-components/Flex';
+import { Shadow } from '@/components/styled-components/Shadow';
 
 interface ITokenPicker {
 	isOpen: boolean;
@@ -39,8 +44,6 @@ declare module 'react-select/dist/declarations/src/Select' {
 		projectVerified?: boolean;
 	}
 }
-
-const { colors } = defaultTheme;
 
 const ImageIcon = (props: { symbol: string }) => {
 	const { symbol } = props;
@@ -60,10 +63,7 @@ const MenuList = (props: MenuListProps<IProjectAcceptedToken, false>) => {
 		<components.MenuList {...props}>
 			{projectVerified && (
 				<GivBackIconContainer>
-					<Image
-						alt='givback eligible icon'
-						src={GivbackEligibleIcon}
-					/>
+					<IconGIVBack size={24} color={brandColors.giv[500]} />
 					<Caption>GIVbacks eligible tokens</Caption>
 				</GivBackIconContainer>
 			)}
@@ -73,31 +73,22 @@ const MenuList = (props: MenuListProps<IProjectAcceptedToken, false>) => {
 };
 
 const Option = ({ ...props }: OptionProps<IProjectAcceptedToken, false>) => {
-	const value = props.data;
-	const projectVerified = props.selectProps.projectVerified;
+	const { data, selectProps } = props;
+	const { name, symbol, isGivbackEligible } = data;
+	const projectVerified = selectProps.projectVerified;
 	return (
 		<components.Option {...props}>
 			<OptionContainer>
 				<RowContainer>
-					<ImageIcon symbol={value.symbol} />
+					<ImageIcon symbol={symbol} />
 					<B>
-						{value.name} ({value.symbol}){'  '}{' '}
-						{value?.isGivbackEligible && projectVerified && (
-							<Image
-								alt='givback eligible icon'
-								src={GivbackEligibleIcon}
-							/>
-						)}
-					</B>{' '}
+						{name} ({symbol}){' '}
+					</B>
+					{isGivbackEligible && projectVerified && (
+						<IconGIVBack size={24} color={brandColors.giv[500]} />
+					)}
 				</RowContainer>
-				{props.isSelected && (
-					<Image
-						src='/images/checkmark.svg'
-						width='10px'
-						height='10px'
-						alt={value.symbol}
-					/>
-				)}
+				{props.isSelected && <IconCheck color={brandColors.giv[500]} />}
 			</OptionContainer>
 		</components.Option>
 	);
@@ -234,170 +225,108 @@ const TokenPicker = (props: {
 	return (
 		<>
 			{isOpen && isMobile && <OverLay />}
-			<Dropdown
+			<TargetContainer
+				onClick={toggleOpen}
 				isOpen={isOpen}
-				onClose={toggleOpen}
-				target={
-					<TargetContainer
-						onClick={toggleOpen}
-						isOpen={isOpen}
-						isMobile={isMobile}
-					>
-						<TokenContainer>
-							{selectedToken && (
-								<ImageIcon symbol={selectedToken.symbol} />
-							)}
-							<P>
-								{selectedToken
-									? selectedToken.symbol
-									: 'Select a token'}
-							</P>
-						</TokenContainer>
-						<ArrowImg
-							src={
-								!isOpen
-									? '/images/caret_down.svg'
-									: '/images/caret_up.svg'
-							}
-							alt='arrow down'
-							width='8px'
-							height='6px'
-						/>{' '}
-					</TargetContainer>
-				}
+				isMobile={isMobile}
 			>
-				<Select
-					autoFocus
-					backspaceRemovesValue={false}
-					components={{
-						DropdownIndicator,
-						IndicatorSeparator: null,
-						Option: (optionProps: any) => (
-							<Option {...optionProps} />
-						),
-						Control,
-						MenuList,
-					}}
-					noOptionsMessage={() => (
-						<NotFound emptyField={() => onChange('')} />
+				<TokenContainer>
+					{selectedToken && (
+						<ImageIcon symbol={selectedToken.symbol} />
 					)}
-					isMobile={isMobile}
-					projectVerified={projectVerified}
-					setIsOpen={setIsOpen}
-					value={selectedToken}
-					inputValue={inputValue}
-					controlShouldRenderValue={false}
-					hideSelectedOptions={false}
-					isClearable={false}
-					menuIsOpen={isOpen}
-					onChange={onSelectChange}
-					onInputChange={onInputChange && onInputChange}
-					options={tokenList}
-					styles={selectStyles}
-					tabSelectsValue={false}
-					placeholder={placeholder}
-					filterOption={filterOptions}
-				/>
-			</Dropdown>
+					{selectedToken ? selectedToken.symbol : 'Select a token'}
+				</TokenContainer>
+				{isOpen ? <IconCaretUp /> : <IconCaretDown />}
+			</TargetContainer>
+			{isOpen && (
+				<Menu>
+					<Select
+						autoFocus
+						backspaceRemovesValue={false}
+						components={{
+							DropdownIndicator,
+							IndicatorSeparator: null,
+							Option: (optionProps: any) => (
+								<Option {...optionProps} />
+							),
+							Control,
+							MenuList,
+						}}
+						noOptionsMessage={() => (
+							<NotFound emptyField={() => onChange('')} />
+						)}
+						isMobile={isMobile}
+						projectVerified={projectVerified}
+						setIsOpen={setIsOpen}
+						value={selectedToken}
+						inputValue={inputValue}
+						controlShouldRenderValue={false}
+						hideSelectedOptions={false}
+						isClearable={false}
+						menuIsOpen={isOpen}
+						onChange={onSelectChange}
+						onInputChange={onInputChange && onInputChange}
+						options={tokenList}
+						styles={selectStyles}
+						tabSelectsValue={false}
+						placeholder={placeholder}
+						filterOption={filterOptions}
+					/>
+				</Menu>
+			)}
+			{isOpen && <Blanket onClick={toggleOpen} />}
 		</>
 	);
 };
 
-// styled components
+const Menu = styled.div`
+	background-color: white;
+	border-radius: 8px;
+	box-shadow: ${Shadow.Neutral[400]};
+	margin-top: 8px;
+	position: absolute;
+	z-index: 13;
+`;
+
+const Blanket = styled.div`
+	bottom: 0;
+	left: 0;
+	top: 0;
+	right: 0;
+	position: fixed;
+	z-index: 12;
+`;
 
 const Control = (props: any) => {
 	if (!props.selectProps.isMobile) {
 		return <components.Control {...props} />;
 	}
 	return (
-		<div style={{ display: 'flex', flexDirection: 'column' }}>
-			<div>
-				<a
-					onClick={() => props.selectProps.setIsOpen(false)}
-					style={{
-						float: 'right',
-						margin: '19px 12px 8px 0',
-					}}
-				>
-					<Image alt='x icon' src={XIcon} />
-				</a>
-			</div>
-			<components.Control {...props} />
-		</div>
-	);
-};
-
-const Menu = (props: JSX.IntrinsicElements['div']) => {
-	const shadow = 'hsla(218, 50%, 10%, 0.1)';
-	return (
-		<div
-			style={{
-				backgroundColor: 'white',
-				borderRadius: 4,
-				boxShadow: `0 0 0 1px ${shadow}, 0 4px 11px ${shadow}`,
-				marginTop: 8,
-				position: 'absolute',
-				zIndex: 2,
-			}}
-			{...props}
-		/>
-	);
-};
-const Blanket = (props: JSX.IntrinsicElements['div']) => (
-	<div
-		style={{
-			bottom: 0,
-			left: 0,
-			top: 0,
-			right: 0,
-			position: 'fixed',
-			zIndex: 1,
-		}}
-		{...props}
-	/>
-);
-interface DropdownProps {
-	readonly isOpen: boolean;
-	readonly target: ReactNode;
-	readonly onClose: () => void;
-}
-const Dropdown: FunctionComponent<DropdownProps> = ({
-	children,
-	isOpen,
-	target,
-	onClose,
-}) => {
-	return (
 		<>
-			<div style={{ zIndex: 1 }}>{target}</div>
-			<div style={{ position: 'relative', zIndex: 11 }}>
-				{isOpen ? <Menu>{children}</Menu> : null}
-				{isOpen ? <Blanket onClick={onClose} /> : null}
-			</div>
+			<MobileClose onClick={() => props.selectProps.setIsOpen(false)}>
+				<IconX size={24} />
+			</MobileClose>
+			<components.Control {...props} />
 		</>
 	);
 };
-const Svg = (p: JSX.IntrinsicElements['svg']) => (
-	<svg
-		width='24'
-		height='24'
-		viewBox='0 0 24 24'
-		focusable='false'
-		role='presentation'
-		{...p}
-	/>
-);
+
+const MobileClose = styled.div`
+	text-align: right;
+	padding: 20px 20px 5px 0;
+`;
+
 const DropdownIndicator = () => (
-	<div style={{ color: colors.neutral20, height: 24, width: 32 }}>
-		<Svg>
-			<path
-				d='M16.436 15.085l3.94 4.01a1 1 0 0 1-1.425 1.402l-3.938-4.006a7.5 7.5 0 1 1 1.423-1.406zM10.5 16a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11z'
-				fill='currentColor'
-				fillRule='evenodd'
-			/>
-		</Svg>
-	</div>
+	<DropdownStyled>
+		<IconSearch color={neutralColors.gray[600]} />
+	</DropdownStyled>
 );
+
+const DropdownStyled = styled(FlexCenter)`
+	margin-right: 10px;
+	padding-left: 6px;
+	border-left: 1px solid ${neutralColors.gray[400]};
+`;
 
 const OverLay = styled.div`
 	position: fixed;
@@ -413,31 +342,21 @@ const OverLay = styled.div`
 	cursor: pointer;
 `;
 
-const TargetContainer = styled.div`
+const TargetContainer = styled.div<ITokenPicker>`
 	display: flex;
 	cursor: pointer;
-	flex-direction: row;
 	justify-content: space-between;
+	align-items: center;
 	height: 54px;
-	border: 2px solid ${neutralColors.gray[300]};
+	border-right: 2px solid ${neutralColors.gray[300]};
+	border-radius: 8px 0 0 8px;
 	padding: 14px 16px;
-	background: ${(props: ITokenPicker) =>
+	background: ${props =>
 		props.isOpen && props.isMobile
 			? 'rgba(79, 87, 106, 0.1)'
 			: props.isOpen
 			? neutralColors.gray[200]
 			: 'transparent'};
-	border-radius: 6px 0 0 6px;
-	align-items: center;
-	border-right: 2px solid
-		${(props: ITokenPicker) =>
-			props.isMobile && props.isOpen
-				? 'rgba(79, 87, 106, 0.1)'
-				: neutralColors.gray[300]};
-	img {
-		filter: ${(props: ITokenPicker) =>
-			props.isMobile && props.isOpen && 'brightness(70%)'};
-	}
 `;
 
 const RowContainer = styled.div`
@@ -446,30 +365,24 @@ const RowContainer = styled.div`
 	gap: 8px;
 	> :first-child {
 		flex-shrink: 0;
-		padding-right: 20px;
-	}
-	> :last-child {
-		width: 100%;
-		color: ${neutralColors.gray[900]};
 	}
 `;
+
 const OptionContainer = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 `;
-const TokenContainer = styled.div`
+
+const TokenContainer = styled(B)`
 	display: flex;
 	align-items: center;
 	gap: 8px;
-
 	> :first-child {
 		flex-shrink: 0;
 	}
 `;
-const ArrowImg = styled.img`
-	margin-left: 5px;
-`;
+
 const NotFoundContainer = styled.div`
 	display: flex;
 	flex-direction: column;

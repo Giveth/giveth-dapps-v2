@@ -19,12 +19,12 @@ const initialState: {
 	currentValues: ISubgraphState;
 	mainnetValues: ISubgraphState;
 	xDaiValues: ISubgraphState;
-	status: string;
+	isLoaded: boolean;
 } = {
 	currentValues: defaultSubgraphValues,
 	mainnetValues: defaultSubgraphValues,
 	xDaiValues: defaultSubgraphValues,
-	status: 'idle',
+	isLoaded: false,
 };
 
 export const subgraphSlice = createSlice({
@@ -34,7 +34,7 @@ export const subgraphSlice = createSlice({
 	extraReducers: builder => {
 		builder
 			.addCase(fetchCurrentInfoAsync.fulfilled, (state, action) => {
-				state.status = 'idle';
+				state.isLoaded = true;
 				state.currentValues = action.payload.response;
 				if (action.payload.chainId === config.MAINNET_NETWORK_NUMBER) {
 					state.mainnetValues = action.payload.response;
@@ -44,11 +44,9 @@ export const subgraphSlice = createSlice({
 				}
 			})
 			.addCase(fetchXDaiInfoAsync.fulfilled, (state, action) => {
-				state.status = 'idle';
 				state.xDaiValues = action.payload;
 			})
 			.addCase(fetchMainnetInfoAsync.fulfilled, (state, action) => {
-				state.status = 'idle';
 				state.mainnetValues = action.payload;
 			});
 	},
