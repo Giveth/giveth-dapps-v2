@@ -212,6 +212,7 @@ const config: EnvConfig = {
 					'https://app.honeyswap.org/#/add/0x83a8eea6427985C523a0c4d9d3E62C051B6580d3/0x97c4dD5cE204b8c1F2f3B8fBfBBDC771d867d18c',
 				unit: 'LP',
 				active: true,
+				farmStartTimeMS: 1655997000000,
 			},
 		],
 
