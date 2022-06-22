@@ -112,11 +112,6 @@ export const HBPic = styled.img`
 	border-radius: 24px;
 `;
 
-export const HBBalanceLogo = styled(HBPic)`
-	padding: 4px;
-	background: #5326ec;
-`;
-
 export const HBContent = styled(GLink)`
 	margin-left: 8px;
 	display: none;
@@ -181,16 +176,14 @@ export const ConnectButton = styled(Button)`
 `;
 
 export const SmallCreateProject = styled(ButtonLink)`
-	white-space: nowrap;
-	padding: 0;
 	width: 48px;
 	height: 48px;
-	gap: 0;
-	span {
-		font-size: 32px !important;
-	}
 	box-shadow: ${props =>
 		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
+	span {
+		font-weight: 500;
+		font-size: 20px;
+	}
 `;
 
 export const LargeCreateProject = styled.div`

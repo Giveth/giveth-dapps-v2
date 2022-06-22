@@ -46,24 +46,33 @@ const NotFound = styled(H3)`
 `;
 
 export const getServerSideProps: GetServerSideProps = async context => {
-	const { query } = context;
-	const queryAddress = query.address;
-	if (!queryAddress) return { props: {} };
-	const address = Array.isArray(queryAddress)
-		? queryAddress[0].toLowerCase()
-		: queryAddress.toLowerCase();
-	const { data: userData } = await client.query({
-		query: GET_USER_BY_ADDRESS,
-		variables: {
-			address: address,
-		},
-	});
-	const user = userData?.userByAddress;
-	return {
-		props: {
-			user,
-		},
-	};
+	try {
+		const { query } = context;
+		const queryAddress = query.address;
+		if (!queryAddress) return { props: {} };
+		const address = Array.isArray(queryAddress)
+			? queryAddress[0].toLowerCase()
+			: queryAddress.toLowerCase();
+		const { data: userData } = await client.query({
+			query: GET_USER_BY_ADDRESS,
+			variables: {
+				address: address,
+			},
+		});
+		const user = userData?.userByAddress;
+		return {
+			props: {
+				user,
+			},
+		};
+	} catch (error) {
+		return {
+			redirect: {
+				destination: '/maintenance',
+				permanent: false,
+			},
+		};
+	}
 };
 
 export default UserRoute;

@@ -7,10 +7,10 @@ import { createUploadLink } from 'apollo-upload-client';
 import merge from 'deepmerge';
 import isEqual from 'lodash.isequal';
 import { isSSRMode } from '@/lib/helpers';
-import links from '@/lib/constants/links';
 import StorageLabel from '@/lib/localStorage';
 import { store } from '@/features/store';
 import { signOut } from '@/features/user/user.thunks';
+import config from '@/configuration';
 
 let apolloClient: any;
 
@@ -25,7 +25,7 @@ function createApolloClient() {
 	}
 
 	const httpLink = createUploadLink({
-		uri: links.BACKEND,
+		uri: config.BACKEND_LINK,
 	}) as unknown as ApolloLink;
 
 	const authLink = setContext((_, { headers }) => {

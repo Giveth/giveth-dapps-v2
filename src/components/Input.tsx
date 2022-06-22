@@ -4,18 +4,13 @@ import {
 	GLink,
 	semanticColors,
 } from '@giveth/ui-design-system';
-import {
-	ChangeEvent,
-	Dispatch,
-	FC,
-	HTMLInputTypeAttribute,
-	memo,
-	ReactElement,
-	SetStateAction,
-	useEffect,
-	useState,
-} from 'react';
+import { FC, InputHTMLAttributes } from 'react';
 import styled from 'styled-components';
+import type {
+	FieldError,
+	RegisterOptions,
+	UseFormRegister,
+} from 'react-hook-form';
 import { IIconProps } from '@giveth/ui-design-system/lib/esm/components/icons/giv-economy/type';
 import { Shadow } from '@/components/styled-components/Shadow';
 
@@ -36,25 +31,16 @@ export enum InputSize {
 	LARGE,
 }
 
-interface IInput {
-	value: string;
-	onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
-	type?: HTMLInputTypeAttribute;
-	name: string;
-	placeholder?: string;
+interface IInput extends InputHTMLAttributes<HTMLInputElement> {
+	registerName: string;
 	label?: string;
-	required?: boolean;
 	caption?: string;
-	validators?: IInputValidator[];
 	size?: InputSize;
-	setFormValidation?: Dispatch<SetStateAction<IFormValidations | undefined>>;
+	register: UseFormRegister<any>;
+	error?: FieldError;
+	registerOptions?: RegisterOptions;
 	disabled?: boolean;
 	LeftIcon?: ReactElement<IIconProps>;
-}
-
-interface IInputValidator {
-	pattern: RegExp;
-	msg: string;
 }
 
 const InputSizeToLinkSize = (size: InputSize) => {
@@ -71,95 +57,19 @@ const InputSizeToLinkSize = (size: InputSize) => {
 };
 
 const Input: FC<IInput> = ({
-	name,
-	value,
-	onChange,
-	type = 'text',
-	validators,
-	placeholder,
+	registerName,
 	label,
 	caption,
-	required,
 	size = InputSize.MEDIUM,
-	setFormValidation,
-	disabled,
+	register,
+	registerOptions = { required: false },
+	error,
 	LeftIcon,
+	...rest
 }) => {
-	const [validation, setValidation] = useState<{
-		status: InputValidationType;
-		msg?: string;
-	}>({
-		status: InputValidationType.NORMAL,
-		msg: undefined,
-	});
-
-	const changeHandle = (e: ChangeEvent<HTMLInputElement>) => {
-		onChange && onChange(e);
-	};
-
-	useEffect(() => {
-		const timer = setTimeout(() => {
-			if (value.length === 0) {
-				if (required) {
-					setValidation({
-						status: InputValidationType.ERROR,
-						msg: `${label || name} is required`,
-					});
-					if (setFormValidation) {
-						setFormValidation(formValidation => ({
-							...formValidation,
-							[name]: InputValidationType.ERROR,
-						}));
-					}
-				} else {
-					setValidation({
-						status: InputValidationType.NORMAL,
-						msg: undefined,
-					});
-					if (setFormValidation) {
-						setFormValidation(formValidation => ({
-							...formValidation,
-							[name]: InputValidationType.NORMAL,
-						}));
-					}
-				}
-				return;
-			}
-			if (validators) {
-				const error = validators.find(
-					validator => !validator.pattern.test(value),
-				);
-				if (error) {
-					setValidation({
-						status: InputValidationType.ERROR,
-						msg: error.msg,
-					});
-					if (setFormValidation) {
-						setFormValidation(formValidation => ({
-							...formValidation,
-							[name]: InputValidationType.ERROR,
-						}));
-					}
-					return;
-				}
-			}
-			if (validation.status !== InputValidationType.NORMAL) {
-				setValidation({
-					status: InputValidationType.NORMAL,
-					msg: undefined,
-				});
-				if (setFormValidation) {
-					setFormValidation(formValidation => ({
-						...formValidation,
-						[name]: InputValidationType.NORMAL,
-					}));
-				}
-			}
-		}, 300);
-		return () => {
-			clearTimeout(timer);
-		};
-	}, [required, validators, value]);
+	const validationStatus = error
+		? InputValidationType.ERROR
+		: InputValidationType.NORMAL;
 
 	return (
 		<InputContainer>
@@ -167,31 +77,27 @@ const Input: FC<IInput> = ({
 				<InputLabel
 					disabled={disabled}
 					size={InputSizeToLinkSize(size)}
-					required={required}
+					required={Boolean(registerOptions.required)}
 				>
 					{label}
 				</InputLabel>
 			)}
 			<InputWrapper>
 				{LeftIcon && LeftIcon}
-				<InputField
-					placeholder={placeholder}
-					name={name}
-					value={value}
-					onChange={changeHandle}
-					type={type}
-					validation={validation.status}
-					inputSize={size}
-					disabled={disabled}
-					hasLeftIcon={!!LeftIcon}
-				/>
+			<InputField
+				validation={validationStatus}
+				inputSize={size}
+				hasLeftIcon={!!LeftIcon}
+				{...register(registerName, registerOptions)}
+				{...rest}
+			/>
 			</InputWrapper>
-			{validation.msg ? (
+			{error?.message ? (
 				<InputValidation
-					validation={validation.status}
+					validation={validationStatus}
 					size={InputSizeToLinkSize(size)}
 				>
-					{validation.msg}
+					{error?.message}
 				</InputValidation>
 			) : (
 				<InputDesc size={InputSizeToLinkSize(size)}>
@@ -357,8 +263,4 @@ const InputWrapper = styled.div`
 	}
 `;
 
-function areEqual(prevProps: IInput, nextProps: IInput) {
-	return prevProps.value === nextProps.value;
-}
-
-export default memo(Input, areEqual);
+export default Input;

@@ -35,8 +35,9 @@ export async function getServerSideProps(props: {
 			},
 		});
 		return {
-			props: {
-				project: null,
+			redirect: {
+				destination: '/maintenance',
+				permanent: false,
 			},
 		};
 	}
