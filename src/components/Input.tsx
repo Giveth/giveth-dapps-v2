@@ -4,15 +4,15 @@ import {
 	GLink,
 	semanticColors,
 } from '@giveth/ui-design-system';
-import { FC, InputHTMLAttributes } from 'react';
+import { FC, InputHTMLAttributes, ReactElement } from 'react';
 import styled from 'styled-components';
+import { IIconProps } from '@giveth/ui-design-system/lib/esm/components/icons/giv-economy/type';
+import { Shadow } from '@/components/styled-components/Shadow';
 import type {
 	FieldError,
 	RegisterOptions,
 	UseFormRegister,
 } from 'react-hook-form';
-import { IIconProps } from '@giveth/ui-design-system/lib/esm/components/icons/giv-economy/type';
-import { Shadow } from '@/components/styled-components/Shadow';
 
 export interface IFormValidations {
 	[key: string]: InputValidationType;
@@ -39,7 +39,6 @@ interface IInput extends InputHTMLAttributes<HTMLInputElement> {
 	register: UseFormRegister<any>;
 	error?: FieldError;
 	registerOptions?: RegisterOptions;
-	disabled?: boolean;
 	LeftIcon?: ReactElement<IIconProps>;
 }
 
@@ -65,6 +64,7 @@ const Input: FC<IInput> = ({
 	registerOptions = { required: false },
 	error,
 	LeftIcon,
+	disabled,
 	...rest
 }) => {
 	const validationStatus = error
@@ -84,13 +84,14 @@ const Input: FC<IInput> = ({
 			)}
 			<InputWrapper>
 				{LeftIcon && LeftIcon}
-			<InputField
-				validation={validationStatus}
-				inputSize={size}
-				hasLeftIcon={!!LeftIcon}
-				{...register(registerName, registerOptions)}
-				{...rest}
-			/>
+				<InputField
+					validation={validationStatus}
+					inputSize={size}
+					hasLeftIcon={!!LeftIcon}
+					disabled={disabled}
+					{...register(registerName, registerOptions)}
+					{...rest}
+				/>
 			</InputWrapper>
 			{error?.message ? (
 				<InputValidation

@@ -18,7 +18,7 @@ import { IModal } from '@/types/common';
 import { useAppDispatch } from '@/features/hooks';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
 import Input, { InputSize } from '../Input';
-import { regexList } from '@/lib/constants/regex';
+import { validators } from '@/lib/constants/regex';
 
 enum EditStatusType {
 	INFO,
@@ -239,11 +239,8 @@ const inputFields = [
 			message: 'Email is required',
 		},
 		validators: {
-			minLength: { value: 3, message: 'Too Short' },
-			pattern: {
-				value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-				message: 'Invalid Email Address',
-			},
+			minLength: validators.tooShort,
+			pattern: validators.email,
 		},
 	},
 	{
@@ -258,10 +255,7 @@ const inputFields = [
 		type: 'url',
 		caption: 'Your home page, blog, or company site.',
 		validators: {
-			pattern: {
-				value: /^(?:http(s)?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
-				message: 'Invalid URL',
-			},
+			pattern: validators.url,
 		},
 	},
 ];

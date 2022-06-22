@@ -22,6 +22,7 @@ import Input from '@/components/Input';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
+import { validators } from '@/lib/constants/regex';
 
 export interface IUserInfo {
 	email: string;
@@ -91,7 +92,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 	return (
 		<>
 			<OnboardStep xs={12} xl={8} sm={12}>
-				<form onSubmit={handleSubmit(onSave)}>
+				<form onSubmit={handleSubmit(onSave)} noValidate>
 					<SectionHeader>What should we call you?</SectionHeader>
 					<Section>
 						<Col xs={12} md={6}>
@@ -136,14 +137,8 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 										value: true,
 										message: 'Email is required',
 									},
-									pattern: {
-										value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-										message: 'Invalid Email Address',
-									},
-									minLength: {
-										value: 3,
-										message: 'Too Short',
-									},
+									pattern: validators.email,
+									minLength: validators.tooShort,
 								}}
 								error={errors.email}
 							/>
@@ -173,10 +168,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 								type='url'
 								caption='Your home page, blog, or company site.'
 								registerOptions={{
-									pattern: {
-										value: /^(?:http(s)?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
-										message: 'Invalid URL',
-									},
+									pattern: validators.url,
 								}}
 								error={errors.url}
 							/>

@@ -10,37 +10,36 @@ export const regexList = {
 	linkedIn: /^(http(s)?:\/\/)?([\w]+\.)?linkedin\.com\/(pub|in|profile)/,
 	youtube:
 		/^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/,
-	tooShort: /^.{3,}$/,
 };
 
 export const validators = {
-	tooShort: { pattern: regexList.tooShort, msg: 'Too Short' },
+	tooShort: { value: 3, message: 'Too Short' },
 	email: {
-		pattern: regexList.email,
-		msg: 'Invalid Email Address',
+		value: regexList.email,
+		message: 'Invalid Email Address',
 	},
 	url: {
-		pattern: regexList.url,
-		msg: 'Invalid URL',
+		value: regexList.url,
+		message: 'Invalid URL',
 	},
 	twitter: {
-		pattern: regexList.twitter,
-		msg: 'Invalid twitter URL',
+		value: regexList.twitter,
+		message: 'Invalid twitter URL',
 	},
 	facebook: {
-		pattern: regexList.facebook,
-		msg: 'Invalid facebook URL',
+		value: regexList.facebook,
+		message: 'Invalid facebook URL',
 	},
 	linkedIn: {
-		pattern: regexList.linkedIn,
-		msg: 'Invalid linkedIn URL',
+		value: regexList.linkedIn,
+		message: 'Invalid linkedIn URL',
 	},
 	instagram: {
-		pattern: regexList.instagram,
-		msg: 'Invalid instagram URL',
+		value: regexList.instagram,
+		message: 'Invalid instagram URL',
 	},
 	youtube: {
-		pattern: regexList.youtube,
-		msg: 'Invalid youtube URL',
+		value: regexList.youtube,
+		message: 'Invalid youtube URL',
 	},
 };
