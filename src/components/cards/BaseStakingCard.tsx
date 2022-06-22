@@ -75,7 +75,6 @@ import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { useAppSelector } from '@/features/hooks';
 import { ITokenDistroInfo } from '@/types/subgraph';
 import StakeLockModal from '../modals/Stake/StakeLock';
-import { LockupDetailsModal } from '../modals/LockupDetailsModal';
 import { GIVPowerExplainModal } from '../modals/GIVPowerExplain';
 import type { LiquidityPosition } from '@/types/nfts';
 
@@ -126,7 +125,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const [showStakeModal, setShowStakeModal] = useState(false);
 	const [showUnStakeModal, setShowUnStakeModal] = useState(false);
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
-	const [showLockupDetailsModal, setShowLockupDetailsModal] = useState(false);
 	const [showGIVPowerExplain, setShowGIVPowerExplain] = useState(false);
 	const [showWhatIsGIVstreamModal, setShowWhatIsGIVstreamModal] =
 		useState(false);
@@ -242,15 +240,16 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				)}
 				{state === StakeCardState.NORMAL ? (
 					<>
-						{type === StakingType.GIVPOWER && (
-							<CardTag
-								onClick={() => setShowGIVPowerExplain(true)}
-							>
-								<GIVpowerLogoCardTag>
-									<IconRocketInSpace16 />
-								</GIVpowerLogoCardTag>
-							</CardTag>
-						)}
+						{chainId === config.XDAI_NETWORK_NUMBER &&
+							type === StakingType.GIV_LM && (
+								<CardTag
+									onClick={() => setShowGIVPowerExplain(true)}
+								>
+									<GIVpowerLogoCardTag>
+										<IconRocketInSpace16 />
+									</GIVpowerLogoCardTag>
+								</CardTag>
+							)}
 						<StakingPoolExchangeRow gap='4px' alignItems='center'>
 							{getPoolIconWithName(platform)}
 							<StakingPoolExchange styleType='Small'>
@@ -456,22 +455,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 											/>
 										}
 									/>
-									{type === StakingType.GIVPOWER && (
-										<LiquidityButton
-											label='MANAGE GIV'
-											onClick={() => {
-												setShowLockupDetailsModal(true);
-											}}
-											buttonType='texty'
-											icon={
-												<IconLock16
-													color={
-														brandColors.deep[100]
-													}
-												/>
-											}
-										/>
-									)}
 								</Flex>
 							)}
 						</StakePoolInfoContainer>
@@ -485,9 +468,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					/>
 				)}
 			</StakingPoolContainer>
-			{showLockupDetailsModal && (
-				<LockupDetailsModal setShowModal={setShowLockupDetailsModal} />
-			)}
 			{showGIVPowerExplain && (
 				<GIVPowerExplainModal setShowModal={setShowGIVPowerExplain} />
 			)}

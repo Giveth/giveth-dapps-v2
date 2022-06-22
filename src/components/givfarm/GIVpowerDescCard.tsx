@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { useState, FC } from 'react';
 import {
 	B,
 	brandColors,
@@ -19,12 +19,18 @@ import styled from 'styled-components';
 
 import { Flex } from '../styled-components/Flex';
 import { IconWithTooltip } from '../IconWithToolTip';
+import { LockupDetailsModal } from '../modals/LockupDetailsModal';
 
 interface IGIVpowerDescCardProps {}
 
 export const GIVpowerDescCard: FC<IGIVpowerDescCardProps> = () => {
+	const [showLockupDetailsModal, setShowLockupDetailsModal] = useState(false);
+
 	return (
 		<>
+			{showLockupDetailsModal && (
+				<LockupDetailsModal setShowModal={setShowLockupDetailsModal} />
+			)}
 			<RegenStreamContainer>
 				<HeaderRow justifyContent='space-between' wrap={1}>
 					<Flex gap='8px'>
@@ -116,7 +122,11 @@ export const GIVpowerDescCard: FC<IGIVpowerDescCardProps> = () => {
 					</LastRow>
 				</Box>
 				<FooterRow wrap={1}>
-					<OulineButton label='Lockup details' size='small' />
+					<OulineButton
+						label='Lockup details'
+						size='small'
+						onClick={() => setShowLockupDetailsModal(true)}
+					/>
 					<IncreaseButton
 						label='Increase your reward'
 						onClick={() => console.log('clicked')}
