@@ -13,6 +13,7 @@ import styled from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { useGIVpower } from '@/context/givpower.context';
+import { formatEthHelper } from '@/helpers/number';
 import type { FC } from 'react';
 
 interface ILockInfo {
@@ -21,13 +22,14 @@ interface ILockInfo {
 
 const LockInfo: FC<ILockInfo> = ({ round }) => {
 	const { apr } = useGIVpower();
+	const multipler = Math.sqrt(1 + round).toPrecision(3);
 
 	return (
 		<LockInfoContainer>
 			<Flex alignItems='baseline' gap='12px'>
 				<LockInfoTitle>Your multiplier</LockInfoTitle>
 				<MultiPlyValue weight={700}>
-					x{Math.sqrt(1 + round).toPrecision(3)}
+					x{multipler}
 					<MultiPlyHelp>
 						<IconWithTooltip
 							icon={<IconHelp size={16} />}
@@ -57,7 +59,9 @@ const LockInfo: FC<ILockInfo> = ({ round }) => {
 					</LockInfoRowHelp>
 				</LockInfoRowTitle>
 				<LockInfoRowValue>
-					0%
+					{apr
+						? `${formatEthHelper(apr.multipliedBy(multipler))}%`
+						: ' ? '}
 					<LockInfoRowSpark>
 						<IconSpark size={16} />
 					</LockInfoRowSpark>
