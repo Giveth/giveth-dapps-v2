@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { useState } from 'react';
 import {
 	B,
 	brandColors,
@@ -19,10 +19,17 @@ import styled from 'styled-components';
 
 import { Flex } from '../styled-components/Flex';
 import { IconWithTooltip } from '../IconWithToolTip';
+import { useGIVpower } from '@/context/givpower.context';
+import { formatWeiHelper } from '@/helpers/number';
+import LockModal from '../modals/Stake/Lock';
+import type { FC } from 'react';
 
 interface IGIVpowerDescCardProps {}
 
 export const GIVpowerDescCard: FC<IGIVpowerDescCardProps> = () => {
+	const [showLockModal, setShowLockModal] = useState(false);
+	const { poolStakingConfig, stakedAmount } = useGIVpower();
+
 	return (
 		<>
 			<RegenStreamContainer>
@@ -98,7 +105,7 @@ export const GIVpowerDescCard: FC<IGIVpowerDescCardProps> = () => {
 								</IconWithTooltip>
 							</HelpContainer>
 						</Key>
-						<Value>0 GIV</Value>
+						<Value>{formatWeiHelper(stakedAmount)} GIV</Value>
 					</Flex>
 					<LastRow justifyContent='space-between'>
 						<LastKey>
@@ -119,13 +126,20 @@ export const GIVpowerDescCard: FC<IGIVpowerDescCardProps> = () => {
 					<OulineButton label='Lockup details' size='small' />
 					<IncreaseButton
 						label='Increase your reward'
-						onClick={() => console.log('clicked')}
+						onClick={() => setShowLockModal(true)}
 						buttonType='primary'
 						disabled={false}
 						size='small'
 					/>
 				</FooterRow>
 			</RegenStreamContainer>
+			{showLockModal && (
+				<LockModal
+					setShowModal={setShowLockModal}
+					poolStakingConfig={poolStakingConfig}
+					maxAmount={stakedAmount}
+				/>
+			)}
 		</>
 	);
 };
