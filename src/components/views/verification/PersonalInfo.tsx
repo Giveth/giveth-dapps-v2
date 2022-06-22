@@ -29,12 +29,13 @@ function addZero(num: number) {
 const PersonalInfo = () => {
 	const { verificationData, setStep, setVerificationData } =
 		useVerificationData();
-	const [email, setEmail] = useState(verificationData?.email || '');
+	// const [email, setEmail] = useState(verificationData?.email || '');
 	const [resetMail, setResetMail] = useState(false);
 	const [timer, setTimer] = useState(0);
 	const [canReSendEmail, setCanReSendEmail] = useState(false);
 	const [isSentMailLoading, setIsSentMailLoading] = useState(false);
-	const { register, handleSubmit } = useForm<IFormInfo>();
+	const { register, handleSubmit, setValue, getValues } =
+		useForm<IFormInfo>();
 	const sendPersonalInfo = async () => {
 		return await client.mutate({
 			mutation: UPDATE_PROJECT_VERIFICATION,
@@ -42,7 +43,7 @@ const PersonalInfo = () => {
 				projectVerificationUpdateInput: {
 					step: 'personalInfo',
 					personalInfo: {
-						email,
+						email: getValues('email'),
 						walletAddress: verificationData?.user.walletAddress,
 						fullName:
 							verificationData?.user.firstName +
@@ -92,8 +93,14 @@ const PersonalInfo = () => {
 			setIsSentMailLoading(false);
 		}
 	};
+	function handleNext() {
+		if (!verificationData?.emailConfirmed) {
+			showToastError('Please confirm your email');
+		} else {
+			setStep(2);
+		}
+	}
 
-	console.log(verificationData?.emailConfirmationTokenExpiredAt);
 	useEffect(() => {
 		if (!verificationData?.emailConfirmationTokenExpiredAt) return;
 		const date = new Date(
@@ -110,13 +117,14 @@ const PersonalInfo = () => {
 		};
 	}, [verificationData?.emailConfirmationTokenExpiredAt]);
 
-	function handleNext() {
-		if (!verificationData?.emailConfirmed) {
-			showToastError('Please confirm your email');
-		} else {
-			setStep(2);
-		}
-	}
+	useEffect(() => {
+		setValue(
+			'name',
+			`${verificationData?.user?.firstName} ${verificationData?.user?.lastName}`,
+		);
+		setValue('walletAddress', verificationData?.user.walletAddress || '');
+		setValue('email', verificationData?.email || '');
+	}, [verificationData]);
 
 	return (
 		<>
@@ -126,14 +134,12 @@ const PersonalInfo = () => {
 					<br />
 					<Input
 						label='What is your full name?'
-						value={`${verificationData?.user.firstName} ${verificationData?.user.lastName}`}
 						disabled
 						registerName='name'
 						register={register}
 					/>
 					<Input
 						label='Your wallet address'
-						value={verificationData?.user.walletAddress || ''}
 						disabled
 						registerName='walletAddress'
 						register={register}
@@ -144,10 +150,6 @@ const PersonalInfo = () => {
 								<Input
 									key='1'
 									label='What is your email address?'
-									value={email}
-									onChange={e => {
-										setEmail(e.target.value);
-									}}
 									registerName='email'
 									register={register}
 								/>
@@ -163,8 +165,7 @@ const PersonalInfo = () => {
 								<Input
 									key='2'
 									label='What is your email address?'
-									value={email}
-									registerName='disabledEmail'
+									registerName='email'
 									register={register}
 									disabled
 								/>
