@@ -15,21 +15,19 @@ import {
 	StakeModalContainer,
 } from './Stake';
 import { StakeState } from '@/lib/staking';
-import StakeSteps from './StakeSteps';
 import { AmountInput } from '@/components/AmountInput';
 import LockSlider from './LockSlider';
 import LockInfo from './LockInfo';
 import StakingBrief from './StakingBrief';
 import type { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 
-interface IStakeLockModalProps extends IModal {
+interface ILockModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
 	regenStreamConfig?: RegenStreamConfig;
 	maxAmount: BigNumber;
 }
-const StakeLockModal: FC<IStakeLockModalProps> = ({
+const LockModal: FC<ILockModalProps> = ({
 	poolStakingConfig,
-	regenStreamConfig,
 	maxAmount,
 	setShowModal,
 }) => {
@@ -47,7 +45,6 @@ const StakeLockModal: FC<IStakeLockModalProps> = ({
 		>
 			<StakeModalContainer>
 				<StakeInnerModal>
-					<StakeSteps stakeState={stakeState} />
 					{(stakeState === StakeState.APPROVE ||
 						stakeState === StakeState.APPROVING) && (
 						<>
@@ -134,4 +131,4 @@ const SectionTitle = styled(H5)`
 	margin: 24px 0 8px;
 `;
 
-export default StakeLockModal;
+export default LockModal;
