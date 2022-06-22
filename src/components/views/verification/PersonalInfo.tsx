@@ -14,6 +14,7 @@ import {
 } from '@/apollo/gql/gqlVerification';
 import { getNowUnixMS } from '@/helpers/time';
 import { durationToYMDh, showToastError } from '@/lib/helpers';
+import { requiredOptions } from '@/lib/constants/regex';
 
 interface IFormInfo {
 	name: string;
@@ -33,8 +34,14 @@ const PersonalInfo = () => {
 	const [timer, setTimer] = useState(0);
 	const [canReSendEmail, setCanReSendEmail] = useState(false);
 	const [isSentMailLoading, setIsSentMailLoading] = useState(false);
-	const { register, handleSubmit, setValue, getValues } =
-		useForm<IFormInfo>();
+	const {
+		register,
+		handleSubmit,
+		setValue,
+		getValues,
+		formState: { errors },
+	} = useForm<IFormInfo>();
+
 	const sendPersonalInfo = async () => {
 		return await client.mutate({
 			mutation: UPDATE_PROJECT_VERIFICATION,
@@ -127,7 +134,7 @@ const PersonalInfo = () => {
 
 	return (
 		<>
-			<form onSubmit={handleSubmit(handleNext)}>
+			<form onSubmit={handleSubmit(handleFormSubmit)}>
 				<div>
 					<H6 weight={700}>Personal info</H6>
 					<br />
@@ -151,12 +158,14 @@ const PersonalInfo = () => {
 									label='What is your email address?'
 									registerName='email'
 									register={register}
+									registerOptions={requiredOptions.email}
+									error={errors.email}
 								/>
 								<ButtonStyled
 									color={brandColors.giv[500]}
 									label='VERIFY EMAIL ADDRESS'
 									size='small'
-									onClick={handleFormSubmit}
+									type='submit'
 								/>
 							</>
 						) : (
@@ -199,7 +208,7 @@ const PersonalInfo = () => {
 							onClick={() => setStep(0)}
 							label='<     PREVIOUS'
 						/>
-						<Button type='submit' label='NEXT     >' />
+						<Button onClick={handleNext} label='NEXT     >' />
 					</BtnContainer>
 				</div>
 			</form>

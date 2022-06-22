@@ -18,7 +18,7 @@ import { IModal } from '@/types/common';
 import { useAppDispatch } from '@/features/hooks';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
 import Input, { InputSize } from '../Input';
-import { validators } from '@/lib/constants/regex';
+import { requiredOptions, validators } from '@/lib/constants/regex';
 
 enum EditStatusType {
 	INFO,
@@ -184,10 +184,7 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 										size={InputSize.SMALL}
 										register={register}
 										error={(errors as any)[field.name]}
-										registerOptions={{
-											required: field.required,
-											...field.validators,
-										}}
+										registerOptions={field.registerOptions}
 									/>
 								))}
 								<Button
@@ -215,33 +212,20 @@ const inputFields = [
 		label: 'first name',
 		placeholder: 'John',
 		name: 'firstName',
-		required: {
-			value: true,
-			message: 'First name is required',
-		},
+		registerOptions: requiredOptions.firstName,
 	},
 	{
 		label: 'last name',
 		placeholder: 'Doe',
 		name: 'lastName',
-		required: {
-			value: true,
-			message: 'Last name is required',
-		},
+		registerOptions: requiredOptions.lastName,
 	},
 	{
 		label: 'email',
 		placeholder: 'Example@Domain.com',
 		name: 'email',
 		type: 'email',
-		required: {
-			value: true,
-			message: 'Email is required',
-		},
-		validators: {
-			minLength: validators.tooShort,
-			pattern: validators.email,
-		},
+		registerOptions: requiredOptions.email,
 	},
 	{
 		label: 'location (optional)',
@@ -254,9 +238,7 @@ const inputFields = [
 		name: 'url',
 		type: 'url',
 		caption: 'Your home page, blog, or company site.',
-		validators: {
-			pattern: validators.url,
-		},
+		registerOptions: validators.url,
 	},
 ];
 

@@ -22,7 +22,7 @@ import Input from '@/components/Input';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
-import { validators } from '@/lib/constants/regex';
+import { requiredOptions, validators } from '@/lib/constants/regex';
 
 export interface IUserInfo {
 	email: string;
@@ -132,14 +132,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 								placeholder='Example@Domain.com'
 								register={register}
 								type='email'
-								registerOptions={{
-									required: {
-										value: true,
-										message: 'Email is required',
-									},
-									pattern: validators.email,
-									minLength: validators.tooShort,
-								}}
+								registerOptions={requiredOptions.email}
 								error={errors.email}
 							/>
 						</Col>
@@ -167,9 +160,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 								register={register}
 								type='url'
 								caption='Your home page, blog, or company site.'
-								registerOptions={{
-									pattern: validators.url,
-								}}
+								registerOptions={validators.url}
 								error={errors.url}
 							/>
 						</Col>
