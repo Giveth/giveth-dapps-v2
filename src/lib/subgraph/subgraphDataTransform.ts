@@ -281,5 +281,6 @@ export const transformSubgraphData = (data: any = {}): ISubgraphState => {
 		uniswapV3Pool: transformUniswapV3Pool(data?.uniswapV3Pool),
 		...transformUniswapPositions(data),
 		uniswapV2EthGivPair: transformUniswapV2Pair(data?.uniswapV2EthGivPair),
+		GIVPowerPositions: data?.GIVpower,
 	};
 };

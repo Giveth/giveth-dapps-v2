@@ -13,6 +13,7 @@ export const defaultSubgraphValues: ISubgraphState = {
 	userNotStakedPositions: [],
 	userStakedPositions: [],
 	allPositions: [],
+	GIVPowerPositions: undefined,
 };
 
 const initialState: {

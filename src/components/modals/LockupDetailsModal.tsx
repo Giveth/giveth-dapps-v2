@@ -1,3 +1,4 @@
+import { useState, FC, useEffect } from 'react';
 import {
 	neutralColors,
 	brandColors,
@@ -9,14 +10,53 @@ import {
 	B,
 	P,
 } from '@giveth/ui-design-system';
+import { utils, BigNumber } from 'ethers';
 import styled from 'styled-components';
-import { FC } from 'react';
+import { smallFormatDate } from '@/lib/helpers';
 import { Flex } from '../styled-components/Flex';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { IconWithTooltip } from '../IconWithToolTip';
+import { useAppSelector } from '@/features/hooks';
+import { IGIVpower } from '@/types/subgraph';
 
 export const LockupDetailsModal: FC<IModal> = ({ setShowModal }) => {
+	const currentValues = useAppSelector(state => state.subgraph.currentValues);
+	const GIVpower: IGIVpower | undefined = currentValues.GIVPowerPositions;
+
+	const [stakedGIV, setStakedGIV] = useState('0');
+	const [availableToUnstake, setAvailableToUnstake] = useState('0');
+	const [lockedGIV, setLockedGIV] = useState([]);
+
+	const setupValues = () => {
+		if (!GIVpower) return;
+		const GIVPowers = GIVpower?.givPowers[0];
+		setStakedGIV(
+			parseFloat(utils.formatEther(GIVPowers?.totalGIVLocked))?.toFixed(
+				4,
+			),
+		);
+		setAvailableToUnstake(
+			parseFloat(
+				utils.formatEther(
+					BigNumber.from(GIVPowers?.totalGIVLocked).mod(
+						BigNumber.from(GIVPowers?.totalGIVPower),
+					),
+				),
+			)?.toFixed(4),
+		);
+		setLockedGIV(
+			GIVpower?.powerLocks &&
+				[...GIVpower.powerLocks].sort((a: any, b: any) => {
+					return a?.unlockableAt < b?.unlockableAt ? -1 : 1;
+				}),
+		);
+	};
+
+	useEffect(() => {
+		setupValues();
+	}, [currentValues]);
+
 	return (
 		<Modal
 			setShowModal={setShowModal}
@@ -34,7 +74,7 @@ export const LockupDetailsModal: FC<IModal> = ({ setShowModal }) => {
 					<div>
 						<IconUnlock32 />
 						<CloseText>
-							<Subtitle>150</Subtitle>
+							<Subtitle>{availableToUnstake}</Subtitle>
 							<H6>GIV</H6>
 						</CloseText>
 					</div>
@@ -54,24 +94,40 @@ export const LockupDetailsModal: FC<IModal> = ({ setShowModal }) => {
 
 				<LockedContainer>
 					<Subtitle>Locked GIV</Subtitle>
-					<LockedTable>
-						<TableHeader>GIV Amount</TableHeader>
-						<TableHeader>Rounds Locked for</TableHeader>
-						<TableHeader>Multiplier</TableHeader>
-						<TableHeader>APR</TableHeader>
-						<TableHeader>Unlock Date</TableHeader>
-						{[1, 2, 3, 4, 5, 6, 7, 8].map((i, key) => {
-							return (
-								<RowWrapper key={key}>
-									<TableCell>823</TableCell>
-									<TableCell>2 Rounds</TableCell>
-									<TableCell>x2</TableCell>
-									<TableCell>55%</TableCell>
-									<TableCell>20 April, 2023</TableCell>
-								</RowWrapper>
-							);
-						})}
-					</LockedTable>
+					{lockedGIV?.length > 0 ? (
+						<LockedTable>
+							<TableHeader>GIV Amount</TableHeader>
+							<TableHeader>Rounds Locked for</TableHeader>
+							<TableHeader>Multiplier</TableHeader>
+							<TableHeader>APR</TableHeader>
+							<TableHeader>Unlock Date</TableHeader>
+							{lockedGIV?.map((i: any, key) => {
+								return (
+									<RowWrapper key={key}>
+										<TableCell>
+											{parseFloat(
+												i?.amount,
+											)?.toLocaleString()}
+										</TableCell>
+										<TableCell>
+											{i?.rounds} Rounds
+										</TableCell>
+										<TableCell>x</TableCell>
+										<TableCell>x%</TableCell>
+										<TableCell>
+											{smallFormatDate(
+												new Date(
+													i?.unlockableAt * 1000,
+												),
+											)}
+										</TableCell>
+									</RowWrapper>
+								);
+							})}
+						</LockedTable>
+					) : (
+						<Subtitle>0</Subtitle>
+					)}
 				</LockedContainer>
 
 				<StakedContainer>
@@ -83,7 +139,7 @@ export const LockupDetailsModal: FC<IModal> = ({ setShowModal }) => {
 					</SubtitleWithTooltip>
 
 					<TotalContainer>
-						<SubtitleH5>150</SubtitleH5>
+						<SubtitleH5>{stakedGIV}</SubtitleH5>
 						<H6>GIV</H6>
 					</TotalContainer>
 				</StakedContainer>
@@ -159,7 +215,7 @@ const SubtitleH5 = styled(H5)`
 
 const LockedTable = styled.div`
 	display: grid;
-	grid-template-columns: 1fr 2fr 1fr 1fr 2fr;
+	grid-template-columns: 2fr 2fr 1fr 1fr 2fr;
 	overflow: auto;
 	min-width: 489px;
 	height: 364px;
@@ -187,6 +243,8 @@ const TableCell = styled(P)`
 	display: flex;
 	height: 60px;
 	border-bottom: 1px solid ${brandColors.deep[100]};
+	padding: 0 0 0 10px;
 	align-items: center;
 	gap: 8px;
+	overflow-x: auto;
 `;

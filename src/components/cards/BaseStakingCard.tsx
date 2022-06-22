@@ -4,7 +4,6 @@ import {
 	brandColors,
 	IconExternalLink,
 	IconHelp,
-	IconLock16,
 	IconRocketInSpace16,
 	IconSpark,
 } from '@giveth/ui-design-system';

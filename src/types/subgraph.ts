@@ -109,6 +109,11 @@ export interface ITokenDistroInfo {
 	endTime: number;
 }
 
+export interface IGIVpower {
+	givPowers?: any;
+	powerLocks?: any;
+}
+
 export interface IUnipool {
 	totalSupply: string;
 	lastUpdateTime: number;
