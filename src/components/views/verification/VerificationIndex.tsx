@@ -91,6 +91,12 @@ const ContentSection = styled(Col)`
 	display: flex;
 	justify-content: space-between;
 	flex-direction: column;
+	> form {
+		height: 100%;
+		display: flex;
+		justify-content: space-between;
+		flex-direction: column;
+	}
 	min-height: 765px;
 `;
 

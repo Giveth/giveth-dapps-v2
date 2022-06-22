@@ -1,6 +1,7 @@
 import { brandColors, Button, H6 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { Flex } from '@/components/styled-components/Flex';
 import { ButtonStyled } from './common.styled';
 import Input from '@/components/Input';
@@ -13,6 +14,14 @@ import {
 } from '@/apollo/gql/gqlVerification';
 import { getNowUnixMS } from '@/helpers/time';
 import { durationToYMDh, showToastError } from '@/lib/helpers';
+import { requiredOptions } from '@/lib/constants/regex';
+
+interface IFormInfo {
+	name: string;
+	walletAddress: string;
+	email: string;
+	disabledEmail: string;
+}
 
 function addZero(num: number) {
 	return num < 10 ? '0' + num : num;
@@ -21,11 +30,18 @@ function addZero(num: number) {
 const PersonalInfo = () => {
 	const { verificationData, setStep, setVerificationData } =
 		useVerificationData();
-	const [email, setEmail] = useState(verificationData?.email || '');
 	const [resetMail, setResetMail] = useState(false);
 	const [timer, setTimer] = useState(0);
 	const [canReSendEmail, setCanReSendEmail] = useState(false);
 	const [isSentMailLoading, setIsSentMailLoading] = useState(false);
+	const {
+		register,
+		handleSubmit,
+		setValue,
+		getValues,
+		formState: { errors },
+	} = useForm<IFormInfo>();
+
 	const sendPersonalInfo = async () => {
 		return await client.mutate({
 			mutation: UPDATE_PROJECT_VERIFICATION,
@@ -33,7 +49,7 @@ const PersonalInfo = () => {
 				projectVerificationUpdateInput: {
 					step: 'personalInfo',
 					personalInfo: {
-						email,
+						email: getValues('email'),
 						walletAddress: verificationData?.user.walletAddress,
 						fullName:
 							verificationData?.user.firstName +
@@ -46,14 +62,18 @@ const PersonalInfo = () => {
 		});
 	};
 	const sendEmail = async () => {
-		const { data } = await client.mutate({
-			mutation: SEND_EMAIL_VERIFICATION,
-			variables: {
-				projectVerificationFormId: Number(verificationData?.id),
-			},
-		});
-		setVerificationData(data.projectVerificationSendEmailConfirmation);
-		return data;
+		try {
+			const { data } = await client.mutate({
+				mutation: SEND_EMAIL_VERIFICATION,
+				variables: {
+					projectVerificationFormId: Number(verificationData?.id),
+				},
+			});
+			setVerificationData(data.projectVerificationSendEmailConfirmation);
+			return data;
+		} catch (error: any) {
+			showToastError(error?.message);
+		}
 	};
 	const showMailInput = () => {
 		if (resetMail) {
@@ -79,8 +99,14 @@ const PersonalInfo = () => {
 			setIsSentMailLoading(false);
 		}
 	};
+	function handleNext() {
+		if (!verificationData?.emailConfirmed) {
+			showToastError('Please confirm your email');
+		} else {
+			setStep(2);
+		}
+	}
 
-	console.log(verificationData?.emailConfirmationTokenExpiredAt);
 	useEffect(() => {
 		if (!verificationData?.emailConfirmationTokenExpiredAt) return;
 		const date = new Date(
@@ -97,91 +123,95 @@ const PersonalInfo = () => {
 		};
 	}, [verificationData?.emailConfirmationTokenExpiredAt]);
 
-	function handleNext() {
-		if (!verificationData?.emailConfirmed) {
-			showToastError('Please confirm your email');
-		} else {
-			setStep(2);
-		}
-	}
+	useEffect(() => {
+		setValue(
+			'name',
+			`${verificationData?.user?.firstName} ${verificationData?.user?.lastName}`,
+		);
+		setValue('walletAddress', verificationData?.user.walletAddress || '');
+		setValue('email', verificationData?.email || '');
+	}, [verificationData]);
 
 	return (
 		<>
-			<div>
-				<H6 weight={700}>Personal info</H6>
-				<br />
-				<Input
-					label='What is your full name?'
-					value={`${verificationData?.user.firstName} ${verificationData?.user.lastName}`}
-					disabled
-					name='name'
-				/>
-				<Input
-					label='Your wallet address'
-					value={verificationData?.user.walletAddress || ''}
-					disabled
-					name='walletAddress'
-				/>
-				<EmailSection>
-					{showMailInput() ? (
-						<>
-							<Input
-								key='1'
-								label='What is your email address?'
-								value={email}
-								onChange={e => {
-									setEmail(e.target.value);
-								}}
-								name='email'
-								disabled={false}
-							/>
-							<ButtonStyled
-								color={brandColors.giv[500]}
-								label='VERIFY EMAIL ADDRESS'
-								size='small'
-								onClick={handleFormSubmit}
-							/>
-						</>
-					) : (
-						<>
-							<Input
-								key='2'
-								label='What is your email address?'
-								value={email}
-								name='disabledEmail'
-								disabled
-							/>
-							<ResendEmailButton
-								color={brandColors.giv[500]}
-								label={
-									canReSendEmail || timer === 0
-										? 'RE-SEND EMAIL'
-										: `RE-SEND EMAIL IN ${addZero(
-												durationToYMDh(timer).min,
-										  )} : ${addZero(
-												durationToYMDh(timer).sec,
-										  )}`
-								}
-								size='small'
-								onClick={handleFormSubmit}
-								disabled={!canReSendEmail}
-								loading={isSentMailLoading}
-							/>
-							<LightBotton
-								onClick={() => setResetMail(true)}
-								label='CHANGE MAIL'
-							/>
-						</>
-					)}
-				</EmailSection>
-			</div>
-			<div>
-				<ContentSeparator />
-				<BtnContainer>
-					<Button onClick={() => setStep(0)} label='<     PREVIOUS' />
-					<Button onClick={handleNext} label='NEXT     >' />
-				</BtnContainer>
-			</div>
+			<form onSubmit={handleSubmit(handleFormSubmit)}>
+				<div>
+					<H6 weight={700}>Personal info</H6>
+					<br />
+					<Input
+						label='What is your full name?'
+						disabled
+						registerName='name'
+						register={register}
+					/>
+					<Input
+						label='Your wallet address'
+						disabled
+						registerName='walletAddress'
+						register={register}
+					/>
+					<EmailSection>
+						{showMailInput() ? (
+							<>
+								<Input
+									key='1'
+									label='What is your email address?'
+									registerName='email'
+									register={register}
+									registerOptions={requiredOptions.email}
+									error={errors.email}
+								/>
+								<ButtonStyled
+									color={brandColors.giv[500]}
+									label='VERIFY EMAIL ADDRESS'
+									size='small'
+									type='submit'
+								/>
+							</>
+						) : (
+							<>
+								<Input
+									key='2'
+									label='What is your email address?'
+									registerName='email'
+									register={register}
+									disabled
+								/>
+								<ResendEmailButton
+									color={brandColors.giv[500]}
+									label={
+										canReSendEmail || timer === 0
+											? 'RE-SEND EMAIL'
+											: `RE-SEND EMAIL IN ${addZero(
+													durationToYMDh(timer).min,
+											  )} : ${addZero(
+													durationToYMDh(timer).sec,
+											  )}`
+									}
+									size='small'
+									onClick={handleFormSubmit}
+									disabled={!canReSendEmail}
+									loading={isSentMailLoading}
+								/>
+								<LightBotton
+									onClick={() => setResetMail(true)}
+									label='CHANGE MAIL'
+								/>
+							</>
+						)}
+					</EmailSection>
+				</div>
+				<div>
+					<ContentSeparator />
+					<BtnContainer>
+						<Button
+							onClick={() => setStep(0)}
+							label='<     PREVIOUS'
+						/>
+						<Button onClick={handleNext} label='NEXT     >' />
+					</BtnContainer>
+				</div>
+			</form>
 		</>
 	);
 };

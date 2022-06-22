@@ -13,33 +13,81 @@ export const regexList = {
 };
 
 export const validators = {
-	tooShort: { value: 3, message: 'Too Short' },
+	tooShort: {
+		pattern: {
+			value: 3,
+			message: 'Too Short',
+		},
+	},
 	email: {
-		value: regexList.email,
-		message: 'Invalid Email Address',
+		pattern: {
+			value: regexList.email,
+			message: 'Invalid Email Address',
+		},
 	},
 	url: {
-		value: regexList.url,
-		message: 'Invalid URL',
+		pattern: {
+			value: regexList.url,
+			message: 'Invalid URL',
+		},
 	},
 	twitter: {
-		value: regexList.twitter,
-		message: 'Invalid twitter URL',
+		pattern: {
+			value: regexList.twitter,
+			message: 'Invalid twitter URL',
+		},
 	},
 	facebook: {
-		value: regexList.facebook,
-		message: 'Invalid facebook URL',
+		pattern: {
+			value: regexList.facebook,
+			message: 'Invalid facebook URL',
+		},
 	},
 	linkedIn: {
-		value: regexList.linkedIn,
-		message: 'Invalid linkedIn URL',
+		pattern: {
+			value: regexList.linkedIn,
+			message: 'Invalid linkedIn URL',
+		},
 	},
 	instagram: {
-		value: regexList.instagram,
-		message: 'Invalid instagram URL',
+		pattern: {
+			value: regexList.instagram,
+			message: 'Invalid instagram URL',
+		},
 	},
 	youtube: {
-		value: regexList.youtube,
-		message: 'Invalid youtube URL',
+		pattern: {
+			value: regexList.youtube,
+			message: 'Invalid youtube URL',
+		},
+	},
+};
+
+export const requiredOptions = {
+	email: {
+		required: {
+			value: true,
+			message: 'Email is required',
+		},
+		...validators.email,
+	},
+	lastName: {
+		required: {
+			value: true,
+			message: 'Last name is required',
+		},
+	},
+	firstName: {
+		required: {
+			value: true,
+			message: 'First name is required',
+		},
+	},
+	url: {
+		required: {
+			value: true,
+			message: 'Url is required',
+		},
+		...validators.url,
 	},
 };
