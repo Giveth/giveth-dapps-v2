@@ -60,7 +60,7 @@ const Input: FC<IInput> = ({
 	label,
 	caption,
 	size = InputSize.MEDIUM,
-	register,
+	register = () => {},
 	registerOptions = { required: false },
 	error,
 	LeftIcon,
