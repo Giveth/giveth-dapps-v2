@@ -12,14 +12,22 @@ import {
 import styled from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
+import { useGIVpower } from '@/context/givpower.context';
+import type { FC } from 'react';
 
-const LockInfo = () => {
+interface ILockInfo {
+	round: number;
+}
+
+const LockInfo: FC<ILockInfo> = ({ round }) => {
+	const { apr } = useGIVpower();
+
 	return (
 		<LockInfoContainer>
 			<Flex alignItems='baseline' gap='12px'>
 				<LockInfoTitle>Your multiplier</LockInfoTitle>
 				<MultiPlyValue weight={700}>
-					x2
+					x{Math.sqrt(1 + round).toPrecision(3)}
 					<MultiPlyHelp>
 						<IconWithTooltip
 							icon={<IconHelp size={16} />}

@@ -49,7 +49,7 @@ const LockModal: FC<ILockModalProps> = ({
 						stakeState === StakeState.APPROVING) && (
 						<>
 							<SectionTitle weight={700}>
-								Locking tokens
+								Lock your staked GIV
 							</SectionTitle>
 							<AmountInput
 								setAmount={setAmount}
@@ -59,7 +59,7 @@ const LockModal: FC<ILockModalProps> = ({
 							/>
 							<SectionTitle weight={700}>Rounds</SectionTitle>
 							<LockSlider setRound={setRound} round={round} />
-							<LockInfo />
+							<LockInfo round={round} />
 							{stakeState === StakeState.APPROVE && (
 								<ApproveButton
 									label={'APPROVE'}
@@ -87,7 +87,7 @@ const LockModal: FC<ILockModalProps> = ({
 						stakeState === StakeState.WRAPPING) && (
 						<>
 							<StakingBrief round={round} amount={amount} />
-							<LockInfo />
+							<LockInfo round={round} />
 							{stakeState === StakeState.WRAP && (
 								<ConfirmButton
 									label={'STAKE & LOCK'}
