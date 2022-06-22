@@ -20,7 +20,7 @@ import styled from 'styled-components';
 import { Flex } from '../styled-components/Flex';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { useGIVpower } from '@/context/givpower.context';
-import { formatWeiHelper } from '@/helpers/number';
+import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import LockModal from '../modals/Stake/Lock';
 import type { FC } from 'react';
 
@@ -28,7 +28,8 @@ interface IGIVpowerDescCardProps {}
 
 export const GIVpowerDescCard: FC<IGIVpowerDescCardProps> = () => {
 	const [showLockModal, setShowLockModal] = useState(false);
-	const { poolStakingConfig, stakedAmount } = useGIVpower();
+	const [average, setAverage] = useState(1);
+	const { poolStakingConfig, apr, stakedAmount } = useGIVpower();
 
 	return (
 		<>
@@ -46,7 +47,7 @@ export const GIVpowerDescCard: FC<IGIVpowerDescCardProps> = () => {
 					<Flex gap='12px' alignItems='baseline'>
 						<AverageLabel>Average multiplier</AverageLabel>
 						<AverageValue>
-							~x1
+							~x{average}
 							<HelpContainer>
 								<IconWithTooltip
 									icon={<IconHelp size={16} />}
@@ -73,7 +74,12 @@ export const GIVpowerDescCard: FC<IGIVpowerDescCardProps> = () => {
 							</HelpContainer>
 						</Key>
 						<Value>
-							0%
+							{apr
+								? `${formatEthHelper(
+										apr.multipliedBy(average),
+								  )}%`
+								: ' ? '}
+							%
 							<ValueIcon>
 								<IconSpark size={16} />
 							</ValueIcon>
