@@ -1,4 +1,4 @@
-import { TabPowerTop, TabPowerBottom } from '../homeTabs/Givpower';
+import { TabPowerTop, TabPowerBottom } from '../homeTabs/GIVPower';
 import Tabs from '../Tabs';
 
 export default function GIVpowerView() {
