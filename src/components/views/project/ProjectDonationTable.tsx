@@ -7,7 +7,6 @@ import {
 	IconETH,
 	IconExternalLink,
 	neutralColors,
-	P,
 } from '@giveth/ui-design-system';
 
 import { client } from '@/apollo/apolloClient';
@@ -207,16 +206,16 @@ const ProjectDonationTable = ({
 								<TableCell>
 									{donation.transactionNetworkId ===
 									config.XDAI_NETWORK_NUMBER ? (
-										<IconETH size={24} />
+										<>
+											<IconGnosisChain size={24} />
+											Gnosis
+										</>
 									) : (
-										<IconGnosisChain size={24} />
+										<>
+											<IconETH size={24} />
+											Ethereum
+										</>
 									)}
-									<P>
-										{donation.transactionNetworkId ===
-										config.XDAI_NETWORK_NUMBER
-											? 'Gnosis'
-											: 'Ethereum'}
-									</P>
 								</TableCell>
 								<TableCell>
 									<B>{donation.amount}</B>
