@@ -29,7 +29,6 @@ function addZero(num: number) {
 const PersonalInfo = () => {
 	const { verificationData, setStep, setVerificationData } =
 		useVerificationData();
-	// const [email, setEmail] = useState(verificationData?.email || '');
 	const [resetMail, setResetMail] = useState(false);
 	const [timer, setTimer] = useState(0);
 	const [canReSendEmail, setCanReSendEmail] = useState(false);
