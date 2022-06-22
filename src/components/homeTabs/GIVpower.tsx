@@ -9,6 +9,7 @@ import {
 	Lead,
 	H1,
 } from '@giveth/ui-design-system';
+import Link from 'next/link';
 import { Col, Row } from '../Grid';
 import { Flex } from '../styled-components/Flex';
 import { TopInnerContainer as Container } from './commons';
@@ -46,6 +47,7 @@ import config from '@/configuration';
 import { BN } from '@/helpers/number';
 import Growth from '../../../public/images/growth.svg';
 import GivStake from '../../../public/images/giv_stake.svg';
+import Routes from '@/lib/constants/Routes';
 export function TabPowerTop() {
 	const { chainId } = useWeb3React();
 	return (
@@ -70,7 +72,7 @@ export function TabPowerTop() {
 					<Col xs={12} sm={5} xl={4}>
 						{/* //TODO: add The Card Functionality  */}
 						<GIVstreamRewardCard
-							wrongNetworkText='GIVstream is only available on Mainnet and Gnosis Chain.'
+							wrongNetworkText='GIVpower is only available on Mainnet and Gnosis Chain.'
 							liquidAmount={BN(1321231321)}
 							stream='2'
 							actionLabel='HARVEST'
@@ -134,7 +136,9 @@ export function TabPowerBottom() {
 								Boost your favourite projects to help them rise
 								through the ranks.
 							</Lead>
-							<CardBottomText>BOOST PROJECTS</CardBottomText>
+							<Link href={Routes.Projects} passHref>
+								<CardBottomText>BOOST PROJECTS</CardBottomText>
+							</Link>
 						</FeaturesCardItem>
 						<FeaturesCardItem>
 							<Image
@@ -146,7 +150,9 @@ export function TabPowerBottom() {
 							<Lead>
 								The longer you lock, the greater your rewards.
 							</Lead>
-							<CardBottomText>SEE REWARDS</CardBottomText>
+							<Link href={Routes.GIVfarm} passHref>
+								<CardBottomText>SEE REWARDS</CardBottomText>
+							</Link>
 						</FeaturesCardItem>
 					</FeaturesCardItemsContainer>
 				</FeaturesCardContainer>
