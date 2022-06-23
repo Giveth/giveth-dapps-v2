@@ -1,21 +1,23 @@
 export const regexList = {
 	email: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-	url: /^(?:http(s)?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
+	website:
+		/^(?:http(s)?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
 	twitter:
 		/(?:https?:)?\/\/(?:www\.|m\.)?twitter\.com\/(\w{2,15})\/?(?:\?\S+)?(?:\#\S+)?$/,
 	facebook:
 		/(?:(?:http|https):\/\/)?(?:www.)?facebook.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[?\w\-]*\/)?(?:profile.php\?id=(?=\d.*))?([\w\-]*)?/,
 	instagram:
-		/(?:https?:)?\/\/(?:www\.|m\.)?instagram\.com\/(\w{2,15})\/?(?:\?\S+)?(?:\#\S+)?$/,
-	linkedIn: /^(http(s)?:\/\/)?([\w]+\.)?linkedin\.com\/(pub|in|profile)/,
+		/(?:(?:http|https):\/\/)?(?:www.)?(?:instagram.com|instagr.am|instagr.com)\/(\w+)/,
+	linkedin: /^(http(s)?:\/\/)?([\w]+\.)?linkedin\.com\/(pub|in|profile)/,
 	youtube:
 		/^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/,
+	tooShort: /^.{3,}$/,
 };
 
 export const validators = {
 	tooShort: {
 		pattern: {
-			value: 3,
+			value: regexList.tooShort,
 			message: 'Too Short',
 		},
 	},
@@ -25,9 +27,9 @@ export const validators = {
 			message: 'Invalid Email Address',
 		},
 	},
-	url: {
+	website: {
 		pattern: {
-			value: regexList.url,
+			value: regexList.website,
 			message: 'Invalid URL',
 		},
 	},
@@ -43,9 +45,9 @@ export const validators = {
 			message: 'Invalid facebook URL',
 		},
 	},
-	linkedIn: {
+	linkedin: {
 		pattern: {
-			value: regexList.linkedIn,
+			value: regexList.linkedin,
 			message: 'Invalid linkedIn URL',
 		},
 	},
@@ -83,11 +85,17 @@ export const requiredOptions = {
 			message: 'First name is required',
 		},
 	},
-	url: {
+	name: {
+		required: {
+			value: true,
+			message: 'Name is required',
+		},
+	},
+	website: {
 		required: {
 			value: true,
 			message: 'Url is required',
 		},
-		...validators.url,
+		...validators.website,
 	},
 };

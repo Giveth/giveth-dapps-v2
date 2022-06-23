@@ -160,7 +160,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 								register={register}
 								type='url'
 								caption='Your home page, blog, or company site.'
-								registerOptions={validators.url}
+								registerOptions={validators.website}
 								error={errors.url}
 							/>
 						</Col>
