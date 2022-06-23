@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { useEffect } from 'react';
 import VerificationIndex from '@/components/views/verification/VerificationIndex';
-import { setShowFooter } from '@/features/general/general.sclie';
+import { setShowFooter } from '@/features/general/general.slice';
 import { VerificationProvider } from '@/context/verification.context';
 import { useAppDispatch } from '@/features/hooks';
 
