@@ -18,6 +18,7 @@ import {
 import { EVerificationSteps } from '@/apollo/types/types';
 import { mediaQueries } from '@/lib/constants/constants';
 import { validators } from '@/lib/constants/regex';
+import { isObjEmpty } from '@/lib/helpers';
 
 enum ProjectRegistryStates {
 	NOTSELECTED = 'notselected',
@@ -28,10 +29,6 @@ enum ProjectRegistryStates {
 interface IOption {
 	value: string;
 	label: string;
-}
-
-function isObjEmpty(obj: Object) {
-	return Object.keys(obj).length > 0;
 }
 
 interface IRegisteryForm {
