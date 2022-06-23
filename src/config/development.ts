@@ -122,7 +122,7 @@ const config: EnvConfig = {
 		nodeUrl: 'https://rpc.gnosischain.com/',
 
 		GIV: {
-			LM_ADDRESS: '0x1460aaF51F4E0B1b59Bb41981Cb4aa5A1B377776',
+			LM_ADDRESS: '0x898Baa558A401e59Cb2aA77bb8b2D89978Cf506F',
 			GARDEN_ADDRESS: '0x642c18755aa5a2bf6861349327d2448813b992ba',
 			BUY_LINK:
 				'https://app.honeyswap.org/#/swap?outputCurrency=0x780FE5de651a3ea62E572f591BF848cFEBaf2163',
