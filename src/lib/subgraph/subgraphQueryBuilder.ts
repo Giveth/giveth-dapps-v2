@@ -235,12 +235,6 @@ export class SubgraphQueryBuilder {
 				...config.XDAI_CONFIG.pools,
 				...config.XDAI_CONFIG.regenFarms,
 			])}
-			
-			uniswapV2EthGivPair: ${SubgraphQueryBuilder.getPairInfoQuery(
-				config.XDAI_CONFIG.pools.find(
-					c => c.type === StakingType.SUSHISWAP_ETH_GIV,
-				)?.POOL_ADDRESS || '',
-			)}
 		}
 		`;
 	};
