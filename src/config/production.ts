@@ -160,7 +160,7 @@ const config: EnvConfig = {
 		blockExplorerName: ['Blockscout'],
 		blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/aminlatifi/giveth-economy-xdai',
+			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-xdai',
 
 		TOKEN_ADDRESS: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
@@ -199,6 +199,19 @@ const config: EnvConfig = {
 					'https://gnosis.sushi.com/add/0x6A023CCd1ff6F2045C3309768eAd9E68F978f6e1/0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 				unit: 'LP',
 				active: true,
+			},
+			{
+				POOL_ADDRESS: '0xB7189A7Ea38FA31210A79fe282AEC5736Ad5fA57',
+				LM_ADDRESS: '0x24A6067fEd46dc8663794c4d39Ec91b074cf85D4',
+				type: StakingType.HONEYSWAP_GIV_DAI,
+				platform: StakingPlatform.HONEYSWAP,
+				title: 'GIV / xDAI',
+				description: '50% GIV, 50% xDAI',
+				provideLiquidityLink:
+					'https://app.honeyswap.org/#/add/0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75/xdai',
+				unit: 'LP',
+				active: true,
+				farmStartTimeMS: 1656086400000,
 			},
 		],
 
