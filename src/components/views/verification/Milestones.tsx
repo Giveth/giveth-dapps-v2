@@ -9,6 +9,7 @@ import {
 import { useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import styled from 'styled-components';
+import { Controller, useForm } from 'react-hook-form';
 import { TextArea } from '@/components/styled-components/TextArea';
 import {
 	StyledDatePicker,
@@ -21,6 +22,13 @@ import { client } from '@/apollo/apolloClient';
 import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
 import { EVerificationSteps } from '@/apollo/types/types';
 
+export interface IMilestonesForm {
+	foundationDate?: Date;
+	mission?: string;
+	achievedMilestones?: string;
+	achievedMilestonesProof?: string;
+}
+
 export default function Milestones() {
 	const [uploading, setUploading] = useState(false);
 	const [loading, setloading] = useState(false);
@@ -29,6 +37,7 @@ export default function Milestones() {
 	const { verificationData, setVerificationData, setStep } =
 		useVerificationData();
 	const { milestones } = verificationData || {};
+	const { control, register, handleSubmit } = useForm<IMilestonesForm>();
 	const [startDate, setStartDate] = useState<Date | undefined>(
 		milestones?.foundationDate
 			? new Date(milestones?.foundationDate)
@@ -72,8 +81,12 @@ export default function Milestones() {
 		}
 	};
 
+	const handleFormSubmit = (data: any) => {
+		console.log(data);
+	};
+
 	return (
-		<>
+		<form onSubmit={handleSubmit(handleFormSubmit)}>
 			<div>
 				<H6 weight={700}>Activity and Milestones</H6>
 				<LeadStyled>
@@ -82,16 +95,24 @@ export default function Milestones() {
 				<br />
 				<DatePickerWrapper>
 					<IconChevronDown color={neutralColors.gray[600]} />
-					<StyledDatePicker
-						selected={startDate}
-						onChange={(date: Date) => {
-							setIsChanged(true);
-							setStartDate(date);
-						}}
-						dateFormat='MM/yyyy'
-						showMonthYearPicker
-						showPopperArrow={false}
-						placeholderText='Select a date'
+					<Controller
+						control={control}
+						name='foundationDate'
+						defaultValue={
+							milestones?.foundationDate
+								? new Date(milestones?.foundationDate)
+								: undefined
+						}
+						render={({ field }) => (
+							<StyledDatePicker
+								selected={field.value}
+								onChange={date => field.onChange(date)}
+								dateFormat='MM/yyyy'
+								showMonthYearPicker
+								showPopperArrow={false}
+								placeholderText='Select a date'
+							/>
+						)}
 					/>
 				</DatePickerWrapper>
 				<LeadStyled>
@@ -142,14 +163,14 @@ export default function Milestones() {
 				<BtnContainer>
 					<Button onClick={() => setStep(4)} label='<     PREVIOUS' />
 					<Button
-						onClick={() => handleNext()}
 						loading={loading}
 						disabled={uploading}
 						label='NEXT     >'
+						type='submit'
 					/>
 				</BtnContainer>
 			</div>
-		</>
+		</form>
 	);
 }
 
