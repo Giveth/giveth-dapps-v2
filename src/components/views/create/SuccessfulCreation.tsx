@@ -12,7 +12,7 @@ import CopyLink from '@/components/CopyLink';
 import { Col, Row, Container } from '@/components/Grid';
 import { mediaQueries } from '@/lib/constants/constants';
 import { fullPath } from '@/lib/helpers';
-import { setShowFooter } from '@/features/general/general.sclie';
+import { setShowFooter } from '@/features/general/general.slice';
 import { useAppDispatch } from '@/features/hooks';
 
 const SuccessfulCreation = (props: {

@@ -18,7 +18,7 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '@/components/styled-components/Flex';
 import { Container } from '@/components/Grid';
 import { useAppSelector } from '@/features/hooks';
-import { ETheme } from '@/features/general/general.sclie';
+import { ETheme } from '@/features/general/general.slice';
 
 const Footer = () => {
 	const theme = useAppSelector(state => state.general.theme);

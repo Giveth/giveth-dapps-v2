@@ -11,7 +11,7 @@ import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
 
 import { Modal } from '@/components/modals/Modal';
-import { ETheme } from '@/features/general/general.sclie';
+import { ETheme } from '@/features/general/general.slice';
 import { mediaQueries } from '@/lib/constants/constants';
 import { IModal } from '@/types/common';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
