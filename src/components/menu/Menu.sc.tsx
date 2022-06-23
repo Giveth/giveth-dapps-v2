@@ -1,6 +1,6 @@
 import { brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { ETheme } from '@/features/general/general.sclie';
+import { ETheme } from '@/features/general/general.slice';
 import { Shadow } from '../styled-components/Shadow';
 
 interface isMounted {

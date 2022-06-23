@@ -4,7 +4,7 @@ import GIVbackView from '@/components/views/Back.view';
 import { givbacksMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
 import { useAppDispatch } from '@/features/hooks';
-import { setDarkTheme, setLightTheme } from '@/features/general/general.sclie';
+import { setDarkTheme, setLightTheme } from '@/features/general/general.slice';
 
 export default function GIVbacksRoute() {
 	const dispatch = useAppDispatch();

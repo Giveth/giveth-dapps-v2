@@ -26,7 +26,7 @@ import {
 	setShowWalletModal,
 } from '@/features/modal/modal.slice';
 import { signOut } from '@/features/user/user.thunks';
-import { ETheme } from '@/features/general/general.sclie';
+import { ETheme } from '@/features/general/general.slice';
 
 const MenuWallet = () => {
 	const [isMounted, setIsMounted] = useState(false);
