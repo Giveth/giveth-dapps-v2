@@ -32,14 +32,18 @@ export interface IMilestonesForm {
 export default function Milestones() {
 	const [uploading, setUploading] = useState(false);
 	const [loading, setloading] = useState(false);
-	const [isChanged, setIsChanged] = useState(false);
 
 	const { verificationData, setVerificationData, setStep } =
 		useVerificationData();
 	const { milestones } = verificationData || {};
-	const { control, register, handleSubmit } = useForm<IMilestonesForm>();
+	const {
+		control,
+		register,
+		handleSubmit,
+		formState: { errors, isDirty },
+	} = useForm<IMilestonesForm>();
 
-	const handleNext = () => {
+	const handleNext = (formData: IMilestonesForm) => {
 		async function sendReq() {
 			setloading(true);
 			const { data } = await client.mutate({
@@ -49,10 +53,11 @@ export default function Milestones() {
 						projectVerificationId: Number(verificationData?.id),
 						step: EVerificationSteps.MILESTONES,
 						milestones: {
-							foundationDate: startDate?.toString(),
-							mission,
-							achievedMilestones,
-							achievedMilestonesProof: url,
+							foundationDate: formData.foundationDate?.toString(),
+							mission: formData.mission,
+							achievedMilestones: formData.achievedMilestones,
+							achievedMilestonesProof:
+								formData.achievedMilestonesProof,
 						},
 					},
 				},
@@ -62,19 +67,15 @@ export default function Milestones() {
 			setStep(6);
 		}
 
-		if (isChanged) {
+		if (isDirty) {
 			sendReq();
 		} else {
 			setStep(6);
 		}
 	};
 
-	const handleFormSubmit = (data: any) => {
-		console.log(data);
-	};
-
 	return (
-		<form onSubmit={handleSubmit(handleFormSubmit)}>
+		<form onSubmit={handleSubmit(handleNext)}>
 			<div>
 				<H6 weight={700}>Activity and Milestones</H6>
 				<LeadStyled>
@@ -111,7 +112,11 @@ export default function Milestones() {
 					Please describe how your project is benefiting society and
 					the world at large.
 				</Paragraph>
-				<TextArea height='82px' {...register('mission')} />
+				<TextArea
+					height='82px'
+					defaultValue={milestones?.mission}
+					{...register('mission')}
+				/>
 				<LeadStyled>
 					Which milestones has your organization/project achieved
 					since conception? This question is required.
@@ -120,7 +125,11 @@ export default function Milestones() {
 					Please provide links to photos, videos, testimonials or
 					other evidence of your project's impact.
 				</Paragraph>
-				<TextArea height='82px' {...register('achievedMilestones')} />
+				<TextArea
+					height='82px'
+					defaultValue={milestones?.achievedMilestones}
+					{...register('achievedMilestones')}
+				/>
 				<LeadStyled>
 					If you cannot provide links to evidence of milestones that
 					have already been achieved, you can upload proof here.
