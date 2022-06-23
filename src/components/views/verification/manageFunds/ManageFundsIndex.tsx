@@ -2,13 +2,17 @@ import { Button, H6, Lead, neutralColors, P } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useState } from 'react';
 
+import { useForm } from 'react-hook-form';
 import AddAddressModal from '@/components/views/verification/manageFunds/AddAddressModal';
 import UserAddress from '@/components/views/verification/manageFunds/UserAddress';
 import { TextArea } from '@/components/styled-components/TextArea';
 import { ContentSeparator, BtnContainer } from '../VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
 import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
-import { EVerificationSteps } from '@/apollo/types/types';
+import {
+	EVerificationSteps,
+	IProjectManagingFunds,
+} from '@/apollo/types/types';
 import { client } from '@/apollo/apolloClient';
 import { showToastError } from '@/lib/helpers';
 import { OutlineStyled } from '../common.styled';
@@ -27,9 +31,6 @@ const ManageFundsIndex = () => {
 	const [addresses, setAddresses] = useState<IAddress[]>(
 		verificationData?.managingFunds?.relatedAddresses || [],
 	);
-	const [description, setDescription] = useState(
-		verificationData?.managingFunds?.description || '',
-	);
 
 	const addAddress = (addressObj: IAddress) => {
 		setAddresses([...addresses, addressObj]);
@@ -41,12 +42,11 @@ const ManageFundsIndex = () => {
 		setAddresses(newAddresses);
 	};
 
-	const handleNext = () => {
+	const { register, handleSubmit } = useForm<IProjectManagingFunds>();
+
+	const handleNext = (formData: IProjectManagingFunds) => {
 		async function sendReq() {
 			try {
-				if (!description) {
-					showToastError('Please enter a description');
-				}
 				setLoading(true);
 				const { data } = await client.mutate({
 					mutation: UPDATE_PROJECT_VERIFICATION,
@@ -55,7 +55,7 @@ const ManageFundsIndex = () => {
 							projectVerificationId: Number(verificationData?.id),
 							step: EVerificationSteps.MANAGING_FUNDS,
 							managingFunds: {
-								description,
+								description: formData.description,
 								relatedAddresses: addresses,
 							},
 						},
@@ -76,55 +76,65 @@ const ManageFundsIndex = () => {
 
 	return (
 		<>
-			<div>
-				<H6 weight={700}>Managing funds</H6>
-				<Lead>
-					<br />
-					The funds raised are expected to be used for public benefit
-					and not for personal gain. How will you use the funds that
-					your project raises? Please provide detailed funding/budget
-					information as well as an overall roadmap or action plan of
-					the project.
-					<DescriptionInput
-						value={description}
-						name='link'
-						placeholder='eg. "We are a decentralized autonomous organization that works toward the development of web3
+			<form onSubmit={handleSubmit(handleNext)}>
+				<div>
+					<H6 weight={700}>Managing funds</H6>
+					<Lead>
+						<br />
+						The funds raised are expected to be used for public
+						benefit and not for personal gain. How will you use the
+						funds that your project raises? Please provide detailed
+						funding/budget information as well as an overall roadmap
+						or action plan of the project.
+						<DescriptionInput
+							placeholder='eg. "We are a decentralized autonomous organization that works toward the development of web3
 				applications"'
-						onChange={e => setDescription(e.target.value)}
-						required
-					/>
-					<div>Additional address</div>
-					<AddressDescription>
-						Please provide additional Ethereum wallet addresses used
-						for managing funds within your project.
-						<P>This is optional</P>
-					</AddressDescription>
-					<OutlineStyled
-						onClick={() => setShowAddressModal(true)}
-						label='ADD ADDRESS'
-						buttonType='primary'
-					/>
-					{addresses.map((address, index) => (
-						<UserAddress
-							remove={() => removeAddress(index)}
-							address={address}
-							key={address.title}
+							defaultValue={
+								verificationData?.managingFunds?.description ||
+								''
+							}
+							{...register('description', {
+								required: {
+									value: true,
+									message: 'This is requierd',
+								},
+							})}
 						/>
-					))}
-				</Lead>
-			</div>
-			<div>
-				<ContentSeparator />
-				<BtnContainer>
-					<Button onClick={() => setStep(5)} label='<     PREVIOUS' />
-					<Button
-						onClick={handleNext}
-						label='NEXT     >'
-						loading={loading}
-						disabled={!description}
-					/>
-				</BtnContainer>
-			</div>
+						<div>Additional address</div>
+						<AddressDescription>
+							Please provide additional Ethereum wallet addresses
+							used for managing funds within your project.
+							<P>This is optional</P>
+						</AddressDescription>
+						<OutlineStyled
+							onClick={() => setShowAddressModal(true)}
+							label='ADD ADDRESS'
+							buttonType='primary'
+						/>
+						{addresses.map((address, index) => (
+							<UserAddress
+								remove={() => removeAddress(index)}
+								address={address}
+								key={address.title}
+							/>
+						))}
+					</Lead>
+				</div>
+				<div>
+					<ContentSeparator />
+					<BtnContainer>
+						<Button
+							onClick={() => setStep(5)}
+							label='<     PREVIOUS'
+						/>
+						<Button
+							label='NEXT     >'
+							loading={loading}
+							type='submit'
+						/>
+					</BtnContainer>
+				</div>
+			</form>
 			{showAddressModal && (
 				<AddAddressModal
 					addAddress={addAddress}
