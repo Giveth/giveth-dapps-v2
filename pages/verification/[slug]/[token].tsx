@@ -14,7 +14,7 @@ import dynamic from 'next/dynamic';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { ButtonStyled } from '@/components/GeneralCard.sc';
 import { useAppDispatch } from '@/features/hooks';
-import { setShowFooter } from '@/features/general/general.sclie';
+import { setShowFooter } from '@/features/general/general.slice';
 import { Shadow } from '@/components/styled-components/Shadow';
 import givFontLogo from '/public/images/icons/giv_font_logo.svg';
 import check_stars from '/public/images/icons/check_stars.svg';

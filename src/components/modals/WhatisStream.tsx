@@ -17,7 +17,7 @@ import Routes from '@/lib/constants/Routes';
 import { RegenStreamConfig } from '@/types/config';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
-import { ETheme } from '@/features/general/general.sclie';
+import { ETheme } from '@/features/general/general.slice';
 import type { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 
 interface IWhatisStreamModal extends IModal {

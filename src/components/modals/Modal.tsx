@@ -8,7 +8,7 @@ import {
 	ModalHeader,
 	ModalHeaderTitlePosition,
 } from '@/components/modals/ModalHeader';
-import { ETheme } from '@/features/general/general.sclie';
+import { ETheme } from '@/features/general/general.slice';
 import { zIndex } from '@/lib/constants/constants';
 import { useAppSelector } from '@/features/hooks';
 

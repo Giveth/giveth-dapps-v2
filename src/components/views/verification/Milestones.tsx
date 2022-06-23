@@ -9,6 +9,7 @@ import {
 import { useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import styled from 'styled-components';
+import { Controller, useForm } from 'react-hook-form';
 import { TextArea } from '@/components/styled-components/TextArea';
 import {
 	StyledDatePicker,
@@ -21,30 +22,28 @@ import { client } from '@/apollo/apolloClient';
 import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
 import { EVerificationSteps } from '@/apollo/types/types';
 
+export interface IMilestonesForm {
+	foundationDate?: Date;
+	mission?: string;
+	achievedMilestones?: string;
+	achievedMilestonesProof?: string;
+}
+
 export default function Milestones() {
 	const [uploading, setUploading] = useState(false);
-	const [loading, setloading] = useState(false);
-	const [isChanged, setIsChanged] = useState(false);
 
 	const { verificationData, setVerificationData, setStep } =
 		useVerificationData();
 	const { milestones } = verificationData || {};
-	const [startDate, setStartDate] = useState<Date | undefined>(
-		milestones?.foundationDate
-			? new Date(milestones?.foundationDate)
-			: undefined,
-	);
-	const [mission, setMission] = useState(milestones?.mission || '');
-	const [achievedMilestones, setAchievedMilestones] = useState(
-		milestones?.achievedMilestones || '',
-	);
-	const [url, setUrl] = useState<string>(
-		milestones?.achievedMilestonesProof || '',
-	);
+	const {
+		control,
+		register,
+		handleSubmit,
+		formState: { errors, isDirty, isSubmitting },
+	} = useForm<IMilestonesForm>();
 
-	const handleNext = () => {
+	const handleNext = (formData: IMilestonesForm) => {
 		async function sendReq() {
-			setloading(true);
 			const { data } = await client.mutate({
 				mutation: UPDATE_PROJECT_VERIFICATION,
 				variables: {
@@ -52,20 +51,20 @@ export default function Milestones() {
 						projectVerificationId: Number(verificationData?.id),
 						step: EVerificationSteps.MILESTONES,
 						milestones: {
-							foundationDate: startDate?.toString(),
-							mission,
-							achievedMilestones,
-							achievedMilestonesProof: url,
+							foundationDate: formData.foundationDate?.toString(),
+							mission: formData.mission,
+							achievedMilestones: formData.achievedMilestones,
+							achievedMilestonesProof:
+								formData.achievedMilestonesProof,
 						},
 					},
 				},
 			});
 			setVerificationData(data.updateProjectVerificationForm);
-			setloading(false);
 			setStep(6);
 		}
 
-		if (isChanged) {
+		if (isDirty) {
 			sendReq();
 		} else {
 			setStep(6);
@@ -73,7 +72,7 @@ export default function Milestones() {
 	};
 
 	return (
-		<>
+		<form onSubmit={handleSubmit(handleNext)}>
 			<div>
 				<H6 weight={700}>Activity and Milestones</H6>
 				<LeadStyled>
@@ -82,16 +81,24 @@ export default function Milestones() {
 				<br />
 				<DatePickerWrapper>
 					<IconChevronDown color={neutralColors.gray[600]} />
-					<StyledDatePicker
-						selected={startDate}
-						onChange={(date: Date) => {
-							setIsChanged(true);
-							setStartDate(date);
-						}}
-						dateFormat='MM/yyyy'
-						showMonthYearPicker
-						showPopperArrow={false}
-						placeholderText='Select a date'
+					<Controller
+						control={control}
+						name='foundationDate'
+						defaultValue={
+							milestones?.foundationDate
+								? new Date(milestones?.foundationDate)
+								: undefined
+						}
+						render={({ field }) => (
+							<StyledDatePicker
+								selected={field.value}
+								onChange={date => field.onChange(date)}
+								dateFormat='MM/yyyy'
+								showMonthYearPicker
+								showPopperArrow={false}
+								placeholderText='Select a date'
+							/>
+						)}
 					/>
 				</DatePickerWrapper>
 				<LeadStyled>
@@ -103,12 +110,9 @@ export default function Milestones() {
 					the world at large.
 				</Paragraph>
 				<TextArea
-					value={mission}
 					height='82px'
-					onChange={e => {
-						setIsChanged(true);
-						setMission(e.target.value);
-					}}
+					defaultValue={milestones?.mission}
+					{...register('mission')}
 				/>
 				<LeadStyled>
 					Which milestones has your organization/project achieved
@@ -119,22 +123,26 @@ export default function Milestones() {
 					other evidence of your project's impact.
 				</Paragraph>
 				<TextArea
-					value={achievedMilestones}
 					height='82px'
-					onChange={e => {
-						setIsChanged(true);
-						setAchievedMilestones(e.target.value);
-					}}
+					defaultValue={milestones?.achievedMilestones}
+					{...register('achievedMilestones')}
 				/>
 				<LeadStyled>
 					If you cannot provide links to evidence of milestones that
 					have already been achieved, you can upload proof here.
 				</LeadStyled>
 				<Paragraph>Upload photo</Paragraph>
-				<ImageUploader
-					url={url}
-					setUrl={setUrl}
-					setIsUploading={setUploading}
+				<Controller
+					control={control}
+					name='achievedMilestonesProof'
+					defaultValue={milestones?.achievedMilestonesProof}
+					render={({ field }) => (
+						<ImageUploader
+							url={field.value || ''}
+							setUrl={url => field.onChange(url)}
+							setIsUploading={setUploading}
+						/>
+					)}
 				/>
 			</div>
 			<div>
@@ -142,14 +150,14 @@ export default function Milestones() {
 				<BtnContainer>
 					<Button onClick={() => setStep(4)} label='<     PREVIOUS' />
 					<Button
-						onClick={() => handleNext()}
-						loading={loading}
+						loading={isSubmitting}
 						disabled={uploading}
 						label='NEXT     >'
+						type='submit'
 					/>
 				</BtnContainer>
 			</div>
-		</>
+		</form>
 	);
 }
 

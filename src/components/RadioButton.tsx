@@ -7,9 +7,8 @@ import {
 	neutralColors,
 	Subline,
 } from '@giveth/ui-design-system';
-import { ETheme } from '@/features/general/general.sclie';
+import { ETheme } from '@/features/general/general.slice';
 import { useAppSelector } from '@/features/hooks';
-
 import RadioOnIcon from '/public/images/radio_on.svg';
 import RadioOffIcon from '/public/images/radio_off.svg';
 
