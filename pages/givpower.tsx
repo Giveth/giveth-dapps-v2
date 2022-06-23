@@ -1,25 +1,23 @@
 import { useEffect } from 'react';
-import Head from 'next/head';
+import GIVpowerView from '@/components/views/Power.view';
+import { GeneralMetatags } from '@/components/Metatag';
+import { setDarkTheme, setLightTheme } from '@/features/general/general.slice';
+import { useAppDispatch } from '@/features/hooks';
+import { givpowerMetatags } from '@/content/metatags';
 
-import { ETheme, useGeneral } from '@/context/general.context';
-import GivPowerView from '@/components/views/Power.view';
-
-export default function GivPower() {
-	const { setTheme } = useGeneral();
+export default function GIVpowerRoute() {
+	const dispatch = useAppDispatch();
 
 	useEffect(() => {
-		setTheme(ETheme.Dark);
+		dispatch(setDarkTheme());
 		return () => {
-			setTheme(ETheme.Light);
+			dispatch(setLightTheme());
 		};
-	}, [setTheme]);
-
+	}, [dispatch]);
 	return (
 		<>
-			<Head>
-				<title>GIVpower</title>
-			</Head>
-			<GivPowerView />
+			<GeneralMetatags info={givpowerMetatags} />
+			<GIVpowerView />
 		</>
 	);
 }

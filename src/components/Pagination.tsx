@@ -3,7 +3,8 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { FlexCenter } from './styled-components/Flex';
-import { ETheme, useGeneral } from '@/context/general.context';
+import { useAppSelector } from '@/features/hooks';
+import { ETheme } from '@/features/general/general.slice';
 
 interface IPagination {
 	setPage: Dispatch<SetStateAction<number>>;
@@ -16,7 +17,7 @@ const Pagination = (props: IPagination) => {
 	const { setPage, currentPage, totalCount, itemPerPage } = props;
 	const [pages, setPages] = useState<any[]>([]);
 	const [pageCount, setPageCount] = useState(0);
-	const { theme } = useGeneral();
+	const theme = useAppSelector(state => state.general.theme);
 
 	useEffect(() => {
 		const nop = Math.ceil(totalCount / itemPerPage);

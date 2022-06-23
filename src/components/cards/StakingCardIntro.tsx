@@ -65,6 +65,7 @@ const Back = styled.div`
 const Description = styled(Caption)`
 	padding: 32px;
 	margin-bottom: 138px;
+	white-space: pre-line;
 `;
 
 const LearnMoreButton = styled(ButtonLink)`

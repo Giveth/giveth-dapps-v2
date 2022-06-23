@@ -8,7 +8,6 @@ import {
 	IconLink24,
 	neutralColors,
 	P,
-	SublineBold,
 } from '@giveth/ui-design-system';
 
 import { formatUSD, smallFormatDate, formatTxLink } from '@/lib/helpers';
@@ -20,27 +19,29 @@ import {
 	IOrder,
 } from '@/components/views/userPublicProfile/UserPublicProfile.view';
 import SortIcon from '@/components/SortIcon';
+import DonationStatus from '@/components/badges/DonationStatusBadge';
 
 interface DonationTable {
 	donations: IWalletDonation[];
 	order: IOrder;
 	changeOrder: (orderBy: EOrderBy) => void;
+	myAccount?: boolean;
 }
 
 const DonationTable: FC<DonationTable> = ({
 	donations,
 	order,
 	changeOrder,
+	myAccount,
 }) => {
 	return (
-		<DonationTableContainer>
+		<DonationTableContainer myAccount={myAccount}>
 			<TableHeader onClick={() => changeOrder(EOrderBy.CreationDate)}>
 				Donated at
 				<SortIcon order={order} title={EOrderBy.CreationDate} />
 			</TableHeader>
 			<TableHeader>Project</TableHeader>
-			<TableHeader>Status</TableHeader>
-			<TableHeader>Currency</TableHeader>
+			{myAccount && <TableHeader>Status</TableHeader>}
 			<TableHeader onClick={() => changeOrder(EOrderBy.TokenAmount)}>
 				Amount
 				<SortIcon order={order} title={EOrderBy.TokenAmount} />
@@ -63,12 +64,14 @@ const DonationTable: FC<DonationTable> = ({
 							<IconLink24 />
 						</ProjectTitleCell>
 					</Link>
-					<TableCell>{donation.status}</TableCell>
+					{myAccount && (
+						<TableCell>
+							<DonationStatus status={donation.status} />
+						</TableCell>
+					)}
 					<TableCell>
-						<CurrencyBadge>{donation.currency}</CurrencyBadge>
-					</TableCell>
-					<TableCell>
-						<P>{donation.amount}</P>
+						<B>{donation.amount}</B>
+						<Currency>{donation.currency}</Currency>
 						<ExternalLink
 							href={formatTxLink(
 								donation.transactionNetworkId,
@@ -91,6 +94,10 @@ const DonationTable: FC<DonationTable> = ({
 	);
 };
 
+const Currency = styled.div`
+	color: ${neutralColors.gray[600]};
+`;
+
 const RowWrapper = styled.div`
 	display: contents;
 	&:hover > div {
@@ -111,9 +118,10 @@ const TableCell = styled(P)<{ bold?: boolean }>`
 	font-weight: ${props => (props.bold ? 500 : 400)};
 `;
 
-const DonationTableContainer = styled.div`
+const DonationTableContainer = styled.div<{ myAccount?: boolean }>`
 	display: grid;
-	grid-template-columns: 1fr 4fr 1fr 1fr 1fr 1fr;
+	grid-template-columns: ${props =>
+		props.myAccount ? '1fr 4fr 1fr 1fr 1fr' : '1fr 4fr 1fr 1fr'};
 	overflow: auto;
 	min-width: 900px;
 	margin: 0 10px;
@@ -139,13 +147,6 @@ const ProjectTitleCell = styled(TableCell)`
 	&:hover > svg {
 		display: block;
 	}
-`;
-
-const CurrencyBadge = styled(SublineBold)`
-	padding: 2px 8px;
-	border: 2px solid ${neutralColors.gray[400]};
-	border-radius: 50px;
-	color: ${neutralColors.gray[700]};
 `;
 
 export default DonationTable;

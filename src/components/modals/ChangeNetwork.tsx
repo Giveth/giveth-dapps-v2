@@ -4,13 +4,14 @@ import { H4, B, brandColors, Caption } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 
 import { mediaQueries } from '@/lib/constants/constants';
-import { ETheme, useGeneral } from '@/context/general.context';
 import config from '@/configuration';
 import { IconEthereum } from '../Icons/Eth';
 import { IconGnosisChain } from '../Icons/GnosisChain';
 import { Modal } from './Modal';
 import { switchNetwork } from '@/lib/wallet';
 import { IModal } from '@/types/common';
+import { useAppSelector } from '@/features/hooks';
+import { ETheme } from '@/features/general/general.slice';
 
 interface IChangeNetworkModalProps extends IModal {
 	targetNetwork: number;
@@ -21,7 +22,7 @@ export const ChangeNetworkModal: FC<IChangeNetworkModalProps> = ({
 	targetNetwork,
 }) => {
 	const { chainId } = useWeb3React();
-	const { theme } = useGeneral();
+	const theme = useAppSelector(state => state.general.theme);
 
 	useEffect(() => {
 		if (chainId === targetNetwork) {

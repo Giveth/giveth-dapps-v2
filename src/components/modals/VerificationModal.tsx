@@ -12,12 +12,13 @@ import {
 } from '@giveth/ui-design-system';
 
 import { Modal } from '@/components/modals/Modal';
-import { ETheme, useGeneral } from '@/context/general.context';
 import links from '@/lib/constants/links';
+import { useAppSelector } from '@/features/hooks';
+import { ETheme } from '@/features/general/general.slice';
 
 export const VerificationModal = (props: { closeModal: () => void }) => {
 	const { closeModal } = props;
-	const { theme } = useGeneral();
+	const theme = useAppSelector(state => state.general.theme);
 
 	const handleClick = () => {
 		router.push(links.PROJECT_VERIFICATION);

@@ -3,9 +3,12 @@ import { gwei2wei } from '@/helpers/blockchain';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 const BASE_ROUTE = 'https://serve.giveth.io';
+// IMPORTANT: Using dev to make it work until staging is merged
+// const BASE_ROUTE = 'https://dev.serve.giveth.io';
 
 const config: EnvConfig = {
 	BACKEND_LINK: `${BASE_ROUTE}/graphql`,
+	FRONTEND_LINK: 'https://staging.giveth.io',
 	MICROSERVICES: {
 		authentication: `${BASE_ROUTE}/siweauthmicroservice/v1`,
 	},
@@ -116,7 +119,7 @@ const config: EnvConfig = {
 		MERKLE_ADDRESS: '0x06BA4122FC4F3AbCdAFD2fF1dD83A88A63842309',
 		TOKEN_DISTRO_ADDRESS: '0x74B557bec1A496a8E9BE57e9A1530A15364C87Be',
 
-		nodeUrl: 'https://rpc.xdaichain.com/',
+		nodeUrl: 'https://rpc.gnosischain.com/',
 
 		GIV: {
 			LM_ADDRESS: '0x1460aaF51F4E0B1b59Bb41981Cb4aa5A1B377776',

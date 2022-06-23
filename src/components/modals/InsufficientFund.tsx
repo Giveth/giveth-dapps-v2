@@ -3,12 +3,14 @@ import styled from 'styled-components';
 import { IconFund } from '@giveth/ui-design-system/lib/cjs/components/icons/Fund';
 import { Button, H5, Lead } from '@giveth/ui-design-system';
 import { Modal } from '@/components/modals/Modal';
-import { ETheme, useGeneral } from '@/context/general.context';
 import { mediaQueries } from '@/lib/constants/constants';
 import { IModal } from '@/types/common';
+import { useAppSelector } from '@/features/hooks';
+import { ETheme } from '@/features/general/general.slice';
 
 export const InsufficientFundModal: FC<IModal> = ({ setShowModal }) => {
-	const { theme } = useGeneral();
+	const theme = useAppSelector(state => state.general.theme);
+
 	return (
 		<Modal
 			setShowModal={setShowModal}

@@ -8,8 +8,9 @@ import {
 	ModalHeader,
 	ModalHeaderTitlePosition,
 } from '@/components/modals/ModalHeader';
-import { ETheme, useGeneral } from '@/context/general.context';
+import { ETheme } from '@/features/general/general.slice';
 import { zIndex } from '@/lib/constants/constants';
+import { useAppSelector } from '@/features/hooks';
 
 const Scrollbars = dynamic(() => import('react-custom-scrollbars'), {
 	ssr: false,
@@ -44,8 +45,8 @@ export const Modal: FC<IModal> = ({
 	fullScreen = false,
 	headerColor,
 }) => {
+	const theme = useAppSelector(state => state.general.theme);
 	const el = useRef(document.createElement('div'));
-	const { theme } = useGeneral();
 
 	useEffect(() => {
 		const current = el.current;

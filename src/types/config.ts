@@ -51,7 +51,6 @@ export interface SimplePoolStakingConfig extends BasicStakingConfig {
 	provideLiquidityLink?: string;
 	unit: string;
 	active: boolean;
-	network?: number;
 }
 
 export interface UniswapV3PoolStakingConfig extends SimplePoolStakingConfig {
@@ -144,6 +143,7 @@ export interface EnvConfig {
 	XDAI_CONFIG: XDaiNetworkConfig;
 	GARDEN_LINK: string;
 	BACKEND_LINK: string;
+	FRONTEND_LINK: string;
 	MICROSERVICES: MicroservicesConfig;
 }
 

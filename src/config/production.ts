@@ -12,6 +12,7 @@ const BASE_ROUTE = 'https://mainnet.serve.giveth.io';
 
 const config: EnvConfig = {
 	BACKEND_LINK: 'https://mainnet.serve.giveth.io/graphql',
+	FRONTEND_LINK: 'https://giveth.io',
 	MAINNET_NETWORK_NUMBER: 1, // ETH
 	XDAI_NETWORK_NUMBER: 100, // xDAI
 	MICROSERVICES: {
@@ -35,7 +36,7 @@ const config: EnvConfig = {
 		blockExplorerName: ['etherscan'],
 		blockExplorerUrls: ['https://etherscan.io/'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/aminlatifi/giveth-economy',
+			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-mainnet',
 
 		TOKEN_ADDRESS: '0x900db999074d9277c5da2a43f252d74366230da0',
 		tokenAddressOnUniswapV2: '0x900db999074d9277c5da2a43f252d74366230da0',
@@ -106,8 +107,41 @@ const config: EnvConfig = {
 		],
 		uniswapV2Subgraph:
 			'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
-		regenStreams: [],
-		regenFarms: [],
+		regenStreams: [
+			{
+				tokenDistroAddress:
+					'0x73f2D115C2cBAa3b5F477A78F7A7CD348D8b70a2',
+				type: StreamType.CULT,
+				title: 'CULT DAO',
+				rewardTokenAddress:
+					'0xf0f9D895aCa5c8678f706FB8216fa22957685A13',
+				rewardTokenSymbol: 'CULT',
+				tokenAddressOnUniswapV2:
+					'0xf0f9D895aCa5c8678f706FB8216fa22957685A13',
+			},
+		],
+		regenFarms: [
+			{
+				POOL_ADDRESS: '0x5281E311734869C64ca60eF047fd87759397EFe6',
+				LM_ADDRESS: '0xa479103c2618aD514653B53F064Bc6c9dC35a30b',
+				type: StakingType.UNISWAPV2_CULT_ETH,
+				platform: StakingPlatform.UNISWAP,
+				title: 'CULT / ETH',
+				description: '50% CULT, 50% ETH',
+				provideLiquidityLink:
+					'https://app.uniswap.org/#/add/v2/0xf0f9D895aCa5c8678f706FB8216fa22957685A13/ETH?chain=mainnet',
+				unit: 'LP',
+				regenStreamType: StreamType.CULT,
+				regenFarmType: RegenFarmType.CULT_ETH,
+				regenFarmIntro: {
+					title: 'CULT',
+					description: `The purpose of CULT is to empower those building and contributing to our decentralized future. Our society makes it as difficult as possible to break away from societal, economic and other norms, and CULT serves to fund and support those who are working to take back our future. CULT is a reminder that the power in people is stronger than the people in power.\n\n CULT is the governance token of the Cult DAO. Every transaction of the CULT token allows you to contribute & fast-forward economic & societal change by contributing a 0.4% tax to the treasury. Fight from within until you get out, or change the system in doing so.`,
+					link: 'https://cultdao.io/',
+				},
+				farmStartTimeMS: 1655218800000,
+				active: true,
+			},
+		],
 	},
 
 	XDAI_CONFIG: {
@@ -127,14 +161,14 @@ const config: EnvConfig = {
 		blockExplorerName: ['Blockscout'],
 		blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/aminlatifi/giveth-economy-xdai',
+			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-xdai',
 
 		TOKEN_ADDRESS: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		MERKLE_ADDRESS: '0xFad63adEFb8203F7605F25f6a921c8bf45604A5e',
 		TOKEN_DISTRO_ADDRESS: '0xc0dbDcA66a0636236fAbe1B3C16B1bD4C84bB1E1',
 
-		nodeUrl: 'https://rpc.xdaichain.com/',
+		nodeUrl: 'https://rpc.gnosischain.com/',
 		GIV: {
 			LM_ADDRESS: '0xD93d3bDBa18ebcB3317a57119ea44ed2Cf41C2F2',
 			GARDEN_ADDRESS: '0x24f2d06446af8d6e89febc205e7936a602a87b60',
@@ -166,6 +200,19 @@ const config: EnvConfig = {
 					'https://gnosis.sushi.com/add/0x6A023CCd1ff6F2045C3309768eAd9E68F978f6e1/0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 				unit: 'LP',
 				active: true,
+			},
+			{
+				POOL_ADDRESS: '0xB7189A7Ea38FA31210A79fe282AEC5736Ad5fA57',
+				LM_ADDRESS: '0x24A6067fEd46dc8663794c4d39Ec91b074cf85D4',
+				type: StakingType.HONEYSWAP_GIV_DAI,
+				platform: StakingPlatform.HONEYSWAP,
+				title: 'GIV / xDAI',
+				description: '50% GIV, 50% xDAI',
+				provideLiquidityLink:
+					'https://app.honeyswap.org/#/add/0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75/xdai',
+				unit: 'LP',
+				active: true,
+				farmStartTimeMS: 1656086400000,
 			},
 		],
 

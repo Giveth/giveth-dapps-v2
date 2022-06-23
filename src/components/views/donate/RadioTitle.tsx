@@ -7,10 +7,11 @@ import {
 	neutralColors,
 	Subline,
 } from '@giveth/ui-design-system';
-import { useGeneral, ETheme } from '@/context/general.context';
+import { ETheme } from '@/features/general/general.slice';
 
 import RadioOnIcon from '../../../../public/images/radio_on.svg';
 import RadioOffIcon from '../../../../public/images/radio_off.svg';
+import { useAppSelector } from '@/features/hooks';
 
 const RadioTitle = (props: {
 	title: string;
@@ -19,7 +20,7 @@ const RadioTitle = (props: {
 	toggleRadio: () => void;
 }) => {
 	const { title, subtitle, isSelected, toggleRadio } = props;
-	const { theme } = useGeneral();
+	const theme = useAppSelector(state => state.general.theme);
 
 	return (
 		<RadioTitleBox onClick={toggleRadio}>

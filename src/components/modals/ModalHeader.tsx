@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
-import { brandColors, H6, IconX } from '@giveth/ui-design-system';
+import { H6, IconX } from '@giveth/ui-design-system';
 import { Flex } from '@/components/styled-components/Flex';
 
 export type ModalHeaderTitlePosition = 'center' | 'left';
@@ -27,13 +27,14 @@ export const ModalHeader: React.FC<IModalHeader> = ({
 	return !hiddenHeader ? (
 		<ModalHeaderRow
 			justifyContent={position === 'center' ? 'center' : 'flex-start'}
+			hasContent={!!icon || !!title}
 			color={color}
 		>
 			{icon}
 			<H6 weight={700}>{title}</H6>
 			{!hiddenClose && (
 				<CloseModalButton onClick={closeModal}>
-					<IconX color={brandColors.deep[900]} size={24} />
+					<IconX size={24} />
 				</CloseModalButton>
 			)}
 		</ModalHeaderRow>
@@ -44,9 +45,12 @@ export const ModalHeader: React.FC<IModalHeader> = ({
 	) : null;
 };
 
-export const ModalHeaderRow = styled(Flex)<{ color?: string }>`
+export const ModalHeaderRow = styled(Flex)<{
+	color?: string;
+	hasContent: boolean;
+}>`
 	gap: 14px;
-	min-height: 48px;
+	min-height: ${props => (props.hasContent ? '48px' : '36px')};
 	padding: 24px 24px 8px;
 	position: relative;
 	align-items: center;

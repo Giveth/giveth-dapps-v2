@@ -14,9 +14,10 @@ import Link from 'next/link';
 import { Flex } from '../styled-components/Flex';
 import { Modal } from './Modal';
 import Routes from '@/lib/constants/Routes';
-import { ETheme, useGeneral } from '@/context/general.context';
 import { RegenStreamConfig } from '@/types/config';
 import { IModal } from '@/types/common';
+import { useAppSelector } from '@/features/hooks';
+import { ETheme } from '@/features/general/general.slice';
 import type { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 
 interface IWhatisStreamModal extends IModal {
@@ -29,7 +30,7 @@ export const WhatisStreamModal: FC<IWhatisStreamModal> = ({
 	tokenDistroHelper,
 	regenStreamConfig,
 }) => {
-	const { theme } = useGeneral();
+	const theme = useAppSelector(state => state.general.theme);
 	const { rewardTokenSymbol } = regenStreamConfig || {
 		rewardTokenSymbol: 'GIV',
 	};
