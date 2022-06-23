@@ -91,7 +91,7 @@ const Input = (props: InputType) => {
 			<InputField
 				validation={validationStatus}
 				inputSize={size}
-				{...(registerName
+				{...(registerName && register
 					? register(registerName, registerOptions)
 					: {})}
 				{...rest}
