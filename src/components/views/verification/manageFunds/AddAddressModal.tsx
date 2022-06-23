@@ -1,8 +1,9 @@
 import styled from 'styled-components';
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { IconWalletOutline } from '@giveth/ui-design-system/lib/cjs/components/icons/WalletOutline';
 import { Button } from '@giveth/ui-design-system';
-import { ethers } from 'ethers';
+import { Controller, useForm } from 'react-hook-form';
+import { useWeb3React } from '@web3-react/core';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import Input from '@/components/Input';
@@ -11,6 +12,7 @@ import { IAddress } from '@/components/views/verification/manageFunds/ManageFund
 import SelectNetwork from '@/components/views/verification/manageFunds/SelectNetwork';
 import { ISelectedNetwork } from '@/components/views/verification/manageFunds/types';
 import config from '@/configuration';
+import { isAddressValid } from '@/lib/wallet';
 import { showToastError } from '@/lib/helpers';
 
 interface IProps extends IModal {
@@ -31,30 +33,38 @@ const networkOptions = [
 	},
 ];
 
+export interface IAddressForm {
+	address: string;
+	title: string;
+	network: ISelectedNetwork;
+}
+
 const AddAddressModal: FC<IProps> = ({
 	setShowModal,
 	addAddress,
 	addresses,
 }) => {
-	const [address, setAddress] = useState('');
-	const [title, setTitle] = useState('');
-	const [selectedNetwork, setSelectedNetwork] = useState<ISelectedNetwork>();
+	const {
+		control,
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<IAddressForm>();
+	const { library } = useWeb3React();
+	console.log('errors', errors);
 
-	const handleSubmit = async () => {
+	const handleAdd = async (formData: IAddressForm) => {
+		const { address, title } = formData;
 		const isDuplicate = addresses.some(item => item.title === title);
-		if (address && title && selectedNetwork) {
-			//TODO: Check ENS Addresses
-			if (!ethers.utils.isAddress(address)) {
-				showToastError('The address in not valid');
-				return;
-			} else if (isDuplicate) {
+		if (address && title && formData.network) {
+			if (isDuplicate) {
 				showToastError('Please provide a unique title');
 				return;
 			}
 			addAddress({
-				address,
-				title,
-				networkId: selectedNetwork.value,
+				address: address,
+				title: title,
+				networkId: formData.network.value,
 			});
 			setShowModal(false);
 		} else {
@@ -70,41 +80,63 @@ const AddAddressModal: FC<IProps> = ({
 			headerIcon={<IconWalletOutline />}
 		>
 			<Container>
-				<SelectNetwork
-					networkOptions={networkOptions}
-					selectedNetwork={selectedNetwork}
-					onChange={setSelectedNetwork}
-				/>
-				<br />
-				<Input
-					onChange={e => setTitle(e.target.value)}
-					value={title}
-					name='AddressTitle'
-					label='Address Title'
-					caption='Choose a title for this address.'
-				/>
-				<br />
-				<Input
-					onChange={e => setAddress(e.target.value)}
-					value={address}
-					name='Address'
-					label='Receiving address'
-					caption='Enter the related address.'
-				/>
-				<Buttons>
-					<Button
-						size='small'
-						label='ADD NEW ADDRESS'
-						buttonType='secondary'
-						onClick={handleSubmit}
+				<form onSubmit={handleSubmit(handleAdd)}>
+					<Controller
+						control={control}
+						name='network'
+						render={({ field }) => (
+							<SelectNetwork
+								networkOptions={networkOptions}
+								selectedNetwork={field.value}
+								onChange={network => field.onChange(network)}
+							/>
+						)}
 					/>
-					<Button
-						size='small'
-						label='CANCEL'
-						buttonType='texty'
-						onClick={() => setShowModal(false)}
+
+					<br />
+					<Input
+						register={register}
+						registerName='title'
+						registerOptions={{
+							required: {
+								value: true,
+								message: 'First name is required',
+							},
+						}}
+						label='Address Title'
+						caption='Choose a title for this address.'
+						error={errors.title}
 					/>
-				</Buttons>
+					<br />
+					<Input
+						register={register}
+						registerName='address'
+						label='Receiving address'
+						caption='Enter the related address.'
+						registerOptions={{
+							validate: async address => {
+								return (await isAddressValid(address, library))
+									? true
+									: 'The address in not valid';
+							},
+						}}
+						error={errors.address}
+					/>
+					<Buttons>
+						<Button
+							size='small'
+							label='ADD NEW ADDRESS'
+							buttonType='secondary'
+							type='submit'
+						/>
+						<Button
+							size='small'
+							label='CANCEL'
+							buttonType='texty'
+							// onClick={() => setShowModal(false)}
+						/>
+					</Buttons>
+				</form>
 			</Container>
 		</Modal>
 	);
