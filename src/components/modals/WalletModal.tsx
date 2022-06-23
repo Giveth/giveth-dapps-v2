@@ -13,7 +13,7 @@ import {
 	walletsArray,
 } from '@/lib/wallet/walletTypes';
 import { Modal } from '@/components/modals/Modal';
-import { ETheme } from '@/features/general/general.sclie';
+import { ETheme } from '@/features/general/general.slice';
 import { detectBrave, showToastError } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
 import LowerShields from '@/components/modals/LowerShields';

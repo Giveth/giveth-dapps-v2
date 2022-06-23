@@ -12,7 +12,7 @@ import { Button as CButton } from '@/components/styled-components/Button';
 import { IHeader } from './Header';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Shadow } from '@/components/styled-components/Shadow';
-import { ETheme } from '@/features/general/general.sclie';
+import { ETheme } from '@/features/general/general.slice';
 
 export const StyledHeader = styled(Flex)<IHeader>`
 	position: fixed;

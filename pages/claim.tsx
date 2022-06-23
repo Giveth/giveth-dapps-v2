@@ -7,7 +7,7 @@ import {
 	setDarkTheme,
 	setLightTheme,
 	setShowHeader,
-} from '@/features/general/general.sclie';
+} from '@/features/general/general.slice';
 import { claimMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
 

@@ -6,7 +6,7 @@ import { Modal } from '@/components/modals/Modal';
 import ShieldBlackIcon from '/public/images/icons/shield_black.svg';
 import ShieldWhiteIcon from '/public/images/icons/shield_white.svg';
 import { useAppSelector } from '@/features/hooks';
-import { ETheme } from '@/features/general/general.sclie';
+import { ETheme } from '@/features/general/general.slice';
 import ShieldImage from '/public/images/brave-shield.png';
 
 const LowerShields = (props: { onClose: () => void }) => {

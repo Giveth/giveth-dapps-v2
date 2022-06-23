@@ -23,7 +23,7 @@ import {
 import {
 	hideHeaderFooter,
 	showHeaderFooter,
-} from '@/features/general/general.sclie';
+} from '@/features/general/general.slice';
 import { useAppDispatch } from '@/features/hooks';
 
 const MaintenanceIndex = () => {
