@@ -6,7 +6,7 @@ import { H5, Button, Lead, brandColors } from '@giveth/ui-design-system';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
-import { ETheme } from '@/features/general/general.sclie';
+import { ETheme } from '@/features/general/general.slice';
 import { Bullets } from '@/components/styled-components/Bullets';
 import Routes from '@/lib/constants/Routes';
 import ExternalLink from '@/components/ExternalLink';

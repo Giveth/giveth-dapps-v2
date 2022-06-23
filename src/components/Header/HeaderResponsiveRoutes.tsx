@@ -12,7 +12,7 @@ import MenuPurple from '/public/images/menu/drawer_menu_purple.svg';
 import MenuWhite from '/public/images/menu/drawer_menu_white.svg';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { useAppSelector } from '@/features/hooks';
-import { ETheme } from '@/features/general/general.sclie';
+import { ETheme } from '@/features/general/general.slice';
 
 const HeaderRoutesResponsive = () => {
 	const router = useRouter();

@@ -29,7 +29,7 @@ import { getUserStakeInfo } from '@/lib/stakingPool';
 import Routes from '@/lib/constants/Routes';
 import { networkInfo } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
-import { ETheme } from '@/features/general/general.sclie';
+import { ETheme } from '@/features/general/general.slice';
 
 interface IRewardMenu {
 	showWhatIsGIVstreamModal: boolean;

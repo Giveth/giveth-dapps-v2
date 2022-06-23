@@ -408,7 +408,9 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 										</BreakdownUnit>
 										<BreakdownRate>
 											{formatWeiHelper(
-												rewardStream,
+												rewardStream.minus(
+													givBackStream,
+												),
 												config.TOKEN_PRECISION,
 												false,
 											)}
@@ -419,7 +421,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 										{givBackStream != 0 && (
 											<>
 												<GIVbackStreamDesc>
-													[ Recieved from GIVbacks
+													Recieved from GIVbacks
 												</GIVbackStreamDesc>
 												<BreakdownRate>
 													{formatWeiHelper(
@@ -440,9 +442,6 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 																			.deep[100]
 																	}
 																/>
-																<GIVbackStreamDesc>
-																	]
-																</GIVbackStreamDesc>
 															</Flex>
 														}
 														direction={'left'}

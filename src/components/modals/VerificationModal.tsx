@@ -13,8 +13,8 @@ import {
 import { useRouter } from 'next/router';
 import { Modal } from '@/components/modals/Modal';
 import { useAppSelector } from '@/features/hooks';
-import { ETheme } from '@/features/general/general.sclie';
 import Routes from '@/lib/constants/Routes';
+import { ETheme } from '@/features/general/general.slice';
 
 export const VerificationModal = (props: { closeModal: () => void }) => {
 	const router = useRouter();
