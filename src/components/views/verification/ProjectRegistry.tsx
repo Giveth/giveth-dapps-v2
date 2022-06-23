@@ -2,6 +2,7 @@ import { Button, H6, Lead, neutralColors, P } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import Select from 'react-select';
+import { useForm } from 'react-hook-form';
 import RadioButton from '../../RadioButton';
 import Input from '@/components/Input';
 import { Label } from '../create/Create.sc';
@@ -16,6 +17,7 @@ import {
 } from '@/apollo/gql/gqlVerification';
 import { EVerificationSteps } from '@/apollo/types/types';
 import { mediaQueries } from '@/lib/constants/constants';
+import { validators } from '@/lib/constants/regex';
 
 enum ProjectRegistryStates {
 	NOTSELECTED = 'notselected',
@@ -26,6 +28,14 @@ enum ProjectRegistryStates {
 interface IOption {
 	value: string;
 	label: string;
+}
+
+function isObjEmpty(obj: Object) {
+	return Object.keys(obj).length > 0;
+}
+
+interface IRegisteryForm {
+	link: string;
 }
 
 export default function ProjectRegistry() {
@@ -44,12 +54,12 @@ export default function ProjectRegistry() {
 		projectRegistry?.organizationDescription || '',
 	);
 	const [country, setCountry] = useState<IOption>();
-	const [link, setLink] = useState(
-		projectRegistry?.organizationWebsite || '',
-	);
 	const [loading, setloading] = useState(false);
 	const [isChanged, setIsChanged] = useState(false);
-
+	const { register, handleSubmit, formState, getValues, setValue } =
+		useForm<IRegisteryForm>();
+	console.log('formState', formState.dirtyFields);
+	console.log('formStateErr', formState.errors);
 	const handleNext = () => {
 		async function sendReq() {
 			setloading(true);
@@ -63,7 +73,7 @@ export default function ProjectRegistry() {
 							isNonProfitOrganization:
 								isNonProfit === ProjectRegistryStates.YES,
 							organizationCountry: country?.value,
-							organizationWebsite: link,
+							organizationWebsite: getValues('link'),
 							organizationDescription: description,
 						},
 					},
@@ -74,7 +84,7 @@ export default function ProjectRegistry() {
 			setStep(4);
 		}
 
-		if (isChanged) {
+		if (isObjEmpty(formState.dirtyFields)) {
 			sendReq();
 		} else {
 			setStep(4);
@@ -109,111 +119,117 @@ export default function ProjectRegistry() {
 
 	return (
 		<>
-			<div>
-				<H6 weight={700}>Project registry</H6>
-				<RadioSectionContainer>
-					<RadioSectionTitle>
-						Is your project part of a registered non-profit
-						organization?
-					</RadioSectionTitle>
-					<RadioSectionSubTitle>
-						Having obtained non-profit status is not a requirement
-						but it is helpful for the verification process
-					</RadioSectionSubTitle>
-					<br />
-					<RadioContainer>
-						<RadioButton
-							title='Yes'
-							toggleRadio={() => {
-								setIsChanged(true);
-								setIsNonProfit(ProjectRegistryStates.YES);
-							}}
-							isSelected={
-								isNonProfit === ProjectRegistryStates.YES
-							}
-						/>
-						<RadioButton
-							title='No'
-							toggleRadio={() => {
-								setIsChanged(true);
-								setIsNonProfit(ProjectRegistryStates.NO);
-							}}
-							isSelected={
-								isNonProfit === ProjectRegistryStates.NO
-							}
-						/>
-					</RadioContainer>
-				</RadioSectionContainer>
-				<br />
-
-				{isNonProfit === ProjectRegistryStates.YES && (
-					<>
-						<Lead>In which country are you registered?</Lead>
+			<form onSubmit={handleSubmit(handleNext)}>
+				<div>
+					<H6 weight={700}>Project registry</H6>
+					<RadioSectionContainer>
+						<RadioSectionTitle>
+							Is your project part of a registered non-profit
+							organization?
+						</RadioSectionTitle>
+						<RadioSectionSubTitle>
+							Having obtained non-profit status is not a
+							requirement but it is helpful for the verification
+							process
+						</RadioSectionSubTitle>
 						<br />
-						<Select
-							options={countries}
-							styles={selectCustomStyles}
-							value={country}
-							onChange={(option: any) => {
-								setIsChanged(true);
-								setCountry(option);
-							}}
-						/>
-						<br />
-						<Lead>
-							Please provide a link to your country's government
-							registry where the team can look up and confirm your
-							status.
-						</Lead>
-						<br />
-						<LinkInputContainer>
-							<Label>Please enter full link</Label>
-							<Input
-								value={link}
-								name='link'
-								placeholder='https://'
-								onChange={e => {
+						<RadioContainer>
+							<RadioButton
+								title='Yes'
+								toggleRadio={() => {
 									setIsChanged(true);
-									setLink(e.target.value);
+									setIsNonProfit(ProjectRegistryStates.YES);
+								}}
+								isSelected={
+									isNonProfit === ProjectRegistryStates.YES
+								}
+							/>
+							<RadioButton
+								title='No'
+								toggleRadio={() => {
+									setIsChanged(true);
+									setIsNonProfit(ProjectRegistryStates.NO);
+								}}
+								isSelected={
+									isNonProfit === ProjectRegistryStates.NO
+								}
+							/>
+						</RadioContainer>
+					</RadioSectionContainer>
+					<br />
+					{isNonProfit === ProjectRegistryStates.YES && (
+						<>
+							<Lead>In which country are you registered?</Lead>
+							<br />
+							<Select
+								options={countries}
+								styles={selectCustomStyles}
+								value={country}
+								onChange={(option: any) => {
+									setIsChanged(true);
+									setCountry(option);
 								}}
 							/>
-						</LinkInputContainer>
-					</>
-				)}
+							<br />
+							<Lead>
+								Please provide a link to your country's
+								government registry where the team can look up
+								and confirm your status.
+							</Lead>
+							<br />
+							<LinkInputContainer>
+								<Label>Please enter full link</Label>
+								<Input
+									registerName='link'
+									register={register}
+									registerOptions={validators.url}
+									placeholder='https://'
+									error={formState.errors.link}
+									defaultValue={
+										projectRegistry?.organizationWebsite ||
+										''
+									}
+								/>
+							</LinkInputContainer>
+						</>
+					)}
 
-				{isNonProfit === ProjectRegistryStates.NO && (
-					<>
-						<Lead>
-							Okay, it sounds like your project is not a
-							registered non-profit. Please tell us a bit about
-							how your organization is structured.
-						</Lead>
-						<br />
-						<TextArea
-							value={description}
-							name='link'
-							placeholder='eg. "We are a decentralized autonomous organization that works toward the development of web3
+					{isNonProfit === ProjectRegistryStates.NO && (
+						<>
+							<Lead>
+								Okay, it sounds like your project is not a
+								registered non-profit. Please tell us a bit
+								about how your organization is structured.
+							</Lead>
+							<br />
+							<TextArea
+								value={description}
+								name='link'
+								placeholder='eg. "We are a decentralized autonomous organization that works toward the development of web3
 						applications"'
-							onChange={e => {
-								setIsChanged(true);
-								setDescription(e.target.value);
-							}}
-							required
+								onChange={e => {
+									setIsChanged(true);
+									setDescription(e.target.value);
+								}}
+							/>
+						</>
+					)}
+				</div>
+				<div>
+					<ContentSeparator />
+					<BtnContainer>
+						<Button
+							onClick={() => setStep(2)}
+							label='<     PREVIOUS'
 						/>
-					</>
-				)}
-			</div>
-			<div>
-				<ContentSeparator />
-				<BtnContainer>
-					<Button onClick={() => setStep(2)} label='<     PREVIOUS' />
-					<Button
-						onClick={() => !loading && handleNext()}
-						loading={loading}
-						label='NEXT     >'
-					/>
-				</BtnContainer>
-			</div>
+						<Button
+							loading={loading}
+							label='NEXT     >'
+							type='submit'
+						/>
+					</BtnContainer>
+				</div>
+			</form>
 		</>
 	);
 }
