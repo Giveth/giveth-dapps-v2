@@ -38,18 +38,6 @@ export default function Milestones() {
 		useVerificationData();
 	const { milestones } = verificationData || {};
 	const { control, register, handleSubmit } = useForm<IMilestonesForm>();
-	const [startDate, setStartDate] = useState<Date | undefined>(
-		milestones?.foundationDate
-			? new Date(milestones?.foundationDate)
-			: undefined,
-	);
-	const [mission, setMission] = useState(milestones?.mission || '');
-	const [achievedMilestones, setAchievedMilestones] = useState(
-		milestones?.achievedMilestones || '',
-	);
-	const [url, setUrl] = useState<string>(
-		milestones?.achievedMilestonesProof || '',
-	);
 
 	const handleNext = () => {
 		async function sendReq() {
@@ -123,14 +111,7 @@ export default function Milestones() {
 					Please describe how your project is benefiting society and
 					the world at large.
 				</Paragraph>
-				<TextArea
-					value={mission}
-					height='82px'
-					onChange={e => {
-						setIsChanged(true);
-						setMission(e.target.value);
-					}}
-				/>
+				<TextArea height='82px' {...register('mission')} />
 				<LeadStyled>
 					Which milestones has your organization/project achieved
 					since conception? This question is required.
@@ -139,23 +120,23 @@ export default function Milestones() {
 					Please provide links to photos, videos, testimonials or
 					other evidence of your project's impact.
 				</Paragraph>
-				<TextArea
-					value={achievedMilestones}
-					height='82px'
-					onChange={e => {
-						setIsChanged(true);
-						setAchievedMilestones(e.target.value);
-					}}
-				/>
+				<TextArea height='82px' {...register('achievedMilestones')} />
 				<LeadStyled>
 					If you cannot provide links to evidence of milestones that
 					have already been achieved, you can upload proof here.
 				</LeadStyled>
 				<Paragraph>Upload photo</Paragraph>
-				<ImageUploader
-					url={url}
-					setUrl={setUrl}
-					setIsUploading={setUploading}
+				<Controller
+					control={control}
+					name='achievedMilestonesProof'
+					defaultValue={milestones?.achievedMilestonesProof}
+					render={({ field }) => (
+						<ImageUploader
+							url={field.value || ''}
+							setUrl={url => field.onChange(url)}
+							setIsUploading={setUploading}
+						/>
+					)}
 				/>
 			</div>
 			<div>
