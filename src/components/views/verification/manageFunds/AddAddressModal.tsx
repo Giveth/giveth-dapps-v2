@@ -100,7 +100,7 @@ const AddAddressModal: FC<IProps> = ({
 						registerOptions={{
 							required: {
 								value: true,
-								message: 'First name is required',
+								message: 'Title is required',
 							},
 						}}
 						label='Address Title'
@@ -133,7 +133,7 @@ const AddAddressModal: FC<IProps> = ({
 							size='small'
 							label='CANCEL'
 							buttonType='texty'
-							// onClick={() => setShowModal(false)}
+							onClick={() => setShowModal(false)}
 						/>
 					</Buttons>
 				</form>
