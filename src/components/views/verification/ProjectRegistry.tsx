@@ -36,7 +36,9 @@ function isObjEmpty(obj: Object) {
 
 interface IRegisteryForm {
 	link: string;
-	country?: IOption;
+	country: IOption;
+	description: string;
+	isNonProfit: ProjectRegistryStates;
 }
 
 export default function ProjectRegistry() {
@@ -44,25 +46,20 @@ export default function ProjectRegistry() {
 		useVerificationData();
 	const { projectRegistry } = verificationData || {};
 	const [countries, setCountries] = useState<IOption[]>([]);
-	const [isNonProfit, setIsNonProfit] = useState<ProjectRegistryStates>(
-		projectRegistry
-			? projectRegistry.isNonProfitOrganization
-				? ProjectRegistryStates.YES
-				: ProjectRegistryStates.NO
-			: ProjectRegistryStates.NOTSELECTED,
-	);
-	const [description, setDescription] = useState(
-		projectRegistry?.organizationDescription || '',
-	);
-	const [loading, setloading] = useState(false);
-	const [isChanged, setIsChanged] = useState(false);
-	const { register, handleSubmit, formState, getValues, control } =
-		useForm<IRegisteryForm>();
-	console.log('formState', formState.dirtyFields);
 
+	const {
+		register,
+		handleSubmit,
+		formState: { errors, dirtyFields, isSubmitting },
+		getValues,
+		control,
+		setValue,
+		watch,
+	} = useForm<IRegisteryForm>();
+
+	const watchIsNonProfit = watch('isNonProfit');
 	const handleNext = () => {
 		async function sendReq() {
-			setloading(true);
 			const { data } = await client.mutate({
 				mutation: UPDATE_PROJECT_VERIFICATION,
 				variables: {
@@ -71,20 +68,19 @@ export default function ProjectRegistry() {
 						step: EVerificationSteps.PROJECT_REGISTRY,
 						projectRegistry: {
 							isNonProfitOrganization:
-								isNonProfit === ProjectRegistryStates.YES,
+								watchIsNonProfit === ProjectRegistryStates.YES,
 							organizationCountry: getValues('country')?.value,
 							organizationWebsite: getValues('link'),
-							organizationDescription: description,
+							organizationDescription: getValues('description'),
 						},
 					},
 				},
 			});
 			setVerificationData(data.updateProjectVerificationForm);
-			setloading(false);
 			setStep(4);
 		}
 
-		if (isObjEmpty(formState.dirtyFields)) {
+		if (isObjEmpty(dirtyFields)) {
 			sendReq();
 		} else {
 			setStep(4);
@@ -107,6 +103,14 @@ export default function ProjectRegistry() {
 		fetchCountries();
 	}, []);
 
+	useEffect(() => {
+		projectRegistry
+			? projectRegistry.isNonProfitOrganization
+				? setValue('isNonProfit', ProjectRegistryStates.YES)
+				: setValue('isNonProfit', ProjectRegistryStates.NO)
+			: setValue('isNonProfit', ProjectRegistryStates.NOTSELECTED);
+	}, [projectRegistry]);
+
 	return (
 		<>
 			<form onSubmit={handleSubmit(handleNext)}>
@@ -123,31 +127,43 @@ export default function ProjectRegistry() {
 							process
 						</RadioSectionSubTitle>
 						<br />
-						<RadioContainer>
-							<RadioButton
-								title='Yes'
-								toggleRadio={() => {
-									setIsChanged(true);
-									setIsNonProfit(ProjectRegistryStates.YES);
-								}}
-								isSelected={
-									isNonProfit === ProjectRegistryStates.YES
-								}
-							/>
-							<RadioButton
-								title='No'
-								toggleRadio={() => {
-									setIsChanged(true);
-									setIsNonProfit(ProjectRegistryStates.NO);
-								}}
-								isSelected={
-									isNonProfit === ProjectRegistryStates.NO
-								}
-							/>
-						</RadioContainer>
+						<Controller
+							name='isNonProfit'
+							control={control}
+							render={({ field: { value } }) => (
+								<RadioContainer>
+									<RadioButton
+										title='Yes'
+										toggleRadio={() => {
+											setValue(
+												'isNonProfit',
+												ProjectRegistryStates.YES,
+												{ shouldDirty: true },
+											);
+										}}
+										isSelected={
+											value === ProjectRegistryStates.YES
+										}
+									/>
+									<RadioButton
+										title='No'
+										toggleRadio={() => {
+											setValue(
+												'isNonProfit',
+												ProjectRegistryStates.NO,
+												{ shouldDirty: true },
+											);
+										}}
+										isSelected={
+											value === ProjectRegistryStates.NO
+										}
+									/>
+								</RadioContainer>
+							)}
+						/>
 					</RadioSectionContainer>
 					<br />
-					{isNonProfit === ProjectRegistryStates.YES && (
+					{watchIsNonProfit === ProjectRegistryStates.YES && (
 						<>
 							<Lead>In which country are you registered?</Lead>
 							<br />
@@ -185,7 +201,7 @@ export default function ProjectRegistry() {
 									register={register}
 									registerOptions={validators.url}
 									placeholder='https://'
-									error={formState.errors.link}
+									error={errors.link}
 									defaultValue={
 										projectRegistry?.organizationWebsite ||
 										''
@@ -195,7 +211,7 @@ export default function ProjectRegistry() {
 						</>
 					)}
 
-					{isNonProfit === ProjectRegistryStates.NO && (
+					{watchIsNonProfit === ProjectRegistryStates.NO && (
 						<>
 							<Lead>
 								Okay, it sounds like your project is not a
@@ -204,14 +220,13 @@ export default function ProjectRegistry() {
 							</Lead>
 							<br />
 							<TextArea
-								value={description}
-								name='link'
 								placeholder='eg. "We are a decentralized autonomous organization that works toward the development of web3
 						applications"'
-								onChange={e => {
-									setIsChanged(true);
-									setDescription(e.target.value);
-								}}
+								{...register('description')}
+								defaultValue={
+									projectRegistry?.organizationDescription ||
+									''
+								}
 							/>
 						</>
 					)}
@@ -224,7 +239,7 @@ export default function ProjectRegistry() {
 							label='<     PREVIOUS'
 						/>
 						<Button
-							loading={loading}
+							loading={isSubmitting}
 							label='NEXT     >'
 							type='submit'
 						/>
