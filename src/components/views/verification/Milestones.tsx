@@ -31,7 +31,6 @@ export interface IMilestonesForm {
 
 export default function Milestones() {
 	const [uploading, setUploading] = useState(false);
-	const [loading, setloading] = useState(false);
 
 	const { verificationData, setVerificationData, setStep } =
 		useVerificationData();
@@ -40,12 +39,11 @@ export default function Milestones() {
 		control,
 		register,
 		handleSubmit,
-		formState: { errors, isDirty },
+		formState: { errors, isDirty, isSubmitting },
 	} = useForm<IMilestonesForm>();
 
 	const handleNext = (formData: IMilestonesForm) => {
 		async function sendReq() {
-			setloading(true);
 			const { data } = await client.mutate({
 				mutation: UPDATE_PROJECT_VERIFICATION,
 				variables: {
@@ -63,7 +61,6 @@ export default function Milestones() {
 				},
 			});
 			setVerificationData(data.updateProjectVerificationForm);
-			setloading(false);
 			setStep(6);
 		}
 
@@ -153,7 +150,7 @@ export default function Milestones() {
 				<BtnContainer>
 					<Button onClick={() => setStep(4)} label='<     PREVIOUS' />
 					<Button
-						loading={loading}
+						loading={isSubmitting}
 						disabled={uploading}
 						label='NEXT     >'
 						type='submit'
