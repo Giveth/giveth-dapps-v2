@@ -2,7 +2,7 @@ import { Button, H6, Lead, neutralColors, P } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import Select from 'react-select';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import RadioButton from '../../RadioButton';
 import Input from '@/components/Input';
 import { Label } from '../create/Create.sc';
@@ -36,6 +36,7 @@ function isObjEmpty(obj: Object) {
 
 interface IRegisteryForm {
 	link: string;
+	country?: IOption;
 }
 
 export default function ProjectRegistry() {
@@ -53,13 +54,12 @@ export default function ProjectRegistry() {
 	const [description, setDescription] = useState(
 		projectRegistry?.organizationDescription || '',
 	);
-	const [country, setCountry] = useState<IOption>();
 	const [loading, setloading] = useState(false);
 	const [isChanged, setIsChanged] = useState(false);
-	const { register, handleSubmit, formState, getValues, setValue } =
+	const { register, handleSubmit, formState, getValues, control } =
 		useForm<IRegisteryForm>();
 	console.log('formState', formState.dirtyFields);
-	console.log('formStateErr', formState.errors);
+
 	const handleNext = () => {
 		async function sendReq() {
 			setloading(true);
@@ -72,7 +72,7 @@ export default function ProjectRegistry() {
 						projectRegistry: {
 							isNonProfitOrganization:
 								isNonProfit === ProjectRegistryStates.YES,
-							organizationCountry: country?.value,
+							organizationCountry: getValues('country')?.value,
 							organizationWebsite: getValues('link'),
 							organizationDescription: description,
 						},
@@ -103,16 +103,6 @@ export default function ProjectRegistry() {
 				}),
 			);
 			setCountries(_countries);
-			const selectedContry = data.getAllowedCountries.find(
-				(_country: any) =>
-					_country.name === projectRegistry?.organizationCountry,
-			);
-			if (selectedContry) {
-				setCountry({
-					label: selectedContry.name,
-					value: selectedContry.name,
-				});
-			}
 		}
 		fetchCountries();
 	}, []);
@@ -161,15 +151,26 @@ export default function ProjectRegistry() {
 						<>
 							<Lead>In which country are you registered?</Lead>
 							<br />
-							<Select
-								options={countries}
-								styles={selectCustomStyles}
-								value={country}
-								onChange={(option: any) => {
-									setIsChanged(true);
-									setCountry(option);
-								}}
+
+							<Controller
+								control={control}
+								name='country'
+								render={({ field: { value, onChange } }) => (
+									<Select
+										options={countries}
+										styles={selectCustomStyles}
+										value={countries.find(
+											c => c.value === value?.value,
+										)}
+										defaultValue={{
+											label: projectRegistry?.organizationCountry,
+											value: projectRegistry?.organizationCountry,
+										}}
+										onChange={onChange}
+									/>
+								)}
 							/>
+
 							<br />
 							<Lead>
 								Please provide a link to your country's
