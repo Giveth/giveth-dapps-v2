@@ -28,6 +28,7 @@ function addZero(num: number) {
 }
 
 const PersonalInfo = () => {
+	const [loading, setLoading] = useState(false);
 	const { verificationData, setStep, setVerificationData } =
 		useVerificationData();
 	const [resetMail, setResetMail] = useState(false);
@@ -62,6 +63,7 @@ const PersonalInfo = () => {
 		});
 	};
 	const sendEmail = async () => {
+		setLoading(true);
 		try {
 			const { data } = await client.mutate({
 				mutation: SEND_EMAIL_VERIFICATION,
@@ -70,9 +72,10 @@ const PersonalInfo = () => {
 				},
 			});
 			setVerificationData(data.projectVerificationSendEmailConfirmation);
-			return data;
 		} catch (error: any) {
 			showToastError(error?.message);
+		} finally {
+			setLoading(false);
 		}
 	};
 	const showMailInput = () => {
@@ -129,7 +132,10 @@ const PersonalInfo = () => {
 			`${verificationData?.user?.firstName} ${verificationData?.user?.lastName}`,
 		);
 		setValue('walletAddress', verificationData?.user.walletAddress || '');
-		setValue('email', verificationData?.email || '');
+		setValue(
+			'email',
+			verificationData?.email || verificationData?.user?.email || '',
+		);
 	}, [verificationData]);
 
 	return (
@@ -162,6 +168,7 @@ const PersonalInfo = () => {
 									error={errors.email}
 								/>
 								<ButtonStyled
+									loading={loading}
 									color={brandColors.giv[500]}
 									label='VERIFY EMAIL ADDRESS'
 									size='small'
