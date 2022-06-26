@@ -196,7 +196,7 @@ export default function ProjectRegistry() {
 								<Input
 									registerName='link'
 									register={register}
-									registerOptions={validators.url}
+									registerOptions={validators.website}
 									placeholder='https://'
 									error={errors.link}
 									defaultValue={
