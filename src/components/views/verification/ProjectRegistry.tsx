@@ -6,7 +6,6 @@ import { useForm, Controller } from 'react-hook-form';
 import RadioButton from '../../RadioButton';
 import Input from '@/components/Input';
 import { Label } from '../create/Create.sc';
-import { TextArea } from '@/components/styled-components/TextArea';
 import selectCustomStyles from '@/lib/constants/selectCustomStyles';
 import { BtnContainer, ContentSeparator } from './VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
@@ -17,13 +16,21 @@ import {
 } from '@/apollo/gql/gqlVerification';
 import { EVerificationSteps } from '@/apollo/types/types';
 import { mediaQueries } from '@/lib/constants/constants';
-import { validators } from '@/lib/constants/regex';
+import { requiredOptions } from '@/lib/constants/regex';
 import { isObjEmpty } from '@/lib/helpers';
+import DescriptionInput from '@/components/DescriptionInput';
 
-enum ProjectRegistryStates {
-	NOTSELECTED = 'notselected',
+enum ERegistryType {
+	NOT_SELECTED = 'notSelected',
 	YES = 'yes',
 	NO = 'no',
+}
+
+enum ERegistry {
+	link = 'link',
+	country = 'country',
+	description = 'description',
+	isNonProfit = 'isNonProfit',
 }
 
 interface IOption {
@@ -31,17 +38,23 @@ interface IOption {
 	label: string;
 }
 
-interface IRegisteryForm {
-	link: string;
-	country: IOption;
-	description: string;
-	isNonProfit: ProjectRegistryStates;
+interface IRegistryForm {
+	[ERegistry.link]: string;
+	[ERegistry.country]: IOption;
+	[ERegistry.description]: string;
+	[ERegistry.isNonProfit]: ERegistryType;
 }
 
 export default function ProjectRegistry() {
 	const { verificationData, setVerificationData, setStep } =
 		useVerificationData();
 	const { projectRegistry } = verificationData || {};
+	const {
+		isNonProfitOrganization,
+		organizationCountry,
+		organizationDescription,
+		organizationWebsite,
+	} = projectRegistry || {};
 	const [countries, setCountries] = useState<IOption[]>([]);
 
 	const {
@@ -52,9 +65,9 @@ export default function ProjectRegistry() {
 		control,
 		setValue,
 		watch,
-	} = useForm<IRegisteryForm>();
+	} = useForm<IRegistryForm>();
 
-	const watchIsNonProfit = watch('isNonProfit');
+	const watchIsNonProfit = watch(ERegistry.isNonProfit);
 	const handleNext = () => {
 		async function sendReq() {
 			const { data } = await client.mutate({
@@ -65,10 +78,13 @@ export default function ProjectRegistry() {
 						step: EVerificationSteps.PROJECT_REGISTRY,
 						projectRegistry: {
 							isNonProfitOrganization:
-								watchIsNonProfit === ProjectRegistryStates.YES,
-							organizationCountry: getValues('country')?.value,
-							organizationWebsite: getValues('link'),
-							organizationDescription: getValues('description'),
+								watchIsNonProfit === ERegistryType.YES,
+							organizationCountry: getValues(ERegistry.country)
+								?.value,
+							organizationWebsite: getValues(ERegistry.link),
+							organizationDescription: getValues(
+								ERegistry.description,
+							),
 						},
 					},
 				},
@@ -102,10 +118,10 @@ export default function ProjectRegistry() {
 
 	useEffect(() => {
 		projectRegistry
-			? projectRegistry.isNonProfitOrganization
-				? setValue('isNonProfit', ProjectRegistryStates.YES)
-				: setValue('isNonProfit', ProjectRegistryStates.NO)
-			: setValue('isNonProfit', ProjectRegistryStates.NOTSELECTED);
+			? isNonProfitOrganization
+				? setValue(ERegistry.isNonProfit, ERegistryType.YES)
+				: setValue(ERegistry.isNonProfit, ERegistryType.NO)
+			: setValue(ERegistry.isNonProfit, ERegistryType.NOT_SELECTED);
 	}, [projectRegistry]);
 
 	return (
@@ -125,7 +141,7 @@ export default function ProjectRegistry() {
 						</RadioSectionSubTitle>
 						<br />
 						<Controller
-							name='isNonProfit'
+							name={ERegistry.isNonProfit}
 							control={control}
 							render={({ field: { value } }) => (
 								<RadioContainer>
@@ -133,41 +149,37 @@ export default function ProjectRegistry() {
 										title='Yes'
 										toggleRadio={() => {
 											setValue(
-												'isNonProfit',
-												ProjectRegistryStates.YES,
+												ERegistry.isNonProfit,
+												ERegistryType.YES,
 												{ shouldDirty: true },
 											);
 										}}
-										isSelected={
-											value === ProjectRegistryStates.YES
-										}
+										isSelected={value === ERegistryType.YES}
 									/>
 									<RadioButton
 										title='No'
 										toggleRadio={() => {
 											setValue(
-												'isNonProfit',
-												ProjectRegistryStates.NO,
+												ERegistry.isNonProfit,
+												ERegistryType.NO,
 												{ shouldDirty: true },
 											);
 										}}
-										isSelected={
-											value === ProjectRegistryStates.NO
-										}
+										isSelected={value === ERegistryType.NO}
 									/>
 								</RadioContainer>
 							)}
 						/>
 					</RadioSectionContainer>
 					<br />
-					{watchIsNonProfit === ProjectRegistryStates.YES && (
+					{watchIsNonProfit === ERegistryType.YES && (
 						<>
 							<Lead>In which country are you registered?</Lead>
 							<br />
 
 							<Controller
 								control={control}
-								name='country'
+								name={ERegistry.country}
 								render={({ field: { value, onChange } }) => (
 									<Select
 										options={countries}
@@ -176,8 +188,8 @@ export default function ProjectRegistry() {
 											c => c.value === value?.value,
 										)}
 										defaultValue={{
-											label: projectRegistry?.organizationCountry,
-											value: projectRegistry?.organizationCountry,
+											label: organizationCountry,
+											value: organizationCountry,
 										}}
 										onChange={onChange}
 									/>
@@ -186,7 +198,7 @@ export default function ProjectRegistry() {
 
 							<br />
 							<Lead>
-								Please provide a link to your country's
+								Please provide a link to your country&apos;s
 								government registry where the team can look up
 								and confirm your status.
 							</Lead>
@@ -194,21 +206,18 @@ export default function ProjectRegistry() {
 							<LinkInputContainer>
 								<Label>Please enter full link</Label>
 								<Input
-									registerName='link'
+									registerName={ERegistry.link}
 									register={register}
-									registerOptions={validators.website}
+									registerOptions={requiredOptions.website}
 									placeholder='https://'
 									error={errors.link}
-									defaultValue={
-										projectRegistry?.organizationWebsite ||
-										''
-									}
+									defaultValue={organizationWebsite || ''}
 								/>
 							</LinkInputContainer>
 						</>
 					)}
 
-					{watchIsNonProfit === ProjectRegistryStates.NO && (
+					{watchIsNonProfit === ERegistryType.NO && (
 						<>
 							<Lead>
 								Okay, it sounds like your project is not a
@@ -216,14 +225,14 @@ export default function ProjectRegistry() {
 								about how your organization is structured.
 							</Lead>
 							<br />
-							<TextArea
+							<DescriptionInput
 								placeholder='eg. "We are a decentralized autonomous organization that works toward the development of web3
 						applications"'
-								{...register('description')}
-								defaultValue={
-									projectRegistry?.organizationDescription ||
-									''
-								}
+								register={register}
+								registerName={ERegistry.description}
+								registerOptions={requiredOptions.field}
+								defaultValue={organizationDescription || ''}
+								error={errors.description}
 							/>
 						</>
 					)}
