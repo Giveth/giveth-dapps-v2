@@ -125,134 +125,128 @@ export default function ProjectRegistry() {
 	}, [projectRegistry]);
 
 	return (
-		<>
-			<form onSubmit={handleSubmit(handleNext)}>
-				<div>
-					<H6 weight={700}>Project registry</H6>
-					<RadioSectionContainer>
-						<RadioSectionTitle>
-							Is your project part of a registered non-profit
-							organization?
-						</RadioSectionTitle>
-						<RadioSectionSubTitle>
-							Having obtained non-profit status is not a
-							requirement but it is helpful for the verification
-							process
-						</RadioSectionSubTitle>
+		<form onSubmit={handleSubmit(handleNext)}>
+			<div>
+				<H6 weight={700}>Project registry</H6>
+				<RadioSectionContainer>
+					<RadioSectionTitle>
+						Is your project part of a registered non-profit
+						organization?
+					</RadioSectionTitle>
+					<RadioSectionSubTitle>
+						Having obtained non-profit status is not a requirement
+						but it is helpful for the verification process
+					</RadioSectionSubTitle>
+					<br />
+					<Controller
+						name={ERegistry.isNonProfit}
+						control={control}
+						render={({ field: { value } }) => (
+							<RadioContainer>
+								<RadioButton
+									title='Yes'
+									toggleRadio={() => {
+										setValue(
+											ERegistry.isNonProfit,
+											ERegistryType.YES,
+											{ shouldDirty: true },
+										);
+									}}
+									isSelected={value === ERegistryType.YES}
+								/>
+								<RadioButton
+									title='No'
+									toggleRadio={() => {
+										setValue(
+											ERegistry.isNonProfit,
+											ERegistryType.NO,
+											{ shouldDirty: true },
+										);
+									}}
+									isSelected={value === ERegistryType.NO}
+								/>
+							</RadioContainer>
+						)}
+					/>
+				</RadioSectionContainer>
+				<br />
+				{watchIsNonProfit === ERegistryType.YES && (
+					<>
+						<Lead>In which country are you registered?</Lead>
 						<br />
+
 						<Controller
-							name={ERegistry.isNonProfit}
 							control={control}
-							render={({ field: { value } }) => (
-								<RadioContainer>
-									<RadioButton
-										title='Yes'
-										toggleRadio={() => {
-											setValue(
-												ERegistry.isNonProfit,
-												ERegistryType.YES,
-												{ shouldDirty: true },
-											);
-										}}
-										isSelected={value === ERegistryType.YES}
-									/>
-									<RadioButton
-										title='No'
-										toggleRadio={() => {
-											setValue(
-												ERegistry.isNonProfit,
-												ERegistryType.NO,
-												{ shouldDirty: true },
-											);
-										}}
-										isSelected={value === ERegistryType.NO}
-									/>
-								</RadioContainer>
+							name={ERegistry.country}
+							render={({ field: { value, onChange } }) => (
+								<Select
+									options={countries}
+									styles={selectCustomStyles}
+									value={countries.find(
+										c => c.value === value?.value,
+									)}
+									defaultValue={{
+										label: organizationCountry,
+										value: organizationCountry,
+									}}
+									onChange={onChange}
+								/>
 							)}
 						/>
-					</RadioSectionContainer>
-					<br />
-					{watchIsNonProfit === ERegistryType.YES && (
-						<>
-							<Lead>In which country are you registered?</Lead>
-							<br />
 
-							<Controller
-								control={control}
-								name={ERegistry.country}
-								render={({ field: { value, onChange } }) => (
-									<Select
-										options={countries}
-										styles={selectCustomStyles}
-										value={countries.find(
-											c => c.value === value?.value,
-										)}
-										defaultValue={{
-											label: organizationCountry,
-											value: organizationCountry,
-										}}
-										onChange={onChange}
-									/>
-								)}
-							/>
-
-							<br />
-							<Lead>
-								Please provide a link to your country&apos;s
-								government registry where the team can look up
-								and confirm your status.
-							</Lead>
-							<br />
-							<LinkInputContainer>
-								<Label>Please enter full link</Label>
-								<Input
-									registerName={ERegistry.link}
-									register={register}
-									registerOptions={requiredOptions.website}
-									placeholder='https://'
-									error={errors.link}
-									defaultValue={organizationWebsite || ''}
-								/>
-							</LinkInputContainer>
-						</>
-					)}
-
-					{watchIsNonProfit === ERegistryType.NO && (
-						<>
-							<Lead>
-								Okay, it sounds like your project is not a
-								registered non-profit. Please tell us a bit
-								about how your organization is structured.
-							</Lead>
-							<br />
-							<DescriptionInput
-								placeholder='eg. "We are a decentralized autonomous organization that works toward the development of web3
-						applications"'
+						<br />
+						<Lead>
+							Please provide a link to your country&apos;s
+							government registry where the team can look up and
+							confirm your status.
+						</Lead>
+						<br />
+						<LinkInputContainer>
+							<Label>Please enter full link</Label>
+							<Input
+								registerName={ERegistry.link}
 								register={register}
-								registerName={ERegistry.description}
-								registerOptions={requiredOptions.field}
-								defaultValue={organizationDescription || ''}
-								error={errors.description}
+								registerOptions={requiredOptions.website}
+								placeholder='https://'
+								error={errors.link}
+								defaultValue={organizationWebsite || ''}
 							/>
-						</>
-					)}
-				</div>
-				<div>
-					<ContentSeparator />
-					<BtnContainer>
-						<Button
-							onClick={() => setStep(2)}
-							label='<     PREVIOUS'
+						</LinkInputContainer>
+					</>
+				)}
+
+				{watchIsNonProfit === ERegistryType.NO && (
+					<>
+						<Lead>
+							Okay, it sounds like your project is not a
+							registered non-profit. Please tell us a bit about
+							how your organization is structured.
+						</Lead>
+						<br />
+						<DescriptionInput
+							placeholder='eg. "We are a decentralized autonomous organization that works toward the development of web3
+						applications"'
+							register={register}
+							registerName={ERegistry.description}
+							registerOptions={requiredOptions.field}
+							defaultValue={organizationDescription || ''}
+							error={errors.description}
 						/>
-						<Button
-							loading={isSubmitting}
-							label='NEXT     >'
-							type='submit'
-						/>
-					</BtnContainer>
-				</div>
-			</form>
-		</>
+					</>
+				)}
+			</div>
+			<div>
+				<ContentSeparator />
+				<BtnContainer>
+					<Button onClick={() => setStep(2)} label='<     PREVIOUS' />
+					<Button
+						loading={isSubmitting}
+						label='NEXT     >'
+						type='submit'
+					/>
+				</BtnContainer>
+			</div>
+		</form>
 	);
 }
 
