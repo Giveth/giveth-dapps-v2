@@ -238,7 +238,7 @@ const inputFields = [
 		name: 'url',
 		type: 'url',
 		caption: 'Your home page, blog, or company site.',
-		registerOptions: validators.url,
+		registerOptions: validators.website,
 	},
 ];
 

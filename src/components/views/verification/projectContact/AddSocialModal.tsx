@@ -1,27 +1,27 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { Button, IconLink } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useForm } from 'react-hook-form';
 import { IModal } from '@/types/common';
 import { Modal } from '@/components/modals/Modal';
-import Input, { IFormValidations } from '@/components/Input';
+import Input from '@/components/Input';
 import { mediaQueries } from '@/lib/constants/constants';
 import { IProjectContact } from '@/apollo/types/types';
-import useFormValidation from '@/hooks/useFormValidation';
-import { validators } from '@/lib/constants/regex';
+import { requiredOptions, validators } from '@/lib/constants/regex';
 
 interface IProps extends IModal {
 	addSocial: (i: IProjectContact) => void;
 }
 
 const AddSocialModal: FC<IProps> = ({ setShowModal, addSocial }) => {
-	const [name, setName] = useState('');
-	const [url, setUrl] = useState('');
-	const [formValidation, setFormValidation] = useState<IFormValidations>();
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<IProjectContact>();
 
-	const isFormValid = useFormValidation(formValidation);
-
-	const handleSubmit = () => {
-		addSocial({ name, url });
+	const handleFormSubmit = (formData: IProjectContact) => {
+		addSocial(formData);
 		setShowModal(false);
 	};
 
@@ -32,34 +32,32 @@ const AddSocialModal: FC<IProps> = ({ setShowModal, addSocial }) => {
 			headerIcon={<IconLink size={23} />}
 			setShowModal={setShowModal}
 		>
-			<Container>
+			<FormContainer onSubmit={handleSubmit(handleFormSubmit)} noValidate>
 				<Input
 					label='Social media title'
-					name='socialMediaTitle'
+					registerName='name'
 					placeholder='Discord'
-					value={name}
-					validators={[validators.tooShort]}
-					onChange={e => setName(e.target.value)}
-					setFormValidation={setFormValidation}
-					required
+					register={register}
+					registerOptions={{
+						...requiredOptions.name,
+						...validators.tooShort,
+					}}
+					error={errors.name}
 				/>
 				<Input
 					label='Link address'
-					name='socialMediaAddress'
+					registerName='url'
 					placeholder='https://www.example.com/...'
-					value={url}
-					validators={[validators.url]}
-					onChange={e => setUrl(e.target.value)}
-					setFormValidation={setFormValidation}
-					required
+					register={register}
+					registerOptions={requiredOptions.website}
+					error={errors.url}
 				/>
 				<Buttons>
 					<Button
 						size='small'
 						label='ADD NEW SOCIAL MEDIA'
 						buttonType='secondary'
-						onClick={handleSubmit}
-						disabled={!isFormValid}
+						type='submit'
 					/>
 					<Button
 						onClick={() => setShowModal(false)}
@@ -68,7 +66,7 @@ const AddSocialModal: FC<IProps> = ({ setShowModal, addSocial }) => {
 						buttonType='texty'
 					/>
 				</Buttons>
-			</Container>
+			</FormContainer>
 		</Modal>
 	);
 };
@@ -86,7 +84,7 @@ const Buttons = styled.div`
 	}
 `;
 
-const Container = styled.div`
+const FormContainer = styled.form`
 	width: 100vw;
 	padding: 26px;
 	text-align: left;

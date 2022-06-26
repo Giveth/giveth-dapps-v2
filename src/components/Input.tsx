@@ -32,13 +32,13 @@ export enum InputSize {
 }
 
 interface IInput extends InputHTMLAttributes<HTMLInputElement> {
-	registerName: string;
 	label?: string;
 	caption?: string;
 	size?: InputSize;
-	register: UseFormRegister<any>;
-	error?: FieldError;
+	register?: UseFormRegister<any>;
+	registerName?: string;
 	registerOptions?: RegisterOptions;
+	error?: FieldError;
 	LeftIcon?: ReactElement<IIconProps>;
 }
 
@@ -56,7 +56,7 @@ const InputSizeToLinkSize = (size: InputSize) => {
 };
 
 const Input: FC<IInput> = ({
-	registerName,
+	registerName = '',
 	label,
 	caption,
 	size = InputSize.MEDIUM,
