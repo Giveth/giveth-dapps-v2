@@ -1,40 +1,28 @@
 import { IconLink, neutralColors } from '@giveth/ui-design-system';
-import { Dispatch, FC, SetStateAction } from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
-import Input, { IFormValidations } from '@/components/Input';
+import Input from '@/components/Input';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { RemoveIcon } from '@/components/views/verification/common';
-import { validators } from '@/lib/constants/regex';
 
 interface IProps {
-	setUrl?: (i: string) => void;
 	url: string;
 	label?: string;
-	remove?: () => void;
-	setFormValidation?: Dispatch<SetStateAction<IFormValidations | undefined>>;
+	remove: () => void;
 }
 
-export const WebsiteInput: FC<IProps> = ({
-	url,
-	setUrl,
-	label,
-	remove,
-	setFormValidation,
-}) => {
+export const OtherInput: FC<IProps> = ({ url, label, remove }) => {
 	return (
 		<Container>
 			<Input
-				label={label || 'Website'}
+				label={label}
 				placeholder='https://'
 				value={url}
-				name={label || 'Website'}
-				onChange={e => setUrl && setUrl(e.target.value)}
+				name={label}
 				LeftIcon={<IconLink color={neutralColors.gray[600]} />}
-				disabled={!setUrl}
-				setFormValidation={setFormValidation}
-				validators={setUrl && [validators.url]}
+				disabled
 			/>
-			{!setUrl && <RemoveIcon onClick={() => remove && remove()} />}
+			<RemoveIcon onClick={remove} />
 		</Container>
 	);
 };

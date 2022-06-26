@@ -4,7 +4,7 @@ import {
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
-import { FC, InputHTMLAttributes, ReactElement } from 'react';
+import { InputHTMLAttributes, ReactElement } from 'react';
 import styled from 'styled-components';
 import { IIconProps } from '@giveth/ui-design-system/lib/esm/components/icons/giv-economy/type';
 import { Shadow } from '@/components/styled-components/Shadow';
@@ -26,14 +26,17 @@ export enum InputSize {
 }
 
 interface IInput extends InputHTMLAttributes<HTMLInputElement> {
-	registerName: string;
 	label?: string;
 	caption?: string;
 	size?: InputSize;
-	register: UseFormRegister<any>;
 	error?: FieldError;
-	registerOptions?: RegisterOptions;
 	LeftIcon?: ReactElement<IIconProps>;
+}
+
+interface IInputWithRegister extends IInput {
+	register: UseFormRegister<any>;
+	registerName: string;
+	registerOptions?: RegisterOptions;
 }
 
 const InputSizeToLinkSize = (size: InputSize) => {
@@ -49,18 +52,27 @@ const InputSizeToLinkSize = (size: InputSize) => {
 	}
 };
 
-const Input: FC<IInput> = ({
-	registerName,
-	label,
-	caption,
-	size = InputSize.MEDIUM,
-	register = () => {},
-	registerOptions = { required: false },
-	error,
-	LeftIcon,
-	disabled,
-	...rest
-}) => {
+type InputType =
+	| IInputWithRegister
+	| ({
+			registerName?: never;
+			register?: never;
+			registerOptions?: never;
+	  } & IInput);
+
+const Input = (props: InputType) => {
+	const {
+		label,
+		caption,
+		size = InputSize.MEDIUM,
+		disabled,
+		LeftIcon,
+		register,
+		registerName,
+		registerOptions = { required: false },
+		error,
+		...rest
+	} = props;
 	const validationStatus = error
 		? EInputValidation.ERROR
 		: EInputValidation.NORMAL;
@@ -83,7 +95,9 @@ const Input: FC<IInput> = ({
 					inputSize={size}
 					hasLeftIcon={!!LeftIcon}
 					disabled={disabled}
-					{...register(registerName, registerOptions)}
+					{...(registerName && register
+						? register(registerName, registerOptions)
+						: {})}
 					{...rest}
 				/>
 			</InputWrapper>

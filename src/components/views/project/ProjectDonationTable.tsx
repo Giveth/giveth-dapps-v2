@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 import styled from 'styled-components';
 import {
 	B,
 	brandColors,
 	H6,
+	IconETH,
 	IconExternalLink,
 	neutralColors,
-	P,
 } from '@giveth/ui-design-system';
 
 import { client } from '@/apollo/apolloClient';
@@ -16,7 +15,12 @@ import { IDonation, IProject } from '@/apollo/types/types';
 import SearchBox from '@/components/SearchBox';
 import { Flex } from '@/components/styled-components/Flex';
 import Pagination from '@/components/Pagination';
-import { smallFormatDate, formatTxLink, compareAddresses } from '@/lib/helpers';
+import {
+	smallFormatDate,
+	formatTxLink,
+	compareAddresses,
+	formatUSD,
+} from '@/lib/helpers';
 import config from '@/configuration';
 import {
 	EDirection,
@@ -25,10 +29,9 @@ import {
 } from '@/apollo/types/gqlEnums';
 import ExternalLink from '@/components/ExternalLink';
 import SortIcon from '@/components/SortIcon';
-import ETHIcon from '/public/images/currencies/eth/24.svg';
-import GnosisIcon from '/public/images/currencies/gnosisChain/24.svg';
 import { useAppSelector } from '@/features/hooks';
 import DonationStatus from '@/components/badges/DonationStatusBadge';
+import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 
 const itemPerPage = 10;
 
@@ -201,23 +204,18 @@ const ProjectDonationTable = ({
 									</TableCell>
 								)}
 								<TableCell>
-									<Image
-										alt='chain logo'
-										src={
-											donation.transactionNetworkId ===
-											config.XDAI_NETWORK_NUMBER
-												? GnosisIcon
-												: ETHIcon
-										}
-										height={24}
-										width={24}
-									/>
-									<P>
-										{donation.transactionNetworkId ===
-										config.XDAI_NETWORK_NUMBER
-											? 'Gnosis'
-											: 'Ethereum'}
-									</P>
+									{donation.transactionNetworkId ===
+									config.XDAI_NETWORK_NUMBER ? (
+										<>
+											<IconGnosisChain size={24} />
+											Gnosis
+										</>
+									) : (
+										<>
+											<IconETH size={24} />
+											Ethereum
+										</>
+									)}
 								</TableCell>
 								<TableCell>
 									<B>{donation.amount}</B>
@@ -238,7 +236,7 @@ const ProjectDonationTable = ({
 								</TableCell>
 								<TableCell>
 									{donation.valueUsd &&
-										'$' + donation.valueUsd.toFixed(2)}
+										formatUSD(donation.valueUsd)}
 								</TableCell>
 							</RowWrapper>
 						))}
