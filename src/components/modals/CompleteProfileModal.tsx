@@ -14,7 +14,7 @@ import { Modal } from '@/components/modals/Modal';
 import Routes from '@/lib/constants/Routes';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
-import { ETheme } from '@/features/general/general.sclie';
+import { ETheme } from '@/features/general/general.slice';
 
 export const CompleteProfileModal: FC<IModal> = ({ setShowModal }) => {
 	const theme = useAppSelector(state => state.general.theme);

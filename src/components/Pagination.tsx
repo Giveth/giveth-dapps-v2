@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { FlexCenter } from './styled-components/Flex';
 import { useAppSelector } from '@/features/hooks';
-import { ETheme } from '@/features/general/general.sclie';
+import { ETheme } from '@/features/general/general.slice';
 
 interface IPagination {
 	setPage: Dispatch<SetStateAction<number>>;

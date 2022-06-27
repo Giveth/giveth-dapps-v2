@@ -43,9 +43,15 @@ const renderPools = (
 	showArchivedPools?: boolean,
 ) => {
 	return pools
-		.filter(p => (showArchivedPools ? true : !!p.active))
-		.sort(p => (p.active ? -1 : 1))
-		.map((poolStakingConfig, index) => {
+		.filter(p => (showArchivedPools ? true : p.active))
+		.map((poolStakingConfig, idx) => ({ poolStakingConfig, idx }))
+		.sort(
+			(
+				{ idx: idx1, poolStakingConfig: { active: active1 } },
+				{ idx: idx2, poolStakingConfig: { active: active2 } },
+			) => +active2 - +active1 || idx1 - idx2,
+		)
+		.map(({ poolStakingConfig }, index) => {
 			return (
 				<Col
 					sm={6}

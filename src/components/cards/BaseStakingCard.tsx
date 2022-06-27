@@ -73,7 +73,6 @@ import { IStakeInfo } from '@/hooks/useStakingPool';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { useAppSelector } from '@/features/hooks';
 import { ITokenDistroInfo } from '@/types/subgraph';
-import StakeLockModal from '../modals/Stake/StakeLock';
 import { GIVPowerExplainModal } from '../modals/GIVPowerExplain';
 import type { LiquidityPosition } from '@/types/nfts';
 
@@ -484,14 +483,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				/>
 			)}
 			{showStakeModal &&
-				(type === StakingType.GIVPOWER ? (
-					<StakeLockModal
-						setShowModal={setShowStakeModal}
-						poolStakingConfig={poolStakingConfig}
-						regenStreamConfig={regenStreamConfig}
-						maxAmount={userNotStakedAmount}
-					/>
-				) : type === StakingType.UNISWAPV3_ETH_GIV ? (
+				(type === StakingType.UNISWAPV3_ETH_GIV ? (
 					<V3StakeModal
 						setShowModal={setShowStakeModal}
 						poolStakingConfig={poolStakingConfig}

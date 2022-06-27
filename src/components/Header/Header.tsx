@@ -40,7 +40,7 @@ import {
 	useAppDispatch,
 	useAppSelector,
 } from '@/features/hooks';
-import { ETheme } from '@/features/general/general.sclie';
+import { ETheme } from '@/features/general/general.slice';
 import {
 	setShowWalletModal,
 	setShowWelcomeModal,
