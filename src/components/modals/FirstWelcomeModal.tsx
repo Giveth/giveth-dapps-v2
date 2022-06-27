@@ -14,6 +14,7 @@ import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
+import Routes from '@/lib/constants/Routes';
 
 interface IText {
 	isDark?: boolean;
@@ -32,48 +33,66 @@ export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
 		>
 			<Container>
 				<Title isDark={theme === ETheme.Dark}>
-					{' '}
-					Welcome to the future of giving
+					Welcome to the Future of Giving
 				</Title>
-				<LeadTitle>Here is the things that you can do now!</LeadTitle>
+				<LeadTitle>You can use Giveth to:</LeadTitle>
 				<Bullets>
 					<li>
 						<Paragraph isDark={theme === ETheme.Dark}>
-							Take a look at awesome{' '}
+							Donate to awesome for-good{' '}
 							<InlineLink
 								target='_blank'
 								rel={'noopener noreferrer'}
-								href={'/projects'}
+								href={Routes.Project}
 							>
 								{' '}
 								projects
-							</InlineLink>{' '}
-							on Giveth.
+							</InlineLink>
+							.
 						</Paragraph>
 					</li>
 					<li>
 						<Paragraph isDark={theme === ETheme.Dark}>
-							You can also create a{' '}
 							<InlineLink
 								target='_blank'
 								rel={'noopener noreferrer'}
-								href={'/create'}
+								href={Routes.CreateProject}
 							>
-								new project
+								Create a project
 							</InlineLink>{' '}
-							and receive donations.
+							&amp; start raising funds for your cause.
 						</Paragraph>
 					</li>
-
 					<li>
 						<Paragraph isDark={theme === ETheme.Dark}>
-							You can earn GIV token by{' '}
+							Earn GIV from{' '}
 							<InlineLink
 								target='_blank'
 								rel={'noopener noreferrer'}
-								href={'/projects'}
+								href={Routes.GIVbacks}
 							>
-								donating to projects
+								GIVbacks
+							</InlineLink>{' '}
+							when you donate to verified{' '}
+							<InlineLink
+								target='_blank'
+								rel={'noopener noreferrer'}
+								href={Routes.Projects}
+							>
+								projects
+							</InlineLink>
+							.
+						</Paragraph>
+					</li>
+					<li>
+						<Paragraph isDark={theme === ETheme.Dark}>
+							Earn a yield by staking tokens in the{' '}
+							<InlineLink
+								target='_blank'
+								rel={'noopener noreferrer'}
+								href={Routes.GIVfarm}
+							>
+								GIVfarm
 							</InlineLink>
 							.
 						</Paragraph>
