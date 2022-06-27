@@ -93,7 +93,7 @@ export default function ProjectRegistry() {
 			setStep(4);
 		}
 
-		if (isObjEmpty(dirtyFields)) {
+		if (isObjEmpty(dirtyFields) && verificationData?.status === 'draft') {
 			sendReq();
 		} else {
 			setStep(4);
@@ -190,6 +190,9 @@ export default function ProjectRegistry() {
 										value: organizationCountry,
 									}}
 									onChange={onChange}
+									isDisabled={
+										verificationData?.status !== 'draft'
+									}
 								/>
 							)}
 						/>
@@ -209,6 +212,7 @@ export default function ProjectRegistry() {
 								registerOptions={requiredOptions.website}
 								placeholder='https://'
 								error={errors.link}
+								disabled={verificationData?.status !== 'draft'}
 								defaultValue={organizationWebsite || ''}
 							/>
 						</LinkInputContainer>
@@ -231,6 +235,7 @@ export default function ProjectRegistry() {
 							registerOptions={requiredOptions.field}
 							defaultValue={organizationDescription || ''}
 							error={errors.description}
+							disabled={verificationData?.status !== 'draft'}
 						/>
 					</>
 				)}
