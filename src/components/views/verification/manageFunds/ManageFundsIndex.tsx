@@ -1,11 +1,10 @@
 import { Button, H6, Lead, neutralColors, P } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 import AddAddressModal from '@/components/views/verification/manageFunds/AddAddressModal';
 import UserAddress from '@/components/views/verification/manageFunds/UserAddress';
-import { TextArea } from '@/components/styled-components/TextArea';
 import { ContentSeparator, BtnContainer } from '../VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
 import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
@@ -16,6 +15,8 @@ import {
 import { client } from '@/apollo/apolloClient';
 import { showToastError } from '@/lib/helpers';
 import { OutlineStyled } from '../common.styled';
+import DescriptionInput from '@/components/DescriptionInput';
+import { requiredOptions } from '@/lib/constants/regex';
 
 export interface IAddress {
 	address: string;
@@ -28,9 +29,24 @@ const ManageFundsIndex = () => {
 	const [showAddressModal, setShowAddressModal] = useState(false);
 	const { setStep, setVerificationData, verificationData } =
 		useVerificationData();
+
+	const managingFundsData = verificationData?.managingFunds;
+	const { relatedAddresses, description } = managingFundsData || {};
+
 	const [addresses, setAddresses] = useState<IAddress[]>(
-		verificationData?.managingFunds?.relatedAddresses || [],
+		relatedAddresses || [],
 	);
+
+	const {
+		register,
+		handleSubmit,
+		setValue,
+		formState: { errors },
+	} = useForm<IProjectManagingFunds>();
+
+	useEffect(() => {
+		if (description) setValue('description', description);
+	}, [description]);
 
 	const addAddress = (addressObj: IAddress) => {
 		setAddresses([...addresses, addressObj]);
@@ -41,8 +57,6 @@ const ManageFundsIndex = () => {
 		newAddresses.splice(index, 1);
 		setAddresses(newAddresses);
 	};
-
-	const { register, handleSubmit } = useForm<IProjectManagingFunds>();
 
 	const handleNext = (formData: IProjectManagingFunds) => {
 		async function sendReq() {
@@ -65,8 +79,7 @@ const ManageFundsIndex = () => {
 				setLoading(false);
 				setStep(7);
 			} catch (error) {
-				showToastError('Something went wrong');
-				console.log('err', error);
+				showToastError(error);
 			} finally {
 				setLoading(false);
 			}
@@ -86,19 +99,14 @@ const ManageFundsIndex = () => {
 						funds that your project raises? Please provide detailed
 						funding/budget information as well as an overall roadmap
 						or action plan of the project.
-						<DescriptionInput
+						<DescriptionInputStyled
+							register={register}
+							registerName='description'
+							registerOptions={requiredOptions.field}
+							error={errors.description}
+							height='180px'
 							placeholder='eg. "We are a decentralized autonomous organization that works toward the development of web3
 				applications"'
-							defaultValue={
-								verificationData?.managingFunds?.description ||
-								''
-							}
-							{...register('description', {
-								required: {
-									value: true,
-									message: 'This is requierd',
-								},
-							})}
 						/>
 						<div>Additional address</div>
 						<AddressDescription>
@@ -156,10 +164,8 @@ const AddressDescription = styled(P)`
 	}
 `;
 
-const DescriptionInput = styled(TextArea)`
-	margin-bottom: 32px;
+const DescriptionInputStyled = styled(DescriptionInput)`
 	margin-top: 24px;
-	height: 180px;
 `;
 
 export default ManageFundsIndex;

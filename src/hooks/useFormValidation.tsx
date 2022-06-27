@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { IFormValidations, InputValidationType } from '@/components/Input';
+import { IFormValidations } from '@/components/Input';
+import { EInputValidation } from '@/types/inputValidation';
 
 const useFormValidation = (formValidation?: IFormValidations) => {
 	const [disabled, setDisabled] = useState(false);
@@ -7,7 +8,7 @@ const useFormValidation = (formValidation?: IFormValidations) => {
 	useEffect(() => {
 		if (formValidation) {
 			const fvs = Object.values(formValidation);
-			setDisabled(!fvs.every(fv => fv === InputValidationType.NORMAL));
+			setDisabled(!fvs.every(fv => fv === EInputValidation.NORMAL));
 		}
 	}, [formValidation]);
 
