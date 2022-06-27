@@ -26,31 +26,6 @@ import { RemoveButton } from './common';
 import { gToast, ToastType } from '@/components/toasts';
 import { ISocialProfile } from '@/apollo/types/types';
 
-async function handleSocialSubmit(
-	socialNetwork: string,
-	notAuthorized: boolean,
-	id?: number,
-) {
-	if (notAuthorized) {
-		if (id) {
-			const res = await client.mutate({
-				mutation: SEND_NEW_SOCIAL_MEDIA,
-				variables: {
-					socialNetwork,
-					projectVerificationId: id,
-				},
-			});
-			console.log('Res', res);
-			window.open(res.data.addNewSocialProfile, '_blank');
-		}
-	} else {
-		gToast(`You already connected a ${socialNetwork} profile`, {
-			type: ToastType.INFO_PRIMARY,
-			position: 'top-center',
-		});
-	}
-}
-
 const SocialProfile = () => {
 	const { setStep } = useVerificationData();
 	const { verificationData, setVerificationData } = useVerificationData();
@@ -77,6 +52,37 @@ const SocialProfile = () => {
 		() => findSocialMedia('linkedin'),
 		[findSocialMedia],
 	);
+
+	async function handleSocialSubmit(
+		socialNetwork: string,
+		notAuthorized: boolean,
+		id?: number,
+	) {
+		if (verificationData?.status !== 'draft') {
+			gToast('Please wait until the project is verified', {
+				type: ToastType.INFO_PRIMARY,
+				position: 'top-center',
+			});
+			return;
+		}
+		if (notAuthorized) {
+			if (id) {
+				const res = await client.mutate({
+					mutation: SEND_NEW_SOCIAL_MEDIA,
+					variables: {
+						socialNetwork,
+						projectVerificationId: id,
+					},
+				});
+				window.open(res.data.addNewSocialProfile, '_blank');
+			}
+		} else {
+			gToast(`You already connected a ${socialNetwork} profile`, {
+				type: ToastType.INFO_PRIMARY,
+				position: 'top-center',
+			});
+		}
+	}
 
 	async function handleSocialRemove(id?: number) {
 		if (id) {
