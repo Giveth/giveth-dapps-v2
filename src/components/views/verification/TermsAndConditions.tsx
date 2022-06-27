@@ -14,7 +14,7 @@ export default function TermsAndConditions() {
 	const [loading, setloading] = useState(false);
 	const [isChanged, setIsChanged] = useState(false);
 
-	const { verificationData, setVerificationData, setStep } =
+	const { verificationData, setVerificationData, setStep, isDraft } =
 		useVerificationData();
 	const [accepted, setAccepted] = useState(
 		verificationData?.isTermAndConditionsAccepted || false,
@@ -38,7 +38,7 @@ export default function TermsAndConditions() {
 			setStep(8);
 		}
 
-		if (isChanged) {
+		if (isChanged && isDraft) {
 			sendReq();
 		} else {
 			setStep(8);
@@ -84,14 +84,16 @@ export default function TermsAndConditions() {
 						</TermItem>
 					</Relative>
 				</TermItemsContainer>
-				<CheckBox
-					title='I accept all of the Giveth community terms and conditions.'
-					checked={accepted}
-					onChange={e => {
-						setIsChanged(true);
-						setAccepted(e);
-					}}
-				/>
+				{isDraft && (
+					<CheckBox
+						title='I accept all of the Giveth community terms and conditions.'
+						checked={accepted}
+						onChange={e => {
+							setIsChanged(true);
+							setAccepted(e);
+						}}
+					/>
+				)}
 			</Lead>
 			<div>
 				<ContentSeparator />
