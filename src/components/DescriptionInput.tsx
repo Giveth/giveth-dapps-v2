@@ -18,7 +18,7 @@ type InputType =
 			registerName?: never;
 			register?: never;
 			registerOptions?: never;
-			error?: FieldError;
+			error?: never;
 	  } & IInputWithRegister);
 
 const DescriptionInput: FC<InputType> = ({

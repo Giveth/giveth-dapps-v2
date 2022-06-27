@@ -58,7 +58,7 @@ type InputType =
 			registerName?: never;
 			register?: never;
 			registerOptions?: never;
-			error?: FieldError;
+			error?: never;
 	  } & IInput);
 
 const Input = (props: InputType) => {
