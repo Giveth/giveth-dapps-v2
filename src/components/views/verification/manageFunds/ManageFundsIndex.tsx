@@ -77,6 +77,7 @@ const ManageFundsIndex = () => {
 				});
 				setVerificationData(data.updateProjectVerificationForm);
 				setLoading(false);
+				setStep(7);
 			} catch (error) {
 				showToastError(error);
 			} finally {
