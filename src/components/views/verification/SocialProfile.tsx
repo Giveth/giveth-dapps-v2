@@ -28,7 +28,8 @@ import { ISocialProfile } from '@/apollo/types/types';
 
 const SocialProfile = () => {
 	const { setStep } = useVerificationData();
-	const { verificationData, setVerificationData } = useVerificationData();
+	const { verificationData, setVerificationData, isDraft } =
+		useVerificationData();
 	const router = useRouter();
 
 	const { slug } = router.query;
@@ -58,7 +59,7 @@ const SocialProfile = () => {
 		notAuthorized: boolean,
 		id?: number,
 	) {
-		if (verificationData?.status !== 'draft') {
+		if (!isDraft) {
 			gToast('Please wait until the project is verified', {
 				type: ToastType.INFO_PRIMARY,
 				position: 'top-center',
@@ -85,7 +86,7 @@ const SocialProfile = () => {
 	}
 
 	async function handleSocialRemove(id?: number) {
-		if (verificationData?.status !== 'draft') {
+		if (!isDraft) {
 			gToast('Please wait until the project is verified', {
 				type: ToastType.INFO_PRIMARY,
 				position: 'top-center',
