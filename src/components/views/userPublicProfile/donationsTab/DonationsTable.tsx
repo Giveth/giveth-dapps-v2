@@ -85,7 +85,8 @@ const DonationTable: FC<DonationTable> = ({
 						</ExternalLink>
 					</TableCell>
 					<TableCell>
-						{donation.valueUsd && formatUSD(donation.valueUsd)}
+						{donation.valueUsd &&
+							'$' + formatUSD(donation.valueUsd)}
 					</TableCell>
 				</RowWrapper>
 			))}
