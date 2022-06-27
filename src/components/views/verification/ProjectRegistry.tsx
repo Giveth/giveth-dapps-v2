@@ -207,7 +207,9 @@ export default function ProjectRegistry() {
 							<Input
 								registerName={ERegistry.link}
 								register={register}
-								registerOptions={requiredOptions.website}
+								registerOptions={
+									isDraft ? requiredOptions.website : {}
+								}
 								placeholder='https://'
 								error={errors.link}
 								disabled={!isDraft}
@@ -230,7 +232,9 @@ export default function ProjectRegistry() {
 						applications"'
 							register={register}
 							registerName={ERegistry.description}
-							registerOptions={requiredOptions.field}
+							registerOptions={
+								isDraft ? requiredOptions.field : {}
+							}
 							defaultValue={organizationDescription || ''}
 							error={errors.description}
 							disabled={!isDraft}

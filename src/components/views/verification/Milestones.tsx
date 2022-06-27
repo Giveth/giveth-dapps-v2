@@ -115,7 +115,7 @@ export default function Milestones() {
 					height='82px'
 					defaultValue={milestones?.mission}
 					register={register}
-					registerOptions={requiredOptions.field}
+					registerOptions={isDraft ? requiredOptions.field : {}}
 					registerName='mission'
 					error={errors.mission}
 					disabled={!isDraft}
@@ -132,7 +132,7 @@ export default function Milestones() {
 					height='82px'
 					defaultValue={milestones?.achievedMilestones}
 					register={register}
-					registerOptions={requiredOptions.field}
+					registerOptions={isDraft ? requiredOptions.field : {}}
 					registerName='achievedMilestones'
 					error={errors.achievedMilestones}
 					disabled={!isDraft}

@@ -106,7 +106,9 @@ const ManageFundsIndex = () => {
 						<DescriptionInputStyled
 							register={register}
 							registerName='description'
-							registerOptions={requiredOptions.field}
+							registerOptions={
+								isDraft ? requiredOptions.field : {}
+							}
 							error={errors.description}
 							height='180px'
 							placeholder='eg. "We are a decentralized autonomous organization that works toward the development of web3
