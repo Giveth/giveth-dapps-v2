@@ -98,4 +98,10 @@ export const requiredOptions = {
 		},
 		...validators.website,
 	},
+	field: {
+		required: {
+			value: true,
+			message: 'This field is required',
+		},
+	},
 };

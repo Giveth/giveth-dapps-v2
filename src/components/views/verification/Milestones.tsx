@@ -10,7 +10,6 @@ import { useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import styled from 'styled-components';
 import { Controller, useForm } from 'react-hook-form';
-import { TextArea } from '@/components/styled-components/TextArea';
 import {
 	StyledDatePicker,
 	DatePickerWrapper,
@@ -21,6 +20,8 @@ import { useVerificationData } from '@/context/verification.context';
 import { client } from '@/apollo/apolloClient';
 import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
 import { EVerificationSteps } from '@/apollo/types/types';
+import DescriptionInput from '@/components/DescriptionInput';
+import { requiredOptions } from '@/lib/constants/regex';
 
 export interface IMilestonesForm {
 	foundationDate?: Date;
@@ -109,29 +110,35 @@ export default function Milestones() {
 					Please describe how your project is benefiting society and
 					the world at large.
 				</Paragraph>
-				<TextArea
+				<DescriptionInput
 					height='82px'
 					defaultValue={milestones?.mission}
-					{...register('mission')}
+					register={register}
+					registerOptions={requiredOptions.field}
+					registerName='mission'
+					error={errors.mission}
 				/>
-				<LeadStyled>
+				<Lead>
 					Which milestones has your organization/project achieved
-					since conception? This question is required.
-				</LeadStyled>
+					since conception?
+				</Lead>
 				<Paragraph>
 					Please provide links to photos, videos, testimonials or
 					other evidence of your project's impact.
 				</Paragraph>
-				<TextArea
+				<DescriptionInput
 					height='82px'
 					defaultValue={milestones?.achievedMilestones}
-					{...register('achievedMilestones')}
+					register={register}
+					registerOptions={requiredOptions.field}
+					registerName='achievedMilestones'
+					error={errors.achievedMilestones}
 				/>
-				<LeadStyled>
+				<Lead>
 					If you cannot provide links to evidence of milestones that
 					have already been achieved, you can upload proof here.
-				</LeadStyled>
-				<Paragraph>Upload photo</Paragraph>
+				</Lead>
+				<Paragraph>Optional</Paragraph>
 				<Controller
 					control={control}
 					name='achievedMilestonesProof'

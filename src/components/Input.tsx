@@ -1,13 +1,14 @@
 import {
 	brandColors,
-	neutralColors,
 	GLink,
+	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
 import { InputHTMLAttributes, ReactElement } from 'react';
 import styled from 'styled-components';
 import { IIconProps } from '@giveth/ui-design-system/lib/esm/components/icons/giv-economy/type';
 import { Shadow } from '@/components/styled-components/Shadow';
+import { EInputValidation, IInputValidation } from '@/types/inputValidation';
 import type {
 	FieldError,
 	RegisterOptions,
@@ -15,14 +16,7 @@ import type {
 } from 'react-hook-form';
 
 export interface IFormValidations {
-	[key: string]: InputValidationType;
-}
-
-export enum InputValidationType {
-	NORMAL,
-	WARNING,
-	ERROR,
-	SUCCESS,
+	[key: string]: EInputValidation;
 }
 
 export enum InputSize {
@@ -35,7 +29,6 @@ interface IInput extends InputHTMLAttributes<HTMLInputElement> {
 	label?: string;
 	caption?: string;
 	size?: InputSize;
-	error?: FieldError;
 	LeftIcon?: ReactElement<IIconProps>;
 }
 
@@ -43,6 +36,7 @@ interface IInputWithRegister extends IInput {
 	register: UseFormRegister<any>;
 	registerName: string;
 	registerOptions?: RegisterOptions;
+	error?: FieldError;
 }
 
 const InputSizeToLinkSize = (size: InputSize) => {
@@ -64,6 +58,7 @@ type InputType =
 			registerName?: never;
 			register?: never;
 			registerOptions?: never;
+			error?: never;
 	  } & IInput);
 
 const Input = (props: InputType) => {
@@ -79,9 +74,10 @@ const Input = (props: InputType) => {
 		error,
 		...rest
 	} = props;
+
 	const validationStatus = error
-		? InputValidationType.ERROR
-		: InputValidationType.NORMAL;
+		? EInputValidation.ERROR
+		: EInputValidation.NORMAL;
 
 	return (
 		<InputContainer>
@@ -139,11 +135,7 @@ const InputLabel = styled(GLink)<{ required?: boolean; disabled?: boolean }>`
 	}
 `;
 
-interface IValidation {
-	validation: InputValidationType;
-}
-
-interface IInputField extends IValidation {
+interface IInputField extends IInputValidation {
 	inputSize: InputSize;
 	hasLeftIcon?: boolean;
 }
@@ -165,13 +157,13 @@ const InputField = styled.input<IInputField>`
 	border: 2px solid
 		${props => {
 			switch (props.validation) {
-				case InputValidationType.NORMAL:
+				case EInputValidation.NORMAL:
 					return neutralColors.gray[300];
-				case InputValidationType.WARNING:
+				case EInputValidation.WARNING:
 					return semanticColors.golden[600];
-				case InputValidationType.ERROR:
+				case EInputValidation.ERROR:
 					return semanticColors.punch[500];
-				case InputValidationType.SUCCESS:
+				case EInputValidation.SUCCESS:
 					return semanticColors.jade[500];
 				default:
 					return neutralColors.gray[300];
@@ -204,7 +196,6 @@ const InputField = styled.input<IInputField>`
 		}
 	}};
 	line-height: 150%;
-	/* font-weight: 500; */
 	font-family: 'Red Hat Text', sans-serif;
 	caret-color: ${brandColors.giv[300]};
 	box-shadow: none;
@@ -212,13 +203,13 @@ const InputField = styled.input<IInputField>`
 		border: 2px solid
 			${props => {
 				switch (props.validation) {
-					case InputValidationType.NORMAL:
+					case EInputValidation.NORMAL:
 						return brandColors.giv[600];
-					case InputValidationType.WARNING:
+					case EInputValidation.WARNING:
 						return semanticColors.golden[700];
-					case InputValidationType.ERROR:
+					case EInputValidation.ERROR:
 						return semanticColors.punch[700];
-					case InputValidationType.SUCCESS:
+					case EInputValidation.SUCCESS:
 						return semanticColors.jade[700];
 					default:
 						return brandColors.giv[600];
@@ -242,23 +233,23 @@ const InputDesc = styled(GLink)`
 	display: block;
 `;
 
-const InputValidation = styled(GLink)<IValidation>`
+const InputValidation = styled(GLink)<IInputValidation>`
 	padding-top: 4px;
 	display: block;
 	color: ${props => {
 		switch (props.validation) {
-			case InputValidationType.NORMAL:
+			case EInputValidation.NORMAL:
 				return neutralColors.gray[900];
-			case InputValidationType.WARNING:
+			case EInputValidation.WARNING:
 				return semanticColors.golden[600];
-			case InputValidationType.ERROR:
+			case EInputValidation.ERROR:
 				return semanticColors.punch[500];
-			case InputValidationType.SUCCESS:
+			case EInputValidation.SUCCESS:
 				return semanticColors.jade[500];
 			default:
 				return neutralColors.gray[300];
 		}
-	}}; ;
+	}};
 `;
 
 const InputWrapper = styled.div`
