@@ -33,7 +33,7 @@ export interface IMilestonesForm {
 export default function Milestones() {
 	const [uploading, setUploading] = useState(false);
 
-	const { verificationData, setVerificationData, setStep } =
+	const { verificationData, setVerificationData, setStep, isDraft } =
 		useVerificationData();
 	const { milestones } = verificationData || {};
 	const {
@@ -65,7 +65,7 @@ export default function Milestones() {
 			setStep(6);
 		}
 
-		if (isDirty) {
+		if (isDirty && isDraft) {
 			sendReq();
 		} else {
 			setStep(6);
@@ -98,6 +98,7 @@ export default function Milestones() {
 								showMonthYearPicker
 								showPopperArrow={false}
 								placeholderText='Select a date'
+								disabled={!isDraft}
 							/>
 						)}
 					/>
@@ -117,6 +118,7 @@ export default function Milestones() {
 					registerOptions={requiredOptions.field}
 					registerName='mission'
 					error={errors.mission}
+					disabled={!isDraft}
 				/>
 				<Lead>
 					Which milestones has your organization/project achieved
@@ -133,6 +135,7 @@ export default function Milestones() {
 					registerOptions={requiredOptions.field}
 					registerName='achievedMilestones'
 					error={errors.achievedMilestones}
+					disabled={!isDraft}
 				/>
 				<Lead>
 					If you cannot provide links to evidence of milestones that
