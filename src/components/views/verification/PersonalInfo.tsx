@@ -29,7 +29,7 @@ function addZero(num: number) {
 
 const PersonalInfo = () => {
 	const [loading, setLoading] = useState(false);
-	const { verificationData, setStep, setVerificationData } =
+	const { verificationData, setStep, setVerificationData, isDraft } =
 		useVerificationData();
 	const [resetMail, setResetMail] = useState(false);
 	const [timer, setTimer] = useState(0);
@@ -167,7 +167,7 @@ const PersonalInfo = () => {
 									registerOptions={requiredOptions.email}
 									error={errors.email}
 								/>
-								{verificationData?.status === 'draft' && (
+								{isDraft && (
 									<ButtonStyled
 										loading={loading}
 										color={brandColors.giv[500]}
@@ -186,7 +186,7 @@ const PersonalInfo = () => {
 									register={register}
 									disabled
 								/>
-								{verificationData?.status === 'draft' && (
+								{isDraft && (
 									<>
 										<ResendEmailButton
 											color={brandColors.giv[500]}
