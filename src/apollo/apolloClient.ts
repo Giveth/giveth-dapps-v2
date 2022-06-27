@@ -11,6 +11,7 @@ import StorageLabel from '@/lib/localStorage';
 import { store } from '@/features/store';
 import { signOut } from '@/features/user/user.thunks';
 import config from '@/configuration';
+import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 
 let apolloClient: any;
 
@@ -51,7 +52,10 @@ function createApolloClient() {
 				console.log(`[GraphQL error]: ${message}`, { locations, path });
 				if (message.toLowerCase().includes('authentication required')) {
 					//   removes token and user from store
-					store.dispatch(signOut());
+					store.dispatch(signOut()).finally(() => {
+						//show signin modal
+						store.dispatch(setShowSignWithWallet(true));
+					});
 				}
 			});
 		if (networkError) console.log(`[Network error]: ${networkError}`);
