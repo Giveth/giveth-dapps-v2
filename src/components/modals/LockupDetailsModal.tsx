@@ -36,9 +36,9 @@ export const LockupDetailsModal: FC<IModal> = ({ setShowModal }) => {
 		if (!GIVpower) return;
 		const GIVPowers = GIVpower?.givPowers[0];
 		setStakedGIV(
-			parseFloat(utils.formatEther(GIVPowers?.totalGIVLocked))?.toFixed(
-				4,
-			),
+			parseFloat(
+				utils.formatEther(GIVPowers?.totalGIVLocked),
+			)?.toPrecision(1),
 		);
 		setAvailableToUnstake(
 			parseFloat(
