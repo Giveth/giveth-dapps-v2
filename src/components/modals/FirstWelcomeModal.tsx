@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import {
@@ -15,6 +15,7 @@ import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 import Routes from '@/lib/constants/Routes';
+import StorageLabel from '@/lib/localStorage';
 
 interface IText {
 	isDark?: boolean;
@@ -23,6 +24,10 @@ interface IText {
 export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
 	const theme = useAppSelector(state => state.general.theme);
 	const router = useRouter();
+
+	useEffect(() => {
+		localStorage.setItem(StorageLabel.FIRSTMODALSHOWED, '1');
+	}, []);
 
 	return (
 		<Modal

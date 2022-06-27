@@ -49,10 +49,6 @@ const ModalController = () => {
 		}
 	}, [isSignedIn]);
 
-	useEffect(() => {
-		dispatch(setShowFirstWelcomeModal(true));
-	}, []);
-
 	return (
 		<>
 			{showWalletModal && (
