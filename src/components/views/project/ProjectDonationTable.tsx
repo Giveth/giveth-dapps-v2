@@ -236,7 +236,7 @@ const ProjectDonationTable = ({
 								</TableCell>
 								<TableCell>
 									{donation.valueUsd &&
-										formatUSD(donation.valueUsd)}
+										'$' + formatUSD(donation.valueUsd)}
 								</TableCell>
 							</RowWrapper>
 						))}
