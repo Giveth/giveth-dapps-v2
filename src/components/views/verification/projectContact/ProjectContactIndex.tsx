@@ -28,7 +28,7 @@ import { OtherInput } from '@/components/views/verification/projectContact/commo
 import { validators } from '@/lib/constants/regex';
 
 export default function ProjectContactIndex() {
-	const { verificationData, setVerificationData, setStep } =
+	const { verificationData, setVerificationData, setStep, isDraft } =
 		useVerificationData();
 
 	const {
@@ -136,6 +136,7 @@ export default function ProjectContactIndex() {
 									i.type.toLowerCase() as keyof typeof validators
 								]
 							}
+							disabled={!isDraft}
 						/>
 					))}
 					{otherSocials.map(social => (
@@ -144,14 +145,17 @@ export default function ProjectContactIndex() {
 							label={social.name}
 							url={social.url}
 							remove={() => removeOtherSocials(social.name)}
+							hideRemoveIcon={!isDraft}
 						/>
 					))}
 					<br />
-					<OutlineStyled
-						onClick={() => setShowSocialModal(true)}
-						label='ADD OTHER'
-						buttonType='primary'
-					/>
+					{isDraft && (
+						<OutlineStyled
+							onClick={() => setShowSocialModal(true)}
+							label='ADD OTHER'
+							buttonType='primary'
+						/>
+					)}
 					<div>
 						<ContentSeparator />
 						<BtnContainer>

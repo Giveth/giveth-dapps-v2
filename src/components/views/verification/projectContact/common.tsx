@@ -9,9 +9,15 @@ interface IProps {
 	url: string;
 	label?: string;
 	remove: () => void;
+	hideRemoveIcon?: boolean;
 }
 
-export const OtherInput: FC<IProps> = ({ url, label, remove }) => {
+export const OtherInput: FC<IProps> = ({
+	url,
+	label,
+	remove,
+	hideRemoveIcon = false,
+}) => {
 	return (
 		<Container>
 			<Input
@@ -22,7 +28,7 @@ export const OtherInput: FC<IProps> = ({ url, label, remove }) => {
 				LeftIcon={<IconLink color={neutralColors.gray[600]} />}
 				disabled
 			/>
-			<RemoveIcon onClick={remove} />
+			{!hideRemoveIcon && <RemoveIcon onClick={remove} />}
 		</Container>
 	);
 };

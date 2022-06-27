@@ -20,6 +20,7 @@ interface IVerificationContext {
 	setVerificationData: Dispatch<
 		SetStateAction<IProjectVerification | undefined>
 	>;
+	isDraft: boolean;
 }
 
 const VerificationContext = createContext<IVerificationContext>({
@@ -31,6 +32,7 @@ const VerificationContext = createContext<IVerificationContext>({
 	setVerificationData: pr => {
 		console.log('setVerificationData not initialed yet!');
 	},
+	isDraft: true,
 });
 
 VerificationContext.displayName = 'VerificationContext';
@@ -41,6 +43,7 @@ export const VerificationProvider = ({ children }: { children: ReactNode }) => {
 		useState<IProjectVerification>();
 	const router = useRouter();
 	const { slug } = router.query;
+	const isDraft = verificationData?.status === 'draft';
 
 	useEffect(() => {
 		async function getVerificationData() {
@@ -80,7 +83,13 @@ export const VerificationProvider = ({ children }: { children: ReactNode }) => {
 
 	return (
 		<VerificationContext.Provider
-			value={{ verificationData, setVerificationData, step, setStep }}
+			value={{
+				verificationData,
+				setVerificationData,
+				step,
+				setStep,
+				isDraft,
+			}}
 		>
 			{children}
 		</VerificationContext.Provider>
