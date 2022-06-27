@@ -20,7 +20,10 @@ interface INetworkIds {
 	[key: number]: boolean;
 }
 
-export const prepareTokenList = (tokens: IProjectAcceptedToken[]) => {
+export const prepareTokenList = (
+	tokens: IProjectAcceptedToken[],
+	isXdai?: boolean,
+) => {
 	let givIndex: number | undefined;
 	const _tokens: ISelectedToken[] = [...tokens];
 	_tokens.sort((a: IProjectAcceptedToken, b: IProjectAcceptedToken) => {
@@ -33,6 +36,12 @@ export const prepareTokenList = (tokens: IProjectAcceptedToken[]) => {
 		}
 		return 0;
 	});
+	if (isXdai) {
+		// sort xDAI to top
+		_tokens.sort(function (x, y) {
+			return x.symbol === 'XDAI' ? -1 : y.symbol === 'XDAI' ? 1 : 0;
+		});
+	}
 	_tokens.forEach((token: IProjectAcceptedToken, index: number) => {
 		if (
 			token.symbol === 'GIV' ||
