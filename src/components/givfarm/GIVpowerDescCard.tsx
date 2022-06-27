@@ -23,7 +23,6 @@ import { LockupDetailsModal } from '../modals/LockupDetailsModal';
 import { useGIVpower } from '@/context/givpower.context';
 import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import LockModal from '../modals/Stake/Lock';
-import type { FC } from 'react';
 
 interface IGIVpowerDescCardProps {}
 
