@@ -17,13 +17,17 @@ import { Flex } from '../styled-components/Flex';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { IconWithTooltip } from '../IconWithToolTip';
+import { formatEthHelper } from '@/helpers/number';
 import { useAppSelector } from '@/features/hooks';
 import { IGIVpower } from '@/types/subgraph';
+import { useGIVpower } from '@/context/givpower.context';
 
 export const LockupDetailsModal: FC<IModal> = ({ setShowModal }) => {
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
 	const GIVpower: IGIVpower | undefined = currentValues.GIVPowerPositions;
 
+	const { apr } = useGIVpower();
+	const [average, setAverage] = useState(1);
 	const [stakedGIV, setStakedGIV] = useState('0');
 	const [availableToUnstake, setAvailableToUnstake] = useState('0');
 	const [lockedGIV, setLockedGIV] = useState([]);
@@ -39,7 +43,7 @@ export const LockupDetailsModal: FC<IModal> = ({ setShowModal }) => {
 		setAvailableToUnstake(
 			parseFloat(
 				utils.formatEther(
-					BigNumber.from(GIVPowers?.totalGIVLocked).mod(
+					BigNumber.from(GIVPowers?.totalGIVLocked)?.sub(
 						BigNumber.from(GIVPowers?.totalGIVPower),
 					),
 				),
@@ -79,7 +83,14 @@ export const LockupDetailsModal: FC<IModal> = ({ setShowModal }) => {
 						</CloseText>
 					</div>
 					<div>
-						<H6>10%</H6>
+						<H6>
+							{apr
+								? `${formatEthHelper(
+										apr.multipliedBy(average),
+								  )}`
+								: ' ? '}
+							%
+						</H6>
 						<CloseText>
 							<H6>APR</H6>
 							<IconWithTooltip
@@ -112,8 +123,21 @@ export const LockupDetailsModal: FC<IModal> = ({ setShowModal }) => {
 										<TableCell>
 											{i?.rounds} Rounds
 										</TableCell>
-										<TableCell>x</TableCell>
-										<TableCell>x%</TableCell>
+										<TableCell>
+											{Math.sqrt(
+												i?.rounds + 1,
+											)?.toPrecision(1)}
+										</TableCell>
+										<TableCell>
+											{apr
+												? `${formatEthHelper(
+														apr.multipliedBy(
+															average,
+														),
+												  )}`
+												: ' ? '}
+											%
+										</TableCell>
 										<TableCell>
 											{smallFormatDate(
 												new Date(

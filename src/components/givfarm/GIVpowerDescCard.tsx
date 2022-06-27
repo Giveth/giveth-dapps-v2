@@ -1,4 +1,4 @@
-import React, { useState, useState, FC } from 'react';
+import React, { useState, FC } from 'react';
 import {
 	B,
 	brandColors,
