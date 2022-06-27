@@ -85,6 +85,13 @@ const SocialProfile = () => {
 	}
 
 	async function handleSocialRemove(id?: number) {
+		if (verificationData?.status !== 'draft') {
+			gToast('Please wait until the project is verified', {
+				type: ToastType.INFO_PRIMARY,
+				position: 'top-center',
+			});
+			return;
+		}
 		if (id) {
 			await client.mutate({
 				mutation: REMOVE_SOCIAL_MEDIA,
