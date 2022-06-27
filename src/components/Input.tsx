@@ -29,7 +29,6 @@ interface IInput extends InputHTMLAttributes<HTMLInputElement> {
 	label?: string;
 	caption?: string;
 	size?: InputSize;
-	error?: FieldError;
 	LeftIcon?: ReactElement<IIconProps>;
 }
 
@@ -37,6 +36,7 @@ interface IInputWithRegister extends IInput {
 	register: UseFormRegister<any>;
 	registerName: string;
 	registerOptions?: RegisterOptions;
+	error?: FieldError;
 }
 
 const InputSizeToLinkSize = (size: InputSize) => {
@@ -58,6 +58,7 @@ type InputType =
 			registerName?: never;
 			register?: never;
 			registerOptions?: never;
+			error?: FieldError;
 	  } & IInput);
 
 const Input = (props: InputType) => {
@@ -73,6 +74,7 @@ const Input = (props: InputType) => {
 		error,
 		...rest
 	} = props;
+
 	const validationStatus = error
 		? EInputValidation.ERROR
 		: EInputValidation.NORMAL;

@@ -5,14 +5,23 @@ import { GLink, neutralColors, semanticColors } from '@giveth/ui-design-system';
 import { TextArea } from './styled-components/TextArea';
 import { EInputValidation, IInputValidation } from '@/types/inputValidation';
 
-interface IDescriptionInput extends InputHTMLAttributes<HTMLTextAreaElement> {
-	register?: UseFormRegister<any>;
-	registerName?: string;
+interface IInputWithRegister extends InputHTMLAttributes<HTMLTextAreaElement> {
+	register: UseFormRegister<any>;
+	registerName: string;
 	registerOptions?: RegisterOptions;
 	error?: FieldError;
 }
 
-const DescriptionInput: FC<IDescriptionInput> = ({
+type InputType =
+	| IInputWithRegister
+	| ({
+			registerName?: never;
+			register?: never;
+			registerOptions?: never;
+			error?: FieldError;
+	  } & IInputWithRegister);
+
+const DescriptionInput: FC<InputType> = ({
 	register = () => {},
 	registerName = '',
 	registerOptions = { required: false },
