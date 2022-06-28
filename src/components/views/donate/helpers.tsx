@@ -23,15 +23,10 @@ interface INetworkIds {
 export const prepareTokenList = (tokens: IProjectAcceptedToken[]) => {
 	let givIndex: number | undefined;
 	const _tokens: ISelectedToken[] = [...tokens];
-	_tokens.sort((a: IProjectAcceptedToken, b: IProjectAcceptedToken) => {
-		const nameA = a.name.toUpperCase();
-		const nameB = b.name.toUpperCase();
-		if (nameA < nameB) {
-			return -1;
-		} else if (nameA > nameB) {
-			return 1;
-		}
-		return 0;
+	_tokens.sort((t1, t2) => {
+		const t1Order = t1.order || 10000;
+		const t2Order = t2.order || 10000;
+		return t2Order > t1Order ? -1 : 1;
 	});
 	_tokens.forEach((token: IProjectAcceptedToken, index: number) => {
 		if (
