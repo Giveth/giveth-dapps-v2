@@ -143,8 +143,12 @@ const CryptoDonation = (props: {
 
 	useEffect(() => {
 		if (networkId && acceptedTokens) {
-			const filteredTokens = filterTokens(acceptedTokens, networkId);
-			const networkIds = getNetworkIds(acceptedTokens);
+			const networkIds = getNetworkIds(acceptedTokens, project.addresses);
+			const filteredTokens = filterTokens(
+				acceptedTokens,
+				networkId,
+				networkIds,
+			);
 			setAcceptedChains(networkIds);
 			if (filteredTokens.length < 1) {
 				setShowChangeNetworkModal(true);
@@ -494,9 +498,11 @@ const CryptoDonation = (props: {
 					/>
 					<AnotherWalletTxt>
 						Want to use another wallet?{' '}
-						<a onClick={() => dispatch(setShowWalletModal(true))}>
+						<span
+							onClick={() => dispatch(setShowWalletModal(true))}
+						>
 							Change Wallet
-						</a>
+						</span>
 					</AnotherWalletTxt>
 				</>
 			)}
@@ -595,7 +601,7 @@ const AnotherWalletTxt = styled(GLink)`
 	color: ${neutralColors.gray[800]};
 	padding: 16px 0;
 	text-align: center;
-	> a {
+	> span {
 		color: ${brandColors.pinky[500]};
 		cursor: pointer;
 	}

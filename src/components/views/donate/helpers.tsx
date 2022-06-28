@@ -11,6 +11,7 @@ import { EDonationStatus } from '@/apollo/types/gqlEnums';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
 import config from '@/configuration';
 import { MAX_TOKEN_ORDER } from '@/lib/constants/tokens';
+import { IWalletAddress } from '@/apollo/types/types';
 
 export interface ISelectedToken extends IProjectAcceptedToken {
 	value?: IProjectAcceptedToken;
@@ -30,7 +31,6 @@ export const prepareTokenList = (tokens: IProjectAcceptedToken[]) => {
 		if (t1Order === t2Order) {
 			const t1Name = t1.name.toLowerCase();
 			const t2Name = t2.name.toLowerCase();
-			console.log(t1Name, t2Name);
 			return t2Name > t1Name ? -1 : 1;
 		}
 		return t2Order > t1Order ? -1 : 1;
@@ -60,16 +60,28 @@ export const prepareTokenList = (tokens: IProjectAcceptedToken[]) => {
 export const filterTokens = (
 	tokens: IProjectAcceptedToken[],
 	networkId: number,
+	acceptedNetworkIds: number[],
 ) => {
+	if (!acceptedNetworkIds.includes(networkId)) return [];
 	return tokens.filter(i => i.networkId === networkId);
 };
 
-export const getNetworkIds = (tokens: IProjectAcceptedToken[]) => {
+export const getNetworkIds = (
+	tokens: IProjectAcceptedToken[],
+	recipientAddresses?: IWalletAddress[],
+) => {
+	const recipientAddressesNetwork = recipientAddresses?.map(
+		address => address.networkId,
+	);
 	const networkIds: INetworkIds = {};
 	tokens.forEach(i => {
 		networkIds[i.networkId] = true;
 	});
-	return Object.keys(networkIds).map(i => Number(i));
+	const networkIdArrays = Object.keys(networkIds).map(i => Number(i));
+	const test = networkIdArrays.filter(networkId =>
+		recipientAddressesNetwork?.includes(networkId),
+	);
+	return test;
 };
 
 export const getNetworkNames = (networks: number[], text: string) => {
