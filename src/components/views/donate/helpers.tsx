@@ -30,7 +30,6 @@ export const prepareTokenList = (tokens: IProjectAcceptedToken[]) => {
 		if (t1Order === t2Order) {
 			const t1Name = t1.name.toLowerCase();
 			const t2Name = t2.name.toLowerCase();
-			console.log(t1Name, t2Name);
 			return t2Name > t1Name ? -1 : 1;
 		}
 		return t2Order > t1Order ? -1 : 1;
