@@ -3,7 +3,7 @@ import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import { Shadow } from '@/components/styled-components/Shadow';
 
 const selectCustomStyles: StylesConfig = {
-	control: styles => ({
+	control: (styles, { isDisabled }) => ({
 		...styles,
 		maxWidth: '520px',
 		borderColor: neutralColors.gray[300],
@@ -11,6 +11,7 @@ const selectCustomStyles: StylesConfig = {
 		borderRadius: '8px',
 		boxShadow: 'none',
 		padding: '8px',
+		background: isDisabled ? `${neutralColors.gray[300]}` : 'initial',
 		'&:hover': {
 			borderColor: `${neutralColors.gray[300]}`,
 			boxShadow: `${Shadow.Neutral[400]}`,
@@ -37,6 +38,10 @@ const selectCustomStyles: StylesConfig = {
 		maxWidth: '520px',
 		borderRadius: '8px',
 		boxShadow: Shadow.Neutral[500],
+	}),
+	placeholder: styles => ({
+		...styles,
+		color: `${neutralColors.gray[500]}`,
 	}),
 };
 

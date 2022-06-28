@@ -172,6 +172,17 @@ export default function ProjectRegistry() {
 				<br />
 				{watchIsNonProfit === ERegistryType.YES && (
 					<>
+						<Lead>
+							What name is your organization registered under?
+						</Lead>
+						<br />
+						<InputContainer>
+							<Input
+								placeholder='Project official name'
+								registerName='organizationName'
+								register={register}
+							/>
+						</InputContainer>
 						<Lead>In which country are you registered?</Lead>
 						<br />
 
@@ -182,13 +193,18 @@ export default function ProjectRegistry() {
 								<Select
 									options={countries}
 									styles={selectCustomStyles}
+									placeholder='Choose country'
 									value={countries.find(
 										c => c.value === value?.value,
 									)}
-									defaultValue={{
-										label: organizationCountry,
-										value: organizationCountry,
-									}}
+									defaultValue={
+										organizationCountry
+											? {
+													label: organizationCountry,
+													value: organizationCountry,
+											  }
+											: null
+									}
 									onChange={onChange}
 									isDisabled={!isDraft}
 								/>
@@ -202,7 +218,7 @@ export default function ProjectRegistry() {
 							confirm your status.
 						</Lead>
 						<br />
-						<LinkInputContainer>
+						<InputContainer>
 							<Label>Please enter full link</Label>
 							<Input
 								registerName={ERegistry.link}
@@ -215,7 +231,7 @@ export default function ProjectRegistry() {
 								disabled={!isDraft}
 								defaultValue={organizationWebsite || ''}
 							/>
-						</LinkInputContainer>
+						</InputContainer>
 					</>
 				)}
 
@@ -282,6 +298,6 @@ const RadioContainer = styled.div`
 	}
 `;
 
-const LinkInputContainer = styled.div`
+const InputContainer = styled.div`
 	max-width: 520px;
 `;
