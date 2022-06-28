@@ -98,6 +98,36 @@ export class SubgraphQueryBuilder {
 		return mainTokenDistroQuery + regenFarmsTokenDistroQueries;
 	};
 
+	static getGIVPowersInfoQuery = (address: string): string => {
+		return `query { givpowers(id: "${address.toLowerCase()}"){ 
+			id
+			initialDate
+			locksCreated
+			roundDuration
+			totalGIVPower
+			totalGIVLocked
+		}}`;
+	};
+
+	static getPowerLocksInfoQuery = (
+		address: string,
+		first?: number,
+		skip?: number,
+	): string => {
+		return `query { powerLocks(id: "${address.toLowerCase()}", first: ${
+			first || 100
+		}, skip: ${skip || 0}){ 
+			id
+			user
+			amount
+			rounds
+			untilRound
+			unlockableAt
+			unlockedAt
+			unlocked
+		}}`;
+	};
+
 	private static getUnipoolInfoQuery = (address: string): string => {
 		return `unipoolContractInfo(id: "${address.toLowerCase()}"){
 			totalSupply
@@ -235,6 +265,11 @@ export class SubgraphQueryBuilder {
 				...config.XDAI_CONFIG.pools,
 				...config.XDAI_CONFIG.regenFarms,
 			])}
+			uniswapV2EthGivPair: ${SubgraphQueryBuilder.getPairInfoQuery(
+				config.XDAI_CONFIG.pools.find(
+					c => c.type === StakingType.SUSHISWAP_ETH_GIV,
+				)?.POOL_ADDRESS || '',
+			)}
 		}
 		`;
 	};

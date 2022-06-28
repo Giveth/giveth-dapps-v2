@@ -313,12 +313,6 @@ export const getUserStakeInfo = (
 				stakedAmount = BN(balance.givStaked);
 				notStakedAmount = BN(balance.balance);
 				break;
-			case StakingType.GIVPOWER:
-				rewards = BN(balance.rewardsGivLm); //TODO: should Change to givpower
-				rewardPerTokenPaid = BN(balance.rewardPerTokenPaidGivLm); //TODO: should Change to givpower
-				stakedAmount = BN(balance.givStaked); //TODO: should Change to givpower
-				notStakedAmount = BN(balance.balance);
-				break;
 			default:
 		}
 	}

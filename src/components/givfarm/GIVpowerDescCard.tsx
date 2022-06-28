@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState, FC } from 'react';
 import {
 	B,
 	brandColors,
@@ -19,20 +19,24 @@ import styled from 'styled-components';
 
 import { Flex } from '../styled-components/Flex';
 import { IconWithTooltip } from '../IconWithToolTip';
+import { LockupDetailsModal } from '../modals/LockupDetailsModal';
 import { useGIVpower } from '@/context/givpower.context';
 import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import LockModal from '../modals/Stake/Lock';
-import type { FC } from 'react';
 
 interface IGIVpowerDescCardProps {}
 
 export const GIVpowerDescCard: FC<IGIVpowerDescCardProps> = () => {
+	const [showLockupDetailsModal, setShowLockupDetailsModal] = useState(false);
 	const [showLockModal, setShowLockModal] = useState(false);
 	const [average, setAverage] = useState(1);
 	const { poolStakingConfig, apr, stakedAmount } = useGIVpower();
 
 	return (
 		<>
+			{showLockupDetailsModal && (
+				<LockupDetailsModal setShowModal={setShowLockupDetailsModal} />
+			)}
 			<RegenStreamContainer>
 				<HeaderRow justifyContent='space-between' wrap={1}>
 					<Flex gap='8px'>
@@ -129,7 +133,11 @@ export const GIVpowerDescCard: FC<IGIVpowerDescCardProps> = () => {
 					</LastRow>
 				</Box>
 				<FooterRow wrap={1}>
-					<OulineButton label='Lockup details' size='small' />
+					<OulineButton
+						label='Lockup details'
+						size='small'
+						onClick={() => setShowLockupDetailsModal(true)}
+					/>
 					<IncreaseButton
 						label='Increase your reward'
 						onClick={() => setShowLockModal(true)}

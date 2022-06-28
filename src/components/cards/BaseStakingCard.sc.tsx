@@ -209,6 +209,7 @@ export const CardTag = styled.div`
 	border-bottom-left-radius: 28px;
 	background-color: ${brandColors.giv[700]};
 	padding: 11px;
+	cursor: pointer;
 `;
 
 export const GIVpowerLogoCardTag = styled.div`

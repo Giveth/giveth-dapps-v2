@@ -4,7 +4,6 @@ import {
 	brandColors,
 	IconExternalLink,
 	IconHelp,
-	IconLock16,
 	IconRocketInSpace16,
 	IconSpark,
 } from '@giveth/ui-design-system';
@@ -74,6 +73,7 @@ import { IStakeInfo } from '@/hooks/useStakingPool';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { useAppSelector } from '@/features/hooks';
 import { ITokenDistroInfo } from '@/types/subgraph';
+import { GIVPowerExplainModal } from '../modals/GIVPowerExplain';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -123,6 +123,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const [showStakeModal, setShowStakeModal] = useState(false);
 	const [showUnStakeModal, setShowUnStakeModal] = useState(false);
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
+	const [showGIVPowerExplain, setShowGIVPowerExplain] = useState(false);
 	const [showWhatIsGIVstreamModal, setShowWhatIsGIVstreamModal] =
 		useState(false);
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
@@ -237,13 +238,16 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				)}
 				{state === StakeCardState.NORMAL ? (
 					<>
-						{type === StakingType.GIVPOWER && (
-							<CardTag>
-								<GIVpowerLogoCardTag>
-									<IconRocketInSpace16 />
-								</GIVpowerLogoCardTag>
-							</CardTag>
-						)}
+						{chainId === config.XDAI_NETWORK_NUMBER &&
+							type === StakingType.GIV_LM && (
+								<CardTag
+									onClick={() => setShowGIVPowerExplain(true)}
+								>
+									<GIVpowerLogoCardTag>
+										<IconRocketInSpace16 />
+									</GIVpowerLogoCardTag>
+								</CardTag>
+							)}
 						<StakingPoolExchangeRow gap='4px' alignItems='center'>
 							{getPoolIconWithName(platform)}
 							<StakingPoolExchange styleType='Small'>
@@ -449,20 +453,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 											/>
 										}
 									/>
-									{type === StakingType.GIVPOWER && (
-										<LiquidityButton
-											label='MANAGE GIV'
-											onClick={() => {}}
-											buttonType='texty'
-											icon={
-												<IconLock16
-													color={
-														brandColors.deep[100]
-													}
-												/>
-											}
-										/>
-									)}
 								</Flex>
 							)}
 						</StakePoolInfoContainer>
@@ -476,6 +466,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					/>
 				)}
 			</StakingPoolContainer>
+			{showGIVPowerExplain && (
+				<GIVPowerExplainModal setShowModal={setShowGIVPowerExplain} />
+			)}
 			{showAPRModal && (
 				<APRModal
 					setShowModal={setShowAPRModal}

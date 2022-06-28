@@ -10,7 +10,9 @@
 		"start": "next start"
 	},
 	"resolutions": {
-		"styled-components": "^5"
+		"styled-components": "^5",
+		"@types/react": "17.0.2",
+		"@types/react-dom": "17.0.2"
 	},
 	"dependencies": {
 		"@apollo/client": "^3.4.16",
@@ -42,8 +44,8 @@
 		"quill-emoji": "^0.2.0",
 		"quill-image-drop-and-paste": "^1.2.10",
 		"quill-image-resize-module": "^3.0.0",
-		"rc-slider": "^10.0.0",
 		"quill-magic-url": "4.1.4",
+		"rc-slider": "^10.0.0",
 		"react": "^18.0.0",
 		"react-custom-scrollbars": "^4.2.1",
 		"react-dom": "^18.0.0",
