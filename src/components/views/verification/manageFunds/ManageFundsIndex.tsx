@@ -27,7 +27,7 @@ export interface IAddress {
 const ManageFundsIndex = () => {
 	const [loading, setLoading] = useState(false);
 	const [showAddressModal, setShowAddressModal] = useState(false);
-	const { setStep, setVerificationData, verificationData } =
+	const { setStep, setVerificationData, verificationData, isDraft } =
 		useVerificationData();
 
 	const managingFundsData = verificationData?.managingFunds;
@@ -84,7 +84,11 @@ const ManageFundsIndex = () => {
 				setLoading(false);
 			}
 		}
-		sendReq();
+		if (isDraft) {
+			sendReq();
+		} else {
+			setStep(7);
+		}
 	};
 
 	return (
@@ -102,11 +106,14 @@ const ManageFundsIndex = () => {
 						<DescriptionInputStyled
 							register={register}
 							registerName='description'
-							registerOptions={requiredOptions.field}
+							registerOptions={
+								isDraft ? requiredOptions.field : {}
+							}
 							error={errors.description}
 							height='180px'
 							placeholder='eg. "We are a decentralized autonomous organization that works toward the development of web3
 				applications"'
+							disabled={!isDraft}
 						/>
 						<div>Additional address</div>
 						<AddressDescription>
@@ -114,11 +121,13 @@ const ManageFundsIndex = () => {
 							used for managing funds within your project.
 							<P>This is optional</P>
 						</AddressDescription>
-						<OutlineStyled
-							onClick={() => setShowAddressModal(true)}
-							label='ADD ADDRESS'
-							buttonType='primary'
-						/>
+						{isDraft && (
+							<OutlineStyled
+								onClick={() => setShowAddressModal(true)}
+								label='ADD ADDRESS'
+								buttonType='primary'
+							/>
+						)}
 						{addresses.map((address, index) => (
 							<UserAddress
 								remove={() => removeAddress(index)}

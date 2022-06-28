@@ -46,7 +46,7 @@ interface IRegistryForm {
 }
 
 export default function ProjectRegistry() {
-	const { verificationData, setVerificationData, setStep } =
+	const { verificationData, setVerificationData, setStep, isDraft } =
 		useVerificationData();
 	const { projectRegistry } = verificationData || {};
 	const {
@@ -93,7 +93,7 @@ export default function ProjectRegistry() {
 			setStep(4);
 		}
 
-		if (isObjEmpty(dirtyFields)) {
+		if (isObjEmpty(dirtyFields) && isDraft) {
 			sendReq();
 		} else {
 			setStep(4);
@@ -190,6 +190,7 @@ export default function ProjectRegistry() {
 										value: organizationCountry,
 									}}
 									onChange={onChange}
+									isDisabled={!isDraft}
 								/>
 							)}
 						/>
@@ -206,9 +207,12 @@ export default function ProjectRegistry() {
 							<Input
 								registerName={ERegistry.link}
 								register={register}
-								registerOptions={requiredOptions.website}
+								registerOptions={
+									isDraft ? requiredOptions.website : {}
+								}
 								placeholder='https://'
 								error={errors.link}
+								disabled={!isDraft}
 								defaultValue={organizationWebsite || ''}
 							/>
 						</LinkInputContainer>
@@ -228,9 +232,12 @@ export default function ProjectRegistry() {
 						applications"'
 							register={register}
 							registerName={ERegistry.description}
-							registerOptions={requiredOptions.field}
+							registerOptions={
+								isDraft ? requiredOptions.field : {}
+							}
 							defaultValue={organizationDescription || ''}
 							error={errors.description}
+							disabled={!isDraft}
 						/>
 					</>
 				)}

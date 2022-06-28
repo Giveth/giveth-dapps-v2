@@ -29,7 +29,7 @@ function addZero(num: number) {
 
 const PersonalInfo = () => {
 	const [loading, setLoading] = useState(false);
-	const { verificationData, setStep, setVerificationData } =
+	const { verificationData, setStep, setVerificationData, isDraft } =
 		useVerificationData();
 	const [resetMail, setResetMail] = useState(false);
 	const [timer, setTimer] = useState(0);
@@ -167,13 +167,15 @@ const PersonalInfo = () => {
 									registerOptions={requiredOptions.email}
 									error={errors.email}
 								/>
-								<ButtonStyled
-									loading={loading}
-									color={brandColors.giv[500]}
-									label='VERIFY EMAIL ADDRESS'
-									size='small'
-									type='submit'
-								/>
+								{isDraft && (
+									<ButtonStyled
+										loading={loading}
+										color={brandColors.giv[500]}
+										label='VERIFY EMAIL ADDRESS'
+										size='small'
+										type='submit'
+									/>
+								)}
 							</>
 						) : (
 							<>
@@ -184,26 +186,34 @@ const PersonalInfo = () => {
 									register={register}
 									disabled
 								/>
-								<ResendEmailButton
-									color={brandColors.giv[500]}
-									label={
-										canReSendEmail || timer === 0
-											? 'RE-SEND EMAIL'
-											: `RE-SEND EMAIL IN ${addZero(
-													durationToYMDh(timer).min,
-											  )} : ${addZero(
-													durationToYMDh(timer).sec,
-											  )}`
-									}
-									size='small'
-									onClick={handleFormSubmit}
-									disabled={!canReSendEmail}
-									loading={isSentMailLoading}
-								/>
-								<LightBotton
-									onClick={() => setResetMail(true)}
-									label='CHANGE MAIL'
-								/>
+								{isDraft && (
+									<>
+										<ResendEmailButton
+											color={brandColors.giv[500]}
+											label={
+												canReSendEmail || timer === 0
+													? 'RE-SEND EMAIL'
+													: `RE-SEND EMAIL IN ${addZero(
+															durationToYMDh(
+																timer,
+															).min,
+													  )} : ${addZero(
+															durationToYMDh(
+																timer,
+															).sec,
+													  )}`
+											}
+											size='small'
+											onClick={handleFormSubmit}
+											disabled={!canReSendEmail}
+											loading={isSentMailLoading}
+										/>
+										<LightBotton
+											onClick={() => setResetMail(true)}
+											label='CHANGE MAIL'
+										/>
+									</>
+								)}
 							</>
 						)}
 					</EmailSection>
