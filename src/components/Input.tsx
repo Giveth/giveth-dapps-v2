@@ -4,7 +4,7 @@ import {
 	GLink,
 	semanticColors,
 } from '@giveth/ui-design-system';
-import { FC, InputHTMLAttributes } from 'react';
+import { InputHTMLAttributes } from 'react';
 import styled from 'styled-components';
 import type {
 	FieldError,
@@ -30,12 +30,15 @@ export enum InputSize {
 }
 
 interface IInput extends InputHTMLAttributes<HTMLInputElement> {
-	registerName: string;
 	label?: string;
 	caption?: string;
 	size?: InputSize;
-	register: UseFormRegister<any>;
 	error?: FieldError;
+}
+
+interface IInputWithRegister extends IInput {
+	register: UseFormRegister<any>;
+	registerName: string;
 	registerOptions?: RegisterOptions;
 }
 
@@ -52,16 +55,25 @@ const InputSizeToLinkSize = (size: InputSize) => {
 	}
 };
 
-const Input: FC<IInput> = ({
-	registerName,
-	label,
-	caption,
-	size = InputSize.MEDIUM,
-	register,
-	registerOptions = { required: false },
-	error,
-	...rest
-}) => {
+type InputType =
+	| IInputWithRegister
+	| ({
+			registerName?: never;
+			register?: never;
+			registerOptions?: never;
+	  } & IInput);
+
+const Input = (props: InputType) => {
+	const {
+		label,
+		caption,
+		size = InputSize.MEDIUM,
+		register,
+		registerName,
+		registerOptions = { required: false },
+		error,
+		...rest
+	} = props;
 	const validationStatus = error
 		? InputValidationType.ERROR
 		: InputValidationType.NORMAL;
@@ -79,7 +91,9 @@ const Input: FC<IInput> = ({
 			<InputField
 				validation={validationStatus}
 				inputSize={size}
-				{...register(registerName, registerOptions)}
+				{...(registerName && register
+					? register(registerName, registerOptions)
+					: {})}
 				{...rest}
 			/>
 			{error?.message ? (
