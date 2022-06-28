@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { H5, Button, Lead, brandColors } from '@giveth/ui-design-system';
 
+import { IconDonation } from '@giveth/ui-design-system/lib/cjs/components/icons/Donation';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
@@ -27,7 +28,7 @@ export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
 	return (
 		<Modal
 			setShowModal={setShowModal}
-			headerIcon={<img src='/images/icons/donate.svg' />}
+			headerIcon={<IconDonation />}
 			headerTitle={`Let's Donate`}
 			headerTitlePosition='left'
 		>
@@ -37,48 +38,47 @@ export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
 				</Title>
 				<LeadTitle>You can use Giveth to:</LeadTitle>
 				<Bullets>
-						<Paragraph isDark={theme === ETheme.Dark}>
-							Donate to awesome for-good{' '}
-							<ExternalLink
-								href={Routes.Projects}
-								title='projects'
-								color={brandColors.pinky[500]}
-							/>
-							.
-						</Paragraph>
-						<Paragraph isDark={theme === ETheme.Dark}>
-							<ExternalLink
-								href={Routes.CreateProject}
-								title='Create a project'
-								color={brandColors.pinky[500]}
-							/>
-							&amp; start raising funds for your cause.
-						</Paragraph>
-						<Paragraph isDark={theme === ETheme.Dark}>
-							Earn GIV from{' '}
-							<ExternalLink
-								href={Routes.GIVbacks}
-								title='GIVbacks'
-								color={brandColors.pinky[500]}
-							/>
-							{' '}
-							when you donate to verified{' '}
-							<ExternalLink
-								href={Routes.Projects}
-								title='projects'
-								color={brandColors.pinky[500]}
-							/>
-							.
-						</Paragraph>
-						<Paragraph isDark={theme === ETheme.Dark}>
-							Earn a yield by staking tokens in the{' '}
-							<ExternalLink
-								href={Routes.GIVfarm}
-								title='GIVfarm'
-								color={brandColors.pinky[500]}
-							/>
-							.
-						</Paragraph>
+					<Paragraph isDark={theme === ETheme.Dark}>
+						Donate to awesome for-good{' '}
+						<ExternalLink
+							href={Routes.Projects}
+							title='projects'
+							color={brandColors.pinky[500]}
+						/>
+						.
+					</Paragraph>
+					<Paragraph isDark={theme === ETheme.Dark}>
+						<ExternalLink
+							href={Routes.CreateProject}
+							title='Create a project '
+							color={brandColors.pinky[500]}
+						/>
+						&amp; start raising funds for your cause.
+					</Paragraph>
+					<Paragraph isDark={theme === ETheme.Dark}>
+						Earn GIV from{' '}
+						<ExternalLink
+							href={Routes.GIVbacks}
+							title='GIVbacks'
+							color={brandColors.pinky[500]}
+						/>{' '}
+						when you donate to verified{' '}
+						<ExternalLink
+							href={Routes.Projects}
+							title='projects'
+							color={brandColors.pinky[500]}
+						/>
+						.
+					</Paragraph>
+					<Paragraph isDark={theme === ETheme.Dark}>
+						Earn a yield by staking tokens in the{' '}
+						<ExternalLink
+							href={Routes.GIVfarm}
+							title='GIVfarm'
+							color={brandColors.pinky[500]}
+						/>
+						.
+					</Paragraph>
 				</Bullets>
 				<Buttons>
 					<DonateButton
