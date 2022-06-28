@@ -13,7 +13,7 @@ import SuccessView from '@/components/views/donate/SuccessView';
 import ProjectCardSelector from '@/components/views/donate/ProjectCardSelector';
 import DonationTypes from '@/components/views/donate/DonationTypes';
 
-const ProjectsIndex = (props: IProjectBySlug) => {
+const DonateIndex = (props: IProjectBySlug) => {
 	const { project } = props;
 	const [isSuccess, setSuccess] = useState<ISuccessDonation>();
 	const { isMobile } = useDeviceDetect();
@@ -79,4 +79,4 @@ const Right = styled.div<{ isMobile: boolean }>`
 	min-height: 620px;
 `;
 
-export default ProjectsIndex;
+export default DonateIndex;
