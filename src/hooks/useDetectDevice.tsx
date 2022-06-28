@@ -12,17 +12,17 @@ function getWidth(): number {
 
 function detectDevice() {
 	const width = getWidth();
-	if (width <= deviceSize.mobileM) {
+	if (width < deviceSize.mobileM) {
 		return { isMobileS: true, isMobile: true };
-	} else if (width <= deviceSize.mobileL) {
+	} else if (width < deviceSize.mobileL) {
 		return { isMobileM: true, isMobile: true };
-	} else if (width <= deviceSize.tablet) {
+	} else if (width < deviceSize.tablet) {
 		return { isMobileL: true, isMobile: true };
-	} else if (width <= deviceSize.laptopS) {
+	} else if (width < deviceSize.laptopS) {
 		return { isTablet: true };
-	} else if (width <= deviceSize.laptopL) {
+	} else if (width < deviceSize.laptopL) {
 		return { isLaptopS: true, isLaptop: true };
-	} else if (width <= deviceSize.desktop) {
+	} else if (width < deviceSize.desktop) {
 		return { isLaptopL: true, isLaptop: true };
 	} else {
 		return { isDesktop: true, isLaptop: true };
