@@ -13,7 +13,6 @@ import twitter from '/public/images/icons/twitter.svg';
 import discord from '/public/images/icons/discord.svg';
 import medium from '/public/images/icons/medium.svg';
 import givFontLogo from '/public/images/icons/giv_font_logo.svg';
-import { useGeneral } from '@/context/general.context';
 import links from '@/lib/constants/links';
 import {
 	ErrorContainer,
@@ -27,13 +26,19 @@ import {
 	StyledImage,
 	LogoContainer,
 } from './ErrorsIndex.sc';
+import {
+	hideHeaderFooter,
+	showHeaderFooter,
+} from '@/features/general/general.slice';
+import { useAppDispatch } from '@/features/hooks';
 
 interface IErrorProps {
 	statusCode: typeof statusCodes[number];
 }
 
 const ErrorsIndex = ({ statusCode }: IErrorProps) => {
-	const { setShowFooter, setShowHeader } = useGeneral();
+	const dispatch = useAppDispatch();
+
 	const {
 		TWITTER: twitterLink,
 		DISCORD: discordLink,
@@ -41,11 +46,9 @@ const ErrorsIndex = ({ statusCode }: IErrorProps) => {
 	} = links;
 
 	useEffect(() => {
-		setShowFooter(false);
-		setShowHeader(false);
+		dispatch(hideHeaderFooter());
 		return () => {
-			setShowFooter(true);
-			setShowHeader(true);
+			dispatch(showHeaderFooter());
 		};
 	}, []);
 

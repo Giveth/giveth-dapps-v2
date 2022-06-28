@@ -4,17 +4,13 @@ import {
 	GLink,
 	semanticColors,
 } from '@giveth/ui-design-system';
-import {
-	ChangeEvent,
-	Dispatch,
-	FC,
-	HTMLInputTypeAttribute,
-	memo,
-	SetStateAction,
-	useEffect,
-	useState,
-} from 'react';
+import { InputHTMLAttributes } from 'react';
 import styled from 'styled-components';
+import type {
+	FieldError,
+	RegisterOptions,
+	UseFormRegister,
+} from 'react-hook-form';
 
 export interface IFormValidations {
 	[key: string]: InputValidationType;
@@ -33,23 +29,17 @@ export enum InputSize {
 	LARGE,
 }
 
-interface IInput {
-	value: string;
-	onChange: any;
-	type?: HTMLInputTypeAttribute;
-	name: string;
-	placeholder: string;
+interface IInput extends InputHTMLAttributes<HTMLInputElement> {
 	label?: string;
-	required?: boolean;
 	caption?: string;
-	validators?: IInputValidator[];
 	size?: InputSize;
-	setFormValidation?: Dispatch<SetStateAction<IFormValidations | undefined>>;
+	error?: FieldError;
 }
 
-interface IInputValidator {
-	pattern: RegExp;
-	msg: string;
+interface IInputWithRegister extends IInput {
+	register: UseFormRegister<any>;
+	registerName: string;
+	registerOptions?: RegisterOptions;
 }
 
 const InputSizeToLinkSize = (size: InputSize) => {
@@ -65,114 +55,53 @@ const InputSizeToLinkSize = (size: InputSize) => {
 	}
 };
 
-const Input: FC<IInput> = ({
-	name,
-	value,
-	onChange,
-	type = 'text',
-	validators,
-	placeholder,
-	label,
-	caption,
-	required,
-	size = InputSize.MEDIUM,
-	setFormValidation,
-}) => {
-	const [validation, setValidation] = useState<{
-		status: InputValidationType;
-		msg?: string;
-	}>({
-		status: InputValidationType.NORMAL,
-		msg: undefined,
-	});
+type InputType =
+	| IInputWithRegister
+	| ({
+			registerName?: never;
+			register?: never;
+			registerOptions?: never;
+	  } & IInput);
 
-	const ChangeHandle = (e: ChangeEvent<HTMLInputElement>) => {
-		onChange(e);
-	};
-
-	useEffect(() => {
-		const timer = setTimeout(() => {
-			if (value.length === 0) {
-				if (required) {
-					setValidation({
-						status: InputValidationType.ERROR,
-						msg: `${label} is required`,
-					});
-					if (setFormValidation) {
-						setFormValidation(formValidation => ({
-							...formValidation,
-							[name]: InputValidationType.ERROR,
-						}));
-					}
-				} else {
-					setValidation({
-						status: InputValidationType.NORMAL,
-						msg: undefined,
-					});
-				}
-				return;
-			}
-			if (validators) {
-				const error = validators.find(
-					validator => !validator.pattern.test(value),
-				);
-				if (error) {
-					setValidation({
-						status: InputValidationType.ERROR,
-						msg: error.msg,
-					});
-					if (setFormValidation) {
-						setFormValidation(formValidation => ({
-							...formValidation,
-							[name]: InputValidationType.ERROR,
-						}));
-					}
-					return;
-				}
-			}
-			if (validation.status !== InputValidationType.NORMAL) {
-				setValidation({
-					status: InputValidationType.NORMAL,
-					msg: undefined,
-				});
-				if (setFormValidation) {
-					setFormValidation(formValidation => ({
-						...formValidation,
-						[name]: InputValidationType.NORMAL,
-					}));
-				}
-			}
-		}, 300);
-		return () => {
-			clearTimeout(timer);
-		};
-	}, [required, validators, value]);
+const Input = (props: InputType) => {
+	const {
+		label,
+		caption,
+		size = InputSize.MEDIUM,
+		register,
+		registerName,
+		registerOptions = { required: false },
+		error,
+		...rest
+	} = props;
+	const validationStatus = error
+		? InputValidationType.ERROR
+		: InputValidationType.NORMAL;
 
 	return (
 		<InputContainer>
 			{label && (
 				<InputLabel
 					size={InputSizeToLinkSize(size)}
-					required={required}
+					required={Boolean(registerOptions.required)}
 				>
 					{label}
 				</InputLabel>
 			)}
 			<InputField
-				placeholder={placeholder}
-				name={name}
-				value={value}
-				onChange={ChangeHandle}
-				type={type}
-				validation={validation.status}
+				validation={validationStatus}
 				inputSize={size}
+				{...(registerName && register
+					? register(registerName, registerOptions)
+					: {})}
+				{...rest}
 			/>
-			{validation.msg ? (
+			{error?.message ? (
 				<InputValidation
-					validation={validation.status}
+					validation={validationStatus}
 					size={InputSizeToLinkSize(size)}
 				>
-					{validation.msg}
+					{error?.message}
 				</InputValidation>
 			) : (
 				<InputDesc size={InputSizeToLinkSize(size)}>
@@ -312,8 +241,4 @@ const InputValidation = styled(GLink)<IValidation>`
 	}}; ;
 `;
 
-function areEqual(prevProps: IInput, nextProps: IInput) {
-	return prevProps.value === nextProps.value;
-}
-
-export default memo(Input, areEqual);
+export default Input;

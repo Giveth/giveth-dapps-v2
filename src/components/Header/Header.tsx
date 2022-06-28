@@ -3,15 +3,13 @@ import { FC, useState, useEffect } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { Button, GLink } from '@giveth/ui-design-system';
+import { Button, GLink, IconGiveth } from '@giveth/ui-design-system';
 
 import { Flex } from '@/components/styled-components/Flex';
-import { ThemeType } from '@/context/theme.context';
 import { formatWeiHelper } from '@/helpers/number';
 import { networksParams } from '@/helpers/blockchain';
 import {
 	ConnectButton,
-	HBBalanceLogo,
 	HBContainer,
 	HBContent,
 	HBPic,
@@ -32,7 +30,6 @@ import {
 } from './Header.sc';
 import { RewardMenu } from '@/components/menu/RewardMenu';
 import MenuWallet from '@/components/menu/MenuWallet';
-import { ETheme, useGeneral } from '@/context/general.context';
 import { menuRoutes } from '../menu/menuRoutes';
 import { isUserRegistered, shortenAddress } from '@/lib/helpers';
 import HeaderRoutesResponsive from './HeaderResponsiveRoutes';
@@ -42,15 +39,16 @@ import {
 	useAppDispatch,
 	useAppSelector,
 } from '@/features/hooks';
+import { ETheme } from '@/features/general/general.slice';
 import {
 	setShowWalletModal,
 	setShowWelcomeModal,
 	setShowSignWithWallet,
 	setShowCompleteProfile,
-} from '@/features/modal/modal.sclie';
+} from '@/features/modal/modal.slice';
 
 export interface IHeader {
-	theme?: ThemeType;
+	theme?: ETheme;
 	show?: boolean;
 }
 
@@ -70,11 +68,10 @@ const Header: FC<IHeader> = () => {
 	const { isEnabled, isSignedIn, userData } = useAppSelector(
 		state => state.user,
 	);
-
-	const { theme } = useGeneral();
+	const theme = useAppSelector(state => state.general.theme);
 	const router = useRouter();
 
-	const showLinks = !isCreateRoute;
+	const isLight = theme === ETheme.Light;
 
 	useEffect(() => {
 		setIsGIVeconomyRoute(router.route.startsWith('/giv'));
@@ -176,7 +173,7 @@ const Header: FC<IHeader> = () => {
 					</>
 				)}
 			</Flex>
-			{showLinks && (
+			{!isCreateRoute && (
 				<HeaderLinks theme={theme}>
 					{menuRoutes.map((link, index) => (
 						<Link href={link.href[0]} passHref key={index}>
@@ -197,9 +194,7 @@ const Header: FC<IHeader> = () => {
 					<Button
 						label='CREATE A PROJECT'
 						size='small'
-						buttonType={
-							theme === ETheme.Light ? 'primary' : 'secondary'
-						}
+						buttonType={isLight ? 'primary' : 'secondary'}
 						onClick={handleCreateButton}
 					/>
 				</LargeCreateProject>
@@ -207,18 +202,8 @@ const Header: FC<IHeader> = () => {
 					<SmallCreateProject
 						onClick={handleCreateButton}
 						theme={theme}
-						label=''
-						icon={
-							<Image
-								src='/images/plus-white.svg'
-								width={16}
-								height={16}
-								alt='create project'
-							/>
-						}
-						linkType={
-							theme === ETheme.Light ? 'primary' : 'secondary'
-						}
+						label='+'
+						linkType={isLight ? 'primary' : 'secondary'}
 					/>
 				</SmallCreateProjectParent>
 				{active && account && chainId ? (
@@ -230,13 +215,7 @@ const Header: FC<IHeader> = () => {
 						>
 							<BalanceButton outline theme={theme}>
 								<HBContainer>
-									<HBBalanceLogo
-										src={'/images/logo/logo.svg'}
-										alt='Profile Pic'
-										width={'24px'}
-										height={'24px'}
-									/>
-
+									<IconGiveth size={24} />
 									<HBContent size='Big'>
 										{formatWeiHelper(balances.balance)}
 									</HBContent>
@@ -263,9 +242,8 @@ const Header: FC<IHeader> = () => {
 								<HBContainer>
 									<HBPic
 										src={
-											userData?.avatar
-												? userData.avatar
-												: '/images/placeholders/profile.png'
+											userData?.avatar ||
+											'/images/placeholders/profile.png'
 										}
 										alt='Profile Pic'
 										width={'24px'}
@@ -279,9 +257,8 @@ const Header: FC<IHeader> = () => {
 										<WBNetwork size='Tiny'>
 											Connected to{' '}
 											{networksParams[chainId]
-												? networksParams[chainId]
-														.chainName
-												: library?._network?.name}
+												?.chainName ||
+												library?._network?.name}
 										</WBNetwork>
 									</WBInfo>
 								</HBContainer>

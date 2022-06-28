@@ -6,4 +6,7 @@ export const Shadow = {
 	Dark: {
 		500: '0 3px 20px rgba(33, 32, 60, 0.24)',
 	},
+	Giv: {
+		400: '0 3px 20px rgba(83, 38, 236, 0.13)',
+	},
 };

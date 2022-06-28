@@ -7,10 +7,11 @@ import { createUploadLink } from 'apollo-upload-client';
 import merge from 'deepmerge';
 import isEqual from 'lodash.isequal';
 import { isSSRMode } from '@/lib/helpers';
-import links from '@/lib/constants/links';
 import StorageLabel from '@/lib/localStorage';
 import { store } from '@/features/store';
 import { signOut } from '@/features/user/user.thunks';
+import config from '@/configuration';
+import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 
 let apolloClient: any;
 
@@ -25,7 +26,7 @@ function createApolloClient() {
 	}
 
 	const httpLink = createUploadLink({
-		uri: links.BACKEND,
+		uri: config.BACKEND_LINK,
 	}) as unknown as ApolloLink;
 
 	const authLink = setContext((_, { headers }) => {
@@ -51,12 +52,15 @@ function createApolloClient() {
 				console.log(`[GraphQL error]: ${message}`, { locations, path });
 				if (message.toLowerCase().includes('authentication required')) {
 					//   removes token and user from store
-					store.dispatch(signOut());
+					store.dispatch(signOut()).finally(() => {
+						//show signin modal
+						store.dispatch(setShowSignWithWallet(true));
+					});
 				}
 			});
-
 		if (networkError) console.log(`[Network error]: ${networkError}`);
 		const { response } = operation.getContext();
+
 		if (
 			response?.status === 401 ||
 			response?.data?.errors[0]?.message === 'unAuthorized'

@@ -12,6 +12,7 @@ const BASE_ROUTE = 'https://mainnet.serve.giveth.io';
 
 const config: EnvConfig = {
 	BACKEND_LINK: 'https://mainnet.serve.giveth.io/graphql',
+	FRONTEND_LINK: 'https://giveth.io',
 	MAINNET_NETWORK_NUMBER: 1, // ETH
 	XDAI_NETWORK_NUMBER: 100, // xDAI
 	MICROSERVICES: {

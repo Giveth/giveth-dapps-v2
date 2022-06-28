@@ -43,7 +43,7 @@ const TestRoute = () => {
 	return (
 		<>
 			<Head>
-				<title>Terms of use | Giveth</title>
+				<Asghar />
 			</Head>
 			<TestContainer>
 				<button
@@ -85,3 +85,5 @@ export const getServerSideProps: GetServerSideProps = async context => {
 const TestContainer = styled.div`
 	padding: 200px;
 `;
+
+const Asghar = () => <title>Asghar kopak</title>;

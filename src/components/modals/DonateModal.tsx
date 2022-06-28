@@ -22,12 +22,12 @@ import { IMeGQL, IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { ISuccessDonation } from '@/components/views/donate/CryptoDonation';
 import { confirmDonation } from '@/components/views/donate/helpers';
 import { IModal } from '@/types/common';
+import { EDonationFailedType } from '@/components/modals/FailedDonation';
 import { client } from '@/apollo/apolloClient';
 import { VALIDATE_TOKEN } from '@/apollo/gql/gqlUser';
 import { useAppDispatch } from '@/features/hooks';
 import { signOut } from '@/features/user/user.thunks';
-import { setShowSignWithWallet } from '@/features/modal/modal.sclie';
-import { EDonationFailedType } from '@/components/modals/FailedDonation';
+import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 
 export interface IDonateModalProps extends IModal {
 	setFailedModalType: (i: EDonationFailedType) => void;
@@ -39,6 +39,8 @@ export interface IDonateModalProps extends IModal {
 	anonymous?: boolean;
 	setSuccessDonation: (i: ISuccessDonation) => void;
 	givBackEligible?: boolean;
+	mainProjectAddress?: string;
+	secondaryProjectAdress?: string;
 }
 
 const DonateModal = (props: IDonateModalProps) => {
@@ -79,7 +81,6 @@ const DonateModal = (props: IDonateModalProps) => {
 	};
 
 	const handleDonate = () => {
-		setDonating(true);
 		confirmDonation({
 			...props,
 			setDonationSaved,

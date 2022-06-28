@@ -7,6 +7,7 @@ import { captureException } from '@sentry/nextjs';
 import UNISWAP_V3_STAKER_ABI from '@/artifacts/uniswap_v3_staker.json';
 import { StakingType, UniswapV3PoolStakingConfig } from '@/types/config';
 import config from '@/configuration';
+import { MAX_TOKEN_ORDER } from './constants/tokens';
 
 const { abi: UniswapV3PoolABI } = UniswapV3PoolJson;
 const { abi: NonfungiblePositionManagerABI } = NonfungiblePositionManagerJson;
@@ -87,6 +88,7 @@ export async function getERC20Info({
 			address: contractAddress,
 			networkId,
 			decimals,
+			order: MAX_TOKEN_ORDER,
 		};
 		console.log({ ERC20Info });
 

@@ -1,19 +1,27 @@
-import { ChangeEvent, FC, useEffect, useReducer, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { H6, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 import { captureException } from '@sentry/nextjs';
+import { useForm } from 'react-hook-form';
+import { useWeb3React } from '@web3-react/core';
 import { UPDATE_USER } from '@/apollo/gql/gqlUser';
-import Input, {
-	IFormValidations,
-	InputValidationType,
-} from '@/components/Input';
 import { SkipOnboardingModal } from '@/components/modals/SkipOnboardingModal';
 import { gToast, ToastType } from '@/components/toasts';
-import { IStep, OnboardActions, OnboardStep } from './common';
+import {
+	IStep,
+	OnboardActionsContianer,
+	OnboardStep,
+	SaveButton,
+	SkipButton,
+} from './common';
 import { OnboardSteps } from './Onboarding.view';
 import { Col, Row } from '@/components/Grid';
+import Input from '@/components/Input';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { setShowSignWithWallet } from '@/features/modal/modal.slice';
+import { fetchUserByAddress } from '@/features/user/user.thunks';
 
 export interface IUserInfo {
 	email: string;
@@ -23,59 +31,40 @@ export interface IUserInfo {
 	url: string;
 }
 
-const initialUserInfo: IUserInfo = {
-	email: '',
-	firstName: '',
-	lastName: '',
-	location: '',
-	url: '',
-};
-
 const InfoStep: FC<IStep> = ({ setStep }) => {
 	const [disabled, setDisabled] = useState(false);
 	const [updateUser] = useMutation(UPDATE_USER);
 	const [showModal, setShowModal] = useState(false);
-	const [formValidation, setFormValidation] = useState<IFormValidations>();
-	const [info, setInfo] = useReducer(
-		(curValues: IUserInfo, newValues: object) => ({
-			...curValues,
-			...newValues,
-		}),
-		initialUserInfo,
-	);
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<IUserInfo>();
+	const dispatch = useAppDispatch();
+	const isSignedIn = useAppSelector(state => state.user.isSignedIn);
+	const { account } = useWeb3React();
 
 	useEffect(() => {
-		if (formValidation) {
-			const fvs = Object.values(formValidation);
-			setDisabled(!fvs.every(fv => fv === InputValidationType.NORMAL));
+		if (!isSignedIn) {
+			dispatch(setShowSignWithWallet(true));
 		}
-	}, [formValidation]);
+	}, [isSignedIn]);
 
 	const handleLater = () => {
 		setShowModal(true);
 	};
 
-	const { email, firstName, lastName, location, url } = info;
-
-	const reducerInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-		const { name, value } = e.target;
-		setInfo({ [name]: value });
-	};
-
-	const onSave = async () => {
+	const onSave = async (formData: IUserInfo) => {
 		setDisabled(true);
 		try {
 			const { data: response } = await updateUser({
 				variables: {
-					email,
-					firstName,
-					lastName,
-					location,
-					url,
+					...formData,
 				},
 			});
 			if (response.updateUser) {
 				setStep(OnboardSteps.PHOTO);
+				account && dispatch(fetchUserByAddress(account));
 				gToast('Profile information updated.', {
 					type: ToastType.SUCCESS,
 					title: 'Success',
@@ -102,92 +91,116 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 	return (
 		<>
 			<OnboardStep xs={12} xl={8} sm={12}>
-				<SectionHeader>What should we call you?</SectionHeader>
-				<Section>
-					<Col xs={12} md={6}>
-						<Input
-							label='first name'
-							placeholder='John'
-							name='firstName'
-							value={firstName}
-							onChange={reducerInputChange}
-							setFormValidation={setFormValidation}
-							required
-						/>
-					</Col>
-					<Col xs={12} md={6}>
-						<Input
-							label='last name'
-							placeholder='Doe'
-							name='lastName'
-							value={lastName}
-							onChange={reducerInputChange}
-							setFormValidation={setFormValidation}
-							required
-						/>
-					</Col>
-					<Col xs={12} md={6}>
-						<Input
-							label='email'
-							placeholder='Example@Domain.com'
-							name='email'
-							value={email}
-							onChange={reducerInputChange}
-							type='email'
-							required
-							setFormValidation={setFormValidation}
-							validators={[
-								{ pattern: /^.{3,}$/, msg: 'Too Short' },
-								{
-									pattern:
-										/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-									msg: 'Invalid Email Address',
-								},
-							]}
-						/>
-					</Col>
-				</Section>
-				<SectionHeader>Where are you?</SectionHeader>
-				<Section>
-					<Col xs={12} md={6}>
-						<Input
-							label='location (optional)'
-							placeholder='Portugal, Turkey,...'
-							name='location'
-							value={location}
-							onChange={reducerInputChange}
-						/>
-					</Col>
-				</Section>
-				<SectionHeader>
-					Personal website or URL to somewhere special?
-				</SectionHeader>
-				<Section>
-					<Col xs={12} md={6}>
-						<Input
-							label='website or url'
-							placeholder='Website'
-							name='url'
-							onChange={reducerInputChange}
-							type='url'
-							caption='Your home page, blog, or company site.'
-							value={url}
-							validators={[
-								{
-									pattern:
-										/^(?:http(s)?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
-									msg: 'Invalid URL',
-								},
-							]}
-						/>
-					</Col>
-				</Section>
-				<OnboardActions
-					onSave={onSave}
-					saveLabel='SAVE & CONTINUE'
-					onLater={handleLater}
-					disabled={disabled}
-				/>
+				<form onSubmit={handleSubmit(onSave)}>
+					<SectionHeader>What should we call you?</SectionHeader>
+					<Section>
+						<Col xs={12} md={6}>
+							<Input
+								registerName='firstName'
+								label='first name'
+								placeholder='John'
+								register={register}
+								registerOptions={{
+									required: {
+										value: true,
+										message: 'First name is required',
+									},
+								}}
+								error={errors.firstName}
+							/>
+						</Col>
+						<Col xs={12} md={6}>
+							<Input
+								label='last name'
+								placeholder='Doe'
+								registerName='lastName'
+								register={register}
+								registerOptions={{
+									required: {
+										value: true,
+										message: 'Last name is required',
+									},
+								}}
+								error={errors.lastName}
+							/>
+						</Col>
+						<Col xs={12} md={6}>
+							<Input
+								registerName='email'
+								label='email'
+								placeholder='Example@Domain.com'
+								register={register}
+								type='email'
+								registerOptions={{
+									required: {
+										value: true,
+										message: 'Email is required',
+									},
+									pattern: {
+										value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+										message: 'Invalid Email Address',
+									},
+									minLength: {
+										value: 3,
+										message: 'Too Short',
+									},
+								}}
+								error={errors.email}
+							/>
+						</Col>
+					</Section>
+					<SectionHeader>Where are you?</SectionHeader>
+					<Section>
+						<Col xs={12} md={6}>
+							<Input
+								label='location (optional)'
+								placeholder='Portugal, Turkey,...'
+								registerName='location'
+								register={register}
+							/>
+						</Col>
+					</Section>
+					<SectionHeader>
+						Personal website or URL to somewhere special?
+					</SectionHeader>
+					<Section>
+						<Col xs={12} md={6}>
+							<Input
+								label='website or url'
+								placeholder='Website'
+								registerName='url'
+								register={register}
+								type='url'
+								caption='Your home page, blog, or company site.'
+								registerOptions={{
+									pattern: {
+										value: /^(?:http(s)?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
+										message: 'Invalid URL',
+									},
+								}}
+								error={errors.url}
+							/>
+						</Col>
+					</Section>
+					<OnboardActionsContianer>
+						<Col xs={12} md={7}>
+							<SaveButton
+								label='SAVE & CONTINUE'
+								disabled={disabled}
+								size='medium'
+								type='submit'
+							/>
+						</Col>
+						<Col xs={12} md={2}>
+							<SkipButton
+								label='Do it later'
+								size='medium'
+								buttonType='texty'
+								onClick={handleLater}
+							/>
+						</Col>
+					</OnboardActionsContianer>
+				</form>
 			</OnboardStep>
 			{showModal && <SkipOnboardingModal setShowModal={setShowModal} />}
 		</>

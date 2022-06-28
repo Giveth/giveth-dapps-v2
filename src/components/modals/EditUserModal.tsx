@@ -1,10 +1,11 @@
-import React, { ChangeEvent, useEffect, useReducer, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { useMutation } from '@apollo/client';
 import { Button, brandColors } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import { useWeb3React } from '@web3-react/core';
+import { useForm } from 'react-hook-form';
 import { Modal } from './Modal';
 import { client } from '@/apollo/apolloClient';
 import { UPDATE_USER } from '@/apollo/gql/gqlUser';
@@ -12,16 +13,11 @@ import { IUser } from '@/apollo/types/types';
 import { FlexCenter, Flex } from '@/components/styled-components/Flex';
 import ImageUploader from '../ImageUploader';
 import { gToast, ToastType } from '../toasts';
-import Input, {
-	IFormValidations,
-	InputSize,
-	InputValidationType,
-} from '../Input';
-import { IUserInfo } from '../views/onboarding/InfoStep';
 import { mediaQueries } from '@/lib/constants/constants';
 import { IModal } from '@/types/common';
 import { useAppDispatch } from '@/features/hooks';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
+import Input, { InputSize } from '../Input';
 
 enum EditStatusType {
 	INFO,
@@ -32,42 +28,28 @@ interface IEditUserModal extends IModal {
 	user: IUser;
 }
 
+type Inputs = {
+	firstName: string;
+	lastName: string;
+	location: string;
+	email: string;
+	url: string;
+};
+
 const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 	const [disabled, setDisabled] = useState(false);
 	const [editStatus, setEditStatus] = useState<EditStatusType>(
 		EditStatusType.INFO,
 	);
 	const [avatar, setAvatar] = useState<string>('');
-	const [formValidation, setFormValidation] = useState<IFormValidations>();
-	const [info, setInfo] = useReducer(
-		(curValues: IUserInfo, newValues: object) => ({
-			...curValues,
-			...newValues,
-		}),
-		{
-			firstName: user.firstName || '',
-			lastName: user.lastName || '',
-			location: user.location || '',
-			email: user.email || '',
-			url: user.url || '',
-		},
-	);
-
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<Inputs>();
 	const dispatch = useAppDispatch();
 	const { account } = useWeb3React();
 	const [updateUser] = useMutation(UPDATE_USER);
-
-	useEffect(() => {
-		if (formValidation) {
-			const fvs = Object.values(formValidation);
-			setDisabled(!fvs.every(fv => fv === InputValidationType.NORMAL));
-		}
-	}, [formValidation]);
-
-	const reducerInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-		const { name, value } = e.target;
-		setInfo({ [name]: value });
-	};
 
 	const onSaveAvatar = async () => {
 		try {
@@ -100,13 +82,13 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 		}
 	};
 
-	const handleSubmit = async () => {
+	const onSubmit = async (formData: Inputs) => {
 		setDisabled(true);
 		try {
 			const { data } = await client.mutate({
 				mutation: UPDATE_USER,
 				variables: {
-					...info,
+					...formData,
 				},
 			});
 			if (data.updateUser) {
@@ -190,35 +172,38 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 								/>
 							</FlexCenter>
 						</FlexCenter>
-						<InputWrapper>
-							{inputFields.map(field => (
-								<Input
-									key={field.name}
-									onChange={reducerInputChange}
-									name={field.name}
-									placeholder={field.placeholder}
-									value={(info as any)[field.name]}
-									label={field.label}
-									caption={field.caption}
-									type={field.type}
-									validators={field.validators}
-									setFormValidation={setFormValidation}
-									size={InputSize.SMALL}
-									required={field.required}
+						<form onSubmit={handleSubmit(onSubmit)}>
+							<InputWrapper>
+								{inputFields.map(field => (
+									<Input
+										defaultValue={(user as any)[field.name]}
+										key={field.name}
+										registerName={field.name}
+										label={field.label}
+										placeholder={field.placeholder}
+										caption={field.caption}
+										size={InputSize.SMALL}
+										register={register}
+										error={(errors as any)[field.name]}
+										registerOptions={{
+											required: field.required,
+											...field.validators,
+										}}
+									/>
+								))}
+								<Button
+									buttonType='secondary'
+									label='SAVE'
+									disabled={disabled}
+									type='submit'
 								/>
-							))}
-							<Button
-								buttonType='secondary'
-								label='SAVE'
-								disabled={disabled}
-								onClick={handleSubmit}
-							/>
-							<TextButton
-								buttonType='texty'
-								label='cancel'
-								onClick={() => setShowModal(false)}
-							/>
-						</InputWrapper>
+								<TextButton
+									buttonType='texty'
+									label='cancel'
+									onClick={() => setShowModal(false)}
+								/>
+							</InputWrapper>
+						</form>
 					</>
 				)}
 			</Wrapper>
@@ -231,28 +216,36 @@ const inputFields = [
 		label: 'first name',
 		placeholder: 'John',
 		name: 'firstName',
-		required: true,
+		required: {
+			value: true,
+			message: 'First name is required',
+		},
 	},
 	{
 		label: 'last name',
 		placeholder: 'Doe',
 		name: 'lastName',
-		required: true,
+		required: {
+			value: true,
+			message: 'Last name is required',
+		},
 	},
 	{
 		label: 'email',
 		placeholder: 'Example@Domain.com',
 		name: 'email',
 		type: 'email',
-		required: true,
-		validators: [
-			{ pattern: /^.{3,}$/, msg: 'Too Short' },
-			{
-				pattern:
-					/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-				msg: 'Invalid Email Address',
+		required: {
+			value: true,
+			message: 'Email is required',
+		},
+		validators: {
+			minLength: { value: 3, message: 'Too Short' },
+			pattern: {
+				value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+				message: 'Invalid Email Address',
 			},
-		],
+		},
 	},
 	{
 		label: 'location (optional)',
@@ -265,13 +258,12 @@ const inputFields = [
 		name: 'url',
 		type: 'url',
 		caption: 'Your home page, blog, or company site.',
-		validators: [
-			{
-				pattern:
-					/^(?:http(s)?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
-				msg: 'Invalid URL',
+		validators: {
+			pattern: {
+				value: /^(?:http(s)?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
+				message: 'Invalid URL',
 			},
-		],
+		},
 	},
 ];
 

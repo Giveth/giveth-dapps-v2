@@ -1,25 +1,23 @@
-import Head from 'next/head';
 import { useEffect } from 'react';
 
 import GIVstreamView from '@/components/views/Stream.view';
-import { useGeneral, ETheme } from '@/context/general.context';
 import { givstreamMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
+import { setDarkTheme, setLightTheme } from '@/features/general/general.slice';
+import { useAppDispatch } from '@/features/hooks';
 
 export default function GIVstreamRoute() {
-	const { setTheme } = useGeneral();
+	const dispatch = useAppDispatch();
 
 	useEffect(() => {
-		setTheme(ETheme.Dark);
+		dispatch(setDarkTheme());
 		return () => {
-			setTheme(ETheme.Light);
+			dispatch(setLightTheme());
 		};
-	}, [setTheme]);
+	}, [dispatch]);
 	return (
 		<>
-			<Head>
-				<GeneralMetatags info={givstreamMetatags} />
-			</Head>
+			<GeneralMetatags info={givstreamMetatags} />
 			<GIVstreamView />
 		</>
 	);

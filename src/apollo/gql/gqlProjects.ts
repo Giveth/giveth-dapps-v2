@@ -106,7 +106,11 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 			description
 			verified
 			traceCampaignId
-			walletAddress
+			addresses {
+				address
+				isRecipient
+				networkId
+			}
 			totalProjectUpdates
 			totalDonations
 			totalTraceDonations
@@ -145,7 +149,11 @@ export const FETCH_PROJECT_BY_ID = gql`
 			title
 			image
 			description
-			walletAddress
+			addresses {
+				address
+				isRecipient
+				networkId
+			}
 			impactLocation
 			categories {
 				name
@@ -260,7 +268,11 @@ export const FETCH_USER_LIKED_PROJECTS = gql`
 				slug
 				creationDate
 				admin
-				walletAddress
+				addresses {
+					address
+					isRecipient
+					networkId
+				}
 				impactLocation
 				listed
 				totalDonations
@@ -307,7 +319,10 @@ export const CREATE_PROJECT = gql`
 			image
 			impactLocation
 			slug
-			walletAddress
+			addresses {
+				address
+				networkId
+			}
 			categories {
 				name
 			}
@@ -316,7 +331,7 @@ export const CREATE_PROJECT = gql`
 `;
 
 export const UPDATE_PROJECT = gql`
-	mutation ($projectId: Float!, $newProjectData: CreateProjectInput!) {
+	mutation ($projectId: Float!, $newProjectData: UpdateProjectInput!) {
 		updateProject(projectId: $projectId, newProjectData: $newProjectData) {
 			id
 			title
@@ -329,7 +344,10 @@ export const UPDATE_PROJECT = gql`
 				name
 				walletAddress
 			}
-			walletAddress
+			addresses {
+				address
+				networkId
+			}
 			impactLocation
 			categories {
 				name
@@ -397,6 +415,7 @@ export const PROJECT_ACCEPTED_TOKENS = gql`
 			decimals
 			mainnetAddress
 			isGivbackEligible
+			order
 		}
 	}
 `;

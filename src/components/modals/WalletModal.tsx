@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { brandColors, H5, Lead, neutralColors } from '@giveth/ui-design-system';
 
 import { captureException } from '@sentry/nextjs';
+import { useRouter } from 'next/router';
 import {
 	EWallets,
 	IWallet,
@@ -13,16 +14,17 @@ import {
 	walletsArray,
 } from '@/lib/wallet/walletTypes';
 import { Modal } from '@/components/modals/Modal';
-import { ETheme } from '@/context/general.context';
-import { detectBrave, showToastError } from '@/lib/helpers';
+import { ETheme } from '@/features/general/general.slice';
+import { detectBrave, isGivEconomyRoute, showToastError } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
 import LowerShields from '@/components/modals/LowerShields';
 import { IModal } from '@/types/common';
-import { setShowFirstWelcomeModal } from '@/features/modal/modal.sclie';
+import { setShowFirstWelcomeModal } from '@/features/modal/modal.slice';
 import { useAppDispatch } from '@/features/hooks';
 
 const WalletModal: FC<IModal> = ({ setShowModal }) => {
 	const [showLowerShields, setShowLowerShields] = useState<boolean>();
+	const router = useRouter();
 
 	const context = useWeb3React();
 	const { activate, deactivate } = context;
@@ -41,7 +43,16 @@ const WalletModal: FC<IModal> = ({ setShowModal }) => {
 				localStorage.setItem(StorageLabel.WALLET, selected.value);
 				activate(selected.connector, showToastError, true)
 					.then(() => {
-						dispatch(setShowFirstWelcomeModal(true));
+						const isGIVeconomyRoute = isGivEconomyRoute(
+							router.route,
+						);
+						const isModalShowedBefor =
+							localStorage.getItem(
+								StorageLabel.FIRSTMODALSHOWED,
+							) === '1';
+						if (!isGIVeconomyRoute && !isModalShowedBefor) {
+							dispatch(setShowFirstWelcomeModal(true));
+						}
 					})
 					.catch(error => {
 						showToastError(error);

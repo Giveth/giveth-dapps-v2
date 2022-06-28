@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import { useEffect, useState } from 'react';
 
 import HomeIndex from '@/components/views/homepage/HomeIndex';
@@ -49,9 +48,7 @@ const HomeRoute = (props: IHomeRoute) => {
 
 	return (
 		<>
-			<Head>
-				<GeneralMetatags info={homeMetatags} />
-			</Head>
+			<GeneralMetatags info={homeMetatags} />
 			<HomeIndex projects={projects} totalCount={totalCount} />
 		</>
 	);
@@ -63,14 +60,22 @@ export async function getServerSideProps({ res }: any) {
 		'public, s-maxage=10, stale-while-revalidate=59',
 	);
 
-	const { projects, totalCount } = await fetchProjects();
-
-	return {
-		props: {
-			projects,
-			totalCount,
-		},
-	};
+	try {
+		const { projects, totalCount } = await fetchProjects();
+		return {
+			props: {
+				projects,
+				totalCount,
+			},
+		};
+	} catch (error) {
+		return {
+			redirect: {
+				destination: '/maintenance',
+				permanent: false,
+			},
+		};
+	}
 }
 
 export default HomeRoute;

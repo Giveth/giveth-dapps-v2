@@ -1,26 +1,24 @@
-import Head from 'next/head';
 import { useEffect } from 'react';
 
 import HomeView from '@/components/views/Home.view';
-import { ETheme, useGeneral } from '@/context/general.context';
 import { giveconomyMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
+import { setDarkTheme, setLightTheme } from '@/features/general/general.slice';
+import { useAppDispatch } from '@/features/hooks';
 
 export default function GIVeconomyRoute() {
-	const { setTheme } = useGeneral();
+	const dispatch = useAppDispatch();
 
 	useEffect(() => {
-		setTheme(ETheme.Dark);
+		dispatch(setDarkTheme());
 		return () => {
-			setTheme(ETheme.Light);
+			dispatch(setLightTheme());
 		};
-	}, [setTheme]);
+	}, [dispatch]);
 
 	return (
 		<>
-			<Head>
-				<GeneralMetatags info={giveconomyMetatags} />
-			</Head>
+			<GeneralMetatags info={giveconomyMetatags} />
 			<HomeView />
 		</>
 	);

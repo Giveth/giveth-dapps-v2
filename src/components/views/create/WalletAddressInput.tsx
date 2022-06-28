@@ -11,36 +11,55 @@ import {
 import { compareAddresses } from '@/lib/helpers';
 import { ECreateErrFields } from '@/components/views/create/CreateProject';
 import { useAppSelector } from '@/features/hooks';
+import config from '@/configuration';
 
 const WalletAddressInput = (props: {
-	value: string;
+	title: string;
+	networkId: number;
+	value?: string;
 	setValue: (e: string) => void;
 	error: string;
 }) => {
-	const { value, setValue, error } = props;
+	const { value, setValue, title, networkId, error } = props;
 	const user = useAppSelector(state => state.user?.userData);
 	const isDefaultAddress = compareAddresses(value, user?.walletAddress);
+	const isGnosis = networkId === config.SECONDARY_NETWORK.id;
 
 	return (
 		<>
-			<H5 id={ECreateErrFields.WALLET_ADDRESS}>Receiving funds</H5>
-			<div>
-				<CaptionContainer>
-					You can set a custom Ethereum address or ENS to receive
-					donations.{' '}
-				</CaptionContainer>
-			</div>
+			<H5
+				id={
+					networkId
+						? ECreateErrFields.MAIN_WALLET_ADDRESS
+						: ECreateErrFields.SECONDARY_WALLET_ADDRESS
+				}
+			>
+				{title}
+			</H5>
+			{networkId === config.PRIMARY_NETWORK.id && (
+				<div>
+					<CaptionContainer>
+						You can set a custom Ethereum address or ENS to receive
+						donations.{' '}
+					</CaptionContainer>
+				</div>
+			)}
 
 			<InputContainer>
-				<TinyLabel>Receiving address</TinyLabel>
 				<InputWithError
 					placeholder='My Wallet Address'
 					onChange={e => setValue(e.target.value)}
 					value={value}
 					error={!!error}
-					disabled={isDefaultAddress && !error}
+					// disabled={isDefaultAddress && !error} // why are we doing this?
 				/>
 				<InputErrorMessage>{error || null}</InputErrorMessage>
+				{isGnosis && (
+					<TinyLabel>
+						Please DO NOT enter exchange addresses for this network.
+						<br />
+					</TinyLabel>
+				)}
 				{isDefaultAddress && (
 					<TinyLabel>
 						This is the default wallet address associated with your

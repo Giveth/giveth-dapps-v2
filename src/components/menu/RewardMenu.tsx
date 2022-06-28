@@ -26,10 +26,10 @@ import { WhatisStreamModal } from '@/components/modals/WhatisStream';
 import { getGivStakingConfig } from '@/helpers/networkProvider';
 import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
 import { getUserStakeInfo } from '@/lib/stakingPool';
-import { ETheme, useGeneral } from '@/context/general.context';
 import Routes from '@/lib/constants/Routes';
 import { networkInfo } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
+import { ETheme } from '@/features/general/general.slice';
 
 interface IRewardMenu {
 	showWhatIsGIVstreamModal: boolean;
@@ -48,7 +48,7 @@ export const RewardMenu = ({
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const { chainId } = useWeb3React();
-	const { theme } = useGeneral();
+	const theme = useAppSelector(state => state.general.theme);
 
 	const { givbackLiquidPart } = currentValues.balances;
 	const { networkName } = networkInfo(chainId);

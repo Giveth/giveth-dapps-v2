@@ -11,12 +11,13 @@ import {
 } from '@giveth/ui-design-system';
 
 import { Modal } from '@/components/modals/Modal';
-import { ETheme, useGeneral } from '@/context/general.context';
 import Routes from '@/lib/constants/Routes';
 import { IModal } from '@/types/common';
+import { useAppSelector } from '@/features/hooks';
+import { ETheme } from '@/features/general/general.slice';
 
 export const CompleteProfileModal: FC<IModal> = ({ setShowModal }) => {
-	const { theme } = useGeneral();
+	const theme = useAppSelector(state => state.general.theme);
 
 	const handleClick = () => {
 		router.push(Routes.Onboard);

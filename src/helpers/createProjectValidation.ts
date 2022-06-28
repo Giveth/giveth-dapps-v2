@@ -9,6 +9,7 @@ import {
 	ECreateErrFields,
 	ICreateProjectErrors,
 } from '@/components/views/create/CreateProject';
+import config from '@/configuration';
 
 export const titleValidation = (
 	title: string,
@@ -49,9 +50,14 @@ export const walletAddressValidation = (
 	errors: ICreateProjectErrors,
 	setErrors: (arg0: ICreateProjectErrors) => void,
 	chainId?: number,
+	networkId?: number,
 ) => {
 	const _errors = { ...errors };
 	let address = walletAddress;
+	const isMain = networkId === config.PRIMARY_NETWORK.id;
+	const errorField = isMain
+		? ECreateErrFields.MAIN_WALLET_ADDRESS
+		: ECreateErrFields.SECONDARY_WALLET_ADDRESS;
 
 	const queryFunc = () =>
 		client
@@ -62,11 +68,11 @@ export const walletAddressValidation = (
 				},
 			})
 			.then(() => {
-				_errors[ECreateErrFields.WALLET_ADDRESS] = '';
+				_errors[errorField] = '';
 				setErrors(_errors);
 			})
 			.catch((err: any) => {
-				_errors[ECreateErrFields.WALLET_ADDRESS] = err.message;
+				_errors[errorField] = err.message;
 				setErrors(_errors);
 
 				captureException(err, {
@@ -77,16 +83,20 @@ export const walletAddressValidation = (
 			});
 
 	if (isAddressENS(walletAddress)) {
+		if (networkId !== config.PRIMARY_NETWORK.id) {
+			_errors[errorField] = 'ENS is only supported on Ethereum Mainnet';
+			setErrors(_errors);
+			return;
+		}
 		if (chainId !== 1) {
-			_errors[ECreateErrFields.WALLET_ADDRESS] =
-				'ENS is only supported on Ethereum Mainnet';
+			_errors[errorField] =
+				'Please switch to the Ethereum Mainnet to handle ENS';
 			setErrors(_errors);
 			return;
 		}
 		getAddressFromENS(walletAddress, web3).then((addr: string) => {
 			if (!addr) {
-				_errors[ECreateErrFields.WALLET_ADDRESS] =
-					'Invalid ENS address';
+				_errors[errorField] = 'Invalid ENS address';
 				setErrors(_errors);
 				return;
 			}
@@ -94,7 +104,7 @@ export const walletAddressValidation = (
 			queryFunc();
 		});
 	} else if (walletAddress.length !== 42) {
-		_errors[ECreateErrFields.WALLET_ADDRESS] = 'Eth address not valid';
+		_errors[errorField] = 'Eth address not valid';
 		setErrors(_errors);
 		return;
 	} else {
