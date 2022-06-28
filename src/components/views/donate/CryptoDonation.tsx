@@ -498,9 +498,11 @@ const CryptoDonation = (props: {
 					/>
 					<AnotherWalletTxt>
 						Want to use another wallet?{' '}
-						<a onClick={() => dispatch(setShowWalletModal(true))}>
+						<span
+							onClick={() => dispatch(setShowWalletModal(true))}
+						>
 							Change Wallet
-						</a>
+						</span>
 					</AnotherWalletTxt>
 				</>
 			)}
@@ -599,7 +601,7 @@ const AnotherWalletTxt = styled(GLink)`
 	color: ${neutralColors.gray[800]};
 	padding: 16px 0;
 	text-align: center;
-	> a {
+	> span {
 		color: ${brandColors.pinky[500]};
 		cursor: pointer;
 	}
