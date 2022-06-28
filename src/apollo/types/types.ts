@@ -60,7 +60,7 @@ export interface IProjectEdition {
 	image?: string;
 	description?: string;
 	walletAddress?: string;
-	addresses?: any;
+	addresses?: IWalletAddress[];
 	impactLocation?: string;
 	categories: ICategory[];
 	adminUser: {
@@ -79,7 +79,7 @@ export interface IProjectCreation {
 	categories: any;
 	organisationId: number;
 	walletAddress?: string;
-	addresses?: any;
+	addresses?: IWalletAddress[];
 	image?: string;
 	isDraft?: boolean;
 }

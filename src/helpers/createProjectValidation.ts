@@ -50,10 +50,11 @@ export const walletAddressValidation = (
 	errors: ICreateProjectErrors,
 	setErrors: (arg0: ICreateProjectErrors) => void,
 	chainId?: number,
+	networkId?: number,
 ) => {
 	const _errors = { ...errors };
 	let address = walletAddress;
-	const isMain = chainId === config.PRIMARY_NETWORK.id;
+	const isMain = networkId === config.PRIMARY_NETWORK.id;
 	const errorField = isMain
 		? ECreateErrFields.MAIN_WALLET_ADDRESS
 		: ECreateErrFields.SECONDARY_WALLET_ADDRESS;
@@ -82,8 +83,14 @@ export const walletAddressValidation = (
 			});
 
 	if (isAddressENS(walletAddress)) {
-		if (chainId !== 1) {
+		if (networkId !== config.PRIMARY_NETWORK.id) {
 			_errors[errorField] = 'ENS is only supported on Ethereum Mainnet';
+			setErrors(_errors);
+			return;
+		}
+		if (chainId !== 1) {
+			_errors[errorField] =
+				'Please switch to the Ethereum Mainnet to handle ENS';
 			setErrors(_errors);
 			return;
 		}
