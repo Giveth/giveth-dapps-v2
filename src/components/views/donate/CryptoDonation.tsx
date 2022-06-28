@@ -143,8 +143,12 @@ const CryptoDonation = (props: {
 
 	useEffect(() => {
 		if (networkId && acceptedTokens) {
-			const filteredTokens = filterTokens(acceptedTokens, networkId);
-			const networkIds = getNetworkIds(acceptedTokens);
+			const networkIds = getNetworkIds(acceptedTokens, project.addresses);
+			const filteredTokens = filterTokens(
+				acceptedTokens,
+				networkId,
+				networkIds,
+			);
 			setAcceptedChains(networkIds);
 			if (filteredTokens.length < 1) {
 				setShowChangeNetworkModal(true);
