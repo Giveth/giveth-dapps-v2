@@ -1,6 +1,6 @@
 import React, { FC, useEffect } from 'react';
 import styled from 'styled-components';
-import { H4, B, brandColors, Caption } from '@giveth/ui-design-system';
+import { P, H4, brandColors, Caption } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 
 import { mediaQueries } from '@/lib/constants/constants';
@@ -42,7 +42,10 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = ({
 					</>
 				)}
 				<Title>Switch to {NetworkName}</Title>
-				<B>Please switch your wallet network to {NetworkName}.</B>
+				<P>
+					This project doesn't accept donations in your connected
+					network. Please switch your wallet network to {NetworkName}.
+				</P>
 				<SwitchCaption
 					onClick={() => switchNetwork(config.PRIMARY_NETWORK.id)}
 				>
