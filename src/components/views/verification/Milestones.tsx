@@ -56,7 +56,9 @@ export default function Milestones() {
 							mission: formData.mission,
 							achievedMilestones: formData.achievedMilestones,
 							achievedMilestonesProof:
-								formData.achievedMilestonesProof,
+								formData.achievedMilestonesProof
+									? formData.achievedMilestonesProof
+									: '',
 						},
 					},
 				},

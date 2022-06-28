@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import Image from 'next/image';
 import {
 	neutralColors,
 	semanticColors,
@@ -8,7 +7,6 @@ import {
 import { useState } from 'react';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
-import BulbIcon from '/public/images/icons/lightbulb.svg';
 import ContentSelector from '@/components/views/verification/ContentSelector';
 import HintModal from '@/components/views/verification/HintModal';
 import { Col, Row } from '@/components/Grid';
@@ -32,9 +30,9 @@ const VerificationIndex = () => {
 							Auto save
 							<SaveCircle />
 						</SaveSection>
-						<GuideSection onClick={() => setShowModal(true)}>
+						{/* <GuideSection onClick={() => setShowModal(true)}>
 							<Image src={BulbIcon} alt='light bulb' />
-						</GuideSection>
+						</GuideSection> */}
 					</AbsoluteSection>
 					<ContentSelector />
 				</ContentSection>

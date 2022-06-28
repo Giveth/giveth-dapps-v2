@@ -19,6 +19,7 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { requiredOptions } from '@/lib/constants/regex';
 import { isObjEmpty } from '@/lib/helpers';
 import DescriptionInput from '@/components/DescriptionInput';
+import ImageUploader from '@/components/ImageUploader';
 
 enum ERegistryType {
 	NOT_SELECTED = 'notSelected',
@@ -31,6 +32,7 @@ enum ERegistry {
 	country = 'country',
 	description = 'description',
 	isNonProfit = 'isNonProfit',
+	organizationPhoto = 'organizationPhoto',
 }
 
 interface IOption {
@@ -43,6 +45,7 @@ interface IRegistryForm {
 	[ERegistry.country]: IOption;
 	[ERegistry.description]: string;
 	[ERegistry.isNonProfit]: ERegistryType;
+	[ERegistry.organizationPhoto]: string;
 }
 
 export default function ProjectRegistry() {
@@ -56,6 +59,7 @@ export default function ProjectRegistry() {
 		organizationWebsite,
 	} = projectRegistry || {};
 	const [countries, setCountries] = useState<IOption[]>([]);
+	const [uploading, setUploading] = useState(false);
 
 	const {
 		register,
@@ -232,6 +236,18 @@ export default function ProjectRegistry() {
 								defaultValue={organizationWebsite || ''}
 							/>
 						</InputContainer>
+						<Controller
+							control={control}
+							name='organizationPhoto'
+							// defaultValue={milestones?.achievedMilestonesProof}
+							render={({ field }) => (
+								<ImageUploader
+									url={field.value || ''}
+									setUrl={url => field.onChange(url)}
+									setIsUploading={setUploading}
+								/>
+							)}
+						/>
 					</>
 				)}
 
@@ -266,6 +282,7 @@ export default function ProjectRegistry() {
 						loading={isSubmitting}
 						label='NEXT     >'
 						type='submit'
+						disabled={uploading}
 					/>
 				</BtnContainer>
 			</div>
