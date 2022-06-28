@@ -87,6 +87,7 @@ export async function getERC20Info({
 			address: contractAddress,
 			networkId,
 			decimals,
+			order: 10000,
 		};
 		console.log({ ERC20Info });
 
