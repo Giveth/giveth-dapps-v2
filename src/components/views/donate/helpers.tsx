@@ -10,6 +10,7 @@ import { IDonateModalProps } from '@/components/modals/DonateModal';
 import { EDonationStatus } from '@/apollo/types/gqlEnums';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
 import config from '@/configuration';
+import { MAX_TOKEN_ORDER } from '@/lib/constants/tokens';
 
 export interface ISelectedToken extends IProjectAcceptedToken {
 	value?: IProjectAcceptedToken;
@@ -24,8 +25,8 @@ export const prepareTokenList = (tokens: IProjectAcceptedToken[]) => {
 	let givIndex: number | undefined;
 	const _tokens: ISelectedToken[] = [...tokens];
 	_tokens.sort((t1, t2) => {
-		const t1Order = t1.order || 10000;
-		const t2Order = t2.order || 10000;
+		const t1Order = t1.order || MAX_TOKEN_ORDER;
+		const t2Order = t2.order || MAX_TOKEN_ORDER;
 		if (t1Order === t2Order) {
 			const t1Name = t1.name.toLowerCase();
 			const t2Name = t2.name.toLowerCase();
