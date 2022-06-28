@@ -43,7 +43,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = ({
 				)}
 				<Title>Switch to {NetworkName}</Title>
 				<P>
-					This project doesn't accept donations in your connected
+					This project doesn&apos;t accept donations in your connected
 					network. Please switch your wallet network to {NetworkName}.
 				</P>
 				<SwitchCaption
