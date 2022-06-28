@@ -26,6 +26,12 @@ export const prepareTokenList = (tokens: IProjectAcceptedToken[]) => {
 	_tokens.sort((t1, t2) => {
 		const t1Order = t1.order || 10000;
 		const t2Order = t2.order || 10000;
+		if (t1Order === t2Order) {
+			const t1Name = t1.name.toLowerCase();
+			const t2Name = t2.name.toLowerCase();
+			console.log(t1Name, t2Name);
+			return t2Name > t1Name ? -1 : 1;
+		}
 		return t2Order > t1Order ? -1 : 1;
 	});
 	_tokens.forEach((token: IProjectAcceptedToken, index: number) => {
