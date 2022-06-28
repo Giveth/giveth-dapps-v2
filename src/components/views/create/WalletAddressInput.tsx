@@ -23,6 +23,8 @@ const WalletAddressInput = (props: {
 	const { value, setValue, title, networkId, error } = props;
 	const user = useAppSelector(state => state.user?.userData);
 	const isDefaultAddress = compareAddresses(value, user?.walletAddress);
+	const isGnosis = networkId === config.SECONDARY_NETWORK.id;
+
 	return (
 		<>
 			<H5
@@ -52,6 +54,12 @@ const WalletAddressInput = (props: {
 					// disabled={isDefaultAddress && !error} // why are we doing this?
 				/>
 				<InputErrorMessage>{error || null}</InputErrorMessage>
+				{isGnosis && (
+					<TinyLabel>
+						Please DO NOT enter exchange addresses for this network.
+						<br />
+					</TinyLabel>
+				)}
 				{isDefaultAddress && (
 					<TinyLabel>
 						This is the default wallet address associated with your
