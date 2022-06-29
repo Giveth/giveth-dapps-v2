@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
 import type { FC } from 'react';
 
-interface IStakingBrief {
+interface ILockingBrief {
 	round: number;
 	amount: string;
 }
-const StakingBrief: FC<IStakingBrief> = ({ round, amount }) => {
+const LockingBrief: FC<ILockingBrief> = ({ round, amount }) => {
 	return (
 		<StakingBriefContainer>
 			<H5>You are locking </H5>
@@ -32,4 +32,4 @@ const H5White = styled(H5)`
 	color: ${brandColors.giv['000']};
 `;
 
-export default StakingBrief;
+export default LockingBrief;
