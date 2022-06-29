@@ -25,10 +25,11 @@ import { AmountInput } from '@/components/AmountInput';
 import LockSlider from './LockSlider';
 import LockInfo from './LockInfo';
 import LockingBrief from './LockingBrief';
-import { lockToken } from '@/lib/stakingPool';
+import { getTotalGIVpower, lockToken } from '@/lib/stakingPool';
 import config from '@/configuration';
 import TotalGIVpowerBox from './TotalGIVpowerBox';
 import Routes from '@/lib/constants/Routes';
+import { Zero } from '@/helpers/number';
 import type { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 
 interface ILockModalProps extends IModal {
@@ -52,11 +53,12 @@ const LockModal: FC<ILockModalProps> = ({
 }) => {
 	const [amount, setAmount] = useState('0');
 	const [round, setRound] = useState(1);
-	const [txHash, setTxHash] = useState('');
+	const [totalGIVpower, setTotalGIVpower] = useState(Zero);
 	const [lockState, setLockState] = useState<ELockState>(ELockState.LOCK);
-	const { chainId, library } = useWeb3React();
+	const { account, library } = useWeb3React();
 
 	const onLock = async () => {
+		if (!account) return;
 		const contractAddress = config.XDAI_CONFIG.GIV.LM_ADDRESS;
 		setLockState(ELockState.LOCKING);
 		try {
@@ -67,9 +69,16 @@ const LockModal: FC<ILockModalProps> = ({
 				library,
 			);
 			if (txResponse) {
-				setTxHash(txResponse.hash);
 				if (txResponse) {
 					const { status } = await txResponse.wait();
+					const _totalGIVpower = await getTotalGIVpower(
+						account,
+						contractAddress,
+						library,
+					);
+					if (_totalGIVpower) {
+						setTotalGIVpower(_totalGIVpower);
+					}
 					setLockState(status ? ELockState.BOOST : ELockState.ERROR);
 				}
 			} else {
@@ -81,7 +90,7 @@ const LockModal: FC<ILockModalProps> = ({
 			);
 			captureException(err, {
 				tags: {
-					section: 'onWrap',
+					section: 'onLock',
 				},
 			});
 		}
@@ -141,7 +150,7 @@ const LockModal: FC<ILockModalProps> = ({
 					{lockState === ELockState.BOOST && (
 						<>
 							<LockingBrief round={round} amount={amount} />
-							<TotalGIVpowerBox />
+							<TotalGIVpowerBox totalGIVpower={totalGIVpower} />
 							<P>
 								You get GIVpower when you stake &amp; lock GIV.
 								GIVpower allows you to influence the ranking of

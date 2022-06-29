@@ -5,9 +5,16 @@ import {
 	IconRocketInSpace32,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import BigNumber from 'bignumber.js';
 import { Flex } from '@/components/styled-components/Flex';
+import { formatWeiHelper } from '@/helpers/number';
+import type { FC } from 'react';
 
-function TotalGIVpowerBox() {
+interface ITotalGIVpowerBox {
+	totalGIVpower: BigNumber;
+}
+
+const TotalGIVpowerBox: FC<ITotalGIVpowerBox> = ({ totalGIVpower }) => {
 	return (
 		<BoxContainer>
 			<H6>You Have</H6>
@@ -15,12 +22,12 @@ function TotalGIVpowerBox() {
 				<IconWrapper>
 					<IconRocketInSpace32 />
 				</IconWrapper>
-				<H5 weight={700}>2250</H5>
+				<H5 weight={700}>{formatWeiHelper(totalGIVpower, 2)}</H5>
 				<H6>GIVpower</H6>
 			</BoxRow>
 		</BoxContainer>
 	);
-}
+};
 
 const BoxContainer = styled.div`
 	background: ${brandColors.giv[500]};

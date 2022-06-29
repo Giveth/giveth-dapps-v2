@@ -682,3 +682,28 @@ export const lockToken = async (
 		});
 	}
 };
+
+export const getTotalGIVpower = async (
+	account: string,
+	contractAddress: string,
+	provider: Web3Provider | null,
+): Promise<BigNumber | undefined> => {
+	if (!provider) {
+		console.error('Provider is null');
+		return;
+	}
+
+	const signer = provider.getSigner();
+
+	const givpowerContract = new Contract(contractAddress, LM_ABI, signer);
+	try {
+		return await givpowerContract.balanceOf(account);
+	} catch (error) {
+		console.log('Error on get total GIVpower:', error);
+		captureException(error, {
+			tags: {
+				section: 'getTotalGIVpower',
+			},
+		});
+	}
+};
