@@ -28,7 +28,7 @@ export interface ISubgraphState {
 	allPositions: IUniswapV3Position[];
 	infinitePositionReward?: IInfinitePositionReward;
 	infinitePosition?: IUniswapV3Position;
-	GIVPowerPositions?: IGIVpower;
+	GIVPowerPositions: IGIVpower;
 
 	[StreamType.FOX]?: ITokenDistroInfo;
 	[StreamType.CULT]?: ITokenDistroInfo;

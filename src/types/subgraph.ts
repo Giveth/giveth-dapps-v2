@@ -117,7 +117,8 @@ export interface IGIVpowerInfo {
 	locksCreated: number;
 	roundDuration: number;
 	totalGIVLocked: number;
-	nextRound: number;
+	currentRound: number;
+	nextRoundDate: number;
 }
 
 export interface IGIVpowerLock {
