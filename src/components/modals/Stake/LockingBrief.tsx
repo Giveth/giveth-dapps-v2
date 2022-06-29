@@ -1,6 +1,7 @@
 import { brandColors, H5 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
+import { formatWeiHelper } from '@/helpers/number';
 import type { FC } from 'react';
 
 interface ILockingBrief {
@@ -11,14 +12,8 @@ const LockingBrief: FC<ILockingBrief> = ({ round, amount }) => {
 	return (
 		<StakingBriefContainer>
 			<H5>You are locking </H5>
-			<H5White weight={700}>{amount} GIV token</H5White>
-			<Flex justifyContent='center'>
-				<H5>for &nbsp;</H5>
-				<H5White weight={700}>
-					{round} round{round > 1 && 's'}
-				</H5White>
-			</Flex>
-			<H5White>(until April x, 2023)</H5White>
+			<H5White weight={700}>{formatWeiHelper(amount, 2)} GIV</H5White>
+			<H5White>until April x, 2023</H5White>
 		</StakingBriefContainer>
 	);
 };

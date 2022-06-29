@@ -84,23 +84,6 @@ const LockInfo: FC<ILockInfo> = ({ round }) => {
 				</LockInfoRowTitle>
 				<LockInfoRowValue>0</LockInfoRowValue>
 			</LockInfoRow>
-			<LockInfoRow justifyContent='space-between'>
-				<LockInfoRowTitle medium>
-					gGIV
-					<LockInfoRowHelp>
-						<IconWithTooltip
-							icon={<IconHelp size={16} />}
-							direction={'right'}
-						>
-							<LockInfotooltip>
-								gGIV is your nontransferable GIVgarden voting
-								power, given at a 1:1 ratio with staked GIV.
-							</LockInfotooltip>
-						</IconWithTooltip>
-					</LockInfoRowHelp>
-				</LockInfoRowTitle>
-				<LockInfoRowValue>0</LockInfoRowValue>
-			</LockInfoRow>
 		</LockInfoContainer>
 	);
 };
