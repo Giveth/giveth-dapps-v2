@@ -426,8 +426,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								<Flex>
 									<LiquidityButton
 										label={
-											type === StakingType.GIV_LM ||
-											StakingType.GIVPOWER
+											type === StakingType.GIV_LM
 												? 'BUY GIV TOKENS'
 												: 'PROVIDE LIQUIDITY'
 										}

@@ -10,7 +10,7 @@ import {
 	B,
 	P,
 } from '@giveth/ui-design-system';
-import { utils, BigNumber } from 'ethers';
+import { utils } from 'ethers';
 import styled from 'styled-components';
 import { smallFormatDate } from '@/lib/helpers';
 import { Flex } from '../styled-components/Flex';
@@ -19,7 +19,7 @@ import { IModal } from '@/types/common';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { formatEthHelper } from '@/helpers/number';
 import { useAppSelector } from '@/features/hooks';
-import { IGIVpower } from '@/types/subgraph';
+import { IGIVpower, IGIVpowerLock } from '@/types/subgraph';
 import { useGIVpower } from '@/context/givpower.context';
 
 export const LockupDetailsModal: FC<IModal> = ({ setShowModal }) => {
@@ -30,28 +30,28 @@ export const LockupDetailsModal: FC<IModal> = ({ setShowModal }) => {
 	const [average, setAverage] = useState(1);
 	const [stakedGIV, setStakedGIV] = useState('0');
 	const [availableToUnstake, setAvailableToUnstake] = useState('0');
-	const [lockedGIV, setLockedGIV] = useState([]);
+	const [lockedGIV, setLockedGIV] = useState<IGIVpowerLock[]>([]);
 
 	const setupValues = () => {
 		if (!GIVpower) return;
-		const GIVPowers = GIVpower?.givPowers[0];
+		const GIVPowers = GIVpower?.givPowers;
 		setStakedGIV(
 			parseFloat(
 				utils.formatEther(GIVPowers?.totalGIVLocked),
 			)?.toPrecision(1),
 		);
-		setAvailableToUnstake(
-			parseFloat(
-				utils.formatEther(
-					BigNumber.from(GIVPowers?.totalGIVLocked)?.sub(
-						BigNumber.from(GIVPowers?.totalGIVPower),
-					),
-				),
-			)?.toFixed(4),
-		);
+		// setAvailableToUnstake(
+		// 	parseFloat(
+		// 		utils.formatEther(
+		// 			BigNumber.from(GIVPowers?.totalGIVLocked)?.sub(
+		// 				BigNumber.from(GIVPowers?.totalGIVPower),
+		// 			),
+		// 		),
+		// 	)?.toFixed(4),
+		// );
 		setLockedGIV(
-			GIVpower?.powerLocks &&
-				[...GIVpower.powerLocks].sort((a: any, b: any) => {
+			GIVpower?.tokenLocks &&
+				[...GIVpower.tokenLocks].sort((a: any, b: any) => {
 					return a?.unlockableAt < b?.unlockableAt ? -1 : 1;
 				}),
 		);

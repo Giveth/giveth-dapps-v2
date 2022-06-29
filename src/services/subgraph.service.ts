@@ -11,7 +11,8 @@ export const fetchSubgraph = async (
 	let uri;
 	// TODO: I'll remove this, only for testing while all is added to main subgraph
 	if (isGIVPower) {
-		uri = 'https://api.thegraph.com/subgraphs/name/aminlatifi/givpower';
+		uri =
+			'https://api.thegraph.com/subgraphs/name/aminlatifi/givpower-deployment-six';
 	} else if (network === config.MAINNET_NETWORK_NUMBER) {
 		uri = config.MAINNET_CONFIG.subgraphAddress;
 	} else if (network === config.XDAI_NETWORK_NUMBER) {

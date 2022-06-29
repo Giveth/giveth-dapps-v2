@@ -4,6 +4,7 @@ import { transformSubgraphData } from '@/lib/subgraph/subgraphDataTransform';
 import { SubgraphQueryBuilder } from '@/lib/subgraph/subgraphQueryBuilder';
 import { fetchSubgraph } from '@/services/subgraph.service';
 import { defaultSubgraphValues } from './subgraph.slice';
+import { getGIVpowerRoundsInfo } from '@/helpers/givpower';
 
 export const fetchMainnetInfo = async (userAddress = '') => {
 	try {
@@ -35,16 +36,23 @@ export const fetchXDaiInfo = async (userAddress = '') => {
 			config.XDAI_NETWORK_NUMBER,
 			true,
 		);
-		const powerLocks = await fetchSubgraph(
-			SubgraphQueryBuilder.getPowerLocksInfoQuery(userAddress),
+		let givpowerInfo = givPower.givpowers[0];
+		const roundsInfo = getGIVpowerRoundsInfo(
+			givpowerInfo.initialDate,
+			givpowerInfo.roundDuration,
+		);
+		givpowerInfo = { ...givpowerInfo, ...roundsInfo };
+
+		const tokenLocks = await fetchSubgraph(
+			SubgraphQueryBuilder.getTokenLocksInfoQuery(userAddress),
 			config.XDAI_NETWORK_NUMBER,
 			true,
 		);
 		return transformSubgraphData({
 			...response,
 			GIVPowerPositions: {
-				givPowers: givPower?.givpowers,
-				...powerLocks,
+				givPowers: givpowerInfo,
+				...tokenLocks,
 			},
 		});
 	} catch (e) {

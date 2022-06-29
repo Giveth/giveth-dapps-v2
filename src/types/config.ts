@@ -19,7 +19,6 @@ export enum StakingType {
 	HONEYSWAP_GIV_HNY = 'Honeyswap_GIV_HNY',
 	HONEYSWAP_GIV_DAI = 'Honeyswap_GIV_DAI',
 	GIV_LM = 'GIV_LM',
-	GIVPOWER = 'GIV_POWER',
 
 	HONEYSWAP_FOX_HNY = 'Honeyswap_FOX_HNY',
 	UNISWAPV2_CULT_ETH = 'UniswapV2_CULT_ETH',

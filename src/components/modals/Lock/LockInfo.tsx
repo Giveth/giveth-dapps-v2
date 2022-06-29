@@ -10,26 +10,28 @@ import {
 	Subline,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import BigNumber from 'bignumber.js';
 import { Flex } from '@/components/styled-components/Flex';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { useGIVpower } from '@/context/givpower.context';
-import { formatEthHelper } from '@/helpers/number';
+import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import type { FC } from 'react';
 
 interface ILockInfo {
 	round: number;
+	amount: string;
 }
 
-const LockInfo: FC<ILockInfo> = ({ round }) => {
+const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 	const { apr } = useGIVpower();
-	const multipler = Math.sqrt(1 + round).toPrecision(3);
+	const multipler = Math.sqrt(1 + round);
 
 	return (
 		<LockInfoContainer>
 			<Flex alignItems='baseline' gap='12px'>
 				<LockInfoTitle>Your multiplier</LockInfoTitle>
 				<MultiPlyValue weight={700}>
-					x{multipler}
+					x{multipler.toPrecision(3)}
 					<MultiPlyHelp>
 						<IconWithTooltip
 							icon={<IconHelp size={16} />}
@@ -82,24 +84,13 @@ const LockInfo: FC<ILockInfo> = ({ round }) => {
 						</IconWithTooltip>
 					</LockInfoRowHelp>
 				</LockInfoRowTitle>
-				<LockInfoRowValue>0</LockInfoRowValue>
-			</LockInfoRow>
-			<LockInfoRow justifyContent='space-between'>
-				<LockInfoRowTitle medium>
-					gGIV
-					<LockInfoRowHelp>
-						<IconWithTooltip
-							icon={<IconHelp size={16} />}
-							direction={'right'}
-						>
-							<LockInfotooltip>
-								gGIV is your nontransferable GIVgarden voting
-								power, given at a 1:1 ratio with staked GIV.
-							</LockInfotooltip>
-						</IconWithTooltip>
-					</LockInfoRowHelp>
-				</LockInfoRowTitle>
-				<LockInfoRowValue>0</LockInfoRowValue>
+				<LockInfoRowValue>
+					{amount
+						? formatWeiHelper(
+								new BigNumber(amount).multipliedBy(multipler),
+						  )
+						: 0}
+				</LockInfoRowValue>
 			</LockInfoRow>
 		</LockInfoContainer>
 	);

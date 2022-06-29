@@ -1,11 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import {
-	Button,
-	H4,
-	neutralColors,
-	OulineButton,
-	P,
-} from '@giveth/ui-design-system';
+import { Button, H4, neutralColors, P } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { BigNumber } from 'ethers';
 import Lottie from 'react-lottie';
@@ -183,12 +177,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 		}
 		setStakeState(StakeState.WRAPPING);
 		try {
-			const txResponse = await wrapToken(
-				amount,
-				POOL_ADDRESS,
-				GARDEN_ADDRESS,
-				library,
-			);
+			const txResponse = await wrapToken(amount, GARDEN_ADDRESS, library);
 			if (txResponse) {
 				setTxHash(txResponse.hash);
 				setStakeState(StakeState.CONFIRMING);
@@ -402,7 +391,7 @@ export const StakeInnerModal = styled.div`
 	padding: 0 24px;
 `;
 
-export const ApproveButton = styled(OulineButton)`
+export const ApproveButton = styled(Button)`
 	width: 100%;
 	margin-top: 32px;
 	margin-bottom: 8px;

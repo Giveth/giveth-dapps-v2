@@ -454,7 +454,6 @@ export const approveERC20tokenTransfer = async (
 
 export const wrapToken = async (
 	amount: string,
-	poolAddress: string,
 	gardenAddress: string,
 	provider: Web3Provider | null,
 ): Promise<TransactionResponse | undefined> => {
@@ -644,6 +643,66 @@ export const withdrawTokens = async (
 		captureException(e, {
 			tags: {
 				section: 'withdrawTokens',
+			},
+		});
+	}
+};
+
+export const lockToken = async (
+	amount: string,
+	round: number,
+	contractAddress: string,
+	provider: Web3Provider | null,
+): Promise<TransactionResponse | undefined> => {
+	if (amount === '0') return;
+	if (!provider) {
+		console.error('Provider is null');
+		return;
+	}
+
+	const signer = provider.getSigner();
+
+	const givpowerContract = new Contract(contractAddress, LM_ABI, signer);
+	try {
+		return await givpowerContract
+			.connect(signer.connectUnchecked())
+			.lock(
+				amount,
+				round,
+				getGasPreference(
+					config.NETWORKS_CONFIG[provider.network.chainId],
+				),
+			);
+	} catch (error) {
+		console.log('Error on locking token:', error);
+		captureException(error, {
+			tags: {
+				section: 'lockToken',
+			},
+		});
+	}
+};
+
+export const getTotalGIVpower = async (
+	account: string,
+	contractAddress: string,
+	provider: Web3Provider | null,
+): Promise<BigNumber | undefined> => {
+	if (!provider) {
+		console.error('Provider is null');
+		return;
+	}
+
+	const signer = provider.getSigner();
+
+	const givpowerContract = new Contract(contractAddress, LM_ABI, signer);
+	try {
+		return await givpowerContract.balanceOf(account);
+	} catch (error) {
+		console.log('Error on get total GIVpower:', error);
+		captureException(error, {
+			tags: {
+				section: 'getTotalGIVpower',
 			},
 		});
 	}

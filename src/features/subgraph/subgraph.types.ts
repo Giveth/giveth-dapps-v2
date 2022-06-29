@@ -14,7 +14,6 @@ export interface ISubgraphState {
 	tokenDistroInfo?: ITokenDistroInfo;
 	uniswapV3Pool?: IUniswapV3Pool;
 	[StakingType.GIV_LM]?: IUnipool;
-	[StakingType.GIVPOWER]?: IUnipool;
 	[StakingType.BALANCER_ETH_GIV]?: IUnipool;
 	[StakingType.SUSHISWAP_ETH_GIV]?: IUnipool;
 	[StakingType.HONEYSWAP_GIV_HNY]?: IUnipool;
@@ -29,7 +28,7 @@ export interface ISubgraphState {
 	allPositions: IUniswapV3Position[];
 	infinitePositionReward?: IInfinitePositionReward;
 	infinitePosition?: IUniswapV3Position;
-	GIVPowerPositions?: IGIVpower;
+	GIVPowerPositions: IGIVpower;
 
 	[StreamType.FOX]?: ITokenDistroInfo;
 	[StreamType.CULT]?: ITokenDistroInfo;

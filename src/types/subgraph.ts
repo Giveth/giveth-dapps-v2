@@ -1,3 +1,5 @@
+import { IUser } from '@/apollo/types/types';
+
 export interface IBalances {
 	balance: string;
 	allocatedTokens: string;
@@ -109,9 +111,30 @@ export interface ITokenDistroInfo {
 	endTime: number;
 }
 
+export interface IGIVpowerInfo {
+	id: string;
+	initialDate: number;
+	locksCreated: number;
+	roundDuration: number;
+	totalGIVLocked: number;
+	currentRound: number;
+	nextRoundDate: number;
+}
+
+export interface IGIVpowerLock {
+	id: string;
+	user: IUser;
+	amount: string;
+	rounds: number;
+	untilRound: number;
+	unlockableAt: number;
+	unlockedAt: number;
+	unlocked: boolean;
+}
+
 export interface IGIVpower {
-	givPowers?: any;
-	powerLocks?: any;
+	givPowers: IGIVpowerInfo;
+	tokenLocks: IGIVpowerLock[];
 }
 
 export interface IUnipool {
