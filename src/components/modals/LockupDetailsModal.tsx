@@ -10,7 +10,7 @@ import {
 	B,
 	P,
 } from '@giveth/ui-design-system';
-import { utils, BigNumber } from 'ethers';
+import { utils } from 'ethers';
 import styled from 'styled-components';
 import { smallFormatDate } from '@/lib/helpers';
 import { Flex } from '../styled-components/Flex';
@@ -40,18 +40,18 @@ export const LockupDetailsModal: FC<IModal> = ({ setShowModal }) => {
 				utils.formatEther(GIVPowers?.totalGIVLocked),
 			)?.toPrecision(1),
 		);
-		setAvailableToUnstake(
-			parseFloat(
-				utils.formatEther(
-					BigNumber.from(GIVPowers?.totalGIVLocked)?.sub(
-						BigNumber.from(GIVPowers?.totalGIVPower),
-					),
-				),
-			)?.toFixed(4),
-		);
+		// setAvailableToUnstake(
+		// 	parseFloat(
+		// 		utils.formatEther(
+		// 			BigNumber.from(GIVPowers?.totalGIVLocked)?.sub(
+		// 				BigNumber.from(GIVPowers?.totalGIVPower),
+		// 			),
+		// 		),
+		// 	)?.toFixed(4),
+		// );
 		setLockedGIV(
-			GIVpower?.powerLocks &&
-				[...GIVpower.powerLocks].sort((a: any, b: any) => {
+			GIVpower?.tokenLocks &&
+				[...GIVpower.tokenLocks].sort((a: any, b: any) => {
 					return a?.unlockableAt < b?.unlockableAt ? -1 : 1;
 				}),
 		);

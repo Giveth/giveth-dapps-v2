@@ -104,17 +104,16 @@ export class SubgraphQueryBuilder {
 			initialDate
 			locksCreated
 			roundDuration
-			totalGIVPower
 			totalGIVLocked
 		}}`;
 	};
 
-	static getPowerLocksInfoQuery = (
+	static getTokenLocksInfoQuery = (
 		address: string,
 		first?: number,
 		skip?: number,
 	): string => {
-		return `query { powerLocks(id: "${address.toLowerCase()}", first: ${
+		return `query { tokenLocks(id: "${address.toLowerCase()}", first: ${
 			first || 100
 		}, skip: ${skip || 0}){ 
 			id

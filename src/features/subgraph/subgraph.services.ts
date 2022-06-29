@@ -35,8 +35,8 @@ export const fetchXDaiInfo = async (userAddress = '') => {
 			config.XDAI_NETWORK_NUMBER,
 			true,
 		);
-		const powerLocks = await fetchSubgraph(
-			SubgraphQueryBuilder.getPowerLocksInfoQuery(userAddress),
+		const tokenLocks = await fetchSubgraph(
+			SubgraphQueryBuilder.getTokenLocksInfoQuery(userAddress),
 			config.XDAI_NETWORK_NUMBER,
 			true,
 		);
@@ -44,7 +44,7 @@ export const fetchXDaiInfo = async (userAddress = '') => {
 			...response,
 			GIVPowerPositions: {
 				givPowers: givPower?.givpowers[0],
-				...powerLocks,
+				...tokenLocks,
 			},
 		});
 	} catch (e) {

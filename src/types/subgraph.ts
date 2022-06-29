@@ -116,7 +116,6 @@ export interface IGIVpowerInfo {
 	initialDate: number;
 	locksCreated: number;
 	roundDuration: number;
-	totalGIVPower: number;
 	totalGIVLocked: number;
 	nextRound: number;
 }
@@ -134,7 +133,7 @@ export interface IGIVpowerLock {
 
 export interface IGIVpower {
 	givPowers: IGIVpowerInfo;
-	powerLocks: IGIVpowerLock[];
+	tokenLocks: IGIVpowerLock[];
 }
 
 export interface IUnipool {
