@@ -59,7 +59,7 @@ const LockModal: FC<ILockModalProps> = ({
 							/>
 							<SectionTitle weight={700}>Rounds</SectionTitle>
 							<LockSlider setRound={setRound} round={round} />
-							<LockInfo round={round} />
+							<LockInfo round={round} amount={amount} />
 							<ApproveButton
 								buttonType='primary'
 								size='small'
@@ -74,7 +74,7 @@ const LockModal: FC<ILockModalProps> = ({
 					{lockState === ELockState.CONFIRM && (
 						<>
 							<LockingBrief round={round} amount={amount} />
-							<LockInfo round={round} />
+							<LockInfo round={round} amount={amount} />
 							<ConfirmButton
 								buttonType='primary'
 								label={'Lock your tokens'}
