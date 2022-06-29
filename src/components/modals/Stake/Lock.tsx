@@ -2,23 +2,19 @@ import { brandColors, H5, IconRocketInSpace32 } from '@giveth/ui-design-system';
 import { BigNumber } from 'ethers';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
-import Lottie from 'react-lottie';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
 import {
 	ApproveButton,
 	CancelButton,
 	ConfirmButton,
-	loadingAnimationOptions,
-	Pending,
 	StakeInnerModal,
 	StakeModalContainer,
 } from './Stake';
-import { StakeState } from '@/lib/staking';
 import { AmountInput } from '@/components/AmountInput';
 import LockSlider from './LockSlider';
 import LockInfo from './LockInfo';
-import StakingBrief from './StakingBrief';
+import LockingBrief from './LockingBrief';
 import type { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 
 interface ILockModalProps extends IModal {
@@ -26,16 +22,22 @@ interface ILockModalProps extends IModal {
 	regenStreamConfig?: RegenStreamConfig;
 	maxAmount: BigNumber;
 }
+
+export enum ELockState {
+	LOCK,
+	CONFIRM,
+	LOCKING,
+	BOOST,
+}
+
 const LockModal: FC<ILockModalProps> = ({
 	poolStakingConfig,
 	maxAmount,
 	setShowModal,
 }) => {
-	const [amount, setAmount] = useState('120');
+	const [amount, setAmount] = useState('0');
 	const [round, setRound] = useState(2);
-	const [stakeState, setStakeState] = useState<StakeState>(
-		StakeState.APPROVE,
-	);
+	const [lockState, setLockState] = useState<ELockState>(ELockState.LOCK);
 	return (
 		<Modal
 			setShowModal={setShowModal}
@@ -45,8 +47,7 @@ const LockModal: FC<ILockModalProps> = ({
 		>
 			<StakeModalContainer>
 				<StakeInnerModal>
-					{(stakeState === StakeState.APPROVE ||
-						stakeState === StakeState.APPROVING) && (
+					{lockState === ELockState.LOCK && (
 						<>
 							<SectionTitle weight={700}>
 								Lock your staked GIV
@@ -55,63 +56,36 @@ const LockModal: FC<ILockModalProps> = ({
 								setAmount={setAmount}
 								maxAmount={maxAmount}
 								poolStakingConfig={poolStakingConfig}
-								disabled={stakeState === StakeState.APPROVING}
 							/>
 							<SectionTitle weight={700}>Rounds</SectionTitle>
 							<LockSlider setRound={setRound} round={round} />
 							<LockInfo round={round} />
-							{stakeState === StakeState.APPROVE && (
-								<ApproveButton
-									label={'APPROVE'}
-									onClick={() => {
-										setStakeState(StakeState.APPROVING);
-									}}
-									disabled={
-										amount == '0' || maxAmount.lt(amount)
-									}
-								/>
-							)}
-							{stakeState === StakeState.APPROVING && (
-								<Pending>
-									<Lottie
-										options={loadingAnimationOptions}
-										height={40}
-										width={40}
-									/>
-									&nbsp;APPROVE PENDING
-								</Pending>
-							)}
+							<ApproveButton
+								buttonType='primary'
+								size='small'
+								label={'Lock to increase your multiplier'}
+								onClick={() => {
+									setLockState(ELockState.CONFIRM);
+								}}
+								disabled={amount == '0' || maxAmount.lt(amount)}
+							/>
 						</>
 					)}
-					{(stakeState === StakeState.WRAP ||
-						stakeState === StakeState.WRAPPING) && (
+					{lockState === ELockState.CONFIRM && (
 						<>
-							<StakingBrief round={round} amount={amount} />
+							<LockingBrief round={round} amount={amount} />
 							<LockInfo round={round} />
-							{stakeState === StakeState.WRAP && (
-								<ConfirmButton
-									label={'STAKE & LOCK'}
-									onClick={() => {}}
-									disabled={
-										amount == '0' || maxAmount.lt(amount)
-									}
-									buttonType='primary'
-								/>
-							)}
-							{stakeState === StakeState.WRAPPING && (
-								<Pending>
-									<Lottie
-										options={loadingAnimationOptions}
-										height={40}
-										width={40}
-									/>
-									&nbsp;STAKE PENDING
-								</Pending>
-							)}
+							<ConfirmButton
+								buttonType='primary'
+								label={'Lock your tokens'}
+								onClick={() => {}}
+								disabled={amount == '0' || maxAmount.lt(amount)}
+							/>
 						</>
 					)}
 					<CancelButton
 						buttonType='texty'
+						size='small'
 						label='CANCEL'
 						onClick={() => {
 							setShowModal(false);
@@ -128,7 +102,7 @@ const SectionTitle = styled(H5)`
 	color: ${brandColors.giv[300]};
 	padding-bottom: 8px;
 	border-bottom: 1px solid ${brandColors.giv[500]};
-	margin: 24px 0 8px;
+	margin: 16px 0 8px;
 `;
 
 export default LockModal;
