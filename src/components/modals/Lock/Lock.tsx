@@ -12,7 +12,7 @@ import {
 	ConfirmButton,
 	StakeInnerModal,
 	StakeModalContainer,
-} from './Stake';
+} from '../Stake/Stake';
 import { AmountInput } from '@/components/AmountInput';
 import LockSlider from './LockSlider';
 import LockInfo from './LockInfo';
@@ -131,7 +131,7 @@ const LockModal: FC<ILockModalProps> = ({
 					<CancelButton
 						buttonType='texty'
 						size='small'
-						label='CANCEL'
+						label={ELockState.BOOST ? 'I’ll do it later' : 'CANCEL'}
 						onClick={() => {
 							setShowModal(false);
 						}}
