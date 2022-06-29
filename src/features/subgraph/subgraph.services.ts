@@ -43,7 +43,7 @@ export const fetchXDaiInfo = async (userAddress = '') => {
 		return transformSubgraphData({
 			...response,
 			GIVPowerPositions: {
-				givPowers: givPower?.givpowers,
+				givPowers: givPower?.givpowers[0],
 				...powerLocks,
 			},
 		});

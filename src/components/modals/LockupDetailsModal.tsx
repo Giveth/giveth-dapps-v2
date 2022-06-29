@@ -19,7 +19,7 @@ import { IModal } from '@/types/common';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { formatEthHelper } from '@/helpers/number';
 import { useAppSelector } from '@/features/hooks';
-import { IGIVpower } from '@/types/subgraph';
+import { IGIVpower, IGIVpowerLock } from '@/types/subgraph';
 import { useGIVpower } from '@/context/givpower.context';
 
 export const LockupDetailsModal: FC<IModal> = ({ setShowModal }) => {
@@ -30,11 +30,11 @@ export const LockupDetailsModal: FC<IModal> = ({ setShowModal }) => {
 	const [average, setAverage] = useState(1);
 	const [stakedGIV, setStakedGIV] = useState('0');
 	const [availableToUnstake, setAvailableToUnstake] = useState('0');
-	const [lockedGIV, setLockedGIV] = useState([]);
+	const [lockedGIV, setLockedGIV] = useState<IGIVpowerLock[]>([]);
 
 	const setupValues = () => {
 		if (!GIVpower) return;
-		const GIVPowers = GIVpower?.givPowers[0];
+		const GIVPowers = GIVpower?.givPowers;
 		setStakedGIV(
 			parseFloat(
 				utils.formatEther(GIVPowers?.totalGIVLocked),
