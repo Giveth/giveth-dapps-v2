@@ -27,6 +27,13 @@ import BAL_WEIGHTED_POOL_Json from '../artifacts/BalancerWeightedPool.json';
 import BAL_VAULT_Json from '../artifacts/BalancerVault.json';
 import TOKEN_MANAGER_Json from '../artifacts/HookedTokenManager.json';
 import ERC20_Json from '../artifacts/ERC20.json';
+import {
+	ERC20,
+	IUniswapV2Pair,
+	IVault,
+	UnipoolTokenDistributor,
+	WeightedPool,
+} from '@/types/contracts';
 
 const { abi: LM_ABI } = LM_Json;
 const { abi: UNI_ABI } = UNI_Json;
@@ -93,13 +100,21 @@ const getBalancerPoolStakingAPR = async (
 		balancerPoolStakingConfig;
 	const tokenAddress = config.NETWORKS_CONFIG[network].TOKEN_ADDRESS;
 
-	const lmContract = new Contract(LM_ADDRESS, LM_ABI, provider);
-	const poolContract = new Contract(
+	const lmContract = new Contract(
+		LM_ADDRESS,
+		LM_ABI,
+		provider,
+	) as UnipoolTokenDistributor;
+	const weightedPoolContract = new Contract(
 		POOL_ADDRESS,
 		BAL_WEIGHTED_POOL_ABI,
 		provider,
-	);
-	const vaultContract = new Contract(VAULT_ADDRESS, BAL_VAULT_ABI, provider);
+	) as WeightedPool;
+	const vaultContract = new Contract(
+		VAULT_ADDRESS,
+		BAL_VAULT_ABI,
+		provider,
+	) as IVault;
 
 	interface PoolTokens {
 		balances: Array<ethers.BigNumber>;
@@ -114,8 +129,8 @@ const getBalancerPoolStakingAPR = async (
 			Array<ethers.BigNumber>,
 		] = await Promise.all([
 			vaultContract.getPoolTokens(POOL_ID),
-			poolContract.totalSupply(),
-			poolContract.getNormalizedWeights(),
+			weightedPoolContract.totalSupply(),
+			weightedPoolContract.getNormalizedWeights(),
 		]);
 
 		let totalSupply: BigNumber;
@@ -182,15 +197,23 @@ const getSimplePoolStakingAPR = async (
 	const tokenAddress = streamConfig
 		? streamConfig.rewardTokenAddress
 		: givTokenAddress;
-	const lmContract = new Contract(LM_ADDRESS, LM_ABI, provider);
+	const lmContract = new Contract(
+		LM_ADDRESS,
+		LM_ABI,
+		provider,
+	) as UnipoolTokenDistributor;
 
 	let totalSupply: BigNumber;
 	let rewardRate: BigNumber;
-	const poolContract = new Contract(POOL_ADDRESS, UNI_ABI, provider);
+	const poolContract = new Contract(
+		POOL_ADDRESS,
+		UNI_ABI,
+		provider,
+	) as IUniswapV2Pair;
 	let apr = null;
 	try {
 		const [_reserves, _token0, _poolTotalSupply]: [
-			Array<ethers.BigNumber>,
+			[ethers.BigNumber, ethers.BigNumber, number],
 			string,
 			ethers.BigNumber,
 		] = await Promise.all([
@@ -341,7 +364,11 @@ const permitTokens = async (
 	const signer = provider.getSigner();
 	const signerAddress = await signer.getAddress();
 
-	const poolContract = new Contract(poolAddress, UNI_ABI, signer);
+	const poolContract = new Contract(
+		poolAddress,
+		UNI_ABI,
+		signer,
+	) as IUniswapV2Pair;
 
 	const domain = {
 		name: await poolContract.name(),
@@ -399,16 +426,15 @@ export const approveERC20tokenTransfer = async (
 	}
 
 	const signer = provider.getSigner();
-	const tokenContract = new Contract(poolAddress, ERC20_ABI, signer);
-	const allowance: BigNumber = await tokenContract.allowance(
+	const tokenContract = new Contract(poolAddress, ERC20_ABI, signer) as ERC20;
+	const allowance: ethers.BigNumber = await tokenContract.allowance(
 		ownerAddress,
 		spenderAddress,
 	);
 
 	const amountNumber = ethers.BigNumber.from(amount);
-	const allowanceNumber = ethers.BigNumber.from(allowance.toString());
 
-	if (amountNumber.lte(allowanceNumber)) return true;
+	if (amountNumber.lte(allowance)) return true;
 
 	const gasPreference = getGasPreference(
 		config.NETWORKS_CONFIG[provider.network.chainId],
@@ -543,7 +569,11 @@ export const stakeTokens = async (
 
 	const signer = provider.getSigner();
 
-	const lmContract = new Contract(lmAddress, LM_ABI, signer);
+	const lmContract = new Contract(
+		lmAddress,
+		LM_ABI,
+		signer,
+	) as UnipoolTokenDistributor;
 
 	try {
 		const gasPreference = getGasPreference(
@@ -561,7 +591,7 @@ export const stakeTokens = async (
 				.connect(signer.connectUnchecked())
 				.stakeWithPermit(
 					ethers.BigNumber.from(amount),
-					rawPermitCall.data,
+					rawPermitCall.data as string,
 					{
 						gasLimit: 300_000,
 						...gasPreference,
