@@ -2,6 +2,8 @@ import { brandColors, H5, IconRocketInSpace32 } from '@giveth/ui-design-system';
 import { BigNumber } from 'ethers';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
+import { captureException } from '@sentry/nextjs';
+import { useWeb3React } from '@web3-react/core';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
 import {
@@ -15,6 +17,8 @@ import { AmountInput } from '@/components/AmountInput';
 import LockSlider from './LockSlider';
 import LockInfo from './LockInfo';
 import LockingBrief from './LockingBrief';
+import { lockToken } from '@/lib/stakingPool';
+import config from '@/configuration';
 import type { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 
 interface ILockModalProps extends IModal {
@@ -28,6 +32,7 @@ export enum ELockState {
 	CONFIRM,
 	LOCKING,
 	BOOST,
+	ERROR,
 }
 
 const LockModal: FC<ILockModalProps> = ({
@@ -37,7 +42,41 @@ const LockModal: FC<ILockModalProps> = ({
 }) => {
 	const [amount, setAmount] = useState('0');
 	const [round, setRound] = useState(2);
+	const [txHash, setTxHash] = useState('');
 	const [lockState, setLockState] = useState<ELockState>(ELockState.LOCK);
+	const { chainId, library } = useWeb3React();
+
+	const onLock = async () => {
+		const contractAddress = config.XDAI_CONFIG.GIV.LM_ADDRESS;
+		setLockState(ELockState.LOCKING);
+		try {
+			const txResponse = await lockToken(
+				amount,
+				round,
+				contractAddress,
+				library,
+			);
+			if (txResponse) {
+				setTxHash(txResponse.hash);
+				if (txResponse) {
+					const { status } = await txResponse.wait();
+					setLockState(status ? ELockState.BOOST : ELockState.ERROR);
+				}
+			} else {
+				setLockState(ELockState.LOCK);
+			}
+		} catch (err: any) {
+			setLockState(
+				err?.code === 4001 ? ELockState.LOCK : ELockState.ERROR,
+			);
+			captureException(err, {
+				tags: {
+					section: 'onWrap',
+				},
+			});
+		}
+	};
+
 	return (
 		<Modal
 			setShowModal={setShowModal}
@@ -78,7 +117,7 @@ const LockModal: FC<ILockModalProps> = ({
 							<ConfirmButton
 								buttonType='primary'
 								label={'Lock your tokens'}
-								onClick={() => {}}
+								onClick={onLock}
 								disabled={amount == '0' || maxAmount.lt(amount)}
 							/>
 						</>
