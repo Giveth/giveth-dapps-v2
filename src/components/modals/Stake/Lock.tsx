@@ -110,7 +110,8 @@ const LockModal: FC<ILockModalProps> = ({
 							/>
 						</>
 					)}
-					{lockState === ELockState.CONFIRM && (
+					{(lockState === ELockState.CONFIRM ||
+						lockState === ELockState.LOCKING) && (
 						<>
 							<LockingBrief round={round} amount={amount} />
 							<LockInfo round={round} amount={amount} />
@@ -118,7 +119,12 @@ const LockModal: FC<ILockModalProps> = ({
 								buttonType='primary'
 								label={'Lock your tokens'}
 								onClick={onLock}
-								disabled={amount == '0' || maxAmount.lt(amount)}
+								disabled={
+									amount == '0' ||
+									maxAmount.lt(amount) ||
+									lockState === ELockState.LOCKING
+								}
+								loading={lockState === ELockState.LOCKING}
 							/>
 						</>
 					)}
