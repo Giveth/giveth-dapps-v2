@@ -1,4 +1,12 @@
-import { brandColors, H5, IconRocketInSpace32 } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	ButtonLink,
+	GLink,
+	H5,
+	IconRocketInSpace32,
+	P,
+	semanticColors,
+} from '@giveth/ui-design-system';
 import { BigNumber } from 'ethers';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
@@ -19,6 +27,8 @@ import LockInfo from './LockInfo';
 import LockingBrief from './LockingBrief';
 import { lockToken } from '@/lib/stakingPool';
 import config from '@/configuration';
+import TotalGIVpowerBox from './TotalGIVpowerBox';
+import Routes from '@/lib/constants/Routes';
 import type { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 
 interface ILockModalProps extends IModal {
@@ -41,7 +51,7 @@ const LockModal: FC<ILockModalProps> = ({
 	setShowModal,
 }) => {
 	const [amount, setAmount] = useState('0');
-	const [round, setRound] = useState(2);
+	const [round, setRound] = useState(1);
 	const [txHash, setTxHash] = useState('');
 	const [lockState, setLockState] = useState<ELockState>(ELockState.LOCK);
 	const { chainId, library } = useWeb3React();
@@ -128,6 +138,32 @@ const LockModal: FC<ILockModalProps> = ({
 							/>
 						</>
 					)}
+					{lockState === ELockState.BOOST && (
+						<>
+							<LockingBrief round={round} amount={amount} />
+							<TotalGIVpowerBox />
+							<P>
+								You get GIVpower when you stake &amp; lock GIV.
+								GIVpower allows you to influence the ranking of
+								projects on Giveth.
+							</P>
+							<P>
+								Top ranked projects may be eligible for matching
+								funds, &amp; their donors get more GIVbacks!
+							</P>
+							<P>
+								Boost your favourite projects, or delegate your
+								GIVpower to community representatives.
+							</P>
+							<LearnMoreLink href=''>Learn More</LearnMoreLink>
+							<BoostButton
+								linkType='primary'
+								label={'Boost projects'}
+								size='small'
+								href={Routes.Projects}
+							/>
+						</>
+					)}
 					<CancelButton
 						buttonType='texty'
 						size='small'
@@ -148,6 +184,17 @@ const SectionTitle = styled(H5)`
 	padding-bottom: 8px;
 	border-bottom: 1px solid ${brandColors.giv[500]};
 	margin: 16px 0 8px;
+`;
+
+const LearnMoreLink = styled(GLink)`
+	display: block;
+	color: ${semanticColors.blueSky[500]};
+	margin-top: 16px;
+`;
+
+const BoostButton = styled(ButtonLink)`
+	margin-top: 38px;
+	margin-bottom: 8px;
 `;
 
 export default LockModal;
