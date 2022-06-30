@@ -15,6 +15,8 @@ const gqlRes = `{
 		isNonProfitOrganization
 		organizationCountry
 		organizationWebsite
+		organizationName
+		attachment
 	}
 	personalInfo {
 		email

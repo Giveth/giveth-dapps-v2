@@ -175,6 +175,8 @@ export interface IProjectRegistry {
 	organizationCountry?: string;
 	organizationWebsite?: string;
 	organizationDescription?: string;
+	organizationName?: string;
+	attachment?: string;
 }
 
 export interface IProjectContact {
