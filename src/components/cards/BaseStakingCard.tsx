@@ -70,6 +70,7 @@ import { useAppSelector } from '@/features/hooks';
 import { ITokenDistroInfo } from '@/types/subgraph';
 import { GIVPowerExplainModal } from '../modals/GIVPowerExplain';
 import GIVpowerCardIntro from './GIVpowerCardIntro';
+import LockModal from '../modals/Lock/Lock';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -120,6 +121,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const [showStakeModal, setShowStakeModal] = useState(false);
 	const [showUnStakeModal, setShowUnStakeModal] = useState(false);
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
+	const [showLockModal, setShowLockModal] = useState(false);
 	const [showGIVPowerExplain, setShowGIVPowerExplain] = useState(false);
 	const [showWhatIsGIVstreamModal, setShowWhatIsGIVstreamModal] =
 		useState(false);
@@ -373,7 +375,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							{type === StakingType.GIV_LM && (
 								<ClaimButton
 									disabled={!active || earned.isZero()}
-									onClick={() => setShowHarvestModal(true)}
+									onClick={() => setShowLockModal(true)}
 									label='Increase your reward'
 									buttonType='primary'
 								/>
@@ -524,6 +526,13 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					regenStreamConfig={regenStreamConfig}
 					stakedPositions={stakedPositions}
 					currentIncentive={currentIncentive}
+				/>
+			)}
+			{showLockModal && (
+				<LockModal
+					setShowModal={setShowLockModal}
+					poolStakingConfig={poolStakingConfig}
+					maxAmount={userNotStakedAmount}
 				/>
 			)}
 			{showWhatIsGIVstreamModal && (
