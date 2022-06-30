@@ -13,8 +13,7 @@ const Done = () => {
 	const { verificationData } = useVerificationData();
 	console.log('status', verificationData);
 
-	const status = verificationData?.status;
-
+	const status = verificationData?.status ?? EVerificationStatus.SUBMITTED;
 	const titles = new Map([
 		[EVerificationStatus.DRAFT, 'Congratulations'],
 		[EVerificationStatus.SUBMITTED, 'Waiting for verification'],
@@ -56,13 +55,11 @@ const Done = () => {
 					</Submitted>
 					<Line />
 					<Waiting
-						active={
-							status ===
-							(EVerificationStatus.DRAFT ||
-								EVerificationStatus.SUBMITTED)
-								? true
-								: false
-						}
+						isActive={[
+							EVerificationStatus.DRAFT,
+							EVerificationStatus.SUBMITTED,
+							EVerificationStatus.REJECTED,
+						].includes(status)}
 					>
 						{status === 'rejected'
 							? 'Verification rejected.'
@@ -72,7 +69,10 @@ const Done = () => {
 						)}
 					</Waiting>
 					<Line />
-					<Voila>Voila! Verified badge</Voila>
+					<Voila isActive={status === EVerificationStatus.VERIFIED}>
+						Voila! Verified badge
+					</Voila>
+					{status === EVerificationStatus.VERIFIED && <CheckCircle />}
 				</StagesContainer>
 			</Container>
 		</>
@@ -84,19 +84,21 @@ const Line = styled.div`
 	width: 20px;
 `;
 
-const Voila = styled.div`
+const Voila = styled.div<{ isActive: boolean }>`
 	display: flex;
 	gap: 10px;
 	align-items: center;
-	color: ${neutralColors.gray[700]};
+	/* color: ${neutralColors.gray[700]}; */
+	color: ${props =>
+		props.isActive ? neutralColors.gray[900] : neutralColors.gray[700]};
 `;
 
-const Waiting = styled.div<{ active: boolean }>`
+const Waiting = styled.div<{ isActive: boolean }>`
 	display: flex;
 	gap: 10px;
 	align-items: center;
 	color: ${props =>
-		props.active ? brandColors.giv[500] : neutralColors.gray[900]};
+		props.isActive ? brandColors.giv[500] : neutralColors.gray[900]};
 `;
 
 const Submitted = styled.div`

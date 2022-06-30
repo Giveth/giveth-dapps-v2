@@ -23,7 +23,7 @@ export default function TermsAndConditions() {
 	const handleNext = () => {
 		async function sendReq() {
 			setloading(true);
-			const { data } = await client.mutate({
+			await client.mutate({
 				mutation: UPDATE_PROJECT_VERIFICATION,
 				variables: {
 					projectVerificationUpdateInput: {
