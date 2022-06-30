@@ -14,8 +14,13 @@ import {
 import { Flex } from '../styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 
-export const StakingPoolContainer = styled.div`
-	height: 488px;
+interface IStakingPoolContainer {
+	shadowColor?: string;
+	big?: boolean;
+}
+
+export const StakingPoolContainer = styled.div<IStakingPoolContainer>`
+	height: ${props => (props.big ? '508px' : '488px')};
 	border-radius: 8px;
 	background: ${brandColors.giv[600]};
 	color: ${neutralColors.gray[100]};
@@ -69,6 +74,7 @@ export const DetailUnit = styled(P)`
 
 export const ClaimButton = styled(Button)`
 	width: 100%;
+	margin-top: 16px;
 `;
 
 export const StakeButtonsRow = styled(Flex)`
