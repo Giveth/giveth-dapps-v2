@@ -14,14 +14,21 @@ import {
 import { Flex } from '../styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 
-export const StakingPoolContainer = styled.div`
-	height: 488px;
+interface IStakingPoolContainer {
+	shadowColor?: string;
+	big?: boolean;
+}
+
+export const StakingPoolContainer = styled.div<IStakingPoolContainer>`
+	height: ${props => (props.big ? '508px' : '488px')};
 	border-radius: 8px;
 	background: ${brandColors.giv[600]};
 	color: ${neutralColors.gray[100]};
 	position: relative;
 	margin-bottom: 32px;
 	padding: 1px 0;
+	box-shadow: ${props =>
+		props.shadowColor ? `0px 0px 24px 6px ${props.shadowColor}` : 'unset'};
 `;
 export const StakingPoolExchangeRow = styled(Flex)`
 	margin: 16px 16px 0;
@@ -55,12 +62,7 @@ export const FirstDetail = styled(Flex)`
 export const Detail = styled(Flex)`
 	margin-bottom: 16px;
 `;
-export const GIVgardenTooltip = styled.div`
-	color: ${neutralColors.gray[100]};
-	text-align: center;
-	width: 120px;
-	font-size: 0.8em;
-`;
+
 export const DetailLabel = styled(Caption)``;
 export const DetailValue = styled(B)``;
 export const DetailUnit = styled(P)`
@@ -69,6 +71,7 @@ export const DetailUnit = styled(P)`
 
 export const ClaimButton = styled(Button)`
 	width: 100%;
+	margin-top: 16px;
 `;
 
 export const StakeButtonsRow = styled(Flex)`
@@ -198,26 +201,4 @@ export const DisableModalCloseButton = styled(OulineButton)`
 export const DisableModalImage = styled.div`
 	width: 36px;
 	color: ${brandColors.giv[500]};
-`;
-
-export const CardTag = styled.div`
-	position: absolute;
-	right: 0;
-	top: 0;
-	width: 68px;
-	height: 104px;
-	border-bottom-left-radius: 28px;
-	background-color: ${brandColors.giv[700]};
-	padding: 11px;
-	cursor: pointer;
-`;
-
-export const GIVpowerLogoCardTag = styled.div`
-	background-color: ${brandColors.pinky[500]};
-	border-radius: 16px;
-	color: white;
-	text-align: center;
-	padding: 8px 15px 4px;
-	position: absolute;
-	bottom: 11px;
 `;

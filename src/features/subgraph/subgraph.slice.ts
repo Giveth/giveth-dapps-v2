@@ -12,11 +12,11 @@ const defaultGIVPowerPositions = {
 	givPowers: {
 		id: '',
 		currentRound: 0,
-		initialDate: 0,
+		initialDate: '0',
 		locksCreated: 0,
-		nextRoundDate: 0,
+		nextRoundDate: '0',
 		roundDuration: 1,
-		totalGIVLocked: 0,
+		totalGIVLocked: '0',
 	},
 	tokenLocks: [],
 };

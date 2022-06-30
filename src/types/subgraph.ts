@@ -114,10 +114,10 @@ export interface ITokenDistroInfo {
 export interface IGIVpowerInfo {
 	id: string;
 	initialDate: string;
-	locksCreated: string;
-	roundDuration: string;
+	locksCreated: number;
+	roundDuration: number;
 	totalGIVLocked: string;
-	currentRound: string;
+	currentRound: number;
 	nextRoundDate: string;
 }
 
