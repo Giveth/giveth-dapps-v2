@@ -1,14 +1,16 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { H5, Button, Lead, brandColors } from '@giveth/ui-design-system';
 
+import { IconDonation } from '@giveth/ui-design-system/lib/cjs/components/icons/Donation';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
-import { Bullets } from '@/components/styled-components/Bullets';
 import Routes from '@/lib/constants/Routes';
+import StorageLabel from '@/lib/localStorage';
+import { Bullets } from '@/components/styled-components/Bullets';
 import ExternalLink from '@/components/ExternalLink';
 
 interface IText {
@@ -19,42 +21,60 @@ export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
 	const theme = useAppSelector(state => state.general.theme);
 	const router = useRouter();
 
+	useEffect(() => {
+		localStorage.setItem(StorageLabel.FIRSTMODALSHOWED, '1');
+	}, []);
+
 	return (
 		<Modal
 			setShowModal={setShowModal}
-			headerIcon={<img src='/images/icons/donate.svg' />}
+			headerIcon={<IconDonation />}
 			headerTitle={`Let's Donate`}
 			headerTitlePosition='left'
 		>
 			<Container>
 				<Title isDark={theme === ETheme.Dark}>
-					Welcome to the future of giving
+					Welcome to the Future of Giving
 				</Title>
-				<LeadTitle>Here is the things that you can do now!</LeadTitle>
+				<LeadTitle>You can use Giveth to:</LeadTitle>
 				<Bullets>
 					<Paragraph isDark={theme === ETheme.Dark}>
-						Take a look at awesome{' '}
+						Donate to awesome for-good{' '}
 						<ExternalLink
 							href={Routes.Projects}
 							title='projects'
 							color={brandColors.pinky[500]}
-						/>{' '}
-						on Giveth.
+						/>
+						.
 					</Paragraph>
 					<Paragraph isDark={theme === ETheme.Dark}>
-						You can also create a{' '}
 						<ExternalLink
 							href={Routes.CreateProject}
-							title='new project'
+							title='Create a project '
 							color={brandColors.pinky[500]}
-						/>{' '}
-						and receive donations.
+						/>
+						&amp; start raising funds for your cause.
 					</Paragraph>
 					<Paragraph isDark={theme === ETheme.Dark}>
-						You can earn GIV token by{' '}
+						Earn GIV from{' '}
+						<ExternalLink
+							href={Routes.GIVbacks}
+							title='GIVbacks'
+							color={brandColors.pinky[500]}
+						/>{' '}
+						when you donate to verified{' '}
 						<ExternalLink
 							href={Routes.Projects}
-							title='donating to projects'
+							title='projects'
+							color={brandColors.pinky[500]}
+						/>
+						.
+					</Paragraph>
+					<Paragraph isDark={theme === ETheme.Dark}>
+						Earn a yield by staking tokens in the{' '}
+						<ExternalLink
+							href={Routes.GIVfarm}
+							title='GIVfarm'
 							color={brandColors.pinky[500]}
 						/>
 						.

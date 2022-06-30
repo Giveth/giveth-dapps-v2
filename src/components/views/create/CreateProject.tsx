@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import {
 	brandColors,
 	Button,
@@ -57,6 +57,10 @@ import { useAppSelector } from '@/features/hooks';
 // import useLeaveConfirm from '@/hooks/useLeaveConfirm';
 import config from '@/configuration';
 
+const { PRIMARY_NETWORK, SECONDARY_NETWORK } = config;
+const ethereumId = PRIMARY_NETWORK.id;
+const gnosisId = SECONDARY_NETWORK.id;
+
 export enum ECreateErrFields {
 	NAME = 'name',
 	DESCRIPTION = 'description',
@@ -71,17 +75,15 @@ export interface ICreateProjectErrors {
 	[ECreateErrFields.SECONDARY_WALLET_ADDRESS]: string;
 }
 
-export interface ICategoryComponent {
-	[key: string]: boolean;
+interface ICreateProjectProps {
+	project?: IProjectEdition;
 }
 
-const CreateProject = (props: { project?: IProjectEdition }) => {
-	const { library } = useWeb3React();
+const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
+	const { library, chainId } = useWeb3React();
 	const [addProjectMutation] = useMutation(CREATE_PROJECT);
 	const [editProjectMutation] = useMutation(UPDATE_PROJECT);
 	const router = useRouter();
-
-	const { project } = props;
 
 	const isEditMode = !!project;
 	const isDraft = project?.status.name === EProjectStatus.DRAFT;
@@ -95,16 +97,14 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 	const [image, setImage] = useState(project?.image || '');
 
 	const [mainAddress, setMainAddress] = useState<IWalletAddress>({
-		address: project?.addresses?.find(
-			(a: IWalletAddress) => a.networkId === config.PRIMARY_NETWORK.id,
-		)?.address,
-		networkId: config.PRIMARY_NETWORK.id,
+		address: project?.addresses?.find(a => a.networkId === ethereumId)
+			?.address,
+		networkId: ethereumId,
 	});
 	const [secondaryAddress, setSecondaryAddress] = useState<IWalletAddress>({
-		address: project?.addresses?.find(
-			(a: IWalletAddress) => a.networkId === config.SECONDARY_NETWORK.id,
-		)?.address,
-		networkId: config.SECONDARY_NETWORK.id,
+		address: project?.addresses?.find(a => a.networkId === gnosisId)
+			?.address,
+		networkId: gnosisId,
 	});
 
 	const [isLoading, setIsLoading] = useState(false);
@@ -116,8 +116,9 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 	const [errors, setErrors] = useState<ICreateProjectErrors>({
 		[ECreateErrFields.NAME]: isEditMode ? '' : 'Title is required',
 		[ECreateErrFields.DESCRIPTION]: '',
-		[ECreateErrFields.MAIN_WALLET_ADDRESS]: '',
-		[ECreateErrFields.SECONDARY_WALLET_ADDRESS]: '',
+		[ECreateErrFields.MAIN_WALLET_ADDRESS]: 'Ethereum Address is required',
+		[ECreateErrFields.SECONDARY_WALLET_ADDRESS]:
+			'Gnosis Address is required',
 	});
 	const [formChange, setFormChange] = useState(false);
 
@@ -137,15 +138,11 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 					JSON.stringify(project.categories) ||
 				imageComparator !== project.image ||
 				mainAddress !==
-					project.addresses?.find(
-						(a: IWalletAddress) =>
-							a.networkId === config.PRIMARY_NETWORK.id,
-					).address ||
+					project.addresses?.find(a => a.networkId === ethereumId)
+						?.address ||
 				secondaryAddress !==
-					project.addresses?.find(
-						(a: IWalletAddress) =>
-							a.networkId === config.SECONDARY_NETWORK.id,
-					).address ||
+					project.addresses?.find(a => a.networkId === gnosisId)
+						?.address ||
 				impactLocation !== project.impactLocation
 			) {
 				setPublish(false);
@@ -170,22 +167,6 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 	}, []);
 
 	useEffect(() => {
-		const userAddress = user?.walletAddress || '';
-		if (!isEditMode) {
-			setMainAddress({
-				address: userAddress,
-				networkId: config.PRIMARY_NETWORK.id,
-			});
-			walletAddressValidation(
-				userAddress,
-				library,
-				errors,
-				setErrors,
-				config.PRIMARY_NETWORK.id,
-			);
-		}
-	}, [user]);
-	useEffect(() => {
 		debouncedTitleValidation.current = Debounced(titleValidation, 1000);
 		debouncedAddressValidation.current = Debounced(
 			walletAddressValidation,
@@ -198,7 +179,7 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 	}, []);
 
 	const handleWalletInputChange = (value: string, networkId: number) => {
-		const isMainnet = networkId === config.PRIMARY_NETWORK.id;
+		const isMainnet = networkId === ethereumId;
 		if (
 			isEditMode &&
 			compareAddresses(
@@ -231,6 +212,7 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 			library,
 			errors,
 			setErrors,
+			chainId,
 			networkId,
 		);
 	};
@@ -276,12 +258,6 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 				? await getAddressFromENS(mainAddress?.address, library)
 				: mainAddress?.address;
 
-			const secondaryAddressValidated = isAddressENS(
-				secondaryAddress.address,
-			)
-				? await getAddressFromENS(secondaryAddress?.address, library)
-				: secondaryAddress?.address;
-
 			const projectData: IProjectCreation = {
 				title: name,
 				description,
@@ -291,11 +267,11 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 				addresses: [
 					{
 						address: utils.getAddress(mainAddressValidated),
-						networkId: config.PRIMARY_NETWORK.id,
+						networkId: ethereumId,
 					},
 					{
-						address: utils.getAddress(secondaryAddressValidated),
-						networkId: config.SECONDARY_NETWORK.id,
+						address: utils.getAddress(secondaryAddress.address!),
+						networkId: gnosisId,
 					},
 				],
 				image,
@@ -342,10 +318,8 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 			}
 		} catch (e) {
 			setIsLoading(false);
-			const error = e as Error;
-			console.log({ e });
-			showToastError(error);
-			captureException(error, {
+			showToastError(e);
+			captureException(e, {
 				tags: {
 					section: 'CreateProjectSubmit',
 				},
@@ -427,15 +401,12 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 								setIsLoading={setIsLoading}
 							/>
 							<WalletAddressInput
-								title='Primary Address'
-								networkId={config.PRIMARY_NETWORK.id}
+								title='Ethereum Mainnet Address'
+								networkId={ethereumId}
 								value={mainAddress.address}
 								setValue={e => {
 									setFormChange(true);
-									handleWalletInputChange(
-										e,
-										config.PRIMARY_NETWORK.id,
-									);
+									handleWalletInputChange(e, ethereumId);
 								}}
 								error={
 									errors[ECreateErrFields.MAIN_WALLET_ADDRESS]
@@ -443,15 +414,11 @@ const CreateProject = (props: { project?: IProjectEdition }) => {
 							/>
 							<WalletAddressInput
 								title='Gnosis Address'
-								networkId={config.SECONDARY_NETWORK.id}
+								networkId={gnosisId}
 								value={secondaryAddress.address}
 								setValue={e => {
-									console.log('gnosisAddress');
 									setFormChange(true);
-									handleWalletInputChange(
-										e,
-										config.SECONDARY_NETWORK.id,
-									);
+									handleWalletInputChange(e, gnosisId);
 								}}
 								error={
 									errors[
