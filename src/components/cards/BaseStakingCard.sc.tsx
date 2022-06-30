@@ -27,6 +27,8 @@ export const StakingPoolContainer = styled.div<IStakingPoolContainer>`
 	position: relative;
 	margin-bottom: 32px;
 	padding: 1px 0;
+	box-shadow: ${props =>
+		props.shadowColor ? `0px 0px 24px 6px ${props.shadowColor}` : 'unset'};
 `;
 export const StakingPoolExchangeRow = styled(Flex)`
 	margin: 16px 16px 0;

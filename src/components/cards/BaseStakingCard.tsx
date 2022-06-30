@@ -203,7 +203,10 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 
 	return (
 		<>
-			<StakingPoolContainer big={type === StakingType.GIV_LM}>
+			<StakingPoolContainer
+				big={type === StakingType.GIV_LM}
+				shadowColor={type === StakingType.GIV_LM ? '#E1458D' : ''}
+			>
 				{!active && disableModal && (
 					<DisableModal>
 						<DisableModalContent>
