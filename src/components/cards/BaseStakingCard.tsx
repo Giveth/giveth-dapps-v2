@@ -69,6 +69,7 @@ import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { useAppSelector } from '@/features/hooks';
 import { ITokenDistroInfo } from '@/types/subgraph';
 import { GIVPowerExplainModal } from '../modals/GIVPowerExplain';
+import GIVpowerCardIntro from './GIVpowerCardIntro';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -443,7 +444,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 						</StakePoolInfoContainer>
 					</>
 				) : state === StakeCardState.GIVPOWER_INTRO ? (
-					<div></div>
+					<GIVpowerCardIntro setState={setState} />
 				) : (
 					<StakingCardIntro
 						poolStakingConfig={

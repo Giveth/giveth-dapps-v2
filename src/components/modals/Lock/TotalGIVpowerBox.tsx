@@ -81,6 +81,7 @@ const BoxContainer = styled.div`
 	padding: 24px;
 	margin: 24px 0;
 	text-align: center;
+	height: 132px;
 `;
 
 const IconWrapper = styled.div`
@@ -88,7 +89,7 @@ const IconWrapper = styled.div`
 `;
 
 const BoxRow = styled(Flex)`
-	margin-top: 18px;
+	margin-top: 12px;
 `;
 
 export default TotalGIVpowerBox;
