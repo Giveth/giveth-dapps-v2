@@ -35,7 +35,8 @@ import { shortenAddress } from '@/lib/helpers';
 import { Col, Container, Row } from '@/components/Grid';
 
 import { GIVfrens } from '@/components/givfarm/GIVfrens';
-import { GIVpower } from '@/components/givfarm/GIVpower';
+import GIVpowerStakingPoolCard from '../cards/GIVpowerStakingPoolCard';
+import { GIVpowerProvider } from '@/context/givpower.context';
 
 const renderPools = (
 	pools: BasicNetworkConfig['pools'],
@@ -192,13 +193,17 @@ export const TabGIVfarmBottom = () => {
 				{chainId === config.XDAI_NETWORK_NUMBER && (
 					<>
 						<PoolRow>
+							<GIVpowerProvider>
+								<Col sm={6} lg={4} key={`givpower_card`}>
+									<GIVpowerStakingPoolCard />
+								</Col>
+							</GIVpowerProvider>
 							{renderPools(
 								config.XDAI_CONFIG.pools,
 								config.XDAI_NETWORK_NUMBER,
 								showArchivedPools,
 							)}
 						</PoolRow>
-						<GIVpower />
 						<GIVfrens
 							regenFarms={config.XDAI_CONFIG.regenFarms}
 							network={config.XDAI_NETWORK_NUMBER}
