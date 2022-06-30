@@ -116,9 +116,12 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const [errors, setErrors] = useState<ICreateProjectErrors>({
 		[ECreateErrFields.NAME]: isEditMode ? '' : 'Title is required',
 		[ECreateErrFields.DESCRIPTION]: '',
-		[ECreateErrFields.MAIN_WALLET_ADDRESS]: 'Ethereum Address is required',
-		[ECreateErrFields.SECONDARY_WALLET_ADDRESS]:
-			'Gnosis Address is required',
+		[ECreateErrFields.MAIN_WALLET_ADDRESS]: isEditMode
+			? ''
+			: 'Ethereum Address is required',
+		[ECreateErrFields.SECONDARY_WALLET_ADDRESS]: isEditMode
+			? ''
+			: 'Gnosis Address is required',
 	});
 	const [formChange, setFormChange] = useState(false);
 
