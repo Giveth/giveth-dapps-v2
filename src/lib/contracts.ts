@@ -7,6 +7,11 @@ import { captureException } from '@sentry/nextjs';
 import UNISWAP_V3_STAKER_ABI from '@/artifacts/uniswap_v3_staker.json';
 import { StakingType, UniswapV3PoolStakingConfig } from '@/types/config';
 import config from '@/configuration';
+import {
+	ERC20,
+	INonfungiblePositionManager,
+	IUniswapV3Pool,
+} from '@/types/contracts';
 
 const { abi: UniswapV3PoolABI } = UniswapV3PoolJson;
 const { abi: NonfungiblePositionManagerABI } = NonfungiblePositionManagerJson;
@@ -21,7 +26,7 @@ const { NFT_POSITIONS_MANAGER_ADDRESS, UNISWAP_V3_STAKER, UNISWAP_V3_LP_POOL } =
 
 export const getNftManagerPositionsContract = (
 	provider: Web3Provider | null,
-) => {
+): INonfungiblePositionManager | undefined => {
 	const signer = provider?.getSigner();
 
 	if (!signer) {
@@ -32,7 +37,7 @@ export const getNftManagerPositionsContract = (
 		NFT_POSITIONS_MANAGER_ADDRESS,
 		NonfungiblePositionManagerABI,
 		signer,
-	);
+	) as INonfungiblePositionManager;
 };
 
 export const getUniswapV3StakerContract = (
@@ -50,7 +55,7 @@ export const getUniswapV3StakerContract = (
 		return;
 	}
 
-	return new Contract(UNISWAP_V3_STAKER, UNISWAP_V3_STAKER_ABI, signer);
+	return new Contract(UNISWAP_V3_STAKER, UNISWAP_V3_STAKER_ABI, signer); // as IUniswapV3Staker;
 };
 
 export const getGivethV3PoolContract = (provider: Web3Provider | null) => {
@@ -60,7 +65,11 @@ export const getGivethV3PoolContract = (provider: Web3Provider | null) => {
 		return;
 	}
 
-	return new Contract(UNISWAP_V3_LP_POOL, UniswapV3PoolABI, signer);
+	return new Contract(
+		UNISWAP_V3_LP_POOL,
+		UniswapV3PoolABI,
+		signer,
+	) as IUniswapV3Pool;
 };
 
 interface IERC20Info {
@@ -77,7 +86,11 @@ export async function getERC20Info({
 	networkId,
 }: IERC20Info) {
 	try {
-		const instance = new Contract(contractAddress, tokenAbi, library);
+		const instance = new Contract(
+			contractAddress,
+			tokenAbi,
+			library,
+		) as ERC20;
 		const name = await instance.name();
 		const symbol = await instance.symbol();
 		const decimals = await instance.decimals();

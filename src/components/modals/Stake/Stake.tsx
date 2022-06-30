@@ -26,6 +26,7 @@ import ToggleSwitch from '../../styled-components/Switch';
 import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
 import { IModal } from '@/types/common';
 import StakeSteps from './StakeSteps';
+import { ERC20 } from '@/types/contracts';
 import type { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 
 interface IStakeModalProps extends IModal {
@@ -85,7 +86,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 					POOL_ADDRESS,
 					ERC20_ABI,
 					signer,
-				);
+				) as ERC20;
 				const allowance: BigNumber = await tokenContract.allowance(
 					userAddress,
 					!GARDEN_ADDRESS ? LM_ADDRESS : GARDEN_ADDRESS!,
