@@ -38,8 +38,8 @@ export const fetchXDaiInfo = async (userAddress = '') => {
 		);
 		let givpowerInfo = givPower.givpowers[0];
 		const roundsInfo = getGIVpowerRoundsInfo(
-			givpowerInfo.initialDate,
-			givpowerInfo.roundDuration,
+			Number(givpowerInfo.initialDate),
+			Number(givpowerInfo.roundDuration),
 		);
 		givpowerInfo = { ...givpowerInfo, ...roundsInfo };
 
