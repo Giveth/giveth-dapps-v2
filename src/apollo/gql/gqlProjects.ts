@@ -415,6 +415,7 @@ export const PROJECT_ACCEPTED_TOKENS = gql`
 			decimals
 			mainnetAddress
 			isGivbackEligible
+			order
 		}
 	}
 `;

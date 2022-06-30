@@ -8,11 +8,10 @@ import {
 	GLink,
 	Lead,
 	neutralColors,
-	P,
 	semanticColors,
 } from '@giveth/ui-design-system';
-import { useRouter } from 'next/router';
 import { AnimatePresence, motion } from 'framer-motion';
+import Link from 'next/link';
 import { client } from '@/apollo/apolloClient';
 
 import {
@@ -373,25 +372,25 @@ interface IDonoContent {
 }
 
 const DoneContent = ({ show }: IDonoContent) => {
-	const router = useRouter();
 	return show ? (
 		<>
 			<Lead>
 				Your project was successfully deactivated. Thank you for using
 				Giveth.
 			</Lead>
-			<RedirectLink onClick={() => router.push(Routes.Projects)}>
-				Go to projects
-			</RedirectLink>
-			<RedirectLink onClick={() => router.push(Routes.MyAccount)}>
-				Back to My account
-			</RedirectLink>
+			<Link href={Routes.Projects} passHref>
+				<RedirectLink>Go to projects</RedirectLink>
+			</Link>
+			<br />
+			<Link href={Routes.MyAccount} passHref>
+				<RedirectLink>Back to My account</RedirectLink>
+			</Link>
 		</>
 	) : null;
 };
 
-const RedirectLink = styled(P)`
-	display: block;
+const RedirectLink = styled.a`
+	display: inline-block;
 	margin-top: 8px;
 	color: ${brandColors.pinky[500]};
 	cursor: pointer;

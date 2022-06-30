@@ -12,6 +12,7 @@ import {
 	INonfungiblePositionManager,
 	IUniswapV3Pool,
 } from '@/types/contracts';
+import { MAX_TOKEN_ORDER } from './constants/tokens';
 
 const { abi: UniswapV3PoolABI } = UniswapV3PoolJson;
 const { abi: NonfungiblePositionManagerABI } = NonfungiblePositionManagerJson;
@@ -100,6 +101,7 @@ export async function getERC20Info({
 			address: contractAddress,
 			networkId,
 			decimals,
+			order: MAX_TOKEN_ORDER,
 		};
 		console.log({ ERC20Info });
 
