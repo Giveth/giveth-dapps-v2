@@ -98,14 +98,22 @@ export class SubgraphQueryBuilder {
 		return mainTokenDistroQuery + regenFarmsTokenDistroQueries;
 	};
 
-	static getGIVPowersInfoQuery = (address: string): string => {
-		return `query { givpowers(id: "${address.toLowerCase()}"){ 
+	private static getGIVPowersInfoQuery = (address: string): string => {
+		return `givpowers(id: "${address}"){ 
 			id
 			initialDate
 			locksCreated
 			roundDuration
 			totalGIVLocked
-		}}`;
+		}`;
+	};
+
+	private static getGIVStakedBalance = (address: string): string => {
+		return ` tokenBalances(
+			where: { user: "${address}" }
+		  ) {
+			balance
+		  }`;
 	};
 
 	static getTokenLocksInfoQuery = (
@@ -269,6 +277,16 @@ export class SubgraphQueryBuilder {
 					c => c.type === StakingType.SUSHISWAP_ETH_GIV,
 				)?.POOL_ADDRESS || '',
 			)}
+		}
+		`;
+	};
+
+	static getGIVpowerQuery = (address: string): string => {
+		const _address = address.toLowerCase();
+		return `
+		{
+			gGiv: ${SubgraphQueryBuilder.getGIVStakedBalance(_address)}
+			givpowerInfo: ${SubgraphQueryBuilder.getGIVPowersInfoQuery(_address)}
 		}
 		`;
 	};
