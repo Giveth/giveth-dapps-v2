@@ -121,7 +121,7 @@ export interface IGIVpowerInfo {
 	nextRoundDate: string;
 }
 
-export interface IGIVpowerLock {
+export interface IGIVpowerPosition {
 	id: string;
 	user: IUser;
 	amount: string;
@@ -130,11 +130,6 @@ export interface IGIVpowerLock {
 	unlockableAt: string;
 	unlockedAt: string;
 	unlocked: boolean;
-}
-
-export interface IGIVpower {
-	givPowers: IGIVpowerInfo;
-	tokenLocks: IGIVpowerLock[];
 }
 
 export interface IUnipool {

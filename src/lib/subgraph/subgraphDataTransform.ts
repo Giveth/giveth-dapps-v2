@@ -1,6 +1,7 @@
 import { ethers } from 'ethers';
 import {
 	IBalances,
+	IGIVpowerInfo,
 	IInfinitePositionReward,
 	ITokenDistroInfo,
 	IUnipool,
@@ -10,9 +11,10 @@ import {
 	ZeroBalances,
 } from '@/types/subgraph';
 import { RegenFarmType, StakingType, StreamType } from '@/types/config';
+import { getGIVpowerRoundsInfo } from '@/helpers/givpower';
 import type { ISubgraphState } from '@/features/subgraph/subgraph.types';
 
-const transformBalanceInfo = (info: any): IBalances => {
+const transformBalanceInfo = (info: any, gGiv: any): IBalances => {
 	if (!info) return ZeroBalances;
 
 	const balance = info.balance || 0;
@@ -44,7 +46,7 @@ const transformBalanceInfo = (info: any): IBalances => {
 	const honeyswapLpStaked = info.honeyswapLpStaked || 0;
 	const honeyswapGivDaiLp = info.honeyswapGivDaiLp || 0;
 	const honeyswapGivDaiLpStaked = info.honeyswapGivDaiLpStaked || 0;
-	const givStaked = info.givStaked || 0;
+	const givStaked = gGiv?.balance || 0;
 	const allocationCount = Number(info.allocationCount || 0);
 	const givDropClaimed = Boolean(info.givDropClaimed);
 
@@ -248,9 +250,34 @@ const transformUniswapV2Pair = (info: any): IUniswapV2Pair | undefined => {
 		reserve1,
 	};
 };
+
+const transformGIVpowerInfo = (info: any): IGIVpowerInfo | undefined => {
+	if (!info) return undefined;
+	const id = info.id;
+	const initialDate = info.initialDate;
+	const locksCreated = info.locksCreated;
+	const totalGIVLocked = info.totalGIVLocked;
+	const roundDuration = info.roundDuration;
+	const roundsInfo = getGIVpowerRoundsInfo(
+		Number(info.initialDate),
+		Number(info.roundDuration),
+	);
+	const nextRoundDate = roundsInfo.nextRoundDate;
+	const currentRound = roundsInfo.currentRound;
+	return {
+		currentRound,
+		id,
+		initialDate,
+		locksCreated,
+		nextRoundDate,
+		roundDuration,
+		totalGIVLocked,
+	};
+};
+
 export const transformSubgraphData = (data: any = {}): ISubgraphState => {
 	return {
-		balances: transformBalanceInfo(data?.balances),
+		balances: transformBalanceInfo(data?.balances, data?.gGiv[0]),
 		tokenDistroInfo: transformTokenDistroInfo(data?.tokenDistroInfo),
 		[StreamType.FOX]: transformTokenDistroInfo(data[StreamType.FOX]),
 		[StreamType.CULT]: transformTokenDistroInfo(data[StreamType.CULT]),
@@ -281,6 +308,7 @@ export const transformSubgraphData = (data: any = {}): ISubgraphState => {
 		uniswapV3Pool: transformUniswapV3Pool(data?.uniswapV3Pool),
 		...transformUniswapPositions(data),
 		uniswapV2EthGivPair: transformUniswapV2Pair(data?.uniswapV2EthGivPair),
+		givpowerInfo: transformGIVpowerInfo(data?.givpowerInfo[0]),
 		GIVPowerPositions: data?.GIVPowerPositions,
 	};
 };
