@@ -58,6 +58,20 @@ const BeforeStart = () => {
 					to apply to receive the &apos;Verified&apos; badge, empower
 					more Givers and also give back to those who have helped you
 					reach your goals, please fill out this form.
+					<br />
+					<br />
+					You will need to provide a link to a social media post made
+					by your organization where you have shared a link to your
+					Giveth project to prove that you are in fact part of the
+					organization you claim to be.
+					<br />
+					<br />
+					You will be required to provide a list of all wallet
+					addresses used for managing funds within your project.
+					<br />
+					<br />
+					If your project is a registered non-profit organization, you
+					will need to upload verifiable proof to complete the form.
 				</Lead>
 			</div>
 			<div>
