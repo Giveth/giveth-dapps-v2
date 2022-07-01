@@ -13,7 +13,7 @@ interface ILockingBrief {
 }
 const LockingBrief: FC<ILockingBrief> = ({ round, amount }) => {
 	const givpowerInfo = useAppSelector(
-		state => state.subgraph.xDaiValues.GIVPowerPositions?.givPowers,
+		state => state.subgraph.xDaiValues.givpowerInfo,
 	);
 	const unlockDate = new Date(getUnlockDate(givpowerInfo, round));
 	return (

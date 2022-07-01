@@ -8,12 +8,14 @@ export const getGIVpowerRoundsInfo = (
 	const currentRound = Math.floor(
 		(getNowUnixMS() / 1000 - initialDate) / roundDuration,
 	);
-	const nextRoundDate =
-		(initialDate + roundDuration * (currentRound + 1)) * 1000;
+	const nextRoundDate = (
+		(initialDate + roundDuration * (currentRound + 1)) *
+		1000
+	).toString();
 	return { currentRound, nextRoundDate };
 };
 
 export const getUnlockDate = (givpowerInfo: IGIVpowerInfo, rounds: number) => {
 	const { nextRoundDate, roundDuration } = givpowerInfo;
-	return nextRoundDate + rounds * roundDuration * 1000;
+	return Number(nextRoundDate) + rounds * roundDuration * 1000;
 };
