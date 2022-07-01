@@ -8,17 +8,14 @@ import {
 } from './subgraph.thunks';
 import type { ISubgraphState } from './subgraph.types';
 
-const defaultGIVPowerPositions = {
-	givPowers: {
-		id: '',
-		currentRound: 0,
-		initialDate: '0',
-		locksCreated: 0,
-		nextRoundDate: '0',
-		roundDuration: 1,
-		totalGIVLocked: '0',
-	},
-	tokenLocks: [],
+const defaultGIVpowerInfo = {
+	id: '',
+	currentRound: 0,
+	initialDate: '0',
+	locksCreated: 0,
+	nextRoundDate: '0',
+	roundDuration: 1,
+	totalGIVLocked: '0',
 };
 
 export const defaultSubgraphValues: ISubgraphState = {
@@ -26,7 +23,7 @@ export const defaultSubgraphValues: ISubgraphState = {
 	userNotStakedPositions: [],
 	userStakedPositions: [],
 	allPositions: [],
-	GIVPowerPositions: defaultGIVPowerPositions,
+	givpowerInfo: defaultGIVpowerInfo,
 };
 
 const initialState: {

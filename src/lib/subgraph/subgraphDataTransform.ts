@@ -309,6 +309,5 @@ export const transformSubgraphData = (data: any = {}): ISubgraphState => {
 		...transformUniswapPositions(data),
 		uniswapV2EthGivPair: transformUniswapV2Pair(data?.uniswapV2EthGivPair),
 		givpowerInfo: transformGIVpowerInfo(data?.givpowerInfo[0]),
-		GIVPowerPositions: data?.GIVPowerPositions,
 	};
 };
