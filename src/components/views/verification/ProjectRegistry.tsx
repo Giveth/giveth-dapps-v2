@@ -19,18 +19,12 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { requiredOptions } from '@/lib/constants/regex';
 import { isObjEmpty } from '@/lib/helpers';
 import DescriptionInput from '@/components/DescriptionInput';
+import ImageUploader from '@/components/ImageUploader';
 
 enum ERegistryType {
 	NOT_SELECTED = 'notSelected',
 	YES = 'yes',
 	NO = 'no',
-}
-
-enum ERegistry {
-	link = 'link',
-	country = 'country',
-	description = 'description',
-	isNonProfit = 'isNonProfit',
 }
 
 interface IOption {
@@ -39,10 +33,12 @@ interface IOption {
 }
 
 interface IRegistryForm {
-	[ERegistry.link]: string;
-	[ERegistry.country]: IOption;
-	[ERegistry.description]: string;
-	[ERegistry.isNonProfit]: ERegistryType;
+	link: string;
+	country: IOption;
+	description: string;
+	isNonProfit: ERegistryType;
+	organizationName: string;
+	attachment: string;
 }
 
 export default function ProjectRegistry() {
@@ -54,21 +50,29 @@ export default function ProjectRegistry() {
 		organizationCountry,
 		organizationDescription,
 		organizationWebsite,
+		attachment,
+		organizationName,
 	} = projectRegistry || {};
 	const [countries, setCountries] = useState<IOption[]>([]);
+	const [uploading, setUploading] = useState(false);
 
 	const {
 		register,
 		handleSubmit,
 		formState: { errors, dirtyFields, isSubmitting },
-		getValues,
 		control,
 		setValue,
 		watch,
 	} = useForm<IRegistryForm>();
 
-	const watchIsNonProfit = watch(ERegistry.isNonProfit);
-	const handleNext = () => {
+	const watchIsNonProfit = watch('isNonProfit');
+	const handleNext = ({
+		country,
+		attachment,
+		link,
+		description,
+		organizationName,
+	}: IRegistryForm) => {
 		async function sendReq() {
 			const { data } = await client.mutate({
 				mutation: UPDATE_PROJECT_VERIFICATION,
@@ -79,12 +83,11 @@ export default function ProjectRegistry() {
 						projectRegistry: {
 							isNonProfitOrganization:
 								watchIsNonProfit === ERegistryType.YES,
-							organizationCountry: getValues(ERegistry.country)
-								?.value,
-							organizationWebsite: getValues(ERegistry.link),
-							organizationDescription: getValues(
-								ERegistry.description,
-							),
+							organizationCountry: country?.value,
+							organizationWebsite: link,
+							organizationDescription: description,
+							organizationName: organizationName,
+							attachment: attachment ?? '',
 						},
 					},
 				},
@@ -119,9 +122,14 @@ export default function ProjectRegistry() {
 	useEffect(() => {
 		projectRegistry
 			? isNonProfitOrganization
-				? setValue(ERegistry.isNonProfit, ERegistryType.YES)
-				: setValue(ERegistry.isNonProfit, ERegistryType.NO)
-			: setValue(ERegistry.isNonProfit, ERegistryType.NOT_SELECTED);
+				? setValue('isNonProfit', ERegistryType.YES)
+				: setValue('isNonProfit', ERegistryType.NO)
+			: setValue('isNonProfit', ERegistryType.NOT_SELECTED);
+		organizationCountry &&
+			setValue('country', {
+				label: organizationCountry,
+				value: organizationCountry,
+			});
 	}, [projectRegistry]);
 
 	return (
@@ -139,7 +147,7 @@ export default function ProjectRegistry() {
 					</RadioSectionSubTitle>
 					<br />
 					<Controller
-						name={ERegistry.isNonProfit}
+						name={'isNonProfit'}
 						control={control}
 						render={({ field: { value } }) => (
 							<RadioContainer>
@@ -147,7 +155,7 @@ export default function ProjectRegistry() {
 									title='Yes'
 									toggleRadio={() => {
 										setValue(
-											ERegistry.isNonProfit,
+											'isNonProfit',
 											ERegistryType.YES,
 											{ shouldDirty: true },
 										);
@@ -158,7 +166,7 @@ export default function ProjectRegistry() {
 									title='No'
 									toggleRadio={() => {
 										setValue(
-											ERegistry.isNonProfit,
+											'isNonProfit',
 											ERegistryType.NO,
 											{ shouldDirty: true },
 										);
@@ -172,29 +180,40 @@ export default function ProjectRegistry() {
 				<br />
 				{watchIsNonProfit === ERegistryType.YES && (
 					<>
+						<Lead>
+							What name is your organization registered under?
+						</Lead>
+						<br />
+						<InputContainer>
+							<Input
+								placeholder='Project official name'
+								registerName='organizationName'
+								register={register}
+								registerOptions={
+									isDraft ? requiredOptions.field : {}
+								}
+								defaultValue={organizationName || ''}
+								error={errors.organizationName}
+							/>
+						</InputContainer>
 						<Lead>In which country are you registered?</Lead>
 						<br />
-
 						<Controller
 							control={control}
-							name={ERegistry.country}
+							name='country'
 							render={({ field: { value, onChange } }) => (
 								<Select
 									options={countries}
 									styles={selectCustomStyles}
+									placeholder='Choose country'
 									value={countries.find(
 										c => c.value === value?.value,
 									)}
-									defaultValue={{
-										label: organizationCountry,
-										value: organizationCountry,
-									}}
 									onChange={onChange}
 									isDisabled={!isDraft}
 								/>
 							)}
 						/>
-
 						<br />
 						<Lead>
 							Please provide a link to your country&apos;s
@@ -202,10 +221,10 @@ export default function ProjectRegistry() {
 							confirm your status.
 						</Lead>
 						<br />
-						<LinkInputContainer>
+						<InputContainer>
 							<Label>Please enter full link</Label>
 							<Input
-								registerName={ERegistry.link}
+								registerName='link'
 								register={register}
 								registerOptions={
 									isDraft ? requiredOptions.website : {}
@@ -215,7 +234,19 @@ export default function ProjectRegistry() {
 								disabled={!isDraft}
 								defaultValue={organizationWebsite || ''}
 							/>
-						</LinkInputContainer>
+						</InputContainer>
+						<Controller
+							control={control}
+							name='attachment'
+							defaultValue={attachment}
+							render={({ field }) => (
+								<ImageUploader
+									url={field.value || ''}
+									setUrl={url => field.onChange(url)}
+									setIsUploading={setUploading}
+								/>
+							)}
+						/>
 					</>
 				)}
 
@@ -231,7 +262,7 @@ export default function ProjectRegistry() {
 							placeholder='eg. "We are a decentralized autonomous organization that works toward the development of web3
 						applications"'
 							register={register}
-							registerName={ERegistry.description}
+							registerName='description'
 							registerOptions={
 								isDraft ? requiredOptions.field : {}
 							}
@@ -250,6 +281,7 @@ export default function ProjectRegistry() {
 						loading={isSubmitting}
 						label='NEXT     >'
 						type='submit'
+						disabled={uploading}
 					/>
 				</BtnContainer>
 			</div>
@@ -282,6 +314,6 @@ const RadioContainer = styled.div`
 	}
 `;
 
-const LinkInputContainer = styled.div`
+const InputContainer = styled.div`
 	max-width: 520px;
 `;
