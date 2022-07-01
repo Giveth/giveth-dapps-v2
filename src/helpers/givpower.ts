@@ -8,8 +8,10 @@ export const getGIVpowerRoundsInfo = (
 	const currentRound = Math.floor(
 		(getNowUnixMS() / 1000 - initialDate) / roundDuration,
 	);
-	const nextRoundDate =
-		(initialDate + roundDuration * (currentRound + 1)) * 1000;
+	const nextRoundDate = (
+		(initialDate + roundDuration * (currentRound + 1)) *
+		1000
+	).toString();
 	return { currentRound, nextRoundDate };
 };
 
