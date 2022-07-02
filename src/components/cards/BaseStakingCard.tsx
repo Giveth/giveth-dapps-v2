@@ -71,6 +71,7 @@ import { ITokenDistroInfo } from '@/types/subgraph';
 import { GIVPowerExplainModal } from '../modals/GIVPowerExplain';
 import GIVpowerCardIntro from './GIVpowerCardIntro';
 import LockModal from '../modals/Lock/Lock';
+import { StakeGIVModal } from '../modals/Stake/StakeGIV';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -484,6 +485,12 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								key: undefined,
 							}
 						}
+					/>
+				) : type === StakingType.GIV_LM ? (
+					<StakeGIVModal
+						setShowModal={setShowStakeModal}
+						poolStakingConfig={poolStakingConfig}
+						maxAmount={userNotStakedAmount}
 					/>
 				) : (
 					<StakeModal
