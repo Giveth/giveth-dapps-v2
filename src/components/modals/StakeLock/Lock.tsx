@@ -1,8 +1,6 @@
 import {
-	brandColors,
 	ButtonLink,
 	GLink,
-	H5,
 	IconRocketInSpace32,
 	P,
 	semanticColors,
@@ -18,6 +16,7 @@ import {
 	ApproveButton,
 	CancelButton,
 	ConfirmButton,
+	SectionTitle,
 	StakeInnerModal,
 	StakeModalContainer,
 } from './StakeLock.sc';
@@ -175,14 +174,6 @@ const LockModal: FC<ILockModalProps> = ({
 		</Modal>
 	);
 };
-
-const SectionTitle = styled(H5)`
-	text-align: left;
-	color: ${brandColors.giv[300]};
-	padding-bottom: 8px;
-	border-bottom: 1px solid ${brandColors.giv[500]};
-	margin: 16px 0 8px;
-`;
 
 const LearnMoreLink = styled(GLink)`
 	display: block;

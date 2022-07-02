@@ -25,6 +25,7 @@ import {
 	StakeInnerModal,
 	ApproveButton,
 	ConfirmButton,
+	SectionTitle,
 } from './StakeLock.sc';
 import type { PoolStakingConfig } from '@/types/config';
 
@@ -171,6 +172,7 @@ export const StakeGIVModal: FC<IStakeModalProps> = ({
 						<>
 							<StakeInnerModal>
 								<StakeSteps stakeState={stakeState} />
+								<SectionTitle>Amount to stake</SectionTitle>
 								<AmountInput
 									setAmount={setAmount}
 									maxAmount={maxAmount}

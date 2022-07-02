@@ -133,7 +133,9 @@ const InputLabel = styled(GLink)`
 const InputLabelText = styled.div`
 	color: ${neutralColors.gray[100]};
 `;
-const InputLabelValue = styled.div``;
+const InputLabelValue = styled.div`
+	color: ${brandColors.deep[100]};
+`;
 const InputLabelAction = styled(GLink)`
 	color: ${brandColors.cyan[500]};
 	cursor: pointer;

@@ -1,4 +1,11 @@
-import { H4, neutralColors, Button } from '@giveth/ui-design-system';
+import {
+	H4,
+	neutralColors,
+	Button,
+	brandColors,
+	H5,
+	OulineButton,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
 
@@ -20,7 +27,7 @@ export const StakeInnerModal = styled.div`
 	padding: 0 24px;
 `;
 
-export const ApproveButton = styled(Button)`
+export const ApproveButton = styled(OulineButton)`
 	width: 100%;
 	margin-top: 32px;
 	margin-bottom: 8px;
@@ -58,4 +65,12 @@ export const ToggleContainer = styled.div`
 	justify-content: center;
 	align-items: center;
 	gap: 10px;
+`;
+
+export const SectionTitle = styled(H5)`
+	text-align: left;
+	color: ${brandColors.giv[300]};
+	padding-bottom: 8px;
+	border-bottom: 1px solid ${brandColors.giv[500]};
+	margin: 16px 0 8px;
 `;
