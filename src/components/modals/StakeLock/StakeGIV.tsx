@@ -178,10 +178,7 @@ export const StakeGIVModal: FC<IStakeModalProps> = ({
 									maxAmount={maxAmount}
 									poolStakingConfig={poolStakingConfig}
 									disabled={
-										!(
-											stakeState === StakeState.APPROVE ||
-											stakeState === StakeState.STAKE
-										)
+										stakeState === StakeState.APPROVING
 									}
 								/>
 								{stakeState === StakeState.APPROVE && (
