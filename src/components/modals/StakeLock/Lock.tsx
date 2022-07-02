@@ -20,7 +20,7 @@ import {
 	ConfirmButton,
 	StakeInnerModal,
 	StakeModalContainer,
-} from '../Stake/Stake';
+} from './StakeLock.sc';
 import { AmountInput } from '@/components/AmountInput';
 import LockSlider from './LockSlider';
 import LockInfo from './LockInfo';

@@ -9,7 +9,7 @@ import {
 import { Dispatch, FC, SetStateAction } from 'react';
 import styled from 'styled-components';
 import Routes from '@/lib/constants/Routes';
-import TotalGIVpowerBox from '../modals/Lock/TotalGIVpowerBox';
+import TotalGIVpowerBox from '../modals/StakeLock/TotalGIVpowerBox';
 import { Flex } from '../styled-components/Flex';
 import { StakeCardState } from './BaseStakingCard';
 
