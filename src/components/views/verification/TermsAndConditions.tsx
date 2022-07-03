@@ -20,6 +20,18 @@ export default function TermsAndConditions() {
 		verificationData?.isTermAndConditionsAccepted || false,
 	);
 
+	const updateVerificationState = () => {
+		setVerificationData(prevState =>
+			prevState
+				? {
+						...prevState,
+						status: EVerificationStatus.DRAFT,
+				  }
+				: undefined,
+		);
+		setStep(8);
+	};
+
 	const handleNext = () => {
 		async function sendReq() {
 			setloading(true);
@@ -33,31 +45,15 @@ export default function TermsAndConditions() {
 					},
 				},
 			});
-			setVerificationData(prevState =>
-				prevState
-					? {
-							...prevState,
-							status: EVerificationStatus.DRAFT,
-					  }
-					: undefined,
-			);
 
 			setloading(false);
-			setStep(8);
+			updateVerificationState();
 		}
 
 		if (isChanged && isDraft) {
 			sendReq();
 		} else {
-			setVerificationData(prevState =>
-				prevState
-					? {
-							...prevState,
-							status: EVerificationStatus.DRAFT,
-					  }
-					: undefined,
-			);
-			setStep(8);
+			updateVerificationState();
 		}
 	};
 	return (

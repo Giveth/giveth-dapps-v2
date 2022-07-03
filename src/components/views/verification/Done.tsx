@@ -14,35 +14,30 @@ const Done = () => {
 	console.log('status', verificationData);
 
 	const status = verificationData?.status ?? EVerificationStatus.SUBMITTED;
-	const titles = new Map([
-		[EVerificationStatus.DRAFT, 'Congratulations'],
-		[EVerificationStatus.SUBMITTED, 'Waiting for verification'],
-		[EVerificationStatus.REJECTED, 'Verification rejected'],
-		[EVerificationStatus.VERIFIED, 'Your project is verified now 🎉'],
-	]);
 
-	const subtitles = new Map([
-		[
-			EVerificationStatus.DRAFT,
-			`Your application has been submitted!
+	const titles = {
+		[EVerificationStatus.DRAFT]: 'Congratulations',
+		[EVerificationStatus.SUBMITTED]: 'Waiting for verification',
+		[EVerificationStatus.REJECTED]: 'Verification rejected',
+		[EVerificationStatus.VERIFIED]: 'Your project is verified now 🎉',
+	};
+
+	const subtitles = {
+		[EVerificationStatus.DRAFT]: `Your application has been submitted!
 		The Verification Team will send an email once it has been reviewed.`,
-		],
-		[
-			EVerificationStatus.SUBMITTED,
-			`We received your application!
+		[EVerificationStatus.SUBMITTED]: `Your application has been submitted!
 		The Verification Team will send an email once it has been reviewed.`,
-		],
-		[EVerificationStatus.REJECTED, 'Please contact support team.'],
-		[EVerificationStatus.VERIFIED, ''],
-	]);
+		[EVerificationStatus.REJECTED]: 'Please contact support team.',
+		[EVerificationStatus.VERIFIED]: '',
+	};
 
 	return (
 		<>
 			<Container>
 				<H4 weight={700}>
-					{titles.get(status ?? EVerificationStatus.SUBMITTED)}
+					{titles[status ?? EVerificationStatus.SUBMITTED]}
 				</H4>
-				<P>{subtitles.get(status ?? EVerificationStatus.SUBMITTED)} </P>
+				<P>{subtitles[status ?? EVerificationStatus.SUBMITTED]} </P>
 				{status === 'draft' && (
 					<ConfettiContainer>
 						<ConfettiAnimation size={isMobile ? 200 : 600} />
