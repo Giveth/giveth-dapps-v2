@@ -62,6 +62,7 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 			return;
 		}
 		setTxHash(tx.hash);
+		setUnstakeState(StakeState.SUBMITTING);
 		const { status } = await tx.wait();
 		if (status) {
 			setUnstakeState(StakeState.CONFIRMED);
@@ -115,12 +116,22 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 										</TotalStakedRow>
 									</LockInfoContainer>
 									<UnStakeButton
-										label={'label'}
+										label={
+											unStakeState === StakeState.UNSTAKE
+												? 'unstake'
+												: 'unstake pending'
+										}
 										onClick={onWithdraw}
 										buttonType='primary'
 										disabled={
 											amount == '0' ||
-											maxUnstakeable.lt(amount)
+											maxUnstakeable.lt(amount) ||
+											unStakeState ===
+												StakeState.UNSTAKING
+										}
+										loading={
+											unStakeState ===
+											StakeState.UNSTAKING
 										}
 									/>
 								</>
