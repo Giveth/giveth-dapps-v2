@@ -13,7 +13,6 @@ import { useWeb3React } from '@web3-react/core';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
 import {
-	StyledOutlineButton,
 	CancelButton,
 	StyledButton,
 	SectionTitle,
@@ -106,7 +105,7 @@ const LockModal: FC<ILockModalProps> = ({
 							<SectionTitle weight={700}>Rounds</SectionTitle>
 							<LockSlider setRound={setRound} round={round} />
 							<LockInfo round={round} amount={amount} />
-							<StyledOutlineButton
+							<StyledButton
 								buttonType='primary'
 								size='small'
 								label={'Lock to increase your multiplier'}
