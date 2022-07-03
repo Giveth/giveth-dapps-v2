@@ -23,6 +23,7 @@ import { fetchSubgraph } from '@/services/subgraph.service';
 import config from '@/configuration';
 import { SubgraphQueryBuilder } from '@/lib/subgraph/subgraphQueryBuilder';
 import { useAppSelector } from '@/features/hooks';
+import { mediaQueries } from '@/lib/constants/constants';
 import type { BigNumber } from 'ethers';
 import type { IModal } from '@/types/common';
 
@@ -170,9 +171,11 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 const LockupDetailsContainer = styled.div`
 	padding: 24px;
 	background-repeat: no-repeat;
-	width: 592px;
 	color: ${neutralColors.gray[100]};
 	text-align: left;
+	${mediaQueries.tablet} {
+		width: 592px;
+	}
 `;
 
 const Desc = styled(H6)`
@@ -236,7 +239,6 @@ const LockedTable = styled.div`
 	display: grid;
 	grid-template-columns: 2fr 2fr 1fr 2fr 2fr;
 	overflow: auto;
-	min-width: 489px;
 	max-height: 364px;
 	margin: 10px 0 0 0;
 	color: ${brandColors.deep[100]};
