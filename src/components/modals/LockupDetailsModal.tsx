@@ -1,4 +1,4 @@
-import { useState, FC } from 'react';
+import { useState, FC, useEffect } from 'react';
 import {
 	neutralColors,
 	brandColors,
@@ -11,21 +11,26 @@ import {
 	P,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useWeb3React } from '@web3-react/core';
 import { smallFormatDate } from '@/lib/helpers';
 import { Flex } from '../styled-components/Flex';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { IconWithTooltip } from '../IconWithToolTip';
-import { formatEthHelper } from '@/helpers/number';
+import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import { useGIVpower } from '@/context/givpower.context';
 import { IGIVpowerPosition } from '@/types/subgraph';
+import { fetchSubgraph } from '@/services/subgraph.service';
+import config from '@/configuration';
+import { SubgraphQueryBuilder } from '@/lib/subgraph/subgraphQueryBuilder';
 
 export const LockupDetailsModal: FC<IModal> = ({ setShowModal }) => {
 	const { apr } = useGIVpower();
+	const { account } = useWeb3React();
 	const [average, setAverage] = useState(1);
 	const [stakedGIV, setStakedGIV] = useState('0');
 	const [availableToUnstake, setAvailableToUnstake] = useState('0');
-	const [lockedGIV, setLockedGIV] = useState<IGIVpowerPosition[]>([]);
+	const [locksInfo, setLocksInfo] = useState<IGIVpowerPosition[]>([]);
 
 	// const setupValues = () => {
 	// 	if (!GIVpower) return;
@@ -44,7 +49,7 @@ export const LockupDetailsModal: FC<IModal> = ({ setShowModal }) => {
 	// 	// 		),
 	// 	// 	)?.toFixed(4),
 	// 	// );
-	// 	setLockedGIV(
+	// 	setLocksInfo(
 	// 		GIVpower?.tokenLocks &&
 	// 			[...GIVpower.tokenLocks].sort((a: any, b: any) => {
 	// 				return a?.unlockableAt < b?.unlockableAt ? -1 : 1;
@@ -55,6 +60,21 @@ export const LockupDetailsModal: FC<IModal> = ({ setShowModal }) => {
 	// useEffect(() => {
 	// 	setupValues();
 	// }, [currentValues]);
+
+	useEffect(() => {
+		async function fetchGIVLockDetails() {
+			if (!account) return;
+			const LocksInfo = await fetchSubgraph(
+				SubgraphQueryBuilder.getTokenLocksInfoQuery(account),
+				config.XDAI_NETWORK_NUMBER,
+				true,
+			);
+			console.log('LocksInfo', LocksInfo.tokenLocks);
+			setLocksInfo(LocksInfo.tokenLocks);
+		}
+
+		fetchGIVLockDetails();
+	}, [account]);
 
 	return (
 		<Modal
@@ -100,49 +120,54 @@ export const LockupDetailsModal: FC<IModal> = ({ setShowModal }) => {
 
 				<LockedContainer>
 					<Subtitle>Locked GIV</Subtitle>
-					{lockedGIV?.length > 0 ? (
+					{locksInfo?.length > 0 ? (
 						<LockedTable>
 							<TableHeader>GIV Amount</TableHeader>
 							<TableHeader>Rounds Locked for</TableHeader>
 							<TableHeader>Multiplier</TableHeader>
 							<TableHeader>APR</TableHeader>
 							<TableHeader>Unlock Date</TableHeader>
-							{lockedGIV?.map((i: any, key) => {
-								return (
-									<RowWrapper key={key}>
-										<TableCell>
-											{parseFloat(
-												i?.amount,
-											)?.toLocaleString()}
-										</TableCell>
-										<TableCell>
-											{i?.rounds} Rounds
-										</TableCell>
-										<TableCell>
-											{Math.sqrt(
-												i?.rounds + 1,
-											)?.toPrecision(1)}
-										</TableCell>
-										<TableCell>
-											{apr
-												? `${formatEthHelper(
-														apr.multipliedBy(
-															average,
-														),
-												  )}`
-												: ' ? '}
-											%
-										</TableCell>
-										<TableCell>
-											{smallFormatDate(
-												new Date(
-													i?.unlockableAt * 1000,
-												),
-											)}
-										</TableCell>
-									</RowWrapper>
-								);
-							})}
+							{locksInfo?.map(
+								(locksInfo: IGIVpowerPosition, key) => {
+									return (
+										<RowWrapper key={key}>
+											<TableCell>
+												{formatWeiHelper(
+													locksInfo.amount,
+													2,
+												)}
+											</TableCell>
+											<TableCell>
+												{locksInfo.rounds} Rounds
+											</TableCell>
+											<TableCell>
+												{Math.sqrt(
+													locksInfo.rounds + 1,
+												)?.toPrecision(1)}
+											</TableCell>
+											<TableCell>
+												{apr
+													? `${formatEthHelper(
+															apr.multipliedBy(
+																average,
+															),
+													  )}`
+													: ' ? '}
+												%
+											</TableCell>
+											<TableCell>
+												{smallFormatDate(
+													new Date(
+														Number(
+															locksInfo.unlockableAt,
+														) * 1000,
+													),
+												)}
+											</TableCell>
+										</RowWrapper>
+									);
+								},
+							)}
 						</LockedTable>
 					) : (
 						<Subtitle>0</Subtitle>
@@ -234,7 +259,7 @@ const SubtitleH5 = styled(H5)`
 
 const LockedTable = styled.div`
 	display: grid;
-	grid-template-columns: 2fr 2fr 1fr 1fr 2fr;
+	grid-template-columns: 2fr 2fr 1fr 2fr 2fr;
 	overflow: auto;
 	min-width: 489px;
 	height: 364px;
