@@ -2,16 +2,18 @@ import { FC } from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
 import { Button, Lead, brandColors, H5 } from '@giveth/ui-design-system';
+import Image from 'next/image';
 
 import Routes from '@/lib/constants/Routes';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
+import BulbIcon from '/public/images/icons/lightbulb.svg';
 
 export const GoodProjectDescription: FC<IModal> = ({ setShowModal }) => {
 	return (
 		<Modal
 			setShowModal={setShowModal}
-			headerIcon={<img src='/images/icons/lightbulb.svg' />}
+			headerIcon={<Image src={BulbIcon} alt='light bulb' />}
 			headerTitle='How to write a great project description'
 			headerTitlePosition='left'
 		>
