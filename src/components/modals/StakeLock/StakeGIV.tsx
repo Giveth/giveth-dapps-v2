@@ -1,10 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
 import { BigNumber } from 'ethers';
-import Lottie from 'react-lottie';
 import { useWeb3React } from '@web3-react/core';
 import { Contract, ethers } from 'ethers';
 import { captureException } from '@sentry/nextjs';
-import { ButtonLink } from '@giveth/ui-design-system';
+import { ButtonLink, H5 } from '@giveth/ui-design-system';
 import { Modal } from '../Modal';
 import { AmountInput } from '../../AmountInput';
 import { approveERC20tokenTransfer, wrapToken } from '@/lib/stakingPool';
@@ -20,14 +19,14 @@ import { IModal } from '@/types/common';
 import StakeSteps from './StakeSteps';
 import { ERC20 } from '@/types/contracts';
 import {
-	Pending,
 	CancelButton,
 	StakeModalContainer,
 	StakeInnerModal,
-	ApproveButton,
-	ConfirmButton,
+	StyledOutlineButton,
 	SectionTitle,
 } from './StakeLock.sc';
+import { BriefContainer, H5White } from './LockingBrief';
+import { formatWeiHelper } from '@/helpers/number';
 import type { PoolStakingConfig } from '@/types/config';
 
 interface IStakeModalProps extends IModal {
@@ -190,8 +189,13 @@ export const StakeGIVModal: FC<IStakeModalProps> = ({
 												StakeState.APPROVING
 											}
 										/>
-										<ApproveButton
-											label={'APPROVE'}
+										<StyledOutlineButton
+											label={
+												stakeState ===
+												StakeState.APPROVE
+													? 'APPROVE'
+													: 'approve pending'
+											}
 											onClick={onApprove}
 											disabled={
 												amount == '0' ||
@@ -210,29 +214,34 @@ export const StakeGIVModal: FC<IStakeModalProps> = ({
 										/>
 									</>
 								)}
-								{stakeState === StakeState.WRAP && (
-									<ConfirmButton
-										label={'STAKE'}
-										onClick={onWrap}
-										disabled={
-											amount == '0' ||
-											maxAmount.lt(amount)
-										}
-										buttonType='primary'
-									/>
-								)}
-								{stakeState === StakeState.WRAPPING && (
+
+								{(stakeState === StakeState.WRAP ||
+									stakeState === StakeState.WRAPPING) && (
 									<>
-										<Pending>
-											<Lottie
-												options={
-													loadingAnimationOptions
-												}
-												height={40}
-												width={40}
-											/>
-											&nbsp;STAKE PENDING
-										</Pending>
+										<BriefContainer>
+											<H5>You are staking</H5>
+											<H5White>
+												{formatWeiHelper(amount, 2)} GIV
+											</H5White>
+										</BriefContainer>
+										<StyledOutlineButton
+											label={
+												stakeState === StakeState.WRAP
+													? 'stake'
+													: 'stake pending'
+											}
+											onClick={onWrap}
+											disabled={
+												amount == '0' ||
+												maxAmount.lt(amount) ||
+												stakeState ===
+													StakeState.WRAPPING
+											}
+											loading={
+												stakeState ===
+												StakeState.WRAPPING
+											}
+										/>
 										<CancelButton
 											buttonType='texty'
 											label='CANCEL'
