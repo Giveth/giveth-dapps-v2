@@ -17,20 +17,20 @@ const LockingBrief: FC<ILockingBrief> = ({ round, amount }) => {
 	);
 	const unlockDate = new Date(getUnlockDate(givpowerInfo, round));
 	return (
-		<StakingBriefContainer>
+		<BriefContainer>
 			<H5>You are locking </H5>
 			<H5White weight={700}>{formatWeiHelper(amount, 2)} GIV</H5White>
 			<H5White>until {smallFormatDate(unlockDate)}</H5White>
-		</StakingBriefContainer>
+		</BriefContainer>
 	);
 };
 
-const StakingBriefContainer = styled(Flex)`
+export const BriefContainer = styled(Flex)`
 	color: ${brandColors.giv[300]};
 	flex-direction: column;
 	gap: 8px;
 `;
-const H5White = styled(H5)`
+export const H5White = styled(H5)`
 	color: ${brandColors.giv['000']};
 `;
 

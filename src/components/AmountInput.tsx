@@ -72,6 +72,7 @@ export const AmountInput: FC<IAmountInput> = ({
 				</InputLabel>
 				<InputLabelAction
 					onClick={() => {
+						if (disabled) return;
 						setAmountPercentage(100);
 						setActiveStep(100);
 					}}
@@ -87,6 +88,7 @@ export const AmountInput: FC<IAmountInput> = ({
 			<FiltersRow>
 				<Step
 					onClick={() => {
+						if (disabled) return;
 						setAmountPercentage(25);
 						setActiveStep(25);
 					}}
@@ -96,6 +98,7 @@ export const AmountInput: FC<IAmountInput> = ({
 				</Step>
 				<Step
 					onClick={() => {
+						if (disabled) return;
 						setAmountPercentage(50);
 						setActiveStep(50);
 					}}
@@ -105,6 +108,7 @@ export const AmountInput: FC<IAmountInput> = ({
 				</Step>
 				<Step
 					onClick={() => {
+						if (disabled) return;
 						setAmountPercentage(75);
 						setActiveStep(75);
 					}}
@@ -114,6 +118,7 @@ export const AmountInput: FC<IAmountInput> = ({
 				</Step>
 				<Step
 					onClick={() => {
+						if (disabled) return;
 						setAmountPercentage(100);
 						setActiveStep(100);
 					}}
@@ -133,7 +138,9 @@ const InputLabel = styled(GLink)`
 const InputLabelText = styled.div`
 	color: ${neutralColors.gray[100]};
 `;
-const InputLabelValue = styled.div``;
+const InputLabelValue = styled.div`
+	color: ${brandColors.deep[100]};
+`;
 const InputLabelAction = styled(GLink)`
 	color: ${brandColors.cyan[500]};
 	cursor: pointer;

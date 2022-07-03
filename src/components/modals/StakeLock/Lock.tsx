@@ -1,8 +1,6 @@
 import {
-	brandColors,
 	ButtonLink,
 	GLink,
-	H5,
 	IconRocketInSpace32,
 	P,
 	semanticColors,
@@ -15,12 +13,13 @@ import { useWeb3React } from '@web3-react/core';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
 import {
-	ApproveButton,
+	StyledOutlineButton,
 	CancelButton,
-	ConfirmButton,
+	StyledButton,
+	SectionTitle,
 	StakeInnerModal,
 	StakeModalContainer,
-} from '../Stake/Stake';
+} from './StakeLock.sc';
 import { AmountInput } from '@/components/AmountInput';
 import LockSlider from './LockSlider';
 import LockInfo from './LockInfo';
@@ -107,7 +106,7 @@ const LockModal: FC<ILockModalProps> = ({
 							<SectionTitle weight={700}>Rounds</SectionTitle>
 							<LockSlider setRound={setRound} round={round} />
 							<LockInfo round={round} amount={amount} />
-							<ApproveButton
+							<StyledOutlineButton
 								buttonType='primary'
 								size='small'
 								label={'Lock to increase your multiplier'}
@@ -123,7 +122,7 @@ const LockModal: FC<ILockModalProps> = ({
 						<>
 							<LockingBrief round={round} amount={amount} />
 							<LockInfo round={round} amount={amount} />
-							<ConfirmButton
+							<StyledButton
 								buttonType='primary'
 								label={'Lock your tokens'}
 								onClick={onLock}
@@ -175,14 +174,6 @@ const LockModal: FC<ILockModalProps> = ({
 		</Modal>
 	);
 };
-
-const SectionTitle = styled(H5)`
-	text-align: left;
-	color: ${brandColors.giv[300]};
-	padding-bottom: 8px;
-	border-bottom: 1px solid ${brandColors.giv[500]};
-	margin: 16px 0 8px;
-`;
 
 const LearnMoreLink = styled(GLink)`
 	display: block;

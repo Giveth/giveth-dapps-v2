@@ -47,7 +47,7 @@ import {
 	StakingPoolSubtitle,
 } from './BaseStakingCard.sc';
 import { APRModal } from '../modals/APR';
-import { StakeModal } from '../modals/Stake/Stake';
+import { StakeModal } from '../modals/StakeLock/Stake';
 import { UnStakeModal } from '../modals/Unstake/UnStake';
 import { StakingPoolImages } from '../StakingPoolImages';
 import { V3StakeModal } from '../modals/V3Stake';
@@ -70,7 +70,8 @@ import { useAppSelector } from '@/features/hooks';
 import { ITokenDistroInfo } from '@/types/subgraph';
 import { GIVPowerExplainModal } from '../modals/GIVPowerExplain';
 import GIVpowerCardIntro from './GIVpowerCardIntro';
-import LockModal from '../modals/Lock/Lock';
+import LockModal from '../modals/StakeLock/Lock';
+import { StakeGIVModal } from '../modals/StakeLock/StakeGIV';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -484,6 +485,13 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								key: undefined,
 							}
 						}
+					/>
+				) : type === StakingType.GIV_LM ? (
+					<StakeGIVModal
+						setShowModal={setShowStakeModal}
+						poolStakingConfig={poolStakingConfig}
+						maxAmount={userNotStakedAmount}
+						showLockModal={() => setShowLockModal(true)}
 					/>
 				) : (
 					<StakeModal
