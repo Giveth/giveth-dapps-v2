@@ -8,7 +8,7 @@ import { ContentSeparator, BtnContainer } from './VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
 import { client } from '@/apollo/apolloClient';
 import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
-import { EVerificationSteps } from '@/apollo/types/types';
+import { EVerificationStatus, EVerificationSteps } from '@/apollo/types/types';
 
 export default function TermsAndConditions() {
 	const [loading, setloading] = useState(false);
@@ -20,10 +20,22 @@ export default function TermsAndConditions() {
 		verificationData?.isTermAndConditionsAccepted || false,
 	);
 
+	const updateVerificationState = () => {
+		setVerificationData(prevState =>
+			prevState
+				? {
+						...prevState,
+						status: EVerificationStatus.DRAFT,
+				  }
+				: undefined,
+		);
+		setStep(8);
+	};
+
 	const handleNext = () => {
 		async function sendReq() {
 			setloading(true);
-			const { data } = await client.mutate({
+			await client.mutate({
 				mutation: UPDATE_PROJECT_VERIFICATION,
 				variables: {
 					projectVerificationUpdateInput: {
@@ -33,15 +45,15 @@ export default function TermsAndConditions() {
 					},
 				},
 			});
-			setVerificationData(data.updateProjectVerificationForm);
+
 			setloading(false);
-			setStep(8);
+			updateVerificationState();
 		}
 
 		if (isChanged && isDraft) {
 			sendReq();
 		} else {
-			setStep(8);
+			updateVerificationState();
 		}
 	};
 	return (

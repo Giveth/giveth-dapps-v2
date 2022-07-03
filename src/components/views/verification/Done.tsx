@@ -4,30 +4,70 @@ import React from 'react';
 import ConfettiAnimation from '@/components/animations/confetti';
 import CheckCircle from '@/components/views/verification/CheckCircle';
 import useDetectDevice from '@/hooks/useDetectDevice';
+import { useVerificationData } from '@/context/verification.context';
+import { EVerificationStatus } from '@/apollo/types/types';
 
 const Done = () => {
 	const device = useDetectDevice();
 	const isMobile = device.isMobile;
+	const { verificationData } = useVerificationData();
+	console.log('status', verificationData);
+
+	const status = verificationData?.status ?? EVerificationStatus.SUBMITTED;
+
+	const titles = {
+		[EVerificationStatus.DRAFT]: 'Congratulations',
+		[EVerificationStatus.SUBMITTED]: 'Waiting for verification',
+		[EVerificationStatus.REJECTED]: 'Verification rejected',
+		[EVerificationStatus.VERIFIED]: 'Your project is verified now 🎉',
+	};
+
+	const subtitles = {
+		[EVerificationStatus.DRAFT]: `Your application has been submitted!
+		The Verification Team will send an email once it has been reviewed.`,
+		[EVerificationStatus.SUBMITTED]: `Your application has been submitted!
+		The Verification Team will send an email once it has been reviewed.`,
+		[EVerificationStatus.REJECTED]: 'Please contact support team.',
+		[EVerificationStatus.VERIFIED]: '',
+	};
+
 	return (
 		<>
 			<Container>
-				<H4 weight={700}>Congratulations</H4>
-				<P>
-					Your application has been submitted! The Verification Team
-					will send an email once it has been reviewed.
-				</P>
-				<ConfettiContainer>
-					<ConfettiAnimation size={isMobile ? 200 : 600} />
-				</ConfettiContainer>
+				<H4 weight={700}>
+					{titles[status ?? EVerificationStatus.SUBMITTED]}
+				</H4>
+				<P>{subtitles[status ?? EVerificationStatus.SUBMITTED]} </P>
+				{status === 'draft' && (
+					<ConfettiContainer>
+						<ConfettiAnimation size={isMobile ? 200 : 600} />
+					</ConfettiContainer>
+				)}
 				<StagesContainer>
 					<Submitted>
 						Form submited
 						<CheckCircle />
 					</Submitted>
 					<Line />
-					<Waiting>Waiting for verification</Waiting>
+					<Waiting
+						isActive={[
+							EVerificationStatus.DRAFT,
+							EVerificationStatus.SUBMITTED,
+							EVerificationStatus.REJECTED,
+						].includes(status)}
+					>
+						{status === 'rejected'
+							? 'Verification rejected.'
+							: 'Waiting for verification'}
+						{status === EVerificationStatus.VERIFIED && (
+							<CheckCircle />
+						)}
+					</Waiting>
 					<Line />
-					<Voila>Voila! Verified badge</Voila>
+					<Voila isActive={status === EVerificationStatus.VERIFIED}>
+						Voila! Verified badge
+					</Voila>
+					{status === EVerificationStatus.VERIFIED && <CheckCircle />}
 				</StagesContainer>
 			</Container>
 		</>
@@ -39,12 +79,21 @@ const Line = styled.div`
 	width: 20px;
 `;
 
-const Voila = styled.div`
-	color: ${neutralColors.gray[700]};
+const Voila = styled.div<{ isActive: boolean }>`
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	/* color: ${neutralColors.gray[700]}; */
+	color: ${props =>
+		props.isActive ? neutralColors.gray[900] : neutralColors.gray[700]};
 `;
 
-const Waiting = styled.div`
-	color: ${brandColors.giv[500]};
+const Waiting = styled.div<{ isActive: boolean }>`
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	color: ${props =>
+		props.isActive ? brandColors.giv[500] : neutralColors.gray[900]};
 `;
 
 const Submitted = styled.div`
