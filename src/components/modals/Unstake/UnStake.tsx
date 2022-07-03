@@ -1,6 +1,13 @@
 import { FC, useState } from 'react';
 import Lottie from 'react-lottie';
-import { neutralColors, Button, H4 } from '@giveth/ui-design-system';
+import {
+	neutralColors,
+	Button,
+	H4,
+	IconUnlock16,
+	B,
+	P,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { BigNumber } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
@@ -49,6 +56,7 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 	const { library, chainId } = useWeb3React();
 
 	const { title, LM_ADDRESS, GARDEN_ADDRESS } = poolStakingConfig;
+	console.log('GARDEN_ADDRESS', GARDEN_ADDRESS);
 
 	const onWithdraw = async () => {
 		setLabel('PENDING UNSTAKE');
@@ -94,6 +102,24 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 								maxAmount={maxAmount}
 								poolStakingConfig={poolStakingConfig}
 							/>
+							{GARDEN_ADDRESS && (
+								<LockInfoContainer
+									flexDirection='column'
+									gap='8px'
+								>
+									<Flex justifyContent='space-between'>
+										<Flex gap='4px' alignItems='center'>
+											<IconUnlock16 />
+											<P>Available to unstake</P>
+										</Flex>
+										<B>150</B>
+									</Flex>
+									<TotalStakedRow justifyContent='space-between'>
+										<P>Total staked</P>
+										<B>459</B>
+									</TotalStakedRow>
+								</LockInfoContainer>
+							)}
 							{label === 'UNSTAKE' && (
 								<UnStakeButton
 									label={label}
@@ -188,8 +214,6 @@ const InnerModal = styled.div`
 	padding: 0 24px;
 `;
 
-const LockInfoContainer = styled.div``;
-
 const UnStakeButton = styled(Button)`
 	width: 100%;
 	margin-top: 32px;
@@ -214,4 +238,12 @@ const Pending = styled(Flex)`
 
 const CancelButton = styled(Button)`
 	width: 100%;
+`;
+
+const LockInfoContainer = styled(Flex)`
+	margin-top: 24px;
+`;
+
+const TotalStakedRow = styled(Flex)`
+	opacity: 0.6;
 `;
