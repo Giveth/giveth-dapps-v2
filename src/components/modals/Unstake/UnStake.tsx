@@ -1,5 +1,4 @@
 import { FC, useState } from 'react';
-import Lottie from 'react-lottie';
 import {
 	neutralColors,
 	Button,
@@ -16,7 +15,6 @@ import { Flex } from '../../styled-components/Flex';
 import { StakingPoolImages } from '../../StakingPoolImages';
 import { AmountInput } from '../../AmountInput';
 import { unwrapToken, withdrawTokens } from '@/lib/stakingPool';
-import LoadingAnimation from '@/animations/loading.json';
 import {
 	ConfirmedInnerModal,
 	ErrorInnerModal,
@@ -27,15 +25,6 @@ import { IModal } from '@/types/common';
 import { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 import { useAppSelector } from '@/features/hooks';
 import { formatWeiHelper } from '@/helpers/number';
-
-const loadingAnimationOptions = {
-	loop: true,
-	autoplay: true,
-	animationData: LoadingAnimation,
-	rendererSettings: {
-		preserveAspectRatio: 'xMidYMid slice',
-	},
-};
 
 interface IUnStakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
@@ -51,47 +40,41 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 }) => {
 	const [txHash, setTxHash] = useState('');
 	const [amount, setAmount] = useState('0');
-	const [label, setLabel] = useState('UNSTAKE');
-	const [stakeState, setStakeState] = useState<StakeState>(
-		StakeState.UNKNOWN,
+	const [unStakeState, setUnstakeState] = useState<StakeState>(
+		StakeState.UNSTAKE,
 	);
 	const { library, chainId } = useWeb3React();
 	const { totalGIVLocked } = useAppSelector(
 		state => state.subgraph.xDaiValues.givpowerInfo,
 	);
 	const { title, LM_ADDRESS, GARDEN_ADDRESS } = poolStakingConfig;
-	const maxUnStakeable = maxAmount.sub(totalGIVLocked);
+	const maxUnstakeable = maxAmount.sub(totalGIVLocked);
 
 	const onWithdraw = async () => {
-		setLabel('PENDING UNSTAKE');
+		setUnstakeState(StakeState.UNSTAKING);
 
 		const tx = GARDEN_ADDRESS
 			? await unwrapToken(amount, GARDEN_ADDRESS, library)
 			: await withdrawTokens(amount, LM_ADDRESS, library);
 
 		if (!tx) {
-			setStakeState(StakeState.UNKNOWN);
-			setLabel('UNSTAKE');
+			setUnstakeState(StakeState.UNSTAKE);
 			return;
 		}
-
 		setTxHash(tx.hash);
-		setStakeState(StakeState.SUBMITTING);
-
 		const { status } = await tx.wait();
-
 		if (status) {
-			setStakeState(StakeState.CONFIRMED);
+			setUnstakeState(StakeState.CONFIRMED);
 		} else {
-			setStakeState(StakeState.ERROR);
+			setUnstakeState(StakeState.ERROR);
 		}
 	};
 
 	return (
 		<Modal setShowModal={setShowModal}>
 			<UnStakeModalContainer>
-				{(stakeState === StakeState.UNKNOWN ||
-					stakeState === StakeState.CONFIRMING) && (
+				{(unStakeState === StakeState.UNSTAKE ||
+					unStakeState === StakeState.UNSTAKING) && (
 					<>
 						<UnStakeModalTitle alignItems='center'>
 							<StakingPoolImages title={title} />
@@ -103,50 +86,44 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 						<InnerModal>
 							<AmountInput
 								setAmount={setAmount}
-								maxAmount={maxUnStakeable}
+								maxAmount={maxUnstakeable}
 								poolStakingConfig={poolStakingConfig}
 							/>
 							{GARDEN_ADDRESS && (
-								<LockInfoContainer
-									flexDirection='column'
-									gap='8px'
-								>
-									<Flex justifyContent='space-between'>
-										<Flex gap='4px' alignItems='center'>
-											<IconUnlock16 />
-											<P>Available to unstake</P>
+								<>
+									<LockInfoContainer
+										flexDirection='column'
+										gap='8px'
+									>
+										<Flex justifyContent='space-between'>
+											<Flex gap='4px' alignItems='center'>
+												<IconUnlock16 />
+												<P>Available to unstake</P>
+											</Flex>
+											<B>
+												{formatWeiHelper(
+													maxUnstakeable,
+													2,
+												)}
+											</B>
 										</Flex>
-										<B>
-											{formatWeiHelper(maxUnStakeable, 2)}
-										</B>
-									</Flex>
-									<TotalStakedRow justifyContent='space-between'>
-										<P>Total staked</P>
-										<B>{formatWeiHelper(maxAmount, 2)}</B>
-									</TotalStakedRow>
-								</LockInfoContainer>
-							)}
-							{label === 'UNSTAKE' && (
-								<UnStakeButton
-									label={label}
-									onClick={onWithdraw}
-									buttonType='primary'
-									disabled={
-										amount == '0' ||
-										maxUnStakeable.lt(amount)
-									}
-								/>
-							)}
-
-							{label === 'PENDING UNSTAKE' && (
-								<Pending>
-									<Lottie
-										options={loadingAnimationOptions}
-										height={40}
-										width={40}
+										<TotalStakedRow justifyContent='space-between'>
+											<P>Total staked</P>
+											<B>
+												{formatWeiHelper(maxAmount, 2)}
+											</B>
+										</TotalStakedRow>
+									</LockInfoContainer>
+									<UnStakeButton
+										label={'label'}
+										onClick={onWithdraw}
+										buttonType='primary'
+										disabled={
+											amount == '0' ||
+											maxUnstakeable.lt(amount)
+										}
 									/>
-									&nbsp;UNSTAKE PENDING
-								</Pending>
+								</>
 							)}
 							<CancelButton
 								buttonType='texty'
@@ -158,14 +135,14 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 						</InnerModal>
 					</>
 				)}
-				{chainId && stakeState === StakeState.REJECT && (
+				{chainId && unStakeState === StakeState.REJECT && (
 					<ErrorInnerModal
 						title='You rejected the transaction.'
 						walletNetwork={chainId}
 						txHash={txHash}
 					/>
 				)}
-				{chainId && stakeState === StakeState.SUBMITTING && (
+				{chainId && unStakeState === StakeState.SUBMITTING && (
 					<SubmittedInnerModal
 						title={title}
 						walletNetwork={chainId}
@@ -176,7 +153,7 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 						rewardTokenSymbol={regenStreamConfig?.rewardTokenSymbol}
 					/>
 				)}
-				{chainId && stakeState === StakeState.CONFIRMED && (
+				{chainId && unStakeState === StakeState.CONFIRMED && (
 					<ConfirmedInnerModal
 						title={title}
 						walletNetwork={chainId}
@@ -187,7 +164,7 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 						rewardTokenSymbol={regenStreamConfig?.rewardTokenSymbol}
 					/>
 				)}
-				{chainId && stakeState === StakeState.ERROR && (
+				{chainId && unStakeState === StakeState.ERROR && (
 					<ErrorInnerModal
 						title='Something went wrong!'
 						walletNetwork={chainId}
