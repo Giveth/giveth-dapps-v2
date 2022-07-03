@@ -30,6 +30,7 @@ import type { PoolStakingConfig } from '@/types/config';
 interface IStakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
 	maxAmount: BigNumber;
+	showLockModal: () => void;
 }
 
 export const loadingAnimationOptions = {
@@ -44,6 +45,7 @@ export const loadingAnimationOptions = {
 export const StakeGIVModal: FC<IStakeModalProps> = ({
 	poolStakingConfig,
 	maxAmount,
+	showLockModal,
 	setShowModal,
 }) => {
 	const [amount, setAmount] = useState('0');
@@ -270,6 +272,10 @@ export const StakeGIVModal: FC<IStakeModalProps> = ({
 							buttonType='primary'
 							label='Increase your multiplier'
 							size='small'
+							onClick={() => {
+								setShowModal(false);
+								showLockModal();
+							}}
 						/>
 						<CancelButton
 							buttonType='texty'

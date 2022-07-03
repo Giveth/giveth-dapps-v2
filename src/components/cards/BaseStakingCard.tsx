@@ -491,6 +491,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 						setShowModal={setShowStakeModal}
 						poolStakingConfig={poolStakingConfig}
 						maxAmount={userNotStakedAmount}
+						showLockModal={() => setShowLockModal(true)}
 					/>
 				) : (
 					<StakeModal
