@@ -28,8 +28,8 @@ import {
 	StakeModalTitle,
 	StakeModalTitleText,
 	StakeInnerModal,
-	ApproveButton,
-	ConfirmButton,
+	StyledOutlineButton,
+	StyledButton,
 	ToggleContainer,
 } from './StakeLock.sc';
 import type { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
@@ -206,7 +206,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 									<P>{permit ? 'Permit' : 'Approve'} mode</P>
 								</ToggleContainer>
 								{stakeState === StakeState.APPROVE && (
-									<ApproveButton
+									<StyledOutlineButton
 										label={'APPROVE'}
 										onClick={onApprove}
 										disabled={
@@ -226,7 +226,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 									</Pending>
 								)}
 								{stakeState === StakeState.STAKE && (
-									<ConfirmButton
+									<StyledButton
 										label={'STAKE'}
 										onClick={onStake}
 										disabled={

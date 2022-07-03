@@ -13,9 +13,9 @@ import { useWeb3React } from '@web3-react/core';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
 import {
-	ApproveButton,
+	StyledOutlineButton,
 	CancelButton,
-	ConfirmButton,
+	StyledButton,
 	SectionTitle,
 	StakeInnerModal,
 	StakeModalContainer,
@@ -106,7 +106,7 @@ const LockModal: FC<ILockModalProps> = ({
 							<SectionTitle weight={700}>Rounds</SectionTitle>
 							<LockSlider setRound={setRound} round={round} />
 							<LockInfo round={round} amount={amount} />
-							<ApproveButton
+							<StyledOutlineButton
 								buttonType='primary'
 								size='small'
 								label={'Lock to increase your multiplier'}
@@ -122,7 +122,7 @@ const LockModal: FC<ILockModalProps> = ({
 						<>
 							<LockingBrief round={round} amount={amount} />
 							<LockInfo round={round} amount={amount} />
-							<ConfirmButton
+							<StyledButton
 								buttonType='primary'
 								label={'Lock your tokens'}
 								onClick={onLock}

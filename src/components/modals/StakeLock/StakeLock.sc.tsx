@@ -27,13 +27,13 @@ export const StakeInnerModal = styled.div`
 	padding: 0 24px;
 `;
 
-export const ApproveButton = styled(OulineButton)`
+export const StyledOutlineButton = styled(OulineButton)`
 	width: 100%;
 	margin-top: 32px;
 	margin-bottom: 8px;
 `;
 
-export const ConfirmButton = styled(Button)`
+export const StyledButton = styled(Button)`
 	width: 100%;
 	margin-top: 32px;
 	margin-bottom: 8px;
