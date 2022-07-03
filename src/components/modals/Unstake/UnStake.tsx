@@ -25,6 +25,8 @@ import {
 import { StakeState } from '@/lib/staking';
 import { IModal } from '@/types/common';
 import { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
+import { useAppSelector } from '@/features/hooks';
+import { formatWeiHelper } from '@/helpers/number';
 
 const loadingAnimationOptions = {
 	loop: true,
@@ -54,9 +56,11 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 		StakeState.UNKNOWN,
 	);
 	const { library, chainId } = useWeb3React();
-
+	const { totalGIVLocked } = useAppSelector(
+		state => state.subgraph.xDaiValues.givpowerInfo,
+	);
 	const { title, LM_ADDRESS, GARDEN_ADDRESS } = poolStakingConfig;
-	console.log('GARDEN_ADDRESS', GARDEN_ADDRESS);
+	const maxUnStakeable = maxAmount.sub(totalGIVLocked);
 
 	const onWithdraw = async () => {
 		setLabel('PENDING UNSTAKE');
@@ -99,7 +103,7 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 						<InnerModal>
 							<AmountInput
 								setAmount={setAmount}
-								maxAmount={maxAmount}
+								maxAmount={maxUnStakeable}
 								poolStakingConfig={poolStakingConfig}
 							/>
 							{GARDEN_ADDRESS && (
@@ -112,11 +116,13 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 											<IconUnlock16 />
 											<P>Available to unstake</P>
 										</Flex>
-										<B>150</B>
+										<B>
+											{formatWeiHelper(maxUnStakeable, 2)}
+										</B>
 									</Flex>
 									<TotalStakedRow justifyContent='space-between'>
 										<P>Total staked</P>
-										<B>459</B>
+										<B>{formatWeiHelper(maxAmount, 2)}</B>
 									</TotalStakedRow>
 								</LockInfoContainer>
 							)}
@@ -126,7 +132,8 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 									onClick={onWithdraw}
 									buttonType='primary'
 									disabled={
-										amount == '0' || maxAmount.lt(amount)
+										amount == '0' ||
+										maxUnStakeable.lt(amount)
 									}
 								/>
 							)}
