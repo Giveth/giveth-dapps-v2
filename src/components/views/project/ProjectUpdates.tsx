@@ -85,7 +85,7 @@ const ProjectUpdates = (props: {
 				],
 			});
 			fetchProject();
-			gToast(`Your update was edited`, {
+			gToast(`Your Updates are SAVED`, {
 				type: ToastType.SUCCESS,
 				// direction: ToastDirection.RIGHT,
 				title: 'Success!',

@@ -109,7 +109,7 @@ const UpdatesSection = (props: {
 					(isEditing ? (
 						<AbsolutButtons>
 							<UpdateBtn
-								label='EDIT'
+								label='SAVE'
 								buttonType='texty'
 								onClick={async () => {
 									editUpdate &&
