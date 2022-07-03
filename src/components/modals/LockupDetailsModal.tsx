@@ -15,7 +15,6 @@ import { useWeb3React } from '@web3-react/core';
 import { smallFormatDate } from '@/lib/helpers';
 import { Flex } from '../styled-components/Flex';
 import { Modal } from './Modal';
-import { IModal } from '@/types/common';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import { useGIVpower } from '@/context/givpower.context';
@@ -23,43 +22,22 @@ import { IGIVpowerPosition } from '@/types/subgraph';
 import { fetchSubgraph } from '@/services/subgraph.service';
 import config from '@/configuration';
 import { SubgraphQueryBuilder } from '@/lib/subgraph/subgraphQueryBuilder';
+import { useAppSelector } from '@/features/hooks';
+import type { BigNumber } from 'ethers';
+import type { IModal } from '@/types/common';
 
-export const LockupDetailsModal: FC<IModal> = ({ setShowModal }) => {
+interface ILockupDetailsModal extends IModal {
+	unstakeable: BigNumber;
+}
+
+export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
+	unstakeable,
+	setShowModal,
+}) => {
 	const { apr } = useGIVpower();
 	const { account } = useWeb3React();
-	const [average, setAverage] = useState(1);
-	const [stakedGIV, setStakedGIV] = useState('0');
-	const [availableToUnstake, setAvailableToUnstake] = useState('0');
 	const [locksInfo, setLocksInfo] = useState<IGIVpowerPosition[]>([]);
-
-	// const setupValues = () => {
-	// 	if (!GIVpower) return;
-	// 	const GIVPowers = GIVpower?.givPowers;
-	// 	setStakedGIV(
-	// 		parseFloat(
-	// 			utils.formatEther(GIVPowers?.totalGIVLocked),
-	// 		)?.toPrecision(1),
-	// 	);
-	// 	// setAvailableToUnstake(
-	// 	// 	parseFloat(
-	// 	// 		utils.formatEther(
-	// 	// 			BigNumber.from(GIVPowers?.totalGIVLocked)?.sub(
-	// 	// 				BigNumber.from(GIVPowers?.totalGIVPower),
-	// 	// 			),
-	// 	// 		),
-	// 	// 	)?.toFixed(4),
-	// 	// );
-	// 	setLocksInfo(
-	// 		GIVpower?.tokenLocks &&
-	// 			[...GIVpower.tokenLocks].sort((a: any, b: any) => {
-	// 				return a?.unlockableAt < b?.unlockableAt ? -1 : 1;
-	// 			}),
-	// 	);
-	// };
-
-	// useEffect(() => {
-	// 	setupValues();
-	// }, [currentValues]);
+	const { balances } = useAppSelector(state => state.subgraph.xDaiValues);
 
 	useEffect(() => {
 		async function fetchGIVLockDetails() {
@@ -69,7 +47,6 @@ export const LockupDetailsModal: FC<IModal> = ({ setShowModal }) => {
 				config.XDAI_NETWORK_NUMBER,
 				true,
 			);
-			console.log('LocksInfo', LocksInfo.tokenLocks);
 			setLocksInfo(LocksInfo.tokenLocks);
 		}
 
@@ -93,19 +70,14 @@ export const LockupDetailsModal: FC<IModal> = ({ setShowModal }) => {
 					<div>
 						<IconUnlock32 />
 						<CloseText>
-							<Subtitle>{availableToUnstake}</Subtitle>
+							<Subtitle>
+								{formatWeiHelper(unstakeable, 2)}
+							</Subtitle>
 							<H6>GIV</H6>
 						</CloseText>
 					</div>
 					<div>
-						<H6>
-							{apr
-								? `${formatEthHelper(
-										apr.multipliedBy(average),
-								  )}`
-								: ' ? '}
-							%
-						</H6>
+						<H6>{apr ? formatEthHelper(apr) : ' ? '}%</H6>
 						<CloseText>
 							<H6>APR</H6>
 							<IconWithTooltip
@@ -129,6 +101,9 @@ export const LockupDetailsModal: FC<IModal> = ({ setShowModal }) => {
 							<TableHeader>Unlock Date</TableHeader>
 							{locksInfo?.map(
 								(locksInfo: IGIVpowerPosition, key) => {
+									const multiplier = Math.sqrt(
+										1 + locksInfo.rounds,
+									);
 									return (
 										<RowWrapper key={key}>
 											<TableCell>
@@ -141,17 +116,15 @@ export const LockupDetailsModal: FC<IModal> = ({ setShowModal }) => {
 												{locksInfo.rounds} Rounds
 											</TableCell>
 											<TableCell>
-												{Math.sqrt(
-													locksInfo.rounds + 1,
-												)?.toPrecision(1)}
+												{multiplier.toPrecision(1)}
 											</TableCell>
 											<TableCell>
 												{apr
-													? `${formatEthHelper(
+													? formatEthHelper(
 															apr.multipliedBy(
-																average,
+																multiplier,
 															),
-													  )}`
+													  )
 													: ' ? '}
 												%
 											</TableCell>
@@ -183,7 +156,9 @@ export const LockupDetailsModal: FC<IModal> = ({ setShowModal }) => {
 					</SubtitleWithTooltip>
 
 					<TotalContainer>
-						<SubtitleH5>{stakedGIV}</SubtitleH5>
+						<SubtitleH5>
+							{formatWeiHelper(balances.givStaked, 2)}
+						</SubtitleH5>
 						<H6>GIV</H6>
 					</TotalContainer>
 				</StakedContainer>
@@ -195,7 +170,7 @@ export const LockupDetailsModal: FC<IModal> = ({ setShowModal }) => {
 const LockupDetailsContainer = styled.div`
 	padding: 24px;
 	background-repeat: no-repeat;
-	width: 552px;
+	width: 592px;
 	color: ${neutralColors.gray[100]};
 	text-align: left;
 `;
@@ -262,7 +237,7 @@ const LockedTable = styled.div`
 	grid-template-columns: 2fr 2fr 1fr 2fr 2fr;
 	overflow: auto;
 	min-width: 489px;
-	height: 364px;
+	max-height: 364px;
 	margin: 10px 0 0 0;
 	color: ${brandColors.deep[100]};
 `;
@@ -287,7 +262,7 @@ const TableCell = styled(P)`
 	display: flex;
 	height: 60px;
 	border-bottom: 1px solid ${brandColors.deep[100]};
-	padding: 0 0 0 10px;
+	padding: 0 10px 0 0;
 	align-items: center;
 	gap: 8px;
 	overflow-x: auto;

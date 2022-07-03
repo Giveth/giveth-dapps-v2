@@ -202,7 +202,10 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 				)}
 			</UnStakeModalContainer>
 			{showLockDetailModal && (
-				<LockupDetailsModal setShowModal={setShowLockDetailModal} />
+				<LockupDetailsModal
+					setShowModal={setShowLockDetailModal}
+					unstakeable={maxUnstakeable}
+				/>
 			)}
 		</Modal>
 	);
