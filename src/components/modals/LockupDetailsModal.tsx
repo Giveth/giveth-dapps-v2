@@ -56,7 +56,7 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 	return (
 		<Modal
 			setShowModal={setShowModal}
-			headerTitle='Lockup Details'
+			headerTitle='Locked GIV Details'
 			headerTitlePosition='left'
 			headerIcon={<IconRocketInSpace32 />}
 		>
