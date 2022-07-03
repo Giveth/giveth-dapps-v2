@@ -25,6 +25,7 @@ import { IModal } from '@/types/common';
 import { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 import { useAppSelector } from '@/features/hooks';
 import { formatWeiHelper } from '@/helpers/number';
+import { LockupDetailsModal } from '../LockupDetailsModal';
 
 interface IUnStakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
@@ -40,6 +41,7 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 }) => {
 	const [txHash, setTxHash] = useState('');
 	const [amount, setAmount] = useState('0');
+	const [showLockDetailModal, setShowLockDetailModal] = useState(false);
 	const [unStakeState, setUnstakeState] = useState<StakeState>(
 		StakeState.UNSTAKE,
 	);
@@ -136,13 +138,25 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 									/>
 								</>
 							)}
-							<CancelButton
-								buttonType='texty'
-								label='CANCEL'
-								onClick={() => {
-									setShowModal(false);
-								}}
-							/>
+							{GARDEN_ADDRESS ? (
+								<CancelButton
+									buttonType='texty'
+									size='small'
+									label='locked giv details'
+									onClick={() => {
+										setShowLockDetailModal(true);
+									}}
+								/>
+							) : (
+								<CancelButton
+									buttonType='texty'
+									size='small'
+									label='CANCEL'
+									onClick={() => {
+										setShowModal(false);
+									}}
+								/>
+							)}
 						</InnerModal>
 					</>
 				)}
@@ -187,6 +201,9 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 					/>
 				)}
 			</UnStakeModalContainer>
+			{showLockDetailModal && (
+				<LockupDetailsModal setShowModal={setShowLockDetailModal} />
+			)}
 		</Modal>
 	);
 };
