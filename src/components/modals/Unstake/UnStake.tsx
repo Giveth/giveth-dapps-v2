@@ -26,6 +26,7 @@ import { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 import { useAppSelector } from '@/features/hooks';
 import { formatWeiHelper } from '@/helpers/number';
 import { LockupDetailsModal } from '../LockupDetailsModal';
+import { mediaQueries } from '@/lib/constants/constants';
 
 interface IUnStakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
@@ -202,15 +203,20 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 				)}
 			</UnStakeModalContainer>
 			{showLockDetailModal && (
-				<LockupDetailsModal setShowModal={setShowLockDetailModal} />
+				<LockupDetailsModal
+					setShowModal={setShowLockDetailModal}
+					unstakeable={maxUnstakeable}
+				/>
 			)}
 		</Modal>
 	);
 };
 
 const UnStakeModalContainer = styled.div`
-	width: 370px;
 	padding-bottom: 24px;
+	${mediaQueries.mobileM} {
+		width: 370px;
+	}
 `;
 
 const UnStakeModalTitle = styled(Flex)`
@@ -230,22 +236,6 @@ const UnStakeButton = styled(Button)`
 	width: 100%;
 	margin-top: 32px;
 	margin-bottom: 8px;
-`;
-
-const Pending = styled(Flex)`
-	margin-top: 32px;
-	margin-bottom: 8px;
-	line-height: 46px;
-	height: 46px;
-	border: 2px solid ${neutralColors.gray[100]};
-	border-radius: 48px;
-	color: ${neutralColors.gray[100]};
-	gap: 8px;
-	justify-content: center;
-	align-items: center;
-	& > div {
-		margin: 0 !important;
-	}
 `;
 
 const CancelButton = styled(Button)`

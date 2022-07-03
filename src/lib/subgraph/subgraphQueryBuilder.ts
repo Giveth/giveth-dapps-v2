@@ -121,7 +121,7 @@ export class SubgraphQueryBuilder {
 		first?: number,
 		skip?: number,
 	): string => {
-		return `query { tokenLocks(id: "${address.toLowerCase()}", first: ${
+		return `query { tokenLocks(id: "${address.toLowerCase()}", where:{unlocked: false}, first: ${
 			first || 100
 		}, skip: ${skip || 0}){ 
 			id

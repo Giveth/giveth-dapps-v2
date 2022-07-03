@@ -125,8 +125,8 @@ export interface IGIVpowerPosition {
 	id: string;
 	user: IUser;
 	amount: string;
-	rounds: string;
-	untilRound: string;
+	rounds: number;
+	untilRound: number;
 	unlockableAt: string;
 	unlockedAt: string;
 	unlocked: boolean;
