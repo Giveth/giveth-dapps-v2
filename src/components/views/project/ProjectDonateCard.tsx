@@ -67,7 +67,6 @@ const ProjectDonateCard = ({
 }: IProjectDonateCard) => {
 	const dispatch = useAppDispatch();
 	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
-
 	const {
 		categories = [],
 		slug,
@@ -166,7 +165,7 @@ const ProjectDonateCard = ({
 
 	useEffect(() => {
 		fetchProjectReaction().then();
-	}, []);
+	}, [user?.id]);
 
 	useEffect(() => {
 		setHeartedByUser(!!reaction?.id && reaction?.userId === user?.id);
@@ -278,12 +277,12 @@ const ProjectDonateCard = ({
 				<BadgeWrapper>
 					<ShareLikeBadge
 						type='share'
-						onClick={() => setShowModal(true)}
+						onClick={() => isActive && setShowModal(true)}
 					/>
 					<ShareLikeBadge
 						type='like'
 						active={heartedByUser}
-						onClick={likeUnlikeProject}
+						onClick={() => isActive && likeUnlikeProject()}
 					/>
 				</BadgeWrapper>
 				{!isAdmin && verified && (
