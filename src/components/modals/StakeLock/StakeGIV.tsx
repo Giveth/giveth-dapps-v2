@@ -4,6 +4,7 @@ import Lottie from 'react-lottie';
 import { useWeb3React } from '@web3-react/core';
 import { Contract, ethers } from 'ethers';
 import { captureException } from '@sentry/nextjs';
+import { ButtonLink } from '@giveth/ui-design-system';
 import { Modal } from '../Modal';
 import { AmountInput } from '../../AmountInput';
 import { approveERC20tokenTransfer, wrapToken } from '@/lib/stakingPool';
@@ -172,29 +173,42 @@ export const StakeGIVModal: FC<IStakeModalProps> = ({
 						<>
 							<StakeInnerModal>
 								<StakeSteps stakeState={stakeState} />
-								<SectionTitle>Amount to stake</SectionTitle>
-								<AmountInput
-									setAmount={setAmount}
-									maxAmount={maxAmount}
-									poolStakingConfig={poolStakingConfig}
-									disabled={
-										stakeState === StakeState.APPROVING
-									}
-								/>
 								{(stakeState === StakeState.APPROVE ||
 									stakeState === StakeState.APPROVING) && (
-									<ApproveButton
-										label={'APPROVE'}
-										onClick={onApprove}
-										disabled={
-											amount == '0' ||
-											maxAmount.lt(amount) ||
-											stakeState === StakeState.APPROVING
-										}
-										loading={
-											stakeState === StakeState.APPROVING
-										}
-									/>
+									<>
+										<SectionTitle>
+											Amount to stake
+										</SectionTitle>
+										<AmountInput
+											setAmount={setAmount}
+											maxAmount={maxAmount}
+											poolStakingConfig={
+												poolStakingConfig
+											}
+											disabled={
+												stakeState ===
+												StakeState.APPROVING
+											}
+										/>
+										<ApproveButton
+											label={'APPROVE'}
+											onClick={onApprove}
+											disabled={
+												amount == '0' ||
+												maxAmount.lt(amount) ||
+												stakeState ===
+													StakeState.APPROVING
+											}
+											loading={
+												stakeState ===
+												StakeState.APPROVING
+											}
+										/>
+										<ButtonLink
+											label='get more giv'
+											linkType='texty'
+										/>
+									</>
 								)}
 								{stakeState === StakeState.WRAP && (
 									<ConfirmButton
@@ -208,22 +222,26 @@ export const StakeGIVModal: FC<IStakeModalProps> = ({
 									/>
 								)}
 								{stakeState === StakeState.WRAPPING && (
-									<Pending>
-										<Lottie
-											options={loadingAnimationOptions}
-											height={40}
-											width={40}
+									<>
+										<Pending>
+											<Lottie
+												options={
+													loadingAnimationOptions
+												}
+												height={40}
+												width={40}
+											/>
+											&nbsp;STAKE PENDING
+										</Pending>
+										<CancelButton
+											buttonType='texty'
+											label='CANCEL'
+											onClick={() => {
+												setShowModal(false);
+											}}
 										/>
-										&nbsp;STAKE PENDING
-									</Pending>
+									</>
 								)}
-								<CancelButton
-									buttonType='texty'
-									label='CANCEL'
-									onClick={() => {
-										setShowModal(false);
-									}}
-								/>
 							</StakeInnerModal>
 						</>
 					)}
