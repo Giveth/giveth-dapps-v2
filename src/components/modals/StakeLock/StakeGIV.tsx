@@ -181,25 +181,20 @@ export const StakeGIVModal: FC<IStakeModalProps> = ({
 										stakeState === StakeState.APPROVING
 									}
 								/>
-								{stakeState === StakeState.APPROVE && (
+								{(stakeState === StakeState.APPROVE ||
+									stakeState === StakeState.APPROVING) && (
 									<ApproveButton
 										label={'APPROVE'}
 										onClick={onApprove}
 										disabled={
 											amount == '0' ||
-											maxAmount.lt(amount)
+											maxAmount.lt(amount) ||
+											stakeState === StakeState.APPROVING
+										}
+										loading={
+											stakeState === StakeState.APPROVING
 										}
 									/>
-								)}
-								{stakeState === StakeState.APPROVING && (
-									<Pending>
-										<Lottie
-											options={loadingAnimationOptions}
-											height={40}
-											width={40}
-										/>
-										&nbsp;APPROVE PENDING
-									</Pending>
 								)}
 								{stakeState === StakeState.WRAP && (
 									<ConfirmButton
