@@ -209,6 +209,9 @@ export const StakeGIVModal: FC<IStakeModalProps> = ({
 										<ButtonLink
 											label='get more giv'
 											linkType='texty'
+											size='small'
+											href={poolStakingConfig.BUY_LINK}
+											target='_blank'
 										/>
 									</>
 								)}
