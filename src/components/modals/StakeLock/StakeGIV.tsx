@@ -8,11 +8,7 @@ import { Modal } from '../Modal';
 import { AmountInput } from '../../AmountInput';
 import { approveERC20tokenTransfer, wrapToken } from '@/lib/stakingPool';
 import LoadingAnimation from '../../../animations/loading.json';
-import {
-	ConfirmedInnerModal,
-	ErrorInnerModal,
-	SubmittedInnerModal,
-} from '../ConfirmSubmit';
+import { ErrorInnerModal } from '../ConfirmSubmit';
 import { StakeState } from '@/lib/staking';
 import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
 import { IModal } from '@/types/common';
@@ -24,9 +20,11 @@ import {
 	StakeInnerModal,
 	StyledOutlineButton,
 	SectionTitle,
+	StyledButton,
 } from './StakeLock.sc';
 import { BriefContainer, H5White } from './LockingBrief';
 import { formatWeiHelper } from '@/helpers/number';
+import LockInfo from './LockInfo';
 import type { PoolStakingConfig } from '@/types/config';
 
 interface IStakeModalProps extends IModal {
@@ -137,7 +135,6 @@ export const StakeGIVModal: FC<IStakeModalProps> = ({
 			const txResponse = await wrapToken(amount, GARDEN_ADDRESS, library);
 			if (txResponse) {
 				setTxHash(txResponse.hash);
-				setStakeState(StakeState.CONFIRMING);
 				if (txResponse) {
 					const { status } = await txResponse.wait();
 					setStakeState(
@@ -166,8 +163,7 @@ export const StakeGIVModal: FC<IStakeModalProps> = ({
 			headerTitlePosition='left'
 		>
 			<StakeModalContainer>
-				{stakeState !== StakeState.CONFIRMING &&
-					stakeState !== StakeState.CONFIRMED &&
+				{stakeState !== StakeState.CONFIRMED &&
 					stakeState !== StakeState.ERROR && (
 						<>
 							<StakeInnerModal>
@@ -220,7 +216,7 @@ export const StakeGIVModal: FC<IStakeModalProps> = ({
 									<>
 										<BriefContainer>
 											<H5>You are staking</H5>
-											<H5White>
+											<H5White weight={700}>
 												{formatWeiHelper(amount, 2)} GIV
 											</H5White>
 										</BriefContainer>
@@ -244,6 +240,7 @@ export const StakeGIVModal: FC<IStakeModalProps> = ({
 										/>
 										<CancelButton
 											buttonType='texty'
+											size='small'
 											label='CANCEL'
 											onClick={() => {
 												setShowModal(false);
@@ -254,19 +251,35 @@ export const StakeGIVModal: FC<IStakeModalProps> = ({
 							</StakeInnerModal>
 						</>
 					)}
-				{chainId && stakeState === StakeState.CONFIRMING && (
-					<SubmittedInnerModal
-						title={title}
-						walletNetwork={chainId}
-						txHash={txHash}
-					/>
-				)}
 				{chainId && stakeState === StakeState.CONFIRMED && (
-					<ConfirmedInnerModal
-						title={title}
-						walletNetwork={chainId}
-						txHash={txHash}
-					/>
+					<StakeInnerModal>
+						<BriefContainer>
+							<H5>Successful!</H5>
+							<H5White>You have staked</H5White>
+							<H5White weight={700}>
+								{formatWeiHelper(amount, 2)} GIV
+							</H5White>
+							<ButtonLink
+								label='View on blockscot'
+								linkType='texty'
+								size='small'
+							/>
+						</BriefContainer>
+						<LockInfo amount={amount} round={0} />
+						<StyledButton
+							buttonType='primary'
+							label='Increase your multiplier'
+							size='small'
+						/>
+						<CancelButton
+							buttonType='texty'
+							size='small'
+							label='No thanks, I’ll keep the min APR'
+							onClick={() => {
+								setShowModal(false);
+							}}
+						/>
+					</StakeInnerModal>
 				)}
 				{chainId && stakeState === StakeState.ERROR && (
 					<ErrorInnerModal
