@@ -19,6 +19,7 @@ interface IInputBox {
 	setError?: any;
 	error?: any;
 	onFocus?: any;
+	disabled?: boolean;
 }
 
 const InputBox: FC<IInputBox> = ({
@@ -30,6 +31,7 @@ const InputBox: FC<IInputBox> = ({
 	type,
 	placeholder,
 	onFocus,
+	disabled,
 }) => {
 	return (
 		<Box>
@@ -46,6 +48,7 @@ const InputBox: FC<IInputBox> = ({
 					onFocus={() => onFocus(true)}
 					onBlur={() => onFocus(false)}
 					placeholder={placeholder}
+					disabled={disabled}
 				/>
 			</Wrapper>
 			{error && <ErrorMsg>{errorHandler?.message}</ErrorMsg>}

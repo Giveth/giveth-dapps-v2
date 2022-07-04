@@ -82,7 +82,7 @@ const CryptoDonation = (props: {
 	setSuccessDonation: (i: ISuccessDonation) => void;
 	project: IProject;
 }) => {
-	const { chainId: networkId, account, library } = useWeb3React();
+	const { chainId: networkId, account, library, active } = useWeb3React();
 	const dispatch = useAppDispatch();
 	const { isEnabled, isSignedIn, balance } = useAppSelector(
 		state => state.user,
@@ -143,8 +143,12 @@ const CryptoDonation = (props: {
 
 	useEffect(() => {
 		if (networkId && acceptedTokens) {
-			const filteredTokens = filterTokens(acceptedTokens, networkId);
-			const networkIds = getNetworkIds(acceptedTokens);
+			const networkIds = getNetworkIds(acceptedTokens, project.addresses);
+			const filteredTokens = filterTokens(
+				acceptedTokens,
+				networkId,
+				networkIds,
+			);
 			setAcceptedChains(networkIds);
 			if (filteredTokens.length < 1) {
 				setShowChangeNetworkModal(true);
@@ -161,6 +165,13 @@ const CryptoDonation = (props: {
 		if (isEnabled) pollToken();
 		return () => clearPoll();
 	}, [selectedToken, isEnabled, account, networkId, balance]);
+
+	useEffect(() => {
+		if (!active) {
+			setSelectedToken(undefined);
+			setAmountTyped(undefined);
+		}
+	}, [active]);
 
 	useEffect(() => {
 		client
@@ -435,6 +446,7 @@ const CryptoDonation = (props: {
 									: 'Search name'
 							}
 							projectVerified={project?.verified!}
+							disabled={!active}
 						/>
 					</DropdownContainer>
 					<InputBox
@@ -453,6 +465,7 @@ const CryptoDonation = (props: {
 						}}
 						onFocus={(val: any) => setInputBoxFocused(!!val)}
 						placeholder='Amount'
+						disabled={!active}
 					/>
 				</SearchContainer>
 				{selectedToken && (
@@ -494,9 +507,11 @@ const CryptoDonation = (props: {
 					/>
 					<AnotherWalletTxt>
 						Want to use another wallet?{' '}
-						<a onClick={() => dispatch(setShowWalletModal(true))}>
+						<span
+							onClick={() => dispatch(setShowWalletModal(true))}
+						>
 							Change Wallet
-						</a>
+						</span>
 					</AnotherWalletTxt>
 				</>
 			)}
@@ -595,7 +610,7 @@ const AnotherWalletTxt = styled(GLink)`
 	color: ${neutralColors.gray[800]};
 	padding: 16px 0;
 	text-align: center;
-	> a {
+	> span {
 		color: ${brandColors.pinky[500]};
 		cursor: pointer;
 	}

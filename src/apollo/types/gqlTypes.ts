@@ -83,4 +83,5 @@ export interface IProjectAcceptedToken {
 	name: string;
 	decimals: number;
 	isGivbackEligible?: boolean;
+	order: number;
 }

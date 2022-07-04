@@ -6,7 +6,7 @@ import { InputContainer, TinyLabel } from './Create.sc';
 import { compareAddresses } from '@/lib/helpers';
 import { ECreateErrFields } from '@/components/views/create/CreateProject';
 import { useAppSelector } from '@/features/hooks';
-import InputBox from '@/components/InputBox';
+import InputBox, { InputErrorMessage } from '@/components/InputBox';
 import config from '@/configuration';
 
 const WalletAddressInput = (props: {
@@ -19,6 +19,8 @@ const WalletAddressInput = (props: {
 	const { value, setValue, title, networkId, error } = props;
 	const user = useAppSelector(state => state.user?.userData);
 	const isDefaultAddress = compareAddresses(value, user?.walletAddress);
+	const isGnosis = networkId === config.SECONDARY_NETWORK.id;
+
 	return (
 		<>
 			<H5
@@ -48,6 +50,13 @@ const WalletAddressInput = (props: {
 					error={error}
 					// disabled={isDefaultAddress && !error} // why are we doing this?
 				/>
+				<InputErrorMessage>{error || null}</InputErrorMessage>
+				{isGnosis && (
+					<TinyLabel>
+						Please DO NOT enter exchange addresses for this network.
+						<br />
+					</TinyLabel>
+				)}
 				{isDefaultAddress && (
 					<TinyLabel>
 						This is the default wallet address associated with your

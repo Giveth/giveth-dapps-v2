@@ -11,6 +11,7 @@ import {
 import { ETheme } from '@/features/general/general.slice';
 import { zIndex } from '@/lib/constants/constants';
 import { useAppSelector } from '@/features/hooks';
+import { checkUserAgentIsMobile } from '@/hooks/useDeviceDetect';
 
 const Scrollbars = dynamic(() => import('react-custom-scrollbars'), {
 	ssr: false,
@@ -46,12 +47,17 @@ export const Modal: FC<IModal> = ({
 	headerColor,
 }) => {
 	const theme = useAppSelector(state => state.general.theme);
+
 	const el = useRef(document.createElement('div'));
 
 	useEffect(() => {
 		const current = el.current;
 		const modalRoot = document.querySelector('body') as HTMLElement;
 		modalRoot.style.overflowY = 'hidden';
+		let isMobile = checkUserAgentIsMobile();
+		if (!isMobile) {
+			modalRoot.style.paddingRight = '15px';
+		}
 		if (modalRoot) {
 			modalRoot.addEventListener('keydown', handleKeyDown);
 			modalRoot.appendChild(current);
@@ -59,6 +65,7 @@ export const Modal: FC<IModal> = ({
 		return () => {
 			modalRoot.removeEventListener('keydown', handleKeyDown);
 			modalRoot.style.overflowY = 'unset';
+			modalRoot.style.paddingRight = '0';
 			modalRoot!.removeChild(current);
 		};
 	}, []);
