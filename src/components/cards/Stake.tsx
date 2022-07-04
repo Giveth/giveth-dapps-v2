@@ -159,7 +159,7 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 			promiseQueue.push(promise);
 		});
 		config.MAINNET_CONFIG.pools.forEach(poolStakingConfig => {
-			if (poolStakingConfig.active === false) return;
+			if (!poolStakingConfig.active || poolStakingConfig.archived) return;
 
 			const unipool = mainnetValues[poolStakingConfig.type];
 			const unipoolHelper = unipool && new UnipoolHelper(unipool);
