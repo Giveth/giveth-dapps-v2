@@ -4,7 +4,6 @@ import {
 	IconExternalLink,
 	GLink,
 	IconCopy,
-	Button,
 } from '@giveth/ui-design-system';
 import { BigNumber } from 'bignumber.js';
 import { constants } from 'ethers';
@@ -42,7 +41,6 @@ import {
 	DaoCardQuote,
 	DaoCardButton,
 } from '../GIVfrens.sc';
-import { addNetwork } from '@/lib/metamask';
 
 const renderPools = (
 	pools: BasicNetworkConfig['pools'],
@@ -146,10 +144,6 @@ export const TabGIVfarmBottom = () => {
 			<Container>
 				<Flex alignItems='center' gap='24px' wrap={1}>
 					<NetworkSelector />
-					<Button
-						label='addNetwork'
-						onClick={() => addNetwork(100)}
-					/>
 					<ExtLinkRow alignItems='center'>
 						<GLink
 							size='Big'
