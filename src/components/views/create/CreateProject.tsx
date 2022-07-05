@@ -35,7 +35,7 @@ import {
 	CategoryInput,
 	DescriptionInput,
 	ImageInput,
-	LocationInput,
+	LocationIndex,
 	NameInput,
 	WalletAddressInput,
 } from './Inputs';
@@ -388,7 +388,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 									setCategories(category);
 								}}
 							/>
-							<LocationInput
+							<LocationIndex
 								defaultValue={defaultImpactLocation}
 								setValue={location => {
 									setFormChange(true);
