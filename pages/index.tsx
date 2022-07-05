@@ -69,12 +69,8 @@ export async function getServerSideProps({ res }: any) {
 			},
 		};
 	} catch (error) {
-		return {
-			redirect: {
-				destination: '/maintenance',
-				permanent: false,
-			},
-		};
+		console.log('{error}', { error });
+		throw new Error('Erorr on Fetch fetchProjects');
 	}
 }
 

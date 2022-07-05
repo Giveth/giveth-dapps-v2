@@ -47,12 +47,7 @@ export async function getServerSideProps(props: { query: { slug: string } }) {
 				section: 'Donate SSR',
 			},
 		});
-		return {
-			redirect: {
-				destination: '/maintenance',
-				permanent: false,
-			},
-		};
+		throw new Error('Erorr on FETCH_PROJECT_BY_SLUG');
 	}
 }
 

@@ -35,11 +35,9 @@ export async function getServerSideProps(props: {
 			},
 		});
 		return {
-			redirect: {
-				destination: '/maintenance',
-				permanent: false,
-			},
+			props: {},
 		};
+		// throw new Error('Erorr on FETCH_PROJECT_BY_SLUG');
 	}
 }
 

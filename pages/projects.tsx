@@ -41,12 +41,7 @@ export async function getServerSideProps() {
 			props: { projects, totalCount, categories },
 		});
 	} catch (error) {
-		return {
-			redirect: {
-				destination: '/maintenance',
-				permanent: false,
-			},
-		};
+		throw new Error('Erorr on FETCH_HOME_PROJECTS');
 	}
 }
 

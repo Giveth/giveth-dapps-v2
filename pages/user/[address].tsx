@@ -1,4 +1,3 @@
-import { GetServerSideProps } from 'next';
 import { FC } from 'react';
 import styled from 'styled-components';
 import { H3 } from '@giveth/ui-design-system';
@@ -45,7 +44,7 @@ const NotFound = styled(H3)`
 	margin: 200px 0;
 `;
 
-export const getServerSideProps: GetServerSideProps = async context => {
+export const getServerSideProps = async (context: any) => {
 	try {
 		const { query } = context;
 		const queryAddress = query.address;
@@ -66,12 +65,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 			},
 		};
 	} catch (error) {
-		return {
-			redirect: {
-				destination: '/maintenance',
-				permanent: false,
-			},
-		};
+		throw new Error('Erorr on GET_USER_BY_ADDRESS');
 	}
 };
 
