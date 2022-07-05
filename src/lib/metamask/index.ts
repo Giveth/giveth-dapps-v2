@@ -108,7 +108,7 @@ export async function switchNetwork(network: number): Promise<void> {
 			method: 'wallet_switchEthereumChain',
 			params: [{ chainId }],
 		});
-		if (res && (res.code === 4902 || res.code === -32603)) {
+		if (res) {
 			gToast(`Error coder: ${res.code}`, {
 				type: ToastType.DANGER,
 				position: 'top-center',
@@ -118,10 +118,7 @@ export async function switchNetwork(network: number): Promise<void> {
 	} catch (switchError: any) {
 		// This error code indicates that the chain has not been added to MetaMask.
 		// if (switchError.code === 4902) {
-		if (
-			switchError &&
-			(switchError.code === 4902 || switchError.code === -32603)
-		) {
+		if (switchError) {
 			gToast(`Error coder: ${switchError.code}`, {
 				type: ToastType.DANGER,
 				position: 'top-center',
