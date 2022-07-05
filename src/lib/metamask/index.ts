@@ -104,10 +104,17 @@ export async function switchNetwork(network: number): Promise<void> {
 	const { chainId } = networksParams[network];
 
 	try {
-		await ethereum.request({
+		const res = await ethereum.request({
 			method: 'wallet_switchEthereumChain',
 			params: [{ chainId }],
 		});
+		if (res && (res.code === 4902 || res.code === -32603)) {
+			gToast(`Error coder: ${res.code}`, {
+				type: ToastType.DANGER,
+				position: 'top-center',
+			});
+			addNetwork(network);
+		}
 	} catch (switchError: any) {
 		// This error code indicates that the chain has not been added to MetaMask.
 		// if (switchError.code === 4902) {
