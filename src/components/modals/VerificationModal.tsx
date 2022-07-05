@@ -7,7 +7,6 @@ import {
 	IconVerified,
 	Lead,
 	neutralColors,
-	P,
 } from '@giveth/ui-design-system';
 
 import { useRouter } from 'next/router';
@@ -34,7 +33,6 @@ export const VerificationModal = (props: { closeModal: () => void }) => {
 					<IconVerified size={54} color={brandColors.cyan[500]} />
 					<div>
 						<Title>Verify your project</Title>
-						<P>Make your project Traceable.</P>
 					</div>
 				</Header>
 

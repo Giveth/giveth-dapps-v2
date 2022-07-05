@@ -28,7 +28,7 @@ const AddSocialModal: FC<IProps> = ({ setShowModal, addSocial }) => {
 	return (
 		<Modal
 			headerTitlePosition='left'
-			headerTitle='Add a new social media'
+			headerTitle='Add a new social media account'
 			headerIcon={<IconLink size={23} />}
 			setShowModal={setShowModal}
 		>

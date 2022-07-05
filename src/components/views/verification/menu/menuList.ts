@@ -2,7 +2,7 @@ const menuList = [
 	'Before you start',
 	'Personal info',
 	'Social profiles',
-	'Project registry',
+	'Project registration',
 	'Project contact',
 	'Milestones',
 	'Managing funds',

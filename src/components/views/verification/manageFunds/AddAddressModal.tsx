@@ -111,7 +111,7 @@ const AddAddressModal: FC<IProps> = ({
 					<Input
 						register={register}
 						registerName='address'
-						label='Receiving address'
+						label='Wallet Address'
 						caption='Enter the related address.'
 						registerOptions={{
 							validate: async address => {
