@@ -4,6 +4,7 @@ import { captureException } from '@sentry/nextjs';
 import config from '@/configuration';
 import UNI_Json from '@/artifacts/UNI.json';
 import { networksParams } from '@/helpers/blockchain';
+import { gToast, ToastType } from '@/components/toasts';
 
 const { abi: UNI_ABI } = UNI_Json;
 
@@ -92,16 +93,10 @@ export async function addNetwork(network: number): Promise<void> {
 
 	const nodeUrl = config.NETWORKS_CONFIG[network]?.nodeUrl;
 	const rpcUrls = nodeUrl ? [nodeUrl] : [];
-
-	console.log('nodeUrl', nodeUrl);
-	console.log('rpcUrls', rpcUrls);
-	console.log('networksParams[network]', networksParams[network]);
-
 	const res = await ethereum.request({
 		method: 'wallet_addEthereumChain',
 		params: [{ ...networksParams[network], rpcUrls }],
 	});
-	console.log('res', res);
 }
 
 export async function switchNetwork(network: number): Promise<void> {
@@ -116,7 +111,17 @@ export async function switchNetwork(network: number): Promise<void> {
 	} catch (switchError: any) {
 		// This error code indicates that the chain has not been added to MetaMask.
 		// if (switchError.code === 4902) {
-		addNetwork(network);
+		if (
+			switchError &&
+			(switchError.code === 4902 || switchError.code === -32603)
+		) {
+			gToast(`Error coder: ${switchError.code}`, {
+				type: ToastType.DANGER,
+				position: 'top-center',
+			});
+			addNetwork(network);
+		}
+
 		// }
 		captureException(switchError, {
 			tags: {
