@@ -4,7 +4,6 @@ import { captureException } from '@sentry/nextjs';
 import config from '@/configuration';
 import UNI_Json from '@/artifacts/UNI.json';
 import { networksParams } from '@/helpers/blockchain';
-import { gToast, ToastType } from '@/components/toasts';
 
 const { abi: UNI_ABI } = UNI_Json;
 
@@ -109,23 +108,13 @@ export async function switchNetwork(network: number): Promise<void> {
 			params: [{ chainId }],
 		});
 		if (res) {
-			gToast(`Error coder: ${res.code}`, {
-				type: ToastType.DANGER,
-				position: 'top-center',
-			});
 			addNetwork(network);
 		}
 	} catch (switchError: any) {
 		// This error code indicates that the chain has not been added to MetaMask.
 		if (switchError) {
-			gToast(`Error coder: ${switchError.code}`, {
-				type: ToastType.DANGER,
-				position: 'top-center',
-			});
 			addNetwork(network);
 		}
-
-		// }
 		captureException(switchError, {
 			tags: {
 				section: 'switchNetwork',
