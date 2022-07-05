@@ -26,6 +26,15 @@ const moduleExports = withBundleAnalyzer({
 		// ssr and displayName are configured by default
 		styledComponents: true,
 	},
+	redirects: () => {
+		return [
+			{
+				source: '/donate',
+				destination: '/projects',
+				permanent: false,
+			},
+		];
+	},
 	webpack: (config, { isServer, dev }) => {
 		if (isServer && !dev) {
 			generateRobotsTxt();
