@@ -117,7 +117,6 @@ export async function switchNetwork(network: number): Promise<void> {
 		}
 	} catch (switchError: any) {
 		// This error code indicates that the chain has not been added to MetaMask.
-		// if (switchError.code === 4902) {
 		if (switchError) {
 			gToast(`Error coder: ${switchError.code}`, {
 				type: ToastType.DANGER,
