@@ -93,10 +93,15 @@ export async function addNetwork(network: number): Promise<void> {
 	const nodeUrl = config.NETWORKS_CONFIG[network]?.nodeUrl;
 	const rpcUrls = nodeUrl ? [nodeUrl] : [];
 
-	await ethereum.request({
+	console.log('nodeUrl', nodeUrl);
+	console.log('rpcUrls', rpcUrls);
+	console.log('networksParams[network]', networksParams[network]);
+
+	const res = await ethereum.request({
 		method: 'wallet_addEthereumChain',
 		params: [{ ...networksParams[network], rpcUrls }],
 	});
+	console.log('res', res);
 }
 
 export async function switchNetwork(network: number): Promise<void> {
