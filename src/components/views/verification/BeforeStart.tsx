@@ -42,7 +42,7 @@ const BeforeStart = () => {
 					out and encourage donations.
 					<br />
 					<br />
-					Once your project is verified, the givers who donate to your
+					Once your project is verified, the Givers who donate to your
 					project will be rewarded with GIV tokens which they can use
 					to participate in the GIVeconomy.
 					<br />

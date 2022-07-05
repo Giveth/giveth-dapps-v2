@@ -116,8 +116,8 @@ export default function ProjectContactIndex() {
 				<InfoWrapper>
 					<IconInfo color={neutralColors.gray[900]} />
 					<PInline>
-						Connect your project&apos;s social media accounts to
-						connect with your donors and build trust!
+						Please provide links to any social media accounts owned
+						by your organization/project.
 					</PInline>
 				</InfoWrapper>
 				<PStyled>This is optional</PStyled>
