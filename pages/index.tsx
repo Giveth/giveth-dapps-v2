@@ -69,8 +69,7 @@ export async function getServerSideProps({ res }: any) {
 			},
 		};
 	} catch (error) {
-		console.log('{error}', { error });
-		throw new Error('Erorr on Fetch fetchProjects');
+		throw error;
 	}
 }
 

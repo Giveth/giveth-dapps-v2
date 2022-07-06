@@ -62,7 +62,7 @@ export const getServerSideProps = async (context: any) => {
 			},
 		};
 	} catch (error) {
-		throw new Error('Erorr on GET_USER_BY_ADDRESS');
+		throw error;
 	}
 };
 

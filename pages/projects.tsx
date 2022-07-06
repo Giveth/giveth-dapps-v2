@@ -41,7 +41,7 @@ export async function getServerSideProps() {
 			props: { projects, totalCount, categories },
 		});
 	} catch (error) {
-		throw new Error('Erorr on FETCH_HOME_PROJECTS');
+		throw error;
 	}
 }
 

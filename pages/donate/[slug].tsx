@@ -52,12 +52,7 @@ export async function getServerSideProps(props: { query: { slug: string } }) {
 				section: 'Donate SSR',
 			},
 		});
-		if (error.message === 'Project not found.') {
-			return {
-				props: {},
-			};
-		}
-		throw new Error('Error on FETCH_PROJECT_BY_SLUG');
+		throw error;
 	}
 }
 
