@@ -3,7 +3,6 @@ import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 import { IProject } from '@/apollo/types/types';
 
 import ProjectIndex from '@/components/views/project/ProjectIndex';
-import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 
 const ProjectRoute = (props: { project?: IProject }) => {
 	return <ProjectIndex project={props.project} />;
@@ -27,14 +26,9 @@ export async function getServerSideProps(props: {
 				project: data.projectBySlug,
 			},
 		};
-	} catch (error: any) {
-		const statusCode = transformGraphQLErrorsToStatusCode(
-			error?.graphQLErrors,
-		);
+	} catch (error) {
 		return {
-			props: {
-				errorStatus: statusCode,
-			},
+			props: {},
 		};
 	}
 }

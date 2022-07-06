@@ -8,6 +8,7 @@ import { IProject } from '@/apollo/types/types';
 import { useAppSelector } from '@/features/hooks';
 import { homeMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
+import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 
 const projectsToFetch = 12;
 
@@ -68,8 +69,15 @@ export async function getServerSideProps({ res }: any) {
 				totalCount,
 			},
 		};
-	} catch (error) {
-		throw error;
+	} catch (error: any) {
+		const statusCode = transformGraphQLErrorsToStatusCode(
+			error?.graphQLErrors,
+		);
+		return {
+			props: {
+				errorStatus: statusCode,
+			},
+		};
 	}
 }
 

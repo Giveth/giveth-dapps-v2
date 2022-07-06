@@ -9,6 +9,7 @@ import { GET_USER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
 import { IUser } from '@/apollo/types/types';
 import UserPublicProfileView from '@/components/views/userPublicProfile/UserPublicProfile.view';
 import { GeneralMetatags } from '@/components/Metatag';
+import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 
 interface IUserRouteProps {
 	user?: IUser;
@@ -65,8 +66,15 @@ export const getServerSideProps: GetServerSideProps = async context => {
 				user,
 			},
 		};
-	} catch (error) {
-		throw error;
+	} catch (error: any) {
+		const statusCode = transformGraphQLErrorsToStatusCode(
+			error?.graphQLErrors,
+		);
+		return {
+			props: {
+				errorStatus: statusCode,
+			},
+		};
 	}
 };
 
