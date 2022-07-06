@@ -17,9 +17,12 @@ import {
 	setShowSignWithWallet,
 	setShowWelcomeModal,
 } from '@/features/modal/modal.slice';
+import Spinner from '@/components/Spinner';
+import NotAvailableProject from '@/components/views/project/NotAvailableProject';
 
 const EditIndex = () => {
 	const [project, setProject] = useState<IProjectEdition>();
+	const [isLoading, setIsLoading] = useState(true);
 
 	const dispatch = useAppDispatch();
 	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
@@ -27,15 +30,16 @@ const EditIndex = () => {
 	const projectId = router?.query.projectIdSlug as string;
 
 	useEffect(() => {
+		if (!isLoading) setIsLoading(true);
 		const userAddress = user?.walletAddress;
 		if (userAddress) {
 			if (project) setProject(undefined);
-			if (!isUserRegistered(user)) {
-				dispatch(setShowCompleteProfile(true));
-				return;
-			}
 			if (!isSignedIn) {
 				dispatch(setShowSignWithWallet(true));
+				return;
+			}
+			if (!isUserRegistered(user)) {
+				dispatch(setShowCompleteProfile(true));
 				return;
 			}
 			client
@@ -54,10 +58,14 @@ const EditIndex = () => {
 						showToastError(
 							'Only project owner can edit the project',
 						);
-					} else setProject(project);
+					} else {
+						setIsLoading(false);
+						setProject(project);
+					}
 				})
 				.catch((error: unknown) => {
-					showToastError(error);
+					setIsLoading(false);
+					console.log('FETCH_PROJECT_BY_ID error: ', error);
 					captureException(error, {
 						tags: {
 							section: 'EditIndex',
@@ -69,7 +77,9 @@ const EditIndex = () => {
 		}
 	}, [user, isSignedIn]);
 
-	return isSignedIn && project ? <CreateProject project={project} /> : null;
+	if (isLoading) return <Spinner />;
+	if (!project) return <NotAvailableProject />;
+	return isSignedIn ? <CreateProject project={project} /> : null;
 };
 
 export default EditIndex;
