@@ -27,17 +27,18 @@ export async function getServerSideProps(props: {
 				project: data.projectBySlug,
 			},
 		};
-	} catch (e) {
-		console.log({ e });
+	} catch (e: any) {
 		captureException(e, {
 			tags: {
 				section: 'ProjectSSR',
 			},
 		});
-		return {
-			props: {},
-		};
-		// throw new Error('Erorr on FETCH_PROJECT_BY_SLUG');
+		if (e.message === 'Project not found.') {
+			return {
+				props: {},
+			};
+		}
+		throw new Error('Error on FETCH_PROJECT_BY_SLUG');
 	}
 }
 
