@@ -1,12 +1,12 @@
 import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
+import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 
 function Error({ statusCode }) {
-	return <ErrorsIndex statusCode='504' />;
+	return <ErrorsIndex statusCode={statusCode} />;
 }
 
 Error.getInitialProps = ({ res, err }) => {
-	// console.log('****ajab!!!!', res, err);
-	const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
+	const statusCode = transformGraphQLErrorsToStatusCode(err.graphQLErrors);
 	return { statusCode };
 };
 
