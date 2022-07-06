@@ -207,6 +207,7 @@ const Title = styled(H5)`
 	color: ${brandColors.deep[600]};
 	font-weight: 400;
 	margin-bottom: 16px;
+	word-break: break-word;
 `;
 
 const Content = styled.div`
