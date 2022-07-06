@@ -19,8 +19,8 @@ import UserController from '@/components/controller/user.ctrl';
 import ModalController from '@/components/controller/modal.ctrl';
 import PriceController from '@/components/controller/price.ctrl';
 import GeneralController from '@/components/controller/general.ctrl';
-import type { AppProps } from 'next/app';
 import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
+import type { AppProps } from 'next/app';
 
 function getLibrary(provider: ExternalProvider) {
 	return new Web3Provider(provider);
