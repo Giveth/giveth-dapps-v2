@@ -1,3 +1,0 @@
-test('it Works', () => {});
-
-export {};
