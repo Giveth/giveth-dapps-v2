@@ -1,11 +1,7 @@
 import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
 
 function Error({ statusCode }) {
-	return statusCode ? (
-		<ErrorsIndex statusCode='504' />
-	) : (
-		<p>An error occurred on client</p>
-	);
+	return <ErrorsIndex statusCode='504' />;
 }
 
 Error.getInitialProps = ({ res, err }) => {
