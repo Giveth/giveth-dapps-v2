@@ -27,19 +27,13 @@ export async function getServerSideProps(props: {
 				project: data.projectBySlug,
 			},
 		};
-	} catch (e) {
-		console.log({ e });
-		captureException(e, {
+	} catch (error) {
+		captureException(error, {
 			tags: {
 				section: 'ProjectSSR',
 			},
 		});
-		return {
-			redirect: {
-				destination: '/maintenance',
-				permanent: false,
-			},
-		};
+		throw error;
 	}
 }
 

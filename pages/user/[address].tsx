@@ -66,12 +66,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 			},
 		};
 	} catch (error) {
-		return {
-			redirect: {
-				destination: '/maintenance',
-				permanent: false,
-			},
-		};
+		throw error;
 	}
 };
 

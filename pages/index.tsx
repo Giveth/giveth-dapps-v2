@@ -69,12 +69,7 @@ export async function getServerSideProps({ res }: any) {
 			},
 		};
 	} catch (error) {
-		return {
-			redirect: {
-				destination: '/maintenance',
-				permanent: false,
-			},
-		};
+		throw error;
 	}
 }
 
