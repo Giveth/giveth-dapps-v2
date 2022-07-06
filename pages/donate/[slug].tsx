@@ -10,7 +10,7 @@ import { ProjectMeta } from '@/components/Metatag';
 import DonateIndex from '@/components/views/donate/DonateIndex';
 
 const NotAvailableProject = dynamic(
-	() => import('../../src/components/NotAvailableProject'),
+	() => import('@/components/NotAvailableProject'),
 	{
 		ssr: false,
 	},

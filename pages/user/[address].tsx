@@ -1,7 +1,5 @@
 import { FC } from 'react';
-import styled from 'styled-components';
-import { H3 } from '@giveth/ui-design-system';
-import { Container } from '@/components/Grid';
+import dynamic from 'next/dynamic';
 
 import { client } from '@/apollo/apolloClient';
 import { GET_USER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
@@ -13,13 +11,16 @@ interface IUserRouteProps {
 	user?: IUser;
 }
 
+const NotFound = dynamic(
+	() => import('@/components/views/Errors/ErrorsIndex'),
+	{
+		ssr: false,
+	},
+);
+
 const UserRoute: FC<IUserRouteProps> = ({ user }) => {
 	if (!user) {
-		return (
-			<Container>
-				<NotFound>User not found</NotFound>
-			</Container>
-		);
+		return <NotFound statusCode='404' />;
 	}
 
 	return (
@@ -39,10 +40,6 @@ const UserRoute: FC<IUserRouteProps> = ({ user }) => {
 		</>
 	);
 };
-
-const NotFound = styled(H3)`
-	margin: 200px 0;
-`;
 
 export const getServerSideProps = async (context: any) => {
 	try {
