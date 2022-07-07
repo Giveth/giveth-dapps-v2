@@ -18,7 +18,7 @@ import {
 	setShowWelcomeModal,
 } from '@/features/modal/modal.slice';
 import Spinner from '@/components/Spinner';
-import NotAvailableProject from '@/components/views/project/NotAvailableProject';
+import NotAvailableProject from '@/components/NotAvailableProject';
 
 const EditIndex = () => {
 	const [project, setProject] = useState<IProjectEdition>();

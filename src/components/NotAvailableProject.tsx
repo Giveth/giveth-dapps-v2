@@ -18,7 +18,9 @@ const NotAvailableProject = () => {
 				height={112}
 				alt='missing-project-image'
 			/>
-			<TitleText>Oops! This project is no longer available!</TitleText>
+			<TitleText>
+				Oops! This project is no longer available or not found!
+			</TitleText>
 			<SimilarProjects slug={slug} />
 		</Wrapper>
 	);
