@@ -1,8 +1,9 @@
 import { render } from '@testing-library/react';
-import HomePage from '../pages/_app';
+import About from '../pages/about';
 
 describe('HomePage', () => {
 	it('should render App', () => {
-		render(<HomePage />);
+		const { debug } = render(<About />);
+		debug();
 	});
 });
