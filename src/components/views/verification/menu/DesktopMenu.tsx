@@ -6,11 +6,13 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import menuList from '@/components/views/verification/menu/menuList';
 import { useVerificationData } from '@/context/verification.context';
 import { ProgressBar } from '@/components/views/verification/common';
+import { findStepByName } from '@/lib/verification';
 
 const DesktopMenu = () => {
 	const { step, setStep, verificationData } = useVerificationData();
-	const { project } = verificationData || {};
+	const { project, lastStep } = verificationData || {};
 	const { title } = project || {};
+	const lastStepIndex = findStepByName(lastStep);
 
 	return (
 		<MenuSection sm={3.75} md={2.75}>
@@ -19,13 +21,13 @@ const DesktopMenu = () => {
 			<ProgressBar />
 			{menuList.map((item, index) => (
 				<MenuTitle
-					hover={index < step}
+					hover={index <= lastStepIndex + 1}
 					isActive={index <= step}
 					key={item}
-					onClick={() => index < step && setStep(index)}
+					onClick={() => index <= lastStepIndex + 1 && setStep(index)}
 				>
 					{item}
-					{(index < step || step === 8) && <CheckCircle />}
+					{(index <= lastStepIndex || step === 8) && <CheckCircle />}
 				</MenuTitle>
 			))}
 		</MenuSection>
