@@ -5,13 +5,18 @@ import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import menuList from '@/components/views/verification/menu/menuList';
 import { useVerificationData } from '@/context/verification.context';
+import { findStepByName } from '@/lib/verification';
 
 const MenuModal: FC<IModal> = ({ setShowModal }) => {
-	const { step, setStep } = useVerificationData();
+	const { step, setStep, verificationData } = useVerificationData();
+	const { lastStep } = verificationData || {};
+	const lastStepIndex = findStepByName(lastStep);
 
 	const handleClick = (index: number) => {
-		setStep(index);
-		setShowModal(false);
+		if (index <= lastStepIndex + 1) {
+			setStep(index);
+			setShowModal(false);
+		}
 	};
 
 	return (
