@@ -2,8 +2,8 @@ import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import { FC, ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
-import dynamic from 'next/dynamic';
 
+import Scrollbars from 'react-custom-scrollbars';
 import {
 	ModalHeader,
 	ModalHeaderTitlePosition,
@@ -12,10 +12,6 @@ import { ETheme } from '@/features/general/general.slice';
 import { zIndex } from '@/lib/constants/constants';
 import { useAppSelector } from '@/features/hooks';
 import { checkUserAgentIsMobile } from '@/hooks/useDeviceDetect';
-
-const Scrollbars = dynamic(() => import('react-custom-scrollbars'), {
-	ssr: false,
-});
 
 interface ModalWrapperProps {
 	fullScreen?: boolean;

@@ -48,13 +48,22 @@ const renderPools = (
 	showArchivedPools?: boolean,
 ) => {
 	return pools
-		.filter(p => (showArchivedPools ? true : p.active))
+		.filter(p => (showArchivedPools ? true : p.active && !p.archived))
 		.map((poolStakingConfig, idx) => ({ poolStakingConfig, idx }))
 		.sort(
 			(
-				{ idx: idx1, poolStakingConfig: { active: active1 } },
-				{ idx: idx2, poolStakingConfig: { active: active2 } },
-			) => +active2 - +active1 || idx1 - idx2,
+				{
+					idx: idx1,
+					poolStakingConfig: { active: active1, archived: archived1 },
+				},
+				{
+					idx: idx2,
+					poolStakingConfig: { active: active2, archived: archived2 },
+				},
+			) =>
+				+active2 - +active1 ||
+				+!!archived2 - +!!archived1 ||
+				idx1 - idx2,
 		)
 		.map(({ poolStakingConfig }, index) => {
 			return (

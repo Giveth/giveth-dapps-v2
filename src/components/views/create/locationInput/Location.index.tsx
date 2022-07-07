@@ -1,34 +1,31 @@
 import React from 'react';
-import { H5, Caption, brandColors } from '@giveth/ui-design-system';
-import { withScriptjs } from 'react-google-maps';
+import { H5, Caption } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
-import Map from '@/components/map';
-import { InputContainer, Label } from './Create.sc';
+import LocationInput from '@/components/views/create/locationInput/LocationInput';
+import { InputContainer, Label } from '../Create.sc';
 import config from '@/configuration';
 
 const googleMapURL = `https://maps.googleapis.com/maps/api/js?key=${config.GOOGLE_MAPS_API_KEY}&v=3.exp&libraries=geometry,drawing,places`;
 
-const LocationInput = (props: {
+const LocationIndex = (props: {
 	defaultValue?: string;
 	setValue: (a: string) => void;
 }) => {
 	const { defaultValue, setValue } = props;
-	const MapLoader = withScriptjs(Map);
 
 	return (
 		<>
 			<H5>Where will your project have the most impact?</H5>
-			<div>
-				<CaptionContainer>
-					Make it easier for donors to find your project by providing
-					a location.
-				</CaptionContainer>
-			</div>
-
+			<CaptionContainer>
+				Make it easier for donors to find your project by providing a
+				location.
+			</CaptionContainer>
 			<InputContainer>
 				<Label>Location</Label>
-				<MapLoader
+				<LocationInput
+					defaultLocation={defaultValue}
+					setLocation={setValue}
 					googleMapURL={googleMapURL}
 					loadingElement={
 						<div
@@ -38,8 +35,6 @@ const LocationInput = (props: {
 							}}
 						/>
 					}
-					defaultLocation={defaultValue}
-					setLocation={setValue}
 				/>
 			</InputContainer>
 		</>
@@ -47,11 +42,7 @@ const LocationInput = (props: {
 };
 
 const CaptionContainer = styled(Caption)`
-	margin: 8.5px 0 0 0;
-	span {
-		cursor: pointer;
-		color: ${brandColors.pinky[500]};
-	}
+	margin-top: 8.5px;
 `;
 
-export default React.memo(LocationInput);
+export default LocationIndex;

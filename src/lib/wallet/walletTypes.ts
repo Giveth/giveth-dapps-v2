@@ -15,7 +15,7 @@ import config from '@/configuration';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 
-const supportedChainIds = [1, 3, 4, 5, 42, 100];
+const supportedChainIds = [1, 3, 4, 5, 42, 100, 137];
 
 export const injectedConnector = new InjectedConnector({ supportedChainIds });
 export const walletconnectConnector = new WalletConnectConnector({

@@ -142,6 +142,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		unit,
 		farmStartTimeMS,
 		active,
+		archived,
 	} = poolStakingConfig;
 
 	const {
@@ -202,7 +203,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	return (
 		<>
 			<StakingPoolContainer>
-				{!active && disableModal && (
+				{(!active || archived) && disableModal && (
 					<DisableModal>
 						<DisableModalContent>
 							<DisableModalImage>
@@ -287,7 +288,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									<FirstDetail justifyContent='space-between'>
 										<DetailLabel>APR</DetailLabel>
 										<Flex gap='8px' alignItems='center'>
-											{active ? (
+											{active && !archived ? (
 												<>
 													<IconSpark
 														size={24}
@@ -379,6 +380,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 										size='small'
 										disabled={
 											!active ||
+											archived ||
 											BN(userNotStakedAmount).isZero()
 										}
 										onClick={() => setShowStakeModal(true)}
@@ -409,7 +411,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									</StakeAmount>
 								</StakeContainer>
 							</StakeButtonsRow>
-							{active && (
+							{active && !archived && (
 								<LiquidityButton
 									label={
 										type === StakingType.GIV_LM

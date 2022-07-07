@@ -5,6 +5,7 @@ import ProjectsIndex from '@/components/views/projects/ProjectsIndex';
 import { ICategory, IProject } from '@/apollo/types/types';
 import { projectsMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
+import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 
 interface IProjectsRoute {
 	projects: IProject[];
@@ -40,11 +41,13 @@ export async function getServerSideProps() {
 		return addApolloState(apolloClient, {
 			props: { projects, totalCount, categories },
 		});
-	} catch (error) {
+	} catch (error: any) {
+		const statusCode = transformGraphQLErrorsToStatusCode(
+			error?.graphQLErrors,
+		);
 		return {
-			redirect: {
-				destination: '/maintenance',
-				permanent: false,
+			props: {
+				errorStatus: statusCode,
 			},
 		};
 	}
