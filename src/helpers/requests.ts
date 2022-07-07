@@ -1,6 +1,7 @@
 import { isSSRMode } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
 import config from '@/configuration';
+import type { GraphQLErrors } from '@apollo/client/errors';
 
 export function sendRequest(
 	url: string,
@@ -115,3 +116,12 @@ export function backendGQLRequest(
 		additionalOptions,
 	);
 }
+
+export const transformGraphQLErrorsToStatusCode = (
+	graphQLErrors: GraphQLErrors,
+) => {
+	if (!graphQLErrors || graphQLErrors.length < 1) return 200;
+	const { message } = graphQLErrors[0];
+	if (message.includes('not found')) return 404;
+	return 500;
+};
