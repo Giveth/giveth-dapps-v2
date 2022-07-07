@@ -7,6 +7,7 @@ import { IProjectBySlug } from '@/apollo/types/types';
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { ProjectMeta } from '@/components/Metatag';
+import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 
 const DonateIndex = dynamic(
 	() => import('@/components/views/donate/DonateIndex'),
@@ -40,17 +41,19 @@ export async function getServerSideProps(props: { query: { slug: string } }) {
 				project,
 			},
 		};
-	} catch (error) {
+	} catch (error: any) {
 		console.log({ error });
 		captureException(error, {
 			tags: {
 				section: 'Donate SSR',
 			},
 		});
+		const statusCode = transformGraphQLErrorsToStatusCode(
+			error?.graphQLErrors,
+		);
 		return {
-			redirect: {
-				destination: '/maintenance',
-				permanent: false,
+			props: {
+				errorStatus: statusCode,
 			},
 		};
 	}
