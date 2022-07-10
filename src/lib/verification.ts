@@ -1,6 +1,6 @@
 import { EVerificationSteps } from '@/apollo/types/types';
 
-export const findStepByName = (step: EVerificationSteps): number => {
+export const findStepByName = (step?: EVerificationSteps): number => {
 	switch (step) {
 		case EVerificationSteps.PERSONAL_INFO:
 			return 1;
