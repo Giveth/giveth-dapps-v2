@@ -59,6 +59,5 @@ const Bar = styled.div<{ width: number }>`
 	border-radius: 5px;
 	width: ${props => props.width * 100}%;
 	height: 100%;
-	transition: width 0.8s;
-	transition-timing-function: ease-in-out;
+	transition: width 0.8s ease-in-out;
 `;
