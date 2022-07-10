@@ -1,9 +1,20 @@
-import { render } from '@testing-library/react';
-import About from '../pages/about';
+import { render } from 'src/test/utils';
+import Header from './components/Header/Header';
+
+jest.mock('next/router', () => ({
+	useRouter() {
+		return {
+			route: '/',
+			pathname: '',
+			query: '',
+			asPath: '',
+		};
+	},
+}));
 
 describe('HomePage', () => {
 	it('should render App', () => {
-		const { debug } = render(<About />);
+		const { debug } = render(<Header />);
 		debug();
 	});
 });
