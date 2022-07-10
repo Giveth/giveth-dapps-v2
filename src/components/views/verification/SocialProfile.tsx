@@ -13,6 +13,7 @@ import { useCallback, useMemo } from 'react';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import DiscordIcon from '/public/images/icons/social/discord.svg';
+import TwitterIcon from '/public/images/icons/social/twitter.svg';
 import { ContentSeparator, BtnContainer } from './VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
 import { client } from '@/apollo/apolloClient';
@@ -45,6 +46,11 @@ const SocialProfile = () => {
 
 	const discordData = useMemo(
 		() => findSocialMedia('discord'),
+		[findSocialMedia],
+	);
+
+	const twitterData = useMemo(
+		() => findSocialMedia('twitter'),
 		[findSocialMedia],
 	);
 
@@ -147,6 +153,30 @@ const SocialProfile = () => {
 							CONNECT TO YOUTUBE
 						</ButtonSocial>
 					</ButtonRow> */}
+					<ButtonRow>
+						<ButtonSocial
+							color='#0077B5
+							'
+							onClick={() => {
+								handleSocialSubmit(
+									'twitter',
+									twitterData === undefined,
+									Number(verificationData?.id),
+								);
+							}}
+						>
+							<Image src={TwitterIcon} alt='twitter icon' />
+							{twitterData?.socialNetworkId ??
+								'CONNECT TO TWITTER'}
+						</ButtonSocial>
+						{twitterData?.socialNetworkId && (
+							<RemoveButton
+								onClick={() =>
+									handleSocialRemove(+twitterData?.id)
+								}
+							/>
+						)}
+					</ButtonRow>
 					<ButtonRow>
 						<ButtonSocial
 							color='#7700D5'
