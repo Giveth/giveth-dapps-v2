@@ -134,6 +134,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const { setInfo } = useFarms();
 	const { chainId } = useWeb3React();
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
+	const { totalGIVLocked } = useAppSelector(
+		state => state.subgraph.xDaiValues.givpowerInfo,
+	);
 	const { regenStreamType, regenFarmIntro } =
 		poolStakingConfig as RegenPoolStakingConfig;
 
@@ -300,6 +303,17 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 																2,
 															)}
 														%
+														{type ===
+															StakingType.GIV_LM &&
+															`-${
+																apr &&
+																formatEthHelper(
+																	apr.multipliedBy(
+																		5.2, // sqrt(1 + max rounds)
+																	),
+																	2,
+																)
+															}%`}
 													</DetailValue>
 													<IconContainer
 														onClick={() =>
