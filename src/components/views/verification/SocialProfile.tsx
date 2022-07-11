@@ -3,6 +3,7 @@ import {
 	Button,
 	H6,
 	IconInfo,
+	IconTwitter,
 	neutralColors,
 	P,
 } from '@giveth/ui-design-system';
@@ -45,6 +46,11 @@ const SocialProfile = () => {
 
 	const discordData = useMemo(
 		() => findSocialMedia('discord'),
+		[findSocialMedia],
+	);
+
+	const twitterData = useMemo(
+		() => findSocialMedia('twitter'),
 		[findSocialMedia],
 	);
 
@@ -147,6 +153,29 @@ const SocialProfile = () => {
 							CONNECT TO YOUTUBE
 						</ButtonSocial>
 					</ButtonRow> */}
+					<ButtonRow>
+						<ButtonSocial
+							color='#0077B5'
+							onClick={() => {
+								handleSocialSubmit(
+									'twitter',
+									twitterData === undefined,
+									Number(verificationData?.id),
+								);
+							}}
+						>
+							<IconTwitter />
+							{twitterData?.socialNetworkId ??
+								'CONNECT TO TWITTER'}
+						</ButtonSocial>
+						{twitterData?.socialNetworkId && (
+							<RemoveButton
+								onClick={() =>
+									handleSocialRemove(+twitterData?.id)
+								}
+							/>
+						)}
+					</ButtonRow>
 					<ButtonRow>
 						<ButtonSocial
 							color='#7700D5'
