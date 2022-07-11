@@ -13,7 +13,7 @@ interface IProps extends IModal {
 	addSocial: (i: IProjectContact) => void;
 }
 
-const AddSocialModal: FC<IProps> = ({ setShowModal, addSocial }) => {
+const AddSocialModal: FC<IProps> = ({ setShowModal, addSocial, showModal }) => {
 	const {
 		register,
 		handleSubmit,
@@ -31,6 +31,7 @@ const AddSocialModal: FC<IProps> = ({ setShowModal, addSocial }) => {
 			headerTitle='Add a new social media account'
 			headerIcon={<IconLink size={23} />}
 			setShowModal={setShowModal}
+			showModal={showModal}
 		>
 			<FormContainer onSubmit={handleSubmit(handleFormSubmit)} noValidate>
 				<Input

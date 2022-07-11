@@ -2,8 +2,8 @@ import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import { FC, ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
-
 import Scrollbars from 'react-custom-scrollbars';
+
 import {
 	ModalHeader,
 	ModalHeaderTitlePosition,
@@ -12,14 +12,15 @@ import { ETheme } from '@/features/general/general.slice';
 import { zIndex } from '@/lib/constants/constants';
 import { useAppSelector } from '@/features/hooks';
 import { checkUserAgentIsMobile } from '@/hooks/useDeviceDetect';
+import { IModal } from '@/types/common';
+import { FlexCenter } from '@/components/styled-components/Flex';
 
 interface ModalWrapperProps {
 	fullScreen?: boolean;
 }
 
-interface IModal extends ModalWrapperProps {
+interface IModalProps extends ModalWrapperProps, IModal {
 	fullScreen?: boolean;
-	setShowModal: (value: boolean) => void;
 	callback?: () => void;
 	hiddenClose?: boolean;
 	hiddenHeader?: boolean;
@@ -30,10 +31,11 @@ interface IModal extends ModalWrapperProps {
 	headerColor?: string;
 }
 
-export const Modal: FC<IModal> = ({
+export const Modal: FC<IModalProps> = ({
 	hiddenClose = false,
 	hiddenHeader = false,
 	setShowModal,
+	showModal,
 	children,
 	headerTitlePosition,
 	headerTitle,
@@ -79,7 +81,10 @@ export const Modal: FC<IModal> = ({
 	};
 
 	return createPortal(
-		<Background onClick={e => e.stopPropagation()}>
+		<Background
+			className={showModal ? 'fadeIn' : 'fadeOut'}
+			onClick={e => e.stopPropagation()}
+		>
 			<Surrounding onClick={() => setShowModal(false)} />
 			<ModalWrapper fullScreen={fullScreen} theme={customTheme || theme}>
 				<ModalHeader
@@ -111,14 +116,11 @@ const Surrounding = styled.div`
 	height: 100%;
 `;
 
-const Background = styled.div`
+const Background = styled(FlexCenter)`
 	width: 100%;
 	height: 100%;
 	background: ${brandColors.giv[900]}b3;
 	position: fixed;
-	display: flex;
-	justify-content: center;
-	align-items: center;
 	top: 0;
 	left: 0;
 	z-index: ${zIndex.MODAL};

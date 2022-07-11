@@ -26,6 +26,7 @@ import AddSocialModal from '@/components/views/verification/projectContact/AddSo
 import { EMainSocials, IMainSocials } from './common.types';
 import { OtherInput } from '@/components/views/verification/projectContact/common';
 import { validators } from '@/lib/constants/regex';
+import useModal from '@/hooks/useModal';
 
 export default function ProjectContactIndex() {
 	const { verificationData, setVerificationData, setStep, isDraft } =
@@ -60,11 +61,12 @@ export default function ProjectContactIndex() {
 		}
 	}, [verificationData]);
 
-	const [showSocialModal, setShowSocialModal] = useState(false);
 	const [isOtherSocialChanged, setIsOtherSocialChanged] = useState(false);
 	const [otherSocials, setOtherSocials] = useState<IProjectContact[]>(
 		findOtherSocials(),
 	);
+
+	const { showModal, showModalWithDelay, setShowModal } = useModal();
 
 	const createSocials = () => {
 		const mainSocials: IProjectContact[] = [];
@@ -151,7 +153,7 @@ export default function ProjectContactIndex() {
 					<br />
 					{isDraft && (
 						<OutlineStyled
-							onClick={() => setShowSocialModal(true)}
+							onClick={() => setShowModal(true)}
 							label='ADD OTHER'
 							buttonType='primary'
 						/>
@@ -168,10 +170,11 @@ export default function ProjectContactIndex() {
 					</div>
 				</FormContainer>
 			</div>
-			{showSocialModal && (
+			{showModalWithDelay && (
 				<AddSocialModal
+					showModal={showModal}
 					addSocial={addOtherSocial}
-					setShowModal={setShowSocialModal}
+					setShowModal={setShowModal}
 				/>
 			)}
 		</>
