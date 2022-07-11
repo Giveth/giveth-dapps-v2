@@ -40,9 +40,10 @@ export const RemoveIcon: FC<IRemoveBtnProps> = ({ onClick }) => {
 export const ProgressBar = () => {
 	const stepsCount = menuList.length;
 	const { step } = useVerificationData();
+	const _step = step < 0 ? 0 : step; // For width animation on initial load
 	return (
 		<Container>
-			<Bar width={step / stepsCount} />
+			<Bar width={_step / stepsCount} />
 		</Container>
 	);
 };
@@ -58,4 +59,5 @@ const Bar = styled.div<{ width: number }>`
 	border-radius: 5px;
 	width: ${props => props.width * 100}%;
 	height: 100%;
+	transition: width 0.8s ease-in-out;
 `;

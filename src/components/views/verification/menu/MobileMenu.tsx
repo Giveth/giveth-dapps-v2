@@ -21,7 +21,7 @@ const MobileMenu = () => {
 			<Wrapper>
 				<MenuSection onClick={() => setShowMenu(true)}>
 					{menuList[step]}
-					<Image src={MenuIcon} alt='Menu icon' />{' '}
+					<Image src={MenuIcon} alt='Menu icon' />
 				</MenuSection>
 				<StatusSection>
 					<B>Verified status for</B>
