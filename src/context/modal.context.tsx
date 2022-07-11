@@ -1,24 +1,41 @@
-import { brandColors, neutralColors } from '@giveth/ui-design-system';
-import { FC, ReactNode, useEffect, useRef, useState } from 'react';
+import { createContext, ReactNode, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import styled from 'styled-components';
-
 import Scrollbars from 'react-custom-scrollbars';
+import styled from 'styled-components';
+import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import {
 	ModalHeader,
 	ModalHeaderTitlePosition,
 } from '@/components/modals/ModalHeader';
-import { ETheme } from '@/features/general/general.slice';
+import { FlexCenter } from '@/components/styled-components/Flex';
 import { zIndex } from '@/lib/constants/constants';
+import { ETheme } from '@/features/general/general.slice';
 import { useAppSelector } from '@/features/hooks';
 import { checkUserAgentIsMobile } from '@/hooks/useDeviceDetect';
-import { FlexCenter } from '@/components/styled-components/Flex';
 
-interface ModalWrapperProps {
-	fullScreen?: boolean;
+interface IModalContext {
+	closeModal: () => void;
 }
 
-interface IModal extends ModalWrapperProps {
+const ModalContext = createContext<IModalContext>({
+	closeModal: () => {},
+});
+
+ModalContext.displayName = 'ModalContext';
+
+export const ModalProvider = ({
+	children,
+	hiddenClose = false,
+	hiddenHeader = false,
+	setShowModal,
+	headerTitlePosition,
+	headerTitle,
+	headerIcon,
+	customTheme,
+	fullScreen = false,
+	headerColor,
+}: {
+	children: ReactNode;
 	fullScreen?: boolean;
 	setShowModal: (value: boolean) => void;
 	callback?: () => void;
@@ -29,19 +46,6 @@ interface IModal extends ModalWrapperProps {
 	headerIcon?: ReactNode;
 	customTheme?: ETheme;
 	headerColor?: string;
-}
-
-export const Modal: FC<IModal> = ({
-	hiddenClose = false,
-	hiddenHeader = false,
-	setShowModal,
-	children,
-	headerTitlePosition,
-	headerTitle,
-	headerIcon,
-	customTheme,
-	fullScreen = false,
-	headerColor,
 }) => {
 	const theme = useAppSelector(state => state.general.theme);
 
@@ -92,30 +96,41 @@ export const Modal: FC<IModal> = ({
 		autoHeightMax: 'calc(80Vh - 60px)',
 	};
 
-	return createPortal(
-		<Background hiding={hiding} onClick={e => e.stopPropagation()}>
-			<Surrounding onClick={() => closeModal()} />
-			<ModalWrapper fullScreen={fullScreen} theme={customTheme || theme}>
-				<ModalHeader
-					hiddenClose={hiddenClose}
-					hiddenHeader={hiddenHeader}
-					title={headerTitle}
-					icon={headerIcon}
-					closeModal={() => closeModal()}
-					position={headerTitlePosition}
-					color={headerColor}
-				/>
-				<Scrollbars
-					renderTrackHorizontal={props => (
-						<div {...props} style={{ display: 'none' }} />
-					)}
-					{...(fullScreen ? {} : ScrollBarsNotFullScreenProps)}
-				>
-					{children}
-				</Scrollbars>
-			</ModalWrapper>
-		</Background>,
-		el.current,
+	const contextData: IModalContext = { closeModal };
+
+	return (
+		<ModalContext.Provider value={contextData}>
+			{createPortal(
+				<Background hiding={hiding} onClick={e => e.stopPropagation()}>
+					<Surrounding onClick={() => closeModal()} />
+					<ModalWrapper
+						fullScreen={fullScreen}
+						theme={customTheme || theme}
+					>
+						<ModalHeader
+							hiddenClose={hiddenClose}
+							hiddenHeader={hiddenHeader}
+							title={headerTitle}
+							icon={headerIcon}
+							closeModal={() => closeModal()}
+							position={headerTitlePosition}
+							color={headerColor}
+						/>
+						<Scrollbars
+							renderTrackHorizontal={props => (
+								<div {...props} style={{ display: 'none' }} />
+							)}
+							{...(fullScreen
+								? {}
+								: ScrollBarsNotFullScreenProps)}
+						>
+							{children}
+						</Scrollbars>
+					</ModalWrapper>
+				</Background>,
+				el.current,
+			)}
+		</ModalContext.Provider>
 	);
 };
 
@@ -134,10 +149,10 @@ const Background = styled(FlexCenter)<{ hiding: boolean }>`
 	left: 0;
 	z-index: ${zIndex.MODAL};
 	opacity: ${props => (props.hiding ? 0 : 1)};
-	transition: opacity 0.9s ease-in-out;
+	transition: opacity 0.3s ease-in-out;
 `;
 
-const ModalWrapper = styled.div<ModalWrapperProps>`
+const ModalWrapper = styled.div<{ fullScreen?: boolean }>`
 	background-color: ${props =>
 		props.theme === ETheme.Dark
 			? brandColors.giv[600]
@@ -157,3 +172,5 @@ const ModalWrapper = styled.div<ModalWrapperProps>`
 	height: ${props => (props.fullScreen ? '100%' : 'auto')};
 	overflow: hidden;
 `;
+
+export const ModalConsumer = ModalContext.Consumer;

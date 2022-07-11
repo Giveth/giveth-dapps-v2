@@ -3,11 +3,11 @@ import { Button, IconLink } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { IModal } from '@/types/common';
-import { Modal } from '@/components/modals/Modal';
 import Input from '@/components/Input';
 import { mediaQueries } from '@/lib/constants/constants';
 import { IProjectContact } from '@/apollo/types/types';
 import { requiredOptions, validators } from '@/lib/constants/regex';
+import { ModalProvider, ModalConsumer } from '@/context/modal.context';
 
 interface IProps extends IModal {
 	addSocial: (i: IProjectContact) => void;
@@ -26,48 +26,55 @@ const AddSocialModal: FC<IProps> = ({ setShowModal, addSocial }) => {
 	};
 
 	return (
-		<Modal
+		<ModalProvider
 			headerTitlePosition='left'
 			headerTitle='Add a new social media account'
 			headerIcon={<IconLink size={23} />}
 			setShowModal={setShowModal}
 		>
-			<FormContainer onSubmit={handleSubmit(handleFormSubmit)} noValidate>
-				<Input
-					label='Social media title'
-					registerName='name'
-					placeholder='Discord'
-					register={register}
-					registerOptions={{
-						...requiredOptions.name,
-						...validators.tooShort,
-					}}
-					error={errors.name}
-				/>
-				<Input
-					label='Link address'
-					registerName='url'
-					placeholder='https://www.example.com/...'
-					register={register}
-					registerOptions={requiredOptions.website}
-					error={errors.url}
-				/>
-				<Buttons>
-					<Button
-						size='small'
-						label='ADD NEW SOCIAL MEDIA'
-						buttonType='secondary'
-						type='submit'
-					/>
-					<Button
-						onClick={() => setShowModal(false)}
-						size='small'
-						label='CANCEL'
-						buttonType='texty'
-					/>
-				</Buttons>
-			</FormContainer>
-		</Modal>
+			<ModalConsumer>
+				{({ closeModal }) => (
+					<FormContainer
+						onSubmit={handleSubmit(handleFormSubmit)}
+						noValidate
+					>
+						<Input
+							label='Social media title'
+							registerName='name'
+							placeholder='Discord'
+							register={register}
+							registerOptions={{
+								...requiredOptions.name,
+								...validators.tooShort,
+							}}
+							error={errors.name}
+						/>
+						<Input
+							label='Link address'
+							registerName='url'
+							placeholder='https://www.example.com/...'
+							register={register}
+							registerOptions={requiredOptions.website}
+							error={errors.url}
+						/>
+						<Buttons>
+							<Button
+								size='small'
+								label='ADD NEW SOCIAL MEDIA'
+								buttonType='secondary'
+								type='submit'
+							/>
+							<Button
+								onClick={closeModal}
+								size='small'
+								label='CANCEL'
+								buttonType='texty'
+							/>
+						</Buttons>
+					</FormContainer>
+				)}
+			</ModalConsumer>
+		</ModalProvider>
 	);
 };
 
