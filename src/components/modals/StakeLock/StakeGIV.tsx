@@ -3,7 +3,7 @@ import { BigNumber } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
 import { Contract, ethers } from 'ethers';
 import { captureException } from '@sentry/nextjs';
-import { ButtonLink, H5 } from '@giveth/ui-design-system';
+import { ButtonLink, H5, IconExternalLink } from '@giveth/ui-design-system';
 import { Modal } from '../Modal';
 import { AmountInput } from '../../AmountInput';
 import { approveERC20tokenTransfer, wrapToken } from '@/lib/stakingPool';
@@ -268,6 +268,7 @@ export const StakeGIVModal: FC<IStakeModalProps> = ({
 								label='View on blockscot'
 								linkType='texty'
 								size='small'
+								icon={<IconExternalLink size={16} />}
 							/>
 						</BriefContainer>
 						<LockInfo amount={amount} round={0} />
