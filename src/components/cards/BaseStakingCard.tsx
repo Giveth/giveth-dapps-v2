@@ -208,6 +208,10 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		setStarted(farmStartTimeMS ? getNowUnixMS() > farmStartTimeMS : true);
 	}, [farmStartTimeMS]);
 
+	const isZeroLocked = type === StakingType.GIV_LM && totalGIVLocked === '0';
+	const isLocked = type === StakingType.GIV_LM && totalGIVLocked !== '0';
+	const avgGivpowerAPR = apr?.multipliedBy(2);
+
 	return (
 		<>
 			<StakingPoolContainer
@@ -299,12 +303,14 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 													<DetailValue>
 														{apr &&
 															formatEthHelper(
-																apr,
+																isLocked
+																	? avgGivpowerAPR ||
+																			0
+																	: apr,
 																2,
 															)}
 														%
-														{type ===
-															StakingType.GIV_LM &&
+														{isZeroLocked &&
 															`-${
 																apr &&
 																formatEthHelper(
