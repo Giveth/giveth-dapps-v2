@@ -3,6 +3,7 @@ import {
 	Button,
 	H6,
 	IconInfo,
+	IconTwitter,
 	neutralColors,
 	P,
 } from '@giveth/ui-design-system';
@@ -13,7 +14,6 @@ import { useCallback, useMemo } from 'react';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import DiscordIcon from '/public/images/icons/social/discord.svg';
-import TwitterIcon from '/public/images/icons/social/twitter.svg';
 import { ContentSeparator, BtnContainer } from './VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
 import { client } from '@/apollo/apolloClient';
@@ -155,8 +155,7 @@ const SocialProfile = () => {
 					</ButtonRow> */}
 					<ButtonRow>
 						<ButtonSocial
-							color='#0077B5
-							'
+							color='#0077B5'
 							onClick={() => {
 								handleSocialSubmit(
 									'twitter',
@@ -165,7 +164,7 @@ const SocialProfile = () => {
 								);
 							}}
 						>
-							<Image src={TwitterIcon} alt='twitter icon' />
+							<IconTwitter />
 							{twitterData?.socialNetworkId ??
 								'CONNECT TO TWITTER'}
 						</ButtonSocial>
