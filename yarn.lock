@@ -4376,6 +4376,14 @@ eslint-config-prettier@^8.3.0:
   resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-8.5.0.tgz#5a81680ec934beca02c7b1a61cf8ca34b66feab1"
   integrity sha512-obmWKLUNCnhtQRKc+tmnYuQl0pFU1ibYJQ5BGhTVB08bHe9wC8qUeG7c08dj9XX+AuPj1YSGSQIHl1pnDHZR0Q==
 
+eslint-import-resolver-jest@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/eslint-import-resolver-jest/-/eslint-import-resolver-jest-3.0.2.tgz#b20150f574576b6bd0d432a7ff08b0067141b33e"
+  integrity sha512-1FiDyoiq02r0fkEbq/h6x9rUawWt4ct6o51uNkoSaC7GC8iIAfsPD8eSYSizZtNRbF6NuOsmuLIShOTavKNtsQ==
+  dependencies:
+    find-root "^1.1.0"
+    resolve "^1.12.0"
+
 eslint-import-resolver-node@0.3.4:
   version "0.3.4"
   resolved "https://registry.yarnpkg.com/eslint-import-resolver-node/-/eslint-import-resolver-node-0.3.4.tgz#85ffa81942c25012d8231096ddf679c03042c717"
