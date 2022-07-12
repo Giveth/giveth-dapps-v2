@@ -5,11 +5,11 @@ import React, {
 	useEffect,
 	useState,
 } from 'react';
-import Image from 'next/image';
 import styled from 'styled-components';
 import { Button, GLink, semanticColors } from '@giveth/ui-design-system';
-import { client } from '@/apollo/apolloClient';
+import { IconArchiving } from '@giveth/ui-design-system/lib/cjs/components/icons/Archiving';
 
+import { client } from '@/apollo/apolloClient';
 import {
 	DEACTIVATE_PROJECT,
 	GET_STATUS_REASONS,
@@ -17,13 +17,13 @@ import {
 import QuestionBadge from '@/components/badges/QuestionBadge';
 import FormProgress from '@/components/FormProgress';
 import { Modal } from '../Modal';
-import ArchiveIcon from '../../../../public/images/icons/archive_deep.svg';
 import { IModal } from '@/types/common';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import DoneContent from './DoneContent';
 import DeactivatingContent from './DeactivatingContent';
 import WhyContent from './WhyContent';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 export interface ISelectObj {
 	value: number;
@@ -54,6 +54,8 @@ const DeactivateProjectModal: FC<IDeactivateProjectModal> = ({
 	);
 	const dispatch = useAppDispatch();
 	const isSignedIn = useAppSelector(state => state.user.isSignedIn);
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+
 	const fetchReasons = async () => {
 		const { data } = await client.query({
 			query: GET_STATUS_REASONS,
@@ -96,15 +98,9 @@ const DeactivateProjectModal: FC<IDeactivateProjectModal> = ({
 
 	return (
 		<Modal
-			setShowModal={setShowModal}
-			headerIcon={
-				<Image
-					src={ArchiveIcon}
-					alt='Archive icon'
-					height={32}
-					width={32}
-				/>
-			}
+			closeModal={closeModal}
+			isAnimating={isAnimating}
+			headerIcon={<IconArchiving />}
 			headerTitle='Deactivating project'
 			headerTitlePosition='left'
 		>
@@ -137,14 +133,14 @@ const DeactivateProjectModal: FC<IDeactivateProjectModal> = ({
 						size='small'
 						label={buttonLabels[tab].confirm}
 						onClick={handleConfirmButton}
-						disabled={tab > 0 && !!!selectedReason}
+						disabled={tab > 0 && !selectedReason}
 					/>
 				)}
 				<CancelButton
 					buttonType='texty'
 					size='small'
 					label={buttonLabels[tab].cancel}
-					onClick={() => setShowModal(false)}
+					onClick={closeModal}
 				/>
 			</Wrapper>
 		</Modal>

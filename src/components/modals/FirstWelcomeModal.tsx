@@ -12,6 +12,7 @@ import Routes from '@/lib/constants/Routes';
 import StorageLabel from '@/lib/localStorage';
 import { Bullets } from '@/components/styled-components/Bullets';
 import ExternalLink from '@/components/ExternalLink';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 interface IText {
 	isDark?: boolean;
@@ -20,6 +21,7 @@ interface IText {
 export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
 	const theme = useAppSelector(state => state.general.theme);
 	const router = useRouter();
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	useEffect(() => {
 		localStorage.setItem(StorageLabel.FIRSTMODALSHOWED, '1');
@@ -27,7 +29,8 @@ export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
 
 	return (
 		<Modal
-			setShowModal={setShowModal}
+			closeModal={closeModal}
+			isAnimating={isAnimating}
 			headerIcon={<IconDonation />}
 			headerTitle={`Let's Donate`}
 			headerTitlePosition='left'
@@ -85,7 +88,7 @@ export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
 						label='Donate to a project'
 						onClick={() => {
 							router.push(Routes.Projects);
-							setShowModal(false);
+							closeModal();
 						}}
 						buttonType={
 							theme === ETheme.Dark ? 'secondary' : 'primary'
@@ -94,7 +97,7 @@ export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
 					<Button
 						buttonType='texty'
 						label='CLOSE'
-						onClick={() => setShowModal(false)}
+						onClick={closeModal}
 					/>
 				</Buttons>
 			</Container>

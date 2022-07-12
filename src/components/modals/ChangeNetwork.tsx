@@ -12,6 +12,7 @@ import { switchNetwork } from '@/lib/wallet';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 interface IChangeNetworkModalProps extends IModal {
 	targetNetwork: number;
@@ -24,9 +25,11 @@ export const ChangeNetworkModal: FC<IChangeNetworkModalProps> = ({
 	const { chainId } = useWeb3React();
 	const theme = useAppSelector(state => state.general.theme);
 
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+
 	useEffect(() => {
 		if (chainId === targetNetwork) {
-			setShowModal(false);
+			closeModal();
 		}
 	}, [chainId, targetNetwork]);
 
@@ -36,7 +39,7 @@ export const ChangeNetworkModal: FC<IChangeNetworkModalProps> = ({
 			: 'Ethereum Mainnet or Gnosis Chain';
 
 	return (
-		<Modal setShowModal={setShowModal}>
+		<Modal closeModal={closeModal} isAnimating={isAnimating}>
 			<ChangeNetworkModalContainer>
 				{targetNetwork === config.MAINNET_NETWORK_NUMBER ? (
 					<IconEthereum size={64} />

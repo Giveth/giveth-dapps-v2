@@ -224,7 +224,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 		<>
 			{showVerificationModal && (
 				<VerificationModal
-					closeModal={() => setShowVerificationModal(false)}
+					onClose={() => setShowVerificationModal(false)}
 				/>
 			)}
 			{showModal && slug && (

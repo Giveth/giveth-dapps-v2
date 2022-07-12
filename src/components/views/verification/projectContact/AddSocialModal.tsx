@@ -8,6 +8,7 @@ import Input from '@/components/Input';
 import { mediaQueries } from '@/lib/constants/constants';
 import { IProjectContact } from '@/apollo/types/types';
 import { requiredOptions, validators } from '@/lib/constants/regex';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 interface IProps extends IModal {
 	addSocial: (i: IProjectContact) => void;
@@ -20,9 +21,11 @@ const AddSocialModal: FC<IProps> = ({ setShowModal, addSocial }) => {
 		formState: { errors },
 	} = useForm<IProjectContact>();
 
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+
 	const handleFormSubmit = (formData: IProjectContact) => {
 		addSocial(formData);
-		setShowModal(false);
+		closeModal();
 	};
 
 	return (
@@ -30,7 +33,8 @@ const AddSocialModal: FC<IProps> = ({ setShowModal, addSocial }) => {
 			headerTitlePosition='left'
 			headerTitle='Add a new social media account'
 			headerIcon={<IconLink size={23} />}
-			setShowModal={setShowModal}
+			isAnimating={isAnimating}
+			closeModal={closeModal}
 		>
 			<FormContainer onSubmit={handleSubmit(handleFormSubmit)} noValidate>
 				<Input
@@ -60,7 +64,7 @@ const AddSocialModal: FC<IProps> = ({ setShowModal, addSocial }) => {
 						type='submit'
 					/>
 					<Button
-						onClick={() => setShowModal(false)}
+						onClick={closeModal}
 						size='small'
 						label='CANCEL'
 						buttonType='texty'
