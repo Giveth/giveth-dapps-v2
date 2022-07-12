@@ -1,5 +1,6 @@
 import { useWeb3React } from '@web3-react/core';
 import { useEffect } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import WalletModal from '@/components/modals/WalletModal';
 import WelcomeModal from '@/components/modals/WelcomeModal';
 import { FirstWelcomeModal } from '@/components/modals/FirstWelcomeModal';
@@ -50,7 +51,7 @@ const ModalController = () => {
 	}, [isSignedIn]);
 
 	return (
-		<>
+		<AnimatePresence>
 			{showWalletModal && (
 				<WalletModal
 					setShowModal={state => dispatch(setShowWalletModal(state))}
@@ -82,7 +83,7 @@ const ModalController = () => {
 					}
 				/>
 			)}
-		</>
+		</AnimatePresence>
 	);
 };
 

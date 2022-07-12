@@ -3,7 +3,7 @@ import { FC, ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import dynamic from 'next/dynamic';
-
+import { motion } from 'framer-motion';
 import {
 	ModalHeader,
 	ModalHeaderTitlePosition,
@@ -85,25 +85,35 @@ export const Modal: FC<IModal> = ({
 	return createPortal(
 		<Background onClick={e => e.stopPropagation()}>
 			<Surrounding onClick={() => setShowModal(false)} />
-			<ModalWrapper fullScreen={fullScreen} theme={customTheme || theme}>
-				<ModalHeader
-					hiddenClose={hiddenClose}
-					hiddenHeader={hiddenHeader}
-					title={headerTitle}
-					icon={headerIcon}
-					closeModal={() => setShowModal(false)}
-					position={headerTitlePosition}
-					color={headerColor}
-				/>
-				<Scrollbars
-					renderTrackHorizontal={props => (
-						<div {...props} style={{ display: 'none' }} />
-					)}
-					{...(fullScreen ? {} : ScrollBarsNotFullScreenProps)}
+			<motion.div
+				key='modal'
+				initial={{ opacity: 0 }}
+				animate={{ opacity: 1 }}
+				exit={{ opacity: 0 }}
+			>
+				<ModalWrapper
+					fullScreen={fullScreen}
+					theme={customTheme || theme}
 				>
-					{children}
-				</Scrollbars>
-			</ModalWrapper>
+					<ModalHeader
+						hiddenClose={hiddenClose}
+						hiddenHeader={hiddenHeader}
+						title={headerTitle}
+						icon={headerIcon}
+						closeModal={() => setShowModal(false)}
+						position={headerTitlePosition}
+						color={headerColor}
+					/>
+					<Scrollbars
+						renderTrackHorizontal={props => (
+							<div {...props} style={{ display: 'none' }} />
+						)}
+						{...(fullScreen ? {} : ScrollBarsNotFullScreenProps)}
+					>
+						{children}
+					</Scrollbars>
+				</ModalWrapper>
+			</motion.div>
 		</Background>,
 		el.current,
 	);
