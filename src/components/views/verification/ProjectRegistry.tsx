@@ -135,7 +135,7 @@ export default function ProjectRegistry() {
 	return (
 		<form onSubmit={handleSubmit(handleNext)}>
 			<div>
-				<H6 weight={700}>Project registry</H6>
+				<H6 weight={700}>Registration</H6>
 				<RadioSectionContainer>
 					<RadioSectionTitle>
 						Is your project part of a registered non-profit

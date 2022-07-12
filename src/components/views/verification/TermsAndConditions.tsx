@@ -115,7 +115,7 @@ export default function TermsAndConditions() {
 						onClick={() => handleNext()}
 						loading={loading}
 						disabled={!accepted}
-						label='NEXT     >'
+						label='FINISH     >'
 					/>
 				</BtnContainer>
 			</div>
