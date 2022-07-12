@@ -7,7 +7,6 @@ import React, {
 	useRef,
 	useState,
 } from 'react';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import {
@@ -21,6 +20,7 @@ import {
 import { motion } from 'framer-motion';
 import { captureException } from '@sentry/nextjs';
 
+import { IconArchiving } from '@giveth/ui-design-system/lib/cjs/components/icons/Archiving';
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import { Shadow } from '@/components/styled-components/Shadow';
 import CategoryBadge from '@/components/badges/CategoryBadge';
@@ -33,7 +33,6 @@ import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_REACTION_BY_ID } from '@/apollo/gql/gqlProjects';
 import { likeProject, unlikeProject } from '@/lib/reaction';
 import DeactivateProjectModal from '@/components/modals/deactivateProject/DeactivateProjectIndex';
-import ArchiveIcon from '../../../../../public/images/icons/archive.svg';
 import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
 import {
 	idToProjectEdit,
@@ -340,7 +339,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 						buttonType='texty'
 						size='small'
 						label={`${isActive ? 'DE' : ''}ACTIVATE PROJECT`}
-						icon={<Image src={ArchiveIcon} alt='Archive icon' />}
+						icon={<IconArchiving size={16} />}
 						onClick={() => handleProjectStatus(isActive)}
 					/>
 				)}
