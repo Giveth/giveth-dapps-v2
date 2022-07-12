@@ -14,6 +14,7 @@ import { ISelectedNetwork } from '@/components/views/verification/manageFunds/ty
 import config from '@/configuration';
 import { isAddressValid } from '@/lib/wallet';
 import { showToastError } from '@/lib/helpers';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 interface IProps extends IModal {
 	addAddress: (address: IAddress) => void;
@@ -51,7 +52,7 @@ const AddAddressModal: FC<IProps> = ({
 		formState: { errors },
 	} = useForm<IAddressForm>();
 	const { library } = useWeb3React();
-	console.log('errors', errors);
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	const handleAdd = async (formData: IAddressForm) => {
 		const { address, title } = formData;
@@ -66,7 +67,7 @@ const AddAddressModal: FC<IProps> = ({
 				title: title,
 				networkId: formData.network.value,
 			});
-			setShowModal(false);
+			closeModal();
 		} else {
 			showToastError('Please provide all values');
 		}
@@ -74,7 +75,8 @@ const AddAddressModal: FC<IProps> = ({
 
 	return (
 		<Modal
-			setShowModal={setShowModal}
+			closeModal={closeModal}
+			isAnimating={isAnimating}
 			headerTitlePosition='left'
 			headerTitle='Add an Address'
 			headerIcon={<IconWalletOutline />}
@@ -134,7 +136,7 @@ const AddAddressModal: FC<IProps> = ({
 							size='small'
 							label='CANCEL'
 							buttonType='texty'
-							onClick={() => setShowModal(false)}
+							onClick={closeModal}
 						/>
 					</Buttons>
 				</form>
