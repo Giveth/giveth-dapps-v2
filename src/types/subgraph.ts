@@ -29,6 +29,7 @@ export interface IBalances {
 	honeyswapGivDaiLp: string;
 	honeyswapGivDaiLpStaked: string;
 	givStaked: string;
+	gGIV: string;
 	allocationCount: number;
 	givDropClaimed: boolean;
 
@@ -75,6 +76,7 @@ export const ZeroBalances: IBalances = {
 	honeyswapGivDaiLp: '0',
 	honeyswapGivDaiLpStaked: '0',
 	givStaked: '0',
+	gGIV: '0',
 	allocationCount: 0,
 	givDropClaimed: false,
 

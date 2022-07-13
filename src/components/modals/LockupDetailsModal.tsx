@@ -158,7 +158,7 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 
 					<TotalContainer>
 						<SubtitleH5>
-							{formatWeiHelper(balances.givStaked, 2)}
+							{formatWeiHelper(balances.gGIV, 2)}
 						</SubtitleH5>
 						<H6>GIV</H6>
 					</TotalContainer>

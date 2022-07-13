@@ -333,7 +333,7 @@ export const getUserStakeInfo = (
 			case StakingType.GIV_LM:
 				rewards = BN(balance.rewardsGivLm);
 				rewardPerTokenPaid = BN(balance.rewardPerTokenPaidGivLm);
-				stakedAmount = BN(balance.givStaked);
+				stakedAmount = BN(balance.gGIV);
 				notStakedAmount = BN(balance.balance);
 				break;
 			default:

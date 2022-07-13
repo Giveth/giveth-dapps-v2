@@ -46,7 +46,8 @@ const transformBalanceInfo = (info: any, gGiv: any): IBalances => {
 	const honeyswapLpStaked = info.honeyswapLpStaked || 0;
 	const honeyswapGivDaiLp = info.honeyswapGivDaiLp || 0;
 	const honeyswapGivDaiLpStaked = info.honeyswapGivDaiLpStaked || 0;
-	const givStaked = gGiv?.balance || 0;
+	const givStaked = info.givStaked || 0;
+	const gGIV = gGiv?.balance || 0;
 	const allocationCount = Number(info.allocationCount || 0);
 	const givDropClaimed = Boolean(info.givDropClaimed);
 
@@ -93,6 +94,7 @@ const transformBalanceInfo = (info: any, gGiv: any): IBalances => {
 		honeyswapGivDaiLp,
 		honeyswapGivDaiLpStaked,
 		givStaked,
+		gGIV,
 		allocationCount,
 		givDropClaimed,
 
