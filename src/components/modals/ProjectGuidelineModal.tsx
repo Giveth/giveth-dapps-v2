@@ -10,11 +10,15 @@ import { IModal } from '@/types/common';
 import { Bullets } from '@/components/styled-components/Bullets';
 import BulbIcon from '/public/images/icons/lightbulb.svg';
 import ExternalLink from '@/components/ExternalLink';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 export const ProjectGuidelineModal: FC<IModal> = ({ setShowModal }) => {
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+
 	return (
 		<Modal
-			setShowModal={setShowModal}
+			closeModal={closeModal}
+			isAnimating={isAnimating}
 			headerIcon={<Image src={BulbIcon} alt='light bulb' />}
 			headerTitle='Submission guidelines'
 			headerTitlePosition='left'

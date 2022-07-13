@@ -10,18 +10,21 @@ import { IModal } from '@/types/common';
 import { Bullets } from '@/components/styled-components/Bullets';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 export const CompleteProfileModal: FC<IModal> = ({ setShowModal }) => {
 	const theme = useAppSelector(state => state.general.theme);
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	const handleClick = () => {
 		router.push(Routes.Onboard);
-		setShowModal(false);
+		closeModal();
 	};
 
 	return (
 		<Modal
-			setShowModal={setShowModal}
+			closeModal={closeModal}
+			isAnimating={isAnimating}
 			headerIcon={<IconProfile />}
 			headerTitle='Complete your profile'
 			headerTitlePosition='left'
@@ -41,7 +44,7 @@ export const CompleteProfileModal: FC<IModal> = ({ setShowModal }) => {
 				/>
 				<SkipButton
 					label='SKIP FOR NOW'
-					onClick={() => setShowModal(false)}
+					onClick={closeModal}
 					buttonType='primary'
 				/>
 			</Container>

@@ -4,13 +4,17 @@ import styled from 'styled-components';
 import { IModal } from '@/types/common';
 import { Modal } from '@/components/modals/Modal';
 import { Bullets } from '@/components/styled-components/Bullets';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 const HintModal: FC<IModal> = ({ setShowModal }) => {
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+
 	return (
 		<Modal
 			headerTitle='Hint!!!'
 			headerTitlePosition='left'
-			setShowModal={setShowModal}
+			closeModal={closeModal}
+			isAnimating={isAnimating}
 		>
 			<Container>
 				<P>

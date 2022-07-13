@@ -19,6 +19,7 @@ import { useAppDispatch } from '@/features/hooks';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
 import Input, { InputSize } from '../Input';
 import { requiredOptions, validators } from '@/lib/constants/regex';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 enum EditStatusType {
 	INFO,
@@ -51,6 +52,7 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 	const dispatch = useAppDispatch();
 	const { account } = useWeb3React();
 	const [updateUser] = useMutation(UPDATE_USER);
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	const onSaveAvatar = async () => {
 		try {
@@ -98,7 +100,7 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 					type: ToastType.SUCCESS,
 					title: 'Success',
 				});
-				setShowModal(false);
+				closeModal();
 			} else {
 				throw 'Update User Failed.';
 			}
@@ -118,8 +120,8 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 
 	return (
 		<Modal
-			setShowModal={setShowModal}
-			headerIcon={<></>}
+			closeModal={closeModal}
+			isAnimating={isAnimating}
 			headerTitle='Edit profile'
 			headerTitlePosition='left'
 		>
@@ -196,7 +198,7 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 								<TextButton
 									buttonType='texty'
 									label='cancel'
-									onClick={() => setShowModal(false)}
+									onClick={closeModal}
 								/>
 							</InputWrapper>
 						</form>

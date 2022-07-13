@@ -23,6 +23,7 @@ import { slugToProjectView } from '@/lib/routeCreators';
 import { IModal } from '@/types/common';
 import CopyLink from '@/components/CopyLink';
 import { fullPath } from '@/lib/helpers';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 interface IShareModal extends IModal {
 	projectHref: string;
@@ -30,10 +31,12 @@ interface IShareModal extends IModal {
 
 const ShareModal = ({ projectHref, setShowModal }: IShareModal) => {
 	const url = fullPath(slugToProjectView(projectHref));
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	return (
 		<Modal
-			setShowModal={setShowModal}
+			closeModal={closeModal}
+			isAnimating={isAnimating}
 			headerIcon={<Image src={ShareIcon} alt='share icon' />}
 			headerTitle='Share'
 			headerTitlePosition='left'
@@ -74,7 +77,7 @@ const ShareModal = ({ projectHref, setShowModal }: IShareModal) => {
 					buttonType='texty'
 					size='small'
 					label='dismiss'
-					onClick={() => setShowModal(false)}
+					onClick={closeModal}
 				/>
 			</Container>
 		</Modal>
