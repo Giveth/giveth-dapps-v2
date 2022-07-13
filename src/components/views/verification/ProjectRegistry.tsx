@@ -179,7 +179,7 @@ export default function ProjectRegistry() {
 				</RadioSectionContainer>
 				<br />
 				{watchIsNonProfit === ERegistryType.YES && (
-					<>
+					<div className='fadeIn'>
 						<Lead>
 							What name is your organization registered under?
 						</Lead>
@@ -247,11 +247,11 @@ export default function ProjectRegistry() {
 								/>
 							)}
 						/>
-					</>
+					</div>
 				)}
 
 				{watchIsNonProfit === ERegistryType.NO && (
-					<>
+					<div className='fadeIn'>
 						<Lead>
 							Okay, it sounds like your project is not a
 							registered non-profit. Please tell us a bit about
@@ -270,7 +270,7 @@ export default function ProjectRegistry() {
 							error={errors.description}
 							disabled={!isDraft}
 						/>
-					</>
+					</div>
 				)}
 			</div>
 			<div>
