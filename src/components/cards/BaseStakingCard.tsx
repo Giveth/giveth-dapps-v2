@@ -560,7 +560,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				<LockModal
 					setShowModal={setShowLockModal}
 					poolStakingConfig={poolStakingConfig}
-					maxAmount={userNotStakedAmount}
+					maxAmount={stakedLpAmount.sub(totalGIVLocked)}
 				/>
 			)}
 			{showWhatIsGIVstreamModal && (
