@@ -125,6 +125,7 @@ const DonateModal = (props: IDonateModalProps) => {
 						/>
 					)}
 					<DonateButton
+						loading={donating}
 						buttonType='primary'
 						disabled={donating}
 						label={donating ? 'DONATING' : 'DONATE'}
@@ -174,8 +175,8 @@ const DonatingBox = styled.div`
 	}
 `;
 
-const DonateButton = styled(Button)`
-	background: ${(props: { disabled: boolean }) =>
+const DonateButton = styled(Button)<{ disabled: boolean }>`
+	background: ${props =>
 		props.disabled ? brandColors.giv[200] : brandColors.giv[500]};
 	:hover:enabled {
 		background: ${brandColors.giv[700]};
@@ -183,10 +184,9 @@ const DonateButton = styled(Button)`
 	:disabled {
 		cursor: not-allowed;
 	}
-	* {
-		margin: auto 0;
-		padding: 0 8px 0 0;
-		font-weight: bold;
+	> :first-child > div {
+		border-top: 3px solid ${brandColors.giv[200]};
+		animation-timing-function: linear;
 	}
 `;
 

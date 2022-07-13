@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import Link from 'next/link';
 import styled from 'styled-components';
 import { Button, Lead, brandColors, H5 } from '@giveth/ui-design-system';
 import Image from 'next/image';
@@ -9,6 +8,7 @@ import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import BulbIcon from '/public/images/icons/lightbulb.svg';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import ExternalLink from '@/components/ExternalLink';
 
 export const GoodProjectDescription: FC<IModal> = ({ setShowModal }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
@@ -34,9 +34,9 @@ export const GoodProjectDescription: FC<IModal> = ({ setShowModal }) => {
 				<Description>When?</Description>
 
 				<LeadStyled>See how others have done it,</LeadStyled>
-				<Link href={Routes.Projects} passHref>
+				<ExternalLink href={Routes.Projects}>
 					<LinkStyled>Browse examples.</LinkStyled>
-				</Link>
+				</ExternalLink>
 
 				<LeadStyled>Read this blog post tutorial,</LeadStyled>
 				<LinkStyled href='https://knowhow.ncvo.org.uk/how-to/how-to-write-an-overview-of-a-nonprofit-organization'>
