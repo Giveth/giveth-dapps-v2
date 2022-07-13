@@ -72,6 +72,7 @@ import { GIVPowerExplainModal } from '../modals/GIVPowerExplain';
 import GIVpowerCardIntro from './GIVpowerCardIntro';
 import LockModal from '../modals/StakeLock/Lock';
 import { StakeGIVModal } from '../modals/StakeLock/StakeGIV';
+import { avgAPR } from '@/helpers/givpower';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -134,9 +135,11 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const { setInfo } = useFarms();
 	const { chainId } = useWeb3React();
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
-	const { totalGIVLocked } = useAppSelector(
-		state => state.subgraph.xDaiValues.givpowerInfo,
+	const { givpowerInfo, balances } = useAppSelector(
+		state => state.subgraph.xDaiValues,
 	);
+
+	const { totalGIVLocked } = givpowerInfo;
 	const { regenStreamType, regenFarmIntro } =
 		poolStakingConfig as RegenPoolStakingConfig;
 
@@ -147,7 +150,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		title,
 		description,
 		provideLiquidityLink,
-		BUY_LINK,
 		unit,
 		farmStartTimeMS,
 		active,
@@ -210,7 +212,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 
 	const isZeroLocked = type === StakingType.GIV_LM && totalGIVLocked === '0';
 	const isLocked = type === StakingType.GIV_LM && totalGIVLocked !== '0';
-	const avgGivpowerAPR = apr?.multipliedBy(2);
 
 	return (
 		<>
@@ -304,8 +305,11 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 														{apr &&
 															formatEthHelper(
 																isLocked
-																	? avgGivpowerAPR ||
-																			0
+																	? avgAPR(
+																			apr,
+																			balances.gGIV,
+																			balances.givStaked,
+																	  )
 																	: apr,
 																2,
 															)}
