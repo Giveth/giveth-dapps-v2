@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import { IGIVpowerInfo } from '@/types/subgraph';
 import { getNowUnixMS } from './time';
 
@@ -18,4 +19,22 @@ export const getGIVpowerRoundsInfo = (
 export const getUnlockDate = (givpowerInfo: IGIVpowerInfo, rounds: number) => {
 	const { nextRoundDate, roundDuration } = givpowerInfo;
 	return Number(nextRoundDate) + rounds * roundDuration * 1000;
+};
+
+export const avgAPR = (
+	apr: BigNumber | null,
+	gGIV?: string,
+	givStaked?: string,
+) => {
+	if (
+		!apr ||
+		apr.isZero() ||
+		!gGIV ||
+		gGIV === '0' ||
+		!givStaked ||
+		givStaked === '0'
+	)
+		return new BigNumber(0);
+	const avg = new BigNumber(givStaked).dividedBy(gGIV);
+	return apr.multipliedBy(avg);
 };
