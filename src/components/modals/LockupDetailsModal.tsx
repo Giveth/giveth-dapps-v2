@@ -85,7 +85,7 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 								icon={<IconHelp />}
 								direction='top'
 							>
-								<H6>APR</H6>
+								<P>APR</P>
 							</IconWithTooltip>
 						</CloseText>
 					</div>
@@ -152,7 +152,7 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 					<SubtitleWithTooltip>
 						<Subtitle>Total staked GIV</Subtitle>
 						<IconWithTooltip icon={<IconHelp />} direction='top'>
-							<H6>some explanation here</H6>
+							<P>some explanation here</P>
 						</IconWithTooltip>
 					</SubtitleWithTooltip>
 
@@ -225,7 +225,7 @@ const Subtitle = styled(H6)`
 	font-weight: 700;
 `;
 
-const SubtitleWithTooltip = styled(Subtitle)`
+const SubtitleWithTooltip = styled.div`
 	display: flex;
 	flex-direction: row;
 	gap: 4px;
