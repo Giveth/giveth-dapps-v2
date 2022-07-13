@@ -82,7 +82,7 @@ const CryptoDonation = (props: {
 	setSuccessDonation: (i: ISuccessDonation) => void;
 	project: IProject;
 }) => {
-	const { chainId: networkId, account, library } = useWeb3React();
+	const { chainId: networkId, account, library, active } = useWeb3React();
 	const dispatch = useAppDispatch();
 	const { isEnabled, isSignedIn, balance } = useAppSelector(
 		state => state.user,
@@ -165,6 +165,13 @@ const CryptoDonation = (props: {
 		if (isEnabled) pollToken();
 		return () => clearPoll();
 	}, [selectedToken, isEnabled, account, networkId, balance]);
+
+	useEffect(() => {
+		if (!active) {
+			setSelectedToken(undefined);
+			setAmountTyped(undefined);
+		}
+	}, [active]);
 
 	useEffect(() => {
 		client
@@ -439,6 +446,7 @@ const CryptoDonation = (props: {
 									: 'Search name'
 							}
 							projectVerified={project?.verified!}
+							disabled={!active}
 						/>
 					</DropdownContainer>
 					<InputBox
@@ -457,6 +465,7 @@ const CryptoDonation = (props: {
 						}}
 						onFocus={(val: any) => setInputBoxFocused(!!val)}
 						placeholder='Amount'
+						disabled={!active}
 					/>
 				</SearchContainer>
 				{selectedToken && (

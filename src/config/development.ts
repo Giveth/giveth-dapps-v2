@@ -140,6 +140,7 @@ const config: EnvConfig = {
 					'https://app.honeyswap.org/#/add/0x780FE5de651a3ea62E572f591BF848cFEBaf2163/0x69F79C9eA174d4659B18c7993c7EFbBbB58cF068',
 				unit: 'LP',
 				active: true,
+				archived: true,
 			},
 			{
 				POOL_ADDRESS: '0x0346B748Ce9bdd42995452b5D30b46c296336f07',
