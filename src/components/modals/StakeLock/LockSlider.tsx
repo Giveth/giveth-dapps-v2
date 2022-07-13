@@ -2,8 +2,11 @@ import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import { P, B, GLink, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { Dispatch, FC, SetStateAction, useState } from 'react';
 import { Flex } from '@/components/styled-components/Flex';
-import type { Dispatch, FC, SetStateAction } from 'react';
+import { useAppSelector } from '@/features/hooks';
+import { getUnlockDate } from '@/helpers/givpower';
+import { smallFormatDate } from '@/lib/helpers';
 
 const maxRound = 26;
 interface ILockSlider {
@@ -12,6 +15,11 @@ interface ILockSlider {
 }
 
 const LockSlider: FC<ILockSlider> = ({ round, setRound }) => {
+	const [isChanged, setIsChanged] = useState(false);
+	const givpowerInfo = useAppSelector(
+		state => state.subgraph.xDaiValues.givpowerInfo,
+	);
+	const unlockDate = new Date(getUnlockDate(givpowerInfo, round));
 	return (
 		<>
 			<Flex justifyContent='space-between'>
@@ -33,12 +41,17 @@ const LockSlider: FC<ILockSlider> = ({ round, setRound }) => {
 				onChange={value => {
 					const _value = Array.isArray(value) ? value[0] : value;
 					setRound(_value);
+					setIsChanged(true);
 				}}
 				value={round}
 			/>
 			<Flex justifyContent='space-between'>
 				<GLink>Min 1 round</GLink>
-				<GLink>Max {maxRound} round</GLink>
+				<GLink>
+					{isChanged
+						? smallFormatDate(unlockDate)
+						: `Max ${maxRound} round`}
+				</GLink>
 			</Flex>
 		</>
 	);
