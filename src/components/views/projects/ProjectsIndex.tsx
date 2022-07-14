@@ -14,7 +14,6 @@ import {
 import styled from 'styled-components';
 
 import { captureException } from '@sentry/nextjs';
-import { BigArc } from '@/components/styled-components/Arc';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import SearchBox from '@/components/SearchBox';
 import Routes from '@/lib/constants/Routes';
@@ -206,7 +205,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 	return (
 		<>
 			<ProjectsBanner mainCategory={selectedMainCategory} />
-			<BigArc />
 			<Wrapper>
 				<Title weight={700}>Projects</Title>
 				<Subtitle>
