@@ -1,17 +1,21 @@
 import { addApolloState, initializeApollo } from '@/apollo/apolloClient';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
-import ProjectsIndex, {
-	IProjectsView,
-} from '@/components/views/projects/ProjectsIndex';
+import ProjectsIndex from '@/components/views/projects/ProjectsIndex';
 import { projectsMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import { mainCategoriesMock } from './[slug]';
+import { ICategory, IMainCategory, IProject } from '@/apollo/types/types';
 
-interface IProjectsRoute extends IProjectsView {}
+export interface IProjectsRouteProps {
+	projects: IProject[];
+	totalCount: number;
+	categories: ICategory[];
+	mainCategories: IMainCategory[];
+}
 
-const ProjectsRoute = (props: IProjectsRoute) => {
+const ProjectsRoute = (props: IProjectsRouteProps) => {
 	const { projects, mainCategories, totalCount, categories } = props;
 	return (
 		<>

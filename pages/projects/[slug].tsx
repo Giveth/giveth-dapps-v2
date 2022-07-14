@@ -5,15 +5,22 @@ import { initializeApollo } from '@/apollo/apolloClient';
 import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { GeneralMetatags } from '@/components/Metatag';
-import ProjectsIndex, {
-	IProjectsView,
-} from '@/components/views/projects/ProjectsIndex';
+import ProjectsIndex from '@/components/views/projects/ProjectsIndex';
 import { projectsMetatags } from '@/content/metatags';
+import type { IProjectsRouteProps } from '.';
 
-interface IProjectsCategoriesRoute extends IProjectsView {}
+interface IProjectsCategoriesRouteProps extends IProjectsRouteProps {
+	selectedMainCategory?: IMainCategory;
+}
 
-const ProjectsCategoriesRoute = (props: IProjectsCategoriesRoute) => {
-	const { projects, mainCategories, totalCount, categories } = props;
+const ProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
+	const {
+		projects,
+		mainCategories,
+		selectedMainCategory,
+		totalCount,
+		categories,
+	} = props;
 
 	return (
 		<>
@@ -23,6 +30,7 @@ const ProjectsCategoriesRoute = (props: IProjectsCategoriesRoute) => {
 				totalCount={totalCount}
 				categories={categories}
 				mainCategories={mainCategories}
+				selectedMainCategory={selectedMainCategory}
 			/>
 		</>
 	);
@@ -39,11 +47,11 @@ export const getServerSideProps: GetServerSideProps = async context => {
 					permanent: false,
 				},
 			};
-		const category = mainCategoriesMock.find(
+		const selectedMainCategory = mainCategoriesMock.find(
 			mainCategory => mainCategory.slug === slug,
 		);
-		if (category) {
-			category.selected = true;
+		if (selectedMainCategory) {
+			selectedMainCategory.selected = true;
 			const apolloClient = initializeApollo();
 			const { data } = await apolloClient.query({
 				query: FETCH_ALL_PROJECTS,
@@ -56,6 +64,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 				props: {
 					projects,
 					mainCategories: mainCategoriesMock,
+					selectedMainCategory,
 					totalCount,
 					categories,
 				},

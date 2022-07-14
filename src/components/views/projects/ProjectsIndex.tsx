@@ -33,12 +33,11 @@ import { Shadow } from '../../styled-components/Shadow';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
+import ProjectsBanner from './ProjectsBanner';
+import type { IProjectsRouteProps } from 'pages/projects';
 
-export interface IProjectsView {
-	projects: IProject[];
-	totalCount: number;
-	categories: ICategory[];
-	mainCategories: IMainCategory[];
+interface IProjectsView extends IProjectsRouteProps {
+	selectedMainCategory?: IMainCategory;
 }
 
 interface ISelectObj {
@@ -85,7 +84,12 @@ const buildCategoryObj = (array: ICategory[]) => {
 };
 
 const ProjectsIndex = (props: IProjectsView) => {
-	const { projects, totalCount: _totalCount, categories } = props;
+	const {
+		projects,
+		selectedMainCategory,
+		totalCount: _totalCount,
+		categories,
+	} = props;
 	const user = useAppSelector(state => state.user.userData);
 
 	const [categoriesObj, setCategoriesObj] = useState<ISelectObj[]>();
@@ -201,6 +205,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	return (
 		<>
+			{selectedMainCategory && (
+				<ProjectsBanner mainCategory={selectedMainCategory} />
+			)}
 			<BigArc />
 			<Wrapper>
 				<Title weight={700}>Projects</Title>
