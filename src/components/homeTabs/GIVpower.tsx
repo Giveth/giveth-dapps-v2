@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import { useWeb3React } from '@web3-react/core';
 import {
 	brandColors,
 	H3,
@@ -8,6 +7,8 @@ import {
 	QuoteText,
 	Lead,
 	H1,
+	Caption,
+	Title as TitleBase,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { Col, Row } from '../Grid';
@@ -40,16 +41,20 @@ import {
 	GivpowerCTAButton,
 	GivpowerCTAButtonOutlined,
 	GivpowerCTAButtonContainer,
+	BoostProjectButton,
+	GivPowerCardContainer,
 } from './GIVpower.sc';
 import RocketImage from '../../../public/images/rocket.svg';
-import { GIVstreamRewardCard } from './GIVstream.sc';
-import config from '@/configuration';
-import { BN } from '@/helpers/number';
 import Growth from '../../../public/images/growth.svg';
 import GivStake from '../../../public/images/giv_stake.svg';
 import Routes from '@/lib/constants/Routes';
+import { useAppSelector } from '@/features/hooks';
+import config from '@/configuration';
+
 export function TabPowerTop() {
-	const { chainId } = useWeb3React();
+	const { givStaked } = useAppSelector(
+		state => state.subgraph.xDaiValues.balances,
+	);
 	return (
 		<GIVpowerTopContainer>
 			<Container>
@@ -70,18 +75,25 @@ export function TabPowerTop() {
 						</Subtitle>
 					</Col>
 					<Col xs={12} sm={5} xl={4}>
-						{/* //TODO: add The Card Functionality  */}
-						<GIVstreamRewardCard
-							wrongNetworkText='GIVpower is only available on Mainnet and Gnosis Chain.'
-							liquidAmount={BN(1321231321)}
-							stream='2'
-							actionLabel='HARVEST'
-							network={chainId}
-							targetNetworks={[
-								config.MAINNET_NETWORK_NUMBER,
-								config.XDAI_NETWORK_NUMBER,
-							]}
-						/>
+						<GivPowerCardContainer>
+							<Caption>Your GIVpower</Caption>
+							<Flex alignItems='baseline' gap='16px'>
+								<Image
+									src={RocketImage}
+									width='27'
+									height='27'
+									alt='givpower'
+								/>
+								<TitleBase>{givStaked ?? 0}</TitleBase>
+							</Flex>
+							<Link href={Routes.Projects} passHref>
+								<BoostProjectButton
+									label='BOOST PROJECT'
+									size='large'
+									linkType='primary'
+								/>
+							</Link>
+						</GivPowerCardContainer>
 					</Col>
 				</Row>
 			</Container>
@@ -90,6 +102,8 @@ export function TabPowerTop() {
 }
 
 export function TabPowerBottom() {
+	const getGivLink = config.XDAI_CONFIG.GIV.BUY_LINK;
+
 	return (
 		<>
 			<Container>
@@ -103,7 +117,7 @@ export function TabPowerBottom() {
 							& more GIVbacks for their donors.
 						</QuoteText>
 					</HeadingTextContainer>
-					<LearnMoreButton label='Learn More'>Hello</LearnMoreButton>
+					<LearnMoreButton label='Learn More' />
 				</HeadingSectionContainer>
 				<FeaturesCardContainer>
 					<FeaturesCardHeading weight={700}>
@@ -122,7 +136,9 @@ export function TabPowerBottom() {
 							/>
 							<H4 weight={700}>Stake & lock GIV </H4>
 							<Lead>Stake & lock GIV to get GIVpower.</Lead>
-							<CardBottomText>GET GIVPOWER</CardBottomText>
+							<Link href={Routes.GIVfarm} passHref>
+								<CardBottomText>GET GIVPOWER</CardBottomText>
+							</Link>
 						</FeaturesCardItem>
 						<FeaturesCardItem>
 							<div>
@@ -187,7 +203,11 @@ export function TabPowerBottom() {
 									more GIVbacks.
 								</QuoteText>
 								<br />
-								<CardBottomText>GET GIVPOWER</CardBottomText>
+								<Link href={Routes.GIVfarm} passHref>
+									<CardBottomText>
+										GET GIVPOWER
+									</CardBottomText>
+								</Link>
 							</BenefitsCardTextContainer>
 						</BenefitsCard>
 						<BenefitsCard>
@@ -208,7 +228,11 @@ export function TabPowerBottom() {
 									donors receive.
 								</QuoteText>
 								<br />
-								<CardBottomText>GET GIVPOWER</CardBottomText>
+								<Link href={Routes.Projects} passHref>
+									<CardBottomText>
+										browse projects
+									</CardBottomText>
+								</Link>
 							</BenefitsCardTextContainer>
 						</BenefitsCard>
 					</BenefitsCardsContainer>
@@ -224,11 +248,14 @@ export function TabPowerBottom() {
 						<GivpowerCTAButton
 							label='GET GIVPOWER'
 							size='large'
-							buttonType='primary'
+							linkType='primary'
+							href={Routes.GIVfarm}
 						/>
 						<GivpowerCTAButtonOutlined
 							label='GET GIV'
 							size='large'
+							href={getGivLink}
+							target='_blank'
 						/>
 					</GivpowerCTAButtonContainer>
 				</GivpowerCTAContainer>
