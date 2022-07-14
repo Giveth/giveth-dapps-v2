@@ -4,6 +4,7 @@ import { H1, neutralColors, SemiTitle } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import { IMainCategory } from '@/apollo/types/types';
 import { FlexCenter } from '@/components/styled-components/Flex';
+import { mediaQueries } from '@/lib/constants/constants';
 
 interface IProjectsBanner {
 	mainCategory?: IMainCategory;
@@ -35,9 +36,15 @@ const ProjectsBanner: FC<IProjectsBanner> = ({ mainCategory }) => {
 };
 
 const BannerContainer = styled(FlexCenter)`
-	width: 100%;
-	height: 540px;
+	height: 0;
 	position: relative;
+	margin-top: 32px;
+	overflow: hidden;
+
+	${mediaQueries.tablet} {
+		margin-top: 0;
+		height: 540px;
+	}
 `;
 
 const Title = styled(H1)`
