@@ -10,7 +10,7 @@ import { projectsMetatags } from '@/content/metatags';
 import type { IProjectsRouteProps } from '.';
 
 interface IProjectsCategoriesRouteProps extends IProjectsRouteProps {
-	selectedMainCategory?: IMainCategory;
+	selectedMainCategory: IMainCategory;
 }
 
 const ProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
