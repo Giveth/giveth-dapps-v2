@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import { H1, SemiTitle } from '@giveth/ui-design-system';
+import { H1, neutralColors, SemiTitle } from '@giveth/ui-design-system';
+import Image from 'next/image';
 import { IMainCategory } from '@/apollo/types/types';
 import { FlexCenter } from '@/components/styled-components/Flex';
 
@@ -20,13 +21,15 @@ const ProjectsBanner: FC<IProjectsBanner> = ({ mainCategory }) => {
 	const _mainCategory = mainCategory ?? allCategory;
 	return (
 		<BannerContainer direction='column'>
-			{/* <Image
+			<Image
 				src={_mainCategory.banner}
 				layout='fill'
 				alt={_mainCategory.title}
-			/> */}
-			<H1>{_mainCategory.title}</H1>
-			<SemiTitle>{_mainCategory.description}</SemiTitle>
+				objectFit='cover'
+				objectPosition='left'
+			/>
+			<Title weight={700}>{_mainCategory.title}</Title>
+			<Desc>{_mainCategory.description}</Desc>
 		</BannerContainer>
 	);
 };
@@ -35,6 +38,17 @@ const BannerContainer = styled(FlexCenter)`
 	width: 100%;
 	height: 540px;
 	position: relative;
+`;
+
+const Title = styled(H1)`
+	z-index: 1;
+	color: ${neutralColors.gray[100]};
+	margin-bottom: 32px;
+`;
+
+const Desc = styled(SemiTitle)`
+	z-index: 1;
+	color: ${neutralColors.gray[100]};
 `;
 
 export default ProjectsBanner;
