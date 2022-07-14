@@ -205,9 +205,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	return (
 		<>
-			{selectedMainCategory && (
-				<ProjectsBanner mainCategory={selectedMainCategory} />
-			)}
+			<ProjectsBanner mainCategory={selectedMainCategory} />
 			<BigArc />
 			<Wrapper>
 				<Title weight={700}>Projects</Title>
