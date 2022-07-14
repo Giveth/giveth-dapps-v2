@@ -24,7 +24,6 @@ const ProjectsCategoriesRoute = (props: IProjectsCategoriesRoute) => {
 				totalCount={totalCount}
 				categories={categories}
 			/>
-			<div></div>
 		</>
 	);
 };
@@ -32,7 +31,7 @@ const ProjectsCategoriesRoute = (props: IProjectsCategoriesRoute) => {
 export const getServerSideProps: GetServerSideProps = async context => {
 	try {
 		const { query } = context;
-		const slug = query.address;
+		const slug = query.slug;
 		if (!slug)
 			return {
 				redirect: {
