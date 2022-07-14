@@ -38,10 +38,10 @@ const ModalController = () => {
 	}, [isRegistered]);
 
 	useEffect(() => {
-		if (showWelcomeModal) {
+		if (showWelcomeModal && active) {
 			dispatch(setShowWelcomeModal(false));
 		}
-	}, [active]);
+	}, [active, showWelcomeModal]);
 
 	useEffect(() => {
 		if (isSignedIn && showSignWithWallet) {

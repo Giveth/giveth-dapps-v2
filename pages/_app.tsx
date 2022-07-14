@@ -19,6 +19,7 @@ import UserController from '@/components/controller/user.ctrl';
 import ModalController from '@/components/controller/modal.ctrl';
 import PriceController from '@/components/controller/price.ctrl';
 import GeneralController from '@/components/controller/general.ctrl';
+import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
 import type { AppProps } from 'next/app';
 
 function getLibrary(provider: ExternalProvider) {
@@ -65,7 +66,12 @@ function MyApp({ Component, pageProps }: AppProps) {
 						<SubgraphController />
 						<UserController />
 						<HeaderWrapper />
-						<Component {...pageProps} />
+						{pageProps.errorStatus ? (
+							<ErrorsIndex statusCode={pageProps.errorStatus} />
+						) : (
+							<Component {...pageProps} />
+						)}
+
 						<FooterWrapper />
 						<ModalController />
 					</Web3ReactProvider>

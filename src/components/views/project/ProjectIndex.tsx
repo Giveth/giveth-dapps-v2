@@ -31,7 +31,7 @@ import { ProjectMeta } from '@/components/Metatag';
 
 const ProjectDonations = dynamic(() => import('./ProjectDonations'));
 const ProjectUpdates = dynamic(() => import('./ProjectUpdates'));
-const NotAvailableProject = dynamic(() => import('./NotAvailableProject'), {
+const NotAvailableProject = dynamic(() => import('../../NotAvailableProject'), {
 	ssr: false,
 });
 const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {

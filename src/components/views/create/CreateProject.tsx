@@ -35,7 +35,7 @@ import {
 	CategoryInput,
 	DescriptionInput,
 	ImageInput,
-	LocationInput,
+	LocationIndex,
 	NameInput,
 	WalletAddressInput,
 } from './Inputs';
@@ -116,9 +116,12 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const [errors, setErrors] = useState<ICreateProjectErrors>({
 		[ECreateErrFields.NAME]: isEditMode ? '' : 'Title is required',
 		[ECreateErrFields.DESCRIPTION]: '',
-		[ECreateErrFields.MAIN_WALLET_ADDRESS]: 'Ethereum Address is required',
-		[ECreateErrFields.SECONDARY_WALLET_ADDRESS]:
-			'Gnosis Address is required',
+		[ECreateErrFields.MAIN_WALLET_ADDRESS]: isEditMode
+			? ''
+			: 'Ethereum Address is required',
+		[ECreateErrFields.SECONDARY_WALLET_ADDRESS]: isEditMode
+			? ''
+			: 'Gnosis Address is required',
 	});
 	const [formChange, setFormChange] = useState(false);
 
@@ -385,7 +388,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 									setCategories(category);
 								}}
 							/>
-							<LocationInput
+							<LocationIndex
 								defaultValue={defaultImpactLocation}
 								setValue={location => {
 									setFormChange(true);

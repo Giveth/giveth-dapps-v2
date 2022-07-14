@@ -2,8 +2,8 @@ import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import { FC, ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
-import dynamic from 'next/dynamic';
 
+import Scrollbars from 'react-custom-scrollbars';
 import {
 	ModalHeader,
 	ModalHeaderTitlePosition,
@@ -11,10 +11,7 @@ import {
 import { ETheme } from '@/features/general/general.slice';
 import { zIndex } from '@/lib/constants/constants';
 import { useAppSelector } from '@/features/hooks';
-
-const Scrollbars = dynamic(() => import('react-custom-scrollbars'), {
-	ssr: false,
-});
+import { checkUserAgentIsMobile } from '@/hooks/useDeviceDetect';
 
 interface ModalWrapperProps {
 	fullScreen?: boolean;
@@ -46,12 +43,17 @@ export const Modal: FC<IModal> = ({
 	headerColor,
 }) => {
 	const theme = useAppSelector(state => state.general.theme);
+
 	const el = useRef(document.createElement('div'));
 
 	useEffect(() => {
 		const current = el.current;
 		const modalRoot = document.querySelector('body') as HTMLElement;
 		modalRoot.style.overflowY = 'hidden';
+		let isMobile = checkUserAgentIsMobile();
+		if (!isMobile) {
+			modalRoot.style.paddingRight = '15px';
+		}
 		if (modalRoot) {
 			modalRoot.addEventListener('keydown', handleKeyDown);
 			modalRoot.appendChild(current);
@@ -59,6 +61,7 @@ export const Modal: FC<IModal> = ({
 		return () => {
 			modalRoot.removeEventListener('keydown', handleKeyDown);
 			modalRoot.style.overflowY = 'unset';
+			modalRoot.style.paddingRight = '0';
 			modalRoot!.removeChild(current);
 		};
 	}, []);

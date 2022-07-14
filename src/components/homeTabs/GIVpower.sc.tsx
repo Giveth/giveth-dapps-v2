@@ -1,18 +1,17 @@
 import styled from 'styled-components';
 import {
 	brandColors,
-	Button,
+	ButtonLink,
 	ButtonText,
 	D1,
 	H1,
 	H2,
 	H3,
-	OulineButton,
+	OutlineLinkButton,
 	QuoteText,
 } from '@giveth/ui-design-system';
 import { BottomContainer, TopContainer } from './commons';
 import { mediaQueries } from '@/lib/constants/constants';
-import { ButtonStyled } from '../GeneralCard.sc';
 import { Arc } from '../styled-components/Arc';
 
 export const GIVpowerTopContainer = styled(TopContainer)`
@@ -33,9 +32,8 @@ export const Subtitle = styled(QuoteText)`
 	}
 `;
 
-export const LearnMoreButton = styled(ButtonStyled)`
-	margin: 0;
-	margin-right: 0;
+export const LearnMoreButton = styled(ButtonLink)`
+	width: 250px;
 `;
 
 export const HeadingSectionContainer = styled.div`
@@ -252,7 +250,7 @@ export const GivpowerCTAButtonContainer = styled.div`
 		flex-direction: row;
 	}
 `;
-export const GivpowerCTAButton = styled(Button)`
+export const GivpowerCTAButton = styled(ButtonLink)`
 	width: 250px;
 	margin: 0 auto;
 	${mediaQueries.tablet} {
@@ -260,10 +258,32 @@ export const GivpowerCTAButton = styled(Button)`
 	}
 `;
 
-export const GivpowerCTAButtonOutlined = styled(OulineButton)`
+export const GivpowerCTAButtonOutlined = styled(OutlineLinkButton)`
 	width: 250px;
 	margin: 0 auto;
 	${mediaQueries.tablet} {
 		margin: 0;
+	}
+`;
+
+export const BoostProjectButton = styled(ButtonLink)`
+	margin: 0 auto;
+	min-width: 250px;
+	${mediaQueries.tablet} {
+		margin: 0;
+	}
+`;
+
+export const GivPowerCardContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 30px;
+	background: ${brandColors.giv[700]};
+	padding: 24px;
+	margin-bottom: 8px;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+	${mediaQueries.tablet} {
+		margin-bottom: 0;
 	}
 `;

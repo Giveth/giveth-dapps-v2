@@ -153,6 +153,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		unit,
 		farmStartTimeMS,
 		active,
+		archived,
 	} = poolStakingConfig;
 
 	const {
@@ -219,7 +220,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				big={type === StakingType.GIV_LM}
 				shadowColor={type === StakingType.GIV_LM ? '#E1458D' : ''}
 			>
-				{!active && disableModal && (
+				{(!active || archived) && disableModal && (
 					<DisableModal>
 						<DisableModalContent>
 							<DisableModalImage>
@@ -292,7 +293,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									<FirstDetail justifyContent='space-between'>
 										<DetailLabel>APR</DetailLabel>
 										<Flex gap='8px' alignItems='center'>
-											{active ? (
+											{active && !archived ? (
 												<>
 													<IconSpark
 														size={24}
@@ -412,6 +413,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 										size='small'
 										disabled={
 											!active ||
+											archived ||
 											BN(userNotStakedAmount).isZero()
 										}
 										onClick={() => setShowStakeModal(true)}
@@ -442,32 +444,36 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									</StakeAmount>
 								</StakeContainer>
 							</StakeButtonsRow>
-							{active && type !== StakingType.GIV_LM && (
-								<Flex>
-									<LiquidityButton
-										label='PROVIDE LIQUIDITY'
-										onClick={() => {
-											if (
-												type ===
-												StakingType.UNISWAPV3_ETH_GIV
-											) {
-												setShowUniV3APRModal(true);
-											} else {
-												window.open(
-													provideLiquidityLink,
-												);
+							{active &&
+								!archived &&
+								type !== StakingType.GIV_LM && (
+									<Flex>
+										<LiquidityButton
+											label='PROVIDE LIQUIDITY'
+											onClick={() => {
+												if (
+													type ===
+													StakingType.UNISWAPV3_ETH_GIV
+												) {
+													setShowUniV3APRModal(true);
+												} else {
+													window.open(
+														provideLiquidityLink,
+													);
+												}
+											}}
+											buttonType='texty'
+											icon={
+												<IconExternalLink
+													size={16}
+													color={
+														brandColors.deep[100]
+													}
+												/>
 											}
-										}}
-										buttonType='texty'
-										icon={
-											<IconExternalLink
-												size={16}
-												color={brandColors.deep[100]}
-											/>
-										}
-									/>
-								</Flex>
-							)}
+										/>
+									</Flex>
+								)}
 						</StakePoolInfoContainer>
 					</>
 				) : state === StakeCardState.GIVPOWER_INTRO ? (
