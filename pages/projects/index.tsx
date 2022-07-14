@@ -7,7 +7,7 @@ import { projectsMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 
-interface IProjectsRoute {
+export interface IProjectsRoute {
 	projects: IProject[];
 	totalCount: number;
 	categories: ICategory[];
