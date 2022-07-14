@@ -89,13 +89,16 @@ const ContentSection = styled(Col)`
 	display: flex;
 	justify-content: space-between;
 	flex-direction: column;
+	min-height: 765px;
 	> form {
 		height: 100%;
 		display: flex;
 		justify-content: space-between;
 		flex-direction: column;
 	}
-	min-height: 765px;
+	> :not(:first-child) {
+		animation: fadeIn 0.3s ease-in-out;
+	}
 `;
 
 const InnerContainer = styled(Row)`
