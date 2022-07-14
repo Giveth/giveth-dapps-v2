@@ -187,7 +187,7 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://app.honeyswap.org/#/add/0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75/0x71850b7E9Ee3f13Ab46d67167341E4bDc905Eef9',
 				unit: 'LP',
-				active: true,
+				active: false,
 			},
 			{
 				POOL_ADDRESS: '0x55FF0cef43F0DF88226E9D87D09fA036017F5586',

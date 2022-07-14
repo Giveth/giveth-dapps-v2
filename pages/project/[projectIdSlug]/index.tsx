@@ -1,4 +1,3 @@
-import { captureException } from '@sentry/nextjs';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 import { IProject } from '@/apollo/types/types';
@@ -27,18 +26,9 @@ export async function getServerSideProps(props: {
 				project: data.projectBySlug,
 			},
 		};
-	} catch (e) {
-		console.log({ e });
-		captureException(e, {
-			tags: {
-				section: 'ProjectSSR',
-			},
-		});
+	} catch (error) {
 		return {
-			redirect: {
-				destination: '/maintenance',
-				permanent: false,
-			},
+			props: {},
 		};
 	}
 }

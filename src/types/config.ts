@@ -50,6 +50,7 @@ export interface SimplePoolStakingConfig extends BasicStakingConfig {
 	provideLiquidityLink?: string;
 	unit: string;
 	active: boolean;
+	archived?: boolean;
 }
 
 export interface UniswapV3PoolStakingConfig extends SimplePoolStakingConfig {

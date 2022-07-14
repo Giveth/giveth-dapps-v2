@@ -3,7 +3,7 @@ import { IconVerified, Overline } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 import { FlexCenter } from '../styled-components/Flex';
-import TraceIcon from '/public//images/trace.svg';
+import TraceIcon from '/public/images/trace.svg';
 
 const VerificationBadge = (props: { verified?: boolean; trace?: boolean }) => {
 	const { verified, trace } = props;

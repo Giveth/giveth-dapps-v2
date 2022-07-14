@@ -29,6 +29,15 @@ const moduleExports = withBundleAnalyzer({
 			exclude: ['error'],
 		},
 	},
+	redirects: () => {
+		return [
+			{
+				source: '/donate',
+				destination: '/projects',
+				permanent: false,
+			},
+		];
+	},
 	webpack: (config, { isServer, dev }) => {
 		if (isServer && !dev) {
 			generateRobotsTxt();

@@ -15,7 +15,7 @@ import { captureException } from '@sentry/nextjs';
 import ImageUploader from './richImageUploader/imageUploader';
 import { UPLOAD_IMAGE } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
-import { showToastError } from '@/lib/helpers';
+import { isSSRMode, showToastError } from '@/lib/helpers';
 
 (window as any).Quill = Quill;
 
@@ -42,7 +42,7 @@ class Video extends BlockEmbed {
 	}
 
 	static formats(domNode: any) {
-		if (typeof window === 'undefined') {
+		if (isSSRMode) {
 			return;
 		}
 		const iframe = domNode?.getElementsByTagName('iframe')[0];
@@ -188,6 +188,9 @@ function TextRichWithQuill(props: any) {
 const ReactQuillStyled = styled(ReactQuill)`
 	> .ql-container {
 		height: 30rem;
+		> .ql-editor {
+			word-break: break-word;
+		}
 	}
 `;
 
