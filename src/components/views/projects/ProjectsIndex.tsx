@@ -24,8 +24,8 @@ import {
 	showToastError,
 } from '@/lib/helpers';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
-import { initializeApollo } from '@/apollo/apolloClient';
-import { ICategory, IProject } from '@/apollo/types/types';
+import { client } from '@/apollo/apolloClient';
+import { ICategory, IMainCategory, IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
 import { EDirection, gqlEnums } from '@/apollo/types/gqlEnums';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
@@ -34,10 +34,11 @@ import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 
-interface IProjectsView {
+export interface IProjectsView {
 	projects: IProject[];
 	totalCount: number;
 	categories: ICategory[];
+	mainCategories: IMainCategory[];
 }
 
 interface ISelectObj {
@@ -138,7 +139,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 		if (!userIdChanged) setIsLoading(true);
 
-		initializeApollo()
+		client
 			.query({
 				query: FETCH_ALL_PROJECTS,
 				variables,

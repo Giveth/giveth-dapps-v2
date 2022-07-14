@@ -5,13 +5,12 @@ import { initializeApollo } from '@/apollo/apolloClient';
 import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { GeneralMetatags } from '@/components/Metatag';
-import ProjectsIndex from '@/components/views/projects/ProjectsIndex';
+import ProjectsIndex, {
+	IProjectsView,
+} from '@/components/views/projects/ProjectsIndex';
 import { projectsMetatags } from '@/content/metatags';
-import { IProjectsRoute } from '.';
 
-interface IProjectsCategoriesRoute extends IProjectsRoute {
-	mainCategories: IMainCategory[];
-}
+interface IProjectsCategoriesRoute extends IProjectsView {}
 
 const ProjectsCategoriesRoute = (props: IProjectsCategoriesRoute) => {
 	const { projects, mainCategories, totalCount, categories } = props;
@@ -23,6 +22,7 @@ const ProjectsCategoriesRoute = (props: IProjectsCategoriesRoute) => {
 				projects={projects}
 				totalCount={totalCount}
 				categories={categories}
+				mainCategories={mainCategories}
 			/>
 		</>
 	);
@@ -77,7 +77,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 };
 
 // Mock Data
-const mainCategoriesMock: IMainCategory[] = [
+export const mainCategoriesMock: IMainCategory[] = [
 	{
 		title: 'Environment & Energy',
 		banner: '',
