@@ -2,19 +2,21 @@ import { addApolloState, initializeApollo } from '@/apollo/apolloClient';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
 import ProjectsIndex from '@/components/views/projects/ProjectsIndex';
-import { ICategory, IProject } from '@/apollo/types/types';
 import { projectsMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
+import { mainCategoriesMock } from './[slug]';
+import { ICategory, IMainCategory, IProject } from '@/apollo/types/types';
 
-interface IProjectsRoute {
+export interface IProjectsRouteProps {
 	projects: IProject[];
 	totalCount: number;
 	categories: ICategory[];
+	mainCategories: IMainCategory[];
 }
 
-const ProjectsRoute = (props: IProjectsRoute) => {
-	const { projects, totalCount, categories } = props;
+const ProjectsRoute = (props: IProjectsRouteProps) => {
+	const { projects, mainCategories, totalCount, categories } = props;
 	return (
 		<>
 			<GeneralMetatags info={projectsMetatags} />
@@ -22,6 +24,7 @@ const ProjectsRoute = (props: IProjectsRoute) => {
 				projects={projects}
 				totalCount={totalCount}
 				categories={categories}
+				mainCategories={mainCategories}
 			/>
 		</>
 	);
@@ -39,7 +42,12 @@ export async function getServerSideProps() {
 
 		const { projects, totalCount, categories } = data.projects;
 		return addApolloState(apolloClient, {
-			props: { projects, totalCount, categories },
+			props: {
+				projects,
+				mainCategories: mainCategoriesMock,
+				totalCount,
+				categories,
+			},
 		});
 	} catch (error: any) {
 		const statusCode = transformGraphQLErrorsToStatusCode(

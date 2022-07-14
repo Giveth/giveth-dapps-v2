@@ -24,8 +24,8 @@ import {
 	showToastError,
 } from '@/lib/helpers';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
-import { initializeApollo } from '@/apollo/apolloClient';
-import { ICategory, IProject } from '@/apollo/types/types';
+import { client } from '@/apollo/apolloClient';
+import { ICategory, IMainCategory, IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
 import { EDirection, gqlEnums } from '@/apollo/types/gqlEnums';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
@@ -33,11 +33,11 @@ import { Shadow } from '../../styled-components/Shadow';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
+import ProjectsBanner from './ProjectsBanner';
+import type { IProjectsRouteProps } from 'pages/projects';
 
-interface IProjectsView {
-	projects: IProject[];
-	totalCount: number;
-	categories: ICategory[];
+interface IProjectsView extends IProjectsRouteProps {
+	selectedMainCategory?: IMainCategory;
 }
 
 interface ISelectObj {
@@ -84,7 +84,12 @@ const buildCategoryObj = (array: ICategory[]) => {
 };
 
 const ProjectsIndex = (props: IProjectsView) => {
-	const { projects, totalCount: _totalCount, categories } = props;
+	const {
+		projects,
+		selectedMainCategory,
+		totalCount: _totalCount,
+		categories,
+	} = props;
 	const user = useAppSelector(state => state.user.userData);
 
 	const [categoriesObj, setCategoriesObj] = useState<ISelectObj[]>();
@@ -138,7 +143,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 		if (!userIdChanged) setIsLoading(true);
 
-		initializeApollo()
+		client
 			.query({
 				query: FETCH_ALL_PROJECTS,
 				variables,
@@ -200,6 +205,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	return (
 		<>
+			{selectedMainCategory && (
+				<ProjectsBanner mainCategory={selectedMainCategory} />
+			)}
 			<BigArc />
 			<Wrapper>
 				<Title weight={700}>Projects</Title>
