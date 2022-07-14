@@ -148,8 +148,8 @@ export interface IMediumBlogPost {
 
 export interface ICategory {
 	name: string;
-	value: string;
-	isActive: boolean;
+	value?: string;
+	isActive?: boolean;
 }
 
 export interface IProjectBySlug {
