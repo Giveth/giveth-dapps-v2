@@ -148,6 +148,8 @@ export interface IMediumBlogPost {
 
 export interface ICategory {
 	name: string;
+	value: string;
+	isActive: boolean;
 }
 
 export interface IProjectBySlug {
@@ -166,4 +168,13 @@ export interface IProjectUpdate {
 export interface ISiweMessage {
 	nonce: string;
 	message: string;
+}
+
+export interface IMainCategory {
+	title: string;
+	description: string;
+	banner: string;
+	slug: string;
+	categories: ICategory[];
+	selected?: boolean;
 }
