@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import Select, { StylesConfig } from 'react-select';
+import { StylesConfig } from 'react-select';
 import Debounced from 'lodash.debounce';
 import { useRouter } from 'next/router';
 import {
@@ -16,7 +16,6 @@ import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
 import { BigArc } from '@/components/styled-components/Arc';
 import ProjectCard from '@/components/project-card/ProjectCard';
-import SearchBox from '@/components/SearchBox';
 import Routes from '@/lib/constants/Routes';
 import {
 	capitalizeFirstLetter,
@@ -34,6 +33,7 @@ import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import ProjectsBanner from './ProjectsBanner';
+import ProjectsFilter from './ProjectsFilter';
 import type { IProjectsRouteProps } from 'pages/projects';
 
 interface IProjectsView extends IProjectsRouteProps {
@@ -218,39 +218,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				</Subtitle>
 
 				<FiltersSection>
-					<SelectComponent>
-						<Label>CATEGORY</Label>
-						<Select
-							classNamePrefix='select'
-							styles={selectCustomStyles}
-							value={selectedCategory}
-							onChange={e => handleChange('category', e)}
-							options={categoriesObj}
-							isMobile={false}
-						/>
-					</SelectComponent>
-					<SelectComponent>
-						<Label>SORT BY</Label>
-						<Select
-							classNamePrefix='select'
-							styles={selectCustomStyles}
-							value={sortBy}
-							onChange={e => handleChange('sortBy', e)}
-							options={sortByObj}
-							isOptionSelected={(option, selectValue) =>
-								selectValue.some((i: any) => i.label === option)
-							}
-							isMobile={false}
-						/>
-					</SelectComponent>
-					<SearchComponent>
-						<Label />
-						<SearchBox
-							onChange={(e: string) => handleChange('search', e)}
-							placeholder='Search Projects ...'
-							value={searchValue}
-						/>
-					</SearchComponent>
+					<ProjectsFilter />
 				</FiltersSection>
 
 				{isLoading && <Loader className='dot-flashing' />}
