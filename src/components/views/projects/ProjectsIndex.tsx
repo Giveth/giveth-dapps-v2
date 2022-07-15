@@ -36,7 +36,7 @@ import ProjectsBanner from './ProjectsBanner';
 import ProjectsFilter from './ProjectsFilter';
 import type { IProjectsRouteProps } from 'pages/projects';
 
-interface IProjectsView extends IProjectsRouteProps {
+export interface IProjectsView extends IProjectsRouteProps {
 	selectedMainCategory?: IMainCategory;
 }
 
@@ -91,7 +91,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 		categories,
 	} = props;
 	const user = useAppSelector(state => state.user.userData);
-
+	console.log('Props', props);
 	const [categoriesObj, setCategoriesObj] = useState<ISelectObj[]>();
 	const [selectedCategory, setSelectedCategory] =
 		useState<ISelectObj>(allCategoryObj);
@@ -218,7 +218,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				</Subtitle>
 
 				<FiltersSection>
-					<ProjectsFilter />
+					<ProjectsFilter projectsProps={props} />
 				</FiltersSection>
 
 				{isLoading && <Loader className='dot-flashing' />}

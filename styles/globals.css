@@ -21,7 +21,6 @@ a {
 	outline: none;
 }
 
-
 /* React-Select component */
 .select__menu {
 	z-index: 10 !important;
@@ -117,7 +116,6 @@ a {
 	}
 }
 
-
 .fadeIn {
 	animation: fadeIn 0.5s ease-in-out;
 }
@@ -130,7 +128,6 @@ a {
 		opacity: 1;
 	}
 }
-
 
 @font-face {
 	font-family: 'Red Hat Text';
@@ -201,5 +198,9 @@ html {
 
 #nprogress > .bar {
 	height: 4px;
-	background-color: #8668FC;
+	background-color: #8668fc;
+}
+
+.swiper-slide {
+	width: auto !important;
 }
