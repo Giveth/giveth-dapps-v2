@@ -14,7 +14,6 @@ import {
 import styled from 'styled-components';
 
 import { captureException } from '@sentry/nextjs';
-import { BigArc } from '@/components/styled-components/Arc';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import SearchBox from '@/components/SearchBox';
 import Routes from '@/lib/constants/Routes';
@@ -205,18 +204,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	return (
 		<>
-			{selectedMainCategory && (
-				<ProjectsBanner mainCategory={selectedMainCategory} />
-			)}
-			<BigArc />
+			<ProjectsBanner mainCategory={selectedMainCategory} />
 			<Wrapper>
-				<Title weight={700}>Projects</Title>
-				<Subtitle>
-					Support for-good projects, nonprofits & charities with
-					crypto donations. Give directly with zero added fees. Get
-					rewarded when you donate to verified projects!
-				</Subtitle>
-
 				<FiltersSection>
 					<SelectComponent>
 						<Label>CATEGORY</Label>
@@ -393,7 +382,6 @@ export const ProjectsContainer = styled.div`
 `;
 
 const Wrapper = styled.div`
-	padding: 166px 30px 4px 30px;
 	max-width: ${deviceSize.desktop + 'px'};
 	margin: 0 auto;
 `;
