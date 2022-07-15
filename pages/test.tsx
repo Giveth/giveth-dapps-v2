@@ -5,12 +5,13 @@ import { useWeb3React } from '@web3-react/core';
 import { gToast, ToastType } from '@/components/toasts';
 import { useAppDispatch } from '@/features/hooks';
 import { fetchXDaiInfoAsync } from '@/features/subgraph/subgraph.thunks';
+import { isMultisig } from '@/lib/helpers';
 
 const TestRoute = () => {
 	// const xDaiValues = useSelector(
 	// 	(state: RootState) => state.subgraph.xDaiValues,
 	// );
-	const { account } = useWeb3React();
+	const { account, library } = useWeb3React();
 	const dispatch = useAppDispatch();
 
 	// const { data, isLoading, error, refetch } = useGetSubgraphValuesQuery({
@@ -63,6 +64,9 @@ const TestRoute = () => {
 					}}
 				>
 					Throw error
+				</button>
+				<button onClick={() => isMultisig(account, library)}>
+					Am I multisig
 				</button>
 			</TestContainer>
 		</>
