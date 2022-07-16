@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useState } from 'react';
 import {
 	brandColors,
 	Button,
@@ -8,16 +8,15 @@ import {
 	IconExternalLink,
 	neutralColors,
 	OulineButton,
-	H6,
+	H5,
 } from '@giveth/ui-design-system';
 import { useMutation } from '@apollo/client';
 import { utils } from 'ethers';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
-import Debounced from 'lodash.debounce';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
 import { captureException } from '@sentry/nextjs';
+import { useForm, FormProvider } from 'react-hook-form';
 
 import {
 	ACTIVATE_PROJECT,
@@ -26,7 +25,6 @@ import {
 } from '@/apollo/gql/gqlProjects';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import {
-	IWalletAddress,
 	IProject,
 	IProjectCreation,
 	IProjectEdition,
@@ -36,26 +34,24 @@ import {
 	DescriptionInput,
 	ImageInput,
 	LocationIndex,
-	NameInput,
 	WalletAddressInput,
 } from './Inputs';
 import SuccessfulCreation from './SuccessfulCreation';
-import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
-import {
-	isDescriptionHeavy,
-	titleValidation,
-	walletAddressValidation,
-} from '@/helpers/createProjectValidation';
-import { compareAddresses, showToastError } from '@/lib/helpers';
+
+import { showToastError } from '@/lib/helpers';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { client } from '@/apollo/apolloClient';
-import LightBulbIcon from '/public/images/icons/lightbulb.svg';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
-import { useAppSelector } from '@/features/hooks';
 // import useLeaveConfirm from '@/hooks/useLeaveConfirm';
 import config from '@/configuration';
+import Input from '@/components/Input';
+import { requiredOptions } from '@/lib/constants/regex';
+import { titleValidation } from '@/components/views/create/helpers';
+import CheckBox from '@/components/Checkbox';
+import Guidelines from '@/components/views/create/Guidelines';
+import useDetectDevice from '@/hooks/useDetectDevice';
 
 const { PRIMARY_NETWORK, SECONDARY_NETWORK } = config;
 const ethereumId = PRIMARY_NETWORK.id;
@@ -79,191 +75,76 @@ interface ICreateProjectProps {
 	project?: IProjectEdition;
 }
 
+export enum EInputs {
+	name = 'name',
+	description = 'description',
+	draft = 'draft',
+	mainAddress = 'mainAddress',
+	secondaryAddress = 'secondaryAddress',
+}
+
+export type TInputs = {
+	[EInputs.name]: string;
+	[EInputs.draft]?: boolean;
+	[EInputs.description]?: string;
+	[EInputs.mainAddress]: string;
+	[EInputs.secondaryAddress]: string;
+};
+
 const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
-	const { library, chainId } = useWeb3React();
+	const { library } = useWeb3React();
 	const [addProjectMutation] = useMutation(CREATE_PROJECT);
 	const [editProjectMutation] = useMutation(UPDATE_PROJECT);
 	const router = useRouter();
+	const formMethods = useForm<TInputs>();
+
+	const {
+		register,
+		handleSubmit,
+		formState: { errors: formErrors },
+		setValue,
+		getValues,
+		watch,
+	} = formMethods;
+
+	const watchName = watch(EInputs.name);
 
 	const isEditMode = !!project;
 	const isDraft = project?.status.name === EProjectStatus.DRAFT;
 	const defaultImpactLocation = project?.impactLocation || '';
 
 	const [creationSuccessful, setCreationSuccessful] = useState<IProject>();
-	const [showGuidelineModal, setShowGuidelineModal] = useState(false);
-	const [name, setName] = useState(project?.title || '');
-	const [description, setDescription] = useState(project?.description || '');
 	const [categories, setCategories] = useState(project?.categories || []);
 	const [image, setImage] = useState(project?.image || '');
+	const [isMainnetGnosisAddEqual, setIsMainnetGnosisAddEqual] =
+		useState(true);
 
-	const [mainAddress, setMainAddress] = useState<IWalletAddress>({
-		address: project?.addresses?.find(a => a.networkId === ethereumId)
-			?.address,
-		networkId: ethereumId,
-	});
-	const [secondaryAddress, setSecondaryAddress] = useState<IWalletAddress>({
-		address: project?.addresses?.find(a => a.networkId === gnosisId)
-			?.address,
-		networkId: gnosisId,
-	});
+	const defaultMainAddress = project?.addresses?.find(
+		a => a.networkId === ethereumId,
+	)?.address;
+	const defaultSecondaryAddress = project?.addresses?.find(
+		a => a.networkId === gnosisId,
+	)?.address;
 
 	const [isLoading, setIsLoading] = useState(false);
-	const [publish, setPublish] = useState<boolean>(false);
 	const [impactLocation, setImpactLocation] = useState(
 		project?.impactLocation || '',
 	);
-	const user = useAppSelector(state => state.user?.userData);
-	const [errors, setErrors] = useState<ICreateProjectErrors>({
-		[ECreateErrFields.NAME]: isEditMode ? '' : 'Title is required',
-		[ECreateErrFields.DESCRIPTION]: '',
-		[ECreateErrFields.MAIN_WALLET_ADDRESS]: isEditMode
-			? ''
-			: 'Ethereum Address is required',
-		[ECreateErrFields.SECONDARY_WALLET_ADDRESS]: isEditMode
-			? ''
-			: 'Gnosis Address is required',
-	});
-	const [formChange, setFormChange] = useState(false);
 
-	const debouncedTitleValidation = useRef<any>();
-	const debouncedAddressValidation = useRef<any>();
-	const debouncedDescriptionValidation = useRef<any>();
 	// useLeaveConfirm({ shouldConfirm: formChange });
 
-	useEffect(() => {
-		if (isEditMode) {
-			if (!project) return;
-			const imageComparator = image === '' ? null : image;
-			if (
-				name !== project.title ||
-				description !== project.description ||
-				JSON.stringify(categories) !==
-					JSON.stringify(project.categories) ||
-				imageComparator !== project.image ||
-				mainAddress !==
-					project.addresses?.find(a => a.networkId === ethereumId)
-						?.address ||
-				secondaryAddress !==
-					project.addresses?.find(a => a.networkId === gnosisId)
-						?.address ||
-				impactLocation !== project.impactLocation
-			) {
-				setPublish(false);
-			} else {
-				setPublish(true);
-			}
-		}
-	}, [
-		name,
-		description,
-		categories,
-		image,
-		JSON.stringify(mainAddress),
-		JSON.stringify(secondaryAddress),
-		impactLocation,
-	]);
-
-	useEffect(() => {
-		if (!isEditMode) {
-			setShowGuidelineModal(true);
-		}
-	}, []);
-
-	useEffect(() => {
-		debouncedTitleValidation.current = Debounced(titleValidation, 1000);
-		debouncedAddressValidation.current = Debounced(
-			walletAddressValidation,
-			1000,
-		);
-		debouncedDescriptionValidation.current = Debounced(
-			isDescriptionHeavy,
-			1000,
-		);
-	}, []);
-
-	const handleWalletInputChange = (value: string, networkId: number) => {
-		const isMainnet = networkId === ethereumId;
-		if (
-			isEditMode &&
-			compareAddresses(
-				value,
-				isMainnet ? mainAddress?.address : secondaryAddress?.address,
-			)
-		) {
-			const _errors = { ...errors };
-			if (isMainnet) {
-				_errors[ECreateErrFields.MAIN_WALLET_ADDRESS] = '';
-			} else {
-				_errors[ECreateErrFields.SECONDARY_WALLET_ADDRESS] = '';
-			}
-			setErrors(_errors);
-			return;
-		}
-		if (isMainnet) {
-			setMainAddress({
-				address: value,
-				networkId,
-			});
-		} else {
-			setSecondaryAddress({
-				address: value,
-				networkId,
-			});
-		}
-		debouncedAddressValidation.current(
-			value,
-			library,
-			errors,
-			setErrors,
-			chainId,
-			networkId,
-		);
-	};
-
-	const handleInputChange = (value: string, id: string) => {
-		if (id === ECreateErrFields.NAME) {
-			setName(value);
-			if (isEditMode && value === project.title) {
-				const _errors = { ...errors };
-				_errors[ECreateErrFields.NAME] = '';
-				setErrors(_errors);
-				return;
-			}
-			debouncedTitleValidation.current(value, errors, setErrors);
-		} else if (id === ECreateErrFields.DESCRIPTION) {
-			setDescription(value);
-			debouncedDescriptionValidation.current(value, errors, setErrors);
-		}
-	};
-
-	const submitErrorHandler = (id: string, error: string) => {
-		document.getElementById(id)?.scrollIntoView({
-			behavior: 'smooth',
-		});
-		showToastError(error);
-	};
-
-	const isReadyToPublish = () => {
-		for (const [key, value] of Object.entries(errors)) {
-			if (value) {
-				submitErrorHandler(key, value);
-				return false;
-			}
-		}
-		return true;
-	};
-
-	const onSubmit = async (drafted?: boolean) => {
+	const onSubmit = async (formData: TInputs) => {
 		try {
-			if (!isReadyToPublish()) return;
-			setFormChange(false);
-			const mainAddressValidated = isAddressENS(mainAddress?.address)
-				? await getAddressFromENS(mainAddress?.address, library)
-				: mainAddress?.address;
+			console.log('formData', formData);
+			const { mainAddress, secondaryAddress, name, description } =
+				formData;
+			const mainAddressValidated = isAddressENS(mainAddress)
+				? await getAddressFromENS(mainAddress, library)
+				: mainAddress;
 
 			const projectData: IProjectCreation = {
 				title: name,
-				description,
+				description: description!,
 				impactLocation,
 				categories: categories.map(category => category.name),
 				organisationId: 1,
@@ -273,12 +154,12 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						networkId: ethereumId,
 					},
 					{
-						address: utils.getAddress(secondaryAddress.address!),
+						address: utils.getAddress(secondaryAddress),
 						networkId: gnosisId,
 					},
 				],
 				image,
-				isDraft: !!drafted,
+				isDraft: formData[EInputs.draft],
 			};
 
 			setIsLoading(true);
@@ -296,7 +177,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						},
 				  });
 
-			if (isDraft && !drafted) {
+			if (isDraft && !formData[EInputs.draft]) {
 				await client.mutate({
 					mutation: ACTIVATE_PROJECT,
 					variables: { projectId: Number(project.id) },
@@ -309,7 +190,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				const _project = isEditMode
 					? addedProject.data?.updateProject
 					: addedProject.data?.createProject;
-				if (drafted) {
+				if (formData[EInputs.draft]) {
 					await router.push(slugToProjectView(_project.slug));
 				} else {
 					if (!isEditMode || (isEditMode && isDraft)) {
@@ -330,162 +211,145 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		}
 	};
 
+	const { isTablet, isMobile } = useDetectDevice();
+	const isSmallScreen = isTablet || isMobile;
+
 	if (creationSuccessful) {
 		return <SuccessfulCreation project={creationSuccessful} />;
 	}
 
-	const Guidelines = () => {
-		return (
-			<div onClick={() => setShowGuidelineModal(true)}>
-				<Image src={LightBulbIcon} alt='Light Bulb Icon' />
-				<H6>Submission guidelines</H6>
-			</div>
-		);
-	};
 	return (
-		<>
-			{showGuidelineModal && (
-				<ProjectGuidelineModal setShowModal={setShowGuidelineModal} />
-			)}
-			{user && (
-				<Container>
-					<CreateContainer>
-						<div>
-							<Title>
-								{isEditMode
-									? 'Project details'
-									: 'Create a Project'}
-							</Title>
-							<GuidelinesStyleTablet>
-								<Guidelines />
-							</GuidelinesStyleTablet>
-						</div>
+		<Container>
+			<CreateContainer>
+				<div>
+					<Title>
+						{isEditMode ? 'Project details' : 'Create a Project'}
+					</Title>
+					{isSmallScreen && (
+						<GuidelinesStyleTablet>
+							<Guidelines />
+						</GuidelinesStyleTablet>
+					)}
+				</div>
 
-						<div>
-							<NameInput
-								value={name}
-								setValue={e => {
-									setFormChange(true);
-									handleInputChange(e, ECreateErrFields.NAME);
-								}}
-								error={errors[ECreateErrFields.NAME]}
-							/>
-							<DescriptionInput
-								value={description}
-								setValue={e => {
-									setFormChange(true);
-									handleInputChange(
-										e,
-										ECreateErrFields.DESCRIPTION,
-									);
-								}}
-								error={errors[ECreateErrFields.DESCRIPTION]}
-							/>
-							<CategoryInput
-								value={categories}
-								setValue={category => {
-									setFormChange(true);
-									setCategories(category);
-								}}
-							/>
-							<LocationIndex
-								defaultValue={defaultImpactLocation}
-								setValue={location => {
-									setFormChange(true);
-									setImpactLocation(location);
-								}}
-							/>
-							<ImageInput
-								value={image}
-								setValue={img => {
-									setFormChange(true);
-									setImage(img);
-								}}
-								setIsLoading={setIsLoading}
-							/>
+				<FormProvider {...formMethods}>
+					<form onSubmit={handleSubmit(onSubmit)}>
+						<Input
+							label='Project name'
+							placeholder='My First Project'
+							maxLength={55}
+							value={watchName}
+							register={register}
+							registerName={EInputs.name}
+							registerOptions={{
+								...requiredOptions.name,
+								validate: titleValidation,
+							}}
+							error={formErrors[EInputs.name]}
+						/>
+						<br />
+						<DescriptionInput
+							value={getValues(EInputs.description)}
+							setValue={e => setValue(EInputs.description, e)}
+						/>
+						<CategoryInput
+							value={categories}
+							setValue={category => setCategories(category)}
+						/>
+						<LocationIndex
+							defaultValue={defaultImpactLocation}
+							setValue={location => setImpactLocation(location)}
+						/>
+						<ImageInput
+							value={image}
+							setValue={img => setImage(img)}
+							setIsLoading={setIsLoading}
+						/>
+						<H5>Receiving funds</H5>
+						<CaptionContainer>
+							You can set a custom Ethereum address or ENS to
+							receive donations.
+						</CaptionContainer>
+						<CheckBox
+							onChange={setIsMainnetGnosisAddEqual}
+							checked={isMainnetGnosisAddEqual}
+							title='I’ll raise & receive funds on Mainnet and Gnosis chain networks'
+						/>
+						<WalletAddressInput
+							defaultValue={defaultMainAddress}
+							networkId={ethereumId}
+							equalAddress={isMainnetGnosisAddEqual}
+						/>
+						{!isMainnetGnosisAddEqual && (
 							<WalletAddressInput
-								title='Ethereum Mainnet Address'
-								networkId={ethereumId}
-								value={mainAddress.address}
-								setValue={e => {
-									setFormChange(true);
-									handleWalletInputChange(e, ethereumId);
-								}}
-								error={
-									errors[ECreateErrFields.MAIN_WALLET_ADDRESS]
-								}
-							/>
-							<WalletAddressInput
-								title='Gnosis Address'
+								defaultValue={defaultSecondaryAddress}
 								networkId={gnosisId}
-								value={secondaryAddress.address}
-								setValue={e => {
-									setFormChange(true);
-									handleWalletInputChange(e, gnosisId);
-								}}
-								error={
-									errors[
-										ECreateErrFields
-											.SECONDARY_WALLET_ADDRESS
-									]
-								}
 							/>
-							<PublishTitle>
-								{isEditMode
-									? 'Publish edited project'
-									: `Let's Publish!`}
-							</PublishTitle>
-							<PublishList>
-								<li>
-									{isEditMode ? 'Edited' : 'Newly published'}{' '}
-									projects will be &quot;unlisted&quot; until
-									reviewed by our team {isEditMode && 'again'}
-									.
-								</li>
-								<li>
-									You can still access your project from your
-									account and share it with your friends via
-									the project link!
-								</li>
-								<li>
-									You&apos;ll receive an email from us once
-									your project is listed.
-								</li>
-							</PublishList>
-							<Buttons>
-								{(!isEditMode || isDraft) && (
-									<OulineButton
-										label='PREVIEW '
-										buttonType='primary'
-										disabled={isLoading}
-										icon={<IconExternalLink size={16} />}
-										onClick={() => onSubmit(true)}
-									/>
-								)}
-								<Button
-									label='PUBLISH'
+						)}
+						<PublishTitle>
+							{isEditMode
+								? 'Publish edited project'
+								: `Let's Publish!`}
+						</PublishTitle>
+						<PublishList>
+							<li>
+								{isEditMode ? 'Edited' : 'Newly published'}{' '}
+								projects will be &quot;unlisted&quot; until
+								reviewed by our team {isEditMode && 'again'}.
+							</li>
+							<li>
+								You can still access your project from your
+								account and share it with your friends via the
+								project link!
+							</li>
+							<li>
+								You&apos;ll receive an email from us once your
+								project is listed.
+							</li>
+						</PublishList>
+						<Buttons>
+							{(!isEditMode || isDraft) && (
+								<OulineButton
+									label='PREVIEW '
 									buttonType='primary'
-									disabled={isLoading || publish}
-									onClick={() => onSubmit(false)}
+									disabled={isLoading}
+									icon={<IconExternalLink size={16} />}
+									type='submit'
+									onClick={() =>
+										setValue(EInputs.draft, true)
+									}
 								/>
-								{isEditMode && (
-									<OulineButton
-										onClick={() => router.back()}
-										label='CANCEL'
-										buttonType='primary'
-									/>
-								)}
-							</Buttons>
-						</div>
-					</CreateContainer>
-					<GuidelinesStyleLaptop>
-						<Guidelines />
-					</GuidelinesStyleLaptop>
-				</Container>
+							)}
+							<Button
+								label='PUBLISH'
+								buttonType='primary'
+								type='submit'
+								disabled={isLoading}
+							/>
+							{isEditMode && (
+								<OulineButton
+									onClick={() => router.back()}
+									label='CANCEL'
+									buttonType='primary'
+								/>
+							)}
+						</Buttons>
+					</form>
+				</FormProvider>
+			</CreateContainer>
+			{!isSmallScreen && (
+				<GuidelinesStyleLaptop>
+					<Guidelines />
+				</GuidelinesStyleLaptop>
 			)}
-		</>
+		</Container>
 	);
 };
+
+const CaptionContainer = styled(Caption)`
+	margin-top: 8px;
+	margin-bottom: 27px;
+`;
 
 const Container = styled.div`
 	max-width: ${deviceSize.desktop + 'px'};
@@ -515,19 +379,13 @@ const GuidelinesStyle = styled.div`
 
 const GuidelinesStyleTablet = styled(GuidelinesStyle)`
 	display: flex;
-	${mediaQueries.laptopS} {
-		display: none;
-	}
 `;
 
 const GuidelinesStyleLaptop = styled(GuidelinesStyle)`
-	display: none;
-	${mediaQueries.laptopS} {
-		display: flex;
-		> div {
-			position: sticky;
-			top: 104px;
-		}
+	display: flex;
+	> div {
+		position: sticky;
+		top: 104px;
 	}
 `;
 

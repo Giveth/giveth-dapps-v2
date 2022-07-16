@@ -3,8 +3,9 @@ import {
 	GLink,
 	neutralColors,
 	semanticColors,
+	SublineBold,
 } from '@giveth/ui-design-system';
-import { InputHTMLAttributes, ReactElement } from 'react';
+import React, { InputHTMLAttributes, ReactElement } from 'react';
 import styled from 'styled-components';
 import { IIconProps } from '@giveth/ui-design-system/lib/esm/components/icons/giv-economy/type';
 import { Shadow } from '@/components/styled-components/Shadow';
@@ -72,6 +73,8 @@ const Input = (props: InputType) => {
 		registerName,
 		registerOptions = { required: false },
 		error,
+		maxLength,
+		value,
 		...rest
 	} = props;
 
@@ -97,11 +100,17 @@ const Input = (props: InputType) => {
 					inputSize={size}
 					hasLeftIcon={!!LeftIcon}
 					disabled={disabled}
+					maxLength={maxLength}
 					{...(registerName && register
 						? register(registerName, registerOptions)
 						: {})}
 					{...rest}
 				/>
+				{maxLength && (
+					<CharLength>
+						{value ? String(value)?.length : 0}/{maxLength}
+					</CharLength>
+				)}
 			</InputWrapper>
 			{error?.message ? (
 				<InputValidation
@@ -118,6 +127,24 @@ const Input = (props: InputType) => {
 		</InputContainer>
 	);
 };
+
+const CharLength = styled(SublineBold)`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 12px;
+	background: ${neutralColors.gray[300]};
+	color: ${neutralColors.gray[700]};
+	font-weight: 500;
+	border-radius: 64px;
+	width: 52px;
+	height: 30px;
+	position: absolute;
+	right: 16px;
+	top: 0;
+	bottom: 0;
+	margin: auto 0;
+`;
 
 const InputContainer = styled.div`
 	flex: 1;

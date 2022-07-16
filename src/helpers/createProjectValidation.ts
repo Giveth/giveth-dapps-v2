@@ -1,48 +1,12 @@
 import { captureException } from '@sentry/nextjs';
 import { client } from '@/apollo/apolloClient';
-import {
-	TITLE_IS_VALID,
-	WALLET_ADDRESS_IS_VALID,
-} from '@/apollo/gql/gqlProjects';
+import { WALLET_ADDRESS_IS_VALID } from '@/apollo/gql/gqlProjects';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import {
 	ECreateErrFields,
 	ICreateProjectErrors,
 } from '@/components/views/create/CreateProject';
 import config from '@/configuration';
-
-export const titleValidation = (
-	title: string,
-	errors: ICreateProjectErrors,
-	setErrors: (arg0: ICreateProjectErrors) => void,
-) => {
-	const _errors = { ...errors };
-	if (title.length < 1) {
-		_errors[ECreateErrFields.NAME] = 'Title is required';
-		setErrors(_errors);
-	} else {
-		client
-			.query({
-				query: TITLE_IS_VALID,
-				variables: {
-					title,
-				},
-			})
-			.then(() => {
-				_errors[ECreateErrFields.NAME] = '';
-				setErrors(_errors);
-			})
-			.catch((err: any) => {
-				_errors[ECreateErrFields.NAME] = err.message;
-				setErrors(_errors);
-				captureException(err, {
-					tags: {
-						section: 'titleValidation',
-					},
-				});
-			});
-	}
-};
 
 export const walletAddressValidation = (
 	walletAddress: string,
@@ -112,18 +76,11 @@ export const walletAddressValidation = (
 	}
 };
 
-export const isDescriptionHeavy = (
-	description: string,
-	errors: ICreateProjectErrors,
-	setErrors: (arg0: ICreateProjectErrors) => void,
-) => {
-	const _errors = { ...errors };
+export const isDescriptionHeavy = (description: string) => {
 	const stringSize = encodeURI(description).split(/%..|./).length - 1;
 	if (stringSize > 4000000) {
-		_errors[ECreateErrFields.DESCRIPTION] = 'Description is too long';
-		setErrors(_errors);
+		return 'Description is too long';
 	} else {
-		_errors[ECreateErrFields.DESCRIPTION] = '';
-		setErrors(_errors);
+		return true;
 	}
 };

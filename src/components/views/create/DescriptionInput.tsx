@@ -19,11 +19,11 @@ const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
 
 const DescriptionInput = (props: {
 	setValue: (e: string) => void;
-	error: string;
-	value: string;
+	// error: string;
+	value?: string;
 }) => {
 	const [showModal, setShowModal] = useState(false);
-	const { value, setValue, error } = props;
+	const { value, setValue } = props;
 	return (
 		<>
 			{showModal && (
@@ -41,7 +41,7 @@ const DescriptionInput = (props: {
 					How to write a good project description.
 				</span>
 			</CaptionContainer>
-			<InputContainerStyled error={error}>
+			<InputContainerStyled>
 				<Label>Project story</Label>
 				<RichTextInput
 					style={TextInputStyle}
@@ -49,12 +49,12 @@ const DescriptionInput = (props: {
 					value={value}
 				/>
 			</InputContainerStyled>
-			<ErrorStyled>{error || null}</ErrorStyled>
+			{/*<ErrorStyled>{error || null}</ErrorStyled>*/}
 		</>
 	);
 };
 
-const InputContainerStyled = styled(InputContainer)<{ error: string }>`
+const InputContainerStyled = styled(InputContainer)<{ error?: string }>`
 	.ql-container.ql-snow,
 	.ql-toolbar.ql-snow {
 		border: ${props =>
