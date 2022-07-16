@@ -1,56 +1,97 @@
 import React from 'react';
-import { H5, Caption, brandColors } from '@giveth/ui-design-system';
+import { H6, IconETH, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useFormContext } from 'react-hook-form';
+import { useWeb3React } from '@web3-react/core';
 
 import { InputContainer, TinyLabel } from './Create.sc';
 import { compareAddresses } from '@/lib/helpers';
-import { ECreateErrFields } from '@/components/views/create/CreateProject';
 import { useAppSelector } from '@/features/hooks';
-import InputBox, { InputErrorMessage } from '@/components/InputBox';
 import config from '@/configuration';
+import Input from '@/components/Input';
+import { requiredOptions } from '@/lib/constants/regex';
+import { EInputs } from '@/components/views/create/CreateProject';
+import { walletAddressValidation } from '@/components/views/create/helpers';
+import { IconGnosisChain } from '@/components/Icons/GnosisChain';
+import { Shadow } from '@/components/styled-components/Shadow';
+import { Flex } from '@/components/styled-components/Flex';
 
 const WalletAddressInput = (props: {
-	title: string;
 	networkId: number;
-	value?: string;
-	setValue: (e: string) => void;
-	error: string;
+	defaultValue?: string;
+	equalAddress?: boolean;
 }) => {
-	const { value, setValue, title, networkId, error } = props;
+	const {
+		register,
+		formState: { errors },
+		getValues,
+		watch,
+	} = useFormContext();
+	const { networkId, defaultValue, equalAddress } = props;
+
+	watch([EInputs.mainAddress, EInputs.secondaryAddress]);
+
+	const { chainId, library } = useWeb3React();
+
 	const user = useAppSelector(state => state.user?.userData);
-	const isDefaultAddress = compareAddresses(value, user?.walletAddress);
 	const isGnosis = networkId === config.SECONDARY_NETWORK.id;
+	const isDefaultAddress = compareAddresses(
+		getValues(isGnosis ? EInputs.secondaryAddress : EInputs.mainAddress),
+		user?.walletAddress,
+	);
 
 	return (
-		<>
-			<H5
-				id={
-					networkId
-						? ECreateErrFields.MAIN_WALLET_ADDRESS
-						: ECreateErrFields.SECONDARY_WALLET_ADDRESS
-				}
-			>
-				{title}
-			</H5>
-			{networkId === config.PRIMARY_NETWORK.id && (
-				<div>
-					<CaptionContainer>
-						You can set a custom Ethereum address or ENS to receive
-						donations.{' '}
-					</CaptionContainer>
-				</div>
-			)}
-
+		<Container>
+			<Header>
+				<H6>
+					{equalAddress
+						? 'Receiving address'
+						: isGnosis
+						? 'Gnosis chain address'
+						: 'Mainnet address'}
+				</H6>
+				<Flex gap='10px'>
+					{equalAddress ? (
+						<>
+							<MainnetIcon />
+							<GnosisIcon />
+						</>
+					) : isGnosis ? (
+						<GnosisIcon />
+					) : (
+						<MainnetIcon />
+					)}
+				</Flex>
+			</Header>
 			<InputContainer>
-				<InputBox
+				<Input
 					label='Receiving address'
 					placeholder='My Wallet Address'
-					onChange={setValue}
-					value={value || ''}
-					error={error}
-					// disabled={isDefaultAddress && !error} // why are we doing this?
+					defaultValue={defaultValue}
+					register={register}
+					registerName={
+						isGnosis
+							? EInputs.secondaryAddress
+							: EInputs.mainAddress
+					}
+					registerOptions={{
+						...requiredOptions.field,
+						validate: i =>
+							walletAddressValidation(
+								i,
+								library,
+								chainId,
+								networkId,
+							),
+					}}
+					error={
+						errors[
+							isGnosis
+								? EInputs.secondaryAddress
+								: EInputs.mainAddress
+						]
+					}
 				/>
-				<InputErrorMessage>{error || null}</InputErrorMessage>
 				{isGnosis && (
 					<TinyLabel>
 						Please DO NOT enter exchange addresses for this network.
@@ -63,28 +104,43 @@ const WalletAddressInput = (props: {
 						account. You can choose a different receiving address.
 					</TinyLabel>
 				)}
-				{isDefaultAddress && !error && (
-					<ChangeAddress onClick={() => setValue('')}>
-						Change address
-					</ChangeAddress>
-				)}
 			</InputContainer>
-		</>
+		</Container>
 	);
 };
 
-const ChangeAddress = styled(Caption)`
-	color: ${brandColors.pinky[500]};
-	margin-top: 16px;
-	cursor: pointer;
+const GnosisIcon = () => (
+	<ChainIconShadow>
+		<IconGnosisChain size={24} />
+	</ChainIconShadow>
+);
+
+const MainnetIcon = () => (
+	<ChainIconShadow>
+		<IconETH size={24} />
+	</ChainIconShadow>
+);
+
+const ChainIconShadow = styled.div`
+	height: 24px;
+	width: fit-content;
+	border-radius: 50%;
+	box-shadow: ${Shadow.Giv[400]};
 `;
 
-const CaptionContainer = styled(Caption)`
-	margin: 8.5px 0 0 0;
-	span {
-		cursor: pointer;
-		color: ${brandColors.pinky[500]};
-	}
+const Header = styled.div`
+	display: flex;
+	justify-content: space-between;
+	padding-bottom: 10px;
+	margin-bottom: 24px;
+	border-bottom: 1px solid ${neutralColors.gray[300]};
+`;
+
+const Container = styled.div`
+	margin-top: 25px;
+	background: ${neutralColors.gray[100]};
+	border-radius: 12px;
+	padding: 16px;
 `;
 
 export default WalletAddressInput;
