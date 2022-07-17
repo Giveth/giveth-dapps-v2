@@ -1,15 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
-import { StylesConfig } from 'react-select';
 import Debounced from 'lodash.debounce';
 import { useRouter } from 'next/router';
 import {
 	brandColors,
-	P,
 	neutralColors,
-	Subline,
 	H3,
 	OulineButton,
 	Lead,
+	IconSearch,
+	IconOptions16,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
@@ -28,12 +27,12 @@ import { ICategory, IMainCategory, IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
 import { EDirection, gqlEnums } from '@/apollo/types/gqlEnums';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
-import { Shadow } from '../../styled-components/Shadow';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import ProjectsBanner from './ProjectsBanner';
 import ProjectsFilter from './ProjectsFilter';
+import { Shadow } from '@/components/styled-components/Shadow';
 import type { IProjectsRouteProps } from 'pages/projects';
 
 export interface IProjectsView extends IProjectsRouteProps {
@@ -219,6 +218,15 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 				<FiltersSection>
 					<ProjectsFilter projectsProps={props} />
+					<FilterAndSearchContainer>
+						<SearchButton>
+							<IconSearch />
+						</SearchButton>
+						<FiltersButton>
+							Filters
+							<IconOptions16 />
+						</FiltersButton>
+					</FilterAndSearchContainer>
 				</FiltersSection>
 
 				{isLoading && <Loader className='dot-flashing' />}
@@ -258,36 +266,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 	);
 };
 
-const selectCustomStyles: StylesConfig = {
-	menu: styles => ({
-		...styles,
-		border: '0px',
-		borderRadius: '8px',
-		boxShadow: Shadow.Neutral[500],
-		'&:focus-within': {
-			border: `2px solid ${brandColors.pinky[500]}`,
-		},
-	}),
-	option: (styles, { isFocused, isSelected }) => ({
-		...styles,
-		width: '95%',
-		height: '38px',
-		margin: '4px auto',
-		borderRadius: '8px',
-		backgroundColor: isSelected
-			? neutralColors.gray[300]
-			: isFocused
-			? neutralColors.gray[200]
-			: 'white',
-		color: isSelected ? neutralColors.gray[900] : neutralColors.gray[800],
-	}),
-	control: base => ({
-		...base,
-		border: 0,
-		boxShadow: 'none',
-	}),
-};
-
 const Loader = styled.div`
 	margin: 20px auto;
 `;
@@ -305,32 +283,9 @@ const StyledButton = styled(OulineButton)<{ transparent?: boolean }>`
 	}
 `;
 
-const SelectComponent = styled(P)`
-	min-width: 200px;
-	width: 100%;
-
-	${mediaQueries.tablet} {
-		width: calc(50% - 8px);
-	}
-
-	${mediaQueries.laptopL} {
-		width: 345px;
-	}
-`;
-
-const SearchComponent = styled.div`
-	flex-grow: 1;
-`;
-
 const LoadingDotIcon = styled.div`
 	padding: 4px 37px;
 `;
-
-const Label = styled(Subline)`
-	color: ${brandColors.deep[500]};
-	height: 18px;
-`;
-
 const FiltersSection = styled.div`
 	padding: 32px 21px;
 	background: white;
@@ -344,6 +299,7 @@ const FiltersSection = styled.div`
 	position: relative;
 	font-weight: 500;
 	color: ${neutralColors.gray[900]};
+	justify-content: space-between;
 `;
 
 export const ProjectsContainer = styled.div`
@@ -376,4 +332,33 @@ const Subtitle = styled(Lead)`
 	font-weight: 400;
 	max-width: 1026px;
 `;
+
+const FilterAndSearchContainer = styled.div`
+	display: flex;
+	gap: 16px;
+`;
+
+const SearchButton = styled.button`
+	border-radius: 50%;
+	width: 48px;
+	height: 48px;
+	background: white;
+	box-shadow: ${Shadow.Neutral[500]};
+	border: none;
+	cursor: pointer;
+`;
+
+const FiltersButton = styled.button`
+	display: flex;
+	gap: 8px;
+	border-radius: 50px;
+	padding: 16px;
+	background: white;
+	box-shadow: ${Shadow.Neutral[500]};
+	border: none;
+	font-weight: 700;
+	text-transform: uppercase;
+	cursor: pointer;
+`;
+
 export default ProjectsIndex;

@@ -11,8 +11,8 @@ import { IProjectsView } from './ProjectsIndex';
 import { Shadow } from '@/components/styled-components/Shadow';
 
 function ProjectsFilter({ projectsProps }: { projectsProps: IProjectsView }) {
-	const navigationPrevRef = useRef(null);
-	const navigationNextRef = useRef(null);
+	const navigationPrevRef = useRef<HTMLButtonElement>(null);
+	const navigationNextRef = useRef<HTMLButtonElement>(null);
 	const mySwiper = useSwiper();
 	const mySwiperSlide = useSwiperSlide();
 	console.log('mySwiper', mySwiper?.allowSlideNext);
