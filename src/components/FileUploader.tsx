@@ -31,6 +31,7 @@ enum EFileUploadingStatus {
 }
 
 interface UploadFile extends File {
+	url?: string;
 	status?: EFileUploadingStatus;
 }
 
@@ -60,6 +61,7 @@ const FileUploader: FC<IFileUploader> = ({
 					},
 				});
 				acceptedFile.status = EFileUploadingStatus.UPLOADED;
+				acceptedFile.url = imageUploaded.upload;
 				setUrls([...urls, imageUploaded.upload]);
 			} catch (error) {
 				acceptedFile.status = EFileUploadingStatus.FAILED;
@@ -128,8 +130,18 @@ const FileUploader: FC<IFileUploader> = ({
 						>
 							<Subline>{file.name}</Subline>
 							{file.status === EFileUploadingStatus.UPLOADED && (
-								<Flex justifyContent='space-between'>
+								<Flex alignItems='center'>
 									<SublineBold>Uploaded</SublineBold>
+									<GLink size='Tiny'>
+										<a
+											href={file.url}
+											target='_blank'
+											rel='noreferrer'
+										>
+											&nbsp;- Link
+										</a>
+									</GLink>
+									<div style={{ flex: 1 }}></div>
 									<DeleteRow onClick={onDelete}>
 										<IconX size={16} />
 										<GLink size='Small'>Delete</GLink>
