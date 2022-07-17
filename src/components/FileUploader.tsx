@@ -40,7 +40,7 @@ const FileUploader: FC<IFileUploader> = ({
 	multiple = false,
 	setIsUploading,
 }) => {
-	const [files, setFiles] = useState<UploadFile[]>();
+	const [files, setFiles] = useState<UploadFile[]>([]);
 	const [uploading, setUploading] = useState(false);
 
 	const onDrop = async (acceptedFiles: UploadFile[]) => {
@@ -77,7 +77,7 @@ const FileUploader: FC<IFileUploader> = ({
 		noKeyboard: true,
 		onDrop: async (acceptedFiles: UploadFile[]) => {
 			console.log('acceptedFiles', acceptedFiles);
-			setFiles(acceptedFiles);
+			setFiles(files => [...files, ...acceptedFiles]);
 			setUploading(true);
 			setIsUploading && setIsUploading(true);
 			await onDrop(acceptedFiles);
@@ -88,7 +88,7 @@ const FileUploader: FC<IFileUploader> = ({
 
 	const onDelete = () => {
 		setUrls([]);
-		setFiles(undefined);
+		setFiles([]);
 		setUploading(false);
 		setIsUploading && setIsUploading(false);
 	};
