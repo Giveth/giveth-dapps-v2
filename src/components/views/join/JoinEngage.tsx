@@ -54,7 +54,7 @@ const JoinEngage = () => {
 					</CardsSection>
 				</Section>
 				<Section>
-					<Title>Consume</Title>
+					<Title>Learn</Title>
 					<CardsConsumeSection>
 						{consumeArray.map(i => (
 							<Card key={i.title} content={i} isHorizontal />
