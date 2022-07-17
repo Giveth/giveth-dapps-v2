@@ -33,7 +33,33 @@ enum EFileUploadingStatus {
 interface UploadFile extends File {
 	url?: string;
 	status?: EFileUploadingStatus;
+	logo?: string;
 }
+
+const convertFileTypeToLogo = (type: string) => {
+	const [mainType, subType] = type.split('/');
+	console.log('mainType', mainType);
+	console.log('subType', subType);
+	switch (mainType) {
+		case 'image':
+			return 'image';
+		case 'application':
+			switch (subType) {
+				case 'pdf':
+					return 'pdf';
+				case 'vnd.openxmlformats-officedocument.wordprocessingml.document':
+					return 'docx';
+				case 'msword':
+					return 'doc';
+				case 'vnd.openxmlformats-officedocument.presentationml.presentation':
+					return 'pptx';
+				case 'vnd.ms-powerpoint':
+					return 'ppt';
+			}
+			return 'text';
+	}
+	return 'unknown';
+};
 
 const FileUploader: FC<IFileUploader> = ({
 	setUrls,
@@ -72,19 +98,23 @@ const FileUploader: FC<IFileUploader> = ({
 	const { getRootProps, getInputProps, open } = useDropzone({
 		accept: {
 			'image/*': ['.jpg', '.jpeg', '.png', '.gif'],
-			'applications/*': ['.docx', '.eot'],
+			'applications/*': ['.docx', '.doc', '.pdf', '.ppt', 'pptx'],
 		},
 		multiple: multiple,
 		noClick: true,
 		noKeyboard: true,
 		onDrop: async (acceptedFiles: UploadFile[]) => {
 			console.log('acceptedFiles', acceptedFiles);
+			for (let i = 0; i < acceptedFiles.length; i++) {
+				const acceptedFile = acceptedFiles[i];
+				acceptedFile.logo = convertFileTypeToLogo(acceptedFile.type);
+			}
 			setFiles(files => [...files, ...acceptedFiles]);
 			setUploading(true);
 			setIsUploading && setIsUploading(true);
 			await onDrop(acceptedFiles);
-			// setUploading(false);
-			// setIsUploading && setIsUploading(false);
+			setUploading(false);
+			setIsUploading && setIsUploading(false);
 		},
 	});
 
@@ -124,6 +154,13 @@ const FileUploader: FC<IFileUploader> = ({
 			{files &&
 				files.map((file, idx) => (
 					<UploadContainer key={idx}>
+						<Image
+							width={40}
+							height={40}
+							src={`/images/extensions/${file.logo}.png`}
+							alt='file extension logo'
+							quality={100}
+						/>
 						<UploadInfoRow
 							flexDirection='column'
 							justifyContent='space-between'
@@ -190,8 +227,8 @@ const DropZone = styled.div`
 `;
 
 const UploadContainer = styled(Flex)`
-	margin: 16px 0;
-	gap: 14px;
+	margin: 24px 0;
+	gap: 4px;
 `;
 
 const UploadInfoRow = styled(Flex)`
