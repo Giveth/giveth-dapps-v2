@@ -123,6 +123,10 @@ const AddAddressModal: FC<IProps> = ({
 									? true
 									: 'The address in not valid';
 							},
+							required: {
+								value: true,
+								message: 'Wallet Address is required',
+							},
 						}}
 						error={errors.address}
 					/>
