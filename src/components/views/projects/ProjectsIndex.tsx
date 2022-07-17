@@ -55,7 +55,7 @@ interface IQueries {
 }
 
 const allCategoryObj = { value: 'All', label: 'All' };
-const sortByObj = [
+const sortByOptions = [
 	{ label: 'Default', value: ESortby.QUALITYSCORE },
 	{ label: 'Amount Raised', value: ESortby.DONATIONS },
 	{ label: 'Accepts GIV Token', value: ESortby.ACCEPTGIV },
@@ -97,7 +97,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [filteredProjects, setFilteredProjects] =
 		useState<IProject[]>(projects);
-	const [sortBy, setSortBy] = useState<ISelectObj>(sortByObj[0]);
+	const [sortBy, setSortBy] = useState<ISelectObj>(sortByOptions[0]);
 	const [search, setSearch] = useState<string>('');
 	const [searchValue, setSearchValue] = useState<string>('');
 	const [totalCount, setTotalCount] = useState(_totalCount);
@@ -225,7 +225,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 							styles={selectCustomStyles}
 							value={sortBy}
 							onChange={e => handleChange('sortBy', e)}
-							options={sortByObj}
+							options={sortByOptions}
 							isOptionSelected={(option, selectValue) =>
 								selectValue.some((i: any) => i.label === option)
 							}

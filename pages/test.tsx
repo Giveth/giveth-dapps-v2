@@ -5,6 +5,7 @@ import { useWeb3React } from '@web3-react/core';
 import { gToast, ToastType } from '@/components/toasts';
 import { useAppDispatch } from '@/features/hooks';
 import { fetchXDaiInfoAsync } from '@/features/subgraph/subgraph.thunks';
+import { FilterMenu } from '@/components/menu/FilterMenu';
 
 const TestRoute = () => {
 	// const xDaiValues = useSelector(
@@ -64,6 +65,9 @@ const TestRoute = () => {
 				>
 					Throw error
 				</button>
+				<div>
+					<FilterMenu />
+				</div>
 			</TestContainer>
 		</>
 	);
