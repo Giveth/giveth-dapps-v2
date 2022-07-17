@@ -153,7 +153,7 @@ const InputContainer = styled.div`
 const InputLabel = styled(GLink)<{ required?: boolean; disabled?: boolean }>`
 	padding-bottom: 4px;
 	color: ${props =>
-		props.disabled ? neutralColors.gray[600] : brandColors.deep[500]};
+		props.disabled ? neutralColors.gray[600] : neutralColors.gray[900]};
 	::after {
 		content: '*';
 		display: ${props => (props.required ? 'inline-block' : 'none')};
@@ -256,7 +256,7 @@ const InputField = styled.input<IInputField>`
 
 const InputDesc = styled(GLink)`
 	padding-top: 4px;
-	color: ${brandColors.deep[500]};
+	color: ${neutralColors.gray[900]};
 	display: block;
 `;
 

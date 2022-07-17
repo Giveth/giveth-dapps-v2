@@ -5,10 +5,10 @@ import {
 	Caption,
 	H3,
 	H4,
+	H5,
 	IconExternalLink,
 	neutralColors,
 	OulineButton,
-	H5,
 } from '@giveth/ui-design-system';
 import { useMutation } from '@apollo/client';
 import { utils } from 'ethers';
@@ -16,7 +16,7 @@ import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
 import { captureException } from '@sentry/nextjs';
-import { useForm, FormProvider } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import {
 	ACTIVATE_PROJECT,
@@ -46,7 +46,7 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 // import useLeaveConfirm from '@/hooks/useLeaveConfirm';
 import config from '@/configuration';
-import Input from '@/components/Input';
+import Input, { InputSize } from '@/components/Input';
 import { requiredOptions } from '@/lib/constants/regex';
 import { titleValidation } from '@/components/views/create/helpers';
 import CheckBox from '@/components/Checkbox';
@@ -96,7 +96,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const [addProjectMutation] = useMutation(CREATE_PROJECT);
 	const [editProjectMutation] = useMutation(UPDATE_PROJECT);
 	const router = useRouter();
-	const formMethods = useForm<TInputs>();
+	const formMethods = useForm<TInputs>({ mode: 'onChange' });
 
 	const {
 		register,
@@ -116,6 +116,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const [creationSuccessful, setCreationSuccessful] = useState<IProject>();
 	const [categories, setCategories] = useState(project?.categories || []);
 	const [image, setImage] = useState(project?.image || '');
+	const [mainnetAddressActive, setMainnetAddressActive] = useState(true);
+	const [gnosisAddressActive, setGnosisAddressActive] = useState(true);
 	const [isMainnetGnosisAddEqual, setIsMainnetGnosisAddEqual] =
 		useState(true);
 
@@ -135,12 +137,39 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 	const onSubmit = async (formData: TInputs) => {
 		try {
-			console.log('formData', formData);
+			setIsLoading(true);
+			const addresses = [];
 			const { mainAddress, secondaryAddress, name, description } =
 				formData;
-			const mainAddressValidated = isAddressENS(mainAddress)
-				? await getAddressFromENS(mainAddress, library)
-				: mainAddress;
+
+			if (isMainnetGnosisAddEqual) {
+				const address = isAddressENS(mainAddress)
+					? await getAddressFromENS(mainAddress, library)
+					: mainAddress;
+				const checksumAddress = utils.getAddress(address);
+				addresses.push(
+					{ address: checksumAddress, networkId: ethereumId },
+					{ address: checksumAddress, networkId: gnosisId },
+				);
+			} else {
+				if (mainnetAddressActive) {
+					const address = isAddressENS(mainAddress)
+						? await getAddressFromENS(mainAddress, library)
+						: mainAddress;
+					const checksumAddress = utils.getAddress(address);
+					addresses.push({
+						address: checksumAddress,
+						networkId: ethereumId,
+					});
+				}
+				if (gnosisAddressActive) {
+					const checksumAddress = utils.getAddress(secondaryAddress);
+					addresses.push({
+						address: checksumAddress,
+						networkId: gnosisId,
+					});
+				}
+			}
 
 			const projectData: IProjectCreation = {
 				title: name,
@@ -148,21 +177,10 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				impactLocation,
 				categories: categories.map(category => category.name),
 				organisationId: 1,
-				addresses: [
-					{
-						address: utils.getAddress(mainAddressValidated),
-						networkId: ethereumId,
-					},
-					{
-						address: utils.getAddress(secondaryAddress),
-						networkId: gnosisId,
-					},
-				],
+				addresses,
 				image,
 				isDraft: formData[EInputs.draft],
 			};
-
-			setIsLoading(true);
 
 			const addedProject = isEditMode
 				? await editProjectMutation({
@@ -238,6 +256,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							label='Project name'
 							placeholder='My First Project'
 							maxLength={55}
+							size={InputSize.LARGE}
 							value={watchName}
 							register={register}
 							registerName={EInputs.name}
@@ -279,13 +298,28 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							defaultValue={defaultMainAddress}
 							networkId={ethereumId}
 							equalAddress={isMainnetGnosisAddEqual}
+							isActive={mainnetAddressActive}
+							setIsActive={e => {
+								if (!e && !gnosisAddressActive)
+									return showToastError(
+										'You must select at least one address',
+									);
+								setMainnetAddressActive(e);
+							}}
 						/>
-						{!isMainnetGnosisAddEqual && (
-							<WalletAddressInput
-								defaultValue={defaultSecondaryAddress}
-								networkId={gnosisId}
-							/>
-						)}
+						<WalletAddressInput
+							defaultValue={defaultSecondaryAddress}
+							networkId={gnosisId}
+							equalAddress={isMainnetGnosisAddEqual}
+							isActive={gnosisAddressActive}
+							setIsActive={e => {
+								if (!e && !mainnetAddressActive)
+									return showToastError(
+										'You must select at least one address',
+									);
+								setGnosisAddressActive(e);
+							}}
+						/>
 						<PublishTitle>
 							{isEditMode
 								? 'Publish edited project'

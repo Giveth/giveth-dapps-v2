@@ -4,32 +4,34 @@ import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
 import { useWeb3React } from '@web3-react/core';
 
-import { InputContainer, TinyLabel } from './Create.sc';
+import { TinyLabel } from './Create.sc';
 import { compareAddresses } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
-import Input from '@/components/Input';
+import Input, { InputSize } from '@/components/Input';
 import { requiredOptions } from '@/lib/constants/regex';
 import { EInputs } from '@/components/views/create/CreateProject';
 import { walletAddressValidation } from '@/components/views/create/helpers';
 import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { Flex } from '@/components/styled-components/Flex';
+import CheckBox from '@/components/Checkbox';
 
 const WalletAddressInput = (props: {
 	networkId: number;
 	defaultValue?: string;
-	equalAddress?: boolean;
+	equalAddress: boolean;
+	isActive: boolean;
+	setIsActive: (active: boolean) => void;
 }) => {
 	const {
 		register,
 		formState: { errors },
 		getValues,
-		watch,
 	} = useFormContext();
-	const { networkId, defaultValue, equalAddress } = props;
 
-	watch([EInputs.mainAddress, EInputs.secondaryAddress]);
+	const { networkId, defaultValue, equalAddress, isActive, setIsActive } =
+		props;
 
 	const { chainId, library } = useWeb3React();
 
@@ -41,13 +43,13 @@ const WalletAddressInput = (props: {
 	);
 
 	return (
-		<Container>
+		<Container hide={equalAddress && isGnosis}>
 			<Header>
 				<H6>
-					{equalAddress
-						? 'Receiving address'
-						: isGnosis
+					{isGnosis
 						? 'Gnosis chain address'
+						: equalAddress
+						? 'Receiving address'
 						: 'Mainnet address'}
 				</H6>
 				<Flex gap='10px'>
@@ -63,48 +65,49 @@ const WalletAddressInput = (props: {
 					)}
 				</Flex>
 			</Header>
-			<InputContainer>
-				<Input
-					label='Receiving address'
-					placeholder='My Wallet Address'
-					defaultValue={defaultValue}
-					register={register}
-					registerName={
+			<Input
+				label='Receiving address'
+				placeholder='My Wallet Address'
+				size={InputSize.LARGE}
+				defaultValue={defaultValue}
+				disabled={!isActive && !equalAddress}
+				register={register}
+				registerName={
+					isGnosis ? EInputs.secondaryAddress : EInputs.mainAddress
+				}
+				registerOptions={{
+					...requiredOptions.field,
+					validate: i =>
+						walletAddressValidation(i, library, chainId, networkId),
+				}}
+				error={
+					errors[
 						isGnosis
 							? EInputs.secondaryAddress
 							: EInputs.mainAddress
-					}
-					registerOptions={{
-						...requiredOptions.field,
-						validate: i =>
-							walletAddressValidation(
-								i,
-								library,
-								chainId,
-								networkId,
-							),
-					}}
-					error={
-						errors[
-							isGnosis
-								? EInputs.secondaryAddress
-								: EInputs.mainAddress
-						]
-					}
-				/>
-				{isGnosis && (
-					<TinyLabel>
-						Please DO NOT enter exchange addresses for this network.
-						<br />
-					</TinyLabel>
-				)}
-				{isDefaultAddress && (
-					<TinyLabel>
-						This is the default wallet address associated with your
-						account. You can choose a different receiving address.
-					</TinyLabel>
-				)}
-			</InputContainer>
+					]
+				}
+			/>
+			<TinyLabel>
+				{isDefaultAddress
+					? 'This is the default wallet address associated with your account. You can choose a different receiving address.'
+					: 'You can enter a new address to receive funds on Mainnet network.'}
+			</TinyLabel>
+			{isGnosis && (
+				<TinyLabel>
+					<br />
+					Please DO NOT enter exchange addresses for this network.
+				</TinyLabel>
+			)}
+			{!equalAddress && (
+				<CheckBoxContainer className='fadeIn'>
+					<CheckBox
+						onChange={setIsActive}
+						title='I’ll receive fund on this address'
+						checked={isActive}
+					/>
+				</CheckBoxContainer>
+			)}
 		</Container>
 	);
 };
@@ -121,6 +124,12 @@ const MainnetIcon = () => (
 	</ChainIconShadow>
 );
 
+const CheckBoxContainer = styled.div`
+	margin-top: 24px;
+	padding-top: 11px;
+	border-top: 1px solid ${neutralColors.gray[300]};
+`;
+
 const ChainIconShadow = styled.div`
 	height: 24px;
 	width: fit-content;
@@ -136,11 +145,14 @@ const Header = styled.div`
 	border-bottom: 1px solid ${neutralColors.gray[300]};
 `;
 
-const Container = styled.div`
+const Container = styled.div<{ hide?: boolean }>`
 	margin-top: 25px;
 	background: ${neutralColors.gray[100]};
 	border-radius: 12px;
 	padding: 16px;
+	opacity: ${props => (props.hide ? 0 : 1)};
+	visibility: ${props => (props.hide ? 'hidden' : 'visible')};
+	transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 `;
 
 export default WalletAddressInput;
