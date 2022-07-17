@@ -26,7 +26,7 @@ import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { ICategory, IMainCategory, IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
-import { EDirection, gqlEnums } from '@/apollo/types/gqlEnums';
+import { EDirection, ESortby } from '@/apollo/types/gqlEnums';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
 import { Shadow } from '../../styled-components/Shadow';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
@@ -56,18 +56,18 @@ interface IQueries {
 
 const allCategoryObj = { value: 'All', label: 'All' };
 const sortByObj = [
-	{ label: 'Default', value: gqlEnums.QUALITYSCORE },
-	{ label: 'Amount Raised', value: gqlEnums.DONATIONS },
-	{ label: 'Accepts GIV Token', value: gqlEnums.ACCEPTGIV },
-	{ label: 'Hearts', value: gqlEnums.HEARTS },
-	{ label: 'Newest', value: gqlEnums.CREATIONDATE },
+	{ label: 'Default', value: ESortby.QUALITYSCORE },
+	{ label: 'Amount Raised', value: ESortby.DONATIONS },
+	{ label: 'Accepts GIV Token', value: ESortby.ACCEPTGIV },
+	{ label: 'Hearts', value: ESortby.HEARTS },
+	{ label: 'Newest', value: ESortby.CREATIONDATE },
 	{
 		label: 'Oldest',
-		value: gqlEnums.CREATIONDATE,
+		value: ESortby.CREATIONDATE,
 		direction: EDirection.ASC,
 	},
-	{ label: 'Verified', value: gqlEnums.VERIFIED },
-	{ label: 'Traceable', value: gqlEnums.TRACEABLE },
+	{ label: 'Verified', value: ESortby.VERIFIED },
+	{ label: 'Traceable', value: ESortby.TRACEABLE },
 ];
 
 const buildCategoryObj = (array: ICategory[]) => {
