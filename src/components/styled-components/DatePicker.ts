@@ -1,12 +1,21 @@
-import { brandColors, neutralColors } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	neutralColors,
+	semanticColors,
+} from '@giveth/ui-design-system';
 import DatePicker from 'react-datepicker';
 import styled from 'styled-components';
 import { Shadow } from './Shadow';
 
-export const StyledDatePicker = styled(DatePicker)<{ hasRightIcon?: boolean }>`
+export const StyledDatePicker = styled(DatePicker)<{
+	hasRightIcon?: boolean;
+	hasError?: boolean;
+}>`
 	width: 100%;
 	border-radius: 8px;
 	border: 2px solid ${neutralColors.gray[300]};
+	border-color: ${props =>
+		props.hasError ? semanticColors.punch[500] : neutralColors.gray[300]};
 	padding: 15px 16px;
 	padding-right: 50px;
 	::placeholder {

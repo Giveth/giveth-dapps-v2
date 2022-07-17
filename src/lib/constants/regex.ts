@@ -104,4 +104,10 @@ export const requiredOptions = {
 			message: 'This field is required',
 		},
 	},
+	date: {
+		required: {
+			value: true,
+			message: 'Date is required',
+		},
+	},
 };
