@@ -13,7 +13,6 @@ import {
 import Link from 'next/link';
 import { Col, Row } from '../Grid';
 import { Flex } from '../styled-components/Flex';
-import { TopInnerContainer as Container } from './commons';
 import {
 	GIVpowerTopContainer,
 	Title,
@@ -43,6 +42,7 @@ import {
 	GivpowerCTAButtonContainer,
 	BoostProjectButton,
 	GivPowerCardContainer,
+	GIVpowerContainer,
 } from './GIVpower.sc';
 import RocketImage from '../../../public/images/rocket.svg';
 import Growth from '../../../public/images/growth.svg';
@@ -57,7 +57,7 @@ export function TabPowerTop() {
 	);
 	return (
 		<GIVpowerTopContainer>
-			<Container>
+			<GIVpowerContainer>
 				<Row style={{ alignItems: 'flex-end' }}>
 					<Col xs={12} sm={7} xl={8}>
 						<Flex alignItems='baseline' gap='16px'>
@@ -96,7 +96,7 @@ export function TabPowerTop() {
 						</GivPowerCardContainer>
 					</Col>
 				</Row>
-			</Container>
+			</GIVpowerContainer>
 		</GIVpowerTopContainer>
 	);
 }
@@ -106,7 +106,7 @@ export function TabPowerBottom() {
 
 	return (
 		<>
-			<Container>
+			<GIVpowerContainer>
 				<H3 weight={700}>Boost Projects with GIVpower</H3>
 				<br />
 				<HeadingSectionContainer>
@@ -180,11 +180,11 @@ export function TabPowerBottom() {
 						Win-win for GIVers & Projects
 					</CenteredHeader>
 				</HeaderAndCirclesContainer>
-			</Container>
+			</GIVpowerContainer>
 			<div style={{ position: 'relative', overflow: 'hidden' }}>
 				<ArcMustardTop />
 				<ArcMustardBottom />
-				<Container>
+				<GIVpowerContainer>
 					<BenefitsCardsContainer>
 						<BenefitsCard>
 							<BenefitsCardHeading weight={700}>
@@ -230,15 +230,15 @@ export function TabPowerBottom() {
 								<br />
 								<Link href={Routes.Projects} passHref>
 									<CardBottomText>
-										browse projects
+										BROWSE PROJECTS
 									</CardBottomText>
 								</Link>
 							</BenefitsCardTextContainer>
 						</BenefitsCard>
 					</BenefitsCardsContainer>
-				</Container>
+				</GIVpowerContainer>
 			</div>
-			<Container>
+			<GIVpowerContainer>
 				<GivpowerCTAContainer>
 					<H1 weight={700}>Stake GIV to get GIVpower</H1>
 					<GivpowerCTASubheading size='small'>
@@ -259,7 +259,7 @@ export function TabPowerBottom() {
 						/>
 					</GivpowerCTAButtonContainer>
 				</GivpowerCTAContainer>
-			</Container>
+			</GIVpowerContainer>
 		</>
 	);
 }

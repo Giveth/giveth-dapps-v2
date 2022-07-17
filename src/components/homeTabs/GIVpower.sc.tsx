@@ -3,6 +3,7 @@ import {
 	brandColors,
 	ButtonLink,
 	ButtonText,
+	Container,
 	D1,
 	H1,
 	H2,
@@ -13,6 +14,13 @@ import {
 import { BottomContainer, TopContainer } from './commons';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Arc } from '../styled-components/Arc';
+
+export const GIVpowerContainer = styled(Container)`
+	padding: 16px;
+	${mediaQueries.laptop} {
+		padding: 16px 32px;
+	}
+`;
 
 export const GIVpowerTopContainer = styled(TopContainer)`
 	overflow: hidden;
@@ -59,12 +67,15 @@ export const FeaturesCardContainer = styled.div`
 	border-radius: 8px;
 	min-height: 480px;
 	margin: 80px 0 45px;
-	padding: 26px 20px;
+	padding: 32px 20px;
 	position: relative;
 	text-align: center;
 	z-index: 1;
 	${mediaQueries.tablet} {
-		padding: 76px 60px;
+		padding: 50px 5px;
+	}
+	${mediaQueries.laptop} {
+		padding: 76px 30px;
 	}
 `;
 export const FeaturesCardHeading = styled(H1)`
@@ -82,11 +93,14 @@ export const FeaturesCardItemsContainer = styled.div`
 	flex-direction: column;
 	margin-top: 60px;
 	gap: 40px;
-	${mediaQueries.desktop} {
+	${mediaQueries.tablet} {
 		flex-direction: row;
 		justify-content: space-between;
-		gap: 20px;
+		gap: 0;
 		margin-top: 106px;
+	}
+	${mediaQueries.laptop} {
+		gap: 20px;
 	}
 `;
 
@@ -112,7 +126,7 @@ export const BenefitsCardsContainer = styled.div`
 	display: flex;
 
 	flex-direction: column;
-	margin: 20px 0px;
+
 	padding-bottom: 60px;
 	${mediaQueries.laptop} {
 		gap: 20px;
@@ -246,7 +260,7 @@ export const GivpowerCTAButtonContainer = styled.div`
 	gap: 16px;
 	margin-top: 40px;
 	flex-direction: column;
-	${mediaQueries.tablet} {
+	${mediaQueries.mobileM} {
 		flex-direction: row;
 	}
 `;
