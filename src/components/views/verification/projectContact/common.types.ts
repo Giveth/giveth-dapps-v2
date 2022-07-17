@@ -5,6 +5,7 @@ export enum EMainSocials {
 	YouTube = 'YouTube',
 	LinkedIn = 'Linkedin',
 	Website = 'Website',
+	SocialLink = 'SocialLink',
 }
 
 export interface IMainSocials {
@@ -14,4 +15,5 @@ export interface IMainSocials {
 	[EMainSocials.YouTube]: string;
 	[EMainSocials.LinkedIn]: string;
 	[EMainSocials.Website]: string;
+	[EMainSocials.SocialLink]: string;
 }
