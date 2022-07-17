@@ -106,9 +106,10 @@ const AddAddressModal: FC<IProps> = ({
 							},
 						}}
 						label='Address Title'
-						caption='Choose a title for this address.'
+						caption='Choose a title for this address. eg. Salary Payments, Marketing, etc.'
 						error={errors.title}
 						maxLength={40}
+						placeholder='Salary Payments'
 					/>
 					<br />
 					<Input
