@@ -238,7 +238,7 @@ export default function ProjectRegistry() {
 						<Controller
 							control={control}
 							name='attachments'
-							// defaultValue={attachment}
+							defaultValue={attachments}
 							render={({ field }) => (
 								<FileUploader
 									urls={field.value || ''}

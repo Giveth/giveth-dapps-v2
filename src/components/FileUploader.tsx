@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction, useState } from 'react';
+import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import Image from 'next/image';
 import styled, { keyframes, css } from 'styled-components';
 import { useDropzone } from 'react-dropzone';
@@ -16,6 +16,7 @@ import { Flex } from './styled-components/Flex';
 import { showToastError } from '@/lib/helpers';
 import { client } from '@/apollo/apolloClient';
 import { UPLOAD_PROFILE_PHOTO } from '@/apollo/gql/gqlUser';
+import { convertFileTypeToLogo, convertUrlToUploadFile } from '@/helpers/file';
 
 interface IFileUploader {
 	urls: string[];
@@ -25,42 +26,17 @@ interface IFileUploader {
 	setIsUploading?: Dispatch<SetStateAction<boolean>>;
 }
 
-enum EFileUploadingStatus {
+export enum EFileUploadingStatus {
 	UPLOADING,
 	UPLOADED,
 	FAILED,
 }
 
-interface UploadFile extends File {
+export interface UploadFile extends File {
 	url?: string;
 	status?: EFileUploadingStatus;
 	logo?: string;
 }
-
-const convertFileTypeToLogo = (type: string) => {
-	const [mainType, subType] = type.split('/');
-	console.log('mainType', mainType);
-	console.log('subType', subType);
-	switch (mainType) {
-		case 'image':
-			return 'image';
-		case 'application':
-			switch (subType) {
-				case 'pdf':
-					return 'pdf';
-				case 'vnd.openxmlformats-officedocument.wordprocessingml.document':
-					return 'docx';
-				case 'msword':
-					return 'doc';
-				case 'vnd.openxmlformats-officedocument.presentationml.presentation':
-					return 'pptx';
-				case 'vnd.ms-powerpoint':
-					return 'ppt';
-			}
-			return 'text';
-	}
-	return 'unknown';
-};
 
 const FileUploader: FC<IFileUploader> = ({
 	setUrls,
@@ -71,6 +47,14 @@ const FileUploader: FC<IFileUploader> = ({
 }) => {
 	const [files, setFiles] = useState<UploadFile[]>([]);
 	const [uploading, setUploading] = useState(false);
+	useEffect(() => {
+		async function fetchUploadedFiles() {
+			const _files = await convertUrlToUploadFile(urls);
+			setFiles(_files);
+		}
+
+		fetchUploadedFiles();
+	}, []);
 
 	const onDrop = async (acceptedFiles: UploadFile[]) => {
 		if (acceptedFiles.length < 1) {
