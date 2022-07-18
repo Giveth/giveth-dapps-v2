@@ -40,7 +40,9 @@ const ImageUploader: FC<IImageUploader> = ({ setUrl, url, setIsUploading }) => {
 	};
 
 	const { getRootProps, getInputProps, open } = useDropzone({
-		accept: 'image/*',
+		accept: {
+			'image/*': ['.jpg', '.jpeg', '.png', '.gif'],
+		},
 		multiple: false,
 		noClick: true,
 		noKeyboard: true,
