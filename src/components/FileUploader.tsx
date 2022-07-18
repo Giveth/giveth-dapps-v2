@@ -21,6 +21,7 @@ interface IFileUploader {
 	urls: string[];
 	setUrls: (urls: string[]) => void;
 	multiple?: boolean;
+	limit?: number;
 	setIsUploading?: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -65,6 +66,7 @@ const FileUploader: FC<IFileUploader> = ({
 	setUrls,
 	urls,
 	multiple = false,
+	limit,
 	setIsUploading,
 }) => {
 	const [files, setFiles] = useState<UploadFile[]>([]);
@@ -104,7 +106,11 @@ const FileUploader: FC<IFileUploader> = ({
 		noClick: true,
 		noKeyboard: true,
 		onDrop: async (acceptedFiles: UploadFile[]) => {
-			console.log('acceptedFiles', acceptedFiles);
+			if (limit && limit < acceptedFiles.length + files.length) {
+				return showToastError(
+					`The maximum allowed number of uploaded files is ${limit}.`,
+				);
+			}
 			for (let i = 0; i < acceptedFiles.length; i++) {
 				const acceptedFile = acceptedFiles[i];
 				acceptedFile.logo = convertFileTypeToLogo(acceptedFile.type);
@@ -141,13 +147,14 @@ const FileUploader: FC<IFileUploader> = ({
 						alt='image'
 					/>
 					<P>
-						{`Drag & drop an image here or`}{' '}
+						{`Drag & drop some docs here or`}{' '}
 						<span onClick={open}>Upload from device.</span>
 					</P>
 					<P>
-						Suggested image size min. 600px width. Image size up to
-						4Mb.
+						Allowed files: .jpg, .jpeg, .png, .gif, .docx, .doc,
+						.pdf, .ppt, pptx
 					</P>
+					<P>Docs size up to 4Mb.</P>
 				</DropZone>
 			)}
 

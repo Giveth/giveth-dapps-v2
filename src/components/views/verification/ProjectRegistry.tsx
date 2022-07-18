@@ -245,6 +245,7 @@ export default function ProjectRegistry() {
 									setUrls={urls => field.onChange(urls)}
 									setIsUploading={setUploading}
 									multiple
+									limit={5}
 								/>
 							)}
 						/>
