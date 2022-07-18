@@ -19,7 +19,7 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { requiredOptions } from '@/lib/constants/regex';
 import { isObjEmpty } from '@/lib/helpers';
 import DescriptionInput from '@/components/DescriptionInput';
-import ImageUploader from '@/components/ImageUploader';
+import FileUploader from '@/components/FileUploader';
 
 enum ERegistryType {
 	NOT_SELECTED = 'notSelected',
@@ -38,7 +38,7 @@ interface IRegistryForm {
 	description: string;
 	isNonProfit: ERegistryType;
 	organizationName: string;
-	attachment: string;
+	attachment: string[];
 }
 
 export default function ProjectRegistry() {
@@ -87,7 +87,7 @@ export default function ProjectRegistry() {
 							organizationWebsite: link,
 							organizationDescription: description,
 							organizationName: organizationName,
-							attachment: attachment ?? '',
+							attachment: attachment ?? [],
 						},
 					},
 				},
@@ -238,12 +238,13 @@ export default function ProjectRegistry() {
 						<Controller
 							control={control}
 							name='attachment'
-							defaultValue={attachment}
+							// defaultValue={attachment}
 							render={({ field }) => (
-								<ImageUploader
-									url={field.value || ''}
-									setUrl={url => field.onChange(url)}
+								<FileUploader
+									urls={field.value || ''}
+									setUrls={urls => field.onChange(urls)}
 									setIsUploading={setUploading}
+									multiple
 								/>
 							)}
 						/>
