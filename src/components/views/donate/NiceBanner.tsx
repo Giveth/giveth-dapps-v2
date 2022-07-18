@@ -19,7 +19,15 @@ const NiceBanner = (props: IProjectBySlug) => {
 		<Wrapper>
 			<Container>
 				<Content>
-					<Title>Get $nice </Title>
+					<Title>
+						Get $nice{' '}
+						<img
+							src='/images/spark.svg'
+							alt='spark'
+							width='32px'
+							height='32px'
+						/>
+					</Title>
 					<Lead>
 						Donate DAI or xDAI to this project and receive $nice
 						tokens in addition to GIVbacks.{' '}
