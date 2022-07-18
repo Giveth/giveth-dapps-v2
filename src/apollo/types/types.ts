@@ -188,7 +188,7 @@ export interface IProjectMilestones {
 	foundationDate?: string;
 	mission?: string;
 	achievedMilestones?: string;
-	achievedMilestonesProof?: string;
+	achievedMilestonesProofs?: string[];
 }
 
 export interface IProjectManagingFunds {

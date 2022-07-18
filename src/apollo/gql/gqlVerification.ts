@@ -37,7 +37,7 @@ const gqlRes = `{
 		mission
 		foundationDate
 		achievedMilestones
-		achievedMilestonesProof
+		achievedMilestonesProofs
 	}
 	managingFunds {
 		description
@@ -88,7 +88,7 @@ query getCurrentProjectVerificationForm($projectId: Float!){
                mission
                foundationDate
                achievedMilestones
-               achievedMilestonesProof
+               achievedMilestonesProofs
              }
              managingFunds {
                description
