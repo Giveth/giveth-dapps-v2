@@ -38,7 +38,7 @@ interface IRegistryForm {
 	description: string;
 	isNonProfit: ERegistryType;
 	organizationName: string;
-	attachment: string[];
+	attachments: string[];
 }
 
 export default function ProjectRegistry() {
@@ -50,7 +50,7 @@ export default function ProjectRegistry() {
 		organizationCountry,
 		organizationDescription,
 		organizationWebsite,
-		attachment,
+		attachments,
 		organizationName,
 	} = projectRegistry || {};
 	const [countries, setCountries] = useState<IOption[]>([]);
@@ -68,7 +68,7 @@ export default function ProjectRegistry() {
 	const watchIsNonProfit = watch('isNonProfit');
 	const handleNext = ({
 		country,
-		attachment,
+		attachments,
 		link,
 		description,
 		organizationName,
@@ -87,7 +87,7 @@ export default function ProjectRegistry() {
 							organizationWebsite: link,
 							organizationDescription: description,
 							organizationName: organizationName,
-							attachment: attachment ?? [],
+							attachments: attachments ?? [],
 						},
 					},
 				},
@@ -237,7 +237,7 @@ export default function ProjectRegistry() {
 						</InputContainer>
 						<Controller
 							control={control}
-							name='attachment'
+							name='attachments'
 							// defaultValue={attachment}
 							render={({ field }) => (
 								<FileUploader

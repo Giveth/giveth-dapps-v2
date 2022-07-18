@@ -16,7 +16,7 @@ const gqlRes = `{
 		organizationCountry
 		organizationWebsite
 		organizationName
-		attachment
+		attachments
 	}
 	personalInfo {
 		email
