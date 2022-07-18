@@ -241,7 +241,7 @@ export default function ProjectRegistry() {
 							defaultValue={attachments}
 							render={({ field }) => (
 								<FileUploader
-									urls={field.value || ''}
+									urls={field.value || []}
 									setUrls={urls => field.onChange(urls)}
 									setIsUploading={setUploading}
 									multiple
