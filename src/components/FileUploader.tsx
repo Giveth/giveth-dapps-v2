@@ -70,7 +70,7 @@ const FileUploader: FC<IFileUploader> = ({
 					mutation: UPLOAD_PROFILE_PHOTO,
 					variables: {
 						fileUpload: {
-							image: acceptedFiles[0],
+							image: acceptedFile,
 						},
 					},
 				});
@@ -200,7 +200,7 @@ const FileUploader: FC<IFileUploader> = ({
 							</UploadInfoRow>
 						</UploadContainer>
 				  ))
-				: urls.map((url, idx) => (
+				: urls?.map((url, idx) => (
 						<UploadContainer key={idx}>
 							<Image
 								width={40}
