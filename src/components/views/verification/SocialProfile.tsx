@@ -2,8 +2,8 @@ import Image from 'next/image';
 import {
 	Button,
 	H6,
-	IconInfo,
 	IconTwitter,
+	Lead,
 	neutralColors,
 	P,
 } from '@giveth/ui-design-system';
@@ -120,11 +120,12 @@ const SocialProfile = () => {
 		<>
 			<div>
 				<H6 weight={700}>Personal Social Media</H6>
-				<Description>
-					<IconInfo color={neutralColors.gray[700]} />
-					Please connect to your personal social media profiles. At
-					least one is required.
-				</Description>
+				<br />
+				<Lead>
+					Connecting your social media accounts is a good way to show
+					that you are who you say you are.
+				</Lead>
+				<Description>This is optional</Description>
 				<ButtonsSection>
 					{/* <ButtonRow>
 						<ButtonSocial color='#00ACEE'>
@@ -262,7 +263,7 @@ const ButtonSocial = styled(FlexCenter)<{ color?: string }>`
 
 const Description = styled(P)`
 	display: flex;
-	margin-top: 24px;
+	margin-top: 8px;
 	align-items: center;
 	gap: 10px;
 	color: ${neutralColors.gray[700]};
