@@ -1,4 +1,8 @@
-import { IconCheck, neutralColors } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	IconCheck,
+	neutralColors,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FlexCenter } from '@/components/styled-components/Flex';
 
@@ -13,14 +17,17 @@ const CheckBox = (props: {
 		<Wrapper
 			onClick={() => !disabled && onChange(!checked)}
 			disabled={disabled}
+			checked={checked}
 		>
-			<FlexCenter>{checked && <IconCheck />}</FlexCenter>
+			<FlexCenter>
+				{checked && <IconCheck size={24} color='white' />}
+			</FlexCenter>
 			<div>{title}</div>
 		</Wrapper>
 	);
 };
 
-const Wrapper = styled.div<{ disabled?: boolean }>`
+const Wrapper = styled.div<{ disabled?: boolean; checked?: boolean }>`
 	cursor: pointer;
 	display: flex;
 	align-items: center;
@@ -37,6 +44,8 @@ const Wrapper = styled.div<{ disabled?: boolean }>`
 		width: 24px;
 		height: 24px;
 		flex-shrink: 0;
+		background: ${props =>
+			props.checked ? brandColors.deep[900] : 'white'};
 	}
 `;
 
