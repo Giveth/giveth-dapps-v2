@@ -9,6 +9,7 @@ import {
 } from '@giveth/ui-design-system';
 import { mediaQueries } from '@/lib/constants/constants';
 import { IProjectBySlug } from '@/apollo/types/types';
+import links from '@/lib/constants/links';
 
 const NiceBanner = (props: IProjectBySlug) => {
 	const { project } = props;
@@ -22,12 +23,7 @@ const NiceBanner = (props: IProjectBySlug) => {
 					<Lead>
 						Donate DAI or xDAI to this project and receive $nice
 						tokens in addition to GIVbacks.{' '}
-						<InfoReadMore
-							target='_blank'
-							href={
-								'https://forum.giveth.io/t/nice-token-rewarding-those-who-donate-to-giveth/657'
-							}
-						>
+						<InfoReadMore target='_blank' href={links.NICE_DOC}>
 							<span>Learn More </span>
 							<IconExternalLink
 								size={16}
