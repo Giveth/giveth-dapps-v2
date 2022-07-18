@@ -19,7 +19,6 @@ import { UPLOAD_PROFILE_PHOTO } from '@/apollo/gql/gqlUser';
 interface IImageUploader {
 	setUrl: (url: string) => void;
 	url: string;
-	multiple: boolean;
 	setIsUploading?: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -40,7 +39,9 @@ const ImageUploader: FC<IImageUploader> = ({ setUrl, url, setIsUploading }) => {
 	};
 
 	const { getRootProps, getInputProps, open } = useDropzone({
-		accept: 'image/*',
+		accept: {
+			'image/*': ['.jpg', '.jpeg', '.png', '.gif'],
+		},
 		multiple: false,
 		noClick: true,
 		noKeyboard: true,
