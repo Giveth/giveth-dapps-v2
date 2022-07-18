@@ -1,7 +1,7 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import Image from 'next/image';
 import styled, { keyframes, css } from 'styled-components';
-import { useDropzone } from 'react-dropzone';
+import { DropEvent, FileRejection, useDropzone } from 'react-dropzone';
 import {
 	P,
 	Subline,
@@ -59,9 +59,6 @@ const FileUploader: FC<IFileUploader> = ({
 	}, []);
 
 	const onDrop = async (acceptedFiles: UploadFile[]) => {
-		if (acceptedFiles.length < 1) {
-			showToastError('File not supported');
-		}
 		for (let i = 0; i < acceptedFiles.length; i++) {
 			const acceptedFile = acceptedFiles[i];
 			acceptedFile.status = EFileUploadingStatus.UPLOADING;
@@ -94,10 +91,13 @@ const FileUploader: FC<IFileUploader> = ({
 			'application/vnd.openxmlformats-officedocument.presentationml.presentation':
 				['.pptx'],
 		},
-		multiple: multiple,
+		multiple: false,
 		noClick: true,
 		noKeyboard: true,
-		onDrop: async (acceptedFiles: UploadFile[]) => {
+		onDropRejected: (fileRejections: FileRejection[], event: DropEvent) => {
+			showToastError('Please import single file with supported format');
+		},
+		onDropAccepted: async (acceptedFiles: UploadFile[]) => {
 			if (limit && limit < acceptedFiles.length + files.length) {
 				return showToastError(
 					`The maximum allowed number of uploaded files is ${limit}.`,

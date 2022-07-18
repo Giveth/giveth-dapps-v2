@@ -245,7 +245,7 @@ export default function ProjectRegistry() {
 							render={({ field }) => (
 								<FileUploader
 									urls={field.value || []}
-									setUrls={urls => field.onChange(urls)}
+									setUrls={field.onChange}
 									setIsUploading={setUploading}
 									multiple
 									limit={5}
