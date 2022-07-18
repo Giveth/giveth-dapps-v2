@@ -1,10 +1,12 @@
 import {
 	Button,
+	GLink,
 	H6,
 	IconChevronDown,
 	Lead,
 	neutralColors,
 	P,
+	semanticColors,
 } from '@giveth/ui-design-system';
 import { useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -14,7 +16,7 @@ import {
 	StyledDatePicker,
 	DatePickerWrapper,
 } from '@/components/styled-components/DatePicker';
-import ImageUploader from '@/components/ImageUploader';
+import FileUploader from '@/components/FileUploader';
 import { ContentSeparator, BtnContainer } from './VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
 import { client } from '@/apollo/apolloClient';
@@ -27,7 +29,7 @@ export interface IMilestonesForm {
 	foundationDate?: Date;
 	mission?: string;
 	achievedMilestones?: string;
-	achievedMilestonesProof?: string;
+	achievedMilestonesProofs?: string[];
 }
 
 export default function Milestones() {
@@ -55,10 +57,10 @@ export default function Milestones() {
 							foundationDate: formData.foundationDate?.toString(),
 							mission: formData.mission,
 							achievedMilestones: formData.achievedMilestones,
-							achievedMilestonesProof:
-								formData.achievedMilestonesProof
-									? formData.achievedMilestonesProof
-									: '',
+							achievedMilestonesProofs:
+								formData.achievedMilestonesProofs
+									? formData.achievedMilestonesProofs
+									: [],
 						},
 					},
 				},
@@ -92,6 +94,7 @@ export default function Milestones() {
 								? new Date(milestones?.foundationDate)
 								: undefined
 						}
+						rules={isDraft ? requiredOptions.date : {}}
 						render={({ field }) => (
 							<StyledDatePicker
 								selected={field.value}
@@ -101,10 +104,16 @@ export default function Milestones() {
 								showPopperArrow={false}
 								placeholderText='Select a date'
 								disabled={!isDraft}
+								hasError={
+									!!errors?.foundationDate?.message ?? false
+								}
 							/>
 						)}
 					/>
 				</DatePickerWrapper>
+				{errors?.foundationDate?.message && (
+					<DateError>{errors.foundationDate?.message}</DateError>
+				)}
 				<LeadStyled>
 					What is your organization/project's mission and how does it
 					align with creating positive change in the world?
@@ -146,13 +155,15 @@ export default function Milestones() {
 				<Paragraph>Optional</Paragraph>
 				<Controller
 					control={control}
-					name='achievedMilestonesProof'
-					defaultValue={milestones?.achievedMilestonesProof}
+					name='achievedMilestonesProofs'
+					defaultValue={milestones?.achievedMilestonesProofs}
 					render={({ field }) => (
-						<ImageUploader
-							url={field.value || ''}
-							setUrl={url => field.onChange(url)}
+						<FileUploader
+							urls={field.value || []}
+							setUrls={urls => field.onChange(urls)}
 							setIsUploading={setUploading}
+							multiple
+							limit={5}
 						/>
 					)}
 				/>
@@ -181,4 +192,8 @@ const Paragraph = styled(P)`
 	color: ${neutralColors.gray[700]};
 	margin-top: 8px;
 	margin-bottom: 24px;
+`;
+
+const DateError = styled(GLink)`
+	color: ${semanticColors.punch[500]};
 `;

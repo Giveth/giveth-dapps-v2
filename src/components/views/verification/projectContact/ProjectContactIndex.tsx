@@ -14,6 +14,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
+import { requiredOptions } from '@/lib/constants/regex';
 
 import Input from '@/components/Input';
 import { BtnContainer, ContentSeparator } from '../VerificationIndex';
@@ -156,6 +157,26 @@ export default function ProjectContactIndex() {
 							buttonType='primary'
 						/>
 					)}
+					<SocialLinkInfo>
+						In order to ensure that you are actually a
+						representative of the organization/project you're
+						applying for, we ask that you post a link to your Giveth
+						project on the organization's twitter or social media
+						account. Please provide a link to the twitter or social
+						media post here.
+					</SocialLinkInfo>
+					<br />
+					<Input
+						label='Link to your Giveth project on your social media'
+						placeholder='https://'
+						LeftIcon={<IconLink color={neutralColors.gray[600]} />}
+						error={errors['SocialLink']}
+						register={register}
+						registerName='SocialLink'
+						registerOptions={isDraft ? requiredOptions.website : {}}
+						disabled={!isDraft}
+					/>
+
 					<div>
 						<ContentSeparator />
 						<BtnContainer>
@@ -232,4 +253,8 @@ const FormContainer = styled.form`
 	> :last-child {
 		max-width: 100%;
 	}
+`;
+
+const SocialLinkInfo = styled(P)`
+	max-width: fit-content;
 `;
