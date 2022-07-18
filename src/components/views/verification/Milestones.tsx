@@ -1,10 +1,12 @@
 import {
 	Button,
+	GLink,
 	H6,
 	IconChevronDown,
 	Lead,
 	neutralColors,
 	P,
+	semanticColors,
 } from '@giveth/ui-design-system';
 import { useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -92,6 +94,7 @@ export default function Milestones() {
 								? new Date(milestones?.foundationDate)
 								: undefined
 						}
+						rules={isDraft ? requiredOptions.date : {}}
 						render={({ field }) => (
 							<StyledDatePicker
 								selected={field.value}
@@ -101,10 +104,16 @@ export default function Milestones() {
 								showPopperArrow={false}
 								placeholderText='Select a date'
 								disabled={!isDraft}
+								hasError={
+									!!errors?.foundationDate?.message ?? false
+								}
 							/>
 						)}
 					/>
 				</DatePickerWrapper>
+				{errors?.foundationDate?.message && (
+					<DateError>{errors.foundationDate?.message}</DateError>
+				)}
 				<LeadStyled>
 					What is your organization/project's mission and how does it
 					align with creating positive change in the world?
@@ -181,4 +190,8 @@ const Paragraph = styled(P)`
 	color: ${neutralColors.gray[700]};
 	margin-top: 8px;
 	margin-bottom: 24px;
+`;
+
+const DateError = styled(GLink)`
+	color: ${semanticColors.punch[500]};
 `;

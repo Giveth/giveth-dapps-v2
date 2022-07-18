@@ -17,7 +17,7 @@ import {
 import { EVerificationSteps } from '@/apollo/types/types';
 import { mediaQueries } from '@/lib/constants/constants';
 import { requiredOptions } from '@/lib/constants/regex';
-import { isObjEmpty } from '@/lib/helpers';
+import { isObjEmpty, showToastError } from '@/lib/helpers';
 import DescriptionInput from '@/components/DescriptionInput';
 import ImageUploader from '@/components/ImageUploader';
 
@@ -95,7 +95,10 @@ export default function ProjectRegistry() {
 			setVerificationData(data.updateProjectVerificationForm);
 			setStep(4);
 		}
-
+		if (watchIsNonProfit === ERegistryType.NOT_SELECTED) {
+			showToastError('Please select one option');
+			return;
+		}
 		if (isObjEmpty(dirtyFields) && isDraft) {
 			sendReq();
 		} else {
