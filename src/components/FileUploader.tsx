@@ -86,7 +86,13 @@ const FileUploader: FC<IFileUploader> = ({
 	const { getRootProps, getInputProps, open } = useDropzone({
 		accept: {
 			'image/*': ['.jpg', '.jpeg', '.png', '.gif'],
-			'applications/*': ['.docx', '.doc', '.pdf', '.ppt', 'pptx'],
+			'application/msword': ['.doc'],
+			'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+				['.docx'],
+			'application/pdf': ['.pdf'],
+			'application/vnd.ms-powerpoint': ['.ppt'],
+			'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+				['.pptx'],
 		},
 		multiple: multiple,
 		noClick: true,
