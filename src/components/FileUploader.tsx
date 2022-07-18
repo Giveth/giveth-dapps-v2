@@ -200,8 +200,7 @@ const FileUploader: FC<IFileUploader> = ({
 							</UploadInfoRow>
 						</UploadContainer>
 				  ))
-				: urls?.length &&
-				  urls.map((url, idx) => (
+				: urls.map((url, idx) => (
 						<UploadContainer key={idx}>
 							<Image
 								width={40}
