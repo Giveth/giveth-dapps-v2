@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import styled from 'styled-components';
 import {
 	brandColors,
@@ -10,6 +11,7 @@ import {
 import { mediaQueries } from '@/lib/constants/constants';
 import { IProjectBySlug } from '@/apollo/types/types';
 import links from '@/lib/constants/links';
+import Spark from '/public/images/spark.svg';
 
 const NiceBanner = (props: IProjectBySlug) => {
 	const { project } = props;
@@ -20,13 +22,7 @@ const NiceBanner = (props: IProjectBySlug) => {
 			<Container>
 				<Content>
 					<Title>
-						Get $nice{' '}
-						<img
-							src='/images/spark.svg'
-							alt='spark'
-							width='32px'
-							height='32px'
-						/>
+						Get $nice <Image src={Spark} alt='spark' />
 					</Title>
 					<Lead>
 						Donate DAI or xDAI to this project and receive $nice
