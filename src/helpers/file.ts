@@ -37,8 +37,6 @@ export const convertUrlToUploadFile = async (urls: string[]) => {
 
 export const convertFileTypeToLogo = (type: string) => {
 	const [mainType, subType] = type.split('/');
-	console.log('mainType', mainType);
-	console.log('subType', subType);
 	switch (mainType) {
 		case 'image':
 			return 'image';
