@@ -108,10 +108,19 @@ const FileUploader: FC<IFileUploader> = ({
 		},
 	});
 
-	const onDelete = () => {
-		setUrls([]);
-		setFiles([]);
-		setIsUploading && setIsUploading(false);
+	const onDelete = (url?: string) => {
+		if (!url) return;
+		let _urls: string[] = [];
+		const _files = files.filter(file => {
+			if (!file.url) return true;
+			if (file.url !== url) {
+				_urls.push(file.url);
+				return true;
+			}
+			return false;
+		});
+		setFiles(_files);
+		setUrls(_urls);
 	};
 
 	return (
@@ -173,7 +182,9 @@ const FileUploader: FC<IFileUploader> = ({
 											</a>
 										</GLink>
 										<div style={{ flex: 1 }}></div>
-										<DeleteRow onClick={onDelete}>
+										<DeleteRow
+											onClick={() => onDelete(file.url)}
+										>
 											<IconX size={16} />
 											<GLink size='Small'>Delete</GLink>
 										</DeleteRow>
@@ -183,10 +194,6 @@ const FileUploader: FC<IFileUploader> = ({
 									EFileUploadingStatus.FAILED && (
 									<Flex justifyContent='space-between'>
 										<SublineBold>Failed</SublineBold>
-										<DeleteRow onClick={onDelete}>
-											<IconX size={16} />
-											<GLink size='Small'>Delete</GLink>
-										</DeleteRow>
 									</Flex>
 								)}
 								<UplaodBar status={file.status} />
