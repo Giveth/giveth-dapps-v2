@@ -25,6 +25,7 @@ import {
 } from '@/apollo/gql/gqlProjects';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import {
+	ICategory,
 	IProject,
 	IProjectCreation,
 	IProjectEdition,
@@ -38,7 +39,7 @@ import {
 } from './Inputs';
 import SuccessfulCreation from './SuccessfulCreation';
 
-import { showToastError } from '@/lib/helpers';
+import { compareAddresses, showToastError } from '@/lib/helpers';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { client } from '@/apollo/apolloClient';
@@ -57,20 +58,6 @@ const { PRIMARY_NETWORK, SECONDARY_NETWORK } = config;
 const ethereumId = PRIMARY_NETWORK.id;
 const gnosisId = SECONDARY_NETWORK.id;
 
-export enum ECreateErrFields {
-	NAME = 'name',
-	DESCRIPTION = 'description',
-	MAIN_WALLET_ADDRESS = 'mainWalletAddress',
-	SECONDARY_WALLET_ADDRESS = 'secondaryWalletAddress',
-}
-
-export interface ICreateProjectErrors {
-	[ECreateErrFields.NAME]: string;
-	[ECreateErrFields.DESCRIPTION]: string;
-	[ECreateErrFields.MAIN_WALLET_ADDRESS]: string;
-	[ECreateErrFields.SECONDARY_WALLET_ADDRESS]: string;
-}
-
 interface ICreateProjectProps {
 	project?: IProjectEdition;
 }
@@ -78,6 +65,9 @@ interface ICreateProjectProps {
 export enum EInputs {
 	name = 'name',
 	description = 'description',
+	categories = 'categories',
+	impactLocation = 'impactLocation',
+	image = 'image',
 	draft = 'draft',
 	mainAddress = 'mainAddress',
 	secondaryAddress = 'secondaryAddress',
@@ -85,8 +75,11 @@ export enum EInputs {
 
 export type TInputs = {
 	[EInputs.name]: string;
-	[EInputs.draft]?: boolean;
 	[EInputs.description]?: string;
+	[EInputs.categories]?: ICategory[];
+	[EInputs.impactLocation]?: string;
+	[EInputs.image]?: string;
+	[EInputs.draft]?: boolean;
 	[EInputs.mainAddress]: string;
 	[EInputs.secondaryAddress]: string;
 };
@@ -96,53 +89,83 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const [addProjectMutation] = useMutation(CREATE_PROJECT);
 	const [editProjectMutation] = useMutation(UPDATE_PROJECT);
 	const router = useRouter();
-	const formMethods = useForm<TInputs>({ mode: 'onChange' });
+
+	const isEditMode = !!project;
+	const { title, description, categories, impactLocation, image, addresses } =
+		project || {};
+	const isDraft = project?.status.name === EProjectStatus.DRAFT;
+	const defaultImpactLocation = impactLocation || '';
+	console.log(project);
+	const defaultMainAddress = addresses?.find(
+		a => a.networkId === ethereumId,
+	)?.address;
+	const defaultSecondaryAddress = addresses?.find(
+		a => a.networkId === gnosisId,
+	)?.address;
+	const isSameDefaultAddresses = compareAddresses(
+		defaultMainAddress,
+		defaultSecondaryAddress,
+	);
+
+	const formMethods = useForm<TInputs>({
+		mode: 'onChange',
+		defaultValues: {
+			[EInputs.name]: title,
+			[EInputs.description]: description,
+			[EInputs.categories]: categories || [],
+			[EInputs.impactLocation]: defaultImpactLocation,
+			[EInputs.image]: image || '',
+			[EInputs.mainAddress]: defaultMainAddress || '',
+			[EInputs.secondaryAddress]: defaultSecondaryAddress || '',
+		},
+	});
 
 	const {
 		register,
 		handleSubmit,
 		formState: { errors: formErrors },
 		setValue,
-		getValues,
 		watch,
 	} = formMethods;
 
-	const watchName = watch(EInputs.name);
-
-	const isEditMode = !!project;
-	const isDraft = project?.status.name === EProjectStatus.DRAFT;
-	const defaultImpactLocation = project?.impactLocation || '';
+	const [watchName, watchDescription, watchCategories, watchImage] = watch([
+		EInputs.name,
+		EInputs.description,
+		EInputs.categories,
+		EInputs.image,
+	]);
 
 	const [creationSuccessful, setCreationSuccessful] = useState<IProject>();
-	const [categories, setCategories] = useState(project?.categories || []);
-	const [image, setImage] = useState(project?.image || '');
-	const [mainnetAddressActive, setMainnetAddressActive] = useState(true);
-	const [gnosisAddressActive, setGnosisAddressActive] = useState(true);
-	const [isMainnetGnosisAddEqual, setIsMainnetGnosisAddEqual] =
-		useState(true);
-
-	const defaultMainAddress = project?.addresses?.find(
-		a => a.networkId === ethereumId,
-	)?.address;
-	const defaultSecondaryAddress = project?.addresses?.find(
-		a => a.networkId === gnosisId,
-	)?.address;
-
-	const [isLoading, setIsLoading] = useState(false);
-	const [impactLocation, setImpactLocation] = useState(
-		project?.impactLocation || '',
+	const [mainnetAddressActive, setMainnetAddressActive] = useState(
+		isEditMode ? !!defaultMainAddress : true,
 	);
+	const [gnosisAddressActive, setGnosisAddressActive] = useState(
+		isEditMode ? !!defaultSecondaryAddress : true,
+	);
+	const [isSameMainnetGnosisAddress, setIsSameMainnetGnosisAddress] =
+		useState(isEditMode ? isSameDefaultAddresses : true);
+	const [isLoading, setIsLoading] = useState(false);
 
 	// useLeaveConfirm({ shouldConfirm: formChange });
+
+	const noTitleValidation = (i: string) => isEditMode && title === i;
 
 	const onSubmit = async (formData: TInputs) => {
 		try {
 			setIsLoading(true);
 			const addresses = [];
-			const { mainAddress, secondaryAddress, name, description } =
-				formData;
+			const {
+				mainAddress,
+				secondaryAddress,
+				name,
+				description,
+				categories,
+				impactLocation,
+				image,
+				draft,
+			} = formData;
 
-			if (isMainnetGnosisAddEqual) {
+			if (isSameMainnetGnosisAddress) {
 				const address = isAddressENS(mainAddress)
 					? await getAddressFromENS(mainAddress, library)
 					: mainAddress;
@@ -175,11 +198,11 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				title: name,
 				description: description!,
 				impactLocation,
-				categories: categories.map(category => category.name),
+				categories: categories?.map(category => category.name),
 				organisationId: 1,
 				addresses,
 				image,
-				isDraft: formData[EInputs.draft],
+				isDraft: draft,
 			};
 
 			const addedProject = isEditMode
@@ -195,7 +218,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						},
 				  });
 
-			if (isDraft && !formData[EInputs.draft]) {
+			if (isDraft && !draft) {
 				await client.mutate({
 					mutation: ACTIVATE_PROJECT,
 					variables: { projectId: Number(project.id) },
@@ -208,7 +231,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				const _project = isEditMode
 					? addedProject.data?.updateProject
 					: addedProject.data?.createProject;
-				if (formData[EInputs.draft]) {
+				if (draft) {
 					await router.push(slugToProjectView(_project.slug));
 				} else {
 					if (!isEditMode || (isEditMode && isDraft)) {
@@ -262,26 +285,29 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							registerName={EInputs.name}
 							registerOptions={{
 								...requiredOptions.name,
-								validate: titleValidation,
+								validate: i => {
+									if (noTitleValidation(i)) return true;
+									return titleValidation(i);
+								},
 							}}
 							error={formErrors[EInputs.name]}
 						/>
 						<br />
 						<DescriptionInput
-							value={getValues(EInputs.description)}
+							value={watchDescription}
 							setValue={e => setValue(EInputs.description, e)}
 						/>
 						<CategoryInput
-							value={categories}
-							setValue={category => setCategories(category)}
+							value={watchCategories}
+							setValue={e => setValue(EInputs.categories, e)}
 						/>
 						<LocationIndex
 							defaultValue={defaultImpactLocation}
-							setValue={location => setImpactLocation(location)}
+							setValue={e => setValue(EInputs.impactLocation, e)}
 						/>
 						<ImageInput
-							value={image}
-							setValue={img => setImage(img)}
+							value={watchImage}
+							setValue={e => setValue(EInputs.image, e)}
 							setIsLoading={setIsLoading}
 						/>
 						<H5>Receiving funds</H5>
@@ -290,15 +316,15 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							receive donations.
 						</CaptionContainer>
 						<CheckBox
-							onChange={setIsMainnetGnosisAddEqual}
-							checked={isMainnetGnosisAddEqual}
+							onChange={setIsSameMainnetGnosisAddress}
+							checked={isSameMainnetGnosisAddress}
 							title='I’ll raise & receive funds on Mainnet and Gnosis chain networks'
 						/>
 						<WalletAddressInput
-							defaultValue={defaultMainAddress}
 							networkId={ethereumId}
-							equalAddress={isMainnetGnosisAddEqual}
+							sameAddress={isSameMainnetGnosisAddress}
 							isActive={mainnetAddressActive}
+							defaultValue={defaultMainAddress}
 							setIsActive={e => {
 								if (!e && !gnosisAddressActive)
 									return showToastError(
@@ -308,10 +334,10 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							}}
 						/>
 						<WalletAddressInput
-							defaultValue={defaultSecondaryAddress}
 							networkId={gnosisId}
-							equalAddress={isMainnetGnosisAddEqual}
+							sameAddress={isSameMainnetGnosisAddress}
 							isActive={gnosisAddressActive}
+							defaultValue={defaultSecondaryAddress}
 							setIsActive={e => {
 								if (!e && !mainnetAddressActive)
 									return showToastError(

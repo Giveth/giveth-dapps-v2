@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { H6, IconETH, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
@@ -11,7 +11,7 @@ import config from '@/configuration';
 import Input, { InputSize } from '@/components/Input';
 import { requiredOptions } from '@/lib/constants/regex';
 import { EInputs } from '@/components/views/create/CreateProject';
-import { walletAddressValidation } from '@/components/views/create/helpers';
+import { addressValidation } from '@/components/views/create/helpers';
 import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { Flex } from '@/components/styled-components/Flex';
@@ -20,7 +20,7 @@ import CheckBox from '@/components/Checkbox';
 const WalletAddressInput = (props: {
 	networkId: number;
 	defaultValue?: string;
-	equalAddress: boolean;
+	sameAddress: boolean;
 	isActive: boolean;
 	setIsActive: (active: boolean) => void;
 }) => {
@@ -30,7 +30,9 @@ const WalletAddressInput = (props: {
 		getValues,
 	} = useFormContext();
 
-	const { networkId, defaultValue, equalAddress, isActive, setIsActive } =
+	const [isHidden, setIsHidden] = useState(false);
+
+	const { networkId, defaultValue, sameAddress, isActive, setIsActive } =
 		props;
 
 	const { chainId, library } = useWeb3React();
@@ -42,18 +44,28 @@ const WalletAddressInput = (props: {
 		user?.walletAddress,
 	);
 
+	useEffect(() => {
+		if (sameAddress) {
+			setTimeout(() => setIsHidden(true), 250);
+		} else {
+			setIsHidden(false);
+		}
+	}, [sameAddress]);
+
+	if (isHidden && isGnosis) return null;
+
 	return (
-		<Container hide={equalAddress && isGnosis}>
+		<Container hide={sameAddress && isGnosis}>
 			<Header>
 				<H6>
 					{isGnosis
 						? 'Gnosis chain address'
-						: equalAddress
+						: sameAddress
 						? 'Receiving address'
 						: 'Mainnet address'}
 				</H6>
 				<Flex gap='10px'>
-					{equalAddress ? (
+					{sameAddress ? (
 						<>
 							<MainnetIcon />
 							<GnosisIcon />
@@ -66,19 +78,32 @@ const WalletAddressInput = (props: {
 				</Flex>
 			</Header>
 			<Input
-				label='Receiving address'
+				label={
+					isGnosis
+						? 'Receiving address on Gnosis'
+						: sameAddress
+						? 'Receiving address'
+						: 'Receiving address on Mainnet'
+				}
 				placeholder='My Wallet Address'
 				size={InputSize.LARGE}
-				defaultValue={defaultValue}
-				disabled={!isActive && !equalAddress}
+				disabled={!isActive && !sameAddress}
 				register={register}
 				registerName={
 					isGnosis ? EInputs.secondaryAddress : EInputs.mainAddress
 				}
 				registerOptions={{
 					...requiredOptions.field,
-					validate: i =>
-						walletAddressValidation(i, library, chainId, networkId),
+					validate: i => {
+						if (compareAddresses(i, defaultValue)) return true;
+						if (!isActive && !sameAddress) return true;
+						return addressValidation(
+							i,
+							library,
+							chainId,
+							networkId,
+						);
+					},
 				}}
 				error={
 					errors[
@@ -99,8 +124,10 @@ const WalletAddressInput = (props: {
 					Please DO NOT enter exchange addresses for this network.
 				</TinyLabel>
 			)}
-			{!equalAddress && (
-				<CheckBoxContainer className='fadeIn'>
+			{!isHidden && (
+				<CheckBoxContainer
+					className={sameAddress ? 'fadeOut' : 'fadeIn'}
+				>
 					<CheckBox
 						onChange={setIsActive}
 						title='I’ll receive fund on this address'
@@ -153,6 +180,7 @@ const Container = styled.div<{ hide?: boolean }>`
 	opacity: ${props => (props.hide ? 0 : 1)};
 	visibility: ${props => (props.hide ? 'hidden' : 'visible')};
 	transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+	animation: fadeIn 0.3s ease-in-out;
 `;
 
 export default WalletAddressInput;

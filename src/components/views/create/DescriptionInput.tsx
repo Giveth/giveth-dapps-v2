@@ -10,8 +10,6 @@ import styled from 'styled-components';
 
 import { InputContainer, Label } from './Create.sc';
 import { GoodProjectDescription } from '@/components/modals/GoodProjectDescription';
-import { ECreateErrFields } from '@/components/views/create/CreateProject';
-import { InputErrorMessage } from '@/components/InputBox';
 
 const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
 	ssr: false,
@@ -32,9 +30,7 @@ const DescriptionInput = (props: {
 				/>
 			)}
 
-			<H5 id={ECreateErrFields.DESCRIPTION}>
-				Tell us about your project...
-			</H5>
+			<H5>Tell us about your project...</H5>
 			<CaptionContainer>
 				Aim for 200-500 words.{' '}
 				<span onClick={() => setShowModal(true)}>
@@ -70,9 +66,12 @@ const InputContainerStyled = styled(InputContainer)<{ error?: string }>`
 	}
 `;
 
-const ErrorStyled = styled(InputErrorMessage)`
+const ErrorStyled = styled.div`
 	margin-top: -10px;
 	margin-bottom: 20px;
+	color: ${semanticColors.punch[500]};
+	font-size: 12px;
+	word-break: break-word;
 `;
 
 const CaptionContainer = styled(Caption)`

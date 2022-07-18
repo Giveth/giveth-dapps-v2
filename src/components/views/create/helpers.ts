@@ -18,7 +18,7 @@ export const titleValidation = async (title: string) => {
 	}
 };
 
-export const walletAddressValidation = async (
+export const addressValidation = async (
 	walletAddress: string,
 	web3: any,
 	chainId?: number, // User wallet provider chainId
