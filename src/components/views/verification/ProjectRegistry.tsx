@@ -19,7 +19,7 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { requiredOptions } from '@/lib/constants/regex';
 import { isObjEmpty, showToastError } from '@/lib/helpers';
 import DescriptionInput from '@/components/DescriptionInput';
-import ImageUploader from '@/components/ImageUploader';
+import FileUploader from '@/components/FileUploader';
 
 enum ERegistryType {
 	NOT_SELECTED = 'notSelected',
@@ -38,7 +38,7 @@ interface IRegistryForm {
 	description: string;
 	isNonProfit: ERegistryType;
 	organizationName: string;
-	attachment: string;
+	attachments: string[];
 }
 
 export default function ProjectRegistry() {
@@ -50,7 +50,7 @@ export default function ProjectRegistry() {
 		organizationCountry,
 		organizationDescription,
 		organizationWebsite,
-		attachment,
+		attachments,
 		organizationName,
 	} = projectRegistry || {};
 	const [countries, setCountries] = useState<IOption[]>([]);
@@ -68,7 +68,7 @@ export default function ProjectRegistry() {
 	const watchIsNonProfit = watch('isNonProfit');
 	const handleNext = ({
 		country,
-		attachment,
+		attachments,
 		link,
 		description,
 		organizationName,
@@ -87,7 +87,7 @@ export default function ProjectRegistry() {
 							organizationWebsite: link,
 							organizationDescription: description,
 							organizationName: organizationName,
-							attachment: attachment ?? '',
+							attachments: attachments ?? [],
 						},
 					},
 				},
@@ -240,13 +240,15 @@ export default function ProjectRegistry() {
 						</InputContainer>
 						<Controller
 							control={control}
-							name='attachment'
-							defaultValue={attachment}
+							name='attachments'
+							defaultValue={attachments}
 							render={({ field }) => (
-								<ImageUploader
-									url={field.value || ''}
-									setUrl={url => field.onChange(url)}
+								<FileUploader
+									urls={field.value || []}
+									setUrls={urls => field.onChange(urls)}
 									setIsUploading={setUploading}
+									multiple
+									limit={5}
 								/>
 							)}
 						/>

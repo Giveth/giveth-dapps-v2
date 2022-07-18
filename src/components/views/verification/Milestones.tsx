@@ -16,7 +16,7 @@ import {
 	StyledDatePicker,
 	DatePickerWrapper,
 } from '@/components/styled-components/DatePicker';
-import ImageUploader from '@/components/ImageUploader';
+import FileUploader from '@/components/FileUploader';
 import { ContentSeparator, BtnContainer } from './VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
 import { client } from '@/apollo/apolloClient';
@@ -29,7 +29,7 @@ export interface IMilestonesForm {
 	foundationDate?: Date;
 	mission?: string;
 	achievedMilestones?: string;
-	achievedMilestonesProof?: string;
+	achievedMilestonesProofs?: string[];
 }
 
 export default function Milestones() {
@@ -57,10 +57,10 @@ export default function Milestones() {
 							foundationDate: formData.foundationDate?.toString(),
 							mission: formData.mission,
 							achievedMilestones: formData.achievedMilestones,
-							achievedMilestonesProof:
-								formData.achievedMilestonesProof
-									? formData.achievedMilestonesProof
-									: '',
+							achievedMilestonesProofs:
+								formData.achievedMilestonesProofs
+									? formData.achievedMilestonesProofs
+									: [],
 						},
 					},
 				},
@@ -155,13 +155,15 @@ export default function Milestones() {
 				<Paragraph>Optional</Paragraph>
 				<Controller
 					control={control}
-					name='achievedMilestonesProof'
-					defaultValue={milestones?.achievedMilestonesProof}
+					name='achievedMilestonesProofs'
+					defaultValue={milestones?.achievedMilestonesProofs}
 					render={({ field }) => (
-						<ImageUploader
-							url={field.value || ''}
-							setUrl={url => field.onChange(url)}
+						<FileUploader
+							urls={field.value || []}
+							setUrls={urls => field.onChange(urls)}
 							setIsUploading={setUploading}
+							multiple
+							limit={5}
 						/>
 					)}
 				/>

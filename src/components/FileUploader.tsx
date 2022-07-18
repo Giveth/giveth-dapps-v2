@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction, useState } from 'react';
+import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import Image from 'next/image';
 import styled, { keyframes, css } from 'styled-components';
 import { useDropzone } from 'react-dropzone';
@@ -16,59 +16,47 @@ import { Flex } from './styled-components/Flex';
 import { showToastError } from '@/lib/helpers';
 import { client } from '@/apollo/apolloClient';
 import { UPLOAD_PROFILE_PHOTO } from '@/apollo/gql/gqlUser';
+import { convertFileTypeToLogo, convertUrlToUploadFile } from '@/helpers/file';
 
 interface IFileUploader {
 	urls: string[];
 	setUrls: (urls: string[]) => void;
 	multiple?: boolean;
+	limit?: number;
 	setIsUploading?: Dispatch<SetStateAction<boolean>>;
 }
 
-enum EFileUploadingStatus {
+export enum EFileUploadingStatus {
 	UPLOADING,
 	UPLOADED,
 	FAILED,
 }
 
-interface UploadFile extends File {
+export interface UploadFile extends File {
 	url?: string;
 	status?: EFileUploadingStatus;
 	logo?: string;
 }
 
-const convertFileTypeToLogo = (type: string) => {
-	const [mainType, subType] = type.split('/');
-	console.log('mainType', mainType);
-	console.log('subType', subType);
-	switch (mainType) {
-		case 'image':
-			return 'image';
-		case 'application':
-			switch (subType) {
-				case 'pdf':
-					return 'pdf';
-				case 'vnd.openxmlformats-officedocument.wordprocessingml.document':
-					return 'docx';
-				case 'msword':
-					return 'doc';
-				case 'vnd.openxmlformats-officedocument.presentationml.presentation':
-					return 'pptx';
-				case 'vnd.ms-powerpoint':
-					return 'ppt';
-			}
-			return 'text';
-	}
-	return 'unknown';
-};
-
 const FileUploader: FC<IFileUploader> = ({
 	setUrls,
 	urls,
 	multiple = false,
+	limit,
 	setIsUploading,
 }) => {
 	const [files, setFiles] = useState<UploadFile[]>([]);
-	const [uploading, setUploading] = useState(false);
+	const [loading, setLoading] = useState(false);
+
+	useEffect(() => {
+		async function fetchUploadedFiles() {
+			const _files = await convertUrlToUploadFile(urls);
+			setFiles(_files);
+		}
+		setLoading(true);
+		fetchUploadedFiles();
+		setLoading(false);
+	}, []);
 
 	const onDrop = async (acceptedFiles: UploadFile[]) => {
 		if (acceptedFiles.length < 1) {
@@ -82,7 +70,7 @@ const FileUploader: FC<IFileUploader> = ({
 					mutation: UPLOAD_PROFILE_PHOTO,
 					variables: {
 						fileUpload: {
-							image: acceptedFiles[0],
+							image: acceptedFile,
 						},
 					},
 				});
@@ -104,32 +92,45 @@ const FileUploader: FC<IFileUploader> = ({
 		noClick: true,
 		noKeyboard: true,
 		onDrop: async (acceptedFiles: UploadFile[]) => {
-			console.log('acceptedFiles', acceptedFiles);
+			if (limit && limit < acceptedFiles.length + files.length) {
+				return showToastError(
+					`The maximum allowed number of uploaded files is ${limit}.`,
+				);
+			}
 			for (let i = 0; i < acceptedFiles.length; i++) {
 				const acceptedFile = acceptedFiles[i];
 				acceptedFile.logo = convertFileTypeToLogo(acceptedFile.type);
 			}
 			setFiles(files => [...files, ...acceptedFiles]);
-			setUploading(true);
 			setIsUploading && setIsUploading(true);
 			await onDrop(acceptedFiles);
-			setUploading(false);
 			setIsUploading && setIsUploading(false);
 		},
 	});
 
-	const onDelete = () => {
-		setUrls([]);
-		setFiles([]);
-		setUploading(false);
-		setIsUploading && setIsUploading(false);
+	const onDelete = (url?: string) => {
+		if (!url) return;
+		let _urls: string[] = [];
+		const _files = files.filter(file => {
+			if (!file.url) return true;
+			if (file.url !== url) {
+				_urls.push(file.url);
+				return true;
+			}
+			return false;
+		});
+		setFiles(_files);
+		setUrls(_urls);
 	};
 
 	return (
 		<>
-			{!multiple && urls.length === 1 ? (
+			{!multiple &&
+			files.length === 1 &&
+			files[0].status === EFileUploadingStatus.UPLOADED &&
+			files[0].type.includes('image') ? (
 				<ShowingImage>
-					<img src={urls[0]} alt='uploaded image' width='100%' />
+					<img src={files[0].url} alt='uploaded image' width='100%' />
 				</ShowingImage>
 			) : (
 				<DropZone {...getRootProps()}>
@@ -141,63 +142,96 @@ const FileUploader: FC<IFileUploader> = ({
 						alt='image'
 					/>
 					<P>
-						{`Drag & drop an image here or`}{' '}
+						{`Drag & drop some docs here or`}{' '}
 						<span onClick={open}>Upload from device.</span>
 					</P>
 					<P>
-						Suggested image size min. 600px width. Image size up to
-						4Mb.
+						Allowed files: .jpg, .jpeg, .png, .gif, .docx, .doc,
+						.pdf, .ppt, pptx
 					</P>
+					<P>Docs size up to 4Mb.</P>
 				</DropZone>
 			)}
 
-			{files &&
-				files.map((file, idx) => (
-					<UploadContainer key={idx}>
-						<Image
-							width={40}
-							height={40}
-							src={`/images/extensions/${file.logo}.png`}
-							alt='file extension logo'
-							quality={100}
-						/>
-						<UploadInfoRow
-							flexDirection='column'
-							justifyContent='space-between'
-						>
-							<Subline>{file.name}</Subline>
-							{file.status === EFileUploadingStatus.UPLOADED && (
+			{files.length
+				? files.map((file, idx) => (
+						<UploadContainer key={idx}>
+							<Image
+								width={40}
+								height={40}
+								src={`/images/extensions/${file.logo}.png`}
+								alt='file extension logo'
+								quality={100}
+							/>
+							<UploadInfoRow
+								flexDirection='column'
+								justifyContent='space-between'
+							>
+								<Subline>{file.name}</Subline>
+								{file.status ===
+									EFileUploadingStatus.UPLOADED && (
+									<Flex alignItems='center'>
+										<SublineBold>Uploaded</SublineBold>
+										<GLink size='Tiny'>
+											<a
+												href={file.url}
+												target='_blank'
+												rel='noreferrer'
+											>
+												&nbsp;- Link
+											</a>
+										</GLink>
+										<div style={{ flex: 1 }}></div>
+										<DeleteRow
+											onClick={() => onDelete(file.url)}
+										>
+											<IconX size={16} />
+											<GLink size='Small'>Delete</GLink>
+										</DeleteRow>
+									</Flex>
+								)}
+								{file.status ===
+									EFileUploadingStatus.FAILED && (
+									<Flex justifyContent='space-between'>
+										<SublineBold>Failed</SublineBold>
+									</Flex>
+								)}
+								<UplaodBar status={file.status} />
+							</UploadInfoRow>
+						</UploadContainer>
+				  ))
+				: urls.map((url, idx) => (
+						<UploadContainer key={idx}>
+							<Image
+								width={40}
+								height={40}
+								src={`/images/extensions/unknown.png`}
+								alt='file extension logo'
+								quality={100}
+							/>
+							<UploadInfoRow
+								flexDirection='column'
+								justifyContent='space-between'
+							>
+								<Subline>{`Attachment ${idx + 1}`}</Subline>
 								<Flex alignItems='center'>
 									<SublineBold>Uploaded</SublineBold>
 									<GLink size='Tiny'>
 										<a
-											href={file.url}
+											href={url}
 											target='_blank'
 											rel='noreferrer'
 										>
 											&nbsp;- Link
 										</a>
 									</GLink>
-									<div style={{ flex: 1 }}></div>
-									<DeleteRow onClick={onDelete}>
-										<IconX size={16} />
-										<GLink size='Small'>Delete</GLink>
-									</DeleteRow>
 								</Flex>
-							)}
-							{file.status === EFileUploadingStatus.FAILED && (
-								<Flex justifyContent='space-between'>
-									<SublineBold>Failed</SublineBold>
-									<DeleteRow onClick={onDelete}>
-										<IconX size={16} />
-										<GLink size='Small'>Delete</GLink>
-									</DeleteRow>
-								</Flex>
-							)}
-							<UplaodBar status={file.status} />
-						</UploadInfoRow>
-					</UploadContainer>
-				))}
+								<UplaodBar
+									status={EFileUploadingStatus.UPLOADED}
+								/>
+							</UploadInfoRow>
+						</UploadContainer>
+				  ))}
 		</>
 	);
 };
