@@ -47,7 +47,7 @@
 		"react-custom-scrollbars": "^4.2.1",
 		"react-datepicker": "^4.8.0",
 		"react-dom": "^18.0.0",
-		"react-dropzone": "^11.5.3",
+		"react-dropzone": "^14.2.2",
 		"react-google-maps": "^9.4.5",
 		"react-hook-form": "^7.32.2",
 		"react-hot-toast": "^2.1.1",
