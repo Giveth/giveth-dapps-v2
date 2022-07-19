@@ -7,11 +7,11 @@ import {
 	IconExternalLink,
 	H4,
 	Lead,
+	IconSpark,
 } from '@giveth/ui-design-system';
 import { mediaQueries } from '@/lib/constants/constants';
 import { IProjectBySlug } from '@/apollo/types/types';
 import links from '@/lib/constants/links';
-import Spark from '/public/images/spark.svg';
 
 const NiceBanner = (props: IProjectBySlug) => {
 	const { project } = props;
@@ -22,7 +22,8 @@ const NiceBanner = (props: IProjectBySlug) => {
 			<Container>
 				<Content>
 					<Title>
-						Get $nice <Image src={Spark} alt='spark' />
+						Get $nice{' '}
+						<IconSpark size={32} color={brandColors.giv[500]} />
 					</Title>
 					<Lead>
 						Donate DAI or xDAI to this project and receive $nice
