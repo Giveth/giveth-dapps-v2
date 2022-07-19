@@ -238,6 +238,10 @@ export default function ProjectRegistry() {
 								defaultValue={organizationWebsite || ''}
 							/>
 						</InputContainer>
+						<Lead>
+							Please provide some documents about your legal
+							entity if you don&apos;t have a link
+						</Lead>
 						<Controller
 							control={control}
 							name='attachments'
