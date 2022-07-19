@@ -27,6 +27,7 @@ import { lockToken } from '@/lib/stakingPool';
 import config from '@/configuration';
 import TotalGIVpowerBox from './TotalGIVpowerBox';
 import Routes from '@/lib/constants/Routes';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 import type { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 
 interface ILockModalProps extends IModal {
@@ -52,6 +53,7 @@ const LockModal: FC<ILockModalProps> = ({
 	const [round, setRound] = useState(1);
 	const [lockState, setLockState] = useState<ELockState>(ELockState.LOCK);
 	const { library } = useWeb3React();
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	const onLock = async () => {
 		const contractAddress = config.XDAI_CONFIG.GIV.LM_ADDRESS;
@@ -85,7 +87,8 @@ const LockModal: FC<ILockModalProps> = ({
 
 	return (
 		<Modal
-			setShowModal={setShowModal}
+			closeModal={closeModal}
+			isAnimating={isAnimating}
 			headerTitlePosition={'left'}
 			headerTitle={'Stake for GIVpower'}
 			headerIcon={<IconRocketInSpace32 />}

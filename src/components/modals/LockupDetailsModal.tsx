@@ -24,6 +24,7 @@ import config from '@/configuration';
 import { SubgraphQueryBuilder } from '@/lib/subgraph/subgraphQueryBuilder';
 import { useAppSelector } from '@/features/hooks';
 import { mediaQueries } from '@/lib/constants/constants';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 import type { BigNumber } from 'ethers';
 import type { IModal } from '@/types/common';
 
@@ -39,6 +40,7 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 	const { account } = useWeb3React();
 	const [locksInfo, setLocksInfo] = useState<IGIVpowerPosition[]>([]);
 	const { balances } = useAppSelector(state => state.subgraph.xDaiValues);
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	useEffect(() => {
 		async function fetchGIVLockDetails() {
@@ -56,7 +58,8 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 
 	return (
 		<Modal
-			setShowModal={setShowModal}
+			closeModal={closeModal}
+			isAnimating={isAnimating}
 			headerTitle='Locked GIV Details'
 			headerTitlePosition='left'
 			headerIcon={<IconRocketInSpace32 />}

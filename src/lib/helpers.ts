@@ -1,7 +1,7 @@
 import { promisify } from 'util';
 // eslint-disable-next-line import/named
 import { unescape } from 'lodash';
-import { parseUnits, parseEther } from '@ethersproject/units';
+import { parseEther, parseUnits } from '@ethersproject/units';
 import { keccak256 } from '@ethersproject/keccak256';
 import { Contract } from '@ethersproject/contracts';
 import { Web3Provider } from '@ethersproject/providers';
@@ -442,3 +442,7 @@ export const createSiweMessage = async (
 		return false;
 	}
 };
+
+export function isObjEmpty(obj: Object) {
+	return Object.keys(obj).length > 0;
+}

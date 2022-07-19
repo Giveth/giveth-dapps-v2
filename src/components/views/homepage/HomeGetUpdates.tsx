@@ -70,9 +70,7 @@ const HomeGetUpdates = () => {
 								<EmailInput
 									placeholder='Your email address'
 									error={error}
-									onChange={(
-										e: React.ChangeEvent<HTMLInputElement>,
-									) => setEmail(e.target.value)}
+									onChange={e => setEmail(e.target.value)}
 									name='member[email]'
 									id='member_email'
 								/>

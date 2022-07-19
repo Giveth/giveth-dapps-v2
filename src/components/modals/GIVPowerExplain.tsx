@@ -14,11 +14,15 @@ import { Flex } from '../styled-components/Flex';
 import { Modal } from './Modal';
 import links from '@/lib/constants/links';
 import { IModal } from '@/types/common';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 export const GIVPowerExplainModal: FC<IModal> = ({ setShowModal }) => {
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+
 	return (
 		<Modal
-			setShowModal={setShowModal}
+			closeModal={closeModal}
+			isAnimating={isAnimating}
 			headerTitle='GIVpower'
 			headerTitlePosition='left'
 			headerIcon={<IconRocketInSpace32 />}

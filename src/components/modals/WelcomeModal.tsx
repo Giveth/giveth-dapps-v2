@@ -21,14 +21,14 @@ import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { useAppDispatch } from '@/features/hooks';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 	const [showLowerShields, setShowLowerShields] = useState<boolean>();
 
 	const { activate } = useWeb3React();
 	const dispatch = useAppDispatch();
-
-	const closeModal = () => setShowModal(false);
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	const checkIsBrave = async () => {
 		const isBrave = await detectBrave();
@@ -63,7 +63,12 @@ const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 	return (
 		<>
 			{showLowerShields && <LowerShields onClose={onCloseLowerShields} />}
-			<Modal setShowModal={setShowModal} fullScreen hiddenHeader>
+			<Modal
+				closeModal={closeModal}
+				isAnimating={isAnimating}
+				fullScreen
+				hiddenHeader
+			>
 				<ModalGrid>
 					<BGContainer />
 					<ContentContainer>
@@ -122,7 +127,7 @@ const BGContainer = styled.div`
 	background-color: ${brandColors.giv[500]};
 	background-image: url('/images/sign_bg.svg');
 	background-repeat: no-repeat;
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		display: block;
 	}
 `;
@@ -135,7 +140,7 @@ const ContentContainer = styled.div`
 	align-self: center;
 	margin: auto;
 	padding: 10px;
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		width: 45%;
 	}
 `;

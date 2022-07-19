@@ -30,7 +30,7 @@ export const CustomBigWarningImage = styled.img`
 	left: -70px;
 	display: none;
 	user-select: none;
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		display: unset;
 	}
 `;
@@ -44,7 +44,7 @@ export const CustomSmallWarningImage = styled.img`
 	right: 70px;
 	display: none;
 	user-select: none;
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		display: unset;
 	}
 `;
@@ -58,7 +58,7 @@ export const CustomGearImage = styled.img`
 	left: -30px;
 	display: none;
 	user-select: none;
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		display: unset;
 	}
 `;
@@ -72,7 +72,7 @@ export const CustomGearsImage = styled.img`
 	right: -30px;
 	display: none;
 	user-select: none;
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		display: unset;
 	}
 `;

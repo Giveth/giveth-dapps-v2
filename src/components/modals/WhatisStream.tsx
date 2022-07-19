@@ -11,13 +11,14 @@ import {
 import styled from 'styled-components';
 import { FC } from 'react';
 import Link from 'next/link';
-import { Flex } from '../styled-components/Flex';
+import { Flex, FlexCenter } from '../styled-components/Flex';
 import { Modal } from './Modal';
 import Routes from '@/lib/constants/Routes';
 import { RegenStreamConfig } from '@/types/config';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 import type { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 
 interface IWhatisStreamModal extends IModal {
@@ -31,14 +32,16 @@ export const WhatisStreamModal: FC<IWhatisStreamModal> = ({
 	regenStreamConfig,
 }) => {
 	const theme = useAppSelector(state => state.general.theme);
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+
 	const { rewardTokenSymbol } = regenStreamConfig || {
 		rewardTokenSymbol: 'GIV',
 	};
 
 	return (
-		<Modal setShowModal={setShowModal}>
+		<Modal closeModal={closeModal} isAnimating={isAnimating}>
 			<WhatisStreamContainer theme={theme}>
-				<TitleRow alignItems='center' justifyContent='center'>
+				<TitleRow>
 					<IconGIVStream size={24} />
 					<Title>
 						What is
@@ -76,9 +79,9 @@ export const WhatisStreamModal: FC<IWhatisStreamModal> = ({
 					.
 				</Desc>
 				{!regenStreamConfig && (
-					<LinksRow alignItems='center' justifyContent='center'>
+					<LinksRow>
 						<Link href={Routes.GIVstream} passHref>
-							<GLink onClick={() => setShowModal(false)}>
+							<GLink onClick={closeModal}>
 								<Flex justifyContent='center'>
 									View Your {rewardTokenSymbol}stream{' '}
 									<IconExternalLink
@@ -93,9 +96,7 @@ export const WhatisStreamModal: FC<IWhatisStreamModal> = ({
 				<GotItButton
 					label='GOT IT'
 					buttonType={theme === ETheme.Dark ? 'secondary' : 'primary'}
-					onClick={() => {
-						setShowModal(false);
-					}}
+					onClick={closeModal}
 				/>
 			</WhatisStreamContainer>
 		</Modal>
@@ -112,7 +113,7 @@ const WhatisStreamContainer = styled.div`
 	width: 570px;
 `;
 
-const TitleRow = styled(Flex)`
+const TitleRow = styled(FlexCenter)`
 	gap: 16px;
 	margin-bottom: 41px;
 `;
@@ -121,7 +122,7 @@ const Desc = styled(P)`
 	margin-bottom: 41px;
 `;
 
-const LinksRow = styled(Flex)`
+const LinksRow = styled(FlexCenter)`
 	gap: 8px;
 	color: ${brandColors.cyan[500]};
 	margin-bottom: 24px;

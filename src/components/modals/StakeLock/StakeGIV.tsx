@@ -25,6 +25,7 @@ import {
 import { BriefContainer, H5White } from './LockingBrief';
 import { formatWeiHelper } from '@/helpers/number';
 import LockInfo from './LockInfo';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 import type { PoolStakingConfig } from '@/types/config';
 
 interface IStakeModalProps extends IModal {
@@ -54,6 +55,7 @@ export const StakeGIVModal: FC<IStakeModalProps> = ({
 		StakeState.APPROVE,
 	);
 	const { chainId, library } = useWeb3React();
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	const { title, POOL_ADDRESS, GARDEN_ADDRESS } = poolStakingConfig;
 
@@ -160,7 +162,8 @@ export const StakeGIVModal: FC<IStakeModalProps> = ({
 
 	return (
 		<Modal
-			setShowModal={setShowModal}
+			closeModal={closeModal}
+			isAnimating={isAnimating}
 			headerTitle='Stake for GIVpower'
 			headerTitlePosition='left'
 		>

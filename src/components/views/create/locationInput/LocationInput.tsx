@@ -82,7 +82,6 @@ class LocationInput extends Component<MyProps, MyState> {
 						this.setState({ address: loc });
 						setLocation(loc);
 					}}
-					style={{ marginTop: '20px' }}
 				/>
 				<GoogleMapComponent coords={coords} />
 			</>

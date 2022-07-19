@@ -12,6 +12,7 @@ import { Modal } from './Modal';
 import { Flex } from '../styled-components/Flex';
 import { RegenStreamConfig } from '@/types/config';
 import { IModal } from '@/types/common';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 import type { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 
 interface IAPRModalProps extends IModal {
@@ -24,11 +25,17 @@ export const APRModal: FC<IAPRModalProps> = ({
 	tokenDistroHelper,
 	regenStreamConfig,
 }) => {
-	const { rewardTokenSymbol = 'GIV', type } = regenStreamConfig || {};
+	const { rewardTokenSymbol = 'GIV' } = regenStreamConfig || {};
 	const streamName = regenStreamConfig ? 'RegenStream' : 'GIVstream';
 
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+
 	return (
-		<Modal setShowModal={setShowModal} headerTitle={'APR'}>
+		<Modal
+			closeModal={closeModal}
+			isAnimating={isAnimating}
+			headerTitle='APR'
+		>
 			<APRModalContainer>
 				<DescContainer>
 					<AlertRow alignItems='flex-end'>

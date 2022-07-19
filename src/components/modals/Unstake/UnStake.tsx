@@ -27,6 +27,7 @@ import { useAppSelector } from '@/features/hooks';
 import { formatWeiHelper } from '@/helpers/number';
 import { LockupDetailsModal } from '../LockupDetailsModal';
 import { mediaQueries } from '@/lib/constants/constants';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 interface IUnStakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
@@ -47,6 +48,7 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 		StakeState.UNSTAKE,
 	);
 	const { library, chainId } = useWeb3React();
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { totalGIVLocked } = useAppSelector(
 		state => state.subgraph.xDaiValues.givpowerInfo,
 	);
@@ -75,7 +77,7 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 	};
 
 	return (
-		<Modal setShowModal={setShowModal}>
+		<Modal closeModal={closeModal} isAnimating={isAnimating}>
 			<UnStakeModalContainer>
 				{(unStakeState === StakeState.UNSTAKE ||
 					unStakeState === StakeState.UNSTAKING) && (

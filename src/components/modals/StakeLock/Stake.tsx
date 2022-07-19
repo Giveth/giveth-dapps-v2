@@ -32,6 +32,7 @@ import {
 	StyledButton,
 	ToggleContainer,
 } from './StakeLock.sc';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 import type { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 
 interface IStakeModalProps extends IModal {
@@ -62,6 +63,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 		StakeState.APPROVE,
 	);
 	const { chainId, library } = useWeb3React();
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	const { title, LM_ADDRESS, POOL_ADDRESS } = poolStakingConfig;
 
@@ -166,7 +168,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 	};
 
 	return (
-		<Modal setShowModal={setShowModal}>
+		<Modal closeModal={closeModal} isAnimating={isAnimating}>
 			<StakeModalContainer>
 				{stakeState !== StakeState.CONFIRMING &&
 					stakeState !== StakeState.CONFIRMED &&

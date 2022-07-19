@@ -1,11 +1,14 @@
 import {
 	brandColors,
-	neutralColors,
 	GLink,
+	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
-import { InputHTMLAttributes } from 'react';
+import { InputHTMLAttributes, ReactElement } from 'react';
 import styled from 'styled-components';
+import { IIconProps } from '@giveth/ui-design-system/lib/esm/components/icons/giv-economy/type';
+import { Shadow } from '@/components/styled-components/Shadow';
+import { EInputValidation, IInputValidation } from '@/types/inputValidation';
 import type {
 	FieldError,
 	RegisterOptions,
@@ -13,14 +16,7 @@ import type {
 } from 'react-hook-form';
 
 export interface IFormValidations {
-	[key: string]: InputValidationType;
-}
-
-export enum InputValidationType {
-	NORMAL,
-	WARNING,
-	ERROR,
-	SUCCESS,
+	[key: string]: EInputValidation;
 }
 
 export enum InputSize {
@@ -33,13 +29,14 @@ interface IInput extends InputHTMLAttributes<HTMLInputElement> {
 	label?: string;
 	caption?: string;
 	size?: InputSize;
-	error?: FieldError;
+	LeftIcon?: ReactElement<IIconProps>;
 }
 
 interface IInputWithRegister extends IInput {
 	register: UseFormRegister<any>;
 	registerName: string;
 	registerOptions?: RegisterOptions;
+	error?: FieldError;
 }
 
 const InputSizeToLinkSize = (size: InputSize) => {
@@ -61,6 +58,7 @@ type InputType =
 			registerName?: never;
 			register?: never;
 			registerOptions?: never;
+			error?: never;
 	  } & IInput);
 
 const Input = (props: InputType) => {
@@ -68,34 +66,43 @@ const Input = (props: InputType) => {
 		label,
 		caption,
 		size = InputSize.MEDIUM,
+		disabled,
+		LeftIcon,
 		register,
 		registerName,
 		registerOptions = { required: false },
 		error,
 		...rest
 	} = props;
+
 	const validationStatus = error
-		? InputValidationType.ERROR
-		: InputValidationType.NORMAL;
+		? EInputValidation.ERROR
+		: EInputValidation.NORMAL;
 
 	return (
 		<InputContainer>
 			{label && (
 				<InputLabel
+					disabled={disabled}
 					size={InputSizeToLinkSize(size)}
 					required={Boolean(registerOptions.required)}
 				>
 					{label}
 				</InputLabel>
 			)}
-			<InputField
-				validation={validationStatus}
-				inputSize={size}
-				{...(registerName && register
-					? register(registerName, registerOptions)
-					: {})}
-				{...rest}
-			/>
+			<InputWrapper>
+				{LeftIcon && LeftIcon}
+				<InputField
+					validation={validationStatus}
+					inputSize={size}
+					hasLeftIcon={!!LeftIcon}
+					disabled={disabled}
+					{...(registerName && register
+						? register(registerName, registerOptions)
+						: {})}
+					{...rest}
+				/>
+			</InputWrapper>
 			{error?.message ? (
 				<InputValidation
 					validation={validationStatus}
@@ -116,10 +123,10 @@ const InputContainer = styled.div`
 	flex: 1;
 `;
 
-const InputLabel = styled(GLink)<{ required?: boolean }>`
-	text-transform: uppercase;
+const InputLabel = styled(GLink)<{ required?: boolean; disabled?: boolean }>`
 	padding-bottom: 4px;
-	color: ${brandColors.deep[500]};
+	color: ${props =>
+		props.disabled ? neutralColors.gray[600] : brandColors.deep[500]};
 	::after {
 		content: '*';
 		display: ${props => (props.required ? 'inline-block' : 'none')};
@@ -128,12 +135,9 @@ const InputLabel = styled(GLink)<{ required?: boolean }>`
 	}
 `;
 
-interface IValidation {
-	validation: InputValidationType;
-}
-
-interface IInputField extends IValidation {
+interface IInputField extends IInputValidation {
 	inputSize: InputSize;
+	hasLeftIcon?: boolean;
 }
 
 const InputField = styled.input<IInputField>`
@@ -153,13 +157,13 @@ const InputField = styled.input<IInputField>`
 	border: 2px solid
 		${props => {
 			switch (props.validation) {
-				case InputValidationType.NORMAL:
+				case EInputValidation.NORMAL:
 					return neutralColors.gray[300];
-				case InputValidationType.WARNING:
+				case EInputValidation.WARNING:
 					return semanticColors.golden[600];
-				case InputValidationType.ERROR:
+				case EInputValidation.ERROR:
 					return semanticColors.punch[500];
-				case InputValidationType.SUCCESS:
+				case EInputValidation.SUCCESS:
 					return semanticColors.jade[500];
 				default:
 					return neutralColors.gray[300];
@@ -178,6 +182,7 @@ const InputField = styled.input<IInputField>`
 				break;
 		}
 	}};
+	padding-left: ${props => props.hasLeftIcon && '60px'};
 	font-size: ${props => {
 		switch (props.inputSize) {
 			case InputSize.SMALL:
@@ -191,25 +196,31 @@ const InputField = styled.input<IInputField>`
 		}
 	}};
 	line-height: 150%;
-	/* font-weight: 500; */
-	font-family: 'Red Hat Text';
+	font-family: 'Red Hat Text', sans-serif;
 	caret-color: ${brandColors.giv[300]};
+	box-shadow: none;
 	:focus {
 		border: 2px solid
 			${props => {
 				switch (props.validation) {
-					case InputValidationType.NORMAL:
-						return neutralColors.gray[500];
-					case InputValidationType.WARNING:
+					case EInputValidation.NORMAL:
+						return brandColors.giv[600];
+					case EInputValidation.WARNING:
 						return semanticColors.golden[700];
-					case InputValidationType.ERROR:
+					case EInputValidation.ERROR:
 						return semanticColors.punch[700];
-					case InputValidationType.SUCCESS:
+					case EInputValidation.SUCCESS:
 						return semanticColors.jade[700];
 					default:
-						return neutralColors.gray[500];
+						return brandColors.giv[600];
 				}
 			}};
+	}
+	:hover {
+		box-shadow: ${Shadow.Neutral[400]};
+	}
+	:disabled {
+		background: ${neutralColors.gray[300]};
 	}
 	::placeholder {
 		color: ${neutralColors.gray[500]};
@@ -222,23 +233,40 @@ const InputDesc = styled(GLink)`
 	display: block;
 `;
 
-const InputValidation = styled(GLink)<IValidation>`
+const InputValidation = styled(GLink)<IInputValidation>`
 	padding-top: 4px;
 	display: block;
 	color: ${props => {
 		switch (props.validation) {
-			case InputValidationType.NORMAL:
+			case EInputValidation.NORMAL:
 				return neutralColors.gray[900];
-			case InputValidationType.WARNING:
+			case EInputValidation.WARNING:
 				return semanticColors.golden[600];
-			case InputValidationType.ERROR:
+			case EInputValidation.ERROR:
 				return semanticColors.punch[500];
-			case InputValidationType.SUCCESS:
+			case EInputValidation.SUCCESS:
 				return semanticColors.jade[500];
 			default:
 				return neutralColors.gray[300];
 		}
-	}}; ;
+	}};
+`;
+
+const InputWrapper = styled.div`
+	position: relative;
+	display: flex;
+	> svg {
+		position: absolute;
+		transform: translateY(-50%);
+		padding-left: 20px;
+		padding-right: 8px;
+		border-right: 1px solid ${neutralColors.gray[400]};
+		width: 52px;
+		height: 23px;
+		top: 50%;
+		left: 0;
+		overflow: hidden;
+	}
 `;
 
 export default Input;

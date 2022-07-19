@@ -1,6 +1,7 @@
 import PlacesAutocomplete from 'react-places-autocomplete';
 import React, { FC } from 'react';
-import { Regular_Input } from '@/components/styled-components/Input';
+import styled from 'styled-components';
+import { Input } from '@/components/styled-components/Input';
 import { globalLocation } from '@/lib/constants/projects';
 
 interface IMyProps {
@@ -25,7 +26,7 @@ const SearchPlaces: FC<IMyProps> = ({ setLocation, address, onSelect }) => {
 				loading,
 			}) => (
 				<>
-					<Regular_Input
+					<InputStyled
 						{...getInputProps({
 							placeholder: isGlobal
 								? 'Global Impact'
@@ -77,5 +78,9 @@ const SearchPlaces: FC<IMyProps> = ({ setLocation, address, onSelect }) => {
 		</PlacesAutocomplete>
 	);
 };
+
+const InputStyled = styled(Input)`
+	margin-bottom: 20px;
+`;
 
 export default SearchPlaces;
