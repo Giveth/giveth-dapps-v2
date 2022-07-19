@@ -129,7 +129,11 @@ const LockModal: FC<ILockModalProps> = ({
 					{(lockState === ELockState.CONFIRM ||
 						lockState === ELockState.LOCKING) && (
 						<>
-							<LockingBrief round={round} amount={amount} />
+							<LockingBrief
+								round={round}
+								amount={amount}
+								onLocking
+							/>
 							<LockInfo round={round} amount={amount} />
 							<StyledButton
 								buttonType='primary'
