@@ -15,7 +15,7 @@ const MenuModal: FC<IModal> = ({ setShowModal }) => {
 	const lastStepIndex = findStepByName(lastStep);
 
 	const handleClick = (index: number) => {
-		if (index <= lastStepIndex + 1) {
+		if (!!lastStepIndex && index <= lastStepIndex + 1) {
 			setStep(index);
 			closeModal();
 		}
