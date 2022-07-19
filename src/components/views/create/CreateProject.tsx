@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import {
 	brandColors,
 	Button,
@@ -53,6 +53,9 @@ import { titleValidation } from '@/components/views/create/helpers';
 import CheckBox from '@/components/Checkbox';
 import Guidelines from '@/components/views/create/Guidelines';
 import useDetectDevice from '@/hooks/useDetectDevice';
+import { Container } from '@/components/Grid';
+import { setShowFooter } from '@/features/general/general.slice';
+import { useAppDispatch } from '@/features/hooks';
 
 const { PRIMARY_NETWORK, SECONDARY_NETWORK } = config;
 const ethereumId = PRIMARY_NETWORK.id;
@@ -89,6 +92,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const [addProjectMutation] = useMutation(CREATE_PROJECT);
 	const [editProjectMutation] = useMutation(UPDATE_PROJECT);
 	const router = useRouter();
+	const dispatch = useAppDispatch();
 
 	const isEditMode = !!project;
 	const { title, description, categories, impactLocation, image, addresses } =
@@ -252,6 +256,10 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		}
 	};
 
+	useEffect(() => {
+		dispatch(setShowFooter(false));
+	}, []);
+
 	const { isTablet, isMobile } = useDetectDevice();
 	const isSmallScreen = isTablet || isMobile;
 
@@ -260,7 +268,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	}
 
 	return (
-		<Container>
+		<Wrapper>
 			<CreateContainer>
 				<div>
 					<Title>
@@ -402,7 +410,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 					<Guidelines />
 				</GuidelinesStyleLaptop>
 			)}
-		</Container>
+		</Wrapper>
 	);
 };
 
@@ -411,8 +419,8 @@ const CaptionContainer = styled(Caption)`
 	margin-bottom: 27px;
 `;
 
-const Container = styled.div`
-	max-width: ${deviceSize.desktop + 'px'};
+const Wrapper = styled.div`
+	max-width: ${deviceSize.laptopS + 'px'};
 	margin: 0 auto;
 	position: relative;
 	display: flex;
@@ -430,7 +438,6 @@ const GuidelinesStyle = styled.div`
 		position: relative;
 		cursor: pointer;
 		margin-bottom: 20px;
-
 		> h6 {
 			font-weight: 700;
 		}
@@ -449,30 +456,22 @@ const GuidelinesStyleLaptop = styled(GuidelinesStyle)`
 	}
 `;
 
-const CreateContainer = styled.div`
-	margin: 104px 42px 154px 40px;
-
-	${mediaQueries.desktop} {
-		margin-left: 264px;
-		width: ${deviceSize.desktop / 2 + 'px'};
-	}
-	${mediaQueries.laptopL} {
-		margin-left: 134px;
-		width: ${(deviceSize.laptopL * 7) / 12 + 'px'};
-	}
-	${mediaQueries.laptopS} {
-		width: ${(deviceSize.laptopS * 8) / 12 + 'px'};
-	}
-
+const CreateContainer = styled(Container)`
+	margin-top: 104px;
+	margin-bottom: 154px;
+	max-width: 720px;
 	> :nth-child(1) {
 		display: flex;
 		justify-content: space-between;
 		flex-wrap: wrap;
-		align-items: center;
-
-		> h3 {
-			margin-bottom: 20px;
+		flex-direction: column-reverse;
+		${mediaQueries.tablet} {
+			flex-direction: row;
 		}
+	}
+	@media (max-width: ${deviceSize.mobileL + 'px'}) {
+		padding-right: 16px;
+		padding-left: 16px;
 	}
 `;
 
@@ -490,6 +489,7 @@ const Buttons = styled.div`
 `;
 
 const Title = styled(H3)`
+	margin-bottom: 48px;
 	color: ${brandColors.deep[600]};
 	font-weight: bold;
 `;
