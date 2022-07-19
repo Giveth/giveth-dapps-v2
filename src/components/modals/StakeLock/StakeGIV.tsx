@@ -215,6 +215,9 @@ export const StakeGIVModal: FC<IStakeModalProps> = ({
 											size='small'
 											href={poolStakingConfig.BUY_LINK}
 											target='_blank'
+											icon={
+												<IconExternalLink size={16} />
+											}
 										/>
 									</>
 								)}

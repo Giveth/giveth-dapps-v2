@@ -26,7 +26,6 @@ import LockingBrief from './LockingBrief';
 import { lockToken } from '@/lib/stakingPool';
 import config from '@/configuration';
 import TotalGIVpowerBox from './TotalGIVpowerBox';
-import Routes from '@/lib/constants/Routes';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import type { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 
@@ -117,12 +116,24 @@ const LockModal: FC<ILockModalProps> = ({
 								}}
 								disabled={amount == '0' || maxAmount.lt(amount)}
 							/>
+							<CancelButton
+								buttonType='texty'
+								size='small'
+								label={'cancel'}
+								onClick={() => {
+									setShowModal(false);
+								}}
+							/>
 						</>
 					)}
 					{(lockState === ELockState.CONFIRM ||
 						lockState === ELockState.LOCKING) && (
 						<>
-							<LockingBrief round={round} amount={amount} />
+							<LockingBrief
+								round={round}
+								amount={amount}
+								onLocking
+							/>
 							<LockInfo round={round} amount={amount} />
 							<StyledButton
 								buttonType='primary'
@@ -141,7 +152,7 @@ const LockModal: FC<ILockModalProps> = ({
 						<>
 							<LockingBrief round={round} amount={amount} />
 							<TotalGIVpowerBox />
-							<P>
+							{/* <P>
 								You get GIVpower when you stake &amp; lock GIV.
 								GIVpower allows you to influence the ranking of
 								projects on Giveth.
@@ -153,24 +164,29 @@ const LockModal: FC<ILockModalProps> = ({
 							<P>
 								Boost your favourite projects, or delegate your
 								GIVpower to community representatives.
+							</P> */}
+							<P>
+								Coming soon: You will be able to use your
+								GIVpower to support verified projects without
+								donating.
 							</P>
 							<LearnMoreLink href=''>Learn More</LearnMoreLink>
-							<BoostButton
+							{/* <BoostButton
 								linkType='primary'
 								label={'Boost projects'}
 								size='small'
 								href={Routes.Projects}
 							/>
+							<CancelButton
+								buttonType='texty'
+								size='small'
+								label={'I’ll do it later'}
+								onClick={() => {
+									setShowModal(false);
+								}}
+							/> */}
 						</>
 					)}
-					<CancelButton
-						buttonType='texty'
-						size='small'
-						label={ELockState.BOOST ? 'I’ll do it later' : 'CANCEL'}
-						onClick={() => {
-							setShowModal(false);
-						}}
-					/>
 				</StakeInnerModal>
 			</StakeModalContainer>
 		</Modal>

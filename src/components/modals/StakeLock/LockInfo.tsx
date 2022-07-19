@@ -78,8 +78,8 @@ const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 							direction={'right'}
 						>
 							<LockInfotooltip>
-								GIVpower allows you to support verified projects
-								on Giveth while earning rewards.
+								Coming soon: GIVpower will allow you to support
+								verified projects will earning rewards.
 							</LockInfotooltip>
 						</IconWithTooltip>
 					</LockInfoRowHelp>
