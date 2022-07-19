@@ -73,6 +73,7 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { ITokenDistroInfo } from '@/types/subgraph';
 import { switchNetwork } from '@/lib/wallet';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
+import Routes from '@/lib/constants/Routes';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -169,7 +170,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	}, [chainId, regenStreamType]);
 
 	useEffect(() => {
-		if (isFirstStakeShown || !router || !isWalletActive) return;
+		if (isFirstStakeShown || !router) return;
 		const { open, chain } = router.query;
 		const _open = Array.isArray(open) ? open[0] : open;
 		const _chain = Array.isArray(chain) ? chain[0] : chain;
@@ -179,20 +180,19 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				: config.MAINNET_NETWORK_NUMBER;
 		const checkNetworkAndShowStakeModal = async () => {
 			if (_chain && _open === type) {
-				await switchNetwork(_chainId);
+				dispatch(setShowWalletModal(!isWalletActive));
+				if (isWalletActive) await switchNetwork(_chainId);
 			}
 			if (_chainId === chainId && _open === type) {
-				if (!account) {
-					dispatch(setShowWalletModal(true));
-					return;
-				} else {
+				if (account) {
 					setShowStakeModal(true);
 					setIsFirstStakeShown(true);
-					router.replace('/givfarm', undefined, { shallow: true });
+					router.replace(Routes.GIVfarm, undefined, {
+						shallow: true,
+					});
 				}
 			}
 		};
-
 		checkNetworkAndShowStakeModal();
 	}, [router, account, isWalletActive]);
 
