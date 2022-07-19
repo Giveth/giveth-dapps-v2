@@ -17,7 +17,7 @@ const NiceBanner = (props: IProjectBySlug) => {
 	// Only show this on the Giveth project}
 	if (project.id !== '1') return null;
 	return (
-		<Wrapper>
+		<>
 			<Container>
 				<Content>
 					<Title>
@@ -38,21 +38,9 @@ const NiceBanner = (props: IProjectBySlug) => {
 				</Content>
 				<BgImage />
 			</Container>
-		</Wrapper>
+		</>
 	);
 };
-
-const Wrapper = styled.div`
-	${mediaQueries.tablet} {
-		display: grid;
-		grid-template-columns: repeat(1, minmax(500px, 1fr));
-		grid-auto-rows: minmax(100px, auto);
-	}
-	${mediaQueries.mobileL} {
-		grid-template-columns: repeat(1, minmax(100px, 1fr));
-		padding: 0 40px;
-	}
-`;
 
 const Title = styled(H4)`
 	color: ${brandColors.giv[500]};
@@ -60,12 +48,13 @@ const Title = styled(H4)`
 `;
 
 const Container = styled.div`
-	width: 100%;
+	display: flex;
+	height: 200px;
+	align-items: center;
 	background: white;
 	box-shadow: 0px 3px 20px rgba(212, 218, 238, 0.4);
 	border-radius: 16px;
-	margin: 0 0 16px 0;
-	height: 160px;
+	margin: 0 40px 16px 40px;
 	${mediaQueries.tablet} {
 		height: 127px;
 	}
@@ -73,15 +62,10 @@ const Container = styled.div`
 
 const Content = styled.div`
 	position: absolute;
-	display: flex;
-	flex-direction: column;
 	text-align: left;
 	z-index: 2;
-	padding: 24px 32px;
-	height: 160px;
-	${mediaQueries.tablet} {
-		height: 127px;
-	}
+	padding: 24px 64px 24px 32px;
+	word-wrap: break-word;
 `;
 
 const BgImage = styled.div`
@@ -92,7 +76,7 @@ const BgImage = styled.div`
 `;
 
 const InfoReadMore = styled(GLink)`
-	padding: 0 0 0 20px;
+	padding: 0 0 0 10px;
 	color: ${brandColors.pinky[500]};
 `;
 
