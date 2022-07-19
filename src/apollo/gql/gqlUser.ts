@@ -58,6 +58,9 @@ export const FETCH_USER_PROJECTS = gql`
 					name
 				}
 				qualityScore
+				projectVerificationForm {
+					status
+				}
 			}
 			totalCount
 		}

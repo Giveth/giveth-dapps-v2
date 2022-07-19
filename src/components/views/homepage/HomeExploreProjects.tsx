@@ -101,7 +101,7 @@ const ProjectsContainer = styled.div`
 	margin-bottom: 64px;
 	margin-top: 28px;
 
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		grid-template-columns: repeat(2, 1fr);
 	}
 

@@ -5,7 +5,6 @@ import {
 	neutralColors,
 	SublineBold,
 } from '@giveth/ui-design-system';
-import { ChangeEvent } from 'react';
 
 import { mediaQueries } from '@/lib/constants/constants';
 import useNewsletterSubscription from '@/hooks/useNewsletterSubscription';
@@ -72,9 +71,7 @@ const JoinSubscriptionCard = () => {
 									error={error}
 									name='member[email]'
 									id='member_email'
-									onChange={(
-										e: ChangeEvent<HTMLInputElement>,
-									) => setEmail(e.target.value)}
+									onChange={e => setEmail(e.target.value)}
 								/>
 								{error && (
 									<InvalidEmail>

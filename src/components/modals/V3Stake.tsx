@@ -32,6 +32,7 @@ import { BN } from '@/helpers/number';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
 import { LiquidityPosition } from '@/types/nfts';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 const loadingAnimationOptions = {
 	loop: true,
@@ -63,8 +64,11 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 	const { balances } = useAppSelector(state => state.subgraph.currentValues);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const { chainId, library, account } = useWeb3React();
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+
 	const positions = isUnstakingModal ? stakedPositions : unstakedPositions;
 	const { title } = poolStakingConfig;
+
 	const [stakeStatus, setStakeStatus] = useState<StakeState>(
 		StakeState.UNKNOWN,
 	);
@@ -137,7 +141,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 	};
 
 	return (
-		<Modal setShowModal={setShowModal}>
+		<Modal closeModal={closeModal} isAnimating={isAnimating}>
 			<StakeModalContainer>
 				{(stakeStatus === StakeState.UNKNOWN ||
 					stakeStatus === StakeState.CONFIRMING ||
@@ -197,9 +201,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 								label='CANCEL'
 								size='medium'
 								buttonType='texty'
-								onClick={() => {
-									setShowModal(false);
-								}}
+								onClick={closeModal}
 								// disabled={claimState === ClaimState.WAITING}
 							/>
 						</HarvestButtonContainer>

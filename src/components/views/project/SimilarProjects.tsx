@@ -12,19 +12,19 @@ import { FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { showToastError } from '@/lib/helpers';
 import { ISuggestedProjectsGQL } from '@/apollo/types/gqlTypes';
-import useWindowDimensions from '@/hooks/useWindowDimensions';
+import useDetectDevice from '@/hooks/useDetectDevice';
 
 const projectsToFetch = 12;
 
 const SimilarProjects = (props: { slug: string }) => {
 	const { slug } = props;
 
-	const { width } = useWindowDimensions();
+	const device = useDetectDevice();
 
 	let projectsToShow;
-	if (width < deviceSize.tablet) {
+	if (device.isMobile) {
 		projectsToShow = 1;
-	} else if (width < deviceSize.laptopL) {
+	} else if (device.isTablet || device.isLaptopS) {
 		projectsToShow = 2;
 	} else {
 		projectsToShow = 3;

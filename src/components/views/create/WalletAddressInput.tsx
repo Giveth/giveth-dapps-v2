@@ -2,15 +2,11 @@ import React from 'react';
 import { H5, Caption, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
-import {
-	InputContainer,
-	InputErrorMessage,
-	InputWithError,
-	TinyLabel,
-} from './Create.sc';
+import { InputContainer, TinyLabel } from './Create.sc';
 import { compareAddresses } from '@/lib/helpers';
 import { ECreateErrFields } from '@/components/views/create/CreateProject';
 import { useAppSelector } from '@/features/hooks';
+import InputBox, { InputErrorMessage } from '@/components/InputBox';
 import config from '@/configuration';
 
 const WalletAddressInput = (props: {
@@ -46,11 +42,12 @@ const WalletAddressInput = (props: {
 			)}
 
 			<InputContainer>
-				<InputWithError
+				<InputBox
+					label='Receiving address'
 					placeholder='My Wallet Address'
-					onChange={e => setValue(e.target.value)}
-					value={value}
-					error={!!error}
+					onChange={setValue}
+					value={value || ''}
+					error={error}
 					// disabled={isDefaultAddress && !error} // why are we doing this?
 				/>
 				<InputErrorMessage>{error || null}</InputErrorMessage>

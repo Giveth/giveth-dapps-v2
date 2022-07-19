@@ -8,15 +8,18 @@ import ShieldWhiteIcon from '/public/images/icons/shield_white.svg';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 import ShieldImage from '/public/images/brave-shield.png';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 const LowerShields = (props: { onClose: () => void }) => {
 	const { onClose } = props;
 	const theme = useAppSelector(state => state.general.theme);
+	const { isAnimating, closeModal } = useModalAnimation(onClose);
 	const isDark = theme === ETheme.Dark;
 
 	return (
 		<Modal
-			setShowModal={onClose}
+			closeModal={closeModal}
+			isAnimating={isAnimating}
 			headerIcon={
 				<Image
 					src={isDark ? ShieldWhiteIcon : ShieldBlackIcon}
@@ -39,9 +42,9 @@ const LowerShields = (props: { onClose: () => void }) => {
 					window for you to complete your sign-in
 				</Lead>
 				{isDark ? (
-					<OulineButton label='OK' onClick={onClose} />
+					<OulineButton label='OK' onClick={closeModal} />
 				) : (
-					<Button label='OK' onClick={onClose} />
+					<Button label='OK' onClick={closeModal} />
 				)}
 			</Container>
 		</Modal>

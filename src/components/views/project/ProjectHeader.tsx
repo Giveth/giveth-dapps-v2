@@ -100,7 +100,7 @@ const TitleContainer = styled.div`
 		padding: 0 32px;
 	}
 
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		padding: 0 40px;
 	}
 

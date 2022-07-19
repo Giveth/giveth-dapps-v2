@@ -18,6 +18,8 @@ import { IModal } from '@/types/common';
 import { useAppDispatch } from '@/features/hooks';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
 import Input, { InputSize } from '../Input';
+import { requiredOptions, validators } from '@/lib/constants/regex';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 enum EditStatusType {
 	INFO,
@@ -37,7 +39,7 @@ type Inputs = {
 };
 
 const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
-	const [disabled, setDisabled] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 	const [editStatus, setEditStatus] = useState<EditStatusType>(
 		EditStatusType.INFO,
 	);
@@ -50,6 +52,7 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 	const dispatch = useAppDispatch();
 	const { account } = useWeb3React();
 	const [updateUser] = useMutation(UPDATE_USER);
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	const onSaveAvatar = async () => {
 		try {
@@ -83,7 +86,7 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 	};
 
 	const onSubmit = async (formData: Inputs) => {
-		setDisabled(true);
+		setIsLoading(true);
 		try {
 			const { data } = await client.mutate({
 				mutation: UPDATE_USER,
@@ -97,7 +100,7 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 					type: ToastType.SUCCESS,
 					title: 'Success',
 				});
-				setShowModal(false);
+				closeModal();
 			} else {
 				throw 'Update User Failed.';
 			}
@@ -112,37 +115,35 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 				},
 			});
 		}
-		setDisabled(false);
+		setIsLoading(false);
 	};
 
 	return (
 		<Modal
-			setShowModal={setShowModal}
-			headerIcon={<></>}
+			closeModal={closeModal}
+			isAnimating={isAnimating}
 			headerTitle='Edit profile'
 			headerTitlePosition='left'
 		>
 			<Wrapper>
 				{editStatus === EditStatusType.PHOTO ? (
-					<>
-						<Flex flexDirection='column' gap='36px'>
-							<ImageUploader setUrl={setAvatar} url={avatar} />
-							<Button
-								buttonType='secondary'
-								label='SAVE'
-								onClick={onSaveAvatar}
-								disabled={!avatar}
-							/>
-							<TextButton
-								buttonType='texty'
-								label='cancel'
-								onClick={() => {
-									setAvatar('');
-									setEditStatus(EditStatusType.INFO);
-								}}
-							/>
-						</Flex>
-					</>
+					<Flex flexDirection='column' gap='36px'>
+						<ImageUploader setUrl={setAvatar} url={avatar} />
+						<Button
+							buttonType='secondary'
+							label='SAVE'
+							onClick={onSaveAvatar}
+							disabled={!avatar}
+						/>
+						<TextButton
+							buttonType='texty'
+							label='cancel'
+							onClick={() => {
+								setAvatar('');
+								setEditStatus(EditStatusType.INFO);
+							}}
+						/>
+					</Flex>
 				) : (
 					<>
 						<FlexCenter direction='column' gap='8px'>
@@ -185,22 +186,19 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 										size={InputSize.SMALL}
 										register={register}
 										error={(errors as any)[field.name]}
-										registerOptions={{
-											required: field.required,
-											...field.validators,
-										}}
+										registerOptions={field.registerOptions}
 									/>
 								))}
 								<Button
 									buttonType='secondary'
 									label='SAVE'
-									disabled={disabled}
+									disabled={isLoading}
 									type='submit'
 								/>
 								<TextButton
 									buttonType='texty'
 									label='cancel'
-									onClick={() => setShowModal(false)}
+									onClick={closeModal}
 								/>
 							</InputWrapper>
 						</form>
@@ -216,36 +214,20 @@ const inputFields = [
 		label: 'first name',
 		placeholder: 'John',
 		name: 'firstName',
-		required: {
-			value: true,
-			message: 'First name is required',
-		},
+		registerOptions: requiredOptions.firstName,
 	},
 	{
 		label: 'last name',
 		placeholder: 'Doe',
 		name: 'lastName',
-		required: {
-			value: true,
-			message: 'Last name is required',
-		},
+		registerOptions: requiredOptions.lastName,
 	},
 	{
 		label: 'email',
 		placeholder: 'Example@Domain.com',
 		name: 'email',
 		type: 'email',
-		required: {
-			value: true,
-			message: 'Email is required',
-		},
-		validators: {
-			minLength: { value: 3, message: 'Too Short' },
-			pattern: {
-				value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-				message: 'Invalid Email Address',
-			},
-		},
+		registerOptions: requiredOptions.email,
 	},
 	{
 		label: 'location (optional)',
@@ -258,12 +240,7 @@ const inputFields = [
 		name: 'url',
 		type: 'url',
 		caption: 'Your home page, blog, or company site.',
-		validators: {
-			pattern: {
-				value: /^(?:http(s)?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
-				message: 'Invalid URL',
-			},
-		},
+		registerOptions: validators.website,
 	},
 ];
 

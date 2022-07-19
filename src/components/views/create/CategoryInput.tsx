@@ -1,12 +1,17 @@
 import React, { Dispatch, SetStateAction } from 'react';
-import { H5, Caption, brandColors } from '@giveth/ui-design-system';
+import {
+	H5,
+	Caption,
+	brandColors,
+	neutralColors,
+	SublineBold,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 import { InputContainer } from './Create.sc';
 import CheckBox from '@/components/Checkbox';
 import { categoryList, maxSelectedCategory } from '@/lib/constants/Categories';
 import { ICategory } from '@/apollo/types/types';
-import { showToastError } from '@/lib/helpers';
 import { mediaQueries } from '@/lib/constants/constants';
 
 const CategoryInput = (props: {
@@ -14,17 +19,11 @@ const CategoryInput = (props: {
 	setValue: Dispatch<SetStateAction<ICategory[]>>;
 }) => {
 	const { value, setValue } = props;
+	const isMaxCategories = value.length >= maxSelectedCategory;
 
 	const handleChange = (isChecked: boolean, name: string) => {
 		const newCategories = [...value];
-
 		if (isChecked) {
-			const isMaxCategories = newCategories.length >= maxSelectedCategory;
-			if (isMaxCategories) {
-				return showToastError(
-					`only ${maxSelectedCategory} categories allowed`,
-				);
-			}
 			newCategories.push({ name });
 			setValue(newCategories);
 		} else {
@@ -44,20 +43,22 @@ const CategoryInput = (props: {
 				<CaptionContainer>
 					You can choose up to {maxSelectedCategory} categories for
 					your project.
+					<CategoryCount>
+						{value.length}/{maxSelectedCategory}
+					</CategoryCount>
 				</CaptionContainer>
 			</div>
 			<InputContainer>
 				<CategoriesGrid>
 					{categoryList.map(i => {
-						const checked = value.find(
-							(el: ICategory) => el.name === i.name,
-						);
+						const checked = value.find(el => el.name === i.name);
 						return (
 							<CheckBox
 								key={i.value}
 								title={i.value}
 								checked={!!checked}
 								onChange={e => handleChange(e, i.name)}
+								disabled={isMaxCategories && !checked}
 							/>
 						);
 					})}
@@ -67,8 +68,20 @@ const CategoryInput = (props: {
 	);
 };
 
+const CategoryCount = styled(SublineBold)`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: ${neutralColors.gray[300]};
+	padding: 6px 10px;
+	margin-left: 16px;
+	border-radius: 64px;
+	color: ${neutralColors.gray[700]};
+`;
+
 const CaptionContainer = styled(Caption)`
-	height: 18px;
+	display: flex;
+	align-items: center;
 	margin: 8.5px 0 0 0;
 	span {
 		cursor: pointer;

@@ -7,12 +7,16 @@ import Routes from '@/lib/constants/Routes';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import BulbIcon from '/public/images/icons/lightbulb.svg';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 import ExternalLink from '@/components/ExternalLink';
 
 export const GoodProjectDescription: FC<IModal> = ({ setShowModal }) => {
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+
 	return (
 		<Modal
-			setShowModal={setShowModal}
+			closeModal={closeModal}
+			isAnimating={isAnimating}
 			headerIcon={<Image src={BulbIcon} alt='light bulb' />}
 			headerTitle='How to write a great project description'
 			headerTitlePosition='left'
@@ -42,7 +46,7 @@ export const GoodProjectDescription: FC<IModal> = ({ setShowModal }) => {
 
 				<OkButton
 					label='DISMISS'
-					onClick={() => setShowModal(false)}
+					onClick={closeModal}
 					buttonType='texty'
 				/>
 			</Container>
