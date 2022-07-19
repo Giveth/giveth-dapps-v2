@@ -383,25 +383,45 @@ const FiltersButton = styled.button`
 `;
 
 const FiltersSwiper = styled.div`
+	display: flex;
 	position: relative;
-	width: 60%;
-	padding-right: 60px;
+	gap: 16px;
+	width: 100%;
+	${mediaQueries.tablet} {
+		width: 70%;
+	}
+	${mediaQueries.laptop} {
+		padding-right: 60px;
+		width: 60%;
+	}
 `;
 
 const NextIcon = styled.button<{ disabled?: boolean }>`
-	width: 48px;
-	height: 48px;
+	min-width: 44px;
+	min-height: 44px;
 	border-radius: 50%;
-	background: white;
+	background: ${neutralColors.gray[100]};
 	box-shadow: ${Shadow.Neutral[500]};
-	cursor: ${props => (props.disabled ? 'default' : 'pointer')};
-	position: absolute;
-	top: calc(50% - 24px);
-	right: 0;
+	cursor: pointer;
 	border: none;
 	z-index: 1;
+	display: none;
 	:disabled {
-		display: none;
+		opacity: 0.5;
+		cursor: default;
+	}
+	${mediaQueries.tablet} {
+		display: inline-block;
+	}
+	${mediaQueries.laptop} {
+		width: 50px;
+		height: 50px;
+		position: absolute;
+		top: calc(50% - 25px);
+		right: 0;
+		:disabled {
+			display: none;
+		}
 	}
 `;
 
@@ -410,8 +430,10 @@ const PrevIcon = styled(NextIcon)<{ disabled?: boolean }>`
 	transform: rotate(180deg);
 	left: 0;
 	z-index: 2;
-	:disabled {
-		display: none;
+	${mediaQueries.laptop} {
+		:disabled {
+			display: none;
+		}
 	}
 `;
 
