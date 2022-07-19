@@ -117,6 +117,14 @@ const LockModal: FC<ILockModalProps> = ({
 								}}
 								disabled={amount == '0' || maxAmount.lt(amount)}
 							/>
+							<CancelButton
+								buttonType='texty'
+								size='small'
+								label={'cancel'}
+								onClick={() => {
+									setShowModal(false);
+								}}
+							/>
 						</>
 					)}
 					{(lockState === ELockState.CONFIRM ||
@@ -161,16 +169,16 @@ const LockModal: FC<ILockModalProps> = ({
 								size='small'
 								href={Routes.Projects}
 							/>
+							<CancelButton
+								buttonType='texty'
+								size='small'
+								label={'I’ll do it later'}
+								onClick={() => {
+									setShowModal(false);
+								}}
+							/>
 						</>
 					)}
-					<CancelButton
-						buttonType='texty'
-						size='small'
-						label={ELockState.BOOST ? 'I’ll do it later' : 'CANCEL'}
-						onClick={() => {
-							setShowModal(false);
-						}}
-					/>
 				</StakeInnerModal>
 			</StakeModalContainer>
 		</Modal>
