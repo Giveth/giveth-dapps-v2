@@ -211,7 +211,8 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		setStarted(farmStartTimeMS ? getNowUnixMS() > farmStartTimeMS : true);
 	}, [farmStartTimeMS]);
 
-	const isZeroLocked = type === StakingType.GIV_LM && totalGIVLocked === '0';
+	const isZeroGIVStacked =
+		type === StakingType.GIV_LM && balances.givStaked === '0';
 	const isLocked = type === StakingType.GIV_LM && totalGIVLocked !== '0';
 
 	return (
@@ -315,7 +316,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 																2,
 															)}
 														%
-														{isZeroLocked &&
+														{isZeroGIVStacked &&
 															`-${
 																apr &&
 																formatEthHelper(
