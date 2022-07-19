@@ -26,7 +26,6 @@ import LockingBrief from './LockingBrief';
 import { lockToken } from '@/lib/stakingPool';
 import config from '@/configuration';
 import TotalGIVpowerBox from './TotalGIVpowerBox';
-import Routes from '@/lib/constants/Routes';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import type { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 
@@ -149,7 +148,7 @@ const LockModal: FC<ILockModalProps> = ({
 						<>
 							<LockingBrief round={round} amount={amount} />
 							<TotalGIVpowerBox />
-							<P>
+							{/* <P>
 								You get GIVpower when you stake &amp; lock GIV.
 								GIVpower allows you to influence the ranking of
 								projects on Giveth.
@@ -161,9 +160,14 @@ const LockModal: FC<ILockModalProps> = ({
 							<P>
 								Boost your favourite projects, or delegate your
 								GIVpower to community representatives.
+							</P> */}
+							<P>
+								Coming soon: You will be able to use your
+								GIVpower to support verified projects without
+								donating.
 							</P>
 							<LearnMoreLink href=''>Learn More</LearnMoreLink>
-							<BoostButton
+							{/* <BoostButton
 								linkType='primary'
 								label={'Boost projects'}
 								size='small'
@@ -176,7 +180,7 @@ const LockModal: FC<ILockModalProps> = ({
 								onClick={() => {
 									setShowModal(false);
 								}}
-							/>
+							/> */}
 						</>
 					)}
 				</StakeInnerModal>
