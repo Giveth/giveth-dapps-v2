@@ -40,6 +40,7 @@ interface PoolRowProps {
 }
 
 export const PoolRow = styled(Row)<PoolRowProps>`
+	align-items: center;
 	margin-top: 24px;
 	margin-bottom: 24px;
 	opacity: ${props => (props.disabled ? '0.6' : '1')};

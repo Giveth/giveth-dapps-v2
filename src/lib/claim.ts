@@ -10,6 +10,7 @@ import { fetchSubgraph } from '@/services/subgraph.service';
 import { SubgraphQueryBuilder } from '@/lib/subgraph/subgraphQueryBuilder';
 import { transformSubgraphData } from '@/lib/subgraph/subgraphDataTransform';
 import { getGasPreference } from '@/lib/helpers';
+import { MerkleDistro } from '@/types/contracts';
 
 const { abi: MERKLE_ABI } = MerkleDropJson;
 const { abi: TOKEN_DISTRO_ABI } = TOKEN_DISTRO_JSON;
@@ -74,18 +75,25 @@ export const claimAirDrop = async (
 	if (!provider) throw new Error('No Provider');
 
 	const signer = provider.getSigner().connectUnchecked();
-	const merkleContract = new Contract(merkleAddress, MERKLE_ABI, provider);
+	const merkleContract = new Contract(
+		merkleAddress,
+		MERKLE_ABI,
+		provider,
+	) as MerkleDistro;
 
 	const claimData = await fetchAirDropClaimData(address);
 
 	if (!claimData) throw new Error('No claim data');
 
-	const args = [claimData.index, claimData.amount, claimData.proof];
-
 	try {
 		return await merkleContract
 			.connect(signer.connectUnchecked())
-			.claim(...args, getGasPreference(config.XDAI_CONFIG));
+			.claim(
+				claimData.index,
+				claimData.amount,
+				claimData.proof,
+				getGasPreference(config.XDAI_CONFIG),
+			);
 	} catch (error) {
 		console.error('Error on claiming GIVdrop:', error);
 		captureException(error, {

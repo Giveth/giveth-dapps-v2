@@ -14,17 +14,25 @@ import {
 import { Flex } from '../styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 
-export const StakingPoolContainer = styled.div`
-	height: 488px;
+interface IStakingPoolContainer {
+	shadowColor?: string;
+	big?: boolean;
+}
+
+export const StakingPoolContainer = styled.div<IStakingPoolContainer>`
+	height: ${props => (props.big ? '508px' : '488px')};
 	border-radius: 8px;
 	background: ${brandColors.giv[600]};
 	color: ${neutralColors.gray[100]};
 	position: relative;
 	margin-bottom: 32px;
 	padding: 1px 0;
+	box-shadow: ${props =>
+		props.shadowColor ? `0px 0px 24px 6px ${props.shadowColor}` : 'unset'};
 `;
 export const StakingPoolExchangeRow = styled(Flex)`
-	margin: 16px;
+	margin: 16px 16px 0;
+	height: 21px;
 `;
 
 export const StakingPoolExchange = styled(Overline)`
@@ -32,7 +40,7 @@ export const StakingPoolExchange = styled(Overline)`
 `;
 
 export const SPTitle = styled(Flex)`
-	margin-top: 12px;
+	margin-top: 2px;
 	margin-bottom: 24px;
 `;
 
@@ -54,12 +62,7 @@ export const FirstDetail = styled(Flex)`
 export const Detail = styled(Flex)`
 	margin-bottom: 16px;
 `;
-export const GIVgardenTooltip = styled.div`
-	color: ${neutralColors.gray[100]};
-	text-align: center;
-	width: 120px;
-	font-size: 0.8em;
-`;
+
 export const DetailLabel = styled(Caption)``;
 export const DetailValue = styled(B)``;
 export const DetailUnit = styled(P)`
@@ -68,6 +71,7 @@ export const DetailUnit = styled(P)`
 
 export const ClaimButton = styled(Button)`
 	width: 100%;
+	margin-top: 16px;
 `;
 
 export const StakeButtonsRow = styled(Flex)`

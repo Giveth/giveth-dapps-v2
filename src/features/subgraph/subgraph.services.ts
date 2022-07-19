@@ -29,7 +29,17 @@ export const fetchXDaiInfo = async (userAddress = '') => {
 			SubgraphQueryBuilder.getXDaiQuery(userAddress),
 			config.XDAI_NETWORK_NUMBER,
 		);
-		return transformSubgraphData(response);
+		// TODO: Doing this here while the real subgraph is ready
+		const givPower = await fetchSubgraph(
+			SubgraphQueryBuilder.getGIVpowerQuery(userAddress),
+			config.XDAI_NETWORK_NUMBER,
+			true,
+		);
+
+		return transformSubgraphData({
+			...response,
+			...givPower,
+		});
 	} catch (e) {
 		console.error('Error on query xDai subgraph:', e);
 		captureException(e, {

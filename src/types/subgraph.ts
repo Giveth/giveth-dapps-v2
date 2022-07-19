@@ -1,3 +1,5 @@
+import { IUser } from '@/apollo/types/types';
+
 export interface IBalances {
 	balance: string;
 	allocatedTokens: string;
@@ -27,6 +29,7 @@ export interface IBalances {
 	honeyswapGivDaiLp: string;
 	honeyswapGivDaiLpStaked: string;
 	givStaked: string;
+	gGIV: string;
 	allocationCount: number;
 	givDropClaimed: boolean;
 
@@ -73,6 +76,7 @@ export const ZeroBalances: IBalances = {
 	honeyswapGivDaiLp: '0',
 	honeyswapGivDaiLpStaked: '0',
 	givStaked: '0',
+	gGIV: '0',
 	allocationCount: 0,
 	givDropClaimed: false,
 
@@ -107,6 +111,27 @@ export interface ITokenDistroInfo {
 	startTime: number;
 	cliffTime: number;
 	endTime: number;
+}
+
+export interface IGIVpowerInfo {
+	id: string;
+	initialDate: string;
+	locksCreated: number;
+	roundDuration: number;
+	totalGIVLocked: string;
+	currentRound: number;
+	nextRoundDate: string;
+}
+
+export interface IGIVpowerPosition {
+	id: string;
+	user: IUser;
+	amount: string;
+	rounds: number;
+	untilRound: number;
+	unlockableAt: string;
+	unlockedAt: string;
+	unlocked: boolean;
 }
 
 export interface IUnipool {

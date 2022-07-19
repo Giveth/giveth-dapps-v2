@@ -6,6 +6,7 @@ import {
 	IUnipool,
 	IUniswapV3Position,
 	IInfinitePositionReward,
+	IGIVpowerInfo,
 } from '@/types/subgraph';
 
 export interface ISubgraphState {
@@ -27,6 +28,8 @@ export interface ISubgraphState {
 	allPositions: IUniswapV3Position[];
 	infinitePositionReward?: IInfinitePositionReward;
 	infinitePosition?: IUniswapV3Position;
+
+	givpowerInfo: IGIVpowerInfo;
 
 	[StreamType.FOX]?: ITokenDistroInfo;
 	[StreamType.CULT]?: ITokenDistroInfo;

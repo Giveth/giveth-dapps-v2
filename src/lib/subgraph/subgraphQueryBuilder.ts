@@ -98,6 +98,43 @@ export class SubgraphQueryBuilder {
 		return mainTokenDistroQuery + regenFarmsTokenDistroQueries;
 	};
 
+	private static getGIVPowersInfoQuery = (address: string): string => {
+		return `givpowers(id: "${address}"){ 
+			id
+			initialDate
+			locksCreated
+			roundDuration
+			totalGIVLocked
+		}`;
+	};
+
+	private static getGIVStakedBalance = (address: string): string => {
+		return ` tokenBalances(
+			where: { user: "${address}" }
+		  ) {
+			balance
+		  }`;
+	};
+
+	static getTokenLocksInfoQuery = (
+		address: string,
+		first?: number,
+		skip?: number,
+	): string => {
+		return `query { tokenLocks(id: "${address.toLowerCase()}", where:{unlocked: false}, first: ${
+			first || 100
+		}, skip: ${skip || 0}){ 
+			id
+			user
+			amount
+			rounds
+			untilRound
+			unlockableAt
+			unlockedAt
+			unlocked
+		}}`;
+	};
+
 	private static getUnipoolInfoQuery = (address: string): string => {
 		return `unipoolContractInfo(id: "${address.toLowerCase()}"){
 			totalSupply
@@ -235,6 +272,21 @@ export class SubgraphQueryBuilder {
 				...config.XDAI_CONFIG.pools,
 				...config.XDAI_CONFIG.regenFarms,
 			])}
+			uniswapV2EthGivPair: ${SubgraphQueryBuilder.getPairInfoQuery(
+				config.XDAI_CONFIG.pools.find(
+					c => c.type === StakingType.SUSHISWAP_ETH_GIV,
+				)?.POOL_ADDRESS || '',
+			)}
+		}
+		`;
+	};
+
+	static getGIVpowerQuery = (address: string): string => {
+		const _address = address.toLowerCase();
+		return `
+		{
+			gGiv: ${SubgraphQueryBuilder.getGIVStakedBalance(_address)}
+			givpowerInfo: ${SubgraphQueryBuilder.getGIVPowersInfoQuery(_address)}
 		}
 		`;
 	};

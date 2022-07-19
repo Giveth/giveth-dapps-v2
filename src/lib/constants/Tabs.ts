@@ -17,6 +17,7 @@ export const giveconomyTabs = [
 		label: 'GIVbacks',
 		href: Routes.GIVbacks,
 	},
+	{ label: 'GIVpower', href: Routes.GIVpower },
 	{
 		label: 'GIVstream',
 		href: Routes.GIVstream,

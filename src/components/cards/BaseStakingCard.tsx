@@ -16,7 +16,6 @@ import {
 	StakingPlatform,
 	StakingType,
 } from '@/types/config';
-import { IconWithTooltip } from '../IconWithToolTip';
 import { BN, formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import {
 	ClaimButton,
@@ -31,7 +30,6 @@ import {
 	DisableModalImage,
 	DisableModalText,
 	FirstDetail,
-	GIVgardenTooltip,
 	IconContainer,
 	IconHelpWraper,
 	IntroIcon,
@@ -49,8 +47,8 @@ import {
 	StakingPoolSubtitle,
 } from './BaseStakingCard.sc';
 import { APRModal } from '../modals/APR';
-import { StakeModal } from '../modals/Stake';
-import { UnStakeModal } from '../modals/UnStake';
+import { StakeModal } from '../modals/StakeLock/Stake';
+import { UnStakeModal } from '../modals/Unstake/UnStake';
 import { StakingPoolImages } from '../StakingPoolImages';
 import { V3StakeModal } from '../modals/V3Stake';
 import { IconGIV } from '../Icons/GIV';
@@ -70,11 +68,17 @@ import { IStakeInfo } from '@/hooks/useStakingPool';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { useAppSelector } from '@/features/hooks';
 import { ITokenDistroInfo } from '@/types/subgraph';
+import { GIVPowerExplainModal } from '../modals/GIVPowerExplain';
+import GIVpowerCardIntro from './GIVpowerCardIntro';
+import LockModal from '../modals/StakeLock/Lock';
+import { StakeGIVModal } from '../modals/StakeLock/StakeGIV';
+import { avgAPR } from '@/helpers/givpower';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
 	NORMAL,
 	INTRO,
+	GIVPOWER_INTRO,
 }
 
 export const getPoolIconWithName = (platform: StakingPlatform) => {
@@ -119,6 +123,8 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const [showStakeModal, setShowStakeModal] = useState(false);
 	const [showUnStakeModal, setShowUnStakeModal] = useState(false);
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
+	const [showLockModal, setShowLockModal] = useState(false);
+	const [showGIVPowerExplain, setShowGIVPowerExplain] = useState(false);
 	const [showWhatIsGIVstreamModal, setShowWhatIsGIVstreamModal] =
 		useState(false);
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
@@ -129,16 +135,21 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const { setInfo } = useFarms();
 	const { chainId } = useWeb3React();
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
+	const { givpowerInfo, balances } = useAppSelector(
+		state => state.subgraph.xDaiValues,
+	);
+
+	const { totalGIVLocked } = givpowerInfo;
 	const { regenStreamType, regenFarmIntro } =
 		poolStakingConfig as RegenPoolStakingConfig;
 
 	const {
 		type,
 		platform,
+		platformTitle,
 		title,
 		description,
 		provideLiquidityLink,
-		BUY_LINK,
 		unit,
 		farmStartTimeMS,
 		active,
@@ -200,9 +211,15 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		setStarted(farmStartTimeMS ? getNowUnixMS() > farmStartTimeMS : true);
 	}, [farmStartTimeMS]);
 
+	const isZeroLocked = type === StakingType.GIV_LM && totalGIVLocked === '0';
+	const isLocked = type === StakingType.GIV_LM && totalGIVLocked !== '0';
+
 	return (
 		<>
-			<StakingPoolContainer>
+			<StakingPoolContainer
+				big={type === StakingType.GIV_LM}
+				shadowColor={type === StakingType.GIV_LM ? '#E1458D' : ''}
+			>
 				{(!active || archived) && disableModal && (
 					<DisableModal>
 						<DisableModalContent>
@@ -236,35 +253,23 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 						<StakingPoolExchangeRow gap='4px' alignItems='center'>
 							{getPoolIconWithName(platform)}
 							<StakingPoolExchange styleType='Small'>
-								{type === StakingType.GIV_LM &&
-									chainId === config.XDAI_NETWORK_NUMBER &&
-									`GIVgarden `}
-								{platform}
+								{platformTitle || platform}
 							</StakingPoolExchange>
-							{chainId === config.XDAI_NETWORK_NUMBER &&
-								type === StakingType.GIV_LM && (
-									<IconWithTooltip
-										direction={'top'}
-										icon={
-											<IconHelp
-												color={brandColors.deep[100]}
-												size={12}
-											/>
-										}
-									>
-										<GIVgardenTooltip>
-											While staking GIV in this pool you
-											are also granted voting power (gGIV)
-											in the GIVgarden.
-										</GIVgardenTooltip>
-									</IconWithTooltip>
-								)}
 							<div style={{ flex: 1 }}></div>
 							{notif && notif}
 							{regenFarmIntro && (
 								<IntroIcon
 									onClick={() =>
 										setState(StakeCardState.INTRO)
+									}
+								>
+									<IconHelp size={16} />
+								</IntroIcon>
+							)}
+							{type === StakingType.GIV_LM && (
+								<IntroIcon
+									onClick={() =>
+										setState(StakeCardState.GIVPOWER_INTRO)
 									}
 								>
 									<IconHelp size={16} />
@@ -300,10 +305,26 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 													<DetailValue>
 														{apr &&
 															formatEthHelper(
-																apr,
+																isLocked
+																	? avgAPR(
+																			apr,
+																			balances.gGIV,
+																			balances.givStaked,
+																	  )
+																	: apr,
 																2,
 															)}
 														%
+														{isZeroLocked &&
+															`-${
+																apr &&
+																formatEthHelper(
+																	apr.multipliedBy(
+																		5.2, // sqrt(1 + max rounds)
+																	),
+																	2,
+																)
+															}%`}
 													</DetailValue>
 													<IconContainer
 														onClick={() =>
@@ -371,8 +392,20 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								disabled={!active || earned.isZero()}
 								onClick={() => setShowHarvestModal(true)}
 								label='HARVEST REWARDS'
-								buttonType='primary'
+								buttonType={
+									type === StakingType.GIV_LM
+										? 'secondary'
+										: 'primary'
+								}
 							/>
+							{type === StakingType.GIV_LM && (
+								<ClaimButton
+									disabled={!active || earned.isZero()}
+									onClick={() => setShowLockModal(true)}
+									label='Increase your reward'
+									buttonType='primary'
+								/>
+							)}
 							<StakeButtonsRow>
 								<StakeContainer flexDirection='column'>
 									<StakeButton
@@ -411,38 +444,40 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									</StakeAmount>
 								</StakeContainer>
 							</StakeButtonsRow>
-							{active && !archived && (
-								<LiquidityButton
-									label={
-										type === StakingType.GIV_LM
-											? 'BUY GIV TOKENS'
-											: 'PROVIDE LIQUIDITY'
-									}
-									onClick={() => {
-										if (
-											type ===
-											StakingType.UNISWAPV3_ETH_GIV
-										) {
-											setShowUniV3APRModal(true);
-										} else {
-											window.open(
-												type === StakingType.GIV_LM
-													? BUY_LINK
-													: provideLiquidityLink,
-											);
-										}
-									}}
-									buttonType='texty'
-									icon={
-										<IconExternalLink
-											size={16}
-											color={brandColors.deep[100]}
+							{active &&
+								!archived &&
+								type !== StakingType.GIV_LM && (
+									<Flex>
+										<LiquidityButton
+											label='PROVIDE LIQUIDITY'
+											onClick={() => {
+												if (
+													type ===
+													StakingType.UNISWAPV3_ETH_GIV
+												) {
+													setShowUniV3APRModal(true);
+												} else {
+													window.open(
+														provideLiquidityLink,
+													);
+												}
+											}}
+											buttonType='texty'
+											icon={
+												<IconExternalLink
+													size={16}
+													color={
+														brandColors.deep[100]
+													}
+												/>
+											}
 										/>
-									}
-								/>
-							)}
+									</Flex>
+								)}
 						</StakePoolInfoContainer>
 					</>
+				) : state === StakeCardState.GIVPOWER_INTRO ? (
+					<GIVpowerCardIntro setState={setState} />
 				) : (
 					<StakingCardIntro
 						poolStakingConfig={
@@ -452,6 +487,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					/>
 				)}
 			</StakingPoolContainer>
+			{showGIVPowerExplain && (
+				<GIVPowerExplainModal setShowModal={setShowGIVPowerExplain} />
+			)}
 			{showAPRModal && (
 				<APRModal
 					setShowModal={setShowAPRModal}
@@ -477,6 +515,13 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								key: undefined,
 							}
 						}
+					/>
+				) : type === StakingType.GIV_LM ? (
+					<StakeGIVModal
+						setShowModal={setShowStakeModal}
+						poolStakingConfig={poolStakingConfig}
+						maxAmount={userNotStakedAmount}
+						showLockModal={() => setShowLockModal(true)}
 					/>
 				) : (
 					<StakeModal
@@ -519,6 +564,13 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					regenStreamConfig={regenStreamConfig}
 					stakedPositions={stakedPositions}
 					currentIncentive={currentIncentive}
+				/>
+			)}
+			{showLockModal && (
+				<LockModal
+					setShowModal={setShowLockModal}
+					poolStakingConfig={poolStakingConfig}
+					maxAmount={stakedLpAmount.sub(totalGIVLocked)}
 				/>
 			)}
 			{showWhatIsGIVstreamModal && (

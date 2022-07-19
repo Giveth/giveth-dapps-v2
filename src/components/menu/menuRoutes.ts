@@ -16,6 +16,7 @@ export const menuRoutes = [
 			Routes.GIVbacks,
 			Routes.GIVfarm,
 			Routes.GIVgarden,
+			Routes.GIVpower,
 			Routes.GIVstream,
 		],
 	},
