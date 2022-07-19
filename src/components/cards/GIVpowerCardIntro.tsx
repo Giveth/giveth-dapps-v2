@@ -1,14 +1,18 @@
 import {
 	P,
 	H6,
+	IconExternalLink,
 	IconRocketInSpace32,
 	IconX,
 	neutralColors,
-	ButtonLink,
+	// ButtonLink,
+	Button,
+	brandColors,
 } from '@giveth/ui-design-system';
 import { Dispatch, FC, SetStateAction } from 'react';
 import styled from 'styled-components';
-import Routes from '@/lib/constants/Routes';
+// import Routes from '@/lib/constants/Routes';
+import links from '@/lib/constants/links';
 import TotalGIVpowerBox from '../modals/StakeLock/TotalGIVpowerBox';
 import { Flex } from '../styled-components/Flex';
 import { StakeCardState } from './BaseStakingCard';
@@ -30,16 +34,25 @@ const GIVpowerCardIntro: FC<IGIVpowerCardIntro> = ({ setState }) => {
 			</HeaderRow>
 			<TotalGIVpowerBox />
 			<Desc>
-				You get GIVpower when you stake &amp; lock GIV. GIVpower allows
-				you to boost projects to influence their ranking on Giveth.
+				You get GIVpower when you stake &amp; lock GIV. GIVpower will
+				allow you to boost projects to influence their ranking on
+				Giveth.
 			</Desc>
 			<Desc>
-				Top ranked projects may be eligible for matching funds, &amp;
-				their donors get more GIVbacks!
+				It will allow you to support the projects you believe in,
+				without donating.
 			</Desc>
-			<ButtonLink
+			{/* <ButtonLink
 				label='Boost projects with GIVpower'
 				href={Routes.Projects}
+			/> */}
+			<LearnMoreButton
+				label='Learn More'
+				onClick={() => window.open(links.GIVPOWER_DOC)}
+				buttonType='texty'
+				icon={
+					<IconExternalLink size={16} color={brandColors.deep[100]} />
+				}
 			/>
 		</GIVpowerCardIntroContainer>
 	);
@@ -62,6 +75,11 @@ const CloseButton = styled.div`
 const Desc = styled(P)`
 	text-align: center;
 	margin-bottom: 32px;
+`;
+
+const LearnMoreButton = styled(Button)`
+	width: 100%;
+	margin-bottom: 16px;
 `;
 
 export default GIVpowerCardIntro;
