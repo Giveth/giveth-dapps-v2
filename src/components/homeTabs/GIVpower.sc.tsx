@@ -17,7 +17,7 @@ import { Arc } from '../styled-components/Arc';
 
 export const GIVpowerContainer = styled(Container)`
 	padding: 16px;
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		padding: 16px 32px;
 	}
 `;
@@ -74,7 +74,7 @@ export const FeaturesCardContainer = styled.div`
 	${mediaQueries.tablet} {
 		padding: 50px 5px;
 	}
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		padding: 76px 30px;
 	}
 `;
@@ -99,7 +99,7 @@ export const FeaturesCardItemsContainer = styled.div`
 		gap: 0;
 		margin-top: 106px;
 	}
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		gap: 20px;
 	}
 `;
@@ -128,7 +128,7 @@ export const BenefitsCardsContainer = styled.div`
 	flex-direction: column;
 
 	padding-bottom: 60px;
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		gap: 20px;
 		flex-direction: row;
 	}
@@ -185,7 +185,7 @@ export const ArcMustardTop = styled(Arc)`
 	top: -100px;
 	right: -300px;
 	display: none;
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		top: 0px;
 		display: unset;
 	}
@@ -200,7 +200,7 @@ export const ArcMustardBottom = styled(Arc)`
 	transform: rotate(-224deg);
 	left: -300px;
 	display: none;
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		bottom: 30px;
 		display: unset;
 	}
@@ -228,7 +228,7 @@ export const Circle = styled.div<{ size: number }>`
 		width: ${props => props.size / 2}px;
 		height: ${props => props.size / 2}px;
 	}
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		width: ${props => props.size / 1.3}px;
 		height: ${props => props.size / 1.3}px;
 	}
