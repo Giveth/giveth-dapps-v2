@@ -178,14 +178,10 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				? config.XDAI_NETWORK_NUMBER
 				: config.MAINNET_NETWORK_NUMBER;
 		const checkNetworkAndShowStakeModal = async () => {
-			console.log('1');
 			if (_chain && _open === type) {
-				console.log('2');
 				await switchNetwork(_chainId);
 			}
 			if (_chainId === chainId && _open === type) {
-				console.log('3');
-
 				if (!account) {
 					dispatch(setShowWalletModal(true));
 					return;
