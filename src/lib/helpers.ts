@@ -437,3 +437,14 @@ export const createSiweMessage = async (
 		return false;
 	}
 };
+
+export const isMultisig = async (
+	address?: string | null,
+	provider?: Web3Provider | null,
+) => {
+	if (!provider) return;
+	if (!address) return;
+
+	const res = await provider.getCode(address);
+	console.log('res', res);
+};
