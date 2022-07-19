@@ -95,7 +95,9 @@ const FileUploader: FC<IFileUploader> = ({
 		noClick: true,
 		noKeyboard: true,
 		onDropRejected: (fileRejections: FileRejection[], event: DropEvent) => {
-			showToastError('Please import single file with supported format');
+			showToastError(
+				'Please import files with supported format one by one',
+			);
 		},
 		onDropAccepted: async (acceptedFiles: UploadFile[]) => {
 			if (limit && limit < acceptedFiles.length + files.length) {
@@ -148,11 +150,11 @@ const FileUploader: FC<IFileUploader> = ({
 						alt='image'
 					/>
 					<P>
-						{`Drag & drop some docs here or`}{' '}
+						{`Drag & drop some docs here or `}
 						<span onClick={open}>Upload from device.</span>
 					</P>
 					<P>
-						Allowed files: .jpg, .jpeg, .png, .gif, .docx, .doc,
+						Supported formats: .jpg, .jpeg, .png, .gif, .docx, .doc,
 						.pdf, .ppt, pptx
 					</P>
 					<P>Docs size up to 4Mb.</P>
