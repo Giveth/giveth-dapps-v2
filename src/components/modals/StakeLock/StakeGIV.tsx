@@ -268,7 +268,7 @@ export const StakeGIVModal: FC<IStakeModalProps> = ({
 								{formatWeiHelper(amount, 2)} GIV
 							</H5White>
 							<ButtonLink
-								label='View on blockscot'
+								label='View on blockscout'
 								linkType='texty'
 								size='small'
 								icon={<IconExternalLink size={16} />}
