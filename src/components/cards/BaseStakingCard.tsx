@@ -175,13 +175,17 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		const { open, chain } = router.query;
 		const _open = Array.isArray(open) ? open[0] : open;
 		const _chain = Array.isArray(chain) ? chain[0] : chain;
+		const _chainId =
+			_chain === 'gnosis'
+				? config.XDAI_NETWORK_NUMBER
+				: config.MAINNET_NETWORK_NUMBER;
 		const checkNetworkAndShowStakeModal = async () => {
 			console.log('1');
 			if (_chain && _open === type) {
 				console.log('2');
-				await switchNetwork(Number(_chain));
+				await switchNetwork(_chainId);
 			}
-			if (Number(_chain) === chainId && _open === type) {
+			if (_chainId === chainId && _open === type) {
 				console.log('3');
 
 				if (!account) {
