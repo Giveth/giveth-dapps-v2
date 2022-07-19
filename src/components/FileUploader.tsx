@@ -157,7 +157,12 @@ const FileUploader: FC<IFileUploader> = ({
 						Supported formats: .jpg, .jpeg, .png, .gif, .docx, .doc,
 						.pdf, .ppt, pptx
 					</P>
-					<P>Docs size up to 4Mb.</P>
+					<P>
+						Docs size up to 4Mb.
+						{limit
+							? ` Maximum ${limit} file${limit > 1 ? 's' : ''}.`
+							: ''}
+					</P>
 				</DropZone>
 			)}
 

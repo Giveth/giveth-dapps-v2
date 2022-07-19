@@ -252,7 +252,7 @@ export default function ProjectRegistry() {
 									setUrls={field.onChange}
 									setIsUploading={setUploading}
 									multiple
-									limit={5}
+									limit={4}
 								/>
 							)}
 						/>
