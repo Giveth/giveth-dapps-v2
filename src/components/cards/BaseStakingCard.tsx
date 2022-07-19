@@ -9,6 +9,7 @@ import {
 import { constants } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { useWeb3React } from '@web3-react/core';
+import { useRouter } from 'next/router';
 import config from '../../configuration';
 import {
 	PoolStakingConfig,
@@ -69,8 +70,10 @@ import FarmCountDown from '../FarmCountDown';
 import { Flex } from '../styled-components/Flex';
 import { IStakeInfo } from '@/hooks/useStakingPool';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
-import { useAppSelector } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { switchNetwork } from '@/lib/wallet';
+import { setShowWalletModal } from '@/features/modal/modal.slice';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -118,6 +121,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const [showAPRModal, setShowAPRModal] = useState(false);
 	const [showUniV3APRModal, setShowUniV3APRModal] = useState(false);
 	const [showStakeModal, setShowStakeModal] = useState(false);
+	const [isFirstStakeShown, setIsFirstStakeShown] = useState(false);
 	const [showUnStakeModal, setShowUnStakeModal] = useState(false);
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
 	const [showWhatIsGIVstreamModal, setShowWhatIsGIVstreamModal] =
@@ -127,9 +131,12 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const [tokenDistroHelper, setTokenDistroHelper] =
 		useState<TokenDistroHelper>();
 	const [disableModal, setDisableModal] = useState<boolean>(true);
+	const router = useRouter();
 	const { setInfo } = useFarms();
-	const { chainId } = useWeb3React();
+	const { chainId, account, active: isWalletActive } = useWeb3React();
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
+	const dispatch = useAppDispatch();
+
 	const sdh = new SubgraphDataHelper(currentValues);
 	const { regenStreamType, regenFarmIntro } =
 		poolStakingConfig as RegenPoolStakingConfig;
@@ -162,6 +169,34 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				: config.MAINNET_CONFIG;
 		return networkConfig.regenStreams.find(s => s.type === regenStreamType);
 	}, [chainId, regenStreamType]);
+
+	useEffect(() => {
+		if (isFirstStakeShown || !router || !isWalletActive) return;
+		const { open, chain } = router.query;
+		const _open = Array.isArray(open) ? open[0] : open;
+		const _chain = Array.isArray(chain) ? chain[0] : chain;
+		const checkNetworkAndShowStakeModal = async () => {
+			console.log('1');
+			if (_chain && _open === type) {
+				console.log('2');
+				await switchNetwork(Number(_chain));
+			}
+			if (Number(_chain) === chainId && _open === type) {
+				console.log('3');
+
+				if (!account) {
+					dispatch(setShowWalletModal(true));
+					return;
+				} else {
+					setShowStakeModal(true);
+					setIsFirstStakeShown(true);
+					router.replace('/givfarm', undefined, { shallow: true });
+				}
+			}
+		};
+
+		checkNetworkAndShowStakeModal();
+	}, [router, account, isWalletActive]);
 
 	useEffect(() => {
 		if (regenStreamType) {
