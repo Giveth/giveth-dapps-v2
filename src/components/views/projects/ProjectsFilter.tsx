@@ -1,66 +1,49 @@
 import { brandColors, neutralColors } from '@giveth/ui-design-system';
 
 import styled from 'styled-components';
-import { Swiper, SwiperSlide, useSwiper, useSwiperSlide } from 'swiper/react';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
-import { useRef } from 'react';
+import { RefObject } from 'react';
 import { IProjectsView } from './ProjectsIndex';
-import { Shadow } from '@/components/styled-components/Shadow';
 
-function ProjectsFilter({ projectsProps }: { projectsProps: IProjectsView }) {
-	const navigationPrevRef = useRef<HTMLButtonElement>(null);
-	const navigationNextRef = useRef<HTMLButtonElement>(null);
-	const mySwiper = useSwiper();
-	const mySwiperSlide = useSwiperSlide();
-	console.log('mySwiper', mySwiper?.allowSlideNext);
-	console.log('mySwiperSlide', mySwiperSlide);
-	console.log('Propss', projectsProps.mainCategories);
-	console.log('Current', navigationNextRef.current);
+interface IProjectsFilterProps {
+	projectsProps: IProjectsView;
+	navigationPrevRef: RefObject<HTMLButtonElement>;
+	navigationNextRef: RefObject<HTMLButtonElement>;
+}
+
+function ProjectsFilter({
+	projectsProps,
+	navigationPrevRef,
+	navigationNextRef,
+}: IProjectsFilterProps) {
 	return (
-		// <div style={{ maxWidth: '50%', display: 'flex' }}>
-		<Container>
-			<PrevIcon ref={navigationPrevRef}>
-				<img src={'/images/caret_right.svg'} alt='caret right' />
-			</PrevIcon>
-			<Swiper
-				modules={[Navigation]}
-				onSlideChange={() => console.log('slide change')}
-				navigation={{
-					prevEl: navigationPrevRef.current,
-					nextEl: navigationNextRef.current,
-				}}
-				slidesPerView='auto'
-				spaceBetween={16}
-				onEnded={() => console.log('ended')}
-			>
-				{projectsProps.mainCategories.map(category => {
-					return (
-						<SwiperSlide key={category.slug}>
-							<MainCategoryItem>
-								{category.title}
-							</MainCategoryItem>
-						</SwiperSlide>
-					);
-				})}
-			</Swiper>
-			<NextIcon ref={navigationNextRef}>
-				<img src={'/images/caret_right.svg'} alt='caret right' />
-			</NextIcon>
-		</Container>
-		// </div>
+		<Swiper
+			modules={[Navigation]}
+			onSlideChange={() => console.log('slide change')}
+			navigation={{
+				prevEl: navigationPrevRef.current,
+				nextEl: navigationNextRef.current,
+			}}
+			slidesPerView='auto'
+			spaceBetween={16}
+			onEnded={() => console.log('ended')}
+		>
+			{projectsProps.mainCategories.map(category => {
+				return (
+					<SwiperSlide key={category.slug}>
+						<MainCategoryItem>{category.title}</MainCategoryItem>
+					</SwiperSlide>
+				);
+			})}
+		</Swiper>
 	);
 }
 
 export default ProjectsFilter;
-
-const Container = styled.div`
-	position: relative;
-	width: 60%;
-	padding-right: 60px;
-`;
 
 const MainCategoryItem = styled.div<{ isSelected?: boolean }>`
 	border-radius: 50px;
@@ -73,31 +56,4 @@ const MainCategoryItem = styled.div<{ isSelected?: boolean }>`
 	}
 	font-weight: 400;
 	text-align: center;
-`;
-
-const NextIcon = styled.button<{ disabled?: boolean }>`
-	width: 48px;
-	height: 48px;
-	border-radius: 50%;
-	background: white;
-	box-shadow: ${Shadow.Neutral[500]};
-	cursor: ${props => (props.disabled ? 'default' : 'pointer')};
-	position: absolute;
-	top: calc(50% - 24px);
-	right: 0;
-	border: none;
-	z-index: 1;
-	:disabled {
-		display: none;
-	}
-`;
-
-const PrevIcon = styled(NextIcon)<{ disabled?: boolean }>`
-	-ms-transform: rotate(180deg);
-	transform: rotate(180deg);
-	left: 0;
-	z-index: 2;
-	:disabled {
-		display: none;
-	}
 `;

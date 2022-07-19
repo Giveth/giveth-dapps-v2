@@ -101,6 +101,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const [search, setSearch] = useState<string>('');
 	const [searchValue, setSearchValue] = useState<string>('');
 	const [totalCount, setTotalCount] = useState(_totalCount);
+	//Slider next and prev button refs
+	const navigationPrevRef = useRef<HTMLButtonElement>(null);
+	const navigationNextRef = useRef<HTMLButtonElement>(null);
 
 	const dispatch = useAppDispatch();
 	const router = useRouter();
@@ -217,7 +220,25 @@ const ProjectsIndex = (props: IProjectsView) => {
 				</Subtitle>
 
 				<FiltersSection>
-					<ProjectsFilter projectsProps={props} />
+					<FiltersSwiper>
+						<PrevIcon ref={navigationPrevRef}>
+							<img
+								src={'/images/caret_right.svg'}
+								alt='caret right'
+							/>
+						</PrevIcon>
+						<ProjectsFilter
+							projectsProps={props}
+							navigationNextRef={navigationNextRef}
+							navigationPrevRef={navigationPrevRef}
+						/>
+						<NextIcon ref={navigationNextRef}>
+							<img
+								src={'/images/caret_right.svg'}
+								alt='caret right'
+							/>
+						</NextIcon>
+					</FiltersSwiper>
 					<FilterAndSearchContainer>
 						<SearchButton>
 							<IconSearch />
@@ -359,6 +380,39 @@ const FiltersButton = styled.button`
 	font-weight: 700;
 	text-transform: uppercase;
 	cursor: pointer;
+`;
+
+const FiltersSwiper = styled.div`
+	position: relative;
+	width: 60%;
+	padding-right: 60px;
+`;
+
+const NextIcon = styled.button<{ disabled?: boolean }>`
+	width: 48px;
+	height: 48px;
+	border-radius: 50%;
+	background: white;
+	box-shadow: ${Shadow.Neutral[500]};
+	cursor: ${props => (props.disabled ? 'default' : 'pointer')};
+	position: absolute;
+	top: calc(50% - 24px);
+	right: 0;
+	border: none;
+	z-index: 1;
+	:disabled {
+		display: none;
+	}
+`;
+
+const PrevIcon = styled(NextIcon)<{ disabled?: boolean }>`
+	-ms-transform: rotate(180deg);
+	transform: rotate(180deg);
+	left: 0;
+	z-index: 2;
+	:disabled {
+		display: none;
+	}
 `;
 
 export default ProjectsIndex;
