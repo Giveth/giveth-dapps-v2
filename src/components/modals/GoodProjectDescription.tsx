@@ -9,6 +9,7 @@ import { IModal } from '@/types/common';
 import BulbIcon from '/public/images/icons/lightbulb.svg';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import ExternalLink from '@/components/ExternalLink';
+import links from '@/lib/constants/links';
 
 export const GoodProjectDescription: FC<IModal> = ({ setShowModal }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
@@ -34,15 +35,19 @@ export const GoodProjectDescription: FC<IModal> = ({ setShowModal }) => {
 				<Description>When?</Description>
 
 				<LeadStyled>See how others have done it,</LeadStyled>
-				<ExternalLink href={Routes.Projects}>
-					<LinkStyled>Browse examples.</LinkStyled>
-				</ExternalLink>
+				<ExternalLink
+					title='Browse examples.'
+					href={Routes.Projects}
+					color={brandColors.pinky[500]}
+				/>
 
 				<LeadStyled>Read this blog post tutorial,</LeadStyled>
-				<LinkStyled href='https://knowhow.ncvo.org.uk/how-to/how-to-write-an-overview-of-a-nonprofit-organization'>
-					How to write a fundraising project description to increase
-					donations.
-				</LinkStyled>
+				<ExternalLink
+					title='How to write a fundraising project description to increase
+					donations.'
+					href={links.FUNDRAISING_DOCS}
+					color={brandColors.pinky[500]}
+				/>
 
 				<OkButton
 					label='DISMISS'
