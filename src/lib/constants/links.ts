@@ -35,6 +35,7 @@ const links = {
 	TRACES_DOCS: DOCS + 'dapps/entitiesAndRoles/#traces',
 	MAKE_TRACEABLE_DOCS: DOCS + 'dapps/makeTraceableProject',
 	VERIFICATION_DOCS: DOCS + 'dapps/projectVerification',
+	FUNDRAISING_DOCS: DOCS + 'whatisgiveth/fundraisingGuide',
 	TRACE: 'https://trace.giveth.io/',
 	COMMONS_STACK: 'https://commonsstack.org/',
 	RECRUITEE: 'https://giveth.recruitee.com/',
