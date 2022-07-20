@@ -124,7 +124,7 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 												}`}
 											</TableCell>
 											<TableCell>
-												{multiplier.toPrecision(1)}
+												{multiplier.toFixed(2)}
 											</TableCell>
 											<TableCell>
 												{apr
