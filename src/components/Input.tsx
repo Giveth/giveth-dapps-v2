@@ -100,6 +100,7 @@ const Input = (props: InputType) => {
 					hasLeftIcon={!!LeftIcon}
 					disabled={disabled}
 					maxLength={maxLength}
+					value={value}
 					{...(registerName && register
 						? register(registerName, registerOptions)
 						: {})}
