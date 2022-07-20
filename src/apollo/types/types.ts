@@ -201,6 +201,7 @@ export interface ISocialProfile {
 	isVerified: boolean;
 	socialNetwork: string;
 	socialNetworkId: string;
+	name: string;
 }
 
 export interface IProjectVerification {
