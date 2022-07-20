@@ -14,7 +14,6 @@ import {
 import styled from 'styled-components';
 
 import { captureException } from '@sentry/nextjs';
-import { BigArc } from '@/components/styled-components/Arc';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import Routes from '@/lib/constants/Routes';
 import {
@@ -112,10 +111,10 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const isFirstRender = useRef(true);
 	const debouncedSearch = useRef<any>();
 	const pageNum = useRef(0);
-	const isDesktop = useMediaQuery(device.laptop);
+	const isDesktop = useMediaQuery(device.laptopS);
 	const isTablet = useMediaQuery(
 		`(min-device-width: ${deviceSize.tablet}px) and (max-device-width: ${
-			deviceSize.laptop - 1
+			deviceSize.laptopS - 1
 		}px)`,
 	);
 	console.log('Props', props);
@@ -216,10 +215,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	return (
 		<>
-			{selectedMainCategory && (
-				<ProjectsBanner mainCategory={selectedMainCategory} />
-			)}
-			<BigArc />
+			<ProjectsBanner mainCategory={selectedMainCategory} />
 			<Wrapper>
 				<Title weight={700}>Projects</Title>
 				<Subtitle>
@@ -356,7 +352,7 @@ export const ProjectsContainer = styled.div`
 	gap: 25px;
 	margin-bottom: 64px;
 
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		grid-template-columns: repeat(2, 1fr);
 	}
 
@@ -366,7 +362,6 @@ export const ProjectsContainer = styled.div`
 `;
 
 const Wrapper = styled.div`
-	padding: 166px 30px 4px 30px;
 	max-width: ${deviceSize.desktop + 'px'};
 	margin: 0 auto;
 `;

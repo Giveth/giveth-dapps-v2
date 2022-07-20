@@ -167,7 +167,7 @@ const RightContainer = styled.div<{ color: string }>`
 	text-align: left;
 	color: ${props => props.color};
 
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		text-align: right;
 	}
 `;
@@ -176,7 +176,7 @@ const SupportUs = styled.div`
 	display: flex;
 	margin-bottom: 32px;
 
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		justify-content: flex-end;
 	}
 `;

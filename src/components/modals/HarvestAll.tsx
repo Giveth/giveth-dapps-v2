@@ -63,6 +63,7 @@ import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
 import { LiquidityPosition } from '@/types/nfts';
 import { Flex } from '../styled-components/Flex';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 import type { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 
 interface IHarvestAllModalProps extends IModal {
@@ -132,6 +133,8 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	//Sum
 	const [sumLiquid, setSumLiquid] = useState(ethers.constants.Zero);
 	const [sumStream, setSumStream] = useState<BigNumber>(Zero);
+
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	const givback = useMemo<ethers.BigNumber>(() => {
 		return regenStreamConfig ? ethers.constants.Zero : BN(balances.givback);
@@ -305,7 +308,8 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 
 	return (
 		<Modal
-			setShowModal={setShowModal}
+			closeModal={closeModal}
+			isAnimating={isAnimating}
 			headerTitle={modalTitle}
 			headerTitlePosition={'left'}
 		>
@@ -321,9 +325,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 								disabled={state !== HarvestStates.HARVEST}
 								label='OK'
 								size='large'
-								onClick={() => {
-									setShowModal(false);
-								}}
+								onClick={closeModal}
 							/>
 						</>
 					) : (
@@ -577,9 +579,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 									label='CANCEL'
 									size='medium'
 									buttonType='texty'
-									onClick={() => {
-										setShowModal(false);
-									}}
+									onClick={closeModal}
 								/>
 							</HarvestBoxes>
 						</>

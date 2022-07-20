@@ -3,6 +3,7 @@ import {
 	EDonationType,
 	EProjectStatus,
 } from '@/apollo/types/gqlEnums';
+import { IAddress } from '@/components/views/verification/manageFunds/ManageFundsIndex';
 
 export interface IProject {
 	id?: string;
@@ -46,6 +47,7 @@ export interface IProject {
 		label: string;
 		supportCustomTokens: boolean;
 	};
+	projectVerificationForm?: IProjectVerification;
 }
 
 export interface IWalletAddress {
@@ -177,4 +179,85 @@ export interface IMainCategory {
 	slug: string;
 	categories: ICategory[];
 	selected?: boolean;
+}
+export interface IProjectRegistry {
+	isNonProfitOrganization?: boolean;
+	organizationCountry?: string;
+	organizationWebsite?: string;
+	organizationDescription?: string;
+	organizationName?: string;
+	attachments?: string[];
+}
+
+export interface IProjectContact {
+	name: string;
+	url: string;
+}
+
+export interface IProjectMilestones {
+	foundationDate?: string;
+	mission?: string;
+	achievedMilestones?: string;
+	achievedMilestonesProofs?: string[];
+}
+
+export interface IProjectManagingFunds {
+	description: string;
+	relatedAddresses: IAddress[];
+}
+
+export interface ISocialProfile {
+	id: string;
+	isVerified: boolean;
+	socialNetwork: string;
+	socialNetworkId: string;
+	name: string;
+}
+
+export interface IProjectVerification {
+	id: string;
+	isTermAndConditionsAccepted: boolean;
+	emailConfirmationToken?: string;
+	emailConfirmationSent?: boolean;
+	emailConfirmationSentAt?: string;
+	emailConfirmedAt?: string;
+	emailConfirmed?: boolean;
+	email?: string;
+	projectRegistry?: IProjectRegistry;
+	projectContacts?: IProjectContact[];
+	milestones?: IProjectMilestones;
+	managingFunds?: IProjectManagingFunds;
+	emailConfirmationTokenExpiredAt?: string;
+	user: IUser;
+	project: IProject;
+	socialProfiles?: ISocialProfile[];
+	status: EVerificationStatus;
+	lastStep: EVerificationSteps;
+}
+
+export enum EVerificationStatus {
+	VERIFIED = 'verified',
+	DRAFT = 'draft',
+	SUBMITTED = 'submitted',
+	REJECTED = 'rejected',
+}
+
+export interface IProjectVerificationUpdateInput {
+	step: EVerificationSteps;
+	projectVerificationId: number;
+	projectRegistry?: IProjectRegistry;
+	projectContacts?: IProjectContact[];
+	milestones?: IProjectMilestones;
+	managingFunds?: IProjectManagingFunds;
+	isTermAndConditionsAccepted?: boolean;
+}
+
+export enum EVerificationSteps {
+	PERSONAL_INFO = 'personalInfo',
+	PROJECT_REGISTRY = 'projectRegistry',
+	PROJECT_CONTACTS = 'projectContacts',
+	MANAGING_FUNDS = 'managingFunds',
+	MILESTONES = 'milestones',
+	TERM_AND_CONDITION = 'termAndCondition',
+	SUBMIT = 'submit',
 }

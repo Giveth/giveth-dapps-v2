@@ -17,6 +17,7 @@ import {
 } from './ConfirmSubmit';
 import { StakeState } from '@/lib/staking';
 import { IModal } from '@/types/common';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 import type { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 
 const loadingAnimationOptions = {
@@ -48,6 +49,8 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 	);
 	const { library, chainId } = useWeb3React();
 
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+
 	const { title, LM_ADDRESS, GARDEN_ADDRESS } = poolStakingConfig;
 
 	const onWithdraw = async () => {
@@ -76,7 +79,7 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 	};
 
 	return (
-		<Modal setShowModal={setShowModal}>
+		<Modal closeModal={closeModal} isAnimating={isAnimating}>
 			<UnStakeModalContainer>
 				{(stakeState === StakeState.UNKNOWN ||
 					stakeState === StakeState.CONFIRMING) && (
@@ -118,9 +121,7 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 							<CancelButton
 								buttonType='texty'
 								label='CANCEL'
-								onClick={() => {
-									setShowModal(false);
-								}}
+								onClick={closeModal}
 							/>
 						</InnerModal>
 					</>

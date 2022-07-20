@@ -98,7 +98,7 @@ const ArcCyan = styled(Arc)`
 	bottom: -150px;
 	right: -430px;
 
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		right: -230px;
 		bottom: -30px;
 	}
@@ -113,7 +113,7 @@ const DotCyan = styled(Arc)`
 	height: 100px;
 	z-index: 1;
 
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		right: 210px;
 		bottom: 235px;
 	}

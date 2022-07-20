@@ -1,4 +1,3 @@
-import router from 'next/router';
 import styled from 'styled-components';
 import {
 	brandColors,
@@ -8,31 +7,34 @@ import {
 	IconVerified,
 	Lead,
 	neutralColors,
-	P,
 } from '@giveth/ui-design-system';
 
+import { useRouter } from 'next/router';
 import { Modal } from '@/components/modals/Modal';
-import links from '@/lib/constants/links';
 import { useAppSelector } from '@/features/hooks';
+import Routes from '@/lib/constants/Routes';
 import { ETheme } from '@/features/general/general.slice';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
-export const VerificationModal = (props: { closeModal: () => void }) => {
-	const { closeModal } = props;
+export const VerificationModal = (props: { onClose: () => void }) => {
+	const router = useRouter();
+	const slug = router.query.projectIdSlug as string;
+	const { onClose } = props;
 	const theme = useAppSelector(state => state.general.theme);
+	const { isAnimating, closeModal } = useModalAnimation(onClose);
 
 	const handleClick = () => {
-		router.push(links.PROJECT_VERIFICATION);
+		router.push(`${Routes.Verification}/${slug}`);
 		closeModal();
 	};
 
 	return (
-		<Modal setShowModal={closeModal} hiddenClose>
+		<Modal closeModal={closeModal} isAnimating={isAnimating} hiddenClose>
 			<Container>
 				<Header>
 					<IconVerified size={54} color={brandColors.cyan[500]} />
 					<div>
 						<Title>Verify your project</Title>
-						<P>Make your project Traceable.</P>
 					</div>
 				</Header>
 

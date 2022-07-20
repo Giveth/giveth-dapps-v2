@@ -10,7 +10,7 @@ import { projectsMetatags } from '@/content/metatags';
 import type { IProjectsRouteProps } from '.';
 
 interface IProjectsCategoriesRouteProps extends IProjectsRouteProps {
-	selectedMainCategory?: IMainCategory;
+	selectedMainCategory: IMainCategory;
 }
 
 const ProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
@@ -89,9 +89,10 @@ export const getServerSideProps: GetServerSideProps = async context => {
 export const mainCategoriesMock: IMainCategory[] = [
 	{
 		title: 'Environment & Energy',
-		banner: '',
+		banner: '/images/banners/categories/environment.png',
 		slug: 'environment-and-energy',
-		description: '',
+		description:
+			'Agriculture, Air, Climate, Energy, Land,Oceans, Pollution, Waste, Water, Biodiversity',
 		categories: [
 			{
 				name: 'agriculture',
@@ -147,7 +148,7 @@ export const mainCategoriesMock: IMainCategory[] = [
 	},
 	{
 		title: 'Economics & Infrastructure',
-		banner: '',
+		banner: '/images/banners/categories/economics.png',
 		slug: 'economic-and-infrastructure',
 		description: '',
 		categories: [
@@ -180,7 +181,7 @@ export const mainCategoriesMock: IMainCategory[] = [
 	},
 	{
 		title: 'Health & Wellness',
-		banner: '',
+		banner: '/images/banners/categories/health.png',
 		slug: 'health-and-wellness',
 		description: '',
 		categories: [
@@ -203,7 +204,7 @@ export const mainCategoriesMock: IMainCategory[] = [
 	},
 	{
 		title: 'Technology & Education',
-		banner: '',
+		banner: '/images/banners/categories/technology.png',
 		slug: 'technology-and-education',
 		description: '',
 		categories: [
@@ -226,7 +227,7 @@ export const mainCategoriesMock: IMainCategory[] = [
 	},
 	{
 		title: 'Art & Culture',
-		banner: '',
+		banner: '/images/banners/categories/art.png',
 		slug: 'art-and-culture',
 		description: '',
 		categories: [
@@ -249,7 +250,7 @@ export const mainCategoriesMock: IMainCategory[] = [
 	},
 	{
 		title: 'Non-profit',
-		banner: '',
+		banner: '/images/banners/categories/nonprofit.png',
 		slug: 'non-profit',
 		description: '',
 		categories: [
