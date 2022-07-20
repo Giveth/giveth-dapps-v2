@@ -10,6 +10,7 @@ export enum StakingPlatform {
 	BALANCER = 'Balancer',
 	HONEYSWAP = 'Honeyswap',
 	SUSHISWAP = 'Sushiswap',
+	ICHI = 'Ichi',
 }
 export enum StakingType {
 	UNISWAPV2_GIV_DAI = 'UniswapV2_GIV_DAI',
@@ -19,6 +20,7 @@ export enum StakingType {
 	HONEYSWAP_GIV_HNY = 'Honeyswap_GIV_HNY',
 	HONEYSWAP_GIV_DAI = 'Honeyswap_GIV_DAI',
 	GIV_LM = 'GIV_LM',
+	ICHI_GIV_ONEGIV = 'Ichi_GIV_oneGIV',
 
 	HONEYSWAP_FOX_HNY = 'Honeyswap_FOX_HNY',
 	UNISWAPV2_CULT_ETH = 'UniswapV2_CULT_ETH',
