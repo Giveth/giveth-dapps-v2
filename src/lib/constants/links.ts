@@ -28,6 +28,7 @@ const links = {
 	GIVBACK_DOC: DOCS + 'giveconomy/givbacks',
 	COVENANT_DOC: DOCS + 'whatisgiveth/covenant/',
 	GIVETH_DOCS: DOCS + 'whatisgiveth/',
+	NICE_DOC: DOCS + 'giveconomy/niceToken',
 	USER_DOCS: DOCS + 'dapps/',
 	DEVELOPER_DOCS: DOCS + 'dapps/givethioinstallation',
 	CAMPAIGN_DOCS: DOCS + 'dapps/entitiesAndRoles/#campaigns',

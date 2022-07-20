@@ -12,6 +12,7 @@ import { formatTxLink } from '@/lib/helpers';
 import SuccessView from '@/components/views/donate/SuccessView';
 import ProjectCardSelector from '@/components/views/donate/ProjectCardSelector';
 import DonationTypes from '@/components/views/donate/DonationTypes';
+import NiceBanner from './NiceBanner';
 
 const DonateIndex = (props: IProjectBySlug) => {
 	const { project } = props;
@@ -26,6 +27,7 @@ const DonateIndex = (props: IProjectBySlug) => {
 		<>
 			<BigArc />
 			<Wrapper>
+				<NiceBanner project={project} />
 				<Sections>
 					<ProjectCardSelector project={project} />
 					<Right isMobile={isMobile}>
