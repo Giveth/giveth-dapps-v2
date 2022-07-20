@@ -117,7 +117,11 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 												)}
 											</TableCell>
 											<TableCell>
-												{locksInfo.rounds} Rounds
+												{`${locksInfo.rounds}  Round${
+													locksInfo.rounds > 1
+														? 's'
+														: ''
+												}`}
 											</TableCell>
 											<TableCell>
 												{multiplier.toPrecision(1)}
