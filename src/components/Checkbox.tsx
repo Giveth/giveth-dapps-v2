@@ -5,14 +5,16 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FlexCenter } from '@/components/styled-components/Flex';
+import type { FC } from 'react';
 
-const CheckBox = (props: {
+interface ICheckBox {
 	onChange: (e: boolean) => void;
-	title: string;
+	label: string;
 	checked?: boolean;
 	disabled?: boolean;
-}) => {
-	const { onChange, checked, title, disabled } = props;
+}
+
+const CheckBox: FC<ICheckBox> = ({ onChange, checked, label, disabled }) => {
 	return (
 		<Wrapper
 			onClick={() => !disabled && onChange(!checked)}
@@ -22,7 +24,7 @@ const CheckBox = (props: {
 			<FlexCenter>
 				{checked && <IconCheck size={24} color='white' />}
 			</FlexCenter>
-			<div>{title}</div>
+			<div>{label}</div>
 		</Wrapper>
 	);
 };

@@ -10,11 +10,14 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useState } from 'react';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
 import { ESortby, EDirection } from '@/apollo/types/gqlEnums';
+import CheckBox from '../Checkbox';
 
 export const FilterMenu = () => {
+	const [isChecked, setIsChecked] = useState(false);
 	return (
 		<MenuContainer>
 			<Header>
@@ -34,6 +37,11 @@ export const FilterMenu = () => {
 			</Section>
 			<Section>
 				<B>Project features</B>
+				<CheckBox
+					label='Giveback eligible '
+					onChange={setIsChecked}
+					checked={isChecked}
+				/>
 			</Section>
 		</MenuContainer>
 	);
