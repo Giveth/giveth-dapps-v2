@@ -13,16 +13,19 @@ interface IProps {
 
 const VerificationStatus: FC<IProps> = ({ status }) => {
 	if (!status || status === EVerificationStatus.DRAFT) return null;
+	const isVerified = status === EVerificationStatus.VERIFIED;
 
 	return (
 		<Container>
 			<Status>
-				<B>Verify status</B>
+				<B>Verification status</B>
 				<VerificationBadge simplified status={status} />
 			</Status>
-			<ExternalLink href={links.DISCORD_SUPPORT}>
-				<Contact>Please contact support team</Contact>
-			</ExternalLink>
+			{!isVerified && (
+				<ExternalLink href={links.DISCORD_SUPPORT}>
+					<Contact>Questions? Contact Support</Contact>
+				</ExternalLink>
+			)}
 		</Container>
 	);
 };
