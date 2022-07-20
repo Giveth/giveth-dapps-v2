@@ -82,6 +82,21 @@ const config: EnvConfig = {
 				active: true,
 			},
 			{
+				POOL_ADDRESS: '0x8a6b25e33b12d1bb6929a8793961076bd1f9d3eb',
+				VAULT_ADDRESS: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+				POOL_ID:
+					'0x8a6b25e33b12d1bb6929a8793961076bd1f9d3eb00020000000000000000053f',
+				LM_ADDRESS: '0x4B319c068685aF260c91407B651918307df30061',
+				type: StakingType.ICHI_GIV_ONEGIV,
+				platform: StakingPlatform.ICHI,
+				title: 'oneGIV / GIV',
+				description: '80% GIV, 20% ETH',
+				provideLiquidityLink:
+					'https://www.figma.com/exit?url=https%3A%2F%2Fapp.ichi.org%2Fvault%3FpoolId%3D20009%26back%3Dvault',
+				unit: 'LP',
+				active: true,
+			},
+			{
 				INCENTIVE_START_TIME: 1640272200,
 				INCENTIVE_END_TIME: 1655997000,
 				INCENTIVE_REWARD_AMOUNT: 10000000,
