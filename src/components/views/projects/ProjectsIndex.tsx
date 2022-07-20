@@ -384,10 +384,11 @@ const FiltersButton = styled.button`
 	padding: 16px;
 	background: white;
 	box-shadow: ${Shadow.Neutral[500]};
-	border: none;
+	border: 1px solid ${neutralColors.gray[400]};
 	font-weight: 700;
 	text-transform: uppercase;
 	cursor: pointer;
+	user-select: none;
 `;
 
 const FiltersSwiper = styled.div`
