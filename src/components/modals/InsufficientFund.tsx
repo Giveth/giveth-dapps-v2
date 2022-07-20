@@ -7,13 +7,16 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 export const InsufficientFundModal: FC<IModal> = ({ setShowModal }) => {
 	const theme = useAppSelector(state => state.general.theme);
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	return (
 		<Modal
-			setShowModal={setShowModal}
+			closeModal={closeModal}
+			isAnimating={isAnimating}
 			headerIcon={<IconFund />}
 			headerTitle='Insufficient Fund'
 			headerTitlePosition='left'
@@ -29,7 +32,7 @@ export const InsufficientFundModal: FC<IModal> = ({ setShowModal }) => {
 
 				<OkButton
 					label='OK'
-					onClick={() => setShowModal(false)}
+					onClick={closeModal}
 					buttonType={theme === ETheme.Dark ? 'primary' : 'secondary'}
 				/>
 			</InsufficientFundContainer>

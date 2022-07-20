@@ -372,7 +372,7 @@ export const ProjectsContainer = styled.div`
 	gap: 25px;
 	margin-bottom: 64px;
 
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		grid-template-columns: repeat(2, 1fr);
 	}
 

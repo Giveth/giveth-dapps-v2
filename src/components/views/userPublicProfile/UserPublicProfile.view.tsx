@@ -93,7 +93,7 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 								<GLink size='Big'>{user?.email}</GLink>
 							)}
 							<WalletContainer>
-								{myAccount && user?.name && user?.email && (
+								{myAccount && isUserRegistered(user) && (
 									<EditProfile
 										size='Big'
 										onClick={() => setShowModal(true)}

@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
 import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
-import ProjectDonateCard from './ProjectDonateCard';
+import ProjectDonateCard from './projectDonateCard/ProjectDonateCard';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
@@ -139,7 +139,6 @@ const ProjectIndex = (props: { project?: IProject }) => {
 				setIsMobile(false);
 			}
 		};
-		windowResizeHandler();
 		window.addEventListener('resize', windowResizeHandler);
 		return () => {
 			removeEventListener('resize', windowResizeHandler);
@@ -251,7 +250,7 @@ const BodyWrapper = styled(Container)`
 		padding: 0 32px;
 	}
 
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		padding: 0 40px;
 	}
 

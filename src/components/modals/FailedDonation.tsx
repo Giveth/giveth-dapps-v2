@@ -9,6 +9,7 @@ import { IModal } from '@/types/common';
 import ExternalLink from '@/components/ExternalLink';
 import DangerIcon from '/public/images/icons/danger_triangle.svg';
 import links from '@/lib/constants/links';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 export enum EDonationFailedType {
 	REJECTED = 'REJECTED',
@@ -23,6 +24,8 @@ interface IProps extends IModal {
 }
 
 const FailedDonation: FC<IProps> = ({ setShowModal, txUrl, type }) => {
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+
 	const messageContent = () => {
 		switch (type) {
 			case EDonationFailedType.REJECTED:
@@ -57,7 +60,8 @@ const FailedDonation: FC<IProps> = ({ setShowModal, txUrl, type }) => {
 
 	return (
 		<Modal
-			setShowModal={setShowModal}
+			closeModal={closeModal}
+			isAnimating={isAnimating}
 			headerTitle='Donation failed!'
 			headerTitlePosition='left'
 			headerColor={semanticColors.punch[500]}

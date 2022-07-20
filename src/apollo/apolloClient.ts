@@ -76,7 +76,9 @@ function createApolloClient() {
 	return new ApolloClient({
 		ssrMode,
 		link: errorLink.concat(authLink.concat(httpLink)),
-		cache: new InMemoryCache(),
+		cache: new InMemoryCache({
+			addTypename: false,
+		}),
 		defaultOptions: {
 			watchQuery: {
 				fetchPolicy: 'cache-and-network',

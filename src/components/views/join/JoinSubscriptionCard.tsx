@@ -5,7 +5,6 @@ import {
 	neutralColors,
 	SublineBold,
 } from '@giveth/ui-design-system';
-import { ChangeEvent } from 'react';
 
 import { mediaQueries } from '@/lib/constants/constants';
 import useNewsletterSubscription from '@/hooks/useNewsletterSubscription';
@@ -58,7 +57,7 @@ const JoinSubscriptionCard = () => {
 				<Caption fullWidth>{captionText} </Caption>
 				{!successSubscription && (
 					<form
-						action='http://news.giveth.io/add_subscriber'
+						action='https://www.getrevue.co/profile/giveth/add_subscriber'
 						method='post'
 						id='revue-form'
 						name='revue-form'
@@ -72,9 +71,7 @@ const JoinSubscriptionCard = () => {
 									error={error}
 									name='member[email]'
 									id='member_email'
-									onChange={(
-										e: ChangeEvent<HTMLInputElement>,
-									) => setEmail(e.target.value)}
+									onChange={e => setEmail(e.target.value)}
 								/>
 								{error && (
 									<InvalidEmail>
@@ -86,6 +83,7 @@ const JoinSubscriptionCard = () => {
 								disabled={!validateEmail(email)}
 								label='Subscribe'
 								buttonType='primary'
+								type='submit'
 							/>
 						</SubscriptionActionWrapper>
 					</form>

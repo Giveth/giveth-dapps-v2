@@ -158,7 +158,7 @@ const ToastContainer = styled(Flex)<IToast>`
 			}
 		}};
 	border-radius: 8px;
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		min-width: 580px;
 	}
 `;
