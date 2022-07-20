@@ -99,7 +99,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		project || {};
 	const isDraft = project?.status.name === EProjectStatus.DRAFT;
 	const defaultImpactLocation = impactLocation || '';
-	console.log(project);
+
 	const defaultMainAddress = addresses?.find(
 		a => a.networkId === ethereumId,
 	)?.address;

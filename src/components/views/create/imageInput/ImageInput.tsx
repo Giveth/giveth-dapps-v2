@@ -39,11 +39,14 @@ const ImageInput = (props: ImageInputProps) => {
 
 	const [isUploadTab, setIsUploadTab] = useState(true);
 	const [attributes, setAttributes] = useState({ name: '', username: '' });
+	const [uploading, setUploading] = useState(false);
+	const [file, setFile] = useState<File>();
 
 	const removeAttributes = () => setAttributes({ name: '', username: '' });
 
 	const removeImage = () => {
 		setValue('');
+		setFile(undefined);
 		removeAttributes();
 	};
 
@@ -55,6 +58,11 @@ const ImageInput = (props: ImageInputProps) => {
 	const pickBg = (index: number) => {
 		setValue(`/images/defaultProjectImages/${index}.png`);
 		removeAttributes();
+	};
+
+	const handleUploading = (i: boolean) => {
+		setUploading(i);
+		setIsLoading(i);
 	};
 
 	return (
@@ -89,9 +97,12 @@ const ImageInput = (props: ImageInputProps) => {
 				)}
 				{(isUploadTab || (!isUploadTab && value)) && (
 					<ImageUploader
-						setUrl={handleUpload}
 						url={value}
-						setIsUploading={setIsLoading}
+						setUrl={handleUpload}
+						uploading={uploading}
+						setUploading={handleUploading}
+						file={file}
+						setFile={setFile}
 					/>
 				)}
 
