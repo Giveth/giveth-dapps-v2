@@ -213,8 +213,8 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 
 	const isGIVpower =
 		type === StakingType.GIV_LM && chainId === config.XDAI_NETWORK_NUMBER;
-	const isZeroLocked = isGIVpower && totalGIVLocked === '0';
 	const isLocked = isGIVpower && totalGIVLocked !== '0';
+	const isZeroGIVStacked = isGIVpower && balances.givStaked === '0';
 
 	return (
 		<>
@@ -319,7 +319,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 																2,
 															)}
 														%
-														{isZeroLocked &&
+														{isZeroGIVStacked &&
 															`-${
 																apr &&
 																formatEthHelper(
