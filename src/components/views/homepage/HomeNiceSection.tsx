@@ -6,8 +6,9 @@ import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
 
 import { HomeContainer } from '@/components/views/homepage/Home.sc';
-import { deviceSize, mediaQueries } from '@/lib/constants/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 import { Shadow } from '@/components/styled-components/Shadow';
+import { Col, Container } from '@/components/Grid';
 
 const HomePurpleSection = () => {
 	return (
@@ -31,19 +32,15 @@ const HomePurpleSection = () => {
 					Donate eligible tokens to Giveth and receive $nice,
 					redeemable for swag and much more!
 				</Desc>
-				<Links>
-					<GLink>
-						<span onClick={() => window.open(links.NICE_DOC)}>
-							Learn more about $nice token
-						</span>
+				<Links xs={12} sm={7} md={8}>
+					<GLink href={links.NICE_DOC} target='_blank'>
+						<span>Learn more about $nice token</span>
 					</GLink>
 					<Link href={Routes.Projects} passHref>
 						Donate to projects
 					</Link>
-					<PurpleLink>
-						<span onClick={() => window.open(links.SWAG)}>
-							Checkout the swag shop
-						</span>
+					<PurpleLink href={links.SWAG} target='_blank'>
+						<span>Checkout the swag shop</span>
 					</PurpleLink>
 				</Links>
 			</Container>
@@ -72,14 +69,6 @@ const Wrapper = styled(HomeContainer)`
 		right: 0;
 		position: absolute;
 		z-index: -1;
-	}
-`;
-
-const Container = styled.div`
-	margin: 0 auto;
-	padding: 32px 0 0 32px;
-	${mediaQueries.desktop} {
-		width: ${deviceSize.desktop + 'px'};
 	}
 `;
 
@@ -140,7 +129,7 @@ const Arcs = styled.div`
 	}
 `;
 
-const Links = styled.div`
+const Links = styled(Col)`
 	display: flex;
 	flex-direction: column;
 	margin: 24px 0 0 0;
