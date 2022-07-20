@@ -37,6 +37,7 @@ const links = {
 	VERIFICATION_DOCS: DOCS + 'dapps/projectVerification',
 	FUNDRAISING_DOCS: DOCS + 'whatisgiveth/fundraisingGuide',
 	TRACE: 'https://trace.giveth.io/',
+	SWAG: 'https://swag.giveth.io/',
 	COMMONS_STACK: 'https://commonsstack.org/',
 	RECRUITEE: 'https://giveth.recruitee.com/',
 	JOINGIVFRENS: TYPEFORM + 'regenfarms',
