@@ -29,6 +29,7 @@ const gqlRes = `{
 	}
 	socialProfiles {
 		socialNetworkId
+		name
 		socialNetwork
 		isVerified
 		id
