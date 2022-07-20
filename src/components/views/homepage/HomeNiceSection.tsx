@@ -1,8 +1,8 @@
 import styled from 'styled-components';
+import Link from 'next/link';
 import { D3, GLink, Lead, brandColors } from '@giveth/ui-design-system';
 import { Arc } from '@/components/styled-components/Arc';
 import Routes from '@/lib/constants/Routes';
-import Link from 'next/link';
 import links from '@/lib/constants/links';
 
 import { HomeContainer } from '@/components/views/homepage/Home.sc';
