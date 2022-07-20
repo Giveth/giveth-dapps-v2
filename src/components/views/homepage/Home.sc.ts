@@ -5,7 +5,7 @@ export const HomeContainer = styled.div`
 	padding-left: 18px;
 	padding-right: 18px;
 
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		padding-left: 32px;
 		padding-right: 32px;
 	}

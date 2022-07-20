@@ -29,7 +29,7 @@ const unsplashPhoto = (i: string) =>
 	`${unsplashOrgUrl}@${i}${unsplashReferral}`;
 
 interface ImageInputProps {
-	setValue: Dispatch<SetStateAction<string>>;
+	setValue: (img: string) => void;
 	value: string;
 	setIsLoading: Dispatch<SetStateAction<boolean>>;
 }

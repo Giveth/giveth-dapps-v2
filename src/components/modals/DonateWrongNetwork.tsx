@@ -11,6 +11,7 @@ import { Modal } from './Modal';
 import { switchNetwork } from '@/lib/wallet';
 import { getNetworkNames } from '@/components/views/donate/helpers';
 import { IModal } from '@/types/common';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 interface IDonateWrongNetwork extends IModal {
 	targetNetworks: number[];
@@ -21,17 +22,18 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = ({
 	targetNetworks,
 }) => {
 	const { chainId } = useWeb3React();
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	useEffect(() => {
 		if (chainId && targetNetworks.includes(chainId)) {
-			setShowModal(false);
+			closeModal();
 		}
 	}, [chainId, targetNetworks]);
 
 	const NetworkName = getNetworkNames(targetNetworks, 'or');
 
 	return (
-		<Modal setShowModal={setShowModal}>
+		<Modal closeModal={closeModal} isAnimating={isAnimating}>
 			<ModalContainer>
 				{!targetNetworks.includes(config.SECONDARY_NETWORK.id) ? (
 					<IconEthereum size={64} />

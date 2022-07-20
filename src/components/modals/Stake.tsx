@@ -15,7 +15,7 @@ import { useWeb3React } from '@web3-react/core';
 import { Contract, ethers } from 'ethers';
 import { captureException } from '@sentry/nextjs';
 import { Modal } from './Modal';
-import { Flex } from '../styled-components/Flex';
+import { Flex, FlexCenter } from '../styled-components/Flex';
 import { StakingPoolImages } from '../StakingPoolImages';
 import { AmountInput } from '../AmountInput';
 import {
@@ -33,6 +33,7 @@ import { StakeState } from '@/lib/staking';
 import ToggleSwitch from '../styled-components/Switch';
 import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
 import { IModal } from '@/types/common';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 import type { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 
 interface IStakeModalProps extends IModal {
@@ -63,6 +64,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 		StakeState.APPROVE,
 	);
 	const { chainId, library } = useWeb3React();
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	const { title, LM_ADDRESS, POOL_ADDRESS, GARDEN_ADDRESS } =
 		poolStakingConfig;
@@ -80,6 +82,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 	}, [amount]);
 
 	useEffect(() => {
+		if (!library) return;
 		library?.on('block', async () => {
 			const amountNumber = ethers.BigNumber.from(amount);
 			if (
@@ -225,7 +228,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 	};
 
 	return (
-		<Modal setShowModal={setShowModal}>
+		<Modal closeModal={closeModal} isAnimating={isAnimating}>
 			<StakeModalContainer>
 				{stakeState !== StakeState.CONFIRMING &&
 					stakeState !== StakeState.CONFIRMED &&
@@ -374,9 +377,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 								<CancelButton
 									buttonType='texty'
 									label='CANCEL'
-									onClick={() => {
-										setShowModal(false);
-									}}
+									onClick={closeModal}
 								/>
 							</InnerModal>
 						</>
@@ -450,10 +451,8 @@ const StakeStepsContainer = styled(Flex)`
 	margin-bottom: 16px;
 `;
 
-const StakeStep = styled(Flex)`
+const StakeStep = styled(FlexCenter)`
 	flex-direction: column;
-	justify-content: center;
-	align-items: center;
 	width: 61px;
 	position: relative;
 	z-index: 1;
@@ -513,7 +512,7 @@ const ConfirmButton = styled(Button)`
 	margin-bottom: 8px;
 `;
 
-const Pending = styled(Flex)`
+const Pending = styled(FlexCenter)`
 	margin-top: 32px;
 	margin-bottom: 8px;
 	line-height: 46px;
@@ -522,8 +521,6 @@ const Pending = styled(Flex)`
 	border-radius: 48px;
 	color: ${neutralColors.gray[100]};
 	gap: 8px;
-	justify-content: center;
-	align-items: center;
 	& > div {
 		margin: 0 !important;
 	}
@@ -533,10 +530,7 @@ const CancelButton = styled(Button)`
 	width: 100%;
 `;
 
-const ToggleContainer = styled.div`
-	padding: 16px 0px 0px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+const ToggleContainer = styled(FlexCenter)`
+	padding: 16px 0 0;
 	gap: 10px;
 `;

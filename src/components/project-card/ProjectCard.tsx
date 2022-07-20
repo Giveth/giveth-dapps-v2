@@ -160,7 +160,7 @@ const DonateButton = styled(ButtonLink)`
 
 const CustomizedDonateButton = styled(DonateButton)<{ isHover: boolean }>`
 	margin: 25px 0;
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		margin: 25px 12px;
 		opacity: ${props => (props.isHover ? '1' : '0')};
 		transition: opacity 0.3s ease-in-out;
@@ -198,7 +198,7 @@ const LastUpdatedContainer = styled(Subline)<{ isHover?: boolean }>`
 	color: ${neutralColors.gray[700]};
 	padding: 2px 8px;
 	border-radius: 4px;
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		transition: opacity 0.3s ease-in-out;
 		display: inline;
 		opacity: ${props => (props.isHover ? 1 : 0)};
@@ -236,7 +236,7 @@ const CardBody = styled.div<{
 	transition: top 0.3s ease;
 	border-radius: ${props =>
 		props.isOtherOrganization ? '0 12px 12px 12px' : '12px'};
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		top: ${props => {
 			if (props.isHover && props.isVerified) {
 				return '109px';
@@ -284,7 +284,7 @@ const Wrapper = styled.div`
 	box-shadow: ${Shadow.Neutral[400]};
 	height: 536px;
 	cursor: pointer;
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		height: 472px;
 	}
 `;

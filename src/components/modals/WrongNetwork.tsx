@@ -4,11 +4,12 @@ import { FC } from 'react';
 import { Button } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 import { InjectedConnector } from '@web3-react/injected-connector';
-import { switchNetwork } from '@/lib/wallet';
 
+import { switchNetwork } from '@/lib/wallet';
 import { chainName } from '@/lib/constants/constants';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 interface IWrongNetworkInnerModal {
 	text?: string;
@@ -75,8 +76,10 @@ export const WrongNetworkModal: FC<IWrongNetworkModal> = ({
 	targetNetworks,
 	setShowModal,
 }) => {
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+
 	return (
-		<Modal setShowModal={setShowModal} hiddenClose>
+		<Modal closeModal={closeModal} isAnimating={isAnimating} hiddenClose>
 			<WrongNetworkModalContainer>
 				<WrongNetworkModalTitle>
 					You&apos;re connected to the wrong network!

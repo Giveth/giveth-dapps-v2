@@ -119,7 +119,7 @@ a {
 
 
 .fadeIn {
-	animation: fadeIn 0.5s ease-in-out;
+	animation: fadeIn 0.3s ease-in-out;
 }
 
 @keyframes fadeIn {
@@ -128,6 +128,19 @@ a {
 	}
 	to {
 		opacity: 1;
+	}
+}
+
+.fadeOut {
+	animation: fadeOut 0.3s ease-in-out;
+}
+
+@keyframes fadeOut {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
 	}
 }
 

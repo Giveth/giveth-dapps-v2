@@ -86,7 +86,7 @@ export const ClaimCard = styled.div`
 		bottom: -4px;
 		left: 0;
 	}
-	@media ${device.laptop} {
+	@media ${device.laptopS} {
 		padding: 100px 50px 146px;
 	}
 	@media ${device.laptopL} {
@@ -144,7 +144,7 @@ export const VideoOverlay = styled.div<{ hidden: boolean }>`
 
 export const ClaimRow = styled(Flex)`
 	gap: 8px;
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		gap: 32px;
 	}
 `;

@@ -37,7 +37,7 @@ export const deviceSize = {
 	mobileM: 375,
 	mobileL: 425,
 	tablet: 768,
-	laptop: 1024,
+	laptopS: 1024,
 	laptopL: 1280,
 	desktop: 1440,
 };
@@ -47,7 +47,7 @@ export const device = {
 	mobileM: `(min-width: ${deviceSize.mobileM}px)`,
 	mobileL: `(min-width: ${deviceSize.mobileL}px)`,
 	tablet: `(min-width: ${deviceSize.tablet}px)`,
-	laptop: `(min-width: ${deviceSize.laptop}px)`,
+	laptopS: `(min-width: ${deviceSize.laptopS}px)`,
 	laptopL: `(min-width: ${deviceSize.laptopL}px)`,
 	desktop: `(min-width: ${deviceSize.desktop}px)`,
 	desktopL: `(min-width: ${deviceSize.desktop}px)`,
@@ -58,7 +58,7 @@ export const mediaQueries = {
 	mobileM: `@media (min-width: ${deviceSize.mobileM}px)`,
 	mobileL: `@media (min-width: ${deviceSize.mobileL}px)`,
 	tablet: `@media (min-width: ${deviceSize.tablet}px)`,
-	laptop: `@media (min-width: ${deviceSize.laptop}px)`,
+	laptopS: `@media (min-width: ${deviceSize.laptopS}px)`,
 	laptopL: `@media (min-width: ${deviceSize.laptopL}px)`,
 	desktop: `@media (min-width: ${deviceSize.desktop}px)`,
 };

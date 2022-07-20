@@ -28,6 +28,7 @@ import { VALIDATE_TOKEN } from '@/apollo/gql/gqlUser';
 import { useAppDispatch } from '@/features/hooks';
 import { signOut } from '@/features/user/user.thunks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 export interface IDonateModalProps extends IModal {
 	setFailedModalType: (i: EDonationFailedType) => void;
@@ -48,6 +49,7 @@ const DonateModal = (props: IDonateModalProps) => {
 
 	const web3Context = useWeb3React();
 	const dispatch = useAppDispatch();
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	const [donating, setDonating] = useState(false);
 	const [donationSaved, setDonationSaved] = useState(false);
@@ -77,7 +79,7 @@ const DonateModal = (props: IDonateModalProps) => {
 	const handleFailedValidation = () => {
 		dispatch(signOut());
 		dispatch(setShowSignWithWallet(true));
-		setShowModal(false);
+		closeModal();
 	};
 
 	const handleDonate = () => {
@@ -91,7 +93,8 @@ const DonateModal = (props: IDonateModalProps) => {
 
 	return (
 		<Modal
-			setShowModal={setShowModal}
+			closeModal={closeModal}
+			isAnimating={isAnimating}
 			headerTitle='Donating'
 			headerTitlePosition='left'
 			headerIcon={<IconWalletApprove size={32} />}
@@ -132,7 +135,7 @@ const DonateModal = (props: IDonateModalProps) => {
 						<CloseButton
 							label='CLOSE THIS MODAL'
 							buttonType='texty'
-							onClick={() => setShowModal(false)}
+							onClick={closeModal}
 						/>
 					)}
 				</Buttons>

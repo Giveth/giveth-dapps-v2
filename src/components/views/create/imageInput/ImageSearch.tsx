@@ -28,7 +28,7 @@ const perPage = 9;
 const orientation = 'landscape';
 
 const ImageSearch = (props: {
-	setValue: Dispatch<SetStateAction<string>>;
+	setValue: (img: string) => void;
 	setAttributes: Dispatch<SetStateAction<{ name: string; username: string }>>;
 	attributes: boolean;
 }) => {

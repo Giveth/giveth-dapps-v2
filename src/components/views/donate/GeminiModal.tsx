@@ -9,13 +9,16 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { Button } from '../../styled-components/Button';
 import { isSSRMode } from '@/lib/helpers';
 import { Modal } from '@/components/modals/Modal';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 const GeminiModal = ({ setShowModal }: any) => {
 	const url = !isSSRMode ? window?.location?.href : null;
 	const { isMobile } = useDeviceDetect();
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+
 	if (isSSRMode) return null;
 	return (
-		<Modal setShowModal={setShowModal}>
+		<Modal closeModal={closeModal} isAnimating={isAnimating}>
 			<Container>
 				<Lead>
 					Giving Block projects only accept donations listed on Gemini
@@ -32,7 +35,7 @@ const GeminiModal = ({ setShowModal }: any) => {
 				/>
 				<TwButton>
 					<TwitterShareButton
-						beforeOnClick={() => setShowModal(false)}
+						beforeOnClick={closeModal}
 						title={
 							'Hey @gemini - I want to donate $GIV to this @thegivingblock project on @givethio! Help me support them by listing $GIV on gemini.com @tyler @cameron'
 						}
@@ -48,9 +51,7 @@ const GeminiModal = ({ setShowModal }: any) => {
 						/>
 					</TwitterShareButton>
 				</TwButton>
-				<CancelBtn onClick={() => setShowModal(false)}>
-					CANCEL
-				</CancelBtn>
+				<CancelBtn onClick={closeModal}>CANCEL</CancelBtn>
 			</Container>
 		</Modal>
 	);
