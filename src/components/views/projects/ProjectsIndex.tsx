@@ -404,7 +404,7 @@ const FiltersSwiper = styled.div`
 	${mediaQueries.tablet} {
 		max-width: 90%;
 	}
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		padding-right: 60px;
 		width: 70%;
 	}
@@ -430,7 +430,7 @@ const NextIcon = styled(IconContainer)`
 	${mediaQueries.tablet} {
 		display: inline-block;
 	}
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		width: 50px;
 		height: 50px;
 		position: absolute;
@@ -447,7 +447,7 @@ const PrevIcon = styled(NextIcon)<{ disabled?: boolean }>`
 	transform: rotate(180deg);
 	left: 0;
 	z-index: 2;
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		:disabled {
 			display: none;
 		}
