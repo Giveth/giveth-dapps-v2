@@ -446,7 +446,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									</StakeAmount>
 								</StakeContainer>
 							</StakeButtonsRow>
-							{active && !archived && (
+							{active && (
 								<LiquidityButton
 									label={
 										type === StakingType.GIV_LM
