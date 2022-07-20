@@ -32,9 +32,10 @@ import { device, deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import ProjectsBanner from './ProjectsBanner';
-import ProjectsFilter from './ProjectsFilter';
+import ProjectsMainCategories from './ProjectsMainCategories';
 import { Shadow } from '@/components/styled-components/Shadow';
 import useMediaQuery from '@/hooks/useMediaQuery';
+import ProjectsSubCategories from './ProjectsSubCategories';
 import type { IProjectsRouteProps } from 'pages/projects';
 
 export interface IProjectsView extends IProjectsRouteProps {
@@ -117,7 +118,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 			deviceSize.laptop - 1
 		}px)`,
 	);
-	console.log('isTablet', isTablet, isDesktop);
+	console.log('Props', props);
 
 	useEffect(() => {
 		setCategoriesObj(buildCategoryObj(categories));
@@ -235,7 +236,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 									alt='caret right'
 								/>
 							</PrevIcon>
-							<ProjectsFilter
+							<ProjectsMainCategories
 								projectsProps={props}
 								navigationNextRef={navigationNextRef}
 								navigationPrevRef={navigationPrevRef}
@@ -266,6 +267,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 							</FilterAndSearchContainer>
 						)}
 					</FiltersSection>
+					<StyledLine />
+					<ProjectsSubCategories />
 				</FiltersContainer>
 
 				{isLoading && <Loader className='dot-flashing' />}
@@ -335,6 +338,7 @@ const FiltersContainer = styled.div`
 	border-radius: 16px;
 	margin-bottom: 32px;
 	margin-top: 50px;
+	gap: 16px;
 `;
 
 const FiltersSection = styled.div`
@@ -453,6 +457,11 @@ const PrevIcon = styled(NextIcon)<{ disabled?: boolean }>`
 			display: none;
 		}
 	}
+`;
+
+const StyledLine = styled.hr`
+	width: 100%;
+	border: 1px solid ${neutralColors.gray[200]};
 `;
 
 export default ProjectsIndex;
