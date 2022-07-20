@@ -226,46 +226,47 @@ const ProjectsIndex = (props: IProjectsView) => {
 					crypto donations. Give directly with zero added fees. Get
 					rewarded when you donate to verified projects!
 				</Subtitle>
-
-				<FiltersSection>
-					<FiltersSwiper>
-						<PrevIcon ref={navigationPrevRef}>
-							<img
-								src={'/images/caret_right.svg'}
-								alt='caret right'
+				<FiltersContainer>
+					<FiltersSection>
+						<FiltersSwiper>
+							<PrevIcon ref={navigationPrevRef}>
+								<img
+									src={'/images/caret_right.svg'}
+									alt='caret right'
+								/>
+							</PrevIcon>
+							<ProjectsFilter
+								projectsProps={props}
+								navigationNextRef={navigationNextRef}
+								navigationPrevRef={navigationPrevRef}
 							/>
-						</PrevIcon>
-						<ProjectsFilter
-							projectsProps={props}
-							navigationNextRef={navigationNextRef}
-							navigationPrevRef={navigationPrevRef}
-						/>
-						<NextIcon ref={navigationNextRef}>
-							<img
-								src={'/images/caret_right.svg'}
-								alt='caret right'
-							/>
-						</NextIcon>
-					</FiltersSwiper>
-					{isDesktop && (
-						<FilterAndSearchContainer>
-							<IconContainer>
-								<IconSearch />
-							</IconContainer>
-							<FiltersButton>
-								Filters
-								<IconOptions16 />
-							</FiltersButton>
-						</FilterAndSearchContainer>
-					)}
-					{isTablet && (
-						<FilterAndSearchContainer>
-							<IconContainer>
-								<IconDots />
-							</IconContainer>
-						</FilterAndSearchContainer>
-					)}
-				</FiltersSection>
+							<NextIcon ref={navigationNextRef}>
+								<img
+									src={'/images/caret_right.svg'}
+									alt='caret right'
+								/>
+							</NextIcon>
+						</FiltersSwiper>
+						{isDesktop && (
+							<FilterAndSearchContainer>
+								<IconContainer>
+									<IconSearch />
+								</IconContainer>
+								<FiltersButton>
+									Filters
+									<IconOptions16 />
+								</FiltersButton>
+							</FilterAndSearchContainer>
+						)}
+						{isTablet && (
+							<FilterAndSearchContainer>
+								<IconContainer>
+									<IconDots />
+								</IconContainer>
+							</FilterAndSearchContainer>
+						)}
+					</FiltersSection>
+				</FiltersContainer>
 
 				{isLoading && <Loader className='dot-flashing' />}
 
@@ -324,9 +325,14 @@ const StyledButton = styled(OulineButton)<{ transparent?: boolean }>`
 const LoadingDotIcon = styled.div`
 	padding: 4px 37px;
 `;
+
+const FiltersContainer = styled.div`
+	display: flex;
+	background: white;
+`;
+
 const FiltersSection = styled.div`
 	padding: 32px 21px;
-	background: white;
 	border-radius: 16px;
 	margin-bottom: 32px;
 	margin-top: 50px;
