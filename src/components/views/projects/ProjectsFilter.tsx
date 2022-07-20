@@ -56,4 +56,5 @@ const MainCategoryItem = styled.div<{ isSelected?: boolean }>`
 	}
 	font-weight: 400;
 	text-align: center;
+	user-select: none;
 `;

@@ -249,9 +249,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 					</FiltersSwiper>
 					{isDesktop && (
 						<FilterAndSearchContainer>
-							<SearchButton>
+							<IconContainer>
 								<IconSearch />
-							</SearchButton>
+							</IconContainer>
 							<FiltersButton>
 								Filters
 								<IconOptions16 />
@@ -260,7 +260,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 					)}
 					{isTablet && (
 						<FilterAndSearchContainer>
-							<IconDots />
+							<IconContainer>
+								<IconDots />
+							</IconContainer>
 						</FilterAndSearchContainer>
 					)}
 				</FiltersSection>
@@ -336,6 +338,7 @@ const FiltersSection = styled.div`
 	font-weight: 500;
 	color: ${neutralColors.gray[900]};
 	justify-content: space-between;
+	flex-wrap: nowrap;
 `;
 
 export const ProjectsContainer = styled.div`
@@ -374,16 +377,6 @@ const FilterAndSearchContainer = styled.div`
 	gap: 16px;
 `;
 
-const SearchButton = styled.button`
-	border-radius: 50%;
-	width: 48px;
-	height: 48px;
-	background: white;
-	box-shadow: ${Shadow.Neutral[500]};
-	border: none;
-	cursor: pointer;
-`;
-
 const FiltersButton = styled.button`
 	display: flex;
 	gap: 8px;
@@ -403,11 +396,11 @@ const FiltersSwiper = styled.div`
 	gap: 16px;
 	width: 100%;
 	${mediaQueries.tablet} {
-		width: 70%;
+		max-width: 90%;
 	}
 	${mediaQueries.laptop} {
 		padding-right: 60px;
-		width: 60%;
+		width: 70%;
 	}
 `;
 
@@ -418,7 +411,7 @@ const IconContainer = styled.button`
 	background: ${neutralColors.gray[100]};
 	box-shadow: ${Shadow.Neutral[500]};
 	cursor: pointer;
-	border: none;
+	border: 1px solid ${neutralColors.gray[400]};
 `;
 
 const NextIcon = styled(IconContainer)`
