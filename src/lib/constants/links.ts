@@ -36,6 +36,7 @@ const links = {
 	MAKE_TRACEABLE_DOCS: DOCS + 'dapps/makeTraceableProject',
 	VERIFICATION_DOCS: DOCS + 'dapps/projectVerification',
 	TRACE: 'https://trace.giveth.io/',
+	SWAG: 'https://swag.giveth.io/',
 	COMMONS_STACK: 'https://commonsstack.org/',
 	RECRUITEE: 'https://giveth.recruitee.com/',
 	JOINGIVFRENS: TYPEFORM + 'regenfarms',
