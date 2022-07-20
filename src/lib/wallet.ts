@@ -88,8 +88,7 @@ export async function isAddressValid(
 	if (web3) {
 		if (isAddressENS(address)) {
 			const actualAddress = await getAddressFromENS(address, web3);
-			if (actualAddress) return true;
-			return false;
+			return !!actualAddress;
 		} else {
 			return ethers.utils.isAddress(address);
 		}

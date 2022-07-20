@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import {
 	H5,
 	Caption,
@@ -8,15 +8,15 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
-import { InputContainer } from './Create.sc';
 import CheckBox from '@/components/Checkbox';
 import { categoryList, maxSelectedCategory } from '@/lib/constants/Categories';
 import { ICategory } from '@/apollo/types/types';
 import { mediaQueries } from '@/lib/constants/constants';
+import { InputContainer } from '@/components/views/create/Create.sc';
 
 const CategoryInput = (props: {
 	value: ICategory[];
-	setValue: Dispatch<SetStateAction<ICategory[]>>;
+	setValue: (category: ICategory[]) => void;
 }) => {
 	const { value, setValue } = props;
 	const isMaxCategories = value.length >= maxSelectedCategory;
@@ -36,35 +36,30 @@ const CategoryInput = (props: {
 	};
 
 	return (
-		<>
-			<br />
+		<InputContainer>
 			<H5>Please select a category.</H5>
-			<div>
-				<CaptionContainer>
-					You can choose up to {maxSelectedCategory} categories for
-					your project.
-					<CategoryCount>
-						{value.length}/{maxSelectedCategory}
-					</CategoryCount>
-				</CaptionContainer>
-			</div>
-			<InputContainer>
-				<CategoriesGrid>
-					{categoryList.map(i => {
-						const checked = value.find(el => el.name === i.name);
-						return (
-							<CheckBox
-								key={i.value}
-								title={i.value}
-								checked={!!checked}
-								onChange={e => handleChange(e, i.name)}
-								disabled={isMaxCategories && !checked}
-							/>
-						);
-					})}
-				</CategoriesGrid>
-			</InputContainer>
-		</>
+			<CaptionContainer>
+				You can choose up to {maxSelectedCategory} categories for your
+				project.
+				<CategoryCount>
+					{value.length}/{maxSelectedCategory}
+				</CategoryCount>
+			</CaptionContainer>
+			<CategoriesGrid>
+				{categoryList.map(i => {
+					const checked = value.find(el => el.name === i.name);
+					return (
+						<CheckBox
+							key={i.value}
+							title={i.value}
+							checked={!!checked}
+							onChange={e => handleChange(e, i.name)}
+							disabled={isMaxCategories && !checked}
+						/>
+					);
+				})}
+			</CategoriesGrid>
+		</InputContainer>
 	);
 };
 
@@ -82,19 +77,16 @@ const CategoryCount = styled(SublineBold)`
 const CaptionContainer = styled(Caption)`
 	display: flex;
 	align-items: center;
-	margin: 8.5px 0 0 0;
-	span {
-		cursor: pointer;
-		color: ${brandColors.pinky[500]};
-	}
+	margin-top: 8.5px;
 `;
 
 const CategoriesGrid = styled.div`
 	display: grid;
 	grid-template-columns: auto;
 	padding: 10px 10px 22px 10px;
-	div {
-		padding: 10px 0;
+	color: ${brandColors.deep[900]};
+	> div {
+		margin: 11px 0;
 	}
 
 	${mediaQueries.tablet} {
