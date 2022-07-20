@@ -7,32 +7,30 @@ import { Navigation } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { RefObject } from 'react';
-import { IProjectsView } from './ProjectsIndex';
+import { IMainCategory } from '@/apollo/types/types';
 
 interface IProjectsFilterProps {
-	projectsProps: IProjectsView;
+	mainCategories: IMainCategory[];
 	navigationPrevRef: RefObject<HTMLButtonElement>;
 	navigationNextRef: RefObject<HTMLButtonElement>;
 }
 
-function ProjectsFilter({
-	projectsProps,
+function ProjectsMainCategories({
+	mainCategories,
 	navigationPrevRef,
 	navigationNextRef,
 }: IProjectsFilterProps) {
 	return (
 		<Swiper
 			modules={[Navigation]}
-			onSlideChange={() => console.log('slide change')}
 			navigation={{
 				prevEl: navigationPrevRef.current,
 				nextEl: navigationNextRef.current,
 			}}
 			slidesPerView='auto'
 			spaceBetween={16}
-			onEnded={() => console.log('ended')}
 		>
-			{projectsProps.mainCategories.map(category => {
+			{mainCategories.map(category => {
 				return (
 					<SwiperSlide key={category.slug}>
 						<MainCategoryItem>{category.title}</MainCategoryItem>
@@ -43,7 +41,7 @@ function ProjectsFilter({
 	);
 }
 
-export default ProjectsFilter;
+export default ProjectsMainCategories;
 
 const MainCategoryItem = styled.div<{ isSelected?: boolean }>`
 	border-radius: 50px;

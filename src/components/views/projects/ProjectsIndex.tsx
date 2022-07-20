@@ -117,7 +117,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 			deviceSize.laptopS - 1
 		}px)`,
 	);
-	console.log('Props', props);
 
 	useEffect(() => {
 		setCategoriesObj(buildCategoryObj(categories));
@@ -233,7 +232,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 								/>
 							</PrevIcon>
 							<ProjectsMainCategories
-								projectsProps={props}
+								// projectsProps={props}
+								mainCategories={props.mainCategories}
 								navigationNextRef={navigationNextRef}
 								navigationPrevRef={navigationPrevRef}
 							/>
