@@ -1,15 +1,12 @@
 import { useEffect, useState } from 'react';
 
-function useMediaQuery(query: string): boolean {
-	const getMatches = (query: string): boolean => {
-		// Prevents SSR issues
-		if (typeof window !== 'undefined') {
-			return window.matchMedia(query).matches;
-		}
-		return false;
-	};
+function useMediaQuery(query: string): boolean | null {
+	const [matches, setMatches] = useState<boolean | null>(null);
 
-	const [matches, setMatches] = useState<boolean>(getMatches(query));
+	//Calling these two functions only in useEffect for preventing hydration mismatch issue
+	const getMatches = (query: string): boolean => {
+		return window.matchMedia(query).matches;
+	};
 
 	function handleChange() {
 		setMatches(getMatches(query));

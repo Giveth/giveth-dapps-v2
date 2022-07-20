@@ -9,6 +9,7 @@ import {
 	Lead,
 	IconSearch,
 	IconOptions16,
+	IconDots,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
@@ -27,12 +28,13 @@ import { ICategory, IMainCategory, IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
 import { EDirection, gqlEnums } from '@/apollo/types/gqlEnums';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
-import { deviceSize, mediaQueries } from '@/lib/constants/constants';
+import { device, deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import ProjectsBanner from './ProjectsBanner';
 import ProjectsFilter from './ProjectsFilter';
 import { Shadow } from '@/components/styled-components/Shadow';
+import useMediaQuery from '@/hooks/useMediaQuery';
 import type { IProjectsRouteProps } from 'pages/projects';
 
 export interface IProjectsView extends IProjectsRouteProps {
@@ -90,7 +92,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 		categories,
 	} = props;
 	const user = useAppSelector(state => state.user.userData);
-	console.log('Props', props);
 	const [categoriesObj, setCategoriesObj] = useState<ISelectObj[]>();
 	const [selectedCategory, setSelectedCategory] =
 		useState<ISelectObj>(allCategoryObj);
@@ -110,6 +111,13 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const isFirstRender = useRef(true);
 	const debouncedSearch = useRef<any>();
 	const pageNum = useRef(0);
+	const isDesktop = useMediaQuery(device.laptop);
+	const isTablet = useMediaQuery(
+		`(min-device-width: ${deviceSize.tablet}px) and (max-device-width: ${
+			deviceSize.laptop - 1
+		}px)`,
+	);
+	console.log('isTablet', isTablet, isDesktop);
 
 	useEffect(() => {
 		setCategoriesObj(buildCategoryObj(categories));
@@ -239,15 +247,22 @@ const ProjectsIndex = (props: IProjectsView) => {
 							/>
 						</NextIcon>
 					</FiltersSwiper>
-					<FilterAndSearchContainer>
-						<SearchButton>
-							<IconSearch />
-						</SearchButton>
-						<FiltersButton>
-							Filters
-							<IconOptions16 />
-						</FiltersButton>
-					</FilterAndSearchContainer>
+					{isDesktop && (
+						<FilterAndSearchContainer>
+							<SearchButton>
+								<IconSearch />
+							</SearchButton>
+							<FiltersButton>
+								Filters
+								<IconOptions16 />
+							</FiltersButton>
+						</FilterAndSearchContainer>
+					)}
+					{isTablet && (
+						<FilterAndSearchContainer>
+							<IconDots />
+						</FilterAndSearchContainer>
+					)}
 				</FiltersSection>
 
 				{isLoading && <Loader className='dot-flashing' />}
@@ -396,7 +411,7 @@ const FiltersSwiper = styled.div`
 	}
 `;
 
-const NextIcon = styled.button<{ disabled?: boolean }>`
+const IconContainer = styled.button`
 	min-width: 44px;
 	min-height: 44px;
 	border-radius: 50%;
@@ -404,6 +419,9 @@ const NextIcon = styled.button<{ disabled?: boolean }>`
 	box-shadow: ${Shadow.Neutral[500]};
 	cursor: pointer;
 	border: none;
+`;
+
+const NextIcon = styled(IconContainer)`
 	z-index: 1;
 	display: none;
 	:disabled {
