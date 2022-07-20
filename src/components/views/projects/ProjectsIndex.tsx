@@ -328,19 +328,20 @@ const LoadingDotIcon = styled.div`
 
 const FiltersContainer = styled.div`
 	display: flex;
+	flex-direction: column;
 	background: white;
-`;
-
-const FiltersSection = styled.div`
+	position: relative;
 	padding: 32px 21px;
 	border-radius: 16px;
 	margin-bottom: 32px;
 	margin-top: 50px;
+`;
+
+const FiltersSection = styled.div`
 	display: flex;
 	gap: 16px;
 	align-items: center;
 	position: relative;
-	font-weight: 500;
 	color: ${neutralColors.gray[900]};
 	justify-content: space-between;
 	flex-wrap: nowrap;
