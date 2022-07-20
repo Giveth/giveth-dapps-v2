@@ -331,7 +331,6 @@ const FiltersSection = styled.div`
 	margin-bottom: 32px;
 	margin-top: 50px;
 	display: flex;
-	flex-wrap: wrap;
 	gap: 16px;
 	align-items: center;
 	position: relative;
