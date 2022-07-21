@@ -1,5 +1,4 @@
 import { captureException } from '@sentry/nextjs';
-import { utils } from 'ethers';
 import {
 	EWallets,
 	torusConnector,
@@ -79,20 +78,3 @@ export const switchNetworkHandler = (chainId: number | undefined) => {
 		switchNetwork(config.XDAI_NETWORK_NUMBER);
 	}
 };
-
-export async function validateAddress(
-	address: string,
-	web3: any,
-	networkId?: number,
-): Promise<boolean | string> {
-	if (!web3) return 'Web3 is not initialized';
-	if (isAddressENS(address)) {
-		if (networkId !== 1) {
-			return 'Please switch to Mainnet to handle ENS addresses';
-		}
-		const actualAddress = await getAddressFromENS(address, web3);
-		return actualAddress ? true : 'Invalid ENS address';
-	} else {
-		return utils.isAddress(address) ? true : 'Invalid address';
-	}
-}

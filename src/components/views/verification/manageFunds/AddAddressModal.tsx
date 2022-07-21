@@ -13,8 +13,7 @@ import { IAddress } from '@/components/views/verification/manageFunds/ManageFund
 import SelectNetwork from '@/components/views/verification/manageFunds/SelectNetwork';
 import { ISelectedNetwork } from '@/components/views/verification/manageFunds/types';
 import config from '@/configuration';
-import { getAddressFromENS, isAddressENS, validateAddress } from '@/lib/wallet';
-import { showToastError } from '@/lib/helpers';
+import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { requiredOptions } from '@/lib/constants/regex';
 
@@ -53,42 +52,50 @@ const AddAddressModal: FC<IProps> = ({
 		handleSubmit,
 		formState: { errors },
 		watch,
-	} = useForm<IAddressForm>();
+		getValues,
+	} = useForm<IAddressForm>({ mode: 'onChange' });
+
 	const { library, chainId } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	const watchTitle = watch('title');
 
 	const handleAdd = async (formData: IAddressForm) => {
-		const { address, title } = formData;
-		const isDuplicate = addresses.some(item => item.title === title);
-		if (address && title && formData.network) {
-			if (isDuplicate) {
-				return showToastError('Please provide a unique title');
-			}
-			const isEns = isAddressENS(address);
-			if (chainId !== 1 && isEns) {
-				return showToastError(
-					'Please switch to Mainnet to handle ENS addresses',
-				);
-			}
-			const _address = isEns
-				? await getAddressFromENS(address, library)
-				: utils.getAddress(address);
-			addAddress({
-				address: _address,
-				title,
-				networkId: formData.network.value,
-			});
-			closeModal();
-		} else {
-			showToastError('Please provide all values');
-		}
+		const { address, title, network } = formData;
+		const isEns = isAddressENS(address);
+		const _address = isEns
+			? await getAddressFromENS(address, library)
+			: utils.getAddress(address);
+		addAddress({
+			address: _address,
+			title,
+			networkId: network.value,
+		});
+		closeModal();
 	};
 
 	const validateTitle = (title: string) => {
 		const isDuplicate = addresses.some(item => item.title === title);
 		return isDuplicate ? 'Please provide a unique title' : true;
+	};
+
+	const validateAddress = async (address: string) => {
+		if (!library) return 'Web3 is not initialized';
+		if (isAddressENS(address)) {
+			if (chainId !== 1) {
+				return 'Please switch to Mainnet to handle ENS addresses';
+			}
+			const actualAddress = await getAddressFromENS(address, library);
+			const isDuplicate = addresses.some(
+				item =>
+					item.address === actualAddress &&
+					item.networkId === getValues('network')?.value,
+			);
+			if (isDuplicate) return 'Address already exists';
+			return actualAddress ? true : 'Invalid ENS address';
+		} else {
+			return utils.isAddress(address) ? true : 'Invalid address';
+		}
 	};
 
 	return (
@@ -104,15 +111,16 @@ const AddAddressModal: FC<IProps> = ({
 					<Controller
 						control={control}
 						name='network'
-						render={({ field }) => (
+						rules={requiredOptions.field}
+						render={({ field, fieldState: { error } }) => (
 							<SelectNetwork
 								networkOptions={networkOptions}
 								selectedNetwork={field.value}
 								onChange={network => field.onChange(network)}
+								error={error}
 							/>
 						)}
 					/>
-
 					<br />
 					<Input
 						register={register}
@@ -136,8 +144,7 @@ const AddAddressModal: FC<IProps> = ({
 						caption='Enter the related address.'
 						registerOptions={{
 							...requiredOptions.walletAddress,
-							validate: async i =>
-								await validateAddress(i, library, chainId),
+							validate: validateAddress,
 						}}
 						error={errors.address}
 					/>

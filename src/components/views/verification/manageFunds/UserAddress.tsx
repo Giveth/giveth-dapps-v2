@@ -4,6 +4,7 @@ import { FlexCenter } from '@/components/styled-components/Flex';
 import Input from '@/components/Input';
 import { IAddress } from '@/components/views/verification/manageFunds/ManageFundsIndex';
 import { RemoveIcon } from '@/components/views/verification/common';
+import { networkInfo } from '@/lib/helpers';
 
 interface IProps {
 	address: IAddress;
@@ -11,13 +12,13 @@ interface IProps {
 }
 
 const UserAddress: FC<IProps> = ({ address, remove }) => {
-	const { title, address: walletAddress } = address;
+	const { title, address: walletAddress, networkId } = address;
 	return (
 		<Container>
 			<Input
 				disabled
 				value={walletAddress}
-				label={title}
+				label={title + ' - ' + networkInfo(networkId).networkName}
 				name='walletAddress'
 			/>
 			<RemoveIcon onClick={remove} />
