@@ -99,7 +99,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		project || {};
 	const isDraft = project?.status.name === EProjectStatus.DRAFT;
 	const defaultImpactLocation = impactLocation || '';
-	console.log(project);
+
 	const defaultMainAddress = addresses?.find(
 		a => a.networkId === ethereumId,
 	)?.address;
@@ -126,6 +126,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 	const {
 		register,
+		unregister,
 		handleSubmit,
 		formState: { errors: formErrors },
 		setValue,
@@ -272,7 +273,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			<CreateContainer>
 				<div>
 					<Title>
-						{isEditMode ? 'Project details' : 'Create a Project'}
+						{isEditMode ? 'Project details' : 'Create a project'}
 					</Title>
 					{isSmallScreen && (
 						<GuidelinesStyleTablet>
@@ -326,7 +327,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						<CheckBox
 							onChange={setIsSameMainnetGnosisAddress}
 							checked={isSameMainnetGnosisAddress}
-							title='I’ll raise & receive funds on Mainnet and Gnosis chain networks'
+							title='I’ll raise & receive funds on Mainnet and Gnosis Chain networks with the same address.'
 						/>
 						<WalletAddressInput
 							networkId={ethereumId}
@@ -338,6 +339,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 									return showToastError(
 										'You must select at least one address',
 									);
+								if (!e) unregister(EInputs.mainAddress);
 								setMainnetAddressActive(e);
 							}}
 						/>
@@ -351,6 +353,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 									return showToastError(
 										'You must select at least one address',
 									);
+								if (!e) unregister(EInputs.secondaryAddress);
 								setGnosisAddressActive(e);
 							}}
 						/>
