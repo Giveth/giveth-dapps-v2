@@ -110,4 +110,16 @@ export const requiredOptions = {
 			message: 'Date is required',
 		},
 	},
+	title: {
+		required: {
+			value: true,
+			message: 'Title is required',
+		},
+	},
+	walletAddress: {
+		required: {
+			value: true,
+			message: 'Wallet address is required',
+		},
+	},
 };

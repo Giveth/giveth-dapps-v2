@@ -101,12 +101,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 								label='first name'
 								placeholder='John'
 								register={register}
-								registerOptions={{
-									required: {
-										value: true,
-										message: 'First name is required',
-									},
-								}}
+								registerOptions={requiredOptions.firstName}
 								error={errors.firstName}
 							/>
 						</Col>
@@ -116,12 +111,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 								placeholder='Doe'
 								registerName='lastName'
 								register={register}
-								registerOptions={{
-									required: {
-										value: true,
-										message: 'Last name is required',
-									},
-								}}
+								registerOptions={requiredOptions.lastName}
 								error={errors.lastName}
 							/>
 						</Col>

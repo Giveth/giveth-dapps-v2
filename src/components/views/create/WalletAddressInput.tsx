@@ -59,7 +59,7 @@ const WalletAddressInput = (props: {
 			<Header>
 				<H6>
 					{isGnosis
-						? 'Gnosis chain address'
+						? 'Gnosis Chain address'
 						: sameAddress
 						? 'Receiving address'
 						: 'Mainnet address'}
@@ -80,7 +80,7 @@ const WalletAddressInput = (props: {
 			<Input
 				label={
 					isGnosis
-						? 'Receiving address on Gnosis'
+						? 'Receiving address on Gnosis Chain'
 						: sameAddress
 						? 'Receiving address'
 						: 'Receiving address on Mainnet'
@@ -116,7 +116,13 @@ const WalletAddressInput = (props: {
 			<TinyLabel>
 				{isDefaultAddress
 					? 'This is the default wallet address associated with your account. You can choose a different receiving address.'
-					: 'You can enter a new address to receive funds on Mainnet network.'}
+					: `You can enter a new address to receive funds on ${
+							sameAddress
+								? 'all supported networks'
+								: isGnosis
+								? 'Gnosis Chain'
+								: 'Mainnet network'
+					  }.`}
 			</TinyLabel>
 			{isGnosis && (
 				<TinyLabel>

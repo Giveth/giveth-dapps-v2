@@ -67,9 +67,7 @@ export function isAddressENS(ens: string | undefined) {
 export async function getAddressFromENS(ens: string | undefined, web3: any) {
 	const isEns = isAddressENS(ens);
 	if (!isEns) return new Error('Error addressNotENS');
-
-	const resolver = await web3.getResolver(ens);
-	return resolver?.address;
+	return await web3.resolveName(ens);
 }
 
 export const switchNetworkHandler = (chainId: number | undefined) => {
