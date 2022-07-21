@@ -44,16 +44,30 @@ export async function getServerSideProps() {
 
 		const {
 			data: { mainCategories },
+		}: {
+			data: { mainCategories: IMainCategory[] };
 		} = await apolloClient.query({
 			query: FETCH_MAIN_CATEGORIES,
 			fetchPolicy: 'network-only',
 		});
 
+		const updatedMaincategory = [
+			{
+				title: 'All',
+				description: '',
+				banner: '',
+				slug: 'all',
+				categories: [],
+				selected: false,
+			},
+			...mainCategories,
+		];
+
 		const { projects, totalCount, categories } = data.projects;
 		return addApolloState(apolloClient, {
 			props: {
 				projects,
-				mainCategories: mainCategories,
+				mainCategories: updatedMaincategory,
 				totalCount,
 				categories,
 			},
