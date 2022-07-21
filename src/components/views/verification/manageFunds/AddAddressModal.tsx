@@ -16,6 +16,7 @@ import config from '@/configuration';
 import { getAddressFromENS, isAddressENS, validateAddress } from '@/lib/wallet';
 import { showToastError } from '@/lib/helpers';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import { requiredOptions } from '@/lib/constants/regex';
 
 interface IProps extends IModal {
 	addAddress: (address: IAddress) => void;
@@ -117,10 +118,7 @@ const AddAddressModal: FC<IProps> = ({
 						register={register}
 						registerName='title'
 						registerOptions={{
-							required: {
-								value: true,
-								message: 'Title is required',
-							},
+							...requiredOptions.title,
 							validate: validateTitle,
 						}}
 						label='Address Title'
@@ -137,12 +135,9 @@ const AddAddressModal: FC<IProps> = ({
 						label='Wallet Address'
 						caption='Enter the related address.'
 						registerOptions={{
+							...requiredOptions.walletAddress,
 							validate: async i =>
 								await validateAddress(i, library, chainId),
-							required: {
-								value: true,
-								message: 'Wallet Address is required',
-							},
 						}}
 						error={errors.address}
 					/>
