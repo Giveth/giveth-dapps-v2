@@ -3,7 +3,10 @@ import { IMainCategory } from '@/apollo/types/types';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import { initializeApollo } from '@/apollo/apolloClient';
 import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
-import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
+import {
+	FETCH_ALL_PROJECTS,
+	FETCH_MAIN_CATEGORIES,
+} from '@/apollo/gql/gqlProjects';
 import { GeneralMetatags } from '@/components/Metatag';
 import ProjectsIndex from '@/components/views/projects/ProjectsIndex';
 import { projectsMetatags } from '@/content/metatags';
@@ -37,6 +40,8 @@ const ProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
+	const apolloClient = initializeApollo();
+
 	try {
 		const { query } = context;
 		const slug = query.slug;
@@ -47,11 +52,34 @@ export const getServerSideProps: GetServerSideProps = async context => {
 					permanent: false,
 				},
 			};
-		const selectedMainCategory = mainCategoriesMock.find(
-			mainCategory => mainCategory.slug === slug,
-		);
+		const {
+			data: { mainCategories },
+		}: {
+			data: { mainCategories: IMainCategory[] };
+		} = await apolloClient.query({
+			query: FETCH_MAIN_CATEGORIES,
+			fetchPolicy: 'network-only',
+		});
+
+		const allCategoriesItem = {
+			title: 'All',
+			description: '',
+			banner: '',
+			slug: 'all',
+			categories: [],
+			selected: false,
+		};
+
+		const updatedMaincategory = [allCategoriesItem, ...mainCategories];
+		const selectedMainCategory = updatedMaincategory.find(mainCategory => {
+			return mainCategory.slug === slug;
+		});
+
 		if (selectedMainCategory) {
-			selectedMainCategory.selected = true;
+			const updatedSelectedMainCategoru = {
+				...selectedMainCategory,
+				selected: true,
+			};
 			const apolloClient = initializeApollo();
 			const { data } = await apolloClient.query({
 				query: FETCH_ALL_PROJECTS,
@@ -63,8 +91,8 @@ export const getServerSideProps: GetServerSideProps = async context => {
 			return {
 				props: {
 					projects,
-					mainCategories: mainCategoriesMock,
-					selectedMainCategory,
+					mainCategories: updatedMaincategory,
+					selectedMainCategory: updatedSelectedMainCategoru,
 					totalCount,
 					categories,
 				},

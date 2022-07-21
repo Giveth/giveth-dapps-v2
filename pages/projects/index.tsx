@@ -50,18 +50,15 @@ export async function getServerSideProps() {
 			query: FETCH_MAIN_CATEGORIES,
 			fetchPolicy: 'network-only',
 		});
-
-		const updatedMaincategory = [
-			{
-				title: 'All',
-				description: '',
-				banner: '',
-				slug: 'all',
-				categories: [],
-				selected: false,
-			},
-			...mainCategories,
-		];
+		const allCategoriesItem = {
+			title: 'All',
+			description: '',
+			banner: '',
+			slug: 'all',
+			categories: [],
+			selected: false,
+		};
+		const updatedMaincategory = [allCategoriesItem, ...mainCategories];
 
 		const { projects, totalCount, categories } = data.projects;
 		return addApolloState(apolloClient, {

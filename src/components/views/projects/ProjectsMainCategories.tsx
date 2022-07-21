@@ -3,10 +3,12 @@ import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper';
-
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { RefObject } from 'react';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
+import Routes from '@/lib/constants/Routes';
 import { IMainCategory } from '@/apollo/types/types';
 
 interface IProjectsFilterProps {
@@ -20,6 +22,17 @@ function ProjectsMainCategories({
 	navigationPrevRef,
 	navigationNextRef,
 }: IProjectsFilterProps) {
+	const { query } = useRouter();
+	const handleIsSelected = (categorySlug: string) => {
+		if (!query?.slug) {
+			if (categorySlug === 'all') {
+				return true;
+			}
+			return false;
+		}
+		if (categorySlug === query.slug) return true;
+		return false;
+	};
 	return (
 		<Swiper
 			modules={[Navigation]}
@@ -33,7 +46,22 @@ function ProjectsMainCategories({
 			{mainCategories.map(category => {
 				return (
 					<SwiperSlide key={category.slug}>
-						<MainCategoryItem>{category.title}</MainCategoryItem>
+						<Link
+							href={
+								category.slug === 'all'
+									? Routes.Projects
+									: `/projects/${category.slug}`
+							}
+							passHref
+						>
+							<a>
+								<MainCategoryItem
+									isSelected={handleIsSelected(category.slug)}
+								>
+									{category.title}
+								</MainCategoryItem>
+							</a>
+						</Link>
 					</SwiperSlide>
 				);
 			})}
