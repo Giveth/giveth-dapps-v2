@@ -91,6 +91,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 		totalCount: _totalCount,
 		categories,
 	} = props;
+	console.log('Props', props.mainCategories);
 	const user = useAppSelector(state => state.user.userData);
 	const [categoriesObj, setCategoriesObj] = useState<ISelectObj[]>();
 	const [selectedCategory, setSelectedCategory] =
