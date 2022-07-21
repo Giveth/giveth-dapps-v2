@@ -263,8 +263,16 @@ const ProjectsIndex = (props: IProjectsView) => {
 							</FilterAndSearchContainer>
 						)}
 					</FiltersSection>
-					<StyledLine />
-					<ProjectsSubCategories subCategories={props.categories} />
+					{props.selectedMainCategory?.categories && (
+						<>
+							<StyledLine />
+							<ProjectsSubCategories
+								subCategories={
+									props.selectedMainCategory?.categories ?? []
+								}
+							/>
+						</>
+					)}
 				</FiltersContainer>
 
 				{isLoading && <Loader className='dot-flashing' />}
