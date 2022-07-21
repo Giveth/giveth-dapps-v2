@@ -264,7 +264,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 						)}
 					</FiltersSection>
 					<StyledLine />
-					<ProjectsSubCategories />
+					<ProjectsSubCategories subCategories={props.categories} />
 				</FiltersContainer>
 
 				{isLoading && <Loader className='dot-flashing' />}
