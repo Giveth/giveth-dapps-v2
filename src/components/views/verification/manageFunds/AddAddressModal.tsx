@@ -4,6 +4,7 @@ import { IconWalletOutline } from '@giveth/ui-design-system/lib/cjs/components/i
 import { Button } from '@giveth/ui-design-system';
 import { Controller, useForm } from 'react-hook-form';
 import { useWeb3React } from '@web3-react/core';
+import { utils } from 'ethers';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import Input from '@/components/Input';
@@ -12,7 +13,7 @@ import { IAddress } from '@/components/views/verification/manageFunds/ManageFund
 import SelectNetwork from '@/components/views/verification/manageFunds/SelectNetwork';
 import { ISelectedNetwork } from '@/components/views/verification/manageFunds/types';
 import config from '@/configuration';
-import { isAddressValid } from '@/lib/wallet';
+import { getAddressFromENS, isAddressENS, validateAddress } from '@/lib/wallet';
 import { showToastError } from '@/lib/helpers';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 
@@ -50,27 +51,43 @@ const AddAddressModal: FC<IProps> = ({
 		register,
 		handleSubmit,
 		formState: { errors },
+		watch,
 	} = useForm<IAddressForm>();
-	const { library } = useWeb3React();
+	const { library, chainId } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+
+	const watchTitle = watch('title');
 
 	const handleAdd = async (formData: IAddressForm) => {
 		const { address, title } = formData;
 		const isDuplicate = addresses.some(item => item.title === title);
 		if (address && title && formData.network) {
 			if (isDuplicate) {
-				showToastError('Please provide a unique title');
-				return;
+				return showToastError('Please provide a unique title');
 			}
+			const isEns = isAddressENS(address);
+			if (chainId !== 1 && isEns) {
+				return showToastError(
+					'Please switch to Mainnet to handle ENS addresses',
+				);
+			}
+			const _address = isEns
+				? await getAddressFromENS(address, library)
+				: utils.getAddress(address);
 			addAddress({
-				address: address,
-				title: title,
+				address: _address,
+				title,
 				networkId: formData.network.value,
 			});
 			closeModal();
 		} else {
 			showToastError('Please provide all values');
 		}
+	};
+
+	const validateTitle = (title: string) => {
+		const isDuplicate = addresses.some(item => item.title === title);
+		return isDuplicate ? 'Please provide a unique title' : true;
 	};
 
 	return (
@@ -104,8 +121,10 @@ const AddAddressModal: FC<IProps> = ({
 								value: true,
 								message: 'Title is required',
 							},
+							validate: validateTitle,
 						}}
 						label='Address Title'
+						value={watchTitle}
 						caption='Choose a title for this address. eg. Salary Payments, Marketing, etc.'
 						error={errors.title}
 						maxLength={40}
@@ -118,11 +137,8 @@ const AddAddressModal: FC<IProps> = ({
 						label='Wallet Address'
 						caption='Enter the related address.'
 						registerOptions={{
-							validate: async address => {
-								return (await isAddressValid(address, library))
-									? true
-									: 'The address in not valid';
-							},
+							validate: async i =>
+								await validateAddress(i, library, chainId),
 							required: {
 								value: true,
 								message: 'Wallet Address is required',
