@@ -12,7 +12,7 @@ function ProjectsSubCategories({
 }) {
 	return (
 		<Flex>
-			<Swiper slidesPerView='auto' spaceBetween={24}>
+			<CustomizedSwiper slidesPerView='auto' spaceBetween={24}>
 				{subCategories.map(category => {
 					return (
 						<SwiperSlide key={category.value}>
@@ -20,7 +20,7 @@ function ProjectsSubCategories({
 						</SwiperSlide>
 					);
 				})}
-			</Swiper>
+			</CustomizedSwiper>
 		</Flex>
 	);
 }
@@ -32,4 +32,8 @@ const SubCategoryItem = styled.div<{ isSelected?: boolean }>`
 	user-select: none;
 	padding: 0 12px 8px 12px;
 	border-bottom: ${props => (props.isSelected ? '1px solid black' : 'none')};
+`;
+
+const CustomizedSwiper = styled(Swiper)`
+	margin-left: 0;
 `;
