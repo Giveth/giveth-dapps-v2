@@ -57,6 +57,7 @@ const ImageInput = (props: ImageInputProps) => {
 
 	const pickBg = (index: number) => {
 		setValue(`/images/defaultProjectImages/${index}.png`);
+		setFile(undefined);
 		removeAttributes();
 	};
 
