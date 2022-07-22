@@ -31,7 +31,7 @@ const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 			<Flex alignItems='baseline' gap='12px'>
 				<LockInfoTitle>Your multiplier</LockInfoTitle>
 				<MultiPlyValue weight={700}>
-					x{multipler.toPrecision(3)}
+					x{multipler.toFixed(2)}
 					<MultiPlyHelp>
 						<IconWithTooltip
 							icon={<IconHelp size={16} />}
