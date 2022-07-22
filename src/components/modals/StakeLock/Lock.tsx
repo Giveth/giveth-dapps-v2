@@ -49,7 +49,7 @@ const LockModal: FC<ILockModalProps> = ({
 	setShowModal,
 }) => {
 	const [amount, setAmount] = useState('0');
-	const [round, setRound] = useState(1);
+	const [round, setRound] = useState(0);
 	const [lockState, setLockState] = useState<ELockState>(ELockState.LOCK);
 	const { library } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
@@ -114,7 +114,11 @@ const LockModal: FC<ILockModalProps> = ({
 								onClick={() => {
 									setLockState(ELockState.CONFIRM);
 								}}
-								disabled={amount == '0' || maxAmount.lt(amount)}
+								disabled={
+									round === 0 ||
+									amount == '0' ||
+									maxAmount.lt(amount)
+								}
 							/>
 							<CancelButton
 								buttonType='texty'

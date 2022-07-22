@@ -30,7 +30,7 @@ const LockSlider: FC<ILockSlider> = ({ round, setRound }) => {
 				<SliderMax onClick={() => setRound(maxRound)}>Max</SliderMax>
 			</Flex>
 			<StyledSlider
-				min={1}
+				min={0}
 				max={maxRound}
 				railStyle={{ backgroundColor: brandColors.giv[800] }}
 				trackStyle={{ backgroundColor: brandColors.giv[200] }}
