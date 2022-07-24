@@ -1,4 +1,4 @@
-export enum gqlEnums {
+export enum ESortby {
 	ACCEPTGIV = 'AcceptGiv',
 	QUALITYSCORE = 'QualityScore',
 	CREATIONDATE = 'CreationDate',
