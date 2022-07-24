@@ -17,7 +17,7 @@ import {
 	EDirection,
 	EDonationStatus,
 	EProjectStatus,
-	gqlEnums,
+	ESortby,
 } from '@/apollo/types/gqlEnums';
 import InfoBadge from '@/components/badges/InfoBadge';
 import { IDonationsByProjectIdGQL } from '@/apollo/types/gqlTypes';
@@ -105,7 +105,7 @@ const ProjectIndex = (props: { project?: IProject }) => {
 					take: donationsPerPage,
 					status: isAdmin ? null : EDonationStatus.VERIFIED,
 					orderBy: {
-						field: gqlEnums.CREATIONDATE,
+						field: ESortby.CREATIONDATE,
 						direction: EDirection.DESC,
 					},
 				},

@@ -26,7 +26,7 @@ import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { ICategory, IMainCategory, IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
-import { EDirection, gqlEnums } from '@/apollo/types/gqlEnums';
+import { EDirection, ESortby } from '@/apollo/types/gqlEnums';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
 import { Shadow } from '../../styled-components/Shadow';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
@@ -55,19 +55,19 @@ interface IQueries {
 }
 
 const allCategoryObj = { value: 'All', label: 'All' };
-const sortByObj = [
-	{ label: 'Default', value: gqlEnums.QUALITYSCORE },
-	{ label: 'Amount Raised', value: gqlEnums.DONATIONS },
-	{ label: 'Accepts GIV Token', value: gqlEnums.ACCEPTGIV },
-	{ label: 'Hearts', value: gqlEnums.HEARTS },
-	{ label: 'Newest', value: gqlEnums.CREATIONDATE },
+const sortByOptions = [
+	{ label: 'Default', value: ESortby.QUALITYSCORE },
+	{ label: 'Amount Raised', value: ESortby.DONATIONS },
+	{ label: 'Accepts GIV Token', value: ESortby.ACCEPTGIV },
+	{ label: 'Hearts', value: ESortby.HEARTS },
+	{ label: 'Newest', value: ESortby.CREATIONDATE },
 	{
 		label: 'Oldest',
-		value: gqlEnums.CREATIONDATE,
+		value: ESortby.CREATIONDATE,
 		direction: EDirection.ASC,
 	},
-	{ label: 'Verified', value: gqlEnums.VERIFIED },
-	{ label: 'Traceable', value: gqlEnums.TRACEABLE },
+	{ label: 'Verified', value: ESortby.VERIFIED },
+	{ label: 'Traceable', value: ESortby.TRACEABLE },
 ];
 
 const buildCategoryObj = (array: ICategory[]) => {
@@ -97,7 +97,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [filteredProjects, setFilteredProjects] =
 		useState<IProject[]>(projects);
-	const [sortBy, setSortBy] = useState<ISelectObj>(sortByObj[0]);
+	const [sortBy, setSortBy] = useState<ISelectObj>(sortByOptions[0]);
 	const [search, setSearch] = useState<string>('');
 	const [searchValue, setSearchValue] = useState<string>('');
 	const [totalCount, setTotalCount] = useState(_totalCount);
@@ -225,7 +225,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 							styles={selectCustomStyles}
 							value={sortBy}
 							onChange={e => handleChange('sortBy', e)}
-							options={sortByObj}
+							options={sortByOptions}
 							isOptionSelected={(option, selectValue) =>
 								selectValue.some((i: any) => i.label === option)
 							}
