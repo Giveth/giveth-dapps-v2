@@ -16,7 +16,11 @@ import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
 import { Modal } from './Modal';
 import LoadingAnimation from '@/animations/loading.json';
-import { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
+import {
+	PoolStakingConfig,
+	RegenStreamConfig,
+	SimplePoolStakingConfig,
+} from '@/types/config';
 import { BN, formatWeiHelper, Zero } from '@/helpers/number';
 import { harvestTokens } from '@/lib/stakingPool';
 import { claimUnstakeStake } from '@/lib/stakingNFT';
@@ -248,7 +252,8 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 				} else {
 					// LP Harvest
 					const txResponse = await harvestTokens(
-						poolStakingConfig.LM_ADDRESS,
+						(poolStakingConfig as SimplePoolStakingConfig)
+							.LM_ADDRESS,
 						library,
 					);
 					if (txResponse) {

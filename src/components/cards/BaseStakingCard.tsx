@@ -13,6 +13,7 @@ import config from '../../configuration';
 import {
 	PoolStakingConfig,
 	RegenPoolStakingConfig,
+	SimplePoolStakingConfig,
 	StakingPlatform,
 	StakingType,
 } from '@/types/config';
@@ -479,7 +480,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				) : (
 					<StakeModal
 						setShowModal={setShowStakeModal}
-						poolStakingConfig={poolStakingConfig}
+						poolStakingConfig={
+							poolStakingConfig as SimplePoolStakingConfig
+						}
 						regenStreamConfig={regenStreamConfig}
 						maxAmount={userNotStakedAmount}
 					/>
@@ -501,7 +504,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				) : (
 					<UnStakeModal
 						setShowModal={setShowUnStakeModal}
-						poolStakingConfig={poolStakingConfig}
+						poolStakingConfig={
+							poolStakingConfig as SimplePoolStakingConfig
+						}
 						regenStreamConfig={regenStreamConfig}
 						maxAmount={stakedLpAmount}
 					/>
