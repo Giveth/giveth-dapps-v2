@@ -118,6 +118,8 @@ const SortItem = styled(Flex)`
 	border-radius: 50px;
 	padding: 10px 16px;
 	gap: 10px;
+	width: fit-content;
+	cursor: pointer;
 `;
 
 const IconContainer = styled.div`
