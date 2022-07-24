@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 import { useWeb3React } from '@web3-react/core';
@@ -43,9 +42,6 @@ const TestRoute = () => {
 
 	return (
 		<>
-			<Head>
-				<Asghar />
-			</Head>
 			<TestContainer>
 				<button
 					onClick={() => {
@@ -89,5 +85,3 @@ export const getServerSideProps: GetServerSideProps = async context => {
 const TestContainer = styled.div`
 	padding: 200px;
 `;
-
-const Asghar = () => <title>Asghar kopak</title>;
