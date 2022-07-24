@@ -39,7 +39,7 @@ const config: EnvConfig = {
 		blockExplorerName: ['Etherscan'],
 		blockExplorerUrls: ['https://kovan.etherscan.io'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-kovan-staging',
+			'https://api.thegraph.com/subgraphs/name/mohammadranjbarz/giv-economy-kovan',
 
 		TOKEN_ADDRESS: '0x29434A25abd94AE882aA883eea81585Aaa5b078D',
 		tokenAddressOnUniswapV2: '0x900db999074d9277c5da2a43f252d74366230da0',
@@ -95,8 +95,6 @@ const config: EnvConfig = {
 					'0x3c2455a3ee0d824941c9329c01a66b86078c3e82',
 				INCENTIVE_REFUNDEE_ADDRESS:
 					'0x5f672d71399d8cDbA64f596394b4f4381247E025',
-				POOL_ADDRESS: '0xa48C26fF05F47a2eEd88C09664de1cb604A21b01',
-				LM_ADDRESS: '0x1aD46D40648639f84a396Fef32132888038c5aA8',
 				type: StakingType.UNISWAPV3_ETH_GIV,
 				platform: StakingPlatform.UNISWAP,
 				title: 'GIV / ETH',

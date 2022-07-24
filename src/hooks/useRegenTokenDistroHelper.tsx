@@ -1,23 +1,15 @@
 import { useState, useEffect } from 'react';
-import { shallowEqual } from 'react-redux';
-import { useAppSelector } from '@/features/hooks';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
-import { StreamType } from '@/types/config';
 import { defaultTokenDistroHelper } from './useGIVTokenDistroHelper';
+import { ITokenDistro } from '@/types/subgraph';
 
-const useRegenTokenDistroHelper = (streamType: StreamType) => {
+const useRegenTokenDistroHelper = (tokenDistro: ITokenDistro) => {
 	const [regenTokenDistroHelper, setRegenTokenDistroHelper] =
 		useState<TokenDistroHelper>(defaultTokenDistroHelper);
-	const streamInfo = useAppSelector(
-		state => state.subgraph.currentValues[streamType],
-		shallowEqual,
-	);
 	useEffect(() => {
-		if (!streamInfo) return;
-		setRegenTokenDistroHelper(
-			new TokenDistroHelper(streamInfo, streamType),
-		);
-	}, [streamInfo, streamType]);
+		if (!tokenDistro) return;
+		setRegenTokenDistroHelper(new TokenDistroHelper(tokenDistro));
+	}, [tokenDistro]);
 	return { regenTokenDistroHelper };
 };
 

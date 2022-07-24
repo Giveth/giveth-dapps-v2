@@ -46,6 +46,7 @@ import {
 import config from '@/configuration';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
+import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import type { TransactionResponse } from '@ethersproject/providers';
 
 const loadingAnimationOptions = {
@@ -91,19 +92,24 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 		ClaimState.UNKNOWN,
 	);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
-	const { balances } = useAppSelector(state => state.subgraph.currentValues);
+	const sdh = new SubgraphDataHelper(
+		useAppSelector(state => state.subgraph.currentValues),
+	);
+	const givTokenDistroBalance = sdh.getGIVTokenDistroBalance();
 	const givPrice = useAppSelector(state => state.price.givPrice);
 
 	const { account, library } = useWeb3React();
 
 	useEffect(() => {
-		const bnGIVback = BN(balances.givback);
-		setClaimableNow(givTokenDistroHelper.getUserClaimableNow(balances));
+		const bnGIVback = BN(givTokenDistroBalance.givback);
+		setClaimableNow(
+			givTokenDistroHelper.getUserClaimableNow(givTokenDistroBalance),
+		);
 		setGivBackLiquidPart(givTokenDistroHelper.getLiquidPart(bnGIVback));
 		setGivBackStream(
 			givTokenDistroHelper.getStreamPartTokenPerWeek(bnGIVback),
 		);
-	}, [balances, givTokenDistroHelper]);
+	}, [givTokenDistroBalance, givTokenDistroHelper]);
 
 	useEffect(() => {
 		setGivDropStream(
@@ -247,7 +253,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 								</RateRow>
 							</>
 						)}
-						{!BN(balances.givback).isZero() && (
+						{!BN(givTokenDistroBalance.givback).isZero() && (
 							<>
 								<HelpRow alignItems='center'>
 									<B>Claimable from GIVbacks</B>

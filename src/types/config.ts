@@ -52,7 +52,8 @@ export interface SimplePoolStakingConfig extends BasicStakingConfig {
 	archived?: boolean;
 }
 
-export interface UniswapV3PoolStakingConfig extends SimplePoolStakingConfig {
+export interface UniswapV3PoolStakingConfig
+	extends Omit<SimplePoolStakingConfig, 'LM_ADDRESS' | 'POOL_ADDRESS'> {
 	INCENTIVE_START_TIME: number;
 	INCENTIVE_END_TIME: number;
 	INCENTIVE_REWARD_AMOUNT: number;

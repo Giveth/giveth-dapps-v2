@@ -16,11 +16,7 @@ import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
 import { Modal } from './Modal';
 import LoadingAnimation from '@/animations/loading.json';
-import {
-	PoolStakingConfig,
-	RegenStreamConfig,
-	StreamType,
-} from '@/types/config';
+import { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 import { BN, formatWeiHelper, Zero } from '@/helpers/number';
 import { harvestTokens } from '@/lib/stakingPool';
 import { claimUnstakeStake } from '@/lib/stakingNFT';
@@ -63,6 +59,7 @@ import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
 import { LiquidityPosition } from '@/types/nfts';
 import { Flex } from '../styled-components/Flex';
+import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import type { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 
 interface IHarvestAllModalProps extends IModal {
@@ -108,7 +105,9 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 }) => {
 	const [state, setState] = useState<HarvestStates>(HarvestStates.HARVEST);
 	const tokenSymbol = regenStreamConfig?.rewardTokenSymbol || 'GIV';
-	const { balances } = useAppSelector(state => state.subgraph.currentValues);
+	const sdh = new SubgraphDataHelper(
+		useAppSelector(state => state.subgraph.currentValues),
+	);
 	const {
 		mainnetThirdPartyTokensPrice,
 		xDaiThirdPartyTokensPrice,
@@ -133,14 +132,18 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	const [sumLiquid, setSumLiquid] = useState(ethers.constants.Zero);
 	const [sumStream, setSumStream] = useState<BigNumber>(Zero);
 
-	const givback = useMemo<ethers.BigNumber>(() => {
-		return regenStreamConfig ? ethers.constants.Zero : BN(balances.givback);
-	}, [regenStreamConfig, balances.givback]);
-	const givbackLiquidPart = useMemo<ethers.BigNumber>(() => {
-		return regenStreamConfig
-			? ethers.constants.Zero
-			: BN(balances.givbackLiquidPart);
-	}, [regenStreamConfig, balances.givbackLiquidPart]);
+	const tokenDistroBalance = regenStreamConfig
+		? sdh.getTokenDistroBalance(regenStreamConfig.tokenDistroAddress)
+		: sdh.getGIVTokenDistroBalance();
+	const givback = useMemo<ethers.BigNumber>(
+		() => BN(tokenDistroBalance.givback),
+		[tokenDistroBalance],
+	);
+	const givbackLiquidPart = useMemo<ethers.BigNumber>(
+		() => BN(tokenDistroBalance.givbackLiquidPart),
+		[tokenDistroBalance],
+	);
+
 	const tokenPrice = useMemo(() => {
 		const currentPrice =
 			network === config.MAINNET_NETWORK_NUMBER
@@ -154,34 +157,29 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 
 	useEffect(() => {
 		if (!tokenDistroHelper) return;
-		const bnAllocatedTokens = BN(balances.allocatedTokens);
 		if (earned) {
 			setRewardLiquidPart(tokenDistroHelper.getLiquidPart(earned));
 			setEarnedStream(
 				tokenDistroHelper.getStreamPartTokenPerWeek(earned),
 			);
 		}
-		setEarnedLiquid(tokenDistroHelper.getUserClaimableNow(balances));
-		let lockedAmount;
-		if (regenStreamConfig) {
-			switch (regenStreamConfig.type) {
-				case StreamType.FOX:
-					lockedAmount = BN(balances.foxAllocatedTokens);
-					break;
-				case StreamType.CULT:
-					lockedAmount = BN(balances.cultAllocatedTokens);
-					break;
-				default:
-					lockedAmount = ethers.constants.Zero;
-			}
-		} else {
-			lockedAmount = bnAllocatedTokens.sub(givback);
-		}
+		setEarnedLiquid(
+			tokenDistroHelper.getUserClaimableNow(tokenDistroBalance),
+		);
+		const lockedAmount = BN(tokenDistroBalance.allocatedTokens).sub(
+			givback,
+		);
 		setRewardStream(
 			tokenDistroHelper.getStreamPartTokenPerWeek(lockedAmount),
 		);
 		setGivBackStream(tokenDistroHelper.getStreamPartTokenPerWeek(givback));
-	}, [earned, balances, tokenDistroHelper, givback, regenStreamConfig]);
+	}, [
+		earned,
+		tokenDistroBalance,
+		tokenDistroHelper,
+		givback,
+		regenStreamConfig,
+	]);
 
 	//calculate Liquid Sum
 	useEffect(() => {
@@ -198,7 +196,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 		if (
 			!regenStreamConfig &&
 			network === config.XDAI_NETWORK_NUMBER &&
-			!balances.givDropClaimed &&
+			!tokenDistroBalance.givDropClaimed &&
 			account
 		) {
 			fetchAirDropClaimData(account).then(claimData => {
@@ -214,7 +212,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	}, [
 		account,
 		network,
-		balances?.givDropClaimed,
+		tokenDistroBalance?.givDropClaimed,
 		tokenDistroHelper,
 		regenStreamConfig,
 	]);

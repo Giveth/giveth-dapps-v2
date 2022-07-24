@@ -66,14 +66,18 @@ import Pagination from '../Pagination';
 import { Container, Row, Col } from '@/components/Grid';
 import GivEconomyProjectCards from '../cards/GivEconomyProjectCards';
 import { useAppSelector } from '@/features/hooks';
+import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
 export const TabGIVstreamTop = () => {
 	const [showModal, setShowModal] = useState(false);
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
 	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
-	const { balances } = useAppSelector(state => state.subgraph.currentValues);
-	const { allocatedTokens, claimed, givback } = balances;
+	const sdh = new SubgraphDataHelper(
+		useAppSelector(state => state.subgraph.currentValues),
+	);
+	const { allocatedTokens, claimed, givback } =
+		sdh.getGIVTokenDistroBalance();
 	const { chainId } = useWeb3React();
 
 	useEffect(() => {
@@ -150,19 +154,26 @@ export const TabGIVstreamBottom = () => {
 	const [streamAmount, setStreamAmount] = useState<BigNumber>(
 		new BigNumber(0),
 	);
-	const { balances } = useAppSelector(state => state.subgraph.currentValues);
+	const sdh = new SubgraphDataHelper(
+		useAppSelector(state => state.subgraph.currentValues),
+	);
+	const givTokenDistroBalance = sdh.getGIVTokenDistroBalance();
 	const increaseSecRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		const _allocatedTokens = BN(balances.allocatedTokens);
-		const _givback = BN(balances.givback);
+		const _allocatedTokens = BN(givTokenDistroBalance.allocatedTokens);
+		const _givback = BN(givTokenDistroBalance.givback);
 
 		setStreamAmount(
 			givTokenDistroHelper.getStreamPartTokenPerWeek(
 				_allocatedTokens.sub(_givback),
 			),
 		);
-	}, [balances.allocatedTokens, balances.givback, givTokenDistroHelper]);
+	}, [
+		givTokenDistroBalance.allocatedTokens,
+		givTokenDistroBalance.givback,
+		givTokenDistroHelper,
+	]);
 
 	useEffect(() => {
 		const _remain = durationToString(givTokenDistroHelper.remain);
@@ -297,12 +308,8 @@ const convetSourceTypeToIcon = (distributor: string) => {
 					<P>{` GIVbacks`}</P>
 				</Flex>
 			);
-		case 'balancerlm':
-		case 'uniswapv2givdailm':
-		case 'givhnylm':
-		case 'givlm':
-		case 'givethlm':
-		case 'uniswappool':
+		case 'unipool':
+		case 'uniswapv3':
 			return (
 				<Flex gap='16px'>
 					<IconGIVFarm size={24} color={brandColors.mustard[500]} />
@@ -339,8 +346,9 @@ export const GIVstreamHistory: FC = () => {
 	>([]);
 	const [loading, setLoading] = useState(true);
 	const [page, setPage] = useState(0);
-	const { balances } = useAppSelector(state => state.subgraph.currentValues);
-	const { allocationCount } = balances;
+	const currentValue = useAppSelector(state => state.subgraph.currentValues);
+	const sdh = new SubgraphDataHelper(currentValue);
+	const { allocationCount } = sdh.getGIVTokenDistroBalance();
 
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 
@@ -420,7 +428,7 @@ export const GIVstreamHistory: FC = () => {
 			)}
 			<Pagination
 				currentPage={page}
-				totalCount={allocationCount}
+				totalCount={+allocationCount}
 				setPage={setPage}
 				itemPerPage={itemPerPage}
 			/>
