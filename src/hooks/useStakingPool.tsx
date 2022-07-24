@@ -8,11 +8,7 @@ import {
 	getLPStakingAPR,
 	getUserStakeInfo,
 } from '@/lib/stakingPool';
-import {
-	PoolStakingConfig,
-	RegenPoolStakingConfig,
-	StakingType,
-} from '@/types/config';
+import { SimplePoolStakingConfig, StakingType } from '@/types/config';
 import { APR, UserStakeInfo } from '@/types/poolInfo';
 import { Zero } from '@/helpers/number';
 import { useAppSelector } from '@/features/hooks';
@@ -25,7 +21,7 @@ export interface IStakeInfo {
 }
 
 export const useStakingPool = (
-	poolStakingConfig: PoolStakingConfig | RegenPoolStakingConfig,
+	poolStakingConfig: SimplePoolStakingConfig,
 	network: number,
 ): IStakeInfo => {
 	const [apr, setApr] = useState<BigNumber | null>(null);
@@ -38,9 +34,9 @@ export const useStakingPool = (
 
 	const { library, chainId } = useWeb3React();
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
+	const subgraphIsLoaded = useAppSelector(state => state.subgraph.isLoaded);
 
 	const { type, LM_ADDRESS } = poolStakingConfig;
-	const subgraphIsLoaded = !!currentValues.isLoaded;
 	const providerNetwork = library?.network?.chainId;
 
 	useEffect(() => {

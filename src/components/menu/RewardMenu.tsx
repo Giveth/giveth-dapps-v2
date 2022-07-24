@@ -30,7 +30,7 @@ import { networkInfo } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { StakingType } from '@/types/config';
+import { SimplePoolStakingConfig, StakingType } from '@/types/config';
 
 interface IRewardMenu {
 	showWhatIsGIVstreamModal: boolean;
@@ -91,7 +91,10 @@ export const RewardMenu = ({
 			pools.forEach(pool => {
 				if (pool.type !== StakingType.UNISWAPV3_ETH_GIV) {
 					_farmRewards = _farmRewards.add(
-						getUserStakeInfo(currentValues, pool).earned,
+						getUserStakeInfo(
+							currentValues,
+							pool as SimplePoolStakingConfig,
+						).earned,
 					);
 				}
 			});

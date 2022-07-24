@@ -8,7 +8,6 @@ import {
 import { captureException } from '@sentry/nextjs';
 import {
 	BalancerPoolStakingConfig,
-	PoolStakingConfig,
 	RegenPoolStakingConfig,
 	SimplePoolStakingConfig,
 	StakingType,
@@ -59,7 +58,7 @@ export const getGivStakingAPR = async (
 };
 
 export const getLPStakingAPR = async (
-	poolStakingConfig: PoolStakingConfig,
+	poolStakingConfig: SimplePoolStakingConfig,
 	network: number,
 	provider: JsonRpcProvider | null,
 	subgraphValue: ISubgraphState,
@@ -247,7 +246,7 @@ const getSimplePoolStakingAPR = async (
 
 export const getUserStakeInfo = (
 	currentValues: ISubgraphState,
-	poolStakingConfig: PoolStakingConfig,
+	poolStakingConfig: SimplePoolStakingConfig,
 ): {
 	stakedAmount: ethers.BigNumber;
 	notStakedAmount: ethers.BigNumber;
