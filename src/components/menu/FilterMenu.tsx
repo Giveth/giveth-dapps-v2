@@ -37,11 +37,16 @@ export const FilterMenu = () => {
 			</Section>
 			<Section>
 				<B>Project features</B>
-				<CheckBox
-					label='Giveback eligible '
-					onChange={setIsChecked}
-					checked={isChecked}
-				/>
+				{projectFeatures.map((projectFeature, idx) => (
+					<FeatureItem key={idx}>
+						<CheckBox
+							label={projectFeature}
+							onChange={setIsChecked}
+							checked={isChecked}
+							size={16}
+						/>
+					</FeatureItem>
+				))}
 			</Section>
 		</MenuContainer>
 	);
@@ -66,6 +71,14 @@ const sortByOptions = [
 		icon: <IconHeartOutline16 />,
 	},
 	{ label: 'Most funded', value: ESortby.DONATIONS, icon: <IconHeart16 /> },
+];
+
+const projectFeatures = [
+	'Giveback eligible',
+	'Accept GIV token',
+	'Verified',
+	'From GivingBlock',
+	'From Trace',
 ];
 
 const MenuContainer = styled.div`
@@ -111,4 +124,14 @@ const IconContainer = styled.div`
 	width: 16px;
 	height: 22px;
 	padding: 2px 0;
+`;
+
+const FeatureItem = styled.div`
+	margin: 16px 0;
+	padding: 8px 10px;
+	border-radius: 8px;
+	transition: background-color 0.3s ease;
+	&:hover {
+		background-color: ${neutralColors.gray[200]};
+	}
 `;
