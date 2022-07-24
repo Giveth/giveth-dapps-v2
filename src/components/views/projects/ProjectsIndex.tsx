@@ -1,21 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
-import Select, { StylesConfig } from 'react-select';
 import Debounced from 'lodash.debounce';
 import { useRouter } from 'next/router';
 import {
 	brandColors,
-	P,
 	neutralColors,
-	Subline,
 	H3,
 	OulineButton,
 	Lead,
+	IconSearch,
+	IconOptions16,
+	IconDots,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 import { captureException } from '@sentry/nextjs';
 import ProjectCard from '@/components/project-card/ProjectCard';
-import SearchBox from '@/components/SearchBox';
 import Routes from '@/lib/constants/Routes';
 import {
 	capitalizeFirstLetter,
@@ -28,14 +27,17 @@ import { ICategory, IMainCategory, IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
 import { EDirection, ESortby } from '@/apollo/types/gqlEnums';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
-import { Shadow } from '../../styled-components/Shadow';
-import { deviceSize, mediaQueries } from '@/lib/constants/constants';
+import { device, deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import ProjectsBanner from './ProjectsBanner';
+import ProjectsMainCategories from './ProjectsMainCategories';
+import { Shadow } from '@/components/styled-components/Shadow';
+import useMediaQuery from '@/hooks/useMediaQuery';
+import ProjectsSubCategories from './ProjectsSubCategories';
 import type { IProjectsRouteProps } from 'pages/projects';
 
-interface IProjectsView extends IProjectsRouteProps {
+export interface IProjectsView extends IProjectsRouteProps {
 	selectedMainCategory?: IMainCategory;
 }
 
@@ -89,8 +91,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 		totalCount: _totalCount,
 		categories,
 	} = props;
-	const user = useAppSelector(state => state.user.userData);
 
+	const user = useAppSelector(state => state.user.userData);
 	const [categoriesObj, setCategoriesObj] = useState<ISelectObj[]>();
 	const [selectedCategory, setSelectedCategory] =
 		useState<ISelectObj>(allCategoryObj);
@@ -101,12 +103,21 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const [search, setSearch] = useState<string>('');
 	const [searchValue, setSearchValue] = useState<string>('');
 	const [totalCount, setTotalCount] = useState(_totalCount);
+	//Slider next and prev button refs
+	const navigationPrevRef = useRef<HTMLButtonElement>(null);
+	const navigationNextRef = useRef<HTMLButtonElement>(null);
 
 	const dispatch = useAppDispatch();
 	const router = useRouter();
 	const isFirstRender = useRef(true);
 	const debouncedSearch = useRef<any>();
 	const pageNum = useRef(0);
+	const isDesktop = useMediaQuery(device.laptopS);
+	const isTablet = useMediaQuery(
+		`(min-device-width: ${deviceSize.tablet}px) and (max-device-width: ${
+			deviceSize.laptopS - 1
+		}px)`,
+	);
 
 	useEffect(() => {
 		setCategoriesObj(buildCategoryObj(categories));
@@ -206,41 +217,57 @@ const ProjectsIndex = (props: IProjectsView) => {
 		<>
 			<ProjectsBanner mainCategory={selectedMainCategory} />
 			<Wrapper>
-				<FiltersSection>
-					<SelectComponent>
-						<Label>CATEGORY</Label>
-						<Select
-							classNamePrefix='select'
-							styles={selectCustomStyles}
-							value={selectedCategory}
-							onChange={e => handleChange('category', e)}
-							options={categoriesObj}
-							isMobile={false}
-						/>
-					</SelectComponent>
-					<SelectComponent>
-						<Label>SORT BY</Label>
-						<Select
-							classNamePrefix='select'
-							styles={selectCustomStyles}
-							value={sortBy}
-							onChange={e => handleChange('sortBy', e)}
-							options={sortByOptions}
-							isOptionSelected={(option, selectValue) =>
-								selectValue.some((i: any) => i.label === option)
-							}
-							isMobile={false}
-						/>
-					</SelectComponent>
-					<SearchComponent>
-						<Label />
-						<SearchBox
-							onChange={(e: string) => handleChange('search', e)}
-							placeholder='Search Projects ...'
-							value={searchValue}
-						/>
-					</SearchComponent>
-				</FiltersSection>
+				<FiltersContainer>
+					<FiltersSection>
+						<FiltersSwiper>
+							<PrevIcon ref={navigationPrevRef}>
+								<img
+									src={'/images/caret_right.svg'}
+									alt='caret right'
+								/>
+							</PrevIcon>
+							<ProjectsMainCategories
+								mainCategories={props.mainCategories}
+								navigationNextRef={navigationNextRef}
+								navigationPrevRef={navigationPrevRef}
+							/>
+							<NextIcon ref={navigationNextRef}>
+								<img
+									src={'/images/caret_right.svg'}
+									alt='caret right'
+								/>
+							</NextIcon>
+						</FiltersSwiper>
+						{isDesktop && (
+							<FilterAndSearchContainer>
+								<IconContainer>
+									<IconSearch />
+								</IconContainer>
+								<FiltersButton>
+									Filters
+									<IconOptions16 />
+								</FiltersButton>
+							</FilterAndSearchContainer>
+						)}
+						{isTablet && (
+							<FilterAndSearchContainer>
+								<IconContainer>
+									<IconDots />
+								</IconContainer>
+							</FilterAndSearchContainer>
+						)}
+					</FiltersSection>
+					{props.selectedMainCategory?.categories && (
+						<>
+							<StyledLine />
+							<ProjectsSubCategories
+								subCategories={
+									props.selectedMainCategory?.categories ?? []
+								}
+							/>
+						</>
+					)}
+				</FiltersContainer>
 
 				{isLoading && <Loader className='dot-flashing' />}
 
@@ -279,36 +306,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 	);
 };
 
-const selectCustomStyles: StylesConfig = {
-	menu: styles => ({
-		...styles,
-		border: '0px',
-		borderRadius: '8px',
-		boxShadow: Shadow.Neutral[500],
-		'&:focus-within': {
-			border: `2px solid ${brandColors.pinky[500]}`,
-		},
-	}),
-	option: (styles, { isFocused, isSelected }) => ({
-		...styles,
-		width: '95%',
-		height: '38px',
-		margin: '4px auto',
-		borderRadius: '8px',
-		backgroundColor: isSelected
-			? neutralColors.gray[300]
-			: isFocused
-			? neutralColors.gray[200]
-			: 'white',
-		color: isSelected ? neutralColors.gray[900] : neutralColors.gray[800],
-	}),
-	control: base => ({
-		...base,
-		border: 0,
-		boxShadow: 'none',
-	}),
-};
-
 const Loader = styled.div`
 	margin: 20px auto;
 `;
@@ -326,45 +323,30 @@ const StyledButton = styled(OulineButton)<{ transparent?: boolean }>`
 	}
 `;
 
-const SelectComponent = styled(P)`
-	min-width: 200px;
-	width: 100%;
-
-	${mediaQueries.tablet} {
-		width: calc(50% - 8px);
-	}
-
-	${mediaQueries.laptopL} {
-		width: 345px;
-	}
-`;
-
-const SearchComponent = styled.div`
-	flex-grow: 1;
-`;
-
 const LoadingDotIcon = styled.div`
 	padding: 4px 37px;
 `;
 
-const Label = styled(Subline)`
-	color: ${brandColors.deep[500]};
-	height: 18px;
-`;
-
-const FiltersSection = styled.div`
-	padding: 32px 21px;
+const FiltersContainer = styled.div`
+	display: flex;
+	flex-direction: column;
 	background: white;
+	position: relative;
+	padding: 32px 21px;
 	border-radius: 16px;
 	margin-bottom: 32px;
 	margin-top: 50px;
+	gap: 16px;
+`;
+
+const FiltersSection = styled.div`
 	display: flex;
-	flex-wrap: wrap;
 	gap: 16px;
 	align-items: center;
 	position: relative;
-	font-weight: 500;
 	color: ${neutralColors.gray[900]};
+	justify-content: space-between;
+	flex-wrap: nowrap;
 `;
 
 export const ProjectsContainer = styled.div`
@@ -396,4 +378,87 @@ const Subtitle = styled(Lead)`
 	font-weight: 400;
 	max-width: 1026px;
 `;
+
+const FilterAndSearchContainer = styled.div`
+	display: flex;
+	gap: 16px;
+`;
+
+const FiltersButton = styled.button`
+	display: flex;
+	gap: 8px;
+	border-radius: 50px;
+	padding: 16px;
+	background: white;
+	box-shadow: ${Shadow.Neutral[500]};
+	border: 1px solid ${neutralColors.gray[400]};
+	font-weight: 700;
+	text-transform: uppercase;
+	cursor: pointer;
+	user-select: none;
+`;
+
+const FiltersSwiper = styled.div`
+	display: flex;
+	position: relative;
+	gap: 16px;
+	width: 100%;
+	${mediaQueries.tablet} {
+		max-width: 90%;
+	}
+	${mediaQueries.laptopS} {
+		padding-right: 60px;
+		width: 70%;
+	}
+`;
+
+const IconContainer = styled.button`
+	min-width: 44px;
+	min-height: 44px;
+	border-radius: 50%;
+	background: ${neutralColors.gray[100]};
+	box-shadow: ${Shadow.Neutral[500]};
+	cursor: pointer;
+	border: 1px solid ${neutralColors.gray[400]};
+`;
+
+const NextIcon = styled(IconContainer)`
+	z-index: 1;
+	display: none;
+	:disabled {
+		opacity: 0.5;
+		cursor: default;
+	}
+	${mediaQueries.tablet} {
+		display: inline-block;
+	}
+	${mediaQueries.laptopS} {
+		width: 50px;
+		height: 50px;
+		position: absolute;
+		top: calc(50% - 25px);
+		right: 0;
+		:disabled {
+			display: none;
+		}
+	}
+`;
+
+const PrevIcon = styled(NextIcon)<{ disabled?: boolean }>`
+	-ms-transform: rotate(180deg);
+	transform: rotate(180deg);
+	left: 0;
+	z-index: 2;
+	${mediaQueries.laptopS} {
+		:disabled {
+			display: none;
+		}
+	}
+`;
+
+const StyledLine = styled.hr`
+	width: 100%;
+	border: 1px solid ${neutralColors.gray[200]};
+`;
+
 export default ProjectsIndex;
