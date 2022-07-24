@@ -25,10 +25,10 @@ export const fetchMainnetInfo = async (userAddress = '') => {
 
 export const fetchXDaiInfo = async (userAddress = '') => {
 	try {
-		const response = await fetchSubgraph(
-			SubgraphQueryBuilder.getXDaiQuery(userAddress),
-			config.XDAI_NETWORK_NUMBER,
-		);
+		const query = SubgraphQueryBuilder.getXDaiQuery(userAddress);
+		console.log('fetch xdai query:', query);
+		const response = await fetchSubgraph(query, config.XDAI_NETWORK_NUMBER);
+		console.log('fetch xdai response:', response);
 		return transformSubgraphData(response);
 	} catch (e) {
 		console.error('Error on query xDai subgraph:', e);
