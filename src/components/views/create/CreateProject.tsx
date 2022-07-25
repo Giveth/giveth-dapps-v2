@@ -23,7 +23,7 @@ import {
 	CREATE_PROJECT,
 	UPDATE_PROJECT,
 } from '@/apollo/gql/gqlProjects';
-import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
+import { isAddressENS } from '@/lib/wallet';
 import {
 	ICategory,
 	IProject,
@@ -110,6 +110,13 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		defaultMainAddress,
 		defaultSecondaryAddress,
 	);
+	const userAddresses: string[] = [];
+	if (isSameDefaultAddresses) userAddresses.push(defaultMainAddress!);
+	else {
+		if (defaultMainAddress) userAddresses.push(defaultMainAddress);
+		if (defaultSecondaryAddress)
+			userAddresses.push(defaultSecondaryAddress);
+	}
 
 	const formMethods = useForm<TInputs>({
 		mode: 'onChange',
@@ -151,6 +158,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		useState(isEditMode ? isSameDefaultAddresses : true);
 	const [isLoading, setIsLoading] = useState(false);
 	const [isTitleValidating, setIsTitleValidating] = useState(false);
+	const [resolvedENS, setResolvedENS] = useState('');
 
 	// useLeaveConfirm({ shouldConfirm: formChange });
 
@@ -173,7 +181,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 			if (isSameMainnetGnosisAddress) {
 				const address = isAddressENS(mainAddress)
-					? await getAddressFromENS(mainAddress, library)
+					? resolvedENS
 					: mainAddress;
 				const checksumAddress = utils.getAddress(address);
 				addresses.push(
@@ -183,7 +191,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			} else {
 				if (mainnetAddressActive) {
 					const address = isAddressENS(mainAddress)
-						? await getAddressFromENS(mainAddress, library)
+						? resolvedENS
 						: mainAddress;
 					const checksumAddress = utils.getAddress(address);
 					addresses.push({
@@ -297,8 +305,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							registerOptions={{
 								...requiredOptions.name,
 								validate: async i => {
-									setIsTitleValidating(true);
 									if (noTitleValidation(i)) return true;
+									setIsTitleValidating(true);
 									const result = await titleValidation(i);
 									setIsTitleValidating(false);
 									return result;
@@ -338,7 +346,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							networkId={ethereumId}
 							sameAddress={isSameMainnetGnosisAddress}
 							isActive={mainnetAddressActive}
-							defaultValue={defaultMainAddress}
+							userAddresses={userAddresses}
+							resolvedENS={resolvedENS}
+							setResolvedENS={setResolvedENS}
 							setIsActive={e => {
 								if (!e && !gnosisAddressActive)
 									return showToastError(
@@ -352,7 +362,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							networkId={gnosisId}
 							sameAddress={isSameMainnetGnosisAddress}
 							isActive={gnosisAddressActive}
-							defaultValue={defaultSecondaryAddress}
+							userAddresses={userAddresses}
+							setResolvedENS={() => {}}
 							setIsActive={e => {
 								if (!e && !mainnetAddressActive)
 									return showToastError(

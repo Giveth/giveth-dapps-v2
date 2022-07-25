@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { H6, IconETH, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
 import { useWeb3React } from '@web3-react/core';
+import { utils } from 'ethers';
 
 import { TinyLabel } from './Create.sc';
 import { compareAddresses } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 import Input, { InputSize } from '@/components/Input';
-import { requiredOptions } from '@/lib/constants/regex';
 import { EInputs } from '@/components/views/create/CreateProject';
 import { addressValidation } from '@/components/views/create/helpers';
 import { IconGnosisChain } from '@/components/Icons/GnosisChain';
@@ -18,12 +18,24 @@ import { Flex } from '@/components/styled-components/Flex';
 import CheckBox from '@/components/Checkbox';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 
-const WalletAddressInput = (props: {
+interface IProps {
 	networkId: number;
-	defaultValue?: string;
+	userAddresses: string[];
 	sameAddress: boolean;
 	isActive: boolean;
 	setIsActive: (active: boolean) => void;
+	resolvedENS?: string;
+	setResolvedENS: (resolvedENS: string) => void;
+}
+
+const WalletAddressInput: FC<IProps> = ({
+	networkId,
+	userAddresses,
+	sameAddress,
+	isActive,
+	setIsActive,
+	resolvedENS,
+	setResolvedENS,
 }) => {
 	const {
 		register,
@@ -32,11 +44,7 @@ const WalletAddressInput = (props: {
 	} = useFormContext();
 
 	const [isHidden, setIsHidden] = useState(false);
-	const [resolvedAdd, setResolvedAdd] = useState('');
 	const [isValidating, setIsValidating] = useState(false);
-
-	const { networkId, defaultValue, sameAddress, isActive, setIsActive } =
-		props;
 
 	const { chainId, library } = useWeb3React();
 
@@ -47,20 +55,55 @@ const WalletAddressInput = (props: {
 	);
 	const isDefaultAddress = compareAddresses(value, user?.walletAddress);
 
-	useEffect(() => {
-		const getAddress = async () => {
-			const address = await getAddressFromENS(value, library);
-			setResolvedAdd('Resolves as ' + address);
-		};
-		if (
-			!isGnosis &&
-			(isActive || sameAddress) &&
-			isAddressENS(value) &&
-			chainId === 1
-		) {
-			getAddress().then();
-		} else setResolvedAdd('');
-	}, [value]);
+	let disabled: boolean;
+	if (isGnosis) disabled = !isActive;
+	else disabled = !isActive && !sameAddress;
+
+	const isPrevAddress = (i: string) => {
+		if (userAddresses.length === 0) return false;
+		return userAddresses
+			.map(i => i.toLowerCase())
+			.includes(i.toLowerCase());
+	};
+
+	const ENSHandler = async (i: string) => {
+		if (networkId !== config.PRIMARY_NETWORK.id) {
+			throw 'ENS is only supported on Ethereum Mainnet';
+		}
+		if (chainId !== 1) {
+			throw 'Please switch to the Ethereum Mainnet to handle ENS';
+		}
+		const address = await getAddressFromENS(i, library);
+		if (address) return address;
+		else throw 'Invalid ENS address';
+	};
+
+	const addressValidator = async (i: string) => {
+		try {
+			if (disabled) return true;
+			setResolvedENS('');
+			let address = i;
+			setIsValidating(true);
+			if (isAddressENS(i)) {
+				address = await ENSHandler(i);
+				setResolvedENS(address);
+			}
+			if (isPrevAddress(address)) {
+				setIsValidating(false);
+				return true;
+			}
+			if (!utils.isAddress(address)) {
+				setIsValidating(false);
+				return 'Eth address not valid';
+			}
+			const res = await addressValidation(address);
+			setIsValidating(false);
+			return res;
+		} catch (e) {
+			setIsValidating(false);
+			return e;
+		}
+	};
 
 	useEffect(() => {
 		if (sameAddress) {
@@ -105,29 +148,14 @@ const WalletAddressInput = (props: {
 				}
 				placeholder='My Wallet Address'
 				size={InputSize.LARGE}
-				disabled={!isActive && !sameAddress}
-				caption={resolvedAdd}
+				disabled={disabled}
+				caption={resolvedENS && 'Resolves as ' + resolvedENS}
 				isValidating={isValidating}
 				register={register}
 				registerName={
 					isGnosis ? EInputs.secondaryAddress : EInputs.mainAddress
 				}
-				registerOptions={{
-					...requiredOptions.field,
-					validate: async i => {
-						setIsValidating(true);
-						if (compareAddresses(i, defaultValue)) return true;
-						if (!isActive && !sameAddress) return true;
-						const res = await addressValidation(
-							i,
-							library,
-							chainId,
-							networkId,
-						);
-						setIsValidating(false);
-						return res;
-					},
-				}}
+				registerOptions={{ validate: addressValidator }}
 				error={
 					errors[
 						isGnosis
