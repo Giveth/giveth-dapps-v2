@@ -35,6 +35,10 @@ import ProjectsMainCategories from './ProjectsMainCategories';
 import { Shadow } from '@/components/styled-components/Shadow';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import ProjectsSubCategories from './ProjectsSubCategories';
+import {
+	useProjectsContext,
+	ProjectsProvider,
+} from '@/context/projects.context';
 import type { IProjectsRouteProps } from 'pages/projects';
 
 export interface IProjectsView extends IProjectsRouteProps {
@@ -108,6 +112,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const navigationNextRef = useRef<HTMLButtonElement>(null);
 
 	const dispatch = useAppDispatch();
+	const { variables } = useProjectsContext();
+
 	const router = useRouter();
 	const isFirstRender = useRef(true);
 	const debouncedSearch = useRef<any>();
@@ -214,7 +220,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const showLoadMore = totalCount > filteredProjects.length;
 
 	return (
-		<>
+		<ProjectsProvider>
 			<ProjectsBanner mainCategory={selectedMainCategory} />
 			<Wrapper>
 				<FiltersContainer>
@@ -302,7 +308,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 					</>
 				)}
 			</Wrapper>
-		</>
+		</ProjectsProvider>
 	);
 };
 
