@@ -9,6 +9,7 @@ import { projectsMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import { ICategory, IMainCategory, IProject } from '@/apollo/types/types';
+import { ProjectsProvider } from '@/context/projects.context';
 
 export interface IProjectsRouteProps {
 	projects: IProject[];
@@ -20,7 +21,7 @@ export interface IProjectsRouteProps {
 const ProjectsRoute = (props: IProjectsRouteProps) => {
 	const { projects, mainCategories, totalCount, categories } = props;
 	return (
-		<>
+		<ProjectsProvider>
 			<GeneralMetatags info={projectsMetatags} />
 			<ProjectsIndex
 				projects={projects}
@@ -28,7 +29,7 @@ const ProjectsRoute = (props: IProjectsRouteProps) => {
 				categories={categories}
 				mainCategories={mainCategories}
 			/>
-		</>
+		</ProjectsProvider>
 	);
 };
 

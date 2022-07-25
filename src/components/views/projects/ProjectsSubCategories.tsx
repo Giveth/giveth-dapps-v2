@@ -4,19 +4,38 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { ICategory } from '@/apollo/types/types';
 import { Flex } from '@/components/styled-components/Flex';
 import 'swiper/css';
+import { useProjectsContext } from '@/context/projects.context';
 
 function ProjectsSubCategories({
 	subCategories,
 }: {
 	subCategories: ICategory[];
 }) {
+	const { variables, setVariables } = useProjectsContext();
+
 	return (
 		<Flex>
 			<CustomizedSwiper slidesPerView='auto' spaceBetween={24}>
-				{subCategories.map(category => {
+				{subCategories.map(subCategory => {
 					return (
-						<SwiperSlide key={category.value}>
-							<SubCategoryItem>{category.name}</SubCategoryItem>
+						<SwiperSlide key={subCategory.value}>
+							<SubCategoryItem
+								isSelected={
+									variables?.category ===
+									subCategory.value?.toLowerCase()
+								}
+								onClick={() =>
+									setVariables(prevVariables => {
+										return {
+											...prevVariables,
+											category:
+												subCategory.value?.toLowerCase(),
+										};
+									})
+								}
+							>
+								{subCategory.name}
+							</SubCategoryItem>
 						</SwiperSlide>
 					);
 				})}
@@ -32,6 +51,7 @@ const SubCategoryItem = styled.div<{ isSelected?: boolean }>`
 	user-select: none;
 	padding: 0 12px 8px 12px;
 	border-bottom: ${props => (props.isSelected ? '1px solid black' : 'none')};
+	cursor: pointer;
 `;
 
 const CustomizedSwiper = styled(Swiper)`
