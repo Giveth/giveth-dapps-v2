@@ -8,8 +8,6 @@ import {
 import { captureException } from '@sentry/nextjs';
 import {
 	BalancerPoolStakingConfig,
-	PoolStakingConfig,
-	RegenFarmType,
 	RegenPoolStakingConfig,
 	SimplePoolStakingConfig,
 	StakingType,
@@ -18,7 +16,6 @@ import config from '../configuration';
 import { APR } from '@/types/poolInfo';
 import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
 import { BN, Zero } from '@/helpers/number';
-import { IBalances } from '@/types/subgraph';
 import { getGasPreference } from '@/lib/helpers';
 
 import LM_Json from '../artifacts/UnipoolTokenDistributor.json';
@@ -27,6 +24,8 @@ import BAL_WEIGHTED_POOL_Json from '../artifacts/BalancerWeightedPool.json';
 import BAL_VAULT_Json from '../artifacts/BalancerVault.json';
 import TOKEN_MANAGER_Json from '../artifacts/HookedTokenManager.json';
 import ERC20_Json from '../artifacts/ERC20.json';
+import { ISubgraphState } from '@/features/subgraph/subgraph.types';
+import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
 const { abi: LM_ABI } = LM_Json;
 const { abi: UNI_ABI } = UNI_Json;
@@ -40,14 +39,15 @@ const toBigNumber = (eb: ethers.BigNumber): BigNumber =>
 
 export const getGivStakingAPR = async (
 	lmAddress: string,
-	network: number,
-	unipool: UnipoolHelper | undefined,
+	subgraphValue: ISubgraphState,
 ): Promise<APR> => {
+	const sdh = new SubgraphDataHelper(subgraphValue);
+	const unipoolHelper = new UnipoolHelper(sdh.getUnipool(lmAddress));
 	let apr: BigNumber = Zero;
 
-	if (unipool) {
-		const totalSupply = unipool.totalSupply;
-		const rewardRate = unipool.rewardRate;
+	if (unipoolHelper) {
+		const totalSupply = unipoolHelper.totalSupply;
+		const rewardRate = unipoolHelper.rewardRate;
 
 		apr = totalSupply.isZero()
 			? Zero
@@ -58,14 +58,18 @@ export const getGivStakingAPR = async (
 };
 
 export const getLPStakingAPR = async (
-	poolStakingConfig: PoolStakingConfig,
+	poolStakingConfig: SimplePoolStakingConfig,
 	network: number,
 	provider: JsonRpcProvider | null,
-	unipoolHelper: UnipoolHelper | undefined,
+	subgraphValue: ISubgraphState,
 ): Promise<APR> => {
 	if (!provider) {
 		return Zero;
 	}
+	const sdh = new SubgraphDataHelper(subgraphValue);
+	const unipoolHelper = new UnipoolHelper(
+		sdh.getUnipool(poolStakingConfig.LM_ADDRESS),
+	);
 	if (poolStakingConfig.type === StakingType.BALANCER_ETH_GIV) {
 		return getBalancerPoolStakingAPR(
 			poolStakingConfig as BalancerPoolStakingConfig,
@@ -241,81 +245,24 @@ const getSimplePoolStakingAPR = async (
 };
 
 export const getUserStakeInfo = (
-	type: StakingType,
-	regenFarmType: RegenFarmType | undefined,
-	balance: IBalances,
-	unipoolHelper: UnipoolHelper | undefined,
+	currentValues: ISubgraphState,
+	poolStakingConfig: SimplePoolStakingConfig,
 ): {
 	stakedAmount: ethers.BigNumber;
 	notStakedAmount: ethers.BigNumber;
 	earned: ethers.BigNumber;
 } => {
-	let rewards = ethers.constants.Zero;
-	let rewardPerTokenPaid = ethers.constants.Zero;
-	let stakedAmount = ethers.constants.Zero;
-	let notStakedAmount = ethers.constants.Zero;
 	let earned = ethers.constants.Zero;
-	if (regenFarmType) {
-		switch (regenFarmType) {
-			case RegenFarmType.FOX_HNY:
-				rewards = BN(balance.rewardsFoxHnyLm);
-				rewardPerTokenPaid = BN(balance.rewardPerTokenPaidFoxHnyLm);
-				stakedAmount = BN(balance.foxHnyLpStaked);
-				notStakedAmount = BN(balance.foxHnyLp);
-				break;
-			case RegenFarmType.CULT_ETH:
-				rewards = BN(balance.rewardsCultEthLm);
-				rewardPerTokenPaid = BN(balance.rewardPerTokenPaidCultEthLm);
-				stakedAmount = BN(balance.cultEthLpStaked);
-				notStakedAmount = BN(balance.cultEthLp);
-				break;
-			default:
-		}
-	} else {
-		switch (type) {
-			case StakingType.SUSHISWAP_ETH_GIV:
-				rewards = BN(balance.rewardsSushiSwap);
-				rewardPerTokenPaid = BN(balance.rewardPerTokenPaidSushiSwap);
-				stakedAmount = BN(balance.sushiSwapLpStaked);
-				notStakedAmount = BN(balance.sushiswapLp);
-				break;
-			case StakingType.HONEYSWAP_GIV_HNY:
-				rewards = BN(balance.rewardsHoneyswap);
-				rewardPerTokenPaid = BN(balance.rewardPerTokenPaidHoneyswap);
-				stakedAmount = BN(balance.honeyswapLpStaked);
-				notStakedAmount = BN(balance.honeyswapLp);
-				break;
-			case StakingType.HONEYSWAP_GIV_DAI:
-				rewards = BN(balance.rewardsHoneyswapGivDai);
-				rewardPerTokenPaid = BN(
-					balance.rewardPerTokenPaidHoneyswapGivDai,
-				);
-				stakedAmount = BN(balance.honeyswapGivDaiLpStaked);
-				notStakedAmount = BN(balance.honeyswapGivDaiLp);
-				break;
-			case StakingType.BALANCER_ETH_GIV:
-				rewards = BN(balance.rewardsBalancer);
-				rewardPerTokenPaid = BN(balance.rewardPerTokenPaidBalancer);
-				stakedAmount = BN(balance.balancerLpStaked);
-				notStakedAmount = BN(balance.balancerLp);
-				break;
-			case StakingType.UNISWAPV2_GIV_DAI:
-				rewards = BN(balance.rewardsUniswapV2GivDai);
-				rewardPerTokenPaid = BN(
-					balance.rewardPerTokenPaidUniswapV2GivDai,
-				);
-				stakedAmount = BN(balance.uniswapV2GivDaiLpStaked);
-				notStakedAmount = BN(balance.uniswapV2GivDaiLp);
-				break;
-			case StakingType.GIV_LM:
-				rewards = BN(balance.rewardsGivLm);
-				rewardPerTokenPaid = BN(balance.rewardPerTokenPaidGivLm);
-				stakedAmount = BN(balance.givStaked);
-				notStakedAmount = BN(balance.balance);
-				break;
-			default:
-		}
-	}
+	const sdh = new SubgraphDataHelper(currentValues);
+	const unipoolBalance = sdh.getUnipoolBalance(poolStakingConfig.LM_ADDRESS);
+	const lpTokenBalance = sdh.getTokenBalance(poolStakingConfig.POOL_ADDRESS);
+	const unipoolHelper = new UnipoolHelper(
+		sdh.getUnipool(poolStakingConfig.LM_ADDRESS),
+	);
+	const rewards = BN(unipoolBalance.rewards);
+	const rewardPerTokenPaid = BN(unipoolBalance.rewardPerTokenPaid);
+	const stakedAmount = BN(unipoolBalance.balance);
+	const notStakedAmount = BN(lpTokenBalance.balance);
 
 	if (unipoolHelper) {
 		earned = unipoolHelper.earned(

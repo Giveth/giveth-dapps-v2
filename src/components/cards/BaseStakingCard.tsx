@@ -13,6 +13,7 @@ import config from '../../configuration';
 import {
 	PoolStakingConfig,
 	RegenPoolStakingConfig,
+	SimplePoolStakingConfig,
 	StakingPlatform,
 	StakingType,
 } from '@/types/config';
@@ -69,7 +70,7 @@ import { Flex } from '../styled-components/Flex';
 import { IStakeInfo } from '@/hooks/useStakingPool';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { useAppSelector } from '@/features/hooks';
-import { ITokenDistroInfo } from '@/types/subgraph';
+import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -129,6 +130,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const { setInfo } = useFarms();
 	const { chainId } = useWeb3React();
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
+	const sdh = new SubgraphDataHelper(currentValues);
 	const { regenStreamType, regenFarmIntro } =
 		poolStakingConfig as RegenPoolStakingConfig;
 
@@ -163,22 +165,19 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 
 	useEffect(() => {
 		if (regenStreamType) {
-			const streamInfo: ITokenDistroInfo | undefined =
-				currentValues[regenStreamType];
-			if (!streamInfo) return;
-			setTokenDistroHelper(
-				new TokenDistroHelper(streamInfo, regenStreamType),
-			);
-		} else {
-			if (!currentValues.tokenDistroInfo) return;
 			setTokenDistroHelper(
 				new TokenDistroHelper(
-					currentValues.tokenDistroInfo,
-					regenStreamType,
+					sdh.getTokenDistro(
+						regenStreamConfig?.tokenDistroAddress as string,
+					),
 				),
 			);
+		} else {
+			setTokenDistroHelper(
+				new TokenDistroHelper(sdh.getGIVTokenDistro()),
+			);
 		}
-	}, [currentValues, poolStakingConfig, regenStreamType]);
+	}, [currentValues, poolStakingConfig, regenStreamConfig]);
 
 	useEffect(() => {
 		if (tokenDistroHelper) {
@@ -481,7 +480,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				) : (
 					<StakeModal
 						setShowModal={setShowStakeModal}
-						poolStakingConfig={poolStakingConfig}
+						poolStakingConfig={
+							poolStakingConfig as SimplePoolStakingConfig
+						}
 						regenStreamConfig={regenStreamConfig}
 						maxAmount={userNotStakedAmount}
 					/>
@@ -503,7 +504,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				) : (
 					<UnStakeModal
 						setShowModal={setShowUnStakeModal}
-						poolStakingConfig={poolStakingConfig}
+						poolStakingConfig={
+							poolStakingConfig as SimplePoolStakingConfig
+						}
 						regenStreamConfig={regenStreamConfig}
 						maxAmount={stakedLpAmount}
 					/>

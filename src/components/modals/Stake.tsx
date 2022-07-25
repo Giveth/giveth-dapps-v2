@@ -33,10 +33,13 @@ import { StakeState } from '@/lib/staking';
 import ToggleSwitch from '../styled-components/Switch';
 import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
 import { IModal } from '@/types/common';
-import type { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
+import type {
+	RegenStreamConfig,
+	SimplePoolStakingConfig,
+} from '@/types/config';
 
 interface IStakeModalProps extends IModal {
-	poolStakingConfig: PoolStakingConfig;
+	poolStakingConfig: SimplePoolStakingConfig;
 	regenStreamConfig?: RegenStreamConfig;
 	maxAmount: BigNumber;
 }

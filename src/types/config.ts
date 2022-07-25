@@ -52,7 +52,8 @@ export interface SimplePoolStakingConfig extends BasicStakingConfig {
 	archived?: boolean;
 }
 
-export interface UniswapV3PoolStakingConfig extends SimplePoolStakingConfig {
+export interface UniswapV3PoolStakingConfig
+	extends Omit<SimplePoolStakingConfig, 'LM_ADDRESS' | 'POOL_ADDRESS'> {
 	INCENTIVE_START_TIME: number;
 	INCENTIVE_END_TIME: number;
 	INCENTIVE_REWARD_AMOUNT: number;
@@ -98,6 +99,7 @@ export interface RegenStreamConfig {
 
 export interface BasicNetworkConfig {
 	TOKEN_ADDRESS: string;
+	gGIV_ADDRESS?: string;
 	tokenAddressOnUniswapV2: string; // For price purpose in test env, on production this must have the same value of `TOKEN_ADDRESS`
 	TOKEN_DISTRO_ADDRESS: string;
 	GIV: BasicStakingConfig;

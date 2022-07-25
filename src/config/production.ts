@@ -93,8 +93,6 @@ const config: EnvConfig = {
 					'0xc763b6b3d0f75167db95daa6a0a0d75dd467c4e1',
 				INCENTIVE_REFUNDEE_ADDRESS:
 					'0x34d27210cC319EC5281bDc4DC2ad8FbcF4EAEAEB',
-				POOL_ADDRESS: '', //it's used in uniswap v2
-				LM_ADDRESS: '', //it's used in uniswap v2
 				type: StakingType.UNISWAPV3_ETH_GIV,
 				platform: StakingPlatform.UNISWAP,
 				title: 'GIV / ETH',

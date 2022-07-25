@@ -39,7 +39,7 @@ const config: EnvConfig = {
 		blockExplorerName: ['Etherscan'],
 		blockExplorerUrls: ['https://kovan.etherscan.io'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-kovan-staging',
+			'https://api.thegraph.com/subgraphs/name/mohammadranjbarz/giv-economy-kovan',
 
 		TOKEN_ADDRESS: '0x29434A25abd94AE882aA883eea81585Aaa5b078D',
 		tokenAddressOnUniswapV2: '0x900db999074d9277c5da2a43f252d74366230da0',
@@ -95,8 +95,6 @@ const config: EnvConfig = {
 					'0x3c2455a3ee0d824941c9329c01a66b86078c3e82',
 				INCENTIVE_REFUNDEE_ADDRESS:
 					'0x5f672d71399d8cDbA64f596394b4f4381247E025',
-				POOL_ADDRESS: '0xa48C26fF05F47a2eEd88C09664de1cb604A21b01',
-				LM_ADDRESS: '0x1aD46D40648639f84a396Fef32132888038c5aA8',
 				type: StakingType.UNISWAPV3_ETH_GIV,
 				platform: StakingPlatform.UNISWAP,
 				title: 'GIV / ETH',
@@ -163,9 +161,10 @@ const config: EnvConfig = {
 		blockExplorerName: ['Blockscout'],
 		blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-xdai-staging',
+			'https://api.thegraph.com/subgraphs/name/aminlatifi/giveconomy-xdai-deployment-seven',
 
 		TOKEN_ADDRESS: '0x83a8eea6427985C523a0c4d9d3E62C051B6580d3',
+		gGIV_ADDRESS: '0x4Bee761229AD815Cc64461783580F629dA0f0350',
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		MERKLE_ADDRESS: '0xc87403C70c9FBfb594d98d3B5E695BBE4C694188',
 		TOKEN_DISTRO_ADDRESS: '0x18a46865AAbAf416a970eaA8625CFC430D2364A1',

@@ -1,11 +1,14 @@
 import React, { FC } from 'react';
 
 import BaseStakingCard from './BaseStakingCard';
-import { PoolStakingConfig, RegenPoolStakingConfig } from '@/types/config';
+import {
+	RegenPoolStakingConfig,
+	SimplePoolStakingConfig,
+} from '@/types/config';
 import { useStakingPool } from '@/hooks/useStakingPool';
 interface IStakingPoolCardProps {
 	network: number;
-	poolStakingConfig: PoolStakingConfig | RegenPoolStakingConfig;
+	poolStakingConfig: SimplePoolStakingConfig | RegenPoolStakingConfig;
 }
 
 const StakingPoolCard: FC<IStakingPoolCardProps> = ({
