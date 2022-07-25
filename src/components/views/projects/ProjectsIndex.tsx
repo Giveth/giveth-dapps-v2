@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import Debounced from 'lodash.debounce';
 import { useRouter } from 'next/router';
 import {
 	brandColors,
@@ -16,16 +15,11 @@ import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import Routes from '@/lib/constants/Routes';
-import {
-	capitalizeFirstLetter,
-	isUserRegistered,
-	showToastError,
-} from '@/lib/helpers';
+import { isUserRegistered, showToastError } from '@/lib/helpers';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
-import { ICategory, IMainCategory, IProject } from '@/apollo/types/types';
+import { IMainCategory, IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
-import { EDirection, ESortby } from '@/apollo/types/gqlEnums';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
 import { device, deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -35,54 +29,21 @@ import ProjectsMainCategories from './ProjectsMainCategories';
 import { Shadow } from '@/components/styled-components/Shadow';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import ProjectsSubCategories from './ProjectsSubCategories';
+import {
+	useProjectsContext,
+	ProjectsProvider,
+} from '@/context/projects.context';
 import type { IProjectsRouteProps } from 'pages/projects';
 
 export interface IProjectsView extends IProjectsRouteProps {
 	selectedMainCategory?: IMainCategory;
 }
 
-interface ISelectObj {
-	value: string;
-	label: string;
-	direction?: string;
-}
-
 interface IQueries {
-	orderBy: { field: string; direction: string };
 	skip?: number;
 	limit?: number;
-	category?: string;
-	searchTerm?: string;
 	connectedWalletUserId?: number;
 }
-
-const allCategoryObj = { value: 'All', label: 'All' };
-const sortByOptions = [
-	{ label: 'Default', value: ESortby.QUALITYSCORE },
-	{ label: 'Amount Raised', value: ESortby.DONATIONS },
-	{ label: 'Accepts GIV Token', value: ESortby.ACCEPTGIV },
-	{ label: 'Hearts', value: ESortby.HEARTS },
-	{ label: 'Newest', value: ESortby.CREATIONDATE },
-	{
-		label: 'Oldest',
-		value: ESortby.CREATIONDATE,
-		direction: EDirection.ASC,
-	},
-	{ label: 'Verified', value: ESortby.VERIFIED },
-	{ label: 'Traceable', value: ESortby.TRACEABLE },
-];
-
-const buildCategoryObj = (array: ICategory[]) => {
-	const newArray = [allCategoryObj];
-	array.forEach(e => {
-		const obj: ISelectObj = {
-			label: capitalizeFirstLetter(e.name),
-			value: e.name,
-		};
-		newArray.push(obj);
-	});
-	return newArray;
-};
 
 const ProjectsIndex = (props: IProjectsView) => {
 	const {
@@ -93,24 +54,19 @@ const ProjectsIndex = (props: IProjectsView) => {
 	} = props;
 
 	const user = useAppSelector(state => state.user.userData);
-	const [categoriesObj, setCategoriesObj] = useState<ISelectObj[]>();
-	const [selectedCategory, setSelectedCategory] =
-		useState<ISelectObj>(allCategoryObj);
 	const [isLoading, setIsLoading] = useState(false);
 	const [filteredProjects, setFilteredProjects] =
 		useState<IProject[]>(projects);
-	const [sortBy, setSortBy] = useState<ISelectObj>(sortByOptions[0]);
-	const [search, setSearch] = useState<string>('');
-	const [searchValue, setSearchValue] = useState<string>('');
+
 	const [totalCount, setTotalCount] = useState(_totalCount);
 	//Slider next and prev button refs
 	const navigationPrevRef = useRef<HTMLButtonElement>(null);
 	const navigationNextRef = useRef<HTMLButtonElement>(null);
 
 	const dispatch = useAppDispatch();
+	const { variables: contextVariables } = useProjectsContext();
+
 	const router = useRouter();
-	const isFirstRender = useRef(true);
-	const debouncedSearch = useRef<any>();
 	const pageNum = useRef(0);
 	const isDesktop = useMediaQuery(device.laptopS);
 	const isTablet = useMediaQuery(
@@ -119,25 +75,12 @@ const ProjectsIndex = (props: IProjectsView) => {
 		}px)`,
 	);
 
-	useEffect(() => {
-		setCategoriesObj(buildCategoryObj(categories));
-		debouncedSearch.current = Debounced(setSearch, 1000);
-	}, []);
-
-	useEffect(() => {
-		if (!isFirstRender.current) fetchProjects();
-		else isFirstRender.current = false;
-	}, [selectedCategory.value, sortBy.label, search]);
-
 	const fetchProjects = (
 		isLoadMore?: boolean,
 		loadNum?: number,
 		userIdChanged = false,
 	) => {
-		const categoryQuery = selectedCategory.value;
-
 		const variables: IQueries = {
-			orderBy: { field: sortBy.value, direction: EDirection.DESC },
 			limit: userIdChanged ? filteredProjects.length : projects.length,
 			skip: userIdChanged ? 0 : projects.length * (loadNum || 0),
 		};
@@ -146,17 +89,15 @@ const ProjectsIndex = (props: IProjectsView) => {
 			variables.connectedWalletUserId = Number(user?.id);
 		}
 
-		if (sortBy.direction) variables.orderBy.direction = sortBy.direction;
-		if (categoryQuery && categoryQuery !== 'All')
-			variables.category = categoryQuery;
-		if (search) variables.searchTerm = search;
-
 		if (!userIdChanged) setIsLoading(true);
 
 		client
 			.query({
 				query: FETCH_ALL_PROJECTS,
-				variables,
+				variables: {
+					...variables,
+					...contextVariables,
+				},
 				fetchPolicy: 'network-only',
 			})
 			.then((res: { data: { projects: IFetchAllProjects } }) => {
@@ -183,20 +124,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 		fetchProjects(false, 0, true);
 	}, [user?.id]);
 
-	const handleChange = (type: string, input: any) => {
-		pageNum.current = 0;
-		if (type === 'search') {
-			setSearchValue(input);
-			debouncedSearch.current(input);
-		} else if (type === 'sortBy') setSortBy(input);
-		else if (type === 'category') setSelectedCategory(input);
-	};
-
-	const clearSearch = () => {
-		setSearch('');
-		setSearchValue('');
-	};
-
 	const loadMore = () => {
 		if (isLoading) return;
 		fetchProjects(true, pageNum.current + 1);
@@ -214,7 +141,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const showLoadMore = totalCount > filteredProjects.length;
 
 	return (
-		<>
+		<ProjectsProvider>
 			<ProjectsBanner mainCategory={selectedMainCategory} />
 			<Wrapper>
 				<FiltersContainer>
@@ -278,7 +205,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 						))}
 					</ProjectsContainer>
 				) : (
-					<ProjectsNoResults trySearch={clearSearch} />
+					<ProjectsNoResults
+						trySearch={() => console.log('Try Again')}
+					/>
 				)}
 
 				{showLoadMore && (
@@ -302,7 +231,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 					</>
 				)}
 			</Wrapper>
-		</>
+		</ProjectsProvider>
 	);
 };
 
