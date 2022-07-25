@@ -1,12 +1,18 @@
 import { StylesConfig } from 'react-select';
-import { brandColors, neutralColors } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	neutralColors,
+	semanticColors,
+} from '@giveth/ui-design-system';
 import { Shadow } from '@/components/styled-components/Shadow';
 
 const selectCustomStyles: StylesConfig = {
-	control: (styles, { isDisabled }) => ({
+	control: (styles, { isDisabled, selectProps }) => ({
 		...styles,
 		maxWidth: '520px',
-		borderColor: neutralColors.gray[300],
+		borderColor: selectProps.hasError
+			? semanticColors.punch[500]
+			: neutralColors.gray[300],
 		borderWidth: '2px',
 		borderRadius: '8px',
 		boxShadow: 'none',
