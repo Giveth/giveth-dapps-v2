@@ -4,6 +4,7 @@ import { IconWalletOutline } from '@giveth/ui-design-system/lib/cjs/components/i
 import { Button } from '@giveth/ui-design-system';
 import { Controller, useForm } from 'react-hook-form';
 import { useWeb3React } from '@web3-react/core';
+import { utils } from 'ethers';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import Input from '@/components/Input';
@@ -12,8 +13,7 @@ import { IAddress } from '@/components/views/verification/manageFunds/ManageFund
 import SelectNetwork from '@/components/views/verification/manageFunds/SelectNetwork';
 import { ISelectedNetwork } from '@/components/views/verification/manageFunds/types';
 import config from '@/configuration';
-import { isAddressValid } from '@/lib/wallet';
-import { showToastError } from '@/lib/helpers';
+import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { requiredOptions } from '@/lib/constants/regex';
 
@@ -51,26 +51,50 @@ const AddAddressModal: FC<IProps> = ({
 		register,
 		handleSubmit,
 		formState: { errors },
-	} = useForm<IAddressForm>();
-	const { library } = useWeb3React();
+		watch,
+		getValues,
+	} = useForm<IAddressForm>({ mode: 'onChange' });
+
+	const { library, chainId } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
+	const watchTitle = watch('title');
+
 	const handleAdd = async (formData: IAddressForm) => {
-		const { address, title } = formData;
+		const { address, title, network } = formData;
+		const isEns = isAddressENS(address);
+		const _address = isEns
+			? await getAddressFromENS(address, library)
+			: utils.getAddress(address);
+		addAddress({
+			address: _address,
+			title,
+			networkId: network.value,
+		});
+		closeModal();
+	};
+
+	const validateTitle = (title: string) => {
 		const isDuplicate = addresses.some(item => item.title === title);
-		if (address && title && formData.network) {
-			if (isDuplicate) {
-				showToastError('Please provide a unique title');
-				return;
+		return isDuplicate ? 'Please provide a unique title' : true;
+	};
+
+	const validateAddress = async (address: string) => {
+		if (!library) return 'Web3 is not initialized';
+		if (isAddressENS(address)) {
+			if (chainId !== 1) {
+				return 'Please switch to Mainnet to handle ENS addresses';
 			}
-			addAddress({
-				address: address,
-				title: title,
-				networkId: formData.network.value,
-			});
-			closeModal();
+			const actualAddress = await getAddressFromENS(address, library);
+			const isDuplicate = addresses.some(
+				item =>
+					item.address === actualAddress &&
+					item.networkId === getValues('network')?.value,
+			);
+			if (isDuplicate) return 'Address already exists';
+			return actualAddress ? true : 'Invalid ENS address';
 		} else {
-			showToastError('Please provide all values');
+			return utils.isAddress(address) ? true : 'Invalid address';
 		}
 	};
 
@@ -87,21 +111,26 @@ const AddAddressModal: FC<IProps> = ({
 					<Controller
 						control={control}
 						name='network'
-						render={({ field }) => (
+						rules={requiredOptions.field}
+						render={({ field, fieldState: { error } }) => (
 							<SelectNetwork
 								networkOptions={networkOptions}
 								selectedNetwork={field.value}
 								onChange={network => field.onChange(network)}
+								error={error}
 							/>
 						)}
 					/>
-
 					<br />
 					<Input
 						register={register}
 						registerName='title'
-						registerOptions={requiredOptions.title}
+						registerOptions={{
+							...requiredOptions.title,
+							validate: validateTitle,
+						}}
 						label='Address Title'
+						value={watchTitle}
 						caption='Choose a title for this address. eg. Salary Payments, Marketing, etc.'
 						error={errors.title}
 						maxLength={40}
@@ -115,11 +144,7 @@ const AddAddressModal: FC<IProps> = ({
 						caption='Enter the related address.'
 						registerOptions={{
 							...requiredOptions.walletAddress,
-							validate: async address => {
-								return (await isAddressValid(address, library))
-									? true
-									: 'The address in not valid';
-							},
+							validate: validateAddress,
 						}}
 						error={errors.address}
 					/>
