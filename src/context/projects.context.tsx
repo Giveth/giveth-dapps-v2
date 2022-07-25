@@ -46,7 +46,7 @@ export function useProjectsContext() {
 	const context = useContext(ProjectsContext);
 
 	if (!context) {
-		throw new Error('Token balance context not found!');
+		throw new Error('Projects context not found!');
 	}
 
 	return context;
