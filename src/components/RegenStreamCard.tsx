@@ -99,7 +99,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 	useEffect(() => {
 		setLockedAmount(BN(tokenDistroBalance.allocatedTokens));
 		setClaimedAmount(BN(tokenDistroBalance.claimed));
-	}, [streamConfig.type, sdh]);
+	}, [tokenDistroBalance]);
 
 	useEffect(() => {
 		setRewardLiquidPart(
