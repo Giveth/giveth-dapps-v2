@@ -61,8 +61,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const navigationNextRef = useRef<HTMLButtonElement>(null);
 
 	const dispatch = useAppDispatch();
-	const { variables: contextVariables } = useProjectsContext();
-	console.log('Category,', contextVariables.category);
+	const { variables: contextVariables, setVariables } = useProjectsContext();
+	console.log('Category,', selectedMainCategory);
 	const router = useRouter();
 	const pageNum = useRef(0);
 	const isDesktop = useMediaQuery(device.laptopS);
@@ -122,8 +122,26 @@ const ProjectsIndex = (props: IProjectsView) => {
 	}, [user?.id]);
 
 	useEffect(() => {
-		fetchProjects(false, 0, false);
-	}, [contextVariables.category]);
+		if (router.query?.slug) {
+			console.log(
+				'Refetching',
+				contextVariables?.mainCategory,
+				router.query?.slug,
+			);
+			setVariables(prevVariables => {
+				return {
+					...prevVariables,
+					mainCategory: selectedMainCategory?.slug,
+				};
+			});
+		}
+
+		fetchProjects(false, 0);
+	}, [
+		contextVariables?.category,
+		contextVariables?.mainCategory,
+		router.query?.slug,
+	]);
 
 	const loadMore = () => {
 		if (isLoading) return;

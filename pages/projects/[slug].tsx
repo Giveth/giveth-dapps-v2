@@ -41,7 +41,7 @@ const ProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 
 export const getServerSideProps: GetServerSideProps = async context => {
 	const apolloClient = initializeApollo();
-
+	const { variables, notifyOnNetworkStatusChange } = OPTIONS_HOME_PROJECTS;
 	try {
 		const { query } = context;
 		const slug = query.slug;
@@ -76,23 +76,26 @@ export const getServerSideProps: GetServerSideProps = async context => {
 		});
 
 		if (selectedMainCategory) {
-			const updatedSelectedMainCategoru = {
+			const updatedSelectedMainCategory = {
 				...selectedMainCategory,
 				selected: true,
 			};
 			const apolloClient = initializeApollo();
 			const { data } = await apolloClient.query({
 				query: FETCH_ALL_PROJECTS,
-				...OPTIONS_HOME_PROJECTS,
+				variables: {
+					...variables,
+					mainCategory: updatedSelectedMainCategory.slug,
+					notifyOnNetworkStatusChange,
+				},
 				fetchPolicy: 'network-only',
 			});
 			const { projects, totalCount, categories } = data.projects;
-
 			return {
 				props: {
 					projects,
 					mainCategories: updatedMaincategory,
-					selectedMainCategory: updatedSelectedMainCategoru,
+					selectedMainCategory: updatedSelectedMainCategory,
 					totalCount,
 					categories,
 				},

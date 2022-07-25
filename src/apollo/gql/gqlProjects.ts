@@ -49,6 +49,7 @@ export const FETCH_ALL_PROJECTS = gql`
 		$filterBy: FilterBy
 		$searchTerm: String
 		$category: String
+		$mainCategory: String
 		$connectedWalletUserId: Int
 	) {
 		projects(
@@ -58,6 +59,7 @@ export const FETCH_ALL_PROJECTS = gql`
 			filterBy: $filterBy
 			searchTerm: $searchTerm
 			category: $category
+			mainCategory: $mainCategory
 			connectedWalletUserId: $connectedWalletUserId
 		) {
 			projects {
