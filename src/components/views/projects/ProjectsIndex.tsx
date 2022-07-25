@@ -29,10 +29,7 @@ import ProjectsMainCategories from './ProjectsMainCategories';
 import { Shadow } from '@/components/styled-components/Shadow';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import ProjectsSubCategories from './ProjectsSubCategories';
-import {
-	useProjectsContext,
-	ProjectsProvider,
-} from '@/context/projects.context';
+import { useProjectsContext } from '@/context/projects.context';
 import type { IProjectsRouteProps } from 'pages/projects';
 
 export interface IProjectsView extends IProjectsRouteProps {
@@ -65,7 +62,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	const dispatch = useAppDispatch();
 	const { variables: contextVariables } = useProjectsContext();
-
+	console.log('Category,', contextVariables.category);
 	const router = useRouter();
 	const pageNum = useRef(0);
 	const isDesktop = useMediaQuery(device.laptopS);
@@ -124,6 +121,10 @@ const ProjectsIndex = (props: IProjectsView) => {
 		fetchProjects(false, 0, true);
 	}, [user?.id]);
 
+	useEffect(() => {
+		fetchProjects(false, 0, false);
+	}, [contextVariables.category]);
+
 	const loadMore = () => {
 		if (isLoading) return;
 		fetchProjects(true, pageNum.current + 1);
@@ -141,7 +142,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const showLoadMore = totalCount > filteredProjects.length;
 
 	return (
-		<ProjectsProvider>
+		<>
 			<ProjectsBanner mainCategory={selectedMainCategory} />
 			<Wrapper>
 				<FiltersContainer>
@@ -231,7 +232,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 					</>
 				)}
 			</Wrapper>
-		</ProjectsProvider>
+		</>
 	);
 };
 

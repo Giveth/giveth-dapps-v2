@@ -10,8 +10,8 @@ import {
 import { GeneralMetatags } from '@/components/Metatag';
 import ProjectsIndex from '@/components/views/projects/ProjectsIndex';
 import { projectsMetatags } from '@/content/metatags';
+import { ProjectsProvider } from '@/context/projects.context';
 import type { IProjectsRouteProps } from '.';
-
 interface IProjectsCategoriesRouteProps extends IProjectsRouteProps {
 	selectedMainCategory: IMainCategory;
 }
@@ -26,7 +26,7 @@ const ProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 	} = props;
 
 	return (
-		<>
+		<ProjectsProvider>
 			<GeneralMetatags info={projectsMetatags} />
 			<ProjectsIndex
 				projects={projects}
@@ -35,7 +35,7 @@ const ProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 				mainCategories={mainCategories}
 				selectedMainCategory={selectedMainCategory}
 			/>
-		</>
+		</ProjectsProvider>
 	);
 };
 
