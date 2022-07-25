@@ -150,6 +150,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const [isSameMainnetGnosisAddress, setIsSameMainnetGnosisAddress] =
 		useState(isEditMode ? isSameDefaultAddresses : true);
 	const [isLoading, setIsLoading] = useState(false);
+	const [isTitleValidating, setIsTitleValidating] = useState(false);
 
 	// useLeaveConfirm({ shouldConfirm: formChange });
 
@@ -290,13 +291,17 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							maxLength={55}
 							size={InputSize.LARGE}
 							value={watchName}
+							isValidating={isTitleValidating}
 							register={register}
 							registerName={EInputs.name}
 							registerOptions={{
 								...requiredOptions.name,
-								validate: i => {
+								validate: async i => {
+									setIsTitleValidating(true);
 									if (noTitleValidation(i)) return true;
-									return titleValidation(i);
+									const result = await titleValidation(i);
+									setIsTitleValidating(false);
+									return result;
 								},
 							}}
 							error={formErrors[EInputs.name]}

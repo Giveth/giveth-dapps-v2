@@ -16,6 +16,7 @@ import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { Flex } from '@/components/styled-components/Flex';
 import CheckBox from '@/components/Checkbox';
+import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 
 const WalletAddressInput = (props: {
 	networkId: number;
@@ -31,6 +32,8 @@ const WalletAddressInput = (props: {
 	} = useFormContext();
 
 	const [isHidden, setIsHidden] = useState(false);
+	const [resolvedAdd, setResolvedAdd] = useState('');
+	const [isValidating, setIsValidating] = useState(false);
 
 	const { networkId, defaultValue, sameAddress, isActive, setIsActive } =
 		props;
@@ -39,10 +42,25 @@ const WalletAddressInput = (props: {
 
 	const user = useAppSelector(state => state.user?.userData);
 	const isGnosis = networkId === config.SECONDARY_NETWORK.id;
-	const isDefaultAddress = compareAddresses(
-		getValues(isGnosis ? EInputs.secondaryAddress : EInputs.mainAddress),
-		user?.walletAddress,
+	const value = getValues(
+		isGnosis ? EInputs.secondaryAddress : EInputs.mainAddress,
 	);
+	const isDefaultAddress = compareAddresses(value, user?.walletAddress);
+
+	useEffect(() => {
+		const getAddress = async () => {
+			const address = await getAddressFromENS(value, library);
+			setResolvedAdd('Resolves as ' + address);
+		};
+		if (
+			!isGnosis &&
+			(isActive || sameAddress) &&
+			isAddressENS(value) &&
+			chainId === 1
+		) {
+			getAddress().then();
+		} else setResolvedAdd('');
+	}, [value]);
 
 	useEffect(() => {
 		if (sameAddress) {
@@ -88,21 +106,26 @@ const WalletAddressInput = (props: {
 				placeholder='My Wallet Address'
 				size={InputSize.LARGE}
 				disabled={!isActive && !sameAddress}
+				caption={resolvedAdd}
+				isValidating={isValidating}
 				register={register}
 				registerName={
 					isGnosis ? EInputs.secondaryAddress : EInputs.mainAddress
 				}
 				registerOptions={{
 					...requiredOptions.field,
-					validate: i => {
+					validate: async i => {
+						setIsValidating(true);
 						if (compareAddresses(i, defaultValue)) return true;
 						if (!isActive && !sameAddress) return true;
-						return addressValidation(
+						const res = await addressValidation(
 							i,
 							library,
 							chainId,
 							networkId,
 						);
+						setIsValidating(false);
+						return res;
 					},
 				}}
 				error={
