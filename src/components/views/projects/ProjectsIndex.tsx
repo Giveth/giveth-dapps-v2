@@ -20,7 +20,6 @@ import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { IMainCategory, IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
-import { EDirection, ESortby } from '@/apollo/types/gqlEnums';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
 import { device, deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -46,22 +45,6 @@ interface IQueries {
 	connectedWalletUserId?: number;
 }
 
-const allCategoryObj = { value: 'All', label: 'All' };
-const sortByOptions = [
-	{ label: 'Default', value: ESortby.QUALITYSCORE },
-	{ label: 'Amount Raised', value: ESortby.DONATIONS },
-	{ label: 'Accepts GIV Token', value: ESortby.ACCEPTGIV },
-	{ label: 'Hearts', value: ESortby.HEARTS },
-	{ label: 'Newest', value: ESortby.CREATIONDATE },
-	{
-		label: 'Oldest',
-		value: ESortby.CREATIONDATE,
-		direction: EDirection.ASC,
-	},
-	{ label: 'Verified', value: ESortby.VERIFIED },
-	{ label: 'Traceable', value: ESortby.TRACEABLE },
-];
-
 const ProjectsIndex = (props: IProjectsView) => {
 	const {
 		projects,
@@ -81,7 +64,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const navigationNextRef = useRef<HTMLButtonElement>(null);
 
 	const dispatch = useAppDispatch();
-	const { variables: contextVariables, setVariables } = useProjectsContext();
+	const { variables: contextVariables } = useProjectsContext();
 
 	const router = useRouter();
 	const pageNum = useRef(0);
