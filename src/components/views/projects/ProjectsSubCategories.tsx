@@ -50,7 +50,7 @@ const SubCategoryItem = styled.div<{ isSelected?: boolean }>`
 	text-transform: capitalize;
 	user-select: none;
 	padding: 0 12px 8px 12px;
-	border-bottom: ${props => (props.isSelected ? '1px solid black' : 'none')};
+	border-bottom: ${props => (props.isSelected ? '2px solid black' : 'none')};
 	cursor: pointer;
 `;
 
