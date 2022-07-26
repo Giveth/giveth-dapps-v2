@@ -136,6 +136,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const {
 		type,
 		platform,
+		platformTitle,
 		title,
 		description,
 		provideLiquidityLink,
@@ -238,7 +239,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								{type === StakingType.GIV_LM &&
 									chainId === config.XDAI_NETWORK_NUMBER &&
 									`GIVgarden `}
-								{platform}
+								{platformTitle || platform}
 							</StakingPoolExchange>
 							{chainId === config.XDAI_NETWORK_NUMBER &&
 								type === StakingType.GIV_LM && (

@@ -89,6 +89,7 @@ const config: EnvConfig = {
 				LM_ADDRESS: '0x4B319c068685aF260c91407B651918307df30061',
 				type: StakingType.ICHI_GIV_ONEGIV,
 				platform: StakingPlatform.ICHI,
+				platformTitle: 'Angel Vault',
 				title: 'oneGIV',
 				description: '80% GIV, 20% ETH',
 				provideLiquidityLink:
