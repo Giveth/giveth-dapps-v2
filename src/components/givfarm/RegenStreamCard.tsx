@@ -64,8 +64,9 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 	const [claimedAmount, setClaimedAmount] = useState<ethers.BigNumber>(
 		constants.Zero,
 	);
-	const currentValues = useAppSelector(state => state.subgraph.currentValues);
-	const sdh = new SubgraphDataHelper(currentValues);
+	const sdh = new SubgraphDataHelper(
+		useAppSelector(state => state.subgraph.currentValues),
+	);
 	const { regenTokenDistroHelper } = useRegenTokenDistroHelper(
 		sdh.getTokenDistro(streamConfig.tokenDistroAddress),
 	);

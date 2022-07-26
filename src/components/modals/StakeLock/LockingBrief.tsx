@@ -2,10 +2,11 @@ import { brandColors, H5 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
 import { formatWeiHelper } from '@/helpers/number';
+import { smallFormatDate } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import { getUnlockDate } from '@/helpers/givpower';
-import { smallFormatDate } from '@/lib/helpers';
 import type { FC } from 'react';
+import type { IGIVpowerInfo } from '@/types/subgraph';
 
 interface ILockingBrief {
 	round: number;
@@ -19,7 +20,7 @@ const LockingBrief: FC<ILockingBrief> = ({
 }) => {
 	const givpowerInfo = useAppSelector(
 		state => state.subgraph.xDaiValues.givpowerInfo,
-	);
+	) as IGIVpowerInfo;
 	const unlockDate = new Date(getUnlockDate(givpowerInfo, round));
 	return (
 		<BriefContainer>
