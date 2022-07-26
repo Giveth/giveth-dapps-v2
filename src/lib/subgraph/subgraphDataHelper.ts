@@ -64,7 +64,7 @@ export class SubgraphDataHelper {
 		return this.getTokenBalance(givTokenAddress);
 	}
 
-	getgGIVTokenBalance(): ITokenBalance {
+	getGIVStakedBalance(): ITokenBalance {
 		const givTokenAddress = config.XDAI_CONFIG.GIV.LM_ADDRESS;
 		return this.getUnipoolBalance(givTokenAddress);
 	}
