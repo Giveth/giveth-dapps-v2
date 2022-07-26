@@ -3,9 +3,7 @@ import { useRouter } from 'next/router';
 import {
 	brandColors,
 	neutralColors,
-	H3,
 	OulineButton,
-	Lead,
 	IconSearch,
 	IconOptions16,
 	IconDots,
@@ -56,13 +54,15 @@ const ProjectsIndex = (props: IProjectsView) => {
 		useState<IProject[]>(projects);
 
 	const [totalCount, setTotalCount] = useState(_totalCount);
+	const [isTabletShowingSearchAndFilter, setIsTabletShowingSearchAndFilter] =
+		useState(false);
 	//Slider next and prev button refs
 	const navigationPrevRef = useRef<HTMLButtonElement>(null);
 	const navigationNextRef = useRef<HTMLButtonElement>(null);
 
 	const dispatch = useAppDispatch();
 	const { variables: contextVariables, setVariables } = useProjectsContext();
-	console.log('Category,', selectedMainCategory);
+
 	const router = useRouter();
 	const pageNum = useRef(0);
 	const isDesktop = useMediaQuery(device.laptopS);
@@ -165,25 +165,27 @@ const ProjectsIndex = (props: IProjectsView) => {
 			<Wrapper>
 				<FiltersContainer>
 					<FiltersSection>
-						<FiltersSwiper>
-							<PrevIcon ref={navigationPrevRef}>
-								<img
-									src={'/images/caret_right.svg'}
-									alt='caret right'
+						{isTabletShowingSearchAndFilter && isTablet ? null : (
+							<FiltersSwiper>
+								<PrevIcon ref={navigationPrevRef}>
+									<img
+										src={'/images/caret_right.svg'}
+										alt='caret right'
+									/>
+								</PrevIcon>
+								<ProjectsMainCategories
+									mainCategories={props.mainCategories}
+									navigationNextRef={navigationNextRef}
+									navigationPrevRef={navigationPrevRef}
 								/>
-							</PrevIcon>
-							<ProjectsMainCategories
-								mainCategories={props.mainCategories}
-								navigationNextRef={navigationNextRef}
-								navigationPrevRef={navigationPrevRef}
-							/>
-							<NextIcon ref={navigationNextRef}>
-								<img
-									src={'/images/caret_right.svg'}
-									alt='caret right'
-								/>
-							</NextIcon>
-						</FiltersSwiper>
+								<NextIcon ref={navigationNextRef}>
+									<img
+										src={'/images/caret_right.svg'}
+										alt='caret right'
+									/>
+								</NextIcon>
+							</FiltersSwiper>
+						)}
 						{isDesktop && (
 							<FilterAndSearchContainer>
 								<IconContainer>
@@ -196,11 +198,40 @@ const ProjectsIndex = (props: IProjectsView) => {
 							</FilterAndSearchContainer>
 						)}
 						{isTablet && (
-							<FilterAndSearchContainer>
-								<IconContainer>
-									<IconDots />
-								</IconContainer>
-							</FilterAndSearchContainer>
+							<>
+								{isTabletShowingSearchAndFilter ? (
+									<TabletFilterAndSearchContainer>
+										<input
+											style={{
+												flexGrow: 1,
+											}}
+										/>
+										<FiltersButton>
+											Filters
+											<IconOptions16 />
+										</FiltersButton>
+										<IconContainer
+											onClick={() =>
+												setIsTabletShowingSearchAndFilter(
+													false,
+												)
+											}
+										>
+											X
+										</IconContainer>
+									</TabletFilterAndSearchContainer>
+								) : (
+									<IconContainer
+										onClick={() =>
+											setIsTabletShowingSearchAndFilter(
+												true,
+											)
+										}
+									>
+										<IconDots />
+									</IconContainer>
+								)}
+							</>
 						)}
 					</FiltersSection>
 					{props.selectedMainCategory?.categories && (
@@ -316,19 +347,9 @@ const Wrapper = styled.div`
 	margin: 0 auto;
 `;
 
-const Title = styled(H3)`
-	margin-bottom: 18px;
-`;
-
-const Subtitle = styled(Lead)`
-	position: relative;
-	margin-bottom: 25px;
-	font-weight: 400;
-	max-width: 1026px;
-`;
-
 const FilterAndSearchContainer = styled.div`
 	display: flex;
+	align-items: center;
 	gap: 16px;
 `;
 
@@ -348,6 +369,7 @@ const FiltersButton = styled.button`
 
 const FiltersSwiper = styled.div`
 	display: flex;
+	align-items: center;
 	position: relative;
 	gap: 16px;
 	width: 100%;
@@ -361,8 +383,13 @@ const FiltersSwiper = styled.div`
 `;
 
 const IconContainer = styled.button`
-	min-width: 44px;
-	min-height: 44px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: fit-content;
+	height: fit-content;
+	min-width: 42px;
+	min-height: 42px;
 	border-radius: 50%;
 	background: ${neutralColors.gray[100]};
 	box-shadow: ${Shadow.Neutral[500]};
@@ -407,6 +434,14 @@ const PrevIcon = styled(NextIcon)<{ disabled?: boolean }>`
 const StyledLine = styled.hr`
 	width: 100%;
 	border: 1px solid ${neutralColors.gray[200]};
+`;
+
+const TabletFilterAndSearchContainer = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 16px;
+	width: 100%;
 `;
 
 export default ProjectsIndex;
