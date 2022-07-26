@@ -24,6 +24,8 @@ export interface IGIVpowerInfo {
 	locksCreated: number;
 	roundDuration: number;
 	totalGIVLocked: string;
+	currentRound: number;
+	nextRoundDate: string;
 }
 
 export interface IGIVpowerPosition {
