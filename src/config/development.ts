@@ -115,6 +115,7 @@ const config: EnvConfig = {
 			'https://api.thegraph.com/subgraphs/name/aminlatifi/givpower-deployment-six',
 
 		TOKEN_ADDRESS: '0x780FE5de651a3ea62E572f591BF848cFEBaf2163',
+		gGIV_ADDRESS: '0x1460aaf51f4e0b1b59bb41981cb4aa5a1b377776',
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		MERKLE_ADDRESS: '0x06BA4122FC4F3AbCdAFD2fF1dD83A88A63842309',
 		TOKEN_DISTRO_ADDRESS: '0x74B557bec1A496a8E9BE57e9A1530A15364C87Be',

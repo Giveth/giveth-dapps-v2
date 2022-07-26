@@ -284,7 +284,19 @@ export const getUserStakeInfo = (
 	);
 	const rewards = BN(unipoolBalance.rewards);
 	const rewardPerTokenPaid = BN(unipoolBalance.rewardPerTokenPaid);
-	const stakedAmount = BN(unipoolBalance.balance);
+	let stakedAmount = BN(unipoolBalance.balance);
+	if (
+		config.XDAI_CONFIG.gGIV_ADDRESS &&
+		currentValues.networkNumber === config.XDAI_NETWORK_NUMBER &&
+		poolStakingConfig.type === StakingType.GIV_LM
+	) {
+		const gGIVBalance = sdh.getTokenBalance(
+			config.XDAI_CONFIG.gGIV_ADDRESS,
+		);
+		stakedAmount = BN(gGIVBalance.balance);
+	} else {
+		stakedAmount = BN(unipoolBalance.balance);
+	}
 	const notStakedAmount = BN(lpTokenBalance.balance);
 
 	if (unipoolHelper) {
