@@ -202,7 +202,7 @@ const transformGIVpowerInfo = (info: any): IGIVpowerInfo => {
 
 export const transformuserGIVlocked = (info: any = {}): ITokenBalance => {
 	return {
-		balance: info || '0',
+		balance: info?.givLocked || '0',
 	};
 };
 
