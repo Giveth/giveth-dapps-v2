@@ -107,9 +107,49 @@ const getIchiPoolStakingAPR = async (
 	ichiPoolStakingConfig: ICHIPoolStakingConfig,
 	network: number,
 	provider: JsonRpcProvider,
-	unipool: UnipoolHelper | undefined,
+	unipoolHelper: UnipoolHelper | undefined,
 ): Promise<APR> => {
-	return Promise.resolve(new BigNumber(3));
+	try {
+		const { ichiApi, LM_ADDRESS } = ichiPoolStakingConfig;
+		const response = await fetch(ichiApi);
+		const apiResult = await response.json();
+		let totalSupply: BigNumber;
+		let rewardRate: BigNumber;
+
+		const lmContract = new Contract(
+			LM_ADDRESS,
+			LM_ABI,
+			provider,
+		) as UnipoolTokenDistributor;
+
+		if (unipoolHelper) {
+			totalSupply = unipoolHelper.totalSupply;
+			rewardRate = unipoolHelper.rewardRate;
+		} else {
+			[totalSupply, rewardRate] = await Promise.all([
+				lmContract.totalSupply(),
+				lmContract.rewardRate(),
+			]).then(([_totalSupply, _rewardRate]) => [
+				toBigNumber(_totalSupply as ethers.BigNumber),
+				toBigNumber(_rewardRate as ethers.BigNumber),
+			]);
+		}
+
+		const {
+			lpPrice = '0',
+			tokens = [],
+		}: { lpPrice: string; tokens: { name: string; price: number }[] } =
+			apiResult;
+
+		if (!lpPrice || lpPrice === '0') return Zero;
+
+		const givTokenPrice = tokens?.find(t => t.name === 'giv')?.price || 0;
+
+		return rewardRate.div(totalSupply).times(givTokenPrice).div(lpPrice);
+	} catch (e) {
+		console.error('Error in fetching ICHI info', e);
+	}
+	return Zero;
 };
 
 const getBalancerPoolStakingAPR = async (
@@ -243,6 +283,7 @@ const getSimplePoolStakingAPR = async (
 			poolContract.token0(),
 			poolContract.totalSupply(),
 		]);
+
 		if (unipoolHelper) {
 			totalSupply = unipoolHelper.totalSupply;
 			rewardRate = unipoolHelper.rewardRate;
@@ -255,6 +296,7 @@ const getSimplePoolStakingAPR = async (
 				toBigNumber(_rewardRate as ethers.BigNumber),
 			]);
 		}
+
 		let tokenReseve = toBigNumber(
 			_token0.toLowerCase() !== tokenAddress.toLowerCase()
 				? _reserves[1]
