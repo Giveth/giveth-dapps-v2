@@ -192,6 +192,16 @@ export class SubgraphQueryBuilder {
 			.join();
 	};
 
+	private static getGIVPowersInfoQuery = (): string => {
+		return `givpower(id: "${config.XDAI_CONFIG.GIV.LM_ADDRESS.toLowerCase()}"){
+			id
+			initialDate
+			locksCreated
+			roundDuration
+			totalGIVLocked
+		}`;
+	};
+
 	static getMainnetQuery = (userAddress: string): string => {
 		const uniswapConfig = config.MAINNET_CONFIG.pools.find(
 			c => c.type === StakingType.UNISWAPV3_ETH_GIV,
@@ -232,6 +242,7 @@ export class SubgraphQueryBuilder {
 				...(config.XDAI_CONFIG.pools as Array<SimplePoolStakingConfig>),
 				...config.XDAI_CONFIG.regenFarms,
 			])}
+			givpowerInfo: ${SubgraphQueryBuilder.getGIVPowersInfoQuery()}
 		}
 		`;
 	};
