@@ -200,6 +200,12 @@ const transformGIVpowerInfo = (info: any): IGIVpowerInfo => {
 	};
 };
 
+export const transformuserGIVlocked = (info: any = {}): ITokenBalance => {
+	return {
+		balance: info || '0',
+	};
+};
+
 export const transformSubgraphData = (data: any = {}): ISubgraphState => {
 	const result: ISubgraphState = {};
 	Object.entries(data).forEach(([key, value]) => {
@@ -225,6 +231,12 @@ export const transformSubgraphData = (data: any = {}): ISubgraphState => {
 				break;
 			case key === 'givpowerInfo':
 				result[key] = transformGIVpowerInfo(value);
+				break;
+
+			case key === 'userGIVLocked':
+				result[key] = transformuserGIVlocked(value);
+				break;
+
 			default:
 		}
 	});

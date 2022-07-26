@@ -5,7 +5,6 @@ import { ITokenAllocation } from '@/types/subgraph';
 export const fetchSubgraph = async (
 	query: string,
 	network: number,
-	isGIVPower?: boolean,
 ): Promise<any> => {
 	const reqBody = { query };
 	let uri;

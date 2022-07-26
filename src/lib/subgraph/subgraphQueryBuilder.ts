@@ -202,6 +202,12 @@ export class SubgraphQueryBuilder {
 		}`;
 	};
 
+	private static getUserGIVLocked = (userAddress: string): string => {
+		return `user(id: "${userAddress.toLowerCase()}") {
+			givLocked
+		  }`;
+	};
+
 	static getMainnetQuery = (userAddress: string): string => {
 		const uniswapConfig = config.MAINNET_CONFIG.pools.find(
 			c => c.type === StakingType.UNISWAPV3_ETH_GIV,
@@ -242,7 +248,8 @@ export class SubgraphQueryBuilder {
 				...(config.XDAI_CONFIG.pools as Array<SimplePoolStakingConfig>),
 				...config.XDAI_CONFIG.regenFarms,
 			])}
-			givpowerInfo: ${SubgraphQueryBuilder.getGIVPowersInfoQuery()}
+			givpowerInfo: ${SubgraphQueryBuilder.getGIVPowersInfoQuery()},
+			userGIVLocked: ${SubgraphQueryBuilder.getUserGIVLocked(userAddress)},
 		}
 		`;
 	};
