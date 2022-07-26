@@ -11,7 +11,11 @@ import { useWeb3React } from '@web3-react/core';
 import { Flex } from '@/components/styled-components/Flex';
 import StakingPoolCard from '@/components/cards/StakingPoolCard';
 import config from '@/configuration';
-import { BasicNetworkConfig, StakingType } from '@/types/config';
+import {
+	BasicNetworkConfig,
+	SimplePoolStakingConfig,
+	StakingType,
+} from '@/types/config';
 import {
 	GIVfarmTopContainer,
 	Subtitle,
@@ -77,7 +81,9 @@ const renderPools = (
 						<StakingPoolCard
 							key={`staking_pool_card_${network}_${index}`}
 							network={network}
-							poolStakingConfig={poolStakingConfig}
+							poolStakingConfig={
+								poolStakingConfig as SimplePoolStakingConfig
+							}
 						/>
 					)}
 				</Col>

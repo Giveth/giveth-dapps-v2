@@ -93,8 +93,6 @@ const config: EnvConfig = {
 					'0xc763b6b3d0f75167db95daa6a0a0d75dd467c4e1',
 				INCENTIVE_REFUNDEE_ADDRESS:
 					'0x34d27210cC319EC5281bDc4DC2ad8FbcF4EAEAEB',
-				POOL_ADDRESS: '', //it's used in uniswap v2
-				LM_ADDRESS: '', //it's used in uniswap v2
 				type: StakingType.UNISWAPV3_ETH_GIV,
 				platform: StakingPlatform.UNISWAP,
 				title: 'GIV / ETH',
@@ -187,7 +185,8 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://app.honeyswap.org/#/add/0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75/0x71850b7E9Ee3f13Ab46d67167341E4bDc905Eef9',
 				unit: 'LP',
-				active: false,
+				active: true,
+				archived: true,
 			},
 			{
 				POOL_ADDRESS: '0x55FF0cef43F0DF88226E9D87D09fA036017F5586',

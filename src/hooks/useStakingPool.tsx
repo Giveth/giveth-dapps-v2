@@ -8,13 +8,8 @@ import {
 	getLPStakingAPR,
 	getUserStakeInfo,
 } from '@/lib/stakingPool';
-import {
-	PoolStakingConfig,
-	RegenPoolStakingConfig,
-	StakingType,
-} from '@/types/config';
+import { SimplePoolStakingConfig, StakingType } from '@/types/config';
 import { APR, UserStakeInfo } from '@/types/poolInfo';
-import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
 import { Zero } from '@/helpers/number';
 import { useAppSelector } from '@/features/hooks';
 
@@ -26,7 +21,7 @@ export interface IStakeInfo {
 }
 
 export const useStakingPool = (
-	poolStakingConfig: PoolStakingConfig | RegenPoolStakingConfig,
+	poolStakingConfig: SimplePoolStakingConfig,
 	network: number,
 ): IStakeInfo => {
 	const [apr, setApr] = useState<BigNumber | null>(null);
@@ -39,12 +34,9 @@ export const useStakingPool = (
 
 	const { library, chainId } = useWeb3React();
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
+	const subgraphIsLoaded = useAppSelector(state => state.subgraph.isLoaded);
 
-	const { balances } = currentValues;
-	const { type, LM_ADDRESS, regenFarmType } =
-		poolStakingConfig as RegenPoolStakingConfig;
-	const unipool = currentValues[regenFarmType || type];
-	const unipoolIsDefined = !!unipool;
+	const { type, LM_ADDRESS } = poolStakingConfig;
 	const providerNetwork = library?.network?.chainId;
 
 	useEffect(() => {
@@ -53,17 +45,16 @@ export const useStakingPool = (
 				library &&
 				chainId === network &&
 				providerNetwork === network &&
-				unipoolIsDefined
+				subgraphIsLoaded
 			) {
-				const unipoolHelper = unipool && new UnipoolHelper(unipool);
 				const promise: Promise<APR> =
 					type === StakingType.GIV_LM
-						? getGivStakingAPR(LM_ADDRESS, network, unipoolHelper)
+						? getGivStakingAPR(LM_ADDRESS, currentValues)
 						: getLPStakingAPR(
 								poolStakingConfig,
 								network,
 								library,
-								unipoolHelper,
+								currentValues,
 						  );
 				promise.then(setApr);
 			} else {
@@ -81,14 +72,11 @@ export const useStakingPool = (
 				stakePoolInfoPoll.current = null;
 			}
 		};
-	}, [library, chainId, unipoolIsDefined, providerNetwork]);
+	}, [library, chainId, subgraphIsLoaded, providerNetwork]);
 
 	useEffect(() => {
-		const unipoolHelper = unipool && new UnipoolHelper(unipool);
-		setUserStakeInfo(
-			getUserStakeInfo(type, regenFarmType, balances, unipoolHelper),
-		);
-	}, [type, regenFarmType, balances, unipool]);
+		setUserStakeInfo(getUserStakeInfo(currentValues, poolStakingConfig));
+	}, [currentValues, poolStakingConfig]);
 	return {
 		apr,
 		...userStakeInfo,

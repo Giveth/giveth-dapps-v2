@@ -31,8 +31,9 @@ import { APR } from '@/types/poolInfo';
 import { getLPStakingAPR } from '@/lib/stakingPool';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { networkProviders } from '@/helpers/networkProvider';
-import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
 import { useAppSelector } from '@/features/hooks';
+import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { SimplePoolStakingConfig, StakingType } from '@/types/config';
 
 const InvestCardContainer = styled(Card)`
 	::before {
@@ -147,28 +148,28 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 
 		const promiseQueue: Promise<APR>[] = [];
 		config.XDAI_CONFIG.pools.forEach(poolStakingConfig => {
-			const unipool = xDaiValues[poolStakingConfig.type];
-			const unipoolHelper = unipool && new UnipoolHelper(unipool);
-
+			const sdh = new SubgraphDataHelper(xDaiValues);
 			const promise: Promise<APR> = getLPStakingAPR(
-				poolStakingConfig,
+				poolStakingConfig as SimplePoolStakingConfig,
 				config.XDAI_NETWORK_NUMBER,
 				networkProviders[config.XDAI_NETWORK_NUMBER],
-				unipoolHelper,
+				xDaiValues,
 			);
 			promiseQueue.push(promise);
 		});
 		config.MAINNET_CONFIG.pools.forEach(poolStakingConfig => {
-			if (!poolStakingConfig.active || poolStakingConfig.archived) return;
-
-			const unipool = mainnetValues[poolStakingConfig.type];
-			const unipoolHelper = unipool && new UnipoolHelper(unipool);
+			if (
+				!poolStakingConfig.active ||
+				poolStakingConfig.archived ||
+				poolStakingConfig.type === StakingType.UNISWAPV3_ETH_GIV
+			)
+				return;
 
 			const promise: Promise<APR> = getLPStakingAPR(
-				poolStakingConfig,
+				poolStakingConfig as SimplePoolStakingConfig,
 				config.MAINNET_NETWORK_NUMBER,
 				networkProviders[config.MAINNET_NETWORK_NUMBER],
-				unipoolHelper,
+				mainnetValues,
 			);
 			promiseQueue.push(promise);
 		});

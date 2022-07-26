@@ -10,7 +10,7 @@ import config from '@/configuration';
 import { StakingType, UniswapV3PoolStakingConfig } from '@/types/config';
 import { getUniswapV3TokenURI } from '@/services/subgraph.service';
 import { Zero } from '@/helpers/number';
-import { IUniswapV3Position } from '@/types/subgraph';
+import { IUniswapV3Pool, IUniswapV3Position } from '@/types/subgraph';
 import { useAppSelector } from '@/features/hooks';
 
 const ERC721NftContext = createContext<{
@@ -29,8 +29,11 @@ export const useLiquidityPositions = () => {
 	const { chainId, library } = useWeb3React();
 
 	const network = config.MAINNET_NETWORK_NUMBER;
-	const { userStakedPositions, userNotStakedPositions, uniswapV3Pool } =
-		mainnetValues;
+	const userStakedPositions =
+		mainnetValues.userStakedPositions as IUniswapV3Position[];
+	const userNotStakedPositions =
+		mainnetValues.userNotStakedPositions as IUniswapV3Position[];
+	const uniswapV3Pool = mainnetValues.uniswapV3Pool as IUniswapV3Pool;
 
 	const [stakedPositions, setStakedPositions] = useState<LiquidityPosition[]>(
 		[],

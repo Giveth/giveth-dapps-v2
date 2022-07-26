@@ -11,7 +11,10 @@ export const fetchMainnetInfo = async (userAddress = '') => {
 			SubgraphQueryBuilder.getMainnetQuery(userAddress),
 			config.MAINNET_NETWORK_NUMBER,
 		);
-		return transformSubgraphData(response);
+		return transformSubgraphData({
+			...response,
+			networkNumber: config.MAINNET_NETWORK_NUMBER,
+		});
 	} catch (e) {
 		console.error('Error on query mainnet subgraph:', e);
 		captureException(e, {
@@ -29,16 +32,9 @@ export const fetchXDaiInfo = async (userAddress = '') => {
 			SubgraphQueryBuilder.getXDaiQuery(userAddress),
 			config.XDAI_NETWORK_NUMBER,
 		);
-		// TODO: Doing this here while the real subgraph is ready
-		const givPower = await fetchSubgraph(
-			SubgraphQueryBuilder.getGIVpowerQuery(userAddress),
-			config.XDAI_NETWORK_NUMBER,
-			true,
-		);
-
 		return transformSubgraphData({
 			...response,
-			...givPower,
+			networkNumber: config.XDAI_NETWORK_NUMBER,
 		});
 	} catch (e) {
 		console.error('Error on query xDai subgraph:', e);
