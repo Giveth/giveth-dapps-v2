@@ -44,6 +44,9 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 		EditStatusType.INFO,
 	);
 	const [avatar, setAvatar] = useState<string>('');
+	const [file, setFile] = useState<File>();
+	const [uploading, setUploading] = useState(false);
+
 	const {
 		register,
 		handleSubmit,
@@ -128,7 +131,14 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 			<Wrapper>
 				{editStatus === EditStatusType.PHOTO ? (
 					<Flex flexDirection='column' gap='36px'>
-						<ImageUploader setUrl={setAvatar} url={avatar} />
+						<ImageUploader
+							url={avatar}
+							setUrl={setAvatar}
+							file={file}
+							setFile={setFile}
+							uploading={uploading}
+							setUploading={setUploading}
+						/>
 						<Button
 							buttonType='secondary'
 							label='SAVE'
