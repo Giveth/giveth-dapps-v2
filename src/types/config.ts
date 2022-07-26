@@ -40,7 +40,8 @@ export type PoolStakingConfig =
 	| SimplePoolStakingConfig
 	| BalancerPoolStakingConfig
 	| UniswapV3PoolStakingConfig
-	| RegenPoolStakingConfig;
+	| RegenPoolStakingConfig
+	| ICHIPoolStakingConfig;
 
 export interface SimplePoolStakingConfig extends BasicStakingConfig {
 	POOL_ADDRESS: string;
@@ -54,6 +55,11 @@ export interface SimplePoolStakingConfig extends BasicStakingConfig {
 	active: boolean;
 	archived?: boolean;
 	introCard?: IntroCardConfig;
+}
+
+export interface ICHIPoolStakingConfig extends SimplePoolStakingConfig {
+	ichiApi: string;
+	platform: StakingPlatform.ICHI;
 }
 
 export interface UniswapV3PoolStakingConfig
@@ -123,6 +129,7 @@ export interface BasicNetworkConfig {
 		| SimplePoolStakingConfig
 		| BalancerPoolStakingConfig
 		| UniswapV3PoolStakingConfig
+		| ICHIPoolStakingConfig
 	>;
 	uniswapV2Subgraph: string;
 

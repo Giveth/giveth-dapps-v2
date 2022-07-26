@@ -8,9 +8,10 @@ import {
 import { captureException } from '@sentry/nextjs';
 import {
 	BalancerPoolStakingConfig,
+	ICHIPoolStakingConfig,
 	RegenPoolStakingConfig,
 	SimplePoolStakingConfig,
-	StakingType,
+	StakingPlatform,
 } from '@/types/config';
 import config from '../configuration';
 import { APR } from '@/types/poolInfo';
@@ -77,21 +78,38 @@ export const getLPStakingAPR = async (
 	const unipoolHelper = new UnipoolHelper(
 		sdh.getUnipool(poolStakingConfig.LM_ADDRESS),
 	);
-	if (poolStakingConfig.type === StakingType.BALANCER_ETH_GIV) {
-		return getBalancerPoolStakingAPR(
-			poolStakingConfig as BalancerPoolStakingConfig,
-			network,
-			provider,
-			unipoolHelper,
-		);
-	} else {
-		return getSimplePoolStakingAPR(
-			poolStakingConfig,
-			network,
-			provider,
-			unipoolHelper,
-		);
+	switch (poolStakingConfig.platform) {
+		case StakingPlatform.BALANCER:
+			return getBalancerPoolStakingAPR(
+				poolStakingConfig as BalancerPoolStakingConfig,
+				network,
+				provider,
+				unipoolHelper,
+			);
+		case StakingPlatform.ICHI:
+			return getIchiPoolStakingAPR(
+				poolStakingConfig as ICHIPoolStakingConfig,
+				network,
+				provider,
+				unipoolHelper,
+			);
+		default:
+			return getSimplePoolStakingAPR(
+				poolStakingConfig,
+				network,
+				provider,
+				unipoolHelper,
+			);
 	}
+};
+
+const getIchiPoolStakingAPR = async (
+	ichiPoolStakingConfig: ICHIPoolStakingConfig,
+	network: number,
+	provider: JsonRpcProvider,
+	unipool: UnipoolHelper | undefined,
+): Promise<APR> => {
+	return Promise.resolve(new BigNumber(3));
 };
 
 const getBalancerPoolStakingAPR = async (
@@ -383,9 +401,10 @@ export const approveERC20tokenTransfer = async (
 
 	if (amountNumber.lte(allowance)) return true;
 
-	const gasPreference = getGasPreference(
-		config.NETWORKS_CONFIG[provider.network.chainId],
-	);
+	const gasPreference = {
+		...getGasPreference(config.NETWORKS_CONFIG[provider.network.chainId]),
+		gasLimit: 70000,
+	};
 
 	if (!allowance.isZero()) {
 		try {
