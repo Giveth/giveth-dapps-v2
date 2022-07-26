@@ -13,12 +13,12 @@ const defaultGIVpowerInfo = {
 	locksCreated: 0,
 	roundDuration: 1,
 	totalGIVLocked: '0',
+	currentRound: 0,
+	nextRoundDate: '0',
 };
 
 export const defaultSubgraphValues: ISubgraphState = {
-	userNotStakedPositions: [],
-	userStakedPositions: [],
-	allPositions: [],
+	gipower: defaultGIVpowerInfo,
 	networkNumber: config.MAINNET_NETWORK_NUMBER,
 };
 
