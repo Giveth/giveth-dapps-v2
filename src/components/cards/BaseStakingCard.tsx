@@ -74,6 +74,7 @@ import LockModal from '../modals/StakeLock/Lock';
 import { StakeGIVModal } from '../modals/StakeLock/StakeGIV';
 import { avgAPR } from '@/helpers/givpower';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { ITokenBalance } from '@/types/subgraph';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -136,7 +137,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const { setInfo } = useFarms();
 	const { chainId } = useWeb3React();
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
-
 	const sdh = new SubgraphDataHelper(currentValues);
 	const { regenStreamType, regenFarmIntro } =
 		poolStakingConfig as RegenPoolStakingConfig;
@@ -160,6 +160,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		stakedAmount: stakedLpAmount,
 		notStakedAmount: userNotStakedAmount,
 	} = stakeInfo;
+
+	const userGIVLocked = currentValues.userGIVLocked as ITokenBalance;
+	const userGIVStaked = sdh.getgGIVTokenBalance();
 
 	const regenStreamConfig = useMemo(() => {
 		if (!regenStreamType) return undefined;
@@ -208,8 +211,8 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 
 	const isGIVpower =
 		type === StakingType.GIV_LM && chainId === config.XDAI_NETWORK_NUMBER;
-	const isLocked = isGIVpower; //TODO Add:  && givLocked !== '0'
-	const isZeroGIVStacked = isGIVpower; //TODO Add:  && balances.givStaked === '0'
+	const isLocked = isGIVpower && userGIVLocked?.balance !== '0';
+	const isZeroGIVStacked = isGIVpower && userGIVStaked?.balance === '0';
 
 	return (
 		<>
@@ -307,8 +310,8 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 																isLocked
 																	? avgAPR(
 																			apr,
-																			'1', //TODO: use balances.gGIV
-																			'1', //TODO: use balances.givStaked
+																			userGIVLocked?.balance,
+																			userGIVStaked?.balance,
 																	  )
 																	: apr,
 																2,
@@ -547,7 +550,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							poolStakingConfig as SimplePoolStakingConfig
 						}
 						regenStreamConfig={regenStreamConfig}
-						maxAmount={stakedLpAmount}
+						maxAmount={stakedLpAmount.sub(userGIVLocked.balance)}
 					/>
 				))}
 			{showHarvestModal && chainId && (
@@ -567,7 +570,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				<LockModal
 					setShowModal={setShowLockModal}
 					poolStakingConfig={poolStakingConfig}
-					maxAmount={stakedLpAmount.sub(totalGIVLocked)}
+					maxAmount={stakedLpAmount.sub(userGIVLocked.balance)}
 				/>
 			)}
 			{showWhatIsGIVstreamModal && (
