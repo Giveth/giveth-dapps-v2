@@ -31,7 +31,7 @@ export const AmountInput: FC<IAmountInput> = ({
 				.div(100)
 				.toString();
 			setAmount(newAmount);
-			setDisplayAmount(formatWeiHelper(newAmount, 6, false));
+			setDisplayAmount(formatWeiHelper(newAmount, false, false));
 		},
 		[maxAmount],
 	);

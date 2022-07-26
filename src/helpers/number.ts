@@ -7,7 +7,7 @@ export const BN = ethers.BigNumber.from;
 
 export const formatEthHelper = (
 	amount: BigNumber.Value,
-	decimals: number = config.TOKEN_PRECISION,
+	decimals: boolean | number = config.TOKEN_PRECISION, // If FALSE then show all decimals
 	format = true,
 ): string => {
 	if (!amount) return '0';
@@ -17,7 +17,9 @@ export const formatEthHelper = (
 	if (format && amt.gt(10 ** 10)) {
 		return amt.toExponential(10);
 	}
-	amt = amt.decimalPlaces(Number(decimals), BigNumber.ROUND_DOWN);
+	amt = decimals
+		? amt.decimalPlaces(Number(decimals), BigNumber.ROUND_DOWN)
+		: amt;
 	return format
 		? amt.lt(0.0001)
 			? '<0.0001'
@@ -31,7 +33,7 @@ export const formatEthHelper = (
 
 export const formatWeiHelper = (
 	amountWei: ethers.BigNumber | BigNumber.Value,
-	decimals: number = config.TOKEN_PRECISION,
+	decimals: boolean | number = config.TOKEN_PRECISION, // If FALSE then show all decimals
 	format = true,
 ): string => {
 	let amountEth: BigNumber.Value;
