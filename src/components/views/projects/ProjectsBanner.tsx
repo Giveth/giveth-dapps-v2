@@ -23,8 +23,9 @@ const ProjectsBanner: FC<IProjectsBanner> = ({ mainCategory }) => {
 	return (
 		<BannerContainer direction='column'>
 			<Image
-				//TODO: Should Update src when backend returns it
-				src={'/images/banners/categories/art.png'}
+				src={
+					mainCategory?.banner || '/images/banners/categories/all.png'
+				}
 				layout='fill'
 				alt={_mainCategory.title}
 				objectFit='cover'
