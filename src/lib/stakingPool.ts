@@ -137,15 +137,23 @@ const getIchiPoolStakingAPR = async (
 
 		const {
 			lpPrice = '0',
+			vaultIRR = 0,
 			tokens = [],
-		}: { lpPrice: string; tokens: { name: string; price: number }[] } =
-			apiResult;
+		}: {
+			lpPrice: string;
+			vaultIRR: number;
+			tokens: { name: string; price: number }[];
+		} = apiResult;
 
 		if (!lpPrice || lpPrice === '0') return Zero;
 
 		const givTokenPrice = tokens?.find(t => t.name === 'giv')?.price || 0;
 
-		return rewardRate.div(totalSupply).times(givTokenPrice).div(lpPrice);
+		return rewardRate
+			.div(totalSupply)
+			.times(givTokenPrice)
+			.div(lpPrice)
+			.plus(vaultIRR);
 	} catch (e) {
 		console.error('Error in fetching ICHI info', e);
 	}
