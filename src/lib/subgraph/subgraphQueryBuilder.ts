@@ -208,6 +208,25 @@ export class SubgraphQueryBuilder {
 		  }`;
 	};
 
+	static getTokenLocksInfoQuery = (
+		address: string,
+		first?: number,
+		skip?: number,
+	): string => {
+		return `query { tokenLocks(id: "${address.toLowerCase()}", where:{unlocked: false}, first: ${
+			first || 100
+		}, skip: ${skip || 0}){ 
+			id
+			user
+			amount
+			rounds
+			untilRound
+			unlockableAt
+			unlockedAt
+			unlocked
+		}}`;
+	};
+
 	static getMainnetQuery = (userAddress: string): string => {
 		const uniswapConfig = config.MAINNET_CONFIG.pools.find(
 			c => c.type === StakingType.UNISWAPV3_ETH_GIV,
