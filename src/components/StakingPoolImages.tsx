@@ -9,6 +9,7 @@ import { IconDai } from '@/components/Icons/Dai';
 import { IconElk } from '@/components/Icons/Elk';
 import { IconxDAI } from '@/components/Icons/xDAI';
 import { IconCult } from '@/components/Icons/Cult';
+import { IconAngelVault } from './Icons/AngelVault';
 interface IStakingPoolImagesProps {
 	title: string;
 }
@@ -31,6 +32,8 @@ export const getCurIconWithName = (currency: string) => {
 			return <IconCult size={40} />;
 		case 'xDAI':
 			return <IconxDAI size={40} />;
+		case 'oneGIV':
+			return <IconAngelVault size={40} />;
 		default:
 			break;
 	}
