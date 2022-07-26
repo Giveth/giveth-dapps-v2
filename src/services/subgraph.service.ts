@@ -9,11 +9,7 @@ export const fetchSubgraph = async (
 ): Promise<any> => {
 	const reqBody = { query };
 	let uri;
-	// TODO: I'll remove this, only for testing while all is added to main subgraph
-	if (isGIVPower) {
-		uri =
-			'https://api.thegraph.com/subgraphs/name/aminlatifi/givpower-deployment-six';
-	} else if (network === config.MAINNET_NETWORK_NUMBER) {
+	if (network === config.MAINNET_NETWORK_NUMBER) {
 		uri = config.MAINNET_CONFIG.subgraphAddress;
 	} else if (network === config.XDAI_NETWORK_NUMBER) {
 		uri = config.XDAI_CONFIG.subgraphAddress;
