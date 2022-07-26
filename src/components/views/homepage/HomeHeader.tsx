@@ -4,25 +4,11 @@ import styled from 'styled-components';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
 import { Arc } from '@/components/styled-components/Arc';
-import { isUserRegistered } from '@/lib/helpers';
 import { mediaQueries } from '@/lib/constants/constants';
-import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import Links from '@/lib/constants/links';
 
 const HomeHeader = () => {
 	const router = useRouter();
-	const dispatch = useAppDispatch();
-	const user = useAppSelector(state => state.user.userData);
-
-	const handleCreateButton = () => {
-		if (isUserRegistered(user)) {
-			router.push(Routes.CreateProject);
-		} else {
-			dispatch(setShowCompleteProfile(true));
-		}
-	};
-
 	return (
 		<Wrapper>
 			<Title weight={700}>Welcome to the Future of Giving</Title>
