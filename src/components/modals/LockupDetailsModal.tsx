@@ -18,13 +18,12 @@ import { Modal } from './Modal';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import { useGIVpower } from '@/context/givpower.context';
-import { IGIVpowerPosition } from '@/types/subgraph';
 import { fetchSubgraph } from '@/services/subgraph.service';
 import config from '@/configuration';
 import { SubgraphQueryBuilder } from '@/lib/subgraph/subgraphQueryBuilder';
-import { useAppSelector } from '@/features/hooks';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import type { IGIVpowerPosition } from '@/types/subgraph';
 import type { BigNumber } from 'ethers';
 import type { IModal } from '@/types/common';
 
@@ -39,8 +38,8 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 	const { apr } = useGIVpower();
 	const { account } = useWeb3React();
 	const [locksInfo, setLocksInfo] = useState<IGIVpowerPosition[]>([]);
-	const { balances } = useAppSelector(state => state.subgraph.xDaiValues);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const { stakedAmount } = useGIVpower();
 
 	useEffect(() => {
 		async function fetchGIVLockDetails() {
@@ -48,7 +47,6 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 			const LocksInfo = await fetchSubgraph(
 				SubgraphQueryBuilder.getTokenLocksInfoQuery(account),
 				config.XDAI_NETWORK_NUMBER,
-				true,
 			);
 			setLocksInfo(LocksInfo.tokenLocks);
 		}
@@ -165,7 +163,7 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 
 					<TotalContainer>
 						<SubtitleH5>
-							{formatWeiHelper(balances.gGIV, 2)}
+							{formatWeiHelper(stakedAmount, 2)}
 						</SubtitleH5>
 						<H6>GIV</H6>
 					</TotalContainer>
