@@ -12,6 +12,7 @@ import { IconCult } from '@/components/Icons/Cult';
 import { IconAngelVault } from './Icons/AngelVault';
 interface IStakingPoolImagesProps {
 	title: string;
+	icon?: string;
 }
 
 export const getCurIconWithName = (currency: string) => {
@@ -39,8 +40,11 @@ export const getCurIconWithName = (currency: string) => {
 	}
 };
 
-export const StakingPoolImages: FC<IStakingPoolImagesProps> = ({ title }) => {
-	const currencies = title.split(' / ');
+export const StakingPoolImages: FC<IStakingPoolImagesProps> = ({
+	title,
+	icon,
+}) => {
+	const currencies = icon ? [icon] : title.split(' / ');
 
 	return (
 		<StakingPoolImagesContainer lenght={currencies.length}>

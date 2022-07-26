@@ -68,7 +68,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 	);
 	const { chainId, library } = useWeb3React();
 
-	const { title, LM_ADDRESS, POOL_ADDRESS, GARDEN_ADDRESS, platform } =
+	const { title, icon, LM_ADDRESS, POOL_ADDRESS, GARDEN_ADDRESS, platform } =
 		poolStakingConfig;
 
 	const onlyApproveMode = useMemo(
@@ -239,7 +239,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 					stakeState !== StakeState.ERROR && (
 						<>
 							<StakeModalTitle alignItems='center'>
-								<StakingPoolImages title={title} />
+								<StakingPoolImages title={title} icon={icon} />
 								<StakeModalTitleText weight={700}>
 									Stake
 								</StakeModalTitleText>

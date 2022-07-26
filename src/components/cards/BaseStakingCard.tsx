@@ -138,6 +138,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		platform,
 		platformTitle,
 		title,
+		icon,
 		description,
 		provideLiquidityLink,
 		BUY_LINK,
@@ -272,7 +273,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							)}
 						</StakingPoolExchangeRow>
 						<SPTitle alignItems='center' gap='16px'>
-							<StakingPoolImages title={title} />
+							<StakingPoolImages title={title} icon={icon} />
 							<div>
 								<StakingPoolLabel weight={900}>
 									{title}

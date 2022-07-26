@@ -3,6 +3,7 @@ export interface BasicStakingConfig {
 	GARDEN_ADDRESS?: string;
 	BUY_LINK?: string;
 	farmStartTimeMS?: number;
+	icon?: string;
 }
 export enum StakingPlatform {
 	GIVETH = 'Staking',

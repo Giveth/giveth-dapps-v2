@@ -67,7 +67,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const { chainId, library, account } = useWeb3React();
 	const positions = isUnstakingModal ? stakedPositions : unstakedPositions;
-	const { title } = poolStakingConfig;
+	const { title, icon } = poolStakingConfig;
 	const [stakeStatus, setStakeStatus] = useState<StakeState>(
 		StakeState.UNKNOWN,
 	);
@@ -151,7 +151,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 					stakeStatus === StakeState.UNSTAKING ||
 					stakeStatus === StakeState.CONFIRM_UNSTAKE) && (
 					<StakeModalTitle alignItems='center'>
-						<StakingPoolImages title={title} />
+						<StakingPoolImages title={title} icon={icon} />
 						<StakeModalTitleText weight={700}>
 							{title}
 						</StakeModalTitleText>
