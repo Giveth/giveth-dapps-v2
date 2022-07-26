@@ -3,7 +3,6 @@ export interface BasicStakingConfig {
 	GARDEN_ADDRESS?: string;
 	BUY_LINK?: string;
 	farmStartTimeMS?: number;
-	introCard?: IntroCardConfig;
 }
 export enum StakingPlatform {
 	GIVETH = 'Staking',
@@ -53,6 +52,7 @@ export interface SimplePoolStakingConfig extends BasicStakingConfig {
 	unit: string;
 	active: boolean;
 	archived?: boolean;
+	introCard?: IntroCardConfig;
 }
 
 export interface UniswapV3PoolStakingConfig

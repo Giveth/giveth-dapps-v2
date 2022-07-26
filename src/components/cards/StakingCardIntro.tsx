@@ -9,13 +9,13 @@ import {
 } from '@giveth/ui-design-system';
 import { Dispatch, FC, SetStateAction } from 'react';
 import styled from 'styled-components';
-import { RegenPoolStakingConfig } from '@/types/config';
+import { SimplePoolStakingConfig } from '@/types/config';
 import { getCurIconWithName } from '../StakingPoolImages';
 import { Flex } from '../styled-components/Flex';
 import { StakeCardState } from './BaseStakingCard';
 
 interface IStakingCardIntro {
-	poolStakingConfig: RegenPoolStakingConfig;
+	poolStakingConfig: SimplePoolStakingConfig;
 	setState: Dispatch<SetStateAction<StakeCardState>>;
 }
 

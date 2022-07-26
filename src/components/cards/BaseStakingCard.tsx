@@ -445,7 +445,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				) : (
 					<StakingCardIntro
 						poolStakingConfig={
-							poolStakingConfig as RegenPoolStakingConfig
+							poolStakingConfig as SimplePoolStakingConfig
 						}
 						setState={setState}
 					/>
