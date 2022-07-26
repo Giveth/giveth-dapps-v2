@@ -64,6 +64,11 @@ export class SubgraphDataHelper {
 		return this.getTokenBalance(givTokenAddress);
 	}
 
+	getgGIVTokenBalance(): ITokenBalance {
+		const givTokenAddress = config.XDAI_CONFIG.GIV.LM_ADDRESS;
+		return this.getUnipoolBalance(givTokenAddress);
+	}
+
 	getGIVTokenDistro(): ITokenDistro {
 		const tokenDistroAddress =
 			config.NETWORKS_CONFIG[this.state.networkNumber as number]
