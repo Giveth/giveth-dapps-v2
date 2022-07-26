@@ -95,6 +95,11 @@ const config: EnvConfig = {
 					'https://www.figma.com/exit?url=https%3A%2F%2Fapp.ichi.org%2Fvault%3FpoolId%3D20009%26back%3Dvault',
 				unit: 'LP',
 				active: true,
+				introCard: {
+					title: 'Angel Vault',
+					description: `The Angel Vault is shared Univ3 position structured to protect GIV from downward volatility.\n\nProvide oneGIV as liquidity in our Angel Vault and stake the LP token to earn rewards proportional to the liquidity provided. When you remove liquidity, you will get oneGIV & GIV proportional to the holdings in the Angel Vault.`,
+					link: 'https://docs.ichi.org/ichi-docs-v3/ichi-vaults/angel-vaults',
+				},
 			},
 			{
 				INCENTIVE_START_TIME: 1640272200,
