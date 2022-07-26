@@ -33,16 +33,24 @@ const StakingCardIntro: FC<IStakingCardIntro> = ({
 				{getCurIconWithName(title.split(' / ')[0])}
 				<H6 weight={700}>{introCard?.title}</H6>
 			</HeaderRow>
-			<Description>{introCard?.description}</Description>
-			<LearnMoreButton
-				label='LEARN MORE'
-				href={introCard?.link}
-				linkType='texty'
-				target='_blank'
-				icon={
-					<IconExternalLink size={16} color={brandColors.deep[100]} />
-				}
-			/>
+			<ContentWrapper
+				flexDirection='column'
+				justifyContent='space-between'
+			>
+				<Description>{introCard?.description}</Description>
+				<LearnMoreButton
+					label='LEARN MORE'
+					href={introCard?.link}
+					linkType='texty'
+					target='_blank'
+					icon={
+						<IconExternalLink
+							size={16}
+							color={brandColors.deep[100]}
+						/>
+					}
+				/>
+			</ContentWrapper>
 		</StakingCardIntroContainer>
 	);
 };
@@ -62,15 +70,18 @@ const Back = styled.div`
 	cursor: pointer;
 `;
 
+const ContentWrapper = styled(Flex)`
+	height: 380px;
+`;
+
 const Description = styled(Caption)`
-	padding: 32px;
-	margin-bottom: 138px;
+	padding: 0 32px;
 	white-space: pre-line;
 `;
 
 const LearnMoreButton = styled(ButtonLink)`
 	width: 90%;
-	margin: auto;
+	margin: 16px auto;
 `;
 
 export default StakingCardIntro;
