@@ -22,8 +22,11 @@ import {
 } from '../ConfirmSubmit';
 import { StakeState } from '@/lib/staking';
 import { IModal } from '@/types/common';
-import { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
-import { useAppSelector } from '@/features/hooks';
+import {
+	PoolStakingConfig,
+	RegenStreamConfig,
+	SimplePoolStakingConfig,
+} from '@/types/config';
 import { formatWeiHelper } from '@/helpers/number';
 import { LockupDetailsModal } from '../LockupDetailsModal';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -49,11 +52,8 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 	);
 	const { library, chainId } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const { totalGIVLocked } = useAppSelector(
-		state => state.subgraph.xDaiValues.givpowerInfo,
-	);
-	const { title, LM_ADDRESS, GARDEN_ADDRESS } = poolStakingConfig;
-	const maxUnstakeable = maxAmount.sub(totalGIVLocked);
+	const { title, LM_ADDRESS, GARDEN_ADDRESS } =
+		poolStakingConfig as SimplePoolStakingConfig;
 
 	const onWithdraw = async () => {
 		setUnstakeState(StakeState.UNSTAKING);
@@ -92,7 +92,7 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 						<InnerModal>
 							<AmountInput
 								setAmount={setAmount}
-								maxAmount={maxUnstakeable}
+								maxAmount={maxAmount}
 								poolStakingConfig={poolStakingConfig}
 							/>
 							{GARDEN_ADDRESS && (
@@ -107,10 +107,7 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 												<P>Available to unstake</P>
 											</Flex>
 											<B>
-												{formatWeiHelper(
-													maxUnstakeable,
-													2,
-												)}
+												{formatWeiHelper(maxAmount, 2)}
 											</B>
 										</Flex>
 										<TotalStakedRow justifyContent='space-between'>
@@ -130,7 +127,7 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 										buttonType='primary'
 										disabled={
 											amount == '0' ||
-											maxUnstakeable.lt(amount) ||
+											maxAmount.lt(amount) ||
 											unStakeState ===
 												StakeState.UNSTAKING
 										}
@@ -207,7 +204,7 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 			{showLockDetailModal && (
 				<LockupDetailsModal
 					setShowModal={setShowLockDetailModal}
-					unstakeable={maxUnstakeable}
+					unstakeable={maxAmount}
 				/>
 			)}
 		</Modal>
