@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import styled from 'styled-components';
 import {
@@ -12,13 +13,78 @@ import WalletIcon from '/public/images/wallet_donate_tab.svg';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { IProject } from '@/apollo/types/types';
 
+import { IconGnosisChain } from '@/components/Icons/GnosisChain';
+import { IconEthereum } from '@/components/Icons/Eth';
+
+import config from '@/configuration';
+
+const { SECONDARY_NETWORK } = config;
+const gnosisId = SECONDARY_NETWORK.id;
+
+interface IAddressRender {
+	item: any;
+	index?: number;
+	isSharedAddress?: boolean;
+}
+
 const ProjectTotalFundCard = (props: { project?: IProject }) => {
-	const {
-		totalDonations,
-		walletAddress,
-		traceCampaignId,
-		totalTraceDonations,
-	} = props.project || {};
+	const { totalDonations, addresses, traceCampaignId, totalTraceDonations } =
+		props.project || {};
+
+	const [sharedAddress, setSharedAddress] = useState<string | undefined>(
+		undefined,
+	);
+
+	const renderAddress = ({
+		item,
+		index,
+		isSharedAddress,
+	}: IAddressRender) => {
+		// we may need to change this in the future if we allow more networks config for addresses
+		return (
+			<BottomSection>
+				<Image src={WalletIcon} alt='wallet icon' />
+				<AddressContainer key={index}>
+					{isSharedAddress ? (
+						<>
+							<Subline>{item.address}</Subline>
+							<IconEthereum size={16} />
+							<IconGnosisChain size={16} />
+						</>
+					) : (
+						<>
+							<Subline>{item.address}</Subline>
+							{item.networkId === gnosisId ? (
+								<IconGnosisChain size={16} />
+							) : (
+								// defaults to eth icon while we add more networks
+								<IconEthereum size={16} />
+							)}
+						</>
+					)}
+				</AddressContainer>
+			</BottomSection>
+		);
+	};
+
+	const checkAddresses = () => {
+		// We should change this check if more networks are added in the future
+		const onlyAddresses = addresses?.map(item => {
+			if (item.isRecipient) {
+				return item.address;
+			}
+		});
+		const addressesDuplicated = onlyAddresses?.some((item, index) => {
+			return onlyAddresses.indexOf(item) != index;
+		});
+		if (addressesDuplicated) {
+			setSharedAddress(addresses && addresses[0].address);
+		}
+	};
+
+	useEffect(() => {
+		checkAddresses();
+	}, [props.project]);
 
 	return (
 		<Wrapper>
@@ -34,10 +100,14 @@ const ProjectTotalFundCard = (props: { project?: IProject }) => {
 					</div>
 				)}
 			</UpperSection>
-			<BottomSection>
-				<Image src={WalletIcon} alt='wallet icon' />
-				<Subline>{walletAddress}</Subline>
-			</BottomSection>
+			{sharedAddress
+				? renderAddress({
+						item: { address: sharedAddress },
+						isSharedAddress: true,
+				  })
+				: addresses?.map((item, index) => {
+						return renderAddress({ item, index });
+				  })}
 		</Wrapper>
 	);
 };
@@ -73,6 +143,14 @@ const BottomSection = styled.div`
 	display: flex;
 	gap: 8px;
 	color: ${neutralColors.gray[500]};
+`;
+
+const AddressContainer = styled.div`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-around;
+	gap: 8px;
 `;
 
 export default ProjectTotalFundCard;
