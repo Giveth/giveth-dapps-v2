@@ -131,8 +131,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const { chainId } = useWeb3React();
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
 	const sdh = new SubgraphDataHelper(currentValues);
-	const { regenStreamType, regenFarmIntro } =
-		poolStakingConfig as RegenPoolStakingConfig;
+	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
 
 	const {
 		type,
@@ -145,6 +144,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		farmStartTimeMS,
 		active,
 		archived,
+		introCard,
 	} = poolStakingConfig;
 
 	const {
@@ -260,7 +260,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								)}
 							<div style={{ flex: 1 }}></div>
 							{notif && notif}
-							{regenFarmIntro && (
+							{introCard && (
 								<IntroIcon
 									onClick={() =>
 										setState(StakeCardState.INTRO)

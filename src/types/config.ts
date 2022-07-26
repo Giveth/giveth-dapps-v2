@@ -3,6 +3,7 @@ export interface BasicStakingConfig {
 	GARDEN_ADDRESS?: string;
 	BUY_LINK?: string;
 	farmStartTimeMS?: number;
+	introCard?: IntroCardConfig;
 }
 export enum StakingPlatform {
 	GIVETH = 'Staking',
@@ -72,7 +73,7 @@ export interface BalancerPoolStakingConfig extends SimplePoolStakingConfig {
 	POOL_ID: string;
 }
 
-export interface RegenFarmIntroConfig {
+export interface IntroCardConfig {
 	title: string;
 	description: string;
 	link: string;
@@ -81,7 +82,6 @@ export interface RegenFarmIntroConfig {
 export interface RegenPoolStakingConfig extends SimplePoolStakingConfig {
 	regenStreamType: StreamType;
 	regenFarmType: RegenFarmType;
-	regenFarmIntro?: RegenFarmIntroConfig;
 }
 
 export interface GasPreference {
