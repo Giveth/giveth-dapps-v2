@@ -50,11 +50,14 @@ import GivStake from '../../../public/images/giv_stake.svg';
 import Routes from '@/lib/constants/Routes';
 import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
+import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { formatWeiHelper } from '@/helpers/number';
 
 export function TabPowerTop() {
-	const { givStaked } = useAppSelector(
-		state => state.subgraph.xDaiValues.balances,
+	const sdh = new SubgraphDataHelper(
+		useAppSelector(state => state.subgraph.xDaiValues),
 	);
+	const givPower = sdh.getUserGIVPowerBalance();
 	return (
 		<GIVpowerTopContainer>
 			<GIVpowerContainer>
@@ -84,7 +87,9 @@ export function TabPowerTop() {
 									height='27'
 									alt='givpower'
 								/>
-								<TitleBase>{givStaked ?? 0}</TitleBase>
+								<TitleBase>
+									{formatWeiHelper(givPower.balance, 2) ?? 0}
+								</TitleBase>
 							</Flex>
 							<Link href={Routes.Projects} passHref>
 								<BoostProjectButton

@@ -33,7 +33,11 @@ import {
 	ToggleContainer,
 } from './StakeLock.sc';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import type { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
+import type {
+	PoolStakingConfig,
+	RegenStreamConfig,
+	SimplePoolStakingConfig,
+} from '@/types/config';
 
 interface IStakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
@@ -65,7 +69,8 @@ export const StakeModal: FC<IStakeModalProps> = ({
 	const { chainId, library } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
-	const { title, LM_ADDRESS, POOL_ADDRESS } = poolStakingConfig;
+	const { title, LM_ADDRESS, POOL_ADDRESS } =
+		poolStakingConfig as SimplePoolStakingConfig;
 
 	useEffect(() => {
 		library?.on('block', async () => {

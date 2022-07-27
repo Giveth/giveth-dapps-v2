@@ -32,6 +32,7 @@ import { HarvestAllModal } from '../modals/HarvestAll';
 import { useAppSelector } from '@/features/hooks';
 import useRegenTokenDistroHelper from '@/hooks/useRegenTokenDistroHelper';
 import config from '@/configuration';
+import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
 interface RegenStreamProps {
 	network: number;
@@ -63,11 +64,15 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 	const [claimedAmount, setClaimedAmount] = useState<ethers.BigNumber>(
 		constants.Zero,
 	);
-	const { regenTokenDistroHelper } = useRegenTokenDistroHelper(
-		streamConfig.type,
+	const sdh = new SubgraphDataHelper(
+		useAppSelector(state => state.subgraph.currentValues),
 	);
-	const currentValues = useAppSelector(state => state.subgraph.currentValues);
-	const { balances } = currentValues;
+	const { regenTokenDistroHelper } = useRegenTokenDistroHelper(
+		sdh.getTokenDistro(streamConfig.tokenDistroAddress),
+	);
+	const tokenDistroBalance = sdh.getTokenDistroBalance(
+		streamConfig.tokenDistroAddress,
+	);
 	const { mainnetThirdPartyTokensPrice, xDaiThirdPartyTokensPrice } =
 		useAppSelector(state => state.price);
 
@@ -93,20 +98,9 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 		xDaiThirdPartyTokensPrice,
 	]);
 	useEffect(() => {
-		switch (streamConfig.type) {
-			case StreamType.FOX:
-				setLockedAmount(BN(balances.foxAllocatedTokens));
-				setClaimedAmount(BN(balances.foxClaimed));
-				break;
-			case StreamType.CULT:
-				setLockedAmount(BN(balances.cultAllocatedTokens));
-				setClaimedAmount(BN(balances.cultClaimed));
-				break;
-			default:
-				setLockedAmount(ethers.constants.Zero);
-				setClaimedAmount(ethers.constants.Zero);
-		}
-	}, [streamConfig.type, balances]);
+		setLockedAmount(BN(tokenDistroBalance.allocatedTokens));
+		setClaimedAmount(BN(tokenDistroBalance.claimed));
+	}, [tokenDistroBalance]);
 
 	useEffect(() => {
 		setRewardLiquidPart(

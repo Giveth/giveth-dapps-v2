@@ -57,7 +57,7 @@ const JoinSubscriptionCard = () => {
 				<Caption fullWidth>{captionText} </Caption>
 				{!successSubscription && (
 					<form
-						action='http://news.giveth.io/add_subscriber'
+						action='https://www.getrevue.co/profile/giveth/add_subscriber'
 						method='post'
 						id='revue-form'
 						name='revue-form'
@@ -83,6 +83,7 @@ const JoinSubscriptionCard = () => {
 								disabled={!validateEmail(email)}
 								label='Subscribe'
 								buttonType='primary'
+								type='submit'
 							/>
 						</SubscriptionActionWrapper>
 					</form>

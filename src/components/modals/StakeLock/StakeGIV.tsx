@@ -26,7 +26,10 @@ import { BriefContainer, H5White } from './LockingBrief';
 import { formatWeiHelper } from '@/helpers/number';
 import LockInfo from './LockInfo';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import type { PoolStakingConfig } from '@/types/config';
+import type {
+	PoolStakingConfig,
+	SimplePoolStakingConfig,
+} from '@/types/config';
 
 interface IStakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
@@ -57,7 +60,8 @@ export const StakeGIVModal: FC<IStakeModalProps> = ({
 	const { chainId, library } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
-	const { title, POOL_ADDRESS, GARDEN_ADDRESS } = poolStakingConfig;
+	const { POOL_ADDRESS, GARDEN_ADDRESS } =
+		poolStakingConfig as SimplePoolStakingConfig;
 
 	useEffect(() => {
 		if (stakeState == StakeState.WRAP) {

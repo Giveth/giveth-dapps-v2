@@ -29,9 +29,7 @@ import config from '@/configuration';
 import { formatEthHelper, formatWeiHelper, Zero } from '@/helpers/number';
 import { getGivStakingAPR } from '@/lib/stakingPool';
 import { APR } from '@/types/poolInfo';
-import { StakingType } from '@/types/config';
 import useClaim from '@/context/claim.context';
-import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
 import { useAppSelector } from '@/features/hooks';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 
@@ -145,14 +143,7 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 
 	useEffect(() => {
 		const cb = () => {
-			const unipool = xDaiValues[StakingType.GIV_LM];
-			const unipoolHelper = unipool && new UnipoolHelper(unipool);
-
-			getGivStakingAPR(
-				config.XDAI_CONFIG.GIV.LM_ADDRESS,
-				config.XDAI_NETWORK_NUMBER,
-				unipoolHelper,
-			)
+			getGivStakingAPR(config.XDAI_CONFIG.GIV.LM_ADDRESS, xDaiValues)
 				.then(_apr => {
 					mounted.current && setApr(_apr);
 				})

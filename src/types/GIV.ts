@@ -1,5 +1,3 @@
-import { ethers } from 'ethers';
-
 export interface ClaimData {
 	index: number;
 	amount: string;
@@ -7,10 +5,4 @@ export interface ClaimData {
 	flags: {
 		[key: string]: boolean;
 	};
-}
-
-export interface ITokenDistroBalance {
-	claimable: ethers.BigNumber;
-	allocatedAmount: ethers.BigNumber;
-	claimedAmount: ethers.BigNumber;
 }

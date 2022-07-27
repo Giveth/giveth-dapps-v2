@@ -27,6 +27,7 @@ const Routes = {
 	GIVpower: '/givpower',
 	GIVbacks: '/givbacks',
 	Claim: '/claim',
+	GivethProject: '/project/the-giveth-community-of-makers',
 };
 
 export default Routes;

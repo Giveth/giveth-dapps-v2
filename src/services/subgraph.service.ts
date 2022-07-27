@@ -5,15 +5,10 @@ import { ITokenAllocation } from '@/types/subgraph';
 export const fetchSubgraph = async (
 	query: string,
 	network: number,
-	isGIVPower?: boolean,
 ): Promise<any> => {
 	const reqBody = { query };
 	let uri;
-	// TODO: I'll remove this, only for testing while all is added to main subgraph
-	if (isGIVPower) {
-		uri =
-			'https://api.thegraph.com/subgraphs/name/aminlatifi/givpower-deployment-six';
-	} else if (network === config.MAINNET_NETWORK_NUMBER) {
+	if (network === config.MAINNET_NETWORK_NUMBER) {
 		uri = config.MAINNET_CONFIG.subgraphAddress;
 	} else if (network === config.XDAI_NETWORK_NUMBER) {
 		uri = config.XDAI_CONFIG.subgraphAddress;
@@ -35,8 +30,26 @@ export const getHistory = async (
 	from?: number,
 	count?: number,
 ): Promise<ITokenAllocation[]> => {
+	let tokenDistroAddress = '';
+	let uri;
+	if (network === config.MAINNET_NETWORK_NUMBER) {
+		uri = config.MAINNET_CONFIG.subgraphAddress;
+		tokenDistroAddress = config.MAINNET_CONFIG.TOKEN_DISTRO_ADDRESS;
+	} else if (network === config.XDAI_NETWORK_NUMBER) {
+		uri = config.XDAI_CONFIG.subgraphAddress;
+		tokenDistroAddress = config.XDAI_CONFIG.TOKEN_DISTRO_ADDRESS;
+	} else {
+		console.error('Network is not Defined!');
+		return [];
+	}
 	const query = `{
-		tokenAllocations(skip: ${from}, first:${count} ,orderBy: timestamp, orderDirection: desc, , where: { recipient: "${address.toLowerCase()}"  }) {
+		tokenAllocations(
+			skip: ${from}, 
+			first:${count},
+			orderBy: timestamp,
+			orderDirection: desc,
+			where: { recipient: "${address.toLowerCase()}", tokenDistroAddress: "${tokenDistroAddress.toLowerCase()}"}
+	) {
 		recipient
 		amount
 		timestamp
@@ -45,15 +58,6 @@ export const getHistory = async (
 	  }
 	}`;
 	const body = { query };
-	let uri;
-	if (network === config.MAINNET_NETWORK_NUMBER) {
-		uri = config.MAINNET_CONFIG.subgraphAddress;
-	} else if (network === config.XDAI_NETWORK_NUMBER) {
-		uri = config.XDAI_CONFIG.subgraphAddress;
-	} else {
-		console.error('Network is not Defined!');
-		return [];
-	}
 	try {
 		const res = await fetch(uri, {
 			method: 'POST',
