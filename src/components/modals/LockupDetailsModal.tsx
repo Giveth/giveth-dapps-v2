@@ -9,6 +9,7 @@ import {
 	H6,
 	B,
 	P,
+	Caption,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
@@ -86,10 +87,10 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 								icon={<IconHelp />}
 								direction='top'
 							>
-								<P>
+								<TooltipContent>
 									The average annual rate of return for this
 									set of staked GIV.
-								</P>
+								</TooltipContent>
 							</IconWithTooltip>
 						</CloseText>
 					</div>
@@ -160,10 +161,10 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 					<SubtitleWithTooltip>
 						<Subtitle>Total staked GIV</Subtitle>
 						<IconWithTooltip icon={<IconHelp />} direction='top'>
-							<P>
+							<TooltipContent>
 								All your staked GIV, including GIV that is
 								locked.
-							</P>
+							</TooltipContent>
 						</IconWithTooltip>
 					</SubtitleWithTooltip>
 
@@ -240,6 +241,10 @@ const SubtitleWithTooltip = styled.div`
 	display: flex;
 	flex-direction: row;
 	gap: 4px;
+`;
+
+const TooltipContent = styled(Caption)`
+	width: 200px;
 `;
 
 const SubtitleH5 = styled(H5)`
