@@ -41,12 +41,7 @@ export const useStakingPool = (
 
 	useEffect(() => {
 		const cb = () => {
-			if (
-				library &&
-				chainId === network &&
-				providerNetwork === network &&
-				subgraphIsLoaded
-			) {
+			if (subgraphIsLoaded) {
 				const promise: Promise<APR> =
 					type === StakingType.GIV_LM
 						? getGivStakingAPR(LM_ADDRESS, currentValues)
@@ -56,7 +51,7 @@ export const useStakingPool = (
 								library,
 								currentValues,
 						  );
-				promise.then(setApr);
+				promise.then(setApr).catch(() => setApr(Zero));
 			} else {
 				setApr(Zero);
 			}
