@@ -28,6 +28,7 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import ProjectsSubCategories from './ProjectsSubCategories';
 import { useProjectsContext } from '@/context/projects.context';
+import { Flex } from '@/components/styled-components/Flex';
 import type { IProjectsRouteProps } from 'pages/projects';
 
 export interface IProjectsView extends IProjectsRouteProps {
@@ -200,7 +201,11 @@ const ProjectsIndex = (props: IProjectsView) => {
 						{isTablet && (
 							<>
 								{isTabletShowingSearchAndFilter ? (
-									<TabletFilterAndSearchContainer>
+									<TabletFilterAndSearchContainer
+										justifyContent='space-between'
+										alignItems='center'
+										gap='16px'
+									>
 										<input
 											style={{
 												flexGrow: 1,
@@ -436,12 +441,8 @@ const StyledLine = styled.hr`
 	border: 1px solid ${neutralColors.gray[200]};
 `;
 
-const TabletFilterAndSearchContainer = styled.div`
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	gap: 16px;
-	width: 100%;
+const TabletFilterAndSearchContainer = styled(Flex)`
+	flex-grow: 1;
 `;
 
 export default ProjectsIndex;
