@@ -74,7 +74,6 @@ import LockModal from '../modals/StakeLock/Lock';
 import { StakeGIVModal } from '../modals/StakeLock/StakeGIV';
 import { avgAPR } from '@/helpers/givpower';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { ITokenBalance } from '@/types/subgraph';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -161,8 +160,8 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		notStakedAmount: userNotStakedAmount,
 	} = stakeInfo;
 
-	const userGIVLocked = currentValues.userGIVLocked as ITokenBalance;
-	const userGIVStaked = sdh.getUserGIVPower();
+	const userGIVLocked = sdh.getUserGIVLockedBalance();
+	const userGIVPowerBalance = sdh.getUserGIVPowerBalance();
 
 	const regenStreamConfig = useMemo(() => {
 		if (!regenStreamType) return undefined;
@@ -211,8 +210,8 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 
 	const isGIVpower =
 		type === StakingType.GIV_LM && chainId === config.XDAI_NETWORK_NUMBER;
-	const isLocked = isGIVpower && userGIVLocked?.balance !== '0';
-	const isZeroGIVStacked = isGIVpower && userGIVStaked?.balance === '0';
+	const isLocked = isGIVpower && userGIVLocked.balance !== '0';
+	const isZeroGIVStacked = isGIVpower && userGIVPowerBalance.balance === '0';
 
 	return (
 		<>
@@ -310,8 +309,8 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 																isLocked
 																	? avgAPR(
 																			apr,
-																			userGIVLocked?.balance,
-																			userGIVStaked?.balance,
+																			userGIVLocked.balance,
+																			userGIVPowerBalance.balance,
 																	  )
 																	: apr,
 																2,

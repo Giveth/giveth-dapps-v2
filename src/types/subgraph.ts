@@ -18,7 +18,7 @@ export interface ITokenDistro {
 	endTime: number;
 }
 
-export interface IGIVpowerInfo {
+export interface IGIVpower {
 	id: string;
 	initialDate: string;
 	locksCreated: number;

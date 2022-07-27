@@ -6,7 +6,7 @@ import { smallFormatDate } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import { getUnlockDate } from '@/helpers/givpower';
 import type { FC } from 'react';
-import type { IGIVpowerInfo } from '@/types/subgraph';
+import type { IGIVpower } from '@/types/subgraph';
 
 interface ILockingBrief {
 	round: number;
@@ -20,7 +20,7 @@ const LockingBrief: FC<ILockingBrief> = ({
 }) => {
 	const givpowerInfo = useAppSelector(
 		state => state.subgraph.xDaiValues.givpowerInfo,
-	) as IGIVpowerInfo;
+	) as IGIVpower;
 	const unlockDate = new Date(getUnlockDate(givpowerInfo, round));
 	return (
 		<BriefContainer>

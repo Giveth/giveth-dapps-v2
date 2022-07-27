@@ -7,7 +7,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import { smallFormatDate } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import { getUnlockDate } from '@/helpers/givpower';
-import type { IGIVpowerInfo } from '@/types/subgraph';
+import type { IGIVpower } from '@/types/subgraph';
 
 const maxRound = 26;
 interface ILockSlider {
@@ -19,7 +19,7 @@ const LockSlider: FC<ILockSlider> = ({ round, setRound }) => {
 	const [isChanged, setIsChanged] = useState(false);
 	const givpowerInfo = useAppSelector(
 		state => state.subgraph.xDaiValues.givpowerInfo,
-	) as IGIVpowerInfo;
+	) as IGIVpower;
 	const unlockDate = new Date(getUnlockDate(givpowerInfo, round));
 	return (
 		<>
