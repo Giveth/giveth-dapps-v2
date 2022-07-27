@@ -1,10 +1,11 @@
+import { utils } from 'ethers';
 import { client } from '@/apollo/apolloClient';
 import {
 	TITLE_IS_VALID,
 	WALLET_ADDRESS_IS_VALID,
 } from '@/apollo/gql/gqlProjects';
 import config from '@/configuration';
-import { getAddressFromENS, isAddressENS, isAddressValid } from '@/lib/wallet';
+import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 
 export const titleValidation = async (title: string) => {
 	try {
@@ -51,7 +52,7 @@ export const addressValidation = async (
 		}
 		address = _address;
 		return await queryFunc();
-	} else if (!(await isAddressValid(walletAddress, web3))) {
+	} else if (!utils.isAddress(address)) {
 		return 'Eth address not valid';
 	} else {
 		return await queryFunc();

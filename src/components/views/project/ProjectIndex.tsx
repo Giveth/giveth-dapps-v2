@@ -154,7 +154,7 @@ const ProjectIndex = (props: { project?: IProject }) => {
 		);
 	}
 
-	if (isCancelled) {
+	if (isCancelled || !project) {
 		return <NotAvailableProject />;
 	}
 
