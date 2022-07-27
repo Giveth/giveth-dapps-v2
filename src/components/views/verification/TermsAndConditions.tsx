@@ -9,6 +9,7 @@ import { useVerificationData } from '@/context/verification.context';
 import { client } from '@/apollo/apolloClient';
 import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
 import { EVerificationStatus, EVerificationSteps } from '@/apollo/types/types';
+import { showToastError } from '@/lib/helpers';
 
 export default function TermsAndConditions() {
 	const [loading, setLoading] = useState(false);
@@ -32,19 +33,24 @@ export default function TermsAndConditions() {
 	};
 
 	const handleNext = async () => {
-		setLoading(true);
-		await client.mutate({
-			mutation: UPDATE_PROJECT_VERIFICATION,
-			variables: {
-				projectVerificationUpdateInput: {
-					projectVerificationId: Number(verificationData?.id),
-					step: EVerificationSteps.TERM_AND_CONDITION,
-					isTermAndConditionsAccepted: accepted,
+		try {
+			setLoading(true);
+			await client.mutate({
+				mutation: UPDATE_PROJECT_VERIFICATION,
+				variables: {
+					projectVerificationUpdateInput: {
+						projectVerificationId: Number(verificationData?.id),
+						step: EVerificationSteps.TERM_AND_CONDITION,
+						isTermAndConditionsAccepted: accepted,
+					},
 				},
-			},
-		});
-		setLoading(false);
-		updateVerificationState();
+			});
+			setLoading(false);
+			updateVerificationState();
+		} catch (error) {
+			setLoading(false);
+			showToastError(error);
+		}
 	};
 
 	return (
