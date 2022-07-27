@@ -72,8 +72,6 @@ import { IStakeInfo } from '@/hooks/useStakingPool';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { switchNetwork } from '@/lib/wallet';
-import { setShowWalletModal } from '@/features/modal/modal.slice';
 import Routes from '@/lib/constants/Routes';
 import type { LiquidityPosition } from '@/types/nfts';
 
@@ -183,10 +181,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				? config.XDAI_NETWORK_NUMBER
 				: config.MAINNET_NETWORK_NUMBER;
 		const checkNetworkAndShowStakeModal = async () => {
-			if (_chain && _open === type) {
-				dispatch(setShowWalletModal(!isWalletActive));
-				if (isWalletActive) await switchNetwork(_chainId);
-			}
 			if (_chainId === chainId && _open === type) {
 				if (account) {
 					setShowStakeModal(true);
