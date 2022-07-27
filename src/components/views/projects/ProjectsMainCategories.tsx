@@ -79,6 +79,11 @@ const MainCategoryItem = styled.div<{ isSelected?: boolean }>`
 	padding: 16px;
 	:hover {
 		cursor: pointer;
+		color: white;
+		background: ${brandColors.giv[600]};
+		-webkit-transition: background-color 300ms linear, color 150ms linear;
+		-ms-transition: background-color 300ms linear, color 150ms linear;
+		transition: background-color 300ms linear, color 150ms linear;
 	}
 	font-weight: 400;
 	text-align: center;
