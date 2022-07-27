@@ -26,6 +26,7 @@ import { BriefContainer, H5White } from './LockingBrief';
 import { formatWeiHelper } from '@/helpers/number';
 import LockInfo from './LockInfo';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import config from '@/configuration';
 import type {
 	PoolStakingConfig,
 	SimplePoolStakingConfig,
@@ -279,6 +280,8 @@ export const StakeGIVModal: FC<IStakeModalProps> = ({
 								linkType='texty'
 								size='small'
 								icon={<IconExternalLink size={16} />}
+								href={`${config.XDAI_CONFIG.blockExplorerUrls}/tx/${txHash}`}
+								target='_blank'
 							/>
 						</BriefContainer>
 						<LockInfo amount={amount} round={0} />
