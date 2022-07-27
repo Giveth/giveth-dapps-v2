@@ -478,7 +478,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									<ClaimButton
 										buttonType='texty'
 										size='small'
-										label='locked giv details'
+										label='Locked GIV tokens'
 										disabled={!isLocked}
 										onClick={() => {
 											setShowLockDetailModal(true);
