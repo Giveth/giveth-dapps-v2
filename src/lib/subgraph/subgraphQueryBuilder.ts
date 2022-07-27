@@ -14,8 +14,9 @@ const uniswapConfig = config.MAINNET_CONFIG.pools.find(
 export class SubgraphQueryBuilder {
 	private static getTokenBalanceQuery = (
 		tokenAddress: string,
-		userAddress: string,
+		userAddress?: string,
 	): string => {
+		if (!userAddress) return '';
 		return `tokenBalance_${tokenAddress.toLowerCase()}: tokenBalance(id: "${tokenAddress.toLowerCase()}-${userAddress.toLowerCase()}"){
 			balance
 		}
@@ -179,7 +180,6 @@ export class SubgraphQueryBuilder {
 		configs: Array<SimplePoolStakingConfig>,
 		userAddress?: string,
 	): string => {
-		if (!userAddress) return '';
 		return configs
 			.map((c: SimplePoolStakingConfig) => {
 				const unipoolAddressLowerCase = c.LM_ADDRESS.toLowerCase();
@@ -192,13 +192,20 @@ export class SubgraphQueryBuilder {
 					rewardPerTokenStored
 					rewardRate
 				}
-				unipoolBalance_${unipoolAddressLowerCase}: unipoolBalance(id: "${unipoolAddressLowerCase}-${userAddress.toLowerCase()}"){
+				${
+					userAddress
+						? `unipoolBalance_${unipoolAddressLowerCase}: unipoolBalance(id: "${unipoolAddressLowerCase}-${userAddress.toLowerCase()}"){
 					id
 					balance
 					rewards
 					rewardPerTokenPaid
-				}
-				` + SubgraphQueryBuilder.getTokenBalanceQuery(c.POOL_ADDRESS, userAddress)
+				}`
+						: ''
+				}` +
+					SubgraphQueryBuilder.getTokenBalanceQuery(
+						c.POOL_ADDRESS,
+						userAddress,
+					)
 				);
 			})
 			.join();
