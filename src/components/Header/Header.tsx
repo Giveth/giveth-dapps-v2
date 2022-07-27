@@ -86,6 +86,11 @@ const Header: FC<IHeader> = () => {
 			!router?.query?.token
 		) {
 			router.push(slugToProjectView(calculateSlug()));
+		} else if (
+			router.route.startsWith(Routes.Verification) &&
+			router?.query?.token
+		) {
+			router.push(`${Routes.Verification}/${calculateSlug()}`);
 		} else {
 			router.back();
 		}
