@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 interface IDirection {
 	direction: 'right' | 'left' | 'top' | 'bottom';
+	align?: 'center' | 'right' | 'left' | 'top' | 'bottom';
 }
 
 interface IIconWithTooltipProps extends IDirection {
@@ -27,15 +28,65 @@ const IconWithTooltipContainer = styled.div<IDirection>`
 		position: absolute;
 		z-index: 1;
 		${props => {
+			let directionStyles;
+			let alignStyles;
 			switch (props.direction) {
 				case 'top':
-					return `bottom: 120%;left: 50%;transform: translateX(-50%);margin-bottom: 4px;`;
+					directionStyles = `bottom: 120%;margin-bottom: 4px;`;
+					switch (props.align) {
+						case 'left':
+							alignStyles = `left: 0%;`;
+							break;
+						case 'right':
+							alignStyles = `right: 0%;`;
+							break;
+						default:
+							alignStyles = `left: 50%; transform: translateX(-50%);`;
+							break;
+					}
+					return directionStyles + alignStyles;
 				case 'right':
-					return `left: 120%;top: 50%;transform: translateY(-50%);margin-left: 4px;`;
+					directionStyles = `left: 120%;margin-left: 4px;`;
+					switch (props.align) {
+						case 'top':
+							alignStyles = `top: 0%;`;
+							break;
+						case 'bottom':
+							alignStyles = `bottom: 0%;`;
+							break;
+						default:
+							alignStyles = `top: 50%;transform: translateY(-50%)`;
+							break;
+					}
+					return directionStyles + alignStyles;
 				case 'left':
-					return `right: 120%;top: 50%;transform: translateY(-50%);margin-right: 4px;`;
+					directionStyles = `right: 120%;margin-right: 4px;`;
+					switch (props.align) {
+						case 'top':
+							alignStyles = `top: 0%;`;
+							break;
+						case 'bottom':
+							alignStyles = `bottom: 0%;`;
+							break;
+						default:
+							alignStyles = `top: 50%;transform: translateY(-50%)`;
+							break;
+					}
+					return directionStyles + alignStyles;
 				case 'bottom':
-					return `top: 120%;left: 50%;transform: translateX(-50%);margin-top: 4px;`;
+					directionStyles = `top: 120%;margin-top: 4px;`;
+					switch (props.align) {
+						case 'left':
+							alignStyles = `left: 0%;`;
+							break;
+						case 'right':
+							alignStyles = `right: 0%;`;
+							break;
+						default:
+							alignStyles = `left: 50%; transform: translateX(-50%);`;
+							break;
+					}
+					return directionStyles + alignStyles;
 				default:
 					break;
 			}
@@ -50,10 +101,11 @@ const IconWithTooltipContainer = styled.div<IDirection>`
 export const IconWithTooltip: FC<IIconWithTooltipProps> = ({
 	icon,
 	direction,
+	align = 'center',
 	children,
 }) => {
 	return (
-		<IconWithTooltipContainer direction={direction}>
+		<IconWithTooltipContainer direction={direction} align={align}>
 			{icon}
 			<span>{children}</span>
 		</IconWithTooltipContainer>
