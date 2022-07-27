@@ -82,6 +82,26 @@ const config: EnvConfig = {
 				active: true,
 			},
 			{
+				POOL_ADDRESS: '0xA0D500fd3479CBCb64a2238082b7a1Df9f87d98D',
+				LM_ADDRESS: '0x76e98f3Db6681E7de4804F97C085bEe0205164f3',
+				type: StakingType.ICHI_GIV_ONEGIV,
+				platform: StakingPlatform.ICHI,
+				ichiApi: 'https://api.ichi.org/v1/farms/20009',
+				platformTitle: 'Angel Vault',
+				title: 'oneGIV / GIV',
+				icon: 'oneGIV',
+				description: 'Angel Vault',
+				provideLiquidityLink:
+					'https://3ea0967f.appichiorg.pages.dev/vault/?poolId=5004&back=vault',
+				unit: 'LP',
+				active: true,
+				introCard: {
+					title: 'Angel Vault',
+					description: `The Angel Vault is shared Univ3 position structured to protect GIV from downward volatility.\n\nProvide oneGIV as liquidity in our Angel Vault and stake the LP token to earn rewards proportional to the liquidity provided. When you remove liquidity, you will get oneGIV & GIV proportional to the holdings in the Angel Vault.`,
+					link: 'https://docs.ichi.org/ichi-docs-v3/ichi-vaults/angel-vaults',
+				},
+			},
+			{
 				INCENTIVE_START_TIME: 1640272200,
 				INCENTIVE_END_TIME: 1655997000,
 				INCENTIVE_REWARD_AMOUNT: 10000000,
@@ -133,7 +153,7 @@ const config: EnvConfig = {
 				unit: 'LP',
 				regenStreamType: StreamType.CULT,
 				regenFarmType: RegenFarmType.CULT_ETH,
-				regenFarmIntro: {
+				introCard: {
 					title: 'CULT',
 					description: `The purpose of CULT is to empower those building and contributing to our decentralized future. Our society makes it as difficult as possible to break away from societal, economic and other norms, and CULT serves to fund and support those who are working to take back our future. CULT is a reminder that the power in people is stronger than the people in power.\n\n CULT is the governance token of the Cult DAO. Every transaction of the CULT token allows you to contribute & fast-forward economic & societal change by contributing a 0.4% tax to the treasury. Fight from within until you get out, or change the system in doing so.`,
 					link: 'https://cultdao.io/',
@@ -248,7 +268,7 @@ const config: EnvConfig = {
 				unit: 'LP',
 				regenStreamType: StreamType.FOX,
 				regenFarmType: RegenFarmType.FOX_HNY,
-				regenFarmIntro: {
+				introCard: {
 					title: 'FOX',
 					description:
 						'ShapeShift is the free and open-source one-stop-shop for cross-chain DeFi. Buy, sell, send, receive, trade, and earn yield on your crypto across a growing number of protocols and chains with no added fees ever. FOX is the governance token of the ShapeShift DAO.',

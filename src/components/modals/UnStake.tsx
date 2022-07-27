@@ -51,7 +51,7 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 	);
 	const { library, chainId } = useWeb3React();
 
-	const { title, LM_ADDRESS, GARDEN_ADDRESS } = poolStakingConfig;
+	const { title, icon, LM_ADDRESS, GARDEN_ADDRESS } = poolStakingConfig;
 
 	const onWithdraw = async () => {
 		setLabel('PENDING UNSTAKE');
@@ -85,7 +85,7 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 					stakeState === StakeState.CONFIRMING) && (
 					<>
 						<UnStakeModalTitle alignItems='center'>
-							<StakingPoolImages title={title} />
+							<StakingPoolImages title={title} icon={icon} />
 							<UnStakeModalTitleText weight={700}>
 								Unstake
 							</UnStakeModalTitleText>

@@ -8,9 +8,10 @@ import {
 import { captureException } from '@sentry/nextjs';
 import {
 	BalancerPoolStakingConfig,
+	ICHIPoolStakingConfig,
 	RegenPoolStakingConfig,
 	SimplePoolStakingConfig,
-	StakingType,
+	StakingPlatform,
 } from '@/types/config';
 import config from '../configuration';
 import { APR } from '@/types/poolInfo';
@@ -77,21 +78,86 @@ export const getLPStakingAPR = async (
 	const unipoolHelper = new UnipoolHelper(
 		sdh.getUnipool(poolStakingConfig.LM_ADDRESS),
 	);
-	if (poolStakingConfig.type === StakingType.BALANCER_ETH_GIV) {
-		return getBalancerPoolStakingAPR(
-			poolStakingConfig as BalancerPoolStakingConfig,
-			network,
-			provider,
-			unipoolHelper,
-		);
-	} else {
-		return getSimplePoolStakingAPR(
-			poolStakingConfig,
-			network,
-			provider,
-			unipoolHelper,
-		);
+	switch (poolStakingConfig.platform) {
+		case StakingPlatform.BALANCER:
+			return getBalancerPoolStakingAPR(
+				poolStakingConfig as BalancerPoolStakingConfig,
+				network,
+				provider,
+				unipoolHelper,
+			);
+		case StakingPlatform.ICHI:
+			return getIchiPoolStakingAPR(
+				poolStakingConfig as ICHIPoolStakingConfig,
+				network,
+				provider,
+				unipoolHelper,
+			);
+		default:
+			return getSimplePoolStakingAPR(
+				poolStakingConfig,
+				network,
+				provider,
+				unipoolHelper,
+			);
 	}
+};
+
+const getIchiPoolStakingAPR = async (
+	ichiPoolStakingConfig: ICHIPoolStakingConfig,
+	network: number,
+	provider: JsonRpcProvider,
+	unipoolHelper: UnipoolHelper | undefined,
+): Promise<APR> => {
+	try {
+		const { ichiApi, LM_ADDRESS } = ichiPoolStakingConfig;
+		const response = await fetch(ichiApi);
+		const apiResult = await response.json();
+		let totalSupply: BigNumber;
+		let rewardRate: BigNumber;
+
+		const lmContract = new Contract(
+			LM_ADDRESS,
+			LM_ABI,
+			provider,
+		) as UnipoolTokenDistributor;
+
+		if (unipoolHelper) {
+			totalSupply = unipoolHelper.totalSupply;
+			rewardRate = unipoolHelper.rewardRate;
+		} else {
+			[totalSupply, rewardRate] = await Promise.all([
+				lmContract.totalSupply(),
+				lmContract.rewardRate(),
+			]).then(([_totalSupply, _rewardRate]) => [
+				toBigNumber(_totalSupply as ethers.BigNumber),
+				toBigNumber(_rewardRate as ethers.BigNumber),
+			]);
+		}
+
+		const {
+			lpPrice = '0',
+			vaultIRR = 0,
+			tokens = [],
+		}: {
+			lpPrice: string;
+			vaultIRR: number;
+			tokens: { name: string; price: number }[];
+		} = apiResult;
+
+		if (!lpPrice || lpPrice === '0') return Zero;
+
+		const givTokenPrice = tokens?.find(t => t.name === 'giv')?.price || 0;
+
+		return rewardRate
+			.div(totalSupply)
+			.times(givTokenPrice)
+			.div(lpPrice)
+			.plus(vaultIRR);
+	} catch (e) {
+		console.error('Error in fetching ICHI info', e);
+	}
+	return Zero;
 };
 
 const getBalancerPoolStakingAPR = async (
@@ -225,6 +291,7 @@ const getSimplePoolStakingAPR = async (
 			poolContract.token0(),
 			poolContract.totalSupply(),
 		]);
+
 		if (unipoolHelper) {
 			totalSupply = unipoolHelper.totalSupply;
 			rewardRate = unipoolHelper.rewardRate;
@@ -237,6 +304,7 @@ const getSimplePoolStakingAPR = async (
 				toBigNumber(_rewardRate as ethers.BigNumber),
 			]);
 		}
+
 		let tokenReseve = toBigNumber(
 			_token0.toLowerCase() !== tokenAddress.toLowerCase()
 				? _reserves[1]
@@ -383,9 +451,10 @@ export const approveERC20tokenTransfer = async (
 
 	if (amountNumber.lte(allowance)) return true;
 
-	const gasPreference = getGasPreference(
-		config.NETWORKS_CONFIG[provider.network.chainId],
-	);
+	const gasPreference = {
+		...getGasPreference(config.NETWORKS_CONFIG[provider.network.chainId]),
+		gasLimit: 70000,
+	};
 
 	if (!allowance.isZero()) {
 		try {

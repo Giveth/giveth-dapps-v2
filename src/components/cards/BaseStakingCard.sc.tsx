@@ -29,6 +29,7 @@ export const StakingPoolExchangeRow = styled(Flex)`
 
 export const StakingPoolExchange = styled(Overline)`
 	color: ${brandColors.deep[100]};
+	text-transform: uppercase;
 `;
 
 export const SPTitle = styled(Flex)`
