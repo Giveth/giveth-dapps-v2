@@ -3,6 +3,7 @@ export interface BasicStakingConfig {
 	GARDEN_ADDRESS?: string;
 	BUY_LINK?: string;
 	farmStartTimeMS?: number;
+	icon?: string;
 }
 export enum StakingPlatform {
 	GIVETH = 'Staking',
@@ -10,6 +11,7 @@ export enum StakingPlatform {
 	BALANCER = 'Balancer',
 	HONEYSWAP = 'Honeyswap',
 	SUSHISWAP = 'Sushiswap',
+	ICHI = 'ICHI',
 }
 export enum StakingType {
 	UNISWAPV2_GIV_DAI = 'UniswapV2_GIV_DAI',
@@ -19,6 +21,7 @@ export enum StakingType {
 	HONEYSWAP_GIV_HNY = 'Honeyswap_GIV_HNY',
 	HONEYSWAP_GIV_DAI = 'Honeyswap_GIV_DAI',
 	GIV_LM = 'GIV_LM',
+	ICHI_GIV_ONEGIV = 'Ichi_GIV_oneGIV',
 
 	HONEYSWAP_FOX_HNY = 'Honeyswap_FOX_HNY',
 	UNISWAPV2_CULT_ETH = 'UniswapV2_CULT_ETH',
@@ -38,7 +41,8 @@ export type PoolStakingConfig =
 	| SimplePoolStakingConfig
 	| BalancerPoolStakingConfig
 	| UniswapV3PoolStakingConfig
-	| RegenPoolStakingConfig;
+	| RegenPoolStakingConfig
+	| ICHIPoolStakingConfig;
 
 export interface SimplePoolStakingConfig extends BasicStakingConfig {
 	POOL_ADDRESS: string;
@@ -51,6 +55,12 @@ export interface SimplePoolStakingConfig extends BasicStakingConfig {
 	unit: string;
 	active: boolean;
 	archived?: boolean;
+	introCard?: IntroCardConfig;
+}
+
+export interface ICHIPoolStakingConfig extends SimplePoolStakingConfig {
+	ichiApi: string;
+	platform: StakingPlatform.ICHI;
 }
 
 export interface UniswapV3PoolStakingConfig
@@ -71,7 +81,7 @@ export interface BalancerPoolStakingConfig extends SimplePoolStakingConfig {
 	POOL_ID: string;
 }
 
-export interface RegenFarmIntroConfig {
+export interface IntroCardConfig {
 	title: string;
 	description: string;
 	link: string;
@@ -80,7 +90,6 @@ export interface RegenFarmIntroConfig {
 export interface RegenPoolStakingConfig extends SimplePoolStakingConfig {
 	regenStreamType: StreamType;
 	regenFarmType: RegenFarmType;
-	regenFarmIntro?: RegenFarmIntroConfig;
 }
 
 export interface GasPreference {
@@ -121,6 +130,7 @@ export interface BasicNetworkConfig {
 		| SimplePoolStakingConfig
 		| BalancerPoolStakingConfig
 		| UniswapV3PoolStakingConfig
+		| ICHIPoolStakingConfig
 	>;
 	uniswapV2Subgraph: string;
 

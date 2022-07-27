@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
 	IconExternalLink,
 	IconGIVBack,
@@ -49,10 +49,11 @@ export const TabGIVbacksTop = () => {
 	const [showGivBackExplain, setShowGivBackExplain] = useState(false);
 	const [givBackStream, setGivBackStream] = useState<BigNumber.Value>(0);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
-	const sdh = new SubgraphDataHelper(
-		useAppSelector(state => state.subgraph.currentValues),
-	);
-	const givTokenDistroBalance = sdh.getGIVTokenDistroBalance();
+	const currentValues = useAppSelector(state => state.subgraph.currentValues);
+	const givTokenDistroBalance = useMemo(() => {
+		const sdh = new SubgraphDataHelper(currentValues);
+		return sdh.getGIVTokenDistroBalance();
+	}, [currentValues]);
 	const { chainId } = useWeb3React();
 
 	useEffect(() => {

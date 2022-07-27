@@ -1,9 +1,9 @@
 import BaseStakingCard from './BaseStakingCard';
-import { useStakingPool } from '@/hooks/useStakingPool';
-import type {
+import {
 	RegenPoolStakingConfig,
 	SimplePoolStakingConfig,
 } from '@/types/config';
+import { useStakingPool } from '@/hooks/useStakingPool';
 import type { FC } from 'react';
 interface IStakingPoolCardProps {
 	network: number;

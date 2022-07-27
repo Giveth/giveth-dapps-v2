@@ -149,6 +149,18 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 		[tokenDistroBalance],
 	);
 
+	const tokenDistroBalance = regenStreamConfig
+		? sdh.getTokenDistroBalance(regenStreamConfig.tokenDistroAddress)
+		: sdh.getGIVTokenDistroBalance();
+	const givback = useMemo<ethers.BigNumber>(
+		() => BN(tokenDistroBalance.givback),
+		[tokenDistroBalance],
+	);
+	const givbackLiquidPart = useMemo<ethers.BigNumber>(
+		() => BN(tokenDistroBalance.givbackLiquidPart),
+		[tokenDistroBalance],
+	);
+
 	const tokenPrice = useMemo(() => {
 		const currentPrice =
 			network === config.MAINNET_NETWORK_NUMBER

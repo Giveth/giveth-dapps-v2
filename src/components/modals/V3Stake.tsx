@@ -34,6 +34,7 @@ import { useAppSelector } from '@/features/hooks';
 import { LiquidityPosition } from '@/types/nfts';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
 const loadingAnimationOptions = {
 	loop: true,
@@ -70,8 +71,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	const positions = isUnstakingModal ? stakedPositions : unstakedPositions;
-	const { title } = poolStakingConfig;
-
+	const { title, icon } = poolStakingConfig;
 	const [stakeStatus, setStakeStatus] = useState<StakeState>(
 		StakeState.UNKNOWN,
 	);
@@ -155,7 +155,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 					stakeStatus === StakeState.UNSTAKING ||
 					stakeStatus === StakeState.CONFIRM_UNSTAKE) && (
 					<StakeModalTitle alignItems='center'>
-						<StakingPoolImages title={title} />
+						<StakingPoolImages title={title} icon={icon} />
 						<StakeModalTitleText weight={700}>
 							{title}
 						</StakeModalTitleText>
