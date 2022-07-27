@@ -75,8 +75,8 @@ const Header: FC<IHeader> = () => {
 
 	const handleBack = () => {
 		const calculateSlug = () => {
-			if (typeof router.query.slug === 'string') {
-				return router.query.slug;
+			if (typeof router.query?.slug === 'string') {
+				return router.query?.slug;
 			}
 			return '';
 		};
