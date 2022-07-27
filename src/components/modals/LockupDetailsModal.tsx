@@ -86,6 +86,7 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 							<IconWithTooltip
 								icon={<IconHelp />}
 								direction='top'
+								align='right'
 							>
 								<TooltipContent>
 									The average annual rate of return for this
