@@ -74,7 +74,6 @@ import LockModal from '../modals/StakeLock/Lock';
 import { StakeGIVModal } from '../modals/StakeLock/StakeGIV';
 import { avgAPR } from '@/helpers/givpower';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { LockupDetailsModal } from '@/components/modals/LockupDetailsModal';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -127,7 +126,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
 	const [showLockModal, setShowLockModal] = useState(false);
 	const [showGIVPowerExplain, setShowGIVPowerExplain] = useState(false);
-	const [showLockDetailModal, setShowLockDetailModal] = useState(false);
 	const [showWhatIsGIVstreamModal, setShowWhatIsGIVstreamModal] =
 		useState(false);
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
@@ -445,46 +443,32 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									</StakeAmount>
 								</StakeContainer>
 							</StakeButtonsRow>
-							{active &&
-								!archived &&
-								(!isGIVpower ? (
-									<Flex>
-										<LiquidityButton
-											label='PROVIDE LIQUIDITY'
-											onClick={() => {
-												if (
-													type ===
-													StakingType.UNISWAPV3_ETH_GIV
-												) {
-													setShowUniV3APRModal(true);
-												} else {
-													window.open(
-														provideLiquidityLink,
-													);
-												}
-											}}
-											buttonType='texty'
-											icon={
-												<IconExternalLink
-													size={16}
-													color={
-														brandColors.deep[100]
-													}
-												/>
-											}
-										/>
-									</Flex>
-								) : (
-									<ClaimButton
-										buttonType='texty'
-										size='small'
-										label='locked giv details'
-										disabled={!isLocked}
+							{active && !archived && !isGIVpower && (
+								<Flex>
+									<LiquidityButton
+										label='PROVIDE LIQUIDITY'
 										onClick={() => {
-											setShowLockDetailModal(true);
+											if (
+												type ===
+												StakingType.UNISWAPV3_ETH_GIV
+											) {
+												setShowUniV3APRModal(true);
+											} else {
+												window.open(
+													provideLiquidityLink,
+												);
+											}
 										}}
+										buttonType='texty'
+										icon={
+											<IconExternalLink
+												size={16}
+												color={brandColors.deep[100]}
+											/>
+										}
 									/>
-								))}
+								</Flex>
+							)}
 						</StakePoolInfoContainer>
 					</>
 				) : state === StakeCardState.GIVPOWER_INTRO ? (
@@ -593,12 +577,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					setShowModal={setShowWhatIsGIVstreamModal}
 					tokenDistroHelper={tokenDistroHelper}
 					regenStreamConfig={regenStreamConfig}
-				/>
-			)}
-			{showLockDetailModal && (
-				<LockupDetailsModal
-					setShowModal={setShowLockDetailModal}
-					unstakeable={stakedLpAmount.sub(userGIVLocked.balance)}
 				/>
 			)}
 		</>
