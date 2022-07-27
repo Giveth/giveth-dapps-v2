@@ -211,11 +211,11 @@ export class SubgraphQueryBuilder {
 	};
 
 	static getTokenLocksInfoQuery = (
-		address: string,
+		userAddress: string,
 		first?: number,
 		skip?: number,
 	): string => {
-		return `query { tokenLocks(id: "${address.toLowerCase()}", where:{unlocked: false}, first: ${
+		return `query { tokenLocks(where:{user: "${userAddress.toLowerCase()}", unlocked: false}, first: ${
 			first || 100
 		}, skip: ${skip || 0}){ 
 			id
