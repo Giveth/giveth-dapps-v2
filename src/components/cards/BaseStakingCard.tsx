@@ -162,7 +162,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	} = stakeInfo;
 
 	const userGIVLocked = currentValues.userGIVLocked as ITokenBalance;
-	const userGIVStaked = sdh.getGIVStakedBalance();
+	const userGIVStaked = sdh.getUserGIVPower();
 
 	const regenStreamConfig = useMemo(() => {
 		if (!regenStreamType) return undefined;
