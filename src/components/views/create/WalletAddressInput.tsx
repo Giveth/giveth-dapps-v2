@@ -11,7 +11,7 @@ import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 import Input, { InputSize } from '@/components/Input';
 import { EInputs } from '@/components/views/create/CreateProject';
-import { addressValidation } from '@/components/views/create/helpers';
+import { gqlAddressValidation } from '@/components/views/create/helpers';
 import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { Flex } from '@/components/styled-components/Flex';
@@ -59,7 +59,8 @@ const WalletAddressInput: FC<IProps> = ({
 	if (isGnosis) disabled = !isActive;
 	else disabled = !isActive && !sameAddress;
 
-	const isPrevAddress = (i: string) => {
+	const isPrevProjectAddress = (i: string) => {
+		// Do not validate if the input address is the same as prev project wallet address
 		if (userAddresses.length === 0) return false;
 		return userAddresses
 			.map(i => i.toLowerCase())
@@ -78,7 +79,7 @@ const WalletAddressInput: FC<IProps> = ({
 		else throw 'Invalid ENS address';
 	};
 
-	const addressValidator = async (i: string) => {
+	const addressValidation = async (i: string) => {
 		try {
 			if (disabled) return true;
 			setResolvedENS('');
@@ -88,7 +89,7 @@ const WalletAddressInput: FC<IProps> = ({
 				address = await ENSHandler(i);
 				setResolvedENS(address);
 			}
-			if (isPrevAddress(address)) {
+			if (isPrevProjectAddress(address)) {
 				setIsValidating(false);
 				return true;
 			}
@@ -96,7 +97,7 @@ const WalletAddressInput: FC<IProps> = ({
 				setIsValidating(false);
 				return 'Eth address not valid';
 			}
-			const res = await addressValidation(address);
+			const res = await gqlAddressValidation(address);
 			setIsValidating(false);
 			return res;
 		} catch (e) {
@@ -155,7 +156,7 @@ const WalletAddressInput: FC<IProps> = ({
 				registerName={
 					isGnosis ? EInputs.secondaryAddress : EInputs.mainAddress
 				}
-				registerOptions={{ validate: addressValidator }}
+				registerOptions={{ validate: addressValidation }}
 				error={
 					errors[
 						isGnosis

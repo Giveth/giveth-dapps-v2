@@ -16,7 +16,7 @@ export const titleValidation = async (title: string) => {
 	}
 };
 
-export const addressValidation = async (address: string) => {
+export const gqlAddressValidation = async (address: string) => {
 	try {
 		const { data } = await client.query({
 			query: WALLET_ADDRESS_IS_VALID,
