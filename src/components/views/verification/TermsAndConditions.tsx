@@ -11,8 +11,7 @@ import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
 import { EVerificationStatus, EVerificationSteps } from '@/apollo/types/types';
 
 export default function TermsAndConditions() {
-	const [loading, setloading] = useState(false);
-	const [isChanged, setIsChanged] = useState(false);
+	const [loading, setLoading] = useState(false);
 
 	const { verificationData, setVerificationData, setStep, isDraft } =
 		useVerificationData();
@@ -32,30 +31,22 @@ export default function TermsAndConditions() {
 		setStep(8);
 	};
 
-	const handleNext = () => {
-		async function sendReq() {
-			setloading(true);
-			await client.mutate({
-				mutation: UPDATE_PROJECT_VERIFICATION,
-				variables: {
-					projectVerificationUpdateInput: {
-						projectVerificationId: Number(verificationData?.id),
-						step: EVerificationSteps.TERM_AND_CONDITION,
-						isTermAndConditionsAccepted: accepted,
-					},
+	const handleNext = async () => {
+		setLoading(true);
+		await client.mutate({
+			mutation: UPDATE_PROJECT_VERIFICATION,
+			variables: {
+				projectVerificationUpdateInput: {
+					projectVerificationId: Number(verificationData?.id),
+					step: EVerificationSteps.TERM_AND_CONDITION,
+					isTermAndConditionsAccepted: accepted,
 				},
-			});
-
-			setloading(false);
-			updateVerificationState();
-		}
-
-		if (isChanged && isDraft) {
-			sendReq();
-		} else {
-			updateVerificationState();
-		}
+			},
+		});
+		setLoading(false);
+		updateVerificationState();
 	};
+
 	return (
 		<>
 			<Lead>
@@ -100,10 +91,7 @@ export default function TermsAndConditions() {
 					<CheckBox
 						title='I accept all of the Giveth community terms and conditions.'
 						checked={accepted}
-						onChange={e => {
-							setIsChanged(true);
-							setAccepted(e);
-						}}
+						onChange={setAccepted}
 					/>
 				)}
 			</Lead>
@@ -112,7 +100,7 @@ export default function TermsAndConditions() {
 				<BtnContainer>
 					<Button onClick={() => setStep(6)} label='<     PREVIOUS' />
 					<Button
-						onClick={() => handleNext()}
+						onClick={handleNext}
 						loading={loading}
 						disabled={!accepted}
 						label='FINISH     >'
