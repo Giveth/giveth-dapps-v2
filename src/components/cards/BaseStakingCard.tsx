@@ -68,15 +68,13 @@ import FarmCountDown from '../FarmCountDown';
 import { Flex } from '../styled-components/Flex';
 import { IStakeInfo } from '@/hooks/useStakingPool';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
-import { useAppSelector } from '@/features/hooks';
 import { GIVPowerExplainModal } from '../modals/GIVPowerExplain';
 import GIVpowerCardIntro from './GIVpowerCardIntro';
 import LockModal from '../modals/StakeLock/Lock';
 import { StakeGIVModal } from '../modals/StakeLock/StakeGIV';
 import { avgAPR } from '@/helpers/givpower';
-import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { LockupDetailsModal } from '../modals/LockupDetailsModal';
-import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import Routes from '@/lib/constants/Routes';
 import type { LiquidityPosition } from '@/types/nfts';
@@ -144,8 +142,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const { setInfo } = useFarms();
 	const { chainId, account, active: isWalletActive } = useWeb3React();
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
-	const sdh = new SubgraphDataHelper(currentValues);
-	const dispatch = useAppDispatch();
 
 	const sdh = new SubgraphDataHelper(currentValues);
 	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;

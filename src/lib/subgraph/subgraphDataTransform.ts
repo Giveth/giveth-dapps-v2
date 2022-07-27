@@ -177,33 +177,6 @@ export const transformTokenDistroBalance = (info: any): ITokenDistroBalance => {
 	};
 };
 
-
-export const transformTokenBalance = (info: any = {}): ITokenBalance => {
-	return {
-		balance: info?.balance || '0',
-	};
-};
-
-export const transformUnipoolBalance = (info: any = {}): IUnipoolBalance => {
-	return {
-		balance: info?.balance || '0',
-		rewards: info?.rewards || '0',
-		rewardPerTokenPaid: info?.rewardPerTokenPaid || '0',
-	};
-};
-
-export const transformTokenDistroBalance = (info: any): ITokenDistroBalance => {
-	return {
-		allocatedTokens: info?.allocatedTokens || '0',
-		allocationCount: info?.allocationCount || '0',
-		claimed: info?.claimed || '0',
-		givback: info?.givback || '0',
-		givDropClaimed: Boolean(info?.givDropClaimed),
-		givbackLiquidPart: info?.givbackLiquidPart || '0',
-		tokenDistroAddress: info?.tokenDistroAddress || '0',
-	};
-};
-
 const transformGIVpowerInfo = (info: any = {}): IGIVpower => {
 	const id = info.id || '';
 	const initialDate = info.initialDate || '0';

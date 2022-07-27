@@ -34,7 +34,6 @@ import { useAppSelector } from '@/features/hooks';
 import { LiquidityPosition } from '@/types/nfts';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
 const loadingAnimationOptions = {
 	loop: true,

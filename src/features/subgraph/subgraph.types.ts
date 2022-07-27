@@ -7,6 +7,7 @@ import {
 	ITokenDistroBalance,
 	ITokenBalance,
 	IUniswapV3Pool,
+	IGIVpower,
 } from '@/types/subgraph';
 
 export interface ISubgraphState {
@@ -26,6 +27,7 @@ export interface ISubgraphState {
 		| IUniswapV3Position[]
 		| IInfinitePositionReward
 		| IUniswapV3Position
+		| IGIVpower
 		| number;
 }
 
