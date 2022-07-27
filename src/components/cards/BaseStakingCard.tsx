@@ -72,8 +72,6 @@ import { IStakeInfo } from '@/hooks/useStakingPool';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { switchNetwork } from '@/lib/wallet';
-import { setShowWalletModal } from '@/features/modal/modal.slice';
 import Routes from '@/lib/constants/Routes';
 import type { LiquidityPosition } from '@/types/nfts';
 
@@ -139,13 +137,14 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const dispatch = useAppDispatch();
 
 	const sdh = new SubgraphDataHelper(currentValues);
-	const { regenStreamType, regenFarmIntro } =
-		poolStakingConfig as RegenPoolStakingConfig;
+	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
 
 	const {
 		type,
 		platform,
+		platformTitle,
 		title,
+		icon,
 		description,
 		provideLiquidityLink,
 		BUY_LINK,
@@ -153,6 +152,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		farmStartTimeMS,
 		active,
 		archived,
+		introCard,
 	} = poolStakingConfig;
 
 	const {
@@ -181,10 +181,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				? config.XDAI_NETWORK_NUMBER
 				: config.MAINNET_NETWORK_NUMBER;
 		const checkNetworkAndShowStakeModal = async () => {
-			if (_chain && _open === type) {
-				dispatch(setShowWalletModal(!isWalletActive));
-				if (isWalletActive) await switchNetwork(_chainId);
-			}
 			if (_chainId === chainId && _open === type) {
 				if (account) {
 					setShowStakeModal(true);
@@ -273,7 +269,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								{type === StakingType.GIV_LM &&
 									chainId === config.XDAI_NETWORK_NUMBER &&
 									`GIVgarden `}
-								{platform}
+								{platformTitle || platform}
 							</StakingPoolExchange>
 							{chainId === config.XDAI_NETWORK_NUMBER &&
 								type === StakingType.GIV_LM && (
@@ -295,7 +291,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								)}
 							<div style={{ flex: 1 }}></div>
 							{notif && notif}
-							{regenFarmIntro && (
+							{introCard && (
 								<IntroIcon
 									onClick={() =>
 										setState(StakeCardState.INTRO)
@@ -306,7 +302,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							)}
 						</StakingPoolExchangeRow>
 						<SPTitle alignItems='center' gap='16px'>
-							<StakingPoolImages title={title} />
+							<StakingPoolImages title={title} icon={icon} />
 							<div>
 								<StakingPoolLabel weight={900}>
 									{title}
@@ -480,7 +476,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				) : (
 					<StakingCardIntro
 						poolStakingConfig={
-							poolStakingConfig as RegenPoolStakingConfig
+							poolStakingConfig as SimplePoolStakingConfig
 						}
 						setState={setState}
 					/>
