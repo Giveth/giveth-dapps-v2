@@ -204,12 +204,12 @@ const ProjectsIndex = (props: IProjectsView) => {
 								>
 									Filters
 									<IconOptions16 />
-									{isFilterOpen && (
-										<FilterMenu
-											handleClose={handleFilterClose}
-										/>
-									)}
 								</FiltersButton>
+								{isFilterOpen && (
+									<FilterMenu
+										handleClose={handleFilterClose}
+									/>
+								)}
 							</FilterAndSearchContainer>
 						)}
 						{isTablet && (
@@ -232,14 +232,12 @@ const ProjectsIndex = (props: IProjectsView) => {
 										>
 											Filters
 											<IconOptions16 />
-											{isFilterOpen && (
-												<FilterMenu
-													handleClose={
-														handleFilterClose
-													}
-												/>
-											)}
 										</FiltersButton>
+										{isFilterOpen && (
+											<FilterMenu
+												handleClose={handleFilterClose}
+											/>
+										)}
 										<IconContainer
 											onClick={() =>
 												setIsTabletShowingSearchAndFilter(
@@ -380,11 +378,11 @@ const Wrapper = styled.div`
 const FilterAndSearchContainer = styled.div`
 	display: flex;
 	align-items: center;
+	position: relative;
 	gap: 16px;
 `;
 
 const FiltersButton = styled.button`
-	position: relative;
 	display: flex;
 	gap: 8px;
 	border-radius: 50px;

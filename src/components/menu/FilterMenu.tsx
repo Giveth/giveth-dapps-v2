@@ -89,7 +89,7 @@ const projectFeatures = [
 const MenuContainer = styled.div`
 	z-index: 3;
 	top: -10px;
-	left: -260px;
+	right: 0;
 	padding: 24px;
 	background-color: ${neutralColors.gray[100]};
 	box-shadow: 0px 3px 20px rgba(212, 218, 238, 0.7);
