@@ -87,6 +87,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 	}, [amount]);
 
 	useEffect(() => {
+		if (!library) return;
 		library?.on('block', async () => {
 			const amountNumber = ethers.BigNumber.from(amount);
 			if (
