@@ -20,7 +20,7 @@ interface IStakingPoolContainer {
 }
 
 export const StakingPoolContainer = styled.div<IStakingPoolContainer>`
-	height: ${props => (props.big ? '542px' : '488px')};
+	height: ${props => (props.big ? '508px' : '488px')};
 	border-radius: 8px;
 	background: ${brandColors.giv[600]};
 	color: ${neutralColors.gray[100]};
