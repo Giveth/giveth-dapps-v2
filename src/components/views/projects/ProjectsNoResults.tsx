@@ -1,8 +1,8 @@
 import { brandColors, neutralColors, Lead } from '@giveth/ui-design-system';
+import styled from 'styled-components';
 import Link from 'next/link';
 import { IMainCategory } from '@/apollo/types/types';
 import Routes from '@/lib/constants/Routes';
-import styled from 'styled-components';
 
 const ProjectsNoResults = (props: { mainCategories: IMainCategory[] }) => {
 	return (
@@ -11,9 +11,10 @@ const ProjectsNoResults = (props: { mainCategories: IMainCategory[] }) => {
 			<LeadMedium>Try another keyword or broaden your search</LeadMedium>
 			<GreayLead>Or go back to main categories</GreayLead>
 			<Categories>
-				{props.mainCategories.map(category => {
+				{props.mainCategories.map((category, index) => {
 					return (
 						<Link
+							key={`category-${index}`}
 							href={
 								category.slug === 'all'
 									? Routes.Projects
