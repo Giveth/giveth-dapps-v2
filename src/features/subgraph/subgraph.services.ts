@@ -5,7 +5,7 @@ import { SubgraphQueryBuilder } from '@/lib/subgraph/subgraphQueryBuilder';
 import { fetchSubgraph } from '@/services/subgraph.service';
 import { defaultSubgraphValues } from './subgraph.slice';
 
-export const fetchMainnetInfo = async (userAddress = '') => {
+export const fetchMainnetInfo = async (userAddress?: string) => {
 	try {
 		const response = await fetchSubgraph(
 			SubgraphQueryBuilder.getMainnetQuery(userAddress),
@@ -26,7 +26,7 @@ export const fetchMainnetInfo = async (userAddress = '') => {
 	}
 };
 
-export const fetchXDaiInfo = async (userAddress = '') => {
+export const fetchXDaiInfo = async (userAddress?: string) => {
 	try {
 		const response = await fetchSubgraph(
 			SubgraphQueryBuilder.getXDaiQuery(userAddress),

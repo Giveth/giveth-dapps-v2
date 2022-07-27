@@ -24,8 +24,9 @@ export class SubgraphQueryBuilder {
 
 	static getBalanceQuery = (
 		{ TOKEN_ADDRESS, gGIV_ADDRESS }: BasicNetworkConfig,
-		userAddress: string,
+		userAddress?: string,
 	): string => {
+		if (!userAddress) return '';
 		let query = SubgraphQueryBuilder.getTokenBalanceQuery(
 			TOKEN_ADDRESS,
 			userAddress,
@@ -43,7 +44,7 @@ export class SubgraphQueryBuilder {
 
 	private static getTokenDistroQueries = (
 		tokenDistroAddress: string,
-		userAddress: string,
+		userAddress?: string,
 	): string => {
 		return `
 		tokenDistro_${tokenDistroAddress.toLowerCase()}: tokenDistro(id: "${tokenDistroAddress.toLowerCase()}") {
@@ -55,7 +56,9 @@ export class SubgraphQueryBuilder {
 		  lockedAmount
 		  totalTokens
 		}
-		tokenDistroBalance_${tokenDistroAddress.toLowerCase()}: tokenDistroBalance(id: "${tokenDistroAddress.toLowerCase()}-${userAddress.toLowerCase()}") {
+		${
+			userAddress
+				? `tokenDistroBalance_${tokenDistroAddress.toLowerCase()}: tokenDistroBalance(id: "${tokenDistroAddress.toLowerCase()}-${userAddress.toLowerCase()}") {
 			allocatedTokens
 			allocationCount
 			claimed
@@ -63,13 +66,16 @@ export class SubgraphQueryBuilder {
 			givDropClaimed
 			givbackLiquidPart
 			tokenDistroAddress
+		}`
+				: ``
 		}
+		
 		`;
 	};
 
 	private static generateTokenDistroQueries = (
 		networkConfig: BasicNetworkConfig,
-		userAddress: string,
+		userAddress?: string,
 	): string => {
 		return [
 			networkConfig.TOKEN_DISTRO_ADDRESS,
@@ -96,26 +102,31 @@ export class SubgraphQueryBuilder {
 		}`;
 	};
 
-	private static getUniswapPositionsQuery = (address: string): string => {
-		const userPositionsQuery = `userNotStakedPositions: uniswapPositions(where:{owner: "${address.toLowerCase()}",closed:false}){
-			tokenId
-			token0
-			token1
-			liquidity
-			tickLower
-			tickUpper
-			staked
-			staker
-		}
-		userStakedPositions: uniswapPositions(where:{staker: "${address.toLowerCase()}"}){
-			tokenId
-			token0
-			token1
-			liquidity
-			tickLower
-			tickUpper
-			staked
-			staker
+	private static getUniswapPositionsQuery = (address?: string): string => {
+		const userPositionsQuery = `
+		${
+			address
+				? `userNotStakedPositions: uniswapPositions(where:{owner: "${address.toLowerCase()}",closed:false}){
+				tokenId
+				token0
+				token1
+				liquidity
+				tickLower
+				tickUpper
+				staked
+				staker
+			}
+			userStakedPositions: uniswapPositions(where:{staker: "${address.toLowerCase()}"}){
+				tokenId
+				token0
+				token1
+				liquidity
+				tickLower
+				tickUpper
+				staked
+				staker
+			}`
+				: ''
 		}
 		allPositions: uniswapPositions(first: 1000, where: {closed:false}){
 			tokenId
@@ -165,9 +176,10 @@ export class SubgraphQueryBuilder {
 	};
 
 	private static generateFarmingQueries = (
-		userAddress: string,
 		configs: Array<SimplePoolStakingConfig>,
+		userAddress?: string,
 	): string => {
+		if (!userAddress) return '';
 		return configs
 			.map((c: SimplePoolStakingConfig) => {
 				const unipoolAddressLowerCase = c.LM_ADDRESS.toLowerCase();
@@ -192,7 +204,7 @@ export class SubgraphQueryBuilder {
 			.join();
 	};
 
-	static getMainnetQuery = (userAddress: string): string => {
+	static getMainnetQuery = (userAddress?: string): string => {
 		const uniswapConfig = config.MAINNET_CONFIG.pools.find(
 			c => c.type === StakingType.UNISWAPV3_ETH_GIV,
 		) as UniswapV3PoolStakingConfig;
@@ -204,13 +216,16 @@ export class SubgraphQueryBuilder {
 				config.MAINNET_CONFIG,
 				userAddress,
 			)}
-			${SubgraphQueryBuilder.generateFarmingQueries(userAddress, [
-				getGivStakingConfig(config.MAINNET_CONFIG),
-				...(config.MAINNET_CONFIG.pools.filter(
-					c => c.type !== StakingType.UNISWAPV3_ETH_GIV,
-				) as Array<SimplePoolStakingConfig>),
-				...config.MAINNET_CONFIG.regenFarms,
-			])}
+			${SubgraphQueryBuilder.generateFarmingQueries(
+				[
+					getGivStakingConfig(config.MAINNET_CONFIG),
+					...(config.MAINNET_CONFIG.pools.filter(
+						c => c.type !== StakingType.UNISWAPV3_ETH_GIV,
+					) as Array<SimplePoolStakingConfig>),
+					...config.MAINNET_CONFIG.regenFarms,
+				],
+				userAddress,
+			)}
 			uniswapV3Pool: ${SubgraphQueryBuilder.getUniswapV3PoolQuery(
 				uniswapConfig.UNISWAP_V3_LP_POOL,
 			)}
@@ -219,7 +234,7 @@ export class SubgraphQueryBuilder {
 		`;
 	};
 
-	static getXDaiQuery = (userAddress: string): string => {
+	static getXDaiQuery = (userAddress?: string): string => {
 		return `
 		{
 			${SubgraphQueryBuilder.getBalanceQuery(config.XDAI_CONFIG, userAddress)}
@@ -227,11 +242,15 @@ export class SubgraphQueryBuilder {
 				config.XDAI_CONFIG,
 				userAddress,
 			)}
-			${SubgraphQueryBuilder.generateFarmingQueries(userAddress, [
-				getGivStakingConfig(config.XDAI_CONFIG),
-				...(config.XDAI_CONFIG.pools as Array<SimplePoolStakingConfig>),
-				...config.XDAI_CONFIG.regenFarms,
-			])}
+			${SubgraphQueryBuilder.generateFarmingQueries(
+				[
+					getGivStakingConfig(config.XDAI_CONFIG),
+					...(config.XDAI_CONFIG
+						.pools as Array<SimplePoolStakingConfig>),
+					...config.XDAI_CONFIG.regenFarms,
+				],
+				userAddress,
+			)}
 		}
 		`;
 	};

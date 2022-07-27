@@ -30,6 +30,6 @@ export interface ISubgraphState {
 }
 
 export interface ICurrentInfo {
-	userAddress: string;
+	userAddress?: string;
 	chainId: number;
 }

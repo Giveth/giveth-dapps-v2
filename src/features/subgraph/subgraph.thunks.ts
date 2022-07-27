@@ -5,7 +5,7 @@ import { ICurrentInfo } from './subgraph.types';
 
 export const fetchXDaiInfoAsync = createAsyncThunk(
 	'subgraph/fetchXDaiInfo',
-	async (userAddress: string) => {
+	async (userAddress?: string) => {
 		const response = await fetchXDaiInfo(userAddress);
 		// The value we return becomes the `fulfilled` action payload
 		return response;
@@ -14,7 +14,7 @@ export const fetchXDaiInfoAsync = createAsyncThunk(
 
 export const fetchMainnetInfoAsync = createAsyncThunk(
 	'subgraph/fetchMainnetInfo',
-	async (userAddress: string) => {
+	async (userAddress?: string) => {
 		const response = await fetchXDaiInfo(userAddress);
 		// The value we return becomes the `fulfilled` action payload
 		return response;
