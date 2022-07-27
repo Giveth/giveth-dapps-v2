@@ -43,7 +43,7 @@ export const ProgressBar = () => {
 	const _step = step < 0 ? 0 : step; // For width animation on initial load
 	return (
 		<Container>
-			<Bar width={_step / stepsCount} />
+			<Bar width={(_step + 1) / stepsCount} />
 		</Container>
 	);
 };
