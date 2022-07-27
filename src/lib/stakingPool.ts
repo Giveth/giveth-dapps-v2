@@ -71,9 +71,9 @@ export const getLPStakingAPR = async (
 	provider: JsonRpcProvider | null,
 	subgraphValue: ISubgraphState,
 ): Promise<APR> => {
-	if (!provider) {
-		return Zero;
-	}
+	const _provider = provider
+		? provider
+		: new JsonRpcProvider(config.NETWORKS_CONFIG[network].nodeUrl);
 	const sdh = new SubgraphDataHelper(subgraphValue);
 	const unipoolHelper = new UnipoolHelper(
 		sdh.getUnipool(poolStakingConfig.LM_ADDRESS),
@@ -83,21 +83,21 @@ export const getLPStakingAPR = async (
 			return getBalancerPoolStakingAPR(
 				poolStakingConfig as BalancerPoolStakingConfig,
 				network,
-				provider,
+				_provider,
 				unipoolHelper,
 			);
 		case StakingPlatform.ICHI:
 			return getIchiPoolStakingAPR(
 				poolStakingConfig as ICHIPoolStakingConfig,
 				network,
-				provider,
+				_provider,
 				unipoolHelper,
 			);
 		default:
 			return getSimplePoolStakingAPR(
 				poolStakingConfig,
 				network,
-				provider,
+				_provider,
 				unipoolHelper,
 			);
 	}
