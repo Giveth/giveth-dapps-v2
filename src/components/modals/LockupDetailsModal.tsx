@@ -86,7 +86,10 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 								icon={<IconHelp />}
 								direction='top'
 							>
-								<P>APR</P>
+								<P>
+									The average annual rate of return for this
+									set of staked GIV.
+								</P>
 							</IconWithTooltip>
 						</CloseText>
 					</div>
