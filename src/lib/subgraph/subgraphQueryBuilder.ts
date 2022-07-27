@@ -38,6 +38,8 @@ export class SubgraphQueryBuilder {
 			);
 		}
 
+		query += SubgraphQueryBuilder.getUserGIVLocked(userAddress);
+
 		return query;
 	};
 
@@ -203,7 +205,7 @@ export class SubgraphQueryBuilder {
 	};
 
 	private static getUserGIVLocked = (userAddress: string): string => {
-		return `user(id: "${userAddress.toLowerCase()}") {
+		return `userGIVLocked: user(id: "${userAddress.toLowerCase()}") {
 			givLocked
 		  }`;
 	};
@@ -268,7 +270,6 @@ export class SubgraphQueryBuilder {
 				...config.XDAI_CONFIG.regenFarms,
 			])}
 			givpowerInfo: ${SubgraphQueryBuilder.getGIVPowersInfoQuery()},
-			userGIVLocked: ${SubgraphQueryBuilder.getUserGIVLocked(userAddress)},
 		}
 		`;
 	};

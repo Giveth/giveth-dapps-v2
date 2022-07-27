@@ -9,7 +9,7 @@ import {
 	IUniswapV2Pair,
 	IUniswapV3Pool,
 	IUniswapV3Position,
-	IGIVpowerInfo,
+	IGIVpower,
 } from '@/types/subgraph';
 import config from '@/configuration';
 import { getGIVpowerRoundsInfo } from '@/helpers/givpower';
@@ -177,30 +177,23 @@ export const transformTokenDistroBalance = (info: any): ITokenDistroBalance => {
 	};
 };
 
-const transformGIVpowerInfo = (info: any): IGIVpowerInfo => {
-	const id = info.id;
-	const initialDate = info.initialDate;
-	const locksCreated = info.locksCreated;
-	const totalGIVLocked = info.totalGIVLocked;
-	const roundDuration = info.roundDuration;
-	const roundsInfo = getGIVpowerRoundsInfo(
-		Number(info.initialDate),
-		Number(info.roundDuration),
-	);
-	const nextRoundDate = roundsInfo.nextRoundDate;
-	const currentRound = roundsInfo.currentRound;
+const transformGIVpowerInfo = (info: any = {}): IGIVpower => {
+	const id = info.id || '';
+	const initialDate = info.initialDate || '0';
+	const locksCreated = Number(info.locksCreated || 0);
+	const totalGIVLocked = info.totalGIVLocked || '0';
+	const roundDuration = Number(info.roundDuration || 0);
 	return {
 		id,
 		initialDate,
 		locksCreated,
-		nextRoundDate,
 		roundDuration,
-		currentRound,
 		totalGIVLocked,
+		...getGIVpowerRoundsInfo(initialDate, roundDuration),
 	};
 };
 
-export const transformuserGIVlocked = (info: any = {}): ITokenBalance => {
+export const transformUserGIVLocked = (info: any = {}): ITokenBalance => {
 	return {
 		balance: info?.givLocked || '0',
 	};
@@ -234,7 +227,7 @@ export const transformSubgraphData = (data: any = {}): ISubgraphState => {
 				break;
 
 			case key === 'userGIVLocked':
-				result[key] = transformuserGIVlocked(value);
+				result[key] = transformUserGIVLocked(value);
 				break;
 
 			default:

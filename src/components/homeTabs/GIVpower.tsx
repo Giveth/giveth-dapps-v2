@@ -57,7 +57,7 @@ export function TabPowerTop() {
 	const sdh = new SubgraphDataHelper(
 		useAppSelector(state => state.subgraph.xDaiValues),
 	);
-	const givPower = sdh.getUserGIVPower();
+	const givPower = sdh.getUserGIVPowerBalance();
 	return (
 		<GIVpowerTopContainer>
 			<GIVpowerContainer>

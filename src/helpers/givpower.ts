@@ -1,23 +1,31 @@
 import BigNumber from 'bignumber.js';
-import { IGIVpowerInfo } from '@/types/subgraph';
 import { getNowUnixMS } from './time';
+import { IGIVpower } from '@/types/subgraph';
 
 export const getGIVpowerRoundsInfo = (
-	initialDate: number,
+	initialDate: string,
 	roundDuration: number,
-) => {
+): {
+	currentRound: number;
+	nextRoundDate: string;
+} => {
+	if (roundDuration === 0)
+		return {
+			currentRound: 0,
+			nextRoundDate: '0',
+		};
 	const currentRound = Math.floor(
-		(getNowUnixMS() / 1000 - initialDate) / roundDuration,
+		(getNowUnixMS() / 1000 - Number(initialDate)) / roundDuration,
 	);
-	const nextRoundDate = (
-		(initialDate + roundDuration * (currentRound + 1)) *
+	const nextRoundDate: string = (
+		(Number(initialDate) + roundDuration * (currentRound + 1)) *
 		1000
 	).toString();
 	return { currentRound, nextRoundDate };
 };
 
-export const getUnlockDate = (givpowerInfo: IGIVpowerInfo, rounds: number) => {
-	const { nextRoundDate, roundDuration } = givpowerInfo;
+export const getUnlockDate = (givPowerInfo: IGIVpower, rounds: number) => {
+	const { nextRoundDate, roundDuration } = givPowerInfo;
 	return Number(nextRoundDate) + rounds * roundDuration * 1000;
 };
 
