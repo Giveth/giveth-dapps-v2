@@ -16,12 +16,17 @@ import { Flex } from '../styled-components/Flex';
 import { ESortby, EDirection } from '@/apollo/types/gqlEnums';
 import CheckBox from '../Checkbox';
 
-export const FilterMenu = () => {
+interface IFilterMenuProps {
+	handleClose: (e?: any) => void;
+}
+
+export const FilterMenu = ({ handleClose }: IFilterMenuProps) => {
 	const [isChecked, setIsChecked] = useState(false);
+
 	return (
 		<MenuContainer>
 			<Header>
-				<CloseContainer>
+				<CloseContainer onClick={handleClose}>
 					<IconX size={24} />
 				</CloseContainer>
 				<Title size='medium'>Filters</Title>
@@ -82,11 +87,16 @@ const projectFeatures = [
 ];
 
 const MenuContainer = styled.div`
+	z-index: 3;
+	top: -10px;
+	left: -260px;
 	padding: 24px;
 	background-color: ${neutralColors.gray[100]};
 	box-shadow: 0px 3px 20px rgba(212, 218, 238, 0.7);
 	border-radius: 16px;
+
 	${mediaQueries.tablet} {
+		position: absolute;
 		width: 375px;
 	}
 `;

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, MouseEvent } from 'react';
 import { useRouter } from 'next/router';
 import {
 	brandColors,
@@ -29,6 +29,7 @@ import useMediaQuery from '@/hooks/useMediaQuery';
 import ProjectsSubCategories from './ProjectsSubCategories';
 import { useProjectsContext } from '@/context/projects.context';
 import { Flex } from '@/components/styled-components/Flex';
+import { FilterMenu } from '@/components/menu/FilterMenu';
 import type { IProjectsRouteProps } from 'pages/projects';
 
 export interface IProjectsView extends IProjectsRouteProps {
@@ -56,7 +57,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	const [totalCount, setTotalCount] = useState(_totalCount);
 	const [isTabletShowingSearchAndFilter, setIsTabletShowingSearchAndFilter] =
-		useState(false);
+		useState(true);
+	const [isFilterOpen, setIsFilterOpen] = useState(false);
 	//Slider next and prev button refs
 	const navigationPrevRef = useRef<HTMLButtonElement>(null);
 	const navigationNextRef = useRef<HTMLButtonElement>(null);
@@ -116,6 +118,11 @@ const ProjectsIndex = (props: IProjectsView) => {
 					},
 				});
 			});
+	};
+
+	const handleFilterClose = (e: MouseEvent<HTMLElement>) => {
+		e.stopPropagation();
+		setIsFilterOpen(false);
 	};
 
 	useEffect(() => {
@@ -192,9 +199,16 @@ const ProjectsIndex = (props: IProjectsView) => {
 								<IconContainer>
 									<IconSearch />
 								</IconContainer>
-								<FiltersButton>
+								<FiltersButton
+									onClick={() => setIsFilterOpen(true)}
+								>
 									Filters
 									<IconOptions16 />
+									{isFilterOpen && (
+										<FilterMenu
+											handleClose={handleFilterClose}
+										/>
+									)}
 								</FiltersButton>
 							</FilterAndSearchContainer>
 						)}
@@ -211,9 +225,20 @@ const ProjectsIndex = (props: IProjectsView) => {
 												flexGrow: 1,
 											}}
 										/>
-										<FiltersButton>
+										<FiltersButton
+											onClick={e => {
+												setIsFilterOpen(true);
+											}}
+										>
 											Filters
 											<IconOptions16 />
+											{isFilterOpen && (
+												<FilterMenu
+													handleClose={
+														handleFilterClose
+													}
+												/>
+											)}
 										</FiltersButton>
 										<IconContainer
 											onClick={() =>
@@ -359,6 +384,7 @@ const FilterAndSearchContainer = styled.div`
 `;
 
 const FiltersButton = styled.button`
+	position: relative;
 	display: flex;
 	gap: 8px;
 	border-radius: 50px;
