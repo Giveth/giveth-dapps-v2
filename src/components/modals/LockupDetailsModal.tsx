@@ -160,7 +160,10 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 					<SubtitleWithTooltip>
 						<Subtitle>Total staked GIV</Subtitle>
 						<IconWithTooltip icon={<IconHelp />} direction='top'>
-							<P>some explanation here</P>
+							<P>
+								All your staked GIV, including GIV that is
+								locked.
+							</P>
 						</IconWithTooltip>
 					</SubtitleWithTooltip>
 
