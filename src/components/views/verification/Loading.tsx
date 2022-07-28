@@ -11,4 +11,6 @@ export default function LoadingVerification() {
 	);
 }
 
-const Container = styled(FlexCenter)``;
+const Container = styled(FlexCenter)`
+	height: 100%;
+`;
