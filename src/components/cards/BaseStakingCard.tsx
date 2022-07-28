@@ -330,7 +330,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 													<DetailValue>
 														{apr &&
 															formatEthHelper(
-																apr,
+																apr.effectiveAPR,
 																2,
 															)}
 														%

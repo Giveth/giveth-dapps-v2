@@ -42,7 +42,7 @@ const { abi: BAL_VAULT_ABI } = BAL_VAULT_Json;
 const { abi: TOKEN_MANAGER_ABI } = TOKEN_MANAGER_Json;
 const { abi: ERC20_ABI } = ERC20_Json;
 
-const toBigNumber = (eb: ethers.BigNumber): BigNumber =>
+const toBigNumberJs = (eb: ethers.BigNumber | string | number): BigNumber =>
 	new BigNumber(eb.toString());
 
 export const getGivStakingAPR = async (
@@ -51,18 +51,18 @@ export const getGivStakingAPR = async (
 ): Promise<APR> => {
 	const sdh = new SubgraphDataHelper(subgraphValue);
 	const unipoolHelper = new UnipoolHelper(sdh.getUnipool(lmAddress));
-	let apr: BigNumber = Zero;
+	let givStakingAPR: BigNumber = Zero;
 
 	if (unipoolHelper) {
 		const totalSupply = unipoolHelper.totalSupply;
 		const rewardRate = unipoolHelper.rewardRate;
 
-		apr = totalSupply.isZero()
+		givStakingAPR = totalSupply.isZero()
 			? Zero
 			: rewardRate.div(totalSupply).times('31536000').times('100');
 	}
 
-	return apr;
+	return { effectiveAPR: givStakingAPR };
 };
 
 export const getLPStakingAPR = async (
@@ -130,8 +130,8 @@ const getIchiPoolStakingAPR = async (
 				lmContract.totalSupply(),
 				lmContract.rewardRate(),
 			]).then(([_totalSupply, _rewardRate]) => [
-				toBigNumber(_totalSupply as ethers.BigNumber),
-				toBigNumber(_rewardRate as ethers.BigNumber),
+				toBigNumberJs(_totalSupply as ethers.BigNumber),
+				toBigNumberJs(_rewardRate as ethers.BigNumber),
 			]);
 		}
 
@@ -145,19 +145,20 @@ const getIchiPoolStakingAPR = async (
 			tokens: { name: string; price: number }[];
 		} = apiResult;
 
-		if (!lpPrice || lpPrice === '0') return Zero;
+		if (!lpPrice || lpPrice === '0') return { effectiveAPR: Zero };
 
 		const givTokenPrice = tokens?.find(t => t.name === 'giv')?.price || 0;
-
-		return rewardRate
+		const totalAPR = rewardRate
 			.div(totalSupply)
 			.times(givTokenPrice)
 			.div(lpPrice)
 			.plus(vaultIRR);
+
+		return { effectiveAPR: totalAPR, vaultIRR: toBigNumberJs(vaultIRR) };
 	} catch (e) {
 		console.error('Error in fetching ICHI info', e);
 	}
-	return Zero;
+	return { effectiveAPR: Zero };
 };
 
 const getBalancerPoolStakingAPR = async (
@@ -190,7 +191,7 @@ const getBalancerPoolStakingAPR = async (
 		balances: Array<ethers.BigNumber>;
 		tokens: Array<string>;
 	}
-	let apr = null;
+	let farmAPR = null;
 
 	try {
 		const [_poolTokens, _poolTotalSupply, _poolNormalizedWeights]: [
@@ -214,13 +215,13 @@ const getBalancerPoolStakingAPR = async (
 				lmContract.totalSupply(),
 				lmContract.rewardRate(),
 			]).then(([_totalSupply, _rewardRate]) => [
-				toBigNumber(_totalSupply as ethers.BigNumber),
-				toBigNumber(_rewardRate as ethers.BigNumber),
+				toBigNumberJs(_totalSupply as ethers.BigNumber),
+				toBigNumberJs(_rewardRate as ethers.BigNumber),
 			]);
 		}
 
-		const weights = _poolNormalizedWeights.map(toBigNumber);
-		const balances = _poolTokens.balances.map(toBigNumber);
+		const weights = _poolNormalizedWeights.map(toBigNumberJs);
+		const balances = _poolTokens.balances.map(toBigNumberJs);
 
 		if (
 			_poolTokens.tokens[0].toLowerCase() !== tokenAddress.toLowerCase()
@@ -229,11 +230,11 @@ const getBalancerPoolStakingAPR = async (
 			weights.reverse();
 		}
 
-		const lp = toBigNumber(_poolTotalSupply)
+		const lp = toBigNumberJs(_poolTotalSupply)
 			.div(BigNumber.sum(...weights).div(weights[0]))
 			.div(balances[0]);
 
-		apr = totalSupply.isZero()
+		farmAPR = totalSupply.isZero()
 			? null
 			: rewardRate
 					.div(totalSupply)
@@ -248,7 +249,7 @@ const getBalancerPoolStakingAPR = async (
 			},
 		});
 	}
-	return apr;
+	return farmAPR ? { effectiveAPR: farmAPR } : null;
 };
 const getSimplePoolStakingAPR = async (
 	poolStakingConfig: SimplePoolStakingConfig | RegenPoolStakingConfig,
@@ -280,7 +281,7 @@ const getSimplePoolStakingAPR = async (
 		UNI_ABI,
 		provider,
 	) as IUniswapV2Pair;
-	let apr = null;
+	let farmAPR = null;
 	try {
 		const [_reserves, _token0, _poolTotalSupply]: [
 			[ethers.BigNumber, ethers.BigNumber, number],
@@ -300,22 +301,22 @@ const getSimplePoolStakingAPR = async (
 				lmContract.totalSupply(),
 				lmContract.rewardRate(),
 			]).then(([_totalSupply, _rewardRate]) => [
-				toBigNumber(_totalSupply as ethers.BigNumber),
-				toBigNumber(_rewardRate as ethers.BigNumber),
+				toBigNumberJs(_totalSupply as ethers.BigNumber),
+				toBigNumberJs(_rewardRate as ethers.BigNumber),
 			]);
 		}
 
-		let tokenReseve = toBigNumber(
+		let tokenReseve = toBigNumberJs(
 			_token0.toLowerCase() !== tokenAddress.toLowerCase()
 				? _reserves[1]
 				: _reserves[0],
 		);
 
-		const lp = toBigNumber(_poolTotalSupply)
+		const lp = toBigNumberJs(_poolTotalSupply)
 			.times(10 ** 18)
 			.div(2)
 			.div(tokenReseve);
-		apr = totalSupply.isZero()
+		farmAPR = totalSupply.isZero()
 			? null
 			: rewardRate
 					.div(totalSupply)
@@ -332,7 +333,7 @@ const getSimplePoolStakingAPR = async (
 		});
 	}
 
-	return apr;
+	return farmAPR ? { effectiveAPR: farmAPR } : null;
 };
 
 export const getUserStakeInfo = (

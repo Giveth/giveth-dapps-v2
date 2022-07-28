@@ -140,7 +140,7 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 			const stakePoolAPRs = await Promise.all(promises);
 			let maxApr = Zero;
 			stakePoolAPRs.forEach(apr => {
-				maxApr = BigNumber.max(maxApr, apr || Zero);
+				maxApr = BigNumber.max(maxApr, apr?.effectiveAPR || Zero);
 			});
 			setAPR(maxApr);
 		};
