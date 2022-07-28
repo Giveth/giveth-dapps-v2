@@ -70,9 +70,10 @@ import FarmCountDown from '../FarmCountDown';
 import { Flex } from '../styled-components/Flex';
 import { IStakeInfo } from '@/hooks/useStakingPool';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
-import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import Routes from '@/lib/constants/Routes';
+import { IconAngelVault } from '../Icons/AngelVault';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -92,6 +93,8 @@ export const getPoolIconWithName = (platform: StakingPlatform) => {
 			return <IconUniswap size={16} />;
 		case StakingPlatform.SUSHISWAP:
 			return <IconSushiswap size={16} />;
+		case StakingPlatform.ICHI:
+			return <IconAngelVault size={16} />;
 		default:
 			break;
 	}
@@ -134,7 +137,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const { setInfo } = useFarms();
 	const { chainId, account, active: isWalletActive } = useWeb3React();
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
-	const dispatch = useAppDispatch();
 
 	const sdh = new SubgraphDataHelper(currentValues);
 	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
