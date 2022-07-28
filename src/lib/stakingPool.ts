@@ -152,6 +152,8 @@ const getIchiPoolStakingAPR = async (
 			.div(totalSupply)
 			.times(givTokenPrice)
 			.div(lpPrice)
+			.times('31536000')
+			.times('100')
 			.plus(vaultIRR);
 
 		return { effectiveAPR: totalAPR, vaultIRR: toBigNumberJs(vaultIRR) };
