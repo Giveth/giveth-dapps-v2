@@ -278,6 +278,29 @@ const ProjectsIndex = (props: IProjectsView) => {
 							/>
 						</>
 					)}
+					{!isDesktop && !isTablet && (
+						<Flex alignItems='center' gap='16px'>
+							<input
+								style={{
+									flexGrow: 1,
+								}}
+							/>
+							<FiltersButton
+								onClick={e => {
+									setIsFilterOpen(true);
+								}}
+							>
+								Filters
+								<IconOptions16 />
+							</FiltersButton>
+							{isFilterOpen && (
+								<FilterMenu
+									handleClose={handleFilterClose}
+									ref={filterMenuRef}
+								/>
+							)}
+						</Flex>
+					)}
 				</FiltersContainer>
 
 				{isLoading && <Loader className='dot-flashing' />}
@@ -474,5 +497,7 @@ const StyledLine = styled.hr`
 const TabletFilterAndSearchContainer = styled(Flex)`
 	flex-grow: 1;
 `;
+
+const MobileFilterContainer = styled.div``;
 
 export default ProjectsIndex;
