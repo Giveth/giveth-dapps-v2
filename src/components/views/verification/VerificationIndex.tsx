@@ -14,11 +14,13 @@ import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import DesktopMenu from '@/components/views/verification/menu/DesktopMenu';
 import MobileMenu from '@/components/views/verification/menu/MobileMenu';
+import { useVerificationData } from '@/context/verification.context';
 
 const VerificationIndex = () => {
 	const [showModal, setShowModal] = useState(false);
 	const device = useDetectDevice();
 	const isMobile = device.isMobile;
+	const { verificationData } = useVerificationData();
 
 	return (
 		<Container>
