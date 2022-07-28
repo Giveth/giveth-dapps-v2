@@ -382,7 +382,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							<li>
 								{isEditMode ? 'Edited' : 'Newly published'}{' '}
 								projects will be &quot;unlisted&quot; until
-								reviewed by our team {isEditMode && 'again'}.
+								reviewed by our team{isEditMode && ' again'}.
 							</li>
 							<li>
 								You can still access your project from your
