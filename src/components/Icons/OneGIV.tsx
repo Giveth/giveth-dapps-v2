@@ -5,7 +5,7 @@ import { ICurrencyIconProps } from './type';
 export const IconOneGIV: FC<ICurrencyIconProps> = ({ size = 16 }) => {
 	return (
 		<Image
-			src={`/images/currencies/onegiv/64.svg`}
+			src={`/images/currencies/onegiv/${size}.svg`}
 			alt='balancer'
 			width={size}
 			height={size}
