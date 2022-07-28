@@ -2,7 +2,6 @@ import { createContext, useEffect, useMemo, useState } from 'react';
 import { Pool, Position } from '@uniswap/v3-sdk';
 import { Token } from '@uniswap/sdk-core';
 
-import BigNumber from 'bignumber.js';
 import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
 import { LiquidityPosition } from '@/types/nfts';
@@ -12,13 +11,14 @@ import { getUniswapV3TokenURI } from '@/services/subgraph.service';
 import { Zero } from '@/helpers/number';
 import { IUniswapV3Pool, IUniswapV3Position } from '@/types/subgraph';
 import { useAppSelector } from '@/features/hooks';
+import { APR } from '@/types/poolInfo';
 
 const ERC721NftContext = createContext<{
 	stakedPositions: LiquidityPosition[];
 	unstakedPositions: LiquidityPosition[];
 	currentIncentive: { key?: (string | number)[] | null };
 	loadingNftPositions: boolean;
-	apr: BigNumber;
+	apr: APR;
 	pool: Pool | null;
 } | null>(null);
 
@@ -41,7 +41,7 @@ export const useLiquidityPositions = () => {
 	const [unstakedPositions, setUnstakedPositions] = useState<
 		LiquidityPosition[]
 	>([]);
-	const [apr, setApr] = useState<BigNumber>(Zero);
+	const [apr, setApr] = useState<APR>({ effectiveAPR: Zero });
 	const [pool, setPool] = useState<Pool | null>(null);
 
 	const [loadingNftPositions, setLoadingNftPositions] = useState(false);
