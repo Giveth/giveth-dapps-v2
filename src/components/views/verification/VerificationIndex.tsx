@@ -13,7 +13,7 @@ import MobileMenu from '@/components/views/verification/menu/MobileMenu';
 import { useVerificationData } from '@/context/verification.context';
 import { EVerificationStatus } from '@/apollo/types/types';
 import { VerificationStatusReport } from './VerificationStatusReport';
-import { VerificationContainer } from './common.sc';
+import { VerificationContainer } from './Common.sc';
 
 const VerificationIndex = () => {
 	const [showModal, setShowModal] = useState(false);

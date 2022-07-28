@@ -15,7 +15,7 @@ import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import DiscordIcon from '/public/images/icons/social/discord.svg';
 import LinkedinIcon from '/public/images/icons/social/linkedin.svg';
-import { ContentSeparator, BtnContainer } from './common.sc';
+import { ContentSeparator, BtnContainer } from './Common.sc';
 import { useVerificationData } from '@/context/verification.context';
 import { client } from '@/apollo/apolloClient';
 import {
@@ -23,7 +23,7 @@ import {
 	REMOVE_SOCIAL_MEDIA,
 	SEND_NEW_SOCIAL_MEDIA,
 } from '@/apollo/gql/gqlVerification';
-import { RemoveButton } from './common';
+import { RemoveButton } from './Common';
 import { gToast, ToastType } from '@/components/toasts';
 import { ISocialProfile } from '@/apollo/types/types';
 

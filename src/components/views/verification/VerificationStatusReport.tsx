@@ -9,7 +9,7 @@ import {
 	VCImageContainer,
 	VCRejectedHeader,
 	VerificationCard,
-} from './common.sc';
+} from './Common.sc';
 import givFontLogo from '/public/images/icons/giv_font_logo.svg';
 import check_stars from '/public/images/icons/check_stars.svg';
 import failed_stars from '/public/images/icons/failed_stars.svg';

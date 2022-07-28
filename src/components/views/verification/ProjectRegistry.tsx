@@ -7,7 +7,7 @@ import RadioButton from '../../RadioButton';
 import Input from '@/components/Input';
 import { Label } from '../create/Create.sc';
 import selectCustomStyles from '@/lib/constants/selectCustomStyles';
-import { BtnContainer, ContentSeparator } from './common.sc';
+import { BtnContainer, ContentSeparator } from './Common.sc';
 import { useVerificationData } from '@/context/verification.context';
 import { client } from '@/apollo/apolloClient';
 import {

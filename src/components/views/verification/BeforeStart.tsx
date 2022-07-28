@@ -2,7 +2,7 @@ import { brandColors, Button, H6, Lead } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
-import { ContentSeparator, BtnContainer } from './common.sc';
+import { ContentSeparator, BtnContainer } from './Common.sc';
 import { useVerificationData } from '@/context/verification.context';
 import { client } from '@/apollo/apolloClient';
 import { CREATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';

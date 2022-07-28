@@ -20,7 +20,7 @@ import {
 	VCRejectedHeader,
 	VerificationCard,
 	VerificationContainer,
-} from './common.sc';
+} from './Common.sc';
 
 const LazyLottie = dynamic(() => import('react-lottie'));
 
