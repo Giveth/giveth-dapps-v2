@@ -16,6 +16,7 @@ import { Flex } from '../styled-components/Flex';
 import { ESortby, EDirection } from '@/apollo/types/gqlEnums';
 import CheckBox from '../Checkbox';
 import { useProjectsContext } from '@/context/projects.context';
+import { zIndex } from '@/lib/constants/constants';
 
 interface IFilterMenuProps {
 	handleClose: (e?: any) => void;
@@ -25,6 +26,7 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 	({ handleClose }, ref) => {
 		const [isChecked, setIsChecked] = useState(false);
 		const { setVariables } = useProjectsContext();
+
 		return (
 			<MenuContainer ref={ref}>
 				<Header>
@@ -100,17 +102,23 @@ const projectFeatures = [
 ];
 
 const MenuContainer = styled.div`
-	z-index: 3;
-	top: -10px;
+	top: 0;
 	right: 0;
 	padding: 24px;
 	background-color: ${neutralColors.gray[100]};
 	box-shadow: 0px 3px 20px rgba(212, 218, 238, 0.7);
-	border-radius: 16px;
-
+	width: 100%;
+	height: 100%;
+	z-index: ${zIndex.FIXED};
+	overflow-y: scroll;
+	position: fixed;
 	${mediaQueries.tablet} {
+		height: auto;
+		top: -10px;
+		border-radius: 16px;
 		position: absolute;
 		width: 375px;
+		z-index: 3;
 	}
 `;
 
