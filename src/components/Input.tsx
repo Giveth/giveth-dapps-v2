@@ -9,6 +9,8 @@ import styled from 'styled-components';
 import { IIconProps } from '@giveth/ui-design-system/lib/esm/components/icons/giv-economy/type';
 import { EInputValidation, IInputValidation } from '@/types/inputValidation';
 import InputStyled from './styled-components/Input';
+import LottieControl from '@/components/animations/lottieControl';
+import LoadingAnimation from '@/animations/loading_giv_600.json';
 import type {
 	FieldError,
 	RegisterOptions,
@@ -28,6 +30,7 @@ export enum InputSize {
 interface IInput extends InputHTMLAttributes<HTMLInputElement> {
 	label?: string;
 	caption?: string;
+	isValidating?: boolean;
 	size?: InputSize;
 	LeftIcon?: ReactElement<IIconProps>;
 }
@@ -74,12 +77,14 @@ const Input = (props: InputType) => {
 		error,
 		maxLength,
 		value,
+		isValidating,
 		...rest
 	} = props;
 
-	const validationStatus = error
-		? EInputValidation.ERROR
-		: EInputValidation.NORMAL;
+	const validationStatus =
+		!error || isValidating
+			? EInputValidation.NORMAL
+			: EInputValidation.ERROR;
 
 	return (
 		<InputContainer>
@@ -112,7 +117,14 @@ const Input = (props: InputType) => {
 					</CharLength>
 				)}
 			</InputWrapper>
-			{error?.message ? (
+			{isValidating ? (
+				<LottieWrapper>
+					<LottieControl
+						animationData={LoadingAnimation}
+						size={22.4}
+					/>
+				</LottieWrapper>
+			) : error?.message ? (
 				<InputValidation
 					validation={validationStatus}
 					size={InputSizeToLinkSize(size)}
@@ -127,6 +139,13 @@ const Input = (props: InputType) => {
 		</InputContainer>
 	);
 };
+
+const LottieWrapper = styled.div`
+	padding-top: 4px;
+	> div > div {
+		margin-left: 0 !important;
+	}
+`;
 
 const CharLength = styled(SublineBold)`
 	display: flex;
