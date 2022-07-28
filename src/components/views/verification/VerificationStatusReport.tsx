@@ -27,12 +27,41 @@ export const VerificationStatusReport = () => {
 	return (
 		<VerificationCard background={background}>
 			{!status && <LoadingVerification />}
-			{status === EVerificationStatus.SUBMITTED && <div>SUBMITTED</div>}
+			{status === EVerificationStatus.SUBMITTED && <Submitted />}
 			{status === EVerificationStatus.VERIFIED && <Verified />}
 			{status === EVerificationStatus.REJECTED && <Rejected />}
 		</VerificationCard>
 	);
 };
+
+function Submitted() {
+	const router = useRouter();
+	const { slug } = router.query;
+
+	return (
+		<>
+			<H6 weight={700}>Submitted</H6>
+			<Lead>
+				Your project is now submitted, our team will check your request.
+			</Lead>
+			<Link href={slugToProjectView(slug as string)} passHref>
+				<ButtonLink size='small' label='GO TO THE PROJECT' />
+			</Link>
+			<VCImageContainer>
+				<Link href='/' passHref>
+					<a>
+						<Image
+							src={givFontLogo}
+							width='150'
+							height='50'
+							alt='giveth logo'
+						/>
+					</a>
+				</Link>
+			</VCImageContainer>
+		</>
+	);
+}
 
 function Verified() {
 	const router = useRouter();
