@@ -101,10 +101,10 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const defaultImpactLocation = impactLocation || '';
 
 	const defaultMainAddress = addresses?.find(
-		a => a.networkId === ethereumId,
+		a => a.isRecipient && a.networkId === ethereumId,
 	)?.address;
 	const defaultSecondaryAddress = addresses?.find(
-		a => a.networkId === gnosisId,
+		a => a.isRecipient && a.networkId === gnosisId,
 	)?.address;
 	const isSameDefaultAddresses = compareAddresses(
 		defaultMainAddress,
