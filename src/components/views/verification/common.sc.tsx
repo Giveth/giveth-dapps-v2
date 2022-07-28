@@ -1,5 +1,11 @@
 import styled from 'styled-components';
-import { Button, neutralColors, OulineButton } from '@giveth/ui-design-system';
+import {
+	Button,
+	H6,
+	neutralColors,
+	OulineButton,
+	semanticColors,
+} from '@giveth/ui-design-system';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -55,6 +61,21 @@ export const VerificationCard = styled(Flex)<{ background: string }>`
 	${mediaQueries.laptopS} {
 		min-height: 765px;
 	}
+`;
+
+export const VCImageContainer = styled.div`
+	position: absolute;
+	bottom: 30px;
+	cursor: pointer;
+`;
+
+export const VCLeadContainer = styled.div`
+	color: ${neutralColors.gray[700]};
+	max-width: 500px;
+`;
+
+export const VCRejectedHeader = styled(H6)`
+	color: ${semanticColors.punch[500]};
 `;
 
 export const BtnContainer = styled(Flex)`

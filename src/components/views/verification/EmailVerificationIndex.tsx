@@ -1,18 +1,10 @@
 import React, { FC, useEffect, useState } from 'react';
-import styled from 'styled-components';
-import {
-	brandColors,
-	H6,
-	Lead,
-	neutralColors,
-	semanticColors,
-} from '@giveth/ui-design-system';
+import { brandColors, H6, Lead, ButtonLink } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { FlexCenter } from '@/components/styled-components/Flex';
-import { ButtonStyled } from '@/components/GeneralCard.sc';
 import { useAppDispatch } from '@/features/hooks';
 import { setShowFooter } from '@/features/general/general.slice';
 import givFontLogo from '/public/images/icons/giv_font_logo.svg';
@@ -22,7 +14,13 @@ import LoadingAnimation from '@/animations/loading_giv.json';
 import { SEND_EMAIL_VERIFICATION_TOKEN } from '@/apollo/gql/gqlVerification';
 import { client } from '@/apollo/apolloClient';
 import { slugToVerification } from '@/lib/routeCreators';
-import { VerificationCard, VerificationContainer } from './common.sc';
+import {
+	VCImageContainer,
+	VCLeadContainer,
+	VCRejectedHeader,
+	VerificationCard,
+	VerificationContainer,
+} from './common.sc';
 
 const LazyLottie = dynamic(() => import('react-lottie'));
 
@@ -122,9 +120,9 @@ function Verified() {
 				You can now close this page and continue verifying your project.
 			</Lead>
 			<Link href={slugToVerification(slug as string)} passHref>
-				<StyledButton size='small' label='CONTINUE VERIFICATION' />
+				<ButtonLink size='small' label='CONTINUE VERIFICATION' />
 			</Link>
-			<ImageContainer>
+			<VCImageContainer>
 				<Link href='/' passHref>
 					<a>
 						<Image
@@ -135,7 +133,7 @@ function Verified() {
 						/>
 					</a>
 				</Link>
-			</ImageContainer>
+			</VCImageContainer>
 		</>
 	);
 }
@@ -149,19 +147,19 @@ function Rejected() {
 				height={80}
 				alt='success icon'
 			/>
-			<RejectedHeader weight={700}>Oh crap!</RejectedHeader>
+			<VCRejectedHeader weight={700}>Oh crap!</VCRejectedHeader>
 			<Lead>
 				This link is expired or not exist anymore, you have to verify
 				your email again.
 			</Lead>
-			<LeadContainer>
+			<VCLeadContainer>
 				<Lead>
 					please go to the verify status form under personal info and
 					request a new verification email!
 				</Lead>
-			</LeadContainer>
+			</VCLeadContainer>
 
-			<ImageContainer>
+			<VCImageContainer>
 				<Link href='/' passHref>
 					<a>
 						<Image
@@ -172,30 +170,7 @@ function Rejected() {
 						/>
 					</a>
 				</Link>
-			</ImageContainer>
+			</VCImageContainer>
 		</>
 	);
 }
-
-const ImageContainer = styled.div`
-	position: absolute;
-	bottom: 30px;
-	cursor: pointer;
-`;
-
-const StyledButton = styled(ButtonStyled)`
-	width: auto;
-	height: auto;
-	padding: 16px 24px;
-	margin-top: 0;
-	/* font-size: 12px; */
-`;
-
-const LeadContainer = styled.div`
-	color: ${neutralColors.gray[700]};
-	max-width: 500px;
-`;
-
-const RejectedHeader = styled(H6)`
-	color: ${semanticColors.punch[500]};
-`;
