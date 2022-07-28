@@ -42,7 +42,6 @@ import {
 	IProjectAcceptedToken,
 	IProjectAcceptedTokensGQL,
 } from '@/apollo/types/gqlTypes';
-import { IWalletAddress } from '@/apollo/types/types';
 import {
 	filterTokens,
 	getNetworkIds,
@@ -107,11 +106,12 @@ const CryptoDonation = (props: {
 	const mainTokenPrice = new BigNumber(ethPrice).toNumber();
 
 	const mainProjectAddress = addresses?.find(
-		(a: IWalletAddress) => a.networkId === config.PRIMARY_NETWORK.id,
+		a => a.isRecipient && a.networkId === config.PRIMARY_NETWORK.id,
 	)?.address;
 	const secondaryProjectAddress = addresses?.find(
-		(a: IWalletAddress) => a.networkId === config.SECONDARY_NETWORK.id,
+		a => a.isRecipient && a.networkId === config.SECONDARY_NETWORK.id,
 	)?.address;
+
 	const [selectedToken, setSelectedToken] = useState<IProjectAcceptedToken>();
 	const [selectedTokenBalance, setSelectedTokenBalance] = useState<any>();
 	const [customInput, setCustomInput] = useState<any>();
@@ -143,7 +143,7 @@ const CryptoDonation = (props: {
 
 	useEffect(() => {
 		if (networkId && acceptedTokens) {
-			const networkIds = getNetworkIds(acceptedTokens, project.addresses);
+			const networkIds = getNetworkIds(acceptedTokens, addresses);
 			const filteredTokens = filterTokens(
 				acceptedTokens,
 				networkId,
@@ -373,7 +373,7 @@ const CryptoDonation = (props: {
 					setTxHash={setTxHash}
 					project={project}
 					mainProjectAddress={mainProjectAddress}
-					secondaryProjectAdress={secondaryProjectAddress}
+					secondaryProjectAddress={secondaryProjectAddress}
 					token={selectedToken}
 					amount={amountTyped}
 					price={tokenPrice}

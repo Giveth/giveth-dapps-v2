@@ -41,7 +41,7 @@ export interface IDonateModalProps extends IModal {
 	setSuccessDonation: (i: ISuccessDonation) => void;
 	givBackEligible?: boolean;
 	mainProjectAddress?: string;
-	secondaryProjectAdress?: string;
+	secondaryProjectAddress?: string;
 }
 
 const DonateModal = (props: IDonateModalProps) => {
