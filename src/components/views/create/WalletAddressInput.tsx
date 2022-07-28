@@ -59,45 +59,45 @@ const WalletAddressInput: FC<IProps> = ({
 	if (isGnosis) disabled = !isActive;
 	else disabled = !isActive && !sameAddress;
 
-	const isPrevProjectAddress = (i: string) => {
+	const isPrevProjectAddress = (newAddress: string) => {
 		// Do not validate if the input address is the same as prev project wallet address
 		if (userAddresses.length === 0) return false;
 		return userAddresses
-			.map(i => i.toLowerCase())
-			.includes(i.toLowerCase());
+			.map(prevAddress => prevAddress.toLowerCase())
+			.includes(newAddress.toLowerCase());
 	};
 
-	const ENSHandler = async (i: string) => {
+	const ENSHandler = async (ens: string) => {
 		if (networkId !== config.PRIMARY_NETWORK.id) {
 			throw 'ENS is only supported on Ethereum Mainnet';
 		}
 		if (chainId !== 1) {
 			throw 'Please switch to the Ethereum Mainnet to handle ENS';
 		}
-		const address = await getAddressFromENS(i, library);
+		const address = await getAddressFromENS(ens, library);
 		if (address) return address;
 		else throw 'Invalid ENS address';
 	};
 
-	const addressValidation = async (i: string) => {
+	const addressValidation = async (address: string) => {
 		try {
 			if (disabled) return true;
 			setResolvedENS('');
-			let address = i;
+			let _address = (' ' + address).slice(1);
 			setIsValidating(true);
-			if (isAddressENS(i)) {
-				address = await ENSHandler(i);
-				setResolvedENS(address);
+			if (isAddressENS(address)) {
+				_address = await ENSHandler(address);
+				setResolvedENS(_address);
 			}
-			if (isPrevProjectAddress(address)) {
+			if (isPrevProjectAddress(_address)) {
 				setIsValidating(false);
 				return true;
 			}
-			if (!utils.isAddress(address)) {
+			if (!utils.isAddress(_address)) {
 				setIsValidating(false);
 				return 'Eth address not valid';
 			}
-			const res = await gqlAddressValidation(address);
+			const res = await gqlAddressValidation(_address);
 			setIsValidating(false);
 			return res;
 		} catch (e) {
