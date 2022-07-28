@@ -30,6 +30,7 @@ import ProjectsSubCategories from './ProjectsSubCategories';
 import { useProjectsContext } from '@/context/projects.context';
 import { Flex } from '@/components/styled-components/Flex';
 import { FilterMenu } from '@/components/menu/FilterMenu';
+import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 import type { IProjectsRouteProps } from 'pages/projects';
 
 export interface IProjectsView extends IProjectsRouteProps {
@@ -62,6 +63,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 	//Slider next and prev button refs
 	const navigationPrevRef = useRef<HTMLButtonElement>(null);
 	const navigationNextRef = useRef<HTMLButtonElement>(null);
+	const filterMenuRef = useRef<HTMLDivElement>(null);
+
+	useOnClickOutside(filterMenuRef, () => setIsFilterOpen(false));
 
 	const dispatch = useAppDispatch();
 	const { variables: contextVariables, setVariables } = useProjectsContext();
@@ -208,6 +212,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 								{isFilterOpen && (
 									<FilterMenu
 										handleClose={handleFilterClose}
+										ref={filterMenuRef}
 									/>
 								)}
 							</FilterAndSearchContainer>
@@ -236,6 +241,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 										{isFilterOpen && (
 											<FilterMenu
 												handleClose={handleFilterClose}
+												ref={filterMenuRef}
 											/>
 										)}
 										<IconContainer
