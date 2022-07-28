@@ -22,7 +22,7 @@ import { useVerificationData } from '@/context/verification.context';
 import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
 import { client } from '@/apollo/apolloClient';
 import { EVerificationSteps, IProjectContact } from '@/apollo/types/types';
-import { OutlineStyled } from '@/components/views/verification/common.styled';
+import { OutlineStyled } from '@/components/views/verification/common.sc';
 import AddSocialModal from '@/components/views/verification/projectContact/AddSocialModal';
 import { EMainSocials, IMainSocials } from './common.types';
 import { OtherInput } from '@/components/views/verification/projectContact/common';

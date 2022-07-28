@@ -14,7 +14,7 @@ import {
 } from '@/apollo/types/types';
 import { client } from '@/apollo/apolloClient';
 import { showToastError } from '@/lib/helpers';
-import { OutlineStyled } from '../common.styled';
+import { OutlineStyled } from '../common.sc';
 import DescriptionInput from '@/components/DescriptionInput';
 import { requiredOptions } from '@/lib/constants/regex';
 

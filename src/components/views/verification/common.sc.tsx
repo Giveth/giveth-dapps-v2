@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Button, neutralColors, OulineButton } from '@giveth/ui-design-system';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
+import { mediaQueries } from '@/lib/constants/constants';
 
 export const OutlineStyled = styled(OulineButton)`
 	padding-left: 100px;
@@ -24,6 +25,37 @@ export const VerificationContainer = styled(Flex)`
 	justify-content: center;
 	background-image: url('/images/backgrounds/Verification_GIV.svg');
 	padding: 165px 0 50px;
+`;
+
+export const VerificationCard = styled(Flex)<{ background: string }>`
+	border-radius: 16px;
+	padding: 100px 8px;
+	align-items: center;
+	text-align: center;
+	flex-direction: column;
+	gap: 24px;
+	background-color: ${neutralColors.gray[100]};
+	width: 85%;
+	max-width: 1076px;
+	height: 100%;
+	position: relative;
+	overflow: hidden;
+	box-shadow: 0 3px 20px ${Shadow.Neutral[400]};
+	::before {
+		content: '';
+		display: 'block';
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		background-image: url(${props => props.background});
+		background-position: bottom;
+		height: 375px;
+		width: 100%;
+		background-repeat: no-repeat;
+	}
+	${mediaQueries.laptopS} {
+		min-height: 765px;
+	}
 `;
 
 export const ButtonStyled = styled(Button)<{

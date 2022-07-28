@@ -8,7 +8,7 @@ import { FC } from 'react';
 import {
 	ButtonStyled,
 	RemoveBtn,
-} from '@/components/views/verification/common.styled';
+} from '@/components/views/verification/common.sc';
 import menuList from '@/components/views/verification/menu/menuList';
 import { useVerificationData } from '@/context/verification.context';
 

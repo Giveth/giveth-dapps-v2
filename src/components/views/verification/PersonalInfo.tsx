@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Flex } from '@/components/styled-components/Flex';
-import { ButtonStyled } from './common.styled';
+import { ButtonStyled } from './common.sc';
 import Input from '@/components/Input';
 import { ContentSeparator, BtnContainer } from './VerificationIndex';
 import { useVerificationData } from '@/context/verification.context';
