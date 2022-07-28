@@ -58,7 +58,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	const [totalCount, setTotalCount] = useState(_totalCount);
 	const [isTabletShowingSearchAndFilter, setIsTabletShowingSearchAndFilter] =
-		useState(true);
+		useState(false);
 	const [isFilterOpen, setIsFilterOpen] = useState(false);
 	//Slider next and prev button refs
 	const navigationPrevRef = useRef<HTMLButtonElement>(null);
