@@ -1,8 +1,8 @@
 import { brandColors, neutralColors, Lead } from '@giveth/ui-design-system';
-import { FlexCenter } from '@/components/styled-components/Flex';
-import { mediaQueries } from '@/lib/constants/constants';
 import styled from 'styled-components';
 import Link from 'next/link';
+import { FlexCenter } from '@/components/styled-components/Flex';
+import { mediaQueries } from '@/lib/constants/constants';
 import { IMainCategory } from '@/apollo/types/types';
 import Routes from '@/lib/constants/Routes';
 
