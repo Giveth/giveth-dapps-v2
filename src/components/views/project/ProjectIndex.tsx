@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Caption, Container, semanticColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-
 import { captureException } from '@sentry/nextjs';
+
 import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
 import ProjectDonateCard from './projectDonateCard/ProjectDonateCard';
@@ -20,7 +20,10 @@ import {
 	gqlEnums,
 } from '@/apollo/types/gqlEnums';
 import InfoBadge from '@/components/badges/InfoBadge';
-import { IDonationsByProjectIdGQL } from '@/apollo/types/gqlTypes';
+import {
+	IDonationsByProjectIdGQL,
+	IProjectBySlug,
+} from '@/apollo/types/gqlTypes';
 import SuccessfulCreation from '@/components/views/create/SuccessfulCreation';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import InlineToast from '@/components/toasts/InlineToast';
@@ -29,7 +32,9 @@ import { compareAddresses, showToastError } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import { ProjectMeta } from '@/components/Metatag';
 
-const ProjectDonations = dynamic(() => import('./ProjectDonations'));
+const ProjectDonations = dynamic(
+	() => import('./projectDonations/ProjectDonations.index'),
+);
 const ProjectUpdates = dynamic(() => import('./ProjectUpdates'));
 const NotAvailableProject = dynamic(() => import('../../NotAvailableProject'), {
 	ssr: false,
@@ -40,7 +45,7 @@ const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {
 
 const donationsPerPage = 10;
 
-const ProjectIndex = (props: { project?: IProject }) => {
+const ProjectIndex: FC<IProjectBySlug> = props => {
 	const [activeTab, setActiveTab] = useState(0);
 	const [isActive, setIsActive] = useState<boolean>(true);
 	const [isDraft, setIsDraft] = useState<boolean>(false);
@@ -203,7 +208,7 @@ const ProjectIndex = (props: { project?: IProject }) => {
 									donations,
 									totalCount: totalDonations,
 								}}
-								project={project!}
+								project={project}
 								isActive={isActive}
 								isDraft={isDraft}
 							/>

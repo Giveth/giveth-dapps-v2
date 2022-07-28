@@ -8,7 +8,7 @@ import ProjectTotalFundCard from './ProjectTotalFundCard';
 import ProjectDonationTable from './ProjectDonationTable';
 import { FlexCenter } from '@/components/styled-components/Flex';
 
-const ProjectDonations = (props: {
+const ProjectDonationsIndex = (props: {
 	donationsByProjectId: IDonationsByProjectId;
 	project?: IProject;
 	isActive?: boolean;
@@ -60,4 +60,4 @@ const MessageText = styled(Lead)`
 	color: ${neutralColors.gray[800]};
 `;
 
-export default ProjectDonations;
+export default ProjectDonationsIndex;

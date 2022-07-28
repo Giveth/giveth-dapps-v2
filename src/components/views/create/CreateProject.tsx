@@ -13,7 +13,6 @@ import {
 import { useMutation } from '@apollo/client';
 import { utils } from 'ethers';
 import styled from 'styled-components';
-import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
 import { captureException } from '@sentry/nextjs';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -88,7 +87,6 @@ export type TInputs = {
 };
 
 const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
-	const { library } = useWeb3React();
 	const [addProjectMutation] = useMutation(CREATE_PROJECT);
 	const [editProjectMutation] = useMutation(UPDATE_PROJECT);
 	const router = useRouter();

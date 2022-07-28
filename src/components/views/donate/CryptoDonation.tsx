@@ -64,8 +64,8 @@ import {
 import usePurpleList from '@/hooks/usePurpleList';
 
 const ethereumChain = config.PRIMARY_NETWORK;
-const xdaiChain = config.SECONDARY_NETWORK;
-const stableCoins = [xdaiChain.mainToken, 'DAI', 'USDT'];
+const gnosisChain = config.SECONDARY_NETWORK;
+const stableCoins = [gnosisChain.mainToken, 'DAI', 'USDT'];
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
 export interface ISuccessDonation {
@@ -138,7 +138,7 @@ const CryptoDonation = (props: {
 
 	const stopPolling = useRef<any>(null);
 	const tokenSymbol = selectedToken?.symbol;
-	const isXdai = networkId === xdaiChain.id;
+	const isGnosis = networkId === gnosisChain.id;
 	const projectIsGivBackEligible = !!verified;
 
 	useEffect(() => {
@@ -204,14 +204,14 @@ const CryptoDonation = (props: {
 				setTokenPrice(mainTokenPrice || 0);
 			} else if (selectedToken?.address) {
 				let tokenAddress = selectedToken.address;
-				// coingecko doesn't have these tokens in xdai, so fetching price from ethereum
-				if (isXdai && selectedToken.mainnetAddress) {
+				// Coingecko doesn't have these tokens in Gnosis Chain, so fetching price from ethereum
+				if (isGnosis && selectedToken.mainnetAddress) {
 					tokenAddress = selectedToken.mainnetAddress || '';
 				}
 				const coingeckoChainId =
-					!isXdai || selectedToken.mainnetAddress
+					!isGnosis || selectedToken.mainnetAddress
 						? ethereumChain.id
-						: xdaiChain.id;
+						: gnosisChain.id;
 				const fetchedPrice = await fetchPrice(
 					coingeckoChainId,
 					tokenAddress,
@@ -251,7 +251,7 @@ const CryptoDonation = (props: {
 		// Native token balance is provided by the Web3Provider
 		if (
 			selectedToken.symbol === ethereumChain.mainToken ||
-			selectedToken.symbol === xdaiChain.mainToken
+			selectedToken.symbol === gnosisChain.mainToken
 		) {
 			return setSelectedTokenBalance(balance);
 		}
@@ -412,7 +412,7 @@ const CryptoDonation = (props: {
 					)}
 				{networkId &&
 					networkId === ethereumChain.id &&
-					acceptedChains?.includes(xdaiChain.id) && (
+					acceptedChains?.includes(gnosisChain.id) && (
 						<NetworkToast>
 							<div>
 								<img src='/images/gas_station.svg' alt='gas' />
@@ -421,7 +421,7 @@ const CryptoDonation = (props: {
 								</Caption>
 							</div>
 							<SwitchCaption
-								onClick={() => switchNetwork(xdaiChain.id)}
+								onClick={() => switchNetwork(gnosisChain.id)}
 							>
 								Switch network
 							</SwitchCaption>
