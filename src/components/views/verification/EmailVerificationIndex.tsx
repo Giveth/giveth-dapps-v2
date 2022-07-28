@@ -11,20 +11,18 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+import { FlexCenter } from '@/components/styled-components/Flex';
 import { ButtonStyled } from '@/components/GeneralCard.sc';
 import { useAppDispatch } from '@/features/hooks';
 import { setShowFooter } from '@/features/general/general.slice';
-import { Shadow } from '@/components/styled-components/Shadow';
 import givFontLogo from '/public/images/icons/giv_font_logo.svg';
 import check_stars from '/public/images/icons/check_stars.svg';
 import failed_stars from '/public/images/icons/failed_stars.svg';
-import { mediaQueries } from '@/lib/constants/constants';
 import LoadingAnimation from '@/animations/loading_giv.json';
 import { SEND_EMAIL_VERIFICATION_TOKEN } from '@/apollo/gql/gqlVerification';
 import { client } from '@/apollo/apolloClient';
 import { slugToVerification } from '@/lib/routeCreators';
-import { VerificationContainer } from './common.sc';
+import { VerificationCard, VerificationContainer } from './common.sc';
 
 const LazyLottie = dynamic(() => import('react-lottie'));
 
@@ -98,10 +96,10 @@ export default function EmailVerificationIndex() {
 
 	return (
 		<VerificationContainer>
-			<InnerContainer status={status} imageAddress={imageAddress}>
+			<VerificationCard background={imageAddress}>
 				<ContentSelector status={status} />
 				<div color={brandColors.giv[500]}></div>
-			</InnerContainer>
+			</VerificationCard>
 		</VerificationContainer>
 	);
 }
@@ -178,46 +176,6 @@ function Rejected() {
 		</>
 	);
 }
-
-const InnerContainer = styled(Flex)<{
-	status: EEmailVerificationStatus;
-	imageAddress: string;
-}>`
-	border-radius: 16px;
-	padding: 100px 8px;
-	padding-bottom: ${props =>
-		props.status !== EEmailVerificationStatus.Pending && '375px'};
-	text-align: center;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-	gap: 24px;
-	background-color: ${neutralColors.gray[100]};
-	width: 85%;
-	max-width: 1076px;
-	height: 100%;
-	position: relative;
-	overflow: hidden;
-	box-shadow: 0 3px 20px ${Shadow.Neutral[400]};
-	::before {
-		display: ${props =>
-			props.status === EEmailVerificationStatus.Pending
-				? 'none'
-				: 'block'};
-		content: '';
-		position: absolute;
-		bottom: 0;
-		left: 0;
-		background-image: url(${props => props.imageAddress});
-		background-position: bottom;
-		height: 375px;
-		width: 100%;
-		background-repeat: no-repeat;
-	}
-	${mediaQueries.laptopS} {
-		min-height: 765px;
-	}
-`;
 
 const ImageContainer = styled.div`
 	position: absolute;

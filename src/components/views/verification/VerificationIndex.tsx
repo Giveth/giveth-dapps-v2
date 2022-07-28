@@ -1,9 +1,5 @@
 import styled from 'styled-components';
-import {
-	neutralColors,
-	semanticColors,
-	SublineBold,
-} from '@giveth/ui-design-system';
+import { semanticColors, SublineBold } from '@giveth/ui-design-system';
 import { useState } from 'react';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
@@ -15,32 +11,39 @@ import useDetectDevice from '@/hooks/useDetectDevice';
 import DesktopMenu from '@/components/views/verification/menu/DesktopMenu';
 import MobileMenu from '@/components/views/verification/menu/MobileMenu';
 import { useVerificationData } from '@/context/verification.context';
+import { EVerificationStatus } from '@/apollo/types/types';
+import { VerificationStatusReport } from './VerificationStatusReport';
+import { VerificationContainer } from './common.sc';
 
 const VerificationIndex = () => {
 	const [showModal, setShowModal] = useState(false);
 	const device = useDetectDevice();
 	const isMobile = device.isMobile;
 	const { verificationData } = useVerificationData();
-
+	const { status } = verificationData || {};
 	return (
-		<Container>
-			<InnerContainer>
-				{isMobile ? <MobileMenu /> : <DesktopMenu />}
-				<ContentSection sm={8} md={9}>
-					<AbsoluteSection>
-						<SaveSection>
-							Auto save
-							<SaveCircle />
-						</SaveSection>
-						{/* <GuideSection onClick={() => setShowModal(true)}>
-							<Image src={BulbIcon} alt='light bulb' />
-						</GuideSection> */}
-					</AbsoluteSection>
-					<ContentSelector />
-				</ContentSection>
-			</InnerContainer>
+		<VerificationContainer>
+			{status == EVerificationStatus.DRAFT ? (
+				<InnerContainer>
+					{isMobile ? <MobileMenu /> : <DesktopMenu />}
+					<ContentSection sm={8} md={9}>
+						<AbsoluteSection>
+							<SaveSection>
+								Auto save
+								<SaveCircle />
+							</SaveSection>
+							{/* <GuideSection onClick={() => setShowModal(true)}>
+								<Image src={BulbIcon} alt='light bulb' />
+							</GuideSection> */}
+						</AbsoluteSection>
+						<ContentSelector />
+					</ContentSection>
+				</InnerContainer>
+			) : (
+				<VerificationStatusReport />
+			)}
 			{showModal && <HintModal setShowModal={setShowModal} />}
-		</Container>
+		</VerificationContainer>
 	);
 };
 
@@ -71,15 +74,6 @@ const GuideSection = styled(FlexCenter)`
 	padding: 10px;
 	border-radius: 16px;
 	cursor: pointer;
-`;
-
-export const BtnContainer = styled(Flex)`
-	justify-content: space-between;
-`;
-
-export const ContentSeparator = styled.hr`
-	border: 0.5px solid ${neutralColors.gray[300]};
-	margin: 64px 0 10px;
 `;
 
 const ContentSection = styled(Col)`
@@ -114,13 +108,6 @@ const InnerContainer = styled(Row)`
 		margin-right: 34px;
 		margin-left: 34px;
 	}
-`;
-
-const Container = styled(Flex)`
-	min-height: 100vh;
-	justify-content: center;
-	background-image: url('/images/backgrounds/Verification_GIV.svg');
-	padding: 165px 0 50px;
 `;
 
 export default VerificationIndex;
