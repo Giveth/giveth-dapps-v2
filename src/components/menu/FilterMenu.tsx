@@ -10,47 +10,67 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useState, forwardRef } from 'react';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
 import { ESortby, EDirection } from '@/apollo/types/gqlEnums';
 import CheckBox from '../Checkbox';
+import { useProjectsContext } from '@/context/projects.context';
+import { zIndex } from '@/lib/constants/constants';
 
-export const FilterMenu = () => {
-	const [isChecked, setIsChecked] = useState(false);
-	return (
-		<MenuContainer>
-			<Header>
-				<CloseContainer>
-					<IconX size={24} />
-				</CloseContainer>
-				<Title size='medium'>Filters</Title>
-			</Header>
-			<Section>
-				<B>Sort by</B>
-				{sortByOptions.map((sortByOption, idx) => (
-					<SortItem key={idx}>
-						<GLink>{sortByOption.label}</GLink>
-						<IconContainer>{sortByOption.icon}</IconContainer>
-					</SortItem>
-				))}
-			</Section>
-			<Section>
-				<B>Project features</B>
-				{projectFeatures.map((projectFeature, idx) => (
-					<FeatureItem key={idx}>
-						<CheckBox
-							label={projectFeature}
-							onChange={setIsChecked}
-							checked={isChecked}
-							size={16}
-						/>
-					</FeatureItem>
-				))}
-			</Section>
-		</MenuContainer>
-	);
-};
+interface IFilterMenuProps {
+	handleClose: (e?: any) => void;
+}
+
+export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
+	({ handleClose }, ref) => {
+		const [isChecked, setIsChecked] = useState(false);
+		const { setVariables } = useProjectsContext();
+
+		return (
+			<MenuContainer ref={ref}>
+				<Header>
+					<CloseContainer onClick={handleClose}>
+						<IconX size={24} />
+					</CloseContainer>
+					<Title size='medium'>Filters</Title>
+				</Header>
+				<Section>
+					<B>Sort by</B>
+					{sortByOptions.map((sortByOption, idx) => (
+						<SortItem
+							key={idx}
+							onClick={() =>
+								setVariables(prevVariables => ({
+									...prevVariables,
+									sortBy: sortByOption.value,
+								}))
+							}
+						>
+							<GLink>{sortByOption.label}</GLink>
+							<IconContainer>{sortByOption.icon}</IconContainer>
+						</SortItem>
+					))}
+				</Section>
+				<Section>
+					<B>Project features</B>
+					{projectFeatures.map((projectFeature, idx) => (
+						<FeatureItem key={idx}>
+							<CheckBox
+								label={projectFeature}
+								onChange={setIsChecked}
+								checked={isChecked}
+								size={16}
+							/>
+						</FeatureItem>
+					))}
+				</Section>
+			</MenuContainer>
+		);
+	},
+);
+
+FilterMenu.displayName = 'FilterMenu';
 
 // should merge with sortByOptions in projectsIndex at the end
 const sortByOptions = [
@@ -82,12 +102,23 @@ const projectFeatures = [
 ];
 
 const MenuContainer = styled.div`
+	top: 0;
+	right: 0;
 	padding: 24px;
 	background-color: ${neutralColors.gray[100]};
 	box-shadow: 0px 3px 20px rgba(212, 218, 238, 0.7);
-	border-radius: 16px;
+	width: 100%;
+	height: 100%;
+	z-index: ${zIndex.FIXED};
+	overflow-y: scroll;
+	position: fixed;
 	${mediaQueries.tablet} {
+		height: auto;
+		top: -10px;
+		border-radius: 16px;
+		position: absolute;
 		width: 375px;
+		z-index: 3;
 	}
 `;
 

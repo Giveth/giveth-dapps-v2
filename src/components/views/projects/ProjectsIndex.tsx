@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, MouseEvent } from 'react';
 import { useRouter } from 'next/router';
 import {
 	brandColors,
@@ -29,6 +29,8 @@ import useMediaQuery from '@/hooks/useMediaQuery';
 import ProjectsSubCategories from './ProjectsSubCategories';
 import { useProjectsContext } from '@/context/projects.context';
 import { Flex } from '@/components/styled-components/Flex';
+import { FilterMenu } from '@/components/menu/FilterMenu';
+import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 import type { IProjectsRouteProps } from 'pages/projects';
 
 export interface IProjectsView extends IProjectsRouteProps {
@@ -57,9 +59,13 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const [totalCount, setTotalCount] = useState(_totalCount);
 	const [isTabletShowingSearchAndFilter, setIsTabletShowingSearchAndFilter] =
 		useState(false);
+	const [isFilterOpen, setIsFilterOpen] = useState(false);
 	//Slider next and prev button refs
 	const navigationPrevRef = useRef<HTMLButtonElement>(null);
 	const navigationNextRef = useRef<HTMLButtonElement>(null);
+	const filterMenuRef = useRef<HTMLDivElement>(null);
+
+	useOnClickOutside(filterMenuRef, () => setIsFilterOpen(false));
 
 	const dispatch = useAppDispatch();
 	const { variables: contextVariables, setVariables } = useProjectsContext();
@@ -116,6 +122,11 @@ const ProjectsIndex = (props: IProjectsView) => {
 					},
 				});
 			});
+	};
+
+	const handleFilterClose = (e: MouseEvent<HTMLElement>) => {
+		e.stopPropagation();
+		setIsFilterOpen(false);
 	};
 
 	useEffect(() => {
@@ -192,10 +203,18 @@ const ProjectsIndex = (props: IProjectsView) => {
 								<IconContainer>
 									<IconSearch />
 								</IconContainer>
-								<FiltersButton>
+								<FiltersButton
+									onClick={() => setIsFilterOpen(true)}
+								>
 									Filters
 									<IconOptions16 />
 								</FiltersButton>
+								{isFilterOpen && (
+									<FilterMenu
+										handleClose={handleFilterClose}
+										ref={filterMenuRef}
+									/>
+								)}
 							</FilterAndSearchContainer>
 						)}
 						{isTablet && (
@@ -211,10 +230,20 @@ const ProjectsIndex = (props: IProjectsView) => {
 												flexGrow: 1,
 											}}
 										/>
-										<FiltersButton>
+										<FiltersButton
+											onClick={e => {
+												setIsFilterOpen(true);
+											}}
+										>
 											Filters
 											<IconOptions16 />
 										</FiltersButton>
+										{isFilterOpen && (
+											<FilterMenu
+												handleClose={handleFilterClose}
+												ref={filterMenuRef}
+											/>
+										)}
 										<IconContainer
 											onClick={() =>
 												setIsTabletShowingSearchAndFilter(
@@ -248,6 +277,29 @@ const ProjectsIndex = (props: IProjectsView) => {
 								}
 							/>
 						</>
+					)}
+					{!isDesktop && !isTablet && (
+						<Flex alignItems='center' gap='16px'>
+							<input
+								style={{
+									flexGrow: 1,
+								}}
+							/>
+							<FiltersButton
+								onClick={e => {
+									setIsFilterOpen(true);
+								}}
+							>
+								Filters
+								<IconOptions16 />
+							</FiltersButton>
+							{isFilterOpen && (
+								<FilterMenu
+									handleClose={handleFilterClose}
+									ref={filterMenuRef}
+								/>
+							)}
+						</Flex>
 					)}
 				</FiltersContainer>
 
@@ -355,6 +407,7 @@ const Wrapper = styled.div`
 const FilterAndSearchContainer = styled.div`
 	display: flex;
 	align-items: center;
+	position: relative;
 	gap: 16px;
 `;
 
@@ -444,5 +497,7 @@ const StyledLine = styled.hr`
 const TabletFilterAndSearchContainer = styled(Flex)`
 	flex-grow: 1;
 `;
+
+const MobileFilterContainer = styled.div``;
 
 export default ProjectsIndex;
