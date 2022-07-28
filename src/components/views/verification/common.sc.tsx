@@ -24,7 +24,7 @@ export const VerificationContainer = styled(Flex)`
 	min-height: 100vh;
 	justify-content: center;
 	background-image: url('/images/backgrounds/Verification_GIV.svg');
-	padding: 165px 0 50px;
+	padding: 132px 0 48px;
 `;
 
 export const VerificationCard = styled(Flex)<{ background: string }>`
@@ -37,7 +37,6 @@ export const VerificationCard = styled(Flex)<{ background: string }>`
 	background-color: ${neutralColors.gray[100]};
 	width: 85%;
 	max-width: 1076px;
-	height: 100%;
 	position: relative;
 	overflow: hidden;
 	box-shadow: 0 3px 20px ${Shadow.Neutral[400]};
@@ -56,6 +55,15 @@ export const VerificationCard = styled(Flex)<{ background: string }>`
 	${mediaQueries.laptopS} {
 		min-height: 765px;
 	}
+`;
+
+export const BtnContainer = styled(Flex)`
+	justify-content: space-between;
+`;
+
+export const ContentSeparator = styled.hr`
+	border: 0.5px solid ${neutralColors.gray[300]};
+	margin: 64px 0 10px;
 `;
 
 export const ButtonStyled = styled(Button)<{

@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import AddAddressModal from '@/components/views/verification/manageFunds/AddAddressModal';
 import UserAddress from '@/components/views/verification/manageFunds/UserAddress';
-import { ContentSeparator, BtnContainer } from '../VerificationIndex';
+import { ContentSeparator, BtnContainer } from '../common.sc';
 import { useVerificationData } from '@/context/verification.context';
 import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
 import {

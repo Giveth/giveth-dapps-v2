@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { Flex } from '@/components/styled-components/Flex';
 import { ButtonStyled } from './common.sc';
 import Input from '@/components/Input';
-import { ContentSeparator, BtnContainer } from './VerificationIndex';
+import { ContentSeparator, BtnContainer } from './common.sc';
 import { useVerificationData } from '@/context/verification.context';
 import { client } from '@/apollo/apolloClient';
 import {

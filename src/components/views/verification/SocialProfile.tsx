@@ -15,7 +15,7 @@ import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import DiscordIcon from '/public/images/icons/social/discord.svg';
 import LinkedinIcon from '/public/images/icons/social/linkedin.svg';
-import { ContentSeparator, BtnContainer } from './VerificationIndex';
+import { ContentSeparator, BtnContainer } from './common.sc';
 import { useVerificationData } from '@/context/verification.context';
 import { client } from '@/apollo/apolloClient';
 import {

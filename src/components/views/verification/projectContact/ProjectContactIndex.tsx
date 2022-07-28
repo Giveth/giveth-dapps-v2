@@ -17,7 +17,7 @@ import { useForm } from 'react-hook-form';
 import { requiredOptions } from '@/lib/constants/regex';
 
 import Input from '@/components/Input';
-import { BtnContainer, ContentSeparator } from '../VerificationIndex';
+import { BtnContainer, ContentSeparator } from '../common.sc';
 import { useVerificationData } from '@/context/verification.context';
 import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
 import { client } from '@/apollo/apolloClient';

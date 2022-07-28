@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import CheckBox from '@/components/Checkbox';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { Relative } from '@/components/styled-components/Position';
-import { ContentSeparator, BtnContainer } from './VerificationIndex';
+import { ContentSeparator, BtnContainer } from './common.sc';
 import { useVerificationData } from '@/context/verification.context';
 import { client } from '@/apollo/apolloClient';
 import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
