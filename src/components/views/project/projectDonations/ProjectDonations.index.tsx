@@ -15,11 +15,20 @@ const ProjectDonationsIndex = (props: {
 	isDraft: boolean;
 }) => {
 	const { donationsByProjectId, project, isActive, isDraft } = props;
-	const { totalDonations } = project || {};
+	const { totalCount } = donationsByProjectId || 0;
 
 	return (
 		<>
-			{totalDonations === 0 ? (
+			{totalCount > 0 ? (
+				<>
+					<ProjectTotalFundCard project={project} />
+					<ProjectDonationTable
+						donations={donationsByProjectId.donations}
+						totalDonations={donationsByProjectId.totalCount}
+						project={project}
+					/>
+				</>
+			) : (
 				isActive &&
 				!isDraft && (
 					<MessageContainer>
@@ -35,15 +44,6 @@ const ProjectDonationsIndex = (props: {
 						</MessageText>
 					</MessageContainer>
 				)
-			) : (
-				<>
-					<ProjectTotalFundCard project={project} />
-					<ProjectDonationTable
-						donations={donationsByProjectId.donations}
-						totalDonations={donationsByProjectId.totalCount}
-						project={project}
-					/>
-				</>
 			)}
 		</>
 	);
