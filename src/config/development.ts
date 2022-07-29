@@ -89,7 +89,6 @@ const config: EnvConfig = {
 				ichiApi: 'https://api.ichi.org/v1/farms/20009',
 				platformTitle: 'Angel Vault',
 				title: 'oneGIV / GIV',
-				icon: 'oneGIV',
 				description: 'Angel Vault',
 				provideLiquidityLink:
 					'https://3ea0967f.appichiorg.pages.dev/vault/?poolId=5004&back=vault',
