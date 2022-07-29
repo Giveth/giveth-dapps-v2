@@ -148,6 +148,14 @@ export interface IMediumBlogPost {
 	guid: string;
 }
 
+export interface IMainCategory {
+	title: string;
+	banner: string;
+	description: string;
+	slug: string;
+	categories: ICategory[];
+}
+
 export interface ICategory {
 	name: string;
 	value?: string;
