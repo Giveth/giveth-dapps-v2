@@ -125,6 +125,9 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 			traceCampaignId
 			categories {
 				name
+				mainCategory {
+					title
+				}
 			}
 			adminUser {
 				id
