@@ -49,11 +49,11 @@ export const TabGIVbacksTop = () => {
 	const [showGivBackExplain, setShowGivBackExplain] = useState(false);
 	const [givBackStream, setGivBackStream] = useState<BigNumber.Value>(0);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
-	const currentValues = useAppSelector(state => state.subgraph.currentValues);
+	const xDaiValues = useAppSelector(state => state.subgraph.xDaiValues);
 	const givTokenDistroBalance = useMemo(() => {
-		const sdh = new SubgraphDataHelper(currentValues);
+		const sdh = new SubgraphDataHelper(xDaiValues);
 		return sdh.getGIVTokenDistroBalance();
-	}, [currentValues]);
+	}, [xDaiValues]);
 	const { chainId } = useWeb3React();
 
 	useEffect(() => {
