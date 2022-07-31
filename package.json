@@ -10,7 +10,9 @@
 		"start": "next start"
 	},
 	"resolutions": {
-		"styled-components": "^5"
+		"styled-components": "^5",
+		"@types/react": "^18.0.15",
+		"@types/react-dom": "^18.0.6"
 	},
 	"dependencies": {
 		"@apollo/client": "^3.4.16",
@@ -43,10 +45,10 @@
 		"quill-image-drop-and-paste": "^1.2.10",
 		"quill-image-resize-module": "^3.0.0",
 		"quill-magic-url": "4.1.4",
-		"react": "^18.0.0",
+		"react": "^18.2.0",
 		"react-custom-scrollbars": "^4.2.1",
 		"react-datepicker": "^4.8.0",
-		"react-dom": "^18.0.0",
+		"react-dom": "^18.2.0",
 		"react-dropzone": "^14.2.2",
 		"react-google-maps": "^9.4.5",
 		"react-hook-form": "^7.32.2",
@@ -66,15 +68,14 @@
 	"devDependencies": {
 		"@next/bundle-analyzer": "^12.1.4",
 		"@types/apollo-upload-client": "^14.1.0",
-		"@types/axios": "^0.14.0",
 		"@types/lodash.debounce": "^4.0.6",
 		"@types/lodash.isequal": "^4.5.5",
 		"@types/node": "16.11.6",
 		"@types/nprogress": "^0.2.0",
-		"@types/react": "17.0.34",
+		"@types/react": "^18.0.15",
 		"@types/react-custom-scrollbars": "^4.0.9",
 		"@types/react-datepicker": "^4.4.1",
-		"@types/react-dom": "^17.0.11",
+		"@types/react-dom": "^18.0.6",
 		"@types/react-html-parser": "^2.0.2",
 		"@types/react-lottie": "^1.2.6",
 		"@types/react-modal": "^3.13.1",
