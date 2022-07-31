@@ -9,6 +9,7 @@ import {
 import { constants } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { useWeb3React } from '@web3-react/core';
+import { useRouter } from 'next/router';
 import config from '../../configuration';
 import {
 	PoolStakingConfig,
@@ -67,14 +68,15 @@ import FarmCountDown from '../FarmCountDown';
 import { Flex } from '../styled-components/Flex';
 import { IStakeInfo } from '@/hooks/useStakingPool';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
-import { useAppSelector } from '@/features/hooks';
 import { GIVPowerExplainModal } from '../modals/GIVPowerExplain';
 import GIVpowerCardIntro from './GIVpowerCardIntro';
 import LockModal from '../modals/StakeLock/Lock';
 import { StakeGIVModal } from '../modals/StakeLock/StakeGIV';
 import { avgAPR } from '@/helpers/givpower';
-import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { LockupDetailsModal } from '../modals/LockupDetailsModal';
+import { useAppSelector } from '@/features/hooks';
+import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import Routes from '@/lib/constants/Routes';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -123,6 +125,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const [showAPRModal, setShowAPRModal] = useState(false);
 	const [showUniV3APRModal, setShowUniV3APRModal] = useState(false);
 	const [showStakeModal, setShowStakeModal] = useState(false);
+	const [isFirstStakeShown, setIsFirstStakeShown] = useState(false);
 	const [showUnStakeModal, setShowUnStakeModal] = useState(false);
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
 	const [showLockModal, setShowLockModal] = useState(false);
@@ -135,24 +138,27 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const [tokenDistroHelper, setTokenDistroHelper] =
 		useState<TokenDistroHelper>();
 	const [disableModal, setDisableModal] = useState<boolean>(true);
+	const router = useRouter();
 	const { setInfo } = useFarms();
-	const { chainId } = useWeb3React();
+	const { chainId, account, active: isWalletActive } = useWeb3React();
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
+
 	const sdh = new SubgraphDataHelper(currentValues);
-	const { regenStreamType, regenFarmIntro } =
-		poolStakingConfig as RegenPoolStakingConfig;
+	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
 
 	const {
 		type,
 		platform,
 		platformTitle,
 		title,
+		icon,
 		description,
 		provideLiquidityLink,
 		unit,
 		farmStartTimeMS,
 		active,
 		archived,
+		introCard,
 	} = poolStakingConfig;
 
 	const {
@@ -173,6 +179,29 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				: config.MAINNET_CONFIG;
 		return networkConfig.regenStreams.find(s => s.type === regenStreamType);
 	}, [chainId, regenStreamType]);
+
+	useEffect(() => {
+		if (isFirstStakeShown || !router) return;
+		const { open, chain } = router.query;
+		const _open = Array.isArray(open) ? open[0] : open;
+		const _chain = Array.isArray(chain) ? chain[0] : chain;
+		const _chainId =
+			_chain === 'gnosis'
+				? config.XDAI_NETWORK_NUMBER
+				: config.MAINNET_NETWORK_NUMBER;
+		const checkNetworkAndShowStakeModal = async () => {
+			if (_chainId === chainId && _open === type) {
+				if (account) {
+					setShowStakeModal(true);
+					setIsFirstStakeShown(true);
+					router.replace(Routes.GIVfarm, undefined, {
+						shallow: true,
+					});
+				}
+			}
+		};
+		checkNetworkAndShowStakeModal();
+	}, [router, account, isWalletActive]);
 
 	useEffect(() => {
 		if (regenStreamType) {
@@ -260,7 +289,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							</StakingPoolExchange>
 							<div style={{ flex: 1 }}></div>
 							{notif && notif}
-							{regenFarmIntro && (
+							{introCard && (
 								<IntroIcon
 									onClick={() =>
 										setState(StakeCardState.INTRO)
@@ -280,7 +309,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							)}
 						</StakingPoolExchangeRow>
 						<SPTitle alignItems='center' gap='16px'>
-							<StakingPoolImages title={title} />
+							<StakingPoolImages title={title} icon={icon} />
 							<div>
 								<StakingPoolLabel weight={900}>
 									{title}
@@ -492,7 +521,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				) : (
 					<StakingCardIntro
 						poolStakingConfig={
-							poolStakingConfig as RegenPoolStakingConfig
+							poolStakingConfig as SimplePoolStakingConfig
 						}
 						setState={setState}
 					/>
@@ -530,7 +559,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				) : isGIVpower ? (
 					<StakeGIVModal
 						setShowModal={setShowStakeModal}
-						poolStakingConfig={poolStakingConfig}
+						poolStakingConfig={
+							poolStakingConfig as SimplePoolStakingConfig
+						}
 						maxAmount={userNotStakedAmount}
 						showLockModal={() => setShowLockModal(true)}
 					/>

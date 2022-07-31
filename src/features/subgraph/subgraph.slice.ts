@@ -18,7 +18,9 @@ const defaultGIVpowerInfo = {
 };
 
 export const defaultSubgraphValues: ISubgraphState = {
-	gipower: defaultGIVpowerInfo,
+	userNotStakedPositions: [],
+	userStakedPositions: [],
+	allPositions: [],
 	networkNumber: config.MAINNET_NETWORK_NUMBER,
 };
 

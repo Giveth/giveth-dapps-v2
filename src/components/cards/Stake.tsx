@@ -32,7 +32,6 @@ import { getLPStakingAPR } from '@/lib/stakingPool';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { networkProviders } from '@/helpers/networkProvider';
 import { useAppSelector } from '@/features/hooks';
-import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { SimplePoolStakingConfig, StakingType } from '@/types/config';
 
 const InvestCardContainer = styled(Card)`
@@ -148,7 +147,6 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 
 		const promiseQueue: Promise<APR>[] = [];
 		config.XDAI_CONFIG.pools.forEach(poolStakingConfig => {
-			const sdh = new SubgraphDataHelper(xDaiValues);
 			const promise: Promise<APR> = getLPStakingAPR(
 				poolStakingConfig as SimplePoolStakingConfig,
 				config.XDAI_NETWORK_NUMBER,
