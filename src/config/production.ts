@@ -65,6 +65,26 @@ const config: EnvConfig = {
 				active: true,
 			},
 			{
+				POOL_ADDRESS: '0xc3151A58d519B94E915f66B044De3E55F77c2dd9',
+				LM_ADDRESS: '0xA4b727DF6fD608d1835e3440288c73fB28c4eF16',
+				type: StakingType.ICHI_GIV_ONEGIV,
+				platform: StakingPlatform.ICHI,
+				ichiApi: 'https://api.ichi.org/v1/farms/20009',
+				platformTitle: 'Angel Vault',
+				title: 'oneGIV / GIV',
+				description: 'Angel Vault',
+				provideLiquidityLink:
+					'https://app.ichi.org/vault?poolId=20009&back=vault',
+				unit: 'LP',
+				active: true,
+				farmStartTimeMS: 1659607200000,
+				introCard: {
+					title: 'Angel Vault',
+					description: `The Angel Vault is shared Univ3 position structured to protect GIV from downward volatility.\n\nProvide oneGIV as liquidity in our Angel Vault and stake the LP token to earn rewards proportional to the liquidity provided. When you remove liquidity, you will get oneGIV & GIV proportional to the holdings in the Angel Vault.`,
+					link: 'https://docs.ichi.org/ichi-docs-v3/ichi-vaults/angel-vaults',
+				},
+			},
+			{
 				POOL_ADDRESS: '0x7819f1532c49388106f7762328c51ee70edd134c',
 				VAULT_ADDRESS: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
 				POOL_ID:
