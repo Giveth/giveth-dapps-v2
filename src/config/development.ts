@@ -88,12 +88,13 @@ const config: EnvConfig = {
 				platform: StakingPlatform.ICHI,
 				ichiApi: 'https://api.ichi.org/v1/farms/20009',
 				platformTitle: 'Angel Vault',
-				title: 'oneGIV / GIV - first',
+				title: 'oneGIV / GIV',
 				description: 'Angel Vault',
 				provideLiquidityLink:
 					'https://3ea0967f.appichiorg.pages.dev/vault/?poolId=5004&back=vault',
 				unit: 'LP',
 				active: true,
+				archived: true,
 				introCard: {
 					title: 'Angel Vault',
 					description: `The Angel Vault is shared Univ3 position structured to protect GIV from downward volatility.\n\nProvide oneGIV as liquidity in our Angel Vault and stake the LP token to earn rewards proportional to the liquidity provided. When you remove liquidity, you will get oneGIV & GIV proportional to the holdings in the Angel Vault.`,
