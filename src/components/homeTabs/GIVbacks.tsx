@@ -36,7 +36,7 @@ import { HarvestAllModal } from '../modals/HarvestAll';
 import { getNowUnixMS } from '@/helpers/time';
 import { formatDate } from '@/lib/helpers';
 import { GIVBackExplainModal } from '../modals/GIVBackExplain';
-import { TopInnerContainer } from './commons';
+import { NoWrap, TopInnerContainer } from './commons';
 import links from '@/lib/constants/links';
 import { Col, Container, Row } from '@/components/Grid';
 import Routes from '@/lib/constants/Routes';
@@ -197,7 +197,9 @@ export const TabGIVbacksBottom = () => {
 					<Row>
 						<Col xs={12} md={8}>
 							<RoundSection>
-								<RoundTitle>GIVbacks Round {round}</RoundTitle>
+								<RoundTitle>
+									GIVbacks <NoWrap>Round {round}</NoWrap>
+								</RoundTitle>
 								<RoundInfo>
 									<RoundInfoRow justifyContent='space-between'>
 										<P>Start Date</P>
@@ -218,10 +220,15 @@ export const TabGIVbacksBottom = () => {
 									<RoundInfoTallRow
 										justifyContent='space-between'
 										alignItems='center'
+										wrap={1}
 									>
-										<P>GIV Allocated to Round</P>
+										<P>
+											<NoWrap>
+												GIV Allocated to Round
+											</NoWrap>
+										</P>
 										<GivAllocated>
-											1 Million GIV
+											<NoWrap>1 Million GIV</NoWrap>
 										</GivAllocated>
 									</RoundInfoTallRow>
 									<RoundButton
