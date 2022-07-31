@@ -113,6 +113,7 @@ const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 };
 
 const ModalGrid = styled.div`
+	color: ${neutralColors.gray[100]};
 	position: relative;
 	display: flex;
 	width: 100%;

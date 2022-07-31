@@ -3,7 +3,7 @@ import { FC } from 'react';
 import styled from 'styled-components';
 import Input from '@/components/Input';
 import { FlexCenter } from '@/components/styled-components/Flex';
-import { RemoveIcon } from '@/components/views/verification/common';
+import { RemoveIcon } from '@/components/views/verification/Common';
 
 interface IProps {
 	url: string;
