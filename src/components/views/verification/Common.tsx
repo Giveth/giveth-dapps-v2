@@ -5,12 +5,12 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
+import menuList from '@/components/views/verification/menu/menuList';
+import { useVerificationData } from '@/context/verification.context';
 import {
 	ButtonStyled,
 	RemoveBtn,
-} from '@/components/views/verification/common.styled';
-import menuList from '@/components/views/verification/menu/menuList';
-import { useVerificationData } from '@/context/verification.context';
+} from '@/components/views/verification/Common.sc';
 
 interface IRemoveBtnProps {
 	onClick?: () => void;

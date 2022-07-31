@@ -12,5 +12,5 @@ export default function LoadingVerification() {
 }
 
 const Container = styled(FlexCenter)`
-	min-height: 700px;
+	height: 100%;
 `;
