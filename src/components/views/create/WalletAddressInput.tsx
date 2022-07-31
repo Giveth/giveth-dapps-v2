@@ -157,6 +157,8 @@ const WalletAddressInput: FC<IProps> = ({
 					isGnosis ? EInputs.secondaryAddress : EInputs.mainAddress
 				}
 				registerOptions={{ validate: addressValidation }}
+				// TODO: fix types
+				// @ts-ignore
 				error={
 					errors[
 						isGnosis
