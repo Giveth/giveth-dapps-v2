@@ -46,6 +46,7 @@ import {
 	setShowSignWithWallet,
 	setShowCompleteProfile,
 } from '@/features/modal/modal.slice';
+import { slugToProjectView } from '@/lib/routeCreators';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -70,8 +71,30 @@ const Header: FC<IHeader> = () => {
 	);
 	const theme = useAppSelector(state => state.general.theme);
 	const router = useRouter();
-
 	const isLight = theme === ETheme.Light;
+
+	const handleBack = () => {
+		const calculateSlug = () => {
+			if (typeof router.query?.slug === 'string') {
+				return router.query?.slug;
+			}
+			return '';
+		};
+		if (
+			router.route.startsWith(Routes.Verification) &&
+			router?.query?.slug &&
+			!router?.query?.token
+		) {
+			router.push(slugToProjectView(calculateSlug()));
+		} else if (
+			router.route.startsWith(Routes.Verification) &&
+			router?.query?.token
+		) {
+			router.push(`${Routes.Verification}/${calculateSlug()}`);
+		} else {
+			router.back();
+		}
+	};
 
 	useEffect(() => {
 		setIsGIVeconomyRoute(router.route.startsWith('/giv'));
@@ -150,7 +173,7 @@ const Header: FC<IHeader> = () => {
 		>
 			<Flex>
 				{showBackBtn ? (
-					<Logo onClick={router.back}>
+					<Logo onClick={handleBack}>
 						<Image
 							width='26px'
 							height='26px'

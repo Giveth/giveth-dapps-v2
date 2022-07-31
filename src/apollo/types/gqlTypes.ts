@@ -13,7 +13,7 @@ export interface IFetchAllProjects {
 }
 
 export interface IProjectBySlug {
-	project: IProject;
+	project?: IProject;
 }
 
 export interface IFetchProjectUpdates {

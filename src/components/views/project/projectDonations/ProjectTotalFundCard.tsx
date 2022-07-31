@@ -1,24 +1,14 @@
-import Image from 'next/image';
+import { FC } from 'react';
 import styled from 'styled-components';
-import {
-	Subline,
-	H2,
-	neutralColors,
-	H5,
-	brandColors,
-} from '@giveth/ui-design-system';
+import { Subline, H2, H5, brandColors } from '@giveth/ui-design-system';
 
-import WalletIcon from '/public/images/wallet_donate_tab.svg';
 import { Shadow } from '@/components/styled-components/Shadow';
-import { IProject } from '@/apollo/types/types';
+import ProjectWalletAddress from '@/components/views/project/projectDonations/ProjectWalletAddress';
+import { IProjectBySlug } from '@/apollo/types/gqlTypes';
 
-const ProjectTotalFundCard = (props: { project?: IProject }) => {
-	const {
-		totalDonations,
-		walletAddress,
-		traceCampaignId,
-		totalTraceDonations,
-	} = props.project || {};
+const ProjectTotalFundCard: FC<IProjectBySlug> = ({ project }) => {
+	const { totalDonations, addresses, traceCampaignId, totalTraceDonations } =
+		project || {};
 
 	return (
 		<Wrapper>
@@ -27,17 +17,14 @@ const ProjectTotalFundCard = (props: { project?: IProject }) => {
 					<Subline>All time funding received</Subline>
 					<TotalFund>{'$' + totalDonations}</TotalFund>
 				</div>
-				{!!traceCampaignId && (
+				{traceCampaignId && (
 					<div>
 						<Subline>Funding from Traces</Subline>
 						<FromTraces>{'$' + totalTraceDonations}</FromTraces>
 					</div>
 				)}
 			</UpperSection>
-			<BottomSection>
-				<Image src={WalletIcon} alt='wallet icon' />
-				<Subline>{walletAddress}</Subline>
-			</BottomSection>
+			<ProjectWalletAddress addresses={addresses} />
 		</Wrapper>
 	);
 };
@@ -65,14 +52,6 @@ const TotalFund = styled(H2)`
 const FromTraces = styled(H5)`
 	margin-top: 12px;
 	font-weight: 400;
-`;
-
-const BottomSection = styled.div`
-	background: ${neutralColors.gray[200]};
-	padding: 9.5px 22px;
-	display: flex;
-	gap: 8px;
-	color: ${neutralColors.gray[500]};
 `;
 
 export default ProjectTotalFundCard;

@@ -13,7 +13,6 @@ import {
 import { useMutation } from '@apollo/client';
 import { utils } from 'ethers';
 import styled from 'styled-components';
-import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
 import { captureException } from '@sentry/nextjs';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -23,7 +22,7 @@ import {
 	CREATE_PROJECT,
 	UPDATE_PROJECT,
 } from '@/apollo/gql/gqlProjects';
-import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
+import { isAddressENS } from '@/lib/wallet';
 import {
 	ICategory,
 	IProject,
@@ -88,7 +87,6 @@ export type TInputs = {
 };
 
 const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
-	const { library } = useWeb3React();
 	const [addProjectMutation] = useMutation(CREATE_PROJECT);
 	const [editProjectMutation] = useMutation(UPDATE_PROJECT);
 	const router = useRouter();
@@ -99,17 +97,24 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		project || {};
 	const isDraft = project?.status.name === EProjectStatus.DRAFT;
 	const defaultImpactLocation = impactLocation || '';
-	console.log(project);
+
 	const defaultMainAddress = addresses?.find(
-		a => a.networkId === ethereumId,
+		a => a.isRecipient && a.networkId === ethereumId,
 	)?.address;
 	const defaultSecondaryAddress = addresses?.find(
-		a => a.networkId === gnosisId,
+		a => a.isRecipient && a.networkId === gnosisId,
 	)?.address;
 	const isSameDefaultAddresses = compareAddresses(
 		defaultMainAddress,
 		defaultSecondaryAddress,
 	);
+	const userAddresses: string[] = [];
+	if (isSameDefaultAddresses) userAddresses.push(defaultMainAddress!);
+	else {
+		if (defaultMainAddress) userAddresses.push(defaultMainAddress);
+		if (defaultSecondaryAddress)
+			userAddresses.push(defaultSecondaryAddress);
+	}
 
 	const formMethods = useForm<TInputs>({
 		mode: 'onChange',
@@ -126,6 +131,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 	const {
 		register,
+		unregister,
 		handleSubmit,
 		formState: { errors: formErrors },
 		setValue,
@@ -149,6 +155,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const [isSameMainnetGnosisAddress, setIsSameMainnetGnosisAddress] =
 		useState(isEditMode ? isSameDefaultAddresses : true);
 	const [isLoading, setIsLoading] = useState(false);
+	const [isTitleValidating, setIsTitleValidating] = useState(false);
+	const [resolvedENS, setResolvedENS] = useState('');
 
 	// useLeaveConfirm({ shouldConfirm: formChange });
 
@@ -171,7 +179,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 			if (isSameMainnetGnosisAddress) {
 				const address = isAddressENS(mainAddress)
-					? await getAddressFromENS(mainAddress, library)
+					? resolvedENS
 					: mainAddress;
 				const checksumAddress = utils.getAddress(address);
 				addresses.push(
@@ -181,7 +189,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			} else {
 				if (mainnetAddressActive) {
 					const address = isAddressENS(mainAddress)
-						? await getAddressFromENS(mainAddress, library)
+						? resolvedENS
 						: mainAddress;
 					const checksumAddress = utils.getAddress(address);
 					addresses.push({
@@ -272,7 +280,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			<CreateContainer>
 				<div>
 					<Title>
-						{isEditMode ? 'Project details' : 'Create a Project'}
+						{isEditMode ? 'Project details' : 'Create a project'}
 					</Title>
 					{isSmallScreen && (
 						<GuidelinesStyleTablet>
@@ -289,13 +297,17 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							maxLength={55}
 							size={InputSize.LARGE}
 							value={watchName}
+							isValidating={isTitleValidating}
 							register={register}
 							registerName={EInputs.name}
 							registerOptions={{
 								...requiredOptions.name,
-								validate: i => {
+								validate: async i => {
 									if (noTitleValidation(i)) return true;
-									return titleValidation(i);
+									setIsTitleValidating(true);
+									const result = await titleValidation(i);
+									setIsTitleValidating(false);
+									return result;
 								},
 							}}
 							error={formErrors[EInputs.name]}
@@ -326,18 +338,21 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						<CheckBox
 							onChange={setIsSameMainnetGnosisAddress}
 							checked={isSameMainnetGnosisAddress}
-							label='I’ll raise & receive funds on Mainnet and Gnosis chain networks'
+							title='I’ll raise & receive funds on Mainnet and Gnosis Chain networks with the same address.'
 						/>
 						<WalletAddressInput
 							networkId={ethereumId}
 							sameAddress={isSameMainnetGnosisAddress}
 							isActive={mainnetAddressActive}
-							defaultValue={defaultMainAddress}
+							userAddresses={userAddresses}
+							resolvedENS={resolvedENS}
+							setResolvedENS={setResolvedENS}
 							setIsActive={e => {
 								if (!e && !gnosisAddressActive)
 									return showToastError(
 										'You must select at least one address',
 									);
+								if (!e) unregister(EInputs.mainAddress);
 								setMainnetAddressActive(e);
 							}}
 						/>
@@ -345,12 +360,14 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							networkId={gnosisId}
 							sameAddress={isSameMainnetGnosisAddress}
 							isActive={gnosisAddressActive}
-							defaultValue={defaultSecondaryAddress}
+							userAddresses={userAddresses}
+							setResolvedENS={() => {}}
 							setIsActive={e => {
 								if (!e && !mainnetAddressActive)
 									return showToastError(
 										'You must select at least one address',
 									);
+								if (!e) unregister(EInputs.secondaryAddress);
 								setGnosisAddressActive(e);
 							}}
 						/>
@@ -363,7 +380,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							<li>
 								{isEditMode ? 'Edited' : 'Newly published'}{' '}
 								projects will be &quot;unlisted&quot; until
-								reviewed by our team {isEditMode && 'again'}.
+								reviewed by our team{isEditMode && ' again'}.
 							</li>
 							<li>
 								You can still access your project from your
