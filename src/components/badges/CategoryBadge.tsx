@@ -1,9 +1,8 @@
 import { neutralColors, Subline } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { ICategory } from '@/apollo/types/types';
 
-const CategoryBadge = (props: { category: ICategory }) => {
-	return <Wrapper>{props.category.name}</Wrapper>;
+const CategoryBadge = ({ category }: { category: string }) => {
+	return <Wrapper>{category}</Wrapper>;
 };
 
 const Wrapper = styled(Subline)`
