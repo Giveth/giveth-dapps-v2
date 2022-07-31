@@ -120,7 +120,7 @@ export function backendGQLRequest(
 export const transformGraphQLErrorsToStatusCode = (
 	graphQLErrors: GraphQLErrors,
 ) => {
-	if (!graphQLErrors || graphQLErrors.length < 1) return 200;
+	if (!graphQLErrors || graphQLErrors.length < 1) return 500;
 	const { message } = graphQLErrors[0];
 	if (message.includes('not found')) return 404;
 	return 500;

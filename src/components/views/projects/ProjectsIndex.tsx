@@ -312,9 +312,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 						))}
 					</ProjectsContainer>
 				) : (
-					<ProjectsNoResults
-						trySearch={() => console.log('Try Again')}
-					/>
+					<ProjectsNoResults mainCategories={props.mainCategories} />
 				)}
 
 				{showLoadMore && (

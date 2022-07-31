@@ -17,7 +17,7 @@ import {
 	DatePickerWrapper,
 } from '@/components/styled-components/DatePicker';
 import FileUploader from '@/components/FileUploader';
-import { ContentSeparator, BtnContainer } from './VerificationIndex';
+import { ContentSeparator, BtnContainer } from './Common.sc';
 import { useVerificationData } from '@/context/verification.context';
 import { client } from '@/apollo/apolloClient';
 import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';

@@ -72,13 +72,16 @@ function ProjectsMainCategories({
 export default ProjectsMainCategories;
 
 const MainCategoryItem = styled.div<{ isSelected?: boolean }>`
+	cursor: pointer;
 	border-radius: 50px;
 	background: ${props =>
 		!props.isSelected ? neutralColors.gray[300] : brandColors.giv[600]};
 	color: ${props => (!props.isSelected ? 'black' : 'white')};
 	padding: 16px;
 	:hover {
-		cursor: pointer;
+		color: white;
+		background: ${brandColors.giv[600]};
+		transition: background-color 300ms linear, color 150ms linear;
 	}
 	font-weight: 400;
 	text-align: center;
