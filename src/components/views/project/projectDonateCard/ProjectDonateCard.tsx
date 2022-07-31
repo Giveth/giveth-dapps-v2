@@ -23,6 +23,7 @@ import { captureException } from '@sentry/nextjs';
 import { IconArchiving } from '@giveth/ui-design-system/lib/cjs/components/icons/Archiving';
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import { Shadow } from '@/components/styled-components/Shadow';
+import CategoryBadge from '@/components/badges/CategoryBadge';
 import { compareAddresses, showToastError } from '@/lib/helpers';
 import { EVerificationStatus, IProject } from '@/apollo/types/types';
 import links from '@/lib/constants/links';
@@ -49,9 +50,6 @@ import {
 	decrementLikedProjectsCount,
 } from '@/features/user/user.slice';
 import VerificationStatus from '@/components/views/project/projectDonateCard/VerificationStatus';
-import CategoryBadge from '@/components/badges/CategoryBadge';
-import { mapCategoriesToMainCategories } from '@/helpers/projects';
-import { Flex } from '@/components/styled-components/Flex';
 
 interface IProjectDonateCard {
 	project?: IProject;
@@ -83,8 +81,6 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 		organization,
 		projectVerificationForm,
 	} = project || {};
-
-	const convertedCategories = mapCategoriesToMainCategories(categories);
 
 	const [heartedByUser, setHeartedByUser] = useState<boolean>(false);
 	const [showModal, setShowModal] = useState<boolean>(false);
@@ -266,7 +262,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 						{!verified && !isDraft && !verStatus && (
 							<FullOutlineButton
 								buttonType='primary'
-								label='VERIFY YOUR PROJECTT'
+								label='VERIFY YOUR PROJECT'
 								disabled={!isActive}
 								onClick={() => setShowVerificationModal(true)}
 							/>
@@ -320,23 +316,11 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 					</GivBackNotif>
 				)}
 				{isCategories && (
-					<MainCategoryWrapper flexDirection='column'>
-						{Object.entries(convertedCategories)?.map(
-							([key, value]) => (
-								<>
-									<MainCategory key={key}>{key}</MainCategory>
-									<CategoryWrapper>
-										{value.map(i => (
-											<CategoryBadge
-												key={i + key}
-												category={i}
-											/>
-										))}
-									</CategoryWrapper>
-								</>
-							),
-						)}
-					</MainCategoryWrapper>
+					<CategoryWrapper>
+						{categories.map(i => (
+							<CategoryBadge key={i.name} category={i} />
+						))}
+					</CategoryWrapper>
 				)}
 				{!isDraft && !isAdmin && (
 					<Links>
@@ -387,16 +371,10 @@ const CategoryWrapper = styled.div`
 	display: flex;
 	flex-wrap: wrap;
 	gap: 10px;
-	overflow: hidden;
-	margin: 8px 0;
-`;
-
-const MainCategoryWrapper = styled(Flex)`
 	margin-top: 24px;
-`;
-
-const MainCategory = styled(Caption)`
-	color: ${neutralColors.gray[600]};
+	overflow: hidden;
+	max-height: 98px;
+	margin-bottom: 16px;
 `;
 
 const GivBackNotif = styled.div`

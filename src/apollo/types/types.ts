@@ -153,10 +153,6 @@ export interface ICategory {
 	mainCategory: Pick<IMainCategory, 'title'>;
 }
 
-export interface IConvertedCategories {
-	[key: string]: string[];
-}
-
 export interface IProjectBySlug {
 	project: IProject;
 }
