@@ -10,7 +10,7 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { useState, forwardRef } from 'react';
+import { forwardRef } from 'react';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
 import { ESortbyAllProjects } from '@/apollo/types/gqlEnums';
@@ -24,9 +24,25 @@ interface IFilterMenuProps {
 
 export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 	({ handleClose }, ref) => {
-		const [isChecked, setIsChecked] = useState(false);
 		const { setVariables, variables } = useProjectsContext();
-
+		const handleSelectFilter = (e: boolean, filter: string) => {
+			if (e === true) {
+				setVariables({
+					...variables,
+					filters: !variables.filters?.includes(filter)
+						? [...(variables.filters || []), filter]
+						: variables.filters,
+				});
+			}
+			if (e === false) {
+				setVariables({
+					...variables,
+					filters: variables.filters?.filter(
+						(f: string) => f !== filter,
+					),
+				});
+			}
+		};
 		return (
 			<MenuContainer ref={ref}>
 				<Header>
@@ -43,12 +59,12 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 								variables.sortingBy === sortByOption.value
 							}
 							key={idx}
-							onClick={() =>
-								setVariables(prevVariables => ({
-									...prevVariables,
+							onClick={e => {
+								setVariables({
+									...variables,
 									sortingBy: sortByOption.value,
-								}))
-							}
+								});
+							}}
 						>
 							<GLink>{sortByOption.label}</GLink>
 							<IconContainer>{sortByOption.icon}</IconContainer>
@@ -60,9 +76,15 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 					{projectFeatures.map((projectFeature, idx) => (
 						<FeatureItem key={idx}>
 							<CheckBox
-								label={projectFeature}
-								onChange={setIsChecked}
-								checked={isChecked}
+								label={projectFeature.label}
+								onChange={e => {
+									handleSelectFilter(e, projectFeature.value);
+								}}
+								checked={
+									variables?.filters?.includes(
+										projectFeature.value,
+									) ?? false
+								}
 								size={16}
 							/>
 						</FeatureItem>
@@ -100,11 +122,11 @@ const sortByOptions = [
 ];
 
 const projectFeatures = [
-	'Giveback eligible',
-	'Accept GIV token',
-	'Verified',
-	'From GivingBlock',
-	'From Trace',
+	{ label: 'Giveback eligible', value: 'givbackEligible' },
+	{ label: 'Accept GIV token', value: 'AcceptGiv' },
+	{ label: 'Verified', value: 'Verified' },
+	{ label: 'From GivingBlock', value: 'GivingBlock' },
+	{ label: 'From Trace', value: 'Traceable' },
 ];
 
 const MenuContainer = styled.div`

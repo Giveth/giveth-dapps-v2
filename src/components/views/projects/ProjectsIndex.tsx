@@ -147,6 +147,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 		contextVariables?.mainCategory,
 		router.query?.slug,
 		contextVariables?.sortingBy,
+		contextVariables?.filters,
 	]);
 
 	const loadMore = () => {
