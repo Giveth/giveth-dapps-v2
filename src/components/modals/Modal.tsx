@@ -29,6 +29,7 @@ interface IModal extends ModalWrapperProps {
 	headerIcon?: ReactNode;
 	customTheme?: ETheme;
 	headerColor?: string;
+	children: ReactNode;
 }
 
 export const Modal: FC<IModal> = ({
