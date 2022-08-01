@@ -7,6 +7,7 @@ interface IDirection {
 
 interface IIconWithTooltipProps extends IDirection {
 	icon: ReactNode;
+	children: React.ReactNode;
 }
 
 const IconWithTooltipContainer = styled.div<IDirection>`

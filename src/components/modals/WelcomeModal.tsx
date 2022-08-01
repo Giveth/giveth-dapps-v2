@@ -113,6 +113,7 @@ const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 };
 
 const ModalGrid = styled.div`
+	color: ${neutralColors.gray[100]};
 	position: relative;
 	display: flex;
 	width: 100%;
@@ -172,6 +173,7 @@ const IconsContainer = styled.div`
 const EthIconContainer = styled(IconsContainer)`
 	padding: 20px 24px;
 	border-radius: 4px;
+	color: ${brandColors.deep[800]};
 `;
 
 const SocialContentContainer = styled.div`
