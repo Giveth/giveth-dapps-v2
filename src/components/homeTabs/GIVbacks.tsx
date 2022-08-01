@@ -20,7 +20,6 @@ import {
 	RoundSection,
 	RoundTitle,
 	RoundInfo,
-	RoundInfoRow,
 	RoundInfoTallRow,
 	RoundButton,
 	InfoSection,
@@ -201,22 +200,39 @@ export const TabGIVbacksBottom = () => {
 									GIVbacks <NoWrap>Round {round}</NoWrap>
 								</RoundTitle>
 								<RoundInfo>
-									<RoundInfoRow justifyContent='space-between'>
-										<P>Start Date</P>
+									<RoundInfoTallRow
+										justifyContent='space-between'
+										alignItems='center'
+										wrap={1}
+									>
+										{' '}
 										<P>
-											{givTokenDistroHelper
-												? formatDate(roundStartime)
-												: '-'}
+											<NoWrap>Start Date</NoWrap>
 										</P>
-									</RoundInfoRow>
-									<RoundInfoRow justifyContent='space-between'>
-										<P>End Date</P>
 										<P>
-											{givTokenDistroHelper
-												? formatDate(roundEndTime)
-												: '-'}
+											<NoWrap>
+												{givTokenDistroHelper
+													? formatDate(roundStartime)
+													: '-'}
+											</NoWrap>
 										</P>
-									</RoundInfoRow>
+									</RoundInfoTallRow>
+									<RoundInfoTallRow
+										justifyContent='space-between'
+										alignItems='center'
+										wrap={1}
+									>
+										<P>
+											<NoWrap>End Date</NoWrap>
+										</P>
+										<P>
+											<NoWrap>
+												{givTokenDistroHelper
+													? formatDate(roundEndTime)
+													: '-'}
+											</NoWrap>
+										</P>
+									</RoundInfoTallRow>
 									<RoundInfoTallRow
 										justifyContent='space-between'
 										alignItems='center'
