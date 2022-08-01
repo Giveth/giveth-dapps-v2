@@ -167,6 +167,7 @@ const IconsContainer = styled.div`
 const EthIconContainer = styled(IconsContainer)`
 	padding: 20px 24px;
 	border-radius: 4px;
+	color: ${brandColors.deep[800]};
 `;
 
 const SocialContentContainer = styled.div`
