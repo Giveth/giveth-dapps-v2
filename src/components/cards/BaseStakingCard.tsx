@@ -342,7 +342,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 															formatEthHelper(
 																isLocked
 																	? avgAPR(
-																		apr.effectiveAPR,
+																			apr.effectiveAPR,
 																			userGIVLocked.balance,
 																			userGIVPowerBalance.balance,
 																	  )
