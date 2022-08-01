@@ -1,4 +1,4 @@
-import { createContext, FC, useContext } from 'react';
+import { createContext, FC, ReactNode, useContext } from 'react';
 import { Zero } from '@ethersproject/constants';
 import { Zero as BNZero } from '@/helpers/number';
 import { useStakingPool } from '@/hooks/useStakingPool';
@@ -14,9 +14,14 @@ interface IGIVpowerContext extends IStakeInfo {
 
 const givPoolstakingConfig = getGivStakingConfig(config.XDAI_CONFIG);
 
+const zeroAPR = {
+	effectiveAPR: BNZero,
+	vaultIRR: BNZero,
+};
+
 export const GIVpowerContext = createContext<IGIVpowerContext>({
 	poolStakingConfig: givPoolstakingConfig,
-	apr: BNZero,
+	apr: zeroAPR,
 	earned: Zero,
 	stakedAmount: Zero,
 	notStakedAmount: Zero,
@@ -24,7 +29,11 @@ export const GIVpowerContext = createContext<IGIVpowerContext>({
 
 GIVpowerContext.displayName = 'GIVpowerContext';
 
-export const GIVpowerProvider: FC = ({ children }) => {
+interface IGIVpowerProvider {
+	children: ReactNode;
+}
+
+export const GIVpowerProvider: FC<IGIVpowerProvider> = ({ children }) => {
 	const { apr, notStakedAmount, stakedAmount, earned } = useStakingPool(
 		givPoolstakingConfig,
 		config.XDAI_NETWORK_NUMBER,

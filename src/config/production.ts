@@ -36,7 +36,7 @@ const config: EnvConfig = {
 		blockExplorerName: ['etherscan'],
 		blockExplorerUrls: ['https://etherscan.io/'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-mainnet',
+			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-mainnet',
 
 		TOKEN_ADDRESS: '0x900db999074d9277c5da2a43f252d74366230da0',
 		tokenAddressOnUniswapV2: '0x900db999074d9277c5da2a43f252d74366230da0',
@@ -63,6 +63,26 @@ const config: EnvConfig = {
 				unit: 'LP',
 				farmStartTimeMS: 1651345200000,
 				active: true,
+			},
+			{
+				POOL_ADDRESS: '0xc3151A58d519B94E915f66B044De3E55F77c2dd9',
+				LM_ADDRESS: '0xA4b727DF6fD608d1835e3440288c73fB28c4eF16',
+				type: StakingType.ICHI_GIV_ONEGIV,
+				platform: StakingPlatform.ICHI,
+				ichiApi: 'https://api.ichi.org/v1/farms/20009',
+				platformTitle: 'Angel Vault',
+				title: 'oneGIV / GIV',
+				description: 'Angel Vault',
+				provideLiquidityLink:
+					'https://app.ichi.org/vault?poolId=20009&back=vault',
+				unit: 'LP',
+				active: true,
+				farmStartTimeMS: 1659607200000,
+				introCard: {
+					title: 'Angel Vault',
+					description: `The Angel Vault is shared Univ3 position structured to protect GIV from downward volatility.\n\nProvide oneGIV as liquidity in our Angel Vault and stake the LP token to earn rewards proportional to the liquidity provided. When you remove liquidity, you will get oneGIV & GIV proportional to the holdings in the Angel Vault.`,
+					link: 'https://docs.ichi.org/ichi-docs-v3/ichi-vaults/angel-vaults',
+				},
 			},
 			{
 				POOL_ADDRESS: '0x7819f1532c49388106f7762328c51ee70edd134c',
@@ -159,7 +179,7 @@ const config: EnvConfig = {
 		blockExplorerName: ['Blockscout'],
 		blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-xdai',
+			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-xdai',
 
 		TOKEN_ADDRESS: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',

@@ -5,6 +5,7 @@ import {
 	useEffect,
 	useState,
 	useCallback,
+	ReactNode,
 } from 'react';
 import { ethers } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
@@ -28,7 +29,11 @@ interface IInfos {
 	[key: string]: ethers.BigNumber;
 }
 
-export const FarmProvider: FC = ({ children }) => {
+interface IFarmProvider {
+	children: ReactNode;
+}
+
+export const FarmProvider: FC<IFarmProvider> = ({ children }) => {
 	const [xDaiInfos, setxDaiInfos] = useState<IInfos>({});
 	const [xDaiTotalEarned, setxDaiTotalEarned] = useState(
 		ethers.constants.Zero,

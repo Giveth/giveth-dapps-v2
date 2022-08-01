@@ -80,7 +80,9 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 						</CloseText>
 					</div>
 					<div>
-						<H6>{apr ? formatEthHelper(apr) : ' ? '}%</H6>
+						<H6>
+							{apr ? formatEthHelper(apr.effectiveAPR) : ' ? '}%
+						</H6>
 						<CloseText>
 							<H6>APR</H6>
 							<IconWithTooltip
@@ -132,7 +134,7 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 											<TableCell>
 												{apr
 													? formatEthHelper(
-															apr.multipliedBy(
+															apr.effectiveAPR.multipliedBy(
 																multiplier,
 															),
 													  )

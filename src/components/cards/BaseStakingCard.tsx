@@ -77,6 +77,7 @@ import { LockupDetailsModal } from '../modals/LockupDetailsModal';
 import { useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import Routes from '@/lib/constants/Routes';
+import { IconAngelVault } from '../Icons/AngelVault';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -97,6 +98,8 @@ export const getPoolIconWithName = (platform: StakingPlatform) => {
 			return <IconUniswap size={16} />;
 		case StakingPlatform.SUSHISWAP:
 			return <IconSushiswap size={16} />;
+		case StakingPlatform.ICHI:
+			return <IconAngelVault size={16} />;
 		default:
 			break;
 	}
@@ -339,11 +342,11 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 															formatEthHelper(
 																isLocked
 																	? avgAPR(
-																			apr,
+																			apr.effectiveAPR,
 																			userGIVLocked.balance,
 																			userGIVPowerBalance.balance,
 																	  )
-																	: apr,
+																	: apr.effectiveAPR,
 																2,
 															)}
 														%
@@ -351,7 +354,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 															`-${
 																apr &&
 																formatEthHelper(
-																	apr.multipliedBy(
+																	apr.effectiveAPR.multipliedBy(
 																		5.2, // sqrt(1 + max rounds)
 																	),
 																	2,

@@ -113,7 +113,9 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 		if (stacked !== '.' && stacked !== '') {
 			_stacked = parseFloat(stacked);
 		}
-		const stackedWithApr = apr ? apr.times(_stacked).div(1200) : Zero;
+		const stackedWithApr = apr
+			? apr.effectiveAPR.times(_stacked).div(1200)
+			: Zero;
 		const convertedStackedWithApr = EthersBigNumber.from(
 			stackedWithApr.toFixed(0),
 		).mul(constants.WeiPerEther);
@@ -227,7 +229,10 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 										width='16'
 										alt='Star icon'
 									/>
-									{formatEthHelper(apr ? apr : Zero)}%
+									{formatEthHelper(
+										apr ? apr.effectiveAPR : Zero,
+									)}
+									%
 								</PoolItemBold>
 							</Flex>
 							<Flex justifyContent='space-between'>
