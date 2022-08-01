@@ -21,6 +21,7 @@ import {
 import { IconWithTooltip } from '../IconWithToolTip';
 import { BN, formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import {
+	AngelVaultTooltip,
 	ClaimButton,
 	Detail,
 	DetailLabel,
@@ -329,23 +330,70 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 																.mustard[500]
 														}
 													/>
-													<DetailValue>
-														{apr &&
-															formatEthHelper(
-																apr.effectiveAPR,
-																2,
-															)}
-														%
-													</DetailValue>
-													<IconContainer
-														onClick={() =>
-															setShowAPRModal(
-																true,
-															)
-														}
-													>
-														<IconHelp size={16} />
-													</IconContainer>
+													{type ===
+													StakingType.ICHI_GIV_ONEGIV ? (
+														<IconWithTooltip
+															direction='right'
+															icon={
+																<DetailValue>
+																	{apr &&
+																		formatEthHelper(
+																			apr.effectiveAPR,
+																			2,
+																		)}
+																	%
+																</DetailValue>
+															}
+														>
+															<AngelVaultTooltip>
+																Your cumulative
+																APR including
+																both rewards
+																earned as fees &
+																added
+																automatically to
+																your position (
+																{apr?.vaultIRR &&
+																	formatEthHelper(
+																		apr.vaultIRR,
+																		2,
+																	)}
+																% IRR), and
+																rewards earned
+																in GIV from
+																staking your LP
+																(
+																{apr &&
+																	formatEthHelper(
+																		apr.effectiveAPR,
+																		2,
+																	)}
+																% APR).
+															</AngelVaultTooltip>
+														</IconWithTooltip>
+													) : (
+														<>
+															<DetailValue>
+																{apr &&
+																	formatEthHelper(
+																		apr.effectiveAPR,
+																		2,
+																	)}
+																%
+															</DetailValue>
+															<IconContainer
+																onClick={() =>
+																	setShowAPRModal(
+																		true,
+																	)
+																}
+															>
+																<IconHelp
+																	size={16}
+																/>
+															</IconContainer>
+														</>
+													)}
 												</>
 											) : (
 												<div>N/A %</div>
