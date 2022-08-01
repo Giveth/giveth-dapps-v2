@@ -4,7 +4,7 @@ import {
 	GLink,
 	IconArrowBottom,
 	IconArrowTop,
-	IconHeart16,
+	IconDonation16,
 	IconHeartOutline16,
 	IconX,
 	neutralColors,
@@ -95,7 +95,7 @@ const sortByOptions = [
 	{
 		label: 'Most funded',
 		value: ESortbyAllProjects.MOSTFUNDED,
-		icon: <IconHeart16 />,
+		icon: <IconDonation16 />,
 	},
 ];
 
