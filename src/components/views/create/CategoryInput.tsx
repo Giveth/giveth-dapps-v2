@@ -51,7 +51,7 @@ const CategoryInput = (props: {
 					return (
 						<CheckBox
 							key={i.value}
-							title={i.value}
+							label={i.value}
 							checked={!!checked}
 							onChange={e => handleChange(e, i.name)}
 							disabled={isMaxCategories && !checked}

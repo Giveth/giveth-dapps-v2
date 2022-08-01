@@ -338,7 +338,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						<CheckBox
 							onChange={setIsSameMainnetGnosisAddress}
 							checked={isSameMainnetGnosisAddress}
-							title='I’ll raise & receive funds on Mainnet and Gnosis Chain networks with the same address.'
+							label='I’ll raise & receive funds on Mainnet and Gnosis Chain networks with the same address.'
 						/>
 						<WalletAddressInput
 							networkId={ethereumId}

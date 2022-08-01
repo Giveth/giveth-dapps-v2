@@ -1,129 +1,89 @@
-import { useEffect, useRef, useState } from 'react';
-import Select, { StylesConfig } from 'react-select';
-import Debounced from 'lodash.debounce';
+import { useEffect, useRef, useState, MouseEvent } from 'react';
 import { useRouter } from 'next/router';
 import {
 	brandColors,
-	P,
 	neutralColors,
-	Subline,
-	H3,
 	OulineButton,
-	Lead,
+	IconSearch,
+	IconOptions16,
+	IconDots,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 import { captureException } from '@sentry/nextjs';
-import { BigArc } from '@/components/styled-components/Arc';
 import ProjectCard from '@/components/project-card/ProjectCard';
-import SearchBox from '@/components/SearchBox';
 import Routes from '@/lib/constants/Routes';
-import {
-	capitalizeFirstLetter,
-	isUserRegistered,
-	showToastError,
-} from '@/lib/helpers';
+import { isUserRegistered, showToastError } from '@/lib/helpers';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
-import { initializeApollo } from '@/apollo/apolloClient';
-import { ICategory, IProject } from '@/apollo/types/types';
+import { client } from '@/apollo/apolloClient';
+import { IMainCategory, IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
-import { EDirection, gqlEnums } from '@/apollo/types/gqlEnums';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
-import { Shadow } from '../../styled-components/Shadow';
-import { deviceSize, mediaQueries } from '@/lib/constants/constants';
+import { device, deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
+import ProjectsBanner from './ProjectsBanner';
+import ProjectsMainCategories from './ProjectsMainCategories';
+import { Shadow } from '@/components/styled-components/Shadow';
+import useMediaQuery from '@/hooks/useMediaQuery';
+import ProjectsSubCategories from './ProjectsSubCategories';
+import { useProjectsContext } from '@/context/projects.context';
+import { Flex } from '@/components/styled-components/Flex';
+import { FilterMenu } from '@/components/menu/FilterMenu';
+import { useOnClickOutside } from '@/hooks/useOnClickOutside';
+import type { IProjectsRouteProps } from 'pages/projects';
 
-interface IProjectsView {
-	projects: IProject[];
-	totalCount: number;
-	categories: ICategory[];
-}
-
-interface ISelectObj {
-	value: string;
-	label: string;
-	direction?: string;
+export interface IProjectsView extends IProjectsRouteProps {
+	selectedMainCategory?: IMainCategory;
 }
 
 interface IQueries {
-	orderBy: { field: string; direction: string };
 	skip?: number;
-	limit?: number;
-	category?: string;
-	searchTerm?: string;
+	take?: number;
 	connectedWalletUserId?: number;
 }
 
-const allCategoryObj = { value: 'All', label: 'All' };
-const sortByObj = [
-	{ label: 'Default', value: gqlEnums.QUALITYSCORE },
-	{ label: 'Amount Raised', value: gqlEnums.DONATIONS },
-	{ label: 'Accepts GIV Token', value: gqlEnums.ACCEPTGIV },
-	{ label: 'Hearts', value: gqlEnums.HEARTS },
-	{ label: 'Newest', value: gqlEnums.CREATIONDATE },
-	{
-		label: 'Oldest',
-		value: gqlEnums.CREATIONDATE,
-		direction: EDirection.ASC,
-	},
-	{ label: 'Verified', value: gqlEnums.VERIFIED },
-	{ label: 'Traceable', value: gqlEnums.TRACEABLE },
-];
-
-const buildCategoryObj = (array: ICategory[]) => {
-	const newArray = [allCategoryObj];
-	array.forEach(e => {
-		const obj: ISelectObj = {
-			label: capitalizeFirstLetter(e.name),
-			value: e.name,
-		};
-		newArray.push(obj);
-	});
-	return newArray;
-};
-
 const ProjectsIndex = (props: IProjectsView) => {
-	const { projects, totalCount: _totalCount, categories } = props;
+	const {
+		projects,
+		selectedMainCategory,
+		totalCount: _totalCount,
+		categories,
+	} = props;
 	const user = useAppSelector(state => state.user.userData);
-
-	const [categoriesObj, setCategoriesObj] = useState<ISelectObj[]>();
-	const [selectedCategory, setSelectedCategory] =
-		useState<ISelectObj>(allCategoryObj);
 	const [isLoading, setIsLoading] = useState(false);
 	const [filteredProjects, setFilteredProjects] =
 		useState<IProject[]>(projects);
-	const [sortBy, setSortBy] = useState<ISelectObj>(sortByObj[0]);
-	const [search, setSearch] = useState<string>('');
-	const [searchValue, setSearchValue] = useState<string>('');
 	const [totalCount, setTotalCount] = useState(_totalCount);
+	const [isTabletShowingSearchAndFilter, setIsTabletShowingSearchAndFilter] =
+		useState(false);
+	const [isFilterOpen, setIsFilterOpen] = useState(false);
+	//Slider next and prev button refs
+	const navigationPrevRef = useRef<HTMLButtonElement>(null);
+	const navigationNextRef = useRef<HTMLButtonElement>(null);
+	const filterMenuRef = useRef<HTMLDivElement>(null);
+
+	useOnClickOutside(filterMenuRef, () => setIsFilterOpen(false));
 
 	const dispatch = useAppDispatch();
+	const { variables: contextVariables, setVariables } = useProjectsContext();
+
 	const router = useRouter();
-	const isFirstRender = useRef(true);
-	const debouncedSearch = useRef<any>();
 	const pageNum = useRef(0);
-
-	useEffect(() => {
-		setCategoriesObj(buildCategoryObj(categories));
-		debouncedSearch.current = Debounced(setSearch, 1000);
-	}, []);
-
-	useEffect(() => {
-		if (!isFirstRender.current) fetchProjects();
-		else isFirstRender.current = false;
-	}, [selectedCategory.value, sortBy.label, search]);
+	const isDesktop = useMediaQuery(device.laptopS);
+	const isTablet = useMediaQuery(
+		`(min-device-width: ${deviceSize.tablet}px) and (max-device-width: ${
+			deviceSize.laptopS - 1
+		}px)`,
+	);
 
 	const fetchProjects = (
 		isLoadMore?: boolean,
 		loadNum?: number,
 		userIdChanged = false,
 	) => {
-		const categoryQuery = selectedCategory.value;
-
 		const variables: IQueries = {
-			orderBy: { field: sortBy.value, direction: EDirection.DESC },
-			limit: userIdChanged ? filteredProjects.length : projects.length,
+			take: userIdChanged ? filteredProjects.length : projects.length,
 			skip: userIdChanged ? 0 : projects.length * (loadNum || 0),
 		};
 
@@ -131,22 +91,20 @@ const ProjectsIndex = (props: IProjectsView) => {
 			variables.connectedWalletUserId = Number(user?.id);
 		}
 
-		if (sortBy.direction) variables.orderBy.direction = sortBy.direction;
-		if (categoryQuery && categoryQuery !== 'All')
-			variables.category = categoryQuery;
-		if (search) variables.searchTerm = search;
-
 		if (!userIdChanged) setIsLoading(true);
 
-		initializeApollo()
+		client
 			.query({
 				query: FETCH_ALL_PROJECTS,
-				variables,
+				variables: {
+					...variables,
+					...contextVariables,
+				},
 				fetchPolicy: 'network-only',
 			})
-			.then((res: { data: { projects: IFetchAllProjects } }) => {
-				const data = res.data?.projects?.projects;
-				const count = res.data?.projects?.totalCount;
+			.then((res: { data: { allProjects: IFetchAllProjects } }) => {
+				const data = res.data?.allProjects?.projects;
+				const count = res.data?.allProjects?.totalCount;
 				setTotalCount(count);
 				setFilteredProjects(
 					isLoadMore ? filteredProjects.concat(data) : data,
@@ -164,23 +122,32 @@ const ProjectsIndex = (props: IProjectsView) => {
 			});
 	};
 
+	const handleFilterClose = (e: MouseEvent<HTMLElement>) => {
+		e.stopPropagation();
+		setIsFilterOpen(false);
+	};
+
 	useEffect(() => {
 		fetchProjects(false, 0, true);
 	}, [user?.id]);
 
-	const handleChange = (type: string, input: any) => {
-		pageNum.current = 0;
-		if (type === 'search') {
-			setSearchValue(input);
-			debouncedSearch.current(input);
-		} else if (type === 'sortBy') setSortBy(input);
-		else if (type === 'category') setSelectedCategory(input);
-	};
+	useEffect(() => {
+		if (router.query?.slug) {
+			setVariables(prevVariables => {
+				return {
+					...prevVariables,
+					mainCategory: selectedMainCategory?.slug,
+				};
+			});
+		}
 
-	const clearSearch = () => {
-		setSearch('');
-		setSearchValue('');
-	};
+		fetchProjects(false, 0);
+	}, [
+		contextVariables?.category,
+		contextVariables?.mainCategory,
+		router.query?.slug,
+		contextVariables?.sortingBy,
+	]);
 
 	const loadMore = () => {
 		if (isLoading) return;
@@ -196,65 +163,150 @@ const ProjectsIndex = (props: IProjectsView) => {
 		}
 	};
 
-	const showLoadMore = totalCount > filteredProjects.length;
+	const showLoadMore = totalCount > filteredProjects?.length;
 
 	return (
 		<>
-			<BigArc />
+			<ProjectsBanner mainCategory={selectedMainCategory} />
 			<Wrapper>
-				<Title weight={700}>Projects</Title>
-				<Subtitle>
-					Support for-good projects, nonprofits & charities with
-					crypto donations. Give directly with zero added fees. Get
-					rewarded when you donate to verified projects!
-				</Subtitle>
-
-				<FiltersSection>
-					<SelectComponent>
-						<Label>CATEGORY</Label>
-						<Select
-							classNamePrefix='select'
-							styles={selectCustomStyles}
-							value={selectedCategory}
-							onChange={e => handleChange('category', e)}
-							options={categoriesObj}
-							isMobile={false}
-						/>
-					</SelectComponent>
-					<SelectComponent>
-						<Label>SORT BY</Label>
-						<Select
-							classNamePrefix='select'
-							styles={selectCustomStyles}
-							value={sortBy}
-							onChange={e => handleChange('sortBy', e)}
-							options={sortByObj}
-							isOptionSelected={(option, selectValue) =>
-								selectValue.some((i: any) => i.label === option)
-							}
-							isMobile={false}
-						/>
-					</SelectComponent>
-					<SearchComponent>
-						<Label />
-						<SearchBox
-							onChange={(e: string) => handleChange('search', e)}
-							placeholder='Search Projects ...'
-							value={searchValue}
-						/>
-					</SearchComponent>
-				</FiltersSection>
+				<FiltersContainer>
+					<FiltersSection>
+						{isTabletShowingSearchAndFilter && isTablet ? null : (
+							<FiltersSwiper>
+								<PrevIcon ref={navigationPrevRef}>
+									<img
+										src={'/images/caret_right.svg'}
+										alt='caret right'
+									/>
+								</PrevIcon>
+								<ProjectsMainCategories
+									mainCategories={props.mainCategories}
+									navigationNextRef={navigationNextRef}
+									navigationPrevRef={navigationPrevRef}
+								/>
+								<NextIcon ref={navigationNextRef}>
+									<img
+										src={'/images/caret_right.svg'}
+										alt='caret right'
+									/>
+								</NextIcon>
+							</FiltersSwiper>
+						)}
+						{isDesktop && (
+							<FilterAndSearchContainer>
+								<IconContainer>
+									<IconSearch />
+								</IconContainer>
+								<FiltersButton
+									onClick={() => setIsFilterOpen(true)}
+								>
+									Filters
+									<IconOptions16 />
+								</FiltersButton>
+								{isFilterOpen && (
+									<FilterMenu
+										handleClose={handleFilterClose}
+										ref={filterMenuRef}
+									/>
+								)}
+							</FilterAndSearchContainer>
+						)}
+						{isTablet && (
+							<>
+								{isTabletShowingSearchAndFilter ? (
+									<TabletFilterAndSearchContainer
+										justifyContent='space-between'
+										alignItems='center'
+										gap='16px'
+									>
+										<input
+											style={{
+												flexGrow: 1,
+											}}
+										/>
+										<FiltersButton
+											onClick={e => {
+												setIsFilterOpen(true);
+											}}
+										>
+											Filters
+											<IconOptions16 />
+										</FiltersButton>
+										{isFilterOpen && (
+											<FilterMenu
+												handleClose={handleFilterClose}
+												ref={filterMenuRef}
+											/>
+										)}
+										<IconContainer
+											onClick={() =>
+												setIsTabletShowingSearchAndFilter(
+													false,
+												)
+											}
+										>
+											X
+										</IconContainer>
+									</TabletFilterAndSearchContainer>
+								) : (
+									<IconContainer
+										onClick={() =>
+											setIsTabletShowingSearchAndFilter(
+												true,
+											)
+										}
+									>
+										<IconDots />
+									</IconContainer>
+								)}
+							</>
+						)}
+					</FiltersSection>
+					{props.selectedMainCategory?.categories && (
+						<>
+							<StyledLine />
+							<ProjectsSubCategories
+								subCategories={
+									props.selectedMainCategory?.categories ?? []
+								}
+							/>
+						</>
+					)}
+					{!isDesktop && !isTablet && (
+						<Flex alignItems='center' gap='16px'>
+							<input
+								style={{
+									flexGrow: 1,
+								}}
+							/>
+							<FiltersButton
+								onClick={e => {
+									setIsFilterOpen(true);
+								}}
+							>
+								Filters
+								<IconOptions16 />
+							</FiltersButton>
+							{isFilterOpen && (
+								<FilterMenu
+									handleClose={handleFilterClose}
+									ref={filterMenuRef}
+								/>
+							)}
+						</Flex>
+					)}
+				</FiltersContainer>
 
 				{isLoading && <Loader className='dot-flashing' />}
 
-				{filteredProjects.length > 0 ? (
+				{filteredProjects?.length > 0 ? (
 					<ProjectsContainer>
 						{filteredProjects.map(project => (
 							<ProjectCard key={project.id} project={project} />
 						))}
 					</ProjectsContainer>
 				) : (
-					<ProjectsNoResults trySearch={clearSearch} />
+					<ProjectsNoResults mainCategories={props.mainCategories} />
 				)}
 
 				{showLoadMore && (
@@ -282,36 +334,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 	);
 };
 
-const selectCustomStyles: StylesConfig = {
-	menu: styles => ({
-		...styles,
-		border: '0px',
-		borderRadius: '8px',
-		boxShadow: Shadow.Neutral[500],
-		'&:focus-within': {
-			border: `2px solid ${brandColors.pinky[500]}`,
-		},
-	}),
-	option: (styles, { isFocused, isSelected }) => ({
-		...styles,
-		width: '95%',
-		height: '38px',
-		margin: '4px auto',
-		borderRadius: '8px',
-		backgroundColor: isSelected
-			? neutralColors.gray[300]
-			: isFocused
-			? neutralColors.gray[200]
-			: 'white',
-		color: isSelected ? neutralColors.gray[900] : neutralColors.gray[800],
-	}),
-	control: base => ({
-		...base,
-		border: 0,
-		boxShadow: 'none',
-	}),
-};
-
 const Loader = styled.div`
 	margin: 20px auto;
 `;
@@ -329,45 +351,30 @@ const StyledButton = styled(OulineButton)<{ transparent?: boolean }>`
 	}
 `;
 
-const SelectComponent = styled(P)`
-	min-width: 200px;
-	width: 100%;
-
-	${mediaQueries.tablet} {
-		width: calc(50% - 8px);
-	}
-
-	${mediaQueries.laptopL} {
-		width: 345px;
-	}
-`;
-
-const SearchComponent = styled.div`
-	flex-grow: 1;
-`;
-
 const LoadingDotIcon = styled.div`
 	padding: 4px 37px;
 `;
 
-const Label = styled(Subline)`
-	color: ${brandColors.deep[500]};
-	height: 18px;
-`;
-
-const FiltersSection = styled.div`
-	padding: 32px 21px;
+const FiltersContainer = styled.div`
+	display: flex;
+	flex-direction: column;
 	background: white;
+	position: relative;
+	padding: 32px 21px;
 	border-radius: 16px;
 	margin-bottom: 32px;
 	margin-top: 50px;
+	gap: 16px;
+`;
+
+const FiltersSection = styled.div`
 	display: flex;
-	flex-wrap: wrap;
 	gap: 16px;
 	align-items: center;
 	position: relative;
-	font-weight: 500;
 	color: ${neutralColors.gray[900]};
+	justify-content: space-between;
+	flex-wrap: nowrap;
 `;
 
 export const ProjectsContainer = styled.div`
@@ -385,19 +392,102 @@ export const ProjectsContainer = styled.div`
 `;
 
 const Wrapper = styled.div`
-	padding: 166px 30px 4px 30px;
 	max-width: ${deviceSize.desktop + 'px'};
 	margin: 0 auto;
 `;
 
-const Title = styled(H3)`
-	margin-bottom: 18px;
+const FilterAndSearchContainer = styled.div`
+	display: flex;
+	align-items: center;
+	position: relative;
+	gap: 16px;
 `;
 
-const Subtitle = styled(Lead)`
-	position: relative;
-	margin-bottom: 25px;
-	font-weight: 400;
-	max-width: 1026px;
+const FiltersButton = styled.button`
+	display: flex;
+	gap: 8px;
+	border-radius: 50px;
+	padding: 16px;
+	background: white;
+	box-shadow: ${Shadow.Neutral[500]};
+	border: 1px solid ${neutralColors.gray[400]};
+	font-weight: 700;
+	text-transform: uppercase;
+	cursor: pointer;
+	user-select: none;
 `;
+
+const FiltersSwiper = styled.div`
+	display: flex;
+	align-items: center;
+	position: relative;
+	gap: 16px;
+	width: 100%;
+	${mediaQueries.tablet} {
+		max-width: 90%;
+	}
+	${mediaQueries.laptopS} {
+		padding-right: 60px;
+		width: 70%;
+	}
+`;
+
+const IconContainer = styled.button`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: fit-content;
+	height: fit-content;
+	min-width: 42px;
+	min-height: 42px;
+	border-radius: 50%;
+	background: ${neutralColors.gray[100]};
+	box-shadow: ${Shadow.Neutral[500]};
+	cursor: pointer;
+	border: 1px solid ${neutralColors.gray[400]};
+`;
+
+const NextIcon = styled(IconContainer)`
+	z-index: 1;
+	display: none;
+	:disabled {
+		opacity: 0.5;
+		cursor: default;
+	}
+	${mediaQueries.tablet} {
+		display: inline-block;
+	}
+	${mediaQueries.laptopS} {
+		width: 50px;
+		height: 50px;
+		position: absolute;
+		top: calc(50% - 25px);
+		right: 0;
+		:disabled {
+			display: none;
+		}
+	}
+`;
+
+const PrevIcon = styled(NextIcon)<{ disabled?: boolean }>`
+	-ms-transform: rotate(180deg);
+	transform: rotate(180deg);
+	left: 0;
+	z-index: 2;
+	${mediaQueries.laptopS} {
+		:disabled {
+			display: none;
+		}
+	}
+`;
+
+const StyledLine = styled.hr`
+	width: 100%;
+	border: 1px solid ${neutralColors.gray[200]};
+`;
+
+const TabletFilterAndSearchContainer = styled(Flex)`
+	flex-grow: 1;
+`;
+
 export default ProjectsIndex;

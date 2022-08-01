@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import HomeIndex from '@/components/views/homepage/HomeIndex';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_HOME_PROJECTS } from '@/apollo/gql/gqlProjects';
-import { EDirection, gqlEnums } from '@/apollo/types/gqlEnums';
+import { EDirection, ESortby } from '@/apollo/types/gqlEnums';
 import { IProject } from '@/apollo/types/types';
 import { useAppSelector } from '@/features/hooks';
 import { homeMetatags } from '@/content/metatags';
@@ -20,7 +20,7 @@ interface IHomeRoute {
 const fetchProjects = async (userId: string | undefined = undefined) => {
 	const variables: any = {
 		limit: projectsToFetch,
-		orderBy: { field: gqlEnums.QUALITYSCORE, direction: EDirection.DESC },
+		orderBy: { field: ESortby.QUALITYSCORE, direction: EDirection.DESC },
 	};
 
 	if (userId) {

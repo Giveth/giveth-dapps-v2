@@ -484,7 +484,7 @@ const CryptoDonation = (props: {
 			)}
 			<CheckBoxContainer>
 				<CheckBox
-					title={'Make it anonymous'}
+					label='Make it anonymous'
 					checked={anonymous}
 					onChange={() => setAnonymous(!anonymous)}
 				/>

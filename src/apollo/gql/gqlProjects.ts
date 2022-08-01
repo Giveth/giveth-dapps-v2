@@ -43,21 +43,23 @@ export const FETCH_HOME_PROJECTS = gql`
 
 export const FETCH_ALL_PROJECTS = gql`
 	query FetchAllProjects(
-		$limit: Int
+		$take: Int
 		$skip: Int
-		$orderBy: OrderBy
-		$filterBy: FilterBy
+		$sortingBy: SortingField
+		$filters: [FilterField!]
 		$searchTerm: String
 		$category: String
+		$mainCategory: String
 		$connectedWalletUserId: Int
 	) {
-		projects(
-			take: $limit
+		allProjects(
+			take: $take
 			skip: $skip
-			orderBy: $orderBy
-			filterBy: $filterBy
+			sortingBy: $sortingBy
+			filters: $filters
 			searchTerm: $searchTerm
 			category: $category
+			mainCategory: $mainCategory
 			connectedWalletUserId: $connectedWalletUserId
 		) {
 			projects {
@@ -444,6 +446,22 @@ export const SIMILAR_PROJECTS = gql`
 					name
 					label
 				}
+			}
+		}
+	}
+`;
+
+export const FETCH_MAIN_CATEGORIES = gql`
+	query {
+		mainCategories {
+			title
+			banner
+			slug
+			description
+			categories {
+				name
+				value
+				isActive
 			}
 		}
 	}

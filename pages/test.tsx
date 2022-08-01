@@ -1,10 +1,10 @@
-import Head from 'next/head';
 import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 import { useWeb3React } from '@web3-react/core';
 import { gToast, ToastType } from '@/components/toasts';
 import { useAppDispatch } from '@/features/hooks';
 import { fetchXDaiInfoAsync } from '@/features/subgraph/subgraph.thunks';
+import { FilterMenu } from '@/components/menu/FilterMenu';
 
 const TestRoute = () => {
 	// const xDaiValues = useSelector(
@@ -42,9 +42,6 @@ const TestRoute = () => {
 
 	return (
 		<>
-			<Head>
-				<Asghar />
-			</Head>
 			<TestContainer>
 				<button
 					onClick={() => {
@@ -64,6 +61,9 @@ const TestRoute = () => {
 				>
 					Throw error
 				</button>
+				<div>
+					<FilterMenu />
+				</div>
 			</TestContainer>
 		</>
 	);
@@ -85,5 +85,3 @@ export const getServerSideProps: GetServerSideProps = async context => {
 const TestContainer = styled.div`
 	padding: 200px;
 `;
-
-const Asghar = () => <title>Asghar kopak</title>;
