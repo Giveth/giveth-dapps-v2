@@ -9,8 +9,10 @@ import { IconDai } from '@/components/Icons/Dai';
 import { IconElk } from '@/components/Icons/Elk';
 import { IconxDAI } from '@/components/Icons/xDAI';
 import { IconCult } from '@/components/Icons/Cult';
+import { IconOneGIV } from './Icons/OneGIV';
 interface IStakingPoolImagesProps {
 	title: string;
+	icon?: string;
 }
 
 export const getCurIconWithName = (currency: string) => {
@@ -31,13 +33,18 @@ export const getCurIconWithName = (currency: string) => {
 			return <IconCult size={40} />;
 		case 'xDAI':
 			return <IconxDAI size={40} />;
+		case 'oneGIV':
+			return <IconOneGIV size={40} />;
 		default:
 			break;
 	}
 };
 
-export const StakingPoolImages: FC<IStakingPoolImagesProps> = ({ title }) => {
-	const currencies = title.split(' / ');
+export const StakingPoolImages: FC<IStakingPoolImagesProps> = ({
+	title,
+	icon,
+}) => {
+	const currencies = icon ? [icon] : title.split(' / ');
 
 	return (
 		<StakingPoolImagesContainer lenght={currencies.length}>

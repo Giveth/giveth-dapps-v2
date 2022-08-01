@@ -4,6 +4,7 @@ import { captureException } from '@sentry/nextjs';
 import config from '@/configuration';
 import UNI_Json from '@/artifacts/UNI.json';
 import { networksParams } from '@/helpers/blockchain';
+import { ERC20 } from '@/types/contracts';
 
 const { abi: UNI_ABI } = UNI_Json;
 
@@ -42,7 +43,7 @@ const fetchTokenInfo = async (
 	provider: JsonRpcProvider,
 	address: string,
 ): Promise<ITokenOptins | undefined> => {
-	const contract = new Contract(address, UNI_ABI, provider);
+	const contract = new Contract(address, UNI_ABI, provider) as ERC20;
 	try {
 		const [_decimal, _symbol]: [number, string] = await Promise.all([
 			contract.decimals(),

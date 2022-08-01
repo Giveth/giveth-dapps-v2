@@ -29,6 +29,7 @@ export const StakingPoolExchangeRow = styled(Flex)`
 
 export const StakingPoolExchange = styled(Overline)`
 	color: ${brandColors.deep[100]};
+	text-transform: uppercase;
 `;
 
 export const SPTitle = styled(Flex)`
@@ -125,7 +126,13 @@ export const OutOfRangeBadgeContianer = styled(Flex)`
 export const OutOfRangeTooltip = styled(Subline)`
 	color: ${neutralColors.gray[100]};
 	width: 233px;
-	text-align: center;
+	text-align: left;
+`;
+
+export const AngelVaultTooltip = styled(Subline)`
+	color: ${neutralColors.gray[100]};
+	width: 261px;
+	text-align: left;
 `;
 
 export const IconHelpWraper = styled.div`

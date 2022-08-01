@@ -46,6 +46,7 @@ import {
 	setShowSignWithWallet,
 	setShowCompleteProfile,
 } from '@/features/modal/modal.slice';
+import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -61,9 +62,10 @@ const Header: FC<IHeader> = () => {
 	const [isCreateRoute, setIsCreateRoute] = useState(false);
 
 	const { chainId, active, account, library } = useWeb3React();
-	const { balances } = useAppSelector(
-		state => state.subgraph[currentValuesHelper(chainId)],
+	const sdh = new SubgraphDataHelper(
+		useAppSelector(state => state.subgraph[currentValuesHelper(chainId)]),
 	);
+	const givBalance = sdh.getGIVTokenBalance();
 	const dispatch = useAppDispatch();
 	const { isEnabled, isSignedIn, userData } = useAppSelector(
 		state => state.user,
@@ -217,7 +219,7 @@ const Header: FC<IHeader> = () => {
 								<HBContainer>
 									<IconGiveth size={24} />
 									<HBContent size='Big'>
-										{formatWeiHelper(balances.balance)}
+										{formatWeiHelper(givBalance.balance)}
 									</HBContent>
 								</HBContainer>
 								<CoverLine theme={theme} />
