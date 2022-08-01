@@ -62,7 +62,9 @@ const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 				</LockInfoRowTitle>
 				<LockInfoRowValue>
 					{apr
-						? `${formatEthHelper(apr.multipliedBy(multipler))}%`
+						? `${formatEthHelper(
+								apr.effectiveAPR.multipliedBy(multipler),
+						  )}%`
 						: ' ? '}
 					<LockInfoRowSpark>
 						<IconSpark size={16} />
