@@ -24,12 +24,13 @@ import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { BN, formatWeiHelper } from '@/helpers/number';
 import { WhatisStreamModal } from '@/components/modals/WhatisStream';
 import { getGivStakingConfig } from '@/helpers/networkProvider';
-import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
 import { getUserStakeInfo } from '@/lib/stakingPool';
 import Routes from '@/lib/constants/Routes';
 import { networkInfo } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
+import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { SimplePoolStakingConfig, StakingType } from '@/types/config';
 
 interface IRewardMenu {
 	showWhatIsGIVstreamModal: boolean;
@@ -50,13 +51,16 @@ export const RewardMenu = ({
 	const { chainId } = useWeb3React();
 	const theme = useAppSelector(state => state.general.theme);
 
-	const { givbackLiquidPart } = currentValues.balances;
+	const sdh = new SubgraphDataHelper(currentValues);
+
+	const tokenDistroBalance = sdh.getGIVTokenDistroBalance();
+	const { givbackLiquidPart } = tokenDistroBalance;
 	const { networkName } = networkInfo(chainId);
 
 	useEffect(() => {
-		const _allocatedTokens = BN(currentValues.balances.allocatedTokens);
-		const _givbackLiquidPart = BN(currentValues.balances.givbackLiquidPart);
-		const _claimed = BN(currentValues.balances.claimed);
+		const _allocatedTokens = BN(tokenDistroBalance.allocatedTokens);
+		const _givbackLiquidPart = BN(tokenDistroBalance.givbackLiquidPart);
+		const _claimed = BN(tokenDistroBalance.claimed);
 		setGIVstreamLiquidPart(
 			givTokenDistroHelper
 				.getLiquidPart(_allocatedTokens.sub(_givbackLiquidPart))
@@ -85,16 +89,11 @@ export const RewardMenu = ({
 		if (pools) {
 			let _farmRewards = constants.Zero;
 			pools.forEach(pool => {
-				const { type } = pool;
-				const unipoolInfo = currentValues[type];
-				if (unipoolInfo) {
-					const unipoolHelper = new UnipoolHelper(unipoolInfo);
+				if (pool.type !== StakingType.UNISWAPV3_ETH_GIV) {
 					_farmRewards = _farmRewards.add(
 						getUserStakeInfo(
-							type,
-							undefined,
-							currentValues.balances,
-							unipoolHelper,
+							currentValues,
+							pool as SimplePoolStakingConfig,
 						).earned,
 					);
 				}

@@ -20,6 +20,7 @@ import { gToast, ToastType } from '@/components/toasts';
 import StorageLabel from '@/lib/localStorage';
 import { networksParams } from '@/helpers/blockchain';
 import config from '@/configuration';
+import { ERC20 } from '@/types/contracts';
 
 declare let window: any;
 
@@ -192,9 +193,13 @@ export async function sendTransaction(
 		const fromSigner = web3.getSigner();
 		if (contractAddress && contractAddress !== AddressZero) {
 			// ERC20 TRANSFER
-			const contract = new Contract(contractAddress, abi, fromSigner);
-			const decimals = await contract.decimals.call();
-			txParams.value = parseUnits(params.value, parseInt(decimals));
+			const contract = new Contract(
+				contractAddress,
+				abi,
+				fromSigner,
+			) as ERC20;
+			const decimals = await contract.decimals();
+			txParams.value = parseUnits(params.value, decimals);
 			tx = await contract.transfer(txParams.to, txParams.value);
 		} else {
 			// REGULAR ETH TRANSFER

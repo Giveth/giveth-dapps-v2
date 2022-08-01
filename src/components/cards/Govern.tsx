@@ -29,9 +29,7 @@ import config from '@/configuration';
 import { formatEthHelper, formatWeiHelper, Zero } from '@/helpers/number';
 import { getGivStakingAPR } from '@/lib/stakingPool';
 import { APR } from '@/types/poolInfo';
-import { StakingType } from '@/types/config';
 import useClaim from '@/context/claim.context';
-import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
 import { useAppSelector } from '@/features/hooks';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 
@@ -115,7 +113,9 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 		if (stacked !== '.' && stacked !== '') {
 			_stacked = parseFloat(stacked);
 		}
-		const stackedWithApr = apr ? apr.times(_stacked).div(1200) : Zero;
+		const stackedWithApr = apr
+			? apr.effectiveAPR.times(_stacked).div(1200)
+			: Zero;
 		const convertedStackedWithApr = EthersBigNumber.from(
 			stackedWithApr.toFixed(0),
 		).mul(constants.WeiPerEther);
@@ -145,13 +145,11 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 
 	useEffect(() => {
 		const cb = () => {
-			const unipool = xDaiValues[StakingType.GIV_LM];
-			const unipoolHelper = unipool && new UnipoolHelper(unipool);
-
 			getGivStakingAPR(
 				config.XDAI_CONFIG.GIV.LM_ADDRESS,
 				config.XDAI_NETWORK_NUMBER,
-				unipoolHelper,
+				xDaiValues,
+				null,
 			)
 				.then(_apr => {
 					mounted.current && setApr(_apr);
@@ -236,7 +234,10 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 										width='16'
 										alt='Star icon'
 									/>
-									{formatEthHelper(apr ? apr : Zero)}%
+									{formatEthHelper(
+										apr ? apr.effectiveAPR : Zero,
+									)}
+									%
 								</PoolItemBold>
 							</Flex>
 							<Flex justifyContent='space-between'>

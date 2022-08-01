@@ -3,6 +3,7 @@ import { shallowEqual } from 'react-redux';
 import { AddressZero } from '@ethersproject/constants';
 import { useAppSelector } from '@/features/hooks';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
+import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
 export const defaultTokenDistroHelper = new TokenDistroHelper({
 	contractAddress: AddressZero,
@@ -17,14 +18,14 @@ export const defaultTokenDistroHelper = new TokenDistroHelper({
 const useGIVTokenDistroHelper = () => {
 	const [givTokenDistroHelper, setGIVTokenDistroHelper] =
 		useState<TokenDistroHelper>(defaultTokenDistroHelper);
-	const tokenDistroInfo = useAppSelector(
-		state => state.subgraph.currentValues.tokenDistroInfo,
+	const currentValue = useAppSelector(
+		state => state.subgraph.currentValues,
 		shallowEqual,
 	);
 	useEffect(() => {
-		if (!tokenDistroInfo) return;
-		setGIVTokenDistroHelper(new TokenDistroHelper(tokenDistroInfo));
-	}, [tokenDistroInfo]);
+		const sdh = new SubgraphDataHelper(currentValue);
+		setGIVTokenDistroHelper(new TokenDistroHelper(sdh.getGIVTokenDistro()));
+	}, [currentValue]);
 	return { givTokenDistroHelper };
 };
 
