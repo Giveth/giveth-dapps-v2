@@ -24,13 +24,14 @@ const StakingCardIntro: FC<IStakingCardIntro> = ({
 	setState,
 }) => {
 	const { title, introCard } = poolStakingConfig;
+	const titleIcon = introCard?.icon ? introCard?.icon : title.split(' / ')[0];
 	return (
 		<StakingCardIntroContainer>
 			<HeaderRow>
 				<Back onClick={() => setState(StakeCardState.NORMAL)}>
 					<IconArrowLeft size={32} />
 				</Back>
-				{getCurIconWithName(title.split(' / ')[0])}
+				{getCurIconWithName(titleIcon)}
 				<H6 weight={700}>{introCard?.title}</H6>
 			</HeaderRow>
 			<ContentWrapper
