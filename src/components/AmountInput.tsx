@@ -36,7 +36,7 @@ export const AmountInput: FC<IAmountInput> = ({
 		[maxAmount],
 	);
 
-	const onUserInput = useCallback(value => {
+	const onUserInput = useCallback((value: string) => {
 		setDisplayAmount(value);
 		setActiveStep(0);
 		let valueBn = BigNumber.from(0);
