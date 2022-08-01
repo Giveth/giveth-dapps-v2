@@ -5,8 +5,11 @@ import { FlexCenter } from '@/components/styled-components/Flex';
 import { mediaQueries } from '@/lib/constants/constants';
 import { IMainCategory } from '@/apollo/types/types';
 import Routes from '@/lib/constants/Routes';
+import { useProjectsContext } from '@/context/projects.context';
 
 const ProjectsNoResults = (props: { mainCategories: IMainCategory[] }) => {
+	const { setVariables } = useProjectsContext();
+
 	return (
 		<Wrapper>
 			<Content>It seems we couldn’t find any result!</Content>
@@ -25,7 +28,16 @@ const ProjectsNoResults = (props: { mainCategories: IMainCategory[] }) => {
 							passHref
 						>
 							<a>
-								<MainCategoryItem>
+								<MainCategoryItem
+									onClick={() => {
+										console.log('Clicked');
+										setVariables(prevVariables => ({
+											...prevVariables,
+											sortingBy: undefined,
+											filters: undefined,
+										}));
+									}}
+								>
 									{category.title}
 								</MainCategoryItem>
 							</a>

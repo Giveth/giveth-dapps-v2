@@ -29,7 +29,7 @@ import useMediaQuery from '@/hooks/useMediaQuery';
 import ProjectsSubCategories from './ProjectsSubCategories';
 import { useProjectsContext } from '@/context/projects.context';
 import { Flex } from '@/components/styled-components/Flex';
-import { FilterMenu } from '@/components/menu/FilterMenu';
+import { FilterMenu, PinkyColoredNumber } from '@/components/menu/FilterMenu';
 import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 import type { IProjectsRouteProps } from 'pages/projects';
 
@@ -39,7 +39,7 @@ export interface IProjectsView extends IProjectsRouteProps {
 
 interface IQueries {
 	skip?: number;
-	take?: number;
+	limit?: number;
 	connectedWalletUserId?: number;
 }
 
@@ -83,7 +83,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 		userIdChanged = false,
 	) => {
 		const variables: IQueries = {
-			take: userIdChanged ? filteredProjects.length : projects.length,
+			limit: userIdChanged ? filteredProjects.length : projects.length,
 			skip: userIdChanged ? 0 : projects.length * (loadNum || 0),
 		};
 
@@ -147,6 +147,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 		contextVariables?.mainCategory,
 		router.query?.slug,
 		contextVariables?.sortingBy,
+		contextVariables?.filters,
 	]);
 
 	const loadMore = () => {
@@ -201,6 +202,11 @@ const ProjectsIndex = (props: IProjectsView) => {
 									onClick={() => setIsFilterOpen(true)}
 								>
 									Filters
+									{contextVariables.filtersCount !== 0 && (
+										<PinkyColoredNumber>
+											{contextVariables.filtersCount}
+										</PinkyColoredNumber>
+									)}
 									<IconOptions16 />
 								</FiltersButton>
 								{isFilterOpen && (
@@ -230,6 +236,14 @@ const ProjectsIndex = (props: IProjectsView) => {
 											}}
 										>
 											Filters
+											{contextVariables.filtersCount !==
+												0 && (
+												<PinkyColoredNumber>
+													{
+														contextVariables.filtersCount
+													}
+												</PinkyColoredNumber>
+											)}
 											<IconOptions16 />
 										</FiltersButton>
 										{isFilterOpen && (
@@ -285,6 +299,11 @@ const ProjectsIndex = (props: IProjectsView) => {
 								}}
 							>
 								Filters
+								{contextVariables.filtersCount !== 0 && (
+									<PinkyColoredNumber>
+										{contextVariables.filtersCount}
+									</PinkyColoredNumber>
+								)}
 								<IconOptions16 />
 							</FiltersButton>
 							{isFilterOpen && (
@@ -405,6 +424,7 @@ const FilterAndSearchContainer = styled.div`
 
 const FiltersButton = styled.button`
 	display: flex;
+	align-items: center;
 	gap: 8px;
 	border-radius: 50px;
 	padding: 16px;
