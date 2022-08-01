@@ -14,7 +14,7 @@ import { captureException } from '@sentry/nextjs';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered, showToastError } from '@/lib/helpers';
-import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
+import { FETCH_ALL_PROJECTS_NEW } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { IMainCategory, IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
@@ -39,7 +39,7 @@ export interface IProjectsView extends IProjectsRouteProps {
 
 interface IQueries {
 	skip?: number;
-	limit?: number;
+	take?: number;
 	connectedWalletUserId?: number;
 }
 
@@ -50,12 +50,10 @@ const ProjectsIndex = (props: IProjectsView) => {
 		totalCount: _totalCount,
 		categories,
 	} = props;
-
 	const user = useAppSelector(state => state.user.userData);
 	const [isLoading, setIsLoading] = useState(false);
 	const [filteredProjects, setFilteredProjects] =
 		useState<IProject[]>(projects);
-
 	const [totalCount, setTotalCount] = useState(_totalCount);
 	const [isTabletShowingSearchAndFilter, setIsTabletShowingSearchAndFilter] =
 		useState(false);
@@ -85,7 +83,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 		userIdChanged = false,
 	) => {
 		const variables: IQueries = {
-			limit: userIdChanged ? filteredProjects.length : projects.length,
+			take: userIdChanged ? filteredProjects.length : projects.length,
 			skip: userIdChanged ? 0 : projects.length * (loadNum || 0),
 		};
 
@@ -97,16 +95,16 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 		client
 			.query({
-				query: FETCH_ALL_PROJECTS,
+				query: FETCH_ALL_PROJECTS_NEW,
 				variables: {
 					...variables,
 					...contextVariables,
 				},
 				fetchPolicy: 'network-only',
 			})
-			.then((res: { data: { projects: IFetchAllProjects } }) => {
-				const data = res.data?.projects?.projects;
-				const count = res.data?.projects?.totalCount;
+			.then((res: { data: { allProjects: IFetchAllProjects } }) => {
+				const data = res.data?.allProjects?.projects;
+				const count = res.data?.allProjects?.totalCount;
 				setTotalCount(count);
 				setFilteredProjects(
 					isLoadMore ? filteredProjects.concat(data) : data,
@@ -135,11 +133,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	useEffect(() => {
 		if (router.query?.slug) {
-			console.log(
-				'Refetching',
-				contextVariables?.mainCategory,
-				router.query?.slug,
-			);
 			setVariables(prevVariables => {
 				return {
 					...prevVariables,
@@ -153,6 +146,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 		contextVariables?.category,
 		contextVariables?.mainCategory,
 		router.query?.slug,
+		contextVariables?.sortingBy,
 	]);
 
 	const loadMore = () => {
@@ -169,7 +163,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 		}
 	};
 
-	const showLoadMore = totalCount > filteredProjects.length;
+	const showLoadMore = totalCount > filteredProjects?.length;
 
 	return (
 		<>
@@ -305,7 +299,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 				{isLoading && <Loader className='dot-flashing' />}
 
-				{filteredProjects.length > 0 ? (
+				{filteredProjects?.length > 0 ? (
 					<ProjectsContainer>
 						{filteredProjects.map(project => (
 							<ProjectCard key={project.id} project={project} />
@@ -495,7 +489,5 @@ const StyledLine = styled.hr`
 const TabletFilterAndSearchContainer = styled(Flex)`
 	flex-grow: 1;
 `;
-
-const MobileFilterContainer = styled.div``;
 
 export default ProjectsIndex;
