@@ -107,7 +107,7 @@ const getIchiPoolStakingAPR = async (
 	ichiPoolStakingConfig: ICHIPoolStakingConfig,
 	network: number,
 	provider: JsonRpcProvider,
-	unipoolHelper: UnipoolHelper | undefined,
+	unipoolHelper: UnipoolHelper,
 ): Promise<APR> => {
 	try {
 		const { ichiApi, LM_ADDRESS } = ichiPoolStakingConfig;
@@ -122,7 +122,7 @@ const getIchiPoolStakingAPR = async (
 			provider,
 		) as UnipoolTokenDistributor;
 
-		if (unipoolHelper) {
+		if (!unipoolHelper.totalSupply.isZero()) {
 			totalSupply = unipoolHelper.totalSupply;
 			rewardRate = unipoolHelper.rewardRate;
 		} else {
@@ -167,7 +167,7 @@ const getBalancerPoolStakingAPR = async (
 	balancerPoolStakingConfig: BalancerPoolStakingConfig,
 	network: number,
 	provider: JsonRpcProvider,
-	unipool: UnipoolHelper | undefined,
+	unipool: UnipoolHelper,
 ): Promise<APR> => {
 	const { LM_ADDRESS, POOL_ADDRESS, VAULT_ADDRESS, POOL_ID } =
 		balancerPoolStakingConfig;
@@ -209,7 +209,7 @@ const getBalancerPoolStakingAPR = async (
 		let totalSupply: BigNumber;
 		let rewardRate: BigNumber;
 
-		if (unipool) {
+		if (!unipool.totalSupply.isZero()) {
 			totalSupply = unipool.totalSupply;
 			rewardRate = unipool.rewardRate;
 		} else {
@@ -257,7 +257,7 @@ const getSimplePoolStakingAPR = async (
 	poolStakingConfig: SimplePoolStakingConfig | RegenPoolStakingConfig,
 	network: number,
 	provider: JsonRpcProvider,
-	unipoolHelper: UnipoolHelper | undefined,
+	unipoolHelper: UnipoolHelper,
 ): Promise<APR> => {
 	const { LM_ADDRESS, POOL_ADDRESS } = poolStakingConfig;
 	const givTokenAddress = config.NETWORKS_CONFIG[network].TOKEN_ADDRESS;
@@ -295,7 +295,7 @@ const getSimplePoolStakingAPR = async (
 			poolContract.totalSupply(),
 		]);
 
-		if (unipoolHelper) {
+		if (!unipoolHelper.totalSupply.isZero()) {
 			totalSupply = unipoolHelper.totalSupply;
 			rewardRate = unipoolHelper.rewardRate;
 		} else {
