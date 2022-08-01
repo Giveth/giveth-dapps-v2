@@ -39,7 +39,7 @@ export interface IProjectsView extends IProjectsRouteProps {
 
 interface IQueries {
 	skip?: number;
-	take?: number;
+	limit?: number;
 	connectedWalletUserId?: number;
 }
 
@@ -83,7 +83,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 		userIdChanged = false,
 	) => {
 		const variables: IQueries = {
-			take: userIdChanged ? filteredProjects.length : projects.length,
+			limit: userIdChanged ? filteredProjects.length : projects.length,
 			skip: userIdChanged ? 0 : projects.length * (loadNum || 0),
 		};
 
