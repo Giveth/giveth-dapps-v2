@@ -95,6 +95,60 @@ export const FETCH_ALL_PROJECTS = gql`
 	}
 `;
 
+export const FETCH_ALL_PROJECTS_NEW = gql`
+	query FetchAllProjects(
+		$take: Int
+		$skip: Int
+		$sortingBy: SortingField
+		$filters: [FilterField!]
+		$searchTerm: String
+		$category: String
+		$mainCategory: String
+		$connectedWalletUserId: Int
+	) {
+		allProjects(
+			take: $take
+			skip: $skip
+			sortingBy: $sortingBy
+			filters: $filters
+			searchTerm: $searchTerm
+			category: $category
+			mainCategory: $mainCategory
+			connectedWalletUserId: $connectedWalletUserId
+		) {
+			projects {
+				id
+				title
+				image
+				slug
+				description
+				verified
+				totalDonations
+				traceCampaignId
+				reaction {
+					id
+					userId
+				}
+				totalReactions
+				adminUser {
+					name
+					walletAddress
+				}
+				updatedAt
+				organization {
+					name
+					label
+					supportCustomTokens
+				}
+			}
+			totalCount
+			categories {
+				name
+			}
+		}
+	}
+`;
+
 export const FETCH_PROJECT_BY_SLUG = gql`
 	query ProjectBySlug($slug: String!, $connectedWalletUserId: Int) {
 		projectBySlug(

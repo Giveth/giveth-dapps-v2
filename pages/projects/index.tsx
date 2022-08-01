@@ -1,6 +1,6 @@
 import { addApolloState, initializeApollo } from '@/apollo/apolloClient';
 import {
-	FETCH_ALL_PROJECTS,
+	FETCH_ALL_PROJECTS_NEW,
 	FETCH_MAIN_CATEGORIES,
 } from '@/apollo/gql/gqlProjects';
 import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
@@ -36,9 +36,8 @@ const ProjectsRoute = (props: IProjectsRouteProps) => {
 export async function getServerSideProps() {
 	try {
 		const apolloClient = initializeApollo();
-
 		const { data } = await apolloClient.query({
-			query: FETCH_ALL_PROJECTS,
+			query: FETCH_ALL_PROJECTS_NEW,
 			...OPTIONS_HOME_PROJECTS,
 			fetchPolicy: 'network-only',
 		});
@@ -61,7 +60,7 @@ export async function getServerSideProps() {
 		};
 		const updatedMaincategory = [allCategoriesItem, ...mainCategories];
 
-		const { projects, totalCount, categories } = data.projects;
+		const { projects, totalCount, categories } = data.allProjects;
 		return addApolloState(apolloClient, {
 			props: {
 				projects,
