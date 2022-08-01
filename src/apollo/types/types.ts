@@ -150,6 +150,11 @@ export interface ICategory {
 	name: string;
 	value?: string;
 	isActive?: boolean;
+	mainCategory?: Pick<IMainCategory, 'title'>;
+}
+
+export interface IConvertedCategories {
+	[key: string]: string[];
 }
 
 export interface IProjectBySlug {
