@@ -10,7 +10,7 @@ import {
 import { Dispatch, FC, SetStateAction } from 'react';
 import styled from 'styled-components';
 import { SimplePoolStakingConfig } from '@/types/config';
-import { getCurIconWithName } from '../StakingPoolImages';
+import { getSymbolIconWithName } from '../StakingPoolImages';
 import { Flex } from '../styled-components/Flex';
 import { StakeCardState } from './BaseStakingCard';
 
@@ -31,7 +31,7 @@ const StakingCardIntro: FC<IStakingCardIntro> = ({
 				<Back onClick={() => setState(StakeCardState.NORMAL)}>
 					<IconArrowLeft size={32} />
 				</Back>
-				{getCurIconWithName(titleIcon)}
+				{getSymbolIconWithName(titleIcon)}
 				<H6 weight={700}>{introCard?.title}</H6>
 			</HeaderRow>
 			<ContentWrapper

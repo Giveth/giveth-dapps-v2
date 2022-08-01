@@ -16,7 +16,7 @@ interface IStakingPoolImagesProps {
 	icon?: string;
 }
 
-export const getCurIconWithName = (currency: string) => {
+export const getSymbolIconWithName = (currency: string) => {
 	switch (currency) {
 		case 'GIV':
 			return <IconGIV size={40} />;
@@ -52,7 +52,7 @@ export const StakingPoolImages: FC<IStakingPoolImagesProps> = ({
 	return (
 		<StakingPoolImagesContainer lenght={currencies.length}>
 			{currencies.map((currency, idx) => (
-				<div key={idx}>{getCurIconWithName(currency)}</div>
+				<div key={idx}>{getSymbolIconWithName(currency)}</div>
 			))}
 		</StakingPoolImagesContainer>
 	);
