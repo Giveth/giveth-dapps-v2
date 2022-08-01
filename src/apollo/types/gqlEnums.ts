@@ -9,6 +9,14 @@ export enum ESortby {
 	DONATIONS = 'Donations',
 }
 
+export enum ESortbyAllProjects {
+	MOSTFUNDED = 'MostFunded',
+	MOSTLIKED = 'MostLiked',
+	NEWEST = 'Newest',
+	OLDEST = 'Oldest',
+	QUALITYSCORE = 'QualityScore',
+}
+
 export enum EProjectStatus {
 	DRAFT = 'drafted',
 	ACTIVE = 'activate',
