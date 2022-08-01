@@ -4,6 +4,7 @@ import {
 	ReactNode,
 	SetStateAction,
 	useContext,
+	useEffect,
 	useState,
 } from 'react';
 
@@ -13,6 +14,7 @@ interface IVariables {
 	mainCategory?: string;
 	category?: string;
 	searchTerm?: string;
+	filtersCount: number;
 }
 
 interface IProjectsContext {
@@ -24,6 +26,7 @@ const variablesDefaultValue = {
 	// sortingBy: ESortby.QUALITYSCORE,
 	sortingBy: undefined,
 	filters: undefined,
+	filtersCount: 0,
 };
 
 const ProjectsContext = createContext<IProjectsContext>({
@@ -37,6 +40,14 @@ export const ProjectsProvider = ({ children }: { children: ReactNode }) => {
 	const [variables, setVariables] = useState<IVariables>(
 		variablesDefaultValue,
 	);
+
+	useEffect(() => {
+		setVariables({
+			...variables,
+			filtersCount: variables.filters?.length ?? 0,
+		});
+	}, [variables.filters]);
+
 	return (
 		<ProjectsContext.Provider value={{ variables, setVariables }}>
 			{children}

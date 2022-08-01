@@ -29,7 +29,7 @@ import useMediaQuery from '@/hooks/useMediaQuery';
 import ProjectsSubCategories from './ProjectsSubCategories';
 import { useProjectsContext } from '@/context/projects.context';
 import { Flex } from '@/components/styled-components/Flex';
-import { FilterMenu } from '@/components/menu/FilterMenu';
+import { FilterMenu, PinkyColoredNumber } from '@/components/menu/FilterMenu';
 import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 import type { IProjectsRouteProps } from 'pages/projects';
 
@@ -202,6 +202,11 @@ const ProjectsIndex = (props: IProjectsView) => {
 									onClick={() => setIsFilterOpen(true)}
 								>
 									Filters
+									{contextVariables.filtersCount !== 0 && (
+										<PinkyColoredNumber>
+											{contextVariables.filtersCount}
+										</PinkyColoredNumber>
+									)}
 									<IconOptions16 />
 								</FiltersButton>
 								{isFilterOpen && (
@@ -231,6 +236,14 @@ const ProjectsIndex = (props: IProjectsView) => {
 											}}
 										>
 											Filters
+											{contextVariables.filtersCount !==
+												0 && (
+												<PinkyColoredNumber>
+													{
+														contextVariables.filtersCount
+													}
+												</PinkyColoredNumber>
+											)}
 											<IconOptions16 />
 										</FiltersButton>
 										{isFilterOpen && (
@@ -286,6 +299,11 @@ const ProjectsIndex = (props: IProjectsView) => {
 								}}
 							>
 								Filters
+								{contextVariables.filtersCount !== 0 && (
+									<PinkyColoredNumber>
+										{contextVariables.filtersCount}
+									</PinkyColoredNumber>
+								)}
 								<IconOptions16 />
 							</FiltersButton>
 							{isFilterOpen && (
@@ -406,6 +424,7 @@ const FilterAndSearchContainer = styled.div`
 
 const FiltersButton = styled.button`
 	display: flex;
+	align-items: center;
 	gap: 8px;
 	border-radius: 50px;
 	padding: 16px;

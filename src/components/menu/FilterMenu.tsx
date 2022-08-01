@@ -1,5 +1,6 @@
 import {
 	B,
+	brandColors,
 	ButtonText,
 	GLink,
 	IconArrowBottom,
@@ -49,7 +50,14 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 					<CloseContainer onClick={handleClose}>
 						<IconX size={24} />
 					</CloseContainer>
-					<Title size='medium'>Filters</Title>
+					<Flex gap='8px' justifyContent='center' alignItems='center'>
+						<Title size='medium'>Filters</Title>
+						{variables.filtersCount !== 0 && (
+							<PinkyColoredNumber size='medium'>
+								{variables.filtersCount}
+							</PinkyColoredNumber>
+						)}
+					</Flex>
 				</Header>
 				<Section>
 					<B>Sort by</B>
@@ -201,4 +209,12 @@ const FeatureItem = styled.div`
 	&:hover {
 		background-color: ${neutralColors.gray[200]};
 	}
+`;
+
+export const PinkyColoredNumber = styled(Title)`
+	background-color: ${brandColors.pinky[500]};
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	color: ${neutralColors.gray[100]};
 `;
