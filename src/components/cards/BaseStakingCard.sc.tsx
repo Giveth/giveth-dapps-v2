@@ -126,7 +126,13 @@ export const OutOfRangeBadgeContianer = styled(Flex)`
 export const OutOfRangeTooltip = styled(Subline)`
 	color: ${neutralColors.gray[100]};
 	width: 233px;
-	text-align: center;
+	text-align: left;
+`;
+
+export const AngelVaultTooltip = styled(Subline)`
+	color: ${neutralColors.gray[100]};
+	width: 261px;
+	text-align: left;
 `;
 
 export const IconHelpWraper = styled.div`

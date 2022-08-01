@@ -21,6 +21,7 @@ import {
 import { IconWithTooltip } from '../IconWithToolTip';
 import { BN, formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import {
+	AngelVaultTooltip,
 	ClaimButton,
 	Detail,
 	DetailLabel,
@@ -38,7 +39,6 @@ import {
 	IconHelpWraper,
 	IntroIcon,
 	LiquidityButton,
-	OutOfRangeTooltip,
 	SPTitle,
 	StakeAmount,
 	StakeButton,
@@ -345,7 +345,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 																</DetailValue>
 															}
 														>
-															<OutOfRangeTooltip>
+															<AngelVaultTooltip>
 																Your cumulative
 																APR including
 																both rewards
@@ -369,7 +369,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 																		2,
 																	)}
 																% APR).
-															</OutOfRangeTooltip>
+															</AngelVaultTooltip>
 														</IconWithTooltip>
 													) : (
 														<>
