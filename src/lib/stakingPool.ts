@@ -57,7 +57,6 @@ const getUnipoolInfo = async (
 		totalSupply = unipoolHelper.totalSupply;
 		rewardRate = unipoolHelper.rewardRate;
 	} else {
-		console.log('here');
 		const lmContract = new Contract(
 			lmAddress,
 			LM_ABI,
