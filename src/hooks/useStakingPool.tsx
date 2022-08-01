@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 
 import { useWeb3React } from '@web3-react/core';
@@ -14,7 +13,7 @@ import { Zero } from '@/helpers/number';
 import { useAppSelector } from '@/features/hooks';
 
 export interface IStakeInfo {
-	apr: BigNumber | null;
+	apr: APR;
 	earned: ethers.BigNumber;
 	stakedAmount: ethers.BigNumber;
 	notStakedAmount: ethers.BigNumber;
@@ -24,7 +23,7 @@ export const useStakingPool = (
 	poolStakingConfig: SimplePoolStakingConfig,
 	network: number,
 ): IStakeInfo => {
-	const [apr, setApr] = useState<BigNumber | null>(null);
+	const [apr, setApr] = useState<APR | null>(null);
 	const [userStakeInfo, setUserStakeInfo] = useState<UserStakeInfo>({
 		earned: ethers.constants.Zero,
 		notStakedAmount: ethers.constants.Zero,
@@ -41,12 +40,7 @@ export const useStakingPool = (
 
 	useEffect(() => {
 		const cb = () => {
-			if (
-				library &&
-				chainId === network &&
-				providerNetwork === network &&
-				subgraphIsLoaded
-			) {
+			if (subgraphIsLoaded) {
 				const promise: Promise<APR> =
 					type === StakingType.GIV_LM
 						? getGivStakingAPR(LM_ADDRESS, currentValues)
@@ -56,9 +50,11 @@ export const useStakingPool = (
 								library,
 								currentValues,
 						  );
-				promise.then(setApr);
+				promise
+					.then(setApr)
+					.catch(() => setApr({ effectiveAPR: Zero }));
 			} else {
-				setApr(Zero);
+				setApr({ effectiveAPR: Zero });
 			}
 		};
 
