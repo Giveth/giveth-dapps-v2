@@ -82,6 +82,7 @@ export interface BalancerPoolStakingConfig extends SimplePoolStakingConfig {
 }
 
 export interface IntroCardConfig {
+	icon?: string;
 	title: string;
 	description: string;
 	link: string;

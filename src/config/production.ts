@@ -80,6 +80,7 @@ const config: EnvConfig = {
 				farmStartTimeMS: 1659625200000,
 				introCard: {
 					title: 'Angel Vault',
+					icon: 'angelVault',
 					description: `The Angel Vault is shared Univ3 position structured to protect GIV from downward volatility.\n\nProvide oneGIV as liquidity in our Angel Vault and stake the LP token to earn rewards proportional to the liquidity provided. When you remove liquidity, you will get oneGIV & GIV proportional to the holdings in the Angel Vault.`,
 					link: 'https://medium.com/@karmaticacid/the-evolution-of-giv-liquidity-introducing-the-giveth-angel-vault-5ee34b2965c1',
 				},
