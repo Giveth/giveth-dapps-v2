@@ -10,12 +10,13 @@ import { IconElk } from '@/components/Icons/Elk';
 import { IconxDAI } from '@/components/Icons/xDAI';
 import { IconCult } from '@/components/Icons/Cult';
 import { IconOneGIV } from './Icons/OneGIV';
+import { IconAngelVault } from './Icons/AngelVault';
 interface IStakingPoolImagesProps {
 	title: string;
 	icon?: string;
 }
 
-export const getCurIconWithName = (currency: string) => {
+export const getSymbolIconWithName = (currency: string) => {
 	switch (currency) {
 		case 'GIV':
 			return <IconGIV size={40} />;
@@ -35,6 +36,8 @@ export const getCurIconWithName = (currency: string) => {
 			return <IconxDAI size={40} />;
 		case 'oneGIV':
 			return <IconOneGIV size={40} />;
+		case 'angelVault':
+			return <IconAngelVault size={40} />;
 		default:
 			break;
 	}
@@ -49,7 +52,7 @@ export const StakingPoolImages: FC<IStakingPoolImagesProps> = ({
 	return (
 		<StakingPoolImagesContainer lenght={currencies.length}>
 			{currencies.map((currency, idx) => (
-				<div key={idx}>{getCurIconWithName(currency)}</div>
+				<div key={idx}>{getSymbolIconWithName(currency)}</div>
 			))}
 		</StakingPoolImagesContainer>
 	);
