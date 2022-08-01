@@ -35,7 +35,6 @@ const ProjectsRoute = (props: IProjectsRouteProps) => {
 export async function getServerSideProps() {
 	try {
 		const apolloClient = initializeApollo();
-
 		const { data } = await apolloClient.query({
 			query: FETCH_ALL_PROJECTS,
 			...OPTIONS_HOME_PROJECTS,
@@ -60,7 +59,7 @@ export async function getServerSideProps() {
 		};
 		const updatedMaincategory = [allCategoriesItem, ...mainCategories];
 
-		const { projects, totalCount, categories } = data.projects;
+		const { projects, totalCount, categories } = data.allProjects;
 		return addApolloState(apolloClient, {
 			props: {
 				projects,

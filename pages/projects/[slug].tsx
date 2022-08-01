@@ -91,7 +91,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 				},
 				fetchPolicy: 'network-only',
 			});
-			const { projects, totalCount, categories } = data.projects;
+			const { projects, totalCount, categories } = data.allProjects;
 			return {
 				props: {
 					projects,

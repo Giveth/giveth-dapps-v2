@@ -13,7 +13,7 @@ import styled from 'styled-components';
 import { useState, forwardRef } from 'react';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
-import { ESortby, EDirection } from '@/apollo/types/gqlEnums';
+import { ESortbyAllProjects } from '@/apollo/types/gqlEnums';
 import CheckBox from '../Checkbox';
 import { useProjectsContext } from '@/context/projects.context';
 import { zIndex } from '@/lib/constants/constants';
@@ -25,7 +25,7 @@ interface IFilterMenuProps {
 export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 	({ handleClose }, ref) => {
 		const [isChecked, setIsChecked] = useState(false);
-		const { setVariables } = useProjectsContext();
+		const { setVariables, variables } = useProjectsContext();
 
 		return (
 			<MenuContainer className='fadeIn' ref={ref}>
@@ -39,11 +39,14 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 					<B>Sort by</B>
 					{sortByOptions.map((sortByOption, idx) => (
 						<SortItem
+							isSortSelected={
+								variables.sortingBy === sortByOption.value
+							}
 							key={idx}
 							onClick={() =>
 								setVariables(prevVariables => ({
 									...prevVariables,
-									sortBy: sortByOption.value,
+									sortingBy: sortByOption.value,
 								}))
 							}
 						>
@@ -76,21 +79,24 @@ FilterMenu.displayName = 'FilterMenu';
 const sortByOptions = [
 	{
 		label: 'Newest',
-		value: ESortby.CREATIONDATE,
+		value: ESortbyAllProjects.NEWEST,
 		icon: <IconArrowTop size={16} />,
 	},
 	{
 		label: 'Oldest',
-		value: ESortby.CREATIONDATE,
-		direction: EDirection.ASC,
+		value: ESortbyAllProjects.OLDEST,
 		icon: <IconArrowBottom size={16} />,
 	},
 	{
 		label: 'Most liked',
-		value: ESortby.HEARTS,
+		value: ESortbyAllProjects.MOSTLIKED,
 		icon: <IconHeartOutline16 />,
 	},
-	{ label: 'Most funded', value: ESortby.DONATIONS, icon: <IconHeart16 /> },
+	{
+		label: 'Most funded',
+		value: ESortbyAllProjects.MOSTFUNDED,
+		icon: <IconHeart16 />,
+	},
 ];
 
 const projectFeatures = [
@@ -113,6 +119,7 @@ const MenuContainer = styled.div`
 	overflow-y: scroll;
 	position: fixed;
 	${mediaQueries.tablet} {
+		overflow-y: auto;
 		height: auto;
 		top: -10px;
 		border-radius: 16px;
@@ -143,9 +150,14 @@ const Section = styled.section`
 	margin: 24px 0;
 `;
 
-const SortItem = styled(Flex)`
+const SortItem = styled(Flex)<{ isSortSelected?: boolean }>`
 	margin: 16px 0;
-	background-color: ${neutralColors.gray[300]};
+
+	background-color: ${props =>
+		props.isSortSelected
+			? neutralColors.gray[900]
+			: neutralColors.gray[300]};
+	color: ${props => props.isSortSelected && neutralColors.gray[100]};
 	border-radius: 50px;
 	padding: 10px 16px;
 	gap: 10px;
