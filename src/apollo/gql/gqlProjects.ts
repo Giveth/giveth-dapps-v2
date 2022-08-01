@@ -43,60 +43,6 @@ export const FETCH_HOME_PROJECTS = gql`
 
 export const FETCH_ALL_PROJECTS = gql`
 	query FetchAllProjects(
-		$limit: Int
-		$skip: Int
-		$orderBy: OrderBy
-		$filterBy: FilterBy
-		$searchTerm: String
-		$category: String
-		$mainCategory: String
-		$connectedWalletUserId: Int
-	) {
-		projects(
-			take: $limit
-			skip: $skip
-			orderBy: $orderBy
-			filterBy: $filterBy
-			searchTerm: $searchTerm
-			category: $category
-			mainCategory: $mainCategory
-			connectedWalletUserId: $connectedWalletUserId
-		) {
-			projects {
-				id
-				title
-				image
-				slug
-				description
-				verified
-				totalDonations
-				traceCampaignId
-				reaction {
-					id
-					userId
-				}
-				totalReactions
-				adminUser {
-					name
-					walletAddress
-				}
-				updatedAt
-				organization {
-					name
-					label
-					supportCustomTokens
-				}
-			}
-			totalCount
-			categories {
-				name
-			}
-		}
-	}
-`;
-
-export const FETCH_ALL_PROJECTS_NEW = gql`
-	query FetchAllProjects(
 		$take: Int
 		$skip: Int
 		$sortingBy: SortingField

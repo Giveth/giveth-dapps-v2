@@ -14,7 +14,7 @@ import { captureException } from '@sentry/nextjs';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered, showToastError } from '@/lib/helpers';
-import { FETCH_ALL_PROJECTS_NEW } from '@/apollo/gql/gqlProjects';
+import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { IMainCategory, IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
@@ -95,7 +95,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 		client
 			.query({
-				query: FETCH_ALL_PROJECTS_NEW,
+				query: FETCH_ALL_PROJECTS,
 				variables: {
 					...variables,
 					...contextVariables,
