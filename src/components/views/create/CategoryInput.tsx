@@ -7,10 +7,10 @@ import {
 	neutralColors,
 	SublineBold,
 } from '@giveth/ui-design-system';
+import { client } from '@/apollo/apolloClient';
 import styled from 'styled-components';
 
 import { FETCH_MAIN_CATEGORIES } from '@/apollo/gql/gqlProjects';
-import { initializeApollo } from '@/apollo/apolloClient';
 import CheckBox from '@/components/Checkbox';
 import { maxSelectedCategory } from '@/lib/constants/Categories';
 import { ICategory, IMainCategory } from '@/apollo/types/types';
@@ -21,7 +21,6 @@ const CategoryInput = (props: {
 	value: ICategory[];
 	setValue: (category: ICategory[]) => void;
 }) => {
-	const apolloClient = initializeApollo();
 	const { value, setValue } = props;
 	const isMaxCategories = value.length >= maxSelectedCategory;
 	const [allCategories, setAllCategories] = useState<any>();
@@ -40,21 +39,20 @@ const CategoryInput = (props: {
 		}
 	};
 
-	const getCategories = async () => {
-		const {
-			data: { mainCategories },
-		}: {
-			data: { mainCategories: IMainCategory[] };
-		} = await apolloClient.query({
-			query: FETCH_MAIN_CATEGORIES,
-		});
-
-		setAllCategories(mainCategories);
-	};
-
 	useEffect(() => {
+		const getCategories = async () => {
+			const {
+				data: { mainCategories },
+			}: {
+				data: { mainCategories: IMainCategory[] };
+			} = await client.query({
+				query: FETCH_MAIN_CATEGORIES,
+			});
+
+			setAllCategories(mainCategories);
+		};
 		getCategories();
-	});
+	}, []);
 
 	return (
 		<InputContainer>
