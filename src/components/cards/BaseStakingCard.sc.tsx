@@ -131,7 +131,8 @@ export const OutOfRangeTooltip = styled(Subline)`
 
 export const AngelVaultTooltip = styled(Subline)`
 	color: ${neutralColors.gray[100]};
-	width: 261px;
+	// TODO: until we merge the new tooltip to and can align it.
+	width: 161px;
 	text-align: left;
 `;
 

@@ -333,7 +333,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 													{type ===
 													StakingType.ICHI_GIV_ONEGIV ? (
 														<IconWithTooltip
-															direction='right'
+															direction='top'
 															icon={
 																<DetailValue>
 																	{apr &&
