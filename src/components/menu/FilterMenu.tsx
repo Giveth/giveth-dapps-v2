@@ -28,7 +28,7 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 		const { setVariables } = useProjectsContext();
 
 		return (
-			<MenuContainer ref={ref}>
+			<MenuContainer className='fadeIn' ref={ref}>
 				<Header>
 					<CloseContainer onClick={handleClose}>
 						<IconX size={24} />

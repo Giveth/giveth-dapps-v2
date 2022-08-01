@@ -21,13 +21,12 @@ export interface IProjectsRouteProps {
 const ProjectsRoute = (props: IProjectsRouteProps) => {
 	const { projects, mainCategories, totalCount, categories } = props;
 	return (
-		<ProjectsProvider>
+		<ProjectsProvider mainCategories={mainCategories}>
 			<GeneralMetatags info={projectsMetatags} />
 			<ProjectsIndex
 				projects={projects}
 				totalCount={totalCount}
 				categories={categories}
-				mainCategories={mainCategories}
 			/>
 		</ProjectsProvider>
 	);
