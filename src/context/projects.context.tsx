@@ -6,10 +6,10 @@ import {
 	useContext,
 	useState,
 } from 'react';
-import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
 
 interface IVariables {
-	orderBy: { field: string; direction: string };
+	sortingBy?: string;
+	filters?: string[];
 	mainCategory?: string;
 	category?: string;
 	searchTerm?: string;
@@ -21,7 +21,9 @@ interface IProjectsContext {
 }
 
 const variablesDefaultValue = {
-	orderBy: OPTIONS_HOME_PROJECTS.variables.orderBy,
+	// sortingBy: ESortby.QUALITYSCORE,
+	sortingBy: undefined,
+	filters: undefined,
 };
 
 const ProjectsContext = createContext<IProjectsContext>({
