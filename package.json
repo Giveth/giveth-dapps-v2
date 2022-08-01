@@ -19,7 +19,7 @@
 		"@ethersproject/contracts": "^5.5.0",
 		"@ethersproject/providers": "^5.5.0",
 		"@ethersproject/units": "^5.5.0",
-		"@giveth/ui-design-system": "^1.8.12",
+		"@giveth/ui-design-system": "^1.8.13",
 		"@gnosis.pm/safe-apps-web3-react": "^1.5.0",
 		"@reduxjs/toolkit": "^1.8.1",
 		"@sentry/nextjs": "^6.19.3",
