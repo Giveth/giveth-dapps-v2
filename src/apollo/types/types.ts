@@ -150,7 +150,7 @@ export interface ICategory {
 	name: string;
 	value?: string;
 	isActive?: boolean;
-	mainCategory: Pick<IMainCategory, 'title'>;
+	mainCategory?: Pick<IMainCategory, 'title'>;
 }
 
 export interface IConvertedCategories {
