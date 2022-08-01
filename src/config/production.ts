@@ -77,7 +77,7 @@ const config: EnvConfig = {
 					'https://app.ichi.org/vault?poolId=20009&back=vault',
 				unit: 'LP',
 				active: true,
-				farmStartTimeMS: 1659607200000,
+				farmStartTimeMS: 1659625200000,
 				introCard: {
 					title: 'Angel Vault',
 					description: `The Angel Vault is shared Univ3 position structured to protect GIV from downward volatility.\n\nProvide oneGIV as liquidity in our Angel Vault and stake the LP token to earn rewards proportional to the liquidity provided. When you remove liquidity, you will get oneGIV & GIV proportional to the holdings in the Angel Vault.`,
