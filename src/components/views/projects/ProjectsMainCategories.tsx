@@ -1,5 +1,4 @@
 import { brandColors, neutralColors } from '@giveth/ui-design-system';
-
 import styled from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper';
@@ -7,9 +6,10 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import { RefObject } from 'react';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
+
 import Routes from '@/lib/constants/Routes';
 import { IMainCategory } from '@/apollo/types/types';
+import InternalLink from '@/components/InternalLink';
 
 interface IProjectsFilterProps {
 	mainCategories: IMainCategory[];
@@ -22,17 +22,15 @@ function ProjectsMainCategories({
 	navigationPrevRef,
 	navigationNextRef,
 }: IProjectsFilterProps) {
+	const projectsRoute = Routes.Projects + '/';
 	const { query } = useRouter();
 	const handleIsSelected = (categorySlug: string) => {
 		if (!query?.slug) {
-			if (categorySlug === 'all') {
-				return true;
-			}
-			return false;
+			return categorySlug === 'all';
 		}
-		if (categorySlug === query.slug) return true;
-		return false;
+		return categorySlug === query.slug;
 	};
+
 	return (
 		<Swiper
 			modules={[Navigation]}
@@ -43,33 +41,26 @@ function ProjectsMainCategories({
 			slidesPerView='auto'
 			spaceBetween={16}
 		>
-			{mainCategories.map(category => {
-				return (
-					<SwiperSlide key={category.slug}>
-						<Link
-							href={
-								category.slug === 'all'
-									? Routes.Projects
-									: `/projects/${category.slug}`
-							}
-							passHref
+			{mainCategories.map(category => (
+				<SwiperSlide key={category.slug}>
+					<InternalLink
+						href={
+							category.slug === 'all'
+								? projectsRoute
+								: projectsRoute + category.slug
+						}
+					>
+						<MainCategoryItem
+							isSelected={handleIsSelected(category.slug)}
 						>
-							<a>
-								<MainCategoryItem
-									isSelected={handleIsSelected(category.slug)}
-								>
-									{category.title}
-								</MainCategoryItem>
-							</a>
-						</Link>
-					</SwiperSlide>
-				);
-			})}
+							{category.title}
+						</MainCategoryItem>
+					</InternalLink>
+				</SwiperSlide>
+			))}
 		</Swiper>
 	);
 }
-
-export default ProjectsMainCategories;
 
 const MainCategoryItem = styled.div<{ isSelected?: boolean }>`
 	cursor: pointer;
@@ -87,3 +78,5 @@ const MainCategoryItem = styled.div<{ isSelected?: boolean }>`
 	text-align: center;
 	user-select: none;
 `;
+
+export default ProjectsMainCategories;
