@@ -13,22 +13,23 @@ const SubgraphController = () => {
 	const { chainId, account } = useWeb3React();
 
 	useEffect(() => {
-		if (!account || !chainId) return;
+		const _account = account ? account : undefined;
+		const _chainID = chainId || config.MAINNET_NETWORK_NUMBER;
 		if (chainId !== config.XDAI_NETWORK_NUMBER)
-			dispatch(fetchXDaiInfoAsync(account));
+			dispatch(fetchXDaiInfoAsync(_account));
 		if (chainId !== config.MAINNET_NETWORK_NUMBER)
-			dispatch(fetchMainnetInfoAsync(account));
+			dispatch(fetchMainnetInfoAsync(_account));
 		dispatch(
 			fetchCurrentInfoAsync({
-				userAddress: account,
-				chainId,
+				userAddress: _account,
+				chainId: _chainID,
 			}),
 		);
 		const interval = setInterval(() => {
 			dispatch(
 				fetchCurrentInfoAsync({
-					userAddress: account,
-					chainId,
+					userAddress: _account,
+					chainId: _chainID,
 				}),
 			);
 		}, config.SUBGRAPH_POLLING_INTERVAL);

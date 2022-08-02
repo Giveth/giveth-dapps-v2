@@ -47,6 +47,7 @@ export const ProjectsProvider = (props: {
 	const [variables, setVariables] = useState<IVariables>(
 		variablesDefaultValue,
 	);
+
 	return (
 		<ProjectsContext.Provider
 			value={{

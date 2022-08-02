@@ -18,7 +18,8 @@ import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import ProjectsBanner from './ProjectsBanner';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { useProjectsContext } from '@/context/projects.context';
-
+import { Flex } from '@/components/styled-components/Flex';
+import { FilterMenu, PinkyColoredNumber } from '@/components/menu/FilterMenu';
 import ProjectsFiltersDesktop from '@/components/views/projects/ProjectsFiltersDesktop';
 import ProjectsFiltersTablet from '@/components/views/projects/ProjectsFiltersTablet';
 import ProjectsFiltersMobile from '@/components/views/projects/ProjectsFiltersMobile';
@@ -31,7 +32,7 @@ export interface IProjectsView {
 
 interface IQueries {
 	skip?: number;
-	take?: number;
+	limit?: number;
 	connectedWalletUserId?: number;
 }
 
@@ -70,7 +71,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 		userIdChanged = false,
 	) => {
 		const variables: IQueries = {
-			take: userIdChanged ? filteredProjects.length : projects.length,
+			limit: userIdChanged ? filteredProjects.length : projects.length,
 			skip: userIdChanged ? 0 : projects.length * (loadNum || 0),
 		};
 
@@ -133,6 +134,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 		contextVariables?.mainCategory,
 		router.query?.slug,
 		contextVariables?.sortingBy,
+		contextVariables?.filters,
 	]);
 
 	const loadMore = () => {
@@ -150,6 +152,19 @@ const ProjectsIndex = (props: IProjectsView) => {
 	};
 
 	const showLoadMore = totalCount > filteredProjects?.length;
+
+	const FiltersButtonWithCounter = () => {
+		const filtersCount = contextVariables?.filters?.length ?? 0;
+		return (
+			<FiltersButton onClick={() => setIsFilterOpen(true)}>
+				Filters
+				{filtersCount !== 0 && (
+					<PinkyColoredNumber>{filtersCount}</PinkyColoredNumber>
+				)}
+				<IconOptions16 />
+			</FiltersButton>
+		);
+	};
 
 	return (
 		<>

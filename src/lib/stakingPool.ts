@@ -8,17 +8,15 @@ import {
 import { captureException } from '@sentry/nextjs';
 import {
 	BalancerPoolStakingConfig,
-	PoolStakingConfig,
-	RegenFarmType,
+	ICHIPoolStakingConfig,
 	RegenPoolStakingConfig,
 	SimplePoolStakingConfig,
-	StakingType,
+	StakingPlatform,
 } from '@/types/config';
 import config from '../configuration';
 import { APR } from '@/types/poolInfo';
 import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
 import { BN, Zero } from '@/helpers/number';
-import { IBalances } from '@/types/subgraph';
 import { getGasPreference } from '@/lib/helpers';
 
 import LM_Json from '../artifacts/UnipoolTokenDistributor.json';
@@ -27,6 +25,15 @@ import BAL_WEIGHTED_POOL_Json from '../artifacts/BalancerWeightedPool.json';
 import BAL_VAULT_Json from '../artifacts/BalancerVault.json';
 import TOKEN_MANAGER_Json from '../artifacts/HookedTokenManager.json';
 import ERC20_Json from '../artifacts/ERC20.json';
+import {
+	ERC20,
+	IUniswapV2Pair,
+	IVault,
+	UnipoolTokenDistributor,
+	WeightedPool,
+} from '@/types/contracts';
+import { ISubgraphState } from '@/features/subgraph/subgraph.types';
+import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
 const { abi: LM_ABI } = LM_Json;
 const { abi: UNI_ABI } = UNI_Json;
@@ -35,77 +42,171 @@ const { abi: BAL_VAULT_ABI } = BAL_VAULT_Json;
 const { abi: TOKEN_MANAGER_ABI } = TOKEN_MANAGER_Json;
 const { abi: ERC20_ABI } = ERC20_Json;
 
-const toBigNumber = (eb: ethers.BigNumber): BigNumber =>
+const toBigNumberJs = (eb: ethers.BigNumber | string | number): BigNumber =>
 	new BigNumber(eb.toString());
+
+const getUnipoolInfo = async (
+	unipoolHelper: UnipoolHelper,
+	lmAddress: string,
+	provider: JsonRpcProvider,
+): Promise<{ totalSupply: BigNumber; rewardRate: BigNumber }> => {
+	let totalSupply: BigNumber;
+	let rewardRate: BigNumber;
+	// Isn't initialized with default values
+	if (!unipoolHelper.totalSupply.isZero()) {
+		totalSupply = unipoolHelper.totalSupply;
+		rewardRate = unipoolHelper.rewardRate;
+	} else {
+		const lmContract = new Contract(
+			lmAddress,
+			LM_ABI,
+			provider,
+		) as UnipoolTokenDistributor;
+		[totalSupply, rewardRate] = await Promise.all([
+			lmContract.totalSupply(),
+			lmContract.rewardRate(),
+		]).then(([_totalSupply, _rewardRate]) => [
+			toBigNumberJs(_totalSupply as ethers.BigNumber),
+			toBigNumberJs(_rewardRate as ethers.BigNumber),
+		]);
+	}
+	return { totalSupply, rewardRate };
+};
 
 export const getGivStakingAPR = async (
 	lmAddress: string,
 	network: number,
-	unipool: UnipoolHelper | undefined,
+	subgraphValue: ISubgraphState,
+	provider: JsonRpcProvider | null,
 ): Promise<APR> => {
-	let apr: BigNumber = Zero;
+	const sdh = new SubgraphDataHelper(subgraphValue);
+	const unipoolHelper = new UnipoolHelper(sdh.getUnipool(lmAddress));
+	let givStakingAPR: BigNumber = Zero;
+	const _provider = provider
+		? provider
+		: new JsonRpcProvider(config.NETWORKS_CONFIG[network].nodeUrl);
 
-	if (unipool) {
-		const totalSupply = unipool.totalSupply;
-		const rewardRate = unipool.rewardRate;
+	const { totalSupply, rewardRate } = await getUnipoolInfo(
+		unipoolHelper,
+		lmAddress,
+		_provider,
+	);
+	givStakingAPR = totalSupply.isZero()
+		? Zero
+		: rewardRate.div(totalSupply).times('31536000').times('100');
 
-		apr = totalSupply.isZero()
-			? Zero
-			: rewardRate.div(totalSupply).times('31536000').times('100');
-	}
-
-	return apr;
+	return { effectiveAPR: givStakingAPR };
 };
 
 export const getLPStakingAPR = async (
-	poolStakingConfig: PoolStakingConfig,
+	poolStakingConfig: SimplePoolStakingConfig,
 	network: number,
 	provider: JsonRpcProvider | null,
-	unipoolHelper: UnipoolHelper | undefined,
+	subgraphValue: ISubgraphState,
 ): Promise<APR> => {
-	if (!provider) {
-		return Zero;
+	const _provider = provider
+		? provider
+		: new JsonRpcProvider(config.NETWORKS_CONFIG[network].nodeUrl);
+	const sdh = new SubgraphDataHelper(subgraphValue);
+	const unipoolHelper = new UnipoolHelper(
+		sdh.getUnipool(poolStakingConfig.LM_ADDRESS),
+	);
+	switch (poolStakingConfig.platform) {
+		case StakingPlatform.BALANCER:
+			return getBalancerPoolStakingAPR(
+				poolStakingConfig as BalancerPoolStakingConfig,
+				network,
+				_provider,
+				unipoolHelper,
+			);
+		case StakingPlatform.ICHI:
+			return getIchiPoolStakingAPR(
+				poolStakingConfig as ICHIPoolStakingConfig,
+				network,
+				_provider,
+				unipoolHelper,
+			);
+		default:
+			return getSimplePoolStakingAPR(
+				poolStakingConfig,
+				network,
+				_provider,
+				unipoolHelper,
+			);
 	}
-	if (poolStakingConfig.type === StakingType.BALANCER_ETH_GIV) {
-		return getBalancerPoolStakingAPR(
-			poolStakingConfig as BalancerPoolStakingConfig,
-			network,
-			provider,
+};
+
+const getIchiPoolStakingAPR = async (
+	ichiPoolStakingConfig: ICHIPoolStakingConfig,
+	network: number,
+	provider: JsonRpcProvider,
+	unipoolHelper: UnipoolHelper,
+): Promise<APR> => {
+	try {
+		const { ichiApi, LM_ADDRESS } = ichiPoolStakingConfig;
+		const response = await fetch(ichiApi);
+		const apiResult = await response.json();
+
+		const { totalSupply, rewardRate } = await getUnipoolInfo(
 			unipoolHelper,
-		);
-	} else {
-		return getSimplePoolStakingAPR(
-			poolStakingConfig,
-			network,
+			LM_ADDRESS,
 			provider,
-			unipoolHelper,
 		);
+
+		const {
+			lpPrice = '0',
+			vaultIRR = 0,
+			tokens = [],
+		}: {
+			lpPrice: string;
+			vaultIRR: number;
+			tokens: { name: string; price: number }[];
+		} = apiResult;
+
+		if (!lpPrice || lpPrice === '0') return { effectiveAPR: Zero };
+
+		const givTokenPrice = tokens?.find(t => t.name === 'giv')?.price || 0;
+		const totalAPR = rewardRate
+			.div(totalSupply)
+			.times(givTokenPrice)
+			.div(lpPrice)
+			.times('31536000')
+			.times('100')
+			.plus(vaultIRR);
+
+		return { effectiveAPR: totalAPR, vaultIRR: toBigNumberJs(vaultIRR) };
+	} catch (e) {
+		console.error('Error in fetching ICHI info', e);
 	}
+	return { effectiveAPR: Zero };
 };
 
 const getBalancerPoolStakingAPR = async (
 	balancerPoolStakingConfig: BalancerPoolStakingConfig,
 	network: number,
 	provider: JsonRpcProvider,
-	unipool: UnipoolHelper | undefined,
+	unipool: UnipoolHelper,
 ): Promise<APR> => {
 	const { LM_ADDRESS, POOL_ADDRESS, VAULT_ADDRESS, POOL_ID } =
 		balancerPoolStakingConfig;
 	const tokenAddress = config.NETWORKS_CONFIG[network].TOKEN_ADDRESS;
 
-	const lmContract = new Contract(LM_ADDRESS, LM_ABI, provider);
-	const poolContract = new Contract(
+	const weightedPoolContract = new Contract(
 		POOL_ADDRESS,
 		BAL_WEIGHTED_POOL_ABI,
 		provider,
-	);
-	const vaultContract = new Contract(VAULT_ADDRESS, BAL_VAULT_ABI, provider);
+	) as WeightedPool;
+	const vaultContract = new Contract(
+		VAULT_ADDRESS,
+		BAL_VAULT_ABI,
+		provider,
+	) as IVault;
 
 	interface PoolTokens {
 		balances: Array<ethers.BigNumber>;
 		tokens: Array<string>;
 	}
-	let apr = null;
+	let farmAPR = null;
 
 	try {
 		const [_poolTokens, _poolTotalSupply, _poolNormalizedWeights]: [
@@ -114,28 +215,18 @@ const getBalancerPoolStakingAPR = async (
 			Array<ethers.BigNumber>,
 		] = await Promise.all([
 			vaultContract.getPoolTokens(POOL_ID),
-			poolContract.totalSupply(),
-			poolContract.getNormalizedWeights(),
+			weightedPoolContract.totalSupply(),
+			weightedPoolContract.getNormalizedWeights(),
 		]);
 
-		let totalSupply: BigNumber;
-		let rewardRate: BigNumber;
+		const { totalSupply, rewardRate } = await getUnipoolInfo(
+			unipool,
+			LM_ADDRESS,
+			provider,
+		);
 
-		if (unipool) {
-			totalSupply = unipool.totalSupply;
-			rewardRate = unipool.rewardRate;
-		} else {
-			[totalSupply, rewardRate] = await Promise.all([
-				lmContract.totalSupply(),
-				lmContract.rewardRate(),
-			]).then(([_totalSupply, _rewardRate]) => [
-				toBigNumber(_totalSupply as ethers.BigNumber),
-				toBigNumber(_rewardRate as ethers.BigNumber),
-			]);
-		}
-
-		const weights = _poolNormalizedWeights.map(toBigNumber);
-		const balances = _poolTokens.balances.map(toBigNumber);
+		const weights = _poolNormalizedWeights.map(toBigNumberJs);
+		const balances = _poolTokens.balances.map(toBigNumberJs);
 
 		if (
 			_poolTokens.tokens[0].toLowerCase() !== tokenAddress.toLowerCase()
@@ -144,11 +235,11 @@ const getBalancerPoolStakingAPR = async (
 			weights.reverse();
 		}
 
-		const lp = toBigNumber(_poolTotalSupply)
+		const lp = toBigNumberJs(_poolTotalSupply)
 			.div(BigNumber.sum(...weights).div(weights[0]))
 			.div(balances[0]);
 
-		apr = totalSupply.isZero()
+		farmAPR = totalSupply.isZero()
 			? null
 			: rewardRate
 					.div(totalSupply)
@@ -163,13 +254,13 @@ const getBalancerPoolStakingAPR = async (
 			},
 		});
 	}
-	return apr;
+	return farmAPR ? { effectiveAPR: farmAPR } : null;
 };
 const getSimplePoolStakingAPR = async (
 	poolStakingConfig: SimplePoolStakingConfig | RegenPoolStakingConfig,
 	network: number,
 	provider: JsonRpcProvider,
-	unipoolHelper: UnipoolHelper | undefined,
+	unipoolHelper: UnipoolHelper,
 ): Promise<APR> => {
 	const { LM_ADDRESS, POOL_ADDRESS } = poolStakingConfig;
 	const givTokenAddress = config.NETWORKS_CONFIG[network].TOKEN_ADDRESS;
@@ -182,15 +273,16 @@ const getSimplePoolStakingAPR = async (
 	const tokenAddress = streamConfig
 		? streamConfig.rewardTokenAddress
 		: givTokenAddress;
-	const lmContract = new Contract(LM_ADDRESS, LM_ABI, provider);
 
-	let totalSupply: BigNumber;
-	let rewardRate: BigNumber;
-	const poolContract = new Contract(POOL_ADDRESS, UNI_ABI, provider);
-	let apr = null;
+	const poolContract = new Contract(
+		POOL_ADDRESS,
+		UNI_ABI,
+		provider,
+	) as IUniswapV2Pair;
+	let farmAPR = null;
 	try {
 		const [_reserves, _token0, _poolTotalSupply]: [
-			Array<ethers.BigNumber>,
+			[ethers.BigNumber, ethers.BigNumber, number],
 			string,
 			ethers.BigNumber,
 		] = await Promise.all([
@@ -198,29 +290,24 @@ const getSimplePoolStakingAPR = async (
 			poolContract.token0(),
 			poolContract.totalSupply(),
 		]);
-		if (unipoolHelper) {
-			totalSupply = unipoolHelper.totalSupply;
-			rewardRate = unipoolHelper.rewardRate;
-		} else {
-			[totalSupply, rewardRate] = await Promise.all([
-				lmContract.totalSupply(),
-				lmContract.rewardRate(),
-			]).then(([_totalSupply, _rewardRate]) => [
-				toBigNumber(_totalSupply as ethers.BigNumber),
-				toBigNumber(_rewardRate as ethers.BigNumber),
-			]);
-		}
-		let tokenReseve = toBigNumber(
+
+		const { totalSupply, rewardRate } = await getUnipoolInfo(
+			unipoolHelper,
+			LM_ADDRESS,
+			provider,
+		);
+
+		let tokenReseve = toBigNumberJs(
 			_token0.toLowerCase() !== tokenAddress.toLowerCase()
 				? _reserves[1]
 				: _reserves[0],
 		);
 
-		const lp = toBigNumber(_poolTotalSupply)
+		const lp = toBigNumberJs(_poolTotalSupply)
 			.times(10 ** 18)
 			.div(2)
 			.div(tokenReseve);
-		apr = totalSupply.isZero()
+		farmAPR = totalSupply.isZero()
 			? null
 			: rewardRate
 					.div(totalSupply)
@@ -237,85 +324,28 @@ const getSimplePoolStakingAPR = async (
 		});
 	}
 
-	return apr;
+	return farmAPR ? { effectiveAPR: farmAPR } : null;
 };
 
 export const getUserStakeInfo = (
-	type: StakingType,
-	regenFarmType: RegenFarmType | undefined,
-	balance: IBalances,
-	unipoolHelper: UnipoolHelper | undefined,
+	currentValues: ISubgraphState,
+	poolStakingConfig: SimplePoolStakingConfig,
 ): {
 	stakedAmount: ethers.BigNumber;
 	notStakedAmount: ethers.BigNumber;
 	earned: ethers.BigNumber;
 } => {
-	let rewards = ethers.constants.Zero;
-	let rewardPerTokenPaid = ethers.constants.Zero;
-	let stakedAmount = ethers.constants.Zero;
-	let notStakedAmount = ethers.constants.Zero;
 	let earned = ethers.constants.Zero;
-	if (regenFarmType) {
-		switch (regenFarmType) {
-			case RegenFarmType.FOX_HNY:
-				rewards = BN(balance.rewardsFoxHnyLm);
-				rewardPerTokenPaid = BN(balance.rewardPerTokenPaidFoxHnyLm);
-				stakedAmount = BN(balance.foxHnyLpStaked);
-				notStakedAmount = BN(balance.foxHnyLp);
-				break;
-			case RegenFarmType.CULT_ETH:
-				rewards = BN(balance.rewardsCultEthLm);
-				rewardPerTokenPaid = BN(balance.rewardPerTokenPaidCultEthLm);
-				stakedAmount = BN(balance.cultEthLpStaked);
-				notStakedAmount = BN(balance.cultEthLp);
-				break;
-			default:
-		}
-	} else {
-		switch (type) {
-			case StakingType.SUSHISWAP_ETH_GIV:
-				rewards = BN(balance.rewardsSushiSwap);
-				rewardPerTokenPaid = BN(balance.rewardPerTokenPaidSushiSwap);
-				stakedAmount = BN(balance.sushiSwapLpStaked);
-				notStakedAmount = BN(balance.sushiswapLp);
-				break;
-			case StakingType.HONEYSWAP_GIV_HNY:
-				rewards = BN(balance.rewardsHoneyswap);
-				rewardPerTokenPaid = BN(balance.rewardPerTokenPaidHoneyswap);
-				stakedAmount = BN(balance.honeyswapLpStaked);
-				notStakedAmount = BN(balance.honeyswapLp);
-				break;
-			case StakingType.HONEYSWAP_GIV_DAI:
-				rewards = BN(balance.rewardsHoneyswapGivDai);
-				rewardPerTokenPaid = BN(
-					balance.rewardPerTokenPaidHoneyswapGivDai,
-				);
-				stakedAmount = BN(balance.honeyswapGivDaiLpStaked);
-				notStakedAmount = BN(balance.honeyswapGivDaiLp);
-				break;
-			case StakingType.BALANCER_ETH_GIV:
-				rewards = BN(balance.rewardsBalancer);
-				rewardPerTokenPaid = BN(balance.rewardPerTokenPaidBalancer);
-				stakedAmount = BN(balance.balancerLpStaked);
-				notStakedAmount = BN(balance.balancerLp);
-				break;
-			case StakingType.UNISWAPV2_GIV_DAI:
-				rewards = BN(balance.rewardsUniswapV2GivDai);
-				rewardPerTokenPaid = BN(
-					balance.rewardPerTokenPaidUniswapV2GivDai,
-				);
-				stakedAmount = BN(balance.uniswapV2GivDaiLpStaked);
-				notStakedAmount = BN(balance.uniswapV2GivDaiLp);
-				break;
-			case StakingType.GIV_LM:
-				rewards = BN(balance.rewardsGivLm);
-				rewardPerTokenPaid = BN(balance.rewardPerTokenPaidGivLm);
-				stakedAmount = BN(balance.givStaked);
-				notStakedAmount = BN(balance.balance);
-				break;
-			default:
-		}
-	}
+	const sdh = new SubgraphDataHelper(currentValues);
+	const unipoolBalance = sdh.getUnipoolBalance(poolStakingConfig.LM_ADDRESS);
+	const lpTokenBalance = sdh.getTokenBalance(poolStakingConfig.POOL_ADDRESS);
+	const unipoolHelper = new UnipoolHelper(
+		sdh.getUnipool(poolStakingConfig.LM_ADDRESS),
+	);
+	const rewards = BN(unipoolBalance.rewards);
+	const rewardPerTokenPaid = BN(unipoolBalance.rewardPerTokenPaid);
+	const stakedAmount = BN(unipoolBalance.balance);
+	const notStakedAmount = BN(lpTokenBalance.balance);
 
 	if (unipoolHelper) {
 		earned = unipoolHelper.earned(
@@ -341,7 +371,11 @@ const permitTokens = async (
 	const signer = provider.getSigner();
 	const signerAddress = await signer.getAddress();
 
-	const poolContract = new Contract(poolAddress, UNI_ABI, signer);
+	const poolContract = new Contract(
+		poolAddress,
+		UNI_ABI,
+		signer,
+	) as IUniswapV2Pair;
 
 	const domain = {
 		name: await poolContract.name(),
@@ -399,20 +433,20 @@ export const approveERC20tokenTransfer = async (
 	}
 
 	const signer = provider.getSigner();
-	const tokenContract = new Contract(poolAddress, ERC20_ABI, signer);
-	const allowance: BigNumber = await tokenContract.allowance(
+	const tokenContract = new Contract(poolAddress, ERC20_ABI, signer) as ERC20;
+	const allowance: ethers.BigNumber = await tokenContract.allowance(
 		ownerAddress,
 		spenderAddress,
 	);
 
 	const amountNumber = ethers.BigNumber.from(amount);
-	const allowanceNumber = ethers.BigNumber.from(allowance.toString());
 
-	if (amountNumber.lte(allowanceNumber)) return true;
+	if (amountNumber.lte(allowance)) return true;
 
-	const gasPreference = getGasPreference(
-		config.NETWORKS_CONFIG[provider.network.chainId],
-	);
+	const gasPreference = {
+		...getGasPreference(config.NETWORKS_CONFIG[provider.network.chainId]),
+		gasLimit: 70000,
+	};
 
 	if (!allowance.isZero()) {
 		try {
@@ -543,7 +577,11 @@ export const stakeTokens = async (
 
 	const signer = provider.getSigner();
 
-	const lmContract = new Contract(lmAddress, LM_ABI, signer);
+	const lmContract = new Contract(
+		lmAddress,
+		LM_ABI,
+		signer,
+	) as UnipoolTokenDistributor;
 
 	try {
 		const gasPreference = getGasPreference(
@@ -561,7 +599,7 @@ export const stakeTokens = async (
 				.connect(signer.connectUnchecked())
 				.stakeWithPermit(
 					ethers.BigNumber.from(amount),
-					rawPermitCall.data,
+					rawPermitCall.data as string,
 					{
 						gasLimit: 300_000,
 						...gasPreference,

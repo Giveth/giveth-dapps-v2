@@ -34,13 +34,13 @@ const HomePurpleSection = () => {
 				</Desc>
 				<Links xs={12} sm={7} md={8}>
 					<GLink href={links.NICE_DOC} target='_blank'>
-						<span>Learn more about $nice token</span>
+						<span>Learn about how $nice works</span>
 					</GLink>
-					<Link href={Routes.Projects} passHref>
-						Donate to projects
+					<Link href={Routes.GivethProject} passHref>
+						Make a donation to Giveth
 					</Link>
 					<PurpleLink href={links.SWAG} target='_blank'>
-						<span>Checkout the swag shop</span>
+						<span>Check out the swag shop</span>
 					</PurpleLink>
 				</Links>
 			</Container>

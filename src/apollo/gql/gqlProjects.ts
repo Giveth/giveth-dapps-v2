@@ -43,7 +43,7 @@ export const FETCH_HOME_PROJECTS = gql`
 
 export const FETCH_ALL_PROJECTS = gql`
 	query FetchAllProjects(
-		$take: Int
+		$limit: Int
 		$skip: Int
 		$sortingBy: SortingField
 		$filters: [FilterField!]
@@ -53,7 +53,7 @@ export const FETCH_ALL_PROJECTS = gql`
 		$connectedWalletUserId: Int
 	) {
 		allProjects(
-			take: $take
+			limit: $limit
 			skip: $skip
 			sortingBy: $sortingBy
 			filters: $filters

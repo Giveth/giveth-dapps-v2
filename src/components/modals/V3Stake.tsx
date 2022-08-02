@@ -33,6 +33,7 @@ import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
 import { LiquidityPosition } from '@/types/nfts';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
 const loadingAnimationOptions = {
 	loop: true,
@@ -61,14 +62,15 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 	currentIncentive,
 	setShowModal,
 }) => {
-	const { balances } = useAppSelector(state => state.subgraph.currentValues);
+	const sdh = new SubgraphDataHelper(
+		useAppSelector(state => state.subgraph.currentValues),
+	);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const { chainId, library, account } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	const positions = isUnstakingModal ? stakedPositions : unstakedPositions;
-	const { title } = poolStakingConfig;
-
+	const { title, icon } = poolStakingConfig;
 	const [stakeStatus, setStakeStatus] = useState<StakeState>(
 		StakeState.UNKNOWN,
 	);
@@ -122,7 +124,9 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 	const handleAction = async (tokenId: number) => {
 		const uniswapV3StakerContract = getUniswapV3StakerContract(library);
 		if (!library || !uniswapV3StakerContract) return;
-		const bnGIVback = BN(balances.givback);
+
+		const givTokenDistroBalance = sdh.getGIVTokenDistroBalance();
+		const bnGIVback = BN(givTokenDistroBalance.givback);
 		const _reward = await getReward(
 			tokenId,
 			uniswapV3StakerContract,
@@ -135,7 +139,9 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 		setTokenId(tokenId);
 		setReward(liquidReward);
 		setStream(BigNumber.from(streamPerWeek.toFixed(0)));
-		setClaimableNow(givTokenDistroHelper.getUserClaimableNow(balances));
+		setClaimableNow(
+			givTokenDistroHelper.getUserClaimableNow(givTokenDistroBalance),
+		);
 		setGivBackLiquidPart(givTokenDistroHelper.getLiquidPart(bnGIVback));
 		// setStakeStatus(StakeState.UNSTAKING);
 	};
@@ -148,7 +154,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 					stakeStatus === StakeState.UNSTAKING ||
 					stakeStatus === StakeState.CONFIRM_UNSTAKE) && (
 					<StakeModalTitle alignItems='center'>
-						<StakingPoolImages title={title} />
+						<StakingPoolImages title={title} icon={icon} />
 						<StakeModalTitleText weight={700}>
 							{title}
 						</StakeModalTitleText>

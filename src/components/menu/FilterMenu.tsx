@@ -1,16 +1,17 @@
 import {
 	B,
+	brandColors,
 	ButtonText,
 	GLink,
 	IconArrowBottom,
 	IconArrowTop,
-	IconHeart16,
+	IconDonation16,
 	IconHeartOutline16,
 	IconX,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { useState, forwardRef } from 'react';
+import { forwardRef } from 'react';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
 import { ESortbyAllProjects } from '@/apollo/types/gqlEnums';
@@ -24,16 +25,40 @@ interface IFilterMenuProps {
 
 export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 	({ handleClose }, ref) => {
-		const [isChecked, setIsChecked] = useState(false);
 		const { setVariables, variables } = useProjectsContext();
-
+		const filtersCount = variables?.filters?.length ?? 0;
+		const handleSelectFilter = (e: boolean, filter: string) => {
+			if (e === true) {
+				setVariables({
+					...variables,
+					filters: !variables.filters?.includes(filter)
+						? [...(variables.filters || []), filter]
+						: variables.filters,
+				});
+			}
+			if (e === false) {
+				setVariables({
+					...variables,
+					filters: variables.filters?.filter(
+						(f: string) => f !== filter,
+					),
+				});
+			}
+		};
 		return (
 			<MenuContainer className='fadeIn' ref={ref}>
 				<Header>
 					<CloseContainer onClick={handleClose}>
 						<IconX size={24} />
 					</CloseContainer>
-					<Title size='medium'>Filters</Title>
+					<Flex gap='8px' justifyContent='center' alignItems='center'>
+						<Title size='medium'>Filters</Title>
+						{filtersCount !== 0 && (
+							<PinkyColoredNumber size='medium'>
+								{filtersCount}
+							</PinkyColoredNumber>
+						)}
+					</Flex>
 				</Header>
 				<Section>
 					<B>Sort by</B>
@@ -43,12 +68,12 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 								variables.sortingBy === sortByOption.value
 							}
 							key={idx}
-							onClick={() =>
-								setVariables(prevVariables => ({
-									...prevVariables,
+							onClick={e => {
+								setVariables({
+									...variables,
 									sortingBy: sortByOption.value,
-								}))
-							}
+								});
+							}}
 						>
 							<GLink>{sortByOption.label}</GLink>
 							<IconContainer>{sortByOption.icon}</IconContainer>
@@ -60,9 +85,15 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 					{projectFeatures.map((projectFeature, idx) => (
 						<FeatureItem key={idx}>
 							<CheckBox
-								label={projectFeature}
-								onChange={setIsChecked}
-								checked={isChecked}
+								label={projectFeature.label}
+								onChange={e => {
+									handleSelectFilter(e, projectFeature.value);
+								}}
+								checked={
+									variables?.filters?.includes(
+										projectFeature.value,
+									) ?? false
+								}
 								size={16}
 							/>
 						</FeatureItem>
@@ -95,16 +126,15 @@ const sortByOptions = [
 	{
 		label: 'Most funded',
 		value: ESortbyAllProjects.MOSTFUNDED,
-		icon: <IconHeart16 />,
+		icon: <IconDonation16 />,
 	},
 ];
 
 const projectFeatures = [
-	'Giveback eligible',
-	'Accept GIV token',
-	'Verified',
-	'From GivingBlock',
-	'From Trace',
+	{ label: 'Accept GIV token', value: 'AcceptGiv' },
+	{ label: 'Verified', value: 'Verified' },
+	{ label: 'From GivingBlock', value: 'GivingBlock' },
+	{ label: 'From Trace', value: 'Traceable' },
 ];
 
 const MenuContainer = styled.div`
@@ -179,4 +209,12 @@ const FeatureItem = styled.div`
 	&:hover {
 		background-color: ${neutralColors.gray[200]};
 	}
+`;
+
+export const PinkyColoredNumber = styled(Title)`
+	background-color: ${brandColors.pinky[500]};
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	color: ${neutralColors.gray[100]};
 `;
