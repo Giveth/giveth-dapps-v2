@@ -81,7 +81,7 @@ const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 						>
 							<LockInfotooltip>
 								Coming soon: GIVpower will allow you to support
-								verified projects will earning rewards.
+								verified projects while earning rewards.
 							</LockInfotooltip>
 						</IconWithTooltip>
 					</LockInfoRowHelp>

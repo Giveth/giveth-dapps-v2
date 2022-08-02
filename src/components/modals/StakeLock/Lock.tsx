@@ -170,9 +170,8 @@ const LockModal: FC<ILockModalProps> = ({
 								GIVpower to community representatives.
 							</P> */}
 							<P>
-								Coming soon: You will be able to use your
-								GIVpower to support verified projects without
-								donating.
+								Coming soon: GIVpower will allow you to support
+								verified projects while earning rewards.
 							</P>
 							<LearnMoreLink href=''>Learn More</LearnMoreLink>
 							{/* <BoostButton
