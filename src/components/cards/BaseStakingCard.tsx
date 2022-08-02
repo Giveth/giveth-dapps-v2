@@ -319,7 +319,40 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							{started ? (
 								<Details>
 									<FirstDetail justifyContent='space-between'>
-										<DetailLabel>APR</DetailLabel>
+										<DetailLabel gap='4px'>
+											APR
+											{type ===
+												StakingType.ICHI_GIV_ONEGIV && (
+												<IconWithTooltip
+													direction='right'
+													icon={
+														<IconHelp size={16} />
+													}
+												>
+													<AngelVaultTooltip>
+														Your cumulative APR
+														including both rewards
+														earned as fees & added
+														automatically to your
+														position (
+														{apr?.vaultIRR &&
+															formatEthHelper(
+																apr.vaultIRR,
+																2,
+															)}
+														% IRR), and rewards
+														earned in GIV from
+														staking your LP (
+														{apr &&
+															formatEthHelper(
+																apr.effectiveAPR,
+																2,
+															)}
+														% APR).
+													</AngelVaultTooltip>
+												</IconWithTooltip>
+											)}
+										</DetailLabel>
 										<Flex gap='8px' alignItems='center'>
 											{active && !archived ? (
 												<>
@@ -330,70 +363,28 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 																.mustard[500]
 														}
 													/>
-													{type ===
-													StakingType.ICHI_GIV_ONEGIV ? (
-														<IconWithTooltip
-															direction='top'
-															icon={
-																<DetailValue>
-																	{apr &&
-																		formatEthHelper(
-																			apr.effectiveAPR,
-																			2,
-																		)}
-																	%
-																</DetailValue>
+
+													<>
+														<DetailValue>
+															{apr &&
+																formatEthHelper(
+																	apr.effectiveAPR,
+																	2,
+																)}
+															%
+														</DetailValue>
+														<IconContainer
+															onClick={() =>
+																setShowAPRModal(
+																	true,
+																)
 															}
 														>
-															<AngelVaultTooltip>
-																Your cumulative
-																APR including
-																both rewards
-																earned as fees &
-																added
-																automatically to
-																your position (
-																{apr?.vaultIRR &&
-																	formatEthHelper(
-																		apr.vaultIRR,
-																		2,
-																	)}
-																% IRR), and
-																rewards earned
-																in GIV from
-																staking your LP
-																(
-																{apr &&
-																	formatEthHelper(
-																		apr.effectiveAPR,
-																		2,
-																	)}
-																% APR).
-															</AngelVaultTooltip>
-														</IconWithTooltip>
-													) : (
-														<>
-															<DetailValue>
-																{apr &&
-																	formatEthHelper(
-																		apr.effectiveAPR,
-																		2,
-																	)}
-																%
-															</DetailValue>
-															<IconContainer
-																onClick={() =>
-																	setShowAPRModal(
-																		true,
-																	)
-																}
-															>
-																<IconHelp
-																	size={16}
-																/>
-															</IconContainer>
-														</>
-													)}
+															<IconHelp
+																size={16}
+															/>
+														</IconContainer>
+													</>
 												</>
 											) : (
 												<div>N/A %</div>

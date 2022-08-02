@@ -61,7 +61,10 @@ export const GIVgardenTooltip = styled.div`
 	width: 120px;
 	font-size: 0.8em;
 `;
-export const DetailLabel = styled(Caption)``;
+export const DetailLabel = styled(Flex)`
+	align-items: center;
+	justify-content: center;
+`;
 export const DetailValue = styled(B)``;
 export const DetailUnit = styled(P)`
 	color: ${brandColors.deep[100]};
@@ -132,7 +135,7 @@ export const OutOfRangeTooltip = styled(Subline)`
 export const AngelVaultTooltip = styled(Subline)`
 	color: ${neutralColors.gray[100]};
 	// TODO: until we merge the new tooltip to and can align it.
-	width: 161px;
+	width: 220px;
 	text-align: left;
 `;
 
