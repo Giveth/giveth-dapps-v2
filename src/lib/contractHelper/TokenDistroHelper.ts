@@ -2,8 +2,7 @@ import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { Zero } from '@ethersproject/constants';
 import { getNowUnixMS } from '@/helpers/time';
-import { IBalances, ITokenDistroInfo } from '@/types/subgraph';
-import { StreamType } from '@/types/config';
+import { ITokenDistro, ITokenDistroBalance } from '@/types/subgraph';
 import { BN } from '@/helpers/number';
 
 export class TokenDistroHelper {
@@ -16,18 +15,15 @@ export class TokenDistroHelper {
 	public readonly endTime: Date;
 	public readonly duration: number;
 
-	constructor(
-		{
-			contractAddress,
-			initialAmount,
-			lockedAmount,
-			totalTokens,
-			startTime,
-			cliffTime,
-			endTime,
-		}: ITokenDistroInfo,
-		readonly streamType?: StreamType,
-	) {
+	constructor({
+		contractAddress,
+		initialAmount,
+		lockedAmount,
+		totalTokens,
+		startTime,
+		cliffTime,
+		endTime,
+	}: ITokenDistro) {
 		this.contractAddress = contractAddress;
 		this.initialAmount = BN(initialAmount);
 		this.lockedAmount = BN(lockedAmount);
@@ -83,23 +79,12 @@ export class TokenDistroHelper {
 		return this.getStreamPartTokenPerSecond(amount).times(604800);
 	};
 
-	public getUserClaimableNow(userBalance: IBalances): ethers.BigNumber {
-		let allocatedTokens, claimed: ethers.BigNumber;
-		switch (this.streamType) {
-			case StreamType.FOX:
-				allocatedTokens = userBalance.foxAllocatedTokens;
-				claimed = BN(userBalance.foxClaimed);
-				break;
-			case StreamType.CULT:
-				allocatedTokens = userBalance.cultAllocatedTokens;
-				claimed = BN(userBalance.cultClaimed);
-				break;
-			default:
-				allocatedTokens = userBalance.allocatedTokens;
-				claimed = BN(userBalance.claimed);
-		}
-
-		return this.getLiquidPart(BN(allocatedTokens)).sub(claimed);
+	public getUserClaimableNow(
+		tokenDistroBalance: ITokenDistroBalance,
+	): ethers.BigNumber {
+		return this.getLiquidPart(BN(tokenDistroBalance.allocatedTokens)).sub(
+			tokenDistroBalance.claimed,
+		);
 	}
 
 	public get GlobalReleasePercentage(): number {

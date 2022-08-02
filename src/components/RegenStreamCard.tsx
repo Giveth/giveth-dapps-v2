@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import {
 	B,
 	brandColors,
@@ -30,8 +30,9 @@ import { IconCult } from '@/components/Icons/Cult';
 import { Flex } from './styled-components/Flex';
 import { HarvestAllModal } from './modals/HarvestAll';
 import { useAppSelector } from '@/features/hooks';
-import useRegenTokenDistroHelper from '@/hooks/useRegenTokenDistroHelper';
 import config from '@/configuration';
+import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 
 interface RegenStreamProps {
 	network: number;
@@ -63,11 +64,19 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 	const [claimedAmount, setClaimedAmount] = useState<ethers.BigNumber>(
 		constants.Zero,
 	);
-	const { regenTokenDistroHelper } = useRegenTokenDistroHelper(
-		streamConfig.type,
-	);
+
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
-	const { balances } = currentValues;
+	const { regenTokenDistroHelper, tokenDistroBalance } = useMemo(() => {
+		const sdh = new SubgraphDataHelper(currentValues);
+		const tokenDistroBalance = sdh.getTokenDistroBalance(
+			streamConfig.tokenDistroAddress,
+		);
+		const regenTokenDistroHelper = new TokenDistroHelper(
+			sdh.getTokenDistro(streamConfig.tokenDistroAddress),
+		);
+		return { regenTokenDistroHelper, tokenDistroBalance };
+	}, [currentValues, streamConfig.tokenDistroAddress]);
+
 	const { mainnetThirdPartyTokensPrice, xDaiThirdPartyTokensPrice } =
 		useAppSelector(state => state.price);
 
@@ -93,20 +102,9 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 		xDaiThirdPartyTokensPrice,
 	]);
 	useEffect(() => {
-		switch (streamConfig.type) {
-			case StreamType.FOX:
-				setLockedAmount(BN(balances.foxAllocatedTokens));
-				setClaimedAmount(BN(balances.foxClaimed));
-				break;
-			case StreamType.CULT:
-				setLockedAmount(BN(balances.cultAllocatedTokens));
-				setClaimedAmount(BN(balances.cultClaimed));
-				break;
-			default:
-				setLockedAmount(ethers.constants.Zero);
-				setClaimedAmount(ethers.constants.Zero);
-		}
-	}, [streamConfig.type, balances]);
+		setLockedAmount(BN(tokenDistroBalance.allocatedTokens));
+		setClaimedAmount(BN(tokenDistroBalance.claimed));
+	}, [tokenDistroBalance]);
 
 	useEffect(() => {
 		setRewardLiquidPart(

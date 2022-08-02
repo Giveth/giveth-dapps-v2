@@ -31,12 +31,12 @@ export const AmountInput: FC<IAmountInput> = ({
 				.div(100)
 				.toString();
 			setAmount(newAmount);
-			setDisplayAmount(formatWeiHelper(newAmount, 6, false));
+			setDisplayAmount(utils.formatEther(newAmount));
 		},
 		[maxAmount],
 	);
 
-	const onUserInput = useCallback(value => {
+	const onUserInput = useCallback((value: string) => {
 		setDisplayAmount(value);
 		setActiveStep(0);
 		let valueBn = BigNumber.from(0);

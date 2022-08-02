@@ -5,7 +5,7 @@ import { Col } from '@/components/Grid';
 import { Shadow } from '@/components/styled-components/Shadow';
 import menuList from '@/components/views/verification/menu/menuList';
 import { useVerificationData } from '@/context/verification.context';
-import { ProgressBar } from '@/components/views/verification/common';
+import { ProgressBar } from '@/components/views/verification/Common';
 import { findStepByName } from '@/lib/verification';
 
 const DesktopMenu = () => {

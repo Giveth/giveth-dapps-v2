@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import Input from '@/components/Input';
 import { IAddress } from '@/components/views/verification/manageFunds/ManageFundsIndex';
-import { RemoveIcon } from '@/components/views/verification/common';
+import { RemoveIcon } from '@/components/views/verification/Common';
 import { networkInfo } from '@/lib/helpers';
 
 interface IProps {

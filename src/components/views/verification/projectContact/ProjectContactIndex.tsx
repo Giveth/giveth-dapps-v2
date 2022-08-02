@@ -17,16 +17,16 @@ import { useForm } from 'react-hook-form';
 import { requiredOptions } from '@/lib/constants/regex';
 
 import Input from '@/components/Input';
-import { BtnContainer, ContentSeparator } from '../VerificationIndex';
+import { BtnContainer, ContentSeparator } from '../Common.sc';
 import { useVerificationData } from '@/context/verification.context';
 import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
 import { client } from '@/apollo/apolloClient';
 import { EVerificationSteps, IProjectContact } from '@/apollo/types/types';
-import { OutlineStyled } from '@/components/views/verification/common.styled';
 import AddSocialModal from '@/components/views/verification/projectContact/AddSocialModal';
 import { EMainSocials, IMainSocials } from './common.types';
 import { OtherInput } from '@/components/views/verification/projectContact/common';
 import { validators } from '@/lib/constants/regex';
+import { OutlineStyled } from '@/components/views/verification/Common.sc';
 
 export default function ProjectContactIndex() {
 	const { verificationData, setVerificationData, setStep, isDraft } =
