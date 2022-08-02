@@ -45,6 +45,7 @@ const SubCategoryItem = styled.div<{ isSelected?: boolean }>`
 
 const CustomizedSwiper = styled(Swiper)`
 	margin-left: 0;
+	width: 100%;
 `;
 
 export default ProjectsSubCategories;

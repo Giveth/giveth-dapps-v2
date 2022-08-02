@@ -18,8 +18,6 @@ import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import ProjectsBanner from './ProjectsBanner';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { useProjectsContext } from '@/context/projects.context';
-import { Flex } from '@/components/styled-components/Flex';
-import { FilterMenu, PinkyColoredNumber } from '@/components/menu/FilterMenu';
 import ProjectsFiltersDesktop from '@/components/views/projects/ProjectsFiltersDesktop';
 import ProjectsFiltersTablet from '@/components/views/projects/ProjectsFiltersTablet';
 import ProjectsFiltersMobile from '@/components/views/projects/ProjectsFiltersMobile';
@@ -37,7 +35,7 @@ interface IQueries {
 }
 
 const ProjectsIndex = (props: IProjectsView) => {
-	const { projects, totalCount: _totalCount, categories } = props;
+	const { projects, totalCount: _totalCount } = props;
 
 	const user = useAppSelector(state => state.user.userData);
 
@@ -152,19 +150,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 	};
 
 	const showLoadMore = totalCount > filteredProjects?.length;
-
-	const FiltersButtonWithCounter = () => {
-		const filtersCount = contextVariables?.filters?.length ?? 0;
-		return (
-			<FiltersButton onClick={() => setIsFilterOpen(true)}>
-				Filters
-				{filtersCount !== 0 && (
-					<PinkyColoredNumber>{filtersCount}</PinkyColoredNumber>
-				)}
-				<IconOptions16 />
-			</FiltersButton>
-		);
-	};
 
 	return (
 		<>

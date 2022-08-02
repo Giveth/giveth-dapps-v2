@@ -1,35 +1,21 @@
-import { IconOptions16, IconSearch, IconX } from '@giveth/ui-design-system';
+import { IconSearch, IconX } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { MouseEvent, useRef, useState } from 'react';
+import { useState } from 'react';
 import ProjectsSearchDesktop from '@/components/views/projects/ProjectsSearchDesktop';
 import ProjectsFiltersSwiper from '@/components/views/projects/ProjectsFiltersSwiper';
-import { FilterMenu } from '@/components/menu/FilterMenu';
-import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 import ProjectsSubCategories from '@/components/views/projects/ProjectsSubCategories';
 import {
-	FiltersButton,
 	FiltersSection,
 	IconContainer,
 	StyledLine,
 } from '@/components/views/projects/common.styled';
 import { useProjectsContext } from '@/context/projects.context';
+import ProjectsFiltersButton from '@/components/views/projects/ProjectsFiltersButton';
 
 const ProjectsFiltersDesktop = () => {
 	const { selectedMainCategory } = useProjectsContext();
-
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
-	const [isFilterOpen, setIsFilterOpen] = useState(false);
-
-	const filterMenuRef = useRef<HTMLDivElement>(null);
-
-	useOnClickOutside(filterMenuRef, () => setIsFilterOpen(false));
-
 	const toggleSearch = () => setIsSearchOpen(!isSearchOpen);
-
-	const handleFilterClose = (e: MouseEvent<HTMLElement>) => {
-		e.stopPropagation();
-		setIsFilterOpen(false);
-	};
 
 	return (
 		<>
@@ -43,16 +29,7 @@ const ProjectsFiltersDesktop = () => {
 					<IconContainer onClick={toggleSearch}>
 						{isSearchOpen ? <IconX /> : <IconSearch />}
 					</IconContainer>
-					<FiltersButton onClick={() => setIsFilterOpen(true)}>
-						Filters
-						<IconOptions16 />
-					</FiltersButton>
-					{isFilterOpen && (
-						<FilterMenu
-							handleClose={handleFilterClose}
-							ref={filterMenuRef}
-						/>
-					)}
+					<ProjectsFiltersButton />
 				</FilterAndSearchContainer>
 			</FiltersSection>
 			{selectedMainCategory && <StyledLine />}

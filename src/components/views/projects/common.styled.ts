@@ -19,6 +19,7 @@ export const FiltersSection = styled.div`
 
 export const FiltersButton = styled.button`
 	display: flex;
+	align-items: center;
 	gap: 8px;
 	border-radius: 50px;
 	padding: 16px;

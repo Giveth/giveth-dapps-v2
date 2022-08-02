@@ -1,34 +1,21 @@
-import { IconDots, IconOptions16, IconX } from '@giveth/ui-design-system';
-import { MouseEvent, useRef, useState } from 'react';
+import { IconDots, IconX } from '@giveth/ui-design-system';
+import { useState } from 'react';
 import styled from 'styled-components';
 import ProjectsSearchTablet from '@/components/views/projects/ProjectsSearchTablet';
-import { FilterMenu } from '@/components/menu/FilterMenu';
 import ProjectsFiltersSwiper from '@/components/views/projects/ProjectsFiltersSwiper';
-import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 import { Flex } from '@/components/styled-components/Flex';
 import {
-	FiltersButton,
 	FiltersSection,
 	IconContainer,
 	StyledLine,
 } from '@/components/views/projects/common.styled';
 import ProjectsSubCategories from '@/components/views/projects/ProjectsSubCategories';
 import { useProjectsContext } from '@/context/projects.context';
+import ProjectsFiltersButton from '@/components/views/projects/ProjectsFiltersButton';
 
 const ProjectsFiltersTablet = () => {
 	const { selectedMainCategory } = useProjectsContext();
-
 	const [showSearchAndFilter, setShowSearchAndFilter] = useState(false);
-	const [isFilterOpen, setIsFilterOpen] = useState(false);
-
-	const filterMenuRef = useRef<HTMLDivElement>(null);
-
-	useOnClickOutside(filterMenuRef, () => setIsFilterOpen(false));
-
-	const handleFilterClose = (e: MouseEvent<HTMLElement>) => {
-		e.stopPropagation();
-		setIsFilterOpen(false);
-	};
 
 	return (
 		<>
@@ -40,20 +27,7 @@ const ProjectsFiltersTablet = () => {
 					className='fadeIn'
 				>
 					<ProjectsSearchTablet />
-					<FiltersButton
-						onClick={() => {
-							setIsFilterOpen(true);
-						}}
-					>
-						Filters
-						<IconOptions16 />
-					</FiltersButton>
-					{isFilterOpen && (
-						<FilterMenu
-							handleClose={handleFilterClose}
-							ref={filterMenuRef}
-						/>
-					)}
+					<ProjectsFiltersButton />
 					<IconContainer
 						onClick={() => setShowSearchAndFilter(false)}
 					>
