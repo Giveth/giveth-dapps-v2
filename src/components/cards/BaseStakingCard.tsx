@@ -37,7 +37,6 @@ import {
 	IntroIcon,
 	LiquidityButton,
 	LockInfotooltip,
-	LockIconTooltip,
 	SPTitle,
 	StakeAmount,
 	StakeButton,
@@ -80,6 +79,7 @@ import { useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import Routes from '@/lib/constants/Routes';
 import { IconAngelVault } from '../Icons/AngelVault';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -470,14 +470,14 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 											setShowUnStakeModal(true)
 										}
 									/>
-									<StakeAmount>
+									<StakeAmount gap='5px'>
 										{type === StakingType.UNISWAPV3_ETH_GIV
 											? `${stakedLpAmount.toNumber()} ${unit}`
 											: `${formatWeiHelper(
 													stakedLpAmount,
 											  )} ${unit}`}{' '}
 										{isLocked && (
-											<LockIconTooltip
+											<IconWithTooltip
 												icon={<IconHelp size={16} />}
 												direction={'right'}
 												align={'right'}
@@ -489,7 +489,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 													details&rdquo; for more
 													information.
 												</LockInfotooltip>
-											</LockIconTooltip>
+											</IconWithTooltip>
 										)}
 									</StakeAmount>
 								</StakeContainer>
