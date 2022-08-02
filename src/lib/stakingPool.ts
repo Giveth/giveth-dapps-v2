@@ -46,22 +46,55 @@ const { abi: ERC20_ABI } = ERC20_Json;
 const toBigNumberJs = (eb: ethers.BigNumber | string | number): BigNumber =>
 	new BigNumber(eb.toString());
 
+const getUnipoolInfo = async (
+	unipoolHelper: UnipoolHelper,
+	lmAddress: string,
+	provider: JsonRpcProvider,
+): Promise<{ totalSupply: BigNumber; rewardRate: BigNumber }> => {
+	let totalSupply: BigNumber;
+	let rewardRate: BigNumber;
+	// Isn't initialized with default values
+	if (!unipoolHelper.totalSupply.isZero()) {
+		totalSupply = unipoolHelper.totalSupply;
+		rewardRate = unipoolHelper.rewardRate;
+	} else {
+		const lmContract = new Contract(
+			lmAddress,
+			LM_ABI,
+			provider,
+		) as UnipoolTokenDistributor;
+		[totalSupply, rewardRate] = await Promise.all([
+			lmContract.totalSupply(),
+			lmContract.rewardRate(),
+		]).then(([_totalSupply, _rewardRate]) => [
+			toBigNumberJs(_totalSupply as ethers.BigNumber),
+			toBigNumberJs(_rewardRate as ethers.BigNumber),
+		]);
+	}
+	return { totalSupply, rewardRate };
+};
+
 export const getGivStakingAPR = async (
 	lmAddress: string,
+	network: number,
 	subgraphValue: ISubgraphState,
+	provider: JsonRpcProvider | null,
 ): Promise<APR> => {
 	const sdh = new SubgraphDataHelper(subgraphValue);
 	const unipoolHelper = new UnipoolHelper(sdh.getUnipool(lmAddress));
 	let givStakingAPR: BigNumber = Zero;
+	const _provider = provider
+		? provider
+		: new JsonRpcProvider(config.NETWORKS_CONFIG[network].nodeUrl);
 
-	if (unipoolHelper) {
-		const totalSupply = unipoolHelper.totalSupply;
-		const rewardRate = unipoolHelper.rewardRate;
-
-		givStakingAPR = totalSupply.isZero()
-			? Zero
-			: rewardRate.div(totalSupply).times('31536000').times('100');
-	}
+	const { totalSupply, rewardRate } = await getUnipoolInfo(
+		unipoolHelper,
+		lmAddress,
+		_provider,
+	);
+	givStakingAPR = totalSupply.isZero()
+		? Zero
+		: rewardRate.div(totalSupply).times('31536000').times('100');
 
 	return { effectiveAPR: givStakingAPR };
 };
@@ -108,33 +141,18 @@ const getIchiPoolStakingAPR = async (
 	ichiPoolStakingConfig: ICHIPoolStakingConfig,
 	network: number,
 	provider: JsonRpcProvider,
-	unipoolHelper: UnipoolHelper | undefined,
+	unipoolHelper: UnipoolHelper,
 ): Promise<APR> => {
 	try {
 		const { ichiApi, LM_ADDRESS } = ichiPoolStakingConfig;
 		const response = await fetch(ichiApi);
 		const apiResult = await response.json();
-		let totalSupply: BigNumber;
-		let rewardRate: BigNumber;
 
-		const lmContract = new Contract(
+		const { totalSupply, rewardRate } = await getUnipoolInfo(
+			unipoolHelper,
 			LM_ADDRESS,
-			LM_ABI,
 			provider,
-		) as UnipoolTokenDistributor;
-
-		if (unipoolHelper) {
-			totalSupply = unipoolHelper.totalSupply;
-			rewardRate = unipoolHelper.rewardRate;
-		} else {
-			[totalSupply, rewardRate] = await Promise.all([
-				lmContract.totalSupply(),
-				lmContract.rewardRate(),
-			]).then(([_totalSupply, _rewardRate]) => [
-				toBigNumberJs(_totalSupply as ethers.BigNumber),
-				toBigNumberJs(_rewardRate as ethers.BigNumber),
-			]);
-		}
+		);
 
 		const {
 			lpPrice = '0',
@@ -168,17 +186,12 @@ const getBalancerPoolStakingAPR = async (
 	balancerPoolStakingConfig: BalancerPoolStakingConfig,
 	network: number,
 	provider: JsonRpcProvider,
-	unipool: UnipoolHelper | undefined,
+	unipool: UnipoolHelper,
 ): Promise<APR> => {
 	const { LM_ADDRESS, POOL_ADDRESS, VAULT_ADDRESS, POOL_ID } =
 		balancerPoolStakingConfig;
 	const tokenAddress = config.NETWORKS_CONFIG[network].TOKEN_ADDRESS;
 
-	const lmContract = new Contract(
-		LM_ADDRESS,
-		LM_ABI,
-		provider,
-	) as UnipoolTokenDistributor;
 	const weightedPoolContract = new Contract(
 		POOL_ADDRESS,
 		BAL_WEIGHTED_POOL_ABI,
@@ -207,21 +220,11 @@ const getBalancerPoolStakingAPR = async (
 			weightedPoolContract.getNormalizedWeights(),
 		]);
 
-		let totalSupply: BigNumber;
-		let rewardRate: BigNumber;
-
-		if (unipool) {
-			totalSupply = unipool.totalSupply;
-			rewardRate = unipool.rewardRate;
-		} else {
-			[totalSupply, rewardRate] = await Promise.all([
-				lmContract.totalSupply(),
-				lmContract.rewardRate(),
-			]).then(([_totalSupply, _rewardRate]) => [
-				toBigNumberJs(_totalSupply as ethers.BigNumber),
-				toBigNumberJs(_rewardRate as ethers.BigNumber),
-			]);
-		}
+		const { totalSupply, rewardRate } = await getUnipoolInfo(
+			unipool,
+			LM_ADDRESS,
+			provider,
+		);
 
 		const weights = _poolNormalizedWeights.map(toBigNumberJs);
 		const balances = _poolTokens.balances.map(toBigNumberJs);
@@ -258,7 +261,7 @@ const getSimplePoolStakingAPR = async (
 	poolStakingConfig: SimplePoolStakingConfig | RegenPoolStakingConfig,
 	network: number,
 	provider: JsonRpcProvider,
-	unipoolHelper: UnipoolHelper | undefined,
+	unipoolHelper: UnipoolHelper,
 ): Promise<APR> => {
 	const { LM_ADDRESS, POOL_ADDRESS } = poolStakingConfig;
 	const givTokenAddress = config.NETWORKS_CONFIG[network].TOKEN_ADDRESS;
@@ -271,14 +274,7 @@ const getSimplePoolStakingAPR = async (
 	const tokenAddress = streamConfig
 		? streamConfig.rewardTokenAddress
 		: givTokenAddress;
-	const lmContract = new Contract(
-		LM_ADDRESS,
-		LM_ABI,
-		provider,
-	) as UnipoolTokenDistributor;
 
-	let totalSupply: BigNumber;
-	let rewardRate: BigNumber;
 	const poolContract = new Contract(
 		POOL_ADDRESS,
 		UNI_ABI,
@@ -296,18 +292,11 @@ const getSimplePoolStakingAPR = async (
 			poolContract.totalSupply(),
 		]);
 
-		if (unipoolHelper) {
-			totalSupply = unipoolHelper.totalSupply;
-			rewardRate = unipoolHelper.rewardRate;
-		} else {
-			[totalSupply, rewardRate] = await Promise.all([
-				lmContract.totalSupply(),
-				lmContract.rewardRate(),
-			]).then(([_totalSupply, _rewardRate]) => [
-				toBigNumberJs(_totalSupply as ethers.BigNumber),
-				toBigNumberJs(_rewardRate as ethers.BigNumber),
-			]);
-		}
+		const { totalSupply, rewardRate } = await getUnipoolInfo(
+			unipoolHelper,
+			LM_ADDRESS,
+			provider,
+		);
 
 		let tokenReseve = toBigNumberJs(
 			_token0.toLowerCase() !== tokenAddress.toLowerCase()
