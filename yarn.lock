@@ -5528,7 +5528,7 @@ quill-emoji@^0.2.0:
     emoji-data-css "^1.0.1"
     fuse.js "^3.3.0"
 
-quill-image-drop-and-paste@^1.2.10:
+quill-image-drop-and-paste@^1.2.11:
   version "1.2.11"
   resolved "https://registry.yarnpkg.com/quill-image-drop-and-paste/-/quill-image-drop-and-paste-1.2.11.tgz#9f4d2daa51ab9d22fe3a0daa3d0da81b3393ecd0"
   integrity sha512-LxYDAmwtwlkcp2vRuEngbxtKSeVTq5vgkDlJx41P/YZBNV4nYRwH5gBVqDfwdKwvfsFGKo067UhA6rKICJPJKg==
