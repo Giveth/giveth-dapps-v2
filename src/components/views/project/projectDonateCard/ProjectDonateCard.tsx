@@ -50,7 +50,7 @@ import {
 } from '@/features/user/user.slice';
 import VerificationStatus from '@/components/views/project/projectDonateCard/VerificationStatus';
 import CategoryBadge from '@/components/badges/CategoryBadge';
-import { mapCategoriesToMainCategories } from '@/helpers/projects';
+import { mapCategoriesToMainCategories } from '@/helpers/singleProject';
 import { Flex } from '@/components/styled-components/Flex';
 
 interface IProjectDonateCard {
@@ -266,7 +266,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 						{!verified && !isDraft && !verStatus && (
 							<FullOutlineButton
 								buttonType='primary'
-								label='VERIFY YOUR PROJECTT'
+								label='VERIFY YOUR PROJECT'
 								disabled={!isActive}
 								onClick={() => setShowVerificationModal(true)}
 							/>
