@@ -30,7 +30,6 @@ const ProjectsNoResults = (props: { mainCategories: IMainCategory[] }) => {
 							<a>
 								<MainCategoryItem
 									onClick={() => {
-										console.log('Clicked');
 										setVariables(prevVariables => ({
 											...prevVariables,
 											sortingBy: undefined,
