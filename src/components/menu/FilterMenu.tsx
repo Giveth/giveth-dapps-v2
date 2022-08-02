@@ -130,7 +130,6 @@ const sortByOptions = [
 ];
 
 const projectFeatures = [
-	{ label: 'Giveback eligible', value: 'givbackEligible' },
 	{ label: 'Accept GIV token', value: 'AcceptGiv' },
 	{ label: 'Verified', value: 'Verified' },
 	{ label: 'From GivingBlock', value: 'GivingBlock' },
