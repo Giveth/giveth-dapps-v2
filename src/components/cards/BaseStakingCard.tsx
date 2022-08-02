@@ -20,6 +20,7 @@ import {
 } from '@/types/config';
 import { BN, formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import {
+	AngelVaultTooltip,
 	ClaimButton,
 	Detail,
 	DetailLabel,
@@ -73,13 +74,13 @@ import { GIVPowerExplainModal } from '../modals/GIVPowerExplain';
 import GIVpowerCardIntro from './GIVpowerCardIntro';
 import LockModal from '../modals/StakeLock/Lock';
 import { StakeGIVModal } from '../modals/StakeLock/StakeGIV';
-import { avgAPR } from '@/helpers/givpower';
 import { LockupDetailsModal } from '../modals/LockupDetailsModal';
 import { useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import Routes from '@/lib/constants/Routes';
 import { IconAngelVault } from '../Icons/AngelVault';
-import { IconWithTooltip } from '@/components/IconWithToolTip';
+import { IconWithTooltip } from '../IconWithToolTip';
+import { avgAPR } from '@/helpers/givpower';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -338,39 +339,86 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 																.mustard[500]
 														}
 													/>
-													<DetailValue>
-														{apr &&
-															formatEthHelper(
-																isLocked
-																	? avgAPR(
+													{type ===
+													StakingType.ICHI_GIV_ONEGIV ? (
+														<IconWithTooltip
+															direction='top'
+															icon={
+																<DetailValue>
+																	{apr &&
+																		formatEthHelper(
 																			apr.effectiveAPR,
-																			userGIVLocked.balance,
-																			userGIVPowerBalance.balance,
-																	  )
-																	: apr.effectiveAPR,
-																2,
-															)}
-														%
-														{isZeroGIVStacked &&
-															`-${
-																apr &&
-																formatEthHelper(
-																	apr.effectiveAPR.multipliedBy(
-																		5.2, // sqrt(1 + max rounds)
-																	),
-																	2,
-																)
-															}%`}
-													</DetailValue>
-													<IconContainer
-														onClick={() =>
-															setShowAPRModal(
-																true,
-															)
-														}
-													>
-														<IconHelp size={16} />
-													</IconContainer>
+																			2,
+																		)}
+																	%
+																</DetailValue>
+															}
+														>
+															<AngelVaultTooltip>
+																Your cumulative
+																APR including
+																both rewards
+																earned as fees &
+																added
+																automatically to
+																your position (
+																{apr?.vaultIRR &&
+																	formatEthHelper(
+																		apr.vaultIRR,
+																		2,
+																	)}
+																% IRR), and
+																rewards earned
+																in GIV from
+																staking your LP
+																(
+																{apr &&
+																	formatEthHelper(
+																		apr.effectiveAPR,
+																		2,
+																	)}
+																% APR).
+															</AngelVaultTooltip>
+														</IconWithTooltip>
+													) : (
+														<>
+															<DetailValue>
+																{apr &&
+																	formatEthHelper(
+																		isLocked
+																			? avgAPR(
+																					apr.effectiveAPR,
+																					userGIVLocked.balance,
+																					userGIVPowerBalance.balance,
+																			  )
+																			: apr.effectiveAPR,
+																		2,
+																	)}
+																%
+																{isZeroGIVStacked &&
+																	`-${
+																		apr &&
+																		formatEthHelper(
+																			apr.effectiveAPR.multipliedBy(
+																				5.2, // sqrt(1 + max rounds)
+																			),
+																			2,
+																		)
+																	}%`}
+															</DetailValue>
+															<IconContainer
+																onClick={() =>
+																	setShowAPRModal(
+																		true,
+																	)
+																}
+															>
+																<IconHelp
+																	size={16}
+																/>
+															</IconContainer>
+														</>
+													)}
 												</>
 											) : (
 												<div>N/A %</div>
