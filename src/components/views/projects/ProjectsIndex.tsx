@@ -166,6 +166,20 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	const showLoadMore = totalCount > filteredProjects?.length;
 
+	const FiltersButtonWithCounter = () => {
+		return (
+			<FiltersButton onClick={() => setIsFilterOpen(true)}>
+				Filters
+				{contextVariables.filtersCount !== 0 && (
+					<PinkyColoredNumber>
+						{contextVariables.filtersCount}
+					</PinkyColoredNumber>
+				)}
+				<IconOptions16 />
+			</FiltersButton>
+		);
+	};
+
 	return (
 		<>
 			<ProjectsBanner mainCategory={selectedMainCategory} />
@@ -198,17 +212,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 								<IconContainer>
 									<IconSearch />
 								</IconContainer>
-								<FiltersButton
-									onClick={() => setIsFilterOpen(true)}
-								>
-									Filters
-									{contextVariables.filtersCount !== 0 && (
-										<PinkyColoredNumber>
-											{contextVariables.filtersCount}
-										</PinkyColoredNumber>
-									)}
-									<IconOptions16 />
-								</FiltersButton>
+								<FiltersButtonWithCounter />
+
 								{isFilterOpen && (
 									<FilterMenu
 										handleClose={handleFilterClose}
@@ -230,22 +235,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 												flexGrow: 1,
 											}}
 										/>
-										<FiltersButton
-											onClick={e => {
-												setIsFilterOpen(true);
-											}}
-										>
-											Filters
-											{contextVariables.filtersCount !==
-												0 && (
-												<PinkyColoredNumber>
-													{
-														contextVariables.filtersCount
-													}
-												</PinkyColoredNumber>
-											)}
-											<IconOptions16 />
-										</FiltersButton>
+										<FiltersButtonWithCounter />
 										{isFilterOpen && (
 											<FilterMenu
 												handleClose={handleFilterClose}
@@ -293,19 +283,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 									flexGrow: 1,
 								}}
 							/>
-							<FiltersButton
-								onClick={e => {
-									setIsFilterOpen(true);
-								}}
-							>
-								Filters
-								{contextVariables.filtersCount !== 0 && (
-									<PinkyColoredNumber>
-										{contextVariables.filtersCount}
-									</PinkyColoredNumber>
-								)}
-								<IconOptions16 />
-							</FiltersButton>
+							<FiltersButtonWithCounter />
 							{isFilterOpen && (
 								<FilterMenu
 									handleClose={handleFilterClose}
