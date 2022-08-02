@@ -37,6 +37,7 @@ export const ProjectsProvider = ({ children }: { children: ReactNode }) => {
 	const [variables, setVariables] = useState<IVariables>(
 		variablesDefaultValue,
 	);
+
 	return (
 		<ProjectsContext.Provider value={{ variables, setVariables }}>
 			{children}
