@@ -26,6 +26,7 @@ interface IFilterMenuProps {
 export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 	({ handleClose }, ref) => {
 		const { setVariables, variables } = useProjectsContext();
+		const filtersCount = variables?.filters?.length ?? 0;
 		const handleSelectFilter = (e: boolean, filter: string) => {
 			if (e === true) {
 				setVariables({
@@ -52,9 +53,9 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 					</CloseContainer>
 					<Flex gap='8px' justifyContent='center' alignItems='center'>
 						<Title size='medium'>Filters</Title>
-						{variables.filtersCount !== 0 && (
+						{filtersCount !== 0 && (
 							<PinkyColoredNumber size='medium'>
-								{variables.filtersCount}
+								{filtersCount}
 							</PinkyColoredNumber>
 						)}
 					</Flex>

@@ -44,12 +44,7 @@ interface IQueries {
 }
 
 const ProjectsIndex = (props: IProjectsView) => {
-	const {
-		projects,
-		selectedMainCategory,
-		totalCount: _totalCount,
-		categories,
-	} = props;
+	const { projects, selectedMainCategory, totalCount: _totalCount } = props;
 	const user = useAppSelector(state => state.user.userData);
 	const [isLoading, setIsLoading] = useState(false);
 	const [filteredProjects, setFilteredProjects] =
@@ -167,13 +162,12 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const showLoadMore = totalCount > filteredProjects?.length;
 
 	const FiltersButtonWithCounter = () => {
+		const filtersCount = contextVariables?.filters?.length ?? 0;
 		return (
 			<FiltersButton onClick={() => setIsFilterOpen(true)}>
 				Filters
-				{contextVariables.filtersCount !== 0 && (
-					<PinkyColoredNumber>
-						{contextVariables.filtersCount}
-					</PinkyColoredNumber>
+				{filtersCount !== 0 && (
+					<PinkyColoredNumber>{filtersCount}</PinkyColoredNumber>
 				)}
 				<IconOptions16 />
 			</FiltersButton>
