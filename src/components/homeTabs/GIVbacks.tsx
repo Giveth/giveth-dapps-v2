@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
 	IconExternalLink,
 	IconGIVBack,
@@ -42,21 +42,26 @@ import { Col, Container, Row } from '@/components/Grid';
 import Routes from '@/lib/constants/Routes';
 import { BN } from '@/helpers/number';
 import { useAppSelector } from '@/features/hooks';
+import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
 export const TabGIVbacksTop = () => {
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
 	const [showGivBackExplain, setShowGivBackExplain] = useState(false);
 	const [givBackStream, setGivBackStream] = useState<BigNumber.Value>(0);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
-	const { balances } = useAppSelector(state => state.subgraph.currentValues);
+	const currentValues = useAppSelector(state => state.subgraph.currentValues);
+	const givTokenDistroBalance = useMemo(() => {
+		const sdh = new SubgraphDataHelper(currentValues);
+		return sdh.getGIVTokenDistroBalance();
+	}, [currentValues]);
 	const { chainId } = useWeb3React();
 
 	useEffect(() => {
-		const _givback = BN(balances.givback);
+		const _givback = BN(givTokenDistroBalance.givback);
 		setGivBackStream(
 			givTokenDistroHelper.getStreamPartTokenPerWeek(_givback),
 		);
-	}, [balances, givTokenDistroHelper]);
+	}, [givTokenDistroBalance, givTokenDistroHelper]);
 
 	return (
 		<>
@@ -78,14 +83,18 @@ export const TabGIVbacksTop = () => {
 							<GIVbackRewardCard
 								title='Your GIVbacks rewards'
 								wrongNetworkText='GIVbacks is only available on Gnosis Chain.'
-								liquidAmount={BN(balances?.givbackLiquidPart)}
+								liquidAmount={BN(
+									givTokenDistroBalance.givbackLiquidPart,
+								)}
 								stream={givBackStream}
 								actionLabel='HARVEST'
 								actionCb={() => {
 									setShowHarvestModal(true);
 								}}
 								subButtonLabel={
-									BN(balances?.givbackLiquidPart)?.isZero()
+									BN(
+										givTokenDistroBalance.givbackLiquidPart,
+									)?.isZero()
 										? "Why don't I have GIVbacks?"
 										: undefined
 								}

@@ -18,7 +18,10 @@ import {
 import { StakeState } from '@/lib/staking';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import type { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
+import type {
+	RegenStreamConfig,
+	SimplePoolStakingConfig,
+} from '@/types/config';
 
 const loadingAnimationOptions = {
 	loop: true,
@@ -30,7 +33,7 @@ const loadingAnimationOptions = {
 };
 
 interface IUnStakeModalProps extends IModal {
-	poolStakingConfig: PoolStakingConfig;
+	poolStakingConfig: SimplePoolStakingConfig;
 	regenStreamConfig?: RegenStreamConfig;
 	maxAmount: BigNumber;
 }
@@ -48,10 +51,9 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 		StakeState.UNKNOWN,
 	);
 	const { library, chainId } = useWeb3React();
-
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
-	const { title, LM_ADDRESS, GARDEN_ADDRESS } = poolStakingConfig;
+	const { title, icon, LM_ADDRESS, GARDEN_ADDRESS } = poolStakingConfig;
 
 	const onWithdraw = async () => {
 		setLabel('PENDING UNSTAKE');
@@ -85,7 +87,7 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 					stakeState === StakeState.CONFIRMING) && (
 					<>
 						<UnStakeModalTitle alignItems='center'>
-							<StakingPoolImages title={title} />
+							<StakingPoolImages title={title} icon={icon} />
 							<UnStakeModalTitleText weight={700}>
 								Unstake
 							</UnStakeModalTitleText>

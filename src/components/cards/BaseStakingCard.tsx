@@ -14,12 +14,14 @@ import config from '../../configuration';
 import {
 	PoolStakingConfig,
 	RegenPoolStakingConfig,
+	SimplePoolStakingConfig,
 	StakingPlatform,
 	StakingType,
 } from '@/types/config';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { BN, formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import {
+	AngelVaultTooltip,
 	ClaimButton,
 	Detail,
 	DetailLabel,
@@ -69,11 +71,10 @@ import FarmCountDown from '../FarmCountDown';
 import { Flex } from '../styled-components/Flex';
 import { IStakeInfo } from '@/hooks/useStakingPool';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
-import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { ITokenDistroInfo } from '@/types/subgraph';
-import { switchNetwork } from '@/lib/wallet';
-import { setShowWalletModal } from '@/features/modal/modal.slice';
+import { useAppSelector } from '@/features/hooks';
 import Routes from '@/lib/constants/Routes';
+import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { IconAngelVault } from '../Icons/AngelVault';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -93,6 +94,8 @@ export const getPoolIconWithName = (platform: StakingPlatform) => {
 			return <IconUniswap size={16} />;
 		case StakingPlatform.SUSHISWAP:
 			return <IconSushiswap size={16} />;
+		case StakingPlatform.ICHI:
+			return <IconAngelVault size={16} />;
 		default:
 			break;
 	}
@@ -135,15 +138,16 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const { setInfo } = useFarms();
 	const { chainId, account, active: isWalletActive } = useWeb3React();
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
-	const dispatch = useAppDispatch();
 
-	const { regenStreamType, regenFarmIntro } =
-		poolStakingConfig as RegenPoolStakingConfig;
+	const sdh = new SubgraphDataHelper(currentValues);
+	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
 
 	const {
 		type,
 		platform,
+		platformTitle,
 		title,
+		icon,
 		description,
 		provideLiquidityLink,
 		BUY_LINK,
@@ -151,6 +155,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		farmStartTimeMS,
 		active,
 		archived,
+		introCard,
 	} = poolStakingConfig;
 
 	const {
@@ -179,10 +184,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				? config.XDAI_NETWORK_NUMBER
 				: config.MAINNET_NETWORK_NUMBER;
 		const checkNetworkAndShowStakeModal = async () => {
-			if (_chain && _open === type) {
-				dispatch(setShowWalletModal(!isWalletActive));
-				if (isWalletActive) await switchNetwork(_chainId);
-			}
 			if (_chainId === chainId && _open === type) {
 				if (account) {
 					setShowStakeModal(true);
@@ -198,22 +199,19 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 
 	useEffect(() => {
 		if (regenStreamType) {
-			const streamInfo: ITokenDistroInfo | undefined =
-				currentValues[regenStreamType];
-			if (!streamInfo) return;
-			setTokenDistroHelper(
-				new TokenDistroHelper(streamInfo, regenStreamType),
-			);
-		} else {
-			if (!currentValues.tokenDistroInfo) return;
 			setTokenDistroHelper(
 				new TokenDistroHelper(
-					currentValues.tokenDistroInfo,
-					regenStreamType,
+					sdh.getTokenDistro(
+						regenStreamConfig?.tokenDistroAddress as string,
+					),
 				),
 			);
+		} else {
+			setTokenDistroHelper(
+				new TokenDistroHelper(sdh.getGIVTokenDistro()),
+			);
 		}
-	}, [currentValues, poolStakingConfig, regenStreamType]);
+	}, [currentValues, poolStakingConfig, regenStreamConfig]);
 
 	useEffect(() => {
 		if (tokenDistroHelper) {
@@ -274,7 +272,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								{type === StakingType.GIV_LM &&
 									chainId === config.XDAI_NETWORK_NUMBER &&
 									`GIVgarden `}
-								{platform}
+								{platformTitle || platform}
 							</StakingPoolExchange>
 							{chainId === config.XDAI_NETWORK_NUMBER &&
 								type === StakingType.GIV_LM && (
@@ -296,7 +294,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								)}
 							<div style={{ flex: 1 }}></div>
 							{notif && notif}
-							{regenFarmIntro && (
+							{introCard && (
 								<IntroIcon
 									onClick={() =>
 										setState(StakeCardState.INTRO)
@@ -307,7 +305,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							)}
 						</StakingPoolExchangeRow>
 						<SPTitle alignItems='center' gap='16px'>
-							<StakingPoolImages title={title} />
+							<StakingPoolImages title={title} icon={icon} />
 							<div>
 								<StakingPoolLabel weight={900}>
 									{title}
@@ -332,23 +330,70 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 																.mustard[500]
 														}
 													/>
-													<DetailValue>
-														{apr &&
-															formatEthHelper(
-																apr,
-																2,
-															)}
-														%
-													</DetailValue>
-													<IconContainer
-														onClick={() =>
-															setShowAPRModal(
-																true,
-															)
-														}
-													>
-														<IconHelp size={16} />
-													</IconContainer>
+													{type ===
+													StakingType.ICHI_GIV_ONEGIV ? (
+														<IconWithTooltip
+															direction='top'
+															icon={
+																<DetailValue>
+																	{apr &&
+																		formatEthHelper(
+																			apr.effectiveAPR,
+																			2,
+																		)}
+																	%
+																</DetailValue>
+															}
+														>
+															<AngelVaultTooltip>
+																Your cumulative
+																APR including
+																both rewards
+																earned as fees &
+																added
+																automatically to
+																your position (
+																{apr?.vaultIRR &&
+																	formatEthHelper(
+																		apr.vaultIRR,
+																		2,
+																	)}
+																% IRR), and
+																rewards earned
+																in GIV from
+																staking your LP
+																(
+																{apr &&
+																	formatEthHelper(
+																		apr.effectiveAPR,
+																		2,
+																	)}
+																% APR).
+															</AngelVaultTooltip>
+														</IconWithTooltip>
+													) : (
+														<>
+															<DetailValue>
+																{apr &&
+																	formatEthHelper(
+																		apr.effectiveAPR,
+																		2,
+																	)}
+																%
+															</DetailValue>
+															<IconContainer
+																onClick={() =>
+																	setShowAPRModal(
+																		true,
+																	)
+																}
+															>
+																<IconHelp
+																	size={16}
+																/>
+															</IconContainer>
+														</>
+													)}
 												</>
 											) : (
 												<div>N/A %</div>
@@ -481,7 +526,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				) : (
 					<StakingCardIntro
 						poolStakingConfig={
-							poolStakingConfig as RegenPoolStakingConfig
+							poolStakingConfig as SimplePoolStakingConfig
 						}
 						setState={setState}
 					/>
@@ -516,7 +561,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				) : (
 					<StakeModal
 						setShowModal={setShowStakeModal}
-						poolStakingConfig={poolStakingConfig}
+						poolStakingConfig={
+							poolStakingConfig as SimplePoolStakingConfig
+						}
 						regenStreamConfig={regenStreamConfig}
 						maxAmount={userNotStakedAmount}
 					/>
@@ -538,7 +585,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				) : (
 					<UnStakeModal
 						setShowModal={setShowUnStakeModal}
-						poolStakingConfig={poolStakingConfig}
+						poolStakingConfig={
+							poolStakingConfig as SimplePoolStakingConfig
+						}
 						regenStreamConfig={regenStreamConfig}
 						maxAmount={stakedLpAmount}
 					/>

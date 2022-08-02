@@ -1,5 +1,5 @@
-import { FC, ReactNode } from 'react';
 import styled from 'styled-components';
+import type { FC, ReactNode } from 'react';
 
 interface IDirection {
 	direction: 'right' | 'left' | 'top' | 'bottom';
@@ -7,7 +7,7 @@ interface IDirection {
 
 interface IIconWithTooltipProps extends IDirection {
 	icon: ReactNode;
-	children: React.ReactNode;
+	children: ReactNode;
 }
 
 const IconWithTooltipContainer = styled.div<IDirection>`

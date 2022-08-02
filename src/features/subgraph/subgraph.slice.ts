@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { ZeroBalances } from '@/types/subgraph';
 import config from '@/configuration';
 import {
 	fetchCurrentInfoAsync,
@@ -9,10 +8,10 @@ import {
 import type { ISubgraphState } from './subgraph.types';
 
 export const defaultSubgraphValues: ISubgraphState = {
-	balances: ZeroBalances,
 	userNotStakedPositions: [],
 	userStakedPositions: [],
 	allPositions: [],
+	networkNumber: config.MAINNET_NETWORK_NUMBER,
 };
 
 const initialState: {

@@ -6,10 +6,12 @@ import { ClaimData } from '@/types/GIV';
 import config from '../configuration';
 import MerkleDropJson from '../artifacts/MerkleDrop.json';
 import TOKEN_DISTRO_JSON from '../artifacts/TokenDistro.json';
-import { fetchSubgraph } from '@/services/subgraph.service';
 import { SubgraphQueryBuilder } from '@/lib/subgraph/subgraphQueryBuilder';
 import { transformSubgraphData } from '@/lib/subgraph/subgraphDataTransform';
 import { getGasPreference } from '@/lib/helpers';
+import { MerkleDistro } from '@/types/contracts';
+import { fetchXDaiInfo } from '@/features/subgraph/subgraph.services';
+import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
 const { abi: MERKLE_ABI } = MerkleDropJson;
 const { abi: TOKEN_DISTRO_ABI } = TOKEN_DISTRO_JSON;
@@ -47,11 +49,12 @@ export const fetchAirDropClaimData = async (
 
 export const hasClaimedAirDrop = async (address: string): Promise<boolean> => {
 	try {
-		const response = await fetchSubgraph(
+		const response = await fetchXDaiInfo(
 			SubgraphQueryBuilder.getXDaiQuery(address),
-			config.XDAI_NETWORK_NUMBER,
 		);
-		const { balances } = transformSubgraphData(response);
+		const sdh = new SubgraphDataHelper(transformSubgraphData(response));
+
+		const balances = sdh.getGIVTokenDistroBalance();
 		return balances.givDropClaimed;
 	} catch (e) {
 		console.error('Error on fetching subgraph');
@@ -74,18 +77,25 @@ export const claimAirDrop = async (
 	if (!provider) throw new Error('No Provider');
 
 	const signer = provider.getSigner().connectUnchecked();
-	const merkleContract = new Contract(merkleAddress, MERKLE_ABI, provider);
+	const merkleContract = new Contract(
+		merkleAddress,
+		MERKLE_ABI,
+		provider,
+	) as MerkleDistro;
 
 	const claimData = await fetchAirDropClaimData(address);
 
 	if (!claimData) throw new Error('No claim data');
 
-	const args = [claimData.index, claimData.amount, claimData.proof];
-
 	try {
 		return await merkleContract
 			.connect(signer.connectUnchecked())
-			.claim(...args, getGasPreference(config.XDAI_CONFIG));
+			.claim(
+				claimData.index,
+				claimData.amount,
+				claimData.proof,
+				getGasPreference(config.XDAI_CONFIG),
+			);
 	} catch (error) {
 		console.error('Error on claiming GIVdrop:', error);
 		captureException(error, {
