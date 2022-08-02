@@ -26,9 +26,9 @@ const ProjectsFiltersDesktop = () => {
 					<ProjectsFiltersSwiper />
 				)}
 				<FilterAndSearchContainer>
-					<IconContainer onClick={toggleSearch}>
+					<BiggerIconContainer onClick={toggleSearch}>
 						{isSearchOpen ? <IconX /> : <IconSearch />}
-					</IconContainer>
+					</BiggerIconContainer>
 					<ProjectsFiltersButton />
 				</FilterAndSearchContainer>
 			</FiltersSection>
@@ -43,6 +43,11 @@ const FilterAndSearchContainer = styled.div`
 	align-items: center;
 	position: relative;
 	gap: 16px;
+`;
+
+const BiggerIconContainer = styled(IconContainer)`
+	width: 50px;
+	height: 50px;
 `;
 
 export default ProjectsFiltersDesktop;
