@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
 	brandColors,
 	Caption,
@@ -7,14 +7,12 @@ import {
 	Subline,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+import { Flex } from '@/components/styled-components/Flex';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
 import useDetectDevice from '@/hooks/useDetectDevice';
 
 const GIVbackToast = () => {
-	const [isPopupOpen, setIsPopupOpen] = useState(false);
-	const { isMobile } = useDetectDevice();
-	const togglePopup = () => setIsPopupOpen(!isPopupOpen);
-
+	const { isTablet } = useDetectDevice();
 	return (
 		<Wrapper>
 			<div>
@@ -23,14 +21,16 @@ const GIVbackToast = () => {
 			<div>
 				<Title>
 					<Caption medium>GIVback eligible</Caption>
-					<Help onClick={togglePopup}>
-						<IconHelp size={16} />
-						<Popup isMobile={isMobile} show={isPopupOpen}>
+					<IconWithTooltip
+						icon={<IconHelp size={16} />}
+						direction={isTablet ? 'left' : 'top'}
+					>
+						<Popup>
 							When you donate to verified projects you qualify to
 							receive GIV tokens. Through GIVbacks, GIV empowers
 							donors with governance rights via the GIVgarden.
 						</Popup>
-					</Help>
+					</IconWithTooltip>
 				</Title>
 				<Caption>You get GIVbacks by donating to this project.</Caption>
 			</div>
@@ -38,39 +38,8 @@ const GIVbackToast = () => {
 	);
 };
 
-const Popup = styled(Subline)<{ show: boolean; isMobile?: boolean }>`
+const Popup = styled(Subline)`
 	width: 246px;
-	background-color: ${brandColors.giv[900]};
-	color: ${brandColors.giv['000']};
-	border-radius: 8px;
-	padding: 8px 11px;
-	visibility: ${({ show }) => (show ? 'visible' : 'hidden')};
-	opacity: ${({ show }) => (show ? 1 : 0)};
-	position: absolute;
-	z-index: 1;
-	bottom: ${({ isMobile }) => (isMobile ? '27px' : '-32px')};
-	left: ${({ isMobile }) => (isMobile ? '-113px' : '27px')};
-	transition: ${({ show }) =>
-		show
-			? 'opacity 0.3s ease-in-out'
-			: 'visibility 0s 0.3s, opacity 0.3s ease-in-out'};
-	::after {
-		content: '';
-		position: absolute;
-		top: ${({ isMobile }) => (isMobile ? '86px' : '38px')};
-		left: ${({ isMobile }) => (isMobile ? '110px' : '-19px')};
-		border-width: 10px;
-		border-style: solid;
-		border-color: ${({ isMobile }) =>
-			isMobile
-				? `${brandColors.giv[900]} transparent transparent transparent`
-				: `transparent ${brandColors.giv[900]} transparent transparent`};
-	}
-`;
-
-const Help = styled(FlexCenter)`
-	cursor: pointer;
-	position: relative;
 `;
 
 const Title = styled(Flex)`
