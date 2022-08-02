@@ -7,4 +7,8 @@ export interface UserStakeInfo {
 	earned: ethers.BigNumber;
 }
 
-export type APR = BigNumber | null;
+export type APR = {
+	// Total APR user get. i.e. Giveth Farming Program + ICHI reward
+	effectiveAPR: BigNumber;
+	vaultIRR?: BigNumber;
+} | null;

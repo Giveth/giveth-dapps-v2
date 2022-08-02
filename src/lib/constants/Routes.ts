@@ -26,6 +26,7 @@ const Routes = {
 	GIVstream_FlowRate: GIVstream + '#flowRate',
 	GIVbacks: '/givbacks',
 	Claim: '/claim',
+	GivethProject: '/project/the-giveth-community-of-makers',
 };
 
 export default Routes;

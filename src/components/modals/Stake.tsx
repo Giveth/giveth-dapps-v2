@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import {
 	brandColors,
 	Button,
@@ -9,10 +9,9 @@ import {
 	SublineBold,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { BigNumber } from 'ethers';
+import { BigNumber, Contract, ethers } from 'ethers';
 import Lottie from 'react-lottie';
 import { useWeb3React } from '@web3-react/core';
-import { Contract, ethers } from 'ethers';
 import { captureException } from '@sentry/nextjs';
 import { Modal } from './Modal';
 import { Flex, FlexCenter } from '../styled-components/Flex';
@@ -34,10 +33,15 @@ import ToggleSwitch from '../styled-components/Switch';
 import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import type { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
+import { ERC20 } from '@/types/contracts';
+import { StakingPlatform } from '@/types/config';
+import type {
+	RegenStreamConfig,
+	SimplePoolStakingConfig,
+} from '@/types/config';
 
 interface IStakeModalProps extends IModal {
-	poolStakingConfig: PoolStakingConfig;
+	poolStakingConfig: SimplePoolStakingConfig;
 	regenStreamConfig?: RegenStreamConfig;
 	maxAmount: BigNumber;
 }
@@ -66,14 +70,17 @@ export const StakeModal: FC<IStakeModalProps> = ({
 	const { chainId, library } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
-	const { title, LM_ADDRESS, POOL_ADDRESS, GARDEN_ADDRESS } =
+	const { title, icon, LM_ADDRESS, POOL_ADDRESS, GARDEN_ADDRESS, platform } =
 		poolStakingConfig;
 
+	const onlyApproveMode = useMemo(
+		() => !!GARDEN_ADDRESS || platform === StakingPlatform.ICHI,
+		[GARDEN_ADDRESS, platform],
+	);
+
 	useEffect(() => {
-		if (GARDEN_ADDRESS) {
-			setPermit(false);
-		}
-	}, [GARDEN_ADDRESS]);
+		setPermit(!onlyApproveMode);
+	}, [onlyApproveMode]);
 
 	useEffect(() => {
 		if (stakeState == StakeState.WRAP) {
@@ -95,7 +102,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 					POOL_ADDRESS,
 					ERC20_ABI,
 					signer,
-				);
+				) as ERC20;
 				const allowance: BigNumber = await tokenContract.allowance(
 					userAddress,
 					!GARDEN_ADDRESS ? LM_ADDRESS : GARDEN_ADDRESS!,
@@ -235,7 +242,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 					stakeState !== StakeState.ERROR && (
 						<>
 							<StakeModalTitle alignItems='center'>
-								<StakingPoolImages title={title} />
+								<StakingPoolImages title={title} icon={icon} />
 								<StakeModalTitleText weight={700}>
 									Stake
 								</StakeModalTitleText>
@@ -293,7 +300,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 										)
 									}
 								/>
-								{!GARDEN_ADDRESS && (
+								{!onlyApproveMode && (
 									<ToggleContainer>
 										<ToggleSwitch
 											checked={permit}
