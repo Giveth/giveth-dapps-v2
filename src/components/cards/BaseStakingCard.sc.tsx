@@ -13,6 +13,7 @@ import {
 } from '@giveth/ui-design-system';
 import { Flex } from '../styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
 
 interface IStakingPoolContainer {
 	shadowColor?: string;
@@ -88,8 +89,10 @@ export const StakeContainer = styled(Flex)`
 	gap: 6px;
 	width: 100%;
 `;
-export const StakeAmount = styled(Caption)`
-	text-align: center;
+export const StakeAmount = styled(Flex)`
+	align-items: center;
+	justify-content: center;
+	font-size: 0.9em;
 `;
 
 export const LiquidityButton = styled(Button)`
@@ -202,4 +205,14 @@ export const DisableModalCloseButton = styled(OulineButton)`
 export const DisableModalImage = styled.div`
 	width: 36px;
 	color: ${brandColors.giv[500]};
+`;
+
+export const LockIconTooltip = styled(IconWithTooltip)`
+	padding: 10px !important;
+	margin-left: 10px !important;
+`;
+
+export const LockInfotooltip = styled(Subline)`
+	color: ${neutralColors.gray[100]};
+	width: 180px;
 `;

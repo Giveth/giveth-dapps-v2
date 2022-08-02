@@ -36,6 +36,8 @@ import {
 	IconHelpWraper,
 	IntroIcon,
 	LiquidityButton,
+	LockInfotooltip,
+	LockIconTooltip,
 	SPTitle,
 	StakeAmount,
 	StakeButton,
@@ -246,7 +248,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		type === StakingType.GIV_LM && chainId === config.XDAI_NETWORK_NUMBER;
 	const isLocked = isGIVpower && userGIVLocked.balance !== '0';
 	const isZeroGIVStacked = isGIVpower && userGIVPowerBalance.balance === '0';
-
+	console.log(isLocked);
 	return (
 		<>
 			<StakingPoolContainer
@@ -473,7 +475,22 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 											? `${stakedLpAmount.toNumber()} ${unit}`
 											: `${formatWeiHelper(
 													stakedLpAmount,
-											  )} ${unit}`}
+											  )} ${unit}`}{' '}
+										{isLocked && (
+											<LockIconTooltip
+												icon={<IconHelp size={16} />}
+												direction={'right'}
+												align={'right'}
+											>
+												<LockInfotooltip>
+													Some or all of your staked
+													GIV is locked. Click
+													&ldquo;Locked GIV
+													details&rdquo; for more
+													information.
+												</LockInfotooltip>
+											</LockIconTooltip>
+										)}
 									</StakeAmount>
 								</StakeContainer>
 							</StakeButtonsRow>
