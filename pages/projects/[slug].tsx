@@ -27,14 +27,15 @@ const ProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 	} = props;
 
 	return (
-		<ProjectsProvider>
+		<ProjectsProvider
+			mainCategories={mainCategories}
+			selectedMainCategory={selectedMainCategory}
+		>
 			<GeneralMetatags info={projectsMetatags} />
 			<ProjectsIndex
 				projects={projects}
 				totalCount={totalCount}
 				categories={categories}
-				mainCategories={mainCategories}
-				selectedMainCategory={selectedMainCategory}
 			/>
 		</ProjectsProvider>
 	);
@@ -71,8 +72,8 @@ export const getServerSideProps: GetServerSideProps = async context => {
 			selected: false,
 		};
 
-		const updatedMaincategory = [allCategoriesItem, ...mainCategories];
-		const selectedMainCategory = updatedMaincategory.find(mainCategory => {
+		const updatedMainCategory = [allCategoriesItem, ...mainCategories];
+		const selectedMainCategory = updatedMainCategory.find(mainCategory => {
 			return mainCategory.slug === slug;
 		});
 
@@ -95,7 +96,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 			return {
 				props: {
 					projects,
-					mainCategories: updatedMaincategory,
+					mainCategories: updatedMainCategory,
 					selectedMainCategory: updatedSelectedMainCategory,
 					totalCount,
 					categories,

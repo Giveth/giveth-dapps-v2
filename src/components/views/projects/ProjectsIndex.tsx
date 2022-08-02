@@ -1,40 +1,31 @@
-import { useEffect, useRef, useState, MouseEvent } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
-import {
-	brandColors,
-	neutralColors,
-	OulineButton,
-	IconSearch,
-	IconOptions16,
-	IconDots,
-} from '@giveth/ui-design-system';
+import { brandColors, OulineButton } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-
 import { captureException } from '@sentry/nextjs';
+
 import ProjectCard from '@/components/project-card/ProjectCard';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered, showToastError } from '@/lib/helpers';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
-import { IMainCategory, IProject } from '@/apollo/types/types';
+import { ICategory, IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
 import { device, deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import ProjectsBanner from './ProjectsBanner';
-import ProjectsMainCategories from './ProjectsMainCategories';
-import { Shadow } from '@/components/styled-components/Shadow';
 import useMediaQuery from '@/hooks/useMediaQuery';
-import ProjectsSubCategories from './ProjectsSubCategories';
 import { useProjectsContext } from '@/context/projects.context';
-import { Flex } from '@/components/styled-components/Flex';
-import { FilterMenu, PinkyColoredNumber } from '@/components/menu/FilterMenu';
-import { useOnClickOutside } from '@/hooks/useOnClickOutside';
-import type { IProjectsRouteProps } from 'pages/projects';
+import ProjectsFiltersDesktop from '@/components/views/projects/ProjectsFiltersDesktop';
+import ProjectsFiltersTablet from '@/components/views/projects/ProjectsFiltersTablet';
+import ProjectsFiltersMobile from '@/components/views/projects/ProjectsFiltersMobile';
 
-export interface IProjectsView extends IProjectsRouteProps {
-	selectedMainCategory?: IMainCategory;
+export interface IProjectsView {
+	projects: IProject[];
+	totalCount: number;
+	categories: ICategory[];
 }
 
 interface IQueries {
@@ -44,24 +35,23 @@ interface IQueries {
 }
 
 const ProjectsIndex = (props: IProjectsView) => {
-	const { projects, selectedMainCategory, totalCount: _totalCount } = props;
+	const { projects, totalCount: _totalCount } = props;
+
 	const user = useAppSelector(state => state.user.userData);
+
 	const [isLoading, setIsLoading] = useState(false);
 	const [filteredProjects, setFilteredProjects] =
 		useState<IProject[]>(projects);
 	const [totalCount, setTotalCount] = useState(_totalCount);
-	const [isTabletShowingSearchAndFilter, setIsTabletShowingSearchAndFilter] =
-		useState(false);
-	const [isFilterOpen, setIsFilterOpen] = useState(false);
-	//Slider next and prev button refs
-	const navigationPrevRef = useRef<HTMLButtonElement>(null);
-	const navigationNextRef = useRef<HTMLButtonElement>(null);
-	const filterMenuRef = useRef<HTMLDivElement>(null);
-
-	useOnClickOutside(filterMenuRef, () => setIsFilterOpen(false));
 
 	const dispatch = useAppDispatch();
-	const { variables: contextVariables, setVariables } = useProjectsContext();
+
+	const {
+		variables: contextVariables,
+		setVariables,
+		mainCategories,
+		selectedMainCategory,
+	} = useProjectsContext();
 
 	const router = useRouter();
 	const pageNum = useRef(0);
@@ -71,6 +61,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 			deviceSize.laptopS - 1
 		}px)`,
 	);
+	const isMobile = !isDesktop && !isTablet;
 
 	const fetchProjects = (
 		isLoadMore?: boolean,
@@ -117,14 +108,13 @@ const ProjectsIndex = (props: IProjectsView) => {
 			});
 	};
 
-	const handleFilterClose = (e: MouseEvent<HTMLElement>) => {
-		e.stopPropagation();
-		setIsFilterOpen(false);
-	};
-
 	useEffect(() => {
 		fetchProjects(false, 0, true);
 	}, [user?.id]);
+
+	useEffect(() => {
+		fetchProjects(false, 0);
+	}, [contextVariables.searchTerm]);
 
 	useEffect(() => {
 		if (router.query?.slug) {
@@ -161,131 +151,14 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	const showLoadMore = totalCount > filteredProjects?.length;
 
-	const FiltersButtonWithCounter = () => {
-		const filtersCount = contextVariables?.filters?.length ?? 0;
-		return (
-			<FiltersButton onClick={() => setIsFilterOpen(true)}>
-				Filters
-				{filtersCount !== 0 && (
-					<PinkyColoredNumber>{filtersCount}</PinkyColoredNumber>
-				)}
-				<IconOptions16 />
-			</FiltersButton>
-		);
-	};
-
 	return (
 		<>
 			<ProjectsBanner mainCategory={selectedMainCategory} />
 			<Wrapper>
 				<FiltersContainer>
-					<FiltersSection>
-						{isTabletShowingSearchAndFilter && isTablet ? null : (
-							<FiltersSwiper>
-								<PrevIcon ref={navigationPrevRef}>
-									<img
-										src={'/images/caret_right.svg'}
-										alt='caret right'
-									/>
-								</PrevIcon>
-								<ProjectsMainCategories
-									mainCategories={props.mainCategories}
-									navigationNextRef={navigationNextRef}
-									navigationPrevRef={navigationPrevRef}
-								/>
-								<NextIcon ref={navigationNextRef}>
-									<img
-										src={'/images/caret_right.svg'}
-										alt='caret right'
-									/>
-								</NextIcon>
-							</FiltersSwiper>
-						)}
-						{isDesktop && (
-							<FilterAndSearchContainer>
-								<IconContainer>
-									<IconSearch />
-								</IconContainer>
-								<FiltersButtonWithCounter />
-
-								{isFilterOpen && (
-									<FilterMenu
-										handleClose={handleFilterClose}
-										ref={filterMenuRef}
-									/>
-								)}
-							</FilterAndSearchContainer>
-						)}
-						{isTablet && (
-							<>
-								{isTabletShowingSearchAndFilter ? (
-									<TabletFilterAndSearchContainer
-										justifyContent='space-between'
-										alignItems='center'
-										gap='16px'
-									>
-										<input
-											style={{
-												flexGrow: 1,
-											}}
-										/>
-										<FiltersButtonWithCounter />
-										{isFilterOpen && (
-											<FilterMenu
-												handleClose={handleFilterClose}
-												ref={filterMenuRef}
-											/>
-										)}
-										<IconContainer
-											onClick={() =>
-												setIsTabletShowingSearchAndFilter(
-													false,
-												)
-											}
-										>
-											X
-										</IconContainer>
-									</TabletFilterAndSearchContainer>
-								) : (
-									<IconContainer
-										onClick={() =>
-											setIsTabletShowingSearchAndFilter(
-												true,
-											)
-										}
-									>
-										<IconDots />
-									</IconContainer>
-								)}
-							</>
-						)}
-					</FiltersSection>
-					{props.selectedMainCategory?.categories && (
-						<>
-							<StyledLine />
-							<ProjectsSubCategories
-								subCategories={
-									props.selectedMainCategory?.categories ?? []
-								}
-							/>
-						</>
-					)}
-					{!isDesktop && !isTablet && (
-						<Flex alignItems='center' gap='16px'>
-							<input
-								style={{
-									flexGrow: 1,
-								}}
-							/>
-							<FiltersButtonWithCounter />
-							{isFilterOpen && (
-								<FilterMenu
-									handleClose={handleFilterClose}
-									ref={filterMenuRef}
-								/>
-							)}
-						</Flex>
-					)}
+					{isDesktop && <ProjectsFiltersDesktop />}
+					{isTablet && <ProjectsFiltersTablet />}
+					{isMobile && <ProjectsFiltersMobile />}
 				</FiltersContainer>
 
 				{isLoading && <Loader className='dot-flashing' />}
@@ -297,7 +170,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 						))}
 					</ProjectsContainer>
 				) : (
-					<ProjectsNoResults mainCategories={props.mainCategories} />
+					<ProjectsNoResults mainCategories={mainCategories} />
 				)}
 
 				{showLoadMore && (
@@ -358,17 +231,7 @@ const FiltersContainer = styled.div`
 	gap: 16px;
 `;
 
-const FiltersSection = styled.div`
-	display: flex;
-	gap: 16px;
-	align-items: center;
-	position: relative;
-	color: ${neutralColors.gray[900]};
-	justify-content: space-between;
-	flex-wrap: nowrap;
-`;
-
-export const ProjectsContainer = styled.div`
+const ProjectsContainer = styled.div`
 	display: grid;
 	gap: 25px;
 	margin-bottom: 64px;
@@ -385,101 +248,6 @@ export const ProjectsContainer = styled.div`
 const Wrapper = styled.div`
 	max-width: ${deviceSize.desktop + 'px'};
 	margin: 0 auto;
-`;
-
-const FilterAndSearchContainer = styled.div`
-	display: flex;
-	align-items: center;
-	position: relative;
-	gap: 16px;
-`;
-
-const FiltersButton = styled.button`
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	border-radius: 50px;
-	padding: 16px;
-	background: white;
-	box-shadow: ${Shadow.Neutral[500]};
-	border: 1px solid ${neutralColors.gray[400]};
-	font-weight: 700;
-	text-transform: uppercase;
-	cursor: pointer;
-	user-select: none;
-`;
-
-const FiltersSwiper = styled.div`
-	display: flex;
-	align-items: center;
-	position: relative;
-	gap: 16px;
-	width: 100%;
-	${mediaQueries.tablet} {
-		max-width: 90%;
-	}
-	${mediaQueries.laptopS} {
-		padding-right: 60px;
-		width: 70%;
-	}
-`;
-
-const IconContainer = styled.button`
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: fit-content;
-	height: fit-content;
-	min-width: 42px;
-	min-height: 42px;
-	border-radius: 50%;
-	background: ${neutralColors.gray[100]};
-	box-shadow: ${Shadow.Neutral[500]};
-	cursor: pointer;
-	border: 1px solid ${neutralColors.gray[400]};
-`;
-
-const NextIcon = styled(IconContainer)`
-	z-index: 1;
-	display: none;
-	:disabled {
-		opacity: 0.5;
-		cursor: default;
-	}
-	${mediaQueries.tablet} {
-		display: inline-block;
-	}
-	${mediaQueries.laptopS} {
-		width: 50px;
-		height: 50px;
-		position: absolute;
-		top: calc(50% - 25px);
-		right: 0;
-		:disabled {
-			display: none;
-		}
-	}
-`;
-
-const PrevIcon = styled(NextIcon)<{ disabled?: boolean }>`
-	-ms-transform: rotate(180deg);
-	transform: rotate(180deg);
-	left: 0;
-	z-index: 2;
-	${mediaQueries.laptopS} {
-		:disabled {
-			display: none;
-		}
-	}
-`;
-
-const StyledLine = styled.hr`
-	width: 100%;
-	border: 1px solid ${neutralColors.gray[200]};
-`;
-
-const TabletFilterAndSearchContainer = styled(Flex)`
-	flex-grow: 1;
 `;
 
 export default ProjectsIndex;

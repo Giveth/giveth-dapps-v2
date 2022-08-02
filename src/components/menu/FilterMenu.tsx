@@ -46,7 +46,7 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 			}
 		};
 		return (
-			<MenuContainer ref={ref}>
+			<MenuContainer className='fadeIn' ref={ref}>
 				<Header>
 					<CloseContainer onClick={handleClose}>
 						<IconX size={24} />

@@ -14,7 +14,7 @@ const ProjectsNoResults = (props: { mainCategories: IMainCategory[] }) => {
 		<Wrapper>
 			<Content>It seems we couldn’t find any result!</Content>
 			<LeadMedium>Try another keyword or broaden your search</LeadMedium>
-			<GreayLead>Or go back to main categories</GreayLead>
+			<GrayLead>Or go back to main categories</GrayLead>
 			<Categories>
 				{props.mainCategories.map((category, index) => {
 					return (
@@ -66,7 +66,7 @@ const LeadMedium = styled(Lead)`
 	color: ${neutralColors.gray[700]};
 `;
 
-const GreayLead = styled(LeadMedium)`
+const GrayLead = styled(LeadMedium)`
 	color: ${neutralColors.gray[600]};
 	margin: 60px 0 0 0;
 `;
