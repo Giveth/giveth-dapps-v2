@@ -32,7 +32,9 @@ export const useStakingPool = (
 	const stakePoolInfoPoll = useRef<NodeJS.Timer | null>(null);
 
 	const { library, chainId } = useWeb3React();
-	const currentValues = useAppSelector(state => state.subgraph.currentValues);
+	const { currentValues, xDaiValues } = useAppSelector(
+		state => state.subgraph,
+	);
 	const subgraphIsLoaded = useAppSelector(state => state.subgraph.isLoaded);
 
 	const { type, LM_ADDRESS } = poolStakingConfig;
@@ -46,7 +48,7 @@ export const useStakingPool = (
 						? getGivStakingAPR(
 								LM_ADDRESS,
 								network,
-								currentValues,
+								xDaiValues,
 								library,
 						  )
 						: getLPStakingAPR(
