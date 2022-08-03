@@ -81,6 +81,7 @@ import Routes from '@/lib/constants/Routes';
 import { IconAngelVault } from '../Icons/AngelVault';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { avgAPR } from '@/helpers/givpower';
+import { FlexCenter } from '@/components/styled-components/Flex';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -517,16 +518,19 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 											setShowUnStakeModal(true)
 										}
 									/>
-									<StakeAmount gap='5px'>
-										{type === StakingType.UNISWAPV3_ETH_GIV
-											? `${stakedLpAmount.toNumber()} ${unit}`
-											: `${formatWeiHelper(
-													stakedLpAmount,
-											  )} ${unit}`}
+									<FlexCenter gap='5px'>
+										<StakeAmount>
+											{type ===
+											StakingType.UNISWAPV3_ETH_GIV
+												? `${stakedLpAmount.toNumber()} ${unit}`
+												: `${formatWeiHelper(
+														stakedLpAmount,
+												  )} ${unit}`}
+										</StakeAmount>
 										{isLocked && (
 											<IconWithTooltip
 												icon={<IconHelp size={16} />}
-												direction={'right'}
+												direction={'left'}
 												align={'right'}
 											>
 												<LockInfotooltip>
@@ -538,7 +542,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 												</LockInfotooltip>
 											</IconWithTooltip>
 										)}
-									</StakeAmount>
+									</FlexCenter>
 								</StakeContainer>
 							</StakeButtonsRow>
 							{active &&

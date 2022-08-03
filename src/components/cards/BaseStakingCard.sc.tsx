@@ -88,10 +88,8 @@ export const StakeContainer = styled(Flex)`
 	gap: 6px;
 	width: 100%;
 `;
-export const StakeAmount = styled(Flex)`
-	align-items: center;
-	justify-content: center;
-	font-size: 0.9em;
+export const StakeAmount = styled(Caption)`
+	text-align: center;
 `;
 
 export const LiquidityButton = styled(Button)`
