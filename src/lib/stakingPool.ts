@@ -75,11 +75,11 @@ const getUnipoolInfo = async (
 };
 
 export const getGivStakingAPR = async (
-	lmAddress: string,
 	network: number,
 	subgraphValue: ISubgraphState,
 	provider: JsonRpcProvider | null,
 ): Promise<APR> => {
+	const lmAddress = config.NETWORKS_CONFIG[network].GIV.LM_ADDRESS;
 	const sdh = new SubgraphDataHelper(subgraphValue);
 	const unipoolHelper = new UnipoolHelper(sdh.getUnipool(lmAddress));
 	let givStakingAPR: BigNumber = Zero;

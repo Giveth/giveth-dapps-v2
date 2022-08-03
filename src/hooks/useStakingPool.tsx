@@ -45,12 +45,7 @@ export const useStakingPool = (
 			if (subgraphIsLoaded) {
 				const promise: Promise<APR> =
 					type === StakingType.GIV_LM
-						? getGivStakingAPR(
-								LM_ADDRESS,
-								network,
-								xDaiValues,
-								library,
-						  )
+						? getGivStakingAPR(network, xDaiValues, library)
 						: getLPStakingAPR(
 								poolStakingConfig,
 								network,
