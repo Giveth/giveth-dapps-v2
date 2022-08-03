@@ -34,6 +34,10 @@ function ProjectsMainCategories({
 	return (
 		<Swiper
 			modules={[Navigation]}
+			navigation={{
+				nextEl: navigationNextRef.current,
+				prevEl: navigationPrevRef.current,
+			}}
 			onInit={swiper => {
 				if (
 					typeof swiper.params.navigation !== 'boolean' &&
