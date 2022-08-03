@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { useRef } from 'react';
 import ProjectsMainCategories from '@/components/views/projects/ProjectsMainCategories';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useProjectsContext } from '@/context/projects.context';
@@ -7,20 +6,14 @@ import { IconContainer } from '@/components/views/projects/common.styled';
 
 const ProjectsFiltersSwiper = () => {
 	const { mainCategories } = useProjectsContext();
-	const navigationPrevRef = useRef<HTMLButtonElement>(null);
-	const navigationNextRef = useRef<HTMLButtonElement>(null);
 
 	return (
 		<Container className='fadeIn'>
-			<PrevIcon ref={navigationPrevRef}>
+			<PrevIcon id='prevIcon'>
 				<img src={'/images/caret_right.svg'} alt='caret right' />
 			</PrevIcon>
-			<ProjectsMainCategories
-				mainCategories={mainCategories}
-				navigationNextRef={navigationNextRef}
-				navigationPrevRef={navigationPrevRef}
-			/>
-			<NextIcon ref={navigationNextRef}>
+			<ProjectsMainCategories mainCategories={mainCategories} />
+			<NextIcon id='nextIcon'>
 				<img src={'/images/caret_right.svg'} alt='caret right' />
 			</NextIcon>
 		</Container>
