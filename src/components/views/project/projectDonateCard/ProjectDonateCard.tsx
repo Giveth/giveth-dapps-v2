@@ -50,11 +50,11 @@ import {
 	decrementLikedProjectsCount,
 } from '@/features/user/user.slice';
 import VerificationStatus from '@/components/views/project/projectDonateCard/VerificationStatus';
+import useDetectDevice from '@/hooks/useDetectDevice';
 
 interface IProjectDonateCard {
 	project?: IProject;
 	isActive?: boolean;
-	isMobile?: boolean;
 	setIsActive: Dispatch<SetStateAction<boolean>>;
 	isDraft?: boolean;
 	setIsDraft: Dispatch<SetStateAction<boolean>>;
@@ -64,7 +64,6 @@ interface IProjectDonateCard {
 const ProjectDonateCard: FC<IProjectDonateCard> = ({
 	project,
 	isActive,
-	isMobile,
 	setIsActive,
 	isDraft,
 	setIsDraft,
@@ -91,6 +90,8 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 	const [reaction, setReaction] = useState<IReaction | undefined>(
 		project?.reaction,
 	);
+
+	const { isMobile } = useDetectDevice();
 
 	const isCategories = categories?.length > 0;
 	const verStatus = verified
@@ -400,7 +401,6 @@ const BadgeWrapper = styled.div`
 `;
 
 const Wrapper = styled(motion.div)<{ initialPosition: number }>`
-	margin-right: 26px;
 	margin-top: -32px;
 	background: white;
 	padding: 32px;
@@ -410,9 +410,10 @@ const Wrapper = styled(motion.div)<{ initialPosition: number }>`
 	flex-shrink: 0;
 	z-index: 10;
 	align-self: flex-start;
-	width: 100vw;
+	width: 100%;
 	position: fixed;
 	bottom: calc(-${props => props.initialPosition}px + 168px);
+	left: 0;
 	border-radius: 40px 40px 0 0;
 
 	${mediaQueries.tablet} {
