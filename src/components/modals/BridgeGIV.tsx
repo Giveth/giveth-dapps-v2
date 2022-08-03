@@ -13,6 +13,7 @@ import { Modal } from './Modal';
 import { mediaQueries } from '@/lib/constants/constants';
 import { switchNetwork } from '@/lib/wallet';
 import config from '@/configuration';
+import links from '@/lib/constants/links';
 import type { IModal } from '@/types/common';
 import type { FC } from 'react';
 
@@ -43,6 +44,8 @@ export const BridgeGIVModal: FC<IBridgeGIVModal> = ({ setShowModal }) => {
 					size='medium'
 					label='Bridge your GIV'
 					icon={<IconExternalLink size={16} />}
+					href={links.GIV_BRIDGE}
+					target='_blank'
 				/>
 				<DescContainer>
 					If you already bridged your GIV, please switch network to
