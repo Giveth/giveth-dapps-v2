@@ -319,7 +319,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							{started ? (
 								<Details>
 									<FirstDetail justifyContent='space-between'>
-										<FlexCenter gap='4px'>
+										<FlexCenter gap='8px'>
 											<DetailLabel>APR</DetailLabel>
 											{type ===
 												StakingType.ICHI_GIV_ONEGIV && (
