@@ -11,6 +11,8 @@ import styled from 'styled-components';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from './Modal';
 import { mediaQueries } from '@/lib/constants/constants';
+import { switchNetwork } from '@/lib/wallet';
+import config from '@/configuration';
 import type { IModal } from '@/types/common';
 import type { FC } from 'react';
 
@@ -50,6 +52,7 @@ export const BridgeGIVModal: FC<IBridgeGIVModal> = ({ setShowModal }) => {
 					buttonType='texty'
 					size='medium'
 					label='Switch network'
+					onClick={() => switchNetwork(config.XDAI_NETWORK_NUMBER)}
 				/>
 			</ModalContainer>
 		</Modal>
