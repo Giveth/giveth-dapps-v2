@@ -25,6 +25,7 @@ export const BridgeGIVModal: FC<IBridgeGIVModal> = ({ setShowModal }) => {
 			headerTitle='Stake GIV on Gnosis Chain'
 			closeModal={closeModal}
 			isAnimating={isAnimating}
+			headerTitlePosition='left'
 		>
 			<ModalContainer>
 				<P>
