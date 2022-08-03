@@ -530,14 +530,13 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 										{isLocked && (
 											<IconWithTooltip
 												icon={<IconHelp size={16} />}
-												direction={'left'}
-												align={'right'}
+												direction={'top'}
 											>
 												<LockInfotooltip>
 													Some or all of your staked
 													GIV is locked. Click
 													&ldquo;Locked GIV
-													details&rdquo; for more
+													Details&rdquo; for more
 													information.
 												</LockInfotooltip>
 											</IconWithTooltip>
