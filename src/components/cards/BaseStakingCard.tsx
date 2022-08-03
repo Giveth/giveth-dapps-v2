@@ -80,6 +80,7 @@ import Routes from '@/lib/constants/Routes';
 import { IconAngelVault } from '../Icons/AngelVault';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { avgAPR } from '@/helpers/givpower';
+import { BridgeGIVModal } from '../modals/BridgeGIV';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -244,9 +245,14 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		setStarted(farmStartTimeMS ? getNowUnixMS() > farmStartTimeMS : true);
 	}, [farmStartTimeMS]);
 
-	const isGIVpower = type === StakingType.GIV_LM;
+	const isGIVpower =
+		type === StakingType.GIV_LM && chainId === config.XDAI_NETWORK_NUMBER;
+	const isBridge =
+		type === StakingType.GIV_LM &&
+		chainId === config.MAINNET_NETWORK_NUMBER;
 	const isLocked = isGIVpower && userGIVLocked.balance !== '0';
-	const isZeroGIVStacked = isGIVpower && userGIVPowerBalance.balance === '0';
+	const isZeroGIVStacked =
+		isBridge || (isGIVpower && userGIVPowerBalance.balance === '0');
 
 	return (
 		<>
@@ -495,7 +501,10 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 										disabled={
 											!active ||
 											archived ||
-											BN(userNotStakedAmount).isZero()
+											(!isBridge &&
+												BN(
+													userNotStakedAmount,
+												).isZero())
 										}
 										onClick={() => setShowStakeModal(true)}
 									/>
@@ -616,6 +625,8 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 						maxAmount={userNotStakedAmount}
 						showLockModal={() => setShowLockModal(true)}
 					/>
+				) : isBridge ? (
+					<BridgeGIVModal setShowModal={setShowStakeModal} />
 				) : (
 					<StakeModal
 						setShowModal={setShowStakeModal}
