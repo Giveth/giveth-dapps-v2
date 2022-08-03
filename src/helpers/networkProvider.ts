@@ -31,7 +31,7 @@ export const getGivStakingConfig = (
 		POOL_ADDRESS: networkConfig.TOKEN_ADDRESS,
 		type: StakingType.GIV_LM,
 		platform: StakingPlatform.GIVETH,
-		platformTitle: 'STAKING',
+		platformTitle: 'GIVPOWER',
 		title: 'GIV',
 		description: '100% GIV',
 		unit: 'GIV',

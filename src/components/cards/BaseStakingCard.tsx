@@ -245,20 +245,18 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		setStarted(farmStartTimeMS ? getNowUnixMS() > farmStartTimeMS : true);
 	}, [farmStartTimeMS]);
 
-	const isGIVpower =
-		type === StakingType.GIV_LM && chainId === config.XDAI_NETWORK_NUMBER;
-	const isBridge =
-		type === StakingType.GIV_LM &&
-		chainId === config.MAINNET_NETWORK_NUMBER;
-	const isLocked = isGIVpower && userGIVLocked.balance !== '0';
+	const isGIV = type === StakingType.GIV_LM;
+	const isGIVpower = isGIV && chainId === config.XDAI_NETWORK_NUMBER;
+	const isBridge = isGIV && chainId === config.MAINNET_NETWORK_NUMBER;
+	const isLocked = isGIV && userGIVLocked.balance !== '0';
 	const isZeroGIVStacked =
-		isBridge || (isGIVpower && userGIVPowerBalance.balance === '0');
+		isBridge || (isGIV && userGIVPowerBalance.balance === '0');
 
 	return (
 		<>
 			<StakingPoolContainer
-				big={isGIVpower}
-				shadowColor={isGIVpower ? '#E1458D' : ''}
+				big={isGIV}
+				shadowColor={isGIV ? '#E1458D' : ''}
 			>
 				{(!active || archived) && disableModal && (
 					<DisableModal>
@@ -293,9 +291,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 						<StakingPoolExchangeRow gap='4px' alignItems='center'>
 							{getPoolIconWithName(platform)}
 							<StakingPoolExchange styleType='Small'>
-								{isGIVpower
-									? 'GIVPOWER'
-									: platformTitle || platform}
+								{platformTitle || platform}
 							</StakingPoolExchange>
 							<div style={{ flex: 1 }}></div>
 							{notif && notif}
@@ -308,7 +304,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									<IconHelp size={16} />
 								</IntroIcon>
 							)}
-							{isGIVpower && (
+							{isGIV && (
 								<IntroIcon
 									onClick={() =>
 										setState(StakeCardState.GIVPOWER_INTRO)
@@ -481,11 +477,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								disabled={!active || earned.isZero()}
 								onClick={() => setShowHarvestModal(true)}
 								label='HARVEST REWARDS'
-								buttonType={
-									isGIVpower ? 'secondary' : 'primary'
-								}
+								buttonType={isGIV ? 'secondary' : 'primary'}
 							/>
-							{isGIVpower && (
+							{isGIV && (
 								<ClaimButton
 									disabled={!active || earned.isZero()}
 									onClick={() => setShowLockModal(true)}
@@ -536,7 +530,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							</StakeButtonsRow>
 							{active &&
 								!archived &&
-								(!isGIVpower ? (
+								(!isGIV ? (
 									<Flex>
 										<LiquidityButton
 											label='PROVIDE LIQUIDITY'
