@@ -244,8 +244,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		setStarted(farmStartTimeMS ? getNowUnixMS() > farmStartTimeMS : true);
 	}, [farmStartTimeMS]);
 
-	const isGIVpower =
-		type === StakingType.GIV_LM && chainId === config.XDAI_NETWORK_NUMBER;
+	const isGIVpower = type === StakingType.GIV_LM;
 	const isLocked = isGIVpower && userGIVLocked.balance !== '0';
 	const isZeroGIVStacked = isGIVpower && userGIVPowerBalance.balance === '0';
 
