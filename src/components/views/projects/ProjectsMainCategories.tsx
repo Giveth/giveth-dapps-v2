@@ -34,9 +34,18 @@ function ProjectsMainCategories({
 	return (
 		<Swiper
 			modules={[Navigation]}
-			navigation={{
-				prevEl: navigationPrevRef.current,
-				nextEl: navigationNextRef.current,
+			onInit={swiper => {
+				if (
+					typeof swiper.params.navigation !== 'boolean' &&
+					typeof swiper.params.navigation !== 'boolean' &&
+					swiper.params !== undefined &&
+					swiper.params.navigation !== undefined
+				) {
+					swiper.params.navigation.prevEl = navigationPrevRef.current;
+					swiper.params.navigation.nextEl = navigationNextRef.current;
+					swiper.navigation.init();
+					swiper.navigation.update();
+				}
 			}}
 			slidesPerView='auto'
 			spaceBetween={16}
