@@ -37,6 +37,7 @@ import {
 	IconHelpWraper,
 	IntroIcon,
 	LiquidityButton,
+	LockInfotooltip,
 	SPTitle,
 	StakeAmount,
 	StakeButton,
@@ -80,6 +81,7 @@ import Routes from '@/lib/constants/Routes';
 import { IconAngelVault } from '../Icons/AngelVault';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { avgAPR } from '@/helpers/givpower';
+import { FlexCenter } from '@/components/styled-components/Flex';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -248,7 +250,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		type === StakingType.GIV_LM && chainId === config.XDAI_NETWORK_NUMBER;
 	const isLocked = isGIVpower && userGIVLocked.balance !== '0';
 	const isZeroGIVStacked = isGIVpower && userGIVPowerBalance.balance === '0';
-
 	return (
 		<>
 			<StakingPoolContainer
@@ -517,13 +518,30 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 											setShowUnStakeModal(true)
 										}
 									/>
-									<StakeAmount>
-										{type === StakingType.UNISWAPV3_ETH_GIV
-											? `${stakedLpAmount.toNumber()} ${unit}`
-											: `${formatWeiHelper(
-													stakedLpAmount,
-											  )} ${unit}`}
-									</StakeAmount>
+									<FlexCenter gap='5px'>
+										<StakeAmount>
+											{type ===
+											StakingType.UNISWAPV3_ETH_GIV
+												? `${stakedLpAmount.toNumber()} ${unit}`
+												: `${formatWeiHelper(
+														stakedLpAmount,
+												  )} ${unit}`}
+										</StakeAmount>
+										{isLocked && (
+											<IconWithTooltip
+												icon={<IconHelp size={16} />}
+												direction={'top'}
+											>
+												<LockInfotooltip>
+													Some or all of your staked
+													GIV is locked. Click
+													&ldquo;Locked GIV
+													Details&rdquo; for more
+													information.
+												</LockInfotooltip>
+											</IconWithTooltip>
+										)}
+									</FlexCenter>
 								</StakeContainer>
 							</StakeButtonsRow>
 							{active &&

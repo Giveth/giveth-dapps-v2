@@ -210,3 +210,8 @@ export const DisableModalImage = styled.div`
 	width: 36px;
 	color: ${brandColors.giv[500]};
 `;
+
+export const LockInfotooltip = styled(Subline)`
+	color: ${neutralColors.gray[100]};
+	width: 180px;
+`;
