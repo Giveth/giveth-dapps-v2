@@ -250,7 +250,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const isBridge = isGIV && chainId === config.MAINNET_NETWORK_NUMBER;
 	const isLocked = isGIV && userGIVLocked.balance !== '0';
 	const isZeroGIVStacked =
-		isBridge || (isGIV && userGIVPowerBalance.balance === '0');
+		isBridge || (isGIVPower && userGIVPowerBalance.balance === '0');
 
 	return (
 		<>
