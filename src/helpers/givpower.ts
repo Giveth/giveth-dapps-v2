@@ -32,17 +32,17 @@ export const getUnlockDate = (givPowerInfo: IGIVpower, rounds: number) => {
 export const avgAPR = (
 	apr: BigNumber | null,
 	gGIV?: string,
-	givStaked?: string,
+	unipoolBalance?: string,
 ) => {
 	if (
 		!apr ||
 		apr.isZero() ||
 		!gGIV ||
 		gGIV === '0' ||
-		!givStaked ||
-		givStaked === '0'
+		!unipoolBalance ||
+		unipoolBalance === '0'
 	)
 		return new BigNumber(0);
-	const avg = new BigNumber(givStaked).dividedBy(gGIV);
+	const avg = new BigNumber(unipoolBalance).dividedBy(gGIV);
 	return apr.multipliedBy(avg);
 };
