@@ -33,6 +33,16 @@ function ProjectsMainCategories({ mainCategories }: IProjectsFilterProps) {
 			}}
 			slidesPerView='auto'
 			spaceBetween={16}
+			onInit={swiper => {
+				let _index = 0;
+				const selectedItemIndex = mainCategories.findIndex(
+					element => element.slug === query?.slug,
+				);
+				if (selectedItemIndex !== -1) {
+					_index = selectedItemIndex;
+					_index !== 0 && swiper.slideTo(_index);
+				}
+			}}
 		>
 			{mainCategories.map(category => (
 				<SwiperSlide key={category.slug}>
