@@ -236,7 +236,7 @@ export class SubgraphQueryBuilder {
 	): string => {
 		return `query { tokenLocks(where:{user: "${userAddress.toLowerCase()}", unlocked: false}, first: ${
 			first || 100
-		}, skip: ${skip || 0}){ 
+		}, skip: ${skip || 0}, orderBy: unlockableAt){ 
 			id
 			user
 			amount
