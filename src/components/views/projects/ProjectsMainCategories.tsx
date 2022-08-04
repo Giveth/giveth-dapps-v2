@@ -73,8 +73,7 @@ const MainCategoryItem = styled.div<{ isSelected?: boolean }>`
 	color: ${props => (!props.isSelected ? 'black' : 'white')};
 	padding: 16px;
 	:hover {
-		color: white;
-		background: ${brandColors.giv[600]};
+		background: ${neutralColors.gray[400]};
 		transition: background-color 300ms linear, color 150ms linear;
 	}
 	font-weight: 400;
