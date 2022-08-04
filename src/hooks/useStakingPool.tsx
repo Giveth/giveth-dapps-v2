@@ -11,6 +11,7 @@ import { SimplePoolStakingConfig, StakingType } from '@/types/config';
 import { APR, UserStakeInfo } from '@/types/poolInfo';
 import { Zero } from '@/helpers/number';
 import { useAppSelector } from '@/features/hooks';
+import config from '@/configuration';
 
 export interface IStakeInfo {
 	apr: APR;
@@ -32,7 +33,9 @@ export const useStakingPool = (
 	const stakePoolInfoPoll = useRef<NodeJS.Timer | null>(null);
 
 	const { library, chainId } = useWeb3React();
-	const currentValues = useAppSelector(state => state.subgraph.currentValues);
+	const { currentValues, xDaiValues } = useAppSelector(
+		state => state.subgraph,
+	);
 	const subgraphIsLoaded = useAppSelector(state => state.subgraph.isLoaded);
 
 	const { type, LM_ADDRESS } = poolStakingConfig;
@@ -44,10 +47,11 @@ export const useStakingPool = (
 				const promise: Promise<APR> =
 					type === StakingType.GIV_LM
 						? getGivStakingAPR(
-								LM_ADDRESS,
-								network,
-								currentValues,
-								library,
+								config.XDAI_NETWORK_NUMBER,
+								xDaiValues,
+								providerNetwork === config.XDAI_NETWORK_NUMBER
+									? library
+									: null,
 						  )
 						: getLPStakingAPR(
 								poolStakingConfig,

@@ -67,7 +67,7 @@ import { UniV3APRModal } from '../modals/UNIv3APR';
 import StakingCardIntro from './StakingCardIntro';
 import { getNowUnixMS } from '@/helpers/time';
 import FarmCountDown from '../FarmCountDown';
-import { Flex } from '../styled-components/Flex';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { IStakeInfo } from '@/hooks/useStakingPool';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { GIVPowerExplainModal } from '../modals/GIVPowerExplain';
@@ -81,7 +81,7 @@ import Routes from '@/lib/constants/Routes';
 import { IconAngelVault } from '../Icons/AngelVault';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { avgAPR } from '@/helpers/givpower';
-import { FlexCenter } from '@/components/styled-components/Flex';
+import { BridgeGIVModal } from '../modals/BridgeGIV';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -246,15 +246,18 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		setStarted(farmStartTimeMS ? getNowUnixMS() > farmStartTimeMS : true);
 	}, [farmStartTimeMS]);
 
-	const isGIVpower =
-		type === StakingType.GIV_LM && chainId === config.XDAI_NETWORK_NUMBER;
-	const isLocked = isGIVpower && userGIVLocked.balance !== '0';
-	const isZeroGIVStacked = isGIVpower && userGIVPowerBalance.balance === '0';
+	const isGIVStaking = type === StakingType.GIV_LM;
+	const isGIVpower = isGIVStaking && chainId === config.XDAI_NETWORK_NUMBER;
+	const isBridge = isGIVStaking && chainId === config.MAINNET_NETWORK_NUMBER;
+	const isLocked = isGIVStaking && userGIVLocked.balance !== '0';
+	const isZeroGIVStacked =
+		isBridge || (isGIVpower && userGIVPowerBalance.balance === '0');
+
 	return (
 		<>
 			<StakingPoolContainer
-				big={isGIVpower}
-				shadowColor={isGIVpower ? '#E1458D' : ''}
+				big={isGIVStaking}
+				shadowColor={isGIVStaking ? '#E1458D' : ''}
 			>
 				{(!active || archived) && disableModal && (
 					<DisableModal>
@@ -289,9 +292,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 						<StakingPoolExchangeRow gap='4px' alignItems='center'>
 							{getPoolIconWithName(platform)}
 							<StakingPoolExchange styleType='Small'>
-								{isGIVpower
-									? 'GIVPOWER'
-									: platformTitle || platform}
+								{platformTitle || platform}
 							</StakingPoolExchange>
 							<div style={{ flex: 1 }}></div>
 							{notif && notif}
@@ -304,7 +305,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									<IconHelp size={16} />
 								</IntroIcon>
 							)}
-							{isGIVpower && (
+							{isGIVStaking && (
 								<IntroIcon
 									onClick={() =>
 										setState(StakeCardState.GIVPOWER_INTRO)
@@ -478,10 +479,10 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								onClick={() => setShowHarvestModal(true)}
 								label='HARVEST REWARDS'
 								buttonType={
-									isGIVpower ? 'secondary' : 'primary'
+									isGIVStaking ? 'secondary' : 'primary'
 								}
 							/>
-							{isGIVpower && (
+							{isGIVStaking && (
 								<ClaimButton
 									disabled={!active || earned.isZero()}
 									onClick={() => setShowLockModal(true)}
@@ -497,7 +498,10 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 										disabled={
 											!active ||
 											archived ||
-											BN(userNotStakedAmount).isZero()
+											(!isBridge &&
+												BN(
+													userNotStakedAmount,
+												).isZero())
 										}
 										onClick={() => setShowStakeModal(true)}
 									/>
@@ -546,7 +550,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							</StakeButtonsRow>
 							{active &&
 								!archived &&
-								(!isGIVpower ? (
+								(!isGIVStaking ? (
 									<Flex>
 										<LiquidityButton
 											label='PROVIDE LIQUIDITY'
@@ -635,6 +639,8 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 						maxAmount={userNotStakedAmount}
 						showLockModal={() => setShowLockModal(true)}
 					/>
+				) : isBridge ? (
+					<BridgeGIVModal setShowModal={setShowStakeModal} />
 				) : (
 					<StakeModal
 						setShowModal={setShowStakeModal}

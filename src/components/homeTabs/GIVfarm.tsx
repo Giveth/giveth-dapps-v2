@@ -30,7 +30,6 @@ import {
 import RadioButton from '@/components/RadioButton';
 import { NetworkSelector } from '@/components/NetworkSelector';
 import StakingPositionCard from '@/components/cards/StakingPositionCard';
-import { getGivStakingConfig } from '@/helpers/networkProvider';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { useFarms } from '@/context/farm.context';
 import { TopInnerContainer, ExtLinkRow } from './commons';
@@ -235,14 +234,11 @@ export const TabGIVfarmBottom = () => {
 								!givEconomySupportedNetworks.includes(chainId)
 							}
 						>
-							<Col sm={6} lg={4}>
-								<StakingPoolCard
-									network={config.MAINNET_NETWORK_NUMBER}
-									poolStakingConfig={getGivStakingConfig(
-										config.MAINNET_CONFIG,
-									)}
-								/>
-							</Col>
+							<GIVpowerProvider>
+								<Col sm={6} lg={4} key={`givpower_card`}>
+									<GIVpowerStakingPoolCard />
+								</Col>
+							</GIVpowerProvider>
 							{renderPools(
 								config.MAINNET_CONFIG.pools,
 								config.MAINNET_NETWORK_NUMBER,

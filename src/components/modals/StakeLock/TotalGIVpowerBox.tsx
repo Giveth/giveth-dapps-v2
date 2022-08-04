@@ -8,12 +8,14 @@ import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import Lottie from 'react-lottie';
+import BigNumber from 'bignumber.js';
 import { Flex } from '@/components/styled-components/Flex';
 import { formatWeiHelper } from '@/helpers/number';
 import { getTotalGIVpower } from '@/lib/stakingPool';
 import config from '@/configuration';
 import LoadingAnimation from '@/animations/loading.json';
-import type BigNumber from 'bignumber.js';
+import { useAppSelector } from '@/features/hooks';
+import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
 const loadingAnimationOptions = {
 	loop: true,
@@ -26,19 +28,29 @@ const loadingAnimationOptions = {
 
 const TotalGIVpowerBox = () => {
 	const [totalGIVpower, setTotalGIVpower] = useState<BigNumber>();
-	const { account, library } = useWeb3React();
+	const { account, library, chainId } = useWeb3React();
+	const xDaiValues = useAppSelector(state => state.subgraph.xDaiValues);
 
-	const contractAddress = config.XDAI_CONFIG.GIV.LM_ADDRESS;
 	useEffect(() => {
 		async function fetchTotalGIVpower() {
-			if (!account) return;
-			const _totalGIVpower = await getTotalGIVpower(
-				account,
-				contractAddress,
-				library,
-			);
-			if (_totalGIVpower) {
-				setTotalGIVpower(_totalGIVpower);
+			try {
+				if (!account) return;
+				if (chainId !== config.XDAI_NETWORK_NUMBER)
+					throw new Error('Change Netowrk to fetchTotalGIVpower');
+				const contractAddress = config.XDAI_CONFIG.GIV.LM_ADDRESS;
+				const _totalGIVpower = await getTotalGIVpower(
+					account,
+					contractAddress,
+					library,
+				);
+				if (_totalGIVpower) {
+					setTotalGIVpower(_totalGIVpower);
+				}
+			} catch (err) {
+				console.log({ err });
+				const sdh = new SubgraphDataHelper(xDaiValues);
+				const userGIVPowerBalance = sdh.getUserGIVPowerBalance();
+				setTotalGIVpower(new BigNumber(userGIVPowerBalance.balance));
 			}
 		}
 
