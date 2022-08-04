@@ -14,8 +14,6 @@ import {
 	brandColors,
 	neutralColors,
 	OulineButton,
-	Caption,
-	IconHelp,
 } from '@giveth/ui-design-system';
 import { motion } from 'framer-motion';
 import { captureException } from '@sentry/nextjs';
@@ -51,6 +49,7 @@ import {
 } from '@/features/user/user.slice';
 import VerificationStatus from '@/components/views/project/projectDonateCard/VerificationStatus';
 import useDetectDevice from '@/hooks/useDetectDevice';
+import GIVbackToast from '@/components/views/project/projectDonateCard/GIVbackToast';
 
 interface IProjectDonateCard {
 	project?: IProject;
@@ -305,17 +304,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 						onClick={() => isActive && likeUnlikeProject()}
 					/>
 				</BadgeWrapper>
-				{!isAdmin && verified && (
-					<GivBackNotif>
-						<Caption color={brandColors.giv[300]}>
-							When you donate to verified projects, you get
-							GIVback.
-						</Caption>
-						<ExternalLink href={links.GIVBACK_DOC}>
-							<IconHelp size={16} />
-						</ExternalLink>
-					</GivBackNotif>
-				)}
+				{!isAdmin && verified && <GIVbackToast />}
 				{isCategories && (
 					<CategoryWrapper>
 						{categories.map(i => (
@@ -378,22 +367,6 @@ const CategoryWrapper = styled.div`
 	margin-bottom: 16px;
 `;
 
-const GivBackNotif = styled.div`
-	padding: 16px;
-	background: rgba(231, 225, 255, 0.4);
-	border-radius: 8px;
-	border: 1px solid ${brandColors.giv[300]};
-	margin-top: 24px;
-	color: ${brandColors.giv[300]};
-	display: flex;
-	gap: 16px;
-	max-width: 420px;
-
-	> a:last-child {
-		margin-top: 3px;
-	}
-`;
-
 const BadgeWrapper = styled.div`
 	display: flex;
 	margin-top: 16px;
@@ -404,7 +377,6 @@ const Wrapper = styled(motion.div)<{ initialPosition: number }>`
 	margin-top: -32px;
 	background: white;
 	padding: 32px;
-	overflow: hidden;
 	height: fit-content;
 	box-shadow: ${Shadow.Neutral[400]};
 	flex-shrink: 0;
