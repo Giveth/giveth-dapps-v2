@@ -294,14 +294,6 @@ export const StakeGIVModal: FC<IStakeModalProps> = ({
 								showLockModal();
 							}}
 						/>
-						<CancelButton
-							buttonType='texty'
-							size='small'
-							label='No thanks, I’ll keep the min APR'
-							onClick={() => {
-								setShowModal(false);
-							}}
-						/>
 					</StakeInnerModal>
 				)}
 				{chainId && stakeState === StakeState.ERROR && (
