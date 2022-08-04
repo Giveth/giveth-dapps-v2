@@ -11,6 +11,7 @@ import {
 	Title as TitleBase,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
+import { useWeb3React } from '@web3-react/core';
 import { Col, Row } from '../Grid';
 import { Flex } from '../styled-components/Flex';
 import {
@@ -43,21 +44,28 @@ import {
 	BoostProjectButton,
 	GivPowerCardContainer,
 	GIVpowerContainer,
+	ConnectWallet,
+	ConnectWalletDesc,
+	ConnectWalletButton,
 } from './GIVpower.sc';
 import RocketImage from '../../../public/images/rocket.svg';
 import Growth from '../../../public/images/growth.svg';
 import GivStake from '../../../public/images/giv_stake.svg';
 import Routes from '@/lib/constants/Routes';
-import { useAppSelector } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { formatWeiHelper } from '@/helpers/number';
+import { setShowWalletModal } from '@/features/modal/modal.slice';
 
 export function TabPowerTop() {
+	const { account } = useWeb3React();
 	const sdh = new SubgraphDataHelper(
 		useAppSelector(state => state.subgraph.xDaiValues),
 	);
 	const givPower = sdh.getUserGIVPowerBalance();
+	const dispatch = useAppDispatch();
+
 	return (
 		<GIVpowerTopContainer>
 			<GIVpowerContainer>
@@ -79,25 +87,47 @@ export function TabPowerTop() {
 					</Col>
 					<Col xs={12} sm={5} xl={4}>
 						<GivPowerCardContainer>
-							<Caption>Your GIVpower</Caption>
-							<Flex alignItems='baseline' gap='16px'>
-								<Image
-									src={RocketImage}
-									width='27'
-									height='27'
-									alt='givpower'
-								/>
-								<TitleBase>
-									{formatWeiHelper(givPower.balance, 2) ?? 0}
-								</TitleBase>
-							</Flex>
-							<Link href={Routes.Projects} passHref>
-								<BoostProjectButton
-									label='BOOST PROJECT'
-									size='large'
-									linkType='primary'
-								/>
-							</Link>
+							{account ? (
+								<>
+									<Caption>Your GIVpower</Caption>
+									<Flex alignItems='baseline' gap='16px'>
+										<Image
+											src={RocketImage}
+											width='27'
+											height='27'
+											alt='givpower'
+										/>
+										<TitleBase>
+											{formatWeiHelper(
+												givPower.balance,
+												2,
+											) ?? 0}
+										</TitleBase>
+									</Flex>
+									<Link href={Routes.Projects} passHref>
+										<BoostProjectButton
+											label='BOOST PROJECTS'
+											size='large'
+											linkType='primary'
+										/>
+									</Link>
+								</>
+							) : (
+								<ConnectWallet>
+									<ConnectWalletDesc>
+										To see your GIVpower, please connect
+										your wallet.
+									</ConnectWalletDesc>
+									<ConnectWalletButton
+										label='Connect Wallet'
+										buttonType='primary'
+										size='small'
+										onClick={() =>
+											dispatch(setShowWalletModal(true))
+										}
+									/>
+								</ConnectWallet>
+							)}
 						</GivPowerCardContainer>
 					</Col>
 				</Row>
