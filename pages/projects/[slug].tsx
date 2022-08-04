@@ -1,4 +1,5 @@
 import { GetServerSideProps } from 'next/types';
+import { useRouter } from 'next/router';
 import { IMainCategory } from '@/apollo/types/types';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import { initializeApollo } from '@/apollo/apolloClient';
@@ -12,7 +13,6 @@ import ProjectsIndex from '@/components/views/projects/ProjectsIndex';
 import { projectsMetatags } from '@/content/metatags';
 import { ProjectsProvider } from '@/context/projects.context';
 import type { IProjectsRouteProps } from '.';
-
 interface IProjectsCategoriesRouteProps extends IProjectsRouteProps {
 	selectedMainCategory: IMainCategory;
 }
@@ -26,16 +26,20 @@ const ProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 		categories,
 	} = props;
 
+	const router = useRouter();
+
 	return (
 		<ProjectsProvider
 			mainCategories={mainCategories}
 			selectedMainCategory={selectedMainCategory}
 		>
 			<GeneralMetatags info={projectsMetatags} />
+
 			<ProjectsIndex
 				projects={projects}
 				totalCount={totalCount}
 				categories={categories}
+				key={router.asPath}
 			/>
 		</ProjectsProvider>
 	);
