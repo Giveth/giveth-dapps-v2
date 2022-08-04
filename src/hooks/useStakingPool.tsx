@@ -11,6 +11,7 @@ import { SimplePoolStakingConfig, StakingType } from '@/types/config';
 import { APR, UserStakeInfo } from '@/types/poolInfo';
 import { Zero } from '@/helpers/number';
 import { useAppSelector } from '@/features/hooks';
+import config from '@/configuration';
 
 export interface IStakeInfo {
 	apr: APR;
@@ -45,7 +46,13 @@ export const useStakingPool = (
 			if (subgraphIsLoaded) {
 				const promise: Promise<APR> =
 					type === StakingType.GIV_LM
-						? getGivStakingAPR(config.XDAI_NETWORK_NUMBER, xDaiValues, providerNetwork === config.XDAI_NETWORK_NUMBER ? library : null)
+						? getGivStakingAPR(
+								config.XDAI_NETWORK_NUMBER,
+								xDaiValues,
+								providerNetwork === config.XDAI_NETWORK_NUMBER
+									? library
+									: null,
+						  )
 						: getLPStakingAPR(
 								poolStakingConfig,
 								network,
