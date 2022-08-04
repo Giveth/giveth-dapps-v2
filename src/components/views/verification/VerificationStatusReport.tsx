@@ -18,7 +18,7 @@ import links from '@/lib/constants/links';
 
 export const VerificationStatusReport = () => {
 	const { verificationData } = useVerificationData();
-	const { status } = verificationData || {};
+	const status = verificationData?.status || EVerificationStatus.DRAFT;
 
 	const background = status
 		? '/images/backgrounds/email-verification-bg-colored.svg'
