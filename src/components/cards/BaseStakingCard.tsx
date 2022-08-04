@@ -390,7 +390,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 																		isLocked
 																			? avgAPR(
 																					apr.effectiveAPR,
-																					userGIVLocked.balance,
+																					stakedLpAmount.toString(),
 																					userGIVPowerBalance.balance,
 																			  )
 																			: apr.effectiveAPR,
