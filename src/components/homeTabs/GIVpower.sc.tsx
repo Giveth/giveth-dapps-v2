@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import {
 	brandColors,
+	Button,
 	ButtonLink,
 	ButtonText,
 	Container,
@@ -9,11 +10,13 @@ import {
 	H2,
 	H3,
 	OutlineLinkButton,
+	P,
 	QuoteText,
 } from '@giveth/ui-design-system';
 import { BottomContainer, TopContainer } from './commons';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Arc } from '../styled-components/Arc';
+import { Flex } from '../styled-components/Flex';
 
 export const GIVpowerContainer = styled(Container)`
 	padding: 16px;
@@ -288,8 +291,7 @@ export const BoostProjectButton = styled(ButtonLink)`
 	}
 `;
 
-export const GivPowerCardContainer = styled.div`
-	display: flex;
+export const GivPowerCardContainer = styled(Flex)`
 	flex-direction: column;
 	gap: 30px;
 	background: ${brandColors.giv[700]};
@@ -300,4 +302,20 @@ export const GivPowerCardContainer = styled.div`
 	${mediaQueries.tablet} {
 		margin-bottom: 0;
 	}
+`;
+
+export const ConnectWallet = styled.div`
+	/* padding: 12px; */
+`;
+
+export const ConnectWalletDesc = styled(P)`
+	padding: 24px;
+	margin-bottom: 12px;
+	text-align: center;
+	color: ${brandColors.deep[100]};
+`;
+
+export const ConnectWalletButton = styled(Button)`
+	margin: auto;
+	min-width: 220px;
 `;

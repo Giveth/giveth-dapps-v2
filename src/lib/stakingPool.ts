@@ -21,6 +21,7 @@ import { BN, Zero } from '@/helpers/number';
 import { getGasPreference } from '@/lib/helpers';
 
 import LM_Json from '../artifacts/UnipoolTokenDistributor.json';
+import GP_Json from '../artifacts/GivPower.json';
 import UNI_Json from '../artifacts/UNI.json';
 import BAL_WEIGHTED_POOL_Json from '../artifacts/BalancerWeightedPool.json';
 import BAL_VAULT_Json from '../artifacts/BalancerVault.json';
@@ -37,6 +38,7 @@ import { ISubgraphState } from '@/features/subgraph/subgraph.types';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
 const { abi: LM_ABI } = LM_Json;
+const { abi: GP_ABI } = GP_Json;
 const { abi: UNI_ABI } = UNI_Json;
 const { abi: BAL_WEIGHTED_POOL_ABI } = BAL_WEIGHTED_POOL_Json;
 const { abi: BAL_VAULT_ABI } = BAL_VAULT_Json;
@@ -714,7 +716,7 @@ export const lockToken = async (
 
 	const signer = provider.getSigner();
 
-	const givpowerContract = new Contract(contractAddress, LM_ABI, signer);
+	const givpowerContract = new Contract(contractAddress, GP_ABI, signer);
 	try {
 		return await givpowerContract
 			.connect(signer.connectUnchecked())
@@ -747,7 +749,7 @@ export const getTotalGIVpower = async (
 
 	const signer = provider.getSigner();
 
-	const givpowerContract = new Contract(contractAddress, LM_ABI, signer);
+	const givpowerContract = new Contract(contractAddress, GP_ABI, signer);
 	try {
 		return await givpowerContract.balanceOf(account);
 	} catch (error) {

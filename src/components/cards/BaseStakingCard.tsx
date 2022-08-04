@@ -37,6 +37,7 @@ import {
 	IconHelpWraper,
 	IntroIcon,
 	LiquidityButton,
+	LockInfotooltip,
 	SPTitle,
 	StakeAmount,
 	StakeButton,
@@ -66,7 +67,7 @@ import { UniV3APRModal } from '../modals/UNIv3APR';
 import StakingCardIntro from './StakingCardIntro';
 import { getNowUnixMS } from '@/helpers/time';
 import FarmCountDown from '../FarmCountDown';
-import { Flex } from '../styled-components/Flex';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { IStakeInfo } from '@/hooks/useStakingPool';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { GIVPowerExplainModal } from '../modals/GIVPowerExplain';
@@ -246,17 +247,17 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	}, [farmStartTimeMS]);
 
 	const isGIVStaking = type === StakingType.GIV_LM;
-	const isGIVpower = isGIV && chainId === config.XDAI_NETWORK_NUMBER;
-	const isBridge = isGIV && chainId === config.MAINNET_NETWORK_NUMBER;
-	const isLocked = isGIV && userGIVLocked.balance !== '0';
+	const isGIVpower = isGIVStaking && chainId === config.XDAI_NETWORK_NUMBER;
+	const isBridge = isGIVStaking && chainId === config.MAINNET_NETWORK_NUMBER;
+	const isLocked = isGIVStaking && userGIVLocked.balance !== '0';
 	const isZeroGIVStacked =
-		isBridge || (isGIVPower && userGIVPowerBalance.balance === '0');
+		isBridge || (isGIVpower && userGIVPowerBalance.balance === '0');
 
 	return (
 		<>
 			<StakingPoolContainer
-				big={isGIV}
-				shadowColor={isGIV ? '#E1458D' : ''}
+				big={isGIVStaking}
+				shadowColor={isGIVStaking ? '#E1458D' : ''}
 			>
 				{(!active || archived) && disableModal && (
 					<DisableModal>
@@ -304,7 +305,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									<IconHelp size={16} />
 								</IntroIcon>
 							)}
-							{isGIV && (
+							{isGIVStaking && (
 								<IntroIcon
 									onClick={() =>
 										setState(StakeCardState.GIVPOWER_INTRO)
@@ -477,9 +478,11 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								disabled={!active || earned.isZero()}
 								onClick={() => setShowHarvestModal(true)}
 								label='HARVEST REWARDS'
-								buttonType={isGIV ? 'secondary' : 'primary'}
+								buttonType={
+									isGIVStaking ? 'secondary' : 'primary'
+								}
 							/>
-							{isGIV && (
+							{isGIVStaking && (
 								<ClaimButton
 									disabled={!active || earned.isZero()}
 									onClick={() => setShowLockModal(true)}
@@ -519,18 +522,35 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 											setShowUnStakeModal(true)
 										}
 									/>
-									<StakeAmount>
-										{type === StakingType.UNISWAPV3_ETH_GIV
-											? `${stakedLpAmount.toNumber()} ${unit}`
-											: `${formatWeiHelper(
-													stakedLpAmount,
-											  )} ${unit}`}
-									</StakeAmount>
+									<FlexCenter gap='5px'>
+										<StakeAmount>
+											{type ===
+											StakingType.UNISWAPV3_ETH_GIV
+												? `${stakedLpAmount.toNumber()} ${unit}`
+												: `${formatWeiHelper(
+														stakedLpAmount,
+												  )} ${unit}`}
+										</StakeAmount>
+										{isLocked && (
+											<IconWithTooltip
+												icon={<IconHelp size={16} />}
+												direction={'top'}
+											>
+												<LockInfotooltip>
+													Some or all of your staked
+													GIV is locked. Click
+													&ldquo;Locked GIV
+													Details&rdquo; for more
+													information.
+												</LockInfotooltip>
+											</IconWithTooltip>
+										)}
+									</FlexCenter>
 								</StakeContainer>
 							</StakeButtonsRow>
 							{active &&
 								!archived &&
-								(!isGIV ? (
+								(!isGIVStaking ? (
 									<Flex>
 										<LiquidityButton
 											label='PROVIDE LIQUIDITY'

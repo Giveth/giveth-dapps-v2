@@ -30,8 +30,7 @@ export const transformTokenDistro = (info: any = {}): ITokenDistro => {
 	const totalTokens = info?.totalTokens || '0';
 
 	return {
-		contractAddress:
-			info?.tokenDistroAddress || ethers.constants.AddressZero,
+		contractAddress: info?.id || ethers.constants.AddressZero,
 		initialAmount,
 		lockedAmount,
 		totalTokens,
