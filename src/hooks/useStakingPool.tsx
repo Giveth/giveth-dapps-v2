@@ -45,7 +45,7 @@ export const useStakingPool = (
 			if (subgraphIsLoaded) {
 				const promise: Promise<APR> =
 					type === StakingType.GIV_LM
-						? getGivStakingAPR(network, xDaiValues, library)
+						? getGivStakingAPR(config.XDAI_NETWORK_NUMBER, xDaiValues, providerNetwork === config.XDAI_NETWORK_NUMBER ? library : null)
 						: getLPStakingAPR(
 								poolStakingConfig,
 								network,
