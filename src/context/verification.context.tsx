@@ -25,7 +25,6 @@ interface IVerificationContext {
 		SetStateAction<IProjectVerification | undefined>
 	>;
 	isDraft: boolean;
-	status: EVerificationStatus;
 }
 
 const VerificationContext = createContext<IVerificationContext>({
@@ -38,14 +37,12 @@ const VerificationContext = createContext<IVerificationContext>({
 		console.log('setVerificationData not initialed yet!');
 	},
 	isDraft: true,
-	status: EVerificationStatus.DRAFT,
 });
 
 VerificationContext.displayName = 'VerificationContext';
 
 export const VerificationProvider = ({ children }: { children: ReactNode }) => {
 	const [step, setStep] = useState(-1);
-	const [status, setStatus] = useState(EVerificationStatus.DRAFT);
 	const [verificationData, setVerificationData] =
 		useState<IProjectVerification>();
 	const router = useRouter();
@@ -71,10 +68,6 @@ export const VerificationProvider = ({ children }: { children: ReactNode }) => {
 				switch (error?.message) {
 					case 'There is not any project verification form for this project':
 						setStep(0);
-						setStatus(EVerificationStatus.DRAFT);
-						break;
-					case 'Project is already verified.':
-						setStatus(EVerificationStatus.VERIFIED);
 						break;
 
 					default:
@@ -101,7 +94,6 @@ export const VerificationProvider = ({ children }: { children: ReactNode }) => {
 				step,
 				setStep,
 				isDraft,
-				status,
 			}}
 		>
 			{children}
