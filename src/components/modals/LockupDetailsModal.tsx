@@ -36,11 +36,10 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 	unstakeable,
 	setShowModal,
 }) => {
-	const { apr } = useGIVpower();
+	const { apr, stakedAmount } = useGIVpower();
 	const { account } = useWeb3React();
 	const [locksInfo, setLocksInfo] = useState<IGIVpowerPosition[]>([]);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const { stakedAmount } = useGIVpower();
 
 	useEffect(() => {
 		async function fetchGIVLockDetails() {
