@@ -51,6 +51,13 @@ const HeaderRoutesResponsive = () => {
 									title={i.title}
 								/>
 							))}
+							<HeaderChartsItem
+								href={'https://giveth-info.vercel.app/'}
+								target='_blank'
+								rel='noreferrer'
+							>
+								Charts ↗
+							</HeaderChartsItem>
 						</HeaderItems>
 					</DrawerOpened>
 					<CloseButton
@@ -135,6 +142,17 @@ const HeaderItems = styled.div`
 	display: flex;
 	gap: 24px;
 	flex-direction: column;
+`;
+
+const HeaderChartsItem = styled.a`
+	font-weight: 400;
+	font-size: 16px;
+	cursor: pointer;
+	border-radius: 72px;
+
+	:hover {
+		color: ${brandColors.pinky[500]} !important;
+	}
 `;
 
 export default HeaderRoutesResponsive;

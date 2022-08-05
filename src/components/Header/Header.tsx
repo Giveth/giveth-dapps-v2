@@ -27,6 +27,7 @@ import {
 	SmallCreateProjectParent,
 	LargeCreateProject,
 	MainLogoBtn,
+	ExternalLink,
 } from './Header.sc';
 import { RewardMenu } from '@/components/menu/RewardMenu';
 import MenuWallet from '@/components/menu/MenuWallet';
@@ -214,6 +215,16 @@ const Header: FC<IHeader> = () => {
 							</HeaderLink>
 						</Link>
 					))}
+					<HeaderLink
+						size='Big'
+						theme={theme}
+						href={'https://giveth-info.vercel.app/'}
+						target='_blank'
+						rel='noreferrer'
+					>
+						Charts
+						<ExternalLink>↗</ExternalLink>
+					</HeaderLink>
 				</HeaderLinks>
 			)}
 

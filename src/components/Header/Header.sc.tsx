@@ -154,6 +154,7 @@ export const HeaderLinks = styled(Flex)<IThemed>`
 export const HeaderLink = styled(GLink)<IHeaderLinkProps>`
 	padding: 8px 16px 7px;
 	border-radius: 72px;
+	display: flex;
 	background-color: ${props => {
 		if (props.active) {
 			return props.theme === ETheme.Dark
@@ -225,4 +226,8 @@ export const MainLogoBtn = styled.div`
 	${mediaQueries.laptopL} {
 		display: flex;
 	}
+`;
+
+export const ExternalLink = styled.sup`
+	font-weight: 500;
 `;
