@@ -3,6 +3,7 @@ export interface BasicStakingConfig {
 	GARDEN_ADDRESS?: string;
 	BUY_LINK?: string;
 	farmStartTimeMS?: number;
+	icon?: string;
 }
 export enum StakingPlatform {
 	GIVETH = 'Staking',
@@ -10,6 +11,7 @@ export enum StakingPlatform {
 	BALANCER = 'Balancer',
 	HONEYSWAP = 'Honeyswap',
 	SUSHISWAP = 'Sushiswap',
+	ICHI = 'ICHI',
 }
 export enum StakingType {
 	UNISWAPV2_GIV_DAI = 'UniswapV2_GIV_DAI',
@@ -19,6 +21,7 @@ export enum StakingType {
 	HONEYSWAP_GIV_HNY = 'Honeyswap_GIV_HNY',
 	HONEYSWAP_GIV_DAI = 'Honeyswap_GIV_DAI',
 	GIV_LM = 'GIV_LM',
+	ICHI_GIV_ONEGIV = 'Ichi_GIV_oneGIV',
 
 	HONEYSWAP_FOX_HNY = 'Honeyswap_FOX_HNY',
 	UNISWAPV2_CULT_ETH = 'UniswapV2_CULT_ETH',
@@ -38,20 +41,30 @@ export type PoolStakingConfig =
 	| SimplePoolStakingConfig
 	| BalancerPoolStakingConfig
 	| UniswapV3PoolStakingConfig
-	| RegenPoolStakingConfig;
+	| RegenPoolStakingConfig
+	| ICHIPoolStakingConfig;
 
 export interface SimplePoolStakingConfig extends BasicStakingConfig {
 	POOL_ADDRESS: string;
 	type: StakingType;
 	platform: StakingPlatform;
+	platformTitle?: string;
 	title: string;
 	description?: string;
 	provideLiquidityLink?: string;
 	unit: string;
 	active: boolean;
+	archived?: boolean;
+	introCard?: IntroCardConfig;
 }
 
-export interface UniswapV3PoolStakingConfig extends SimplePoolStakingConfig {
+export interface ICHIPoolStakingConfig extends SimplePoolStakingConfig {
+	ichiApi: string;
+	platform: StakingPlatform.ICHI;
+}
+
+export interface UniswapV3PoolStakingConfig
+	extends Omit<SimplePoolStakingConfig, 'LM_ADDRESS' | 'POOL_ADDRESS'> {
 	INCENTIVE_START_TIME: number;
 	INCENTIVE_END_TIME: number;
 	INCENTIVE_REWARD_AMOUNT: number;
@@ -68,7 +81,8 @@ export interface BalancerPoolStakingConfig extends SimplePoolStakingConfig {
 	POOL_ID: string;
 }
 
-export interface RegenFarmIntroConfig {
+export interface IntroCardConfig {
+	icon?: string;
 	title: string;
 	description: string;
 	link: string;
@@ -77,7 +91,6 @@ export interface RegenFarmIntroConfig {
 export interface RegenPoolStakingConfig extends SimplePoolStakingConfig {
 	regenStreamType: StreamType;
 	regenFarmType: RegenFarmType;
-	regenFarmIntro?: RegenFarmIntroConfig;
 }
 
 export interface GasPreference {
@@ -97,6 +110,7 @@ export interface RegenStreamConfig {
 
 export interface BasicNetworkConfig {
 	TOKEN_ADDRESS: string;
+	gGIV_ADDRESS?: string;
 	tokenAddressOnUniswapV2: string; // For price purpose in test env, on production this must have the same value of `TOKEN_ADDRESS`
 	TOKEN_DISTRO_ADDRESS: string;
 	GIV: BasicStakingConfig;
@@ -117,6 +131,7 @@ export interface BasicNetworkConfig {
 		| SimplePoolStakingConfig
 		| BalancerPoolStakingConfig
 		| UniswapV3PoolStakingConfig
+		| ICHIPoolStakingConfig
 	>;
 	uniswapV2Subgraph: string;
 

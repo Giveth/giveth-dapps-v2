@@ -2,7 +2,7 @@ import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import { FC, ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
-import dynamic from 'next/dynamic';
+import Scrollbars from 'react-custom-scrollbars';
 
 import {
 	ModalHeader,
@@ -13,18 +13,15 @@ import { zIndex } from '@/lib/constants/constants';
 import { useAppSelector } from '@/features/hooks';
 import { checkUserAgentIsMobile } from '@/hooks/useDeviceDetect';
 
-const Scrollbars = dynamic(() => import('react-custom-scrollbars'), {
-	ssr: false,
-});
-
 interface ModalWrapperProps {
 	fullScreen?: boolean;
 }
 
 interface IModal extends ModalWrapperProps {
 	fullScreen?: boolean;
-	setShowModal: (value: boolean) => void;
+	closeModal: () => void;
 	callback?: () => void;
+	isAnimating: boolean;
 	hiddenClose?: boolean;
 	hiddenHeader?: boolean;
 	headerTitlePosition?: ModalHeaderTitlePosition;
@@ -32,12 +29,14 @@ interface IModal extends ModalWrapperProps {
 	headerIcon?: ReactNode;
 	customTheme?: ETheme;
 	headerColor?: string;
+	children: React.ReactNode;
 }
 
 export const Modal: FC<IModal> = ({
 	hiddenClose = false,
 	hiddenHeader = false,
-	setShowModal,
+	closeModal,
+	isAnimating,
 	children,
 	headerTitlePosition,
 	headerTitle,
@@ -47,7 +46,6 @@ export const Modal: FC<IModal> = ({
 	headerColor,
 }) => {
 	const theme = useAppSelector(state => state.general.theme);
-
 	const el = useRef(document.createElement('div'));
 
 	useEffect(() => {
@@ -72,7 +70,7 @@ export const Modal: FC<IModal> = ({
 
 	const handleKeyDown = (e: KeyboardEvent) => {
 		if (e.key === 'Escape') {
-			setShowModal(false);
+			closeModal();
 		}
 	};
 
@@ -83,15 +81,18 @@ export const Modal: FC<IModal> = ({
 	};
 
 	return createPortal(
-		<Background onClick={e => e.stopPropagation()}>
-			<Surrounding onClick={() => setShowModal(false)} />
+		<Background
+			isAnimating={isAnimating}
+			onClick={e => e.stopPropagation()}
+		>
+			<Surrounding onClick={closeModal} />
 			<ModalWrapper fullScreen={fullScreen} theme={customTheme || theme}>
 				<ModalHeader
 					hiddenClose={hiddenClose}
 					hiddenHeader={hiddenHeader}
 					title={headerTitle}
 					icon={headerIcon}
-					closeModal={() => setShowModal(false)}
+					closeModal={closeModal}
 					position={headerTitlePosition}
 					color={headerColor}
 				/>
@@ -115,7 +116,7 @@ const Surrounding = styled.div`
 	height: 100%;
 `;
 
-const Background = styled.div`
+const Background = styled.div<{ isAnimating: boolean }>`
 	width: 100%;
 	height: 100%;
 	background: ${brandColors.giv[900]}b3;
@@ -126,6 +127,8 @@ const Background = styled.div`
 	top: 0;
 	left: 0;
 	z-index: ${zIndex.MODAL};
+	opacity: ${props => (props.isAnimating ? 0 : 1)};
+	transition: opacity 0.3s ease;
 `;
 
 const ModalWrapper = styled.div<ModalWrapperProps>`

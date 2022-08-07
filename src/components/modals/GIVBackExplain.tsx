@@ -14,10 +14,13 @@ import { Flex } from '../styled-components/Flex';
 import { Modal } from './Modal';
 import links from '@/lib/constants/links';
 import { IModal } from '@/types/common';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 export const GIVBackExplainModal: FC<IModal> = ({ setShowModal }) => {
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+
 	return (
-		<Modal setShowModal={setShowModal}>
+		<Modal closeModal={closeModal} isAnimating={isAnimating}>
 			<GIVBackExplainContainer>
 				<TitleRow alignItems='center' justifyContent='center'>
 					<IconGIVBack size={24} />
@@ -32,7 +35,7 @@ export const GIVBackExplainModal: FC<IModal> = ({ setShowModal }) => {
 				</Desc>
 				<LinksRow alignItems='center' justifyContent='center'>
 					<GLink
-						onClick={() => setShowModal(false)}
+						onClick={closeModal}
 						target='_blank'
 						href={links.GIVBACK_DOC}
 					>
@@ -45,12 +48,7 @@ export const GIVBackExplainModal: FC<IModal> = ({ setShowModal }) => {
 						</LinksRow>
 					</GLink>
 				</LinksRow>
-				<GotItButton
-					label='GOT IT'
-					onClick={() => {
-						setShowModal(false);
-					}}
-				/>
+				<GotItButton label='GOT IT' onClick={closeModal} />
 			</GIVBackExplainContainer>
 		</Modal>
 	);

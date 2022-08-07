@@ -17,6 +17,7 @@ import { IModal } from '@/types/common';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { signToGetToken } from '@/features/user/user.thunks';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 interface IProps extends IModal {
 	callback?: () => void;
@@ -26,12 +27,13 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 	const theme = useAppSelector(state => state.general.theme);
 	const { account, library, chainId } = useWeb3React();
 	const router = useRouter();
-
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const dispatch = useAppDispatch();
 
 	return (
 		<Modal
-			setShowModal={setShowModal}
+			closeModal={closeModal}
+			isAnimating={isAnimating}
 			headerIcon={<IconWalletApprove />}
 			headerTitle='Sign Wallet'
 			headerTitlePosition='left'
@@ -59,14 +61,14 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 								pathname: router.pathname,
 							}),
 						);
-						setShowModal(false);
+						closeModal();
 						!!signature && callback && callback();
 					}}
 					buttonType={theme === ETheme.Dark ? 'secondary' : 'primary'}
 				/>
 				<SkipButton
 					label='SKIP FOR NOW'
-					onClick={() => setShowModal(false)}
+					onClick={closeModal}
 					buttonType='texty'
 				/>
 			</Container>

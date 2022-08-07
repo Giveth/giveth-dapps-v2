@@ -11,7 +11,11 @@ import { useWeb3React } from '@web3-react/core';
 import { Flex } from '@/components/styled-components/Flex';
 import StakingPoolCard from '@/components/cards/StakingPoolCard';
 import config from '@/configuration';
-import { BasicNetworkConfig, StakingType } from '@/types/config';
+import {
+	BasicNetworkConfig,
+	SimplePoolStakingConfig,
+	StakingType,
+} from '@/types/config';
 import {
 	GIVfarmTopContainer,
 	Subtitle,
@@ -23,7 +27,7 @@ import {
 	GIVfarmBottomContainer,
 	ArchivedPoolsToggle,
 } from './GIVfarm.sc';
-import RadioTitle from '@/components/views/donate/RadioTitle';
+import RadioButton from '@/components/RadioButton';
 import { NetworkSelector } from '@/components/NetworkSelector';
 import StakingPositionCard from '@/components/cards/StakingPositionCard';
 import { getGivStakingConfig } from '@/helpers/networkProvider';
@@ -48,13 +52,22 @@ const renderPools = (
 	showArchivedPools?: boolean,
 ) => {
 	return pools
-		.filter(p => (showArchivedPools ? true : p.active))
+		.filter(p => (showArchivedPools ? true : p.active && !p.archived))
 		.map((poolStakingConfig, idx) => ({ poolStakingConfig, idx }))
 		.sort(
 			(
-				{ idx: idx1, poolStakingConfig: { active: active1 } },
-				{ idx: idx2, poolStakingConfig: { active: active2 } },
-			) => +active2 - +active1 || idx1 - idx2,
+				{
+					idx: idx1,
+					poolStakingConfig: { active: active1, archived: archived1 },
+				},
+				{
+					idx: idx2,
+					poolStakingConfig: { active: active2, archived: archived2 },
+				},
+			) =>
+				+active2 - +active1 ||
+				+!!archived2 - +!!archived1 ||
+				idx1 - idx2,
 		)
 		.map(({ poolStakingConfig }, index) => {
 			return (
@@ -72,7 +85,9 @@ const renderPools = (
 						<StakingPoolCard
 							key={`staking_pool_card_${network}_${index}`}
 							network={network}
-							poolStakingConfig={poolStakingConfig}
+							poolStakingConfig={
+								poolStakingConfig as SimplePoolStakingConfig
+							}
 						/>
 					)}
 				</Col>
@@ -188,7 +203,7 @@ export const TabGIVfarmBottom = () => {
 					</ContractRow>
 				</Flex>
 				<ArchivedPoolsToggle>
-					<RadioTitle
+					<RadioButton
 						title='Show archived pools'
 						toggleRadio={() => setArchivedPools(!showArchivedPools)}
 						isSelected={showArchivedPools}

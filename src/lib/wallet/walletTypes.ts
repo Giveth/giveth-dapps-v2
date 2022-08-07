@@ -1,21 +1,23 @@
 import { InjectedConnector } from '@web3-react/injected-connector';
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
+import { SafeAppConnector } from '@gnosis.pm/safe-apps-web3-react';
 // import { PortisConnector } from '@web3-react/portis-connector';
 // import { FortmaticConnector } from '@web3-react/fortmatic-connector';
 // import { AuthereumConnector } from '@web3-react/authereum-connector';
 import metamaskIcon from '/public//images/wallets/metamask.svg';
 import walletConnectIcon from '/public//images/wallets/walletconnect.svg';
+import torusIcon from '/public//images/wallets/torus.svg';
+import gnosisIcon from '/public//images/wallets/gnosis.svg';
+// import authereumIcon from '/public//images/wallets/authereum.svg';
 // import portisIcon from '/public//images/wallets/portis.svg';
 // import fortmaticIcon from '/public//images/wallets/fortmatic.svg';
-import torusIcon from '/public//images/wallets/torus.svg';
-// import authereumIcon from '/public//images/wallets/authereum.svg';
 import { Web3ReactContextInterface } from '@web3-react/core/dist/types';
 import { TorusConnector } from '@/lib/wallet/torus-connector';
 import config from '@/configuration';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 
-const supportedChainIds = [1, 3, 4, 5, 42, 100];
+const supportedChainIds = [1, 3, 4, 5, 42, 100, 137];
 
 export const injectedConnector = new InjectedConnector({ supportedChainIds });
 export const walletconnectConnector = new WalletConnectConnector({
@@ -27,6 +29,7 @@ export const walletconnectConnector = new WalletConnectConnector({
 		[config.XDAI_NETWORK_NUMBER]: config.XDAI_CONFIG.nodeUrl,
 	},
 });
+export const gnosisSafeConnector = new SafeAppConnector();
 // export const portisConnector = new PortisConnector({
 // 	dAppId: process.env.PORTIS_DAPP_ID as string,
 // 	networks: [1, 3, 100],
@@ -45,7 +48,10 @@ export type TWalletConnector =
 	// | PortisConnector
 	// | FortmaticConnector
 	// | AuthereumConnector,
-	InjectedConnector | WalletConnectConnector | TorusConnector;
+	| InjectedConnector
+	| WalletConnectConnector
+	| TorusConnector
+	| SafeAppConnector;
 
 export enum EWallets {
 	METAMASK = 'metamask',
@@ -54,6 +60,7 @@ export enum EWallets {
 	FORTMATIC = 'fortmatic',
 	TORUS = 'torus',
 	AUTHEREUM = 'authereum',
+	GNOSISSAFE = 'gnosis safe',
 }
 
 export interface IWallet {
@@ -84,6 +91,12 @@ export const walletsArray: IWallet[] = [
 		connector: walletconnectConnector,
 	},
 	torusWallet,
+	{
+		name: 'GnosisSafe',
+		value: EWallets.GNOSISSAFE,
+		image: gnosisIcon,
+		connector: gnosisSafeConnector,
+	},
 	// {
 	// 	name: 'Portis',
 	// 	value: EWallets.PORTIS,
@@ -108,9 +121,10 @@ export const useWalletName = (Web3ReactContext: Web3ReactContextInterface) => {
 	const { library, connector } = Web3ReactContext;
 	if (connector instanceof WalletConnectConnector)
 		return EWallets.WALLETCONNECT;
+	if (connector instanceof TorusConnector) return EWallets.TORUS;
+	if (connector instanceof SafeAppConnector) return EWallets.GNOSISSAFE;
 	// if (connector instanceof PortisConnector) return EWallets.PORTIS;
 	// if (connector instanceof FortmaticConnector) return EWallets.FORTMATIC;
-	if (connector instanceof TorusConnector) return EWallets.TORUS;
 	// if (connector instanceof AuthereumConnector) return EWallets.AUTHEREUM;
 	return library?.connection?.url;
 };

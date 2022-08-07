@@ -39,7 +39,7 @@ const config: EnvConfig = {
 		blockExplorerName: ['Etherscan'],
 		blockExplorerUrls: ['https://kovan.etherscan.io'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-kovan-staging',
+			'https://api.thegraph.com/subgraphs/name/mohammadranjbarz/giv-economy-kovan',
 
 		TOKEN_ADDRESS: '0x29434A25abd94AE882aA883eea81585Aaa5b078D',
 		tokenAddressOnUniswapV2: '0x900db999074d9277c5da2a43f252d74366230da0',
@@ -82,6 +82,27 @@ const config: EnvConfig = {
 				active: true,
 			},
 			{
+				POOL_ADDRESS: '0xA0D500fd3479CBCb64a2238082b7a1Df9f87d98D',
+				LM_ADDRESS: '0x7CD371D230338C74563A9A23AF72dd009a7D1b1C',
+				type: StakingType.ICHI_GIV_ONEGIV,
+				platform: StakingPlatform.ICHI,
+				ichiApi: 'https://api.ichi.org/v1/farms/20009',
+				platformTitle: 'Angel Vault',
+				title: 'oneGIV / GIV',
+				description: 'Angel Vault',
+				provideLiquidityLink:
+					'https://3ea0967f.appichiorg.pages.dev/vault/?poolId=5004&back=vault',
+				unit: 'LP',
+				active: true,
+				farmStartTimeMS: 1659366000000,
+				introCard: {
+					icon: 'angelVault',
+					title: 'Angel Vault',
+					description: `The Angel Vault is shared Univ3 position structured to protect GIV from downward volatility.\n\nProvide oneGIV as liquidity in our Angel Vault and stake the LP token to earn rewards proportional to the liquidity provided. When you remove liquidity, you will get oneGIV & GIV proportional to the holdings in the Angel Vault.`,
+					link: 'https://docs.ichi.org/ichi-docs-v3/ichi-vaults/angel-vaults',
+				},
+			},
+			{
 				INCENTIVE_START_TIME: 1640272200,
 				INCENTIVE_END_TIME: 1655997000,
 				INCENTIVE_REWARD_AMOUNT: 10000000,
@@ -95,8 +116,6 @@ const config: EnvConfig = {
 					'0x3c2455a3ee0d824941c9329c01a66b86078c3e82',
 				INCENTIVE_REFUNDEE_ADDRESS:
 					'0x5f672d71399d8cDbA64f596394b4f4381247E025',
-				POOL_ADDRESS: '0xa48C26fF05F47a2eEd88C09664de1cb604A21b01',
-				LM_ADDRESS: '0x1aD46D40648639f84a396Fef32132888038c5aA8',
 				type: StakingType.UNISWAPV3_ETH_GIV,
 				platform: StakingPlatform.UNISWAP,
 				title: 'GIV / ETH',
@@ -135,7 +154,7 @@ const config: EnvConfig = {
 				unit: 'LP',
 				regenStreamType: StreamType.CULT,
 				regenFarmType: RegenFarmType.CULT_ETH,
-				regenFarmIntro: {
+				introCard: {
 					title: 'CULT',
 					description: `The purpose of CULT is to empower those building and contributing to our decentralized future. Our society makes it as difficult as possible to break away from societal, economic and other norms, and CULT serves to fund and support those who are working to take back our future. CULT is a reminder that the power in people is stronger than the people in power.\n\n CULT is the governance token of the Cult DAO. Every transaction of the CULT token allows you to contribute & fast-forward economic & societal change by contributing a 0.4% tax to the treasury. Fight from within until you get out, or change the system in doing so.`,
 					link: 'https://cultdao.io/',
@@ -163,9 +182,10 @@ const config: EnvConfig = {
 		blockExplorerName: ['Blockscout'],
 		blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-xdai-staging',
+			'https://api.thegraph.com/subgraphs/name/aminlatifi/giveconomy-xdai-deployment-seven',
 
 		TOKEN_ADDRESS: '0x83a8eea6427985C523a0c4d9d3E62C051B6580d3',
+		gGIV_ADDRESS: '0x4Bee761229AD815Cc64461783580F629dA0f0350',
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		MERKLE_ADDRESS: '0xc87403C70c9FBfb594d98d3B5E695BBE4C694188',
 		TOKEN_DISTRO_ADDRESS: '0x18a46865AAbAf416a970eaA8625CFC430D2364A1',
@@ -191,6 +211,7 @@ const config: EnvConfig = {
 					'https://app.honeyswap.org/#/add/0x83a8eea6427985C523a0c4d9d3E62C051B6580d3/0x69F79C9eA174d4659B18c7993c7EFbBbB58cF068',
 				unit: 'LP',
 				active: true,
+				archived: true,
 			},
 			{
 				POOL_ADDRESS: '0x437B0da7932b21F54488fD80Ee09b519a6f4d8AD',
@@ -248,7 +269,7 @@ const config: EnvConfig = {
 				unit: 'LP',
 				regenStreamType: StreamType.FOX,
 				regenFarmType: RegenFarmType.FOX_HNY,
-				regenFarmIntro: {
+				introCard: {
 					title: 'FOX',
 					description:
 						'ShapeShift is the free and open-source one-stop-shop for cross-chain DeFi. Buy, sell, send, receive, trade, and earn yield on your crypto across a growing number of protocols and chains with no added fees ever. FOX is the governance token of the ShapeShift DAO.',

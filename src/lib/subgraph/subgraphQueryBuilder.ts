@@ -1,7 +1,5 @@
 import {
 	BasicNetworkConfig,
-	RegenPoolStakingConfig,
-	RegenStreamConfig,
 	SimplePoolStakingConfig,
 	StakingType,
 	UniswapV3PoolStakingConfig,
@@ -14,57 +12,43 @@ const uniswapConfig = config.MAINNET_CONFIG.pools.find(
 ) as UniswapV3PoolStakingConfig;
 
 export class SubgraphQueryBuilder {
-	static getBalanceQuery = (address: string): string => {
-		return `balance(id: "${address.toLowerCase()}") {
+	private static getTokenBalanceQuery = (
+		tokenAddress: string,
+		userAddress?: string,
+	): string => {
+		if (!userAddress) return '';
+		return `tokenBalance_${tokenAddress.toLowerCase()}: tokenBalance(id: "${tokenAddress.toLowerCase()}-${userAddress.toLowerCase()}"){
 			balance
-			allocatedTokens
-			claimed
-			rewardPerTokenPaidGivLm
-			rewardsGivLm
-			rewardPerTokenPaidSushiSwap
-			rewardsSushiSwap
-			rewardPerTokenPaidHoneyswap
-			rewardsHoneyswap
-			rewardPerTokenPaidHoneyswapGivDai
-			rewardsHoneyswapGivDai
-			rewardPerTokenPaidBalancer
-			rewardsBalancer
-			rewardPerTokenPaidUniswapV2GivDai
-			rewardsUniswapV2GivDai
-			givback
-			givbackLiquidPart
-			balancerLp
-			balancerLpStaked
-			uniswapV2GivDaiLp
-			uniswapV2GivDaiLpStaked
-			sushiswapLp
-			sushiSwapLpStaked
-			honeyswapLp 
-			honeyswapLpStaked 
-			honeyswapGivDaiLp 
-			honeyswapGivDaiLpStaked 
-			givStaked
-			allocationCount
-			givDropClaimed
-			
-			foxAllocatedTokens
-			foxClaimed
-			rewardPerTokenPaidFoxHnyLm
-			rewardsFoxHnyLm
-			foxHnyLp
-			foxHnyLpStaked
-
-			cultAllocatedTokens
-			cultClaimed
-			rewardPerTokenPaidCultEthLm
-			rewardsCultEthLm
-			cultEthLp
-			cultEthLpStaked	
-		}`;
+		}
+		`;
 	};
 
-	private static getTokenDistroInfoQuery = (address: string): string => {
-		return `tokenDistroContractInfo(id: "${address.toLowerCase()}"){
+	static getBalanceQuery = (
+		{ TOKEN_ADDRESS, gGIV_ADDRESS }: BasicNetworkConfig,
+		userAddress?: string,
+	): string => {
+		if (!userAddress) return '';
+		let query = SubgraphQueryBuilder.getTokenBalanceQuery(
+			TOKEN_ADDRESS,
+			userAddress,
+		);
+
+		if (gGIV_ADDRESS) {
+			query += SubgraphQueryBuilder.getTokenBalanceQuery(
+				gGIV_ADDRESS,
+				userAddress,
+			);
+		}
+
+		return query;
+	};
+
+	private static getTokenDistroQueries = (
+		tokenDistroAddress: string,
+		userAddress?: string,
+	): string => {
+		return `
+		tokenDistro_${tokenDistroAddress.toLowerCase()}: tokenDistro(id: "${tokenDistroAddress.toLowerCase()}") {
 		  id
 		  initialAmount
 		  duration
@@ -73,40 +57,40 @@ export class SubgraphQueryBuilder {
 		  lockedAmount
 		  totalTokens
 		}
-		`;
-	};
-
-	private static generateTokenDistroInfoQueries = (
-		networkConfig: BasicNetworkConfig,
-	): string => {
-		const mainTokenDistroQuery = `
-		tokenDistroInfo: ${SubgraphQueryBuilder.getTokenDistroInfoQuery(
-			networkConfig.TOKEN_DISTRO_ADDRESS,
-		)}
-		`;
-
-		const regenFarmsTokenDistroQueries = networkConfig.regenStreams
-			.map((regenStream: RegenStreamConfig) => {
-				return `
-			${regenStream.type}: ${SubgraphQueryBuilder.getTokenDistroInfoQuery(
-					regenStream.tokenDistroAddress,
-				)}
-			`;
-			})
-			.join();
-
-		return mainTokenDistroQuery + regenFarmsTokenDistroQueries;
-	};
-
-	private static getUnipoolInfoQuery = (address: string): string => {
-		return `unipoolContractInfo(id: "${address.toLowerCase()}"){
-			totalSupply
-			lastUpdateTime
-			periodFinish
-			rewardPerTokenStored
-			rewardRate
+		${
+			userAddress
+				? `tokenDistroBalance_${tokenDistroAddress.toLowerCase()}: tokenDistroBalance(id: "${tokenDistroAddress.toLowerCase()}-${userAddress.toLowerCase()}") {
+			allocatedTokens
+			allocationCount
+			claimed
+			givback
+			givDropClaimed
+			givbackLiquidPart
+			tokenDistroAddress
+		}`
+				: ``
 		}
+		
 		`;
+	};
+
+	private static generateTokenDistroQueries = (
+		networkConfig: BasicNetworkConfig,
+		userAddress?: string,
+	): string => {
+		return [
+			networkConfig.TOKEN_DISTRO_ADDRESS,
+			...networkConfig.regenStreams.map(c => {
+				return c.tokenDistroAddress;
+			}),
+		]
+			.map(tokenDistroAddress =>
+				SubgraphQueryBuilder.getTokenDistroQueries(
+					tokenDistroAddress,
+					userAddress,
+				),
+			)
+			.join();
 	};
 
 	private static getUniswapV3PoolQuery = (address: string): string => {
@@ -119,26 +103,31 @@ export class SubgraphQueryBuilder {
 		}`;
 	};
 
-	private static getUniswapPositionsQuery = (address: string): string => {
-		const userPositionsQuery = `userNotStakedPositions: uniswapPositions(where:{owner: "${address.toLowerCase()}",closed:false}){
-			tokenId
-			token0
-			token1
-			liquidity
-			tickLower
-			tickUpper
-			staked
-			staker
-		}
-		userStakedPositions: uniswapPositions(where:{staker: "${address.toLowerCase()}"}){
-			tokenId
-			token0
-			token1
-			liquidity
-			tickLower
-			tickUpper
-			staked
-			staker
+	private static getUniswapPositionsQuery = (address?: string): string => {
+		const userPositionsQuery = `
+		${
+			address
+				? `userNotStakedPositions: uniswapPositions(where:{owner: "${address.toLowerCase()}",closed:false}){
+				tokenId
+				token0
+				token1
+				liquidity
+				tickLower
+				tickUpper
+				staked
+				staker
+			}
+			userStakedPositions: uniswapPositions(where:{staker: "${address.toLowerCase()}"}){
+				tokenId
+				token0
+				token1
+				liquidity
+				tickLower
+				tickUpper
+				staked
+				staker
+			}`
+				: ''
 		}
 		allPositions: uniswapPositions(first: 1000, where: {closed:false}){
 			tokenId
@@ -187,54 +176,88 @@ export class SubgraphQueryBuilder {
 		`;
 	};
 
-	private static generateUnipoolInfoQueries = (
-		configs: Array<SimplePoolStakingConfig | RegenPoolStakingConfig>,
+	private static generateFarmingQueries = (
+		configs: Array<SimplePoolStakingConfig>,
+		userAddress?: string,
 	): string => {
 		return configs
-			.map((c: SimplePoolStakingConfig | RegenPoolStakingConfig) => {
-				const { regenFarmType, type } = c as RegenPoolStakingConfig;
-				return `${
-					regenFarmType || type
-				}: ${SubgraphQueryBuilder.getUnipoolInfoQuery(c.LM_ADDRESS)}`;
+			.map((c: SimplePoolStakingConfig) => {
+				const unipoolAddressLowerCase = c.LM_ADDRESS.toLowerCase();
+				return (
+					`
+				unipool_${unipoolAddressLowerCase}: unipool(id: "${unipoolAddressLowerCase}") {
+					totalSupply
+					lastUpdateTime
+					periodFinish
+					rewardPerTokenStored
+					rewardRate
+				}
+				${
+					userAddress
+						? `unipoolBalance_${unipoolAddressLowerCase}: unipoolBalance(id: "${unipoolAddressLowerCase}-${userAddress.toLowerCase()}"){
+					id
+					balance
+					rewards
+					rewardPerTokenPaid
+				}`
+						: ''
+				}` +
+					SubgraphQueryBuilder.getTokenBalanceQuery(
+						c.POOL_ADDRESS,
+						userAddress,
+					)
+				);
 			})
 			.join();
 	};
 
-	static getMainnetQuery = (address: string): string => {
+	static getMainnetQuery = (userAddress?: string): string => {
 		const uniswapConfig = config.MAINNET_CONFIG.pools.find(
 			c => c.type === StakingType.UNISWAPV3_ETH_GIV,
 		) as UniswapV3PoolStakingConfig;
 
 		return `
 		{
-			balances: ${SubgraphQueryBuilder.getBalanceQuery(address)}
-			${SubgraphQueryBuilder.generateTokenDistroInfoQueries(config.MAINNET_CONFIG)}
-			${SubgraphQueryBuilder.generateUnipoolInfoQueries([
-				getGivStakingConfig(config.MAINNET_CONFIG),
-				...config.MAINNET_CONFIG.pools.filter(
-					c => c.type !== StakingType.UNISWAPV3_ETH_GIV,
-				),
-				...config.MAINNET_CONFIG.regenFarms,
-				...config.XDAI_CONFIG.regenFarms,
-			])}
+			${SubgraphQueryBuilder.getBalanceQuery(config.MAINNET_CONFIG, userAddress)}
+			${SubgraphQueryBuilder.generateTokenDistroQueries(
+				config.MAINNET_CONFIG,
+				userAddress,
+			)}
+			${SubgraphQueryBuilder.generateFarmingQueries(
+				[
+					getGivStakingConfig(config.MAINNET_CONFIG),
+					...(config.MAINNET_CONFIG.pools.filter(
+						c => c.type !== StakingType.UNISWAPV3_ETH_GIV,
+					) as Array<SimplePoolStakingConfig>),
+					...config.MAINNET_CONFIG.regenFarms,
+				],
+				userAddress,
+			)}
 			uniswapV3Pool: ${SubgraphQueryBuilder.getUniswapV3PoolQuery(
 				uniswapConfig.UNISWAP_V3_LP_POOL,
 			)}
-			${SubgraphQueryBuilder.getUniswapPositionsQuery(address)}
+			${SubgraphQueryBuilder.getUniswapPositionsQuery(userAddress)}
 		}
 		`;
 	};
 
-	static getXDaiQuery = (address: string): string => {
+	static getXDaiQuery = (userAddress?: string): string => {
 		return `
 		{
-			balances: ${SubgraphQueryBuilder.getBalanceQuery(address)}
-			${SubgraphQueryBuilder.generateTokenDistroInfoQueries(config.XDAI_CONFIG)}
-			${SubgraphQueryBuilder.generateUnipoolInfoQueries([
-				getGivStakingConfig(config.XDAI_CONFIG),
-				...config.XDAI_CONFIG.pools,
-				...config.XDAI_CONFIG.regenFarms,
-			])}
+			${SubgraphQueryBuilder.getBalanceQuery(config.XDAI_CONFIG, userAddress)}
+			${SubgraphQueryBuilder.generateTokenDistroQueries(
+				config.XDAI_CONFIG,
+				userAddress,
+			)}
+			${SubgraphQueryBuilder.generateFarmingQueries(
+				[
+					getGivStakingConfig(config.XDAI_CONFIG),
+					...(config.XDAI_CONFIG
+						.pools as Array<SimplePoolStakingConfig>),
+					...config.XDAI_CONFIG.regenFarms,
+				],
+				userAddress,
+			)}
 		}
 		`;
 	};

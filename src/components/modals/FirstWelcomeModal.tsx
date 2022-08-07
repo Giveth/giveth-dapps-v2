@@ -1,21 +1,18 @@
 import { FC, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
-import {
-	P,
-	H5,
-	Button,
-	Lead,
-	neutralColors,
-	brandColors,
-} from '@giveth/ui-design-system';
+import { H5, Button, Lead, brandColors } from '@giveth/ui-design-system';
 
+import { IconDonation } from '@giveth/ui-design-system/lib/cjs/components/icons/Donation';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 import Routes from '@/lib/constants/Routes';
 import StorageLabel from '@/lib/localStorage';
+import { Bullets } from '@/components/styled-components/Bullets';
+import ExternalLink from '@/components/ExternalLink';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 interface IText {
 	isDark?: boolean;
@@ -24,6 +21,7 @@ interface IText {
 export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
 	const theme = useAppSelector(state => state.general.theme);
 	const router = useRouter();
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	useEffect(() => {
 		localStorage.setItem(StorageLabel.FIRSTMODALSHOWED, '1');
@@ -31,8 +29,9 @@ export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
 
 	return (
 		<Modal
-			setShowModal={setShowModal}
-			headerIcon={<img src='/images/icons/donate.svg' />}
+			closeModal={closeModal}
+			isAnimating={isAnimating}
+			headerIcon={<IconDonation />}
 			headerTitle={`Let's Donate`}
 			headerTitlePosition='left'
 		>
@@ -42,84 +41,69 @@ export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
 				</Title>
 				<LeadTitle>You can use Giveth to:</LeadTitle>
 				<Bullets>
-					<li>
-						<Paragraph isDark={theme === ETheme.Dark}>
-							Donate to awesome for-good{' '}
-							<InlineLink
-								target='_blank'
-								rel={'noopener noreferrer'}
-								href={Routes.Project}
-							>
-								{' '}
-								projects
-							</InlineLink>
-							.
-						</Paragraph>
-					</li>
-					<li>
-						<Paragraph isDark={theme === ETheme.Dark}>
-							<InlineLink
-								target='_blank'
-								rel={'noopener noreferrer'}
-								href={Routes.CreateProject}
-							>
-								Create a project
-							</InlineLink>{' '}
-							&amp; start raising funds for your cause.
-						</Paragraph>
-					</li>
-					<li>
-						<Paragraph isDark={theme === ETheme.Dark}>
-							Earn GIV from{' '}
-							<InlineLink
-								target='_blank'
-								rel={'noopener noreferrer'}
-								href={Routes.GIVbacks}
-							>
-								GIVbacks
-							</InlineLink>{' '}
-							when you donate to verified{' '}
-							<InlineLink
-								target='_blank'
-								rel={'noopener noreferrer'}
-								href={Routes.Projects}
-							>
-								projects
-							</InlineLink>
-							.
-						</Paragraph>
-					</li>
-					<li>
-						<Paragraph isDark={theme === ETheme.Dark}>
-							Earn a yield by staking tokens in the{' '}
-							<InlineLink
-								target='_blank'
-								rel={'noopener noreferrer'}
-								href={Routes.GIVfarm}
-							>
-								GIVfarm
-							</InlineLink>
-							.
-						</Paragraph>
-					</li>
+					<Paragraph isDark={theme === ETheme.Dark}>
+						Donate to awesome for-good{' '}
+						<ExternalLink
+							href={Routes.Projects}
+							title='projects'
+							color={brandColors.pinky[500]}
+						/>
+						.
+					</Paragraph>
+					<Paragraph isDark={theme === ETheme.Dark}>
+						<ExternalLink
+							href={Routes.CreateProject}
+							title='Create a project '
+							color={brandColors.pinky[500]}
+						/>
+						&amp; start raising funds for your cause.
+					</Paragraph>
+					<Paragraph isDark={theme === ETheme.Dark}>
+						Earn GIV from{' '}
+						<ExternalLink
+							href={Routes.GIVbacks}
+							title='GIVbacks'
+							color={brandColors.pinky[500]}
+						/>{' '}
+						when you donate to verified{' '}
+						<ExternalLink
+							href={Routes.Projects}
+							title='projects'
+							color={brandColors.pinky[500]}
+						/>
+						.
+					</Paragraph>
+					<Paragraph isDark={theme === ETheme.Dark}>
+						Earn a yield by staking tokens in the{' '}
+						<ExternalLink
+							href={Routes.GIVfarm}
+							title='GIVfarm'
+							color={brandColors.pinky[500]}
+						/>
+						.
+					</Paragraph>
 				</Bullets>
-				<DonateButton
-					label='Donate to a project'
-					onClick={() => {
-						router.push('/projects');
-						setShowModal(false);
-					}}
-					buttonType={theme === ETheme.Dark ? 'secondary' : 'primary'}
-				/>
+				<Buttons>
+					<DonateButton
+						label='Donate to a project'
+						onClick={() => {
+							router.push(Routes.Projects);
+							closeModal();
+						}}
+						buttonType={
+							theme === ETheme.Dark ? 'secondary' : 'primary'
+						}
+					/>
+					<Button
+						buttonType='texty'
+						label='CLOSE'
+						onClick={closeModal}
+					/>
+				</Buttons>
 			</Container>
 		</Modal>
 	);
 };
-
-const InlineLink = styled.a`
-	color: ${brandColors.pinky[500]};
-	cursor: pointer;
-`;
 
 const Title = styled(H5)`
 	color: ${(prop: IText) => (prop.isDark ? 'white' : brandColors.deep[900])};
@@ -134,7 +118,13 @@ const LeadTitle = styled(Lead)`
 const DonateButton = styled(Button)`
 	width: 300px;
 	height: 48px;
-	margin: 48px auto 0;
+`;
+
+const Buttons = styled.div`
+	padding-top: 20px;
+	> * {
+		margin: 20px auto 0;
+	}
 `;
 
 const Container = styled.div`
@@ -143,18 +133,7 @@ const Container = styled.div`
 	padding: 26px 33px;
 `;
 
-const Bullets = styled.ul`
-	padding-left: 17px;
-	list-style-image: url('/images/bullet_tiny.svg');
-	display: flex;
-	flex-direction: column;
-	margin-bottom: 30px;
-	li {
-		margin: 8px 0;
-		color: ${neutralColors.gray[900]};
-	}
-`;
-
-const Paragraph = styled(P)`
+const Paragraph = styled.li`
 	color: ${(prop: IText) => (prop.isDark ? 'white' : brandColors.deep[900])};
+	font-size: 20px;
 `;

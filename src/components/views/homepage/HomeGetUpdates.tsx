@@ -58,7 +58,7 @@ const HomeGetUpdates = () => {
 				</P>
 				{!successSubscription && (
 					<form
-						action='http://news.giveth.io/add_subscriber'
+						action='https://www.getrevue.co/profile/giveth/add_subscriber'
 						method='post'
 						id='revue-form'
 						name='revue-form'
@@ -70,9 +70,7 @@ const HomeGetUpdates = () => {
 								<EmailInput
 									placeholder='Your email address'
 									error={error}
-									onChange={(
-										e: React.ChangeEvent<HTMLInputElement>,
-									) => setEmail(e.target.value)}
+									onChange={e => setEmail(e.target.value)}
 									name='member[email]'
 									id='member_email'
 								/>
@@ -85,6 +83,7 @@ const HomeGetUpdates = () => {
 							<SubscribeButton
 								disabled={!validateEmail(email)}
 								label='SUBSCRIBE'
+								type='submit'
 							/>
 						</InputBox>
 					</form>

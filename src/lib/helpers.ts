@@ -1,7 +1,7 @@
 import { promisify } from 'util';
 // eslint-disable-next-line import/named
 import { unescape } from 'lodash';
-import { parseUnits, parseEther } from '@ethersproject/units';
+import { parseEther, parseUnits } from '@ethersproject/units';
 import { keccak256 } from '@ethersproject/keccak256';
 import { Contract } from '@ethersproject/contracts';
 import { Web3Provider } from '@ethersproject/providers';
@@ -20,6 +20,7 @@ import { gToast, ToastType } from '@/components/toasts';
 import StorageLabel from '@/lib/localStorage';
 import { networksParams } from '@/helpers/blockchain';
 import config from '@/configuration';
+import { ERC20 } from '@/types/contracts';
 
 declare let window: any;
 
@@ -192,9 +193,13 @@ export async function sendTransaction(
 		const fromSigner = web3.getSigner();
 		if (contractAddress && contractAddress !== AddressZero) {
 			// ERC20 TRANSFER
-			const contract = new Contract(contractAddress, abi, fromSigner);
-			const decimals = await contract.decimals.call();
-			txParams.value = parseUnits(params.value, parseInt(decimals));
+			const contract = new Contract(
+				contractAddress,
+				abi,
+				fromSigner,
+			) as ERC20;
+			const decimals = await contract.decimals();
+			txParams.value = parseUnits(params.value, decimals);
 			tx = await contract.transfer(txParams.to, txParams.value);
 		} else {
 			// REGULAR ETH TRANSFER
@@ -437,3 +442,7 @@ export const createSiweMessage = async (
 		return false;
 	}
 };
+
+export function isObjEmpty(obj: Object) {
+	return Object.keys(obj).length > 0;
+}

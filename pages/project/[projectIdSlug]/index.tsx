@@ -1,12 +1,12 @@
-import { captureException } from '@sentry/nextjs';
+import { FC } from 'react';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
-import { IProject } from '@/apollo/types/types';
 
 import ProjectIndex from '@/components/views/project/ProjectIndex';
+import { IProjectBySlug } from '@/apollo/types/gqlTypes';
 
-const ProjectRoute = (props: { project?: IProject }) => {
-	return <ProjectIndex project={props.project} />;
+const ProjectRoute: FC<IProjectBySlug> = ({ project }) => {
+	return <ProjectIndex project={project} />;
 };
 
 export async function getServerSideProps(props: {
@@ -27,18 +27,9 @@ export async function getServerSideProps(props: {
 				project: data.projectBySlug,
 			},
 		};
-	} catch (e) {
-		console.log({ e });
-		captureException(e, {
-			tags: {
-				section: 'ProjectSSR',
-			},
-		});
+	} catch (error) {
 		return {
-			redirect: {
-				destination: '/maintenance',
-				permanent: false,
-			},
+			props: {},
 		};
 	}
 }

@@ -4,6 +4,7 @@ import { captureException } from '@sentry/nextjs';
 import config from '@/configuration';
 import UNI_Json from '@/artifacts/UNI.json';
 import { networksParams } from '@/helpers/blockchain';
+import { ERC20 } from '@/types/contracts';
 
 const { abi: UNI_ABI } = UNI_Json;
 
@@ -42,7 +43,7 @@ const fetchTokenInfo = async (
 	provider: JsonRpcProvider,
 	address: string,
 ): Promise<ITokenOptins | undefined> => {
-	const contract = new Contract(address, UNI_ABI, provider);
+	const contract = new Contract(address, UNI_ABI, provider) as ERC20;
 	try {
 		const [_decimal, _symbol]: [number, string] = await Promise.all([
 			contract.decimals(),
@@ -92,8 +93,7 @@ export async function addNetwork(network: number): Promise<void> {
 
 	const nodeUrl = config.NETWORKS_CONFIG[network]?.nodeUrl;
 	const rpcUrls = nodeUrl ? [nodeUrl] : [];
-
-	await ethereum.request({
+	const res = await ethereum.request({
 		method: 'wallet_addEthereumChain',
 		params: [{ ...networksParams[network], rpcUrls }],
 	});
@@ -104,13 +104,16 @@ export async function switchNetwork(network: number): Promise<void> {
 	const { chainId } = networksParams[network];
 
 	try {
-		await ethereum.request({
+		const res = await ethereum.request({
 			method: 'wallet_switchEthereumChain',
 			params: [{ chainId }],
 		});
+		if (res) {
+			addNetwork(network);
+		}
 	} catch (switchError: any) {
 		// This error code indicates that the chain has not been added to MetaMask.
-		if (switchError.code === 4902) {
+		if (switchError) {
 			addNetwork(network);
 		}
 		captureException(switchError, {

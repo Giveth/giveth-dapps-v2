@@ -18,6 +18,7 @@ const Routes = {
 	MyProjects: MyAccount + '?tab=projects',
 	MyDonations: MyAccount + '?tab=donations',
 	Onboard: '/onboard',
+	Verification: '/verification',
 	GIVECONOMY: '/giveconomy',
 	GIVgarden: '/givgarden',
 	GIVfarm: '/givfarm',
@@ -25,6 +26,7 @@ const Routes = {
 	GIVstream_FlowRate: GIVstream + '#flowRate',
 	GIVbacks: '/givbacks',
 	Claim: '/claim',
+	GivethProject: '/project/the-giveth-community-of-makers',
 };
 
 export default Routes;

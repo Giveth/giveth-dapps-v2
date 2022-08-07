@@ -180,7 +180,7 @@ export const claim = async (
 
 	try {
 		uniswapV3StakerContract.claimReward(
-			currentIncentive.key[0],
+			currentIncentive.key[0] as string,
 			walletAddress,
 			0,
 			getGasPreference(config.NETWORKS_CONFIG[provider.network.chainId]),

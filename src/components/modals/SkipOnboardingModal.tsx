@@ -12,12 +12,16 @@ import { useRouter } from 'next/router';
 import { Flex } from '../styled-components/Flex';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 export const SkipOnboardingModal: FC<IModal> = ({ setShowModal }) => {
 	const router = useRouter();
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+
 	return (
 		<Modal
-			setShowModal={setShowModal}
+			closeModal={closeModal}
+			isAnimating={isAnimating}
 			headerIcon={<IconInfo32 />}
 			headerTitle='Are you sure?'
 			headerTitlePosition='left'
@@ -36,7 +40,7 @@ export const SkipOnboardingModal: FC<IModal> = ({ setShowModal }) => {
 				<OKButton
 					size='small'
 					label='OK, I’LL DO IT NOW'
-					onClick={() => setShowModal(false)}
+					onClick={closeModal}
 				/>
 				<CancelButton
 					size='small'
