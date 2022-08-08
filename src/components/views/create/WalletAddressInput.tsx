@@ -47,6 +47,7 @@ const WalletAddressInput: FC<IProps> = ({
 		register,
 		formState: { errors },
 		getValues,
+		clearErrors,
 	} = useFormContext();
 
 	const [isHidden, setIsHidden] = useState(false);
@@ -56,12 +57,10 @@ const WalletAddressInput: FC<IProps> = ({
 
 	const user = useAppSelector(state => state.user?.userData);
 	const isGnosis = networkId === config.SECONDARY_NETWORK.id;
-	const value = getValues(
-		isGnosis ? EInputs.secondaryAddress : EInputs.mainAddress,
-	);
+	const inputName = isGnosis ? EInputs.secondaryAddress : EInputs.mainAddress;
+	const value = getValues(inputName);
 	const isDefaultAddress = compareAddresses(value, user?.walletAddress);
-	const error =
-		errors[isGnosis ? EInputs.secondaryAddress : EInputs.mainAddress];
+	const error = errors[inputName];
 	const errorMessage = (error?.message || '') as string;
 	const isAddressUsed =
 		errorMessage.indexOf('is already being used for a project') > -1;
@@ -92,6 +91,7 @@ const WalletAddressInput: FC<IProps> = ({
 
 	const addressValidation = async (address: string) => {
 		try {
+			clearErrors(inputName);
 			if (disabled) return true;
 			setResolvedENS('');
 			let _address = (' ' + address).slice(1);
@@ -174,13 +174,9 @@ const WalletAddressInput: FC<IProps> = ({
 				disabled={disabled}
 				isValidating={isValidating}
 				register={register}
-				registerName={
-					isGnosis ? EInputs.secondaryAddress : EInputs.mainAddress
-				}
+				registerName={inputName}
 				registerOptions={{ validate: addressValidation }}
-				// TODO: fix types
-				// @ts-ignore
-				error={!isAddressUsed && error}
+				error={isAddressUsed ? undefined : error}
 			/>
 			{resolvedENS && (
 				<InlineToast
