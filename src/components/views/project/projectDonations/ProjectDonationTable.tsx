@@ -32,6 +32,7 @@ import SortIcon from '@/components/SortIcon';
 import { useAppSelector } from '@/features/hooks';
 import DonationStatus from '@/components/badges/DonationStatusBadge';
 import { IconGnosisChain } from '@/components/Icons/GnosisChain';
+import useDebounce from '@/hooks/useDebounce';
 
 const itemPerPage = 10;
 
@@ -52,12 +53,20 @@ interface IProjectDonationTable {
 	project?: IProject;
 }
 
+interface PageDonations {
+	donations: IDonation[];
+	totalCount?: number;
+}
+
 const ProjectDonationTable = ({
 	donations,
 	totalDonations,
 	project,
 }: IProjectDonationTable) => {
-	const [pageDonations, setPageDonations] = useState<IDonation[]>(donations);
+	const [pageDonations, setPageDonations] = useState<PageDonations>({
+		donations: donations,
+		totalCount: totalDonations,
+	});
 	const [page, setPage] = useState<number>(0);
 	const [order, setOrder] = useState<IOrder>({
 		by: EOrderBy.CreationDate,
@@ -73,6 +82,8 @@ const ProjectDonationTable = ({
 		adminUser?.walletAddress,
 		user?.walletAddress,
 	);
+
+	const debouncedSearch = useDebounce(searchTerm, 500);
 
 	const orderChangeHandler = (orderBy: EOrderBy) => {
 		if (orderBy === order.by) {
@@ -107,11 +118,11 @@ const ProjectDonationTable = ({
 			});
 			const { donationsByProjectId } = projectDonations;
 			if (!!donationsByProjectId?.donations) {
-				setPageDonations(donationsByProjectId.donations);
+				setPageDonations(donationsByProjectId);
 			}
 		};
-		fetchProjectDonations().then();
-	}, [page, order.by, order.direction, id, searchTerm]);
+		fetchProjectDonations();
+	}, [page, order.by, order.direction, id, debouncedSearch]);
 
 	useEffect(() => {
 		if (page !== 0) setPage(0);
@@ -180,7 +191,7 @@ const ProjectDonationTable = ({
 								title={EOrderBy.UsdAmount}
 							/>
 						</TableHeader>
-						{pageDonations.map(donation => (
+						{pageDonations?.donations?.map(donation => (
 							<RowWrapper key={donation.id}>
 								<TableCell>
 									{smallFormatDate(
@@ -245,9 +256,7 @@ const ProjectDonationTable = ({
 			)}
 			<Pagination
 				currentPage={page}
-				totalCount={
-					!!searchTerm ? pageDonations.length : totalDonations || 0
-				}
+				totalCount={pageDonations?.totalCount ?? 0}
 				setPage={setPage}
 				itemPerPage={itemPerPage}
 			/>
