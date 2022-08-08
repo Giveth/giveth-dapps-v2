@@ -15,6 +15,7 @@ const customJestConfig = {
 	moduleNameMapper: {
 		'^@/(.*)$': '<rootDir>/src/$1',
 	},
+	setupFilesAfterEnv: ['<rootDir>/setup-jest.ts'],
 	preset: 'ts-jest',
 	testEnvironment: 'jest-environment-jsdom',
 	watchPlugins: [

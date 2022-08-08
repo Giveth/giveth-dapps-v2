@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import { IconLink } from '@giveth/ui-design-system';
+import { axe } from 'jest-axe';
 import Input from '@/components/Input';
 import '@testing-library/jest-dom';
 
@@ -10,11 +10,11 @@ test('Testing Input component', () => {
 	expect(input).toHaveValue('');
 });
 
-test('Testing Input Icon', () => {
-	const { getByRole, debug } = render(
-		<Input LeftIcon={<IconLink />} id='TestInput' />,
-	);
+test('the input is accessible', async () => {
+	const { getByRole, debug } = render(<Input id='TestInput' />);
 	const input = getByRole('textbox');
-	// expect(input).toHaveAd;
+	const accessibilityResults = await axe(input);
+	expect(accessibilityResults).toHaveNoViolations();
+
 	debug();
 });
