@@ -11,6 +11,7 @@ import { EInputValidation, IInputValidation } from '@/types/inputValidation';
 import InputStyled from './styled-components/Input';
 import LottieControl from '@/components/animations/lottieControl';
 import LoadingAnimation from '@/animations/loading_giv_600.json';
+import { FlexCenter } from '@/components/styled-components/Flex';
 import type {
 	FieldError,
 	RegisterOptions,
@@ -111,20 +112,21 @@ const Input = (props: InputType) => {
 						: {})}
 					{...rest}
 				/>
-				{maxLength && (
-					<CharLength>
-						{value ? String(value)?.length : 0}/{maxLength}
-					</CharLength>
-				)}
+				<Absolute>
+					{isValidating && (
+						<LottieControl
+							animationData={LoadingAnimation}
+							size={22.4}
+						/>
+					)}
+					{maxLength && (
+						<CharLength>
+							{value ? String(value)?.length : 0}/{maxLength}
+						</CharLength>
+					)}
+				</Absolute>
 			</InputWrapper>
-			{isValidating ? (
-				<LottieWrapper>
-					<LottieControl
-						animationData={LoadingAnimation}
-						size={22.4}
-					/>
-				</LottieWrapper>
-			) : error?.message ? (
+			{error?.message ? (
 				<InputValidation
 					validation={validationStatus}
 					size={InputSizeToLinkSize(size)}
@@ -140,11 +142,11 @@ const Input = (props: InputType) => {
 	);
 };
 
-const LottieWrapper = styled.div`
-	padding-top: 4px;
-	> div > div {
-		margin-left: 0 !important;
-	}
+const Absolute = styled(FlexCenter)`
+	position: absolute;
+	right: 10px;
+	top: 0;
+	bottom: 0;
 `;
 
 const CharLength = styled(SublineBold)`
@@ -158,11 +160,7 @@ const CharLength = styled(SublineBold)`
 	border-radius: 64px;
 	width: 52px;
 	height: 30px;
-	position: absolute;
-	right: 16px;
-	top: 0;
-	bottom: 0;
-	margin: auto 0;
+	margin-right: 6px;
 `;
 
 const InputContainer = styled.div`
