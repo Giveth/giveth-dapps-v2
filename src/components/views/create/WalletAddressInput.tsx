@@ -1,11 +1,16 @@
 import React, { FC, useEffect, useState } from 'react';
-import { H6, IconETH, neutralColors } from '@giveth/ui-design-system';
+import {
+	Caption,
+	H6,
+	IconETH,
+	neutralColors,
+	semanticColors,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
 import { useWeb3React } from '@web3-react/core';
 import { utils } from 'ethers';
 
-import { TinyLabel } from './Create.sc';
 import { compareAddresses } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
@@ -14,9 +19,10 @@ import { EInputs } from '@/components/views/create/CreateProject';
 import { gqlAddressValidation } from '@/components/views/create/helpers';
 import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import { Shadow } from '@/components/styled-components/Shadow';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import CheckBox from '@/components/Checkbox';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
+import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 
 interface IProps {
 	networkId: number;
@@ -54,13 +60,18 @@ const WalletAddressInput: FC<IProps> = ({
 		isGnosis ? EInputs.secondaryAddress : EInputs.mainAddress,
 	);
 	const isDefaultAddress = compareAddresses(value, user?.walletAddress);
+	const error =
+		errors[isGnosis ? EInputs.secondaryAddress : EInputs.mainAddress];
+	const errorMessage = (error?.message || '') as string;
+	const isAddressUsed =
+		errorMessage.indexOf('is already being used for a project') > -1;
 
 	let disabled: boolean;
 	if (isGnosis) disabled = !isActive;
 	else disabled = !isActive && !sameAddress;
 
-	const isPrevProjectAddress = (newAddress: string) => {
-		// Do not validate if the input address is the same as prev project wallet address
+	const isProjectPrevAddress = (newAddress: string) => {
+		// Do not validate if the input address is the same as project prev wallet address
 		if (userAddresses.length === 0) return false;
 		return userAddresses
 			.map(prevAddress => prevAddress.toLowerCase())
@@ -89,7 +100,7 @@ const WalletAddressInput: FC<IProps> = ({
 				_address = await ENSHandler(address);
 				setResolvedENS(_address);
 			}
-			if (isPrevProjectAddress(_address)) {
+			if (isProjectPrevAddress(_address)) {
 				setIsValidating(false);
 				return true;
 			}
@@ -148,9 +159,19 @@ const WalletAddressInput: FC<IProps> = ({
 						: 'Receiving address on Mainnet'
 				}
 				placeholder='My Wallet Address'
+				caption={
+					isDefaultAddress
+						? 'This is the default wallet address associated with your account. You can choose a different receiving address.'
+						: `You can enter a new address to receive funds on ${
+								sameAddress
+									? 'all supported networks'
+									: isGnosis
+									? 'Gnosis Chain'
+									: 'Mainnet network'
+						  }.`
+				}
 				size={InputSize.LARGE}
 				disabled={disabled}
-				caption={resolvedENS && 'Resolves as ' + resolvedENS}
 				isValidating={isValidating}
 				register={register}
 				registerName={
@@ -159,30 +180,27 @@ const WalletAddressInput: FC<IProps> = ({
 				registerOptions={{ validate: addressValidation }}
 				// TODO: fix types
 				// @ts-ignore
-				error={
-					errors[
-						isGnosis
-							? EInputs.secondaryAddress
-							: EInputs.mainAddress
-					]
-				}
+				error={!isAddressUsed && error}
 			/>
-			<TinyLabel>
-				{isDefaultAddress
-					? 'This is the default wallet address associated with your account. You can choose a different receiving address.'
-					: `You can enter a new address to receive funds on ${
-							sameAddress
-								? 'all supported networks'
-								: isGnosis
-								? 'Gnosis Chain'
-								: 'Mainnet network'
-					  }.`}
-			</TinyLabel>
-			{isGnosis && (
-				<TinyLabel>
-					<br />
-					Please DO NOT enter exchange addresses for this network.
-				</TinyLabel>
+			{resolvedENS && (
+				<InlineToast
+					type={EToastType.Success}
+					message={'Resolves as ' + resolvedENS}
+				/>
+			)}
+			{isAddressUsed && (
+				<InlineToast
+					type={EToastType.Error}
+					message='This address is already used for another project. Please enter an address which is not currently associated with any other project.'
+				/>
+			)}
+			{(isGnosis || sameAddress) && (
+				<ExchangeNotify>
+					<Warning>!</Warning>
+					<Caption>
+						Please DO NOT enter exchange addresses for Gnosis Chain.
+					</Caption>
+				</ExchangeNotify>
 			)}
 			{!isHidden && (
 				<CheckBoxContainer
@@ -210,6 +228,22 @@ const MainnetIcon = () => (
 		<IconETH size={24} />
 	</ChainIconShadow>
 );
+
+const Warning = styled(FlexCenter)`
+	border-radius: 50%;
+	border: 1px solid ${semanticColors.blueSky[700]};
+	width: 14px;
+	height: 14px;
+	font-size: 8px;
+	font-weight: 700;
+`;
+
+const ExchangeNotify = styled(Flex)`
+	color: ${semanticColors.blueSky[700]};
+	gap: 17px;
+	align-items: center;
+	margin-top: 24px;
+`;
 
 const CheckBoxContainer = styled.div`
 	margin-top: 24px;
