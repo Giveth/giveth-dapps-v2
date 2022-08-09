@@ -14,8 +14,6 @@ import {
 	brandColors,
 	neutralColors,
 	OulineButton,
-	Caption,
-	IconHelp,
 } from '@giveth/ui-design-system';
 import { motion } from 'framer-motion';
 import { captureException } from '@sentry/nextjs';
@@ -49,14 +47,10 @@ import {
 	decrementLikedProjectsCount,
 } from '@/features/user/user.slice';
 import VerificationStatus from '@/components/views/project/projectDonateCard/VerificationStatus';
-import CategoryBadge from '@/components/badges/CategoryBadge';
-import { mapCategoriesToMainCategories } from '@/helpers/singleProject';
-import { Flex } from '@/components/styled-components/Flex';
 
 interface IProjectDonateCard {
 	project?: IProject;
 	isActive?: boolean;
-	isMobile?: boolean;
 	setIsActive: Dispatch<SetStateAction<boolean>>;
 	isDraft?: boolean;
 	setIsDraft: Dispatch<SetStateAction<boolean>>;
@@ -66,7 +60,6 @@ interface IProjectDonateCard {
 const ProjectDonateCard: FC<IProjectDonateCard> = ({
 	project,
 	isActive,
-	isMobile,
 	setIsActive,
 	isDraft,
 	setIsDraft,
@@ -95,6 +88,8 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 	const [reaction, setReaction] = useState<IReaction | undefined>(
 		project?.reaction,
 	);
+
+	const { isMobile } = useDetectDevice();
 
 	const isCategories = categories?.length > 0;
 	const verStatus = verified
@@ -308,17 +303,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 						onClick={() => isActive && likeUnlikeProject()}
 					/>
 				</BadgeWrapper>
-				{!isAdmin && verified && (
-					<GivBackNotif>
-						<Caption color={brandColors.giv[300]}>
-							When you donate to verified projects, you get
-							GIVback.
-						</Caption>
-						<ExternalLink href={links.GIVBACK_DOC}>
-							<IconHelp size={16} />
-						</ExternalLink>
-					</GivBackNotif>
-				)}
+				{!isAdmin && verified && <GIVbackToast />}
 				{isCategories && (
 					<MainCategoryWrapper flexDirection='column'>
 						{Object.entries(convertedCategories)?.map(
@@ -387,16 +372,10 @@ const CategoryWrapper = styled.div`
 	display: flex;
 	flex-wrap: wrap;
 	gap: 10px;
-	overflow: hidden;
-	margin: 8px 0;
-`;
-
-const MainCategoryWrapper = styled(Flex)`
 	margin-top: 24px;
-`;
-
-const MainCategory = styled(Caption)`
-	color: ${neutralColors.gray[600]};
+	overflow: hidden;
+	max-height: 98px;
+	margin-bottom: 16px;
 `;
 
 const GivBackNotif = styled.div`
@@ -422,19 +401,18 @@ const BadgeWrapper = styled.div`
 `;
 
 const Wrapper = styled(motion.div)<{ initialPosition: number }>`
-	margin-right: 26px;
 	margin-top: -32px;
 	background: white;
 	padding: 32px;
-	overflow: hidden;
 	height: fit-content;
 	box-shadow: ${Shadow.Neutral[400]};
 	flex-shrink: 0;
 	z-index: 10;
 	align-self: flex-start;
-	width: 100vw;
+	width: 100%;
 	position: fixed;
 	bottom: calc(-${props => props.initialPosition}px + 168px);
+	left: 0;
 	border-radius: 40px 40px 0 0;
 
 	${mediaQueries.tablet} {
