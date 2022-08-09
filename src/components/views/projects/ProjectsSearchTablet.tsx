@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { IconSearch, IconX } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Input from '@/components/Input';
@@ -15,6 +15,10 @@ const ProjectsSearchTablet = () => {
 		setSearchValue('');
 		handleSearch();
 	};
+
+	useEffect(() => {
+		setSearchValue(variables.searchTerm);
+	}, [variables.searchTerm]);
 
 	return (
 		<SearchContainer className='fadeIn'>

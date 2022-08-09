@@ -1,7 +1,7 @@
 import { IconSearch, neutralColors } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Input from '@/components/Input';
 import IconEnter from '../../../../public/images/icons/enter.svg';
 import { FlexCenter } from '@/components/styled-components/Flex';
@@ -18,6 +18,10 @@ const ProjectsSearchDesktop = () => {
 		setSearchValue('');
 		handleSearch();
 	};
+
+	useEffect(() => {
+		setSearchValue(variables.searchTerm);
+	}, [variables.searchTerm]);
 
 	return (
 		<SearchContainer className='fadeIn'>
