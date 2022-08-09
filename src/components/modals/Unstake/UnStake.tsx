@@ -148,6 +148,9 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 									buttonType='texty'
 									size='small'
 									label='locked giv details'
+									disabled={stakedAmount
+										.sub(maxAmount)
+										.isZero()}
 									onClick={() => {
 										setShowLockDetailModal(true);
 									}}
