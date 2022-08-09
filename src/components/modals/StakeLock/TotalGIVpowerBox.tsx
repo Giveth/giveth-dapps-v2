@@ -70,9 +70,7 @@ const TotalGIVpowerBox = () => {
 						<IconWrapper>
 							<IconRocketInSpace32 />
 						</IconWrapper>
-						<H5 weight={700}>
-							{formatWeiHelper(totalGIVpower, 2)}
-						</H5>
+						<H5 weight={700}>{formatWeiHelper(totalGIVpower)}</H5>
 						<H6>GIVpower</H6>
 					</BoxRow>
 				</>

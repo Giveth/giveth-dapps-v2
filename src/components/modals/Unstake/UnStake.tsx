@@ -108,17 +108,12 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 												<IconUnlock16 />
 												<P>Available to unstake</P>
 											</Flex>
-											<B>
-												{formatWeiHelper(maxAmount, 2)}
-											</B>
+											<B>{formatWeiHelper(maxAmount)}</B>
 										</Flex>
 										<TotalStakedRow justifyContent='space-between'>
 											<P>Total staked</P>
 											<B>
-												{formatWeiHelper(
-													stakedAmount,
-													2,
-												)}
+												{formatWeiHelper(stakedAmount)}
 											</B>
 										</TotalStakedRow>
 									</LockInfoContainer>

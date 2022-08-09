@@ -72,9 +72,7 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 					<div>
 						<IconUnlock32 />
 						<CloseText>
-							<Subtitle>
-								{formatWeiHelper(unstakeable, 2)}
-							</Subtitle>
+							<Subtitle>{formatWeiHelper(unstakeable)}</Subtitle>
 							<H6>GIV</H6>
 						</CloseText>
 					</div>
@@ -117,7 +115,6 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 											<TableCell>
 												{formatWeiHelper(
 													locksInfo.amount,
-													2,
 												)}
 											</TableCell>
 											<TableCell>
@@ -171,9 +168,7 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 					</SubtitleWithTooltip>
 
 					<TotalContainer>
-						<SubtitleH5>
-							{formatWeiHelper(stakedAmount, 2)}
-						</SubtitleH5>
+						<SubtitleH5>{formatWeiHelper(stakedAmount)}</SubtitleH5>
 						<H6>GIV</H6>
 					</TotalContainer>
 				</StakedContainer>

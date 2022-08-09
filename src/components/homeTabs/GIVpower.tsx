@@ -100,7 +100,6 @@ export function TabPowerTop() {
 										<TitleBase>
 											{formatWeiHelper(
 												givPower.balance,
-												2,
 											) ?? 0}
 										</TitleBase>
 									</Flex>
