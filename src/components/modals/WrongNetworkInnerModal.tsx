@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { FC } from 'react';
 import { Button } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
-import { InjectedConnector } from '@web3-react/injected-connector';
 import { switchNetwork } from '@/lib/wallet';
 
 import { chainName } from '@/lib/constants/constants';
@@ -19,7 +18,7 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 	text,
 	targetNetworks,
 }) => {
-	const { account, activate } = useWeb3React();
+	const { account } = useWeb3React();
 	const dispatch = useAppDispatch();
 
 	const connectWallet = () => {
@@ -28,7 +27,7 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 
 	const checkWalletAndSwitchNetwork = async (network: number) => {
 		if (!account) {
-			await activate(new InjectedConnector({}));
+			connectWallet();
 		}
 		if (account) {
 			await switchNetwork(network);
