@@ -349,7 +349,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 														{apr?.vaultIRR &&
 															formatEthHelper(
 																apr.vaultIRR,
-																2,
 															)}
 														% IRR), and rewards
 														earned in GIV from
@@ -357,7 +356,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 														{apr &&
 															formatEthHelper(
 																apr.effectiveAPR,
-																2,
 															)}
 														% APR).
 													</AngelVaultTooltip>
