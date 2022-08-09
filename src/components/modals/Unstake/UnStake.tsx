@@ -31,6 +31,7 @@ import { formatWeiHelper } from '@/helpers/number';
 import { LockupDetailsModal } from '../LockupDetailsModal';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import { useGIVpower } from '@/context/givpower.context';
 
 interface IUnStakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
@@ -50,6 +51,7 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 	const [unStakeState, setUnstakeState] = useState<StakeState>(
 		StakeState.UNSTAKE,
 	);
+	const { stakedAmount } = useGIVpower();
 	const { library, chainId } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { title, LM_ADDRESS, GARDEN_ADDRESS } =
@@ -113,7 +115,10 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 										<TotalStakedRow justifyContent='space-between'>
 											<P>Total staked</P>
 											<B>
-												{formatWeiHelper(maxAmount, 2)}
+												{formatWeiHelper(
+													stakedAmount,
+													2,
+												)}
 											</B>
 										</TotalStakedRow>
 									</LockInfoContainer>
