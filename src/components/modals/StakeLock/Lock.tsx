@@ -1,6 +1,7 @@
 import {
 	ButtonLink,
 	GLink,
+	IconHelp,
 	IconRocketInSpace32,
 	P,
 	semanticColors,
@@ -21,12 +22,14 @@ import {
 } from './StakeLock.sc';
 import { AmountInput } from '@/components/AmountInput';
 import LockSlider from './LockSlider';
-import LockInfo from './LockInfo';
+import LockInfo, { LockInfotooltip } from './LockInfo';
 import LockingBrief from './LockingBrief';
 import { lockToken } from '@/lib/stakingPool';
 import config from '@/configuration';
 import TotalGIVpowerBox from './TotalGIVpowerBox';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
+import { Flex } from '@/components/styled-components/Flex';
 import type { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 
 interface ILockModalProps extends IModal {
@@ -104,7 +107,19 @@ const LockModal: FC<ILockModalProps> = ({
 								maxAmount={maxAmount}
 								poolStakingConfig={poolStakingConfig}
 							/>
-							<SectionTitle weight={700}>Rounds</SectionTitle>
+							<Flex gap='4px' alignItems='center'>
+								<SectionTitle weight={700}>Rounds</SectionTitle>
+								<IconWithTooltip
+									icon={<IconHelp size={16} />}
+									direction='right'
+									align='top'
+								>
+									<LockInfotooltip>
+										Rounds are 2 week periods corresponding
+										to GIVbacks rounds.
+									</LockInfotooltip>
+								</IconWithTooltip>
+							</Flex>
 							<LockSlider setRound={setRound} round={round} />
 							<LockInfo round={round} amount={amount} />
 							<StyledButton
