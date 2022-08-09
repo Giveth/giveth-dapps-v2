@@ -4,7 +4,7 @@ import {
 	semanticColors,
 	SublineBold,
 } from '@giveth/ui-design-system';
-import React, { InputHTMLAttributes, ReactElement } from 'react';
+import React, { InputHTMLAttributes, ReactElement, useId } from 'react';
 import styled from 'styled-components';
 import { IIconProps } from '@giveth/ui-design-system/lib/esm/components/icons/giv-economy/type';
 import { EInputValidation, IInputValidation } from '@/types/inputValidation';
@@ -27,6 +27,10 @@ export enum InputSize {
 	LARGE,
 }
 
+interface IInputLabelProps {
+	required?: boolean;
+	disabled?: boolean;
+}
 interface IInput extends InputHTMLAttributes<HTMLInputElement> {
 	label?: string;
 	caption?: string;
@@ -80,7 +84,7 @@ const Input = (props: InputType) => {
 		isValidating,
 		...rest
 	} = props;
-
+	const id = useId();
 	const validationStatus =
 		!error || isValidating
 			? EInputValidation.NORMAL
@@ -89,13 +93,15 @@ const Input = (props: InputType) => {
 	return (
 		<InputContainer>
 			{label && (
-				<InputLabel
-					disabled={disabled}
-					size={InputSizeToLinkSize(size)}
-					required={Boolean(registerOptions.required)}
-				>
-					{label}
-				</InputLabel>
+				<label htmlFor={id}>
+					<InputLabel
+						disabled={disabled}
+						size={InputSizeToLinkSize(size)}
+						required={Boolean(registerOptions.required)}
+					>
+						{label}
+					</InputLabel>
+				</label>
 			)}
 			<InputWrapper>
 				{LeftIcon && LeftIcon}
@@ -106,6 +112,7 @@ const Input = (props: InputType) => {
 					disabled={disabled}
 					maxLength={maxLength}
 					value={value}
+					id={id}
 					{...(registerName && register
 						? register(registerName, registerOptions)
 						: {})}
@@ -169,7 +176,7 @@ const InputContainer = styled.div`
 	flex: 1;
 `;
 
-const InputLabel = styled(GLink)<{ required?: boolean; disabled?: boolean }>`
+const InputLabel = styled(GLink)<IInputLabelProps>`
 	padding-bottom: 4px;
 	color: ${props =>
 		props.disabled ? neutralColors.gray[600] : neutralColors.gray[900]};
