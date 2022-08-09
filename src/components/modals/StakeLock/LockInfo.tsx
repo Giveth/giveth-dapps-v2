@@ -155,7 +155,7 @@ const LockInfoRowSpark = styled.div`
 	}
 `;
 
-const LockInfotooltip = styled(Subline)`
+export const LockInfotooltip = styled(Subline)`
 	color: ${neutralColors.gray[100]};
 	width: 160px;
 `;
