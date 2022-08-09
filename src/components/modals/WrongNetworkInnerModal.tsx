@@ -26,12 +26,7 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 	};
 
 	const checkWalletAndSwitchNetwork = async (network: number) => {
-		if (!account) {
-			connectWallet();
-		}
-		if (account) {
-			await switchNetwork(network);
-		}
+		await switchNetwork(network);
 	};
 
 	return (
