@@ -76,8 +76,8 @@ import LockModal from '../modals/StakeLock/Lock';
 import { StakeGIVModal } from '../modals/StakeLock/StakeGIV';
 import { LockupDetailsModal } from '../modals/LockupDetailsModal';
 import { useAppSelector } from '@/features/hooks';
-import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import Routes from '@/lib/constants/Routes';
+import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { IconAngelVault } from '../Icons/AngelVault';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { avgAPR } from '@/helpers/givpower';
@@ -330,7 +330,38 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							{started ? (
 								<Details>
 									<FirstDetail justifyContent='space-between'>
-										<DetailLabel>APR</DetailLabel>
+										<FlexCenter gap='8px'>
+											<DetailLabel>APR</DetailLabel>
+											{type ===
+												StakingType.ICHI_GIV_ONEGIV && (
+												<IconWithTooltip
+													direction='right'
+													icon={
+														<IconHelp size={16} />
+													}
+												>
+													<AngelVaultTooltip>
+														Your cumulative APR
+														including both rewards
+														earned as fees & added
+														automatically to your
+														position (
+														{apr?.vaultIRR &&
+															formatEthHelper(
+																apr.vaultIRR,
+															)}
+														% IRR), and rewards
+														earned in GIV from
+														staking your LP (
+														{apr &&
+															formatEthHelper(
+																apr.effectiveAPR,
+															)}
+														% APR).
+													</AngelVaultTooltip>
+												</IconWithTooltip>
+											)}
+										</FlexCenter>
 										<Flex gap='8px' alignItems='center'>
 											{active && !archived ? (
 												<>
@@ -341,86 +372,42 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 																.mustard[500]
 														}
 													/>
-													{type ===
-													StakingType.ICHI_GIV_ONEGIV ? (
-														<IconWithTooltip
-															direction='top'
-															icon={
-																<DetailValue>
-																	{apr &&
-																		formatEthHelper(
-																			apr.effectiveAPR,
-																			2,
-																		)}
-																	%
-																</DetailValue>
+
+													<>
+														<DetailValue>
+															{apr &&
+																formatEthHelper(
+																	isLocked
+																		? avgAPR(
+																				apr.effectiveAPR,
+																				stakedLpAmount.toString(),
+																				userGIVPowerBalance.balance,
+																		  )
+																		: apr.effectiveAPR,
+																)}
+															%
+															{isZeroGIVStacked &&
+																`-${
+																	apr &&
+																	formatEthHelper(
+																		apr.effectiveAPR.multipliedBy(
+																			5.2, // sqrt(1 + max rounds)
+																		),
+																	)
+																}%`}
+														</DetailValue>
+														<IconContainer
+															onClick={() =>
+																setShowAPRModal(
+																	true,
+																)
 															}
 														>
-															<AngelVaultTooltip>
-																Your cumulative
-																APR including
-																both rewards
-																earned as fees &
-																added
-																automatically to
-																your position (
-																{apr?.vaultIRR &&
-																	formatEthHelper(
-																		apr.vaultIRR,
-																		2,
-																	)}
-																% IRR), and
-																rewards earned
-																in GIV from
-																staking your LP
-																(
-																{apr &&
-																	formatEthHelper(
-																		apr.effectiveAPR,
-																		2,
-																	)}
-																% APR).
-															</AngelVaultTooltip>
-														</IconWithTooltip>
-													) : (
-														<>
-															<DetailValue>
-																{apr &&
-																	formatEthHelper(
-																		isLocked
-																			? avgAPR(
-																					apr.effectiveAPR,
-																					stakedLpAmount.toString(),
-																					userGIVPowerBalance.balance,
-																			  )
-																			: apr.effectiveAPR,
-																		2,
-																	)}
-																%
-																{isZeroGIVStacked &&
-																	`-${
-																		apr &&
-																		formatEthHelper(
-																			apr.effectiveAPR.multipliedBy(
-																				5.2, // sqrt(1 + max rounds)
-																			),
-																			2,
-																		)
-																	}%`}
-															</DetailValue>
-															<IconContainer
-																onClick={() =>
-																	setShowAPRModal(
-																		true,
-																	)
-																}
-															>
-																<IconHelp
-																	size={16}
-																/>
-															</IconContainer>
-														</>
-													)}
+															<IconHelp
+																size={16}
+															/>
+														</IconContainer>
+													</>
 												</>
 											) : (
 												<div>N/A %</div>
