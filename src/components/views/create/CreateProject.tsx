@@ -15,6 +15,10 @@ import { utils } from 'ethers';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { captureException } from '@sentry/nextjs';
+
+// TODO: Adding ts-ignore while this is solved
+// Current error: Type instantiation is excessively deep and possibly infinite. (on FormProvider)
+// @ts-ignore
 import { FormProvider, useForm } from 'react-hook-form';
 
 import {
