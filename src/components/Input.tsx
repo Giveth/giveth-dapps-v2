@@ -4,15 +4,19 @@ import {
 	semanticColors,
 	SublineBold,
 } from '@giveth/ui-design-system';
-import React, { InputHTMLAttributes, ReactElement, useId } from 'react';
+import React, { FC, InputHTMLAttributes, ReactElement, useId } from 'react';
 import styled from 'styled-components';
 import { IIconProps } from '@giveth/ui-design-system/lib/esm/components/icons/giv-economy/type';
 import { EInputValidation, IInputValidation } from '@/types/inputValidation';
 import InputStyled from './styled-components/Input';
 import LottieControl from '@/components/animations/lottieControl';
 import LoadingAnimation from '@/animations/loading_giv_600.json';
+import { FlexCenter } from '@/components/styled-components/Flex';
 import type {
+	DeepRequired,
 	FieldError,
+	FieldErrorsImpl,
+	Merge,
 	RegisterOptions,
 	UseFormRegister,
 } from 'react-hook-form';
@@ -43,7 +47,10 @@ interface IInputWithRegister extends IInput {
 	register: UseFormRegister<any>;
 	registerName: string;
 	registerOptions?: RegisterOptions;
-	error?: FieldError;
+	error?:
+		| FieldError
+		| undefined
+		| Merge<FieldError, FieldErrorsImpl<NonNullable<DeepRequired<any>>>>;
 }
 
 const InputSizeToLinkSize = (size: InputSize) => {
@@ -68,7 +75,7 @@ type InputType =
 			error?: never;
 	  } & IInput);
 
-const Input = (props: InputType) => {
+const Input: FC<InputType> = props => {
 	const {
 		label,
 		caption,
@@ -118,25 +125,26 @@ const Input = (props: InputType) => {
 						: {})}
 					{...rest}
 				/>
-				{maxLength && (
-					<CharLength>
-						{value ? String(value)?.length : 0}/{maxLength}
-					</CharLength>
-				)}
+				<Absolute>
+					{isValidating && (
+						<LottieControl
+							animationData={LoadingAnimation}
+							size={22.4}
+						/>
+					)}
+					{maxLength && (
+						<CharLength>
+							{value ? String(value)?.length : 0}/{maxLength}
+						</CharLength>
+					)}
+				</Absolute>
 			</InputWrapper>
-			{isValidating ? (
-				<LottieWrapper>
-					<LottieControl
-						animationData={LoadingAnimation}
-						size={22.4}
-					/>
-				</LottieWrapper>
-			) : error?.message ? (
+			{error?.message ? (
 				<InputValidation
 					validation={validationStatus}
 					size={InputSizeToLinkSize(size)}
 				>
-					{error?.message}
+					{error.message as string}
 				</InputValidation>
 			) : (
 				<InputDesc size={InputSizeToLinkSize(size)}>
@@ -147,11 +155,11 @@ const Input = (props: InputType) => {
 	);
 };
 
-const LottieWrapper = styled.div`
-	padding-top: 4px;
-	> div > div {
-		margin-left: 0 !important;
-	}
+const Absolute = styled(FlexCenter)`
+	position: absolute;
+	right: 10px;
+	top: 0;
+	bottom: 0;
 `;
 
 const CharLength = styled(SublineBold)`
@@ -165,11 +173,7 @@ const CharLength = styled(SublineBold)`
 	border-radius: 64px;
 	width: 52px;
 	height: 30px;
-	position: absolute;
-	right: 16px;
-	top: 0;
-	bottom: 0;
-	margin: auto 0;
+	margin-right: 6px;
 `;
 
 const InputContainer = styled.div`
