@@ -26,7 +26,7 @@ import {
 } from '@/apollo/types/gqlTypes';
 import SuccessfulCreation from '@/components/views/create/SuccessfulCreation';
 import { mediaQueries } from '@/lib/constants/constants';
-import InlineToast from '@/components/toasts/InlineToast';
+import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import SimilarProjects from '@/components/views/project/SimilarProjects';
 import { compareAddresses, showToastError } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
@@ -176,7 +176,10 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 							/>
 						)}
 						{!isActive && !isDraft && (
-							<InlineToast message='This project is not active.' />
+							<InlineToast
+								type={EToastType.Warning}
+								message='This project is not active.'
+							/>
 						)}
 						{activeTab === 0 && (
 							<RichTextViewer content={description} />

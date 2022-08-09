@@ -1,16 +1,16 @@
 import styled from 'styled-components';
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { Contract } from '@ethersproject/contracts';
 import BigNumber from 'bignumber.js';
 import {
+	B,
+	brandColors,
 	Button,
 	Caption,
+	GLink,
 	neutralColors,
 	semanticColors,
-	brandColors,
-	GLink,
-	B,
 } from '@giveth/ui-design-system';
 // @ts-ignore
 import tokenAbi from 'human-standard-token-abi';
@@ -28,7 +28,7 @@ import { switchNetwork } from '@/lib/wallet';
 import GeminiModal from './GeminiModal';
 import config from '@/configuration';
 import TokenPicker from './TokenPicker';
-import InlineToast from '@/components/toasts/InlineToast';
+import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { client } from '@/apollo/apolloClient';
 import { PROJECT_ACCEPTED_TOKENS } from '@/apollo/gql/gqlProjects';
@@ -495,7 +495,12 @@ const CryptoDonation = (props: {
 				</B>
 			</CheckBoxContainer>
 
-			{!isActive && <InlineToast message='This project is not active.' />}
+			{!isActive && (
+				<InlineToast
+					type={EToastType.Warning}
+					message='This project is not active.'
+				/>
+			)}
 
 			{isEnabled && (
 				<>
