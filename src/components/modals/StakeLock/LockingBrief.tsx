@@ -25,7 +25,7 @@ const LockingBrief: FC<ILockingBrief> = ({
 	return (
 		<BriefContainer>
 			<H5>{`You ${onLocking ? 'are locking' : 'locked'} `}</H5>
-			<H5White weight={700}>{formatWeiHelper(amount, 2)} GIV</H5White>
+			<H5White weight={700}>{formatWeiHelper(amount)} GIV</H5White>
 			<H5White>until {smallFormatDate(unlockDate)}</H5White>
 		</BriefContainer>
 	);
