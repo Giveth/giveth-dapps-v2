@@ -273,11 +273,7 @@ export const StakeGIVModal: FC<IStakeModalProps> = ({
 							<H5>Successful!</H5>
 							<H5White>You have staked</H5White>
 							<H5White weight={700}>
-								{formatWeiHelper(
-									amount,
-									config.TOKEN_PRECISION,
-								)}
-								{' GIV'}
+								{formatWeiHelper(amount)} GIV
 							</H5White>
 							<ButtonLink
 								label='View on blockscout'
