@@ -248,7 +248,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 
 	const isGIVStaking = type === StakingType.GIV_LM;
 	const isGIVpower = isGIVStaking && chainId === config.XDAI_NETWORK_NUMBER;
-	const isBridge = isGIVStaking && chainId === config.MAINNET_NETWORK_NUMBER;
+	const isBridge = isGIVStaking && chainId !== config.XDAI_NETWORK_NUMBER;
 	const isLocked = isGIVStaking && userGIVLocked.balance !== '0';
 	const isZeroGIVStacked =
 		isBridge || (isGIVpower && userGIVPowerBalance.balance === '0');
@@ -358,6 +358,38 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 																apr.effectiveAPR,
 															)}
 														% APR).
+													</AngelVaultTooltip>
+												</IconWithTooltip>
+											)}
+											{isGIVStaking && (
+												<IconWithTooltip
+													direction='right'
+													icon={
+														<IconHelp size={16} />
+													}
+												>
+													<AngelVaultTooltip>
+														{isZeroGIVStacked
+															? `This is the range of possible APRs for staked and locked GIV. Lock your GIV for longer to earn greater rewards.`
+															: `This is the weighted average APR for your staked (and locked) GIV. The full range of APRs for staking and/or locking is ${
+																	apr &&
+																	formatEthHelper(
+																		isLocked
+																			? avgAPR(
+																					apr.effectiveAPR,
+																					stakedLpAmount.toString(),
+																					userGIVPowerBalance.balance,
+																			  )
+																			: apr.effectiveAPR,
+																	)
+															  }%-${
+																	apr &&
+																	formatEthHelper(
+																		apr.effectiveAPR.multipliedBy(
+																			5.2, // sqrt(1 + max rounds)
+																		),
+																	)
+															  }%. Lock your GIV for longer to earn greater rewards.`}
 													</AngelVaultTooltip>
 												</IconWithTooltip>
 											)}
