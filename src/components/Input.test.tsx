@@ -3,7 +3,7 @@ import { axe } from 'jest-axe';
 import Input from '@/components/Input';
 import '@testing-library/jest-dom';
 
-test('Testing Input component', () => {
+test('the input is rendering', () => {
 	const { getByRole } = render(<Input />);
 	const input = getByRole('textbox');
 	expect(input).toBeInTheDocument();
@@ -11,10 +11,8 @@ test('Testing Input component', () => {
 });
 
 test('the input is accessible', async () => {
-	const { getByRole, debug } = render(<Input id='TestInput' />);
+	const { getByRole } = render(<Input label='test' />);
 	const input = getByRole('textbox');
 	const accessibilityResults = await axe(input);
 	expect(accessibilityResults).toHaveNoViolations();
-
-	debug();
 });
