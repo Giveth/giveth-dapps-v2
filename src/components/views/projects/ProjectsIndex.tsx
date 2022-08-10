@@ -21,6 +21,8 @@ import { useProjectsContext } from '@/context/projects.context';
 import ProjectsFiltersDesktop from '@/components/views/projects/ProjectsFiltersDesktop';
 import ProjectsFiltersTablet from '@/components/views/projects/ProjectsFiltersTablet';
 import ProjectsFiltersMobile from '@/components/views/projects/ProjectsFiltersMobile';
+import LottieControl from '@/components/animations/lottieControl';
+import LoadingAnimation from '@/animations/loading_giv.json';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -153,6 +155,15 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	return (
 		<>
+			{isLoading && (
+				<Loading>
+					<LottieControl
+						animationData={LoadingAnimation}
+						size={150}
+					/>
+				</Loading>
+			)}
+
 			<ProjectsBanner mainCategory={selectedMainCategory} />
 			<Wrapper>
 				<FiltersContainer>
@@ -248,6 +259,21 @@ const ProjectsContainer = styled.div`
 const Wrapper = styled.div`
 	max-width: ${deviceSize.desktop + 'px'};
 	margin: 0 auto;
+`;
+
+const Loading = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1000;
+	height: 100%;
+	width: 100%;
+	background-color: gray;
+	transition: opacity 0.3s ease-in-out;
+	opacity: 0.9;
 `;
 
 export default ProjectsIndex;
