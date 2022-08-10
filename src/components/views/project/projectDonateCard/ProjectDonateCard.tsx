@@ -14,11 +14,12 @@ import {
 	brandColors,
 	neutralColors,
 	OulineButton,
+	Caption,
 } from '@giveth/ui-design-system';
 import { motion } from 'framer-motion';
 import { captureException } from '@sentry/nextjs';
-
 import { IconArchiving } from '@giveth/ui-design-system/lib/cjs/components/icons/Archiving';
+
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { compareAddresses, showToastError } from '@/lib/helpers';
@@ -140,7 +141,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 				showToastError(e);
 				captureException(e, {
 					tags: {
-						section: 'likeUnline Project Donate',
+						section: 'likeUnlike Project Donate Card',
 					},
 				});
 			} finally {
