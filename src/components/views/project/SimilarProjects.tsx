@@ -19,12 +19,12 @@ const projectsToFetch = 12;
 const SimilarProjects = (props: { slug: string }) => {
 	const { slug } = props;
 
-	const device = useDetectDevice();
+	const { isMobile, isTablet, isLaptopS } = useDetectDevice();
 
 	let projectsToShow;
-	if (device.isMobile) {
+	if (isMobile) {
 		projectsToShow = 1;
-	} else if (device.isTablet || device.isLaptopS) {
+	} else if (isTablet || isLaptopS) {
 		projectsToShow = 2;
 	} else {
 		projectsToShow = 3;

@@ -12,17 +12,17 @@ import { client } from '@/apollo/apolloClient';
 import { ICategory, IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
-import { device, deviceSize, mediaQueries } from '@/lib/constants/constants';
+import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import ProjectsBanner from './ProjectsBanner';
-import useMediaQuery from '@/hooks/useMediaQuery';
 import { useProjectsContext } from '@/context/projects.context';
 import ProjectsFiltersDesktop from '@/components/views/projects/ProjectsFiltersDesktop';
 import ProjectsFiltersTablet from '@/components/views/projects/ProjectsFiltersTablet';
 import ProjectsFiltersMobile from '@/components/views/projects/ProjectsFiltersMobile';
 import LottieControl from '@/components/animations/lottieControl';
 import LoadingAnimation from '@/animations/loading_giv.json';
+import useDetectDevice from '@/hooks/useDetectDevice';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -57,13 +57,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	const router = useRouter();
 	const pageNum = useRef(0);
-	const isDesktop = useMediaQuery(device.laptopS);
-	const isTablet = useMediaQuery(
-		`(min-device-width: ${deviceSize.tablet}px) and (max-device-width: ${
-			deviceSize.laptopS - 1
-		}px)`,
-	);
-	const isMobile = !isDesktop && !isTablet;
+	const { isDesktop, isTablet, isMobile } = useDetectDevice();
 
 	const fetchProjects = (
 		isLoadMore?: boolean,
