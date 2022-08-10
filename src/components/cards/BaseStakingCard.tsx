@@ -248,10 +248,12 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 
 	const isGIVStaking = type === StakingType.GIV_LM;
 	const isGIVpower = isGIVStaking && chainId === config.XDAI_NETWORK_NUMBER;
-	const isBridge = isGIVStaking && chainId !== config.XDAI_NETWORK_NUMBER;
+	const isBridge = isGIVStaking && chainId === config.MAINNET_NETWORK_NUMBER;
 	const isLocked = isGIVStaking && userGIVLocked.balance !== '0';
 	const isZeroGIVStacked =
-		isBridge || (isGIVpower && userGIVPowerBalance.balance === '0');
+		!account ||
+		isBridge ||
+		(isGIVpower && userGIVPowerBalance.balance === '0');
 
 	return (
 		<>
