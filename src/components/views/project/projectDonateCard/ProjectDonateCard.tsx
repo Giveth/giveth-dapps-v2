@@ -15,10 +15,9 @@ import {
 	neutralColors,
 	OulineButton,
 } from '@giveth/ui-design-system';
-import { motion } from 'framer-motion';
 import { captureException } from '@sentry/nextjs';
-
 import { IconArchiving } from '@giveth/ui-design-system/lib/cjs/components/icons/Archiving';
+
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import { Shadow } from '@/components/styled-components/Shadow';
 import CategoryBadge from '@/components/badges/CategoryBadge';
@@ -86,6 +85,8 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 	const [isAdmin, setIsAdmin] = useState<boolean>(false);
 	const [deactivateModal, setDeactivateModal] = useState<boolean>(false);
 	const [showVerificationModal, setShowVerificationModal] = useState(false);
+	const [mobileCardOpen, setMobileCardOpen] = useState(false);
+	const [wrapperHeight, setWrapperHeight] = useState<number>(350);
 	const [reaction, setReaction] = useState<IReaction | undefined>(
 		project?.reaction,
 	);
@@ -101,10 +102,10 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 	const router = useRouter();
 
 	const wrapperRef = useRef<HTMLDivElement>(null);
-	const [wrapperHeight, setWrapperHeight] = useState<number>(0);
 
 	const scrollToSimilarProjects = () => {
 		const el = document.getElementById('similar-projects');
+		if (mobileCardOpen) setMobileCardOpen(false);
 		if (el) el.scrollIntoView({ behavior: 'smooth' });
 	};
 
@@ -188,8 +189,16 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 	}, [user, adminUser]);
 
 	useEffect(() => {
-		setWrapperHeight(wrapperRef?.current?.clientHeight || 0);
-	}, [wrapperRef, project]);
+		const handleResize = () =>
+			setWrapperHeight(wrapperRef?.current?.clientHeight || 0);
+		if (isMobile) {
+			handleResize();
+			window.addEventListener('resize', handleResize);
+		}
+		return () => {
+			if (isMobile) window.removeEventListener('resize', handleResize);
+		};
+	}, [project]);
 
 	const handleProjectStatus = async (deactivate?: boolean) => {
 		if (deactivate) {
@@ -238,12 +247,17 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 				/>
 			)}
 			<Wrapper
+				height={wrapperHeight}
 				ref={wrapperRef}
-				initialPosition={wrapperHeight}
-				drag='y'
-				dragConstraints={{ top: -(wrapperHeight - 168), bottom: 120 }}
+				isOpen={mobileCardOpen}
 			>
-				{isMobile && <BlueBar />}
+				{isMobile && (
+					<BlueBarContainer
+						onClick={() => setMobileCardOpen(!mobileCardOpen)}
+					>
+						<BlueBar />
+					</BlueBarContainer>
+				)}
 				<ProjectCardOrgBadge
 					organization={organization?.label}
 					isHover={false}
@@ -348,13 +362,15 @@ const Links = styled.div`
 	}
 `;
 
+const BlueBarContainer = styled.div`
+	padding: 16px 0;
+`;
+
 const BlueBar = styled.div`
 	width: 80px;
 	height: 3px;
 	background-color: ${brandColors.giv[500]};
-	margin: 0 auto 16px;
-	position: relative;
-	top: -8px;
+	margin: 0 auto;
 `;
 
 const CategoryWrapper = styled.div`
@@ -362,8 +378,6 @@ const CategoryWrapper = styled.div`
 	flex-wrap: wrap;
 	gap: 10px;
 	margin-top: 24px;
-	overflow: hidden;
-	max-height: 98px;
 	margin-bottom: 16px;
 `;
 
@@ -373,10 +387,10 @@ const BadgeWrapper = styled.div`
 	justify-content: space-between;
 `;
 
-const Wrapper = styled(motion.div)<{ initialPosition: number }>`
+const Wrapper = styled.div<{ isOpen: boolean; height: number }>`
 	margin-top: -32px;
 	background: white;
-	padding: 32px;
+	padding: 0 32px 32px;
 	height: fit-content;
 	box-shadow: ${Shadow.Neutral[400]};
 	flex-shrink: 0;
@@ -384,9 +398,11 @@ const Wrapper = styled(motion.div)<{ initialPosition: number }>`
 	align-self: flex-start;
 	width: 100%;
 	position: fixed;
-	bottom: calc(-${props => props.initialPosition}px + 168px);
+	bottom: ${({ isOpen, height }) =>
+		isOpen ? '0' : `calc(165px - ${height}px)`};
 	left: 0;
 	border-radius: 40px 40px 0 0;
+	transition: bottom 0.3s ease-in-out;
 
 	${mediaQueries.tablet} {
 		padding: 16px;
