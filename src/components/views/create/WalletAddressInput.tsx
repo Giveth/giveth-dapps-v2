@@ -226,6 +226,7 @@ const MainnetIcon = () => (
 );
 
 const Warning = styled(FlexCenter)`
+	flex-shrink: 0;
 	border-radius: 50%;
 	border: 1px solid ${semanticColors.blueSky[700]};
 	width: 14px;
