@@ -26,12 +26,14 @@ import {
 	PoolStakingConfig,
 	RegenStreamConfig,
 	SimplePoolStakingConfig,
+	StakingType,
 } from '@/types/config';
 import { formatWeiHelper } from '@/helpers/number';
 import { LockupDetailsModal } from '../LockupDetailsModal';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { useGIVpower } from '@/context/givpower.context';
+import config from '@/configuration';
 
 interface IUnStakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
@@ -54,8 +56,11 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 	const { stakedAmount } = useGIVpower();
 	const { library, chainId } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const { title, LM_ADDRESS, GARDEN_ADDRESS } =
+	const { title, type, LM_ADDRESS, GARDEN_ADDRESS } =
 		poolStakingConfig as SimplePoolStakingConfig;
+
+	const isGIVStaking = type === StakingType.GIV_LM;
+	const isGIVpower = isGIVStaking && chainId === config.XDAI_NETWORK_NUMBER;
 
 	const onWithdraw = async () => {
 		setUnstakeState(StakeState.UNSTAKING);
@@ -97,7 +102,7 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 								maxAmount={maxAmount}
 								poolStakingConfig={poolStakingConfig}
 							/>
-							{GARDEN_ADDRESS && (
+							{isGIVpower && (
 								<>
 									<LockInfoContainer
 										flexDirection='column'
@@ -117,28 +122,24 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 											</B>
 										</TotalStakedRow>
 									</LockInfoContainer>
-									<UnStakeButton
-										label={
-											unStakeState === StakeState.UNSTAKE
-												? 'unstake'
-												: 'unstake pending'
-										}
-										onClick={onWithdraw}
-										buttonType='primary'
-										disabled={
-											amount == '0' ||
-											maxAmount.lt(amount) ||
-											unStakeState ===
-												StakeState.UNSTAKING
-										}
-										loading={
-											unStakeState ===
-											StakeState.UNSTAKING
-										}
-									/>
 								</>
 							)}
-							{GARDEN_ADDRESS ? (
+							<UnStakeButton
+								label={
+									unStakeState === StakeState.UNSTAKE
+										? 'unstake'
+										: 'unstake pending'
+								}
+								onClick={onWithdraw}
+								buttonType='primary'
+								disabled={
+									amount == '0' ||
+									maxAmount.lt(amount) ||
+									unStakeState === StakeState.UNSTAKING
+								}
+								loading={unStakeState === StakeState.UNSTAKING}
+							/>
+							{isGIVpower ? (
 								<CancelButton
 									buttonType='texty'
 									size='small'
