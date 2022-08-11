@@ -505,7 +505,11 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							/>
 							{isGIVStaking && (
 								<ClaimButton
-									disabled={!active || earned.isZero()}
+									disabled={
+										!isGIVpower ||
+										!active ||
+										earned.isZero()
+									}
 									onClick={() => setShowLockModal(true)}
 									label='Increase your reward'
 									buttonType='primary'
