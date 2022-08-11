@@ -105,10 +105,12 @@ const ProjectsIndex = (props: IProjectsView) => {
 	};
 
 	useEffect(() => {
+		pageNum.current = 0;
 		fetchProjects(false, 0, true);
 	}, [user?.id]);
 
 	useEffect(() => {
+		pageNum.current = 0;
 		fetchProjects(false, 0);
 	}, [contextVariables.searchTerm]);
 
@@ -121,7 +123,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				};
 			});
 		}
-
+		pageNum.current = 0;
 		fetchProjects(false, 0);
 	}, [
 		contextVariables?.category,
