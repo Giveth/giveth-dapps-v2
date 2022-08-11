@@ -63,7 +63,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 			deviceSize.laptopS - 1
 		}px)`,
 	);
-	const isMobile = !isDesktop && !isTablet;
 
 	const fetchProjects = (
 		isLoadMore?: boolean,
@@ -111,10 +110,12 @@ const ProjectsIndex = (props: IProjectsView) => {
 	};
 
 	useEffect(() => {
+		pageNum.current = 0;
 		fetchProjects(false, 0, true);
 	}, [user?.id]);
 
 	useEffect(() => {
+		pageNum.current = 0;
 		fetchProjects(false, 0);
 	}, [contextVariables.searchTerm]);
 
@@ -127,7 +128,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				};
 			});
 		}
-
+		pageNum.current = 0;
 		fetchProjects(false, 0);
 	}, [
 		contextVariables?.category,
@@ -167,9 +168,13 @@ const ProjectsIndex = (props: IProjectsView) => {
 			<ProjectsBanner mainCategory={selectedMainCategory} />
 			<Wrapper>
 				<FiltersContainer>
-					{isDesktop && <ProjectsFiltersDesktop />}
-					{isTablet && <ProjectsFiltersTablet />}
-					{isMobile && <ProjectsFiltersMobile />}
+					{isDesktop ? (
+						<ProjectsFiltersDesktop />
+					) : isTablet ? (
+						<ProjectsFiltersTablet />
+					) : (
+						<ProjectsFiltersMobile />
+					)}
 				</FiltersContainer>
 
 				{isLoading && <Loader className='dot-flashing' />}
