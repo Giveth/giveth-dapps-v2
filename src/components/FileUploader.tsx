@@ -150,7 +150,7 @@ const FileUploader: FC<IFileUploader> = ({
 						alt='image'
 					/>
 					<P>
-						{`Drag & drop some docs here or `}
+						{`Drag & drop your files here or `}
 						<span onClick={open}>Upload from device.</span>
 					</P>
 					<P>
