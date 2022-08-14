@@ -23,10 +23,10 @@ import Select, {
 	MenuListProps,
 } from 'react-select';
 
-import useDeviceDetect from '@/hooks/useDeviceDetect';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
+import useDetectDevice from '@/hooks/useDetectDevice';
 
 declare module 'react-select/dist/declarations/src/Select' {
 	export interface Props<
@@ -120,7 +120,7 @@ const TokenPicker = (props: {
 		disabled,
 	} = props;
 
-	const { isMobile } = useDeviceDetect();
+	const { isMobile } = useDetectDevice();
 	const [isOpen, setIsOpen] = useState(false);
 
 	const selectStyles: StylesConfig<IProjectAcceptedToken, false> = {

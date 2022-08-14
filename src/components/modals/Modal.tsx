@@ -11,7 +11,7 @@ import {
 import { ETheme } from '@/features/general/general.slice';
 import { zIndex } from '@/lib/constants/constants';
 import { useAppSelector } from '@/features/hooks';
-import { checkUserAgentIsMobile } from '@/hooks/useDeviceDetect';
+import useDetectDevice from '@/hooks/useDetectDevice';
 
 interface ModalWrapperProps {
 	fullScreen?: boolean;
@@ -29,7 +29,7 @@ interface IModal extends ModalWrapperProps {
 	headerIcon?: ReactNode;
 	customTheme?: ETheme;
 	headerColor?: string;
-	children: React.ReactNode;
+	children: ReactNode;
 }
 
 export const Modal: FC<IModal> = ({
@@ -47,12 +47,12 @@ export const Modal: FC<IModal> = ({
 }) => {
 	const theme = useAppSelector(state => state.general.theme);
 	const el = useRef(document.createElement('div'));
+	const { isMobile } = useDetectDevice();
 
 	useEffect(() => {
 		const current = el.current;
 		const modalRoot = document.querySelector('body') as HTMLElement;
 		modalRoot.style.overflowY = 'hidden';
-		let isMobile = checkUserAgentIsMobile();
 		if (!isMobile) {
 			modalRoot.style.paddingRight = '15px';
 		}
