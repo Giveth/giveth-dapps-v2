@@ -50,6 +50,7 @@ const Container = styled.div<{ colorType: keyof typeof semanticColors }>`
 	margin: 24px 0;
 	max-width: 750px;
 	color: ${({ colorType }) => semanticColors[colorType][700]};
+	word-break: break-word;
 	> *:first-child {
 		flex-shrink: 0;
 	}
