@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { useVerificationData } from '@/context/verification.context';
 import { Shadow } from '@/components/styled-components/Shadow';
-import { ProgressBar } from '@/components/views/verification/Common';
+import { StepsProgressBar } from '@/components/views/verification/Common';
 import menuList from '@/components/views/verification/menu/menuList';
 import MenuModal from '@/components/views/verification/menu/MenuModal';
 import MenuIcon from '/public/images/menu/drawer_menu_black.svg';
@@ -26,7 +26,7 @@ const MobileMenu = () => {
 				<StatusSection>
 					<B>Verified status for</B>
 					<B>{title}</B>
-					<ProgressBar />
+					<StepsProgressBar />
 				</StatusSection>
 			</Wrapper>
 			{showMenu && <MenuModal setShowModal={setShowMenu} />}
