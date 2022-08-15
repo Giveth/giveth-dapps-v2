@@ -54,7 +54,10 @@ const ImageUploader: FC<IImageUploader> = props => {
 						justifyContent='space-between'
 					>
 						<Flex justifyContent='space-between'>
-							<Subline>{file.name + ` (${progress}%)`}</Subline>
+							<Subline>
+								<span>{file.name + ' '}</span>
+								{!url && <span>({progress}%)</span>}
+							</Subline>
 							{isUploading && (
 								<DeleteRow onClick={onDelete}>
 									<IconX size={16} />
