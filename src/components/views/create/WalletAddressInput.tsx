@@ -23,6 +23,7 @@ import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import CheckBox from '@/components/Checkbox';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
+import useDelay from '@/hooks/useDelay';
 
 interface IProps {
 	networkId: number;
@@ -65,6 +66,9 @@ const WalletAddressInput: FC<IProps> = ({
 	const isAddressUsed =
 		errorMessage.indexOf('is already being used for a project') > -1;
 
+	const delayedResolvedENS = useDelay(!!resolvedENS);
+	const delayedIsAddressUsed = useDelay(isAddressUsed);
+
 	let disabled: boolean;
 	if (isGnosis) disabled = !isActive;
 	else disabled = !isActive && !sameAddress;
@@ -93,6 +97,7 @@ const WalletAddressInput: FC<IProps> = ({
 		try {
 			clearErrors(inputName);
 			if (disabled) return true;
+			if (address.length === 0) return 'This field is required';
 			setResolvedENS('');
 			let _address = (' ' + address).slice(1);
 			setIsValidating(true);
@@ -178,14 +183,16 @@ const WalletAddressInput: FC<IProps> = ({
 				registerOptions={{ validate: addressValidation }}
 				error={isAddressUsed ? undefined : error}
 			/>
-			{resolvedENS && (
+			{delayedResolvedENS && (
 				<InlineToast
+					isHidden={!resolvedENS}
 					type={EToastType.Success}
 					message={'Resolves as ' + resolvedENS}
 				/>
 			)}
-			{isAddressUsed && (
+			{delayedIsAddressUsed && (
 				<InlineToast
+					isHidden={!isAddressUsed}
 					type={EToastType.Error}
 					message='This address is already used for another project. Please enter an address which is not currently associated with any other project.'
 				/>
