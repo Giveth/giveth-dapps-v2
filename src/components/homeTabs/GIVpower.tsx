@@ -55,7 +55,6 @@ import Routes from '@/lib/constants/Routes';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { formatWeiHelper } from '@/helpers/number';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
 
 export function TabPowerTop() {
@@ -98,9 +97,12 @@ export function TabPowerTop() {
 											alt='givpower'
 										/>
 										<TitleBase>
+											{/*
+											// TODO: UnComment when we want to go live
 											{formatWeiHelper(
 												givPower.balance,
-											) ?? 0}
+											) ?? 0} */}
+											Coming Soon
 										</TitleBase>
 									</Flex>
 									<Link href={Routes.Projects} passHref>
@@ -108,6 +110,8 @@ export function TabPowerTop() {
 											label='BOOST PROJECTS'
 											size='large'
 											linkType='primary'
+											// TODO: Remove when we want to go live
+											disabled
 										/>
 									</Link>
 								</>
@@ -170,9 +174,14 @@ export function TabPowerBottom() {
 							/>
 							<H4 weight={700}>Stake & lock GIV </H4>
 							<Lead>Stake & lock GIV to get GIVpower.</Lead>
-							<Link href={Routes.GIVfarm} passHref>
-								<CardBottomText>GET GIVPOWER</CardBottomText>
-							</Link>
+							{/*
+							TODO: UnComment when we want to go live
+							<Link href={Routes.GIVfarm} passHref> */}
+							<CardBottomText>
+								{/* GET GIVPOWER */}
+								Coming Soon
+							</CardBottomText>
+							{/* </Link> */}
 						</FeaturesCardItem>
 						<FeaturesCardItem>
 							<div>
@@ -186,9 +195,14 @@ export function TabPowerBottom() {
 								Boost your favourite projects to help them rise
 								through the ranks.
 							</Lead>
-							<Link href={Routes.Projects} passHref>
-								<CardBottomText>BOOST PROJECTS</CardBottomText>
-							</Link>
+							{/*
+							TODO: UnComment when we want to go live
+							<Link href={Routes.Projects} passHref> */}
+							<CardBottomText>
+								{/* BOOST PROJECTS */}
+								Coming Soon
+							</CardBottomText>
+							{/* </Link> */}
 						</FeaturesCardItem>
 						<FeaturesCardItem>
 							<Image
@@ -200,9 +214,15 @@ export function TabPowerBottom() {
 							<Lead>
 								The longer you lock, the greater your rewards.
 							</Lead>
-							<Link href={Routes.GIVfarm} passHref>
-								<CardBottomText>SEE REWARDS</CardBottomText>
-							</Link>
+
+							{/*
+							TODO: UnComment when we want to go live
+							<Link href={Routes.GIVfarm} passHref> */}
+							<CardBottomText>
+								{/* SEE REWARDS */}
+								Coming Soon
+							</CardBottomText>
+							{/* </Link> */}
 						</FeaturesCardItem>
 					</FeaturesCardItemsContainer>
 				</FeaturesCardContainer>
@@ -237,11 +257,14 @@ export function TabPowerBottom() {
 									more GIVbacks.
 								</QuoteText>
 								<br />
-								<Link href={Routes.GIVfarm} passHref>
-									<CardBottomText>
-										GET GIVPOWER
-									</CardBottomText>
-								</Link>
+								{/*
+								TODO: UnComment when we want to go live
+								<Link href={Routes.GIVfarm} passHref> */}
+								<CardBottomText>
+									{/* GET GIVPOWER */}
+									Coming Soon
+								</CardBottomText>
+								{/* </Link> */}
 							</BenefitsCardTextContainer>
 						</BenefitsCard>
 						<BenefitsCard>
