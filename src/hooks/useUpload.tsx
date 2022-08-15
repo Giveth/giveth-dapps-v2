@@ -45,6 +45,7 @@ const useUpload = (
 		multiple: false,
 		noClick: true,
 		noKeyboard: true,
+		useFsAccessApi: false,
 		onDrop: async (acceptedFiles: File[]) => {
 			setFile(acceptedFiles[0]);
 			setIsUploading(true);
