@@ -3,7 +3,7 @@ name: User Story
 about: 'Smallest unit of work. It''s an end goal, expressed from the software user''s
   perspective. '
 title: User Story
-labels: ''
+labels: User Story
 assignees: ''
 
 ---
