@@ -28,7 +28,11 @@ interface IInfos {
 	[key: string]: ethers.BigNumber;
 }
 
-export const FarmProvider: FC = ({ children }) => {
+interface IFarmProviderl {
+	children: React.ReactNode;
+}
+
+export const FarmProvider: FC<IFarmProviderl> = ({ children }) => {
 	const [xDaiInfos, setxDaiInfos] = useState<IInfos>({});
 	const [xDaiTotalEarned, setxDaiTotalEarned] = useState(
 		ethers.constants.Zero,

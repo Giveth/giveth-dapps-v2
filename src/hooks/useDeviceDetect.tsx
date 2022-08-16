@@ -15,17 +15,19 @@ import { deviceSize } from '@/lib/constants/constants';
 // 	return { isMobile: size[0] <= deviceSize.mobileL };
 // }
 
+export const checkUserAgentIsMobile = () => {
+	const userAgent =
+		typeof window.navigator === 'undefined' ? '' : navigator.userAgent;
+	return Boolean(
+		userAgent.match(/Android|BlackBerry|iPhone|iPod|Opera Mini|IEMobile/i),
+	);
+};
+
 export default function useDeviceDetect() {
 	const [isMobile, setMobile] = React.useState(false);
 
 	React.useEffect(() => {
-		const userAgent =
-			typeof window.navigator === 'undefined' ? '' : navigator.userAgent;
-		let mobile = Boolean(
-			userAgent.match(
-				/Android|BlackBerry|iPhone|iPod|Opera Mini|IEMobile/i,
-			),
-		);
+		let mobile = checkUserAgentIsMobile();
 		// check width if device not found
 		if (!mobile && typeof window !== 'undefined') {
 			mobile = window.innerWidth <= deviceSize.mobileL;

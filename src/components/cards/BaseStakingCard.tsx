@@ -72,8 +72,8 @@ import { Flex } from '../styled-components/Flex';
 import { IStakeInfo } from '@/hooks/useStakingPool';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { useAppSelector } from '@/features/hooks';
-import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import Routes from '@/lib/constants/Routes';
+import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { IconAngelVault } from '../Icons/AngelVault';
 import type { LiquidityPosition } from '@/types/nfts';
 

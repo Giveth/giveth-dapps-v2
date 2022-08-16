@@ -46,6 +46,7 @@ import {
 	setShowSignWithWallet,
 	setShowCompleteProfile,
 } from '@/features/modal/modal.slice';
+import { slugToProjectView } from '@/lib/routeCreators';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
 export interface IHeader {
@@ -59,7 +60,7 @@ const Header: FC<IHeader> = () => {
 	const [showUserMenu, setShowUserMenu] = useState(false);
 	const [showHeader, setShowHeader] = useState(true);
 	const [isGIVeconomyRoute, setIsGIVeconomyRoute] = useState(false);
-	const [isCreateRoute, setIsCreateRoute] = useState(false);
+	const [showBackBtn, setShowBackBtn] = useState(false);
 
 	const { chainId, active, account, library } = useWeb3React();
 	const sdh = new SubgraphDataHelper(
@@ -72,12 +73,37 @@ const Header: FC<IHeader> = () => {
 	);
 	const theme = useAppSelector(state => state.general.theme);
 	const router = useRouter();
-
 	const isLight = theme === ETheme.Light;
+
+	const handleBack = () => {
+		const calculateSlug = () => {
+			if (typeof router.query?.slug === 'string') {
+				return router.query?.slug;
+			}
+			return '';
+		};
+		if (
+			router.route.startsWith(Routes.Verification) &&
+			router?.query?.slug &&
+			!router?.query?.token
+		) {
+			router.push(slugToProjectView(calculateSlug()));
+		} else if (
+			router.route.startsWith(Routes.Verification) &&
+			router?.query?.token
+		) {
+			router.push(`${Routes.Verification}/${calculateSlug()}`);
+		} else {
+			router.back();
+		}
+	};
 
 	useEffect(() => {
 		setIsGIVeconomyRoute(router.route.startsWith('/giv'));
-		setIsCreateRoute(router.route.startsWith(Routes.CreateProject));
+		setShowBackBtn(
+			router.route.startsWith(Routes.CreateProject) ||
+				router.route.startsWith(Routes.Verification),
+		);
 	}, [router.route]);
 
 	useEffect(() => {
@@ -148,8 +174,8 @@ const Header: FC<IHeader> = () => {
 			show={showHeader}
 		>
 			<Flex>
-				{isCreateRoute ? (
-					<Logo onClick={router.back}>
+				{showBackBtn ? (
+					<Logo onClick={handleBack}>
 						<Image
 							width='26px'
 							height='26px'
@@ -175,7 +201,7 @@ const Header: FC<IHeader> = () => {
 					</>
 				)}
 			</Flex>
-			{!isCreateRoute && (
+			{!showBackBtn && (
 				<HeaderLinks theme={theme}>
 					{menuRoutes.map((link, index) => (
 						<Link href={link.href[0]} passHref key={index}>

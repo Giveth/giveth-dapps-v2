@@ -71,17 +71,16 @@ export const getNetworkIds = (
 	recipientAddresses?: IWalletAddress[],
 ) => {
 	const recipientAddressesNetwork = recipientAddresses?.map(
-		address => address.networkId,
+		address => address.isRecipient && address.networkId,
 	);
 	const networkIds: INetworkIds = {};
 	tokens.forEach(i => {
 		networkIds[i.networkId] = true;
 	});
 	const networkIdArrays = Object.keys(networkIds).map(i => Number(i));
-	const test = networkIdArrays.filter(networkId =>
+	return networkIdArrays.filter(networkId =>
 		recipientAddressesNetwork?.includes(networkId),
 	);
-	return test;
 };
 
 export const getNetworkNames = (networks: number[], text: string) => {
@@ -105,9 +104,8 @@ export interface IConfirmDonation extends IDonateModalProps {
 
 export const confirmDonation = async (props: IConfirmDonation) => {
 	const {
-		project,
 		mainProjectAddress,
-		secondaryProjectAdress,
+		secondaryProjectAddress,
 		amount,
 		token,
 		setSuccessDonation,
@@ -118,11 +116,12 @@ export const confirmDonation = async (props: IConfirmDonation) => {
 		givBackEligible,
 		setTxHash,
 	} = props;
+
 	const { library, chainId } = web3Context;
 	const walletAddress =
 		chainId === config.PRIMARY_NETWORK.id
 			? mainProjectAddress
-			: secondaryProjectAdress;
+			: secondaryProjectAddress;
 	const { address } = token;
 	let donationId = 0,
 		donationSaved = false;

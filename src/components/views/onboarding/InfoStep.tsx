@@ -2,8 +2,8 @@ import { FC, useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { H6, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-
 import { captureException } from '@sentry/nextjs';
+
 import { useForm } from 'react-hook-form';
 import { useWeb3React } from '@web3-react/core';
 import { UPDATE_USER } from '@/apollo/gql/gqlUser';
@@ -22,6 +22,7 @@ import Input from '@/components/Input';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
+import { requiredOptions, validators } from '@/lib/constants/regex';
 
 export interface IUserInfo {
 	email: string;
@@ -32,7 +33,7 @@ export interface IUserInfo {
 }
 
 const InfoStep: FC<IStep> = ({ setStep }) => {
-	const [disabled, setDisabled] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 	const [updateUser] = useMutation(UPDATE_USER);
 	const [showModal, setShowModal] = useState(false);
 	const {
@@ -55,7 +56,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 	};
 
 	const onSave = async (formData: IUserInfo) => {
-		setDisabled(true);
+		setIsLoading(true);
 		try {
 			const { data: response } = await updateUser({
 				variables: {
@@ -84,14 +85,14 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 				},
 			});
 		}
-		setDisabled(false);
+		setIsLoading(false);
 		return false;
 	};
 
 	return (
 		<>
 			<OnboardStep xs={12} xl={8} sm={12}>
-				<form onSubmit={handleSubmit(onSave)}>
+				<form onSubmit={handleSubmit(onSave)} noValidate>
 					<SectionHeader>What should we call you?</SectionHeader>
 					<Section>
 						<Col xs={12} md={6}>
@@ -100,12 +101,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 								label='first name'
 								placeholder='John'
 								register={register}
-								registerOptions={{
-									required: {
-										value: true,
-										message: 'First name is required',
-									},
-								}}
+								registerOptions={requiredOptions.firstName}
 								error={errors.firstName}
 							/>
 						</Col>
@@ -115,12 +111,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 								placeholder='Doe'
 								registerName='lastName'
 								register={register}
-								registerOptions={{
-									required: {
-										value: true,
-										message: 'Last name is required',
-									},
-								}}
+								registerOptions={requiredOptions.lastName}
 								error={errors.lastName}
 							/>
 						</Col>
@@ -131,20 +122,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 								placeholder='Example@Domain.com'
 								register={register}
 								type='email'
-								registerOptions={{
-									required: {
-										value: true,
-										message: 'Email is required',
-									},
-									pattern: {
-										value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-										message: 'Invalid Email Address',
-									},
-									minLength: {
-										value: 3,
-										message: 'Too Short',
-									},
-								}}
+								registerOptions={requiredOptions.email}
 								error={errors.email}
 							/>
 						</Col>
@@ -172,12 +150,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 								register={register}
 								type='url'
 								caption='Your home page, blog, or company site.'
-								registerOptions={{
-									pattern: {
-										value: /^(?:http(s)?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
-										message: 'Invalid URL',
-									},
-								}}
+								registerOptions={validators.website}
 								error={errors.url}
 							/>
 						</Col>
@@ -186,7 +159,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 						<Col xs={12} md={7}>
 							<SaveButton
 								label='SAVE & CONTINUE'
-								disabled={disabled}
+								disabled={isLoading}
 								size='medium'
 								type='submit'
 							/>

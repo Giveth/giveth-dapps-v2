@@ -15,3 +15,7 @@ export const idToProjectEdit = (id?: string) => {
 export const addressToUserView = (address?: string) => {
 	return Routes.User + '/' + address;
 };
+
+export const slugToVerification = (slug?: string) => {
+	return Routes.Verification + '/' + slug;
+};
