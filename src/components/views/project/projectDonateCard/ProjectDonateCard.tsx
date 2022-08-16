@@ -136,7 +136,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 				showToastError(e);
 				captureException(e, {
 					tags: {
-						section: 'likeUnline Project Donate',
+						section: 'likeUnlike Project Donate Card',
 					},
 				});
 			} finally {
@@ -188,8 +188,16 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 	}, [user, adminUser]);
 
 	useEffect(() => {
-		setWrapperHeight(wrapperRef?.current?.clientHeight || 0);
-	}, [wrapperRef, project]);
+		const handleResize = () =>
+			setWrapperHeight(wrapperRef?.current?.clientHeight || 0);
+		if (isMobile) {
+			handleResize();
+			window.addEventListener('resize', handleResize);
+		}
+		return () => {
+			if (isMobile) window.removeEventListener('resize', handleResize);
+		};
+	}, [project]);
 
 	const handleProjectStatus = async (deactivate?: boolean) => {
 		if (deactivate) {
@@ -239,9 +247,10 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 			)}
 			<Wrapper
 				ref={wrapperRef}
-				initialPosition={wrapperHeight}
-				drag='y'
-				dragConstraints={{ top: -(wrapperHeight - 168), bottom: 120 }}
+				height={wrapperHeight}
+				drag={isMobile ? 'y' : false}
+				dragElastic={0}
+				dragConstraints={{ top: -(wrapperHeight - 165), bottom: 120 }}
 			>
 				{isMobile && <BlueBar />}
 				<ProjectCardOrgBadge
@@ -373,7 +382,7 @@ const BadgeWrapper = styled.div`
 	justify-content: space-between;
 `;
 
-const Wrapper = styled(motion.div)<{ initialPosition: number }>`
+const Wrapper = styled(motion.div)<{ height: number }>`
 	margin-top: -32px;
 	background: white;
 	padding: 32px;
@@ -384,7 +393,7 @@ const Wrapper = styled(motion.div)<{ initialPosition: number }>`
 	align-self: flex-start;
 	width: 100%;
 	position: fixed;
-	bottom: calc(-${props => props.initialPosition}px + 168px);
+	bottom: ${({ height }) => `calc(165px - ${height}px)`};
 	left: 0;
 	border-radius: 40px 40px 0 0;
 
