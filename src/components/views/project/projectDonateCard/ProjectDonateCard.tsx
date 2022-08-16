@@ -195,9 +195,9 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 			window.addEventListener('resize', handleResize);
 		}
 		return () => {
-			if (isMobile) window.removeEventListener('resize', handleResize);
+			window.removeEventListener('resize', handleResize);
 		};
-	}, [project]);
+	}, [project, isMobile]);
 
 	const handleProjectStatus = async (deactivate?: boolean) => {
 		if (deactivate) {
