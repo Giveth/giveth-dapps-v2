@@ -80,22 +80,23 @@ const AddAddressModal: FC<IProps> = ({
 	};
 
 	const validateAddress = async (address: string) => {
+		let actualAddress = address;
 		if (!library) return 'Web3 is not initialized';
 		if (isAddressENS(address)) {
 			if (chainId !== 1) {
 				return 'Please switch to Mainnet to handle ENS addresses';
 			}
-			const actualAddress = await getAddressFromENS(address, library);
-			const isDuplicate = addresses.some(
-				item =>
-					item.address === actualAddress &&
-					item.networkId === getValues('network')?.value,
-			);
-			if (isDuplicate) return 'Address already exists';
-			return actualAddress ? true : 'Invalid ENS address';
+			actualAddress = await getAddressFromENS(address, library);
+			if (!actualAddress) return 'Invalid ENS address';
 		} else {
-			return utils.isAddress(address) ? true : 'Invalid address';
+			if (!utils.isAddress(address)) return 'Invalid address';
 		}
+		const isDuplicate = addresses.some(
+			item =>
+				item.address.toLowerCase() === actualAddress.toLowerCase() &&
+				item.networkId === getValues('network')?.value,
+		);
+		return isDuplicate ? 'Address already exists' : true;
 	};
 
 	return (
