@@ -117,7 +117,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	}
 
 	const formMethods = useForm<TInputs>({
-		mode: 'onChange',
+		mode: 'onSubmit',
 		defaultValues: {
 			[EInputs.name]: title,
 			[EInputs.description]: description,
