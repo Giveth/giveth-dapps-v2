@@ -18,15 +18,15 @@ const config: EnvConfig = {
 	MICROSERVICES: {
 		authentication: `${BASE_ROUTE}/siweauthmicroservice/v1`,
 	},
-	MAINNET_NETWORK_NUMBER: 42, // Kovan
+	MAINNET_NETWORK_NUMBER: 5, // Goerli
 	XDAI_NETWORK_NUMBER: 100, // xDAI
 
 	GARDEN_LINK:
 		'https://gardens-staging.1hive.org/#/xdai/garden/0x16388d99199a74810fc572049b3d4d657e7d5deb',
 
 	MAINNET_CONFIG: {
-		chainId: '0x2a', // A 0x-prefixed hexadecimal string
-		chainName: 'Kovan',
+		chainId: '0x5', // A 0x-prefixed hexadecimal string
+		chainName: 'Goerli',
 		nativeCurrency: {
 			name: 'ETH',
 			symbol: 'ETH', // 2-6 characters long
@@ -37,51 +37,52 @@ const config: EnvConfig = {
 			// Keep it empty for automatic configuration
 		},
 		blockExplorerName: ['Etherscan'],
-		blockExplorerUrls: ['https://kovan.etherscan.io'],
+		blockExplorerUrls: ['https://goerli.etherscan.io'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/mohammadranjbarz/giv-economy-kovan',
+			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-goerli-staging',
 
-		TOKEN_ADDRESS: '0x29434A25abd94AE882aA883eea81585Aaa5b078D',
-		tokenAddressOnUniswapV2: '0x900db999074d9277c5da2a43f252d74366230da0',
-		WETH_TOKEN_ADDRESS: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
-		TOKEN_DISTRO_ADDRESS: '0x2C84Ab41b53C52959a794830fe296Fd717c33337',
+		TOKEN_ADDRESS: '0xA2470F25bb8b53Bd3924C7AC0C68d32BF2aBd5be',
+		tokenAddressOnUniswapV2: '0x900db999074d9277c5da2a43f252d74366230da0', // TODO: GOERLI ?
+		WETH_TOKEN_ADDRESS: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
+		TOKEN_DISTRO_ADDRESS: '0x4358c99abFe7A9983B6c96785b8870b5412C5B4B',
 		GIV: {
-			LM_ADDRESS: '0x17207684344B206A06BF8651d6e5e1833660418b',
+			LM_ADDRESS: '0x929C9353D67af21411d4475B30D960F23C209abd',
 			BUY_LINK:
 				'https://app.uniswap.org/#/swap?outputCurrency=0x29434A25abd94AE882aA883eea81585Aaa5b078D',
 		},
 
-		nodeUrl: 'https://kovan.infura.io/v3/' + INFURA_API_KEY,
+		nodeUrl: 'https://goerli.infura.io/v3/' + INFURA_API_KEY,
 
 		pools: [
 			{
-				POOL_ADDRESS: '0x6D5481911052a42c109F1f56354BEB07Ec430b85',
-				LM_ADDRESS: '0x9e4EcF5fE5F58C888C84338525422A1D0915f6ff',
+				POOL_ADDRESS: '0x0551f038a84cb0d42584a8E3eaf5a409D22F4211',
+				LM_ADDRESS: '0x6420Ad2d9B512f1cF0B899794598Ed17da2C5836',
 				type: StakingType.UNISWAPV2_GIV_DAI,
 				platform: StakingPlatform.UNISWAP,
 				title: 'GIV / DAI',
 				description: '50% GIV, 50% DAI',
 				provideLiquidityLink:
-					'https://app.uniswap.org/#/add/v2/0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa/0x29434A25abd94AE882aA883eea81585Aaa5b078D?chain=kovan',
+					'https://app.uniswap.org/#/add/v2/0xA2470F25bb8b53Bd3924C7AC0C68d32BF2aBd5be/0xdc31Ee1784292379Fbb2964b3B9C4124D8F89C60?chain=goerli',
 				unit: 'LP',
 				active: true,
 			},
 			{
-				POOL_ADDRESS: '0x8a6b25e33b12d1bb6929a8793961076bd1f9d3eb',
-				VAULT_ADDRESS: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+				POOL_ADDRESS: '0xfaeb6a8b5f15af77673666e51a44f6b9b6ca5da2',
+				VAULT_ADDRESS: '0xba12222222228d8ba445958a75a0704d566bf2c8',
 				POOL_ID:
-					'0x8a6b25e33b12d1bb6929a8793961076bd1f9d3eb00020000000000000000053f',
-				LM_ADDRESS: '0x4B319c068685aF260c91407B651918307df30061',
+					'0xfaeb6a8b5f15af77673666e51a44f6b9b6ca5da20002000000000000000000da',
+				LM_ADDRESS: '0x11275A970e17B21Cf6917C9D3DA5AcB6722c5dcC',
 				type: StakingType.BALANCER_ETH_GIV,
 				platform: StakingPlatform.BALANCER,
 				title: 'GIV / ETH',
 				description: '80% GIV, 20% ETH',
 				provideLiquidityLink:
-					'https://kovan.app.balancer.fi/#/pool/0x8a6b25e33b12d1bb6929a8793961076bd1f9d3eb00020000000000000000053f',
+					'https://goerli.app.balancer.fi/#/pool/0xfaeb6a8b5f15af77673666e51a44f6b9b6ca5da2xxxxx',
 				unit: 'LP',
 				active: true,
 			},
 			{
+				// TODO: GOERLI
 				POOL_ADDRESS: '0xA0D500fd3479CBCb64a2238082b7a1Df9f87d98D',
 				LM_ADDRESS: '0x7CD371D230338C74563A9A23AF72dd009a7D1b1C',
 				type: StakingType.ICHI_GIV_ONEGIV,
@@ -107,15 +108,15 @@ const config: EnvConfig = {
 				INCENTIVE_END_TIME: 1655997000,
 				INCENTIVE_REWARD_AMOUNT: 10000000,
 				NFT_POSITIONS_MANAGER_ADDRESS:
-					'0xC36442b4a4522E871399CD717aBDD847Ab11FE88',
-				UNISWAP_V3_STAKER: '0x1f98407aaB862CdDeF78Ed252D6f557aA5b0f00d',
+					'0xC36442b4a4522E871399CD717aBDD847Ab11FE88', // TODO: GOERLI
+				UNISWAP_V3_STAKER: '0x1f98407aaB862CdDeF78Ed252D6f557aA5b0f00d', // TODO: GOERLI
 				STAKING_REWARDS_CONTRACT:
 					'0xfA656B81cEC0deD6Acd5Bb1a60A06914aB21A0B3',
 				REWARD_TOKEN: '0xDfbb5C70006B357d30BB335f55a01e6b0151Bcb5',
 				UNISWAP_V3_LP_POOL:
-					'0x3c2455a3ee0d824941c9329c01a66b86078c3e82',
+					'0x3c2455a3ee0d824941c9329c01a66b86078c3e82', // TODO: GOERLI
 				INCENTIVE_REFUNDEE_ADDRESS:
-					'0x5f672d71399d8cDbA64f596394b4f4381247E025',
+					'0x5f672d71399d8cDbA64f596394b4f4381247E025', // TODO: GOERLI
 				type: StakingType.UNISWAPV3_ETH_GIV,
 				platform: StakingPlatform.UNISWAP,
 				title: 'GIV / ETH',
@@ -129,6 +130,7 @@ const config: EnvConfig = {
 		uniswapV2Subgraph:
 			'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
 		regenStreams: [
+			// TODO: GOERLI
 			{
 				tokenDistroAddress:
 					'0xBb974e08774544a361BCF496fE61DaB9Df29AFFc',
@@ -142,6 +144,7 @@ const config: EnvConfig = {
 			},
 		],
 		regenFarms: [
+			// TODO: GOERLI
 			{
 				POOL_ADDRESS: '0x6bb32725aa31b1a99e7c782e0605b0fb57e4b9e6',
 				LM_ADDRESS: '0x9d23d449af3e2c07a286688c85ff5d3d4c219d79',
