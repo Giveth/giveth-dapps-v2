@@ -20,7 +20,6 @@ import {
 	RoundSection,
 	RoundTitle,
 	RoundInfo,
-	RoundInfoRow,
 	RoundInfoTallRow,
 	RoundButton,
 	InfoSection,
@@ -36,7 +35,7 @@ import { HarvestAllModal } from '../modals/HarvestAll';
 import { getNowUnixMS } from '@/helpers/time';
 import { formatDate } from '@/lib/helpers';
 import { GIVBackExplainModal } from '../modals/GIVBackExplain';
-import { TopInnerContainer } from './commons';
+import { NoWrap, TopInnerContainer } from './commons';
 import links from '@/lib/constants/links';
 import { Col, Container, Row } from '@/components/Grid';
 import Routes from '@/lib/constants/Routes';
@@ -49,11 +48,11 @@ export const TabGIVbacksTop = () => {
 	const [showGivBackExplain, setShowGivBackExplain] = useState(false);
 	const [givBackStream, setGivBackStream] = useState<BigNumber.Value>(0);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
-	const currentValues = useAppSelector(state => state.subgraph.currentValues);
+	const xDaiValues = useAppSelector(state => state.subgraph.xDaiValues);
 	const givTokenDistroBalance = useMemo(() => {
-		const sdh = new SubgraphDataHelper(currentValues);
+		const sdh = new SubgraphDataHelper(xDaiValues);
 		return sdh.getGIVTokenDistroBalance();
-	}, [currentValues]);
+	}, [xDaiValues]);
 	const { chainId } = useWeb3React();
 
 	useEffect(() => {
@@ -197,31 +196,55 @@ export const TabGIVbacksBottom = () => {
 					<Row>
 						<Col xs={12} md={8}>
 							<RoundSection>
-								<RoundTitle>GIVbacks Round {round}</RoundTitle>
+								<RoundTitle>
+									GIVbacks <NoWrap>Round {round}</NoWrap>
+								</RoundTitle>
 								<RoundInfo>
-									<RoundInfoRow justifyContent='space-between'>
-										<P>Start Date</P>
-										<P>
-											{givTokenDistroHelper
-												? formatDate(roundStartime)
-												: '-'}
-										</P>
-									</RoundInfoRow>
-									<RoundInfoRow justifyContent='space-between'>
-										<P>End Date</P>
-										<P>
-											{givTokenDistroHelper
-												? formatDate(roundEndTime)
-												: '-'}
-										</P>
-									</RoundInfoRow>
 									<RoundInfoTallRow
 										justifyContent='space-between'
 										alignItems='center'
+										wrap={1}
 									>
-										<P>GIV Allocated to Round</P>
+										{' '}
+										<P>
+											<NoWrap>Start Date</NoWrap>
+										</P>
+										<P>
+											<NoWrap>
+												{givTokenDistroHelper
+													? formatDate(roundStartime)
+													: '-'}
+											</NoWrap>
+										</P>
+									</RoundInfoTallRow>
+									<RoundInfoTallRow
+										justifyContent='space-between'
+										alignItems='center'
+										wrap={1}
+									>
+										<P>
+											<NoWrap>End Date</NoWrap>
+										</P>
+										<P>
+											<NoWrap>
+												{givTokenDistroHelper
+													? formatDate(roundEndTime)
+													: '-'}
+											</NoWrap>
+										</P>
+									</RoundInfoTallRow>
+									<RoundInfoTallRow
+										justifyContent='space-between'
+										alignItems='center'
+										wrap={1}
+									>
+										<P>
+											<NoWrap>
+												GIV Allocated to Round
+											</NoWrap>
+										</P>
 										<GivAllocated>
-											1 Million GIV
+											<NoWrap>1 Million GIV</NoWrap>
 										</GivAllocated>
 									</RoundInfoTallRow>
 									<RoundButton
