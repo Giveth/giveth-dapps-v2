@@ -16,9 +16,10 @@ export enum EToastType {
 interface IProps {
 	message: string;
 	type: EToastType;
+	isHidden?: boolean;
 }
 
-const InlineToast: FC<IProps> = ({ message, type }) => {
+const InlineToast: FC<IProps> = ({ message, type, isHidden }) => {
 	const colorType: keyof typeof semanticColors =
 		type === EToastType.Error
 			? 'punch'
@@ -27,7 +28,10 @@ const InlineToast: FC<IProps> = ({ message, type }) => {
 			: 'jade';
 
 	return (
-		<Container colorType={colorType}>
+		<Container
+			className={isHidden ? 'fadeOut' : 'fadeIn'}
+			colorType={colorType}
+		>
 			{type === EToastType.Success ? (
 				<IconCheckmarkCircle />
 			) : (
