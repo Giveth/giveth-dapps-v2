@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import {
 	brandColors,
 	Button,
@@ -16,6 +16,7 @@ import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { captureException } from '@sentry/nextjs';
 import { FormProvider, useForm } from 'react-hook-form';
+import debounce from 'lodash.debounce';
 
 import {
 	ACTIVATE_PROJECT,
@@ -37,7 +38,6 @@ import {
 	WalletAddressInput,
 } from './Inputs';
 import SuccessfulCreation from './SuccessfulCreation';
-
 import { compareAddresses, showToastError } from '@/lib/helpers';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { slugToProjectView } from '@/lib/routeCreators';
@@ -48,7 +48,7 @@ import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import config from '@/configuration';
 import Input, { InputSize } from '@/components/Input';
 import { requiredOptions } from '@/lib/constants/regex';
-import { titleValidation } from '@/components/views/create/helpers';
+import { gqlTitleValidation } from '@/components/views/create/helpers';
 import CheckBox from '@/components/Checkbox';
 import Guidelines from '@/components/views/create/Guidelines';
 import useDetectDevice from '@/hooks/useDetectDevice';
@@ -135,6 +135,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		handleSubmit,
 		formState: { errors: formErrors },
 		setValue,
+		setError,
 		watch,
 	} = formMethods;
 
@@ -264,6 +265,19 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		}
 	};
 
+	const titleValidation = async (title: string) => {
+		if (noTitleValidation(title)) return true;
+		setIsTitleValidating(true);
+		const result = await gqlTitleValidation(title);
+		setIsTitleValidating(false);
+		if (typeof result === 'string') {
+			setError(EInputs.name, { type: 'validate', message: result });
+		}
+		return true;
+	};
+
+	const debouncedTitleValidation = useRef(debounce(titleValidation, 750));
+
 	useEffect(() => {
 		dispatch(setShowFooter(false));
 	}, []);
@@ -302,13 +316,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							registerName={EInputs.name}
 							registerOptions={{
 								...requiredOptions.name,
-								validate: async i => {
-									if (noTitleValidation(i)) return true;
-									setIsTitleValidating(true);
-									const result = await titleValidation(i);
-									setIsTitleValidating(false);
-									return result;
-								},
+								validate: debouncedTitleValidation.current,
 							}}
 							error={formErrors[EInputs.name]}
 						/>
