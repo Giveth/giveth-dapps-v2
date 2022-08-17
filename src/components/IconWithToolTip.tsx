@@ -11,6 +11,20 @@ interface IIconWithTooltipProps extends IDirection {
 	children: ReactNode;
 }
 
+export const IconWithTooltip: FC<IIconWithTooltipProps> = ({
+	icon,
+	direction,
+	align = 'center',
+	children,
+}) => {
+	return (
+		<IconWithTooltipContainer direction={direction} align={align}>
+			{icon}
+			<span>{children}</span>
+		</IconWithTooltipContainer>
+	);
+};
+
 const IconWithTooltipContainer = styled.div<IDirection>`
 	position: relative;
 	cursor: pointer;
@@ -97,18 +111,3 @@ const IconWithTooltipContainer = styled.div<IDirection>`
 		transition: opacity 0.3s;
 	}
 `;
-<<<<<<< HEAD
-
-export const IconWithTooltip: FC<IIconWithTooltipProps> = ({
-	icon,
-	direction,
-	align = 'center',
-	children,
-}) => {
-	return (
-		<IconWithTooltipContainer direction={direction} align={align}>
-			{icon}
-			<span>{children}</span>
-		</IconWithTooltipContainer>
-	);
-};
