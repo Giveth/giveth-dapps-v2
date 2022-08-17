@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import Select, { StylesConfig } from 'react-select';
-import Debounced from 'lodash.debounce';
 import { useRouter } from 'next/router';
 import {
 	brandColors,
@@ -33,6 +32,7 @@ import { Shadow } from '../../styled-components/Shadow';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
+import useDebounce from '@/hooks/useDebounce';
 
 interface IProjectsView {
 	projects: IProject[];
@@ -87,32 +87,25 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const { projects, totalCount: _totalCount, categories } = props;
 	const user = useAppSelector(state => state.user.userData);
 
-	const [categoriesObj, setCategoriesObj] = useState<ISelectObj[]>();
 	const [selectedCategory, setSelectedCategory] =
 		useState<ISelectObj>(allCategoryObj);
 	const [isLoading, setIsLoading] = useState(false);
 	const [filteredProjects, setFilteredProjects] =
 		useState<IProject[]>(projects);
 	const [sortBy, setSortBy] = useState<ISelectObj>(sortByObj[0]);
-	const [search, setSearch] = useState<string>('');
 	const [searchValue, setSearchValue] = useState<string>('');
 	const [totalCount, setTotalCount] = useState(_totalCount);
 
 	const dispatch = useAppDispatch();
 	const router = useRouter();
 	const isFirstRender = useRef(true);
-	const debouncedSearch = useRef<any>();
 	const pageNum = useRef(0);
-
-	useEffect(() => {
-		setCategoriesObj(buildCategoryObj(categories));
-		debouncedSearch.current = Debounced(setSearch, 1000);
-	}, []);
+	const debouncedSearch = useDebounce(searchValue);
 
 	useEffect(() => {
 		if (!isFirstRender.current) fetchProjects();
 		else isFirstRender.current = false;
-	}, [selectedCategory.value, sortBy.label, search]);
+	}, [selectedCategory.value, sortBy.label, debouncedSearch]);
 
 	const fetchProjects = (
 		isLoadMore?: boolean,
@@ -134,7 +127,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 		if (sortBy.direction) variables.orderBy.direction = sortBy.direction;
 		if (categoryQuery && categoryQuery !== 'All')
 			variables.category = categoryQuery;
-		if (search) variables.searchTerm = search;
+		if (searchValue) variables.searchTerm = searchValue;
 
 		if (!userIdChanged) setIsLoading(true);
 
@@ -172,13 +165,11 @@ const ProjectsIndex = (props: IProjectsView) => {
 		pageNum.current = 0;
 		if (type === 'search') {
 			setSearchValue(input);
-			debouncedSearch.current(input);
 		} else if (type === 'sortBy') setSortBy(input);
 		else if (type === 'category') setSelectedCategory(input);
 	};
 
 	const clearSearch = () => {
-		setSearch('');
 		setSearchValue('');
 	};
 
@@ -217,7 +208,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 							styles={selectCustomStyles}
 							value={selectedCategory}
 							onChange={e => handleChange('category', e)}
-							options={categoriesObj}
+							options={buildCategoryObj(categories)}
 							isMobile={false}
 						/>
 					</SelectComponent>
