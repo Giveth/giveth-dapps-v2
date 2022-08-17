@@ -4,7 +4,6 @@ import {
 	IconHeart,
 	neutralColors,
 	P,
-	semanticColors,
 } from '@giveth/ui-design-system';
 import { FC } from 'react';
 import styled from 'styled-components';
@@ -18,9 +17,9 @@ import InternalLink from '@/components/InternalLink';
 import ListingBadge from '@/components/views/userPublicProfile/projectsTab/ListingBadge';
 import StatusBadge from '@/components/views/userPublicProfile/projectsTab/StatusBadge';
 import SortIcon from '@/components/SortIcon';
-import { IProject } from '@/apollo/types/types';
-import { Badge } from '@/components/views/userPublicProfile/StyledComponents';
+import { EVerificationStatus, IProject } from '@/apollo/types/types';
 import { mediaQueries } from '@/lib/constants/constants';
+import VerificationBadge from '@/components/VerificationBadge';
 
 interface IProjectsTable {
 	projects: IProject[];
@@ -54,6 +53,9 @@ const ProjectsTable: FC<IProjectsTable> = ({
 			{projects?.map(project => {
 				const status = project.status.name;
 				const isCancelled = status === EProjectStatus.CANCEL;
+				const verStatus = project.verified
+					? EVerificationStatus.VERIFIED
+					: project.projectVerificationForm?.status;
 				return (
 					<RowWrapper key={project.id}>
 						<TableCell>
@@ -65,11 +67,7 @@ const ProjectsTable: FC<IProjectsTable> = ({
 						<TableCell bold>
 							<ProjectTitle>
 								{project.title}
-								{project.verified && (
-									<Badge mainColor={semanticColors.jade}>
-										Verified
-									</Badge>
-								)}
+								<VerificationBadge status={verStatus} />
 							</ProjectTitle>
 						</TableCell>
 						<TableCell>{project.totalReactions}</TableCell>
@@ -102,11 +100,11 @@ const ProjectsTable: FC<IProjectsTable> = ({
 
 const Container = styled.div`
 	display: grid;
-	grid-template-columns: 1.5fr 1fr 3fr 1.1fr 1.5fr 1.75fr 1fr;
+	grid-template-columns: 1.5fr 1.1fr 4fr 1.1fr 1.5fr 1.75fr 1fr;
 	overflow: auto;
 	min-width: 900px;
 
-	${mediaQueries.laptop} {
+	${mediaQueries.laptopS} {
 		min-width: 1000px;
 	}
 `;
@@ -160,9 +158,9 @@ const Actions = styled(Flex)<{ isCancelled: boolean }>`
 `;
 
 const ProjectTitle = styled.div`
-	> :last-child {
-		margin-left: 7px;
-	}
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0 10px;
 `;
 
 export default ProjectsTable;

@@ -63,6 +63,7 @@ import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
 import { LiquidityPosition } from '@/types/nfts';
 import { Flex } from '../styled-components/Flex';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import type { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 
@@ -135,6 +136,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	//Sum
 	const [sumLiquid, setSumLiquid] = useState(ethers.constants.Zero);
 	const [sumStream, setSumStream] = useState<BigNumber>(Zero);
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	const tokenDistroBalance = regenStreamConfig
 		? sdh.getTokenDistroBalance(regenStreamConfig.tokenDistroAddress)
@@ -308,7 +310,8 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 
 	return (
 		<Modal
-			setShowModal={setShowModal}
+			closeModal={closeModal}
+			isAnimating={isAnimating}
 			headerTitle={modalTitle}
 			headerTitlePosition={'left'}
 		>
@@ -324,9 +327,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 								disabled={state !== HarvestStates.HARVEST}
 								label='OK'
 								size='large'
-								onClick={() => {
-									setShowModal(false);
-								}}
+								onClick={closeModal}
 							/>
 						</>
 					) : (
@@ -580,9 +581,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 									label='CANCEL'
 									size='medium'
 									buttonType='texty'
-									onClick={() => {
-										setShowModal(false);
-									}}
+									onClick={closeModal}
 								/>
 							</HarvestBoxes>
 						</>

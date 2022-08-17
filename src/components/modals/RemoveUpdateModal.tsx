@@ -10,15 +10,19 @@ import {
 import { Modal } from '@/components/modals/Modal';
 import FixedToast from '@/components/toasts/FixedToast';
 import { IModal } from '@/types/common';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 interface IProps extends IModal {
 	callback: () => void;
 }
 
 export const RemoveUpdateModal: FC<IProps> = ({ setShowModal, callback }) => {
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+
 	return (
 		<Modal
-			setShowModal={setShowModal}
+			closeModal={closeModal}
+			isAnimating={isAnimating}
 			headerIcon={<IconTrash size={24} />}
 			headerTitle='Removing Update'
 			headerTitlePosition='left'
@@ -45,7 +49,7 @@ export const RemoveUpdateModal: FC<IProps> = ({ setShowModal, callback }) => {
 				/>
 				<NoButton
 					label='CANCEL'
-					onClick={() => setShowModal(false)}
+					onClick={closeModal}
 					buttonType={'texty'}
 				/>
 			</Container>

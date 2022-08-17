@@ -4,9 +4,9 @@ import {
 	IWrongNetworkInnerModal,
 	WrongNetworkInnerModal,
 } from './WrongNetworkInnerModal';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 import type { IModal } from '@/types/common';
 import type { FC } from 'react';
-
 interface IWrongNetworkModal extends IModal, IWrongNetworkInnerModal {}
 
 export const WrongNetworkModal: FC<IWrongNetworkModal> = ({
@@ -14,8 +14,10 @@ export const WrongNetworkModal: FC<IWrongNetworkModal> = ({
 	targetNetworks,
 	setShowModal,
 }) => {
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+
 	return (
-		<Modal setShowModal={setShowModal} hiddenClose>
+		<Modal closeModal={closeModal} isAnimating={isAnimating} hiddenClose>
 			<WrongNetworkModalContainer>
 				<WrongNetworkModalTitle>
 					You&apos;re connected to the wrong network!

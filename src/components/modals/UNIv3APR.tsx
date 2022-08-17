@@ -4,6 +4,7 @@ import { P, Button } from '@giveth/ui-design-system';
 import { Modal } from './Modal';
 import { PoolStakingConfig } from '@/types/config';
 import { IModal } from '@/types/common';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 interface IUniV3APRModal extends IModal {
 	poolStakingConfig: PoolStakingConfig;
@@ -13,8 +14,10 @@ export const UniV3APRModal: FC<IUniV3APRModal> = ({
 	setShowModal,
 	poolStakingConfig,
 }) => {
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+
 	return (
-		<Modal setShowModal={setShowModal}>
+		<Modal closeModal={closeModal} isAnimating={isAnimating}>
 			<APRModalContainer>
 				<P>
 					Concentrate your liquidity for higher APRs. The narrower
@@ -23,7 +26,7 @@ export const UniV3APRModal: FC<IUniV3APRModal> = ({
 				<OKButton
 					onClick={() => {
 						window.open(poolStakingConfig.provideLiquidityLink);
-						setShowModal(false);
+						closeModal();
 					}}
 					label='OK'
 					buttonType='primary'

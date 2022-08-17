@@ -6,6 +6,7 @@ import {
 	SubmittedInnerModal,
 } from './ConfirmSubmit';
 import { IModal } from '@/types/common';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 enum ClaimState {
 	UNKNOWN,
@@ -27,8 +28,10 @@ export const ClaimModal: FC<IClaimModal> = ({
 	network,
 	txStatus,
 }) => {
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+
 	return (
-		<Modal setShowModal={setShowModal}>
+		<Modal closeModal={closeModal} isAnimating={isAnimating}>
 			{claimState === ClaimState.WAITING && (
 				<SubmittedInnerModal
 					title='Waiting confirmation.'

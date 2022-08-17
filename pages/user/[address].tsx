@@ -1,8 +1,5 @@
 import { GetServerSideProps } from 'next';
 import { FC } from 'react';
-import styled from 'styled-components';
-import { H3 } from '@giveth/ui-design-system';
-import { Container } from '@/components/Grid';
 
 import { client } from '@/apollo/apolloClient';
 import { GET_USER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
@@ -10,18 +7,16 @@ import { IUser } from '@/apollo/types/types';
 import UserPublicProfileView from '@/components/views/userPublicProfile/UserPublicProfile.view';
 import { GeneralMetatags } from '@/components/Metatag';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
+import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
 
 interface IUserRouteProps {
 	user?: IUser;
 }
 
 const UserRoute: FC<IUserRouteProps> = ({ user }) => {
+	// When user is not found, GQL doesn't return any error. After backend is fixed, this can be deleted.
 	if (!user) {
-		return (
-			<Container>
-				<NotFound>User not found</NotFound>
-			</Container>
-		);
+		return <ErrorsIndex statusCode='404' />;
 	}
 
 	return (
@@ -41,10 +36,6 @@ const UserRoute: FC<IUserRouteProps> = ({ user }) => {
 		</>
 	);
 };
-
-const NotFound = styled(H3)`
-	margin: 200px 0;
-`;
 
 export const getServerSideProps: GetServerSideProps = async context => {
 	try {
