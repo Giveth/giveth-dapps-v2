@@ -11,7 +11,7 @@ import {
 	neutralColors,
 	brandColors,
 } from '@giveth/ui-design-system';
-
+import { IconImage } from '@giveth/ui-design-system/lib/cjs/components/icons/Image';
 import { Flex } from './styled-components/Flex';
 import { showToastError } from '@/lib/helpers';
 import { client } from '@/apollo/apolloClient';
@@ -143,12 +143,8 @@ const FileUploader: FC<IFileUploader> = ({
 			) : (
 				<DropZone {...getRootProps()}>
 					<input {...getInputProps()} />
-					<Image
-						src='/images/icons/image.svg'
-						width={36}
-						height={36}
-						alt='image'
-					/>
+					<IconImage size={32} color={neutralColors.gray[500]} />
+					<br />
 					<P>
 						{`Drag & drop your files here or `}
 						<span onClick={open}>Upload from device.</span>
