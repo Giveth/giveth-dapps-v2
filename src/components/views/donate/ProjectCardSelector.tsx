@@ -35,7 +35,7 @@ const ProjectCardSelector = (props: { project: IProject }) => {
 			<MobileCardWrapper
 				height={wrapperHeight}
 				ref={wrapperRef}
-				dragConstraints={{ top: -(wrapperHeight - 35), bottom: 0 }}
+				dragConstraints={{ top: 50 - wrapperHeight, bottom: 0 }}
 				drag='y'
 				dragElastic={0}
 			>
@@ -59,7 +59,7 @@ const BlueBar = styled.div`
 	width: 80px;
 	height: 3px;
 	background-color: ${brandColors.giv[500]};
-	margin: 16px auto;
+	margin: 24px auto;
 	position: relative;
 `;
 
@@ -88,7 +88,7 @@ const MobileCardWrapper = styled(motion.div)<{ height: number }>`
 	justify-content: center;
 	width: 100%;
 	left: 0;
-	bottom: ${({ height }) => `calc(35px - ${height}px)`};
+	bottom: ${({ height }) => `calc(50px - ${height}px)`};
 	padding: 0 16px;
 	background-color: white;
 	z-index: 10;
