@@ -8,18 +8,27 @@ import ProjectTotalFundCard from './ProjectTotalFundCard';
 import ProjectDonationTable from './ProjectDonationTable';
 import { FlexCenter } from '@/components/styled-components/Flex';
 
-const ProjectDonations = (props: {
+const ProjectDonationsIndex = (props: {
 	donationsByProjectId: IDonationsByProjectId;
 	project?: IProject;
 	isActive?: boolean;
 	isDraft: boolean;
 }) => {
 	const { donationsByProjectId, project, isActive, isDraft } = props;
-	const { totalDonations } = project || {};
+	const { totalCount } = donationsByProjectId || 0;
 
 	return (
 		<>
-			{totalDonations === 0 ? (
+			{totalCount > 0 ? (
+				<>
+					<ProjectTotalFundCard project={project} />
+					<ProjectDonationTable
+						donations={donationsByProjectId.donations}
+						totalDonations={donationsByProjectId.totalCount}
+						project={project}
+					/>
+				</>
+			) : (
 				isActive &&
 				!isDraft && (
 					<MessageContainer>
@@ -35,15 +44,6 @@ const ProjectDonations = (props: {
 						</MessageText>
 					</MessageContainer>
 				)
-			) : (
-				<>
-					<ProjectTotalFundCard project={project} />
-					<ProjectDonationTable
-						donations={donationsByProjectId.donations}
-						totalDonations={donationsByProjectId.totalCount}
-						project={project}
-					/>
-				</>
 			)}
 		</>
 	);
@@ -60,4 +60,4 @@ const MessageText = styled(Lead)`
 	color: ${neutralColors.gray[800]};
 `;
 
-export default ProjectDonations;
+export default ProjectDonationsIndex;

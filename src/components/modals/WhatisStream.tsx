@@ -53,12 +53,8 @@ export const WhatisStreamModal: FC<IWhatisStreamModal> = ({
 				<Desc>
 					Welcome to the expanding
 					{regenStreamConfig
-						? ' Multiverse! The RegenStream aligns  '
-						: ' GIViverse! The GIVstream aligns '}
-					community members with the long term success of
-					{regenStreamConfig
-						? ' platforms and DAOs that are value-aligned with Giveth.'
-						: ' Giveth and the GIVeconomy.'}
+						? ' Multiverse! The RegenStream aligns community members with the long term success of platforms and DAOs that are value-aligned with Giveth.'
+						: ' GIViverse! With the GIVstream, as the GIVeconomy grows, so does the governance power of its contributors.'}
 				</Desc>
 				<H5 weight={900}>How it Works </H5>
 				<Desc>

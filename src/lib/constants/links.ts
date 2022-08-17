@@ -12,6 +12,7 @@ const links = {
 	FEATURE_REQUEST: TYPEFORM + 'featurerequest',
 	FEEDBACK: TYPEFORM + 'feedback',
 	SUPPORT_US: Routes.Donate + '/the-giveth-community-of-makers',
+	GIVETH_MATCHING: Routes.Donate + '/Giveth-Matching-Pool-0',
 	PROJECT_VERIFICATION: TYPEFORM + 'verification',
 	DISCORD: 'https://discord.giveth.io',
 	DISCOURSE,
@@ -36,6 +37,7 @@ const links = {
 	TRACES_DOCS: DOCS + 'dapps/entitiesAndRoles/#traces',
 	MAKE_TRACEABLE_DOCS: DOCS + 'dapps/makeTraceableProject',
 	VERIFICATION_DOCS: DOCS + 'dapps/projectVerification',
+	FUNDRAISING_DOCS: DOCS + 'whatisgiveth/fundraisingGuide',
 	TRACE: 'https://trace.giveth.io/',
 	SWAG: 'https://swag.giveth.io/',
 	COMMONS_STACK: 'https://commonsstack.org/',
@@ -52,6 +54,7 @@ const links = {
 
 if (!isProduction) {
 	links.SUPPORT_US = Routes.Donate + '/giveth-2021:-retreat-to-the-future';
+	links.GIVETH_MATCHING = Routes.Donate + '/matching-pool-test-0';
 }
 
 export default links;

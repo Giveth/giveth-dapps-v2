@@ -1,5 +1,5 @@
-import { FC, ReactNode } from 'react';
 import styled from 'styled-components';
+import type { FC, ReactNode } from 'react';
 
 interface IDirection {
 	direction: 'right' | 'left' | 'top' | 'bottom';
@@ -92,12 +92,12 @@ const IconWithTooltipContainer = styled.div<IDirection>`
 					break;
 			}
 		}}
-
 		/* Fade in tooltip - takes 1 second to go from 0% to 100% opac: */
 		opacity: 0;
 		transition: opacity 0.3s;
 	}
 `;
+<<<<<<< HEAD
 
 export const IconWithTooltip: FC<IIconWithTooltipProps> = ({
 	icon,

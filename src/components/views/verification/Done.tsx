@@ -11,7 +11,6 @@ const Done = () => {
 	const device = useDetectDevice();
 	const isMobile = device.isMobile;
 	const { verificationData } = useVerificationData();
-	console.log('status', verificationData);
 
 	const status = verificationData?.status ?? EVerificationStatus.SUBMITTED;
 

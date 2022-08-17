@@ -14,7 +14,6 @@ export interface IProject {
 	creationDate?: string;
 	admin?: string;
 	description?: string;
-	walletAddress?: string;
 	addresses?: IWalletAddress[];
 	impactLocation?: string;
 	qualityScore?: number;
@@ -61,7 +60,6 @@ export interface IProjectEdition {
 	title?: string;
 	image?: string;
 	description?: string;
-	walletAddress?: string;
 	addresses?: IWalletAddress[];
 	impactLocation?: string;
 	categories: ICategory[];
@@ -201,6 +199,7 @@ export interface ISocialProfile {
 	isVerified: boolean;
 	socialNetwork: string;
 	socialNetworkId: string;
+	name: string;
 }
 
 export interface IProjectVerification {

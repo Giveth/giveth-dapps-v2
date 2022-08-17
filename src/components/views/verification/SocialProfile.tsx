@@ -14,7 +14,8 @@ import { useCallback, useMemo } from 'react';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import DiscordIcon from '/public/images/icons/social/discord.svg';
-import { ContentSeparator, BtnContainer } from './VerificationIndex';
+import LinkedinIcon from '/public/images/icons/social/linkedin.svg';
+import { ContentSeparator, BtnContainer } from './Common.sc';
 import { useVerificationData } from '@/context/verification.context';
 import { client } from '@/apollo/apolloClient';
 import {
@@ -22,7 +23,7 @@ import {
 	REMOVE_SOCIAL_MEDIA,
 	SEND_NEW_SOCIAL_MEDIA,
 } from '@/apollo/gql/gqlVerification';
-import { RemoveButton } from './common';
+import { RemoveButton } from './Common';
 import { gToast, ToastType } from '@/components/toasts';
 import { ISocialProfile } from '@/apollo/types/types';
 
@@ -54,10 +55,10 @@ const SocialProfile = () => {
 		[findSocialMedia],
 	);
 
-	// const linkedinData = useMemo(
-	// 	() => findSocialMedia('linkedin'),
-	// 	[findSocialMedia],
-	// );
+	const linkedinData = useMemo(
+		() => findSocialMedia('linkedin'),
+		[findSocialMedia],
+	);
 
 	async function handleSocialSubmit(
 		socialNetwork: string,
@@ -200,10 +201,9 @@ const SocialProfile = () => {
 							/>
 						)}
 					</ButtonRow>
-					{/* <ButtonRow>
+					<ButtonRow>
 						<ButtonSocial
-							color='#0077B5
-							'
+							color='#0077B5'
 							onClick={() => {
 								handleSocialSubmit(
 									'linkedin',
@@ -213,17 +213,16 @@ const SocialProfile = () => {
 							}}
 						>
 							<Image src={LinkedinIcon} alt='linkedin icon' />
-							{linkedinData?.socialNetworkId ??
-								'CONNECT TO LINKEDIN'}
+							{linkedinData?.name ?? 'CONNECT TO LINKEDIN'}
 						</ButtonSocial>
-						{linkedinData?.socialNetworkId && (
+						{linkedinData?.name && (
 							<RemoveButton
 								onClick={() =>
 									handleSocialRemove(+linkedinData?.id)
 								}
 							/>
 						)}
-					</ButtonRow> */}
+					</ButtonRow>
 				</ButtonsSection>
 			</div>
 			<div>

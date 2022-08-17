@@ -27,19 +27,17 @@ const LocationIndex = (props: {
 					defaultLocation={defaultValue}
 					setLocation={setValue}
 					googleMapURL={googleMapURL}
-					loadingElement={
-						<div
-							style={{
-								width: '100%',
-								height: '100%',
-							}}
-						/>
-					}
+					loadingElement={<MapContainer />}
 				/>
 			</InputContainer>
 		</>
 	);
 };
+
+const MapContainer = styled.div`
+	width: 100%;
+	height: 100%;
+`;
 
 const CaptionContainer = styled(Caption)`
 	margin-top: 8.5px;

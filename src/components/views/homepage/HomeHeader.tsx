@@ -1,28 +1,14 @@
 import { useRouter } from 'next/router';
 import { H1, brandColors, Button, Lead } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-
 import { FlexCenter } from '@/components/styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
 import { Arc } from '@/components/styled-components/Arc';
-import { isUserRegistered } from '@/lib/helpers';
 import { mediaQueries } from '@/lib/constants/constants';
-import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { setShowCompleteProfile } from '@/features/modal/modal.slice';
+import Links from '@/lib/constants/links';
 
 const HomeHeader = () => {
 	const router = useRouter();
-	const dispatch = useAppDispatch();
-	const user = useAppSelector(state => state.user.userData);
-
-	const handleCreateButton = () => {
-		if (isUserRegistered(user)) {
-			router.push(Routes.CreateProject);
-		} else {
-			dispatch(setShowCompleteProfile(true));
-		}
-	};
-
 	return (
 		<Wrapper>
 			<Title weight={700}>Welcome to the Future of Giving</Title>
@@ -30,17 +16,17 @@ const HomeHeader = () => {
 				Get rewarded for giving to for-good projects with zero added
 				fees.
 			</Subtitle>
-			<AllProjectsButton
+			<MatchingPoolButton
 				buttonType='primary'
 				size='large'
-				label='SEE PROJECTS'
-				onClick={() => router.push(Routes.Projects)}
+				label='DONATE NOW'
+				onClick={() => router.push(Links.GIVETH_MATCHING)}
 			/>
-			<CreateProject
+			<SeeProjects
 				buttonType='texty'
 				size='large'
-				label='Create a Project'
-				onClick={handleCreateButton}
+				label='See Projects'
+				onClick={() => router.push(Routes.Projects)}
 			/>
 			<MustardArc />
 		</Wrapper>
@@ -57,12 +43,12 @@ const Subtitle = styled(Lead)`
 	padding-bottom: 30px;
 `;
 
-const AllProjectsButton = styled(Button)`
+const MatchingPoolButton = styled(Button)`
 	height: 66px;
 	padding: 0 80px;
 `;
 
-const CreateProject = styled(Button)`
+const SeeProjects = styled(Button)`
 	height: 66px;
 	color: ${brandColors.mustard[500]};
 	a {
