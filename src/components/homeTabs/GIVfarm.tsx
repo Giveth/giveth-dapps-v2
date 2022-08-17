@@ -51,8 +51,15 @@ const renderPools = (
 	network: number,
 	showArchivedPools?: boolean,
 ) => {
+	const rightNow = Date.now();
 	return pools
-		.filter(p => (showArchivedPools ? true : p.active && !p.archived))
+		.filter(p =>
+			showArchivedPools
+				? true
+				: (!p?.discontinued || rightNow < p?.discontinued) && // shows card if time of discontinuation isn't over
+				  p.active &&
+				  !p.archived,
+		)
 		.map((poolStakingConfig, idx) => ({ poolStakingConfig, idx }))
 		.sort(
 			(

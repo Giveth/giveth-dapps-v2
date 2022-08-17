@@ -9,6 +9,7 @@ import { gwei2wei } from '@/helpers/blockchain';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 const BASE_ROUTE = 'https://mainnet.serve.giveth.io';
+const SEPT_8TH_2022 = 1662595200000;
 
 const config: EnvConfig = {
 	BACKEND_LINK: 'https://mainnet.serve.giveth.io/graphql',
@@ -46,6 +47,7 @@ const config: EnvConfig = {
 			LM_ADDRESS: '0x4B9EfAE862a1755F7CEcb021856D467E86976755',
 			BUY_LINK:
 				'https://app.uniswap.org/#/swap?outputCurrency=0x900db999074d9277c5da2a43f252d74366230da0',
+			discontinued: SEPT_8TH_2022,
 		},
 
 		nodeUrl: 'https://mainnet.infura.io/v3/' + INFURA_API_KEY,
@@ -63,6 +65,7 @@ const config: EnvConfig = {
 				unit: 'LP',
 				farmStartTimeMS: 1651345200000,
 				active: true,
+				discontinued: SEPT_8TH_2022,
 			},
 			{
 				POOL_ADDRESS: '0xc3151A58d519B94E915f66B044De3E55F77c2dd9',
@@ -220,6 +223,7 @@ const config: EnvConfig = {
 					'https://gnosis.sushi.com/add/0x6A023CCd1ff6F2045C3309768eAd9E68F978f6e1/0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 				unit: 'LP',
 				active: true,
+				discontinued: SEPT_8TH_2022,
 			},
 			{
 				POOL_ADDRESS: '0xB7189A7Ea38FA31210A79fe282AEC5736Ad5fA57',
@@ -232,6 +236,7 @@ const config: EnvConfig = {
 					'https://app.honeyswap.org/#/add/0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75/xdai',
 				unit: 'LP',
 				active: true,
+				discontinued: SEPT_8TH_2022, // change this to  archived: true when it's over
 				farmStartTimeMS: 1656086400000,
 			},
 		],

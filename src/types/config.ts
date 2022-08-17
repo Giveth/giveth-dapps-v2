@@ -4,6 +4,7 @@ export interface BasicStakingConfig {
 	BUY_LINK?: string;
 	farmStartTimeMS?: number;
 	icon?: string;
+	discontinued?: number;
 }
 export enum StakingPlatform {
 	GIVETH = 'Staking',
@@ -55,6 +56,7 @@ export interface SimplePoolStakingConfig extends BasicStakingConfig {
 	unit: string;
 	active: boolean;
 	archived?: boolean;
+	discontinued?: number;
 	introCard?: IntroCardConfig;
 }
 
