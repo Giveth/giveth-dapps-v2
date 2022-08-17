@@ -28,6 +28,7 @@ import { VALIDATE_TOKEN } from '@/apollo/gql/gqlUser';
 import { useAppDispatch } from '@/features/hooks';
 import { signOut } from '@/features/user/user.thunks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 export interface IDonateModalProps extends IModal {
 	setFailedModalType: (i: EDonationFailedType) => void;
@@ -40,7 +41,7 @@ export interface IDonateModalProps extends IModal {
 	setSuccessDonation: (i: ISuccessDonation) => void;
 	givBackEligible?: boolean;
 	mainProjectAddress?: string;
-	secondaryProjectAdress?: string;
+	secondaryProjectAddress?: string;
 }
 
 const DonateModal = (props: IDonateModalProps) => {
@@ -48,6 +49,7 @@ const DonateModal = (props: IDonateModalProps) => {
 
 	const web3Context = useWeb3React();
 	const dispatch = useAppDispatch();
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	const [donating, setDonating] = useState(false);
 	const [donationSaved, setDonationSaved] = useState(false);
@@ -77,7 +79,7 @@ const DonateModal = (props: IDonateModalProps) => {
 	const handleFailedValidation = () => {
 		dispatch(signOut());
 		dispatch(setShowSignWithWallet(true));
-		setShowModal(false);
+		closeModal();
 	};
 
 	const handleDonate = () => {
@@ -91,7 +93,8 @@ const DonateModal = (props: IDonateModalProps) => {
 
 	return (
 		<Modal
-			setShowModal={setShowModal}
+			closeModal={closeModal}
+			isAnimating={isAnimating}
 			headerTitle='Donating'
 			headerTitlePosition='left'
 			headerIcon={<IconWalletApprove size={32} />}
@@ -122,6 +125,7 @@ const DonateModal = (props: IDonateModalProps) => {
 						/>
 					)}
 					<DonateButton
+						loading={donating}
 						buttonType='primary'
 						disabled={donating}
 						label={donating ? 'DONATING' : 'DONATE'}
@@ -131,7 +135,7 @@ const DonateModal = (props: IDonateModalProps) => {
 						<CloseButton
 							label='CLOSE THIS MODAL'
 							buttonType='texty'
-							onClick={() => setShowModal(false)}
+							onClick={closeModal}
 						/>
 					)}
 				</Buttons>
@@ -171,8 +175,8 @@ const DonatingBox = styled.div`
 	}
 `;
 
-const DonateButton = styled(Button)`
-	background: ${(props: { disabled: boolean }) =>
+const DonateButton = styled(Button)<{ disabled: boolean }>`
+	background: ${props =>
 		props.disabled ? brandColors.giv[200] : brandColors.giv[500]};
 	:hover:enabled {
 		background: ${brandColors.giv[700]};
@@ -180,10 +184,9 @@ const DonateButton = styled(Button)`
 	:disabled {
 		cursor: not-allowed;
 	}
-	* {
-		margin: auto 0;
-		padding: 0 8px 0 0;
-		font-weight: bold;
+	> :first-child > div {
+		border-top: 3px solid ${brandColors.giv[200]};
+		animation-timing-function: linear;
 	}
 `;
 

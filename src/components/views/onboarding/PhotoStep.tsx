@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { Lead } from '@giveth/ui-design-system';
@@ -24,6 +24,9 @@ import { Col } from '@/components/Grid';
 
 const PhotoStep: FC<IStep> = ({ setStep }) => {
 	const [url, setUrl] = useState<string>('');
+	const [file, setFile] = useState<File>();
+	const [uploading, setUploading] = useState(false);
+
 	const [updateUser] = useMutation(UPDATE_USER);
 	const dispatch = useAppDispatch();
 	const isSignedIn = useAppSelector(state => state.user.isSignedIn);
@@ -84,7 +87,14 @@ const PhotoStep: FC<IStep> = ({ setStep }) => {
 					<br />
 					Upload a photo that represents who you are.
 				</Desc>
-				<ImageUploader setUrl={setUrl} url={url} />
+				<ImageUploader
+					url={url}
+					setUrl={setUrl}
+					file={file}
+					setFile={setFile}
+					uploading={uploading}
+					setUploading={setUploading}
+				/>
 				<OnboardActionsContianer>
 					<Col xs={12} md={7}>
 						<SaveButton

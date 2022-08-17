@@ -28,11 +28,6 @@ import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 
-interface ITokenPicker {
-	isOpen: boolean;
-	isMobile?: boolean;
-}
-
 declare module 'react-select/dist/declarations/src/Select' {
 	export interface Props<
 		Option,
@@ -112,6 +107,7 @@ const TokenPicker = (props: {
 	inputValue?: any;
 	selectedToken: IProjectAcceptedToken | undefined;
 	placeholder: string;
+	disabled?: boolean;
 }) => {
 	const {
 		tokenList,
@@ -121,9 +117,12 @@ const TokenPicker = (props: {
 		selectedToken,
 		placeholder,
 		projectVerified,
+		disabled,
 	} = props;
+
 	const { isMobile } = useDeviceDetect();
 	const [isOpen, setIsOpen] = useState(false);
+
 	const selectStyles: StylesConfig<IProjectAcceptedToken, false> = {
 		control: (base: any) => ({
 			...base,
@@ -195,7 +194,7 @@ const TokenPicker = (props: {
 	};
 
 	const toggleOpen = () => {
-		setIsOpen(!isOpen);
+		!disabled && setIsOpen(!isOpen);
 	};
 
 	const onSelectChange = (
@@ -229,6 +228,7 @@ const TokenPicker = (props: {
 				onClick={toggleOpen}
 				isOpen={isOpen}
 				isMobile={isMobile}
+				disabled={disabled}
 			>
 				<TokenContainer>
 					{selectedToken && (
@@ -342,6 +342,12 @@ const OverLay = styled.div`
 	cursor: pointer;
 `;
 
+interface ITokenPicker {
+	isOpen: boolean;
+	isMobile?: boolean;
+	disabled?: boolean;
+}
+
 const TargetContainer = styled.div<ITokenPicker>`
 	display: flex;
 	cursor: pointer;
@@ -351,8 +357,11 @@ const TargetContainer = styled.div<ITokenPicker>`
 	border-right: 2px solid ${neutralColors.gray[300]};
 	border-radius: 8px 0 0 8px;
 	padding: 14px 16px;
+	color: ${props => props.disabled && neutralColors.gray[600]};
 	background: ${props =>
-		props.isOpen && props.isMobile
+		props.disabled
+			? neutralColors.gray[200]
+			: props.isOpen && props.isMobile
 			? 'rgba(79, 87, 106, 0.1)'
 			: props.isOpen
 			? neutralColors.gray[200]

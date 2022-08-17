@@ -1,32 +1,38 @@
-import { Dispatch, FC, SetStateAction, useState } from 'react';
+import { FC } from 'react';
 import Image from 'next/image';
-import styled, { keyframes, css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import { useDropzone } from 'react-dropzone';
 import {
+	brandColors,
+	GLink,
+	IconX,
+	neutralColors,
 	P,
 	Subline,
 	SublineBold,
-	IconX,
-	GLink,
-	neutralColors,
-	brandColors,
 } from '@giveth/ui-design-system';
 
-import { Flex } from './styled-components/Flex';
+import { Flex, FlexCenter } from './styled-components/Flex';
 import { client } from '@/apollo/apolloClient';
 import { UPLOAD_PROFILE_PHOTO } from '@/apollo/gql/gqlUser';
 
 interface IImageUploader {
-	// multiple: boolean;
 	setUrl: (url: string) => void;
 	url: string;
-	setIsUploading?: Dispatch<SetStateAction<boolean>>;
+	uploading?: boolean;
+	setUploading?: (i: boolean) => void;
+	file?: File;
+	setFile: (f: File | undefined) => void;
 }
 
-const ImageUploader: FC<IImageUploader> = ({ setUrl, url, setIsUploading }) => {
-	const [file, setFile] = useState<File>();
-	const [uploading, setUploading] = useState(false);
-
+const ImageUploader: FC<IImageUploader> = ({
+	setUrl,
+	url,
+	uploading,
+	setUploading,
+	file,
+	setFile,
+}) => {
 	const onDrop = async (acceptedFiles: File[]) => {
 		const { data: imageUploaded } = await client.mutate({
 			mutation: UPLOAD_PROFILE_PHOTO,
@@ -40,25 +46,23 @@ const ImageUploader: FC<IImageUploader> = ({ setUrl, url, setIsUploading }) => {
 	};
 
 	const { getRootProps, getInputProps, open } = useDropzone({
-		accept: 'image/*',
+		accept: {
+			'image/*': ['.jpg', '.jpeg', '.png', '.gif'],
+		},
 		multiple: false,
 		noClick: true,
 		noKeyboard: true,
 		onDrop: async (acceptedFiles: File[]) => {
 			setFile(acceptedFiles[0]);
-			setUploading(true);
-			setIsUploading && setIsUploading(true);
+			setUploading && setUploading(true);
 			await onDrop(acceptedFiles);
-			setUploading(false);
-			setIsUploading && setIsUploading(false);
+			setUploading && setUploading(false);
 		},
 	});
 
 	const onDelete = () => {
 		setUrl('');
 		setFile(undefined);
-		setUploading(false);
-		setIsUploading && setIsUploading(false);
 	};
 
 	return (
@@ -77,7 +81,7 @@ const ImageUploader: FC<IImageUploader> = ({ setUrl, url, setIsUploading }) => {
 						alt='image'
 					/>
 					<P>
-						{`Drag & drop an image here or`}{' '}
+						Drag & drop an image here or{' '}
 						<span onClick={open}>Upload from device.</span>
 					</P>
 					<P>
@@ -102,7 +106,7 @@ const ImageUploader: FC<IImageUploader> = ({ setUrl, url, setIsUploading }) => {
 								</DeleteRow>
 							</Flex>
 						)}
-						<UplaodBar uploading={uploading} />
+						<UploadBar uploading={uploading} />
 					</UploadInfoRow>
 				</UploadContainer>
 			)}
@@ -116,11 +120,8 @@ const ShowingImage = styled.div`
 	}
 `;
 
-const DropZone = styled.div`
-	display: flex;
+const DropZone = styled(FlexCenter)`
 	flex-direction: column;
-	align-items: center;
-	justify-content: center;
 	border: 1px dotted ${neutralColors.gray[400]};
 	margin: 24px 0 16px 0;
 	padding: 64px 20px;
@@ -160,7 +161,7 @@ const move = keyframes`
 	}
 `;
 
-const UplaodBar = styled.div<{ uploading: boolean }>`
+const UploadBar = styled.div<{ uploading?: boolean }>`
 	width: 100%;
 	height: 4px;
 	border-radius: 2px;

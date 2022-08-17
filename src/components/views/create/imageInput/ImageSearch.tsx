@@ -1,17 +1,10 @@
-import React, {
-	Dispatch,
-	SetStateAction,
-	useEffect,
-	useRef,
-	useState,
-} from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { createApi } from 'unsplash-js';
 import { Basic } from 'unsplash-js/dist/methods/photos/types';
 import styled from 'styled-components';
-import Debounced from 'lodash.debounce';
 import { neutralColors, Subline } from '@giveth/ui-design-system';
-
 import { captureException } from '@sentry/nextjs';
+
 import SearchBox from '@/components/SearchBox';
 import { showToastError } from '@/lib/helpers';
 import { Shadow } from '@/components/styled-components/Shadow';
@@ -20,6 +13,7 @@ import { unsplashUrl } from '@/components/views/create/imageInput/ImageInput';
 import ImageSuggestions from '@/components/views/create/imageInput/ImageSuggestions';
 import ImageNoResults from '@/components/views/create/imageInput/ImageNoResults';
 import ImageResults from '@/components/views/create/imageInput/ImageResults';
+import useDebounce from '@/hooks/useDebounce';
 
 const accessKey = process.env.NEXT_PUBLIC_UNSPLASH_API!;
 const unsplash = createApi({ accessKey });
@@ -28,7 +22,7 @@ const perPage = 9;
 const orientation = 'landscape';
 
 const ImageSearch = (props: {
-	setValue: Dispatch<SetStateAction<string>>;
+	setValue: (img: string) => void;
 	setAttributes: Dispatch<SetStateAction<{ name: string; username: string }>>;
 	attributes: boolean;
 }) => {
@@ -37,12 +31,8 @@ const ImageSearch = (props: {
 	const [search, setSearch] = useState('');
 	const [images, setImages] = useState<undefined | Basic[]>();
 
-	const debouncedSearch = useRef<any>();
+	const debouncedSearch = useDebounce(search);
 	const noResults = images && images.length === 0;
-
-	useEffect(() => {
-		debouncedSearch.current = Debounced(fetchPhotos, 1000);
-	}, []);
 
 	const fetchPhotos = (query: string, loadMore?: boolean) => {
 		const page = loadMore && images ? images.length / perPage + 1 : 1;
@@ -59,11 +49,15 @@ const ImageSearch = (props: {
 				showToastError(error);
 				captureException(error, {
 					tags: {
-						section: 'fethPhotosUnsplashSearch',
+						section: 'fetchPhotosUnsplashSearch',
 					},
 				});
 			});
 	};
+
+	useEffect(() => {
+		if (search) fetchPhotos(search);
+	}, [debouncedSearch]);
 
 	// It's required by Unsplash guidelines
 	const requestDownload = (downloadLocation: string) => {
@@ -87,16 +81,11 @@ const ImageSearch = (props: {
 		fetchPhotos(query);
 	};
 
-	const handleDebouncedSearch = (query: string) => {
-		setSearch(query);
-		debouncedSearch.current(query);
-	};
-
 	return (
 		<Container>
 			{images && <Surrounding onClick={closePopup} />}
 			<SearchBox
-				onChange={handleDebouncedSearch}
+				onChange={setSearch}
 				value={search}
 				placeholder='Search Unsplash for photos'
 			/>

@@ -1,16 +1,16 @@
 import styled from 'styled-components';
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { Contract } from '@ethersproject/contracts';
 import BigNumber from 'bignumber.js';
 import {
+	B,
+	brandColors,
 	Button,
 	Caption,
+	GLink,
 	neutralColors,
 	semanticColors,
-	brandColors,
-	GLink,
-	B,
 } from '@giveth/ui-design-system';
 // @ts-ignore
 import tokenAbi from 'human-standard-token-abi';
@@ -28,7 +28,7 @@ import { switchNetwork } from '@/lib/wallet';
 import GeminiModal from './GeminiModal';
 import config from '@/configuration';
 import TokenPicker from './TokenPicker';
-import InlineToast from '@/components/toasts/InlineToast';
+import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { client } from '@/apollo/apolloClient';
 import { PROJECT_ACCEPTED_TOKENS } from '@/apollo/gql/gqlProjects';
@@ -42,7 +42,6 @@ import {
 	IProjectAcceptedToken,
 	IProjectAcceptedTokensGQL,
 } from '@/apollo/types/gqlTypes';
-import { IWalletAddress } from '@/apollo/types/types';
 import {
 	filterTokens,
 	getNetworkIds,
@@ -64,8 +63,8 @@ import {
 import usePurpleList from '@/hooks/usePurpleList';
 
 const ethereumChain = config.PRIMARY_NETWORK;
-const xdaiChain = config.SECONDARY_NETWORK;
-const stableCoins = [xdaiChain.mainToken, 'DAI', 'USDT'];
+const gnosisChain = config.SECONDARY_NETWORK;
+const stableCoins = [gnosisChain.mainToken, 'DAI', 'USDT'];
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
 export interface ISuccessDonation {
@@ -82,7 +81,7 @@ const CryptoDonation = (props: {
 	setSuccessDonation: (i: ISuccessDonation) => void;
 	project: IProject;
 }) => {
-	const { chainId: networkId, account, library } = useWeb3React();
+	const { chainId: networkId, account, library, active } = useWeb3React();
 	const dispatch = useAppDispatch();
 	const { isEnabled, isSignedIn, balance } = useAppSelector(
 		state => state.user,
@@ -107,11 +106,12 @@ const CryptoDonation = (props: {
 	const mainTokenPrice = new BigNumber(ethPrice).toNumber();
 
 	const mainProjectAddress = addresses?.find(
-		(a: IWalletAddress) => a.networkId === config.PRIMARY_NETWORK.id,
+		a => a.isRecipient && a.networkId === config.PRIMARY_NETWORK.id,
 	)?.address;
 	const secondaryProjectAddress = addresses?.find(
-		(a: IWalletAddress) => a.networkId === config.SECONDARY_NETWORK.id,
+		a => a.isRecipient && a.networkId === config.SECONDARY_NETWORK.id,
 	)?.address;
+
 	const [selectedToken, setSelectedToken] = useState<IProjectAcceptedToken>();
 	const [selectedTokenBalance, setSelectedTokenBalance] = useState<any>();
 	const [customInput, setCustomInput] = useState<any>();
@@ -138,12 +138,12 @@ const CryptoDonation = (props: {
 
 	const stopPolling = useRef<any>(null);
 	const tokenSymbol = selectedToken?.symbol;
-	const isXdai = networkId === xdaiChain.id;
+	const isGnosis = networkId === gnosisChain.id;
 	const projectIsGivBackEligible = !!verified;
 
 	useEffect(() => {
 		if (networkId && acceptedTokens) {
-			const networkIds = getNetworkIds(acceptedTokens, project.addresses);
+			const networkIds = getNetworkIds(acceptedTokens, addresses);
 			const filteredTokens = filterTokens(
 				acceptedTokens,
 				networkId,
@@ -165,6 +165,13 @@ const CryptoDonation = (props: {
 		if (isEnabled) pollToken();
 		return () => clearPoll();
 	}, [selectedToken, isEnabled, account, networkId, balance]);
+
+	useEffect(() => {
+		if (!active) {
+			setSelectedToken(undefined);
+			setAmountTyped(undefined);
+		}
+	}, [active]);
 
 	useEffect(() => {
 		client
@@ -197,14 +204,14 @@ const CryptoDonation = (props: {
 				setTokenPrice(mainTokenPrice || 0);
 			} else if (selectedToken?.address) {
 				let tokenAddress = selectedToken.address;
-				// coingecko doesn't have these tokens in xdai, so fetching price from ethereum
-				if (isXdai && selectedToken.mainnetAddress) {
+				// Coingecko doesn't have these tokens in Gnosis Chain, so fetching price from ethereum
+				if (isGnosis && selectedToken.mainnetAddress) {
 					tokenAddress = selectedToken.mainnetAddress || '';
 				}
 				const coingeckoChainId =
-					!isXdai || selectedToken.mainnetAddress
+					!isGnosis || selectedToken.mainnetAddress
 						? ethereumChain.id
-						: xdaiChain.id;
+						: gnosisChain.id;
 				const fetchedPrice = await fetchPrice(
 					coingeckoChainId,
 					tokenAddress,
@@ -244,7 +251,7 @@ const CryptoDonation = (props: {
 		// Native token balance is provided by the Web3Provider
 		if (
 			selectedToken.symbol === ethereumChain.mainToken ||
-			selectedToken.symbol === xdaiChain.mainToken
+			selectedToken.symbol === gnosisChain.mainToken
 		) {
 			return setSelectedTokenBalance(balance);
 		}
@@ -366,7 +373,7 @@ const CryptoDonation = (props: {
 					setTxHash={setTxHash}
 					project={project}
 					mainProjectAddress={mainProjectAddress}
-					secondaryProjectAdress={secondaryProjectAddress}
+					secondaryProjectAddress={secondaryProjectAddress}
 					token={selectedToken}
 					amount={amountTyped}
 					price={tokenPrice}
@@ -405,7 +412,7 @@ const CryptoDonation = (props: {
 					)}
 				{networkId &&
 					networkId === ethereumChain.id &&
-					acceptedChains?.includes(xdaiChain.id) && (
+					acceptedChains?.includes(gnosisChain.id) && (
 						<NetworkToast>
 							<div>
 								<img src='/images/gas_station.svg' alt='gas' />
@@ -414,7 +421,7 @@ const CryptoDonation = (props: {
 								</Caption>
 							</div>
 							<SwitchCaption
-								onClick={() => switchNetwork(xdaiChain.id)}
+								onClick={() => switchNetwork(gnosisChain.id)}
 							>
 								Switch network
 							</SwitchCaption>
@@ -439,6 +446,7 @@ const CryptoDonation = (props: {
 									: 'Search name'
 							}
 							projectVerified={project?.verified!}
+							disabled={!active}
 						/>
 					</DropdownContainer>
 					<InputBox
@@ -457,6 +465,7 @@ const CryptoDonation = (props: {
 						}}
 						onFocus={(val: any) => setInputBoxFocused(!!val)}
 						placeholder='Amount'
+						disabled={!active}
 					/>
 				</SearchContainer>
 				{selectedToken && (
@@ -486,7 +495,12 @@ const CryptoDonation = (props: {
 				</B>
 			</CheckBoxContainer>
 
-			{!isActive && <InlineToast message='This project is not active.' />}
+			{!isActive && (
+				<InlineToast
+					type={EToastType.Warning}
+					message='This project is not active.'
+				/>
+			)}
 
 			{isEnabled && (
 				<>

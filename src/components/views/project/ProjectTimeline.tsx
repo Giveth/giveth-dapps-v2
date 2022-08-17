@@ -109,7 +109,7 @@ const UpdatesSection = (props: {
 					(isEditing ? (
 						<AbsolutButtons>
 							<UpdateBtn
-								label='EDIT'
+								label='SAVE'
 								buttonType='texty'
 								onClick={async () => {
 									editUpdate &&
@@ -207,6 +207,7 @@ const Title = styled(H5)`
 	color: ${brandColors.deep[600]};
 	font-weight: 400;
 	margin-bottom: 16px;
+	word-break: break-word;
 `;
 
 const Content = styled.div`

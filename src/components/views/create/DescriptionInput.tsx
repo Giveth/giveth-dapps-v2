@@ -8,9 +8,8 @@ import {
 import dynamic from 'next/dynamic';
 import styled from 'styled-components';
 
-import { InputContainer, InputErrorMessage, Label } from './Create.sc';
+import { InputContainer, Label } from './Create.sc';
 import { GoodProjectDescription } from '@/components/modals/GoodProjectDescription';
-import { ECreateErrFields } from '@/components/views/create/CreateProject';
 
 const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
 	ssr: false,
@@ -18,11 +17,11 @@ const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
 
 const DescriptionInput = (props: {
 	setValue: (e: string) => void;
-	error: string;
-	value: string;
+	// error: string;
+	value?: string;
 }) => {
 	const [showModal, setShowModal] = useState(false);
-	const { value, setValue, error } = props;
+	const { value, setValue } = props;
 	return (
 		<>
 			{showModal && (
@@ -31,16 +30,14 @@ const DescriptionInput = (props: {
 				/>
 			)}
 
-			<H5 id={ECreateErrFields.DESCRIPTION}>
-				Tell us about your project...
-			</H5>
+			<H5>Tell us about your project...</H5>
 			<CaptionContainer>
 				Aim for 200-500 words.{' '}
 				<span onClick={() => setShowModal(true)}>
 					How to write a good project description.
 				</span>
 			</CaptionContainer>
-			<InputContainerStyled error={error}>
+			<InputContainerStyled>
 				<Label>Project story</Label>
 				<RichTextInput
 					style={TextInputStyle}
@@ -48,12 +45,12 @@ const DescriptionInput = (props: {
 					value={value}
 				/>
 			</InputContainerStyled>
-			<ErrorStyled>{error || null}</ErrorStyled>
+			{/*<ErrorStyled>{error || null}</ErrorStyled>*/}
 		</>
 	);
 };
 
-const InputContainerStyled = styled(InputContainer)<{ error: string }>`
+const InputContainerStyled = styled(InputContainer)<{ error?: string }>`
 	.ql-container.ql-snow,
 	.ql-toolbar.ql-snow {
 		border: ${props =>
@@ -69,9 +66,12 @@ const InputContainerStyled = styled(InputContainer)<{ error: string }>`
 	}
 `;
 
-const ErrorStyled = styled(InputErrorMessage)`
+const ErrorStyled = styled.div`
 	margin-top: -10px;
 	margin-bottom: 20px;
+	color: ${semanticColors.punch[500]};
+	font-size: 12px;
+	word-break: break-word;
 `;
 
 const CaptionContainer = styled(Caption)`

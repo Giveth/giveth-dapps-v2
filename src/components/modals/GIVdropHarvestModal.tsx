@@ -46,6 +46,7 @@ import {
 import config from '@/configuration';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import type { TransactionResponse } from '@ethersproject/providers';
 
@@ -91,13 +92,14 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 	const [claimState, setClaimState] = useState<ClaimState>(
 		ClaimState.UNKNOWN,
 	);
+
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const sdh = new SubgraphDataHelper(
 		useAppSelector(state => state.subgraph.currentValues),
 	);
 	const givTokenDistroBalance = sdh.getGIVTokenDistroBalance();
 	const givPrice = useAppSelector(state => state.price.givPrice);
-
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { account, library } = useWeb3React();
 
 	useEffect(() => {
@@ -219,7 +221,11 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 	};
 
 	return (
-		<Modal setShowModal={setShowModal} headerTitle={'GIVdrop'}>
+		<Modal
+			closeModal={closeModal}
+			headerTitle={'GIVdrop'}
+			isAnimating={isAnimating}
+		>
 			<HarvestAllModalContainer>
 				{(claimState === ClaimState.UNKNOWN ||
 					claimState === ClaimState.WAITING) && (
@@ -340,9 +346,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 							label='CANCEL'
 							size='medium'
 							buttonType='texty'
-							onClick={() => {
-								setShowModal(false);
-							}}
+							onClick={closeModal}
 							disabled={claimState === ClaimState.WAITING}
 						/>
 					</HarvestBoxes>
@@ -374,7 +378,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 							size='medium'
 							buttonType='texty'
 							onClick={() => {
-								setShowModal(false);
+								closeModal();
 								setClaimState(ClaimState.UNKNOWN);
 							}}
 						/>

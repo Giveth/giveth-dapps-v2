@@ -22,6 +22,10 @@ const Wrapper = styled.div`
 		}
 	}
 
+	.ql-container > .ql-editor {
+		word-break: break-word;
+	}
+
 	${mediaQueries.tablet} {
 		padding: 0 16px;
 	}

@@ -1,5 +1,5 @@
 import { useWeb3React } from '@web3-react/core';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { formatEther } from '@ethersproject/units';
 import { captureException } from '@sentry/nextjs';
 import { InjectedConnector } from '@web3-react/injected-connector';
@@ -18,6 +18,8 @@ import { walletsArray } from '@/lib/wallet/walletTypes';
 const UserController = () => {
 	const { account, library, chainId, activate } = useWeb3React();
 	const dispatch = useAppDispatch();
+	//TODO: Remove this state  before  merfing verification-develop-branch to DEVELOP
+	const [isActivatedCalled, setIsActivatedCalled] = useState(false);
 	const token = !isSSRMode ? localStorage.getItem(StorageLabel.TOKEN) : null;
 
 	useEffect(() => {
@@ -26,11 +28,13 @@ const UserController = () => {
 		if (wallet && wallet.connector instanceof InjectedConnector) {
 			wallet.connector.isAuthorized().then(isAuthorized => {
 				if (isAuthorized) {
-					activate(wallet.connector, console.log).then();
+					activate(wallet.connector, console.log).then(() =>
+						setIsActivatedCalled(true),
+					);
 				}
 			});
 		}
-	}, [activate]);
+	}, [activate, isActivatedCalled]);
 
 	useEffect(() => {
 		if (account) dispatch(fetchUserByAddress(account));

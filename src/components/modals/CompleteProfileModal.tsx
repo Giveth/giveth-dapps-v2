@@ -2,48 +2,40 @@ import { FC } from 'react';
 import router from 'next/router';
 import styled from 'styled-components';
 import { IconProfile } from '@giveth/ui-design-system/lib/cjs/components/icons/Profile';
-import {
-	brandColors,
-	Button,
-	H5,
-	Lead,
-	neutralColors,
-} from '@giveth/ui-design-system';
+import { brandColors, Button, H5, Lead } from '@giveth/ui-design-system';
 
 import { Modal } from '@/components/modals/Modal';
 import Routes from '@/lib/constants/Routes';
 import { IModal } from '@/types/common';
+import { Bullets } from '@/components/styled-components/Bullets';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 export const CompleteProfileModal: FC<IModal> = ({ setShowModal }) => {
 	const theme = useAppSelector(state => state.general.theme);
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	const handleClick = () => {
 		router.push(Routes.Onboard);
-		setShowModal(false);
+		closeModal();
 	};
 
 	return (
 		<Modal
-			setShowModal={setShowModal}
+			closeModal={closeModal}
+			isAnimating={isAnimating}
 			headerIcon={<IconProfile />}
 			headerTitle='Complete your profile'
 			headerTitlePosition='left'
 		>
 			<Container>
 				<Title>Now it’s time to complete your profile!</Title>
-				<Description>With a complete profile you can:</Description>
+				<div>With a complete profile you can:</div>
 				<Bullets>
-					<li>
-						<Lead>Create projects and receive funds.</Lead>
-					</li>
-					<li>
-						<Lead>Better communicate with the community.</Lead>
-					</li>
-					<li>
-						<Lead>Let others know you a little better.</Lead>
-					</li>
+					<li>Create projects and receive funds.</li>
+					<li>Better communicate with the community.</li>
+					<li>Let others know you a little better.</li>
 				</Bullets>
 				<OkButton
 					label='OK'
@@ -52,7 +44,7 @@ export const CompleteProfileModal: FC<IModal> = ({ setShowModal }) => {
 				/>
 				<SkipButton
 					label='SKIP FOR NOW'
-					onClick={() => setShowModal(false)}
+					onClick={closeModal}
 					buttonType='primary'
 				/>
 			</Container>
@@ -60,20 +52,11 @@ export const CompleteProfileModal: FC<IModal> = ({ setShowModal }) => {
 	);
 };
 
-const Bullets = styled.ul`
-	padding-left: 17px;
-	list-style-image: url('/images/bullet_tiny.svg');
-	margin-bottom: 30px;
-	li {
-		margin: 10px 0;
-		color: ${neutralColors.gray[900]};
-	}
-`;
-
-const Container = styled.div`
+const Container = styled(Lead)`
 	max-width: 528px;
 	padding: 24px;
 	text-align: left;
+	color: ${brandColors.deep[900]};
 `;
 
 const OkButton = styled(Button)`
@@ -94,11 +77,6 @@ const SkipButton = styled(Button)`
 `;
 
 const Title = styled(H5)`
-	margin-top: 24px;
+	margin: 24px 0;
 	font-weight: 700;
-`;
-
-const Description = styled(Lead)`
-	margin-top: 24px;
-	color: ${brandColors.deep[900]};
 `;
