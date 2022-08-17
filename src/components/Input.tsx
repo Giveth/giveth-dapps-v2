@@ -1,16 +1,22 @@
 import {
-	brandColors,
 	GLink,
 	neutralColors,
 	semanticColors,
+	SublineBold,
 } from '@giveth/ui-design-system';
-import { InputHTMLAttributes, ReactElement } from 'react';
+import React, { FC, InputHTMLAttributes, ReactElement, useId } from 'react';
 import styled from 'styled-components';
 import { IIconProps } from '@giveth/ui-design-system/lib/esm/components/icons/giv-economy/type';
-import { Shadow } from '@/components/styled-components/Shadow';
 import { EInputValidation, IInputValidation } from '@/types/inputValidation';
+import InputStyled from './styled-components/Input';
+import LottieControl from '@/components/animations/lottieControl';
+import LoadingAnimation from '@/animations/loading_giv_600.json';
+import { FlexCenter } from '@/components/styled-components/Flex';
 import type {
+	DeepRequired,
 	FieldError,
+	FieldErrorsImpl,
+	Merge,
 	RegisterOptions,
 	UseFormRegister,
 } from 'react-hook-form';
@@ -25,9 +31,14 @@ export enum InputSize {
 	LARGE,
 }
 
+interface IInputLabelProps {
+	required?: boolean;
+	disabled?: boolean;
+}
 interface IInput extends InputHTMLAttributes<HTMLInputElement> {
 	label?: string;
 	caption?: string;
+	isValidating?: boolean;
 	size?: InputSize;
 	LeftIcon?: ReactElement<IIconProps>;
 }
@@ -36,7 +47,10 @@ interface IInputWithRegister extends IInput {
 	register: UseFormRegister<any>;
 	registerName: string;
 	registerOptions?: RegisterOptions;
-	error?: FieldError;
+	error?:
+		| FieldError
+		| undefined
+		| Merge<FieldError, FieldErrorsImpl<NonNullable<DeepRequired<any>>>>;
 }
 
 const InputSizeToLinkSize = (size: InputSize) => {
@@ -61,7 +75,7 @@ type InputType =
 			error?: never;
 	  } & IInput);
 
-const Input = (props: InputType) => {
+const Input: FC<InputType> = props => {
 	const {
 		label,
 		caption,
@@ -72,43 +86,65 @@ const Input = (props: InputType) => {
 		registerName,
 		registerOptions = { required: false },
 		error,
+		maxLength,
+		value,
+		isValidating,
 		...rest
 	} = props;
-
-	const validationStatus = error
-		? EInputValidation.ERROR
-		: EInputValidation.NORMAL;
+	const id = useId();
+	const validationStatus =
+		!error || isValidating
+			? EInputValidation.NORMAL
+			: EInputValidation.ERROR;
 
 	return (
 		<InputContainer>
 			{label && (
-				<InputLabel
-					disabled={disabled}
-					size={InputSizeToLinkSize(size)}
-					required={Boolean(registerOptions.required)}
-				>
-					{label}
-				</InputLabel>
+				<label htmlFor={id}>
+					<InputLabel
+						disabled={disabled}
+						size={InputSizeToLinkSize(size)}
+						required={Boolean(registerOptions.required)}
+					>
+						{label}
+					</InputLabel>
+				</label>
 			)}
 			<InputWrapper>
 				{LeftIcon && LeftIcon}
-				<InputField
+				<InputStyled
 					validation={validationStatus}
 					inputSize={size}
 					hasLeftIcon={!!LeftIcon}
 					disabled={disabled}
+					maxLength={maxLength}
+					value={value}
+					id={id}
 					{...(registerName && register
 						? register(registerName, registerOptions)
 						: {})}
 					{...rest}
 				/>
+				<Absolute>
+					{isValidating && (
+						<LottieControl
+							animationData={LoadingAnimation}
+							size={22.4}
+						/>
+					)}
+					{maxLength && (
+						<CharLength>
+							{value ? String(value)?.length : 0}/{maxLength}
+						</CharLength>
+					)}
+				</Absolute>
 			</InputWrapper>
 			{error?.message ? (
 				<InputValidation
 					validation={validationStatus}
 					size={InputSizeToLinkSize(size)}
 				>
-					{error?.message}
+					{error.message as string}
 				</InputValidation>
 			) : (
 				<InputDesc size={InputSizeToLinkSize(size)}>
@@ -119,14 +155,35 @@ const Input = (props: InputType) => {
 	);
 };
 
+const Absolute = styled(FlexCenter)`
+	position: absolute;
+	right: 10px;
+	top: 0;
+	bottom: 0;
+`;
+
+const CharLength = styled(SublineBold)`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 12px;
+	background: ${neutralColors.gray[300]};
+	color: ${neutralColors.gray[700]};
+	font-weight: 500;
+	border-radius: 64px;
+	width: 52px;
+	height: 30px;
+	margin-right: 6px;
+`;
+
 const InputContainer = styled.div`
 	flex: 1;
 `;
 
-const InputLabel = styled(GLink)<{ required?: boolean; disabled?: boolean }>`
+const InputLabel = styled(GLink)<IInputLabelProps>`
 	padding-bottom: 4px;
 	color: ${props =>
-		props.disabled ? neutralColors.gray[600] : brandColors.deep[500]};
+		props.disabled ? neutralColors.gray[600] : neutralColors.gray[900]};
 	::after {
 		content: '*';
 		display: ${props => (props.required ? 'inline-block' : 'none')};
@@ -135,101 +192,9 @@ const InputLabel = styled(GLink)<{ required?: boolean; disabled?: boolean }>`
 	}
 `;
 
-interface IInputField extends IInputValidation {
-	inputSize: InputSize;
-	hasLeftIcon?: boolean;
-}
-
-const InputField = styled.input<IInputField>`
-	width: 100%;
-	height: ${props => {
-		switch (props.inputSize) {
-			case InputSize.SMALL:
-				return '32px';
-			case InputSize.MEDIUM:
-				return '54px';
-			case InputSize.LARGE:
-				return '56px';
-			default:
-				break;
-		}
-	}};
-	border: 2px solid
-		${props => {
-			switch (props.validation) {
-				case EInputValidation.NORMAL:
-					return neutralColors.gray[300];
-				case EInputValidation.WARNING:
-					return semanticColors.golden[600];
-				case EInputValidation.ERROR:
-					return semanticColors.punch[500];
-				case EInputValidation.SUCCESS:
-					return semanticColors.jade[500];
-				default:
-					return neutralColors.gray[300];
-			}
-		}};
-	border-radius: 8px;
-	padding: ${props => {
-		switch (props.inputSize) {
-			case InputSize.SMALL:
-				return '8px';
-			case InputSize.MEDIUM:
-				return '15px 16px';
-			case InputSize.LARGE:
-				return '18px 16px';
-			default:
-				break;
-		}
-	}};
-	padding-left: ${props => props.hasLeftIcon && '60px'};
-	font-size: ${props => {
-		switch (props.inputSize) {
-			case InputSize.SMALL:
-				return '12px';
-			case InputSize.MEDIUM:
-				return '16px';
-			case InputSize.LARGE:
-				return '16px';
-			default:
-				break;
-		}
-	}};
-	line-height: 150%;
-	font-family: 'Red Hat Text', sans-serif;
-	caret-color: ${brandColors.giv[300]};
-	box-shadow: none;
-	:focus {
-		border: 2px solid
-			${props => {
-				switch (props.validation) {
-					case EInputValidation.NORMAL:
-						return brandColors.giv[600];
-					case EInputValidation.WARNING:
-						return semanticColors.golden[700];
-					case EInputValidation.ERROR:
-						return semanticColors.punch[700];
-					case EInputValidation.SUCCESS:
-						return semanticColors.jade[700];
-					default:
-						return brandColors.giv[600];
-				}
-			}};
-	}
-	:hover {
-		box-shadow: ${Shadow.Neutral[400]};
-	}
-	:disabled {
-		background: ${neutralColors.gray[300]};
-	}
-	::placeholder {
-		color: ${neutralColors.gray[500]};
-	}
-`;
-
 const InputDesc = styled(GLink)`
 	padding-top: 4px;
-	color: ${brandColors.deep[500]};
+	color: ${neutralColors.gray[900]};
 	display: block;
 `;
 

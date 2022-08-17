@@ -72,8 +72,8 @@ const AboutMission = () => {
 					</ListItem>
 					<ListItem>
 						Giveth enables trust within communities by increasing
-						transparency and accountability through blockchain.
-						technology
+						transparency and accountability through blockchain
+						technology.
 					</ListItem>
 					<ListItem>
 						Giveth proactively reaches out to similar initiatives

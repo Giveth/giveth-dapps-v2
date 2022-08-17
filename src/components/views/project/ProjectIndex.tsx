@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Caption, Container, semanticColors } from '@giveth/ui-design-system';
+import { Caption, semanticColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-
 import { captureException } from '@sentry/nextjs';
+
 import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
 import ProjectDonateCard from './projectDonateCard/ProjectDonateCard';
@@ -20,16 +20,21 @@ import {
 	gqlEnums,
 } from '@/apollo/types/gqlEnums';
 import InfoBadge from '@/components/badges/InfoBadge';
-import { IDonationsByProjectIdGQL } from '@/apollo/types/gqlTypes';
+import {
+	IDonationsByProjectIdGQL,
+	IProjectBySlug,
+} from '@/apollo/types/gqlTypes';
 import SuccessfulCreation from '@/components/views/create/SuccessfulCreation';
-import { deviceSize, mediaQueries } from '@/lib/constants/constants';
-import InlineToast from '@/components/toasts/InlineToast';
+import { mediaQueries } from '@/lib/constants/constants';
+import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import SimilarProjects from '@/components/views/project/SimilarProjects';
 import { compareAddresses, showToastError } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import { ProjectMeta } from '@/components/Metatag';
 
-const ProjectDonations = dynamic(() => import('./ProjectDonations'));
+const ProjectDonations = dynamic(
+	() => import('./projectDonations/ProjectDonations.index'),
+);
 const ProjectUpdates = dynamic(() => import('./ProjectUpdates'));
 const NotAvailableProject = dynamic(() => import('../../NotAvailableProject'), {
 	ssr: false,
@@ -40,7 +45,7 @@ const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {
 
 const donationsPerPage = 10;
 
-const ProjectIndex = (props: { project?: IProject }) => {
+const ProjectIndex: FC<IProjectBySlug> = props => {
 	const [activeTab, setActiveTab] = useState(0);
 	const [isActive, setIsActive] = useState<boolean>(true);
 	const [isDraft, setIsDraft] = useState<boolean>(false);
@@ -48,7 +53,6 @@ const ProjectIndex = (props: { project?: IProject }) => {
 	const [donations, setDonations] = useState<IDonation[]>([]);
 	const [totalDonations, setTotalDonations] = useState(0);
 	const [creationSuccessful, setCreationSuccessful] = useState(false);
-	const [isMobile, setIsMobile] = useState<boolean>(false);
 	const [isCancelled, setIsCancelled] = useState<boolean>(false);
 	const user = useAppSelector(state => state.user.userData);
 
@@ -131,20 +135,6 @@ const ProjectIndex = (props: { project?: IProject }) => {
 		}
 	}, [slug, user?.id]);
 
-	useEffect(() => {
-		const windowResizeHandler = () => {
-			if (window.screen.width < deviceSize.tablet) {
-				setIsMobile(true);
-			} else {
-				setIsMobile(false);
-			}
-		};
-		window.addEventListener('resize', windowResizeHandler);
-		return () => {
-			removeEventListener('resize', windowResizeHandler);
-		};
-	}, []);
-
 	if (creationSuccessful) {
 		return (
 			<SuccessfulCreation
@@ -154,7 +144,7 @@ const ProjectIndex = (props: { project?: IProject }) => {
 		);
 	}
 
-	if (isCancelled) {
+	if (isCancelled || !project) {
 		return <NotAvailableProject />;
 	}
 
@@ -186,7 +176,10 @@ const ProjectIndex = (props: { project?: IProject }) => {
 							/>
 						)}
 						{!isActive && !isDraft && (
-							<InlineToast message='This project is not active.' />
+							<InlineToast
+								type={EToastType.Warning}
+								message='This project is not active.'
+							/>
 						)}
 						{activeTab === 0 && (
 							<RichTextViewer content={description} />
@@ -203,7 +196,7 @@ const ProjectIndex = (props: { project?: IProject }) => {
 									donations,
 									totalCount: totalDonations,
 								}}
-								project={project!}
+								project={project}
 								isActive={isActive}
 								isDraft={isDraft}
 							/>
@@ -213,7 +206,6 @@ const ProjectIndex = (props: { project?: IProject }) => {
 						<ProjectDonateCard
 							isDraft={isDraft}
 							project={project!}
-							isMobile={isMobile}
 							isActive={isActive}
 							setIsActive={setIsActive}
 							setIsDraft={setIsDraft}
@@ -240,32 +232,27 @@ const Wrapper = styled.div`
 	position: relative;
 `;
 
-const BodyWrapper = styled(Container)`
+const BodyWrapper = styled.div`
 	display: flex;
 	justify-content: space-between;
 	margin: 0 auto;
 	min-height: calc(100vh - 312px);
+	max-width: 1280px;
+	padding: 0 16px;
 
-	${mediaQueries.tablet} {
+	${mediaQueries.mobileL} {
 		padding: 0 32px;
 	}
 
 	${mediaQueries.laptopS} {
 		padding: 0 40px;
 	}
-
-	${mediaQueries.desktop} {
-		max-width: 1280px;
-	}
 `;
 
 const ContentWrapper = styled.div`
 	flex-grow: 1;
-	padding: 0 16px 0 16px;
-
-	${mediaQueries.tablet} {
-		padding: 0 24px 0 0;
-	}
+	padding-right: 16px;
+	width: 100%;
 `;
 
 export default ProjectIndex;

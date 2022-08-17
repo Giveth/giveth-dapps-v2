@@ -41,8 +41,8 @@ const Wrapper = styled.div<{ disabled?: boolean; checked?: boolean }>`
 					? neutralColors.gray[400]
 					: neutralColors.gray[900]};
 		border-radius: 4px;
-		width: 24px;
-		height: 24px;
+		width: 20px;
+		height: 20px;
 		flex-shrink: 0;
 		background: ${props =>
 			props.checked ? brandColors.deep[900] : 'white'};

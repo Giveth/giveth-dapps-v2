@@ -12,7 +12,6 @@ export const Label = styled(GLink)`
 `;
 
 export const TinyLabel = styled(GLink)`
-	height: 14px;
 	margin: 4px 0 0 0;
-	color: ${neutralColors.gray[600]};
+	color: ${neutralColors.gray[900]};
 `;

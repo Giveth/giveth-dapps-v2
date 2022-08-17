@@ -5,7 +5,7 @@ import { Col } from '@/components/Grid';
 import { Shadow } from '@/components/styled-components/Shadow';
 import menuList from '@/components/views/verification/menu/menuList';
 import { useVerificationData } from '@/context/verification.context';
-import { ProgressBar } from '@/components/views/verification/common';
+import { ProgressBar } from '@/components/views/verification/Common';
 import { findStepByName } from '@/lib/verification';
 
 const DesktopMenu = () => {
@@ -13,23 +13,28 @@ const DesktopMenu = () => {
 	const { project, lastStep } = verificationData || {};
 	const { title } = project || {};
 	const lastStepIndex = findStepByName(lastStep);
-
 	return (
 		<MenuSection sm={3.75} md={2.75}>
 			<MenuTitle>Verified status for</MenuTitle>
 			<MenuTitle isActive>{title}</MenuTitle>
 			<ProgressBar />
-			{menuList.map((item, index) => (
-				<MenuTitle
-					hover={index <= lastStepIndex + 1}
-					isActive={index <= step}
-					key={item}
-					onClick={() => index <= lastStepIndex + 1 && setStep(index)}
-				>
-					{item}
-					{(index <= lastStepIndex || step === 8) && <CheckCircle />}
-				</MenuTitle>
-			))}
+			{menuList.map((item, index) => {
+				const isClickable =
+					!!lastStepIndex && index <= lastStepIndex + 1;
+				return (
+					<MenuTitle
+						hover={isClickable}
+						isActive={index <= step}
+						key={item}
+						onClick={() => isClickable && setStep(index)}
+					>
+						{item}
+						{(index <= lastStepIndex || step === 8) && (
+							<CheckCircle />
+						)}
+					</MenuTitle>
+				);
+			})}
 		</MenuSection>
 	);
 };

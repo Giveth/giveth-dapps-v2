@@ -5,12 +5,12 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
+import menuList from '@/components/views/verification/menu/menuList';
+import { useVerificationData } from '@/context/verification.context';
 import {
 	ButtonStyled,
 	RemoveBtn,
-} from '@/components/views/verification/common.styled';
-import menuList from '@/components/views/verification/menu/menuList';
-import { useVerificationData } from '@/context/verification.context';
+} from '@/components/views/verification/Common.sc';
 
 interface IRemoveBtnProps {
 	onClick?: () => void;
@@ -43,7 +43,7 @@ export const ProgressBar = () => {
 	const _step = step < 0 ? 0 : step; // For width animation on initial load
 	return (
 		<Container>
-			<Bar width={_step / stepsCount} />
+			<Bar width={(_step + 1) / stepsCount} />
 		</Container>
 	);
 };

@@ -4,15 +4,15 @@ import styled from 'styled-components';
 import CheckBox from '@/components/Checkbox';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { Relative } from '@/components/styled-components/Position';
-import { ContentSeparator, BtnContainer } from './VerificationIndex';
+import { ContentSeparator, BtnContainer } from './Common.sc';
 import { useVerificationData } from '@/context/verification.context';
 import { client } from '@/apollo/apolloClient';
 import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
 import { EVerificationStatus, EVerificationSteps } from '@/apollo/types/types';
+import { showToastError } from '@/lib/helpers';
 
 export default function TermsAndConditions() {
-	const [loading, setloading] = useState(false);
-	const [isChanged, setIsChanged] = useState(false);
+	const [loading, setLoading] = useState(false);
 
 	const { verificationData, setVerificationData, setStep, isDraft } =
 		useVerificationData();
@@ -32,9 +32,9 @@ export default function TermsAndConditions() {
 		setStep(8);
 	};
 
-	const handleNext = () => {
-		async function sendReq() {
-			setloading(true);
+	const handleNext = async () => {
+		try {
+			setLoading(true);
 			await client.mutate({
 				mutation: UPDATE_PROJECT_VERIFICATION,
 				variables: {
@@ -45,17 +45,14 @@ export default function TermsAndConditions() {
 					},
 				},
 			});
-
-			setloading(false);
+			setLoading(false);
 			updateVerificationState();
-		}
-
-		if (isChanged && isDraft) {
-			sendReq();
-		} else {
-			updateVerificationState();
+		} catch (error) {
+			setLoading(false);
+			showToastError(error);
 		}
 	};
+
 	return (
 		<>
 			<Lead>
@@ -100,10 +97,7 @@ export default function TermsAndConditions() {
 					<CheckBox
 						title='I accept all of the Giveth community terms and conditions.'
 						checked={accepted}
-						onChange={e => {
-							setIsChanged(true);
-							setAccepted(e);
-						}}
+						onChange={setAccepted}
 					/>
 				)}
 			</Lead>
@@ -112,7 +106,7 @@ export default function TermsAndConditions() {
 				<BtnContainer>
 					<Button onClick={() => setStep(6)} label='<     PREVIOUS' />
 					<Button
-						onClick={() => handleNext()}
+						onClick={handleNext}
 						loading={loading}
 						disabled={!accepted}
 						label='FINISH     >'
