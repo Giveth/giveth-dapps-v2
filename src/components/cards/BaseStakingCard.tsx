@@ -153,10 +153,14 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		BUY_LINK,
 		unit,
 		farmStartTimeMS,
-		active,
+		active: activePool,
 		archived,
+		discontinued,
 		introCard,
 	} = poolStakingConfig;
+
+	const active =
+		activePool && (!discontinued || getNowUnixMS() > discontinued); // pool is no longer active if discontinuation date is over
 
 	const {
 		apr,
@@ -236,7 +240,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	return (
 		<>
 			<StakingPoolContainer>
-				{(!active || archived) && disableModal && (
+				{(!active || archived || discontinued) && disableModal && (
 					<DisableModal>
 						<DisableModalContent>
 							<DisableModalImage>

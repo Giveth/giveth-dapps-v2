@@ -39,6 +39,7 @@ import { givEconomySupportedNetworks } from '@/lib/constants/constants';
 import { shortenAddress } from '@/lib/helpers';
 import { Col, Container, Row } from '@/components/Grid';
 import links from '@/lib/constants/links';
+import { getNowUnixMS } from '@/helpers/time';
 import {
 	DaoCard,
 	DaoCardTitle,
@@ -51,8 +52,15 @@ const renderPools = (
 	network: number,
 	showArchivedPools?: boolean,
 ) => {
+	const rightNow = getNowUnixMS();
 	return pools
-		.filter(p => (showArchivedPools ? true : p.active && !p.archived))
+		.filter(p =>
+			showArchivedPools
+				? true
+				: p.active &&
+				  (!p?.discontinued || rightNow < p?.discontinued) && // shows card if time of discontinuation isn't over
+				  !p.archived,
+		)
 		.map((poolStakingConfig, idx) => ({ poolStakingConfig, idx }))
 		.sort(
 			(
@@ -145,6 +153,17 @@ export const TabGIVfarmBottom = () => {
 	const { chainId } = useWeb3React();
 	const [showArchivedPools, setArchivedPools] = useState(false);
 
+	const mainnetGIVStaking = getGivStakingConfig(config.MAINNET_CONFIG);
+	const mainGIVStakeDiscontinued =
+		mainnetGIVStaking.discontinued &&
+		getNowUnixMS() > mainnetGIVStaking.discontinued;
+
+	const xdaiGIVStaking = getGivStakingConfig(config.XDAI_CONFIG);
+
+	const xdaiGIVStakeDiscontinued =
+		xdaiGIVStaking.discontinued &&
+		getNowUnixMS() > xdaiGIVStaking.discontinued;
+
 	return (
 		<GIVfarmBottomContainer>
 			<Container>
@@ -212,14 +231,15 @@ export const TabGIVfarmBottom = () => {
 				{chainId === config.XDAI_NETWORK_NUMBER && (
 					<>
 						<PoolRow>
-							<Col sm={6} lg={4}>
-								<StakingPoolCard
-									network={config.XDAI_NETWORK_NUMBER}
-									poolStakingConfig={getGivStakingConfig(
-										config.XDAI_CONFIG,
-									)}
-								/>
-							</Col>
+							{(showArchivedPools ||
+								!xdaiGIVStakeDiscontinued) && (
+								<Col sm={6} lg={4}>
+									<StakingPoolCard
+										network={config.XDAI_NETWORK_NUMBER}
+										poolStakingConfig={xdaiGIVStaking}
+									/>
+								</Col>
+							)}
 							{renderPools(
 								config.XDAI_CONFIG.pools,
 								config.XDAI_NETWORK_NUMBER,
@@ -242,14 +262,15 @@ export const TabGIVfarmBottom = () => {
 								!givEconomySupportedNetworks.includes(chainId)
 							}
 						>
-							<Col sm={6} lg={4}>
-								<StakingPoolCard
-									network={config.MAINNET_NETWORK_NUMBER}
-									poolStakingConfig={getGivStakingConfig(
-										config.MAINNET_CONFIG,
-									)}
-								/>
-							</Col>
+							{(showArchivedPools ||
+								!mainGIVStakeDiscontinued) && (
+								<Col sm={6} lg={4}>
+									<StakingPoolCard
+										network={config.MAINNET_NETWORK_NUMBER}
+										poolStakingConfig={mainnetGIVStaking}
+									/>
+								</Col>
+							)}
 							{renderPools(
 								config.MAINNET_CONFIG.pools,
 								config.MAINNET_NETWORK_NUMBER,
