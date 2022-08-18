@@ -6,13 +6,13 @@ export const chainName = (chainId: number) => {
 		case 31337:
 			return 'Hardhat';
 		case 1:
+		case 42:
+		case 5:
 			return 'Mainnet';
 		case 4:
 			return 'Rinkeby';
 		case 100:
 			return 'Gnosis Chain';
-		case 42:
-			return 'Mainnet';
 		default:
 			return 'Unknown';
 	}
