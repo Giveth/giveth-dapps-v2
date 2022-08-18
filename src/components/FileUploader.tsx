@@ -10,8 +10,8 @@ import {
 	GLink,
 	neutralColors,
 	brandColors,
+	IconImage,
 } from '@giveth/ui-design-system';
-import { IconImage } from '@giveth/ui-design-system/lib/cjs/components/icons/Image';
 import { Flex } from './styled-components/Flex';
 import { showToastError } from '@/lib/helpers';
 import { client } from '@/apollo/apolloClient';
