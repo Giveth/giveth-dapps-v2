@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import {
 	Caption,
 	H6,
@@ -10,7 +10,6 @@ import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
 import { useWeb3React } from '@web3-react/core';
 import { utils } from 'ethers';
-import debounce from 'lodash.debounce';
 
 import { compareAddresses } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
@@ -49,7 +48,6 @@ const WalletAddressInput: FC<IProps> = ({
 		formState: { errors },
 		getValues,
 		clearErrors,
-		setError,
 	} = useFormContext();
 
 	const [isHidden, setIsHidden] = useState(false);
@@ -91,17 +89,14 @@ const WalletAddressInput: FC<IProps> = ({
 		else throw 'Invalid ENS address';
 	};
 
-	const setFormError = (message: string | boolean) => {
-		if (typeof message === 'string') {
-			setError(inputName, { type: 'validate', message });
-		}
-	};
-
 	const addressValidation = async (address: string) => {
 		try {
 			clearErrors(inputName);
-			if (disabled) return true;
 			setResolvedENS('');
+			if (disabled) return true;
+			if (address.length === 0) {
+				return 'This field is required';
+			}
 			let _address = (' ' + address).slice(1);
 			setIsValidating(true);
 			if (isAddressENS(address)) {
@@ -114,21 +109,16 @@ const WalletAddressInput: FC<IProps> = ({
 			}
 			if (!utils.isAddress(_address)) {
 				setIsValidating(false);
-				setFormError('Eth address not valid');
 				return 'Eth address not valid';
 			}
 			const res = await gqlAddressValidation(_address);
-			setFormError(res);
 			setIsValidating(false);
 			return res;
 		} catch (e: any) {
 			setIsValidating(false);
-			setFormError(e);
 			return e;
 		}
 	};
-
-	const debouncedValidation = useRef(debounce(addressValidation, 750));
 
 	useEffect(() => {
 		if (sameAddress) {
@@ -188,7 +178,7 @@ const WalletAddressInput: FC<IProps> = ({
 				isValidating={isValidating}
 				register={register}
 				registerName={inputName}
-				registerOptions={{ validate: debouncedValidation.current }}
+				registerOptions={{ validate: addressValidation }}
 				error={isAddressUsed ? undefined : error}
 			/>
 			{resolvedENS && (

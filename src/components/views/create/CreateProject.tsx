@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import {
 	brandColors,
 	Button,
@@ -16,7 +16,6 @@ import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { captureException } from '@sentry/nextjs';
 import { FormProvider, useForm } from 'react-hook-form';
-import debounce from 'lodash.debounce';
 
 import {
 	ACTIVATE_PROJECT,
@@ -117,7 +116,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	}
 
 	const formMethods = useForm<TInputs>({
-		mode: 'onChange',
+		mode: 'onBlur',
+		reValidateMode: 'onBlur',
 		defaultValues: {
 			[EInputs.name]: title,
 			[EInputs.description]: description,
@@ -270,13 +270,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		setIsTitleValidating(true);
 		const result = await gqlTitleValidation(title);
 		setIsTitleValidating(false);
-		if (typeof result === 'string') {
-			setError(EInputs.name, { type: 'validate', message: result });
-		}
-		return true;
+		return result;
 	};
-
-	const debouncedTitleValidation = useRef(debounce(titleValidation, 750));
 
 	useEffect(() => {
 		dispatch(setShowFooter(false));
@@ -316,7 +311,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							registerName={EInputs.name}
 							registerOptions={{
 								...requiredOptions.name,
-								validate: debouncedTitleValidation.current,
+								validate: titleValidation,
 							}}
 							error={formErrors[EInputs.name]}
 						/>
