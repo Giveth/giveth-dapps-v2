@@ -1,8 +1,13 @@
 import { FC } from 'react';
 import router from 'next/router';
 import styled from 'styled-components';
-import { IconProfile } from '@giveth/ui-design-system/lib/cjs/components/icons/Profile';
-import { brandColors, Button, H5, Lead } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	Button,
+	H5,
+	IconProfile,
+	Lead,
+} from '@giveth/ui-design-system';
 
 import { Modal } from '@/components/modals/Modal';
 import Routes from '@/lib/constants/Routes';
