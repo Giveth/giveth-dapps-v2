@@ -39,7 +39,6 @@ import { givEconomySupportedNetworks } from '@/lib/constants/constants';
 import { shortenAddress } from '@/lib/helpers';
 import { Col, Container, Row } from '@/components/Grid';
 import links from '@/lib/constants/links';
-import { getNowUnixMS } from '@/helpers/time';
 import {
 	DaoCard,
 	DaoCardTitle,
@@ -52,7 +51,6 @@ const renderPools = (
 	network: number,
 	showArchivedPools?: boolean,
 ) => {
-	const rightNow = getNowUnixMS();
 	return pools
 		.filter(p => (showArchivedPools ? true : p.active && !p.archived))
 		.map((poolStakingConfig, idx) => ({ poolStakingConfig, idx }))
