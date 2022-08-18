@@ -9,6 +9,7 @@ import { gwei2wei } from '@/helpers/blockchain';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 const BASE_ROUTE = 'https://serve.giveth.io';
+const SEPT_8TH_2022 = 1662595200000;
 // IMPORTANT: Using dev to make it work until staging is merged
 // const BASE_ROUTE = 'https://dev.serve.giveth.io';
 
@@ -65,6 +66,7 @@ const config: EnvConfig = {
 					'https://app.uniswap.org/#/add/v2/0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa/0x29434A25abd94AE882aA883eea81585Aaa5b078D?chain=kovan',
 				unit: 'LP',
 				active: true,
+				discontinued: SEPT_8TH_2022,
 			},
 			{
 				POOL_ADDRESS: '0x8a6b25e33b12d1bb6929a8793961076bd1f9d3eb',

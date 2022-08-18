@@ -4,8 +4,6 @@ export interface BasicStakingConfig {
 	BUY_LINK?: string;
 	farmStartTimeMS?: number;
 	icon?: string;
-	active?: boolean;
-	discontinued?: number;
 }
 export enum StakingPlatform {
 	GIVETH = 'Staking',
@@ -116,7 +114,7 @@ export interface BasicNetworkConfig {
 	gGIV_ADDRESS?: string;
 	tokenAddressOnUniswapV2: string; // For price purpose in test env, on production this must have the same value of `TOKEN_ADDRESS`
 	TOKEN_DISTRO_ADDRESS: string;
-	GIV: BasicStakingConfig;
+	GIV: BasicStakingConfig | SimplePoolStakingConfig;
 	nodeUrl: string;
 	chainId: string; // A 0x-prefixed hexadecimal string
 	chainName: string;

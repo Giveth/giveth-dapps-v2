@@ -47,7 +47,6 @@ const config: EnvConfig = {
 			LM_ADDRESS: '0x4B9EfAE862a1755F7CEcb021856D467E86976755',
 			BUY_LINK:
 				'https://app.uniswap.org/#/swap?outputCurrency=0x900db999074d9277c5da2a43f252d74366230da0',
-			active: true,
 			discontinued: SEPT_8TH_2022,
 		},
 
