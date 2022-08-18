@@ -96,11 +96,11 @@ const WalletAddressInput: FC<IProps> = ({
 	const addressValidation = async (address: string) => {
 		try {
 			clearErrors(inputName);
+			setResolvedENS('');
 			if (disabled) return true;
 			if (address.length === 0) {
 				return 'This field is required';
 			}
-			setResolvedENS('');
 			let _address = (' ' + address).slice(1);
 			setIsValidating(true);
 			if (isAddressENS(address)) {
