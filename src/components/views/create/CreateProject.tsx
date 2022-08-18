@@ -135,7 +135,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		handleSubmit,
 		formState: { errors: formErrors },
 		setValue,
-		setError,
 		watch,
 	} = formMethods;
 
