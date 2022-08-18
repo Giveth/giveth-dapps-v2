@@ -56,6 +56,8 @@ import { StakeModal } from '../modals/Stake';
 import { UnStakeModal } from '../modals/UnStake';
 import { StakingPoolImages } from '../StakingPoolImages';
 import { V3StakeModal } from '../modals/V3Stake';
+import { IconEthereum } from '../Icons/Eth';
+import { IconGnosisChain } from '../Icons/GnosisChain';
 import { IconGIV } from '../Icons/GIV';
 import { IconHoneyswap } from '../Icons/Honeyswap';
 import { IconBalancer } from '../Icons/Balancer';
@@ -82,7 +84,17 @@ export enum StakeCardState {
 	INTRO,
 }
 
-export const getPoolIconWithName = (platform: StakingPlatform) => {
+export const getPoolIconWithName = (
+	platform: StakingPlatform,
+	poolNetwork?: number,
+) => {
+	switch (poolNetwork) {
+		case config.MAINNET_NETWORK_NUMBER:
+			return <IconEthereum size={16} />;
+		case config.XDAI_NETWORK_NUMBER:
+			return <IconGnosisChain size={16} />;
+	}
+	// if no number is set then it defaults to platform icon
 	switch (platform) {
 		case StakingPlatform.BALANCER:
 			return <IconBalancer size={16} />;
@@ -156,6 +168,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		active,
 		archived,
 		introCard,
+		network: poolNetwork,
 	} = poolStakingConfig;
 
 	const {
@@ -267,7 +280,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				{state === StakeCardState.NORMAL ? (
 					<>
 						<StakingPoolExchangeRow gap='4px' alignItems='center'>
-							{getPoolIconWithName(platform)}
+							{getPoolIconWithName(platform, poolNetwork)}
 							<StakingPoolExchange styleType='Small'>
 								{type === StakingType.GIV_LM &&
 									chainId === config.XDAI_NETWORK_NUMBER &&

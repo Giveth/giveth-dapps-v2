@@ -14,6 +14,9 @@ import config from '@/configuration';
 import {
 	BasicNetworkConfig,
 	SimplePoolStakingConfig,
+	BalancerPoolStakingConfig,
+	UniswapV3PoolStakingConfig,
+	ICHIPoolStakingConfig,
 	StakingType,
 } from '@/types/config';
 import {
@@ -46,14 +49,23 @@ import {
 	DaoCardButton,
 } from '../GIVfrens.sc';
 
+type IPools = Array<
+	| SimplePoolStakingConfig
+	| BalancerPoolStakingConfig
+	| UniswapV3PoolStakingConfig
+	| ICHIPoolStakingConfig
+>;
+
 const renderPools = (
 	pools: BasicNetworkConfig['pools'],
-	network: number,
 	showArchivedPools?: boolean,
 ) => {
 	return pools
 		.filter(p => (showArchivedPools ? true : p.active && !p.archived))
-		.map((poolStakingConfig, idx) => ({ poolStakingConfig, idx }))
+		.map((poolStakingConfig, idx) => ({
+			poolStakingConfig,
+			idx,
+		}))
 		.sort(
 			(
 				{
@@ -70,6 +82,7 @@ const renderPools = (
 				idx1 - idx2,
 		)
 		.map(({ poolStakingConfig }, index) => {
+			const network = poolStakingConfig?.network || 0;
 			return (
 				<Col
 					sm={6}
@@ -145,6 +158,27 @@ export const TabGIVfarmBottom = () => {
 	const { chainId } = useWeb3React();
 	const [showArchivedPools, setArchivedPools] = useState(false);
 
+	const [allPools, setAllpools] = useState<IPools>([]);
+
+	useEffect(() => {
+		let pools: IPools = [];
+		config.XDAI_CONFIG.pools.map((e: any) => {
+			pools.push({
+				network: config.XDAI_NETWORK_NUMBER,
+				...e,
+			});
+		});
+		config.MAINNET_CONFIG.pools.map((e: any) => {
+			pools.push({
+				network: config.MAINNET_NETWORK_NUMBER,
+				...e,
+			});
+		});
+		setAllpools(pools);
+	}, []);
+
+	console.log({ allPools });
+
 	return (
 		<GIVfarmBottomContainer>
 			<Container>
@@ -209,59 +243,42 @@ export const TabGIVfarmBottom = () => {
 						isSelected={showArchivedPools}
 					/>
 				</ArchivedPoolsToggle>
-				{chainId === config.XDAI_NETWORK_NUMBER && (
-					<>
-						<PoolRow>
-							<Col sm={6} lg={4}>
-								<StakingPoolCard
-									network={config.XDAI_NETWORK_NUMBER}
-									poolStakingConfig={getGivStakingConfig(
-										config.XDAI_CONFIG,
-									)}
-								/>
-							</Col>
-							{renderPools(
-								config.XDAI_CONFIG.pools,
-								config.XDAI_NETWORK_NUMBER,
-								showArchivedPools,
-							)}
-						</PoolRow>
+				<>
+					<PoolRow>
+						<Col sm={6} lg={4}>
+							<StakingPoolCard
+								network={config.XDAI_NETWORK_NUMBER}
+								poolStakingConfig={getGivStakingConfig(
+									config.XDAI_CONFIG,
+								)}
+							/>
+						</Col>
+						<Col sm={6} lg={4}>
+							<StakingPoolCard
+								network={config.MAINNET_NETWORK_NUMBER}
+								poolStakingConfig={getGivStakingConfig(
+									config.MAINNET_CONFIG,
+								)}
+							/>
+						</Col>
+						{renderPools(allPools, showArchivedPools)}
+					</PoolRow>
+					{chainId === config.XDAI_NETWORK_NUMBER ? (
 						<GIVfrens
 							regenFarms={config.XDAI_CONFIG.regenFarms}
 							network={config.XDAI_NETWORK_NUMBER}
 						/>
-					</>
-				)}
-				{(!chainId ||
-					chainId === config.MAINNET_NETWORK_NUMBER ||
-					!givEconomySupportedNetworks.includes(chainId)) && (
-					<>
-						<PoolRow
-							disabled={
-								!chainId ||
-								!givEconomySupportedNetworks.includes(chainId)
-							}
-						>
-							<Col sm={6} lg={4}>
-								<StakingPoolCard
-									network={config.MAINNET_NETWORK_NUMBER}
-									poolStakingConfig={getGivStakingConfig(
-										config.MAINNET_CONFIG,
-									)}
-								/>
-							</Col>
-							{renderPools(
-								config.MAINNET_CONFIG.pools,
-								config.MAINNET_NETWORK_NUMBER,
-								showArchivedPools,
-							)}
-						</PoolRow>
+					) : (
 						<GIVfrens
 							regenFarms={config.MAINNET_CONFIG.regenFarms}
 							network={config.MAINNET_NETWORK_NUMBER}
 						/>
-					</>
-				)}
+					)}
+					<GIVfrens
+						regenFarms={config.XDAI_CONFIG.regenFarms}
+						network={config.XDAI_NETWORK_NUMBER}
+					/>
+				</>
 				<Col xs={12}>
 					<DaoCard>
 						<DaoCardTitle weight={900}>Add Your DAO</DaoCardTitle>

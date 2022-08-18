@@ -56,6 +56,7 @@ export interface SimplePoolStakingConfig extends BasicStakingConfig {
 	active: boolean;
 	archived?: boolean;
 	introCard?: IntroCardConfig;
+	network?: number;
 }
 
 export interface ICHIPoolStakingConfig extends SimplePoolStakingConfig {
