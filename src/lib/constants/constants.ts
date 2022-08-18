@@ -11,8 +11,6 @@ export const chainName = (chainId: number) => {
 			return 'Mainnet';
 		case 4:
 			return 'Rinkeby';
-		case 5:
-			return 'Goerli';
 		case 100:
 			return 'Gnosis Chain';
 		default:

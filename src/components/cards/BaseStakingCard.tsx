@@ -255,15 +255,16 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				{poolNetwork !== chainId && (
 					<WrongNetworkContainer>
 						<Image
-							src='/images/alert.svg'
-							height={24}
-							width={24}
+							src='/images/alert-2.svg'
+							height={32}
+							width={32}
 							alt='question'
 						/>
 						<Caption>
 							You are currently connected to{' '}
-							{chainName(poolNetwork)} switch to{' '}
-							{chainName(chainId)} to interact with this farm.
+							{chainName(chainId || 0)} switch to{' '}
+							{chainName(poolNetwork || 0)} to interact with this
+							farm.
 						</Caption>
 					</WrongNetworkContainer>
 				)}
@@ -280,12 +281,12 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							</DisableModalImage>
 							<div>
 								<DisableModalText weight={700}>
-									Attention Farmers!
+									This pool is no longer available
 								</DisableModalText>
 								<br />
 								<DisableModalText>
-									This farm is ending soon, move your funds to
-									another farm to keep earning rewards
+									Please unstake your tokens and check out
+									other available pools.
 								</DisableModalText>
 								<DisableModalCloseButton
 									label='GOT IT'

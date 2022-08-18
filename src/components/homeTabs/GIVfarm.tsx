@@ -182,59 +182,67 @@ export const TabGIVfarmBottom = () => {
 	return (
 		<GIVfarmBottomContainer>
 			<Container>
-				<Flex alignItems='center' gap='24px' wrap={1}>
+				<Flex
+					alignItems='center'
+					gap='24px'
+					wrap={1}
+					justifyContent='space-between'
+				>
 					<NetworkSelector />
-					<ExtLinkRow alignItems='center'>
-						<GLink
-							size='Big'
-							target='_blank'
-							rel='noreferrer'
-							href='https://omni.xdaichain.com/bridge'
-						>
-							Bridge your GIV
-						</GLink>
-						<IconExternalLink />
-					</ExtLinkRow>
-					<ExtLinkRow alignItems='center'>
-						<GLink
-							size='Big'
-							target='_blank'
-							rel='noreferrer'
-							href={
+					<Flex alignItems='center' gap='24px' wrap={1}>
+						<ExtLinkRow alignItems='center'>
+							<GLink
+								size='Big'
+								target='_blank'
+								rel='noreferrer'
+								href='https://omni.xdaichain.com/bridge'
+							>
+								Bridge your GIV
+							</GLink>
+							<IconExternalLink />
+						</ExtLinkRow>
+						<ExtLinkRow alignItems='center'>
+							<GLink
+								size='Big'
+								target='_blank'
+								rel='noreferrer'
+								href={
+									chainId === config.XDAI_NETWORK_NUMBER
+										? config.XDAI_CONFIG.GIV.BUY_LINK
+										: config.MAINNET_CONFIG.GIV.BUY_LINK
+								}
+							>
+								Buy GIV token
+							</GLink>
+							<IconExternalLink />
+						</ExtLinkRow>
+						<ContractRow>
+							<GLink>{`Contract (${
 								chainId === config.XDAI_NETWORK_NUMBER
-									? config.XDAI_CONFIG.GIV.BUY_LINK
-									: config.MAINNET_CONFIG.GIV.BUY_LINK
-							}
-						>
-							Buy GIV token
-						</GLink>
-						<IconExternalLink />
-					</ExtLinkRow>
-					<ContractRow>
-						<GLink>{`Contract (${
-							chainId === config.XDAI_NETWORK_NUMBER
-								? config.XDAI_CONFIG.chainName
-								: config.MAINNET_CONFIG.chainName
-						}):`}</GLink>
-						<GLink>
-							{shortenAddress(
-								chainId === config.XDAI_NETWORK_NUMBER
-									? config.XDAI_CONFIG.TOKEN_ADDRESS
-									: config.MAINNET_CONFIG.TOKEN_ADDRESS,
-							)}
-						</GLink>
-						<CopyWrapper
-							onClick={() => {
-								navigator.clipboard.writeText(
+									? config.XDAI_CONFIG.chainName
+									: config.MAINNET_CONFIG.chainName
+							}):`}</GLink>
+							<GLink>
+								{shortenAddress(
 									chainId === config.XDAI_NETWORK_NUMBER
 										? config.XDAI_CONFIG.TOKEN_ADDRESS
 										: config.MAINNET_CONFIG.TOKEN_ADDRESS,
-								);
-							}}
-						>
-							<IconCopy />
-						</CopyWrapper>
-					</ContractRow>
+								)}
+							</GLink>
+							<CopyWrapper
+								onClick={() => {
+									navigator.clipboard.writeText(
+										chainId === config.XDAI_NETWORK_NUMBER
+											? config.XDAI_CONFIG.TOKEN_ADDRESS
+											: config.MAINNET_CONFIG
+													.TOKEN_ADDRESS,
+									);
+								}}
+							>
+								<IconCopy />
+							</CopyWrapper>
+						</ContractRow>
+					</Flex>
 				</Flex>
 				<ArchivedPoolsToggle>
 					<RadioButton

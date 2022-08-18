@@ -207,8 +207,7 @@ export const DisableModalImage = styled.div`
 	color: ${brandColors.giv[500]};
 `;
 
-export const WrongNetworkContainer = styled.div`
-	display: flex;
+export const WrongNetworkContainer = styled(Flex)`
 	flex-direction: row;
 	position: absolute;
 	bottom: 0;
