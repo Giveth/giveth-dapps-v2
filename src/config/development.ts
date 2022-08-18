@@ -67,17 +67,17 @@ const config: EnvConfig = {
 				active: true,
 			},
 			{
-				POOL_ADDRESS: '0xfaeb6a8b5f15af77673666e51a44f6b9b6ca5da2',
+				POOL_ADDRESS: '0xf8cba1c22b6515982bf43e71b7e8b546a3323ea8',
 				VAULT_ADDRESS: '0xba12222222228d8ba445958a75a0704d566bf2c8',
 				POOL_ID:
-					'0xfaeb6a8b5f15af77673666e51a44f6b9b6ca5da20002000000000000000000da',
+					'0xf8cba1c22b6515982bf43e71b7e8b546a3323ea80002000000000000000000df',
 				LM_ADDRESS: '0x11275A970e17B21Cf6917C9D3DA5AcB6722c5dcC',
 				type: StakingType.BALANCER_ETH_GIV,
 				platform: StakingPlatform.BALANCER,
 				title: 'GIV / ETH',
 				description: '80% GIV, 20% ETH',
 				provideLiquidityLink:
-					'https://goerli.balancer.fi/#/pool/0xfaeb6a8b5f15af77673666e51a44f6b9b6ca5da20002000000000000000000da',
+					'https://goerli.balancer.fi/#/pool/0xf8cba1c22b6515982bf43e71b7e8b546a3323ea80002000000000000000000df',
 				unit: 'LP',
 				active: true,
 			},
