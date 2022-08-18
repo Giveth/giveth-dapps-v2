@@ -5,6 +5,7 @@ import {
 	IconExternalLink,
 	IconHelp,
 	IconSpark,
+	Caption,
 } from '@giveth/ui-design-system';
 import { constants } from 'ethers';
 import BigNumber from 'bignumber.js';
@@ -50,6 +51,7 @@ import {
 	StakingPoolExchangeRow,
 	StakingPoolLabel,
 	StakingPoolSubtitle,
+	WrongNetworkContainer,
 } from './BaseStakingCard.sc';
 import { APRModal } from '../modals/APR';
 import { StakeModal } from '../modals/Stake';
@@ -75,6 +77,7 @@ import { IStakeInfo } from '@/hooks/useStakingPool';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { useAppSelector } from '@/features/hooks';
 import Routes from '@/lib/constants/Routes';
+import { chainName } from '@/lib/constants/constants';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { IconAngelVault } from '../Icons/AngelVault';
 import type { LiquidityPosition } from '@/types/nfts';
@@ -249,12 +252,27 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	return (
 		<>
 			<StakingPoolContainer>
+				{poolNetwork !== chainId && (
+					<WrongNetworkContainer>
+						<Image
+							src='/images/alert.svg'
+							height={24}
+							width={24}
+							alt='question'
+						/>
+						<Caption>
+							You are currently connected to{' '}
+							{chainName(poolNetwork)} switch to{' '}
+							{chainName(chainId)} to interact with this farm.
+						</Caption>
+					</WrongNetworkContainer>
+				)}
 				{(!active || archived) && disableModal && (
 					<DisableModal>
 						<DisableModalContent>
 							<DisableModalImage>
 								<Image
-									src='/images/icons/questionMarkGiv.svg'
+									src='/images/icons/info.svg'
 									height={24}
 									width={24}
 									alt='question'
@@ -262,12 +280,12 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							</DisableModalImage>
 							<div>
 								<DisableModalText weight={700}>
-									This pool is no longer available
+									Attention Farmers!
 								</DisableModalText>
 								<br />
 								<DisableModalText>
-									Please unstake your tokens and check out
-									other available pools.
+									This farm is ending soon, move your funds to
+									another farm to keep earning rewards
 								</DisableModalText>
 								<DisableModalCloseButton
 									label='GOT IT'

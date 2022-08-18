@@ -250,6 +250,7 @@ export const TabGIVfarmBottom = () => {
 								network={config.XDAI_NETWORK_NUMBER}
 								poolStakingConfig={getGivStakingConfig(
 									config.XDAI_CONFIG,
+									config.XDAI_NETWORK_NUMBER,
 								)}
 							/>
 						</Col>
@@ -258,6 +259,7 @@ export const TabGIVfarmBottom = () => {
 								network={config.MAINNET_NETWORK_NUMBER}
 								poolStakingConfig={getGivStakingConfig(
 									config.MAINNET_CONFIG,
+									config.MAINNET_NETWORK_NUMBER,
 								)}
 							/>
 						</Col>
@@ -274,10 +276,6 @@ export const TabGIVfarmBottom = () => {
 							network={config.MAINNET_NETWORK_NUMBER}
 						/>
 					)}
-					<GIVfrens
-						regenFarms={config.XDAI_CONFIG.regenFarms}
-						network={config.XDAI_NETWORK_NUMBER}
-					/>
 				</>
 				<Col xs={12}>
 					<DaoCard>
