@@ -3,13 +3,13 @@ import styled from 'styled-components';
 import {
 	brandColors,
 	GLink,
+	IconImage,
 	IconX,
 	neutralColors,
 	P,
 	Subline,
 	SublineBold,
 } from '@giveth/ui-design-system';
-import { IconImage } from '@giveth/ui-design-system/lib/cjs/components/icons/Image';
 import { DropzoneState } from 'react-dropzone';
 import { Flex, FlexCenter } from './styled-components/Flex';
 import ProgressBar from '@/components/ProgressBar';
