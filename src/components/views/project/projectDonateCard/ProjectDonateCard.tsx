@@ -14,11 +14,11 @@ import {
 	brandColors,
 	neutralColors,
 	OulineButton,
+	IconArchiving,
 } from '@giveth/ui-design-system';
 import { motion } from 'framer-motion';
 import { captureException } from '@sentry/nextjs';
 
-import { IconArchiving } from '@giveth/ui-design-system/lib/cjs/components/icons/Archiving';
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import { Shadow } from '@/components/styled-components/Shadow';
 import CategoryBadge from '@/components/badges/CategoryBadge';
