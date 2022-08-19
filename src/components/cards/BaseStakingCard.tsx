@@ -153,14 +153,11 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		BUY_LINK,
 		unit,
 		farmStartTimeMS,
-		active: activePool,
+		active,
 		archived,
 		discontinued,
 		introCard,
 	} = poolStakingConfig;
-
-	const active =
-		activePool && (!discontinued || getNowUnixMS() > discontinued); // pool is no longer active if discontinuation date is over
 
 	const {
 		apr,
@@ -251,20 +248,25 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									alt='question'
 								/>
 							</DisableModalImage>
-							<div>
+							<Flex
+								flexDirection='column'
+								justifyContent='space-evenly'
+							>
 								<DisableModalText weight={700}>
-									This pool is no longer available
+									{discontinued
+										? 'Attention Farmers!'
+										: 'This pool is no longer available'}
 								</DisableModalText>
-								<br />
 								<DisableModalText>
-									Please unstake your tokens and check out
-									other available pools.
+									{discontinued
+										? 'This farm is ending soon, move your funds to another farm to keep earning rewards.'
+										: 'Please unstake your tokens and check out other available pools.'}
 								</DisableModalText>
 								<DisableModalCloseButton
 									label='GOT IT'
 									onClick={() => setDisableModal(false)}
 								/>
-							</div>
+							</Flex>
 						</DisableModalContent>
 					</DisableModal>
 				)}

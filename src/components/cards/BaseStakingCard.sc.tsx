@@ -181,7 +181,7 @@ export const DisableModalContent = styled.div`
 	border-radius: 12px;
 	box-shadow: ${Shadow.Neutral[400]};
 	max-width: 80%;
-	height: 156px;
+	height: 170px;
 	padding: 16px 12px;
 `;
 
