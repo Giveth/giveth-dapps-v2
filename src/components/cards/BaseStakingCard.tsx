@@ -291,7 +291,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								</DisableModalText>
 								<DisableModalText>
 									{discontinued
-										? 'This farm is ending soon, move your funds to another farm to keep earning rewards.'
+										? 'This farm has ended, move your funds to another farm to keep earning rewards.'
 										: 'Please unstake your tokens and check out other available pools.'}
 								</DisableModalText>
 								<DisableModalCloseButton
