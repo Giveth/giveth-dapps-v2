@@ -206,6 +206,7 @@ const config: EnvConfig = {
 					'https://app.sushi.com/add/0x83a8eea6427985C523a0c4d9d3E62C051B6580d3/0x736a98655049433f79dCcF5e54b887E8890b63D1',
 				unit: 'LP',
 				active: true,
+				discontinued: SEPT_8TH_2022,
 			},
 			{
 				POOL_ADDRESS: '0xB4E0fc187f0EEd740D93eF15Cd14750a2780fc2A',
@@ -219,6 +220,7 @@ const config: EnvConfig = {
 				unit: 'LP',
 				active: true,
 				farmStartTimeMS: 1655997000000,
+				discontinued: SEPT_8TH_2022,
 			},
 		],
 
