@@ -50,6 +50,7 @@ const config: EnvConfig = {
 			LM_ADDRESS: '0x929C9353D67af21411d4475B30D960F23C209abd',
 			BUY_LINK:
 				'https://app.uniswap.org/#/swap?outputCurrency=0x29434A25abd94AE882aA883eea81585Aaa5b078D',
+			discontinued: SEPT_8TH_2022,
 		},
 
 		nodeUrl: 'https://goerli.infura.io/v3/' + INFURA_API_KEY,
