@@ -225,10 +225,7 @@ export class SubgraphQueryBuilder {
 			)}
 			${SubgraphQueryBuilder.generateFarmingQueries(
 				[
-					getGivStakingConfig(
-						config.MAINNET_CONFIG,
-						config.MAINNET_NETWORK_NUMBER,
-					),
+					getGivStakingConfig(config.MAINNET_CONFIG),
 					...(config.MAINNET_CONFIG.pools.filter(
 						c => c.type !== StakingType.UNISWAPV3_ETH_GIV,
 					) as Array<SimplePoolStakingConfig>),
@@ -261,10 +258,7 @@ export class SubgraphQueryBuilder {
 			)}
 			${SubgraphQueryBuilder.generateFarmingQueries(
 				[
-					getGivStakingConfig(
-						config.XDAI_CONFIG,
-						config.XDAI_NETWORK_NUMBER,
-					),
+					getGivStakingConfig(config.XDAI_CONFIG),
 					...(config.XDAI_CONFIG
 						.pools as Array<SimplePoolStakingConfig>),
 					...config.XDAI_CONFIG.regenFarms,

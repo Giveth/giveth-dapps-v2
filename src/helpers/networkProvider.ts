@@ -25,11 +25,9 @@ export const networkProviders = _networksProviders;
 
 export const getGivStakingConfig = (
 	networkConfig: BasicNetworkConfig,
-	network: number,
 ): SimplePoolStakingConfig => {
 	return {
 		...networkConfig.GIV,
-		network,
 		POOL_ADDRESS: networkConfig.TOKEN_ADDRESS,
 		type: StakingType.GIV_LM,
 		platform: StakingPlatform.GIVETH,

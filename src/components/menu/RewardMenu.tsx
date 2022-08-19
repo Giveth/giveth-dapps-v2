@@ -78,18 +78,12 @@ export const RewardMenu = ({
 		if (chainId === config.XDAI_NETWORK_NUMBER) {
 			pools = [
 				...config.XDAI_CONFIG.pools,
-				getGivStakingConfig(
-					config.XDAI_CONFIG,
-					config.XDAI_NETWORK_NUMBER,
-				),
+				getGivStakingConfig(config.XDAI_CONFIG),
 			];
 		} else if (chainId === config.MAINNET_NETWORK_NUMBER) {
 			pools = [
 				...config.MAINNET_CONFIG.pools,
-				getGivStakingConfig(
-					config.MAINNET_CONFIG,
-					config.MAINNET_NETWORK_NUMBER,
-				),
+				getGivStakingConfig(config.MAINNET_CONFIG),
 			];
 		}
 		if (pools) {
