@@ -10,7 +10,7 @@ import { gwei2wei } from '@/helpers/blockchain';
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 const BASE_ROUTE = 'https://mainnet.serve.giveth.io';
 const SEPT_8TH_2022 = 1662595200000;
-const MAINNET_NETWORK_NUMBER = 5; // Goerli
+const MAINNET_NETWORK_NUMBER = 1; // Mainnet
 const XDAI_NETWORK_NUMBER = 100; // xDAI
 
 const config: EnvConfig = {
