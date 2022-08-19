@@ -32,7 +32,10 @@ import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { TopInnerContainer } from './commons';
 import { Col, Container, Row } from '@/components/Grid';
 
-const poolStakingConfig = getGivStakingConfig(config.XDAI_CONFIG);
+const poolStakingConfig = getGivStakingConfig(
+	config.XDAI_CONFIG,
+	config.XDAI_NETWORK_NUMBER,
+);
 
 export const TabGardenTop = () => {
 	const { chainId } = useWeb3React();
