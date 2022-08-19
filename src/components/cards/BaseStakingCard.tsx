@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import React, { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 import {
 	brandColors,
@@ -6,6 +5,8 @@ import {
 	IconHelp,
 	IconSpark,
 	Caption,
+	IconAlertCricle,
+	IconInfo24,
 } from '@giveth/ui-design-system';
 import { constants } from 'ethers';
 import BigNumber from 'bignumber.js';
@@ -255,12 +256,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 			<StakingPoolContainer>
 				{poolNetwork !== chainId && (
 					<WrongNetworkContainer>
-						<Image
-							src='/images/alert-2.svg'
-							height={32}
-							width={32}
-							alt='question'
-						/>
+						<IconAlertCricle size={32} />
 						<Caption>
 							You are currently connected to{' '}
 							{chainName(chainId || 0)} switch to{' '}
@@ -273,12 +269,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					<DisableModal>
 						<DisableModalContent>
 							<DisableModalImage>
-								<Image
-									src='/images/icons/info.svg'
-									height={24}
-									width={24}
-									alt='question'
-								/>
+								<IconInfo24 />
 							</DisableModalImage>
 							<Flex
 								flexDirection='column'
