@@ -11,11 +11,7 @@ import { useWeb3React } from '@web3-react/core';
 import { Flex } from '@/components/styled-components/Flex';
 import StakingPoolCard from '@/components/cards/StakingPoolCard';
 import config from '@/configuration';
-import {
-	BasicNetworkConfig,
-	SimplePoolStakingConfig,
-	StakingType,
-} from '@/types/config';
+import { SimplePoolStakingConfig, StakingType } from '@/types/config';
 import {
 	GIVfarmTopContainer,
 	Subtitle,
@@ -35,7 +31,6 @@ import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { useFarms } from '@/context/farm.context';
 import { TopInnerContainer, ExtLinkRow } from './commons';
 import { GIVfrens } from '@/components/GIVfrens';
-import { givEconomySupportedNetworks } from '@/lib/constants/constants';
 import { shortenAddress } from '@/lib/helpers';
 import { Col, Container, Row } from '@/components/Grid';
 import links from '@/lib/constants/links';
@@ -46,11 +41,11 @@ import {
 	DaoCardButton,
 } from '../GIVfrens.sc';
 
-const renderPools = (
-	pools: BasicNetworkConfig['pools'],
-	network: number,
-	showArchivedPools?: boolean,
-) => {
+const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
+	const pools = [...config.MAINNET_CONFIG.pools, ...config.XDAI_CONFIG.pools];
+	if (chainId === config.XDAI_NETWORK_NUMBER) {
+		pools.reverse();
+	}
 	return pools
 		.filter(p => (showArchivedPools ? true : p.active && !p.archived))
 		.map((poolStakingConfig, idx) => ({ poolStakingConfig, idx }))
@@ -70,6 +65,7 @@ const renderPools = (
 				idx1 - idx2,
 		)
 		.map(({ poolStakingConfig }, index) => {
+			const network = poolStakingConfig?.network || 0;
 			return (
 				<Col
 					sm={6}
@@ -145,64 +141,70 @@ export const TabGIVfarmBottom = () => {
 	const { chainId } = useWeb3React();
 	const [showArchivedPools, setArchivedPools] = useState(false);
 
-	const mainnetGIVStaking = getGivStakingConfig(config.MAINNET_CONFIG);
-	const xdaiGIVStaking = getGivStakingConfig(config.XDAI_CONFIG);
 	return (
 		<GIVfarmBottomContainer>
 			<Container>
-				<Flex alignItems='center' gap='24px' wrap={1}>
+				<Flex
+					alignItems='center'
+					gap='24px'
+					wrap={1}
+					justifyContent='space-between'
+				>
 					<NetworkSelector />
-					<ExtLinkRow alignItems='center'>
-						<GLink
-							size='Big'
-							target='_blank'
-							rel='noreferrer'
-							href='https://omni.xdaichain.com/bridge'
-						>
-							Bridge your GIV
-						</GLink>
-						<IconExternalLink />
-					</ExtLinkRow>
-					<ExtLinkRow alignItems='center'>
-						<GLink
-							size='Big'
-							target='_blank'
-							rel='noreferrer'
-							href={
+					<Flex alignItems='center' gap='24px' wrap={1}>
+						<ExtLinkRow alignItems='center'>
+							<GLink
+								size='Big'
+								target='_blank'
+								rel='noreferrer'
+								href='https://omni.xdaichain.com/bridge'
+							>
+								Bridge your GIV
+							</GLink>
+							<IconExternalLink />
+						</ExtLinkRow>
+						<ExtLinkRow alignItems='center'>
+							<GLink
+								size='Big'
+								target='_blank'
+								rel='noreferrer'
+								href={
+									chainId === config.XDAI_NETWORK_NUMBER
+										? config.XDAI_CONFIG.GIV.BUY_LINK
+										: config.MAINNET_CONFIG.GIV.BUY_LINK
+								}
+							>
+								Buy GIV token
+							</GLink>
+							<IconExternalLink />
+						</ExtLinkRow>
+						<ContractRow>
+							<GLink>{`Contract (${
 								chainId === config.XDAI_NETWORK_NUMBER
-									? config.XDAI_CONFIG.GIV.BUY_LINK
-									: config.MAINNET_CONFIG.GIV.BUY_LINK
-							}
-						>
-							Buy GIV token
-						</GLink>
-						<IconExternalLink />
-					</ExtLinkRow>
-					<ContractRow>
-						<GLink>{`Contract (${
-							chainId === config.XDAI_NETWORK_NUMBER
-								? config.XDAI_CONFIG.chainName
-								: config.MAINNET_CONFIG.chainName
-						}):`}</GLink>
-						<GLink>
-							{shortenAddress(
-								chainId === config.XDAI_NETWORK_NUMBER
-									? config.XDAI_CONFIG.TOKEN_ADDRESS
-									: config.MAINNET_CONFIG.TOKEN_ADDRESS,
-							)}
-						</GLink>
-						<CopyWrapper
-							onClick={() => {
-								navigator.clipboard.writeText(
+									? config.XDAI_CONFIG.chainName
+									: config.MAINNET_CONFIG.chainName
+							}):`}</GLink>
+							<GLink>
+								{shortenAddress(
 									chainId === config.XDAI_NETWORK_NUMBER
 										? config.XDAI_CONFIG.TOKEN_ADDRESS
 										: config.MAINNET_CONFIG.TOKEN_ADDRESS,
-								);
-							}}
-						>
-							<IconCopy />
-						</CopyWrapper>
-					</ContractRow>
+								)}
+							</GLink>
+							<CopyWrapper
+								onClick={() => {
+									navigator.clipboard.writeText(
+										chainId === config.XDAI_NETWORK_NUMBER
+											? config.XDAI_CONFIG.TOKEN_ADDRESS
+											: config.MAINNET_CONFIG
+													.TOKEN_ADDRESS,
+									);
+								}}
+							>
+								<IconCopy />
+							</CopyWrapper>
+						</ContractRow>
+					</Flex>
 				</Flex>
 				<ArchivedPoolsToggle>
 					<RadioButton
@@ -211,61 +213,38 @@ export const TabGIVfarmBottom = () => {
 						isSelected={showArchivedPools}
 					/>
 				</ArchivedPoolsToggle>
-				{chainId === config.XDAI_NETWORK_NUMBER && (
-					<>
-						<PoolRow>
-							{(!xdaiGIVStaking.archived ||
-								showArchivedPools) && (
-								<Col sm={6} lg={4}>
-									<StakingPoolCard
-										network={config.XDAI_NETWORK_NUMBER}
-										poolStakingConfig={xdaiGIVStaking}
-									/>
-								</Col>
-							)}
-							{renderPools(
-								config.XDAI_CONFIG.pools,
-								config.XDAI_NETWORK_NUMBER,
-								showArchivedPools,
-							)}
-						</PoolRow>
+				<>
+					<PoolRow>
+						<Col sm={6} lg={4}>
+							<StakingPoolCard
+								network={config.XDAI_NETWORK_NUMBER}
+								poolStakingConfig={getGivStakingConfig(
+									config.XDAI_CONFIG,
+								)}
+							/>
+						</Col>
+						<Col sm={6} lg={4}>
+							<StakingPoolCard
+								network={config.MAINNET_NETWORK_NUMBER}
+								poolStakingConfig={getGivStakingConfig(
+									config.MAINNET_CONFIG,
+								)}
+							/>
+						</Col>
+						{renderPools(chainId, showArchivedPools)}
+					</PoolRow>
+					{chainId === config.XDAI_NETWORK_NUMBER ? (
 						<GIVfrens
 							regenFarms={config.XDAI_CONFIG.regenFarms}
 							network={config.XDAI_NETWORK_NUMBER}
 						/>
-					</>
-				)}
-				{(!chainId ||
-					chainId === config.MAINNET_NETWORK_NUMBER ||
-					!givEconomySupportedNetworks.includes(chainId)) && (
-					<>
-						<PoolRow
-							disabled={
-								!chainId ||
-								!givEconomySupportedNetworks.includes(chainId)
-							}
-						>
-							{(!mainnetGIVStaking.archived ||
-								showArchivedPools) && (
-								<Col sm={6} lg={4}>
-									<StakingPoolCard
-										network={config.MAINNET_NETWORK_NUMBER}
-										poolStakingConfig={mainnetGIVStaking}
-									/>
-								</Col>
-							)}
-							{renderPools(
-								config.MAINNET_CONFIG.pools,
-								config.MAINNET_NETWORK_NUMBER,
-								showArchivedPools,
-							)}
-						</PoolRow>
+					) : (
 						<GIVfrens
 							regenFarms={config.MAINNET_CONFIG.regenFarms}
 							network={config.MAINNET_NETWORK_NUMBER}
 						/>
-					</>
-				)}
+					)}
+				</>
 				<Col xs={12}>
 					<DaoCard>
 						<DaoCardTitle weight={900}>Add Your DAO</DaoCardTitle>

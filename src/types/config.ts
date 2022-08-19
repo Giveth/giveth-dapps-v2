@@ -1,5 +1,7 @@
 export interface BasicStakingConfig {
 	LM_ADDRESS: string;
+	network: number;
+	discontinued?: number;
 	GARDEN_ADDRESS?: string;
 	BUY_LINK?: string;
 	farmStartTimeMS?: number;
@@ -55,7 +57,6 @@ export interface SimplePoolStakingConfig extends BasicStakingConfig {
 	unit: string;
 	active: boolean;
 	archived?: boolean;
-	discontinued?: number;
 	introCard?: IntroCardConfig;
 }
 
@@ -114,7 +115,7 @@ export interface BasicNetworkConfig {
 	gGIV_ADDRESS?: string;
 	tokenAddressOnUniswapV2: string; // For price purpose in test env, on production this must have the same value of `TOKEN_ADDRESS`
 	TOKEN_DISTRO_ADDRESS: string;
-	GIV: BasicStakingConfig | SimplePoolStakingConfig;
+	GIV: BasicStakingConfig;
 	nodeUrl: string;
 	chainId: string; // A 0x-prefixed hexadecimal string
 	chainName: string;

@@ -1,10 +1,12 @@
-import Image from 'next/image';
 import React, { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 import {
 	brandColors,
 	IconExternalLink,
 	IconHelp,
 	IconSpark,
+	Caption,
+	IconAlertCricle,
+	IconInfo24,
 } from '@giveth/ui-design-system';
 import { constants } from 'ethers';
 import BigNumber from 'bignumber.js';
@@ -50,12 +52,15 @@ import {
 	StakingPoolExchangeRow,
 	StakingPoolLabel,
 	StakingPoolSubtitle,
+	WrongNetworkContainer,
 } from './BaseStakingCard.sc';
 import { APRModal } from '../modals/APR';
 import { StakeModal } from '../modals/Stake';
 import { UnStakeModal } from '../modals/UnStake';
 import { StakingPoolImages } from '../StakingPoolImages';
 import { V3StakeModal } from '../modals/V3Stake';
+import { IconEthereum } from '../Icons/Eth';
+import { IconGnosisChain } from '../Icons/GnosisChain';
 import { IconGIV } from '../Icons/GIV';
 import { IconHoneyswap } from '../Icons/Honeyswap';
 import { IconBalancer } from '../Icons/Balancer';
@@ -73,6 +78,7 @@ import { IStakeInfo } from '@/hooks/useStakingPool';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { useAppSelector } from '@/features/hooks';
 import Routes from '@/lib/constants/Routes';
+import { chainName } from '@/lib/constants/constants';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { IconAngelVault } from '../Icons/AngelVault';
 import type { LiquidityPosition } from '@/types/nfts';
@@ -82,7 +88,17 @@ export enum StakeCardState {
 	INTRO,
 }
 
-export const getPoolIconWithName = (platform: StakingPlatform) => {
+export const getPoolIconWithName = (
+	platform: StakingPlatform,
+	poolNetwork?: number,
+) => {
+	switch (poolNetwork) {
+		case config.MAINNET_NETWORK_NUMBER:
+			return <IconEthereum size={16} />;
+		case config.XDAI_NETWORK_NUMBER:
+			return <IconGnosisChain size={16} />;
+	}
+	// if no number is set then it defaults to platform icon
 	switch (platform) {
 		case StakingPlatform.BALANCER:
 			return <IconBalancer size={16} />;
@@ -157,6 +173,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		archived,
 		discontinued,
 		introCard,
+		network: poolNetwork,
 	} = poolStakingConfig;
 
 	const {
@@ -237,16 +254,22 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	return (
 		<>
 			<StakingPoolContainer>
+				{poolNetwork !== chainId && (
+					<WrongNetworkContainer>
+						<IconAlertCricle size={32} />
+						<Caption>
+							You are currently connected to{' '}
+							{chainName(chainId || 0)} switch to{' '}
+							{chainName(poolNetwork || 0)} to interact with this
+							farm.
+						</Caption>
+					</WrongNetworkContainer>
+				)}
 				{(!active || archived || discontinued) && disableModal && (
 					<DisableModal>
 						<DisableModalContent>
 							<DisableModalImage>
-								<Image
-									src='/images/icons/questionMarkGiv.svg'
-									height={24}
-									width={24}
-									alt='question'
-								/>
+								<IconInfo24 />
 							</DisableModalImage>
 							<Flex
 								flexDirection='column'
@@ -259,7 +282,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								</DisableModalText>
 								<DisableModalText>
 									{discontinued
-										? 'This farm is ending soon, move your funds to another farm to keep earning rewards.'
+										? 'This farm has ended, move your funds to another farm to keep earning rewards.'
 										: 'Please unstake your tokens and check out other available pools.'}
 								</DisableModalText>
 								<DisableModalCloseButton
@@ -273,7 +296,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				{state === StakeCardState.NORMAL ? (
 					<>
 						<StakingPoolExchangeRow gap='4px' alignItems='center'>
-							{getPoolIconWithName(platform)}
+							{getPoolIconWithName(platform, poolNetwork)}
 							<StakingPoolExchange styleType='Small'>
 								{type === StakingType.GIV_LM &&
 									chainId === config.XDAI_NETWORK_NUMBER &&

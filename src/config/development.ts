@@ -10,6 +10,8 @@ import { gwei2wei } from '@/helpers/blockchain';
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 const BASE_ROUTE = 'https://serve.giveth.io';
 const SEPT_8TH_2022 = 1662595200000;
+const MAINNET_NETWORK_NUMBER = 5; // Goerli
+const XDAI_NETWORK_NUMBER = 100; // xDAI
 // IMPORTANT: Using dev to make it work until staging is merged
 // const BASE_ROUTE = 'https://dev.serve.giveth.io';
 
@@ -19,8 +21,8 @@ const config: EnvConfig = {
 	MICROSERVICES: {
 		authentication: `${BASE_ROUTE}/siweauthmicroservice/v1`,
 	},
-	MAINNET_NETWORK_NUMBER: 5, // Goerli
-	XDAI_NETWORK_NUMBER: 100, // xDAI
+	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
+	XDAI_NETWORK_NUMBER: XDAI_NETWORK_NUMBER,
 
 	GARDEN_LINK:
 		'https://gardens-staging.1hive.org/#/xdai/garden/0x16388d99199a74810fc572049b3d4d657e7d5deb',
@@ -47,15 +49,18 @@ const config: EnvConfig = {
 		WETH_TOKEN_ADDRESS: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
 		TOKEN_DISTRO_ADDRESS: '0x4358c99abFe7A9983B6c96785b8870b5412C5B4B',
 		GIV: {
+			network: MAINNET_NETWORK_NUMBER,
 			LM_ADDRESS: '0x929C9353D67af21411d4475B30D960F23C209abd',
 			BUY_LINK:
 				'https://app.uniswap.org/#/swap?outputCurrency=0x29434A25abd94AE882aA883eea81585Aaa5b078D',
+			discontinued: SEPT_8TH_2022,
 		},
 
 		nodeUrl: 'https://goerli.infura.io/v3/' + INFURA_API_KEY,
 
 		pools: [
 			{
+				network: MAINNET_NETWORK_NUMBER,
 				POOL_ADDRESS: '0x0551f038a84cb0d42584a8E3eaf5a409D22F4211',
 				LM_ADDRESS: '0x6420Ad2d9B512f1cF0B899794598Ed17da2C5836',
 				type: StakingType.UNISWAPV2_GIV_DAI,
@@ -69,6 +74,7 @@ const config: EnvConfig = {
 				discontinued: SEPT_8TH_2022,
 			},
 			{
+				network: MAINNET_NETWORK_NUMBER,
 				POOL_ADDRESS: '0xf8cba1c22b6515982bf43e71b7e8b546a3323ea8',
 				VAULT_ADDRESS: '0xba12222222228d8ba445958a75a0704d566bf2c8',
 				POOL_ID:
@@ -175,6 +181,7 @@ const config: EnvConfig = {
 		nodeUrl: 'https://rpc.gnosischain.com/',
 
 		GIV: {
+			network: XDAI_NETWORK_NUMBER,
 			LM_ADDRESS: '0xDAEa66Adc97833781139373DF5B3bcEd3fdda5b1',
 			GARDEN_ADDRESS: '0x9ff80789b74d1d2b7cf5a568ea82409c2b327861',
 			BUY_LINK:
@@ -183,6 +190,7 @@ const config: EnvConfig = {
 
 		pools: [
 			{
+				network: XDAI_NETWORK_NUMBER,
 				POOL_ADDRESS: '0x31A5AeA76Af79F592a3A3F46a9f6Cb118990433b',
 				LM_ADDRESS: '0xC09147Ac0aC8B5271F03b511c3554e3238Ae3201',
 				type: StakingType.HONEYSWAP_GIV_HNY,
@@ -196,6 +204,7 @@ const config: EnvConfig = {
 				archived: true,
 			},
 			{
+				network: XDAI_NETWORK_NUMBER,
 				POOL_ADDRESS: '0x437B0da7932b21F54488fD80Ee09b519a6f4d8AD',
 				LM_ADDRESS: '0x83535D6DeF8E881E647C00462315bae9A6E7BD09',
 				type: StakingType.SUSHISWAP_ETH_GIV,
@@ -206,8 +215,10 @@ const config: EnvConfig = {
 					'https://app.sushi.com/add/0x83a8eea6427985C523a0c4d9d3E62C051B6580d3/0x736a98655049433f79dCcF5e54b887E8890b63D1',
 				unit: 'LP',
 				active: true,
+				discontinued: SEPT_8TH_2022,
 			},
 			{
+				network: XDAI_NETWORK_NUMBER,
 				POOL_ADDRESS: '0xB4E0fc187f0EEd740D93eF15Cd14750a2780fc2A',
 				LM_ADDRESS: '0xe2c436E177C39A5D18AF6923Fc2Fc673f4729C05',
 				type: StakingType.HONEYSWAP_GIV_DAI,
@@ -219,6 +230,7 @@ const config: EnvConfig = {
 				unit: 'LP',
 				active: true,
 				farmStartTimeMS: 1655997000000,
+				discontinued: SEPT_8TH_2022,
 			},
 		],
 
@@ -240,6 +252,7 @@ const config: EnvConfig = {
 		],
 		regenFarms: [
 			{
+				network: XDAI_NETWORK_NUMBER,
 				POOL_ADDRESS: '0xD28C07F802212F04AF41834ec0CC81d2d283124B',
 				LM_ADDRESS: '0x06851400866e065972ff21e1ECdE035b4772736d',
 				type: StakingType.HONEYSWAP_FOX_HNY,
