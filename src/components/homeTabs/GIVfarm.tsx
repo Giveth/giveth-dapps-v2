@@ -145,6 +145,8 @@ export const TabGIVfarmBottom = () => {
 	const { chainId } = useWeb3React();
 	const [showArchivedPools, setArchivedPools] = useState(false);
 
+	const mainnetGIVStaking = getGivStakingConfig(config.MAINNET_CONFIG);
+	const xdaiGIVStaking = getGivStakingConfig(config.XDAI_CONFIG);
 	return (
 		<GIVfarmBottomContainer>
 			<Container>
@@ -212,14 +214,15 @@ export const TabGIVfarmBottom = () => {
 				{chainId === config.XDAI_NETWORK_NUMBER && (
 					<>
 						<PoolRow>
-							<Col sm={6} lg={4}>
-								<StakingPoolCard
-									network={config.XDAI_NETWORK_NUMBER}
-									poolStakingConfig={getGivStakingConfig(
-										config.XDAI_CONFIG,
-									)}
-								/>
-							</Col>
+							{(!xdaiGIVStaking.archived ||
+								showArchivedPools) && (
+								<Col sm={6} lg={4}>
+									<StakingPoolCard
+										network={config.XDAI_NETWORK_NUMBER}
+										poolStakingConfig={xdaiGIVStaking}
+									/>
+								</Col>
+							)}
 							{renderPools(
 								config.XDAI_CONFIG.pools,
 								config.XDAI_NETWORK_NUMBER,
@@ -242,14 +245,15 @@ export const TabGIVfarmBottom = () => {
 								!givEconomySupportedNetworks.includes(chainId)
 							}
 						>
-							<Col sm={6} lg={4}>
-								<StakingPoolCard
-									network={config.MAINNET_NETWORK_NUMBER}
-									poolStakingConfig={getGivStakingConfig(
-										config.MAINNET_CONFIG,
-									)}
-								/>
-							</Col>
+							{(!mainnetGIVStaking.archived ||
+								showArchivedPools) && (
+								<Col sm={6} lg={4}>
+									<StakingPoolCard
+										network={config.MAINNET_NETWORK_NUMBER}
+										poolStakingConfig={mainnetGIVStaking}
+									/>
+								</Col>
+							)}
 							{renderPools(
 								config.MAINNET_CONFIG.pools,
 								config.MAINNET_NETWORK_NUMBER,
