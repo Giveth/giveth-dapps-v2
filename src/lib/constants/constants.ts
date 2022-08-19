@@ -6,9 +6,11 @@ export const chainName = (chainId: number) => {
 		case 31337:
 			return 'Hardhat';
 		case 1:
-		case 42:
-		case 5:
 			return 'Mainnet';
+		case 42:
+			return 'Kovan';
+		case 5:
+			return 'Goerli';
 		case 4:
 			return 'Rinkeby';
 		case 100:

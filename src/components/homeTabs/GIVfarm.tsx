@@ -177,8 +177,6 @@ export const TabGIVfarmBottom = () => {
 		setAllpools(pools);
 	}, []);
 
-	console.log({ allPools });
-
 	return (
 		<GIVfarmBottomContainer>
 			<Container>
