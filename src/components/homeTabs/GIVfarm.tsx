@@ -80,7 +80,6 @@ const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
 					) : (
 						<StakingPoolCard
 							key={`staking_pool_card_${network}_${index}`}
-							network={network}
 							poolStakingConfig={
 								poolStakingConfig as SimplePoolStakingConfig
 							}
@@ -217,7 +216,6 @@ export const TabGIVfarmBottom = () => {
 					<PoolRow>
 						<Col sm={6} lg={4}>
 							<StakingPoolCard
-								network={config.XDAI_NETWORK_NUMBER}
 								poolStakingConfig={getGivStakingConfig(
 									config.XDAI_CONFIG,
 								)}
@@ -225,7 +223,6 @@ export const TabGIVfarmBottom = () => {
 						</Col>
 						<Col sm={6} lg={4}>
 							<StakingPoolCard
-								network={config.MAINNET_NETWORK_NUMBER}
 								poolStakingConfig={getGivStakingConfig(
 									config.MAINNET_CONFIG,
 								)}

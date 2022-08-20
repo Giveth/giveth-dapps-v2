@@ -100,10 +100,10 @@ export const getGivStakingAPR = async (
 
 export const getLPStakingAPR = async (
 	poolStakingConfig: SimplePoolStakingConfig,
-	network: number,
 	provider: JsonRpcProvider | null,
 	subgraphValue: ISubgraphState,
 ): Promise<APR> => {
+	const { network } = poolStakingConfig;
 	const _provider = provider
 		? provider
 		: new JsonRpcProvider(config.NETWORKS_CONFIG[network].nodeUrl);
@@ -316,7 +316,7 @@ const getSimplePoolStakingAPR = async (
 					.times(lp)
 					.div(10 ** 18);
 	} catch (e) {
-		console.error('error on fetching apr:', e);
+		console.error('error on fetching simple pool apr:', e);
 		captureException(e, {
 			tags: {
 				section: 'getSimplePoolStakingAPR',

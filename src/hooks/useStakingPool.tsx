@@ -11,6 +11,7 @@ import { SimplePoolStakingConfig, StakingType } from '@/types/config';
 import { APR, UserStakeInfo } from '@/types/poolInfo';
 import { Zero } from '@/helpers/number';
 import { useAppSelector } from '@/features/hooks';
+import config from '@/configuration';
 
 export interface IStakeInfo {
 	apr: APR;
@@ -21,7 +22,6 @@ export interface IStakeInfo {
 
 export const useStakingPool = (
 	poolStakingConfig: SimplePoolStakingConfig,
-	network: number,
 ): IStakeInfo => {
 	const [apr, setApr] = useState<APR | null>(null);
 	const [userStakeInfo, setUserStakeInfo] = useState<UserStakeInfo>({
@@ -32,27 +32,34 @@ export const useStakingPool = (
 	const stakePoolInfoPoll = useRef<NodeJS.Timer | null>(null);
 
 	const { library, chainId } = useWeb3React();
-	const currentValues = useAppSelector(state => state.subgraph.currentValues);
-	const subgraphIsLoaded = useAppSelector(state => state.subgraph.isLoaded);
+	const { mainnetValues, xDaiValues, isLoaded } = useAppSelector(
+		state => state.subgraph,
+	);
+
+	const { network } = poolStakingConfig;
+	const currentValues =
+		poolStakingConfig.network === config.XDAI_NETWORK_NUMBER
+			? xDaiValues
+			: mainnetValues;
 
 	const { type, LM_ADDRESS } = poolStakingConfig;
 	const providerNetwork = library?.network?.chainId;
+	const _library = chainId === network ? library : undefined;
 
 	useEffect(() => {
 		const cb = () => {
-			if (subgraphIsLoaded) {
+			if (isLoaded) {
 				const promise: Promise<APR> =
 					type === StakingType.GIV_LM
 						? getGivStakingAPR(
 								LM_ADDRESS,
 								network,
 								currentValues,
-								library,
+								_library,
 						  )
 						: getLPStakingAPR(
 								poolStakingConfig,
-								network,
-								library,
+								_library,
 								currentValues,
 						  );
 				promise
@@ -73,7 +80,7 @@ export const useStakingPool = (
 				stakePoolInfoPoll.current = null;
 			}
 		};
-	}, [library, chainId, subgraphIsLoaded, providerNetwork]);
+	}, [library, chainId, isLoaded, providerNetwork]);
 
 	useEffect(() => {
 		setUserStakeInfo(getUserStakeInfo(currentValues, poolStakingConfig));

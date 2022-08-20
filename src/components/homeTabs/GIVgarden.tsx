@@ -45,10 +45,7 @@ export const TabGardenTop = () => {
 		new BigNumber(0),
 	);
 
-	const { earned } = useStakingPool(
-		poolStakingConfig,
-		config.XDAI_NETWORK_NUMBER,
-	);
+	const { earned } = useStakingPool(poolStakingConfig);
 
 	useEffect(() => {
 		setEarnedLiquidPart(givTokenDistroHelper.getLiquidPart(earned));
