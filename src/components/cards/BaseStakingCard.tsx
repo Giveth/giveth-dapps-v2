@@ -153,9 +153,10 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const router = useRouter();
 	const { setInfo } = useFarms();
 	const { chainId, account, active: isWalletActive } = useWeb3React();
-	const currentValues = useAppSelector(state => state.subgraph.currentValues);
+	const { mainnetValues, xDaiValues } = useAppSelector(
+		state => state.subgraph,
+	);
 
-	const sdh = new SubgraphDataHelper(currentValues);
 	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
 
 	const {
@@ -175,6 +176,10 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		introCard,
 		network: poolNetwork,
 	} = poolStakingConfig;
+
+	const currentValues =
+		poolNetwork === config.XDAI_NETWORK_NUMBER ? xDaiValues : mainnetValues;
+	const sdh = new SubgraphDataHelper(currentValues);
 
 	const {
 		apr,
