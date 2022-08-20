@@ -42,3 +42,7 @@ export const EnhancedRewardCard = styled(RewardCard)`
 export const ExtLinkCyan = styled(GLink)`
 	color: ${brandColors.cyan[500]};
 `;
+
+export const NoWrap = styled.span`
+	white-space: nowrap;
+`;

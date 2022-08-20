@@ -6,6 +6,7 @@ import {
 	SimplePoolStakingConfig,
 } from '@/types/config';
 import { useStakingPool } from '@/hooks/useStakingPool';
+
 interface IStakingPoolCardProps {
 	network: number;
 	poolStakingConfig: SimplePoolStakingConfig | RegenPoolStakingConfig;
