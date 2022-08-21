@@ -20,9 +20,9 @@ import config from '@/configuration';
 import { IconEthereum } from './Icons/Eth';
 import { IconGnosisChain } from './Icons/GnosisChain';
 import { WhatisStreamModal } from '@/components/modals/WhatisStream';
-import { WrongNetworkInnerModal } from './modals/WrongNetwork';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { useAppSelector } from '@/features/hooks';
+import { WrongNetworkInnerModal } from '@/components//modals/WrongNetworkInnerModal';
 interface IRewardCardProps {
 	title?: string;
 	liquidAmount: ethers.BigNumber;

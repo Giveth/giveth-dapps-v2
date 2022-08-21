@@ -216,7 +216,7 @@ export class SubgraphQueryBuilder {
 			c => c.type === StakingType.UNISWAPV3_ETH_GIV,
 		) as UniswapV3PoolStakingConfig;
 
-		return `
+		const query = `
 		{
 			${SubgraphQueryBuilder.getBalanceQuery(config.MAINNET_CONFIG, userAddress)}
 			${SubgraphQueryBuilder.generateTokenDistroQueries(
@@ -233,12 +233,19 @@ export class SubgraphQueryBuilder {
 				],
 				userAddress,
 			)}
-			uniswapV3Pool: ${SubgraphQueryBuilder.getUniswapV3PoolQuery(
-				uniswapConfig.UNISWAP_V3_LP_POOL,
-			)}
 			${SubgraphQueryBuilder.getUniswapPositionsQuery(userAddress)}
 		}
 		`;
+
+		if (uniswapConfig) {
+			return `
+			${query}
+			uniswapV3Pool: ${SubgraphQueryBuilder.getUniswapV3PoolQuery(
+				uniswapConfig.UNISWAP_V3_LP_POOL,
+			)}
+			`;
+		}
+		return query;
 	};
 
 	static getXDaiQuery = (userAddress?: string): string => {

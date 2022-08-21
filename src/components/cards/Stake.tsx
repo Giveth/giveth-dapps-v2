@@ -149,7 +149,6 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 		config.XDAI_CONFIG.pools.forEach(poolStakingConfig => {
 			const promise: Promise<APR> = getLPStakingAPR(
 				poolStakingConfig as SimplePoolStakingConfig,
-				config.XDAI_NETWORK_NUMBER,
 				networkProviders[config.XDAI_NETWORK_NUMBER],
 				xDaiValues,
 			);
@@ -165,7 +164,6 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 
 			const promise: Promise<APR> = getLPStakingAPR(
 				poolStakingConfig as SimplePoolStakingConfig,
-				config.MAINNET_NETWORK_NUMBER,
 				networkProviders[config.MAINNET_NETWORK_NUMBER],
 				mainnetValues,
 			);
