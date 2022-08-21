@@ -72,7 +72,6 @@ export const GIVfrens: FC<IGIVfrensProps> = ({ regenFarms, network }) => {
 							<Row>
 								<Col xs={12} sm={6} lg={4}>
 									<StakingPoolCard
-										network={network}
 										poolStakingConfig={poolStakingConfig}
 									/>
 								</Col>

@@ -18,9 +18,10 @@ const { abi: UniswapV3PoolABI } = UniswapV3PoolJson;
 const { abi: NonfungiblePositionManagerABI } = NonfungiblePositionManagerJson;
 
 const mainnetConfig = config.MAINNET_CONFIG;
-const uniswapV3Config = mainnetConfig.pools.find(
-	c => c.type === StakingType.UNISWAPV3_ETH_GIV,
-) as UniswapV3PoolStakingConfig;
+const uniswapV3Config =
+	(mainnetConfig.pools.find(
+		c => c.type === StakingType.UNISWAPV3_ETH_GIV,
+	) as UniswapV3PoolStakingConfig) || {};
 
 const { NFT_POSITIONS_MANAGER_ADDRESS, UNISWAP_V3_STAKER, UNISWAP_V3_LP_POOL } =
 	uniswapV3Config;
