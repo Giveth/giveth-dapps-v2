@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { brandColors, neutralColors } from '@giveth/ui-design-system';
-
+import { motion } from 'framer-motion';
 import useDeviceDetect from '@/hooks/useDeviceDetect';
 import { IProject } from '@/apollo/types/types';
 import ProjectCard from '@/components/project-card/ProjectCardAlt';
@@ -12,23 +12,39 @@ import { mediaQueries } from '@/lib/constants/constants';
 const ProjectCardSelector = (props: { project: IProject }) => {
 	const { project } = props;
 
-	const { isMobile } = useDeviceDetect();
+	const [wrapperHeight, setWrapperHeight] = useState<number>(0);
 
-	const [hideMobileCard, setHideMobileCard] = useState<boolean>(true);
+	const { isMobile } = useDeviceDetect();
+	const wrapperRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		const handleResize = () => {
+			setWrapperHeight(wrapperRef?.current?.clientHeight || 0);
+		};
+		if (isMobile) {
+			handleResize();
+			window.addEventListener('resize', handleResize);
+		}
+		return () => {
+			window.removeEventListener('resize', handleResize);
+		};
+	}, [project, isMobile]);
 
 	if (isMobile) {
 		return (
-			<CardMobileWrapper
-				onClick={() => setHideMobileCard(!hideMobileCard)}
+			<MobileCardWrapper
+				height={wrapperHeight}
+				ref={wrapperRef}
+				dragConstraints={{ top: 50 - wrapperHeight, bottom: 0 }}
+				drag='y'
+				dragElastic={0}
 			>
-				<SlideBtn />
-				{!hideMobileCard && (
-					<MobileCardContainer>
-						<ProjectCard project={project} />
-						<SocialBox project={project} />
-					</MobileCardContainer>
-				)}
-			</CardMobileWrapper>
+				<BlueBar />
+				<MobileCardContainer>
+					<ProjectCard project={project} />
+					<SocialBox project={project} />
+				</MobileCardContainer>
+			</MobileCardWrapper>
 		);
 	} else {
 		return (
@@ -38,6 +54,14 @@ const ProjectCardSelector = (props: { project: IProject }) => {
 		);
 	}
 };
+
+const BlueBar = styled.div`
+	width: 80px;
+	height: 3px;
+	background-color: ${brandColors.giv[500]};
+	margin: 24px auto;
+	position: relative;
+`;
 
 const Left = styled.div`
 	z-index: 1;
@@ -56,7 +80,7 @@ const Left = styled.div`
 	}
 `;
 
-const CardMobileWrapper = styled.div`
+const MobileCardWrapper = styled(motion.div)<{ height: number }>`
 	flex-direction: column;
 	position: fixed;
 	display: flex;
@@ -64,9 +88,7 @@ const CardMobileWrapper = styled.div`
 	justify-content: center;
 	width: 100%;
 	left: 0;
-	bottom: 0;
-	margin: 0;
-	-webkit-backface-visibility: hidden;
+	bottom: ${({ height }) => `calc(50px - ${height}px)`};
 	padding: 0 16px;
 	background-color: white;
 	z-index: 10;
@@ -77,14 +99,6 @@ const CardMobileWrapper = styled.div`
 const MobileCardContainer = styled.div`
 	display: flex;
 	flex-direction: column;
-`;
-
-const SlideBtn = styled.div`
-	width: 78px;
-	height: 0;
-	margin: 16px 0;
-	border: 1.5px solid ${brandColors.giv[500]};
-	border-radius: 15%;
 `;
 
 export default ProjectCardSelector;
