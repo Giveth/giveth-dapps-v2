@@ -2,6 +2,7 @@ import {
 	brandColors,
 	IconCheck,
 	neutralColors,
+	P,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FlexCenter } from '@/components/styled-components/Flex';
@@ -22,7 +23,7 @@ const CheckBox = (props: {
 			<FlexCenter>
 				{checked && <IconCheck size={24} color='white' />}
 			</FlexCenter>
-			<div>{title}</div>
+			<P>{title}</P>
 		</Wrapper>
 	);
 };
