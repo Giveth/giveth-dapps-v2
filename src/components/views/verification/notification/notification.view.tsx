@@ -1,42 +1,7 @@
-import {
-	H5,
-	IconNotificationOutline32,
-	Lead,
-	P,
-	B,
-	GLink,
-} from '@giveth/ui-design-system';
-import { ReactNode } from 'react';
+import { H5, IconNotificationOutline32, Lead } from '@giveth/ui-design-system';
 import { Flex } from '@/components/styled-components/Flex';
 import { NotificationContainer } from './notification.sc';
-
-const templateToHTML = (template: any) => {
-	const { content, metaData } = template;
-	const res: ReactNode[] = [];
-	content.forEach((cont: any) => {
-		const c: string = cont.content;
-		const temp = c.startsWith('$') ? metaData[c.substring(1)] : c;
-		switch (cont.type) {
-			case 'p':
-				res.push(<P as='span'>{temp}</P>);
-				break;
-			case 'b':
-				res.push(<B as='span'>{temp}</B>);
-				break;
-			case 'a':
-				res.push(
-					<GLink href={metaData[cont.href.substring(1)]}>
-						{temp}
-					</GLink>,
-				);
-				break;
-			default:
-				break;
-		}
-		res.push(' ');
-	});
-	return res;
-};
+import { INotificationData, convertRawDataToHTML } from '@/helpers/html';
 
 function NotificationView() {
 	return (
@@ -53,7 +18,7 @@ function NotificationView() {
 				</Flex>
 				<div>
 					{notifs.map((notif, idx) => (
-						<div key={idx}>{templateToHTML(notif)}</div>
+						<div key={idx}>{convertRawDataToHTML(notif)}</div>
 					))}
 				</div>
 			</NotificationContainer>
@@ -63,10 +28,10 @@ function NotificationView() {
 
 export default NotificationView;
 
-const notifs = [
+const notifs: INotificationData[] = [
 	{
 		icon: '',
-		content: [
+		template: [
 			{
 				type: 'p',
 				content: 'you staked',
@@ -91,11 +56,11 @@ const notifs = [
 			href1: '/givfarm',
 		},
 		time: '193543213645',
-		qutoe: 'hey bro, how are you?',
+		quote: 'hey bro, how are you?',
 	},
 	{
 		icon: '',
-		content: [
+		template: [
 			{
 				type: 'p',
 				content: 'you staked',
@@ -137,6 +102,6 @@ const notifs = [
 			apr: '18.2%',
 		},
 		time: '193543213645',
-		qutoe: 'hey bro, how are you?',
+		quote: 'hey bro, how are you?',
 	},
 ];
