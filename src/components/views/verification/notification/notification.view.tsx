@@ -1,8 +1,9 @@
 import { H5, IconNotificationOutline32, Lead } from '@giveth/ui-design-system';
 import {
 	NotificationContainer,
-	NotificationTitle,
+	NotificationHeader,
 	IconContainer,
+	NotificationDesc,
 } from './notification.sc';
 import { INotificationData } from '@/helpers/html';
 import { NotificationBox } from '@/components/notification/NotificationBox';
@@ -10,17 +11,17 @@ import { NotificationBox } from '@/components/notification/NotificationBox';
 function NotificationView() {
 	return (
 		<NotificationContainer>
-			<NotificationTitle gap='8px'>
+			<NotificationHeader gap='8px'>
 				<IconContainer>
 					<IconNotificationOutline32 />
 				</IconContainer>
-				<div>
+				<NotificationDesc>
 					<H5 weight={700}>Notification Center</H5>
 					<Lead>
 						Your activity history, starting with the Most recent
 					</Lead>
-				</div>
-			</NotificationTitle>
+				</NotificationDesc>
+			</NotificationHeader>
 			<div>
 				{notifications.map((notification, idx) => (
 					<NotificationBox key={idx} notification={notification} />

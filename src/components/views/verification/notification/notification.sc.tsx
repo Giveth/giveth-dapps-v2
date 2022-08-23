@@ -12,6 +12,10 @@ export const IconContainer = styled.div`
 	padding-top: 10px;
 `;
 
-export const NotificationTitle = styled(Flex)`
+export const NotificationHeader = styled(Flex)`
 	padding: 24px;
+`;
+
+export const NotificationDesc = styled.div`
+	marign-top: 16px;
 `;
