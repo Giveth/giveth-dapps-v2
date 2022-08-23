@@ -15,7 +15,7 @@ const templateToHTML = (template: any) => {
 	const res: ReactNode[] = [];
 	content.forEach((cont: any) => {
 		const c: string = cont.content;
-		const temp = c.startsWith('$') ? metaData[c] : c;
+		const temp = c.startsWith('$') ? metaData[c.substring(1)] : c;
 		switch (cont.type) {
 			case 'p':
 				res.push(<P as='span'>{temp}</P>);
@@ -24,8 +24,11 @@ const templateToHTML = (template: any) => {
 				res.push(<B as='span'>{temp}</B>);
 				break;
 			case 'a':
-				const c: string = cont.content;
-				res.push(<GLink href={metaData[cont.href]}>{temp}</GLink>);
+				res.push(
+					<GLink href={metaData[cont.href.substring(1)]}>
+						{temp}
+					</GLink>,
+				);
 				break;
 			default:
 				break;
@@ -83,9 +86,9 @@ const notifs = [
 			},
 		],
 		metaData: {
-			$amount: '400.2',
-			$farm: 'givfarm',
-			$href1: '/givfarm',
+			amount: '400.2',
+			farm: 'givfarm',
+			href1: '/givfarm',
 		},
 		time: '193543213645',
 		qutoe: 'hey bro, how are you?',
@@ -102,19 +105,36 @@ const notifs = [
 				content: '$amount',
 			},
 			{
+				type: 'b',
+				content: 'GIV tokens',
+			},
+			{
 				type: 'p',
 				content: 'on',
 			},
 			{
 				type: 'a',
 				content: '$farm',
-				href: '$href1',
+				href: '$href',
+			},
+			{
+				type: 'p',
+				content: 'for',
+			},
+			{
+				type: 'b',
+				content: '$apr',
+			},
+			{
+				type: 'b',
+				content: 'APR',
 			},
 		],
 		metaData: {
-			$amount: '400.2',
-			$farm: 'givfarm',
-			$href1: '/givfarm',
+			amount: '400.2',
+			farm: 'givfarm',
+			href: '/givfarm',
+			apr: '18.2%',
 		},
 		time: '193543213645',
 		qutoe: 'hey bro, how are you?',
