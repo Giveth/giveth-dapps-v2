@@ -1,12 +1,13 @@
 import { H5, IconNotificationOutline32, Lead } from '@giveth/ui-design-system';
 import { Flex } from '@/components/styled-components/Flex';
-import { NotificationContainer } from './notification.sc';
-import { INotificationData, convertRawDataToHTML } from '@/helpers/html';
+import { NotificationContainer, NotificationTitle } from './notification.sc';
+import { INotificationData } from '@/helpers/html';
+import { NotificationBox } from '@/components/notification/NotificationBox';
 
 function NotificationView() {
 	return (
-		<>
-			<NotificationContainer>
+		<NotificationContainer>
+			<NotificationTitle>
 				<Flex gap='8px'>
 					<IconNotificationOutline32 />
 					<div>
@@ -16,19 +17,19 @@ function NotificationView() {
 						</Lead>
 					</div>
 				</Flex>
-				<div>
-					{notifs.map((notif, idx) => (
-						<div key={idx}>{convertRawDataToHTML(notif)}</div>
-					))}
-				</div>
-			</NotificationContainer>
-		</>
+			</NotificationTitle>
+			<div>
+				{notifications.map((notification, idx) => (
+					<NotificationBox key={idx} notification={notification} />
+				))}
+			</div>
+		</NotificationContainer>
 	);
 }
 
 export default NotificationView;
 
-const notifs: INotificationData[] = [
+const notifications: INotificationData[] = [
 	{
 		icon: '',
 		template: [
@@ -55,7 +56,7 @@ const notifs: INotificationData[] = [
 			farm: 'givfarm',
 			href1: '/givfarm',
 		},
-		time: '193543213645',
+		time: '1661256071107',
 		quote: 'hey bro, how are you?',
 	},
 	{
@@ -101,7 +102,7 @@ const notifs: INotificationData[] = [
 			href: '/givfarm',
 			apr: '18.2%',
 		},
-		time: '193543213645',
-		quote: 'hey bro, how are you?',
+		time: '1661256071107',
+		quote: 'hey bro, how are you?\n good, an you?',
 	},
 ];
