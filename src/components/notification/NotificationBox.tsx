@@ -6,17 +6,23 @@ import type { FC } from 'react';
 
 interface INotificationBox {
 	notification: INotificationData;
+	short?: boolean;
 }
 
-export const NotificationBox: FC<INotificationBox> = ({ notification }) => {
+export const NotificationBox: FC<INotificationBox> = ({
+	notification,
+	short = false,
+}) => {
 	return (
 		<NotificationBoxContainer gap='16px'>
-			<IconContainer>
-				<IconHeartOutline24 />
-			</IconContainer>
+			{!short && (
+				<IconContainer>
+					<IconHeartOutline24 />
+				</IconContainer>
+			)}
 			<NotificationContent>
 				<div>{convertRawDataToHTML(notification)}</div>
-				{notification.quote && (
+				{!short && notification.quote && (
 					<NotificationQuote>{notification.quote}</NotificationQuote>
 				)}
 				<NotificationTime>
