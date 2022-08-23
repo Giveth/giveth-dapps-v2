@@ -3,7 +3,14 @@ import { FC, useState, useEffect } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { Button, GLink, IconGiveth } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	Button,
+	GLink,
+	IconGiveth,
+	IconNotification16,
+	neutralColors,
+} from '@giveth/ui-design-system';
 
 import { Flex } from '@/components/styled-components/Flex';
 import { formatWeiHelper } from '@/helpers/number';
@@ -27,6 +34,8 @@ import {
 	SmallCreateProjectParent,
 	LargeCreateProject,
 	MainLogoBtn,
+	NotificationsButton,
+	NotificationsIconContainer,
 } from './Header.sc';
 import { RewardMenu } from '@/components/menu/RewardMenu';
 import MenuWallet from '@/components/menu/MenuWallet';
@@ -48,6 +57,7 @@ import {
 } from '@/features/modal/modal.slice';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import NotificationMenu from '../notification/NotificationMenu';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -58,6 +68,7 @@ const Header: FC<IHeader> = () => {
 	const [showRewardMenu, setShowRewardMenu] = useState(false);
 	const [showRewardMenuModal, setShowRewardMenuModal] = useState(false);
 	const [showUserMenu, setShowUserMenu] = useState(false);
+	const [showNotifications, setShowNotifications] = useState(false);
 	const [showHeader, setShowHeader] = useState(true);
 	const [isGIVeconomyRoute, setIsGIVeconomyRoute] = useState(false);
 	const [showBackBtn, setShowBackBtn] = useState(false);
@@ -236,6 +247,25 @@ const Header: FC<IHeader> = () => {
 				</SmallCreateProjectParent>
 				{active && account && chainId ? (
 					<>
+						<MenuAndButtonContainer
+							onClick={() => setShowNotifications(true)}
+							onMouseEnter={() => setShowNotifications(true)}
+							onMouseLeave={() => setShowNotifications(false)}
+						>
+							<NotificationsButton outline theme={theme}>
+								<NotificationsIconContainer>
+									<IconNotification16
+										color={
+											isLight
+												? brandColors.pinky[500]
+												: neutralColors.gray[100]
+										}
+									/>
+								</NotificationsIconContainer>
+								<CoverLine theme={theme} />
+							</NotificationsButton>
+							{showNotifications && <NotificationMenu />}
+						</MenuAndButtonContainer>
 						<MenuAndButtonContainer
 							onClick={() => setShowRewardMenu(true)}
 							onMouseEnter={() => setShowRewardMenu(true)}

@@ -66,6 +66,12 @@ export const BalanceButton = styled(HeaderButton)`
 	position: relative;
 `;
 
+export const NotificationsButton = styled(HeaderButton)`
+	align-items: center;
+	background-color: ${props =>
+		props.theme === ETheme.Dark ? brandColors.giv[900] : 'white'};
+`;
+
 export const WalletButton = styled(HeaderButton)`
 	div:nth-child(2) {
 		display: none;
@@ -90,6 +96,11 @@ export const HBContainer = styled.div`
 	display: flex;
 	align-items: center;
 	z-index: 2;
+`;
+
+export const NotificationsIconContainer = styled(HBContainer)`
+	padding-right: 5px;
+	padding-left: 5px;
 `;
 
 export const WBInfo = styled.div`
