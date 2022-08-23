@@ -1,5 +1,5 @@
 import { GeneralMetatags } from '@/components/Metatag';
-import NotificationView from '@/components/views/verification/notification/notification.view';
+import NotificationView from '@/components/views/notification/notification.view';
 
 const NotificationRoute = () => {
 	return (
