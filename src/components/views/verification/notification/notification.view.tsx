@@ -1,22 +1,25 @@
 import { H5, IconNotificationOutline32, Lead } from '@giveth/ui-design-system';
-import { Flex } from '@/components/styled-components/Flex';
-import { NotificationContainer, NotificationTitle } from './notification.sc';
+import {
+	NotificationContainer,
+	NotificationTitle,
+	IconContainer,
+} from './notification.sc';
 import { INotificationData } from '@/helpers/html';
 import { NotificationBox } from '@/components/notification/NotificationBox';
 
 function NotificationView() {
 	return (
 		<NotificationContainer>
-			<NotificationTitle>
-				<Flex gap='8px'>
+			<NotificationTitle gap='8px'>
+				<IconContainer>
 					<IconNotificationOutline32 />
-					<div>
-						<H5 weight={700}>Notification Center</H5>
-						<Lead>
-							Your activity history, starting with the Most recent
-						</Lead>
-					</div>
-				</Flex>
+				</IconContainer>
+				<div>
+					<H5 weight={700}>Notification Center</H5>
+					<Lead>
+						Your activity history, starting with the Most recent
+					</Lead>
+				</div>
 			</NotificationTitle>
 			<div>
 				{notifications.map((notification, idx) => (

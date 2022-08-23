@@ -38,7 +38,7 @@ const NotificationBoxContainer = styled(Flex)`
 const NotificationContent = styled.div``;
 
 const NotificationQuote = styled.div`
-	border-left: 2px solid ${neutralColors.gray[400]};
+	border-left: 4px solid ${neutralColors.gray[400]};
 	font-weight: bold;
 	padding-left: 16px;
 	margin-top: 16px;
