@@ -7,6 +7,7 @@ import {
 } from '@giveth/ui-design-system';
 import { Flex } from '../styled-components/Flex';
 import { convertRawDataToHTML, INotificationData } from '@/helpers/html';
+import { durationToString } from '@/lib/helpers';
 import type { FC } from 'react';
 
 interface INotificationBox {
@@ -32,7 +33,11 @@ export const NotificationBox: FC<INotificationBox> = ({
 					<NotificationQuote>{notification.quote}</NotificationQuote>
 				)}
 				<NotificationTime>
-					{/* {new Date(notification.time)} */}
+					{durationToString(
+						Date.now() - Number(notification.time),
+						1,
+						true,
+					) + ' ago'}
 				</NotificationTime>
 			</NotificationContent>
 		</NotificationBoxContainer>
