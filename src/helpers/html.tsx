@@ -17,6 +17,7 @@ export interface IRowData {
 }
 
 export interface INotificationData extends IRowData {
+	id: string;
 	icon: string;
 	time: string;
 	quote: string;
@@ -26,20 +27,28 @@ export interface INotificationData extends IRowData {
 export const convertRawDataToHTML = (RawData: IRowData) => {
 	const { template, metaData } = RawData;
 	const res: ReactNode[] = [];
-	template.forEach((node: any) => {
+	template.forEach((node: any, idx) => {
 		const c: string = node.content;
 		const temp = c.startsWith('$') ? metaData[c.substring(1)] : c;
 		switch (node.type) {
 			case 'p':
-				res.push(<P as='span'>{temp}</P>);
+				res.push(
+					<P key={idx} as='span'>
+						{temp}
+					</P>,
+				);
 				break;
 			case 'b':
-				res.push(<B as='span'>{temp}</B>);
+				res.push(
+					<B key={idx} as='span'>
+						{temp}
+					</B>,
+				);
 				break;
 			case 'a':
 				const href = metaData[node.href.substring(1)] || '';
 				res.push(
-					<GLink size='Big' href={href}>
+					<GLink key={idx} size='Big' href={href}>
 						{temp}
 					</GLink>,
 				);
