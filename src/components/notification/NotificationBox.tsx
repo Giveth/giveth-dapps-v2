@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import {
 	B,
 	brandColors,
+	Caption,
 	IconHeartOutline24,
 	neutralColors,
 } from '@giveth/ui-design-system';
@@ -32,7 +33,7 @@ export const NotificationBox: FC<INotificationBox> = ({
 				{!short && notification.quote && (
 					<NotificationQuote>{notification.quote}</NotificationQuote>
 				)}
-				<NotificationTime>
+				<NotificationTime medium>
 					{durationToString(
 						Date.now() - Number(notification.time),
 						1,
@@ -80,6 +81,7 @@ const NotificationQuote = styled(B)`
 	}
 `;
 
-const NotificationTime = styled.div`
+const NotificationTime = styled(Caption)`
 	margin-top: 16px;
+	color: ${neutralColors.gray[700]};
 `;
