@@ -1,4 +1,5 @@
 import { H5, IconNotificationOutline32, Lead } from '@giveth/ui-design-system';
+import { useState } from 'react';
 import {
 	NotificationContainer,
 	NotificationHeader,
@@ -7,8 +8,17 @@ import {
 } from './notification.sc';
 import { INotificationData } from '@/helpers/html';
 import { NotificationBox } from '@/components/notification/NotificationBox';
+import { TabsContainer, TabItem } from '@/components/styled-components/Tabs';
+
+enum ENotificationTabs {
+	ALL,
+	GENERAL,
+	PROJECTS,
+	GIVECONOMY,
+}
 
 function NotificationView() {
+	const [tab, setTab] = useState(ENotificationTabs.ALL);
 	return (
 		<NotificationContainer>
 			<NotificationHeader gap='8px'>
@@ -22,6 +32,32 @@ function NotificationView() {
 					</Lead>
 				</NotificationDesc>
 			</NotificationHeader>
+			<TabsContainer>
+				<TabItem
+					active={tab === ENotificationTabs.ALL}
+					onClick={() => setTab(ENotificationTabs.ALL)}
+				>
+					All
+				</TabItem>
+				<TabItem
+					active={tab === ENotificationTabs.GENERAL}
+					onClick={() => setTab(ENotificationTabs.GENERAL)}
+				>
+					General
+				</TabItem>
+				<TabItem
+					active={tab === ENotificationTabs.PROJECTS}
+					onClick={() => setTab(ENotificationTabs.PROJECTS)}
+				>
+					Projects
+				</TabItem>
+				<TabItem
+					active={tab === ENotificationTabs.GIVECONOMY}
+					onClick={() => setTab(ENotificationTabs.GIVECONOMY)}
+				>
+					GIVeconomy
+				</TabItem>
+			</TabsContainer>
 			<div>
 				{notifications.map((notification, idx) => (
 					<NotificationBox key={idx} notification={notification} />
