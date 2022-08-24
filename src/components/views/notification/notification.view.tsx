@@ -108,5 +108,6 @@ const notifications: INotificationData[] = [
 		},
 		time: '1661256071107',
 		quote: 'hey bro, how are you?\ngood, an you?',
+		isRead: true,
 	},
 ];
