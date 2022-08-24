@@ -10,6 +10,7 @@ import {
 	IconGiveth,
 	IconNotification16,
 	neutralColors,
+	Overline,
 } from '@giveth/ui-design-system';
 
 import { Flex } from '@/components/styled-components/Flex';
@@ -36,6 +37,7 @@ import {
 	MainLogoBtn,
 	NotificationsButton,
 	NotificationsIconContainer,
+	NotificationsButtonCircle,
 } from './Header.sc';
 import { RewardMenu } from '@/components/menu/RewardMenu';
 import MenuWallet from '@/components/menu/MenuWallet';
@@ -254,6 +256,11 @@ const Header: FC<IHeader> = () => {
 						>
 							<NotificationsButton outline theme={theme}>
 								<NotificationsIconContainer>
+									<NotificationsButtonCircle>
+										<Overline styleType='Small'>
+											12
+										</Overline>
+									</NotificationsButtonCircle>
 									<IconNotification16
 										color={
 											isLight
