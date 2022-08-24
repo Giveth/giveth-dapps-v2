@@ -42,6 +42,7 @@ const ProjectCardSelector = (props: { project: IProject }) => {
 				<BlueBar />
 				<MobileCardContainer>
 					<ProjectCard project={project} />
+					<MobileGrayBar />
 					<SocialBox project={project} />
 				</MobileCardContainer>
 			</MobileCardWrapper>
@@ -63,17 +64,19 @@ const BlueBar = styled.div`
 	position: relative;
 `;
 
+const MobileGrayBar = styled.div`
+	border-bottom: 3px solid ${neutralColors.gray[200]};
+	margin-top: 16px;
+`;
+
 const Left = styled.div`
 	z-index: 1;
-	justify-content: center;
-	align-items: center;
 	background: ${neutralColors.gray[200]};
 	box-shadow: ${Shadow.Neutral[400]};
 	padding: 29px;
 	border-top-left-radius: 16px;
 	border-bottom-left-radius: 16px;
 	${mediaQueries.mobileL} {
-		align-items: flex-start;
 		> div:first-child {
 			padding: 0 1%;
 		}
