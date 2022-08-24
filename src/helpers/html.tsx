@@ -20,6 +20,7 @@ export interface INotificationData extends IRowData {
 	icon: string;
 	time: string;
 	quote: string;
+	isRead?: boolean;
 }
 
 export const convertRawDataToHTML = (RawData: IRowData) => {

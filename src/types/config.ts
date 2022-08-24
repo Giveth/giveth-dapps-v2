@@ -166,6 +166,7 @@ export interface GlobalConfig extends EnvConfig {
 	TOKEN_NAME: string;
 	WEB3_POLLING_INTERVAL: number;
 	SUBGRAPH_POLLING_INTERVAL: number;
+	NOTIFICATION_POLLING_INTERVAL: number;
 	TOKEN_PRECISION: number;
 	PRIMARY_NETWORK: any;
 	SECONDARY_NETWORK: any;
