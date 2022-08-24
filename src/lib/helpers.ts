@@ -55,7 +55,7 @@ export function formatWalletLink(chainId?: number, address?: string) {
 	return `${networksParams[chainId]?.blockExplorerUrls[0]}/address/${address}`;
 }
 
-export const durationToYMDh = (ms: number) => {
+export const durationToYMDh = (ms: number, full: boolean = false) => {
 	const baseTime = new Date(0);
 	const duration = new Date(ms);
 
@@ -66,17 +66,29 @@ export const durationToYMDh = (ms: number) => {
 	const min = duration.getUTCMinutes() - baseTime.getUTCMinutes();
 	const sec = duration.getUTCSeconds() - baseTime.getUTCSeconds();
 
-	return { y, m, d, h, min, sec };
+	// { year: y, month: m, day: d, hour: h, minute: min, second: sec }
+	const shortRes = { y, m, d, h, min, sec };
+	if (full) {
+		let fullRes: any = {};
+		if (y) fullRes[`year${y > 1 ? 's' : ''}`] = y;
+		if (m) fullRes[`month${m > 1 ? 's' : ''}`] = m;
+		if (d) fullRes[`day${d > 1 ? 's' : ''}`] = d;
+		if (h) fullRes[`hour${h > 1 ? 's' : ''}`] = h;
+		if (min) fullRes[`minute${min > 1 ? 's' : ''}`] = min;
+		if (sec) fullRes[`second${sec > 1 ? 's' : ''}`] = sec;
+		return fullRes;
+	}
+	return shortRes;
 };
 
-export const durationToString = (ms: number, length = 3) => {
-	const temp: { [key: string]: number } = durationToYMDh(ms);
+export const durationToString = (ms: number, length = 3, full = false) => {
+	const temp: { [key: string]: number } = durationToYMDh(ms, full);
 	const res: string[] = [];
 	for (const key in temp) {
 		if (Object.prototype.hasOwnProperty.call(temp, key)) {
 			const value: number = temp[key];
 			if (value) {
-				res.push(`${value}${key}`);
+				res.push(`${value} ${key}`);
 			}
 		}
 	}
