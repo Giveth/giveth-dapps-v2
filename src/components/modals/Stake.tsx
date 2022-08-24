@@ -79,7 +79,10 @@ export const StakeModal: FC<IStakeModalProps> = ({
 	);
 
 	useEffect(() => {
-		handlePermit();
+		if (!onlyApproveMode) {
+			setPermit(true);
+			setStakeState(StakeState.STAKE);
+		}
 	}, [onlyApproveMode]);
 
 	useEffect(() => {
