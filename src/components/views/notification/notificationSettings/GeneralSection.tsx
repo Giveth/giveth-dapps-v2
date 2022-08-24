@@ -1,6 +1,7 @@
 import { SectionContainer } from './common/common.sc';
 import SectionHeader from './common/SectionHeader';
 import { SectionItem } from './common/SectionItem';
+import ToggleReceiveNotifications from '@/components/views/notification/notificationSettings/common/ToggleReceiveNotifications';
 
 const GeneralSection = () => {
 	return (
@@ -12,12 +13,12 @@ const GeneralSection = () => {
 			<SectionItem
 				title='Email notifications'
 				description='Turn on/off all email notifications'
-				options={<div>hi</div>}
+				options={<ToggleReceiveNotifications />}
 			/>
 			<SectionItem
 				title='Dapp notifications'
 				description='Turn on/off all Dapp notifications'
-				options={<div>hi</div>}
+				options={<ToggleReceiveNotifications />}
 			/>
 		</SectionContainer>
 	);
