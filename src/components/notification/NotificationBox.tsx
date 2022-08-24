@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { IconHeartOutline24, neutralColors } from '@giveth/ui-design-system';
+import { B, IconHeartOutline24, neutralColors } from '@giveth/ui-design-system';
 import { Flex } from '../styled-components/Flex';
 import { convertRawDataToHTML, INotificationData } from '@/helpers/html';
 import type { FC } from 'react';
@@ -43,11 +43,18 @@ const NotificationBoxContainer = styled(Flex)`
 
 const NotificationContent = styled.div``;
 
-const NotificationQuote = styled.pre`
+const NotificationQuote = styled(B)`
 	border-left: 4px solid ${neutralColors.gray[400]};
 	font-weight: bold;
 	padding-left: 16px;
 	margin-top: 16px;
+	white-space: pre-wrap;
+	&::before {
+		content: '"';
+	}
+	&::after {
+		content: '"';
+	}
 `;
 
 const NotificationTime = styled.div`
