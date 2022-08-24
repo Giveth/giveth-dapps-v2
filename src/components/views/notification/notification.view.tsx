@@ -1,4 +1,5 @@
 import { H5, IconNotificationOutline32, Lead } from '@giveth/ui-design-system';
+import { useState } from 'react';
 import {
 	NotificationContainer,
 	NotificationHeader,
@@ -7,8 +8,23 @@ import {
 } from './notification.sc';
 import { INotificationData } from '@/helpers/html';
 import { NotificationBox } from '@/components/notification/NotificationBox';
+import {
+	TabsContainer,
+	TabItem,
+	TabItemCount,
+} from '@/components/styled-components/Tabs';
+import { useAppSelector } from '@/features/hooks';
+
+enum ENotificationTabs {
+	ALL,
+	GENERAL,
+	PROJECTS,
+	GIVECONOMY,
+}
 
 function NotificationView() {
+	const [tab, setTab] = useState(ENotificationTabs.ALL);
+	const { notificationInfo } = useAppSelector(state => state.notification);
 	return (
 		<NotificationContainer>
 			<NotificationHeader gap='8px'>
@@ -22,6 +38,44 @@ function NotificationView() {
 					</Lead>
 				</NotificationDesc>
 			</NotificationHeader>
+			<TabsContainer>
+				<TabItem
+					active={tab === ENotificationTabs.ALL}
+					onClick={() => setTab(ENotificationTabs.ALL)}
+				>
+					All
+					<TabItemCount active={tab === ENotificationTabs.ALL}>
+						{notificationInfo.total}
+					</TabItemCount>
+				</TabItem>
+				<TabItem
+					active={tab === ENotificationTabs.GENERAL}
+					onClick={() => setTab(ENotificationTabs.GENERAL)}
+				>
+					General
+					<TabItemCount active={tab === ENotificationTabs.GENERAL}>
+						{notificationInfo.general}
+					</TabItemCount>
+				</TabItem>
+				<TabItem
+					active={tab === ENotificationTabs.PROJECTS}
+					onClick={() => setTab(ENotificationTabs.PROJECTS)}
+				>
+					Projects
+					<TabItemCount active={tab === ENotificationTabs.PROJECTS}>
+						{notificationInfo.projectsRelated}
+					</TabItemCount>
+				</TabItem>
+				<TabItem
+					active={tab === ENotificationTabs.GIVECONOMY}
+					onClick={() => setTab(ENotificationTabs.GIVECONOMY)}
+				>
+					GIVeconomy
+					<TabItemCount active={tab === ENotificationTabs.GIVECONOMY}>
+						{notificationInfo.givEconomyRelated}
+					</TabItemCount>
+				</TabItem>
+			</TabsContainer>
 			<div>
 				{notifications.map((notification, idx) => (
 					<NotificationBox key={idx} notification={notification} />
@@ -108,5 +162,6 @@ const notifications: INotificationData[] = [
 		},
 		time: '1661256071107',
 		quote: 'hey bro, how are you?\ngood, an you?',
+		isRead: true,
 	},
 ];

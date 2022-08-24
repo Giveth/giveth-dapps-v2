@@ -5,6 +5,7 @@ import modalReducer from './modal/modal.slice';
 import userReducer from './user/user.slice';
 import priceReducer from './price/price.slice';
 import generalReducer from './general/general.slice';
+import notificationReducer from './notification/notification.slice';
 
 export const store = configureStore({
 	reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
 		user: userReducer,
 		price: priceReducer,
 		general: generalReducer,
+		notification: notificationReducer,
 	},
 });
 
