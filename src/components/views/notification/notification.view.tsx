@@ -107,6 +107,6 @@ const notifications: INotificationData[] = [
 			apr: '18.2%',
 		},
 		time: '1661256071107',
-		quote: 'hey bro, how are you?\n good, an you?',
+		quote: 'hey bro, how are you?\ngood, an you?',
 	},
 ];
