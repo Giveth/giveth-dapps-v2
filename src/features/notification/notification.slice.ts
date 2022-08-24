@@ -12,10 +12,10 @@ export const defaultNotificationValues: INotificationState = {
 };
 
 const initialState: {
-	NotificationInfo: INotificationState;
+	notificationInfo: INotificationState;
 	isLoaded: boolean;
 } = {
-	NotificationInfo: defaultNotificationValues,
+	notificationInfo: defaultNotificationValues,
 	isLoaded: false,
 };
 
@@ -27,7 +27,7 @@ export const notificationSlice = createSlice({
 		builder.addCase(
 			fetchNotificationInfoAsync.fulfilled,
 			(state, action) => {
-				state.NotificationInfo = action.payload;
+				state.notificationInfo = action.payload;
 			},
 		);
 	},
