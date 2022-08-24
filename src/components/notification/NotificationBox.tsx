@@ -19,8 +19,8 @@ export const NotificationBox: FC<INotificationBox> = ({
 	short = false,
 }) => {
 	return (
-		<NotificationBoxContainer gap='16px'>
-			{!notification.isRead && <UnreadCircle />}
+		<NotificationBoxContainer gap='16px' isShort={short}>
+			{!notification.isRead && <UnreadCircle isShort={short} />}
 			{!short && (
 				<IconContainer>
 					<IconHeartOutline24 />
@@ -39,19 +39,19 @@ export const NotificationBox: FC<INotificationBox> = ({
 	);
 };
 
-const NotificationBoxContainer = styled(Flex)`
+const NotificationBoxContainer = styled(Flex)<{ isShort: boolean }>`
 	position: relative;
-	padding: 24px;
+	padding: ${props => (!props.isShort ? '24px' : '4px')};
 `;
 
 const IconContainer = styled.div`
 	padding-top: 4px;
 `;
 
-const UnreadCircle = styled.div`
+const UnreadCircle = styled.div<{ isShort: boolean }>`
 	position: absolute;
-	top: 10px;
-	left: 10px;
+	top: ${props => (!props.isShort ? '10px' : '0')};
+	left: ${props => (!props.isShort ? '10px' : '-5px')};
 	height: 8px;
 	width: 8px;
 	background-color: ${brandColors.pinky[500]};
