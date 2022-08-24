@@ -17,5 +17,15 @@ export const NotificationHeader = styled(Flex)`
 `;
 
 export const NotificationDesc = styled.div`
-	marign-top: 16px;
+	margin-top: 16px;
+`;
+
+export const GrayBar = styled.div`
+	width: 100%;
+	border-bottom: 3px solid ${neutralColors.gray[300]};
+`;
+
+export const GrayBarTiny = styled.div`
+	width: 100%;
+	border-bottom: 1px solid ${neutralColors.gray[300]};
 `;
