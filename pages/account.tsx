@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { H5 } from '@giveth/ui-design-system';
 import Head from 'next/head';
 import { FC } from 'react';
+import { useWeb3React } from '@web3-react/core';
 import UserPublicProfileView from '@/components/views/userPublicProfile/UserPublicProfile.view';
 import { useAppSelector } from '@/features/hooks';
 import LottieControl from '@/components/animations/lottieControl';
@@ -13,12 +14,18 @@ const NoUserContainer = styled.div`
 
 const UserRoute: FC = () => {
 	const { userData, isLoadingUser } = useAppSelector(state => state.user);
+	const { active } = useWeb3React();
+
 	return (
 		<>
 			<Head>
 				<title>Giveth | {userData?.name}</title>
 			</Head>
-			{isLoadingUser ? (
+			{!active ? (
+				<NoUserContainer>
+					<H5>Wallet is not connected</H5>
+				</NoUserContainer>
+			) : isLoadingUser ? (
 				<NoUserContainer>
 					<LottieControl
 						animationData={LoadingAnimation}
