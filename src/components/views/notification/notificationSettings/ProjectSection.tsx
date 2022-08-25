@@ -1,22 +1,28 @@
+import { useState } from 'react';
 import { SectionContainer } from './common/common.sc';
 import SectionHeader from './common/SectionHeader';
 import { SectionItem } from './common/SectionItem';
+import CheckboxEmailNotification from '@/components/views/notification/notificationSettings/common/CheckboxEmailNotification';
 
 const ProjectSection = () => {
+	const [isOpen, setIsOpen] = useState(false);
 	return (
 		<SectionContainer>
 			<SectionHeader
 				title='Project activities'
 				description='All notifications related to project activities'
+				isOpen={isOpen}
+				onClick={() => setIsOpen(!isOpen)}
 			/>
-			{itemsArray.map(item => (
-				<SectionItem
-					title={item.title}
-					description={item.description}
-					options={<div>hi</div>}
-					key={item.title}
-				/>
-			))}
+			{isOpen &&
+				itemsArray.map(item => (
+					<SectionItem
+						title={item.title}
+						description={item.description}
+						options={<CheckboxEmailNotification />}
+						key={item.title}
+					/>
+				))}
 		</SectionContainer>
 	);
 };
