@@ -85,6 +85,9 @@ const Header: FC<IHeader> = () => {
 		state => state.user,
 	);
 	const theme = useAppSelector(state => state.general.theme);
+	const { total: totalUnreadNotifications } = useAppSelector(
+		state => state.notification.notificationInfo,
+	);
 	const router = useRouter();
 	const isLight = theme === ETheme.Light;
 
@@ -258,7 +261,7 @@ const Header: FC<IHeader> = () => {
 								<NotificationsIconContainer>
 									<NotificationsButtonCircle>
 										<Overline styleType='Small'>
-											12
+											{totalUnreadNotifications}
 										</Overline>
 									</NotificationsButtonCircle>
 									<IconNotification16

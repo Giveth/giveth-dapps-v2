@@ -77,8 +77,11 @@ function NotificationView() {
 				</TabItem>
 			</TabsContainer>
 			<div>
-				{notifications.map((notification, idx) => (
-					<NotificationBox key={idx} notification={notification} />
+				{notifications.map(notification => (
+					<NotificationBox
+						key={notification.id}
+						notification={notification}
+					/>
 				))}
 			</div>
 		</NotificationContainer>
@@ -89,6 +92,7 @@ export default NotificationView;
 
 const notifications: INotificationData[] = [
 	{
+		id: '1',
 		icon: '',
 		template: [
 			{
@@ -114,10 +118,11 @@ const notifications: INotificationData[] = [
 			farm: 'givfarm',
 			href1: '/givfarm',
 		},
-		time: '1661256071107',
+		time: '1661300000107',
 		quote: 'hey bro, how are you?',
 	},
 	{
+		id: '2',
 		icon: '',
 		template: [
 			{

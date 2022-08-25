@@ -2,11 +2,13 @@ import styled from 'styled-components';
 import {
 	B,
 	brandColors,
+	Caption,
 	IconHeartOutline24,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import { Flex } from '../styled-components/Flex';
 import { convertRawDataToHTML, INotificationData } from '@/helpers/html';
+import { durationToString } from '@/lib/helpers';
 import type { FC } from 'react';
 
 interface INotificationBox {
@@ -31,8 +33,12 @@ export const NotificationBox: FC<INotificationBox> = ({
 				{!short && notification.quote && (
 					<NotificationQuote>{notification.quote}</NotificationQuote>
 				)}
-				<NotificationTime>
-					{/* {new Date(notification.time)} */}
+				<NotificationTime medium>
+					{durationToString(
+						Date.now() - Number(notification.time),
+						1,
+						true,
+					) + ' ago'}
 				</NotificationTime>
 			</NotificationContent>
 		</NotificationBoxContainer>
@@ -75,6 +81,7 @@ const NotificationQuote = styled(B)`
 	}
 `;
 
-const NotificationTime = styled.div`
+const NotificationTime = styled(Caption)`
 	margin-top: 16px;
+	color: ${neutralColors.gray[700]};
 `;
