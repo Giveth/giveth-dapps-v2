@@ -6,6 +6,7 @@ import {
 	neutralColors,
 	Overline,
 } from '@giveth/ui-design-system';
+import Link from 'next/link';
 import { useAppSelector } from '@/features/hooks';
 import { MenuContainer } from '../menu/Menu.sc';
 import { INotificationData } from '@/helpers/html';
@@ -37,12 +38,12 @@ const NotificationMenu = () => {
 				))
 				.slice(0, 5)}
 			<br />
-			<AllNotificationsLink
-				color={brandColors.pinky[500]}
-				href='/notification'
-			>
-				All notifications
-			</AllNotificationsLink>
+			{/* TODO: Read HREF from links Object */}
+			<Link href='/notification' passHref>
+				<AllNotificationsLink color={brandColors.pinky[500]}>
+					All notifications
+				</AllNotificationsLink>
+			</Link>
 		</NotifsMenuContainer>
 	);
 };
