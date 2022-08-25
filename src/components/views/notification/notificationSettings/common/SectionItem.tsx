@@ -1,6 +1,8 @@
 import { B, neutralColors, P } from '@giveth/ui-design-system';
 import { FC, ReactNode } from 'react';
 import styled from 'styled-components';
+import { Col, Row } from '@/components/Grid';
+import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 
 interface ISectionItem {
 	title: string;
@@ -12,24 +14,33 @@ export const SectionItem: FC<ISectionItem> = props => {
 	const { title, description, options } = props;
 	return (
 		<Container>
-			<Left>
+			<ColStyled xs={6} sm={7} md={8}>
 				<Title>{title}</Title>
 				<Description>{description}</Description>
-			</Left>
-			<Right>{options}</Right>
+			</ColStyled>
+			<ColStyled xs={6} sm={5} md={4}>
+				{options}
+			</ColStyled>
 		</Container>
 	);
 };
 
-const Container = styled.div`
-	margin-top: 40px;
-	margin-bottom: 40px;
-	display: flex;
-	justify-content: space-between;
+const ColStyled = styled(Col)`
+	@media (max-width: ${deviceSize.mobileL}px) {
+		width: 100%;
+	}
 `;
 
-const Left = styled.div``;
-const Right = styled.div``;
+const Container = styled(Row)`
+	margin-top: 40px;
+	margin-bottom: 40px;
+	flex-direction: column;
+	gap: 10px;
+	${mediaQueries.mobileL} {
+		flex-direction: row;
+		gap: 0;
+	}
+`;
 
 const Title = styled(B)`
 	margin-bottom: 10px;
