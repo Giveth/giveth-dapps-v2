@@ -47,6 +47,7 @@ const Wrapper = styled.div<{ disabled?: boolean; checked?: boolean }>`
 		flex-shrink: 0;
 		background: ${props =>
 			props.checked ? brandColors.deep[900] : 'white'};
+		transition: background 0.15s ease-in-out;
 	}
 `;
 
