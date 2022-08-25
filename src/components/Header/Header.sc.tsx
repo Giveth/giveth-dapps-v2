@@ -214,6 +214,11 @@ export const SmallCreateProject = styled(ButtonLink)`
 
 export const LargeCreateProject = styled.div`
 	display: none;
+	> button {
+		box-shadow: ${props =>
+			props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
+	}
+
 	${mediaQueries.laptopS} {
 		display: unset;
 	}
