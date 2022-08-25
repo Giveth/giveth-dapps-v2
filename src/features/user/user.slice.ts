@@ -10,12 +10,14 @@ const initialState: {
 	isEnabled: boolean;
 	isSignedIn: boolean;
 	balance: string | null;
+	isLoadingUser: boolean;
 } = {
 	userData: undefined,
 	token: undefined,
 	isEnabled: false,
 	isSignedIn: false,
 	balance: null,
+	isLoadingUser: false,
 };
 
 export const userSlice = createSlice({
@@ -49,6 +51,9 @@ export const userSlice = createSlice({
 	},
 	extraReducers: builder => {
 		builder
+			.addCase(fetchUserByAddress.pending, state => {
+				state.isLoadingUser = true;
+			})
 			.addCase(
 				fetchUserByAddress.fulfilled,
 				(
@@ -78,8 +83,12 @@ export const userSlice = createSlice({
 						localStorage.removeItem(StorageLabel.TOKEN);
 					}
 					state.userData = action.payload.data?.userByAddress;
+					state.isLoadingUser = false;
 				},
 			)
+			.addCase(fetchUserByAddress.rejected, state => {
+				state.isLoadingUser = false;
+			})
 			.addCase(signToGetToken.fulfilled, (state, action) => {
 				state.token = action.payload;
 				state.isSignedIn = true;
