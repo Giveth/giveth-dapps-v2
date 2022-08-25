@@ -30,11 +30,14 @@ const NotificationMenu = () => {
 
 			{notifications
 				.map(notification => (
-					<NotificationBox
-						key={notification.id}
-						short={true}
-						notification={notification}
-					/>
+					<>
+						<NotificationBox
+							key={notification.id}
+							short={true}
+							notification={notification}
+						/>
+						<br />
+					</>
 				))
 				.slice(0, 5)}
 			<br />
