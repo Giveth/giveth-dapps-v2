@@ -32,8 +32,7 @@ const ColStyled = styled(Col)`
 `;
 
 const Container = styled(Row)`
-	margin-top: 40px;
-	margin-bottom: 40px;
+	padding-top: 40px;
 	flex-direction: column;
 	gap: 10px;
 	${mediaQueries.mobileL} {

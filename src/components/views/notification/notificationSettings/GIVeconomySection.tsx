@@ -1,11 +1,25 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import { SectionContainer } from './common/common.sc';
 import SectionHeader from './common/SectionHeader';
 import { SectionItem } from './common/SectionItem';
-import CheckboxEmailNotification from '@/components/views/notification/notificationSettings/common/CheckboxEmailNotification';
+import CheckboxEmailNotification from './common/CheckboxEmailNotification';
 
 const GIVeconomySection = () => {
 	const [isOpen, setIsOpen] = useState(false);
+	const [itemsHeight, setItemsHeight] = useState(0);
+
+	useEffect(() => {
+		const resize_ob = new ResizeObserver(function (entries) {
+			let rect = entries[0].contentRect;
+			setItemsHeight(rect.height);
+		});
+		resize_ob.observe(document.getElementById('itemsWrapperId')!);
+		return () => {
+			resize_ob.unobserve(document.getElementById('itemsWrapperId')!);
+		};
+	}, []);
+
 	return (
 		<SectionContainer>
 			<SectionHeader
@@ -14,18 +28,27 @@ const GIVeconomySection = () => {
 				isOpen={isOpen}
 				onClick={() => setIsOpen(!isOpen)}
 			/>
-			{isOpen &&
-				itemsArray.map(item => (
-					<SectionItem
-						title={item.title}
-						description={item.description}
-						options={<CheckboxEmailNotification />}
-						key={item.title}
-					/>
-				))}
+			<ItemsWrapper height={itemsHeight} isOpen={isOpen}>
+				<div id='itemsWrapperId'>
+					{itemsArray.map(item => (
+						<SectionItem
+							key={item.title}
+							title={item.title}
+							description={item.description}
+							options={<CheckboxEmailNotification />}
+						/>
+					))}
+				</div>
+			</ItemsWrapper>
 		</SectionContainer>
 	);
 };
+
+const ItemsWrapper = styled.div<{ isOpen: boolean; height: number }>`
+	height: ${({ isOpen, height }) => (isOpen ? height + 'px' : 0)};
+	transition: height 1s ease-in-out;
+	overflow: hidden;
+`;
 
 const itemsArray = [
 	{
