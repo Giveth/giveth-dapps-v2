@@ -30,7 +30,7 @@ const NotificationMenu = () => {
 			{notifications
 				.map(notification => (
 					<NotificationBox
-						key={notification.time}
+						key={notification.id}
 						short={true}
 						notification={notification}
 					/>
@@ -66,6 +66,7 @@ const AllNotificationsLink = styled(GLink)`
 
 const notifications: INotificationData[] = [
 	{
+		id: '1',
 		icon: '',
 		template: [
 			{
@@ -95,6 +96,7 @@ const notifications: INotificationData[] = [
 		quote: 'hey bro, how are you?',
 	},
 	{
+		id: '2',
 		icon: '',
 		template: [
 			{
@@ -142,6 +144,7 @@ const notifications: INotificationData[] = [
 	},
 
 	{
+		id: '3',
 		icon: '',
 		template: [
 			{
@@ -171,6 +174,7 @@ const notifications: INotificationData[] = [
 		quote: 'hey bro, how are you?',
 	},
 	{
+		id: '4',
 		icon: '',
 		template: [
 			{
@@ -200,6 +204,7 @@ const notifications: INotificationData[] = [
 		quote: 'hey bro, how are you?',
 	},
 	{
+		id: '5',
 		icon: '',
 		template: [
 			{
@@ -229,6 +234,7 @@ const notifications: INotificationData[] = [
 		quote: 'hey bro, how are you?',
 	},
 	{
+		id: '6',
 		icon: '',
 		template: [
 			{
@@ -258,6 +264,7 @@ const notifications: INotificationData[] = [
 		quote: 'hey bro, how are you?',
 	},
 	{
+		id: '7',
 		icon: '',
 		template: [
 			{
@@ -287,6 +294,7 @@ const notifications: INotificationData[] = [
 		quote: 'hey bro, how are you?',
 	},
 	{
+		id: '8',
 		icon: '',
 		template: [
 			{
@@ -316,6 +324,7 @@ const notifications: INotificationData[] = [
 		quote: 'hey bro, how are you?',
 	},
 	{
+		id: '9',
 		icon: '',
 		template: [
 			{
@@ -345,6 +354,7 @@ const notifications: INotificationData[] = [
 		quote: 'hey bro, how are you?',
 	},
 	{
+		id: '10',
 		icon: '',
 		template: [
 			{
@@ -374,6 +384,7 @@ const notifications: INotificationData[] = [
 		quote: 'hey bro, how are you?',
 	},
 	{
+		id: '11',
 		icon: '',
 		template: [
 			{
@@ -403,6 +414,7 @@ const notifications: INotificationData[] = [
 		quote: 'hey bro, how are you?',
 	},
 	{
+		id: '12',
 		icon: '',
 		template: [
 			{
