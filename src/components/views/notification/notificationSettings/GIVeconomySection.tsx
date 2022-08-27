@@ -4,6 +4,7 @@ import { SectionContainer } from './common/common.sc';
 import SectionHeader from './common/SectionHeader';
 import { SectionItem } from './common/SectionItem';
 import CheckboxEmailNotification from './common/CheckboxEmailNotification';
+import { GrayBar } from '@/components/views/notification/notification.sc';
 
 const GIVeconomySection = () => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -14,33 +15,38 @@ const GIVeconomySection = () => {
 			let rect = entries[0].contentRect;
 			setItemsHeight(rect.height);
 		});
-		resize_ob.observe(document.getElementById('itemsWrapperId')!);
+		resize_ob.observe(document.getElementById('GIVeconomyWrapperId')!);
 		return () => {
-			resize_ob.unobserve(document.getElementById('itemsWrapperId')!);
+			resize_ob.unobserve(
+				document.getElementById('GIVeconomyWrapperId')!,
+			);
 		};
 	}, []);
 
 	return (
-		<SectionContainer>
-			<SectionHeader
-				title='GIVeconomy activities'
-				description='All notifications related to GIVeconomy'
-				isOpen={isOpen}
-				onClick={() => setIsOpen(!isOpen)}
-			/>
-			<ItemsWrapper height={itemsHeight} isOpen={isOpen}>
-				<div id='itemsWrapperId'>
-					{itemsArray.map(item => (
-						<SectionItem
-							key={item.title}
-							title={item.title}
-							description={item.description}
-							options={<CheckboxEmailNotification />}
-						/>
-					))}
-				</div>
-			</ItemsWrapper>
-		</SectionContainer>
+		<>
+			<GrayBar />
+			<SectionContainer>
+				<SectionHeader
+					title='GIVeconomy activities'
+					description='All notifications related to GIVeconomy'
+					isOpen={isOpen}
+					onClick={() => setIsOpen(!isOpen)}
+				/>
+				<ItemsWrapper height={itemsHeight} isOpen={isOpen}>
+					<div id='GIVeconomyWrapperId'>
+						{itemsArray.map(item => (
+							<SectionItem
+								key={item.title}
+								title={item.title}
+								description={item.description}
+								options={<CheckboxEmailNotification />}
+							/>
+						))}
+					</div>
+				</ItemsWrapper>
+			</SectionContainer>
+		</>
 	);
 };
 

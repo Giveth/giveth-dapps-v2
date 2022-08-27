@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { GrayBar } from '../notification.sc';
 import HeaderSection from './HeaderSection';
 import GeneralSection from './GeneralSection';
 import { SettingsContainer } from './common/common.sc';
@@ -18,11 +17,8 @@ const SettingsIndex = () => {
 	return (
 		<SettingsContainer>
 			<HeaderSection />
-			<GrayBar />
 			<GeneralSection />
-			<GrayBar />
 			<ProjectSection />
-			<GrayBar />
 			<GIVeconomySection />
 		</SettingsContainer>
 	);
