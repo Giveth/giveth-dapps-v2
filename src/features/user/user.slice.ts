@@ -10,14 +10,14 @@ const initialState: {
 	isEnabled: boolean;
 	isSignedIn: boolean;
 	balance: string | null;
-	isLoadingUser: boolean;
+	isLoading: boolean;
 } = {
 	userData: undefined,
 	token: undefined,
 	isEnabled: false,
 	isSignedIn: false,
 	balance: null,
-	isLoadingUser: false,
+	isLoading: true,
 };
 
 export const userSlice = createSlice({
@@ -48,11 +48,14 @@ export const userSlice = createSlice({
 					(state.userData.likedProjectsCount || 1) - 1;
 			}
 		},
+		setIsLoading: (state, action: PayloadAction<boolean>) => {
+			state.isLoading = action.payload;
+		},
 	},
 	extraReducers: builder => {
 		builder
 			.addCase(fetchUserByAddress.pending, state => {
-				state.isLoadingUser = true;
+				state.isLoading = true;
 			})
 			.addCase(
 				fetchUserByAddress.fulfilled,
@@ -83,11 +86,11 @@ export const userSlice = createSlice({
 						localStorage.removeItem(StorageLabel.TOKEN);
 					}
 					state.userData = action.payload.data?.userByAddress;
-					state.isLoadingUser = false;
+					state.isLoading = false;
 				},
 			)
 			.addCase(fetchUserByAddress.rejected, state => {
-				state.isLoadingUser = false;
+				state.isLoading = false;
 			})
 			.addCase(signToGetToken.fulfilled, (state, action) => {
 				state.token = action.payload;
@@ -108,5 +111,6 @@ export const {
 	setBalance,
 	incrementLikedProjectsCount,
 	decrementLikedProjectsCount,
+	setIsLoading,
 } = userSlice.actions;
 export default userSlice.reducer;
