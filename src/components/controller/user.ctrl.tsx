@@ -6,6 +6,7 @@ import { InjectedConnector } from '@web3-react/injected-connector';
 import { useAppDispatch } from '@/features/hooks';
 import {
 	setBalance,
+	setIsLoading,
 	setIsEnabled,
 	setIsSignedIn,
 	setToken,
@@ -26,13 +27,22 @@ const UserController = () => {
 		const selectedWalletName = localStorage.getItem(StorageLabel.WALLET);
 		const wallet = walletsArray.find(w => w.value === selectedWalletName);
 		if (wallet && wallet.connector instanceof InjectedConnector) {
-			wallet.connector.isAuthorized().then(isAuthorized => {
-				if (isAuthorized) {
-					activate(wallet.connector, console.log).then(() =>
-						setIsActivatedCalled(true),
-					);
-				}
-			});
+			wallet.connector
+				.isAuthorized()
+				.then(isAuthorized => {
+					if (isAuthorized) {
+						activate(wallet.connector, console.log)
+							.then(() => setIsActivatedCalled(true))
+							.finally(() => {
+								if (!token) dispatch(setIsLoading(false));
+							});
+					} else {
+						dispatch(setIsLoading(false));
+					}
+				})
+				.catch(() => dispatch(setIsLoading(false)));
+		} else {
+			dispatch(setIsLoading(false));
 		}
 	}, [activate, isActivatedCalled]);
 
