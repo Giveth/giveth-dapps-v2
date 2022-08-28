@@ -3,6 +3,9 @@ import { gwei2wei } from '@/helpers/blockchain';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 const BASE_ROUTE = 'https://serve.giveth.io';
+const SEPT_8TH_2022 = 1662595200000;
+const MAINNET_NETWORK_NUMBER = 5; // Goerli
+const XDAI_NETWORK_NUMBER = 100; // xDAI
 // IMPORTANT: Using dev to make it work until staging is merged
 // const BASE_ROUTE = 'https://dev.serve.giveth.io';
 
@@ -12,15 +15,15 @@ const config: EnvConfig = {
 	MICROSERVICES: {
 		authentication: `${BASE_ROUTE}/siweauthmicroservice/v1`,
 	},
-	MAINNET_NETWORK_NUMBER: 42, // Kovan
-	XDAI_NETWORK_NUMBER: 100, // xDAI
+	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
+	XDAI_NETWORK_NUMBER: XDAI_NETWORK_NUMBER,
 
 	GARDEN_LINK:
 		'https://gardens-staging.1hive.org/#/xdai/garden/0xb3f3da0080a8811d887531ca4c0dbfe3490bd1a1',
 
 	MAINNET_CONFIG: {
-		chainId: '0x2a', // A 0x-prefixed hexadecimal string
-		chainName: 'Kovan',
+		chainId: '0x5', // A 0x-prefixed hexadecimal string
+		chainName: 'Goerli',
 		nativeCurrency: {
 			name: 'ETH',
 			symbol: 'ETH', // 2-6 characters long
@@ -31,7 +34,7 @@ const config: EnvConfig = {
 			// Keep it empty for automatic configuration
 		},
 		blockExplorerName: ['Etherscan'],
-		blockExplorerUrls: ['https://kovan.etherscan.io'],
+		blockExplorerUrls: ['https://goerli.etherscan.io'],
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/aminlatifi/givpower-deployment-six-kovan',
 
@@ -40,15 +43,17 @@ const config: EnvConfig = {
 		WETH_TOKEN_ADDRESS: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
 		TOKEN_DISTRO_ADDRESS: '0x373bAa19E92F6204b461b791094012fd259996F4',
 		GIV: {
+			network: MAINNET_NETWORK_NUMBER,
 			LM_ADDRESS: '0xDfdBDA44b2b9C113475a372c078aAC1279C4d7BE',
 			BUY_LINK:
 				'https://app.uniswap.org/#/swap?outputCurrency=0x6c16216484069C19530a57762AD6630fB678D00E',
 		},
 
-		nodeUrl: 'https://kovan.infura.io/v3/' + INFURA_API_KEY,
+		nodeUrl: 'https://goerli.infura.io/v3/' + INFURA_API_KEY,
 
 		pools: [
 			{
+				network: MAINNET_NETWORK_NUMBER,
 				POOL_ADDRESS: '0x02653cae0cad6b3cd73e7dbc4f7a3ce6693c3ed7',
 				VAULT_ADDRESS: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
 				POOL_ID:
@@ -64,6 +69,7 @@ const config: EnvConfig = {
 				active: true,
 			},
 			{
+				network: MAINNET_NETWORK_NUMBER,
 				INCENTIVE_START_TIME: 1640190600,
 				INCENTIVE_END_TIME: 1655915400,
 				INCENTIVE_REWARD_AMOUNT: 10000000,
@@ -121,6 +127,7 @@ const config: EnvConfig = {
 		nodeUrl: 'https://rpc.gnosischain.com/',
 
 		GIV: {
+			network: XDAI_NETWORK_NUMBER,
 			LM_ADDRESS: '0x898Baa558A401e59Cb2aA77bb8b2D89978Cf506F',
 			GARDEN_ADDRESS: '0x642c18755aa5a2bf6861349327d2448813b992ba',
 			BUY_LINK:
@@ -129,6 +136,7 @@ const config: EnvConfig = {
 
 		pools: [
 			{
+				network: XDAI_NETWORK_NUMBER,
 				POOL_ADDRESS: '0xE5021d9B578b84f7D272CFDE3E8B58c0Bf37B402',
 				LM_ADDRESS: '0x34F8Cc88b872f13d32084464af56f1052A2eF0f6',
 				type: StakingType.HONEYSWAP_GIV_HNY,
@@ -142,6 +150,7 @@ const config: EnvConfig = {
 				archived: true,
 			},
 			{
+				network: XDAI_NETWORK_NUMBER,
 				POOL_ADDRESS: '0x0346B748Ce9bdd42995452b5D30b46c296336f07',
 				LM_ADDRESS: '0x448d5E09620752f031Ea629993050f8581118438',
 				type: StakingType.SUSHISWAP_ETH_GIV,
@@ -152,6 +161,20 @@ const config: EnvConfig = {
 					'https://app.sushi.com/add/0x780FE5de651a3ea62E572f591BF848cFEBaf2163/0x736a98655049433f79dCcF5e54b887E8890b63D1',
 				unit: 'LP',
 				active: true,
+			},
+			{
+				network: MAINNET_NETWORK_NUMBER,
+				POOL_ADDRESS: '0xB4E0fc187f0EEd740D93eF15Cd14750a2780fc2A',
+				LM_ADDRESS: '0xe2c436E177C39A5D18AF6923Fc2Fc673f4729C05',
+				type: StakingType.HONEYSWAP_GIV_DAI,
+				platform: StakingPlatform.HONEYSWAP,
+				title: 'GIV / xDAI',
+				description: '50% GIV, 50% xDAI',
+				provideLiquidityLink:
+					'https://app.honeyswap.org/#/add/0x83a8eea6427985C523a0c4d9d3E62C051B6580d3/0x97c4dD5cE204b8c1F2f3B8fBfBBDC771d867d18c',
+				unit: 'LP',
+				active: true,
+				farmStartTimeMS: 1655997000000,
 			},
 		],
 

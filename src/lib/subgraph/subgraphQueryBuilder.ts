@@ -253,6 +253,15 @@ export class SubgraphQueryBuilder {
 			c => c.type === StakingType.UNISWAPV3_ETH_GIV,
 		) as UniswapV3PoolStakingConfig;
 
+		let uniswapV3PoolQuery = '';
+		if (uniswapConfig?.UNISWAP_V3_LP_POOL) {
+			uniswapV3PoolQuery = `
+			uniswapV3Pool: ${SubgraphQueryBuilder.getUniswapV3PoolQuery(
+				uniswapConfig.UNISWAP_V3_LP_POOL,
+			)}
+			`;
+		}
+
 		return `
 		{
 			${SubgraphQueryBuilder.getBalanceQuery(config.MAINNET_CONFIG, userAddress)}
@@ -270,10 +279,8 @@ export class SubgraphQueryBuilder {
 				],
 				userAddress,
 			)}
-			uniswapV3Pool: ${SubgraphQueryBuilder.getUniswapV3PoolQuery(
-				uniswapConfig.UNISWAP_V3_LP_POOL,
-			)}
 			${SubgraphQueryBuilder.getUniswapPositionsQuery(userAddress)}
+			${uniswapV3PoolQuery}
 		}
 		`;
 	};

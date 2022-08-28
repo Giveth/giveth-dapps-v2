@@ -22,7 +22,6 @@ export interface IStakeInfo {
 
 export const useStakingPool = (
 	poolStakingConfig: SimplePoolStakingConfig,
-	network: number,
 ): IStakeInfo => {
 	const [apr, setApr] = useState<APR | null>(null);
 	const [userStakeInfo, setUserStakeInfo] = useState<UserStakeInfo>({
@@ -33,30 +32,34 @@ export const useStakingPool = (
 	const stakePoolInfoPoll = useRef<NodeJS.Timer | null>(null);
 
 	const { library, chainId } = useWeb3React();
-	const { currentValues, xDaiValues } = useAppSelector(
+	const { mainnetValues, xDaiValues, isLoaded } = useAppSelector(
 		state => state.subgraph,
 	);
-	const subgraphIsLoaded = useAppSelector(state => state.subgraph.isLoaded);
+
+	const { network } = poolStakingConfig;
+	const currentValues =
+		poolStakingConfig.network === config.XDAI_NETWORK_NUMBER
+			? xDaiValues
+			: mainnetValues;
 
 	const { type, LM_ADDRESS } = poolStakingConfig;
 	const providerNetwork = library?.network?.chainId;
+	const _library = chainId === network ? library : undefined;
 
 	useEffect(() => {
 		const cb = () => {
-			if (subgraphIsLoaded) {
+			if (isLoaded) {
 				const promise: Promise<APR> =
 					type === StakingType.GIV_LM
 						? getGivStakingAPR(
-								config.XDAI_NETWORK_NUMBER,
-								xDaiValues,
-								providerNetwork === config.XDAI_NETWORK_NUMBER
-									? library
-									: null,
+								LM_ADDRESS,
+								network,
+								currentValues,
+								_library,
 						  )
 						: getLPStakingAPR(
 								poolStakingConfig,
-								network,
-								library,
+								_library,
 								currentValues,
 						  );
 				promise
@@ -77,7 +80,7 @@ export const useStakingPool = (
 				stakePoolInfoPoll.current = null;
 			}
 		};
-	}, [library, chainId, subgraphIsLoaded, providerNetwork]);
+	}, [library, chainId, isLoaded, providerNetwork]);
 
 	useEffect(() => {
 		setUserStakeInfo(getUserStakeInfo(currentValues, poolStakingConfig));

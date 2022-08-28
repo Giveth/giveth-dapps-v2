@@ -185,7 +185,7 @@ export const DisableModalContent = styled.div`
 	border-radius: 12px;
 	box-shadow: ${Shadow.Neutral[400]};
 	max-width: 80%;
-	height: 156px;
+	height: 190px;
 	padding: 16px 12px;
 `;
 
@@ -214,4 +214,20 @@ export const DisableModalImage = styled.div`
 export const LockInfotooltip = styled(Subline)`
 	color: ${neutralColors.gray[100]};
 	width: 180px;
+`;
+
+export const WrongNetworkContainer = styled(Flex)`
+	flex-direction: row;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 257px;
+	padding: 0 20px;
+	align-items: center;
+	background: linear-gradient(180deg, #3811bf 0%, #17096a 47.94%);
+	opacity: 0.7;
+	z-index: 2;
+	div {
+		padding: 0 0 0 17px;
+	}
 `;

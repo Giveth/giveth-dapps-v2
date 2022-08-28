@@ -1,10 +1,12 @@
-import Image from 'next/image';
 import React, { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 import {
 	brandColors,
 	IconExternalLink,
 	IconHelp,
 	IconSpark,
+	Caption,
+	IconAlertCricle,
+	IconInfo24,
 } from '@giveth/ui-design-system';
 import { constants } from 'ethers';
 import BigNumber from 'bignumber.js';
@@ -33,6 +35,7 @@ import {
 	DisableModalImage,
 	DisableModalText,
 	FirstDetail,
+	GIVgardenTooltip,
 	IconContainer,
 	IconHelpWraper,
 	IntroIcon,
@@ -49,12 +52,15 @@ import {
 	StakingPoolExchangeRow,
 	StakingPoolLabel,
 	StakingPoolSubtitle,
+	WrongNetworkContainer,
 } from './BaseStakingCard.sc';
 import { APRModal } from '../modals/APR';
 import { StakeModal } from '../modals/StakeLock/Stake';
 import { UnStakeModal } from '../modals/Unstake/UnStake';
 import { StakingPoolImages } from '../StakingPoolImages';
 import { V3StakeModal } from '../modals/V3Stake';
+import { IconEthereum } from '../Icons/Eth';
+import { IconGnosisChain } from '../Icons/GnosisChain';
 import { IconGIV } from '../Icons/GIV';
 import { IconHoneyswap } from '../Icons/Honeyswap';
 import { IconBalancer } from '../Icons/Balancer';
@@ -77,6 +83,7 @@ import { StakeGIVModal } from '../modals/StakeLock/StakeGIV';
 import { LockupDetailsModal } from '../modals/LockupDetailsModal';
 import { useAppSelector } from '@/features/hooks';
 import Routes from '@/lib/constants/Routes';
+import { chainName } from '@/lib/constants/constants';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { IconAngelVault } from '../Icons/AngelVault';
 import { IconWithTooltip } from '../IconWithToolTip';
@@ -90,7 +97,17 @@ export enum StakeCardState {
 	GIVPOWER_INTRO,
 }
 
-export const getPoolIconWithName = (platform: StakingPlatform) => {
+export const getPoolIconWithName = (
+	platform: StakingPlatform,
+	poolNetwork?: number,
+) => {
+	switch (poolNetwork) {
+		case config.MAINNET_NETWORK_NUMBER:
+			return <IconEthereum size={16} />;
+		case config.XDAI_NETWORK_NUMBER:
+			return <IconGnosisChain size={16} />;
+	}
+	// if no number is set then it defaults to platform icon
 	switch (platform) {
 		case StakingPlatform.BALANCER:
 			return <IconBalancer size={16} />;
@@ -148,9 +165,10 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const router = useRouter();
 	const { setInfo } = useFarms();
 	const { chainId, account, active: isWalletActive } = useWeb3React();
-	const currentValues = useAppSelector(state => state.subgraph.currentValues);
+	const { mainnetValues, xDaiValues } = useAppSelector(
+		state => state.subgraph,
+	);
 
-	const sdh = new SubgraphDataHelper(currentValues);
 	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
 
 	const {
@@ -165,8 +183,14 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		farmStartTimeMS,
 		active,
 		archived,
+		discontinued,
 		introCard,
+		network: poolNetwork,
 	} = poolStakingConfig;
+
+	const currentValues =
+		poolNetwork === config.XDAI_NETWORK_NUMBER ? xDaiValues : mainnetValues;
+	const sdh = new SubgraphDataHelper(currentValues);
 
 	const {
 		apr,
@@ -235,10 +259,8 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		}
 	}, [earned, tokenDistroHelper]);
 	useEffect(() => {
-		if (chainId) {
-			if (!regenStreamConfig) setInfo(chainId, type, earned);
-		}
-	}, [chainId, earned, type, regenStreamConfig, setInfo]);
+		if (!regenStreamConfig) setInfo(poolNetwork, type, earned);
+	}, [poolNetwork, earned, type, regenStreamConfig, setInfo]);
 
 	const rewardTokenSymbol = regenStreamConfig?.rewardTokenSymbol || 'GIV';
 
@@ -261,41 +283,73 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				big={isGIVStaking}
 				shadowColor={isGIVStaking ? '#E1458D' : ''}
 			>
-				{(!active || archived) && disableModal && (
+				{poolNetwork !== chainId && (
+					<WrongNetworkContainer>
+						<IconAlertCricle size={32} />
+						<Caption>
+							You are currently connected to{' '}
+							{chainName(chainId || 0)} switch to{' '}
+							{chainName(poolNetwork || 0)} to interact with this
+							farm.
+						</Caption>
+					</WrongNetworkContainer>
+				)}
+				{(!active || archived || discontinued) && disableModal && (
 					<DisableModal>
 						<DisableModalContent>
 							<DisableModalImage>
-								<Image
-									src='/images/icons/questionMarkGiv.svg'
-									height={24}
-									width={24}
-									alt='question'
-								/>
+								<IconInfo24 />
 							</DisableModalImage>
-							<div>
+							<Flex
+								flexDirection='column'
+								justifyContent='space-evenly'
+							>
 								<DisableModalText weight={700}>
-									This pool is no longer available
+									{discontinued
+										? 'Attention Farmers!'
+										: 'This pool is no longer available'}
 								</DisableModalText>
-								<br />
 								<DisableModalText>
-									Please unstake your tokens and check out
-									other available pools.
+									{discontinued
+										? 'This farm has ended, move your funds to another farm to keep earning rewards.'
+										: 'Please unstake your tokens and check out other available pools.'}
 								</DisableModalText>
 								<DisableModalCloseButton
 									label='GOT IT'
 									onClick={() => setDisableModal(false)}
 								/>
-							</div>
+							</Flex>
 						</DisableModalContent>
 					</DisableModal>
 				)}
 				{state === StakeCardState.NORMAL ? (
 					<>
 						<StakingPoolExchangeRow gap='4px' alignItems='center'>
-							{getPoolIconWithName(platform)}
+							{getPoolIconWithName(platform, poolNetwork)}
 							<StakingPoolExchange styleType='Small'>
+								{type === StakingType.GIV_LM &&
+									chainId === config.XDAI_NETWORK_NUMBER &&
+									`GIVgarden `}
 								{platformTitle || platform}
 							</StakingPoolExchange>
+							{poolNetwork === config.XDAI_NETWORK_NUMBER &&
+								type === StakingType.GIV_LM && (
+									<IconWithTooltip
+										direction={'top'}
+										icon={
+											<IconHelp
+												color={brandColors.deep[100]}
+												size={12}
+											/>
+										}
+									>
+										<GIVgardenTooltip>
+											While staking GIV in this pool you
+											are also granted voting power (gGIV)
+											in the GIVgarden.
+										</GIVgardenTooltip>
+									</IconWithTooltip>
+								)}
 							<div style={{ flex: 1 }}></div>
 							{notif && notif}
 							{introCard && (
