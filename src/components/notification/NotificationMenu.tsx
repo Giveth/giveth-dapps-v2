@@ -11,6 +11,7 @@ import { useAppSelector } from '@/features/hooks';
 import { MenuContainer } from '../menu/Menu.sc';
 import { INotificationData } from '@/helpers/html';
 import { NotificationBox } from './NotificationBox';
+import Routes from '@/lib/constants/Routes';
 
 const NotificationMenu = () => {
 	const [isMounted, setIsMounted] = useState(false);
@@ -42,7 +43,7 @@ const NotificationMenu = () => {
 				.slice(0, 5)}
 			<br />
 			{/* TODO: Read HREF from links Object */}
-			<Link href='/notification' passHref>
+			<Link href={Routes.Notification} passHref>
 				<AllNotificationsLink color={brandColors.pinky[500]}>
 					All notifications
 				</AllNotificationsLink>
