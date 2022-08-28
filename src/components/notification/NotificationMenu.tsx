@@ -6,10 +6,12 @@ import {
 	neutralColors,
 	Overline,
 } from '@giveth/ui-design-system';
+import Link from 'next/link';
 import { useAppSelector } from '@/features/hooks';
 import { MenuContainer } from '../menu/Menu.sc';
 import { INotificationData } from '@/helpers/html';
 import { NotificationBox } from './NotificationBox';
+import Routes from '@/lib/constants/Routes';
 
 const NotificationMenu = () => {
 	const [isMounted, setIsMounted] = useState(false);
@@ -29,20 +31,22 @@ const NotificationMenu = () => {
 
 			{notifications
 				.map(notification => (
-					<NotificationBox
-						key={notification.id}
-						short={true}
-						notification={notification}
-					/>
+					<>
+						<NotificationBox
+							key={notification.id}
+							short={true}
+							notification={notification}
+						/>
+						<br />
+					</>
 				))
 				.slice(0, 5)}
 			<br />
-			<AllNotificationsLink
-				color={brandColors.pinky[500]}
-				href='/notification'
-			>
-				All notifications
-			</AllNotificationsLink>
+			<Link href={Routes.Notification} passHref>
+				<AllNotificationsLink color={brandColors.pinky[500]}>
+					All notifications
+				</AllNotificationsLink>
+			</Link>
 		</NotifsMenuContainer>
 	);
 };
