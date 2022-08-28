@@ -42,7 +42,6 @@ const NotificationMenu = () => {
 				))
 				.slice(0, 5)}
 			<br />
-			{/* TODO: Read HREF from links Object */}
 			<Link href={Routes.Notification} passHref>
 				<AllNotificationsLink color={brandColors.pinky[500]}>
 					All notifications
