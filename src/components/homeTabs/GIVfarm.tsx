@@ -32,17 +32,11 @@ import { useFarms } from '@/context/farm.context';
 import { TopInnerContainer, ExtLinkRow } from './commons';
 import { shortenAddress } from '@/lib/helpers';
 import { Col, Container, Row } from '@/components/Grid';
-import links from '@/lib/constants/links';
-import {
-	DaoCard,
-	DaoCardTitle,
-	DaoCardQuote,
-	DaoCardButton,
-} from '../GIVfrens.sc';
 
 import { GIVfrens } from '@/components/givfarm/GIVfrens';
 import GIVpowerStakingPoolCard from '../cards/GIVpowerStakingPoolCard';
 import { GIVpowerProvider } from '@/context/givpower.context';
+import { DaoCard } from '../givfarm/DaoCard';
 
 const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
 	const pools = [...config.MAINNET_CONFIG.pools, ...config.XDAI_CONFIG.pools];
@@ -244,18 +238,7 @@ export const TabGIVfarmBottom = () => {
 					)}
 				</>
 				<Col xs={12}>
-					<DaoCard>
-						<DaoCardTitle weight={900}>Add Your DAO</DaoCardTitle>
-						<DaoCardQuote size='small'>
-							Apply to kickstart a RegenFarm for your for-good DAO
-						</DaoCardQuote>
-						<DaoCardButton
-							label='APPLY NOW'
-							linkType='primary'
-							href={links.JOINGIVFRENS}
-							target='_blank'
-						/>
-					</DaoCard>
+					<DaoCard />
 				</Col>
 			</Container>
 		</GIVfarmBottomContainer>

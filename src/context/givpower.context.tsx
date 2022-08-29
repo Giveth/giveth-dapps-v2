@@ -41,10 +41,8 @@ export const GIVpowerProvider: FC<IGIVpowerProvider> = ({ children }) => {
 		chainId === config.XDAI_NETWORK_NUMBER
 			? givPoolstakingConfigGnosis
 			: givPoolstakingConfigMainnet;
-	const { apr, notStakedAmount, stakedAmount, earned } = useStakingPool(
-		givPoolstakingConfig,
-		config.XDAI_NETWORK_NUMBER,
-	);
+	const { apr, notStakedAmount, stakedAmount, earned } =
+		useStakingPool(givPoolstakingConfig);
 	return (
 		<GIVpowerContext.Provider
 			value={{
