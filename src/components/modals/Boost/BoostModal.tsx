@@ -1,6 +1,7 @@
 import {
 	B,
 	brandColors,
+	Caption,
 	H4,
 	H6,
 	IconHelp,
@@ -8,6 +9,7 @@ import {
 	IconRocketInSpace32,
 	neutralColors,
 	P,
+	semanticColors,
 } from '@giveth/ui-design-system';
 import { FC } from 'react';
 import styled from 'styled-components';
@@ -74,6 +76,14 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 							</Flex>
 						</Flex>
 					</InfoPart>
+					<DescToast>
+						<Caption>
+							By allocating GIVpower to this project, we will
+							reduce your allocation on previous project
+							proportionally. You can check your previous
+							allocation on My account.
+						</Caption>
+					</DescToast>
 				</ContentSection>
 			</BoostModalContainer>
 		</Modal>
@@ -95,6 +105,7 @@ const InfoPart = styled.div`
 	padding: 16px;
 	border: 2px solid ${neutralColors.gray[300]};
 	border-radius: 8px;
+	margin-bottom: 32px;
 `;
 
 const TotalGIVpowerRow = styled(Flex)`
@@ -118,6 +129,15 @@ const GIVpowerHelp = styled.div`
 
 const ColoredRocketIcon = styled.div`
 	color: ${brandColors.giv[500]};
+`;
+
+const DescToast = styled.div`
+	padding: 16px;
+	border: 1px solid ${semanticColors.blueSky[700]};
+	background-color: ${semanticColors.blueSky[100]};
+	color: ${semanticColors.blueSky[700]};
+	border-radius: 8px;
+	margin-bottom: 32px;
 `;
 
 export default BoostModal;
