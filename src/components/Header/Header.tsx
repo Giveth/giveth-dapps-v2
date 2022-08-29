@@ -86,7 +86,7 @@ const Header: FC<IHeader> = () => {
 	);
 	const theme = useAppSelector(state => state.general.theme);
 	const { total: totalUnreadNotifications } = useAppSelector(
-		state => state.notification.notificationInfo.result,
+		state => state.notification.notificationInfo,
 	);
 
 	const router = useRouter();

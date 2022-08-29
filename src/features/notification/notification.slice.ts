@@ -1,20 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchNotificationCountAsync } from './notification.thunks';
 
-import type { INotificationCountResult } from './notification.types';
+import type { INotificationCountState } from './notification.types';
 
-export const defaultNotificationValues: INotificationCountResult = {
-	result: {
-		general: 0,
-		givEconomyRelated: 0,
-		projectsRelated: 0,
-		lastNotificationId: '0',
-		total: 0,
-	},
+export const defaultNotificationValues: INotificationCountState = {
+	general: 0,
+	givEconomyRelated: 0,
+	projectsRelated: 0,
+	lastNotificationId: '0',
+	total: 0,
 };
 
 const initialState: {
-	notificationInfo: INotificationCountResult;
+	notificationInfo: INotificationCountState;
 	isLoaded: boolean;
 } = {
 	notificationInfo: defaultNotificationValues,

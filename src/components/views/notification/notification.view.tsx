@@ -29,7 +29,7 @@ function NotificationView() {
 		general,
 		projectsRelated,
 		givEconomyRelated,
-	} = useAppSelector(state => state.notification.notificationInfo.result);
+	} = useAppSelector(state => state.notification.notificationInfo);
 	return (
 		<NotificationContainer>
 			<NotificationHeader gap='8px'>
