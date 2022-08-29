@@ -224,8 +224,8 @@ export const WrongNetworkContainer = styled(Flex)`
 	height: 257px;
 	padding: 0 20px;
 	align-items: center;
-	background: linear-gradient(180deg, #3811bf 0%, #17096a 47.94%);
-	opacity: 0.7;
+	background: linear-gradient(180deg, transparent 0%, #17096a 50%);
+	opacity: 0.9;
 	z-index: 2;
 	div {
 		padding: 0 0 0 17px;
