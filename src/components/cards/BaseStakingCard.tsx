@@ -269,19 +269,19 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	}, [farmStartTimeMS]);
 
 	const isGIVStaking = type === StakingType.GIV_LM;
-	const isGIVpower = isGIVStaking && chainId === config.XDAI_NETWORK_NUMBER;
-	const isBridge = isGIVStaking && chainId === config.MAINNET_NETWORK_NUMBER;
-	const isLocked = isGIVStaking && userGIVLocked.balance !== '0';
+	const isBridge =
+		isGIVStaking && poolNetwork === config.MAINNET_NETWORK_NUMBER;
+	const isGIVpower =
+		isGIVStaking && poolNetwork === config.XDAI_NETWORK_NUMBER;
+	const isLocked = isGIVpower && userGIVLocked.balance !== '0';
 	const isZeroGIVStacked =
-		!account ||
-		isBridge ||
-		(isGIVpower && userGIVPowerBalance.balance === '0');
+		!account || (isGIVpower && userGIVPowerBalance.balance === '0');
 
 	return (
 		<>
 			<StakingPoolContainer
-				big={isGIVStaking}
-				shadowColor={isGIVStaking ? '#E1458D' : ''}
+				big={isGIVpower}
+				shadowColor={isGIVpower ? '#E1458D' : ''}
 			>
 				{poolNetwork !== chainId && (
 					<WrongNetworkContainer>
@@ -361,7 +361,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									<IconHelp size={16} />
 								</IntroIcon>
 							)}
-							{isGIVStaking && (
+							{isGIVpower && (
 								<IntroIcon
 									onClick={() =>
 										setState(StakeCardState.GIVPOWER_INTRO)
@@ -417,7 +417,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 													</AngelVaultTooltip>
 												</IconWithTooltip>
 											)}
-											{isGIVStaking && (
+											{isGIVpower && (
 												<IconWithTooltip
 													direction='right'
 													icon={
@@ -554,10 +554,10 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								onClick={() => setShowHarvestModal(true)}
 								label='HARVEST REWARDS'
 								buttonType={
-									isGIVStaking ? 'secondary' : 'primary'
+									isGIVpower ? 'secondary' : 'primary'
 								}
 							/>
-							{isGIVStaking && (
+							{isGIVpower && (
 								<ClaimButton
 									disabled={
 										!isGIVpower ||
@@ -577,10 +577,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 										disabled={
 											!active ||
 											archived ||
-											(!isBridge &&
-												BN(
-													userNotStakedAmount,
-												).isZero())
+											BN(userNotStakedAmount).isZero()
 										}
 										onClick={() => setShowStakeModal(true)}
 									/>
@@ -629,7 +626,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							</StakeButtonsRow>
 							{active &&
 								!archived &&
-								(!isGIVStaking ? (
+								(!isGIVpower ? (
 									<Flex>
 										<LiquidityButton
 											label='PROVIDE LIQUIDITY'
