@@ -86,8 +86,9 @@ const Header: FC<IHeader> = () => {
 	);
 	const theme = useAppSelector(state => state.general.theme);
 	const { total: totalUnreadNotifications } = useAppSelector(
-		state => state.notification.notificationInfo,
+		state => state.notification.notificationInfo.result,
 	);
+
 	const router = useRouter();
 	const isLight = theme === ETheme.Light;
 
@@ -259,11 +260,13 @@ const Header: FC<IHeader> = () => {
 						>
 							<NotificationsButton outline theme={theme}>
 								<NotificationsIconContainer>
-									<NotificationsButtonCircle>
-										<Overline styleType='Small'>
-											{totalUnreadNotifications}
-										</Overline>
-									</NotificationsButtonCircle>
+									{totalUnreadNotifications > 0 && (
+										<NotificationsButtonCircle>
+											<Overline styleType='Small'>
+												{totalUnreadNotifications}
+											</Overline>
+										</NotificationsButtonCircle>
+									)}
 									<IconNotification16
 										color={
 											isLight
