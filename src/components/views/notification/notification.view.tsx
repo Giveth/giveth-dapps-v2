@@ -24,7 +24,12 @@ enum ENotificationTabs {
 
 function NotificationView() {
 	const [tab, setTab] = useState(ENotificationTabs.ALL);
-	const { notificationInfo } = useAppSelector(state => state.notification);
+	const {
+		total: totalUnreadNotifications,
+		general,
+		projectsRelated,
+		givEconomyRelated,
+	} = useAppSelector(state => state.notification.notificationInfo.result);
 	return (
 		<NotificationContainer>
 			<NotificationHeader gap='8px'>
@@ -45,7 +50,7 @@ function NotificationView() {
 				>
 					All
 					<TabItemCount active={tab === ENotificationTabs.ALL}>
-						{notificationInfo.total}
+						{totalUnreadNotifications}
 					</TabItemCount>
 				</TabItem>
 				<TabItem
@@ -54,7 +59,7 @@ function NotificationView() {
 				>
 					General
 					<TabItemCount active={tab === ENotificationTabs.GENERAL}>
-						{notificationInfo.general}
+						{general}
 					</TabItemCount>
 				</TabItem>
 				<TabItem
@@ -63,7 +68,7 @@ function NotificationView() {
 				>
 					Projects
 					<TabItemCount active={tab === ENotificationTabs.PROJECTS}>
-						{notificationInfo.projectsRelated}
+						{projectsRelated}
 					</TabItemCount>
 				</TabItem>
 				<TabItem
@@ -72,7 +77,7 @@ function NotificationView() {
 				>
 					GIVeconomy
 					<TabItemCount active={tab === ENotificationTabs.GIVECONOMY}>
-						{notificationInfo.givEconomyRelated}
+						{givEconomyRelated}
 					</TabItemCount>
 				</TabItem>
 			</TabsContainer>
