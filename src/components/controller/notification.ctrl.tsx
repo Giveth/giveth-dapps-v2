@@ -3,18 +3,22 @@ import { useEffect } from 'react';
 import { useAppDispatch } from '@/features/hooks';
 import config from '@/configuration';
 
-import { fetchNotificationInfoAsync } from '@/features/notification/notification.thunks';
+import { fetchNotificationCountAsync } from '@/features/notification/notification.thunks';
 
 const NotificationController = () => {
 	const dispatch = useAppDispatch();
 	const { account } = useWeb3React();
 
 	useEffect(() => {
-		const interval = setInterval(() => {
-			dispatch(fetchNotificationInfoAsync());
-		}, config.NOTIFICATION_POLLING_INTERVAL);
+		let interval: NodeJS.Timer;
+		if (account) {
+			dispatch(fetchNotificationCountAsync());
+			interval = setInterval(() => {
+				dispatch(fetchNotificationCountAsync());
+			}, config.NOTIFICATION_POLLING_INTERVAL);
+		}
 		return () => {
-			clearInterval(interval);
+			if (interval) clearInterval(interval);
 		};
 	}, [account, dispatch]);
 	return null;
