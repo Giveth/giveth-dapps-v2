@@ -60,6 +60,7 @@ import {
 import { slugToProjectView } from '@/lib/routeCreators';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import NotificationMenu from '../notification/NotificationMenu';
+import useDetectDevice from '@/hooks/useDetectDevice';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -74,7 +75,7 @@ const Header: FC<IHeader> = () => {
 	const [showHeader, setShowHeader] = useState(true);
 	const [isGIVeconomyRoute, setIsGIVeconomyRoute] = useState(false);
 	const [showBackBtn, setShowBackBtn] = useState(false);
-
+	// const notificationMenuRef = useRef<HTMLDivElement>(null);
 	const { chainId, active, account, library } = useWeb3React();
 	const sdh = new SubgraphDataHelper(
 		useAppSelector(state => state.subgraph[currentValuesHelper(chainId)]),
@@ -88,6 +89,7 @@ const Header: FC<IHeader> = () => {
 	const { total: totalUnreadNotifications } = useAppSelector(
 		state => state.notification.notificationInfo,
 	);
+	const { isMobileL } = useDetectDevice();
 
 	const router = useRouter();
 	const isLight = theme === ETheme.Light;
@@ -253,32 +255,35 @@ const Header: FC<IHeader> = () => {
 				</SmallCreateProjectParent>
 				{active && account && chainId ? (
 					<>
-						<MenuAndButtonContainer
-							onClick={() => setShowNotifications(true)}
-							onMouseEnter={() => setShowNotifications(true)}
-							onMouseLeave={() => setShowNotifications(false)}
-						>
-							<NotificationsButton outline theme={theme}>
-								<NotificationsIconContainer>
-									{totalUnreadNotifications > 0 && (
-										<NotificationsButtonCircle>
-											<Overline styleType='Small'>
-												{totalUnreadNotifications}
-											</Overline>
-										</NotificationsButtonCircle>
-									)}
-									<IconNotification16
-										color={
-											isLight
-												? brandColors.pinky[500]
-												: neutralColors.gray[100]
-										}
-									/>
-								</NotificationsIconContainer>
-								<CoverLine theme={theme} />
-							</NotificationsButton>
-							{showNotifications && <NotificationMenu />}
-						</MenuAndButtonContainer>
+						{!isMobileL && (
+							<MenuAndButtonContainer
+								onClick={() => setShowNotifications(true)}
+								onMouseEnter={() => setShowNotifications(true)}
+								onMouseLeave={() => setShowNotifications(false)}
+							>
+								<NotificationsButton outline theme={theme}>
+									<NotificationsIconContainer>
+										{totalUnreadNotifications > 0 && (
+											<NotificationsButtonCircle>
+												<Overline styleType='Small'>
+													{totalUnreadNotifications}
+												</Overline>
+											</NotificationsButtonCircle>
+										)}
+										<IconNotification16
+											color={
+												isLight
+													? brandColors.pinky[500]
+													: neutralColors.gray[100]
+											}
+										/>
+									</NotificationsIconContainer>
+									<CoverLine theme={theme} />
+								</NotificationsButton>
+								{showNotifications && <NotificationMenu />}
+							</MenuAndButtonContainer>
+						)}
+
 						<MenuAndButtonContainer
 							onClick={() => setShowRewardMenu(true)}
 							onMouseEnter={() => setShowRewardMenu(true)}
