@@ -1,9 +1,13 @@
 import {
+	B,
+	brandColors,
 	H4,
 	H6,
 	IconHelp,
+	IconRocketInSpace24,
 	IconRocketInSpace32,
 	neutralColors,
+	P,
 } from '@giveth/ui-design-system';
 import { FC } from 'react';
 import styled from 'styled-components';
@@ -32,7 +36,7 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 			<BoostModalContainer>
 				<ContentSection>
 					<InfoPart>
-						<Flex alignItems='baseline' gap='12px'>
+						<TotalGIVpowerRow alignItems='baseline' gap='12px'>
 							<H6>Total GIVpower</H6>
 							<GIVpowerValue weight={700}>
 								392,743.00
@@ -48,6 +52,26 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 									</IconWithTooltip>
 								</GIVpowerHelp>
 							</GIVpowerValue>
+						</TotalGIVpowerRow>
+						<Flex justifyContent='space-between'>
+							<Flex alignItems='baseline' gap='4px'>
+								<P>Boosted projects</P>
+								<IconWithTooltip
+									icon={<IconHelp size={16} />}
+									direction={'bottom'}
+								>
+									<LockInfotooltip>
+										{/* TODO: add copy of this toast */}
+										Your givpower
+									</LockInfotooltip>
+								</IconWithTooltip>
+							</Flex>
+							<Flex gap='4px'>
+								<ColoredRocketIcon>
+									<IconRocketInSpace24 />
+								</ColoredRocketIcon>
+								<B>4</B>
+							</Flex>
 						</Flex>
 					</InfoPart>
 				</ContentSection>
@@ -71,7 +95,11 @@ const InfoPart = styled.div`
 	padding: 16px;
 	border: 2px solid ${neutralColors.gray[300]};
 	border-radius: 8px;
+`;
+
+const TotalGIVpowerRow = styled(Flex)`
 	color: ${neutralColors.gray[700]};
+	margin-bottom: 21px;
 `;
 
 const GIVpowerValue = styled(H4)`
@@ -86,6 +114,10 @@ const GIVpowerHelp = styled.div`
 	&:hover {
 		color: ${neutralColors.gray[800]};
 	}
+`;
+
+const ColoredRocketIcon = styled.div`
+	color: ${brandColors.giv[500]};
 `;
 
 export default BoostModal;
