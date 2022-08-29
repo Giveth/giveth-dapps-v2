@@ -231,3 +231,10 @@ export const WrongNetworkContainer = styled(Flex)`
 		padding: 0 0 0 17px;
 	}
 `;
+
+export const GIVgardenTooltip = styled.div`
+	color: ${neutralColors.gray[100]};
+	text-align: center;
+	width: 120px;
+	font-size: 0.8em;
+`;
