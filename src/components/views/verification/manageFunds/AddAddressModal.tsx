@@ -53,7 +53,7 @@ const AddAddressModal: FC<IProps> = ({
 		formState: { errors },
 		watch,
 		getValues,
-	} = useForm<IAddressForm>({ mode: 'onChange' });
+	} = useForm<IAddressForm>({ mode: 'onBlur', reValidateMode: 'onBlur' });
 
 	const { library, chainId } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);

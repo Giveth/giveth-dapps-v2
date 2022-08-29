@@ -15,7 +15,7 @@ interface TorusConnectorArguments {
 const networks: { [key: number]: string } = {
 	1: 'mainnet',
 	100: 'xdai',
-	42: 'kovan',
+	5: 'goerli',
 };
 
 export class TorusConnector extends AbstractConnector {

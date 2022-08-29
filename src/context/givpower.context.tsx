@@ -1,6 +1,5 @@
 import { createContext, FC, ReactNode, useContext } from 'react';
 import { Zero } from '@ethersproject/constants';
-import { useWeb3React } from '@web3-react/core';
 import { Zero as BNZero } from '@/helpers/number';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import { getGivStakingConfig } from '@/helpers/networkProvider';
@@ -14,7 +13,6 @@ interface IGIVpowerContext extends IStakeInfo {
 }
 
 const givPoolstakingConfigGnosis = getGivStakingConfig(config.XDAI_CONFIG);
-const givPoolstakingConfigMainnet = getGivStakingConfig(config.MAINNET_CONFIG);
 
 const zeroAPR = {
 	effectiveAPR: BNZero,
@@ -36,19 +34,13 @@ interface IGIVpowerProvider {
 }
 
 export const GIVpowerProvider: FC<IGIVpowerProvider> = ({ children }) => {
-	const { chainId } = useWeb3React();
-	const givPoolstakingConfig =
-		chainId === config.XDAI_NETWORK_NUMBER
-			? givPoolstakingConfigGnosis
-			: givPoolstakingConfigMainnet;
 	const { apr, notStakedAmount, stakedAmount, earned } = useStakingPool(
-		givPoolstakingConfig,
-		config.XDAI_NETWORK_NUMBER,
+		givPoolstakingConfigGnosis,
 	);
 	return (
 		<GIVpowerContext.Provider
 			value={{
-				poolStakingConfig: givPoolstakingConfig,
+				poolStakingConfig: givPoolstakingConfigGnosis,
 				apr,
 				notStakedAmount,
 				stakedAmount,
