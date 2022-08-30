@@ -309,16 +309,20 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 					<ShareLikeBadge
 						type='share'
 						onClick={() => isActive && setShowModal(true)}
+						isSimple={!isAdmin}
 					/>
 					<ShareLikeBadge
 						type='like'
 						active={heartedByUser}
 						onClick={() => isActive && likeUnlikeProject()}
+						isSimple={!isAdmin}
 					/>
-					<BoostButton>
-						<ButtonText>Boost</ButtonText>
-						<IconRocketInSpace color={brandColors.giv[500]} />
-					</BoostButton>
+					{!isAdmin && (
+						<BoostButton>
+							<ButtonText>Boost</ButtonText>
+							<IconRocketInSpace color={brandColors.giv[500]} />
+						</BoostButton>
+					)}
 				</BadgeWrapper>
 				{!isAdmin && verified && <GIVbackToast />}
 				{isCategories && (
@@ -359,10 +363,12 @@ const BoostButton = styled(FlexCenter)`
 	box-shadow: ${Shadow.Neutral[500]};
 	display: flex;
 	gap: 9.5px;
-	padding-right: 24px;
-	padding-left: 24px;
+	padding-right: 9px;
+	padding-left: 9px;
 	color: ${brandColors.giv[500]};
 	cursor: pointer;
+	background: white;
+	width: 100%;
 `;
 
 const Links = styled.div`
@@ -398,6 +404,7 @@ const BadgeWrapper = styled.div`
 	display: flex;
 	margin-top: 16px;
 	justify-content: space-between;
+	gap: 8px;
 `;
 
 const Wrapper = styled(motion.div)<{ height: number }>`
@@ -406,7 +413,6 @@ const Wrapper = styled(motion.div)<{ height: number }>`
 	padding: 32px;
 	height: fit-content;
 	box-shadow: ${Shadow.Neutral[400]};
-	flex-shrink: 0;
 	z-index: 10;
 	align-self: flex-start;
 	width: 100%;
