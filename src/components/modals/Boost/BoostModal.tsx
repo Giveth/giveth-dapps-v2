@@ -191,7 +191,7 @@ const StyledSlider = styled(Slider)`
 	margin-bottom: 32px;
 `;
 
-const HandleTooltip = styled.div`
+const HandleTooltip = styled(Subline)`
 	background-color: ${brandColors.giv[800]};
 	position: absolute;
 	top: 20px;
@@ -199,7 +199,6 @@ const HandleTooltip = styled.div`
 	transform: translateX(-50%);
 	padding: 0 6px;
 	color: white;
-	font-size: 12px;
 	border-radius: 4px;
 	&::before {
 		content: '';
