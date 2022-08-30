@@ -1,10 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchNotificationInfo } from './notification.services';
+import { fetchNotificationCount } from './notification.services';
 
-export const fetchNotificationInfoAsync = createAsyncThunk(
-	'notification/fetchNotificationInfo',
+export const fetchNotificationCountAsync = createAsyncThunk(
+	'notification/fetchNotificationCount',
 	async () => {
-		const response = await fetchNotificationInfo();
+		const response = await fetchNotificationCount();
 		// The value we return becomes the `fulfilled` action payload
 		return response;
 	},

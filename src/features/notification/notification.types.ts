@@ -1,4 +1,4 @@
-export interface INotificationState {
+export interface INotificationCountState {
 	general: number;
 	givEconomyRelated: number;
 	projectsRelated: number;
