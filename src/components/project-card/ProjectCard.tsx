@@ -12,6 +12,7 @@ import {
 	IconVerified,
 	semanticColors,
 	IconGIVBack,
+	IconRocketInSpace16,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 
@@ -105,17 +106,24 @@ const ProjectCard = (props: IProjectCard) => {
 						</Author>
 					)}
 					<Description>{htmlToText(description)}</Description>
-					<Flex alignItems='center' gap='4px'>
-						<PriceText>
-							${Math.ceil(totalDonations as number)}
-						</PriceText>
-						<RaisedText> Raised</RaisedText>
+					<Flex justifyContent='space-between'>
+						<Flex alignItems='center' gap='4px'>
+							<IconRocketInSpace16 />
+							<LightSubline>GIVpower ranking</LightSubline>
+							<B>#7</B>
+						</Flex>
+						<Flex alignItems='center' gap='4px'>
+							<PriceText>
+								${Math.ceil(totalDonations as number)}
+							</PriceText>
+							<LightSubline> Raised</LightSubline>
+						</Flex>
 					</Flex>
 					{verified && (
 						<>
 							<Hr />
-							<Flex gap='16px'>
-								<>
+							<Flex justifyContent='space-between'>
+								<Flex gap='16px'>
 									<Flex alignItems='center' gap='4px'>
 										<IconVerified
 											size={16}
@@ -134,7 +142,16 @@ const ProjectCard = (props: IProjectCard) => {
 											GIVBACK ELIGIBLE
 										</GivBackText>
 									</Flex>
-								</>
+								</Flex>
+								<GivpowerRankContainer
+									gap='8px'
+									alignItems='center'
+								>
+									<IconRocketInSpace16
+										color={neutralColors.gray[700]}
+									/>
+									<B>#7</B>
+								</GivpowerRankContainer>
 							</Flex>
 						</>
 					)}
@@ -172,7 +189,7 @@ const PriceText = styled(B)`
 	color: ${neutralColors.gray[800]};
 `;
 
-const RaisedText = styled(Subline)`
+const LightSubline = styled(Subline)`
 	display: inline;
 	color: ${neutralColors.gray[700]};
 `;
@@ -287,6 +304,13 @@ const Wrapper = styled.div`
 	${mediaQueries.laptopS} {
 		height: 472px;
 	}
+`;
+
+const GivpowerRankContainer = styled(Flex)`
+	padding: 2px 8px;
+	background-color: ${neutralColors.gray[300]};
+	color: ${neutralColors.gray[800]};
+	border-radius: 8px;
 `;
 
 export default ProjectCard;
