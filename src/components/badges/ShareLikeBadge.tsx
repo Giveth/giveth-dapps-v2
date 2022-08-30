@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 import {
 	neutralColors,
-	GLink,
 	IconShare,
 	brandColors,
 	IconHeartOutline,
 	IconHeart,
 } from '@giveth/ui-design-system';
 import { Shadow } from '../styled-components/Shadow';
+import { FlexCenter } from '@/components/styled-components/Flex';
 
 const ShareLikeBadge = (props: {
 	type: 'share' | 'like';
@@ -16,7 +16,6 @@ const ShareLikeBadge = (props: {
 }) => {
 	const { type, active, onClick } = props;
 	const isShare = type === 'share';
-	const text = isShare ? 'Share' : 'Like';
 	const icon = isShare ? (
 		<IconShare color={neutralColors.gray[500]} />
 	) : active ? (
@@ -25,30 +24,19 @@ const ShareLikeBadge = (props: {
 		<IconHeartOutline color={neutralColors.gray[500]} />
 	);
 
-	return (
-		<Wrapper onClick={onClick}>
-			{icon}
-			<BadgeText size='Medium'>{text}</BadgeText>
-		</Wrapper>
-	);
+	return <Wrapper onClick={onClick}>{icon}</Wrapper>;
 };
 
-const Wrapper = styled.div`
-	height: 40px;
-	width: 125px;
+const Wrapper = styled(FlexCenter)`
+	height: 48px;
+	width: 64px;
 	display: flex;
 	align-items: center;
 	padding: 0 18px;
 	background: white;
 	border-radius: 48px;
-	box-shadow: ${Shadow.Neutral[400]};
+	box-shadow: ${Shadow.Neutral[500]};
 	cursor: pointer;
-`;
-
-const BadgeText = styled(GLink)`
-	color: ${neutralColors.gray[600]};
-	font-weight: 500;
-	margin: 0 auto;
 `;
 
 export default ShareLikeBadge;

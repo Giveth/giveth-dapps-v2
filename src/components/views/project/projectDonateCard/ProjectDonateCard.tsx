@@ -15,6 +15,8 @@ import {
 	neutralColors,
 	OulineButton,
 	IconArchiving,
+	IconRocketInSpace,
+	ButtonText,
 } from '@giveth/ui-design-system';
 import { motion } from 'framer-motion';
 import { captureException } from '@sentry/nextjs';
@@ -50,6 +52,7 @@ import {
 import VerificationStatus from '@/components/views/project/projectDonateCard/VerificationStatus';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import GIVbackToast from '@/components/views/project/projectDonateCard/GIVbackToast';
+import { FlexCenter } from '@/components/styled-components/Flex';
 
 interface IProjectDonateCard {
 	project?: IProject;
@@ -312,6 +315,10 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 						active={heartedByUser}
 						onClick={() => isActive && likeUnlikeProject()}
 					/>
+					<BoostButton>
+						<ButtonText>Boost</ButtonText>
+						<IconRocketInSpace color={brandColors.giv[500]} />
+					</BoostButton>
 				</BadgeWrapper>
 				{!isAdmin && verified && <GIVbackToast />}
 				{isCategories && (
@@ -346,6 +353,17 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 		</>
 	);
 };
+
+const BoostButton = styled(FlexCenter)`
+	border-radius: 48px;
+	box-shadow: ${Shadow.Neutral[500]};
+	display: flex;
+	gap: 9.5px;
+	padding-right: 24px;
+	padding-left: 24px;
+	color: ${brandColors.giv[500]};
+	cursor: pointer;
+`;
 
 const Links = styled.div`
 	color: ${brandColors.pinky[500]};

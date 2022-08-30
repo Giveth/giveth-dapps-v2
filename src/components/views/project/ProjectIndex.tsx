@@ -31,6 +31,7 @@ import SimilarProjects from '@/components/views/project/SimilarProjects';
 import { compareAddresses, showToastError } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import { ProjectMeta } from '@/components/Metatag';
+import ProjectGIVPowerIndex from '@/components/views/project/projectGIVPower';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
@@ -201,6 +202,7 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 								isDraft={isDraft}
 							/>
 						)}
+						{activeTab === 3 && <ProjectGIVPowerIndex />}
 					</ContentWrapper>
 					{project && (
 						<ProjectDonateCard
