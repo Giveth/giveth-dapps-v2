@@ -48,8 +48,8 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 	const [isSaving, setIsSaving] = useState(false);
 
 	let totalGIVpower = '392743000000000000000000';
-	totalGIVpower = '0';
-	let boostedProjects = 0;
+	// totalGIVpower = '0';
+	let boostedProjects = 2;
 
 	useEffect(() => {
 		if (boostedProjects === 0) {
@@ -188,7 +188,7 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 					label='Confirm'
 					size='small'
 					loading={isSaving}
-					disabled={!isChanged || isSaving}
+					disabled={!isChanged || isSaving || percentage === 0}
 					onClick={confirmAllocation}
 				/>
 				<ManageLink href={Routes.BoostedProjects}>
