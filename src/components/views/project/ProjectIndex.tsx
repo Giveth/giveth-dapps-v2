@@ -32,6 +32,7 @@ import { compareAddresses, showToastError } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import { ProjectMeta } from '@/components/Metatag';
 import ProjectGIVPowerIndex from '@/components/views/project/projectGIVPower';
+import { Col, Row } from '@/components/Grid';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
@@ -167,7 +168,7 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 					</DraftIndicator>
 				)}
 				<BodyWrapper>
-					<ContentWrapper>
+					<Col sm={8}>
 						{project && !isDraft && (
 							<ProjectTabs
 								activeTab={activeTab}
@@ -203,16 +204,18 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 							/>
 						)}
 						{activeTab === 3 && <ProjectGIVPowerIndex />}
-					</ContentWrapper>
+					</Col>
 					{project && (
-						<ProjectDonateCard
-							isDraft={isDraft}
-							project={project!}
-							isActive={isActive}
-							setIsActive={setIsActive}
-							setIsDraft={setIsDraft}
-							setCreationSuccessful={setCreationSuccessful}
-						/>
+						<Col sm={4}>
+							<ProjectDonateCard
+								isDraft={isDraft}
+								project={project!}
+								isActive={isActive}
+								setIsActive={setIsActive}
+								setIsDraft={setIsDraft}
+								setCreationSuccessful={setCreationSuccessful}
+							/>
+						</Col>
 					)}
 				</BodyWrapper>
 			</Wrapper>
@@ -234,27 +237,19 @@ const Wrapper = styled.div`
 	position: relative;
 `;
 
-const BodyWrapper = styled.div`
-	display: flex;
-	justify-content: space-between;
+const BodyWrapper = styled(Row)`
 	margin: 0 auto;
 	min-height: calc(100vh - 312px);
 	max-width: 1280px;
 	padding: 0 16px;
 
 	${mediaQueries.mobileL} {
-		padding: 0 32px;
+		padding: 0 22px;
 	}
 
 	${mediaQueries.laptopS} {
 		padding: 0 40px;
 	}
-`;
-
-const ContentWrapper = styled.div`
-	flex-grow: 1;
-	padding-right: 16px;
-	width: 100%;
 `;
 
 export default ProjectIndex;
