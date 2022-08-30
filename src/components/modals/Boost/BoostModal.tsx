@@ -3,6 +3,7 @@ import {
 	brandColors,
 	Caption,
 	H4,
+	H5,
 	H6,
 	IconHelp,
 	IconRocketInSpace24,
@@ -131,6 +132,9 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 							value={round}
 						/>
 					</SliderWrapper>
+					<SliderDesc isChanged={isChanged} weight={700}>
+						{isChanged ? ' ~7493 GIVpower.' : 'Drag to allocate.'}
+					</SliderDesc>
 				</ContentSection>
 			</BoostModalContainer>
 		</Modal>
@@ -242,6 +246,15 @@ const SliderTooltip = styled(Subline)`
 		left: 50%;
 		transform: translateX(-50%);
 	}
+`;
+
+interface SliderDescProps {
+	isChanged: boolean;
+}
+
+const SliderDesc = styled(H5)<SliderDescProps>`
+	color: ${props =>
+		props.isChanged ? brandColors.giv[500] : neutralColors.gray[700]};
 `;
 
 export default BoostModal;
