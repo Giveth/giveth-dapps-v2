@@ -1,34 +1,43 @@
 import {
 	B,
 	brandColors,
-	Button,
 	Caption,
-	GLink,
-	H4,
-	H5,
 	H6,
 	IconHelp,
 	IconRocketInSpace24,
 	IconRocketInSpace32,
 	neutralColors,
 	P,
-	semanticColors,
-	Subline,
 } from '@giveth/ui-design-system';
 import { FC, useState, useEffect } from 'react';
-import styled from 'styled-components';
-import Slider from 'rc-slider';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
 
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import { mediaQueries } from '@/lib/constants/constants';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { LockInfotooltip } from '../StakeLock/LockInfo';
 import { Flex } from '@/components/styled-components/Flex';
 import 'rc-slider/assets/index.css';
 import { BN, formatWeiHelper } from '@/helpers/number';
 import Routes from '@/lib/constants/Routes';
+import { ZeroGivpowerModal } from './ZeroGivpowerModal';
+import {
+	BoostModalContainer,
+	InfoPart,
+	TotalGIVpowerRow,
+	GIVpowerValue,
+	GIVpowerHelp,
+	ColoredRocketIcon,
+	DescToast,
+	SliderWrapper,
+	SliderTooltip,
+	StyledSlider,
+	Handle,
+	HandleTooltip,
+	SliderDesc,
+	ConfirmButton,
+	ManageLink,
+} from './BoostModal.sc';
 
 interface IBoostModalProps extends IModal {}
 
@@ -38,8 +47,9 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 	const [isChanged, setIsChanged] = useState(false);
 	const [isSaving, setIsSaving] = useState(false);
 
-	const totalGIVpower = '392743000000000000000000';
-	let boostedProjects = 0;
+	let totalGIVpower = '392743000000000000000000';
+	// totalGIVpower = '0';
+	let boostedProjects = 2;
 
 	useEffect(() => {
 		if (boostedProjects === 0) {
@@ -52,6 +62,10 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 		console.log('Confirming');
 		setIsSaving(true);
 	};
+
+	if (totalGIVpower == '0') {
+		return <ZeroGivpowerModal setShowModal={setShowModal} />;
+	}
 
 	return (
 		<Modal
@@ -174,7 +188,7 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 					label='Confirm'
 					size='small'
 					loading={isSaving}
-					disabled={!isChanged || isSaving}
+					disabled={!isChanged || isSaving || percentage === 0}
 					onClick={confirmAllocation}
 				/>
 				<ManageLink href={Routes.BoostedProjects}>
@@ -184,143 +198,5 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 		</Modal>
 	);
 };
-
-const BoostModalContainer = styled.div`
-	width: 100%;
-	${mediaQueries.tablet} {
-		width: 480px;
-	}
-	padding: 24px;
-`;
-
-const InfoPart = styled.div`
-	padding: 16px;
-	border: 2px solid ${neutralColors.gray[300]};
-	border-radius: 8px;
-	margin-bottom: 32px;
-`;
-
-const TotalGIVpowerRow = styled(Flex)`
-	color: ${neutralColors.gray[700]};
-	margin-bottom: 21px;
-`;
-
-const GIVpowerValue = styled(H4)`
-	position: relative;
-`;
-
-const GIVpowerHelp = styled.div`
-	position: absolute;
-	top: -16px;
-	right: -20px;
-	cursor: pointer;
-	&:hover {
-		color: ${neutralColors.gray[800]};
-	}
-`;
-
-const ColoredRocketIcon = styled.div`
-	color: ${brandColors.giv[500]};
-`;
-
-const DescToast = styled.div`
-	padding: 16px;
-	border: 1px solid ${semanticColors.blueSky[700]};
-	background-color: ${semanticColors.blueSky[100]};
-	color: ${semanticColors.blueSky[700]};
-	border-radius: 8px;
-	margin-bottom: 32px;
-`;
-
-const StyledSlider = styled(Slider)`
-	margin-bottom: 32px;
-`;
-
-const Handle = styled.div`
-	&::after {
-		content: '';
-		position: absolute;
-		right: -4px;
-		top: -3px;
-		height: 14px;
-		width: 1px;
-		background-color: ${brandColors.giv[900]};
-	}
-`;
-
-const HandleTooltip = styled(Subline)`
-	background-color: ${brandColors.giv[800]};
-	position: absolute;
-	top: 20px;
-	left: 50%;
-	transform: translateX(-50%);
-	padding: 0 6px;
-	color: white;
-	border-radius: 4px;
-	&::before {
-		content: '';
-		width: 0;
-		height: 0;
-		border-style: solid;
-		border-width: 0 5px 5px 5px;
-		border-color: transparent transparent ${brandColors.giv[800]}
-			transparent;
-		position: absolute;
-		top: -5px;
-		left: 50%;
-		transform: translateX(-50%);
-	}
-`;
-
-const SliderWrapper = styled.div`
-	position: relative;
-`;
-
-const SliderTooltip = styled(Subline)`
-	background-color: ${neutralColors.gray[500]};
-	position: absolute;
-	top: -20px;
-	left: 50%;
-	transform: translateX(-50%);
-	padding: 0 6px;
-	color: white;
-	font-size: 12px;
-	border-radius: 4px;
-	&::before {
-		content: '';
-		width: 0;
-		height: 0;
-		border-style: solid;
-		border-width: 5px 5px 0 5px;
-		border-color: ${neutralColors.gray[500]} transparent transparent
-			transparent;
-		position: absolute;
-		bottom: -5px;
-		left: 50%;
-		transform: translateX(-50%);
-	}
-`;
-
-interface SliderDescProps {
-	isChanged: boolean;
-}
-
-const SliderDesc = styled(H5)<SliderDescProps>`
-	color: ${props =>
-		props.isChanged ? brandColors.giv[500] : neutralColors.gray[700]};
-`;
-
-const ConfirmButton = styled(Button)`
-	width: 300px;
-	margin: 40px auto 12px;
-`;
-
-const ManageLink = styled(GLink)`
-	color: ${brandColors.pinky[500]};
-	&:hover {
-		color: ${brandColors.pinky[800]};
-	}
-	transition: color 0.3s ease;
-`;
 
 export default BoostModal;
