@@ -36,8 +36,14 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const [percentage, setPercentage] = useState(0);
 	const [isChanged, setIsChanged] = useState(false);
+	const [isSaving, setIsSaving] = useState(false);
 
 	const totalGIVpower = '392743000000000000000000';
+
+	const confirmAllocation = () => {
+		console.log('Confirming');
+		setIsSaving(true);
+	};
 
 	return (
 		<Modal
@@ -148,7 +154,13 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 						  } GIVpower.`
 						: 'Drag to allocate.'}
 				</SliderDesc>
-				<ConfirmButton label='Confirm' size='small' />
+				<ConfirmButton
+					label='Confirm'
+					size='small'
+					loading={isSaving}
+					disabled={!isChanged || isSaving}
+					onClick={confirmAllocation}
+				/>
 				<ManageLink href={Routes.BoostedProjects}>
 					Manage your allocations
 				</ManageLink>
