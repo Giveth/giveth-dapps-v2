@@ -39,7 +39,7 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 	const [isSaving, setIsSaving] = useState(false);
 
 	const totalGIVpower = '392743000000000000000000';
-	let boostedProjects = 1;
+	let boostedProjects = 0;
 
 	useEffect(() => {
 		if (boostedProjects === 0) {
@@ -145,13 +145,13 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 						}}
 						handleRender={renderProps => {
 							return (
-								<div {...renderProps.props}>
+								<Handle {...renderProps.props}>
 									{isChanged && (
 										<HandleTooltip>
 											{percentage}%
 										</HandleTooltip>
 									)}
-								</div>
+								</Handle>
 							);
 						}}
 						value={percentage}
@@ -234,6 +234,18 @@ const DescToast = styled.div`
 
 const StyledSlider = styled(Slider)`
 	margin-bottom: 32px;
+`;
+
+const Handle = styled.div`
+	&::after {
+		content: '';
+		position: absolute;
+		right: -4px;
+		top: -3px;
+		height: 14px;
+		width: 1px;
+		background-color: ${brandColors.giv[900]};
+	}
 `;
 
 const HandleTooltip = styled(Subline)`
