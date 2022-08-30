@@ -1,7 +1,9 @@
 import {
 	B,
 	brandColors,
+	Button,
 	Caption,
+	GLink,
 	H4,
 	H5,
 	H6,
@@ -26,6 +28,7 @@ import { LockInfotooltip } from '../StakeLock/LockInfo';
 import { Flex } from '@/components/styled-components/Flex';
 import 'rc-slider/assets/index.css';
 import { BN, formatWeiHelper } from '@/helpers/number';
+import Routes from '@/lib/constants/Routes';
 
 interface IBoostModalProps extends IModal {}
 
@@ -45,28 +48,12 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 			headerIcon={<IconRocketInSpace32 />}
 		>
 			<BoostModalContainer>
-				<ContentSection>
-					<InfoPart>
-						<TotalGIVpowerRow alignItems='baseline' gap='12px'>
-							<H6>Total GIVpower</H6>
-							<GIVpowerValue weight={700}>
-								{formatWeiHelper(totalGIVpower)}
-								<GIVpowerHelp>
-									<IconWithTooltip
-										icon={<IconHelp size={16} />}
-										direction={'bottom'}
-									>
-										<LockInfotooltip>
-											{/* TODO: add copy of this toast */}
-											Your givpower
-										</LockInfotooltip>
-									</IconWithTooltip>
-								</GIVpowerHelp>
-							</GIVpowerValue>
-						</TotalGIVpowerRow>
-						<Flex justifyContent='space-between'>
-							<Flex alignItems='baseline' gap='4px'>
-								<P>Boosted projects</P>
+				<InfoPart>
+					<TotalGIVpowerRow alignItems='baseline' gap='12px'>
+						<H6>Total GIVpower</H6>
+						<GIVpowerValue weight={700}>
+							{formatWeiHelper(totalGIVpower)}
+							<GIVpowerHelp>
 								<IconWithTooltip
 									icon={<IconHelp size={16} />}
 									direction={'bottom'}
@@ -76,78 +63,95 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 										Your givpower
 									</LockInfotooltip>
 								</IconWithTooltip>
-							</Flex>
-							<Flex gap='4px'>
-								<ColoredRocketIcon>
-									<IconRocketInSpace24 />
-								</ColoredRocketIcon>
-								<B>4</B>
-							</Flex>
+							</GIVpowerHelp>
+						</GIVpowerValue>
+					</TotalGIVpowerRow>
+					<Flex justifyContent='space-between'>
+						<Flex alignItems='baseline' gap='4px'>
+							<P>Boosted projects</P>
+							<IconWithTooltip
+								icon={<IconHelp size={16} />}
+								direction={'bottom'}
+							>
+								<LockInfotooltip>
+									{/* TODO: add copy of this toast */}
+									Your givpower
+								</LockInfotooltip>
+							</IconWithTooltip>
 						</Flex>
-					</InfoPart>
-					<DescToast>
-						<Caption>
-							By allocating GIVpower to this project, we will
-							reduce your allocation on previous project
-							proportionally. You can check your previous
-							allocation on My account.
-						</Caption>
-					</DescToast>
-					<SliderWrapper>
-						{!isChanged && (
-							<SliderTooltip>
-								Allocated to previous projects
-							</SliderTooltip>
-						)}
-						<StyledSlider
-							min={0}
-							max={100}
-							railStyle={{
-								backgroundColor: brandColors.giv[900],
-							}}
-							trackStyle={{
-								backgroundColor: brandColors.giv[500],
-							}}
-							handleStyle={{
-								backgroundColor: neutralColors.gray[100],
-								border: `3px solid ${brandColors.giv[800]}`,
-								opacity: 1,
-							}}
-							onChange={value => {
-								const _value = Array.isArray(value)
-									? value[0]
-									: value;
-								setPercentage(_value);
-								setIsChanged(true);
-							}}
-							handleRender={renderProps => {
-								return (
-									<div {...renderProps.props}>
-										{isChanged && (
-											<HandleTooltip>
-												{percentage}%
-											</HandleTooltip>
-										)}
-									</div>
-								);
-							}}
-							value={percentage}
-						/>
-					</SliderWrapper>
-					<SliderDesc isChanged={isChanged} weight={700}>
-						{isChanged
-							? `~${
-									percentage > 0
-										? formatWeiHelper(
-												BN(totalGIVpower)
-													.mul(percentage)
-													.div(100),
-										  )
-										: 0
-							  } GIVpower.`
-							: 'Drag to allocate.'}
-					</SliderDesc>
-				</ContentSection>
+						<Flex gap='4px'>
+							<ColoredRocketIcon>
+								<IconRocketInSpace24 />
+							</ColoredRocketIcon>
+							<B>4</B>
+						</Flex>
+					</Flex>
+				</InfoPart>
+				<DescToast>
+					<Caption>
+						By allocating GIVpower to this project, we will reduce
+						your allocation on previous project proportionally. You
+						can check your previous allocation on My account.
+					</Caption>
+				</DescToast>
+				<SliderWrapper>
+					{!isChanged && (
+						<SliderTooltip>
+							Allocated to previous projects
+						</SliderTooltip>
+					)}
+					<StyledSlider
+						min={0}
+						max={100}
+						railStyle={{
+							backgroundColor: brandColors.giv[900],
+						}}
+						trackStyle={{
+							backgroundColor: brandColors.giv[500],
+						}}
+						handleStyle={{
+							backgroundColor: neutralColors.gray[100],
+							border: `3px solid ${brandColors.giv[800]}`,
+							opacity: 1,
+						}}
+						onChange={value => {
+							const _value = Array.isArray(value)
+								? value[0]
+								: value;
+							setPercentage(_value);
+							setIsChanged(true);
+						}}
+						handleRender={renderProps => {
+							return (
+								<div {...renderProps.props}>
+									{isChanged && (
+										<HandleTooltip>
+											{percentage}%
+										</HandleTooltip>
+									)}
+								</div>
+							);
+						}}
+						value={percentage}
+					/>
+				</SliderWrapper>
+				<SliderDesc isChanged={isChanged} weight={700}>
+					{isChanged
+						? `~${
+								percentage > 0
+									? formatWeiHelper(
+											BN(totalGIVpower)
+												.mul(percentage)
+												.div(100),
+									  )
+									: 0
+						  } GIVpower.`
+						: 'Drag to allocate.'}
+				</SliderDesc>
+				<ConfirmButton label='Confirm' size='small' />
+				<ManageLink href={Routes.BoostedProjects}>
+					Manage your allocations
+				</ManageLink>
 			</BoostModalContainer>
 		</Modal>
 	);
@@ -158,9 +162,6 @@ const BoostModalContainer = styled.div`
 	${mediaQueries.tablet} {
 		width: 480px;
 	}
-`;
-
-const ContentSection = styled.div`
 	padding: 24px;
 `;
 
@@ -267,6 +268,19 @@ interface SliderDescProps {
 const SliderDesc = styled(H5)<SliderDescProps>`
 	color: ${props =>
 		props.isChanged ? brandColors.giv[500] : neutralColors.gray[700]};
+`;
+
+const ConfirmButton = styled(Button)`
+	width: 300px;
+	margin: 40px auto 12px;
+`;
+
+const ManageLink = styled(GLink)`
+	color: ${brandColors.pinky[500]};
+	&:hover {
+		color: ${brandColors.pinky[800]};
+	}
+	transition: color 0.3s ease;
 `;
 
 export default BoostModal;
