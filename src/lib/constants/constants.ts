@@ -7,12 +7,14 @@ export const chainName = (chainId: number) => {
 			return 'Hardhat';
 		case 1:
 			return 'Mainnet';
+		case 42:
+			return 'Kovan';
+		case 5:
+			return 'Goerli';
 		case 4:
 			return 'Rinkeby';
 		case 100:
 			return 'Gnosis Chain';
-		case 42:
-			return 'Mainnet';
 		default:
 			return 'Unknown';
 	}

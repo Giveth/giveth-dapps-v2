@@ -20,6 +20,7 @@ import { fetchUserByAddress } from '@/features/user/user.thunks';
 import Input, { InputSize } from '../Input';
 import { requiredOptions, validators } from '@/lib/constants/regex';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import useUpload from '@/hooks/useUpload';
 
 enum EditStatusType {
 	INFO,
@@ -43,9 +44,9 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 	const [editStatus, setEditStatus] = useState<EditStatusType>(
 		EditStatusType.INFO,
 	);
-	const [avatar, setAvatar] = useState<string>('');
-	const [file, setFile] = useState<File>();
-	const [uploading, setUploading] = useState(false);
+
+	const useUploadProps = useUpload();
+	const { url, onDelete } = useUploadProps;
 
 	const {
 		register,
@@ -61,7 +62,7 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 		try {
 			const { data: response } = await updateUser({
 				variables: {
-					avatar,
+					avatar: url,
 				},
 			});
 			if (response.updateUser) {
@@ -71,6 +72,7 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 					type: ToastType.SUCCESS,
 					title: 'Success',
 				});
+				onDelete();
 			} else {
 				throw 'updateUser false';
 			}
@@ -131,25 +133,18 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 			<Wrapper>
 				{editStatus === EditStatusType.PHOTO ? (
 					<Flex flexDirection='column' gap='36px'>
-						<ImageUploader
-							url={avatar}
-							setUrl={setAvatar}
-							file={file}
-							setFile={setFile}
-							uploading={uploading}
-							setUploading={setUploading}
-						/>
+						<ImageUploader {...useUploadProps} />
 						<Button
 							buttonType='secondary'
 							label='SAVE'
 							onClick={onSaveAvatar}
-							disabled={!avatar}
+							disabled={!url}
 						/>
 						<TextButton
 							buttonType='texty'
 							label='cancel'
 							onClick={() => {
-								setAvatar('');
+								onDelete();
 								setEditStatus(EditStatusType.INFO);
 							}}
 						/>

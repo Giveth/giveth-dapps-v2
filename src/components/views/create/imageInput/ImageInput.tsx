@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, FC, SetStateAction, useState } from 'react';
 import {
 	H5,
 	Caption,
@@ -16,6 +16,7 @@ import { OurImages } from '@/lib/constants/constants';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import ImageUploader from '@/components/ImageUploader';
 import ExternalLink from '@/components/ExternalLink';
+import useUpload from '@/hooks/useUpload';
 
 const ImageSearch = dynamic(() => import('./ImageSearch'), {
 	ssr: false,
@@ -34,36 +35,25 @@ interface ImageInputProps {
 	setIsLoading: Dispatch<SetStateAction<boolean>>;
 }
 
-const ImageInput = (props: ImageInputProps) => {
-	const { value, setValue, setIsLoading } = props;
-
+const ImageInput: FC<ImageInputProps> = ({ value, setValue, setIsLoading }) => {
 	const [isUploadTab, setIsUploadTab] = useState(true);
 	const [attributes, setAttributes] = useState({ name: '', username: '' });
-	const [uploading, setUploading] = useState(false);
-	const [file, setFile] = useState<File>();
+
+	const useUploadProps = useUpload(setValue, setIsLoading);
+	const { onDelete } = useUploadProps;
+	const imageUploaderProps = { ...useUploadProps, url: value };
 
 	const removeAttributes = () => setAttributes({ name: '', username: '' });
 
 	const removeImage = () => {
-		setValue('');
-		setFile(undefined);
-		removeAttributes();
-	};
-
-	const handleUpload = (image: string) => {
-		setValue(image);
+		onDelete();
 		removeAttributes();
 	};
 
 	const pickBg = (index: number) => {
+		onDelete();
 		setValue(`/images/defaultProjectImages/${index}.png`);
-		setFile(undefined);
 		removeAttributes();
-	};
-
-	const handleUploading = (i: boolean) => {
-		setUploading(i);
-		setIsLoading(i);
 	};
 
 	return (
@@ -97,14 +87,7 @@ const ImageInput = (props: ImageInputProps) => {
 					/>
 				)}
 				{(isUploadTab || (!isUploadTab && value)) && (
-					<ImageUploader
-						url={value}
-						setUrl={handleUpload}
-						uploading={uploading}
-						setUploading={handleUploading}
-						file={file}
-						setFile={setFile}
-					/>
+					<ImageUploader {...imageUploaderProps} />
 				)}
 
 				{attributes.name && (

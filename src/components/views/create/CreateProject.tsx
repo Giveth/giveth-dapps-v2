@@ -37,7 +37,6 @@ import {
 	WalletAddressInput,
 } from './Inputs';
 import SuccessfulCreation from './SuccessfulCreation';
-
 import { compareAddresses, showToastError } from '@/lib/helpers';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { slugToProjectView } from '@/lib/routeCreators';
@@ -48,7 +47,7 @@ import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import config from '@/configuration';
 import Input, { InputSize } from '@/components/Input';
 import { requiredOptions } from '@/lib/constants/regex';
-import { titleValidation } from '@/components/views/create/helpers';
+import { gqlTitleValidation } from '@/components/views/create/helpers';
 import CheckBox from '@/components/Checkbox';
 import Guidelines from '@/components/views/create/Guidelines';
 import useDetectDevice from '@/hooks/useDetectDevice';
@@ -117,7 +116,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	}
 
 	const formMethods = useForm<TInputs>({
-		mode: 'onChange',
+		mode: 'onBlur',
+		reValidateMode: 'onBlur',
 		defaultValues: {
 			[EInputs.name]: title,
 			[EInputs.description]: description,
@@ -264,6 +264,14 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		}
 	};
 
+	const titleValidation = async (title: string) => {
+		if (noTitleValidation(title)) return true;
+		setIsTitleValidating(true);
+		const result = await gqlTitleValidation(title);
+		setIsTitleValidating(false);
+		return result;
+	};
+
 	useEffect(() => {
 		dispatch(setShowFooter(false));
 	}, []);
@@ -302,13 +310,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							registerName={EInputs.name}
 							registerOptions={{
 								...requiredOptions.name,
-								validate: async i => {
-									if (noTitleValidation(i)) return true;
-									setIsTitleValidating(true);
-									const result = await titleValidation(i);
-									setIsTitleValidating(false);
-									return result;
-								},
+								validate: titleValidation,
 							}}
 							error={formErrors[EInputs.name]}
 						/>

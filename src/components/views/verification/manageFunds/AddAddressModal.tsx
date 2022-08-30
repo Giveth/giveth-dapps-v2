@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import React, { FC } from 'react';
-import { IconWalletOutline } from '@giveth/ui-design-system/lib/cjs/components/icons/WalletOutline';
-import { Button } from '@giveth/ui-design-system';
+import { Button, IconWalletOutline } from '@giveth/ui-design-system';
 import { Controller, useForm } from 'react-hook-form';
 import { useWeb3React } from '@web3-react/core';
 import { utils } from 'ethers';
@@ -53,7 +52,7 @@ const AddAddressModal: FC<IProps> = ({
 		formState: { errors },
 		watch,
 		getValues,
-	} = useForm<IAddressForm>({ mode: 'onChange' });
+	} = useForm<IAddressForm>({ mode: 'onBlur', reValidateMode: 'onBlur' });
 
 	const { library, chainId } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
@@ -80,22 +79,23 @@ const AddAddressModal: FC<IProps> = ({
 	};
 
 	const validateAddress = async (address: string) => {
+		let actualAddress = address;
 		if (!library) return 'Web3 is not initialized';
 		if (isAddressENS(address)) {
 			if (chainId !== 1) {
 				return 'Please switch to Mainnet to handle ENS addresses';
 			}
-			const actualAddress = await getAddressFromENS(address, library);
-			const isDuplicate = addresses.some(
-				item =>
-					item.address === actualAddress &&
-					item.networkId === getValues('network')?.value,
-			);
-			if (isDuplicate) return 'Address already exists';
-			return actualAddress ? true : 'Invalid ENS address';
+			actualAddress = await getAddressFromENS(address, library);
+			if (!actualAddress) return 'Invalid ENS address';
 		} else {
-			return utils.isAddress(address) ? true : 'Invalid address';
+			if (!utils.isAddress(address)) return 'Invalid address';
 		}
+		const isDuplicate = addresses.some(
+			item =>
+				item.address.toLowerCase() === actualAddress.toLowerCase() &&
+				item.networkId === getValues('network')?.value,
+		);
+		return isDuplicate ? 'Address already exists' : true;
 	};
 
 	return (

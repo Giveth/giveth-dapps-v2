@@ -28,6 +28,7 @@ export const ButtonStyled = styled(Button)`
 export const Title = styled(H4)`
 	margin-top: 10px;
 	max-width: calc(100vw - 72px);
+	font-weight: 700;
 `;
 
 export const Caption = styled(P)`

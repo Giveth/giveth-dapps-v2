@@ -16,9 +16,10 @@ export enum EToastType {
 interface IProps {
 	message: string;
 	type: EToastType;
+	isHidden?: boolean;
 }
 
-const InlineToast: FC<IProps> = ({ message, type }) => {
+const InlineToast: FC<IProps> = ({ message, type, isHidden }) => {
 	const colorType: keyof typeof semanticColors =
 		type === EToastType.Error
 			? 'punch'
@@ -27,7 +28,10 @@ const InlineToast: FC<IProps> = ({ message, type }) => {
 			: 'jade';
 
 	return (
-		<Container colorType={colorType}>
+		<Container
+			className={isHidden ? 'fadeOut' : 'fadeIn'}
+			colorType={colorType}
+		>
 			{type === EToastType.Success ? (
 				<IconCheckmarkCircle />
 			) : (
@@ -50,6 +54,7 @@ const Container = styled.div<{ colorType: keyof typeof semanticColors }>`
 	margin: 24px 0;
 	max-width: 750px;
 	color: ${({ colorType }) => semanticColors[colorType][700]};
+	word-break: break-word;
 	> *:first-child {
 		flex-shrink: 0;
 	}

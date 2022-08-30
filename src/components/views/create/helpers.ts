@@ -4,7 +4,7 @@ import {
 	WALLET_ADDRESS_IS_VALID,
 } from '@/apollo/gql/gqlProjects';
 
-export const titleValidation = async (title: string) => {
+export const gqlTitleValidation = async (title: string) => {
 	try {
 		const { data } = await client.query({
 			query: TITLE_IS_VALID,

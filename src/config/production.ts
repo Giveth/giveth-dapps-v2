@@ -9,12 +9,15 @@ import { gwei2wei } from '@/helpers/blockchain';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 const BASE_ROUTE = 'https://mainnet.serve.giveth.io';
+const SEPT_8TH_2022 = 1662595200000;
+const MAINNET_NETWORK_NUMBER = 1; // Mainnet
+const XDAI_NETWORK_NUMBER = 100; // xDAI
 
 const config: EnvConfig = {
 	BACKEND_LINK: 'https://mainnet.serve.giveth.io/graphql',
 	FRONTEND_LINK: 'https://giveth.io',
-	MAINNET_NETWORK_NUMBER: 1, // ETH
-	XDAI_NETWORK_NUMBER: 100, // xDAI
+	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
+	XDAI_NETWORK_NUMBER: XDAI_NETWORK_NUMBER,
 	MICROSERVICES: {
 		authentication: `${BASE_ROUTE}/siweauthmicroservice/v1`,
 	},
@@ -43,15 +46,18 @@ const config: EnvConfig = {
 		WETH_TOKEN_ADDRESS: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
 		TOKEN_DISTRO_ADDRESS: '0x87dE995F6744B75bBe0255A973081142aDb61f4d',
 		GIV: {
+			network: MAINNET_NETWORK_NUMBER,
 			LM_ADDRESS: '0x4B9EfAE862a1755F7CEcb021856D467E86976755',
 			BUY_LINK:
 				'https://app.uniswap.org/#/swap?outputCurrency=0x900db999074d9277c5da2a43f252d74366230da0',
+			discontinued: SEPT_8TH_2022,
 		},
 
 		nodeUrl: 'https://mainnet.infura.io/v3/' + INFURA_API_KEY,
 
 		pools: [
 			{
+				network: MAINNET_NETWORK_NUMBER,
 				POOL_ADDRESS: '0xbeba1666c62c65e58770376de332891b09461eeb',
 				LM_ADDRESS: '0xa4523D703F663615Bd41606B46B58dEb2F926D98',
 				type: StakingType.UNISWAPV2_GIV_DAI,
@@ -63,8 +69,10 @@ const config: EnvConfig = {
 				unit: 'LP',
 				farmStartTimeMS: 1651345200000,
 				active: true,
+				discontinued: SEPT_8TH_2022,
 			},
 			{
+				network: MAINNET_NETWORK_NUMBER,
 				POOL_ADDRESS: '0xc3151A58d519B94E915f66B044De3E55F77c2dd9',
 				LM_ADDRESS: '0xA4b727DF6fD608d1835e3440288c73fB28c4eF16',
 				type: StakingType.ICHI_GIV_ONEGIV,
@@ -86,6 +94,7 @@ const config: EnvConfig = {
 				},
 			},
 			{
+				network: MAINNET_NETWORK_NUMBER,
 				POOL_ADDRESS: '0x7819f1532c49388106f7762328c51ee70edd134c',
 				VAULT_ADDRESS: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
 				POOL_ID:
@@ -101,6 +110,7 @@ const config: EnvConfig = {
 				active: true,
 			},
 			{
+				network: MAINNET_NETWORK_NUMBER,
 				INCENTIVE_START_TIME: 1640361600,
 				INCENTIVE_END_TIME: 1656086400,
 				INCENTIVE_REWARD_AMOUNT: 10000000,
@@ -141,6 +151,7 @@ const config: EnvConfig = {
 		],
 		regenFarms: [
 			{
+				network: MAINNET_NETWORK_NUMBER,
 				POOL_ADDRESS: '0x5281E311734869C64ca60eF047fd87759397EFe6',
 				LM_ADDRESS: '0xa479103c2618aD514653B53F064Bc6c9dC35a30b',
 				type: StakingType.UNISWAPV2_CULT_ETH,
@@ -189,6 +200,7 @@ const config: EnvConfig = {
 
 		nodeUrl: 'https://rpc.gnosischain.com/',
 		GIV: {
+			network: XDAI_NETWORK_NUMBER,
 			LM_ADDRESS: '0xD93d3bDBa18ebcB3317a57119ea44ed2Cf41C2F2',
 			GARDEN_ADDRESS: '0x24f2d06446af8d6e89febc205e7936a602a87b60',
 			BUY_LINK:
@@ -197,6 +209,7 @@ const config: EnvConfig = {
 
 		pools: [
 			{
+				network: XDAI_NETWORK_NUMBER,
 				POOL_ADDRESS: '0x08ea9f608656A4a775EF73f5B187a2F1AE2ae10e',
 				LM_ADDRESS: '0x4B9EfAE862a1755F7CEcb021856D467E86976755',
 				type: StakingType.HONEYSWAP_GIV_HNY,
@@ -210,6 +223,7 @@ const config: EnvConfig = {
 				archived: true,
 			},
 			{
+				network: XDAI_NETWORK_NUMBER,
 				POOL_ADDRESS: '0x55FF0cef43F0DF88226E9D87D09fA036017F5586',
 				LM_ADDRESS: '0xfB429010C1e9D08B7347F968a7d88f0207807EF0',
 				type: StakingType.SUSHISWAP_ETH_GIV,
@@ -220,8 +234,10 @@ const config: EnvConfig = {
 					'https://gnosis.sushi.com/add/0x6A023CCd1ff6F2045C3309768eAd9E68F978f6e1/0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 				unit: 'LP',
 				active: true,
+				discontinued: SEPT_8TH_2022,
 			},
 			{
+				network: XDAI_NETWORK_NUMBER,
 				POOL_ADDRESS: '0xB7189A7Ea38FA31210A79fe282AEC5736Ad5fA57',
 				LM_ADDRESS: '0x24A6067fEd46dc8663794c4d39Ec91b074cf85D4',
 				type: StakingType.HONEYSWAP_GIV_DAI,
@@ -232,6 +248,7 @@ const config: EnvConfig = {
 					'https://app.honeyswap.org/#/add/0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75/xdai',
 				unit: 'LP',
 				active: true,
+				discontinued: SEPT_8TH_2022, // change this to  archived: true when it's over
 				farmStartTimeMS: 1656086400000,
 			},
 		],
@@ -254,6 +271,7 @@ const config: EnvConfig = {
 		],
 		regenFarms: [
 			{
+				network: XDAI_NETWORK_NUMBER,
 				POOL_ADDRESS: '0x8a0bee989c591142414ad67fb604539d917889df',
 				LM_ADDRESS: '0x502EC7a040F486EE6Cb7d634D94764874B29dE68',
 				type: StakingType.HONEYSWAP_FOX_HNY,

@@ -12,9 +12,9 @@ const config: GlobalConfig = {
 	SUBGRAPH_POLLING_INTERVAL: 5000,
 	TOKEN_PRECISION: 2,
 	PRIMARY_NETWORK: {
-		name: isProduction ? 'Ethereum Mainnet' : 'Ropsten',
-		id: isProduction ? 1 : 3,
-		chain: isProduction ? '0x1' : '0x3',
+		name: isProduction ? 'Ethereum Mainnet' : 'Goerli',
+		id: isProduction ? 1 : 5,
+		chain: isProduction ? '0x1' : '0x5',
 		mainToken: 'ETH',
 	},
 	SECONDARY_NETWORK: {

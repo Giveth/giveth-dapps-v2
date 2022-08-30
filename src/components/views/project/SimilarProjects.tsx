@@ -44,6 +44,7 @@ const SimilarProjects = (props: { slug: string }) => {
 	};
 
 	useEffect(() => {
+		setListPosition(0);
 		client
 			.query({
 				query: SIMILAR_PROJECTS,
@@ -66,7 +67,7 @@ const SimilarProjects = (props: { slug: string }) => {
 					},
 				});
 			});
-	}, []);
+	}, [slug]);
 
 	if (!suggestedProjects || suggestedProjects.length === 0) return null;
 	return (
