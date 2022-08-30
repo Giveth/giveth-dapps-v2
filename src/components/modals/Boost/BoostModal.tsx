@@ -10,6 +10,7 @@ import {
 	neutralColors,
 	P,
 	semanticColors,
+	Subline,
 } from '@giveth/ui-design-system';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
@@ -89,34 +90,47 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 							allocation on My account.
 						</Caption>
 					</DescToast>
-					<StyledSlider
-						min={0}
-						max={100}
-						railStyle={{ backgroundColor: brandColors.giv[900] }}
-						trackStyle={{ backgroundColor: brandColors.giv[500] }}
-						handleStyle={{
-							backgroundColor: neutralColors.gray[100],
-							border: `3px solid ${brandColors.giv[800]}`,
-							opacity: 1,
-						}}
-						onChange={value => {
-							const _value = Array.isArray(value)
-								? value[0]
-								: value;
-							setRound(_value);
-							setIsChanged(true);
-						}}
-						handleRender={renderProps => {
-							return (
-								<div {...renderProps.props}>
-									{isChanged && (
-										<HandleTooltip>{round}%</HandleTooltip>
-									)}
-								</div>
-							);
-						}}
-						value={round}
-					/>
+					<SliderWrapper>
+						{!isChanged && (
+							<SliderTooltip>
+								Allocated to previous projects
+							</SliderTooltip>
+						)}
+						<StyledSlider
+							min={0}
+							max={100}
+							railStyle={{
+								backgroundColor: brandColors.giv[900],
+							}}
+							trackStyle={{
+								backgroundColor: brandColors.giv[500],
+							}}
+							handleStyle={{
+								backgroundColor: neutralColors.gray[100],
+								border: `3px solid ${brandColors.giv[800]}`,
+								opacity: 1,
+							}}
+							onChange={value => {
+								const _value = Array.isArray(value)
+									? value[0]
+									: value;
+								setRound(_value);
+								setIsChanged(true);
+							}}
+							handleRender={renderProps => {
+								return (
+									<div {...renderProps.props}>
+										{isChanged && (
+											<HandleTooltip>
+												{round}%
+											</HandleTooltip>
+										)}
+									</div>
+								);
+							}}
+							value={round}
+						/>
+					</SliderWrapper>
 				</ContentSection>
 			</BoostModalContainer>
 		</Modal>
@@ -197,6 +211,35 @@ const HandleTooltip = styled.div`
 			transparent;
 		position: absolute;
 		top: -5px;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+`;
+
+const SliderWrapper = styled.div`
+	position: relative;
+`;
+
+const SliderTooltip = styled(Subline)`
+	background-color: ${neutralColors.gray[500]};
+	position: absolute;
+	top: -20px;
+	left: 50%;
+	transform: translateX(-50%);
+	padding: 0 6px;
+	color: white;
+	font-size: 12px;
+	border-radius: 4px;
+	&::before {
+		content: '';
+		width: 0;
+		height: 0;
+		border-style: solid;
+		border-width: 5px 5px 0 5px;
+		border-color: ${neutralColors.gray[500]} transparent transparent
+			transparent;
+		position: absolute;
+		bottom: -5px;
 		left: 50%;
 		transform: translateX(-50%);
 	}
