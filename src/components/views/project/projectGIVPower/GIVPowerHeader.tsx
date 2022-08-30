@@ -5,19 +5,24 @@ import { Flex } from '@/components/styled-components/Flex';
 import { Col, Row } from '@/components/Grid';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 
+const givPower = {
+	total: 2854.45,
+	rank: '#7',
+};
+
 const GIVPowerHeader = () => {
 	return (
 		<Container>
 			<ColStyled xs={8} sm={7}>
 				<Subline>TOTAL GIVPOWER</Subline>
 				<Flex gap='4px' alignItems='flex-end'>
-					<H2 weight={700}>2854.45</H2>
+					<H2 weight={700}>{givPower.total || 0}</H2>
 					<H5>GIV</H5>
 				</Flex>
 			</ColStyled>
 			<ColStyled xs={4} sm={5}>
 				<Subline>PROJECT RANK</Subline>
-				<H2 weight={700}>#7</H2>
+				<H2 weight={700}>{givPower.rank || '--'}</H2>
 			</ColStyled>
 		</Container>
 	);
