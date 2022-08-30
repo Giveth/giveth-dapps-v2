@@ -11,8 +11,9 @@ import {
 	P,
 	semanticColors,
 } from '@giveth/ui-design-system';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import styled from 'styled-components';
+import Slider from 'rc-slider';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
 
@@ -21,11 +22,15 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { LockInfotooltip } from '../StakeLock/LockInfo';
 import { Flex } from '@/components/styled-components/Flex';
+import 'rc-slider/assets/index.css';
 
 interface IBoostModalProps extends IModal {}
 
 const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const [round, setRound] = useState(0);
+	const [isChanged, setIsChanged] = useState(false);
+	// const handle = useRef();
 
 	return (
 		<Modal
@@ -84,6 +89,34 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 							allocation on My account.
 						</Caption>
 					</DescToast>
+					<StyledSlider
+						min={0}
+						max={100}
+						railStyle={{ backgroundColor: brandColors.giv[900] }}
+						trackStyle={{ backgroundColor: brandColors.giv[500] }}
+						handleStyle={{
+							backgroundColor: neutralColors.gray[100],
+							border: `3px solid ${brandColors.giv[800]}`,
+							opacity: 1,
+						}}
+						onChange={value => {
+							const _value = Array.isArray(value)
+								? value[0]
+								: value;
+							setRound(_value);
+							setIsChanged(true);
+						}}
+						handleRender={renderProps => {
+							return (
+								<div {...renderProps.props}>
+									{isChanged && (
+										<HandleTooltip>{round}%</HandleTooltip>
+									)}
+								</div>
+							);
+						}}
+						value={round}
+					/>
 				</ContentSection>
 			</BoostModalContainer>
 		</Modal>
@@ -138,6 +171,35 @@ const DescToast = styled.div`
 	color: ${semanticColors.blueSky[700]};
 	border-radius: 8px;
 	margin-bottom: 32px;
+`;
+
+const StyledSlider = styled(Slider)`
+	margin-bottom: 32px;
+`;
+
+const HandleTooltip = styled.div`
+	background-color: ${brandColors.giv[800]};
+	position: absolute;
+	top: 20px;
+	left: 50%;
+	transform: translateX(-50%);
+	padding: 0 6px;
+	color: white;
+	font-size: 12px;
+	border-radius: 4px;
+	&::before {
+		content: '';
+		width: 0;
+		height: 0;
+		border-style: solid;
+		border-width: 0 5px 5px 5px;
+		border-color: transparent transparent ${brandColors.giv[800]}
+			transparent;
+		position: absolute;
+		top: -5px;
+		left: 50%;
+		transform: translateX(-50%);
+	}
 `;
 
 export default BoostModal;
