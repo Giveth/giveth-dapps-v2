@@ -221,7 +221,11 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				? config.XDAI_NETWORK_NUMBER
 				: config.MAINNET_NETWORK_NUMBER;
 		const checkNetworkAndShowStakeModal = async () => {
-			if (_chainId === chainId && _open === type) {
+			if (
+				_chainId === chainId &&
+				_chainId === poolNetwork &&
+				_open === type
+			) {
 				if (account) {
 					setShowStakeModal(true);
 					setIsFirstStakeShown(true);
