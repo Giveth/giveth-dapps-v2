@@ -25,14 +25,16 @@ import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { LockInfotooltip } from '../StakeLock/LockInfo';
 import { Flex } from '@/components/styled-components/Flex';
 import 'rc-slider/assets/index.css';
+import { BN, formatWeiHelper } from '@/helpers/number';
 
 interface IBoostModalProps extends IModal {}
 
 const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const [round, setRound] = useState(0);
+	const [percentage, setPercentage] = useState(0);
 	const [isChanged, setIsChanged] = useState(false);
-	// const handle = useRef();
+
+	const totalGIVpower = '392743000000000000000000';
 
 	return (
 		<Modal
@@ -48,7 +50,7 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 						<TotalGIVpowerRow alignItems='baseline' gap='12px'>
 							<H6>Total GIVpower</H6>
 							<GIVpowerValue weight={700}>
-								392,743.00
+								{formatWeiHelper(totalGIVpower)}
 								<GIVpowerHelp>
 									<IconWithTooltip
 										icon={<IconHelp size={16} />}
@@ -115,7 +117,7 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 								const _value = Array.isArray(value)
 									? value[0]
 									: value;
-								setRound(_value);
+								setPercentage(_value);
 								setIsChanged(true);
 							}}
 							handleRender={renderProps => {
@@ -123,17 +125,27 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 									<div {...renderProps.props}>
 										{isChanged && (
 											<HandleTooltip>
-												{round}%
+												{percentage}%
 											</HandleTooltip>
 										)}
 									</div>
 								);
 							}}
-							value={round}
+							value={percentage}
 						/>
 					</SliderWrapper>
 					<SliderDesc isChanged={isChanged} weight={700}>
-						{isChanged ? ' ~7493 GIVpower.' : 'Drag to allocate.'}
+						{isChanged
+							? `~${
+									percentage > 0
+										? formatWeiHelper(
+												BN(totalGIVpower)
+													.mul(percentage)
+													.div(100),
+										  )
+										: 0
+							  } GIVpower.`
+							: 'Drag to allocate.'}
 					</SliderDesc>
 				</ContentSection>
 			</BoostModalContainer>
