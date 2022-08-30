@@ -15,7 +15,7 @@ import {
 	semanticColors,
 	Subline,
 } from '@giveth/ui-design-system';
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Slider from 'rc-slider';
 import { IModal } from '@/types/common';
@@ -39,7 +39,14 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 	const [isSaving, setIsSaving] = useState(false);
 
 	const totalGIVpower = '392743000000000000000000';
-	const boostedProjects = 4;
+	let boostedProjects = 1;
+
+	useEffect(() => {
+		if (boostedProjects === 0) {
+			setPercentage(100);
+			setIsChanged(true);
+		}
+	}, [boostedProjects]);
 
 	const confirmAllocation = () => {
 		console.log('Confirming');
@@ -114,17 +121,25 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 							backgroundColor: brandColors.giv[900],
 						}}
 						trackStyle={{
-							backgroundColor: brandColors.giv[500],
+							backgroundColor:
+								boostedProjects === 0
+									? brandColors.giv[200]
+									: brandColors.giv[500],
 						}}
 						handleStyle={{
 							backgroundColor: neutralColors.gray[100],
-							border: `3px solid ${brandColors.giv[800]}`,
+							border: `3px solid ${
+								boostedProjects === 0
+									? neutralColors.gray[500]
+									: brandColors.giv[800]
+							}`,
 							opacity: 1,
 						}}
 						onChange={value => {
 							const _value = Array.isArray(value)
 								? value[0]
 								: value;
+							if (boostedProjects === 0) return;
 							setPercentage(_value);
 							setIsChanged(true);
 						}}
