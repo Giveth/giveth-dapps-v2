@@ -2,9 +2,11 @@ import Head from 'next/head';
 import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 import { useWeb3React } from '@web3-react/core';
+import { useState } from 'react';
 import { gToast, ToastType } from '@/components/toasts';
 import { useAppDispatch } from '@/features/hooks';
 import { fetchXDaiInfoAsync } from '@/features/subgraph/subgraph.thunks';
+import BoostModal from '@/components/modals/Boost/BoostModal';
 
 const TestRoute = () => {
 	// const xDaiValues = useSelector(
@@ -12,6 +14,7 @@ const TestRoute = () => {
 	// );
 	const { account } = useWeb3React();
 	const dispatch = useAppDispatch();
+	const [showBoost, setShowBoost] = useState(false);
 
 	// const { data, isLoading, error, refetch } = useGetSubgraphValuesQuery({
 	// 	chain: chainId,
@@ -56,6 +59,7 @@ const TestRoute = () => {
 					Dispatch
 				</button>
 				<button onClick={notify}>Test</button>
+				<button onClick={() => setShowBoost(true)}>Show boost</button>
 				<button
 					type='button'
 					onClick={() => {
@@ -65,6 +69,7 @@ const TestRoute = () => {
 					Throw error
 				</button>
 			</TestContainer>
+			{showBoost && <BoostModal setShowModal={setShowBoost} />}
 		</>
 	);
 };
