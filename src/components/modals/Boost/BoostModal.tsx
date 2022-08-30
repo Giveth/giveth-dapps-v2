@@ -39,6 +39,7 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 	const [isSaving, setIsSaving] = useState(false);
 
 	const totalGIVpower = '392743000000000000000000';
+	const boostedProjects = 4;
 
 	const confirmAllocation = () => {
 		console.log('Confirming');
@@ -89,7 +90,7 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 							<ColoredRocketIcon>
 								<IconRocketInSpace24 />
 							</ColoredRocketIcon>
-							<B>4</B>
+							<B>{boostedProjects}</B>
 						</Flex>
 					</Flex>
 				</InfoPart>
