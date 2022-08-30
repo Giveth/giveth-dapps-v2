@@ -30,7 +30,7 @@ export const ZeroGivpowerModal: FC<IModal> = ({ setShowModal }) => {
 					<br /> Stake and lock your GIV to get GIVpower.
 				</Lead>
 				<GetButton
-					label='Confirm'
+					label='Get GIVpower'
 					size='small'
 					href={`${Routes.GIVfarm}/?open=${StakingType.GIV_LM}&chain=gnosis`}
 				/>
