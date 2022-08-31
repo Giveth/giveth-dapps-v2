@@ -12,20 +12,22 @@ import Slider from 'rc-slider';
 import styled, { css } from 'styled-components';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '@/components/styled-components/Flex';
+import { EBoostModalState } from './BoostModal';
 
 interface IBoostModalContainerProps {
-	isBoosted: boolean;
+	state: EBoostModalState;
 }
 
 export const BoostModalContainer = styled.div<IBoostModalContainerProps>`
 	width: 100%;
 	transition: width 0.2s ease, height 0.2s ease;
 	${mediaQueries.tablet} {
-		width: ${props => (props.isBoosted ? 716 : 480)}px;
+		width: ${props =>
+			props.state === EBoostModalState.BOOSTED ? 716 : 480}px;
 	}
 	padding: 24px;
 	${props =>
-		props.isBoosted
+		props.state === EBoostModalState.BOOSTED
 			? css`
 					background-image: url('/images/backgrounds/rocket.png');
 					background-repeat: no-repeat;
@@ -162,4 +164,19 @@ export const ManageLink = styled(GLink)`
 		color: ${brandColors.pinky[800]};
 	}
 	transition: color 0.3s ease;
+`;
+
+export const BoostedTitle = styled(H4)`
+	margin: 81px auto 25px;
+`;
+
+export const ConfettiContainer = styled.div`
+	position: absolute;
+	top: 50px;
+	left: 0;
+	right: 0;
+	margin-left: auto;
+	margin-right: auto;
+	height: 200px;
+	overflow-y: hidden;
 `;
