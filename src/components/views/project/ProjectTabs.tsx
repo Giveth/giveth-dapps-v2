@@ -30,6 +30,7 @@ const ProjectTabs = (props: IProjectTabs) => {
 		{ title: 'About' },
 		{ title: 'Updates', badge: totalProjectUpdates },
 		{ title: 'Donations', badge: totalDonations },
+		{ title: 'GIVpower', badge: 64 },
 	];
 
 	return (

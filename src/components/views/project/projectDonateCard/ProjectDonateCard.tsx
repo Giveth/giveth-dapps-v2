@@ -14,11 +14,13 @@ import {
 	brandColors,
 	neutralColors,
 	OulineButton,
+	IconArchiving,
+	IconRocketInSpace,
+	ButtonText,
 } from '@giveth/ui-design-system';
 import { motion } from 'framer-motion';
 import { captureException } from '@sentry/nextjs';
 
-import { IconArchiving } from '@giveth/ui-design-system/lib/cjs/components/icons/Archiving';
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import { Shadow } from '@/components/styled-components/Shadow';
 import CategoryBadge from '@/components/badges/CategoryBadge';
@@ -50,6 +52,7 @@ import {
 import VerificationStatus from '@/components/views/project/projectDonateCard/VerificationStatus';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import GIVbackToast from '@/components/views/project/projectDonateCard/GIVbackToast';
+import { FlexCenter } from '@/components/styled-components/Flex';
 
 interface IProjectDonateCard {
 	project?: IProject;
@@ -136,7 +139,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 				showToastError(e);
 				captureException(e, {
 					tags: {
-						section: 'likeUnline Project Donate',
+						section: 'likeUnlike Project Donate Card',
 					},
 				});
 			} finally {
@@ -188,8 +191,16 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 	}, [user, adminUser]);
 
 	useEffect(() => {
-		setWrapperHeight(wrapperRef?.current?.clientHeight || 0);
-	}, [wrapperRef, project]);
+		const handleResize = () =>
+			setWrapperHeight(wrapperRef?.current?.clientHeight || 0);
+		if (isMobile) {
+			handleResize();
+			window.addEventListener('resize', handleResize);
+		}
+		return () => {
+			window.removeEventListener('resize', handleResize);
+		};
+	}, [project, isMobile]);
 
 	const handleProjectStatus = async (deactivate?: boolean) => {
 		if (deactivate) {
@@ -239,9 +250,10 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 			)}
 			<Wrapper
 				ref={wrapperRef}
-				initialPosition={wrapperHeight}
-				drag='y'
-				dragConstraints={{ top: -(wrapperHeight - 168), bottom: 120 }}
+				height={wrapperHeight}
+				drag={isMobile ? 'y' : false}
+				dragElastic={0}
+				dragConstraints={{ top: -(wrapperHeight - 165), bottom: 120 }}
 			>
 				{isMobile && <BlueBar />}
 				<ProjectCardOrgBadge
@@ -297,12 +309,20 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 					<ShareLikeBadge
 						type='share'
 						onClick={() => isActive && setShowModal(true)}
+						isSimple={!isAdmin}
 					/>
 					<ShareLikeBadge
 						type='like'
 						active={heartedByUser}
 						onClick={() => isActive && likeUnlikeProject()}
+						isSimple={!isAdmin}
 					/>
+					{!isAdmin && (
+						<BoostButton>
+							<ButtonText>Boost</ButtonText>
+							<IconRocketInSpace color={brandColors.giv[500]} />
+						</BoostButton>
+					)}
 				</BadgeWrapper>
 				{!isAdmin && verified && <GIVbackToast />}
 				{isCategories && (
@@ -338,6 +358,19 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 	);
 };
 
+const BoostButton = styled(FlexCenter)`
+	border-radius: 48px;
+	box-shadow: ${Shadow.Neutral[500]};
+	display: flex;
+	gap: 9.5px;
+	padding-right: 9px;
+	padding-left: 9px;
+	color: ${brandColors.giv[500]};
+	cursor: pointer;
+	background: white;
+	width: 100%;
+`;
+
 const Links = styled.div`
 	color: ${brandColors.pinky[500]};
 	display: flex;
@@ -371,20 +404,20 @@ const BadgeWrapper = styled.div`
 	display: flex;
 	margin-top: 16px;
 	justify-content: space-between;
+	gap: 8px;
 `;
 
-const Wrapper = styled(motion.div)<{ initialPosition: number }>`
+const Wrapper = styled(motion.div)<{ height: number }>`
 	margin-top: -32px;
 	background: white;
 	padding: 32px;
 	height: fit-content;
 	box-shadow: ${Shadow.Neutral[400]};
-	flex-shrink: 0;
 	z-index: 10;
 	align-self: flex-start;
 	width: 100%;
 	position: fixed;
-	bottom: calc(-${props => props.initialPosition}px + 168px);
+	bottom: ${({ height }) => `calc(165px - ${height}px)`};
 	left: 0;
 	border-radius: 40px 40px 0 0;
 
