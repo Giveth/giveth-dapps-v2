@@ -2,6 +2,7 @@ import {
 	B,
 	brandColors,
 	Caption,
+	GLink,
 	H6,
 	IconHelp,
 	IconRocketInSpace24,
@@ -9,6 +10,7 @@ import {
 	P,
 } from '@giveth/ui-design-system';
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { LockInfotooltip } from '../StakeLock/LockInfo';
 import { Flex } from '@/components/styled-components/Flex';
@@ -111,10 +113,15 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 				</Flex>
 			</InfoPart>
 			<DescToast>
-				<Caption>
-					By allocating GIVpower to this project, we will reduce your
-					allocation on previous project proportionally. You can check
-					your previous allocation on My account.
+				<Caption style={{ whiteSpace: `pre-line` }}>
+					{boostedProjects > 0
+						? `By allocating GIVpower to this project, we will reduce your allocation on previous project proportionally.
+						You can check your previous allocation on `
+						: `This is your first time boosting, so 100% will be allocated to this project.
+						You can check your allocation on `}
+					<Link href={Routes.MyBoostedProjects} passHref>
+						<GLink>My account</GLink>
+					</Link>
 				</Caption>
 			</DescToast>
 			<SliderWrapper>
@@ -180,9 +187,9 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 				disabled={!isChanged || isSaving || percentage === 0}
 				onClick={confirmAllocation}
 			/>
-			<ManageLink href={Routes.BoostedProjects}>
-				Manage your allocations
-			</ManageLink>
+			<Link href={Routes.MyBoostedProjects} passHref>
+				<ManageLink>Manage your allocations</ManageLink>
+			</Link>
 		</>
 	);
 };
