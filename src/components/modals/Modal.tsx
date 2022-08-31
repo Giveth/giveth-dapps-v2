@@ -9,8 +9,9 @@ import {
 	ModalHeaderTitlePosition,
 } from '@/components/modals/ModalHeader';
 import { ETheme } from '@/features/general/general.slice';
-import { zIndex } from '@/lib/constants/constants';
+import { mediaQueries, zIndex } from '@/lib/constants/constants';
 import { useAppSelector } from '@/features/hooks';
+import useDeviceDetect from '@/hooks/useDeviceDetect';
 
 interface ModalWrapperProps {
 	fullScreen?: boolean;
@@ -46,6 +47,7 @@ export const Modal: FC<IModal> = ({
 }) => {
 	const theme = useAppSelector(state => state.general.theme);
 	const el = useRef(document.createElement('div'));
+	const { isMobile } = useDeviceDetect();
 
 	useEffect(() => {
 		const current = el.current;
@@ -100,7 +102,9 @@ export const Modal: FC<IModal> = ({
 					renderTrackHorizontal={props => (
 						<div {...props} style={{ display: 'none' }} />
 					)}
-					{...(fullScreen ? {} : ScrollBarsNotFullScreenProps)}
+					{...(fullScreen || isMobile
+						? {}
+						: ScrollBarsNotFullScreenProps)}
 				>
 					{children}
 				</Scrollbars>
@@ -136,9 +140,6 @@ const ModalWrapper = styled.div<ModalWrapperProps>`
 		props.theme === ETheme.Dark
 			? brandColors.giv[600]
 			: neutralColors.gray[100]};
-	box-shadow: 0 3px 20px
-		${props => (props.theme === ETheme.Dark ? '#00000026' : '#21203c')};
-	border-radius: ${props => (props.fullScreen ? 0 : '8px')};
 	color: ${props =>
 		props.theme === ETheme.Dark
 			? neutralColors.gray[100]
@@ -146,8 +147,15 @@ const ModalWrapper = styled.div<ModalWrapperProps>`
 	position: relative;
 	z-index: 10;
 	text-align: center;
-	max-height: ${props => (props.fullScreen ? 'none' : '90vh')};
-	width: ${props => (props.fullScreen ? '100%' : 'auto')};
-	height: ${props => (props.fullScreen ? '100%' : 'auto')};
 	overflow: hidden;
+	height: 100%;
+	width: 100%;
+	${mediaQueries.tablet} {
+		border-radius: ${props => (props.fullScreen ? 0 : '8px')};
+		box-shadow: 0 3px 20px
+			${props => (props.theme === ETheme.Dark ? '#00000026' : '#21203c')};
+		max-height: ${props => (props.fullScreen ? 'none' : '90vh')};
+		width: ${props => (props.fullScreen ? '100%' : 'auto')};
+		height: ${props => (props.fullScreen ? '100%' : 'auto')};
+	}
 `;
