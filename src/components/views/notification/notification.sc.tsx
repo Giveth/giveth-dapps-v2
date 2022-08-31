@@ -4,6 +4,7 @@ import { Flex } from '@/components/styled-components/Flex';
 
 export const NotificationContainer = styled(Container)`
 	margin-top: 176px;
+	margin-bottom: 267px;
 	background-color: ${neutralColors.gray[100]};
 	border-radius: 8px;
 `;
