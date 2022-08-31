@@ -46,6 +46,7 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 	const [percentage, setPercentage] = useState(0);
 	const [isChanged, setIsChanged] = useState(false);
 	const [isSaving, setIsSaving] = useState(false);
+	const [isBoosted, setIsBoosted] = useState(false);
 
 	let totalGIVpower = '392743000000000000000000';
 	// totalGIVpower = '0';
@@ -61,6 +62,10 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 	const confirmAllocation = () => {
 		console.log('Confirming');
 		setIsSaving(true);
+		setTimeout(() => {
+			setIsSaving(false);
+			setIsBoosted(true);
+		}, 1000);
 	};
 
 	if (totalGIVpower == '0') {
@@ -75,7 +80,7 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 			headerTitle={'Boost'}
 			headerIcon={<IconRocketInSpace32 />}
 		>
-			<BoostModalContainer>
+			<BoostModalContainer isBoosted={isBoosted}>
 				<InfoPart>
 					<TotalGIVpowerRow alignItems='baseline' gap='12px'>
 						<H6>Total GIVpower</H6>
