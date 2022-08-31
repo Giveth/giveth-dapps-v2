@@ -11,7 +11,6 @@ import {
 import { ETheme } from '@/features/general/general.slice';
 import { zIndex } from '@/lib/constants/constants';
 import { useAppSelector } from '@/features/hooks';
-import { checkUserAgentIsMobile } from '@/hooks/useDeviceDetect';
 
 interface ModalWrapperProps {
 	fullScreen?: boolean;
@@ -51,9 +50,10 @@ export const Modal: FC<IModal> = ({
 	useEffect(() => {
 		const current = el.current;
 		const modalRoot = document.querySelector('body') as HTMLElement;
+		const hasScrollbar =
+			window.innerWidth - modalRoot.getBoundingClientRect().width !== 0;
 		modalRoot.style.overflowY = 'hidden';
-		let isMobile = checkUserAgentIsMobile();
-		if (!isMobile) {
+		if (hasScrollbar) {
 			modalRoot.style.paddingRight = '15px';
 		}
 		if (modalRoot) {
