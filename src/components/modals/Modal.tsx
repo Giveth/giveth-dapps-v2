@@ -52,12 +52,11 @@ export const Modal: FC<IModal> = ({
 	useEffect(() => {
 		const current = el.current;
 		const modalRoot = document.querySelector('body') as HTMLElement;
-		const hasScrollbar =
-			window.innerWidth - modalRoot.getBoundingClientRect().width !== 0;
+		const innerWindowDiff =
+			window.innerWidth - modalRoot.getBoundingClientRect().width;
 		modalRoot.style.overflowY = 'hidden';
-		if (hasScrollbar) {
-			modalRoot.style.paddingRight = '15px';
-		}
+		modalRoot.style.paddingRight = `${innerWindowDiff}px`;
+
 		if (modalRoot) {
 			modalRoot.addEventListener('keydown', handleKeyDown);
 			modalRoot.appendChild(current);
