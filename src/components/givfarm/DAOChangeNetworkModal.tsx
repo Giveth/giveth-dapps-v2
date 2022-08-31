@@ -12,6 +12,7 @@ import { switchNetwork } from '@/lib/metamask';
 import { Flex } from '../styled-components/Flex';
 import { IChangeNetworkModal } from './common';
 import config from '@/configuration';
+import { mediaQueries } from '@/lib/constants/constants';
 
 const DAOChangeNetworkModal = ({ network }: IChangeNetworkModal) => {
 	const { account, activate } = useWeb3React();
@@ -48,7 +49,7 @@ const DAOChangeNetworkModalContainer = styled.div`
 	color: ${brandColors.giv[300]};
 	border: 1px solid ${brandColors.giv[300]};
 	border-radius: 8px;
-	width: 320px;
+	width: 100%;
 	z-index: 4;
 	position: absolute;
 	top: 50%;
@@ -56,6 +57,9 @@ const DAOChangeNetworkModalContainer = styled.div`
 	transform: translate(-50%, -50%);
 	opacity: 2;
 	padding: 16px;
+	${mediaQueries.tablet} {
+		width: 320px;
+	}
 `;
 
 const Title = styled(Caption)`
