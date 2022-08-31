@@ -9,16 +9,29 @@ import {
 	GLink,
 } from '@giveth/ui-design-system';
 import Slider from 'rc-slider';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '@/components/styled-components/Flex';
 
-export const BoostModalContainer = styled.div`
+interface IBoostModalContainerProps {
+	isBoosted: boolean;
+}
+
+export const BoostModalContainer = styled.div<IBoostModalContainerProps>`
 	width: 100%;
+	transition: width 0.2s ease, height 0.2s ease;
 	${mediaQueries.tablet} {
-		width: 480px;
+		width: ${props => (props.isBoosted ? 716 : 480)}px;
 	}
 	padding: 24px;
+	${props =>
+		props.isBoosted
+			? css`
+					background-image: url('/images/backgrounds/rocket.png');
+					background-repeat: no-repeat;
+					background-position: left bottom;
+			  `
+			: ''}
 `;
 
 export const InfoPart = styled.div`
