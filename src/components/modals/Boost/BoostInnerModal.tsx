@@ -82,8 +82,9 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 								direction={'bottom'}
 							>
 								<LockInfotooltip>
-									{/* TODO: add copy of this toast */}
-									Your givpower
+									This is the total GIVpower you have, you can
+									get more GIVpower by stake & lock more
+									tokens
 								</LockInfotooltip>
 							</IconWithTooltip>
 						</GIVpowerHelp>
@@ -97,8 +98,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 							direction={'bottom'}
 						>
 							<LockInfotooltip>
-								{/* TODO: add copy of this toast */}
-								Your givpower
+								This is the project you boosted before
 							</LockInfotooltip>
 						</IconWithTooltip>
 					</Flex>
