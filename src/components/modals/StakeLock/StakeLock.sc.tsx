@@ -8,10 +8,14 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
+import { mediaQueries } from '@/lib/constants/constants';
 
 export const StakeModalContainer = styled.div`
-	width: 370px;
 	padding-bottom: 24px;
+	width: 100%;
+	${mediaQueries.tablet} {
+		width: 370px;
+	}
 `;
 
 export const StakeModalTitle = styled(Flex)`

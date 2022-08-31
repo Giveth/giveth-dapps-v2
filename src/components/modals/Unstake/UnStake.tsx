@@ -217,6 +217,7 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 
 const UnStakeModalContainer = styled.div`
 	padding-bottom: 24px;
+	width: 100%;
 	${mediaQueries.mobileM} {
 		width: 370px;
 	}
