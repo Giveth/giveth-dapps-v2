@@ -148,7 +148,7 @@ interface XDaiNetworkConfig extends BasicNetworkConfig {
 	MERKLE_ADDRESS: string;
 }
 interface MicroservicesConfig {
-	authentication: string;
+	[key: string]: string;
 }
 
 export interface EnvConfig {
