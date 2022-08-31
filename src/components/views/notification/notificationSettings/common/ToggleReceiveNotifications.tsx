@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import ToggleButton from '@/components/ToggleButton';
+import ToggleSwitch from '@/components/ToggleSwitch';
 
 const ToggleReceiveNotifications = () => {
 	const [isOn, setIsOn] = useState(false);
 	return (
-		<ToggleButton
+		<ToggleSwitch
 			isOn={isOn}
 			toggleOnOff={setIsOn}
 			caption='I’d like to receive all notifications'

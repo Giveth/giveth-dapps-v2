@@ -8,19 +8,26 @@ interface IToggleButton {
 	caption: string;
 }
 
-const ToggleButton: FC<IToggleButton> = ({ isOn, toggleOnOff, caption }) => {
+const ToggleSwitch: FC<IToggleButton> = ({ isOn, toggleOnOff, caption }) => {
 	const handleClick = () => {
 		toggleOnOff(!isOn);
 	};
 	return (
 		<Container onClick={handleClick}>
-			<Button isOn={isOn}>
+			<InputStyled checked={isOn} type='checkbox' />
+			<Switch isOn={isOn}>
 				<Bullet isOn={isOn} />
-			</Button>
+			</Switch>
 			<Caption>{caption}</Caption>
 		</Container>
 	);
 };
+
+const InputStyled = styled.input`
+	opacity: 0;
+	width: 0;
+	height: 0;
+`;
 
 const Bullet = styled.div<{ isOn: boolean }>`
 	position: absolute;
@@ -34,7 +41,7 @@ const Bullet = styled.div<{ isOn: boolean }>`
 	top: 1px;
 `;
 
-const Button = styled.button<{ isOn: boolean }>`
+const Switch = styled.span<{ isOn: boolean }>`
 	position: relative;
 	width: 30px;
 	height: 16px;
@@ -43,7 +50,6 @@ const Button = styled.button<{ isOn: boolean }>`
 	padding-right: 1px;
 	border-radius: 50px;
 	cursor: pointer;
-	border: unset;
 	background: ${props =>
 		props.isOn ? brandColors.pinky[500] : neutralColors.gray[700]};
 	transition: background 0.3s ease-in-out;
@@ -60,4 +66,4 @@ const Container = styled.div`
 	cursor: pointer;
 `;
 
-export default ToggleButton;
+export default ToggleSwitch;
