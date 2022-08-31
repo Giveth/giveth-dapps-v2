@@ -13,7 +13,7 @@ interface ICheckBox {
 	label: string;
 	checked?: boolean;
 	disabled?: boolean;
-	size?: 16 | 32 | 24;
+	size?: 16 | 20 | 24 | 32;
 	labelSize?: 'Tiny' | 'Small' | 'Medium' | 'Big';
 }
 
@@ -50,7 +50,7 @@ const Wrapper = styled(Flex)<{
 }>`
 	cursor: pointer;
 	color: ${props =>
-		props.disabled ? neutralColors.gray[600] : neutralColors.gray[900]};
+		props.disabled ? neutralColors.gray[600] : neutralColors.gray[800]};
 	> div:first-child {
 		border: 2px solid
 			${props =>
@@ -72,6 +72,13 @@ const Wrapper = styled(Flex)<{
 					gap: 10px;
 					> div:first-child {
 						border-width: 1px;
+					}
+				`;
+			case 20:
+				return css`
+					gap: 10px;
+					> div:first-child {
+						border-width: 2px;
 					}
 				`;
 			case 24:
