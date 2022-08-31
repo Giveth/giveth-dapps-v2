@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import styled from 'styled-components';
 import {
 	H5,
 	SemiTitle,
 	Caption,
-	brandColors,
 	neutralColors,
 	SublineBold,
 } from '@giveth/ui-design-system';
 import { client } from '@/apollo/apolloClient';
-
 import { FETCH_MAIN_CATEGORIES } from '@/apollo/gql/gqlProjects';
 import CheckBox from '@/components/Checkbox';
 import { maxSelectedCategory } from '@/lib/constants/Categories';
@@ -67,23 +65,29 @@ const CategoryInput = (props: {
 			<CategoriesGrid>
 				{allCategories?.map((c: IMainCategory) => {
 					return (
-						<>
+						<Fragment key={c.title}>
 							<CategoryTitle>{c.title}</CategoryTitle>
 							{c.categories.map(i => {
 								const checked = value.find(
 									el => el.name === i.name,
 								);
 								return (
-									<CheckBox
-										key={i.value}
-										label={i.value!}
-										checked={!!checked}
-										onChange={e => handleChange(e, i.name)}
-										disabled={isMaxCategories && !checked}
-									/>
+									<CategoryItem key={i.value}>
+										<CheckBox
+											size={20}
+											label={i.value!}
+											checked={!!checked}
+											onChange={e =>
+												handleChange(e, i.name)
+											}
+											disabled={
+												isMaxCategories && !checked
+											}
+										/>
+									</CategoryItem>
 								);
 							})}
-						</>
+						</Fragment>
 					);
 				})}
 			</CategoriesGrid>
@@ -108,28 +112,27 @@ const CaptionContainer = styled(Caption)`
 	margin-top: 8.5px;
 `;
 
-const CategoriesGrid = styled.div`
-	display: grid;
-	grid-template-columns: auto;
-	padding: 10px 10px 22px 10px;
-	margin: 28.5px 0 0 0;
-	color: ${brandColors.deep[900]};
-	align-content: end;
+const CategoryItem = styled.div`
+	margin-top: 28px;
+`;
 
-	> div {
-		margin: 11px 0;
-	}
+const CategoriesGrid = styled.div`
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	color: ${neutralColors.gray[800]};
+	height: 910px;
 
 	${mediaQueries.tablet} {
-		grid-template-columns: auto auto auto !important;
-	}
-	${mediaQueries.mobileM} {
-		grid-template-columns: auto auto;
+		height: 650px;
 	}
 `;
 
 const CategoryTitle = styled(SemiTitle)`
-	max-width: 200px;
+	max-width: 220px;
+	margin-top: 28px;
+	margin-bottom: -8px;
+	color: ${neutralColors.gray[900]};
 `;
 
 export default CategoryInput;
