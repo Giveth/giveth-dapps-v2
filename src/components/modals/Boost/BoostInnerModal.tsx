@@ -155,7 +155,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 					}}
 					onChange={value => {
 						const _value = Array.isArray(value) ? value[0] : value;
-						if (boostedProjects === 0) return;
+						if (boostedProjects === 0 || isSaving) return;
 						setPercentage(_value);
 						setIsChanged(true);
 					}}
