@@ -8,13 +8,12 @@ import {
 	neutralColors,
 	P,
 } from '@giveth/ui-design-system';
-import { FC, useState, useEffect } from 'react';
-
+import { useState, useEffect } from 'react';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { LockInfotooltip } from '../StakeLock/LockInfo';
 import { Flex } from '@/components/styled-components/Flex';
 import 'rc-slider/assets/index.css';
-import { BN, formatWeiHelper } from '@/helpers/number';
+import { formatWeiHelper } from '@/helpers/number';
 import Routes from '@/lib/constants/Routes';
 import {
 	InfoPart,
@@ -32,17 +31,25 @@ import {
 	ConfirmButton,
 	ManageLink,
 } from './BoostModal.sc';
+import { EBoostModalState } from './BoostModal';
+import type { BigNumber } from 'ethers';
+import type { FC, Dispatch, SetStateAction } from 'react';
 
-interface IInnerBoostModalProps {}
+interface IInnerBoostModalProps {
+	totalGIVpower: BigNumber;
+	setPercentage: Dispatch<SetStateAction<number>>;
+	setState: Dispatch<SetStateAction<EBoostModalState>>;
+}
 
-const BoostInnerModal: FC<IInnerBoostModalProps> = () => {
+const BoostInnerModal: FC<IInnerBoostModalProps> = ({
+	totalGIVpower,
+	setPercentage: setFinalPercentage,
+	setState,
+}) => {
 	const [percentage, setPercentage] = useState(0);
 	const [isChanged, setIsChanged] = useState(false);
 	const [isSaving, setIsSaving] = useState(false);
-	const [isBoosted, setIsBoosted] = useState(false);
 
-	let totalGIVpower = '392743000000000000000000';
-	// totalGIVpower = '0';
 	let boostedProjects = 2;
 
 	useEffect(() => {
@@ -57,7 +64,8 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = () => {
 		setIsSaving(true);
 		setTimeout(() => {
 			setIsSaving(false);
-			setIsBoosted(true);
+			setFinalPercentage(percentage);
+			setState(EBoostModalState.BOOSTED);
 		}, 1000);
 	};
 
@@ -159,9 +167,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = () => {
 					? `~${
 							percentage > 0
 								? formatWeiHelper(
-										BN(totalGIVpower)
-											.mul(percentage)
-											.div(100),
+										totalGIVpower.mul(percentage).div(100),
 								  )
 								: 0
 					  } GIVpower.`
