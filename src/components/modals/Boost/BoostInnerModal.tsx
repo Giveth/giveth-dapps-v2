@@ -120,7 +120,9 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 						: `This is your first time boosting, so 100% will be allocated to this project.
 						You can check your allocation on `}
 					<Link href={Routes.MyBoostedProjects} passHref>
-						<GLink>My account</GLink>
+						<GLink>
+							<b>My account</b>
+						</GLink>
 					</Link>
 				</Caption>
 			</DescToast>
