@@ -34,11 +34,11 @@ export const ZeroGivpowerModal: FC<IModal> = ({ setShowModal }) => {
 					size='small'
 					href={`${Routes.GIVfarm}/?open=${StakingType.GIV_LM}&chain=gnosis`}
 				/>
-				<NoButton
+				<CustomButton
 					buttonType='texty'
 					label='Not Now'
 					onClick={closeModal}
-				></NoButton>
+				/>
 			</ZeroGivpowerModalContainer>
 		</Modal>
 	);
@@ -52,12 +52,17 @@ const ZeroGivpowerModalContainer = styled.div`
 	padding: 24px;
 `;
 
-const GetButton = styled(ButtonLink)`
+export const CustomButtonLink = styled(ButtonLink)`
 	width: 300px;
+	display: block;
+	margin: 8px auto;
+`;
+
+export const GetButton = styled(CustomButtonLink)`
 	margin: 42px auto 12px;
 `;
 
-const NoButton = styled(Button)`
+export const CustomButton = styled(Button)`
 	width: 300px;
-	margin: auto;
+	margin: 8px auto;
 `;
