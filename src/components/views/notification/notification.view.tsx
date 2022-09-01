@@ -1,5 +1,5 @@
 import { H5, IconNotificationOutline32, Lead } from '@giveth/ui-design-system';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
 	NotificationContainer,
 	NotificationHeader,
@@ -13,7 +13,8 @@ import {
 	TabItem,
 	TabItemCount,
 } from '@/components/styled-components/Tabs';
-import { useAppSelector } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { setShowFooter } from '@/features/general/general.slice';
 
 enum ENotificationTabs {
 	ALL,
@@ -30,6 +31,13 @@ function NotificationView() {
 		projectsRelated,
 		givEconomyRelated,
 	} = useAppSelector(state => state.notification.notificationInfo);
+
+	const dispatch = useAppDispatch();
+
+	useEffect(() => {
+		dispatch(setShowFooter(false));
+	}, []);
+
 	return (
 		<NotificationContainer>
 			<NotificationHeader gap='8px'>

@@ -4,6 +4,7 @@ import { Flex } from '@/components/styled-components/Flex';
 
 export const NotificationContainer = styled(Container)`
 	margin-top: 176px;
+	margin-bottom: 267px;
 	background-color: ${neutralColors.gray[100]};
 	border-radius: 8px;
 `;
@@ -17,5 +18,15 @@ export const NotificationHeader = styled(Flex)`
 `;
 
 export const NotificationDesc = styled.div`
-	marign-top: 16px;
+	margin-top: 16px;
+`;
+
+export const GrayBar = styled.div`
+	width: 100%;
+	border-bottom: 3px solid ${neutralColors.gray[300]};
+`;
+
+export const GrayBarTiny = styled.div`
+	width: 100%;
+	border-bottom: 1px solid ${neutralColors.gray[300]};
 `;

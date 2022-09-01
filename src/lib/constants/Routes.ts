@@ -19,6 +19,7 @@ const Routes = {
 	MyDonations: MyAccount + '?tab=donations',
 	Onboard: '/onboard',
 	Verification: '/verification',
+	Notification: '/notification',
 	GIVECONOMY: '/giveconomy',
 	GIVgarden: '/givgarden',
 	GIVfarm: '/givfarm',
@@ -27,7 +28,6 @@ const Routes = {
 	GIVbacks: '/givbacks',
 	Claim: '/claim',
 	GivethProject: '/project/the-giveth-community-of-makers',
-	Notification: '/notification',
 };
 
 export default Routes;
