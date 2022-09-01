@@ -25,7 +25,8 @@ export const BoostModalContainer = styled.div<IBoostModalContainerProps>`
 		width: ${props =>
 			props.state === EBoostModalState.BOOSTED ? 716 : 480}px;
 	}
-	padding: 24px;
+	padding: ${props =>
+		props.state === EBoostModalState.BOOSTING ? '24px' : '0 24px 24px'};
 	${props =>
 		props.state === EBoostModalState.BOOSTED
 			? css`
