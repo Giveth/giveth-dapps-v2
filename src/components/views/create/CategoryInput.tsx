@@ -72,14 +72,19 @@ const CategoryInput = (props: {
 									el => el.name === i.name,
 								);
 								return (
-									<CheckBox
-										key={i.value}
-										size={20}
-										label={i.value!}
-										checked={!!checked}
-										onChange={e => handleChange(e, i.name)}
-										disabled={isMaxCategories && !checked}
-									/>
+									<SubcategoryItem key={i.value}>
+										<CheckBox
+											size={20}
+											label={i.value!}
+											checked={!!checked}
+											onChange={e =>
+												handleChange(e, i.name)
+											}
+											disabled={
+												isMaxCategories && !checked
+											}
+										/>
+									</SubcategoryItem>
 								);
 							})}
 						</Fragment>
@@ -89,6 +94,10 @@ const CategoryInput = (props: {
 		</InputContainer>
 	);
 };
+
+const SubcategoryItem = styled.div`
+	margin: 28px 0;
+`;
 
 const CategoryCount = styled(SublineBold)`
 	display: flex;
@@ -108,14 +117,11 @@ const CaptionContainer = styled(Caption)`
 `;
 
 const CategoriesGrid = styled.div`
-	display: flex;
-	flex-direction: column;
-	flex-wrap: wrap;
+	margin-top: 28px;
+	column-count: 2;
 	color: ${neutralColors.gray[800]};
-	height: 920px;
 	> * {
-		margin-top: 28px;
-		width: 180px;
+		width: 160px;
 	}
 	${mediaQueries.mobileL} {
 		> * {
@@ -123,13 +129,12 @@ const CategoriesGrid = styled.div`
 		}
 	}
 	${mediaQueries.tablet} {
-		height: 650px;
+		column-count: 3;
 	}
 `;
 
 const CategoryTitle = styled(SemiTitle)`
 	max-width: 220px;
-	margin-top: 28px;
 	margin-bottom: -8px;
 	color: ${neutralColors.gray[900]};
 `;
