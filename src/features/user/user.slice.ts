@@ -3,6 +3,7 @@ import { IUser } from '@/apollo/types/types';
 import { fetchUserByAddress, signToGetToken, signOut } from './user.thunks';
 import StorageLabel from '@/lib/localStorage';
 import { compareAddresses } from '@/lib/helpers';
+import { RootState } from '../store';
 
 const initialState: {
 	userData?: IUser;
@@ -18,6 +19,15 @@ const initialState: {
 	isSignedIn: false,
 	balance: null,
 	isLoading: true,
+};
+
+type UserStateType = RootState['user'];
+
+const signOutUser = (state: UserStateType) => {
+	localStorage.removeItem(StorageLabel.USER);
+	localStorage.removeItem(StorageLabel.TOKEN);
+	state.token = undefined;
+	state.isSignedIn = false;
 };
 
 export const userSlice = createSlice({
@@ -97,10 +107,13 @@ export const userSlice = createSlice({
 				state.isSignedIn = true;
 			})
 			.addCase(signOut.fulfilled, state => {
-				localStorage.removeItem(StorageLabel.USER);
-				localStorage.removeItem(StorageLabel.TOKEN);
-				state.token = undefined;
-				state.isSignedIn = false;
+				signOutUser(state);
+			})
+			.addCase(signOut.rejected, state => {
+				signOutUser(state);
+			})
+			.addCase(signOut.pending, state => {
+				signOutUser(state);
 			});
 	},
 });
