@@ -30,12 +30,14 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 		return <ZeroGivpowerModal setShowModal={setShowModal} />;
 	}
 
+	const title = EBoostModalState.BOOSTING ? 'Boost' : 'Well done!';
+
 	return (
 		<Modal
 			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerTitlePosition={'left'}
-			headerTitle={'Boost'}
+			headerTitle={title}
 			headerIcon={<IconRocketInSpace32 />}
 		>
 			<BoostModalContainer state={state}>
@@ -46,7 +48,10 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 						setState={setState}
 					/>
 				) : (
-					<BoostedInnerModal percentage={percentage} />
+					<BoostedInnerModal
+						percentage={percentage}
+						closeModal={closeModal}
+					/>
 				)}
 			</BoostModalContainer>
 		</Modal>
