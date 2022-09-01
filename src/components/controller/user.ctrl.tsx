@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { formatEther } from '@ethersproject/units';
 import { captureException } from '@sentry/nextjs';
 import { InjectedConnector } from '@web3-react/injected-connector';
-import { useAppDispatch } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import {
 	setBalance,
 	setIsLoading,
@@ -22,6 +22,7 @@ const UserController = () => {
 	//TODO: Remove this state  before  merfing verification-develop-branch to DEVELOP
 	const [isActivatedCalled, setIsActivatedCalled] = useState(false);
 	const token = !isSSRMode ? localStorage.getItem(StorageLabel.TOKEN) : null;
+	const { userData } = useAppSelector(state => state.user);
 
 	useEffect(() => {
 		const selectedWalletName = localStorage.getItem(StorageLabel.WALLET);
@@ -53,11 +54,11 @@ const UserController = () => {
 	useEffect(() => {
 		if (account && token) {
 			dispatch(setIsEnabled(true));
-			dispatch(setIsSignedIn(true));
+			if (userData?.isSignedIn) dispatch(setIsSignedIn(true));
 		} else if (account) {
 			dispatch(setIsEnabled(true));
 		}
-	}, [account, token]);
+	}, [account, token, userData?.isSignedIn]);
 
 	useEffect(() => {
 		if (token) {
