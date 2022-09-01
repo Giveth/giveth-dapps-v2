@@ -54,6 +54,8 @@ const ZeroGivpowerModalContainer = styled.div`
 
 export const CustomButtonLink = styled(ButtonLink)`
 	width: 300px;
+	display: block;
+	margin: 8px auto;
 `;
 
 export const GetButton = styled(CustomButtonLink)`
@@ -62,5 +64,5 @@ export const GetButton = styled(CustomButtonLink)`
 
 export const CustomButton = styled(Button)`
 	width: 300px;
-	margin: auto;
+	margin: 8px auto;
 `;
