@@ -260,7 +260,7 @@ export const EDIT_PROJECT_UPDATE = gql`
 `;
 
 export const FETCH_USER_LIKED_PROJECTS = gql`
-	query FetchUesrLikedProjects($take: Int, $skip: Int, $userId: Int!) {
+	query FetchUserLikedProjects($take: Int, $skip: Int, $userId: Int!) {
 		likedProjectsByUserId(take: $take, skip: $skip, userId: $userId) {
 			projects {
 				id
@@ -276,6 +276,9 @@ export const FETCH_USER_LIKED_PROJECTS = gql`
 					isRecipient
 					networkId
 				}
+				adminUser {
+					name
+				}
 				impactLocation
 				listed
 				totalDonations
@@ -287,11 +290,16 @@ export const FETCH_USER_LIKED_PROJECTS = gql`
 					userId
 				}
 				qualityScore
+				updatedAt
+				organization {
+					label
+				}
 			}
 			totalCount
 		}
 	}
 `;
+
 export const UPLOAD_IMAGE = gql`
 	mutation ($imageUpload: ImageUpload!) {
 		uploadImage(imageUpload: $imageUpload) {

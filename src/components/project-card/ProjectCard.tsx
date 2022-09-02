@@ -226,8 +226,7 @@ const CardBody = styled.div<{
 	isHover?: boolean;
 	isVerified?: boolean;
 }>`
-	padding: 26px;
-	padding-top: 32px;
+	padding: 32px 26px 26px;
 	position: absolute;
 	left: 0;
 	right: 0;
@@ -276,7 +275,6 @@ const ImagePlaceholder = styled.div`
 const Wrapper = styled.div`
 	position: relative;
 	width: 100%;
-	max-width: 443px;
 	border-radius: ${cardRadius};
 	margin: 0 auto;
 	background: white;
