@@ -12,6 +12,7 @@ import Pagination from '@/components/Pagination';
 import { Flex } from '@/components/styled-components/Flex';
 import NothingToSee from '@/components/views/userProfile/NothingToSee';
 import DonationTable from '@/components/views/userProfile/donationsTab/DonationsTable';
+import { UserProfileTab } from '../common.sc';
 
 const itemPerPage = 10;
 
@@ -69,7 +70,7 @@ const ProfileDonationsTab: FC<IUserProfileView> = ({ myAccount, user }) => {
 	}, [user, page, order.by, order.direction]);
 
 	return (
-		<DonationsTab>
+		<UserProfileTab>
 			<DonationTableWrapper>
 				{!loading && totalDonations === 0 ? (
 					<NothingWrapper>
@@ -95,7 +96,7 @@ const ProfileDonationsTab: FC<IUserProfileView> = ({ myAccount, user }) => {
 				setPage={setPage}
 				itemPerPage={itemPerPage}
 			/>
-		</DonationsTab>
+		</UserProfileTab>
 	);
 };
 
@@ -117,10 +118,6 @@ const DonationTableWrapper = styled.div`
 const NothingWrapper = styled.div`
 	position: relative;
 	padding: 100px 0;
-`;
-
-const DonationsTab = styled.div`
-	margin-bottom: 80px;
 `;
 
 export default ProfileDonationsTab;
