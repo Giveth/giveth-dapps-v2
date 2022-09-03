@@ -36,6 +36,9 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 			case 'projects':
 				setTab(EProfile.PROJECTS);
 				break;
+			case 'boosted':
+				setTab(EProfile.BOOSTED);
+				break;
 			case 'donations':
 				setTab(EProfile.DONATIONS);
 				break;
