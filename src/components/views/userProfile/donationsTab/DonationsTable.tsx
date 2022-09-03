@@ -17,7 +17,7 @@ import { IWalletDonation } from '@/apollo/types/types';
 import {
 	EOrderBy,
 	IOrder,
-} from '@/components/views/userPublicProfile/UserPublicProfile.view';
+} from '@/components/views/userProfile/UserProfile.view';
 import SortIcon from '@/components/SortIcon';
 import DonationStatus from '@/components/badges/DonationStatusBadge';
 

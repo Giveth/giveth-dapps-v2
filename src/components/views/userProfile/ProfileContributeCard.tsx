@@ -4,13 +4,10 @@ import styled from 'styled-components';
 
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '../../styled-components/Flex';
-import { IUserPublicProfileView } from '@/components/views/userPublicProfile/UserPublicProfile.view';
+import { IUserProfileView } from '@/components/views/userProfile/UserProfile.view';
 import { formatUSD } from '@/lib/helpers';
 
-const PublicProfileContributeCard: FC<IUserPublicProfileView> = ({
-	user,
-	myAccount,
-}) => {
+const ProfileContributeCard: FC<IUserProfileView> = ({ user, myAccount }) => {
 	const userName = user?.name || 'Unknown';
 
 	return (
@@ -72,4 +69,4 @@ const ContributeCardTitles = styled(Subline)`
 	text-transform: uppercase;
 `;
 
-export default PublicProfileContributeCard;
+export default ProfileContributeCard;

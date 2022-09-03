@@ -11,7 +11,7 @@ import {
 } from '@giveth/ui-design-system';
 
 import { mediaQueries } from '@/lib/constants/constants';
-import PublicProfileContributes from './PublicProfileContributes';
+import ProfileContributes from './ProfileContributes';
 import { IUser } from '@/apollo/types/types';
 import EditUserModal from '@/components/modals/EditUserModal';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
@@ -23,7 +23,7 @@ import {
 import { Container } from '@/components/Grid';
 import { EDirection } from '@/apollo/types/gqlEnums';
 import ExternalLink from '@/components/ExternalLink';
-import IncompleteProfileToast from '@/components/views/userPublicProfile/IncompleteProfileToast';
+import IncompleteProfileToast from '@/components/views/userProfile/IncompleteProfileToast';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 
@@ -39,15 +39,12 @@ export interface IOrder {
 	direction: EDirection;
 }
 
-export interface IUserPublicProfileView {
+export interface IUserProfileView {
 	user: IUser;
 	myAccount?: boolean;
 }
 
-const UserPublicProfileView: FC<IUserPublicProfileView> = ({
-	myAccount,
-	user,
-}) => {
+const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 	const dispatch = useAppDispatch();
 	const { isSignedIn } = useAppSelector(state => state.user);
 
@@ -73,7 +70,7 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 
 	return (
 		<>
-			<PublicProfileHeader>
+			<ProfileHeader>
 				<Container>
 					{showCompleteProfile && (
 						<IncompleteProfileToast
@@ -122,8 +119,8 @@ const UserPublicProfileView: FC<IUserPublicProfileView> = ({
 						</UserInfoRow>
 					</UserInfo>
 				</Container>
-			</PublicProfileHeader>
-			<PublicProfileContributes user={user} myAccount={myAccount} />
+			</ProfileHeader>
+			<ProfileContributes user={user} myAccount={myAccount} />
 			{showModal && (
 				<EditUserModal setShowModal={setShowModal} user={user} />
 			)}
@@ -144,7 +141,7 @@ const UserInfo = styled(FlexCenter)`
 	}
 `;
 
-const PublicProfileHeader = styled.div`
+const ProfileHeader = styled.div`
 	padding-top: 120px;
 	padding-bottom: 32px;
 	background-color: ${neutralColors.gray[100]};
@@ -199,4 +196,4 @@ const NoUserContainer = styled.div`
 	padding: 200px;
 `;
 
-export default UserPublicProfileView;
+export default UserProfileView;

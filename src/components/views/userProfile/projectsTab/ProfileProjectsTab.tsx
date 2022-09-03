@@ -2,16 +2,12 @@ import { neutralColors } from '@giveth/ui-design-system';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import {
-	IUserPublicProfileView,
-	EOrderBy,
-	IOrder,
-} from '../UserPublicProfile.view';
+import { IUserProfileView, EOrderBy, IOrder } from '../UserProfile.view';
 import ProjectsTable from './ProjectsTable';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Container } from '@/components/Grid';
 import { EDirection } from '@/apollo/types/gqlEnums';
-import NothingToSee from '@/components/views/userPublicProfile/NothingToSee';
+import NothingToSee from '@/components/views/userProfile/NothingToSee';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_USER_PROJECTS } from '@/apollo/gql/gqlUser';
 import { IUserProjects } from '@/apollo/types/gqlTypes';
@@ -22,10 +18,7 @@ import { Flex } from '@/components/styled-components/Flex';
 
 const itemPerPage = 10;
 
-const PublicProfileProjectsTab: FC<IUserPublicProfileView> = ({
-	user,
-	myAccount,
-}) => {
+const ProfileProjectsTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 	const [loading, setLoading] = useState(false);
 	const [projects, setProjects] = useState<IProject[]>([]);
 	const [totalCount, setTotalCount] = useState<number>(0);
@@ -162,4 +155,4 @@ const ProjectsTab = styled.div`
 	margin-bottom: 80px;
 `;
 
-export default PublicProfileProjectsTab;
+export default ProfileProjectsTab;

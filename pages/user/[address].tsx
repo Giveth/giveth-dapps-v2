@@ -4,7 +4,7 @@ import { FC } from 'react';
 import { client } from '@/apollo/apolloClient';
 import { GET_USER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
 import { IUser } from '@/apollo/types/types';
-import UserPublicProfileView from '@/components/views/userPublicProfile/UserPublicProfile.view';
+import UserProfileView from '@/components/views/userProfile/UserProfile.view';
 import { GeneralMetatags } from '@/components/Metatag';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
@@ -32,7 +32,7 @@ const UserRoute: FC<IUserRouteProps> = ({ user }) => {
 					url: `https://giveth.io/user/${user.walletAddress}`,
 				}}
 			/>
-			<UserPublicProfileView user={user} />
+			<UserProfileView user={user} />
 		</>
 	);
 };
