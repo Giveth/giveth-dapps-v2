@@ -8,14 +8,14 @@ import {
 import { FC } from 'react';
 import styled from 'styled-components';
 
-import { EOrderBy, IOrder } from '../UserPublicProfile.view';
+import { EOrderBy, IOrder } from '../UserProfile.view';
 import { idToProjectEdit, slugToProjectView } from '@/lib/routeCreators';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { formatUSD, smallFormatDate } from '@/lib/helpers';
 import { Flex } from '@/components/styled-components/Flex';
 import InternalLink from '@/components/InternalLink';
-import ListingBadge from '@/components/views/userPublicProfile/projectsTab/ListingBadge';
-import StatusBadge from '@/components/views/userPublicProfile/projectsTab/StatusBadge';
+import ListingBadge from '@/components/views/userProfile/projectsTab/ListingBadge';
+import StatusBadge from '@/components/views/userProfile/projectsTab/StatusBadge';
 import SortIcon from '@/components/SortIcon';
 import { EVerificationStatus, IProject } from '@/apollo/types/types';
 import { mediaQueries } from '@/lib/constants/constants';

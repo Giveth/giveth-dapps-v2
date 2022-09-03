@@ -7,17 +7,14 @@ import { IUserLikedProjects } from '@/apollo/types/gqlTypes';
 import { IProject } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import ProjectCard from '@/components/project-card/ProjectCard';
-import { Loading } from './projectsTab/PublicProfileProjectsTab';
-import { IUserPublicProfileView } from './UserPublicProfile.view';
+import { Loading } from './projectsTab/ProfileProjectsTab';
+import { IUserProfileView } from './UserProfile.view';
 import { mediaQueries } from '@/lib/constants/constants';
-import NothingToSee from '@/components/views/userPublicProfile/NothingToSee';
+import NothingToSee from '@/components/views/userProfile/NothingToSee';
 
 const itemPerPage = 6;
 
-const PublicProfileLikedTab: FC<IUserPublicProfileView> = ({
-	myAccount,
-	user,
-}) => {
+const ProfileLikedTab: FC<IUserProfileView> = ({ myAccount, user }) => {
 	const [loading, setLoading] = useState(false);
 	const [projects, setProjects] = useState<IProject[]>([]);
 	const [totalCount, setTotalCount] = useState<number>(0);
@@ -99,4 +96,4 @@ const LikedContainer = styled.div`
 	}
 `;
 
-export default PublicProfileLikedTab;
+export default ProfileLikedTab;

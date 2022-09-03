@@ -2,11 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { neutralColors } from '@giveth/ui-design-system';
 
-import {
-	IUserPublicProfileView,
-	EOrderBy,
-	IOrder,
-} from '../UserPublicProfile.view';
+import { IUserProfileView, EOrderBy, IOrder } from '../UserProfile.view';
 import { EDirection, EDonationStatus } from '@/apollo/types/gqlEnums';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_USER_DONATIONS } from '@/apollo/gql/gqlUser';
@@ -14,15 +10,12 @@ import { IUserDonations } from '@/apollo/types/gqlTypes';
 import { IWalletDonation } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import { Flex } from '@/components/styled-components/Flex';
-import NothingToSee from '@/components/views/userPublicProfile/NothingToSee';
-import DonationTable from '@/components/views/userPublicProfile/donationsTab/DonationsTable';
+import NothingToSee from '@/components/views/userProfile/NothingToSee';
+import DonationTable from '@/components/views/userProfile/donationsTab/DonationsTable';
 
 const itemPerPage = 10;
 
-const PublicProfileDonationsTab: FC<IUserPublicProfileView> = ({
-	myAccount,
-	user,
-}) => {
+const ProfileDonationsTab: FC<IUserProfileView> = ({ myAccount, user }) => {
 	const [loading, setLoading] = useState(false);
 	const [donations, setDonations] = useState<IWalletDonation[]>([]);
 	const [totalDonations, setTotalDonations] = useState<number>(0);
@@ -130,4 +123,4 @@ const DonationsTab = styled.div`
 	margin-bottom: 80px;
 `;
 
-export default PublicProfileDonationsTab;
+export default ProfileDonationsTab;

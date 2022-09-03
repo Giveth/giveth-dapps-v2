@@ -11,13 +11,13 @@ import {
 } from '@giveth/ui-design-system';
 
 import Routes from '@/lib/constants/Routes';
-import ContributeCard from './PublicProfileContributeCard';
+import ContributeCard from './ProfileContributeCard';
 import { Flex } from '@/components/styled-components/Flex';
 import { isUserRegistered } from '@/lib/helpers';
-import { IUserPublicProfileView } from '@/components/views/userPublicProfile/UserPublicProfile.view';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
+import { IUserProfileView } from '@/components/views/userProfile/UserProfile.view';
 
 interface IBtnProps extends IButtonProps {
 	outline?: boolean;
@@ -29,7 +29,7 @@ interface ISection {
 	buttons: IBtnProps[];
 }
 
-const PublicProfileOverviewTab: FC<IUserPublicProfileView> = ({ user }) => {
+const ProfileOverviewTab: FC<IUserProfileView> = ({ user }) => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 
@@ -157,4 +157,4 @@ const Buttons = styled(Flex)`
 	flex-wrap: wrap;
 `;
 
-export default PublicProfileOverviewTab;
+export default ProfileOverviewTab;

@@ -7,7 +7,7 @@ import { EDirection } from '@/apollo/types/gqlEnums';
 import {
 	EOrderBy,
 	IOrder,
-} from '@/components/views/userPublicProfile/UserPublicProfile.view';
+} from '@/components/views/userProfile/UserProfile.view';
 
 const SortIcon = (props: { order: IOrder; title: EOrderBy }) => {
 	const { order, title } = props;
