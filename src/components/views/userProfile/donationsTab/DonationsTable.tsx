@@ -7,7 +7,6 @@ import {
 	IconExternalLink,
 	IconLink24,
 	neutralColors,
-	P,
 } from '@giveth/ui-design-system';
 
 import { formatUSD, smallFormatDate, formatTxLink } from '@/lib/helpers';
@@ -20,6 +19,11 @@ import {
 } from '@/components/views/userProfile/UserProfile.view';
 import SortIcon from '@/components/SortIcon';
 import DonationStatus from '@/components/badges/DonationStatusBadge';
+import {
+	RowWrapper,
+	TableCell,
+	TableHeader,
+} from '@/components/styled-components/Table';
 
 interface DonationTable {
 	donations: IWalletDonation[];
@@ -51,10 +55,10 @@ const DonationTable: FC<DonationTable> = ({
 				<SortIcon order={order} title={EOrderBy.UsdAmount} />
 			</TableHeader>
 			{donations.map(donation => (
-				<RowWrapper key={donation.id}>
-					<TableCell>
+				<DonationRowWrapper key={donation.id}>
+					<DonationTableCell>
 						{smallFormatDate(new Date(donation.createdAt))}
-					</TableCell>
+					</DonationTableCell>
 					<Link
 						href={slugToProjectView(donation.project.slug)}
 						passHref
@@ -65,11 +69,11 @@ const DonationTable: FC<DonationTable> = ({
 						</ProjectTitleCell>
 					</Link>
 					{myAccount && (
-						<TableCell>
+						<DonationTableCell>
 							<DonationStatus status={donation.status} />
-						</TableCell>
+						</DonationTableCell>
 					)}
-					<TableCell>
+					<DonationTableCell>
 						<B>{donation.amount}</B>
 						<Currency>{donation.currency}</Currency>
 						<ExternalLink
@@ -83,12 +87,12 @@ const DonationTable: FC<DonationTable> = ({
 								color={brandColors.pinky[500]}
 							/>
 						</ExternalLink>
-					</TableCell>
-					<TableCell>
+					</DonationTableCell>
+					<DonationTableCell>
 						{donation.valueUsd &&
 							'$' + formatUSD(donation.valueUsd)}
-					</TableCell>
-				</RowWrapper>
+					</DonationTableCell>
+				</DonationRowWrapper>
 			))}
 		</DonationTableContainer>
 	);
@@ -98,23 +102,16 @@ const Currency = styled.div`
 	color: ${neutralColors.gray[600]};
 `;
 
-const RowWrapper = styled.div`
-	display: contents;
+const DonationRowWrapper = styled(RowWrapper)`
 	&:hover > div {
 		background-color: ${neutralColors.gray[300]};
 		color: ${brandColors.pinky[500]};
 	}
-	& > div:first-child {
-		padding-left: 4px;
-	}
 `;
 
-const TableCell = styled(P)<{ bold?: boolean }>`
-	display: flex;
+const DonationTableCell = styled(TableCell)<{ bold?: boolean }>`
 	height: 60px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
-	align-items: center;
-	gap: 8px;
 	font-weight: ${props => (props.bold ? 500 : 400)};
 `;
 
@@ -127,19 +124,7 @@ const DonationTableContainer = styled.div<{ myAccount?: boolean }>`
 	margin: 0 10px;
 `;
 
-const TableHeader = styled(B)`
-	display: flex;
-	height: 40px;
-	border-bottom: 1px solid ${neutralColors.gray[400]};
-	align-items: center;
-	${props =>
-		props.onClick &&
-		`cursor: pointer;
-	gap: 8px;
-	align-items: center;`}
-`;
-
-const ProjectTitleCell = styled(TableCell)`
+const ProjectTitleCell = styled(DonationTableCell)`
 	cursor: pointer;
 	& > svg {
 		display: none;

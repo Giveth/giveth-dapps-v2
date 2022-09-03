@@ -15,6 +15,7 @@ import { IProject } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import { Flex } from '@/components/styled-components/Flex';
+import { UserProfileTab } from '../common.sc';
 
 const itemPerPage = 10;
 
@@ -72,7 +73,7 @@ const ProfileProjectsTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 	}, [user, page, order.by, order.direction]);
 
 	return (
-		<ProjectsTab>
+		<UserProfileTab>
 			<ProjectsContainer>
 				{!loading && totalCount === 0 ? (
 					<NothingWrapper>
@@ -105,7 +106,7 @@ const ProfileProjectsTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 				setPage={setPage}
 				itemPerPage={itemPerPage}
 			/>
-		</ProjectsTab>
+		</UserProfileTab>
 	);
 };
 
@@ -149,10 +150,6 @@ const GridContainer = styled.div`
 	${mediaQueries.laptopL} {
 		grid-template-columns: repeat(3, 1fr);
 	}
-`;
-
-const ProjectsTab = styled.div`
-	margin-bottom: 80px;
 `;
 
 export default ProfileProjectsTab;

@@ -1,9 +1,7 @@
 import {
-	B,
 	brandColors,
 	IconHeart,
 	neutralColors,
-	P,
 } from '@giveth/ui-design-system';
 import { FC } from 'react';
 import styled from 'styled-components';
@@ -20,6 +18,11 @@ import SortIcon from '@/components/SortIcon';
 import { EVerificationStatus, IProject } from '@/apollo/types/types';
 import { mediaQueries } from '@/lib/constants/constants';
 import VerificationBadge from '@/components/VerificationBadge';
+import {
+	RowWrapper,
+	TableCell,
+	TableHeader,
+} from '@/components/styled-components/Table';
 
 interface IProjectsTable {
 	projects: IProject[];
@@ -33,23 +36,27 @@ const ProjectsTable: FC<IProjectsTable> = ({
 	order,
 }) => {
 	return (
-		<Container>
-			<TableHeader onClick={() => changeOrder(EOrderBy.CreationDate)}>
+		<Table>
+			<ProjectsTableHeader
+				onClick={() => changeOrder(EOrderBy.CreationDate)}
+			>
 				Created at
 				<SortIcon order={order} title={EOrderBy.CreationDate} />
-			</TableHeader>
-			<TableHeader>Status</TableHeader>
-			<TableHeader>Project</TableHeader>
-			<TableHeader>
+			</ProjectsTableHeader>
+			<ProjectsTableHeader>Status</ProjectsTableHeader>
+			<ProjectsTableHeader>Project</ProjectsTableHeader>
+			<ProjectsTableHeader>
 				Likes 
 				<IconHeart />
-			</TableHeader>
-			<TableHeader onClick={() => changeOrder(EOrderBy.Donations)}>
+			</ProjectsTableHeader>
+			<ProjectsTableHeader
+				onClick={() => changeOrder(EOrderBy.Donations)}
+			>
 				Total Raised
 				<SortIcon order={order} title={EOrderBy.Donations} />
-			</TableHeader>
-			<TableHeader>Listing</TableHeader>
-			<TableHeader>Actions</TableHeader>
+			</ProjectsTableHeader>
+			<ProjectsTableHeader>Listing</ProjectsTableHeader>
+			<ProjectsTableHeader>Actions</ProjectsTableHeader>
 			{projects?.map(project => {
 				const status = project.status.name;
 				const isCancelled = status === EProjectStatus.CANCEL;
@@ -57,27 +64,29 @@ const ProjectsTable: FC<IProjectsTable> = ({
 					? EVerificationStatus.VERIFIED
 					: project.projectVerificationForm?.status;
 				return (
-					<RowWrapper key={project.id}>
-						<TableCell>
+					<ProjectsRowWrapper key={project.id}>
+						<ProjectTableCell>
 							{smallFormatDate(new Date(project.creationDate!))}
-						</TableCell>
-						<TableCell>
+						</ProjectTableCell>
+						<ProjectTableCell>
 							<StatusBadge status={status!} />
-						</TableCell>
-						<TableCell bold>
+						</ProjectTableCell>
+						<ProjectTableCell bold>
 							<ProjectTitle>
 								{project.title}
 								<VerificationBadge status={verStatus} />
 							</ProjectTitle>
-						</TableCell>
-						<TableCell>{project.totalReactions}</TableCell>
-						<TableCell bold>
+						</ProjectTableCell>
+						<ProjectTableCell>
+							{project.totalReactions}
+						</ProjectTableCell>
+						<ProjectTableCell bold>
 							{formatUSD(project.totalDonations)} USD
-						</TableCell>
-						<TableCell>
+						</ProjectTableCell>
+						<ProjectTableCell>
 							<ListingBadge listed={project.listed!} />
-						</TableCell>
-						<TableCell>
+						</ProjectTableCell>
+						<ProjectTableCell>
 							<Actions isCancelled={isCancelled}>
 								<InternalLink
 									href={idToProjectEdit(project.id)}
@@ -90,15 +99,15 @@ const ProjectsTable: FC<IProjectsTable> = ({
 									disabled={isCancelled}
 								/>
 							</Actions>
-						</TableCell>
-					</RowWrapper>
+						</ProjectTableCell>
+					</ProjectsRowWrapper>
 				);
 			})}
-		</Container>
+		</Table>
 	);
 };
 
-const Container = styled.div`
+const Table = styled.div`
 	display: grid;
 	grid-template-columns: 1.5fr 1.1fr 4fr 1.1fr 1.5fr 1.75fr 1fr;
 	overflow: auto;
@@ -109,39 +118,23 @@ const Container = styled.div`
 	}
 `;
 
-const TableHeader = styled(B)`
-	display: flex;
-	height: 40px;
-	border-bottom: 1px solid ${neutralColors.gray[400]};
-	align-items: center;
-	${props =>
-		props.onClick &&
-		`cursor: pointer;
-	gap: 8px;
-	align-items: center;`}
+const ProjectsTableHeader = styled(TableHeader)`
 	img {
 		padding-left: 5px;
 	}
 `;
 
-const TableCell = styled(P)<{ bold?: boolean }>`
-	display: flex;
+const ProjectTableCell = styled(TableCell)<{ bold?: boolean }>`
 	width: 100%;
 	height: 60px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
-	align-items: center;
-	gap: 8px;
 	font-weight: ${props => (props.bold ? 500 : 400)};
 `;
 
-const RowWrapper = styled.div`
-	display: contents;
+const ProjectsRowWrapper = styled(RowWrapper)`
 	&:hover > div {
 		background-color: ${neutralColors.gray[300]};
 		color: ${brandColors.pinky[500]};
-	}
-	& > div:first-child {
-		padding-left: 4px;
 	}
 `;
 

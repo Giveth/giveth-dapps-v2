@@ -11,9 +11,11 @@ import ProfileOverviewTab from './ProfileOverviewTab';
 import { IUserProfileView } from './UserProfile.view';
 import { Container } from '@/components/Grid';
 import ContributeCard from '@/components/views/userProfile/ProfileContributeCard';
+import { ProfileBoostedTab } from './boostedTab/ProfileBoostedTab';
 
 enum EProfile {
 	OVERVIEW,
+	BOOSTED,
 	PROJECTS,
 	DONATIONS,
 	LIKED,
@@ -34,6 +36,9 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 		switch (tab) {
 			case 'projects':
 				setTab(EProfile.PROJECTS);
+				break;
+			case 'boosted':
+				setTab(EProfile.BOOSTED);
 				break;
 			case 'donations':
 				setTab(EProfile.DONATIONS);
@@ -60,6 +65,14 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 						onClick={() => setTab(EProfile.OVERVIEW)}
 					>
 						Overview
+					</ProfileTab>
+				)}
+				{myAccount && (
+					<ProfileTab
+						active={tab === EProfile.BOOSTED}
+						onClick={() => setTab(EProfile.BOOSTED)}
+					>
+						Boosted projects
 					</ProfileTab>
 				)}
 				<ProfileTab
@@ -97,6 +110,7 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 				</ProfileTab>
 			</ProfileTabsContainer>
 			{tab === EProfile.OVERVIEW && <ProfileOverviewTab user={user} />}
+			{tab === EProfile.BOOSTED && <ProfileBoostedTab user={user} />}
 			{tab === EProfile.PROJECTS && (
 				<ProfileProjectsTab user={user} myAccount={myAccount} />
 			)}
@@ -117,7 +131,6 @@ const ProfileContainer = styled(Container)`
 const ProfileTabsContainer = styled(Flex)`
 	padding: 37px 0;
 	gap: 16px;
-	max-width: 600px;
 	overflow: auto;
 `;
 

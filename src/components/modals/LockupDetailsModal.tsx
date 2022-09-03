@@ -7,8 +7,6 @@ import {
 	IconUnlock32,
 	H5,
 	H6,
-	B,
-	P,
 	Caption,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
@@ -24,6 +22,7 @@ import config from '@/configuration';
 import { SubgraphQueryBuilder } from '@/lib/subgraph/subgraphQueryBuilder';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import { RowWrapper, TableCell, TableHeader } from '../styled-components/Table';
 import type { IGIVpowerPosition } from '@/types/subgraph';
 import type { BigNumber } from 'ethers';
 import type { IModal } from '@/types/common';
@@ -112,22 +111,22 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 									);
 									return (
 										<RowWrapper key={key}>
-											<TableCell>
+											<LockTableCell>
 												{formatWeiHelper(
 													locksInfo.amount,
 												)}
-											</TableCell>
-											<TableCell>
+											</LockTableCell>
+											<LockTableCell>
 												{`${locksInfo.rounds}  Round${
 													locksInfo.rounds > 1
 														? 's'
 														: ''
 												}`}
-											</TableCell>
-											<TableCell>
+											</LockTableCell>
+											<LockTableCell>
 												{multiplier.toFixed(2)}
-											</TableCell>
-											<TableCell>
+											</LockTableCell>
+											<LockTableCell>
 												{apr
 													? formatEthHelper(
 															apr.effectiveAPR.multipliedBy(
@@ -136,8 +135,8 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 													  )
 													: ' ? '}
 												%
-											</TableCell>
-											<TableCell>
+											</LockTableCell>
+											<LockTableCell>
 												{smallFormatDate(
 													new Date(
 														Number(
@@ -145,7 +144,7 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 														) * 1000,
 													),
 												)}
-											</TableCell>
+											</LockTableCell>
 										</RowWrapper>
 									);
 								},
@@ -257,28 +256,9 @@ const LockedTable = styled.div`
 	color: ${brandColors.deep[100]};
 `;
 
-const TableHeader = styled(B)`
-	display: flex;
-	height: 40px;
-	border-bottom: 1px solid ${brandColors.deep[100]};
-	align-items: center;
-	padding: 32px 29px 32px 0;
-	margin: 8px 0;
-`;
-
-const RowWrapper = styled.div`
-	display: contents;
-	& > div:first-child {
-		padding-left: 4px;
-	}
-`;
-
-const TableCell = styled(P)`
-	display: flex;
+const LockTableCell = styled(TableCell)`
 	height: 60px;
 	border-bottom: 1px solid ${brandColors.deep[100]};
 	padding: 0 10px 0 0;
-	align-items: center;
-	gap: 8px;
 	overflow-x: auto;
 `;
