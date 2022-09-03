@@ -54,9 +54,9 @@ const ProjectCard = (props: IProjectCard) => {
 
 	const [isHover, setIsHover] = useState(false);
 
+	const orgLabel = organization?.label;
 	const isForeignOrg =
-		organization?.label !== ORGANIZATION.trace &&
-		organization?.label !== ORGANIZATION.giveth;
+		orgLabel !== ORGANIZATION.trace && orgLabel !== ORGANIZATION.giveth;
 	const name = adminUser?.name;
 
 	return (
@@ -68,7 +68,7 @@ const ProjectCard = (props: IProjectCard) => {
 				<ImagePlaceholder>
 					<ProjectCardBadges project={project} />
 					<ProjectCardOrgBadge
-						organization={organization?.label}
+						organization={orgLabel}
 						isHover={isHover}
 					/>
 					<ProjectCardImage image={image} />
@@ -76,7 +76,7 @@ const ProjectCard = (props: IProjectCard) => {
 				<CardBody
 					isHover={isHover}
 					isOtherOrganization={
-						organization?.label !== ORGANIZATION.giveth
+						orgLabel && orgLabel !== ORGANIZATION.giveth
 					}
 					isVerified={verified}
 				>
@@ -115,26 +115,22 @@ const ProjectCard = (props: IProjectCard) => {
 						<>
 							<Hr />
 							<Flex gap='16px'>
-								<>
-									<Flex alignItems='center' gap='4px'>
-										<IconVerified
-											size={16}
-											color={semanticColors.jade[500]}
+								<Flex alignItems='center' gap='4px'>
+									<IconVerified
+										size={16}
+										color={semanticColors.jade[500]}
+									/>
+									<VerifiedText>VERIFIED</VerifiedText>
+								</Flex>
+								<Flex alignItems='center' gap='2px'>
+									<GivBackIconContainer>
+										<IconGIVBack
+											size={24}
+											color={brandColors.giv[500]}
 										/>
-										<VerifiedText>VERIFIED</VerifiedText>
-									</Flex>
-									<Flex alignItems='center' gap='2px'>
-										<GivBackIconContainer>
-											<IconGIVBack
-												size={24}
-												color={brandColors.giv[500]}
-											/>
-										</GivBackIconContainer>
-										<GivBackText>
-											GIVBACK ELIGIBLE
-										</GivBackText>
-									</Flex>
-								</>
+									</GivBackIconContainer>
+									<GivBackText>GIVBACK ELIGIBLE</GivBackText>
+								</Flex>
 							</Flex>
 						</>
 					)}
@@ -222,7 +218,7 @@ const Description = styled(P)`
 `;
 
 const CardBody = styled.div<{
-	isOtherOrganization?: boolean;
+	isOtherOrganization?: boolean | '';
 	isHover?: boolean;
 	isVerified?: boolean;
 }>`

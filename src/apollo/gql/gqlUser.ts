@@ -62,9 +62,7 @@ export const FETCH_USER_PROJECTS = gql`
 					status
 				}
 				updatedAt
-				organization {
-					label
-				}
+				verified
 			}
 			totalCount
 		}

@@ -277,6 +277,7 @@ export const FETCH_USER_LIKED_PROJECTS = gql`
 					networkId
 				}
 				adminUser {
+					walletAddress
 					name
 				}
 				impactLocation
@@ -294,6 +295,7 @@ export const FETCH_USER_LIKED_PROJECTS = gql`
 				organization {
 					label
 				}
+				verified
 			}
 			totalCount
 		}
