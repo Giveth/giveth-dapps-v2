@@ -14,6 +14,7 @@ import ContributeCard from '@/components/views/userProfile/ProfileContributeCard
 
 enum EProfile {
 	OVERVIEW,
+	BOOSTED,
 	PROJECTS,
 	DONATIONS,
 	LIKED,
@@ -60,6 +61,14 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 						onClick={() => setTab(EProfile.OVERVIEW)}
 					>
 						Overview
+					</ProfileTab>
+				)}
+				{myAccount && (
+					<ProfileTab
+						active={tab === EProfile.BOOSTED}
+						onClick={() => setTab(EProfile.BOOSTED)}
+					>
+						Boosted projects
 					</ProfileTab>
 				)}
 				<ProfileTab
