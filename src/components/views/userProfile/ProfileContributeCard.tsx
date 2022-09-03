@@ -1,4 +1,4 @@
-import { brandColors, H2, H5, Subline } from '@giveth/ui-design-system';
+import { H2, H5 } from '@giveth/ui-design-system';
 import { FC } from 'react';
 import styled from 'styled-components';
 
@@ -6,6 +6,7 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '../../styled-components/Flex';
 import { IUserProfileView } from '@/components/views/userProfile/UserProfile.view';
 import { formatUSD } from '@/lib/helpers';
+import { ContributeCard, ContributeCardTitles } from './common.sc';
 
 const ProfileContributeCard: FC<IUserProfileView> = ({ user, myAccount }) => {
 	const userName = user?.name || 'Unknown';
@@ -53,20 +54,6 @@ const ContributeCardContainer = styled(Flex)`
 	${mediaQueries.tablet} {
 		flex-direction: row;
 	}
-`;
-
-const ContributeCard = styled.div`
-	background: ${brandColors.giv['000']};
-	box-shadow: 0 3px 20px rgba(212, 218, 238, 0.4);
-	border-radius: 12px;
-	display: grid;
-	padding: 24px;
-	grid-template-columns: 1fr 1fr;
-	width: 100%;
-`;
-
-const ContributeCardTitles = styled(Subline)`
-	text-transform: uppercase;
 `;
 
 export default ProfileContributeCard;
