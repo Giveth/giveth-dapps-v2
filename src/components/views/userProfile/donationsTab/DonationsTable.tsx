@@ -20,7 +20,7 @@ import {
 } from '@/components/views/userProfile/UserProfile.view';
 import SortIcon from '@/components/SortIcon';
 import DonationStatus from '@/components/badges/DonationStatusBadge';
-import { TableHeader } from '@/components/styled-components/Table';
+import { RowWrapper, TableHeader } from '@/components/styled-components/Table';
 
 interface DonationTable {
 	donations: IWalletDonation[];
@@ -52,7 +52,7 @@ const DonationTable: FC<DonationTable> = ({
 				<SortIcon order={order} title={EOrderBy.UsdAmount} />
 			</TableHeader>
 			{donations.map(donation => (
-				<RowWrapper key={donation.id}>
+				<DonationRowWrapper key={donation.id}>
 					<TableCell>
 						{smallFormatDate(new Date(donation.createdAt))}
 					</TableCell>
@@ -89,7 +89,7 @@ const DonationTable: FC<DonationTable> = ({
 						{donation.valueUsd &&
 							'$' + formatUSD(donation.valueUsd)}
 					</TableCell>
-				</RowWrapper>
+				</DonationRowWrapper>
 			))}
 		</DonationTableContainer>
 	);
@@ -99,14 +99,10 @@ const Currency = styled.div`
 	color: ${neutralColors.gray[600]};
 `;
 
-const RowWrapper = styled.div`
-	display: contents;
+const DonationRowWrapper = styled(RowWrapper)`
 	&:hover > div {
 		background-color: ${neutralColors.gray[300]};
 		color: ${brandColors.pinky[500]};
-	}
-	& > div:first-child {
-		padding-left: 4px;
 	}
 `;
 

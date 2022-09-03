@@ -23,7 +23,7 @@ import config from '@/configuration';
 import { SubgraphQueryBuilder } from '@/lib/subgraph/subgraphQueryBuilder';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import { TableHeader } from '../styled-components/Table';
+import { RowWrapper, TableHeader } from '../styled-components/Table';
 import type { IGIVpowerPosition } from '@/types/subgraph';
 import type { BigNumber } from 'ethers';
 import type { IModal } from '@/types/common';
@@ -255,13 +255,6 @@ const LockedTable = styled.div`
 	max-height: 364px;
 	margin: 10px 0 0 0;
 	color: ${brandColors.deep[100]};
-`;
-
-const RowWrapper = styled.div`
-	display: contents;
-	& > div:first-child {
-		padding-left: 4px;
-	}
 `;
 
 const TableCell = styled(P)`

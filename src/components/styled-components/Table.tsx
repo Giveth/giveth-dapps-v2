@@ -14,3 +14,10 @@ export const TableHeader = styled(B)`
 			align-items: center;
 		`}
 `;
+
+export const RowWrapper = styled.div`
+	display: contents;
+	& > div:first-child {
+		padding-left: 4px;
+	}
+`;

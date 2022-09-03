@@ -19,7 +19,7 @@ import SortIcon from '@/components/SortIcon';
 import { EVerificationStatus, IProject } from '@/apollo/types/types';
 import { mediaQueries } from '@/lib/constants/constants';
 import VerificationBadge from '@/components/VerificationBadge';
-import { TableHeader } from '@/components/styled-components/Table';
+import { RowWrapper, TableHeader } from '@/components/styled-components/Table';
 
 interface IProjectsTable {
 	projects: IProject[];
@@ -61,7 +61,7 @@ const ProjectsTable: FC<IProjectsTable> = ({
 					? EVerificationStatus.VERIFIED
 					: project.projectVerificationForm?.status;
 				return (
-					<RowWrapper key={project.id}>
+					<ProjectsRowWrapper key={project.id}>
 						<TableCell>
 							{smallFormatDate(new Date(project.creationDate!))}
 						</TableCell>
@@ -95,7 +95,7 @@ const ProjectsTable: FC<IProjectsTable> = ({
 								/>
 							</Actions>
 						</TableCell>
-					</RowWrapper>
+					</ProjectsRowWrapper>
 				);
 			})}
 		</Container>
@@ -129,14 +129,10 @@ const TableCell = styled(P)<{ bold?: boolean }>`
 	font-weight: ${props => (props.bold ? 500 : 400)};
 `;
 
-const RowWrapper = styled.div`
-	display: contents;
+const ProjectsRowWrapper = styled(RowWrapper)`
 	&:hover > div {
 		background-color: ${neutralColors.gray[300]};
 		color: ${brandColors.pinky[500]};
-	}
-	& > div:first-child {
-		padding-left: 4px;
 	}
 `;
 

@@ -33,7 +33,7 @@ import { useAppSelector } from '@/features/hooks';
 import DonationStatus from '@/components/badges/DonationStatusBadge';
 import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import useDebounce from '@/hooks/useDebounce';
-import { TableHeader } from '@/components/styled-components/Table';
+import { RowWrapper, TableHeader } from '@/components/styled-components/Table';
 
 const itemPerPage = 10;
 
@@ -193,7 +193,7 @@ const ProjectDonationTable = ({
 							/>
 						</TableHeader>
 						{pageDonations?.donations?.map(donation => (
-							<RowWrapper key={donation.id}>
+							<DonationRowWrapper key={donation.id}>
 								<TableCell>
 									{smallFormatDate(
 										new Date(donation.createdAt),
@@ -250,7 +250,7 @@ const ProjectDonationTable = ({
 									{donation.valueUsd &&
 										'$' + formatUSD(donation.valueUsd)}
 								</TableCell>
-							</RowWrapper>
+							</DonationRowWrapper>
 						))}
 					</DonationTableContainer>
 				</DonationTableWrapper>
@@ -318,14 +318,10 @@ const DonationTableContainer = styled.div<{ isAdmin?: boolean }>`
 	min-width: 800px;
 `;
 
-const RowWrapper = styled.div`
-	display: contents;
+const DonationRowWrapper = styled(RowWrapper)`
 	&:hover > div {
 		background-color: ${neutralColors.gray[300]};
 		color: ${brandColors.pinky[500]};
-	}
-	& > div:first-child {
-		padding-left: 4px;
 	}
 `;
 
