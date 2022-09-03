@@ -13,7 +13,6 @@ import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { IDonation, IProject } from '@/apollo/types/types';
 import SearchBox from '@/components/SearchBox';
-import { Flex } from '@/components/styled-components/Flex';
 import Pagination from '@/components/Pagination';
 import {
 	smallFormatDate,
@@ -33,7 +32,11 @@ import { useAppSelector } from '@/features/hooks';
 import DonationStatus from '@/components/badges/DonationStatusBadge';
 import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import useDebounce from '@/hooks/useDebounce';
-import { RowWrapper, TableHeader } from '@/components/styled-components/Table';
+import {
+	RowWrapper,
+	TableCell,
+	TableHeader,
+} from '@/components/styled-components/Table';
 
 const itemPerPage = 10;
 
@@ -194,12 +197,12 @@ const ProjectDonationTable = ({
 						</TableHeader>
 						{pageDonations?.donations?.map(donation => (
 							<DonationRowWrapper key={donation.id}>
-								<TableCell>
+								<DonationTableCell>
 									{smallFormatDate(
 										new Date(donation.createdAt),
 									)}
-								</TableCell>
-								<TableCell>
+								</DonationTableCell>
+								<DonationTableCell>
 									{donation.donationType ===
 									EDonationType.POIGNART
 										? 'PoignART'
@@ -207,15 +210,15 @@ const ProjectDonationTable = ({
 										? 'Anonymous'
 										: donation.user?.name ||
 										  donation.user?.firstName}
-								</TableCell>
+								</DonationTableCell>
 								{isAdmin && (
-									<TableCell>
+									<DonationTableCell>
 										<DonationStatus
 											status={donation.status}
 										/>
-									</TableCell>
+									</DonationTableCell>
 								)}
-								<TableCell>
+								<DonationTableCell>
 									{donation.transactionNetworkId ===
 									config.XDAI_NETWORK_NUMBER ? (
 										<>
@@ -228,8 +231,8 @@ const ProjectDonationTable = ({
 											Ethereum
 										</>
 									)}
-								</TableCell>
-								<TableCell>
+								</DonationTableCell>
+								<DonationTableCell>
 									<B>{donation.amount}</B>
 									<Currency>{donation.currency}</Currency>
 									{!donation.anonymous && (
@@ -245,11 +248,11 @@ const ProjectDonationTable = ({
 											/>
 										</ExternalLink>
 									)}
-								</TableCell>
-								<TableCell>
+								</DonationTableCell>
+								<DonationTableCell>
 									{donation.valueUsd &&
 										'$' + formatUSD(donation.valueUsd)}
-								</TableCell>
+								</DonationTableCell>
 							</DonationRowWrapper>
 						))}
 					</DonationTableContainer>
@@ -325,11 +328,9 @@ const DonationRowWrapper = styled(RowWrapper)`
 	}
 `;
 
-const TableCell = styled(Flex)`
+const DonationTableCell = styled(TableCell)`
 	height: 60px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
-	align-items: center;
-	gap: 8px;
 `;
 
 export default ProjectDonationTable;

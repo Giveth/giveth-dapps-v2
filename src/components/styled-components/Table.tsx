@@ -1,4 +1,4 @@
-import { B, neutralColors } from '@giveth/ui-design-system';
+import { B, neutralColors, P } from '@giveth/ui-design-system';
 import styled, { css } from 'styled-components';
 
 export const TableHeader = styled(B)`
@@ -20,4 +20,11 @@ export const RowWrapper = styled.div`
 	& > div:first-child {
 		padding-left: 4px;
 	}
+`;
+
+export const TableCell = styled(P)`
+	display: flex;
+	align-items: center;
+	overflow-x: auto;
+	gap: 8px;
 `;

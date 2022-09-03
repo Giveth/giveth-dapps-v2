@@ -2,7 +2,6 @@ import {
 	brandColors,
 	IconHeart,
 	neutralColors,
-	P,
 } from '@giveth/ui-design-system';
 import { FC } from 'react';
 import styled from 'styled-components';
@@ -19,7 +18,11 @@ import SortIcon from '@/components/SortIcon';
 import { EVerificationStatus, IProject } from '@/apollo/types/types';
 import { mediaQueries } from '@/lib/constants/constants';
 import VerificationBadge from '@/components/VerificationBadge';
-import { RowWrapper, TableHeader } from '@/components/styled-components/Table';
+import {
+	RowWrapper,
+	TableCell,
+	TableHeader,
+} from '@/components/styled-components/Table';
 
 interface IProjectsTable {
 	projects: IProject[];
@@ -62,26 +65,28 @@ const ProjectsTable: FC<IProjectsTable> = ({
 					: project.projectVerificationForm?.status;
 				return (
 					<ProjectsRowWrapper key={project.id}>
-						<TableCell>
+						<ProjectTableCell>
 							{smallFormatDate(new Date(project.creationDate!))}
-						</TableCell>
-						<TableCell>
+						</ProjectTableCell>
+						<ProjectTableCell>
 							<StatusBadge status={status!} />
-						</TableCell>
-						<TableCell bold>
+						</ProjectTableCell>
+						<ProjectTableCell bold>
 							<ProjectTitle>
 								{project.title}
 								<VerificationBadge status={verStatus} />
 							</ProjectTitle>
-						</TableCell>
-						<TableCell>{project.totalReactions}</TableCell>
-						<TableCell bold>
+						</ProjectTableCell>
+						<ProjectTableCell>
+							{project.totalReactions}
+						</ProjectTableCell>
+						<ProjectTableCell bold>
 							{formatUSD(project.totalDonations)} USD
-						</TableCell>
-						<TableCell>
+						</ProjectTableCell>
+						<ProjectTableCell>
 							<ListingBadge listed={project.listed!} />
-						</TableCell>
-						<TableCell>
+						</ProjectTableCell>
+						<ProjectTableCell>
 							<Actions isCancelled={isCancelled}>
 								<InternalLink
 									href={idToProjectEdit(project.id)}
@@ -94,7 +99,7 @@ const ProjectsTable: FC<IProjectsTable> = ({
 									disabled={isCancelled}
 								/>
 							</Actions>
-						</TableCell>
+						</ProjectTableCell>
 					</ProjectsRowWrapper>
 				);
 			})}
@@ -119,13 +124,10 @@ const ProjectsTableHeader = styled(TableHeader)`
 	}
 `;
 
-const TableCell = styled(P)<{ bold?: boolean }>`
-	display: flex;
+const ProjectTableCell = styled(TableCell)<{ bold?: boolean }>`
 	width: 100%;
 	height: 60px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
-	align-items: center;
-	gap: 8px;
 	font-weight: ${props => (props.bold ? 500 : 400)};
 `;
 

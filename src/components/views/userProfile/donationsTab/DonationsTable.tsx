@@ -7,7 +7,6 @@ import {
 	IconExternalLink,
 	IconLink24,
 	neutralColors,
-	P,
 } from '@giveth/ui-design-system';
 
 import { formatUSD, smallFormatDate, formatTxLink } from '@/lib/helpers';
@@ -20,7 +19,11 @@ import {
 } from '@/components/views/userProfile/UserProfile.view';
 import SortIcon from '@/components/SortIcon';
 import DonationStatus from '@/components/badges/DonationStatusBadge';
-import { RowWrapper, TableHeader } from '@/components/styled-components/Table';
+import {
+	RowWrapper,
+	TableCell,
+	TableHeader,
+} from '@/components/styled-components/Table';
 
 interface DonationTable {
 	donations: IWalletDonation[];
@@ -53,9 +56,9 @@ const DonationTable: FC<DonationTable> = ({
 			</TableHeader>
 			{donations.map(donation => (
 				<DonationRowWrapper key={donation.id}>
-					<TableCell>
+					<DonationTableCell>
 						{smallFormatDate(new Date(donation.createdAt))}
-					</TableCell>
+					</DonationTableCell>
 					<Link
 						href={slugToProjectView(donation.project.slug)}
 						passHref
@@ -66,11 +69,11 @@ const DonationTable: FC<DonationTable> = ({
 						</ProjectTitleCell>
 					</Link>
 					{myAccount && (
-						<TableCell>
+						<DonationTableCell>
 							<DonationStatus status={donation.status} />
-						</TableCell>
+						</DonationTableCell>
 					)}
-					<TableCell>
+					<DonationTableCell>
 						<B>{donation.amount}</B>
 						<Currency>{donation.currency}</Currency>
 						<ExternalLink
@@ -84,11 +87,11 @@ const DonationTable: FC<DonationTable> = ({
 								color={brandColors.pinky[500]}
 							/>
 						</ExternalLink>
-					</TableCell>
-					<TableCell>
+					</DonationTableCell>
+					<DonationTableCell>
 						{donation.valueUsd &&
 							'$' + formatUSD(donation.valueUsd)}
-					</TableCell>
+					</DonationTableCell>
 				</DonationRowWrapper>
 			))}
 		</DonationTableContainer>
@@ -106,12 +109,9 @@ const DonationRowWrapper = styled(RowWrapper)`
 	}
 `;
 
-const TableCell = styled(P)<{ bold?: boolean }>`
-	display: flex;
+const DonationTableCell = styled(TableCell)<{ bold?: boolean }>`
 	height: 60px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
-	align-items: center;
-	gap: 8px;
 	font-weight: ${props => (props.bold ? 500 : 400)};
 `;
 
@@ -124,7 +124,7 @@ const DonationTableContainer = styled.div<{ myAccount?: boolean }>`
 	margin: 0 10px;
 `;
 
-const ProjectTitleCell = styled(TableCell)`
+const ProjectTitleCell = styled(DonationTableCell)`
 	cursor: pointer;
 	& > svg {
 		display: none;
