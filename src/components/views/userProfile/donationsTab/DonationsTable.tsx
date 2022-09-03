@@ -20,6 +20,7 @@ import {
 } from '@/components/views/userProfile/UserProfile.view';
 import SortIcon from '@/components/SortIcon';
 import DonationStatus from '@/components/badges/DonationStatusBadge';
+import { TableHeader } from '@/components/styled-components/Table';
 
 interface DonationTable {
 	donations: IWalletDonation[];
@@ -125,18 +126,6 @@ const DonationTableContainer = styled.div<{ myAccount?: boolean }>`
 	overflow: auto;
 	min-width: 900px;
 	margin: 0 10px;
-`;
-
-const TableHeader = styled(B)`
-	display: flex;
-	height: 40px;
-	border-bottom: 1px solid ${neutralColors.gray[400]};
-	align-items: center;
-	${props =>
-		props.onClick &&
-		`cursor: pointer;
-	gap: 8px;
-	align-items: center;`}
 `;
 
 const ProjectTitleCell = styled(TableCell)`

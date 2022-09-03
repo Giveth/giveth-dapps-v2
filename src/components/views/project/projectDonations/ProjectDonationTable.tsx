@@ -33,6 +33,7 @@ import { useAppSelector } from '@/features/hooks';
 import DonationStatus from '@/components/badges/DonationStatusBadge';
 import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import useDebounce from '@/hooks/useDebounce';
+import { TableHeader } from '@/components/styled-components/Table';
 
 const itemPerPage = 10;
 
@@ -315,18 +316,6 @@ const DonationTableContainer = styled.div<{ isAdmin?: boolean }>`
 			? '1.25fr 2fr 1fr 1.25fr 1fr 1fr'
 			: '1.25fr 2fr 1.25fr 1fr 1fr'};
 	min-width: 800px;
-`;
-
-const TableHeader = styled(B)`
-	height: 40px;
-	border-bottom: 1px solid ${neutralColors.gray[400]};
-	align-items: center;
-	display: flex;
-	${props =>
-		props.onClick &&
-		`cursor: pointer;
-	gap: 8px;
-	align-items: center;`}
 `;
 
 const RowWrapper = styled.div`

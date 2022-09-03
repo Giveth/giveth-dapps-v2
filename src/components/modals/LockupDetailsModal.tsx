@@ -7,7 +7,6 @@ import {
 	IconUnlock32,
 	H5,
 	H6,
-	B,
 	P,
 	Caption,
 } from '@giveth/ui-design-system';
@@ -24,6 +23,7 @@ import config from '@/configuration';
 import { SubgraphQueryBuilder } from '@/lib/subgraph/subgraphQueryBuilder';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import { TableHeader } from '../styled-components/Table';
 import type { IGIVpowerPosition } from '@/types/subgraph';
 import type { BigNumber } from 'ethers';
 import type { IModal } from '@/types/common';
@@ -255,15 +255,6 @@ const LockedTable = styled.div`
 	max-height: 364px;
 	margin: 10px 0 0 0;
 	color: ${brandColors.deep[100]};
-`;
-
-const TableHeader = styled(B)`
-	display: flex;
-	height: 40px;
-	border-bottom: 1px solid ${brandColors.deep[100]};
-	align-items: center;
-	padding: 32px 29px 32px 0;
-	margin: 8px 0;
 `;
 
 const RowWrapper = styled.div`
