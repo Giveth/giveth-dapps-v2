@@ -36,7 +36,7 @@ const ProjectsTable: FC<IProjectsTable> = ({
 	order,
 }) => {
 	return (
-		<Container>
+		<Table>
 			<ProjectsTableHeader
 				onClick={() => changeOrder(EOrderBy.CreationDate)}
 			>
@@ -103,11 +103,11 @@ const ProjectsTable: FC<IProjectsTable> = ({
 					</ProjectsRowWrapper>
 				);
 			})}
-		</Container>
+		</Table>
 	);
 };
 
-const Container = styled.div`
+const Table = styled.div`
 	display: grid;
 	grid-template-columns: 1.5fr 1.1fr 4fr 1.1fr 1.5fr 1.75fr 1fr;
 	overflow: auto;
