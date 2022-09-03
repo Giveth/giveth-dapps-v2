@@ -11,6 +11,7 @@ import ProfileOverviewTab from './ProfileOverviewTab';
 import { IUserProfileView } from './UserProfile.view';
 import { Container } from '@/components/Grid';
 import ContributeCard from '@/components/views/userProfile/ProfileContributeCard';
+import { ProfileBoostedTab } from './boostedTab/ProfileBoostedTab';
 
 enum EProfile {
 	OVERVIEW,
@@ -109,6 +110,7 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 				</ProfileTab>
 			</ProfileTabsContainer>
 			{tab === EProfile.OVERVIEW && <ProfileOverviewTab user={user} />}
+			{tab === EProfile.BOOSTED && <ProfileBoostedTab user={user} />}
 			{tab === EProfile.PROJECTS && (
 				<ProfileProjectsTab user={user} myAccount={myAccount} />
 			)}
