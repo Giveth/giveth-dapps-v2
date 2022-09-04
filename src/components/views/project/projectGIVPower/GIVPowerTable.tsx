@@ -8,7 +8,7 @@ import {
 } from '@giveth/ui-design-system';
 import SortIcon from '@/components/SortIcon';
 import { EDirection } from '@/apollo/types/gqlEnums';
-import { EOrderBy } from '@/components/views/userPublicProfile/UserPublicProfile.view';
+import { EOrderBy } from '@/components/views/userProfile/UserProfile.view';
 
 const order = {
 	by: EOrderBy.TokenAmount,
