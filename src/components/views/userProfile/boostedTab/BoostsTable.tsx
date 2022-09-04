@@ -1,9 +1,12 @@
 import {
 	brandColors,
+	Button,
+	H5,
 	IconTrash,
 	neutralColors,
+	OulineButton,
 } from '@giveth/ui-design-system';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import styled from 'styled-components';
 
 import { mediaQueries } from '@/lib/constants/constants';
@@ -16,6 +19,7 @@ import {
 import { IBoostedProject } from '@/apollo/types/gqlTypes';
 import { EBoostedOrderBy, IBoostedOrder } from './ProfileBoostedTab';
 import { BN, formatWeiHelper } from '@/helpers/number';
+import { Flex } from '@/components/styled-components/Flex';
 
 interface IBoostsTable {
 	boosts: IBoostedProject[];
@@ -24,53 +28,103 @@ interface IBoostsTable {
 	changeOrder: (orderBy: EBoostedOrderBy) => void;
 }
 
+enum ETableNode {
+	VIEWING,
+	EDITING,
+}
+
 const BoostsTable: FC<IBoostsTable> = ({
 	boosts,
 	totalAmountOfGIVpower,
 	order,
 	changeOrder,
 }) => {
+	const [mode, setMode] = useState(ETableNode.VIEWING);
+	const [_boosts, setBoosts] = useState(boosts);
 	const _totalAmountOfGIVpower = BN(totalAmountOfGIVpower);
 	return (
-		<Table>
-			<TableHeader>Projects</TableHeader>
-			<TableHeader
-				onClick={() => changeOrder(EBoostedOrderBy.Percentage)}
-			>
-				GIVpower amount
-				{/* <SortIcon order={order} title={EBoostedOrderBy.Percentage} /> */}
-			</TableHeader>
-			<TableHeader>Boosted with</TableHeader>
-			<TableHeader></TableHeader>
-			{boosts?.map(boost => {
-				return (
-					<BoostsRowWrapper key={boost.project.id}>
-						<BoostsTableCell bold>
-							{boost.project.title}
-						</BoostsTableCell>
-						<BoostsTableCell>
-							{formatWeiHelper(
-								_totalAmountOfGIVpower
-									.mul(boost.percentage)
-									.div(100),
-							)}
-						</BoostsTableCell>
-						<BoostsTableCell bold>
-							{boost.percentage}%
-						</BoostsTableCell>
-						<BoostsTableCell>
-							<IconTrash size={24} />
-						</BoostsTableCell>
-					</BoostsRowWrapper>
-				);
-			})}
-			<TableFooter>TOTAL GIVPOWER</TableFooter>
-			<TableFooter></TableFooter>
-			<TableFooter></TableFooter>
-			<TableFooter></TableFooter>
-		</Table>
+		<>
+			<Header justifyContent='space-between'>
+				<H5 weight={700}>GIVPower Table Summary</H5>
+				<Flex gap='8px'>
+					{mode === ETableNode.VIEWING ? (
+						<Button
+							buttonType='primary'
+							label='edit boosting'
+							size='small'
+							onClick={() => setMode(ETableNode.EDITING)}
+						/>
+					) : (
+						<>
+							<OulineButton
+								buttonType='primary'
+								label='reset all'
+								size='small'
+								onClick={() => setBoosts(boosts)}
+							/>
+							<Button
+								buttonType='primary'
+								label='Apply changes'
+								size='small'
+								onClick={() => setMode(ETableNode.EDITING)}
+							/>
+							<OulineButton
+								buttonType='primary'
+								label='cancel'
+								size='small'
+								onClick={() => setMode(ETableNode.VIEWING)}
+							/>
+						</>
+					)}
+				</Flex>
+			</Header>
+			<Table>
+				<TableHeader>Projects</TableHeader>
+				<TableHeader
+					onClick={() => {
+						if (mode === ETableNode.VIEWING)
+							changeOrder(EBoostedOrderBy.Percentage);
+					}}
+				>
+					GIVpower amount
+					{/* <SortIcon order={order} title={EBoostedOrderBy.Percentage} /> */}
+				</TableHeader>
+				<TableHeader>Boosted with</TableHeader>
+				<TableHeader></TableHeader>
+				{_boosts?.map(boost => {
+					return (
+						<BoostsRowWrapper key={boost.project.id}>
+							<BoostsTableCell bold>
+								{boost.project.title}
+							</BoostsTableCell>
+							<BoostsTableCell>
+								{formatWeiHelper(
+									_totalAmountOfGIVpower
+										.mul(boost.percentage)
+										.div(100),
+								)}
+							</BoostsTableCell>
+							<BoostsTableCell bold>
+								{boost.percentage}%
+							</BoostsTableCell>
+							<BoostsTableCell>
+								<IconTrash size={24} />
+							</BoostsTableCell>
+						</BoostsRowWrapper>
+					);
+				})}
+				<TableFooter>TOTAL GIVPOWER</TableFooter>
+				<TableFooter></TableFooter>
+				<TableFooter>100%</TableFooter>
+				<TableFooter></TableFooter>
+			</Table>
+		</>
 	);
 };
+
+const Header = styled(Flex)`
+	margin: 68px 0 48px;
+`;
 
 const Table = styled.div`
 	display: grid;
