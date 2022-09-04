@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import styled from 'styled-components';
-import { Lead, Button, OulineButton } from '@giveth/ui-design-system';
+import { Lead, Button, OutlineButton } from '@giveth/ui-design-system';
 
 import { Modal } from '@/components/modals/Modal';
 import ShieldBlackIcon from '/public/images/icons/shield_black.svg';
@@ -42,7 +42,7 @@ const LowerShields = (props: { onClose: () => void }) => {
 					window for you to complete your sign-in
 				</Lead>
 				{isDark ? (
-					<OulineButton label='OK' onClick={closeModal} />
+					<OutlineButton label='OK' onClick={closeModal} />
 				) : (
 					<Button label='OK' onClick={closeModal} />
 				)}
