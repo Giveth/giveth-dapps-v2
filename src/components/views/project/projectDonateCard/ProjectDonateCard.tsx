@@ -13,7 +13,7 @@ import {
 	Button,
 	brandColors,
 	neutralColors,
-	OulineButton,
+	OutlineButton,
 	IconArchiving,
 } from '@giveth/ui-design-system';
 import { motion } from 'framer-motion';
@@ -425,7 +425,7 @@ const FullButton = styled(Button)`
 	}
 `;
 
-const FullOutlineButton = styled(OulineButton)`
+const FullOutlineButton = styled(OutlineButton)`
 	width: 100%;
 `;
 

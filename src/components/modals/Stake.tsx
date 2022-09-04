@@ -4,7 +4,7 @@ import {
 	Button,
 	H4,
 	neutralColors,
-	OulineButton,
+	OutlineButton,
 	P,
 	SublineBold,
 } from '@giveth/ui-design-system';
@@ -507,7 +507,7 @@ const InnerModal = styled.div`
 	padding: 0 24px;
 `;
 
-const ApproveButton = styled(OulineButton)`
+const ApproveButton = styled(OutlineButton)`
 	width: 100%;
 	margin-top: 32px;
 	margin-bottom: 8px;
