@@ -8,7 +8,7 @@ import {
 	H5,
 	IconExternalLink,
 	neutralColors,
-	OulineButton,
+	OutlineButton,
 } from '@giveth/ui-design-system';
 import { useMutation } from '@apollo/client';
 import { utils } from 'ethers';
@@ -396,7 +396,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						</PublishList>
 						<Buttons>
 							{(!isEditMode || isDraft) && (
-								<OulineButton
+								<OutlineButton
 									label='PREVIEW '
 									buttonType='primary'
 									disabled={isLoading}
@@ -414,7 +414,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								disabled={isLoading}
 							/>
 							{isEditMode && (
-								<OulineButton
+								<OutlineButton
 									onClick={() => router.back()}
 									label='CANCEL'
 									buttonType='primary'
