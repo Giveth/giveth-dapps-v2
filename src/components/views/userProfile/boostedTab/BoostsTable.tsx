@@ -7,7 +7,7 @@ import {
 	neutralColors,
 	OutlineButton,
 } from '@giveth/ui-design-system';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { mediaQueries } from '@/lib/constants/constants';
@@ -42,8 +42,13 @@ const BoostsTable: FC<IBoostsTable> = ({
 	changeOrder,
 }) => {
 	const [mode, setMode] = useState(ETableNode.VIEWING);
-	const [_boosts, setBoosts] = useState(boosts);
+	const [_boosts, setBoosts] = useState<IBoostedProject[]>([]);
 	const _totalAmountOfGIVpower = BN(totalAmountOfGIVpower);
+
+	useEffect(() => {
+		if (mode === ETableNode.VIEWING) setBoosts(boosts);
+	}, [boosts]);
+
 	return (
 		<>
 			<Header justifyContent='space-between'>
