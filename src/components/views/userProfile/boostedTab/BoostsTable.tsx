@@ -5,7 +5,7 @@ import {
 	IconTrash,
 	IconUnlock16,
 	neutralColors,
-	OulineButton,
+	OutlineButton,
 } from '@giveth/ui-design-system';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
@@ -58,7 +58,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 						/>
 					) : (
 						<>
-							<OulineButton
+							<OutlineButton
 								buttonType='primary'
 								label='reset all'
 								size='small'
@@ -70,7 +70,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 								size='small'
 								onClick={() => setMode(ETableNode.EDITING)}
 							/>
-							<OulineButton
+							<OutlineButton
 								buttonType='primary'
 								label='cancel'
 								size='small'
