@@ -3,6 +3,7 @@ import {
 	Button,
 	H5,
 	IconTrash,
+	IconUnlock16,
 	neutralColors,
 	OulineButton,
 } from '@giveth/ui-design-system';
@@ -20,6 +21,7 @@ import { IBoostedProject } from '@/apollo/types/gqlTypes';
 import { EBoostedOrderBy, IBoostedOrder } from './ProfileBoostedTab';
 import { BN, formatWeiHelper } from '@/helpers/number';
 import { Flex } from '@/components/styled-components/Flex';
+import Input, { InputSize } from '@/components/Input';
 
 interface IBoostsTable {
 	boosts: IBoostedProject[];
@@ -105,7 +107,19 @@ const BoostsTable: FC<IBoostsTable> = ({
 								)}
 							</BoostsTableCell>
 							<BoostsTableCell bold>
-								{boost.percentage}%
+								{mode === ETableNode.VIEWING ? (
+									`${boost.percentage}%`
+								) : (
+									<Input
+										size={InputSize.SMALL}
+										LeftIcon={
+											<IconUnlock16
+												size={16}
+												color={neutralColors.gray[600]}
+											/>
+										}
+									/>
+								)}
 							</BoostsTableCell>
 							<BoostsTableCell>
 								<IconTrash size={24} />
