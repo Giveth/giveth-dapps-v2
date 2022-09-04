@@ -7,9 +7,8 @@ import { useAppDispatch } from '@/features/hooks';
 import {
 	setBalance,
 	setIsLoading,
-	setIsEnabled,
-	setIsSignedIn,
 	setToken,
+	setIsEnabled,
 } from '@/features/user/user.slice';
 import { isSSRMode } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
@@ -19,7 +18,6 @@ import { walletsArray } from '@/lib/wallet/walletTypes';
 const UserController = () => {
 	const { account, library, chainId, activate } = useWeb3React();
 	const dispatch = useAppDispatch();
-	//TODO: Remove this state  before  merfing verification-develop-branch to DEVELOP
 	const [isActivatedCalled, setIsActivatedCalled] = useState(false);
 	const token = !isSSRMode ? localStorage.getItem(StorageLabel.TOKEN) : null;
 
@@ -47,17 +45,11 @@ const UserController = () => {
 	}, [activate, isActivatedCalled]);
 
 	useEffect(() => {
-		if (account) dispatch(fetchUserByAddress(account));
-	}, [account]);
-
-	useEffect(() => {
-		if (account && token) {
-			dispatch(setIsEnabled(true));
-			dispatch(setIsSignedIn(true));
-		} else if (account) {
+		if (account) {
+			dispatch(fetchUserByAddress(account));
 			dispatch(setIsEnabled(true));
 		}
-	}, [account, token]);
+	}, [account]);
 
 	useEffect(() => {
 		if (token) {
