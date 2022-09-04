@@ -13,7 +13,7 @@ import {
 	Button,
 	brandColors,
 	neutralColors,
-	OulineButton,
+	OutlineButton,
 	IconArchiving,
 	IconRocketInSpace,
 	ButtonText,
@@ -449,7 +449,7 @@ const FullButton = styled(Button)`
 	}
 `;
 
-const FullOutlineButton = styled(OulineButton)`
+const FullOutlineButton = styled(OutlineButton)`
 	width: 100%;
 `;
 
