@@ -96,6 +96,13 @@ export const userSlice = createSlice({
 						localStorage.removeItem(StorageLabel.TOKEN);
 					}
 					state.userData = action.payload.data?.userByAddress;
+					if (
+						action.payload.data?.userByAddress?.isSignedIn === false
+					) {
+						signOutUser(state);
+					} else {
+						state.isSignedIn = true;
+					}
 					state.isLoading = false;
 				},
 			)
