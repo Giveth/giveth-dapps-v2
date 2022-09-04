@@ -153,13 +153,13 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 						}`,
 						opacity: 1,
 					}}
-					onChange={value => {
+					onChange={(value: any) => {
 						const _value = Array.isArray(value) ? value[0] : value;
 						if (boostedProjects === 0 || isSaving) return;
 						setPercentage(_value);
 						setIsChanged(true);
 					}}
-					handleRender={renderProps => {
+					handleRender={(renderProps: any) => {
 						return (
 							<Handle {...renderProps.props}>
 								{isChanged && (
