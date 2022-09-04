@@ -113,12 +113,6 @@ export const userSlice = createSlice({
 				state.token = action.payload;
 				state.isSignedIn = true;
 			})
-			.addCase(signOut.fulfilled, state => {
-				signOutUser(state);
-			})
-			.addCase(signOut.rejected, state => {
-				signOutUser(state);
-			})
 			.addCase(signOut.pending, state => {
 				signOutUser(state);
 			});
