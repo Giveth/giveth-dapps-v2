@@ -61,6 +61,8 @@ export const FETCH_USER_PROJECTS = gql`
 				projectVerificationForm {
 					status
 				}
+				updatedAt
+				verified
 			}
 			totalCount
 		}
