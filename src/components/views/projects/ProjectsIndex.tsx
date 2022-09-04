@@ -366,7 +366,7 @@ export const ProjectsContainer = styled.div`
 	gap: 25px;
 	margin-bottom: 64px;
 
-	${mediaQueries.laptopS} {
+	${mediaQueries.tablet} {
 		grid-template-columns: repeat(2, 1fr);
 	}
 
