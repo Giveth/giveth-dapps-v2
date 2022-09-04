@@ -4,11 +4,14 @@ import { FilterMenu, PinkyColoredNumber } from '@/components/menu/FilterMenu';
 import { useProjectsContext } from '@/context/projects.context';
 import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 import { FiltersButton } from '@/components/views/projects/common.styled';
+import useDelay from '@/hooks/useDelay';
 
 const ProjectsFiltersButton = () => {
 	const { variables } = useProjectsContext();
 	const [isFilterOpen, setIsFilterOpen] = useState(false);
 	const filtersCount = variables?.filters?.length ?? 0;
+
+	const delayedIsFilterOpen = useDelay(isFilterOpen, 280);
 
 	const filterMenuRef = useRef<HTMLDivElement>(null);
 
@@ -28,8 +31,9 @@ const ProjectsFiltersButton = () => {
 				)}
 				<IconOptions16 />
 			</FiltersButton>
-			{isFilterOpen && (
+			{(delayedIsFilterOpen || isFilterOpen) && (
 				<FilterMenu
+					isOpen={isFilterOpen}
 					handleClose={handleFilterClose}
 					ref={filterMenuRef}
 				/>
