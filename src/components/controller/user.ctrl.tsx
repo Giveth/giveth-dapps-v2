@@ -3,13 +3,12 @@ import { useEffect, useState } from 'react';
 import { formatEther } from '@ethersproject/units';
 import { captureException } from '@sentry/nextjs';
 import { InjectedConnector } from '@web3-react/injected-connector';
-import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { useAppDispatch } from '@/features/hooks';
 import {
 	setBalance,
 	setIsLoading,
-	setIsEnabled,
-	setIsSignedIn,
 	setToken,
+	setIsEnabled,
 } from '@/features/user/user.slice';
 import { isSSRMode } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
@@ -19,10 +18,8 @@ import { walletsArray } from '@/lib/wallet/walletTypes';
 const UserController = () => {
 	const { account, library, chainId, activate } = useWeb3React();
 	const dispatch = useAppDispatch();
-	//TODO: Remove this state  before  merfing verification-develop-branch to DEVELOP
 	const [isActivatedCalled, setIsActivatedCalled] = useState(false);
 	const token = !isSSRMode ? localStorage.getItem(StorageLabel.TOKEN) : null;
-	const { userData } = useAppSelector(state => state.user);
 
 	useEffect(() => {
 		const selectedWalletName = localStorage.getItem(StorageLabel.WALLET);
@@ -48,17 +45,11 @@ const UserController = () => {
 	}, [activate, isActivatedCalled]);
 
 	useEffect(() => {
-		if (account) dispatch(fetchUserByAddress(account));
-	}, [account]);
-
-	useEffect(() => {
-		if (account && token) {
-			dispatch(setIsEnabled(true));
-			if (userData?.isSignedIn) dispatch(setIsSignedIn(true));
-		} else if (account) {
+		if (account) {
+			dispatch(fetchUserByAddress(account));
 			dispatch(setIsEnabled(true));
 		}
-	}, [account, token, userData?.isSignedIn]);
+	}, [account]);
 
 	useEffect(() => {
 		if (token) {
