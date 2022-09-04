@@ -100,6 +100,7 @@ export interface IUser {
 	projectsCount?: number;
 	donationsCount?: number;
 	likedProjectsCount?: number;
+	isSignedIn: boolean;
 }
 
 export interface IReaction {

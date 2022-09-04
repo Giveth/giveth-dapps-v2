@@ -20,6 +20,7 @@ const moduleExports = withBundleAnalyzer({
 			'static.tgbwidget.com',
 			'images.unsplash.com',
 			'd2m0e1zy3fwxmp.cloudfront.net', // temporal for CHANGE default image
+			'i.imgur.com',
 			'd2jyzh4ah9xf6q.cloudfront.net', // temporal for CHANGE default image
 		],
 	},

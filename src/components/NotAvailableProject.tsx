@@ -1,15 +1,9 @@
 import Image from 'next/image';
 import styled from 'styled-components';
 import { brandColors, H4 } from '@giveth/ui-design-system';
-import { useRouter } from 'next/router';
-
 import { FlexCenter } from '@/components/styled-components/Flex';
-import SimilarProjects from '@/components/views/project/SimilarProjects';
 
 const NotAvailableProject = () => {
-	const router = useRouter();
-	const slug = router.query.projectIdSlug as string;
-
 	return (
 		<Wrapper>
 			<Image
@@ -21,7 +15,6 @@ const NotAvailableProject = () => {
 			<TitleText>
 				Oops! This project is no longer available or not found!
 			</TitleText>
-			<SimilarProjects slug={slug} />
 		</Wrapper>
 	);
 };
