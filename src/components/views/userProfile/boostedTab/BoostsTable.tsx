@@ -10,6 +10,7 @@ import { mediaQueries } from '@/lib/constants/constants';
 import {
 	RowWrapper,
 	TableCell,
+	TableFooter,
 	TableHeader,
 } from '@/components/styled-components/Table';
 import { IBoostedProject } from '@/apollo/types/gqlTypes';
@@ -63,6 +64,10 @@ const BoostsTable: FC<IBoostsTable> = ({
 					</BoostsRowWrapper>
 				);
 			})}
+			<TableFooter>TOTAL GIVPOWER</TableFooter>
+			<TableFooter></TableFooter>
+			<TableFooter></TableFooter>
+			<TableFooter></TableFooter>
 		</Table>
 	);
 };
