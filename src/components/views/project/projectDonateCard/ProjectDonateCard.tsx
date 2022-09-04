@@ -13,7 +13,7 @@ import {
 	Button,
 	brandColors,
 	neutralColors,
-	OulineButton,
+	OutlineButton,
 } from '@giveth/ui-design-system';
 import { motion } from 'framer-motion';
 import { captureException } from '@sentry/nextjs';
@@ -416,7 +416,7 @@ const FullButton = styled(Button)`
 	}
 `;
 
-const FullOutlineButton = styled(OulineButton)`
+const FullOutlineButton = styled(OutlineButton)`
 	width: 100%;
 `;
 

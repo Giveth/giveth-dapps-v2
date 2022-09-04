@@ -10,7 +10,7 @@ import {
 	H5,
 	Lead,
 	neutralColors,
-	OulineButton,
+	OutlineButton,
 } from '@giveth/ui-design-system';
 
 import { Modal } from './Modal';
@@ -111,7 +111,7 @@ const LeadText = styled(Lead)`
 	color: ${brandColors.deep[900]};
 `;
 
-const CustomOutlineButton = styled(OulineButton)`
+const CustomOutlineButton = styled(OutlineButton)`
 	text-transform: uppercase;
 	font-weight: 700;
 	border: none;

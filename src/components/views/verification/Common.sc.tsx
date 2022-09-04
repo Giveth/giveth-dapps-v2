@@ -3,14 +3,14 @@ import {
 	Button,
 	H6,
 	neutralColors,
-	OulineButton,
+	OutlineButton,
 	semanticColors,
 } from '@giveth/ui-design-system';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { mediaQueries } from '@/lib/constants/constants';
 
-export const OutlineStyled = styled(OulineButton)`
+export const OutlineStyled = styled(OutlineButton)`
 	padding-left: 100px;
 	padding-right: 100px;
 	margin-bottom: 24px;

@@ -7,7 +7,7 @@ import {
 	H1,
 	QuoteText,
 	Button,
-	OulineButton,
+	OutlineButton,
 } from '@giveth/ui-design-system';
 
 import Routes from '@/lib/constants/Routes';
@@ -112,7 +112,7 @@ const PublicProfileOverviewTab: FC<IUserPublicProfileView> = ({ user }) => {
 							onClick: btn.onClick,
 						};
 						if (btn.outline)
-							return <OulineButton key={index} {...props} />;
+							return <OutlineButton key={index} {...props} />;
 						return <Button key={index} {...props} />;
 					})}
 				</Buttons>
