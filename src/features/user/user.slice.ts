@@ -97,11 +97,11 @@ export const userSlice = createSlice({
 					}
 					state.userData = action.payload.data?.userByAddress;
 					if (
-						action.payload.data?.userByAddress?.isSignedIn === false
+						action.payload.data?.userByAddress?.isSignedIn === true
 					) {
-						signOutUser(state);
-					} else {
 						state.isSignedIn = true;
+					} else {
+						signOutUser(state);
 					}
 					state.isLoading = false;
 				},
