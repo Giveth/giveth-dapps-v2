@@ -7,7 +7,7 @@ import {
 	neutralColors,
 	Subline,
 	H3,
-	OulineButton,
+	OutlineButton,
 	Lead,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
@@ -307,7 +307,7 @@ const Loader = styled.div`
 	margin: 20px auto;
 `;
 
-const StyledButton = styled(OulineButton)<{ transparent?: boolean }>`
+const StyledButton = styled(OutlineButton)<{ transparent?: boolean }>`
 	color: ${brandColors.pinky[500]};
 	border-color: ${props =>
 		props.transparent ? 'transparent' : brandColors.pinky[500]};

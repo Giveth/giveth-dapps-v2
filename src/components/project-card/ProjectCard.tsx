@@ -106,18 +106,11 @@ const ProjectCard = (props: IProjectCard) => {
 						</Author>
 					)}
 					<Description>{htmlToText(description)}</Description>
-					<Flex justifyContent='space-between'>
-						<Flex alignItems='center' gap='4px'>
-							<IconRocketInSpace16 />
-							<LightSubline>GIVpower ranking</LightSubline>
-							<B>#7</B>
-						</Flex>
-						<Flex alignItems='center' gap='4px'>
-							<PriceText>
-								${Math.ceil(totalDonations as number)}
-							</PriceText>
-							<LightSubline> Raised</LightSubline>
-						</Flex>
+					<Flex alignItems='center' gap='4px'>
+						<PriceText>
+							${Math.ceil(totalDonations as number)}
+						</PriceText>
+						<LightSubline> Raised</LightSubline>
 					</Flex>
 					{verified && (
 						<>

@@ -8,7 +8,7 @@ import {
 	P,
 	Caption,
 	Button,
-	OulineButton,
+	OutlineButton,
 	Subline,
 } from '@giveth/ui-design-system';
 import { Flex } from '../styled-components/Flex';
@@ -80,7 +80,7 @@ export const StakeButtonsRow = styled(Flex)`
 	gap: 16px;
 `;
 
-export const StakeButton = styled(OulineButton)`
+export const StakeButton = styled(OutlineButton)`
 	width: 100%;
 `;
 
@@ -194,7 +194,7 @@ export const DisableModalText = styled(P)<{ weight?: number }>`
 	font-weight: ${props => (props.weight ? props.weight : 400)};
 `;
 
-export const DisableModalCloseButton = styled(OulineButton)`
+export const DisableModalCloseButton = styled(OutlineButton)`
 	border: none;
 	color: ${brandColors.giv[500]};
 	font-weight: 700;
