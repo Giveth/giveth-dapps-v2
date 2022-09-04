@@ -6,7 +6,7 @@ import {
 	GLink,
 	brandColors,
 	IconExternalLink,
-	OulineButton,
+	OutlineButton,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
@@ -124,7 +124,7 @@ const LinksRow = styled(FlexCenter)`
 	margin-bottom: 24px;
 `;
 
-const GotItButton = styled(OulineButton)`
+const GotItButton = styled(OutlineButton)`
 	width: 316px;
 	margin: 0 auto;
 `;
