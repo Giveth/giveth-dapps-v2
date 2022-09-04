@@ -4,7 +4,7 @@ import {
 	Button,
 	brandColors,
 	H5,
-	OulineButton,
+	OutlineButton,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
@@ -31,7 +31,7 @@ export const StakeInnerModal = styled.div`
 	padding: 0 24px;
 `;
 
-export const StyledOutlineButton = styled(OulineButton)`
+export const StyledOutlineButton = styled(OutlineButton)`
 	width: 100%;
 	margin-top: 32px;
 	margin-bottom: 8px;
