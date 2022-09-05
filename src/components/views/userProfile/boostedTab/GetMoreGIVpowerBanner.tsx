@@ -36,6 +36,7 @@ const GetMoreGIVpowerBanner = () => {
 					size='large'
 					linkType='primary'
 					href={config.XDAI_CONFIG.GIV.BUY_LINK}
+					target='_blank'
 				/>
 			</Actions>
 		</GetMoreGIVpowerContainer>
