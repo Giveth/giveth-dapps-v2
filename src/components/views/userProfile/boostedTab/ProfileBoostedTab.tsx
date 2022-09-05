@@ -14,6 +14,7 @@ import { IPowerBoosting } from '@/apollo/types/types';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_POWER_BOOSTING_INFO } from '@/apollo/gql/gqlPowerBoosting';
 import { Loading } from '../projectsTab/ProfileProjectsTab';
+import { EmptyPowerBoosting } from './EmptyPowerBoosting';
 
 export enum EPowerBoostingOrder {
 	CreationAt = 'createdAt',
@@ -89,12 +90,16 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 			</CustomContributeCard>
 			<PowerBoostingContainer>
 				{loading && <Loading />}
-				<BoostsTable
-					boosts={boosts}
-					totalAmountOfGIVpower={totalAmountOfGIVpower}
-					order={order}
-					changeOrder={changeOrder}
-				/>
+				{!loading && boosts.length > 0 ? (
+					<BoostsTable
+						boosts={boosts}
+						totalAmountOfGIVpower={totalAmountOfGIVpower}
+						order={order}
+						changeOrder={changeOrder}
+					/>
+				) : (
+					<EmptyPowerBoosting />
+				)}
 			</PowerBoostingContainer>
 		</UserProfileTab>
 	);
