@@ -10,8 +10,8 @@ import { IUserProfileView } from '../UserProfile.view';
 import { formatWeiHelper } from '@/helpers/number';
 import { EDirection } from '@/apollo/types/gqlEnums';
 import BoostsTable from './BoostsTable';
-import { IBoostedProject } from '@/apollo/types/gqlTypes';
 import { getRequest } from '@/helpers/requests';
+import { IPowerBoosting } from '@/apollo/types/types';
 
 export enum EBoostedOrderBy {
 	Percentage = 'percentage',
@@ -24,7 +24,7 @@ export interface IBoostedOrder {
 
 export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 	const [loading, setLoading] = useState(false);
-	const [boosts, setBoosts] = useState<IBoostedProject[]>([]);
+	const [boosts, setBoosts] = useState<IPowerBoosting[]>([]);
 	const [order, setOrder] = useState<IBoostedOrder>({
 		by: EBoostedOrderBy.Percentage,
 		direction: EDirection.DESC,
@@ -56,7 +56,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 			setLoading(true);
 			const res = await getRequest('/api/boostedProjects');
 			setLoading(false);
-			const boostedProjects: IBoostedProject[] = res.boostedProjects;
+			const boostedProjects: IPowerBoosting[] = res.boostedProjects;
 			console.log('boostedProjects', boostedProjects);
 			setBoosts(boostedProjects);
 		};

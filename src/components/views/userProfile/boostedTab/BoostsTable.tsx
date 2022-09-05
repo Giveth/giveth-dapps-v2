@@ -16,15 +16,15 @@ import {
 	TableFooter,
 	TableHeader,
 } from '@/components/styled-components/Table';
-import { IBoostedProject } from '@/apollo/types/gqlTypes';
 import { EBoostedOrderBy, IBoostedOrder } from './ProfileBoostedTab';
 import { BN, formatWeiHelper } from '@/helpers/number';
 import { Flex } from '@/components/styled-components/Flex';
 import Input, { InputSize } from '@/components/Input';
 import SortIcon from '@/components/SortIcon';
+import { IPowerBoosting } from '@/apollo/types/types';
 
 interface IBoostsTable {
-	boosts: IBoostedProject[];
+	boosts: IPowerBoosting[];
 	totalAmountOfGIVpower: string;
 	order: IBoostedOrder;
 	changeOrder: (orderBy: EBoostedOrderBy) => void;
@@ -42,7 +42,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 	changeOrder,
 }) => {
 	const [mode, setMode] = useState(ETableNode.VIEWING);
-	const [_boosts, setBoosts] = useState<IBoostedProject[]>([]);
+	const [_boosts, setBoosts] = useState<IPowerBoosting[]>([]);
 	const _totalAmountOfGIVpower = BN(totalAmountOfGIVpower);
 
 	useEffect(() => {
