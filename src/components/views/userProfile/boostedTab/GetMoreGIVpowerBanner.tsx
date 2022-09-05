@@ -2,6 +2,7 @@ import {
 	brandColors,
 	ButtonLink,
 	H1,
+	mediaQueries,
 	OutlineLinkButton,
 	QuoteText,
 } from '@giveth/ui-design-system';
@@ -20,20 +21,20 @@ const GetMoreGIVpowerBanner = () => {
 			<QuoteText size='small'>
 				Stake & lock GIV to get GIVpower to boost projects.
 			</QuoteText>
-			<Actions gap='16px'>
+			<Actions gap='16px' wrap={1}>
 				<Link
 					href={`${Routes.GIVfarm}/?open=${StakingType.GIV_LM}&chain=gnosis`}
 					passHref
 				>
 					<ButtonLink
 						label='Stake GIV'
-						size='large'
+						size='small'
 						linkType='primary'
 					/>
 				</Link>
 				<OutlineLinkButton
 					label='Get GIV'
-					size='large'
+					size='small'
 					linkType='primary'
 					href={config.XDAI_CONFIG.GIV.BUY_LINK}
 					target='_blank'
@@ -62,9 +63,16 @@ const Background = styled.div`
 
 const Actions = styled(Flex)`
 	margin-top: 40px;
+	justify-content: center;
 	& > a {
-		padding: 24px 72px;
+		width: 251px;
 		z-index: 1;
+	}
+	${mediaQueries.tablet} {
+		justify-content: flex-start;
+		& > a {
+			width: 220px;
+		}
 	}
 `;
 
