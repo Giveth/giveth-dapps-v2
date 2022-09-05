@@ -326,7 +326,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 						isSimple={!isAdmin}
 					/>
 					{!isAdmin && (
-						<BoostButton>
+						<BoostButton onClick={() => setShowBoost(true)}>
 							<ButtonText>Boost</ButtonText>
 							<IconRocketInSpace color={brandColors.giv[500]} />
 						</BoostButton>
