@@ -1,6 +1,7 @@
 import {
 	B,
 	brandColors,
+	Button,
 	ButtonText,
 	IconX,
 	neutralColors,
@@ -22,6 +23,7 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 	({ handleClose, isOpen }, ref) => {
 		const { setVariables, variables } = useProjectsContext();
 		const filtersCount = variables?.filters?.length ?? 0;
+
 		const handleSelectFilter = (e: boolean, filter: string) => {
 			if (e) {
 				setVariables({
@@ -39,6 +41,14 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 				});
 			}
 		};
+
+		const clearFilters = () => {
+			setVariables({
+				...variables,
+				filters: [],
+			});
+		};
+
 		return (
 			<MenuContainer className={isOpen ? 'fadeIn' : 'fadeOut'} ref={ref}>
 				<Header>
@@ -73,6 +83,11 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 						</FeatureItem>
 					))}
 				</Section>
+				<ButtonStyled
+					onClick={clearFilters}
+					buttonType='texty-secondary'
+					label='Clear all Filters'
+				/>
 			</MenuContainer>
 		);
 	},
@@ -86,6 +101,10 @@ const projectFeatures = [
 	{ label: 'From GivingBlock', value: 'GivingBlock' },
 	{ label: 'From Trace', value: 'Traceable' },
 ];
+
+const ButtonStyled = styled(Button)`
+	margin: 0 auto;
+`;
 
 const MenuContainer = styled.div`
 	top: 0;
@@ -126,6 +145,7 @@ const CloseContainer = styled.div`
 
 const Section = styled.section`
 	margin: 24px 0;
+	border-bottom: 1px solid ${neutralColors.gray[300]};
 `;
 
 const FeatureItem = styled.div`
