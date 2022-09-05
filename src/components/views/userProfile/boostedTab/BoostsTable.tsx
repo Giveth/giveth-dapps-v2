@@ -21,6 +21,7 @@ import { EBoostedOrderBy, IBoostedOrder } from './ProfileBoostedTab';
 import { BN, formatWeiHelper } from '@/helpers/number';
 import { Flex } from '@/components/styled-components/Flex';
 import Input, { InputSize } from '@/components/Input';
+import SortIcon from '@/components/SortIcon';
 
 interface IBoostsTable {
 	boosts: IBoostedProject[];
@@ -93,7 +94,10 @@ const BoostsTable: FC<IBoostsTable> = ({
 					}}
 				>
 					GIVpower amount
-					{/* <SortIcon order={order} title={EBoostedOrderBy.Percentage} /> */}
+					<SortIcon
+						order={order}
+						title={EBoostedOrderBy.Percentage}
+					/>
 				</TableHeader>
 				<TableHeader>Boosted with</TableHeader>
 				<TableHeader></TableHeader>
