@@ -16,6 +16,8 @@ import { FETCH_POWER_BOOSTING_INFO } from '@/apollo/gql/gqlPowerBoosting';
 import { Loading } from '../projectsTab/ProfileProjectsTab';
 import { EmptyPowerBoosting } from './EmptyPowerBoosting';
 import GetMoreGIVpowerBanner from './GetMoreGIVpowerBanner';
+import { useAppSelector } from '@/features/hooks';
+import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
 export enum EPowerBoostingOrder {
 	CreationAt = 'createdAt',
@@ -36,7 +38,10 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 		direction: EDirection.DESC,
 	});
 
-	const totalAmountOfGIVpower = '7989240000000000000000';
+	const sdh = new SubgraphDataHelper(
+		useAppSelector(state => state.subgraph.xDaiValues),
+	);
+	const givPower = sdh.getUserGIVPowerBalance();
 
 	const changeOrder = (orderBy: EPowerBoostingOrder) => {
 		if (orderBy === order.by) {
@@ -86,7 +91,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 					~total Amount of GIVpower
 				</ContributeCardTitles>
 				<ContributeCardTitles>Project boosted</ContributeCardTitles>
-				<H5>{formatWeiHelper(totalAmountOfGIVpower)}</H5>
+				<H5>{formatWeiHelper(givPower.balance)}</H5>
 				<H5>8</H5>
 			</CustomContributeCard>
 			<PowerBoostingContainer>
@@ -94,7 +99,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 				{!loading && boosts.length > 0 ? (
 					<BoostsTable
 						boosts={boosts}
-						totalAmountOfGIVpower={totalAmountOfGIVpower}
+						totalAmountOfGIVpower={givPower.balance}
 						order={order}
 						changeOrder={changeOrder}
 					/>
