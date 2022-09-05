@@ -23,6 +23,7 @@ import ProjectsFiltersMobile from '@/components/views/projects/ProjectsFiltersMo
 import LottieControl from '@/components/animations/lottieControl';
 import LoadingAnimation from '@/animations/loading_giv.json';
 import useDetectDevice from '@/hooks/useDetectDevice';
+import { FlexCenter } from '@/components/styled-components/Flex';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -232,18 +233,23 @@ const FiltersContainer = styled.div`
 	background: white;
 	position: relative;
 	padding: 32px 21px;
-	border-radius: 16px;
+	border-radius: 0;
 	margin-bottom: 32px;
 	margin-top: 50px;
 	gap: 16px;
+	${mediaQueries.tablet} {
+		border-radius: 16px;
+	}
 `;
 
 const ProjectsContainer = styled.div`
 	display: grid;
 	gap: 25px;
 	margin-bottom: 64px;
+	padding: 0 23px;
 
 	${mediaQueries.tablet} {
+		padding: 0;
 		grid-template-columns: repeat(2, 1fr);
 	}
 
@@ -255,12 +261,15 @@ const ProjectsContainer = styled.div`
 const Wrapper = styled.div`
 	max-width: ${deviceSize.desktop + 'px'};
 	margin: 0 auto;
+	${mediaQueries.tablet} {
+		padding: 0 33px;
+	}
+	${mediaQueries.laptopS} {
+		padding: 0 40px;
+	}
 `;
 
-const Loading = styled.div`
-	display: flex;
-	align-items: center;
-	justify-content: center;
+const Loading = styled(FlexCenter)`
 	position: fixed;
 	top: 0;
 	left: 0;

@@ -13,7 +13,7 @@ import {
 import styled from 'styled-components';
 import { forwardRef } from 'react';
 import { mediaQueries } from '@/lib/constants/constants';
-import { Flex } from '../styled-components/Flex';
+import { Flex, FlexCenter } from '../styled-components/Flex';
 import { ESortbyAllProjects } from '@/apollo/types/gqlEnums';
 import CheckBox from '../Checkbox';
 import { useProjectsContext } from '@/context/projects.context';
@@ -21,10 +21,11 @@ import { zIndex } from '@/lib/constants/constants';
 
 interface IFilterMenuProps {
 	handleClose: (e?: any) => void;
+	isOpen?: boolean;
 }
 
 export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
-	({ handleClose }, ref) => {
+	({ handleClose, isOpen }, ref) => {
 		const { setVariables, variables } = useProjectsContext();
 		const filtersCount = variables?.filters?.length ?? 0;
 		const handleSelectFilter = (e: boolean, filter: string) => {
@@ -46,19 +47,19 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 			}
 		};
 		return (
-			<MenuContainer className='fadeIn' ref={ref}>
+			<MenuContainer className={isOpen ? 'fadeIn' : 'fadeOut'} ref={ref}>
 				<Header>
 					<CloseContainer onClick={handleClose}>
 						<IconX size={24} />
 					</CloseContainer>
-					<Flex gap='8px' justifyContent='center' alignItems='center'>
+					<FlexCenter gap='8px'>
 						<Title size='medium'>Filters</Title>
 						{filtersCount !== 0 && (
 							<PinkyColoredNumber size='medium'>
 								{filtersCount}
 							</PinkyColoredNumber>
 						)}
-					</Flex>
+					</FlexCenter>
 				</Header>
 				<Section>
 					<B>Sort by</B>
@@ -142,7 +143,7 @@ const MenuContainer = styled.div`
 	right: 0;
 	padding: 24px;
 	background-color: ${neutralColors.gray[100]};
-	box-shadow: 0px 3px 20px rgba(212, 218, 238, 0.7);
+	box-shadow: 0 3px 20px rgba(212, 218, 238, 0.7);
 	width: 100%;
 	height: 100%;
 	z-index: ${zIndex.FIXED};
