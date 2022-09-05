@@ -2,6 +2,7 @@ import {
 	brandColors,
 	Button,
 	H5,
+	IconLock16,
 	IconTrash,
 	IconUnlock16,
 	neutralColors,
@@ -54,13 +55,11 @@ const BoostsTable: FC<IBoostsTable> = ({
 		setBoosts(boosts);
 	}, [boosts]);
 
-	const lockPower = (id: string) => {
-		setBoosts(oldBoosts => {
-			const temp = [...oldBoosts];
-			const lockedBoost = temp.find(oldBoost => oldBoost.id === id);
-			if (lockedBoost) lockedBoost.isLocked = true;
-			return temp;
-		});
+	const toggleLockPower = (id: string) => {
+		const temp = [..._boosts];
+		const lockedBoost = temp.find(oldBoost => oldBoost.id === id);
+		if (lockedBoost) lockedBoost.isLocked = !lockedBoost.isLocked;
+		setBoosts(temp);
 	};
 
 	return (
@@ -138,15 +137,25 @@ const BoostsTable: FC<IBoostsTable> = ({
 										LeftIcon={
 											<IconWrapper
 												onClick={() =>
-													lockPower(boost.id)
+													toggleLockPower(boost.id)
 												}
 											>
-												<IconUnlock16
-													size={16}
-													color={
-														neutralColors.gray[600]
-													}
-												/>
+												{boost.isLocked ? (
+													<IconLock16
+														color={
+															neutralColors
+																.gray[600]
+														}
+													/>
+												) : (
+													<IconUnlock16
+														size={16}
+														color={
+															neutralColors
+																.gray[600]
+														}
+													/>
+												)}
 											</IconWrapper>
 										}
 									/>
