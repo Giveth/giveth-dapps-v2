@@ -41,12 +41,13 @@ const BoostsTable: FC<IBoostsTable> = ({
 	order,
 	changeOrder,
 }) => {
-	const [mode, setMode] = useState(ETableNode.VIEWING);
+	const [mode, setMode] = useState(ETableNode.EDITING);
 	const [_boosts, setBoosts] = useState<IPowerBoosting[]>([]);
 	const _totalAmountOfGIVpower = BN(totalAmountOfGIVpower);
 
 	useEffect(() => {
-		if (mode === ETableNode.VIEWING) setBoosts(boosts);
+		// if (mode === ETableNode.VIEWING)
+		setBoosts(boosts);
 	}, [boosts]);
 
 	return (
@@ -118,19 +119,25 @@ const BoostsTable: FC<IBoostsTable> = ({
 								{mode === ETableNode.VIEWING ? (
 									`${boost.percentage}%`
 								) : (
-									<Input
+									<StyledInput
 										size={InputSize.SMALL}
 										LeftIcon={
-											<IconUnlock16
-												size={16}
-												color={neutralColors.gray[600]}
-											/>
+											<IconWrapper>
+												<IconUnlock16
+													size={16}
+													color={
+														neutralColors.gray[600]
+													}
+												/>
+											</IconWrapper>
 										}
 									/>
 								)}
 							</BoostsTableCell>
 							<BoostsTableCell>
-								<IconTrash size={24} />
+								{mode === ETableNode.VIEWING && (
+									<IconTrash size={24} />
+								)}
 							</BoostsTableCell>
 						</BoostsRowWrapper>
 					);
@@ -171,6 +178,14 @@ const BoostsRowWrapper = styled(RowWrapper)`
 		background-color: ${neutralColors.gray[300]};
 		color: ${brandColors.pinky[500]};
 	}
+`;
+
+const StyledInput = styled(Input)`
+	margin-top: 10px;
+`;
+
+const IconWrapper = styled.div`
+	cursor: pointer;
 `;
 
 export default BoostsTable;
