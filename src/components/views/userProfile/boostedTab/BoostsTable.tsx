@@ -8,7 +8,7 @@ import {
 	neutralColors,
 	OutlineButton,
 } from '@giveth/ui-design-system';
-import { FC, useEffect, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import {
@@ -48,6 +48,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 }) => {
 	const [mode, setMode] = useState(ETableNode.EDITING);
 	const [_boosts, setBoosts] = useState<IEnhancedPowerBoosting[]>([]);
+	const [sum, setSum] = useState(100);
 	const _totalAmountOfGIVpower = BN(totalAmountOfGIVpower);
 
 	useEffect(() => {
@@ -60,6 +61,20 @@ const BoostsTable: FC<IBoostsTable> = ({
 		const lockedBoost = temp.find(oldBoost => oldBoost.id === id);
 		if (lockedBoost) lockedBoost.isLocked = !lockedBoost.isLocked;
 		setBoosts(temp);
+	};
+
+	const onPercentageChange = (
+		id: string,
+		e: ChangeEvent<HTMLInputElement>,
+	) => {
+		const temp = [..._boosts];
+		const lockedBoost = temp.find(oldBoost => oldBoost.id === id);
+		if (lockedBoost) {
+			lockedBoost.percentage = Number(e.target.value || 0);
+			const _sum = temp.reduce((a, b) => a + b.percentage, 0);
+			setSum(_sum);
+			setBoosts(temp);
+		}
 	};
 
 	return (
@@ -132,6 +147,10 @@ const BoostsTable: FC<IBoostsTable> = ({
 									`${boost.percentage}%`
 								) : (
 									<StyledInput
+										value={boost.percentage}
+										onChange={e => {
+											onPercentageChange(boost.id, e);
+										}}
 										size={InputSize.SMALL}
 										disabled={boost.isLocked}
 										LeftIcon={
@@ -171,7 +190,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 				})}
 				<TableFooter>TOTAL GIVPOWER</TableFooter>
 				<TableFooter></TableFooter>
-				<TableFooter>100%</TableFooter>
+				<TableFooter>{sum}%</TableFooter>
 				<TableFooter></TableFooter>
 			</Table>
 		</>
