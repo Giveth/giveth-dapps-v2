@@ -85,6 +85,7 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 				</Section>
 				<ButtonStyled
 					onClick={clearFilters}
+					disabled={filtersCount === 0}
 					buttonType='texty-secondary'
 					label='Clear all Filters'
 				/>
