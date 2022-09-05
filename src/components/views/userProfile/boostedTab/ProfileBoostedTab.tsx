@@ -15,6 +15,7 @@ import { client } from '@/apollo/apolloClient';
 import { FETCH_POWER_BOOSTING_INFO } from '@/apollo/gql/gqlPowerBoosting';
 import { Loading } from '../projectsTab/ProfileProjectsTab';
 import { EmptyPowerBoosting } from './EmptyPowerBoosting';
+import GetMoreGIVpowerBanner from './GetMoreGIVpowerBanner';
 
 export enum EPowerBoostingOrder {
 	CreationAt = 'createdAt',
@@ -101,6 +102,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 					<EmptyPowerBoosting />
 				)}
 			</PowerBoostingContainer>
+			<GetMoreGIVpowerBanner />
 		</UserProfileTab>
 	);
 };
