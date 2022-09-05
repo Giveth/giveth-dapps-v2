@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { ButtonLink, neutralColors, QuoteText } from '@giveth/ui-design-system';
+import Link from 'next/link';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
 
@@ -12,11 +13,9 @@ export const EmptyPowerBoosting = () => {
 				Go to the projects and find a good project to boost
 			</Title>
 			<br />
-			<ButtonLink
-				label='Go to projects'
-				href={Routes.Projects}
-				size='small'
-			/>
+			<Link href={Routes.Projects} passHref>
+				<ButtonLink label='Go to projects' size='small' />
+			</Link>
 		</EmptyPowerBoostingContainer>
 	);
 };
