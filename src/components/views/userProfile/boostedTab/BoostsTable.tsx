@@ -50,9 +50,9 @@ const BoostsTable: FC<IBoostsTable> = ({
 
 	return (
 		<>
-			<Header justifyContent='space-between'>
+			<Header justifyContent='space-between' wrap={1} gap='16px'>
 				<H5 weight={700}>GIVPower Table Summary</H5>
-				<Flex gap='8px'>
+				<Actions gap='8px'>
 					{mode === ETableNode.VIEWING ? (
 						<Button
 							buttonType='primary'
@@ -82,7 +82,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 							/>
 						</>
 					)}
-				</Flex>
+				</Actions>
 			</Header>
 			<Table>
 				<TableHeader>Projects</TableHeader>
@@ -142,6 +142,11 @@ const BoostsTable: FC<IBoostsTable> = ({
 
 const Header = styled(Flex)`
 	margin: 68px 0 48px;
+`;
+
+const Actions = styled(Flex)`
+	overflow: auto;
+	padding-bottom: 16px;
 `;
 
 const Table = styled.div`
