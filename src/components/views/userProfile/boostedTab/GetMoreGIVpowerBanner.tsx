@@ -19,7 +19,7 @@ const GetMoreGIVpowerBanner = () => {
 			<QuoteText size='small'>
 				Stake & lock GIV to get GIVpower to boost projects.
 			</QuoteText>
-			<Actions>
+			<Actions gap='16px'>
 				<Link
 					href={`${Routes.GIVfarm}/?open=${StakingType.GIV_LM}&chain=gnosis`}
 					passHref
@@ -42,9 +42,25 @@ const GetMoreGIVpowerBanner = () => {
 };
 
 const GetMoreGIVpowerContainer = styled.div`
+	position: relative;
+
+	background-color: ${brandColors.giv['000']};
 	color: ${brandColors.giv[500]};
+	padding: 51px 59px;
+	::after {
+		content: '';
+		background-image: url('/images/backgrounds/giv-outline.svg');
+		opacity: 0.18;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		position: absolute;
+		z-index: 1;
+	}
 `;
 const Actions = styled(Flex)`
+	margin-top: 40px;
 	& > a {
 		padding: 24px 72px;
 	}
