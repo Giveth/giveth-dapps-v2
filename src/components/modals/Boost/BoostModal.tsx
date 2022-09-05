@@ -11,7 +11,9 @@ import BoostedInnerModal from './BoostedInnerModal';
 import BoostInnerModal from './BoostInnerModal';
 import { BN } from '@/helpers/number';
 
-interface IBoostModalProps extends IModal {}
+interface IBoostModalProps extends IModal {
+	projectId: string;
+}
 
 export enum EBoostModalState {
 	BOOSTING,
