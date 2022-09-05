@@ -56,7 +56,17 @@ const Input = styled.input<IInputField>`
 				return '18px 16px';
 		}
 	}};
-	padding-left: ${props => props.hasLeftIcon && '60px'};
+	padding-left: ${props => {
+		if (!props.hasLeftIcon) return;
+		switch (props.inputSize) {
+			case InputSize.SMALL:
+				return '36px';
+			case InputSize.MEDIUM:
+				return '44px';
+			case InputSize.LARGE:
+				return '44px';
+		}
+	}};
 	padding-right: ${props => props.maxLength && '72px'};
 	font-size: ${props => {
 		switch (props.inputSize) {
