@@ -10,6 +10,8 @@ import { BoostModalContainer } from './BoostModal.sc';
 import BoostedInnerModal from './BoostedInnerModal';
 import BoostInnerModal from './BoostInnerModal';
 import { BN } from '@/helpers/number';
+import { useAppSelector } from '@/features/hooks';
+import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
 interface IBoostModalProps extends IModal {}
 
@@ -23,10 +25,12 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 	const [percentage, setPercentage] = useState(0);
 	const [state, setState] = useState(EBoostModalState.BOOSTING);
 
-	let totalGIVpower = '392743000000000000000000';
-	// totalGIVpower = '0';
+	const sdh = new SubgraphDataHelper(
+		useAppSelector(state => state.subgraph.xDaiValues),
+	);
+	const givPower = sdh.getUserGIVPowerBalance();
 
-	if (totalGIVpower == '0') {
+	if (givPower.balance == '0') {
 		return <ZeroGivpowerModal setShowModal={setShowModal} />;
 	}
 
@@ -43,7 +47,7 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 			<BoostModalContainer state={state}>
 				{state === EBoostModalState.BOOSTING ? (
 					<BoostInnerModal
-						totalGIVpower={BN(totalGIVpower)}
+						totalGIVpower={BN(givPower.balance)}
 						setPercentage={setPercentage}
 						setState={setState}
 					/>
