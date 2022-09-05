@@ -13,6 +13,7 @@ import BoostsTable from './BoostsTable';
 import { IPowerBoosting } from '@/apollo/types/types';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_POWER_BOOSTING_INFO } from '@/apollo/gql/gqlPowerBoosting';
+import { Loading } from '../projectsTab/ProfileProjectsTab';
 
 export enum EPowerBoostingOrder {
 	CreationAt = 'createdAt',
@@ -86,12 +87,15 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 				<H5>{formatWeiHelper(totalAmountOfGIVpower)}</H5>
 				<H5>8</H5>
 			</CustomContributeCard>
-			<BoostsTable
-				boosts={boosts}
-				totalAmountOfGIVpower={totalAmountOfGIVpower}
-				order={order}
-				changeOrder={changeOrder}
-			/>
+			<PowerBoostingContainer>
+				{loading && <Loading />}
+				<BoostsTable
+					boosts={boosts}
+					totalAmountOfGIVpower={totalAmountOfGIVpower}
+					order={order}
+					changeOrder={changeOrder}
+				/>
+			</PowerBoostingContainer>
 		</UserProfileTab>
 	);
 };
@@ -101,4 +105,9 @@ const CustomContributeCard = styled(ContributeCard)`
 	${mediaQueries.tablet} {
 		width: 614px;
 	}
+`;
+
+export const PowerBoostingContainer = styled.div`
+	position: relative;
+	margin-bottom: 40px;
 `;
