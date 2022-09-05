@@ -4,6 +4,9 @@
 		"merkle",
 		"xdai",
 		"GIVpower",
-		"GIVeconomy"
+		"GIVeconomy",
+		"GIVfarm",
+		"GIVback",
+		"GIVstream",
 	]
 }
