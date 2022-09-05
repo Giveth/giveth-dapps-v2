@@ -156,7 +156,6 @@ const Actions = styled(Flex)`
 const Table = styled.div`
 	display: grid;
 	grid-template-columns: 4fr 1fr 1fr 0.3fr;
-	overflow: auto;
 	min-width: 700px;
 `;
 
