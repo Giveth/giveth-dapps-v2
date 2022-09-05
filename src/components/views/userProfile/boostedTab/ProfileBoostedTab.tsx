@@ -10,15 +10,18 @@ import { IUserProfileView } from '../UserProfile.view';
 import { formatWeiHelper } from '@/helpers/number';
 import { EDirection } from '@/apollo/types/gqlEnums';
 import BoostsTable from './BoostsTable';
-import { getRequest } from '@/helpers/requests';
 import { IPowerBoosting } from '@/apollo/types/types';
+import { client } from '@/apollo/apolloClient';
+import { FETCH_POWER_BOOSTING_INFO } from '@/apollo/gql/gqlPowerBoosting';
 
-export enum EBoostedOrderBy {
-	Percentage = 'percentage',
+export enum EPowerBoostingOrder {
+	CreationAt = 'createdAt',
+	UpdatedAt = 'updatedAt',
+	Percentage = 'Percentage',
 }
 
 export interface IBoostedOrder {
-	by: EBoostedOrderBy;
+	by: EPowerBoostingOrder;
 	direction: EDirection;
 }
 
@@ -26,13 +29,13 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 	const [loading, setLoading] = useState(false);
 	const [boosts, setBoosts] = useState<IPowerBoosting[]>([]);
 	const [order, setOrder] = useState<IBoostedOrder>({
-		by: EBoostedOrderBy.Percentage,
+		by: EPowerBoostingOrder.Percentage,
 		direction: EDirection.DESC,
 	});
 
 	const totalAmountOfGIVpower = '7989240000000000000000';
 
-	const changeOrder = (orderBy: EBoostedOrderBy) => {
+	const changeOrder = (orderBy: EPowerBoostingOrder) => {
 		if (orderBy === order.by) {
 			setOrder({
 				by: orderBy,
@@ -54,11 +57,17 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 
 		const fetchUserBoosts = async () => {
 			setLoading(true);
-			const res = await getRequest('/api/boostedProjects');
+			const { data: userPowerBoostings } = await client.query({
+				query: FETCH_POWER_BOOSTING_INFO,
+				variables: {
+					take: 50,
+					skip: 0,
+					orderBy: { field: order.by, direction: order.direction },
+					userId: parseFloat(user.id || '') || -1,
+				},
+			});
 			setLoading(false);
-			const boostedProjects: IPowerBoosting[] = res.boostedProjects;
-			console.log('boostedProjects', boostedProjects);
-			setBoosts(boostedProjects);
+			setBoosts(userPowerBoostings);
 		};
 		fetchUserBoosts().then();
 	}, [user, order.by, order.direction]);

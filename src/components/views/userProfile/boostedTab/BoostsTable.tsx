@@ -16,7 +16,7 @@ import {
 	TableFooter,
 	TableHeader,
 } from '@/components/styled-components/Table';
-import { EBoostedOrderBy, IBoostedOrder } from './ProfileBoostedTab';
+import { EPowerBoostingOrder, IBoostedOrder } from './ProfileBoostedTab';
 import { BN, formatWeiHelper } from '@/helpers/number';
 import { Flex } from '@/components/styled-components/Flex';
 import Input, { InputSize } from '@/components/Input';
@@ -27,7 +27,7 @@ interface IBoostsTable {
 	boosts: IPowerBoosting[];
 	totalAmountOfGIVpower: string;
 	order: IBoostedOrder;
-	changeOrder: (orderBy: EBoostedOrderBy) => void;
+	changeOrder: (orderBy: EPowerBoostingOrder) => void;
 }
 
 enum ETableNode {
@@ -90,13 +90,13 @@ const BoostsTable: FC<IBoostsTable> = ({
 				<TableHeader
 					onClick={() => {
 						if (mode === ETableNode.VIEWING)
-							changeOrder(EBoostedOrderBy.Percentage);
+							changeOrder(EPowerBoostingOrder.Percentage);
 					}}
 				>
 					GIVpower amount
 					<SortIcon
 						order={order}
-						title={EBoostedOrderBy.Percentage}
+						title={EPowerBoostingOrder.Percentage}
 					/>
 				</TableHeader>
 				<TableHeader>Boosted with</TableHeader>
