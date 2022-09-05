@@ -1,4 +1,5 @@
 import {
+	B,
 	brandColors,
 	Button,
 	H5,
@@ -7,9 +8,10 @@ import {
 	IconUnlock16,
 	neutralColors,
 	OutlineButton,
+	semanticColors,
 } from '@giveth/ui-design-system';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import {
 	RowWrapper,
@@ -70,12 +72,14 @@ const BoostsTable: FC<IBoostsTable> = ({
 		const temp = [..._boosts];
 		const lockedBoost = temp.find(oldBoost => oldBoost.id === id);
 		if (lockedBoost) {
-			lockedBoost.percentage = Number(e.target.value || 0);
+			lockedBoost.percentage = Number(e.target.value);
 			const _sum = temp.reduce((a, b) => a + b.percentage, 0);
 			setSum(_sum);
 			setBoosts(temp);
 		}
 	};
+
+	const isExceed = sum !== 100;
 
 	return (
 		<>
@@ -151,6 +155,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 										onChange={e => {
 											onPercentageChange(boost.id, e);
 										}}
+										type='number'
 										size={InputSize.SMALL}
 										disabled={boost.isLocked}
 										LeftIcon={
@@ -189,9 +194,12 @@ const BoostsTable: FC<IBoostsTable> = ({
 					);
 				})}
 				<TableFooter>TOTAL GIVPOWER</TableFooter>
-				<TableFooter></TableFooter>
-				<TableFooter>{sum}%</TableFooter>
-				<TableFooter></TableFooter>
+				<CustomTableFooter isExceed={isExceed}>
+					{sum}%
+					{isExceed && (
+						<ExceedError>You can’t exceed 100%</ExceedError>
+					)}
+				</CustomTableFooter>
 			</Table>
 		</>
 	);
@@ -228,10 +236,35 @@ const BoostsRowWrapper = styled(RowWrapper)`
 
 const StyledInput = styled(Input)`
 	margin-top: 10px;
+	width: 100px;
+	display: block;
 `;
 
 const IconWrapper = styled.div`
 	cursor: pointer;
+`;
+
+interface ICustomTableFooter {
+	isExceed: boolean;
+}
+
+const CustomTableFooter = styled(TableFooter)<ICustomTableFooter>`
+	grid-column-start: 3;
+	grid-column-end: 5;
+	${props =>
+		props.isExceed
+			? css`
+					color: ${semanticColors.punch[500]};
+			  `
+			: ''}
+`;
+
+const ExceedError = styled(B)`
+	color: ${semanticColors.punch[700]};
+	background-color: ${semanticColors.punch[100]};
+	border-radius: 8px;
+	padding: 2px 8px;
+	margin-left: 8px;
 `;
 
 export default BoostsTable;
