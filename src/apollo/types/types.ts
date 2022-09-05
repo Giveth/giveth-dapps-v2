@@ -249,3 +249,10 @@ export enum EVerificationSteps {
 	TERM_AND_CONDITION = 'termAndCondition',
 	SUBMIT = 'submit',
 }
+
+export interface IPowerBoosting {
+	id: string;
+	user: IUser;
+	project: IProject;
+	percentage: number;
+}

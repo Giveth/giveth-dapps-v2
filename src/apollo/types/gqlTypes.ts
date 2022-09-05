@@ -85,8 +85,3 @@ export interface IProjectAcceptedToken {
 	isGivbackEligible?: boolean;
 	order: number;
 }
-
-export interface IBoostedProject {
-	project: IProject;
-	percentage: number;
-}
