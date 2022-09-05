@@ -117,4 +117,5 @@ const CustomContributeCard = styled(ContributeCard)`
 export const PowerBoostingContainer = styled.div`
 	position: relative;
 	margin-bottom: 40px;
+	overflow-x: auto;
 `;

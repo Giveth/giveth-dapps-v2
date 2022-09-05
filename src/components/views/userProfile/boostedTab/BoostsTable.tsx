@@ -157,7 +157,7 @@ const Table = styled.div`
 	display: grid;
 	grid-template-columns: 4fr 1fr 1fr 0.3fr;
 	overflow: auto;
-	min-width: 360px;
+	min-width: 700px;
 `;
 
 const BoostsTableCell = styled(TableCell)<{ bold?: boolean }>`
