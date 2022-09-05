@@ -53,9 +53,10 @@ import VerificationStatus from '@/components/views/project/projectDonateCard/Ver
 import useDetectDevice from '@/hooks/useDetectDevice';
 import GIVbackToast from '@/components/views/project/projectDonateCard/GIVbackToast';
 import { FlexCenter } from '@/components/styled-components/Flex';
+import BoostModal from '@/components/modals/Boost/BoostModal';
 
 interface IProjectDonateCard {
-	project?: IProject;
+	project: IProject;
 	isActive?: boolean;
 	setIsActive: Dispatch<SetStateAction<boolean>>;
 	isDraft?: boolean;
@@ -89,6 +90,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 	const [isAdmin, setIsAdmin] = useState<boolean>(false);
 	const [deactivateModal, setDeactivateModal] = useState<boolean>(false);
 	const [showVerificationModal, setShowVerificationModal] = useState(false);
+	const [showBoost, setShowBoost] = useState(false);
 	const [reaction, setReaction] = useState<IReaction | undefined>(
 		project?.reaction,
 	);
@@ -246,6 +248,12 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 					setShowModal={setDeactivateModal}
 					projectId={id}
 					setIsActive={setIsActive}
+				/>
+			)}
+			{showBoost && project?.id && (
+				<BoostModal
+					projectId={project.id}
+					setShowModal={setShowBoost}
 				/>
 			)}
 			<Wrapper
