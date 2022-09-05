@@ -4,12 +4,13 @@ import {
 	IconSort16,
 } from '@giveth/ui-design-system';
 import { EDirection } from '@/apollo/types/gqlEnums';
-import {
-	EOrderBy,
-	IOrder,
-} from '@/components/views/userProfile/UserProfile.view';
 
-const SortIcon = (props: { order: IOrder; title: EOrderBy }) => {
+export interface IOrder {
+	by: string;
+	direction: EDirection;
+}
+
+const SortIcon = (props: { order: IOrder; title: string }) => {
 	const { order, title } = props;
 	return order.by === title ? (
 		order.direction === EDirection.DESC ? (

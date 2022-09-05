@@ -28,3 +28,10 @@ export const TableCell = styled(P)`
 	overflow-x: auto;
 	gap: 8px;
 `;
+
+export const TableFooter = styled(B)`
+	display: flex;
+	padding: 18px 0;
+	border-top: 1px solid ${neutralColors.gray[400]};
+	align-items: center;
+`;
