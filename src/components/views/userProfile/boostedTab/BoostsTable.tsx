@@ -10,7 +10,6 @@ import {
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { mediaQueries } from '@/lib/constants/constants';
 import {
 	RowWrapper,
 	TableCell,
@@ -147,13 +146,9 @@ const Header = styled(Flex)`
 
 const Table = styled.div`
 	display: grid;
-	grid-template-columns: 4fr 1fr 1fr 0.1fr;
+	grid-template-columns: 4fr 1fr 1fr 0.3fr;
 	overflow: auto;
-	min-width: 700px;
-
-	${mediaQueries.laptopS} {
-		min-width: 900px;
-	}
+	min-width: 360px;
 `;
 
 const BoostsTableCell = styled(TableCell)<{ bold?: boolean }>`
