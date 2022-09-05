@@ -15,6 +15,7 @@ import config from '@/configuration';
 const GetMoreGIVpowerBanner = () => {
 	return (
 		<GetMoreGIVpowerContainer>
+			<Background />
 			<H1 weight={700}>Get more GIVpower</H1>
 			<QuoteText size='small'>
 				Stake & lock GIV to get GIVpower to boost projects.
@@ -43,26 +44,26 @@ const GetMoreGIVpowerBanner = () => {
 
 const GetMoreGIVpowerContainer = styled.div`
 	position: relative;
-
 	background-color: ${brandColors.giv['000']};
 	color: ${brandColors.giv[500]};
 	padding: 51px 59px;
-	::after {
-		content: '';
-		background-image: url('/images/backgrounds/giv-outline.svg');
-		opacity: 0.18;
-		top: 0;
-		left: 0;
-		bottom: 0;
-		right: 0;
-		position: absolute;
-		z-index: 1;
-	}
 `;
+
+const Background = styled.div`
+	background-image: url('/images/backgrounds/giv-outline.svg');
+	opacity: 0.18;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	position: absolute;
+`;
+
 const Actions = styled(Flex)`
 	margin-top: 40px;
 	& > a {
 		padding: 24px 72px;
+		z-index: 1;
 	}
 `;
 
