@@ -49,6 +49,7 @@ const GetMoreGIVpowerContainer = styled.div`
 	background-color: ${brandColors.giv['000']};
 	color: ${brandColors.giv[500]};
 	padding: 51px 59px;
+	border-radius: 8px;
 `;
 
 const Background = styled.div`
