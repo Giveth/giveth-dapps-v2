@@ -89,6 +89,7 @@ const Input: FC<InputType> = props => {
 		maxLength,
 		value,
 		isValidating,
+		className,
 		...rest
 	} = props;
 	const id = useId();
@@ -98,7 +99,7 @@ const Input: FC<InputType> = props => {
 			: EInputValidation.ERROR;
 
 	return (
-		<InputContainer>
+		<InputContainer className={className}>
 			{label && (
 				<label htmlFor={id}>
 					<InputLabel
