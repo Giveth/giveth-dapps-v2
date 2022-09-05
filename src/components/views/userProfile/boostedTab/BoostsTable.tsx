@@ -30,6 +30,10 @@ interface IBoostsTable {
 	changeOrder: (orderBy: EPowerBoostingOrder) => void;
 }
 
+interface IEnhancedPowerBoosting extends IPowerBoosting {
+	isLocked?: boolean;
+}
+
 enum ETableNode {
 	VIEWING,
 	EDITING,
@@ -42,13 +46,22 @@ const BoostsTable: FC<IBoostsTable> = ({
 	changeOrder,
 }) => {
 	const [mode, setMode] = useState(ETableNode.EDITING);
-	const [_boosts, setBoosts] = useState<IPowerBoosting[]>([]);
+	const [_boosts, setBoosts] = useState<IEnhancedPowerBoosting[]>([]);
 	const _totalAmountOfGIVpower = BN(totalAmountOfGIVpower);
 
 	useEffect(() => {
 		// if (mode === ETableNode.VIEWING)
 		setBoosts(boosts);
 	}, [boosts]);
+
+	const lockPower = (id: string) => {
+		setBoosts(oldBoosts => {
+			const temp = [...oldBoosts];
+			const lockedBoost = temp.find(oldBoost => oldBoost.id === id);
+			if (lockedBoost) lockedBoost.isLocked = true;
+			return temp;
+		});
+	};
 
 	return (
 		<>
@@ -121,8 +134,13 @@ const BoostsTable: FC<IBoostsTable> = ({
 								) : (
 									<StyledInput
 										size={InputSize.SMALL}
+										disabled={boost.isLocked}
 										LeftIcon={
-											<IconWrapper>
+											<IconWrapper
+												onClick={() =>
+													lockPower(boost.id)
+												}
+											>
 												<IconUnlock16
 													size={16}
 													color={
