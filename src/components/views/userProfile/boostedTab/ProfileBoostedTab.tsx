@@ -57,7 +57,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 
 		const fetchUserBoosts = async () => {
 			setLoading(true);
-			const { data: userPowerBoostings } = await client.query({
+			const { data } = await client.query({
 				query: FETCH_POWER_BOOSTING_INFO,
 				variables: {
 					take: 50,
@@ -67,7 +67,11 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 				},
 			});
 			setLoading(false);
-			setBoosts(userPowerBoostings);
+			if (data?.getPowerBoosting) {
+				const powerBoostings: IPowerBoosting[] =
+					data.getPowerBoosting.powerBoostings;
+				setBoosts(powerBoostings);
+			}
 		};
 		fetchUserBoosts().then();
 	}, [user, order.by, order.direction]);
