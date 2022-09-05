@@ -35,7 +35,7 @@ function createApolloClient() {
 			: null;
 		const mutation: any = {
 			Authorization: currentToken ? `Bearer ${currentToken}` : '',
-			authVersion: '2',
+			authVersion: '1', //TODO change it to 2 version before merge
 		};
 		if (userWalletAddress) mutation['wallet-address'] = userWalletAddress;
 		return {
