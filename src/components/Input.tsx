@@ -5,7 +5,7 @@ import {
 	SublineBold,
 } from '@giveth/ui-design-system';
 import React, { FC, InputHTMLAttributes, ReactElement, useId } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { IIconProps } from '@giveth/ui-design-system/lib/esm/components/icons/giv-economy/type';
 import { EInputValidation, IInputValidation } from '@/types/inputValidation';
 import InputStyled from './styled-components/Input';
@@ -41,6 +41,11 @@ interface IInput extends InputHTMLAttributes<HTMLInputElement> {
 	isValidating?: boolean;
 	size?: InputSize;
 	LeftIcon?: ReactElement<IIconProps>;
+	error?: ICustomInputError;
+}
+
+interface ICustomInputError {
+	message?: string;
 }
 
 interface IInputWithRegister extends IInput {
@@ -50,6 +55,7 @@ interface IInputWithRegister extends IInput {
 	error?:
 		| FieldError
 		| undefined
+		| ICustomInputError
 		| Merge<FieldError, FieldErrorsImpl<NonNullable<DeepRequired<any>>>>;
 }
 
@@ -72,7 +78,6 @@ type InputType =
 			registerName?: never;
 			register?: never;
 			registerOptions?: never;
-			error?: never;
 	  } & IInput);
 
 const Input: FC<InputType> = props => {
@@ -89,6 +94,7 @@ const Input: FC<InputType> = props => {
 		maxLength,
 		value,
 		isValidating,
+		className,
 		...rest
 	} = props;
 	const id = useId();
@@ -98,7 +104,7 @@ const Input: FC<InputType> = props => {
 			: EInputValidation.ERROR;
 
 	return (
-		<InputContainer>
+		<InputContainer className={className}>
 			{label && (
 				<label htmlFor={id}>
 					<InputLabel
@@ -111,7 +117,11 @@ const Input: FC<InputType> = props => {
 				</label>
 			)}
 			<InputWrapper>
-				{LeftIcon && LeftIcon}
+				{LeftIcon && (
+					<LeftIconWrapper inputSize={size}>
+						{LeftIcon}
+					</LeftIconWrapper>
+				)}
 				<InputStyled
 					validation={validationStatus}
 					inputSize={size}
@@ -220,18 +230,45 @@ const InputValidation = styled(GLink)<IInputValidation>`
 const InputWrapper = styled.div`
 	position: relative;
 	display: flex;
-	> svg {
-		position: absolute;
-		transform: translateY(-50%);
-		padding-left: 20px;
-		padding-right: 8px;
-		border-right: 1px solid ${neutralColors.gray[400]};
-		width: 52px;
-		height: 23px;
-		top: 50%;
-		left: 0;
-		overflow: hidden;
-	}
+`;
+
+interface IInputWrapper {
+	inputSize: InputSize;
+}
+
+const LeftIconWrapper = styled.div<IInputWrapper>`
+	position: absolute;
+	transform: translateY(-50%);
+
+	border-right: 1px solid ${neutralColors.gray[400]};
+	top: 50%;
+	left: 0;
+	overflow: hidden;
+	${props => {
+		switch (props.inputSize) {
+			case InputSize.SMALL:
+				return css`
+					width: 28px;
+					height: 16px;
+					padding-left: 8px;
+				`;
+			case InputSize.MEDIUM:
+				return css`
+					width: 36px;
+					height: 24px;
+					padding-top: 4px;
+					padding-left: 16px;
+				`;
+			case InputSize.LARGE:
+				return css`
+					width: 36px;
+					height: 24px;
+					padding-top: 4px;
+					padding-left: 16px;
+				`;
+		}
+	}}
+	padding-right: 4px;
 `;
 
 export default Input;
