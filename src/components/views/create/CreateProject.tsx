@@ -320,8 +320,10 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							setValue={e => setValue(EInputs.description, e)}
 						/>
 						<CategoryInput
-							value={watchCategories}
-							setValue={e => setValue(EInputs.categories, e)}
+							selectedCategories={watchCategories}
+							setSelectedCategories={e =>
+								setValue(EInputs.categories, e)
+							}
 						/>
 						<LocationIndex
 							defaultValue={defaultImpactLocation}
