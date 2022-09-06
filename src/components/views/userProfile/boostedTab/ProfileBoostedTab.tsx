@@ -18,6 +18,7 @@ import { EmptyPowerBoosting } from './EmptyPowerBoosting';
 import GetMoreGIVpowerBanner from './GetMoreGIVpowerBanner';
 import { useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { getRequest } from '@/helpers/requests';
 
 export enum EPowerBoostingOrder {
 	CreationAt = 'createdAt',
@@ -81,7 +82,16 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 				setBoosts(powerBoostings);
 			}
 		};
-		fetchUserBoosts().then();
+		const fetchUserBoosts1 = async () => {
+			setLoading(true);
+			const res = await getRequest('/api/boostedProjects');
+			setLoading(false);
+			const boostedProjects: IPowerBoosting[] = res.boostedProjects;
+			console.log('boostedProjects', boostedProjects);
+			setBoosts(boostedProjects);
+		};
+		fetchUserBoosts1();
+		// fetchUserBoosts();
 	}, [user, order.by, order.direction]);
 
 	return (
