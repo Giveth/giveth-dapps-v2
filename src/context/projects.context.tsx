@@ -7,6 +7,7 @@ import {
 	useState,
 } from 'react';
 import { IMainCategory } from '@/apollo/types/types';
+import { ESortby } from '@/apollo/types/gqlEnums';
 
 interface IVariables {
 	sortingBy?: string;
@@ -24,8 +25,7 @@ interface IProjectsContext {
 }
 
 const variablesDefaultValue = {
-	// sortingBy: ESortby.QUALITYSCORE,
-	sortingBy: undefined,
+	sortingBy: ESortby.QUALITYSCORE,
 	filters: undefined,
 };
 

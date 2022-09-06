@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
-import { brandColors, OutlineButton } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	neutralColors,
+	OutlineButton,
+	H5,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
 
@@ -23,7 +28,8 @@ import ProjectsFiltersMobile from '@/components/views/projects/ProjectsFiltersMo
 import LottieControl from '@/components/animations/lottieControl';
 import LoadingAnimation from '@/animations/loading_giv.json';
 import useDetectDevice from '@/hooks/useDetectDevice';
-import { FlexCenter } from '@/components/styled-components/Flex';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+import ProjectsSortSelect from './ProjectsSortSelect';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -168,7 +174,19 @@ const ProjectsIndex = (props: IProjectsView) => {
 					{isTablet && <ProjectsFiltersTablet />}
 					{isMobile && <ProjectsFiltersMobile />}
 				</FiltersContainer>
-
+				<SortingContainer>
+					<Flex
+						justifyContent='space-between'
+						flexDirection={isMobile ? 'column' : 'row'}
+						gap={isMobile ? '16px' : undefined}
+						alignItems={isMobile ? 'stretch' : 'center'}
+					>
+						<Title>
+							Explore <span>{totalCount} Projects</span>
+						</Title>
+						<ProjectsSortSelect />
+					</Flex>
+				</SortingContainer>
 				{isLoading && <Loader className='dot-flashing' />}
 
 				{filteredProjects?.length > 0 ? (
@@ -234,7 +252,7 @@ const FiltersContainer = styled.div`
 	position: relative;
 	padding: 32px 21px;
 	border-radius: 0;
-	margin-bottom: 32px;
+	margin-bottom: 24px;
 	margin-top: 50px;
 	gap: 16px;
 	${mediaQueries.tablet} {
@@ -279,6 +297,22 @@ const Loading = styled(FlexCenter)`
 	background-color: gray;
 	transition: opacity 0.3s ease-in-out;
 	opacity: 0.9;
+`;
+
+const Title = styled(H5)`
+	font-weight: 700;
+
+	span {
+		color: ${neutralColors.gray[700]};
+	}
+`;
+
+const SortingContainer = styled.div`
+	margin-bottom: 24px;
+	padding: 0 23px;
+	${mediaQueries.tablet} {
+		padding: 0;
+	}
 `;
 
 export default ProjectsIndex;
