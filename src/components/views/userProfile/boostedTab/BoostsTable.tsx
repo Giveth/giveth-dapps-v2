@@ -35,7 +35,9 @@ interface IBoostsTable {
 }
 
 interface IEnhancedPowerBoosting extends IPowerBoosting {
+	displayValue?: string;
 	isLocked?: boolean;
+	hasError?: boolean;
 }
 
 enum ETableNode {
@@ -72,49 +74,57 @@ const BoostsTable: FC<IBoostsTable> = ({
 		e: ChangeEvent<HTMLInputElement>,
 	) => {
 		console.log('called');
-		// setIsCalc(true);
 		const newPercentage = +e.target.value;
 		if (isNaN(newPercentage) || newPercentage < 0 || newPercentage > 100)
 			return;
-		// if (!newPercentage) return;
 		const tempBoosts = [..._boosts];
 		let lockedBoost: IEnhancedPowerBoosting | undefined = undefined;
 		const otherNonLockedBoosts: IEnhancedPowerBoosting[] = [];
 		let sumOfUnlocks = 0;
 		let sumOfLocks = 0;
 		let oldPercentage: number = 0;
+
+		//generate info
 		for (let i = 0; i < tempBoosts.length; i++) {
 			const boost = tempBoosts[i];
+			boost.hasError = false;
 			if (boost.id === id) {
 				lockedBoost = boost;
-				oldPercentage = lockedBoost.percentage;
+				oldPercentage = Number(lockedBoost.percentage);
+				// to handle float numbers
 				lockedBoost.percentage = newPercentage;
+				lockedBoost.displayValue = e.target.value;
 				sumOfUnlocks += newPercentage;
 			} else if (!boost.isLocked) {
 				otherNonLockedBoosts.push(boost);
-				sumOfUnlocks += boost.percentage;
+				sumOfUnlocks += Number(boost.percentage);
 			} else {
-				sumOfLocks += boost.percentage;
+				sumOfLocks += Number(boost.percentage);
 			}
 		}
+		if (!lockedBoost) return;
 		const _tempSum = sumOfLocks + sumOfUnlocks;
 		const free = 100 - sumOfLocks;
+
+		// exceed 100%
 		if (newPercentage >= free) {
+			lockedBoost.hasError = true;
 			setSum(_tempSum);
 			setBoosts(tempBoosts);
 			return;
 		}
+
 		const diff = 100 - _tempSum;
-		console.log('diff', diff);
 		for (let i = 0; i < otherNonLockedBoosts.length; i++) {
 			const boost = otherNonLockedBoosts[i];
 			const value = sumOfUnlocks - newPercentage;
+			let rate;
 			if (value !== 0) {
-				const rate = boost.percentage / value;
-				boost.percentage += rate * diff;
+				rate = boost.percentage / value;
 			} else {
-				boost.percentage = 0;
+				rate = 0.1;
 			}
+			boost.percentage += rate * diff;
 		}
 		setSum(100);
 		setBoosts(tempBoosts);
@@ -192,7 +202,11 @@ const BoostsTable: FC<IBoostsTable> = ({
 									`${boost.percentage}%`
 								) : (
 									<StyledInput
-										value={boost.percentage}
+										value={
+											boost.displayValue !== undefined
+												? boost.displayValue
+												: boost.percentage
+										}
 										onChange={e => {
 											onPercentageChange(boost.id, e);
 										}}
@@ -222,6 +236,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 												)}
 											</IconWrapper>
 										}
+										error={boost.hasError ? {} : undefined}
 									/>
 								)}
 							</BoostsTableCell>
