@@ -41,6 +41,11 @@ interface IInput extends InputHTMLAttributes<HTMLInputElement> {
 	isValidating?: boolean;
 	size?: InputSize;
 	LeftIcon?: ReactElement<IIconProps>;
+	error?: ICustomInputError;
+}
+
+interface ICustomInputError {
+	message?: string;
 }
 
 interface IInputWithRegister extends IInput {
@@ -50,6 +55,7 @@ interface IInputWithRegister extends IInput {
 	error?:
 		| FieldError
 		| undefined
+		| ICustomInputError
 		| Merge<FieldError, FieldErrorsImpl<NonNullable<DeepRequired<any>>>>;
 }
 
@@ -72,7 +78,6 @@ type InputType =
 			registerName?: never;
 			register?: never;
 			registerOptions?: never;
-			error?: never;
 	  } & IInput);
 
 const Input: FC<InputType> = props => {
