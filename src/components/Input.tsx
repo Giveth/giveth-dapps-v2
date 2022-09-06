@@ -251,7 +251,6 @@ const LeftIconWrapper = styled.div<IInputWrapper>`
 					width: 28px;
 					height: 16px;
 					padding-left: 8px;
-					padding-right: 4px;
 				`;
 			case InputSize.MEDIUM:
 				return css`
@@ -259,7 +258,6 @@ const LeftIconWrapper = styled.div<IInputWrapper>`
 					height: 24px;
 					padding-top: 4px;
 					padding-left: 16px;
-					padding-right: 4px;
 				`;
 			case InputSize.LARGE:
 				return css`
@@ -267,10 +265,10 @@ const LeftIconWrapper = styled.div<IInputWrapper>`
 					height: 24px;
 					padding-top: 4px;
 					padding-left: 16px;
-					padding-right: 4px;
 				`;
 		}
 	}}
+	padding-right: 4px;
 `;
 
 export default Input;
