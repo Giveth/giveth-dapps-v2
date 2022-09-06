@@ -125,7 +125,7 @@ const MenuContainer = styled.div`
 		border-radius: 16px;
 		position: absolute;
 		width: 375px;
-		z-index: 3;
+		z-index: ${zIndex.FIXED};
 	}
 `;
 
