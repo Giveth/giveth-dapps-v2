@@ -179,6 +179,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 						justifyContent='space-between'
 						flexDirection={isMobile ? 'column' : 'row'}
 						gap={isMobile ? '16px' : undefined}
+						alignItems={isMobile ? 'stretch' : 'center'}
 					>
 						<Title>
 							Explore <span>{totalCount} Projects</span>
