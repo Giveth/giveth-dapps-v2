@@ -164,7 +164,10 @@ const BoostsTable: FC<IBoostsTable> = ({
 								buttonType='primary'
 								label='cancel'
 								size='small'
-								onClick={() => setMode(ETableNode.VIEWING)}
+								onClick={() => {
+									setEditBoosts(structuredClone(boosts));
+									setMode(ETableNode.VIEWING);
+								}}
 							/>
 						</>
 					)}
