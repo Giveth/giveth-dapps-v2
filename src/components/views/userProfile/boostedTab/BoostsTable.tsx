@@ -72,8 +72,11 @@ const BoostsTable: FC<IBoostsTable> = ({
 	const onPercentageChange = (
 		id: string,
 		e: ChangeEvent<HTMLInputElement>,
+		isOnBlur?: boolean,
 	) => {
-		console.log('called');
+		if (isOnBlur && e.target.value == '') {
+			e.target.value = '0.1';
+		}
 		const newPercentage = +e.target.value;
 		if (isNaN(newPercentage) || newPercentage < 0 || newPercentage > 100)
 			return;
@@ -82,15 +85,14 @@ const BoostsTable: FC<IBoostsTable> = ({
 		const otherNonLockedBoosts: IEnhancedPowerBoosting[] = [];
 		let sumOfUnlocks = 0;
 		let sumOfLocks = 0;
-		let oldPercentage: number = 0;
 
 		//generate info
 		for (let i = 0; i < tempBoosts.length; i++) {
 			const boost = tempBoosts[i];
 			boost.hasError = false;
+			boost.displayValue = undefined;
 			if (boost.id === id) {
 				changedBoost = boost;
-				oldPercentage = Number(changedBoost.percentage);
 				// to handle float numbers
 				changedBoost.percentage = newPercentage;
 				changedBoost.displayValue = e.target.value;
@@ -126,7 +128,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 			}
 			boost.percentage += rate * diff;
 		}
-		setSum(100);
+		setSum(100); //Should show real number
 		setBoosts(tempBoosts);
 	};
 
@@ -208,8 +210,19 @@ const BoostsTable: FC<IBoostsTable> = ({
 												: boost.percentage
 										}
 										onChange={e => {
-											onPercentageChange(boost.id, e);
+											onPercentageChange(
+												boost.id,
+												e,
+												false,
+											);
 										}}
+										onBlur={e =>
+											onPercentageChange(
+												boost.id,
+												e,
+												true,
+											)
+										}
 										size={InputSize.SMALL}
 										disabled={boost.isLocked}
 										LeftIcon={
@@ -250,7 +263,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 				})}
 				<TableFooter>TOTAL GIVPOWER</TableFooter>
 				<CustomTableFooter isExceed={isExceed}>
-					{Math.round(sum)}%
+					{sum}%
 					{isExceed && (
 						<ExceedError>You can’t exceed 100%</ExceedError>
 					)}
