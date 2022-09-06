@@ -51,22 +51,20 @@ const BoostsTable: FC<IBoostsTable> = ({
 	order,
 	changeOrder,
 }) => {
-	const [mode, setMode] = useState(ETableNode.EDITING);
-	const [_boosts, setBoosts] = useState<IEnhancedPowerBoosting[]>([]);
-	const [isCalc, setIsCalc] = useState(false);
+	const [mode, setMode] = useState(ETableNode.VIEWING);
+	const [editBoosts, setEditBoosts] = useState<IEnhancedPowerBoosting[]>([]);
 	const [sum, setSum] = useState(100);
 	const _totalAmountOfGIVpower = new BigNumber(totalAmountOfGIVpower);
 
 	useEffect(() => {
-		// if (mode === ETableNode.VIEWING)
-		setBoosts(boosts);
+		if (mode === ETableNode.VIEWING) setEditBoosts(structuredClone(boosts));
 	}, [boosts]);
 
 	const toggleLockPower = (id: string) => {
-		const temp = [..._boosts];
+		const temp = [...editBoosts];
 		const lockedBoost = temp.find(oldBoost => oldBoost.id === id);
 		if (lockedBoost) lockedBoost.isLocked = !lockedBoost.isLocked;
-		setBoosts(temp);
+		setEditBoosts(temp);
 	};
 
 	const onPercentageChange = (
@@ -80,7 +78,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 		const newPercentage = +e.target.value;
 		if (isNaN(newPercentage) || newPercentage < 0 || newPercentage > 100)
 			return;
-		const tempBoosts = [..._boosts];
+		const tempBoosts = [...editBoosts];
 		let changedBoost: IEnhancedPowerBoosting | undefined = undefined;
 		const otherNonLockedBoosts: IEnhancedPowerBoosting[] = [];
 		let sumOfUnlocks = 0;
@@ -112,7 +110,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 		if (newPercentage >= free) {
 			changedBoost.hasError = true;
 			setSum(_tempSum);
-			setBoosts(tempBoosts);
+			setEditBoosts(tempBoosts);
 			return;
 		}
 
@@ -129,7 +127,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 			boost.percentage += rate * diff;
 		}
 		setSum(100); //Should show real number
-		setBoosts(tempBoosts);
+		setEditBoosts(tempBoosts);
 	};
 
 	const isExceed = Math.round(sum) !== 100;
@@ -152,7 +150,9 @@ const BoostsTable: FC<IBoostsTable> = ({
 								buttonType='primary'
 								label='reset all'
 								size='small'
-								onClick={() => setBoosts(boosts)}
+								onClick={() =>
+									setEditBoosts(structuredClone(boosts))
+								}
 							/>
 							<Button
 								buttonType='primary'
@@ -186,7 +186,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 				</TableHeader>
 				<TableHeader>Boosted with</TableHeader>
 				<TableHeader></TableHeader>
-				{_boosts?.map(boost => {
+				{editBoosts?.map(boost => {
 					return (
 						<BoostsRowWrapper key={boost.project.id}>
 							<BoostsTableCell bold>
