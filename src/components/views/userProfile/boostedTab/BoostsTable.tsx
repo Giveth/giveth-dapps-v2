@@ -78,7 +78,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 		if (isNaN(newPercentage) || newPercentage < 0 || newPercentage > 100)
 			return;
 		const tempBoosts = [..._boosts];
-		let lockedBoost: IEnhancedPowerBoosting | undefined = undefined;
+		let changedBoost: IEnhancedPowerBoosting | undefined = undefined;
 		const otherNonLockedBoosts: IEnhancedPowerBoosting[] = [];
 		let sumOfUnlocks = 0;
 		let sumOfLocks = 0;
@@ -89,11 +89,11 @@ const BoostsTable: FC<IBoostsTable> = ({
 			const boost = tempBoosts[i];
 			boost.hasError = false;
 			if (boost.id === id) {
-				lockedBoost = boost;
-				oldPercentage = Number(lockedBoost.percentage);
+				changedBoost = boost;
+				oldPercentage = Number(changedBoost.percentage);
 				// to handle float numbers
-				lockedBoost.percentage = newPercentage;
-				lockedBoost.displayValue = e.target.value;
+				changedBoost.percentage = newPercentage;
+				changedBoost.displayValue = e.target.value;
 				sumOfUnlocks += newPercentage;
 			} else if (!boost.isLocked) {
 				otherNonLockedBoosts.push(boost);
@@ -102,13 +102,13 @@ const BoostsTable: FC<IBoostsTable> = ({
 				sumOfLocks += Number(boost.percentage);
 			}
 		}
-		if (!lockedBoost) return;
+		if (!changedBoost) return;
 		const _tempSum = sumOfLocks + sumOfUnlocks;
 		const free = 100 - sumOfLocks;
 
 		// exceed 100%
 		if (newPercentage >= free) {
-			lockedBoost.hasError = true;
+			changedBoost.hasError = true;
 			setSum(_tempSum);
 			setBoosts(tempBoosts);
 			return;
