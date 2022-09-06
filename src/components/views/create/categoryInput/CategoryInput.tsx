@@ -7,6 +7,8 @@ import {
 	SublineBold,
 } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
+import { useFormContext } from 'react-hook-form';
+
 import { client } from '@/apollo/apolloClient';
 import { FETCH_MAIN_CATEGORIES } from '@/apollo/gql/gqlProjects';
 import { maxSelectedCategory } from '@/lib/constants/Categories';
@@ -14,15 +16,20 @@ import { ICategory, IMainCategory } from '@/apollo/types/types';
 import { InputContainer } from '@/components/views/create/Create.sc';
 import MainCategoryItem from '@/components/views/create/categoryInput/MainCategoryItem';
 import { showToastError } from '@/lib/helpers';
+import { EInputs } from '@/components/views/create/CreateProject';
 
-interface IProps {
-	selectedCategories: ICategory[];
-	setSelectedCategories: (category: ICategory[]) => void;
-}
+const CategoryInput: FC = () => {
+	const { getValues, setValue } = useFormContext();
 
-const CategoryInput: FC<IProps> = props => {
-	const { selectedCategories, setSelectedCategories } = props;
 	const [allCategories, setAllCategories] = useState<IMainCategory[]>();
+	const [selectedCategories, setSelectedCategories] = useState<ICategory[]>(
+		getValues(EInputs.categories),
+	);
+
+	const handleSelectCategory = (categories: ICategory[]) => {
+		setSelectedCategories(categories);
+		setValue(EInputs.categories, categories);
+	};
 
 	useEffect(() => {
 		const getCategories = async () => {
@@ -56,7 +63,7 @@ const CategoryInput: FC<IProps> = props => {
 					key={mainCategory.title}
 					mainCategoryItem={mainCategory}
 					selectedCategories={selectedCategories}
-					setSelectedCategories={setSelectedCategories}
+					setSelectedCategories={handleSelectCategory}
 				/>
 			))}
 		</InputContainer>
