@@ -13,6 +13,7 @@ import {
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 
+import BigNumber from 'bignumber.js';
 import {
 	RowWrapper,
 	TableCell,
@@ -20,7 +21,7 @@ import {
 	TableHeader,
 } from '@/components/styled-components/Table';
 import { EPowerBoostingOrder, IBoostedOrder } from './ProfileBoostedTab';
-import { BN, formatWeiHelper } from '@/helpers/number';
+import { formatWeiHelper } from '@/helpers/number';
 import { Flex } from '@/components/styled-components/Flex';
 import Input, { InputSize } from '@/components/Input';
 import SortIcon from '@/components/SortIcon';
@@ -50,8 +51,9 @@ const BoostsTable: FC<IBoostsTable> = ({
 }) => {
 	const [mode, setMode] = useState(ETableNode.EDITING);
 	const [_boosts, setBoosts] = useState<IEnhancedPowerBoosting[]>([]);
+	const [isCalc, setIsCalc] = useState(false);
 	const [sum, setSum] = useState(100);
-	const _totalAmountOfGIVpower = BN(totalAmountOfGIVpower);
+	const _totalAmountOfGIVpower = new BigNumber(totalAmountOfGIVpower);
 
 	useEffect(() => {
 		// if (mode === ETableNode.VIEWING)
@@ -69,17 +71,56 @@ const BoostsTable: FC<IBoostsTable> = ({
 		id: string,
 		e: ChangeEvent<HTMLInputElement>,
 	) => {
-		const temp = [..._boosts];
-		const lockedBoost = temp.find(oldBoost => oldBoost.id === id);
-		if (lockedBoost) {
-			lockedBoost.percentage = Number(e.target.value);
-			const _sum = temp.reduce((a, b) => a + b.percentage, 0);
-			setSum(_sum);
-			setBoosts(temp);
+		console.log('called');
+		// setIsCalc(true);
+		const newPercentage = +e.target.value;
+		if (isNaN(newPercentage) || newPercentage < 0 || newPercentage > 100)
+			return;
+		// if (!newPercentage) return;
+		const tempBoosts = [..._boosts];
+		let lockedBoost: IEnhancedPowerBoosting | undefined = undefined;
+		const otherNonLockedBoosts: IEnhancedPowerBoosting[] = [];
+		let sumOfUnlocks = 0;
+		let sumOfLocks = 0;
+		let oldPercentage: number = 0;
+		for (let i = 0; i < tempBoosts.length; i++) {
+			const boost = tempBoosts[i];
+			if (boost.id === id) {
+				lockedBoost = boost;
+				oldPercentage = lockedBoost.percentage;
+				lockedBoost.percentage = newPercentage;
+				sumOfUnlocks += newPercentage;
+			} else if (!boost.isLocked) {
+				otherNonLockedBoosts.push(boost);
+				sumOfUnlocks += boost.percentage;
+			} else {
+				sumOfLocks += boost.percentage;
+			}
 		}
+		const _tempSum = sumOfLocks + sumOfUnlocks;
+		const free = 100 - sumOfLocks;
+		if (newPercentage >= free) {
+			setSum(_tempSum);
+			setBoosts(tempBoosts);
+			return;
+		}
+		const diff = 100 - _tempSum;
+		console.log('diff', diff);
+		for (let i = 0; i < otherNonLockedBoosts.length; i++) {
+			const boost = otherNonLockedBoosts[i];
+			const value = sumOfUnlocks - newPercentage;
+			if (value !== 0) {
+				const rate = boost.percentage / value;
+				boost.percentage += rate * diff;
+			} else {
+				boost.percentage = 0;
+			}
+		}
+		setSum(100);
+		setBoosts(tempBoosts);
 	};
 
-	const isExceed = sum !== 100;
+	const isExceed = Math.round(sum) !== 100;
 
 	return (
 		<>
@@ -142,8 +183,8 @@ const BoostsTable: FC<IBoostsTable> = ({
 							<BoostsTableCell>
 								{formatWeiHelper(
 									_totalAmountOfGIVpower
-										.mul(boost.percentage)
-										.div(100),
+										.multipliedBy(boost.percentage || 0)
+										.dividedBy(100),
 								)}
 							</BoostsTableCell>
 							<BoostsTableCell bold>
@@ -155,7 +196,6 @@ const BoostsTable: FC<IBoostsTable> = ({
 										onChange={e => {
 											onPercentageChange(boost.id, e);
 										}}
-										type='number'
 										size={InputSize.SMALL}
 										disabled={boost.isLocked}
 										LeftIcon={
@@ -195,7 +235,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 				})}
 				<TableFooter>TOTAL GIVPOWER</TableFooter>
 				<CustomTableFooter isExceed={isExceed}>
-					{sum}%
+					{Math.round(sum)}%
 					{isExceed && (
 						<ExceedError>You can’t exceed 100%</ExceedError>
 					)}
