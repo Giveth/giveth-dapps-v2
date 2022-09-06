@@ -13,7 +13,7 @@ interface ICheckBox {
 	label: string;
 	checked?: boolean;
 	disabled?: boolean;
-	size?: 16 | 20 | 24 | 32;
+	size?: 14 | 16 | 20 | 24 | 32;
 	labelSize?: 'Tiny' | 'Small' | 'Medium' | 'Big';
 }
 
@@ -67,6 +67,13 @@ const Wrapper = styled(Flex)<{
 	}
 	${props => {
 		switch (props.size) {
+			case 14:
+				return css`
+					gap: 10px;
+					> div:first-child {
+						border-width: 1px;
+					}
+				`;
 			case 16:
 				return css`
 					gap: 10px;

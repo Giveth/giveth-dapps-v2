@@ -1,20 +1,15 @@
 import {
 	B,
 	brandColors,
+	Button,
 	ButtonText,
-	GLink,
-	IconArrowBottom,
-	IconArrowTop,
-	IconDonation16,
-	IconHeartOutline16,
 	IconX,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { forwardRef } from 'react';
 import { mediaQueries } from '@/lib/constants/constants';
-import { Flex, FlexCenter } from '../styled-components/Flex';
-import { ESortbyAllProjects } from '@/apollo/types/gqlEnums';
+import { FlexCenter } from '../styled-components/Flex';
 import CheckBox from '../Checkbox';
 import { useProjectsContext } from '@/context/projects.context';
 import { zIndex } from '@/lib/constants/constants';
@@ -28,16 +23,16 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 	({ handleClose, isOpen }, ref) => {
 		const { setVariables, variables } = useProjectsContext();
 		const filtersCount = variables?.filters?.length ?? 0;
+
 		const handleSelectFilter = (e: boolean, filter: string) => {
-			if (e === true) {
+			if (e) {
 				setVariables({
 					...variables,
 					filters: !variables.filters?.includes(filter)
 						? [...(variables.filters || []), filter]
 						: variables.filters,
 				});
-			}
-			if (e === false) {
+			} else {
 				setVariables({
 					...variables,
 					filters: variables.filters?.filter(
@@ -46,6 +41,14 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 				});
 			}
 		};
+
+		const clearFilters = () => {
+			setVariables({
+				...variables,
+				filters: [],
+			});
+		};
+
 		return (
 			<MenuContainer className={isOpen ? 'fadeIn' : 'fadeOut'} ref={ref}>
 				<Header>
@@ -53,7 +56,7 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 						<IconX size={24} />
 					</CloseContainer>
 					<FlexCenter gap='8px'>
-						<Title size='medium'>Filters</Title>
+						<ButtonText size='medium'>Filters</ButtonText>
 						{filtersCount !== 0 && (
 							<PinkyColoredNumber size='medium'>
 								{filtersCount}
@@ -61,26 +64,6 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 						)}
 					</FlexCenter>
 				</Header>
-				<Section>
-					<B>Sort by</B>
-					{sortByOptions.map((sortByOption, idx) => (
-						<SortItem
-							isSortSelected={
-								variables.sortingBy === sortByOption.value
-							}
-							key={idx}
-							onClick={e => {
-								setVariables({
-									...variables,
-									sortingBy: sortByOption.value,
-								});
-							}}
-						>
-							<GLink>{sortByOption.label}</GLink>
-							<IconContainer>{sortByOption.icon}</IconContainer>
-						</SortItem>
-					))}
-				</Section>
 				<Section>
 					<B>Project features</B>
 					{projectFeatures.map((projectFeature, idx) => (
@@ -95,11 +78,17 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 										projectFeature.value,
 									) ?? false
 								}
-								size={16}
+								size={14}
 							/>
 						</FeatureItem>
 					))}
 				</Section>
+				<ButtonStyled
+					onClick={clearFilters}
+					disabled={filtersCount === 0}
+					buttonType='texty-secondary'
+					label='Clear all Filters'
+				/>
 			</MenuContainer>
 		);
 	},
@@ -107,36 +96,16 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 
 FilterMenu.displayName = 'FilterMenu';
 
-// should merge with sortByOptions in projectsIndex at the end
-const sortByOptions = [
-	{
-		label: 'Newest',
-		value: ESortbyAllProjects.NEWEST,
-		icon: <IconArrowTop size={16} />,
-	},
-	{
-		label: 'Oldest',
-		value: ESortbyAllProjects.OLDEST,
-		icon: <IconArrowBottom size={16} />,
-	},
-	{
-		label: 'Most liked',
-		value: ESortbyAllProjects.MOSTLIKED,
-		icon: <IconHeartOutline16 />,
-	},
-	{
-		label: 'Most funded',
-		value: ESortbyAllProjects.MOSTFUNDED,
-		icon: <IconDonation16 />,
-	},
-];
-
 const projectFeatures = [
 	{ label: 'Accept GIV token', value: 'AcceptGiv' },
 	{ label: 'Verified', value: 'Verified' },
 	{ label: 'From GivingBlock', value: 'GivingBlock' },
 	{ label: 'From Trace', value: 'Traceable' },
 ];
+
+const ButtonStyled = styled(Button)`
+	margin: 0 auto;
+`;
 
 const MenuContainer = styled.div`
 	top: 0;
@@ -175,31 +144,9 @@ const CloseContainer = styled.div`
 	cursor: pointer;
 `;
 
-const Title = styled(ButtonText)``;
-
 const Section = styled.section`
 	margin: 24px 0;
-`;
-
-const SortItem = styled(Flex)<{ isSortSelected?: boolean }>`
-	margin: 16px 0;
-
-	background-color: ${props =>
-		props.isSortSelected
-			? neutralColors.gray[900]
-			: neutralColors.gray[300]};
-	color: ${props => props.isSortSelected && neutralColors.gray[100]};
-	border-radius: 50px;
-	padding: 10px 16px;
-	gap: 10px;
-	width: fit-content;
-	cursor: pointer;
-`;
-
-const IconContainer = styled.div`
-	width: 16px;
-	height: 22px;
-	padding: 2px 0;
+	border-bottom: 1px solid ${neutralColors.gray[300]};
 `;
 
 const FeatureItem = styled.div`
@@ -212,7 +159,7 @@ const FeatureItem = styled.div`
 	}
 `;
 
-export const PinkyColoredNumber = styled(Title)`
+export const PinkyColoredNumber = styled(ButtonText)`
 	background-color: ${brandColors.pinky[500]};
 	width: 18px;
 	height: 18px;
