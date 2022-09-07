@@ -1,5 +1,5 @@
 import { IconRocketInSpace32 } from '@giveth/ui-design-system';
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
 
@@ -10,9 +10,6 @@ import { BoostModalContainer } from './BoostModal.sc';
 import BoostedInnerModal from './BoostedInnerModal';
 import BoostInnerModal from './BoostInnerModal';
 import { BN } from '@/helpers/number';
-import { client } from '@/apollo/apolloClient';
-import { FETCH_POWER_BOOSTING_INFO } from '@/apollo/gql/gqlPowerBoosting';
-import { IPowerBoosting } from '@/apollo/types/types';
 import { useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
@@ -25,46 +22,20 @@ export enum EBoostModalState {
 	BOOSTED,
 }
 
-const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
+const BoostModal: FC<IBoostModalProps> = ({ setShowModal, projectId }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const [percentage, setPercentage] = useState(0);
 	const [state, setState] = useState(EBoostModalState.BOOSTING);
-	const [loading, setLoading] = useState(false);
-	const [isFirst, setIsFirst] = useState(false);
-	const user = useAppSelector(state => state.user.userData);
 	const sdh = new SubgraphDataHelper(
 		useAppSelector(state => state.subgraph.xDaiValues),
 	);
 	const givPower = sdh.getUserGIVPowerBalance();
 
-	useEffect(() => {
-		if (!user) return;
-
-		const fetchUserBoosts = async () => {
-			setLoading(true);
-			const { data } = await client.query({
-				query: FETCH_POWER_BOOSTING_INFO,
-				variables: {
-					take: 1,
-					skip: 0,
-					userId: parseFloat(user.id || '') || -1,
-				},
-			});
-			setLoading(false);
-			if (data?.getPowerBoosting) {
-				const powerBoostings: IPowerBoosting[] =
-					data.getPowerBoosting.powerBoostings;
-				setIsFirst(powerBoostings.length === 0);
-			}
-		};
-		fetchUserBoosts().then();
-	}, [user]);
-
 	if (givPower.balance == '0') {
 		return <ZeroGivpowerModal setShowModal={setShowModal} />;
 	}
 
-	const title = EBoostModalState.BOOSTING ? 'Boost' : 'Well done!';
+	const title = state === EBoostModalState.BOOSTING ? 'Boost' : 'Well done!';
 
 	return (
 		<Modal
@@ -80,6 +51,8 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 						totalGIVpower={BN(givPower.balance)}
 						setPercentage={setPercentage}
 						setState={setState}
+						// TODO: Create Project context
+						projectId={projectId}
 					/>
 				) : (
 					<BoostedInnerModal

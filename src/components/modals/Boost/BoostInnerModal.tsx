@@ -11,6 +11,8 @@ import {
 } from '@giveth/ui-design-system';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import LottieControl from '@/components/animations/lottieControl';
+
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { LockInfotooltip } from '../StakeLock/LockInfo';
 import { Flex } from '@/components/styled-components/Flex';
@@ -34,42 +36,135 @@ import {
 	ManageLink,
 } from './BoostModal.sc';
 import { EBoostModalState } from './BoostModal';
-import type { BigNumber } from 'ethers';
+import {
+	FETCH_POWER_BOOSTING_INFO,
+	SAVE_POWER_BOOSTING,
+} from '@/apollo/gql/gqlPowerBoosting';
+import { client } from '@/apollo/apolloClient';
+import { IPowerBoosting } from '@/apollo/types/types';
+import { useAppSelector } from '@/features/hooks';
+import LoadingAnimation from '@/animations/loading_giv.json';
 import type { FC, Dispatch, SetStateAction } from 'react';
+import type { BigNumber } from 'ethers';
 
 interface IInnerBoostModalProps {
 	totalGIVpower: BigNumber;
 	setPercentage: Dispatch<SetStateAction<number>>;
 	setState: Dispatch<SetStateAction<EBoostModalState>>;
+	projectId: string;
 }
 
 const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 	totalGIVpower,
 	setPercentage: setFinalPercentage,
 	setState,
+	projectId,
 }) => {
 	const [percentage, setPercentage] = useState(0);
 	const [isChanged, setIsChanged] = useState(false);
 	const [isSaving, setIsSaving] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const [boostedProjects, setBoostedProjects] = useState<IPowerBoosting[]>(
+		[],
+	);
+	const boostedProjectsCount = boostedProjects.length ?? 0;
+	const user = useAppSelector(state => state.user.userData);
+	console.log('Projects', boostedProjects);
+	const isOnlyBoostedProjectIsThisProject =
+		boostedProjects[0]?.project.id === projectId &&
+		boostedProjects.length === 1;
 
-	let boostedProjects = 2;
+	const handleCaptionText = () => {
+		if (boostedProjectsCount === 0) {
+			return (
+				<Caption style={{ whiteSpace: `pre-line` }}>
+					This is your first time boosting, so 100% will be allocated
+					to this project. You can check your allocation on &nbsp;
+					<Link href={Routes.MyBoostedProjects} passHref>
+						<GLink>
+							<b>My account</b>
+						</GLink>
+					</Link>
+				</Caption>
+			);
+		} else if (isOnlyBoostedProjectIsThisProject) {
+			return (
+				<Caption style={{ whiteSpace: `pre-line` }}>
+					You supported with 100% of your total GIVpower to this
+					project. You can't edit the allocation unless you have at
+					least 1 other boosted project. Try boosting other projects
+					or managing them in &nbsp;
+					<Link href={Routes.MyBoostedProjects} passHref>
+						<GLink>
+							<b>My account</b>
+						</GLink>
+					</Link>
+				</Caption>
+			);
+		} else {
+			return (
+				<Caption style={{ whiteSpace: `pre-line` }}>
+					By allocating GIVpower to this project, we will reduce your
+					allocation on previous project proportionally. You can check
+					your previous allocation on &nbsp;
+					<Link href={Routes.MyBoostedProjects} passHref>
+						<GLink>
+							<b>My account</b>
+						</GLink>
+					</Link>
+				</Caption>
+			);
+		}
+	};
 
 	useEffect(() => {
-		if (boostedProjects === 0) {
+		if (!user) return;
+
+		const fetchUserBoosts = async () => {
+			setLoading(true);
+			//Check user has boosted any  project or not
+			const { data } = await client.query({
+				query: FETCH_POWER_BOOSTING_INFO,
+				variables: {
+					take: 50,
+					skip: 0,
+					userId: parseFloat(user.id || '') || -1,
+				},
+			});
+
+			setLoading(false);
+			if (data?.getPowerBoosting) {
+				const powerBoostings: IPowerBoosting[] =
+					data.getPowerBoosting.powerBoostings;
+				setBoostedProjects(powerBoostings);
+			}
+		};
+		fetchUserBoosts().then();
+	}, [user]);
+
+	useEffect(() => {
+		if (boostedProjectsCount === 0) {
 			setPercentage(100);
 			setIsChanged(true);
 		}
-	}, [boostedProjects]);
+	}, [boostedProjectsCount]);
 
-	const confirmAllocation = () => {
-		console.log('Confirming');
+	const confirmAllocation = async () => {
 		setIsSaving(true);
-		setTimeout(() => {
-			setIsSaving(false);
-			setFinalPercentage(percentage);
-			setState(EBoostModalState.BOOSTED);
-		}, 1000);
+		const res = await client.mutate({
+			mutation: SAVE_POWER_BOOSTING,
+			variables: {
+				percentage,
+				projectId: +projectId,
+			},
+		});
+		setIsSaving(false);
+		if (res) setState(EBoostModalState.BOOSTED);
 	};
+
+	if (loading) {
+		return <LottieControl animationData={LoadingAnimation} size={50} />;
+	}
 
 	return (
 		<>
@@ -108,24 +203,11 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 						<ColoredRocketIcon>
 							<IconRocketInSpace24 />
 						</ColoredRocketIcon>
-						<B>{boostedProjects}</B>
+						<B>{boostedProjectsCount}</B>
 					</Flex>
 				</Flex>
 			</InfoPart>
-			<DescToast>
-				<Caption style={{ whiteSpace: `pre-line` }}>
-					{boostedProjects > 0
-						? `By allocating GIVpower to this project, we will reduce your allocation on previous project proportionally.
-						You can check your previous allocation on `
-						: `This is your first time boosting, so 100% will be allocated to this project.
-						You can check your allocation on `}
-					<Link href={Routes.MyBoostedProjects} passHref>
-						<GLink>
-							<b>My account</b>
-						</GLink>
-					</Link>
-				</Caption>
-			</DescToast>
+			<DescToast>{handleCaptionText()}</DescToast>
 			<SliderWrapper>
 				{!isChanged && (
 					<SliderTooltip>
@@ -140,14 +222,14 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 					}}
 					trackStyle={{
 						backgroundColor:
-							boostedProjects === 0
+							boostedProjectsCount === 0
 								? brandColors.giv[200]
 								: brandColors.giv[500],
 					}}
 					handleStyle={{
 						backgroundColor: neutralColors.gray[100],
 						border: `3px solid ${
-							boostedProjects === 0
+							boostedProjectsCount === 0
 								? neutralColors.gray[500]
 								: brandColors.giv[800]
 						}`,
@@ -155,7 +237,12 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 					}}
 					onChange={(value: any) => {
 						const _value = Array.isArray(value) ? value[0] : value;
-						if (boostedProjects === 0 || isSaving) return;
+						if (
+							boostedProjectsCount === 0 ||
+							isSaving ||
+							isOnlyBoostedProjectIsThisProject
+						)
+							return;
 						setPercentage(_value);
 						setIsChanged(true);
 					}}
@@ -186,7 +273,12 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 				label='Confirm'
 				size='small'
 				loading={isSaving}
-				disabled={!isChanged || isSaving || percentage === 0}
+				disabled={
+					!isChanged ||
+					isSaving ||
+					percentage === 0 ||
+					isOnlyBoostedProjectIsThisProject
+				}
 				onClick={confirmAllocation}
 			/>
 			<Link href={Routes.MyBoostedProjects} passHref>
