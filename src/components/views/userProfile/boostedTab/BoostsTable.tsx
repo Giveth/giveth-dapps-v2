@@ -1,15 +1,19 @@
 import {
+	B,
 	brandColors,
 	Button,
 	H5,
+	IconLock16,
 	IconTrash,
 	IconUnlock16,
 	neutralColors,
 	OutlineButton,
+	semanticColors,
 } from '@giveth/ui-design-system';
-import { FC, useEffect, useState } from 'react';
-import styled from 'styled-components';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
+import styled, { css } from 'styled-components';
 
+import BigNumber from 'bignumber.js';
 import {
 	RowWrapper,
 	TableCell,
@@ -17,7 +21,7 @@ import {
 	TableHeader,
 } from '@/components/styled-components/Table';
 import { EPowerBoostingOrder, IBoostedOrder } from './ProfileBoostedTab';
-import { BN, formatWeiHelper } from '@/helpers/number';
+import { formatWeiHelper } from '@/helpers/number';
 import { Flex } from '@/components/styled-components/Flex';
 import Input, { InputSize } from '@/components/Input';
 import SortIcon from '@/components/SortIcon';
@@ -28,6 +32,12 @@ interface IBoostsTable {
 	totalAmountOfGIVpower: string;
 	order: IBoostedOrder;
 	changeOrder: (orderBy: EPowerBoostingOrder) => void;
+}
+
+interface IEnhancedPowerBoosting extends IPowerBoosting {
+	displayValue?: string;
+	isLocked?: boolean;
+	hasError?: boolean;
 }
 
 enum ETableNode {
@@ -42,12 +52,85 @@ const BoostsTable: FC<IBoostsTable> = ({
 	changeOrder,
 }) => {
 	const [mode, setMode] = useState(ETableNode.VIEWING);
-	const [_boosts, setBoosts] = useState<IPowerBoosting[]>([]);
-	const _totalAmountOfGIVpower = BN(totalAmountOfGIVpower);
+	const [editBoosts, setEditBoosts] = useState<IEnhancedPowerBoosting[]>([]);
+	const [sum, setSum] = useState(100);
+	const _totalAmountOfGIVpower = new BigNumber(totalAmountOfGIVpower);
 
 	useEffect(() => {
-		if (mode === ETableNode.VIEWING) setBoosts(boosts);
+		if (mode === ETableNode.VIEWING) setEditBoosts(structuredClone(boosts));
 	}, [boosts]);
+
+	const toggleLockPower = (id: string) => {
+		const temp = [...editBoosts];
+		const lockedBoost = temp.find(oldBoost => oldBoost.id === id);
+		if (lockedBoost) lockedBoost.isLocked = !lockedBoost.isLocked;
+		setEditBoosts(temp);
+	};
+
+	const onPercentageChange = (
+		id: string,
+		e: ChangeEvent<HTMLInputElement>,
+		isOnBlur?: boolean,
+	) => {
+		if (isOnBlur && e.target.value == '') {
+			e.target.value = '0.1';
+		}
+		const newPercentage = +e.target.value;
+		if (isNaN(newPercentage) || newPercentage < 0 || newPercentage > 100)
+			return;
+		const tempBoosts = [...editBoosts];
+		let changedBoost: IEnhancedPowerBoosting | undefined = undefined;
+		const otherNonLockedBoosts: IEnhancedPowerBoosting[] = [];
+		let sumOfUnlocks = 0;
+		let sumOfLocks = 0;
+
+		//generate info
+		for (let i = 0; i < tempBoosts.length; i++) {
+			const boost = tempBoosts[i];
+			boost.hasError = false;
+			boost.displayValue = undefined;
+			if (boost.id === id) {
+				changedBoost = boost;
+				// to handle float numbers
+				changedBoost.percentage = newPercentage;
+				changedBoost.displayValue = e.target.value;
+				sumOfUnlocks += newPercentage;
+			} else if (!boost.isLocked) {
+				otherNonLockedBoosts.push(boost);
+				sumOfUnlocks += Number(boost.percentage);
+			} else {
+				sumOfLocks += Number(boost.percentage);
+			}
+		}
+		if (!changedBoost) return;
+		const _tempSum = sumOfLocks + sumOfUnlocks;
+		const free = 100 - sumOfLocks;
+
+		// exceed 100%
+		if (newPercentage >= free) {
+			changedBoost.hasError = true;
+			setSum(_tempSum);
+			setEditBoosts(tempBoosts);
+			return;
+		}
+
+		const diff = 100 - _tempSum;
+		for (let i = 0; i < otherNonLockedBoosts.length; i++) {
+			const boost = otherNonLockedBoosts[i];
+			const value = sumOfUnlocks - newPercentage;
+			let rate;
+			if (value !== 0) {
+				rate = boost.percentage / value;
+			} else {
+				rate = 0.1;
+			}
+			boost.percentage += rate * diff;
+		}
+		setSum(100); //Should show real number
+		setEditBoosts(tempBoosts);
+	};
+
+	const isExceed = Math.round(sum) !== 100;
 
 	return (
 		<>
@@ -67,7 +150,9 @@ const BoostsTable: FC<IBoostsTable> = ({
 								buttonType='primary'
 								label='reset all'
 								size='small'
-								onClick={() => setBoosts(boosts)}
+								onClick={() =>
+									setEditBoosts(structuredClone(boosts))
+								}
 							/>
 							<Button
 								buttonType='primary'
@@ -79,7 +164,10 @@ const BoostsTable: FC<IBoostsTable> = ({
 								buttonType='primary'
 								label='cancel'
 								size='small'
-								onClick={() => setMode(ETableNode.VIEWING)}
+								onClick={() => {
+									setEditBoosts(structuredClone(boosts));
+									setMode(ETableNode.VIEWING);
+								}}
 							/>
 						</>
 					)}
@@ -101,7 +189,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 				</TableHeader>
 				<TableHeader>Boosted with</TableHeader>
 				<TableHeader></TableHeader>
-				{_boosts?.map(boost => {
+				{editBoosts?.map(boost => {
 					return (
 						<BoostsRowWrapper key={boost.project.id}>
 							<BoostsTableCell bold>
@@ -110,35 +198,79 @@ const BoostsTable: FC<IBoostsTable> = ({
 							<BoostsTableCell>
 								{formatWeiHelper(
 									_totalAmountOfGIVpower
-										.mul(boost.percentage)
-										.div(100),
+										.multipliedBy(boost.percentage || 0)
+										.dividedBy(100),
 								)}
 							</BoostsTableCell>
 							<BoostsTableCell bold>
 								{mode === ETableNode.VIEWING ? (
 									`${boost.percentage}%`
 								) : (
-									<Input
-										size={InputSize.SMALL}
-										LeftIcon={
-											<IconUnlock16
-												size={16}
-												color={neutralColors.gray[600]}
-											/>
+									<StyledInput
+										value={
+											boost.displayValue !== undefined
+												? boost.displayValue
+												: boost.percentage
 										}
+										onChange={e => {
+											onPercentageChange(
+												boost.id,
+												e,
+												false,
+											);
+										}}
+										onBlur={e =>
+											onPercentageChange(
+												boost.id,
+												e,
+												true,
+											)
+										}
+										size={InputSize.SMALL}
+										disabled={boost.isLocked}
+										LeftIcon={
+											<IconWrapper
+												onClick={() =>
+													toggleLockPower(boost.id)
+												}
+											>
+												{boost.isLocked ? (
+													<IconLock16
+														color={
+															neutralColors
+																.gray[600]
+														}
+													/>
+												) : (
+													<IconUnlock16
+														size={16}
+														color={
+															neutralColors
+																.gray[600]
+														}
+													/>
+												)}
+											</IconWrapper>
+										}
+										error={boost.hasError ? {} : undefined}
 									/>
 								)}
 							</BoostsTableCell>
 							<BoostsTableCell>
-								<IconTrash size={24} />
+								{mode === ETableNode.VIEWING && (
+									<IconTrash size={24} />
+								)}
 							</BoostsTableCell>
 						</BoostsRowWrapper>
 					);
 				})}
 				<TableFooter>TOTAL GIVPOWER</TableFooter>
-				<TableFooter></TableFooter>
-				<TableFooter>100%</TableFooter>
-				<TableFooter></TableFooter>
+				<CustomTableFooter isExceed={isExceed}>
+					{sum}%
+					{isExceed && (
+						<ExceedError>You can’t exceed 100%</ExceedError>
+					)}
+				</CustomTableFooter>
 			</Table>
 		</>
 	);
@@ -171,6 +303,39 @@ const BoostsRowWrapper = styled(RowWrapper)`
 		background-color: ${neutralColors.gray[300]};
 		color: ${brandColors.pinky[500]};
 	}
+`;
+
+const StyledInput = styled(Input)`
+	margin-top: 10px;
+	width: 100px;
+	display: block;
+`;
+
+const IconWrapper = styled.div`
+	cursor: pointer;
+`;
+
+interface ICustomTableFooter {
+	isExceed: boolean;
+}
+
+const CustomTableFooter = styled(TableFooter)<ICustomTableFooter>`
+	grid-column-start: 3;
+	grid-column-end: 5;
+	${props =>
+		props.isExceed
+			? css`
+					color: ${semanticColors.punch[500]};
+			  `
+			: ''}
+`;
+
+const ExceedError = styled(B)`
+	color: ${semanticColors.punch[700]};
+	background-color: ${semanticColors.punch[100]};
+	border-radius: 8px;
+	padding: 2px 8px;
+	margin-left: 8px;
 `;
 
 export default BoostsTable;

@@ -55,10 +55,12 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 		fetchUserBoosts().then();
 	}, [user]);
 
-	let totalGIVpower = '392743000000000000000000';
-	// totalGIVpower = '0';
+	const sdh = new SubgraphDataHelper(
+		useAppSelector(state => state.subgraph.xDaiValues),
+	);
+	const givPower = sdh.getUserGIVPowerBalance();
 
-	if (totalGIVpower == '0') {
+	if (givPower.balance == '0') {
 		return <ZeroGivpowerModal setShowModal={setShowModal} />;
 	}
 
@@ -75,7 +77,7 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 			<BoostModalContainer state={state}>
 				{state === EBoostModalState.BOOSTING ? (
 					<BoostInnerModal
-						totalGIVpower={BN(totalGIVpower)}
+						totalGIVpower={BN(givPower.balance)}
 						setPercentage={setPercentage}
 						setState={setState}
 					/>
