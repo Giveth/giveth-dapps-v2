@@ -45,15 +45,13 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 // import useLeaveConfirm from '@/hooks/useLeaveConfirm';
 import config from '@/configuration';
-import Input, { InputSize } from '@/components/Input';
-import { requiredOptions } from '@/lib/constants/regex';
-import { gqlTitleValidation } from '@/components/views/create/helpers';
 import CheckBox from '@/components/Checkbox';
 import Guidelines from '@/components/views/create/Guidelines';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { Container } from '@/components/Grid';
 import { setShowFooter } from '@/features/general/general.slice';
 import { useAppDispatch } from '@/features/hooks';
+import NameInput from '@/components/views/create/NameInput';
 
 const { PRIMARY_NETWORK, SECONDARY_NETWORK } = config;
 const ethereumId = PRIMARY_NETWORK.id;
@@ -120,7 +118,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		reValidateMode: 'onBlur',
 		defaultValues: {
 			[EInputs.name]: title,
-			[EInputs.description]: description,
+			[EInputs.description]: description || '',
 			[EInputs.categories]: categories || [],
 			[EInputs.impactLocation]: defaultImpactLocation,
 			[EInputs.image]: image || '',
@@ -129,21 +127,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		},
 	});
 
-	const {
-		register,
-		unregister,
-		handleSubmit,
-		formState: { errors: formErrors },
-		setValue,
-		watch,
-	} = formMethods;
-
-	const [watchName, watchDescription, watchCategories, watchImage] = watch([
-		EInputs.name,
-		EInputs.description,
-		EInputs.categories,
-		EInputs.image,
-	]);
+	const { unregister, handleSubmit, setValue } = formMethods;
 
 	const [creationSuccessful, setCreationSuccessful] = useState<IProject>();
 	const [mainnetAddressActive, setMainnetAddressActive] = useState(
@@ -155,12 +139,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const [isSameMainnetGnosisAddress, setIsSameMainnetGnosisAddress] =
 		useState(isEditMode ? isSameDefaultAddresses : true);
 	const [isLoading, setIsLoading] = useState(false);
-	const [isTitleValidating, setIsTitleValidating] = useState(false);
 	const [resolvedENS, setResolvedENS] = useState('');
 
 	// useLeaveConfirm({ shouldConfirm: formChange });
-
-	const noTitleValidation = (i: string) => isEditMode && title === i;
 
 	const onSubmit = async (formData: TInputs) => {
 		try {
@@ -264,14 +245,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		}
 	};
 
-	const titleValidation = async (title: string) => {
-		if (noTitleValidation(title)) return true;
-		setIsTitleValidating(true);
-		const result = await gqlTitleValidation(title);
-		setIsTitleValidating(false);
-		return result;
-	};
-
 	useEffect(() => {
 		dispatch(setShowFooter(false));
 	}, []);
@@ -299,41 +272,11 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 				<FormProvider {...formMethods}>
 					<form onSubmit={handleSubmit(onSubmit)}>
-						<Input
-							label='Project name'
-							placeholder='My First Project'
-							maxLength={55}
-							size={InputSize.LARGE}
-							value={watchName}
-							isValidating={isTitleValidating}
-							register={register}
-							registerName={EInputs.name}
-							registerOptions={{
-								...requiredOptions.name,
-								validate: titleValidation,
-							}}
-							error={formErrors[EInputs.name]}
-						/>
-						<br />
-						<DescriptionInput
-							value={watchDescription}
-							setValue={e => setValue(EInputs.description, e)}
-						/>
-						<CategoryInput
-							selectedCategories={watchCategories}
-							setSelectedCategories={e =>
-								setValue(EInputs.categories, e)
-							}
-						/>
-						<LocationIndex
-							defaultValue={defaultImpactLocation}
-							setValue={e => setValue(EInputs.impactLocation, e)}
-						/>
-						<ImageInput
-							value={watchImage}
-							setValue={e => setValue(EInputs.image, e)}
-							setIsLoading={setIsLoading}
-						/>
+						<NameInput preTitle={title} />
+						<DescriptionInput />
+						<CategoryInput />
+						<LocationIndex />
+						<ImageInput setIsLoading={setIsLoading} />
 						<H5>Receiving funds</H5>
 						<CaptionContainer>
 							You can set a custom Ethereum address or ENS to
@@ -417,9 +360,10 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							/>
 							{isEditMode && (
 								<OutlineButton
-									onClick={() => router.back()}
+									onClick={() => !isLoading && router.back()}
 									label='CANCEL'
 									buttonType='primary'
+									disabled={isLoading}
 								/>
 							)}
 						</Buttons>
