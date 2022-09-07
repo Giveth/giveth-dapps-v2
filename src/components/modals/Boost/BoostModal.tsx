@@ -42,6 +42,7 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 
 		const fetchUserBoosts = async () => {
 			setLoading(true);
+			//Check user has boosted any  project or not
 			const { data } = await client.query({
 				query: FETCH_POWER_BOOSTING_INFO,
 				variables: {
