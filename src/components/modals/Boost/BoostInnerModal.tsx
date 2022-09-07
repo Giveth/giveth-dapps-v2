@@ -36,7 +36,10 @@ import {
 	ManageLink,
 } from './BoostModal.sc';
 import { EBoostModalState } from './BoostModal';
-import { FETCH_POWER_BOOSTING_INFO } from '@/apollo/gql/gqlPowerBoosting';
+import {
+	FETCH_POWER_BOOSTING_INFO,
+	SAVE_POWER_BOOSTING,
+} from '@/apollo/gql/gqlPowerBoosting';
 import { client } from '@/apollo/apolloClient';
 import { IPowerBoosting } from '@/apollo/types/types';
 import { useAppSelector } from '@/features/hooks';
@@ -48,20 +51,71 @@ interface IInnerBoostModalProps {
 	totalGIVpower: BigNumber;
 	setPercentage: Dispatch<SetStateAction<number>>;
 	setState: Dispatch<SetStateAction<EBoostModalState>>;
+	projectId: string;
 }
 
 const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 	totalGIVpower,
 	setPercentage: setFinalPercentage,
 	setState,
+	projectId,
 }) => {
 	const [percentage, setPercentage] = useState(0);
 	const [isChanged, setIsChanged] = useState(false);
 	const [isSaving, setIsSaving] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const [boostedProjectsCount, setBoostedProjectsCount] = useState(0);
-
+	const [boostedProjects, setBoostedProjects] = useState<IPowerBoosting[]>(
+		[],
+	);
+	const boostedProjectsCount = boostedProjects.length ?? 0;
 	const user = useAppSelector(state => state.user.userData);
+	console.log('Projects', boostedProjects);
+	const isOnlyBoostedProjectIsThisProject =
+		boostedProjects[0]?.project.id === projectId;
+
+	const handleCaptionText = () => {
+		if (boostedProjectsCount === 0) {
+			return (
+				<Caption style={{ whiteSpace: `pre-line` }}>
+					This is your first time boosting, so 100% will be allocated
+					to this project. You can check your allocation on &nbsp;
+					<Link href={Routes.MyBoostedProjects} passHref>
+						<GLink>
+							<b>My account</b>
+						</GLink>
+					</Link>
+				</Caption>
+			);
+		} else if (isOnlyBoostedProjectIsThisProject) {
+			return (
+				<Caption style={{ whiteSpace: `pre-line` }}>
+					You supported with 100% of your total GIVpower to this
+					project. You can't edit the allocation unless you have at
+					least 1 other boosted project. Try boosting other projects
+					or managing them in &nbsp;
+					<Link href={Routes.MyBoostedProjects} passHref>
+						<GLink>
+							<b>My account</b>
+						</GLink>
+					</Link>
+				</Caption>
+			);
+		} else {
+			return (
+				<Caption style={{ whiteSpace: `pre-line` }}>
+					By allocating GIVpower to this project, we will reduce your
+					allocation on previous project proportionally. You can check
+					your previous allocation on &nbsp;
+					<Link href={Routes.MyBoostedProjects} passHref>
+						<GLink>
+							<b>My account</b>
+						</GLink>
+					</Link>
+				</Caption>
+			);
+		}
+	};
+
 	useEffect(() => {
 		if (!user) return;
 
@@ -76,12 +130,12 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 					userId: parseFloat(user.id || '') || -1,
 				},
 			});
-			console.log('Data', data);
+
 			setLoading(false);
 			if (data?.getPowerBoosting) {
 				const powerBoostings: IPowerBoosting[] =
 					data.getPowerBoosting.powerBoostings;
-				setBoostedProjectsCount(powerBoostings.length ?? 0);
+				setBoostedProjects(powerBoostings);
 			}
 		};
 		fetchUserBoosts().then();
@@ -94,14 +148,17 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 		}
 	}, [boostedProjectsCount]);
 
-	const confirmAllocation = () => {
-		console.log('Confirming');
+	const confirmAllocation = async () => {
 		setIsSaving(true);
-		setTimeout(() => {
-			setIsSaving(false);
-			setFinalPercentage(percentage);
-			setState(EBoostModalState.BOOSTED);
-		}, 1000);
+		const res = await client.mutate({
+			mutation: SAVE_POWER_BOOSTING,
+			variables: {
+				percentage,
+				projectId: +projectId,
+			},
+		});
+		setIsSaving(false);
+		if (res) setState(EBoostModalState.BOOSTED);
 	};
 
 	if (loading) {
@@ -149,20 +206,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 					</Flex>
 				</Flex>
 			</InfoPart>
-			<DescToast>
-				<Caption style={{ whiteSpace: `pre-line` }}>
-					{boostedProjectsCount > 0
-						? `By allocating GIVpower to this project, we will reduce your allocation on previous project proportionally.
-						You can check your previous allocation on `
-						: `This is your first time boosting, so 100% will be allocated to this project.
-						You can check your allocation on `}
-					<Link href={Routes.MyBoostedProjects} passHref>
-						<GLink>
-							<b>My account</b>
-						</GLink>
-					</Link>
-				</Caption>
-			</DescToast>
+			<DescToast>{handleCaptionText()}</DescToast>
 			<SliderWrapper>
 				{!isChanged && (
 					<SliderTooltip>
@@ -192,7 +236,12 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 					}}
 					onChange={(value: any) => {
 						const _value = Array.isArray(value) ? value[0] : value;
-						if (boostedProjectsCount === 0 || isSaving) return;
+						if (
+							boostedProjectsCount === 0 ||
+							isSaving ||
+							isOnlyBoostedProjectIsThisProject
+						)
+							return;
 						setPercentage(_value);
 						setIsChanged(true);
 					}}
@@ -223,7 +272,12 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 				label='Confirm'
 				size='small'
 				loading={isSaving}
-				disabled={!isChanged || isSaving || percentage === 0}
+				disabled={
+					!isChanged ||
+					isSaving ||
+					percentage === 0 ||
+					isOnlyBoostedProjectIsThisProject
+				}
 				onClick={confirmAllocation}
 			/>
 			<Link href={Routes.MyBoostedProjects} passHref>
