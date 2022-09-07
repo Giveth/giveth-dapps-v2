@@ -34,8 +34,12 @@ import {
 	ManageLink,
 } from './BoostModal.sc';
 import { EBoostModalState } from './BoostModal';
-import type { BigNumber } from 'ethers';
+import { FETCH_POWER_BOOSTING_INFO } from '@/apollo/gql/gqlPowerBoosting';
+import { client } from '@/apollo/apolloClient';
+import { IPowerBoosting } from '@/apollo/types/types';
+import { useAppSelector } from '@/features/hooks';
 import type { FC, Dispatch, SetStateAction } from 'react';
+import type { BigNumber } from 'ethers';
 
 interface IInnerBoostModalProps {
 	totalGIVpower: BigNumber;
@@ -51,8 +55,36 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 	const [percentage, setPercentage] = useState(0);
 	const [isChanged, setIsChanged] = useState(false);
 	const [isSaving, setIsSaving] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const [isFirst, setIsFirst] = useState(false);
+
+	const user = useAppSelector(state => state.user.userData);
 
 	let boostedProjects = 2;
+
+	useEffect(() => {
+		if (!user) return;
+
+		const fetchUserBoosts = async () => {
+			setLoading(true);
+			//Check user has boosted any  project or not
+			const { data } = await client.query({
+				query: FETCH_POWER_BOOSTING_INFO,
+				variables: {
+					take: 1,
+					skip: 0,
+					userId: parseFloat(user.id || '') || -1,
+				},
+			});
+			setLoading(false);
+			if (data?.getPowerBoosting) {
+				const powerBoostings: IPowerBoosting[] =
+					data.getPowerBoosting.powerBoostings;
+				setIsFirst(powerBoostings.length === 0);
+			}
+		};
+		fetchUserBoosts().then();
+	}, [user]);
 
 	useEffect(() => {
 		if (boostedProjects === 0) {
