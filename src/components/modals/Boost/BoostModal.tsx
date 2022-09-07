@@ -14,6 +14,7 @@ import { client } from '@/apollo/apolloClient';
 import { FETCH_POWER_BOOSTING_INFO } from '@/apollo/gql/gqlPowerBoosting';
 import { IPowerBoosting } from '@/apollo/types/types';
 import { useAppSelector } from '@/features/hooks';
+import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
 interface IBoostModalProps extends IModal {
 	projectId: string;
@@ -31,6 +32,10 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 	const [loading, setLoading] = useState(false);
 	const [isFirst, setIsFirst] = useState(false);
 	const user = useAppSelector(state => state.user.userData);
+	const sdh = new SubgraphDataHelper(
+		useAppSelector(state => state.subgraph.xDaiValues),
+	);
+	const givPower = sdh.getUserGIVPowerBalance();
 
 	useEffect(() => {
 		if (!user) return;
@@ -54,11 +59,6 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 		};
 		fetchUserBoosts().then();
 	}, [user]);
-
-	const sdh = new SubgraphDataHelper(
-		useAppSelector(state => state.subgraph.xDaiValues),
-	);
-	const givPower = sdh.getUserGIVPowerBalance();
 
 	if (givPower.balance == '0') {
 		return <ZeroGivpowerModal setShowModal={setShowModal} />;
