@@ -11,6 +11,12 @@ import {
 	inputSizeToFontSize,
 	inputSizeToHeight,
 	inputSizeToPaddingLeft,
+	INPUT_HORIZONTAL_PADDING_LARGE,
+	INPUT_HORIZONTAL_PADDING_MEDIUM,
+	INPUT_HORIZONTAL_PADDING_SMALL,
+	INPUT_VERTICAL_PADDING_LARGE,
+	INPUT_VERTICAL_PADDING_MEDIUM,
+	INPUT_VERTICAL_PADDING_SMALL,
 } from '@/helpers/styledComponents';
 
 interface IInputField {
@@ -41,18 +47,20 @@ const Input = styled.input<IInputField>`
 	padding: ${props => {
 		switch (props.inputSize) {
 			case InputSize.SMALL:
-				return '8px';
+				return `${INPUT_VERTICAL_PADDING_SMALL}px ${INPUT_HORIZONTAL_PADDING_SMALL}px`;
 			case InputSize.MEDIUM:
-				return '15px 16px';
+				return `${INPUT_VERTICAL_PADDING_MEDIUM}px ${INPUT_HORIZONTAL_PADDING_MEDIUM}px`;
 			case InputSize.LARGE:
-				return '18px 16px';
+				return `${INPUT_VERTICAL_PADDING_LARGE}px ${INPUT_HORIZONTAL_PADDING_LARGE}px`;
 			default:
-				return '18px 16px';
+				return `${INPUT_VERTICAL_PADDING_LARGE}px ${INPUT_HORIZONTAL_PADDING_LARGE}px`;
 		}
 	}};
 	padding-left: ${props => {
-		if (!props.hasLeftIcon) return;
-		return `${inputSizeToPaddingLeft(props.inputSize)}px`;
+		return `${inputSizeToPaddingLeft(
+			props.inputSize,
+			props.hasLeftIcon,
+		)}px`;
 	}};
 	padding-right: ${props => props.maxLength && '72px'};
 	font-size: ${props => `${inputSizeToFontSize(props.inputSize)}px`};
