@@ -26,6 +26,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import Input, { InputSize } from '@/components/Input';
 import SortIcon from '@/components/SortIcon';
 import { IPowerBoosting } from '@/apollo/types/types';
+import { InputSuffix } from '@/components/styled-components/Input';
 
 interface IBoostsTable {
 	boosts: IPowerBoosting[];
@@ -251,6 +252,13 @@ const BoostsTable: FC<IBoostsTable> = ({
 													/>
 												)}
 											</IconWrapper>
+										}
+										suffix={
+											<InputSuffix
+												inputSize={InputSize.SMALL}
+											>
+												%
+											</InputSuffix>
 										}
 										error={boost.hasError ? {} : undefined}
 									/>
