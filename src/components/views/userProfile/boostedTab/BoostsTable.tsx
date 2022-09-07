@@ -307,12 +307,14 @@ const BoostsTable: FC<IBoostsTable> = ({
 					);
 				})}
 				<TableFooter>TOTAL GIVPOWER</TableFooter>
+				<TableFooter></TableFooter>
 				<CustomTableFooter isExceed={isExceed}>
 					{sum}%
 					{isExceed && (
 						<ExceedError>You can’t exceed 100%</ExceedError>
 					)}
 				</CustomTableFooter>
+				<TableFooter></TableFooter>
 			</Table>
 		</>
 	);
@@ -363,8 +365,8 @@ interface ICustomTableFooter {
 }
 
 const CustomTableFooter = styled(TableFooter)<ICustomTableFooter>`
-	grid-column-start: 3;
-	grid-column-end: 5;
+	/* grid-column-start: 3; */
+	/* grid-column-end: 5; */
 	${props =>
 		props.isExceed
 			? css`

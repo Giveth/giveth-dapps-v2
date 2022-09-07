@@ -90,8 +90,8 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 			console.log('boostedProjects', boostedProjects);
 			setBoosts(boostedProjects);
 		};
-		fetchUserBoosts1();
-		// fetchUserBoosts();
+		// fetchUserBoosts1();
+		fetchUserBoosts();
 	}, [user, order.by, order.direction]);
 
 	return (
