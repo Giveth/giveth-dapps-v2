@@ -6,6 +6,7 @@ import {
 	IconLock16,
 	IconTrash,
 	IconUnlock16,
+	IconUnLockable16,
 	neutralColors,
 	OutlineButton,
 	semanticColors,
@@ -38,6 +39,7 @@ interface IBoostsTable {
 interface IEnhancedPowerBoosting extends IPowerBoosting {
 	displayValue?: string;
 	isLocked?: boolean;
+	isLockable?: boolean;
 	hasError?: boolean;
 }
 
@@ -62,10 +64,34 @@ const BoostsTable: FC<IBoostsTable> = ({
 	}, [boosts]);
 
 	const toggleLockPower = (id: string) => {
-		const temp = [...editBoosts];
-		const lockedBoost = temp.find(oldBoost => oldBoost.id === id);
-		if (lockedBoost) lockedBoost.isLocked = !lockedBoost.isLocked;
-		setEditBoosts(temp);
+		const tempBoosts = [...editBoosts];
+		let changedBoost: IEnhancedPowerBoosting | undefined = undefined;
+		let locksCount = 0;
+		const otherNonLockedBoosts: IEnhancedPowerBoosting[] = [];
+
+		//generate info
+		for (let i = 0; i < tempBoosts.length; i++) {
+			const boost = tempBoosts[i];
+			if (boost.id === id) {
+				changedBoost = boost;
+				if (!changedBoost.isLockable) return;
+				changedBoost.isLocked = !changedBoost.isLocked;
+			}
+			if (boost.isLocked) {
+				locksCount++;
+			} else {
+				otherNonLockedBoosts.push(boost);
+			}
+		}
+
+		let isLockable = true;
+		if (locksCount === tempBoosts.length - 2) isLockable = false;
+
+		for (let i = 0; i < otherNonLockedBoosts.length; i++) {
+			const boost = otherNonLockedBoosts[i];
+			boost.isLockable = isLockable;
+		}
+		setEditBoosts(tempBoosts);
 	};
 
 	const onPercentageChange = (
@@ -239,15 +265,23 @@ const BoostsTable: FC<IBoostsTable> = ({
 													<IconLock16
 														color={
 															neutralColors
-																.gray[600]
+																.gray[900]
 														}
 													/>
-												) : (
+												) : boost.isLockable ? (
 													<IconUnlock16
 														size={16}
 														color={
 															neutralColors
 																.gray[600]
+														}
+													/>
+												) : (
+													<IconUnLockable16
+														size={16}
+														color={
+															neutralColors
+																.gray[400]
 														}
 													/>
 												)}
