@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { EInputValidation } from '@/types/inputValidation';
 import { InputSize } from '@/components/Input';
+import { inputSizeToFontSize } from '@/helpers/styledComponents';
 
 interface IInputField {
 	inputSize?: InputSize; // Default is 'LARGE'
@@ -68,18 +69,7 @@ const Input = styled.input<IInputField>`
 		}
 	}};
 	padding-right: ${props => props.maxLength && '72px'};
-	font-size: ${props => {
-		switch (props.inputSize) {
-			case InputSize.SMALL:
-				return '12px';
-			case InputSize.MEDIUM:
-				return '16px';
-			case InputSize.LARGE:
-				return '16px';
-			default:
-				return '16px';
-		}
-	}};
+	font-size: ${props => `${inputSizeToFontSize(props.inputSize)}px`};
 	line-height: 150%;
 	font-family: 'Red Hat Text', sans-serif;
 	caret-color: ${brandColors.giv[300]};
