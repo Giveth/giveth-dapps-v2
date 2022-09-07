@@ -26,7 +26,8 @@ export interface ISubgraphState {
 		| IUniswapV3Position[]
 		| IInfinitePositionReward
 		| IUniswapV3Position
-		| number;
+		| number
+		| boolean;
 }
 
 export interface ICurrentInfo {
