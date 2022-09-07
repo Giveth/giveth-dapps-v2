@@ -35,7 +35,7 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 		return <ZeroGivpowerModal setShowModal={setShowModal} />;
 	}
 
-	const title = EBoostModalState.BOOSTING ? 'Boost' : 'Well done!';
+	const title = state === EBoostModalState.BOOSTING ? 'Boost' : 'Well done!';
 
 	return (
 		<Modal
