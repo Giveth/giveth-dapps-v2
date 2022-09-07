@@ -159,7 +159,10 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 			},
 		});
 		setIsSaving(false);
-		if (res) setState(EBoostModalState.BOOSTED);
+		if (res) {
+			setFinalPercentage(percentage);
+			setState(EBoostModalState.BOOSTED);
+		}
 	};
 
 	if (loading) {
