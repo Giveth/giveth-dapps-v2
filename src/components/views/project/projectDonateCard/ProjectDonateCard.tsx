@@ -178,6 +178,14 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 		}
 	}, [id, user?.id]);
 
+	const handleBoostClick = () => {
+		if (!isSignedIn) {
+			dispatch(setShowSignWithWallet(true));
+		} else {
+			setShowBoost(true);
+		}
+	};
+
 	useEffect(() => {
 		fetchProjectReaction().then();
 	}, [user?.id]);
@@ -326,7 +334,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 						isSimple={!isAdmin}
 					/>
 					{!isAdmin && (
-						<BoostButton onClick={() => setShowBoost(true)}>
+						<BoostButton onClick={handleBoostClick}>
 							<ButtonText>Boost</ButtonText>
 							<IconRocketInSpace color={brandColors.giv[500]} />
 						</BoostButton>
