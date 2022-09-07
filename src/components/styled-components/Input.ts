@@ -95,5 +95,16 @@ const Input = styled.input<IInputField>`
 		color: ${neutralColors.gray[500]};
 	}
 `;
+interface IInputSuffixProps {
+	inputSize: InputSize;
+}
+
+export const InputSuffix = styled.span<IInputSuffixProps>`
+	font-size: ${props => `${inputSizeToFontSize(props.inputSize)}px`};
+	line-height: 150%;
+	padding: 0 4px;
+	position: absolute;
+	top: 0;
+`;
 
 export default Input;
