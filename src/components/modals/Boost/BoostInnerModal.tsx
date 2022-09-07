@@ -11,6 +11,8 @@ import {
 } from '@giveth/ui-design-system';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import LottieControl from '@/components/animations/lottieControl';
+
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { LockInfotooltip } from '../StakeLock/LockInfo';
 import { Flex } from '@/components/styled-components/Flex';
@@ -38,6 +40,7 @@ import { FETCH_POWER_BOOSTING_INFO } from '@/apollo/gql/gqlPowerBoosting';
 import { client } from '@/apollo/apolloClient';
 import { IPowerBoosting } from '@/apollo/types/types';
 import { useAppSelector } from '@/features/hooks';
+import LoadingAnimation from '@/animations/loading_giv.json';
 import type { FC, Dispatch, SetStateAction } from 'react';
 import type { BigNumber } from 'ethers';
 
@@ -100,6 +103,10 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 			setState(EBoostModalState.BOOSTED);
 		}, 1000);
 	};
+
+	if (loading) {
+		return <LottieControl animationData={LoadingAnimation} size={50} />;
+	}
 
 	return (
 		<>
