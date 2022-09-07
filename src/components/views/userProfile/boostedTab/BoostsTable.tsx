@@ -316,7 +316,8 @@ const BoostsRowWrapper = styled(RowWrapper)`
 const StyledInput = styled(Input)`
 	margin-top: 10px;
 	width: 100px;
-	display: block;
+	overflow-x: hidden;
+	flex: none;
 `;
 
 const IconWrapper = styled.div`
