@@ -4,7 +4,15 @@ import {
 	semanticColors,
 	SublineBold,
 } from '@giveth/ui-design-system';
-import React, { FC, InputHTMLAttributes, ReactElement, useId } from 'react';
+import React, {
+	FC,
+	InputHTMLAttributes,
+	ReactElement,
+	useCallback,
+	useEffect,
+	useId,
+	useRef,
+} from 'react';
 import styled, { css } from 'styled-components';
 import { IIconProps } from '@giveth/ui-design-system/lib/esm/components/icons/giv-economy/type';
 import { EInputValidation, IInputValidation } from '@/types/inputValidation';
@@ -12,6 +20,12 @@ import InputStyled from './styled-components/Input';
 import LottieControl from '@/components/animations/lottieControl';
 import LoadingAnimation from '@/animations/loading_giv_600.json';
 import { FlexCenter } from '@/components/styled-components/Flex';
+import { getTextWidth } from '@/helpers/text';
+import {
+	inputSizeToFontSize,
+	inputSizeToPaddingLeft,
+	inputSizeToVerticalPadding,
+} from '@/helpers/styledComponents';
 import type {
 	DeepRequired,
 	FieldError,
@@ -42,6 +56,7 @@ interface IInput extends InputHTMLAttributes<HTMLInputElement> {
 	size?: InputSize;
 	LeftIcon?: ReactElement<IIconProps>;
 	error?: ICustomInputError;
+	suffix?: ReactElement;
 }
 
 interface ICustomInputError {
@@ -94,14 +109,34 @@ const Input: FC<InputType> = props => {
 		maxLength,
 		value,
 		isValidating,
+		suffix,
 		className,
 		...rest
 	} = props;
 	const id = useId();
+	const canvasRef = useRef<HTMLCanvasElement>();
 	const validationStatus =
 		!error || isValidating
 			? EInputValidation.NORMAL
 			: EInputValidation.ERROR;
+
+	useEffect(() => {
+		if (suffix) {
+			canvasRef.current = document.createElement('canvas');
+		}
+	}, [suffix]);
+
+	const calcLeft = useCallback(() => {
+		if (canvasRef.current) {
+			const width = getTextWidth(
+				value?.toString() || '',
+				`normal ${inputSizeToFontSize(size)}px Red Hat Text`,
+				canvasRef.current,
+			);
+			return inputSizeToPaddingLeft(size, !!LeftIcon) + width;
+		}
+		return 0;
+	}, [size, value, LeftIcon]);
 
 	return (
 		<InputContainer className={className}>
@@ -135,6 +170,14 @@ const Input: FC<InputType> = props => {
 						: {})}
 					{...rest}
 				/>
+				<SuffixWrapper
+					style={{
+						left: calcLeft() + 'px',
+						top: `${inputSizeToVerticalPadding(size)}px`,
+					}}
+				>
+					{suffix}
+				</SuffixWrapper>
 				<Absolute>
 					{isValidating && (
 						<LottieControl
@@ -269,6 +312,12 @@ const LeftIconWrapper = styled.div<IInputWrapper>`
 		}
 	}}
 	padding-right: 4px;
+`;
+
+const SuffixWrapper = styled.span`
+	position: absolute;
+	/* width: 16px;
+	height: 16px; */
 `;
 
 export default Input;
