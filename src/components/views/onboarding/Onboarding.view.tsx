@@ -47,7 +47,7 @@ enum LabelStatus {
 
 const OnboardHeader: FC<IOnboard> = ({ step }) => {
 	return (
-		<OnboardHeaderConatiner>
+		<OnboardHeaderContainer>
 			<OnboardHeading weight={700}>Complete your profile</OnboardHeading>
 			<OnboardProgressbar step={step} />
 			<OnboardProgressbarLabels>
@@ -66,7 +66,7 @@ const OnboardHeader: FC<IOnboard> = ({ step }) => {
 					</OnboardProgressbarLabel>
 				))}
 			</OnboardProgressbarLabels>
-		</OnboardHeaderConatiner>
+		</OnboardHeaderContainer>
 	);
 };
 
@@ -75,7 +75,7 @@ const OnboardViewContainer = styled(Container)`
 	padding-bottom: 68px;
 `;
 
-const OnboardHeaderConatiner = styled.div`
+const OnboardHeaderContainer = styled.div`
 	padding-bottom: 68px;
 `;
 
