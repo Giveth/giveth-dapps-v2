@@ -22,7 +22,7 @@ export enum EBoostModalState {
 	BOOSTED,
 }
 
-const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
+const BoostModal: FC<IBoostModalProps> = ({ setShowModal, projectId }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const [percentage, setPercentage] = useState(0);
 	const [state, setState] = useState(EBoostModalState.BOOSTING);
@@ -51,6 +51,8 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal }) => {
 						totalGIVpower={BN(givPower.balance)}
 						setPercentage={setPercentage}
 						setState={setState}
+						// TODO: Create Project context
+						projectId={projectId}
 					/>
 				) : (
 					<BoostedInnerModal
