@@ -63,3 +63,16 @@ export const inputSizeToPaddingLeft = (
 		}
 	}
 };
+
+export const inputSizeToVerticalPadding = (inputSize?: InputSize) => {
+	switch (inputSize) {
+		case InputSize.SMALL:
+			return INPUT_VERTICAL_PADDING_SMALL;
+		case InputSize.MEDIUM:
+			return INPUT_VERTICAL_PADDING_MEDIUM;
+		case InputSize.LARGE:
+			return INPUT_VERTICAL_PADDING_LARGE;
+		default:
+			return INPUT_VERTICAL_PADDING_LARGE;
+	}
+};
