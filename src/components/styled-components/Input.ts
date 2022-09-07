@@ -7,7 +7,11 @@ import styled from 'styled-components';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { EInputValidation } from '@/types/inputValidation';
 import { InputSize } from '@/components/Input';
-import { inputSizeToFontSize } from '@/helpers/styledComponents';
+import {
+	inputSizeToFontSize,
+	inputSizeToHeight,
+	inputSizeToPaddingLeft,
+} from '@/helpers/styledComponents';
 
 interface IInputField {
 	inputSize?: InputSize; // Default is 'LARGE'
@@ -17,18 +21,7 @@ interface IInputField {
 
 const Input = styled.input<IInputField>`
 	width: 100%;
-	height: ${props => {
-		switch (props.inputSize) {
-			case InputSize.SMALL:
-				return '32px';
-			case InputSize.MEDIUM:
-				return '54px';
-			case InputSize.LARGE:
-				return '56px';
-			default:
-				return '56px';
-		}
-	}};
+	height: ${props => `${inputSizeToHeight(props.inputSize)}px`};
 	border: 2px solid
 		${props => {
 			switch (props.validation) {
@@ -59,14 +52,7 @@ const Input = styled.input<IInputField>`
 	}};
 	padding-left: ${props => {
 		if (!props.hasLeftIcon) return;
-		switch (props.inputSize) {
-			case InputSize.SMALL:
-				return '36px';
-			case InputSize.MEDIUM:
-				return '44px';
-			case InputSize.LARGE:
-				return '44px';
-		}
+		return `${inputSizeToPaddingLeft(props.inputSize)}px`;
 	}};
 	padding-right: ${props => props.maxLength && '72px'};
 	font-size: ${props => `${inputSizeToFontSize(props.inputSize)}px`};
