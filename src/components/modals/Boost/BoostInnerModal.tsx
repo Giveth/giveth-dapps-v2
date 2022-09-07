@@ -56,12 +56,9 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 	const [isChanged, setIsChanged] = useState(false);
 	const [isSaving, setIsSaving] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const [isFirst, setIsFirst] = useState(false);
+	const [boostedProjectsCount, setBoostedProjectsCount] = useState(0);
 
 	const user = useAppSelector(state => state.user.userData);
-
-	let boostedProjects = 2;
-
 	useEffect(() => {
 		if (!user) return;
 
@@ -71,27 +68,28 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 			const { data } = await client.query({
 				query: FETCH_POWER_BOOSTING_INFO,
 				variables: {
-					take: 1,
+					take: 50,
 					skip: 0,
 					userId: parseFloat(user.id || '') || -1,
 				},
 			});
+			console.log('Data', data);
 			setLoading(false);
 			if (data?.getPowerBoosting) {
 				const powerBoostings: IPowerBoosting[] =
 					data.getPowerBoosting.powerBoostings;
-				setIsFirst(powerBoostings.length === 0);
+				setBoostedProjectsCount(powerBoostings.length ?? 0);
 			}
 		};
 		fetchUserBoosts().then();
 	}, [user]);
 
 	useEffect(() => {
-		if (boostedProjects === 0) {
+		if (boostedProjectsCount === 0) {
 			setPercentage(100);
 			setIsChanged(true);
 		}
-	}, [boostedProjects]);
+	}, [boostedProjectsCount]);
 
 	const confirmAllocation = () => {
 		console.log('Confirming');
@@ -140,13 +138,13 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 						<ColoredRocketIcon>
 							<IconRocketInSpace24 />
 						</ColoredRocketIcon>
-						<B>{boostedProjects}</B>
+						<B>{boostedProjectsCount}</B>
 					</Flex>
 				</Flex>
 			</InfoPart>
 			<DescToast>
 				<Caption style={{ whiteSpace: `pre-line` }}>
-					{boostedProjects > 0
+					{boostedProjectsCount > 0
 						? `By allocating GIVpower to this project, we will reduce your allocation on previous project proportionally.
 						You can check your previous allocation on `
 						: `This is your first time boosting, so 100% will be allocated to this project.
@@ -172,14 +170,14 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 					}}
 					trackStyle={{
 						backgroundColor:
-							boostedProjects === 0
+							boostedProjectsCount === 0
 								? brandColors.giv[200]
 								: brandColors.giv[500],
 					}}
 					handleStyle={{
 						backgroundColor: neutralColors.gray[100],
 						border: `3px solid ${
-							boostedProjects === 0
+							boostedProjectsCount === 0
 								? neutralColors.gray[500]
 								: brandColors.giv[800]
 						}`,
@@ -187,7 +185,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 					}}
 					onChange={(value: any) => {
 						const _value = Array.isArray(value) ? value[0] : value;
-						if (boostedProjects === 0 || isSaving) return;
+						if (boostedProjectsCount === 0 || isSaving) return;
 						setPercentage(_value);
 						setIsChanged(true);
 					}}
