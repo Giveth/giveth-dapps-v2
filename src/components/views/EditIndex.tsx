@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-
 import { captureException } from '@sentry/nextjs';
+
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
 import { IProjectEdition } from '@/apollo/types/types';
-import { isUserRegistered, showToastError } from '@/lib/helpers';
+import {
+	compareAddresses,
+	isUserRegistered,
+	showToastError,
+} from '@/lib/helpers';
 import CreateProject from '@/components/views/create/CreateProject';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import {
@@ -21,7 +25,7 @@ import CompleteProfile from '@/components/CompleteProfile';
 
 const EditIndex = () => {
 	const [project, setProject] = useState<IProjectEdition>();
-	const [isLoading, setIsLoading] = useState(false);
+	const [isLoadingProject, setIsLoadingProject] = useState(true);
 
 	const dispatch = useAppDispatch();
 	const {
@@ -39,14 +43,15 @@ const EditIndex = () => {
 		if (isEnabled) {
 			if (project) setProject(undefined);
 			if (!isSignedIn) {
+				setIsLoadingProject(false);
 				dispatch(setShowSignWithWallet(true));
 				return;
 			}
 			if (!isRegistered) {
+				setIsLoadingProject(false);
 				dispatch(setShowCompleteProfile(true));
 				return;
 			}
-			if (!isLoading) setIsLoading(true);
 			client
 				.query({
 					query: FETCH_PROJECT_BY_ID,
@@ -54,11 +59,22 @@ const EditIndex = () => {
 				})
 				.then((res: { data: { projectById: IProjectEdition } }) => {
 					const project = res.data.projectById;
-					setIsLoading(false);
-					setProject(project);
+					if (
+						!compareAddresses(
+							user?.walletAddress,
+							project.adminUser.walletAddress,
+						)
+					) {
+						showToastError(
+							'Only project owner can edit the project',
+						);
+					} else {
+						setProject(project);
+					}
+					setIsLoadingProject(false);
 				})
 				.catch((error: unknown) => {
-					setIsLoading(false);
+					setIsLoadingProject(false);
 					showToastError(error);
 					captureException(error, {
 						tags: {
@@ -67,11 +83,14 @@ const EditIndex = () => {
 					});
 				});
 		} else {
-			dispatch(setShowWelcomeModal(true));
+			if (!isLoadingUser) {
+				dispatch(setShowWelcomeModal(true));
+				setIsLoadingProject(false);
+			}
 		}
-	}, [user, isSignedIn]);
+	}, [user, isSignedIn, isLoadingUser]);
 
-	if (isLoading || isLoadingUser) {
+	if (isLoadingProject || isLoadingUser) {
 		return <Spinner />;
 	} else if (!isEnabled) {
 		return <WalletNotConnected />;

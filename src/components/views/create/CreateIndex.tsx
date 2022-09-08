@@ -32,9 +32,9 @@ const CreateIndex = () => {
 				dispatch(setShowCompleteProfile(true));
 			}
 		} else {
-			dispatch(setShowWelcomeModal(true));
+			if (!isLoading) dispatch(setShowWelcomeModal(true));
 		}
-	}, [user, isSignedIn]);
+	}, [user, isSignedIn, isLoading]);
 
 	if (isLoading) {
 		return <Spinner />;
