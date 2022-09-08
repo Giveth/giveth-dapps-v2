@@ -7,11 +7,13 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import Spinner from '@/components/Spinner';
 import WalletNotConnected from '@/components/WalletNotConnected';
 import UserNotSignedIn from '@/components/UserNotSignedIn';
+import { isUserRegistered } from '@/lib/helpers';
+import CompleteProfile from '@/components/CompleteProfile';
 
 const VerificationRoute = () => {
 	const dispatch = useAppDispatch();
 
-	const { isLoading, isEnabled, isSignedIn } = useAppSelector(
+	const { isLoading, isEnabled, isSignedIn, userData } = useAppSelector(
 		state => state.user,
 	);
 
@@ -28,6 +30,8 @@ const VerificationRoute = () => {
 		return <WalletNotConnected />;
 	} else if (!isSignedIn) {
 		return <UserNotSignedIn />;
+	} else if (!isUserRegistered(userData)) {
+		return <CompleteProfile />;
 	}
 
 	return (
