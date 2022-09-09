@@ -18,6 +18,7 @@ export interface IProject {
 	impactLocation?: string;
 	qualityScore?: number;
 	verified?: boolean;
+	verificationStatus?: string;
 	listed?: boolean | null;
 	categories: ICategory[];
 	reaction?: IReaction;
