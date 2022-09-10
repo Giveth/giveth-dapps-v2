@@ -152,6 +152,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 				rate = 0.1;
 			}
 			boost.percentage += rate * diff;
+			boost.percentage = +boost.percentage.toFixed(2);
 		}
 		setSum(100); //Should show real number
 		setEditBoosts(tempBoosts);
@@ -290,11 +291,11 @@ const BoostsTable: FC<IBoostsTable> = ({
 											</IconWrapper>
 										}
 										suffix={
-											<InputSuffix
+											<Percentage
 												inputSize={InputSize.SMALL}
 											>
 												%
-											</InputSuffix>
+											</Percentage>
 										}
 										error={boost.hasError ? {} : undefined}
 									/>
@@ -383,6 +384,11 @@ const ExceedError = styled(B)`
 	border-radius: 8px;
 	padding: 2px 8px;
 	margin-left: 8px;
+`;
+
+const Percentage = styled(InputSuffix)`
+	color: ${neutralColors.gray[800]};
+	user-select: none;
 `;
 
 export default BoostsTable;
