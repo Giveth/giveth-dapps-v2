@@ -268,7 +268,9 @@ const BoostsTable: FC<IBoostsTable> = ({
 																.gray[900]
 														}
 													/>
-												) : boost.isLockable ? (
+												) : boost.isLockable ===
+														undefined ||
+												  boost.isLockable === true ? (
 													<IconUnlock16
 														size={16}
 														color={
