@@ -74,7 +74,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 			const boost = tempBoosts[i];
 			if (boost.id === id) {
 				changedBoost = boost;
-				if (!changedBoost.isLockable) return;
+				if (changedBoost.isLockable === false) return;
 				changedBoost.isLocked = !changedBoost.isLocked;
 			}
 			if (boost.isLocked) {
