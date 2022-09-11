@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import Routes from '@/lib/constants/Routes';
 import { IMainCategory } from '@/apollo/types/types';
 import InternalLink from '@/components/InternalLink';
+import { useProjectsContext } from '@/context/projects.context';
 
 interface IProjectsFilterProps {
 	mainCategories: IMainCategory[];
@@ -17,11 +18,20 @@ interface IProjectsFilterProps {
 function ProjectsMainCategories({ mainCategories }: IProjectsFilterProps) {
 	const projectsRoute = Routes.Projects + '/';
 	const { query } = useRouter();
+	const { variables, setVariables } = useProjectsContext();
 	const handleIsSelected = (categorySlug: string) => {
 		if (!query?.slug) {
 			return categorySlug === 'all';
 		}
 		return categorySlug === query.slug;
+	};
+
+	const handleItemClick = (slug: string) => {
+		if (slug !== query?.slug)
+			setVariables({
+				...variables,
+				category: undefined,
+			});
 	};
 
 	return (
@@ -55,6 +65,7 @@ function ProjectsMainCategories({ mainCategories }: IProjectsFilterProps) {
 					>
 						<MainCategoryItem
 							isSelected={handleIsSelected(category.slug)}
+							onClick={() => handleItemClick(category.slug)}
 						>
 							{category.title}
 						</MainCategoryItem>
