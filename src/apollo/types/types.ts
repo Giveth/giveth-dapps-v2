@@ -2,6 +2,7 @@ import {
 	EDonationStatus,
 	EDonationType,
 	EProjectStatus,
+	EProjectVerificationStatus,
 } from '@/apollo/types/gqlEnums';
 import { IAddress } from '@/components/views/verification/manageFunds/ManageFundsIndex';
 
@@ -18,7 +19,7 @@ export interface IProject {
 	impactLocation?: string;
 	qualityScore?: number;
 	verified?: boolean;
-	verificationStatus?: string;
+	verificationStatus?: EProjectVerificationStatus;
 	listed?: boolean | null;
 	categories: ICategory[];
 	reaction?: IReaction;
