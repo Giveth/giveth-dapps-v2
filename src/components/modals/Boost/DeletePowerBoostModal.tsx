@@ -40,15 +40,15 @@ export const DeletePowerBoostModal: FC<IDeletePowerBoostModal> = ({
 		>
 			<DeletePowerBoostModalContainer>
 				{canDelete ? (
-					<Lead>
+					<Content>
 						By removing project boosting, your GIVpower will
 						distribute to your other projects.
-					</Lead>
+					</Content>
 				) : (
-					<Lead>
+					<Content>
 						You can’t remove this project boosting because this is
 						the only boosting that you have!
-					</Lead>
+					</Content>
 				)}
 				{canDelete ? (
 					<>
@@ -77,6 +77,10 @@ const DeletePowerBoostModalContainer = styled.div`
 		width: 450px;
 	}
 	padding: 24px;
+`;
+
+const Content = styled(Lead)`
+	margin-bottom: 48px;
 `;
 
 export const CustomButtonLink = styled(ButtonLink)`
