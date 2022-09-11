@@ -35,6 +35,7 @@ interface IBoostsTable {
 	order: IBoostedOrder;
 	changeOrder: (orderBy: EPowerBoostingOrder) => void;
 	saveBoosts: (newBoosts: IPowerBoosting[]) => Promise<boolean>;
+	deleteBoost: (id: string) => Promise<void>;
 }
 
 interface IEnhancedPowerBoosting extends IPowerBoosting {
@@ -55,6 +56,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 	order,
 	changeOrder,
 	saveBoosts,
+	deleteBoost,
 }) => {
 	const [mode, setMode] = useState(ETableNode.VIEWING);
 	const [editBoosts, setEditBoosts] = useState<IEnhancedPowerBoosting[]>([]);
@@ -159,8 +161,6 @@ const BoostsTable: FC<IBoostsTable> = ({
 		setSum(100); //Should show real number
 		setEditBoosts(tempBoosts);
 	};
-
-	const deleteBoost = (id: string) => {};
 
 	const isExceed = Math.round(sum) !== 100;
 

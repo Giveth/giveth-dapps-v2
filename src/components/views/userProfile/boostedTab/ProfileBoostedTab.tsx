@@ -16,6 +16,7 @@ import { client } from '@/apollo/apolloClient';
 import {
 	FETCH_POWER_BOOSTING_INFO,
 	SAVE_MULTIPLE_POWER_BOOSTING,
+	SAVE_POWER_BOOSTING,
 } from '@/apollo/gql/gqlPowerBoosting';
 import { Loading } from '../projectsTab/ProfileProjectsTab';
 import { EmptyPowerBoosting } from './EmptyPowerBoosting';
@@ -120,6 +121,36 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 		}
 	};
 
+	const deleteBoost = async (id: string) => {
+		setLoading(true);
+		const tempBoosts = [...boosts];
+		let deletedBoost = tempBoosts.find(boost => boost.id === id);
+
+		try {
+			const res = await client.mutate({
+				mutation: SAVE_POWER_BOOSTING,
+				variables: {
+					percentage: 0,
+					projectId: Number(deletedBoost?.project.id),
+				},
+			});
+			if (res.data) {
+				const newBoosts: IPowerBoosting[] =
+					res.data.setSinglePowerBoosting;
+				setBoosts(newBoosts);
+			}
+			setLoading(false);
+		} catch (error) {
+			console.log({ error });
+			captureException(error, {
+				tags: {
+					section: 'Save manage power boosting',
+				},
+			});
+			setLoading(false);
+		}
+	};
+
 	return (
 		<UserProfileTab>
 			<CustomContributeCard>
@@ -139,6 +170,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 						order={order}
 						changeOrder={changeOrder}
 						saveBoosts={saveBoosts}
+						deleteBoost={deleteBoost}
 					/>
 				) : (
 					<EmptyPowerBoosting />
