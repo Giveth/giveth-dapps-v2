@@ -160,6 +160,8 @@ const BoostsTable: FC<IBoostsTable> = ({
 		setEditBoosts(tempBoosts);
 	};
 
+	const deleteBoost = (id: string) => {};
+
 	const isExceed = Math.round(sum) !== 100;
 
 	return (
@@ -310,7 +312,11 @@ const BoostsTable: FC<IBoostsTable> = ({
 							</BoostsTableCell>
 							<BoostsTableCell>
 								{mode === ETableNode.VIEWING && (
-									<IconTrash size={24} />
+									<IconWrapper
+										onClick={() => deleteBoost(boost.id)}
+									>
+										<IconTrash size={24} />
+									</IconWrapper>
 								)}
 							</BoostsTableCell>
 						</BoostsRowWrapper>
