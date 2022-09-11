@@ -146,6 +146,12 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 		if (boostedProjectsCount === 0) {
 			setPercentage(100);
 			setIsChanged(true);
+		} else {
+			const sameProject = boostedProjects.find(
+				project => project?.project.id === projectId,
+			);
+			const _percentage = Math.floor(sameProject?.percentage ?? 0);
+			setPercentage(_percentage);
 		}
 	}, [boostedProjectsCount]);
 
