@@ -108,8 +108,6 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 				setLoading(false);
 				return true;
 			}
-			setLoading(false);
-			return false;
 		} catch (error) {
 			console.log({ error });
 			captureException(error, {
@@ -117,6 +115,8 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 					section: 'Save manage power boosting',
 				},
 			});
+		} finally {
+			setLoading(false);
 			return false;
 		}
 	};
@@ -138,8 +138,11 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 				const newBoosts: IPowerBoosting[] =
 					res.data.setSinglePowerBoosting;
 				setBoosts(newBoosts);
+				setLoading(false);
+				return true;
 			}
 			setLoading(false);
+			return false;
 		} catch (error) {
 			console.log({ error });
 			captureException(error, {
@@ -148,6 +151,9 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 				},
 			});
 			setLoading(false);
+		} finally {
+			setLoading(false);
+			return false;
 		}
 	};
 
