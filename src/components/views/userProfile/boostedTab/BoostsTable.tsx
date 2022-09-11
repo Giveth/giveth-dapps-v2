@@ -34,7 +34,7 @@ interface IBoostsTable {
 	totalAmountOfGIVpower: string;
 	order: IBoostedOrder;
 	changeOrder: (orderBy: EPowerBoostingOrder) => void;
-	saveBoosts: (newBoosts: IPowerBoosting[]) => Promise<void>;
+	saveBoosts: (newBoosts: IPowerBoosting[]) => Promise<boolean>;
 }
 
 interface IEnhancedPowerBoosting extends IPowerBoosting {
@@ -188,9 +188,11 @@ const BoostsTable: FC<IBoostsTable> = ({
 								buttonType='primary'
 								label='Apply changes'
 								size='small'
-								onClick={() => {
-									saveBoosts(editBoosts);
-									setMode(ETableNode.EDITING);
+								onClick={async () => {
+									const isSaved = await saveBoosts(
+										editBoosts,
+									);
+									if (isSaved) setMode(ETableNode.VIEWING);
 								}}
 							/>
 							<OutlineButton
@@ -339,7 +341,7 @@ const Actions = styled(Flex)`
 
 const Table = styled.div`
 	display: grid;
-	grid-template-columns: 4fr 1fr 1fr 0.3fr;
+	grid-template-columns: 4fr 1.2fr 1fr 0.3fr;
 	min-width: 700px;
 `;
 
