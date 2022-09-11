@@ -245,10 +245,8 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		}
 	}, [earned, tokenDistroHelper]);
 	useEffect(() => {
-		if (chainId) {
-			if (!regenStreamConfig) setInfo(chainId, type, earned);
-		}
-	}, [chainId, earned, type, regenStreamConfig, setInfo]);
+		if (!regenStreamConfig) setInfo(poolNetwork, type, earned);
+	}, [poolNetwork, earned, type, regenStreamConfig, setInfo]);
 
 	const rewardTokenSymbol = regenStreamConfig?.rewardTokenSymbol || 'GIV';
 
@@ -304,11 +302,12 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							{getPoolIconWithName(platform, poolNetwork)}
 							<StakingPoolExchange styleType='Small'>
 								{type === StakingType.GIV_LM &&
-									chainId === config.XDAI_NETWORK_NUMBER &&
+									poolNetwork ===
+										config.XDAI_NETWORK_NUMBER &&
 									`GIVgarden `}
 								{platformTitle || platform}
 							</StakingPoolExchange>
-							{chainId === config.XDAI_NETWORK_NUMBER &&
+							{poolNetwork === config.XDAI_NETWORK_NUMBER &&
 								type === StakingType.GIV_LM && (
 									<IconWithTooltip
 										direction={'top'}
