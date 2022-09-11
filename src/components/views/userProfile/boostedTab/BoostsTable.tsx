@@ -28,6 +28,7 @@ import Input, { InputSize } from '@/components/Input';
 import SortIcon from '@/components/SortIcon';
 import { IPowerBoosting } from '@/apollo/types/types';
 import { InputSuffix } from '@/components/styled-components/Input';
+import { DeletePowerBoostModal } from '@/components/modals/Boost/DeletePowerBoostModal';
 
 interface IBoostsTable {
 	boosts: IPowerBoosting[];
@@ -35,7 +36,7 @@ interface IBoostsTable {
 	order: IBoostedOrder;
 	changeOrder: (orderBy: EPowerBoostingOrder) => void;
 	saveBoosts: (newBoosts: IPowerBoosting[]) => Promise<boolean>;
-	deleteBoost: (id: string) => Promise<void>;
+	deleteBoost: (id: string) => Promise<boolean>;
 }
 
 interface IEnhancedPowerBoosting extends IPowerBoosting {
@@ -61,6 +62,9 @@ const BoostsTable: FC<IBoostsTable> = ({
 	const [mode, setMode] = useState(ETableNode.VIEWING);
 	const [editBoosts, setEditBoosts] = useState<IEnhancedPowerBoosting[]>([]);
 	const [sum, setSum] = useState(100);
+	const [showDeleteModal, setShowDeleteModal] = useState(false);
+	const [selectedBoost, setSelectedBoost] = useState('');
+
 	const _totalAmountOfGIVpower = new BigNumber(totalAmountOfGIVpower);
 
 	useEffect(() => {
@@ -312,11 +316,16 @@ const BoostsTable: FC<IBoostsTable> = ({
 							</BoostsTableCell>
 							<BoostsTableCell>
 								{mode === ETableNode.VIEWING && (
-									<IconWrapper
-										onClick={() => deleteBoost(boost.id)}
-									>
-										<IconTrash size={24} />
-									</IconWrapper>
+									<>
+										<IconWrapper
+											onClick={() => {
+												setSelectedBoost(boost.id);
+												setShowDeleteModal(true);
+											}}
+										>
+											<IconTrash size={24} />
+										</IconWrapper>
+									</>
 								)}
 							</BoostsTableCell>
 						</BoostsRowWrapper>
@@ -332,6 +341,14 @@ const BoostsTable: FC<IBoostsTable> = ({
 				</CustomTableFooter>
 				<TableFooter></TableFooter>
 			</Table>
+			{showDeleteModal && (
+				<DeletePowerBoostModal
+					boostId={selectedBoost}
+					canDelete={boosts.length > 2}
+					deleteBoost={deleteBoost}
+					setShowModal={setShowDeleteModal}
+				/>
+			)}
 		</>
 	);
 };
