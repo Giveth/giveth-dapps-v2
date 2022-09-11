@@ -34,6 +34,7 @@ interface IBoostsTable {
 	totalAmountOfGIVpower: string;
 	order: IBoostedOrder;
 	changeOrder: (orderBy: EPowerBoostingOrder) => void;
+	saveBoosts: (newBoosts: IPowerBoosting[]) => Promise<void>;
 }
 
 interface IEnhancedPowerBoosting extends IPowerBoosting {
@@ -53,6 +54,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 	totalAmountOfGIVpower,
 	order,
 	changeOrder,
+	saveBoosts,
 }) => {
 	const [mode, setMode] = useState(ETableNode.VIEWING);
 	const [editBoosts, setEditBoosts] = useState<IEnhancedPowerBoosting[]>([]);
@@ -186,7 +188,10 @@ const BoostsTable: FC<IBoostsTable> = ({
 								buttonType='primary'
 								label='Apply changes'
 								size='small'
-								onClick={() => setMode(ETableNode.EDITING)}
+								onClick={() => {
+									saveBoosts(editBoosts);
+									setMode(ETableNode.EDITING);
+								}}
 							/>
 							<OutlineButton
 								buttonType='primary'

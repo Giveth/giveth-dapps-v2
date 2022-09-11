@@ -12,7 +12,10 @@ import { EDirection } from '@/apollo/types/gqlEnums';
 import BoostsTable from './BoostsTable';
 import { IPowerBoosting } from '@/apollo/types/types';
 import { client } from '@/apollo/apolloClient';
-import { FETCH_POWER_BOOSTING_INFO } from '@/apollo/gql/gqlPowerBoosting';
+import {
+	FETCH_POWER_BOOSTING_INFO,
+	SAVE_MULTIPLE_POWER_BOOSTING,
+} from '@/apollo/gql/gqlPowerBoosting';
 import { Loading } from '../projectsTab/ProfileProjectsTab';
 import { EmptyPowerBoosting } from './EmptyPowerBoosting';
 import GetMoreGIVpowerBanner from './GetMoreGIVpowerBanner';
@@ -84,6 +87,23 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 		fetchUserBoosts();
 	}, [user, order.by, order.direction]);
 
+	const saveBoosts = async (newBoosts: IPowerBoosting[]) => {
+		setLoading(true);
+		const percentages = newBoosts.map(boost => Number(boost.percentage));
+		const projectIds = newBoosts.map(boost => Number(boost.project.id));
+		const res = await client.mutate({
+			mutation: SAVE_MULTIPLE_POWER_BOOSTING,
+			variables: {
+				percentages,
+				projectIds,
+			},
+		});
+		setLoading(false);
+		if (res) {
+			console.log('res', res);
+		}
+	};
+
 	return (
 		<UserProfileTab>
 			<CustomContributeCard>
@@ -102,6 +122,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 						totalAmountOfGIVpower={givPower.balance}
 						order={order}
 						changeOrder={changeOrder}
+						saveBoosts={saveBoosts}
 					/>
 				) : (
 					<EmptyPowerBoosting />
