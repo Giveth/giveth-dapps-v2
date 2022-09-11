@@ -1,6 +1,7 @@
 import { H5, mediaQueries } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC, useEffect, useState } from 'react';
+import { captureException } from '@sentry/nextjs';
 import {
 	ContributeCard,
 	ContributeCardTitles,
@@ -91,16 +92,31 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 		setLoading(true);
 		const percentages = newBoosts.map(boost => Number(boost.percentage));
 		const projectIds = newBoosts.map(boost => Number(boost.project.id));
-		const res = await client.mutate({
-			mutation: SAVE_MULTIPLE_POWER_BOOSTING,
-			variables: {
-				percentages,
-				projectIds,
-			},
-		});
-		setLoading(false);
-		if (res) {
-			console.log('res', res);
+		try {
+			const res = await client.mutate({
+				mutation: SAVE_MULTIPLE_POWER_BOOSTING,
+				variables: {
+					percentages,
+					projectIds,
+				},
+			});
+			if (res.data) {
+				const setMultiplePowerBoosting: IPowerBoosting[] =
+					res.data.setMultiplePowerBoosting;
+				setBoosts(setMultiplePowerBoosting);
+				setLoading(false);
+				return true;
+			}
+			setLoading(false);
+			return false;
+		} catch (error) {
+			console.log({ error });
+			captureException(error, {
+				tags: {
+					section: 'Save manage power boosting',
+				},
+			});
+			return false;
 		}
 	};
 
