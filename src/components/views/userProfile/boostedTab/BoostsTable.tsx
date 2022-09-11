@@ -344,7 +344,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 			{showDeleteModal && (
 				<DeletePowerBoostModal
 					boostId={selectedBoost}
-					canDelete={boosts.length > 2}
+					canDelete={boosts.length > 1}
 					deleteBoost={deleteBoost}
 					setShowModal={setShowDeleteModal}
 				/>

@@ -26,8 +26,8 @@ export const DeletePowerBoostModal: FC<IDeletePowerBoostModal> = ({
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	const onDelete = async () => {
-		const isDeleted = await deleteBoost(boostId);
-		if (isDeleted) closeModal();
+		deleteBoost(boostId);
+		closeModal();
 	};
 
 	return (
