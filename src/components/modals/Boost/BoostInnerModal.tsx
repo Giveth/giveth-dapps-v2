@@ -69,7 +69,6 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 	);
 	const boostedProjectsCount = boostedProjects.length ?? 0;
 	const user = useAppSelector(state => state.user.userData);
-	console.log('Projects', boostedProjects);
 	const isOnlyBoostedProjectIsThisProject =
 		boostedProjects[0]?.project.id === projectId &&
 		boostedProjects.length === 1;
