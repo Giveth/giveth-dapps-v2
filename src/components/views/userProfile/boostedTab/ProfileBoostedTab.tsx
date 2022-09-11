@@ -163,7 +163,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 			</CustomContributeCard>
 			<PowerBoostingContainer>
 				{loading && <Loading />}
-				{!loading && boosts.length > 0 ? (
+				{boosts.length > 0 ? (
 					<BoostsTable
 						boosts={boosts}
 						totalAmountOfGIVpower={givPower.balance}
