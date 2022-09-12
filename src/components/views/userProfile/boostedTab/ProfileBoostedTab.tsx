@@ -1,6 +1,6 @@
 import { H5, mediaQueries } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
 import {
 	ContributeCard,
@@ -48,23 +48,6 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 	);
 	const givPower = sdh.getUserGIVPowerBalance();
 
-	const changeOrder = (orderBy: EPowerBoostingOrder) => {
-		if (orderBy === order.by) {
-			setOrder({
-				by: orderBy,
-				direction:
-					order.direction === EDirection.ASC
-						? EDirection.DESC
-						: EDirection.ASC,
-			});
-		} else {
-			setOrder({
-				by: orderBy,
-				direction: EDirection.DESC,
-			});
-		}
-	};
-
 	useEffect(() => {
 		if (!user) return;
 
@@ -89,7 +72,27 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 		fetchUserBoosts();
 	}, [user, order.by, order.direction]);
 
-	const saveBoosts = async (newBoosts: IPowerBoosting[]) => {
+	const changeOrder = useCallback(
+		(orderBy: EPowerBoostingOrder) => {
+			if (orderBy === order.by) {
+				setOrder({
+					by: orderBy,
+					direction:
+						order.direction === EDirection.ASC
+							? EDirection.DESC
+							: EDirection.ASC,
+				});
+			} else {
+				setOrder({
+					by: orderBy,
+					direction: EDirection.DESC,
+				});
+			}
+		},
+		[order.by, order.direction],
+	);
+
+	const saveBoosts = useCallback(async (newBoosts: IPowerBoosting[]) => {
 		setLoading(true);
 		const percentages = newBoosts.map(boost => Number(boost.percentage));
 		const projectIds = newBoosts.map(boost => Number(boost.project.id));
@@ -108,6 +111,8 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 				setLoading(false);
 				return true;
 			}
+			setLoading(false);
+			return false;
 		} catch (error) {
 			console.log({ error });
 			captureException(error, {
@@ -115,47 +120,47 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 					section: 'Save manage power boosting',
 				},
 			});
-		} finally {
 			setLoading(false);
 			return false;
 		}
-	};
+	}, []);
 
-	const deleteBoost = async (id: string) => {
-		setLoading(true);
-		const tempBoosts = [...boosts];
-		let deletedBoost = tempBoosts.find(boost => boost.id === id);
+	const deleteBoost = useCallback(
+		async (id: string) => {
+			setLoading(true);
+			const tempBoosts = [...boosts];
+			let deletedBoost = tempBoosts.find(boost => boost.id === id);
 
-		try {
-			const res = await client.mutate({
-				mutation: SAVE_POWER_BOOSTING,
-				variables: {
-					percentage: 0,
-					projectId: Number(deletedBoost?.project.id),
-				},
-			});
-			if (res.data) {
-				const newBoosts: IPowerBoosting[] =
-					res.data.setSinglePowerBoosting;
-				setBoosts(newBoosts);
+			try {
+				const res = await client.mutate({
+					mutation: SAVE_POWER_BOOSTING,
+					variables: {
+						percentage: 0,
+						projectId: Number(deletedBoost?.project.id),
+					},
+				});
+				if (res.data) {
+					const newBoosts: IPowerBoosting[] =
+						res.data.setSinglePowerBoosting;
+					setBoosts(newBoosts);
+					setLoading(false);
+					return true;
+				}
 				setLoading(false);
-				return true;
+				return false;
+			} catch (error) {
+				console.log({ error });
+				captureException(error, {
+					tags: {
+						section: 'Save manage power boosting',
+					},
+				});
+				setLoading(false);
+				return false;
 			}
-			setLoading(false);
-			return false;
-		} catch (error) {
-			console.log({ error });
-			captureException(error, {
-				tags: {
-					section: 'Save manage power boosting',
-				},
-			});
-			setLoading(false);
-		} finally {
-			setLoading(false);
-			return false;
-		}
-	};
+		},
+		[boosts],
+	);
 
 	return (
 		<UserProfileTab>
