@@ -6,6 +6,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import { useRouter } from 'next/router';
 
+import { useEffect } from 'react';
 import Routes from '@/lib/constants/Routes';
 import { IMainCategory } from '@/apollo/types/types';
 import InternalLink from '@/components/InternalLink';
@@ -26,13 +27,12 @@ function ProjectsMainCategories({ mainCategories }: IProjectsFilterProps) {
 		return categorySlug === query.slug;
 	};
 
-	const handleItemClick = (slug: string) => {
-		if (slug !== query?.slug)
-			setVariables({
-				...variables,
-				category: undefined,
-			});
-	};
+	useEffect(() => {
+		setVariables({
+			...variables,
+			category: undefined,
+		});
+	}, [query?.slug]);
 
 	return (
 		<Swiper
@@ -65,7 +65,6 @@ function ProjectsMainCategories({ mainCategories }: IProjectsFilterProps) {
 					>
 						<MainCategoryItem
 							isSelected={handleIsSelected(category.slug)}
-							onClick={() => handleItemClick(category.slug)}
 						>
 							{category.title}
 						</MainCategoryItem>
