@@ -1,23 +1,21 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import config from '@/configuration';
-import { fetchXDaiInfo, fetchMainnetInfo } from './subgraph.services';
+import { fetchMainnetInfo, fetchXDaiInfo } from './subgraph.services';
 import { ICurrentInfo } from './subgraph.types';
 
 export const fetchXDaiInfoAsync = createAsyncThunk(
 	'subgraph/fetchXDaiInfo',
 	async (userAddress?: string) => {
 		const response = await fetchXDaiInfo(userAddress);
-		// The value we return becomes the `fulfilled` action payload
-		return response;
+		return { ...response, isLoaded: true };
 	},
 );
 
 export const fetchMainnetInfoAsync = createAsyncThunk(
 	'subgraph/fetchMainnetInfo',
 	async (userAddress?: string) => {
-		const response = await fetchXDaiInfo(userAddress);
-		// The value we return becomes the `fulfilled` action payload
-		return response;
+		const response = await fetchMainnetInfo(userAddress);
+		return { ...response, isLoaded: true };
 	},
 );
 
@@ -28,7 +26,9 @@ export const fetchCurrentInfoAsync = createAsyncThunk(
 			props.chainId === config.MAINNET_NETWORK_NUMBER
 				? await fetchMainnetInfo(props.userAddress)
 				: await fetchXDaiInfo(props.userAddress);
-		// The value we return becomes the `fulfilled` action payload
-		return { response, chainId: props.chainId };
+		return {
+			response: { ...response, isLoaded: true },
+			chainId: props.chainId,
+		};
 	},
 );
