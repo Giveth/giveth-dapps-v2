@@ -383,6 +383,7 @@ const Wrapper = styled.div`
 
 const Title = styled(H3)`
 	margin-bottom: 18px;
+	position: relative;
 `;
 
 const Subtitle = styled(Lead)`
