@@ -5,8 +5,6 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { FlexCenter } from '@/components/styled-components/Flex';
-import { useAppDispatch } from '@/features/hooks';
-import { setShowFooter } from '@/features/general/general.slice';
 import givFontLogo from '/public/images/icons/giv_font_logo.svg';
 import check_stars from '/public/images/icons/check_stars.svg';
 import failed_stars from '/public/images/icons/failed_stars.svg';
@@ -63,7 +61,6 @@ const ContentSelector: FC<IContentSelector> = ({ status }) => {
 };
 
 export default function EmailVerificationIndex() {
-	const dispatch = useAppDispatch();
 	const router = useRouter();
 	const { token } = router.query;
 	const [status, setStatus] = useState<EEmailVerificationStatus>(
@@ -73,10 +70,6 @@ export default function EmailVerificationIndex() {
 	const imageAddress = `/images/backgrounds/email-verification-bg-${
 		status === EEmailVerificationStatus.Verified ? 'colored' : 'dark'
 	}.svg`;
-
-	useEffect(() => {
-		dispatch(setShowFooter(false));
-	}, []);
 
 	useEffect(() => {
 		if (token) {

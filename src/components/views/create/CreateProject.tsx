@@ -274,6 +274,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 	useEffect(() => {
 		dispatch(setShowFooter(false));
+		return () => {
+			dispatch(setShowFooter(true));
+		};
 	}, []);
 
 	const { isTablet, isMobile } = useDetectDevice();

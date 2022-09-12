@@ -27,6 +27,9 @@ const SuccessfulCreation = (props: {
 	useEffect(() => {
 		setTimeout(() => window.scrollTo(0, 0), 200);
 		dispatch(setShowFooter(false));
+		return () => {
+			dispatch(setShowFooter(true));
+		};
 	}, []);
 
 	return (
