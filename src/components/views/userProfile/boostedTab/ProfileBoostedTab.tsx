@@ -165,7 +165,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 				</ContributeCardTitles>
 				<ContributeCardTitles>Project boosted</ContributeCardTitles>
 				<H5>{formatWeiHelper(givPower.balance)}</H5>
-				<H5>8</H5>
+				<H5>{boosts.length}</H5>
 			</CustomContributeCard>
 			<PowerBoostingContainer>
 				{loading && <Loading />}
