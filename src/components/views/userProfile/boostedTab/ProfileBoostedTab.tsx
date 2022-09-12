@@ -1,6 +1,7 @@
 import { H5, mediaQueries } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
+import { captureException } from '@sentry/nextjs';
 import {
 	ContributeCard,
 	ContributeCardTitles,
@@ -12,7 +13,11 @@ import { EDirection } from '@/apollo/types/gqlEnums';
 import BoostsTable from './BoostsTable';
 import { IPowerBoosting } from '@/apollo/types/types';
 import { client } from '@/apollo/apolloClient';
-import { FETCH_POWER_BOOSTING_INFO } from '@/apollo/gql/gqlPowerBoosting';
+import {
+	FETCH_POWER_BOOSTING_INFO,
+	SAVE_MULTIPLE_POWER_BOOSTING,
+	SAVE_POWER_BOOSTING,
+} from '@/apollo/gql/gqlPowerBoosting';
 import { Loading } from '../projectsTab/ProfileProjectsTab';
 import { EmptyPowerBoosting } from './EmptyPowerBoosting';
 import GetMoreGIVpowerBanner from './GetMoreGIVpowerBanner';
@@ -43,23 +48,6 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 	);
 	const givPower = sdh.getUserGIVPowerBalance();
 
-	const changeOrder = (orderBy: EPowerBoostingOrder) => {
-		if (orderBy === order.by) {
-			setOrder({
-				by: orderBy,
-				direction:
-					order.direction === EDirection.ASC
-						? EDirection.DESC
-						: EDirection.ASC,
-			});
-		} else {
-			setOrder({
-				by: orderBy,
-				direction: EDirection.DESC,
-			});
-		}
-	};
-
 	useEffect(() => {
 		if (!user) return;
 
@@ -84,6 +72,96 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 		fetchUserBoosts();
 	}, [user, order.by, order.direction]);
 
+	const changeOrder = useCallback(
+		(orderBy: EPowerBoostingOrder) => {
+			if (orderBy === order.by) {
+				setOrder({
+					by: orderBy,
+					direction:
+						order.direction === EDirection.ASC
+							? EDirection.DESC
+							: EDirection.ASC,
+				});
+			} else {
+				setOrder({
+					by: orderBy,
+					direction: EDirection.DESC,
+				});
+			}
+		},
+		[order.by, order.direction],
+	);
+
+	const saveBoosts = useCallback(async (newBoosts: IPowerBoosting[]) => {
+		setLoading(true);
+		const percentages = newBoosts.map(boost => Number(boost.percentage));
+		const projectIds = newBoosts.map(boost => Number(boost.project.id));
+		try {
+			const res = await client.mutate({
+				mutation: SAVE_MULTIPLE_POWER_BOOSTING,
+				variables: {
+					percentages,
+					projectIds,
+				},
+			});
+			if (res.data) {
+				const setMultiplePowerBoosting: IPowerBoosting[] =
+					res.data.setMultiplePowerBoosting;
+				setBoosts(setMultiplePowerBoosting);
+				setLoading(false);
+				return true;
+			}
+			setLoading(false);
+			return false;
+		} catch (error) {
+			console.log({ error });
+			captureException(error, {
+				tags: {
+					section: 'Save manage power boosting',
+				},
+			});
+			setLoading(false);
+			return false;
+		}
+	}, []);
+
+	const deleteBoost = useCallback(
+		async (id: string) => {
+			setLoading(true);
+			const tempBoosts = [...boosts];
+			let deletedBoost = tempBoosts.find(boost => boost.id === id);
+
+			try {
+				const res = await client.mutate({
+					mutation: SAVE_POWER_BOOSTING,
+					variables: {
+						percentage: 0,
+						projectId: Number(deletedBoost?.project.id),
+					},
+				});
+				if (res.data) {
+					const newBoosts: IPowerBoosting[] =
+						res.data.setSinglePowerBoosting;
+					setBoosts(newBoosts);
+					setLoading(false);
+					return true;
+				}
+				setLoading(false);
+				return false;
+			} catch (error) {
+				console.log({ error });
+				captureException(error, {
+					tags: {
+						section: 'Save manage power boosting',
+					},
+				});
+				setLoading(false);
+				return false;
+			}
+		},
+		[boosts],
+	);
+
 	return (
 		<UserProfileTab>
 			<CustomContributeCard>
@@ -92,16 +170,18 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 				</ContributeCardTitles>
 				<ContributeCardTitles>Project boosted</ContributeCardTitles>
 				<H5>{formatWeiHelper(givPower.balance)}</H5>
-				<H5>8</H5>
+				<H5>{boosts.length}</H5>
 			</CustomContributeCard>
 			<PowerBoostingContainer>
 				{loading && <Loading />}
-				{!loading && boosts.length > 0 ? (
+				{boosts.length > 0 ? (
 					<BoostsTable
 						boosts={boosts}
 						totalAmountOfGIVpower={givPower.balance}
 						order={order}
 						changeOrder={changeOrder}
+						saveBoosts={saveBoosts}
+						deleteBoost={deleteBoost}
 					/>
 				) : (
 					<EmptyPowerBoosting />

@@ -28,12 +28,15 @@ import Input, { InputSize } from '@/components/Input';
 import SortIcon from '@/components/SortIcon';
 import { IPowerBoosting } from '@/apollo/types/types';
 import { InputSuffix } from '@/components/styled-components/Input';
+import { DeletePowerBoostModal } from '@/components/modals/Boost/DeletePowerBoostModal';
 
 interface IBoostsTable {
 	boosts: IPowerBoosting[];
 	totalAmountOfGIVpower: string;
 	order: IBoostedOrder;
 	changeOrder: (orderBy: EPowerBoostingOrder) => void;
+	saveBoosts: (newBoosts: IPowerBoosting[]) => Promise<boolean>;
+	deleteBoost: (id: string) => Promise<boolean>;
 }
 
 interface IEnhancedPowerBoosting extends IPowerBoosting {
@@ -53,10 +56,15 @@ const BoostsTable: FC<IBoostsTable> = ({
 	totalAmountOfGIVpower,
 	order,
 	changeOrder,
+	saveBoosts,
+	deleteBoost,
 }) => {
 	const [mode, setMode] = useState(ETableNode.VIEWING);
 	const [editBoosts, setEditBoosts] = useState<IEnhancedPowerBoosting[]>([]);
 	const [sum, setSum] = useState(100);
+	const [showDeleteModal, setShowDeleteModal] = useState(false);
+	const [selectedBoost, setSelectedBoost] = useState('');
+
 	const _totalAmountOfGIVpower = new BigNumber(totalAmountOfGIVpower);
 
 	useEffect(() => {
@@ -186,7 +194,12 @@ const BoostsTable: FC<IBoostsTable> = ({
 								buttonType='primary'
 								label='Apply changes'
 								size='small'
-								onClick={() => setMode(ETableNode.EDITING)}
+								onClick={async () => {
+									const isSaved = await saveBoosts(
+										editBoosts,
+									);
+									if (isSaved) setMode(ETableNode.VIEWING);
+								}}
 							/>
 							<OutlineButton
 								buttonType='primary'
@@ -303,7 +316,16 @@ const BoostsTable: FC<IBoostsTable> = ({
 							</BoostsTableCell>
 							<BoostsTableCell>
 								{mode === ETableNode.VIEWING && (
-									<IconTrash size={24} />
+									<>
+										<IconWrapper
+											onClick={() => {
+												setSelectedBoost(boost.id);
+												setShowDeleteModal(true);
+											}}
+										>
+											<IconTrash size={24} />
+										</IconWrapper>
+									</>
 								)}
 							</BoostsTableCell>
 						</BoostsRowWrapper>
@@ -319,6 +341,14 @@ const BoostsTable: FC<IBoostsTable> = ({
 				</CustomTableFooter>
 				<TableFooter></TableFooter>
 			</Table>
+			{showDeleteModal && (
+				<DeletePowerBoostModal
+					boostId={selectedBoost}
+					canDelete={boosts.length > 1}
+					deleteBoost={deleteBoost}
+					setShowModal={setShowDeleteModal}
+				/>
+			)}
 		</>
 	);
 };
@@ -334,7 +364,7 @@ const Actions = styled(Flex)`
 
 const Table = styled.div`
 	display: grid;
-	grid-template-columns: 4fr 1fr 1fr 0.3fr;
+	grid-template-columns: 4fr 1.2fr 1fr 0.3fr;
 	min-width: 700px;
 `;
 

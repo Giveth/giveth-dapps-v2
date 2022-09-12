@@ -12,6 +12,7 @@ export const SAVE_POWER_BOOSTING = gql`
 			}
 			project {
 				id
+				title
 			}
 			percentage
 		}
@@ -33,6 +34,7 @@ export const SAVE_MULTIPLE_POWER_BOOSTING = gql`
 			}
 			project {
 				id
+				title
 			}
 			percentage
 		}
