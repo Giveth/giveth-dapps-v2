@@ -1,5 +1,12 @@
 import { useRouter } from 'next/router';
-import { D3, Lead, Button, H3, brandColors } from '@giveth/ui-design-system';
+import {
+	D3,
+	Lead,
+	Button,
+	H3,
+	brandColors,
+	deviceSize,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 import Routes from '@/lib/constants/Routes';
@@ -54,10 +61,10 @@ const HomeChangeMakers = () => {
 			<MustardArc />
 			<Title>Calling all Changemakers!</Title>
 			<br />
-			<Lead>
+			<LeadStyled>
 				Do you have a for-good project that&apos;s creating value for
 				society, for the environment, or for the world?
-			</Lead>
+			</LeadStyled>
 			<MiddleSection>
 				<Lead>
 					Establish your project on Giveth to tap into the
@@ -85,6 +92,13 @@ const HomeChangeMakers = () => {
 		</Wrapper>
 	);
 };
+
+const LeadStyled = styled(Lead)`
+	text-align: center;
+	${mediaQueries.tablet} {
+		text-align: left;
+	}
+`;
 
 const CreateProjectButton = styled(Button)`
 	width: 300px;
@@ -172,10 +186,9 @@ const MiddleSection = styled.div`
 `;
 
 const Title = styled(D3)`
-	font-size: 4.5rem;
-
-	${mediaQueries.tablet} {
-		font-size: 5.5rem;
+	@media only screen and (max-width: ${deviceSize.tablet}px) {
+		font-size: 36px;
+		text-align: center;
 	}
 `;
 
