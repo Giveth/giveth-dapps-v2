@@ -1,5 +1,5 @@
 import { useWeb3React } from '@web3-react/core';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { formatEther } from '@ethersproject/units';
 import { captureException } from '@sentry/nextjs';
 import { InjectedConnector } from '@web3-react/injected-connector';
@@ -12,7 +12,7 @@ import {
 } from '@/features/user/user.slice';
 import { isSSRMode } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
-import { fetchUserByAddress } from '@/features/user/user.thunks';
+import { fetchUserByAddress, signOut } from '@/features/user/user.thunks';
 import { walletsArray } from '@/lib/wallet/walletTypes';
 
 const UserController = () => {
@@ -20,6 +20,8 @@ const UserController = () => {
 	const dispatch = useAppDispatch();
 	const [isActivatedCalled, setIsActivatedCalled] = useState(false);
 	const token = !isSSRMode ? localStorage.getItem(StorageLabel.TOKEN) : null;
+
+	const isMounted = useRef(false);
 
 	useEffect(() => {
 		const selectedWalletName = localStorage.getItem(StorageLabel.WALLET);
@@ -45,7 +47,16 @@ const UserController = () => {
 	}, [activate, isActivatedCalled]);
 
 	useEffect(() => {
+		if (isMounted.current) {
+			if (!account) {
+				// Case when wallet is locked
+				dispatch(setIsEnabled(false));
+			}
+			// Sign out if wallet is changed
+			dispatch(signOut());
+		}
 		if (account) {
+			isMounted.current = true;
 			dispatch(fetchUserByAddress(account));
 			dispatch(setIsEnabled(true));
 		}
