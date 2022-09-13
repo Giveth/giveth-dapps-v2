@@ -117,28 +117,24 @@ const ProjectsIndex = (props: IProjectsView) => {
 	}, [user?.id]);
 
 	useEffect(() => {
+		console.log('before if');
+		if (isLoading) return;
+		console.log('after if');
 		pageNum.current = 0;
 		fetchProjects(false, 0);
-	}, [contextVariables.searchTerm]);
+	}, [contextVariables]);
 
 	useEffect(() => {
 		if (router.query?.slug) {
+			console.log('router.query?.slug', router.query?.slug);
 			setVariables(prevVariables => {
 				return {
 					...prevVariables,
-					mainCategory: selectedMainCategory?.slug,
+					mainCategory: router.query?.slug?.toString(),
 				};
 			});
 		}
-		pageNum.current = 0;
-		fetchProjects(false, 0);
-	}, [
-		contextVariables?.category,
-		contextVariables?.mainCategory,
-		router.query?.slug,
-		contextVariables?.sortingBy,
-		contextVariables?.filters,
-	]);
+	}, [router.query?.slug]);
 
 	const loadMore = () => {
 		if (isLoading) return;
