@@ -5,7 +5,7 @@ import GIVPowerTable from './GIVPowerTable';
 import NoBoost from '@/components/views/project/projectGIVPower/NoBoost';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BOOSTINGS } from '@/apollo/gql/gqlPowerBoosting';
-import { IPowerBoostingsData } from '@/apollo/types/types';
+import { IUserProjectPowers } from '@/apollo/types/types';
 
 const hasGivPower = false;
 
@@ -18,9 +18,7 @@ const ProjectGIVPowerIndex = ({
 	userId,
 	projectId,
 }: ProjectGIVPowerIndexProps) => {
-	const [boostingsData, setBoostingsData] = useState<
-		IPowerBoostingsData | []
-	>([]);
+	const [boostingsData, setBoostingsData] = useState<IUserProjectPowers>();
 	const fetchProjectBoostings = async () => {
 		if (userId && projectId) {
 			client
@@ -35,9 +33,8 @@ const ProjectGIVPowerIndex = ({
 				})
 				.then(
 					(res: {
-						data: { userProjectPowers: IPowerBoostingsData };
+						data: { userProjectPowers: IUserProjectPowers };
 					}) => {
-						console.log('Res', res);
 						setBoostingsData(res?.data?.userProjectPowers);
 					},
 				)

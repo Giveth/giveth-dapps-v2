@@ -265,3 +265,8 @@ export interface IPowerBoostingsData {
 	userPower: number;
 	boostedPower: number;
 }
+
+export interface IUserProjectPowers {
+	totalCount: number;
+	userProjectPowers: IPowerBoostingsData;
+}
