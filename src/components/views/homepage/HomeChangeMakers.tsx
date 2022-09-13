@@ -61,7 +61,7 @@ const HomeChangeMakers = () => {
 			<MustardArc />
 			<Title>Calling all Changemakers!</Title>
 			<br />
-			<LeadStyled>
+			<LeadStyled size='large'>
 				Do you have a for-good project that&apos;s creating value for
 				society, for the environment, or for the world?
 			</LeadStyled>
