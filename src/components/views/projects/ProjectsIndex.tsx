@@ -117,16 +117,12 @@ const ProjectsIndex = (props: IProjectsView) => {
 	}, [user?.id]);
 
 	useEffect(() => {
-		console.log('before if');
-		if (isLoading) return;
-		console.log('after if');
 		pageNum.current = 0;
 		fetchProjects(false, 0);
 	}, [contextVariables]);
 
 	useEffect(() => {
 		if (router.query?.slug) {
-			console.log('router.query?.slug', router.query?.slug);
 			setVariables(prevVariables => {
 				return {
 					...prevVariables,
