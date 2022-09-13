@@ -81,6 +81,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 		}
 
 		if (!userIdChanged) setIsLoading(true);
+		if (contextVariables.mainCategory !== router.query?.slug?.toString())
+			return;
 
 		client
 			.query({
@@ -119,26 +121,18 @@ const ProjectsIndex = (props: IProjectsView) => {
 	useEffect(() => {
 		pageNum.current = 0;
 		fetchProjects(false, 0);
-	}, [contextVariables.searchTerm]);
+	}, [contextVariables]);
 
 	useEffect(() => {
 		if (router.query?.slug) {
 			setVariables(prevVariables => {
 				return {
 					...prevVariables,
-					mainCategory: selectedMainCategory?.slug,
+					mainCategory: router.query?.slug?.toString(),
 				};
 			});
 		}
-		pageNum.current = 0;
-		fetchProjects(false, 0);
-	}, [
-		contextVariables?.category,
-		contextVariables?.mainCategory,
-		router.query?.slug,
-		contextVariables?.sortingBy,
-		contextVariables?.filters,
-	]);
+	}, [router.query?.slug]);
 
 	const loadMore = () => {
 		if (isLoading) return;
