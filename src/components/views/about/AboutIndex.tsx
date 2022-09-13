@@ -9,7 +9,7 @@ import {
 	P,
 	neutralColors,
 	D3,
-	Button,
+	ButtonLink,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
@@ -52,9 +52,10 @@ const AboutIndex = () => {
 						world for creating positive change.
 					</UpperCaption>
 					<Link href={links.SUPPORT_US} passHref>
-						<UpperButton
-							buttonType='primary'
+						<SupportGivethButton
+							linkType='primary'
 							label='SUPPORT GIVETH'
+							size='large'
 						/>
 					</Link>
 				</Container>
@@ -226,8 +227,9 @@ const Middle = styled.div`
 	}
 `;
 
-const UpperButton = styled(Button)`
+const SupportGivethButton = styled(ButtonLink)`
 	margin: 50px auto 180px;
+	width: 290px;
 `;
 
 const UpperCaption = styled(Lead)`
