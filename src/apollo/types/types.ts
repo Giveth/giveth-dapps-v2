@@ -256,3 +256,12 @@ export interface IPowerBoosting {
 	project: IProject;
 	percentage: number;
 }
+
+export interface IPowerBoostingsData {
+	id: string;
+	userId: string;
+	projectId: string;
+	percentage: number;
+	userPower: number;
+	boostedPower: number;
+}
