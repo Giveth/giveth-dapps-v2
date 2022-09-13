@@ -81,6 +81,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 		}
 
 		if (!userIdChanged) setIsLoading(true);
+		if (contextVariables.mainCategory !== router.query?.slug?.toString())
+			return;
 
 		client
 			.query({
