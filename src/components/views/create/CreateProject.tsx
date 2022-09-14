@@ -274,6 +274,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 	useEffect(() => {
 		dispatch(setShowFooter(false));
+		return () => {
+			dispatch(setShowFooter(true));
+		};
 	}, []);
 
 	const { isTablet, isMobile } = useDetectDevice();
@@ -451,7 +454,7 @@ const GuidelinesStyle = styled.div`
 		height: 87px;
 		align-items: center;
 		gap: 20px;
-		padding: 28px 35px 28px 28px;
+		padding: 28px 30px 28px 28px;
 		border-radius: 8px;
 		box-shadow: ${Shadow.Dark[500]};
 		position: relative;

@@ -7,10 +7,15 @@ import {
 	setShowSignWithWallet,
 	setShowWelcomeModal,
 } from '@/features/modal/modal.slice';
+import WalletNotConnected from '@/components/WalletNotConnected';
+import UserNotSignedIn from '@/components/UserNotSignedIn';
+import CompleteProfile from '@/components/CompleteProfile';
+import Spinner from '@/components/Spinner';
 
 const CreateIndex = () => {
 	const dispatch = useAppDispatch();
 	const {
+		isLoading,
 		isEnabled,
 		isSignedIn,
 		userData: user,
@@ -27,11 +32,20 @@ const CreateIndex = () => {
 				dispatch(setShowCompleteProfile(true));
 			}
 		} else {
-			dispatch(setShowWelcomeModal(true));
+			if (!isLoading) dispatch(setShowWelcomeModal(true));
 		}
-	}, [user, isSignedIn]);
+	}, [user, isSignedIn, isLoading]);
 
-	return isRegistered && isSignedIn ? <CreateProject /> : null;
+	if (isLoading) {
+		return <Spinner />;
+	} else if (!isEnabled) {
+		return <WalletNotConnected />;
+	} else if (!isSignedIn) {
+		return <UserNotSignedIn />;
+	} else if (!isRegistered) {
+		return <CompleteProfile />;
+	}
+	return <CreateProject />;
 };
 
 export default CreateIndex;

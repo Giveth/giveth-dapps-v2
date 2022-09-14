@@ -32,7 +32,7 @@ export const useStakingPool = (
 	const stakePoolInfoPoll = useRef<NodeJS.Timer | null>(null);
 
 	const { library, chainId } = useWeb3React();
-	const { mainnetValues, xDaiValues, isLoaded } = useAppSelector(
+	const { mainnetValues, xDaiValues } = useAppSelector(
 		state => state.subgraph,
 	);
 
@@ -41,7 +41,7 @@ export const useStakingPool = (
 		poolStakingConfig.network === config.XDAI_NETWORK_NUMBER
 			? xDaiValues
 			: mainnetValues;
-
+	const { isLoaded } = currentValues;
 	const { type, LM_ADDRESS } = poolStakingConfig;
 	const providerNetwork = library?.network?.chainId;
 	const _library = chainId === network ? library : undefined;
