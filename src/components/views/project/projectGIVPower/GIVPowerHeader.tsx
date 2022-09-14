@@ -23,7 +23,7 @@ const GIVPowerHeader: FC<IGIVPowerHeader> = ({ projectPower }) => {
 			</ColStyled>
 			<ColStyled xs={4} sm={5}>
 				<Subline>PROJECT RANK</Subline>
-				<H2 weight={700}>{projectPower?.powerRank || '--'}</H2>
+				<H2 weight={700}>#{projectPower?.powerRank || '--'}</H2>
 			</ColStyled>
 		</Container>
 	);
