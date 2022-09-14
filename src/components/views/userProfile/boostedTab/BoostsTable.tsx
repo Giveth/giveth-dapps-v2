@@ -196,6 +196,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 								buttonType='primary'
 								label='Apply changes'
 								size='small'
+								disabled={isExceed}
 								onClick={async () => {
 									const isSaved = await saveBoosts(
 										editBoosts,
