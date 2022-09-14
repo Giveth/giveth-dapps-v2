@@ -5,14 +5,18 @@ import GIVPowerTable from './GIVPowerTable';
 import NoBoost from '@/components/views/project/projectGIVPower/NoBoost';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BOOSTINGS } from '@/apollo/gql/gqlPowerBoosting';
-import { IUserProjectPowers } from '@/apollo/types/types';
+import { IProjectPower, IUserProjectPowers } from '@/apollo/types/types';
 
 interface ProjectGIVPowerIndexProps {
 	userId?: string;
 	projectId: string;
+	projectPower?: IProjectPower;
 }
 
-const ProjectGIVPowerIndex = ({ projectId }: ProjectGIVPowerIndexProps) => {
+const ProjectGIVPowerIndex = ({
+	projectId,
+	projectPower,
+}: ProjectGIVPowerIndexProps) => {
 	const [boostingsData, setBoostingsData] = useState<IUserProjectPowers>();
 	console.log('Count', boostingsData);
 	const hasGivPower = boostingsData ? boostingsData.totalCount > 0 : false;
@@ -52,7 +56,7 @@ const ProjectGIVPowerIndex = ({ projectId }: ProjectGIVPowerIndexProps) => {
 
 	return (
 		<>
-			<GIVPowerHeader />
+			<GIVPowerHeader projectPower={projectPower} />
 			{hasGivPower ? (
 				<GIVPowerTable
 					boostingsData={boostingsData?.userProjectPowers ?? []}

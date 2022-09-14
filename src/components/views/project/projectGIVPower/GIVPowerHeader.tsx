@@ -1,28 +1,29 @@
 import styled from 'styled-components';
 import { H2, H5, Subline } from '@giveth/ui-design-system';
+import { FC } from 'react';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { Flex } from '@/components/styled-components/Flex';
 import { Col, Row } from '@/components/Grid';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
+import { IProjectPower } from '@/apollo/types/types';
 
-const givPower = {
-	total: 2854.45,
-	rank: '#7',
-};
+interface IGIVPowerHeader {
+	projectPower?: IProjectPower;
+}
 
-const GIVPowerHeader = () => {
+const GIVPowerHeader: FC<IGIVPowerHeader> = ({ projectPower }) => {
 	return (
 		<Container>
 			<ColStyled xs={8} sm={7}>
 				<Subline>TOTAL GIVPOWER</Subline>
 				<Flex gap='4px' alignItems='flex-end'>
-					<H2 weight={700}>{givPower.total || 0}</H2>
+					<H2 weight={700}>{projectPower?.totalPower || 0}</H2>
 					<H5>GIV</H5>
 				</Flex>
 			</ColStyled>
 			<ColStyled xs={4} sm={5}>
 				<Subline>PROJECT RANK</Subline>
-				<H2 weight={700}>{givPower.rank || '--'}</H2>
+				<H2 weight={700}>{projectPower?.powerRank || '--'}</H2>
 			</ColStyled>
 		</Container>
 	);
