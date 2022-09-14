@@ -137,15 +137,19 @@ const ProjectCard = (props: IProjectCard) => {
 										</GivBackText>
 									</Flex>
 								</Flex>
-								<GivpowerRankContainer
-									gap='8px'
-									alignItems='center'
-								>
-									<IconRocketInSpace16
-										color={neutralColors.gray[700]}
-									/>
-									<B>#{projectPower?.powerRank}</B>
-								</GivpowerRankContainer>
+								{projectPower?.powerRank && (
+									<GivpowerRankContainer
+										gap='8px'
+										alignItems='center'
+									>
+										<IconRocketInSpace16
+											color={neutralColors.gray[700]}
+										/>
+										<B>
+											#{projectPower?.powerRank || '--'}
+										</B>
+									</GivpowerRankContainer>
+								)}
 							</Flex>
 						</>
 					)}
