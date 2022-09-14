@@ -30,6 +30,7 @@ import { Row } from '@/components/Grid';
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
+import InternalLink from '@/components/InternalLink';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -86,11 +87,11 @@ const ProjectCard = (props: IProjectCard) => {
 							{calcBiggestUnitDifferenceTime(updatedAt)}
 						</LastUpdatedContainer>
 
-						<a href={slugToProjectView(slug)}>
+						<InternalLink href={slugToProjectView(slug)}>
 							<Title weight={700} isHover={isHover}>
 								{title}
 							</Title>
-						</a>
+						</InternalLink>
 					</div>
 					{adminUser && !isForeignOrg ? (
 						<Link
@@ -189,7 +190,7 @@ const GivBackIconContainer = styled.div`
 
 const LastUpdatedContainer = styled(Subline)<{ isHover?: boolean }>`
 	position: absolute;
-	bottom: 20px;
+	bottom: 30px;
 	background-color: ${neutralColors.gray[300]};
 	color: ${neutralColors.gray[700]};
 	padding: 2px 8px;
@@ -198,7 +199,6 @@ const LastUpdatedContainer = styled(Subline)<{ isHover?: boolean }>`
 		transition: opacity 0.3s ease-in-out;
 		display: inline;
 		opacity: ${props => (props.isHover ? 1 : 0)};
-		bottom: 30px;
 	}
 `;
 
