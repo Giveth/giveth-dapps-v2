@@ -20,7 +20,7 @@ interface IHomeRoute {
 const fetchProjects = async (userId: string | undefined = undefined) => {
 	const variables: any = {
 		limit: projectsToFetch,
-		orderBy: { field: gqlEnums.QUALITYSCORE, direction: EDirection.DESC },
+		orderBy: { field: gqlEnums.GIVPOWER, direction: EDirection.DESC },
 	};
 
 	if (userId) {
