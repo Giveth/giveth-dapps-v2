@@ -80,7 +80,6 @@ const ProjectCard = (props: IProjectCard) => {
 					isOtherOrganization={
 						organization?.label !== ORGANIZATION.giveth
 					}
-					isVerified={verified}
 				>
 					<div style={{ position: 'relative' }}>
 						<LastUpdatedContainer isHover={isHover}>
@@ -113,10 +112,10 @@ const ProjectCard = (props: IProjectCard) => {
 						</PriceText>
 						<LightSubline> Raised</LightSubline>
 					</Flex>
-					{verified && (
-						<>
-							<Hr />
-							<Flex justifyContent='space-between'>
+					<>
+						<Hr />
+						<Flex justifyContent='space-between'>
+							{verified && (
 								<Flex gap='16px'>
 									<Flex alignItems='center' gap='4px'>
 										<IconVerified
@@ -137,22 +136,20 @@ const ProjectCard = (props: IProjectCard) => {
 										</GivBackText>
 									</Flex>
 								</Flex>
-								{projectPower?.powerRank && (
-									<GivpowerRankContainer
-										gap='8px'
-										alignItems='center'
-									>
-										<IconRocketInSpace16
-											color={neutralColors.gray[700]}
-										/>
-										<B>
-											#{projectPower?.powerRank || '--'}
-										</B>
-									</GivpowerRankContainer>
-								)}
-							</Flex>
-						</>
-					)}
+							)}
+							{projectPower?.powerRank && (
+								<GivpowerRankContainer
+									gap='8px'
+									alignItems='center'
+								>
+									<IconRocketInSpace16
+										color={neutralColors.gray[700]}
+									/>
+									<B>#{projectPower?.powerRank || '--'}</B>
+								</GivpowerRankContainer>
+							)}
+						</Flex>
+					</>
 					<ActionButtons>
 						<Link href={slugToProjectDonate(slug)} passHref>
 							<CustomizedDonateButton
@@ -239,27 +236,22 @@ const Description = styled(P)`
 const CardBody = styled.div<{
 	isOtherOrganization?: boolean;
 	isHover?: boolean;
-	isVerified?: boolean;
 }>`
 	padding: 26px;
 	padding-top: 32px;
 	position: absolute;
 	left: 0;
 	right: 0;
-	top: ${props => (props.isVerified ? '192px' : '227px')};
+	top: 192px;
 	background-color: ${neutralColors.gray[100]};
 	transition: top 0.3s ease;
 	border-radius: ${props =>
 		props.isOtherOrganization ? '0 12px 12px 12px' : '12px'};
 	${mediaQueries.laptopS} {
 		top: ${props => {
-			if (props.isHover && props.isVerified) {
+			if (props.isHover) {
 				return '109px';
-			} else if (props.isHover && !props.isVerified) {
-				return '151px';
-			} else if (!props.isVerified) {
-				return '221px';
-			} else if (props.isVerified) {
+			} else {
 				return '186px';
 			}
 		}};
@@ -309,6 +301,7 @@ const GivpowerRankContainer = styled(Flex)`
 	background-color: ${neutralColors.gray[300]};
 	color: ${neutralColors.gray[800]};
 	border-radius: 8px;
+	margin-left: auto;
 `;
 
 export default ProjectCard;
