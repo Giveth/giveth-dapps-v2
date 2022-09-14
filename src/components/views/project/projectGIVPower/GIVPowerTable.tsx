@@ -45,12 +45,6 @@ const GIVPowerTable = ({ boostingsData }: IGIVPowerTableProps) => {
 	);
 };
 
-const tableData = [
-	{ name: 'Carlos Quintero', amount: 150, rank: 1 },
-	{ name: 'Anonymous', amount: 823, rank: 2 },
-	{ name: 'Lauren Luz', amount: 85, rank: 3 },
-];
-
 const TableRow = styled(P)`
 	height: 60px;
 	display: flex;
