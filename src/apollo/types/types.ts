@@ -47,6 +47,9 @@ export interface IProject {
 		supportCustomTokens: boolean;
 	};
 	projectVerificationForm?: IProjectVerification;
+	projectPower: {
+		totalPower?: number;
+	};
 }
 
 export interface IWalletAddress {
