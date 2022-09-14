@@ -9,13 +9,20 @@ import {
 import SortIcon from '@/components/SortIcon';
 import { EDirection } from '@/apollo/types/gqlEnums';
 import { EOrderBy } from '@/components/views/userProfile/UserProfile.view';
+import { IPowerBoostingsData } from '@/apollo/types/types';
 
 const order = {
 	by: EOrderBy.TokenAmount,
 	direction: EDirection.ASC,
 };
 
-const GIVPowerTable = () => {
+interface IGIVPowerTableProps {
+	boostingsData: IPowerBoostingsData[];
+	totalCount: number;
+}
+
+const GIVPowerTable = ({ boostingsData, totalCount }: IGIVPowerTableProps) => {
+	console.log('boostingsData', boostingsData);
 	return (
 		<Container>
 			<TableHeader>
@@ -28,22 +35,16 @@ const GIVPowerTable = () => {
 				Amount
 				<SortIcon order={order} title={EOrderBy.UsdAmount} />
 			</TableHeader>
-			{tableData.map(({ rank, name, amount }) => (
-				<Fragment key={name}>
-					<TableRow>#{rank}</TableRow>
-					<TableRow>{name}</TableRow>
-					<TableRow>{amount}</TableRow>
+			{boostingsData?.map(({ id, user, boostedPower }) => (
+				<Fragment key={id}>
+					<TableRow>#{id}</TableRow>
+					<TableRow>{user.name}</TableRow>
+					<TableRow>{boostedPower}</TableRow>
 				</Fragment>
 			))}
 		</Container>
 	);
 };
-
-const tableData = [
-	{ name: 'Carlos Quintero', amount: 150, rank: 1 },
-	{ name: 'Anonymous', amount: 823, rank: 2 },
-	{ name: 'Lauren Luz', amount: 85, rank: 3 },
-];
 
 const TableRow = styled(P)`
 	height: 60px;

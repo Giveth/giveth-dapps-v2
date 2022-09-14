@@ -47,6 +47,9 @@ export interface IProject {
 		supportCustomTokens: boolean;
 	};
 	projectVerificationForm?: IProjectVerification;
+	projectPower: {
+		totalPower?: number;
+	};
 }
 
 export interface IWalletAddress {
@@ -255,4 +258,25 @@ export interface IPowerBoosting {
 	user: IUser;
 	project: IProject;
 	percentage: number;
+}
+
+interface IBoostedUser {
+	id: string;
+	firstName: string;
+	lastName: string;
+	name: string;
+}
+export interface IPowerBoostingsData {
+	id: string;
+	userId: string;
+	projectId: string;
+	percentage: number;
+	userPower: number;
+	boostedPower: number;
+	user: IBoostedUser;
+}
+
+export interface IUserProjectPowers {
+	totalCount: number;
+	userProjectPowers: IPowerBoostingsData[];
 }

@@ -203,7 +203,9 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 								isDraft={isDraft}
 							/>
 						)}
-						{activeTab === 3 && <ProjectGIVPowerIndex />}
+						{activeTab === 3 && (
+							<ProjectGIVPowerIndex projectId={id} />
+						)}
 					</Col>
 					{project && (
 						<Col sm={4}>

@@ -71,3 +71,35 @@ export const FETCH_POWER_BOOSTING_INFO = gql`
 		}
 	}
 `;
+
+export const FETCH_PROJECT_BOOSTINGS = gql`
+	query userProjectPowers(
+		$take: Int
+		$skip: Int
+		$orderBy: UserPowerOrderBy
+		$projectId: Int
+	) {
+		userProjectPowers(
+			take: $take
+			skip: $skip
+			orderBy: $orderBy
+			projectId: $projectId
+		) {
+			totalCount
+			userProjectPowers {
+				id
+				userId
+				projectId
+				percentage
+				userPower
+				boostedPower
+				user {
+					id
+					firstName
+					lastName
+					name
+				}
+			}
+		}
+	}
+`;
