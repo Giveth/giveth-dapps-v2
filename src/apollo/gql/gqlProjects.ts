@@ -89,6 +89,11 @@ export const FETCH_ALL_PROJECTS = gql`
 					label
 					supportCustomTokens
 				}
+				projectPower {
+					powerRank
+					totalPower
+					updateTime
+				}
 			}
 			totalCount
 			categories {
