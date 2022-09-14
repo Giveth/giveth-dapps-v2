@@ -5,6 +5,11 @@ import {
 } from '@/apollo/types/gqlEnums';
 import { IAddress } from '@/components/views/verification/manageFunds/ManageFundsIndex';
 
+export interface IProjectPower {
+	powerRank: number;
+	totalPower?: number;
+	updateTime: string;
+}
 export interface IProject {
 	id?: string;
 	title?: string;
@@ -47,9 +52,7 @@ export interface IProject {
 		supportCustomTokens: boolean;
 	};
 	projectVerificationForm?: IProjectVerification;
-	projectPower: {
-		totalPower?: number;
-	};
+	projectPower: IProjectPower;
 }
 
 export interface IWalletAddress {
