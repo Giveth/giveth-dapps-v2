@@ -9,13 +9,19 @@ import {
 import SortIcon from '@/components/SortIcon';
 import { EDirection } from '@/apollo/types/gqlEnums';
 import { EOrderBy } from '@/components/views/userProfile/UserProfile.view';
+import { IPowerBoostingsData } from '@/apollo/types/types';
 
 const order = {
 	by: EOrderBy.TokenAmount,
 	direction: EDirection.ASC,
 };
 
-const GIVPowerTable = () => {
+interface IGIVPowerTableProps {
+	boostingsData: IPowerBoostingsData[];
+}
+
+const GIVPowerTable = ({ boostingsData }: IGIVPowerTableProps) => {
+	console.log('boostingsData', boostingsData);
 	return (
 		<Container>
 			<TableHeader>
@@ -28,11 +34,11 @@ const GIVPowerTable = () => {
 				Amount
 				<SortIcon order={order} title={EOrderBy.UsdAmount} />
 			</TableHeader>
-			{tableData.map(({ rank, name, amount }) => (
-				<Fragment key={name}>
-					<TableRow>#{rank}</TableRow>
-					<TableRow>{name}</TableRow>
-					<TableRow>{amount}</TableRow>
+			{boostingsData?.map(({ id, user, boostedPower }) => (
+				<Fragment key={user.id}>
+					<TableRow>#{id}</TableRow>
+					<TableRow>{user.name}</TableRow>
+					<TableRow>{boostedPower}</TableRow>
 				</Fragment>
 			))}
 		</Container>
