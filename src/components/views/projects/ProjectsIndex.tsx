@@ -57,6 +57,7 @@ interface IQueries {
 
 const allCategoryObj = { value: 'All', label: 'All' };
 const sortByObj = [
+	{ label: 'GIVpower', value: gqlEnums.GIVPOWER },
 	{ label: 'Default', value: gqlEnums.QUALITYSCORE },
 	{ label: 'Amount Raised', value: gqlEnums.DONATIONS },
 	{ label: 'Accepts GIV Token', value: gqlEnums.ACCEPTGIV },
