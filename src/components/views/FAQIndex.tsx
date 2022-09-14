@@ -99,12 +99,14 @@ const Title = styled(D3)`
 	color: ${brandColors.giv[700]};
 	margin-top: 195px;
 	margin-bottom: 16px;
+	position: relative;
 `;
 
 const Wrapper = styled.div`
 	text-align: center;
 	position: relative;
 	overflow: hidden;
+	padding: 0 10px;
 `;
 
 export default FAQIndex;
