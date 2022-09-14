@@ -64,6 +64,7 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 		title,
 		status,
 		id = '',
+		projectPower,
 	} = project || {};
 	const router = useRouter();
 	const slug = router.query.projectIdSlug as string;
@@ -204,7 +205,10 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 							/>
 						)}
 						{activeTab === 3 && (
-							<ProjectGIVPowerIndex projectId={id} />
+							<ProjectGIVPowerIndex
+								projectId={id}
+								projectPower={projectPower}
+							/>
 						)}
 					</Col>
 					{project && (

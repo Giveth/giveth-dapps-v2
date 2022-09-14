@@ -35,6 +35,11 @@ export const FETCH_HOME_PROJECTS = gql`
 					label
 					supportCustomTokens
 				}
+				projectPower {
+					powerRank
+					totalPower
+					updateTime
+				}
 			}
 			totalCount
 		}
@@ -83,6 +88,11 @@ export const FETCH_ALL_PROJECTS = gql`
 					name
 					label
 					supportCustomTokens
+				}
+				projectPower {
+					powerRank
+					totalPower
+					updateTime
 				}
 			}
 			totalCount
@@ -142,7 +152,9 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 				status
 			}
 			projectPower {
+				powerRank
 				totalPower
+				updateTime
 			}
 		}
 	}

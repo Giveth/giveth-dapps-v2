@@ -51,6 +51,7 @@ const ProjectCard = (props: IProjectCard) => {
 		updatedAt,
 		organization,
 		verified,
+		projectPower,
 	} = project;
 
 	const [isHover, setIsHover] = useState(false);
@@ -143,7 +144,7 @@ const ProjectCard = (props: IProjectCard) => {
 									<IconRocketInSpace16
 										color={neutralColors.gray[700]}
 									/>
-									<B>#7</B>
+									<B>#{projectPower?.powerRank}</B>
 								</GivpowerRankContainer>
 							</Flex>
 						</>
