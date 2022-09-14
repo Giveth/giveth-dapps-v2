@@ -257,6 +257,12 @@ export interface IPowerBoosting {
 	percentage: number;
 }
 
+interface IBoostedUser {
+	id: string;
+	firstName: string;
+	lastName: string;
+	name: string;
+}
 export interface IPowerBoostingsData {
 	id: string;
 	userId: string;
@@ -264,9 +270,10 @@ export interface IPowerBoostingsData {
 	percentage: number;
 	userPower: number;
 	boostedPower: number;
+	user: IBoostedUser;
 }
 
 export interface IUserProjectPowers {
 	totalCount: number;
-	userProjectPowers: IPowerBoostingsData;
+	userProjectPowers: IPowerBoostingsData[];
 }
