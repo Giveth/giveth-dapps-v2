@@ -7,8 +7,6 @@ import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BOOSTINGS } from '@/apollo/gql/gqlPowerBoosting';
 import { IUserProjectPowers } from '@/apollo/types/types';
 
-const hasGivPower = false;
-
 interface ProjectGIVPowerIndexProps {
 	userId?: string;
 	projectId: string;
@@ -19,6 +17,8 @@ const ProjectGIVPowerIndex = ({
 	projectId,
 }: ProjectGIVPowerIndexProps) => {
 	const [boostingsData, setBoostingsData] = useState<IUserProjectPowers>();
+	console.log('Count', boostingsData);
+	const hasGivPower = boostingsData ? boostingsData.totalCount > 0 : false;
 	const fetchProjectBoostings = async () => {
 		if (userId && projectId) {
 			client
@@ -28,6 +28,7 @@ const ProjectGIVPowerIndex = ({
 						projectId: +projectId,
 						userId: +userId,
 						take: 50,
+						skip: 0,
 					},
 					fetchPolicy: 'network-only',
 				})
@@ -35,7 +36,7 @@ const ProjectGIVPowerIndex = ({
 					(res: {
 						data: { userProjectPowers: IUserProjectPowers };
 					}) => {
-						setBoostingsData(res?.data?.userProjectPowers);
+						setBoostingsData(res?.data?.userProjectPowers ?? []);
 					},
 				)
 				.catch((error: unknown) => {
@@ -55,7 +56,13 @@ const ProjectGIVPowerIndex = ({
 	return (
 		<>
 			<GIVPowerHeader />
-			{hasGivPower ? <GIVPowerTable /> : <NoBoost />}
+			{hasGivPower ? (
+				<GIVPowerTable
+					boostingsData={boostingsData?.userProjectPowers ?? []}
+				/>
+			) : (
+				<NoBoost />
+			)}
 		</>
 	);
 };
