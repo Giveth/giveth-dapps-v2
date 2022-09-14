@@ -12,21 +12,17 @@ interface ProjectGIVPowerIndexProps {
 	projectId: string;
 }
 
-const ProjectGIVPowerIndex = ({
-	userId,
-	projectId,
-}: ProjectGIVPowerIndexProps) => {
+const ProjectGIVPowerIndex = ({ projectId }: ProjectGIVPowerIndexProps) => {
 	const [boostingsData, setBoostingsData] = useState<IUserProjectPowers>();
 	console.log('Count', boostingsData);
 	const hasGivPower = boostingsData ? boostingsData.totalCount > 0 : false;
 	const fetchProjectBoostings = async () => {
-		if (userId && projectId) {
+		if (projectId) {
 			client
 				.query({
 					query: FETCH_PROJECT_BOOSTINGS,
 					variables: {
 						projectId: +projectId,
-						userId: +userId,
 						take: 50,
 						skip: 0,
 					},
