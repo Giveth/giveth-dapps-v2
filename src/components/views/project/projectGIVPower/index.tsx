@@ -36,6 +36,7 @@ const ProjectGIVPowerIndex = ({
 					(res: {
 						data: { userProjectPowers: IUserProjectPowers };
 					}) => {
+						console.log('Res', res?.data);
 						setBoostingsData(res?.data?.userProjectPowers ?? []);
 					},
 				)
@@ -59,6 +60,7 @@ const ProjectGIVPowerIndex = ({
 			{hasGivPower ? (
 				<GIVPowerTable
 					boostingsData={boostingsData?.userProjectPowers ?? []}
+					totalCount={boostingsData?.totalCount ?? 0}
 				/>
 			) : (
 				<NoBoost />
