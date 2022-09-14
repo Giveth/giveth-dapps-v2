@@ -15,6 +15,7 @@ import { ChangeEvent, FC, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 
 import BigNumber from 'bignumber.js';
+import Link from 'next/link';
 import {
 	RowWrapper,
 	TableCell,
@@ -29,6 +30,7 @@ import SortIcon from '@/components/SortIcon';
 import { IPowerBoosting } from '@/apollo/types/types';
 import { InputSuffix } from '@/components/styled-components/Input';
 import { DeletePowerBoostModal } from '@/components/modals/Boost/DeletePowerBoostModal';
+import { slugToProjectView } from '@/lib/routeCreators';
 
 interface IBoostsTable {
 	boosts: IPowerBoosting[];
@@ -234,7 +236,11 @@ const BoostsTable: FC<IBoostsTable> = ({
 					return (
 						<BoostsRowWrapper key={boost.project.id}>
 							<BoostsTableCell bold>
-								{boost.project.title}
+								<Link
+									href={slugToProjectView(boost.project.slug)}
+								>
+									{boost.project.title}
+								</Link>
 							</BoostsTableCell>
 							<BoostsTableCell>
 								{formatWeiHelper(
