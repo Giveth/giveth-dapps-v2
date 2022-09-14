@@ -95,6 +95,12 @@ export const FETCH_PROJECT_BOOSTINGS = gql`
 				percentage
 				userPower
 				boostedPower
+				user {
+					id
+					firstName
+					lastName
+					name
+				}
 			}
 		}
 	}
