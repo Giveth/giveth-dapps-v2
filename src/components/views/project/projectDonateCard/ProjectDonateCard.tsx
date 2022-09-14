@@ -145,7 +145,6 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 			}
 		}
 	};
-
 	const fetchProjectReaction = useCallback(async () => {
 		if (user?.id && id) {
 			// Already fetched
@@ -283,14 +282,16 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 									}
 								/>
 							)}
-						{isVerDraft && (
-							<ExternalLink href={slugToVerification(slug)}>
-								<FullOutlineButton
-									buttonType='primary'
-									label='RESUME VERIFICATION'
-								/>
-							</ExternalLink>
-						)}
+						{verificationStatus !==
+							EProjectVerificationStatus.REVOKED &&
+							isVerDraft && (
+								<ExternalLink href={slugToVerification(slug)}>
+									<FullOutlineButton
+										buttonType='primary'
+										label='RESUME VERIFICATION'
+									/>
+								</ExternalLink>
+							)}
 						<VerificationStatus status={verStatus} />
 						{isDraft && (
 							<FullButton
