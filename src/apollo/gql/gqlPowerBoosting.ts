@@ -78,14 +78,12 @@ export const FETCH_PROJECT_BOOSTINGS = gql`
 		$skip: Int
 		$orderBy: UserPowerOrderBy
 		$projectId: Int
-		$userId: Int
 	) {
 		userProjectPowers(
 			take: $take
 			skip: $skip
 			orderBy: $orderBy
 			projectId: $projectId
-			userId: $userId
 		) {
 			totalCount
 			userProjectPowers {
