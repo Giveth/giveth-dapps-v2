@@ -18,9 +18,10 @@ const order = {
 
 interface IGIVPowerTableProps {
 	boostingsData: IPowerBoostingsData[];
+	totalCount: number;
 }
 
-const GIVPowerTable = ({ boostingsData }: IGIVPowerTableProps) => {
+const GIVPowerTable = ({ boostingsData, totalCount }: IGIVPowerTableProps) => {
 	console.log('boostingsData', boostingsData);
 	return (
 		<Container>
@@ -35,7 +36,7 @@ const GIVPowerTable = ({ boostingsData }: IGIVPowerTableProps) => {
 				<SortIcon order={order} title={EOrderBy.UsdAmount} />
 			</TableHeader>
 			{boostingsData?.map(({ id, user, boostedPower }) => (
-				<Fragment key={user.id}>
+				<Fragment key={id}>
 					<TableRow>#{id}</TableRow>
 					<TableRow>{user.name}</TableRow>
 					<TableRow>{boostedPower}</TableRow>
