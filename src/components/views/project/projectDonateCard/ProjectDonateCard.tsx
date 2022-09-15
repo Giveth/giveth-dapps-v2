@@ -335,7 +335,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 					/>
 					{!isAdmin && (
 						<BoostButton onClick={handleBoostClick}>
-							<ButtonText>Boost</ButtonText>
+							<BoostButtonText>Boost</BoostButtonText>
 							<IconRocketInSpace color={brandColors.giv[500]} />
 						</BoostButton>
 					)}
@@ -378,13 +378,17 @@ const BoostButton = styled(FlexCenter)`
 	border-radius: 48px;
 	box-shadow: ${Shadow.Neutral[500]};
 	display: flex;
-	gap: 9.5px;
-	padding-right: 9px;
-	padding-left: 9px;
+	gap: 4px;
+	padding-right: 22px;
+	padding-left: 22px;
 	color: ${brandColors.giv[500]};
 	cursor: pointer;
 	background: white;
 	width: 100%;
+`;
+
+const BoostButtonText = styled(ButtonText)`
+	font-size: 0.75em;
 `;
 
 const Links = styled.div`

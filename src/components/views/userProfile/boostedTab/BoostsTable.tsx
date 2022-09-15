@@ -234,7 +234,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 							changeOrder(EPowerBoostingOrder.Percentage);
 					}}
 				>
-					GIVpower amount
+					GIVpower Amount
 					<SortIcon
 						order={order}
 						title={EPowerBoostingOrder.Percentage}
