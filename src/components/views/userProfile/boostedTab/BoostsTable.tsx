@@ -70,7 +70,14 @@ const BoostsTable: FC<IBoostsTable> = ({
 	const _totalAmountOfGIVpower = new BigNumber(totalAmountOfGIVpower);
 
 	useEffect(() => {
-		if (mode === ETableNode.VIEWING) setEditBoosts(structuredClone(boosts));
+		if (mode === ETableNode.VIEWING) {
+			const _boosts: IEnhancedPowerBoosting[] = structuredClone(boosts);
+			if (_boosts.length === 2) {
+				_boosts[0].isLockable = false;
+				_boosts[1].isLockable = false;
+			}
+			setEditBoosts(_boosts);
+		}
 	}, [boosts]);
 
 	const toggleLockPower = (id: string) => {
@@ -322,16 +329,14 @@ const BoostsTable: FC<IBoostsTable> = ({
 							</BoostsTableCell>
 							<BoostsTableCell>
 								{mode === ETableNode.VIEWING && (
-									<>
-										<IconWrapper
-											onClick={() => {
-												setSelectedBoost(boost.id);
-												setShowDeleteModal(true);
-											}}
-										>
-											<IconTrash size={24} />
-										</IconWrapper>
-									</>
+									<IconWrapper
+										onClick={() => {
+											setSelectedBoost(boost.id);
+											setShowDeleteModal(true);
+										}}
+									>
+										<IconTrash size={24} />
+									</IconWrapper>
 								)}
 							</BoostsTableCell>
 						</BoostsRowWrapper>
