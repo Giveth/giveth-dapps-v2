@@ -1479,6 +1479,14 @@
   dependencies:
     parchment "^1.1.2"
 
+"@types/quill@^2.0.9":
+  version "2.0.9"
+  resolved "https://registry.yarnpkg.com/@types/quill/-/quill-2.0.9.tgz#71e2cd9069690eeb01b0c7318ff7eb2bb9e2044a"
+  integrity sha512-/n40Ypp+jF3GDLqB/5z1P+Odq1K98txXbBgRDkG6Z90LGC1AwQPtZWNeOdDg0yUlgBSUASmpeDn3eBPUuPXtuw==
+  dependencies:
+    parchment "^1.1.2"
+    quill-delta "^4.0.1"
+
 "@types/react-custom-scrollbars@^4.0.9":
   version "4.0.10"
   resolved "https://registry.yarnpkg.com/@types/react-custom-scrollbars/-/react-custom-scrollbars-4.0.10.tgz#f31289df0da95cdb0dfa2a6bdccda7bc909690e6"
@@ -3705,7 +3713,7 @@ fast-diff@1.1.2:
   resolved "https://registry.yarnpkg.com/fast-diff/-/fast-diff-1.1.2.tgz#4b62c42b8e03de3f848460b639079920695d0154"
   integrity sha512-KaJUt+M9t1qaIteSvjc6P3RbMdXsNhK61GRftR6SNxqmhthcd9MGIi4T+o0jD8LUSpSnSKXE20nLtJ3fOHxQig==
 
-fast-diff@^1.1.2:
+fast-diff@1.2.0, fast-diff@^1.1.2:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/fast-diff/-/fast-diff-1.2.0.tgz#73ee11982d86caaf7959828d519cfe927fac5f03"
   integrity sha512-xJuoT5+L99XlZ8twedaRf6Ax2TgQVxvgZOYoPKqZufmJib0tL2tegPBOZb1pVNgIhlqDlA0eO0c3wBvQcmzx4w==
@@ -4671,6 +4679,11 @@ locate-path@^5.0.0:
   dependencies:
     p-locate "^4.1.0"
 
+lodash.clonedeep@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
+  integrity sha512-H5ZhCF25riFd9uB5UCkVKo61m3S/xZk1x4wA6yp/L3RFP6Z/eHH1ymQcGLo7J3GMPfm0V/7m1tryHuGVxpqEBQ==
+
 lodash.debounce@^4.0.8:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
@@ -5518,6 +5531,15 @@ quill-delta@^3.6.2:
     extend "^3.0.2"
     fast-diff "1.1.2"
 
+quill-delta@^4.0.1:
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/quill-delta/-/quill-delta-4.2.2.tgz#015397d046e0a3bed087cd8a51f98c11a1b8f351"
+  integrity sha512-qjbn82b/yJzOjstBgkhtBjN2TNK+ZHP/BgUQO+j6bRhWQQdmj2lH6hXG7+nwwLF41Xgn//7/83lxs9n2BkTtTg==
+  dependencies:
+    fast-diff "1.2.0"
+    lodash.clonedeep "^4.5.0"
+    lodash.isequal "^4.5.0"
+
 quill-emoji@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/quill-emoji/-/quill-emoji-0.2.0.tgz#2d8b830cfd3389a408100f3b7de8d656da74d06f"
@@ -5540,11 +5562,12 @@ quill-image-resize-module@^3.0.0:
     quill "^1.2.2"
     raw-loader "^0.5.1"
 
-quill-magic-url@^4.1.7:
-  version "4.1.7"
-  resolved "https://registry.yarnpkg.com/quill-magic-url/-/quill-magic-url-4.1.7.tgz#69a88f1d9cd07df945117caef17b1ceb67c0d403"
-  integrity sha512-j7vzPyYZ0B4zQwSChpS5TpY9PihN+6zU872jLLhbg3ZMibmLgAc3ILIgdoZhQnCQy5Tl9dhUOEAKgY1Zf/n3rw==
+quill-magic-url@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/quill-magic-url/-/quill-magic-url-4.2.0.tgz#61d5b98c19c0345e744c75e0faf40cb87c2bfdd4"
+  integrity sha512-u1tHwsQjrTczhECNtXK5EUkWwAMb8raLpsU3llqiLu344kPlA9ldoenHvY3XW+yI+2IZ9WgKgRmcy+cKGN3gnQ==
   dependencies:
+    "@types/quill" "^2.0.9"
     normalize-url "^4.5.1"
     quill-delta "^3.6.2"
 
@@ -5751,10 +5774,10 @@ react-popper@^2.2.5:
     react-fast-compare "^3.0.1"
     warning "^4.0.2"
 
-react-quill@^2.0.0-beta.4:
-  version "2.0.0-beta1"
-  resolved "https://registry.yarnpkg.com/react-quill/-/react-quill-2.0.0-beta1.tgz#dde877f5498d2dd3f35692d128a4d4a5aa43487b"
-  integrity sha512-05BnFuNOogm9VoCMitLHh7Ml+QcbiZAOHv7wJo1L04rROai/6vJKrIaLfsoirxQi29lfQM2ZjPjP1hfC4gs0rQ==
+react-quill@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-quill/-/react-quill-2.0.0.tgz#67a0100f58f96a246af240c9fa6841b363b3e017"
+  integrity sha512-4qQtv1FtCfLgoD3PXAur5RyxuUbPXQGOHgTlFie3jtxp43mXDtzCKaOgQ3mLyZfi1PUlyjycfivKelFhy13QUg==
   dependencies:
     "@types/lodash" "^4.14.146"
     "@types/quill" "^1.3.10"
