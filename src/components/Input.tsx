@@ -9,7 +9,6 @@ import React, {
 	InputHTMLAttributes,
 	ReactElement,
 	useCallback,
-	useEffect,
 	useId,
 	useRef,
 } from 'react';
@@ -120,13 +119,10 @@ const Input: FC<InputType> = props => {
 			? EInputValidation.NORMAL
 			: EInputValidation.ERROR;
 
-	useEffect(() => {
-		if (suffix) {
+	const calcLeft = useCallback(() => {
+		if (suffix && !canvasRef.current) {
 			canvasRef.current = document.createElement('canvas');
 		}
-	}, [suffix]);
-
-	const calcLeft = useCallback(() => {
 		if (canvasRef.current) {
 			const width = getTextWidth(
 				value?.toString() || '',

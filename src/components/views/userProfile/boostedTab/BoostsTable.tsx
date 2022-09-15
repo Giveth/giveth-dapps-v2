@@ -73,6 +73,15 @@ const BoostsTable: FC<IBoostsTable> = ({
 		if (mode === ETableNode.VIEWING) setEditBoosts(structuredClone(boosts));
 	}, [boosts]);
 
+	useEffect(() => {
+		if (editBoosts.length < 3) {
+			for (let i = 0; i < editBoosts.length; i++) {
+				const editboost = editBoosts[i];
+				editboost.isLockable = false;
+			}
+		}
+	}, [editBoosts]);
+
 	const toggleLockPower = (id: string) => {
 		const tempBoosts = [...editBoosts];
 		let changedBoost: IEnhancedPowerBoosting | undefined = undefined;
