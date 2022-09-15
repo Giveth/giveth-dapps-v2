@@ -74,7 +74,7 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 					<Link href={Routes.MyBoostedProjects}>
 						<a>
 							<ProfileTab active={tab === EProfile.BOOSTED}>
-								Boosted projects
+								Boosted Projects
 							</ProfileTab>
 						</a>
 					</Link>
@@ -82,7 +82,7 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 				<Link href={Routes.MyProjects}>
 					<a>
 						<ProfileTab active={tab === EProfile.PROJECTS}>
-							{`${myAccount ? 'My ' : userName + '’s'} projects`}
+							{`${myAccount ? 'My ' : userName + '’s'} Projects`}
 							{myAccount && user?.projectsCount != 0 && (
 								<Count active={tab === EProfile.PROJECTS}>
 									{user?.projectsCount}
@@ -109,7 +109,7 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 							active={tab === EProfile.LIKED}
 							onClick={() => setTab(EProfile.LIKED)}
 						>
-							Liked projects
+							Liked Projects
 							{myAccount && !!user.likedProjectsCount && (
 								<Count active={tab === EProfile.LIKED}>
 									{user?.likedProjectsCount}
