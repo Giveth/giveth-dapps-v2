@@ -23,6 +23,7 @@ import { EmptyPowerBoosting } from './EmptyPowerBoosting';
 import GetMoreGIVpowerBanner from './GetMoreGIVpowerBanner';
 import { useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { showToastError } from '@/lib/helpers';
 
 export enum EPowerBoostingOrder {
 	CreationAt = 'createdAt',
@@ -114,7 +115,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 			setLoading(false);
 			return false;
 		} catch (error) {
-			console.log({ error });
+			showToastError(error);
 			captureException(error, {
 				tags: {
 					section: 'Save manage power boosting',
