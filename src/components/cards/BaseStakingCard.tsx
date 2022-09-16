@@ -348,7 +348,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 										}
 									>
 										<GIVgardenTooltip>
-											While staking GIV in this pool you
+											While staking GIV in this pool, you
 											are also granted voting power (gGIV)
 											in the GIVgarden.
 										</GIVgardenTooltip>
