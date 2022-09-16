@@ -54,7 +54,7 @@ const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 							direction={'right'}
 						>
 							<LockInfotooltip>
-								This is you rate of return for this set of GIV
+								This is your rate of return for this set of GIV
 								tokens.
 							</LockInfotooltip>
 						</IconWithTooltip>
