@@ -366,7 +366,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 												direction={'top'}
 											>
 												<TooltipContent>
-													Increase you {tokenSymbol}
+													Increase your {tokenSymbol}
 													stream flowrate when you
 													claim liquid rewards!
 												</TooltipContent>
