@@ -6,7 +6,6 @@ import {
 	neutralColors,
 	P,
 } from '@giveth/ui-design-system';
-import SortIcon from '@/components/SortIcon';
 import { EDirection } from '@/apollo/types/gqlEnums';
 import { EOrderBy } from '@/components/views/userProfile/UserProfile.view';
 import { IPowerBoostingsData } from '@/apollo/types/types';
@@ -27,13 +26,13 @@ const GIVPowerTable = ({ boostingsData, totalCount }: IGIVPowerTableProps) => {
 		<Container>
 			<TableHeader>
 				Ranking
-				<SortIcon order={order} title={EOrderBy.TokenAmount} />
+				{/* <SortIcon order={order} title={EOrderBy.TokenAmount} /> */}
 			</TableHeader>
 			<TableHeader></TableHeader>
 			<TableHeader>
 				<IconRocketInSpace size={20} />
 				Amount
-				<SortIcon order={order} title={EOrderBy.UsdAmount} />
+				{/* <SortIcon order={order} title={EOrderBy.UsdAmount} /> */}
 			</TableHeader>
 			{boostingsData?.map(({ id, user, boostedPower }) => (
 				<Fragment key={id}>
@@ -58,7 +57,6 @@ const TableHeader = styled(B)`
 	display: flex;
 	gap: 8px;
 	padding-bottom: 8px;
-	cursor: pointer;
 `;
 
 const Container = styled.div`
