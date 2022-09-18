@@ -61,7 +61,7 @@ const TableHeader = styled(B)`
 
 const Container = styled.div`
 	margin-top: 40px;
-	margin-bottom: 40px;
+	margin-bottom: 10px;
 	display: grid;
 	grid-template-columns: 0.7fr 4fr 1fr;
 `;
