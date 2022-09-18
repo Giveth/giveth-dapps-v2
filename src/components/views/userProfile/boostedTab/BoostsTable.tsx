@@ -182,7 +182,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 	return (
 		<>
 			<Header justifyContent='space-between' wrap={1} gap='16px'>
-				<H5 weight={700}>GIVPower Table Summary</H5>
+				<H5 weight={700}>GIVpower Summary</H5>
 				<Actions gap='8px'>
 					{mode === ETableNode.VIEWING ? (
 						<Button
@@ -234,13 +234,13 @@ const BoostsTable: FC<IBoostsTable> = ({
 							changeOrder(EPowerBoostingOrder.Percentage);
 					}}
 				>
-					GIVpower amount
+					GIVpower Amount
 					<SortIcon
 						order={order}
 						title={EPowerBoostingOrder.Percentage}
 					/>
 				</TableHeader>
-				<TableHeader>Boosted with</TableHeader>
+				<TableHeader>% of Total</TableHeader>
 				<TableHeader></TableHeader>
 				{editBoosts?.map(boost => {
 					return (
@@ -347,7 +347,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 						</BoostsRowWrapper>
 					);
 				})}
-				<TableFooter>TOTAL GIVPOWER</TableFooter>
+				<TableFooter>Total GIVpower</TableFooter>
 				<TableFooter></TableFooter>
 				<CustomTableFooter isExceed={isExceed}>
 					{sum}%

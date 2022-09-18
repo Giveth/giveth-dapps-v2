@@ -4,9 +4,9 @@ import { QuoteText } from '@giveth/ui-design-system';
 const NoBoost = () => {
 	return (
 		<Wrapper size='small'>
-			<div>Your project didn’t receive any boost yet!</div>
+			<div>This project hasn't received any boosts yet!</div>
 			<div>
-				You can share this project with your friends and ask them to
+				Share this project on social media and ask your friends for a
 				boost!
 			</div>
 		</Wrapper>
