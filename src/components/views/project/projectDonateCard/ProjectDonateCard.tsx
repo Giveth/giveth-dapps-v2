@@ -282,16 +282,14 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 									}
 								/>
 							)}
-						{verificationStatus !==
-							EProjectVerificationStatus.REVOKED &&
-							isVerDraft && (
-								<ExternalLink href={slugToVerification(slug)}>
-									<FullOutlineButton
-										buttonType='primary'
-										label='RESUME VERIFICATION'
-									/>
-								</ExternalLink>
-							)}
+						{isVerDraft && (
+							<ExternalLink href={slugToVerification(slug)}>
+								<FullOutlineButton
+									buttonType='primary'
+									label='RESUME VERIFICATION'
+								/>
+							</ExternalLink>
+						)}
 						<VerificationStatus status={verStatus} />
 						{isDraft && (
 							<FullButton
