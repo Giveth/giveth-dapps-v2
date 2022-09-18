@@ -6,6 +6,8 @@ import NoBoost from '@/components/views/project/projectGIVPower/NoBoost';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BOOSTINGS } from '@/apollo/gql/gqlPowerBoosting';
 import { IProjectPower, IUserProjectPowers } from '@/apollo/types/types';
+import Pagination from '@/components/Pagination';
+import { Flex } from '@/components/styled-components/Flex';
 
 interface ProjectGIVPowerIndexProps {
 	userId?: string;
@@ -13,13 +15,17 @@ interface ProjectGIVPowerIndexProps {
 	projectPower?: IProjectPower;
 }
 
+const itemPerPage = 10;
+
 const ProjectGIVPowerIndex = ({
 	projectId,
 	projectPower,
 }: ProjectGIVPowerIndexProps) => {
 	const [boostingsData, setBoostingsData] = useState<IUserProjectPowers>();
+	const [page, setPage] = useState(0);
 	console.log('Count', boostingsData);
 	const hasGivPower = boostingsData ? boostingsData.totalCount > 0 : false;
+	const totalCount = boostingsData?.totalCount ?? 0;
 	const fetchProjectBoostings = async () => {
 		if (projectId) {
 			client
@@ -27,8 +33,8 @@ const ProjectGIVPowerIndex = ({
 					query: FETCH_PROJECT_BOOSTINGS,
 					variables: {
 						projectId: +projectId,
-						take: 50,
-						skip: 0,
+						take: itemPerPage,
+						skip: page * itemPerPage,
 					},
 					fetchPolicy: 'network-only',
 				})
@@ -52,16 +58,26 @@ const ProjectGIVPowerIndex = ({
 
 	useEffect(() => {
 		fetchProjectBoostings();
-	}, []);
+	}, [page]);
 
 	return (
 		<>
 			<GIVPowerHeader projectPower={projectPower} />
 			{hasGivPower ? (
-				<GIVPowerTable
-					boostingsData={boostingsData?.userProjectPowers ?? []}
-					totalCount={boostingsData?.totalCount ?? 0}
-				/>
+				<>
+					<GIVPowerTable
+						boostingsData={boostingsData?.userProjectPowers ?? []}
+						totalCount={totalCount}
+					/>
+					<Flex justifyContent='flex-end'>
+						<Pagination
+							totalCount={totalCount}
+							currentPage={page}
+							setPage={setPage}
+							itemPerPage={itemPerPage}
+						/>
+					</Flex>
+				</>
 			) : (
 				<NoBoost />
 			)}
