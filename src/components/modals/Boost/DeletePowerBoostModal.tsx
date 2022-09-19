@@ -38,7 +38,7 @@ export const DeletePowerBoostModal: FC<IDeletePowerBoostModal> = ({
 			headerTitle={canDelete ? 'Are you sure?' : 'Ooops!'}
 			headerIcon={<IconRocketInSpace32 />}
 		>
-			<DeletePowerBoostModalContainer>
+			<ConfirmPowerBoostModalContainer>
 				{canDelete ? (
 					<Content>
 						By removing your boost to this project your GIVpower
@@ -66,12 +66,12 @@ export const DeletePowerBoostModal: FC<IDeletePowerBoostModal> = ({
 						onClick={closeModal}
 					/>
 				)}
-			</DeletePowerBoostModalContainer>
+			</ConfirmPowerBoostModalContainer>
 		</Modal>
 	);
 };
 
-const DeletePowerBoostModalContainer = styled.div`
+export const ConfirmPowerBoostModalContainer = styled.div`
 	width: 100%;
 	${mediaQueries.tablet} {
 		width: 450px;
@@ -79,7 +79,7 @@ const DeletePowerBoostModalContainer = styled.div`
 	padding: 24px;
 `;
 
-const Content = styled(Lead)`
+export const Content = styled(Lead)`
 	margin-bottom: 48px;
 `;
 

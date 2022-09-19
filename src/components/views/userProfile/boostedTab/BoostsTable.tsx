@@ -31,6 +31,7 @@ import { IPowerBoosting } from '@/apollo/types/types';
 import { InputSuffix } from '@/components/styled-components/Input';
 import { DeletePowerBoostModal } from '@/components/modals/Boost/DeletePowerBoostModal';
 import { slugToProjectView } from '@/lib/routeCreators';
+import { ApprovePowerBoostModal } from '@/components/modals/Boost/ApprovePowerBoostModal';
 
 interface IBoostsTable {
 	boosts: IPowerBoosting[];
@@ -65,6 +66,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 	const [editBoosts, setEditBoosts] = useState<IEnhancedPowerBoosting[]>([]);
 	const [sum, setSum] = useState(100);
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
+	const [showApproveModal, setShowApproveModal] = useState(false);
 	const [selectedBoost, setSelectedBoost] = useState('');
 
 	const _totalAmountOfGIVpower = new BigNumber(totalAmountOfGIVpower);
@@ -177,6 +179,14 @@ const BoostsTable: FC<IBoostsTable> = ({
 		setEditBoosts(tempBoosts);
 	};
 
+	const onSaveBoosts = async () => {
+		const isSaved = await saveBoosts(editBoosts);
+		if (isSaved) {
+			setMode(ETableNode.VIEWING);
+			return true;
+		}
+		return false;
+	};
 	const isExceed = Math.round(sum) !== 100;
 
 	return (
@@ -206,11 +216,8 @@ const BoostsTable: FC<IBoostsTable> = ({
 								label='Apply changes'
 								size='small'
 								disabled={isExceed}
-								onClick={async () => {
-									const isSaved = await saveBoosts(
-										editBoosts,
-									);
-									if (isSaved) setMode(ETableNode.VIEWING);
+								onClick={() => {
+									setShowApproveModal(true);
 								}}
 							/>
 							<OutlineButton
@@ -363,6 +370,12 @@ const BoostsTable: FC<IBoostsTable> = ({
 					canDelete={boosts.length > 1}
 					deleteBoost={deleteBoost}
 					setShowModal={setShowDeleteModal}
+				/>
+			)}
+			{showApproveModal && (
+				<ApprovePowerBoostModal
+					setShowModal={setShowApproveModal}
+					onSaveBoosts={onSaveBoosts}
 				/>
 			)}
 		</>
