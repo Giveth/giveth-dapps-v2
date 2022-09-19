@@ -25,7 +25,7 @@ const GIVPowerTable = ({ boostingsData }: IGIVPowerTableProps) => {
 				<Fragment key={id}>
 					<TableRow>#{rank}</TableRow>
 					<TableRow>{user.name}</TableRow>
-					<TableRow>{boostedPower}</TableRow>
+					<TableRow>{boostedPower.toFixed(2)}</TableRow>
 				</Fragment>
 			))}
 		</Container>
