@@ -13,7 +13,6 @@ interface IGIVPowerTableProps {
 }
 
 const GIVPowerTable = ({ boostingsData }: IGIVPowerTableProps) => {
-	console.log('boostingsData', boostingsData);
 	return (
 		<Container>
 			<TableHeader>Ranking</TableHeader>
