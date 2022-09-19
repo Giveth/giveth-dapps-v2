@@ -17,7 +17,9 @@ const GIVPowerHeader: FC<IGIVPowerHeader> = ({ projectPower }) => {
 			<ColStyled xs={8} sm={7}>
 				<Subline>TOTAL GIVPOWER</Subline>
 				<Flex gap='4px' alignItems='flex-end'>
-					<H2 weight={700}>{projectPower?.totalPower || 0}</H2>
+					<H2 weight={700}>
+						{projectPower?.totalPower?.toFixed(2) || 0}
+					</H2>
 					<H5>GIV</H5>
 				</Flex>
 			</ColStyled>
