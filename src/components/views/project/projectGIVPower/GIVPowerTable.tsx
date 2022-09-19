@@ -6,37 +6,24 @@ import {
 	neutralColors,
 	P,
 } from '@giveth/ui-design-system';
-import { EDirection } from '@/apollo/types/gqlEnums';
-import { EOrderBy } from '@/components/views/userProfile/UserProfile.view';
 import { IPowerBoostingsData } from '@/apollo/types/types';
-
-const order = {
-	by: EOrderBy.TokenAmount,
-	direction: EDirection.ASC,
-};
 
 interface IGIVPowerTableProps {
 	boostingsData: IPowerBoostingsData[];
-	totalCount: number;
 }
 
-const GIVPowerTable = ({ boostingsData, totalCount }: IGIVPowerTableProps) => {
-	console.log('boostingsData', boostingsData);
+const GIVPowerTable = ({ boostingsData }: IGIVPowerTableProps) => {
 	return (
 		<Container>
-			<TableHeader>
-				Ranking
-				{/* <SortIcon order={order} title={EOrderBy.TokenAmount} /> */}
-			</TableHeader>
+			<TableHeader>Ranking</TableHeader>
 			<TableHeader></TableHeader>
 			<TableHeader>
 				<IconRocketInSpace size={20} />
 				Amount
-				{/* <SortIcon order={order} title={EOrderBy.UsdAmount} /> */}
 			</TableHeader>
-			{boostingsData?.map(({ id, user, boostedPower }) => (
+			{boostingsData?.map(({ id, user, boostedPower, rank }) => (
 				<Fragment key={id}>
-					<TableRow>#{id}</TableRow>
+					<TableRow>#{rank}</TableRow>
 					<TableRow>{user.name}</TableRow>
 					<TableRow>{boostedPower}</TableRow>
 				</Fragment>

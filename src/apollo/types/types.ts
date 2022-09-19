@@ -276,6 +276,7 @@ export interface IPowerBoostingsData {
 	percentage: number;
 	userPower: number;
 	boostedPower: number;
+	rank: number;
 	user: IBoostedUser;
 }
 
