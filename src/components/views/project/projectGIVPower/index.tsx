@@ -67,7 +67,6 @@ const ProjectGIVPowerIndex = ({
 				<>
 					<GIVPowerTable
 						boostingsData={boostingsData?.userProjectPowers ?? []}
-						totalCount={totalCount}
 					/>
 					<Flex justifyContent='flex-end'>
 						<Pagination
