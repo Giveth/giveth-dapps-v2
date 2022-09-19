@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { IconRocketInSpace32 } from '@giveth/ui-design-system';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
@@ -18,10 +18,13 @@ export const ApprovePowerBoostModal: FC<IApprovePowerBoostModal> = ({
 	onSaveBoosts,
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const [loading, setLoading] = useState(false);
 
 	const onSave = async () => {
+		setLoading(true);
 		const isSaved = await onSaveBoosts();
 		if (isSaved) closeModal();
+		setLoading(false);
 	};
 
 	return (
@@ -37,7 +40,12 @@ export const ApprovePowerBoostModal: FC<IApprovePowerBoostModal> = ({
 					You changed the allocation and about to save this changes.
 				</Content>
 				<>
-					<CustomButton label='Save changes' onClick={onSave} />
+					<CustomButton
+						label='Save changes'
+						onClick={onSave}
+						loading={loading}
+						disabled={loading}
+					/>
 					<CustomButton
 						buttonType='texty-primary'
 						label='Cancel'
