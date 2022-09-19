@@ -8,26 +8,22 @@ function ProjectsSubCategories() {
 	const { variables, setVariables, selectedMainCategory } =
 		useProjectsContext();
 	const subCategories = selectedMainCategory?.categories;
-
 	return subCategories ? (
 		<CustomizedSwiper slidesPerView='auto' spaceBetween={24}>
 			{subCategories.map(subCategory => (
 				<SwiperSlide key={subCategory.value}>
 					<SubCategoryItem
-						isSelected={
-							variables?.category ===
-							subCategory.value?.toLowerCase()
-						}
+						isSelected={variables?.category === subCategory.name}
 						onClick={() =>
 							setVariables(prevVariables => {
 								return {
 									...prevVariables,
-									category: subCategory.value?.toLowerCase(),
+									category: subCategory.name,
 								};
 							})
 						}
 					>
-						{subCategory.name}
+						{subCategory.value}
 					</SubCategoryItem>
 				</SwiperSlide>
 			))}
