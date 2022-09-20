@@ -214,7 +214,8 @@ const CloseText = styled.div`
 `;
 
 const LockedContainer = styled.div`
-	margin: 24px 0 0 0;
+	overflow-x: auto;
+	padding: 24px 0;
 `;
 
 const StakedContainer = styled.div`
@@ -248,6 +249,7 @@ const SubtitleH5 = styled(H5)`
 `;
 
 const LockedTable = styled.div`
+	min-width: 700px;
 	display: grid;
 	grid-template-columns: 2fr 2fr 1fr 2fr 2fr;
 	overflow: auto;
