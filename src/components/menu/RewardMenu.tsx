@@ -278,5 +278,5 @@ const IconHelpWraper = styled.div`
 
 const RewardMenuContainer = styled(MenuContainer)`
 	max-height: 400px;
-	overflow-y: scroll;
+	overflow-y: auto;
 `;
