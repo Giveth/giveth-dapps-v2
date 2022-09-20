@@ -238,7 +238,8 @@ interface IWalletMenuContainer {
 }
 
 const WalletMenuContainer = styled(MenuContainer)<IWalletMenuContainer>`
-	max-height: ${props => (props.isSignedIn ? '470px' : '430px')};
+	max-height: ${props => (props.isSignedIn ? '480px' : '430px')};
+	overflow-y: scroll;
 `;
 
 export default MenuWallet;
