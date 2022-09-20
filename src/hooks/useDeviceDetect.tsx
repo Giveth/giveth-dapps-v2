@@ -1,39 +1,32 @@
 import React from 'react';
 import { deviceSize } from '@/lib/constants/constants';
 
-// TODO: fix this so it relates the change of width
-// export function _useDeviceDetect() {
-// 	const [size, setSize] = React.useState([0, 0]);
-// 	React.useLayoutEffect(() => {
-// 		function updateSize() {
-// 			setSize([window.innerWidth, window.innerHeight]);
-// 		}
-// 		window.addEventListener('resize', updateSize);
-// 		updateSize();
-// 		return () => window.removeEventListener('resize', updateSize);
-// 	}, []);
-// 	return { isMobile: size[0] <= deviceSize.mobileL };
-// }
-
-export const checkUserAgentIsMobile = () => {
-	const userAgent =
-		typeof window.navigator === 'undefined' ? '' : navigator.userAgent;
-	return Boolean(
-		userAgent.match(/Android|BlackBerry|iPhone|iPod|Opera Mini|IEMobile/i),
-	);
-};
-
 export default function useDeviceDetect() {
-	const [isMobile, setMobile] = React.useState(false);
+	const query = `(max-width:${deviceSize.mobileL}px)`;
+	const getMatches = () => {
+		// Prevents SSR issues
+		if (typeof window !== 'undefined') {
+			return window.matchMedia(query).matches;
+		}
+		return false;
+	};
+
+	const [matches, setMatches] = React.useState<boolean>(getMatches());
+
+	function handleChange() {
+		setMatches(getMatches());
+	}
 
 	React.useEffect(() => {
-		let mobile = checkUserAgentIsMobile();
-		// check width if device not found
-		if (!mobile && typeof window !== 'undefined') {
-			mobile = window.innerWidth <= deviceSize.mobileL;
-		}
-		setMobile(mobile);
-	}, []);
+		const matchMedia = window.matchMedia(query);
+		// Triggered at the first client-side load and if query changes
+		handleChange();
+		// Listen matchMedia
+		matchMedia.addEventListener('change', handleChange);
+		return () => {
+			matchMedia.removeEventListener('change', handleChange);
+		};
+	}, [query]);
 
-	return { isMobile };
+	return { isMobile: matches };
 }
