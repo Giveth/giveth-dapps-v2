@@ -19,7 +19,7 @@ const HomeBlogPost = ({ post }: IHomeBlogPost) => {
 	return (
 		<Wrapper>
 			<a href={link}>
-				<Title weight={700}>{title}</Title>
+				<Title weight={700}>{htmlToText(title)}</Title>
 			</a>
 			<Description>{htmlToText(description)}</Description>
 			<AuthorContainer>

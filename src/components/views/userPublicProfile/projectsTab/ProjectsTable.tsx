@@ -100,7 +100,7 @@ const ProjectsTable: FC<IProjectsTable> = ({
 
 const Container = styled.div`
 	display: grid;
-	grid-template-columns: 1.5fr 1.1fr 4fr 1.1fr 1.5fr 1.75fr 1fr;
+	grid-template-columns: 1.5fr 1.1fr 4fr 1.1fr 1.5fr 2fr 1fr;
 	overflow: auto;
 	min-width: 900px;
 

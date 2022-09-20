@@ -291,6 +291,9 @@ const Loading = styled(FlexCenter)`
 	background-color: gray;
 	transition: opacity 0.3s ease-in-out;
 	opacity: 0.9;
+const Title = styled(H3)`
+	margin-bottom: 18px;
+	position: relative;
 `;
 
 const Title = styled(H5)`

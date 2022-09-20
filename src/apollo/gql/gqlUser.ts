@@ -50,6 +50,7 @@ export const FETCH_USER_PROJECTS = gql`
 				totalDonations
 				totalReactions
 				verified
+				verificationStatus
 				status {
 					id
 					name

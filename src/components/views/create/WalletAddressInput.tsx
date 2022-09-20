@@ -73,6 +73,20 @@ const WalletAddressInput: FC<IProps> = ({
 	if (isGnosis) disabled = !isActive;
 	else disabled = !isActive && !sameAddress;
 
+	let caption: string = '';
+	if (isDefaultAddress) {
+		caption =
+			'This is the default wallet address associated with your account. You can choose a different receiving address.';
+	} else if (errorMessage || !value) {
+		caption = `You can enter a new address to receive funds on ${
+			sameAddress
+				? 'all supported networks'
+				: isGnosis
+				? 'Gnosis Chain'
+				: 'Mainnet network'
+		}.`;
+	}
+
 	const isProjectPrevAddress = (newAddress: string) => {
 		// Do not validate if the input address is the same as project prev wallet address
 		if (userAddresses.length === 0) return false;
@@ -166,17 +180,7 @@ const WalletAddressInput: FC<IProps> = ({
 						: 'Receiving address on Mainnet'
 				}
 				placeholder='My Wallet Address'
-				caption={
-					isDefaultAddress
-						? 'This is the default wallet address associated with your account. You can choose a different receiving address.'
-						: `You can enter a new address to receive funds on ${
-								sameAddress
-									? 'all supported networks'
-									: isGnosis
-									? 'Gnosis Chain'
-									: 'Mainnet network'
-						  }.`
-				}
+				caption={caption}
 				size={InputSize.LARGE}
 				disabled={disabled}
 				isValidating={isValidating}
