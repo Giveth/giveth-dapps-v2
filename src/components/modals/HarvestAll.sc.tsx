@@ -110,7 +110,7 @@ export const BreakdownRow = styled.div`
 	grid-template-columns: 3fr 1fr 1fr 1fr 1.5fr;
 	border-bottom: 2px solid ${brandColors.giv[500]};
 	padding: 16px;
-	width: 480px;
+	min-width: 480px;
 `;
 
 export const BreakdownIcon = styled.div``;
