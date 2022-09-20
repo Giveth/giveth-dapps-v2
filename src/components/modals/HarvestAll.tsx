@@ -348,7 +348,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 												regenStreamConfig?.rewardTokenSymbol
 											}
 										/>
-										<HelpRow alignItems='center'>
+										<HelpRow alignItems='baseline' wrap={1}>
 											<Caption>
 												Your new {tokenSymbol}
 												stream flowrate
@@ -371,11 +371,13 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 													claim liquid rewards!
 												</TooltipContent>
 											</IconWithTooltip>
-											<IconGIVStream size={24} />
-											<GIVRate>
-												{formatWeiHelper(sumStream)}
-											</GIVRate>
-											<Lead>{tokenSymbol}/week</Lead>
+											<Flex gap='8px'>
+												<IconGIVStream size={24} />
+												<GIVRate>
+													{formatWeiHelper(sumStream)}
+												</GIVRate>
+												<Lead>{tokenSymbol}/week</Lead>
+											</Flex>
 										</HelpRow>
 									</>
 								)}
