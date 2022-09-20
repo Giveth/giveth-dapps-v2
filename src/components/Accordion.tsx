@@ -49,6 +49,7 @@ const HeadSection = styled.div`
 	display: flex;
 	justify-content: space-between;
 	gap: 20px;
+	user-select: none;
 
 	> :last-child {
 		flex-shrink: 0;

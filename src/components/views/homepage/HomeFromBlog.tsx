@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { P, brandColors } from '@giveth/ui-design-system';
+import { brandColors, SemiTitle } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 import HomeBlogPost from './HomeBlogPost';
@@ -40,7 +40,7 @@ const HomeFromBlog = () => {
 	);
 };
 
-const Title = styled(P)`
+const Title = styled(SemiTitle)`
 	color: ${brandColors.giv[500]};
 `;
 

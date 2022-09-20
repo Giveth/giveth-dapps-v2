@@ -47,6 +47,7 @@ import {
 	incrementLikedProjectsCount,
 	decrementLikedProjectsCount,
 } from '@/features/user/user.slice';
+import { EProjectVerificationStatus } from '@/apollo/types/gqlEnums';
 import VerificationStatus from '@/components/views/project/projectDonateCard/VerificationStatus';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import GIVbackToast from '@/components/views/project/projectDonateCard/GIVbackToast';
@@ -79,6 +80,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 		adminUser,
 		id,
 		verified,
+		verificationStatus,
 		organization,
 		projectVerificationForm,
 	} = project || {};
@@ -149,7 +151,6 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 			}
 		}
 	};
-
 	const fetchProjectReaction = useCallback(async () => {
 		if (user?.id && id) {
 			// Already fetched
@@ -273,14 +274,20 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 								router.push(idToProjectEdit(project?.id || ''))
 							}
 						/>
-						{!verified && !isDraft && !verStatus && (
-							<FullOutlineButton
-								buttonType='primary'
-								label='VERIFY YOUR PROJECT'
-								disabled={!isActive}
-								onClick={() => setShowVerificationModal(true)}
-							/>
-						)}
+						{verificationStatus !==
+							EProjectVerificationStatus.REVOKED &&
+							!verified &&
+							!isDraft &&
+							!verStatus && (
+								<FullOutlineButton
+									buttonType='primary'
+									label='VERIFY YOUR PROJECT'
+									disabled={!isActive}
+									onClick={() =>
+										setShowVerificationModal(true)
+									}
+								/>
+							)}
 						{isVerDraft && (
 							<ExternalLink href={slugToVerification(slug)}>
 								<FullOutlineButton

@@ -1,4 +1,4 @@
-import { D3, H4, brandColors } from '@giveth/ui-design-system';
+import { D3, H4, brandColors, deviceSize } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 import { mediaQueries } from '@/lib/constants/constants';
@@ -11,12 +11,18 @@ const JoinIndex = () => {
 			<ArcCyan />
 			<ArcMustard />
 			<TextContainer>
-				<D3>Join our Community.</D3>
-				<H4>Building the Future of Giving.</H4>
+				<D3Styled>Join our Community</D3Styled>
+				<H4>Building the Future of Giving</H4>
 			</TextContainer>
 		</UpperSection>
 	);
 };
+
+const D3Styled = styled(D3)`
+	@media only screen and (max-width: ${deviceSize.tablet}px) {
+		font-size: 3.5rem;
+	}
+`;
 
 const ArcBig = styled(Arc)`
 	border-width: 150px;

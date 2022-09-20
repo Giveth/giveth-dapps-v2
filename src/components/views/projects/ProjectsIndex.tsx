@@ -295,6 +295,7 @@ const Loading = styled(FlexCenter)`
 
 const Title = styled(H5)`
 	font-weight: 700;
+	position: relative;
 
 	span {
 		color: ${neutralColors.gray[700]};
