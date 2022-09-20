@@ -1,7 +1,16 @@
 import React from 'react';
 import { deviceSize } from '@/lib/constants/constants';
 
+export const checkUserAgentIsMobile = () => {
+	const userAgent =
+		typeof window.navigator === 'undefined' ? '' : navigator.userAgent;
+	return Boolean(
+		userAgent.match(/Android|BlackBerry|iPhone|iPod|Opera Mini|IEMobile/i),
+	);
+};
+
 export default function useDeviceDetect() {
+	// Based on useMediaQuery hook
 	const query = `(max-width:${deviceSize.mobileL}px)`;
 	const getMatches = () => {
 		// Prevents SSR issues
