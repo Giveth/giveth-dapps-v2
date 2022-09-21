@@ -399,6 +399,7 @@ const Table = styled.div`
 
 const BoostsTableCell = styled(TableCell)<{ bold?: boolean }>`
 	width: 100%;
+	min-height: 60px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
 	font-weight: ${props => (props.bold ? 500 : 400)};
 	line-height: unset;
@@ -409,7 +410,6 @@ const BoostsRowWrapper = styled(RowWrapper)`
 		background-color: ${neutralColors.gray[300]};
 		color: ${brandColors.pinky[500]};
 	}
-	height: 60px;
 	overflow-y: hidden;
 `;
 
