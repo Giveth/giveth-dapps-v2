@@ -174,14 +174,9 @@ export function TabPowerBottom() {
 							/>
 							<H4 weight={700}>Stake & lock GIV </H4>
 							<Lead>Stake & lock GIV to get GIVpower.</Lead>
-							{/*
-							TODO: UnComment when we want to go live
-							<Link href={Routes.GIVfarm} passHref> */}
-							<CardBottomText>
-								{/* GET GIVPOWER */}
-								Coming Soon
-							</CardBottomText>
-							{/* </Link> */}
+							<Link href={Routes.GIVfarm} passHref>
+								<CardBottomText>GET GIVPOWER</CardBottomText>
+							</Link>
 						</FeaturesCardItem>
 						<FeaturesCardItem>
 							<div>
@@ -215,14 +210,9 @@ export function TabPowerBottom() {
 								The longer you lock, the greater your rewards.
 							</Lead>
 
-							{/*
-							TODO: UnComment when we want to go live
-							<Link href={Routes.GIVfarm} passHref> */}
-							<CardBottomText>
-								{/* SEE REWARDS */}
-								Coming Soon
-							</CardBottomText>
-							{/* </Link> */}
+							<Link href={Routes.GIVfarm} passHref>
+								<CardBottomText>SEE REWARDS</CardBottomText>
+							</Link>
 						</FeaturesCardItem>
 					</FeaturesCardItemsContainer>
 				</FeaturesCardContainer>
