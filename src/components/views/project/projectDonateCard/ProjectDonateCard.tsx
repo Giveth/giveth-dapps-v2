@@ -54,6 +54,7 @@ import useDetectDevice from '@/hooks/useDetectDevice';
 import GIVbackToast from '@/components/views/project/projectDonateCard/GIVbackToast';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import BoostModal from '@/components/modals/Boost/BoostModal';
+import { IS_BOOSTING_ENABLED } from '@/configuration';
 
 interface IProjectDonateCard {
 	project: IProject;
@@ -333,7 +334,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 						onClick={() => isActive && likeUnlikeProject()}
 						isSimple={!isAdmin}
 					/>
-					{!isAdmin && (
+					{IS_BOOSTING_ENABLED && !isAdmin && (
 						<BoostButton onClick={handleBoostClick}>
 							<BoostButtonText>Boost</BoostButtonText>
 							<IconRocketInSpace color={brandColors.giv[500]} />
