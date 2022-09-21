@@ -181,7 +181,7 @@ const LockModal: FC<ILockModalProps> = ({
 								funds, &amp; their donors get more GIVbacks!
 							</P>
 							<P>
-								Boost your favourite projects, or delegate your
+								Boost your favorite projects, or delegate your
 								GIVpower to community representatives.
 							</P> */}
 							<P>
