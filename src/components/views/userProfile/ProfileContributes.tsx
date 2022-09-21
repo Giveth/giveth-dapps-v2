@@ -71,6 +71,7 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 						</a>
 					</Link>
 				)}
+				{/* // TODO: Boosting - remove this for boosting launch */}
 				{myAccount && IS_BOOSTING_ENABLED && (
 					<Link href={Routes.MyBoostedProjects}>
 						<a>

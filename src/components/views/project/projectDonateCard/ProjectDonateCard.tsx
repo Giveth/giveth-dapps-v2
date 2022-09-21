@@ -334,6 +334,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 						onClick={() => isActive && likeUnlikeProject()}
 						isSimple={!isAdmin}
 					/>
+					{/* // TODO: Boosting - remove this for boosting launch */}
 					{IS_BOOSTING_ENABLED && !isAdmin && (
 						<BoostButton onClick={handleBoostClick}>
 							<BoostButtonText>Boost</BoostButtonText>

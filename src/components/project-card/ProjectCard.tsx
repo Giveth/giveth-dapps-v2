@@ -138,6 +138,7 @@ const ProjectCard = (props: IProjectCard) => {
 									</Flex>
 								</Flex>
 							)}
+							{/* // TODO: Boosting - remove this for boosting launch */}
 							{IS_BOOSTING_ENABLED && projectPower?.powerRank && (
 								<GivpowerRankContainer
 									gap='8px'
