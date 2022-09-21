@@ -57,6 +57,7 @@ import config from '@/configuration';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
 import { formatWeiHelper } from '@/helpers/number';
+import links from '@/lib/constants/links';
 
 export function TabPowerTop() {
 	const { account } = useWeb3React();
@@ -153,7 +154,11 @@ export function TabPowerBottom() {
 							& more GIVbacks for their donors.
 						</QuoteText>
 					</HeadingTextContainer>
-					<LearnMoreButton label='Learn More' />
+					<LearnMoreButton
+						label='Learn More'
+						target='_blank'
+						href={links.GIVPOWER_DOC}
+					/>
 				</HeadingSectionContainer>
 				<FeaturesCardContainer>
 					<FeaturesCardHeading weight={700}>
