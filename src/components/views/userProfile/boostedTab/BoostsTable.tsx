@@ -402,6 +402,7 @@ const BoostsTableCell = styled(TableCell)<{ bold?: boolean }>`
 	height: 60px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
 	font-weight: ${props => (props.bold ? 500 : 400)};
+	line-height: unset;
 `;
 
 const BoostsRowWrapper = styled(RowWrapper)`
