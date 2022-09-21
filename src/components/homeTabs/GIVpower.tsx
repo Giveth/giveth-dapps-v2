@@ -56,6 +56,7 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
+import { formatWeiHelper } from '@/helpers/number';
 
 export function TabPowerTop() {
 	const { account } = useWeb3React();
@@ -97,12 +98,9 @@ export function TabPowerTop() {
 											alt='givpower'
 										/>
 										<TitleBase>
-											{/*
-											// TODO: UnComment when we want to go live
 											{formatWeiHelper(
 												givPower.balance,
-											) ?? 0} */}
-											Coming Soon
+											) ?? 0}
 										</TitleBase>
 									</Flex>
 									<Link href={Routes.Projects} passHref>
