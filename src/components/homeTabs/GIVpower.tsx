@@ -41,7 +41,6 @@ import {
 	GivpowerCTAButton,
 	GivpowerCTAButtonOutlined,
 	GivpowerCTAButtonContainer,
-	BoostProjectButton,
 	GivPowerCardContainer,
 	GIVpowerContainer,
 	ConnectWallet,
@@ -104,15 +103,15 @@ export function TabPowerTop() {
 											) ?? 0}
 										</TitleBase>
 									</Flex>
-									<Link href={Routes.Projects} passHref>
-										<BoostProjectButton
-											label='BOOST PROJECTS'
-											size='large'
-											linkType='primary'
-											// TODO: Remove when we want to go live
-											disabled
-										/>
-									</Link>
+									{/*<Link href={Routes.Projects} passHref>*/}
+									{/*	<BoostProjectButton*/}
+									{/*		label='BOOST PROJECTS'*/}
+									{/*		size='large'*/}
+									{/*		linkType='primary'*/}
+									{/*		// TODO: Remove when we want to go live*/}
+									{/*		disabled*/}
+									{/*	/>*/}
+									{/*</Link>*/}
 								</>
 							) : (
 								<ConnectWallet>
