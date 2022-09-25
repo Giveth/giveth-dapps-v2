@@ -34,7 +34,7 @@ export const givgardenMetatags = {
 };
 
 export const givpowerMetatags = {
-	title: 'GIVpower: Boost Projects with GIVpower6',
+	title: 'GIVpower: Boost Projects with GIVpower',
 	desc: 'With GIVpower, you can support verified projects, while earning rewards on your GIV.',
 	image: 'https://i.ibb.co/HTbdCdd/Thumbnail.png',
 	url: 'https://giveth.io/givpower',
