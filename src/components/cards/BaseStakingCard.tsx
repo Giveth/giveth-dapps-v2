@@ -331,9 +331,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 						<StakingPoolExchangeRow gap='4px' alignItems='center'>
 							{getPoolIconWithName(platform, poolNetwork)}
 							<StakingPoolExchange styleType='Small'>
-								{type === StakingType.GIV_LM &&
-									chainId === config.XDAI_NETWORK_NUMBER &&
-									`GIVgarden `}
 								{platformTitle || platform}
 							</StakingPoolExchange>
 							{poolNetwork === config.XDAI_NETWORK_NUMBER &&
