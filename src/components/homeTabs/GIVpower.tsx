@@ -41,7 +41,6 @@ import {
 	GivpowerCTAButton,
 	GivpowerCTAButtonOutlined,
 	GivpowerCTAButtonContainer,
-	BoostProjectButton,
 	GivPowerCardContainer,
 	GIVpowerContainer,
 	ConnectWallet,
@@ -56,6 +55,8 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
+import { formatWeiHelper } from '@/helpers/number';
+import links from '@/lib/constants/links';
 
 export function TabPowerTop() {
 	const { account } = useWeb3React();
@@ -97,23 +98,20 @@ export function TabPowerTop() {
 											alt='givpower'
 										/>
 										<TitleBase>
-											{/*
-											// TODO: UnComment when we want to go live
 											{formatWeiHelper(
 												givPower.balance,
-											) ?? 0} */}
-											Coming Soon
+											) ?? 0}
 										</TitleBase>
 									</Flex>
-									<Link href={Routes.Projects} passHref>
-										<BoostProjectButton
-											label='BOOST PROJECTS'
-											size='large'
-											linkType='primary'
-											// TODO: Remove when we want to go live
-											disabled
-										/>
-									</Link>
+									{/*<Link href={Routes.Projects} passHref>*/}
+									{/*	<BoostProjectButton*/}
+									{/*		label='BOOST PROJECTS'*/}
+									{/*		size='large'*/}
+									{/*		linkType='primary'*/}
+									{/*		// TODO: Remove when we want to go live*/}
+									{/*		disabled*/}
+									{/*	/>*/}
+									{/*</Link>*/}
 								</>
 							) : (
 								<ConnectWallet>
@@ -155,7 +153,11 @@ export function TabPowerBottom() {
 							& more GIVbacks for their donors.
 						</QuoteText>
 					</HeadingTextContainer>
-					<LearnMoreButton label='Learn More' />
+					<LearnMoreButton
+						label='Learn More'
+						target='_blank'
+						href={links.GIVPOWER_DOC}
+					/>
 				</HeadingSectionContainer>
 				<FeaturesCardContainer>
 					<FeaturesCardHeading weight={700}>
@@ -174,14 +176,9 @@ export function TabPowerBottom() {
 							/>
 							<H4 weight={700}>Stake & lock GIV </H4>
 							<Lead>Stake & lock GIV to get GIVpower.</Lead>
-							{/*
-							TODO: UnComment when we want to go live
-							<Link href={Routes.GIVfarm} passHref> */}
-							<CardBottomText>
-								{/* GET GIVPOWER */}
-								Coming Soon
-							</CardBottomText>
-							{/* </Link> */}
+							<Link href={Routes.GIVfarm} passHref>
+								<CardBottomText>GET GIVPOWER</CardBottomText>
+							</Link>
 						</FeaturesCardItem>
 						<FeaturesCardItem>
 							<div>
@@ -215,14 +212,9 @@ export function TabPowerBottom() {
 								The longer you lock, the greater your rewards.
 							</Lead>
 
-							{/*
-							TODO: UnComment when we want to go live
-							<Link href={Routes.GIVfarm} passHref> */}
-							<CardBottomText>
-								{/* SEE REWARDS */}
-								Coming Soon
-							</CardBottomText>
-							{/* </Link> */}
+							<Link href={Routes.GIVfarm} passHref>
+								<CardBottomText>SEE REWARDS</CardBottomText>
+							</Link>
 						</FeaturesCardItem>
 					</FeaturesCardItemsContainer>
 				</FeaturesCardContainer>

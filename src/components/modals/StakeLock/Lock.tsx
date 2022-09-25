@@ -30,6 +30,8 @@ import TotalGIVpowerBox from './TotalGIVpowerBox';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { Flex } from '@/components/styled-components/Flex';
+import links from '@/lib/constants/links';
+import ExternalLink from '@/components/ExternalLink';
 import type { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 
 interface ILockModalProps extends IModal {
@@ -181,14 +183,16 @@ const LockModal: FC<ILockModalProps> = ({
 								funds, &amp; their donors get more GIVbacks!
 							</P>
 							<P>
-								Boost your favourite projects, or delegate your
+								Boost your favorite projects, or delegate your
 								GIVpower to community representatives.
 							</P> */}
 							<P>
 								Coming soon: GIVpower will allow you to support
 								verified projects while earning rewards.
 							</P>
-							<LearnMoreLink href=''>Learn More</LearnMoreLink>
+							<ExternalLink href={links.GIVPOWER_DOC}>
+								<LearnMoreLink>Learn More</LearnMoreLink>
+							</ExternalLink>
 							{/* <BoostButton
 								linkType='primary'
 								label={'Boost projects'}

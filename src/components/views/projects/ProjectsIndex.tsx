@@ -33,6 +33,7 @@ import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import useDebounce from '@/hooks/useDebounce';
+import { IS_BOOSTING_ENABLED } from '@/configuration';
 
 interface IProjectsView {
 	projects: IProject[];
@@ -57,7 +58,8 @@ interface IQueries {
 
 const allCategoryObj = { value: 'All', label: 'All' };
 const sortByObj = [
-	{ label: 'GIVpower', value: gqlEnums.GIVPOWER },
+	//TODO: boosting - uncomment this for test boosting
+	// { label: 'GIVpower', value: gqlEnums.GIVPOWER },
 	{ label: 'Default', value: gqlEnums.QUALITYSCORE },
 	{ label: 'Amount Raised', value: gqlEnums.DONATIONS },
 	{ label: 'Accepts GIV Token', value: gqlEnums.ACCEPTGIV },
@@ -71,6 +73,11 @@ const sortByObj = [
 	{ label: 'Verified', value: gqlEnums.VERIFIED },
 	{ label: 'Traceable', value: gqlEnums.TRACEABLE },
 ];
+
+// TODO: boosting - remove/comment this for boosting
+if (IS_BOOSTING_ENABLED) {
+	sortByObj.unshift({ label: 'GIVpower', value: gqlEnums.GIVPOWER });
+}
 
 const buildCategoryObj = (array: ICategory[]) => {
 	const newArray = [allCategoryObj];
