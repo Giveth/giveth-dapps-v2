@@ -6,14 +6,16 @@ import { ICurrentInfo } from './subgraph.types';
 export const fetchXDaiInfoAsync = createAsyncThunk(
 	'subgraph/fetchXDaiInfo',
 	async (userAddress?: string) => {
-		return await fetchXDaiInfo(userAddress);
+		const response = await fetchXDaiInfo(userAddress);
+		return { ...response, isLoaded: true };
 	},
 );
 
 export const fetchMainnetInfoAsync = createAsyncThunk(
 	'subgraph/fetchMainnetInfo',
 	async (userAddress?: string) => {
-		return await fetchMainnetInfo(userAddress);
+		const response = await fetchMainnetInfo(userAddress);
+		return { ...response, isLoaded: true };
 	},
 );
 
@@ -24,6 +26,9 @@ export const fetchCurrentInfoAsync = createAsyncThunk(
 			props.chainId === config.MAINNET_NETWORK_NUMBER
 				? await fetchMainnetInfo(props.userAddress)
 				: await fetchXDaiInfo(props.userAddress);
-		return { response, chainId: props.chainId };
+		return {
+			response: { ...response, isLoaded: true },
+			chainId: props.chainId,
+		};
 	},
 );
