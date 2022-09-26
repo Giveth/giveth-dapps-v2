@@ -19,6 +19,13 @@
 		},
 		"incremental": true
 	},
-	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "setup-jest.ts"],
+	"include": [
+		"next-env.d.ts",
+		"src/**/*.ts",
+		"src/**/*.tsx",
+		"pages/**/*.tsx",
+		"pages/**/*.ts",
+		"setup-jest.ts"
+	],
 	"exclude": ["node_modules", "cypress"]
 }
