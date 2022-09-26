@@ -165,7 +165,7 @@ const config: EnvConfig = {
 		blockExplorerName: ['Blockscout'],
 		blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/aminlatifi/givpower-deployment-six',
+			'https://api.thegraph.com/subgraphs/name/aminlatifi/giveconomy-xdai-deployment-seven',
 
 		TOKEN_ADDRESS: '0x780FE5de651a3ea62E572f591BF848cFEBaf2163',
 		gGIV_ADDRESS: '0x1460aaf51f4e0b1b59bb41981cb4aa5a1b377776',
