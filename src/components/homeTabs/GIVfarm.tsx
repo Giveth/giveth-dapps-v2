@@ -216,13 +216,15 @@ export const TabGIVfarmBottom = () => {
 								<GIVpowerStakingPoolCard />
 							</Col>
 						</GIVpowerProvider>
-						<Col sm={6} lg={4}>
-							<StakingPoolCard
-								poolStakingConfig={getGivStakingConfig(
-									config.MAINNET_CONFIG,
-								)}
-							/>
-						</Col>
+						{showArchivedPools && (
+							<Col sm={6} lg={4}>
+								<StakingPoolCard
+									poolStakingConfig={getGivStakingConfig(
+										config.MAINNET_CONFIG,
+									)}
+								/>
+							</Col>
+						)}
 						{renderPools(chainId, showArchivedPools)}
 					</PoolRow>
 					{chainId === config.XDAI_NETWORK_NUMBER ? (

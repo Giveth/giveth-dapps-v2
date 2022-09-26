@@ -48,6 +48,8 @@ const config: EnvConfig = {
 			BUY_LINK:
 				'https://app.uniswap.org/#/swap?outputCurrency=0x29434A25abd94AE882aA883eea81585Aaa5b078D',
 			discontinued: SEPT_8TH_2022,
+			active: false,
+			archived: true,
 		},
 
 		nodeUrl: 'https://goerli.infura.io/v3/' + INFURA_API_KEY,
@@ -64,7 +66,8 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://app.uniswap.org/#/add/v2/0xA2470F25bb8b53Bd3924C7AC0C68d32BF2aBd5be/0xdc31Ee1784292379Fbb2964b3B9C4124D8F89C60?chain=goerli',
 				unit: 'LP',
-				active: true,
+				active: false,
+				archived: true,
 				discontinued: SEPT_8TH_2022,
 			},
 			{
@@ -194,7 +197,7 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://app.honeyswap.org/#/add/0x780FE5de651a3ea62E572f591BF848cFEBaf2163/0x69F79C9eA174d4659B18c7993c7EFbBbB58cF068',
 				unit: 'LP',
-				active: true,
+				active: false,
 				archived: true,
 			},
 			{
@@ -209,6 +212,7 @@ const config: EnvConfig = {
 					'https://app.sushi.com/add/0x780FE5de651a3ea62E572f591BF848cFEBaf2163/0x736a98655049433f79dCcF5e54b887E8890b63D1',
 				unit: 'LP',
 				active: true,
+				archived: true,
 			},
 		],
 
