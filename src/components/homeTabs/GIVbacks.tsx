@@ -124,10 +124,10 @@ export const TabGIVbacksBottom = () => {
 	const [round, setRound] = useState(0);
 	const [roundStartime, setRoundStartime] = useState(new Date());
 	const [roundEndTime, setRoundEndTime] = useState(new Date());
-	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
+	const { givTokenDistroHelper, isLoaded } = useGIVTokenDistroHelper();
 
 	useEffect(() => {
-		if (givTokenDistroHelper) {
+		if (givTokenDistroHelper && isLoaded) {
 			const now = getNowUnixMS();
 			const deltaT = now - givTokenDistroHelper.startTime.getTime();
 			const TwoWeek = 1_209_600_000;
@@ -197,7 +197,10 @@ export const TabGIVbacksBottom = () => {
 						<Col xs={12} md={8}>
 							<RoundSection>
 								<RoundTitle>
-									GIVbacks <NoWrap>Round {round}</NoWrap>
+									GIVbacks{' '}
+									<NoWrap>
+										Round {isLoaded ? round : '--'}
+									</NoWrap>
 								</RoundTitle>
 								<RoundInfo>
 									<RoundInfoTallRow
@@ -211,9 +214,9 @@ export const TabGIVbacksBottom = () => {
 										</P>
 										<P>
 											<NoWrap>
-												{givTokenDistroHelper
+												{isLoaded
 													? formatDate(roundStartime)
-													: '-'}
+													: '--'}
 											</NoWrap>
 										</P>
 									</RoundInfoTallRow>
@@ -227,9 +230,9 @@ export const TabGIVbacksBottom = () => {
 										</P>
 										<P>
 											<NoWrap>
-												{givTokenDistroHelper
+												{isLoaded
 													? formatDate(roundEndTime)
-													: '-'}
+													: '--'}
 											</NoWrap>
 										</P>
 									</RoundInfoTallRow>
