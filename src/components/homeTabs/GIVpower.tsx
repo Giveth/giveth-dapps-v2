@@ -47,6 +47,7 @@ import {
 	ConnectWalletDesc,
 	ConnectWalletButton,
 	GivAmount,
+	BoostProjectButton,
 } from './GIVpower.sc';
 import RocketImage from '../../../public/images/rocket.svg';
 import Growth from '../../../public/images/growth.svg';
@@ -71,7 +72,7 @@ export function TabPowerTop() {
 		<GIVpowerTopContainer>
 			<GIVpowerContainer>
 				<Row style={{ alignItems: 'flex-end' }}>
-					<Col xs={12} sm={7} xl={8}>
+					<Col xs={12} sm={8}>
 						<Flex alignItems='baseline' gap='16px'>
 							<Title>GIVpower</Title>
 							{/* <IconGIVFarm size={64} /> */}
@@ -86,7 +87,7 @@ export function TabPowerTop() {
 							Use GIV to boost projects to new heights!
 						</Subtitle>
 					</Col>
-					<Col xs={12} sm={5} xl={4}>
+					<Col xs={12} sm={4}>
 						<GivPowerCardContainer>
 							{account ? (
 								<>
@@ -104,15 +105,13 @@ export function TabPowerTop() {
 											) ?? 0}
 										</TitleBase>
 									</GivAmount>
-									{/*<Link href={Routes.Projects} passHref>*/}
-									{/*	<BoostProjectButton*/}
-									{/*		label='BOOST PROJECTS'*/}
-									{/*		size='large'*/}
-									{/*		linkType='primary'*/}
-									{/*		// TODO: Remove when we want to go live*/}
-									{/*		disabled*/}
-									{/*	/>*/}
-									{/*</Link>*/}
+									<Link href={Routes.GIVfarm} passHref>
+										<BoostProjectButton
+											label='Get more GIVpower'
+											size='large'
+											linkType='primary'
+										/>
+									</Link>
 								</>
 							) : (
 								<ConnectWallet>
@@ -246,18 +245,13 @@ export function TabPowerBottom() {
 									multiplier.
 								</QuoteText>
 								<QuoteText size='small'>
-									Donate to the top-boosted projects to get
-									more GIVbacks.
+									Soon: Donate to top-ranked projects to get
+									extra GIVbacks.
 								</QuoteText>
 								<br />
-								{/*
-								TODO: UnComment when we want to go live
-								<Link href={Routes.GIVfarm} passHref> */}
-								<CardBottomText>
-									{/* GET GIVPOWER */}
-									Coming Soon
-								</CardBottomText>
-								{/* </Link> */}
+								<Link href={Routes.GIVfarm} passHref>
+									<CardBottomText>Stake GIV</CardBottomText>
+								</Link>
 							</BenefitsCardTextContainer>
 						</BenefitsCard>
 						<BenefitsCard>
@@ -266,23 +260,19 @@ export function TabPowerBottom() {
 							</BenefitsCardHeading>
 							<BenefitsCardTextContainer>
 								<QuoteText size='small'>
-									Fire up your community to get more boosts &
-									improve your rank.
-								</QuoteText>
-								<QuoteText size='small'>
-									Top-ranked projects get funding from the
-									Giveth Matching Pool.
+									Soon: Fire up your community to use GIVpower
+									& help improve your rank.
 								</QuoteText>
 								<QuoteText size='small'>
 									The higher your rank, the more GIVbacks your
-									donors receive.
+									donors will receive.
+								</QuoteText>
+								<QuoteText size='small'>
+									Top-ranked projects will eventually get
+									funding from the Giveth Matching Pool.
 								</QuoteText>
 								<br />
-								<Link href={Routes.Projects} passHref>
-									<CardBottomText>
-										BROWSE PROJECTS
-									</CardBottomText>
-								</Link>
+								<CardBottomText>Coming Soon</CardBottomText>
 							</BenefitsCardTextContainer>
 						</BenefitsCard>
 					</BenefitsCardsContainer>
