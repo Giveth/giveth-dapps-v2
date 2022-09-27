@@ -13,6 +13,7 @@ import { Flex } from '../styled-components/Flex';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import { mediaQueries } from '@/lib/constants/constants';
 
 export const SkipOnboardingModal: FC<IModal> = ({ setShowModal }) => {
 	const router = useRouter();
@@ -54,8 +55,11 @@ export const SkipOnboardingModal: FC<IModal> = ({ setShowModal }) => {
 };
 
 const SkipOnboardingModalContainer = styled.div`
-	width: 494px;
 	padding: 24px;
+	width: 100%;
+	${mediaQueries.tablet} {
+		width: 494px;
+	}
 `;
 
 const Desc = styled(Lead)`

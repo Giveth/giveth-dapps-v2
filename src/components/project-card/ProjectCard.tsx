@@ -12,6 +12,7 @@ import {
 	IconVerified,
 	semanticColors,
 	IconGIVBack,
+	IconRocketInSpace16,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 
@@ -30,6 +31,7 @@ import { Row } from '@/components/Grid';
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
+import { IS_BOOSTING_ENABLED } from '@/configuration';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -50,6 +52,7 @@ const ProjectCard = (props: IProjectCard) => {
 		updatedAt,
 		organization,
 		verified,
+		projectPower,
 	} = project;
 
 	const [isHover, setIsHover] = useState(false);
@@ -78,7 +81,6 @@ const ProjectCard = (props: IProjectCard) => {
 					isOtherOrganization={
 						organization?.label !== ORGANIZATION.giveth
 					}
-					isVerified={verified}
 				>
 					<div style={{ position: 'relative' }}>
 						<LastUpdatedContainer isHover={isHover}>
@@ -109,13 +111,13 @@ const ProjectCard = (props: IProjectCard) => {
 						<PriceText>
 							${Math.ceil(totalDonations as number)}
 						</PriceText>
-						<RaisedText> Raised</RaisedText>
+						<LightSubline> Raised</LightSubline>
 					</Flex>
-					{verified && (
-						<>
-							<Hr />
-							<Flex gap='16px'>
-								<>
+					<>
+						<Hr />
+						<Flex justifyContent='space-between'>
+							{verified && (
+								<Flex gap='16px'>
 									<Flex alignItems='center' gap='4px'>
 										<IconVerified
 											size={16}
@@ -134,10 +136,22 @@ const ProjectCard = (props: IProjectCard) => {
 											GIVBACK ELIGIBLE
 										</GivBackText>
 									</Flex>
-								</>
-							</Flex>
-						</>
-					)}
+								</Flex>
+							)}
+							{/* // TODO: Boosting - remove this for boosting launch */}
+							{IS_BOOSTING_ENABLED && projectPower?.powerRank && (
+								<GivpowerRankContainer
+									gap='8px'
+									alignItems='center'
+								>
+									<IconRocketInSpace16
+										color={neutralColors.gray[700]}
+									/>
+									<B>#{projectPower?.powerRank || '--'}</B>
+								</GivpowerRankContainer>
+							)}
+						</Flex>
+					</>
 					<ActionButtons>
 						<Link href={slugToProjectDonate(slug)} passHref>
 							<CustomizedDonateButton
@@ -172,7 +186,7 @@ const PriceText = styled(B)`
 	color: ${neutralColors.gray[800]};
 `;
 
-const RaisedText = styled(Subline)`
+const LightSubline = styled(Subline)`
 	display: inline;
 	color: ${neutralColors.gray[700]};
 `;
@@ -224,27 +238,22 @@ const Description = styled(P)`
 const CardBody = styled.div<{
 	isOtherOrganization?: boolean;
 	isHover?: boolean;
-	isVerified?: boolean;
 }>`
 	padding: 26px;
 	padding-top: 32px;
 	position: absolute;
 	left: 0;
 	right: 0;
-	top: ${props => (props.isVerified ? '192px' : '227px')};
+	top: 192px;
 	background-color: ${neutralColors.gray[100]};
 	transition: top 0.3s ease;
 	border-radius: ${props =>
 		props.isOtherOrganization ? '0 12px 12px 12px' : '12px'};
 	${mediaQueries.laptopS} {
 		top: ${props => {
-			if (props.isHover && props.isVerified) {
+			if (props.isHover) {
 				return '109px';
-			} else if (props.isHover && !props.isVerified) {
-				return '151px';
-			} else if (!props.isVerified) {
-				return '221px';
-			} else if (props.isVerified) {
+			} else {
 				return '186px';
 			}
 		}};
@@ -287,6 +296,14 @@ const Wrapper = styled.div`
 	${mediaQueries.laptopS} {
 		height: 472px;
 	}
+`;
+
+const GivpowerRankContainer = styled(Flex)`
+	padding: 2px 8px;
+	background-color: ${neutralColors.gray[300]};
+	color: ${neutralColors.gray[800]};
+	border-radius: 8px;
+	margin-left: auto;
 `;
 
 export default ProjectCard;
