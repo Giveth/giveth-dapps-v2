@@ -250,6 +250,7 @@ const SubtitleH5 = styled(H5)`
 
 const LockedTable = styled.div`
 	display: grid;
+	min-width: 500px;
 	grid-template-columns: 2fr 2.5fr 1.5fr 1fr 1.5fr;
 	overflow: auto;
 	max-height: 364px;
