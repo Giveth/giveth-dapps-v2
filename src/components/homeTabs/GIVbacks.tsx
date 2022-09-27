@@ -133,25 +133,22 @@ export const TabGIVbacksBottom = () => {
 			givTokenDistroHelper.startTime.getTime() !== 0
 		) {
 			const now = getNowUnixMS();
-			const deltaT = now - givTokenDistroHelper.startTime.getTime();
+			const ROUND_20_OFFSET = 4; // At round 20 we changed the rounds from Fridays to Tuesdays
+			const startTime = new Date(givTokenDistroHelper.startTime);
+			startTime.setDate(startTime.getDate() + ROUND_20_OFFSET);
+			const deltaT = now - startTime.getTime();
 			const TwoWeek = 1_209_600_000;
 			const _round = Math.floor(deltaT / TwoWeek) + 1;
 			setRound(_round);
-			const _rounStartTime = new Date(givTokenDistroHelper.startTime);
-			_rounStartTime.setDate(
-				givTokenDistroHelper.startTime.getDate() + (_round - 1) * 14,
-			);
-			_rounStartTime.setHours(givTokenDistroHelper.startTime.getHours());
-			_rounStartTime.setMinutes(
-				givTokenDistroHelper.startTime.getMinutes(),
-			);
+			const _rounStartTime = new Date(startTime);
+			_rounStartTime.setDate(startTime.getDate() + (_round - 1) * 14);
+			_rounStartTime.setHours(startTime.getHours());
+			_rounStartTime.setMinutes(startTime.getMinutes());
 			setRoundStartime(_rounStartTime);
 			const _roundEndTime = new Date(_rounStartTime);
 			_roundEndTime.setDate(_rounStartTime.getDate() + 14);
-			_roundEndTime.setHours(givTokenDistroHelper.startTime.getHours());
-			_roundEndTime.setMinutes(
-				givTokenDistroHelper.startTime.getMinutes(),
-			);
+			_roundEndTime.setHours(startTime.getHours());
+			_roundEndTime.setMinutes(startTime.getMinutes());
 			setRoundEndTime(_roundEndTime);
 		}
 	}, [givTokenDistroHelper]);
