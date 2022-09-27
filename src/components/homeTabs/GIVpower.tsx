@@ -46,13 +46,14 @@ import {
 	ConnectWallet,
 	ConnectWalletDesc,
 	ConnectWalletButton,
+	BoostProjectButton,
 } from './GIVpower.sc';
 import RocketImage from '../../../public/images/rocket.svg';
 import Growth from '../../../public/images/growth.svg';
 import GivStake from '../../../public/images/giv_stake.svg';
 import Routes from '@/lib/constants/Routes';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import config from '@/configuration';
+import config, { IS_BOOSTING_ENABLED } from '@/configuration';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
 import { formatWeiHelper } from '@/helpers/number';
@@ -103,15 +104,15 @@ export function TabPowerTop() {
 											) ?? 0}
 										</TitleBase>
 									</Flex>
-									{/*<Link href={Routes.Projects} passHref>*/}
-									{/*	<BoostProjectButton*/}
-									{/*		label='BOOST PROJECTS'*/}
-									{/*		size='large'*/}
-									{/*		linkType='primary'*/}
-									{/*		// TODO: Remove when we want to go live*/}
-									{/*		disabled*/}
-									{/*	/>*/}
-									{/*</Link>*/}
+									{IS_BOOSTING_ENABLED && (
+										<Link href={Routes.Projects} passHref>
+											<BoostProjectButton
+												label='BOOST PROJECTS'
+												size='large'
+												linkType='primary'
+											/>
+										</Link>
+									)}
 								</>
 							) : (
 								<ConnectWallet>
