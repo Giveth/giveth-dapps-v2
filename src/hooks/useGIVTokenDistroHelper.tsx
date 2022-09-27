@@ -18,6 +18,7 @@ export const defaultTokenDistroHelper = new TokenDistroHelper({
 const useGIVTokenDistroHelper = () => {
 	const [givTokenDistroHelper, setGIVTokenDistroHelper] =
 		useState<TokenDistroHelper>(defaultTokenDistroHelper);
+	const [isLoaded, setIsLoaded] = useState(false);
 	const currentValue = useAppSelector(
 		state => state.subgraph.currentValues,
 		shallowEqual,
@@ -25,8 +26,9 @@ const useGIVTokenDistroHelper = () => {
 	useEffect(() => {
 		const sdh = new SubgraphDataHelper(currentValue);
 		setGIVTokenDistroHelper(new TokenDistroHelper(sdh.getGIVTokenDistro()));
+		setIsLoaded(currentValue.isLoaded as boolean);
 	}, [currentValue]);
-	return { givTokenDistroHelper };
+	return { givTokenDistroHelper, isLoaded };
 };
 
 export default useGIVTokenDistroHelper;
