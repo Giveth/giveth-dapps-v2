@@ -236,8 +236,8 @@ const Subtitle = styled(H6)`
 
 const SubtitleWithTooltip = styled.div`
 	display: flex;
-	flex-direction: row;
-	gap: 4px;
+	align-items: baseline;
+	gap: 10px;
 `;
 
 const TooltipContent = styled(Caption)`
@@ -249,9 +249,9 @@ const SubtitleH5 = styled(H5)`
 `;
 
 const LockedTable = styled.div`
-	min-width: 700px;
 	display: grid;
-	grid-template-columns: 2fr 2fr 1fr 2fr 2fr;
+	min-width: 500px;
+	grid-template-columns: 2fr 2.5fr 1.5fr 1fr 1.5fr;
 	overflow: auto;
 	max-height: 364px;
 	margin: 10px 0 0 0;

@@ -46,6 +46,7 @@ import {
 	ConnectWallet,
 	ConnectWalletDesc,
 	ConnectWalletButton,
+	GivAmount,
 } from './GIVpower.sc';
 import RocketImage from '../../../public/images/rocket.svg';
 import Growth from '../../../public/images/growth.svg';
@@ -90,7 +91,7 @@ export function TabPowerTop() {
 							{account ? (
 								<>
 									<Caption>Your GIVpower</Caption>
-									<Flex alignItems='baseline' gap='16px'>
+									<GivAmount>
 										<Image
 											src={RocketImage}
 											width='27'
@@ -102,7 +103,7 @@ export function TabPowerTop() {
 												givPower.balance,
 											) ?? 0}
 										</TitleBase>
-									</Flex>
+									</GivAmount>
 									{/*<Link href={Routes.Projects} passHref>*/}
 									{/*	<BoostProjectButton*/}
 									{/*		label='BOOST PROJECTS'*/}
