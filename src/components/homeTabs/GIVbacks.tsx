@@ -127,7 +127,11 @@ export const TabGIVbacksBottom = () => {
 	const { givTokenDistroHelper, isLoaded } = useGIVTokenDistroHelper();
 
 	useEffect(() => {
-		if (givTokenDistroHelper && isLoaded) {
+		if (
+			givTokenDistroHelper &&
+			isLoaded &&
+			givTokenDistroHelper.startTime.getTime() !== 0
+		) {
 			const now = getNowUnixMS();
 			const deltaT = now - givTokenDistroHelper.startTime.getTime();
 			const TwoWeek = 1_209_600_000;
