@@ -345,9 +345,10 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 										}
 									>
 										<GIVgardenTooltip>
-											While staking GIV in this pool, you
-											are also granted voting power (gGIV)
-											in the GIVgarden.
+											Staking GIV in this pool allows you
+											to support projects with GIVpower &
+											grants you voting power in Giveth
+											DAO (gGIV), in addition to the APR.
 										</GIVgardenTooltip>
 									</IconWithTooltip>
 								)}
