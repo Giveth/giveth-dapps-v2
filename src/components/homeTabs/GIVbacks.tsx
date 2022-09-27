@@ -122,7 +122,7 @@ export const TabGIVbacksTop = () => {
 
 export const TabGIVbacksBottom = () => {
 	const [round, setRound] = useState(0);
-	const [roundStartime, setRoundStartime] = useState(new Date());
+	const [roundStarTime, setRoundStarTime] = useState(new Date());
 	const [roundEndTime, setRoundEndTime] = useState(new Date());
 	const { givTokenDistroHelper, isLoaded } = useGIVTokenDistroHelper();
 
@@ -140,16 +140,18 @@ export const TabGIVbacksBottom = () => {
 			const TwoWeek = 1_209_600_000;
 			const _round = Math.floor(deltaT / TwoWeek) + 1;
 			setRound(_round);
-			const _rounStartTime = new Date(startTime);
-			_rounStartTime.setDate(startTime.getDate() + (_round - 1) * 14);
-			_rounStartTime.setHours(startTime.getHours());
-			_rounStartTime.setMinutes(startTime.getMinutes());
-			setRoundStartime(_rounStartTime);
-			const _roundEndTime = new Date(_rounStartTime);
-			_roundEndTime.setDate(_rounStartTime.getDate() + 14);
+			const _roundEndTime = new Date(startTime);
+			_roundEndTime.setDate(startTime.getDate() + _round * 14);
 			_roundEndTime.setHours(startTime.getHours());
 			_roundEndTime.setMinutes(startTime.getMinutes());
 			setRoundEndTime(_roundEndTime);
+			const _roundStartTime = new Date(_roundEndTime);
+			if (_round === 20) {
+				_roundStartTime.setDate(_roundEndTime.getDate() - 18);
+			} else {
+				_roundStartTime.setDate(_roundEndTime.getDate() - 14);
+			}
+			setRoundStarTime(_roundStartTime);
 		}
 	}, [givTokenDistroHelper]);
 
@@ -216,7 +218,7 @@ export const TabGIVbacksBottom = () => {
 										<P>
 											<NoWrap>
 												{isLoaded
-													? formatDate(roundStartime)
+													? formatDate(roundStarTime)
 													: '--'}
 											</NoWrap>
 										</P>
