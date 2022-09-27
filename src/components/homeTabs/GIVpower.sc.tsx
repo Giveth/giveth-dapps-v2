@@ -288,6 +288,16 @@ export const BoostProjectButton = styled(ButtonLink)`
 	min-width: 250px;
 	${mediaQueries.tablet} {
 		margin: 0;
+		min-width: unset;
+		span {
+			font-size: 13px;
+		}
+	}
+	${mediaQueries.laptopS} {
+		min-width: 250px;
+		span {
+			font-size: 1rem;
+		}
 	}
 `;
 
@@ -296,10 +306,12 @@ export const GivPowerCardContainer = styled(Flex)`
 	gap: 30px;
 	background: ${brandColors.giv[700]};
 	padding: 24px;
-	margin-bottom: 8px;
 	border-top-left-radius: 8px;
 	border-top-right-radius: 8px;
 	${mediaQueries.tablet} {
+		margin-bottom: 40px;
+	}
+	${mediaQueries.laptopS} {
 		margin-bottom: 0;
 	}
 `;
@@ -308,12 +320,6 @@ export const GivAmount = styled(Flex)`
 	align-items: baseline;
 	gap: 16px;
 	margin-bottom: 16px;
-	${mediaQueries.tablet} {
-		margin-bottom: 50px;
-	}
-	${mediaQueries.laptopS} {
-		margin-bottom: 16px;
-	}
 `;
 
 export const ConnectWallet = styled.div`
