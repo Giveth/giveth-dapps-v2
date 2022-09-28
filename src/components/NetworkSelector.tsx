@@ -44,7 +44,7 @@ export const NetworkSelector = () => {
 				<NetworkSelectorContainer
 					disabled={!givEconomySupportedNetworks.includes(chainId)}
 				>
-					<XDaiSelector
+					<Selector
 						isSelected={chainId === config.XDAI_NETWORK_NUMBER}
 						onClick={() =>
 							handleChangeNetwork(config.XDAI_NETWORK_NUMBER)
@@ -52,8 +52,8 @@ export const NetworkSelector = () => {
 					>
 						<IconGnosisChain size={24} />
 						<B>Gnosis Chain</B>
-					</XDaiSelector>
-					<EthSelector
+					</Selector>
+					<Selector
 						isSelected={
 							chainId === config.MAINNET_NETWORK_NUMBER ||
 							!givEconomySupportedNetworks.includes(chainId)
@@ -64,7 +64,7 @@ export const NetworkSelector = () => {
 					>
 						<IconEthereum size={24} />
 						<B>Ethereum</B>
-					</EthSelector>
+					</Selector>
 				</NetworkSelectorContainer>
 			) : (
 				'' // TODO: show connect your wallet
@@ -95,13 +95,6 @@ const Selector = styled(Flex)<ISelector>`
 	justify-content: center;
 	padding: 12px 24px;
 	gap: 8px;
-	${props => (props.isSelected ? `background: ${brandColors.giv[600]}` : '')}
-`;
-
-const XDaiSelector = styled(Selector)`
 	width: 50%;
-`;
-
-const EthSelector = styled(Selector)`
-	width: 50%;
+	background: ${props => (props.isSelected ? brandColors.giv[600] : '')};
 `;
