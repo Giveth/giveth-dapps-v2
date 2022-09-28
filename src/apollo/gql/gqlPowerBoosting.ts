@@ -93,10 +93,9 @@ export const FETCH_PROJECT_BOOSTINGS = gql`
 				id
 				userId
 				projectId
-				percentage
-				userPower
 				boostedPower
 				rank
+				round
 				user {
 					id
 					firstName

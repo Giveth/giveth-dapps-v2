@@ -39,7 +39,7 @@ const FETCH_HOME_PROJECTS_WITH_BOOST = gql`
 				projectPower {
 					powerRank
 					totalPower
-					updateTime
+					round
 				}
 			}
 			totalCount
@@ -138,7 +138,7 @@ const FETCH_ALL_PROJECTS_WITH_BOOST = gql`
 				projectPower {
 					powerRank
 					totalPower
-					updateTime
+					round
 				}
 			}
 			totalCount
@@ -256,7 +256,7 @@ export const FETCH_PROJECT_BY_SLUG_WITH_BOOST = gql`
 			projectPower {
 				powerRank
 				totalPower
-				updateTime
+				round
 			}
 		}
 	}
