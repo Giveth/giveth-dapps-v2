@@ -5,9 +5,10 @@ import { Web3ReactProvider } from '@web3-react/core';
 import { ApolloProvider } from '@apollo/client';
 import { ExternalProvider, Web3Provider } from '@ethersproject/providers';
 import NProgress from 'nprogress';
-
 import { useRouter } from 'next/router';
 import { Provider } from 'react-redux';
+import Script from 'next/script';
+import * as gtag from '@/lib/gtag';
 import { useApollo } from '@/apollo/apolloClient';
 import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
 import { FooterWrapper } from '@/components/Footer/FooterWrapper';
@@ -20,6 +21,8 @@ import ModalController from '@/components/controller/modal.ctrl';
 import PriceController from '@/components/controller/price.ctrl';
 import GeneralController from '@/components/controller/general.ctrl';
 import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
+import { GA_TRACKING_ID } from '@/lib/gtag';
+import { isProduction } from '@/configuration';
 import type { AppProps } from 'next/app';
 
 function getLibrary(provider: ExternalProvider) {
@@ -50,6 +53,21 @@ function MyApp({ Component, pageProps }: AppProps) {
 		};
 	}, [router]);
 
+	useEffect(() => {
+		if (isProduction) {
+			//google analytics on route change
+			const handleRouteChange = (url: URL) => {
+				gtag.pageview(url);
+			};
+			router.events.on('routeChangeComplete', handleRouteChange);
+			router.events.on('hashChangeComplete', handleRouteChange);
+			return () => {
+				router.events.off('routeChangeComplete', handleRouteChange);
+				router.events.off('hashChangeComplete', handleRouteChange);
+			};
+		}
+	}, [router.events]);
+
 	return (
 		<>
 			<Head>
@@ -78,6 +96,28 @@ function MyApp({ Component, pageProps }: AppProps) {
 				</ApolloProvider>
 			</Provider>
 			<Toaster containerStyle={{ top: '80px' }} />
+			{isProduction && (
+				<>
+					<Script
+						strategy='afterInteractive'
+						src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+					/>
+					<Script
+						id='gtag-init'
+						strategy='afterInteractive'
+						dangerouslySetInnerHTML={{
+							__html: `
+				  window.dataLayer = window.dataLayer || [];
+				  function gtag(){dataLayer.push(arguments);}
+				  gtag('js', new Date());
+				  gtag('config', '${GA_TRACKING_ID}', {
+					page_path: window.location.pathname,
+				  });
+			  `,
+						}}
+					/>
+				</>
+			)}
 		</>
 	);
 }
