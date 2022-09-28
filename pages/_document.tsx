@@ -6,6 +6,7 @@ import Document, {
 	NextScript,
 	DocumentContext,
 } from 'next/document';
+import { isProduction } from '@/configuration';
 
 export default class MyDocument extends Document {
 	static async getInitialProps(ctx: DocumentContext) {
@@ -39,6 +40,17 @@ export default class MyDocument extends Document {
 			<Html>
 				<Head>
 					<link rel='shortcut icon' href='/favicon.svg' />
+					{isProduction && (
+						<script
+							dangerouslySetInnerHTML={{
+								__html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+          `,
+							}}
+						/>
+					)}
 				</Head>
 				<body>
 					<Main />
