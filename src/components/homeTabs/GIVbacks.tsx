@@ -122,33 +122,36 @@ export const TabGIVbacksTop = () => {
 
 export const TabGIVbacksBottom = () => {
 	const [round, setRound] = useState(0);
-	const [roundStartime, setRoundStartime] = useState(new Date());
+	const [roundStarTime, setRoundStarTime] = useState(new Date());
 	const [roundEndTime, setRoundEndTime] = useState(new Date());
-	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
+	const { givTokenDistroHelper, isLoaded } = useGIVTokenDistroHelper();
 
 	useEffect(() => {
-		if (givTokenDistroHelper) {
+		if (
+			givTokenDistroHelper &&
+			isLoaded &&
+			givTokenDistroHelper.startTime.getTime() !== 0
+		) {
 			const now = getNowUnixMS();
-			const deltaT = now - givTokenDistroHelper.startTime.getTime();
+			const ROUND_20_OFFSET = 4; // At round 20 we changed the rounds from Fridays to Tuesdays
+			const startTime = new Date(givTokenDistroHelper.startTime);
+			startTime.setDate(startTime.getDate() + ROUND_20_OFFSET);
+			const deltaT = now - startTime.getTime();
 			const TwoWeek = 1_209_600_000;
 			const _round = Math.floor(deltaT / TwoWeek) + 1;
 			setRound(_round);
-			const _rounStartTime = new Date(givTokenDistroHelper.startTime);
-			_rounStartTime.setDate(
-				givTokenDistroHelper.startTime.getDate() + (_round - 1) * 14,
-			);
-			_rounStartTime.setHours(givTokenDistroHelper.startTime.getHours());
-			_rounStartTime.setMinutes(
-				givTokenDistroHelper.startTime.getMinutes(),
-			);
-			setRoundStartime(_rounStartTime);
-			const _roundEndTime = new Date(_rounStartTime);
-			_roundEndTime.setDate(_rounStartTime.getDate() + 14);
-			_roundEndTime.setHours(givTokenDistroHelper.startTime.getHours());
-			_roundEndTime.setMinutes(
-				givTokenDistroHelper.startTime.getMinutes(),
-			);
+			const _roundEndTime = new Date(startTime);
+			_roundEndTime.setDate(startTime.getDate() + _round * 14);
+			_roundEndTime.setHours(startTime.getHours());
+			_roundEndTime.setMinutes(startTime.getMinutes());
 			setRoundEndTime(_roundEndTime);
+			const _roundStartTime = new Date(_roundEndTime);
+			if (_round === 20) {
+				_roundStartTime.setDate(_roundEndTime.getDate() - 18);
+			} else {
+				_roundStartTime.setDate(_roundEndTime.getDate() - 14);
+			}
+			setRoundStarTime(_roundStartTime);
 		}
 	}, [givTokenDistroHelper]);
 
@@ -197,7 +200,10 @@ export const TabGIVbacksBottom = () => {
 						<Col xs={12} md={8}>
 							<RoundSection>
 								<RoundTitle>
-									GIVbacks <NoWrap>Round {round}</NoWrap>
+									GIVbacks{' '}
+									<NoWrap>
+										Round {isLoaded ? round : '--'}
+									</NoWrap>
 								</RoundTitle>
 								<RoundInfo>
 									<RoundInfoTallRow
@@ -211,9 +217,9 @@ export const TabGIVbacksBottom = () => {
 										</P>
 										<P>
 											<NoWrap>
-												{givTokenDistroHelper
-													? formatDate(roundStartime)
-													: '-'}
+												{isLoaded
+													? formatDate(roundStarTime)
+													: '--'}
 											</NoWrap>
 										</P>
 									</RoundInfoTallRow>
@@ -227,9 +233,9 @@ export const TabGIVbacksBottom = () => {
 										</P>
 										<P>
 											<NoWrap>
-												{givTokenDistroHelper
+												{isLoaded
 													? formatDate(roundEndTime)
-													: '-'}
+													: '--'}
 											</NoWrap>
 										</P>
 									</RoundInfoTallRow>
