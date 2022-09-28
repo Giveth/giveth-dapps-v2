@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { B, brandColors } from '@giveth/ui-design-system';
+import { B, brandColors, mediaQueries } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 
 import { switchNetwork } from '@/lib/wallet';
@@ -97,4 +97,12 @@ const Selector = styled(Flex)<ISelector>`
 	gap: 8px;
 	width: 50%;
 	background: ${props => (props.isSelected ? brandColors.giv[600] : '')};
+	& > div {
+		display: none;
+	}
+	${mediaQueries.mobileL} {
+		& > div {
+			display: block;
+		}
+	}
 `;
