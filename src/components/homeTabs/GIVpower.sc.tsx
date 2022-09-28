@@ -304,6 +304,18 @@ export const GivPowerCardContainer = styled(Flex)`
 	}
 `;
 
+export const GivAmount = styled(Flex)`
+	align-items: baseline;
+	gap: 16px;
+	margin-bottom: 16px;
+	${mediaQueries.tablet} {
+		margin-bottom: 50px;
+	}
+	${mediaQueries.laptopS} {
+		margin-bottom: 16px;
+	}
+`;
+
 export const ConnectWallet = styled.div`
 	/* padding: 12px; */
 `;

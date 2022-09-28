@@ -9,6 +9,7 @@ import { useAppSelector } from '@/features/hooks';
 import { homeMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
+import { IS_BOOSTING_ENABLED } from '@/configuration';
 
 const projectsToFetch = 12;
 
@@ -20,7 +21,12 @@ interface IHomeRoute {
 const fetchProjects = async (userId: string | undefined = undefined) => {
 	const variables: any = {
 		limit: projectsToFetch,
-		orderBy: { field: gqlEnums.GIVPOWER, direction: EDirection.DESC },
+		orderBy: {
+			field: IS_BOOSTING_ENABLED
+				? gqlEnums.GIVPOWER
+				: gqlEnums.QUALITYSCORE,
+			direction: EDirection.DESC,
+		},
 	};
 
 	if (userId) {

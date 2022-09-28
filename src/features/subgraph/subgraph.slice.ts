@@ -22,18 +22,17 @@ export const defaultSubgraphValues: ISubgraphState = {
 	userStakedPositions: [],
 	allPositions: [],
 	networkNumber: config.MAINNET_NETWORK_NUMBER,
+	isLoaded: false,
 };
 
 const initialState: {
 	currentValues: ISubgraphState;
 	mainnetValues: ISubgraphState;
 	xDaiValues: ISubgraphState;
-	isLoaded: boolean;
 } = {
 	currentValues: defaultSubgraphValues,
 	mainnetValues: defaultSubgraphValues,
 	xDaiValues: defaultSubgraphValues,
-	isLoaded: false,
 };
 
 export const subgraphSlice = createSlice({
@@ -43,7 +42,6 @@ export const subgraphSlice = createSlice({
 	extraReducers: builder => {
 		builder
 			.addCase(fetchCurrentInfoAsync.fulfilled, (state, action) => {
-				state.isLoaded = true;
 				state.currentValues = action.payload.response;
 				if (action.payload.chainId === config.MAINNET_NETWORK_NUMBER) {
 					state.mainnetValues = action.payload.response;
