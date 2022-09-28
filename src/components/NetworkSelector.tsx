@@ -44,7 +44,7 @@ export const NetworkSelector = () => {
 				<NetworkSelectorContainer
 					disabled={!givEconomySupportedNetworks.includes(chainId)}
 				>
-					<XDaiSelecor
+					<XDaiSelector
 						isSelected={chainId === config.XDAI_NETWORK_NUMBER}
 						onClick={() =>
 							handleChangeNetwork(config.XDAI_NETWORK_NUMBER)
@@ -52,7 +52,7 @@ export const NetworkSelector = () => {
 					>
 						<IconGnosisChain size={24} />
 						<B>Gnosis Chain</B>
-					</XDaiSelecor>
+					</XDaiSelector>
 					<EthSelector
 						isSelected={
 							chainId === config.MAINNET_NETWORK_NUMBER ||
@@ -98,7 +98,7 @@ const Selector = styled(Flex)<ISelector>`
 	${props => (props.isSelected ? `background: ${brandColors.giv[600]}` : '')}
 `;
 
-const XDaiSelecor = styled(Selector)`
+const XDaiSelector = styled(Selector)`
 	width: 50%;
 `;
 
