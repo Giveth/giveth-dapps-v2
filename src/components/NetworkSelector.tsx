@@ -15,7 +15,7 @@ interface NetworkSelectorProps {
 	disabled?: boolean;
 }
 
-interface ISelecetor {
+interface ISelector {
 	isSelected: boolean;
 }
 
@@ -90,7 +90,7 @@ const NetworkSelectorContainer = styled(Flex)<NetworkSelectorProps>`
 	pointer-events: ${props => (props.disabled ? 'none' : 'auto')};
 `;
 
-const Selector = styled(Flex)<ISelecetor>`
+const Selector = styled(Flex)<ISelector>`
 	align-items: center;
 	justify-content: center;
 	padding: 12px 24px;
