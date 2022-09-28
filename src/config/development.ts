@@ -56,6 +56,8 @@ const config: EnvConfig = {
 			BUY_LINK:
 				'https://app.uniswap.org/#/swap?outputCurrency=0x29434A25abd94AE882aA883eea81585Aaa5b078D',
 			discontinued: SEPT_8TH_2022,
+			active: false,
+			archived: true,
 		},
 
 		nodeUrl: 'https://goerli.infura.io/v3/' + INFURA_API_KEY,
@@ -72,7 +74,8 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://app.uniswap.org/#/add/v2/0xA2470F25bb8b53Bd3924C7AC0C68d32BF2aBd5be/0xdc31Ee1784292379Fbb2964b3B9C4124D8F89C60?chain=goerli',
 				unit: 'LP',
-				active: true,
+				active: false,
+				archived: true,
 				discontinued: SEPT_8TH_2022,
 			},
 			{
@@ -172,7 +175,7 @@ const config: EnvConfig = {
 		blockExplorerName: ['Blockscout'],
 		blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/aminlatifi/giveconomy-xdai-deployment-seven',
+			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-xdai-staging',
 
 		TOKEN_ADDRESS: '0x83a8eea6427985C523a0c4d9d3E62C051B6580d3',
 		gGIV_ADDRESS: '0x4Bee761229AD815Cc64461783580F629dA0f0350',
@@ -202,7 +205,7 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://app.honeyswap.org/#/add/0x83a8eea6427985C523a0c4d9d3E62C051B6580d3/0x69F79C9eA174d4659B18c7993c7EFbBbB58cF068',
 				unit: 'LP',
-				active: true,
+				active: false,
 				archived: true,
 			},
 			{
@@ -216,7 +219,8 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://app.sushi.com/add/0x83a8eea6427985C523a0c4d9d3E62C051B6580d3/0x736a98655049433f79dCcF5e54b887E8890b63D1',
 				unit: 'LP',
-				active: true,
+				active: false,
+				archived: true,
 				discontinued: SEPT_8TH_2022,
 			},
 			{
@@ -230,7 +234,8 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://app.honeyswap.org/#/add/0x83a8eea6427985C523a0c4d9d3E62C051B6580d3/0x97c4dD5cE204b8c1F2f3B8fBfBBDC771d867d18c',
 				unit: 'LP',
-				active: true,
+				active: false,
+				archived: true,
 				farmStartTimeMS: 1655997000000,
 				discontinued: SEPT_8TH_2022,
 			},

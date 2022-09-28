@@ -53,6 +53,8 @@ const config: EnvConfig = {
 			BUY_LINK:
 				'https://app.uniswap.org/#/swap?outputCurrency=0x900db999074d9277c5da2a43f252d74366230da0',
 			discontinued: SEPT_8TH_2022,
+			active: false,
+			archived: true,
 		},
 
 		nodeUrl: 'https://mainnet.infura.io/v3/' + INFURA_API_KEY,
@@ -70,8 +72,9 @@ const config: EnvConfig = {
 					'https://app.uniswap.org/#/add/v2/0x6B175474E89094C44Da98b954EedeAC495271d0F/0x900dB999074d9277c5DA2A43F252D74366230DA0?chain=mainnet',
 				unit: 'LP',
 				farmStartTimeMS: 1651345200000,
-				active: true,
+				active: false,
 				discontinued: SEPT_8TH_2022,
+				archived: true,
 			},
 			{
 				network: MAINNET_NETWORK_NUMBER,
@@ -235,8 +238,9 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://gnosis.sushi.com/add/0x6A023CCd1ff6F2045C3309768eAd9E68F978f6e1/0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 				unit: 'LP',
-				active: true,
+				active: false,
 				discontinued: SEPT_8TH_2022,
+				archived: true,
 			},
 			{
 				network: XDAI_NETWORK_NUMBER,
@@ -249,9 +253,10 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://app.honeyswap.org/#/add/0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75/xdai',
 				unit: 'LP',
-				active: true,
+				active: false,
 				discontinued: SEPT_8TH_2022, // change this to  archived: true when it's over
 				farmStartTimeMS: 1656086400000,
+				archived: true,
 			},
 		],
 

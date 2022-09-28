@@ -145,7 +145,6 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 			}
 		}
 	};
-
 	const fetchProjectReaction = useCallback(async () => {
 		if (user?.id && id) {
 			// Already fetched
