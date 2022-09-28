@@ -89,6 +89,7 @@ export const GIVstreamProgressContainer = styled.div`
 	border-radius: 8px;
 	padding: 28px 33px;
 	margin: 40px 0 64px;
+	overflow: hidden;
 `;
 
 export const GsPTitleRow = styled(Flex)``;

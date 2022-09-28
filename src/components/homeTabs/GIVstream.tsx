@@ -280,7 +280,7 @@ export const GIVstreamProgress: FC<IGIVstreamProgressProps> = ({
 					<H6>GIViverse Expansion</H6>
 					<IconWithTooltip
 						icon={<IconHelp size={16} />}
-						direction={'right'}
+						direction={'bottom'}
 					>
 						<GsPTooltip>
 							Liquid GIV that has already flowed out of the
