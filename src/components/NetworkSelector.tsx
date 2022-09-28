@@ -80,7 +80,6 @@ export const NetworkSelector = () => {
 };
 
 const NetworkSelectorContainer = styled(Flex)<NetworkSelectorProps>`
-	width: 360px;
 	height: 48px;
 	border-radius: 88px;
 	border: 1px solid ${brandColors.giv[600]};
@@ -88,6 +87,9 @@ const NetworkSelectorContainer = styled(Flex)<NetworkSelectorProps>`
 	cursor: pointer;
 	opacity: ${props => (props.disabled ? '0.2' : '1')};
 	pointer-events: ${props => (props.disabled ? 'none' : 'auto')};
+	${mediaQueries.mobileL} {
+		width: 360px;
+	}
 `;
 
 const Selector = styled(Flex)<ISelector>`
