@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 import {
-	D1,
 	H2,
 	H4,
 	P,
@@ -18,6 +17,7 @@ import {
 	TopInnerContainer,
 	BottomContainer,
 	EnhancedRewardCard,
+	MobileD1,
 } from './commons';
 import { Flex } from '../styled-components/Flex';
 import { DataBox } from '../DataBox';
@@ -43,7 +43,7 @@ export const TitleCol = styled(Col)`
 	position: relative;
 `;
 
-export const GSTitle = styled(D1)`
+export const GSTitle = styled(MobileD1)`
 	margin-top: 60px;
 	margin-bottom: 24px;
 `;
