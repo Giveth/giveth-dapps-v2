@@ -12,6 +12,16 @@ interface IGIVPowerHeader {
 }
 
 const GIVPowerHeader: FC<IGIVPowerHeader> = ({ projectPower }) => {
+	const handlePowerRank = () => {
+		if (projectPower?.totalPower === 0) {
+			return '--';
+		} else if (projectPower?.powerRank) {
+			return projectPower?.powerRank;
+		} else {
+			return '--';
+		}
+	};
+
 	return (
 		<Container>
 			<ColStyled xs={8} sm={7}>
@@ -25,7 +35,7 @@ const GIVPowerHeader: FC<IGIVPowerHeader> = ({ projectPower }) => {
 			</ColStyled>
 			<ColStyled xs={4} sm={5}>
 				<Subline>PROJECT RANK</Subline>
-				<H2 weight={700}>#{projectPower?.powerRank || '--'}</H2>
+				<H2 weight={700}>#{handlePowerRank()}</H2>
 			</ColStyled>
 		</Container>
 	);
