@@ -176,16 +176,23 @@ export const HistoryLoading = styled.div`
 	z-index: 1;
 `;
 
+export const GridWrapper = styled.div`
+	overflow-x: auto;
+	padding-bottom: 10px;
+`;
+
 export const Grid = styled.div`
 	display: grid;
-	grid-template-columns: 1fr 2fr 2fr 1fr;
+	grid-template-columns: 160px 1fr 160px 160px;
 	border-bottom: 2px solid ${brandColors.giv[500]};
+	width: 100%;
+	min-width: 600px;
 	& > span {
 		padding: 8px 4px;
-		// border-left: 1px solid black;
-		// border-bottom: 1px solid black;
-		text-overflow: ellipsis;
-		overflow: hidden;
+		overflow-x: hidden;
+	}
+	${mediaQueries.tablet} {
+		grid-template-columns: 1fr 2fr 2fr 1fr;
 	}
 `;
 
