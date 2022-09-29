@@ -235,6 +235,6 @@ export const WrongNetworkContainer = styled(Flex)`
 export const GIVgardenTooltip = styled.div`
 	color: ${neutralColors.gray[100]};
 	text-align: center;
-	width: 120px;
+	width: 150px;
 	font-size: 0.8em;
 `;
