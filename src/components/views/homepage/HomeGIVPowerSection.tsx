@@ -1,9 +1,8 @@
+import Link from 'next/link';
 import styled from 'styled-components';
-
 import { HomeContainer } from '@/components/views/homepage/Home.sc';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Shadow } from '@/components/styled-components/Shadow';
-import Link from 'next/link';
 
 const HomePurpleSection = () => {
 	return (
