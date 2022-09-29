@@ -208,6 +208,7 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 							<ProjectGIVPowerIndex
 								projectId={id}
 								projectPower={projectPower}
+								isAdmin={isAdmin}
 							/>
 						)}
 					</Col>
