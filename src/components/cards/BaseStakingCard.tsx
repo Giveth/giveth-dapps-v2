@@ -430,15 +430,20 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 														{isZeroGIVStacked
 															? `This is the range of possible APRs for staked and locked GIV. Lock your GIV for longer to earn greater rewards.`
 															: `This is the weighted average APR for your staked (and locked) GIV. The full range of APRs for staking and/or locking is ${
+																	// Removing this as it was showing a wrong value when user has locked GIV, why are we doing this comparison?
+																	// apr &&
+																	// formatEthHelper(
+																	// 	isLocked
+																	// 		? avgAPR(
+																	// 				apr.effectiveAPR,
+																	// 				stakedLpAmount.toString(),
+																	// 				userGIVPowerBalance.balance,
+																	// 		  )
+																	// 		: apr.effectiveAPR,
+																	// )
 																	apr &&
 																	formatEthHelper(
-																		isLocked
-																			? avgAPR(
-																					apr.effectiveAPR,
-																					stakedLpAmount.toString(),
-																					userGIVPowerBalance.balance,
-																			  )
-																			: apr.effectiveAPR,
+																		apr.effectiveAPR,
 																	)
 															  }%-${
 																	apr &&
