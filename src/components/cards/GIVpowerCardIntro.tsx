@@ -61,11 +61,14 @@ const GIVpowerCardIntro: FC<IGIVpowerCardIntro> = ({ setState }) => {
 				label='Boost projects with GIVpower'
 				href={Routes.Projects}
 			/> */}
-				<LearnMoreButton
+				{
+					// Commenting for now, we may need it later
+				}
+				{/* <LearnMoreButton
 					label='locked GIV details'
 					buttonType='texty'
 					onClick={() => setShowLockDetailModal(true)}
-				/>
+				/> */}
 				<LearnMoreButton
 					label='Learn More'
 					onClick={() => window.open(links.GIVPOWER_DOC)}
