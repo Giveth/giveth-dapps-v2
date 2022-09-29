@@ -99,6 +99,8 @@ const LockModal: FC<ILockModalProps> = ({
 		>
 			<StakeModalContainer>
 				<StakeInnerModal>
+					<h6>Amount:{amount}</h6>
+					<h6>{typeof amount}</h6>
 					{lockState === ELockState.LOCK && (
 						<>
 							<SectionTitle weight={700}>
