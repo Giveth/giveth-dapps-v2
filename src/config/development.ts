@@ -278,6 +278,28 @@ const config: EnvConfig = {
 				farmStartTimeMS: 1646306818206,
 				active: true,
 			},
+			{
+				network: XDAI_NETWORK_NUMBER,
+				POOL_ADDRESS: '0x0714A2fE9574F591a4ed3fD03b63714e8681fBb7',
+				LM_ADDRESS: '0x93c40bCA6a854B2190a054136a316C4Df7f89f10',
+				type: StakingType.HONEYSWAP_FOX_XDAI,
+				platform: StakingPlatform.HONEYSWAP,
+				title: 'FOX / xDAI',
+				description: '50% FOX, 50% xDAI',
+				provideLiquidityLink:
+					'Provide liquidity: https://app.honeyswap.org/#/add/0x18cE354571ba71bC7b3d633b254954C5A9cfC195/0x97c4dD5cE204b8c1F2f3B8fBfBBDC771d867d18c',
+				unit: 'LP',
+				regenStreamType: StreamType.FOX,
+				regenFarmType: RegenFarmType.FOX_HNY,
+				introCard: {
+					title: 'ShapeShift DAO',
+					description:
+						'ShapeShift is the free and open-source one-stop-shop for cross-chain DeFi. Buy, sell, send, receive, trade, and earn yield on your crypto across a growing number of protocols and chains with no added fees ever. FOX is the governance token of the ShapeShift DAO.',
+					link: 'https://shapeshift.com/',
+				},
+				farmStartTimeMS: 1646306818206,
+				active: true,
+			},
 		],
 	},
 };
