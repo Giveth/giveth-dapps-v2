@@ -48,6 +48,7 @@ import {
 	ConnectWalletButton,
 	GivAmount,
 	BoostProjectButton,
+	BenefitsCardContainer,
 } from './GIVpower.sc';
 import RocketImage from '../../../public/images/rocket.svg';
 import Growth from '../../../public/images/growth.svg';
@@ -236,42 +237,47 @@ export function TabPowerBottom() {
 							<BenefitsCardHeading weight={700}>
 								For GIVers
 							</BenefitsCardHeading>
-							<BenefitsCardTextContainer>
-								<QuoteText size='small'>
-									Stake GIV to get GIVpower & earn rewards.
-								</QuoteText>
-								<QuoteText size='small'>
-									Lock your GIV to increase your rewards
-									multiplier.
-								</QuoteText>
-								<QuoteText size='small'>
-									Soon: Donate to top-ranked projects to get
-									extra GIVbacks.
-								</QuoteText>
-								<br />
+							<BenefitsCardContainer>
+								<BenefitsCardTextContainer>
+									<QuoteText size='small'>
+										Stake GIV to get GIVpower & earn
+										rewards.
+									</QuoteText>
+									<QuoteText size='small'>
+										Lock your GIV to increase your rewards
+										multiplier.
+									</QuoteText>
+									<QuoteText size='small'>
+										Soon: Donate to top-ranked projects to
+										get extra GIVbacks.
+									</QuoteText>
+									<br />
+								</BenefitsCardTextContainer>
 								<Link href={Routes.GIVfarm} passHref>
 									<CardBottomText>Stake GIV</CardBottomText>
 								</Link>
-							</BenefitsCardTextContainer>
+							</BenefitsCardContainer>
 						</BenefitsCard>
 						<BenefitsCard>
 							<BenefitsCardHeading weight={700}>
 								For Projects
 							</BenefitsCardHeading>
 							<BenefitsCardTextContainer>
-								<QuoteText size='small'>
-									Soon: Fire up your community to use GIVpower
-									& help improve your rank.
-								</QuoteText>
-								<QuoteText size='small'>
-									The higher your rank, the more GIVbacks your
-									donors will receive.
-								</QuoteText>
-								<QuoteText size='small'>
-									Top-ranked projects will eventually get
-									funding from the Giveth Matching Pool.
-								</QuoteText>
-								<br />
+								<BenefitsCardTextContainer>
+									<QuoteText size='small'>
+										Soon: Fire up your community to use
+										GIVpower & help improve your rank.
+									</QuoteText>
+									<QuoteText size='small'>
+										The higher your rank, the more GIVbacks
+										your donors will receive.
+									</QuoteText>
+									<QuoteText size='small'>
+										Top-ranked projects will eventually get
+										funding from the Giveth Matching Pool.
+									</QuoteText>
+									<br />
+								</BenefitsCardTextContainer>
 								<CardBottomText>Coming Soon</CardBottomText>
 							</BenefitsCardTextContainer>
 						</BenefitsCard>

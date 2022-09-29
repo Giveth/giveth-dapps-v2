@@ -87,8 +87,7 @@ export const FeaturesCardHeading = styled(H1)`
 
 export const FeaturesCardSubheading = styled(QuoteText)`
 	max-width: 750px;
-	margin: auto;
-	margin-top: 8px;
+	margin: 8px auto;
 `;
 
 export const FeaturesCardItemsContainer = styled.div`
@@ -117,8 +116,7 @@ export const FeaturesCardItem = styled.div`
 
 export const CardBottomText = styled(ButtonText)`
 	color: ${brandColors.mustard[500]};
-	margin-top: 3px;
-	margin: 0 auto;
+	margin: 3px auto 0;
 `;
 
 export const CenteredHeader = styled(H2)`
@@ -153,9 +151,14 @@ export const BenefitsCard = styled.div`
 		padding: 60px;
 	}
 	${mediaQueries.desktop} {
-		display: row;
 		width: 50%;
 	}
+`;
+
+export const BenefitsCardContainer = styled(Flex)`
+	flex-direction: column;
+	justify-content: space-between;
+	height: 100%;
 `;
 
 export const BenefitsCardTextContainer = styled.div`
@@ -164,8 +167,6 @@ export const BenefitsCardTextContainer = styled.div`
 	gap: 20px;
 	margin: auto;
 	${mediaQueries.desktop} {
-		display: row;
-		width: 50%;
 		width: 360px;
 	}
 `;
@@ -189,7 +190,7 @@ export const ArcMustardTop = styled(Arc)`
 	right: -300px;
 	display: none;
 	${mediaQueries.laptopS} {
-		top: 0px;
+		top: 0;
 		display: unset;
 	}
 	z-index: 0;
