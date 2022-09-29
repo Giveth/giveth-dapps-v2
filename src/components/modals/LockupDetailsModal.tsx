@@ -87,8 +87,8 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 								align='right'
 							>
 								<TooltipContent>
-									The average annual rate of return for this
-									set of staked GIV.
+									The minimum APR for staked (not locked) GIV.
+									Lock your GIV to increase your rewards.
 								</TooltipContent>
 							</IconWithTooltip>
 						</CloseText>
