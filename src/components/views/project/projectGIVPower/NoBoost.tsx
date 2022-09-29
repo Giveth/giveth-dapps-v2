@@ -1,13 +1,15 @@
 import styled from 'styled-components';
 import { QuoteText } from '@giveth/ui-design-system';
 
-const NoBoost = () => {
+const NoBoost = ({ isAdmin }: { isAdmin: boolean }) => {
 	return (
 		<Wrapper size='small'>
 			<div>This project hasn't received any boosts yet!</div>
 			<div>
-				Share this project on social media and ask your friends for a
-				boost!
+				{isAdmin
+					? `Share this project on social media and ask your friends
+				for a boost!`
+					: `Be the first one to boost this project.`}
 			</div>
 		</Wrapper>
 	);
