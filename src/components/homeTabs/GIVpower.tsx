@@ -48,6 +48,7 @@ import {
 	ConnectWalletButton,
 	GivAmount,
 	BoostProjectButton,
+	BoostLinkContainer,
 } from './GIVpower.sc';
 import RocketImage from '../../../public/images/rocket.svg';
 import Growth from '../../../public/images/growth.svg';
@@ -106,13 +107,18 @@ export function TabPowerTop() {
 										</TitleBase>
 									</GivAmount>
 									{IS_BOOSTING_ENABLED && (
-										<Link href={Routes.Projects} passHref>
-											<BoostProjectButton
-												label='BOOST PROJECTS'
-												size='large'
-												linkType='primary'
-											/>
-										</Link>
+										<BoostLinkContainer>
+											<Link
+												href={Routes.Projects}
+												passHref
+											>
+												<BoostProjectButton
+													label='BOOST PROJECTS'
+													size='large'
+													linkType='primary'
+												/>
+											</Link>
+										</BoostLinkContainer>
 									)}
 								</>
 							) : (
@@ -151,8 +157,8 @@ export function TabPowerBottom() {
 					<HeadingTextContainer>
 						<QuoteText size='small'>
 							Support verified projects using “Boost”. Projects
-							backed by GIVpower will benefit from matching funds
-							& more GIVbacks for their donors.
+							backed by GIVpower will benefit from more GIVbacks
+							for their donors and eventually, matching funds.
 						</QuoteText>
 					</HeadingTextContainer>
 					<LearnMoreButton
@@ -271,12 +277,12 @@ export function TabPowerBottom() {
 									improve your rank.
 								</QuoteText>
 								<QuoteText size='small'>
-									Top-ranked projects get funding from the
-									Giveth Matching Pool.
-								</QuoteText>
-								<QuoteText size='small'>
 									The higher your rank, the more GIVbacks your
 									donors receive.
+								</QuoteText>
+								<QuoteText size='small'>
+									Top-ranked projects get funding from the
+									Giveth Matching Pool.
 								</QuoteText>
 								<br />
 								<Link href={Routes.Projects} passHref>

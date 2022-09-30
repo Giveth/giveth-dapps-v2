@@ -240,6 +240,9 @@ export const Circle = styled.div<{ size: number }>`
 		height: ${props => props.size}px;
 	}
 `;
+export const BoostLinkContainer = styled.div`
+	margin-bottom: 10px;
+`;
 
 export const GivpowerCTAContainer = styled.div`
 	background-image: url('/images/backgrounds/giv-outline.svg');
@@ -284,7 +287,7 @@ export const GivpowerCTAButtonOutlined = styled(OutlineLinkButton)`
 `;
 
 export const BoostProjectButton = styled(ButtonLink)`
-	margin: 0 auto;
+	margin: 0 auto 10px;
 	min-width: 250px;
 	${mediaQueries.tablet} {
 		margin: 0;
@@ -304,6 +307,7 @@ export const GivPowerCardContainer = styled(Flex)`
 	}
 `;
 
+// remove margin when boosting deployment goes to production
 export const GivAmount = styled(Flex)`
 	align-items: baseline;
 	gap: 16px;
