@@ -49,6 +49,7 @@ import {
 	GivAmount,
 	BoostProjectButton,
 	BoostLinkContainer,
+	CaptionStyled,
 } from './GIVpower.sc';
 import RocketImage from '../../../public/images/rocket.svg';
 import Growth from '../../../public/images/growth.svg';
@@ -75,7 +76,7 @@ export function TabPowerTop() {
 		<GIVpowerTopContainer>
 			<GIVpowerContainer>
 				<Row style={{ alignItems: 'flex-end' }}>
-					<Col xs={12} sm={7} xl={8}>
+					<Col xs={12} sm={8}>
 						<Flex alignItems='baseline' gap='16px'>
 							<Title>GIVpower</Title>
 							{/* <IconGIVFarm size={64} /> */}
@@ -90,7 +91,7 @@ export function TabPowerTop() {
 							Use GIV to boost projects to new heights!
 						</Subtitle>
 					</Col>
-					<Col xs={12} sm={5} xl={4}>
+					<Col xs={12} sm={4}>
 						<GivPowerCardContainer>
 							{account ? (
 								<>
@@ -108,6 +109,11 @@ export function TabPowerTop() {
 									</GivAmount>
 									{IS_BOOSTING_ENABLED && (
 										<BoostLinkContainer>
+											{hasZeroGivPower && (
+												<CaptionStyled medium>
+													Stake GIV to get GIVpower!
+												</CaptionStyled>
+											)}
 											<Link
 												href={
 													hasZeroGivPower
