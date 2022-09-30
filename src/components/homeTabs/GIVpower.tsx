@@ -67,6 +67,8 @@ export function TabPowerTop() {
 		useAppSelector(state => state.subgraph.xDaiValues),
 	);
 	const givPower = sdh.getUserGIVPowerBalance();
+	const givPowerFormatted = formatWeiHelper(givPower.balance);
+	const hasZeroGivPower = givPowerFormatted === '0';
 	const dispatch = useAppDispatch();
 
 	return (
@@ -101,19 +103,25 @@ export function TabPowerTop() {
 											alt='givpower'
 										/>
 										<TitleBase>
-											{formatWeiHelper(
-												givPower.balance,
-											) ?? 0}
+											{givPowerFormatted ?? 0}
 										</TitleBase>
 									</GivAmount>
 									{IS_BOOSTING_ENABLED && (
 										<BoostLinkContainer>
 											<Link
-												href={Routes.Projects}
+												href={
+													hasZeroGivPower
+														? Routes.GIVfarm
+														: Routes.Projects
+												}
 												passHref
 											>
 												<BoostProjectButton
-													label='BOOST PROJECTS'
+													label={
+														hasZeroGivPower
+															? 'STAKE FOR GIVPOWER'
+															: 'BOOST PROJECTS'
+													}
 													size='large'
 													linkType='primary'
 												/>
