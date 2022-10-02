@@ -93,7 +93,6 @@ export interface IntroCardConfig {
 }
 
 export interface RegenPoolStakingConfig extends SimplePoolStakingConfig {
-	regenStreamType: StreamType;
 	regenFarmType: RegenFarmType;
 }
 
@@ -110,6 +109,7 @@ export interface RegenStreamConfig {
 	rewardTokenSymbol: string;
 	// For price purpose
 	tokenAddressOnUniswapV2: string;
+	farms: RegenPoolStakingConfig[];
 }
 
 export interface BasicNetworkConfig {
@@ -140,7 +140,6 @@ export interface BasicNetworkConfig {
 	uniswapV2Subgraph: string;
 
 	regenStreams: RegenStreamConfig[];
-	regenFarms: RegenPoolStakingConfig[];
 }
 
 interface MainnetNetworkConfig extends BasicNetworkConfig {
