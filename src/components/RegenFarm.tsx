@@ -2,12 +2,13 @@ import React, { FC } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { givEconomySupportedNetworks } from '@/lib/constants/constants';
 import StakingPoolCard from './cards/StakingPoolCard';
-import { DAOContainer } from './GIVfrens.sc';
+import { DAOChangeNetwork, DAOContainer } from './GIVfrens.sc';
 import { Row, Col } from './Grid';
 import { PoolRow } from './homeTabs/GIVfarm.sc';
 import { RegenStreamCard } from './RegenStreamCard';
 import config from '@/configuration';
 import { RegenFarmConfig } from '@/types/config';
+import { DAOChangeNetworkModal } from './DAOChangeNetworkModal';
 
 interface IRegenFarmProps {
 	regenFarm: RegenFarmConfig;
@@ -44,7 +45,7 @@ export const RegenFarm: FC<IRegenFarmProps> = ({ regenFarm }) => {
 						)}
 					</Col>
 				</Row>
-				{/* {chainId !== config.MAINNET_NETWORK_NUMBER &&
+				{chainId !== config.MAINNET_NETWORK_NUMBER &&
 					chainId !== config.XDAI_NETWORK_NUMBER && (
 						<>
 							<DAOChangeNetwork />
@@ -52,7 +53,7 @@ export const RegenFarm: FC<IRegenFarmProps> = ({ regenFarm }) => {
 								network={config.MAINNET_NETWORK_NUMBER}
 							/>
 						</>
-					)} */}
+					)}
 			</DAOContainer>
 		</PoolRow>
 	);
