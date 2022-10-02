@@ -139,17 +139,21 @@ const ProjectCard = (props: IProjectCard) => {
 								</Flex>
 							)}
 							{/* // TODO: Boosting - remove this for boosting launch */}
-							{IS_BOOSTING_ENABLED && projectPower?.powerRank && (
-								<GivpowerRankContainer
-									gap='8px'
-									alignItems='center'
-								>
-									<IconRocketInSpace16
-										color={neutralColors.gray[700]}
-									/>
-									<B>#{projectPower?.powerRank || '--'}</B>
-								</GivpowerRankContainer>
-							)}
+							{IS_BOOSTING_ENABLED &&
+								projectPower?.powerRank &&
+								projectPower.totalPower !== 0 && (
+									<GivpowerRankContainer
+										gap='8px'
+										alignItems='center'
+									>
+										<IconRocketInSpace16
+											color={neutralColors.gray[700]}
+										/>
+										<B>
+											#{projectPower?.powerRank || '--'}
+										</B>
+									</GivpowerRankContainer>
+								)}
 						</Flex>
 					</>
 					<ActionButtons>
