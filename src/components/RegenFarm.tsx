@@ -25,6 +25,7 @@ export const RegenFarm: FC<IRegenFarmProps> = ({ regenFarm }) => {
 						<Col key={idx} xs={12} sm={6} lg={4}>
 							<StakingPoolCard
 								poolStakingConfig={poolStakingConfig}
+								regenStreamConfig={regenFarm}
 							/>
 						</Col>
 					))}
