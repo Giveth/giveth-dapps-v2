@@ -1,6 +1,9 @@
 import React, { FC } from 'react';
 import { useWeb3React } from '@web3-react/core';
-import { givEconomySupportedNetworks } from '@/lib/constants/constants';
+import {
+	givEconomySupportedNetworks,
+	regenFarmStreamCardCol,
+} from '@/lib/constants/constants';
 import StakingPoolCard from './cards/StakingPoolCard';
 import { DAOChangeNetwork, DAOContainer } from './GIVfrens.sc';
 import { Row, Col } from './Grid';
@@ -30,7 +33,11 @@ export const RegenFarm: FC<IRegenFarmProps> = ({ regenFarm }) => {
 							/>
 						</Col>
 					))}
-					<Col xs={12} lg={4}>
+					<Col
+						xs={12}
+						sm={regenFarmStreamCardCol.sm[pools.length]} // TODO: use mod()
+						lg={regenFarmStreamCardCol.lg[pools.length]} // TODO: use mod()
+					>
 						{regenFarm && (
 							<RegenStreamCard
 								streamConfig={regenFarm}
