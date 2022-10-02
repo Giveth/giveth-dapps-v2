@@ -18,10 +18,7 @@ import {
 import { StakeState } from '@/lib/staking';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import type {
-	RegenStreamConfig,
-	SimplePoolStakingConfig,
-} from '@/types/config';
+import type { RegenFarmConfig, SimplePoolStakingConfig } from '@/types/config';
 
 const loadingAnimationOptions = {
 	loop: true,
@@ -34,7 +31,7 @@ const loadingAnimationOptions = {
 
 interface IUnStakeModalProps extends IModal {
 	poolStakingConfig: SimplePoolStakingConfig;
-	regenStreamConfig?: RegenStreamConfig;
+	regenStreamConfig?: RegenFarmConfig;
 	maxAmount: BigNumber;
 }
 
