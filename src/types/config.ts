@@ -93,6 +93,7 @@ export interface IntroCardConfig {
 }
 
 export interface RegenPoolStakingConfig extends SimplePoolStakingConfig {
+	regenStreamType: StreamType;
 	regenFarmType: RegenFarmType;
 }
 
@@ -101,7 +102,7 @@ export interface GasPreference {
 	maxPriorityFeePerGas?: string;
 }
 
-export interface RegenStreamConfig {
+export interface RegenFarmConfig {
 	title: string;
 	tokenDistroAddress: string;
 	type: StreamType;
@@ -109,7 +110,7 @@ export interface RegenStreamConfig {
 	rewardTokenSymbol: string;
 	// For price purpose
 	tokenAddressOnUniswapV2: string;
-	farms: RegenPoolStakingConfig[];
+	pools: RegenPoolStakingConfig[];
 }
 
 export interface BasicNetworkConfig {
@@ -139,7 +140,7 @@ export interface BasicNetworkConfig {
 	>;
 	uniswapV2Subgraph: string;
 
-	regenStreams: RegenStreamConfig[];
+	regenFarms: RegenFarmConfig[];
 }
 
 interface MainnetNetworkConfig extends BasicNetworkConfig {
