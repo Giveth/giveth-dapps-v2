@@ -226,6 +226,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 								size='small'
 								onClick={() => {
 									setEditBoosts(structuredClone(boosts));
+									setSum(100);
 									setMode(ETableNode.VIEWING);
 								}}
 							/>
