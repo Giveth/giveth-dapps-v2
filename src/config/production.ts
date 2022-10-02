@@ -139,7 +139,7 @@ const config: EnvConfig = {
 		],
 		uniswapV2Subgraph:
 			'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
-		regenStreams: [
+		regenFarms: [
 			{
 				tokenDistroAddress:
 					'0x73f2D115C2cBAa3b5F477A78F7A7CD348D8b70a2',
@@ -150,7 +150,7 @@ const config: EnvConfig = {
 				rewardTokenSymbol: 'CULT',
 				tokenAddressOnUniswapV2:
 					'0xf0f9D895aCa5c8678f706FB8216fa22957685A13',
-				farms: [
+				pools: [
 					{
 						network: MAINNET_NETWORK_NUMBER,
 						POOL_ADDRESS:
@@ -164,6 +164,7 @@ const config: EnvConfig = {
 						provideLiquidityLink:
 							'https://app.uniswap.org/#/add/v2/0xf0f9D895aCa5c8678f706FB8216fa22957685A13/ETH?chain=mainnet',
 						unit: 'LP',
+						regenStreamType: StreamType.CULT,
 						regenFarmType: RegenFarmType.CULT_ETH,
 						introCard: {
 							title: 'CULT',
@@ -262,7 +263,7 @@ const config: EnvConfig = {
 		uniswapV2Subgraph:
 			'https://api.thegraph.com/subgraphs/name/1hive/honeyswap-v2',
 
-		regenStreams: [
+		regenFarms: [
 			{
 				tokenDistroAddress:
 					'0xA9a37a14E562D0E1d335B4714E3455483ede7A9a',
@@ -273,7 +274,7 @@ const config: EnvConfig = {
 				rewardTokenSymbol: 'FOX',
 				tokenAddressOnUniswapV2:
 					'0x21a42669643f45bc0e086b8fc2ed70c23d67509d',
-				farms: [
+				pools: [
 					{
 						network: XDAI_NETWORK_NUMBER,
 						POOL_ADDRESS:
@@ -287,6 +288,7 @@ const config: EnvConfig = {
 						provideLiquidityLink:
 							'https://app.honeyswap.org/#/add/0x21a42669643f45bc0e086b8fc2ed70c23d67509d/0x71850b7e9ee3f13ab46d67167341e4bdc905eef9?chainId=100',
 						unit: 'LP',
+						regenStreamType: StreamType.FOX,
 						regenFarmType: RegenFarmType.FOX_HNY,
 						introCard: {
 							title: 'FOX',
