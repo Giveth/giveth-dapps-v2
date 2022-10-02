@@ -141,7 +141,7 @@ const ProjectCard = (props: IProjectCard) => {
 							{/* // TODO: Boosting - remove this for boosting launch */}
 							{IS_BOOSTING_ENABLED &&
 								projectPower?.powerRank &&
-								projectPower.totalPower !== 0 && (
+								projectPower?.totalPower !== 0 && (
 									<GivpowerRankContainer
 										gap='8px'
 										alignItems='center'
