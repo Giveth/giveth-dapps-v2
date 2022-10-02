@@ -23,7 +23,7 @@ import {
 	PercentageRow,
 } from '@/components/homeTabs/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
-import { RegenStreamConfig, StreamType } from '@/types/config';
+import { RegenFarmConfig, StreamType } from '@/types/config';
 import { BN, formatWeiHelper } from '@/helpers/number';
 import { IconFox } from '@/components/Icons/Fox';
 import { IconCult } from '@/components/Icons/Cult';
@@ -36,7 +36,7 @@ import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 
 interface RegenStreamProps {
 	network: number;
-	streamConfig: RegenStreamConfig;
+	streamConfig: RegenFarmConfig;
 }
 
 export const getStreamIconWithType = (type: StreamType, size?: number) => {
