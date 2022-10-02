@@ -96,6 +96,18 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 		setLoading(true);
 		const percentages = newBoosts.map(boost => Number(boost.percentage));
 		const projectIds = newBoosts.map(boost => Number(boost.project.id));
+		//fix calculation error
+		let indexOfMax = 0;
+		let sum = 0;
+		for (let i = 0; i < percentages.length; i++) {
+			const percentage = percentages[i];
+			if (percentage > percentages[indexOfMax]) indexOfMax = i;
+			sum += percentage;
+		}
+		const error = 100 - sum;
+		if (error > 0.00001 || error < -0.00001) {
+			percentages[indexOfMax] += error;
+		}
 		try {
 			const res = await client.mutate({
 				mutation: SAVE_MULTIPLE_POWER_BOOSTING,
