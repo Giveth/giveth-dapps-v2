@@ -174,6 +174,24 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 		return <LottieControl animationData={LoadingAnimation} size={50} />;
 	}
 
+	if (boostedProjectsCount > 20) {
+		return (
+			<>
+				<DescToast>
+					<Caption style={{ whiteSpace: `pre-line` }}>
+						You have already boosted the maximum 20 projects.
+						<br /> Do you want to boost this project anyway? Try to
+						remove at least one other boosted project from your
+						account, and get back to this project again!
+					</Caption>
+				</DescToast>
+				<Link href={Routes.MyBoostedProjects} passHref>
+					<ManageLink>Manage your allocations</ManageLink>
+				</Link>
+			</>
+		);
+	}
+
 	return (
 		<>
 			<InfoPart>
