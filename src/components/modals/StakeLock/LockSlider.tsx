@@ -58,7 +58,7 @@ const LockSlider: FC<ILockSlider> = ({ round, setRound }) => {
 				<Flex1 />
 				<GLink>
 					{isChanged
-						? smallFormatDate(unlockDate)
+						? `Lock until ${smallFormatDate(unlockDate)}`
 						: `Max ${maxRound} round`}
 				</GLink>
 			</Flex>
