@@ -53,8 +53,9 @@ const LockSlider: FC<ILockSlider> = ({ round, setRound }) => {
 				}}
 				value={round}
 			/>
-			<Flex justifyContent='space-between'>
-				<GLink>Min 1 round</GLink>
+			<Flex>
+				{round < 1 && <GLink>Min 1 round</GLink>}
+				<Flex1 />
 				<GLink>
 					{isChanged
 						? smallFormatDate(unlockDate)
@@ -112,6 +113,10 @@ const ToastDesc = styled(Caption)`
 
 const ToastRound = styled(Caption)`
 	color: ${neutralColors.gray['100']};
+`;
+
+const Flex1 = styled.div`
+	flex: 1;
 `;
 
 export default LockSlider;
