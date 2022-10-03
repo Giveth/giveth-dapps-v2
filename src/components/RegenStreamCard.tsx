@@ -86,7 +86,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 				? mainnetThirdPartyTokensPrice
 				: xDaiThirdPartyTokensPrice;
 		const price = new BigNumber(
-			currentPrice[streamConfig.tokenAddressOnUniswapV2],
+			currentPrice[streamConfig.tokenAddressOnUniswapV2.toLowerCase()],
 		);
 		if (!price || price.isNaN()) return;
 
