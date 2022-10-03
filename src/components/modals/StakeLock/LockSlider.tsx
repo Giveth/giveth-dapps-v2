@@ -63,16 +63,18 @@ const LockSlider: FC<ILockSlider> = ({ round, setRound }) => {
 				</GLink>
 			</Flex>
 			<MidRoundToast>
-				<ToastTitle medium>Mid-round lock</ToastTitle>
 				{round > 0 ? (
-					<ToastDesc>
-						Your tokens will be locked for the remainder of the
-						current round + the{' '}
-						<ToastRound as='span' medium>
-							{round} round{round > 1 ? 's' : ''}
-						</ToastRound>{' '}
-						you selected.
-					</ToastDesc>
+					<>
+						<ToastTitle medium>Mid-round lock</ToastTitle>
+						<ToastDesc>
+							Your tokens will be locked for the remainder of the
+							current round + the{' '}
+							<ToastRound as='span' medium>
+								{round} round{round > 1 ? 's' : ''}
+							</ToastRound>{' '}
+							you selected.
+						</ToastDesc>
+					</>
 				) : (
 					<ToastDesc>
 						When you lock your tokens mid-round, they will be locked
