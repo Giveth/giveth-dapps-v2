@@ -1,6 +1,13 @@
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
-import { P, B, GLink, brandColors } from '@giveth/ui-design-system';
+import {
+	P,
+	B,
+	GLink,
+	brandColors,
+	Caption,
+	neutralColors,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import { Flex } from '@/components/styled-components/Flex';
@@ -54,6 +61,17 @@ const LockSlider: FC<ILockSlider> = ({ round, setRound }) => {
 						: `Max ${maxRound} round`}
 				</GLink>
 			</Flex>
+			<MidRoundToast>
+				<ToastTitle medium>Mid-round lock</ToastTitle>
+				<ToastDesc>
+					Your tokens will be locked for the remainder of the current
+					round + the{' '}
+					<ToastRound as='span' medium>
+						{round} round{round > 1 ? 's' : ''}
+					</ToastRound>{' '}
+					you selected.
+				</ToastDesc>
+			</MidRoundToast>
 		</>
 	);
 };
@@ -65,6 +83,27 @@ const SliderMax = styled(GLink)`
 `;
 const StyledSlider = styled(Slider)`
 	margin: 8px 0 4px;
+`;
+
+const MidRoundToast = styled.div`
+	background-color: ${brandColors.giv[700]};
+	border-radius: 8px;
+	padding: 16px;
+	margin-top: 8px;
+`;
+
+const ToastTitle = styled(Caption)`
+	text-align: left;
+	margin-bottom: 4px;
+`;
+
+const ToastDesc = styled(Caption)`
+	text-align: left;
+	color: ${brandColors.giv[300]};
+`;
+
+const ToastRound = styled(Caption)`
+	color: ${neutralColors.gray['100']};
 `;
 
 export default LockSlider;
