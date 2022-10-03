@@ -155,7 +155,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 
 							<IconWithTooltip
 								icon={<IconHelp size={16} />}
-								direction={'right'}
+								direction={'bottom'}
 							>
 								<GsPTooltip>
 									Liquid{'	 '}
