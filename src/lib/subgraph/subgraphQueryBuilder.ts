@@ -1,6 +1,5 @@
 import {
 	BasicNetworkConfig,
-	RegenPoolStakingConfig,
 	SimplePoolStakingConfig,
 	StakingType,
 	UniswapV3PoolStakingConfig,
@@ -239,13 +238,9 @@ export class SubgraphQueryBuilder {
 					...(config.MAINNET_CONFIG.pools.filter(
 						c => c.type !== StakingType.UNISWAPV3_ETH_GIV,
 					) as Array<SimplePoolStakingConfig>),
-					...config.MAINNET_CONFIG.regenFarms.reduce(
-						(regenPools, regenFarm) => [
-							...regenPools,
-							...regenFarm.pools,
-						],
-						[] as RegenPoolStakingConfig[],
-					),
+					...config.MAINNET_CONFIG.regenFarms
+						.map(regenFarm => regenFarm.pools)
+						.flat(),
 				],
 				userAddress,
 			)}
@@ -268,13 +263,9 @@ export class SubgraphQueryBuilder {
 					getGivStakingConfig(config.XDAI_CONFIG),
 					...(config.XDAI_CONFIG
 						.pools as Array<SimplePoolStakingConfig>),
-					...config.XDAI_CONFIG.regenFarms.reduce(
-						(regenPools, regenFarm) => [
-							...regenPools,
-							...regenFarm.pools,
-						],
-						[] as RegenPoolStakingConfig[],
-					),
+					...config.XDAI_CONFIG.regenFarms
+						.map(regenFarm => regenFarm.pools)
+						.flat(),
 				],
 				userAddress,
 			)}
