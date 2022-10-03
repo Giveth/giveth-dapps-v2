@@ -49,12 +49,13 @@ import {
 	TxHash,
 	TxSpan,
 	TitleCol,
+	GridWrapper,
 } from './GIVstream.sc';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { getHistory } from '@/services/subgraph.service';
 import { BN, formatWeiHelper } from '@/helpers/number';
 import config from '@/configuration';
-import { durationToString } from '@/lib/helpers';
+import { durationToString, shortenAddress } from '@/lib/helpers';
 import { NetworkSelector } from '@/components/NetworkSelector';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { HarvestAllModal } from '../modals/HarvestAll';
@@ -280,7 +281,7 @@ export const GIVstreamProgress: FC<IGIVstreamProgressProps> = ({
 					<H6>GIViverse Expansion</H6>
 					<IconWithTooltip
 						icon={<IconHelp size={16} />}
-						direction={'right'}
+						direction={'bottom'}
 					>
 						<GsPTooltip>
 							Liquid GIV that has already flowed out of the
@@ -370,59 +371,66 @@ export const GIVstreamHistory: FC = () => {
 
 	return (
 		<HistoryContainer>
-			<Grid>
-				<B as='span'>GIVstream Source</B>
-				<B as='span'>Flowrate Change</B>
-				<B as='span'>Date</B>
-				<B as='span'>Tx</B>
-			</Grid>
-			{tokenAllocations && tokenAllocations.length > 0 && (
+			<GridWrapper>
 				<Grid>
-					{tokenAllocations.map((tokenAllocation, idx) => {
-						const d = new Date(+`${tokenAllocation.timestamp}000`);
-						const date = d
-							.toDateString()
-							.split(' ')
-							.splice(1, 3)
-							.join(' ');
-						return (
-							// <span key={idx}>1</span>
-							<Fragment key={idx}>
-								<P as='span'>
-									{convetSourceTypeToIcon(
-										tokenAllocation.distributor ||
-											'Unknown',
-									)}
-									{/* {tokenAllocation.distributor || 'Unknown'} */}
-								</P>
-								<B as='span'>
-									+
-									{formatWeiHelper(
-										givTokenDistroHelper.getStreamPartTokenPerWeek(
-											ethers.BigNumber.from(
-												tokenAllocation.amount,
-											),
-										),
-									)}
-									<GsHFrUnit as='span'>{` GIV/week`}</GsHFrUnit>
-								</B>
-								<P as='span'>{date}</P>
-								{chainId && (
-									<TxSpan>
-										<TxHash
-											size='Big'
-											href={`${config.NETWORKS_CONFIG[chainId]?.blockExplorerUrls}/tx/${tokenAllocation.txHash}`}
-											target='_blank'
-										>
-											{tokenAllocation.txHash}
-										</TxHash>
-									</TxSpan>
-								)}
-							</Fragment>
-						);
-					})}
+					{/* Akbar */}
+					<B as='span'>GIVstream Source</B>
+					<B as='span'>Flowrate Change</B>
+					<B as='span'>Date</B>
+					<B as='span'>Tx</B>
 				</Grid>
-			)}
+				{tokenAllocations && tokenAllocations.length > 0 && (
+					<Grid>
+						{tokenAllocations.map((tokenAllocation, idx) => {
+							const d = new Date(
+								+`${tokenAllocation.timestamp}000`,
+							);
+							const date = d
+								.toDateString()
+								.split(' ')
+								.splice(1, 3)
+								.join(' ');
+							return (
+								// <span key={idx}>1</span>
+								<Fragment key={idx}>
+									<P as='span'>
+										{convetSourceTypeToIcon(
+											tokenAllocation.distributor ||
+												'Unknown',
+										)}
+										{/* {tokenAllocation.distributor || 'Unknown'} */}
+									</P>
+									<B as='span'>
+										+
+										{formatWeiHelper(
+											givTokenDistroHelper.getStreamPartTokenPerWeek(
+												ethers.BigNumber.from(
+													tokenAllocation.amount,
+												),
+											),
+										)}
+										<GsHFrUnit as='span'>{` GIV/week`}</GsHFrUnit>
+									</B>
+									<P as='span'>{date}</P>
+									{chainId && (
+										<TxSpan>
+											<TxHash
+												size='Big'
+												href={`${config.NETWORKS_CONFIG[chainId]?.blockExplorerUrls}/tx/${tokenAllocation.txHash}`}
+												target='_blank'
+											>
+												{shortenAddress(
+													tokenAllocation.txHash,
+												)}
+											</TxHash>
+										</TxSpan>
+									)}
+								</Fragment>
+							);
+						})}
+					</Grid>
+				)}
+			</GridWrapper>
 			{(!tokenAllocations || tokenAllocations.length == 0) && (
 				<NoData> NO DATA</NoData>
 			)}

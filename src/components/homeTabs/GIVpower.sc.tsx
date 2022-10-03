@@ -5,7 +5,6 @@ import {
 	ButtonLink,
 	ButtonText,
 	Container,
-	D1,
 	H1,
 	H2,
 	H3,
@@ -13,7 +12,7 @@ import {
 	P,
 	QuoteText,
 } from '@giveth/ui-design-system';
-import { BottomContainer, TopContainer } from './commons';
+import { BottomContainer, MobileD1, TopContainer } from './commons';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Arc } from '../styled-components/Arc';
 import { Flex } from '../styled-components/Flex';
@@ -31,7 +30,7 @@ export const GIVpowerTopContainer = styled(TopContainer)`
 `;
 export const GIVpowerBottomContainer = styled(BottomContainer)``;
 
-export const Title = styled(D1)`
+export const Title = styled(MobileD1)`
 	margin-top: 60px;
 	margin-bottom: 24px;
 `;
