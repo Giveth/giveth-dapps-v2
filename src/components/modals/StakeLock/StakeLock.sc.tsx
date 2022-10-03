@@ -14,7 +14,7 @@ export const StakeModalContainer = styled.div`
 	padding-bottom: 24px;
 	width: 100%;
 	${mediaQueries.tablet} {
-		width: 370px;
+		width: 381px;
 	}
 `;
 
