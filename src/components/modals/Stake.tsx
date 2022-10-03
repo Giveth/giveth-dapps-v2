@@ -35,14 +35,11 @@ import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { ERC20 } from '@/types/contracts';
 import { StakingPlatform } from '@/types/config';
-import type {
-	RegenStreamConfig,
-	SimplePoolStakingConfig,
-} from '@/types/config';
+import type { SimplePoolStakingConfig, RegenFarmConfig } from '@/types/config';
 
 interface IStakeModalProps extends IModal {
 	poolStakingConfig: SimplePoolStakingConfig;
-	regenStreamConfig?: RegenStreamConfig;
+	regenStreamConfig?: RegenFarmConfig;
 	maxAmount: BigNumber;
 }
 

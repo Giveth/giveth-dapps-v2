@@ -232,17 +232,7 @@ export const TabGIVfarmBottom = () => {
 						)}
 						{renderPools(chainId, showArchivedPools)}
 					</PoolRow>
-					{chainId === config.XDAI_NETWORK_NUMBER ? (
-						<GIVfrens
-							regenFarms={config.XDAI_CONFIG.regenFarms}
-							network={config.XDAI_NETWORK_NUMBER}
-						/>
-					) : (
-						<GIVfrens
-							regenFarms={config.MAINNET_CONFIG.regenFarms}
-							network={config.MAINNET_NETWORK_NUMBER}
-						/>
-					)}
+					<GIVfrens />
 				</>
 				<Col xs={12}>
 					<DaoCard>
