@@ -143,15 +143,14 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 					setPercentage(100);
 					setIsChanged(true);
 				} else {
-					const sameProject = boostedProjects.find(
+					const sameProject = powerBoostings.find(
 						project => project?.project.id === projectId,
 					);
 					const _percentage = Math.floor(
 						sameProject?.percentage ?? 0,
 					);
 					setPercentage(_percentage);
-					if (count >= 20 && !sameProject) {
-						console.log('Count', count);
+					if (count >= 4 && !sameProject) {
 						setState(EBoostModalState.LIMIT_EXEEDED);
 					}
 				}
