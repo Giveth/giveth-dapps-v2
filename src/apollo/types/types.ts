@@ -6,6 +6,11 @@ import {
 } from '@/apollo/types/gqlEnums';
 import { IAddress } from '@/components/views/verification/manageFunds/ManageFundsIndex';
 
+export interface IProjectPower {
+	powerRank: number;
+	totalPower?: number;
+	updateTime: string;
+}
 export interface IProject {
 	id?: string;
 	title?: string;
@@ -49,6 +54,7 @@ export interface IProject {
 		supportCustomTokens: boolean;
 	};
 	projectVerificationForm?: IProjectVerification;
+	projectPower: IProjectPower;
 }
 
 export interface IWalletAddress {
@@ -251,4 +257,33 @@ export enum EVerificationSteps {
 	MILESTONES = 'milestones',
 	TERM_AND_CONDITION = 'termAndCondition',
 	SUBMIT = 'submit',
+}
+
+export interface IPowerBoosting {
+	id: string;
+	user: IUser;
+	project: IProject;
+	percentage: number;
+}
+
+interface IBoostedUser {
+	id: string;
+	firstName: string;
+	lastName: string;
+	name: string;
+}
+export interface IPowerBoostingsData {
+	id: string;
+	userId: string;
+	projectId: string;
+	percentage: number;
+	userPower: number;
+	boostedPower: number;
+	rank: number;
+	user: IBoostedUser;
+}
+
+export interface IUserProjectPowers {
+	totalCount: number;
+	userProjectPowers: IPowerBoostingsData[];
 }

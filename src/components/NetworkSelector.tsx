@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { B, brandColors } from '@giveth/ui-design-system';
+import { B, brandColors, mediaQueries } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 
 import { switchNetwork } from '@/lib/wallet';
@@ -15,7 +15,7 @@ interface NetworkSelectorProps {
 	disabled?: boolean;
 }
 
-interface ISelecetor {
+interface ISelector {
 	isSelected: boolean;
 }
 
@@ -44,7 +44,7 @@ export const NetworkSelector = () => {
 				<NetworkSelectorContainer
 					disabled={!givEconomySupportedNetworks.includes(chainId)}
 				>
-					<XDaiSelecor
+					<Selector
 						isSelected={chainId === config.XDAI_NETWORK_NUMBER}
 						onClick={() =>
 							handleChangeNetwork(config.XDAI_NETWORK_NUMBER)
@@ -52,8 +52,8 @@ export const NetworkSelector = () => {
 					>
 						<IconGnosisChain size={24} />
 						<B>Gnosis Chain</B>
-					</XDaiSelecor>
-					<EthSelector
+					</Selector>
+					<Selector
 						isSelected={
 							chainId === config.MAINNET_NETWORK_NUMBER ||
 							!givEconomySupportedNetworks.includes(chainId)
@@ -64,7 +64,7 @@ export const NetworkSelector = () => {
 					>
 						<IconEthereum size={24} />
 						<B>Ethereum</B>
-					</EthSelector>
+					</Selector>
 				</NetworkSelectorContainer>
 			) : (
 				'' // TODO: show connect your wallet
@@ -80,7 +80,6 @@ export const NetworkSelector = () => {
 };
 
 const NetworkSelectorContainer = styled(Flex)<NetworkSelectorProps>`
-	width: 360px;
 	height: 48px;
 	border-radius: 88px;
 	border: 1px solid ${brandColors.giv[600]};
@@ -88,20 +87,24 @@ const NetworkSelectorContainer = styled(Flex)<NetworkSelectorProps>`
 	cursor: pointer;
 	opacity: ${props => (props.disabled ? '0.2' : '1')};
 	pointer-events: ${props => (props.disabled ? 'none' : 'auto')};
+	${mediaQueries.mobileL} {
+		width: 360px;
+	}
 `;
 
-const Selector = styled(Flex)<ISelecetor>`
+const Selector = styled(Flex)<ISelector>`
 	align-items: center;
 	justify-content: center;
 	padding: 12px 24px;
 	gap: 8px;
-	${props => (props.isSelected ? `background: ${brandColors.giv[600]}` : '')}
-`;
-
-const XDaiSelecor = styled(Selector)`
 	width: 50%;
-`;
-
-const EthSelector = styled(Selector)`
-	width: 50%;
+	background: ${props => (props.isSelected ? brandColors.giv[600] : '')};
+	& > div {
+		display: none;
+	}
+	${mediaQueries.mobileL} {
+		& > div {
+			display: block;
+		}
+	}
 `;

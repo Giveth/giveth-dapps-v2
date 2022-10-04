@@ -20,12 +20,17 @@ const moduleExports = withBundleAnalyzer({
 			'static.tgbwidget.com',
 			'images.unsplash.com',
 			'd2m0e1zy3fwxmp.cloudfront.net', // temporal for CHANGE default image
-			'i.imgur.com',
+			'static.tgb-preprod.com',
+			'tgb-preproduction-formio.s3.amazonaws.com',
+			'dashboard.tgb-preprod.com',
 		],
 	},
 	compiler: {
 		// ssr and displayName are configured by default
 		styledComponents: true,
+		// removeConsole: {
+		// 	exclude: ['error'],
+		// },
 	},
 	redirects: () => {
 		return [

@@ -1,6 +1,4 @@
 import Head from 'next/head';
-import React from 'react';
-import UserPublicProfileView from '@/components/views/userPublicProfile/UserPublicProfile.view';
 import { useAppSelector } from '@/features/hooks';
 import Spinner from '@/components/Spinner';
 import WalletNotConnected from '@/components/WalletNotConnected';
