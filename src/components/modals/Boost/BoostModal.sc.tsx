@@ -190,6 +190,7 @@ export const ExceededContainer = styled.div`
 export const BoostedProjectsLink = styled(ButtonLink)`
 	width: 300px;
 	margin: 20px auto;
+	margin-top: 0;
 `;
 
 export const NotNowButton = styled(Button)`
