@@ -7,6 +7,7 @@ import {
 	H5,
 	Button,
 	GLink,
+	ButtonLink,
 } from '@giveth/ui-design-system';
 import Slider from 'rc-slider';
 import styled, { css } from 'styled-components';
@@ -184,4 +185,9 @@ export const ConfettiContainer = styled.div`
 
 export const ExceededContainer = styled.div`
 	padding: 48px 0;
+`;
+
+export const BoostedProjectsLink = styled(ButtonLink)`
+	width: 300px;
+	margin: 20px auto;
 `;
