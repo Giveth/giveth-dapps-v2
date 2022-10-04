@@ -148,10 +148,13 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 						sameProject?.percentage ?? 0,
 					);
 					setPercentage(_percentage);
+					if (count >= 20 && !sameProject) {
+						setState(EBoostModalState.LIMIT_EXEEDED);
+					}
 				}
 			}
 		};
-		fetchUserBoosts().then();
+		fetchUserBoosts();
 	}, [user]);
 
 	const confirmAllocation = async () => {
@@ -174,7 +177,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 		return <LottieControl animationData={LoadingAnimation} size={50} />;
 	}
 
-	if (boostedProjectsCount > 20) {
+	if (EBoostModalState.LIMIT_EXEEDED) {
 		return (
 			<>
 				<DescToast>
