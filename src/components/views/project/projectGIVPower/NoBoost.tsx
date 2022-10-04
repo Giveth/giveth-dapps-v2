@@ -4,7 +4,12 @@ import { QuoteText } from '@giveth/ui-design-system';
 const NoBoost = ({ isAdmin }: { isAdmin: boolean }) => {
 	return (
 		<Wrapper size='small'>
-			<div>This project hasn't received any boosts yet!</div>
+			<div>
+				{isAdmin
+					? `Your project didn't receive any boosts yet!
+				`
+					: `This project hasn't received any boosts yet!`}
+			</div>
 			<div>
 				{isAdmin
 					? `Share this project on social media and ask your friends
