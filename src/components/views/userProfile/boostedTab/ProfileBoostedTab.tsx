@@ -23,6 +23,7 @@ import { EmptyPowerBoosting } from './EmptyPowerBoosting';
 import GetMoreGIVpowerBanner from './GetMoreGIVpowerBanner';
 import { useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { sortBoosts } from '@/helpers/givpower';
 
 export enum EPowerBoostingOrder {
 	CreationAt = 'createdAt',
@@ -92,50 +93,59 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 		[order.by, order.direction],
 	);
 
-	const saveBoosts = useCallback(async (newBoosts: IPowerBoosting[]) => {
-		setLoading(true);
-		const percentages = newBoosts.map(boost => Number(boost.percentage));
-		const projectIds = newBoosts.map(boost => Number(boost.project.id));
-		//fix calculation error
-		let indexOfMax = 0;
-		let sum = 0;
-		for (let i = 0; i < percentages.length; i++) {
-			const percentage = percentages[i];
-			if (percentage > percentages[indexOfMax]) indexOfMax = i;
-			sum += percentage;
-		}
-		const error = 100 - sum;
-		if (error > 0.00001 || error < -0.00001) {
-			percentages[indexOfMax] += error;
-		}
-		try {
-			const res = await client.mutate({
-				mutation: SAVE_MULTIPLE_POWER_BOOSTING,
-				variables: {
-					percentages,
-					projectIds,
-				},
-			});
-			if (res.data) {
-				const setMultiplePowerBoosting: IPowerBoosting[] =
-					res.data.setMultiplePowerBoosting;
-				setBoosts(setMultiplePowerBoosting);
-				setLoading(false);
-				return true;
+	const saveBoosts = useCallback(
+		async (newBoosts: IPowerBoosting[]) => {
+			setLoading(true);
+			const percentages = newBoosts.map(boost =>
+				Number(boost.percentage),
+			);
+			const projectIds = newBoosts.map(boost => Number(boost.project.id));
+			//fix calculation error
+			let indexOfMax = 0;
+			let sum = 0;
+			for (let i = 0; i < percentages.length; i++) {
+				const percentage = percentages[i];
+				if (percentage > percentages[indexOfMax]) indexOfMax = i;
+				sum += percentage;
 			}
-			setLoading(false);
-			return false;
-		} catch (error) {
-			console.log({ error });
-			captureException(error, {
-				tags: {
-					section: 'Save manage power boosting',
-				},
-			});
-			setLoading(false);
-			return false;
-		}
-	}, []);
+			const error = 100 - sum;
+			if (error > 0.00001 || error < -0.00001) {
+				percentages[indexOfMax] += error;
+			}
+			try {
+				const res = await client.mutate({
+					mutation: SAVE_MULTIPLE_POWER_BOOSTING,
+					variables: {
+						percentages,
+						projectIds,
+					},
+				});
+				if (res.data) {
+					const setMultiplePowerBoosting: IPowerBoosting[] =
+						res.data.setMultiplePowerBoosting;
+					const sortedBoosts = sortBoosts(
+						setMultiplePowerBoosting,
+						order,
+					);
+					setBoosts(sortedBoosts);
+					setLoading(false);
+					return true;
+				}
+				setLoading(false);
+				return false;
+			} catch (error) {
+				console.log({ error });
+				captureException(error, {
+					tags: {
+						section: 'Save manage power boosting',
+					},
+				});
+				setLoading(false);
+				return false;
+			}
+		},
+		[order],
+	);
 
 	const deleteBoost = useCallback(
 		async (id: string) => {
