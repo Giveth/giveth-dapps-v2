@@ -36,14 +36,25 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal, projectId }) => {
 		return <ZeroGivpowerModal setShowModal={setShowModal} />;
 	}
 
-	const title = state === EBoostModalState.BOOSTING ? 'Boost' : 'Well done!';
+	const title = () => {
+		switch (state) {
+			case EBoostModalState.BOOSTING:
+				return 'Boost';
+			case EBoostModalState.LIMIT_EXEEDED:
+				return 'Oh no!';
+			case EBoostModalState.BOOSTED:
+				return 'Well done!';
+			default:
+				return 'Boost';
+		}
+	};
 
 	return (
 		<Modal
 			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerTitlePosition={'left'}
-			headerTitle={title}
+			headerTitle={title()}
 			headerIcon={<IconRocketInSpace32 />}
 		>
 			<BoostModalContainer state={state}>
