@@ -67,6 +67,7 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal, projectId }) => {
 						setState={setState}
 						// TODO: Create Project context
 						projectId={projectId}
+						setShowModal={setShowModal}
 					/>
 				) : (
 					<BoostedInnerModal
