@@ -20,7 +20,7 @@ interface IBoostModalProps extends IModal {
 export enum EBoostModalState {
 	BOOSTING,
 	BOOSTED,
-	LIMIT_EXEEDED,
+	LIMIT_EXCEEDED,
 }
 
 const BoostModal: FC<IBoostModalProps> = ({ setShowModal, projectId }) => {
@@ -40,7 +40,7 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal, projectId }) => {
 		switch (state) {
 			case EBoostModalState.BOOSTING:
 				return 'Boost';
-			case EBoostModalState.LIMIT_EXEEDED:
+			case EBoostModalState.LIMIT_EXCEEDED:
 				return 'Oh no!';
 			case EBoostModalState.BOOSTED:
 				return 'Well done!';
@@ -59,7 +59,7 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal, projectId }) => {
 		>
 			<BoostModalContainer state={state}>
 				{state === EBoostModalState.BOOSTING ||
-				state === EBoostModalState.LIMIT_EXEEDED ? (
+				state === EBoostModalState.LIMIT_EXCEEDED ? (
 					<BoostInnerModal
 						totalGIVpower={BN(givPower.balance)}
 						setPercentage={setPercentage}
