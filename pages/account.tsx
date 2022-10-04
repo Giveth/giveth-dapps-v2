@@ -3,6 +3,7 @@ import { useAppSelector } from '@/features/hooks';
 import Spinner from '@/components/Spinner';
 import WalletNotConnected from '@/components/WalletNotConnected';
 import UserNotSignedIn from '@/components/UserNotSignedIn';
+import UserProfileView from '@/components/views/userProfile/UserProfile.view';
 
 const UserRoute = () => {
 	const { isSignedIn, isEnabled, userData, isLoading } = useAppSelector(
@@ -22,7 +23,7 @@ const UserRoute = () => {
 			<Head>
 				<title>{userData?.name} | Giveth</title>
 			</Head>
-			<UserPublicProfileView user={userData!} myAccount />
+			<UserProfileView user={userData!} myAccount />
 		</>
 	);
 };
