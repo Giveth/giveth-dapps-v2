@@ -36,6 +36,8 @@ import {
 	ConfirmButton,
 	ManageLink,
 	ExceededContainer,
+	BoostedProjectsLink,
+	NotNowButton,
 } from './BoostModal.sc';
 import { EBoostModalState } from './BoostModal';
 import {
@@ -55,6 +57,7 @@ interface IInnerBoostModalProps {
 	state: EBoostModalState;
 	setState: Dispatch<SetStateAction<EBoostModalState>>;
 	projectId: string;
+	setShowModal: (showModal: boolean) => void;
 }
 
 const BoostInnerModal: FC<IInnerBoostModalProps> = ({
@@ -63,6 +66,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 	state,
 	setState,
 	projectId,
+	setShowModal,
 }) => {
 	const [percentage, setPercentage] = useState(0);
 	const [isChanged, setIsChanged] = useState(false);
@@ -152,7 +156,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 						sameProject?.percentage ?? 0,
 					);
 					setPercentage(_percentage);
-					if (count >= 4 && !sameProject) {
+					if (count >= 20 && !sameProject) {
 						setState(EBoostModalState.LIMIT_EXCEEDED);
 					}
 				}
@@ -187,14 +191,22 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 				<ExceededContainer>
 					<Lead>
 						You have already boosted the maximum 20 projects!
-						<br /> To coninute with this boosting, remove at least
+						<br /> To continue with this boosting, remove at least
 						one other boosted project from your account and come
 						back to this project again!
 					</Lead>
 				</ExceededContainer>
 				<Link href={Routes.MyBoostedProjects} passHref>
-					<ManageLink>Manage your allocations</ManageLink>
+					<BoostedProjectsLink
+						size='medium'
+						label='Go to Boosted Projects'
+					/>
 				</Link>
+				<NotNowButton
+					buttonType='texty-primary'
+					label='Not now'
+					onClick={() => setShowModal(false)}
+				/>
 			</>
 		);
 	}
