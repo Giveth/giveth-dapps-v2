@@ -164,7 +164,8 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 				if (res.data) {
 					const newBoosts: IPowerBoosting[] =
 						res.data.setSinglePowerBoosting;
-					setBoosts(newBoosts);
+					const sortedBoosts = sortBoosts(newBoosts, order);
+					setBoosts(sortedBoosts);
 					setLoading(false);
 					return true;
 				}
@@ -181,7 +182,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 				return false;
 			}
 		},
-		[boosts],
+		[boosts, order],
 	);
 
 	return (
