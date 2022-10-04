@@ -1,6 +1,12 @@
 import BigNumber from 'bignumber.js';
 import { getNowUnixMS } from './time';
 import { IGIVpower } from '@/types/subgraph';
+import { IPowerBoosting } from '@/apollo/types/types';
+import {
+	EPowerBoostingOrder,
+	IBoostedOrder,
+} from '@/components/views/userProfile/boostedTab/ProfileBoostedTab';
+import { EDirection } from '@/apollo/types/gqlEnums';
 
 export const getGIVpowerRoundsInfo = (
 	initialDate: string,
@@ -45,4 +51,18 @@ export const avgAPR = (
 		return new BigNumber(0);
 	const avg = new BigNumber(unipoolBalance).dividedBy(gGIV);
 	return apr.multipliedBy(avg);
+};
+
+export const sortBoosts = (
+	boosts: IPowerBoosting[],
+	orderBy: IBoostedOrder,
+) => {
+	const sign = orderBy.direction === EDirection.ASC ? 1 : -1;
+	if (orderBy.by === EPowerBoostingOrder.Percentage) {
+		return boosts.sort((b1, b2) =>
+			b1.percentage > b2.percentage ? sign : sign * -1,
+		);
+	} else {
+		return boosts;
+	}
 };
