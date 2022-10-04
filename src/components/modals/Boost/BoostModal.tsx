@@ -20,6 +20,7 @@ interface IBoostModalProps extends IModal {
 export enum EBoostModalState {
 	BOOSTING,
 	BOOSTED,
+	LIMIT_EXEEDED,
 }
 
 const BoostModal: FC<IBoostModalProps> = ({ setShowModal, projectId }) => {
