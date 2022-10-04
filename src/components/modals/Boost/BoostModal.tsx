@@ -47,7 +47,8 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal, projectId }) => {
 			headerIcon={<IconRocketInSpace32 />}
 		>
 			<BoostModalContainer state={state}>
-				{state === EBoostModalState.BOOSTING ? (
+				{state === EBoostModalState.BOOSTING ||
+				state === EBoostModalState.LIMIT_EXEEDED ? (
 					<BoostInnerModal
 						totalGIVpower={BN(givPower.balance)}
 						setPercentage={setPercentage}
