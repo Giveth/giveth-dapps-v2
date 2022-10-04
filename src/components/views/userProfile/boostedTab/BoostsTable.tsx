@@ -205,6 +205,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 							label='edit boosting'
 							size='small'
 							onClick={() => setMode(ETableNode.EDITING)}
+							disabled={editBoosts.length < 2}
 						/>
 					) : (
 						<>
