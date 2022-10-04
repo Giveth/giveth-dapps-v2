@@ -51,6 +51,7 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal, projectId }) => {
 					<BoostInnerModal
 						totalGIVpower={BN(givPower.balance)}
 						setPercentage={setPercentage}
+						state={state}
 						setState={setState}
 						// TODO: Create Project context
 						projectId={projectId}

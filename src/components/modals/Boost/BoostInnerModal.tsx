@@ -50,6 +50,7 @@ import type { BigNumber } from 'ethers';
 interface IInnerBoostModalProps {
 	totalGIVpower: BigNumber;
 	setPercentage: Dispatch<SetStateAction<number>>;
+	state: EBoostModalState;
 	setState: Dispatch<SetStateAction<EBoostModalState>>;
 	projectId: string;
 }
@@ -57,6 +58,7 @@ interface IInnerBoostModalProps {
 const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 	totalGIVpower,
 	setPercentage: setFinalPercentage,
+	state,
 	setState,
 	projectId,
 }) => {
@@ -149,6 +151,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 					);
 					setPercentage(_percentage);
 					if (count >= 20 && !sameProject) {
+						console.log('Count', count);
 						setState(EBoostModalState.LIMIT_EXEEDED);
 					}
 				}
@@ -177,7 +180,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 		return <LottieControl animationData={LoadingAnimation} size={50} />;
 	}
 
-	if (EBoostModalState.LIMIT_EXEEDED) {
+	if (state === EBoostModalState.LIMIT_EXEEDED) {
 		return (
 			<>
 				<DescToast>
