@@ -53,6 +53,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 		};
 	}, [router]);
 
+        // when route changed call GA.
 	useEffect(() => {
 		if (isProduction) {
 			//google analytics on route change
