@@ -136,23 +136,23 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 				const powerBoostings: IPowerBoosting[] =
 					data.getPowerBoosting.powerBoostings;
 				setBoostedProjects(powerBoostings);
+				const count = data.getPowerBoosting.powerBoostings?.length ?? 0;
+				if (count === 0) {
+					setPercentage(100);
+					setIsChanged(true);
+				} else {
+					const sameProject = boostedProjects.find(
+						project => project?.project.id === projectId,
+					);
+					const _percentage = Math.floor(
+						sameProject?.percentage ?? 0,
+					);
+					setPercentage(_percentage);
+				}
 			}
 		};
 		fetchUserBoosts().then();
 	}, [user]);
-
-	useEffect(() => {
-		if (boostedProjectsCount === 0) {
-			setPercentage(100);
-			setIsChanged(true);
-		} else {
-			const sameProject = boostedProjects.find(
-				project => project?.project.id === projectId,
-			);
-			const _percentage = Math.floor(sameProject?.percentage ?? 0);
-			setPercentage(_percentage);
-		}
-	}, [boostedProjectsCount]);
 
 	const confirmAllocation = async () => {
 		setIsSaving(true);
