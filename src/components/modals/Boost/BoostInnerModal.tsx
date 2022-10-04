@@ -6,6 +6,7 @@ import {
 	H6,
 	IconHelp,
 	IconRocketInSpace24,
+	Lead,
 	neutralColors,
 	P,
 } from '@giveth/ui-design-system';
@@ -34,6 +35,7 @@ import {
 	SliderDesc,
 	ConfirmButton,
 	ManageLink,
+	ExceededContainer,
 } from './BoostModal.sc';
 import { EBoostModalState } from './BoostModal';
 import {
@@ -151,7 +153,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 					);
 					setPercentage(_percentage);
 					if (count >= 4 && !sameProject) {
-						setState(EBoostModalState.LIMIT_EXEEDED);
+						setState(EBoostModalState.LIMIT_EXCEEDED);
 					}
 				}
 			}
@@ -179,17 +181,17 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 		return <LottieControl animationData={LoadingAnimation} size={50} />;
 	}
 
-	if (state === EBoostModalState.LIMIT_EXEEDED) {
+	if (state === EBoostModalState.LIMIT_EXCEEDED) {
 		return (
 			<>
-				<DescToast>
-					<Caption style={{ whiteSpace: `pre-line` }}>
-						You have already boosted the maximum 20 projects.
-						<br /> Do you want to boost this project anyway? Try to
-						remove at least one other boosted project from your
-						account, and get back to this project again!
-					</Caption>
-				</DescToast>
+				<ExceededContainer>
+					<Lead>
+						You have already boosted the maximum 20 projects!
+						<br /> To coninute with this boosting, remove at least
+						one other boosted project from your account and come
+						back to this project again!
+					</Lead>
+				</ExceededContainer>
 				<Link href={Routes.MyBoostedProjects} passHref>
 					<ManageLink>Manage your allocations</ManageLink>
 				</Link>
