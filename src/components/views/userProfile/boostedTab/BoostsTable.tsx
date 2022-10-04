@@ -207,9 +207,10 @@ const BoostsTable: FC<IBoostsTable> = ({
 								buttonType='primary'
 								label='reset all'
 								size='small'
-								onClick={() =>
-									setEditBoosts(structuredClone(boosts))
-								}
+								onClick={() => {
+									setEditBoosts(structuredClone(boosts));
+									setSum(100);
+								}}
 							/>
 							<Button
 								buttonType='primary'
@@ -226,6 +227,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 								size='small'
 								onClick={() => {
 									setEditBoosts(structuredClone(boosts));
+									setSum(100);
 									setMode(ETableNode.VIEWING);
 								}}
 							/>
