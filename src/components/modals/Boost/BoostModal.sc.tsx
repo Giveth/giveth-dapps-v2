@@ -191,3 +191,7 @@ export const BoostedProjectsLink = styled(ButtonLink)`
 	width: 300px;
 	margin: 20px auto;
 `;
+
+export const NotNowButton = styled(Button)`
+	margin: 0 auto;
+`;
