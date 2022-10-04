@@ -120,8 +120,13 @@ const BoostsTable: FC<IBoostsTable> = ({
 		e: ChangeEvent<HTMLInputElement>,
 		isOnBlur?: boolean,
 	) => {
-		if (isOnBlur && e.target.value == '') {
-			e.target.value = '0.1';
+		if (isOnBlur) {
+			if (e.target.value === '') {
+				e.target.value = '0.1';
+			} else {
+				// only run this function in onblur when the input is empty
+				return;
+			}
 		}
 		const newPercentage = +e.target.value;
 		if (isNaN(newPercentage) || newPercentage < 0 || newPercentage > 100)
