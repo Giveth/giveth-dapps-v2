@@ -181,3 +181,7 @@ export const ConfettiContainer = styled.div`
 	height: 200px;
 	overflow-y: hidden;
 `;
+
+export const ExceededContainer = styled.div`
+	padding: 48px 0;
+`;
