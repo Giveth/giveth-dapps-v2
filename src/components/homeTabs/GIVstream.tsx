@@ -373,7 +373,6 @@ export const GIVstreamHistory: FC = () => {
 		<HistoryContainer>
 			<GridWrapper>
 				<Grid>
-					{/* Akbar */}
 					<B as='span'>GIVstream Source</B>
 					<B as='span'>Flowrate Change</B>
 					<B as='span'>Date</B>
