@@ -174,7 +174,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 					</PercentageRow>
 				</div>
 				<Remaining>{`Time remaining: ` + remainTime}</Remaining>
-				<HarvestContainer wrap={1}>
+				<HarvestContainer wrap={1} gap='24px'>
 					<div>
 						<AmountInfo alignItems='flex-end' gap='4px'>
 							{getStreamIconWithType(streamConfig.type, 24)}
