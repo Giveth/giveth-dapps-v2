@@ -31,7 +31,7 @@ export const IconWithTooltip: FC<IIconWithTooltipProps> = ({
 			ref={elRef}
 		>
 			{icon}
-			{show && <Tooltip ParentRef={elRef}>{children}</Tooltip>}
+			{show && <Tooltip parentRef={elRef}>{children}</Tooltip>}
 		</IconWithTooltipContainer>
 	);
 };

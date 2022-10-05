@@ -3,11 +3,11 @@ import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 
 interface ITooltipProps {
-	ParentRef: RefObject<HTMLDivElement>;
+	parentRef: RefObject<HTMLDivElement>;
 	children: ReactNode;
 }
 
-export const Tooltip: FC<ITooltipProps> = ({ ParentRef, children }) => {
+export const Tooltip: FC<ITooltipProps> = ({ parentRef, children }) => {
 	const el = useRef(document.createElement('div'));
 	const childRef = useRef<HTMLDivElement>(null);
 	useEffect(() => {
@@ -15,8 +15,7 @@ export const Tooltip: FC<ITooltipProps> = ({ ParentRef, children }) => {
 
 		const current = el.current;
 		const modalRoot = document.querySelector('body') as HTMLElement;
-		const size = ParentRef.current?.getBoundingClientRect();
-		console.log('ParentRef', size);
+		const size = parentRef.current?.getBoundingClientRect();
 
 		if (modalRoot) {
 			modalRoot.appendChild(current);
@@ -25,16 +24,22 @@ export const Tooltip: FC<ITooltipProps> = ({ ParentRef, children }) => {
 			console.log('leave');
 			modalRoot!.removeChild(current);
 		};
-	}, []);
+	}, [parentRef]);
 
-	useEffect(() => {
-		if (!childRef.current) return;
-		const size = childRef.current.getBoundingClientRect();
-		console.log('size', size);
-	}, [children]);
+	// console.log('top', parentRef.current?.getBoundingClientRect().top);
+	console.log('height', childRef.current);
 
 	return createPortal(
-		<TooltipContainer ref={childRef}>{children}</TooltipContainer>,
+		<TooltipContainer
+			ref={childRef}
+			style={{
+				top:
+					(parentRef.current?.getBoundingClientRect().top || 0) -
+					(childRef.current?.getBoundingClientRect().height || 0),
+			}}
+		>
+			{children}
+		</TooltipContainer>,
 		el.current,
 	);
 };
@@ -42,7 +47,6 @@ export const Tooltip: FC<ITooltipProps> = ({ ParentRef, children }) => {
 const TooltipContainer = styled.div`
 	position: fixed;
 	background-color: red;
-	top: 0;
 	left: 0;
 	padding: 0;
 `;
