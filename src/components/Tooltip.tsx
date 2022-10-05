@@ -1,9 +1,14 @@
-import { useEffect, useRef } from 'react';
+import { FC, ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 
-export const Tooltip = () => {
+interface ITooltipProps {
+	children: ReactNode;
+}
+
+export const Tooltip: FC<ITooltipProps> = ({ children }) => {
 	const el = useRef(document.createElement('div'));
+	const childRef = useRef<HTMLDivElement>(null);
 	useEffect(() => {
 		console.log('enter');
 
@@ -19,7 +24,16 @@ export const Tooltip = () => {
 		};
 	}, []);
 
-	return createPortal(<TooltipContainer></TooltipContainer>, el.current);
+	useEffect(() => {
+		if (!childRef.current) return;
+		const size = childRef.current.getBoundingClientRect();
+		console.log('size', size);
+	}, [children]);
+
+	return createPortal(
+		<TooltipContainer ref={childRef}>{children}</TooltipContainer>,
+		el.current,
+	);
 };
 
 const TooltipContainer = styled.div`
