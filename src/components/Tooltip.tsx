@@ -32,15 +32,14 @@ export const Tooltip: FC<ITooltipProps> = ({
 		console.log('enter');
 
 		const current = el.current;
-		const modalRoot = document.querySelector('body') as HTMLElement;
-		const size = parentRef.current?.getBoundingClientRect();
+		const body = document.querySelector('body') as HTMLElement;
 
-		if (modalRoot) {
-			modalRoot.appendChild(current);
+		if (body) {
+			body.appendChild(current);
 		}
 		return () => {
 			console.log('leave');
-			modalRoot!.removeChild(current);
+			body!.removeChild(current);
 		};
 	}, [parentRef]);
 
@@ -76,6 +75,12 @@ const tooltipStyleCalc = (
 				top: parentPosition.top,
 				left: parentPosition.left,
 				transform: `translate(-50%, calc(-100% - 16px))`,
+			};
+		case 'bottom':
+			style = {
+				top: parentPosition.bottom,
+				left: parentPosition.left,
+				transform: `translate(-50%, 4px)`,
 			};
 	}
 	console.log('style', style);
