@@ -6,7 +6,6 @@ import {
 	ButtonText,
 	Caption,
 	Container,
-	D1,
 	H1,
 	H2,
 	H3,
@@ -14,7 +13,7 @@ import {
 	P,
 	QuoteText,
 } from '@giveth/ui-design-system';
-import { BottomContainer, TopContainer } from './commons';
+import { BottomContainer, MobileD1, TopContainer } from './commons';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Arc } from '../styled-components/Arc';
 import { Flex } from '../styled-components/Flex';
@@ -32,7 +31,7 @@ export const GIVpowerTopContainer = styled(TopContainer)`
 `;
 export const GIVpowerBottomContainer = styled(BottomContainer)``;
 
-export const Title = styled(D1)`
+export const Title = styled(MobileD1)`
 	margin-top: 60px;
 	margin-bottom: 24px;
 `;
@@ -88,8 +87,7 @@ export const FeaturesCardHeading = styled(H1)`
 
 export const FeaturesCardSubheading = styled(QuoteText)`
 	max-width: 750px;
-	margin: auto;
-	margin-top: 8px;
+	margin: 8px auto;
 `;
 
 export const FeaturesCardItemsContainer = styled.div`
@@ -118,8 +116,7 @@ export const FeaturesCardItem = styled.div`
 
 export const CardBottomText = styled(ButtonText)`
 	color: ${brandColors.mustard[500]};
-	margin-top: 3px;
-	margin: 0 auto;
+	margin: 3px auto 0;
 `;
 
 export const CenteredHeader = styled(H2)`
@@ -154,9 +151,14 @@ export const BenefitsCard = styled.div`
 		padding: 60px;
 	}
 	${mediaQueries.desktop} {
-		display: row;
 		width: 50%;
 	}
+`;
+
+export const BenefitsCardContainer = styled(Flex)`
+	flex-direction: column;
+	justify-content: space-between;
+	height: 100%;
 `;
 
 export const BenefitsCardTextContainer = styled.div`
@@ -165,8 +167,6 @@ export const BenefitsCardTextContainer = styled.div`
 	gap: 20px;
 	margin: auto;
 	${mediaQueries.desktop} {
-		display: row;
-		width: 50%;
 		width: 360px;
 	}
 `;
@@ -190,7 +190,7 @@ export const ArcMustardTop = styled(Arc)`
 	right: -300px;
 	display: none;
 	${mediaQueries.laptopS} {
-		top: 0px;
+		top: 0;
 		display: unset;
 	}
 	z-index: 0;
@@ -329,8 +329,7 @@ export const GivPowerCardContainer = styled.div`
 export const GivAmount = styled(Flex)`
 	align-items: baseline;
 	gap: 16px;
-	margin-bottom: 27px;
-	margin-top: 16px;
+	margin-bottom: 16px;
 `;
 
 export const ConnectWallet = styled.div`

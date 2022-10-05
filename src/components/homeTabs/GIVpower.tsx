@@ -50,6 +50,8 @@ import {
 	BoostProjectButton,
 	BoostLinkContainer,
 	CaptionStyled,
+	BoostProjectButton,
+	BenefitsCardContainer,
 } from './GIVpower.sc';
 import RocketImage from '../../../public/images/rocket.svg';
 import Growth from '../../../public/images/growth.svg';
@@ -258,28 +260,26 @@ export function TabPowerBottom() {
 							<BenefitsCardHeading weight={700}>
 								For GIVers
 							</BenefitsCardHeading>
-							<BenefitsCardTextContainer>
-								<QuoteText size='small'>
-									Stake GIV to get GIVpower & earn rewards.
-								</QuoteText>
-								<QuoteText size='small'>
-									Lock your GIV to increase your rewards
-									multiplier.
-								</QuoteText>
-								<QuoteText size='small'>
-									Donate to the top-boosted projects to get
-									more GIVbacks.
-								</QuoteText>
-								<br />
-								{/*
-								TODO: UnComment when we want to go live
-								<Link href={Routes.GIVfarm} passHref> */}
-								<CardBottomText>
-									{/* GET GIVPOWER */}
-									Coming Soon
-								</CardBottomText>
-								{/* </Link> */}
-							</BenefitsCardTextContainer>
+							<BenefitsCardContainer>
+								<BenefitsCardTextContainer>
+									<QuoteText size='small'>
+										Stake GIV to get GIVpower & earn
+										rewards.
+									</QuoteText>
+									<QuoteText size='small'>
+										Lock your GIV to increase your rewards
+										multiplier.
+									</QuoteText>
+									<QuoteText size='small'>
+										Soon: Donate to top-ranked projects to
+										get extra GIVbacks.
+									</QuoteText>
+									<br />
+								</BenefitsCardTextContainer>
+								<Link href={Routes.GIVfarm} passHref>
+									<CardBottomText>Stake GIV</CardBottomText>
+								</Link>
+							</BenefitsCardContainer>
 						</BenefitsCard>
 						<BenefitsCard>
 							<BenefitsCardHeading weight={700}>

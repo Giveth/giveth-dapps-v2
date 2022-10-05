@@ -125,7 +125,13 @@ export const TabGIVbacksBottom = () => {
 	const [roundStarTime, setRoundStarTime] = useState(new Date());
 	const [roundEndTime, setRoundEndTime] = useState(new Date());
 	const { givTokenDistroHelper, isLoaded } = useGIVTokenDistroHelper();
-
+	const allocatedGIV =
+		round === 20
+			? `${((1e6 / 14) * 18).toLocaleString(undefined, {
+					minimumFractionDigits: 0,
+					maximumFractionDigits: 0,
+			  })} GIV`
+			: `1 Million GIV`;
 	useEffect(() => {
 		if (
 			givTokenDistroHelper &&
@@ -250,7 +256,7 @@ export const TabGIVbacksBottom = () => {
 											</NoWrap>
 										</P>
 										<GivAllocated>
-											<NoWrap>1 Million GIV</NoWrap>
+											<NoWrap>{allocatedGIV}</NoWrap>
 										</GivAllocated>
 									</RoundInfoTallRow>
 									<RoundButton
