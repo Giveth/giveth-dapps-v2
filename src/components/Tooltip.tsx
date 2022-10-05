@@ -33,9 +33,8 @@ export const Tooltip: FC<ITooltipProps> = ({ parentRef, children }) => {
 		<TooltipContainer
 			ref={childRef}
 			style={{
-				top:
-					(parentRef.current?.getBoundingClientRect().top || 0) -
-					(childRef.current?.getBoundingClientRect().height || 0),
+				top: parentRef.current?.getBoundingClientRect().top,
+				left: parentRef.current?.getBoundingClientRect().left,
 			}}
 		>
 			{children}
@@ -49,4 +48,5 @@ const TooltipContainer = styled.div`
 	background-color: red;
 	left: 0;
 	padding: 0;
+	transform: translate(-50%, calc(-100% - 16px));
 `;
