@@ -50,7 +50,6 @@ import {
 	BoostProjectButton,
 	BoostLinkContainer,
 	CaptionStyled,
-	BoostProjectButton,
 	BenefitsCardContainer,
 } from './GIVpower.sc';
 import RocketImage from '../../../public/images/rocket.svg';
