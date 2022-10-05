@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Tooltip } from './Tooltip';
 import type { FC, ReactNode } from 'react';
 
@@ -20,15 +20,18 @@ export const IconWithTooltip: FC<IIconWithTooltipProps> = ({
 	children,
 }) => {
 	const [show, setShow] = useState(false);
+	const elRef = useRef<HTMLDivElement>(null);
+
 	return (
 		<IconWithTooltipContainer
 			direction={direction}
 			align={align}
 			onMouseEnter={() => setShow(true)}
 			onMouseLeave={() => setShow(false)}
+			ref={elRef}
 		>
 			{icon}
-			{show && <Tooltip>{children}</Tooltip>}
+			{show && <Tooltip ParentRef={elRef}>{children}</Tooltip>}
 		</IconWithTooltipContainer>
 	);
 };
