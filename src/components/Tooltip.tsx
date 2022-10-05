@@ -1,4 +1,11 @@
-import { FC, ReactNode, RefObject, useEffect, useRef } from 'react';
+import {
+	CSSProperties,
+	FC,
+	ReactNode,
+	RefObject,
+	useEffect,
+	useRef,
+} from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import { zIndex } from '@/lib/constants/constants';
@@ -43,10 +50,7 @@ export const Tooltip: FC<ITooltipProps> = ({
 	return createPortal(
 		<TooltipContainer
 			ref={childRef}
-			style={{
-				top: parentRef.current?.getBoundingClientRect().top,
-				left: parentRef.current?.getBoundingClientRect().left,
-			}}
+			style={tooltipStyleCalc(parentRef, { direction, align })}
 			direction={direction}
 			align={align}
 		>
@@ -56,11 +60,33 @@ export const Tooltip: FC<ITooltipProps> = ({
 	);
 };
 
+const tooltipStyleCalc = (
+	parentRef: RefObject<HTMLDivElement>,
+	position: ITooltipDirection,
+): CSSProperties => {
+	if (!parentRef.current) return {};
+	if (typeof window === 'undefined') return {};
+	const { align, direction } = position;
+	const parentPosition = parentRef.current?.getBoundingClientRect();
+	let style = {};
+	console.log('position', position);
+	switch (direction) {
+		case 'top':
+			style = {
+				top: parentPosition.top,
+				left: parentPosition.left,
+				transform: `translate(-50%, calc(-100% - 16px))`,
+			};
+	}
+	console.log('style', style);
+
+	return style;
+};
+
 const TooltipContainer = styled.div<ITooltipDirection>`
 	position: fixed;
 	left: 0;
 	padding: 0;
-	transform: translate(-50%, calc(-100% - 16px));
 	background-color: black;
 	color: #fff;
 	border-radius: 6px;
