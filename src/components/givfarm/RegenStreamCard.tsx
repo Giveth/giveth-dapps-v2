@@ -221,7 +221,7 @@ const RegenStreamContainer = styled(Flex)`
 `;
 
 const HeaderRow = styled(Flex)`
-	margin-bottom: 76px;
+	margin-bottom: 24px;
 `;
 
 const RateRow = styled(Flex)`
