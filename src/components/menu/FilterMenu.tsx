@@ -100,7 +100,7 @@ const projectFeatures = [
 	{ label: 'Accept GIV token', value: 'AcceptGiv' },
 	{ label: 'Verified', value: 'Verified' },
 	{ label: 'From GivingBlock', value: 'GivingBlock' },
-	{ label: 'From Trace', value: 'Traceable' },
+	{ label: 'Accept Funds on Gnosis', value: 'AcceptFundOnGnosis' },
 ];
 
 const ButtonStyled = styled(Button)`
