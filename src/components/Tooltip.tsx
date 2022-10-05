@@ -7,6 +7,11 @@ interface ITooltipProps {
 	children: ReactNode;
 }
 
+export interface ITooltipDirection {
+	direction: 'right' | 'left' | 'top' | 'bottom';
+	align?: 'center' | 'right' | 'left' | 'top' | 'bottom';
+}
+
 export const Tooltip: FC<ITooltipProps> = ({ parentRef, children }) => {
 	const el = useRef(document.createElement('div'));
 	const childRef = useRef<HTMLDivElement>(null);
