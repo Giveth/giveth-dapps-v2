@@ -28,6 +28,7 @@ import {
 	FeaturesCardItem,
 	CenteredHeader,
 	BenefitsCardsContainer,
+	BenefitsCardContainer,
 	BenefitsCard,
 	BenefitsCardTextContainer,
 	BenefitsCardHeading,
