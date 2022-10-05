@@ -12,6 +12,7 @@ import { Modal } from './Modal';
 import { Flex } from '../styled-components/Flex';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import { mediaQueries } from '@/lib/constants/constants';
 import { RegenFarmConfig } from '@/types/config';
 import type { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 
@@ -74,10 +75,13 @@ export const APRModal: FC<IAPRModalProps> = ({
 };
 
 const APRModalContainer = styled.div`
-	width: 370px;
 	padding: 16px 24px;
 	margin-bottom: 22px;
 	text-align: left;
+	width: 100%;
+	${mediaQueries.tablet} {
+		width: 370px;
+	}
 `;
 
 const DescContainer = styled.div`

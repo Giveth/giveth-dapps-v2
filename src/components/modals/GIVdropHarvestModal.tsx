@@ -288,8 +288,8 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 										direction={'top'}
 									>
 										<TooltipContent>
-											Increase you GIVstream flowrate when
-											you claim liquid rewards!
+											Increase your GIVstream flowrate
+											when you claim liquid rewards!
 										</TooltipContent>
 									</IconWithTooltip>
 								</HelpRow>
