@@ -298,7 +298,7 @@ const config: EnvConfig = {
 						},
 						farmStartTimeMS: 1649001600000,
 						active: true,
-						discontinued: 1664744400000,
+						discontinued: 1665932450000,
 					},
 				],
 			},
