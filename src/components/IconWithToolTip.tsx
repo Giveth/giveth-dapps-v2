@@ -24,7 +24,11 @@ export const IconWithTooltip: FC<IIconWithTooltipProps> = ({
 			ref={elRef}
 		>
 			{icon}
-			{show && <Tooltip parentRef={elRef}>{children}</Tooltip>}
+			{show && (
+				<Tooltip direction={direction} align={align} parentRef={elRef}>
+					{children}
+				</Tooltip>
+			)}
 		</IconWithTooltipContainer>
 	);
 };

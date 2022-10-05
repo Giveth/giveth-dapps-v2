@@ -2,17 +2,22 @@ import { FC, ReactNode, RefObject, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 
-interface ITooltipProps {
-	parentRef: RefObject<HTMLDivElement>;
-	children: ReactNode;
-}
-
 export interface ITooltipDirection {
 	direction: 'right' | 'left' | 'top' | 'bottom';
 	align?: 'center' | 'right' | 'left' | 'top' | 'bottom';
 }
 
-export const Tooltip: FC<ITooltipProps> = ({ parentRef, children }) => {
+interface ITooltipProps extends ITooltipDirection {
+	parentRef: RefObject<HTMLDivElement>;
+	children: ReactNode;
+}
+
+export const Tooltip: FC<ITooltipProps> = ({
+	parentRef,
+	direction,
+	align,
+	children,
+}) => {
 	const el = useRef(document.createElement('div'));
 	const childRef = useRef<HTMLDivElement>(null);
 	useEffect(() => {
@@ -41,6 +46,8 @@ export const Tooltip: FC<ITooltipProps> = ({ parentRef, children }) => {
 				top: parentRef.current?.getBoundingClientRect().top,
 				left: parentRef.current?.getBoundingClientRect().left,
 			}}
+			direction={direction}
+			align={align}
 		>
 			{children}
 		</TooltipContainer>,
@@ -48,10 +55,77 @@ export const Tooltip: FC<ITooltipProps> = ({ parentRef, children }) => {
 	);
 };
 
-const TooltipContainer = styled.div`
+const TooltipContainer = styled.div<ITooltipDirection>`
 	position: fixed;
-	background-color: red;
 	left: 0;
 	padding: 0;
 	transform: translate(-50%, calc(-100% - 16px));
+	background-color: black;
+	color: #fff;
+	border-radius: 6px;
+	padding: 8px;
+	/* ${props => {
+		let directionStyles;
+		let alignStyles;
+		switch (props.direction) {
+			case 'top':
+				directionStyles = `bottom: 120%;margin-bottom: 4px;`;
+				switch (props.align) {
+					case 'left':
+						alignStyles = `left: 0%;`;
+						break;
+					case 'right':
+						alignStyles = `right: 0%;`;
+						break;
+					default:
+						alignStyles = `left: 50%; transform: translateX(-50%);`;
+						break;
+				}
+				return directionStyles + alignStyles;
+			case 'right':
+				directionStyles = `left: 120%;margin-left: 4px;`;
+				switch (props.align) {
+					case 'top':
+						alignStyles = `top: 0%;`;
+						break;
+					case 'bottom':
+						alignStyles = `bottom: 0%;`;
+						break;
+					default:
+						alignStyles = `top: 50%;transform: translateY(-50%)`;
+						break;
+				}
+				return directionStyles + alignStyles;
+			case 'left':
+				directionStyles = `right: 120%;margin-right: 4px;`;
+				switch (props.align) {
+					case 'top':
+						alignStyles = `top: 0%;`;
+						break;
+					case 'bottom':
+						alignStyles = `bottom: 0%;`;
+						break;
+					default:
+						alignStyles = `top: 50%;transform: translateY(-50%)`;
+						break;
+				}
+				return directionStyles + alignStyles;
+			case 'bottom':
+				directionStyles = `top: 120%;margin-top: 4px;`;
+				switch (props.align) {
+					case 'left':
+						alignStyles = `left: 0%;`;
+						break;
+					case 'right':
+						alignStyles = `right: 0%;`;
+						break;
+					default:
+						alignStyles = `left: 50%; transform: translateX(-50%);`;
+						break;
+				}
+				return directionStyles + alignStyles;
+			default:
+				break;
+		}
+	}} */
 `;
