@@ -1,12 +1,13 @@
-import { FC, ReactNode, useEffect, useRef } from 'react';
+import { FC, ReactNode, RefObject, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 
 interface ITooltipProps {
+	ParentRef: RefObject<HTMLDivElement>;
 	children: ReactNode;
 }
 
-export const Tooltip: FC<ITooltipProps> = ({ children }) => {
+export const Tooltip: FC<ITooltipProps> = ({ ParentRef, children }) => {
 	const el = useRef(document.createElement('div'));
 	const childRef = useRef<HTMLDivElement>(null);
 	useEffect(() => {
@@ -14,6 +15,8 @@ export const Tooltip: FC<ITooltipProps> = ({ children }) => {
 
 		const current = el.current;
 		const modalRoot = document.querySelector('body') as HTMLElement;
+		const size = ParentRef.current?.getBoundingClientRect();
+		console.log('ParentRef', size);
 
 		if (modalRoot) {
 			modalRoot.appendChild(current);
