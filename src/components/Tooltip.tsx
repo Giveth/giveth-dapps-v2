@@ -1,6 +1,7 @@
 import { FC, ReactNode, RefObject, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
+import { zIndex } from '@/lib/constants/constants';
 
 export interface ITooltipDirection {
 	direction: 'right' | 'left' | 'top' | 'bottom';
@@ -64,6 +65,7 @@ const TooltipContainer = styled.div<ITooltipDirection>`
 	color: #fff;
 	border-radius: 6px;
 	padding: 8px;
+	z-index: ${zIndex.TOOLTIP};
 	/* ${props => {
 		let directionStyles;
 		let alignStyles;
