@@ -12,8 +12,6 @@ const BASE_ROUTE = 'https://serve.giveth.io';
 const SEPT_8TH_2022 = 1662595200000;
 const MAINNET_NETWORK_NUMBER = 5; // Goerli
 const XDAI_NETWORK_NUMBER = 100; // xDAI
-// IMPORTANT: Using dev to make it work until staging is merged
-// const BASE_ROUTE = 'https://dev.serve.giveth.io';
 
 const config: EnvConfig = {
 	BACKEND_LINK: `${BASE_ROUTE}/graphql`,

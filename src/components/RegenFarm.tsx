@@ -5,13 +5,13 @@ import {
 	regenFarmStreamCardCol,
 } from '@/lib/constants/constants';
 import StakingPoolCard from './cards/StakingPoolCard';
-import { DAOChangeNetwork, DAOContainer } from './GIVfrens.sc';
 import { Row, Col } from './Grid';
 import { PoolRow } from './homeTabs/GIVfarm.sc';
-import { RegenStreamCard } from './RegenStreamCard';
 import config from '@/configuration';
 import { RegenFarmConfig } from '@/types/config';
 import { DAOChangeNetworkModal } from './DAOChangeNetworkModal';
+import { DAOContainer, DAOChangeNetwork } from './givfarm/GIVfrens.sc';
+import { RegenStreamCard } from './givfarm/RegenStreamCard';
 
 interface IRegenFarmProps {
 	regenFarm: RegenFarmConfig;
