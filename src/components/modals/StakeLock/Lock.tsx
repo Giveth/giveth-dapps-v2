@@ -32,11 +32,10 @@ import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { Flex } from '@/components/styled-components/Flex';
 import links from '@/lib/constants/links';
 import ExternalLink from '@/components/ExternalLink';
-import type { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
+import type { PoolStakingConfig } from '@/types/config';
 
 interface ILockModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
-	regenStreamConfig?: RegenStreamConfig;
 	maxAmount: BigNumber;
 }
 
