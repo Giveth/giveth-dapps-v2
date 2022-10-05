@@ -276,6 +276,6 @@ const Converted = styled(Caption)`
 
 const HarvestButton = styled(Button)`
 	width: auto;
-	padding-left: 64px;
-	padding-right: 64px;
+	flex: 1;
+	max-width: 264px;
 `;
