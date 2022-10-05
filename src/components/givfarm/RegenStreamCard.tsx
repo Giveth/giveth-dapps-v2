@@ -174,7 +174,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 					</PercentageRow>
 				</div>
 				<Remaining>{`Time remaining: ` + remainTime}</Remaining>
-				<HarvestContainer wrap={1}>
+				<HarvestContainer wrap={1} gap='24px'>
 					<div>
 						<AmountInfo alignItems='flex-end' gap='4px'>
 							{getStreamIconWithType(streamConfig.type, 24)}
@@ -221,7 +221,7 @@ const RegenStreamContainer = styled(Flex)`
 `;
 
 const HeaderRow = styled(Flex)`
-	margin-bottom: 76px;
+	margin-bottom: 24px;
 `;
 
 const RateRow = styled(Flex)`
@@ -276,6 +276,6 @@ const Converted = styled(Caption)`
 
 const HarvestButton = styled(Button)`
 	width: auto;
-	padding-left: 64px;
-	padding-right: 64px;
+	flex: 1;
+	max-width: 264px;
 `;
