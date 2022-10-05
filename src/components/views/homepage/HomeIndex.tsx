@@ -2,6 +2,7 @@ import HomeHeader from './HomeHeader';
 import HomeExploreProjects from './HomeExploreProjects';
 import HomePurpleSection from './HomePurpleSection';
 import HomeNiceSection from './HomeNiceSection';
+import HomeGIVPowerSection from './HomeGIVPowerSection';
 import HomeFromBlog from './HomeFromBlog';
 import HomeGetUpdates from './HomeGetUpdates';
 import HomeChangeMakers from './HomeChangeMakers';
@@ -25,6 +26,7 @@ const HomeIndex = (props: IHomeView) => {
 				totalCount={totalCount}
 				projects={projects.slice(0, projectsSlice)}
 			/>
+			<HomeGIVPowerSection />
 			<HomeNiceSection />
 			<HomePurpleSection />
 			<HomeExploreProjects
