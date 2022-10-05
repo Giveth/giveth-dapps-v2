@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import { useState } from 'react';
+import { Tooltip } from './Tooltip';
 import type { FC, ReactNode } from 'react';
 
 interface IDirection {
@@ -17,10 +19,16 @@ export const IconWithTooltip: FC<IIconWithTooltipProps> = ({
 	align = 'center',
 	children,
 }) => {
+	const [show, setShow] = useState(false);
 	return (
-		<IconWithTooltipContainer direction={direction} align={align}>
+		<IconWithTooltipContainer
+			direction={direction}
+			align={align}
+			onMouseEnter={() => setShow(true)}
+			onMouseLeave={() => setShow(false)}
+		>
 			{icon}
-			<span>{children}</span>
+			{show && <Tooltip>{children}</Tooltip>}
 		</IconWithTooltipContainer>
 	);
 };
