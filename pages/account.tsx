@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { H5 } from '@giveth/ui-design-system';
 import Head from 'next/head';
 import { FC } from 'react';
-import UserPublicProfileView from '@/components/views/userPublicProfile/UserPublicProfile.view';
+import UserProfileView from '@/components/views/userProfile/UserProfile.view';
 import { useAppSelector } from '@/features/hooks';
 
 const NoUserContainer = styled.div`
@@ -17,7 +17,7 @@ const UserRoute: FC = () => {
 				<title>Giveth | {user?.name}</title>
 			</Head>
 			{user ? (
-				<UserPublicProfileView user={user} myAccount />
+				<UserProfileView user={user} myAccount />
 			) : (
 				<NoUserContainer>
 					<H5>Not logged in or user not found</H5>
