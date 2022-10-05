@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 import { H3 } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
-import { Col } from './Grid';
 import config from '@/configuration';
-import { RegenFarm } from './RegenFarm';
-import { GIVfrensLink, Subtitle } from '@/components/GIVfrens.sc';
+import { Col } from '../Grid';
+import { RegenFarm } from '../RegenFarm';
+import { Subtitle, GIVfrensLink } from './GIVfrens.sc';
 
 interface IGIVfrensProps {}
 
