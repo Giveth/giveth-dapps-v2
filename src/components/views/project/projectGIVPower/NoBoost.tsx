@@ -6,7 +6,7 @@ const NoBoost = ({ isAdmin }: { isAdmin: boolean }) => {
 		<Wrapper size='small'>
 			<div>
 				{isAdmin
-					? `Your project didn't receive any boosts yet!
+					? `Your project hasn't received any boosts yet!
 				`
 					: `This project hasn't received any boosts yet!`}
 			</div>
