@@ -5,9 +5,10 @@ import { Web3ReactProvider } from '@web3-react/core';
 import { ApolloProvider } from '@apollo/client';
 import { ExternalProvider, Web3Provider } from '@ethersproject/providers';
 import NProgress from 'nprogress';
-
+import * as snippet from '@segment/snippet';
 import { useRouter } from 'next/router';
 import { Provider } from 'react-redux';
+import Script from 'next/script';
 import { useApollo } from '@/apollo/apolloClient';
 import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
 import { FooterWrapper } from '@/components/Footer/FooterWrapper';
@@ -20,7 +21,26 @@ import ModalController from '@/components/controller/modal.ctrl';
 import PriceController from '@/components/controller/price.ctrl';
 import GeneralController from '@/components/controller/general.ctrl';
 import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
+import Page from '@/components/Page';
 import type { AppProps } from 'next/app';
+
+const DEFAULT_WRITE_KEY = 'lvBWopQhDusIfdEr0l1w7oYxk4Stsjvk';
+
+function renderSnippet() {
+	const opts = {
+		apiKey:
+			process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY || DEFAULT_WRITE_KEY,
+		// note: the page option only covers SSR tracking.
+		// Page.js is used to track other events using `window.analytics.page()`
+		page: true,
+	};
+
+	if (process.env.NODE_ENV === 'development') {
+		return snippet.max(opts);
+	}
+
+	return snippet.min(opts);
+}
 
 function getLibrary(provider: ExternalProvider) {
 	return new Web3Provider(provider);
@@ -66,17 +86,28 @@ function MyApp({ Component, pageProps }: AppProps) {
 						<SubgraphController />
 						<UserController />
 						<HeaderWrapper />
-						{pageProps.errorStatus ? (
-							<ErrorsIndex statusCode={pageProps.errorStatus} />
-						) : (
-							<Component {...pageProps} />
-						)}
-
+						<Page>
+							{pageProps.errorStatus ? (
+								<ErrorsIndex
+									statusCode={pageProps.errorStatus}
+								/>
+							) : (
+								<Component {...pageProps} />
+							)}
+							<Script
+								id='segment-script'
+								strategy='afterInteractive'
+								dangerouslySetInnerHTML={{
+									__html: renderSnippet(),
+								}}
+							/>
+						</Page>
 						<FooterWrapper />
 						<ModalController />
 					</Web3ReactProvider>
 				</ApolloProvider>
 			</Provider>
+
 			<Toaster containerStyle={{ top: '80px' }} />
 		</>
 	);
