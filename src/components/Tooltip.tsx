@@ -82,6 +82,12 @@ const tooltipStyleCalc = (
 				left: parentPosition.left,
 				transform: `translate(-50%, 4px)`,
 			};
+		case 'right':
+			style = {
+				top: parentPosition.bottom,
+				left: parentPosition.right,
+				transform: `translate(4px, -50%)`,
+			};
 	}
 	console.log('style', style);
 
