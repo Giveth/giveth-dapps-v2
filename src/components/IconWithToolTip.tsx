@@ -35,4 +35,5 @@ export const IconWithTooltip: FC<IIconWithTooltipProps> = ({
 
 const IconWithTooltipContainer = styled.div`
 	cursor: pointer;
+	display: inline-block;
 `;
