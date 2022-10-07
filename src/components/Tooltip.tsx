@@ -29,7 +29,7 @@ export const Tooltip: FC<ITooltipProps> = ({
 	const el = useRef(document.createElement('div'));
 	const childRef = useRef<HTMLDivElement>(null);
 	useEffect(() => {
-		console.log('enter');
+		// console.log('enter');
 
 		const current = el.current;
 		const body = document.querySelector('body') as HTMLElement;
@@ -38,13 +38,13 @@ export const Tooltip: FC<ITooltipProps> = ({
 			body.appendChild(current);
 		}
 		return () => {
-			console.log('leave');
+			// console.log('leave');
 			body!.removeChild(current);
 		};
 	}, [parentRef]);
 
 	// console.log('top', parentRef.current?.getBoundingClientRect().top);
-	console.log('height', childRef.current);
+	console.log('height', childRef.current?.getBoundingClientRect());
 
 	return createPortal(
 		<TooltipContainer
@@ -74,28 +74,40 @@ const tooltipStyleCalc = (
 			style = {
 				top: parentPosition.top,
 				left: parentPosition.left,
-				transform: `translate(-50%, calc(-100% - 16px))`,
+				transform: `translate(calc(-50% + ${
+					parentPosition.width / 2
+				}px), calc(-100% - 16px))`,
 			};
+			break;
 		case 'bottom':
 			style = {
 				top: parentPosition.bottom,
 				left: parentPosition.left,
-				transform: `translate(-50%, 4px)`,
+				transform: `translate(calc(-50% + ${
+					parentPosition.width / 2
+				}px), 4px)`,
 			};
+			break;
 		case 'right':
 			style = {
 				top: parentPosition.bottom,
 				left: parentPosition.right,
-				transform: `translate(4px, -50%)`,
+				transform: `translate(4px, calc(-50% - ${
+					parentPosition.height / 2
+				}px))`,
 			};
+			break;
 		case 'left':
 			style = {
 				top: parentPosition.bottom,
 				left: parentPosition.left,
-				transform: `translate(calc(-100% - 8px), -50%)`,
+				transform: `translate(calc(-100% - 8px), calc(-50% - ${
+					parentPosition.height / 2
+				}px))`,
 			};
+			break;
 	}
-	console.log('style', style);
+	// console.log('style', style);
 
 	return style;
 };
