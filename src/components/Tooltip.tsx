@@ -88,6 +88,12 @@ const tooltipStyleCalc = (
 				left: parentPosition.right,
 				transform: `translate(4px, -50%)`,
 			};
+		case 'left':
+			style = {
+				top: parentPosition.bottom,
+				left: parentPosition.left,
+				transform: `translate(calc(-100% - 8px), -50%)`,
+			};
 	}
 	console.log('style', style);
 
@@ -96,7 +102,6 @@ const tooltipStyleCalc = (
 
 const TooltipContainer = styled.div<ITooltipDirection>`
 	position: fixed;
-	left: 0;
 	padding: 0;
 	background-color: black;
 	color: #fff;
