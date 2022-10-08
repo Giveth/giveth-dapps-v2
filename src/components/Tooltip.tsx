@@ -5,9 +5,10 @@ import {
 	RefObject,
 	useEffect,
 	useRef,
+	useState,
 } from 'react';
-import { createPortal } from 'react-dom';
 import styled from 'styled-components';
+import { createPortal } from 'react-dom';
 import { zIndex } from '@/lib/constants/constants';
 
 export interface ITooltipDirection {
@@ -26,6 +27,7 @@ export const Tooltip: FC<ITooltipProps> = ({
 	align,
 	children,
 }) => {
+	const [style, setStyle] = useState({});
 	const el = useRef(document.createElement('div'));
 	const childRef = useRef<HTMLDivElement>(null);
 	useEffect(() => {
@@ -41,15 +43,20 @@ export const Tooltip: FC<ITooltipProps> = ({
 			// console.log('leave');
 			body!.removeChild(current);
 		};
-	}, [parentRef]);
+	}, []);
 
-	// console.log('top', parentRef.current?.getBoundingClientRect().top);
-	console.log('height', childRef.current?.getBoundingClientRect());
+	useEffect(() => {
+		if (!parentRef.current) return;
+		if (!childRef.current) return;
+		const childRect = childRef.current.getBoundingClientRect();
+		console.log('childRef');
+		setStyle(tooltipStyleCalc(parentRef, { direction, align }));
+	}, [align, direction, parentRef, childRef]);
 
 	return createPortal(
 		<TooltipContainer
 			ref={childRef}
-			style={tooltipStyleCalc(parentRef, { direction, align })}
+			style={style}
 			direction={direction}
 			align={align}
 		>
