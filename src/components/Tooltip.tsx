@@ -49,7 +49,6 @@ export const Tooltip: FC<ITooltipProps> = ({
 		if (!parentRef.current) return;
 		if (!childRef.current) return;
 		const childRect = childRef.current.getBoundingClientRect();
-		console.log('childRef');
 		setStyle(tooltipStyleCalc(parentRef, { direction, align }));
 	}, [align, direction, parentRef, childRef]);
 
@@ -73,43 +72,43 @@ const tooltipStyleCalc = (
 	if (!parentRef.current) return {};
 	if (typeof window === 'undefined') return {};
 	const { align, direction } = position;
-	const parentPosition = parentRef.current?.getBoundingClientRect();
+	const parentRect = parentRef.current?.getBoundingClientRect();
 	let style = {};
 	console.log('position', position);
 	switch (direction) {
 		case 'top':
 			style = {
-				top: parentPosition.top,
-				left: parentPosition.left,
+				top: parentRect.top,
+				left: parentRect.left,
 				transform: `translate(calc(-50% + ${
-					parentPosition.width / 2
+					parentRect.width / 2
 				}px), calc(-100% - 16px))`,
 			};
 			break;
 		case 'bottom':
 			style = {
-				top: parentPosition.bottom,
-				left: parentPosition.left,
+				top: parentRect.bottom,
+				left: parentRect.left,
 				transform: `translate(calc(-50% + ${
-					parentPosition.width / 2
+					parentRect.width / 2
 				}px), 4px)`,
 			};
 			break;
 		case 'right':
 			style = {
-				top: parentPosition.bottom,
-				left: parentPosition.right,
+				top: parentRect.bottom,
+				left: parentRect.right,
 				transform: `translate(4px, calc(-50% - ${
-					parentPosition.height / 2
+					parentRect.height / 2
 				}px))`,
 			};
 			break;
 		case 'left':
 			style = {
-				top: parentPosition.bottom,
-				left: parentPosition.left,
+				top: parentRect.bottom,
+				left: parentRect.left,
 				transform: `translate(calc(-100% - 8px), calc(-50% - ${
-					parentPosition.height / 2
+					parentRect.height / 2
 				}px))`,
 			};
 			break;
