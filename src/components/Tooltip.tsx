@@ -48,8 +48,9 @@ export const Tooltip: FC<ITooltipProps> = ({
 	useEffect(() => {
 		if (!parentRef.current) return;
 		if (!childRef.current) return;
+		const parentRect = parentRef.current.getBoundingClientRect();
 		const childRect = childRef.current.getBoundingClientRect();
-		setStyle(tooltipStyleCalc(parentRef, { direction, align }));
+		setStyle(tooltipStyleCalc(parentRect, childRect, { direction, align }));
 	}, [align, direction, parentRef, childRef]);
 
 	return createPortal(
@@ -66,13 +67,11 @@ export const Tooltip: FC<ITooltipProps> = ({
 };
 
 const tooltipStyleCalc = (
-	parentRef: RefObject<HTMLDivElement>,
+	parentRect: DOMRect,
+	childRect: DOMRect,
 	position: ITooltipDirection,
 ): CSSProperties => {
-	if (!parentRef.current) return {};
-	if (typeof window === 'undefined') return {};
 	const { align, direction } = position;
-	const parentRect = parentRef.current?.getBoundingClientRect();
 	let style = {};
 	console.log('position', position);
 	switch (direction) {
