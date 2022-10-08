@@ -7,6 +7,7 @@ import { captureException } from '@sentry/nextjs';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper';
 import Image from 'next/image';
+import { Swiper as SwiperClass } from 'swiper/types';
 
 import { client } from '@/apollo/apolloClient';
 import { SIMILAR_PROJECTS } from '@/apollo/gql/gqlProjects';
@@ -26,6 +27,8 @@ const SimilarProjects = (props: { slug: string }) => {
 
 	const device = useDetectDevice();
 
+	const [swiperInstance, setSwiperInstance] = useState<SwiperClass>();
+
 	let projectsToShow;
 	if (device.isMobile) {
 		projectsToShow = 1;
@@ -38,6 +41,7 @@ const SimilarProjects = (props: { slug: string }) => {
 	const [suggestedProjects, setSuggestedProjects] = useState<IProject[]>([]);
 
 	useEffect(() => {
+		swiperInstance?.slideTo(0);
 		client
 			.query({
 				query: SIMILAR_PROJECTS,
@@ -71,6 +75,7 @@ const SimilarProjects = (props: { slug: string }) => {
 					<Image src={CaretRightIcon} alt='caret right' />
 				</CaretLeft>
 				<Swiper
+					onSwiper={setSwiperInstance}
 					modules={[Navigation]}
 					navigation={{
 						nextEl: '#nextIcon',
