@@ -24,6 +24,7 @@ import selectCustomStyles from '@/lib/constants/selectCustomStyles';
 import { useProjectsContext } from '@/context/projects.context';
 import { Flex } from '@/components/styled-components/Flex';
 import useDetectDevice from '@/hooks/useDetectDevice';
+import { IS_BOOSTING_ENABLED } from '@/configuration';
 
 export interface ISelectedSort {
 	icon: ReactElement;
@@ -62,6 +63,15 @@ const sortByOptions = [
 		icon: <IconDonation16 color={brandColors.deep[900]} />,
 	},
 ];
+
+if (IS_BOOSTING_ENABLED) {
+	// TODO: add GIVpower icon
+	sortByOptions.unshift({
+		label: 'GIVpower',
+		value: ESortbyAllProjects.GIVPOWER,
+		icon: <></>,
+	});
+}
 
 const ProjectsSortSelect = () => {
 	const { variables, setVariables } = useProjectsContext();

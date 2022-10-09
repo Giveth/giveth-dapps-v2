@@ -23,8 +23,8 @@ const fetchProjects = async (userId: string | undefined = undefined) => {
 		limit: projectsToFetch,
 		orderBy: {
 			field: IS_BOOSTING_ENABLED
-				? gqlEnums.GIVPOWER
-				: gqlEnums.QUALITYSCORE,
+				? ESortby.GIVPOWER
+				: ESortby.QUALITYSCORE,
 			direction: EDirection.DESC,
 		},
 	};
