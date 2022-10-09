@@ -48,8 +48,19 @@ export const Tooltip: FC<ITooltipProps> = ({
 	useEffect(() => {
 		if (!parentRef.current) return;
 		if (!childRef.current) return;
+		if (typeof window === 'undefined') return;
 		const parentRect = parentRef.current.getBoundingClientRect();
 		const childRect = childRef.current.getBoundingClientRect();
+
+		console.log('parentRect', parentRect);
+		console.log('childRect', childRect);
+		// let isTopOk = parentRect.top - childRect.height >= 0;
+		// let isBottomOk =
+		// 	parentRect.bottom + childRect.height <= window.innerHeight;
+		// let isRightOk = false;
+		// let isLeftOk = false;
+		// console.log(parentRect.bottom + childRect.height, window.innerHeight);
+
 		setStyle(tooltipStyleCalc(parentRect, childRect, { direction, align }));
 	}, [align, direction, parentRef, childRef]);
 
