@@ -9,9 +9,9 @@ import {
 	ModalHeaderTitlePosition,
 } from '@/components/modals/ModalHeader';
 import { ETheme } from '@/features/general/general.slice';
-import { zIndex } from '@/lib/constants/constants';
+import { mediaQueries, zIndex } from '@/lib/constants/constants';
 import { useAppSelector } from '@/features/hooks';
-import useDetectDevice from '@/hooks/useDetectDevice';
+import useDeviceDetect from '@/hooks/useDeviceDetect';
 
 interface ModalWrapperProps {
 	fullScreen?: boolean;
@@ -52,10 +52,11 @@ export const Modal: FC<IModal> = ({
 	useEffect(() => {
 		const current = el.current;
 		const modalRoot = document.querySelector('body') as HTMLElement;
+		const innerWindowDiff =
+			window.innerWidth - modalRoot.getBoundingClientRect().width;
 		modalRoot.style.overflowY = 'hidden';
-		if (!isMobile) {
-			modalRoot.style.paddingRight = '15px';
-		}
+		modalRoot.style.paddingRight = `${innerWindowDiff}px`;
+
 		if (modalRoot) {
 			modalRoot.addEventListener('keydown', handleKeyDown);
 			modalRoot.appendChild(current);
@@ -100,7 +101,9 @@ export const Modal: FC<IModal> = ({
 					renderTrackHorizontal={props => (
 						<div {...props} style={{ display: 'none' }} />
 					)}
-					{...(fullScreen ? {} : ScrollBarsNotFullScreenProps)}
+					{...(fullScreen || isMobile
+						? {}
+						: ScrollBarsNotFullScreenProps)}
 				>
 					{children}
 				</Scrollbars>
@@ -136,9 +139,6 @@ const ModalWrapper = styled.div<ModalWrapperProps>`
 		props.theme === ETheme.Dark
 			? brandColors.giv[600]
 			: neutralColors.gray[100]};
-	box-shadow: 0 3px 20px
-		${props => (props.theme === ETheme.Dark ? '#00000026' : '#21203c')};
-	border-radius: ${props => (props.fullScreen ? 0 : '8px')};
 	color: ${props =>
 		props.theme === ETheme.Dark
 			? neutralColors.gray[100]
@@ -146,8 +146,15 @@ const ModalWrapper = styled.div<ModalWrapperProps>`
 	position: relative;
 	z-index: 10;
 	text-align: center;
-	max-height: ${props => (props.fullScreen ? 'none' : '90vh')};
-	width: ${props => (props.fullScreen ? '100%' : 'auto')};
-	height: ${props => (props.fullScreen ? '100%' : 'auto')};
 	overflow: hidden;
+	height: 100%;
+	width: 100%;
+	${mediaQueries.tablet} {
+		border-radius: ${props => (props.fullScreen ? 0 : '8px')};
+		box-shadow: 0 3px 20px
+			${props => (props.theme === ETheme.Dark ? '#00000026' : '#21203c')};
+		max-height: ${props => (props.fullScreen ? 'none' : '90vh')};
+		width: ${props => (props.fullScreen ? '100%' : 'auto')};
+		height: ${props => (props.fullScreen ? '100%' : 'auto')};
+	}
 `;

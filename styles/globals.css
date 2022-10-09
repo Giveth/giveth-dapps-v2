@@ -198,7 +198,7 @@ a {
 
 #nprogress {
 	z-index: 1101;
-	position: absolute;
+	position: fixed;
 	width: 100%;
 	top: 0;
 }

@@ -16,6 +16,8 @@ import {
 	OutlineButton,
 	IconArchiving,
 	Caption,
+	IconRocketInSpace,
+	ButtonText,
 } from '@giveth/ui-design-system';
 import { motion } from 'framer-motion';
 import { captureException } from '@sentry/nextjs';
@@ -51,12 +53,14 @@ import { EProjectVerificationStatus } from '@/apollo/types/gqlEnums';
 import VerificationStatus from '@/components/views/project/projectDonateCard/VerificationStatus';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import GIVbackToast from '@/components/views/project/projectDonateCard/GIVbackToast';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+import BoostModal from '@/components/modals/Boost/BoostModal';
+import { IS_BOOSTING_ENABLED } from '@/configuration';
 import CategoryBadge from '@/components/badges/CategoryBadge';
 import { mapCategoriesToMainCategories } from '@/helpers/singleProject';
-import { Flex } from '@/components/styled-components/Flex';
 
 interface IProjectDonateCard {
-	project?: IProject;
+	project: IProject;
 	isActive?: boolean;
 	setIsActive: Dispatch<SetStateAction<boolean>>;
 	isDraft?: boolean;
@@ -93,6 +97,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 	const [isAdmin, setIsAdmin] = useState<boolean>(false);
 	const [deactivateModal, setDeactivateModal] = useState<boolean>(false);
 	const [showVerificationModal, setShowVerificationModal] = useState(false);
+	const [showBoost, setShowBoost] = useState(false);
 	const [reaction, setReaction] = useState<IReaction | undefined>(
 		project?.reaction,
 	);
@@ -179,6 +184,14 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 		}
 	}, [id, user?.id]);
 
+	const handleBoostClick = () => {
+		if (!isSignedIn) {
+			dispatch(setShowSignWithWallet(true));
+		} else {
+			setShowBoost(true);
+		}
+	};
+
 	useEffect(() => {
 		fetchProjectReaction().then();
 	}, [user?.id]);
@@ -251,6 +264,12 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 					setIsActive={setIsActive}
 				/>
 			)}
+			{showBoost && project?.id && (
+				<BoostModal
+					projectId={project.id}
+					setShowModal={setShowBoost}
+				/>
+			)}
 			<Wrapper
 				ref={wrapperRef}
 				height={wrapperHeight}
@@ -318,12 +337,21 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 					<ShareLikeBadge
 						type='share'
 						onClick={() => isActive && setShowModal(true)}
+						isSimple={!isAdmin}
 					/>
 					<ShareLikeBadge
 						type='like'
 						active={heartedByUser}
 						onClick={() => isActive && likeUnlikeProject()}
+						isSimple={!isAdmin}
 					/>
+					{/* // TODO: Boosting - remove this for boosting launch */}
+					{IS_BOOSTING_ENABLED && !isAdmin && (
+						<BoostButton onClick={handleBoostClick}>
+							<BoostButtonText>Boost</BoostButtonText>
+							<IconRocketInSpace color={brandColors.giv[500]} />
+						</BoostButton>
+					)}
 				</BadgeWrapper>
 				{!isAdmin && verified && <GIVbackToast />}
 				{isCategories && (
@@ -371,6 +399,23 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 	);
 };
 
+const BoostButton = styled(FlexCenter)`
+	border-radius: 48px;
+	box-shadow: ${Shadow.Neutral[500]};
+	display: flex;
+	gap: 4px;
+	padding-right: 22px;
+	padding-left: 22px;
+	color: ${brandColors.giv[500]};
+	cursor: pointer;
+	background: white;
+	width: 100%;
+`;
+
+const BoostButtonText = styled(ButtonText)`
+	font-size: 0.75em;
+`;
+
 const Links = styled.div`
 	color: ${brandColors.pinky[500]};
 	display: flex;
@@ -410,6 +455,7 @@ const BadgeWrapper = styled.div`
 	display: flex;
 	margin-top: 16px;
 	justify-content: space-between;
+	gap: 8px;
 `;
 
 const Wrapper = styled(motion.div)<{ height: number }>`
@@ -418,7 +464,6 @@ const Wrapper = styled(motion.div)<{ height: number }>`
 	padding: 32px;
 	height: fit-content;
 	box-shadow: ${Shadow.Neutral[400]};
-	flex-shrink: 0;
 	z-index: 10;
 	align-self: flex-start;
 	width: 100%;

@@ -1,6 +1,53 @@
 import { gql } from '@apollo/client';
+import { IS_BOOSTING_ENABLED } from '@/configuration';
 
-export const FETCH_HOME_PROJECTS = gql`
+const FETCH_HOME_PROJECTS_WITH_BOOST = gql`
+	query FetchAllProjects(
+		$limit: Int
+		$orderBy: OrderBy
+		$connectedWalletUserId: Int
+	) {
+		projects(
+			take: $limit
+			orderBy: $orderBy
+			connectedWalletUserId: $connectedWalletUserId
+		) {
+			projects {
+				id
+				title
+				image
+				slug
+				description
+				verified
+				totalDonations
+				traceCampaignId
+				reaction {
+					id
+					userId
+				}
+				totalReactions
+				adminUser {
+					name
+					walletAddress
+				}
+				updatedAt
+				organization {
+					name
+					label
+					supportCustomTokens
+				}
+				projectPower {
+					powerRank
+					totalPower
+					updateTime
+				}
+			}
+			totalCount
+		}
+	}
+`;
+
+const FETCH_HOME_PROJECTS_WITHOUT_BOOST = gql`
 	query FetchAllProjects(
 		$limit: Int
 		$orderBy: OrderBy
@@ -41,7 +88,68 @@ export const FETCH_HOME_PROJECTS = gql`
 	}
 `;
 
-export const FETCH_ALL_PROJECTS = gql`
+export const FETCH_HOME_PROJECTS = IS_BOOSTING_ENABLED
+	? FETCH_HOME_PROJECTS_WITH_BOOST
+	: FETCH_HOME_PROJECTS_WITHOUT_BOOST;
+
+const FETCH_ALL_PROJECTS_WITH_BOOST = gql`
+	query FetchAllProjects(
+		$limit: Int
+		$skip: Int
+		$orderBy: OrderBy
+		$filterBy: FilterBy
+		$searchTerm: String
+		$category: String
+		$connectedWalletUserId: Int
+	) {
+		projects(
+			take: $limit
+			skip: $skip
+			orderBy: $orderBy
+			filterBy: $filterBy
+			searchTerm: $searchTerm
+			category: $category
+			connectedWalletUserId: $connectedWalletUserId
+		) {
+			projects {
+				id
+				title
+				image
+				slug
+				description
+				verified
+				totalDonations
+				traceCampaignId
+				reaction {
+					id
+					userId
+				}
+				totalReactions
+				adminUser {
+					name
+					walletAddress
+				}
+				updatedAt
+				organization {
+					name
+					label
+					supportCustomTokens
+				}
+				projectPower {
+					powerRank
+					totalPower
+					updateTime
+				}
+			}
+			totalCount
+			categories {
+				name
+			}
+		}
+	}
+`;
+
+const FETCH_ALL_PROJECTS_WITHOUT_BOOST = gql`
 	query FetchAllProjects(
 		$limit: Int
 		$skip: Int
@@ -95,7 +203,68 @@ export const FETCH_ALL_PROJECTS = gql`
 	}
 `;
 
-export const FETCH_PROJECT_BY_SLUG = gql`
+export const FETCH_ALL_PROJECTS = IS_BOOSTING_ENABLED
+	? FETCH_ALL_PROJECTS_WITH_BOOST
+	: FETCH_ALL_PROJECTS_WITHOUT_BOOST;
+
+export const FETCH_PROJECT_BY_SLUG_WITH_BOOST = gql`
+	query ProjectBySlug($slug: String!, $connectedWalletUserId: Int) {
+		projectBySlug(
+			slug: $slug
+			connectedWalletUserId: $connectedWalletUserId
+		) {
+			id
+			title
+			image
+			slug
+			description
+			verified
+			traceCampaignId
+			addresses {
+				address
+				isRecipient
+				networkId
+			}
+			totalProjectUpdates
+			totalDonations
+			totalTraceDonations
+			creationDate
+			reaction {
+				id
+				userId
+			}
+			totalReactions
+			traceCampaignId
+			categories {
+				name
+			}
+			adminUser {
+				id
+				name
+				walletAddress
+			}
+			status {
+				id
+				name
+			}
+			organization {
+				name
+				label
+				supportCustomTokens
+			}
+			projectVerificationForm {
+				status
+			}
+			projectPower {
+				powerRank
+				totalPower
+				updateTime
+			}
+		}
+	}
+`;
+
+export const FETCH_PROJECT_BY_SLUG_WITHOUT_BOOST = gql`
 	query ProjectBySlug($slug: String!, $connectedWalletUserId: Int) {
 		projectBySlug(
 			slug: $slug
@@ -150,6 +319,10 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 		}
 	}
 `;
+
+export const FETCH_PROJECT_BY_SLUG = IS_BOOSTING_ENABLED
+	? FETCH_PROJECT_BY_SLUG_WITH_BOOST
+	: FETCH_PROJECT_BY_SLUG_WITHOUT_BOOST;
 
 export const FETCH_PROJECT_BY_ID = gql`
 	query ProjectById($id: Float!) {

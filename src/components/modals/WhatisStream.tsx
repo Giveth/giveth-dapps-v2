@@ -7,6 +7,7 @@ import {
 	brandColors,
 	IconExternalLink,
 	OutlineButton,
+	mediaQueries,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
@@ -106,7 +107,10 @@ const WhatisStreamContainer = styled.div`
 			? `url('/images/stream1.svg')`
 			: `url('/images/stream2.svg')`};
 	background-repeat: no-repeat;
-	width: 570px;
+	width: 100%;
+	${mediaQueries.tablet} {
+		width: 570px;
+	}
 `;
 
 const TitleRow = styled(FlexCenter)`
