@@ -31,6 +31,7 @@ import useDetectDevice from '@/hooks/useDetectDevice';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import ProjectsSortSelect from './ProjectsSortSelect';
 import useMediaQuery from '@/hooks/useMediaQuery';
+import ProjectsMiddleBanner from './ProjectsMiddleBanner';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -166,10 +167,32 @@ const ProjectsIndex = (props: IProjectsView) => {
 		const sliceIndex = handleSliceNumber();
 		const firstSlice = filteredProjects.slice(0, sliceIndex);
 		const secondSlice = filteredProjects.slice(sliceIndex);
-		console.log('HandleSlice1', firstSlice);
-		console.log('HandleSlice2', secondSlice);
 		return [firstSlice, secondSlice];
 	};
+
+	const renderProjects = () => {
+		const [firstSlice, secondSlice] = handleArraySlice();
+		if (filteredProjects?.length > 0) {
+			return (
+				<ProjectsWrapper>
+					<ProjectsContainer>
+						{firstSlice.map(project => (
+							<ProjectCard key={project.id} project={project} />
+						))}
+					</ProjectsContainer>
+					<ProjectsMiddleBanner />
+					<ProjectsContainer>
+						{secondSlice.map(project => (
+							<ProjectCard key={project.id} project={project} />
+						))}
+					</ProjectsContainer>
+				</ProjectsWrapper>
+			);
+		} else {
+			return <ProjectsNoResults mainCategories={mainCategories} />;
+		}
+	};
+
 	return (
 		<>
 			{isLoading && (
@@ -202,17 +225,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 					</Flex>
 				</SortingContainer>
 				{isLoading && <Loader className='dot-flashing' />}
-
-				{filteredProjects?.length > 0 ? (
-					<ProjectsContainer>
-						{filteredProjects.map(project => (
-							<ProjectCard key={project.id} project={project} />
-						))}
-					</ProjectsContainer>
-				) : (
-					<ProjectsNoResults mainCategories={mainCategories} />
-				)}
-
+				{renderProjects()}
 				{showLoadMore && (
 					<>
 						<StyledButton
@@ -274,10 +287,13 @@ const FiltersContainer = styled.div`
 	}
 `;
 
+const ProjectsWrapper = styled.div`
+	margin-bottom: 64px;
+`;
+
 const ProjectsContainer = styled.div`
 	display: grid;
 	gap: 25px;
-	margin-bottom: 64px;
 	padding: 0 23px;
 
 	${mediaQueries.tablet} {
