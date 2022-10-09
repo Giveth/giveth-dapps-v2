@@ -1,4 +1,4 @@
-import { brandColors, GLink } from '@giveth/ui-design-system';
+import { brandColors, D1, GLink } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Container } from '@/components/Grid';
 import { Flex } from '../styled-components/Flex';
@@ -45,4 +45,14 @@ export const ExtLinkCyan = styled(GLink)`
 
 export const NoWrap = styled.span`
 	white-space: nowrap;
+`;
+
+export const MobileD1 = styled(D1)`
+	font-size: 3rem !important;
+	${mediaQueries.tablet} {
+		font-size: 4rem !important;
+	}
+	${mediaQueries.laptopS} {
+		font-size: 6.69rem !important;
+	}
 `;

@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 import {
-	D1,
 	H2,
 	H5,
 	P,
@@ -13,7 +12,12 @@ import {
 	Title,
 	ButtonLink,
 } from '@giveth/ui-design-system';
-import { BottomContainer, EnhancedRewardCard, TopContainer } from './commons';
+import {
+	BottomContainer,
+	EnhancedRewardCard,
+	MobileD1,
+	TopContainer,
+} from './commons';
 import { Flex } from '../styled-components/Flex';
 import { mediaQueries } from '@/lib/constants/constants';
 
@@ -30,7 +34,7 @@ export const Right = styled.div`
 	align-self: end;
 `;
 
-export const GBTitle = styled(D1)`
+export const GBTitle = styled(MobileD1)`
 	margin-bottom: 24px;
 `;
 

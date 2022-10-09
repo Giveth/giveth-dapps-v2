@@ -9,6 +9,7 @@ import { useAppSelector } from '@/features/hooks';
 import { homeMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
+import { IS_BOOSTING_ENABLED } from '@/configuration';
 
 const projectsToFetch = 12;
 
@@ -20,7 +21,12 @@ interface IHomeRoute {
 const fetchProjects = async (userId: string | undefined = undefined) => {
 	const variables: any = {
 		limit: projectsToFetch,
-		orderBy: { field: ESortby.QUALITYSCORE, direction: EDirection.DESC },
+		orderBy: {
+			field: IS_BOOSTING_ENABLED
+				? ESortby.GIVPOWER
+				: ESortby.QUALITYSCORE,
+			direction: EDirection.DESC,
+		},
 	};
 
 	if (userId) {
@@ -60,7 +66,6 @@ export async function getServerSideProps({ res }: any) {
 		'Cache-Control',
 		'public, s-maxage=10, stale-while-revalidate=59',
 	);
-
 	try {
 		const { projects, totalCount } = await fetchProjects();
 		return {

@@ -7,6 +7,7 @@ export enum ESortby {
 	TRACEABLE = 'Traceable',
 	HEARTS = 'Reactions',
 	DONATIONS = 'Donations',
+	GIVPOWER = 'GIVPower',
 }
 
 export enum ESortbyAllProjects {
@@ -15,6 +16,7 @@ export enum ESortbyAllProjects {
 	NEWEST = 'Newest',
 	OLDEST = 'Oldest',
 	QUALITYSCORE = 'QualityScore',
+	GIVPOWER = 'GIVPower',
 }
 
 export enum EProjectStatus {

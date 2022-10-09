@@ -1,12 +1,10 @@
-import React, { FC } from 'react';
-
 import BaseStakingCard from './BaseStakingCard';
-import {
+import { useStakingPool } from '@/hooks/useStakingPool';
+import type {
 	RegenPoolStakingConfig,
 	SimplePoolStakingConfig,
 } from '@/types/config';
-import { useStakingPool } from '@/hooks/useStakingPool';
-
+import type { FC } from 'react';
 interface IStakingPoolCardProps {
 	poolStakingConfig: SimplePoolStakingConfig | RegenPoolStakingConfig;
 }

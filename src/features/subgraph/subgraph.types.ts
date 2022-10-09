@@ -7,15 +7,10 @@ import {
 	ITokenDistroBalance,
 	ITokenBalance,
 	IUniswapV3Pool,
+	IGIVpower,
 } from '@/types/subgraph';
 
 export interface ISubgraphState {
-	// uniswapV3Pool?: IUniswapV3Pool;
-	// userNotStakedPositions: IUniswapV3Position[];
-	// userStakedPositions: IUniswapV3Position[];
-	// allPositions: IUniswapV3Position[];
-	// infinitePositionReward?: IInfinitePositionReward;
-	// infinitePosition?: IUniswapV3Position;
 	[key: string]:
 		| IUnipool
 		| IUnipoolBalance
@@ -26,6 +21,7 @@ export interface ISubgraphState {
 		| IUniswapV3Position[]
 		| IInfinitePositionReward
 		| IUniswapV3Position
+		| IGIVpower
 		| number
 		| boolean;
 }

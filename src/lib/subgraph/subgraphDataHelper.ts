@@ -64,6 +64,18 @@ export class SubgraphDataHelper {
 		return this.getTokenBalance(givTokenAddress);
 	}
 
+	getUserGIVPowerBalance(): IUnipoolBalance {
+		const givTokenAddress = config.XDAI_CONFIG.GIV.LM_ADDRESS;
+		return this.getUnipoolBalance(givTokenAddress);
+	}
+
+	getUserGIVLockedBalance(): ITokenBalance {
+		return (
+			(this.state['userGIVLocked'] as ITokenBalance) ||
+			transformTokenBalance()
+		);
+	}
+
 	getGIVTokenDistro(): ITokenDistro {
 		const tokenDistroAddress =
 			config.NETWORKS_CONFIG[this.state.networkNumber as number]

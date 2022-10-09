@@ -1,7 +1,12 @@
 import styled from 'styled-components';
 
-import { D1, QuoteText, brandColors } from '@giveth/ui-design-system';
-import { BottomContainer, EnhancedRewardCard, TopContainer } from './commons';
+import { QuoteText, brandColors } from '@giveth/ui-design-system';
+import {
+	BottomContainer,
+	EnhancedRewardCard,
+	MobileD1,
+	TopContainer,
+} from './commons';
 import { Flex } from '../styled-components/Flex';
 import { Row } from '../Grid';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -12,7 +17,7 @@ export const GIVfarmTopContainer = styled(TopContainer)`
 `;
 export const GIVfarmBottomContainer = styled(BottomContainer)``;
 
-export const Title = styled(D1)`
+export const Title = styled(MobileD1)`
 	margin-top: 60px;
 	margin-bottom: 24px;
 `;
@@ -40,6 +45,7 @@ interface PoolRowProps {
 }
 
 export const PoolRow = styled(Row)<PoolRowProps>`
+	align-items: center;
 	margin-top: 24px;
 	margin-bottom: 24px;
 	opacity: ${props => (props.disabled ? '0.6' : '1')};
