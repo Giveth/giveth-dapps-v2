@@ -24,7 +24,7 @@ import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
 import Page from '@/components/Page';
 import type { AppProps } from 'next/app';
 
-const DEFAULT_WRITE_KEY = 'lvBWopQhDusIfdEr0l1w7oYxk4Stsjvk';
+const DEFAULT_WRITE_KEY = 'MHK95b7o6FRNHt0ZZJU9bNGUT5MNCEyB';
 
 function renderSnippet() {
 	const opts = {
