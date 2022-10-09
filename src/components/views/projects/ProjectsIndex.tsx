@@ -17,7 +17,7 @@ import { client } from '@/apollo/apolloClient';
 import { ICategory, IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
-import { deviceSize, mediaQueries } from '@/lib/constants/constants';
+import { device, deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import ProjectsBanner from './ProjectsBanner';
@@ -30,6 +30,7 @@ import LoadingAnimation from '@/animations/loading_giv.json';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import ProjectsSortSelect from './ProjectsSortSelect';
+import useMediaQuery from '@/hooks/useMediaQuery';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -64,7 +65,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	const router = useRouter();
 	const pageNum = useRef(0);
-	const { isDesktop, isTablet, isMobile } = useDetectDevice();
+	const { isDesktop, isTablet, isMobile, isLaptopL } = useDetectDevice();
 
 	const fetchProjects = (
 		isLoadMore?: boolean,
@@ -149,6 +150,17 @@ const ProjectsIndex = (props: IProjectsView) => {
 	};
 
 	const showLoadMore = totalCount > filteredProjects?.length;
+	const isTabletSlice = useMediaQuery(device.tablet);
+
+	const handleSliceNumber = () => {
+		if (isMobile) {
+			return 1;
+		} else if (isTabletSlice && !isLaptopL) {
+			return 2;
+		} else {
+			return 3;
+		}
+	};
 
 	return (
 		<>
