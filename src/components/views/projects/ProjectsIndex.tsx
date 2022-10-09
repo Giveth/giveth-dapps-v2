@@ -162,6 +162,14 @@ const ProjectsIndex = (props: IProjectsView) => {
 		}
 	};
 
+	const handleArraySlice = () => {
+		const sliceIndex = handleSliceNumber();
+		const firstSlice = filteredProjects.slice(0, sliceIndex);
+		const secondSlice = filteredProjects.slice(sliceIndex);
+		console.log('HandleSlice1', firstSlice);
+		console.log('HandleSlice2', secondSlice);
+		return [firstSlice, secondSlice];
+	};
 	return (
 		<>
 			{isLoading && (
