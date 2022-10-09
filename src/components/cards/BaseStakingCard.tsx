@@ -280,6 +280,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const isLocked = isGIVpower && userGIVLocked.balance !== '0';
 	const isZeroGIVStacked =
 		!account || (isGIVpower && userGIVPowerBalance.balance === '0');
+	const availableStakedToken = stakedLpAmount.sub(userGIVLocked.balance);
 
 	return (
 		<>
@@ -570,7 +571,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 										!isGIVpower ||
 										!active ||
 										earned.isZero() ||
-										userNotStakedAmount.isZero()
+										availableStakedToken.lte(constants.Zero)
 									}
 									onClick={() => setShowLockModal(true)}
 									label='Increase your reward'
@@ -756,7 +757,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							poolStakingConfig as SimplePoolStakingConfig
 						}
 						regenStreamConfig={regenStreamConfig}
-						maxAmount={stakedLpAmount.sub(userGIVLocked.balance)}
+						maxAmount={availableStakedToken}
 					/>
 				))}
 			{showHarvestModal && chainId && (
@@ -776,7 +777,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				<LockModal
 					setShowModal={setShowLockModal}
 					poolStakingConfig={poolStakingConfig}
-					maxAmount={stakedLpAmount.sub(userGIVLocked.balance)}
+					maxAmount={availableStakedToken}
 				/>
 			)}
 			{showWhatIsGIVstreamModal && (
@@ -789,7 +790,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 			{showLockDetailModal && (
 				<LockupDetailsModal
 					setShowModal={setShowLockDetailModal}
-					unstakeable={stakedLpAmount.sub(userGIVLocked.balance)}
+					unstakeable={availableStakedToken}
 				/>
 			)}
 		</>
