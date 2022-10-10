@@ -17,7 +17,7 @@ import { client } from '@/apollo/apolloClient';
 import { ICategory, IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
-import { deviceSize, mediaQueries } from '@/lib/constants/constants';
+import { device, deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import ProjectsBanner from './ProjectsBanner';
@@ -30,6 +30,8 @@ import LoadingAnimation from '@/animations/loading_giv.json';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import ProjectsSortSelect from './ProjectsSortSelect';
+import useMediaQuery from '@/hooks/useMediaQuery';
+import ProjectsMiddleBanner from './ProjectsMiddleBanner';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -64,7 +66,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	const router = useRouter();
 	const pageNum = useRef(0);
-	const { isDesktop, isTablet, isMobile } = useDetectDevice();
+	const { isDesktop, isTablet, isMobile, isLaptopL } = useDetectDevice();
 
 	const fetchProjects = (
 		isLoadMore?: boolean,
@@ -149,6 +151,47 @@ const ProjectsIndex = (props: IProjectsView) => {
 	};
 
 	const showLoadMore = totalCount > filteredProjects?.length;
+	const isTabletSlice = useMediaQuery(device.tablet);
+
+	const handleSliceNumber = () => {
+		if (isMobile) {
+			return 1;
+		} else if (isTabletSlice && !isLaptopL) {
+			return 2;
+		} else {
+			return 3;
+		}
+	};
+
+	const handleArraySlice = () => {
+		const sliceIndex = handleSliceNumber();
+		const firstSlice = filteredProjects.slice(0, sliceIndex);
+		const secondSlice = filteredProjects.slice(sliceIndex);
+		return [firstSlice, secondSlice];
+	};
+
+	const renderProjects = () => {
+		const [firstSlice, secondSlice] = handleArraySlice();
+		if (filteredProjects?.length > 0) {
+			return (
+				<ProjectsWrapper>
+					<ProjectsContainer>
+						{firstSlice.map(project => (
+							<ProjectCard key={project.id} project={project} />
+						))}
+					</ProjectsContainer>
+					<ProjectsMiddleBanner />
+					<ProjectsContainer>
+						{secondSlice.map(project => (
+							<ProjectCard key={project.id} project={project} />
+						))}
+					</ProjectsContainer>
+				</ProjectsWrapper>
+			);
+		} else {
+			return <ProjectsNoResults mainCategories={mainCategories} />;
+		}
+	};
 
 	return (
 		<>
@@ -182,17 +225,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 					</Flex>
 				</SortingContainer>
 				{isLoading && <Loader className='dot-flashing' />}
-
-				{filteredProjects?.length > 0 ? (
-					<ProjectsContainer>
-						{filteredProjects.map(project => (
-							<ProjectCard key={project.id} project={project} />
-						))}
-					</ProjectsContainer>
-				) : (
-					<ProjectsNoResults mainCategories={mainCategories} />
-				)}
-
+				{renderProjects()}
 				{showLoadMore && (
 					<>
 						<StyledButton
@@ -254,10 +287,13 @@ const FiltersContainer = styled.div`
 	}
 `;
 
+const ProjectsWrapper = styled.div`
+	margin-bottom: 64px;
+`;
+
 const ProjectsContainer = styled.div`
 	display: grid;
 	gap: 25px;
-	margin-bottom: 64px;
 	padding: 0 23px;
 
 	${mediaQueries.tablet} {

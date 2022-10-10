@@ -13,6 +13,7 @@ export default function useDetectDevice() {
 			deviceSize.laptopL - 1
 		}px)`,
 	);
+	const isLaptopL = useMediaQuery(device.laptopL);
 	const isMobile = !isDesktop && !isTablet;
-	return { isDesktop, isLaptopS, isTablet, isMobile };
+	return { isDesktop, isLaptopS, isTablet, isMobile, isLaptopL };
 }
