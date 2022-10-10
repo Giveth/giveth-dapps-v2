@@ -156,7 +156,6 @@ const tooltipStyleCalc = (
 
 const TooltipContainer = styled.div<ITooltipDirection>`
 	position: fixed;
-	padding: 0;
 	background-color: black;
 	color: #fff;
 	border-radius: 6px;
