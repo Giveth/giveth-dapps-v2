@@ -37,12 +37,8 @@ const BigArc = styled(Arc)`
 	border-width: 180px;
 	border-color: ${brandColors.giv[100]};
 	opacity: 40%;
-	/* top: -550%;
-	left: -190%; */
-	top: -220vw;
-	right: 15vw;
-	/* top: -1900px;
-	left: -2400px; */
+	top: -550%;
+	left: -190%;
 	width: 3600px;
 	height: 3600px;
 	z-index: 0;
