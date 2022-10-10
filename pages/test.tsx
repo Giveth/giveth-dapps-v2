@@ -7,7 +7,6 @@ import { useAppDispatch } from '@/features/hooks';
 import { fetchXDaiInfoAsync } from '@/features/subgraph/subgraph.thunks';
 import { FlowRateTooltip } from '@/components/homeTabs/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
-import { useClientRect } from '@/hooks/useClientReact';
 import { zIndex } from '@/lib/constants/constants';
 
 const TestRoute = () => {
@@ -16,7 +15,6 @@ const TestRoute = () => {
 	// );
 	const { account } = useWeb3React();
 	const dispatch = useAppDispatch();
-	const [rect, ref] = useClientRect();
 
 	// const { data, isLoading, error, refetch } = useGetSubgraphValuesQuery({
 	// 	chain: chainId,
@@ -51,14 +49,14 @@ const TestRoute = () => {
 			<TestContainer>
 				<IconWithTooltip
 					icon={<IconHelp size={16} />}
-					direction={'bottom'}
+					direction='top'
+					align='left'
 				>
 					<FlowRateTooltip>
 						The rate at which you receive liquid GIV from your
 						GIVstream.
 					</FlowRateTooltip>
 				</IconWithTooltip>
-				<TooltipContainer ref={ref}>This is test</TooltipContainer>
 				{/* <Tooltip direction={direction} align={align} parentRef={elRef}>
 					<div>Test</div>
 				</Tooltip> */}

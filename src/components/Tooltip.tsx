@@ -21,6 +21,8 @@ interface ITooltipProps extends ITooltipDirection {
 	children: ReactNode;
 }
 
+const ARROW_SIZE = 16;
+
 export const Tooltip: FC<ITooltipProps> = ({
 	parentRef,
 	direction,
@@ -87,12 +89,24 @@ const tooltipStyleCalc = (
 	console.log('position', position);
 	switch (direction) {
 		case 'top':
+			let translateX;
+			switch (align) {
+				case 'right':
+					translateX = `-${ARROW_SIZE}px`;
+					break;
+				case 'left':
+					translateX = `calc(-100% + ${
+						parentRect.width + ARROW_SIZE
+					}px)`;
+					break;
+				default:
+					translateX = `calc(-50% + ${parentRect.width / 2}px)`;
+					break;
+			}
 			style = {
 				top: parentRect.top,
 				left: parentRect.left,
-				transform: `translate(calc(-50% + ${
-					parentRect.width / 2
-				}px), calc(-100% - 16px))`,
+				transform: `translate(${translateX}, calc(-100% - ${ARROW_SIZE}px))`,
 			};
 			break;
 		case 'bottom':
