@@ -110,7 +110,7 @@ const translateYForRightLeft = (
 			return `-100%`;
 
 		case 'bottom':
-			return `-${ARROW_SIZE}px`;
+			return `-${parentRect.width + ARROW_SIZE}px`;
 
 		default:
 			return `calc(-50% - ${parentRect.height / 2}px)`;
