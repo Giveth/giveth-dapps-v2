@@ -50,15 +50,6 @@ export const Tooltip: FC<ITooltipProps> = ({
 		if (typeof window === 'undefined') return;
 		const parentRect = parentRef.current.getBoundingClientRect();
 		const childRect = childRef.current?.getBoundingClientRect();
-
-		// console.log('parentRect', parentRect);
-		// console.log('childRect', childRect);
-		// let isTopOk = parentRect.top - childRect.height >= 0;
-		// let isBottomOk =
-		// 	parentRect.bottom + childRect.height <= window.innerHeight;
-		// let isRightOk = false;
-		// let isLeftOk = false;
-		// console.log(parentRect.bottom + childRect.height, window.innerHeight);
 		const _style = tooltipStyleCalc(
 			{
 				direction,
@@ -120,7 +111,7 @@ const translateYForRightLeft = (
 const tooltipStyleCalc = (
 	position: ITooltipDirection,
 	parentRect: DOMRect,
-	childRect?: DOMRect,
+	childRect?: DOMRect, // left it here for future usage
 ): CSSProperties => {
 	const { align, direction } = position;
 	let style = {};
