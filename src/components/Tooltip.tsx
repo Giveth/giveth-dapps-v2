@@ -29,7 +29,7 @@ export const Tooltip: FC<ITooltipProps> = ({
 	align,
 	children,
 }) => {
-	const [style, setStyle] = useState({});
+	const [style, setStyle] = useState<CSSProperties>({});
 	const el = useRef(document.createElement('div'));
 	const childRef = useRef<HTMLDivElement>(null);
 	useEffect(() => {
@@ -49,32 +49,42 @@ export const Tooltip: FC<ITooltipProps> = ({
 
 	useEffect(() => {
 		if (!parentRef.current) return;
-		if (!childRef.current) return;
+		// if (!childRef.current) return;
 		if (typeof window === 'undefined') return;
 		const parentRect = parentRef.current.getBoundingClientRect();
-		const childRect = childRef.current.getBoundingClientRect();
+		const childRect = childRef.current?.getBoundingClientRect();
 
-		console.log('parentRect', parentRect);
-		console.log('childRect', childRect);
+		// console.log('parentRect', parentRect);
+		// console.log('childRect', childRect);
 		// let isTopOk = parentRect.top - childRect.height >= 0;
 		// let isBottomOk =
 		// 	parentRect.bottom + childRect.height <= window.innerHeight;
 		// let isRightOk = false;
 		// let isLeftOk = false;
 		// console.log(parentRect.bottom + childRect.height, window.innerHeight);
-
-		setStyle(tooltipStyleCalc(parentRect, childRect, { direction, align }));
+		const _style = tooltipStyleCalc(
+			{
+				direction,
+				align,
+			},
+			parentRect,
+			childRect,
+		);
+		console.log('style', JSON.stringify(_style));
+		setStyle(_style);
 	}, [align, direction, parentRef, childRef]);
 
 	return createPortal(
-		<TooltipContainer
-			ref={childRef}
-			style={style}
-			direction={direction}
-			align={align}
-		>
-			{children}
-		</TooltipContainer>,
+		style.top ? (
+			<TooltipContainer
+				ref={childRef}
+				style={style}
+				direction={direction}
+				align={align}
+			>
+				{children}
+			</TooltipContainer>
+		) : null,
 		el.current,
 	);
 };
@@ -96,9 +106,9 @@ const translateXForTopBottom = (
 };
 
 const tooltipStyleCalc = (
-	parentRect: DOMRect,
-	childRect: DOMRect,
 	position: ITooltipDirection,
+	parentRect: DOMRect,
+	childRect?: DOMRect,
 ): CSSProperties => {
 	const { align, direction } = position;
 	let style = {};
@@ -152,4 +162,6 @@ const TooltipContainer = styled.div<ITooltipDirection>`
 	border-radius: 6px;
 	padding: 8px;
 	z-index: ${zIndex.TOOLTIP};
+	top: 0;
+	left: 0;
 `;
