@@ -7,11 +7,10 @@ const ProjectsMiddleBanner = () => {
 	return (
 		<Container flexDirection='column' gap='23px'>
 			<BigArc />
-			<Title weight={700}>Zero added fees!</Title>
+			<Title weight={700}>Donate Crypto Directly</Title>
 			<Caption>
-				Donate crypto directly to Economics and Infrastructure projects
-				on Giveth! Support projects and get rewarded for giving with
-				zero added fees.
+				Get rewarded for giving to public goods projects with zero added
+				fees.
 			</Caption>
 		</Container>
 	);
@@ -38,8 +37,12 @@ const BigArc = styled(Arc)`
 	border-width: 180px;
 	border-color: ${brandColors.giv[100]};
 	opacity: 40%;
-	top: -1900px;
-	left: -2400px;
+	/* top: -550%;
+	left: -190%; */
+	top: -220vw;
+	right: 15vw;
+	/* top: -1900px;
+	left: -2400px; */
 	width: 3600px;
 	height: 3600px;
 	z-index: 0;
