@@ -35,11 +35,11 @@ const Title = styled(H3)`
 `;
 
 const BigArc = styled(Arc)`
-	border-width: 250px;
+	border-width: 180px;
 	border-color: ${brandColors.giv[100]};
 	opacity: 40%;
-	top: 0;
-	left: 0;
+	top: -1900px;
+	left: -2400px;
 	width: 3600px;
 	height: 3600px;
 	z-index: 0;
