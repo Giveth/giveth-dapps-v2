@@ -152,11 +152,7 @@ export const TabGIVbacksBottom = () => {
 			_roundEndTime.setMinutes(startTime.getMinutes());
 			setRoundEndTime(_roundEndTime);
 			const _roundStartTime = new Date(_roundEndTime);
-			if (_round === 20) {
-				_roundStartTime.setDate(_roundEndTime.getDate() - 18);
-			} else {
-				_roundStartTime.setDate(_roundEndTime.getDate() - 14);
-			}
+			_roundStartTime.setDate(_roundEndTime.getDate() - 14);
 			setRoundStarTime(_roundStartTime);
 		}
 	}, [givTokenDistroHelper]);
