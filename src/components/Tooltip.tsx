@@ -21,7 +21,7 @@ interface ITooltipProps extends ITooltipDirection {
 	children: ReactNode;
 }
 
-const ARROW_SIZE = 16;
+const ARROW_SIZE = 8;
 
 export const Tooltip: FC<ITooltipProps> = ({
 	parentRef,
@@ -33,8 +33,6 @@ export const Tooltip: FC<ITooltipProps> = ({
 	const el = useRef(document.createElement('div'));
 	const childRef = useRef<HTMLDivElement>(null);
 	useEffect(() => {
-		// console.log('enter');
-
 		const current = el.current;
 		const body = document.querySelector('body') as HTMLElement;
 
@@ -42,7 +40,6 @@ export const Tooltip: FC<ITooltipProps> = ({
 			body.appendChild(current);
 		}
 		return () => {
-			// console.log('leave');
 			body!.removeChild(current);
 		};
 	}, []);
@@ -70,7 +67,6 @@ export const Tooltip: FC<ITooltipProps> = ({
 			parentRect,
 			childRect,
 		);
-		console.log('style', JSON.stringify(_style));
 		setStyle(_style);
 	}, [align, direction, parentRef, childRef]);
 
@@ -134,33 +130,33 @@ const tooltipStyleCalc = (
 		case 'top':
 			translateX = translateXForTopBottom(align, parentRect);
 			style = {
-				top: parentRect.top,
+				top: parentRect.top - ARROW_SIZE,
 				left: parentRect.left,
-				transform: `translate(${translateX}, calc(-100% - ${ARROW_SIZE}px))`,
+				transform: `translate(${translateX}, -100%)`,
 			};
 			break;
 		case 'bottom':
 			translateX = translateXForTopBottom(align, parentRect);
 			style = {
-				top: parentRect.bottom,
+				top: parentRect.bottom + ARROW_SIZE,
 				left: parentRect.left,
-				transform: `translate(${translateX}, 4px)`,
+				transform: `translate(${translateX}, 0)`,
 			};
 			break;
 		case 'right':
 			translateY = translateYForRightLeft(align, parentRect);
 			style = {
 				top: parentRect.bottom,
-				left: parentRect.right,
-				transform: `translate(4px, ${translateY})`,
+				left: parentRect.right + ARROW_SIZE,
+				transform: `translate(0, ${translateY})`,
 			};
 			break;
 		case 'left':
 			translateY = translateYForRightLeft(align, parentRect);
 			style = {
 				top: parentRect.bottom,
-				left: parentRect.left,
-				transform: `translate(calc(-100% - 8px), ${translateY})`,
+				left: parentRect.left - ARROW_SIZE,
+				transform: `translate(-100%, ${translateY})`,
 			};
 			break;
 	}
