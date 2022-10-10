@@ -78,6 +78,19 @@ const TestRoute = () => {
 				>
 					Throw error
 				</button>
+				<div>
+					--------------------------------------------
+					<IconWithTooltip
+						icon={<IconHelp size={16} />}
+						direction='right'
+						align='bottom'
+					>
+						<FlowRateTooltip>
+							The rate at which you receive liquid GIV from your
+							GIVstream.
+						</FlowRateTooltip>
+					</IconWithTooltip>
+				</div>
 			</TestContainer>
 		</>
 	);
