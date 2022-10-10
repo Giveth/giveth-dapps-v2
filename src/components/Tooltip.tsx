@@ -79,6 +79,22 @@ export const Tooltip: FC<ITooltipProps> = ({
 	);
 };
 
+const translateXForTopBottom = (
+	align: ITooltipDirection['align'],
+	parentRect: DOMRect,
+) => {
+	switch (align) {
+		case 'right':
+			return `-${ARROW_SIZE}px`;
+
+		case 'left':
+			return `calc(-100% + ${parentRect.width + ARROW_SIZE}px)`;
+
+		default:
+			return `calc(-50% + ${parentRect.width / 2}px)`;
+	}
+};
+
 const tooltipStyleCalc = (
 	parentRect: DOMRect,
 	childRect: DOMRect,
@@ -86,23 +102,10 @@ const tooltipStyleCalc = (
 ): CSSProperties => {
 	const { align, direction } = position;
 	let style = {};
-	console.log('position', position);
+	let translateX;
 	switch (direction) {
 		case 'top':
-			let translateX;
-			switch (align) {
-				case 'right':
-					translateX = `-${ARROW_SIZE}px`;
-					break;
-				case 'left':
-					translateX = `calc(-100% + ${
-						parentRect.width + ARROW_SIZE
-					}px)`;
-					break;
-				default:
-					translateX = `calc(-50% + ${parentRect.width / 2}px)`;
-					break;
-			}
+			translateX = translateXForTopBottom(align, parentRect);
 			style = {
 				top: parentRect.top,
 				left: parentRect.left,
@@ -110,12 +113,11 @@ const tooltipStyleCalc = (
 			};
 			break;
 		case 'bottom':
+			translateX = translateXForTopBottom(align, parentRect);
 			style = {
 				top: parentRect.bottom,
 				left: parentRect.left,
-				transform: `translate(calc(-50% + ${
-					parentRect.width / 2
-				}px), 4px)`,
+				transform: `translate(${translateX}, 4px)`,
 			};
 			break;
 		case 'right':
