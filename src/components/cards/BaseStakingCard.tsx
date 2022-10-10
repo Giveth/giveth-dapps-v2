@@ -602,7 +602,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									<StakeButton
 										label='UNSTAKE'
 										size='small'
-										disabled={stakedLpAmount.isZero()}
+										disabled={availableStakedToken.isZero()}
 										onClick={() =>
 											setShowUnStakeModal(true)
 										}
