@@ -21,8 +21,13 @@ import ModalController from '@/components/controller/modal.ctrl';
 import PriceController from '@/components/controller/price.ctrl';
 import GeneralController from '@/components/controller/general.ctrl';
 import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
-import Page from '@/components/Page';
 import type { AppProps } from 'next/app';
+
+declare global {
+	interface Window {
+		analytics: any;
+	}
+}
 
 const DEFAULT_WRITE_KEY = 'MHK95b7o6FRNHt0ZZJU9bNGUT5MNCEyB';
 
@@ -35,7 +40,7 @@ function renderSnippet() {
 		page: true,
 	};
 
-	if (process.env.NODE_ENV === 'development') {
+	if (process.env.NEXT_PUBLIC_ENV === 'development') {
 		return snippet.max(opts);
 	}
 
@@ -55,18 +60,21 @@ function MyApp({ Component, pageProps }: AppProps) {
 			console.log(`Loading: ${url}`);
 			NProgress.start();
 		};
-		const handleStop = () => {
+		const handleChangeComplete = (url: string) => {
+			NProgress.done();
+			window.analytics.page(url);
+		};
+		const handleChangeError = () => {
 			NProgress.done();
 		};
 
 		router.events.on('routeChangeStart', handleStart);
-		router.events.on('routeChangeComplete', handleStop);
-		router.events.on('routeChangeError', handleStop);
-
+		router.events.on('routeChangeComplete', handleChangeComplete);
+		router.events.on('routeChangeError', handleChangeError);
 		return () => {
 			router.events.off('routeChangeStart', handleStart);
-			router.events.off('routeChangeComplete', handleStop);
-			router.events.off('routeChangeError', handleStop);
+			router.events.off('routeChangeComplete', handleChangeComplete);
+			router.events.off('routeChangeError', handleChangeError);
 		};
 	}, [router]);
 
@@ -86,22 +94,19 @@ function MyApp({ Component, pageProps }: AppProps) {
 						<SubgraphController />
 						<UserController />
 						<HeaderWrapper />
-						<Page>
-							{pageProps.errorStatus ? (
-								<ErrorsIndex
-									statusCode={pageProps.errorStatus}
-								/>
-							) : (
-								<Component {...pageProps} />
-							)}
-							<Script
-								id='segment-script'
-								strategy='afterInteractive'
-								dangerouslySetInnerHTML={{
-									__html: renderSnippet(),
-								}}
-							/>
-						</Page>
+						{pageProps.errorStatus ? (
+							<ErrorsIndex statusCode={pageProps.errorStatus} />
+						) : (
+							<Component {...pageProps} />
+						)}
+						<Script
+							id='segment-script'
+							strategy='afterInteractive'
+							dangerouslySetInnerHTML={{
+								__html: renderSnippet(),
+							}}
+						/>
+
 						<FooterWrapper />
 						<ModalController />
 					</Web3ReactProvider>
