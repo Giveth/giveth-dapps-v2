@@ -99,8 +99,8 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 					<Subtitle>Locked GIV</Subtitle>
 					{locksInfo?.length > 0 ? (
 						<LockedTable>
-							<LockTableHeader>GIV Amount</LockTableHeader>
-							<LockTableHeader>Rounds Locked for</LockTableHeader>
+							<LockTableHeader>GIV</LockTableHeader>
+							<LockTableHeader>Locked for</LockTableHeader>
 							<LockTableHeader>Multiplier</LockTableHeader>
 							<LockTableHeader>APR</LockTableHeader>
 							<LockTableHeader>Unlock Date</LockTableHeader>
