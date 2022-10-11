@@ -99,13 +99,15 @@ function MyApp({ Component, pageProps }: AppProps) {
 						) : (
 							<Component {...pageProps} />
 						)}
-						<Script
-							id='segment-script'
-							strategy='afterInteractive'
-							dangerouslySetInnerHTML={{
-								__html: renderSnippet(),
-							}}
-						/>
+						{process.env.NEXT_PUBLIC_ENV === 'production' && (
+							<Script
+								id='segment-script'
+								strategy='afterInteractive'
+								dangerouslySetInnerHTML={{
+									__html: renderSnippet(),
+								}}
+							/>
+						)}
 
 						<FooterWrapper />
 						<ModalController />
