@@ -278,6 +278,7 @@ const config: EnvConfig = {
 						},
 						farmStartTimeMS: 1646306818206,
 						active: true,
+						discontinued: 1665932450000,
 					},
 					{
 						network: XDAI_NETWORK_NUMBER,
