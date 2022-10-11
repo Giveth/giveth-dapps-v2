@@ -62,7 +62,8 @@ function MyApp({ Component, pageProps }: AppProps) {
 		};
 		const handleChangeComplete = (url: string) => {
 			NProgress.done();
-			window.analytics.page(url);
+			process.env.NEXT_PUBLIC_ENV === 'production' &&
+				window.analytics.page(url);
 		};
 		const handleChangeError = () => {
 			NProgress.done();
