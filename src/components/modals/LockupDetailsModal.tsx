@@ -99,11 +99,11 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 					<Subtitle>Locked GIV</Subtitle>
 					{locksInfo?.length > 0 ? (
 						<LockedTable>
-							<TableHeader>GIV Amount</TableHeader>
-							<TableHeader>Rounds Locked for</TableHeader>
-							<TableHeader>Multiplier</TableHeader>
-							<TableHeader>APR</TableHeader>
-							<TableHeader>Unlock Date</TableHeader>
+							<LockTableHeader>GIV</LockTableHeader>
+							<LockTableHeader>Locked for</LockTableHeader>
+							<LockTableHeader>Multiplier</LockTableHeader>
+							<LockTableHeader>APR</LockTableHeader>
+							<LockTableHeader>Unlock Date</LockTableHeader>
 							{locksInfo?.map(
 								(locksInfo: IGIVpowerPosition, key) => {
 									const multiplier = Math.sqrt(
@@ -250,17 +250,23 @@ const SubtitleH5 = styled(H5)`
 
 const LockedTable = styled.div`
 	display: grid;
-	min-width: 500px;
-	grid-template-columns: 2fr 2.5fr 1.5fr 1fr 1.5fr;
+	min-width: min-content;
+	grid-template-columns: 2fr 2.5fr 1.5fr 1.2fr 1.6fr;
 	overflow: auto;
 	max-height: 364px;
 	margin: 10px 0 0 0;
 	color: ${brandColors.deep[100]};
 `;
 
+const LockTableHeader = styled(TableHeader)`
+	white-space: nowrap;
+	padding: 0 10px 0 0;
+`;
+
 const LockTableCell = styled(TableCell)`
 	height: 60px;
 	border-bottom: 1px solid ${brandColors.deep[100]};
 	padding: 0 10px 0 0;
-	overflow-x: auto;
+	white-space: nowrap;
+	min-width: min-content;
 `;
