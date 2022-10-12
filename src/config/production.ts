@@ -312,7 +312,7 @@ const config: EnvConfig = {
 						title: 'FOX / xDAI',
 						description: '50% FOX, 50% xDAI',
 						provideLiquidityLink:
-							'https://app.honeyswap.org/#/add/0x18cE354571ba71bC7b3d633b254954C5A9cfC195/0x97c4dD5cE204b8c1F2f3B8fBfBBDC771d867d18c',
+							'https://app.honeyswap.org/#/add/0x21a42669643f45bc0e086b8fc2ed70c23d67509d/0xe91d153e0b41518a2ce8dd3d7944fa863463a97d?chainId=100',
 						unit: 'LP',
 						regenStreamType: StreamType.FOX,
 						regenFarmType: RegenFarmType.FOX_HNY,
