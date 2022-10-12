@@ -51,7 +51,7 @@ const config: EnvConfig = {
 			LM_ADDRESS: '0x929C9353D67af21411d4475B30D960F23C209abd',
 			BUY_LINK:
 				'https://app.uniswap.org/#/swap?outputCurrency=0x29434A25abd94AE882aA883eea81585Aaa5b078D',
-			discontinued: SEPT_8TH_2022,
+			farmEndTimeMS: SEPT_8TH_2022,
 			active: false,
 			archived: true,
 		},
@@ -72,7 +72,7 @@ const config: EnvConfig = {
 				unit: 'LP',
 				active: false,
 				archived: true,
-				discontinued: SEPT_8TH_2022,
+				farmEndTimeMS: SEPT_8TH_2022,
 			},
 			{
 				network: MAINNET_NETWORK_NUMBER,
@@ -220,7 +220,7 @@ const config: EnvConfig = {
 				unit: 'LP',
 				active: false,
 				archived: true,
-				discontinued: SEPT_8TH_2022,
+				farmEndTimeMS: SEPT_8TH_2022,
 			},
 			{
 				network: XDAI_NETWORK_NUMBER,
@@ -236,7 +236,7 @@ const config: EnvConfig = {
 				active: false,
 				archived: true,
 				farmStartTimeMS: 1655997000000,
-				discontinued: SEPT_8TH_2022,
+				farmEndTimeMS: SEPT_8TH_2022,
 			},
 		],
 
@@ -278,7 +278,7 @@ const config: EnvConfig = {
 						},
 						farmStartTimeMS: 1646306818206,
 						active: true,
-						discontinued: 1665932450000,
+						farmEndTimeMS: 1665932450000,
 					},
 					{
 						network: XDAI_NETWORK_NUMBER,

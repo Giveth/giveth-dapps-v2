@@ -1,10 +1,10 @@
 export interface BasicStakingConfig {
 	LM_ADDRESS: string;
 	network: number;
-	discontinued?: number;
 	GARDEN_ADDRESS?: string;
 	BUY_LINK?: string;
 	farmStartTimeMS?: number;
+	farmEndTimeMS?: number;
 	icon?: string;
 }
 export enum StakingPlatform {
