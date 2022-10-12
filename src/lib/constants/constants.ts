@@ -115,3 +115,12 @@ export const statusCodes = [
 	'503',
 	'504',
 ] as const;
+
+export const searchSuggestions = [
+	'open source',
+	'blockchain',
+	'children',
+	'land stewardship',
+	'homelessness',
+	'indigenous',
+];

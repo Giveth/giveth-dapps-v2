@@ -11,7 +11,7 @@ import {
 import { ETheme } from '@/features/general/general.slice';
 import { mediaQueries, zIndex } from '@/lib/constants/constants';
 import { useAppSelector } from '@/features/hooks';
-import useDeviceDetect from '@/hooks/useDeviceDetect';
+import useDetectDevice from '@/hooks/useDetectDevice';
 
 interface ModalWrapperProps {
 	fullScreen?: boolean;
@@ -47,7 +47,7 @@ export const Modal: FC<IModal> = ({
 }) => {
 	const theme = useAppSelector(state => state.general.theme);
 	const el = useRef(document.createElement('div'));
-	const { isMobile } = useDeviceDetect();
+	const { isMobile } = useDetectDevice();
 
 	useEffect(() => {
 		const current = el.current;

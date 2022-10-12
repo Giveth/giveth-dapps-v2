@@ -153,19 +153,21 @@ const FETCH_ALL_PROJECTS_WITHOUT_BOOST = gql`
 	query FetchAllProjects(
 		$limit: Int
 		$skip: Int
-		$orderBy: OrderBy
-		$filterBy: FilterBy
+		$sortingBy: SortingField
+		$filters: [FilterField!]
 		$searchTerm: String
 		$category: String
+		$mainCategory: String
 		$connectedWalletUserId: Int
 	) {
-		projects(
-			take: $limit
+		allProjects(
+			limit: $limit
 			skip: $skip
-			orderBy: $orderBy
-			filterBy: $filterBy
+			sortingBy: $sortingBy
+			filters: $filters
 			searchTerm: $searchTerm
 			category: $category
+			mainCategory: $mainCategory
 			connectedWalletUserId: $connectedWalletUserId
 		) {
 			projects {
@@ -293,6 +295,9 @@ export const FETCH_PROJECT_BY_SLUG_WITHOUT_BOOST = gql`
 			traceCampaignId
 			categories {
 				name
+				mainCategory {
+					title
+				}
 			}
 			adminUser {
 				id
@@ -628,6 +633,22 @@ export const SIMILAR_PROJECTS = gql`
 					name
 					label
 				}
+			}
+		}
+	}
+`;
+
+export const FETCH_MAIN_CATEGORIES = gql`
+	query {
+		mainCategories {
+			title
+			banner
+			slug
+			description
+			categories {
+				name
+				value
+				isActive
 			}
 		}
 	}

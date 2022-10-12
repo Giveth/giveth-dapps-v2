@@ -1,129 +1,79 @@
 import { useEffect, useRef, useState } from 'react';
-import Select, { StylesConfig } from 'react-select';
 import { useRouter } from 'next/router';
 import {
 	brandColors,
-	P,
 	neutralColors,
-	Subline,
-	H3,
 	OutlineButton,
-	Lead,
+	H5,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-
 import { captureException } from '@sentry/nextjs';
-import { BigArc } from '@/components/styled-components/Arc';
+
 import ProjectCard from '@/components/project-card/ProjectCard';
-import SearchBox from '@/components/SearchBox';
 import Routes from '@/lib/constants/Routes';
-import {
-	capitalizeFirstLetter,
-	isUserRegistered,
-	showToastError,
-} from '@/lib/helpers';
+import { isUserRegistered, showToastError } from '@/lib/helpers';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
-import { initializeApollo } from '@/apollo/apolloClient';
+import { client } from '@/apollo/apolloClient';
 import { ICategory, IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
-import { EDirection, gqlEnums } from '@/apollo/types/gqlEnums';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
-import { Shadow } from '../../styled-components/Shadow';
-import { deviceSize, mediaQueries } from '@/lib/constants/constants';
+import { device, deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
-import useDebounce from '@/hooks/useDebounce';
-import { IS_BOOSTING_ENABLED } from '@/configuration';
+import ProjectsBanner from './ProjectsBanner';
+import { useProjectsContext } from '@/context/projects.context';
+import ProjectsFiltersDesktop from '@/components/views/projects/ProjectsFiltersDesktop';
+import ProjectsFiltersTablet from '@/components/views/projects/ProjectsFiltersTablet';
+import ProjectsFiltersMobile from '@/components/views/projects/ProjectsFiltersMobile';
+import LottieControl from '@/components/animations/lottieControl';
+import LoadingAnimation from '@/animations/loading_giv.json';
+import useDetectDevice from '@/hooks/useDetectDevice';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+import ProjectsSortSelect from './ProjectsSortSelect';
+import useMediaQuery from '@/hooks/useMediaQuery';
+import ProjectsMiddleBanner from './ProjectsMiddleBanner';
 
-interface IProjectsView {
+export interface IProjectsView {
 	projects: IProject[];
 	totalCount: number;
 	categories: ICategory[];
 }
 
-interface ISelectObj {
-	value: string;
-	label: string;
-	direction?: string;
-}
-
 interface IQueries {
-	orderBy: { field: string; direction: string };
 	skip?: number;
 	limit?: number;
-	category?: string;
-	searchTerm?: string;
 	connectedWalletUserId?: number;
 }
 
-const allCategoryObj = { value: 'All', label: 'All' };
-const sortByObj = [
-	//TODO: boosting - uncomment this for test boosting
-	// { label: 'GIVpower', value: gqlEnums.GIVPOWER },
-	{ label: 'Default', value: gqlEnums.QUALITYSCORE },
-	{ label: 'Amount Raised', value: gqlEnums.DONATIONS },
-	{ label: 'Accepts GIV Token', value: gqlEnums.ACCEPTGIV },
-	{ label: 'Hearts', value: gqlEnums.HEARTS },
-	{ label: 'Newest', value: gqlEnums.CREATIONDATE },
-	{
-		label: 'Oldest',
-		value: gqlEnums.CREATIONDATE,
-		direction: EDirection.ASC,
-	},
-	{ label: 'Verified', value: gqlEnums.VERIFIED },
-	{ label: 'Traceable', value: gqlEnums.TRACEABLE },
-];
-
-// TODO: boosting - remove/comment this for boosting
-if (IS_BOOSTING_ENABLED) {
-	sortByObj.unshift({ label: 'GIVpower', value: gqlEnums.GIVPOWER });
-}
-
-const buildCategoryObj = (array: ICategory[]) => {
-	const newArray = [allCategoryObj];
-	array.forEach(e => {
-		const obj: ISelectObj = {
-			label: capitalizeFirstLetter(e.name),
-			value: e.name,
-		};
-		newArray.push(obj);
-	});
-	return newArray;
-};
-
 const ProjectsIndex = (props: IProjectsView) => {
-	const { projects, totalCount: _totalCount, categories } = props;
+	const { projects, totalCount: _totalCount } = props;
+
 	const user = useAppSelector(state => state.user.userData);
 
-	const [selectedCategory, setSelectedCategory] =
-		useState<ISelectObj>(allCategoryObj);
 	const [isLoading, setIsLoading] = useState(false);
 	const [filteredProjects, setFilteredProjects] =
 		useState<IProject[]>(projects);
-	const [sortBy, setSortBy] = useState<ISelectObj>(sortByObj[0]);
-	const [searchValue, setSearchValue] = useState<string>('');
 	const [totalCount, setTotalCount] = useState(_totalCount);
 
 	const dispatch = useAppDispatch();
-	const router = useRouter();
-	const isFirstRender = useRef(true);
-	const pageNum = useRef(0);
-	const debouncedSearch = useDebounce(searchValue);
 
-	useEffect(() => {
-		if (!isFirstRender.current) fetchProjects();
-		else isFirstRender.current = false;
-	}, [selectedCategory.value, sortBy.label, debouncedSearch]);
+	const {
+		variables: contextVariables,
+		setVariables,
+		mainCategories,
+		selectedMainCategory,
+	} = useProjectsContext();
+
+	const router = useRouter();
+	const pageNum = useRef(0);
+	const { isDesktop, isTablet, isMobile, isLaptopL } = useDetectDevice();
 
 	const fetchProjects = (
 		isLoadMore?: boolean,
 		loadNum?: number,
 		userIdChanged = false,
 	) => {
-		const categoryQuery = selectedCategory.value;
-
 		const variables: IQueries = {
-			orderBy: { field: sortBy.value, direction: EDirection.DESC },
 			limit: userIdChanged ? filteredProjects.length : projects.length,
 			skip: userIdChanged ? 0 : projects.length * (loadNum || 0),
 		};
@@ -132,22 +82,22 @@ const ProjectsIndex = (props: IProjectsView) => {
 			variables.connectedWalletUserId = Number(user?.id);
 		}
 
-		if (sortBy.direction) variables.orderBy.direction = sortBy.direction;
-		if (categoryQuery && categoryQuery !== 'All')
-			variables.category = categoryQuery;
-		if (searchValue) variables.searchTerm = searchValue;
-
 		if (!userIdChanged) setIsLoading(true);
+		if (contextVariables.mainCategory !== router.query?.slug?.toString())
+			return;
 
-		initializeApollo()
+		client
 			.query({
 				query: FETCH_ALL_PROJECTS,
-				variables,
+				variables: {
+					...variables,
+					...contextVariables,
+				},
 				fetchPolicy: 'network-only',
 			})
-			.then((res: { data: { projects: IFetchAllProjects } }) => {
-				const data = res.data?.projects?.projects;
-				const count = res.data?.projects?.totalCount;
+			.then((res: { data: { allProjects: IFetchAllProjects } }) => {
+				const data = res.data?.allProjects?.projects;
+				const count = res.data?.allProjects?.totalCount;
 				setTotalCount(count);
 				setFilteredProjects(
 					isLoadMore ? filteredProjects.concat(data) : data,
@@ -166,20 +116,25 @@ const ProjectsIndex = (props: IProjectsView) => {
 	};
 
 	useEffect(() => {
+		pageNum.current = 0;
 		fetchProjects(false, 0, true);
 	}, [user?.id]);
 
-	const handleChange = (type: string, input: any) => {
+	useEffect(() => {
 		pageNum.current = 0;
-		if (type === 'search') {
-			setSearchValue(input);
-		} else if (type === 'sortBy') setSortBy(input);
-		else if (type === 'category') setSelectedCategory(input);
-	};
+		fetchProjects(false, 0);
+	}, [contextVariables]);
 
-	const clearSearch = () => {
-		setSearchValue('');
-	};
+	useEffect(() => {
+		if (router.query?.slug) {
+			setVariables(prevVariables => {
+				return {
+					...prevVariables,
+					mainCategory: router.query?.slug?.toString(),
+				};
+			});
+		}
+	}, [router.query?.slug]);
 
 	const loadMore = () => {
 		if (isLoading) return;
@@ -195,67 +150,82 @@ const ProjectsIndex = (props: IProjectsView) => {
 		}
 	};
 
-	const showLoadMore = totalCount > filteredProjects.length;
+	const showLoadMore = totalCount > filteredProjects?.length;
+	const isTabletSlice = useMediaQuery(device.tablet);
 
-	return (
-		<>
-			<BigArc />
-			<Wrapper>
-				<Title weight={700}>Projects</Title>
-				<Subtitle>
-					Support for-good projects, nonprofits & charities with
-					crypto donations. Give directly with zero added fees. Get
-					rewarded when you donate to verified projects!
-				</Subtitle>
+	const handleSliceNumber = () => {
+		if (isMobile) {
+			return 1;
+		} else if (isTabletSlice && !isLaptopL) {
+			return 2;
+		} else {
+			return 3;
+		}
+	};
 
-				<FiltersSection>
-					<SelectComponent>
-						<Label>CATEGORY</Label>
-						<Select
-							classNamePrefix='select'
-							styles={selectCustomStyles}
-							value={selectedCategory}
-							onChange={e => handleChange('category', e)}
-							options={buildCategoryObj(categories)}
-							isMobile={false}
-						/>
-					</SelectComponent>
-					<SelectComponent>
-						<Label>SORT BY</Label>
-						<Select
-							classNamePrefix='select'
-							styles={selectCustomStyles}
-							value={sortBy}
-							onChange={e => handleChange('sortBy', e)}
-							options={sortByObj}
-							isOptionSelected={(option, selectValue) =>
-								selectValue.some((i: any) => i.label === option)
-							}
-							isMobile={false}
-						/>
-					</SelectComponent>
-					<SearchComponent>
-						<Label />
-						<SearchBox
-							onChange={(e: string) => handleChange('search', e)}
-							placeholder='Search Projects ...'
-							value={searchValue}
-						/>
-					</SearchComponent>
-				</FiltersSection>
+	const handleArraySlice = () => {
+		const sliceIndex = handleSliceNumber();
+		const firstSlice = filteredProjects.slice(0, sliceIndex);
+		const secondSlice = filteredProjects.slice(sliceIndex);
+		return [firstSlice, secondSlice];
+	};
 
-				{isLoading && <Loader className='dot-flashing' />}
-
-				{filteredProjects.length > 0 ? (
+	const renderProjects = () => {
+		const [firstSlice, secondSlice] = handleArraySlice();
+		if (filteredProjects?.length > 0) {
+			return (
+				<ProjectsWrapper>
 					<ProjectsContainer>
-						{filteredProjects.map(project => (
+						{firstSlice.map(project => (
 							<ProjectCard key={project.id} project={project} />
 						))}
 					</ProjectsContainer>
-				) : (
-					<ProjectsNoResults trySearch={clearSearch} />
-				)}
+					<ProjectsMiddleBanner />
+					<ProjectsContainer>
+						{secondSlice.map(project => (
+							<ProjectCard key={project.id} project={project} />
+						))}
+					</ProjectsContainer>
+				</ProjectsWrapper>
+			);
+		} else {
+			return <ProjectsNoResults mainCategories={mainCategories} />;
+		}
+	};
 
+	return (
+		<>
+			{isLoading && (
+				<Loading>
+					<LottieControl
+						animationData={LoadingAnimation}
+						size={150}
+					/>
+				</Loading>
+			)}
+
+			<ProjectsBanner mainCategory={selectedMainCategory} />
+			<Wrapper>
+				<FiltersContainer>
+					{isDesktop && <ProjectsFiltersDesktop />}
+					{isTablet && <ProjectsFiltersTablet />}
+					{isMobile && <ProjectsFiltersMobile />}
+				</FiltersContainer>
+				<SortingContainer>
+					<Flex
+						justifyContent='space-between'
+						flexDirection={isMobile ? 'column' : 'row'}
+						gap={isMobile ? '16px' : undefined}
+						alignItems={isMobile ? 'stretch' : 'center'}
+					>
+						<Title>
+							Explore <span>{totalCount} Projects</span>
+						</Title>
+						<ProjectsSortSelect />
+					</Flex>
+				</SortingContainer>
+				{isLoading && <Loader className='dot-flashing' />}
+				{renderProjects()}
 				{showLoadMore && (
 					<>
 						<StyledButton
@@ -281,36 +251,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 	);
 };
 
-const selectCustomStyles: StylesConfig = {
-	menu: styles => ({
-		...styles,
-		border: '0px',
-		borderRadius: '8px',
-		boxShadow: Shadow.Neutral[500],
-		'&:focus-within': {
-			border: `2px solid ${brandColors.pinky[500]}`,
-		},
-	}),
-	option: (styles, { isFocused, isSelected }) => ({
-		...styles,
-		width: '95%',
-		height: '38px',
-		margin: '4px auto',
-		borderRadius: '8px',
-		backgroundColor: isSelected
-			? neutralColors.gray[300]
-			: isFocused
-			? neutralColors.gray[200]
-			: 'white',
-		color: isSelected ? neutralColors.gray[900] : neutralColors.gray[800],
-	}),
-	control: base => ({
-		...base,
-		border: 0,
-		boxShadow: 'none',
-	}),
-};
-
 const Loader = styled.div`
 	margin: 20px auto;
 `;
@@ -328,53 +268,36 @@ const StyledButton = styled(OutlineButton)<{ transparent?: boolean }>`
 	}
 `;
 
-const SelectComponent = styled(P)`
-	min-width: 200px;
-	width: 100%;
-
-	${mediaQueries.tablet} {
-		width: calc(50% - 8px);
-	}
-
-	${mediaQueries.laptopL} {
-		width: 345px;
-	}
-`;
-
-const SearchComponent = styled.div`
-	flex-grow: 1;
-`;
-
 const LoadingDotIcon = styled.div`
 	padding: 4px 37px;
 `;
 
-const Label = styled(Subline)`
-	color: ${brandColors.deep[500]};
-	height: 18px;
-`;
-
-const FiltersSection = styled.div`
-	padding: 32px 21px;
-	background: white;
-	border-radius: 16px;
-	margin-bottom: 32px;
-	margin-top: 50px;
+const FiltersContainer = styled.div`
 	display: flex;
-	flex-wrap: wrap;
-	gap: 16px;
-	align-items: center;
+	flex-direction: column;
+	background: white;
 	position: relative;
-	font-weight: 500;
-	color: ${neutralColors.gray[900]};
+	padding: 32px 21px;
+	border-radius: 0;
+	margin-bottom: 24px;
+	margin-top: 50px;
+	gap: 16px;
+	${mediaQueries.tablet} {
+		border-radius: 16px;
+	}
 `;
 
-export const ProjectsContainer = styled.div`
+const ProjectsWrapper = styled.div`
+	margin-bottom: 64px;
+`;
+
+const ProjectsContainer = styled.div`
 	display: grid;
 	gap: 25px;
-	margin-bottom: 64px;
+	padding: 0 23px;
 
 	${mediaQueries.tablet} {
+		padding: 0;
 		grid-template-columns: repeat(2, 1fr);
 	}
 
@@ -384,20 +307,43 @@ export const ProjectsContainer = styled.div`
 `;
 
 const Wrapper = styled.div`
-	padding: 166px 30px 4px 30px;
 	max-width: ${deviceSize.desktop + 'px'};
 	margin: 0 auto;
+	${mediaQueries.tablet} {
+		padding: 0 33px;
+	}
+	${mediaQueries.laptopS} {
+		padding: 0 40px;
+	}
 `;
 
-const Title = styled(H3)`
-	margin-bottom: 18px;
-	position: relative;
+const Loading = styled(FlexCenter)`
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1000;
+	height: 100%;
+	width: 100%;
+	background-color: gray;
+	transition: opacity 0.3s ease-in-out;
+	opacity: 0.9;
 `;
 
-const Subtitle = styled(Lead)`
+const Title = styled(H5)`
+	font-weight: 700;
 	position: relative;
-	margin-bottom: 25px;
-	font-weight: 400;
-	max-width: 1026px;
+
+	span {
+		color: ${neutralColors.gray[700]};
+	}
 `;
+
+const SortingContainer = styled.div`
+	margin-bottom: 24px;
+	padding: 0 23px;
+	${mediaQueries.tablet} {
+		padding: 0;
+	}
+`;
+
 export default ProjectsIndex;
