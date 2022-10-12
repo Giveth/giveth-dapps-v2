@@ -1,6 +1,14 @@
 const MyAccount = '/account';
 const GIVstream = '/givstream';
 
+// Public profile and my account
+export const profileTabs = {
+	likedProjects: '?tab=liked',
+	projects: '?tab=projects',
+	donations: '?tab=donations',
+	boosted: '?tab=boosted',
+};
+
 const Routes = {
 	Home: '/',
 	CreateProject: '/create',
@@ -15,10 +23,9 @@ const Routes = {
 	Terms: '/tos',
 	Partnerships: '/partnerships',
 	MyAccount,
-	MyProjects: MyAccount + '?tab=projects',
-	MyDonations: MyAccount + '?tab=donations',
-	MyBoostedProjects: MyAccount + '?tab=boosted',
-	MyLikedProjects: MyAccount + '?tab=liked',
+	MyProjects: MyAccount + profileTabs.projects,
+	MyDonations: MyAccount + profileTabs.donations,
+	MyBoostedProjects: MyAccount + profileTabs.boosted,
 	Onboard: '/onboard',
 	Verification: '/verification',
 	GIVECONOMY: '/giveconomy',
