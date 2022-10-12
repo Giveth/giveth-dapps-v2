@@ -322,7 +322,7 @@ const config: EnvConfig = {
 								'ShapeShift is the free and open-source one-stop-shop for cross-chain DeFi. Buy, sell, send, receive, trade, and earn yield on your crypto across a growing number of protocols and chains with no added fees ever. FOX is the governance token of the ShapeShift DAO.',
 							link: 'https://shapeshift.com/',
 						},
-						farmStartTimeMS: 1665932450000,
+						farmStartTimeMS: 1666026660000,
 						active: true,
 					},
 				],
