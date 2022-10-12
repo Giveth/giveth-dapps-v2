@@ -50,7 +50,7 @@ const config: EnvConfig = {
 			LM_ADDRESS: '0x4B9EfAE862a1755F7CEcb021856D467E86976755',
 			BUY_LINK:
 				'https://app.uniswap.org/#/swap?outputCurrency=0x900db999074d9277c5da2a43f252d74366230da0',
-			discontinued: SEPT_8TH_2022,
+			farmEndTimeMS: SEPT_8TH_2022,
 			active: false,
 			archived: true,
 		},
@@ -71,7 +71,7 @@ const config: EnvConfig = {
 				unit: 'LP',
 				farmStartTimeMS: 1651345200000,
 				active: false,
-				discontinued: SEPT_8TH_2022,
+				farmEndTimeMS: SEPT_8TH_2022,
 				archived: true,
 			},
 			{
@@ -240,7 +240,7 @@ const config: EnvConfig = {
 					'https://gnosis.sushi.com/add/0x6A023CCd1ff6F2045C3309768eAd9E68F978f6e1/0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 				unit: 'LP',
 				active: false,
-				discontinued: SEPT_8TH_2022,
+				farmEndTimeMS: SEPT_8TH_2022,
 				archived: true,
 			},
 			{
@@ -255,7 +255,7 @@ const config: EnvConfig = {
 					'https://app.honeyswap.org/#/add/0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75/xdai',
 				unit: 'LP',
 				active: false,
-				discontinued: SEPT_8TH_2022, // change this to  archived: true when it's over
+				farmEndTimeMS: SEPT_8TH_2022, // change this to  archived: true when it's over
 				farmStartTimeMS: 1656086400000,
 				archived: true,
 			},
@@ -299,7 +299,7 @@ const config: EnvConfig = {
 						},
 						farmStartTimeMS: 1649001600000,
 						active: true,
-						discontinued: 1665932450000,
+						farmEndTimeMS: 1665932450000,
 					},
 				],
 			},
