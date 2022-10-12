@@ -23,6 +23,7 @@ export const defaultSubgraphValues: ISubgraphState = {
 	allPositions: [],
 	networkNumber: config.MAINNET_NETWORK_NUMBER,
 	isLoaded: false,
+	ali: true,
 };
 
 const initialState: {

@@ -26,12 +26,14 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal, projectId }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const [percentage, setPercentage] = useState(0);
 	const [state, setState] = useState(EBoostModalState.BOOSTING);
-	const sdh = new SubgraphDataHelper(
-		useAppSelector(state => state.subgraph.xDaiValues),
-	);
+	const temp = useAppSelector(state => state.subgraph.xDaiValues);
+	console.log('temp', temp);
+	const sdh = new SubgraphDataHelper(temp);
 	const givPower = sdh.getUserGIVPowerBalance();
+	console.log('givPower.balance', givPower.balance);
 
 	if (givPower.balance == '0') {
+		console.log('here');
 		return <ZeroGivpowerModal setShowModal={setShowModal} />;
 	}
 

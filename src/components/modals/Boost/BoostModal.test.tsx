@@ -4,7 +4,7 @@ import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import BoostModal from './BoostModal';
 import config from '@/configuration';
-import { render } from '@/tests/utils';
+import { render, screen } from '@/tests/utils';
 
 // We use msw to intercept the network request during the test,
 // and return the response 'John Smith' after 150ms
@@ -21,10 +21,12 @@ export const handlers = [
 					totalGIVLocked: '201271330350605663881960',
 				},
 				userGIVLocked: {
-					givLocked: '1000000000000000000',
+					givLocked: '10000',
 				},
+				// `unipoolBalance_${config.XDAI_CONFIG.GIV.LM_ADDRESS}`: "1000",
+				unipoolBalance_0xdaea66adc97833781139373df5b3bced3fdda5b1:
+					'1000',
 			}),
-			ctx.delay(150),
 		);
 	}),
 	// rest.get(config.MAINNET_CONFIG.subgraphAddress, (req, res, ctx) => {
@@ -43,9 +45,12 @@ afterEach(() => server.resetHandlers());
 // Disable API mocking after the tests are done.
 afterAll(() => server.close());
 
-test('the GIVpower balance is zero', () => {
+test('the GIVpower balance is zero', async () => {
 	const setStateMock = jest.fn();
 	const useStateMock: any = (useState: any) => [useState, setStateMock];
 	jest.spyOn(React, 'useState').mockImplementation(useStateMock);
 	render(<BoostModal projectId='0' setShowModal={setStateMock} />);
+	// screen.debug();
+	// screen.getByText(/givpower/);
+	expect(await screen.getByTestId('zero-givpower-modal'));
 });
