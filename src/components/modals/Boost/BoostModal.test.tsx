@@ -52,5 +52,5 @@ test('the GIVpower balance is zero', async () => {
 	render(<BoostModal projectId='0' setShowModal={setStateMock} />);
 	// screen.debug();
 	// screen.getByText(/givpower/);
-	expect(await screen.getByTestId('zero-givpower-modal'));
+	expect(await screen.getByTestId('zero-givpower-modal')).toBeInTheDocument();
 });
