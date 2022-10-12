@@ -184,9 +184,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		provideLiquidityLink,
 		unit,
 		farmStartTimeMS,
+		farmEndTimeMS,
 		active,
 		archived,
-		discontinued,
 		introCard,
 		network: poolNetwork,
 	} = poolStakingConfig;
@@ -204,6 +204,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 
 	const userGIVLocked = sdh.getUserGIVLockedBalance();
 	const userGIVPowerBalance = sdh.getUserGIVPowerBalance();
+	const isDiscontinued = farmEndTimeMS
+		? getNowUnixMS() > farmEndTimeMS
+		: false;
 
 	useEffect(() => {
 		if (isFirstStakeShown || !router) return;
@@ -293,7 +296,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 						</Caption>
 					</WrongNetworkContainer>
 				)}
-				{(!active || archived || discontinued) && disableModal && (
+				{(!active || archived || isDiscontinued) && disableModal && (
 					<DisableModal>
 						<DisableModalContent>
 							<DisableModalImage>
@@ -304,12 +307,12 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								justifyContent='space-evenly'
 							>
 								<DisableModalText weight={700}>
-									{discontinued
+									{isDiscontinued
 										? 'Attention Farmers!'
 										: 'This pool is no longer available'}
 								</DisableModalText>
 								<DisableModalText>
-									{discontinued
+									{isDiscontinued
 										? 'This farm has ended, move your funds to another farm to keep earning rewards.'
 										: 'Please unstake your tokens and check out other available pools.'}
 								</DisableModalText>
