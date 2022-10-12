@@ -306,7 +306,7 @@ const config: EnvConfig = {
 						POOL_ADDRESS:
 							'0xc22313fd39f7d4d73a89558f9e8e444c86464bac',
 						LM_ADDRESS:
-							'0x93c40bCA6a854B2190a054136a316C4Df7f89f10',
+							'0x9A333AD00868472c0314F76DB8dA305B83890129',
 						type: StakingType.HONEYSWAP_FOX_XDAI,
 						platform: StakingPlatform.HONEYSWAP,
 						title: 'FOX / xDAI',
