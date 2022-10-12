@@ -294,7 +294,7 @@ const config: EnvConfig = {
 							'https://app.honeyswap.org/#/add/0x18cE354571ba71bC7b3d633b254954C5A9cfC195/0x97c4dD5cE204b8c1F2f3B8fBfBBDC771d867d18c',
 						unit: 'LP',
 						regenStreamType: StreamType.FOX,
-						regenFarmType: RegenFarmType.FOX_HNY,
+						regenFarmType: RegenFarmType.FOX_XDAI,
 						introCard: {
 							title: 'ShapeShift DAO',
 							description:
