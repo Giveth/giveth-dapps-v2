@@ -255,6 +255,7 @@ export const FETCH_PROJECT_BY_SLUG_WITH_BOOST = gql`
 			projectVerificationForm {
 				status
 			}
+			verificationFormStatus
 			projectPower {
 				powerRank
 				totalPower
@@ -316,6 +317,7 @@ export const FETCH_PROJECT_BY_SLUG_WITHOUT_BOOST = gql`
 			projectVerificationForm {
 				status
 			}
+			verificationFormStatus
 		}
 	}
 `;

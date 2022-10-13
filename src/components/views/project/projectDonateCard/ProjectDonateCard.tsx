@@ -86,7 +86,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 		verified,
 		verificationStatus,
 		organization,
-		projectVerificationForm,
+		verificationFormStatus,
 	} = project || {};
 
 	const convertedCategories = mapCategoriesToMainCategories(categories);
@@ -107,8 +107,10 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 	const isCategories = categories?.length > 0;
 	const verStatus = verified
 		? EVerificationStatus.VERIFIED
-		: projectVerificationForm?.status;
+		: verificationFormStatus;
+
 	const isVerDraft = verStatus === EVerificationStatus.DRAFT;
+	const isRevoked = verificationStatus === EProjectVerificationStatus.REVOKED;
 
 	const router = useRouter();
 
@@ -156,6 +158,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 			}
 		}
 	};
+
 	const fetchProjectReaction = useCallback(async () => {
 		if (user?.id && id) {
 			// Already fetched
@@ -293,21 +296,15 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 								router.push(idToProjectEdit(project?.id || ''))
 							}
 						/>
-						{verificationStatus !==
-							EProjectVerificationStatus.REVOKED &&
-							!verified &&
-							!isDraft &&
-							!verStatus && (
-								<FullOutlineButton
-									buttonType='primary'
-									label='VERIFY YOUR PROJECT'
-									disabled={!isActive}
-									onClick={() =>
-										setShowVerificationModal(true)
-									}
-								/>
-							)}
-						{isVerDraft && (
+						{!isRevoked && !verified && !isDraft && !verStatus && (
+							<FullOutlineButton
+								buttonType='primary'
+								label='VERIFY YOUR PROJECT'
+								disabled={!isActive}
+								onClick={() => setShowVerificationModal(true)}
+							/>
+						)}
+						{!isRevoked && isVerDraft && (
 							<ExternalLink href={slugToVerification(slug)}>
 								<FullOutlineButton
 									buttonType='primary'
