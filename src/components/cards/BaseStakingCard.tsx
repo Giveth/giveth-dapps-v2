@@ -279,7 +279,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		isGIVStaking && poolNetwork === config.XDAI_NETWORK_NUMBER;
 	const isLocked = isGIVpower && userGIVLocked.balance !== '0';
 	const isZeroGIVStacked =
-		!account || (isGIVpower && userGIVPowerBalance.balance === '0');
+		isGIVpower && (!account || userGIVPowerBalance.balance === '0');
 	const availableStakedToken = stakedLpAmount.sub(userGIVLocked.balance);
 
 	return (
@@ -472,7 +472,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 																)}
 															%
 															{isZeroGIVStacked &&
-																isGIVStaking &&
 																`-${
 																	apr &&
 																	formatEthHelper(
