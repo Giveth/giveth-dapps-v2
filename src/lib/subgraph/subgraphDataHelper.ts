@@ -66,7 +66,6 @@ export class SubgraphDataHelper {
 
 	getUserGIVPowerBalance(): IUnipoolBalance {
 		const givTokenAddress = config.XDAI_CONFIG.GIV.LM_ADDRESS;
-		console.log('givTokenAddress', givTokenAddress);
 		return this.getUnipoolBalance(givTokenAddress);
 	}
 
