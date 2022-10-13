@@ -2,7 +2,7 @@ import { neutralColors, Subline } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 const CategoryBadge = ({ category }: { category: string }) => {
-	return <Wrapper>{category}123123123123</Wrapper>;
+	return <Wrapper>{category}</Wrapper>;
 };
 
 const Wrapper = styled(Subline)`
