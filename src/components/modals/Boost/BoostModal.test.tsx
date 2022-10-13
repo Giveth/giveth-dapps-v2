@@ -3,6 +3,10 @@ import { screen } from '@testing-library/react';
 import { renderWithProviders } from '@/tests/utils';
 import '@testing-library/jest-dom';
 import BoostModal from './BoostModal';
+import config from '@/configuration';
+import type { ISubgraphState } from '@/features/subgraph/subgraph.types';
+
+// Please Don't remove these comment they will help us on mocking requests. Thanks
 // We use msw to intercept the network request during the test,
 // and return the response 'John Smith' after 150ms
 // when receiving a get request to the `/api/user` endpoint
@@ -71,19 +75,20 @@ test('showing the ZeroGivpowerModal if the user GIVpower balance is zero', async
 	const setStateMock = jest.fn();
 	const useStateMock: any = (useState: any) => [useState, setStateMock];
 	jest.spyOn(React, 'useState').mockImplementation(useStateMock);
+	const xDaiValues: ISubgraphState = {};
+	xDaiValues[
+		`unipoolBalance_${config.XDAI_CONFIG.GIV.LM_ADDRESS.toLowerCase()}`
+	] = {
+		balance: '0',
+		rewards: '',
+		rewardPerTokenPaid: '',
+	};
 	renderWithProviders(
 		<BoostModal projectId='0' setShowModal={setStateMock} />,
 		{
 			preloadedState: {
 				subgraph: {
-					xDaiValues: {
-						unipoolBalance_0xdaea66adc97833781139373df5b3bced3fdda5b1:
-							{
-								balance: '0',
-								rewards: '',
-								rewardPerTokenPaid: '',
-							},
-					},
+					xDaiValues: xDaiValues,
 					mainnetValues: {},
 					currentValues: {},
 				},
