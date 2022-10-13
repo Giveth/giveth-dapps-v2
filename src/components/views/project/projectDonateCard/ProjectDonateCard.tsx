@@ -432,8 +432,7 @@ const BlueBar = styled.div`
 	top: -8px;
 `;
 
-const CategoryWrapper = styled.div`
-	display: flex;
+const CategoryWrapper = styled(Flex)`
 	flex-wrap: wrap;
 	gap: 10px;
 	overflow: hidden;
