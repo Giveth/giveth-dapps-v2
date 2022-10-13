@@ -57,6 +57,35 @@ test('showing user total GIVpower amount correctly', async () => {
 			},
 		},
 	);
-	// expect(await screen.getByTestId('boost-modal')).toBeInTheDocument();
+	expect(await screen.getByText(/1,000/)).toBeInTheDocument();
+});
+
+test('showing user total GIVpower amount correctly', async () => {
+	const setStateMock = jest.fn();
+	const useStateMock: any = (useState: any) => [useState, setStateMock];
+	jest.spyOn(React, 'useState').mockImplementation(useStateMock);
+	renderWithProviders(
+		<BoostInnerModal
+			totalGIVpower={BN('1000000000000000000000')}
+			projectId='0'
+			setPercentage={setStateMock}
+			setState={setStateMock}
+		/>,
+		{
+			preloadedState: {
+				user: {
+					userData: {
+						id: '1',
+						isSignedIn: true,
+					},
+					token: '',
+					isEnabled: true,
+					isSignedIn: true,
+					balance: '1000',
+					isLoading: false,
+				},
+			},
+		},
+	);
 	expect(await screen.getByText(/1,000/)).toBeInTheDocument();
 });
