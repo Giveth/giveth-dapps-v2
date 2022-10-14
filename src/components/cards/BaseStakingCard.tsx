@@ -280,7 +280,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const isLocked = isGIVpower && userGIVLocked.balance !== '0';
 	const isZeroGIVStacked =
 		isGIVpower && (!account || userGIVPowerBalance.balance === '0');
-	const availableStakedToken = stakedLpAmount.sub(userGIVLocked.balance);
+	const availableStakedToken = isGIVpower
+		? stakedLpAmount.sub(userGIVLocked.balance)
+		: stakedLpAmount;
 
 	return (
 		<>
