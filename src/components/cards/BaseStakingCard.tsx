@@ -667,9 +667,8 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					<GIVpowerCardIntro setState={setState} />
 				) : (
 					<StakingCardIntro
-						poolStakingConfig={
-							poolStakingConfig as SimplePoolStakingConfig
-						}
+						symbol={title}
+						introCard={poolStakingConfig.introCard}
 						setState={setState}
 					/>
 				)}
