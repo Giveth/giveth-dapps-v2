@@ -111,6 +111,7 @@ export interface RegenFarmConfig {
 	// For price purpose
 	tokenAddressOnUniswapV2: string;
 	pools: RegenPoolStakingConfig[];
+	introCard?: IntroCardConfig;
 }
 
 export interface BasicNetworkConfig {
