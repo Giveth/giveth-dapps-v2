@@ -15,16 +15,16 @@ import Link from 'next/link';
 import { Flex, FlexCenter } from '../styled-components/Flex';
 import { Modal } from './Modal';
 import Routes from '@/lib/constants/Routes';
-import { RegenStreamConfig } from '@/types/config';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import { RegenFarmConfig } from '@/types/config';
 import type { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 
 interface IWhatisStreamModal extends IModal {
 	tokenDistroHelper?: TokenDistroHelper;
-	regenStreamConfig?: RegenStreamConfig;
+	regenStreamConfig?: RegenFarmConfig;
 }
 
 export const WhatisStreamModal: FC<IWhatisStreamModal> = ({

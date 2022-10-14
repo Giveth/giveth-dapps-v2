@@ -1,29 +1,19 @@
 import React, { FC } from 'react';
 import { H3 } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
-import { RegenPoolStakingConfig } from '@/types/config';
-import {
-	DAOContainer,
-	GIVfrensLink,
-	Subtitle,
-	DAOChangeNetwork,
-} from '@/components/givfarm/GIVfrens.sc';
-import { PoolRow } from '@/components/homeTabs/GIVfarm.sc';
-import StakingPoolCard from '@/components/cards/StakingPoolCard';
-import { Col, Row } from '../Grid';
 import config from '@/configuration';
-import { givEconomySupportedNetworks } from '@/lib/constants/constants';
-import { RegenStreamCard } from './RegenStreamCard';
-import DAOChangeNetworkModal from './DAOChangeNetworkModal';
+import { Col } from '../Grid';
+import { RegenFarm } from '../RegenFarm';
+import { Subtitle, GIVfrensLink } from './GIVfrens.sc';
 
-interface IGIVfrensProps {
-	regenFarms: RegenPoolStakingConfig[];
-	network: number;
-}
+interface IGIVfrensProps {}
 
-export const GIVfrens: FC<IGIVfrensProps> = ({ regenFarms, network }) => {
+export const GIVfrens: FC<IGIVfrensProps> = () => {
 	const { chainId } = useWeb3React();
-	if (regenFarms.length === 0) return null;
+	const regenFarms =
+		chainId === config.XDAI_NETWORK_NUMBER
+			? config.XDAI_CONFIG.regenFarms
+			: config.MAINNET_CONFIG.regenFarms;
 
 	return (
 		<>
@@ -43,54 +33,9 @@ export const GIVfrens: FC<IGIVfrensProps> = ({ regenFarms, network }) => {
 					.
 				</Subtitle>
 			</Col>
-			<PoolRow>
-				{regenFarms.map((poolStakingConfig, index) => {
-					const regenStream = config.NETWORKS_CONFIG[
-						network
-					].regenStreams.find(
-						s => s.type === poolStakingConfig.regenStreamType,
-					);
-					return (
-						<DAOContainer
-							key={`regen_staking_pool_card_${network}_${index}`}
-							xs={12}
-						>
-							<Row>
-								<Col xs={12} sm={6} lg={4}>
-									<StakingPoolCard
-										poolStakingConfig={poolStakingConfig}
-									/>
-								</Col>
-								<Col xs={12} sm={6} lg={8}>
-									{regenStream && (
-										<RegenStreamCard
-											streamConfig={regenStream}
-											network={
-												givEconomySupportedNetworks.includes(
-													chainId as number,
-												)
-													? (chainId as number)
-													: config.MAINNET_NETWORK_NUMBER
-											}
-										/>
-									)}
-								</Col>
-							</Row>
-							{chainId !== config.MAINNET_NETWORK_NUMBER &&
-								chainId !== config.XDAI_NETWORK_NUMBER && (
-									<>
-										<DAOChangeNetwork />
-										<DAOChangeNetworkModal
-											network={
-												config.MAINNET_NETWORK_NUMBER
-											}
-										/>
-									</>
-								)}
-						</DAOContainer>
-					);
-				})}
-			</PoolRow>
+			{regenFarms.map((regenFarm, index) => (
+				<RegenFarm key={index} regenFarm={regenFarm} />
+			))}
 		</>
 	);
 };

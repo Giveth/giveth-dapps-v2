@@ -13,7 +13,6 @@ export const GIVfrensLink = styled(GLink)`
 
 export const DAOContainer = styled(Col)`
 	position: relative;
-	padding-top: 24px;
 `;
 
 export const DAOChangeNetwork = styled.div`

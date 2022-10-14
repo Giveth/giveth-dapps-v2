@@ -35,13 +35,13 @@ import {
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import type {
 	PoolStakingConfig,
-	RegenStreamConfig,
+	RegenFarmConfig,
 	SimplePoolStakingConfig,
 } from '@/types/config';
 
 interface IStakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
-	regenStreamConfig?: RegenStreamConfig;
+	regenStreamConfig?: RegenFarmConfig;
 	maxAmount: BigNumber;
 }
 
