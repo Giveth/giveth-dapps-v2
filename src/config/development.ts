@@ -254,6 +254,12 @@ const config: EnvConfig = {
 				rewardTokenSymbol: 'FOX',
 				tokenAddressOnUniswapV2:
 					'0x21a42669643f45Bc0e086b8Fc2ed70c23D67509d',
+				introCard: {
+					title: 'ShapeShift DAO',
+					description:
+						'ShapeShift is the free and open-source one-stop-shop for cross-chain DeFi. Buy, sell, send, receive, trade, and earn yield on your crypto across a growing number of protocols and chains with no added fees ever. FOX is the governance token of the ShapeShift DAO.',
+					link: 'https://shapeshift.com/',
+				},
 				pools: [
 					{
 						network: XDAI_NETWORK_NUMBER,
@@ -270,12 +276,7 @@ const config: EnvConfig = {
 						unit: 'LP',
 						regenStreamType: StreamType.FOX,
 						regenFarmType: RegenFarmType.FOX_HNY,
-						introCard: {
-							title: 'FOX',
-							description:
-								'ShapeShift is the free and open-source one-stop-shop for cross-chain DeFi. Buy, sell, send, receive, trade, and earn yield on your crypto across a growing number of protocols and chains with no added fees ever. FOX is the governance token of the ShapeShift DAO.',
-							link: 'https://shapeshift.com/',
-						},
+
 						farmStartTimeMS: 1646306818206,
 						active: true,
 						farmEndTimeMS: 1665932450000,
@@ -295,12 +296,7 @@ const config: EnvConfig = {
 						unit: 'LP',
 						regenStreamType: StreamType.FOX,
 						regenFarmType: RegenFarmType.FOX_XDAI,
-						introCard: {
-							title: 'ShapeShift DAO',
-							description:
-								'ShapeShift is the free and open-source one-stop-shop for cross-chain DeFi. Buy, sell, send, receive, trade, and earn yield on your crypto across a growing number of protocols and chains with no added fees ever. FOX is the governance token of the ShapeShift DAO.',
-							link: 'https://shapeshift.com/',
-						},
+
 						farmStartTimeMS: 1646306818206,
 						active: true,
 					},
