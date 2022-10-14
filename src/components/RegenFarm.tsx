@@ -1,5 +1,7 @@
 import React, { FC } from 'react';
 import { useWeb3React } from '@web3-react/core';
+import { H4 } from '@giveth/ui-design-system';
+import styled from 'styled-components';
 import {
 	givEconomySupportedNetworks,
 	regenFarmStreamCardCol,
@@ -24,6 +26,7 @@ export const RegenFarm: FC<IRegenFarmProps> = ({ regenFarm }) => {
 	return (
 		<PoolRow>
 			<DAOContainer key={`regenStream_${regenFarm.type}`} xs={12}>
+				<DaoTitle>{regenFarm.title}</DaoTitle>
 				<Row>
 					{pools.map((poolStakingConfig, idx) => (
 						<Col key={idx} xs={12} sm={6} lg={4}>
@@ -65,3 +68,8 @@ export const RegenFarm: FC<IRegenFarmProps> = ({ regenFarm }) => {
 		</PoolRow>
 	);
 };
+
+const DaoTitle = styled(H4)`
+	margin-top: 32px;
+	margin-bottom: 24px;
+`;
