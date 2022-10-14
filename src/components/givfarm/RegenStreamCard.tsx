@@ -10,6 +10,7 @@ import {
 	IconGIVStream,
 	IconHelp,
 	Lead,
+	neutralColors,
 	P,
 	Subline,
 } from '@giveth/ui-design-system';
@@ -33,6 +34,7 @@ import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
+import { StakeCardState } from '../cards/BaseStakingCard';
 
 interface RegenStreamProps {
 	network: number;
@@ -54,6 +56,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 	network,
 	streamConfig,
 }) => {
+	const [state, setState] = useState(StakeCardState.NORMAL);
 	const [showModal, setShowModal] = useState(false);
 	const [usdAmount, setUSDAmount] = useState('0');
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
@@ -125,9 +128,16 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 		<>
 			<RegenStreamContainer>
 				<HeaderRow justifyContent='space-between' wrap={1}>
-					<Flex gap='8px'>
+					<Flex gap='8px' style={{ position: 'relative' }}>
 						{icon}
 						<H5>{streamConfig.title}</H5>
+						{streamConfig.introCard && (
+							<IntroIcon
+								onClick={() => setState(StakeCardState.INTRO)}
+							>
+								<IconHelp size={16} />
+							</IntroIcon>
+						)}
 					</Flex>
 					<RateRow>
 						<IconGIVStream size={32} />
@@ -135,15 +145,6 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 						<StreamRateUnit>
 							{streamConfig.rewardTokenSymbol}/week
 						</StreamRateUnit>
-						{/* <IconWithTooltip
-							icon={<IconHelp size={16} />}
-							direction={'left'}
-						>
-							<GsPTooltip>
-								Your {streamConfig.rewardTokenSymbol}stream
-								flowrate
-							</GsPTooltip>
-						</IconWithTooltip> */}
 					</RateRow>
 				</HeaderRow>
 				<div>
@@ -222,6 +223,18 @@ const RegenStreamContainer = styled(Flex)`
 
 const HeaderRow = styled(Flex)`
 	margin-bottom: 24px;
+`;
+
+export const IntroIcon = styled.div`
+	position: absolute;
+	top: 4px;
+	right: -24px;
+	cursor: pointer;
+	color: ${brandColors.deep[100]};
+	transition: color 0.3s ease;
+	:hover {
+		color: ${neutralColors.gray[100]};
+	}
 `;
 
 const RateRow = styled(Flex)`
