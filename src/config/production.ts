@@ -150,11 +150,6 @@ const config: EnvConfig = {
 				rewardTokenSymbol: 'CULT',
 				tokenAddressOnUniswapV2:
 					'0xf0f9D895aCa5c8678f706FB8216fa22957685A13',
-				introCard: {
-					title: 'CULT',
-					description: `The purpose of CULT is to empower those building and contributing to our decentralized future. Our society makes it as difficult as possible to break away from societal, economic and other norms, and CULT serves to fund and support those who are working to take back our future. CULT is a reminder that the power in people is stronger than the people in power.\n\n CULT is the governance token of the Cult DAO. Every transaction of the CULT token allows you to contribute & fast-forward economic & societal change by contributing a 0.4% tax to the treasury. Fight from within until you get out, or change the system in doing so.`,
-					link: 'https://cultdao.io/',
-				},
 				pools: [
 					{
 						network: MAINNET_NETWORK_NUMBER,
@@ -173,6 +168,11 @@ const config: EnvConfig = {
 						regenFarmType: RegenFarmType.CULT_ETH,
 						farmStartTimeMS: 1655218800000,
 						active: true,
+						introCard: {
+							title: 'CULT',
+							description: `The purpose of CULT is to empower those building and contributing to our decentralized future. Our society makes it as difficult as possible to break away from societal, economic and other norms, and CULT serves to fund and support those who are working to take back our future. CULT is a reminder that the power in people is stronger than the people in power.\n\n CULT is the governance token of the Cult DAO. Every transaction of the CULT token allows you to contribute & fast-forward economic & societal change by contributing a 0.4% tax to the treasury. Fight from within until you get out, or change the system in doing so.`,
+							link: 'https://cultdao.io/',
+						},
 					},
 				],
 			},
@@ -275,12 +275,6 @@ const config: EnvConfig = {
 				rewardTokenSymbol: 'FOX',
 				tokenAddressOnUniswapV2:
 					'0x21a42669643f45bc0e086b8fc2ed70c23d67509d',
-				introCard: {
-					title: 'ShapeShift DAO',
-					description:
-						'ShapeShift is the free and open-source one-stop-shop for cross-chain DeFi. Buy, sell, send, receive, trade, and earn yield on your crypto across a growing number of protocols and chains with no added fees ever. FOX is the governance token of the ShapeShift DAO.',
-					link: 'https://shapeshift.com/',
-				},
 				pools: [
 					{
 						network: XDAI_NETWORK_NUMBER,
@@ -300,6 +294,12 @@ const config: EnvConfig = {
 						farmStartTimeMS: 1649001600000,
 						active: true,
 						farmEndTimeMS: 1665932450000,
+						introCard: {
+							title: 'ShapeShift DAO',
+							description:
+								'ShapeShift is the free and open-source one-stop-shop for cross-chain DeFi. Buy, sell, send, receive, trade, and earn yield on your crypto across a growing number of protocols and chains with no added fees ever. FOX is the governance token of the ShapeShift DAO.',
+							link: 'https://shapeshift.com/',
+						},
 					},
 					{
 						network: XDAI_NETWORK_NUMBER,
@@ -318,6 +318,12 @@ const config: EnvConfig = {
 						regenFarmType: RegenFarmType.FOX_XDAI,
 						farmStartTimeMS: 1666026660000,
 						active: true,
+						introCard: {
+							title: 'ShapeShift DAO',
+							description:
+								'ShapeShift is the free and open-source one-stop-shop for cross-chain DeFi. Buy, sell, send, receive, trade, and earn yield on your crypto across a growing number of protocols and chains with no added fees ever. FOX is the governance token of the ShapeShift DAO.',
+							link: 'https://shapeshift.com/',
+						},
 					},
 				],
 			},
