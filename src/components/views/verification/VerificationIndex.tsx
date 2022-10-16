@@ -17,8 +17,7 @@ import { VerificationContainer } from './Common.sc';
 
 const VerificationIndex = () => {
 	const [showModal, setShowModal] = useState(false);
-	const device = useDetectDevice();
-	const isMobile = device.isMobile;
+	const { isMobile } = useDetectDevice();
 	const { verificationData } = useVerificationData();
 	const status = verificationData?.status || EVerificationStatus.DRAFT;
 	return (

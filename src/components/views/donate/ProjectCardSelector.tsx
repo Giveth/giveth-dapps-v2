@@ -2,19 +2,19 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import { motion } from 'framer-motion';
-import useDeviceDetect from '@/hooks/useDeviceDetect';
 import { IProject } from '@/apollo/types/types';
 import ProjectCard from '@/components/project-card/ProjectCardAlt';
 import SocialBox from '@/components/views/donate/SocialBox';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { mediaQueries } from '@/lib/constants/constants';
+import useDetectDevice from '@/hooks/useDetectDevice';
 
 const ProjectCardSelector = (props: { project: IProject }) => {
 	const { project } = props;
 
 	const [wrapperHeight, setWrapperHeight] = useState<number>(0);
 
-	const { isMobile } = useDeviceDetect();
+	const { isMobile } = useDetectDevice();
 	const wrapperRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {

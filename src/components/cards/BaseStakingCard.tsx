@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useEffect, useMemo, useState } from 'react';
+import React, { FC, ReactNode, useEffect, useState } from 'react';
 import {
 	brandColors,
 	IconExternalLink,
@@ -15,6 +15,7 @@ import { useRouter } from 'next/router';
 import config from '../../configuration';
 import {
 	PoolStakingConfig,
+	RegenFarmConfig,
 	RegenPoolStakingConfig,
 	SimplePoolStakingConfig,
 	StakingPlatform,
@@ -129,6 +130,7 @@ interface IBaseStakingCardProps {
 	poolStakingConfig: PoolStakingConfig | RegenPoolStakingConfig;
 	stakeInfo: IStakeInfo;
 	notif?: ReactNode;
+	regenStreamConfig?: RegenFarmConfig;
 	stakedPositions?: LiquidityPosition[];
 	unstakedPositions?: LiquidityPosition[];
 	currentIncentive?: {
@@ -140,6 +142,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	stakeInfo,
 	poolStakingConfig,
 	notif,
+	regenStreamConfig,
 	stakedPositions,
 	unstakedPositions,
 	currentIncentive,
@@ -181,9 +184,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		provideLiquidityLink,
 		unit,
 		farmStartTimeMS,
+		farmEndTimeMS,
 		active,
 		archived,
-		discontinued,
 		introCard,
 		network: poolNetwork,
 	} = poolStakingConfig;
@@ -201,15 +204,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 
 	const userGIVLocked = sdh.getUserGIVLockedBalance();
 	const userGIVPowerBalance = sdh.getUserGIVPowerBalance();
-
-	const regenStreamConfig = useMemo(() => {
-		if (!regenStreamType) return undefined;
-		const networkConfig =
-			chainId === config.XDAI_NETWORK_NUMBER
-				? config.XDAI_CONFIG
-				: config.MAINNET_CONFIG;
-		return networkConfig.regenStreams.find(s => s.type === regenStreamType);
-	}, [chainId, regenStreamType]);
+	const isDiscontinued = farmEndTimeMS
+		? getNowUnixMS() > farmEndTimeMS
+		: false;
 
 	useEffect(() => {
 		if (isFirstStakeShown || !router) return;
@@ -279,8 +276,10 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		isGIVStaking && poolNetwork === config.XDAI_NETWORK_NUMBER;
 	const isLocked = isGIVpower && userGIVLocked.balance !== '0';
 	const isZeroGIVStacked =
-		!account || (isGIVpower && userGIVPowerBalance.balance === '0');
-	const availableStakedToken = stakedLpAmount.sub(userGIVLocked.balance);
+		isGIVpower && (!account || userGIVPowerBalance.balance === '0');
+	const availableStakedToken = isGIVpower
+		? stakedLpAmount.sub(userGIVLocked.balance)
+		: stakedLpAmount;
 
 	return (
 		<>
@@ -299,7 +298,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 						</Caption>
 					</WrongNetworkContainer>
 				)}
-				{(!active || archived || discontinued) && disableModal && (
+				{(!active || archived || isDiscontinued) && disableModal && (
 					<DisableModal>
 						<DisableModalContent>
 							<DisableModalImage>
@@ -310,12 +309,12 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								justifyContent='space-evenly'
 							>
 								<DisableModalText weight={700}>
-									{discontinued
+									{isDiscontinued
 										? 'Attention Farmers!'
 										: 'This pool is no longer available'}
 								</DisableModalText>
 								<DisableModalText>
-									{discontinued
+									{isDiscontinued
 										? 'This farm has ended, move your funds to another farm to keep earning rewards.'
 										: 'Please unstake your tokens and check out other available pools.'}
 								</DisableModalText>
@@ -431,17 +430,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 														{isZeroGIVStacked
 															? `This is the range of possible APRs for staked and locked GIV. Lock your GIV for longer to earn greater rewards.`
 															: `This is the weighted average APR for your staked (and locked) GIV. The full range of APRs for staking and/or locking is ${
-																	// Removing this as it was showing a wrong value when user has locked GIV, why are we doing this comparison?
-																	// apr &&
-																	// formatEthHelper(
-																	// 	isLocked
-																	// 		? avgAPR(
-																	// 				apr.effectiveAPR,
-																	// 				stakedLpAmount.toString(),
-																	// 				userGIVPowerBalance.balance,
-																	// 		  )
-																	// 		: apr.effectiveAPR,
-																	// )
 																	apr &&
 																	formatEthHelper(
 																		apr.effectiveAPR,
@@ -679,9 +667,8 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					<GIVpowerCardIntro setState={setState} />
 				) : (
 					<StakingCardIntro
-						poolStakingConfig={
-							poolStakingConfig as SimplePoolStakingConfig
-						}
+						symbol={title}
+						introCard={poolStakingConfig.introCard}
 						setState={setState}
 					/>
 				)}

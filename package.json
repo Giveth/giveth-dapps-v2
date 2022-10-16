@@ -1,6 +1,6 @@
 {
 	"name": "givethdapp",
-	"version": "2.3.1",
+	"version": "2.3.3",
 	"private": true,
 	"scripts": {
 		"build": "next build",
@@ -24,6 +24,7 @@
 		"@giveth/ui-design-system": "^1.8.26",
 		"@gnosis.pm/safe-apps-web3-react": "^1.5.0",
 		"@reduxjs/toolkit": "^1.8.1",
+		"@segment/snippet": "^4.15.3",
 		"@sentry/nextjs": "^6.19.3",
 		"@toruslabs/torus-embed": "^1.20.2",
 		"@uniswap/v3-sdk": "3.9.0",
@@ -90,6 +91,7 @@
 		"@types/styled-components": "^5.1.12",
 		"@typescript-eslint/eslint-plugin": "^5.3.1",
 		"@typescript-eslint/parser": "^5.3.1",
+		"babel-plugin-styled-components": "^1.13.2",
 		"cypress": "^10.6.0",
 		"eslint": "^8.2.0",
 		"eslint-config-next": "^12.0.3",

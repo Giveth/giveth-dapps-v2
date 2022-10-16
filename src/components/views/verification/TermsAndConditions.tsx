@@ -95,7 +95,7 @@ export default function TermsAndConditions() {
 				</TermItemsContainer>
 				{isDraft && (
 					<CheckBox
-						title='I accept all of the Giveth community terms and conditions.'
+						label='I accept all of the Giveth community terms and conditions.'
 						checked={accepted}
 						onChange={setAccepted}
 					/>

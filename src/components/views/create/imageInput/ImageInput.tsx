@@ -9,6 +9,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import dynamic from 'next/dynamic';
+import { useFormContext } from 'react-hook-form';
 
 import { InputContainer } from '../Create.sc';
 import { Shadow } from '@/components/styled-components/Shadow';
@@ -17,6 +18,7 @@ import { FlexCenter } from '@/components/styled-components/Flex';
 import ImageUploader from '@/components/ImageUploader';
 import ExternalLink from '@/components/ExternalLink';
 import useUpload from '@/hooks/useUpload';
+import { EInputs } from '@/components/views/create/CreateProject';
 
 const ImageSearch = dynamic(() => import('./ImageSearch'), {
 	ssr: false,
@@ -30,18 +32,24 @@ const unsplashPhoto = (i: string) =>
 	`${unsplashOrgUrl}@${i}${unsplashReferral}`;
 
 interface ImageInputProps {
-	setValue: (img: string) => void;
-	value: string;
 	setIsLoading: Dispatch<SetStateAction<boolean>>;
 }
 
-const ImageInput: FC<ImageInputProps> = ({ value, setValue, setIsLoading }) => {
+const ImageInput: FC<ImageInputProps> = ({ setIsLoading }) => {
+	const { getValues, setValue } = useFormContext();
+
+	const [image, setImage] = useState(getValues(EInputs.image));
 	const [isUploadTab, setIsUploadTab] = useState(true);
 	const [attributes, setAttributes] = useState({ name: '', username: '' });
 
-	const useUploadProps = useUpload(setValue, setIsLoading);
+	const handleSetImage = (img: string) => {
+		setImage(img);
+		setValue(EInputs.image, img);
+	};
+
+	const useUploadProps = useUpload(handleSetImage, setIsLoading);
 	const { onDelete } = useUploadProps;
-	const imageUploaderProps = { ...useUploadProps, url: value };
+	const imageUploaderProps = { ...useUploadProps, url: image };
 
 	const removeAttributes = () => setAttributes({ name: '', username: '' });
 
@@ -52,7 +60,7 @@ const ImageInput: FC<ImageInputProps> = ({ value, setValue, setIsLoading }) => {
 
 	const pickBg = (index: number) => {
 		onDelete();
-		setValue(`/images/defaultProjectImages/${index}.png`);
+		handleSetImage(`/images/defaultProjectImages/${index}.png`);
 		removeAttributes();
 	};
 
@@ -82,11 +90,11 @@ const ImageInput: FC<ImageInputProps> = ({ value, setValue, setIsLoading }) => {
 				{!isUploadTab && (
 					<ImageSearch
 						setAttributes={setAttributes}
-						setValue={setValue}
+						setValue={handleSetImage}
 						attributes={!!attributes.name}
 					/>
 				)}
-				{(isUploadTab || (!isUploadTab && value)) && (
+				{(isUploadTab || (!isUploadTab && image)) && (
 					<ImageUploader {...imageUploaderProps} />
 				)}
 
@@ -112,7 +120,7 @@ const ImageInput: FC<ImageInputProps> = ({ value, setValue, setIsLoading }) => {
 					))}
 					<div>
 						<Separator />
-						<RemoveBox isActive={!!value} onClick={removeImage}>
+						<RemoveBox isActive={!!image} onClick={removeImage}>
 							<IconTrash size={24} />
 							<div>REMOVE</div>
 						</RemoveBox>

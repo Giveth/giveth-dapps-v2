@@ -1,5 +1,5 @@
 import { IS_BOOSTING_ENABLED } from '@/configuration';
-import { EDirection, gqlEnums } from '../types/gqlEnums';
+import { EDirection, ESortby } from '../types/gqlEnums';
 
 export const OPTIONS_HOME_PROJECTS = {
 	variables: {
@@ -7,8 +7,8 @@ export const OPTIONS_HOME_PROJECTS = {
 		skip: 0,
 		orderBy: {
 			field: IS_BOOSTING_ENABLED
-				? gqlEnums.GIVPOWER
-				: gqlEnums.QUALITYSCORE,
+				? ESortby.GIVPOWER
+				: ESortby.QUALITYSCORE,
 			direction: EDirection.DESC,
 		},
 	},

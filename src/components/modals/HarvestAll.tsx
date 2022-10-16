@@ -18,7 +18,7 @@ import { Modal } from './Modal';
 import LoadingAnimation from '@/animations/loading.json';
 import {
 	PoolStakingConfig,
-	RegenStreamConfig,
+	RegenFarmConfig,
 	SimplePoolStakingConfig,
 } from '@/types/config';
 import { BN, formatWeiHelper, Zero } from '@/helpers/number';
@@ -73,7 +73,7 @@ interface IHarvestAllModalProps extends IModal {
 	earned?: ethers.BigNumber;
 	network: number;
 	tokenDistroHelper?: TokenDistroHelper;
-	regenStreamConfig?: RegenStreamConfig;
+	regenStreamConfig?: RegenFarmConfig;
 	stakedPositions?: LiquidityPosition[];
 	currentIncentive?: {
 		key?: (string | number)[] | null | undefined;

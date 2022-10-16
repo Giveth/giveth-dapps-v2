@@ -55,6 +55,7 @@ export interface IProject {
 	};
 	projectVerificationForm?: IProjectVerification;
 	projectPower: IProjectPower;
+	verificationFormStatus?: EVerificationStatus;
 }
 
 export interface IWalletAddress {
@@ -157,6 +158,13 @@ export interface IMediumBlogPost {
 
 export interface ICategory {
 	name: string;
+	value?: string;
+	isActive?: boolean;
+	mainCategory?: Pick<IMainCategory, 'title'>;
+}
+
+export interface IConvertedCategories {
+	[key: string]: string[];
 }
 
 export interface IProjectBySlug {
@@ -177,6 +185,14 @@ export interface ISiweMessage {
 	message: string;
 }
 
+export interface IMainCategory {
+	title: string;
+	description: string;
+	banner: string;
+	slug: string;
+	categories: ICategory[];
+	selected?: boolean;
+}
 export interface IProjectRegistry {
 	isNonProfitOrganization?: boolean;
 	organizationCountry?: string;

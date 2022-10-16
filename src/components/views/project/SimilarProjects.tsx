@@ -25,14 +25,14 @@ const projectsToFetch = 12;
 const SimilarProjects = (props: { slug: string }) => {
 	const { slug } = props;
 
-	const device = useDetectDevice();
+	const { isMobile, isTablet, isLaptopS } = useDetectDevice();
 
 	const [swiperInstance, setSwiperInstance] = useState<SwiperClass>();
 
 	let projectsToShow;
-	if (device.isMobile) {
+	if (isMobile) {
 		projectsToShow = 1;
-	} else if (device.isTablet || device.isLaptopS) {
+	} else if (isTablet || isLaptopS) {
 		projectsToShow = 2;
 	} else {
 		projectsToShow = 3;

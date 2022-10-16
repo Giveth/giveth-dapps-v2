@@ -15,6 +15,7 @@ import {
 	neutralColors,
 	OutlineButton,
 	IconArchiving,
+	Caption,
 	IconRocketInSpace,
 	ButtonText,
 } from '@giveth/ui-design-system';
@@ -23,7 +24,6 @@ import { captureException } from '@sentry/nextjs';
 
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import { Shadow } from '@/components/styled-components/Shadow';
-import CategoryBadge from '@/components/badges/CategoryBadge';
 import { compareAddresses, showToastError } from '@/lib/helpers';
 import { EVerificationStatus, IProject } from '@/apollo/types/types';
 import links from '@/lib/constants/links';
@@ -53,9 +53,11 @@ import { EProjectVerificationStatus } from '@/apollo/types/gqlEnums';
 import VerificationStatus from '@/components/views/project/projectDonateCard/VerificationStatus';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import GIVbackToast from '@/components/views/project/projectDonateCard/GIVbackToast';
-import { FlexCenter } from '@/components/styled-components/Flex';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import BoostModal from '@/components/modals/Boost/BoostModal';
 import { IS_BOOSTING_ENABLED } from '@/configuration';
+import CategoryBadge from '@/components/badges/CategoryBadge';
+import { mapCategoriesToMainCategories } from '@/helpers/singleProject';
 
 interface IProjectDonateCard {
 	project: IProject;
@@ -84,8 +86,11 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 		verified,
 		verificationStatus,
 		organization,
-		projectVerificationForm,
+		verificationFormStatus,
 	} = project || {};
+
+	const convertedCategories = mapCategoriesToMainCategories(categories);
+
 	const [heartedByUser, setHeartedByUser] = useState<boolean>(false);
 	const [showModal, setShowModal] = useState<boolean>(false);
 	const [loading, setLoading] = useState(false);
@@ -102,8 +107,10 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 	const isCategories = categories?.length > 0;
 	const verStatus = verified
 		? EVerificationStatus.VERIFIED
-		: projectVerificationForm?.status;
+		: verificationFormStatus;
+
 	const isVerDraft = verStatus === EVerificationStatus.DRAFT;
+	const isRevoked = verificationStatus === EProjectVerificationStatus.REVOKED;
 
 	const router = useRouter();
 
@@ -151,6 +158,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 			}
 		}
 	};
+
 	const fetchProjectReaction = useCallback(async () => {
 		if (user?.id && id) {
 			// Already fetched
@@ -288,21 +296,15 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 								router.push(idToProjectEdit(project?.id || ''))
 							}
 						/>
-						{verificationStatus !==
-							EProjectVerificationStatus.REVOKED &&
-							!verified &&
-							!isDraft &&
-							!verStatus && (
-								<FullOutlineButton
-									buttonType='primary'
-									label='VERIFY YOUR PROJECT'
-									disabled={!isActive}
-									onClick={() =>
-										setShowVerificationModal(true)
-									}
-								/>
-							)}
-						{isVerDraft && (
+						{!isRevoked && !verified && !isDraft && !verStatus && (
+							<FullOutlineButton
+								buttonType='primary'
+								label='VERIFY YOUR PROJECT'
+								disabled={!isActive}
+								onClick={() => setShowVerificationModal(true)}
+							/>
+						)}
+						{!isRevoked && isVerDraft && (
 							<ExternalLink href={slugToVerification(slug)}>
 								<FullOutlineButton
 									buttonType='primary'
@@ -350,11 +352,23 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 				</BadgeWrapper>
 				{!isAdmin && verified && <GIVbackToast />}
 				{isCategories && (
-					<CategoryWrapper>
-						{categories.map(i => (
-							<CategoryBadge key={i.name} category={i} />
-						))}
-					</CategoryWrapper>
+					<MainCategoryWrapper flexDirection='column'>
+						{Object.entries(convertedCategories)?.map(
+							([key, value]) => (
+								<>
+									<MainCategory key={key}>{key}</MainCategory>
+									<CategoryWrapper>
+										{value.map(i => (
+											<CategoryBadge
+												key={i + key}
+												category={i}
+											/>
+										))}
+									</CategoryWrapper>
+								</>
+							),
+						)}
+					</MainCategoryWrapper>
 				)}
 				{!isDraft && !isAdmin && (
 					<Links>
@@ -418,14 +432,19 @@ const BlueBar = styled.div`
 	top: -8px;
 `;
 
-const CategoryWrapper = styled.div`
-	display: flex;
+const CategoryWrapper = styled(Flex)`
 	flex-wrap: wrap;
 	gap: 10px;
-	margin-top: 24px;
 	overflow: hidden;
-	max-height: 98px;
-	margin-bottom: 16px;
+	margin: 8px 0;
+`;
+
+const MainCategoryWrapper = styled(Flex)`
+	margin-top: 24px;
+`;
+
+const MainCategory = styled(Caption)`
+	color: ${neutralColors.gray[600]};
 `;
 
 const BadgeWrapper = styled.div`

@@ -2,8 +2,8 @@ import { useRouter } from 'next/router';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { brandColors, neutralColors, P } from '@giveth/ui-design-system';
-
 import Link from 'next/link';
+
 import { Flex } from '@/components/styled-components/Flex';
 import ProfileDonationsTab from './donationsTab/ProfileDonationsTab';
 import ProfileLikedTab from './ProfileLikedTab';
@@ -13,8 +13,9 @@ import { IUserProfileView } from './UserProfile.view';
 import { Container } from '@/components/Grid';
 import ContributeCard from '@/components/views/userProfile/ProfileContributeCard';
 import { ProfileBoostedTab } from './boostedTab/ProfileBoostedTab';
-import Routes from '@/lib/constants/Routes';
+import Routes, { profileTabs } from '@/lib/constants/Routes';
 import { IS_BOOSTING_ENABLED } from '@/configuration';
+import { isSSRMode } from '@/lib/helpers';
 
 enum EProfile {
 	OVERVIEW,
@@ -55,6 +56,7 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 	}, [router?.query?.tab]);
 
 	const userName = user?.name || 'Unknown';
+	const { pathname = '' } = isSSRMode ? {} : window.location;
 
 	return (
 		<ProfileContainer>
@@ -81,7 +83,7 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 						</a>
 					</Link>
 				)}
-				<Link href={Routes.MyProjects}>
+				<Link href={pathname + profileTabs.projects}>
 					<a>
 						<ProfileTab active={tab === EProfile.PROJECTS}>
 							{`${myAccount ? 'My ' : userName + '’s'} Projects`}
@@ -93,7 +95,7 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 						</ProfileTab>
 					</a>
 				</Link>
-				<Link href={Routes.MyDonations}>
+				<Link href={pathname + profileTabs.donations}>
 					<a>
 						<ProfileTab active={tab === EProfile.DONATIONS}>
 							{`${myAccount ? 'My ' : ''}Donations`}
@@ -105,7 +107,7 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 						</ProfileTab>
 					</a>
 				</Link>
-				<Link href={Routes.MyLikedProjects}>
+				<Link href={pathname + profileTabs.likedProjects}>
 					<a>
 						<ProfileTab
 							active={tab === EProfile.LIKED}
