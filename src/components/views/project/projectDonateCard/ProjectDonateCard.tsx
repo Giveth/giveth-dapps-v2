@@ -304,11 +304,15 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 								onClick={() => setShowVerificationModal(true)}
 							/>
 						)}
-						{!isRevoked && isVerDraft && (
+						{isVerDraft && (
 							<ExternalLink href={slugToVerification(slug)}>
 								<FullOutlineButton
 									buttonType='primary'
-									label='RESUME VERIFICATION'
+									label={
+										isRevoked
+											? 'Re-apply'
+											: 'RESUME VERIFICATION'
+									}
 								/>
 							</ExternalLink>
 						)}
