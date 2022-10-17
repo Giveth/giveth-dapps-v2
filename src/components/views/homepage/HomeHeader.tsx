@@ -6,12 +6,19 @@ import Routes from '@/lib/constants/Routes';
 import { Arc } from '@/components/styled-components/Arc';
 import { mediaQueries } from '@/lib/constants/constants';
 import Links from '@/lib/constants/links';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const HomeHeader = () => {
+	const intl = useIntl();
 	const router = useRouter();
+
+	const welcomeTitle = intl.formatMessage({
+		id: 'page.home.bigscreen.title',
+	});
+
 	return (
 		<Wrapper>
-			<Title weight={700}>Welcome to the Future of Giving</Title>
+			<Title weight={700}>{welcomeTitle}</Title>
 			<Subtitle>
 				Get rewarded for giving to for-good projects with zero added
 				fees.

@@ -14,6 +14,8 @@ import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
 import { FooterWrapper } from '@/components/Footer/FooterWrapper';
 
 import '../styles/globals.css';
+import { IntlProvider } from 'react-intl';
+import { en, es } from '../lang';
 import { store } from '@/features/store';
 import SubgraphController from '@/components/controller/subgraph.ctrl';
 import UserController from '@/components/controller/user.ctrl';
@@ -30,6 +32,12 @@ declare global {
 }
 
 const DEFAULT_WRITE_KEY = 'MHK95b7o6FRNHt0ZZJU9bNGUT5MNCEyB';
+
+type IntlMessageKeys = keyof typeof en;
+const messages = {
+	en,
+	es,
+};
 
 function renderSnippet() {
 	const opts = {
@@ -53,6 +61,7 @@ function getLibrary(provider: ExternalProvider) {
 
 function MyApp({ Component, pageProps }: AppProps) {
 	const router = useRouter();
+	const locale = router ? router.locale : 'en';
 	const apolloClient = useApollo(pageProps);
 
 	useEffect(() => {
@@ -88,32 +97,40 @@ function MyApp({ Component, pageProps }: AppProps) {
 				/>
 			</Head>
 			<Provider store={store}>
-				<ApolloProvider client={apolloClient}>
-					<Web3ReactProvider getLibrary={getLibrary}>
-						<GeneralController />
-						<PriceController />
-						<SubgraphController />
-						<UserController />
-						<HeaderWrapper />
-						{pageProps.errorStatus ? (
-							<ErrorsIndex statusCode={pageProps.errorStatus} />
-						) : (
-							<Component {...pageProps} />
-						)}
-						{process.env.NEXT_PUBLIC_ENV === 'production' && (
-							<Script
-								id='segment-script'
-								strategy='afterInteractive'
-								dangerouslySetInnerHTML={{
-									__html: renderSnippet(),
-								}}
-							/>
-						)}
+				<IntlProvider
+					locale={locale!}
+					messages={messages[locale as keyof typeof messages]}
+					defaultLocale='en'
+				>
+					<ApolloProvider client={apolloClient}>
+						<Web3ReactProvider getLibrary={getLibrary}>
+							<GeneralController />
+							<PriceController />
+							<SubgraphController />
+							<UserController />
+							<HeaderWrapper />
+							{pageProps.errorStatus ? (
+								<ErrorsIndex
+									statusCode={pageProps.errorStatus}
+								/>
+							) : (
+								<Component {...pageProps} />
+							)}
+							{process.env.NEXT_PUBLIC_ENV === 'production' && (
+								<Script
+									id='segment-script'
+									strategy='afterInteractive'
+									dangerouslySetInnerHTML={{
+										__html: renderSnippet(),
+									}}
+								/>
+							)}
 
-						<FooterWrapper />
-						<ModalController />
-					</Web3ReactProvider>
-				</ApolloProvider>
+							<FooterWrapper />
+							<ModalController />
+						</Web3ReactProvider>
+					</ApolloProvider>
+				</IntlProvider>
 			</Provider>
 
 			<Toaster containerStyle={{ top: '80px' }} />
