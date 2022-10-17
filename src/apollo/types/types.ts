@@ -164,7 +164,7 @@ export interface ICategory {
 }
 
 export interface IConvertedCategories {
-	[key: string]: string[];
+	[key: string]: { name: string; value: string }[];
 }
 
 export interface IProjectBySlug {

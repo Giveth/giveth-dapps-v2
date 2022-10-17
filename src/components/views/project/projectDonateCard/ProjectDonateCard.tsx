@@ -1,6 +1,7 @@
 import React, {
 	Dispatch,
 	FC,
+	Fragment,
 	SetStateAction,
 	useCallback,
 	useEffect,
@@ -358,18 +359,18 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 				{isCategories && (
 					<MainCategoryWrapper flexDirection='column'>
 						{Object.entries(convertedCategories)?.map(
-							([key, value]) => (
-								<>
-									<MainCategory key={key}>{key}</MainCategory>
+							([mainCategory, subcategories]) => (
+								<Fragment key={mainCategory}>
+									<MainCategory>{mainCategory}</MainCategory>
 									<CategoryWrapper>
-										{value.map(i => (
+										{subcategories.map(subcategory => (
 											<CategoryBadge
-												key={i + key}
-												category={i}
+												key={subcategory.name}
+												category={subcategory.value}
 											/>
 										))}
 									</CategoryWrapper>
-								</>
+								</Fragment>
 							),
 						)}
 					</MainCategoryWrapper>
