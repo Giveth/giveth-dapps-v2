@@ -153,19 +153,21 @@ const FETCH_ALL_PROJECTS_WITHOUT_BOOST = gql`
 	query FetchAllProjects(
 		$limit: Int
 		$skip: Int
-		$orderBy: OrderBy
-		$filterBy: FilterBy
+		$sortingBy: SortingField
+		$filters: [FilterField!]
 		$searchTerm: String
 		$category: String
+		$mainCategory: String
 		$connectedWalletUserId: Int
 	) {
-		projects(
-			take: $limit
+		allProjects(
+			limit: $limit
 			skip: $skip
-			orderBy: $orderBy
-			filterBy: $filterBy
+			sortingBy: $sortingBy
+			filters: $filters
 			searchTerm: $searchTerm
 			category: $category
+			mainCategory: $mainCategory
 			connectedWalletUserId: $connectedWalletUserId
 		) {
 			projects {
@@ -235,6 +237,7 @@ export const FETCH_PROJECT_BY_SLUG_WITH_BOOST = gql`
 			traceCampaignId
 			categories {
 				name
+				value
 			}
 			adminUser {
 				id
@@ -253,6 +256,7 @@ export const FETCH_PROJECT_BY_SLUG_WITH_BOOST = gql`
 			projectVerificationForm {
 				status
 			}
+			verificationFormStatus
 			projectPower {
 				powerRank
 				totalPower
@@ -274,6 +278,7 @@ export const FETCH_PROJECT_BY_SLUG_WITHOUT_BOOST = gql`
 			slug
 			description
 			verified
+			verificationStatus
 			traceCampaignId
 			addresses {
 				address
@@ -292,6 +297,10 @@ export const FETCH_PROJECT_BY_SLUG_WITHOUT_BOOST = gql`
 			traceCampaignId
 			categories {
 				name
+				value
+				mainCategory {
+					title
+				}
 			}
 			adminUser {
 				id
@@ -310,6 +319,7 @@ export const FETCH_PROJECT_BY_SLUG_WITHOUT_BOOST = gql`
 			projectVerificationForm {
 				status
 			}
+			verificationFormStatus
 		}
 	}
 `;
@@ -333,6 +343,7 @@ export const FETCH_PROJECT_BY_ID = gql`
 			impactLocation
 			categories {
 				name
+				value
 			}
 			adminUser {
 				walletAddress
@@ -433,7 +444,7 @@ export const EDIT_PROJECT_UPDATE = gql`
 `;
 
 export const FETCH_USER_LIKED_PROJECTS = gql`
-	query FetchUesrLikedProjects($take: Int, $skip: Int, $userId: Int!) {
+	query FetchUserLikedProjects($take: Int, $skip: Int, $userId: Int!) {
 		likedProjectsByUserId(take: $take, skip: $skip, userId: $userId) {
 			projects {
 				id
@@ -449,22 +460,33 @@ export const FETCH_USER_LIKED_PROJECTS = gql`
 					isRecipient
 					networkId
 				}
+				adminUser {
+					walletAddress
+					name
+				}
 				impactLocation
 				listed
 				totalDonations
 				categories {
 					name
+					value
 				}
 				reaction {
 					id
 					userId
 				}
 				qualityScore
+				updatedAt
+				organization {
+					label
+				}
+				verified
 			}
 			totalCount
 		}
 	}
 `;
+
 export const UPLOAD_IMAGE = gql`
 	mutation ($imageUpload: ImageUpload!) {
 		uploadImage(imageUpload: $imageUpload) {
@@ -501,6 +523,7 @@ export const CREATE_PROJECT = gql`
 			}
 			categories {
 				name
+				value
 			}
 		}
 	}
@@ -527,6 +550,7 @@ export const UPDATE_PROJECT = gql`
 			impactLocation
 			categories {
 				name
+				value
 			}
 		}
 	}
@@ -617,6 +641,22 @@ export const SIMILAR_PROJECTS = gql`
 					name
 					label
 				}
+			}
+		}
+	}
+`;
+
+export const FETCH_MAIN_CATEGORIES = gql`
+	query {
+		mainCategories {
+			title
+			banner
+			slug
+			description
+			categories {
+				name
+				value
+				isActive
 			}
 		}
 	}

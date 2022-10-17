@@ -1,11 +1,11 @@
 import { FC } from 'react';
 import styled from 'styled-components';
-import { IconTrash } from '@giveth/ui-design-system/lib/cjs/components/icons/Trash';
 import {
 	Button,
 	Lead,
 	brandColors,
 	IconAlertTriangle,
+	IconTrash,
 } from '@giveth/ui-design-system';
 import { Modal } from '@/components/modals/Modal';
 import FixedToast from '@/components/toasts/FixedToast';

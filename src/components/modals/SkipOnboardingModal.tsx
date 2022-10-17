@@ -29,7 +29,7 @@ export const SkipOnboardingModal: FC<IModal> = ({ setShowModal }) => {
 		>
 			<SkipOnboardingModalContainer>
 				<Desc>
-					If you don’t add required informations, you can’t create
+					If you don’t add required information, you can’t create
 					projects to receive funds.
 				</Desc>
 				<AlertBox>

@@ -45,7 +45,7 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal, projectId }) => {
 			headerTitle={title}
 			headerIcon={<IconRocketInSpace32 />}
 		>
-			<BoostModalContainer state={state}>
+			<BoostModalContainer state={state} data-testid='boost-modal'>
 				{state === EBoostModalState.BOOSTING ? (
 					<BoostInnerModal
 						totalGIVpower={BN(givPower.balance)}

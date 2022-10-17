@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { Lead } from '@giveth/ui-design-system';
@@ -8,7 +8,7 @@ import { captureException } from '@sentry/nextjs';
 import { useWeb3React } from '@web3-react/core';
 import {
 	IStep,
-	OnboardActionsContianer,
+	OnboardActionsContainer,
 	OnboardStep,
 	SaveButton,
 	SkipButton,
@@ -21,16 +21,16 @@ import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
 import { Col } from '@/components/Grid';
+import useUpload from '@/hooks/useUpload';
 
 const PhotoStep: FC<IStep> = ({ setStep }) => {
-	const [url, setUrl] = useState<string>('');
-	const [file, setFile] = useState<File>();
-	const [uploading, setUploading] = useState(false);
-
 	const [updateUser] = useMutation(UPDATE_USER);
 	const dispatch = useAppDispatch();
 	const isSignedIn = useAppSelector(state => state.user.isSignedIn);
 	const { account } = useWeb3React();
+
+	const useUploadProps = useUpload();
+	const { url, onDelete } = useUploadProps;
 
 	useEffect(() => {
 		if (!isSignedIn) {
@@ -52,6 +52,7 @@ const PhotoStep: FC<IStep> = ({ setStep }) => {
 					type: ToastType.SUCCESS,
 					title: 'Success',
 				});
+				onDelete();
 				return true;
 			} else {
 				throw 'updateUser false';
@@ -72,49 +73,40 @@ const PhotoStep: FC<IStep> = ({ setStep }) => {
 	};
 
 	return (
-		<>
-			<OnboardStep>
-				<ProfilePicWrapper>
-					<Image
-						src='/images/avatar.svg'
-						width={128}
-						height={128}
-						alt='user avatar'
-					/>
-				</ProfilePicWrapper>
-				<Desc>
-					This is how you look right now! Strange, right?
-					<br />
-					Upload a photo that represents who you are.
-				</Desc>
-				<ImageUploader
-					url={url}
-					setUrl={setUrl}
-					file={file}
-					setFile={setFile}
-					uploading={uploading}
-					setUploading={setUploading}
+		<OnboardStep>
+			<ProfilePicWrapper>
+				<Image
+					src='/images/avatar.svg'
+					width={128}
+					height={128}
+					alt='user avatar'
 				/>
-				<OnboardActionsContianer>
-					<Col xs={12} md={7}>
-						<SaveButton
-							label='SAVE'
-							onClick={onSave}
-							disabled={!url}
-							size='medium'
-						/>
-					</Col>
-					<Col xs={12} md={2}>
-						<SkipButton
-							label='Do it later'
-							size='medium'
-							buttonType='texty'
-							onClick={() => setStep(OnboardSteps.DONE)}
-						/>
-					</Col>
-				</OnboardActionsContianer>
-			</OnboardStep>
-		</>
+			</ProfilePicWrapper>
+			<Desc>
+				This is how you look right now! Strange, right?
+				<br />
+				Upload a photo that represents who you are.
+			</Desc>
+			<ImageUploader {...useUploadProps} />
+			<OnboardActionsContainer>
+				<Col xs={12} md={7}>
+					<SaveButton
+						label='SAVE'
+						onClick={onSave}
+						disabled={!url}
+						size='medium'
+					/>
+				</Col>
+				<Col xs={12} md={2}>
+					<SkipButton
+						label='Do it later'
+						size='medium'
+						buttonType='texty'
+						onClick={() => setStep(OnboardSteps.DONE)}
+					/>
+				</Col>
+			</OnboardActionsContainer>
+		</OnboardStep>
 	);
 };
 

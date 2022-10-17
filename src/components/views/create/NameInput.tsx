@@ -1,0 +1,55 @@
+import React, { FC, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
+import Input, { InputSize } from '@/components/Input';
+import { requiredOptions } from '@/lib/constants/regex';
+import { EInputs } from '@/components/views/create/CreateProject';
+import { gqlTitleValidation } from '@/components/views/create/helpers';
+
+interface IProps {
+	preTitle?: string;
+}
+
+const NameInput: FC<IProps> = ({ preTitle }) => {
+	const {
+		register,
+		formState: { errors: formErrors },
+		watch,
+	} = useFormContext();
+
+	const [isTitleValidating, setIsTitleValidating] = useState(false);
+
+	const watchName = watch(EInputs.name);
+
+	const noTitleValidation = (i: string) => preTitle && preTitle === i;
+
+	const titleValidation = async (title: string) => {
+		if (noTitleValidation(title)) return true;
+		setIsTitleValidating(true);
+		const result = await gqlTitleValidation(title);
+		setIsTitleValidating(false);
+		return result;
+	};
+
+	return (
+		<>
+			<Input
+				label='Project name'
+				placeholder='My First Project'
+				maxLength={55}
+				size={InputSize.LARGE}
+				value={watchName}
+				isValidating={isTitleValidating}
+				register={register}
+				registerName={EInputs.name}
+				registerOptions={{
+					...requiredOptions.name,
+					validate: titleValidation,
+				}}
+				error={formErrors[EInputs.name]}
+			/>
+			<br />
+		</>
+	);
+};
+
+export default NameInput;

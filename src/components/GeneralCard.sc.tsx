@@ -28,6 +28,7 @@ export const ButtonStyled = styled(Button)`
 export const Title = styled(H4)`
 	margin-top: 10px;
 	max-width: calc(100vw - 72px);
+	font-weight: 700;
 `;
 
 export const Caption = styled(P)`
@@ -45,10 +46,10 @@ export const TitleSection = styled.div`
 export const HorizontalTitleSection = styled.div`
 	display: flex;
 	flex-direction: column;
-	text-align: left;
 	max-width: calc(100vw - 72px);
 
 	${mediaQueries.tablet} {
+		text-align: left;
 		padding: 0 15px 0 70px;
 		width: ${(props: { fullWidth?: boolean }) =>
 			props.fullWidth ? '100%' : '485px'};

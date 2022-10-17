@@ -8,6 +8,10 @@ body {
 	background-color: #f7f7f9;
 }
 
+html {
+	font-size: 16px;
+}
+
 a {
 	color: inherit;
 	text-decoration: none;
@@ -20,7 +24,6 @@ a {
 *:focus {
 	outline: none;
 }
-
 
 /* React-Select component */
 .select__menu {
@@ -117,7 +120,6 @@ a {
 	}
 }
 
-
 .fadeIn {
 	animation: fadeIn 0.3s ease-in-out;
 }
@@ -143,7 +145,6 @@ a {
 		opacity: 0;
 	}
 }
-
 
 @font-face {
 	font-family: 'Red Hat Text';
@@ -195,7 +196,6 @@ a {
 	z-index: 10000;
 }
 
-
 #nprogress {
 	z-index: 1101;
 	position: fixed;
@@ -205,5 +205,9 @@ a {
 
 #nprogress > .bar {
 	height: 4px;
-	background-color: #8668FC;
+	background-color: #8668fc;
+}
+
+.swiper-slide {
+	width: auto !important;
 }

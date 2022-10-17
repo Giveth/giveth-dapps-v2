@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import styled from 'styled-components';
-import { IconFund } from '@giveth/ui-design-system/lib/cjs/components/icons/Fund';
-import { Button, H5, Lead } from '@giveth/ui-design-system';
+import { Button, H5, IconFund, Lead } from '@giveth/ui-design-system';
 import { Modal } from '@/components/modals/Modal';
 import { mediaQueries } from '@/lib/constants/constants';
 import { IModal } from '@/types/common';
