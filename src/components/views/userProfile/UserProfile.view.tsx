@@ -61,10 +61,10 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 		}
 	}, [user, isSignedIn]);
 
-	if (!user || (myAccount && !isSignedIn))
+	if (myAccount && !isSignedIn)
 		return (
 			<NoUserContainer>
-				<H5>Not logged in</H5>
+				<H5>Please Sign In</H5>
 			</NoUserContainer>
 		);
 

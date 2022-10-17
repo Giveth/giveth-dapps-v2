@@ -10,15 +10,15 @@ import {
 
 import { Modal } from './Modal';
 import { Flex } from '../styled-components/Flex';
-import { RegenStreamConfig } from '@/types/config';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { mediaQueries } from '@/lib/constants/constants';
+import { RegenFarmConfig } from '@/types/config';
 import type { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 
 interface IAPRModalProps extends IModal {
 	tokenDistroHelper?: TokenDistroHelper;
-	regenStreamConfig?: RegenStreamConfig;
+	regenStreamConfig?: RegenFarmConfig;
 }
 
 export const APRModal: FC<IAPRModalProps> = ({

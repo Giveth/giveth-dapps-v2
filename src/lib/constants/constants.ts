@@ -115,3 +115,17 @@ export const statusCodes = [
 	'503',
 	'504',
 ] as const;
+
+export const searchSuggestions = [
+	'open source',
+	'blockchain',
+	'children',
+	'land stewardship',
+	'homelessness',
+	'indigenous',
+];
+
+export const regenFarmStreamCardCol = {
+	sm: [12, 6, 12],
+	lg: [12, 8, 4],
+};

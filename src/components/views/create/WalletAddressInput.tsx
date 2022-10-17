@@ -23,6 +23,7 @@ import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import CheckBox from '@/components/Checkbox';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
+import useDelay from '@/hooks/useDelay';
 
 interface IProps {
 	networkId: number;
@@ -65,9 +66,26 @@ const WalletAddressInput: FC<IProps> = ({
 	const isAddressUsed =
 		errorMessage.indexOf('is already being used for a project') > -1;
 
+	const delayedResolvedENS = useDelay(!!resolvedENS);
+	const delayedIsAddressUsed = useDelay(isAddressUsed);
+
 	let disabled: boolean;
 	if (isGnosis) disabled = !isActive;
 	else disabled = !isActive && !sameAddress;
+
+	let caption: string = '';
+	if (isDefaultAddress) {
+		caption =
+			'This is the default wallet address associated with your account. You can choose a different receiving address.';
+	} else if (errorMessage || !value) {
+		caption = `You can enter a new address to receive funds on ${
+			sameAddress
+				? 'all supported networks'
+				: isGnosis
+				? 'Gnosis Chain'
+				: 'Mainnet network'
+		}.`;
+	}
 
 	const isProjectPrevAddress = (newAddress: string) => {
 		// Do not validate if the input address is the same as project prev wallet address
@@ -162,17 +180,7 @@ const WalletAddressInput: FC<IProps> = ({
 						: 'Receiving address on Mainnet'
 				}
 				placeholder='My Wallet Address'
-				caption={
-					isDefaultAddress
-						? 'This is the default wallet address associated with your account. You can choose a different receiving address.'
-						: `You can enter a new address to receive funds on ${
-								sameAddress
-									? 'all supported networks'
-									: isGnosis
-									? 'Gnosis Chain'
-									: 'Mainnet network'
-						  }.`
-				}
+				caption={caption}
 				size={InputSize.LARGE}
 				disabled={disabled}
 				isValidating={isValidating}
@@ -181,14 +189,16 @@ const WalletAddressInput: FC<IProps> = ({
 				registerOptions={{ validate: addressValidation }}
 				error={isAddressUsed ? undefined : error}
 			/>
-			{resolvedENS && (
+			{delayedResolvedENS && (
 				<InlineToast
+					isHidden={!resolvedENS}
 					type={EToastType.Success}
 					message={'Resolves as ' + resolvedENS}
 				/>
 			)}
-			{isAddressUsed && (
+			{delayedIsAddressUsed && (
 				<InlineToast
+					isHidden={!isAddressUsed}
 					type={EToastType.Error}
 					message='This address is already used for another project. Please enter an address which is not currently associated with any other project.'
 				/>
@@ -207,7 +217,7 @@ const WalletAddressInput: FC<IProps> = ({
 				>
 					<CheckBox
 						onChange={setIsActive}
-						title='I’ll receive fund on this address'
+						label='I’ll receive fund on this address'
 						checked={isActive}
 					/>
 				</CheckBoxContainer>

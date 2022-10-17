@@ -8,8 +8,8 @@ import {
 	Button,
 	neutralColors,
 } from '@giveth/ui-design-system';
-
 import { captureException } from '@sentry/nextjs';
+
 import {
 	FETCH_PROJECT_UPDATES,
 	ADD_PROJECT_UPDATE,

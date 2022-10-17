@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import styled from 'styled-components';
-import { IconWalletApprove } from '@giveth/ui-design-system/lib/cjs/components/icons/WalletApprove';
 import {
 	brandColors,
 	Button,
+	IconWalletApprove,
 	Lead,
 	neutralColors,
 } from '@giveth/ui-design-system';

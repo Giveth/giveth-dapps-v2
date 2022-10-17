@@ -24,7 +24,7 @@ import { StakeState } from '@/lib/staking';
 import { IModal } from '@/types/common';
 import {
 	PoolStakingConfig,
-	RegenStreamConfig,
+	RegenFarmConfig,
 	SimplePoolStakingConfig,
 	StakingType,
 } from '@/types/config';
@@ -37,7 +37,7 @@ import config from '@/configuration';
 
 interface IUnStakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
-	regenStreamConfig?: RegenStreamConfig;
+	regenStreamConfig?: RegenFarmConfig;
 	maxAmount: BigNumber;
 }
 

@@ -9,6 +9,9 @@ export default function Token() {
 
 	useEffect(() => {
 		dispatch(setShowFooter(false));
+		return () => {
+			dispatch(setShowFooter(true));
+		};
 	}, []);
 
 	return <EmailVerificationIndex />;

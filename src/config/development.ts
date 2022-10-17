@@ -45,7 +45,7 @@ const config: EnvConfig = {
 			LM_ADDRESS: '0x929C9353D67af21411d4475B30D960F23C209abd',
 			BUY_LINK:
 				'https://app.uniswap.org/#/swap?outputCurrency=0x29434A25abd94AE882aA883eea81585Aaa5b078D',
-			discontinued: SEPT_8TH_2022,
+			farmEndTimeMS: SEPT_8TH_2022,
 			active: false,
 			archived: true,
 		},
@@ -66,7 +66,7 @@ const config: EnvConfig = {
 				unit: 'LP',
 				active: false,
 				archived: true,
-				discontinued: SEPT_8TH_2022,
+				farmEndTimeMS: SEPT_8TH_2022,
 			},
 			{
 				network: MAINNET_NETWORK_NUMBER,
@@ -109,7 +109,7 @@ const config: EnvConfig = {
 		],
 		uniswapV2Subgraph:
 			'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
-		regenStreams: [
+		regenFarms: [
 			// // TODO: GOERLI
 			// {
 			// 	tokenDistroAddress:
@@ -121,29 +121,32 @@ const config: EnvConfig = {
 			// 	rewardTokenSymbol: 'CULT',
 			// 	tokenAddressOnUniswapV2:
 			// 		'0xf0f9d895aca5c8678f706fb8216fa22957685a13',
-			// },
-		],
-		regenFarms: [
-			// // TODO: GOERLI
-			// {
-			// 	POOL_ADDRESS: '0x6bb32725aa31b1a99e7c782e0605b0fb57e4b9e6',
-			// 	LM_ADDRESS: '0x9d23d449af3e2c07a286688c85ff5d3d4c219d79',
-			// 	type: StakingType.UNISWAPV2_CULT_ETH,
-			// 	platform: StakingPlatform.UNISWAP,
-			// 	title: 'CULT / ETH',
-			// 	description: '50% CULT, 50% ETH',
-			// 	provideLiquidityLink:
-			// 		'https://app.uniswap.org/#/add/v2/0x3e4d3FadEE2338D420bb5E5cB26aAd96c165476c/ETH?chain=kovan',
-			// 	unit: 'LP',
-			// 	regenStreamType: StreamType.CULT,
-			// 	regenFarmType: RegenFarmType.CULT_ETH,
-			// 	introCard: {
-			// 		title: 'CULT',
-			// 		description: `The purpose of CULT is to empower those building and contributing to our decentralized future. Our society makes it as difficult as possible to break away from societal, economic and other norms, and CULT serves to fund and support those who are working to take back our future. CULT is a reminder that the power in people is stronger than the people in power.\n\n CULT is the governance token of the Cult DAO. Every transaction of the CULT token allows you to contribute & fast-forward economic & societal change by contributing a 0.4% tax to the treasury. Fight from within until you get out, or change the system in doing so.`,
-			// 		link: 'https://cultdao.io/',
-			// 	},
-			// 	farmStartTimeMS: 1646306818206,
-			// 	active: true,
+			// 	pools: [
+			// 		// TODO: GOERLI
+			// 		{
+			// 			network: MAINNET_NETWORK_NUMBER,
+			// 			POOL_ADDRESS:
+			// 				'0x6bb32725aa31b1a99e7c782e0605b0fb57e4b9e6',
+			// 			LM_ADDRESS:
+			// 				'0x9d23d449af3e2c07a286688c85ff5d3d4c219d79',
+			// 			type: StakingType.UNISWAPV2_CULT_ETH,
+			// 			platform: StakingPlatform.UNISWAP,
+			// 			title: 'CULT / ETH',
+			// 			description: '50% CULT, 50% ETH',
+			// 			provideLiquidityLink:
+			// 				'https://app.uniswap.org/#/add/v2/0x3e4d3FadEE2338D420bb5E5cB26aAd96c165476c/ETH?chain=kovan',
+			// 			unit: 'LP',
+			// 			regenStreamType: StreamType.CULT,
+			// 			regenFarmType: RegenFarmType.CULT_ETH,
+			// 			introCard: {
+			// 				title: 'CULT',
+			// 				description: `The purpose of CULT is to empower those building and contributing to our decentralized future. Our society makes it as difficult as possible to break away from societal, economic and other norms, and CULT serves to fund and support those who are working to take back our future. CULT is a reminder that the power in people is stronger than the people in power.\n\n CULT is the governance token of the Cult DAO. Every transaction of the CULT token allows you to contribute & fast-forward economic & societal change by contributing a 0.4% tax to the treasury. Fight from within until you get out, or change the system in doing so.`,
+			// 				link: 'https://cultdao.io/',
+			// 			},
+			// 			farmStartTimeMS: 1646306818206,
+			// 			active: true,
+			// 		},
+			// 	],
 			// },
 		],
 	},
@@ -217,7 +220,6 @@ const config: EnvConfig = {
 		uniswapV2Subgraph:
 			'https://api.thegraph.com/subgraphs/name/1hive/honeyswap-v2',
 
-		regenStreams: [],
 		regenFarms: [],
 	},
 };

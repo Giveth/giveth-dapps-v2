@@ -2,6 +2,7 @@ import {
 	EDonationStatus,
 	EDonationType,
 	EProjectStatus,
+	EProjectVerificationStatus,
 } from '@/apollo/types/gqlEnums';
 import { IAddress } from '@/components/views/verification/manageFunds/ManageFundsIndex';
 
@@ -23,6 +24,7 @@ export interface IProject {
 	impactLocation?: string;
 	qualityScore?: number;
 	verified?: boolean;
+	verificationStatus?: EProjectVerificationStatus;
 	listed?: boolean | null;
 	categories: ICategory[];
 	reaction?: IReaction;
@@ -53,6 +55,7 @@ export interface IProject {
 	};
 	projectVerificationForm?: IProjectVerification;
 	projectPower: IProjectPower;
+	verificationFormStatus?: EVerificationStatus;
 }
 
 export interface IWalletAddress {
@@ -106,6 +109,7 @@ export interface IUser {
 	projectsCount?: number;
 	donationsCount?: number;
 	likedProjectsCount?: number;
+	isSignedIn: boolean;
 }
 
 export interface IReaction {
@@ -154,6 +158,13 @@ export interface IMediumBlogPost {
 
 export interface ICategory {
 	name: string;
+	value?: string;
+	isActive?: boolean;
+	mainCategory?: Pick<IMainCategory, 'title'>;
+}
+
+export interface IConvertedCategories {
+	[key: string]: { name: string; value: string }[];
 }
 
 export interface IProjectBySlug {
@@ -174,6 +185,14 @@ export interface ISiweMessage {
 	message: string;
 }
 
+export interface IMainCategory {
+	title: string;
+	description: string;
+	banner: string;
+	slug: string;
+	categories: ICategory[];
+	selected?: boolean;
+}
 export interface IProjectRegistry {
 	isNonProfitOrganization?: boolean;
 	organizationCountry?: string;

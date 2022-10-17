@@ -5,7 +5,7 @@ import { Col } from '@/components/Grid';
 import { Shadow } from '@/components/styled-components/Shadow';
 import menuList from '@/components/views/verification/menu/menuList';
 import { useVerificationData } from '@/context/verification.context';
-import { ProgressBar } from '@/components/views/verification/Common';
+import { StepsProgressBar } from '@/components/views/verification/Common';
 import { findStepByName } from '@/lib/verification';
 
 const DesktopMenu = () => {
@@ -17,7 +17,7 @@ const DesktopMenu = () => {
 		<MenuSection sm={3.75} md={2.75}>
 			<MenuTitle>Verified status for</MenuTitle>
 			<MenuTitle isActive>{title}</MenuTitle>
-			<ProgressBar />
+			<StepsProgressBar />
 			{menuList.map((item, index) => {
 				const isClickable =
 					!!lastStepIndex && index <= lastStepIndex + 1;

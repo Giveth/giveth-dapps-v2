@@ -1,49 +1,47 @@
 import styled from 'styled-components';
 import React, { useEffect, useState } from 'react';
 import { Container, H5 } from '@giveth/ui-design-system';
-
+import 'swiper/css';
+import 'swiper/css/navigation';
 import { captureException } from '@sentry/nextjs';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation } from 'swiper';
+import Image from 'next/image';
+import { Swiper as SwiperClass } from 'swiper/types';
+
 import { client } from '@/apollo/apolloClient';
 import { SIMILAR_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { IProject } from '@/apollo/types/types';
-import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { showToastError } from '@/lib/helpers';
 import { ISuggestedProjectsGQL } from '@/apollo/types/gqlTypes';
 import useDetectDevice from '@/hooks/useDetectDevice';
+import CaretRightIcon from '/public/images/caret_right.svg';
 
 const projectsToFetch = 12;
 
 const SimilarProjects = (props: { slug: string }) => {
 	const { slug } = props;
 
-	const device = useDetectDevice();
+	const { isMobile, isTablet, isLaptopS } = useDetectDevice();
+
+	const [swiperInstance, setSwiperInstance] = useState<SwiperClass>();
 
 	let projectsToShow;
-	if (device.isMobile) {
+	if (isMobile) {
 		projectsToShow = 1;
-	} else if (device.isTablet || device.isLaptopS) {
+	} else if (isTablet || isLaptopS) {
 		projectsToShow = 2;
 	} else {
 		projectsToShow = 3;
 	}
 
 	const [suggestedProjects, setSuggestedProjects] = useState<IProject[]>([]);
-	const [listPosition, setListPosition] = useState<number>(0);
-
-	const pagesCount = Math.ceil(suggestedProjects.length / projectsToShow);
-
-	const moveList = (pos: number) => {
-		if (suggestedProjects.length === 0) return;
-		const newPos = listPosition + pos;
-		if (newPos >= 0 && newPos < pagesCount) {
-			setListPosition(newPos);
-		}
-	};
 
 	useEffect(() => {
+		swiperInstance?.slideTo(0);
 		client
 			.query({
 				query: SIMILAR_PROJECTS,
@@ -66,79 +64,77 @@ const SimilarProjects = (props: { slug: string }) => {
 					},
 				});
 			});
-	}, []);
+	}, [slug]);
 
 	if (!suggestedProjects || suggestedProjects.length === 0) return null;
 	return (
 		<ContainerStyled id='similar-projects'>
 			<H5 weight={700}>Similar projects</H5>
-			<SliderContainer>
-				<CaretLeft
-					onClick={() => moveList(-1)}
-					disabled={listPosition === 0}
-				>
-					<img src={'/images/caret_right.svg'} alt='caret right' />
+			<SwiperContainer>
+				<CaretLeft id='prevIcon'>
+					<Image src={CaretRightIcon} alt='caret right' />
 				</CaretLeft>
-				{suggestedProjects
-					?.slice(
-						listPosition * projectsToShow,
-						listPosition * projectsToShow + projectsToShow,
-					)
-					?.map(project => (
-						<div className='fadeIn' key={project.id}>
-							<ProjectCard project={project} />
-						</div>
-					))}
-				<CaretRight
-					disabled={listPosition === pagesCount - 1}
-					onClick={() => moveList(1)}
+				<Swiper
+					onSwiper={setSwiperInstance}
+					modules={[Navigation]}
+					navigation={{
+						nextEl: '#nextIcon',
+						prevEl: '#prevIcon',
+					}}
+					slidesPerView={projectsToShow}
+					spaceBetween={24}
 				>
-					<img src={'/images/caret_right.svg'} alt='caret right' />
+					{suggestedProjects?.map(project => (
+						<SwiperSlide key={project.id}>
+							<ProjectCard project={project} />
+						</SwiperSlide>
+					))}
+				</Swiper>
+				<CaretRight id='nextIcon'>
+					<Image src={CaretRightIcon} alt='caret right' />
 				</CaretRight>
-			</SliderContainer>
+			</SwiperContainer>
 		</ContainerStyled>
 	);
 };
 
-const ContainerStyled = styled(Container)`
-	margin-top: 60px;
+const SwiperContainer = styled.div`
+	overflow: unset;
+	position: relative;
 `;
 
-const CaretRight = styled(FlexCenter)<{ disabled: boolean }>`
+const ContainerStyled = styled(Container)`
+	position: relative;
+	margin-top: 60px;
+	margin-bottom: 120px;
+	> h5 {
+		margin-bottom: 21px;
+	}
+`;
+
+const CaretRight = styled(FlexCenter)`
 	width: 48px;
 	height: 48px;
 	border-radius: 50%;
 	background: white;
 	box-shadow: ${Shadow.Neutral[500]};
-	opacity: ${props => props.disabled && 0.4};
-	cursor: ${props => (props.disabled ? 'default' : 'pointer')};
+	cursor: pointer;
 	position: absolute;
 	top: calc(50% - 24px);
 	right: -24px;
-	z-index: 1;
+	z-index: 10;
+	user-select: none;
+	&.swiper-button-disabled {
+		opacity: 0.4;
+		cursor: default;
+	}
+	transition: opacity 0.3s ease-in-out;
 `;
 
 const CaretLeft = styled(CaretRight)`
 	-ms-transform: rotate(180deg);
 	transform: rotate(180deg);
 	left: -24px;
-`;
-
-const SliderContainer = styled.div`
-	display: grid;
-	width: 100%;
-	max-width: ${deviceSize.laptopL + 'px'};
-	gap: 25px;
-	position: relative;
-	margin-bottom: 64px;
-	margin-top: 28px;
-
-	${mediaQueries.tablet} {
-		grid-template-columns: repeat(2, 1fr);
-	}
-	${mediaQueries.laptopL} {
-		grid-template-columns: repeat(3, 1fr);
-	}
 `;
 
 export default SimilarProjects;

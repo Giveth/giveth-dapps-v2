@@ -14,5 +14,6 @@ export const GET_USER_BY_ADDRESS = `query UserByAddress($address: String!) {
         likedProjectsCount
         projectsCount
         donationsCount
+        isSignedIn
     }
 }`;
