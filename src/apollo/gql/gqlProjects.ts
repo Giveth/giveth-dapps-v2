@@ -237,6 +237,7 @@ export const FETCH_PROJECT_BY_SLUG_WITH_BOOST = gql`
 			traceCampaignId
 			categories {
 				name
+				value
 			}
 			adminUser {
 				id
@@ -296,6 +297,7 @@ export const FETCH_PROJECT_BY_SLUG_WITHOUT_BOOST = gql`
 			traceCampaignId
 			categories {
 				name
+				value
 				mainCategory {
 					title
 				}
@@ -341,6 +343,7 @@ export const FETCH_PROJECT_BY_ID = gql`
 			impactLocation
 			categories {
 				name
+				value
 			}
 			adminUser {
 				walletAddress
@@ -466,6 +469,7 @@ export const FETCH_USER_LIKED_PROJECTS = gql`
 				totalDonations
 				categories {
 					name
+					value
 				}
 				reaction {
 					id
@@ -519,6 +523,7 @@ export const CREATE_PROJECT = gql`
 			}
 			categories {
 				name
+				value
 			}
 		}
 	}
@@ -545,6 +550,7 @@ export const UPDATE_PROJECT = gql`
 			impactLocation
 			categories {
 				name
+				value
 			}
 		}
 	}
