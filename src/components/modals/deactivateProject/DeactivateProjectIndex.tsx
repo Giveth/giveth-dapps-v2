@@ -6,8 +6,12 @@ import React, {
 	useState,
 } from 'react';
 import styled from 'styled-components';
-import { Button, GLink, semanticColors } from '@giveth/ui-design-system';
-import { IconArchiving } from '@giveth/ui-design-system/lib/cjs/components/icons/Archiving';
+import {
+	Button,
+	GLink,
+	IconArchiving,
+	semanticColors,
+} from '@giveth/ui-design-system';
 
 import { client } from '@/apollo/apolloClient';
 import {

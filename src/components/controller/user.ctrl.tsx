@@ -1,53 +1,66 @@
 import { useWeb3React } from '@web3-react/core';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { formatEther } from '@ethersproject/units';
 import { captureException } from '@sentry/nextjs';
 import { InjectedConnector } from '@web3-react/injected-connector';
 import { useAppDispatch } from '@/features/hooks';
 import {
 	setBalance,
-	setIsEnabled,
-	setIsSignedIn,
+	setIsLoading,
 	setToken,
+	setIsEnabled,
 } from '@/features/user/user.slice';
 import { isSSRMode } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
-import { fetchUserByAddress } from '@/features/user/user.thunks';
+import { fetchUserByAddress, signOut } from '@/features/user/user.thunks';
 import { walletsArray } from '@/lib/wallet/walletTypes';
 
 const UserController = () => {
 	const { account, library, chainId, activate } = useWeb3React();
 	const dispatch = useAppDispatch();
-	//TODO: Remove this state  before  merfing verification-develop-branch to DEVELOP
 	const [isActivatedCalled, setIsActivatedCalled] = useState(false);
 	const token = !isSSRMode ? localStorage.getItem(StorageLabel.TOKEN) : null;
+
+	const isMounted = useRef(false);
 
 	useEffect(() => {
 		const selectedWalletName = localStorage.getItem(StorageLabel.WALLET);
 		const wallet = walletsArray.find(w => w.value === selectedWalletName);
 		if (wallet && wallet.connector instanceof InjectedConnector) {
-			wallet.connector.isAuthorized().then(isAuthorized => {
-				if (isAuthorized) {
-					activate(wallet.connector, console.log).then(() =>
-						setIsActivatedCalled(true),
-					);
-				}
-			});
+			wallet.connector
+				.isAuthorized()
+				.then(isAuthorized => {
+					if (isAuthorized) {
+						activate(wallet.connector, console.log)
+							.then(() => setIsActivatedCalled(true))
+							.finally(() => {
+								if (!token) dispatch(setIsLoading(false));
+							});
+					} else {
+						dispatch(setIsLoading(false));
+					}
+				})
+				.catch(() => dispatch(setIsLoading(false)));
+		} else {
+			dispatch(setIsLoading(false));
 		}
 	}, [activate, isActivatedCalled]);
 
 	useEffect(() => {
-		if (account) dispatch(fetchUserByAddress(account));
-	}, [account]);
-
-	useEffect(() => {
-		if (account && token) {
-			dispatch(setIsEnabled(true));
-			dispatch(setIsSignedIn(true));
-		} else if (account) {
+		if (isMounted.current) {
+			if (!account) {
+				// Case when wallet is locked
+				dispatch(setIsEnabled(false));
+			}
+			// Sign out if wallet is changed
+			dispatch(signOut());
+		}
+		if (account) {
+			isMounted.current = true;
+			dispatch(fetchUserByAddress(account));
 			dispatch(setIsEnabled(true));
 		}
-	}, [account, token]);
+	}, [account]);
 
 	useEffect(() => {
 		if (token) {

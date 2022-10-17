@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { H6 } from '@giveth/ui-design-system';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import styled from 'styled-components';
 import LightBulbIcon from '../../../../public/images/icons/lightbulb.svg';
 import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
 import Routes from '@/lib/constants/Routes';
@@ -20,15 +21,19 @@ const Guidelines = () => {
 
 	return (
 		<>
-			<div onClick={() => setShowGuidelineModal(true)}>
+			<GuidelinesCard onClick={() => setShowGuidelineModal(true)}>
 				<Image src={LightBulbIcon} alt='Light Bulb Icon' />
 				<H6>Submission guidelines</H6>
-			</div>
+			</GuidelinesCard>
 			{showGuidelineModal && (
 				<ProjectGuidelineModal setShowModal={setShowGuidelineModal} />
 			)}
 		</>
 	);
 };
+
+const GuidelinesCard = styled.div`
+	user-select: none;
+`;
 
 export default Guidelines;

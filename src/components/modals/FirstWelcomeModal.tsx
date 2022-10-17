@@ -1,9 +1,14 @@
 import { FC, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
-import { H5, Button, Lead, brandColors } from '@giveth/ui-design-system';
+import {
+	H5,
+	Button,
+	Lead,
+	brandColors,
+	IconDonation,
+} from '@giveth/ui-design-system';
 
-import { IconDonation } from '@giveth/ui-design-system/lib/cjs/components/icons/Donation';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';

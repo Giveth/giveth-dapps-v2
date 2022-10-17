@@ -24,7 +24,7 @@ export const ZeroGivpowerModal: FC<IModal> = ({ setShowModal }) => {
 			headerTitle={'Oh no!'}
 			headerIcon={<IconRocketInSpace32 />}
 		>
-			<ZeroGivpowerModalContainer>
+			<ZeroGivpowerModalContainer data-testid='zero-givpower-modal'>
 				<Lead>
 					You don’t have any GIVpower!
 					<br /> Stake and lock your GIV to get GIVpower.

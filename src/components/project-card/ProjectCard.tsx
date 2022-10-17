@@ -32,6 +32,7 @@ import { ORGANIZATION } from '@/lib/constants/organizations';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
 import { IS_BOOSTING_ENABLED } from '@/configuration';
+import InternalLink from '@/components/InternalLink';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -57,9 +58,9 @@ const ProjectCard = (props: IProjectCard) => {
 
 	const [isHover, setIsHover] = useState(false);
 
+	const orgLabel = organization?.label;
 	const isForeignOrg =
-		organization?.label !== ORGANIZATION.trace &&
-		organization?.label !== ORGANIZATION.giveth;
+		orgLabel !== ORGANIZATION.trace && orgLabel !== ORGANIZATION.giveth;
 	const name = adminUser?.name;
 
 	return (
@@ -71,7 +72,7 @@ const ProjectCard = (props: IProjectCard) => {
 				<ImagePlaceholder>
 					<ProjectCardBadges project={project} />
 					<ProjectCardOrgBadge
-						organization={organization?.label}
+						organization={orgLabel}
 						isHover={isHover}
 					/>
 					<ProjectCardImage image={image} />
@@ -79,7 +80,7 @@ const ProjectCard = (props: IProjectCard) => {
 				<CardBody
 					isHover={isHover}
 					isOtherOrganization={
-						organization?.label !== ORGANIZATION.giveth
+						orgLabel && orgLabel !== ORGANIZATION.giveth
 					}
 				>
 					<div style={{ position: 'relative' }}>
@@ -88,11 +89,11 @@ const ProjectCard = (props: IProjectCard) => {
 							{calcBiggestUnitDifferenceTime(updatedAt)}
 						</LastUpdatedContainer>
 
-						<a href={slugToProjectView(slug)}>
+						<InternalLink href={slugToProjectView(slug)}>
 							<Title weight={700} isHover={isHover}>
 								{title}
 							</Title>
-						</a>
+						</InternalLink>
 					</div>
 					{adminUser && !isForeignOrg ? (
 						<Link
@@ -211,7 +212,7 @@ const GivBackIconContainer = styled.div`
 
 const LastUpdatedContainer = styled(Subline)<{ isHover?: boolean }>`
 	position: absolute;
-	bottom: 20px;
+	bottom: 30px;
 	background-color: ${neutralColors.gray[300]};
 	color: ${neutralColors.gray[700]};
 	padding: 2px 8px;
@@ -220,7 +221,6 @@ const LastUpdatedContainer = styled(Subline)<{ isHover?: boolean }>`
 		transition: opacity 0.3s ease-in-out;
 		display: inline;
 		opacity: ${props => (props.isHover ? 1 : 0)};
-		bottom: 30px;
 	}
 `;
 
@@ -240,11 +240,10 @@ const Description = styled(P)`
 `;
 
 const CardBody = styled.div<{
-	isOtherOrganization?: boolean;
+	isOtherOrganization?: boolean | '';
 	isHover?: boolean;
 }>`
-	padding: 26px;
-	padding-top: 32px;
+	padding: 32px 26px 26px;
 	position: absolute;
 	left: 0;
 	right: 0;
@@ -289,7 +288,6 @@ const ImagePlaceholder = styled.div`
 const Wrapper = styled.div`
 	position: relative;
 	width: 100%;
-	max-width: 443px;
 	border-radius: ${cardRadius};
 	margin: 0 auto;
 	background: white;

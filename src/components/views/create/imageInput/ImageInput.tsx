@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, FC, SetStateAction, useState } from 'react';
 import {
 	H5,
 	Caption,
@@ -9,6 +9,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import dynamic from 'next/dynamic';
+import { useFormContext } from 'react-hook-form';
 
 import { InputContainer } from '../Create.sc';
 import { Shadow } from '@/components/styled-components/Shadow';
@@ -16,6 +17,8 @@ import { OurImages } from '@/lib/constants/constants';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import ImageUploader from '@/components/ImageUploader';
 import ExternalLink from '@/components/ExternalLink';
+import useUpload from '@/hooks/useUpload';
+import { EInputs } from '@/components/views/create/CreateProject';
 
 const ImageSearch = dynamic(() => import('./ImageSearch'), {
 	ssr: false,
@@ -29,41 +32,36 @@ const unsplashPhoto = (i: string) =>
 	`${unsplashOrgUrl}@${i}${unsplashReferral}`;
 
 interface ImageInputProps {
-	setValue: (img: string) => void;
-	value: string;
 	setIsLoading: Dispatch<SetStateAction<boolean>>;
 }
 
-const ImageInput = (props: ImageInputProps) => {
-	const { value, setValue, setIsLoading } = props;
+const ImageInput: FC<ImageInputProps> = ({ setIsLoading }) => {
+	const { getValues, setValue } = useFormContext();
 
+	const [image, setImage] = useState(getValues(EInputs.image));
 	const [isUploadTab, setIsUploadTab] = useState(true);
 	const [attributes, setAttributes] = useState({ name: '', username: '' });
-	const [uploading, setUploading] = useState(false);
-	const [file, setFile] = useState<File>();
+
+	const handleSetImage = (img: string) => {
+		setImage(img);
+		setValue(EInputs.image, img);
+	};
+
+	const useUploadProps = useUpload(handleSetImage, setIsLoading);
+	const { onDelete } = useUploadProps;
+	const imageUploaderProps = { ...useUploadProps, url: image };
 
 	const removeAttributes = () => setAttributes({ name: '', username: '' });
 
 	const removeImage = () => {
-		setValue('');
-		setFile(undefined);
-		removeAttributes();
-	};
-
-	const handleUpload = (image: string) => {
-		setValue(image);
+		onDelete();
 		removeAttributes();
 	};
 
 	const pickBg = (index: number) => {
-		setValue(`/images/defaultProjectImages/${index}.png`);
-		setFile(undefined);
+		onDelete();
+		handleSetImage(`/images/defaultProjectImages/${index}.png`);
 		removeAttributes();
-	};
-
-	const handleUploading = (i: boolean) => {
-		setUploading(i);
-		setIsLoading(i);
 	};
 
 	return (
@@ -92,19 +90,12 @@ const ImageInput = (props: ImageInputProps) => {
 				{!isUploadTab && (
 					<ImageSearch
 						setAttributes={setAttributes}
-						setValue={setValue}
+						setValue={handleSetImage}
 						attributes={!!attributes.name}
 					/>
 				)}
-				{(isUploadTab || (!isUploadTab && value)) && (
-					<ImageUploader
-						url={value}
-						setUrl={handleUpload}
-						uploading={uploading}
-						setUploading={handleUploading}
-						file={file}
-						setFile={setFile}
-					/>
+				{(isUploadTab || (!isUploadTab && image)) && (
+					<ImageUploader {...imageUploaderProps} />
 				)}
 
 				{attributes.name && (
@@ -129,7 +120,7 @@ const ImageInput = (props: ImageInputProps) => {
 					))}
 					<div>
 						<Separator />
-						<RemoveBox isActive={!!value} onClick={removeImage}>
+						<RemoveBox isActive={!!image} onClick={removeImage}>
 							<IconTrash size={24} />
 							<div>REMOVE</div>
 						</RemoveBox>

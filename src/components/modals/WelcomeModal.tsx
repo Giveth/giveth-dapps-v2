@@ -72,7 +72,7 @@ const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 				<ModalGrid>
 					<BGContainer />
 					<ContentContainer>
-						<H3>Sign in to Giveth</H3>
+						<SignInTitle>Sign in to Giveth</SignInTitle>
 						<ContentSubtitle>
 							Please sign in to your account and start using
 							Giveth.
@@ -189,12 +189,18 @@ const BreakPoint = styled.div`
 	align-items: center;
 	justify-content: space-between;
 	margin: 48px 0;
+	color: ${brandColors.deep[800]};
 `;
 
 const BreakLine = styled.hr`
 	width: 45%;
 	margin: auto 0;
 	border-top: 1px solid ${neutralColors.gray[300]};
+`;
+
+const SignInTitle = styled(H3)`
+	color: ${brandColors.deep[800]};
+	font-weight: 700;
 `;
 
 const socialArray = [

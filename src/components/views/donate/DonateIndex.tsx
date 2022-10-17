@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { ISuccessDonation } from './CryptoDonation';
 import { IProjectBySlug } from '@/apollo/types/types';
 import { BigArc } from '@/components/styled-components/Arc';
-import useDeviceDetect from '@/hooks/useDeviceDetect';
 import { mediaQueries } from '@/lib/constants/constants';
 import SocialBox from './SocialBox';
 import { formatTxLink } from '@/lib/helpers';
@@ -13,11 +12,12 @@ import SuccessView from '@/components/views/donate/SuccessView';
 import ProjectCardSelector from '@/components/views/donate/ProjectCardSelector';
 import DonationTypes from '@/components/views/donate/DonationTypes';
 import NiceBanner from './NiceBanner';
+import useDetectDevice from '@/hooks/useDetectDevice';
 
 const DonateIndex = (props: IProjectBySlug) => {
 	const { project } = props;
 	const [isSuccess, setSuccess] = useState<ISuccessDonation>();
-	const { isMobile } = useDeviceDetect();
+	const { isMobile } = useDetectDevice();
 
 	const { chainId } = useWeb3React();
 

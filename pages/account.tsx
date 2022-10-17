@@ -1,28 +1,29 @@
-import styled from 'styled-components';
-import { H5 } from '@giveth/ui-design-system';
 import Head from 'next/head';
-import { FC } from 'react';
-import UserProfileView from '@/components/views/userProfile/UserProfile.view';
 import { useAppSelector } from '@/features/hooks';
+import Spinner from '@/components/Spinner';
+import WalletNotConnected from '@/components/WalletNotConnected';
+import UserNotSignedIn from '@/components/UserNotSignedIn';
+import UserProfileView from '@/components/views/userProfile/UserProfile.view';
 
-const NoUserContainer = styled.div`
-	padding: 200px;
-`;
+const UserRoute = () => {
+	const { isSignedIn, isEnabled, userData, isLoading } = useAppSelector(
+		state => state.user,
+	);
 
-const UserRoute: FC = () => {
-	const user = useAppSelector(state => state.user.userData);
+	if (isLoading) {
+		return <Spinner />;
+	} else if (!isEnabled) {
+		return <WalletNotConnected />;
+	} else if (!isSignedIn) {
+		return <UserNotSignedIn />;
+	}
+
 	return (
 		<>
 			<Head>
-				<title>Giveth | {user?.name}</title>
+				<title>{userData?.name} | Giveth</title>
 			</Head>
-			{user ? (
-				<UserProfileView user={user} myAccount />
-			) : (
-				<NoUserContainer>
-					<H5>Not logged in or user not found</H5>
-				</NoUserContainer>
-			)}
+			<UserProfileView user={userData!} myAccount />
 		</>
 	);
 };

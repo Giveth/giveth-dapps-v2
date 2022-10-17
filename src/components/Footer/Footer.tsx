@@ -8,6 +8,7 @@ import {
 	IconYoutube,
 	IconTwitter,
 	Caption,
+	IconDiscord,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import styled from 'styled-components';
@@ -119,6 +120,9 @@ const Footer = () => {
 						</a>
 						<a href={links.YOUTUBE}>
 							<IconYoutube size={24} color={textColor} />
+						</a>
+						<a href={links.DISCORD}>
+							<IconDiscord size={24} color={textColor} />
 						</a>
 						<a href={links.DOCS}>
 							<IconDocs size={24} color={textColor} />

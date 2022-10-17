@@ -51,13 +51,9 @@ const Title = styled(D3)`
 
 const Wrapper = styled.div`
 	position: relative;
-	margin: 150px 0;
+	margin: 150px auto;
 	padding: 0 18px;
-
-	${mediaQueries.tablet} {
-		margin: 150px 270px;
-		padding: 0;
-	}
+	max-width: 1000px;
 `;
 
 export default TermsIndex;

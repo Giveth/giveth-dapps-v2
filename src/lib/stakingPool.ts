@@ -271,7 +271,7 @@ const getSimplePoolStakingAPR = async (
 	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
 	const streamConfig =
 		regenStreamType &&
-		config.NETWORKS_CONFIG[network].regenStreams.find(
+		config.NETWORKS_CONFIG[network].regenFarms.find(
 			s => s.type === regenStreamType,
 		);
 	const tokenAddress = streamConfig

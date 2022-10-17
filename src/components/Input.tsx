@@ -1,5 +1,6 @@
 import {
 	GLink,
+	IIconProps,
 	neutralColors,
 	semanticColors,
 	SublineBold,
@@ -13,7 +14,6 @@ import React, {
 	useRef,
 } from 'react';
 import styled, { css } from 'styled-components';
-import { IIconProps } from '@giveth/ui-design-system/lib/esm/components/icons/giv-economy/type';
 import { EInputValidation, IInputValidation } from '@/types/inputValidation';
 import InputStyled from './styled-components/Input';
 import LottieControl from '@/components/animations/lottieControl';

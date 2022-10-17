@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import React, { FC } from 'react';
-import { IconWalletOutline } from '@giveth/ui-design-system/lib/cjs/components/icons/WalletOutline';
-import { Button } from '@giveth/ui-design-system';
+import { Button, IconWalletOutline } from '@giveth/ui-design-system';
 import { Controller, useForm } from 'react-hook-form';
 import { useWeb3React } from '@web3-react/core';
 import { utils } from 'ethers';

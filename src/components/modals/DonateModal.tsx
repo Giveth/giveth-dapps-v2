@@ -10,8 +10,8 @@ import {
 	Button,
 	semanticColors,
 	IconInfo,
+	IconWalletApprove,
 } from '@giveth/ui-design-system';
-import { IconWalletApprove } from '@giveth/ui-design-system/lib/cjs/components/icons/WalletApprove';
 
 import { Modal } from '@/components/modals/Modal';
 import { IProject } from '@/apollo/types/types';

@@ -17,7 +17,7 @@ import {
 	EDirection,
 	EDonationStatus,
 	EProjectStatus,
-	gqlEnums,
+	ESortby,
 } from '@/apollo/types/gqlEnums';
 import InfoBadge from '@/components/badges/InfoBadge';
 import {
@@ -51,12 +51,14 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 	const [activeTab, setActiveTab] = useState(0);
 	const [isActive, setIsActive] = useState<boolean>(true);
 	const [isDraft, setIsDraft] = useState<boolean>(false);
-	const [project, setProject] = useState<IProject | undefined>(props.project);
+	const [draftProject, setDraftProject] = useState<IProject>();
 	const [donations, setDonations] = useState<IDonation[]>([]);
 	const [totalDonations, setTotalDonations] = useState(0);
 	const [creationSuccessful, setCreationSuccessful] = useState(false);
-	const [isCancelled, setIsCancelled] = useState<boolean>(false);
+
 	const user = useAppSelector(state => state.user.userData);
+
+	const project = draftProject || props.project;
 
 	const {
 		adminUser,
@@ -81,10 +83,15 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 				fetchPolicy: 'network-only',
 			})
 			.then((res: { data: { projectBySlug: IProject } }) => {
-				setProject(res.data.projectBySlug);
+				const _project = res.data.projectBySlug;
+				if (_project.status.name !== EProjectStatus.CANCEL) {
+					setDraftProject(_project);
+				} else {
+					draftProject && setDraftProject(undefined);
+				}
 			})
 			.catch((error: unknown) => {
-				setIsCancelled(true);
+				showToastError(error);
 				captureException(error, {
 					tags: {
 						section: 'fetchProject',
@@ -97,7 +104,6 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 		if (status) {
 			setIsActive(status.name === EProjectStatus.ACTIVE);
 			setIsDraft(status.name === EProjectStatus.DRAFT);
-			setIsCancelled(status.name === EProjectStatus.CANCEL);
 		}
 	}, [status]);
 
@@ -112,7 +118,7 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 					take: donationsPerPage,
 					status: isAdmin ? null : EDonationStatus.VERIFIED,
 					orderBy: {
-						field: gqlEnums.CREATIONDATE,
+						field: ESortby.CREATIONDATE,
 						direction: EDirection.DESC,
 					},
 				},
@@ -133,10 +139,12 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 	}, [id]);
 
 	useEffect(() => {
-		if (slug && user?.id) {
+		draftProject && setDraftProject(undefined);
+		// Re-fetch project if project is draft and user is signed in
+		if (!props.project && user?.isSignedIn) {
 			fetchProject().then();
 		}
-	}, [slug, user?.id]);
+	}, [props.project, user]);
 
 	if (creationSuccessful) {
 		return (
@@ -147,7 +155,7 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 		);
 	}
 
-	if (isCancelled || !project) {
+	if (!project) {
 		return <NotAvailableProject />;
 	}
 

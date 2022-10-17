@@ -1,4 +1,10 @@
-import { H2, brandColors, Lead, D3 } from '@giveth/ui-design-system';
+import {
+	H2,
+	brandColors,
+	Lead,
+	D3,
+	deviceSize,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 import PartnershipsCard from './PartnershipsCard';
@@ -104,6 +110,9 @@ const Caption = styled(Lead)`
 
 const Title = styled(D3)`
 	margin-bottom: 24px;
+	@media only screen and (max-width: ${deviceSize.tablet}px) {
+		font-size: 3.5rem;
+	}
 `;
 
 const Wrapper = styled.div`

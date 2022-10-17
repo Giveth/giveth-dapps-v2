@@ -1,13 +1,13 @@
 import { useRouter } from 'next/router';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { IButtonProps } from '@giveth/ui-design-system/lib/esm/components/buttons/type';
 import {
 	brandColors,
 	H1,
 	QuoteText,
 	Button,
 	OutlineButton,
+	IButtonProps,
 } from '@giveth/ui-design-system';
 
 import Routes from '@/lib/constants/Routes';
