@@ -141,7 +141,7 @@ export const BenefitsCard = styled.div`
 	width: 100%;
 	padding: 30px;
 	text-align: center;
-	background-color: #4c32e3;
+	background-color: #5326ec;
 	border-radius: 8px;
 	position: relative;
 	margin-top: 30px;
