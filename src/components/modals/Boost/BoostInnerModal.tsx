@@ -85,8 +85,8 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 		if (boostedProjectsCount === 0) {
 			return (
 				<Caption style={{ whiteSpace: `pre-line` }}>
-					This is your first time boosting, so 100% will be allocated
-					to this project. You can check your allocation on &nbsp;
+					This is your first time boosting, 100% will be allocated to
+					this project. You can check your allocation on &nbsp;
 					<Link href={Routes.MyBoostedProjects} passHref>
 						<GLink>
 							<b>My account</b>
@@ -224,9 +224,8 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 								direction={'bottom'}
 							>
 								<LockInfotooltip>
-									This is the total GIVpower you have, you can
-									get more GIVpower by stake & lock more
-									tokens
+									Get more GIVpower by staking & locking more
+									GIV tokens.
 								</LockInfotooltip>
 							</IconWithTooltip>
 						</GIVpowerHelp>
@@ -240,7 +239,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 							direction={'bottom'}
 						>
 							<LockInfotooltip>
-								This is the project you boosted before
+								The amount of projects you have already boosted.
 							</LockInfotooltip>
 						</IconWithTooltip>
 					</Flex>
@@ -311,7 +310,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 										totalGIVpower.mul(percentage).div(100),
 								  )
 								: 0
-					  } GIVpower.`
+					  } GIVpower`
 					: 'Drag to allocate.'}
 			</SliderDesc>
 			<ConfirmButton
