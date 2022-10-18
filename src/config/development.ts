@@ -2,7 +2,7 @@ import { EnvConfig, StakingPlatform, StakingType } from '@/types/config';
 import { gwei2wei } from '@/helpers/blockchain';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
-const BASE_ROUTE = 'https://dev.serve.giveth.io';
+const BASE_ROUTE = 'https://serve.giveth.io';
 const SEPT_8TH_2022 = 1662595200000;
 const MAINNET_NETWORK_NUMBER = 5; // Goerli
 const XDAI_NETWORK_NUMBER = 100; // xDAI
