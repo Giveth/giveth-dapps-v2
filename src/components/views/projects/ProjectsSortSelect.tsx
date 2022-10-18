@@ -38,15 +38,10 @@ const DropdownIndicator: ComponentType<DropdownIndicatorProps> = props => {
 
 const sortByOptions = [
 	{
-		label: 'Boosted',
-		value: ESortbyAllProjects.GIVPOWER,
-		icon: <IconRocketInSpace16 color={brandColors.deep[900]} />,
+		label: 'Default',
+		value: ESortbyAllProjects.QUALITYSCORE,
+		icon: <IconSort size={16} color={brandColors.deep[900]} />,
 	},
-	// {
-	// 	label: 'Default',
-	// 	value: ESortbyAllProjects.QUALITYSCORE,
-	// 	icon: <IconSort size={16} color={brandColors.deep[900]} />,
-	// },
 	{
 		label: 'Newest',
 		value: ESortbyAllProjects.NEWEST,
@@ -61,6 +56,11 @@ const sortByOptions = [
 		label: 'Most liked',
 		value: ESortbyAllProjects.MOSTLIKED,
 		icon: <IconHeartOutline16 color={brandColors.deep[900]} />,
+	},
+	{
+		label: 'Boosted',
+		value: ESortbyAllProjects.GIVPOWER,
+		icon: <IconRocketInSpace16 color={brandColors.deep[900]} />,
 	},
 	{
 		label: 'Most funded',
