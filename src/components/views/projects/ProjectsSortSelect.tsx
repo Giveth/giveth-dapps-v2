@@ -10,6 +10,7 @@ import {
 	neutralColors,
 	P,
 	IconSort,
+	IconRocketInSpace16,
 } from '@giveth/ui-design-system';
 import Select, {
 	components,
@@ -37,15 +38,15 @@ const DropdownIndicator: ComponentType<DropdownIndicatorProps> = props => {
 
 const sortByOptions = [
 	{
-		label: 'GIVpower',
+		label: 'Boosted',
 		value: ESortbyAllProjects.GIVPOWER,
-		icon: <IconSort size={16} color={brandColors.deep[900]} />,
+		icon: <IconRocketInSpace16 color={brandColors.deep[900]} />,
 	},
-	{
-		label: 'Default',
-		value: ESortbyAllProjects.QUALITYSCORE,
-		icon: <IconSort size={16} color={brandColors.deep[900]} />,
-	},
+	// {
+	// 	label: 'Default',
+	// 	value: ESortbyAllProjects.QUALITYSCORE,
+	// 	icon: <IconSort size={16} color={brandColors.deep[900]} />,
+	// },
 	{
 		label: 'Newest',
 		value: ESortbyAllProjects.NEWEST,
