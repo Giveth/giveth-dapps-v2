@@ -12,6 +12,7 @@ const HomePurpleSection = () => {
 			<a>
 				<Wrapper>
 					<Image
+						alt='GIVpower is here'
 						src={givpowerIsHere}
 						layout='fill'
 						objectFit='cover'
