@@ -1,8 +1,14 @@
-import { EnvConfig, StakingPlatform, StakingType } from '@/types/config';
+import {
+	EnvConfig,
+	RegenFarmType,
+	StakingPlatform,
+	StakingType,
+	StreamType,
+} from '@/types/config';
 import { gwei2wei } from '@/helpers/blockchain';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
-const BASE_ROUTE = 'https://dev.serve.giveth.io';
+const BASE_ROUTE = 'https://serve.giveth.io';
 const SEPT_8TH_2022 = 1662595200000;
 const MAINNET_NETWORK_NUMBER = 5; // Goerli
 const XDAI_NETWORK_NUMBER = 100; // xDAI
@@ -17,7 +23,7 @@ const config: EnvConfig = {
 	XDAI_NETWORK_NUMBER: XDAI_NETWORK_NUMBER,
 
 	GARDEN_LINK:
-		'https://gardens-staging.1hive.org/#/xdai/garden/0xb3f3da0080a8811d887531ca4c0dbfe3490bd1a1',
+		'https://gardens-staging.1hive.org/#/xdai/garden/0x16388d99199a74810fc572049b3d4d657e7d5deb',
 
 	MAINNET_CONFIG: {
 		chainId: '0x5', // A 0x-prefixed hexadecimal string
@@ -168,59 +174,141 @@ const config: EnvConfig = {
 		blockExplorerName: ['Blockscout'],
 		blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/aminlatifi/givpower-deployment-six',
+			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-xdai-staging',
 
-		TOKEN_ADDRESS: '0x780FE5de651a3ea62E572f591BF848cFEBaf2163',
-		gGIV_ADDRESS: '0x1460aaf51f4e0b1b59bb41981cb4aa5a1b377776',
+		TOKEN_ADDRESS: '0x83a8eea6427985C523a0c4d9d3E62C051B6580d3',
+		gGIV_ADDRESS: '0x4Bee761229AD815Cc64461783580F629dA0f0350',
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
-		MERKLE_ADDRESS: '0x06BA4122FC4F3AbCdAFD2fF1dD83A88A63842309',
-		TOKEN_DISTRO_ADDRESS: '0x74B557bec1A496a8E9BE57e9A1530A15364C87Be',
+		MERKLE_ADDRESS: '0xc87403C70c9FBfb594d98d3B5E695BBE4C694188',
+		TOKEN_DISTRO_ADDRESS: '0x18a46865AAbAf416a970eaA8625CFC430D2364A1',
 
 		nodeUrl: 'https://rpc.gnosischain.com/',
 
 		GIV: {
 			network: XDAI_NETWORK_NUMBER,
-			LM_ADDRESS: '0x898Baa558A401e59Cb2aA77bb8b2D89978Cf506F',
-			GARDEN_ADDRESS: '0x642c18755aa5a2bf6861349327d2448813b992ba',
+			LM_ADDRESS: '0xDAEa66Adc97833781139373DF5B3bcEd3fdda5b1',
+			GARDEN_ADDRESS: '0x9ff80789b74d1d2b7cf5a568ea82409c2b327861',
 			BUY_LINK:
-				'https://app.honeyswap.org/#/swap?outputCurrency=0x780FE5de651a3ea62E572f591BF848cFEBaf2163',
+				'https://app.honeyswap.org/#/swap?outputCurrency=0x83a8eea6427985C523a0c4d9d3E62C051B6580d3',
 		},
 
 		pools: [
 			{
 				network: XDAI_NETWORK_NUMBER,
-				POOL_ADDRESS: '0xE5021d9B578b84f7D272CFDE3E8B58c0Bf37B402',
-				LM_ADDRESS: '0x34F8Cc88b872f13d32084464af56f1052A2eF0f6',
+				POOL_ADDRESS: '0x31A5AeA76Af79F592a3A3F46a9f6Cb118990433b',
+				LM_ADDRESS: '0xC09147Ac0aC8B5271F03b511c3554e3238Ae3201',
 				type: StakingType.HONEYSWAP_GIV_HNY,
 				platform: StakingPlatform.HONEYSWAP,
 				title: 'GIV / HNY',
 				description: '50% GIV, 50% HNY',
 				provideLiquidityLink:
-					'https://app.honeyswap.org/#/add/0x780FE5de651a3ea62E572f591BF848cFEBaf2163/0x69F79C9eA174d4659B18c7993c7EFbBbB58cF068',
+					'https://app.honeyswap.org/#/add/0x83a8eea6427985C523a0c4d9d3E62C051B6580d3/0x69F79C9eA174d4659B18c7993c7EFbBbB58cF068',
 				unit: 'LP',
 				active: false,
 				archived: true,
 			},
 			{
 				network: XDAI_NETWORK_NUMBER,
-				POOL_ADDRESS: '0x0346B748Ce9bdd42995452b5D30b46c296336f07',
-				LM_ADDRESS: '0x448d5E09620752f031Ea629993050f8581118438',
+				POOL_ADDRESS: '0x437B0da7932b21F54488fD80Ee09b519a6f4d8AD',
+				LM_ADDRESS: '0x83535D6DeF8E881E647C00462315bae9A6E7BD09',
 				type: StakingType.SUSHISWAP_ETH_GIV,
 				platform: StakingPlatform.SUSHISWAP,
 				title: 'GIV / ETH',
 				description: '50% ETH, 50% GIV',
 				provideLiquidityLink:
-					'https://app.sushi.com/add/0x780FE5de651a3ea62E572f591BF848cFEBaf2163/0x736a98655049433f79dCcF5e54b887E8890b63D1',
+					'https://app.sushi.com/add/0x83a8eea6427985C523a0c4d9d3E62C051B6580d3/0x736a98655049433f79dCcF5e54b887E8890b63D1',
 				unit: 'LP',
-				active: true,
+				active: false,
 				archived: true,
+				farmEndTimeMS: SEPT_8TH_2022,
+			},
+			{
+				network: XDAI_NETWORK_NUMBER,
+				POOL_ADDRESS: '0xB4E0fc187f0EEd740D93eF15Cd14750a2780fc2A',
+				LM_ADDRESS: '0xe2c436E177C39A5D18AF6923Fc2Fc673f4729C05',
+				type: StakingType.HONEYSWAP_GIV_DAI,
+				platform: StakingPlatform.HONEYSWAP,
+				title: 'GIV / xDAI',
+				description: '50% GIV, 50% xDAI',
+				provideLiquidityLink:
+					'https://app.honeyswap.org/#/add/0x83a8eea6427985C523a0c4d9d3E62C051B6580d3/0x97c4dD5cE204b8c1F2f3B8fBfBBDC771d867d18c',
+				unit: 'LP',
+				active: false,
+				archived: true,
+				farmStartTimeMS: 1655997000000,
+				farmEndTimeMS: SEPT_8TH_2022,
 			},
 		],
 
 		uniswapV2Subgraph:
 			'https://api.thegraph.com/subgraphs/name/1hive/honeyswap-v2',
 
-		regenFarms: [],
+		regenFarms: [
+			{
+				tokenDistroAddress:
+					'0xCA29ec6F4218E230294993E0d77d5ece5a6573D8',
+				type: StreamType.FOX,
+				title: 'ShapeShift DAO',
+				rewardTokenAddress:
+					'0x18cE354571ba71bC7b3d633b254954C5A9cfC195',
+				rewardTokenSymbol: 'FOX',
+				tokenAddressOnUniswapV2:
+					'0x21a42669643f45Bc0e086b8Fc2ed70c23D67509d',
+				pools: [
+					{
+						network: XDAI_NETWORK_NUMBER,
+						POOL_ADDRESS:
+							'0xD28C07F802212F04AF41834ec0CC81d2d283124B',
+						LM_ADDRESS:
+							'0x06851400866e065972ff21e1ECdE035b4772736d',
+						type: StakingType.HONEYSWAP_FOX_HNY,
+						platform: StakingPlatform.HONEYSWAP,
+						title: 'FOX / HNY',
+						description: '50% FOX, 50% HNY',
+						provideLiquidityLink:
+							'https://app.honeyswap.org/#/add/0x18cE354571ba71bC7b3d633b254954C5A9cfC195/0x69F79C9eA174d4659B18c7993c7EFbBbB58cF068',
+						unit: 'LP',
+						regenStreamType: StreamType.FOX,
+						regenFarmType: RegenFarmType.FOX_HNY,
+
+						farmStartTimeMS: 1646306818206,
+						active: true,
+						farmEndTimeMS: 1665932450000,
+						introCard: {
+							title: 'ShapeShift DAO',
+							description:
+								'ShapeShift is the free and open-source one-stop-shop for cross-chain DeFi. Buy, sell, send, receive, trade, and earn yield on your crypto across a growing number of protocols and chains with no added fees ever. FOX is the governance token of the ShapeShift DAO.',
+							link: 'https://shapeshift.com/',
+						},
+					},
+					{
+						network: XDAI_NETWORK_NUMBER,
+						POOL_ADDRESS:
+							'0x0714A2fE9574F591a4ed3fD03b63714e8681fBb7',
+						LM_ADDRESS:
+							'0x93c40bCA6a854B2190a054136a316C4Df7f89f10',
+						type: StakingType.HONEYSWAP_FOX_XDAI,
+						platform: StakingPlatform.HONEYSWAP,
+						title: 'FOX / xDAI',
+						description: '50% FOX, 50% xDAI',
+						provideLiquidityLink:
+							'https://app.honeyswap.org/#/add/0x18cE354571ba71bC7b3d633b254954C5A9cfC195/0x97c4dD5cE204b8c1F2f3B8fBfBBDC771d867d18c',
+						unit: 'LP',
+						regenStreamType: StreamType.FOX,
+						regenFarmType: RegenFarmType.FOX_XDAI,
+
+						farmStartTimeMS: 1646306818206,
+						active: true,
+						introCard: {
+							title: 'ShapeShift DAO',
+							description:
+								'ShapeShift is the free and open-source one-stop-shop for cross-chain DeFi. Buy, sell, send, receive, trade, and earn yield on your crypto across a growing number of protocols and chains with no added fees ever. FOX is the governance token of the ShapeShift DAO.',
+							link: 'https://shapeshift.com/',
+						},
+					},
+				],
+			},
+		],
 	},
 };
 
