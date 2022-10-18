@@ -1,9 +1,9 @@
 ---
-name: Bug report
-about: Create a report to help us improve
-title: BUG
-labels: bug
-assignees: MoeNick
+name: 'Test report - GIVBoosting '
+about: Create a report to help us improve testting
+title: ''
+labels: GIVeconomy, GIVPower
+assignees: ''
 
 ---
 
@@ -22,6 +22,19 @@ A clear and concise description of what you expected to happen.
 
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
+
+**This happens on which Boosting Section?**
+- [ ] Project's Card
+- [ ] Single Project Public View | Boost Button
+- [ ]  Single Project Project's owner view | Boost Button
+- [ ]  Single Project View | Givpower tab
+- [ ] Boost Modal 
+- [ ] Success Boost
+- [ ] My Account | Boosting Tab: list of boosted projects
+- [ ] My Account | Delete a Boosted Projects
+- [ ] My Account | Edit boosting allocations
+- [ ] My Account | Success editing allocations
+- [ ] My Account | Success editing allocations. 
 
 **Desktop (please complete the following information):**
  - OS: [e.g. iOS]
