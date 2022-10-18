@@ -14,7 +14,6 @@ import { Container } from '@/components/Grid';
 import ContributeCard from '@/components/views/userProfile/ProfileContributeCard';
 import { ProfileBoostedTab } from './boostedTab/ProfileBoostedTab';
 import Routes, { profileTabs } from '@/lib/constants/Routes';
-import { IS_BOOSTING_ENABLED } from '@/configuration';
 import { isSSRMode } from '@/lib/helpers';
 
 enum EProfile {
@@ -73,8 +72,7 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 						</a>
 					</Link>
 				)}
-				{/* // TODO: Boosting - remove this for boosting launch */}
-				{myAccount && IS_BOOSTING_ENABLED && (
+				{myAccount && (
 					<Link href={Routes.MyBoostedProjects}>
 						<a>
 							<ProfileTab active={tab === EProfile.BOOSTED}>
