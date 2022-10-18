@@ -48,6 +48,8 @@ import {
 	ConnectWalletButton,
 	GivAmount,
 	BoostProjectButton,
+	BoostLinkContainer,
+	CaptionStyled,
 	BenefitsCardContainer,
 } from './GIVpower.sc';
 import RocketImage from '../../../public/images/rocket.svg';
@@ -67,6 +69,8 @@ export function TabPowerTop() {
 		useAppSelector(state => state.subgraph.xDaiValues),
 	);
 	const givPower = sdh.getUserGIVPowerBalance();
+	const givPowerFormatted = formatWeiHelper(givPower.balance);
+	const hasZeroGivPower = givPowerFormatted === '0';
 	const dispatch = useAppDispatch();
 
 	return (
@@ -101,18 +105,34 @@ export function TabPowerTop() {
 											alt='givpower'
 										/>
 										<TitleBase>
-											{formatWeiHelper(
-												givPower.balance,
-											) ?? 0}
+											{givPowerFormatted ?? 0}
 										</TitleBase>
 									</GivAmount>
-									<Link href={Routes.GIVfarm} passHref>
-										<BoostProjectButton
-											label='Get more GIVpower'
-											size='large'
-											linkType='primary'
-										/>
-									</Link>
+									<BoostLinkContainer>
+										{hasZeroGivPower && (
+											<CaptionStyled medium>
+												Stake GIV to get GIVpower!
+											</CaptionStyled>
+										)}
+										<Link
+											href={
+												hasZeroGivPower
+													? Routes.GIVfarm
+													: Routes.Projects
+											}
+											passHref
+										>
+											<BoostProjectButton
+												label={
+													hasZeroGivPower
+														? 'STAKE FOR GIVPOWER'
+														: 'BOOST PROJECTS'
+												}
+												size='large'
+												linkType='primary'
+											/>
+										</Link>
+									</BoostLinkContainer>
 								</>
 							) : (
 								<ConnectWallet>
@@ -150,8 +170,8 @@ export function TabPowerBottom() {
 					<HeadingTextContainer>
 						<QuoteText size='small'>
 							Support verified projects using “Boost”. Projects
-							backed by GIVpower will benefit from matching funds
-							& more GIVbacks for their donors.
+							backed by GIVpower will benefit from more GIVbacks
+							for their donors and eventually, matching funds.
 						</QuoteText>
 					</HeadingTextContainer>
 					<LearnMoreButton
@@ -263,22 +283,24 @@ export function TabPowerBottom() {
 								For Projects
 							</BenefitsCardHeading>
 							<BenefitsCardTextContainer>
-								<BenefitsCardTextContainer>
-									<QuoteText size='small'>
-										Soon: Fire up your community to use
-										GIVpower & help improve your rank.
-									</QuoteText>
-									<QuoteText size='small'>
-										The higher your rank, the more GIVbacks
-										your donors will receive.
-									</QuoteText>
-									<QuoteText size='small'>
-										Top-ranked projects will eventually get
-										funding from the Giveth Matching Pool.
-									</QuoteText>
-									<br />
-								</BenefitsCardTextContainer>
-								<CardBottomText>Coming Soon</CardBottomText>
+								<QuoteText size='small'>
+									Fire up your community to get more boosts &
+									improve your rank.
+								</QuoteText>
+								<QuoteText size='small'>
+									The higher your rank, the more GIVbacks your
+									donors receive.
+								</QuoteText>
+								<QuoteText size='small'>
+									Top-ranked projects get funding from the
+									Giveth Matching Pool.
+								</QuoteText>
+								<br />
+								<Link href={Routes.Projects} passHref>
+									<CardBottomText>
+										BROWSE PROJECTS
+									</CardBottomText>
+								</Link>
 							</BenefitsCardTextContainer>
 						</BenefitsCard>
 					</BenefitsCardsContainer>

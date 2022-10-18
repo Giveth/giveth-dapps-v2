@@ -9,7 +9,7 @@ import { IAddress } from '@/components/views/verification/manageFunds/ManageFund
 export interface IProjectPower {
 	powerRank: number;
 	totalPower?: number;
-	updateTime: string;
+	round: number;
 }
 export interface IProject {
 	id?: string;

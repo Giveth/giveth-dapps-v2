@@ -31,7 +31,6 @@ import { Row } from '@/components/Grid';
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
-import { IS_BOOSTING_ENABLED } from '@/configuration';
 import InternalLink from '@/components/InternalLink';
 
 const cardRadius = '12px';
@@ -139,18 +138,20 @@ const ProjectCard = (props: IProjectCard) => {
 									</Flex>
 								</Flex>
 							)}
-							{/* // TODO: Boosting - remove this for boosting launch */}
-							{IS_BOOSTING_ENABLED && projectPower?.powerRank && (
-								<GivpowerRankContainer
-									gap='8px'
-									alignItems='center'
-								>
-									<IconRocketInSpace16
-										color={neutralColors.gray[700]}
-									/>
-									<B>#{projectPower?.powerRank || '--'}</B>
-								</GivpowerRankContainer>
-							)}
+							{projectPower?.powerRank &&
+								projectPower?.totalPower !== 0 && (
+									<GivpowerRankContainer
+										gap='8px'
+										alignItems='center'
+									>
+										<IconRocketInSpace16
+											color={neutralColors.gray[700]}
+										/>
+										<B>
+											#{projectPower?.powerRank || '--'}
+										</B>
+									</GivpowerRankContainer>
+								)}
 						</Flex>
 					</>
 					<ActionButtons>

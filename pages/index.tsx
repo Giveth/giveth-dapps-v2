@@ -9,7 +9,6 @@ import { useAppSelector } from '@/features/hooks';
 import { homeMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
-import { IS_BOOSTING_ENABLED } from '@/configuration';
 
 const projectsToFetch = 12;
 
@@ -22,9 +21,7 @@ const fetchProjects = async (userId: string | undefined = undefined) => {
 	const variables: any = {
 		limit: projectsToFetch,
 		orderBy: {
-			field: IS_BOOSTING_ENABLED
-				? ESortby.GIVPOWER
-				: ESortby.QUALITYSCORE,
+			field: ESortby.GIVPOWER,
 			direction: EDirection.DESC,
 		},
 	};

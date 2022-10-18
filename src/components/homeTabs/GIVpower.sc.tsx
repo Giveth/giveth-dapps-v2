@@ -4,6 +4,7 @@ import {
 	Button,
 	ButtonLink,
 	ButtonText,
+	Caption,
 	Container,
 	H1,
 	H2,
@@ -240,6 +241,14 @@ export const Circle = styled.div<{ size: number }>`
 		height: ${props => props.size}px;
 	}
 `;
+export const BoostLinkContainer = styled.div`
+	margin-bottom: 10px;
+`;
+
+export const CaptionStyled = styled(Caption)`
+	text-align: center;
+	margin-top: -16px;
+`;
 
 export const GivpowerCTAContainer = styled.div`
 	background-image: url('/images/backgrounds/giv-outline.svg');
@@ -284,38 +293,39 @@ export const GivpowerCTAButtonOutlined = styled(OutlineLinkButton)`
 `;
 
 export const BoostProjectButton = styled(ButtonLink)`
-	margin: 0 auto;
+	margin: 8px auto 10px;
 	min-width: 250px;
 	${mediaQueries.tablet} {
-		margin: 0;
+		margin: 8px 0 0;
 		min-width: unset;
-		span {
-			font-size: 13px;
+		* {
+			font-size: 0.8rem;
 		}
 	}
 	${mediaQueries.laptopS} {
 		min-width: 250px;
-		span {
+		* {
 			font-size: 1rem;
 		}
 	}
 `;
 
-export const GivPowerCardContainer = styled(Flex)`
-	flex-direction: column;
-	gap: 30px;
+export const GivPowerCardContainer = styled.div`
 	background: ${brandColors.giv[700]};
 	padding: 24px;
+	margin-bottom: 8px;
 	border-top-left-radius: 8px;
 	border-top-right-radius: 8px;
 	${mediaQueries.tablet} {
-		margin-bottom: 40px;
+		margin-bottom: 0;
+		padding-bottom: 40px;
 	}
 	${mediaQueries.laptopS} {
-		margin-bottom: 0;
+		padding-bottom: 24px;
 	}
 `;
 
+// remove margin when boosting deployment goes to production
 export const GivAmount = styled(Flex)`
 	align-items: baseline;
 	gap: 16px;
@@ -335,5 +345,4 @@ export const ConnectWalletDesc = styled(P)`
 
 export const ConnectWalletButton = styled(Button)`
 	margin: auto;
-	min-width: 220px;
 `;

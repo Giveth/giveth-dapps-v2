@@ -6,6 +6,7 @@ import {
 	H6,
 	IconHelp,
 	IconRocketInSpace24,
+	Lead,
 	neutralColors,
 	P,
 } from '@giveth/ui-design-system';
@@ -34,6 +35,9 @@ import {
 	SliderDesc,
 	ConfirmButton,
 	ManageLink,
+	ExceededContainer,
+	BoostedProjectsLink,
+	NotNowButton,
 } from './BoostModal.sc';
 import { EBoostModalState } from './BoostModal';
 import {
@@ -50,15 +54,19 @@ import type { BigNumber } from 'ethers';
 interface IInnerBoostModalProps {
 	totalGIVpower: BigNumber;
 	setPercentage: Dispatch<SetStateAction<number>>;
+	state: EBoostModalState;
 	setState: Dispatch<SetStateAction<EBoostModalState>>;
 	projectId: string;
+	setShowModal: (showModal: boolean) => void;
 }
 
 const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 	totalGIVpower,
 	setPercentage: setFinalPercentage,
+	state,
 	setState,
 	projectId,
+	setShowModal,
 }) => {
 	const [percentage, setPercentage] = useState(0);
 	const [isChanged, setIsChanged] = useState(false);
@@ -136,23 +144,26 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 				const powerBoostings: IPowerBoosting[] =
 					data.getPowerBoosting.powerBoostings;
 				setBoostedProjects(powerBoostings);
+				const count = data.getPowerBoosting.powerBoostings?.length ?? 0;
+				if (count === 0) {
+					setPercentage(100);
+					setIsChanged(true);
+				} else {
+					const sameProject = powerBoostings.find(
+						project => project?.project.id === projectId,
+					);
+					const _percentage = Math.floor(
+						sameProject?.percentage ?? 0,
+					);
+					setPercentage(_percentage);
+					if (count >= 20 && !sameProject) {
+						setState(EBoostModalState.LIMIT_EXCEEDED);
+					}
+				}
 			}
 		};
-		fetchUserBoosts().then();
+		fetchUserBoosts();
 	}, [user]);
-
-	useEffect(() => {
-		if (boostedProjectsCount === 0) {
-			setPercentage(100);
-			setIsChanged(true);
-		} else {
-			const sameProject = boostedProjects.find(
-				project => project?.project.id === projectId,
-			);
-			const _percentage = Math.floor(sameProject?.percentage ?? 0);
-			setPercentage(_percentage);
-		}
-	}, [boostedProjectsCount]);
 
 	const confirmAllocation = async () => {
 		setIsSaving(true);
@@ -172,6 +183,32 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 
 	if (loading) {
 		return <LottieControl animationData={LoadingAnimation} size={50} />;
+	}
+
+	if (state === EBoostModalState.LIMIT_EXCEEDED) {
+		return (
+			<>
+				<ExceededContainer>
+					<Lead>
+						You have already boosted the maximum 20 projects!
+						<br /> To continue with this boosting, remove at least
+						one other boosted project from your account and come
+						back to this project again!
+					</Lead>
+				</ExceededContainer>
+				<Link href={Routes.MyBoostedProjects} passHref>
+					<BoostedProjectsLink
+						size='medium'
+						label='Go to Boosted Projects'
+					/>
+				</Link>
+				<NotNowButton
+					buttonType='texty-primary'
+					label='Not now'
+					onClick={() => setShowModal(false)}
+				/>
+			</>
+		);
 	}
 
 	return (
