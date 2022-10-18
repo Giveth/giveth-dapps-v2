@@ -4,9 +4,6 @@ import { GlobalConfig } from './types/config';
 
 export const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
 
-export const IS_BOOSTING_ENABLED = process.env.NEXT_PUBLIC_BOOSTING === '1';
-console.log('IS_BOOSTING_ENABLED', IS_BOOSTING_ENABLED);
-
 const envConfig = isProduction ? production : development;
 
 const config: GlobalConfig = {
