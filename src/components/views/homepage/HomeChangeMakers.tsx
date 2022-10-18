@@ -9,6 +9,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
+import { useIntl } from 'react-intl';
 import Routes from '@/lib/constants/Routes';
 import { Arc } from '@/components/styled-components/Arc';
 import { isUserRegistered } from '@/lib/helpers';
@@ -42,6 +43,7 @@ const content = [
 ];
 
 const HomeChangeMakers = () => {
+	const intl = useIntl();
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 	const user = useAppSelector(state => state.user.userData);
@@ -59,24 +61,30 @@ const HomeChangeMakers = () => {
 			<PurpleArc />
 			<CyanArc />
 			<MustardArc />
-			<Title>Calling all Changemakers!</Title>
+			<Title>
+				{intl.formatMessage({
+					id: 'page.home.section.calling_all_change_makers',
+				})}
+			</Title>
 			<br />
 			<LeadStyled size='large'>
-				Do you have a for-good project that&apos;s creating value for
-				society, for the environment, or for the world?
+				{intl.formatMessage({
+					id: 'page.home.section.calling_all_change_makers.subtitle',
+				})}
 			</LeadStyled>
 			<MiddleSection>
 				<Lead>
-					Establish your project on Giveth to tap into the
-					revolutionary funding opportunities of the Ethereum
-					Ecosystem. Start raising funds within minutes. Creating a
-					project is absolutely free!
+					{intl.formatMessage({
+						id: 'page.home.section.calling_all_change_makers.description',
+					})}
 				</Lead>
 				<br />
 				<CreateProjectButton
 					buttonType='primary'
 					size='large'
-					label='CREATE A PROJECT'
+					label={intl.formatMessage({
+						id: 'component.button.create_project',
+					})}
 					onClick={handleCreateButton}
 				/>
 			</MiddleSection>

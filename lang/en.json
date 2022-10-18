@@ -1,3 +1,17 @@
 {
-	"page.home.bigscreen.title": "Welcome to the Future of Giving"
+	"page.home.bigscreen.title": "Welcome to the Future of Giving",
+	"page.home.bigscreen.get_rewarded": "Get rewarded for giving to for-good projects with zero added fees.",
+	"page.home.bigscreen.donate_button": "DONATE NOW",
+	"page.home.bigscreen.see_projects": "SEE PROJECTS",
+	"component.button.create_project": "CREATE A PROJECT",
+	"component.button.sign_in": "SIGN IN",
+	"component.button.connect_wallet": "CONECTAR BILLETERA",
+	"page.projects.middle.donate_directly": "Donate Crypto Directly",
+	"page.projects.title.explore": "Explore",
+	"page.projects.title.projects": "Projects",
+	"page.projects.subtitle.donate_crypto": "Donate crypto directly to for-good projects.",
+	"component.button.see_all_projects": "SEE ALL PROJECTS",
+	"page.home.section.calling_all_change_makers": "Calling all Changemakers!",
+	"page.home.section.calling_all_change_makers.subtitle": "Do you have a for-good project that&apos;s creating value for society, for the environment, or for the world?",
+	"page.home.section.calling_all_change_makers.description": "Establish your project on Giveth to tap into the revolutionary funding opportunities of the Ethereum Ecosystem. Start raising funds within minutes. Creating a project is absolutely free!"
 }

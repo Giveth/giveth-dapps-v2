@@ -10,6 +10,7 @@ import styled from 'styled-components';
 
 import ProjectCard from '@/components/project-card/ProjectCard';
 import { IProject } from '@/apollo/types/types';
+import { useIntl } from 'react-intl';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered } from '@/lib/helpers';
 import { FlexCenter } from '@/components/styled-components/Flex';
@@ -26,6 +27,7 @@ interface IHomeExploreProjects {
 const HomeExploreProjects = (props: IHomeExploreProjects) => {
 	const { projects, totalCount, noTitle } = props;
 
+	const intl = useIntl();
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 	const user = useAppSelector(state => state.user.userData);
@@ -43,10 +45,20 @@ const HomeExploreProjects = (props: IHomeExploreProjects) => {
 			{!noTitle && (
 				<>
 					<Title>
-						Explore <span>{totalCount} Projects</span>
+						{intl.formatMessage({
+							id: 'page.projects.title.explore',
+						})}{' '}
+						<span>
+							{totalCount}{' '}
+							{intl.formatMessage({
+								id: 'page.projects.title.projects',
+							})}
+						</span>
 					</Title>
 					<Subtitle>
-						Donate crypto directly to for-good projects.
+						{intl.formatMessage({
+							id: 'page.projects.subtitle.donate_crypto',
+						})}
 					</Subtitle>
 				</>
 			)}
@@ -59,13 +71,17 @@ const HomeExploreProjects = (props: IHomeExploreProjects) => {
 				<AllProjectsButton
 					buttonType='primary'
 					size='large'
-					label='SEE ALL PROJECTS'
+					label={intl.formatMessage({
+						id: 'component.button.see_all_projects',
+					})}
 					onClick={() => router.push(Routes.Projects)}
 				/>
 				<CreateProject
 					buttonType='texty'
 					size='large'
-					label='Create a Project'
+					label={intl.formatMessage({
+						id: 'component.button.create_project',
+					})}
 					onClick={handleCreateButton}
 				/>
 			</ButtonsWrapper>

@@ -10,6 +10,7 @@ import {
 	IButtonProps,
 } from '@giveth/ui-design-system';
 
+import { useIntl } from 'react-intl';
 import Routes from '@/lib/constants/Routes';
 import ContributeCard from './ProfileContributeCard';
 import { Flex } from '@/components/styled-components/Flex';
@@ -30,6 +31,7 @@ interface ISection {
 }
 
 const ProfileOverviewTab: FC<IUserProfileView> = ({ user }) => {
+	const intl = useIntl();
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 
@@ -59,7 +61,9 @@ const ProfileOverviewTab: FC<IUserProfileView> = ({ user }) => {
 				'Giveth is the place to donate to or raise funds for awesome projects with zero added feeds. ',
 			buttons: [
 				{
-					label: 'CREATE A PROJECT',
+					label: intl.formatMessage({
+						id: 'component.button.create_project',
+					}),
 					onClick: handleCreateButton,
 				},
 				{

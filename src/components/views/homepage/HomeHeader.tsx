@@ -6,7 +6,7 @@ import Routes from '@/lib/constants/Routes';
 import { Arc } from '@/components/styled-components/Arc';
 import { mediaQueries } from '@/lib/constants/constants';
 import Links from '@/lib/constants/links';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 
 const HomeHeader = () => {
 	const intl = useIntl();
@@ -20,19 +20,24 @@ const HomeHeader = () => {
 		<Wrapper>
 			<Title weight={700}>{welcomeTitle}</Title>
 			<Subtitle>
-				Get rewarded for giving to for-good projects with zero added
-				fees.
+				{intl.formatMessage({
+					id: 'page.home.bigscreen.get_rewarded',
+				})}
 			</Subtitle>
 			<MatchingPoolButton
 				buttonType='primary'
 				size='large'
-				label='DONATE NOW'
+				label={intl.formatMessage({
+					id: 'page.home.bigscreen.donate_button',
+				})}
 				onClick={() => router.push(Links.GIVETH_MATCHING)}
 			/>
 			<SeeProjects
 				buttonType='texty'
 				size='large'
-				label='See Projects'
+				label={intl.formatMessage({
+					id: 'page.home.bigscreen.see_projects',
+				})}
 				onClick={() => router.push(Routes.Projects)}
 			/>
 			<MustardArc />

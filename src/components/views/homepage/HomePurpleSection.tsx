@@ -12,6 +12,7 @@ import {
 	H3,
 } from '@giveth/ui-design-system';
 
+import { useIntl } from 'react-intl';
 import TwitterIcon from '/public/images/twitter.svg';
 import { isSSRMode, isUserRegistered } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
@@ -23,6 +24,7 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 
 const HomePurpleSection = () => {
+	const intl = useIntl();
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 	const user = useAppSelector(state => state.user.userData);
@@ -107,7 +109,9 @@ Explore @givethio to support this vision for the Future of Giving. 💜`;
 						<ForMakersButton
 							buttonType='primary'
 							size='large'
-							label='CREATE A PROJECT'
+							label={intl.formatMessage({
+								id: 'component.button.create_project',
+							})}
 							onClick={handleCreateButton}
 						/>
 					</ForMakersContainers>

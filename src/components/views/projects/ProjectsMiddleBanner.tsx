@@ -1,16 +1,23 @@
 import { brandColors, H3, Lead } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
 import { Arc } from '@/components/styled-components/Arc';
 
 const ProjectsMiddleBanner = () => {
+	const intl = useIntl();
 	return (
 		<Container flexDirection='column' gap='23px'>
 			<BigArc />
-			<Title weight={700}>Donate Crypto Directly</Title>
+			<Title weight={700}>
+				{intl.formatMessage({
+					id: 'page.projects.middle.donate_directly',
+				})}
+			</Title>
 			<Caption>
-				Get rewarded for giving to public goods projects with zero added
-				fees.
+				{intl.formatMessage({
+					id: 'page.home.bigscreen.get_rewarded',
+				})}
 			</Caption>
 		</Container>
 	);

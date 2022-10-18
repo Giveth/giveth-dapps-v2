@@ -1,3 +1,17 @@
 {
-	"page.home.bigscreen.title": "Bienvenido al futuro de las Donaciones"
+	"page.home.bigscreen.title": "Bienvenido al futuro de las Donaciones",
+	"page.home.bigscreen.get_rewarded": "Obtén recompensas por donar a buenas causas sin ninguna comisión.",
+	"page.home.bigscreen.donate_button": "DONA AHORA",
+	"page.home.bigscreen.see_projects": "VER PROYECTOS",
+	"component.button.create_project": "CREA UN PROYECTO",
+	"component.button.sign_in": "INGRESA",
+	"component.button.connect_wallet": "CONECTAR BILLETERA",
+	"page.projects.middle.donate_directly": "Dona crypto directamente",
+	"page.projects.title.explore": "Explora",
+	"page.projects.title.projects": "Proyectos",
+	"page.projects.subtitle.donate_crypto": "Dona crypto directamente a buenas causas.",
+	"component.button.see_all_projects": "TODOS LOS PROYECTOS",
+	"page.home.section.calling_all_change_makers": "Llamando a todos los Changemakers!",
+	"page.home.section.calling_all_change_makers.subtitle": "Tienes un proyecto que esta creando valor a la sociedad, al ambiente o al mundo?",
+	"page.home.section.calling_all_change_makers.description": "Crea tu proyecto en Giveth para aprovechar la revolucionarias oportunidades de financiación del ecosistema Ethereum. Comience a recaudar fondos en minutos. Creando un proyecto es absolutamente gratis!"
 }

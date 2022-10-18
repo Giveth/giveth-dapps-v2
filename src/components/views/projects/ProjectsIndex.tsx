@@ -11,6 +11,7 @@ import { captureException } from '@sentry/nextjs';
 
 import ProjectCard from '@/components/project-card/ProjectCard';
 import Routes from '@/lib/constants/Routes';
+import { useIntl } from 'react-intl';
 import { isUserRegistered, showToastError } from '@/lib/helpers';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
@@ -46,6 +47,7 @@ interface IQueries {
 }
 
 const ProjectsIndex = (props: IProjectsView) => {
+	const intl = useIntl();
 	const { projects, totalCount: _totalCount } = props;
 
 	const user = useAppSelector(state => state.user.userData);
@@ -219,7 +221,10 @@ const ProjectsIndex = (props: IProjectsView) => {
 						alignItems={isMobile ? 'stretch' : 'center'}
 					>
 						<Title>
-							Explore <span>{totalCount} Projects</span>
+							{intl.formatMessage({
+								id: 'page.projects.title.explore',
+							})}
+							<span>{totalCount} Projects</span>
 						</Title>
 						<ProjectsSortSelect />
 					</Flex>
