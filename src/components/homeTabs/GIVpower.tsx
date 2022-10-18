@@ -57,7 +57,7 @@ import Growth from '../../../public/images/growth.svg';
 import GivStake from '../../../public/images/giv_stake.svg';
 import Routes from '@/lib/constants/Routes';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import config, { IS_BOOSTING_ENABLED } from '@/configuration';
+import config from '@/configuration';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
 import { formatWeiHelper } from '@/helpers/number';
@@ -108,33 +108,31 @@ export function TabPowerTop() {
 											{givPowerFormatted ?? 0}
 										</TitleBase>
 									</GivAmount>
-									{IS_BOOSTING_ENABLED && (
-										<BoostLinkContainer>
-											{hasZeroGivPower && (
-												<CaptionStyled medium>
-													Stake GIV to get GIVpower!
-												</CaptionStyled>
-											)}
-											<Link
-												href={
+									<BoostLinkContainer>
+										{hasZeroGivPower && (
+											<CaptionStyled medium>
+												Stake GIV to get GIVpower!
+											</CaptionStyled>
+										)}
+										<Link
+											href={
+												hasZeroGivPower
+													? Routes.GIVfarm
+													: Routes.Projects
+											}
+											passHref
+										>
+											<BoostProjectButton
+												label={
 													hasZeroGivPower
-														? Routes.GIVfarm
-														: Routes.Projects
+														? 'STAKE FOR GIVPOWER'
+														: 'BOOST PROJECTS'
 												}
-												passHref
-											>
-												<BoostProjectButton
-													label={
-														hasZeroGivPower
-															? 'STAKE FOR GIVPOWER'
-															: 'BOOST PROJECTS'
-													}
-													size='large'
-													linkType='primary'
-												/>
-											</Link>
-										</BoostLinkContainer>
-									)}
+												size='large'
+												linkType='primary'
+											/>
+										</Link>
+									</BoostLinkContainer>
 								</>
 							) : (
 								<ConnectWallet>
