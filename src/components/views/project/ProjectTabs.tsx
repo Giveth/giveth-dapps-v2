@@ -10,7 +10,6 @@ import styled from 'styled-components';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { IProject } from '@/apollo/types/types';
-import { IS_BOOSTING_ENABLED } from '@/configuration';
 
 interface IProjectTabs {
 	project?: IProject;
@@ -31,14 +30,8 @@ const ProjectTabs = (props: IProjectTabs) => {
 		{ title: 'About' },
 		{ title: 'Updates', badge: totalProjectUpdates },
 		{ title: 'Donations', badge: totalDonations },
-		//TODO: Boosting - uncomment this on boosting launch
-		// { title: 'GIVpower' },
+		{ title: 'GIVpower' },
 	];
-
-	//TODO: Boosting - remove this on boosting launch
-	if (IS_BOOSTING_ENABLED) {
-		tabsArray.push({ title: 'GIVpower' });
-	}
 
 	return (
 		<Wrapper>
