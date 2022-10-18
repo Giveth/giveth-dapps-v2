@@ -1,5 +1,5 @@
 ---
-name: 'Test report - GIVBoosting '
+name: 'Test report - Boosting '
 about: Create a report to help us improve testting
 title: 'GIVpower Boosting | '
 labels: GIVeconomy, GIVPower
