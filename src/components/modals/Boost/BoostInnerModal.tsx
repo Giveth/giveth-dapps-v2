@@ -97,10 +97,10 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 		} else if (isOnlyBoostedProjectIsThisProject) {
 			return (
 				<Caption style={{ whiteSpace: `pre-line` }}>
-					You supported with 100% of your total GIVpower to this
-					project. You can't edit the allocation unless you have at
-					least 1 other boosted project. Try boosting other projects
-					or managing them in &nbsp;
+					You supported this project with 100% of your total GIVpower.
+					You can't edit the allocation unless you have at least 1
+					other boosted project. Try boosting other projects or
+					managing them in &nbsp;
 					<Link href={Routes.MyBoostedProjects} passHref>
 						<GLink>
 							<b>My account</b>

@@ -34,7 +34,7 @@ const BoostedInnerModal: FC<IBoostedModalProps> = ({
 				</Desc>
 				<ActionsSection>
 					<GetButton
-						label='Get GIVpower'
+						label='Get more GIVpower'
 						size='small'
 						href={`${Routes.GIVfarm}/?open=${StakingType.GIV_LM}&chain=gnosis`}
 					/>
