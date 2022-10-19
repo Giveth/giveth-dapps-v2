@@ -8,12 +8,13 @@ import {
 	SublineBold,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-
+import { useIntl } from 'react-intl';
 import { HomeContainer } from '@/components/views/homepage/Home.sc';
 import { deviceSize } from '@/lib/constants/constants';
 import useNewsletterSubscription from '@/hooks/useNewsletterSubscription';
 
 const HomeGetUpdates = () => {
+	const intl = useIntl();
 	const {
 		email,
 		setEmail,
@@ -27,8 +28,10 @@ const HomeGetUpdates = () => {
 			<Container>
 				<Title weight={700}>
 					{successSubscription
-						? `You're In!`
-						: 'Get the latest updates'}
+						? intl.formatMessage({ id: 'page.home.section.you_in' })
+						: intl.formatMessage({
+								id: 'page.home.section.get_updates',
+						  })}
 				</Title>
 				<P>
 					{successSubscription ? (

@@ -21,24 +21,20 @@ import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 
 const content = [
 	{
-		title: 'Easy Onboarding',
-		description:
-			'New to crypto? No Problem. Create a Torus wallet and connect to the DApp by logging in via your favourite web2 platform.',
+		title: 'page.home.section.easy_onboarding',
+		description: 'page.home.section.easy_onboarding_desc',
 	},
 	{
-		title: 'Zero-Added Fees',
-		description:
-			'Create a project or donate directly to for-good projects with zero fees added by Giveth.',
+		title: 'page.home.section.zero_fees',
+		description: 'page.home.section.zero_fees_desc',
 	},
 	{
-		title: 'Project Verification',
-		description:
-			'Encourage project accountability by donating to trusted projects. Apply for verification and your donors will be rewarded with GIVbacks.',
+		title: 'page.home.section.project_verification',
+		description: 'page.home.section.project_verification_desc',
 	},
 	{
-		title: 'The GIVeconomy',
-		description:
-			'Give, earn and govern using GIV and the GIVeconomy. Get rewarded for being a GIVer.',
+		title: 'page.home.section.the_giveconomy',
+		description: 'page.home.section.the_giveconomy_desc2',
 	},
 ];
 
@@ -91,9 +87,17 @@ const HomeChangeMakers = () => {
 			<EndSection>
 				{content.map(i => (
 					<EndItem key={i.title}>
-						<H3 weight={700}>{i.title}</H3>
+						<H3 weight={700}>
+							{intl.formatMessage({
+								id: i.title,
+							})}
+						</H3>
 						<br />
-						<ContentLead>{i.description}</ContentLead>
+						<ContentLead>
+							{intl.formatMessage({
+								id: i.description,
+							})}
+						</ContentLead>
 					</EndItem>
 				))}
 			</EndSection>
