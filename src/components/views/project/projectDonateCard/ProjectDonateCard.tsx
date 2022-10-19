@@ -338,20 +338,18 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 					<ShareLikeBadge
 						type='share'
 						onClick={() => isActive && setShowModal(true)}
-						isSimple={!isAdmin}
+						isSimple
 					/>
 					<ShareLikeBadge
 						type='like'
 						active={heartedByUser}
 						onClick={() => isActive && likeUnlikeProject()}
-						isSimple={!isAdmin}
+						isSimple
 					/>
-					{!isAdmin && (
-						<BoostButton onClick={handleBoostClick}>
-							<BoostButtonText>Boost</BoostButtonText>
-							<IconRocketInSpace color={brandColors.giv[500]} />
-						</BoostButton>
-					)}
+					<BoostButton onClick={handleBoostClick}>
+						<BoostButtonText>Boost</BoostButtonText>
+						<IconRocketInSpace color={brandColors.giv[500]} />
+					</BoostButton>
 				</BadgeWrapper>
 				{!isAdmin && verified && <GIVbackToast />}
 				{isCategories && (
