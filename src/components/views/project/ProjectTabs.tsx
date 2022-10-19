@@ -30,8 +30,9 @@ const ProjectTabs = (props: IProjectTabs) => {
 		{ title: 'About' },
 		{ title: 'Updates', badge: totalProjectUpdates },
 		{ title: 'Donations', badge: totalDonations },
-		{ title: 'GIVpower' },
 	];
+
+	if (project?.verified) tabsArray.push({ title: 'GIVpower' });
 
 	return (
 		<Wrapper>

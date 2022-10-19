@@ -47,13 +47,14 @@ export const LearnMoreButton = styled(ButtonLink)`
 	width: 250px;
 `;
 
-export const HeadingSectionContainer = styled.div`
-	display: flex;
+export const HeadingSectionContainer = styled(Flex)`
 	flex-direction: column;
 	gap: 20px;
+	align-items: center;
 
 	${mediaQueries.desktop} {
 		flex-direction: row;
+		align-items: flex-end;
 	}
 `;
 

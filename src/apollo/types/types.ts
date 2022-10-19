@@ -109,6 +109,7 @@ export interface IUser {
 	projectsCount?: number;
 	donationsCount?: number;
 	likedProjectsCount?: number;
+	boostedProjectsCount?: number;
 	isSignedIn: boolean;
 }
 

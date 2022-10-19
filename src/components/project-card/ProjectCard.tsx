@@ -113,10 +113,10 @@ const ProjectCard = (props: IProjectCard) => {
 						</PriceText>
 						<LightSubline> Raised</LightSubline>
 					</Flex>
-					<>
-						<Hr />
-						<Flex justifyContent='space-between'>
-							{verified && (
+					{verified && (
+						<>
+							<Hr />
+							<Flex justifyContent='space-between'>
 								<Flex gap='16px'>
 									<Flex alignItems='center' gap='4px'>
 										<IconVerified
@@ -137,23 +137,26 @@ const ProjectCard = (props: IProjectCard) => {
 										</GivBackText>
 									</Flex>
 								</Flex>
-							)}
-							{projectPower?.powerRank &&
-								projectPower?.totalPower !== 0 && (
-									<GivpowerRankContainer
-										gap='8px'
-										alignItems='center'
-									>
-										<IconRocketInSpace16
-											color={neutralColors.gray[700]}
-										/>
-										<B>
-											#{projectPower?.powerRank || '--'}
-										</B>
-									</GivpowerRankContainer>
-								)}
-						</Flex>
-					</>
+								{projectPower?.powerRank &&
+									projectPower?.totalPower !== 0 && (
+										<GivpowerRankContainer
+											gap='8px'
+											alignItems='center'
+										>
+											<IconRocketInSpace16
+												color={neutralColors.gray[700]}
+											/>
+											<B>
+												#
+												{projectPower?.powerRank ||
+													'--'}
+											</B>
+										</GivpowerRankContainer>
+									)}
+							</Flex>
+						</>
+					)}
+
 					<ActionButtons>
 						<Link href={slugToProjectDonate(slug)} passHref>
 							<CustomizedDonateButton

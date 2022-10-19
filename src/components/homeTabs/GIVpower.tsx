@@ -178,6 +178,7 @@ export function TabPowerBottom() {
 						label='Learn More'
 						target='_blank'
 						href={links.GIVPOWER_DOC}
+						size='large'
 					/>
 				</HeadingSectionContainer>
 				<FeaturesCardContainer>
