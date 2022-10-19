@@ -239,7 +239,8 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 							direction={'bottom'}
 						>
 							<LockInfotooltip>
-								The amount of projects you have already boosted.
+								This is the number of projects you have boosted
+								before
 							</LockInfotooltip>
 						</IconWithTooltip>
 					</Flex>
