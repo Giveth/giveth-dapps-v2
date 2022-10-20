@@ -31,7 +31,7 @@ interface ISection {
 }
 
 const ProfileOverviewTab: FC<IUserProfileView> = ({ user }) => {
-	const intl = useIntl();
+	const { formatMessage } = useIntl();
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 
@@ -61,7 +61,7 @@ const ProfileOverviewTab: FC<IUserProfileView> = ({ user }) => {
 				'Giveth is the place to donate to or raise funds for awesome projects with zero added feeds. ',
 			buttons: [
 				{
-					label: intl.formatMessage({
+					label: formatMessage({
 						id: 'component.button.create_project',
 					}),
 					onClick: handleCreateButton,

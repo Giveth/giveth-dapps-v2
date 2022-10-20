@@ -24,7 +24,7 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 
 const HomePurpleSection = () => {
-	const intl = useIntl();
+	const { formatMessage } = useIntl();
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 	const user = useAppSelector(state => state.user.userData);
@@ -53,14 +53,14 @@ Explore @givethio to support this vision for the Future of Giving. 💜`;
 			</MustardThing>
 			<Container>
 				<GivingEffortless weight={700}>
-					{intl.formatMessage({
+					{formatMessage({
 						id: 'page.home.section.giving_is_effortless',
 					})}
 				</GivingEffortless>
 				<GivingButtons>
 					<StartGiving
 						size='large'
-						label={intl.formatMessage({
+						label={formatMessage({
 							id: 'component.button.start_giving',
 						})}
 						onClick={() => router.push(Routes.Projects)}
@@ -78,7 +78,7 @@ Explore @givethio to support this vision for the Future of Giving. 💜`;
 								height={24}
 							/>
 							<TwitterButtonText size='Big'>
-								{intl.formatMessage({
+								{formatMessage({
 									id: 'component.button.tweet_this',
 								})}
 							</TwitterButtonText>
@@ -87,20 +87,20 @@ Explore @givethio to support this vision for the Future of Giving. 💜`;
 				</GivingButtons>
 				<GIVeconomy>
 					<H3 weight={700}>
-						{intl.formatMessage({
+						{formatMessage({
 							id: 'page.home.section.the_giveconomy',
 						})}
 					</H3>
 					<br />
 					<Lead>
-						{intl.formatMessage({
+						{formatMessage({
 							id: 'page.home.section.the_giveconomy_desc',
 						})}
 					</Lead>
 					<br />
 					<Link href={Routes.GIVECONOMY} passHref>
 						<GIVeconomyUrl>
-							{intl.formatMessage({
+							{formatMessage({
 								id: 'component.button.learn_more_giveconomy',
 							})}
 						</GIVeconomyUrl>
@@ -109,13 +109,13 @@ Explore @givethio to support this vision for the Future of Giving. 💜`;
 				<ForMakersGivers>
 					<ForMakersContainers md={6}>
 						<H3 weight={700}>
-							{intl.formatMessage({
+							{formatMessage({
 								id: 'page.home.section.for_projects',
 							})}
 						</H3>
 						<br />
 						<Lead>
-							{intl.formatMessage({
+							{formatMessage({
 								id: 'page.home.section.for_projects_desc',
 							})}
 						</Lead>
@@ -123,7 +123,7 @@ Explore @givethio to support this vision for the Future of Giving. 💜`;
 						<ForMakersButton
 							buttonType='primary'
 							size='large'
-							label={intl.formatMessage({
+							label={formatMessage({
 								id: 'component.button.create_project',
 							})}
 							onClick={handleCreateButton}
@@ -131,13 +131,13 @@ Explore @givethio to support this vision for the Future of Giving. 💜`;
 					</ForMakersContainers>
 					<ForMakersContainers md={6}>
 						<H3 weight={700}>
-							{intl.formatMessage({
+							{formatMessage({
 								id: 'page.home.section.for_givers',
 							})}
 						</H3>
 						<br />
 						<Lead>
-							{intl.formatMessage({
+							{formatMessage({
 								id: 'page.home.section.for_givers_desc',
 							})}
 						</Lead>
@@ -145,7 +145,7 @@ Explore @givethio to support this vision for the Future of Giving. 💜`;
 						<ForMakersButton
 							buttonType='primary'
 							size='large'
-							label={intl.formatMessage({
+							label={formatMessage({
 								id: 'component.button.donate_project',
 							})}
 							onClick={() => router.push(Routes.Projects)}

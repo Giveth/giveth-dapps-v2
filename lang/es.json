@@ -44,5 +44,21 @@
 	"page.home.nice_desc": "Dona con tokens aptos a Giveth y recibe $nice, son redimibles por swag y más!",
 	"page.home.nice_learn": "Aprende más sobre como funciona $nice",
 	"page.home.nice_donate": "Dona a Giveth",
-	"page.home.nice_swag": "Mira nuestro swag shop"
+	"page.home.nice_swag": "Mira nuestro swag shop",
+	"component.title.home": "Home",
+	"component.title.projects": "Proyectos",
+	"component.title.about_us": "Sobre Nosotros",
+	"component.title.faq": "FAQ",
+	"component.title.support": "Soporte",
+	"component.title.join_our_community": "Unete a la Comunidad",
+	"component.title.what_is_giveth": "¿Qué es Giveth?",
+	"component.title.user_guides": "Guias de Usuario",
+	"component.title.dev_docs": "Documentación",
+	"component.title.tos": "Terminos de USo",
+	"component.title.giveth_trace": "Giveth Trace",
+	"component.title.commons_stack": "Commons Stack",
+	"component.title.partnerships": "Partnerships",
+	"component.title.we_hiring": "Estamos contratando!",
+	"component.title.support_us": "Apoyanos",
+	"component.title.with_your_donation": "con tu Donación"
 }

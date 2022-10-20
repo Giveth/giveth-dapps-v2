@@ -27,7 +27,7 @@ interface IHomeExploreProjects {
 const HomeExploreProjects = (props: IHomeExploreProjects) => {
 	const { projects, totalCount, noTitle } = props;
 
-	const intl = useIntl();
+	const { formatMessage } = useIntl();
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 	const user = useAppSelector(state => state.user.userData);
@@ -45,18 +45,18 @@ const HomeExploreProjects = (props: IHomeExploreProjects) => {
 			{!noTitle && (
 				<>
 					<Title>
-						{intl.formatMessage({
+						{formatMessage({
 							id: 'page.projects.title.explore',
 						})}{' '}
 						<span>
 							{totalCount}{' '}
-							{intl.formatMessage({
+							{formatMessage({
 								id: 'page.projects.title.projects',
 							})}
 						</span>
 					</Title>
 					<Subtitle>
-						{intl.formatMessage({
+						{formatMessage({
 							id: 'page.projects.subtitle.donate_crypto',
 						})}
 					</Subtitle>
@@ -71,7 +71,7 @@ const HomeExploreProjects = (props: IHomeExploreProjects) => {
 				<AllProjectsButton
 					buttonType='primary'
 					size='large'
-					label={intl.formatMessage({
+					label={formatMessage({
 						id: 'component.button.see_all_projects',
 					})}
 					onClick={() => router.push(Routes.Projects)}
@@ -79,7 +79,7 @@ const HomeExploreProjects = (props: IHomeExploreProjects) => {
 				<CreateProject
 					buttonType='texty'
 					size='large'
-					label={intl.formatMessage({
+					label={formatMessage({
 						id: 'component.button.create_project',
 					})}
 					onClick={handleCreateButton}

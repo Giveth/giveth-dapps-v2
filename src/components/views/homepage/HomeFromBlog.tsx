@@ -11,7 +11,7 @@ import { deviceSize } from '@/lib/constants/constants';
 
 const HomeFromBlog = () => {
 	const [mediumPosts, setMediumPosts] = useState<IMediumBlogPost[]>();
-	const intl = useIntl();
+	const { formatMessage } = useIntl();
 
 	useEffect(() => {
 		const getPosts = async () => {
@@ -28,7 +28,7 @@ const HomeFromBlog = () => {
 		<Wrapper>
 			<Container>
 				<Title>
-					{intl.formatMessage({ id: 'page.home.section.from_blog' })}
+					{formatMessage({ id: 'page.home.section.from_blog' })}
 				</Title>
 				{mediumPosts && (
 					<Row>

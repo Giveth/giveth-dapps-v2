@@ -28,7 +28,7 @@ import {
 	LargeCreateProject,
 	MainLogoBtn,
 } from './Header.sc';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { RewardMenu } from '@/components/menu/RewardMenu';
 import MenuWallet from '@/components/menu/MenuWallet';
 import { menuRoutes } from '../menu/menuRoutes';
@@ -74,7 +74,7 @@ const Header: FC<IHeader> = () => {
 	);
 	const theme = useAppSelector(state => state.general.theme);
 	const router = useRouter();
-	const intl = useIntl();
+	const { formatMessage } = useIntl();
 	const isLight = theme === ETheme.Light;
 
 	const handleBack = () => {
@@ -222,7 +222,7 @@ const Header: FC<IHeader> = () => {
 			<Flex gap='8px'>
 				<LargeCreateProject>
 					<Button
-						label={intl.formatMessage({
+						label={formatMessage({
 							id: 'component.button.create_project',
 						})}
 						size='small'
@@ -303,7 +303,7 @@ const Header: FC<IHeader> = () => {
 					<ConnectButton
 						buttonType='primary'
 						size='small'
-						label={intl.formatMessage({
+						label={formatMessage({
 							id: isGIVeconomyRoute
 								? 'component.button.connect_wallet'
 								: 'component.button.sign_in',

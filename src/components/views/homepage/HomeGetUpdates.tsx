@@ -14,7 +14,7 @@ import { deviceSize } from '@/lib/constants/constants';
 import useNewsletterSubscription from '@/hooks/useNewsletterSubscription';
 
 const HomeGetUpdates = () => {
-	const intl = useIntl();
+	const { formatMessage } = useIntl();
 	const {
 		email,
 		setEmail,
@@ -28,19 +28,19 @@ const HomeGetUpdates = () => {
 			<Container>
 				<Title weight={700}>
 					{successSubscription
-						? intl.formatMessage({ id: 'page.home.section.you_in' })
-						: intl.formatMessage({
+						? formatMessage({ id: 'page.home.section.you_in' })
+						: formatMessage({
 								id: 'page.home.section.get_updates',
 						  })}
 				</Title>
 				<P>
 					{successSubscription ? (
 						<span>
-							{intl.formatMessage({
+							{formatMessage({
 								id: 'page.home.section.success_subs_one',
 							})}
 							<br />
-							{intl.formatMessage({
+							{formatMessage({
 								id: 'page.home.section.success_subs_two',
 							})}{' '}
 							<StyledLink
@@ -49,7 +49,7 @@ const HomeGetUpdates = () => {
 								rel='noreferrer'
 							>
 								GIVnews page
-								{intl.formatMessage({
+								{formatMessage({
 									id: 'page.home.section.givnews_page',
 								})}
 							</StyledLink>
@@ -57,7 +57,7 @@ const HomeGetUpdates = () => {
 						</span>
 					) : (
 						<span>
-							{intl.formatMessage({
+							{formatMessage({
 								id: 'page.home.section.subscribe_newsletter',
 							})}
 						</span>
@@ -75,7 +75,7 @@ const HomeGetUpdates = () => {
 						<InputBox>
 							<div>
 								<EmailInput
-									placeholder={intl.formatMessage({
+									placeholder={formatMessage({
 										id: 'component.button.your_email_address',
 									})}
 									error={error}
@@ -91,7 +91,7 @@ const HomeGetUpdates = () => {
 							</div>
 							<SubscribeButton
 								disabled={!validateEmail(email)}
-								label={intl.formatMessage({
+								label={formatMessage({
 									id: 'component.button.subscribe',
 								})}
 								type='submit'

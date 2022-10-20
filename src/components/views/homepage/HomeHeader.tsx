@@ -9,10 +9,10 @@ import Links from '@/lib/constants/links';
 import { useIntl } from 'react-intl';
 
 const HomeHeader = () => {
-	const intl = useIntl();
+	const { formatMessage } = useIntl();
 	const router = useRouter();
 
-	const welcomeTitle = intl.formatMessage({
+	const welcomeTitle = formatMessage({
 		id: 'page.home.bigscreen.title',
 	});
 
@@ -20,14 +20,14 @@ const HomeHeader = () => {
 		<Wrapper>
 			<Title weight={700}>{welcomeTitle}</Title>
 			<Subtitle>
-				{intl.formatMessage({
+				{formatMessage({
 					id: 'page.home.bigscreen.get_rewarded',
 				})}
 			</Subtitle>
 			<MatchingPoolButton
 				buttonType='primary'
 				size='large'
-				label={intl.formatMessage({
+				label={formatMessage({
 					id: 'page.home.bigscreen.donate_button',
 				})}
 				onClick={() => router.push(Links.GIVETH_MATCHING)}
@@ -35,7 +35,7 @@ const HomeHeader = () => {
 			<SeeProjects
 				buttonType='texty'
 				size='large'
-				label={intl.formatMessage({
+				label={formatMessage({
 					id: 'page.home.bigscreen.see_projects',
 				})}
 				onClick={() => router.push(Routes.Projects)}

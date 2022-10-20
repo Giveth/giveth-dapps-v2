@@ -5,17 +5,17 @@ import { Flex } from '@/components/styled-components/Flex';
 import { Arc } from '@/components/styled-components/Arc';
 
 const ProjectsMiddleBanner = () => {
-	const intl = useIntl();
+	const { formatMessage } = useIntl();
 	return (
 		<Container flexDirection='column' gap='23px'>
 			<BigArc />
 			<Title weight={700}>
-				{intl.formatMessage({
+				{formatMessage({
 					id: 'page.projects.middle.donate_directly',
 				})}
 			</Title>
 			<Caption>
-				{intl.formatMessage({
+				{formatMessage({
 					id: 'page.home.bigscreen.get_rewarded',
 				})}
 			</Caption>

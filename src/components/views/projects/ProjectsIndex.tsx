@@ -47,7 +47,7 @@ interface IQueries {
 }
 
 const ProjectsIndex = (props: IProjectsView) => {
-	const intl = useIntl();
+	const { formatMessage } = useIntl();
 	const { projects, totalCount: _totalCount } = props;
 
 	const user = useAppSelector(state => state.user.userData);
@@ -221,7 +221,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 						alignItems={isMobile ? 'stretch' : 'center'}
 					>
 						<Title>
-							{intl.formatMessage({
+							{formatMessage({
 								id: 'page.projects.title.explore',
 							})}
 							<span>{totalCount} Projects</span>

@@ -39,7 +39,7 @@ const content = [
 ];
 
 const HomeChangeMakers = () => {
-	const intl = useIntl();
+	const { formatMessage } = useIntl();
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 	const user = useAppSelector(state => state.user.userData);
@@ -58,19 +58,19 @@ const HomeChangeMakers = () => {
 			<CyanArc />
 			<MustardArc />
 			<Title>
-				{intl.formatMessage({
+				{formatMessage({
 					id: 'page.home.section.calling_all_change_makers',
 				})}
 			</Title>
 			<br />
 			<LeadStyled size='large'>
-				{intl.formatMessage({
+				{formatMessage({
 					id: 'page.home.section.calling_all_change_makers.subtitle',
 				})}
 			</LeadStyled>
 			<MiddleSection>
 				<Lead>
-					{intl.formatMessage({
+					{formatMessage({
 						id: 'page.home.section.calling_all_change_makers.description',
 					})}
 				</Lead>
@@ -78,7 +78,7 @@ const HomeChangeMakers = () => {
 				<CreateProjectButton
 					buttonType='primary'
 					size='large'
-					label={intl.formatMessage({
+					label={formatMessage({
 						id: 'component.button.create_project',
 					})}
 					onClick={handleCreateButton}
@@ -88,13 +88,13 @@ const HomeChangeMakers = () => {
 				{content.map(i => (
 					<EndItem key={i.title}>
 						<H3 weight={700}>
-							{intl.formatMessage({
+							{formatMessage({
 								id: i.title,
 							})}
 						</H3>
 						<br />
 						<ContentLead>
-							{intl.formatMessage({
+							{formatMessage({
 								id: i.description,
 							})}
 						</ContentLead>
