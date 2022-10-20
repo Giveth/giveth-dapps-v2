@@ -6,12 +6,11 @@ import { networksParams } from '@/helpers/blockchain';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import { sendTransaction, showToastError } from '@/lib/helpers';
 import { saveDonation, updateDonation } from '@/services/donation';
-import { IDonateModalProps } from '@/components/modals/DonateModal';
 import { EDonationStatus } from '@/apollo/types/gqlEnums';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
-import config from '@/configuration';
 import { MAX_TOKEN_ORDER } from '@/lib/constants/tokens';
 import { IWalletAddress } from '@/apollo/types/types';
+import { ISuccessDonation } from '@/components/views/donate/CryptoDonation';
 
 export interface ISelectedToken extends IProjectAcceptedToken {
 	value?: IProjectAcceptedToken;
@@ -96,16 +95,25 @@ export const getNetworkNames = (networks: number[], text: string) => {
 	});
 };
 
-export interface IConfirmDonation extends IDonateModalProps {
-	setDonationSaved: (value: boolean) => void;
+export interface IConfirmDonation {
+	setDonationSaved?: (value: boolean) => void;
 	web3Context: Web3ReactContextInterface;
 	setDonating: (value: boolean) => void;
+	walletAddress: string;
+	projectId: number;
+	isDonationToGiveth?: boolean;
+	amount: number;
+	token: IProjectAcceptedToken;
+	setSuccessDonation?: (value: ISuccessDonation) => void;
+	setFailedModalType: (i: EDonationFailedType) => void;
+	givBackEligible?: boolean;
+	setTxHash: (i: string) => void;
+	anonymous?: boolean;
 }
 
 export const confirmDonation = async (props: IConfirmDonation) => {
 	const {
-		mainProjectAddress,
-		secondaryProjectAddress,
+		walletAddress,
 		amount,
 		token,
 		setSuccessDonation,
@@ -115,14 +123,12 @@ export const confirmDonation = async (props: IConfirmDonation) => {
 		setDonationSaved,
 		givBackEligible,
 		setTxHash,
+		isDonationToGiveth,
 	} = props;
 
-	const { library, chainId } = web3Context;
-	const walletAddress =
-		chainId === config.PRIMARY_NETWORK.id
-			? mainProjectAddress
-			: secondaryProjectAddress;
+	const { library } = web3Context;
 	const { address } = token;
+
 	let donationId = 0,
 		donationSaved = false;
 
@@ -142,7 +148,7 @@ export const confirmDonation = async (props: IConfirmDonation) => {
 				saveDonation({ nonce, txHash, ...props })
 					.then(res => {
 						donationId = res;
-						setDonationSaved(true);
+						setDonationSaved && setDonationSaved(true);
 						donationSaved = true;
 					})
 					.catch(() => {
@@ -153,6 +159,7 @@ export const confirmDonation = async (props: IConfirmDonation) => {
 			onReceipt: async (txHash: string) => {
 				updateDonation(donationId, EDonationStatus.VERIFIED);
 				donationSaved &&
+					setSuccessDonation &&
 					setSuccessDonation({ txHash, givBackEligible });
 			},
 		};
@@ -177,7 +184,7 @@ export const confirmDonation = async (props: IConfirmDonation) => {
 			setFailedModalType(EDonationFailedType.FAILED);
 		}
 		setDonating(false);
-		setDonationSaved(false);
+		setDonationSaved && setDonationSaved(false);
 		captureException(error, {
 			tags: {
 				section: 'confirmDonation',

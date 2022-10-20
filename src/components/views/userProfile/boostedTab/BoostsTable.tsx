@@ -13,9 +13,9 @@ import {
 } from '@giveth/ui-design-system';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
-
 import BigNumber from 'bignumber.js';
 import Link from 'next/link';
+
 import {
 	RowWrapper,
 	TableCell,

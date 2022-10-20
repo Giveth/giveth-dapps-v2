@@ -58,7 +58,7 @@ const ProjectCard = (props: IProjectCard) => {
 					{traceCampaignId && <VerificationBadge trace />}
 				</BadgeContainer>
 			)}
-			<CardBody>
+			<CardBody isNew={isNew}>
 				<InternalLink href={slugToProjectView(slug)}>
 					<Title>{title}</Title>
 				</InternalLink>
@@ -94,10 +94,11 @@ const Description = styled(P)`
 	overflow: hidden;
 	color: ${neutralColors.gray[900]};
 	margin-bottom: 20px;
+	margin-top: 8px;
 `;
 
-const CardBody = styled.div`
-	margin: 50px 24px 0 24px;
+const CardBody = styled.div<{ isNew?: boolean }>`
+	margin: ${props => (props.isNew ? '50px 24px 0' : '50px 0 0')};
 	text-align: left;
 `;
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components';
 import {
 	brandColors,
@@ -9,12 +9,11 @@ import {
 	IconSpark,
 } from '@giveth/ui-design-system';
 import { mediaQueries } from '@/lib/constants/constants';
-import { IProjectBySlug } from '@/apollo/types/types';
 import links from '@/lib/constants/links';
+import { IDonateRouteProps } from '../../../../pages/donate/[slug]';
 
-const NiceBanner = (props: IProjectBySlug) => {
-	const { project } = props;
-	// Only show this on the Giveth project}
+const NiceBanner: FC<IDonateRouteProps> = ({ project }) => {
+	// Only show this on the Giveth project
 	if (project.id !== '1') return null;
 	return (
 		<>
@@ -52,7 +51,7 @@ const Container = styled.div`
 	height: 200px;
 	align-items: center;
 	background: white;
-	box-shadow: 0px 3px 20px rgba(212, 218, 238, 0.4);
+	box-shadow: 0 3px 20px rgba(212, 218, 238, 0.4);
 	border-radius: 16px;
 	margin: 0 40px 16px 40px;
 	${mediaQueries.tablet} {

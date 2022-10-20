@@ -29,12 +29,11 @@ export const updateDonation = (donationId: number, status: EDonationStatus) => {
 };
 
 export async function saveDonation(props: IOnTxHash) {
-	const { web3Context, txHash, amount, token, project, anonymous, nonce } =
+	const { web3Context, txHash, amount, token, projectId, anonymous, nonce } =
 		props;
 
 	const { chainId } = web3Context;
 	const { address, symbol } = token;
-	const projectId = Number(project.id);
 
 	let donationId = 0;
 	try {

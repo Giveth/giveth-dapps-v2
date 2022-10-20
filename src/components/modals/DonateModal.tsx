@@ -29,6 +29,7 @@ import { useAppDispatch } from '@/features/hooks';
 import { signOut } from '@/features/user/user.thunks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import config from '@/configuration';
 
 export interface IDonateModalProps extends IModal {
 	setFailedModalType: (i: EDonationFailedType) => void;
@@ -36,16 +37,31 @@ export interface IDonateModalProps extends IModal {
 	project: IProject;
 	token: IProjectAcceptedToken;
 	amount: number;
+	donationToGiveth: number;
 	price?: number;
 	anonymous?: boolean;
 	setSuccessDonation: (i: ISuccessDonation) => void;
 	givBackEligible?: boolean;
-	mainProjectAddress?: string;
-	secondaryProjectAddress?: string;
+	projectWalletAddress: string;
+	givethWalletAddress: string;
 }
 
 const DonateModal = (props: IDonateModalProps) => {
-	const { project, token, amount, price, setShowModal } = props;
+	const {
+		project,
+		token,
+		amount,
+		price,
+		setShowModal,
+		projectWalletAddress,
+		givethWalletAddress,
+		donationToGiveth,
+		anonymous,
+		setSuccessDonation,
+		setFailedModalType,
+		givBackEligible,
+		setTxHash,
+	} = props;
 
 	const web3Context = useWeb3React();
 	const dispatch = useAppDispatch();
@@ -53,12 +69,17 @@ const DonateModal = (props: IDonateModalProps) => {
 
 	const [donating, setDonating] = useState(false);
 	const [donationSaved, setDonationSaved] = useState(false);
+	const [isDonationToGiveth, setIsDonationToGiveth] = useState(
+		donationToGiveth > 0,
+	);
 
 	const { title } = project || {};
 
 	const avgPrice = price && price * amount;
+	const donationToGivethAmount = (amount * donationToGiveth) / 100;
+	const donationToGivethPrice = price && donationToGivethAmount * price;
 
-	const validateToken = () => {
+	const validateToken = async () => {
 		setDonating(true);
 		client
 			.query({
@@ -82,13 +103,34 @@ const DonateModal = (props: IDonateModalProps) => {
 		closeModal();
 	};
 
-	const handleDonate = () => {
-		confirmDonation({
-			...props,
-			setDonationSaved,
+	const handleDonate = async () => {
+		const txProps = {
+			anonymous,
 			web3Context,
 			setDonating,
-		}).then();
+			amount,
+			token,
+			setFailedModalType,
+			setTxHash,
+		};
+		if (donationToGiveth > 0) {
+			await confirmDonation({
+				...txProps,
+				walletAddress: givethWalletAddress,
+				amount: donationToGivethAmount,
+				projectId: config.GIVETH_PROJECT_ID,
+				isDonationToGiveth: true,
+			});
+			setIsDonationToGiveth(false);
+		}
+		await confirmDonation({
+			...txProps,
+			givBackEligible,
+			setSuccessDonation,
+			setDonationSaved,
+			walletAddress: projectWalletAddress,
+			projectId: Number(project.id),
+		});
 	};
 
 	return (
@@ -103,11 +145,25 @@ const DonateModal = (props: IDonateModalProps) => {
 				<DonatingBox>
 					<P>You are donating</P>
 					<H3>
-						{formatPrice(amount)} {token.symbol}
+						{formatPrice(
+							isDonationToGiveth
+								? donationToGivethAmount
+								: amount,
+						)}{' '}
+						{token.symbol}
 					</H3>
-					{avgPrice ? <H6>{formatPrice(avgPrice)} USD</H6> : null}
+					{avgPrice ? (
+						<H6>
+							{formatPrice(
+								isDonationToGiveth
+									? donationToGivethPrice
+									: avgPrice,
+							)}{' '}
+							USD
+						</H6>
+					) : null}
 					<P>
-						To <span>{title}</span>
+						To <span>{isDonationToGiveth ? 'Giveth' : title}</span>
 					</P>
 				</DonatingBox>
 				<Buttons>
