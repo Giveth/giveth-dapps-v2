@@ -11,33 +11,36 @@ import {
 import { mediaQueries } from '@/lib/constants/constants';
 import links from '@/lib/constants/links';
 import { IDonateRouteProps } from '../../../../pages/donate/[slug]';
+import config from '@/configuration';
 
 const NiceBanner: FC<IDonateRouteProps> = ({ project }) => {
 	// Only show this on the Giveth project
-	if (project.id !== '1') return null;
+	if (+project.id! !== config.GIVETH_PROJECT_ID) return null;
 	return (
-		<>
-			<Container>
-				<Content>
-					<Title>
-						Get $nice{' '}
-						<IconSpark size={32} color={brandColors.giv[500]} />
-					</Title>
-					<Lead>
-						Donate DAI, xDAI or wxDAI to this project and receive
-						$nice tokens in addition to GIVbacks.{' '}
-						<InfoReadMore target='_blank' href={links.NICE_DOC}>
-							<span>Learn More </span>
-							<IconExternalLink
-								size={16}
-								color={brandColors.pinky[500]}
-							/>
-						</InfoReadMore>
-					</Lead>
-				</Content>
-				<BgImage />
-			</Container>
-		</>
+		<Container>
+			<Content>
+				<Title>
+					Get $nice{' '}
+					<IconSpark size={32} color={brandColors.giv[500]} />
+				</Title>
+				<Lead>
+					Donate DAI, xDAI or wxDAI to this project and receive $nice
+					tokens in addition to GIVbacks.
+					<InfoReadMore
+						rel='noopener noreferrer'
+						target='_blank'
+						href={links.NICE_DOC}
+					>
+						<span>Learn More </span>
+						<IconExternalLink
+							size={16}
+							color={brandColors.pinky[500]}
+						/>
+					</InfoReadMore>
+				</Lead>
+			</Content>
+			<BgImage />
+		</Container>
 	);
 };
 
@@ -75,7 +78,7 @@ const BgImage = styled.div`
 `;
 
 const InfoReadMore = styled(GLink)`
-	padding: 0 0 0 10px;
+	padding-left: 10px;
 	color: ${brandColors.pinky[500]};
 `;
 

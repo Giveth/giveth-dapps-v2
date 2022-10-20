@@ -108,6 +108,7 @@ const CryptoDonation = (props: {
 	} = organization || {};
 	const isActive = status?.name === EProjectStatus.ACTIVE;
 	const mainTokenPrice = new BigNumber(ethPrice).toNumber();
+	const noDonationSplit = Number(projectId!) === config.GIVETH_PROJECT_ID;
 
 	const projectWalletAddress =
 		addresses?.find(a => a.isRecipient && a.networkId === networkId)
@@ -139,7 +140,9 @@ const CryptoDonation = (props: {
 	const [failedModalType, setFailedModalType] =
 		useState<EDonationFailedType>();
 	const [txHash, setTxHash] = useState<string>();
-	const [donationToGiveth, setDonationToGiveth] = useState(5);
+	const [donationToGiveth, setDonationToGiveth] = useState(
+		noDonationSplit ? 0 : 5,
+	);
 
 	const stopPolling = useRef<any>(null);
 	const tokenSymbol = selectedToken?.symbol;
@@ -483,10 +486,14 @@ const CryptoDonation = (props: {
 				)}
 			</InputContainer>
 
-			<DonateToGiveth
-				setDonationToGiveth={setDonationToGiveth}
-				donationToGiveth={donationToGiveth}
-			/>
+			{!noDonationSplit ? (
+				<DonateToGiveth
+					setDonationToGiveth={setDonationToGiveth}
+					donationToGiveth={donationToGiveth}
+				/>
+			) : (
+				<br />
+			)}
 
 			{selectedToken && (
 				<GIVBackToast
@@ -496,12 +503,16 @@ const CryptoDonation = (props: {
 				/>
 			)}
 
-			<TotalDonation
-				donationToGiveth={donationToGiveth}
-				donationToProject={amountTyped}
-				projectTitle={projectTitle}
-				tokenSymbol={selectedToken?.symbol}
-			/>
+			{!noDonationSplit ? (
+				<TotalDonation
+					donationToGiveth={donationToGiveth}
+					donationToProject={amountTyped}
+					projectTitle={projectTitle}
+					tokenSymbol={selectedToken?.symbol}
+				/>
+			) : (
+				<EmptySpace />
+			)}
 
 			{!isActive && (
 				<InlineToast
@@ -541,6 +552,10 @@ const CryptoDonation = (props: {
 		</MainContainer>
 	);
 };
+
+const EmptySpace = styled.div`
+	margin-top: 70px;
+`;
 
 const MainContainer = styled.div`
 	display: flex;
