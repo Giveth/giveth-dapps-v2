@@ -61,7 +61,7 @@ export const userSlice = createSlice({
 		decrementBoostedProjectsCount: state => {
 			if (state.userData) {
 				state.userData.boostedProjectsCount =
-					(state.userData.likedProjectsCount || 1) - 1;
+					(state.userData?.boostedProjectsCount || 1) - 1;
 			}
 		},
 		setIsLoading: (state, action: PayloadAction<boolean>) => {
