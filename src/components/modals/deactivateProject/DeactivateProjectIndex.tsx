@@ -155,11 +155,12 @@ const formSteps = ['Deactivating', 'Why?', 'Done'];
 
 const Wrapper = styled.div`
 	max-width: 500px;
-	padding: 0 24px 20px;
+	padding: 24px 24px 20px;
 `;
 
 const TextWrapper = styled.div`
 	text-align: left;
+	margin-top: 8px;
 `;
 
 const GivBackNotif = styled.div`

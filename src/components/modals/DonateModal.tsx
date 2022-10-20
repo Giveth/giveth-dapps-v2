@@ -30,6 +30,7 @@ import { signOut } from '@/features/user/user.thunks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import config from '@/configuration';
+import FormProgress from '@/components/FormProgress';
 
 export interface IDonateModalProps extends IModal {
 	setFailedModalType: (i: EDonationFailedType) => void;
@@ -66,12 +67,11 @@ const DonateModal = (props: IDonateModalProps) => {
 	const web3Context = useWeb3React();
 	const dispatch = useAppDispatch();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const isDonatingToGiveth = donationToGiveth > 0;
 
 	const [donating, setDonating] = useState(false);
 	const [donationSaved, setDonationSaved] = useState(false);
-	const [isDonationToGiveth, setIsDonationToGiveth] = useState(
-		donationToGiveth > 0,
-	);
+	const [isFirstTx, setIsFirstTx] = useState(isDonatingToGiveth);
 
 	const { title } = project || {};
 
@@ -113,7 +113,7 @@ const DonateModal = (props: IDonateModalProps) => {
 			setFailedModalType,
 			setTxHash,
 		};
-		if (donationToGiveth > 0) {
+		if (isDonatingToGiveth) {
 			await confirmDonation({
 				...txProps,
 				walletAddress: givethWalletAddress,
@@ -121,7 +121,7 @@ const DonateModal = (props: IDonateModalProps) => {
 				projectId: config.GIVETH_PROJECT_ID,
 				isDonationToGiveth: true,
 			});
-			setIsDonationToGiveth(false);
+			setIsFirstTx(false);
 		}
 		await confirmDonation({
 			...txProps,
@@ -142,28 +142,30 @@ const DonateModal = (props: IDonateModalProps) => {
 			headerIcon={<IconWalletApprove size={32} />}
 		>
 			<DonateContainer>
+				{isDonatingToGiveth && (
+					<FormProgress
+						progress={isFirstTx ? 0 : 1}
+						steps={formSteps}
+					/>
+				)}
 				<DonatingBox>
 					<P>You are donating</P>
 					<H3>
 						{formatPrice(
-							isDonationToGiveth
-								? donationToGivethAmount
-								: amount,
+							isFirstTx ? donationToGivethAmount : amount,
 						)}{' '}
 						{token.symbol}
 					</H3>
 					{avgPrice ? (
 						<H6>
 							{formatPrice(
-								isDonationToGiveth
-									? donationToGivethPrice
-									: avgPrice,
+								isFirstTx ? donationToGivethPrice : avgPrice,
 							)}{' '}
 							USD
 						</H6>
 					) : null}
 					<P>
-						To <span>{isDonationToGiveth ? 'Giveth' : title}</span>
+						To <span>{isFirstTx ? 'Giveth' : title}</span>
 					</P>
 				</DonatingBox>
 				<Buttons>
@@ -199,6 +201,8 @@ const DonateModal = (props: IDonateModalProps) => {
 		</Modal>
 	);
 };
+
+const formSteps = ['Donate to Giveth', 'Donate to project'];
 
 const DonateContainer = styled.div`
 	background: white;
