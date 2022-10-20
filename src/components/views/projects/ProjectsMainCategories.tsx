@@ -55,7 +55,7 @@ function ProjectsMainCategories({ mainCategories }: IProjectsFilterProps) {
 			}}
 		>
 			{mainCategories.map(category => (
-				<SwiperSlide key={category.slug}>
+				<SwiperSlide key={category.slug} style={{ width: 'auto' }}>
 					<InternalLink
 						href={
 							category.slug === 'all'
