@@ -5,12 +5,14 @@ import { Arc } from '@/components/styled-components/Arc';
 import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
 
+import { useIntl } from 'react-intl';
 import { HomeContainer } from '@/components/views/homepage/Home.sc';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { Col, Container } from '@/components/Grid';
 
 const HomePurpleSection = () => {
+	const { formatMessage } = useIntl();
 	return (
 		<Wrapper>
 			<Arcs>
@@ -28,19 +30,20 @@ const HomePurpleSection = () => {
 						height={101.71}
 					/>
 				</BigTitle>
-				<Desc>
-					Donate eligible tokens to Giveth and receive $nice,
-					redeemable for swag and much more!
-				</Desc>
+				<Desc>{formatMessage({ id: 'page.home.nice_desc' })}</Desc>
 				<Links xs={12} sm={7} md={8}>
 					<GLink href={links.NICE_DOC} target='_blank'>
-						<span>Learn about how $nice works</span>
+						<span>
+							{formatMessage({ id: 'page.home.nice_learn' })}
+						</span>
 					</GLink>
 					<Link href={Routes.GivethProject} passHref>
-						Make a donation to Giveth
+						{formatMessage({ id: 'page.home.nice_donate' })}
 					</Link>
 					<PurpleLink href={links.SWAG} target='_blank'>
-						<span>Check out the swag shop</span>
+						<span>
+							{formatMessage({ id: 'page.home.nice_swag' })}
+						</span>
 					</PurpleLink>
 				</Links>
 			</Container>

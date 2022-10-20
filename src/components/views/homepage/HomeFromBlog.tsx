@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { brandColors, SemiTitle } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
+import { useIntl } from 'react-intl';
 import HomeBlogPost from './HomeBlogPost';
 import { IMediumBlogPost } from '@/apollo/types/types';
 import { HomeContainer } from '@/components/views/homepage/Home.sc';
@@ -10,6 +11,7 @@ import { deviceSize } from '@/lib/constants/constants';
 
 const HomeFromBlog = () => {
 	const [mediumPosts, setMediumPosts] = useState<IMediumBlogPost[]>();
+	const intl = useIntl();
 
 	useEffect(() => {
 		const getPosts = async () => {
@@ -25,7 +27,9 @@ const HomeFromBlog = () => {
 	return (
 		<Wrapper>
 			<Container>
-				<Title>FROM OUR BLOG</Title>
+				<Title>
+					{intl.formatMessage({ id: 'page.home.section.from_blog' })}
+				</Title>
 				{mediumPosts && (
 					<Row>
 						{mediumPosts.map((post: IMediumBlogPost) => (

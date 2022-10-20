@@ -33,5 +33,16 @@
 	"page.home.section.project_verification_desc": "Encourage project accountability by donating to trusted projects. Apply for verification and your donors will be rewarded with GIVbacks.",
 	"page.home.section.the_giveconomy_desc2": "Give, earn and govern using GIV and the GIVeconomy. Get rewarded for being a GIVer.",
 	"page.home.section.you_in": "You're In!",
-	"page.home.section.get_updates": "Get the latest updates"
+	"page.home.section.get_updates": "Get the latest updates",
+	"page.home.section.from_blog": "FROM OUR BLOG",
+	"page.home.section.success_subs_one": "We just sent you an email to confirm your subscription!",
+	"page.home.section.success_subs_two": "Once you do, you'll receive the next issue of our newsletter in your inbox. If you'd like to view previous issues, visit our",
+	"page.home.section.givnews_page": "GIVnews page",
+	"page.home.section.subscribe_newsletter": "Subscribe to our newsletter to get the latest news, updates and amazing offers delivered directly straight to your mailbox!",
+	"component.button.your_email_address": "Your email address",
+	"component.button.subscribe": "SUBSCRIBE",
+	"page.home.nice_desc": "Donate eligible tokens to Giveth and receive $nice, redeemable for swag and much more!",
+	"page.home.nice_learn": "Learn about how $nice works",
+	"page.home.nice_donate": "Make a donation to Giveth",
+	"page.home.nice_swag": "Check out the swag shop"
 }

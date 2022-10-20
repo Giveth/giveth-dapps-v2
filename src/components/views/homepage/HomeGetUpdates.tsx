@@ -36,26 +36,30 @@ const HomeGetUpdates = () => {
 				<P>
 					{successSubscription ? (
 						<span>
-							We just sent you an email to confirm your
-							subscription!
+							{intl.formatMessage({
+								id: 'page.home.section.success_subs_one',
+							})}
 							<br />
-							Once you do, you'll receive the next issue of our
-							newsletter in your inbox. If you'd like to view
-							previous issues, visit our{' '}
+							{intl.formatMessage({
+								id: 'page.home.section.success_subs_two',
+							})}{' '}
 							<StyledLink
 								href='http://news.giveth.io/'
 								target='_blank'
 								rel='noreferrer'
 							>
 								GIVnews page
+								{intl.formatMessage({
+									id: 'page.home.section.givnews_page',
+								})}
 							</StyledLink>
 							.
 						</span>
 					) : (
 						<span>
-							Subscribe to our newsletter to get the latest news,
-							updates and amazing offers delivered directly
-							straight to your mailbox!
+							{intl.formatMessage({
+								id: 'page.home.section.subscribe_newsletter',
+							})}
 						</span>
 					)}
 				</P>
@@ -71,7 +75,9 @@ const HomeGetUpdates = () => {
 						<InputBox>
 							<div>
 								<EmailInput
-									placeholder='Your email address'
+									placeholder={intl.formatMessage({
+										id: 'component.button.your_email_address',
+									})}
 									error={error}
 									onChange={e => setEmail(e.target.value)}
 									name='member[email]'
@@ -85,7 +91,9 @@ const HomeGetUpdates = () => {
 							</div>
 							<SubscribeButton
 								disabled={!validateEmail(email)}
-								label='SUBSCRIBE'
+								label={intl.formatMessage({
+									id: 'component.button.subscribe',
+								})}
 								type='submit'
 							/>
 						</InputBox>
