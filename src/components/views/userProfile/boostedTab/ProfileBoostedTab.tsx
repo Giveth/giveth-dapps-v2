@@ -47,6 +47,8 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 	const sdh = new SubgraphDataHelper(
 		useAppSelector(state => state.subgraph.xDaiValues),
 	);
+	const { userData } = useAppSelector(state => state.user);
+	const boostedProjectsCount = userData?.boostedProjectsCount ?? 0;
 	const givPower = sdh.getUserGIVPowerBalance();
 
 	useEffect(() => {
@@ -193,11 +195,11 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 				</ContributeCardTitles>
 				<ContributeCardTitles>Projects Boosted</ContributeCardTitles>
 				<H5>~{formatWeiHelper(givPower.balance)}</H5>
-				<H5>{boosts.length}</H5>
+				<H5>{boostedProjectsCount}</H5>
 			</CustomContributeCard>
 			<PowerBoostingContainer>
 				{loading && <Loading />}
-				{boosts.length > 0 ? (
+				{boostedProjectsCount && boostedProjectsCount > 0 ? (
 					<BoostsTable
 						boosts={boosts}
 						totalAmountOfGIVpower={givPower.balance}

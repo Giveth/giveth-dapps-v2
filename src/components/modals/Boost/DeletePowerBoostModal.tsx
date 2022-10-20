@@ -10,6 +10,8 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
 import { mediaQueries } from '@/lib/constants/constants';
+import { useAppDispatch } from '@/features/hooks';
+import { decrementBoostedProjectsCount } from '@/features/user/user.slice';
 
 interface IDeletePowerBoostModal extends IModal {
 	boostId: string;
@@ -24,9 +26,11 @@ export const DeletePowerBoostModal: FC<IDeletePowerBoostModal> = ({
 	canDelete,
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const dispatch = useAppDispatch();
 
 	const onDelete = async () => {
 		deleteBoost(boostId);
+		dispatch(decrementBoostedProjectsCount());
 		closeModal();
 	};
 
