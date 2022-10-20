@@ -30,8 +30,8 @@ export const DeletePowerBoostModal: FC<IDeletePowerBoostModal> = ({
 
 	const onDelete = async () => {
 		deleteBoost(boostId);
+		dispatch(decrementBoostedProjectsCount());
 		closeModal();
-		dispatch(decrementBoostedProjectsCount);
 	};
 
 	return (
