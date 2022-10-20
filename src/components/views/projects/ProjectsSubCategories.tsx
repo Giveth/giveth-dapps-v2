@@ -11,7 +11,7 @@ function ProjectsSubCategories() {
 	return subCategories ? (
 		<CustomizedSwiper slidesPerView='auto' spaceBetween={24}>
 			{subCategories.map(subCategory => (
-				<SwiperSlide key={subCategory.value}>
+				<SwiperSlide key={subCategory.value} style={{ width: 'auto' }}>
 					<SubCategoryItem
 						isSelected={variables?.category === subCategory.name}
 						onClick={() =>
