@@ -280,6 +280,7 @@ const config: EnvConfig = {
 								'ShapeShift is the free and open-source one-stop-shop for cross-chain DeFi. Buy, sell, send, receive, trade, and earn yield on your crypto across a growing number of protocols and chains with no added fees ever. FOX is the governance token of the ShapeShift DAO.',
 							link: 'https://shapeshift.com/',
 						},
+						archived: true,
 					},
 					{
 						network: XDAI_NETWORK_NUMBER,
@@ -296,7 +297,6 @@ const config: EnvConfig = {
 						unit: 'LP',
 						regenStreamType: StreamType.FOX,
 						regenFarmType: RegenFarmType.FOX_XDAI,
-
 						farmStartTimeMS: 1646306818206,
 						active: true,
 						introCard: {
