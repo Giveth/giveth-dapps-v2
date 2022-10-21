@@ -17,18 +17,26 @@ import { RegenStreamCard } from './givfarm/RegenStreamCard';
 
 interface IRegenFarmProps {
 	regenFarm: RegenFarmConfig;
+	showArchivedPools: boolean;
 }
 
-export const RegenFarm: FC<IRegenFarmProps> = ({ regenFarm }) => {
+export const RegenFarm: FC<IRegenFarmProps> = ({
+	regenFarm,
+	showArchivedPools,
+}) => {
 	const { chainId } = useWeb3React();
 	const { pools } = regenFarm;
+
+	const filteredPools = showArchivedPools
+		? pools
+		: pools.filter(pool => pool.archived !== true);
 
 	return (
 		<PoolRow>
 			<DAOContainer key={`regenStream_${regenFarm.type}`} xs={12}>
 				<DaoTitle>{regenFarm.title}</DaoTitle>
 				<Row>
-					{pools.map((poolStakingConfig, idx) => (
+					{filteredPools.map((poolStakingConfig, idx) => (
 						<Col key={idx} xs={12} sm={6} lg={4}>
 							<StakingPoolCard
 								poolStakingConfig={poolStakingConfig}
@@ -38,8 +46,8 @@ export const RegenFarm: FC<IRegenFarmProps> = ({ regenFarm }) => {
 					))}
 					<Col
 						xs={12}
-						sm={regenFarmStreamCardCol.sm[pools.length]} // TODO: use mod()
-						lg={regenFarmStreamCardCol.lg[pools.length]} // TODO: use mod()
+						sm={regenFarmStreamCardCol.sm[filteredPools.length]} // TODO: use mod()
+						lg={regenFarmStreamCardCol.lg[filteredPools.length]} // TODO: use mod()
 					>
 						{regenFarm && (
 							<RegenStreamCard
