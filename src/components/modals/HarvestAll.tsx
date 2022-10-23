@@ -18,7 +18,7 @@ import { Modal } from './Modal';
 import LoadingAnimation from '@/animations/loading.json';
 import {
 	PoolStakingConfig,
-	RegenStreamConfig,
+	RegenFarmConfig,
 	SimplePoolStakingConfig,
 } from '@/types/config';
 import { BN, formatWeiHelper, Zero } from '@/helpers/number';
@@ -73,7 +73,7 @@ interface IHarvestAllModalProps extends IModal {
 	earned?: ethers.BigNumber;
 	network: number;
 	tokenDistroHelper?: TokenDistroHelper;
-	regenStreamConfig?: RegenStreamConfig;
+	regenStreamConfig?: RegenFarmConfig;
 	stakedPositions?: LiquidityPosition[];
 	currentIncentive?: {
 		key?: (string | number)[] | null | undefined;
@@ -348,7 +348,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 												regenStreamConfig?.rewardTokenSymbol
 											}
 										/>
-										<HelpRow alignItems='center'>
+										<HelpRow alignItems='baseline' wrap={1}>
 											<Caption>
 												Your new {tokenSymbol}
 												stream flowrate
@@ -366,16 +366,18 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 												direction={'top'}
 											>
 												<TooltipContent>
-													Increase you {tokenSymbol}
+													Increase your {tokenSymbol}
 													stream flowrate when you
 													claim liquid rewards!
 												</TooltipContent>
 											</IconWithTooltip>
-											<IconGIVStream size={24} />
-											<GIVRate>
-												{formatWeiHelper(sumStream)}
-											</GIVRate>
-											<Lead>{tokenSymbol}/week</Lead>
+											<Flex gap='8px'>
+												<IconGIVStream size={24} />
+												<GIVRate>
+													{formatWeiHelper(sumStream)}
+												</GIVRate>
+												<Lead>{tokenSymbol}/week</Lead>
+											</Flex>
 										</HelpRow>
 									</>
 								)}

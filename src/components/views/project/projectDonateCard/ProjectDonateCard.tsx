@@ -1,6 +1,7 @@
 import React, {
 	Dispatch,
 	FC,
+	Fragment,
 	SetStateAction,
 	useCallback,
 	useEffect,
@@ -15,13 +16,15 @@ import {
 	neutralColors,
 	OutlineButton,
 	IconArchiving,
+	Caption,
+	IconRocketInSpace,
+	ButtonText,
 } from '@giveth/ui-design-system';
 import { motion } from 'framer-motion';
 import { captureException } from '@sentry/nextjs';
 
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import { Shadow } from '@/components/styled-components/Shadow';
-import CategoryBadge from '@/components/badges/CategoryBadge';
 import { compareAddresses, showToastError } from '@/lib/helpers';
 import { EVerificationStatus, IProject } from '@/apollo/types/types';
 import links from '@/lib/constants/links';
@@ -51,9 +54,14 @@ import { EProjectVerificationStatus } from '@/apollo/types/gqlEnums';
 import VerificationStatus from '@/components/views/project/projectDonateCard/VerificationStatus';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import GIVbackToast from '@/components/views/project/projectDonateCard/GIVbackToast';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+import BoostModal from '@/components/modals/Boost/BoostModal';
+import { IS_BOOSTING_ENABLED } from '@/configuration';
+import CategoryBadge from '@/components/badges/CategoryBadge';
+import { mapCategoriesToMainCategories } from '@/helpers/singleProject';
 
 interface IProjectDonateCard {
-	project?: IProject;
+	project: IProject;
 	isActive?: boolean;
 	setIsActive: Dispatch<SetStateAction<boolean>>;
 	isDraft?: boolean;
@@ -79,14 +87,18 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 		verified,
 		verificationStatus,
 		organization,
-		projectVerificationForm,
+		verificationFormStatus,
 	} = project || {};
+
+	const convertedCategories = mapCategoriesToMainCategories(categories);
+
 	const [heartedByUser, setHeartedByUser] = useState<boolean>(false);
 	const [showModal, setShowModal] = useState<boolean>(false);
 	const [loading, setLoading] = useState(false);
 	const [isAdmin, setIsAdmin] = useState<boolean>(false);
 	const [deactivateModal, setDeactivateModal] = useState<boolean>(false);
 	const [showVerificationModal, setShowVerificationModal] = useState(false);
+	const [showBoost, setShowBoost] = useState(false);
 	const [reaction, setReaction] = useState<IReaction | undefined>(
 		project?.reaction,
 	);
@@ -96,8 +108,10 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 	const isCategories = categories?.length > 0;
 	const verStatus = verified
 		? EVerificationStatus.VERIFIED
-		: projectVerificationForm?.status;
+		: verificationFormStatus;
+
 	const isVerDraft = verStatus === EVerificationStatus.DRAFT;
+	const isRevoked = verificationStatus === EProjectVerificationStatus.REVOKED;
 
 	const router = useRouter();
 
@@ -145,6 +159,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 			}
 		}
 	};
+
 	const fetchProjectReaction = useCallback(async () => {
 		if (user?.id && id) {
 			// Already fetched
@@ -172,6 +187,14 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 			setReaction(undefined);
 		}
 	}, [id, user?.id]);
+
+	const handleBoostClick = () => {
+		if (!isSignedIn) {
+			dispatch(setShowSignWithWallet(true));
+		} else {
+			setShowBoost(true);
+		}
+	};
 
 	useEffect(() => {
 		fetchProjectReaction().then();
@@ -245,6 +268,12 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 					setIsActive={setIsActive}
 				/>
 			)}
+			{showBoost && project?.id && (
+				<BoostModal
+					projectId={project.id}
+					setShowModal={setShowBoost}
+				/>
+			)}
 			<Wrapper
 				ref={wrapperRef}
 				height={wrapperHeight}
@@ -268,25 +297,23 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 								router.push(idToProjectEdit(project?.id || ''))
 							}
 						/>
-						{verificationStatus !==
-							EProjectVerificationStatus.REVOKED &&
-							!verified &&
-							!isDraft &&
-							!verStatus && (
-								<FullOutlineButton
-									buttonType='primary'
-									label='VERIFY YOUR PROJECT'
-									disabled={!isActive}
-									onClick={() =>
-										setShowVerificationModal(true)
-									}
-								/>
-							)}
+						{!isRevoked && !verified && !isDraft && !verStatus && (
+							<FullOutlineButton
+								buttonType='primary'
+								label='VERIFY YOUR PROJECT'
+								disabled={!isActive}
+								onClick={() => setShowVerificationModal(true)}
+							/>
+						)}
 						{isVerDraft && (
 							<ExternalLink href={slugToVerification(slug)}>
 								<FullOutlineButton
 									buttonType='primary'
-									label='RESUME VERIFICATION'
+									label={
+										isRevoked
+											? 'Re-apply'
+											: 'RESUME VERIFICATION'
+									}
 								/>
 							</ExternalLink>
 						)}
@@ -312,20 +339,41 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 					<ShareLikeBadge
 						type='share'
 						onClick={() => isActive && setShowModal(true)}
+						isSimple={!isAdmin}
 					/>
 					<ShareLikeBadge
 						type='like'
 						active={heartedByUser}
 						onClick={() => isActive && likeUnlikeProject()}
+						isSimple={!isAdmin}
 					/>
+					{/* // TODO: Boosting - remove this for boosting launch */}
+					{IS_BOOSTING_ENABLED && !isAdmin && (
+						<BoostButton onClick={handleBoostClick}>
+							<BoostButtonText>Boost</BoostButtonText>
+							<IconRocketInSpace color={brandColors.giv[500]} />
+						</BoostButton>
+					)}
 				</BadgeWrapper>
 				{!isAdmin && verified && <GIVbackToast />}
 				{isCategories && (
-					<CategoryWrapper>
-						{categories.map(i => (
-							<CategoryBadge key={i.name} category={i} />
-						))}
-					</CategoryWrapper>
+					<MainCategoryWrapper flexDirection='column'>
+						{Object.entries(convertedCategories)?.map(
+							([mainCategory, subcategories]) => (
+								<Fragment key={mainCategory}>
+									<MainCategory>{mainCategory}</MainCategory>
+									<CategoryWrapper>
+										{subcategories.map(subcategory => (
+											<CategoryBadge
+												key={subcategory.name}
+												category={subcategory.value}
+											/>
+										))}
+									</CategoryWrapper>
+								</Fragment>
+							),
+						)}
+					</MainCategoryWrapper>
 				)}
 				{!isDraft && !isAdmin && (
 					<Links>
@@ -353,6 +401,23 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 	);
 };
 
+const BoostButton = styled(FlexCenter)`
+	border-radius: 48px;
+	box-shadow: ${Shadow.Neutral[500]};
+	display: flex;
+	gap: 4px;
+	padding-right: 22px;
+	padding-left: 22px;
+	color: ${brandColors.giv[500]};
+	cursor: pointer;
+	background: white;
+	width: 100%;
+`;
+
+const BoostButtonText = styled(ButtonText)`
+	font-size: 0.75em;
+`;
+
 const Links = styled.div`
 	color: ${brandColors.pinky[500]};
 	display: flex;
@@ -372,20 +437,26 @@ const BlueBar = styled.div`
 	top: -8px;
 `;
 
-const CategoryWrapper = styled.div`
-	display: flex;
+const CategoryWrapper = styled(Flex)`
 	flex-wrap: wrap;
 	gap: 10px;
-	margin-top: 24px;
 	overflow: hidden;
-	max-height: 98px;
-	margin-bottom: 16px;
+	margin: 8px 0;
+`;
+
+const MainCategoryWrapper = styled(Flex)`
+	margin-top: 24px;
+`;
+
+const MainCategory = styled(Caption)`
+	color: ${neutralColors.gray[600]};
 `;
 
 const BadgeWrapper = styled.div`
 	display: flex;
 	margin-top: 16px;
 	justify-content: space-between;
+	gap: 8px;
 `;
 
 const Wrapper = styled(motion.div)<{ height: number }>`
@@ -394,7 +465,6 @@ const Wrapper = styled(motion.div)<{ height: number }>`
 	padding: 32px;
 	height: fit-content;
 	box-shadow: ${Shadow.Neutral[400]};
-	flex-shrink: 0;
 	z-index: 10;
 	align-self: flex-start;
 	width: 100%;

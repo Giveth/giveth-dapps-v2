@@ -17,7 +17,7 @@ import {
 	EDirection,
 	EDonationStatus,
 	EProjectStatus,
-	gqlEnums,
+	ESortby,
 } from '@/apollo/types/gqlEnums';
 import InfoBadge from '@/components/badges/InfoBadge';
 import {
@@ -31,6 +31,8 @@ import SimilarProjects from '@/components/views/project/SimilarProjects';
 import { compareAddresses, showToastError } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import { ProjectMeta } from '@/components/Metatag';
+import { Col, Row } from '@/components/Grid';
+import ProjectGIVPowerIndex from '@/components/views/project/projectGIVPower';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
@@ -49,12 +51,14 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 	const [activeTab, setActiveTab] = useState(0);
 	const [isActive, setIsActive] = useState<boolean>(true);
 	const [isDraft, setIsDraft] = useState<boolean>(false);
-	const [project, setProject] = useState<IProject | undefined>(props.project);
+	const [draftProject, setDraftProject] = useState<IProject>();
 	const [donations, setDonations] = useState<IDonation[]>([]);
 	const [totalDonations, setTotalDonations] = useState(0);
 	const [creationSuccessful, setCreationSuccessful] = useState(false);
-	const [isCancelled, setIsCancelled] = useState<boolean>(false);
+
 	const user = useAppSelector(state => state.user.userData);
+
+	const project = draftProject || props.project;
 
 	const {
 		adminUser,
@@ -62,6 +66,7 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 		title,
 		status,
 		id = '',
+		projectPower,
 	} = project || {};
 	const router = useRouter();
 	const slug = router.query.projectIdSlug as string;
@@ -78,10 +83,15 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 				fetchPolicy: 'network-only',
 			})
 			.then((res: { data: { projectBySlug: IProject } }) => {
-				setProject(res.data.projectBySlug);
+				const _project = res.data.projectBySlug;
+				if (_project.status.name !== EProjectStatus.CANCEL) {
+					setDraftProject(_project);
+				} else {
+					draftProject && setDraftProject(undefined);
+				}
 			})
 			.catch((error: unknown) => {
-				setIsCancelled(true);
+				showToastError(error);
 				captureException(error, {
 					tags: {
 						section: 'fetchProject',
@@ -94,7 +104,6 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 		if (status) {
 			setIsActive(status.name === EProjectStatus.ACTIVE);
 			setIsDraft(status.name === EProjectStatus.DRAFT);
-			setIsCancelled(status.name === EProjectStatus.CANCEL);
 		}
 	}, [status]);
 
@@ -109,7 +118,7 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 					take: donationsPerPage,
 					status: isAdmin ? null : EDonationStatus.VERIFIED,
 					orderBy: {
-						field: gqlEnums.CREATIONDATE,
+						field: ESortby.CREATIONDATE,
 						direction: EDirection.DESC,
 					},
 				},
@@ -130,10 +139,12 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 	}, [id]);
 
 	useEffect(() => {
-		if (slug && user?.id) {
+		draftProject && setDraftProject(undefined);
+		// Re-fetch project if project is draft and user is signed in
+		if (!props.project && user?.isSignedIn) {
 			fetchProject().then();
 		}
-	}, [slug, user?.id]);
+	}, [props.project, user]);
 
 	if (creationSuccessful) {
 		return (
@@ -144,7 +155,7 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 		);
 	}
 
-	if (isCancelled || !project) {
+	if (!project) {
 		return <NotAvailableProject />;
 	}
 
@@ -166,7 +177,7 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 					</DraftIndicator>
 				)}
 				<BodyWrapper>
-					<ContentWrapper>
+					<Col sm={8}>
 						{project && !isDraft && (
 							<ProjectTabs
 								activeTab={activeTab}
@@ -201,16 +212,24 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 								isDraft={isDraft}
 							/>
 						)}
-					</ContentWrapper>
+						{activeTab === 3 && (
+							<ProjectGIVPowerIndex
+								projectId={id}
+								projectPower={projectPower}
+							/>
+						)}
+					</Col>
 					{project && (
-						<ProjectDonateCard
-							isDraft={isDraft}
-							project={project!}
-							isActive={isActive}
-							setIsActive={setIsActive}
-							setIsDraft={setIsDraft}
-							setCreationSuccessful={setCreationSuccessful}
-						/>
+						<Col sm={4}>
+							<ProjectDonateCard
+								isDraft={isDraft}
+								project={project!}
+								isActive={isActive}
+								setIsActive={setIsActive}
+								setIsDraft={setIsDraft}
+								setCreationSuccessful={setCreationSuccessful}
+							/>
+						</Col>
 					)}
 				</BodyWrapper>
 			</Wrapper>
@@ -232,27 +251,19 @@ const Wrapper = styled.div`
 	position: relative;
 `;
 
-const BodyWrapper = styled.div`
-	display: flex;
-	justify-content: space-between;
+const BodyWrapper = styled(Row)`
 	margin: 0 auto;
 	min-height: calc(100vh - 312px);
 	max-width: 1280px;
 	padding: 0 16px;
 
 	${mediaQueries.mobileL} {
-		padding: 0 32px;
+		padding: 0 22px;
 	}
 
 	${mediaQueries.laptopS} {
 		padding: 0 40px;
 	}
-`;
-
-const ContentWrapper = styled.div`
-	flex-grow: 1;
-	padding-right: 16px;
-	width: 100%;
 `;
 
 export default ProjectIndex;

@@ -1,3 +1,5 @@
+import { IUser } from '@/apollo/types/types';
+
 export interface ITokenAllocation {
 	amount: string;
 	distributor: string;
@@ -14,6 +16,27 @@ export interface ITokenDistro {
 	startTime: number;
 	cliffTime: number;
 	endTime: number;
+}
+
+export interface IGIVpower {
+	id: string;
+	initialDate: string;
+	locksCreated: number;
+	roundDuration: number;
+	totalGIVLocked: string;
+	currentRound: number;
+	nextRoundDate: string;
+}
+
+export interface IGIVpowerPosition {
+	id: string;
+	user: IUser;
+	amount: string;
+	rounds: number;
+	untilRound: number;
+	unlockableAt: string;
+	unlockedAt: string;
+	unlocked: boolean;
 }
 
 export interface IUnipool {

@@ -8,8 +8,7 @@ import { useVerificationData } from '@/context/verification.context';
 import { EVerificationStatus } from '@/apollo/types/types';
 
 const Done = () => {
-	const device = useDetectDevice();
-	const isMobile = device.isMobile;
+	const { isMobile } = useDetectDevice();
 	const { verificationData } = useVerificationData();
 
 	const status = verificationData?.status ?? EVerificationStatus.SUBMITTED;
@@ -37,14 +36,14 @@ const Done = () => {
 					{titles[status ?? EVerificationStatus.SUBMITTED]}
 				</H4>
 				<P>{subtitles[status ?? EVerificationStatus.SUBMITTED]} </P>
-				{status === 'draft' && (
+				{status === EVerificationStatus.DRAFT && (
 					<ConfettiContainer>
 						<ConfettiAnimation size={isMobile ? 200 : 600} />
 					</ConfettiContainer>
 				)}
 				<StagesContainer>
 					<Submitted>
-						Form submited
+						Form submitted
 						<CheckCircle />
 					</Submitted>
 					<Line />
@@ -55,7 +54,7 @@ const Done = () => {
 							EVerificationStatus.REJECTED,
 						].includes(status)}
 					>
-						{status === 'rejected'
+						{status === EVerificationStatus.REJECTED
 							? 'Verification rejected.'
 							: 'Waiting for verification'}
 						{status === EVerificationStatus.VERIFIED && (

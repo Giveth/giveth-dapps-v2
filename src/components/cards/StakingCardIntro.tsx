@@ -9,22 +9,25 @@ import {
 } from '@giveth/ui-design-system';
 import { Dispatch, FC, SetStateAction } from 'react';
 import styled from 'styled-components';
-import { SimplePoolStakingConfig } from '@/types/config';
+import { IntroCardConfig } from '@/types/config';
 import { getSymbolIconWithName } from '../StakingPoolImages';
 import { Flex } from '../styled-components/Flex';
 import { StakeCardState } from './BaseStakingCard';
 
 interface IStakingCardIntro {
-	poolStakingConfig: SimplePoolStakingConfig;
 	setState: Dispatch<SetStateAction<StakeCardState>>;
+	symbol: string;
+	introCard?: IntroCardConfig;
 }
 
 const StakingCardIntro: FC<IStakingCardIntro> = ({
-	poolStakingConfig,
+	symbol,
+	introCard,
 	setState,
 }) => {
-	const { title, introCard } = poolStakingConfig;
-	const titleIcon = introCard?.icon ? introCard?.icon : title.split(' / ')[0];
+	const titleIcon = introCard?.icon
+		? introCard?.icon
+		: symbol.split(' / ')[0];
 	return (
 		<StakingCardIntroContainer>
 			<HeaderRow>

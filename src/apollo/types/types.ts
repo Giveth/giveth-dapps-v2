@@ -6,6 +6,11 @@ import {
 } from '@/apollo/types/gqlEnums';
 import { IAddress } from '@/components/views/verification/manageFunds/ManageFundsIndex';
 
+export interface IProjectPower {
+	powerRank: number;
+	totalPower?: number;
+	updateTime: string;
+}
 export interface IProject {
 	id?: string;
 	title?: string;
@@ -49,6 +54,8 @@ export interface IProject {
 		supportCustomTokens: boolean;
 	};
 	projectVerificationForm?: IProjectVerification;
+	projectPower: IProjectPower;
+	verificationFormStatus?: EVerificationStatus;
 }
 
 export interface IWalletAddress {
@@ -151,6 +158,13 @@ export interface IMediumBlogPost {
 
 export interface ICategory {
 	name: string;
+	value?: string;
+	isActive?: boolean;
+	mainCategory?: Pick<IMainCategory, 'title'>;
+}
+
+export interface IConvertedCategories {
+	[key: string]: { name: string; value: string }[];
 }
 
 export interface IProjectBySlug {
@@ -171,6 +185,14 @@ export interface ISiweMessage {
 	message: string;
 }
 
+export interface IMainCategory {
+	title: string;
+	description: string;
+	banner: string;
+	slug: string;
+	categories: ICategory[];
+	selected?: boolean;
+}
 export interface IProjectRegistry {
 	isNonProfitOrganization?: boolean;
 	organizationCountry?: string;
@@ -251,4 +273,33 @@ export enum EVerificationSteps {
 	MILESTONES = 'milestones',
 	TERM_AND_CONDITION = 'termAndCondition',
 	SUBMIT = 'submit',
+}
+
+export interface IPowerBoosting {
+	id: string;
+	user: IUser;
+	project: IProject;
+	percentage: number;
+}
+
+interface IBoostedUser {
+	id: string;
+	firstName: string;
+	lastName: string;
+	name: string;
+}
+export interface IPowerBoostingsData {
+	id: string;
+	userId: string;
+	projectId: string;
+	percentage: number;
+	userPower: number;
+	boostedPower: number;
+	rank: number;
+	user: IBoostedUser;
+}
+
+export interface IUserProjectPowers {
+	totalCount: number;
+	userProjectPowers: IPowerBoostingsData[];
 }

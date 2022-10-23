@@ -25,7 +25,6 @@ a {
 	outline: none;
 }
 
-
 /* React-Select component */
 .select__menu {
 	z-index: 10 !important;
@@ -121,7 +120,6 @@ a {
 	}
 }
 
-
 .fadeIn {
 	animation: fadeIn 0.3s ease-in-out;
 }
@@ -147,7 +145,6 @@ a {
 		opacity: 0;
 	}
 }
-
 
 @font-face {
 	font-family: 'Red Hat Text';
@@ -201,12 +198,12 @@ a {
 
 #nprogress {
 	z-index: 1101;
-	position: absolute;
+	position: fixed;
 	width: 100%;
 	top: 0;
 }
 
 #nprogress > .bar {
 	height: 4px;
-	background-color: #8668FC;
+	background-color: #8668fc;
 }
