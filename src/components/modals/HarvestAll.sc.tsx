@@ -102,6 +102,7 @@ export const BreakdownTableTitle = styled(B)`
 
 export const BreakdownTableBody = styled.div`
 	margin-bottom: 48px;
+	overflow-x: auto;
 `;
 
 export const BreakdownRow = styled.div`
@@ -109,6 +110,7 @@ export const BreakdownRow = styled.div`
 	grid-template-columns: 3fr 1fr 1fr 1fr 1.5fr;
 	border-bottom: 2px solid ${brandColors.giv[500]};
 	padding: 16px;
+	min-width: 480px;
 `;
 
 export const BreakdownIcon = styled.div``;

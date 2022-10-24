@@ -7,21 +7,29 @@ import {
 } from '@giveth/ui-design-system';
 import dynamic from 'next/dynamic';
 import styled from 'styled-components';
+import { useFormContext } from 'react-hook-form';
 
 import { InputContainer, Label } from './Create.sc';
 import { GoodProjectDescription } from '@/components/modals/GoodProjectDescription';
+import { EInputs } from '@/components/views/create/CreateProject';
 
 const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
 	ssr: false,
 });
 
-const DescriptionInput = (props: {
-	setValue: (e: string) => void;
-	// error: string;
-	value?: string;
-}) => {
+const DescriptionInput = () => {
+	const { getValues, setValue } = useFormContext();
+
 	const [showModal, setShowModal] = useState(false);
-	const { value, setValue } = props;
+	const [description, setDescription] = useState(
+		getValues(EInputs.description),
+	);
+
+	const handleDescription = (value: string) => {
+		setDescription(value);
+		setValue(EInputs.description, value);
+	};
+
 	return (
 		<>
 			{showModal && (
@@ -41,8 +49,8 @@ const DescriptionInput = (props: {
 				<Label>Project story</Label>
 				<RichTextInput
 					style={TextInputStyle}
-					setValue={setValue}
-					value={value}
+					setValue={handleDescription}
+					value={description}
 				/>
 			</InputContainerStyled>
 			{/*<ErrorStyled>{error || null}</ErrorStyled>*/}

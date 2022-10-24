@@ -7,6 +7,17 @@ import styled from 'styled-components';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { EInputValidation } from '@/types/inputValidation';
 import { InputSize } from '@/components/Input';
+import {
+	inputSizeToFontSize,
+	inputSizeToHeight,
+	inputSizeToPaddingLeft,
+	INPUT_HORIZONTAL_PADDING_LARGE,
+	INPUT_HORIZONTAL_PADDING_MEDIUM,
+	INPUT_HORIZONTAL_PADDING_SMALL,
+	INPUT_VERTICAL_PADDING_LARGE,
+	INPUT_VERTICAL_PADDING_MEDIUM,
+	INPUT_VERTICAL_PADDING_SMALL,
+} from '@/helpers/styledComponents';
 
 interface IInputField {
 	inputSize?: InputSize; // Default is 'LARGE'
@@ -16,18 +27,7 @@ interface IInputField {
 
 const Input = styled.input<IInputField>`
 	width: 100%;
-	height: ${props => {
-		switch (props.inputSize) {
-			case InputSize.SMALL:
-				return '32px';
-			case InputSize.MEDIUM:
-				return '54px';
-			case InputSize.LARGE:
-				return '56px';
-			default:
-				return '56px';
-		}
-	}};
+	height: ${props => `${inputSizeToHeight(props.inputSize)}px`};
 	border: 2px solid
 		${props => {
 			switch (props.validation) {
@@ -47,29 +47,23 @@ const Input = styled.input<IInputField>`
 	padding: ${props => {
 		switch (props.inputSize) {
 			case InputSize.SMALL:
-				return '8px';
+				return `${INPUT_VERTICAL_PADDING_SMALL}px ${INPUT_HORIZONTAL_PADDING_SMALL}px`;
 			case InputSize.MEDIUM:
-				return '15px 16px';
+				return `${INPUT_VERTICAL_PADDING_MEDIUM}px ${INPUT_HORIZONTAL_PADDING_MEDIUM}px`;
 			case InputSize.LARGE:
-				return '18px 16px';
+				return `${INPUT_VERTICAL_PADDING_LARGE}px ${INPUT_HORIZONTAL_PADDING_LARGE}px`;
 			default:
-				return '18px 16px';
+				return `${INPUT_VERTICAL_PADDING_LARGE}px ${INPUT_HORIZONTAL_PADDING_LARGE}px`;
 		}
 	}};
-	padding-left: ${props => props.hasLeftIcon && '60px'};
+	padding-left: ${props => {
+		return `${inputSizeToPaddingLeft(
+			props.inputSize,
+			props.hasLeftIcon,
+		)}px`;
+	}};
 	padding-right: ${props => props.maxLength && '72px'};
-	font-size: ${props => {
-		switch (props.inputSize) {
-			case InputSize.SMALL:
-				return '12px';
-			case InputSize.MEDIUM:
-				return '16px';
-			case InputSize.LARGE:
-				return '16px';
-			default:
-				return '16px';
-		}
-	}};
+	font-size: ${props => `${inputSizeToFontSize(props.inputSize)}px`};
 	line-height: 150%;
 	font-family: 'Red Hat Text', sans-serif;
 	caret-color: ${brandColors.giv[300]};
@@ -100,6 +94,17 @@ const Input = styled.input<IInputField>`
 	::placeholder {
 		color: ${neutralColors.gray[500]};
 	}
+`;
+interface IInputSuffixProps {
+	inputSize: InputSize;
+}
+
+export const InputSuffix = styled.span<IInputSuffixProps>`
+	font-size: ${props => `${inputSizeToFontSize(props.inputSize)}px`};
+	line-height: 150%;
+	padding: 0 4px;
+	position: absolute;
+	top: 0;
 `;
 
 export default Input;

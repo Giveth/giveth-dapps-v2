@@ -8,12 +8,12 @@ const CheckboxEmailNotification = () => {
 	return (
 		<Container>
 			<Checkbox
-				title='Send me email'
+				label='Send me email'
 				checked={emailNotification}
 				onChange={setEmailNotification}
 			/>
 			<Checkbox
-				title='Dapp notification'
+				label='Dapp notification'
 				checked={dappNotification}
 				onChange={setDappNotification}
 			/>

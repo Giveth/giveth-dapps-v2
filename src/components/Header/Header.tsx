@@ -89,7 +89,7 @@ const Header: FC<IHeader> = () => {
 	const { total: totalUnreadNotifications } = useAppSelector(
 		state => state.notification.notificationInfo,
 	);
-	const { isMobileL } = useDetectDevice();
+	const { isMobile } = useDetectDevice();
 
 	const router = useRouter();
 	const isLight = theme === ETheme.Light;
@@ -255,7 +255,7 @@ const Header: FC<IHeader> = () => {
 				</SmallCreateProjectParent>
 				{active && account && chainId ? (
 					<>
-						{!isMobileL && (
+						{!isMobile && (
 							<MenuAndButtonContainer
 								onClick={() => setShowNotifications(true)}
 								onMouseEnter={() => setShowNotifications(true)}

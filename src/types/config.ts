@@ -1,10 +1,10 @@
 export interface BasicStakingConfig {
 	LM_ADDRESS: string;
 	network: number;
-	discontinued?: number;
 	GARDEN_ADDRESS?: string;
 	BUY_LINK?: string;
 	farmStartTimeMS?: number;
+	farmEndTimeMS?: number;
 	icon?: string;
 }
 export enum StakingPlatform {
@@ -26,11 +26,13 @@ export enum StakingType {
 	ICHI_GIV_ONEGIV = 'Ichi_GIV_oneGIV',
 
 	HONEYSWAP_FOX_HNY = 'Honeyswap_FOX_HNY',
+	HONEYSWAP_FOX_XDAI = 'Honeyswap_FOX_DAI',
 	UNISWAPV2_CULT_ETH = 'UniswapV2_CULT_ETH',
 }
 
 export enum RegenFarmType {
 	FOX_HNY = 'FOX_HNY_FARM',
+	FOX_XDAI = 'FOX_XDAI_FARM',
 	CULT_ETH = 'CULT_ETH_FARM',
 }
 
@@ -100,7 +102,7 @@ export interface GasPreference {
 	maxPriorityFeePerGas?: string;
 }
 
-export interface RegenStreamConfig {
+export interface RegenFarmConfig {
 	title: string;
 	tokenDistroAddress: string;
 	type: StreamType;
@@ -108,6 +110,8 @@ export interface RegenStreamConfig {
 	rewardTokenSymbol: string;
 	// For price purpose
 	tokenAddressOnUniswapV2: string;
+	pools: RegenPoolStakingConfig[];
+	introCard?: IntroCardConfig;
 }
 
 export interface BasicNetworkConfig {
@@ -137,8 +141,7 @@ export interface BasicNetworkConfig {
 	>;
 	uniswapV2Subgraph: string;
 
-	regenStreams: RegenStreamConfig[];
-	regenFarms: RegenPoolStakingConfig[];
+	regenFarms: RegenFarmConfig[];
 }
 
 interface MainnetNetworkConfig extends BasicNetworkConfig {

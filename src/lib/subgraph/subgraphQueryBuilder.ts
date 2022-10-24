@@ -40,6 +40,8 @@ export class SubgraphQueryBuilder {
 			);
 		}
 
+		query += SubgraphQueryBuilder.getUserGIVLocked(userAddress);
+
 		return query;
 	};
 
@@ -80,7 +82,7 @@ export class SubgraphQueryBuilder {
 	): string => {
 		return [
 			networkConfig.TOKEN_DISTRO_ADDRESS,
-			...networkConfig.regenStreams.map(c => {
+			...networkConfig.regenFarms.map(c => {
 				return c.tokenDistroAddress;
 			}),
 		]
@@ -211,6 +213,41 @@ export class SubgraphQueryBuilder {
 			.join();
 	};
 
+	private static getGIVPowersInfoQuery = (): string => {
+		return `givpower(id: "${config.XDAI_CONFIG.GIV.LM_ADDRESS.toLowerCase()}"){
+			id
+			initialDate
+			locksCreated
+			roundDuration
+			totalGIVLocked
+		}`;
+	};
+
+	private static getUserGIVLocked = (userAddress: string): string => {
+		return `userGIVLocked: user(id: "${userAddress.toLowerCase()}") {
+			givLocked
+		  }`;
+	};
+
+	static getTokenLocksInfoQuery = (
+		userAddress: string,
+		first?: number,
+		skip?: number,
+	): string => {
+		return `query { tokenLocks(where:{user: "${userAddress.toLowerCase()}", unlocked: false}, first: ${
+			first || 100
+		}, skip: ${skip || 0}, orderBy: unlockableAt){ 
+			id
+			user
+			amount
+			rounds
+			untilRound
+			unlockableAt
+			unlockedAt
+			unlocked
+		}}`;
+	};
+
 	static getMainnetQuery = (userAddress?: string): string => {
 		const uniswapConfig = config.MAINNET_CONFIG.pools.find(
 			c => c.type === StakingType.UNISWAPV3_ETH_GIV,
@@ -238,7 +275,9 @@ export class SubgraphQueryBuilder {
 					...(config.MAINNET_CONFIG.pools.filter(
 						c => c.type !== StakingType.UNISWAPV3_ETH_GIV,
 					) as Array<SimplePoolStakingConfig>),
-					...config.MAINNET_CONFIG.regenFarms,
+					...config.MAINNET_CONFIG.regenFarms
+						.map(regenFarm => regenFarm.pools)
+						.flat(),
 				],
 				userAddress,
 			)}
@@ -261,10 +300,13 @@ export class SubgraphQueryBuilder {
 					getGivStakingConfig(config.XDAI_CONFIG),
 					...(config.XDAI_CONFIG
 						.pools as Array<SimplePoolStakingConfig>),
-					...config.XDAI_CONFIG.regenFarms,
+					...config.XDAI_CONFIG.regenFarms
+						.map(regenFarm => regenFarm.pools)
+						.flat(),
 				],
 				userAddress,
 			)}
+			givpowerInfo: ${SubgraphQueryBuilder.getGIVPowersInfoQuery()},
 		}
 		`;
 	};

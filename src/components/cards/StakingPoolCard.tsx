@@ -1,17 +1,20 @@
-import React, { FC } from 'react';
-
 import BaseStakingCard from './BaseStakingCard';
-import {
+import { useStakingPool } from '@/hooks/useStakingPool';
+import type {
+	RegenFarmConfig,
 	RegenPoolStakingConfig,
 	SimplePoolStakingConfig,
 } from '@/types/config';
-import { useStakingPool } from '@/hooks/useStakingPool';
-
+import type { FC } from 'react';
 interface IStakingPoolCardProps {
 	poolStakingConfig: SimplePoolStakingConfig | RegenPoolStakingConfig;
+	regenStreamConfig?: RegenFarmConfig;
 }
 
-const StakingPoolCard: FC<IStakingPoolCardProps> = ({ poolStakingConfig }) => {
+const StakingPoolCard: FC<IStakingPoolCardProps> = ({
+	poolStakingConfig,
+	regenStreamConfig,
+}) => {
 	const { apr, notStakedAmount, stakedAmount, earned } =
 		useStakingPool(poolStakingConfig);
 	const stakeInfo = {
@@ -25,6 +28,7 @@ const StakingPoolCard: FC<IStakingPoolCardProps> = ({ poolStakingConfig }) => {
 		<BaseStakingCard
 			stakeInfo={stakeInfo}
 			poolStakingConfig={poolStakingConfig}
+			regenStreamConfig={regenStreamConfig}
 		/>
 	);
 };

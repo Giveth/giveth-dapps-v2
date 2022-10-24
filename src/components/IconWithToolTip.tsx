@@ -1,11 +1,9 @@
 import styled from 'styled-components';
+import { useRef, useState } from 'react';
+import { ITooltipDirection, Tooltip } from './Tooltip';
 import type { FC, ReactNode } from 'react';
 
-interface IDirection {
-	direction: 'right' | 'left' | 'top' | 'bottom';
-}
-
-interface IIconWithTooltipProps extends IDirection {
+interface IIconWithTooltipProps extends ITooltipDirection {
 	icon: ReactNode;
 	children: ReactNode;
 }
@@ -13,49 +11,29 @@ interface IIconWithTooltipProps extends IDirection {
 export const IconWithTooltip: FC<IIconWithTooltipProps> = ({
 	icon,
 	direction,
+	align = 'center',
 	children,
 }) => {
+	const [show, setShow] = useState(false);
+	const elRef = useRef<HTMLDivElement>(null);
+
 	return (
-		<IconWithTooltipContainer direction={direction}>
+		<IconWithTooltipContainer
+			onMouseEnter={() => setShow(true)}
+			onMouseLeave={() => setShow(false)}
+			ref={elRef}
+		>
 			{icon}
-			<span>{children}</span>
+			{show && (
+				<Tooltip direction={direction} align={align} parentRef={elRef}>
+					{children}
+				</Tooltip>
+			)}
 		</IconWithTooltipContainer>
 	);
 };
 
-const IconWithTooltipContainer = styled.div<IDirection>`
-	position: relative;
+const IconWithTooltipContainer = styled.div`
 	cursor: pointer;
-	&:hover {
-		span {
-			visibility: visible;
-			opacity: 1;
-		}
-	}
-	& > span {
-		visibility: hidden;
-		background-color: black;
-		color: #fff;
-		border-radius: 6px;
-		padding: 8px;
-		position: absolute;
-		z-index: 1;
-		${props => {
-			switch (props.direction) {
-				case 'top':
-					return `bottom: 120%;left: 50%;transform: translateX(-50%);margin-bottom: 4px;`;
-				case 'right':
-					return `left: 120%;top: 50%;transform: translateY(-50%);margin-left: 4px;`;
-				case 'left':
-					return `right: 120%;top: 50%;transform: translateY(-50%);margin-right: 4px;`;
-				case 'bottom':
-					return `top: 120%;left: 50%;transform: translateX(-50%);margin-top: 4px;`;
-				default:
-					break;
-			}
-		}}
-		/* Fade in tooltip - takes 1 second to go from 0% to 100% opac: */
-		opacity: 0;
-		transition: opacity 0.3s;
-	}
+	display: inline-block;
 `;

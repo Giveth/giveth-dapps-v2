@@ -7,6 +7,7 @@ import {
 	brandColors,
 	IconExternalLink,
 	OutlineButton,
+	mediaQueries,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
@@ -14,16 +15,16 @@ import Link from 'next/link';
 import { Flex, FlexCenter } from '../styled-components/Flex';
 import { Modal } from './Modal';
 import Routes from '@/lib/constants/Routes';
-import { RegenStreamConfig } from '@/types/config';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import { RegenFarmConfig } from '@/types/config';
 import type { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 
 interface IWhatisStreamModal extends IModal {
 	tokenDistroHelper?: TokenDistroHelper;
-	regenStreamConfig?: RegenStreamConfig;
+	regenStreamConfig?: RegenFarmConfig;
 }
 
 export const WhatisStreamModal: FC<IWhatisStreamModal> = ({
@@ -106,7 +107,10 @@ const WhatisStreamContainer = styled.div`
 			? `url('/images/stream1.svg')`
 			: `url('/images/stream2.svg')`};
 	background-repeat: no-repeat;
-	width: 570px;
+	width: 100%;
+	${mediaQueries.tablet} {
+		width: 570px;
+	}
 `;
 
 const TitleRow = styled(FlexCenter)`

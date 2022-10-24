@@ -30,16 +30,13 @@ import { getGivStakingConfig } from '@/helpers/networkProvider';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { useFarms } from '@/context/farm.context';
 import { TopInnerContainer, ExtLinkRow } from './commons';
-import { GIVfrens } from '@/components/GIVfrens';
 import { shortenAddress } from '@/lib/helpers';
 import { Col, Container, Row } from '@/components/Grid';
-import links from '@/lib/constants/links';
-import {
-	DaoCard,
-	DaoCardTitle,
-	DaoCardQuote,
-	DaoCardButton,
-} from '../GIVfrens.sc';
+
+import { GIVfrens } from '@/components/givfarm/GIVfrens';
+import GIVpowerStakingPoolCard from '../cards/GIVpowerStakingPoolCard';
+import { GIVpowerProvider } from '@/context/givpower.context';
+import { DaoCard } from '../givfarm/DaoCard';
 
 const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
 	const pools = [...config.MAINNET_CONFIG.pools, ...config.XDAI_CONFIG.pools];
@@ -214,13 +211,11 @@ export const TabGIVfarmBottom = () => {
 				</ArchivedPoolsToggle>
 				<>
 					<PoolRow>
-						<Col sm={6} lg={4}>
-							<StakingPoolCard
-								poolStakingConfig={getGivStakingConfig(
-									config.XDAI_CONFIG,
-								)}
-							/>
-						</Col>
+						<GIVpowerProvider>
+							<Col sm={6} lg={4} key={`givpower_card`}>
+								<GIVpowerStakingPoolCard />
+							</Col>
+						</GIVpowerProvider>
 						{showArchivedPools && (
 							<Col sm={6} lg={4}>
 								<StakingPoolCard
@@ -232,31 +227,10 @@ export const TabGIVfarmBottom = () => {
 						)}
 						{renderPools(chainId, showArchivedPools)}
 					</PoolRow>
-					{chainId === config.XDAI_NETWORK_NUMBER ? (
-						<GIVfrens
-							regenFarms={config.XDAI_CONFIG.regenFarms}
-							network={config.XDAI_NETWORK_NUMBER}
-						/>
-					) : (
-						<GIVfrens
-							regenFarms={config.MAINNET_CONFIG.regenFarms}
-							network={config.MAINNET_NETWORK_NUMBER}
-						/>
-					)}
+					<GIVfrens />
 				</>
 				<Col xs={12}>
-					<DaoCard>
-						<DaoCardTitle weight={900}>Add Your DAO</DaoCardTitle>
-						<DaoCardQuote size='small'>
-							Apply to kickstart a RegenFarm for your for-good DAO
-						</DaoCardQuote>
-						<DaoCardButton
-							label='APPLY NOW'
-							linkType='primary'
-							href={links.JOINGIVFRENS}
-							target='_blank'
-						/>
-					</DaoCard>
+					<DaoCard />
 				</Col>
 			</Container>
 		</GIVfarmBottomContainer>

@@ -217,7 +217,7 @@ const WalletAddressInput: FC<IProps> = ({
 				>
 					<CheckBox
 						onChange={setIsActive}
-						title='I’ll receive fund on this address'
+						label='I’ll receive fund on this address'
 						checked={isActive}
 					/>
 				</CheckBoxContainer>

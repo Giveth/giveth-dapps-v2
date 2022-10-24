@@ -12,6 +12,7 @@ import {
 	RegenPoolStakingConfig,
 	SimplePoolStakingConfig,
 	StakingPlatform,
+	StakingType,
 } from '@/types/config';
 import config from '../configuration';
 import { APR } from '@/types/poolInfo';
@@ -20,6 +21,7 @@ import { BN, Zero } from '@/helpers/number';
 import { getGasPreference } from '@/lib/helpers';
 
 import LM_Json from '../artifacts/UnipoolTokenDistributor.json';
+import GP_Json from '../artifacts/GivPower.json';
 import UNI_Json from '../artifacts/UNI.json';
 import BAL_WEIGHTED_POOL_Json from '../artifacts/BalancerWeightedPool.json';
 import BAL_VAULT_Json from '../artifacts/BalancerVault.json';
@@ -36,6 +38,7 @@ import { ISubgraphState } from '@/features/subgraph/subgraph.types';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
 const { abi: LM_ABI } = LM_Json;
+const { abi: GP_ABI } = GP_Json;
 const { abi: UNI_ABI } = UNI_Json;
 const { abi: BAL_WEIGHTED_POOL_ABI } = BAL_WEIGHTED_POOL_Json;
 const { abi: BAL_VAULT_ABI } = BAL_VAULT_Json;
@@ -74,17 +77,18 @@ const getUnipoolInfo = async (
 };
 
 export const getGivStakingAPR = async (
-	lmAddress: string,
 	network: number,
 	subgraphValue: ISubgraphState,
 	provider: JsonRpcProvider | null,
 ): Promise<APR> => {
+	const lmAddress = config.NETWORKS_CONFIG[network].GIV.LM_ADDRESS;
 	const sdh = new SubgraphDataHelper(subgraphValue);
 	const unipoolHelper = new UnipoolHelper(sdh.getUnipool(lmAddress));
 	let givStakingAPR: BigNumber = Zero;
-	const _provider = provider
-		? provider
-		: new JsonRpcProvider(config.NETWORKS_CONFIG[network].nodeUrl);
+	const _provider =
+		provider && provider._network.chainId === network
+			? provider
+			: new JsonRpcProvider(config.NETWORKS_CONFIG[network].nodeUrl);
 
 	const { totalSupply, rewardRate } = await getUnipoolInfo(
 		unipoolHelper,
@@ -267,7 +271,7 @@ const getSimplePoolStakingAPR = async (
 	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
 	const streamConfig =
 		regenStreamType &&
-		config.NETWORKS_CONFIG[network].regenStreams.find(
+		config.NETWORKS_CONFIG[network].regenFarms.find(
 			s => s.type === regenStreamType,
 		);
 	const tokenAddress = streamConfig
@@ -344,7 +348,19 @@ export const getUserStakeInfo = (
 	);
 	const rewards = BN(unipoolBalance.rewards);
 	const rewardPerTokenPaid = BN(unipoolBalance.rewardPerTokenPaid);
-	const stakedAmount = BN(unipoolBalance.balance);
+	let stakedAmount = BN(unipoolBalance.balance);
+	if (
+		config.XDAI_CONFIG.gGIV_ADDRESS &&
+		currentValues.networkNumber === config.XDAI_NETWORK_NUMBER &&
+		poolStakingConfig.type === StakingType.GIV_LM
+	) {
+		const gGIVBalance = sdh.getTokenBalance(
+			config.XDAI_CONFIG.gGIV_ADDRESS,
+		);
+		stakedAmount = BN(gGIVBalance.balance);
+	} else {
+		stakedAmount = BN(unipoolBalance.balance);
+	}
 	const notStakedAmount = BN(lpTokenBalance.balance);
 
 	if (unipoolHelper) {
@@ -488,7 +504,6 @@ export const approveERC20tokenTransfer = async (
 
 export const wrapToken = async (
 	amount: string,
-	poolAddress: string,
 	gardenAddress: string,
 	provider: Web3Provider | null,
 ): Promise<TransactionResponse | undefined> => {
@@ -682,6 +697,66 @@ export const withdrawTokens = async (
 		captureException(e, {
 			tags: {
 				section: 'withdrawTokens',
+			},
+		});
+	}
+};
+
+export const lockToken = async (
+	amount: string,
+	round: number,
+	contractAddress: string,
+	provider: Web3Provider | null,
+): Promise<TransactionResponse | undefined> => {
+	if (amount === '0') return;
+	if (!provider) {
+		console.error('Provider is null');
+		return;
+	}
+
+	const signer = provider.getSigner();
+
+	const givpowerContract = new Contract(contractAddress, GP_ABI, signer);
+	try {
+		return await givpowerContract
+			.connect(signer.connectUnchecked())
+			.lock(
+				amount,
+				round,
+				getGasPreference(
+					config.NETWORKS_CONFIG[provider.network.chainId],
+				),
+			);
+	} catch (error) {
+		console.log('Error on locking token:', error);
+		captureException(error, {
+			tags: {
+				section: 'lockToken',
+			},
+		});
+	}
+};
+
+export const getTotalGIVpower = async (
+	account: string,
+	contractAddress: string,
+	provider: Web3Provider | null,
+): Promise<BigNumber | undefined> => {
+	if (!provider) {
+		console.error('Provider is null');
+		return;
+	}
+
+	const signer = provider.getSigner();
+
+	const givpowerContract = new Contract(contractAddress, GP_ABI, signer);
+	try {
+		return await givpowerContract.balanceOf(account);
+	} catch (error) {
+		console.log('Error on get total GIVpower:', error);
+		captureException(error, {
+			tags: {
+				section: 'getTotalGIVpower',
 			},
 		});
 	}
