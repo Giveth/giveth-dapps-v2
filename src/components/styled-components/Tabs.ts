@@ -25,10 +25,10 @@ export const TabItem = styled(P)<ITab>`
 	${props =>
 		props.active &&
 		`
-	background: ${neutralColors.gray[100]};
-	box-shadow: 0 3px 20px rgba(212, 218, 238, 0.4);
-	border-radius: 50px;
-`}
+		background: ${neutralColors.gray[100]};
+		box-shadow: 0 3px 20px rgba(212, 218, 238, 0.4);
+		border-radius: 50px;
+	`}
 `;
 
 export const TabItemCount = styled.div`
