@@ -49,6 +49,7 @@ const Wrapper = styled(Flex)<{
 	checked?: boolean;
 }>`
 	cursor: pointer;
+	user-select: none;
 	color: ${props =>
 		props.disabled ? neutralColors.gray[600] : neutralColors.gray[800]};
 	> div:first-child {
