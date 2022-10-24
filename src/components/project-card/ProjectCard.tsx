@@ -132,9 +132,7 @@ const ProjectCard = (props: IProjectCard) => {
 												color={brandColors.giv[500]}
 											/>
 										</GivBackIconContainer>
-										<GivBackText>
-											GIVBACK ELIGIBLE
-										</GivBackText>
+										<GivBackText>GIVBACKS</GivBackText>
 									</Flex>
 								</Flex>
 								{projectPower?.powerRank &&
