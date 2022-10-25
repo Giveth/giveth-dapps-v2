@@ -20,7 +20,7 @@ const GIVbackToast = () => {
 			</div>
 			<div>
 				<Title>
-					<Caption medium>GIVback eligible</Caption>
+					<Caption medium>GIVbacks</Caption>
 					<IconWithTooltip
 						icon={<IconHelp size={16} />}
 						direction={isTablet ? 'left' : 'top'}
