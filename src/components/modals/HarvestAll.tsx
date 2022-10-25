@@ -131,7 +131,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	//GIVfarm
 	const [earnedLiquid, setEarnedLiquid] = useState(ethers.constants.Zero);
 	const [earnedStream, setEarnedStream] = useState<BigNumber>(Zero);
-	//GIVback
+	//GIVbacks
 	const [givBackStream, setGivBackStream] = useState<BigNumber.Value>(0);
 	//Sum
 	const [sumLiquid, setSumLiquid] = useState(ethers.constants.Zero);
@@ -189,12 +189,12 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 
 	//calculate Liquid Sum
 	useEffect(() => {
-		setSumLiquid(rewardLiquidPart.add(earnedLiquid)); // earnedLiquid includes the givback liquid part
+		setSumLiquid(rewardLiquidPart.add(earnedLiquid)); // earnedLiquid includes the givbacks liquid part
 	}, [rewardLiquidPart, earnedLiquid]);
 
 	//calculate Stream Sum
 	useEffect(() => {
-		setSumStream(BigNumber.sum(rewardStream, earnedStream)); // earnedStream includes the givback stream part
+		setSumStream(BigNumber.sum(rewardStream, earnedStream)); // earnedStream includes the givbacks stream part
 	}, [rewardStream, earnedStream]);
 
 	useEffect(() => {
