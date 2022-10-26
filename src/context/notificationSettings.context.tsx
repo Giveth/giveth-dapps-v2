@@ -30,7 +30,7 @@ export const NotificationSettingsProvider: FC<IProviderProps> = props => {
 
 	useEffect(() => {
 		fetchNotificationSettings()
-			.then(res => setNotificationSettings(res.notificationSettings))
+			.then(res => setNotificationSettings(res?.notificationSettings))
 			.catch(showToastError);
 	}, []);
 

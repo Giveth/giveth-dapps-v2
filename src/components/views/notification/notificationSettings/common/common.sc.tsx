@@ -19,3 +19,14 @@ export const SectionSubtitle = styled.div`
 	margin-top: 8px;
 	margin-bottom: 7px;
 `;
+
+export const ItemsWrapper = styled.div<{ isOpen: boolean; height: number }>`
+	height: ${({ isOpen, height }) => (isOpen ? height + 'px' : 0)};
+	transition: height 1s ease-in-out;
+	overflow: hidden;
+	> div {
+		> div:last-child {
+			padding-bottom: 32px;
+		}
+	}
+`;

@@ -11,11 +11,13 @@ const CheckboxEmailNotification = () => {
 				label='Send me email'
 				checked={emailNotification}
 				onChange={setEmailNotification}
+				size={18}
 			/>
 			<Checkbox
 				label='Dapp notification'
 				checked={dappNotification}
 				onChange={setDappNotification}
+				size={18}
 			/>
 		</Container>
 	);

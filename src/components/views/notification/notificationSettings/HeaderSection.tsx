@@ -8,10 +8,18 @@ import styled from 'styled-components';
 import InternalLink from '@/components/InternalLink';
 import Routes from '@/lib/constants/Routes';
 import { FlexCenter } from '@/components/styled-components/Flex';
+import AutoSave from '@/components/AutoSave';
+import useDetectDevice from '@/hooks/useDetectDevice';
 
 const HeaderSection = () => {
+	const { isMobile } = useDetectDevice();
 	return (
 		<Header>
+			{!isMobile && (
+				<Absolute>
+					<AutoSave />
+				</Absolute>
+			)}
 			<HeaderTop>
 				<InternalLink href={Routes.Notification}>
 					<BackButton>
@@ -28,6 +36,12 @@ const HeaderSection = () => {
 	);
 };
 
+const Absolute = styled.div`
+	position: absolute;
+	top: 36px;
+	right: 40px;
+`;
+
 const HeaderTop = styled.div`
 	display: flex;
 	gap: 16px;
@@ -36,6 +50,7 @@ const HeaderTop = styled.div`
 
 const Header = styled.div`
 	padding: 24px 40px;
+	position: relative;
 `;
 
 const BackButton = styled(FlexCenter)`

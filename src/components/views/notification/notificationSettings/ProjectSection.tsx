@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { SectionContainer } from './common/common.sc';
+import { ItemsWrapper, SectionContainer } from './common/common.sc';
 import SectionHeader from './common/SectionHeader';
 import { SectionItem } from './common/SectionItem';
-import CheckboxEmailNotification from './common/CheckboxEmailNotification';
 import { GrayBar } from '@/components/views/notification/notification.sc';
 
 const ProjectSection = () => {
-	const [isOpen, setIsOpen] = useState(false);
+	const [isOpen, setIsOpen] = useState(true);
 	const [itemsHeight, setItemsHeight] = useState(0);
 
 	useEffect(() => {
@@ -37,7 +35,6 @@ const ProjectSection = () => {
 							<SectionItem
 								title={item.title}
 								description={item.description}
-								options={<CheckboxEmailNotification />}
 								key={item.title}
 							/>
 						))}
@@ -48,54 +45,45 @@ const ProjectSection = () => {
 	);
 };
 
-const ItemsWrapper = styled.div<{ isOpen: boolean; height: number }>`
-	height: ${({ isOpen, height }) => (isOpen ? height + 'px' : 0)};
-	transition: height 1s ease-in-out;
-	overflow: hidden;
-`;
-
 const itemsArray = [
 	{
-		title: 'Project Saved',
-		description: 'When Project is saved as draft',
-	},
-	{
-		title: 'Project Published',
+		title: 'Project published',
 		description: 'When Project has been published',
+		notificationTypeId: 8,
 	},
 	{
-		title: 'Project Updates',
+		title: 'Project updates',
 		description: 'You Posted an update on your project',
+		notificationTypeId: 40,
 	},
 	{
-		title: 'Project  status',
-		description:
-			'When Project has been listed, unlisted, cancelled, activated or deactivated',
+		title: 'Project updates',
+		description: 'When your liked project has an update',
+		notificationTypeId: 42,
 	},
 	{
-		title: 'Form  status',
+		title: 'Project status',
 		description:
-			'When Form has been sent and under review, rejected or approved',
+			'When your own Project has been listed, unlisted, cancelled, activated or deactivated',
+		notificationTypeId: 9,
+	},
+	{
+		title: 'Project status',
+		description:
+			'When your liked Project has been listed, unlisted, cancelled, activated or deactivated',
+		notificationTypeId: 18,
 	},
 	{
 		title: 'Project likes',
 		description: 'When someone liked your project',
-	},
-	{
-		title: 'Comments',
-		description: 'When someone writes a comment on your project',
+		notificationTypeId: 46,
 	},
 	{
 		title: 'Donations',
 		description:
 			'When someone donates to your project, when you \n' +
 			'donate to a project, donation success and failure.',
-	},
-	{
-		title: 'Verification',
-		description:
-			'Your Project Verification Status, reminders to approve\n' +
-			'for verification.',
+		notificationTypeId: 37,
 	},
 	{
 		title: 'Your boost status',
