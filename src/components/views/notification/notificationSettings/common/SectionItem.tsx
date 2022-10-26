@@ -1,17 +1,17 @@
 import { B, neutralColors, P } from '@giveth/ui-design-system';
-import { FC, ReactNode } from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
 import { Col, Row } from '@/components/Grid';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
+import CheckboxEmailNotification from '@/components/views/notification/notificationSettings/common/CheckboxEmailNotification';
 
 interface ISectionItem {
 	title: string;
 	description: string;
-	options: ReactNode;
 }
 
 export const SectionItem: FC<ISectionItem> = props => {
-	const { title, description, options } = props;
+	const { title, description } = props;
 	return (
 		<Container>
 			<ColStyled xs={6} sm={7} md={8}>
@@ -19,7 +19,7 @@ export const SectionItem: FC<ISectionItem> = props => {
 				<Description>{description}</Description>
 			</ColStyled>
 			<ColStyled xs={6} sm={5} md={4}>
-				{options}
+				<CheckboxEmailNotification />
 			</ColStyled>
 		</Container>
 	);
