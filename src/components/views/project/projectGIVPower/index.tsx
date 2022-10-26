@@ -1,5 +1,5 @@
 import { captureException } from '@sentry/nextjs';
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import GIVPowerHeader from './GIVPowerHeader';
 import GIVPowerTable from './GIVPowerTable';
 import NoBoost from '@/components/views/project/projectGIVPower/NoBoost';
@@ -9,8 +9,7 @@ import { IProjectPower, IUserProjectPowers } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import { Flex } from '@/components/styled-components/Flex';
 
-interface ProjectGIVPowerIndexProps {
-	userId?: string;
+interface IProjectGIVPowerIndexProps {
 	projectId: string;
 	projectPower?: IProjectPower;
 	isAdmin: boolean;
@@ -18,15 +17,15 @@ interface ProjectGIVPowerIndexProps {
 
 const itemPerPage = 10;
 
-const ProjectGIVPowerIndex = ({
-	projectId,
-	projectPower,
-	isAdmin,
-}: ProjectGIVPowerIndexProps) => {
+const ProjectGIVPowerIndex: FC<IProjectGIVPowerIndexProps> = props => {
+	const { projectId, projectPower, isAdmin } = props;
+
 	const [boostingsData, setBoostingsData] = useState<IUserProjectPowers>();
 	const [page, setPage] = useState(0);
+
 	const hasGivPower = boostingsData ? boostingsData.totalCount > 0 : false;
 	const totalCount = boostingsData?.totalCount ?? 0;
+
 	const fetchProjectBoostings = async () => {
 		if (projectId) {
 			client

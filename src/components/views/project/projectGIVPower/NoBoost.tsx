@@ -1,20 +1,23 @@
 import styled from 'styled-components';
 import { QuoteText } from '@giveth/ui-design-system';
+import { FC } from 'react';
 
-const NoBoost = ({ isAdmin }: { isAdmin: boolean }) => {
+interface IProps {
+	isAdmin: boolean;
+}
+
+const NoBoost: FC<IProps> = ({ isAdmin }) => {
 	return (
 		<Wrapper size='small'>
 			<div>
 				{isAdmin
-					? `Your project hasn't received any boosts yet!
-				`
-					: `This project hasn't received any boosts yet!`}
+					? 'Your project has not yet been boosted!'
+					: "This project hasn't been boosted yet!"}
 			</div>
 			<div>
 				{isAdmin
-					? `Share this project on social media and ask your friends
-				for a boost!`
-					: `Be the first one to boost this project.`}
+					? 'Share your project on social media and ask your friends to use GIVpower to give you a boost!'
+					: 'Be the first to boost this project with GIVpower.'}
 			</div>
 		</Wrapper>
 	);
