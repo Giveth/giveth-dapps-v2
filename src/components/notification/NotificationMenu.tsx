@@ -13,15 +13,17 @@ import { INotificationData } from '@/helpers/html';
 import { NotificationBox } from './NotificationBox';
 import Routes from '@/lib/constants/Routes';
 import { fetchNotificationsData } from '@/features/notification/notification.services';
+import { INotificationsState } from '@/features/notification/notification.types';
 
 const NotificationMenu = () => {
 	const [isMounted, setIsMounted] = useState(false);
 	const theme = useAppSelector(state => state.general.theme);
-	const [notifications, setNotifications] = useState();
+	const [notifications, setNotifications] = useState<
+		INotificationsState | undefined
+	>();
 	useEffect(() => {
 		setIsMounted(true);
 		fetchNotificationsData().then(res => {
-			console.log('notifications', res);
 			setNotifications(res);
 		});
 	}, []);
