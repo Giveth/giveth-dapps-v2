@@ -169,9 +169,10 @@ export function TabPowerBottom() {
 				<HeadingSectionContainer>
 					<HeadingTextContainer>
 						<QuoteText size='small'>
-							Support verified projects using “Boost”. Projects
-							backed by GIVpower will benefit from more GIVbacks
-							for their donors and eventually, matching funds.
+							Use your GIVpower to <i>boost</i> verified projects
+							to improve their project ranking. Donors to higher
+							ranked projects will get more GIV from our GIVbacks
+							program.
 						</QuoteText>
 					</HeadingTextContainer>
 					<LearnMoreButton
