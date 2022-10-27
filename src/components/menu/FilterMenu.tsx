@@ -11,6 +11,7 @@ import { forwardRef } from 'react';
 import { mediaQueries } from '@/lib/constants/constants';
 import { FlexCenter } from '../styled-components/Flex';
 import CheckBox from '../Checkbox';
+import { useIntl } from 'react-intl';
 import { useProjectsContext } from '@/context/projects.context';
 import { zIndex } from '@/lib/constants/constants';
 
@@ -21,6 +22,7 @@ interface IFilterMenuProps {
 
 export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 	({ handleClose, isOpen }, ref) => {
+		const { formatMessage } = useIntl();
 		const { setVariables, variables } = useProjectsContext();
 		const filtersCount = variables?.filters?.length ?? 0;
 
@@ -56,7 +58,9 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 						<IconX size={24} />
 					</CloseContainer>
 					<FlexCenter gap='8px'>
-						<ButtonText size='medium'>Filters</ButtonText>
+						<ButtonText size='medium'>
+							{formatMessage({ id: 'label.filters' })}
+						</ButtonText>
 						{filtersCount !== 0 && (
 							<PinkyColoredNumber size='medium'>
 								{filtersCount}
@@ -65,7 +69,7 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 					</FlexCenter>
 				</Header>
 				<Section>
-					<B>Project features</B>
+					<B>{formatMessage({ id: 'label.project_features' })}</B>
 					{projectFeatures.map((projectFeature, idx) => (
 						<FeatureItem key={idx}>
 							<CheckBox
@@ -87,7 +91,7 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 					onClick={clearFilters}
 					disabled={filtersCount === 0}
 					buttonType='texty-secondary'
-					label='Clear all Filters'
+					label={formatMessage({ id: 'label.clear_all_filters' })}
 				/>
 			</MenuContainer>
 		);

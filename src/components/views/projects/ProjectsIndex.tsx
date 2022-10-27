@@ -224,7 +224,12 @@ const ProjectsIndex = (props: IProjectsView) => {
 							{formatMessage({
 								id: 'page.projects.title.explore',
 							})}
-							<span>{totalCount} Projects</span>
+							<span>
+								{totalCount}{' '}
+								{formatMessage({
+									id: 'page.projects.title.projects',
+								})}
+							</span>
 						</Title>
 						<ProjectsSortSelect />
 					</Flex>
@@ -235,7 +240,13 @@ const ProjectsIndex = (props: IProjectsView) => {
 					<>
 						<StyledButton
 							onClick={loadMore}
-							label={isLoading ? '' : 'LOAD MORE'}
+							label={
+								isLoading
+									? ''
+									: formatMessage({
+											id: 'component.button.load_more',
+									  })
+							}
 							icon={
 								isLoading && (
 									<LoadingDotIcon>
@@ -246,7 +257,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 						/>
 						<StyledButton
 							onClick={handleCreateButton}
-							label='Create a Project'
+							label={formatMessage({
+								id: 'component.button.create_project',
+							})}
 							transparent
 						/>
 					</>

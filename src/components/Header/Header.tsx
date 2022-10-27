@@ -212,7 +212,7 @@ const Header: FC<IHeader> = () => {
 								theme={theme}
 								active={link.href.includes(router.route)}
 							>
-								{link.title}
+								{formatMessage({ id: link.title })}
 							</HeaderLink>
 						</Link>
 					))}
@@ -287,7 +287,9 @@ const Header: FC<IHeader> = () => {
 												shortenAddress(account)}
 										</GLink>
 										<WBNetwork size='Tiny'>
-											Connected to{' '}
+											{formatMessage({
+												id: 'label.connected_to',
+											})}{' '}
 											{networksParams[chainId]
 												?.chainName ||
 												library?._network?.name}

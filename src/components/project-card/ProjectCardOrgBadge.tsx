@@ -5,6 +5,7 @@ import { neutralColors, Overline } from '@giveth/ui-design-system';
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { mediaQueries } from '@/lib/constants/constants';
+import { useIntl } from 'react-intl';
 
 interface IProjectCardOrgBadge {
 	isHover: boolean;
@@ -32,6 +33,7 @@ const ProjectCardOrgBadge = ({
 	isAbsolute,
 	isProjectView,
 }: IProjectCardOrgBadge) => {
+	const { formatMessage } = useIntl();
 	const displayImg = setOrgImage(organization);
 	const hideBadge =
 		organization === ORGANIZATION.giveth ||
@@ -42,7 +44,9 @@ const ProjectCardOrgBadge = ({
 
 	const content = (
 		<>
-			<OrganizationText>PROJECT BY:  </OrganizationText>
+			<OrganizationText>
+				{formatMessage({ id: 'label.project_by' })}:  
+			</OrganizationText>
 			<ImageContainer>
 				<img src={displayImg} alt={organization} />
 			</ImageContainer>

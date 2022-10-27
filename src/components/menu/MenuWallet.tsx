@@ -12,6 +12,7 @@ import {
 	Overline,
 } from '@giveth/ui-design-system';
 
+import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
 import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
@@ -29,6 +30,7 @@ import { signOut } from '@/features/user/user.thunks';
 import { ETheme } from '@/features/general/general.slice';
 
 const MenuWallet = () => {
+	const { formatMessage } = useIntl();
 	const [isMounted, setIsMounted] = useState(false);
 	const [balance, setBalance] = useState<string | null>(null);
 	const { chainId, account, library } = useWeb3React();
@@ -99,7 +101,7 @@ const MenuWallet = () => {
 				theme={theme}
 				isSignedIn={isSignedIn || false}
 			>
-				<Title>WALLET</Title>
+				<Title>{formatMessage({ id: 'label.wallet' })}</Title>
 				<Subtitle>
 					<LeftSection>
 						{balance + ' '}
@@ -111,17 +113,17 @@ const MenuWallet = () => {
 							dispatch(setShowWalletModal(true));
 						}}
 					>
-						Change wallet
+						{formatMessage({ id: 'label.change_wallet' })}
 					</StyledButton>
 				</Subtitle>
-				<Title>NETWORK</Title>
+				<Title>{formatMessage({ id: 'label.network' })}</Title>
 				<Subtitle>
 					<LeftSection>{networkName}</LeftSection>
 					{chainId && (
 						<StyledButton
 							onClick={() => switchNetworkHandler(chainId)}
 						>
-							Switch network
+							{formatMessage({ id: 'label.switch_network' })}
 						</StyledButton>
 					)}
 				</Subtitle>
@@ -132,7 +134,7 @@ const MenuWallet = () => {
 							onClick={() => goRoute(i)}
 							theme={theme}
 						>
-							{i.title}
+							{formatMessage({ id: i.title })}
 						</MenuItem>
 					))}
 					{isSignedIn && (
@@ -151,28 +153,32 @@ const MenuWallet = () => {
 
 const walletMenuArray = [
 	{
-		title: 'My Account',
+		title: 'label.my_account',
 		url: Routes.MyAccount,
 		requiresSign: true,
 	},
 	{
-		title: 'My Projects',
+		title: 'label.my_projects',
 		url: Routes.MyProjects,
 		requiresSign: true,
 	},
 	{
-		title: 'My Donations',
+		title: 'label.my_donations',
 		url: Routes.MyDonations,
 		requiresSign: true,
 	},
 	{
-		title: 'Create a Project',
+		title: 'label.create_a_project',
 		url: Routes.CreateProject,
 		requiresSign: true,
 		requiresRegistration: true,
 	},
-	{ title: 'Report a bug', url: links.REPORT_ISSUE, requiresSign: false },
-	{ title: 'Support', url: Routes.Support, requiresSign: false },
+	{
+		title: 'label.report_a_bug',
+		url: links.REPORT_ISSUE,
+		requiresSign: false,
+	},
+	{ title: 'label.support', url: Routes.Support, requiresSign: false },
 ];
 
 const MenuItem = styled.a`
