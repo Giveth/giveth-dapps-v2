@@ -43,7 +43,7 @@ const BoostedInnerModal: FC<IBoostedModalProps> = ({
 					/>
 					<Link href={Routes.MyBoostedProjects} passHref>
 						<CustomButtonLink
-							linkType='texty'
+							linkType='texty-primary'
 							size='small'
 							label='see your boosted projects'
 						/>
