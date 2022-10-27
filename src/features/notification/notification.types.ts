@@ -11,3 +11,16 @@ export interface IHtmlTemplate {
 	content: string;
 	href?: string;
 }
+
+export interface INotification {
+	createdAt: string;
+	metadata: {
+		[key: string]: string;
+	};
+	notificationType: {
+		category: string;
+		content: string;
+		description: string;
+		htmlTemplate: IHtmlTemplate[];
+	};
+}
