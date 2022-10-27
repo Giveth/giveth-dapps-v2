@@ -39,7 +39,7 @@ export const DeletePowerBoostModal: FC<IDeletePowerBoostModal> = ({
 			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerTitlePosition={'left'}
-			headerTitle={canDelete ? 'Are you sure?' : 'Ooops!'}
+			headerTitle={canDelete ? 'Are you sure?' : 'Oops!'}
 			headerIcon={<IconRocketInSpace32 />}
 		>
 			<ConfirmPowerBoostModalContainer>
