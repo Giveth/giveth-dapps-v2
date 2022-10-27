@@ -5,3 +5,9 @@ export interface INotificationCountState {
 	lastNotificationId: string;
 	total: number;
 }
+
+export interface IHtmlTemplate {
+	type: string;
+	content: string;
+	href?: string;
+}
