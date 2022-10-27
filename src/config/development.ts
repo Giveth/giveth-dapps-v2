@@ -20,6 +20,7 @@ const config: EnvConfig = {
 	MICROSERVICES: {
 		authentication: `${BASE_ROUTE}/siweauthmicroservice/v1`,
 		notification: `${NOTIFICATION_BASE_ROUTE}/v1/notifications`,
+		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
 	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
 	XDAI_NETWORK_NUMBER: XDAI_NETWORK_NUMBER,

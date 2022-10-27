@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { SectionContainer } from './common/common.sc';
+import { ItemsWrapper, SectionContainer } from './common/common.sc';
 import SectionHeader from './common/SectionHeader';
 import { SectionItem } from './common/SectionItem';
-import CheckboxEmailNotification from './common/CheckboxEmailNotification';
 import { GrayBar } from '@/components/views/notification/notification.sc';
 
 const GIVeconomySection = () => {
@@ -37,10 +35,8 @@ const GIVeconomySection = () => {
 					<div id='GIVeconomyWrapperId'>
 						{itemsArray.map(item => (
 							<SectionItem
-								key={item.title}
-								title={item.title}
-								description={item.description}
-								options={<CheckboxEmailNotification />}
+								key={item.notificationTypeId}
+								item={item}
 							/>
 						))}
 					</div>
@@ -50,40 +46,31 @@ const GIVeconomySection = () => {
 	);
 };
 
-const ItemsWrapper = styled.div<{ isOpen: boolean; height: number }>`
-	height: ${({ isOpen, height }) => (isOpen ? height + 'px' : 0)};
-	transition: height 1s ease-in-out;
-	overflow: hidden;
-`;
-
 const itemsArray = [
 	{
 		title: 'Rewards ',
 		description:
 			'Shows when you have claimable rewards and \n' +
 			'your harvested rewards ',
+		notificationTypeId: 28,
 	},
 	{
 		title: 'Stakes',
 		description: 'Shows when you stake or unstake on the GIVfarm',
-	},
-	{
-		title: 'Farm',
-		description:
-			'When a new farm has been added to the platform\n' +
-			'or disabled. ',
+		notificationTypeId: 30,
 	},
 	{
 		title: 'GIVbacks',
 		description:
 			'When GIVbacks are ready to be claimed after each\n' + 'round',
+		notificationTypeId: 32,
 	},
-	{
-		title: 'GIVpower Allocations',
-		description:
-			'Shows the your locked, unlocked ,received amount of \n' +
-			'GIVpower and the amount automatically relocked.',
-	},
+	// {
+	// 	title: 'GIVpower Allocations',
+	// 	description:
+	// 		'Shows the your locked, unlocked ,received amount of \n' +
+	// 		'GIVpower and the amount automatically relocked.',
+	// },
 ];
 
 export default GIVeconomySection;

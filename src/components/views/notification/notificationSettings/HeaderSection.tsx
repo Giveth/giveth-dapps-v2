@@ -2,12 +2,14 @@ import {
 	H5,
 	IconArrowLeft,
 	Lead,
+	mediaQueries,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import InternalLink from '@/components/InternalLink';
 import Routes from '@/lib/constants/Routes';
 import { FlexCenter } from '@/components/styled-components/Flex';
+import AutoSave from '@/components/AutoSave';
 
 const HeaderSection = () => {
 	return (
@@ -20,6 +22,9 @@ const HeaderSection = () => {
 				</InternalLink>
 				<H5 weight={700}>Notification Settings</H5>
 			</HeaderTop>
+			<AutoSaveContainer>
+				<AutoSave />
+			</AutoSaveContainer>
 			<Lead>
 				Important notifications outside you notification settings may
 				still be sent to you
@@ -27,6 +32,16 @@ const HeaderSection = () => {
 		</Header>
 	);
 };
+
+const AutoSaveContainer = styled.div`
+	margin-bottom: 10px;
+
+	${mediaQueries.mobileL} {
+		position: absolute;
+		top: 36px;
+		right: 40px;
+	}
+`;
 
 const HeaderTop = styled.div`
 	display: flex;
@@ -36,6 +51,7 @@ const HeaderTop = styled.div`
 
 const Header = styled.div`
 	padding: 24px 40px;
+	position: relative;
 `;
 
 const BackButton = styled(FlexCenter)`

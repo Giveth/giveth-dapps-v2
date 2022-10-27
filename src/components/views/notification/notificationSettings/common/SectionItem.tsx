@@ -1,17 +1,20 @@
 import { B, neutralColors, P } from '@giveth/ui-design-system';
-import { FC, ReactNode } from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
 import { Col, Row } from '@/components/Grid';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
+import DappMailCheckbox from '@/components/views/notification/notificationSettings/common/DappMailCheckbox';
 
 interface ISectionItem {
-	title: string;
-	description: string;
-	options: ReactNode;
+	item: {
+		title: string;
+		description: string;
+		notificationTypeId: number;
+	};
 }
 
-export const SectionItem: FC<ISectionItem> = props => {
-	const { title, description, options } = props;
+export const SectionItem: FC<ISectionItem> = ({ item }) => {
+	const { title, description, notificationTypeId } = item;
 	return (
 		<Container>
 			<ColStyled xs={6} sm={7} md={8}>
@@ -19,7 +22,7 @@ export const SectionItem: FC<ISectionItem> = props => {
 				<Description>{description}</Description>
 			</ColStyled>
 			<ColStyled xs={6} sm={5} md={4}>
-				{options}
+				<DappMailCheckbox notificationTypeId={notificationTypeId} />
 			</ColStyled>
 		</Container>
 	);
