@@ -21,3 +21,8 @@ export const fetchNotificationCount =
 			return defaultNotificationValues;
 		}
 	};
+
+export const fetchNotificationsData = async () => {
+	const data = await getRequest(`${config.MICROSERVICES.notification}`, true);
+	return data;
+};
