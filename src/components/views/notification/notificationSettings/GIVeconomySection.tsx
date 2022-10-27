@@ -35,9 +35,8 @@ const GIVeconomySection = () => {
 					<div id='GIVeconomyWrapperId'>
 						{itemsArray.map(item => (
 							<SectionItem
-								key={item.title}
-								title={item.title}
-								description={item.description}
+								key={item.notificationTypeId}
+								item={item}
 							/>
 						))}
 					</div>
@@ -66,12 +65,12 @@ const itemsArray = [
 			'When GIVbacks are ready to be claimed after each\n' + 'round',
 		notificationTypeId: 32,
 	},
-	{
-		title: 'GIVpower Allocations',
-		description:
-			'Shows the your locked, unlocked ,received amount of \n' +
-			'GIVpower and the amount automatically relocked.',
-	},
+	// {
+	// 	title: 'GIVpower Allocations',
+	// 	description:
+	// 		'Shows the your locked, unlocked ,received amount of \n' +
+	// 		'GIVpower and the amount automatically relocked.',
+	// },
 ];
 
 export default GIVeconomySection;

@@ -33,9 +33,8 @@ const ProjectSection = () => {
 					<div id='projectWrapperId'>
 						{itemsArray.map(item => (
 							<SectionItem
-								title={item.title}
-								description={item.description}
-								key={item.title}
+								key={item.notificationTypeId}
+								item={item}
 							/>
 						))}
 					</div>
@@ -85,16 +84,16 @@ const itemsArray = [
 			'donate to a project, donation success and failure.',
 		notificationTypeId: 37,
 	},
-	{
-		title: 'Your boost status',
-		description:
-			'Shows when you boost a project, change the allocation of \n' +
-			'GIVpower.',
-	},
-	{
-		title: 'Project boost status',
-		description: 'Shows when your project receives a boost',
-	},
+	// {
+	// 	title: 'Your boost status',
+	// 	description:
+	// 		'Shows when you boost a project, change the allocation of \n' +
+	// 		'GIVpower.',
+	// },
+	// {
+	// 	title: 'Project boost status',
+	// 	description: 'Shows when your project receives a boost',
+	// },
 ];
 
 export default ProjectSection;

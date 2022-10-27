@@ -6,16 +6,29 @@ import {
 	useEffect,
 	useState,
 } from 'react';
-import { fetchNotificationSettings } from '@/features/notification/notification.services';
+import {
+	fetchNotificationSettings,
+	INotificationSettingsPostInput,
+	postNotificationSettings,
+} from '@/features/notification/notification.services';
 import { INotificationSetting } from '@/features/notification/notification.types';
 import { showToastError } from '@/lib/helpers';
 
-interface INotificationSettingsContext {
-	notificationSettings?: INotificationSetting[];
+interface IChangeableItems {
+	allowEmailNotification?: boolean;
+	allowDappPushNotification?: boolean;
 }
 
-const NotificationSettingsContext =
-	createContext<INotificationSettingsContext | null>(null);
+interface INotificationSettingsContext {
+	notificationSettings?: INotificationSetting[];
+	setNotificationSettings: (i: INotificationSettingsPostInput) => void;
+}
+
+const NotificationSettingsContext = createContext<INotificationSettingsContext>(
+	{
+		setNotificationSettings: async () => null,
+	},
+);
 
 NotificationSettingsContext.displayName = 'NotificationSettingsContext';
 
@@ -34,10 +47,36 @@ export const NotificationSettingsProvider: FC<IProviderProps> = props => {
 			.catch(showToastError);
 	}, []);
 
-	console.log('notificationSettings', notificationSettings);
+	const handleSet = (inputObj: INotificationSettingsPostInput) => {
+		const {
+			notificationTypeId,
+			allowDappPushNotification,
+			allowEmailNotification,
+		} = inputObj;
+		const newItem: IChangeableItems = {};
+		if (allowDappPushNotification !== undefined) {
+			newItem['allowDappPushNotification'] = allowDappPushNotification;
+		}
+		if (allowEmailNotification !== undefined) {
+			newItem['allowEmailNotification'] = allowEmailNotification;
+		}
+		const newSettingsItems = notificationSettings?.map(i => {
+			if (i.notificationTypeId === notificationTypeId) {
+				return { ...i, ...newItem };
+			}
+			return i;
+		});
+		setNotificationSettings(newSettingsItems);
+		postNotificationSettings(inputObj).catch(showToastError);
+	};
 
 	return (
-		<NotificationSettingsContext.Provider value={{ notificationSettings }}>
+		<NotificationSettingsContext.Provider
+			value={{
+				notificationSettings,
+				setNotificationSettings: handleSet,
+			}}
+		>
 			{children}
 		</NotificationSettingsContext.Provider>
 	);
