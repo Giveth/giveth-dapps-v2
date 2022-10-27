@@ -281,16 +281,16 @@ export function TabPowerBottom() {
 							</BenefitsCardHeading>
 							<BenefitsCardTextContainer>
 								<QuoteText size='small'>
-									Fire up your community to get more boosts &
+									Fire up your community to use GIVpower to
 									improve your rank.
 								</QuoteText>
 								<QuoteText size='small'>
 									The higher your rank, the more GIVbacks your
-									donors receive.
+									donors will receive.
 								</QuoteText>
 								<QuoteText size='small'>
-									Top-ranked projects get funding from the
-									Giveth Matching Pool.
+									Top-ranked projects will eventually get
+									funding from the Giveth Matching Pool.
 								</QuoteText>
 								<br />
 								<Link href={Routes.Projects} passHref>
