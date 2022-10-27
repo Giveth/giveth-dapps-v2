@@ -265,8 +265,8 @@ export function TabPowerBottom() {
 										multiplier.
 									</QuoteText>
 									<QuoteText size='small'>
-										Soon: Donate to top-ranked projects to
-										get extra GIVbacks.
+										Donate to top-ranked projects and get
+										more GIV back!
 									</QuoteText>
 									<br />
 								</BenefitsCardTextContainer>
