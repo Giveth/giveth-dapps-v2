@@ -6,6 +6,7 @@ import { showToastError } from '@/lib/helpers';
 import {
 	INotificationSetting,
 	INotificationSettings,
+	INotificationsState,
 } from './notification.types';
 import type { INotificationCountState } from './notification.types';
 
@@ -84,6 +85,9 @@ export const postNotificationSettings: TPostNotificationSettings = async i => {
 };
 
 export const fetchNotificationsData = async () => {
-	const data = await getRequest(`${config.MICROSERVICES.notification}`, true);
+	const data: Promise<INotificationsState> = await getRequest(
+		`${config.MICROSERVICES.notification}`,
+		true,
+	);
 	return data;
 };
