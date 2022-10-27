@@ -27,7 +27,7 @@ export interface INotification {
 
 export interface INotificationsState {
 	count: number;
-	notifications: INotification[];
+	notifications?: INotification[];
 }
 
 interface INotificationSettingType {
