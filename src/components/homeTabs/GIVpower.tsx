@@ -204,6 +204,21 @@ export function TabPowerBottom() {
 							</Link>
 						</FeaturesCardItem>
 						<FeaturesCardItem>
+							<Image
+								height='70'
+								src={Growth}
+								alt='givpower earn yield icon'
+							/>
+							<H4 weight={700}>Earn a Yield</H4>
+							<Lead>
+								The longer you lock, the greater your rewards.
+							</Lead>
+
+							<Link href={Routes.GIVfarm} passHref>
+								<CardBottomText>SEE REWARDS</CardBottomText>
+							</Link>
+						</FeaturesCardItem>
+						<FeaturesCardItem>
 							<div>
 								<IconRocketInSpace32
 									size={65}
@@ -217,21 +232,6 @@ export function TabPowerBottom() {
 							</Lead>
 							<Link href={Routes.Projects} passHref>
 								<CardBottomText>BOOST PROJECTS</CardBottomText>
-							</Link>
-						</FeaturesCardItem>
-						<FeaturesCardItem>
-							<Image
-								height='70'
-								src={Growth}
-								alt='givpower earn yield icon'
-							/>
-							<H4 weight={700}>Earn a Yield</H4>
-							<Lead>
-								The longer you lock, the greater your rewards.
-							</Lead>
-
-							<Link href={Routes.GIVfarm} passHref>
-								<CardBottomText>SEE REWARDS</CardBottomText>
 							</Link>
 						</FeaturesCardItem>
 					</FeaturesCardItemsContainer>
