@@ -215,14 +215,9 @@ export function TabPowerBottom() {
 								Boost your favourite projects to help them rise
 								through the ranks.
 							</Lead>
-							{/*
-							TODO: UnComment when we want to go live
-							<Link href={Routes.Projects} passHref> */}
-							<CardBottomText>
-								{/* BOOST PROJECTS */}
-								Coming Soon
-							</CardBottomText>
-							{/* </Link> */}
+							<Link href={Routes.Projects} passHref>
+								<CardBottomText>BOOST PROJECTS</CardBottomText>
+							</Link>
 						</FeaturesCardItem>
 						<FeaturesCardItem>
 							<Image
