@@ -22,6 +22,7 @@ const config: EnvConfig = {
 	MICROSERVICES: {
 		authentication: `${BASE_ROUTE}/siweauthmicroservice/v1`,
 		notification: `${NOTIFICATION_BASE_ROUTE}/v1/notifications`,
+		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
 	GARDEN_LINK:
 		'https://gardens.1hive.org/#/xdai/garden/0xb25f0ee2d26461e2b5b3d3ddafe197a0da677b98',

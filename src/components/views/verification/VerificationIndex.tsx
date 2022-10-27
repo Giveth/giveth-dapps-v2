@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { semanticColors, SublineBold } from '@giveth/ui-design-system';
 import { useState } from 'react';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
@@ -14,6 +13,7 @@ import { useVerificationData } from '@/context/verification.context';
 import { EVerificationStatus } from '@/apollo/types/types';
 import { VerificationStatusReport } from './VerificationStatusReport';
 import { VerificationContainer } from './Common.sc';
+import AutoSave from '@/components/AutoSave';
 
 const VerificationIndex = () => {
 	const [showModal, setShowModal] = useState(false);
@@ -27,10 +27,7 @@ const VerificationIndex = () => {
 					{isMobile ? <MobileMenu /> : <DesktopMenu />}
 					<ContentSection sm={8} md={9}>
 						<AbsoluteSection>
-							<SaveSection>
-								Auto save
-								<SaveCircle />
-							</SaveSection>
+							<AutoSave />
 							{/* <GuideSection onClick={() => setShowModal(true)}>
 								<Image src={BulbIcon} alt='light bulb' />
 							</GuideSection> */}
@@ -48,24 +45,9 @@ const VerificationIndex = () => {
 
 const AbsoluteSection = styled(Flex)`
 	position: absolute;
-	top: 16px;
+	top: 29px;
 	right: 16px;
 	gap: 23px;
-`;
-
-const SaveCircle = styled.div`
-	width: 10px;
-	height: 10px;
-	margin-top: 5px;
-	border-radius: 50%;
-	border: 2px solid ${semanticColors.jade[100]};
-	background: ${semanticColors.jade[500]};
-`;
-
-const SaveSection = styled(SublineBold)`
-	display: flex;
-	margin-top: 13px;
-	gap: 3px;
 `;
 
 const GuideSection = styled(FlexCenter)`

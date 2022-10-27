@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import HeaderSection from './HeaderSection';
-import GeneralSection from './GeneralSection';
 import { SettingsContainer } from './common/common.sc';
 import ProjectSection from './ProjectSection';
 import GIVeconomySection from './GIVeconomySection';
@@ -17,7 +16,6 @@ const SettingsIndex = () => {
 	return (
 		<SettingsContainer>
 			<HeaderSection />
-			<GeneralSection />
 			<ProjectSection />
 			<GIVeconomySection />
 		</SettingsContainer>

@@ -13,7 +13,7 @@ interface ICheckBox {
 	label: string;
 	checked?: boolean;
 	disabled?: boolean;
-	size?: 14 | 16 | 20 | 24 | 32;
+	size?: 14 | 16 | 18 | 20 | 24 | 32;
 	labelSize?: 'Tiny' | 'Small' | 'Medium' | 'Big';
 }
 
@@ -80,6 +80,13 @@ const Wrapper = styled(Flex)<{
 					gap: 10px;
 					> div:first-child {
 						border-width: 1px;
+					}
+				`;
+			case 18:
+				return css`
+					gap: 18px;
+					> div:first-child {
+						border-width: 2px;
 					}
 				`;
 			case 20:
