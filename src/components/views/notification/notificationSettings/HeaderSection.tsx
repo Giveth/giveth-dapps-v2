@@ -2,6 +2,7 @@ import {
 	H5,
 	IconArrowLeft,
 	Lead,
+	mediaQueries,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
@@ -9,17 +10,10 @@ import InternalLink from '@/components/InternalLink';
 import Routes from '@/lib/constants/Routes';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import AutoSave from '@/components/AutoSave';
-import useDetectDevice from '@/hooks/useDetectDevice';
 
 const HeaderSection = () => {
-	const { isMobile } = useDetectDevice();
 	return (
 		<Header>
-			{!isMobile && (
-				<Absolute>
-					<AutoSave />
-				</Absolute>
-			)}
 			<HeaderTop>
 				<InternalLink href={Routes.Notification}>
 					<BackButton>
@@ -28,6 +22,9 @@ const HeaderSection = () => {
 				</InternalLink>
 				<H5 weight={700}>Notification Settings</H5>
 			</HeaderTop>
+			<AutoSaveContainer>
+				<AutoSave />
+			</AutoSaveContainer>
 			<Lead>
 				Important notifications outside you notification settings may
 				still be sent to you
@@ -36,10 +33,14 @@ const HeaderSection = () => {
 	);
 };
 
-const Absolute = styled.div`
-	position: absolute;
-	top: 36px;
-	right: 40px;
+const AutoSaveContainer = styled.div`
+	margin-bottom: 10px;
+
+	${mediaQueries.mobileL} {
+		position: absolute;
+		top: 36px;
+		right: 40px;
+	}
 `;
 
 const HeaderTop = styled.div`
