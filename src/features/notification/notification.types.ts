@@ -24,3 +24,8 @@ export interface INotification {
 		htmlTemplate: IHtmlTemplate[];
 	};
 }
+
+export interface INotificationsState {
+	count: number;
+	notifications: INotification[];
+}
