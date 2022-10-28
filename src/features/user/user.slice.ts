@@ -137,6 +137,7 @@ export const {
 	incrementLikedProjectsCount,
 	decrementLikedProjectsCount,
 	decrementBoostedProjectsCount,
+	setBoostedProjectsCount,
 	setIsLoading,
 } = userSlice.actions;
 export default userSlice.reducer;
