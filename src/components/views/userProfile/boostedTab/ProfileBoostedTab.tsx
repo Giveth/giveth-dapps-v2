@@ -21,9 +21,10 @@ import {
 import { Loading } from '../projectsTab/ProfileProjectsTab';
 import { EmptyPowerBoosting } from './EmptyPowerBoosting';
 import GetMoreGIVpowerBanner from './GetMoreGIVpowerBanner';
-import { useAppSelector } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { sortBoosts } from '@/helpers/givpower';
+import { setBoostedProjectsCount } from '@/features/user/user.slice';
 
 export enum EPowerBoostingOrder {
 	CreationAt = 'createdAt',
@@ -50,6 +51,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 	const { userData } = useAppSelector(state => state.user);
 	const boostedProjectsCount = userData?.boostedProjectsCount ?? 0;
 	const givPower = sdh.getUserGIVPowerBalance();
+	const dispatch = useAppDispatch();
 
 	useEffect(() => {
 		if (!user) return;
@@ -70,6 +72,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 				const powerBoostings: IPowerBoosting[] =
 					data.getPowerBoosting.powerBoostings;
 				setBoosts(powerBoostings);
+				dispatch(setBoostedProjectsCount(powerBoostings.length));
 			}
 		};
 		fetchUserBoosts();
@@ -168,6 +171,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 						res.data.setSinglePowerBoosting;
 					const sortedBoosts = sortBoosts(newBoosts, order);
 					setBoosts(sortedBoosts);
+					dispatch(setBoostedProjectsCount(sortedBoosts.length));
 					setLoading(false);
 					return true;
 				}

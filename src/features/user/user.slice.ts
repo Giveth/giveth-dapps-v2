@@ -58,10 +58,9 @@ export const userSlice = createSlice({
 					(state.userData.likedProjectsCount || 1) - 1;
 			}
 		},
-		decrementBoostedProjectsCount: state => {
+		setBoostedProjectsCount: (state, action: PayloadAction<number>) => {
 			if (state.userData) {
-				state.userData.boostedProjectsCount =
-					(state.userData?.boostedProjectsCount || 1) - 1;
+				state.userData.boostedProjectsCount = action.payload;
 			}
 		},
 		setIsLoading: (state, action: PayloadAction<boolean>) => {
@@ -131,7 +130,7 @@ export const {
 	setBalance,
 	incrementLikedProjectsCount,
 	decrementLikedProjectsCount,
-	decrementBoostedProjectsCount,
+	setBoostedProjectsCount,
 	setIsLoading,
 } = userSlice.actions;
 export default userSlice.reducer;
