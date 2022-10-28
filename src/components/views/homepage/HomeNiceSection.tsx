@@ -1,11 +1,11 @@
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import { D3, GLink, Lead, brandColors } from '@giveth/ui-design-system';
 import { Arc } from '@/components/styled-components/Arc';
 import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
 
-import { useIntl } from 'react-intl';
 import { HomeContainer } from '@/components/views/homepage/Home.sc';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Shadow } from '@/components/styled-components/Shadow';

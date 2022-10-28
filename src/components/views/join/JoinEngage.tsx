@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { Lead, brandColors, H2 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 
 import Card from '@/components/GeneralCard';
 import YellowFlower from '/public/images/yellow_flower.svg';
@@ -18,7 +19,6 @@ import JoinSubscriptionCard from './JoinSubscriptionCard';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { ButtonStyled } from '@/components/GeneralCard.sc';
 import { Container } from '@/components/Grid';
-import { useIntl } from 'react-intl';
 
 const JoinEngage = () => {
 	const { formatMessage } = useIntl();

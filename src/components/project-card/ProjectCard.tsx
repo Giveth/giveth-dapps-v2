@@ -21,11 +21,7 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectCardBadges from './ProjectCardLikeAndShareButtons';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
 import { IProject } from '@/apollo/types/types';
-import {
-	calcBiggestUnitDifferenceTime,
-	timeFromNow,
-	htmlToText,
-} from '@/lib/helpers';
+import { timeFromNow, htmlToText } from '@/lib/helpers';
 import ProjectCardImage from './ProjectCardImage';
 import {
 	addressToUserView,

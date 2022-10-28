@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { Button, GLink, IconGiveth } from '@giveth/ui-design-system';
 
+import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
 import { formatWeiHelper } from '@/helpers/number';
 import { networksParams } from '@/helpers/blockchain';
@@ -28,7 +29,6 @@ import {
 	LargeCreateProject,
 	MainLogoBtn,
 } from './Header.sc';
-import { useIntl } from 'react-intl';
 import { RewardMenu } from '@/components/menu/RewardMenu';
 import MenuWallet from '@/components/menu/MenuWallet';
 import { menuRoutes } from '../menu/menuRoutes';

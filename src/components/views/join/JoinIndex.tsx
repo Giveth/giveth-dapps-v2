@@ -1,9 +1,9 @@
 import { D3, H4, brandColors, deviceSize } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 
 import { mediaQueries } from '@/lib/constants/constants';
 import { Arc } from '@/components/styled-components/Arc';
-import { useIntl } from 'react-intl';
 
 const JoinIndex = () => {
 	const { formatMessage } = useIntl();

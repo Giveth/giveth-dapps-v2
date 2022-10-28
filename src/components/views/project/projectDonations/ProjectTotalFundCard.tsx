@@ -1,11 +1,11 @@
 import { FC } from 'react';
 import styled from 'styled-components';
 import { Subline, H2, H5, brandColors } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 
 import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectWalletAddress from '@/components/views/project/projectDonations/ProjectWalletAddress';
 import { IProjectBySlug } from '@/apollo/types/gqlTypes';
-import { useIntl } from 'react-intl';
 
 const ProjectTotalFundCard: FC<IProjectBySlug> = ({ project }) => {
 	const { totalDonations, addresses, traceCampaignId, totalTraceDonations } =

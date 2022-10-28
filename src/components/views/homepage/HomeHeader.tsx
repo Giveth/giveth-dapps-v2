@@ -1,12 +1,12 @@
 import { useRouter } from 'next/router';
 import { H1, brandColors, Button, Lead } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
 import { Arc } from '@/components/styled-components/Arc';
 import { mediaQueries } from '@/lib/constants/constants';
 import Links from '@/lib/constants/links';
-import { useIntl } from 'react-intl';
 
 const HomeHeader = () => {
 	const { formatMessage } = useIntl();

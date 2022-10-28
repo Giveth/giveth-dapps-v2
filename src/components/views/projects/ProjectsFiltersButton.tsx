@@ -1,10 +1,10 @@
 import { MouseEvent, useRef, useState } from 'react';
+import { useIntl } from 'react-intl';
 import { IconOptions16 } from '@giveth/ui-design-system';
 import { FilterMenu, PinkyColoredNumber } from '@/components/menu/FilterMenu';
 import { useProjectsContext } from '@/context/projects.context';
 import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 import { FiltersButton } from '@/components/views/projects/common.styled';
-import { useIntl } from 'react-intl';
 import useDelay from '@/hooks/useDelay';
 
 const ProjectsFiltersButton = () => {

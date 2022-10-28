@@ -8,6 +8,7 @@ import React, {
 	useRef,
 	useState,
 } from 'react';
+import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import {
@@ -40,7 +41,6 @@ import {
 	slugToProjectDonate,
 	slugToVerification,
 } from '@/lib/routeCreators';
-import { useIntl } from 'react-intl';
 import { VerificationModal } from '@/components/modals/VerificationModal';
 import { mediaQueries } from '@/lib/constants/constants';
 import ProjectCardOrgBadge from '../../../project-card/ProjectCardOrgBadge';

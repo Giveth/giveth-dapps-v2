@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import Head from 'next/head';
+import { IntlProvider } from 'react-intl';
 import { Toaster } from 'react-hot-toast';
 import { Web3ReactProvider } from '@web3-react/core';
 import { ApolloProvider } from '@apollo/client';
@@ -14,7 +15,6 @@ import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
 import { FooterWrapper } from '@/components/Footer/FooterWrapper';
 
 import '../styles/globals.css';
-import { IntlProvider } from 'react-intl';
 import { en, es } from '../lang';
 import { store } from '@/features/store';
 import SubgraphController from '@/components/controller/subgraph.ctrl';

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
+import { useIntl } from 'react-intl';
 import {
 	Button,
 	brandColors,
@@ -14,7 +15,6 @@ import {
 import styled from 'styled-components';
 import { IProjectUpdate } from '@/apollo/types/types';
 import { Flex } from '@/components/styled-components/Flex';
-import { useIntl } from 'react-intl';
 
 const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {
 	ssr: false,

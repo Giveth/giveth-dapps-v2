@@ -1,11 +1,11 @@
 import { neutralColors, Caption } from '@giveth/ui-design-system';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 
 import { FlexCenter } from './styled-components/Flex';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
-import { useIntl } from 'react-intl';
 
 interface IPagination {
 	setPage: Dispatch<SetStateAction<number>>;

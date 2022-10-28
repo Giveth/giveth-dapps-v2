@@ -1,8 +1,8 @@
 import React from 'react';
 import { B } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import ExternalLink from '@/components/ExternalLink';
-import { useIntl } from 'react-intl';
 
 interface IFToast {
 	message: string | JSX.Element;

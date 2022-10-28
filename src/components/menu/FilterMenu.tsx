@@ -7,11 +7,11 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { forwardRef } from 'react';
 import { mediaQueries } from '@/lib/constants/constants';
 import { FlexCenter } from '../styled-components/Flex';
 import CheckBox from '../Checkbox';
-import { useIntl } from 'react-intl';
 import { useProjectsContext } from '@/context/projects.context';
 import { zIndex } from '@/lib/constants/constants';
 

@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import Image from 'next/image';
+import { useIntl } from 'react-intl';
 import {
 	FacebookShareButton,
 	LinkedinShareButton,
@@ -10,7 +11,6 @@ import styled from 'styled-components';
 import { fullPath } from '@/lib/helpers';
 import { IProject } from '@/apollo/types/types';
 import { slugToProjectView } from '@/lib/routeCreators';
-import { useIntl } from 'react-intl';
 
 interface ISocialBox {
 	project: IProject;
