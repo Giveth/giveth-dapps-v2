@@ -16,9 +16,9 @@ export const EmptyPowerBoosting = () => {
 			{givPower.balance === '0' ? (
 				<>
 					<Title size='small'>
-						You didn’t boost any project before!
+						You haven't boosted any projects yet!
 						<br />
-						Go to the projects and find a good project to boost
+						Use your GIVpower to support projects you love.
 					</Title>
 					<br />
 					<Link href={Routes.Projects} passHref>
