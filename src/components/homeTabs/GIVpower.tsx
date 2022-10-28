@@ -169,9 +169,10 @@ export function TabPowerBottom() {
 				<HeadingSectionContainer>
 					<HeadingTextContainer>
 						<QuoteText size='small'>
-							Support verified projects using “Boost”. Projects
-							backed by GIVpower will benefit from more GIVbacks
-							for their donors and eventually, matching funds.
+							Use your GIVpower to <i>boost</i> verified projects
+							to improve their project ranking. Donors to higher
+							ranked projects will get more GIV from our GIVbacks
+							program.
 						</QuoteText>
 					</HeadingTextContainer>
 					<LearnMoreButton
@@ -203,27 +204,6 @@ export function TabPowerBottom() {
 							</Link>
 						</FeaturesCardItem>
 						<FeaturesCardItem>
-							<div>
-								<IconRocketInSpace32
-									size={65}
-									color={brandColors.mustard[500]}
-								/>
-							</div>
-							<H4 weight={700}>Boost Projects</H4>
-							<Lead>
-								Boost your favourite projects to help them rise
-								through the ranks.
-							</Lead>
-							{/*
-							TODO: UnComment when we want to go live
-							<Link href={Routes.Projects} passHref> */}
-							<CardBottomText>
-								{/* BOOST PROJECTS */}
-								Coming Soon
-							</CardBottomText>
-							{/* </Link> */}
-						</FeaturesCardItem>
-						<FeaturesCardItem>
 							<Image
 								height='70'
 								src={Growth}
@@ -236,6 +216,22 @@ export function TabPowerBottom() {
 
 							<Link href={Routes.GIVfarm} passHref>
 								<CardBottomText>SEE REWARDS</CardBottomText>
+							</Link>
+						</FeaturesCardItem>
+						<FeaturesCardItem>
+							<div>
+								<IconRocketInSpace32
+									size={65}
+									color={brandColors.mustard[500]}
+								/>
+							</div>
+							<H4 weight={700}>Boost Projects</H4>
+							<Lead>
+								Boost your favourite projects to help them rise
+								through the ranks.
+							</Lead>
+							<Link href={Routes.Projects} passHref>
+								<CardBottomText>BOOST PROJECTS</CardBottomText>
 							</Link>
 						</FeaturesCardItem>
 					</FeaturesCardItemsContainer>
@@ -269,8 +265,8 @@ export function TabPowerBottom() {
 										multiplier.
 									</QuoteText>
 									<QuoteText size='small'>
-										Soon: Donate to top-ranked projects to
-										get extra GIVbacks.
+										Donate to top-ranked projects and get
+										more GIV back!
 									</QuoteText>
 									<br />
 								</BenefitsCardTextContainer>
@@ -285,16 +281,16 @@ export function TabPowerBottom() {
 							</BenefitsCardHeading>
 							<BenefitsCardTextContainer>
 								<QuoteText size='small'>
-									Fire up your community to get more boosts &
+									Fire up your community to use GIVpower to
 									improve your rank.
 								</QuoteText>
 								<QuoteText size='small'>
 									The higher your rank, the more GIVbacks your
-									donors receive.
+									donors will receive.
 								</QuoteText>
 								<QuoteText size='small'>
-									Top-ranked projects get funding from the
-									Giveth Matching Pool.
+									Top-ranked projects will eventually get
+									funding from the Giveth Matching Pool.
 								</QuoteText>
 								<br />
 								<Link href={Routes.Projects} passHref>
