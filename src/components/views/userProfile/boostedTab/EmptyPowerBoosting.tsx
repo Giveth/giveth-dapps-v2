@@ -26,7 +26,18 @@ export const EmptyPowerBoosting = () => {
 					</Link>
 				</>
 			) : (
-				<></>
+				<>
+					<Title size='small'>
+						You don't have any GIVpower yet!
+						<br />
+						Stake and lock GIV to get GIVpower and starting boosting
+						projects.
+					</Title>
+					<br />
+					<Link href={Routes.GIVfarm} passHref>
+						<ButtonLink label='Get GIVpower' size='small' />
+					</Link>
+				</>
 			)}
 		</EmptyPowerBoostingContainer>
 	);
