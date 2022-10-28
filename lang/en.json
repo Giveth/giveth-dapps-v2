@@ -179,5 +179,19 @@
 	"label.join_desc_two": "You can join our Community Call every Thursday in Discord, follow our social media, or come say hello in a channel below. We look forward to welcoming you!",
 	"label.add_to_calendar": "Add to Calendar",
 	"label.engage": "Engage",
-	"label.learn": "Learn"
+	"label.learn": "Learn",
+	"label.join_us_on": "join us on",
+	"page.engage.discord.desc": "Join the conversation! Discord is where our team communicates. Introduce yourself, give us feedback, find out how to contribute or just say hello!",
+	"page.engage.discourse.desc": "The Giveth forum is where we create discourse around new and existing proposals. We share ideas involving development and governance, cultivating discussions about important topics around our team and community.",
+	"page.engage.github.desc": "Got some developer skills? Check out our Github! We always welcome new contributors. Please also join one of our dev channels in Discord to say hello!",
+	"page.engage.telegram.desc": "Not on Discord? Join our Telegram! This group is bridged directly to the #general channel in the Giveth discord so we’ll see all of your messages here.",
+	"page.learn.medium.desc": "Keep up with our Medium blog where we publish regular development and community updates with the latest and greatest.",
+	"page.learn.twitter.desc": "Connect with us on Twitter to stay up-to-date on exciting shares about the Future of Giving!",
+	"page.learn.youtube.desc": "Check out presentations, interviews, AMAs and more on the Giveth Youtube. Also follow our Transparency channel for recordings of our calls.",
+	"page.learn.reddit.desc": "Subscribe to our r/Giveth subreddit to stay abreast of updates, engage in discussions and upvote all the things.",
+	"label.subscribe_to_our_newsletter": "Subscribe to our newsletter",
+	"label.subscribe_to_our_newsletter.desc": "Subscribe to our newsletter to get the latest news, updates and amazing offers delivered directly straight to your mailbox!",
+	"label.please_set_a_valid_email": "Please insert a valid email address!",
+	"label.we_just_sent_you_an_email": "We just sent you an email to confirm your subscription! Once you do, you'll receive the next issue of our newsletter in your inbox. If you'd like to view previous issues, visit our",
+	"label.givnews_page": "GIVnews page"
 }

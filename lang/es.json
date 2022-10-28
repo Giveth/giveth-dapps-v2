@@ -179,5 +179,19 @@
 	"label.join_desc_two": "",
 	"label.add_to_calendar": "Agregar al Calendario",
 	"label.engage": "Involucrarse",
-	"label.learn": "Aprender"
+	"label.learn": "Aprender",
+	"label.join_us_on": "Únete en",
+	"page.engage.discord.desc": "",
+	"page.engage.discourse.desc": "",
+	"page.engage.github.desc": "",
+	"page.engage.telegram.desc": "",
+	"page.learn.medium.desc": "",
+	"page.learn.twitter.desc": "",
+	"page.learn.youtube.desc": "",
+	"page.learn.reddit.desc": "",
+	"label.subscribe_to_our_newsletter": "Suscribete a nuestro newsletter",
+	"label.subscribe_to_our_newsletter.desc": "",
+	"label.please_set_a_valid_email": "Porfavor inserta un email valido",
+	"label.we_just_sent_you_an_email": "",
+	"label.givnews_page": "página de GIVnews"
 }
