@@ -7,7 +7,7 @@ export interface INotificationCountState {
 }
 
 export interface IHtmlTemplate {
-	type: string;
+	type: 'p' | 'b' | 'a' | 'br' | string;
 	content: string;
 	href?: string;
 }
