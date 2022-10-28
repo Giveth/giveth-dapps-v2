@@ -39,7 +39,7 @@ export const DeletePowerBoostModal: FC<IDeletePowerBoostModal> = ({
 			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerTitlePosition={'left'}
-			headerTitle={canDelete ? 'Are you sure?' : 'Ooops!'}
+			headerTitle={canDelete ? 'Are you sure?' : 'Oops!'}
 			headerIcon={<IconRocketInSpace32 />}
 		>
 			<ConfirmPowerBoostModalContainer>
@@ -50,8 +50,9 @@ export const DeletePowerBoostModal: FC<IDeletePowerBoostModal> = ({
 					</Content>
 				) : (
 					<Content>
-						You can’t remove this project boost because this is the
-						only boost that you have!
+						You must have at least one active boost! In order to
+						remove GIVpower from this project, please boost another
+						project.
 					</Content>
 				)}
 				{canDelete ? (
