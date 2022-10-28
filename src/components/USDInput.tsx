@@ -2,6 +2,7 @@ import { GLink, neutralColors, brandColors } from '@giveth/ui-design-system';
 import { BigNumber, utils } from 'ethers';
 import { FC, useState, useCallback } from 'react';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
 import { formatWeiHelper } from '@/helpers/number';
 import { PoolStakingConfig } from '@/types/config';
@@ -19,7 +20,7 @@ export const USDInput: FC<IAmountInput> = ({
 	disabled = false,
 }) => {
 	const [displayAmount, setDisplayAmount] = useState('');
-
+	const { formatMessage } = useIntl();
 	const setAmountPercentage = useCallback(
 		(percentage: number): void => {
 			const newAmount = BigNumber.from(maxAmount)
@@ -51,7 +52,10 @@ export const USDInput: FC<IAmountInput> = ({
 		<>
 			<InputLabelRow justifyContent='space-between'>
 				<InputLabel>
-					<InputLabelText>Available: </InputLabelText>
+					<InputLabelText>
+						{' '}
+						{formatMessage({ id: 'label.available' })}:{' '}
+					</InputLabelText>
 					<InputLabelValue>
 						&nbsp;
 						{formatWeiHelper(maxAmount)}

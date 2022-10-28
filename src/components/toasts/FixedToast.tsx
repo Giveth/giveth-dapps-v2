@@ -2,6 +2,7 @@ import React from 'react';
 import { B } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import ExternalLink from '@/components/ExternalLink';
+import { useIntl } from 'react-intl';
 
 interface IFToast {
 	message: string | JSX.Element;
@@ -18,13 +19,16 @@ interface IToastContainer {
 
 const FixedToast = (props: IFToast) => {
 	const { message, icon, color, backgroundColor, boldColor, href } = props;
+	const { formatMessage } = useIntl();
 	return (
 		<Container color={backgroundColor} borderColor={color}>
 			{icon && <Icon>{icon}</Icon>}
 			<Text color={color}>{message}</Text>
 			{href && (
 				<ExternalLink href={href}>
-					<Text color={boldColor}>Learn More</Text>
+					<Text color={boldColor}>
+						{formatMessage({ id: 'label.learn_more' })}
+					</Text>
 				</ExternalLink>
 			)}
 		</Container>

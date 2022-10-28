@@ -10,6 +10,7 @@ import styled from 'styled-components';
 import { fullPath } from '@/lib/helpers';
 import { IProject } from '@/apollo/types/types';
 import { slugToProjectView } from '@/lib/routeCreators';
+import { useIntl } from 'react-intl';
 
 interface ISocialBox {
 	project: IProject;
@@ -18,6 +19,7 @@ interface ISocialBox {
 
 const SocialBox: FC<ISocialBox> = ({ project, isSuccess }) => {
 	const { description, slug } = project;
+	const { formatMessage } = useIntl();
 	const shareTitleTwitter = `Our project is raising funds in crypto on @givethio! 🙌
 Donate directly on Ethereum Mainnet or @gnosischain w/ no fees or intermediaries.👇`;
 
@@ -33,8 +35,8 @@ Donate directly on Ethereum Mainnet or @gnosischain w/ no fees or intermediaries
 		<Social isSuccess={isSuccess}>
 			<BLead>
 				{isSuccess
-					? 'Share this with your friends'
-					: `Can't donate? Share this page instead.`}
+					? formatMessage({ id: 'label.share_this' })
+					: formatMessage({ id: 'label.cant_donate' })}
 			</BLead>
 			<SocialItems>
 				<SocialItem isSuccess={isSuccess}>
