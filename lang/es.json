@@ -85,5 +85,19 @@
 	"label.givback_eligible": "Elegible a GIVbacks",
 	"label.last_updated": "Ultima Actualización",
 	"label.project_by": "PROYECTO DE",
-	"label.just_now": "Justo ahora"
+	"label.just_now": "Justo ahora",
+	"label.about": "Acerca",
+	"label.updates": "Actualizaciones",
+	"label.donations": "Donaciones",
+	"component.givback_elibible.desc": "Cuando donas a proyectos verificados calificas para recibir GIV tokens. Por medio de GIVbacks, GIV empodera donantes con derechos de governanza a traves del GIVgarden.",
+	"component.givback_toast.desc": "Obtienes GIVbacks al donar a este proyecto.",
+	"label.report_an_issue": "Reporta un problema",
+	"label.view_similar_projects": "Mira proyectos similares",
+	"component.button.activate_project": "ACTIVAR PROYECTO",
+	"component.button.de": "DES",
+	"label.publish_project": "PUBLICAR PROYECTO",
+	"label.edit": "EDITAR",
+	"label.verify_your_project": "VERIFICA TU PROYECTO",
+	"label.re_apply": "Aplicar de nuevo",
+	"label.resume_verification": "REANUDAR VERIFICAIÓN"
 }

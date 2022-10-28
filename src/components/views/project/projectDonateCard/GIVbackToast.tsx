@@ -6,6 +6,7 @@ import {
 	IconHelp,
 	Subline,
 } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -13,6 +14,8 @@ import useDetectDevice from '@/hooks/useDetectDevice';
 
 const GIVbackToast = () => {
 	const { isTablet } = useDetectDevice();
+	const { formatMessage } = useIntl();
+
 	return (
 		<Wrapper>
 			<div>
@@ -20,19 +23,23 @@ const GIVbackToast = () => {
 			</div>
 			<div>
 				<Title>
-					<Caption medium>GIVback eligible</Caption>
+					<Caption medium>
+						{formatMessage({ id: 'label.givback_eligible' })}
+					</Caption>
 					<IconWithTooltip
 						icon={<IconHelp size={16} />}
 						direction={isTablet ? 'left' : 'top'}
 					>
 						<Popup>
-							When you donate to verified projects you qualify to
-							receive GIV tokens. Through GIVbacks, GIV empowers
-							donors with governance rights via the GIVgarden.
+							{formatMessage({
+								id: 'component.givback_elibible.desc',
+							})}
 						</Popup>
 					</IconWithTooltip>
 				</Title>
-				<Caption>You get GIVbacks by donating to this project.</Caption>
+				<Caption>
+					{formatMessage({ id: 'component.givback_toast.desc' })}
+				</Caption>
 			</div>
 		</Wrapper>
 	);
