@@ -64,6 +64,11 @@ export const userSlice = createSlice({
 					(state.userData?.boostedProjectsCount || 1) - 1;
 			}
 		},
+		setBoostedProjectsCount: (state, action: PayloadAction<number>) => {
+			if (state.userData) {
+				state.userData.boostedProjectsCount = action.payload;
+			}
+		},
 		setIsLoading: (state, action: PayloadAction<boolean>) => {
 			state.isLoading = action.payload;
 		},
