@@ -58,11 +58,13 @@ const Subtitle = styled(Lead)`
 const MatchingPoolButton = styled(Button)`
 	height: 66px;
 	padding: 0 80px;
+	text-transform: uppercase;
 `;
 
 const SeeProjects = styled(Button)`
 	height: 66px;
 	color: ${brandColors.mustard[500]};
+	text-transform: uppercase;
 	a {
 		font-weight: 400;
 	}

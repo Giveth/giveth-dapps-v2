@@ -91,6 +91,7 @@ const HomeExploreProjects = (props: IHomeExploreProjects) => {
 
 const AllProjectsButton = styled(Button)`
 	width: 300px;
+	text-transform: uppercase;
 `;
 
 const CreateProject = styled(Button)`

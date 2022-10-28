@@ -251,7 +251,7 @@ const StartGiving = styled(Button)`
 	color: ${brandColors.giv[500]};
 	height: 66px;
 	padding: 0 80px;
-
+	text-transform: uppercase;
 	&:hover {
 		background-color: ${brandColors.mustard[500]};
 		color: ${brandColors.giv[500]};

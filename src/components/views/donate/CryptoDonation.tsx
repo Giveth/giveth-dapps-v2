@@ -620,6 +620,7 @@ const MainButton = styled(Button)`
 	background-color: ${props =>
 		props.disabled ? brandColors.giv[200] : brandColors.giv[500]};
 	color: white;
+	text-transform: uppercase;
 `;
 
 const CheckBoxContainer = styled.div`

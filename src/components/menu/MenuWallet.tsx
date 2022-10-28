@@ -142,7 +142,7 @@ const MenuWallet = () => {
 							onClick={() => dispatch(signOut(token!))}
 							theme={theme}
 						>
-							Sign out
+							{formatMessage({ id: 'label.sign_out' })}
 						</MenuItem>
 					)}
 				</Menus>

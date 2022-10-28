@@ -18,35 +18,31 @@ import JoinSubscriptionCard from './JoinSubscriptionCard';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { ButtonStyled } from '@/components/GeneralCard.sc';
 import { Container } from '@/components/Grid';
+import { useIntl } from 'react-intl';
 
 const JoinEngage = () => {
+	const { formatMessage } = useIntl();
 	return (
 		<>
 			<ContainerStyled>
 				<LeadText>
-					Giveth is first and foremost a community of givers and
-					changemakers. We are passionate people working together to
-					build a crypto-economic system that can reward giving to
-					good causes. Our project is open-source, decentralized,
-					altruistic, and community-led.
+					{formatMessage({ id: 'label.join_desc_one' })}
 				</LeadText>
 				<br />
 				<LeadText>
-					You can join our Community Call every Thursday in Discord,
-					follow our social media, or come say hello in a channel
-					below. We look forward to welcoming you!
+					{formatMessage({ id: 'label.join_desc_two' })}
 				</LeadText>
 				<br />
 				<FlexCenter>
 					<ButtonStyled
 						buttonType='primary'
-						label='Add to Calendar'
+						label={formatMessage({ id: 'label.add_to_calendar' })}
 						onClick={() => window.open(links.ADD_TO_CALENDAR)}
 					/>
 				</FlexCenter>
 
 				<Section>
-					<Title>Engage</Title>
+					<Title>{formatMessage({ id: 'label.engage' })}</Title>
 					<CardsSection>
 						{engageArray.map(i => (
 							<Card key={i.title} content={i} />
@@ -54,7 +50,7 @@ const JoinEngage = () => {
 					</CardsSection>
 				</Section>
 				<Section>
-					<Title>Learn</Title>
+					<Title>{formatMessage({ id: 'label.learn' })}</Title>
 					<CardsConsumeSection>
 						{consumeArray.map(i => (
 							<Card key={i.title} content={i} isHorizontal />
