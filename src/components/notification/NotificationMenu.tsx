@@ -12,15 +12,22 @@ import { MenuContainer } from '../menu/Menu.sc';
 import { INotificationData } from '@/helpers/html';
 import { NotificationBox } from './NotificationBox';
 import Routes from '@/lib/constants/Routes';
+import { fetchNotificationsData } from '@/features/notification/notification.services';
+import { INotificationsState } from '@/features/notification/notification.types';
 
 const NotificationMenu = () => {
 	const [isMounted, setIsMounted] = useState(false);
 	const theme = useAppSelector(state => state.general.theme);
-
+	const [notifications, setNotifications] = useState<
+		INotificationsState | undefined
+	>();
 	useEffect(() => {
 		setIsMounted(true);
+		fetchNotificationsData().then(res => {
+			setNotifications(res);
+		});
 	}, []);
-
+	console.log('Notifications', notifications);
 	return (
 		<NotifsMenuContainer isMounted={isMounted} theme={theme}>
 			<NotificationsTitle styleType='Small'>
@@ -29,7 +36,7 @@ const NotificationMenu = () => {
 			<br />
 			<br />
 
-			{notifications
+			{mockNotifications
 				.map(notification => (
 					<>
 						<NotificationBox
@@ -68,7 +75,7 @@ const AllNotificationsLink = styled(GLink)`
 	color: ${brandColors.pinky[500]};
 `;
 
-const notifications: INotificationData[] = [
+const mockNotifications: INotificationData[] = [
 	{
 		id: '1',
 		icon: '',

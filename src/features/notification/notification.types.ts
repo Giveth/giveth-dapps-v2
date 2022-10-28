@@ -6,6 +6,30 @@ export interface INotificationCountState {
 	total: number;
 }
 
+export interface IHtmlTemplate {
+	type: string;
+	content: string;
+	href?: string;
+}
+
+export interface INotification {
+	createdAt: string;
+	metadata: {
+		[key: string]: string;
+	};
+	notificationType: {
+		category: string;
+		content: string;
+		description: string;
+		htmlTemplate: IHtmlTemplate[];
+	};
+}
+
+export interface INotificationsState {
+	count: number;
+	notifications?: INotification[];
+}
+
 interface INotificationSettingType {
 	category: 'general' | 'givEconomy' | 'projectRelated' | 'discussion';
 	title: string;
@@ -14,7 +38,6 @@ interface INotificationSettingType {
 	description: string;
 	content: string;
 }
-
 export interface INotificationSetting {
 	notificationTypeId: number;
 	id: number;
