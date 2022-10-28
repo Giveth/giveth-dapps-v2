@@ -13,21 +13,21 @@ import { INotificationData } from '@/helpers/html';
 import { NotificationBox } from './NotificationBox';
 import Routes from '@/lib/constants/Routes';
 import { fetchNotificationsData } from '@/features/notification/notification.services';
-import { INotificationsState } from '@/features/notification/notification.types';
+import { INotification } from '@/features/notification/notification.types';
 
 const NotificationMenu = () => {
 	const [isMounted, setIsMounted] = useState(false);
 	const theme = useAppSelector(state => state.general.theme);
-	const [notifications, setNotifications] = useState<
-		INotificationsState | undefined
-	>();
+	const [notifications, setNotifications] = useState<INotification[]>([]);
+
 	useEffect(() => {
 		setIsMounted(true);
 		fetchNotificationsData().then(res => {
-			setNotifications(res);
+			if (res?.notifications) setNotifications(res.notifications);
 		});
 	}, []);
 	console.log('Notifications', notifications);
+
 	return (
 		<NotifsMenuContainer isMounted={isMounted} theme={theme}>
 			<NotificationsTitle styleType='Small'>
@@ -35,8 +35,7 @@ const NotificationMenu = () => {
 			</NotificationsTitle>
 			<br />
 			<br />
-
-			{mockNotifications
+			{notifications
 				.map(notification => (
 					<>
 						<NotificationBox
