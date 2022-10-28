@@ -2,7 +2,7 @@ import { P, B, GLink } from '@giveth/ui-design-system';
 import type { ReactNode } from 'react';
 
 export interface IRowDataTemplate {
-	type: 'p' | 'b' | 'a' | string;
+	type: 'p' | 'b' | 'a' | 'br' | string;
 	content: string;
 	href?: string;
 }
@@ -52,6 +52,9 @@ export const convertRawDataToHTML = (RawData: IRowData) => {
 						{temp}
 					</GLink>,
 				);
+				break;
+			case 'br':
+				res.push(<br />);
 				break;
 			default:
 				res.push(<P as='span'>{temp}</P>);
