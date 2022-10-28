@@ -1,36 +1,17 @@
 import { P, B, GLink } from '@giveth/ui-design-system';
+import { INotification } from '@/features/notification/notification.types';
 import type { ReactNode } from 'react';
 
-export interface IRowDataTemplate {
-	type: 'p' | 'b' | 'a' | 'br' | string;
-	content: string;
-	href?: string;
-}
-
-export interface IRowDataMetaData {
-	[key: string]: string;
-}
-
-export interface IRowData {
-	template: IRowDataTemplate[];
-	metaData: IRowDataMetaData;
-}
-
-export interface INotificationData extends IRowData {
-	id: string;
-	icon: string;
-	time: string;
-	quote: string;
-	isRead?: boolean;
-}
-
-export const convertRawDataToHTML = (RawData: IRowData) => {
-	const { template, metaData } = RawData;
+export const convertRawDataToHTML = (notification: INotification) => {
+	const { metadata, notificationType } = notification;
+	const { htmlTemplate } = notificationType;
 	const res: ReactNode[] = [];
-	template.forEach((node: any, idx) => {
-		const c: string = node.content;
-		const temp = c.startsWith('$') ? metaData[c.substring(1)] : c;
-		switch (node.type) {
+	htmlTemplate.forEach((template: any, idx) => {
+		const { content } = template;
+		const temp = content?.startsWith('$')
+			? metadata[content.substring(1)]
+			: content;
+		switch (template.type) {
 			case 'p':
 				res.push(
 					<P key={idx} as='span'>
@@ -46,7 +27,7 @@ export const convertRawDataToHTML = (RawData: IRowData) => {
 				);
 				break;
 			case 'a':
-				const href = metaData[node.href.substring(1)] || '';
+				const href = metadata[template.href.substring(1)] || '';
 				res.push(
 					<GLink key={idx} size='Big' href={href}>
 						{temp}
