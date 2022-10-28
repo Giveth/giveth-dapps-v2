@@ -202,7 +202,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 					{mode === ETableNode.VIEWING ? (
 						<Button
 							buttonType='primary'
-							label='edit boosting'
+							label='modify'
 							size='small'
 							onClick={() => setMode(ETableNode.EDITING)}
 							disabled={editBoosts.length < 2}
