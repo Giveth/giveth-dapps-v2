@@ -9,6 +9,7 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 
+import { useIntl } from 'react-intl';
 import { formatUSD, smallFormatDate, formatTxLink } from '@/lib/helpers';
 import { slugToProjectView } from '@/lib/routeCreators';
 import ExternalLink from '@/components/ExternalLink';
@@ -38,20 +39,25 @@ const DonationTable: FC<DonationTable> = ({
 	changeOrder,
 	myAccount,
 }) => {
+	const { formatMessage } = useIntl();
 	return (
 		<DonationTableContainer myAccount={myAccount}>
 			<TableHeader onClick={() => changeOrder(EOrderBy.CreationDate)}>
-				Donated at
+				{formatMessage({ id: 'label.donated_at' })}
 				<SortIcon order={order} title={EOrderBy.CreationDate} />
 			</TableHeader>
-			<TableHeader>Project</TableHeader>
-			{myAccount && <TableHeader>Status</TableHeader>}
+			<TableHeader>{formatMessage({ id: 'label.project' })}</TableHeader>
+			{myAccount && (
+				<TableHeader>
+					{formatMessage({ id: 'label.status' })}
+				</TableHeader>
+			)}
 			<TableHeader onClick={() => changeOrder(EOrderBy.TokenAmount)}>
-				Amount
+				{formatMessage({ id: 'label.amount' })}
 				<SortIcon order={order} title={EOrderBy.TokenAmount} />
 			</TableHeader>
 			<TableHeader onClick={() => changeOrder(EOrderBy.UsdAmount)}>
-				USD Value
+				{formatMessage({ id: 'label.usd_value' })}
 				<SortIcon order={order} title={EOrderBy.UsdAmount} />
 			</TableHeader>
 			{donations.map(donation => (

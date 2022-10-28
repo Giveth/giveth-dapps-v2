@@ -14,6 +14,7 @@ import {
 import styled from 'styled-components';
 import { IProjectUpdate } from '@/apollo/types/types';
 import { Flex } from '@/components/styled-components/Flex';
+import { useIntl } from 'react-intl';
 
 const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {
 	ssr: false,
@@ -52,11 +53,14 @@ const ProjectTimeline = (props: {
 };
 
 const LaunchSection = (props: { creationDate: string }) => {
+	const { formatMessage } = useIntl();
 	return (
 		<Wrapper>
 			<TimelineSection date={props.creationDate} launch />
 			<Content>
-				<Title>Project Launched! 🎉</Title>
+				<Title>
+					{formatMessage({ id: 'label.project_launched' })} 🎉
+				</Title>
 				{/*TODO share in twitter?*/}
 				{/* <Button label='Share this'></Button> */}
 			</Content>

@@ -514,7 +514,7 @@ const Wrapper = styled(motion.div)<{ height: number }>`
 const FullButton = styled(Button)`
 	width: 100%;
 	margin-bottom: 8px;
-
+	text-transform: uppercase;
 	&:disabled {
 		background-color: ${neutralColors.gray[600]};
 		color: ${neutralColors.gray[100]};

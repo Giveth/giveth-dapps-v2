@@ -9,6 +9,7 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 
+import { useIntl } from 'react-intl';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { IDonation, IProject } from '@/apollo/types/types';
@@ -80,6 +81,7 @@ const ProjectDonationTable = ({
 	const [searchTerm, setSearchTerm] = useState<string>('');
 
 	const user = useAppSelector(state => state.user.userData);
+	const { formatMessage } = useIntl();
 
 	const { id, traceCampaignId, adminUser } = project || {};
 	const isAdmin = compareAddresses(
@@ -140,7 +142,7 @@ const ProjectDonationTable = ({
 						onClick={() => setActiveTab(0)}
 						className={activeTab === 0 ? 'active' : ''}
 					>
-						Donations
+						{formatMessage({ id: 'label.donations' })}
 					</Tab>
 					{!!traceCampaignId && (
 						<Tab
@@ -164,21 +166,29 @@ const ProjectDonationTable = ({
 								orderChangeHandler(EOrderBy.CreationDate)
 							}
 						>
-							Donated at
+							{formatMessage({ id: 'label.donated_at' })}
 							<SortIcon
 								order={order}
 								title={EOrderBy.CreationDate}
 							/>
 						</TableHeader>
-						<TableHeader>Donor</TableHeader>
-						{isAdmin && <TableHeader>Status</TableHeader>}
-						<TableHeader>Network</TableHeader>
+						<TableHeader>
+							{formatMessage({ id: 'label.donor' })}
+						</TableHeader>
+						{isAdmin && (
+							<TableHeader>
+								{formatMessage({ id: 'label.status' })}
+							</TableHeader>
+						)}
+						<TableHeader>
+							{formatMessage({ id: 'label.network' })}
+						</TableHeader>
 						<TableHeader
 							onClick={() =>
 								orderChangeHandler(EOrderBy.TokenAmount)
 							}
 						>
-							Amount
+							{formatMessage({ id: 'label.amount' })}
 							<SortIcon
 								order={order}
 								title={EOrderBy.TokenAmount}
@@ -189,7 +199,7 @@ const ProjectDonationTable = ({
 								orderChangeHandler(EOrderBy.UsdAmount)
 							}
 						>
-							USD Value
+							{formatMessage({ id: 'label.usd_value' })}
 							<SortIcon
 								order={order}
 								title={EOrderBy.UsdAmount}

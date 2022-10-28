@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { FlexCenter } from './styled-components/Flex';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
+import { useIntl } from 'react-intl';
 
 interface IPagination {
 	setPage: Dispatch<SetStateAction<number>>;
@@ -18,6 +19,7 @@ const Pagination = (props: IPagination) => {
 	const [pages, setPages] = useState<any[]>([]);
 	const [pageCount, setPageCount] = useState(0);
 	const theme = useAppSelector(state => state.general.theme);
+	const { formatMessage } = useIntl();
 
 	useEffect(() => {
 		const nop = Math.ceil(totalCount / itemPerPage);
@@ -56,7 +58,7 @@ const Pagination = (props: IPagination) => {
 				}}
 				disable={currentPage == 0}
 			>
-				{'<  Prev'}
+				{`<  ${formatMessage({ id: 'label.prev' })}`}
 			</PaginationItem>
 			{pages.map((p, id) => {
 				return (
@@ -79,7 +81,7 @@ const Pagination = (props: IPagination) => {
 				}}
 				disable={currentPage + 1 >= pageCount}
 			>
-				{'Next  >'}
+				{`${formatMessage({ id: 'label.next' })}  >`}
 			</PaginationItem>
 		</PaginationRow>
 	);

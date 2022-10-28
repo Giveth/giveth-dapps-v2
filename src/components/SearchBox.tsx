@@ -3,6 +3,7 @@ import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import SearchIcon from '/public/images/search.svg';
 import { FlexCenter } from './styled-components/Flex';
+import { useIntl } from 'react-intl';
 
 const SearchBox = (props: {
 	onChange: (e: string) => void;
@@ -10,12 +11,16 @@ const SearchBox = (props: {
 	value: string;
 }) => {
 	const { onChange, placeholder, value } = props;
+	const { formatMessage } = useIntl();
 
 	return (
 		<Wrapper>
 			<Input
 				onChange={e => onChange(e.target.value)}
-				placeholder={placeholder || 'Search ...'}
+				placeholder={
+					placeholder ||
+					`${formatMessage({ id: 'label.search' })} ...`
+				}
 				value={value}
 			/>
 			<Border />

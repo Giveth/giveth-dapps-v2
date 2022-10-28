@@ -6,6 +6,7 @@ import {
 import { FC } from 'react';
 import styled from 'styled-components';
 
+import { useIntl } from 'react-intl';
 import { EOrderBy, IOrder } from '../UserProfile.view';
 import { idToProjectEdit, slugToProjectView } from '@/lib/routeCreators';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
@@ -35,28 +36,37 @@ const ProjectsTable: FC<IProjectsTable> = ({
 	changeOrder,
 	order,
 }) => {
+	const { formatMessage } = useIntl();
 	return (
 		<Table>
 			<ProjectsTableHeader
 				onClick={() => changeOrder(EOrderBy.CreationDate)}
 			>
-				Created at
+				{formatMessage({ id: 'label.created_at' })}
 				<SortIcon order={order} title={EOrderBy.CreationDate} />
 			</ProjectsTableHeader>
-			<ProjectsTableHeader>Status</ProjectsTableHeader>
-			<ProjectsTableHeader>Project</ProjectsTableHeader>
 			<ProjectsTableHeader>
-				Likes 
+				{formatMessage({ id: 'label.status' })}
+			</ProjectsTableHeader>
+			<ProjectsTableHeader>
+				{formatMessage({ id: 'label.project' })}
+			</ProjectsTableHeader>
+			<ProjectsTableHeader>
+				{formatMessage({ id: 'label.likes' })}
 				<IconHeart />
 			</ProjectsTableHeader>
 			<ProjectsTableHeader
 				onClick={() => changeOrder(EOrderBy.Donations)}
 			>
-				Total Raised
+				{formatMessage({ id: 'label.total_raised' })}
 				<SortIcon order={order} title={EOrderBy.Donations} />
 			</ProjectsTableHeader>
-			<ProjectsTableHeader>Listing</ProjectsTableHeader>
-			<ProjectsTableHeader>Actions</ProjectsTableHeader>
+			<ProjectsTableHeader>
+				{formatMessage({ id: 'label.listing' })}
+			</ProjectsTableHeader>
+			<ProjectsTableHeader>
+				{formatMessage({ id: 'label.actions' })}
+			</ProjectsTableHeader>
 			{projects?.map(project => {
 				const status = project.status.name;
 				const isCancelled = status === EProjectStatus.CANCEL;
@@ -90,12 +100,12 @@ const ProjectsTable: FC<IProjectsTable> = ({
 							<Actions isCancelled={isCancelled}>
 								<InternalLink
 									href={idToProjectEdit(project.id)}
-									title='Edit'
+									title={formatMessage({ id: 'label.edit' })}
 									disabled={isCancelled}
 								/>
 								<InternalLink
 									href={slugToProjectView(project.slug)}
-									title='View'
+									title={formatMessage({ id: 'label.view' })}
 									disabled={isCancelled}
 								/>
 							</Actions>
