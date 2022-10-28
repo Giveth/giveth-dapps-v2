@@ -97,7 +97,7 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 FilterMenu.displayName = 'FilterMenu';
 
 const projectFeatures = [
-	{ label: 'Accept GIV token', value: 'AcceptGiv' },
+	{ label: 'Accept GIV', value: 'AcceptGiv' },
 	{ label: 'Verified', value: 'Verified' },
 	{ label: 'From GivingBlock', value: 'GivingBlock' },
 	{ label: 'Accept Funds on Gnosis', value: 'AcceptFundOnGnosis' },
