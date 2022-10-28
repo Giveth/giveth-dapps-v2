@@ -13,7 +13,9 @@ export interface IHtmlTemplate {
 }
 
 export interface INotification {
+	id: string;
 	createdAt: string;
+	isRead?: boolean;
 	metadata: {
 		[key: string]: string;
 	};
