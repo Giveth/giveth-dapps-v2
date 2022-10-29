@@ -332,75 +332,68 @@ const faqContent = (formatMessage: any) => {
 				),
 			},
 			{
-				question: 'What types of projects are prohibited?',
+				question: 'page.faq.what_types_of_projects_are_prohibited',
 				answer: (
 					<>
-						Projects that are found to exhibit "unacceptable
-						behaviour" and/or violate our{' '}
+						<FormattedMessage id='page.faq.what_types_of_projects_are_prohibited.content.one' />{' '}
 						<a
 							href='https://docs.giveth.io/whatisgiveth/covenant/'
 							target='_blank'
 							rel='noopener noreferrer'
 						>
-							Covenant
+							<FormattedMessage id='label.covenant' />
 						</a>{' '}
-						and/or{' '}
+						<FormattedMessage id='label.and_or' />{' '}
 						<a
 							href='https://giveth.io/tos'
 							target='_blank'
 							rel='noopener noreferrer'
 						>
-							Terms of Use
+							<FormattedMessage id='component.title.tos' />
 						</a>{' '}
-						are considered prohibited and will be cancelled
-						immediately and an email will be send to the project
-						owner. Learn more in our{' '}
+						<FormattedMessage id='page.faq.what_types_of_projects_are_prohibited.content.two' />{' '}
 						<a
 							href='https://docs.giveth.io/dapps/listedUnlisted/#cancelled-projects'
 							target='_blank'
 							rel='noopener noreferrer'
 						>
-							documentation article
+							<FormattedMessage id='page.faq.what_types_of_projects_are_prohibited.content.three' />
 						</a>
 						.
 					</>
 				),
 			},
 			{
-				question: 'What is a Traceable project?',
+				question: 'page.faq.what_is_a_traceable_project',
 				answer: (
 					<>
-						A project on{' '}
+						<FormattedMessage id='page.faq.what_is_a_traceable_project.content.one' />{' '}
 						<ExternalLink href={Routes.Home} title='Giveth.io' />{' '}
-						that has been verified can choose to become a{' '}
+						<FormattedMessage id='page.faq.what_is_a_traceable_project.content.two' />{' '}
 						<ExternalLink
 							href={links.CAMPAIGN_DOCS}
-							title='Campaign'
+							title={formatMessage({ id: 'label.campaign' })}
 						/>{' '}
-						on{' '}
-						<ExternalLink href={links.TRACE} title='Giveth TRACE' />
-						, thus becoming a <b>Traceable project</b>. This enables
-						project creators to manage their donations transparently
-						using{' '}
-						<ExternalLink href={links.TRACES_DOCS} title='Traces' />
-						. Traces specify how the project is using their
-						donations to achieve the goals of the overarching
-						Campaigns. Upgrading giveth.io projects to Campaigns
-						enables project creators to specify parts of their
-						project requiring funding as different types of{' '}
-						<ExternalLink href={links.TRACES_DOCS} title='Traces' />
-						. Donors benefit from being able to choose to fund
-						either specific Traces or the overarching Campaign, and
-						are able to trace the flow of their donations. A
-						traceable project appears on both{' '}
+						<FormattedMessage id='label.on' />{' '}
 						<ExternalLink href={links.TRACE} title='Giveth TRACE' />{' '}
-						(as a Campaign) and{' '}
-						<ExternalLink href={Routes.Home} title='Giveth.io' />,
-						allowing for double exposure! To learn how to make your
-						project traceable, visit our{' '}
+						<FormattedMessage id='page.faq.what_is_a_traceable_project.content.three' />{' '}
+						<b>
+							<FormattedMessage id='label.traceable_project' />
+						</b>{' '}
+						<FormattedMessage id='page.faq.what_is_a_traceable_project.content.four' />{' '}
+						<ExternalLink href={links.TRACES_DOCS} title='Traces' />{' '}
+						<FormattedMessage id='page.faq.what_is_a_traceable_project.content.five' />{' '}
+						<ExternalLink href={links.TRACES_DOCS} title='Traces' />{' '}
+						<FormattedMessage id='page.faq.what_is_a_traceable_project.content.six' />
+						{'  '}
+						<ExternalLink href={links.TRACE} title='Giveth TRACE' />
+						{'  '}
+						<FormattedMessage id='page.faq.what_is_a_traceable_project.content.seven' />{' '}
+						<ExternalLink href={Routes.Home} title='Giveth.io' />,{' '}
+						<FormattedMessage id='page.faq.what_is_a_traceable_project.content.eight' />{' '}
 						<ExternalLink
 							href={links.MAKE_TRACEABLE_DOCS}
-							title='documentation'
+							title={formatMessage({ id: 'label.documentation' })}
 						/>
 						.
 					</>
