@@ -270,5 +270,13 @@
 	"page.partnerships.tokenengineeringcommons": "Building sustainable economic and governance systems.",
 	"page.partnerships.thegivingblock": "A crypto donation ecosystem.",
 	"page.partnerships.vocdoni": "Easy and secure solution For all your governance needs.",
-	"page.partnerships.whitehatgroup": "Trusted group of Ethereum hackers that have rescued 100's of millions of dollars multiple times."
+	"page.partnerships.whitehatgroup": "Trusted group of Ethereum hackers that have rescued 100's of millions of dollars multiple times.",
+	"label.how_can_we_help_you": "How can we help you?",
+	"label.ask_us_a_question": "Ask us a Question",
+	"label.ask_us_a_question.caption": "Do you have a specific question or a general inquiry that requires a response?",
+	"label.report_an_issue.caption": "Having problems with our site? Is something not functioning as expected?",
+	"label.leave_feedback": "Leave Feedback",
+	"label.leave_feedback.caption": "Let us know how your experience was! \n How can we improve?",
+	"label.request_a_new_feature": "Request a New Feature",
+	"label.request_a_new_feature.caption": "Want to see a new feature on Giveth? Are we missing a critical functionality?"
 }

@@ -270,5 +270,13 @@
 	"page.partnerships.tokenengineeringcommons": "",
 	"page.partnerships.thegivingblock": "",
 	"page.partnerships.vocdoni": "",
-	"page.partnerships.whitehatgroup": ""
+	"page.partnerships.whitehatgroup": "",
+	"label.how_can_we_help_you": "¿Cómo podemos ayudar?",
+	"label.ask_us_a_question": "",
+	"label.ask_us_a_question.caption": "",
+	"label.report_an_issue.caption": "",
+	"label.leave_feedback": "",
+	"label.leave_feedback.caption": "",
+	"label.request_a_new_feature": "",
+	"label.request_a_new_feature.caption": ""
 }
