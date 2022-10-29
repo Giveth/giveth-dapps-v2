@@ -43,7 +43,9 @@ const PartnershipsIndex = () => {
 					{sortedPartnerships.map((partner: IPartner) => (
 						<PartnershipsCard
 							key={partner.title}
-							description={partner.description}
+							description={formatMessage({
+								id: partner.description,
+							})}
 							link={partner.link}
 							icon={partner.icon}
 							title={partner.title}
