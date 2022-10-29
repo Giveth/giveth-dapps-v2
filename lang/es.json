@@ -354,5 +354,15 @@
 	"page.faq.what_is_a_traceable_project.content.eight": "",
 	"label.campaign": "Campaña",
 	"label.traceable_project": "Proyecto Traceable",
-	"label.documentation": "documentación"
+	"label.documentation": "documentación",
+	"label.on": "en",
+	"page.faq.i_still_need_more_detail_on_how_giveth_works": "Aun necesito más detalles sobre como funciona Giveth. ¿Donde puedo encontrar esto?",
+	"page.faq.i_still_need_more_detail_on_how_giveth_works.content.one": "",
+	"page.faq.i_still_need_more_detail_on_how_giveth_works.content.two": "",
+	"label.docs": "docs",
+	"page.faq.i_love_giveth_but_right_now_i_have_no_funds": "Amo a Giveth pero ahora mismo no cuento con fondos para donar, ¿De que otra manera puedo contribuir?",
+	"page.faq.i_love_giveth_but_right_now_i_have_no_funds.content.one": "",
+	"page.faq.i_love_giveth_but_right_now_i_have_no_funds.content.two": "",
+	"label.join_us_on_any_social_media": "Únete en cualquier de nuestros canales sociales",
+	"label.general": "General"
 }

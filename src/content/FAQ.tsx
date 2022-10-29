@@ -5,7 +5,7 @@ import links from '@/lib/constants/links';
 
 const faqContent = (formatMessage: any) => {
 	return {
-		General: [
+		[formatMessage({ id: 'label.general' })]: [
 			{
 				question: 'page.faq.what_is_blockchain',
 				answer: (
@@ -401,27 +401,24 @@ const faqContent = (formatMessage: any) => {
 			},
 			{
 				question:
-					'I still need more detail on how Giveth works. Where can I find this?',
+					'page.faq.i_still_need_more_detail_on_how_giveth_works',
 				answer: (
 					<>
-						For information about how Giveth works, its governance
-						structure, developer documentation and user guides for
-						the Donation Application please have a look at the{' '}
+						<FormattedMessage id='page.faq.i_still_need_more_detail_on_how_giveth_works.content.one' />{' '}
 						<a
 							href='https://docs.giveth.io'
 							target='_blank'
 							rel='noopener noreferrer'
 						>
-							docs
-						</a>
-						. You're always very welcome to join our chatrooms.
-						Please visit the{' '}
+							<FormattedMessage id='label.docs' />
+						</a>{' '}
+						<FormattedMessage id='page.faq.i_still_need_more_detail_on_how_giveth_works.content.two' />{' '}
 						<a
 							href='https://giveth.io/join'
 							target='_blank'
 							rel='noopener noreferrer'
 						>
-							Join Page
+							<FormattedMessage id='label.join_page' />
 						</a>
 						.
 					</>
@@ -429,16 +426,17 @@ const faqContent = (formatMessage: any) => {
 			},
 			{
 				question:
-					'I love Giveth but right now I have no funds to donate, how else can I contribute?',
+					'page.faq.i_love_giveth_but_right_now_i_have_no_funds',
 				answer: (
 					<>
-						We are a very inclusive Community and would love for you
-						to join and see how you can get involved.{' '}
+						<FormattedMessage id='page.faq.i_love_giveth_but_right_now_i_have_no_funds.content.one' />{' '}
 						<ExternalLink
 							href={Routes.Join}
-							title='Join us on any of our social channels'
+							title={formatMessage({
+								id: 'label.join_us_on_any_social_media',
+							})}
 						/>{' '}
-						and come talk to us!
+						<FormattedMessage id='page.faq.i_love_giveth_but_right_now_i_have_no_funds.content.two' />{' '}
 					</>
 				),
 			},

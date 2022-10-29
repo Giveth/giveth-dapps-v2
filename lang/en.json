@@ -355,5 +355,14 @@
 	"label.campaign": "Campaign",
 	"label.traceable_project": "Traceable Project",
 	"label.documentation": "documentation",
-	"label.on": "en"
+	"label.on": "on",
+	"page.faq.i_still_need_more_detail_on_how_giveth_works": "I still need more detail on how Giveth works. Where can I find this?",
+	"page.faq.i_still_need_more_detail_on_how_giveth_works.content.one": "For information about how Giveth works, its governance structure, developer documentation and user guides for the Donation Application please have a look at the",
+	"page.faq.i_still_need_more_detail_on_how_giveth_works.content.two": ". You're always very welcome to join our chatrooms. Please visit the",
+	"label.docs": "docs",
+	"page.faq.i_love_giveth_but_right_now_i_have_no_funds": "I love Giveth but right now I have no funds to donate, how else can I contribute?",
+	"page.faq.i_love_giveth_but_right_now_i_have_no_funds.content.one": "We are a very inclusive Community and would love for you to join and see how you can get involved.",
+	"page.faq.i_love_giveth_but_right_now_i_have_no_funds.content.two": "and come talk to us!",
+	"label.join_us_on_any_social_media": "Join us on any of our social channels",
+	"label.general": "General"
 }
