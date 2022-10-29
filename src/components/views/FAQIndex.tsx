@@ -37,7 +37,10 @@ const FAQIndex = () => {
 				</SearchStyles>
 				<FAQContainer>
 					{Object.keys(faqContent).map(i => (
-						<Accordion key={i} title={i}>
+						<Accordion
+							key={i}
+							title={formatMessage({ id: i?.toLowerCase() })}
+						>
 							{faqContent[i as TFAQ].map(faq => (
 								<Accordion
 									key={faq.question}

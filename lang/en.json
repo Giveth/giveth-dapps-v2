@@ -1,4 +1,7 @@
 {
+	"giveth": "Giveth",
+	"giveconomy": "GIVeconomy",
+	"general": "General",
 	"page.home.bigscreen.title": "Welcome to the Future of Giving",
 	"page.home.bigscreen.get_rewarded": "Get rewarded for giving to for-good projects with zero added fees.",
 	"page.home.bigscreen.donate_button": "Donate Now",
@@ -363,6 +366,5 @@
 	"page.faq.i_love_giveth_but_right_now_i_have_no_funds": "I love Giveth but right now I have no funds to donate, how else can I contribute?",
 	"page.faq.i_love_giveth_but_right_now_i_have_no_funds.content.one": "We are a very inclusive Community and would love for you to join and see how you can get involved.",
 	"page.faq.i_love_giveth_but_right_now_i_have_no_funds.content.two": "and come talk to us!",
-	"label.join_us_on_any_social_media": "Join us on any of our social channels",
-	"label.general": "General"
+	"label.join_us_on_any_social_media": "Join us on any of our social channels"
 }

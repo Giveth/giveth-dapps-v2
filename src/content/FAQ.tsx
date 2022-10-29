@@ -5,7 +5,7 @@ import links from '@/lib/constants/links';
 
 const faqContent = (formatMessage: any) => {
 	return {
-		[formatMessage({ id: 'label.general' })]: [
+		General: [
 			{
 				question: 'page.faq.what_is_blockchain',
 				answer: (
