@@ -1,5 +1,5 @@
-import Routes from '@/lib/constants/Routes';
 import { FormattedMessage } from 'react-intl';
+import Routes from '@/lib/constants/Routes';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
 
