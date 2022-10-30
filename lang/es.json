@@ -448,5 +448,21 @@
 	"page.faq.can_i_speed_up_my_givstream": "¿Cómo puedo acelerar mi GIVstream?",
 	"page.faq.can_i_speed_up_my_givstream.content.one": "",
 	"page.faq.can_i_speed_up_my_givstream.content.two": "",
-	"page.faq.can_i_speed_up_my_givstream.content.three": ""
+	"page.faq.can_i_speed_up_my_givstream.content.three": "",
+	"label.sign_in_to_giveth": "Inicia Sesión en Giveth",
+	"label.please_sign_in_to_your_account": "Porfavor ingresa en tu cuenta para empezar a usar Giveth.",
+	"label.sign_in_with_ethereum": "Ingresa con Ethereum",
+	"label.connect_with_your": "Conectarse con",
+	"label.week": "semana",
+	"label.givstream_flowrate": "Flujo de GIVstream",
+	"label.sign_wallet": "Firmar Billetera",
+	"label.you_need_to_authorize_your_wallet": "Necesitas autorizar tu billetera para habillitar su uso en Giveth.",
+	"label.note:this_is_necessary_to_donate_to_projects_or_receive_funding": "Nota: Esto es necesario para poder donar a proyectos o recibir financiación.",
+	"label.skip_for_now": "Ignorar por ahora",
+	"label.you_need_to_sign_in_first": "Necesitas iniciar sesión primero!",
+	"label.or_go_back_to_home": "O vuelve al inicio",
+	"label.giveth_is_currently_offline": "Giveth.io esta fuera de servicio por mantenimiento programado!",
+	"label.check_again_in_a_few_hours": "Vuelve en un par de horas para sumergirte",
+	"label.back_into_the": "de vuelta en",
+	"label.the_future_of_giving": "el futuro de las donaciones"
 }

@@ -448,5 +448,21 @@
 	"page.faq.can_i_speed_up_my_givstream": "Can I speed up my GIVstream?",
 	"page.faq.can_i_speed_up_my_givstream.content.one": "You can increase your",
 	"page.faq.can_i_speed_up_my_givstream.content.two": "flow-rate by participating in the GIVeconomy through",
-	"page.faq.can_i_speed_up_my_givstream.content.three": "You cannot, however, accelerate your GIVstream to decrease the time remaining. The 'GIViverse expansion' time period ends on December 23, 2026 and is the same for the entire GIVeconomy."
+	"page.faq.can_i_speed_up_my_givstream.content.three": "You cannot, however, accelerate your GIVstream to decrease the time remaining. The 'GIViverse expansion' time period ends on December 23, 2026 and is the same for the entire GIVeconomy.",
+	"label.sign_in_to_giveth": "Sign in to Giveth",
+	"label.please_sign_in_to_your_account": "Please sign in to your account and start using Giveth.",
+	"label.sign_in_with_ethereum": "Sign in with Ethereum",
+	"label.connect_with_your": "Connect with your",
+	"label.week": "week",
+	"label.givstream_flowrate": "Flowrate",
+	"label.sign_wallet": "Sign Wallet",
+	"label.you_need_to_authorize_your_wallet": "You need to authorize your wallet to be able to use it on Giveth.",
+	"label.note:this_is_necessary_to_donate_to_projects_or_receive_funding": "Note: This is necessary to be able to donate to projects or receive funding.",
+	"label.skip_for_now": "Skip for now",
+	"label.you_need_to_sign_in_first": "You need to sign in first!",
+	"label.or_go_back_to_home": "Or go back to homepage",
+	"label.giveth_is_currently_offline": "Giveth.io is currently offline for scheduled maintenance!",
+	"label.check_again_in_a_few_hours": "Check again in a few hours to dive",
+	"label.back_into_the": "back into the",
+	"label.the_future_of_giving": "the future of giving"
 }
