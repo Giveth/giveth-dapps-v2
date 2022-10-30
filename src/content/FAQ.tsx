@@ -237,7 +237,7 @@ const faqContent = (formatMessage: any) => {
 							target='_blank'
 							rel='noopener noreferrer'
 						>
-							<FormattedMessage id='page.faq.are_there_fees_for_creating_a_project.content.two' />{' '}
+							<FormattedMessage id='page.faq.are_there_fees_for_creating_a_project.content.two' />
 						</a>
 						.
 					</>
@@ -375,15 +375,15 @@ const faqContent = (formatMessage: any) => {
 							title={formatMessage({ id: 'label.campaign' })}
 						/>{' '}
 						<FormattedMessage id='label.on' />{' '}
-						<ExternalLink href={links.TRACE} title='Giveth TRACE' />{' '}
+						<ExternalLink href={links.TRACE} title='Giveth TRACE' />
 						<FormattedMessage id='page.faq.what_is_a_traceable_project.content.three' />{' '}
 						<b>
 							<FormattedMessage id='label.traceable_project' />
-						</b>{' '}
+						</b>
 						<FormattedMessage id='page.faq.what_is_a_traceable_project.content.four' />{' '}
-						<ExternalLink href={links.TRACES_DOCS} title='Traces' />{' '}
+						<ExternalLink href={links.TRACES_DOCS} title='Traces' />
 						<FormattedMessage id='page.faq.what_is_a_traceable_project.content.five' />{' '}
-						<ExternalLink href={links.TRACES_DOCS} title='Traces' />{' '}
+						<ExternalLink href={links.TRACES_DOCS} title='Traces' />
 						<FormattedMessage id='page.faq.what_is_a_traceable_project.content.six' />
 						{'  '}
 						<ExternalLink href={links.TRACE} title='Giveth TRACE' />
@@ -411,7 +411,7 @@ const faqContent = (formatMessage: any) => {
 							rel='noopener noreferrer'
 						>
 							<FormattedMessage id='label.docs' />
-						</a>{' '}
+						</a>
 						<FormattedMessage id='page.faq.i_still_need_more_detail_on_how_giveth_works.content.two' />{' '}
 						<a
 							href='https://giveth.io/join'
@@ -443,80 +443,62 @@ const faqContent = (formatMessage: any) => {
 		],
 		GIVeconomy: [
 			{
-				question: 'Why is Giveth launching a token?',
+				question: 'page.faq.why_is_giveth_launching_a_token',
 				answer: (
 					<>
-						Giveth’s mission is to reward & empower those who give
-						-- to projects, to society & to the world. The GIV token
-						fuels and drives the GIVeconomy and some has been
-						already distributed to those who have contributed to
-						making Giveth what it is today. Anyone with an Ethereum
-						wallet can get GIV via our{' '}
+						<FormattedMessage id='page.faq.why_is_giveth_launching_a_token.content.one' />{' '}
 						<a
 							href='https://docs.giveth.io/giveconomy/givbacks/'
 							target='_blank'
 							rel='noreferrer'
 						>
-							GIVbacks program
+							<FormattedMessage id='label.givbacks_program' />
 						</a>{' '}
-						by donating to verified projects. GIV is a governance
-						token that allows our community to actively participate
-						in shaping the future of Giveth in a decentralized way.
+						<FormattedMessage id='page.faq.why_is_giveth_launching_a_token.content.two' />
 					</>
 				),
 			},
 			{
-				question: 'What network is the GIV token on?',
+				question: 'page.faq.what_network_is_the_giv_token_on',
 				answer: (
-					<>
-						GIV was deployed on Ethereum Mainnet and is used most
-						heavily on Gnosis Chain (xDai). However, the GIViverse
-						is multi-chained and GIV will likely be
-						bridged/transferred to other chains and Layer 2
-						networks.
-					</>
+					<FormattedMessage id='page.faq.what_network_is_the_giv_token_on.content' />
 				),
 			},
 			{
-				question: 'Why are you using the Gnosis (xDai) network?',
+				question: 'page.faq.why_are_you_using_gnosis_network',
 				answer: (
-					<>
-						Giveth was part of the creation of Gnosis Chain
-						(formerly xDai Network) and loves the low-gas fees!
-					</>
+					<FormattedMessage id='page.faq.why_are_you_using_gnosis_network.content' />
 				),
 			},
 			{
-				question: 'What can I do with GIV?',
+				question: 'page.faq.what_can_i_do_with_giv',
 				answer: (
 					<>
-						With GIV, you can Govern, Donate, Farm & Earn! Explore
-						the GIVeconomy{' '}
+						<FormattedMessage id='page.faq.what_can_i_do_with_giv.content' />{' '}
 						<a
 							href='https://giveth.io/giveconomy'
 							target='_blank'
 							rel='noopener noreferrer'
 						>
-							here
+							<FormattedMessage id='label.here' />
 						</a>
 						.
 					</>
 				),
 			},
 			{
-				question: 'How can I get (more) GIV?',
+				question: 'page.faq.how_can_i_get_more_giv',
 				answer: (
 					<>
-						You can get GIV by interacting with the GIVeconomy and
-						Giveth in several ways:{' '}
+						<FormattedMessage id='page.faq.how_can_i_get_more_giv.content.one' />{' '}
 						<ul>
 							<li>
-								By{' '}
+								<FormattedMessage id='label.faq_by' />{' '}
 								<ExternalLink
 									href={Routes.Projects}
 									title='donating'
 								/>{' '}
-								to verified projects and getting{' '}
+								<FormattedMessage id='page.faq.how_can_i_get_more_giv.content.two' />{' '}
 								<a
 									href='https://docs.giveth.io/giveconomy/givbacks/'
 									target='_blank'
@@ -527,7 +509,7 @@ const faqContent = (formatMessage: any) => {
 								.
 							</li>
 							<li>
-								By providing liquidity and staking tokens in the{' '}
+								<FormattedMessage id='page.faq.how_can_i_get_more_giv.content.three' />{' '}
 								<ExternalLink
 									href={Routes.GIVfarm}
 									title='GIVfarm'
@@ -535,7 +517,7 @@ const faqContent = (formatMessage: any) => {
 								.
 							</li>
 							<li>
-								By wrapping GIV and voting in the{' '}
+								<FormattedMessage id='page.faq.how_can_i_get_more_giv.content.four' />{' '}
 								<ExternalLink
 									href={Routes.GIVgarden}
 									title='GIVgarden'
@@ -543,13 +525,13 @@ const faqContent = (formatMessage: any) => {
 								.
 							</li>
 							<li>
-								By{' '}
+								<FormattedMessage id='label.faq_by' />{' '}
 								<a
 									href='https://giveth.io/join'
 									target='_blank'
 									rel='noreferrer'
 								>
-									becoming a contributor
+									<FormattedMessage id='page.faq.how_can_i_get_more_giv.content.five' />
 								</a>
 								.
 							</li>
@@ -558,13 +540,10 @@ const faqContent = (formatMessage: any) => {
 				),
 			},
 			{
-				question: 'Who is eligible to receive the GIVdrop?',
+				question: 'page.faq.who_is_eligible_to_receive_givdrop',
 				answer: (
 					<>
-						Recipients of the GIVdrop include members of the "Giveth
-						trusted seed" - our community of crypto philanthropists,
-						Giveth users & builders, Blockchain4Good DAO members,
-						and other ecosystem partners. Check your{' '}
+						<FormattedMessage id='page.faq.who_is_eligible_to_receive_givdrop.content.one' />{' '}
 						<a
 							href='https://giveth.io/giveconomy'
 							target='_blank'
@@ -572,24 +551,23 @@ const faqContent = (formatMessage: any) => {
 						>
 							GIVdrop
 						</a>{' '}
-						or learn more about eligibility in our{' '}
+						<FormattedMessage id='page.faq.who_is_eligible_to_receive_givdrop.content.two' />{' '}
 						<a
 							href='https://docs.giveth.io/giveconomy/givdrop/'
 							target='_blank'
 							rel='noreferrer'
 						>
-							documentation
+							<FormattedMessage id='label.documentation' />
 						</a>
 						.
 					</>
 				),
 			},
 			{
-				question: 'Will there be another GIVdrop?',
+				question: 'page.faq.will_there_be_another_givdrop',
 				answer: (
 					<>
-						No, there are no more GIVdrops planned, but anyone can
-						get GIV from{' '}
+						<FormattedMessage id='page.faq.will_there_be_another_givdrop.content.one' />{' '}
 						<a
 							href='https://docs.giveth.io/giveconomy/givbacks/'
 							target='_blank'
@@ -597,101 +575,70 @@ const faqContent = (formatMessage: any) => {
 						>
 							GIVbacks
 						</a>{' '}
-						by donating to verified projects on Giveth.
+						<FormattedMessage id='page.faq.will_there_be_another_givdrop.content.two' />
 					</>
 				),
 			},
 			{
-				question: 'How do I claim my GIVdrop?',
+				question: 'page.faq.how_do_i_claim_my_givdrop',
 				answer: (
 					<>
-						You can check your GIVdrop and claim your tokens{' '}
+						<FormattedMessage id='page.faq.how_do_i_claim_my_givdrop.content.one' />{' '}
 						<a
 							href='https://giveth.io/giveconomy'
 							target='_blank'
 							rel='noreferrer'
 						>
-							here
+							<FormattedMessage id='label.here' />
 						</a>{' '}
-						or read our{' '}
+						<FormattedMessage id='page.faq.how_do_i_claim_my_givdrop.content.two' />{' '}
 						<a
 							href='https://docs.giveth.io/giveconomy/givdrop/#claiming-your-givdrop'
 							target='_blank'
 							rel='noreferrer'
 						>
-							tutorial
+							<FormattedMessage id='label.tutorial' />
 						</a>{' '}
-						on how to claim!
+						<FormattedMessage id='page.faq.how_do_i_claim_my_givdrop.content.three' />
 					</>
 				),
 			},
 			{
-				question:
-					"Why can't I see my successfully claimed GIV in my wallet?",
+				question: 'page.faq.why_cant_i_see_my_claimed_drop',
 				answer: (
-					<>
-						The GIVdrop is on Gnosis Chain (xDai). Ensure that your
-						wallet is connected to xDai and that you have added GIV
-						to your token list! The address for the GIV token on
-						xDai is 0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75.
-					</>
+					<FormattedMessage id='page.faq.why_cant_i_see_my_claimed_drop.content' />
 				),
 			},
 			{
-				question: "Why don't I have a GIVdrop?",
+				question: 'page.faq.why_dont_i_have_a_givdrop',
 				answer: (
-					<>
-						The GIVdrop has been sent to our community of crypto
-						philanthropists, Giveth users & builders,
-						Blockchain4Good DAO members, and other ecosystem
-						partners. We have made every effort to include all valid
-						addresses in this GIVdrop, at our discretion. Not every
-						person who has ever interacted with Giveth is eligible.
-						If you did not receive GIV, that is because you were not
-						eligible. We will not review past transactions or
-						consider other addresses for inclusion. We appreciate
-						your understanding.
-					</>
+					<FormattedMessage id='page.faq.why_dont_i_have_a_givdrop.content' />
 				),
 			},
 			{
-				question: "I didn't receive a GIVdrop. Can I get one now?",
+				question: 'page.faq.i_didnt_get_airdrop_can_i_get_one',
 				answer: (
-					<>
-						We have made every effort to include all valid addresses
-						in this GIVdrop, at our discretion. Not every person who
-						has ever interacted with Giveth is eligible. If you did
-						not receive GIV, that is because you were not eligible.
-						We will not review past transactions or consider other
-						addresses for inclusion. We appreciate your
-						understanding.
-					</>
+					<FormattedMessage id='page.faq.i_didnt_get_airdrop_can_i_get_one.content' />
 				),
 			},
 			{
-				question:
-					"I'm eligible for the GIVdrop, but I lost the keys to my address. Can you help?",
+				question: 'page.faq.im_eligible_for_givdrop_but_lost_keys',
 				answer: (
 					<>
-						If you received the GIVdrop but no longer have access to
-						the eligible address, it is possible for us to redirect
-						the allocation to another ETH address. However, you need
-						to prove who you are and that you do have tokens
-						allocated to you. If this is you,{' '}
+						<FormattedMessage id='page.faq.im_eligible_for_givdrop_but_lost_keys.content.one' />{' '}
 						<a
 							href='https://giveth.io/support'
 							target='_blank'
 							rel='noreferrer'
 						>
-							reach out to our team
+							<FormattedMessage id='page.faq.im_eligible_for_givdrop_but_lost_keys.content.two' />
 						</a>{' '}
-						for support. FYI - If no one on the Giveth team knows
-						you, it probably won't work out.
+						<FormattedMessage id='page.faq.im_eligible_for_givdrop_but_lost_keys.content.three' />
 					</>
 				),
 			},
 			{
-				question: 'How do I get involved in governance?',
+				question: 'page.faq.how_do_i_get_involved_in_governance',
 				answer: (
 					<>
 						<a
@@ -699,35 +646,30 @@ const faqContent = (formatMessage: any) => {
 							target='_blank'
 							rel='noreferrer'
 						>
-							Join Discord
+							<FormattedMessage id='page.faq.how_do_i_get_involved_in_governance.content.one' />
 						</a>{' '}
-						to engage with the community. If you have GIV, wrap it
-						in the{' '}
+						<FormattedMessage id='page.faq.how_do_i_get_involved_in_governance.content.two' />{' '}
 						<ExternalLink
 							href={Routes.GIVgarden}
 							title='GIVgarden'
 						/>{' '}
-						to unlock your governance voting power. Keep abreast of
-						governance proposals and participate in the discussion
-						in our{' '}
+						<FormattedMessage id='page.faq.how_do_i_get_involved_in_governance.content.three' />{' '}
 						<a
 							href='https://forum.giveth.io/'
 							target='_blank'
 							rel='noreferrer'
 						>
-							Forum
+							<FormattedMessage id='label.forum' />
 						</a>
 						.
 					</>
 				),
 			},
 			{
-				question: 'What is the GIVbacks program?',
+				question: 'page.faq.what_is_the_givbacks_program',
 				answer: (
 					<>
-						GIVbacks is a revolutionary concept that rewards donors
-						to verified projects on Giveth with GIV. Learn more
-						about{' '}
+						<FormattedMessage id='page.faq.what_is_the_givbacks_program.content.one' />{' '}
 						<a
 							href='https://docs.giveth.io/giveconomy/givbacks/'
 							target='_blank'
@@ -735,214 +677,175 @@ const faqContent = (formatMessage: any) => {
 						>
 							GIVbacks
 						</a>{' '}
-						in our documentation.
+						<FormattedMessage id='page.faq.what_is_the_givbacks_program.content.two' />
 					</>
 				),
 			},
 			{
-				question: "What is a 'Verified' Project?",
+				question: 'page.faq.what_is_a_verified_project',
 				answer: (
 					<>
-						'Verified' is a top tier status for projects wishing to
-						join the GIVbacks program. The GIVbacks program is a
-						revolutionary concept that rewards donors to verified
-						projects with GIV tokens. By applying for a 'Verified'
-						project status, you will be able to make your project
-						stand out and encourage more donations. Getting your
-						project verified also builds a relationship of trust
-						with your donors by demonstrating your project's
-						legitimacy and showing that the funds are being used to
-						create positive change. This simple verification process
-						requires some additional information about your project
-						and the intended impact of your organization. If you
-						would like to apply to receive the 'Verified' badge,
-						encourage more giving and give back to those who have
-						helped you reach your goals, please fill out{' '}
+						<FormattedMessage id='page.faq.what_is_a_verified_project.content' />{' '}
 						<a
 							href='https://giveth.typeform.com/verification?typeform-source=next.giveth.io'
 							target='_blank'
 							rel='noreferrer'
 						>
-							this form
+							<FormattedMessage id='label.this_form' />
 						</a>
 						.
 					</>
 				),
 			},
 			{
-				question:
-					'I earned GIVbacks, but the GIVbacks page says my balance is zero. What happened?',
+				question: 'page.faq.i_earned_givbacks_but_my_balance_is_zero',
 				answer: (
 					<>
-						When you harvest GIV rewards on Gnosis Chain (xDai) from
-						the{' '}
+						<FormattedMessage id='page.faq.i_earned_givbacks_but_my_balance_is_zero.content.one' />{' '}
 						<ExternalLink
 							href={Routes.GIVgarden}
 							title='GIVgarden'
 						/>
 						, <ExternalLink href={Routes.GIVfarm} title='GIVfarm' />
-						, or{' '}
+						, <FormattedMessage id='label.or' />{' '}
 						<ExternalLink
 							href={Routes.GIVstream}
 							title='GIVstream'
 						/>{' '}
-						pages, you get all liquid GIV allocated to you in our
-						token distro in a single transaction. If you earned GIV
-						but don't see it on the{' '}
+						<FormattedMessage id='page.faq.i_earned_givbacks_but_my_balance_is_zero.content.two' />{' '}
 						<ExternalLink href={Routes.GIVbacks} title='GIVbacks' />{' '}
-						page you may have already claimed this allocation from
-						another page.
+						<FormattedMessage id='page.faq.i_earned_givbacks_but_my_balance_is_zero.content.three' />
 					</>
 				),
 			},
 			{
-				question: 'What is the GIVgarden?',
+				question: 'page.faq.what_is_the_givgarden',
 				answer: (
 					<>
-						The{' '}
+						<FormattedMessage id='label.the' />{' '}
 						<ExternalLink
 							href={Routes.GIVgarden}
 							title='GIVgarden'
 						/>{' '}
-						is the Giveth Community’s DAO governance platform,
-						developed by{' '}
+						<FormattedMessage id='page.faq.what_is_the_givgarden.content.one' />{' '}
 						<a
 							href='https://1hive.gitbook.io/gardens/'
 							target='_blank'
 							rel='noreferrer'
 						>
-							1Hive's Gardens team
+							<FormattedMessage id='page.faq.what_is_the_givgarden.content.two' />
 						</a>
-						, where GIV token holders can influence the treasury,
-						roadmap and mission of the Giveth ecosystem. To learn
-						more, check out the{' '}
+						<FormattedMessage id='page.faq.what_is_the_givgarden.content.three' />{' '}
 						<a
 							href='https://docs.giveth.io/giveconomy/givgarden/'
 							target='_blank'
 							rel='noreferrer'
 						>
-							GIVgarden documentation
+							<FormattedMessage id='label.givgarden_documentation' />
 						</a>
 						.
 					</>
 				),
 			},
 			{
-				question: 'What is the GIVfarm?',
+				question: 'page.faq.what_is_the_givfarm',
 				answer: (
 					<>
-						The{' '}
+						<FormattedMessage id='label.the' />{' '}
 						<ExternalLink href={Routes.GIVfarm} title='GIVfarm' />{' '}
-						is the Giveth liquidity mining program that allows GIV
-						holders to provide liquidity and stake tokens to earn
-						GIV rewards. To learn more, check out the{' '}
+						<FormattedMessage id='page.faq.what_is_the_givfarm.content' />{' '}
 						<ExternalLink
 							href={links.GIVFARM_DOCS}
-							title='GIVfarm documentation'
+							title={formatMessage({
+								id: 'label.givfarm_documentation',
+							})}
 						/>
 						.
 					</>
 				),
 			},
 			{
-				question: 'What is the GIVstream?',
+				question: 'page.faq.what_is_the_givstream',
 				answer: (
 					<>
-						The{' '}
+						<FormattedMessage id='label.the' />{' '}
 						<ExternalLink
 							href={Routes.GIVstream}
 							title='GIVstream'
 						/>{' '}
-						aligns community members with the long term success of
-						Giveth and the GIVeconomy. With the GIVstream, anyone
-						who adds value to the GIVeconomy gets GIV continuously
-						for up to 5 years. The GIVeconomy starts out small but
-						as more value is created, the GIViverse expands -- More
-						GIV becomes liquid and more GIV spreads out to our
-						community of stakeholders. To learn more, check out the{' '}
+						<FormattedMessage id='page.faq.what_is_the_givstream.content' />{' '}
 						<ExternalLink
 							href={links.GIVSTREAM_DOCS}
-							title='GIVstream documentation'
+							title={formatMessage({
+								id: 'label.givstream_documentation',
+							})}
 						/>
 						.
 					</>
 				),
 			},
 			{
-				question: 'Why is there a GIVstream?',
+				question: 'page.faq.why_is_there_a_givstream',
 				answer: (
 					<>
-						The GIVstream nurtures the GIVeconomy at inception by
-						having only 10% of the total supply of GIV liquid and
-						transferable to start. As the GIVeconomy grows &
-						stabilizes, more GIV become liquid and available for
-						everyone. We want to empower those who support the
-						Giveth ecosystem with steadily increasing governance
-						rights, this includes participants who{' '}
+						<FormattedMessage id='page.faq.why_is_there_a_givstream.content.one' />{' '}
 						<ExternalLink
 							href={Routes.Projects}
-							title='donate to verified projects'
+							title={formatMessage({
+								id: 'label.donate_to_verified_projects',
+							})}
 						/>
-						, vote in the{' '}
+						<FormattedMessage id='page.faq.why_is_there_a_givstream.content.two' />{' '}
 						<ExternalLink
 							href={Routes.GIVgarden}
 							title='GIVgarden'
-						/>{' '}
-						or provide liquidity in the{' '}
-						<ExternalLink href={Routes.GIVfarm} title='GIVfarm' />.
-						Participants benefit from their GIVstream flowing as the
-						GIVeconomy flourishes over time, therefore we ensure
-						that Giveth is not just governed by people who buy
-						tokens on the open market but by those who contribute in
-						a more meaningful way.
+						/>
+						{'  '}
+						<FormattedMessage id='page.faq.why_is_there_a_givstream.content.three' />{' '}
+						<ExternalLink href={Routes.GIVfarm} title='GIVfarm' />.{' '}
+						<FormattedMessage id='page.faq.why_is_there_a_givstream.content.four' />
 					</>
 				),
 			},
 			{
-				question: 'How do I get a GIVstream?',
+				question: 'page.faq.how_do_i_get_a_givstream',
 				answer: (
 					<>
-						You can get (or increase) your GIVstream flow-rate on
-						Gnosis Chain by donating (on Gnosis (xDai) or Mainnet)
-						and getting{' '}
+						<FormattedMessage id='page.faq.how_do_i_get_a_givstream.content.one' />{' '}
 						<ExternalLink href={Routes.GIVbacks} title='GIVbacks' />
-						, by wrapping GIV to use in the{' '}
+						<FormattedMessage id='page.faq.how_do_i_get_a_givstream.content.two' />{' '}
 						<ExternalLink
 							href={Routes.GIVgarden}
 							title='GIVgarden'
 						/>
-						, or by staking in the{' '}
+						<FormattedMessage id='page.faq.how_do_i_get_a_givstream.content.three' />{' '}
 						<ExternalLink href={Routes.GIVfarm} title='GIVfarm' />{' '}
-						on Gnosis (xDai). You can get (or increase) your
-						GIVstream flowrate on Ethereum Mainnet by providing
-						Mainnet liquidity and staking GIV or LP tokens in the{' '}
+						<FormattedMessage id='page.faq.how_do_i_get_a_givstream.content.four' />{' '}
 						<ExternalLink href={Routes.GIVfarm} title='GIVfarm' />{' '}
-						on Mainnet.
+						<FormattedMessage id='page.faq.how_do_i_get_a_givstream.content.five' />
 					</>
 				),
 			},
 			{
-				question: 'Can I speed up my GIVstream?',
+				question: 'page.faq.can_i_speed_up_my_givstream',
 				answer: (
 					<>
-						You can increase your{' '}
+						<FormattedMessage id='page.faq.can_i_speed_up_my_givstream.content.one' />{' '}
 						<ExternalLink
 							href={Routes.GIVstream}
 							title='GIVstream'
 						/>{' '}
-						flow-rate by participating in the GIVeconomy through{' '}
+						<FormattedMessage id='page.faq.can_i_speed_up_my_givstream.content.two' />{' '}
 						<ExternalLink href={Routes.GIVbacks} title='GIVbacks' />{' '}
-						, the{' '}
+						, <FormattedMessage id='label.the' />{' '}
 						<ExternalLink
 							href={Routes.GIVgarden}
 							title='GIVgarden'
 						/>
-						, or the{' '}
+						, <FormattedMessage id='label.or' />{' '}
+						<FormattedMessage id='label.the' />{' '}
 						<ExternalLink href={Routes.GIVfarm} title='GIVfarm' />.
-						You cannot, however, accelerate your GIVstream to
-						decrease the time remaining. The "GIViverse expansion"
-						time period ends on December 23, 2026 and is the same
-						for the entire GIVeconomy.
+						<FormattedMessage id='page.faq.can_i_speed_up_my_givstream.content.three' />
 					</>
 				),
 			},
