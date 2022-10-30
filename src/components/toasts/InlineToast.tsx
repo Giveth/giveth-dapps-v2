@@ -2,6 +2,7 @@ import {
 	Caption,
 	IconAlertTriangle,
 	IconCheckmarkCircle,
+	IconInfo,
 	semanticColors,
 } from '@giveth/ui-design-system';
 import React, { FC } from 'react';
@@ -11,6 +12,7 @@ export enum EToastType {
 	Error = 'error',
 	Warning = 'warning',
 	Success = 'success',
+	Info = 'info',
 }
 
 interface IProps {
@@ -25,6 +27,8 @@ const InlineToast: FC<IProps> = ({ message, type, isHidden }) => {
 			? 'punch'
 			: type === EToastType.Warning
 			? 'golden'
+			: type === EToastType.Info
+			? 'blueSky'
 			: 'jade';
 
 	return (
@@ -34,6 +38,8 @@ const InlineToast: FC<IProps> = ({ message, type, isHidden }) => {
 		>
 			{type === EToastType.Success ? (
 				<IconCheckmarkCircle />
+			) : type === EToastType.Info ? (
+				<IconInfo size={16} color={semanticColors.blueSky[700]} />
 			) : (
 				<IconAlertTriangle />
 			)}

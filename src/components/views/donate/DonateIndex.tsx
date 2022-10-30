@@ -1,12 +1,10 @@
 import React, { FC, useState } from 'react';
-import { useWeb3React } from '@web3-react/core';
 import styled from 'styled-components';
 
 import { ISuccessDonation } from './CryptoDonation';
 import { BigArc } from '@/components/styled-components/Arc';
 import { mediaQueries } from '@/lib/constants/constants';
 import SocialBox from './SocialBox';
-import { formatTxLink } from '@/lib/helpers';
 import SuccessView from '@/components/views/donate/SuccessView';
 import ProjectCardSelector from '@/components/views/donate/ProjectCardSelector';
 import DonationTypes from '@/components/views/donate/DonationTypes';
@@ -17,8 +15,6 @@ import { IDonateRouteProps } from '../../../../pages/donate/[slug]';
 const DonateIndex: FC<IDonateRouteProps> = ({ project }) => {
 	const [isSuccess, setSuccess] = useState<ISuccessDonation>();
 	const { isMobile } = useDetectDevice();
-
-	const { chainId } = useWeb3React();
 
 	const { givBackEligible, txHash } = isSuccess || {};
 
@@ -32,7 +28,7 @@ const DonateIndex: FC<IDonateRouteProps> = ({ project }) => {
 					<Right isMobile={isMobile}>
 						{isSuccess ? (
 							<SuccessView
-								txLink={formatTxLink(chainId, txHash)}
+								txHash={txHash!}
 								project={project}
 								givBackEligible={givBackEligible!}
 							/>

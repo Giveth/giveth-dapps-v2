@@ -10,7 +10,6 @@ import { EDonationStatus } from '@/apollo/types/gqlEnums';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
 import { MAX_TOKEN_ORDER } from '@/lib/constants/tokens';
 import { IWalletAddress } from '@/apollo/types/types';
-import { ISuccessDonation } from '@/components/views/donate/CryptoDonation';
 
 export interface ISelectedToken extends IProjectAcceptedToken {
 	value?: IProjectAcceptedToken;
@@ -95,42 +94,43 @@ export const getNetworkNames = (networks: number[], text: string) => {
 	});
 };
 
-export interface IConfirmDonation {
+export interface ICreateDonation {
 	setDonationSaved?: (value: boolean) => void;
 	web3Context: Web3ReactContextInterface;
 	setDonating: (value: boolean) => void;
 	walletAddress: string;
 	projectId: number;
-	isDonationToGiveth?: boolean;
 	amount: number;
 	token: IProjectAcceptedToken;
-	setSuccessDonation?: (value: ISuccessDonation) => void;
 	setFailedModalType: (i: EDonationFailedType) => void;
-	givBackEligible?: boolean;
 	setTxHash: (i: string) => void;
 	anonymous?: boolean;
 }
 
-export const confirmDonation = async (props: IConfirmDonation) => {
+export interface ICreateDonationResult {
+	isSaved: boolean;
+	txHash: string;
+}
+
+type TCreateDonation = (i: ICreateDonation) => Promise<ICreateDonationResult>;
+
+export const createDonation: TCreateDonation = async props => {
 	const {
 		walletAddress,
 		amount,
 		token,
-		setSuccessDonation,
 		setFailedModalType,
 		web3Context,
 		setDonating,
 		setDonationSaved,
-		givBackEligible,
 		setTxHash,
-		isDonationToGiveth,
 	} = props;
 
 	const { library } = web3Context;
 	const { address } = token;
 
 	let donationId = 0,
-		donationSaved = false;
+		_txHash = '';
 
 	try {
 		const toAddress = isAddressENS(walletAddress!)
@@ -143,34 +143,33 @@ export const confirmDonation = async (props: IConfirmDonation) => {
 		};
 
 		const txCallbacks = {
-			onTxHash: async (txHash: string, nonce: number) => {
+			onTxHash: (txHash: string, nonce: number) => {
+				_txHash = txHash;
 				setTxHash(txHash);
 				saveDonation({ nonce, txHash, ...props })
 					.then(res => {
 						donationId = res;
 						setDonationSaved && setDonationSaved(true);
-						donationSaved = true;
 					})
 					.catch(() => {
 						setFailedModalType(EDonationFailedType.NOT_SAVED);
 						setDonating(false);
 					});
 			},
-			onReceipt: async (txHash: string) => {
+			onReceipt: () => {
 				updateDonation(donationId, EDonationStatus.VERIFIED);
-				donationSaved &&
-					setSuccessDonation &&
-					setSuccessDonation({ txHash, givBackEligible });
 			},
 		};
 
 		await sendTransaction(library, transactionObj, txCallbacks, address);
+		return { isSaved: donationId > 0, txHash: _txHash };
 	} catch (error: any) {
+		_txHash = error.replacement?.hash || error.transactionHash;
 		if (
 			(error.replacement && error.cancelled === true) ||
 			error.reason === 'transaction failed'
 		) {
-			setTxHash(error.replacement?.hash || error.transactionHash);
+			setTxHash(_txHash);
 			setFailedModalType(
 				error.cancelled
 					? EDonationFailedType.CANCELLED
@@ -190,5 +189,6 @@ export const confirmDonation = async (props: IConfirmDonation) => {
 				section: 'confirmDonation',
 			},
 		});
+		throw { isSaved: donationId > 0, txHash: _txHash };
 	}
 };

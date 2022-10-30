@@ -31,12 +31,7 @@ import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { client } from '@/apollo/apolloClient';
 import { PROJECT_ACCEPTED_TOKENS } from '@/apollo/gql/gqlProjects';
-import {
-	formatBalance,
-	formatTxLink,
-	pollEvery,
-	showToastError,
-} from '@/lib/helpers';
+import { formatBalance, pollEvery, showToastError } from '@/lib/helpers';
 import {
 	IProjectAcceptedToken,
 	IProjectAcceptedTokensGQL,
@@ -51,9 +46,6 @@ import { ORGANIZATION } from '@/lib/constants/organizations';
 import { getERC20Info } from '@/lib/contracts';
 import GIVBackToast from '@/components/views/donate/GIVBackToast';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
-import FailedDonation, {
-	EDonationFailedType,
-} from '@/components/modals/FailedDonation';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import {
 	setShowSignWithWallet,
@@ -69,7 +61,7 @@ const stableCoins = [gnosisChain.mainToken, 'DAI', 'USDT'];
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
 export interface ISuccessDonation {
-	txHash: string;
+	txHash: string[];
 	givBackEligible?: boolean;
 }
 
@@ -137,9 +129,6 @@ const CryptoDonation = (props: {
 	const [acceptedTokens, setAcceptedTokens] =
 		useState<IProjectAcceptedToken[]>();
 	const [acceptedChains, setAcceptedChains] = useState<number[]>();
-	const [failedModalType, setFailedModalType] =
-		useState<EDonationFailedType>();
-	const [txHash, setTxHash] = useState<string>();
 	const [donationToGiveth, setDonationToGiveth] = useState(
 		noDonationSplit ? 0 : 5,
 	);
@@ -378,8 +367,6 @@ const CryptoDonation = (props: {
 				<DonateModal
 					setShowModal={setShowDonateModal}
 					setSuccessDonation={setSuccessDonation}
-					setFailedModalType={setFailedModalType}
-					setTxHash={setTxHash}
 					project={project}
 					projectWalletAddress={projectWalletAddress}
 					givethWalletAddress={givethWalletAddress}
@@ -391,13 +378,6 @@ const CryptoDonation = (props: {
 					givBackEligible={
 						projectIsGivBackEligible && tokenIsGivBackEligible
 					}
-				/>
-			)}
-			{failedModalType && (
-				<FailedDonation
-					txUrl={formatTxLink(networkId, txHash)}
-					setShowModal={() => setFailedModalType(undefined)}
-					type={failedModalType}
 				/>
 			)}
 

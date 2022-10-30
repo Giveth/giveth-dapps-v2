@@ -1,15 +1,27 @@
 import React from 'react';
-import { B } from '@giveth/ui-design-system';
+import {
+	Caption,
+	IconCheckmarkCircle,
+	semanticColors,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import ExternalLink from '@/components/ExternalLink';
+
+export enum EToastType {
+	SUCCESS = 'success',
+	ERROR = 'error',
+	WARNING = 'warning',
+	INFO = 'info',
+}
 
 interface IFToast {
 	message: string | JSX.Element;
 	href?: string;
-	color: string;
+	color?: string;
 	boldColor?: string;
-	backgroundColor: string;
+	backgroundColor?: string;
 	icon?: JSX.Element;
+	type?: EToastType;
 }
 
 interface IToastContainer {
@@ -17,9 +29,17 @@ interface IToastContainer {
 }
 
 const FixedToast = (props: IFToast) => {
-	const { message, icon, color, backgroundColor, boldColor, href } = props;
+	let { message, icon, color, backgroundColor, boldColor, href, type } =
+		props;
+
+	if (type === EToastType.SUCCESS) {
+		color = semanticColors.jade[700];
+		backgroundColor = semanticColors.jade[100];
+		icon = <IconCheckmarkCircle color={semanticColors.jade[700]} />;
+	}
+
 	return (
-		<Container color={backgroundColor} borderColor={color}>
+		<Container color={backgroundColor} borderColor={color!}>
 			{icon && <Icon>{icon}</Icon>}
 			<Text color={color}>{message}</Text>
 			{href && (
@@ -31,7 +51,7 @@ const FixedToast = (props: IFToast) => {
 	);
 };
 
-const Container = styled.div`
+const Container = styled.div<{ color?: string; borderColor: string }>`
 	display: flex;
 	align-items: center;
 	background-color: ${props => props.color};
@@ -47,9 +67,8 @@ const Container = styled.div`
 	}
 `;
 
-const Text = styled(B)`
+const Text = styled(Caption)`
 	color: ${props => props.color};
-	font-size: 14px;
 	line-height: 150%;
 	> a {
 		font-weight: 700;
@@ -57,7 +76,7 @@ const Text = styled(B)`
 `;
 
 const Icon = styled.div`
-	padding: 5px 5px 0 0;
+	padding: 5px 15px 0 0;
 `;
 
 export default FixedToast;

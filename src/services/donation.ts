@@ -5,10 +5,10 @@ import {
 	UPDATE_DONATION_STATUS,
 } from '@/apollo/gql/gqlDonations';
 import { client } from '@/apollo/apolloClient';
-import { IConfirmDonation } from '@/components/views/donate/helpers';
+import { ICreateDonation } from '@/components/views/donate/helpers';
 import { EDonationStatus } from '@/apollo/types/gqlEnums';
 
-interface IOnTxHash extends IConfirmDonation {
+interface IOnTxHash extends ICreateDonation {
 	txHash: string;
 	nonce: number;
 }
