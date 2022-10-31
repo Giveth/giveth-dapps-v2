@@ -96,9 +96,9 @@ export const formatDate = (date: Date) => {
 		.replace(/,/g, '');
 };
 
-export const smallFormatDate = (date: Date) => {
+export const smallFormatDate = (date: Date, locale?: string) => {
 	return date
-		.toLocaleString('en-US', {
+		.toLocaleString(locale || 'en-US', {
 			day: 'numeric',
 			year: 'numeric',
 			month: 'short',

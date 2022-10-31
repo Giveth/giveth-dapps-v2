@@ -81,8 +81,7 @@ const ProjectDonationTable = ({
 	const [searchTerm, setSearchTerm] = useState<string>('');
 
 	const user = useAppSelector(state => state.user.userData);
-	const { formatMessage } = useIntl();
-
+	const { formatMessage, locale } = useIntl();
 	const { id, traceCampaignId, adminUser } = project || {};
 	const isAdmin = compareAddresses(
 		adminUser?.walletAddress,
@@ -210,6 +209,7 @@ const ProjectDonationTable = ({
 								<DonationTableCell>
 									{smallFormatDate(
 										new Date(donation.createdAt),
+										locale,
 									)}
 								</DonationTableCell>
 								<DonationTableCell>

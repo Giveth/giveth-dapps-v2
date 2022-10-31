@@ -39,7 +39,8 @@ const DonationTable: FC<DonationTable> = ({
 	changeOrder,
 	myAccount,
 }) => {
-	const { formatMessage } = useIntl();
+	const { formatMessage, locale } = useIntl();
+	console.log({ locale });
 	return (
 		<DonationTableContainer myAccount={myAccount}>
 			<TableHeader onClick={() => changeOrder(EOrderBy.CreationDate)}>
@@ -63,7 +64,7 @@ const DonationTable: FC<DonationTable> = ({
 			{donations.map(donation => (
 				<DonationRowWrapper key={donation.id}>
 					<DonationTableCell>
-						{smallFormatDate(new Date(donation.createdAt))}
+						{smallFormatDate(new Date(donation.createdAt), locale)}
 					</DonationTableCell>
 					<Link
 						href={slugToProjectView(donation.project.slug)}

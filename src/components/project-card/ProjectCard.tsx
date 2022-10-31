@@ -118,7 +118,10 @@ const ProjectCard = (props: IProjectCard) => {
 						<PriceText>
 							${Math.ceil(totalDonations as number)}
 						</PriceText>
-						<LightSubline> Raised</LightSubline>
+						<LightSubline>
+							{' '}
+							{formatMessage({ id: 'label.raised_two' })}
+						</LightSubline>
 					</Flex>
 					<>
 						<Hr />

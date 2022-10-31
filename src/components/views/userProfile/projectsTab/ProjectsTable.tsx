@@ -36,7 +36,7 @@ const ProjectsTable: FC<IProjectsTable> = ({
 	changeOrder,
 	order,
 }) => {
-	const { formatMessage } = useIntl();
+	const { formatMessage, locale } = useIntl();
 	return (
 		<Table>
 			<ProjectsTableHeader
@@ -76,7 +76,10 @@ const ProjectsTable: FC<IProjectsTable> = ({
 				return (
 					<ProjectsRowWrapper key={project.id}>
 						<ProjectTableCell>
-							{smallFormatDate(new Date(project.creationDate!))}
+							{smallFormatDate(
+								new Date(project.creationDate!),
+								locale,
+							)}
 						</ProjectTableCell>
 						<ProjectTableCell>
 							<StatusBadge status={status!} />

@@ -479,5 +479,6 @@
 	"label.email": "email",
 	"label.location_optional": "location (optional)",
 	"label.website_or_url": "website or url",
-	"label.your_homepage_or_blog": "Your homepage, blog, or company site."
+	"label.your_homepage_or_blog": "Your homepage, blog, or company site.",
+	"label.raised_two": "Raised"
 }
