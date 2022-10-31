@@ -167,7 +167,7 @@ const config: EnvConfig = {
 						regenStreamType: StreamType.CULT,
 						regenFarmType: RegenFarmType.CULT_ETH,
 						farmStartTimeMS: 1655218800000,
-						active: true,
+						active: false,
 						introCard: {
 							title: 'CULT',
 							description: `The purpose of CULT is to empower those building and contributing to our decentralized future. Our society makes it as difficult as possible to break away from societal, economic and other norms, and CULT serves to fund and support those who are working to take back our future. CULT is a reminder that the power in people is stronger than the people in power.\n\n CULT is the governance token of the Cult DAO. Every transaction of the CULT token allows you to contribute & fast-forward economic & societal change by contributing a 0.4% tax to the treasury. Fight from within until you get out, or change the system in doing so.`,
