@@ -527,7 +527,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 													rewardLiquidPart,
 												)} ${rewardTokenSymbol}`
 											) : (
-												<div>N/A</div>
+												<div>
+													{paused ? 'pending' : 'N/A'}
+												</div>
 											)}
 										</DetailValue>
 									</Detail>
@@ -551,7 +553,11 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 														rewardStream,
 													)
 												) : (
-													<div>N/A</div>
+													<div>
+														{paused
+															? 'pending'
+															: 'N/A'}
+													</div>
 												)}
 											</DetailValue>
 											<DetailUnit>
