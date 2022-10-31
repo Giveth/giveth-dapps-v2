@@ -560,9 +560,11 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 													</div>
 												)}
 											</DetailValue>
-											<DetailUnit>
-												{rewardTokenSymbol}/week
-											</DetailUnit>
+											{active && (
+												<DetailUnit>
+													{rewardTokenSymbol}/week
+												</DetailUnit>
+											)}
 										</Flex>
 									</Detail>
 								</Details>
