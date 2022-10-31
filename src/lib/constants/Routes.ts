@@ -28,7 +28,7 @@ const Routes = {
 	MyBoostedProjects: MyAccount + profileTabs.boosted,
 	Onboard: '/onboard',
 	Verification: '/verification',
-	Notification: '/notification',
+	Notification: '/notifications',
 	GIVECONOMY: '/giveconomy',
 	GIVgarden: '/givgarden',
 	GIVfarm: '/givfarm',
