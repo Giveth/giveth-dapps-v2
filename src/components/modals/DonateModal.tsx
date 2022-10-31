@@ -158,11 +158,12 @@ const DonateModal = (props: IDonateModalProps) => {
 			<Modal
 				closeModal={closeModal}
 				isAnimating={isAnimating}
+				headerTitlePosition='left'
+				headerIcon={<IconDonation size={32} />}
+				doNotCloseOnClickOutside
 				headerTitle={
 					firstDonationSaved ? 'Donation submitted' : 'Donating'
 				}
-				headerTitlePosition='left'
-				headerIcon={<IconDonation size={32} />}
 			>
 				<DonateContainer>
 					<DonatingBox>
