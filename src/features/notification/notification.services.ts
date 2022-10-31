@@ -1,5 +1,5 @@
 import { captureException } from '@sentry/nextjs';
-import { getRequest, postRequest } from '@/helpers/requests';
+import { getRequest, putRequest } from '@/helpers/requests';
 import { defaultNotificationValues } from './notification.slice';
 import config from '@/configuration';
 import { showToastError } from '@/lib/helpers';
@@ -64,7 +64,7 @@ export const postNotificationSettings: TPostNotificationSettings = async i => {
 	} = i;
 
 	try {
-		return await postRequest(
+		return await putRequest(
 			`${config.MICROSERVICES.notificationSettings}/${notificationTypeId}`,
 			true,
 			{
