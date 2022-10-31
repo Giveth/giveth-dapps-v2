@@ -32,7 +32,7 @@ const BoostedInnerModal: FC<IBoostedModalProps> = ({
 					You boosted this project with {percentage}% of your
 					GIVpower.
 					<br />
-					Note: This project’s ranking will only change at the start
+					Note: This project’s rank will only change at the start of
 					of the next GIVbacks round
 				</Desc>
 				<ActionsSection>
