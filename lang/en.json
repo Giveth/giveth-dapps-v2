@@ -464,5 +464,20 @@
 	"label.giveth_is_currently_offline": "Giveth.io is currently offline for scheduled maintenance!",
 	"label.check_again_in_a_few_hours": "Check again in a few hours to dive",
 	"label.back_into_the": "back into the",
-	"label.the_future_of_giving": "the future of giving"
+	"label.the_future_of_giving": "the future of giving",
+	"label.you_already_completed_your_profile": "You've already completed your profile!",
+	"label.you_can_use_the_dashboard_to_edit": "You can use the dashboard to edit.",
+	"label.go_to_dashboard": "Go to dashboard",
+	"label.edit_profile": "Edit Profile",
+	"label.please_sign_in": "Please sign in",
+	"label.cancel": "Cancel",
+	"label.save": "Save",
+	"label.upload_new_pic": "Upload new picture",
+	"label.delete_pic": "Delete picture",
+	"label.first_name": "First name",
+	"label.last_name": "Last name",
+	"label.email": "email",
+	"label.location_optional": "location (optional)",
+	"label.website_or_url": "website or url",
+	"label.your_homepage_or_blog": "Your homepage, blog, or company site."
 }

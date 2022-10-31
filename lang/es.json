@@ -464,5 +464,20 @@
 	"label.giveth_is_currently_offline": "Giveth.io esta fuera de servicio por mantenimiento programado!",
 	"label.check_again_in_a_few_hours": "Vuelve en un par de horas para sumergirte",
 	"label.back_into_the": "de vuelta en",
-	"label.the_future_of_giving": "el futuro de las donaciones"
+	"label.the_future_of_giving": "el futuro de las donaciones",
+	"label.you_already_completed_your_profile": "Ya has completado tu perfil!",
+	"label.you_can_use_the_dashboard_to_edit": "Puedes usar el panel para editarlo",
+	"label.go_to_dashboard": "Ir al panel",
+	"label.edit_profile": "Editar Perfil",
+	"label.please_sign_in": "Porfavor inicia sesión",
+	"label.cancel": "Cancelar",
+	"label.save": "Guardar",
+	"label.upload_new_pic": "Sube una nueva imagen",
+	"label.delete_pic": "Borrar imagen",
+	"label.first_name": "Nombre",
+	"label.last_name": "Apellido",
+	"label.email": "Email",
+	"label.location_optional": "Ubicación (opcional)",
+	"label.website_or_url": "Sitio web o url",
+	"label.your_homepage_or_blog": "Tu pagina principal, blog o sitio de compañia."
 }
