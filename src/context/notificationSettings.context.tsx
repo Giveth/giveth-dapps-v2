@@ -9,7 +9,7 @@ import {
 import {
 	fetchNotificationSettings,
 	INotificationSettingsPostInput,
-	postNotificationSettings,
+	putNotificationSettings,
 } from '@/features/notification/notification.services';
 import { INotificationSetting } from '@/features/notification/notification.types';
 import { showToastError } from '@/lib/helpers';
@@ -67,7 +67,7 @@ export const NotificationSettingsProvider: FC<IProviderProps> = props => {
 			return i;
 		});
 		setNotificationSettings(newSettingsItems);
-		postNotificationSettings(inputObj).catch(showToastError);
+		putNotificationSettings(inputObj).catch(showToastError);
 	};
 
 	return (

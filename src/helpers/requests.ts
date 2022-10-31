@@ -5,7 +5,7 @@ import type { GraphQLErrors } from '@apollo/client/errors';
 
 export function sendRequest(
 	url: string,
-	method: 'POST' | 'GET',
+	method: 'POST' | 'GET' | 'PUT',
 	authorization: boolean = false,
 	body?: {},
 	additionalHeaders: HeadersInit = {},
@@ -73,6 +73,23 @@ export function postRequest(
 	return sendRequest(
 		url,
 		'POST',
+		authorization,
+		body,
+		additionalHeaders,
+		additionalOptions,
+	);
+}
+
+export function putRequest(
+	url: string,
+	authorization: boolean = false,
+	body: {} = {},
+	additionalHeaders: HeadersInit = {},
+	additionalOptions: RequestInit = {},
+) {
+	return sendRequest(
+		url,
+		'PUT',
 		authorization,
 		body,
 		additionalHeaders,

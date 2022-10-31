@@ -15,7 +15,7 @@ const HeaderSection = () => {
 	return (
 		<Header>
 			<HeaderTop>
-				<InternalLink href={Routes.Notification}>
+				<InternalLink href={Routes.Notifications}>
 					<BackButton>
 						<IconArrowLeft size={20} />
 					</BackButton>
