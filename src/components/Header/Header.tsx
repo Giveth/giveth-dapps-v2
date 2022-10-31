@@ -92,11 +92,15 @@ const Header: FC<IHeader> = () => {
 	const { total: totalUnreadNotifications } = useAppSelector(
 		state => state.notification.notificationInfo,
 	);
+	const { lastNotificationId } = useAppSelector(
+		state => state.notification.notificationInfo,
+	);
 	const { isMobile } = useDetectDevice();
 
 	const router = useRouter();
 	const isLight = theme === ETheme.Light;
-
+	const lastFetchedNotificationId = notifications[0]?.id ?? undefined;
+	console.log('Notiiifss', lastNotificationId, lastFetchedNotificationId);
 	const handleBack = () => {
 		const calculateSlug = () => {
 			if (typeof router.query?.slug === 'string') {
