@@ -53,6 +53,7 @@ const config: EnvConfig = {
 			farmEndTimeMS: SEPT_8TH_2022,
 			active: false,
 			archived: true,
+			platformTitle: 'GIV staking',
 		},
 
 		nodeUrl: 'https://mainnet.infura.io/v3/' + INFURA_API_KEY,
@@ -211,6 +212,7 @@ const config: EnvConfig = {
 			GARDEN_ADDRESS: '0x24f2d06446af8d6e89febc205e7936a602a87b60',
 			BUY_LINK:
 				'https://app.honeyswap.org/#/swap?outputCurrency=0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
+			platformTitle: 'GIVPOWER',
 		},
 
 		pools: [
