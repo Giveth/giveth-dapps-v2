@@ -66,7 +66,8 @@ const DonateModal = (props: IDonateModalProps) => {
 	const isDonatingToGiveth = donationToGiveth > 0;
 
 	const [donating, setDonating] = useState(false);
-	const [donationSaved, setDonationSaved] = useState(false);
+	const [firstDonationSaved, setFirstDonationSaved] = useState(false);
+	const [secondDonationSaved, setSecondDonationSaved] = useState(false);
 	const [firstTxHash, setFirstTxHash] = useState('');
 	const [secondTxHash, setSecondTxHash] = useState('');
 	const [isFirstTxSuccess, setIsFirstTxSuccess] = useState(false);
@@ -124,7 +125,7 @@ const DonateModal = (props: IDonateModalProps) => {
 		createDonation({
 			...txProps,
 			setTxHash: setFirstTxHash,
-			setDonationSaved,
+			setDonationSaved: setFirstDonationSaved,
 			walletAddress: projectWalletAddress,
 			projectId: Number(project.id),
 		}).then(({ isSaved, txHash: firstHash }) => {
@@ -133,6 +134,7 @@ const DonateModal = (props: IDonateModalProps) => {
 				createDonation({
 					...txProps,
 					setTxHash: setSecondTxHash,
+					setDonationSaved: setSecondDonationSaved,
 					walletAddress: givethWalletAddress,
 					amount: donationToGivethAmount,
 					projectId: config.GIVETH_PROJECT_ID,
@@ -156,7 +158,9 @@ const DonateModal = (props: IDonateModalProps) => {
 			<Modal
 				closeModal={closeModal}
 				isAnimating={isAnimating}
-				headerTitle={donationSaved ? 'Donation submitted' : 'Donating'}
+				headerTitle={
+					firstDonationSaved ? 'Donation submitted' : 'Donating'
+				}
 				headerTitlePosition='left'
 				headerIcon={<IconDonation size={32} />}
 			>
@@ -194,8 +198,10 @@ const DonateModal = (props: IDonateModalProps) => {
 						{isDonatingToGiveth && (
 							<>
 								<Lead>
-									{isFirstTxSuccess
+									{secondDonationSaved
 										? 'Donation submitted'
+										: isFirstTxSuccess
+										? 'You are donating'
 										: 'and'}
 								</Lead>
 								<DonateSummary
@@ -231,7 +237,7 @@ const DonateModal = (props: IDonateModalProps) => {
 						)}
 					</DonatingBox>
 					<Buttons>
-						{donationSaved && (
+						{firstDonationSaved && (
 							<InlineToast
 								type={EToastType.Info}
 								message='Your donation is being processed.'
