@@ -90,6 +90,7 @@ const config: EnvConfig = {
 					'https://app.ichi.org/vault?poolId=20009&back=vault',
 				unit: 'LP',
 				active: false,
+				paused: true,
 				farmStartTimeMS: 1659625200000,
 				introCard: {
 					title: 'Angel Vault',
