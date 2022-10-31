@@ -34,6 +34,7 @@ import {
 	DisableModalCloseButton,
 	DisableModalContent,
 	DisableModalImage,
+	DisableModalLink,
 	DisableModalText,
 	FirstDetail,
 	GIVgardenTooltip,
@@ -187,6 +188,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		farmEndTimeMS,
 		active,
 		archived,
+		paused,
 		introCard,
 		network: poolNetwork,
 	} = poolStakingConfig;
@@ -298,34 +300,53 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 						</Caption>
 					</WrongNetworkContainer>
 				)}
-				{(!active || archived || isDiscontinued) && disableModal && (
-					<DisableModal>
-						<DisableModalContent>
-							<DisableModalImage>
-								<IconInfo24 />
-							</DisableModalImage>
-							<Flex
-								flexDirection='column'
-								justifyContent='space-evenly'
-							>
-								<DisableModalText weight={700}>
-									{isDiscontinued
-										? 'Attention Farmers!'
-										: 'This pool is no longer available'}
-								</DisableModalText>
-								<DisableModalText>
-									{isDiscontinued
-										? 'This farm has ended, move your funds to another farm to keep earning rewards.'
-										: 'Please unstake your tokens and check out other available pools.'}
-								</DisableModalText>
-								<DisableModalCloseButton
-									label='GOT IT'
-									onClick={() => setDisableModal(false)}
-								/>
-							</Flex>
-						</DisableModalContent>
-					</DisableModal>
-				)}
+				{(!active || archived || isDiscontinued || paused) &&
+					disableModal && (
+						<DisableModal>
+							<DisableModalContent>
+								<DisableModalImage>
+									<IconInfo24 />
+								</DisableModalImage>
+								<Flex
+									flexDirection='column'
+									justifyContent='space-evenly'
+								>
+									<DisableModalText weight={700}>
+										{paused
+											? 'This pool has been paused'
+											: isDiscontinued
+											? 'Attention Farmers!'
+											: 'This pool is no longer available'}
+									</DisableModalText>
+									<DisableModalText>
+										{paused ? (
+											<>
+												An exploit has removed available
+												rewards from this pool. Please
+												follow
+												<DisableModalLink
+													size='Big'
+													target='_blank'
+													href='https://forum.giveth.io/t/ending-givfarm-liquidity-incentives-programs-for-giv/872'
+												>
+													&nbsp;this forum post&nbsp;
+												</DisableModalLink>
+												for updates.
+											</>
+										) : isDiscontinued ? (
+											'This farm has ended, move your funds to another farm to keep earning rewards.'
+										) : (
+											'Please unstake your tokens and check out other available pools.'
+										)}
+									</DisableModalText>
+									<DisableModalCloseButton
+										label='GOT IT'
+										onClick={() => setDisableModal(false)}
+									/>
+								</Flex>
+							</DisableModalContent>
+						</DisableModal>
+					)}
 				{state === StakeCardState.NORMAL ? (
 					<>
 						<StakingPoolExchangeRow gap='4px' alignItems='center'>
