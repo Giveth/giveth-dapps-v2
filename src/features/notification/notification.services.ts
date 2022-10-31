@@ -56,22 +56,32 @@ type TPostNotificationSettings = (
 	i: INotificationSettingsPostInput,
 ) => Promise<INotificationSetting | null>;
 
-export const postNotificationSettings: TPostNotificationSettings = async i => {
+interface IPutNotificationSettingsBody {
+	id: number;
+	allowEmailNotification?: string;
+	allowDappPushNotification?: string;
+}
+
+export const putNotificationSettings: TPostNotificationSettings = async i => {
 	const {
 		notificationTypeId,
 		allowEmailNotification,
 		allowDappPushNotification,
 	} = i;
 
+	const body: IPutNotificationSettingsBody = { id: notificationTypeId };
+	if (allowEmailNotification !== undefined) {
+		body.allowEmailNotification = String(allowEmailNotification);
+	}
+	if (allowDappPushNotification !== undefined) {
+		body.allowDappPushNotification = String(allowDappPushNotification);
+	}
+
 	try {
 		return await putRequest(
 			`${config.MICROSERVICES.notificationSettings}/${notificationTypeId}`,
 			true,
-			{
-				id: notificationTypeId,
-				allowEmailNotification,
-				allowDappPushNotification,
-			},
+			body,
 		);
 	} catch (e) {
 		showToastError(e);
