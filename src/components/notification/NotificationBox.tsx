@@ -35,7 +35,7 @@ export const NotificationBox: FC<INotificationBox> = ({
 				)} */}
 				<NotificationTime medium>
 					{durationToString(
-						Date.now() - Number(notification.createdAt),
+						Date.now() - new Date(notification.createdAt).getTime(),
 						1,
 						true,
 					) + ' ago'}
