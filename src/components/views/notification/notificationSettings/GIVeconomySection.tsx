@@ -15,9 +15,7 @@ const GIVeconomySection = () => {
 		});
 		resize_ob.observe(document.getElementById('GIVeconomyWrapperId')!);
 		return () => {
-			resize_ob.unobserve(
-				document.getElementById('GIVeconomyWrapperId')!,
-			);
+			resize_ob.disconnect();
 		};
 	}, []);
 
