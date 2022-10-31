@@ -364,6 +364,7 @@ export const FETCH_GIVETH_PROJECT_BY_ID = gql`
 				isRecipient
 				networkId
 			}
+			slug
 		}
 	}
 `;

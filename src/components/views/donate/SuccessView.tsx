@@ -7,7 +7,7 @@ import {
 	P,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 
@@ -19,6 +19,11 @@ import SocialBox from '@/components/views/donate/SocialBox';
 import ExternalLink from '@/components/ExternalLink';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { formatTxLink } from '@/lib/helpers';
+import { client } from '@/apollo/apolloClient';
+import { FETCH_GIVETH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
+import config from '@/configuration';
+import { slugToProjectView } from '@/lib/routeCreators';
+import { IFetchGivethProjectGQL } from '@/apollo/types/gqlTypes';
 
 interface IProps {
 	project: IProject;
@@ -30,16 +35,35 @@ const SuccessView: FC<IProps> = props => {
 	const { txHash, project, givBackEligible } = props;
 	const hasMultipleTxs = txHash.length > 1;
 	const { chainId } = useWeb3React();
-	const message = hasMultipleTxs
-		? `Thank you for supporting ${project?.title} and We're also grateful for your donation to the Giveth DAO, you can check out our more of projects on Giveth.`
-		: `Thank you for supporting ${project?.title}. Your contribution goes a long way!`;
+	const [givethSlug, setGivethSlug] = React.useState<string>('');
+	const message = hasMultipleTxs ? (
+		<>
+			Thank you for supporting {project?.title} and thanks for your
+			donation to the Giveth DAO! You can check out the Giveth DAO project{' '}
+			<ExternalLink href={slugToProjectView(givethSlug)} title='here' />.
+		</>
+	) : (
+		`Thank you for supporting ${project?.title}. Your contribution goes a long way!`
+	);
+
+	useEffect(() => {
+		client
+			.query({
+				query: FETCH_GIVETH_PROJECT_BY_ID,
+				variables: { id: config.GIVETH_PROJECT_ID },
+				fetchPolicy: 'no-cache',
+			})
+			.then((res: IFetchGivethProjectGQL) =>
+				setGivethSlug(res.data.projectById.slug),
+			);
+	}, []);
 
 	return (
 		<SuccessContainer>
 			<ConfettiContainer>
 				<ConfettiAnimation size={300} />
 			</ConfettiContainer>
-			<GiverH4 weight={700}>You're a giver now!</GiverH4>
+			<GiverH4 weight={700}>You&#39;re a giver now!</GiverH4>
 			<SuccessMessage>{message}</SuccessMessage>
 			{givBackEligible && (
 				<GivBackContainer>
@@ -119,6 +143,9 @@ const SuccessMessage = styled(P)`
 	position: relative;
 	margin: 16px 0 30px;
 	color: ${brandColors.deep[900]};
+	a {
+		color: ${brandColors.pinky[500]};
+	}
 `;
 
 const Options = styled(FlexCenter)`

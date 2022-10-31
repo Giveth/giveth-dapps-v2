@@ -109,7 +109,7 @@ const DonateModal = (props: IDonateModalProps) => {
 		setTimeout(() => {
 			closeModal();
 			setSuccessDonation({ txHash, givBackEligible });
-		}, 3000);
+		}, 4000);
 	};
 
 	const handleDonate = () => {
