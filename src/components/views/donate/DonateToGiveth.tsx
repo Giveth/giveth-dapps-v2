@@ -69,10 +69,11 @@ const DonateToGiveth: FC<IDonateToGiveth> = props => {
 				/>
 			</UserInput>
 			<CheckBox
-				size={12}
+				size={14}
 				checked={donationToGiveth === 0}
 				onChange={handleCheckbox}
 				label='I do not want to support Giveth with my donation'
+				labelSize='Small'
 			/>
 		</Container>
 	);
