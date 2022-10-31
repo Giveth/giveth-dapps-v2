@@ -87,7 +87,7 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://app.ichi.org/vault?poolId=20009&back=vault',
 				unit: 'LP',
-				active: true,
+				active: false,
 				farmStartTimeMS: 1659625200000,
 				introCard: {
 					title: 'Angel Vault',
@@ -110,7 +110,7 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://app.balancer.fi/#/pool/0x7819f1532c49388106f7762328c51ee70edd134c000200000000000000000109',
 				unit: 'LP',
-				active: true,
+				active: false,
 			},
 			{
 				network: MAINNET_NETWORK_NUMBER,
