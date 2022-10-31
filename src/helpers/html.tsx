@@ -1,4 +1,5 @@
-import { P, B, GLink } from '@giveth/ui-design-system';
+import { P, B, GLink, brandColors } from '@giveth/ui-design-system';
+import styled from 'styled-components';
 import { INotification } from '@/features/notification/notification.types';
 import type { ReactNode } from 'react';
 
@@ -29,9 +30,9 @@ export const convertRawDataToHTML = (notification: INotification) => {
 			case 'a':
 				const href = metadata[template.href.substring(1)] || '';
 				res.push(
-					<GLink key={idx} size='Big' href={href}>
+					<StyledGlink key={idx} size='Big' href={href}>
 						{temp}
-					</GLink>,
+					</StyledGlink>,
 				);
 				break;
 			case 'br':
@@ -45,3 +46,11 @@ export const convertRawDataToHTML = (notification: INotification) => {
 	});
 	return res;
 };
+
+const StyledGlink = styled(GLink)`
+	font-weight: 700;
+	transition: color 0.1s ease;
+	&:hover {
+		color: ${brandColors.pinky[500]};
+	}
+`;
