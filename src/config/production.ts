@@ -213,6 +213,7 @@ const config: EnvConfig = {
 			BUY_LINK:
 				'https://app.honeyswap.org/#/swap?outputCurrency=0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 			platformTitle: 'GIVPOWER',
+			active: true,
 		},
 
 		pools: [
