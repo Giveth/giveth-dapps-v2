@@ -8,6 +8,7 @@ export interface BasicStakingConfig {
 	icon?: string;
 	active: boolean;
 	archived?: boolean;
+	paused?: boolean;
 }
 export enum StakingPlatform {
 	GIVETH = 'Staking',
