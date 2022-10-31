@@ -75,7 +75,6 @@ const Header: FC<IHeader> = () => {
 	const [showHeader, setShowHeader] = useState(true);
 	const [isGIVeconomyRoute, setIsGIVeconomyRoute] = useState(false);
 	const [showBackBtn, setShowBackBtn] = useState(false);
-	// const notificationMenuRef = useRef<HTMLDivElement>(null);
 	const { chainId, active, account, library } = useWeb3React();
 	const sdh = new SubgraphDataHelper(
 		useAppSelector(state => state.subgraph[currentValuesHelper(chainId)]),
@@ -255,7 +254,7 @@ const Header: FC<IHeader> = () => {
 				</SmallCreateProjectParent>
 				{active && account && chainId ? (
 					<>
-						{!isMobile && (
+						{!isMobile && isSignedIn && (
 							<MenuAndButtonContainer
 								onClick={() => setShowNotifications(true)}
 								onMouseEnter={() => setShowNotifications(true)}

@@ -1,18 +1,18 @@
 import styled from 'styled-components';
 import {
-	B,
 	brandColors,
 	Caption,
 	IconHeartOutline24,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import { Flex } from '../styled-components/Flex';
-import { convertRawDataToHTML, INotificationData } from '@/helpers/html';
+import { convertRawDataToHTML } from '@/helpers/html';
 import { durationToString } from '@/lib/helpers';
+import { INotification } from '@/features/notification/notification.types';
 import type { FC } from 'react';
 
 interface INotificationBox {
-	notification: INotificationData;
+	notification: INotification;
 	short?: boolean;
 }
 
@@ -30,12 +30,12 @@ export const NotificationBox: FC<INotificationBox> = ({
 			)}
 			<NotificationContent>
 				<div>{convertRawDataToHTML(notification)}</div>
-				{!short && notification.quote && (
+				{/* {!short && notification.quote && (
 					<NotificationQuote>{notification.quote}</NotificationQuote>
-				)}
+				)} */}
 				<NotificationTime medium>
 					{durationToString(
-						Date.now() - Number(notification.time),
+						Date.now() - Number(notification.createdAt),
 						1,
 						true,
 					) + ' ago'}
@@ -67,19 +67,19 @@ const UnreadCircle = styled.div<{ isShort: boolean }>`
 
 const NotificationContent = styled.div``;
 
-const NotificationQuote = styled(B)`
-	border-left: 4px solid ${neutralColors.gray[400]};
-	font-weight: bold;
-	padding-left: 16px;
-	margin-top: 16px;
-	white-space: pre-wrap;
-	&::before {
-		content: '"';
-	}
-	&::after {
-		content: '"';
-	}
-`;
+// const NotificationQuote = styled(B)`
+// 	border-left: 4px solid ${neutralColors.gray[400]};
+// 	font-weight: bold;
+// 	padding-left: 16px;
+// 	margin-top: 16px;
+// 	white-space: pre-wrap;
+// 	&::before {
+// 		content: '"';
+// 	}
+// 	&::after {
+// 		content: '"';
+// 	}
+// `;
 
 const NotificationTime = styled(Caption)`
 	margin-top: 16px;

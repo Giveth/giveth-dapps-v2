@@ -7,13 +7,15 @@ export interface INotificationCountState {
 }
 
 export interface IHtmlTemplate {
-	type: string;
+	type: 'p' | 'b' | 'a' | 'br' | string;
 	content: string;
 	href?: string;
 }
 
 export interface INotification {
+	id: string;
 	createdAt: string;
+	isRead?: boolean;
 	metadata: {
 		[key: string]: string;
 	};
