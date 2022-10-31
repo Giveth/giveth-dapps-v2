@@ -79,31 +79,37 @@ const SuccessView: FC<IProps> = props => {
 			)}
 			{!givBackEligible && <SocialBox project={project} isSuccess />}
 			<Options>
-				<P style={{ color: neutralColors.gray[900] }}>
-					Your transaction has been submitted.
-				</P>
 				{hasMultipleTxs ? (
 					<>
+						<P style={{ color: neutralColors.gray[900] }}>
+							Your transactions have been submitted. You can view
+							them on a blockchain explorer here:
+						</P>
 						<TxLink>
 							<ExternalLink
 								href={formatTxLink(chainId, txHash[0])}
-								title='View  donation to project on Etherscan'
+								title='Donation to the project'
 							/>
 						</TxLink>
 						<TxLink>
 							<ExternalLink
 								href={formatTxLink(chainId, txHash[1])}
-								title='View donation to Giveth on Etherscan'
+								title='Donation to Giveth'
 							/>
 						</TxLink>
 					</>
 				) : (
-					<TxLink>
-						<ExternalLink
-							href={formatTxLink(chainId, txHash[0])}
-							title='View on Etherscan'
-						/>
-					</TxLink>
+					<>
+						<P style={{ color: neutralColors.gray[900] }}>
+							Your transaction has been submitted.
+						</P>
+						<TxLink>
+							<ExternalLink
+								href={formatTxLink(chainId, txHash[0])}
+								title='View on a blockchain explorer'
+							/>
+						</TxLink>
+					</>
 				)}
 				<Link passHref href={Routes.Projects}>
 					<ProjectsButton size='small' label='SEE MORE PROJECTS' />

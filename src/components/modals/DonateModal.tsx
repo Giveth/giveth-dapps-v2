@@ -196,7 +196,7 @@ const DonateModal = (props: IDonateModalProps) => {
 								<Lead>
 									{isFirstTxSuccess
 										? 'Donation submitted'
-										: 'also'}
+										: 'and'}
 								</Lead>
 								<DonateSummary
 									value={donationToGivethAmount}
