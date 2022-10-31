@@ -19,14 +19,20 @@ import { NotificationBox } from '@/components/notification/NotificationBox';
 
 enum ENotificationTabs {
 	ALL,
-	GENERAL,
-	PROJECTS,
-	GIVECONOMY,
+	GENERAL = 'projectRelated',
+	PROJECTS = 'projectRelated',
+	GIVECONOMY = 'givEconomyRelated',
 }
 
 function NotificationView() {
 	const [tab, setTab] = useState(ENotificationTabs.ALL);
-	const [notifications, setNotifications] = useState<INotification[]>([]);
+	const [allNotifs, setAllNotifs] = useState<INotification[]>([]);
+	const [generalNotifs, setGenralNotifs] = useState<INotification[]>([]);
+	const [projectNotifs, setProjectsNotifs] = useState<INotification[]>([]);
+	const [giveconomyNotifs, setGIVeconomyNotifs] = useState<INotification[]>(
+		[],
+	);
+	const [loading, setLoading] = useState(false);
 
 	const {
 		total: totalUnreadNotifications,
@@ -42,10 +48,25 @@ function NotificationView() {
 	}, [dispatch]);
 
 	useEffect(() => {
-		fetchNotificationsData().then(res => {
-			if (res?.notifications) setNotifications(res.notifications);
-		});
+		setLoading(true);
+		fetchNotificationsData()
+			.then(res => {
+				if (res?.notifications) setAllNotifs(res.notifications);
+			})
+			.finally(() => {
+				setLoading(true);
+			});
 	}, []);
+
+	const handleTabChange = (tab: ENotificationTabs) => {
+		fetchNotificationsData()
+			.then(res => {
+				if (res?.notifications) setAllNotifs(res.notifications);
+			})
+			.finally(() => {
+				setLoading(true);
+			});
+	};
 
 	return (
 		<NotificationContainer>
@@ -98,14 +119,46 @@ function NotificationView() {
 					</TabItemCount>
 				</TabItem>
 			</TabsContainer>
-			<div>
-				{notifications.map(notification => (
-					<NotificationBox
-						key={notification.id}
-						notification={notification}
-					/>
-				))}
-			</div>
+			{tab === ENotificationTabs.ALL && (
+				<div>
+					{allNotifs.map(notification => (
+						<NotificationBox
+							key={notification.id}
+							notification={notification}
+						/>
+					))}
+				</div>
+			)}
+			{tab === ENotificationTabs.GENERAL && (
+				<div>
+					{generalNotifs.map(notification => (
+						<NotificationBox
+							key={notification.id}
+							notification={notification}
+						/>
+					))}
+				</div>
+			)}
+			{tab === ENotificationTabs.PROJECTS && (
+				<div>
+					{projectNotifs.map(notification => (
+						<NotificationBox
+							key={notification.id}
+							notification={notification}
+						/>
+					))}
+				</div>
+			)}
+			{tab === ENotificationTabs.GIVECONOMY && (
+				<div>
+					{giveconomyNotifs.map(notification => (
+						<NotificationBox
+							key={notification.id}
+							notification={notification}
+						/>
+					))}
+				</div>
+			)}
 		</NotificationContainer>
 	);
 }
