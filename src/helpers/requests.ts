@@ -37,7 +37,8 @@ export function sendRequest(
 			} else {
 				const errorObject = await response.json();
 				const errorMessage =
-					errorObject?.errors[0]?.message ?? 'An error occurred';
+					(errorObject.message || errorObject?.errors[0]?.message) ??
+					'An error occurred';
 				return Promise.reject(new Error(errorMessage));
 			}
 		});
