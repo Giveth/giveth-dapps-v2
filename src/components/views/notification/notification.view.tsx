@@ -67,8 +67,15 @@ function NotificationView() {
 			});
 	}, []);
 
-	const handleTabChange = (tab: ENotificationTabs) => {
-		fetchNotificationsData()
+	const handleTabChange = (newTab: ENotificationTabs) => {
+		if (newTab === tab) return;
+		let query;
+		if (newTab !== ENotificationTabs.ALL) {
+			query = {
+				category: newTab,
+			};
+		}
+		fetchNotificationsData(query)
 			.then(res => {
 				if (res?.notifications) setAllNotifs(res.notifications);
 			})
@@ -95,7 +102,7 @@ function NotificationView() {
 				<TabsContainer>
 					<TabItem
 						active={tab === ENotificationTabs.ALL}
-						onClick={() => setTab(ENotificationTabs.ALL)}
+						onClick={() => handleTabChange(ENotificationTabs.ALL)}
 					>
 						All
 						<TabItemCount active={tab === ENotificationTabs.ALL}>
@@ -104,7 +111,9 @@ function NotificationView() {
 					</TabItem>
 					<TabItem
 						active={tab === ENotificationTabs.GENERAL}
-						onClick={() => setTab(ENotificationTabs.GENERAL)}
+						onClick={() =>
+							handleTabChange(ENotificationTabs.GENERAL)
+						}
 					>
 						General
 						<TabItemCount
@@ -115,7 +124,9 @@ function NotificationView() {
 					</TabItem>
 					<TabItem
 						active={tab === ENotificationTabs.PROJECTS}
-						onClick={() => setTab(ENotificationTabs.PROJECTS)}
+						onClick={() =>
+							handleTabChange(ENotificationTabs.PROJECTS)
+						}
 					>
 						Projects
 						<TabItemCount
@@ -126,7 +137,9 @@ function NotificationView() {
 					</TabItem>
 					<TabItem
 						active={tab === ENotificationTabs.GIVECONOMY}
-						onClick={() => setTab(ENotificationTabs.GIVECONOMY)}
+						onClick={() =>
+							handleTabChange(ENotificationTabs.GIVECONOMY)
+						}
 					>
 						GIVeconomy
 						<TabItemCount
