@@ -343,11 +343,7 @@ const CryptoDonation = (props: {
 	};
 
 	const donationDisabled =
-		!isActive ||
-		!amountTyped ||
-		amountTyped <= 0 ||
-		!selectedToken ||
-		error;
+		!isActive || !amountTyped || !selectedToken || error;
 
 	return (
 		<MainContainer>
@@ -444,7 +440,7 @@ const CryptoDonation = (props: {
 						error={error}
 						setError={setError}
 						errorHandler={{
-							condition: value => value >= 0 && value <= 0.000001,
+							condition: value => value < 0.000001,
 							message: 'Set a valid amount',
 						}}
 						type='number'
