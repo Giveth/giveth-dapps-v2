@@ -63,12 +63,13 @@ function NotificationView() {
 				if (res?.notifications) setAllNotifs(res.notifications);
 			})
 			.finally(() => {
-				setLoading(true);
+				setLoading(false);
 			});
 	}, []);
 
 	const handleTabChange = (newTab: ENotificationTabs) => {
 		if (newTab === tab) return;
+		setLoading(true);
 		let query;
 		if (newTab !== ENotificationTabs.ALL) {
 			query = {
@@ -80,7 +81,7 @@ function NotificationView() {
 				if (res?.notifications) setAllNotifs(res.notifications);
 			})
 			.finally(() => {
-				setLoading(true);
+				setLoading(false);
 			});
 	};
 
