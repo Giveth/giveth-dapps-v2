@@ -227,7 +227,7 @@ export const TabGIVfarmBottom = () => {
 						)}
 						{renderPools(chainId, showArchivedPools)}
 					</PoolRow>
-					<GIVfrens />
+					<GIVfrens showArchivedPools={showArchivedPools} />
 				</>
 				<Col xs={12}>
 					<DaoCard />
