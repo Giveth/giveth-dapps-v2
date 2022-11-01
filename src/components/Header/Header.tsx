@@ -100,7 +100,6 @@ const Header: FC<IHeader> = () => {
 	const router = useRouter();
 	const isLight = theme === ETheme.Light;
 	const lastFetchedNotificationId = notifications[0]?.id ?? undefined;
-	console.log('Notiiifss', lastNotificationId, lastFetchedNotificationId);
 	const handleBack = () => {
 		const calculateSlug = () => {
 			if (typeof router.query?.slug === 'string') {
@@ -121,6 +120,16 @@ const Header: FC<IHeader> = () => {
 			router.push(`${Routes.Verification}/${calculateSlug()}`);
 		} else {
 			router.back();
+		}
+	};
+
+	const fetchNotificationsAndSetState = async () => {
+		if (!isSignedIn) return;
+		try {
+			const res = await fetchNotificationsData();
+			if (res?.notifications) setNotifications(res.notifications);
+		} catch {
+			console.log('Error fetching notifications');
 		}
 	};
 
@@ -167,10 +176,15 @@ const Header: FC<IHeader> = () => {
 	}, [showHeader]);
 
 	useEffect(() => {
-		fetchNotificationsData().then(res => {
-			if (res?.notifications) setNotifications(res.notifications);
-		});
-	}, []);
+		if (
+			typeof lastFetchedNotificationId === 'number' &&
+			lastNotificationId > lastFetchedNotificationId
+		) {
+			fetchNotificationsAndSetState();
+			return;
+		}
+		fetchNotificationsAndSetState();
+	}, [lastNotificationId]);
 
 	const handleModals = () => {
 		if (isGIVeconomyRoute) {
