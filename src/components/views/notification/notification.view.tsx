@@ -79,7 +79,24 @@ function NotificationView() {
 		}
 		fetchNotificationsData(query)
 			.then(res => {
-				if (res?.notifications) setAllNotifs(res.notifications);
+				if (res?.notifications) {
+					switch (newTab) {
+						case ENotificationTabs.ALL:
+							setAllNotifs(res.notifications);
+							break;
+						case ENotificationTabs.GENERAL:
+							setGenralNotifs(res.notifications);
+							break;
+						case ENotificationTabs.PROJECTS:
+							setProjectsNotifs(res.notifications);
+							break;
+						case ENotificationTabs.GIVECONOMY:
+							setGIVeconomyNotifs(res.notifications);
+							break;
+						default:
+							break;
+					}
+				}
 			})
 			.finally(() => {
 				setLoading(false);
