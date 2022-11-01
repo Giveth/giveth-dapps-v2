@@ -1,10 +1,16 @@
-import { H5, IconNotificationOutline32, Lead } from '@giveth/ui-design-system';
+import {
+	H5,
+	IconConfig24,
+	IconNotificationOutline32,
+	Lead,
+} from '@giveth/ui-design-system';
 import { useEffect, useState } from 'react';
 import {
 	NotificationContainer,
 	NotificationHeader,
 	IconContainer,
 	NotificationDesc,
+	ConfigContainer,
 } from './notification.sc';
 import {
 	TabsContainer,
@@ -16,6 +22,9 @@ import { setShowFooter } from '@/features/general/general.slice';
 import { fetchNotificationsData } from '@/features/notification/notification.services';
 import { INotification } from '@/features/notification/notification.types';
 import { NotificationBox } from '@/components/notification/NotificationBox';
+import { Flex } from '@/components/styled-components/Flex';
+import InternalLink from '@/components/InternalLink';
+import Routes from '@/lib/constants/Routes';
 
 enum ENotificationTabs {
 	ALL,
@@ -81,44 +90,58 @@ function NotificationView() {
 					</Lead>
 				</NotificationDesc>
 			</NotificationHeader>
-			<TabsContainer>
-				<TabItem
-					active={tab === ENotificationTabs.ALL}
-					onClick={() => setTab(ENotificationTabs.ALL)}
-				>
-					All
-					<TabItemCount active={tab === ENotificationTabs.ALL}>
-						{totalUnreadNotifications}
-					</TabItemCount>
-				</TabItem>
-				<TabItem
-					active={tab === ENotificationTabs.GENERAL}
-					onClick={() => setTab(ENotificationTabs.GENERAL)}
-				>
-					General
-					<TabItemCount active={tab === ENotificationTabs.GENERAL}>
-						{general}
-					</TabItemCount>
-				</TabItem>
-				<TabItem
-					active={tab === ENotificationTabs.PROJECTS}
-					onClick={() => setTab(ENotificationTabs.PROJECTS)}
-				>
-					Projects
-					<TabItemCount active={tab === ENotificationTabs.PROJECTS}>
-						{projectsRelated}
-					</TabItemCount>
-				</TabItem>
-				<TabItem
-					active={tab === ENotificationTabs.GIVECONOMY}
-					onClick={() => setTab(ENotificationTabs.GIVECONOMY)}
-				>
-					GIVeconomy
-					<TabItemCount active={tab === ENotificationTabs.GIVECONOMY}>
-						{givEconomyRelated}
-					</TabItemCount>
-				</TabItem>
-			</TabsContainer>
+
+			<Flex justifyContent='space-between' alignItems='center'>
+				<TabsContainer>
+					<TabItem
+						active={tab === ENotificationTabs.ALL}
+						onClick={() => setTab(ENotificationTabs.ALL)}
+					>
+						All
+						<TabItemCount active={tab === ENotificationTabs.ALL}>
+							{totalUnreadNotifications}
+						</TabItemCount>
+					</TabItem>
+					<TabItem
+						active={tab === ENotificationTabs.GENERAL}
+						onClick={() => setTab(ENotificationTabs.GENERAL)}
+					>
+						General
+						<TabItemCount
+							active={tab === ENotificationTabs.GENERAL}
+						>
+							{general}
+						</TabItemCount>
+					</TabItem>
+					<TabItem
+						active={tab === ENotificationTabs.PROJECTS}
+						onClick={() => setTab(ENotificationTabs.PROJECTS)}
+					>
+						Projects
+						<TabItemCount
+							active={tab === ENotificationTabs.PROJECTS}
+						>
+							{projectsRelated}
+						</TabItemCount>
+					</TabItem>
+					<TabItem
+						active={tab === ENotificationTabs.GIVECONOMY}
+						onClick={() => setTab(ENotificationTabs.GIVECONOMY)}
+					>
+						GIVeconomy
+						<TabItemCount
+							active={tab === ENotificationTabs.GIVECONOMY}
+						>
+							{givEconomyRelated}
+						</TabItemCount>
+					</TabItem>
+				</TabsContainer>
+				<InternalLink href={Routes.NotificationsSettings}>
+					<ConfigContainer>
+						<IconConfig24 />
+					</ConfigContainer>
+				</InternalLink>
+			</Flex>
 			{tab === ENotificationTabs.ALL && (
 				<div>
 					{allNotifs.map(notification => (

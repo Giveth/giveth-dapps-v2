@@ -47,7 +47,7 @@ const NotificationMenu = () => {
 				))
 				.slice(0, 5)}
 			<br />
-			<Link href={Routes.Notification} passHref>
+			<Link href={Routes.Notifications} passHref>
 				<AllNotificationsLink color={brandColors.pinky[500]}>
 					All notifications
 				</AllNotificationsLink>

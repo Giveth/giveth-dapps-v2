@@ -15,7 +15,7 @@ const ProjectSection = () => {
 		});
 		resize_ob.observe(document.getElementById('projectWrapperId')!);
 		return () => {
-			resize_ob.unobserve(document.getElementById('projectWrapperId')!);
+			resize_ob.disconnect();
 		};
 	}, []);
 
