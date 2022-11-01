@@ -79,7 +79,9 @@ const DonateModal = (props: IDonateModalProps) => {
 
 	const avgPrice = price && price * amount;
 	let donationToGivethAmount = (amount * donationToGiveth) / 100;
-	if (donationToGivethAmount < 0.000001) donationToGivethAmount = 0.000001;
+	if (donationToGivethAmount < 0.000001 && isDonatingToGiveth) {
+		donationToGivethAmount = 0.000001;
+	}
 	const donationToGivethPrice = price && donationToGivethAmount * price;
 
 	const validateToken = async () => {

@@ -26,7 +26,9 @@ const TotalDonation: FC<ITotalDonation> = props => {
 	const isActive = !!(donationToProject && tokenSymbol);
 
 	let donationToGivethAmount = (donationToProject * donationToGiveth) / 100;
-	if (donationToGivethAmount < 0.000001) donationToGivethAmount = 0.000001;
+	if (donationToGivethAmount < 0.000001 && donationToGivethAmount > 0) {
+		donationToGivethAmount = 0.000001;
+	}
 
 	const totalDonation = formatPrice(
 		donationToProject + donationToGivethAmount,
