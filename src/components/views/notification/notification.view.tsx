@@ -28,7 +28,7 @@ import Routes from '@/lib/constants/Routes';
 
 enum ENotificationTabs {
 	ALL,
-	GENERAL = 'projectRelated',
+	GENERAL = 'general',
 	PROJECTS = 'projectRelated',
 	GIVECONOMY = 'givEconomyRelated',
 }
@@ -69,6 +69,7 @@ function NotificationView() {
 
 	const handleTabChange = (newTab: ENotificationTabs) => {
 		if (newTab === tab) return;
+		setTab(newTab);
 		setLoading(true);
 		let query;
 		if (newTab !== ENotificationTabs.ALL) {
