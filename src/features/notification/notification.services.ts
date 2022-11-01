@@ -94,10 +94,11 @@ export const putNotificationSettings: TPostNotificationSettings = async i => {
 	}
 };
 
-export const fetchNotificationsData = async () => {
+export const fetchNotificationsData = async (query: any = {}) => {
 	const data: Promise<INotificationsState> = await getRequest(
 		`${config.MICROSERVICES.notification}`,
 		true,
+		query,
 	);
 	return data;
 };
