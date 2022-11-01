@@ -441,7 +441,7 @@ const CryptoDonation = (props: {
 						setError={setError}
 						errorHandler={{
 							condition: value => value < 0.000001,
-							message: 'Set a valid amount',
+							message: 'Amount is too small',
 						}}
 						type='number'
 						onChange={val => {
