@@ -175,34 +175,37 @@ function NotificationView() {
 				</InternalLink>
 			</Flex>
 			<div>
-				{tab === ENotificationTabs.ALL &&
+				{loading ? (
+					<div>Loading...</div>
+				) : tab === ENotificationTabs.ALL ? (
 					allNotifs.map(notification => (
 						<NotificationBox
 							key={notification.id}
 							notification={notification}
 						/>
-					))}
-				{tab === ENotificationTabs.GENERAL &&
+					))
+				) : tab === ENotificationTabs.GENERAL ? (
 					generalNotifs.map(notification => (
 						<NotificationBox
 							key={notification.id}
 							notification={notification}
 						/>
-					))}
-				{tab === ENotificationTabs.PROJECTS &&
+					))
+				) : tab === ENotificationTabs.PROJECTS ? (
 					projectNotifs.map(notification => (
 						<NotificationBox
 							key={notification.id}
 							notification={notification}
 						/>
-					))}
-				{tab === ENotificationTabs.GIVECONOMY &&
+					))
+				) : tab === ENotificationTabs.GIVECONOMY ? (
 					giveconomyNotifs.map(notification => (
 						<NotificationBox
 							key={notification.id}
 							notification={notification}
 						/>
-					))}
+					))
+				) : null}
 			</div>
 		</NotificationContainer>
 	);
