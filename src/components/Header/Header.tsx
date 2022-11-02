@@ -123,16 +123,6 @@ const Header: FC<IHeader> = () => {
 		}
 	};
 
-	const fetchNotificationsAndSetState = async () => {
-		if (!isSignedIn) return;
-		try {
-			const res = await fetchNotificationsData();
-			if (res?.notifications) setNotifications(res.notifications);
-		} catch {
-			console.log('Error fetching notifications');
-		}
-	};
-
 	useEffect(() => {
 		setIsGIVeconomyRoute(router.route.startsWith('/giv'));
 		setShowBackBtn(
@@ -176,6 +166,16 @@ const Header: FC<IHeader> = () => {
 	}, [showHeader]);
 
 	useEffect(() => {
+		const fetchNotificationsAndSetState = async () => {
+			if (!isSignedIn) return;
+			try {
+				const res = await fetchNotificationsData();
+				if (res?.notifications) setNotifications(res.notifications);
+			} catch {
+				console.log('Error fetching notifications');
+			}
+		};
+
 		if (
 			typeof lastFetchedNotificationId === 'number' &&
 			lastNotificationId > lastFetchedNotificationId
@@ -183,6 +183,7 @@ const Header: FC<IHeader> = () => {
 			fetchNotificationsAndSetState();
 			return;
 		}
+
 		fetchNotificationsAndSetState();
 	}, [lastNotificationId]);
 
