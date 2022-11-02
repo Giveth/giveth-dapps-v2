@@ -44,10 +44,7 @@ const BeforeStart = () => {
 					<br />
 					Once your project is verified, the Givers who donate to your
 					project will be rewarded with GIV tokens which they can use
-					to participate in the GIVeconomy. On the other hand, you
-					will be required to post regular updates about your project,
-					otherwise your verified badge could be revoked after 3
-					months of no updates.
+					to participate in the GIVeconomy.
 					<br />
 					<br />
 					The simple{' '}
@@ -75,6 +72,10 @@ const BeforeStart = () => {
 					<br />
 					If your project is a registered non-profit organization, you
 					will need to upload verifiable proof to complete the form.
+					<br />
+					<br />
+					Once your project becomes verified you will need to provide
+					quarterly updates in order to maintain your verified status.
 				</Lead>
 			</div>
 			<div>

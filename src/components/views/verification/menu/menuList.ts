@@ -4,7 +4,7 @@ const menuList = [
 	'Social profiles',
 	'Registration',
 	'Project contact',
-	'Milestones',
+	'Impact',
 	'Managing funds',
 	'Terms & Conditions',
 	'Done',

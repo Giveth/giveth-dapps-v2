@@ -52,7 +52,7 @@ export default function Milestones() {
 				variables: {
 					projectVerificationUpdateInput: {
 						projectVerificationId: Number(verificationData?.id),
-						step: EVerificationSteps.MILESTONES,
+						step: EVerificationSteps.IMPACT,
 						milestones: {
 							foundationDate: formData.foundationDate?.toString(),
 							mission: formData.mission,
@@ -79,7 +79,7 @@ export default function Milestones() {
 	return (
 		<form onSubmit={handleSubmit(handleNext)}>
 			<div>
-				<H6 weight={700}>Activity and Milestones</H6>
+				<H6 weight={700}>Goals, Activities and Impact</H6>
 				<LeadStyled>
 					When was your organization/project founded?
 				</LeadStyled>
@@ -149,8 +149,8 @@ export default function Milestones() {
 					disabled={!isDraft}
 				/>
 				<Lead>
-					If you cannot provide links to evidence of milestones that
-					have already been achieved, you can upload proof here.
+					If you cannot provide links to evidence of past activities
+					and/or social impact, you can upload proof here.
 				</Lead>
 				<Paragraph>Optional</Paragraph>
 				<Controller

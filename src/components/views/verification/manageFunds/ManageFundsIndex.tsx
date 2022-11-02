@@ -100,9 +100,7 @@ const ManageFundsIndex = () => {
 						<br />
 						The funds raised are expected to be used for public
 						benefit and not for personal gain. How will you use the
-						funds that your project raises? Please provide detailed
-						funding/budget information as well as an overall roadmap
-						or action plan of the project.
+						funds that your project raises?
 						<DescriptionInputStyled
 							register={register}
 							registerName='description'
