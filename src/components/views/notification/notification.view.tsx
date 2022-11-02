@@ -140,10 +140,8 @@ function NotificationView() {
 						</TabItemCount>
 					</TabItem>
 				</TabsContainer>
-				<ConfigContainer>
-					<div onClick={() => setShowMenu(true)}>
-						<IconDots24 />
-					</div>
+				<ConfigContainer onClick={() => setShowMenu(true)}>
+					<IconDots24 />
 					{showMenu && (
 						<NotificationsInnerMenuContainer ref={menuRef}>
 							<Flex flexDirection='column' gap='24px'>
