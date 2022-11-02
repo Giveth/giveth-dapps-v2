@@ -1,6 +1,7 @@
 import { Container, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+import { Shadow } from '@/components/styled-components/Shadow';
 
 export const NotificationContainer = styled(Container)`
 	margin-top: 176px;
@@ -32,8 +33,19 @@ export const GrayBarTiny = styled.div`
 `;
 
 export const ConfigContainer = styled(FlexCenter)`
+	position: relative;
 	background: ${neutralColors.gray[200]};
 	border-radius: 8px;
 	padding: 10px;
 	cursor: pointer;
+`;
+
+export const NotificationsInnerMenuContainer = styled.div`
+	padding: 24px 50px 24px 16px;
+	position: absolute;
+	top: 55px;
+	right: 0;
+	box-shadow: ${Shadow.Neutral[400]};
+	border-radius: 8px;
+	white-space: nowrap;
 `;
