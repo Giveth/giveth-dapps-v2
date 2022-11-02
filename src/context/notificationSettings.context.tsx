@@ -66,7 +66,7 @@ export const NotificationSettingsProvider: FC<IProviderProps> = props => {
 			}
 			return i;
 		});
-		const oldSetting = JSON.parse(JSON.stringify(notificationSettings));
+		const oldSetting = structuredClone(notificationSettings);
 		setNotificationSettings(newSettingsItems);
 		putNotificationSettings(inputObj).catch(() => {
 			setNotificationSettings(oldSetting);
