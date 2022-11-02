@@ -42,7 +42,6 @@ export const NotificationSettingsProvider: FC<IProviderProps> = props => {
 		useState<INotificationSetting[]>();
 
 	useEffect(() => {
-		console.log('fetching notification settings');
 		fetchNotificationSettings()
 			.then(res => setNotificationSettings(res?.notificationSettings))
 			.catch(showToastError);

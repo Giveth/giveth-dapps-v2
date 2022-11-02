@@ -27,7 +27,14 @@ export function sendRequest(
 		  }
 		: { ...defaultHeaders };
 	try {
-		return fetch(url + '?' + new URLSearchParams(query), {
+		let urlWithQuery = url;
+		if (query) {
+			if (url.charAt(url.length - 1) !== '/') {
+				urlWithQuery += '/';
+			}
+			urlWithQuery = `${urlWithQuery}?${new URLSearchParams(query)}`;
+		}
+		return fetch(urlWithQuery, {
 			method,
 			headers,
 			body: JSON.stringify(body),
