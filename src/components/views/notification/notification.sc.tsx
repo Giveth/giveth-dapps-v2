@@ -1,4 +1,4 @@
-import { Container, neutralColors } from '@giveth/ui-design-system';
+import { B, Container, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
@@ -48,6 +48,10 @@ export const NotificationsInnerMenuContainer = styled.div`
 	box-shadow: ${Shadow.Neutral[400]};
 	border-radius: 8px;
 	white-space: nowrap;
-	z-index: 1;
+	z-index: 2;
+	background-color: ${neutralColors.gray[100]};
 	cursor: auto;
+`;
+export const NotificationsInnerMenuItem = styled(B)`
+	cursor: pointer;
 `;
