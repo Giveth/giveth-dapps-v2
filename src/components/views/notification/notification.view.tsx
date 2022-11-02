@@ -5,7 +5,7 @@ import {
 	IconNotificationOutline32,
 	Lead,
 } from '@giveth/ui-design-system';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
 	NotificationContainer,
 	NotificationHeader,
@@ -25,6 +25,7 @@ import { INotification } from '@/features/notification/notification.types';
 import { NotificationBox } from '@/components/notification/NotificationBox';
 import { Flex } from '@/components/styled-components/Flex';
 import { fetchNotificationsData } from '@/features/notification/notification.services';
+import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 
 enum ENotificationTabs {
 	ALL,
@@ -37,6 +38,9 @@ function NotificationView() {
 	const [tab, setTab] = useState(ENotificationTabs.ALL);
 	const [notifs, setNotifs] = useState<INotification[]>([]);
 	const [loading, setLoading] = useState(false);
+	const [showMenu, setShowMenu] = useState(false);
+
+	const menuRef = useRef<HTMLDivElement>(null);
 
 	const {
 		total: totalUnreadNotifications,
@@ -46,6 +50,8 @@ function NotificationView() {
 	} = useAppSelector(state => state.notification.notificationInfo);
 
 	const dispatch = useAppDispatch();
+
+	useOnClickOutside(menuRef, () => setShowMenu(false));
 
 	useEffect(() => {
 		dispatch(setShowFooter(false));
@@ -133,15 +139,19 @@ function NotificationView() {
 					</TabItem>
 				</TabsContainer>
 				<ConfigContainer>
-					<IconDots24 />
-					<NotificationsInnerMenuContainer>
-						<Flex flexDirection='column' gap='24px'>
-							<B>Mark all as read</B>
-							<B>Show all read</B>
-							<B>Show all unread</B>
-							<B>Settings</B>
-						</Flex>
-					</NotificationsInnerMenuContainer>
+					<div onClick={() => setShowMenu(true)}>
+						<IconDots24 />
+					</div>
+					{showMenu && (
+						<NotificationsInnerMenuContainer ref={menuRef}>
+							<Flex flexDirection='column' gap='24px'>
+								<B>Mark all as read</B>
+								<B>Show all read</B>
+								<B>Show all unread</B>
+								<B>Settings</B>
+							</Flex>
+						</NotificationsInnerMenuContainer>
+					)}
 				</ConfigContainer>
 			</Flex>
 			<div>
