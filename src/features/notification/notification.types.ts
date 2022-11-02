@@ -2,7 +2,7 @@ export interface INotificationCountState {
 	general: number;
 	givEconomyRelated: number;
 	projectsRelated: number;
-	lastNotificationId: string;
+	lastNotificationId: number;
 	total: number;
 }
 
@@ -13,7 +13,7 @@ export interface IHtmlTemplate {
 }
 
 export interface INotification {
-	id: string;
+	id: number;
 	createdAt: string;
 	isRead?: boolean;
 	metadata: {

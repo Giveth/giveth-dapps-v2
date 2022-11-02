@@ -11,19 +11,18 @@ import { useAppSelector } from '@/features/hooks';
 import { MenuContainer } from '../menu/Menu.sc';
 import { NotificationBox } from './NotificationBox';
 import Routes from '@/lib/constants/Routes';
-import { fetchNotificationsData } from '@/features/notification/notification.services';
 import { INotification } from '@/features/notification/notification.types';
 
-const NotificationMenu = () => {
+interface INotificationMenuProps {
+	notifications: INotification[] | [];
+}
+
+const NotificationMenu = ({ notifications }: INotificationMenuProps) => {
 	const [isMounted, setIsMounted] = useState(false);
 	const theme = useAppSelector(state => state.general.theme);
-	const [notifications, setNotifications] = useState<INotification[]>([]);
 
 	useEffect(() => {
 		setIsMounted(true);
-		fetchNotificationsData().then(res => {
-			if (res?.notifications) setNotifications(res.notifications);
-		});
 	}, []);
 	console.log('Notifications', notifications);
 

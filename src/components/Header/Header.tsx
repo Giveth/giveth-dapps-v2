@@ -61,6 +61,8 @@ import { slugToProjectView } from '@/lib/routeCreators';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import NotificationMenu from '../notification/NotificationMenu';
 import useDetectDevice from '@/hooks/useDetectDevice';
+import { INotification } from '@/features/notification/notification.types';
+import { fetchNotificationsData } from '@/features/notification/notification.services';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -75,6 +77,8 @@ const Header: FC<IHeader> = () => {
 	const [showHeader, setShowHeader] = useState(true);
 	const [isGIVeconomyRoute, setIsGIVeconomyRoute] = useState(false);
 	const [showBackBtn, setShowBackBtn] = useState(false);
+	const [notifications, setNotifications] = useState<INotification[]>([]);
+
 	const { chainId, active, account, library } = useWeb3React();
 	const sdh = new SubgraphDataHelper(
 		useAppSelector(state => state.subgraph[currentValuesHelper(chainId)]),
@@ -88,11 +92,14 @@ const Header: FC<IHeader> = () => {
 	const { total: totalUnreadNotifications } = useAppSelector(
 		state => state.notification.notificationInfo,
 	);
+	const { lastNotificationId } = useAppSelector(
+		state => state.notification.notificationInfo,
+	);
 	const { isMobile } = useDetectDevice();
 
 	const router = useRouter();
 	const isLight = theme === ETheme.Light;
-
+	const lastFetchedNotificationId = notifications[0]?.id ?? undefined;
 	const handleBack = () => {
 		const calculateSlug = () => {
 			if (typeof router.query?.slug === 'string') {
@@ -157,6 +164,28 @@ const Header: FC<IHeader> = () => {
 
 		return () => window.removeEventListener('scroll', onScroll);
 	}, [showHeader]);
+
+	useEffect(() => {
+		const fetchNotificationsAndSetState = async () => {
+			if (!isSignedIn) return;
+			try {
+				const res = await fetchNotificationsData();
+				if (res?.notifications) setNotifications(res.notifications);
+			} catch {
+				console.log('Error fetching notifications');
+			}
+		};
+
+		if (
+			typeof lastFetchedNotificationId === 'number' &&
+			lastNotificationId > lastFetchedNotificationId
+		) {
+			fetchNotificationsAndSetState();
+			return;
+		}
+
+		fetchNotificationsAndSetState();
+	}, [lastNotificationId]);
 
 	const handleModals = () => {
 		if (isGIVeconomyRoute) {
@@ -279,7 +308,11 @@ const Header: FC<IHeader> = () => {
 									</NotificationsIconContainer>
 									<CoverLine theme={theme} />
 								</NotificationsButton>
-								{showNotifications && <NotificationMenu />}
+								{showNotifications && (
+									<NotificationMenu
+										notifications={notifications}
+									/>
+								)}
 							</MenuAndButtonContainer>
 						)}
 
