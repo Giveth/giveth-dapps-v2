@@ -1,6 +1,6 @@
 import {
 	H5,
-	IconConfig24,
+	IconDots24,
 	IconNotificationOutline32,
 	Lead,
 } from '@giveth/ui-design-system';
@@ -22,8 +22,6 @@ import { setShowFooter } from '@/features/general/general.slice';
 import { INotification } from '@/features/notification/notification.types';
 import { NotificationBox } from '@/components/notification/NotificationBox';
 import { Flex } from '@/components/styled-components/Flex';
-import InternalLink from '@/components/InternalLink';
-import Routes from '@/lib/constants/Routes';
 import { fetchNotificationsData } from '@/features/notification/notification.services';
 
 enum ENotificationTabs {
@@ -132,11 +130,9 @@ function NotificationView() {
 						</TabItemCount>
 					</TabItem>
 				</TabsContainer>
-				<InternalLink href={Routes.NotificationsSettings}>
-					<ConfigContainer>
-						<IconConfig24 />
-					</ConfigContainer>
-				</InternalLink>
+				<ConfigContainer>
+					<IconDots24 />
+				</ConfigContainer>
 			</Flex>
 			<div>
 				{loading ? (
