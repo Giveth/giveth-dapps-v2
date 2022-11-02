@@ -24,7 +24,6 @@ const NotificationMenu = ({ notifications }: INotificationMenuProps) => {
 	useEffect(() => {
 		setIsMounted(true);
 	}, []);
-	console.log('Notifications', notifications);
 
 	return (
 		<NotifsMenuContainer isMounted={isMounted} theme={theme}>
