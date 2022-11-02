@@ -32,8 +32,9 @@ export const fetchNotificationSettings =
 	async (): Promise<INotificationSettings | null> => {
 		try {
 			return await getRequest(
-				`${config.MICROSERVICES.notificationSettings}/?limit=100`,
+				`${config.MICROSERVICES.notificationSettings}`,
 				true,
+				{ limit: 100 },
 			);
 		} catch (e) {
 			showToastError(e);
@@ -54,7 +55,7 @@ export interface INotificationSettingsPostInput {
 
 type TPostNotificationSettings = (
 	i: INotificationSettingsPostInput,
-) => Promise<INotificationSetting | null>;
+) => Promise<INotificationSetting>;
 
 interface IPutNotificationSettingsBody {
 	id: number;
@@ -90,7 +91,7 @@ export const putNotificationSettings: TPostNotificationSettings = async i => {
 				section: 'postNotificationSettings',
 			},
 		});
-		return null;
+		throw e;
 	}
 };
 
