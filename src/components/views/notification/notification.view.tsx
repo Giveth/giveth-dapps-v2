@@ -4,7 +4,7 @@ import {
 	IconNotificationOutline32,
 	Lead,
 } from '@giveth/ui-design-system';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
 	NotificationContainer,
 	NotificationHeader,
@@ -37,7 +37,6 @@ function NotificationView() {
 	const [tab, setTab] = useState(ENotificationTabs.ALL);
 	const [notifs, setNotifs] = useState<INotification[]>([]);
 	const [loading, setLoading] = useState(false);
-	const controllerRef = useRef();
 
 	const {
 		total: totalUnreadNotifications,
