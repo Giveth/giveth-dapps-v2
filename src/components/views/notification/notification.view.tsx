@@ -26,6 +26,8 @@ import { NotificationBox } from '@/components/notification/NotificationBox';
 import { Flex } from '@/components/styled-components/Flex';
 import { fetchNotificationsData } from '@/features/notification/notification.services';
 import { useOnClickOutside } from '@/hooks/useOnClickOutside';
+import InternalLink from '@/components/InternalLink';
+import Routes from '@/lib/constants/Routes';
 
 enum ENotificationTabs {
 	ALL,
@@ -154,9 +156,13 @@ function NotificationView() {
 								<NotificationsInnerMenuItem>
 									Show all unread
 								</NotificationsInnerMenuItem>
-								<NotificationsInnerMenuItem>
-									Settings
-								</NotificationsInnerMenuItem>
+								<InternalLink
+									href={Routes.NotificationsSettings}
+								>
+									<NotificationsInnerMenuItem>
+										Settings
+									</NotificationsInnerMenuItem>
+								</InternalLink>
 							</Flex>
 						</NotificationsInnerMenuContainer>
 					)}
