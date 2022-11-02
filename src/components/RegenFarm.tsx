@@ -29,7 +29,9 @@ export const RegenFarm: FC<IRegenFarmProps> = ({
 
 	const filteredPools = showArchivedPools
 		? pools
-		: pools.filter(pool => pool.archived !== true);
+		: pools.filter(pool => pool.archived !== true && pool.active === true);
+
+	if (filteredPools.length === 0) return null;
 
 	return (
 		<PoolRow>
