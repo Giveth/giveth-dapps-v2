@@ -4,7 +4,7 @@ import {
 	IconNotificationOutline32,
 	Lead,
 } from '@giveth/ui-design-system';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
 	NotificationContainer,
 	NotificationHeader,
@@ -19,12 +19,12 @@ import {
 } from '@/components/styled-components/Tabs';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowFooter } from '@/features/general/general.slice';
-import { fetchNotificationsData } from '@/features/notification/notification.services';
 import { INotification } from '@/features/notification/notification.types';
 import { NotificationBox } from '@/components/notification/NotificationBox';
 import { Flex } from '@/components/styled-components/Flex';
 import InternalLink from '@/components/InternalLink';
 import Routes from '@/lib/constants/Routes';
+import { fetchNotificationsData } from '@/features/notification/notification.services';
 
 enum ENotificationTabs {
 	ALL,
@@ -35,13 +35,9 @@ enum ENotificationTabs {
 
 function NotificationView() {
 	const [tab, setTab] = useState(ENotificationTabs.ALL);
-	const [allNotifs, setAllNotifs] = useState<INotification[]>([]);
-	const [generalNotifs, setGenralNotifs] = useState<INotification[]>([]);
-	const [projectNotifs, setProjectsNotifs] = useState<INotification[]>([]);
-	const [giveconomyNotifs, setGIVeconomyNotifs] = useState<INotification[]>(
-		[],
-	);
+	const [notifs, setNotifs] = useState<INotification[]>([]);
 	const [loading, setLoading] = useState(false);
+	const controllerRef = useRef();
 
 	const {
 		total: totalUnreadNotifications,
@@ -58,50 +54,25 @@ function NotificationView() {
 
 	useEffect(() => {
 		setLoading(true);
-		fetchNotificationsData()
-			.then(res => {
-				if (res?.notifications) setAllNotifs(res.notifications);
-			})
-			.finally(() => {
-				setLoading(false);
-			});
-	}, []);
-
-	const handleTabChange = (newTab: ENotificationTabs) => {
-		if (newTab === tab) return;
-		setTab(newTab);
-		setLoading(true);
+		const controller = new AbortController();
+		const signal = controller.signal;
 		let query;
-		if (newTab !== ENotificationTabs.ALL) {
+		if (tab !== ENotificationTabs.ALL) {
 			query = {
-				category: newTab,
+				category: tab,
 			};
 		}
-		fetchNotificationsData(query)
+		fetchNotificationsData(query, { signal })
 			.then(res => {
-				if (res?.notifications) {
-					switch (newTab) {
-						case ENotificationTabs.ALL:
-							setAllNotifs(res.notifications);
-							break;
-						case ENotificationTabs.GENERAL:
-							setGenralNotifs(res.notifications);
-							break;
-						case ENotificationTabs.PROJECTS:
-							setProjectsNotifs(res.notifications);
-							break;
-						case ENotificationTabs.GIVECONOMY:
-							setGIVeconomyNotifs(res.notifications);
-							break;
-						default:
-							break;
-					}
-				}
+				if (res?.notifications) setNotifs(res.notifications);
 			})
 			.finally(() => {
 				setLoading(false);
 			});
-	};
+		return () => {
+			controller.abort();
+		};
+	}, [tab]);
 
 	return (
 		<NotificationContainer>
@@ -121,7 +92,7 @@ function NotificationView() {
 				<TabsContainer>
 					<TabItem
 						active={tab === ENotificationTabs.ALL}
-						onClick={() => handleTabChange(ENotificationTabs.ALL)}
+						onClick={() => setTab(ENotificationTabs.ALL)}
 					>
 						All
 						<TabItemCount active={tab === ENotificationTabs.ALL}>
@@ -130,9 +101,7 @@ function NotificationView() {
 					</TabItem>
 					<TabItem
 						active={tab === ENotificationTabs.GENERAL}
-						onClick={() =>
-							handleTabChange(ENotificationTabs.GENERAL)
-						}
+						onClick={() => setTab(ENotificationTabs.GENERAL)}
 					>
 						General
 						<TabItemCount
@@ -143,9 +112,7 @@ function NotificationView() {
 					</TabItem>
 					<TabItem
 						active={tab === ENotificationTabs.PROJECTS}
-						onClick={() =>
-							handleTabChange(ENotificationTabs.PROJECTS)
-						}
+						onClick={() => setTab(ENotificationTabs.PROJECTS)}
 					>
 						Projects
 						<TabItemCount
@@ -156,9 +123,7 @@ function NotificationView() {
 					</TabItem>
 					<TabItem
 						active={tab === ENotificationTabs.GIVECONOMY}
-						onClick={() =>
-							handleTabChange(ENotificationTabs.GIVECONOMY)
-						}
+						onClick={() => setTab(ENotificationTabs.GIVECONOMY)}
 					>
 						GIVeconomy
 						<TabItemCount
@@ -177,35 +142,14 @@ function NotificationView() {
 			<div>
 				{loading ? (
 					<div>Loading...</div>
-				) : tab === ENotificationTabs.ALL ? (
-					allNotifs.map(notification => (
+				) : (
+					notifs.map(notification => (
 						<NotificationBox
 							key={notification.id}
 							notification={notification}
 						/>
 					))
-				) : tab === ENotificationTabs.GENERAL ? (
-					generalNotifs.map(notification => (
-						<NotificationBox
-							key={notification.id}
-							notification={notification}
-						/>
-					))
-				) : tab === ENotificationTabs.PROJECTS ? (
-					projectNotifs.map(notification => (
-						<NotificationBox
-							key={notification.id}
-							notification={notification}
-						/>
-					))
-				) : tab === ENotificationTabs.GIVECONOMY ? (
-					giveconomyNotifs.map(notification => (
-						<NotificationBox
-							key={notification.id}
-							notification={notification}
-						/>
-					))
-				) : null}
+				)}
 			</div>
 		</NotificationContainer>
 	);
