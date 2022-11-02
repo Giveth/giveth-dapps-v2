@@ -66,8 +66,11 @@ export const NotificationSettingsProvider: FC<IProviderProps> = props => {
 			}
 			return i;
 		});
+		const oldSetting = structuredClone(notificationSettings);
 		setNotificationSettings(newSettingsItems);
-		putNotificationSettings(inputObj).catch(showToastError);
+		putNotificationSettings(inputObj).catch(() => {
+			setNotificationSettings(oldSetting);
+		});
 	};
 
 	return (
