@@ -8,6 +8,7 @@ export function sendRequest(
 	method: 'POST' | 'GET' | 'PUT',
 	authorization: boolean = false,
 	body?: {},
+	query?: {},
 	additionalHeaders: HeadersInit = {},
 	additionalOptions: RequestInit = {},
 ) {
@@ -26,7 +27,7 @@ export function sendRequest(
 		  }
 		: { ...defaultHeaders };
 	try {
-		return fetch(url, {
+		return fetch(url + '?' + new URLSearchParams(query), {
 			method,
 			headers,
 			body: JSON.stringify(body),
@@ -50,6 +51,7 @@ export function sendRequest(
 export function getRequest(
 	url: string,
 	authorization: boolean = false,
+	query: {} = {},
 	additionalHeaders: HeadersInit = {},
 	additionalOptions: RequestInit = {},
 ) {
@@ -58,6 +60,7 @@ export function getRequest(
 		'GET',
 		authorization,
 		undefined,
+		query,
 		additionalHeaders,
 		additionalOptions,
 	);
@@ -75,6 +78,7 @@ export function postRequest(
 		'POST',
 		authorization,
 		body,
+		undefined,
 		additionalHeaders,
 		additionalOptions,
 	);
@@ -92,6 +96,7 @@ export function putRequest(
 		'PUT',
 		authorization,
 		body,
+		undefined,
 		additionalHeaders,
 		additionalOptions,
 	);

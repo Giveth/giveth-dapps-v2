@@ -19,23 +19,24 @@ import {
 } from '@/components/styled-components/Tabs';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowFooter } from '@/features/general/general.slice';
-import { fetchNotificationsData } from '@/features/notification/notification.services';
 import { INotification } from '@/features/notification/notification.types';
 import { NotificationBox } from '@/components/notification/NotificationBox';
 import { Flex } from '@/components/styled-components/Flex';
 import InternalLink from '@/components/InternalLink';
 import Routes from '@/lib/constants/Routes';
+import { fetchNotificationsData } from '@/features/notification/notification.services';
 
 enum ENotificationTabs {
 	ALL,
-	GENERAL,
-	PROJECTS,
-	GIVECONOMY,
+	GENERAL = 'general',
+	PROJECTS = 'projectRelated',
+	GIVECONOMY = 'givEconomyRelated',
 }
 
 function NotificationView() {
 	const [tab, setTab] = useState(ENotificationTabs.ALL);
-	const [notifications, setNotifications] = useState<INotification[]>([]);
+	const [notifs, setNotifs] = useState<INotification[]>([]);
+	const [loading, setLoading] = useState(false);
 
 	const {
 		total: totalUnreadNotifications,
@@ -51,10 +52,26 @@ function NotificationView() {
 	}, [dispatch]);
 
 	useEffect(() => {
-		fetchNotificationsData().then(res => {
-			if (res?.notifications) setNotifications(res.notifications);
-		});
-	}, []);
+		setLoading(true);
+		const controller = new AbortController();
+		const signal = controller.signal;
+		let query;
+		if (tab !== ENotificationTabs.ALL) {
+			query = {
+				category: tab,
+			};
+		}
+		fetchNotificationsData(query, { signal })
+			.then(res => {
+				if (res?.notifications) setNotifs(res.notifications);
+			})
+			.finally(() => {
+				setLoading(false);
+			});
+		return () => {
+			controller.abort();
+		};
+	}, [tab]);
 
 	return (
 		<NotificationContainer>
@@ -69,6 +86,7 @@ function NotificationView() {
 					</Lead>
 				</NotificationDesc>
 			</NotificationHeader>
+
 			<Flex justifyContent='space-between' alignItems='center'>
 				<TabsContainer>
 					<TabItem
@@ -121,12 +139,16 @@ function NotificationView() {
 				</InternalLink>
 			</Flex>
 			<div>
-				{notifications.map(notification => (
-					<NotificationBox
-						key={notification.id}
-						notification={notification}
-					/>
-				))}
+				{loading ? (
+					<div>Loading...</div>
+				) : (
+					notifs.map(notification => (
+						<NotificationBox
+							key={notification.id}
+							notification={notification}
+						/>
+					))
+				)}
 			</div>
 		</NotificationContainer>
 	);
