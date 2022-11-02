@@ -48,4 +48,6 @@ export const NotificationsInnerMenuContainer = styled.div`
 	box-shadow: ${Shadow.Neutral[400]};
 	border-radius: 8px;
 	white-space: nowrap;
+	z-index: 1;
+	cursor: auto;
 `;
