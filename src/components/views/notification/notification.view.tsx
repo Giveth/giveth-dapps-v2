@@ -1,4 +1,5 @@
 import {
+	B,
 	H5,
 	IconDots24,
 	IconNotificationOutline32,
@@ -11,6 +12,7 @@ import {
 	IconContainer,
 	NotificationDesc,
 	ConfigContainer,
+	NotificationsInnerMenuContainer,
 } from './notification.sc';
 import {
 	TabsContainer,
@@ -132,6 +134,14 @@ function NotificationView() {
 				</TabsContainer>
 				<ConfigContainer>
 					<IconDots24 />
+					<NotificationsInnerMenuContainer>
+						<Flex flexDirection='column' gap='24px'>
+							<B>Mark all as read</B>
+							<B>Show all read</B>
+							<B>Show all unread</B>
+							<B>Settings</B>
+						</Flex>
+					</NotificationsInnerMenuContainer>
 				</ConfigContainer>
 			</Flex>
 			<div>
