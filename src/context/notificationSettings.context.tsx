@@ -8,20 +8,15 @@ import {
 } from 'react';
 import {
 	fetchNotificationSettings,
-	INotificationSettingsPostInput,
+	INotificationSettingsPutInput,
 	putNotificationSettings,
 } from '@/features/notification/notification.services';
 import { INotificationSetting } from '@/features/notification/notification.types';
 import { showToastError } from '@/lib/helpers';
 
-interface IChangeableItems {
-	allowEmailNotification?: boolean;
-	allowDappPushNotification?: boolean;
-}
-
 interface INotificationSettingsContext {
 	notificationSettings?: INotificationSetting[];
-	setNotificationSettings: (i: INotificationSettingsPostInput) => void;
+	setNotificationSettings: (i: INotificationSettingsPutInput) => void;
 }
 
 const NotificationSettingsContext = createContext<INotificationSettingsContext>(
@@ -47,13 +42,10 @@ export const NotificationSettingsProvider: FC<IProviderProps> = props => {
 			.catch(showToastError);
 	}, []);
 
-	const handleSet = (inputObj: INotificationSettingsPostInput) => {
-		const {
-			notificationTypeId,
-			allowDappPushNotification,
-			allowEmailNotification,
-		} = inputObj;
-		const newItem: IChangeableItems = {};
+	const handleSet = (inputObj: INotificationSettingsPutInput) => {
+		const { id, allowDappPushNotification, allowEmailNotification } =
+			inputObj;
+		const newItem: INotificationSettingsPutInput = { id };
 		if (allowDappPushNotification !== undefined) {
 			newItem['allowDappPushNotification'] = allowDappPushNotification;
 		}
@@ -61,15 +53,15 @@ export const NotificationSettingsProvider: FC<IProviderProps> = props => {
 			newItem['allowEmailNotification'] = allowEmailNotification;
 		}
 		const newSettingsItems = notificationSettings?.map(i => {
-			if (i.notificationTypeId === notificationTypeId) {
+			if (i.id === id) {
 				return { ...i, ...newItem };
 			}
 			return i;
 		});
-		const oldSetting = structuredClone(notificationSettings);
+		const oldSettingsItems = structuredClone(notificationSettings);
 		setNotificationSettings(newSettingsItems);
 		putNotificationSettings(inputObj).catch(() => {
-			setNotificationSettings(oldSetting);
+			setNotificationSettings(oldSettingsItems);
 		});
 	};
 
