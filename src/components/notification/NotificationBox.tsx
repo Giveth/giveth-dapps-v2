@@ -10,6 +10,7 @@ import { Flex } from '../styled-components/Flex';
 import { convertRawDataToHTML } from '@/helpers/html';
 import { durationToString } from '@/lib/helpers';
 import { INotification } from '@/features/notification/notification.types';
+import { setNotificationRead } from '@/features/notification/notification.services';
 
 interface INotificationBox {
 	notification: INotification;
@@ -26,7 +27,7 @@ export const NotificationBox: FC<INotificationBox> = ({
 		const read = (entries: IntersectionObserverEntry[]) => {
 			const [entry] = entries;
 			if (entry.isIntersecting) {
-				console.log('read', notification.id);
+				setNotificationRead(notification.id);
 			}
 		};
 		let observer = new IntersectionObserver(read);
