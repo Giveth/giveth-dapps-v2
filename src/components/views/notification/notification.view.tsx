@@ -1,5 +1,4 @@
 import {
-	B,
 	H5,
 	IconDots24,
 	IconNotificationOutline32,
@@ -13,6 +12,7 @@ import {
 	NotificationDesc,
 	ConfigContainer,
 	NotificationsInnerMenuContainer,
+	NotificationsInnerMenuItem,
 } from './notification.sc';
 import {
 	TabsContainer,
@@ -145,10 +145,18 @@ function NotificationView() {
 					{showMenu && (
 						<NotificationsInnerMenuContainer ref={menuRef}>
 							<Flex flexDirection='column' gap='24px'>
-								<B>Mark all as read</B>
-								<B>Show all read</B>
-								<B>Show all unread</B>
-								<B>Settings</B>
+								<NotificationsInnerMenuItem>
+									Mark all as read
+								</NotificationsInnerMenuItem>
+								<NotificationsInnerMenuItem>
+									Show all read
+								</NotificationsInnerMenuItem>
+								<NotificationsInnerMenuItem>
+									Show all unread
+								</NotificationsInnerMenuItem>
+								<NotificationsInnerMenuItem>
+									Settings
+								</NotificationsInnerMenuItem>
 							</Flex>
 						</NotificationsInnerMenuContainer>
 					)}
