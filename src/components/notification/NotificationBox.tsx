@@ -5,11 +5,11 @@ import {
 	IconHeartOutline24,
 	neutralColors,
 } from '@giveth/ui-design-system';
+import { FC, useEffect, useRef } from 'react';
 import { Flex } from '../styled-components/Flex';
 import { convertRawDataToHTML } from '@/helpers/html';
 import { durationToString } from '@/lib/helpers';
 import { INotification } from '@/features/notification/notification.types';
-import type { FC } from 'react';
 
 interface INotificationBox {
 	notification: INotification;
@@ -20,8 +20,25 @@ export const NotificationBox: FC<INotificationBox> = ({
 	notification,
 	short = false,
 }) => {
+	const NotifRef = useRef(null);
+
+	useEffect(() => {
+		const read = (entries: IntersectionObserverEntry[]) => {
+			const [entry] = entries;
+			if (entry.isIntersecting) {
+				console.log('read', notification.id);
+			}
+		};
+		let observer = new IntersectionObserver(read);
+		if (NotifRef.current) observer.observe(NotifRef.current);
+
+		return () => {
+			if (NotifRef.current) observer.unobserve(NotifRef.current);
+		};
+	}, [notification.id]);
+
 	return (
-		<NotificationBoxContainer gap='16px' isShort={short}>
+		<NotificationBoxContainer gap='16px' isShort={short} ref={NotifRef}>
 			{!notification.isRead && <UnreadCircle isShort={short} />}
 			{!short && (
 				<IconContainer>
