@@ -36,10 +36,14 @@ export const convertRawDataToHTML = (notification: INotification) => {
 				);
 				break;
 			case 'br':
-				res.push(<br />);
+				res.push(<br key={idx} />);
 				break;
 			default:
-				res.push(<P as='span'>{temp}</P>);
+				res.push(
+					<P as='span' key={idx}>
+						{temp}
+					</P>,
+				);
 				break;
 		}
 		res.push(' ');
