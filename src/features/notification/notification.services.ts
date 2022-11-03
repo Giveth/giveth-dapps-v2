@@ -47,30 +47,26 @@ export const fetchNotificationSettings =
 		}
 	};
 
-export interface INotificationSettingsPostInput {
-	notificationTypeId: number;
+export interface INotificationSettingsPutInput {
+	id: number;
 	allowEmailNotification?: boolean;
 	allowDappPushNotification?: boolean;
 }
 
-type TPostNotificationSettings = (
-	i: INotificationSettingsPostInput,
+type TPutNotificationSettings = (
+	i: INotificationSettingsPutInput,
 ) => Promise<INotificationSetting>;
 
-interface IPutNotificationSettingsBody {
+interface INotificationSettingsPutBody {
 	id: number;
 	allowEmailNotification?: string;
 	allowDappPushNotification?: string;
 }
 
-export const putNotificationSettings: TPostNotificationSettings = async i => {
-	const {
-		notificationTypeId,
-		allowEmailNotification,
-		allowDappPushNotification,
-	} = i;
+export const putNotificationSettings: TPutNotificationSettings = async i => {
+	const { id, allowEmailNotification, allowDappPushNotification } = i;
 
-	const body: IPutNotificationSettingsBody = { id: notificationTypeId };
+	const body: INotificationSettingsPutBody = { id };
 	if (allowEmailNotification !== undefined) {
 		body.allowEmailNotification = String(allowEmailNotification);
 	}
@@ -80,7 +76,7 @@ export const putNotificationSettings: TPostNotificationSettings = async i => {
 
 	try {
 		return await putRequest(
-			`${config.MICROSERVICES.notificationSettings}/${notificationTypeId}`,
+			`${config.MICROSERVICES.notificationSettings}/${id}`,
 			true,
 			body,
 		);
@@ -88,7 +84,7 @@ export const putNotificationSettings: TPostNotificationSettings = async i => {
 		showToastError(e);
 		captureException(e, {
 			tags: {
-				section: 'postNotificationSettings',
+				section: 'putNotificationSettings',
 			},
 		});
 		throw e;

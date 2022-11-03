@@ -13,21 +13,18 @@ const DappMailCheckbox: FC<IDappMailCheckbox> = ({ notificationTypeId }) => {
 	const notificationItem = notificationSettings?.find(
 		i => i.notificationTypeId === notificationTypeId,
 	);
-	const { allowDappPushNotification, allowEmailNotification } =
-		notificationItem || {};
+	const {
+		allowDappPushNotification,
+		allowEmailNotification,
+		id = 1,
+	} = notificationItem || {};
 
 	const setEmailNotification = (i: boolean) => {
-		setNotificationSettings({
-			notificationTypeId,
-			allowEmailNotification: i,
-		});
+		setNotificationSettings({ id, allowEmailNotification: i });
 	};
 
 	const setDappNotification = (i: boolean) => {
-		setNotificationSettings({
-			notificationTypeId,
-			allowDappPushNotification: i,
-		});
+		setNotificationSettings({ id, allowDappPushNotification: i });
 	};
 
 	return (
