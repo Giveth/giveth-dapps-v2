@@ -41,7 +41,7 @@ function NotificationView() {
 	const [notifs, setNotifs] = useState<INotification[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [showMenu, setShowMenu] = useState(false);
-
+	const [showIsRead, setShowIsRead] = useState<Boolean | null>(null);
 	const menuRef = useRef<HTMLDivElement>(null);
 
 	const {
@@ -69,6 +69,12 @@ function NotificationView() {
 				category: tab,
 			};
 		}
+		if (showIsRead !== null) {
+			query = {
+				...query,
+				isRead: showIsRead,
+			};
+		}
 		fetchNotificationsData(query, { signal })
 			.then(res => {
 				if (res?.notifications) setNotifs(res.notifications);
@@ -79,7 +85,7 @@ function NotificationView() {
 		return () => {
 			controller.abort();
 		};
-	}, [tab]);
+	}, [tab, showIsRead]);
 
 	return (
 		<NotificationContainer>
@@ -148,10 +154,14 @@ function NotificationView() {
 								<NotificationsInnerMenuItem>
 									Mark all as read
 								</NotificationsInnerMenuItem>
-								<NotificationsInnerMenuItem>
+								<NotificationsInnerMenuItem
+									onClick={() => setShowIsRead(true)}
+								>
 									Show all read
 								</NotificationsInnerMenuItem>
-								<NotificationsInnerMenuItem>
+								<NotificationsInnerMenuItem
+									onClick={() => setShowIsRead(false)}
+								>
 									Show all unread
 								</NotificationsInnerMenuItem>
 								<InternalLink
