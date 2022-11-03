@@ -8,6 +8,7 @@ import {
 	Button,
 	Caption,
 	GLink,
+	IconGasStation,
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
@@ -54,6 +55,7 @@ import {
 import usePurpleList from '@/hooks/usePurpleList';
 import DonateToGiveth from '@/components/views/donate/DonateToGiveth';
 import TotalDonation from '@/components/views/donate/TotalDonation';
+import { Flex } from '@/components/styled-components/Flex';
 
 const ethereumChain = config.PRIMARY_NETWORK;
 const gnosisChain = config.SECONDARY_NETWORK;
@@ -382,13 +384,10 @@ const CryptoDonation = (props: {
 					acceptedChains &&
 					!acceptedChains.includes(networkId) && (
 						<NetworkToast>
-							<div>
-								<Caption medium>
-									Projects from {orgName} only accept
-									donations on{' '}
-									{getNetworkNames(acceptedChains, 'and')}.
-								</Caption>
-							</div>
+							<Caption medium>
+								Projects from {orgName} only accept donations on{' '}
+								{getNetworkNames(acceptedChains, 'and')}.
+							</Caption>
 							<SwitchCaption
 								onClick={() => switchNetwork(ethereumChain.id)}
 							>
@@ -400,12 +399,12 @@ const CryptoDonation = (props: {
 					networkId === ethereumChain.id &&
 					acceptedChains?.includes(gnosisChain.id) && (
 						<NetworkToast>
-							<div>
-								<img src='/images/gas_station.svg' alt='gas' />
+							<Flex alignItems='center' gap='9px'>
+								<IconGasStation />
 								<Caption medium>
 									Save on gas fees, switch to Gnosis Chain.
 								</Caption>
-							</div>
+							</Flex>
 							<SwitchCaption
 								onClick={() => switchNetwork(gnosisChain.id)}
 							>
@@ -582,8 +581,8 @@ const NetworkToast = styled.div`
 	> :last-child {
 		flex-shrink: 0;
 	}
-	> div:first-child {
-		display: flex;
+	> div:first-child > svg {
+		flex-shrink: 0;
 	}
 	img {
 		padding-right: 12px;
