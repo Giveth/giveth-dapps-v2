@@ -3,12 +3,14 @@ import { Caption, neutralColors } from '@giveth/ui-design-system';
 import { FC } from 'react';
 import { Flex } from '@/components/styled-components/Flex';
 import { formatPrice } from '@/lib/helpers';
+import { minDonationAmount } from '@/lib/constants/constants';
 
 interface ITotalDonation {
 	projectTitle?: string;
 	donationToGiveth: number;
 	donationToProject?: number;
 	tokenSymbol?: string;
+	isActive?: boolean;
 }
 
 const titleSummary = (title?: string) => {
@@ -21,13 +23,15 @@ const TotalDonation: FC<ITotalDonation> = props => {
 		donationToGiveth = 0,
 		donationToProject = 0,
 		tokenSymbol,
+		isActive,
 	} = props;
 
-	const isActive = !!(donationToProject && tokenSymbol);
-
 	let donationToGivethAmount = (donationToProject * donationToGiveth) / 100;
-	if (donationToGivethAmount < 0.000001 && donationToGivethAmount > 0) {
-		donationToGivethAmount = 0.000001;
+	if (
+		donationToGivethAmount < minDonationAmount &&
+		donationToGivethAmount > 0
+	) {
+		donationToGivethAmount = minDonationAmount;
 	}
 
 	const totalDonation = formatPrice(
@@ -90,7 +94,7 @@ const TableRow = styled(FlexStyled)`
 	padding: 0 8px;
 `;
 
-const Container = styled.div<{ isActive: boolean }>`
+const Container = styled.div<{ isActive?: boolean }>`
 	margin-bottom: 16px;
 	opacity: ${props => (props.isActive ? 1 : 0.5)};
 	b {

@@ -19,7 +19,7 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import InputBox from './InputBox';
 import CheckBox from '@/components/Checkbox';
 import DonateModal from '@/components/modals/DonateModal';
-import { mediaQueries } from '@/lib/constants/constants';
+import { mediaQueries, minDonationAmount } from '@/lib/constants/constants';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import { IDonationProject } from '@/apollo/types/types';
 import { fetchPrice } from '@/services/token';
@@ -120,7 +120,7 @@ const CryptoDonation = (props: {
 	const [erc20OriginalList, setErc20OriginalList] = useState<any>();
 	const [anonymous, setAnonymous] = useState<boolean>(false);
 	// const [selectLoading, setSelectLoading] = useState(false);
-	const [error, setError] = useState<boolean>(false);
+	const [amountError, setAmountError] = useState<boolean>(false);
 	const [tokenIsGivBackEligible, setTokenIsGivBackEligible] =
 		useState<boolean>();
 	const [showDonateModal, setShowDonateModal] = useState(false);
@@ -343,7 +343,7 @@ const CryptoDonation = (props: {
 	};
 
 	const donationDisabled =
-		!isActive || !amountTyped || !selectedToken || error;
+		!isActive || !amountTyped || !selectedToken || amountError;
 
 	return (
 		<MainContainer>
@@ -413,7 +413,7 @@ const CryptoDonation = (props: {
 							</SwitchCaption>
 						</NetworkToast>
 					)}
-				<SearchContainer error={error} focused={inputBoxFocused}>
+				<SearchContainer error={amountError} focused={inputBoxFocused}>
 					<DropdownContainer>
 						<TokenPicker
 							tokenList={erc20List}
@@ -437,20 +437,18 @@ const CryptoDonation = (props: {
 					</DropdownContainer>
 					<InputBox
 						value={amountTyped}
-						error={error}
-						setError={setError}
-						errorHandler={{
-							condition: value => value < 0.000001,
-							message: 'Amount is too small',
-						}}
-						type='number'
+						error={amountError}
 						onChange={val => {
 							const checkGIV = checkGIVTokenAvailability();
 							if (/^0+(?=\d)/.test(String(val))) return;
+							setAmountError(
+								val !== undefined
+									? val < minDonationAmount
+									: false,
+							);
 							if (checkGIV) setAmountTyped(val);
 						}}
-						onFocus={(val: any) => setInputBoxFocused(!!val)}
-						placeholder='Amount'
+						onFocus={setInputBoxFocused}
 						disabled={!active}
 					/>
 				</SearchContainer>
@@ -485,6 +483,7 @@ const CryptoDonation = (props: {
 					donationToProject={amountTyped}
 					projectTitle={projectTitle}
 					tokenSymbol={selectedToken?.symbol}
+					isActive={!donationDisabled}
 				/>
 			) : (
 				<EmptySpace />
