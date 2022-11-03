@@ -43,14 +43,13 @@ export const DeletePowerBoostModal: FC<IDeletePowerBoostModal> = ({
 			<ConfirmPowerBoostModalContainer>
 				{canDelete ? (
 					<Content>
-						By removing your boost to this project your GIVpower
-						will be distributed to other projects you have boosted.
+						If you remove GIVpower from this project, it will be
+						distributed to other projects you have boosted.
 					</Content>
 				) : (
 					<Content>
-						You must have at least one active boost! In order to
-						remove GIVpower from this project, please boost another
-						project.
+						You can&apos;t remove GIVpower from this project because
+						it is the only boost you have!
 					</Content>
 				)}
 				{canDelete ? (

@@ -37,8 +37,8 @@ export const ApprovePowerBoostModal: FC<IApprovePowerBoostModal> = ({
 		>
 			<ConfirmPowerBoostModalContainer>
 				<Content>
-					You changed your GIVpower allocations, do you want to save
-					these changes?
+					You are about to save the changes you made to your GIVpower
+					allocations. This cannot be undone.
 				</Content>
 				<>
 					<CustomButton
