@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, FC } from 'react';
 import styled from 'styled-components';
 import {
 	brandColors,
@@ -17,14 +17,13 @@ interface INotificationMenuProps {
 	notifications: INotification[] | [];
 }
 
-const NotificationMenu = ({ notifications }: INotificationMenuProps) => {
+const NotificationMenu: FC<INotificationMenuProps> = ({ notifications }) => {
 	const [isMounted, setIsMounted] = useState(false);
 	const theme = useAppSelector(state => state.general.theme);
 
 	useEffect(() => {
 		setIsMounted(true);
 	}, []);
-	console.log('Notifications', notifications);
 
 	return (
 		<NotifsMenuContainer isMounted={isMounted} theme={theme}>
@@ -33,18 +32,13 @@ const NotificationMenu = ({ notifications }: INotificationMenuProps) => {
 			</NotificationsTitle>
 			<br />
 			<br />
-			{notifications
-				.map(notification => (
-					<>
-						<NotificationBox
-							key={notification.id}
-							short={true}
-							notification={notification}
-						/>
-						<br />
-					</>
-				))
-				.slice(0, 5)}
+			{notifications.map(notification => (
+				<NotificationBox
+					key={notification.id}
+					short={true}
+					notification={notification}
+				/>
+			))}
 			<br />
 			<Link href={Routes.Notifications} passHref>
 				<AllNotificationsLink color={brandColors.pinky[500]}>
