@@ -53,24 +53,24 @@ const itemsArray = [
 	{
 		title: 'Project updates',
 		description: 'You Posted an update on your project',
-		notificationTypeId: 40,
+		notificationTypeId: 43,
 	},
 	{
 		title: 'Project updates',
 		description: 'When your liked project has an update',
-		notificationTypeId: 42,
+		notificationTypeId: 47,
 	},
 	{
 		title: 'Project status',
 		description:
 			'When your own Project has been listed, unlisted, cancelled, activated or deactivated',
-		notificationTypeId: 9,
+		notificationTypeId: 57,
 	},
 	{
 		title: 'Project status',
 		description:
 			'When your liked Project has been listed, unlisted, cancelled, activated or deactivated',
-		notificationTypeId: 18,
+		notificationTypeId: 61,
 	},
 	{
 		title: 'Project likes',
@@ -82,18 +82,20 @@ const itemsArray = [
 		description:
 			'When someone donates to your project, when you \n' +
 			'donate to a project, donation success and failure.',
-		notificationTypeId: 37,
+		notificationTypeId: 58,
 	},
-	// {
-	// 	title: 'Your boost status',
-	// 	description:
-	// 		'Shows when you boost a project, change the allocation of \n' +
-	// 		'GIVpower.',
-	// },
-	// {
-	// 	title: 'Project boost status',
-	// 	description: 'Shows when your project receives a boost',
-	// },
+	{
+		title: 'Your boost status',
+		description:
+			'Shows when you boost a project, change the allocation of \n' +
+			'GIVpower.',
+		notificationTypeId: 55,
+	},
+	{
+		title: 'Project boost status',
+		description: 'Shows when your project receives a boost',
+		notificationTypeId: 56,
+	},
 ];
 
 export default ProjectSection;
