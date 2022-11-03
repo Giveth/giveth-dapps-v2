@@ -50,25 +50,25 @@ const itemsArray = [
 		description:
 			'Shows when you have claimable rewards and \n' +
 			'your harvested rewards ',
-		notificationTypeId: 28,
+		notificationTypeId: 60,
 	},
 	{
 		title: 'Stakes',
 		description: 'Shows when you stake or unstake on the GIVfarm',
-		notificationTypeId: 30,
+		notificationTypeId: 59,
 	},
 	{
 		title: 'GIVbacks',
-		description:
-			'When GIVbacks are ready to be claimed after each\n' + 'round',
+		description: 'When GIVbacks are ready to be claimed after each round',
 		notificationTypeId: 32,
 	},
-	// {
-	// 	title: 'GIVpower Allocations',
-	// 	description:
-	// 		'Shows the your locked, unlocked ,received amount of \n' +
-	// 		'GIVpower and the amount automatically relocked.',
-	// },
+	{
+		title: 'GIVpower Allocations',
+		description:
+			'Shows your locked, unlocked and received amount of \n' +
+			'GIVpower and the amount automatically relocked.',
+		notificationTypeId: 54,
+	},
 ];
 
 export default GIVeconomySection;
