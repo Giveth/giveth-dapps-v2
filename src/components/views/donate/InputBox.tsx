@@ -9,16 +9,9 @@ import styled from 'styled-components';
 
 interface IInputBox {
 	value?: number;
-	onChange: (e: number) => void;
-	placeholder?: string;
-	type?: string;
-	errorHandler: {
-		condition: (i: number) => boolean;
-		message: string;
-	};
-	setError?: any;
-	error?: any;
-	onFocus?: any;
+	onChange: (e: number | undefined) => void;
+	error?: boolean;
+	onFocus: (i: boolean) => void;
 	disabled?: boolean;
 }
 
@@ -26,10 +19,6 @@ const InputBox: FC<IInputBox> = ({
 	value,
 	onChange,
 	error,
-	setError,
-	errorHandler,
-	type,
-	placeholder,
 	onFocus,
 	disabled,
 }) => {
@@ -39,19 +28,20 @@ const InputBox: FC<IInputBox> = ({
 				<Input
 					id='input-box'
 					value={value}
-					type={type}
+					type='number'
 					onChange={e => {
-						const num = Number(e.target.value);
+						const _value = e.target.value;
+						const num =
+							_value === '' ? undefined : Number(e.target.value);
 						onChange(num);
-						setError(errorHandler.condition(num));
 					}}
 					onFocus={() => onFocus(true)}
 					onBlur={() => onFocus(false)}
-					placeholder={placeholder}
+					placeholder='Amount'
 					disabled={disabled}
 				/>
 			</Wrapper>
-			{error && <ErrorMsg>{errorHandler?.message}</ErrorMsg>}
+			{error && <ErrorMsg>Amount is too small</ErrorMsg>}
 		</Box>
 	);
 };

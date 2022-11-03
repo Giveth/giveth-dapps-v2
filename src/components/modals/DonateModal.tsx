@@ -12,7 +12,7 @@ import {
 import { Modal } from '@/components/modals/Modal';
 import { IProject } from '@/apollo/types/types';
 import { compareAddresses, formatTxLink } from '@/lib/helpers';
-import { mediaQueries } from '@/lib/constants/constants';
+import { mediaQueries, minDonationAmount } from '@/lib/constants/constants';
 import { IMeGQL, IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { ISuccessDonation } from '@/components/views/donate/CryptoDonation';
 import { createDonation } from '@/components/views/donate/helpers';
@@ -79,8 +79,8 @@ const DonateModal = (props: IDonateModalProps) => {
 
 	const avgPrice = price && price * amount;
 	let donationToGivethAmount = (amount * donationToGiveth) / 100;
-	if (donationToGivethAmount < 0.000001 && isDonatingToGiveth) {
-		donationToGivethAmount = 0.000001;
+	if (donationToGivethAmount < minDonationAmount && isDonatingToGiveth) {
+		donationToGivethAmount = minDonationAmount;
 	}
 	const donationToGivethPrice = price && donationToGivethAmount * price;
 
