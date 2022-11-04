@@ -5,6 +5,7 @@ import {
 	GLink,
 	neutralColors,
 	Overline,
+	P,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { useAppSelector } from '@/features/hooks';
@@ -15,9 +16,13 @@ import { INotification } from '@/features/notification/notification.types';
 
 interface INotificationMenuProps {
 	notifications: INotification[] | [];
+	markOneNotificationRead: (notificationId: number) => void;
 }
 
-const NotificationMenu: FC<INotificationMenuProps> = ({ notifications }) => {
+const NotificationMenu: FC<INotificationMenuProps> = ({
+	notifications,
+	markOneNotificationRead,
+}) => {
 	const [isMounted, setIsMounted] = useState(false);
 	const theme = useAppSelector(state => state.general.theme);
 
@@ -32,13 +37,18 @@ const NotificationMenu: FC<INotificationMenuProps> = ({ notifications }) => {
 			</NotificationsTitle>
 			<br />
 			<br />
-			{notifications.map(notification => (
-				<NotificationBox
-					key={notification.id}
-					short={true}
-					notification={notification}
-				/>
-			))}
+			{notifications?.length > 0 ? (
+				notifications.map(notification => (
+					<NotificationBox
+						key={notification.id}
+						short={true}
+						notification={notification}
+						markOneNotificationRead={markOneNotificationRead}
+					/>
+				))
+			) : (
+				<P>You have no notification</P>
+			)}
 			<br />
 			<Link href={Routes.Notifications} passHref>
 				<AllNotificationsLink color={brandColors.pinky[500]}>

@@ -61,8 +61,8 @@ import { slugToProjectView } from '@/lib/routeCreators';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import NotificationMenu from '../notification/NotificationMenu';
 import useDetectDevice from '@/hooks/useDetectDevice';
-import { INotification } from '@/features/notification/notification.types';
 import { fetchNotificationsData } from '@/features/notification/notification.services';
+import { useNotification } from '@/hooks/useNotification';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -77,7 +77,8 @@ const Header: FC<IHeader> = () => {
 	const [showHeader, setShowHeader] = useState(true);
 	const [isGIVeconomyRoute, setIsGIVeconomyRoute] = useState(false);
 	const [showBackBtn, setShowBackBtn] = useState(false);
-	const [notifications, setNotifications] = useState<INotification[]>([]);
+	const { notifications, setNotifications, markOneNotificationRead } =
+		useNotification();
 
 	const { chainId, active, account, library } = useWeb3React();
 	const sdh = new SubgraphDataHelper(
@@ -311,6 +312,9 @@ const Header: FC<IHeader> = () => {
 								{showNotifications && (
 									<NotificationMenu
 										notifications={notifications}
+										markOneNotificationRead={
+											markOneNotificationRead
+										}
 									/>
 								)}
 							</MenuAndButtonContainer>
