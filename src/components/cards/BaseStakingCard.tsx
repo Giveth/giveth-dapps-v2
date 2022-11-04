@@ -5,7 +5,7 @@ import {
 	IconHelp,
 	IconSpark,
 	Caption,
-	IconAlertCricle,
+	IconAlertCircle32,
 	IconInfo24,
 } from '@giveth/ui-design-system';
 import { constants } from 'ethers';
@@ -291,7 +291,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 			>
 				{poolNetwork !== chainId && (
 					<WrongNetworkContainer>
-						<IconAlertCricle size={32} />
+						<IconAlertCircle32 />
 						<Caption>
 							You are currently connected to{' '}
 							{chainName(chainId || 0)} switch to{' '}

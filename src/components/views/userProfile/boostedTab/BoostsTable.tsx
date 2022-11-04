@@ -3,7 +3,7 @@ import {
 	brandColors,
 	Button,
 	H5,
-	IconAlertCricle,
+	IconAlertCircle16,
 	IconLock16,
 	IconTrash,
 	IconUnlock16,
@@ -370,11 +370,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 												}}
 											>
 												<IconWithTooltip
-													icon={
-														<IconAlertCricle
-															size={16}
-														/>
-													}
+													icon={<IconAlertCircle16 />}
 													direction='top'
 													align='left'
 												>

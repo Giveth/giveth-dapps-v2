@@ -1,10 +1,10 @@
 import {
 	brandColors,
 	Caption,
-	IconAlertCricle,
 	IconCheckmarkCircle,
 	semanticColors,
 	ButtonText,
+	IconAlertCircle16,
 } from '@giveth/ui-design-system';
 import toast, { ToastPosition } from 'react-hot-toast';
 import styled from 'styled-components';
@@ -38,19 +38,19 @@ export interface IToast {
 const toastIcon = (type: ToastType) => {
 	switch (type) {
 		case ToastType.INFO_PRIMARY:
-			return <IconAlertCricle size={16} />;
+			return <IconAlertCircle16 />;
 		case ToastType.INFO_SECONDARY:
-			return <IconAlertCricle size={16} />;
+			return <IconAlertCircle16 />;
 		case ToastType.SUCCESS:
 			return <IconCheckmarkCircle size={16} />;
 		case ToastType.HINT:
-			return <IconAlertCricle size={16} />;
+			return <IconAlertCircle16 />;
 		case ToastType.WARNING:
-			return <IconAlertCricle size={16} />;
+			return <IconAlertCircle16 />;
 		case ToastType.DANGER:
-			return <IconAlertCricle size={16} />;
+			return <IconAlertCircle16 />;
 		default:
-			return <IconAlertCricle size={16} />;
+			return <IconAlertCircle16 />;
 	}
 };
 
