@@ -10,8 +10,6 @@ import { homeMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 
-const projectsToFetch = 12;
-
 interface IHomeRoute {
 	projects: IProject[];
 	totalCount: number;
@@ -19,7 +17,7 @@ interface IHomeRoute {
 
 const fetchProjects = async (userId: string | undefined = undefined) => {
 	const variables: any = {
-		limit: projectsToFetch,
+		limit: 12,
 		sortingBy: ESortbyAllProjects.GIVPOWER,
 	};
 
