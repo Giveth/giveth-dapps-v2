@@ -259,7 +259,10 @@ const BoostsTable: FC<IBoostsTable> = ({
 				<TableHeader></TableHeader>
 				{editBoosts?.map(boost => {
 					return (
-						<BoostsRowWrapper key={boost.project.id}>
+						<BoostsRowWrapper
+							key={boost.project.id}
+							hasError={!boost.project.verified}
+						>
 							<BoostsTableCell bold>
 								<Link
 									href={slugToProjectView(boost.project.slug)}
@@ -413,7 +416,12 @@ const BoostsTableCell = styled(TableCell)<{ bold?: boolean }>`
 	line-height: unset;
 `;
 
-const BoostsRowWrapper = styled(RowWrapper)`
+interface IBoostsRowWrapper {
+	hasError?: boolean;
+}
+
+const BoostsRowWrapper = styled(RowWrapper)<IBoostsRowWrapper>`
+	color: ${props => (props.hasError ? semanticColors.punch[500] : '')};
 	&:hover > div {
 		background-color: ${neutralColors.gray[300]};
 		color: ${brandColors.pinky[500]};
