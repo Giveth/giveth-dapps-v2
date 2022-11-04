@@ -14,6 +14,7 @@ export const SAVE_POWER_BOOSTING = gql`
 				id
 				title
 				slug
+				verified
 			}
 			percentage
 		}
@@ -37,6 +38,7 @@ export const SAVE_MULTIPLE_POWER_BOOSTING = gql`
 				id
 				title
 				slug
+				verified
 			}
 			percentage
 		}
@@ -68,6 +70,7 @@ export const FETCH_POWER_BOOSTING_INFO = gql`
 					id
 					title
 					slug
+					verified
 				}
 				percentage
 			}
