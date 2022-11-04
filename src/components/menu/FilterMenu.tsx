@@ -99,6 +99,7 @@ FilterMenu.displayName = 'FilterMenu';
 const projectFeatures = [
 	{ label: 'Accept GIV token', value: 'AcceptGiv' },
 	{ label: 'Verified', value: 'Verified' },
+	{ label: 'Boosted with GIVpower', value: 'BoostedWithGivPower' },
 	{ label: 'From GivingBlock', value: 'GivingBlock' },
 	{ label: 'Accept Funds on Gnosis', value: 'AcceptFundOnGnosis' },
 ];
