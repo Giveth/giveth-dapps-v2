@@ -3,6 +3,7 @@ import {
 	brandColors,
 	Button,
 	H5,
+	IconAlertCricle,
 	IconLock16,
 	IconTrash,
 	IconUnlock16,
@@ -10,6 +11,7 @@ import {
 	neutralColors,
 	OutlineButton,
 	semanticColors,
+	Subline,
 } from '@giveth/ui-design-system';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
@@ -32,6 +34,7 @@ import { InputSuffix } from '@/components/styled-components/Input';
 import { DeletePowerBoostModal } from '@/components/modals/Boost/DeletePowerBoostModal';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { ApprovePowerBoostModal } from '@/components/modals/Boost/ApprovePowerBoostModal';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
 
 interface IBoostsTable {
 	boosts: IPowerBoosting[];
@@ -359,6 +362,33 @@ const BoostsTable: FC<IBoostsTable> = ({
 										>
 											<IconTrash size={24} />
 										</IconWrapper>
+										{!boost.project.verified && (
+											<IconWrapper
+												onClick={() => {
+													setSelectedBoost(boost.id);
+													setShowDeleteModal(true);
+												}}
+											>
+												<IconWithTooltip
+													icon={
+														<IconAlertCricle
+															size={16}
+														/>
+													}
+													direction='top'
+													align='left'
+												>
+													<UnverifiedTooltip>
+														This project has lost
+														its verified status and
+														therefore is no longer
+														eligible for GIVpower.
+														We recommend removing
+														this boost.
+													</UnverifiedTooltip>
+												</IconWithTooltip>
+											</IconWrapper>
+										)}
 									</>
 								)}
 							</BoostsTableCell>
@@ -466,6 +496,11 @@ const ExceedError = styled(B)`
 const Percentage = styled(InputSuffix)`
 	color: ${neutralColors.gray[800]};
 	user-select: none;
+`;
+
+const UnverifiedTooltip = styled(Subline)`
+	color: ${neutralColors.gray[100]};
+	width: 260px;
 `;
 
 export default BoostsTable;
