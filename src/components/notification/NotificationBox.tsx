@@ -5,7 +5,7 @@ import {
 	IconHeartOutline24,
 	neutralColors,
 } from '@giveth/ui-design-system';
-import { FC, useState, useEffect, useRef } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import { Flex } from '../styled-components/Flex';
 import { convertRawDataToHTML } from '@/helpers/html';
 import { durationToString } from '@/lib/helpers';
@@ -15,22 +15,25 @@ import { setNotificationRead } from '@/features/notification/notification.servic
 interface INotificationBox {
 	notification: INotification;
 	short?: boolean;
+	markOneNotificationRead: (notificationId: number) => void;
 }
 
 export const NotificationBox: FC<INotificationBox> = ({
 	notification,
 	short = false,
+	markOneNotificationRead,
 }) => {
-	const [isRead, setIsRead] = useState(notification.isRead);
+	// const [isRead, setIsRead] = useState(notification.isRead);
 	const NotifRef = useRef(null);
 
 	useEffect(() => {
-		if (isRead) return;
+		if (notification.isRead) return;
 		const read = (entries: IntersectionObserverEntry[]) => {
 			const [entry] = entries;
 			if (entry.isIntersecting) {
 				setNotificationRead(notification.id).then(
-					(notif: INotification) => setIsRead(notif.isRead),
+					(notif: INotification) =>
+						markOneNotificationRead(notification.id),
 				);
 			}
 		};
@@ -44,7 +47,7 @@ export const NotificationBox: FC<INotificationBox> = ({
 
 	return (
 		<NotificationBoxContainer gap='16px' isShort={short} ref={NotifRef}>
-			{!isRead && <UnreadCircle isShort={short} />}
+			{!notification.isRead && <UnreadCircle isShort={short} />}
 			{!short && (
 				<IconContainer>
 					<IconHeartOutline24 />
