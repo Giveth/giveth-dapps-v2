@@ -34,12 +34,22 @@ export interface INotificationsState {
 
 interface INotificationSettingType {
 	category: 'general' | 'givEconomy' | 'projectRelated' | 'discussion';
+	categoryGroup:
+		| 'donations'
+		| 'stakes'
+		| 'yourBoostStatus'
+		| 'rewards'
+		| 'givPowerAllocations'
+		| 'projectBoostStatus'
+		| 'projectStatus'
+		| 'likedByYouProjects';
 	title: string;
 	name: string;
 	id: number;
 	description: string;
 	content: string;
 }
+
 export interface INotificationSetting {
 	notificationTypeId: number;
 	id: number;
