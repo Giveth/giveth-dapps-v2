@@ -19,12 +19,12 @@ import {
 } from '@/components/styled-components/Tabs';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowFooter } from '@/features/general/general.slice';
-import { INotification } from '@/features/notification/notification.types';
 import { NotificationBox } from '@/components/notification/NotificationBox';
 import { Flex } from '@/components/styled-components/Flex';
 import InternalLink from '@/components/InternalLink';
 import Routes from '@/lib/constants/Routes';
 import { fetchNotificationsData } from '@/features/notification/notification.services';
+import { useNotification } from '@/hooks/useNotification';
 
 enum ENotificationTabs {
 	ALL,
@@ -35,7 +35,8 @@ enum ENotificationTabs {
 
 function NotificationView() {
 	const [tab, setTab] = useState(ENotificationTabs.ALL);
-	const [notifs, setNotifs] = useState<INotification[]>([]);
+	const { notifications, setNotifications, markOneNotificationRead } =
+		useNotification();
 	const [loading, setLoading] = useState(false);
 
 	const {
@@ -63,7 +64,7 @@ function NotificationView() {
 		}
 		fetchNotificationsData(query, { signal })
 			.then(res => {
-				if (res?.notifications) setNotifs(res.notifications);
+				if (res?.notifications) setNotifications(res.notifications);
 			})
 			.finally(() => {
 				setLoading(false);
@@ -142,10 +143,11 @@ function NotificationView() {
 				{loading ? (
 					<div>Loading...</div>
 				) : (
-					notifs.map(notification => (
+					notifications.map(notification => (
 						<NotificationBox
 							key={notification.id}
 							notification={notification}
+							markOneNotificationRead={markOneNotificationRead}
 						/>
 					))
 				)}
