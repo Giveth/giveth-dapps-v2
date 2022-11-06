@@ -9,7 +9,6 @@ import {
 	IconDonation16,
 	neutralColors,
 	P,
-	IconSort,
 	IconRocketInSpace16,
 } from '@giveth/ui-design-system';
 import Select, {
@@ -38,9 +37,9 @@ const DropdownIndicator: ComponentType<DropdownIndicatorProps> = props => {
 
 const sortByOptions = [
 	{
-		label: 'Default',
-		value: ESortbyAllProjects.QUALITYSCORE,
-		icon: <IconSort size={16} color={brandColors.deep[900]} />,
+		label: 'Rank',
+		value: ESortbyAllProjects.GIVPOWER,
+		icon: <IconRocketInSpace16 color={brandColors.deep[900]} />,
 	},
 	{
 		label: 'Newest',
@@ -56,11 +55,6 @@ const sortByOptions = [
 		label: 'Most liked',
 		value: ESortbyAllProjects.MOSTLIKED,
 		icon: <IconHeartOutline16 color={brandColors.deep[900]} />,
-	},
-	{
-		label: 'Boosted',
-		value: ESortbyAllProjects.GIVPOWER,
-		icon: <IconRocketInSpace16 color={brandColors.deep[900]} />,
 	},
 	{
 		label: 'Most funded',
@@ -91,11 +85,7 @@ const ProjectsSortSelect = () => {
 						sortingBy: e.value,
 					})
 				}
-				defaultValue={{
-					label: 'Default',
-					value: ESortbyAllProjects.QUALITYSCORE,
-					icon: <IconSort size={16} color={brandColors.deep[900]} />,
-				}}
+				defaultValue={sortByOptions[0]}
 				options={sortByOptions}
 				styles={selectStyles}
 				id='sorting'

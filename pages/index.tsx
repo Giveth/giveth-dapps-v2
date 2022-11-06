@@ -2,15 +2,13 @@ import { useEffect, useState } from 'react';
 
 import HomeIndex from '@/components/views/homepage/HomeIndex';
 import { client } from '@/apollo/apolloClient';
-import { FETCH_HOME_PROJECTS } from '@/apollo/gql/gqlProjects';
-import { EDirection, ESortby } from '@/apollo/types/gqlEnums';
+import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
+import { ESortbyAllProjects } from '@/apollo/types/gqlEnums';
 import { IProject } from '@/apollo/types/types';
 import { useAppSelector } from '@/features/hooks';
 import { homeMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
-
-const projectsToFetch = 12;
 
 interface IHomeRoute {
 	projects: IProject[];
@@ -19,23 +17,20 @@ interface IHomeRoute {
 
 const fetchProjects = async (userId: string | undefined = undefined) => {
 	const variables: any = {
-		limit: projectsToFetch,
-		orderBy: {
-			field: ESortby.GIVPOWER,
-			direction: EDirection.DESC,
-		},
+		limit: 12,
+		sortingBy: ESortbyAllProjects.GIVPOWER,
 	};
 
 	if (userId) {
 		variables.connectedWalletUserId = Number(userId);
 	}
 	const { data } = await client.query({
-		query: FETCH_HOME_PROJECTS,
+		query: FETCH_ALL_PROJECTS,
 		variables,
 		fetchPolicy: 'network-only',
 	});
 
-	return data.projects;
+	return data.allProjects;
 };
 
 const HomeRoute = (props: IHomeRoute) => {
@@ -44,6 +39,7 @@ const HomeRoute = (props: IHomeRoute) => {
 	const [totalCount, setTotalCount] = useState(props.totalCount);
 
 	useEffect(() => {
+		if (!user) return;
 		fetchProjects(user?.id).then(({ projects, totalCount }) => {
 			setProjects(projects);
 			setTotalCount(totalCount);

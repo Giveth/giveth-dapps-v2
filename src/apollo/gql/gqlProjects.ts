@@ -1,51 +1,5 @@
 import { gql } from '@apollo/client';
 
-export const FETCH_HOME_PROJECTS = gql`
-	query FetchAllProjects(
-		$limit: Int
-		$orderBy: OrderBy
-		$connectedWalletUserId: Int
-	) {
-		projects(
-			take: $limit
-			orderBy: $orderBy
-			connectedWalletUserId: $connectedWalletUserId
-		) {
-			projects {
-				id
-				title
-				image
-				slug
-				description
-				verified
-				totalDonations
-				traceCampaignId
-				reaction {
-					id
-					userId
-				}
-				totalReactions
-				adminUser {
-					name
-					walletAddress
-				}
-				updatedAt
-				organization {
-					name
-					label
-					supportCustomTokens
-				}
-				projectPower {
-					powerRank
-					totalPower
-					round
-				}
-			}
-			totalCount
-		}
-	}
-`;
-
 export const FETCH_ALL_PROJECTS = gql`
 	query FetchAllProjects(
 		$limit: Int
