@@ -17,7 +17,7 @@ import { fetchNotificationsData } from '@/features/notification/notification.ser
 const NotificationMenu = () => {
 	const [isMounted, setIsMounted] = useState(false);
 	const [notifications, setNotifications] = useState<INotification[]>([]);
-
+	const [isLoading, setIsLoading] = useState(false);
 	const { isSignedIn } = useAppSelector(state => state.user);
 	const theme = useAppSelector(state => state.general.theme);
 	const { lastNotificationId } = useAppSelector(
@@ -31,10 +31,13 @@ const NotificationMenu = () => {
 		const fetchNotificationsAndSetState = async () => {
 			if (!isSignedIn) return;
 			try {
+				setIsLoading(true);
 				const res = await fetchNotificationsData();
 				if (res?.notifications) setNotifications(res.notifications);
 			} catch {
 				console.log('Error fetching notifications');
+			} finally {
+				setIsLoading(false);
 			}
 		};
 
@@ -58,18 +61,22 @@ const NotificationMenu = () => {
 			</NotificationsTitle>
 			<br />
 			<br />
-			{notifications
-				.map(notification => (
-					<>
-						<NotificationBox
-							key={notification.id}
-							short={true}
-							notification={notification}
-						/>
-						<br />
-					</>
-				))
-				.slice(0, 5)}
+			{isLoading ? (
+				<div>Please Wait ....</div>
+			) : (
+				notifications
+					.map(notification => (
+						<>
+							<NotificationBox
+								key={notification.id}
+								short={true}
+								notification={notification}
+							/>
+							<br />
+						</>
+					))
+					.slice(0, 5)
+			)}
 			<br />
 			<Link href={Routes.Notifications} passHref>
 				<AllNotificationsLink color={brandColors.pinky[500]}>
