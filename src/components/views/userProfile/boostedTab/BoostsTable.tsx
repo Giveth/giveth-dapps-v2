@@ -3,6 +3,7 @@ import {
 	brandColors,
 	Button,
 	H5,
+	IconAlertCircle16,
 	IconLock16,
 	IconTrash,
 	IconUnlock16,
@@ -10,6 +11,7 @@ import {
 	neutralColors,
 	OutlineButton,
 	semanticColors,
+	Subline,
 } from '@giveth/ui-design-system';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
@@ -32,6 +34,7 @@ import { InputSuffix } from '@/components/styled-components/Input';
 import { DeletePowerBoostModal } from '@/components/modals/Boost/DeletePowerBoostModal';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { ApprovePowerBoostModal } from '@/components/modals/Boost/ApprovePowerBoostModal';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
 
 interface IBoostsTable {
 	boosts: IPowerBoosting[];
@@ -259,7 +262,10 @@ const BoostsTable: FC<IBoostsTable> = ({
 				<TableHeader></TableHeader>
 				{editBoosts?.map(boost => {
 					return (
-						<BoostsRowWrapper key={boost.project.id}>
+						<BoostsRowWrapper
+							key={boost.project.id}
+							hasError={!boost.project.verified}
+						>
 							<BoostsTableCell bold>
 								<Link
 									href={slugToProjectView(boost.project.slug)}
@@ -356,6 +362,29 @@ const BoostsTable: FC<IBoostsTable> = ({
 										>
 											<IconTrash size={24} />
 										</IconWrapper>
+										{!boost.project.verified && (
+											<IconWrapper
+												onClick={() => {
+													setSelectedBoost(boost.id);
+													setShowDeleteModal(true);
+												}}
+											>
+												<IconWithTooltip
+													icon={<IconAlertCircle16 />}
+													direction='top'
+													align='left'
+												>
+													<UnverifiedTooltip>
+														This project has lost
+														its verified status and
+														therefore is no longer
+														eligible for GIVpower.
+														We recommend removing
+														this boost.
+													</UnverifiedTooltip>
+												</IconWithTooltip>
+											</IconWrapper>
+										)}
 									</>
 								)}
 							</BoostsTableCell>
@@ -413,7 +442,12 @@ const BoostsTableCell = styled(TableCell)<{ bold?: boolean }>`
 	line-height: unset;
 `;
 
-const BoostsRowWrapper = styled(RowWrapper)`
+interface IBoostsRowWrapper {
+	hasError?: boolean;
+}
+
+const BoostsRowWrapper = styled(RowWrapper)<IBoostsRowWrapper>`
+	color: ${props => (props.hasError ? semanticColors.punch[500] : '')};
 	&:hover > div {
 		background-color: ${neutralColors.gray[300]};
 		color: ${brandColors.pinky[500]};
@@ -458,6 +492,11 @@ const ExceedError = styled(B)`
 const Percentage = styled(InputSuffix)`
 	color: ${neutralColors.gray[800]};
 	user-select: none;
+`;
+
+const UnverifiedTooltip = styled(Subline)`
+	color: ${neutralColors.gray[100]};
+	width: 260px;
 `;
 
 export default BoostsTable;
