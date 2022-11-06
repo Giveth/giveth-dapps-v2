@@ -12,18 +12,43 @@ import { MenuContainer } from '../menu/Menu.sc';
 import { NotificationBox } from './NotificationBox';
 import Routes from '@/lib/constants/Routes';
 import { INotification } from '@/features/notification/notification.types';
+import { fetchNotificationsData } from '@/features/notification/notification.services';
 
-interface INotificationMenuProps {
-	notifications: INotification[] | [];
-}
-
-const NotificationMenu = ({ notifications }: INotificationMenuProps) => {
+const NotificationMenu = () => {
 	const [isMounted, setIsMounted] = useState(false);
+	const [notifications, setNotifications] = useState<INotification[]>([]);
+
+	const { isSignedIn } = useAppSelector(state => state.user);
 	const theme = useAppSelector(state => state.general.theme);
+	const { lastNotificationId } = useAppSelector(
+		state => state.notification.notificationInfo,
+	);
+
+	const lastFetchedNotificationId = notifications[0]?.id ?? undefined;
 
 	useEffect(() => {
 		setIsMounted(true);
+		const fetchNotificationsAndSetState = async () => {
+			if (!isSignedIn) return;
+			try {
+				const res = await fetchNotificationsData();
+				if (res?.notifications) setNotifications(res.notifications);
+			} catch {
+				console.log('Error fetching notifications');
+			}
+		};
+
+		if (
+			typeof lastFetchedNotificationId === 'number' &&
+			lastNotificationId > lastFetchedNotificationId
+		) {
+			fetchNotificationsAndSetState();
+			return;
+		}
+
+		fetchNotificationsAndSetState();
 	}, []);
+
 	console.log('Notifications', notifications);
 
 	return (
