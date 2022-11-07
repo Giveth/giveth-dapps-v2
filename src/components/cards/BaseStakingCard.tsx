@@ -262,7 +262,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		}
 	}, [earned, tokenDistroHelper]);
 	useEffect(() => {
-		if (!regenStreamConfig) setInfo(poolNetwork, type, earned);
+		if (active && !regenStreamConfig) setInfo(poolNetwork, type, earned);
 	}, [poolNetwork, earned, type, regenStreamConfig, setInfo]);
 
 	const rewardTokenSymbol = regenStreamConfig?.rewardTokenSymbol || 'GIV';
