@@ -585,9 +585,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							{isGIVpower && (
 								<ClaimButton
 									disabled={
-										!isGIVpower ||
 										!active ||
-										earned.isZero() ||
 										availableStakedToken.lte(constants.Zero)
 									}
 									onClick={() => setShowLockModal(true)}
