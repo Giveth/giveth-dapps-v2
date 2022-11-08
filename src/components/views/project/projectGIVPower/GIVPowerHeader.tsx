@@ -1,17 +1,17 @@
 import styled from 'styled-components';
-import { H2, H5, Subline } from '@giveth/ui-design-system';
+import { H5, neutralColors } from '@giveth/ui-design-system';
 import { FC } from 'react';
-import { Shadow } from '@/components/styled-components/Shadow';
-import { Flex } from '@/components/styled-components/Flex';
-import { Col, Row } from '@/components/Grid';
-import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { IProjectPower } from '@/apollo/types/types';
 
 interface IGIVPowerHeader {
 	projectPower?: IProjectPower;
+	projectFuturePower?: IProjectPower;
 }
 
-const GIVPowerHeader: FC<IGIVPowerHeader> = ({ projectPower }) => {
+const GIVPowerHeader: FC<IGIVPowerHeader> = ({
+	projectPower,
+	projectFuturePower,
+}) => {
 	const handlePowerRank = () => {
 		if (projectPower?.totalPower === 0) {
 			return '--';
@@ -24,40 +24,17 @@ const GIVPowerHeader: FC<IGIVPowerHeader> = ({ projectPower }) => {
 
 	return (
 		<Container>
-			<ColStyled xs={8} sm={7}>
-				<Subline>TOTAL GIVPOWER</Subline>
-				<Flex gap='4px' alignItems='flex-end'>
-					<H2 weight={700}>
-						{projectPower?.totalPower?.toFixed(2) || 0}
-					</H2>
-					<H5>GIV</H5>
-				</Flex>
-			</ColStyled>
-			<ColStyled xs={4} sm={5}>
-				<Subline>PROJECT RANK</Subline>
-				<H2 weight={700}>#{handlePowerRank()}</H2>
-			</ColStyled>
+			<H5 weight={700}>
+				Boost this project with GIVpower to improve its rank!
+			</H5>
 		</Container>
 	);
 };
 
-const ColStyled = styled(Col)`
-	@media (max-width: ${deviceSize.mobileL}px) {
-		width: 100%;
-	}
-`;
-
-const Container = styled(Row)`
-	margin-top: 57px;
-	padding: 24px;
-	box-shadow: ${Shadow.Neutral[400]};
-	border-radius: 12px;
-	max-width: 635px;
-	flex-direction: column;
-	gap: 16px 0;
-	${mediaQueries.mobileL} {
-		flex-direction: row;
-	}
+const Container = styled.div`
+	padding: 16px 24px;
+	border-radius: 8px;
+	background-color: ${neutralColors.gray[100]};
 `;
 
 export default GIVPowerHeader;

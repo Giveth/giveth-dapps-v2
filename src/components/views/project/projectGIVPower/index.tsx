@@ -66,7 +66,10 @@ const ProjectGIVPowerIndex = ({
 
 	return (
 		<>
-			<GIVPowerHeader projectPower={projectPower} />
+			<GIVPowerHeader
+				projectPower={projectPower}
+				projectFuturePower={projectFuturePower}
+			/>
 			{hasGivPower ? (
 				<>
 					<GIVPowerTable
