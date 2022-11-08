@@ -1,10 +1,10 @@
 import {
 	brandColors,
 	Caption,
-	IconAlertCricle,
+	IconAlertCircle,
 	IconAlertTriangleFilled,
 	IconCheckCircleFilled,
-	IconHelp,
+	IconHelpFilled,
 	semanticColors,
 } from '@giveth/ui-design-system';
 import React, { FC } from 'react';
@@ -47,11 +47,11 @@ const InlineToast: FC<IProps> = props => {
 	} else if (type === EToastType.Info) {
 		colorType.color = semanticColors.blueSky[700];
 		colorType.backgroundColor = semanticColors.blueSky[100];
-		colorType.icon = <IconAlertCricle size={19} />;
+		colorType.icon = <IconAlertCircle size={19} />;
 	} else if (type === EToastType.Hint) {
 		colorType.color = brandColors.giv[300];
 		colorType.backgroundColor = brandColors.giv[50];
-		colorType.icon = <IconHelp />;
+		colorType.icon = <IconHelpFilled />;
 	} else {
 		// Success
 		colorType.color = semanticColors.jade[700];
