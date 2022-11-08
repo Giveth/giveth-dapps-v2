@@ -8,7 +8,7 @@ import {
 	Button,
 	GLink,
 	IconGiveth,
-	IconNotification16,
+	IconNotificationFilled16,
 	neutralColors,
 	Overline,
 } from '@giveth/ui-design-system';
@@ -299,7 +299,7 @@ const Header: FC<IHeader> = () => {
 												</Overline>
 											</NotificationsButtonCircle>
 										)}
-										<IconNotification16
+										<IconNotificationFilled16
 											color={
 												isLight
 													? brandColors.pinky[500]
