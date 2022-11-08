@@ -199,7 +199,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 				<Link href={Routes.MyBoostedProjects} passHref>
 					<BoostedProjectsLink
 						size='medium'
-						label='Go to Boosted Projects'
+						label='Go to My GIVpower'
 					/>
 				</Link>
 				<NotNowButton

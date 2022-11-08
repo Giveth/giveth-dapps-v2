@@ -45,7 +45,7 @@ const BoostedInnerModal: FC<IBoostedModalProps> = ({
 						<CustomButtonLink
 							linkType='texty-primary'
 							size='small'
-							label='see your boosted projects'
+							label='see your GIVpower allocations'
 						/>
 					</Link>
 					<CustomButton

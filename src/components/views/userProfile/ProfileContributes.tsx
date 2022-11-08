@@ -76,7 +76,7 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 					<Link href={Routes.MyBoostedProjects}>
 						<a>
 							<ProfileTab active={tab === EProfile.BOOSTED}>
-								Boosted Projects
+								My GIVpower
 								{user?.boostedProjectsCount != 0 && (
 									<Count active={tab === EProfile.PROJECTS}>
 										{user?.boostedProjectsCount}
