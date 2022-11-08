@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react';
+import { useIntl } from 'react-intl';
 import { useFormContext } from 'react-hook-form';
 import Input, { InputSize } from '@/components/Input';
 import { requiredOptions } from '@/lib/constants/regex';
@@ -15,6 +16,7 @@ const NameInput: FC<IProps> = ({ preTitle }) => {
 		formState: { errors: formErrors },
 		watch,
 	} = useFormContext();
+	const { formatMessage } = useIntl();
 
 	const [isTitleValidating, setIsTitleValidating] = useState(false);
 
@@ -33,8 +35,8 @@ const NameInput: FC<IProps> = ({ preTitle }) => {
 	return (
 		<>
 			<Input
-				label='Project name'
-				placeholder='My First Project'
+				label={formatMessage({ id: 'label.project_name' })}
+				placeholder={formatMessage({ id: 'label.my_first_project' })}
 				maxLength={55}
 				size={InputSize.LARGE}
 				value={watchName}
