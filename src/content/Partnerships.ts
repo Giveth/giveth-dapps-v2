@@ -83,6 +83,7 @@ export const PartnershipArray: IPartner[] = [
 		description: 'page.partnerships.datafund',
 		link: 'https://datafund.io',
 	},
+
 	{
 		icon: DoinGud,
 		title: 'DoinGud',
