@@ -3,7 +3,7 @@ import {
 	brandColors,
 	Caption,
 	IconGIVBack,
-	IconHelp,
+	IconHelpFilled16,
 	Subline,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
@@ -27,7 +27,7 @@ const GIVbackToast = () => {
 						{formatMessage({ id: 'label.givback_eligible' })}
 					</Caption>
 					<IconWithTooltip
-						icon={<IconHelp size={16} />}
+						icon={<IconHelpFilled16 />}
 						direction={isTablet ? 'left' : 'top'}
 					>
 						<Popup>

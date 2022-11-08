@@ -5,8 +5,8 @@ import {
 	GLink,
 	brandColors,
 	Caption,
-	IconHelp,
 	neutralColors,
+	IconHelpFilled,
 } from '@giveth/ui-design-system';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -143,7 +143,7 @@ export const RewardMenu = ({
 								setShowWhatIsGIVstreamModal(true);
 							}}
 						>
-							<IconHelp color='currentColor' />
+							<IconHelpFilled />
 						</IconHelpWraper>
 					</FlowrateRow>
 				</FlowrateBox>

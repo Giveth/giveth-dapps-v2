@@ -5,8 +5,8 @@ import {
 	IconShare,
 	brandColors,
 	IconHeartOutline,
-	IconHeart,
 	ButtonText,
+	IconHeartFilled,
 } from '@giveth/ui-design-system';
 import { Shadow } from '../styled-components/Shadow';
 import { FlexCenter } from '@/components/styled-components/Flex';
@@ -26,7 +26,7 @@ const ShareLikeBadge = (props: {
 	const icon = isShare ? (
 		<IconShare color={neutralColors.gray[500]} />
 	) : active ? (
-		<IconHeart color={brandColors.pinky[500]} />
+		<IconHeartFilled color={brandColors.pinky[500]} />
 	) : (
 		<IconHeartOutline color={neutralColors.gray[500]} />
 	);

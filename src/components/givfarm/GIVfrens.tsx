@@ -6,9 +6,11 @@ import { Col } from '../Grid';
 import { RegenFarm } from '../RegenFarm';
 import { Subtitle, GIVfrensLink } from './GIVfrens.sc';
 
-interface IGIVfrensProps {}
+interface IGIVfrensProps {
+	showArchivedPools: boolean;
+}
 
-export const GIVfrens: FC<IGIVfrensProps> = () => {
+export const GIVfrens: FC<IGIVfrensProps> = ({ showArchivedPools }) => {
 	const { chainId } = useWeb3React();
 	const regenFarms =
 		chainId === config.XDAI_NETWORK_NUMBER
@@ -34,7 +36,11 @@ export const GIVfrens: FC<IGIVfrensProps> = () => {
 				</Subtitle>
 			</Col>
 			{regenFarms.map((regenFarm, index) => (
-				<RegenFarm key={index} regenFarm={regenFarm} />
+				<RegenFarm
+					key={index}
+					regenFarm={regenFarm}
+					showArchivedPools={showArchivedPools}
+				/>
 			))}
 		</>
 	);

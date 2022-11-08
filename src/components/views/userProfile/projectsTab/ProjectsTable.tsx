@@ -1,6 +1,6 @@
 import {
 	brandColors,
-	IconHeart,
+	IconHeartFilled,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import { FC } from 'react';
