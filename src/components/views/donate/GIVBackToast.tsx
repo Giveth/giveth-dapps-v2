@@ -1,10 +1,8 @@
-import { brandColors } from '@giveth/ui-design-system';
 import React from 'react';
 import styled from 'styled-components';
-
-import FixedToast from '@/components/toasts/FixedToast';
 import links from '@/lib/constants/links';
 import ExternalLink from '@/components/ExternalLink';
+import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 
 const GIVBackToast = (props: {
 	projectEligible?: boolean;
@@ -12,21 +10,17 @@ const GIVBackToast = (props: {
 	userEligible?: boolean;
 }) => {
 	const { projectEligible, tokenEligible, userEligible } = props;
-	let message,
-		color = brandColors.mustard[700],
-		boldColor = brandColors.mustard[800],
-		backgroundColor = brandColors.mustard[200];
 
+	let message: JSX.Element | string,
+		type = EToastType.Warning;
 	if (!userEligible) {
 		message =
 			'Your currently connected wallet address is associated with a Giveth project, therefore donations made from this address are not eligible for GIVbacks.';
 	} else if (!projectEligible) {
 		message = 'This project is not eligible for GIVbacks.';
 	} else if (tokenEligible) {
+		type = EToastType.Hint;
 		message = 'This token is eligible for GIVbacks.';
-		color = brandColors.giv[300];
-		boldColor = brandColors.giv[600];
-		backgroundColor = brandColors.giv[100];
 	} else {
 		message = (
 			<>
@@ -44,12 +38,11 @@ const GIVBackToast = (props: {
 
 	return (
 		<ToastContainer>
-			<FixedToast
+			<InlineToast
+				noIcon
+				type={type}
 				message={message}
-				color={color}
-				boldColor={boldColor}
-				backgroundColor={backgroundColor}
-				href={links.GIVBACK_DOC}
+				link={links.GIVBACK_DOC}
 			/>
 		</ToastContainer>
 	);

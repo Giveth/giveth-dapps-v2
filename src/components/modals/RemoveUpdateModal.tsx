@@ -1,16 +1,10 @@
 import { FC } from 'react';
 import styled from 'styled-components';
-import {
-	Button,
-	Lead,
-	brandColors,
-	IconAlertTriangle,
-	IconTrash,
-} from '@giveth/ui-design-system';
+import { Button, IconTrash, Lead } from '@giveth/ui-design-system';
 import { Modal } from '@/components/modals/Modal';
-import FixedToast from '@/components/toasts/FixedToast';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 
 interface IProps extends IModal {
 	callback: () => void;
@@ -31,16 +25,9 @@ export const RemoveUpdateModal: FC<IProps> = ({ setShowModal, callback }) => {
 				<Description>
 					Are you sure you want to remove this update?
 				</Description>
-				<FixedToast
-					message={`You can't undo this action`}
-					color={brandColors.mustard[700]}
-					backgroundColor={brandColors.mustard[200]}
-					icon={
-						<IconAlertTriangle
-							size={16}
-							color={brandColors.mustard[700]}
-						/>
-					}
+				<InlineToast
+					message="You can't undo this action"
+					type={EToastType.Warning}
 				/>
 				<OkButton
 					label='YES, REMOVE IT'
@@ -59,7 +46,6 @@ export const RemoveUpdateModal: FC<IProps> = ({ setShowModal, callback }) => {
 
 const Container = styled.div`
 	height: 300px;
-	width: 528px;
 	padding: 19px;
 	text-align: left;
 `;
