@@ -1,7 +1,7 @@
 import { useEffect, useState, MouseEvent } from 'react';
 import {
 	brandColors,
-	IconHeart16,
+	IconHeartFilled16,
 	IconHeartOutline16,
 	IconShare16,
 	neutralColors,
@@ -101,7 +101,7 @@ const ProjectCardLikeAndShareButtons = (
 							<Subline>{totalReactions}</Subline>
 						)}
 						{reaction?.userId && reaction?.userId === user?.id ? (
-							<IconHeart16 color={brandColors.pinky[500]} />
+							<IconHeartFilled16 color={brandColors.pinky[500]} />
 						) : (
 							<IconHeartOutline16 />
 						)}

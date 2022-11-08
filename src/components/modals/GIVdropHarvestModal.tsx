@@ -1,11 +1,11 @@
 import { FC, useState, useEffect } from 'react';
 import {
 	B,
-	IconHelp,
 	brandColors,
 	Caption,
 	IconGIVStream,
 	Lead,
+	IconHelpFilled16,
 } from '@giveth/ui-design-system';
 import { ethers, constants } from 'ethers';
 import { Zero } from '@ethersproject/constants';
@@ -280,8 +280,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 									</Caption>
 									<IconWithTooltip
 										icon={
-											<IconHelp
-												size={16}
+											<IconHelpFilled16
 												color={brandColors.deep[100]}
 											/>
 										}

@@ -6,8 +6,8 @@ import {
 	Title,
 	P,
 	IconGIVStream,
-	IconHelp,
 	Button,
+	IconHelpFilled24,
 } from '@giveth/ui-design-system';
 import React, { FC, MouseEventHandler, useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -110,8 +110,7 @@ export const RewardCard: FC<IRewardCardProps> = ({
 									setShowWhatIsGIVstreamModal(true);
 								}}
 							>
-								<IconHelp
-									size={24}
+								<IconHelpFilled24
 									color={brandColors.deep[200]}
 								/>
 							</IconHelpWraper>
