@@ -56,6 +56,7 @@ export interface IProject {
 	projectVerificationForm?: IProjectVerification;
 	projectPower: IProjectPower;
 	verificationFormStatus?: EVerificationStatus;
+	projectFuturePower: IProjectPower;
 }
 
 export interface IWalletAddress {
