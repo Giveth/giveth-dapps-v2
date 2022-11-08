@@ -186,6 +186,7 @@ export const PartnershipArray: IPartner[] = [
 		description: 'page.partnerships.shapeshiftdao',
 		link: 'https://shapeshift.com/',
 	},
+
 	{
 		icon: Swarm,
 		title: 'Swarm',
