@@ -1,7 +1,7 @@
 import React from 'react';
 import {
 	Caption,
-	IconCheckmarkCircle,
+	IconCheckCircleFilled,
 	semanticColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
@@ -35,7 +35,7 @@ const FixedToast = (props: IFToast) => {
 	if (type === EToastType.SUCCESS) {
 		color = semanticColors.jade[700];
 		backgroundColor = semanticColors.jade[100];
-		icon = <IconCheckmarkCircle color={semanticColors.jade[700]} />;
+		icon = <IconCheckCircleFilled color={semanticColors.jade[700]} />;
 	}
 
 	return (
