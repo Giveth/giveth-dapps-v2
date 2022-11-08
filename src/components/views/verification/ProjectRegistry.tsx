@@ -1,3 +1,4 @@
+import { useIntl } from 'react-intl';
 import { Button, H6, Lead, neutralColors, P } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
@@ -55,6 +56,7 @@ export default function ProjectRegistry() {
 	} = projectRegistry || {};
 	const [countries, setCountries] = useState<IOption[]>([]);
 	const [uploading, setUploading] = useState(false);
+	const { formatMessage } = useIntl();
 
 	const {
 		register,
@@ -96,7 +98,9 @@ export default function ProjectRegistry() {
 			setStep(4);
 		}
 		if (watchIsNonProfit === ERegistryType.NOT_SELECTED) {
-			showToastError('Please select one option');
+			showToastError(
+				formatMessage({ id: 'label.please_select_one_option' }),
+			);
 			return;
 		}
 		if (isObjEmpty(dirtyFields) && isDraft) {
@@ -138,15 +142,19 @@ export default function ProjectRegistry() {
 	return (
 		<form onSubmit={handleSubmit(handleNext)}>
 			<div>
-				<H6 weight={700}>Registration</H6>
+				<H6 weight={700}>
+					{formatMessage({ id: 'label.registration' })}
+				</H6>
 				<RadioSectionContainer>
 					<RadioSectionTitle>
-						Is your project part of a registered non-profit
-						organization?
+						{formatMessage({
+							id: 'label.is_your_project_part_of_a_non_profit',
+						})}
 					</RadioSectionTitle>
 					<RadioSectionSubTitle>
-						Having obtained non-profit status is not a requirement
-						but it is helpful for the verification process
+						{formatMessage({
+							id: 'label.having_obtained_non_profit_stauts_is_not_a_requirement',
+						})}
 					</RadioSectionSubTitle>
 					<br />
 					<Controller
@@ -155,7 +163,7 @@ export default function ProjectRegistry() {
 						render={({ field: { value } }) => (
 							<RadioContainer>
 								<RadioButton
-									title='Yes'
+									title={formatMessage({ id: 'label.yes' })}
 									toggleRadio={() => {
 										setValue(
 											'isNonProfit',
@@ -166,7 +174,7 @@ export default function ProjectRegistry() {
 									isSelected={value === ERegistryType.YES}
 								/>
 								<RadioButton
-									title='No'
+									title={formatMessage({ id: 'label.no' })}
 									toggleRadio={() => {
 										setValue(
 											'isNonProfit',
@@ -184,12 +192,16 @@ export default function ProjectRegistry() {
 				{watchIsNonProfit === ERegistryType.YES && (
 					<div className='fadeIn'>
 						<Lead>
-							What name is your organization registered under?
+							{formatMessage({
+								id: 'page.verification.registration.one',
+							})}
 						</Lead>
 						<br />
 						<InputContainer>
 							<Input
-								placeholder='Project official name'
+								placeholder={formatMessage({
+									id: 'label.project_official_name',
+								})}
 								registerName='organizationName'
 								register={register}
 								registerOptions={
@@ -199,7 +211,12 @@ export default function ProjectRegistry() {
 								error={errors.organizationName}
 							/>
 						</InputContainer>
-						<Lead>In which country are you registered?</Lead>
+						<Lead>
+							{' '}
+							{formatMessage({
+								id: 'page.verification.registration.two',
+							})}
+						</Lead>
 						<br />
 						<Controller
 							control={control}
@@ -208,7 +225,9 @@ export default function ProjectRegistry() {
 								<Select
 									options={countries}
 									styles={selectCustomStyles}
-									placeholder='Choose country'
+									placeholder={formatMessage({
+										id: 'label.choose_country',
+									})}
 									value={countries.find(
 										c => c.value === value?.value,
 									)}
@@ -219,13 +238,17 @@ export default function ProjectRegistry() {
 						/>
 						<br />
 						<Lead>
-							Please provide a link to your country&apos;s
-							government registry where the team can look up and
-							confirm your status.
+							{formatMessage({
+								id: 'page.verification.registration.three',
+							})}
 						</Lead>
 						<br />
 						<InputContainer>
-							<Label>Please enter full link</Label>
+							<Label>
+								{formatMessage({
+									id: 'label.please_enter_full_link',
+								})}
+							</Label>
 							<Input
 								registerName='link'
 								register={register}
@@ -239,8 +262,9 @@ export default function ProjectRegistry() {
 							/>
 						</InputContainer>
 						<Lead>
-							Please provide some documents about your legal
-							entity if you don&apos;t have a link
+							{formatMessage({
+								id: 'page.verification.registration.four',
+							})}
 						</Lead>
 						<Controller
 							control={control}
@@ -262,14 +286,15 @@ export default function ProjectRegistry() {
 				{watchIsNonProfit === ERegistryType.NO && (
 					<div className='fadeIn'>
 						<Lead>
-							Okay, it sounds like your project is not a
-							registered non-profit. Please tell us a bit about
-							how your organization is structured.
+							{formatMessage({
+								id: 'label.okay_it_sounds_like_your_project_is_not_a_non_profit',
+							})}
 						</Lead>
 						<br />
 						<DescriptionInput
-							placeholder='eg. "We are a decentralized autonomous organization that works toward the development of web3
-						applications"'
+							placeholder={formatMessage({
+								id: 'label.eg_we_are_a_dao_that_works',
+							})}
 							register={register}
 							registerName='description'
 							registerOptions={
@@ -285,10 +310,13 @@ export default function ProjectRegistry() {
 			<div>
 				<ContentSeparator />
 				<BtnContainer>
-					<Button onClick={() => setStep(2)} label='<     PREVIOUS' />
+					<Button
+						onClick={() => setStep(2)}
+						label={`<     ${formatMessage({ id: 'label.prev' })}`}
+					/>
 					<Button
 						loading={isSubmitting}
-						label='NEXT     >'
+						label={`${formatMessage({ id: 'label.next' })}     >`}
 						type='submit'
 						disabled={uploading}
 					/>

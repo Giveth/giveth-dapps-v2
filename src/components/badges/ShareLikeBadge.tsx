@@ -1,3 +1,4 @@
+import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import {
 	neutralColors,
@@ -16,9 +17,12 @@ const ShareLikeBadge = (props: {
 	onClick: () => void;
 	isSimple?: boolean;
 }) => {
+	const { formatMessage } = useIntl();
 	const { type, active, onClick, isSimple } = props;
 	const isShare = type === 'share';
-	const text = isShare ? 'Share' : 'Like';
+	const text = isShare
+		? formatMessage({ id: 'label.share' })
+		: formatMessage({ id: 'label.like' });
 	const icon = isShare ? (
 		<IconShare color={neutralColors.gray[500]} />
 	) : active ? (

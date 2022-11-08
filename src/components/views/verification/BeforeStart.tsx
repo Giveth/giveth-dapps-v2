@@ -1,3 +1,4 @@
+import { useIntl } from 'react-intl';
 import { brandColors, Button, H6, Lead } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 import ExternalLink from '@/components/ExternalLink';
@@ -12,6 +13,7 @@ const BeforeStart = () => {
 		useVerificationData();
 	const router = useRouter();
 	const { slug } = router.query;
+	const { formatMessage } = useIntl();
 
 	const saveStep = () => {
 		async function sendReq() {
@@ -33,55 +35,62 @@ const BeforeStart = () => {
 	return (
 		<>
 			<div>
-				<H6 weight={700}>Before you start</H6>
+				<H6 weight={700}>
+					{formatMessage({ id: 'label.before_you_start' })}
+				</H6>
 				<Lead>
 					<br />
-					Giveth would like to offer you the opportunity to reward
-					your contributors with GIVbacks! By applying for a verified
-					project status, you will be able to make your project stand
-					out and encourage donations.
+					{formatMessage({
+						id: 'page.verification.before_you_start.one',
+					})}
 					<br />
 					<br />
-					Once your project is verified, the Givers who donate to your
-					project will be rewarded with GIV tokens which they can use
-					to participate in the GIVeconomy. On the other hand, you
-					will be required to post regular updates about your project,
-					otherwise your verified badge could be revoked after 3
-					months of no updates.
+					{formatMessage({
+						id: 'page.verification.before_you_start.two',
+					})}
 					<br />
 					<br />
-					The simple{' '}
+					{formatMessage({
+						id: 'page.verification.before_you_start.three',
+					})}{' '}
 					<ExternalLink
 						href={links.VERIFICATION_DOCS}
 						color={brandColors.pinky[500]}
-						title='verification process'
+						title={formatMessage({
+							id: 'label.verification_process',
+						})}
 					/>{' '}
-					requires some additional information about your project and
-					the intended impact of your organization. If you would like
-					to apply to receive the &apos;Verified&apos; badge, empower
-					more Givers and also give back to those who have helped you
-					reach your goals, please fill out this form.
+					{formatMessage({
+						id: 'page.verification.before_you_start.four',
+					})}
 					<br />
 					<br />
-					You will need to provide a link to a social media post made
-					by your organization where you have shared a link to your
-					Giveth project to prove that you are in fact part of the
-					organization you claim to be.
+					{formatMessage({
+						id: 'page.verification.before_you_start.five',
+					})}
 					<br />
 					<br />
-					You will be required to provide a list of all wallet
-					addresses used for managing funds within your project.
+					{formatMessage({
+						id: 'page.verification.before_you_start.six',
+					})}
 					<br />
 					<br />
-					If your project is a registered non-profit organization, you
-					will need to upload verifiable proof to complete the form.
+					{formatMessage({
+						id: 'page.verification.before_you_start.seven',
+					})}
 				</Lead>
 			</div>
 			<div>
 				<ContentSeparator />
 				<BtnContainer>
-					<Button disabled label='<     PREVIOUS' />
-					<Button onClick={() => saveStep()} label='NEXT     >' />
+					<Button
+						disabled
+						label={`<     ${formatMessage({ id: 'label.prev' })}`}
+					/>
+					<Button
+						onClick={() => saveStep()}
+						label={`${formatMessage({ id: 'label.next' })}     >`}
+					/>
 				</BtnContainer>
 			</div>
 		</>

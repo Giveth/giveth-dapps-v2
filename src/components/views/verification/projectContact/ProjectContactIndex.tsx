@@ -1,3 +1,4 @@
+import { useIntl } from 'react-intl';
 import { useEffect, useState } from 'react';
 import {
 	Button,
@@ -39,6 +40,7 @@ export default function ProjectContactIndex() {
 		setValue,
 		getValues,
 	} = useForm<IMainSocials>();
+	const { formatMessage } = useIntl();
 
 	const socials = verificationData?.projectContacts || [];
 
@@ -113,15 +115,20 @@ export default function ProjectContactIndex() {
 	return (
 		<>
 			<div>
-				<H6 weight={700}>Project Social Media</H6>
+				<H6 weight={700}>
+					{formatMessage({ id: 'label.project_social_media' })}
+				</H6>
 				<InfoWrapper>
 					<IconInfo color={neutralColors.gray[900]} />
 					<PInline>
-						Please provide links to any social media accounts owned
-						by your organization/project.
+						{formatMessage({
+							id: 'label.please_provide_links_to_any_social_media',
+						})}
 					</PInline>
 				</InfoWrapper>
-				<PStyled>This is optional</PStyled>
+				<PStyled>
+					{formatMessage({ id: 'label.this_is_optional' })}
+				</PStyled>
 				<FormContainer onSubmit={handleSubmit(handleNext)}>
 					{mainSocialsInputs.map(i => (
 						<Input
@@ -153,21 +160,20 @@ export default function ProjectContactIndex() {
 					{isDraft && (
 						<OutlineStyled
 							onClick={() => setShowSocialModal(true)}
-							label='ADD OTHER'
+							label={formatMessage({ id: 'label.add_other' })}
 							buttonType='primary'
 						/>
 					)}
 					<SocialLinkInfo>
-						In order to ensure that you are actually a
-						representative of the organization/project you're
-						applying for, we ask that you post a link to your Giveth
-						project on the organization's twitter or social media
-						account. Please provide a link to the twitter or social
-						media post here.
+						{formatMessage({
+							id: 'label.in_order_to_ensure_that_you_are_a_representative',
+						})}
 					</SocialLinkInfo>
 					<br />
 					<Input
-						label='Link to your Giveth project on your social media'
+						label={formatMessage({
+							id: 'label.link_to_your_giveth_project',
+						})}
 						placeholder='https://'
 						LeftIcon={<IconLink color={neutralColors.gray[600]} />}
 						error={errors['SocialLink']}
@@ -182,9 +188,16 @@ export default function ProjectContactIndex() {
 						<BtnContainer>
 							<Button
 								onClick={() => setStep(3)}
-								label='<     PREVIOUS'
+								label={`<     ${formatMessage({
+									id: 'label.prev',
+								})}`}
 							/>
-							<Button label='NEXT     >' type='submit' />
+							<Button
+								label={`${formatMessage({
+									id: 'label.next',
+								})}     >`}
+								type='submit'
+							/>
 						</BtnContainer>
 					</div>
 				</FormContainer>

@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { brandColors, H6, Lead, ButtonLink } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -70,6 +71,7 @@ export default function EmailVerificationIndex() {
 	const imageAddress = `/images/backgrounds/email-verification-bg-${
 		status === EEmailVerificationStatus.Verified ? 'colored' : 'dark'
 	}.svg`;
+	const { formatMessage } = useIntl();
 
 	useEffect(() => {
 		if (token) {
@@ -107,13 +109,21 @@ function Verified() {
 				height={80}
 				alt='success icon'
 			/>
-			<H6 weight={700}>Well Done</H6>
+			<H6 weight={700}>{FormattedMessage({ id: 'label.well_done' })}</H6>
 			<Lead>
-				Your email has been verified! <br />
-				You can now close this page and continue verifying your project.
+				{FormattedMessage({ id: 'label.your_email_has_been_verified' })}
+				! <br />
+				{FormattedMessage({
+					id: 'label.you_can_now_close_this_page_and_continue_verifying',
+				})}
 			</Lead>
 			<Link href={slugToVerification(slug as string)} passHref>
-				<ButtonLink size='small' label='CONTINUE VERIFICATION' />
+				<ButtonLink
+					size='small'
+					label={FormattedMessage({
+						id: 'label.continue_verification',
+					})}
+				/>
 			</Link>
 			<VCImageContainer>
 				<Link href='/' passHref>
