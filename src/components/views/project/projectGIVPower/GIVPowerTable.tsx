@@ -1,4 +1,4 @@
-import { FC, Fragment } from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
 import {
 	B,
@@ -7,6 +7,7 @@ import {
 	P,
 } from '@giveth/ui-design-system';
 import { IPowerBoostingsData, IProjectPower } from '@/apollo/types/types';
+import { RowWrapper } from '@/components/styled-components/Table';
 
 interface IGIVPowerTableProps {
 	boostingsData: IPowerBoostingsData[];
@@ -25,10 +26,10 @@ const GIVPowerTable: FC<IGIVPowerTableProps> = ({
 				Amount
 			</TableHeader>
 			{boostingsData?.map(({ id, user, boostedPower }) => (
-				<Fragment key={id}>
+				<GIVpowerRowWrapper key={id}>
 					<TableCell>{user.name || 'Anonymous'}</TableCell>
 					<TableCell>{boostedPower.toFixed(2)}</TableCell>
-				</Fragment>
+				</GIVpowerRowWrapper>
 			))}
 			<TableHeader>TOTAL GIVPOWER</TableHeader>
 			<TableHeader>
@@ -51,6 +52,12 @@ const TableHeader = styled(B)`
 	gap: 8px;
 	padding-top: 16px;
 	padding-bottom: 8px;
+`;
+
+const GIVpowerRowWrapper = styled(RowWrapper)`
+	&:hover > div {
+		background-color: ${neutralColors.gray[300]};
+	}
 `;
 
 const Container = styled.div`
