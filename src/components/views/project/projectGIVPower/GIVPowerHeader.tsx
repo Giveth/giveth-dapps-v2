@@ -17,6 +17,7 @@ import { FC } from 'react';
 import { IProjectPower } from '@/apollo/types/types';
 import { Col, Row } from '@/components/Grid';
 import { Flex } from '@/components/styled-components/Flex';
+import links from '@/lib/constants/links';
 
 interface IGIVPowerHeader {
 	projectPower?: IProjectPower;
@@ -49,7 +50,7 @@ const GIVPowerHeader: FC<IGIVPowerHeader> = ({
 			</H5>
 			<Desc>
 				Donors to higher ranked projects get more GIVbacks.
-				<LearnMoreLink href='' size='Big'>
+				<LearnMoreLink href={links.GIVPOWER_DOC} size='Big'>
 					&nbsp;Learn more.
 				</LearnMoreLink>
 			</Desc>
