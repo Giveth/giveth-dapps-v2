@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { FC, Fragment } from 'react';
 import styled from 'styled-components';
 import {
 	B,
@@ -6,13 +6,17 @@ import {
 	neutralColors,
 	P,
 } from '@giveth/ui-design-system';
-import { IPowerBoostingsData } from '@/apollo/types/types';
+import { IPowerBoostingsData, IProjectPower } from '@/apollo/types/types';
 
 interface IGIVPowerTableProps {
 	boostingsData: IPowerBoostingsData[];
+	projectPower?: IProjectPower;
 }
 
-const GIVPowerTable = ({ boostingsData }: IGIVPowerTableProps) => {
+const GIVPowerTable: FC<IGIVPowerTableProps> = ({
+	boostingsData,
+	projectPower,
+}) => {
 	return (
 		<Container>
 			{/* <TableHeader>Ranking</TableHeader> */}
@@ -30,7 +34,9 @@ const GIVPowerTable = ({ boostingsData }: IGIVPowerTableProps) => {
 			))}
 			{/* <TableCell></TableCell> */}
 			<TableHeader>TOTAL GIVPOWER</TableHeader>
-			<TableHeader>1000</TableHeader>
+			<TableHeader>
+				{projectPower?.totalPower?.toFixed(2) || 0}
+			</TableHeader>
 		</Container>
 	);
 };
