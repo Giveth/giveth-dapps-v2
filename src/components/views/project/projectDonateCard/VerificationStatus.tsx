@@ -13,9 +13,9 @@ interface IProps {
 }
 
 const VerificationStatus: FC<IProps> = ({ status }) => {
+	const { formatMessage } = useIntl();
 	if (!status || status === EVerificationStatus.DRAFT) return null;
 	const isVerified = status === EVerificationStatus.VERIFIED;
-	const { formatMessage } = useIntl();
 
 	return (
 		<Container>
