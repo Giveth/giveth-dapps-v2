@@ -1,8 +1,4 @@
-import {
-	brandColors,
-	IconHeartFilled,
-	neutralColors,
-} from '@giveth/ui-design-system';
+import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import { FC } from 'react';
 import styled from 'styled-components';
 
@@ -53,7 +49,6 @@ const ProjectsTable: FC<IProjectsTable> = ({
 			</ProjectsTableHeader>
 			<ProjectsTableHeader>
 				{formatMessage({ id: 'label.likes' })}
-				<IconHeart />
 			</ProjectsTableHeader>
 			<ProjectsTableHeader
 				onClick={() => changeOrder(EOrderBy.Donations)}
