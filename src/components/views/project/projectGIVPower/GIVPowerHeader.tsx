@@ -71,7 +71,7 @@ const GIVPowerHeader: FC<IGIVPowerHeader> = ({
 				</Col>
 				<Col xs={12} md={6}>
 					<RankBox>
-						<RankTitle>Current Rank</RankTitle>
+						<RankTitle>Projected Rank</RankTitle>
 						<NextRank state={goingUp}>
 							<Flex alignItems='baseline' gap='4px'>
 								{goingUp > 0 ? (
@@ -89,8 +89,8 @@ const GIVPowerHeader: FC<IGIVPowerHeader> = ({
 						<RankDescContainer gap='6px'>
 							<IconAlertCircle16 />
 							<Caption>
-								The rank will update at the start of the next
-								GIVbacks round.
+								This is the expected rank for the next round
+								based on current GIVpower.
 							</Caption>
 						</RankDescContainer>
 					</RankBox>
