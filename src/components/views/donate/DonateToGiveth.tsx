@@ -2,7 +2,7 @@ import {
 	brandColors,
 	Caption,
 	GLink,
-	IconHelp,
+	IconHelpFilled16,
 	neutralColors,
 	Subline,
 } from '@giveth/ui-design-system';
@@ -39,7 +39,7 @@ const DonateToGiveth: FC<IDonateToGiveth> = props => {
 		<Container>
 			<Flex alignItems='center' gap='4px'>
 				<Caption medium>Donate to Giveth</Caption>
-				<IconWithTooltip icon={<IconHelp size={16} />} direction='top'>
+				<IconWithTooltip icon={<IconHelpFilled16 />} direction='top'>
 					<TooltipContainer>
 						Support Giveth with a donation to the Giveth DAO. The
 						selected donation percentage will be added on top of
