@@ -28,16 +28,6 @@ const GIVPowerHeader: FC<IGIVPowerHeader> = ({
 	projectPower,
 	projectFuturePower,
 }) => {
-	const handlePowerRank = () => {
-		if (projectPower?.totalPower === 0) {
-			return '--';
-		} else if (projectPower?.powerRank) {
-			return projectPower?.powerRank;
-		} else {
-			return '--';
-		}
-	};
-
 	const goingUp =
 		!projectFuturePower?.powerRank || !projectPower?.powerRank
 			? 0
