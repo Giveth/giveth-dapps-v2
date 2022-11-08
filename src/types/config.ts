@@ -6,6 +6,9 @@ export interface BasicStakingConfig {
 	farmStartTimeMS?: number;
 	farmEndTimeMS?: number;
 	icon?: string;
+	active: boolean;
+	archived?: boolean;
+	paused?: boolean;
 }
 export enum StakingPlatform {
 	GIVETH = 'Staking',
@@ -57,8 +60,6 @@ export interface SimplePoolStakingConfig extends BasicStakingConfig {
 	description?: string;
 	provideLiquidityLink?: string;
 	unit: string;
-	active: boolean;
-	archived?: boolean;
 	introCard?: IntroCardConfig;
 }
 

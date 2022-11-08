@@ -1,8 +1,8 @@
 import {
 	Caption,
-	IconAlertTriangle,
-	IconCheckmarkCircle,
-	IconInfo,
+	IconAlertTriangleFilled,
+	IconCheckCircleFilled,
+	IconHelpFilled,
 	semanticColors,
 } from '@giveth/ui-design-system';
 import React, { FC } from 'react';
@@ -37,11 +37,11 @@ const InlineToast: FC<IProps> = ({ message, type, isHidden }) => {
 			colorType={colorType}
 		>
 			{type === EToastType.Success ? (
-				<IconCheckmarkCircle />
+				<IconCheckCircleFilled />
 			) : type === EToastType.Info ? (
-				<IconInfo size={16} color={semanticColors.blueSky[700]} />
+				<IconHelpFilled size={16} color={semanticColors.blueSky[700]} />
 			) : (
-				<IconAlertTriangle />
+				<IconAlertTriangleFilled />
 			)}
 			<Caption>{message}</Caption>
 		</Container>

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { P } from '@giveth/ui-design-system';
 import { BigNumber } from 'ethers';
 import Lottie from 'react-lottie';
@@ -33,10 +33,11 @@ import {
 	ToggleContainer,
 } from './StakeLock.sc';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import type {
+import {
 	PoolStakingConfig,
 	RegenFarmConfig,
 	SimplePoolStakingConfig,
+	StakingPlatform,
 } from '@/types/config';
 
 interface IStakeModalProps extends IModal {
@@ -69,7 +70,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 	const { chainId, library } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
-	const { title, LM_ADDRESS, POOL_ADDRESS } =
+	const { title, LM_ADDRESS, POOL_ADDRESS, platform } =
 		poolStakingConfig as SimplePoolStakingConfig;
 
 	useEffect(() => {
@@ -103,6 +104,18 @@ export const StakeModal: FC<IStakeModalProps> = ({
 			library.removeAllListeners('block');
 		};
 	}, [library, amount, stakeState]);
+
+	const onlyApproveMode = useMemo(
+		() => platform === StakingPlatform.ICHI,
+		[platform],
+	);
+
+	useEffect(() => {
+		if (!onlyApproveMode) {
+			setPermit(true);
+			setStakeState(StakeState.STAKE);
+		}
+	}, [onlyApproveMode]);
 
 	const onApprove = async () => {
 		if (amount === '0') return;
@@ -198,20 +211,25 @@ export const StakeModal: FC<IStakeModalProps> = ({
 										)
 									}
 								/>
-								<ToggleContainer>
-									<ToggleSwitch
-										checked={permit}
-										disabled={
-											!(
-												stakeState ===
-													StakeState.APPROVE ||
-												stakeState === StakeState.STAKE
-											)
-										}
-										setStateChange={handlePermit}
-									/>
-									<P>{permit ? 'Permit' : 'Approve'} mode</P>
-								</ToggleContainer>
+								{!onlyApproveMode && (
+									<ToggleContainer>
+										<ToggleSwitch
+											checked={permit}
+											disabled={
+												!(
+													stakeState ===
+														StakeState.APPROVE ||
+													stakeState ===
+														StakeState.STAKE
+												)
+											}
+											setStateChange={handlePermit}
+										/>
+										<P>
+											{permit ? 'Permit' : 'Approve'} mode
+										</P>
+									</ToggleContainer>
+								)}
 								{stakeState === StakeState.APPROVE && (
 									<StyledOutlineButton
 										label={'APPROVE'}

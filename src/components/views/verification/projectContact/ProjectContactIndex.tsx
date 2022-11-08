@@ -3,7 +3,6 @@ import {
 	Button,
 	H6,
 	IconFacebook,
-	IconInfo,
 	IconInstagram,
 	IconLink,
 	IconLinkedin,
@@ -11,6 +10,7 @@ import {
 	IconYoutube,
 	neutralColors,
 	P,
+	IconInfoFilled,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
@@ -115,7 +115,7 @@ export default function ProjectContactIndex() {
 			<div>
 				<H6 weight={700}>Project Social Media</H6>
 				<InfoWrapper>
-					<IconInfo color={neutralColors.gray[900]} />
+					<IconInfoFilled color={neutralColors.gray[900]} />
 					<PInline>
 						Please provide links to any social media accounts owned
 						by your organization/project.
