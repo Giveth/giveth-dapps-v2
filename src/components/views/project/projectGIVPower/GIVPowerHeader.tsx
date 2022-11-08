@@ -3,11 +3,12 @@ import {
 	brandColors,
 	Caption,
 	GLink,
-	H3,
 	H5,
+	H6,
 	IconAlertCircle16,
 	neutralColors,
 	P,
+	semanticColors,
 	Subline,
 } from '@giveth/ui-design-system';
 import { FC } from 'react';
@@ -34,6 +35,11 @@ const GIVPowerHeader: FC<IGIVPowerHeader> = ({
 		}
 	};
 
+	const goingUp =
+		!projectFuturePower?.powerRank || !projectPower?.powerRank
+			? 0
+			: projectFuturePower.powerRank - projectPower?.powerRank;
+
 	return (
 		<Container>
 			<H5 weight={700}>
@@ -49,9 +55,9 @@ const GIVPowerHeader: FC<IGIVPowerHeader> = ({
 				<Col xs={12} md={6}>
 					<RankBox>
 						<RankTitle>Current Rank</RankTitle>
-						<CurrentRank weight={700}>
-							#{projectPower?.powerRank}
-						</CurrentRank>
+						<Rank>
+							<H5 weight={700}>#{projectPower?.powerRank}</H5>
+						</Rank>
 						<RankDescContainer gap='6px'>
 							<IconAlertCircle16 />
 							<Caption>
@@ -64,9 +70,13 @@ const GIVPowerHeader: FC<IGIVPowerHeader> = ({
 				<Col xs={12} md={6}>
 					<RankBox>
 						<RankTitle>Current Rank</RankTitle>
-						<CurrentRank weight={700}>
-							#{projectPower?.powerRank}
-						</CurrentRank>
+						<NextRank state={goingUp}>
+							<H6 weight={700}>
+								#
+								{projectFuturePower?.powerRank ||
+									projectPower?.powerRank}
+							</H6>
+						</NextRank>
 						<RankDescContainer gap='6px'>
 							<IconAlertCircle16 />
 							<Caption>
@@ -103,8 +113,13 @@ const RankBox = styled.div`
 
 const RankTitle = styled(Subline)``;
 
-const CurrentRank = styled(H3)`
+const Rank = styled.div`
 	height: 54px;
+`;
+
+const NextRank = styled(Rank)<{ state: number }>`
+	color: ${props =>
+		props.state > 0 ? semanticColors.punch[700] : semanticColors.jade[700]};
 `;
 const RankDescContainer = styled(Flex)`
 	padding-top: 6px;
