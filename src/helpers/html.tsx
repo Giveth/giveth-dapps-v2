@@ -1,4 +1,29 @@
-import { P, B, GLink, brandColors } from '@giveth/ui-design-system';
+import {
+	P,
+	B,
+	GLink,
+	brandColors,
+	IconProfile24,
+	IconProfileCompleted24,
+	IconAdminNotif24,
+	IconFile24,
+	IconPublish24,
+	IconListed24,
+	IconUnlisted24,
+	IconDeactivated24,
+	IconActivated24,
+	IconFormSubmit24,
+	IconRejected24,
+	IconClaim24,
+	IconDonation24,
+	IconEmptyCircle24,
+	IconHeartFilled24,
+	IconStake24,
+	IconUnstake24,
+	IconVerifiedBadge24,
+	IconNoGiveback24,
+	IconNotificationFilled24,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { INotification } from '@/features/notification/notification.types';
 import type { ReactNode } from 'react';
@@ -58,3 +83,52 @@ const StyledGlink = styled(GLink)`
 		color: ${brandColors.pinky[500]};
 	}
 `;
+
+function convertBackendIconsToComponents(icon: string) {
+	switch (icon) {
+		case 'IconProfile':
+			return <IconProfile24 />;
+		case 'IconProfileCompleted':
+			return <IconProfileCompleted24 />;
+		case 'IconAdminNotif':
+			return <IconAdminNotif24 />;
+		case 'IconFile':
+			return <IconFile24 />;
+		case 'IconPublish':
+			return <IconPublish24 />;
+		case 'IconListed':
+			return <IconListed24 />;
+		case 'IconUnlisted':
+			return <IconUnlisted24 />;
+		case 'IconDeactivated':
+			return <IconDeactivated24 />;
+		case 'IconActivated':
+			return <IconActivated24 />;
+		case 'IconFormSubmit':
+			return <IconFormSubmit24 />;
+		case 'IconRejected':
+			return <IconRejected24 />;
+		case 'IconVerifiedBadge':
+			return <IconVerifiedBadge24 />;
+		case 'IconClaim':
+			return <IconClaim24 />;
+		case 'IconEmptyCircle':
+			return <IconEmptyCircle24 />;
+		case 'IconStake':
+			return <IconStake24 />;
+		case 'IconUnstake':
+			return <IconUnstake24 />;
+		case 'IconGIVBack':
+			return <IconNoGiveback24 />;
+		case 'IconStake':
+			return <IconStake24 />;
+		case 'IconDonation':
+			return <IconDonation24 />;
+		case 'IconFile':
+			return <IconFile24 />;
+		case 'IconHeartFilled':
+			return <IconHeartFilled24 />;
+		default:
+			return <IconNotificationFilled24 />;
+	}
+}
