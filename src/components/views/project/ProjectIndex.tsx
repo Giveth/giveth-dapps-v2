@@ -67,6 +67,7 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 		status,
 		id = '',
 		projectPower,
+		projectFuturePower,
 	} = project || {};
 	const router = useRouter();
 	const slug = router.query.projectIdSlug as string;
@@ -216,6 +217,7 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 							<ProjectGIVPowerIndex
 								projectId={id}
 								projectPower={projectPower}
+								projectFuturePower={projectFuturePower}
 								isAdmin={isAdmin}
 							/>
 						)}
