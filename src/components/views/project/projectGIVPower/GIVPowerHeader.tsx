@@ -56,7 +56,9 @@ const GIVPowerHeader: FC<IGIVPowerHeader> = ({
 							<H5 weight={700}>#{projectPower?.powerRank}</H5>
 						</Rank>
 						<RankDescContainer gap='6px'>
-							<IconAlertCircle16 />
+							<IconWrapper>
+								<IconAlertCircle16 />
+							</IconWrapper>
 							<Caption>
 								The rank will update at the start of the next
 								GIVbacks round.
@@ -82,7 +84,9 @@ const GIVPowerHeader: FC<IGIVPowerHeader> = ({
 							</Flex>
 						</NextRank>
 						<RankDescContainer gap='6px'>
-							<IconAlertCircle16 />
+							<IconWrapper>
+								<IconAlertCircle16 />
+							</IconWrapper>
 							<Caption>
 								This is the expected rank for the next round
 								based on current GIVpower.
@@ -127,6 +131,11 @@ const NextRank = styled(Rank)<{ state: number }>`
 `;
 const RankDescContainer = styled(Flex)`
 	padding-top: 6px;
+`;
+
+const IconWrapper = styled.div`
+	padding-top: 2px;
+	width: 16px;
 `;
 
 export default GIVPowerHeader;
