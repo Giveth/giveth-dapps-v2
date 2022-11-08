@@ -19,20 +19,17 @@ const GIVPowerTable: FC<IGIVPowerTableProps> = ({
 }) => {
 	return (
 		<Container>
-			{/* <TableHeader>Ranking</TableHeader> */}
 			<TableHeader></TableHeader>
 			<TableHeader>
 				<IconRocketInSpace size={20} />
 				Amount
 			</TableHeader>
-			{boostingsData?.map(({ id, user, boostedPower, rank }) => (
+			{boostingsData?.map(({ id, user, boostedPower }) => (
 				<Fragment key={id}>
-					{/* <TableCell>#{rank}</TableCell> */}
 					<TableCell>{user.name || 'Anonymous'}</TableCell>
 					<TableCell>{boostedPower.toFixed(2)}</TableCell>
 				</Fragment>
 			))}
-			{/* <TableCell></TableCell> */}
 			<TableHeader>TOTAL GIVPOWER</TableHeader>
 			<TableHeader>
 				{projectPower?.totalPower?.toFixed(2) || 0}
