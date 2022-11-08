@@ -15,7 +15,7 @@ interface IGIVPowerTableProps {
 const GIVPowerTable = ({ boostingsData }: IGIVPowerTableProps) => {
 	return (
 		<Container>
-			<TableHeader>Ranking</TableHeader>
+			{/* <TableHeader>Ranking</TableHeader> */}
 			<TableHeader></TableHeader>
 			<TableHeader>
 				<IconRocketInSpace size={20} />
@@ -23,16 +23,19 @@ const GIVPowerTable = ({ boostingsData }: IGIVPowerTableProps) => {
 			</TableHeader>
 			{boostingsData?.map(({ id, user, boostedPower, rank }) => (
 				<Fragment key={id}>
-					<TableRow>#{rank}</TableRow>
-					<TableRow>{user.name || 'Anonymous'}</TableRow>
-					<TableRow>{boostedPower.toFixed(2)}</TableRow>
+					{/* <TableCell>#{rank}</TableCell> */}
+					<TableCell>{user.name || 'Anonymous'}</TableCell>
+					<TableCell>{boostedPower.toFixed(2)}</TableCell>
 				</Fragment>
 			))}
+			{/* <TableCell></TableCell> */}
+			<TableHeader>TOTAL GIVPOWER</TableHeader>
+			<TableHeader>1000</TableHeader>
 		</Container>
 	);
 };
 
-const TableRow = styled(P)`
+const TableCell = styled(P)`
 	height: 60px;
 	display: flex;
 	align-items: center;
@@ -43,6 +46,7 @@ const TableHeader = styled(B)`
 	border-bottom: 2px solid ${neutralColors.gray[400]};
 	display: flex;
 	gap: 8px;
+	padding-top: 16px;
 	padding-bottom: 8px;
 `;
 
@@ -50,7 +54,7 @@ const Container = styled.div`
 	margin-top: 40px;
 	margin-bottom: 10px;
 	display: grid;
-	grid-template-columns: 0.7fr 4fr 1fr;
+	grid-template-columns: 4fr 1fr;
 `;
 
 export default GIVPowerTable;
