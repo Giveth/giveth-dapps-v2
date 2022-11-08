@@ -9,6 +9,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
+import { useIntl } from 'react-intl';
 import Routes from '@/lib/constants/Routes';
 import { Arc } from '@/components/styled-components/Arc';
 import { isUserRegistered } from '@/lib/helpers';
@@ -20,28 +21,25 @@ import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 
 const content = [
 	{
-		title: 'Easy Onboarding',
-		description:
-			'New to crypto? No Problem. Create a Torus wallet and connect to the DApp by logging in via your favourite web2 platform.',
+		title: 'page.home.section.easy_onboarding',
+		description: 'page.home.section.easy_onboarding_desc',
 	},
 	{
-		title: 'Zero-Added Fees',
-		description:
-			'Create a project or donate directly to for-good projects with zero fees added by Giveth.',
+		title: 'page.home.section.zero_fees',
+		description: 'page.home.section.zero_fees_desc',
 	},
 	{
-		title: 'Project Verification',
-		description:
-			'Encourage project accountability by donating to trusted projects. Apply for verification and your donors will be rewarded with GIVbacks.',
+		title: 'page.home.section.project_verification',
+		description: 'page.home.section.project_verification_desc',
 	},
 	{
-		title: 'The GIVeconomy',
-		description:
-			'Give, earn and govern using GIV and the GIVeconomy. Get rewarded for being a GIVer.',
+		title: 'page.home.section.the_giveconomy',
+		description: 'page.home.section.the_giveconomy_desc2',
 	},
 ];
 
 const HomeChangeMakers = () => {
+	const { formatMessage } = useIntl();
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 	const user = useAppSelector(state => state.user.userData);
@@ -59,33 +57,47 @@ const HomeChangeMakers = () => {
 			<PurpleArc />
 			<CyanArc />
 			<MustardArc />
-			<Title>Calling all Changemakers!</Title>
+			<Title>
+				{formatMessage({
+					id: 'page.home.section.calling_all_change_makers',
+				})}
+			</Title>
 			<br />
 			<LeadStyled size='large'>
-				Do you have a for-good project that&apos;s creating value for
-				society, for the environment, or for the world?
+				{formatMessage({
+					id: 'page.home.section.calling_all_change_makers.subtitle',
+				})}
 			</LeadStyled>
 			<MiddleSection>
 				<Lead>
-					Establish your project on Giveth to tap into the
-					revolutionary funding opportunities of the Ethereum
-					Ecosystem. Start raising funds within minutes. Creating a
-					project is absolutely free!
+					{formatMessage({
+						id: 'page.home.section.calling_all_change_makers.description',
+					})}
 				</Lead>
 				<br />
 				<CreateProjectButton
 					buttonType='primary'
 					size='large'
-					label='CREATE A PROJECT'
+					label={formatMessage({
+						id: 'component.button.create_project',
+					})}
 					onClick={handleCreateButton}
 				/>
 			</MiddleSection>
 			<EndSection>
 				{content.map(i => (
 					<EndItem key={i.title}>
-						<H3 weight={700}>{i.title}</H3>
+						<H3 weight={700}>
+							{formatMessage({
+								id: i.title,
+							})}
+						</H3>
 						<br />
-						<ContentLead>{i.description}</ContentLead>
+						<ContentLead>
+							{formatMessage({
+								id: i.description,
+							})}
+						</ContentLead>
 					</EndItem>
 				))}
 			</EndSection>

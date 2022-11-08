@@ -9,6 +9,7 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 
+import { useIntl } from 'react-intl';
 import { Modal } from '@/components/modals/Modal';
 import { IProject } from '@/apollo/types/types';
 import { compareAddresses, formatTxLink } from '@/lib/helpers';
@@ -65,6 +66,7 @@ const DonateModal = (props: IDonateModalProps) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const isDonatingToGiveth = donationToGiveth > 0;
 
+	const { formatMessage } = useIntl();
 	const [donating, setDonating] = useState(false);
 	const [firstDonationSaved, setFirstDonationSaved] = useState(false);
 	const [secondDonationSaved, setSecondDonationSaved] = useState(false);
@@ -251,7 +253,11 @@ const DonateModal = (props: IDonateModalProps) => {
 							loading={donating}
 							buttonType='primary'
 							disabled={donating}
-							label={donating ? 'DONATING' : 'DONATE'}
+							label={
+								donating
+									? formatMessage({ id: 'label.donating' })
+									: formatMessage({ id: 'label.donate' })
+							}
 							onClick={validateToken}
 						/>
 					</Buttons>
@@ -319,6 +325,7 @@ const DonateButton = styled(Button)<{ disabled: boolean }>`
 		border-top: 3px solid ${brandColors.giv[200]};
 		animation-timing-function: linear;
 	}
+	text-transform: uppercase;
 `;
 
 const Buttons = styled.div`

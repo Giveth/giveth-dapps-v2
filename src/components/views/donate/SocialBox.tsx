@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import Image from 'next/image';
+import { useIntl } from 'react-intl';
 import {
 	FacebookShareButton,
 	LinkedinShareButton,
@@ -18,6 +19,7 @@ interface ISocialBox {
 
 const SocialBox: FC<ISocialBox> = ({ project, isSuccess }) => {
 	const { description, slug } = project;
+	const { formatMessage } = useIntl();
 	const shareTitleTwitter = `Our project is raising funds in crypto on @givethio! 🙌
 Donate directly on Ethereum Mainnet or @gnosischain w/ no fees or intermediaries.👇`;
 
@@ -33,8 +35,8 @@ Donate directly on Ethereum Mainnet or @gnosischain w/ no fees or intermediaries
 		<Social isSuccess={isSuccess}>
 			<BLead>
 				{isSuccess
-					? 'Share this with your friends'
-					: `Can't donate? Share this page instead.`}
+					? formatMessage({ id: 'label.share_this' })
+					: formatMessage({ id: 'label.cant_donate' })}
 			</BLead>
 			<SocialItems>
 				<SocialItem isSuccess={isSuccess}>

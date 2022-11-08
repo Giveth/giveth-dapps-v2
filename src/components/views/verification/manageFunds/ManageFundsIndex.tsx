@@ -1,3 +1,4 @@
+import { useIntl } from 'react-intl';
 import { Button, H6, Lead, neutralColors, P } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
@@ -43,6 +44,7 @@ const ManageFundsIndex = () => {
 		setValue,
 		formState: { errors },
 	} = useForm<IProjectManagingFunds>();
+	const { formatMessage } = useIntl();
 
 	useEffect(() => {
 		if (description) setValue('description', description);
@@ -95,14 +97,14 @@ const ManageFundsIndex = () => {
 		<>
 			<form onSubmit={handleSubmit(handleNext)}>
 				<div>
-					<H6 weight={700}>Managing funds</H6>
+					<H6 weight={700}>
+						{formatMessage({ id: 'label.managing_funds' })}
+					</H6>
 					<Lead>
 						<br />
-						The funds raised are expected to be used for public
-						benefit and not for personal gain. How will you use the
-						funds that your project raises? Please provide detailed
-						funding/budget information as well as an overall roadmap
-						or action plan of the project.
+						{formatMessage({
+							id: 'page.verification.managing_funds.one',
+						})}
 						<DescriptionInputStyled
 							register={register}
 							registerName='description'
@@ -111,20 +113,32 @@ const ManageFundsIndex = () => {
 							}
 							error={errors.description}
 							height='180px'
-							placeholder='eg. "We are a decentralized autonomous organization that works toward the development of web3
-				applications"'
+							placeholder={formatMessage({
+								id: 'page.verification.managing_funds.two',
+							})}
 							disabled={!isDraft}
 						/>
-						<div>Additional address</div>
+						<div>
+							{formatMessage({
+								id: 'page.verification.managing_funds.three',
+							})}
+						</div>
 						<AddressDescription>
-							Please provide additional Ethereum wallet addresses
-							used for managing funds within your project.
-							<P>This is optional</P>
+							{formatMessage({
+								id: 'page.verification.managing_funds.four',
+							})}
+							<P>
+								{formatMessage({
+									id: 'label.this_is_optional',
+								})}
+							</P>
 						</AddressDescription>
 						{isDraft && (
 							<OutlineStyled
 								onClick={() => setShowAddressModal(true)}
-								label='ADD ADDRESS'
+								label={formatMessage({
+									id: 'label.add_address',
+								})}
 								buttonType='primary'
 							/>
 						)}
@@ -142,10 +156,14 @@ const ManageFundsIndex = () => {
 					<BtnContainer>
 						<Button
 							onClick={() => setStep(5)}
-							label='<     PREVIOUS'
+							label={`<     ${formatMessage({
+								id: 'label.prev',
+							})}`}
 						/>
 						<Button
-							label='NEXT     >'
+							label={`${formatMessage({
+								id: 'label.next',
+							})}     >`}
 							loading={loading}
 							type='submit'
 						/>

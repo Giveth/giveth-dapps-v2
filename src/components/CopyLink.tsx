@@ -5,6 +5,7 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { FC, useState } from 'react';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
@@ -16,6 +17,7 @@ interface ICopyLink {
 
 const CopyLink: FC<ICopyLink> = ({ url }) => {
 	const [isCopied, setIsCopied] = useState(false);
+	const { formatMessage } = useIntl();
 
 	if (isSSRMode) {
 		return null;
@@ -34,7 +36,11 @@ const CopyLink: FC<ICopyLink> = ({ url }) => {
 			<CustomButton
 				buttonType='texty'
 				size='small'
-				label={isCopied ? 'copied!' : 'copy link'}
+				label={
+					isCopied
+						? `${formatMessage({ id: 'label.copied' })}`
+						: formatMessage({ id: 'label.copy_link' })
+				}
 				onClick={() => !isCopied && handleCopy()}
 				isCopied={isCopied}
 			/>

@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { Button, GLink, IconGiveth } from '@giveth/ui-design-system';
 
+import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
 import { formatWeiHelper } from '@/helpers/number';
 import { networksParams } from '@/helpers/blockchain';
@@ -73,6 +74,7 @@ const Header: FC<IHeader> = () => {
 	);
 	const theme = useAppSelector(state => state.general.theme);
 	const router = useRouter();
+	const { formatMessage } = useIntl();
 	const isLight = theme === ETheme.Light;
 
 	const handleBack = () => {
@@ -210,7 +212,7 @@ const Header: FC<IHeader> = () => {
 								theme={theme}
 								active={link.href.includes(router.route)}
 							>
-								{link.title}
+								{formatMessage({ id: link.title })}
 							</HeaderLink>
 						</Link>
 					))}
@@ -220,7 +222,9 @@ const Header: FC<IHeader> = () => {
 			<Flex gap='8px'>
 				<LargeCreateProject>
 					<Button
-						label='CREATE A PROJECT'
+						label={formatMessage({
+							id: 'component.button.create_project',
+						})}
 						size='small'
 						buttonType={isLight ? 'primary' : 'secondary'}
 						onClick={handleCreateButton}
@@ -283,7 +287,9 @@ const Header: FC<IHeader> = () => {
 												shortenAddress(account)}
 										</GLink>
 										<WBNetwork size='Tiny'>
-											Connected to{' '}
+											{formatMessage({
+												id: 'label.connected_to',
+											})}{' '}
 											{networksParams[chainId]
 												?.chainName ||
 												library?._network?.name}
@@ -299,7 +305,11 @@ const Header: FC<IHeader> = () => {
 					<ConnectButton
 						buttonType='primary'
 						size='small'
-						label={isGIVeconomyRoute ? 'CONNECT WALLET' : 'SIGN IN'}
+						label={formatMessage({
+							id: isGIVeconomyRoute
+								? 'component.button.connect_wallet'
+								: 'component.button.sign_in',
+						})}
 						onClick={handleModals}
 					/>
 				)}

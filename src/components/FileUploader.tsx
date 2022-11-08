@@ -1,4 +1,5 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import styled, { keyframes, css } from 'styled-components';
 import { DropEvent, FileRejection, useDropzone } from 'react-dropzone';
@@ -47,6 +48,7 @@ const FileUploader: FC<IFileUploader> = ({
 }) => {
 	const [files, setFiles] = useState<UploadFile[]>([]);
 	const [loading, setLoading] = useState(false);
+	const { formatMessage } = useIntl();
 
 	useEffect(() => {
 		async function fetchUploadedFiles() {
@@ -146,15 +148,19 @@ const FileUploader: FC<IFileUploader> = ({
 					<IconImage size={32} color={neutralColors.gray[500]} />
 					<br />
 					<P>
-						{`Drag & drop your files here or `}
-						<span onClick={open}>Upload from device.</span>
+						{formatMessage({
+							id: 'label.drag_and_drop_an_image_or',
+						})}
+						<span onClick={open}>
+							{formatMessage({ id: 'label.upload_from_device' })}
+						</span>
 					</P>
 					<P>
-						Supported formats: .jpg, .jpeg, .png, .gif, .docx, .doc,
-						.pdf, .ppt, pptx
+						{formatMessage({ id: 'label.supported_formats' })}:
+						.jpg, .jpeg, .png, .gif, .docx, .doc, .pdf, .ppt, pptx
 					</P>
 					<P>
-						Docs size up to 4Mb.
+						{formatMessage({ id: 'label.docs_size_up_to_4mb' })}
 						{limit
 							? ` Maximum ${limit} file${limit > 1 ? 's' : ''}.`
 							: ''}
@@ -180,7 +186,11 @@ const FileUploader: FC<IFileUploader> = ({
 								{file.status ===
 									EFileUploadingStatus.UPLOADED && (
 									<Flex alignItems='center'>
-										<SublineBold>Uploaded</SublineBold>
+										<SublineBold>
+											{formatMessage({
+												id: 'label.uplodaded',
+											})}
+										</SublineBold>
 										<GLink size='Tiny'>
 											<a
 												href={file.url}
@@ -195,14 +205,22 @@ const FileUploader: FC<IFileUploader> = ({
 											onClick={() => onDelete(file.url)}
 										>
 											<IconX size={16} />
-											<GLink size='Small'>Delete</GLink>
+											<GLink size='Small'>
+												{formatMessage({
+													id: 'label.delete',
+												})}
+											</GLink>
 										</DeleteRow>
 									</Flex>
 								)}
 								{file.status ===
 									EFileUploadingStatus.FAILED && (
 									<Flex justifyContent='space-between'>
-										<SublineBold>Failed</SublineBold>
+										<SublineBold>
+											{formatMessage({
+												id: 'label.failed',
+											})}
+										</SublineBold>
 									</Flex>
 								)}
 								<UplaodBar status={file.status} />
@@ -224,7 +242,11 @@ const FileUploader: FC<IFileUploader> = ({
 							>
 								<Subline>{`Attachment ${idx + 1}`}</Subline>
 								<Flex alignItems='center'>
-									<SublineBold>Uploaded</SublineBold>
+									<SublineBold>
+										{formatMessage({
+											id: 'label.uploaded',
+										})}
+									</SublineBold>
 									<GLink size='Tiny'>
 										<a
 											href={url}

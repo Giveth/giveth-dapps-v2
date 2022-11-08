@@ -7,7 +7,7 @@ import {
 	H6,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-
+import { useIntl } from 'react-intl';
 import ProjectCardImage from './ProjectCardImage';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
 import { IProject } from '@/apollo/types/types';
@@ -39,6 +39,7 @@ const ProjectCard = (props: IProjectCard) => {
 
 	const { name, walletAddress } = adminUser || {};
 	const orgLabel = organization?.label;
+	const { formatMessage } = useIntl();
 
 	return (
 		<Wrapper isNew={isNew}>
@@ -70,7 +71,8 @@ const ProjectCard = (props: IProjectCard) => {
 				<Description>{htmlToText(description)}</Description>
 				{!isNew && (
 					<BodyCaption>
-						Raised: ${totalDonations?.toLocaleString()}
+						{formatMessage({ id: 'label.raised' })}: $
+						{totalDonations?.toLocaleString()}
 					</BodyCaption>
 				)}
 			</CardBody>

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-
+import { useIntl } from 'react-intl';
 import links from '@/lib/constants/links';
 import ExternalLink from '@/components/ExternalLink';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
@@ -11,25 +11,27 @@ const GIVBackToast = (props: {
 	userEligible?: boolean;
 }) => {
 	const { projectEligible, tokenEligible, userEligible } = props;
+	const { formatMessage } = useIntl();
 	let message: JSX.Element | string,
 		type = EToastType.Warning;
 	if (!userEligible) {
-		message =
-			'Your currently connected wallet address is associated with a Giveth project, therefore donations made from this address are not eligible for GIVbacks.';
+		message = formatMessage({
+			id: 'label.your_current_wallet_is_associated_with_a_giveth_project',
+		});
 	} else if (!projectEligible) {
-		message = 'This project is not eligible for GIVbacks.';
+		message = formatMessage({ id: 'label.this_project_is_not_eligible' });
 	} else if (tokenEligible) {
 		type = EToastType.Hint;
-		message = 'This token is eligible for GIVbacks.';
+		message = formatMessage({ id: 'label.this_token_is_eligible' });
 	} else {
 		message = (
 			<>
-				This token is not eligible for GIVbacks. To create a request to
-				add this token to our GIVbacks token list, please make a comment
-				in{' '}
+				{formatMessage({
+					id: 'label.this_project_is_not_eligible.desc',
+				})}{' '}
 				<ExternalLink
 					href={links.GIVBACK_TOKENS_FORUM}
-					title='our forum'
+					title={formatMessage({ id: 'label.our_forum' })}
 				/>
 				.
 			</>

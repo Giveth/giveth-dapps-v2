@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
+import { useIntl } from 'react-intl';
 import {
 	Button,
 	brandColors,
@@ -52,11 +53,14 @@ const ProjectTimeline = (props: {
 };
 
 const LaunchSection = (props: { creationDate: string }) => {
+	const { formatMessage } = useIntl();
 	return (
 		<Wrapper>
 			<TimelineSection date={props.creationDate} launch />
 			<Content>
-				<Title>Project Launched! 🎉</Title>
+				<Title>
+					{formatMessage({ id: 'label.project_launched' })} 🎉
+				</Title>
 				{/*TODO share in twitter?*/}
 				{/* <Button label='Share this'></Button> */}
 			</Content>

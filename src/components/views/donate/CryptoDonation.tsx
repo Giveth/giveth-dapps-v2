@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { Contract } from '@ethersproject/contracts';
 import BigNumber from 'bignumber.js';
+import { useIntl } from 'react-intl';
 import {
 	brandColors,
 	Button,
@@ -78,6 +79,7 @@ const CryptoDonation = (props: {
 }) => {
 	const { chainId: networkId, account, library, active } = useWeb3React();
 	const dispatch = useAppDispatch();
+	const { formatMessage } = useIntl();
 	const { isEnabled, isSignedIn, balance } = useAppSelector(
 		state => state.user,
 	);
@@ -385,13 +387,19 @@ const CryptoDonation = (props: {
 					!acceptedChains.includes(networkId) && (
 						<NetworkToast>
 							<Caption medium>
-								Projects from {orgName} only accept donations on{' '}
+								{formatMessage({
+									id: 'label.projects_from',
+								})}{' '}
+								{orgName}{' '}
+								{formatMessage({
+									id: 'label.only_accept_on',
+								})}{' '}
 								{getNetworkNames(acceptedChains, 'and')}.
 							</Caption>
 							<SwitchCaption
 								onClick={() => switchNetwork(ethereumChain.id)}
 							>
-								Switch network
+								{formatMessage({ id: 'label.switch_network' })}
 							</SwitchCaption>
 						</NetworkToast>
 					)}
@@ -402,13 +410,15 @@ const CryptoDonation = (props: {
 							<Flex alignItems='center' gap='9px'>
 								<IconGasStation />
 								<Caption medium>
-									Save on gas fees, switch to Gnosis Chain.
+									{formatMessage({
+										id: 'label.save_on_gas_fees',
+									})}
 								</Caption>
 							</Flex>
 							<SwitchCaption
 								onClick={() => switchNetwork(gnosisChain.id)}
 							>
-								Switch network
+								{formatMessage({ id: 'label.switch_network' })}
 							</SwitchCaption>
 						</NetworkToast>
 					)}
@@ -427,8 +437,12 @@ const CryptoDonation = (props: {
 							onInputChange={handleCustomToken}
 							placeholder={
 								supportCustomTokens
-									? 'Search name or paste an address'
-									: 'Search name'
+									? formatMessage({
+											id: 'component.input.search_or_paste',
+									  })
+									: formatMessage({
+											id: 'component.input.search_name',
+									  })
 							}
 							projectVerified={project?.verified!}
 							disabled={!active}
@@ -453,8 +467,8 @@ const CryptoDonation = (props: {
 				</SearchContainer>
 				{selectedToken && (
 					<AvText>
-						Available: {formatBalance(selectedTokenBalance)}{' '}
-						{tokenSymbol}
+						{formatMessage({ id: 'label.available' })}:{' '}
+						{formatBalance(selectedTokenBalance)} {tokenSymbol}
 					</AvText>
 				)}
 			</InputContainer>
@@ -491,13 +505,15 @@ const CryptoDonation = (props: {
 			{!isActive && (
 				<InlineToast
 					type={EToastType.Warning}
-					message='This project is not active.'
+					message={formatMessage({
+						id: 'label.this_project_is_not_active',
+					})}
 				/>
 			)}
 
 			{isEnabled && (
 				<MainButton
-					label='DONATE'
+					label={formatMessage({ id: 'label.donate' })}
 					disabled={donationDisabled}
 					size='medium'
 					onClick={handleDonate}
@@ -505,22 +521,24 @@ const CryptoDonation = (props: {
 			)}
 			{!isEnabled && (
 				<MainButton
-					label='CONNECT WALLET'
+					label={formatMessage({
+						id: 'component.button.connect_wallet',
+					})}
 					onClick={() => dispatch(setShowWalletModal(true))}
 				/>
 			)}
 
 			<CheckBoxContainer>
 				<CheckBox
-					label='Make it anonymous'
+					label={formatMessage({ id: 'label.make_it_anonymous' })}
 					checked={anonymous}
 					onChange={() => setAnonymous(!anonymous)}
 					size={14}
 				/>
 				<div>
-					By checking this, we won't consider your profile information
-					as a donor for this donation and won't show it on public
-					pages.
+					{formatMessage({
+						id: 'component.tooltip.by_checking_this',
+					})}
 				</div>
 			</CheckBoxContainer>
 		</MainContainer>
@@ -600,6 +618,7 @@ const MainButton = styled(Button)`
 	background-color: ${props =>
 		props.disabled ? brandColors.giv[200] : brandColors.giv[500]};
 	color: white;
+	text-transform: uppercase;
 `;
 
 const CheckBoxContainer = styled.div`

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { H4 } from '@giveth/ui-design-system';
 import { H4, neutralColors } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 
 import CryptoDonation, {
 	ISuccessDonation,
@@ -13,22 +15,23 @@ const DonationTypes = (props: {
 	project: IDonationProject;
 	setSuccess: (i: ISuccessDonation) => void;
 }) => {
+	const { formatMessage } = useIntl();
 	const { project, setSuccess } = props;
 
 	const [isCrypto, setIsCrypto] = useState(true);
 
 	return (
 		<>
-			<H4 weight={700}>Donate With</H4>
+			<H4 weight={700}>{formatMessage({ id: 'page.donate.title' })}</H4>
 			<RadioBox>
 				<RadioButton
-					title='Cryptocurrency'
+					title={formatMessage({ id: 'label.cryptocurrency' })}
 					toggleRadio={() => setIsCrypto(true)}
 					isSelected={isCrypto}
 					small
 				/>
 				<RadioButton
-					title='Credit Card'
+					title={formatMessage({ id: 'label.credit_card' })}
 					toggleRadio={() => setIsCrypto(false)}
 					isSelected={!isCrypto}
 					small
