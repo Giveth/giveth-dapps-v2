@@ -1,6 +1,6 @@
 import {
 	brandColors,
-	IconHeart,
+	IconHeartFilled,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import { FC } from 'react';
@@ -47,7 +47,7 @@ const ProjectsTable: FC<IProjectsTable> = ({
 			<ProjectsTableHeader>Project</ProjectsTableHeader>
 			<ProjectsTableHeader>
 				Likes 
-				<IconHeart />
+				<IconHeartFilled />
 			</ProjectsTableHeader>
 			<ProjectsTableHeader
 				onClick={() => changeOrder(EOrderBy.Donations)}

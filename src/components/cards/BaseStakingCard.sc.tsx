@@ -10,6 +10,7 @@ import {
 	Button,
 	OutlineButton,
 	Subline,
+	GLink,
 } from '@giveth/ui-design-system';
 import { Flex } from '../styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
@@ -192,6 +193,10 @@ export const DisableModalContent = styled.div`
 export const DisableModalText = styled(P)<{ weight?: number }>`
 	color: ${brandColors.giv[500]};
 	font-weight: ${props => (props.weight ? props.weight : 400)};
+`;
+
+export const DisableModalLink = styled(GLink)<{ weight?: number }>`
+	color: ${brandColors.pinky[500]};
 `;
 
 export const DisableModalCloseButton = styled(OutlineButton)`

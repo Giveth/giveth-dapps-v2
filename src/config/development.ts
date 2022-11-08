@@ -193,6 +193,7 @@ const config: EnvConfig = {
 			GARDEN_ADDRESS: '0x9ff80789b74d1d2b7cf5a568ea82409c2b327861',
 			BUY_LINK:
 				'https://app.honeyswap.org/#/swap?outputCurrency=0x83a8eea6427985C523a0c4d9d3E62C051B6580d3',
+			active: true,
 		},
 
 		pools: [

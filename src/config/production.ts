@@ -54,8 +54,10 @@ const config: EnvConfig = {
 			BUY_LINK:
 				'https://app.uniswap.org/#/swap?outputCurrency=0x900db999074d9277c5da2a43f252d74366230da0',
 			farmEndTimeMS: SEPT_8TH_2022,
+			platformTitle: 'GIV staking',
 			active: false,
 			archived: true,
+			paused: true,
 		},
 
 		nodeUrl: 'https://mainnet.infura.io/v3/' + INFURA_API_KEY,
@@ -90,7 +92,8 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://app.ichi.org/vault?poolId=20009&back=vault',
 				unit: 'LP',
-				active: true,
+				active: false,
+				paused: true,
 				farmStartTimeMS: 1659625200000,
 				introCard: {
 					title: 'Angel Vault',
@@ -113,7 +116,8 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://app.balancer.fi/#/pool/0x7819f1532c49388106f7762328c51ee70edd134c000200000000000000000109',
 				unit: 'LP',
-				active: true,
+				active: false,
+				paused: true,
 			},
 			{
 				network: MAINNET_NETWORK_NUMBER,
@@ -170,12 +174,13 @@ const config: EnvConfig = {
 						regenStreamType: StreamType.CULT,
 						regenFarmType: RegenFarmType.CULT_ETH,
 						farmStartTimeMS: 1655218800000,
-						active: true,
 						introCard: {
 							title: 'CULT',
 							description: `The purpose of CULT is to empower those building and contributing to our decentralized future. Our society makes it as difficult as possible to break away from societal, economic and other norms, and CULT serves to fund and support those who are working to take back our future. CULT is a reminder that the power in people is stronger than the people in power.\n\n CULT is the governance token of the Cult DAO. Every transaction of the CULT token allows you to contribute & fast-forward economic & societal change by contributing a 0.4% tax to the treasury. Fight from within until you get out, or change the system in doing so.`,
 							link: 'https://cultdao.io/',
 						},
+						active: false,
+						paused: true,
 					},
 				],
 			},
@@ -214,6 +219,8 @@ const config: EnvConfig = {
 			GARDEN_ADDRESS: '0x24f2d06446af8d6e89febc205e7936a602a87b60',
 			BUY_LINK:
 				'https://app.honeyswap.org/#/swap?outputCurrency=0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
+			platformTitle: 'GIVPOWER',
+			active: true,
 		},
 
 		pools: [
@@ -303,6 +310,7 @@ const config: EnvConfig = {
 								'ShapeShift is the free and open-source one-stop-shop for cross-chain DeFi. Buy, sell, send, receive, trade, and earn yield on your crypto across a growing number of protocols and chains with no added fees ever. FOX is the governance token of the ShapeShift DAO.',
 							link: 'https://shapeshift.com/',
 						},
+						archived: true,
 					},
 					{
 						network: XDAI_NETWORK_NUMBER,
