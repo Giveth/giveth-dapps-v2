@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 import { useWeb3React } from '@web3-react/core';
-import { IconHelp } from '@giveth/ui-design-system';
+import { IconHelpFilled16 } from '@giveth/ui-design-system';
 import { gToast, ToastType } from '@/components/toasts';
 import { useAppDispatch } from '@/features/hooks';
 import { fetchXDaiInfoAsync } from '@/features/subgraph/subgraph.thunks';
@@ -49,7 +49,7 @@ const TestRoute = () => {
 			<TestContainer>
 				this is test page.
 				<IconWithTooltip
-					icon={<IconHelp size={16} />}
+					icon={<IconHelpFilled16 />}
 					direction='top'
 					align='left'
 				>
@@ -82,7 +82,7 @@ const TestRoute = () => {
 				<div>
 					--------------------------------------------
 					<IconWithTooltip
-						icon={<IconHelp size={16} />}
+						icon={<IconHelpFilled16 />}
 						direction='right'
 						align='bottom'
 					>
