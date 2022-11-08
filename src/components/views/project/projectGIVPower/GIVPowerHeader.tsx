@@ -40,7 +40,11 @@ const GIVPowerHeader: FC<IGIVPowerHeader> = ({
 			</H5>
 			<Desc>
 				Donors to higher ranked projects get more GIVbacks.
-				<LearnMoreLink href={links.GIVPOWER_DOC} size='Big'>
+				<LearnMoreLink
+					href={links.GIVPOWER_DOC}
+					size='Big'
+					target='_blank'
+				>
 					&nbsp;Learn more.
 				</LearnMoreLink>
 			</Desc>
