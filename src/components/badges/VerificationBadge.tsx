@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { IconVerified, Overline } from '@giveth/ui-design-system';
+import { IconVerifiedBadge, Overline } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 import { FlexCenter } from '../styled-components/Flex';
@@ -12,7 +12,7 @@ const VerificationBadge = (props: { verified?: boolean; trace?: boolean }) => {
 	return (
 		<Wrapper>
 			{verified ? (
-				<IconVerified />
+				<IconVerifiedBadge />
 			) : trace ? (
 				<Image src={TraceIcon} alt='badge icon' />
 			) : null}

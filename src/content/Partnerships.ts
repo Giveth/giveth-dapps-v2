@@ -1,6 +1,5 @@
 import Alibre from '/public/images/partnerships/Alibre.svg';
 import Maker_DAO from '/public/images/partnerships/Maker_DAO.svg';
-import district0x from '/public/images/partnerships/district0x.svg';
 import MyCrypto from '/public/images/partnerships/MyCrypto.svg';
 import Aragon from '/public/images/partnerships/Aragon.svg';
 import MyEtherWallet from '/public/images/partnerships/MyEtherWallet.svg';
@@ -19,7 +18,6 @@ import Gravity_DAO from '/public/images/partnerships/Gravity_DAO.svg';
 import Ethereum_Colombia from '/public/images/partnerships/Ethereum_Colombia.svg';
 import Meta_Cartel from '/public/images/partnerships/Meta_Cartel.svg';
 import Vocdoni from '/public/images/partnerships/Vocdoni.svg';
-import SourceCred from '/public/images/partnerships/SourceCred.svg';
 import Meta_Gamma_Delta from '/public/images/partnerships/Meta_Gamma_Delta.svg';
 import clrfund from '/public/images/partnerships/clrfund.svg';
 import The_DAOist from '/public/images/partnerships/The_DAOist.svg';
@@ -89,12 +87,7 @@ export const PartnershipArray: IPartner[] = [
 			'A protocol that guards personal data, provides safe storage and enables ethical data exchange.',
 		link: 'https://datafund.io',
 	},
-	{
-		icon: district0x,
-		title: 'district0x',
-		description: 'A network of decentralized markets and communities.',
-		link: 'https://district0x.io/',
-	},
+
 	{
 		icon: DoinGud,
 		title: 'DoinGud',
@@ -207,13 +200,7 @@ export const PartnershipArray: IPartner[] = [
 			'The veteran organization for trading and holding crypto, now fully decentralized!',
 		link: 'https://shapeshift.com/',
 	},
-	{
-		icon: SourceCred,
-		title: 'SourceCred',
-		description:
-			'A tool for communities to measure and reward value creation.',
-		link: 'https://sourcecred.io/',
-	},
+
 	{
 		icon: Swarm,
 		title: 'Swarm',

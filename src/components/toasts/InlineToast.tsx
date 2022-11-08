@@ -2,8 +2,8 @@ import {
 	brandColors,
 	Caption,
 	IconAlertCricle,
-	IconAlertTriangle,
-	IconCheckmarkCircle,
+	IconAlertTriangleFilled,
+	IconCheckCircleFilled,
 	IconHelp,
 	semanticColors,
 } from '@giveth/ui-design-system';
@@ -39,11 +39,11 @@ const InlineToast: FC<IProps> = props => {
 	if (type === EToastType.Error) {
 		colorType.color = semanticColors.punch[700];
 		colorType.backgroundColor = semanticColors.punch[100];
-		colorType.icon = <IconAlertTriangle />;
+		colorType.icon = <IconAlertTriangleFilled />;
 	} else if (type === EToastType.Warning) {
 		colorType.color = semanticColors.golden[700];
 		colorType.backgroundColor = semanticColors.golden[200];
-		colorType.icon = <IconAlertTriangle />;
+		colorType.icon = <IconAlertTriangleFilled />;
 	} else if (type === EToastType.Info) {
 		colorType.color = semanticColors.blueSky[700];
 		colorType.backgroundColor = semanticColors.blueSky[100];
@@ -56,7 +56,7 @@ const InlineToast: FC<IProps> = props => {
 		// Success
 		colorType.color = semanticColors.jade[700];
 		colorType.backgroundColor = semanticColors.jade[100];
-		colorType.icon = <IconCheckmarkCircle />;
+		colorType.icon = <IconCheckCircleFilled />;
 	}
 
 	return (
