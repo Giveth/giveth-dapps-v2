@@ -1,1 +1,0 @@
-{formatMessage({ id: 'label.learn_more' })}

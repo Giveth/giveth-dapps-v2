@@ -9,6 +9,7 @@ import {
 } from '@giveth/ui-design-system';
 import React, { FC } from 'react';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import ExternalLink from '@/components/ExternalLink';
 
 export enum EToastType {
@@ -35,6 +36,7 @@ interface IColorType {
 
 const InlineToast: FC<IProps> = props => {
 	const { message, type, isHidden, noIcon, link } = props;
+	const { formatMessage } = useIntl();
 	const colorType: IColorType = {};
 	if (type === EToastType.Error) {
 		colorType.color = semanticColors.punch[700];
@@ -68,7 +70,9 @@ const InlineToast: FC<IProps> = props => {
 			<Caption>{message}</Caption>
 			{link && (
 				<ExternalLink color={colorType.color} href={link}>
-					<Caption medium>Learn more</Caption>
+					<Caption medium>
+						{formatMessage({ id: 'label.learn_more' })}
+					</Caption>
 				</ExternalLink>
 			)}
 		</Container>
