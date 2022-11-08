@@ -1,63 +1,132 @@
 import styled from 'styled-components';
-import { H2, H5, Subline } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	Caption,
+	GLink,
+	H5,
+	H6,
+	IconAlertCircle16,
+	IconArrowUp16,
+	IconArrowDown16,
+	neutralColors,
+	P,
+	semanticColors,
+	Subline,
+} from '@giveth/ui-design-system';
 import { FC } from 'react';
-import { Shadow } from '@/components/styled-components/Shadow';
-import { Flex } from '@/components/styled-components/Flex';
-import { Col, Row } from '@/components/Grid';
-import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { IProjectPower } from '@/apollo/types/types';
+import { Col, Row } from '@/components/Grid';
+import { Flex } from '@/components/styled-components/Flex';
+import links from '@/lib/constants/links';
 
 interface IGIVPowerHeader {
 	projectPower?: IProjectPower;
+	projectFuturePower?: IProjectPower;
 }
 
-const GIVPowerHeader: FC<IGIVPowerHeader> = ({ projectPower }) => {
-	const handlePowerRank = () => {
-		if (projectPower?.totalPower === 0) {
-			return '--';
-		} else if (projectPower?.powerRank) {
-			return projectPower?.powerRank;
-		} else {
-			return '--';
-		}
-	};
+const GIVPowerHeader: FC<IGIVPowerHeader> = ({
+	projectPower,
+	projectFuturePower,
+}) => {
+	const goingUp =
+		!projectFuturePower?.powerRank || !projectPower?.powerRank
+			? 0
+			: projectFuturePower.powerRank - projectPower?.powerRank;
 
 	return (
 		<Container>
-			<ColStyled xs={8} sm={7}>
-				<Subline>TOTAL GIVPOWER</Subline>
-				<Flex gap='4px' alignItems='flex-end'>
-					<H2 weight={700}>
-						{projectPower?.totalPower?.toFixed(2) || 0}
-					</H2>
-					<H5>GIV</H5>
-				</Flex>
-			</ColStyled>
-			<ColStyled xs={4} sm={5}>
-				<Subline>PROJECT RANK</Subline>
-				<H2 weight={700}>#{handlePowerRank()}</H2>
-			</ColStyled>
+			<H5 weight={700}>
+				Boost this project with GIVpower to improve its rank!
+			</H5>
+			<Desc>
+				Donors to higher ranked projects get more GIVbacks.
+				<LearnMoreLink
+					href={links.GIVPOWER_DOC}
+					size='Big'
+					target='_blank'
+				>
+					&nbsp;Learn more.
+				</LearnMoreLink>
+			</Desc>
+			<RanksRow>
+				<Col xs={12} md={6}>
+					<RankBox>
+						<RankTitle>Current Rank</RankTitle>
+						<Rank>
+							<H5 weight={700}>#{projectPower?.powerRank}</H5>
+						</Rank>
+						<RankDescContainer gap='6px'>
+							<IconAlertCircle16 />
+							<Caption>
+								The rank will update at the start of the next
+								GIVbacks round.
+							</Caption>
+						</RankDescContainer>
+					</RankBox>
+				</Col>
+				<Col xs={12} md={6}>
+					<RankBox>
+						<RankTitle>Projected Rank</RankTitle>
+						<NextRank state={goingUp}>
+							<Flex alignItems='baseline' gap='4px'>
+								{goingUp > 0 ? (
+									<IconArrowDown16 />
+								) : (
+									<IconArrowUp16 />
+								)}
+								<H6 weight={700}>
+									#
+									{projectFuturePower?.powerRank ||
+										projectPower?.powerRank}
+								</H6>
+							</Flex>
+						</NextRank>
+						<RankDescContainer gap='6px'>
+							<IconAlertCircle16 />
+							<Caption>
+								This is the expected rank for the next round
+								based on current GIVpower.
+							</Caption>
+						</RankDescContainer>
+					</RankBox>
+				</Col>
+			</RanksRow>
 		</Container>
 	);
 };
 
-const ColStyled = styled(Col)`
-	@media (max-width: ${deviceSize.mobileL}px) {
-		width: 100%;
-	}
+const Container = styled.div`
+	padding: 16px 24px;
+	border-radius: 8px;
+	background-color: ${neutralColors.gray[100]};
 `;
 
-const Container = styled(Row)`
-	margin-top: 57px;
-	padding: 24px;
-	box-shadow: ${Shadow.Neutral[400]};
-	border-radius: 12px;
-	max-width: 635px;
-	flex-direction: column;
-	gap: 16px 0;
-	${mediaQueries.mobileL} {
-		flex-direction: row;
-	}
+const Desc = styled(P)`
+	padding: 8px 0 32px;
+`;
+
+const LearnMoreLink = styled(GLink)`
+	color: ${brandColors.pinky[500]};
+`;
+
+const RanksRow = styled(Row)``;
+
+const RankBox = styled.div`
+	padding: 0 60px 32px 0;
+`;
+
+const RankTitle = styled(Subline)``;
+
+const Rank = styled.div`
+	height: 54px;
+`;
+
+const NextRank = styled(Rank)<{ state: number }>`
+	color: ${props =>
+		props.state > 0 ? semanticColors.punch[700] : semanticColors.jade[700]};
+`;
+const RankDescContainer = styled(Flex)`
+	padding-top: 6px;
 `;
 
 export default GIVPowerHeader;

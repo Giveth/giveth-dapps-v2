@@ -1,7 +1,7 @@
 import { FC, useState, useEffect } from 'react';
 import {
 	B,
-	IconHelp,
+	IconHelpFilled,
 	brandColors,
 	Caption,
 	IconGIVStream,
@@ -280,7 +280,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 									</Caption>
 									<IconWithTooltip
 										icon={
-											<IconHelp
+											<IconHelpFilled
 												size={16}
 												color={brandColors.deep[100]}
 											/>

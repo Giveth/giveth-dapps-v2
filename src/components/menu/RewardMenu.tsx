@@ -5,7 +5,7 @@ import {
 	GLink,
 	brandColors,
 	Caption,
-	IconHelp,
+	IconHelpFilled,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import { useEffect, useState } from 'react';
@@ -130,13 +130,13 @@ export const RewardMenu = ({
 							{formatWeiHelper(flowRateNow)}
 						</FlowrateAmount>
 						<FlowrateUnit>GIV/week</FlowrateUnit>
-						<IconHelpWraper
+						<IconHelpFilledWraper
 							onClick={() => {
 								setShowWhatIsGIVstreamModal(true);
 							}}
 						>
-							<IconHelp color='currentColor' />
-						</IconHelpWraper>
+							<IconHelpFilled color='currentColor' />
+						</IconHelpFilledWraper>
 					</FlowrateRow>
 				</FlowrateBox>
 				<Link href={Routes.GIVstream} passHref>
@@ -271,7 +271,7 @@ export const PartTitle = styled(Overline)`
 export const PartAmount = styled(Caption)``;
 export const PartUnit = styled(Caption)``;
 
-const IconHelpWraper = styled.div`
+const IconHelpFilledWraper = styled.div`
 	cursor: pointer;
 	color: ${brandColors.giv[200]};
 `;

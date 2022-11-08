@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
 import {
 	B,
@@ -6,33 +6,40 @@ import {
 	neutralColors,
 	P,
 } from '@giveth/ui-design-system';
-import { IPowerBoostingsData } from '@/apollo/types/types';
+import { IPowerBoostingsData, IProjectPower } from '@/apollo/types/types';
+import { RowWrapper } from '@/components/styled-components/Table';
 
 interface IGIVPowerTableProps {
 	boostingsData: IPowerBoostingsData[];
+	projectPower?: IProjectPower;
 }
 
-const GIVPowerTable = ({ boostingsData }: IGIVPowerTableProps) => {
+const GIVPowerTable: FC<IGIVPowerTableProps> = ({
+	boostingsData,
+	projectPower,
+}) => {
 	return (
 		<Container>
-			<TableHeader>Ranking</TableHeader>
 			<TableHeader></TableHeader>
 			<TableHeader>
 				<IconRocketInSpace size={20} />
 				Amount
 			</TableHeader>
-			{boostingsData?.map(({ id, user, boostedPower, rank }) => (
-				<Fragment key={id}>
-					<TableRow>#{rank}</TableRow>
-					<TableRow>{user.name || 'Anonymous'}</TableRow>
-					<TableRow>{boostedPower.toFixed(2)}</TableRow>
-				</Fragment>
+			{boostingsData?.map(({ id, user, boostedPower }) => (
+				<GIVpowerRowWrapper key={id}>
+					<TableCell>{user.name || 'Anonymous'}</TableCell>
+					<TableCell>{boostedPower.toFixed(2)}</TableCell>
+				</GIVpowerRowWrapper>
 			))}
+			<TableHeader>TOTAL GIVPOWER</TableHeader>
+			<TableHeader>
+				{projectPower?.totalPower?.toFixed(2) || 0}
+			</TableHeader>
 		</Container>
 	);
 };
 
-const TableRow = styled(P)`
+const TableCell = styled(P)`
 	height: 60px;
 	display: flex;
 	align-items: center;
@@ -43,14 +50,21 @@ const TableHeader = styled(B)`
 	border-bottom: 2px solid ${neutralColors.gray[400]};
 	display: flex;
 	gap: 8px;
+	padding-top: 16px;
 	padding-bottom: 8px;
+`;
+
+const GIVpowerRowWrapper = styled(RowWrapper)`
+	&:hover > div {
+		background-color: ${neutralColors.gray[300]};
+	}
 `;
 
 const Container = styled.div`
 	margin-top: 40px;
 	margin-bottom: 10px;
 	display: grid;
-	grid-template-columns: 0.7fr 4fr 1fr;
+	grid-template-columns: 4fr 1fr;
 `;
 
 export default GIVPowerTable;

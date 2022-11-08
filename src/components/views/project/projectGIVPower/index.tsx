@@ -13,6 +13,7 @@ interface ProjectGIVPowerIndexProps {
 	userId?: string;
 	projectId: string;
 	projectPower?: IProjectPower;
+	projectFuturePower?: IProjectPower;
 	isAdmin: boolean;
 }
 
@@ -21,12 +22,14 @@ const itemPerPage = 10;
 const ProjectGIVPowerIndex = ({
 	projectId,
 	projectPower,
+	projectFuturePower,
 	isAdmin,
 }: ProjectGIVPowerIndexProps) => {
 	const [boostingsData, setBoostingsData] = useState<IUserProjectPowers>();
 	const [page, setPage] = useState(0);
 	const hasGivPower = boostingsData ? boostingsData.totalCount > 0 : false;
 	const totalCount = boostingsData?.totalCount ?? 0;
+	console.log('projectFuturePower', projectFuturePower);
 	const fetchProjectBoostings = async () => {
 		if (projectId) {
 			client
@@ -63,11 +66,15 @@ const ProjectGIVPowerIndex = ({
 
 	return (
 		<>
-			<GIVPowerHeader projectPower={projectPower} />
+			<GIVPowerHeader
+				projectPower={projectPower}
+				projectFuturePower={projectFuturePower}
+			/>
 			{hasGivPower ? (
 				<>
 					<GIVPowerTable
 						boostingsData={boostingsData?.userProjectPowers ?? []}
+						projectPower={projectPower}
 					/>
 					<Flex justifyContent='flex-end'>
 						<Pagination

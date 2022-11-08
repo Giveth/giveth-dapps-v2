@@ -10,7 +10,7 @@ import {
 	IconGIVFarm,
 	IconGIVGarden,
 	IconGIVStream,
-	IconHelp,
+	IconHelpFilled16,
 	IconSpark,
 	P,
 } from '@giveth/ui-design-system';
@@ -198,7 +198,7 @@ export const TabGIVstreamBottom = () => {
 					</H1>
 					<FlowRateUnit>GIV/week</FlowRateUnit>
 					<IconWithTooltip
-						icon={<IconHelp size={16} />}
+						icon={<IconHelpFilled16 />}
 						direction={'top'}
 					>
 						<FlowRateTooltip>
@@ -240,7 +240,7 @@ export const TabGIVstreamBottom = () => {
 				<HistoryTitleRow>
 					<HistoryTitle>History</HistoryTitle>
 					<IconWithTooltip
-						icon={<IconHelp size={16} />}
+						icon={<IconHelpFilled16 />}
 						direction={'top'}
 					>
 						<HistoryTooltip>
@@ -280,7 +280,7 @@ export const GIVstreamProgress: FC<IGIVstreamProgressProps> = ({
 				<GsPTitle alignItems='center' gap='8px'>
 					<H6>GIViverse Expansion</H6>
 					<IconWithTooltip
-						icon={<IconHelp size={16} />}
+						icon={<IconHelpFilled16 />}
 						direction={'bottom'}
 					>
 						<GsPTooltip>

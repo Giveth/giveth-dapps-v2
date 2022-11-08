@@ -117,6 +117,11 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 				totalPower
 				round
 			}
+			projectFuturePower {
+				totalPower
+				powerRank
+				round
+			}
 		}
 	}
 `;

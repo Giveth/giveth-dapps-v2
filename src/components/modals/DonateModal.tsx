@@ -9,7 +9,7 @@ import {
 	neutralColors,
 	Button,
 	semanticColors,
-	IconInfo,
+	IconInfoFilled,
 	IconWalletApprove,
 } from '@giveth/ui-design-system';
 
@@ -117,7 +117,7 @@ const DonateModal = (props: IDonateModalProps) => {
 							color={semanticColors.blueSky[700]}
 							backgroundColor={semanticColors.blueSky[100]}
 							icon={
-								<IconInfo
+								<IconInfoFilled
 									size={16}
 									color={semanticColors.blueSky[700]}
 								/>

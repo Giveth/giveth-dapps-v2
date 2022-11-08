@@ -9,10 +9,10 @@ import {
 	ButtonLink,
 	B,
 	Subline,
-	IconVerified,
 	semanticColors,
 	IconGIVBack,
 	IconRocketInSpace16,
+	IconVerifiedBadge16,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 
@@ -119,8 +119,7 @@ const ProjectCard = (props: IProjectCard) => {
 							<Flex justifyContent='space-between'>
 								<Flex gap='16px'>
 									<Flex alignItems='center' gap='4px'>
-										<IconVerified
-											size={16}
+										<IconVerifiedBadge16
 											color={semanticColors.jade[500]}
 										/>
 										<VerifiedText>VERIFIED</VerifiedText>
