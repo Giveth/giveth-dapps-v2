@@ -1,8 +1,8 @@
 import {
-	IconInfo32,
+	IconInfoFilled32,
 	Lead,
 	semanticColors,
-	IconInfo16,
+	IconInfoFilled16,
 	Caption,
 	Button,
 } from '@giveth/ui-design-system';
@@ -23,7 +23,7 @@ export const SkipOnboardingModal: FC<IModal> = ({ setShowModal }) => {
 		<Modal
 			closeModal={closeModal}
 			isAnimating={isAnimating}
-			headerIcon={<IconInfo32 />}
+			headerIcon={<IconInfoFilled32 />}
 			headerTitle='Are you sure?'
 			headerTitlePosition='left'
 		>
@@ -33,7 +33,7 @@ export const SkipOnboardingModal: FC<IModal> = ({ setShowModal }) => {
 					projects to receive funds.
 				</Desc>
 				<AlertBox>
-					<IconInfo16 />
+					<IconInfoFilled16 />
 					<Caption>
 						You can update your info from profile later too.
 					</Caption>

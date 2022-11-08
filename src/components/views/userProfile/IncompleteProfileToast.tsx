@@ -2,7 +2,7 @@ import {
 	brandColors,
 	Button,
 	Caption,
-	IconAlertTriangle,
+	IconAlertTriangleFilled,
 	IconX,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
@@ -23,7 +23,10 @@ const IncompleteProfileToast = ({ close }: IIncompleteToast) => {
 				<IconX size={16} color={brandColors.mustard[700]} />
 			</CloseButton>
 			<IncompleteProfile>
-				<IconAlertTriangle size={16} color={brandColors.mustard[700]} />
+				<IconAlertTriangleFilled
+					size={16}
+					color={brandColors.mustard[700]}
+				/>
 				<div>
 					<Caption medium>Your profile is incomplete</Caption>
 					<Caption>

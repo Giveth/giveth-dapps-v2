@@ -3,7 +3,7 @@ import {
 	neutralColors,
 	brandColors,
 	IconRocketInSpace32,
-	IconHelp,
+	IconHelpFilled,
 	IconUnlock32,
 	H5,
 	H6,
@@ -82,7 +82,7 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 						<CloseText>
 							<H6>APR</H6>
 							<IconWithTooltip
-								icon={<IconHelp />}
+								icon={<IconHelpFilled />}
 								direction='top'
 								align='right'
 							>
@@ -158,7 +158,10 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 				<StakedContainer>
 					<SubtitleWithTooltip>
 						<Subtitle>Total staked GIV</Subtitle>
-						<IconWithTooltip icon={<IconHelp />} direction='top'>
+						<IconWithTooltip
+							icon={<IconHelpFilled />}
+							direction='top'
+						>
 							<TooltipContent>
 								All your staked GIV, including GIV that is
 								locked.

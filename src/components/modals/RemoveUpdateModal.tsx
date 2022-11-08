@@ -4,7 +4,7 @@ import {
 	Button,
 	Lead,
 	brandColors,
-	IconAlertTriangle,
+	IconAlertTriangleFilled,
 	IconTrash,
 } from '@giveth/ui-design-system';
 import { Modal } from '@/components/modals/Modal';
@@ -36,7 +36,7 @@ export const RemoveUpdateModal: FC<IProps> = ({ setShowModal, callback }) => {
 					color={brandColors.mustard[700]}
 					backgroundColor={brandColors.mustard[200]}
 					icon={
-						<IconAlertTriangle
+						<IconAlertTriangleFilled
 							size={16}
 							color={brandColors.mustard[700]}
 						/>

@@ -1,5 +1,5 @@
 import {
-	IconInfo16,
+	IconInfoFilled16,
 	neutralColors,
 	brandColors,
 	Caption,
@@ -31,7 +31,7 @@ const DAOChangeNetworkModal = ({ network }: IChangeNetworkModal) => {
 	return (
 		<DAOChangeNetworkModalContainer>
 			<Flex gap='16px'>
-				<IconInfo16 />
+				<IconInfoFilled16 />
 				<Title>Switch network</Title>
 			</Flex>
 			<Desc>This RegenFarm is only available on {networkLabel}</Desc>

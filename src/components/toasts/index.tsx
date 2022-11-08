@@ -1,10 +1,10 @@
 import {
 	brandColors,
 	Caption,
-	IconCheckmarkCircle,
 	semanticColors,
 	ButtonText,
 	IconAlertCircle16,
+	IconCheckCircleFilled16,
 } from '@giveth/ui-design-system';
 import toast, { ToastPosition } from 'react-hot-toast';
 import styled from 'styled-components';
@@ -42,7 +42,7 @@ const toastIcon = (type: ToastType) => {
 		case ToastType.INFO_SECONDARY:
 			return <IconAlertCircle16 />;
 		case ToastType.SUCCESS:
-			return <IconCheckmarkCircle size={16} />;
+			return <IconCheckCircleFilled16 />;
 		case ToastType.HINT:
 			return <IconAlertCircle16 />;
 		case ToastType.WARNING:

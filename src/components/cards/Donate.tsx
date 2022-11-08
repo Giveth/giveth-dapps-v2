@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import {
 	Subline,
 	neutralColors,
-	IconHelp,
+	IconHelpFilled16,
 	H2,
 	H5,
 	Lead,
@@ -149,7 +149,7 @@ export const DonateCard: FC<IClaimViewCardProps> = ({ index }) => {
 							<Flex gap='4px' alignItems='center'>
 								<ImpactCardLabel>Your donation</ImpactCardLabel>
 								<IconWithTooltip
-									icon={<IconHelp size={16} />}
+									icon={<IconHelpFilled16 />}
 									direction={'top'}
 								>
 									<GdropDonateTooltip>

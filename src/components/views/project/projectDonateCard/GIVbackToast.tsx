@@ -3,7 +3,7 @@ import {
 	brandColors,
 	Caption,
 	IconGIVBack,
-	IconHelp,
+	IconHelpFilled16,
 	Subline,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
@@ -22,7 +22,7 @@ const GIVbackToast = () => {
 				<Title>
 					<Caption medium>GIVbacks</Caption>
 					<IconWithTooltip
-						icon={<IconHelp size={16} />}
+						icon={<IconHelpFilled16 />}
 						direction={isTablet ? 'left' : 'top'}
 					>
 						<Popup>

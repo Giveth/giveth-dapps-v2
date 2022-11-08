@@ -4,7 +4,7 @@ import {
 	Caption,
 	GLink,
 	H6,
-	IconHelp,
+	IconHelpFilled16,
 	IconRocketInSpace24,
 	Lead,
 	neutralColors,
@@ -220,7 +220,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 						{formatWeiHelper(totalGIVpower)}
 						<GIVpowerHelp>
 							<IconWithTooltip
-								icon={<IconHelp size={16} />}
+								icon={<IconHelpFilled16 />}
 								direction={'bottom'}
 							>
 								<LockInfotooltip>
@@ -235,7 +235,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 					<Flex alignItems='baseline' gap='4px'>
 						<P>Boosted projects</P>
 						<IconWithTooltip
-							icon={<IconHelp size={16} />}
+							icon={<IconHelpFilled16 />}
 							direction={'bottom'}
 						>
 							<LockInfotooltip>

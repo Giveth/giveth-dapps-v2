@@ -6,7 +6,7 @@ import {
 	IconGIVBack,
 	IconGIVFarm,
 	IconGIVStream,
-	IconHelp,
+	IconHelpFilled,
 	Lead,
 	P,
 } from '@giveth/ui-design-system';
@@ -355,7 +355,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 											</Caption>
 											<IconWithTooltip
 												icon={
-													<IconHelp
+													<IconHelpFilled
 														size={16}
 														color={
 															brandColors
@@ -441,7 +441,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 													<IconWithTooltip
 														icon={
 															<Flex gap='4px'>
-																<IconHelp
+																<IconHelpFilled
 																	size={16}
 																	color={
 																		brandColors
