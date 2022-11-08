@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { H4 } from '@giveth/ui-design-system';
 import { H4, neutralColors } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 
