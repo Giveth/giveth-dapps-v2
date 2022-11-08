@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { Contract } from '@ethersproject/contracts';
 import BigNumber from 'bignumber.js';
+import { useIntl } from 'react-intl';
 import {
 	B,
 	brandColors,
@@ -83,6 +84,7 @@ const CryptoDonation = (props: {
 }) => {
 	const { chainId: networkId, account, library, active } = useWeb3React();
 	const dispatch = useAppDispatch();
+	const { formatMessage } = useIntl();
 	const { isEnabled, isSignedIn, balance } = useAppSelector(
 		state => state.user,
 	);
@@ -398,15 +400,20 @@ const CryptoDonation = (props: {
 						<NetworkToast>
 							<div>
 								<Caption medium>
-									Projects from {orgName} only accept
-									donations on{' '}
+									{formatMessage({
+										id: 'label.projects_from',
+									})}{' '}
+									{orgName}{' '}
+									{formatMessage({
+										id: 'label.only_accept_on',
+									})}{' '}
 									{getNetworkNames(acceptedChains, 'and')}.
 								</Caption>
 							</div>
 							<SwitchCaption
 								onClick={() => switchNetwork(ethereumChain.id)}
 							>
-								Switch network
+								{formatMessage({ id: 'label.switch_network' })}
 							</SwitchCaption>
 						</NetworkToast>
 					)}
@@ -417,13 +424,15 @@ const CryptoDonation = (props: {
 							<div>
 								<img src='/images/gas_station.svg' alt='gas' />
 								<Caption medium>
-									Save on gas fees, switch to Gnosis Chain.
+									{formatMessage({
+										id: 'label.save_on_gas_fees',
+									})}
 								</Caption>
 							</div>
 							<SwitchCaption
 								onClick={() => switchNetwork(gnosisChain.id)}
 							>
-								Switch network
+								{formatMessage({ id: 'label.switch_network' })}
 							</SwitchCaption>
 						</NetworkToast>
 					)}
@@ -442,8 +451,12 @@ const CryptoDonation = (props: {
 							onInputChange={handleCustomToken}
 							placeholder={
 								supportCustomTokens
-									? 'Search name or paste an address'
-									: 'Search name'
+									? formatMessage({
+											id: 'component.input.search_or_paste',
+									  })
+									: formatMessage({
+											id: 'component.input.search_name',
+									  })
 							}
 							projectVerified={project?.verified!}
 							disabled={!active}
@@ -455,7 +468,9 @@ const CryptoDonation = (props: {
 						setError={setError}
 						errorHandler={{
 							condition: value => value >= 0 && value <= 0.000001,
-							message: 'Set a valid amount',
+							message: formatMessage({
+								id: 'label.set_valid_ammount',
+							}),
 						}}
 						type='number'
 						onChange={val => {
@@ -464,14 +479,14 @@ const CryptoDonation = (props: {
 							if (checkGIV) setAmountTyped(val);
 						}}
 						onFocus={(val: any) => setInputBoxFocused(!!val)}
-						placeholder='Amount'
+						placeholder={formatMessage({ id: 'label.amount' })}
 						disabled={!active}
 					/>
 				</SearchContainer>
 				{selectedToken && (
 					<AvText>
-						Available: {formatBalance(selectedTokenBalance)}{' '}
-						{tokenSymbol}
+						{formatMessage({ id: 'label.available' })}:{' '}
+						{formatBalance(selectedTokenBalance)} {tokenSymbol}
 					</AvText>
 				)}
 			</InputContainer>
@@ -484,45 +499,51 @@ const CryptoDonation = (props: {
 			)}
 			<CheckBoxContainer>
 				<CheckBox
-					label='Make it anonymous'
+					label={formatMessage({ id: 'label.make_it_anonymous' })}
 					checked={anonymous}
 					onChange={() => setAnonymous(!anonymous)}
 				/>
 				<B>
-					By checking this, we won't consider your profile information
-					as a donor for this donation and won't show it on public
-					pages.
+					{formatMessage({
+						id: 'component.tooltip.by_checking_this',
+					})}
 				</B>
 			</CheckBoxContainer>
 
 			{!isActive && (
 				<InlineToast
 					type={EToastType.Warning}
-					message='This project is not active.'
+					message={formatMessage({
+						id: 'label.this_project_is_not_active',
+					})}
 				/>
 			)}
 
 			{isEnabled && (
 				<>
 					<MainButton
-						label='DONATE'
+						label={formatMessage({ id: 'label.donate' })}
 						disabled={donationDisabled}
 						size='large'
 						onClick={handleDonate}
 					/>
 					<AnotherWalletTxt>
-						Want to use another wallet?{' '}
+						{formatMessage({
+							id: 'label.want_to_use_another_wallet',
+						})}{' '}
 						<span
 							onClick={() => dispatch(setShowWalletModal(true))}
 						>
-							Change Wallet
+							{formatMessage({ id: 'label.change_wallet' })}
 						</span>
 					</AnotherWalletTxt>
 				</>
 			)}
 			{!isEnabled && (
 				<MainButton
-					label='CONNECT WALLET'
+					label={formatMessage({
+						id: 'component.button.connect_wallet',
+					})}
 					onClick={() => dispatch(setShowWalletModal(true))}
 				/>
 			)}
@@ -599,6 +620,7 @@ const MainButton = styled(Button)`
 	background-color: ${props =>
 		props.disabled ? brandColors.giv[200] : brandColors.giv[500]};
 	color: white;
+	text-transform: uppercase;
 `;
 
 const CheckBoxContainer = styled.div`

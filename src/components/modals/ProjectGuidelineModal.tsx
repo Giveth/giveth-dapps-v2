@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { neutralColors, brandColors, P } from '@giveth/ui-design-system';
 import Image from 'next/image';
@@ -14,44 +15,60 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 export const ProjectGuidelineModal: FC<IModal> = ({ setShowModal }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const { formatMessage } = useIntl();
 
 	return (
 		<Modal
 			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerIcon={<Image src={BulbIcon} alt='light bulb' />}
-			headerTitle='Submission guidelines'
+			headerTitle={formatMessage({ id: 'label.submission_guidelines' })}
 			headerTitlePosition='left'
 		>
 			<Container>
 				<Bullets>
 					<li>
-						Clear project description explaining who the
-						organization is and what you will do with the funds.
+						{formatMessage({
+							id: 'label.submission_guidelines.one',
+						})}
 					</li>
-					<li>A unique or custom banner photo.</li>
 					<li>
-						No violations of our{' '}
+						{formatMessage({
+							id: 'label.submission_guidelines.two',
+						})}
+					</li>
+					<li>
+						{formatMessage({
+							id: 'label.submission_guidelines.three',
+						})}{' '}
 						<ExternalLink
 							href={links.COVENANT_DOC}
-							title='Covenant'
+							title={formatMessage({ id: 'label.covenant' })}
 							color={brandColors.pinky[500]}
 						/>{' '}
-						and/or{' '}
+						{formatMessage({ id: 'label.and_or' })}{' '}
 						<ExternalLink
 							href={Routes.Terms}
-							title='Terms of Use'
+							title={formatMessage({ id: 'component.title.tos' })}
 							color={brandColors.pinky[500]}
 						/>
 						.
 					</li>
 					<li>
-						<Optional>(Optional)</Optional>Embedded photos, videos
-						or legitimate external links.
+						<Optional>
+							({formatMessage({ id: 'label.optional' })})
+						</Optional>
+						{formatMessage({
+							id: 'label.submission_guidelines.four',
+						})}
 					</li>
 					<li>
-						<Optional>(Optional)</Optional>A link to the repository
-						of open-source projects.
+						<Optional>
+							({formatMessage({ id: 'label.optional' })})
+						</Optional>
+						{formatMessage({
+							id: 'label.submission_guidelines.five',
+						})}
 					</li>
 				</Bullets>
 			</Container>

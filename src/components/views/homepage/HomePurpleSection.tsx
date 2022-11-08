@@ -12,6 +12,7 @@ import {
 	H3,
 } from '@giveth/ui-design-system';
 
+import { useIntl } from 'react-intl';
 import TwitterIcon from '/public/images/twitter.svg';
 import { isSSRMode, isUserRegistered } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
@@ -23,6 +24,7 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 
 const HomePurpleSection = () => {
+	const { formatMessage } = useIntl();
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 	const user = useAppSelector(state => state.user.userData);
@@ -51,13 +53,16 @@ Explore @givethio to support this vision for the Future of Giving. 💜`;
 			</MustardThing>
 			<Container>
 				<GivingEffortless weight={700}>
-					Giving is effortless and people all around the world are
-					rewarded for creating positive change.
+					{formatMessage({
+						id: 'page.home.section.giving_is_effortless',
+					})}
 				</GivingEffortless>
 				<GivingButtons>
 					<StartGiving
 						size='large'
-						label='START GIVING'
+						label={formatMessage({
+							id: 'component.button.start_giving',
+						})}
 						onClick={() => router.push(Routes.Projects)}
 					/>
 					<TwitterShareButton
@@ -73,59 +78,76 @@ Explore @givethio to support this vision for the Future of Giving. 💜`;
 								height={24}
 							/>
 							<TwitterButtonText size='Big'>
-								Tweet this
+								{formatMessage({
+									id: 'component.button.tweet_this',
+								})}
 							</TwitterButtonText>
 						</TwitterButton>
 					</TwitterShareButton>
 				</GivingButtons>
 				<GIVeconomy>
-					<H3 weight={700}>The GIVeconomy</H3>
+					<H3 weight={700}>
+						{formatMessage({
+							id: 'page.home.section.the_giveconomy',
+						})}
+					</H3>
 					<br />
 					<Lead>
-						Welcome to a future where we revolutionize economic
-						systems, regenerate the Earth, evolve human coordination
-						& create societies based on decentralization, freedom,
-						community and love.
+						{formatMessage({
+							id: 'page.home.section.the_giveconomy_desc',
+						})}
 					</Lead>
 					<br />
 					<Link href={Routes.GIVECONOMY} passHref>
 						<GIVeconomyUrl>
-							Learn more about GIVeconomy
+							{formatMessage({
+								id: 'component.button.learn_more_giveconomy',
+							})}
 						</GIVeconomyUrl>
 					</Link>
 				</GIVeconomy>
 				<ForMakersGivers>
 					<ForMakersContainers md={6}>
-						<H3 weight={700}>For Projects</H3>
+						<H3 weight={700}>
+							{formatMessage({
+								id: 'page.home.section.for_projects',
+							})}
+						</H3>
 						<br />
 						<Lead>
-							Create a project within minutes and start raising
-							funds in crypto with zero added fees. Get verified
-							and your donors will be rewarded by GIVbacks.
+							{formatMessage({
+								id: 'page.home.section.for_projects_desc',
+							})}
 						</Lead>
 						<br />
 						<ForMakersButton
 							buttonType='primary'
 							size='large'
-							label='CREATE A PROJECT'
+							label={formatMessage({
+								id: 'component.button.create_project',
+							})}
 							onClick={handleCreateButton}
 						/>
 					</ForMakersContainers>
 					<ForMakersContainers md={6}>
-						<H3 weight={700}>For Givers</H3>
+						<H3 weight={700}>
+							{formatMessage({
+								id: 'page.home.section.for_givers',
+							})}
+						</H3>
 						<br />
 						<Lead>
-							For the first time ever, there is an upside to
-							donating. When you donate crypto to verified
-							projects, you get rewarded with GIV from our
-							GIVbacks program. Enjoy liquid GIV and a GIV/week
-							flowrate from the GIVstream until 2026.
+							{formatMessage({
+								id: 'page.home.section.for_givers_desc',
+							})}
 						</Lead>
 						<br />
 						<ForMakersButton
 							buttonType='primary'
 							size='large'
-							label='DONATE TO A PROJECT'
+							label={formatMessage({
+								id: 'component.button.donate_project',
+							})}
 							onClick={() => router.push(Routes.Projects)}
 						/>
 					</ForMakersContainers>
@@ -229,7 +251,7 @@ const StartGiving = styled(Button)`
 	color: ${brandColors.giv[500]};
 	height: 66px;
 	padding: 0 80px;
-
+	text-transform: uppercase;
 	&:hover {
 		background-color: ${brandColors.mustard[500]};
 		color: ${brandColors.giv[500]};

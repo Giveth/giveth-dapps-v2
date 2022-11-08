@@ -1,3 +1,4 @@
+import { useIntl } from 'react-intl';
 import {
 	Button,
 	GLink,
@@ -44,6 +45,7 @@ export default function Milestones() {
 		handleSubmit,
 		formState: { errors, isDirty, isSubmitting },
 	} = useForm<IMilestonesForm>();
+	const { formatMessage } = useIntl();
 
 	const handleNext = (formData: IMilestonesForm) => {
 		async function sendReq() {
@@ -79,9 +81,13 @@ export default function Milestones() {
 	return (
 		<form onSubmit={handleSubmit(handleNext)}>
 			<div>
-				<H6 weight={700}>Activity and Milestones</H6>
+				<H6 weight={700}>
+					{formatMessage({ id: 'label.activity_and_milestones' })}
+				</H6>
 				<LeadStyled>
-					When was your organization/project founded?
+					{formatMessage({
+						id: 'page.verification.activity_and_milestones.one',
+					})}
 				</LeadStyled>
 				<br />
 				<DatePickerWrapper>
@@ -102,7 +108,9 @@ export default function Milestones() {
 								dateFormat='MM/yyyy'
 								showMonthYearPicker
 								showPopperArrow={false}
-								placeholderText='Select a date'
+								placeholderText={formatMessage({
+									id: 'label.select_a_date',
+								})}
 								disabled={!isDraft}
 								hasError={
 									!!errors?.foundationDate?.message ?? false
@@ -115,12 +123,14 @@ export default function Milestones() {
 					<DateError>{errors.foundationDate?.message}</DateError>
 				)}
 				<LeadStyled>
-					What is your organization/project's mission and how does it
-					align with creating positive change in the world?
+					{formatMessage({
+						id: 'page.verification.activity_and_milestones.two',
+					})}
 				</LeadStyled>
 				<Paragraph>
-					Please describe how your project is benefiting society and
-					the world at large.
+					{formatMessage({
+						id: 'page.verification.activity_and_milestones.three',
+					})}
 				</Paragraph>
 				<DescriptionInput
 					height='82px'
@@ -132,12 +142,14 @@ export default function Milestones() {
 					disabled={!isDraft}
 				/>
 				<Lead>
-					Which milestones has your organization/project achieved
-					since conception?
+					{formatMessage({
+						id: 'page.verification.activity_and_milestones.four',
+					})}
 				</Lead>
 				<Paragraph>
-					Please provide links to photos, videos, testimonials or
-					other evidence of your project's impact.
+					{formatMessage({
+						id: 'page.verification.activity_and_milestones.five',
+					})}
 				</Paragraph>
 				<DescriptionInput
 					height='82px'
@@ -149,10 +161,11 @@ export default function Milestones() {
 					disabled={!isDraft}
 				/>
 				<Lead>
-					If you cannot provide links to evidence of milestones that
-					have already been achieved, you can upload proof here.
+					{formatMessage({
+						id: 'page.verification.activity_and_milestones.six',
+					})}
 				</Lead>
-				<Paragraph>Optional</Paragraph>
+				<Paragraph>{formatMessage({ id: 'label.optional' })}</Paragraph>
 				<Controller
 					control={control}
 					name='achievedMilestonesProofs'
@@ -171,11 +184,18 @@ export default function Milestones() {
 			<div>
 				<ContentSeparator />
 				<BtnContainer>
-					<Button onClick={() => setStep(4)} label='<     PREVIOUS' />
+					<Button
+						onClick={() => setStep(4)}
+						label={`<     ${formatMessage({
+							id: 'label.prev',
+						})}`}
+					/>
 					<Button
 						loading={isSubmitting}
 						disabled={uploading}
-						label='NEXT     >'
+						label={`${formatMessage({
+							id: 'label.next',
+						})}     >`}
 						type='submit'
 					/>
 				</BtnContainer>

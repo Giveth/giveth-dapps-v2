@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { useIntl } from 'react-intl';
 import {
 	Button,
 	H6,
@@ -32,6 +33,7 @@ const SocialProfile = () => {
 	const { verificationData, setVerificationData, isDraft } =
 		useVerificationData();
 	const router = useRouter();
+	const { formatMessage } = useIntl();
 
 	const { slug } = router.query;
 
@@ -120,13 +122,18 @@ const SocialProfile = () => {
 	return (
 		<>
 			<div>
-				<H6 weight={700}>Personal Social Media</H6>
+				<H6 weight={700}>
+					{formatMessage({ id: 'label.personal_social_media' })}
+				</H6>
 				<br />
 				<Lead>
-					Connecting your social media accounts is a good way to show
-					that you are who you say you are.
+					{formatMessage({
+						id: 'label.connecting_your_social_media_is_a_good_way',
+					})}
 				</Lead>
-				<Description>This is optional</Description>
+				<Description>
+					{formatMessage({ id: 'label.this_is_optional' })}
+				</Description>
 				<ButtonsSection>
 					{/* <ButtonRow>
 						<ButtonSocial color='#00ACEE'>
@@ -168,7 +175,9 @@ const SocialProfile = () => {
 						>
 							<IconTwitter />
 							{twitterData?.socialNetworkId ??
-								'CONNECT TO TWITTER'}
+								`${formatMessage({
+									id: 'label.connect_to',
+								})} TWITTER`}
 						</ButtonSocial>
 						{twitterData?.socialNetworkId && (
 							<RemoveButton
@@ -191,7 +200,9 @@ const SocialProfile = () => {
 						>
 							<Image src={DiscordIcon} alt='discord icon' />
 							{discordData?.socialNetworkId ??
-								'CONNECT TO DISCORD'}
+								`${formatMessage({
+									id: 'label.connect_to',
+								})} DISCORD`}
 						</ButtonSocial>
 						{discordData?.socialNetworkId && (
 							<RemoveButton
@@ -213,7 +224,10 @@ const SocialProfile = () => {
 							}}
 						>
 							<Image src={LinkedinIcon} alt='linkedin icon' />
-							{linkedinData?.name ?? 'CONNECT TO LINKEDIN'}
+							{linkedinData?.name ??
+								`${formatMessage({
+									id: 'label.connect_to',
+								})} LINKEDIN`}
 						</ButtonSocial>
 						{linkedinData?.name && (
 							<RemoveButton
@@ -228,8 +242,14 @@ const SocialProfile = () => {
 			<div>
 				<ContentSeparator />
 				<BtnContainer>
-					<Button onClick={() => setStep(1)} label='<     PREVIOUS' />
-					<Button onClick={() => setStep(3)} label='NEXT     >' />
+					<Button
+						onClick={() => setStep(1)}
+						label={`<     ${formatMessage({ id: 'label.prev' })}`}
+					/>
+					<Button
+						onClick={() => setStep(3)}
+						label={`${formatMessage({ id: 'label.next' })}     >`}
+					/>
 				</BtnContainer>
 			</div>
 		</>
@@ -258,6 +278,7 @@ const ButtonSocial = styled(FlexCenter)<{ color?: string }>`
 	width: fit-content;
 	padding: 0 24px;
 	cursor: pointer;
+	text-transform: uppercase;
 `;
 
 const Description = styled(P)`

@@ -5,6 +5,7 @@ import {
 	H4,
 	IconProfile,
 } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import InternalLink from '@/components/InternalLink';
 import Routes from '@/lib/constants/Routes';
@@ -12,26 +13,33 @@ import { FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 
 const AlreadyRegistered = () => {
+	const { formatMessage } = useIntl();
 	return (
 		<ContainerStyled>
 			<IconContainer>
 				<IconProfile color={brandColors.giv[300]} size={90} />
 			</IconContainer>
 			<H4Styled>
-				You&apos;ve already completed your profile!
-				<div>You can use the dashboard to edit.</div>
+				{formatMessage({
+					id: 'label.you_already_completed_your_profile',
+				})}
+				<div>
+					{formatMessage({
+						id: 'label.you_can_use_the_dashboard_to_edit',
+					})}
+				</div>
 			</H4Styled>
 			<InternalLink href={Routes.MyAccount}>
 				<ButtonStyled
 					size='medium'
-					label='Go to dashboard'
+					label={formatMessage({ id: 'label.go_to_dashboard' })}
 					buttonType='primary'
 				/>
 			</InternalLink>
 			<InternalLink href={Routes.Home}>
 				<ButtonTexty
 					buttonType='texty'
-					label='or Go back to Homepage'
+					label={formatMessage({ id: 'label.or_go_back_to_home' })}
 				/>
 			</InternalLink>
 		</ContainerStyled>
