@@ -55,36 +55,9 @@ const ProjectGIVPowerIndex = ({
 				} catch (err) {
 					showToastError(err);
 					captureException(err, {
-						tags: { section: 'createProjectFetchCategories' },
+						tags: { section: 'fetchProjectBoostings' },
 					});
 				}
-				// const { data, loading } = await client.query({
-				// 	query: FETCH_PROJECT_BOOSTINGS,
-				// 	variables: {
-				// 		projectId: +projectId,
-				// 		take: itemPerPage,
-				// 		skip: page * itemPerPage,
-				// 	},
-				// 	fetchPolicy: 'network-only',
-				// });
-				// console.log('res', res);
-				// .then(
-				// 	(res: {
-				// 		data: { userProjectPowers: IUserProjectPowers };
-				// 	}) => {
-				// 		console.log('Res', res?.data);
-				// 		setBoostingsData(
-				// 			res?.data?.userProjectPowers ?? [],
-				// 		);
-				// 	},
-				// )
-				// .catch((error: unknown) => {
-				// 	captureException(error, {
-				// 		tags: {
-				// 			section: 'fetchProjectBoostings',
-				// 		},
-				// 	});
-				// });
 			}
 			setLoading(false);
 		};
