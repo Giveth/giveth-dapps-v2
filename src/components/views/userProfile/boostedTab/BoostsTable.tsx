@@ -330,13 +330,25 @@ const BoostsTable: FC<IBoostsTable> = ({
 														}
 													/>
 												) : (
-													<IconUnLockable16
-														size={16}
-														color={
-															neutralColors
-																.gray[400]
+													<IconWithTooltip
+														icon={
+															<IconUnLockable16
+																size={16}
+																color={
+																	neutralColors
+																		.gray[400]
+																}
+															/>
 														}
-													/>
+														direction='top'
+													>
+														<BoostTooltip>
+															You can’t lock every
+															percentage because
+															the total must equal
+															100%
+														</BoostTooltip>
+													</IconWithTooltip>
 												)}
 											</IconWrapper>
 										}
@@ -374,14 +386,14 @@ const BoostsTable: FC<IBoostsTable> = ({
 													direction='top'
 													align='left'
 												>
-													<UnverifiedTooltip>
+													<BoostTooltip>
 														This project has lost
 														its verified status and
 														therefore is no longer
 														eligible for GIVpower.
 														We recommend removing
 														this boost.
-													</UnverifiedTooltip>
+													</BoostTooltip>
 												</IconWithTooltip>
 											</IconWrapper>
 										)}
@@ -494,9 +506,9 @@ const Percentage = styled(InputSuffix)`
 	user-select: none;
 `;
 
-const UnverifiedTooltip = styled(Subline)`
+const BoostTooltip = styled(Subline)`
 	color: ${neutralColors.gray[100]};
-	width: 260px;
+	width: 240px;
 `;
 
 export default BoostsTable;
