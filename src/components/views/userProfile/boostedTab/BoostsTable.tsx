@@ -341,7 +341,6 @@ const BoostsTable: FC<IBoostsTable> = ({
 															/>
 														}
 														direction='top'
-														align='left'
 													>
 														<BoostTooltip>
 															You can’t lock every
@@ -509,7 +508,7 @@ const Percentage = styled(InputSuffix)`
 
 const BoostTooltip = styled(Subline)`
 	color: ${neutralColors.gray[100]};
-	width: 260px;
+	width: 240px;
 `;
 
 export default BoostsTable;
