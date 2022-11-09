@@ -9,6 +9,8 @@ import { Flex } from '@/components/styled-components/Flex';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BOOSTINGS } from '@/apollo/gql/gqlPowerBoosting';
 import { showToastError } from '@/lib/helpers';
+import LoadingAnimation from '@/animations/loading_giv.json';
+import LottieControl from '@/components/animations/lottieControl';
 
 interface ProjectGIVPowerIndexProps {
 	userId?: string;
@@ -50,7 +52,6 @@ const ProjectGIVPowerIndex = ({
 					setBoostingsData(
 						(userProjectPowers as IUserProjectPowers) ?? [],
 					);
-					console.log('userProjectPowers', userProjectPowers);
 				} catch (err) {
 					showToastError(err);
 					captureException(err, {
@@ -90,6 +91,9 @@ const ProjectGIVPowerIndex = ({
 
 		fetchProjectBoostings();
 	}, [page]);
+
+	if (loading)
+		return <LottieControl animationData={LoadingAnimation} size={150} />;
 
 	return (
 		<>
