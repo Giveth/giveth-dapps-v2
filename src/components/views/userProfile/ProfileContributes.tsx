@@ -72,7 +72,7 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 						<ProfileTab active={tab === EProfile.GIVPOWER}>
 							{`${myAccount ? 'My ' : ''} GIVpower`}
 							{myAccount && user?.boostedProjectsCount !== 0 && (
-								<Count active={tab === EProfile.PROJECTS}>
+								<Count active={tab === EProfile.GIVPOWER}>
 									{user?.boostedProjectsCount}
 								</Count>
 							)}
