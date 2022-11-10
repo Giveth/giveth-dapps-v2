@@ -13,12 +13,6 @@ const ProfileContributeCard: FC<IUserProfileView> = ({ user, myAccount }) => {
 
 	return (
 		<>
-			{!myAccount && (
-				<UserContributeTitle
-					weight={700}
-				>{`${userName}’s donations & projects`}</UserContributeTitle>
-			)}
-
 			<ContributeCardContainer>
 				<ContributeCard>
 					<ContributeCardTitles>donations</ContributeCardTitles>
@@ -37,6 +31,11 @@ const ProfileContributeCard: FC<IUserProfileView> = ({ user, myAccount }) => {
 					<H5>${formatUSD(user.totalReceived)}</H5>
 				</ContributeCard>
 			</ContributeCardContainer>
+			{!myAccount && (
+				<UserContributeTitle
+					weight={700}
+				>{`${userName}’s donations & projects`}</UserContributeTitle>
+			)}
 		</>
 	);
 };
