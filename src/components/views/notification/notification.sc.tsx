@@ -1,6 +1,7 @@
 import { Container, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+import { TabItem } from '@/components/styled-components/Tabs';
 
 export const NotificationContainer = styled(Container)`
 	margin-top: 176px;
@@ -34,4 +35,14 @@ export const ConfigContainer = styled(FlexCenter)`
 	border-radius: 8px;
 	padding: 10px;
 	cursor: pointer;
+`;
+
+export const NotifisTabItem = styled(TabItem)`
+	${props =>
+		props.active &&
+		`
+		background: ${neutralColors.gray[300]};
+		box-shadow: 0 3px 20px rgba(212, 218, 238, 0.4);
+		border-radius: 50px;
+	`}
 `;

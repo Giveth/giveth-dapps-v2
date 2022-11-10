@@ -10,10 +10,10 @@ import {
 	IconContainer,
 	NotificationDesc,
 	ConfigContainer,
+	NotifisTabItem,
 } from './notification.sc';
 import {
 	TabsContainer,
-	TabItem,
 	TabItemCount,
 } from '@/components/styled-components/Tabs';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -89,7 +89,7 @@ function NotificationView() {
 
 			<Flex justifyContent='space-between' alignItems='center'>
 				<TabsContainer>
-					<TabItem
+					<NotifisTabItem
 						active={tab === ENotificationTabs.ALL}
 						onClick={() => setTab(ENotificationTabs.ALL)}
 					>
@@ -97,8 +97,8 @@ function NotificationView() {
 						<TabItemCount active={tab === ENotificationTabs.ALL}>
 							{totalUnreadNotifications}
 						</TabItemCount>
-					</TabItem>
-					<TabItem
+					</NotifisTabItem>
+					<NotifisTabItem
 						active={tab === ENotificationTabs.GENERAL}
 						onClick={() => setTab(ENotificationTabs.GENERAL)}
 					>
@@ -108,8 +108,8 @@ function NotificationView() {
 						>
 							{general}
 						</TabItemCount>
-					</TabItem>
-					<TabItem
+					</NotifisTabItem>
+					<NotifisTabItem
 						active={tab === ENotificationTabs.PROJECTS}
 						onClick={() => setTab(ENotificationTabs.PROJECTS)}
 					>
@@ -119,8 +119,8 @@ function NotificationView() {
 						>
 							{projectsRelated}
 						</TabItemCount>
-					</TabItem>
-					<TabItem
+					</NotifisTabItem>
+					<NotifisTabItem
 						active={tab === ENotificationTabs.GIVECONOMY}
 						onClick={() => setTab(ENotificationTabs.GIVECONOMY)}
 					>
@@ -130,7 +130,7 @@ function NotificationView() {
 						>
 							{givEconomyRelated}
 						</TabItemCount>
-					</TabItem>
+					</NotifisTabItem>
 				</TabsContainer>
 				<InternalLink href={Routes.NotificationsSettings}>
 					<ConfigContainer>
