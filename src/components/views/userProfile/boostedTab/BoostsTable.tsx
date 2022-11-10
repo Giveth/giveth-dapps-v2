@@ -415,7 +415,9 @@ const BoostsTable: FC<IBoostsTable> = ({
 						<ExceedError>You can’t exceed 100%</ExceedError>
 					)}
 				</CustomTableFooter>
-				<TableFooter></TableFooter>
+				{myAccount && mode === ETableNode.VIEWING && (
+					<TableFooter></TableFooter>
+				)}
 			</Table>
 			{showDeleteModal && (
 				<DeletePowerBoostModal
