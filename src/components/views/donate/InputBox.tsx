@@ -6,6 +6,7 @@ import {
 	GLink,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 
 interface IInputBox {
 	value?: number;
@@ -22,6 +23,8 @@ const InputBox: FC<IInputBox> = ({
 	onFocus,
 	disabled,
 }) => {
+	const { formatMessage } = useIntl();
+
 	return (
 		<Box>
 			<Wrapper>
@@ -37,11 +40,15 @@ const InputBox: FC<IInputBox> = ({
 					}}
 					onFocus={() => onFocus(true)}
 					onBlur={() => onFocus(false)}
-					placeholder='Amount'
+					placeholder={formatMessage({ id: 'label.amount' })}
 					disabled={disabled}
 				/>
 			</Wrapper>
-			{error && <ErrorMsg>Amount is too small</ErrorMsg>}
+			{error && (
+				<ErrorMsg>
+					{formatMessage({ id: 'label.amount_is_too_small' })}
+				</ErrorMsg>
+			)}
 		</Box>
 	);
 };

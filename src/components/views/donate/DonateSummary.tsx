@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import styled from 'styled-components';
 import { B, H5 } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { formatPrice } from '@/lib/helpers';
 
@@ -13,6 +14,7 @@ interface IProps {
 
 const DonateSummary: FC<IProps> = props => {
 	const { value, tokenSymbol, usdValue, title } = props;
+	const { formatMessage } = useIntl();
 	return (
 		<>
 			<Amount gap='10px'>
@@ -22,7 +24,7 @@ const DonateSummary: FC<IProps> = props => {
 				<b>{formatPrice(usdValue) + ' USD'}</b>
 			</Amount>
 			<Amount gap='5px'>
-				<div>to</div>
+				<div>{formatMessage({ id: 'label.to_lowercase' })}</div>
 				<B>{title}</B>
 			</Amount>
 		</>
