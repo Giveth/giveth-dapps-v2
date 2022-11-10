@@ -30,9 +30,7 @@ interface ITab {
 
 const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 	const router = useRouter();
-	const [tab, setTab] = useState(
-		myAccount ? EProfile.OVERVIEW : EProfile.PROJECTS,
-	);
+	const [tab, setTab] = useState(EProfile.OVERVIEW);
 
 	useEffect(() => {
 		const tab = router?.query?.tab;
