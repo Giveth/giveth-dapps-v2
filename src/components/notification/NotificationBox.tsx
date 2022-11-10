@@ -72,7 +72,7 @@ export const NotificationBox: FC<INotificationBox> = ({
 
 const NotificationBoxContainer = styled(Flex)<{ isShort: boolean }>`
 	position: relative;
-	padding: ${props => (!props.isShort ? '24px' : '4px')};
+	padding: ${props => (!props.isShort ? '24px 0' : '4px')};
 `;
 
 const IconContainer = styled.div`
