@@ -63,15 +63,13 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 				<ContributeCard user={user} />
 			)}
 			<ProfileTabsContainer>
-				{myAccount && (
-					<Link href={Routes.MyAccount}>
-						<a>
-							<ProfileTab active={tab === EProfile.OVERVIEW}>
-								Overview
-							</ProfileTab>
-						</a>
-					</Link>
-				)}
+				<Link href={Routes.MyAccount}>
+					<a>
+						<ProfileTab active={tab === EProfile.OVERVIEW}>
+							Overview
+						</ProfileTab>
+					</a>
+				</Link>
 				<Link href={Routes.MyBoostedProjects}>
 					<a>
 						<ProfileTab active={tab === EProfile.BOOSTED}>
