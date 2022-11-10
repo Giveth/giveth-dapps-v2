@@ -3,10 +3,17 @@ import { ItemsWrapper, SectionContainer } from './common/common.sc';
 import SectionHeader from './common/SectionHeader';
 import { SectionItem } from './common/SectionItem';
 import { GrayBar } from '@/components/views/notification/notification.sc';
+import { useNotificationSettingsData } from '@/context/notificationSettings.context';
+import { ENotificationCategory } from '@/features/notification/notification.types';
 
 const GIVeconomySection = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [itemsHeight, setItemsHeight] = useState(0);
+
+	const { notificationSettings } = useNotificationSettingsData();
+	const givEconomyItems = notificationSettings?.filter(
+		i => i.notificationType?.category === ENotificationCategory.givEconomy,
+	);
 
 	useEffect(() => {
 		const resize_ob = new ResizeObserver(function (entries) {
@@ -31,7 +38,7 @@ const GIVeconomySection = () => {
 				/>
 				<ItemsWrapper height={itemsHeight} isOpen={isOpen}>
 					<div id='GIVeconomyWrapperId'>
-						{itemsArray.map(item => (
+						{givEconomyItems?.map(item => (
 							<SectionItem
 								key={item.notificationTypeId}
 								item={item}
@@ -43,32 +50,5 @@ const GIVeconomySection = () => {
 		</>
 	);
 };
-
-const itemsArray = [
-	{
-		title: 'Rewards ',
-		description:
-			'Shows when you have claimable rewards and \n' +
-			'your harvested rewards ',
-		notificationTypeId: 60,
-	},
-	{
-		title: 'Stakes',
-		description: 'Shows when you stake or unstake on the GIVfarm',
-		notificationTypeId: 59,
-	},
-	{
-		title: 'GIVbacks',
-		description: 'When GIVbacks are ready to be claimed after each round',
-		notificationTypeId: 32,
-	},
-	{
-		title: 'GIVpower Allocations',
-		description:
-			'Shows your locked, unlocked and received amount of \n' +
-			'GIVpower and the amount automatically relocked.',
-		notificationTypeId: 54,
-	},
-];
 
 export default GIVeconomySection;

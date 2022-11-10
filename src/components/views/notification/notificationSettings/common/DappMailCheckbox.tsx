@@ -2,22 +2,16 @@ import styled from 'styled-components';
 import { FC } from 'react';
 import Checkbox from '@/components/Checkbox';
 import { useNotificationSettingsData } from '@/context/notificationSettings.context';
+import { INotificationSetting } from '@/features/notification/notification.types';
 
 interface IDappMailCheckbox {
-	notificationTypeId: number;
+	notificationItem: INotificationSetting;
 }
 
-const DappMailCheckbox: FC<IDappMailCheckbox> = ({ notificationTypeId }) => {
-	const { notificationSettings, setNotificationSettings } =
-		useNotificationSettingsData();
-	const notificationItem = notificationSettings?.find(
-		i => i.notificationTypeId === notificationTypeId,
-	);
-	const {
-		allowDappPushNotification,
-		allowEmailNotification,
-		id = 1,
-	} = notificationItem || {};
+const DappMailCheckbox: FC<IDappMailCheckbox> = ({ notificationItem }) => {
+	const { setNotificationSettings } = useNotificationSettingsData();
+	const { id, allowDappPushNotification, allowEmailNotification } =
+		notificationItem;
 
 	const setEmailNotification = (i: boolean) => {
 		setNotificationSettings({ id, allowEmailNotification: i });

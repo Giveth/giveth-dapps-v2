@@ -4,17 +4,15 @@ import styled from 'styled-components';
 import { Col, Row } from '@/components/Grid';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import DappMailCheckbox from '@/components/views/notification/notificationSettings/common/DappMailCheckbox';
+import { INotificationSetting } from '@/features/notification/notification.types';
 
 interface ISectionItem {
-	item: {
-		title: string;
-		description: string;
-		notificationTypeId: number;
-	};
+	item: INotificationSetting;
 }
 
 export const SectionItem: FC<ISectionItem> = ({ item }) => {
-	const { title, description, notificationTypeId } = item;
+	const { notificationType } = item;
+	const { title, description } = notificationType!;
 	return (
 		<Container>
 			<ColStyled xs={6} sm={7} md={8}>
@@ -22,7 +20,7 @@ export const SectionItem: FC<ISectionItem> = ({ item }) => {
 				<Description>{description}</Description>
 			</ColStyled>
 			<ColStyled xs={6} sm={5} md={4}>
-				<DappMailCheckbox notificationTypeId={notificationTypeId} />
+				<DappMailCheckbox notificationItem={item} />
 			</ColStyled>
 		</Container>
 	);
