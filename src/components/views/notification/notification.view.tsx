@@ -94,42 +94,52 @@ function NotificationView() {
 						onClick={() => setTab(ENotificationTabs.ALL)}
 					>
 						All
-						<TabItemCount active={tab === ENotificationTabs.ALL}>
-							{totalUnreadNotifications}
-						</TabItemCount>
+						{totalUnreadNotifications !== 0 && (
+							<TabItemCount
+								active={tab === ENotificationTabs.ALL}
+							>
+								{totalUnreadNotifications}
+							</TabItemCount>
+						)}
 					</NotifisTabItem>
 					<NotifisTabItem
 						active={tab === ENotificationTabs.GENERAL}
 						onClick={() => setTab(ENotificationTabs.GENERAL)}
 					>
 						General
-						<TabItemCount
-							active={tab === ENotificationTabs.GENERAL}
-						>
-							{general}
-						</TabItemCount>
+						{general !== 0 && (
+							<TabItemCount
+								active={tab === ENotificationTabs.GENERAL}
+							>
+								{general}
+							</TabItemCount>
+						)}
 					</NotifisTabItem>
 					<NotifisTabItem
 						active={tab === ENotificationTabs.PROJECTS}
 						onClick={() => setTab(ENotificationTabs.PROJECTS)}
 					>
 						Projects
-						<TabItemCount
-							active={tab === ENotificationTabs.PROJECTS}
-						>
-							{projectsRelated}
-						</TabItemCount>
+						{projectsRelated !== 0 && (
+							<TabItemCount
+								active={tab === ENotificationTabs.PROJECTS}
+							>
+								{projectsRelated}
+							</TabItemCount>
+						)}
 					</NotifisTabItem>
 					<NotifisTabItem
 						active={tab === ENotificationTabs.GIVECONOMY}
 						onClick={() => setTab(ENotificationTabs.GIVECONOMY)}
 					>
 						GIVeconomy
-						<TabItemCount
-							active={tab === ENotificationTabs.GIVECONOMY}
-						>
-							{givEconomyRelated}
-						</TabItemCount>
+						{givEconomyRelated !== 0 && (
+							<TabItemCount
+								active={tab === ENotificationTabs.GIVECONOMY}
+							>
+								{givEconomyRelated}
+							</TabItemCount>
+						)}
 					</NotifisTabItem>
 				</TabsContainer>
 				<InternalLink href={Routes.NotificationsSettings}>
