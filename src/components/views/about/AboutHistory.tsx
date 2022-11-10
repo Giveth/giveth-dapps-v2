@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import {
 	brandColors,
 	ButtonLink,
@@ -12,19 +13,46 @@ import links from '@/lib/constants/links';
 
 const AboutHistory = () => {
 	const [sliderSection, setSliderSection] = useState<number>(0);
+	const { formatMessage } = useIntl();
+
+	const sliderContent = [
+		{
+			title: 'label.rising_out_the_shadows',
+			body: formatMessage({ id: 'label.rising_out_the_shadows.desc' }),
+		},
+		{
+			title: 'label.starting_with_traceable_donations',
+			body: formatMessage({
+				id: 'label.starting_with_traceable_donations.desc',
+			}),
+		},
+		{
+			title: 'label.and_now_the_giveconomy',
+			body: formatMessage({ id: 'label.and_now_the_giveconomy.desc' }),
+		},
+		{
+			title: 'label.take_a_dive_into_the_history',
+			body: (
+				<ReadMoreButton
+					href={links.HISTORY}
+					target='_blank'
+					label={formatMessage({ id: 'label.read_more' })}
+				/>
+			),
+		},
+	];
 
 	return (
 		<>
 			<Upper>
 				<Rect>
-					<span>Giveth</span> was founded in 2016 and provided value
-					to the Blockchain4Good ecosystem for 5 years, funded solely
-					by donations.
+					<span>Giveth</span>{' '}
+					{formatMessage({ id: 'label.giveth_was_founded' })}
 				</Rect>
 				<UpperText>
-					The launch of the <span>GIVeconomy</span> in December 2021
-					provided a new way to fund our initiatives to evolve
-					philanthropy.
+					{formatMessage({ id: 'label.the_launch_of_the' })}{' '}
+					<span>GIVeconomy</span>{' '}
+					{formatMessage({ id: 'label.in_december_2021' })}
 				</UpperText>
 			</Upper>
 			<End>
@@ -33,7 +61,7 @@ const AboutHistory = () => {
 						key={`slider-content-${index}`}
 						active={sliderSection === index}
 					>
-						<Title>{elem.title}</Title>
+						<Title>{formatMessage({ id: elem.title })}</Title>
 						<Lead>{elem.body}</Lead>
 					</SliderTextSection>
 				))}
@@ -120,30 +148,5 @@ const Upper = styled.div`
 	flex-wrap: wrap;
 	gap: 25px 50px;
 `;
-
-const sliderContent = [
-	{
-		title: 'Rising out of the ashes of TheDAO',
-		body: 'The Giveth founding team was a group of altruistic whitehat hackers who set out to build systems to turn non-profits into DAOs of their own, starting with platforms for P2P giving on the blockchain.',
-	},
-	{
-		title: 'Starting with traceable donations',
-		body: 'After writing and open-sourcing innovative smart contracts like the MiniMe token, the team launched the first Giveth DApp, now called Giveth TRACE, to enable a traceable & accountable donations to for-good Campaigns.',
-	},
-	{
-		title: 'And now... the GIVeconomy',
-		body: 'Building on that foundation and heaven-bent on using blockchain to fund public goods regeneratively, we created the GIVeconomy. Fueled by GIV, the GIVeconomy is rewarding & empowering all who give.',
-	},
-	{
-		title: 'Take a dive into the History of Giveth',
-		body: (
-			<ReadMoreButton
-				href={links.HISTORY}
-				target='_blank'
-				label='READ MORE'
-			/>
-		),
-	},
-];
 
 export default AboutHistory;

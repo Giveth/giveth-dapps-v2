@@ -199,6 +199,7 @@ export const HeaderLink = styled(GLink)<IHeaderLinkProps>`
 export const ConnectButton = styled(Button)`
 	box-shadow: ${props =>
 		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
+	text-transform: uppercase;
 `;
 
 export const SmallCreateProject = styled(ButtonLink)`

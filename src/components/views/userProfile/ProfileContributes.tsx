@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 
 import ProfileDonationsTab from './donationsTab/ProfileDonationsTab';
 import ProfileLikedTab from './ProfileLikedTab';
@@ -27,6 +28,7 @@ enum EPublicProfile {
 
 const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 	const router = useRouter();
+	const { formatMessage } = useIntl();
 	const [tab, setTab] = useState(
 		myAccount ? EPublicProfile.OVERVIEW : EPublicProfile.PROJECTS,
 	);
@@ -68,7 +70,7 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 						active={tab === EPublicProfile.OVERVIEW}
 						onClick={() => setTab(EPublicProfile.OVERVIEW)}
 					>
-						Overview
+						{formatMessage({ id: 'label.overview' })}
 					</TabItem>
 				)}
 				{/* // TODO: Boosting - remove this for boosting launch */}
@@ -77,14 +79,20 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 						active={tab === EPublicProfile.BOOSTED}
 						onClick={() => setTab(EPublicProfile.BOOSTED)}
 					>
-						Boosted Projects
+						{formatMessage({
+							id: 'label.boosted_projects',
+						})}
 					</TabItem>
 				)}
 				<TabItem
 					active={tab === EPublicProfile.PROJECTS}
 					onClick={() => setTab(EPublicProfile.PROJECTS)}
 				>
-					{`${myAccount ? 'My ' : userName + '’s'} projects`}
+					{`${
+						myAccount
+							? formatMessage({ id: 'label.my_projects' })
+							: formatMessage({ id: 'label.projects' })
+					}`}
 					{myAccount && user?.projectsCount != 0 && (
 						<TabItemCount active={tab === EPublicProfile.PROJECTS}>
 							{user?.projectsCount}
@@ -95,7 +103,13 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 					active={tab === EPublicProfile.DONATIONS}
 					onClick={() => setTab(EPublicProfile.DONATIONS)}
 				>
-					{`${myAccount ? 'My ' : ''}Donations`}
+					{`${
+						myAccount
+							? formatMessage({
+								id: 'label.my_donations',
+							})
+							: formatMessage({ id: 'label.donations' })
+					}`}
 					{myAccount && user?.donationsCount != 0 && (
 						<TabItemCount active={tab === EPublicProfile.DONATIONS}>
 							{user?.donationsCount}
@@ -106,7 +120,7 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 					active={tab === EPublicProfile.LIKED}
 					onClick={() => setTab(EPublicProfile.LIKED)}
 				>
-					Liked projects
+					{formatMessage({ id: 'label.liked_projects' })}
 					{myAccount && !!user.likedProjectsCount && (
 						<TabItemCount active={tab === EPublicProfile.LIKED}>
 							{user?.likedProjectsCount}

@@ -1,3 +1,4 @@
+import { useIntl } from 'react-intl';
 import { brandColors, Button, H6 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
@@ -42,6 +43,7 @@ const PersonalInfo = () => {
 		getValues,
 		formState: { errors },
 	} = useForm<IFormInfo>();
+	const { formatMessage } = useIntl();
 
 	const sendPersonalInfo = async () => {
 		return await client.mutate({
@@ -104,7 +106,9 @@ const PersonalInfo = () => {
 	};
 	function handleNext() {
 		if (!verificationData?.emailConfirmed) {
-			showToastError('Please confirm your email');
+			showToastError(
+				formatMessage({ id: 'label.please_confirm_your_email' }),
+			);
 		} else {
 			setStep(2);
 		}
@@ -142,16 +146,22 @@ const PersonalInfo = () => {
 		<>
 			<form onSubmit={handleSubmit(handleFormSubmit)}>
 				<div>
-					<H6 weight={700}>Personal info</H6>
+					<H6 weight={700}>
+						{formatMessage({ id: 'label.personal_info' })}
+					</H6>
 					<br />
 					<Input
-						label='What is your full name?'
+						label={formatMessage({
+							id: 'page.verification.personal_info.one',
+						})}
 						disabled
 						registerName='name'
 						register={register}
 					/>
 					<Input
-						label='Your wallet address'
+						label={formatMessage({
+							id: 'page.verification.personal_info.two',
+						})}
 						disabled
 						registerName='walletAddress'
 						register={register}
@@ -161,7 +171,9 @@ const PersonalInfo = () => {
 							<>
 								<Input
 									key='1'
-									label='What is your email address?'
+									label={formatMessage({
+										id: 'page.verification.personal_info.three',
+									})}
 									registerName='email'
 									register={register}
 									registerOptions={requiredOptions.email}
@@ -171,7 +183,9 @@ const PersonalInfo = () => {
 									<ButtonStyled
 										loading={loading}
 										color={brandColors.giv[500]}
-										label='VERIFY EMAIL ADDRESS'
+										label={formatMessage({
+											id: 'label.verify_email_address',
+										})}
 										size='small'
 										type='submit'
 									/>
@@ -181,7 +195,9 @@ const PersonalInfo = () => {
 							<>
 								<Input
 									key='2'
-									label='What is your email address?'
+									label={formatMessage({
+										id: 'page.verification.personal_info.three',
+									})}
 									registerName='email'
 									register={register}
 									disabled
@@ -192,8 +208,12 @@ const PersonalInfo = () => {
 											color={brandColors.giv[500]}
 											label={
 												canReSendEmail || timer === 0
-													? 'RE-SEND EMAIL'
-													: `RE-SEND EMAIL IN ${addZero(
+													? formatMessage({
+															id: 'label.resend_email',
+													  })
+													: `${formatMessage({
+															id: 'label.resend_email_in',
+													  })} ${addZero(
 															durationToYMDh(
 																timer,
 															).min,
@@ -210,7 +230,9 @@ const PersonalInfo = () => {
 										/>
 										<LightBotton
 											onClick={() => setResetMail(true)}
-											label='CHANGE MAIL'
+											label={formatMessage({
+												id: 'label.change_email',
+											})}
 										/>
 									</>
 								)}
@@ -223,9 +245,16 @@ const PersonalInfo = () => {
 					<BtnContainer>
 						<Button
 							onClick={() => setStep(0)}
-							label='<     PREVIOUS'
+							label={`<     ${formatMessage({
+								id: 'label.prev',
+							})}`}
 						/>
-						<Button onClick={handleNext} label='NEXT     >' />
+						<Button
+							onClick={handleNext}
+							label={`${formatMessage({
+								id: 'label.next',
+							})}     >`}
+						/>
 					</BtnContainer>
 				</div>
 			</form>

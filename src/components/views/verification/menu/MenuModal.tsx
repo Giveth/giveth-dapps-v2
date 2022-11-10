@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { B, neutralColors } from '@giveth/ui-design-system';
 import { Modal } from '@/components/modals/Modal';
@@ -13,6 +14,7 @@ const MenuModal: FC<IModal> = ({ setShowModal }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { lastStep } = verificationData || {};
 	const lastStepIndex = findStepByName(lastStep);
+	const { formatMessage } = useIntl();
 
 	const handleClick = (index: number) => {
 		if (!!lastStepIndex && index <= lastStepIndex + 1) {
@@ -35,7 +37,7 @@ const MenuModal: FC<IModal> = ({ setShowModal }) => {
 						active={step === index}
 						key={i}
 					>
-						{i}
+						{formatMessage({ id: i })}
 					</MenuItem>
 				))}
 			</Container>

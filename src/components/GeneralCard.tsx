@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { useIntl } from 'react-intl';
 import {
 	Wrapper,
 	ButtonStyled,
@@ -25,15 +26,16 @@ const GeneralCard = (props: { content: IContent; isHorizontal?: boolean }) => {
 		Wrap = HorizontalWrap;
 		TitleBox = HorizontalTitleSection;
 	}
+	const { formatMessage } = useIntl();
 	return (
 		<Wrap>
 			<Image src={icon} alt='title' />
 			<TitleBox>
-				<Title>{title}</Title>
-				<Caption>{caption}</Caption>
+				<Title>{formatMessage({ id: title })}</Title>
+				<Caption>{formatMessage({ id: caption })}</Caption>
 			</TitleBox>
 			<ButtonStyled
-				label={buttonLabel}
+				label={formatMessage({ id: buttonLabel })}
 				buttonType='primary'
 				onClick={() => window?.open(route, '_blank')?.focus()}
 			/>

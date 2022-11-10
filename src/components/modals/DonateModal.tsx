@@ -13,6 +13,7 @@ import {
 	IconInfoFilled16,
 } from '@giveth/ui-design-system';
 
+import { useIntl } from 'react-intl';
 import { Modal } from '@/components/modals/Modal';
 import { IProject } from '@/apollo/types/types';
 import { compareAddresses, formatPrice } from '@/lib/helpers';
@@ -51,6 +52,7 @@ const DonateModal = (props: IDonateModalProps) => {
 	const dispatch = useAppDispatch();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
+	const { formatMessage } = useIntl();
 	const [donating, setDonating] = useState(false);
 	const [donationSaved, setDonationSaved] = useState(false);
 
@@ -95,19 +97,19 @@ const DonateModal = (props: IDonateModalProps) => {
 		<Modal
 			closeModal={closeModal}
 			isAnimating={isAnimating}
-			headerTitle='Donating'
+			headerTitle={formatMessage({ id: 'label.donating' })}
 			headerTitlePosition='left'
 			headerIcon={<IconWalletApprove size={32} />}
 		>
 			<DonateContainer>
 				<DonatingBox>
-					<P>You are donating</P>
+					<P>{formatMessage({ id: 'label.you_are_donating' })}</P>
 					<H3>
 						{formatPrice(amount)} {token.symbol}
 					</H3>
 					{avgPrice ? <H6>{formatPrice(avgPrice)} USD</H6> : null}
 					<P>
-						To <span>{title}</span>
+						{formatMessage({ id: 'label.to' })} <span>{title}</span>
 					</P>
 				</DonatingBox>
 				<Buttons>
@@ -127,7 +129,11 @@ const DonateModal = (props: IDonateModalProps) => {
 						loading={donating}
 						buttonType='primary'
 						disabled={donating}
-						label={donating ? 'DONATING' : 'DONATE'}
+						label={
+							donating
+								? formatMessage({ id: 'label.donating' })
+								: formatMessage({ id: 'label.donate' })
+						}
 						onClick={validateToken}
 					/>
 					{donationSaved && (
@@ -187,6 +193,7 @@ const DonateButton = styled(Button)<{ disabled: boolean }>`
 		border-top: 3px solid ${brandColors.giv[200]};
 		animation-timing-function: linear;
 	}
+	text-transform: uppercase;
 `;
 
 const Buttons = styled.div`

@@ -108,9 +108,9 @@ export const formatDate = (date: Date) => {
 		.replace(/,/g, '');
 };
 
-export const smallFormatDate = (date: Date) => {
+export const smallFormatDate = (date: Date, locale?: string) => {
 	return date
-		.toLocaleString('en-US', {
+		.toLocaleString(locale || 'en-US', {
 			day: 'numeric',
 			year: 'numeric',
 			month: 'short',
@@ -380,6 +380,31 @@ export const calcBiggestUnitDifferenceTime = (_time: string) => {
 	if (diff.min > 0)
 		return ` ${diff.min} minute${diff.min > 1 ? 's' : ''} ago`;
 	return ' Just now';
+};
+
+export const timeFromNow = (
+	date: string,
+	formatter: any,
+	defaultMessage: string,
+) => {
+	const options = {
+		style: 'long',
+	};
+	const time = new Date(date);
+	const diff: { [key: string]: number } = durationToYMDh(
+		Date.now() - time.getTime(),
+	);
+	if (diff.y > 0)
+		return ` ${formatter(Math.trunc(diff.y * -1), 'year', options)}`;
+	if (diff.m > 0)
+		return ` ${formatter(Math.trunc(diff.m * -1), 'month', options)}`;
+	if (diff.d > 0)
+		return ` ${formatter(Math.trunc(diff.d * -1), 'day', options)}`;
+	if (diff.h > 0)
+		return ` ${formatter(Math.trunc(diff.h * -1), 'hour', options)}`;
+	if (diff.min > 0)
+		return ` ${formatter(Math.trunc(diff.m * -1), 'min', options)}`;
+	return ` ${defaultMessage}`;
 };
 
 export const detectBrave = async () => {

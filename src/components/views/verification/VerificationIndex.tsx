@@ -20,6 +20,7 @@ const VerificationIndex = () => {
 	const { isMobile } = useDetectDevice();
 	const { verificationData } = useVerificationData();
 	const status = verificationData?.status || EVerificationStatus.DRAFT;
+
 	return (
 		<VerificationContainer>
 			{status == EVerificationStatus.DRAFT ? (

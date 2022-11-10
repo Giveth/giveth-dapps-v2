@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { neutralColors, Overline } from '@giveth/ui-design-system';
 
 import { ORGANIZATION } from '@/lib/constants/organizations';
@@ -32,6 +33,7 @@ const ProjectCardOrgBadge = ({
 	isAbsolute,
 	isProjectView,
 }: IProjectCardOrgBadge) => {
+	const { formatMessage } = useIntl();
 	const displayImg = setOrgImage(organization);
 	const hideBadge =
 		organization === ORGANIZATION.giveth ||
@@ -42,7 +44,9 @@ const ProjectCardOrgBadge = ({
 
 	const content = (
 		<>
-			<OrganizationText>PROJECT BY:  </OrganizationText>
+			<OrganizationText>
+				{formatMessage({ id: 'label.project_by' })}:  
+			</OrganizationText>
 			<ImageContainer>
 				<img src={displayImg} alt={organization} />
 			</ImageContainer>

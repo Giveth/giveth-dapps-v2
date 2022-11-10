@@ -49,6 +49,11 @@ const moduleExports = withBundleAnalyzer({
 		}
 		return config;
 	},
+	i18n: {
+		locales: ['en', 'es'],
+		defaultLocale: 'en',
+		localeDetection: false,
+	},
 });
 
 const sentryWebpackPluginOptions = {
