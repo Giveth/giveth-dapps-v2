@@ -80,7 +80,7 @@ function NotificationView() {
 				<IconContainer>
 					<IconNotificationOutline32 />
 				</IconContainer>
-				<NotificationDesc>
+				<NotificationDesc flexDirection='column'>
 					<H5 weight={700}>Notification Center</H5>
 					<Lead>
 						Your activity history, starting with the Most recent

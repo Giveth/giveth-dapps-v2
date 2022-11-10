@@ -17,8 +17,9 @@ export const NotificationHeader = styled(Flex)`
 	padding: 24px 0;
 `;
 
-export const NotificationDesc = styled.div`
+export const NotificationDesc = styled(Flex)`
 	margin-top: 2px;
+	gap: 16px;
 `;
 
 export const GrayBar = styled.div`
