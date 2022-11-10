@@ -38,11 +38,13 @@ export const ConfigContainer = styled(FlexCenter)`
 `;
 
 export const NotifisTabItem = styled(TabItem)`
+	color: ${neutralColors.gray[900]};
 	${props =>
 		props.active &&
 		`
 		background: ${neutralColors.gray[300]};
 		box-shadow: 0 3px 20px rgba(212, 218, 238, 0.4);
 		border-radius: 50px;
+		padding: 9px 16px;
 	`}
 `;
