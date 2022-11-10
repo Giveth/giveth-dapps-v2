@@ -8,8 +8,8 @@ import {
 	Lead,
 	neutralColors,
 } from '@giveth/ui-design-system';
-
 import { useIntl } from 'react-intl';
+
 import { Modal } from '@/components/modals/Modal';
 import { IProject } from '@/apollo/types/types';
 import { compareAddresses, formatTxLink } from '@/lib/helpers';
@@ -167,15 +167,21 @@ const DonateModal = (props: IDonateModalProps) => {
 				headerIcon={<IconDonation size={32} />}
 				doNotCloseOnClickOutside
 				headerTitle={
-					firstDonationSaved ? 'Donation submitted' : 'Donating'
+					firstDonationSaved
+						? formatMessage({ id: 'label.donation_submitted' })
+						: formatMessage({ id: 'label.donating' })
 				}
 			>
 				<DonateContainer>
 					<DonatingBox>
 						<Lead>
 							{isFirstTxSuccess
-								? 'Donation submitted'
-								: 'You are donating'}
+								? formatMessage({
+										id: 'label.donation_submitted',
+								  })
+								: formatMessage({
+										id: 'label.you_are_donating',
+								  })}
 						</Lead>
 						<DonateSummary
 							value={amount}
@@ -187,7 +193,16 @@ const DonateModal = (props: IDonateModalProps) => {
 							<TxStatus>
 								<InlineToast
 									type={EToastType.Success}
-									message={`Donation to the ${title} successful`}
+									message={
+										formatMessage({
+											id: 'label.donation_to_the',
+										}) +
+										' ' +
+										title +
+										formatMessage({
+											id: 'label.successful',
+										})
+									}
 								/>
 								{firstTxHash && (
 									<ExternalLink
@@ -195,7 +210,9 @@ const DonateModal = (props: IDonateModalProps) => {
 											chainId,
 											firstTxHash,
 										)}
-										title='View on Etherscan'
+										title={formatMessage({
+											id: 'label.view_on_etherscan',
+										})}
 										color={brandColors.pinky[500]}
 									/>
 								)}
@@ -205,10 +222,16 @@ const DonateModal = (props: IDonateModalProps) => {
 							<>
 								<Lead>
 									{secondDonationSaved
-										? 'Donation submitted'
+										? formatMessage({
+												id: 'label.donation_submitted',
+										  })
 										: isFirstTxSuccess
-										? 'You are donating'
-										: 'and'}
+										? formatMessage({
+												id: 'label.you_are_donating',
+										  })
+										: formatMessage({
+												id: 'label.and',
+										  })}
 								</Lead>
 								<DonateSummary
 									value={donationToGivethAmount}
@@ -220,12 +243,21 @@ const DonateModal = (props: IDonateModalProps) => {
 									<TxStatus>
 										<InlineToast
 											type={secondTxStatus}
-											message={`Donation to the Giveth DAO ${
-												secondTxStatus ===
-												EToastType.Success
-													? 'successful'
-													: 'failed'
-											}`}
+											message={`
+												${formatMessage({
+													id: 'label.donation_to_the',
+												})} Giveth DAO
+													${
+														secondTxStatus ===
+														EToastType.Success
+															? formatMessage({
+																	id: 'label.successful',
+															  })
+															: formatMessage({
+																	id: 'label.failed_lowercase',
+															  })
+													}
+											`}
 										/>
 										{secondTxHash && (
 											<ExternalLink
@@ -233,7 +265,9 @@ const DonateModal = (props: IDonateModalProps) => {
 													chainId,
 													secondTxHash,
 												)}
-												title='View on Etherscan'
+												title={formatMessage({
+													id: 'label.view_on_etherscan',
+												})}
 												color={brandColors.pinky[500]}
 											/>
 										)}
@@ -246,7 +280,9 @@ const DonateModal = (props: IDonateModalProps) => {
 						{firstDonationSaved && (
 							<InlineToast
 								type={EToastType.Info}
-								message='Your donation is being processed.'
+								message={formatMessage({
+									id: 'label.your_donation_is_being_processed',
+								})}
 							/>
 						)}
 						<DonateButton

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Caption, neutralColors } from '@giveth/ui-design-system';
 import { FC } from 'react';
+import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
 import { formatPrice } from '@/lib/helpers';
 import { minDonationAmount } from '@/lib/constants/constants';
@@ -26,6 +27,8 @@ const TotalDonation: FC<ITotalDonation> = props => {
 		isActive,
 	} = props;
 
+	const { formatMessage } = useIntl();
+
 	let donationToGivethAmount = (donationToProject * donationToGiveth) / 100;
 	if (
 		donationToGivethAmount < minDonationAmount &&
@@ -42,7 +45,8 @@ const TotalDonation: FC<ITotalDonation> = props => {
 		<Container isActive={isActive}>
 			<TableRow>
 				<Caption>
-					Donating to <b>{titleSummary(projectTitle)}</b>
+					{formatMessage({ id: 'label.donating_to' })}
+					<b>{' ' + titleSummary(projectTitle)}</b>
 				</Caption>
 				{isActive && (
 					<Caption>
@@ -52,7 +56,10 @@ const TotalDonation: FC<ITotalDonation> = props => {
 			</TableRow>
 			<TableRow>
 				<Caption>
-					Donating <b>{donationToGiveth}%</b> to <b>Giveth</b>
+					{formatMessage({ id: 'label.donating_camelcase' })}
+					<b>{' ' + donationToGiveth}% </b>
+					{formatMessage({ id: 'label.to_lowercase' })}
+					<b> Giveth</b>
 				</Caption>
 				{isActive && (
 					<Caption>
@@ -63,7 +70,9 @@ const TotalDonation: FC<ITotalDonation> = props => {
 				)}
 			</TableRow>
 			<Total>
-				<Caption medium>Your total donation</Caption>
+				<Caption medium>
+					{formatMessage({ id: 'label.your_total_donation' })}
+				</Caption>
 				{isActive && (
 					<Caption medium>
 						{totalDonation + ' ' + tokenSymbol}

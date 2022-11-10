@@ -8,6 +8,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { ChangeEvent, FC } from 'react';
+import { useIntl } from 'react-intl';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { Flex } from '@/components/styled-components/Flex';
 import Input, { InputSize } from '@/components/Input';
@@ -24,6 +25,8 @@ const givethDonationOptions = [5, 10, 15, 20];
 const DonateToGiveth: FC<IDonateToGiveth> = props => {
 	const { donationToGiveth, setDonationToGiveth } = props;
 
+	const { formatMessage } = useIntl();
+
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const newPercentage = +e.target.value;
 		if (isNaN(newPercentage) || newPercentage < 0 || newPercentage > 10000)
@@ -38,12 +41,12 @@ const DonateToGiveth: FC<IDonateToGiveth> = props => {
 	return (
 		<Container>
 			<Flex alignItems='center' gap='4px'>
-				<Caption medium>Donate to Giveth</Caption>
+				<Caption medium>
+					{formatMessage({ id: 'label.donation_to' }) + ' Giveth'}
+				</Caption>
 				<IconWithTooltip icon={<IconHelpFilled16 />} direction='top'>
 					<TooltipContainer>
-						Support Giveth with a donation to the Giveth DAO. The
-						selected donation percentage will be added on top of
-						your donation amount in the same token you are donating.
+						{formatMessage({ id: 'label.support_giveth_with' })}
 					</TooltipContainer>
 				</IconWithTooltip>
 			</Flex>
@@ -72,7 +75,9 @@ const DonateToGiveth: FC<IDonateToGiveth> = props => {
 				size={14}
 				checked={donationToGiveth === 0}
 				onChange={handleCheckbox}
-				label='I do not want to support Giveth with my donation'
+				label={formatMessage({
+					id: 'label.i_dont_want_to_support_giveth',
+				})}
 				labelSize='Small'
 			/>
 		</Container>
