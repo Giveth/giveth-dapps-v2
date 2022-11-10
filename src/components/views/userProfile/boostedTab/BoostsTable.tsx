@@ -270,7 +270,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 					return (
 						<BoostsRowWrapper
 							key={boost.project.id}
-							hasError={!boost.project.verified}
+							hasError={myAccount && !boost.project.verified}
 						>
 							<BoostsTableCell bold>
 								<Link
