@@ -13,7 +13,7 @@ import { IUserProfileView } from './UserProfile.view';
 import { Container } from '@/components/Grid';
 import ContributeCard from '@/components/views/userProfile/ProfileContributeCard';
 import { ProfileBoostedTab } from './boostedTab/ProfileBoostedTab';
-import Routes, { profileTabs } from '@/lib/constants/Routes';
+import { profileTabs } from '@/lib/constants/Routes';
 import { isSSRMode } from '@/lib/helpers';
 
 enum EProfile {
@@ -61,7 +61,7 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 				<ContributeCard user={user} />
 			)}
 			<ProfileTabsContainer>
-				<Link href={Routes.MyAccount}>
+				<Link href={pathname + profileTabs.overview}>
 					<a>
 						<ProfileTab active={tab === EProfile.OVERVIEW}>
 							Overview
