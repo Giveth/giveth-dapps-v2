@@ -7,14 +7,11 @@ export const NotificationContainer = styled(Container)`
 	margin-bottom: 267px;
 	background-color: ${neutralColors.gray[100]};
 	border-radius: 8px;
+	padding: 24px;
 `;
 
 export const IconContainer = styled.div`
 	padding-top: 10px;
-`;
-
-export const NotificationHeader = styled(Flex)`
-	padding: 24px 0;
 `;
 
 export const NotificationDesc = styled(Flex)`

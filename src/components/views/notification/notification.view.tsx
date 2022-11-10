@@ -7,7 +7,6 @@ import {
 import { useEffect, useState } from 'react';
 import {
 	NotificationContainer,
-	NotificationHeader,
 	IconContainer,
 	NotificationDesc,
 	ConfigContainer,
@@ -76,7 +75,7 @@ function NotificationView() {
 
 	return (
 		<NotificationContainer>
-			<NotificationHeader gap='8px'>
+			<Flex gap='8px'>
 				<IconContainer>
 					<IconNotificationOutline32 />
 				</IconContainer>
@@ -86,7 +85,7 @@ function NotificationView() {
 						Your activity history, starting with the Most recent
 					</Lead>
 				</NotificationDesc>
-			</NotificationHeader>
+			</Flex>
 
 			<Flex justifyContent='space-between' alignItems='center'>
 				<TabsContainer>
