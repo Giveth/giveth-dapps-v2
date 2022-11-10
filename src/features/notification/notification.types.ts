@@ -33,8 +33,15 @@ export interface INotificationsState {
 	notifications?: INotification[];
 }
 
+export enum ENotificationCategory {
+	general = 'general',
+	givEconomy = 'givEconomy',
+	projectRelated = 'projectRelated',
+	discussion = 'discussion',
+}
+
 interface INotificationSettingType {
-	category: 'general' | 'givEconomy' | 'projectRelated' | 'discussion';
+	category: ENotificationCategory;
 	categoryGroup:
 		| 'donations'
 		| 'stakes'
