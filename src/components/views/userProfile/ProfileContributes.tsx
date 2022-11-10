@@ -35,11 +35,14 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 	useEffect(() => {
 		const tab = router?.query?.tab;
 		switch (tab) {
-			case 'projects':
-				setTab(EProfile.PROJECTS);
+			case 'overview':
+				setTab(EProfile.OVERVIEW);
 				break;
 			case 'givpower':
 				setTab(EProfile.GIVPOWER);
+				break;
+			case 'projects':
+				setTab(EProfile.PROJECTS);
 				break;
 			case 'donations':
 				setTab(EProfile.DONATIONS);
@@ -48,7 +51,7 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 				setTab(EProfile.LIKED);
 				break;
 			default:
-				setTab(myAccount ? EProfile.OVERVIEW : EProfile.PROJECTS);
+				setTab(EProfile.OVERVIEW);
 		}
 	}, [router?.query?.tab]);
 
@@ -72,12 +75,11 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 					<a>
 						<ProfileTab active={tab === EProfile.GIVPOWER}>
 							{`${myAccount ? 'My ' : ''} GIVpower`}
-							{user?.boostedProjectsCount &&
-								user?.boostedProjectsCount !== 0 && (
-									<Count active={tab === EProfile.PROJECTS}>
-										{user?.boostedProjectsCount}
-									</Count>
-								)}
+							{myAccount && user?.boostedProjectsCount !== 0 && (
+								<Count active={tab === EProfile.PROJECTS}>
+									{user?.boostedProjectsCount}
+								</Count>
+							)}
 						</ProfileTab>
 					</a>
 				</Link>
