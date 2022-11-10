@@ -31,7 +31,7 @@ export const TabItem = styled(P)<ITab>`
 	`}
 `;
 
-export const TabItemCount = styled.div`
+export const TabItemCount = styled.div<ITab>`
 	background-color: ${brandColors.pinky[500]};
 	color: white;
 	width: 24px;
