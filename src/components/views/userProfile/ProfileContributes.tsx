@@ -72,20 +72,19 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 						</a>
 					</Link>
 				)}
-				{myAccount && (
-					<Link href={Routes.MyBoostedProjects}>
-						<a>
-							<ProfileTab active={tab === EProfile.BOOSTED}>
-								My GIVpower
-								{user?.boostedProjectsCount != 0 && (
+				<Link href={Routes.MyBoostedProjects}>
+					<a>
+						<ProfileTab active={tab === EProfile.BOOSTED}>
+							{`${myAccount ? 'My ' : ''} GIVpower`}
+							{user?.boostedProjectsCount &&
+								user?.boostedProjectsCount !== 0 && (
 									<Count active={tab === EProfile.PROJECTS}>
 										{user?.boostedProjectsCount}
 									</Count>
 								)}
-							</ProfileTab>
-						</a>
-					</Link>
-				)}
+						</ProfileTab>
+					</a>
+				</Link>
 				<Link href={pathname + profileTabs.projects}>
 					<a>
 						<ProfileTab active={tab === EProfile.PROJECTS}>
