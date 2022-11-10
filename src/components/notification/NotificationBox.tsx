@@ -75,8 +75,7 @@ const NotificationBoxContainer = styled(Flex)<{ isShort: boolean }>`
 	padding: ${props => (!props.isShort ? '24px 0' : '4px')};
 `;
 
-const IconContainer = styled.div`
-	display: flex;
+const IconContainer = styled(Flex)`
 	align-items: center;
 	padding-top: 4px;
 	padding: 5px;
