@@ -29,7 +29,7 @@ interface ISection {
 	buttons: IBtnProps[];
 }
 
-const ProfileOverviewTab: FC<IUserProfileView> = ({ user }) => {
+const ProfileOverviewTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 
@@ -99,24 +99,26 @@ const ProfileOverviewTab: FC<IUserProfileView> = ({ user }) => {
 
 	return (
 		<UserContributeInfo>
-			<ContributeCard user={user} myAccount />
-			<AccountHero leftAlign={title === Sections.donate.title}>
-				<H1>{title}</H1>
-				<QuoteText>{subtitle}</QuoteText>
-				<Buttons>
-					{buttons.map((btn, index) => {
-						const props: IButtonProps = {
-							size: 'large',
-							label: btn.label,
-							buttonType: 'primary',
-							onClick: btn.onClick,
-						};
-						if (btn.outline)
-							return <OutlineButton key={index} {...props} />;
-						return <Button key={index} {...props} />;
-					})}
-				</Buttons>
-			</AccountHero>
+			<ContributeCard user={user} />
+			{myAccount && (
+				<AccountHero leftAlign={title === Sections.donate.title}>
+					<H1>{title}</H1>
+					<QuoteText>{subtitle}</QuoteText>
+					<Buttons>
+						{buttons.map((btn, index) => {
+							const props: IButtonProps = {
+								size: 'large',
+								label: btn.label,
+								buttonType: 'primary',
+								onClick: btn.onClick,
+							};
+							if (btn.outline)
+								return <OutlineButton key={index} {...props} />;
+							return <Button key={index} {...props} />;
+						})}
+					</Buttons>
+				</AccountHero>
+			)}
 		</UserContributeInfo>
 	);
 };
