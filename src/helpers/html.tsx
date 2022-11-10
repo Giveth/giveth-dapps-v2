@@ -55,7 +55,12 @@ export const convertRawDataToHTML = (notification: INotification) => {
 			case 'a':
 				const href = metadata[template.href.substring(1)] || '';
 				res.push(
-					<StyledGlink key={idx} size='Big' href={href}>
+					<StyledGlink
+						key={idx}
+						size='Big'
+						href={href}
+						target='_blank'
+					>
 						{temp}
 					</StyledGlink>,
 				);
