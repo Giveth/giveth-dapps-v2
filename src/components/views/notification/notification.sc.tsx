@@ -48,3 +48,7 @@ export const NotifisTabItem = styled(TabItem)`
 		padding: 9px 16px;
 	`}
 `;
+
+export const NotifsHr = styled.hr`
+	margin-bottom: 13px;
+`;

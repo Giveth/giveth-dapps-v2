@@ -3,6 +3,7 @@ import {
 	IconConfig24,
 	IconNotificationOutline32,
 	Lead,
+	neutralColors,
 } from '@giveth/ui-design-system';
 import { useEffect, useState } from 'react';
 import {
@@ -11,6 +12,7 @@ import {
 	NotificationDesc,
 	ConfigContainer,
 	NotifisTabItem,
+	NotifsHr,
 } from './notification.sc';
 import {
 	TabsContainer,
@@ -86,7 +88,6 @@ function NotificationView() {
 					</Lead>
 				</NotificationDesc>
 			</Flex>
-
 			<Flex justifyContent='space-between' alignItems='center'>
 				<TabsContainer>
 					<NotifisTabItem
@@ -148,6 +149,7 @@ function NotificationView() {
 					</ConfigContainer>
 				</InternalLink>
 			</Flex>
+			<NotifsHr color={neutralColors.gray[300]} />
 			<div>
 				{loading ? (
 					<div>Loading...</div>
