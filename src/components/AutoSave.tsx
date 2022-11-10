@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 import { semanticColors, SublineBold } from '@giveth/ui-design-system';
 import { FC } from 'react';
+import { useIntl } from 'react-intl';
 
 const AutoSave: FC = () => {
+	const { formatMessage } = useIntl();
 	return (
 		<SaveSection>
-			Auto save
+			{formatMessage({ id: 'label.auto_save' })}
 			<SaveCircle />
 		</SaveSection>
 	);
