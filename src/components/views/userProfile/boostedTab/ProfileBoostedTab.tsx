@@ -214,6 +214,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({
 						changeOrder={changeOrder}
 						saveBoosts={saveBoosts}
 						deleteBoost={deleteBoost}
+						myAccount={myAccount}
 					/>
 				) : (
 					<EmptyPowerBoosting />
