@@ -14,7 +14,7 @@ export const IconContainer = styled.div`
 `;
 
 export const NotificationHeader = styled(Flex)`
-	padding: 24px;
+	padding: 24px 0;
 `;
 
 export const NotificationDesc = styled.div`
