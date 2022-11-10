@@ -57,8 +57,6 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 		}
 	}, [router?.query?.tab]);
 
-	const userName = user?.name || 'Unknown';
-
 	return (
 		<ProfileContainer>
 			{!myAccount && tab === EPublicProfile.PROJECTS && (
@@ -106,8 +104,8 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 					{`${
 						myAccount
 							? formatMessage({
-								id: 'label.my_donations',
-							})
+									id: 'label.my_donations',
+							  })
 							: formatMessage({ id: 'label.donations' })
 					}`}
 					{myAccount && user?.donationsCount != 0 && (
