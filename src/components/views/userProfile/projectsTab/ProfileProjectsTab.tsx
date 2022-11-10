@@ -16,6 +16,7 @@ import Pagination from '@/components/Pagination';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import { Flex } from '@/components/styled-components/Flex';
 import { UserProfileTab } from '../common.sc';
+import ContributeCard from '@/components/views/userProfile/ProfileContributeCard';
 
 const itemPerPage = 10;
 
@@ -74,6 +75,7 @@ const ProfileProjectsTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 
 	return (
 		<UserProfileTab>
+			{!myAccount && <ContributeCard user={user} />}
 			<ProjectsContainer>
 				{!loading && totalCount === 0 ? (
 					<NothingWrapper>

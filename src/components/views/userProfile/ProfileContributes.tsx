@@ -11,7 +11,6 @@ import ProfileProjectsTab from './projectsTab/ProfileProjectsTab';
 import ProfileOverviewTab from './ProfileOverviewTab';
 import { IUserProfileView } from './UserProfile.view';
 import { Container } from '@/components/Grid';
-import ContributeCard from '@/components/views/userProfile/ProfileContributeCard';
 import { ProfileBoostedTab } from './boostedTab/ProfileBoostedTab';
 import { profileTabs } from '@/lib/constants/Routes';
 import { isSSRMode } from '@/lib/helpers';
@@ -60,9 +59,6 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 
 	return (
 		<ProfileContainer>
-			{!myAccount && tab === EProfile.PROJECTS && (
-				<ContributeCard user={user} />
-			)}
 			<ProfileTabsContainer>
 				<Link href={pathname + profileTabs.overview}>
 					<a>
