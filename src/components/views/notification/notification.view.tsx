@@ -3,18 +3,19 @@ import {
 	IconConfig24,
 	IconNotificationOutline32,
 	Lead,
+	neutralColors,
 } from '@giveth/ui-design-system';
 import { useEffect, useState } from 'react';
 import {
 	NotificationContainer,
-	NotificationHeader,
 	IconContainer,
 	NotificationDesc,
 	ConfigContainer,
+	NotifisTabItem,
+	NotifsHr,
 } from './notification.sc';
 import {
 	TabsContainer,
-	TabItem,
 	TabItemCount,
 } from '@/components/styled-components/Tabs';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -76,62 +77,71 @@ function NotificationView() {
 
 	return (
 		<NotificationContainer>
-			<NotificationHeader gap='8px'>
+			<Flex gap='8px'>
 				<IconContainer>
 					<IconNotificationOutline32 />
 				</IconContainer>
-				<NotificationDesc>
+				<NotificationDesc flexDirection='column'>
 					<H5 weight={700}>Notification Center</H5>
 					<Lead>
-						Your activity history, starting with the Most recent
+						Your activity history, starting with the most recent
 					</Lead>
 				</NotificationDesc>
-			</NotificationHeader>
-
+			</Flex>
 			<Flex justifyContent='space-between' alignItems='center'>
 				<TabsContainer>
-					<TabItem
+					<NotifisTabItem
 						active={tab === ENotificationTabs.ALL}
 						onClick={() => setTab(ENotificationTabs.ALL)}
 					>
 						All
-						<TabItemCount active={tab === ENotificationTabs.ALL}>
-							{totalUnreadNotifications}
-						</TabItemCount>
-					</TabItem>
-					<TabItem
+						{totalUnreadNotifications !== 0 && (
+							<TabItemCount
+								active={tab === ENotificationTabs.ALL}
+							>
+								{totalUnreadNotifications}
+							</TabItemCount>
+						)}
+					</NotifisTabItem>
+					<NotifisTabItem
 						active={tab === ENotificationTabs.GENERAL}
 						onClick={() => setTab(ENotificationTabs.GENERAL)}
 					>
 						General
-						<TabItemCount
-							active={tab === ENotificationTabs.GENERAL}
-						>
-							{general}
-						</TabItemCount>
-					</TabItem>
-					<TabItem
+						{general !== 0 && (
+							<TabItemCount
+								active={tab === ENotificationTabs.GENERAL}
+							>
+								{general}
+							</TabItemCount>
+						)}
+					</NotifisTabItem>
+					<NotifisTabItem
 						active={tab === ENotificationTabs.PROJECTS}
 						onClick={() => setTab(ENotificationTabs.PROJECTS)}
 					>
 						Projects
-						<TabItemCount
-							active={tab === ENotificationTabs.PROJECTS}
-						>
-							{projectsRelated}
-						</TabItemCount>
-					</TabItem>
-					<TabItem
+						{projectsRelated !== 0 && (
+							<TabItemCount
+								active={tab === ENotificationTabs.PROJECTS}
+							>
+								{projectsRelated}
+							</TabItemCount>
+						)}
+					</NotifisTabItem>
+					<NotifisTabItem
 						active={tab === ENotificationTabs.GIVECONOMY}
 						onClick={() => setTab(ENotificationTabs.GIVECONOMY)}
 					>
 						GIVeconomy
-						<TabItemCount
-							active={tab === ENotificationTabs.GIVECONOMY}
-						>
-							{givEconomyRelated}
-						</TabItemCount>
-					</TabItem>
+						{givEconomyRelated !== 0 && (
+							<TabItemCount
+								active={tab === ENotificationTabs.GIVECONOMY}
+							>
+								{givEconomyRelated}
+							</TabItemCount>
+						)}
+					</NotifisTabItem>
 				</TabsContainer>
 				<InternalLink href={Routes.NotificationsSettings}>
 					<ConfigContainer>
@@ -139,6 +149,7 @@ function NotificationView() {
 					</ConfigContainer>
 				</InternalLink>
 			</Flex>
+			<NotifsHr color={neutralColors.gray[300]} />
 			<div>
 				{loading ? (
 					<div>Loading...</div>

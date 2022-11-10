@@ -31,9 +31,8 @@ export const TabItem = styled(P)<ITab>`
 	`}
 `;
 
-export const TabItemCount = styled.div`
-	background-color: ${(props: ITab) =>
-		props.active ? neutralColors.gray[500] : brandColors.pinky[500]};
+export const TabItemCount = styled.div<ITab>`
+	background-color: ${brandColors.pinky[500]};
 	color: white;
 	width: 24px;
 	height: 24px;

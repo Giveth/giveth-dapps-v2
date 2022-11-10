@@ -72,11 +72,16 @@ export const NotificationBox: FC<INotificationBox> = ({
 
 const NotificationBoxContainer = styled(Flex)<{ isShort: boolean }>`
 	position: relative;
-	padding: ${props => (!props.isShort ? '24px' : '4px')};
+	padding: ${props => (!props.isShort ? '24px 0' : '4px')};
 `;
 
-const IconContainer = styled.div`
+const IconContainer = styled(Flex)`
+	align-items: center;
 	padding-top: 4px;
+	padding: 5px;
+	background-color: ${neutralColors.gray[200]};
+	align-self: flex-start;
+	border-radius: 50%;
 `;
 
 const UnreadCircle = styled.div<{ isShort: boolean }>`
