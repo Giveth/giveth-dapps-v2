@@ -76,7 +76,13 @@ const NotificationBoxContainer = styled(Flex)<{ isShort: boolean }>`
 `;
 
 const IconContainer = styled.div`
+	display: flex;
+	align-items: center;
 	padding-top: 4px;
+	padding: 5px;
+	background-color: ${neutralColors.gray[200]};
+	align-self: flex-start;
+	border-radius: 50%;
 `;
 
 const UnreadCircle = styled.div<{ isShort: boolean }>`
