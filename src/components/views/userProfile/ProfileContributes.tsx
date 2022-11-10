@@ -122,7 +122,9 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 				</Link>
 			</ProfileTabsContainer>
 			{tab === EProfile.OVERVIEW && <ProfileOverviewTab user={user} />}
-			{tab === EProfile.GIVPOWER && <ProfileBoostedTab user={user} />}
+			{tab === EProfile.GIVPOWER && (
+				<ProfileBoostedTab user={user} myAccount={myAccount} />
+			)}
 			{tab === EProfile.PROJECTS && (
 				<ProfileProjectsTab user={user} myAccount={myAccount} />
 			)}

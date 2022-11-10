@@ -37,7 +37,10 @@ export interface IBoostedOrder {
 	direction: EDirection;
 }
 
-export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
+export const ProfileBoostedTab: FC<IUserProfileView> = ({
+	user,
+	myAccount,
+}) => {
 	const [loading, setLoading] = useState(false);
 	const [boosts, setBoosts] = useState<IPowerBoosting[]>([]);
 	const [order, setOrder] = useState<IBoostedOrder>({
