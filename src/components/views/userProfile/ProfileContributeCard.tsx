@@ -8,39 +8,28 @@ import { IUserProfileView } from '@/components/views/userProfile/UserProfile.vie
 import { formatUSD } from '@/lib/helpers';
 import { ContributeCard, ContributeCardTitles } from './common.sc';
 
-const ProfileContributeCard: FC<IUserProfileView> = ({ user, myAccount }) => {
-	const userName = user?.name || 'Unknown';
-
+const ProfileContributeCard: FC<IUserProfileView> = ({ user }) => {
 	return (
-		<>
-			<ContributeCardContainer>
-				<ContributeCard>
-					<ContributeCardTitles>donations</ContributeCardTitles>
-					<ContributeCardTitles>
-						Total amount donated
-					</ContributeCardTitles>
-					<H2>{user.donationsCount || 0}</H2>
-					<H5>${formatUSD(user.totalDonated)}</H5>
-				</ContributeCard>
-				<ContributeCard>
-					<ContributeCardTitles>Projects</ContributeCardTitles>
-					<ContributeCardTitles>
-						Donation received
-					</ContributeCardTitles>
-					<H2>{user.projectsCount || 0}</H2>
-					<H5>${formatUSD(user.totalReceived)}</H5>
-				</ContributeCard>
-			</ContributeCardContainer>
-			{!myAccount && (
-				<UserContributeTitle
-					weight={700}
-				>{`${userName}’s donations & projects`}</UserContributeTitle>
-			)}
-		</>
+		<ContributeCardContainer>
+			<ContributeCard>
+				<ContributeCardTitles>donations</ContributeCardTitles>
+				<ContributeCardTitles>
+					Total amount donated
+				</ContributeCardTitles>
+				<H2>{user.donationsCount || 0}</H2>
+				<H5>${formatUSD(user.totalDonated)}</H5>
+			</ContributeCard>
+			<ContributeCard>
+				<ContributeCardTitles>Projects</ContributeCardTitles>
+				<ContributeCardTitles>Donation received</ContributeCardTitles>
+				<H2>{user.projectsCount || 0}</H2>
+				<H5>${formatUSD(user.totalReceived)}</H5>
+			</ContributeCard>
+		</ContributeCardContainer>
 	);
 };
 
-const UserContributeTitle = styled(H5)`
+export const UserContributeTitle = styled(H5)`
 	margin-bottom: 16px;
 	margin-top: 40px;
 `;

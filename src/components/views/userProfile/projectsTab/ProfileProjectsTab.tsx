@@ -16,7 +16,9 @@ import Pagination from '@/components/Pagination';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import { Flex } from '@/components/styled-components/Flex';
 import { UserProfileTab } from '../common.sc';
-import ContributeCard from '@/components/views/userProfile/ProfileContributeCard';
+import ContributeCard, {
+	UserContributeTitle,
+} from '@/components/views/userProfile/ProfileContributeCard';
 
 const itemPerPage = 10;
 
@@ -30,6 +32,7 @@ const ProfileProjectsTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 		by: EOrderBy.CreationDate,
 		direction: EDirection.DESC,
 	});
+	const userName = user?.name || 'Unknown';
 
 	const changeOrder = (orderBy: EOrderBy) => {
 		if (orderBy === order.by) {
@@ -76,6 +79,11 @@ const ProfileProjectsTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 	return (
 		<UserProfileTab>
 			{!myAccount && <ContributeCard user={user} />}
+			{!myAccount && (
+				<UserContributeTitle
+					weight={700}
+				>{`${userName}’s donations & projects`}</UserContributeTitle>
+			)}
 			<ProjectsContainer>
 				{!loading && totalCount === 0 ? (
 					<NothingWrapper>
