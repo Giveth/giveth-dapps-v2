@@ -18,7 +18,7 @@ import { isSSRMode } from '@/lib/helpers';
 
 enum EProfile {
 	OVERVIEW,
-	BOOSTED,
+	GIVPOWER,
 	PROJECTS,
 	DONATIONS,
 	LIKED,
@@ -38,8 +38,8 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 			case 'projects':
 				setTab(EProfile.PROJECTS);
 				break;
-			case 'boosted':
-				setTab(EProfile.BOOSTED);
+			case 'givpower':
+				setTab(EProfile.GIVPOWER);
 				break;
 			case 'donations':
 				setTab(EProfile.DONATIONS);
@@ -70,7 +70,7 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 				</Link>
 				<Link href={Routes.MyBoostedProjects}>
 					<a>
-						<ProfileTab active={tab === EProfile.BOOSTED}>
+						<ProfileTab active={tab === EProfile.GIVPOWER}>
 							{`${myAccount ? 'My ' : ''} GIVpower`}
 							{user?.boostedProjectsCount &&
 								user?.boostedProjectsCount !== 0 && (
@@ -122,7 +122,7 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 				</Link>
 			</ProfileTabsContainer>
 			{tab === EProfile.OVERVIEW && <ProfileOverviewTab user={user} />}
-			{tab === EProfile.BOOSTED && <ProfileBoostedTab user={user} />}
+			{tab === EProfile.GIVPOWER && <ProfileBoostedTab user={user} />}
 			{tab === EProfile.PROJECTS && (
 				<ProfileProjectsTab user={user} myAccount={myAccount} />
 			)}
