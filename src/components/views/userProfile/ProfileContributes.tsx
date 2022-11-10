@@ -68,7 +68,7 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 						</ProfileTab>
 					</a>
 				</Link>
-				<Link href={Routes.MyBoostedProjects}>
+				<Link href={pathname + profileTabs.givpower}>
 					<a>
 						<ProfileTab active={tab === EProfile.GIVPOWER}>
 							{`${myAccount ? 'My ' : ''} GIVpower`}
