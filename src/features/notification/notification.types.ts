@@ -23,6 +23,7 @@ export interface INotification {
 		category: string;
 		content: string;
 		description: string;
+		icon: string;
 		htmlTemplate: IHtmlTemplate[];
 	};
 }

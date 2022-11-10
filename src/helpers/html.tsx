@@ -22,7 +22,7 @@ import {
 	IconUnstake24,
 	IconVerifiedBadge24,
 	IconNoGiveback24,
-	IconNotificationFilled24,
+	IconNotificationOutline24,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { INotification } from '@/features/notification/notification.types';
@@ -89,7 +89,7 @@ const StyledGlink = styled(GLink)`
 	}
 `;
 
-function convertBackendIconsToComponents(icon: string) {
+export function convertBackendIconsToComponents(icon: string) {
 	switch (icon) {
 		case 'IconProfile':
 			return <IconProfile24 />;
@@ -134,6 +134,6 @@ function convertBackendIconsToComponents(icon: string) {
 		case 'IconHeartFilled':
 			return <IconHeartFilled24 />;
 		default:
-			return <IconNotificationFilled24 />;
+			return <IconNotificationOutline24 />;
 	}
 }

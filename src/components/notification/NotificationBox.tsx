@@ -1,13 +1,11 @@
 import styled from 'styled-components';
-import {
-	brandColors,
-	Caption,
-	IconHeartOutline24,
-	neutralColors,
-} from '@giveth/ui-design-system';
+import { brandColors, Caption, neutralColors } from '@giveth/ui-design-system';
 import { FC, useEffect, useRef } from 'react';
 import { Flex } from '../styled-components/Flex';
-import { convertRawDataToHTML } from '@/helpers/html';
+import {
+	convertRawDataToHTML,
+	convertBackendIconsToComponents,
+} from '@/helpers/html';
 import { durationToString } from '@/lib/helpers';
 import { INotification } from '@/features/notification/notification.types';
 import { setNotificationRead } from '@/features/notification/notification.services';
@@ -50,7 +48,9 @@ export const NotificationBox: FC<INotificationBox> = ({
 			{!notification.isRead && <UnreadCircle isShort={short} />}
 			{!short && (
 				<IconContainer>
-					<IconHeartOutline24 />
+					{convertBackendIconsToComponents(
+						notification.notificationType?.icon,
+					)}
 				</IconContainer>
 			)}
 			<NotificationContent>
