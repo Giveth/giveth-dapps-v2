@@ -84,7 +84,7 @@ function NotificationView() {
 				<NotificationDesc flexDirection='column'>
 					<H5 weight={700}>Notification Center</H5>
 					<Lead>
-						Your activity history, starting with the Most recent
+						Your activity history, starting with the most recent
 					</Lead>
 				</NotificationDesc>
 			</Flex>
