@@ -446,8 +446,8 @@ const Actions = styled(Flex)`
 
 const Table = styled.div<{ hasLastCol: boolean }>`
 	display: grid;
-	grid-template-columns: 4fr 1.2fr 1fr ${props =>
-			props.hasLastCol ? '0.3fr' : ''};
+	grid-template-columns: ${props =>
+		props.hasLastCol ? '4fr 1.2fr 1fr 0.3fr' : '4fr 1.5fr 0.6fr'};
 	min-width: 700px;
 `;
 
