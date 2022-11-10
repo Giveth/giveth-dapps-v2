@@ -25,8 +25,8 @@ const NiceBanner = (props: IProjectBySlug) => {
 						<IconSpark size={32} color={brandColors.giv[500]} />
 					</Title>
 					<Lead>
-						Donate DAI, xDAI or wxDAI to this project and receive
-						$nice tokens in addition to GIVbacks.{' '}
+						Donate DAI, xDAI, wxDAI or USDC to this project and
+						receive $nice tokens in addition to GIVbacks.{' '}
 						<InfoReadMore target='_blank' href={links.NICE_DOC}>
 							<span>Learn More </span>
 							<IconExternalLink
