@@ -81,7 +81,9 @@ export default function Milestones() {
 	return (
 		<form onSubmit={handleSubmit(handleNext)}>
 			<div>
-				<H6 weight={700}>Goals, Activities and Impact</H6>
+				<H6 weight={700}>
+					{formatMessage({ id: 'label.activity_and_milestones' })}
+				</H6>
 				<LeadStyled>
 					{formatMessage({
 						id: 'page.verification.activity_and_milestones.one',
@@ -159,8 +161,9 @@ export default function Milestones() {
 					disabled={!isDraft}
 				/>
 				<Lead>
-					If you cannot provide links to evidence of past activities
-					and/or social impact, you can upload proof here.
+					{formatMessage({
+						id: 'page.verification.activity_and_milestones.six',
+					})}
 				</Lead>
 				<Paragraph>{formatMessage({ id: 'label.optional' })}</Paragraph>
 				<Controller

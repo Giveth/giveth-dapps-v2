@@ -45,9 +45,9 @@ const BeforeStart = () => {
 					})}
 					<br />
 					<br />
-					Once your project is verified, the Givers who donate to your
-					project will be rewarded with GIV tokens which they can use
-					to participate in the GIVeconomy.
+					{formatMessage({
+						id: 'page.verification.before_you_start.one',
+					})}
 					<br />
 					<br />
 					{formatMessage({
@@ -75,12 +75,14 @@ const BeforeStart = () => {
 					})}
 					<br />
 					<br />
-					If your project is a registered non-profit organization, you
-					will need to upload verifiable proof to complete the form.
+					{formatMessage({
+						id: 'page.verification.before_you_start.seven',
+					})}
 					<br />
 					<br />
-					Once your project becomes verified you will need to provide
-					quarterly updates in order to maintain your verified status.
+					{formatMessage({
+						id: 'page.verification.before_you_start.eight',
+					})}
 				</Lead>
 			</div>
 			<div>

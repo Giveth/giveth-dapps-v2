@@ -102,9 +102,9 @@ const ManageFundsIndex = () => {
 					</H6>
 					<Lead>
 						<br />
-						The funds raised are expected to be used for public
-						benefit and not for personal gain. How will you use the
-						funds that your project raises?
+						{formatMessage({
+							id: 'page.verification.managing_funds.one',
+						})}
 						<DescriptionInputStyled
 							register={register}
 							registerName='description'
