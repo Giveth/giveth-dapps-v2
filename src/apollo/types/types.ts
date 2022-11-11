@@ -212,6 +212,9 @@ export interface IProjectMilestones {
 	mission?: string;
 	achievedMilestones?: string;
 	achievedMilestonesProofs?: string[];
+	problem?: string;
+	plans?: string;
+	impact?: string;
 }
 
 export interface IProjectManagingFunds {
