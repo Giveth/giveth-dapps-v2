@@ -29,3 +29,13 @@ export const DonateContributeCard: FC<IUserProfileView> = ({ user }) => (
 		}}
 	/>
 );
+
+export const ProjectsContributeCard: FC<IUserProfileView> = ({ user }) => (
+	<ContributeCard
+		data1={{ label: 'Projects', value: user.projectsCount || 0 }}
+		data2={{
+			label: 'Donation received',
+			value: `${formatUSD(user.totalReceived)}`,
+		}}
+	/>
+);
