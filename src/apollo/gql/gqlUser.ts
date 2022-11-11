@@ -17,6 +17,7 @@ export const GET_USER_BY_ADDRESS = gql`
 			likedProjectsCount
 			projectsCount
 			donationsCount
+			boostedProjectsCount
 		}
 	}
 `;
