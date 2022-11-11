@@ -24,8 +24,8 @@ const NiceBanner: FC<IDonateRouteProps> = ({ project }) => {
 					<IconSpark size={32} color={brandColors.giv[500]} />
 				</Title>
 				<Lead>
-					Donate DAI, xDAI, wxDAI or USDC to this project and
-					receive $nice tokens in addition to GIVbacks.
+					Donate DAI, xDAI, wxDAI or USDC to this project and receive
+					$nice tokens in addition to GIVbacks.
 					<InfoReadMore
 						rel='noopener noreferrer'
 						target='_blank'
