@@ -1,5 +1,5 @@
 import { H2, H5 } from '@giveth/ui-design-system';
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { formatUSD } from '@/lib/helpers';
 import { ContributeCardBox, ContributeCardTitles } from './ContributeCard.sc';
 import { IUserProfileView } from './views/userProfile/UserProfile.view';
@@ -39,3 +39,24 @@ export const ProjectsContributeCard: FC<IUserProfileView> = ({ user }) => (
 		}}
 	/>
 );
+
+export const PublicGIVpowerContributeCard: FC<IUserProfileView> = ({
+	user,
+}) => {
+	const total = useMemo(() => {
+		return 100;
+	}, [user]);
+
+	return (
+		<ContributeCard
+			data1={{
+				label: 'total Amount of GIVpower',
+				value: total,
+			}}
+			data2={{
+				label: 'Projects boosted',
+				value: `${formatUSD(user.boostedProjectsCount)}`,
+			}}
+		/>
+	);
+};
