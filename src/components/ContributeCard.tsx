@@ -1,8 +1,12 @@
 import { H2, H5 } from '@giveth/ui-design-system';
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { formatUSD } from '@/lib/helpers';
 import { ContributeCardBox, ContributeCardTitles } from './ContributeCard.sc';
 import { IUserProfileView } from './views/userProfile/UserProfile.view';
+import { FETCH_USER_GIVPOWER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
+import { gqlRequest } from '@/helpers/requests';
+import config from '@/configuration';
+import { formatWeiHelper } from '@/helpers/number';
 
 interface IContributeCard {
 	data1: { label: string; value: string | number };
@@ -43,19 +47,31 @@ export const ProjectsContributeCard: FC<IUserProfileView> = ({ user }) => (
 export const PublicGIVpowerContributeCard: FC<IUserProfileView> = ({
 	user,
 }) => {
-	const total = useMemo(() => {
-		return 100;
+	const [total, setTotal] = useState();
+	useEffect(() => {
+		const fetchTotoal = async () => {
+			const { data } = await gqlRequest(
+				config.XDAI_CONFIG.subgraphAddress,
+				false,
+				FETCH_USER_GIVPOWER_BY_ADDRESS,
+				{
+					id: `${config.XDAI_CONFIG.GIV.LM_ADDRESS.toLowerCase()}-${user.walletAddress?.toLowerCase()}`,
+				},
+			);
+			setTotal(data?.unipoolBalance?.balance || 0);
+		};
+		fetchTotoal();
 	}, [user]);
 
 	return (
 		<ContributeCard
 			data1={{
 				label: 'total Amount of GIVpower',
-				value: total,
+				value: total !== undefined ? formatWeiHelper(total) : '--',
 			}}
 			data2={{
 				label: 'Projects boosted',
-				value: `${formatUSD(user.boostedProjectsCount)}`,
+				value: user.boostedProjectsCount || 0,
 			}}
 		/>
 	);
