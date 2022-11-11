@@ -1,7 +1,7 @@
 import {
 	IconArrowBottom,
 	IconArrowTop,
-	IconSort16,
+	IconSorting16,
 } from '@giveth/ui-design-system';
 import { EDirection } from '@/apollo/types/gqlEnums';
 
@@ -19,7 +19,7 @@ const SortIcon = (props: { order: IOrder; title: string }) => {
 			<IconArrowTop size={16} />
 		)
 	) : (
-		<IconSort16 />
+		<IconSorting16 />
 	);
 };
 

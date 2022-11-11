@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
 import {
 	H5,
 	Caption,
@@ -19,6 +20,7 @@ const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
 
 const DescriptionInput = () => {
 	const { getValues, setValue } = useFormContext();
+	const { formatMessage } = useIntl();
 
 	const [showModal, setShowModal] = useState(false);
 	const [description, setDescription] = useState(
@@ -38,15 +40,17 @@ const DescriptionInput = () => {
 				/>
 			)}
 
-			<H5>Tell us about your project...</H5>
+			<H5>{formatMessage({ id: 'label.tell_us_about_your_project' })}</H5>
 			<CaptionContainer>
-				Aim for 200-500 words.{' '}
+				{formatMessage({ id: 'label.aim_for_200_500_words' })}{' '}
 				<span onClick={() => setShowModal(true)}>
-					How to write a good project description.
+					{formatMessage({
+						id: 'label.how_to_write_a_good_project_desc',
+					})}
 				</span>
 			</CaptionContainer>
 			<InputContainerStyled>
-				<Label>Project story</Label>
+				<Label>{formatMessage({ id: 'label.project_story' })}</Label>
 				<RichTextInput
 					style={TextInputStyle}
 					setValue={handleDescription}

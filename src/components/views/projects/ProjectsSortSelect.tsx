@@ -9,7 +9,7 @@ import {
 	IconDonation16,
 	neutralColors,
 	P,
-	IconSort,
+	IconSorting16,
 } from '@giveth/ui-design-system';
 import Select, {
 	components,
@@ -40,7 +40,7 @@ const sortByOptions = [
 	{
 		label: 'Default',
 		value: ESortbyAllProjects.QUALITYSCORE,
-		icon: <IconSort size={16} color={brandColors.deep[900]} />,
+		icon: <IconSorting16 color={brandColors.deep[900]} />,
 	},
 	{
 		label: 'Newest',
@@ -98,7 +98,7 @@ const ProjectsSortSelect = () => {
 				defaultValue={{
 					label: 'Default',
 					value: ESortbyAllProjects.QUALITYSCORE,
-					icon: <IconSort size={16} color={brandColors.deep[900]} />,
+					icon: <IconSorting16 color={brandColors.deep[900]} />,
 				}}
 				options={sortByOptions}
 				styles={selectStyles}

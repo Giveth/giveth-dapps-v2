@@ -10,7 +10,7 @@ import {
 	IconGIVFarm,
 	IconGIVGarden,
 	IconGIVStream,
-	IconHelp,
+	IconHelpFilled16,
 	IconSpark,
 	P,
 } from '@giveth/ui-design-system';
@@ -198,7 +198,7 @@ export const TabGIVstreamBottom = () => {
 					</H1>
 					<FlowRateUnit>GIV/week</FlowRateUnit>
 					<IconWithTooltip
-						icon={<IconHelp size={16} />}
+						icon={<IconHelpFilled16 />}
 						direction={'top'}
 					>
 						<FlowRateTooltip>
@@ -240,7 +240,7 @@ export const TabGIVstreamBottom = () => {
 				<HistoryTitleRow>
 					<HistoryTitle>History</HistoryTitle>
 					<IconWithTooltip
-						icon={<IconHelp size={16} />}
+						icon={<IconHelpFilled16 />}
 						direction={'top'}
 					>
 						<HistoryTooltip>
@@ -280,7 +280,7 @@ export const GIVstreamProgress: FC<IGIVstreamProgressProps> = ({
 				<GsPTitle alignItems='center' gap='8px'>
 					<H6>GIViverse Expansion</H6>
 					<IconWithTooltip
-						icon={<IconHelp size={16} />}
+						icon={<IconHelpFilled16 />}
 						direction={'bottom'}
 					>
 						<GsPTooltip>
@@ -332,9 +332,14 @@ const convetSourceTypeToIcon = (distributor: string) => {
 				</Flex>
 			);
 		default:
-			// 'Unknown'
-			return distributor;
-			break;
+			// 'Unknown' we show givfarm instead of unknown for exploit farms
+			// https://github.com/Giveth/giveth-dapps-v2/issues/1796
+			return (
+				<Flex gap='16px'>
+					<IconGIVFarm size={24} color={brandColors.mustard[500]} />
+					<P>{` GIVfarm`}</P>
+				</Flex>
+			);
 	}
 };
 

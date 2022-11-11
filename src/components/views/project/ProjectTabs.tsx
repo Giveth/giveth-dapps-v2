@@ -7,6 +7,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
+import { useIntl } from 'react-intl';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { IProject } from '@/apollo/types/types';
@@ -26,11 +27,12 @@ const badgeCount = (count?: number) => {
 const ProjectTabs = (props: IProjectTabs) => {
 	const { project, activeTab, setActiveTab, totalDonations } = props;
 	const { totalProjectUpdates } = project || {};
+	const { formatMessage } = useIntl();
 
 	const tabsArray = [
-		{ title: 'About' },
-		{ title: 'Updates', badge: totalProjectUpdates },
-		{ title: 'Donations', badge: totalDonations },
+		{ title: 'label.about' },
+		{ title: 'label.updates', badge: totalProjectUpdates },
+		{ title: 'label.donations', badge: totalDonations },
 		//TODO: Boosting - uncomment this on boosting launch
 		// { title: 'GIVpower' },
 	];
@@ -48,7 +50,7 @@ const ProjectTabs = (props: IProjectTabs) => {
 					key={i.title}
 					className={activeTab === index ? 'active' : ''}
 				>
-					{i.title}
+					{formatMessage({ id: i.title })}
 					{badgeCount(i.badge) && <Badge>{i.badge}</Badge>}
 				</Tab>
 			))}

@@ -1,3 +1,4 @@
+import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { B, neutralColors } from '@giveth/ui-design-system';
 import CheckCircle from '@/components/views/verification/CheckCircle';
@@ -13,9 +14,13 @@ const DesktopMenu = () => {
 	const { project, lastStep } = verificationData || {};
 	const { title } = project || {};
 	const lastStepIndex = findStepByName(lastStep);
+	const { formatMessage } = useIntl();
+
 	return (
 		<MenuSection sm={3.75} md={2.75}>
-			<MenuTitle>Verified status for</MenuTitle>
+			<MenuTitle>
+				{formatMessage({ id: 'label.verified_status_for' })}
+			</MenuTitle>
 			<MenuTitle isActive>{title}</MenuTitle>
 			<StepsProgressBar />
 			{menuList.map((item, index) => {
@@ -28,7 +33,7 @@ const DesktopMenu = () => {
 						key={item}
 						onClick={() => isClickable && setStep(index)}
 					>
-						{item}
+						{formatMessage({ id: item })}
 						{(index <= lastStepIndex || step === 8) && (
 							<CheckCircle />
 						)}

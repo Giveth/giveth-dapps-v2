@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import {
 	H5,
@@ -20,6 +21,7 @@ import { EInputs } from '@/components/views/create/CreateProject';
 
 const CategoryInput: FC = () => {
 	const { getValues, setValue } = useFormContext();
+	const { formatMessage } = useIntl();
 
 	const [allCategories, setAllCategories] = useState<IMainCategory[]>();
 	const [selectedCategories, setSelectedCategories] = useState<ICategory[]>(
@@ -50,10 +52,11 @@ const CategoryInput: FC = () => {
 
 	return (
 		<InputContainer>
-			<H5>Please select a category.</H5>
+			<H5>{formatMessage({ id: 'label.please_select_a_category' })}</H5>
 			<CaptionContainer>
-				You can choose up to {maxSelectedCategory} categories for your
-				project.
+				{formatMessage({ id: 'label.you_can_choose_up_to' })}{' '}
+				{maxSelectedCategory}{' '}
+				{formatMessage({ id: 'label.categories_for_your_project' })}
 				<CategoryCount>
 					{selectedCategories.length}/{maxSelectedCategory}
 				</CategoryCount>

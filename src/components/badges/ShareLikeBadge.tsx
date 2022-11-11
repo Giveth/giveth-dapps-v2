@@ -1,11 +1,12 @@
+import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import {
 	neutralColors,
 	IconShare,
 	brandColors,
 	IconHeartOutline,
-	IconHeart,
 	ButtonText,
+	IconHeartFilled,
 } from '@giveth/ui-design-system';
 import { Shadow } from '../styled-components/Shadow';
 import { FlexCenter } from '@/components/styled-components/Flex';
@@ -16,13 +17,16 @@ const ShareLikeBadge = (props: {
 	onClick: () => void;
 	isSimple?: boolean;
 }) => {
+	const { formatMessage } = useIntl();
 	const { type, active, onClick, isSimple } = props;
 	const isShare = type === 'share';
-	const text = isShare ? 'Share' : 'Like';
+	const text = isShare
+		? formatMessage({ id: 'label.share' })
+		: formatMessage({ id: 'label.like' });
 	const icon = isShare ? (
 		<IconShare color={neutralColors.gray[500]} />
 	) : active ? (
-		<IconHeart color={brandColors.pinky[500]} />
+		<IconHeartFilled color={brandColors.pinky[500]} />
 	) : (
 		<IconHeartOutline color={neutralColors.gray[500]} />
 	);

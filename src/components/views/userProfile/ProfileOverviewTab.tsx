@@ -10,6 +10,7 @@ import {
 	IButtonProps,
 } from '@giveth/ui-design-system';
 
+import { useIntl } from 'react-intl';
 import Routes from '@/lib/constants/Routes';
 import ContributeCard from './ProfileContributeCard';
 import { Flex } from '@/components/styled-components/Flex';
@@ -30,6 +31,7 @@ interface ISection {
 }
 
 const ProfileOverviewTab: FC<IUserProfileView> = ({ user }) => {
+	const { formatMessage } = useIntl();
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 
@@ -43,38 +45,42 @@ const ProfileOverviewTab: FC<IUserProfileView> = ({ user }) => {
 
 	const Sections = {
 		stranger: {
-			title: 'Don’t be a stranger!',
-			subtitle:
-				'Complete your profile for better management of your donations & projects',
+			title: formatMessage({ id: 'label.dont_be_a_stranger' }),
+			subtitle: formatMessage({ id: 'label.complete_profile.desc' }),
 			buttons: [
 				{
-					label: 'COMPLETE PROFILE',
+					label: formatMessage({
+						id: 'component.button.complete_profile',
+					}),
 					onClick: () => router.push(Routes.Onboard),
 				},
 			],
 		},
 		donate: {
-			title: 'Start donating or raising funds',
-			subtitle:
-				'Giveth is the place to donate to or raise funds for awesome projects with zero added feeds. ',
+			title: formatMessage({ id: 'label.start_donating' }),
+			subtitle: formatMessage({ id: 'label.start_donating.desc' }),
 			buttons: [
 				{
-					label: 'CREATE A PROJECT',
+					label: formatMessage({
+						id: 'component.button.create_project',
+					}),
 					onClick: handleCreateButton,
 				},
 				{
-					label: 'VIEW PROJECTS',
+					label: formatMessage({ id: 'label.view_projects' }),
 					onClick: () => router.push(Routes.Projects),
 					outline: true,
 				},
 			],
 		},
 		getGiv: {
-			title: 'Give and get GIV',
-			subtitle: ' Donate to verified projects and get rewarded with GIV',
+			title: formatMessage({ id: 'label.git_and_get_giv' }),
+			subtitle: formatMessage({
+				id: 'label.donate_to_verified_projects.desc',
+			}),
 			buttons: [
 				{
-					label: 'EXPLORE GIVBACKS',
+					label: formatMessage({ id: 'label.explore_givbacks' }),
 					onClick: () => router.push(Routes.GIVbacks),
 				},
 			],

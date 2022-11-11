@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { Lead, brandColors, H2 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 
 import Card from '@/components/GeneralCard';
 import YellowFlower from '/public/images/yellow_flower.svg';
@@ -20,33 +21,95 @@ import { ButtonStyled } from '@/components/GeneralCard.sc';
 import { Container } from '@/components/Grid';
 
 const JoinEngage = () => {
+	const { formatMessage } = useIntl();
+
+	const engageArray = [
+		{
+			icon: discord_icon,
+			title: 'Discord',
+			caption: formatMessage({ id: 'page.engage.discord.desc' }),
+			buttonLabel: `${formatMessage({ id: 'label.join_us_on' })} discord`,
+			route: links.DISCORD,
+		},
+		{
+			icon: discourse_icon,
+			title: 'Discourse',
+			caption: formatMessage({ id: 'page.engage.discourse.desc' }),
+			buttonLabel: `${formatMessage({
+				id: 'label.join_us_on',
+			})} discourse`,
+			route: links.DISCOURSE,
+		},
+		{
+			icon: github_icon,
+			title: 'Github',
+			caption: formatMessage({ id: 'page.engage.github.desc' }),
+			buttonLabel: `${formatMessage({ id: 'label.join_us_on' })} github`,
+			route: links.GITHUB,
+		},
+		{
+			icon: telegram_icon,
+			title: 'Telegram',
+			caption: formatMessage({ id: 'page.engage.telegram.desc' }),
+			buttonLabel: `${formatMessage({
+				id: 'label.join_us_on',
+			})} telegram`,
+			route: links.TELEGRAM,
+		},
+	];
+
+	const consumeArray = [
+		{
+			icon: medium_icon,
+			title: 'Medium',
+			caption: formatMessage({ id: 'page.learn.medium.desc' }),
+			buttonLabel: `${formatMessage({ id: 'label.join_us_on' })} medium`,
+			route: links.MEDIUM,
+		},
+		{
+			icon: twitter_icon,
+			title: 'Twitter',
+			caption: formatMessage({ id: 'page.learn.twitter.desc' }),
+			buttonLabel: `${formatMessage({ id: 'label.join_us_on' })} twitter`,
+			route: links.TWITTER,
+		},
+		{
+			icon: youtube_icon,
+			title: 'Youtube',
+			caption: formatMessage({ id: 'page.learn.youtube.desc' }),
+			buttonLabel: `${formatMessage({ id: 'label.join_us_on' })} youtube`,
+			route: links.YOUTUBE,
+		},
+		{
+			icon: reddit_icon,
+			title: 'Reddit',
+			caption: formatMessage({ id: 'page.learn.reddit.desc' }),
+			buttonLabel: `${formatMessage({ id: 'label.join_us_on' })} reddit`,
+			route: links.REDDIT,
+		},
+	];
+
 	return (
 		<>
 			<ContainerStyled>
 				<LeadText>
-					Giveth is first and foremost a community of givers and
-					changemakers. We are passionate people working together to
-					build a crypto-economic system that can reward giving to
-					good causes. Our project is open-source, decentralized,
-					altruistic, and community-led.
+					{formatMessage({ id: 'label.join_desc_one' })}
 				</LeadText>
 				<br />
 				<LeadText>
-					You can join our Community Call every Thursday in Discord,
-					follow our social media, or come say hello in a channel
-					below. We look forward to welcoming you!
+					{formatMessage({ id: 'label.join_desc_two' })}
 				</LeadText>
 				<br />
 				<FlexCenter>
 					<ButtonStyled
 						buttonType='primary'
-						label='Add to Calendar'
+						label={formatMessage({ id: 'label.add_to_calendar' })}
 						onClick={() => window.open(links.ADD_TO_CALENDAR)}
 					/>
 				</FlexCenter>
 
 				<Section>
-					<Title>Engage</Title>
+					<Title>{formatMessage({ id: 'label.engage' })}</Title>
 					<CardsSection>
 						{engageArray.map(i => (
 							<Card key={i.title} content={i} />
@@ -54,7 +117,7 @@ const JoinEngage = () => {
 					</CardsSection>
 				</Section>
 				<Section>
-					<Title>Learn</Title>
+					<Title>{formatMessage({ id: 'label.learn' })}</Title>
 					<CardsConsumeSection>
 						{consumeArray.map(i => (
 							<Card key={i.title} content={i} isHorizontal />
@@ -72,76 +135,6 @@ const JoinEngage = () => {
 		</>
 	);
 };
-
-const engageArray = [
-	{
-		icon: discord_icon,
-		title: 'Discord',
-		caption:
-			'Join the conversation! Discord is where our team communicates. Introduce yourself, give us feedback, find out how to contribute or just say hello!',
-		buttonLabel: 'join us on discord',
-		route: links.DISCORD,
-	},
-	{
-		icon: discourse_icon,
-		title: 'Discourse',
-		caption:
-			'The Giveth forum is where we create discourse around new and existing proposals. We share ideas involving development and governance, cultivating discussions about important topics around our team and community.',
-		buttonLabel: 'join us on discourse',
-		route: links.DISCOURSE,
-	},
-	{
-		icon: github_icon,
-		title: 'Github',
-		caption:
-			'Got some developer skills? Check out our Github! We always welcome new contributors. Please also join one of our dev channels in Discord to say hello!',
-		buttonLabel: 'join us on github',
-		route: links.GITHUB,
-	},
-	{
-		icon: telegram_icon,
-		title: 'Telegram',
-		caption:
-			'Not on Discord? Join our Telegram! This group is bridged directly to the #general channel in the Giveth discord so we’ll see all of your messages here.',
-		buttonLabel: 'join us on telegram',
-		route: links.TELEGRAM,
-	},
-];
-
-const consumeArray = [
-	{
-		icon: medium_icon,
-		title: 'Medium',
-		caption:
-			'Keep up with our Medium blog where we publish regular development and community updates with the latest and greatest.',
-		buttonLabel: 'join us on medium',
-		route: links.MEDIUM,
-	},
-	{
-		icon: twitter_icon,
-		title: 'Twitter',
-		caption:
-			'Connect with us on Twitter to stay up-to-date on exciting shares about the Future of Giving!',
-		buttonLabel: 'join us on twitter',
-		route: links.TWITTER,
-	},
-	{
-		icon: youtube_icon,
-		title: 'Youtube',
-		caption:
-			'Check out presentations, interviews, AMAs and more on the Giveth Youtube. Also follow our Transparency channel for recordings of our calls.',
-		buttonLabel: 'join us on youtube',
-		route: links.YOUTUBE,
-	},
-	{
-		icon: reddit_icon,
-		title: 'Reddit',
-		caption:
-			'Subscribe to our r/Giveth subreddit to stay abreast of updates, engage in discussions and upvote all the things.',
-		buttonLabel: 'join us on reddit',
-		route: links.REDDIT,
-	},
-];
 
 const ContainerStyled = styled(Container)`
 	max-width: 1205px;

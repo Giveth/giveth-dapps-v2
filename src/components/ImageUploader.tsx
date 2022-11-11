@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import {
 	brandColors,
@@ -26,6 +27,7 @@ interface IImageUploader {
 const ImageUploader: FC<IImageUploader> = props => {
 	const { progress, url, isUploading, file, onDelete, dropzoneProps } = props;
 	const { getRootProps, getInputProps, open } = dropzoneProps;
+	const { formatMessage } = useIntl();
 	return (
 		<>
 			{url ? (
@@ -38,12 +40,17 @@ const ImageUploader: FC<IImageUploader> = props => {
 					<IconImage size={32} color={neutralColors.gray[500]} />
 					<br />
 					<P>
-						Drag & drop an image here or{' '}
-						<span onClick={open}>Upload from device.</span>
+						{formatMessage({
+							id: 'label.drag_and_drop_an_image_or',
+						})}{' '}
+						<span onClick={open}>
+							{formatMessage({ id: 'label.upload_from_device' })}
+						</span>
 					</P>
 					<P>
-						Suggested image size min. 600px width. Image size up to
-						4Mb.
+						{formatMessage({
+							id: 'label.suggested_image_size_min',
+						})}
 					</P>
 				</DropZone>
 			)}
@@ -61,16 +68,24 @@ const ImageUploader: FC<IImageUploader> = props => {
 							{isUploading && (
 								<DeleteRow onClick={onDelete}>
 									<IconX size={16} />
-									<GLink size='Small'>Cancel upload</GLink>
+									<GLink size='Small'>
+										{formatMessage({
+											id: 'label.cancel_upload',
+										})}
+									</GLink>
 								</DeleteRow>
 							)}
 						</Flex>
 						{url && (
 							<Flex justifyContent='space-between'>
-								<SublineBold>Uploaded</SublineBold>
+								<SublineBold>
+									{formatMessage({ id: 'label.uploaded' })}
+								</SublineBold>
 								<DeleteRow onClick={onDelete}>
 									<IconX size={16} />
-									<GLink size='Small'>Delete</GLink>
+									<GLink size='Small'>
+										{formatMessage({ id: 'label.delete' })}
+									</GLink>
 								</DeleteRow>
 							</Flex>
 						)}

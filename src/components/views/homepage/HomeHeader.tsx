@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { H1, brandColors, Button, Lead } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
 import { Arc } from '@/components/styled-components/Arc';
@@ -8,24 +9,35 @@ import { mediaQueries } from '@/lib/constants/constants';
 import Links from '@/lib/constants/links';
 
 const HomeHeader = () => {
+	const { formatMessage } = useIntl();
 	const router = useRouter();
+
+	const welcomeTitle = formatMessage({
+		id: 'page.home.bigscreen.title',
+	});
+
 	return (
 		<Wrapper>
-			<Title weight={700}>Welcome to the Future of Giving</Title>
+			<Title weight={700}>{welcomeTitle}</Title>
 			<Subtitle>
-				Get rewarded for giving to for-good projects with zero added
-				fees.
+				{formatMessage({
+					id: 'page.home.bigscreen.get_rewarded',
+				})}
 			</Subtitle>
 			<MatchingPoolButton
 				buttonType='primary'
 				size='large'
-				label='DONATE NOW'
+				label={formatMessage({
+					id: 'page.home.bigscreen.donate_button',
+				})}
 				onClick={() => router.push(Links.GIVETH_MATCHING)}
 			/>
 			<SeeProjects
 				buttonType='texty'
 				size='large'
-				label='See Projects'
+				label={formatMessage({
+					id: 'page.home.bigscreen.see_projects',
+				})}
 				onClick={() => router.push(Routes.Projects)}
 			/>
 			<MustardArc />
@@ -46,11 +58,13 @@ const Subtitle = styled(Lead)`
 const MatchingPoolButton = styled(Button)`
 	height: 66px;
 	padding: 0 80px;
+	text-transform: uppercase;
 `;
 
 const SeeProjects = styled(Button)`
 	height: 66px;
 	color: ${brandColors.mustard[500]};
+	text-transform: uppercase;
 	a {
 		font-weight: 400;
 	}

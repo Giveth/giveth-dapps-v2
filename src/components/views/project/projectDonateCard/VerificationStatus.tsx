@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { B, brandColors, neutralColors } from '@giveth/ui-design-system';
 import { EVerificationStatus } from '@/apollo/types/types';
@@ -12,18 +13,23 @@ interface IProps {
 }
 
 const VerificationStatus: FC<IProps> = ({ status }) => {
+	const { formatMessage } = useIntl();
 	if (!status || status === EVerificationStatus.DRAFT) return null;
 	const isVerified = status === EVerificationStatus.VERIFIED;
 
 	return (
 		<Container>
 			<Status>
-				<B>Verification status</B>
+				<B>{formatMessage({ id: 'label.verification_status' })}</B>
 				<VerificationBadge simplified status={status} />
 			</Status>
 			{!isVerified && (
 				<ExternalLink href={links.DISCORD_SUPPORT}>
-					<Contact>Questions? Contact Support</Contact>
+					<Contact>
+						{formatMessage({
+							id: 'label.questions_contact_support',
+						})}
+					</Contact>
 				</ExternalLink>
 			)}
 		</Container>
