@@ -4,7 +4,7 @@ import { useIntl } from 'react-intl';
 import {
 	brandColors,
 	Button,
-	IconWalletApprove,
+	IconWalletApprove32,
 	Lead,
 	neutralColors,
 } from '@giveth/ui-design-system';
@@ -36,7 +36,7 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 		<Modal
 			closeModal={closeModal}
 			isAnimating={isAnimating}
-			headerIcon={<IconWalletApprove />}
+			headerIcon={<IconWalletApprove32 />}
 			headerTitle={formatMessage({ id: 'label.sign_wallet' })}
 			headerTitlePosition='left'
 		>
