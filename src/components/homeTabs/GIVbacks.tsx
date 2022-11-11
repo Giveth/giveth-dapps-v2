@@ -179,7 +179,7 @@ export const TabGIVbacksBottom = () => {
 									label='VERIFY YOUR PROJECT'
 									linkType='secondary'
 									size='large'
-									href='https://giveth.typeform.com/verification'
+									href='https://docs.giveth.io/dapps/projectVerification'
 									target='_blank'
 								/>
 							}
