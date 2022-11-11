@@ -1,6 +1,8 @@
 import { H2, H5 } from '@giveth/ui-design-system';
 import { FC } from 'react';
+import { formatUSD } from '@/lib/helpers';
 import { ContributeCardBox, ContributeCardTitles } from './ContributeCard.sc';
+import { IUserProfileView } from './views/userProfile/UserProfile.view';
 
 interface IContributeCard {
 	data1: { label: string; value: string | number };
@@ -17,3 +19,13 @@ export const ContributeCard: FC<IContributeCard> = ({ data1, data2 }) => {
 		</ContributeCardBox>
 	);
 };
+
+export const DonateContributeCard: FC<IUserProfileView> = ({ user }) => (
+	<ContributeCard
+		data1={{ label: 'donations', value: user.donationsCount || 0 }}
+		data2={{
+			label: 'Total amount donated',
+			value: `${formatUSD(user.totalDonated)}`,
+		}}
+	/>
+);
