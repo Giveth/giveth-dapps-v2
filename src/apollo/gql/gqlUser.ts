@@ -146,3 +146,13 @@ export const VALIDATE_TOKEN = gql`
 		}
 	}
 `;
+
+export const FETCH_USER_GIVPOWER_BY_ADDRESS = `
+	query unipoolBalance($id: String!) {
+		unipoolBalance(
+			id: $id
+		) {
+			balance
+		}
+	}
+`;
