@@ -129,3 +129,5 @@ export const regenFarmStreamCardCol = {
 	sm: [12, 6, 12],
 	lg: [12, 8, 4],
 };
+
+export const TWO_WEEK = 1_209_600_000;
