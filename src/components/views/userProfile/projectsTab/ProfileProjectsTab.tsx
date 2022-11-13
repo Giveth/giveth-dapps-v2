@@ -14,10 +14,11 @@ import { IProject } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import { Flex } from '@/components/styled-components/Flex';
-import { UserProfileTab } from '../common.sc';
-import ContributeCard, {
-	UserContributeTitle,
-} from '@/components/views/userProfile/ProfileContributeCard';
+import { UserContributeTitle, UserProfileTab } from '../common.sc';
+import {
+	DonateContributeCard,
+	ProjectsContributeCard,
+} from '@/components/ContributeCard';
 
 const itemPerPage = 10;
 
@@ -77,7 +78,16 @@ const ProfileProjectsTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 
 	return (
 		<UserProfileTab>
-			{!myAccount && <ContributeCard user={user} />}
+			{!myAccount && (
+				<Row>
+					<Col lg={6}>
+						<DonateContributeCard user={user} />
+					</Col>
+					<Col lg={6}>
+						<ProjectsContributeCard user={user} />
+					</Col>
+				</Row>
+			)}
 			{!myAccount && (
 				<UserContributeTitle
 					weight={700}
