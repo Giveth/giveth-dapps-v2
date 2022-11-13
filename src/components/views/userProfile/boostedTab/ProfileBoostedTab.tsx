@@ -1,14 +1,8 @@
-import { H5, mediaQueries } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
-import {
-	ContributeCard,
-	ContributeCardTitles,
-	UserProfileTab,
-} from '../common.sc';
+
 import { IUserProfileView } from '../UserProfile.view';
-import { formatWeiHelper } from '@/helpers/number';
 import { EDirection } from '@/apollo/types/gqlEnums';
 import BoostsTable from './BoostsTable';
 import { IPowerBoosting } from '@/apollo/types/types';
@@ -25,6 +19,13 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { sortBoosts } from '@/helpers/givpower';
 import { setBoostedProjectsCount } from '@/features/user/user.slice';
+import { UserProfileTab } from '../common.sc';
+import {
+	ContributeCard,
+	PublicGIVpowerContributeCard,
+} from '@/components/ContributeCard';
+import { formatWeiHelper } from '@/helpers/number';
+import { Row, Col } from '@/components/Grid';
 
 export enum EPowerBoostingOrder {
 	CreationAt = 'createdAt',
@@ -37,7 +38,10 @@ export interface IBoostedOrder {
 	direction: EDirection;
 }
 
-export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
+export const ProfileBoostedTab: FC<IUserProfileView> = ({
+	user,
+	myAccount,
+}) => {
 	const [loading, setLoading] = useState(false);
 	const [boosts, setBoosts] = useState<IPowerBoosting[]>([]);
 	const [order, setOrder] = useState<IBoostedOrder>({
@@ -193,14 +197,24 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 
 	return (
 		<UserProfileTab>
-			<CustomContributeCard>
-				<ContributeCardTitles>
-					Total Amount of GIVpower
-				</ContributeCardTitles>
-				<ContributeCardTitles>Projects Boosted</ContributeCardTitles>
-				<H5>~{formatWeiHelper(givPower.balance)}</H5>
-				<H5>{boostedProjectsCount}</H5>
-			</CustomContributeCard>
+			<Row>
+				<Col lg={6}>
+					{myAccount ? (
+						<ContributeCard
+							data1={{
+								label: 'Total Amount of GIVpower',
+								value: `~${formatWeiHelper(givPower.balance)}`,
+							}}
+							data2={{
+								label: 'Projects Boosted',
+								value: boostedProjectsCount,
+							}}
+						/>
+					) : (
+						<PublicGIVpowerContributeCard user={user} />
+					)}
+				</Col>
+			</Row>
 			<PowerBoostingContainer>
 				{loading && <Loading />}
 				{boostedProjectsCount && boostedProjectsCount > 0 ? (
@@ -211,6 +225,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 						changeOrder={changeOrder}
 						saveBoosts={saveBoosts}
 						deleteBoost={deleteBoost}
+						myAccount={myAccount}
 					/>
 				) : (
 					<EmptyPowerBoosting />
@@ -221,12 +236,12 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 	);
 };
 
-const CustomContributeCard = styled(ContributeCard)`
-	width: 100%;
-	${mediaQueries.tablet} {
-		width: 614px;
-	}
-`;
+// const CustomContributeCard = styled(ContributeCard)`
+// 	width: 100%;
+// 	${mediaQueries.tablet} {
+// 		width: 614px;
+// 	}
+// `;
 
 export const PowerBoostingContainer = styled.div`
 	position: relative;

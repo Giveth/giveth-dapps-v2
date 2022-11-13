@@ -4,8 +4,7 @@ import styled from 'styled-components';
 
 import { IUserProfileView, EOrderBy, IOrder } from '../UserProfile.view';
 import ProjectsTable from './ProjectsTable';
-import { mediaQueries } from '@/lib/constants/constants';
-import { Container } from '@/components/Grid';
+import { Col, Row } from '@/components/Grid';
 import { EDirection } from '@/apollo/types/gqlEnums';
 import NothingToSee from '@/components/views/userProfile/NothingToSee';
 import { client } from '@/apollo/apolloClient';
@@ -15,7 +14,11 @@ import { IProject } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import { Flex } from '@/components/styled-components/Flex';
-import { UserProfileTab } from '../common.sc';
+import { UserContributeTitle, UserProfileTab } from '../common.sc';
+import {
+	DonateContributeCard,
+	ProjectsContributeCard,
+} from '@/components/ContributeCard';
 
 const itemPerPage = 10;
 
@@ -29,6 +32,7 @@ const ProfileProjectsTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 		by: EOrderBy.CreationDate,
 		direction: EDirection.DESC,
 	});
+	const userName = user?.name || 'Unknown';
 
 	const changeOrder = (orderBy: EOrderBy) => {
 		if (orderBy === order.by) {
@@ -74,6 +78,21 @@ const ProfileProjectsTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 
 	return (
 		<UserProfileTab>
+			{!myAccount && (
+				<Row>
+					<Col lg={6}>
+						<DonateContributeCard user={user} />
+					</Col>
+					<Col lg={6}>
+						<ProjectsContributeCard user={user} />
+					</Col>
+				</Row>
+			)}
+			{!myAccount && (
+				<UserContributeTitle
+					weight={700}
+				>{`${userName}’s donations & projects`}</UserContributeTitle>
+			)}
 			<ProjectsContainer>
 				{!loading && totalCount === 0 ? (
 					<NothingWrapper>
@@ -92,11 +111,13 @@ const ProfileProjectsTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 						/>
 					</ProjectsTableWrapper>
 				) : (
-					<GridContainer>
+					<Row>
 						{projects.map(project => (
-							<ProjectCard key={project.id} project={project} />
+							<Col key={project.id} md={6} lg={4}>
+								<ProjectCard project={project} />
+							</Col>
 						))}
-					</GridContainer>
+					</Row>
 				)}
 				{loading && <Loading />}
 			</ProjectsContainer>
@@ -110,13 +131,8 @@ const ProfileProjectsTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 	);
 };
 
-export const ProjectsContainer = styled(Container)`
-	display: grid;
-	position: relative;
-	gap: 24px;
+export const ProjectsContainer = styled.div`
 	margin-bottom: 40px;
-	padding: 0;
-	align-items: center;
 `;
 
 const ProjectsTableWrapper = styled.div`
@@ -135,21 +151,6 @@ export const Loading = styled(Flex)`
 const NothingWrapper = styled.div`
 	position: relative;
 	padding: 100px 0;
-`;
-
-const GridContainer = styled.div`
-	display: grid;
-	position: relative;
-	gap: 24px;
-	margin-bottom: 64px;
-	padding: 0;
-	align-items: center;
-	${mediaQueries.tablet} {
-		grid-template-columns: repeat(2, 1fr);
-	}
-	${mediaQueries.laptopL} {
-		grid-template-columns: repeat(3, 1fr);
-	}
 `;
 
 export default ProfileProjectsTab;

@@ -11,13 +11,21 @@ import {
 } from '@giveth/ui-design-system';
 
 import Routes from '@/lib/constants/Routes';
-import ContributeCard from './ProfileContributeCard';
 import { Flex } from '@/components/styled-components/Flex';
 import { isUserRegistered } from '@/lib/helpers';
 import { mediaQueries } from '@/lib/constants/constants';
-import { useAppDispatch } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import { IUserProfileView } from '@/components/views/userProfile/UserProfile.view';
+import {
+	ContributeCard,
+	DonateContributeCard,
+	ProjectsContributeCard,
+	PublicGIVpowerContributeCard,
+} from '@/components/ContributeCard';
+import { Row, Col } from '@/components/Grid';
+import { formatWeiHelper } from '@/helpers/number';
+import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
 interface IBtnProps extends IButtonProps {
 	outline?: boolean;
@@ -29,7 +37,7 @@ interface ISection {
 	buttons: IBtnProps[];
 }
 
-const ProfileOverviewTab: FC<IUserProfileView> = ({ user }) => {
+const ProfileOverviewTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 
@@ -41,7 +49,7 @@ const ProfileOverviewTab: FC<IUserProfileView> = ({ user }) => {
 		}
 	};
 
-	const Sections = {
+	const _sections = {
 		stranger: {
 			title: 'Don’t be a stranger!',
 			subtitle:
@@ -81,17 +89,23 @@ const ProfileOverviewTab: FC<IUserProfileView> = ({ user }) => {
 		},
 	};
 
-	const [section, setSection] = useState<ISection>(Sections.getGiv);
+	const [section, setSection] = useState<ISection>(_sections.getGiv);
+	const sdh = new SubgraphDataHelper(
+		useAppSelector(state => state.subgraph.xDaiValues),
+	);
+	const { userData } = useAppSelector(state => state.user);
+	const boostedProjectsCount = userData?.boostedProjectsCount ?? 0;
+	const givPower = sdh.getUserGIVPowerBalance();
 	const { title, subtitle, buttons } = section;
 
 	useEffect(() => {
 		const setupSections = async () => {
 			if (!user?.name) {
-				setSection(Sections.stranger);
+				setSection(_sections.stranger);
 			} else if (!user?.totalDonated) {
-				setSection(Sections.donate);
+				setSection(_sections.donate);
 			} else {
-				setSection(Sections.getGiv);
+				setSection(_sections.getGiv);
 			}
 		};
 		setupSections();
@@ -99,24 +113,49 @@ const ProfileOverviewTab: FC<IUserProfileView> = ({ user }) => {
 
 	return (
 		<UserContributeInfo>
-			<ContributeCard user={user} myAccount />
-			<AccountHero leftAlign={title === Sections.donate.title}>
-				<H1>{title}</H1>
-				<QuoteText>{subtitle}</QuoteText>
-				<Buttons>
-					{buttons.map((btn, index) => {
-						const props: IButtonProps = {
-							size: 'large',
-							label: btn.label,
-							buttonType: 'primary',
-							onClick: btn.onClick,
-						};
-						if (btn.outline)
-							return <OutlineButton key={index} {...props} />;
-						return <Button key={index} {...props} />;
-					})}
-				</Buttons>
-			</AccountHero>
+			<Row>
+				<Col lg={6}>
+					<DonateContributeCard user={user} />
+				</Col>
+				<Col lg={6}>
+					<ProjectsContributeCard user={user} />
+				</Col>
+				<Col lg={6}>
+					{myAccount ? (
+						<ContributeCard
+							data1={{
+								label: 'Total Amount of GIVpower',
+								value: `~${formatWeiHelper(givPower.balance)}`,
+							}}
+							data2={{
+								label: 'Projects Boosted',
+								value: boostedProjectsCount,
+							}}
+						/>
+					) : (
+						<PublicGIVpowerContributeCard user={user} />
+					)}
+				</Col>
+			</Row>
+			{myAccount && (
+				<AccountHero leftAlign={title === _sections.donate.title}>
+					<H1>{title}</H1>
+					<QuoteText>{subtitle}</QuoteText>
+					<Buttons>
+						{buttons.map((btn, index) => {
+							const props: IButtonProps = {
+								size: 'large',
+								label: btn.label,
+								buttonType: 'primary',
+								onClick: btn.onClick,
+							};
+							if (btn.outline)
+								return <OutlineButton key={index} {...props} />;
+							return <Button key={index} {...props} />;
+						})}
+					</Buttons>
+				</AccountHero>
+			)}
 		</UserContributeInfo>
 	);
 };

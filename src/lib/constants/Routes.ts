@@ -3,6 +3,8 @@ const GIVstream = '/givstream';
 
 // Public profile and my account
 export const profileTabs = {
+	overview: '?tab=overview',
+	givpower: '?tab=givpower',
 	likedProjects: '?tab=liked',
 	projects: '?tab=projects',
 	donations: '?tab=donations',

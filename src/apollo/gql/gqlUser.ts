@@ -17,6 +17,7 @@ export const GET_USER_BY_ADDRESS = gql`
 			likedProjectsCount
 			projectsCount
 			donationsCount
+			boostedProjectsCount
 		}
 	}
 `;
@@ -142,6 +143,16 @@ export const VALIDATE_TOKEN = gql`
 	query {
 		me {
 			walletAddress
+		}
+	}
+`;
+
+export const FETCH_USER_GIVPOWER_BY_ADDRESS = `
+	query unipoolBalance($id: String!) {
+		unipoolBalance(
+			id: $id
+		) {
+			balance
 		}
 	}
 `;

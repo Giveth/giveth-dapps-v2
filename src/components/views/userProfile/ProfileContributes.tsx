@@ -11,14 +11,13 @@ import ProfileProjectsTab from './projectsTab/ProfileProjectsTab';
 import ProfileOverviewTab from './ProfileOverviewTab';
 import { IUserProfileView } from './UserProfile.view';
 import { Container } from '@/components/Grid';
-import ContributeCard from '@/components/views/userProfile/ProfileContributeCard';
 import { ProfileBoostedTab } from './boostedTab/ProfileBoostedTab';
-import Routes, { profileTabs } from '@/lib/constants/Routes';
+import { profileTabs } from '@/lib/constants/Routes';
 import { isSSRMode } from '@/lib/helpers';
 
 enum EProfile {
 	OVERVIEW,
-	BOOSTED,
+	GIVPOWER,
 	PROJECTS,
 	DONATIONS,
 	LIKED,
@@ -30,18 +29,19 @@ interface ITab {
 
 const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 	const router = useRouter();
-	const [tab, setTab] = useState(
-		myAccount ? EProfile.OVERVIEW : EProfile.PROJECTS,
-	);
+	const [tab, setTab] = useState(EProfile.OVERVIEW);
 
 	useEffect(() => {
 		const tab = router?.query?.tab;
 		switch (tab) {
+			case 'overview':
+				setTab(EProfile.OVERVIEW);
+				break;
+			case 'givpower':
+				setTab(EProfile.GIVPOWER);
+				break;
 			case 'projects':
 				setTab(EProfile.PROJECTS);
-				break;
-			case 'boosted':
-				setTab(EProfile.BOOSTED);
 				break;
 			case 'donations':
 				setTab(EProfile.DONATIONS);
@@ -50,7 +50,7 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 				setTab(EProfile.LIKED);
 				break;
 			default:
-				setTab(myAccount ? EProfile.OVERVIEW : EProfile.PROJECTS);
+				setTab(EProfile.OVERVIEW);
 		}
 	}, [router?.query?.tab]);
 
@@ -59,33 +59,26 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 
 	return (
 		<ProfileContainer>
-			{!myAccount && tab === EProfile.PROJECTS && (
-				<ContributeCard user={user} />
-			)}
 			<ProfileTabsContainer>
-				{myAccount && (
-					<Link href={Routes.MyAccount}>
-						<a>
-							<ProfileTab active={tab === EProfile.OVERVIEW}>
-								Overview
-							</ProfileTab>
-						</a>
-					</Link>
-				)}
-				{myAccount && (
-					<Link href={Routes.MyBoostedProjects}>
-						<a>
-							<ProfileTab active={tab === EProfile.BOOSTED}>
-								My GIVpower
-								{user?.boostedProjectsCount != 0 && (
-									<Count active={tab === EProfile.PROJECTS}>
-										{user?.boostedProjectsCount}
-									</Count>
-								)}
-							</ProfileTab>
-						</a>
-					</Link>
-				)}
+				<Link href={pathname + profileTabs.overview}>
+					<a>
+						<ProfileTab active={tab === EProfile.OVERVIEW}>
+							Overview
+						</ProfileTab>
+					</a>
+				</Link>
+				<Link href={pathname + profileTabs.givpower}>
+					<a>
+						<ProfileTab active={tab === EProfile.GIVPOWER}>
+							{`${myAccount ? 'My ' : ''} GIVpower`}
+							{myAccount && user?.boostedProjectsCount !== 0 && (
+								<Count active={tab === EProfile.GIVPOWER}>
+									{user?.boostedProjectsCount}
+								</Count>
+							)}
+						</ProfileTab>
+					</a>
+				</Link>
 				<Link href={pathname + profileTabs.projects}>
 					<a>
 						<ProfileTab active={tab === EProfile.PROJECTS}>
@@ -126,8 +119,12 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 					</a>
 				</Link>
 			</ProfileTabsContainer>
-			{tab === EProfile.OVERVIEW && <ProfileOverviewTab user={user} />}
-			{tab === EProfile.BOOSTED && <ProfileBoostedTab user={user} />}
+			{tab === EProfile.OVERVIEW && (
+				<ProfileOverviewTab user={user} myAccount={myAccount} />
+			)}
+			{tab === EProfile.GIVPOWER && (
+				<ProfileBoostedTab user={user} myAccount={myAccount} />
+			)}
 			{tab === EProfile.PROJECTS && (
 				<ProfileProjectsTab user={user} myAccount={myAccount} />
 			)}

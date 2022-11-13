@@ -43,6 +43,7 @@ interface IBoostsTable {
 	changeOrder: (orderBy: EPowerBoostingOrder) => void;
 	saveBoosts: (newBoosts: IPowerBoosting[]) => Promise<boolean>;
 	deleteBoost: (id: string) => Promise<boolean>;
+	myAccount?: boolean;
 }
 
 interface IEnhancedPowerBoosting extends IPowerBoosting {
@@ -64,6 +65,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 	changeOrder,
 	saveBoosts,
 	deleteBoost,
+	myAccount,
 }) => {
 	const [mode, setMode] = useState(ETableNode.VIEWING);
 	const [editBoosts, setEditBoosts] = useState<IEnhancedPowerBoosting[]>([]);
@@ -201,50 +203,52 @@ const BoostsTable: FC<IBoostsTable> = ({
 		<>
 			<Header justifyContent='space-between' wrap={1} gap='16px'>
 				<H5 weight={700}>GIVpower Summary</H5>
-				<Actions gap='8px'>
-					{mode === ETableNode.VIEWING ? (
-						<Button
-							buttonType='primary'
-							label='modify'
-							size='small'
-							onClick={() => setMode(ETableNode.EDITING)}
-							disabled={editBoosts.length < 2}
-						/>
-					) : (
-						<>
-							<OutlineButton
-								buttonType='primary'
-								label='reset all'
-								size='small'
-								onClick={() => {
-									setEditBoosts(structuredClone(boosts));
-									setSum(100);
-								}}
-							/>
+				{myAccount && (
+					<Actions gap='8px'>
+						{mode === ETableNode.VIEWING ? (
 							<Button
 								buttonType='primary'
-								label='Apply changes'
+								label='modify'
 								size='small'
-								disabled={isExceed}
-								onClick={() => {
-									setShowApproveModal(true);
-								}}
+								onClick={() => setMode(ETableNode.EDITING)}
+								disabled={editBoosts.length < 2}
 							/>
-							<OutlineButton
-								buttonType='primary'
-								label='cancel'
-								size='small'
-								onClick={() => {
-									setEditBoosts(structuredClone(boosts));
-									setSum(100);
-									setMode(ETableNode.VIEWING);
-								}}
-							/>
-						</>
-					)}
-				</Actions>
+						) : (
+							<>
+								<OutlineButton
+									buttonType='primary'
+									label='reset all'
+									size='small'
+									onClick={() => {
+										setEditBoosts(structuredClone(boosts));
+										setSum(100);
+									}}
+								/>
+								<Button
+									buttonType='primary'
+									label='Apply changes'
+									size='small'
+									disabled={isExceed}
+									onClick={() => {
+										setShowApproveModal(true);
+									}}
+								/>
+								<OutlineButton
+									buttonType='primary'
+									label='cancel'
+									size='small'
+									onClick={() => {
+										setEditBoosts(structuredClone(boosts));
+										setSum(100);
+										setMode(ETableNode.VIEWING);
+									}}
+								/>
+							</>
+						)}
+					</Actions>
+				)}
 			</Header>
-			<Table>
+			<Table hasLastCol={!!myAccount && mode === ETableNode.VIEWING}>
 				<TableHeader>Projects</TableHeader>
 				<TableHeader
 					onClick={() => {
@@ -259,12 +263,14 @@ const BoostsTable: FC<IBoostsTable> = ({
 					/>
 				</TableHeader>
 				<TableHeader>% of Total</TableHeader>
-				<TableHeader></TableHeader>
+				{myAccount && mode === ETableNode.VIEWING && (
+					<TableHeader></TableHeader>
+				)}
 				{editBoosts?.map(boost => {
 					return (
 						<BoostsRowWrapper
 							key={boost.project.id}
-							hasError={!boost.project.verified}
+							hasError={myAccount && !boost.project.verified}
 						>
 							<BoostsTableCell bold>
 								<Link
@@ -363,43 +369,41 @@ const BoostsTable: FC<IBoostsTable> = ({
 									/>
 								)}
 							</BoostsTableCell>
-							<BoostsTableCell>
-								{mode === ETableNode.VIEWING && (
-									<>
+							{myAccount && mode === ETableNode.VIEWING && (
+								<BoostsTableCell>
+									<IconWrapper
+										onClick={() => {
+											setSelectedBoost(boost.id);
+											setShowDeleteModal(true);
+										}}
+									>
+										<IconTrash size={24} />
+									</IconWrapper>
+									{!boost.project.verified && (
 										<IconWrapper
 											onClick={() => {
 												setSelectedBoost(boost.id);
 												setShowDeleteModal(true);
 											}}
 										>
-											<IconTrash size={24} />
-										</IconWrapper>
-										{!boost.project.verified && (
-											<IconWrapper
-												onClick={() => {
-													setSelectedBoost(boost.id);
-													setShowDeleteModal(true);
-												}}
+											<IconWithTooltip
+												icon={<IconAlertCircle16 />}
+												direction='top'
+												align='left'
 											>
-												<IconWithTooltip
-													icon={<IconAlertCircle16 />}
-													direction='top'
-													align='left'
-												>
-													<BoostTooltip>
-														This project has lost
-														its verified status and
-														therefore is no longer
-														eligible for GIVpower.
-														We recommend removing
-														this boost.
-													</BoostTooltip>
-												</IconWithTooltip>
-											</IconWrapper>
-										)}
-									</>
-								)}
-							</BoostsTableCell>
+												<BoostTooltip>
+													This project has lost its
+													verified status and
+													therefore is no longer
+													eligible for GIVpower. We
+													recommend removing this
+													boost.
+												</BoostTooltip>
+											</IconWithTooltip>
+										</IconWrapper>
+									)}
+								</BoostsTableCell>
+							)}
 						</BoostsRowWrapper>
 					);
 				})}
@@ -411,7 +415,9 @@ const BoostsTable: FC<IBoostsTable> = ({
 						<ExceedError>You can’t exceed 100%</ExceedError>
 					)}
 				</CustomTableFooter>
-				<TableFooter></TableFooter>
+				{myAccount && mode === ETableNode.VIEWING && (
+					<TableFooter></TableFooter>
+				)}
 			</Table>
 			{showDeleteModal && (
 				<DeletePowerBoostModal
@@ -440,9 +446,10 @@ const Actions = styled(Flex)`
 	padding-bottom: 16px;
 `;
 
-const Table = styled.div`
+const Table = styled.div<{ hasLastCol: boolean }>`
 	display: grid;
-	grid-template-columns: 4fr 1.2fr 1fr 0.3fr;
+	grid-template-columns: ${props =>
+		props.hasLastCol ? '4fr 1.2fr 1fr 0.3fr' : '4fr 1.5fr 0.6fr'};
 	min-width: 700px;
 `;
 
