@@ -38,6 +38,7 @@ import GIVpowerStakingPoolCard from '../cards/GIVpowerStakingPoolCard';
 import { GIVpowerProvider } from '@/context/givpower.context';
 import { DaoCard } from '../givfarm/DaoCard';
 import { getNowUnixMS } from '@/helpers/time';
+import { TWO_WEEK } from '@/lib/constants/constants';
 
 const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
 	const pools =
@@ -46,7 +47,6 @@ const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
 			: [...config.MAINNET_CONFIG.pools, ...config.XDAI_CONFIG.pools];
 
 	const now = getNowUnixMS();
-	const TWO_WEEK = 1_209_600_000;
 	const filteredPools = [];
 	for (let i = 0; i < pools.length; i++) {
 		const pool = pools[i];

@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import {
 	givEconomySupportedNetworks,
 	regenFarmStreamCardCol,
+	TWO_WEEK,
 } from '@/lib/constants/constants';
 import StakingPoolCard from './cards/StakingPoolCard';
 import { Row, Col } from './Grid';
@@ -14,6 +15,7 @@ import { RegenFarmConfig } from '@/types/config';
 import { DAOChangeNetworkModal } from './DAOChangeNetworkModal';
 import { DAOContainer, DAOChangeNetwork } from './givfarm/GIVfrens.sc';
 import { RegenStreamCard } from './givfarm/RegenStreamCard';
+import { getNowUnixMS } from '@/helpers/time';
 
 interface IRegenFarmProps {
 	regenFarm: RegenFarmConfig;
@@ -27,9 +29,17 @@ export const RegenFarm: FC<IRegenFarmProps> = ({
 	const { chainId } = useWeb3React();
 	const { pools } = regenFarm;
 
+	const now = getNowUnixMS();
+
 	const filteredPools = showArchivedPools
 		? pools
-		: pools.filter(pool => pool.archived !== true && pool.active === true);
+		: pools.filter(
+				pool =>
+					!(
+						pool.farmEndTimeMS &&
+						now > pool.farmEndTimeMS + TWO_WEEK
+					),
+		  );
 
 	if (filteredPools.length === 0) return null;
 
