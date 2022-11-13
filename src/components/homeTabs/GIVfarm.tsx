@@ -11,7 +11,11 @@ import { useWeb3React } from '@web3-react/core';
 import { Flex } from '@/components/styled-components/Flex';
 import StakingPoolCard from '@/components/cards/StakingPoolCard';
 import config from '@/configuration';
-import { SimplePoolStakingConfig, StakingType } from '@/types/config';
+import {
+	SimplePoolStakingConfig,
+	StakingType,
+	UniswapV3PoolStakingConfig,
+} from '@/types/config';
 import {
 	GIVfarmTopContainer,
 	Subtitle,
@@ -40,6 +44,21 @@ import { DaoCard } from '../givfarm/DaoCard';
 import { getNowUnixMS } from '@/helpers/time';
 import { TWO_WEEK } from '@/lib/constants/constants';
 
+const renderPool = (
+	pool: SimplePoolStakingConfig | UniswapV3PoolStakingConfig,
+	id: number,
+) => (
+	<Col sm={6} lg={4} key={`staking_pool_card_${pool.network}_${id}`}>
+		{pool.type === StakingType.UNISWAPV3_ETH_GIV ? (
+			<StakingPositionCard poolStakingConfig={pool} />
+		) : (
+			<StakingPoolCard
+				poolStakingConfig={pool as SimplePoolStakingConfig}
+			/>
+		)}
+	</Col>
+);
+
 const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
 	const pools =
 		chainId === config.XDAI_NETWORK_NUMBER
@@ -48,25 +67,19 @@ const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
 
 	const now = getNowUnixMS();
 	const filteredPools = [];
+	const discontinuedPools = [];
 	for (let i = 0; i < pools.length; i++) {
 		const pool = pools[i];
-		const { farmEndTimeMS, network, type } = pool;
+		const { farmEndTimeMS } = pool;
 		const archived = farmEndTimeMS && now > farmEndTimeMS + TWO_WEEK;
 		if (!showArchivedPools && archived) continue;
-		filteredPools.push(
-			<Col sm={6} lg={4} key={`staking_pool_card_${network}_${i}`}>
-				{type === StakingType.UNISWAPV3_ETH_GIV ? (
-					<StakingPositionCard poolStakingConfig={pool} />
-				) : (
-					<StakingPoolCard
-						key={`staking_pool_card_${network}_${i}`}
-						poolStakingConfig={pool as SimplePoolStakingConfig}
-					/>
-				)}
-			</Col>,
-		);
+		if (farmEndTimeMS && now > farmEndTimeMS) {
+			discontinuedPools.push(renderPool(pool, i));
+		} else {
+			filteredPools.push(renderPool(pool, i));
+		}
 	}
-	return filteredPools;
+	return [...filteredPools, ...discontinuedPools];
 };
 
 export const TabGIVfarmTop = () => {
