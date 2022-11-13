@@ -52,7 +52,7 @@ const SuccessView = (props: {
 					</ExternalLink>
 				</GivBackContainer>
 			)}
-			{!givBackEligible && <SocialBox project={project} isSuccess />}
+			<SocialBox project={project} isSuccess />
 			<Options>
 				<P style={{ color: neutralColors.gray[900] }}>
 					Your transaction has been submitted.

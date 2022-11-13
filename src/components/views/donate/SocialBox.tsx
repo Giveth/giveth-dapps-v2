@@ -20,10 +20,14 @@ interface ISocialBox {
 const SocialBox: FC<ISocialBox> = ({ project, isSuccess }) => {
 	const { description, slug } = project;
 	const { formatMessage } = useIntl();
-	const shareTitleTwitter = `Our project is raising funds in crypto on @givethio! 🙌
+	const shareTitleTwitter = `${
+		isSuccess ? 'This' : 'Our'
+	} project is raising funds in crypto on @givethio! 🙌
 Donate directly on Ethereum Mainnet or @gnosischain w/ no fees or intermediaries.👇`;
 
-	const shareTitleFacebookAndLinkedin = `Our project is raising funds in crypto on @givethio!
+	const shareTitleFacebookAndLinkedin = `${
+		isSuccess ? 'This' : 'Our'
+	} project is raising funds in crypto on @givethio!
 	Donate directly on Ethereum Mainnet or Gnosis Chain with no fees or intermediaries.
 	
 	Here's the link to our project:
@@ -97,7 +101,7 @@ const Social = styled.div<{ isSuccess?: boolean }>`
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	margin: ${props => (props.isSuccess ? 0 : '18px 0')};
+	margin: ${props => (props.isSuccess ? '50px 0' : '18px 0')};
 	color: ${neutralColors.gray[900]};
 	align-items: center;
 `;
