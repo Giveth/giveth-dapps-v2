@@ -6,9 +6,7 @@ export interface BasicStakingConfig {
 	farmStartTimeMS?: number;
 	farmEndTimeMS?: number;
 	icon?: string;
-	active: boolean;
-	archived?: boolean;
-	paused?: boolean;
+	exploited?: boolean;
 }
 export enum StakingPlatform {
 	GIVETH = 'Staking',
