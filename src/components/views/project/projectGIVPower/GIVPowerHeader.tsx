@@ -53,7 +53,12 @@ const GIVPowerHeader: FC<IGIVPowerHeader> = ({
 					<RankBox>
 						<RankTitle>Current Rank</RankTitle>
 						<Rank>
-							<H5 weight={700}>#{projectPower?.powerRank}</H5>
+							<H5 weight={700}>
+								#
+								{projectPower?.totalPower === 0
+									? '--'
+									: projectPower?.powerRank}
+							</H5>
 						</Rank>
 						<RankDescContainer gap='6px'>
 							<IconWrapper>
@@ -71,15 +76,15 @@ const GIVPowerHeader: FC<IGIVPowerHeader> = ({
 						<RankTitle>Projected Rank</RankTitle>
 						<NextRank state={goingUp}>
 							<Flex alignItems='baseline' gap='4px'>
-								{goingUp > 0 ? (
+								{goingUp === 0 ? (
+									''
+								) : goingUp > 0 ? (
 									<IconArrowDown16 />
 								) : (
 									<IconArrowUp16 />
 								)}
 								<H6 weight={700}>
-									#
-									{projectFuturePower?.powerRank ||
-										projectPower?.powerRank}
+									#{projectFuturePower?.powerRank || '--'}
 								</H6>
 							</Flex>
 						</NextRank>
