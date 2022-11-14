@@ -6,7 +6,6 @@ import {
 	IconSpark,
 	Caption,
 	IconAlertCircle32,
-	IconInfoFilled24,
 	IconHelpFilled16,
 } from '@giveth/ui-design-system';
 import { constants } from 'ethers';
@@ -187,9 +186,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		unit,
 		farmStartTimeMS,
 		farmEndTimeMS,
-		active,
-		archived,
-		paused,
+		exploited,
 		introCard,
 		network: poolNetwork,
 	} = poolStakingConfig;
@@ -263,7 +260,8 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		}
 	}, [earned, tokenDistroHelper]);
 	useEffect(() => {
-		if (active && !regenStreamConfig) setInfo(poolNetwork, type, earned);
+		if (!(exploited || regenStreamConfig))
+			setInfo(poolNetwork, type, earned);
 	}, [poolNetwork, earned, type, regenStreamConfig, setInfo]);
 
 	const rewardTokenSymbol = regenStreamConfig?.rewardTokenSymbol || 'GIV';
@@ -301,53 +299,46 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 						</Caption>
 					</WrongNetworkContainer>
 				)}
-				{(!active || archived || isDiscontinued || paused) &&
-					disableModal && (
-						<DisableModal>
-							<DisableModalContent>
-								<DisableModalImage>
-									<IconInfoFilled24 />
-								</DisableModalImage>
-								<Flex
-									flexDirection='column'
-									justifyContent='space-evenly'
-								>
-									<DisableModalText weight={700}>
-										{paused
-											? 'This pool has been paused'
-											: isDiscontinued
-											? 'Attention Farmers!'
-											: 'This pool is no longer available'}
-									</DisableModalText>
-									<DisableModalText>
-										{paused ? (
-											<>
-												An exploit has removed available
-												rewards from this pool. Please
-												follow
-												<DisableModalLink
-													size='Big'
-													target='_blank'
-													href='https://forum.giveth.io/t/ending-givfarm-liquidity-incentives-programs-for-giv/872'
-												>
-													&nbsp;this forum post&nbsp;
-												</DisableModalLink>
-												for updates.
-											</>
-										) : isDiscontinued ? (
-											'This farm has ended, move your funds to another farm to keep earning rewards.'
-										) : (
-											'Please unstake your tokens and check out other available pools.'
-										)}
-									</DisableModalText>
-									<DisableModalCloseButton
-										label='GOT IT'
-										onClick={() => setDisableModal(false)}
-									/>
-								</Flex>
-							</DisableModalContent>
-						</DisableModal>
-					)}
+				{(isDiscontinued || exploited) && disableModal && (
+					<DisableModal>
+						<DisableModalContent>
+							<DisableModalImage>
+								<IconInfo24 />
+							</DisableModalImage>
+							<Flex
+								flexDirection='column'
+								justifyContent='space-evenly'
+							>
+								<DisableModalText weight={700}>
+									This farm has ended
+								</DisableModalText>
+								<DisableModalText>
+									{exploited ? (
+										<>
+											An exploit has removed available
+											rewards from this pool. Please refer
+											to
+											<DisableModalLink
+												size='Big'
+												target='_blank'
+												href='https://forum.giveth.io/t/ending-givfarm-liquidity-incentives-programs-for-giv/872'
+											>
+												&nbsp;this forum post&nbsp;
+											</DisableModalLink>
+											for details.
+										</>
+									) : (
+										'Harvest your rewards and move your funds to another farm to keep earning rewards '
+									)}
+								</DisableModalText>
+								<DisableModalCloseButton
+									label='GOT IT'
+									onClick={() => setDisableModal(false)}
+								/>
+							</Flex>
+						</DisableModalContent>
+					</DisableModal>
+				)}
 				{state === StakeCardState.NORMAL ? (
 					<>
 						<StakingPoolExchangeRow gap='4px' alignItems='center'>
@@ -465,7 +456,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 											)}
 										</FlexCenter>
 										<Flex gap='8px' alignItems='center'>
-											{active && !archived ? (
+											{!(exploited || isDiscontinued) ? (
 												<>
 													<IconSpark
 														size={24}
@@ -474,7 +465,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 																.mustard[500]
 														}
 													/>
-
 													<>
 														<DetailValue>
 															{apr &&
@@ -517,14 +507,12 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									<Detail justifyContent='space-between'>
 										<DetailLabel>Claimable</DetailLabel>
 										<DetailValue>
-											{active ? (
+											{!exploited ? (
 												`${formatWeiHelper(
 													rewardLiquidPart,
 												)} ${rewardTokenSymbol}`
 											) : (
-												<div>
-													{paused ? 'pending' : 'N/A'}
-												</div>
+												<div>N/A</div>
 											)}
 										</DetailValue>
 									</Detail>
@@ -543,23 +531,17 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 										</Flex>
 										<Flex gap='4px' alignItems='center'>
 											<DetailValue>
-												{active ? (
+												{!exploited ? (
 													formatWeiHelper(
 														rewardStream,
 													)
 												) : (
-													<div>
-														{paused
-															? 'pending'
-															: 'N/A'}
-													</div>
+													<div>N/A</div>
 												)}
 											</DetailValue>
-											{active && (
-												<DetailUnit>
-													{rewardTokenSymbol}/week
-												</DetailUnit>
-											)}
+											<DetailUnit>
+												{rewardTokenSymbol}/week
+											</DetailUnit>
 										</Flex>
 									</Detail>
 								</Details>
@@ -570,7 +552,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								/>
 							)}
 							<ClaimButton
-								disabled={!active || earned.isZero()}
+								disabled={exploited || earned.isZero()}
 								onClick={() => setShowHarvestModal(true)}
 								label='HARVEST REWARDS'
 								buttonType={
@@ -579,10 +561,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							/>
 							{isGIVpower && (
 								<ClaimButton
-									disabled={
-										!active ||
-										availableStakedToken.lte(constants.Zero)
-									}
+									disabled={availableStakedToken.lte(
+										constants.Zero,
+									)}
 									onClick={() => setShowLockModal(true)}
 									label='Increase your reward'
 									buttonType='primary'
@@ -594,8 +575,8 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 										label='STAKE'
 										size='small'
 										disabled={
-											!active ||
-											archived ||
+											isDiscontinued ||
+											exploited ||
 											BN(userNotStakedAmount).isZero()
 										}
 										onClick={() => setShowStakeModal(true)}
@@ -643,8 +624,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									</FlexCenter>
 								</StakeContainer>
 							</StakeButtonsRow>
-							{active &&
-								!archived &&
+							{!(exploited || isDiscontinued) &&
 								(!isGIVpower ? (
 									<Flex>
 										<LiquidityButton
