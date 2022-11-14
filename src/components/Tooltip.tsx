@@ -143,13 +143,23 @@ const tooltipStyleCalc = (
 				break;
 			}
 		case 'bottom':
-			translateX = translateXForTopBottom(align, parentRect);
-			style = {
-				top: parentRect.bottom + ARROW_SIZE,
-				left: parentRect.left,
-				transform: `translate(${translateX}, 0)`,
-			};
-			break;
+			if (isMobile) {
+				style = {
+					top: parentRect.bottom + ARROW_SIZE,
+					left: 10,
+					transform: `translate(${translateX}, 0)`,
+					width: '95vw',
+				};
+				break;
+			} else {
+				translateX = translateXForTopBottom(align, parentRect);
+				style = {
+					top: parentRect.bottom + ARROW_SIZE,
+					left: parentRect.left,
+					transform: `translate(${translateX}, 0)`,
+				};
+				break;
+			}
 		case 'right':
 			translateY = translateYForRightLeft(align, parentRect);
 			style = {
