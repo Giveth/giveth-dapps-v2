@@ -322,7 +322,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 				onClick={confirmAllocation}
 			/>
 			<Link href={Routes.MyBoostedProjects} passHref>
-				<ManageLink>Manage your allocations</ManageLink>
+				<ManageLink>Manage your GIVpower</ManageLink>
 			</Link>
 		</>
 	);
