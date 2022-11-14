@@ -631,7 +631,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									</FlexCenter>
 								</StakeContainer>
 							</StakeButtonsRow>
-							{(exploited || isDiscontinued) &&
+							{!(exploited || isDiscontinued) &&
 								(!isGIVpower ? (
 									<Flex>
 										<LiquidityButton
