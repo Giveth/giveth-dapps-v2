@@ -77,7 +77,7 @@ const SuccessView: FC<IProps> = props => {
 					</ExternalLink>
 				</GivBackContainer>
 			)}
-			{!givBackEligible && <SocialBox project={project} isSuccess />}
+			<SocialBox project={project} isSuccess />
 			<Options>
 				{hasMultipleTxs ? (
 					<>

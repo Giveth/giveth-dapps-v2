@@ -199,6 +199,7 @@ const DonateModal = (props: IDonateModalProps) => {
 										}) +
 										' ' +
 										title +
+										' ' +
 										formatMessage({
 											id: 'label.successful',
 										})
