@@ -30,7 +30,7 @@ Donate directly on Ethereum Mainnet or @gnosischain w/ no fees or intermediaries
 	} project is raising funds in crypto on @givethio!
 	Donate directly on Ethereum Mainnet or Gnosis Chain with no fees or intermediaries.
 	
-	Here's the link to our project:
+	Here's the link to ${isSuccess ? 'this' : 'our'} project:
 	`;
 
 	const projectUrl = fullPath(slugToProjectView(slug));
