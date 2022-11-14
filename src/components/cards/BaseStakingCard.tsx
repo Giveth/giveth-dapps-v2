@@ -7,6 +7,7 @@ import {
 	Caption,
 	IconAlertCircle32,
 	IconHelpFilled16,
+	IconInfoFilled24,
 } from '@giveth/ui-design-system';
 import { constants } from 'ethers';
 import BigNumber from 'bignumber.js';
@@ -303,7 +304,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					<DisableModal>
 						<DisableModalContent>
 							<DisableModalImage>
-								<IconInfo24 />
+								<IconInfoFilled24 />
 							</DisableModalImage>
 							<Flex
 								flexDirection='column'
