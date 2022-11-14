@@ -8,7 +8,7 @@ export const findStepByName = (step?: EVerificationSteps): number => {
 			return 3;
 		case EVerificationSteps.PROJECT_CONTACTS:
 			return 4;
-		case EVerificationSteps.MILESTONES:
+		case EVerificationSteps.IMPACT:
 			return 5;
 		case EVerificationSteps.MANAGING_FUNDS:
 			return 6;

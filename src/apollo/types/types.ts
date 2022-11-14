@@ -217,6 +217,9 @@ export interface IProjectMilestones {
 	mission?: string;
 	achievedMilestones?: string;
 	achievedMilestonesProofs?: string[];
+	problem?: string;
+	plans?: string;
+	impact?: string;
 }
 
 export interface IProjectManagingFunds {
@@ -275,7 +278,7 @@ export enum EVerificationSteps {
 	PROJECT_REGISTRY = 'projectRegistry',
 	PROJECT_CONTACTS = 'projectContacts',
 	MANAGING_FUNDS = 'managingFunds',
-	MILESTONES = 'milestones',
+	IMPACT = 'milestones',
 	TERM_AND_CONDITION = 'termAndCondition',
 	SUBMIT = 'submit',
 }
