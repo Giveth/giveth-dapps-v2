@@ -1,66 +1,92 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import styled from 'styled-components';
 import {
 	brandColors,
-	H3,
-	H6,
-	P,
-	neutralColors,
 	Button,
-	semanticColors,
-	IconWalletApprove,
-	IconInfoFilled16,
+	IconDonation,
+	Lead,
+	neutralColors,
 } from '@giveth/ui-design-system';
-
 import { useIntl } from 'react-intl';
+
 import { Modal } from '@/components/modals/Modal';
 import { IProject } from '@/apollo/types/types';
-import { compareAddresses, formatPrice } from '@/lib/helpers';
-import FixedToast from '@/components/toasts/FixedToast';
-import { mediaQueries } from '@/lib/constants/constants';
+import { compareAddresses, formatTxLink } from '@/lib/helpers';
+import { mediaQueries, minDonationAmount } from '@/lib/constants/constants';
 import { IMeGQL, IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { ISuccessDonation } from '@/components/views/donate/CryptoDonation';
-import { confirmDonation } from '@/components/views/donate/helpers';
+import { createDonation } from '@/components/views/donate/helpers';
 import { IModal } from '@/types/common';
-import { EDonationFailedType } from '@/components/modals/FailedDonation';
+import FailedDonation, {
+	EDonationFailedType,
+} from '@/components/modals/FailedDonation';
 import { client } from '@/apollo/apolloClient';
 import { VALIDATE_TOKEN } from '@/apollo/gql/gqlUser';
 import { useAppDispatch } from '@/features/hooks';
 import { signOut } from '@/features/user/user.thunks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import config from '@/configuration';
+import DonateSummary from '@/components/views/donate/DonateSummary';
+import ExternalLink from '@/components/ExternalLink';
+import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 
 export interface IDonateModalProps extends IModal {
-	setFailedModalType: (i: EDonationFailedType) => void;
-	setTxHash: (i: string) => void;
 	project: IProject;
 	token: IProjectAcceptedToken;
 	amount: number;
+	donationToGiveth: number;
 	price?: number;
 	anonymous?: boolean;
 	setSuccessDonation: (i: ISuccessDonation) => void;
 	givBackEligible?: boolean;
-	mainProjectAddress?: string;
-	secondaryProjectAddress?: string;
+	projectWalletAddress: string;
+	givethWalletAddress: string;
 }
 
 const DonateModal = (props: IDonateModalProps) => {
-	const { project, token, amount, price, setShowModal } = props;
+	const {
+		project,
+		token,
+		amount,
+		price,
+		setShowModal,
+		projectWalletAddress,
+		givethWalletAddress,
+		donationToGiveth,
+		anonymous,
+		setSuccessDonation,
+		givBackEligible,
+	} = props;
 
 	const web3Context = useWeb3React();
+	const { account, chainId } = web3Context;
 	const dispatch = useAppDispatch();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const isDonatingToGiveth = donationToGiveth > 0;
 
 	const { formatMessage } = useIntl();
 	const [donating, setDonating] = useState(false);
-	const [donationSaved, setDonationSaved] = useState(false);
+	const [firstDonationSaved, setFirstDonationSaved] = useState(false);
+	const [secondDonationSaved, setSecondDonationSaved] = useState(false);
+	const [firstTxHash, setFirstTxHash] = useState('');
+	const [secondTxHash, setSecondTxHash] = useState('');
+	const [isFirstTxSuccess, setIsFirstTxSuccess] = useState(false);
+	const [secondTxStatus, setSecondTxStatus] = useState<EToastType>();
+	const [failedModalType, setFailedModalType] =
+		useState<EDonationFailedType>();
 
 	const { title } = project || {};
 
 	const avgPrice = price && price * amount;
+	let donationToGivethAmount = (amount * donationToGiveth) / 100;
+	if (donationToGivethAmount < minDonationAmount && isDonatingToGiveth) {
+		donationToGivethAmount = minDonationAmount;
+	}
+	const donationToGivethPrice = price && donationToGivethAmount * price;
 
-	const validateToken = () => {
+	const validateToken = async () => {
 		setDonating(true);
 		client
 			.query({
@@ -69,7 +95,7 @@ const DonateModal = (props: IDonateModalProps) => {
 			})
 			.then((res: IMeGQL) => {
 				const address = res.data?.me?.walletAddress;
-				if (compareAddresses(address, web3Context.account)) {
+				if (compareAddresses(address, account)) {
 					handleDonate();
 				} else {
 					handleFailedValidation();
@@ -84,70 +110,212 @@ const DonateModal = (props: IDonateModalProps) => {
 		closeModal();
 	};
 
+	const delayedCloseModal = (txHash1: string, txHash2?: string) => {
+		const txHash = txHash2 ? [txHash1, txHash2] : [txHash1];
+		setTimeout(() => {
+			closeModal();
+			setSuccessDonation({ txHash, givBackEligible });
+		}, 4000);
+	};
+
 	const handleDonate = () => {
-		confirmDonation({
-			...props,
-			setDonationSaved,
+		const txProps = {
+			anonymous,
 			web3Context,
 			setDonating,
-		}).then();
+			amount,
+			token,
+			setFailedModalType,
+		};
+		createDonation({
+			...txProps,
+			setTxHash: setFirstTxHash,
+			setDonationSaved: setFirstDonationSaved,
+			walletAddress: projectWalletAddress,
+			projectId: Number(project.id),
+		}).then(({ isSaved, txHash: firstHash }) => {
+			setIsFirstTxSuccess(true);
+			if (isDonatingToGiveth) {
+				createDonation({
+					...txProps,
+					setTxHash: setSecondTxHash,
+					setDonationSaved: setSecondDonationSaved,
+					walletAddress: givethWalletAddress,
+					amount: donationToGivethAmount,
+					projectId: config.GIVETH_PROJECT_ID,
+				})
+					.then(({ txHash: secondHash }) => {
+						setSecondTxStatus(EToastType.Success);
+						isSaved && delayedCloseModal(firstHash, secondHash);
+					})
+					.catch(({ txHash: secondHash }) => {
+						setSecondTxStatus(EToastType.Error);
+						isSaved && delayedCloseModal(firstHash, secondHash);
+					});
+			} else if (isSaved) {
+				delayedCloseModal(firstHash);
+			}
+		});
 	};
 
 	return (
-		<Modal
-			closeModal={closeModal}
-			isAnimating={isAnimating}
-			headerTitle={formatMessage({ id: 'label.donating' })}
-			headerTitlePosition='left'
-			headerIcon={<IconWalletApprove size={32} />}
-		>
-			<DonateContainer>
-				<DonatingBox>
-					<P>{formatMessage({ id: 'label.you_are_donating' })}</P>
-					<H3>
-						{formatPrice(amount)} {token.symbol}
-					</H3>
-					{avgPrice ? <H6>{formatPrice(avgPrice)} USD</H6> : null}
-					<P>
-						{formatMessage({ id: 'label.to' })} <span>{title}</span>
-					</P>
-				</DonatingBox>
-				<Buttons>
-					{donationSaved && (
-						<FixedToast
-							message='Your donation is being processed, you can close this modal.'
-							color={semanticColors.blueSky[700]}
-							backgroundColor={semanticColors.blueSky[100]}
-							icon={
-								<IconInfoFilled16
-									color={semanticColors.blueSky[700]}
+		<>
+			<Modal
+				closeModal={closeModal}
+				isAnimating={isAnimating}
+				headerTitlePosition='left'
+				headerIcon={<IconDonation size={32} />}
+				doNotCloseOnClickOutside
+				headerTitle={
+					firstDonationSaved
+						? formatMessage({ id: 'label.donation_submitted' })
+						: formatMessage({ id: 'label.donating' })
+				}
+			>
+				<DonateContainer>
+					<DonatingBox>
+						<Lead>
+							{isFirstTxSuccess
+								? formatMessage({
+										id: 'label.donation_submitted',
+								  })
+								: formatMessage({
+										id: 'label.you_are_donating',
+								  })}
+						</Lead>
+						<DonateSummary
+							value={amount}
+							tokenSymbol={token.symbol}
+							usdValue={avgPrice}
+							title={title}
+						/>
+						{isFirstTxSuccess && (
+							<TxStatus>
+								<InlineToast
+									type={EToastType.Success}
+									message={
+										formatMessage({
+											id: 'label.donation_to_the',
+										}) +
+										' ' +
+										title +
+										formatMessage({
+											id: 'label.successful',
+										})
+									}
 								/>
+								{firstTxHash && (
+									<ExternalLink
+										href={formatTxLink(
+											chainId,
+											firstTxHash,
+										)}
+										title={formatMessage({
+											id: 'label.view_on_etherscan',
+										})}
+										color={brandColors.pinky[500]}
+									/>
+								)}
+							</TxStatus>
+						)}
+						{isDonatingToGiveth && (
+							<>
+								<Lead>
+									{secondDonationSaved
+										? formatMessage({
+												id: 'label.donation_submitted',
+										  })
+										: isFirstTxSuccess
+										? formatMessage({
+												id: 'label.you_are_donating',
+										  })
+										: formatMessage({
+												id: 'label.and',
+										  })}
+								</Lead>
+								<DonateSummary
+									value={donationToGivethAmount}
+									tokenSymbol={token.symbol}
+									usdValue={donationToGivethPrice}
+									title='The Giveth DAO'
+								/>
+								{secondTxStatus && (
+									<TxStatus>
+										<InlineToast
+											type={secondTxStatus}
+											message={`
+												${formatMessage({
+													id: 'label.donation_to_the',
+												})} Giveth DAO
+													${
+														secondTxStatus ===
+														EToastType.Success
+															? formatMessage({
+																	id: 'label.successful',
+															  })
+															: formatMessage({
+																	id: 'label.failed_lowercase',
+															  })
+													}
+											`}
+										/>
+										{secondTxHash && (
+											<ExternalLink
+												href={formatTxLink(
+													chainId,
+													secondTxHash,
+												)}
+												title={formatMessage({
+													id: 'label.view_on_etherscan',
+												})}
+												color={brandColors.pinky[500]}
+											/>
+										)}
+									</TxStatus>
+								)}
+							</>
+						)}
+					</DonatingBox>
+					<Buttons>
+						{firstDonationSaved && (
+							<InlineToast
+								type={EToastType.Info}
+								message={formatMessage({
+									id: 'label.your_donation_is_being_processed',
+								})}
+							/>
+						)}
+						<DonateButton
+							loading={donating}
+							buttonType='primary'
+							disabled={donating}
+							label={
+								donating
+									? formatMessage({ id: 'label.donating' })
+									: formatMessage({ id: 'label.donate' })
 							}
+							onClick={validateToken}
 						/>
-					)}
-					<DonateButton
-						loading={donating}
-						buttonType='primary'
-						disabled={donating}
-						label={
-							donating
-								? formatMessage({ id: 'label.donating' })
-								: formatMessage({ id: 'label.donate' })
-						}
-						onClick={validateToken}
-					/>
-					{donationSaved && (
-						<CloseButton
-							label='CLOSE THIS MODAL'
-							buttonType='texty'
-							onClick={closeModal}
-						/>
-					)}
-				</Buttons>
-			</DonateContainer>
-		</Modal>
+					</Buttons>
+				</DonateContainer>
+			</Modal>
+			{failedModalType && (
+				<FailedDonation
+					txUrl={formatTxLink(chainId, firstTxHash || secondTxHash)}
+					setShowModal={() => setFailedModalType(undefined)}
+					type={failedModalType}
+				/>
+			)}
+		</>
 	);
 };
+
+const TxStatus = styled.div`
+	margin-bottom: 12px;
+	> div:first-child {
+		margin-bottom: 12px;
+	}
+`;
 
 const DonateContainer = styled.div`
 	background: white;

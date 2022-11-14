@@ -11,6 +11,7 @@ export interface IProjectPower {
 	totalPower?: number;
 	updateTime: string;
 }
+
 export interface IProject {
 	id?: string;
 	title?: string;
@@ -56,6 +57,10 @@ export interface IProject {
 	projectVerificationForm?: IProjectVerification;
 	projectPower: IProjectPower;
 	verificationFormStatus?: EVerificationStatus;
+}
+
+export interface IDonationProject extends IProject {
+	givethAddresses: IWalletAddress[];
 }
 
 export interface IWalletAddress {

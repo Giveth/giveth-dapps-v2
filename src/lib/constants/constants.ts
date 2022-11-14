@@ -129,3 +129,5 @@ export const regenFarmStreamCardCol = {
 	sm: [12, 6, 12],
 	lg: [12, 8, 4],
 };
+
+export const minDonationAmount = 0.000001;

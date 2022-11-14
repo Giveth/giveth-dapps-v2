@@ -3,6 +3,7 @@ import {
 	IDonation,
 	IProject,
 	IProjectUpdate,
+	IWalletAddress,
 	IWalletDonation,
 } from './types';
 
@@ -84,4 +85,13 @@ export interface IProjectAcceptedToken {
 	decimals: number;
 	isGivbackEligible?: boolean;
 	order: number;
+}
+
+export interface IFetchGivethProjectGQL {
+	data: {
+		projectById: {
+			slug: string;
+			addresses: IWalletAddress[];
+		};
+	};
 }

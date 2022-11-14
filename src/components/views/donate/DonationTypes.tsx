@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { H4 } from '@giveth/ui-design-system';
-
+import { H4, neutralColors } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+
 import CryptoDonation, {
 	ISuccessDonation,
 } from '@/components/views/donate/CryptoDonation';
 import FiatDonation from '@/components/views/donate/FiatDonation';
-import { IProject } from '@/apollo/types/types';
+import { IDonationProject } from '@/apollo/types/types';
 import RadioButton from '@/components/RadioButton';
 
 const DonationTypes = (props: {
-	project: IProject;
+	project: IDonationProject;
 	setSuccess: (i: ISuccessDonation) => void;
 }) => {
 	const { formatMessage } = useIntl();
@@ -27,15 +27,16 @@ const DonationTypes = (props: {
 					title={formatMessage({ id: 'label.cryptocurrency' })}
 					toggleRadio={() => setIsCrypto(true)}
 					isSelected={isCrypto}
-					subtitle={formatMessage({ id: 'page.donate.zero_fees' })}
+					small
 				/>
 				<RadioButton
 					title={formatMessage({ id: 'label.credit_card' })}
 					toggleRadio={() => setIsCrypto(false)}
 					isSelected={!isCrypto}
-					subtitle={formatMessage({ id: 'page.donate.bank_fees' })}
+					small
 				/>
 			</RadioBox>
+			<Break />
 			{isCrypto ? (
 				<CryptoDonation
 					project={project}
@@ -51,11 +52,17 @@ const DonationTypes = (props: {
 	);
 };
 
+const Break = styled.hr`
+	border: 1px solid ${neutralColors.gray[400]};
+`;
+
 const RadioBox = styled.div`
 	display: flex;
 	justify-content: space-between;
-	margin-top: 29px;
+	margin-top: 32px;
 	flex-wrap: wrap;
+	max-width: 350px;
+	gap: 10px;
 
 	@media (max-width: 850px) {
 		/* Very unique size issue */

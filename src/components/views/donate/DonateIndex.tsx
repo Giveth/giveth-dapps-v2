@@ -1,25 +1,20 @@
-import React, { useState } from 'react';
-import { useWeb3React } from '@web3-react/core';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 
 import { ISuccessDonation } from './CryptoDonation';
-import { IProjectBySlug } from '@/apollo/types/types';
 import { BigArc } from '@/components/styled-components/Arc';
 import { mediaQueries } from '@/lib/constants/constants';
 import SocialBox from './SocialBox';
-import { formatTxLink } from '@/lib/helpers';
 import SuccessView from '@/components/views/donate/SuccessView';
 import ProjectCardSelector from '@/components/views/donate/ProjectCardSelector';
 import DonationTypes from '@/components/views/donate/DonationTypes';
 import NiceBanner from './NiceBanner';
 import useDetectDevice from '@/hooks/useDetectDevice';
+import { IDonateRouteProps } from '../../../../pages/donate/[slug]';
 
-const DonateIndex = (props: IProjectBySlug) => {
-	const { project } = props;
+const DonateIndex: FC<IDonateRouteProps> = ({ project }) => {
 	const [isSuccess, setSuccess] = useState<ISuccessDonation>();
 	const { isMobile } = useDetectDevice();
-
-	const { chainId } = useWeb3React();
 
 	const { givBackEligible, txHash } = isSuccess || {};
 
@@ -33,7 +28,7 @@ const DonateIndex = (props: IProjectBySlug) => {
 					<Right isMobile={isMobile}>
 						{isSuccess ? (
 							<SuccessView
-								txLink={formatTxLink(chainId, txHash)}
+								txHash={txHash!}
 								project={project}
 								givBackEligible={givBackEligible!}
 							/>
@@ -76,7 +71,7 @@ const Right = styled.div<{ isMobile: boolean }>`
 	z-index: 1;
 	background: white;
 	text-align: left;
-	padding: 65px 32px 32px;
+	padding: 32px;
 	border-radius: ${props => (props.isMobile ? '16px' : '0 16px 16px 0')};
 	min-height: 620px;
 `;

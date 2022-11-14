@@ -14,6 +14,7 @@ const MAINNET_NETWORK_NUMBER = 5; // Goerli
 const XDAI_NETWORK_NUMBER = 100; // xDAI
 
 const config: EnvConfig = {
+	GIVETH_PROJECT_ID: 1,
 	BACKEND_LINK: `${BASE_ROUTE}/graphql`,
 	FRONTEND_LINK: 'https://staging.giveth.io',
 	MICROSERVICES: {
