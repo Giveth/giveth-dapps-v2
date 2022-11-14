@@ -28,7 +28,6 @@ import {
 	ColoredRocketIcon,
 	DescToast,
 	SliderWrapper,
-	SliderTooltip,
 	StyledSlider,
 	Handle,
 	HandleTooltip,
@@ -254,11 +253,6 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 			</InfoPart>
 			<DescToast>{handleCaptionText()}</DescToast>
 			<SliderWrapper>
-				{!isChanged && (
-					<SliderTooltip>
-						Allocated to previous projects
-					</SliderTooltip>
-				)}
 				<StyledSlider
 					min={0}
 					max={100}
