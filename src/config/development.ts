@@ -52,8 +52,6 @@ const config: EnvConfig = {
 			BUY_LINK:
 				'https://app.uniswap.org/#/swap?outputCurrency=0x29434A25abd94AE882aA883eea81585Aaa5b078D',
 			farmEndTimeMS: SEPT_8TH_2022,
-			active: false,
-			archived: true,
 		},
 
 		nodeUrl: 'https://goerli.infura.io/v3/' + INFURA_API_KEY,
@@ -70,8 +68,6 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://app.uniswap.org/#/add/v2/0xA2470F25bb8b53Bd3924C7AC0C68d32BF2aBd5be/0xdc31Ee1784292379Fbb2964b3B9C4124D8F89C60?chain=goerli',
 				unit: 'LP',
-				active: false,
-				archived: true,
 				farmEndTimeMS: SEPT_8TH_2022,
 			},
 			{
@@ -88,7 +84,6 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://goerli.balancer.fi/#/pool/0xf8cba1c22b6515982bf43e71b7e8b546a3323ea80002000000000000000000df',
 				unit: 'LP',
-				active: true,
 			},
 			// {
 			// 	// TODO: GOERLI
@@ -190,7 +185,6 @@ const config: EnvConfig = {
 			GARDEN_ADDRESS: '0x9ff80789b74d1d2b7cf5a568ea82409c2b327861',
 			BUY_LINK:
 				'https://app.honeyswap.org/#/swap?outputCurrency=0x83a8eea6427985C523a0c4d9d3E62C051B6580d3',
-			active: true,
 		},
 
 		pools: [
@@ -205,8 +199,7 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://app.honeyswap.org/#/add/0x83a8eea6427985C523a0c4d9d3E62C051B6580d3/0x69F79C9eA174d4659B18c7993c7EFbBbB58cF068',
 				unit: 'LP',
-				active: false,
-				archived: true,
+				farmEndTimeMS: SEPT_8TH_2022,
 			},
 			{
 				network: XDAI_NETWORK_NUMBER,
@@ -219,8 +212,6 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://app.sushi.com/add/0x83a8eea6427985C523a0c4d9d3E62C051B6580d3/0x736a98655049433f79dCcF5e54b887E8890b63D1',
 				unit: 'LP',
-				active: false,
-				archived: true,
 				farmEndTimeMS: SEPT_8TH_2022,
 			},
 			{
@@ -234,8 +225,6 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://app.honeyswap.org/#/add/0x83a8eea6427985C523a0c4d9d3E62C051B6580d3/0x97c4dD5cE204b8c1F2f3B8fBfBBDC771d867d18c',
 				unit: 'LP',
-				active: false,
-				archived: true,
 				farmStartTimeMS: 1655997000000,
 				farmEndTimeMS: SEPT_8TH_2022,
 			},
@@ -273,7 +262,6 @@ const config: EnvConfig = {
 						regenFarmType: RegenFarmType.FOX_HNY,
 
 						farmStartTimeMS: 1646306818206,
-						active: true,
 						farmEndTimeMS: 1665932450000,
 						introCard: {
 							title: 'ShapeShift DAO',
@@ -299,7 +287,6 @@ const config: EnvConfig = {
 						regenFarmType: RegenFarmType.FOX_XDAI,
 
 						farmStartTimeMS: 1646306818206,
-						active: true,
 						introCard: {
 							title: 'ShapeShift DAO',
 							description:
