@@ -53,7 +53,12 @@ const GIVPowerHeader: FC<IGIVPowerHeader> = ({
 					<RankBox>
 						<RankTitle>Current Rank</RankTitle>
 						<Rank>
-							<H5 weight={700}>#{projectPower?.powerRank}</H5>
+							<H5 weight={700}>
+								#
+								{projectPower?.totalPower === 0
+									? '--'
+									: projectPower?.powerRank}
+							</H5>
 						</Rank>
 						<RankDescContainer gap='6px'>
 							<IconWrapper>
