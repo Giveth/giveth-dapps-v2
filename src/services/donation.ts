@@ -5,10 +5,10 @@ import {
 	UPDATE_DONATION_STATUS,
 } from '@/apollo/gql/gqlDonations';
 import { client } from '@/apollo/apolloClient';
-import { IConfirmDonation } from '@/components/views/donate/helpers';
+import { ICreateDonation } from '@/components/views/donate/helpers';
 import { EDonationStatus } from '@/apollo/types/gqlEnums';
 
-interface IOnTxHash extends IConfirmDonation {
+interface IOnTxHash extends ICreateDonation {
 	txHash: string;
 	nonce: number;
 }
@@ -29,12 +29,11 @@ export const updateDonation = (donationId: number, status: EDonationStatus) => {
 };
 
 export async function saveDonation(props: IOnTxHash) {
-	const { web3Context, txHash, amount, token, project, anonymous, nonce } =
+	const { web3Context, txHash, amount, token, projectId, anonymous, nonce } =
 		props;
 
 	const { chainId } = web3Context;
 	const { address, symbol } = token;
-	const projectId = Number(project.id);
 
 	let donationId = 0;
 	try {

@@ -12,6 +12,7 @@ import { ETheme } from '@/features/general/general.slice';
 import { mediaQueries, zIndex } from '@/lib/constants/constants';
 import { useAppSelector } from '@/features/hooks';
 import useDetectDevice from '@/hooks/useDetectDevice';
+import { FlexCenter } from '@/components/styled-components/Flex';
 
 interface ModalWrapperProps {
 	fullScreen?: boolean;
@@ -30,6 +31,7 @@ interface IModal extends ModalWrapperProps {
 	customTheme?: ETheme;
 	headerColor?: string;
 	children: ReactNode;
+	doNotCloseOnClickOutside?: boolean;
 }
 
 export const Modal: FC<IModal> = ({
@@ -44,6 +46,7 @@ export const Modal: FC<IModal> = ({
 	customTheme,
 	fullScreen = false,
 	headerColor,
+	doNotCloseOnClickOutside,
 }) => {
 	const theme = useAppSelector(state => state.general.theme);
 	const el = useRef(document.createElement('div'));
@@ -86,7 +89,7 @@ export const Modal: FC<IModal> = ({
 			isAnimating={isAnimating}
 			onClick={e => e.stopPropagation()}
 		>
-			<Surrounding onClick={closeModal} />
+			{!doNotCloseOnClickOutside && <Surrounding onClick={closeModal} />}
 			<ModalWrapper fullScreen={fullScreen} theme={customTheme || theme}>
 				<ModalHeader
 					hiddenClose={hiddenClose}
@@ -119,14 +122,11 @@ const Surrounding = styled.div`
 	height: 100%;
 `;
 
-const Background = styled.div<{ isAnimating: boolean }>`
+const Background = styled(FlexCenter)<{ isAnimating: boolean }>`
 	width: 100%;
 	height: 100%;
 	background: ${brandColors.giv[900]}b3;
 	position: fixed;
-	display: flex;
-	justify-content: center;
-	align-items: center;
 	top: 0;
 	left: 0;
 	z-index: ${zIndex.MODAL};

@@ -156,6 +156,7 @@ interface MicroservicesConfig {
 }
 
 export interface EnvConfig {
+	GIVETH_PROJECT_ID: number;
 	MAINNET_NETWORK_NUMBER: number;
 	XDAI_NETWORK_NUMBER: number;
 	MAINNET_CONFIG: MainnetNetworkConfig;

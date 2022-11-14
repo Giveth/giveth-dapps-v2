@@ -7,39 +7,64 @@ import {
 	P,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
-import React from 'react';
+import React, { FC, useEffect } from 'react';
 import styled from 'styled-components';
-import ConfettiAnimation from '@/components/animations/confetti';
+import { useWeb3React } from '@web3-react/core';
 
+import ConfettiAnimation from '@/components/animations/confetti';
 import { IProject } from '@/apollo/types/types';
 import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
 import SocialBox from '@/components/views/donate/SocialBox';
 import ExternalLink from '@/components/ExternalLink';
-import InternalLink from '@/components/InternalLink';
-import { slugToProjectView } from '@/lib/routeCreators';
 import { FlexCenter } from '@/components/styled-components/Flex';
+import { formatTxLink } from '@/lib/helpers';
+import { client } from '@/apollo/apolloClient';
+import { FETCH_GIVETH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
+import config from '@/configuration';
+import { slugToProjectView } from '@/lib/routeCreators';
+import { IFetchGivethProjectGQL } from '@/apollo/types/gqlTypes';
 
-const SuccessView = (props: {
-	txLink: string;
+interface IProps {
 	project: IProject;
-	givBackEligible: boolean;
-}) => {
-	const { txLink, project, givBackEligible } = props;
+	txHash: string[];
+	givBackEligible?: boolean;
+}
+
+const SuccessView: FC<IProps> = props => {
+	const { txHash, project, givBackEligible } = props;
+	const hasMultipleTxs = txHash.length > 1;
+	const { chainId } = useWeb3React();
+	const [givethSlug, setGivethSlug] = React.useState<string>('');
+	const message = hasMultipleTxs ? (
+		<>
+			Thank you for supporting {project?.title} and thanks for your
+			donation to the Giveth DAO! You can check out the Giveth DAO project{' '}
+			<ExternalLink href={slugToProjectView(givethSlug)} title='here' />.
+		</>
+	) : (
+		`Thank you for supporting ${project?.title}. Your contribution goes a long way!`
+	);
+
+	useEffect(() => {
+		client
+			.query({
+				query: FETCH_GIVETH_PROJECT_BY_ID,
+				variables: { id: config.GIVETH_PROJECT_ID },
+				fetchPolicy: 'no-cache',
+			})
+			.then((res: IFetchGivethProjectGQL) =>
+				setGivethSlug(res.data.projectById.slug),
+			);
+	}, []);
+
 	return (
-		<SucceessContainer>
+		<SuccessContainer>
 			<ConfettiContainer>
 				<ConfettiAnimation size={300} />
 			</ConfettiContainer>
-			<GiverH4>You're a giver now!</GiverH4>
-			<SuccessMessage>
-				Thank you for supporting{' '}
-				<InternalLink
-					href={slugToProjectView(project.slug)}
-					title={project?.title}
-				/>
-				. Your contribution goes a long way!
-			</SuccessMessage>
+			<GiverH4 weight={700}>You&#39;re a giver now!</GiverH4>
+			<SuccessMessage>{message}</SuccessMessage>
 			{givBackEligible && (
 				<GivBackContainer>
 					<H6>You&#39;re eligible for GIVbacks!</H6>
@@ -54,24 +79,50 @@ const SuccessView = (props: {
 			)}
 			{!givBackEligible && <SocialBox project={project} isSuccess />}
 			<Options>
-				<P style={{ color: neutralColors.gray[900] }}>
-					Your transaction has been submitted.
-				</P>
-				<TxLink>
-					<ExternalLink href={txLink} title='View on explorer' />
-				</TxLink>
+				{hasMultipleTxs ? (
+					<>
+						<P style={{ color: neutralColors.gray[900] }}>
+							Your transactions have been submitted. You can view
+							them on a blockchain explorer here:
+						</P>
+						<TxLink>
+							<ExternalLink
+								href={formatTxLink(chainId, txHash[0])}
+								title='Donation to the project'
+							/>
+						</TxLink>
+						<TxLink>
+							<ExternalLink
+								href={formatTxLink(chainId, txHash[1])}
+								title='Donation to Giveth'
+							/>
+						</TxLink>
+					</>
+				) : (
+					<>
+						<P style={{ color: neutralColors.gray[900] }}>
+							Your transaction has been submitted.
+						</P>
+						<TxLink>
+							<ExternalLink
+								href={formatTxLink(chainId, txHash[0])}
+								title='View on a blockchain explorer'
+							/>
+						</TxLink>
+					</>
+				)}
 				<Link passHref href={Routes.Projects}>
-					<ProjectsButton label='SEE MORE PROJECTS' />
+					<ProjectsButton size='small' label='SEE MORE PROJECTS' />
 				</Link>
 			</Options>
-		</SucceessContainer>
+		</SuccessContainer>
 	);
 };
 
 const TxLink = styled(P)`
 	color: ${brandColors.pinky[500]};
 	cursor: pointer;
-	margin: 8px 0 24px 0;
+	margin-top: 8px;
 `;
 
 const ConfettiContainer = styled.div`
@@ -83,7 +134,7 @@ const GiverH4 = styled(H4)`
 	color: ${brandColors.deep[700]};
 `;
 
-const SucceessContainer = styled.div`
+const SuccessContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: space-around;
@@ -96,22 +147,22 @@ const SucceessContainer = styled.div`
 
 const SuccessMessage = styled(P)`
 	position: relative;
-	margin: 16px 0;
+	margin: 16px 0 30px;
 	color: ${brandColors.deep[900]};
 	a {
-		font-weight: 500;
+		color: ${brandColors.pinky[500]};
 	}
 `;
 
 const Options = styled(FlexCenter)`
 	flex-direction: column;
 	width: 100%;
+	margin-top: 24px;
 `;
 
 const ProjectsButton = styled(Button)`
 	width: 242px;
-	height: 48px;
-	font-size: 12px;
+	margin-top: 24px;
 `;
 
 const LearnButton = styled(Button)`
