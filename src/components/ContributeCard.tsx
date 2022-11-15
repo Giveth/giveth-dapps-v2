@@ -1,4 +1,4 @@
-import { H2, H5 } from '@giveth/ui-design-system';
+import { H3, H5 } from '@giveth/ui-design-system';
 import { FC, useEffect, useState } from 'react';
 import { formatUSD } from '@/lib/helpers';
 import { ContributeCardBox, ContributeCardTitles } from './ContributeCard.sc';
@@ -18,7 +18,7 @@ export const ContributeCard: FC<IContributeCard> = ({ data1, data2 }) => {
 		<ContributeCardBox>
 			<ContributeCardTitles>{data1.label}</ContributeCardTitles>
 			<ContributeCardTitles>{data2.label}</ContributeCardTitles>
-			<H2>{data1.value}</H2>
+			<H3 weight={700}>{data1.value}</H3>
 			<H5>{data2.value}</H5>
 		</ContributeCardBox>
 	);
