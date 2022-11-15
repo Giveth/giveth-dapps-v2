@@ -104,7 +104,6 @@ const translateYForRightLeft = (
 	switch (align) {
 		case 'top':
 			return `-100%`;
-
 		case 'bottom':
 			return `-${parentRect.width + ARROW_SIZE}px`;
 
@@ -123,17 +122,23 @@ const tooltipStyleCalc = (
 	let style = {};
 	let translateX;
 	let translateY;
-	switch (direction) {
-		case 'top':
-			if (isMobile) {
-				style = {
-					top: parentRect.top - ARROW_SIZE - 50,
-					left: 10,
-					transform: `translate(${translateX}, -100%)`,
-					width: '95vw',
-				};
-				break;
-			} else {
+	if (isMobile && direction !== 'bottom') {
+		style = {
+			top: parentRect.top - ARROW_SIZE - 50,
+			left: 10,
+			transform: `translate(${translateX}, -100%)`,
+			width: '95vw',
+		};
+	} else if (isMobile && direction === 'bottom') {
+		style = {
+			top: parentRect.bottom + ARROW_SIZE,
+			left: 10,
+			transform: `translate(${translateX}, 0)`,
+			width: '95vw',
+		};
+	} else {
+		switch (direction) {
+			case 'top':
 				translateX = translateXForTopBottom(align, parentRect);
 				style = {
 					top: parentRect.top - ARROW_SIZE,
@@ -141,17 +146,7 @@ const tooltipStyleCalc = (
 					transform: `translate(${translateX}, -100%)`,
 				};
 				break;
-			}
-		case 'bottom':
-			if (isMobile) {
-				style = {
-					top: parentRect.bottom + ARROW_SIZE,
-					left: 10,
-					transform: `translate(${translateX}, 0)`,
-					width: '95vw',
-				};
-				break;
-			} else {
+			case 'bottom':
 				translateX = translateXForTopBottom(align, parentRect);
 				style = {
 					top: parentRect.bottom + ARROW_SIZE,
@@ -159,17 +154,8 @@ const tooltipStyleCalc = (
 					transform: `translate(${translateX}, 0)`,
 				};
 				break;
-			}
-		case 'right':
-			if (isMobile) {
-				style = {
-					top: parentRect.top - ARROW_SIZE - 50,
-					left: 10,
-					transform: `translate(${translateX}, -100%)`,
-					width: '95vw',
-				};
-				break;
-			} else {
+
+			case 'right':
 				translateY = translateYForRightLeft(align, parentRect);
 				style = {
 					top: parentRect.bottom,
@@ -177,17 +163,7 @@ const tooltipStyleCalc = (
 					transform: `translate(0, ${translateY})`,
 				};
 				break;
-			}
-		case 'left':
-			if (isMobile) {
-				style = {
-					top: parentRect.top - ARROW_SIZE - 50,
-					left: 10,
-					transform: `translate(${translateX}, -100%)`,
-					width: '95vw',
-				};
-				break;
-			} else {
+			case 'left':
 				translateY = translateYForRightLeft(align, parentRect);
 				style = {
 					top: parentRect.bottom,
@@ -195,7 +171,7 @@ const tooltipStyleCalc = (
 					transform: `translate(-100%, ${translateY})`,
 				};
 				break;
-			}
+		}
 	}
 	return style;
 };
