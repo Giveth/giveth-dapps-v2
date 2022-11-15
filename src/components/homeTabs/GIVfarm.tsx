@@ -11,7 +11,11 @@ import { useWeb3React } from '@web3-react/core';
 import { Flex } from '@/components/styled-components/Flex';
 import StakingPoolCard from '@/components/cards/StakingPoolCard';
 import config from '@/configuration';
-import { SimplePoolStakingConfig, StakingType } from '@/types/config';
+import {
+	SimplePoolStakingConfig,
+	StakingType,
+	UniswapV3PoolStakingConfig,
+} from '@/types/config';
 import {
 	GIVfarmTopContainer,
 	Subtitle,
@@ -37,54 +41,45 @@ import { GIVfrens } from '@/components/givfarm/GIVfrens';
 import GIVpowerStakingPoolCard from '../cards/GIVpowerStakingPoolCard';
 import { GIVpowerProvider } from '@/context/givpower.context';
 import { DaoCard } from '../givfarm/DaoCard';
+import { getNowUnixMS } from '@/helpers/time';
+import { TWO_WEEK } from '@/lib/constants/constants';
+
+const renderPool = (
+	pool: SimplePoolStakingConfig | UniswapV3PoolStakingConfig,
+	id: number,
+) => (
+	<Col sm={6} lg={4} key={`staking_pool_card_${pool.network}_${id}`}>
+		{pool.type === StakingType.UNISWAPV3_ETH_GIV ? (
+			<StakingPositionCard poolStakingConfig={pool} />
+		) : (
+			<StakingPoolCard
+				poolStakingConfig={pool as SimplePoolStakingConfig}
+			/>
+		)}
+	</Col>
+);
 
 const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
-	const pools = [...config.MAINNET_CONFIG.pools, ...config.XDAI_CONFIG.pools];
-	if (chainId === config.XDAI_NETWORK_NUMBER) {
-		pools.reverse();
+	const pools =
+		chainId === config.XDAI_NETWORK_NUMBER
+			? [...config.XDAI_CONFIG.pools, ...config.MAINNET_CONFIG.pools]
+			: [...config.MAINNET_CONFIG.pools, ...config.XDAI_CONFIG.pools];
+
+	const now = getNowUnixMS();
+	const filteredPools = [];
+	const discontinuedPools = [];
+	for (let i = 0; i < pools.length; i++) {
+		const pool = pools[i];
+		const { farmEndTimeMS } = pool;
+		const archived = farmEndTimeMS && now > farmEndTimeMS + TWO_WEEK;
+		if (!showArchivedPools && archived) continue;
+		if (farmEndTimeMS && now > farmEndTimeMS) {
+			discontinuedPools.push(renderPool(pool, i));
+		} else {
+			filteredPools.push(renderPool(pool, i));
+		}
 	}
-	return pools
-		.filter(p => (showArchivedPools ? true : p.active && !p.archived))
-		.map((poolStakingConfig, idx) => ({ poolStakingConfig, idx }))
-		.sort(
-			(
-				{
-					idx: idx1,
-					poolStakingConfig: { active: active1, archived: archived1 },
-				},
-				{
-					idx: idx2,
-					poolStakingConfig: { active: active2, archived: archived2 },
-				},
-			) =>
-				+active2 - +active1 ||
-				+!!archived2 - +!!archived1 ||
-				idx1 - idx2,
-		)
-		.map(({ poolStakingConfig }, index) => {
-			const network = poolStakingConfig?.network || 0;
-			return (
-				<Col
-					sm={6}
-					lg={4}
-					key={`staking_pool_card_${network}_${index}`}
-				>
-					{poolStakingConfig.type ===
-					StakingType.UNISWAPV3_ETH_GIV ? (
-						<StakingPositionCard
-							poolStakingConfig={poolStakingConfig}
-						/>
-					) : (
-						<StakingPoolCard
-							key={`staking_pool_card_${network}_${index}`}
-							poolStakingConfig={
-								poolStakingConfig as SimplePoolStakingConfig
-							}
-						/>
-					)}
-				</Col>
-			);
-		});
+	return [...filteredPools, ...discontinuedPools];
 };
 
 export const TabGIVfarmTop = () => {
@@ -209,26 +204,24 @@ export const TabGIVfarmBottom = () => {
 						isSelected={showArchivedPools}
 					/>
 				</ArchivedPoolsToggle>
-				<>
-					<PoolRow>
-						<GIVpowerProvider>
-							<Col sm={6} lg={4} key={`givpower_card`}>
-								<GIVpowerStakingPoolCard />
-							</Col>
-						</GIVpowerProvider>
-						{showArchivedPools && (
-							<Col sm={6} lg={4}>
-								<StakingPoolCard
-									poolStakingConfig={getGivStakingConfig(
-										config.MAINNET_CONFIG,
-									)}
-								/>
-							</Col>
-						)}
-						{renderPools(chainId, showArchivedPools)}
-					</PoolRow>
-					<GIVfrens showArchivedPools={showArchivedPools} />
-				</>
+				<PoolRow>
+					<GIVpowerProvider>
+						<Col sm={6} lg={4} key={`givpower_card`}>
+							<GIVpowerStakingPoolCard />
+						</Col>
+					</GIVpowerProvider>
+					{showArchivedPools && (
+						<Col sm={6} lg={4}>
+							<StakingPoolCard
+								poolStakingConfig={getGivStakingConfig(
+									config.MAINNET_CONFIG,
+								)}
+							/>
+						</Col>
+					)}
+					{renderPools(chainId, showArchivedPools)}
+				</PoolRow>
+				<GIVfrens showArchivedPools={showArchivedPools} />
 				<Col xs={12}>
 					<DaoCard />
 				</Col>
