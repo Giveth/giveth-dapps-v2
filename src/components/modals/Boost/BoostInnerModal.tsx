@@ -112,7 +112,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 				<Caption style={{ whiteSpace: `pre-line` }}>
 					When you allocate a percentage of your total GIVpower to
 					this project, the GIVpower you have on other projects will
-					decrease proportionally. You can review and manage you
+					decrease proportionally. You can review and manage your
 					GIVpower allocations in &nbsp;
 					<Link href={Routes.MyBoostedProjects} passHref>
 						<GLink>
