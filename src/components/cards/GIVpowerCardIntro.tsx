@@ -5,9 +5,8 @@ import {
 	IconRocketInSpace32,
 	IconX,
 	neutralColors,
-	// ButtonLink,
-	Button,
 	brandColors,
+	ButtonLink,
 } from '@giveth/ui-design-system';
 import { useState } from 'react';
 import styled from 'styled-components';
@@ -20,6 +19,7 @@ import { LockupDetailsModal } from '../modals/LockupDetailsModal';
 import { useGIVpower } from '@/context/givpower.context';
 import { useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import Routes from '@/lib/constants/Routes';
 import type { Dispatch, FC, SetStateAction } from 'react';
 
 interface IGIVpowerCardIntro {
@@ -57,22 +57,12 @@ const GIVpowerCardIntro: FC<IGIVpowerCardIntro> = ({ setState }) => {
 					It will allow you to support the projects you believe in,
 					without donating.
 				</Desc>
-				{/* <ButtonLink
-				label='Boost projects with GIVpower'
-				href={Routes.Projects}
-			/> */}
-				{
-					// Commenting for now, we may need it later
-				}
-				{/* <LearnMoreButton
-					label='locked GIV details'
-					buttonType='texty'
-					onClick={() => setShowLockDetailModal(true)}
-				/> */}
+				<ButtonLink label='Boost Projects' href={Routes.Projects} />
 				<LearnMoreButton
 					label='Learn More'
-					onClick={() => window.open(links.GIVPOWER_DOC)}
-					buttonType='texty'
+					linkType='texty'
+					href={links.GIVPOWER_DOC}
+					target='_blank'
 					icon={
 						<IconExternalLink
 							size={16}
@@ -110,8 +100,9 @@ const Desc = styled(P)`
 	margin-bottom: 32px;
 `;
 
-const LearnMoreButton = styled(Button)`
+const LearnMoreButton = styled(ButtonLink)`
 	width: 100%;
+	margin-top: 8px;
 	margin-bottom: 16px;
 `;
 
