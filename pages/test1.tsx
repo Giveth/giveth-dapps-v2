@@ -50,8 +50,8 @@ const TestRoute = () => {
 				this is test page.
 				<IconWithTooltip
 					icon={<IconHelpFilled16 />}
-					direction='top'
-					align='left'
+					direction='right'
+					align='top'
 				>
 					<FlowRateTooltip>
 						The rate at which you receive liquid GIV from your
