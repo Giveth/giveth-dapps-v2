@@ -7,9 +7,7 @@ import { useIntl } from 'react-intl';
 import {
 	brandColors,
 	Button,
-	Caption,
 	GLink,
-	IconGasStation,
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
@@ -25,7 +23,6 @@ import { mediaQueries, minDonationAmount } from '@/lib/constants/constants';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import { IDonationProject } from '@/apollo/types/types';
 import { fetchPrice } from '@/services/token';
-import { switchNetwork } from '@/lib/wallet';
 import GeminiModal from './GeminiModal';
 import config from '@/configuration';
 import TokenPicker from './TokenPicker';
@@ -41,7 +38,6 @@ import {
 import {
 	filterTokens,
 	getNetworkIds,
-	getNetworkNames,
 	prepareTokenList,
 } from '@/components/views/donate/helpers';
 import { ORGANIZATION } from '@/lib/constants/organizations';
@@ -56,7 +52,8 @@ import {
 import usePurpleList from '@/hooks/usePurpleList';
 import DonateToGiveth from '@/components/views/donate/DonateToGiveth';
 import TotalDonation from '@/components/views/donate/TotalDonation';
-import { Flex } from '@/components/styled-components/Flex';
+import SaveGasFees from '@/components/views/donate/SaveGasFees';
+import SwitchToAcceptedChain from '@/components/views/donate/SwitchToAcceptedChain';
 
 const ethereumChain = config.PRIMARY_NETWORK;
 const gnosisChain = config.SECONDARY_NETWORK;
@@ -97,11 +94,7 @@ const CryptoDonation = (props: {
 		title: projectTitle,
 	} = project;
 
-	const {
-		supportCustomTokens,
-		name: orgName,
-		label: orgLabel,
-	} = organization || {};
+	const { supportCustomTokens, label: orgLabel } = organization || {};
 	const isActive = status?.name === EProjectStatus.ACTIVE;
 	const mainTokenPrice = new BigNumber(ethPrice).toNumber();
 	const noDonationSplit = Number(projectId!) === config.GIVETH_PROJECT_ID;
@@ -355,7 +348,7 @@ const CryptoDonation = (props: {
 			{showChangeNetworkModal && acceptedChains && (
 				<DonateWrongNetwork
 					setShowModal={setShowChangeNetworkModal}
-					targetNetworks={acceptedChains}
+					acceptedChains={acceptedChains}
 				/>
 			)}
 			{showInsufficientModal && (
@@ -382,46 +375,8 @@ const CryptoDonation = (props: {
 			)}
 
 			<InputContainer>
-				{networkId &&
-					acceptedChains &&
-					!acceptedChains.includes(networkId) && (
-						<NetworkToast>
-							<Caption medium>
-								{formatMessage({
-									id: 'label.projects_from',
-								})}{' '}
-								{orgName}{' '}
-								{formatMessage({
-									id: 'label.only_accept_on',
-								})}{' '}
-								{getNetworkNames(acceptedChains, 'and')}.
-							</Caption>
-							<SwitchCaption
-								onClick={() => switchNetwork(ethereumChain.id)}
-							>
-								{formatMessage({ id: 'label.switch_network' })}
-							</SwitchCaption>
-						</NetworkToast>
-					)}
-				{networkId &&
-					networkId === ethereumChain.id &&
-					acceptedChains?.includes(gnosisChain.id) && (
-						<NetworkToast>
-							<Flex alignItems='center' gap='9px'>
-								<IconGasStation />
-								<Caption medium>
-									{formatMessage({
-										id: 'label.save_on_gas_fees',
-									})}
-								</Caption>
-							</Flex>
-							<SwitchCaption
-								onClick={() => switchNetwork(gnosisChain.id)}
-							>
-								{formatMessage({ id: 'label.switch_network' })}
-							</SwitchCaption>
-						</NetworkToast>
-					)}
+				<SwitchToAcceptedChain acceptedChains={acceptedChains} />
+				<SaveGasFees acceptedChains={acceptedChains} />
 				<SearchContainer error={amountError} focused={inputBoxFocused}>
 					<DropdownContainer>
 						<TokenPicker
@@ -588,29 +543,6 @@ const DropdownContainer = styled.div`
 	${mediaQueries.mobileL} {
 		width: 50%;
 	}
-`;
-
-const NetworkToast = styled.div`
-	display: flex;
-	gap: 10px;
-	width: 100%;
-	margin-bottom: 9px;
-	color: ${neutralColors.gray[800]};
-	> :last-child {
-		flex-shrink: 0;
-	}
-	> div:first-child > svg {
-		flex-shrink: 0;
-	}
-	img {
-		padding-right: 12px;
-	}
-`;
-
-const SwitchCaption = styled(Caption)`
-	color: ${brandColors.pinky[500]};
-	cursor: pointer;
-	margin: 0 auto;
 `;
 
 const MainButton = styled(Button)`
