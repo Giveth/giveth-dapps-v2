@@ -49,13 +49,13 @@ const GIVpowerCardIntro: FC<IGIVpowerCardIntro> = ({ setState }) => {
 				</HeaderRow>
 				<TotalGIVpowerBox />
 				<Desc>
-					You get GIVpower when you stake &amp; lock GIV. GIVpower
-					will allow you to boost projects to influence their ranking
-					on Giveth.
+					You get GIVpower when you stake & lock GIV. Use your
+					GIVpower to boost projects on Giveth to influence their
+					rank. Donors to top-ranked projects get more GIVbacks.
 				</Desc>
 				<Desc>
-					It will allow you to support the projects you believe in,
-					without donating.
+					With GIVpower, you can support the projects you believe in,
+					without sacrificing!
 				</Desc>
 				<ButtonLink label='Boost Projects' href={Routes.Projects} />
 				<LearnMoreButton
@@ -97,7 +97,7 @@ const CloseButton = styled.div`
 
 const Desc = styled(P)`
 	text-align: center;
-	margin-bottom: 32px;
+	margin-bottom: 16px;
 `;
 
 const LearnMoreButton = styled(ButtonLink)`
