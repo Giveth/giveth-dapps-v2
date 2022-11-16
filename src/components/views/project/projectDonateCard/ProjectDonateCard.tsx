@@ -305,7 +305,12 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 							icon={<IconHelpFilled16 />}
 							direction={'bottom'}
 						>
-							Should fill some thing
+							<BoostTooltip>
+								Boost this project with GIVpower to improve its
+								rank! Rank is updated at the beginning of every
+								GIVbacks round. You can see the projected rank
+								for next round as well below.
+							</BoostTooltip>
 						</IconWithTooltip>
 					</Flex>
 					<Flex gap='8px' alignItems='flex-end'>
@@ -602,6 +607,11 @@ const ArchiveButton = styled(Button)`
 		color: ${brandColors.giv[500]};
 		background-color: transparent;
 	}
+`;
+
+export const BoostTooltip = styled(Subline)`
+	color: ${neutralColors.gray[100]};
+	width: 260px;
 `;
 
 export default ProjectDonateCard;
