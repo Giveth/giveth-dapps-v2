@@ -74,7 +74,13 @@ function NotificationView() {
 			  });
 		fetchNotificationsData(query, { signal })
 			.then(res => {
-				if (res?.notifications) setNotifications(res.notifications);
+				if (res?.notifications) {
+					setNotifications(
+						pageNumber.current === 0
+							? res.notifications
+							: notifications.concat(res.notifications),
+					);
+				}
 			})
 			.finally(() => {
 				setLoading(false);
@@ -172,6 +178,7 @@ function NotificationView() {
 					))
 				)}
 			</div>
+			<h6>{pageNumber.current}</h6>
 		</NotificationContainer>
 	);
 }
