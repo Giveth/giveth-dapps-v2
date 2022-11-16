@@ -5,7 +5,7 @@ import {
 	Lead,
 	neutralColors,
 } from '@giveth/ui-design-system';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
 	NotificationContainer,
 	IconContainer,
@@ -42,7 +42,7 @@ function NotificationView() {
 		useNotification();
 	const [loading, setLoading] = useState(false);
 	const [totalCount, setTotalCount] = useState(0);
-	const pageNumber = useRef(0);
+	const [pageNumber, setPageNumber] = useState(0);
 
 	const {
 		total: totalUnreadNotifications,
@@ -54,7 +54,7 @@ function NotificationView() {
 	const dispatch = useAppDispatch();
 
 	const handleLoadMore = () => {
-		if (limit * pageNumber.current < totalCount) pageNumber.current++;
+		if (notifications.length < totalCount) setPageNumber(pageNumber + 1);
 	};
 
 	useEffect(() => {
@@ -69,18 +69,18 @@ function NotificationView() {
 		tab === ENotificationTabs.ALL
 			? (query = {
 					limit,
-					offset: pageNumber.current * limit,
+					offset: pageNumber * limit,
 			  })
 			: (query = {
 					category: tab,
 					limit,
-					offset: pageNumber.current * limit,
+					offset: pageNumber * limit,
 			  });
 		fetchNotificationsData(query, { signal })
 			.then(res => {
 				if (res?.notifications) {
 					setNotifications(
-						pageNumber.current === 0
+						pageNumber === 0
 							? res.notifications
 							: notifications.concat(res.notifications),
 					);
@@ -93,7 +93,7 @@ function NotificationView() {
 		return () => {
 			controller.abort();
 		};
-	}, [tab, pageNumber.current]);
+	}, [tab, pageNumber]);
 
 	return (
 		<NotificationContainer>
@@ -183,7 +183,9 @@ function NotificationView() {
 					))
 				)}
 			</div>
-			<h6>{pageNumber.current}</h6>
+			<h6>{pageNumber}</h6>
+			<h6>{totalCount}</h6>
+			<h6>{notifications.length}</h6>
 			<h5 onClick={handleLoadMore}>LoadMore</h5>
 		</NotificationContainer>
 	);
