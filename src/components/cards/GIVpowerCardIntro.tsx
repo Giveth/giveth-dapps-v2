@@ -14,7 +14,7 @@ import styled from 'styled-components';
 // import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
 import TotalGIVpowerBox from '../modals/StakeLock/TotalGIVpowerBox';
-import { Flex } from '../styled-components/Flex';
+import { Flex, FlexSpacer } from '../styled-components/Flex';
 import { StakeCardState } from './BaseStakingCard';
 import { LockupDetailsModal } from '../modals/LockupDetailsModal';
 import { useGIVpower } from '@/context/givpower.context';
@@ -40,7 +40,7 @@ const GIVpowerCardIntro: FC<IGIVpowerCardIntro> = ({ setState }) => {
 				<HeaderRow>
 					<IconRocketInSpace32 />
 					<H6 weight={700}>GIVpower</H6>
-					<div style={{ flex: 1 }}></div>
+					<FlexSpacer />
 					<CloseButton
 						onClick={() => setState(StakeCardState.NORMAL)}
 					>

@@ -76,7 +76,11 @@ import { UniV3APRModal } from '../modals/UNIv3APR';
 import StakingCardIntro from './StakingCardIntro';
 import { getNowUnixMS } from '@/helpers/time';
 import FarmCountDown from '../FarmCountDown';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+import {
+	Flex,
+	FlexCenter,
+	FlexSpacer,
+} from '@/components/styled-components/Flex';
 import { IStakeInfo } from '@/hooks/useStakingPool';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { GIVPowerExplainModal } from '../modals/GIVPowerExplain';
@@ -366,7 +370,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 										</GIVgardenTooltip>
 									</IconWithTooltip>
 								)}
-							<div style={{ flex: 1 }}></div>
+							<FlexSpacer />
 							{notif && notif}
 							{introCard && (
 								<IntroIcon

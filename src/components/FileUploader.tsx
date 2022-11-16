@@ -12,7 +12,7 @@ import {
 	brandColors,
 	IconImage,
 } from '@giveth/ui-design-system';
-import { Flex } from './styled-components/Flex';
+import { Flex, FlexSpacer } from './styled-components/Flex';
 import { showToastError } from '@/lib/helpers';
 import { client } from '@/apollo/apolloClient';
 import { UPLOAD_PROFILE_PHOTO } from '@/apollo/gql/gqlUser';
@@ -190,7 +190,7 @@ const FileUploader: FC<IFileUploader> = ({
 												&nbsp;- Link
 											</a>
 										</GLink>
-										<div style={{ flex: 1 }}></div>
+										<FlexSpacer />
 										<DeleteRow
 											onClick={() => onDelete(file.url)}
 										>
