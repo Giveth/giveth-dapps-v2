@@ -88,7 +88,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 					this project. You can check your allocation on &nbsp;
 					<Link href={Routes.MyBoostedProjects} passHref>
 						<GLink>
-							<b>My account</b>
+							<b>My GIVpower</b>
 						</GLink>
 					</Link>
 				</Caption>
@@ -102,7 +102,21 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 					managing them in &nbsp;
 					<Link href={Routes.MyBoostedProjects} passHref>
 						<GLink>
-							<b>My account</b>
+							<b>My GIVpower</b>
+						</GLink>
+					</Link>
+				</Caption>
+			);
+		} else if (percentage === 100) {
+			return (
+				<Caption style={{ whiteSpace: `pre-line` }}>
+					Are you Sure? <br /> If you boost this project with 100% of
+					your GIVpower, you will remove your GIVpower from all the
+					other projects you boosted. <br />
+					You can review and manage your GIVpower allocations in .
+					<Link href={Routes.MyBoostedProjects} passHref>
+						<GLink>
+							<b>My GIVpower</b>
 						</GLink>
 					</Link>
 				</Caption>
@@ -112,8 +126,9 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 				<Caption style={{ whiteSpace: `pre-line` }}>
 					When you allocate a percentage of your total GIVpower to
 					this project, the GIVpower you have on other projects will
-					decrease proportionally. You can review and manage your
-					GIVpower allocations in &nbsp;
+					decrease proportionally. <br />
+					You can review and manage your GIVpower allocations in
+					&nbsp;
 					<Link href={Routes.MyBoostedProjects} passHref>
 						<GLink>
 							<b>My GIVpower</b>
