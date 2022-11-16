@@ -78,6 +78,30 @@ export const FETCH_POWER_BOOSTING_INFO = gql`
 	}
 `;
 
+export const FETCH_PROJECT_BOOSTERS = gql`
+	query getPowerBoostingsQuery(
+		$take: Int
+		$skip: Int
+		$orderBy: PowerBoostingOrderBy
+		$projectId: Int
+	) {
+		getPowerBoosting(
+			take: $take
+			skip: $skip
+			orderBy: $orderBy
+			projectId: $projectId
+		) {
+			powerBoostings {
+				id
+				user {
+					walletAddress
+				}
+				percentage
+			}
+		}
+	}
+`;
+
 export const FETCH_PROJECT_BOOSTINGS = gql`
 	query userProjectPowers(
 		$take: Int
