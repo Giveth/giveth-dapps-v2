@@ -57,7 +57,11 @@ import { EProjectVerificationStatus } from '@/apollo/types/gqlEnums';
 import VerificationStatus from '@/components/views/project/projectDonateCard/VerificationStatus';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import GIVbackToast from '@/components/views/project/projectDonateCard/GIVbackToast';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+import {
+	Flex,
+	FlexCenter,
+	FlexSpacer,
+} from '@/components/styled-components/Flex';
 import BoostModal from '@/components/modals/Boost/BoostModal';
 import CategoryBadge from '@/components/badges/CategoryBadge';
 import { mapCategoriesToMainCategories } from '@/helpers/singleProject';
@@ -310,6 +314,11 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 							projectPower={projectPower}
 							projectFuturePower={projectFuturePower}
 						/>
+						<FlexSpacer />
+						<BoostButton onClick={handleBoostClick}>
+							<BoostButtonText>Boost</BoostButtonText>
+							<IconRocketInSpace color={brandColors.giv[500]} />
+						</BoostButton>
 					</Flex>
 				</BoostWrapper>
 				<DonateWrapper>
