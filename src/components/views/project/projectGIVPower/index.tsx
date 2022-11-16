@@ -7,10 +7,10 @@ import { IProjectPower, IUserProjectPowers } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import { Flex } from '@/components/styled-components/Flex';
 import { client } from '@/apollo/apolloClient';
-import { FETCH_PROJECT_BOOSTINGS } from '@/apollo/gql/gqlPowerBoosting';
 import { showToastError } from '@/lib/helpers';
 import LoadingAnimation from '@/animations/loading_giv.json';
 import LottieControl from '@/components/animations/lottieControl';
+import { FETCH_PROJECT_BOOSTERS } from '@/apollo/gql/gqlPowerBoosting';
 
 interface ProjectGIVPowerIndexProps {
 	userId?: string;
@@ -35,18 +35,17 @@ const ProjectGIVPowerIndex = ({
 	const totalCount = boostingsData?.totalCount ?? 0;
 
 	useEffect(() => {
-		const fetchProjectBoostings = async () => {
+		const fetchProjectBoosters = async () => {
 			setLoading(true);
 			if (projectId) {
 				try {
 					const { data } = await client.query({
-						query: FETCH_PROJECT_BOOSTINGS,
+						query: FETCH_PROJECT_BOOSTERS,
 						variables: {
-							projectId: +projectId,
 							take: itemPerPage,
 							skip: page * itemPerPage,
+							projectId: +projectId,
 						},
-						fetchPolicy: 'network-only',
 					});
 					const { userProjectPowers } = data;
 					setBoostingsData(
@@ -62,7 +61,7 @@ const ProjectGIVPowerIndex = ({
 			setLoading(false);
 		};
 
-		fetchProjectBoostings();
+		fetchProjectBoosters();
 	}, [page]);
 
 	if (loading)
