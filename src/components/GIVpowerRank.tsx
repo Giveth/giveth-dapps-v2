@@ -57,6 +57,7 @@ const RankContainer = styled.div`
 `;
 
 const NextRankContainer = styled(RankContainer)<{ state: number }>`
+	padding-top: 21px;
 	color: ${props =>
 		props.state > 0 ? semanticColors.punch[700] : semanticColors.jade[700]};
 `;
