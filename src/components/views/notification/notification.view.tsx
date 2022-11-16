@@ -62,13 +62,16 @@ function NotificationView() {
 		const controller = new AbortController();
 		const signal = controller.signal;
 		let query;
-		if (tab !== ENotificationTabs.ALL) {
-			query = {
-				category: tab,
-				limit,
-				offset: pageNumber.current * limit,
-			};
-		}
+		tab === ENotificationTabs.ALL
+			? (query = {
+					limit,
+					offset: pageNumber.current * limit,
+			  })
+			: (query = {
+					category: tab,
+					limit,
+					offset: pageNumber.current * limit,
+			  });
 		fetchNotificationsData(query, { signal })
 			.then(res => {
 				if (res?.notifications) setNotifications(res.notifications);
