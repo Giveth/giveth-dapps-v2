@@ -4,13 +4,9 @@ import {
 	Caption,
 	GLink,
 	H5,
-	H6,
 	IconAlertCircle16,
-	IconArrowUp16,
-	IconArrowDown16,
 	neutralColors,
 	P,
-	semanticColors,
 	Subline,
 } from '@giveth/ui-design-system';
 import { FC } from 'react';
@@ -18,6 +14,7 @@ import { IProjectPower } from '@/apollo/types/types';
 import { Col, Row } from '@/components/Grid';
 import { Flex } from '@/components/styled-components/Flex';
 import links from '@/lib/constants/links';
+import { CurrentRank, NextRank } from '@/components/GIVpowerRank';
 
 interface IGIVPowerHeader {
 	projectPower?: IProjectPower;
@@ -28,11 +25,6 @@ const GIVPowerHeader: FC<IGIVPowerHeader> = ({
 	projectPower,
 	projectFuturePower,
 }) => {
-	const goingUp =
-		!projectFuturePower?.powerRank || !projectPower?.powerRank
-			? 0
-			: projectFuturePower.powerRank - projectPower?.powerRank;
-
 	return (
 		<Container>
 			<H5 weight={700}>
@@ -52,14 +44,7 @@ const GIVPowerHeader: FC<IGIVPowerHeader> = ({
 				<Col xs={12} md={6}>
 					<RankBox>
 						<RankTitle>Current Rank</RankTitle>
-						<Rank>
-							<H5 weight={700}>
-								#
-								{projectPower?.totalPower === 0
-									? '--'
-									: projectPower?.powerRank}
-							</H5>
-						</Rank>
+						<CurrentRank projectPower={projectPower} />
 						<RankDescContainer gap='6px'>
 							<IconWrapper>
 								<IconAlertCircle16 />
@@ -74,20 +59,10 @@ const GIVPowerHeader: FC<IGIVPowerHeader> = ({
 				<Col xs={12} md={6}>
 					<RankBox>
 						<RankTitle>Projected Rank</RankTitle>
-						<NextRank state={goingUp}>
-							<Flex alignItems='baseline' gap='4px'>
-								{goingUp === 0 ? (
-									''
-								) : goingUp > 0 ? (
-									<IconArrowDown16 />
-								) : (
-									<IconArrowUp16 />
-								)}
-								<H6 weight={700}>
-									#{projectFuturePower?.powerRank || '--'}
-								</H6>
-							</Flex>
-						</NextRank>
+						<NextRank
+							projectPower={projectPower}
+							projectFuturePower={projectFuturePower}
+						/>
 						<RankDescContainer gap='6px'>
 							<IconWrapper>
 								<IconAlertCircle16 />
@@ -126,14 +101,6 @@ const RankBox = styled.div`
 
 const RankTitle = styled(Subline)``;
 
-const Rank = styled.div`
-	height: 54px;
-`;
-
-const NextRank = styled(Rank)<{ state: number }>`
-	color: ${props =>
-		props.state > 0 ? semanticColors.punch[700] : semanticColors.jade[700]};
-`;
 const RankDescContainer = styled(Flex)`
 	padding-top: 6px;
 `;
