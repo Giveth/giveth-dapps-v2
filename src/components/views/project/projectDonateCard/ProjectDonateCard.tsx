@@ -315,10 +315,10 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 							projectFuturePower={projectFuturePower}
 						/>
 						<FlexSpacer />
-						<BoostButton onClick={handleBoostClick}>
+						<BoostButton1 onClick={handleBoostClick}>
+							<IconRocketInSpace />
 							<BoostButtonText>Boost</BoostButtonText>
-							<IconRocketInSpace color={brandColors.giv[500]} />
-						</BoostButton>
+						</BoostButton1>
 					</Flex>
 				</BoostWrapper>
 				<DonateWrapper>
@@ -461,6 +461,21 @@ const BoostButton = styled(FlexCenter)`
 	width: 100%;
 `;
 
+const BoostButton1 = styled(Flex)`
+	border-radius: 48px;
+	box-shadow: ${Shadow.Neutral[500]};
+	display: flex;
+	gap: 4px;
+	padding: 16px 24px;
+	color: ${brandColors.giv[900]};
+	cursor: pointer;
+	background: white;
+	align-items: flex-end;
+	&:hover {
+		color: ${brandColors.giv[600]};
+	}
+`;
+
 const BoostButtonText = styled(ButtonText)`
 	font-size: 0.75em;
 `;
@@ -507,7 +522,7 @@ const BadgeWrapper = styled.div`
 `;
 
 const Wrapper = styled(motion.div)<{ height: number }>`
-	margin-top: -32px;
+	margin-top: -62px;
 	height: fit-content;
 	z-index: 10;
 	align-self: flex-start;
