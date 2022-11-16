@@ -5,7 +5,7 @@ import {
 	Lead,
 	neutralColors,
 } from '@giveth/ui-design-system';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
 	NotificationContainer,
 	IconContainer,
@@ -39,6 +39,8 @@ function NotificationView() {
 	const { notifications, setNotifications, markOneNotificationRead } =
 		useNotification();
 	const [loading, setLoading] = useState(false);
+
+	const pageNumber = useRef(0);
 
 	const {
 		total: totalUnreadNotifications,
