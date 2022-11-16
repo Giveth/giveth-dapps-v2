@@ -267,7 +267,15 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 					</Flex>
 				</Flex>
 			</InfoPart>
-			<DescToast>{handleCaptionText()}</DescToast>
+			<DescToast
+				hasError={
+					boostedProjectsCount !== 0 &&
+					!isOnlyBoostedProjectIsThisProject &&
+					percentage === 100
+				}
+			>
+				{handleCaptionText()}
+			</DescToast>
 			<SliderWrapper>
 				<StyledSlider
 					min={0}
