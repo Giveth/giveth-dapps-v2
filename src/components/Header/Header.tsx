@@ -172,7 +172,7 @@ const Header: FC<IHeader> = () => {
 		const fetchNotificationsAndSetState = async () => {
 			if (!isSignedIn) return;
 			try {
-				const res = await fetchNotificationsData({ limit: 3 });
+				const res = await fetchNotificationsData({ limit: 4 });
 				if (res?.notifications) setNotifications(res.notifications);
 			} catch {
 				console.log('Error fetching notifications');
