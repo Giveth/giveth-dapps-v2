@@ -68,11 +68,25 @@ export const ColoredRocketIcon = styled.div`
 	color: ${brandColors.giv[500]};
 `;
 
-export const DescToast = styled.div`
+interface IDescToast {
+	hasError?: boolean;
+}
+
+export const DescToast = styled.div<IDescToast>`
 	padding: 16px;
-	border: 1px solid ${semanticColors.blueSky[700]};
-	background-color: ${semanticColors.blueSky[100]};
-	color: ${semanticColors.blueSky[700]};
+	border: 1px solid
+		${props =>
+			props.hasError
+				? semanticColors.punch[700]
+				: semanticColors.blueSky[700]};
+	background-color: ${props =>
+		props.hasError
+			? semanticColors.punch[100]
+			: semanticColors.blueSky[100]};
+	color: ${props =>
+		props.hasError
+			? semanticColors.punch[700]
+			: semanticColors.blueSky[700]};
 	border-radius: 8px;
 	margin-bottom: 32px;
 `;
