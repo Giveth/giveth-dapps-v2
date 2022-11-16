@@ -41,7 +41,7 @@ function NotificationView() {
 	const { notifications, setNotifications, markOneNotificationRead } =
 		useNotification();
 	const [loading, setLoading] = useState(false);
-
+	const [totalCount, setTotalCount] = useState(0);
 	const pageNumber = useRef(0);
 
 	const {
@@ -52,6 +52,10 @@ function NotificationView() {
 	} = useAppSelector(state => state.notification.notificationInfo);
 
 	const dispatch = useAppDispatch();
+
+	const handleLoadMore = () => {
+		if (limit * pageNumber.current < totalCount) pageNumber.current++;
+	};
 
 	useEffect(() => {
 		dispatch(setShowFooter(false));
@@ -80,6 +84,7 @@ function NotificationView() {
 							? res.notifications
 							: notifications.concat(res.notifications),
 					);
+					setTotalCount(res.count);
 				}
 			})
 			.finally(() => {
@@ -179,6 +184,7 @@ function NotificationView() {
 				)}
 			</div>
 			<h6>{pageNumber.current}</h6>
+			<h5 onClick={handleLoadMore}>LoadMore</h5>
 		</NotificationContainer>
 	);
 }
