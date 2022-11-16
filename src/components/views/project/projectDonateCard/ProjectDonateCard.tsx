@@ -476,8 +476,9 @@ const BoostButton1 = styled(Flex)`
 	cursor: pointer;
 	background: white;
 	align-items: flex-end;
+	transition: color 0.2s ease;
 	&:hover {
-		color: ${brandColors.giv[600]};
+		color: ${brandColors.giv[400]};
 	}
 `;
 
