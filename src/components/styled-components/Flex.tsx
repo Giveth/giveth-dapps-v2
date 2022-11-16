@@ -37,3 +37,7 @@ export const FlexCenter = styled.div<IFlexCenter>`
 	gap: ${props => props.gap};
 	flex-direction: ${props => props.direction};
 `;
+
+export const FlexSpacer = styled.div`
+	flex: 1;
+`;
