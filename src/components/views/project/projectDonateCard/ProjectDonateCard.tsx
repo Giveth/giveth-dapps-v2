@@ -19,6 +19,7 @@ import {
 	Caption,
 	IconRocketInSpace,
 	ButtonText,
+	IconRocketInSpace24,
 } from '@giveth/ui-design-system';
 import { motion } from 'framer-motion';
 import { captureException } from '@sentry/nextjs';
@@ -286,6 +287,9 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 					isHover={false}
 					isProjectView={true}
 				/>
+				<BoostWrapper>
+					<IconRocketInSpace24 />
+				</BoostWrapper>
 				<DonateWrapper>
 					{isAdmin ? (
 						<>
@@ -482,14 +486,33 @@ const Wrapper = styled(motion.div)<{ height: number }>`
 	left: 0;
 	${mediaQueries.tablet} {
 		position: sticky;
-		top: 168px;
+		top: 132px;
 	}
 `;
 
-const BoostWrapper = styled.div``;
+const BoostWrapper = styled.div`
+	background: ${brandColors.giv['000']};
+	border-radius: 40px;
+	padding: 24px;
+	margin-bottom: 16px;
+	${mediaQueries.tablet} {
+		padding: 16px;
+		max-width: 225px;
+		border-radius: 40px;
+	}
+
+	${mediaQueries.laptopS} {
+		max-width: 285px;
+	}
+
+	${mediaQueries.laptopL} {
+		padding: 32px;
+		max-width: 325px;
+	}
+`;
 
 const DonateWrapper = styled.div`
-	background: white;
+	background: ${brandColors.giv['000']};
 	box-shadow: ${Shadow.Neutral[400]};
 	border-radius: 40px 40px 0 0;
 	padding: 32px;
