@@ -28,6 +28,7 @@ export async function getServerSideProps(props: {
 			},
 		};
 	} catch (error) {
+		// TODO: Handle 502 error
 		return {
 			props: {},
 		};
