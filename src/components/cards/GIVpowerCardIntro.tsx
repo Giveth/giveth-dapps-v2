@@ -5,9 +5,8 @@ import {
 	IconRocketInSpace32,
 	IconX,
 	neutralColors,
-	// ButtonLink,
-	Button,
 	brandColors,
+	ButtonLink,
 } from '@giveth/ui-design-system';
 import { useState } from 'react';
 import styled from 'styled-components';
@@ -20,6 +19,7 @@ import { LockupDetailsModal } from '../modals/LockupDetailsModal';
 import { useGIVpower } from '@/context/givpower.context';
 import { useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import Routes from '@/lib/constants/Routes';
 import type { Dispatch, FC, SetStateAction } from 'react';
 
 interface IGIVpowerCardIntro {
@@ -49,30 +49,20 @@ const GIVpowerCardIntro: FC<IGIVpowerCardIntro> = ({ setState }) => {
 				</HeaderRow>
 				<TotalGIVpowerBox />
 				<Desc>
-					You get GIVpower when you stake &amp; lock GIV. GIVpower
-					will allow you to boost projects to influence their ranking
-					on Giveth.
+					You get GIVpower when you stake & lock GIV. Use your
+					GIVpower to boost projects on Giveth to influence their
+					rank. Donors to top-ranked projects get more GIVbacks.
 				</Desc>
 				<Desc>
-					It will allow you to support the projects you believe in,
-					without donating.
+					With GIVpower, you can support the projects you believe in,
+					without sacrificing!
 				</Desc>
-				{/* <ButtonLink
-				label='Boost projects with GIVpower'
-				href={Routes.Projects}
-			/> */}
-				{
-					// Commenting for now, we may need it later
-				}
-				{/* <LearnMoreButton
-					label='locked GIV details'
-					buttonType='texty'
-					onClick={() => setShowLockDetailModal(true)}
-				/> */}
+				<ButtonLink label='Boost Projects' href={Routes.Projects} />
 				<LearnMoreButton
 					label='Learn More'
-					onClick={() => window.open(links.GIVPOWER_DOC)}
-					buttonType='texty'
+					linkType='texty'
+					href={links.GIVPOWER_DOC}
+					target='_blank'
 					icon={
 						<IconExternalLink
 							size={16}
@@ -107,11 +97,12 @@ const CloseButton = styled.div`
 
 const Desc = styled(P)`
 	text-align: center;
-	margin-bottom: 32px;
+	margin-bottom: 16px;
 `;
 
-const LearnMoreButton = styled(Button)`
+const LearnMoreButton = styled(ButtonLink)`
 	width: 100%;
+	margin-top: 8px;
 	margin-bottom: 16px;
 `;
 
