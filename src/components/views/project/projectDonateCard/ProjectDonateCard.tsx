@@ -20,6 +20,8 @@ import {
 	IconRocketInSpace,
 	ButtonText,
 	IconRocketInSpace24,
+	Subline,
+	IconHelpFilled16,
 } from '@giveth/ui-design-system';
 import { motion } from 'framer-motion';
 import { captureException } from '@sentry/nextjs';
@@ -59,6 +61,8 @@ import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import BoostModal from '@/components/modals/Boost/BoostModal';
 import CategoryBadge from '@/components/badges/CategoryBadge';
 import { mapCategoriesToMainCategories } from '@/helpers/singleProject';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
+import { CurrentRank, NextRank } from '@/components/GIVpowerRank';
 
 interface IProjectDonateCard {
 	project: IProject;
@@ -88,6 +92,8 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 		verificationStatus,
 		organization,
 		verificationFormStatus,
+		projectPower,
+		projectFuturePower,
 	} = project || {};
 
 	const convertedCategories = mapCategoriesToMainCategories(categories);
@@ -288,7 +294,23 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 					isProjectView={true}
 				/>
 				<BoostWrapper>
-					<IconRocketInSpace24 />
+					<Flex gap='8px' alignItems='center'>
+						<IconRocketInSpace24 />
+						<Subline>GIVPOWER RANK</Subline>
+						<IconWithTooltip
+							icon={<IconHelpFilled16 />}
+							direction={'bottom'}
+						>
+							Should fill some thing
+						</IconWithTooltip>
+					</Flex>
+					<Flex gap='8px' alignItems='flex-end'>
+						<CurrentRank projectPower={projectPower} />
+						<NextRank
+							projectPower={projectPower}
+							projectFuturePower={projectFuturePower}
+						/>
+					</Flex>
 				</BoostWrapper>
 				<DonateWrapper>
 					{isAdmin ? (
