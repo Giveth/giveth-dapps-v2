@@ -34,6 +34,8 @@ enum ENotificationTabs {
 	GIVECONOMY = 'givEconomyRelated',
 }
 
+const limit = 2;
+
 function NotificationView() {
 	const [tab, setTab] = useState(ENotificationTabs.ALL);
 	const { notifications, setNotifications, markOneNotificationRead } =
@@ -63,6 +65,8 @@ function NotificationView() {
 		if (tab !== ENotificationTabs.ALL) {
 			query = {
 				category: tab,
+				limit,
+				offset: pageNumber.current * limit,
 			};
 		}
 		fetchNotificationsData(query, { signal })
@@ -75,7 +79,7 @@ function NotificationView() {
 		return () => {
 			controller.abort();
 		};
-	}, [tab]);
+	}, [tab, pageNumber.current]);
 
 	return (
 		<NotificationContainer>
