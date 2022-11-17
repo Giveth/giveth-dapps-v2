@@ -14,7 +14,10 @@ import {
 	ConfigContainer,
 	NotifisTabItem,
 	NotifsHr,
+	Loading,
 } from './notification.sc';
+import LottieControl from '@/components/animations/lottieControl';
+import LoadingAnimation from '@/animations/loading_giv.json';
 import {
 	TabsContainer,
 	TabItemCount,
@@ -104,6 +107,14 @@ function NotificationView() {
 
 	return (
 		<NotificationContainer>
+			{loading && (
+				<Loading>
+					<LottieControl
+						animationData={LoadingAnimation}
+						size={150}
+					/>
+				</Loading>
+			)}
 			<Flex gap='8px'>
 				<IconContainer>
 					<IconNotificationOutline32 />
