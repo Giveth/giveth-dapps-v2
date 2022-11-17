@@ -35,7 +35,7 @@ enum ENotificationTabs {
 	GIVECONOMY = 'givEconomyRelated',
 }
 
-const limit = 2;
+const limit = 6;
 
 function NotificationView() {
 	const [tab, setTab] = useState(ENotificationTabs.ALL);
