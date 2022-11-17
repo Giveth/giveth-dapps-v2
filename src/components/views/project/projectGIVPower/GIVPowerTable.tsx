@@ -7,13 +7,17 @@ import {
 	P,
 } from '@giveth/ui-design-system';
 import { RowWrapper } from '@/components/styled-components/Table';
-import type { IBoostersData } from '.';
+import { IPowerBoostingWithUserGIVpower } from '.';
 
 interface IGIVPowerTableProps {
-	boostersData?: IBoostersData;
+	powerBoostings?: IPowerBoostingWithUserGIVpower[];
+	totalPowerBoosting: string;
 }
 
-const GIVPowerTable: FC<IGIVPowerTableProps> = ({ boostersData }) => {
+const GIVPowerTable: FC<IGIVPowerTableProps> = ({
+	powerBoostings,
+	totalPowerBoosting,
+}) => {
 	return (
 		<Container>
 			<TableHeader></TableHeader>
@@ -21,14 +25,14 @@ const GIVPowerTable: FC<IGIVPowerTableProps> = ({ boostersData }) => {
 				<IconRocketInSpace size={20} />
 				Amount
 			</TableHeader>
-			{boostersData?.powerBoostings.map(({ id, user }) => (
+			{powerBoostings?.map(({ id, user }) => (
 				<GIVpowerRowWrapper key={id}>
 					<TableCell>{user.name || 'Anonymous'}</TableCell>
 					<TableCell>{user.allocated}</TableCell>
 				</GIVpowerRowWrapper>
 			))}
 			<TableHeader>TOTAL GIVPOWER</TableHeader>
-			<TableHeader>{boostersData?.totalPowerBoosting || 0}</TableHeader>
+			<TableHeader>{totalPowerBoosting || 0}</TableHeader>
 		</Container>
 	);
 };

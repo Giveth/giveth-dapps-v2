@@ -17,7 +17,8 @@ import config from '@/configuration';
 import { FETCH_USERS_GIVPOWER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
 import { formatWeiHelper } from '@/helpers/number';
 
-interface IPowerBoostingWithUserGIVpower extends Omit<IPowerBoosting, 'user'> {
+export interface IPowerBoostingWithUserGIVpower
+	extends Omit<IPowerBoosting, 'user'> {
 	user: {
 		name: string;
 		walletAddress: string;
@@ -25,7 +26,7 @@ interface IPowerBoostingWithUserGIVpower extends Omit<IPowerBoosting, 'user'> {
 		givpowerBalance: string;
 	};
 }
-export interface IBoostersData {
+interface IBoostersData {
 	powerBoostings: IPowerBoostingWithUserGIVpower[];
 	totalPowerBoosting: string;
 	totalCount: number;
@@ -159,7 +160,17 @@ const ProjectGIVPowerIndex = ({
 			/>
 			{hasGivPower ? (
 				<>
-					<GIVPowerTable boostersData={boostersData} />
+					<GIVPowerTable
+						powerBoostings={
+							boostersData?.powerBoostings.slice(
+								page * itemPerPage,
+								(page + 1) * itemPerPage,
+							) || []
+						}
+						totalPowerBoosting={
+							boostersData?.totalPowerBoosting || '0'
+						}
+					/>
 					<Flex justifyContent='flex-end'>
 						<Pagination
 							totalCount={totalCount}
