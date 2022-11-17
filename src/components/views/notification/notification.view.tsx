@@ -4,6 +4,7 @@ import {
 	IconNotificationOutline32,
 	Lead,
 	neutralColors,
+	OutlineButton,
 } from '@giveth/ui-design-system';
 import { useEffect, useState } from 'react';
 import {
@@ -21,7 +22,7 @@ import {
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowFooter } from '@/features/general/general.slice';
 import { NotificationBox } from '@/components/notification/NotificationBox';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import InternalLink from '@/components/InternalLink';
 import Routes from '@/lib/constants/Routes';
 import { fetchNotificationsData } from '@/features/notification/notification.services';
@@ -43,7 +44,7 @@ function NotificationView() {
 	const [loading, setLoading] = useState(false);
 	const [totalCount, setTotalCount] = useState(0);
 	const [pageNumber, setPageNumber] = useState(0);
-
+	const showLoadMore = totalCount > notifications.length;
 	const {
 		total: totalUnreadNotifications,
 		general,
@@ -183,10 +184,15 @@ function NotificationView() {
 					))
 				)}
 			</div>
-			<h6>{pageNumber}</h6>
-			<h6>{totalCount}</h6>
-			<h6>{notifications.length}</h6>
-			<h5 onClick={handleLoadMore}>LoadMore</h5>
+			<FlexCenter>
+				{showLoadMore && (
+					<OutlineButton
+						buttonType='primary'
+						label='Load More'
+						onClick={handleLoadMore}
+					/>
+				)}
+			</FlexCenter>
 		</NotificationContainer>
 	);
 }
