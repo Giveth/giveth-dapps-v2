@@ -95,6 +95,7 @@ export const FETCH_PROJECT_BOOSTERS = gql`
 			powerBoostings {
 				id
 				user {
+					name
 					walletAddress
 				}
 				percentage
