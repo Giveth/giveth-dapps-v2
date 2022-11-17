@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
+import BigNumber from 'bignumber.js';
 import GIVPowerHeader from './GIVPowerHeader';
 import GIVPowerTable from './GIVPowerTable';
 import NoBoost from '@/components/views/project/projectGIVPower/NoBoost';
@@ -14,15 +15,17 @@ import { FETCH_PROJECT_BOOSTERS } from '@/apollo/gql/gqlPowerBoosting';
 import { gqlRequest } from '@/helpers/requests';
 import config from '@/configuration';
 import { FETCH_USERS_GIVPOWER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
+import { formatWeiHelper } from '@/helpers/number';
 
 interface IPowerBoostingWithUserGIVpower extends Omit<IPowerBoosting, 'user'> {
 	user: {
 		name: string;
 		walletAddress: string;
-		totalGIVpowerBalance: string;
+		allocated: string;
+		givpowerBalance: string;
 	};
 }
-interface IBoostersData {
+export interface IBoostersData {
 	powerBoostings: IPowerBoostingWithUserGIVpower[];
 	totalPowerBoosting: string;
 	totalCount: number;
@@ -114,10 +117,17 @@ const ProjectGIVPowerIndex = ({
 						i++
 					) {
 						const powerBoosting = _boostersData.powerBoostings[i];
-						powerBoosting.user.totalGIVpowerBalance =
+						powerBoosting.user.givpowerBalance =
 							unipoolBalancesObj[
 								powerBoosting.user.walletAddress
 							];
+						const allocated = new BigNumber(
+							powerBoosting.user.givpowerBalance,
+						)
+							.multipliedBy(100)
+							.div(powerBoosting.percentage);
+						powerBoosting.user.allocated =
+							formatWeiHelper(allocated);
 					}
 					setBoostersData(_boostersData);
 				} catch (err) {
@@ -144,10 +154,7 @@ const ProjectGIVPowerIndex = ({
 			/>
 			{hasGivPower ? (
 				<>
-					<GIVPowerTable
-						boostingsData={[]}
-						projectPower={projectPower}
-					/>
+					<GIVPowerTable boostersData={boostersData} />
 					<Flex justifyContent='flex-end'>
 						<Pagination
 							totalCount={totalCount}
