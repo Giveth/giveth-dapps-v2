@@ -283,25 +283,3 @@ export interface IPowerBoosting {
 	project: IProject;
 	percentage: number;
 }
-
-interface IBoostedUser {
-	id: string;
-	firstName: string;
-	lastName: string;
-	name: string;
-}
-export interface IPowerBoostingsData {
-	id: string;
-	userId: string;
-	projectId: string;
-	percentage: number;
-	userPower: number;
-	boostedPower: number;
-	rank: number;
-	user: IBoostedUser;
-}
-
-export interface IUserProjectPowers {
-	totalCount: number;
-	userProjectPowers: IPowerBoostingsData[];
-}
