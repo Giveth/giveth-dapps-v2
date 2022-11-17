@@ -4,6 +4,7 @@ import {
 	IconNotificationOutline32,
 	Lead,
 	neutralColors,
+	OutlineButton,
 } from '@giveth/ui-design-system';
 import { useEffect, useState } from 'react';
 import {
@@ -21,7 +22,7 @@ import {
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowFooter } from '@/features/general/general.slice';
 import { NotificationBox } from '@/components/notification/NotificationBox';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import InternalLink from '@/components/InternalLink';
 import Routes from '@/lib/constants/Routes';
 import { fetchNotificationsData } from '@/features/notification/notification.services';
@@ -34,12 +35,16 @@ enum ENotificationTabs {
 	GIVECONOMY = 'givEconomyRelated',
 }
 
+const limit = 2;
+
 function NotificationView() {
 	const [tab, setTab] = useState(ENotificationTabs.ALL);
 	const { notifications, setNotifications, markOneNotificationRead } =
 		useNotification();
 	const [loading, setLoading] = useState(false);
-
+	const [totalCount, setTotalCount] = useState(0);
+	const [pageNumber, setPageNumber] = useState(0);
+	const showLoadMore = totalCount > notifications.length;
 	const {
 		total: totalUnreadNotifications,
 		general,
@@ -48,6 +53,16 @@ function NotificationView() {
 	} = useAppSelector(state => state.notification.notificationInfo);
 
 	const dispatch = useAppDispatch();
+
+	const handleLoadMore = () => {
+		if (notifications.length < totalCount) setPageNumber(pageNumber + 1);
+	};
+
+	const handleChangeTab = (newTab: ENotificationTabs) => {
+		setNotifications([]);
+		setPageNumber(0);
+		setTab(newTab);
+	};
 
 	useEffect(() => {
 		dispatch(setShowFooter(false));
@@ -58,14 +73,26 @@ function NotificationView() {
 		const controller = new AbortController();
 		const signal = controller.signal;
 		let query;
-		if (tab !== ENotificationTabs.ALL) {
-			query = {
-				category: tab,
-			};
-		}
+		tab === ENotificationTabs.ALL
+			? (query = {
+					limit,
+					offset: pageNumber * limit,
+			  })
+			: (query = {
+					category: tab,
+					limit,
+					offset: pageNumber * limit,
+			  });
 		fetchNotificationsData(query, { signal })
 			.then(res => {
-				if (res?.notifications) setNotifications(res.notifications);
+				if (res?.notifications) {
+					setNotifications(
+						pageNumber === 0
+							? res.notifications
+							: notifications.concat(res.notifications),
+					);
+					setTotalCount(res.count);
+				}
 			})
 			.finally(() => {
 				setLoading(false);
@@ -73,7 +100,7 @@ function NotificationView() {
 		return () => {
 			controller.abort();
 		};
-	}, [tab]);
+	}, [tab, pageNumber]);
 
 	return (
 		<NotificationContainer>
@@ -92,7 +119,7 @@ function NotificationView() {
 				<TabsContainer>
 					<NotifisTabItem
 						active={tab === ENotificationTabs.ALL}
-						onClick={() => setTab(ENotificationTabs.ALL)}
+						onClick={() => handleChangeTab(ENotificationTabs.ALL)}
 					>
 						All
 						{totalUnreadNotifications !== 0 && (
@@ -105,7 +132,9 @@ function NotificationView() {
 					</NotifisTabItem>
 					<NotifisTabItem
 						active={tab === ENotificationTabs.GENERAL}
-						onClick={() => setTab(ENotificationTabs.GENERAL)}
+						onClick={() =>
+							handleChangeTab(ENotificationTabs.GENERAL)
+						}
 					>
 						General
 						{general !== 0 && (
@@ -118,7 +147,9 @@ function NotificationView() {
 					</NotifisTabItem>
 					<NotifisTabItem
 						active={tab === ENotificationTabs.PROJECTS}
-						onClick={() => setTab(ENotificationTabs.PROJECTS)}
+						onClick={() =>
+							handleChangeTab(ENotificationTabs.PROJECTS)
+						}
 					>
 						Projects
 						{projectsRelated !== 0 && (
@@ -131,7 +162,9 @@ function NotificationView() {
 					</NotifisTabItem>
 					<NotifisTabItem
 						active={tab === ENotificationTabs.GIVECONOMY}
-						onClick={() => setTab(ENotificationTabs.GIVECONOMY)}
+						onClick={() =>
+							handleChangeTab(ENotificationTabs.GIVECONOMY)
+						}
 					>
 						GIVeconomy
 						{givEconomyRelated !== 0 && (
@@ -163,6 +196,15 @@ function NotificationView() {
 					))
 				)}
 			</div>
+			<FlexCenter>
+				{showLoadMore && (
+					<OutlineButton
+						buttonType='primary'
+						label='Load More'
+						onClick={handleLoadMore}
+					/>
+				)}
+			</FlexCenter>
 		</NotificationContainer>
 	);
 }
