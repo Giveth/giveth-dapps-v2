@@ -5,6 +5,7 @@ import {
 	semanticColors,
 	H3,
 	IconRocketInSpace32,
+	IconRocketInSpace16,
 } from '@giveth/ui-design-system';
 import React, { FC } from 'react';
 import styled from 'styled-components';
@@ -33,7 +34,12 @@ export const NextRank: FC<IGIVpowerRank> = ({
 			) : (
 				<IconArrowUp16 />
 			)}
-			<H6 weight={700}>#{projectFuturePower?.powerRank || '--'}</H6>
+			{!projectFuturePower?.powerRank && <IconRocketInSpace16 />}
+			<H6 weight={700}>
+				{projectFuturePower?.powerRank
+					? `#${projectFuturePower?.powerRank}`
+					: '--'}
+			</H6>
 		</NextRankContainer>
 	);
 };
