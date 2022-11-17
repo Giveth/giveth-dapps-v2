@@ -6,18 +6,14 @@ import {
 	neutralColors,
 	P,
 } from '@giveth/ui-design-system';
-import { IPowerBoostingsData, IProjectPower } from '@/apollo/types/types';
 import { RowWrapper } from '@/components/styled-components/Table';
+import type { IBoostersData } from '.';
 
 interface IGIVPowerTableProps {
-	boostingsData: IPowerBoostingsData[];
-	projectPower?: IProjectPower;
+	boostersData?: IBoostersData;
 }
 
-const GIVPowerTable: FC<IGIVPowerTableProps> = ({
-	boostingsData,
-	projectPower,
-}) => {
+const GIVPowerTable: FC<IGIVPowerTableProps> = ({ boostersData }) => {
 	return (
 		<Container>
 			<TableHeader></TableHeader>
@@ -25,16 +21,14 @@ const GIVPowerTable: FC<IGIVPowerTableProps> = ({
 				<IconRocketInSpace size={20} />
 				Amount
 			</TableHeader>
-			{boostingsData?.map(({ id, user, boostedPower }) => (
+			{boostersData?.powerBoostings.map(({ id, user }) => (
 				<GIVpowerRowWrapper key={id}>
 					<TableCell>{user.name || 'Anonymous'}</TableCell>
-					<TableCell>{boostedPower.toFixed(2)}</TableCell>
+					<TableCell>{user.allocated}</TableCell>
 				</GIVpowerRowWrapper>
 			))}
 			<TableHeader>TOTAL GIVPOWER</TableHeader>
-			<TableHeader>
-				{projectPower?.totalPower?.toFixed(2) || 0}
-			</TableHeader>
+			<TableHeader>{boostersData?.totalPowerBoosting || 0}</TableHeader>
 		</Container>
 	);
 };
