@@ -195,17 +195,13 @@ function NotificationView() {
 			</Flex>
 			<NotifsHr color={neutralColors.gray[300]} />
 			<div>
-				{loading ? (
-					<div>Loading...</div>
-				) : (
-					notifications.map(notification => (
-						<NotificationBox
-							key={notification.id}
-							notification={notification}
-							markOneNotificationRead={markOneNotificationRead}
-						/>
-					))
-				)}
+				{notifications.map(notification => (
+					<NotificationBox
+						key={notification.id}
+						notification={notification}
+						markOneNotificationRead={markOneNotificationRead}
+					/>
+				))}
 			</div>
 			<FlexCenter>
 				{showLoadMore && (
