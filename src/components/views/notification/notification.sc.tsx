@@ -52,3 +52,15 @@ export const NotifisTabItem = styled(TabItem)`
 export const NotifsHr = styled.hr`
 	margin-bottom: 13px;
 `;
+
+export const Loading = styled(FlexCenter)`
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1000;
+	height: 100%;
+	width: 100%;
+	background-color: gray;
+	transition: opacity 0.3s ease-in-out;
+	opacity: 0.9;
+`;
