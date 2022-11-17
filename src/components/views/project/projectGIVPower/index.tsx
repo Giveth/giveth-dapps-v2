@@ -111,6 +111,8 @@ const ProjectGIVPowerIndex = ({
 						boostingResp.data.getPowerBoosting,
 					);
 
+					let _total = new BigNumber(0);
+
 					for (
 						let i = 0;
 						i < _boostersData.powerBoostings.length;
@@ -121,14 +123,16 @@ const ProjectGIVPowerIndex = ({
 							unipoolBalancesObj[
 								powerBoosting.user.walletAddress
 							];
-						const allocated = new BigNumber(
+						const _allocated = new BigNumber(
 							powerBoosting.user.givpowerBalance,
 						)
 							.multipliedBy(100)
 							.div(powerBoosting.percentage);
 						powerBoosting.user.allocated =
-							formatWeiHelper(allocated);
+							formatWeiHelper(_allocated);
+						_total = _total.plus(_allocated);
 					}
+					_boostersData.totalPowerBoosting = formatWeiHelper(_total);
 					setBoostersData(_boostersData);
 				} catch (err) {
 					showToastError(err);
