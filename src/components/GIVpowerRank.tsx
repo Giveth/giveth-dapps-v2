@@ -24,35 +24,32 @@ export const NextRank: FC<IGIVpowerRank> = ({
 			? 0
 			: projectFuturePower.powerRank - projectPower?.powerRank;
 	return (
-		<NextRankContainer state={goingUp}>
-			<Flex alignItems='baseline' gap='4px'>
-				{goingUp === 0 ? (
-					''
-				) : goingUp > 0 ? (
-					<IconArrowDown16 />
-				) : (
-					<IconArrowUp16 />
-				)}
-				<H6 weight={700}>#{projectFuturePower?.powerRank || '--'}</H6>
-			</Flex>
+		<NextRankContainer state={goingUp} alignItems='baseline' gap='4px'>
+			{goingUp === 0 ? (
+				''
+			) : goingUp > 0 ? (
+				<IconArrowDown16 />
+			) : (
+				<IconArrowUp16 />
+			)}
+			<H6 weight={700}>#{projectFuturePower?.powerRank || '--'}</H6>
 		</NextRankContainer>
 	);
 };
 
 export const CurrentRank: FC<IGIVpowerRank> = ({ projectPower }) => {
 	return (
-		<RankContainer>
+		<RankContainer alignItems='baseline' gap='4px'>
 			<H3 weight={700}>
-				#
 				{projectPower?.totalPower === 0
 					? '--'
-					: projectPower?.powerRank}
+					: `#${projectPower?.powerRank}`}
 			</H3>
 		</RankContainer>
 	);
 };
 
-const RankContainer = styled.div`
+const RankContainer = styled(Flex)`
 	height: 54px;
 `;
 
