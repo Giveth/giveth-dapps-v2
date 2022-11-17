@@ -4,6 +4,7 @@ import {
 	H6,
 	semanticColors,
 	H3,
+	IconRocketInSpace32,
 } from '@giveth/ui-design-system';
 import React, { FC } from 'react';
 import styled from 'styled-components';
@@ -40,6 +41,7 @@ export const NextRank: FC<IGIVpowerRank> = ({
 export const CurrentRank: FC<IGIVpowerRank> = ({ projectPower }) => {
 	return (
 		<RankContainer alignItems='baseline' gap='4px'>
+			{projectPower?.totalPower === 0 && <IconRocketInSpace32 />}
 			<H3 weight={700}>
 				{projectPower?.totalPower === 0
 					? '--'
