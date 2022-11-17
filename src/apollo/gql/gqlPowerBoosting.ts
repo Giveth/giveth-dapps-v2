@@ -91,6 +91,7 @@ export const FETCH_PROJECT_BOOSTERS = gql`
 			orderBy: $orderBy
 			projectId: $projectId
 		) {
+			totalCount
 			powerBoostings {
 				id
 				user {
