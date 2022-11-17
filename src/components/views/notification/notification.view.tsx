@@ -35,7 +35,7 @@ enum ENotificationTabs {
 	GIVECONOMY = 'givEconomyRelated',
 }
 
-const limit = 6;
+const limit = 2;
 
 function NotificationView() {
 	const [tab, setTab] = useState(ENotificationTabs.ALL);
@@ -56,6 +56,12 @@ function NotificationView() {
 
 	const handleLoadMore = () => {
 		if (notifications.length < totalCount) setPageNumber(pageNumber + 1);
+	};
+
+	const handleChangeTab = (newTab: ENotificationTabs) => {
+		setNotifications([]);
+		setPageNumber(0);
+		setTab(newTab);
 	};
 
 	useEffect(() => {
@@ -113,7 +119,7 @@ function NotificationView() {
 				<TabsContainer>
 					<NotifisTabItem
 						active={tab === ENotificationTabs.ALL}
-						onClick={() => setTab(ENotificationTabs.ALL)}
+						onClick={() => handleChangeTab(ENotificationTabs.ALL)}
 					>
 						All
 						{totalUnreadNotifications !== 0 && (
@@ -126,7 +132,9 @@ function NotificationView() {
 					</NotifisTabItem>
 					<NotifisTabItem
 						active={tab === ENotificationTabs.GENERAL}
-						onClick={() => setTab(ENotificationTabs.GENERAL)}
+						onClick={() =>
+							handleChangeTab(ENotificationTabs.GENERAL)
+						}
 					>
 						General
 						{general !== 0 && (
@@ -139,7 +147,9 @@ function NotificationView() {
 					</NotifisTabItem>
 					<NotifisTabItem
 						active={tab === ENotificationTabs.PROJECTS}
-						onClick={() => setTab(ENotificationTabs.PROJECTS)}
+						onClick={() =>
+							handleChangeTab(ENotificationTabs.PROJECTS)
+						}
 					>
 						Projects
 						{projectsRelated !== 0 && (
@@ -152,7 +162,9 @@ function NotificationView() {
 					</NotifisTabItem>
 					<NotifisTabItem
 						active={tab === ENotificationTabs.GIVECONOMY}
-						onClick={() => setTab(ENotificationTabs.GIVECONOMY)}
+						onClick={() =>
+							handleChangeTab(ENotificationTabs.GIVECONOMY)
+						}
 					>
 						GIVeconomy
 						{givEconomyRelated !== 0 && (
