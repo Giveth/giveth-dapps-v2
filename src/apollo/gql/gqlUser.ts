@@ -156,3 +156,19 @@ export const FETCH_USER_GIVPOWER_BY_ADDRESS = `
 		}
 	}
 `;
+
+export const FETCH_USERS_GIVPOWER_BY_ADDRESS = `
+	query unipoolBalances ($addresses: [String!]!, $contract: String!, $length: Int!) {
+	  unipoolBalances(
+		first: $length
+	  where: {
+		unipool:  $contract,
+		  user_in: $addresses
+	  },
+	) {
+		balance
+		user {
+		  id
+		}
+	  }
+	}`;
