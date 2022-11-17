@@ -14,7 +14,10 @@ import {
 	ConfigContainer,
 	NotifisTabItem,
 	NotifsHr,
+	Loading,
 } from './notification.sc';
+import LottieControl from '@/components/animations/lottieControl';
+import LoadingAnimation from '@/animations/loading_giv.json';
 import {
 	TabsContainer,
 	TabItemCount,
@@ -35,7 +38,7 @@ enum ENotificationTabs {
 	GIVECONOMY = 'givEconomyRelated',
 }
 
-const limit = 2;
+const limit = 6;
 
 function NotificationView() {
 	const [tab, setTab] = useState(ENotificationTabs.ALL);
@@ -104,6 +107,14 @@ function NotificationView() {
 
 	return (
 		<NotificationContainer>
+			{loading && (
+				<Loading>
+					<LottieControl
+						animationData={LoadingAnimation}
+						size={150}
+					/>
+				</Loading>
+			)}
 			<Flex gap='8px'>
 				<IconContainer>
 					<IconNotificationOutline32 />
@@ -184,17 +195,13 @@ function NotificationView() {
 			</Flex>
 			<NotifsHr color={neutralColors.gray[300]} />
 			<div>
-				{loading ? (
-					<div>Loading...</div>
-				) : (
-					notifications.map(notification => (
-						<NotificationBox
-							key={notification.id}
-							notification={notification}
-							markOneNotificationRead={markOneNotificationRead}
-						/>
-					))
-				)}
+				{notifications.map(notification => (
+					<NotificationBox
+						key={notification.id}
+						notification={notification}
+						markOneNotificationRead={markOneNotificationRead}
+					/>
+				))}
 			</div>
 			<FlexCenter>
 				{showLoadMore && (
