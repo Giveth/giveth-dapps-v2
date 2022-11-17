@@ -64,8 +64,6 @@ const ProjectGIVPowerIndex = ({
 					const boostingResp = await client.query({
 						query: FETCH_PROJECT_BOOSTERS,
 						variables: {
-							take: 50,
-							skip: 0,
 							projectId: +projectId,
 						},
 					});
