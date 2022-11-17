@@ -59,11 +59,12 @@ const ProjectGIVPowerIndex = ({
 			if (projectId) {
 				try {
 					//get users with percentage
+					// we have to handle pagination in the frontend because we need to calculate sum in here and we need all data together.
 					const boostingResp = await client.query({
 						query: FETCH_PROJECT_BOOSTERS,
 						variables: {
-							take: itemPerPage,
-							skip: page * itemPerPage,
+							take: 50,
+							skip: 0,
 							projectId: +projectId,
 						},
 					});
@@ -145,7 +146,7 @@ const ProjectGIVPowerIndex = ({
 		};
 
 		fetchProjectBoosters();
-	}, [page]);
+	}, [projectId]);
 
 	if (loading)
 		return <LottieControl animationData={LoadingAnimation} size={150} />;
