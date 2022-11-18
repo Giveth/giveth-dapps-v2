@@ -9,7 +9,7 @@ import React, {
 	useState,
 } from 'react';
 import { useRouter } from 'next/router';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import {
 	Button,
 	brandColors,
@@ -286,10 +286,11 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 				drag={isMobile ? 'y' : false}
 				dragElastic={0}
 				dragConstraints={{ top: -(wrapperHeight - 165), bottom: 120 }}
+				isMobile={isMobile}
 			>
 				{isMobile && <BlueBar />}
 
-				<BoostWrapper>
+				<BoostWrapper isMobile={isMobile}>
 					{!isMobile && (
 						<Flex gap='8px' alignItems='center'>
 							<IconRocketInSpace24 />
@@ -320,7 +321,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 						</BoostButton>
 					</Flex>
 				</BoostWrapper>
-				<DonateWrapper>
+				<DonateWrapper isMobile={isMobile}>
 					{!isMobile && (
 						<ProjectCardOrgBadge
 							organization={organization?.label}
@@ -507,7 +508,15 @@ const BadgeWrapper = styled.div`
 	gap: 8px;
 `;
 
-const Wrapper = styled(motion.div)<{ height: number }>`
+interface IWrapper {
+	isMobile: boolean;
+}
+
+interface IWrapperWithHeight extends IWrapper {
+	height: number;
+}
+
+const Wrapper = styled(motion.div)<IWrapperWithHeight>`
 	margin-top: -62px;
 	height: fit-content;
 	z-index: 10;
@@ -520,48 +529,83 @@ const Wrapper = styled(motion.div)<{ height: number }>`
 		position: sticky;
 		top: 132px;
 	}
+	${props =>
+		props.isMobile
+			? css`
+					background: ${brandColors.giv['000']};
+					box-shadow: ${Shadow.Neutral[400]};
+					border-radius: 40px 40px 0 0;
+					padding: 32px;
+					${mediaQueries.tablet} {
+						padding: 16px;
+						max-width: 225px;
+						border-radius: 40px;
+					}
+
+					${mediaQueries.laptopS} {
+						max-width: 285px;
+					}
+
+					${mediaQueries.laptopL} {
+						padding: 32px;
+						max-width: 325px;
+					}
+			  `
+			: css``}
 `;
 
-const BoostWrapper = styled.div`
-	background: ${brandColors.giv['000']};
-	border-radius: 40px;
-	padding: 24px;
-	margin-bottom: 16px;
-	${mediaQueries.tablet} {
-		padding: 16px;
-		max-width: 225px;
-		border-radius: 40px;
-	}
+const BoostWrapper = styled.div<IWrapper>`
+	${props =>
+		props.isMobile
+			? css`
+					padding-bottom: 16px;
+			  `
+			: css`
+					background: ${brandColors.giv['000']};
+					border-radius: 40px;
+					padding: 24px;
+					margin-bottom: 16px;
+					${mediaQueries.tablet} {
+						padding: 16px;
+						max-width: 225px;
+						border-radius: 40px;
+					}
 
-	${mediaQueries.laptopS} {
-		max-width: 285px;
-	}
+					${mediaQueries.laptopS} {
+						max-width: 285px;
+					}
 
-	${mediaQueries.laptopL} {
-		padding: 32px;
-		max-width: 325px;
-	}
+					${mediaQueries.laptopL} {
+						padding: 32px;
+						max-width: 325px;
+					}
+			  `}
 `;
 
-const DonateWrapper = styled.div`
-	background: ${brandColors.giv['000']};
-	box-shadow: ${Shadow.Neutral[400]};
-	border-radius: 40px 40px 0 0;
-	padding: 32px;
-	${mediaQueries.tablet} {
-		padding: 16px;
-		max-width: 225px;
-		border-radius: 40px;
-	}
+const DonateWrapper = styled.div<IWrapper>`
+	${props =>
+		props.isMobile
+			? css``
+			: css`
+					background: ${brandColors.giv['000']};
+					box-shadow: ${Shadow.Neutral[400]};
+					border-radius: 40px 40px 0 0;
+					padding: 32px;
+					${mediaQueries.tablet} {
+						padding: 16px;
+						max-width: 225px;
+						border-radius: 40px;
+					}
 
-	${mediaQueries.laptopS} {
-		max-width: 285px;
-	}
+					${mediaQueries.laptopS} {
+						max-width: 285px;
+					}
 
-	${mediaQueries.laptopL} {
-		padding: 32px;
-		max-width: 325px;
-	}
+					${mediaQueries.laptopL} {
+						padding: 32px;
+						max-width: 325px;
+					}
+			  `}
 `;
 
 const FullButton = styled(Button)`
