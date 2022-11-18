@@ -57,11 +57,7 @@ import { EProjectVerificationStatus } from '@/apollo/types/gqlEnums';
 import VerificationStatus from '@/components/views/project/projectDonateCard/VerificationStatus';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import GIVbackToast from '@/components/views/project/projectDonateCard/GIVbackToast';
-import {
-	Flex,
-	FlexCenter,
-	FlexSpacer,
-} from '@/components/styled-components/Flex';
+import { Flex, FlexSpacer } from '@/components/styled-components/Flex';
 import BoostModal from '@/components/modals/Boost/BoostModal';
 import CategoryBadge from '@/components/badges/CategoryBadge';
 import { mapCategoriesToMainCategories } from '@/helpers/singleProject';
@@ -318,10 +314,10 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 							projectFuturePower={projectFuturePower}
 						/>
 						<FlexSpacer />
-						<BoostButton1 onClick={handleBoostClick}>
+						<BoostButton onClick={handleBoostClick}>
 							<IconRocketInSpace />
 							<BoostButtonText>Boost</BoostButtonText>
-						</BoostButton1>
+						</BoostButton>
 					</Flex>
 				</BoostWrapper>
 				<DonateWrapper>
@@ -450,20 +446,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 	);
 };
 
-const BoostButton = styled(FlexCenter)`
-	border-radius: 48px;
-	box-shadow: ${Shadow.Neutral[500]};
-	display: flex;
-	gap: 4px;
-	padding-right: 22px;
-	padding-left: 22px;
-	color: ${brandColors.giv[500]};
-	cursor: pointer;
-	background: white;
-	width: 100%;
-`;
-
-const BoostButton1 = styled(Flex)`
+const BoostButton = styled(Flex)`
 	border-radius: 48px;
 	box-shadow: ${Shadow.Neutral[500]};
 	display: flex;
