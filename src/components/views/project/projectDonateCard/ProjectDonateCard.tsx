@@ -292,11 +292,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 				dragConstraints={{ top: -(wrapperHeight - 165), bottom: 120 }}
 			>
 				{isMobile && <BlueBar />}
-				<ProjectCardOrgBadge
-					organization={organization?.label}
-					isHover={false}
-					isProjectView={true}
-				/>
+
 				<BoostWrapper>
 					<Flex gap='8px' alignItems='center'>
 						<IconRocketInSpace24 />
@@ -327,6 +323,11 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 					</Flex>
 				</BoostWrapper>
 				<DonateWrapper>
+					<ProjectCardOrgBadge
+						organization={organization?.label}
+						isHover={false}
+						isProjectView={true}
+					/>
 					{isAdmin ? (
 						<>
 							<FullButton
