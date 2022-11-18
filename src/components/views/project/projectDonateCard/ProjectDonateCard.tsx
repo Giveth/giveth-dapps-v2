@@ -44,7 +44,7 @@ import {
 	slugToVerification,
 } from '@/lib/routeCreators';
 import { VerificationModal } from '@/components/modals/VerificationModal';
-import { mediaQueries } from '@/lib/constants/constants';
+import { mediaQueries, zIndex } from '@/lib/constants/constants';
 import ProjectCardOrgBadge from '../../../project-card/ProjectCardOrgBadge';
 import ExternalLink from '@/components/ExternalLink';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -285,7 +285,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 				height={wrapperHeight}
 				drag={isMobile ? 'y' : false}
 				dragElastic={0}
-				dragConstraints={{ top: -(wrapperHeight - 165), bottom: 120 }}
+				dragConstraints={{ top: -(wrapperHeight - 165), bottom: 132 }}
 				isMobile={isMobile}
 			>
 				{isMobile && <BlueBar />}
@@ -481,7 +481,7 @@ const BlueBar = styled.div`
 	width: 80px;
 	height: 3px;
 	background-color: ${brandColors.giv[500]};
-	margin: 0 auto 16px;
+	margin: 0 auto 8px;
 	position: relative;
 	top: -8px;
 `;
@@ -519,7 +519,7 @@ interface IWrapperWithHeight extends IWrapper {
 const Wrapper = styled(motion.div)<IWrapperWithHeight>`
 	margin-top: -62px;
 	height: fit-content;
-	z-index: 10;
+	z-index: ${zIndex.HEADER};
 	align-self: flex-start;
 	width: 100%;
 	position: fixed;
