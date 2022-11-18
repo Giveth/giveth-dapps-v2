@@ -294,21 +294,23 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 				{isMobile && <BlueBar />}
 
 				<BoostWrapper>
-					<Flex gap='8px' alignItems='center'>
-						<IconRocketInSpace24 />
-						<Subline>GIVPOWER RANK</Subline>
-						<IconWithTooltip
-							icon={<IconHelpFilled16 />}
-							direction={'bottom'}
-						>
-							<BoostTooltip>
-								Boost this project with GIVpower to improve its
-								rank! Rank is updated at the beginning of every
-								GIVbacks round. You can see the projected rank
-								for next round as well below.
-							</BoostTooltip>
-						</IconWithTooltip>
-					</Flex>
+					{!isMobile && (
+						<Flex gap='8px' alignItems='center'>
+							<IconRocketInSpace24 />
+							<Subline>GIVPOWER RANK</Subline>
+							<IconWithTooltip
+								icon={<IconHelpFilled16 />}
+								direction={'bottom'}
+							>
+								<BoostTooltip>
+									Boost this project with GIVpower to improve
+									its rank! Rank is updated at the beginning
+									of every GIVbacks round. You can see the
+									projected rank for next round as well below.
+								</BoostTooltip>
+							</IconWithTooltip>
+						</Flex>
+					)}
 					<Flex gap='8px' alignItems='flex-end'>
 						<CurrentRank projectPower={projectPower} />
 						<NextRank
@@ -323,11 +325,13 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 					</Flex>
 				</BoostWrapper>
 				<DonateWrapper>
-					<ProjectCardOrgBadge
-						organization={organization?.label}
-						isHover={false}
-						isProjectView={true}
-					/>
+					{!isMobile && (
+						<ProjectCardOrgBadge
+							organization={organization?.label}
+							isHover={false}
+							isProjectView={true}
+						/>
+					)}
 					{isAdmin ? (
 						<>
 							<FullButton
