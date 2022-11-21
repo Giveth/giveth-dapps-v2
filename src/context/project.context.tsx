@@ -1,6 +1,8 @@
 import {
 	createContext,
+	Dispatch,
 	ReactNode,
+	SetStateAction,
 	useCallback,
 	useContext,
 	useState,
@@ -23,7 +25,22 @@ interface IBoostersData {
 	totalCount: number;
 }
 
-const ProjectContext = createContext({});
+interface IProjectContext {
+	boostersData?: IBoostersData;
+	setBoostersData: Dispatch<SetStateAction<IBoostersData | undefined>>;
+	isBoostingsLoading: boolean;
+	setIsBoostingsLoading: Dispatch<SetStateAction<boolean>>;
+	fetchProjectBoosters: (projectId: number) => Promise<void>;
+}
+
+const ProjectContext = createContext<IProjectContext>({
+	isBoostingsLoading: false,
+	setBoostersData: () => console.log('setBoostersData not initialed yet!'),
+	setIsBoostingsLoading: () =>
+		console.log('setIsBoostingsLoading not initialed yet!'),
+	fetchProjectBoosters: () =>
+		Promise.reject('fetchProjectBoosters not initialed yet!'),
+});
 ProjectContext.displayName = 'ProjectContext';
 
 export const ProjectProvider = ({ children }: { children: ReactNode }) => {
@@ -127,7 +144,7 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
 	);
 };
 
-export function useProjectsContext() {
+export function useProjectContext() {
 	const context = useContext(ProjectContext);
 
 	if (!context) {
