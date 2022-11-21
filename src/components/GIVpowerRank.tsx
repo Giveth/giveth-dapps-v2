@@ -11,6 +11,7 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 import { IProjectPower } from '@/apollo/types/types';
 import { Flex } from './styled-components/Flex';
+import { mediaQueries } from '@/lib/constants/constants';
 
 interface IGIVpowerRank {
 	projectPower?: IProjectPower;
@@ -62,7 +63,10 @@ const RankContainer = styled(Flex)`
 `;
 
 const NextRankContainer = styled(RankContainer)<{ state: number }>`
-	padding-top: 21px;
+	padding-top: 13px;
 	color: ${props =>
 		props.state > 0 ? semanticColors.punch[700] : semanticColors.jade[700]};
+	${mediaQueries.tablet} {
+		padding-top: 21px;
+	}
 `;
