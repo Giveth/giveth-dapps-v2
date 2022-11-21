@@ -33,6 +33,7 @@ import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { networkProviders } from '@/helpers/networkProvider';
 import { useAppSelector } from '@/features/hooks';
 import { SimplePoolStakingConfig, StakingType } from '@/types/config';
+import { getNowUnixMS } from '@/helpers/time';
 
 const InvestCardContainer = styled(Card)`
 	::before {
@@ -155,9 +156,12 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 			promiseQueue.push(promise);
 		});
 		config.MAINNET_CONFIG.pools.forEach(poolStakingConfig => {
+			const isDiscontinued = poolStakingConfig.farmEndTimeMS
+				? getNowUnixMS() > poolStakingConfig.farmEndTimeMS
+				: false;
 			if (
-				!poolStakingConfig.active ||
-				poolStakingConfig.archived ||
+				poolStakingConfig.exploited ||
+				isDiscontinued ||
 				poolStakingConfig.type === StakingType.UNISWAPV3_ETH_GIV
 			)
 				return;
