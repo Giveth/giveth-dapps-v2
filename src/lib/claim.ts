@@ -6,7 +6,6 @@ import { ClaimData } from '@/types/GIV';
 import config from '../configuration';
 import MerkleDropJson from '../artifacts/MerkleDrop.json';
 import TOKEN_DISTRO_JSON from '../artifacts/TokenDistro.json';
-import { SubgraphQueryBuilder } from '@/lib/subgraph/subgraphQueryBuilder';
 import { transformSubgraphData } from '@/lib/subgraph/subgraphDataTransform';
 import { getGasPreference } from '@/lib/helpers';
 import { MerkleDistro } from '@/types/contracts';
@@ -49,9 +48,7 @@ export const fetchAirDropClaimData = async (
 
 export const hasClaimedAirDrop = async (address: string): Promise<boolean> => {
 	try {
-		const response = await fetchXDaiInfo(
-			SubgraphQueryBuilder.getXDaiQuery(address),
-		);
+		const response = await fetchXDaiInfo(address);
 		const sdh = new SubgraphDataHelper(transformSubgraphData(response));
 
 		const balances = sdh.getGIVTokenDistroBalance();
