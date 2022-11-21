@@ -134,22 +134,20 @@ const ProjectCard = (props: IProjectCard) => {
 										<GivBackText>GIVBACKS</GivBackText>
 									</Flex>
 								</Flex>
-								{projectPower?.powerRank &&
-									projectPower?.totalPower !== 0 && (
-										<GivpowerRankContainer
-											gap='8px'
-											alignItems='center'
-										>
-											<IconRocketInSpace16
-												color={neutralColors.gray[700]}
-											/>
-											<B>
-												#
-												{projectPower?.powerRank ||
-													'--'}
-											</B>
-										</GivpowerRankContainer>
-									)}
+								<GivpowerRankContainer
+									gap='8px'
+									alignItems='center'
+								>
+									<IconRocketInSpace16
+										color={neutralColors.gray[700]}
+									/>
+									<B>
+										{projectPower?.powerRank &&
+										projectPower?.totalPower !== 0
+											? `#${projectPower.powerRank}`
+											: '--'}
+									</B>
+								</GivpowerRankContainer>
 							</Flex>
 						</>
 					)}
