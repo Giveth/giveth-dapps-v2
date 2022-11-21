@@ -1,4 +1,10 @@
-import { createContext, ReactNode, useCallback, useState } from 'react';
+import {
+	createContext,
+	ReactNode,
+	useCallback,
+	useContext,
+	useState,
+} from 'react';
 import { captureException } from '@sentry/nextjs';
 import BigNumber from 'bignumber.js';
 import config from '@/configuration';
@@ -18,6 +24,7 @@ interface IBoostersData {
 }
 
 const ProjectContext = createContext({});
+ProjectContext.displayName = 'ProjectContext';
 
 export const ProjectProvider = ({ children }: { children: ReactNode }) => {
 	const [boostersData, setBoostersData] = useState<IBoostersData>();
@@ -119,3 +126,13 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
 		</ProjectContext.Provider>
 	);
 };
+
+export function useProjectsContext() {
+	const context = useContext(ProjectContext);
+
+	if (!context) {
+		throw new Error('Project context not found!');
+	}
+
+	return context;
+}
