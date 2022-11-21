@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from 'react';
+import { createContext, ReactNode, useCallback, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
 import BigNumber from 'bignumber.js';
 import config from '@/configuration';
@@ -23,7 +23,7 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
 	const [boostersData, setBoostersData] = useState<IBoostersData>();
 	const [isBoostingsLoading, setIsBoostingsLoading] = useState(false);
 
-	const fetchProjectBoosters = async (projectId: number) => {
+	const fetchProjectBoosters = useCallback(async (projectId: number) => {
 		setIsBoostingsLoading(true);
 		if (projectId) {
 			try {
@@ -103,7 +103,7 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
 			}
 		}
 		setIsBoostingsLoading(false);
-	};
+	}, []);
 
 	return (
 		<ProjectContext.Provider
