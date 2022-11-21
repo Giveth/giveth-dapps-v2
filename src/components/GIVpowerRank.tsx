@@ -59,7 +59,9 @@ export const CurrentRank: FC<IGIVpowerRank> = ({ projectPower }) => {
 };
 
 const RankContainer = styled(Flex)`
-	height: 54px;
+	${mediaQueries.tablet} {
+		height: 54px;
+	}
 `;
 
 const NextRankContainer = styled(RankContainer)<{ state: number }>`
