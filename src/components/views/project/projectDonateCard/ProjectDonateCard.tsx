@@ -22,6 +22,7 @@ import {
 	IconRocketInSpace24,
 	Subline,
 	IconHelpFilled16,
+	IconRocketInSpace32,
 } from '@giveth/ui-design-system';
 import { motion } from 'framer-motion';
 import { captureException } from '@sentry/nextjs';
@@ -309,6 +310,9 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 						</Flex>
 					)}
 					<Flex gap='8px' alignItems='flex-end'>
+						{isMobile && projectPower?.totalPower !== 0 && (
+							<IconRocketInSpace32 />
+						)}
 						<CurrentRank projectPower={projectPower} />
 						<NextRank
 							projectPower={projectPower}
