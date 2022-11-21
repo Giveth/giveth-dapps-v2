@@ -112,6 +112,7 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
 				setBoostersData,
 				isBoostingsLoading,
 				setIsBoostingsLoading,
+				fetchProjectBoosters,
 			}}
 		>
 			{children}
