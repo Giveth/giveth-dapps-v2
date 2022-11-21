@@ -1,6 +1,7 @@
 import { H1, H4 } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import { useEffect } from 'react';
+import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import links from '@/lib/constants/links';
 import givFontLogo from '/public/images/icons/giv_font_logo.svg';
@@ -28,6 +29,7 @@ import { useAppDispatch } from '@/features/hooks';
 
 const MaintenanceIndex = () => {
 	const dispatch = useAppDispatch();
+	const { formatMessage } = useIntl();
 
 	const {
 		TWITTER: twitterLink,
@@ -56,14 +58,22 @@ const MaintenanceIndex = () => {
 					alt='error icon'
 				/>
 				<H1>
-					Giveth.io is currently offline for scheduled maintenance!
+					{formatMessage({ id: 'label.giveth_is_currently_offline' })}
 				</H1>
 				<div>
-					<H4>Check again in a few hours to dive</H4>
+					<H4>
+						{formatMessage({
+							id: 'label.check_again_in_a_few_hours',
+						})}
+					</H4>
 					<H4>
 						<b>
-							back into the{' '}
-							<MustardSpan>Future of Giving</MustardSpan>
+							{formatMessage({ id: 'label.back_into_the' })}{' '}
+							<MustardSpan>
+								{formatMessage({
+									id: 'label.the_future_of_giving',
+								})}
+							</MustardSpan>
 						</b>
 					</H4>
 				</div>

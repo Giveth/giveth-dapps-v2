@@ -5,10 +5,10 @@ import BigNumber from 'bignumber.js';
 import {
 	Subline,
 	neutralColors,
-	IconHelp,
 	H2,
 	H5,
 	Lead,
+	IconHelpFilled16,
 } from '@giveth/ui-design-system';
 import { InputWithUnit } from '../input/index';
 import { Flex } from '../styled-components/Flex';
@@ -149,7 +149,7 @@ export const DonateCard: FC<IClaimViewCardProps> = ({ index }) => {
 							<Flex gap='4px' alignItems='center'>
 								<ImpactCardLabel>Your donation</ImpactCardLabel>
 								<IconWithTooltip
-									icon={<IconHelp size={16} />}
+									icon={<IconHelpFilled16 />}
 									direction={'top'}
 								>
 									<GdropDonateTooltip>

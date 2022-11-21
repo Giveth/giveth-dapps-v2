@@ -1,10 +1,11 @@
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import {
 	brandColors,
 	Button,
 	H5,
 	IconExternalLink,
-	IconVerified,
+	IconVerifiedBadge,
 	Lead,
 	neutralColors,
 } from '@giveth/ui-design-system';
@@ -22,6 +23,7 @@ export const VerificationModal = (props: { onClose: () => void }) => {
 	const { onClose } = props;
 	const theme = useAppSelector(state => state.general.theme);
 	const { isAnimating, closeModal } = useModalAnimation(onClose);
+	const { formatMessage } = useIntl();
 
 	const handleClick = () => {
 		router.push(`${Routes.Verification}/${slug}`);
@@ -32,41 +34,40 @@ export const VerificationModal = (props: { onClose: () => void }) => {
 		<Modal closeModal={closeModal} isAnimating={isAnimating} hiddenClose>
 			<Container>
 				<Header>
-					<IconVerified size={54} color={brandColors.cyan[500]} />
+					<IconVerifiedBadge
+						size={54}
+						color={brandColors.cyan[500]}
+					/>
 					<div>
-						<Title>Verify your project</Title>
+						<Title>
+							{formatMessage({ id: 'label.verify_your_project' })}
+						</Title>
 					</div>
 				</Header>
 
 				<Description>
-					Verified is a top tier status for projects wishing to join
-					the GIVbacks program. The GIVbacks program is a
-					revolutionary concept that rewards donors to verified
-					projects with GIV tokens. By applying for a
-					&apos;Verified&apos; project status, you will be able to
-					make your project stand out and encourage more donations.
-					Getting your project verified also builds a relationship of
-					trust with your donors by demonstrating your project&apos;s
-					legitimacy and showing that the funds are being used to
-					create positive change.
+					{formatMessage({
+						id: 'label.verify_your_project.modal.one',
+					})}
 					<br />
 					<br />
-					This simple verification process requires some additional
-					information about your project and the intended impact of
-					your organization. If you would like to apply to receive the
-					&apos;Verified&apos; badge, encourage more giving and give
-					back to those who have helped you reach your goals, please
-					fill out this form.
+					{formatMessage({
+						id: 'label.verify_your_project.modal.two',
+					})}
 				</Description>
 
 				<OkButton
-					label='PROCEED TO VERIFICATION  '
+					label={formatMessage({
+						id: 'label.proceed_to_verification',
+					})}
 					onClick={handleClick}
 					buttonType={theme === ETheme.Dark ? 'primary' : 'secondary'}
 					icon={<IconExternalLink />}
 				/>
 				<SkipButton
-					label='CANCEL'
+					label={formatMessage({
+						id: 'label.cancel',
+					})}
 					onClick={closeModal}
 					buttonType='texty'
 				/>

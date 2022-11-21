@@ -5,10 +5,11 @@ import {
 	GLink,
 	brandColors,
 	Caption,
-	IconHelp,
 	neutralColors,
+	IconHelpFilled,
 } from '@giveth/ui-design-system';
 import { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import Image from 'next/image';
 import BigNumber from 'bignumber.js';
@@ -41,6 +42,7 @@ export const RewardMenu = ({
 	showWhatIsGIVstreamModal,
 	setShowWhatIsGIVstreamModal,
 }: IRewardMenu) => {
+	const { formatMessage } = useIntl();
 	const [isMounted, setIsMounted] = useState(false);
 	const [farmsLiquidPart, setFarmsLiquidPart] = useState(Zero);
 	const [givStreamLiquidPart, setGIVstreamLiquidPart] = useState(Zero);
@@ -110,15 +112,19 @@ export const RewardMenu = ({
 	return (
 		<>
 			<RewardMenuContainer isMounted={isMounted} theme={theme}>
-				<Overline>NETWORK</Overline>
+				<NetworkTitle>
+					{formatMessage({ id: 'label.network' })}
+				</NetworkTitle>
 				<NetworkRow>
 					<B>{networkName}</B>
 					<SwithNetwork onClick={() => switchNetworkHandler(chainId)}>
-						Switch network
+						{formatMessage({ id: 'label.switch_network' })}
 					</SwithNetwork>
 				</NetworkRow>
 				<FlowrateBox theme={theme}>
-					<Overline styleType='Small'>GIVstream Flowrate</Overline>
+					<Overline styleType='Small'>
+						{formatMessage({ id: 'label.givstream_flowrate' })}
+					</Overline>
 					<FlowrateRow>
 						<Image
 							src='/images/icons/thunder.svg'
@@ -129,13 +135,15 @@ export const RewardMenu = ({
 						<FlowrateAmount>
 							{formatWeiHelper(flowRateNow)}
 						</FlowrateAmount>
-						<FlowrateUnit>GIV/week</FlowrateUnit>
+						<FlowrateUnit>
+							GIV/{formatMessage({ id: 'label.week' })}
+						</FlowrateUnit>
 						<IconHelpWraper
 							onClick={() => {
 								setShowWhatIsGIVstreamModal(true);
 							}}
 						>
-							<IconHelp color='currentColor' />
+							<IconHelpFilled />
 						</IconHelpWraper>
 					</FlowrateRow>
 				</FlowrateBox>
@@ -143,7 +151,10 @@ export const RewardMenu = ({
 					<a>
 						<PartRow theme={theme}>
 							<PartInfo>
-								<PartTitle as='span'>From GIVstream</PartTitle>
+								<PartTitle as='span'>
+									{formatMessage({ id: 'label.from' })}{' '}
+									GIVstream
+								</PartTitle>
 								<Flex gap='4px'>
 									<PartAmount medium>
 										{formatWeiHelper(givStreamLiquidPart)}
@@ -270,6 +281,10 @@ export const PartTitle = styled(Overline)`
 `;
 export const PartAmount = styled(Caption)``;
 export const PartUnit = styled(Caption)``;
+
+const NetworkTitle = styled(Overline)`
+	text-transform: uppercase;
+`;
 
 const IconHelpWraper = styled.div`
 	cursor: pointer;

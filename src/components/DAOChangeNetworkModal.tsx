@@ -1,9 +1,9 @@
 import {
-	IconInfo16,
 	neutralColors,
 	brandColors,
 	Caption,
 	Button,
+	IconInfoFilled16,
 } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 import { InjectedConnector } from '@web3-react/injected-connector';
@@ -33,7 +33,7 @@ export const DAOChangeNetworkModal = ({ network }: IChangeNetworkModal) => {
 	return (
 		<DAOChangeNetworkModalContainer>
 			<Flex gap='16px'>
-				<IconInfo16 />
+				<IconInfoFilled16 />
 				<Title>Switch network</Title>
 			</Flex>
 			<Desc>This RegenFarm is only available on {networkLabel}</Desc>

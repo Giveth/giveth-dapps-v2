@@ -356,6 +356,19 @@ export const FETCH_PROJECT_BY_ID = gql`
 	}
 `;
 
+export const FETCH_GIVETH_PROJECT_BY_ID = gql`
+	query ProjectById($id: Float!) {
+		projectById(id: $id) {
+			addresses {
+				address
+				isRecipient
+				networkId
+			}
+			slug
+		}
+	}
+`;
+
 export const FETCH_PROJECT_REACTION_BY_ID = gql`
 	query ProjectById($id: Float!, $connectedWalletUserId: Int) {
 		projectById(id: $id, connectedWalletUserId: $connectedWalletUserId) {

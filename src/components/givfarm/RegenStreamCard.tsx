@@ -8,7 +8,7 @@ import {
 	H5,
 	H6,
 	IconGIVStream,
-	IconHelp,
+	IconHelpFilled16,
 	Lead,
 	neutralColors,
 	P,
@@ -139,7 +139,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 										setState(StakeCardState.INTRO)
 									}
 								>
-									<IconHelp size={16} />
+									<IconHelpFilled16 />
 								</IntroIcon>
 							)}
 						</Flex>
@@ -162,7 +162,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 								</H6>
 
 								<IconWithTooltip
-									icon={<IconHelp size={16} />}
+									icon={<IconHelpFilled16 />}
 									direction={'bottom'}
 								>
 									<GsPTooltip>

@@ -7,6 +7,7 @@ import {
 	H6,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 
 import ProjectCard from '@/components/project-card/ProjectCard';
 import { IProject } from '@/apollo/types/types';
@@ -26,6 +27,7 @@ interface IHomeExploreProjects {
 const HomeExploreProjects = (props: IHomeExploreProjects) => {
 	const { projects, totalCount, noTitle } = props;
 
+	const { formatMessage } = useIntl();
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 	const user = useAppSelector(state => state.user.userData);
@@ -43,10 +45,20 @@ const HomeExploreProjects = (props: IHomeExploreProjects) => {
 			{!noTitle && (
 				<>
 					<Title>
-						Explore <span>{totalCount} Projects</span>
+						{formatMessage({
+							id: 'page.projects.title.explore',
+						})}{' '}
+						<span>
+							{totalCount}{' '}
+							{formatMessage({
+								id: 'page.projects.title.projects',
+							})}
+						</span>
 					</Title>
 					<Subtitle>
-						Donate crypto directly to for-good projects.
+						{formatMessage({
+							id: 'page.projects.subtitle.donate_crypto',
+						})}
 					</Subtitle>
 				</>
 			)}
@@ -59,13 +71,17 @@ const HomeExploreProjects = (props: IHomeExploreProjects) => {
 				<AllProjectsButton
 					buttonType='primary'
 					size='large'
-					label='SEE ALL PROJECTS'
+					label={formatMessage({
+						id: 'component.button.see_all_projects',
+					})}
 					onClick={() => router.push(Routes.Projects)}
 				/>
 				<CreateProject
 					buttonType='texty'
 					size='large'
-					label='Create a Project'
+					label={formatMessage({
+						id: 'component.button.create_project',
+					})}
 					onClick={handleCreateButton}
 				/>
 			</ButtonsWrapper>
@@ -75,6 +91,7 @@ const HomeExploreProjects = (props: IHomeExploreProjects) => {
 
 const AllProjectsButton = styled(Button)`
 	width: 300px;
+	text-transform: uppercase;
 `;
 
 const CreateProject = styled(Button)`

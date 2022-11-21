@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { useMutation } from '@apollo/client';
 import { Button, brandColors } from '@giveth/ui-design-system';
@@ -40,6 +41,7 @@ type Inputs = {
 };
 
 const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
+	const { formatMessage } = useIntl();
 	const [isLoading, setIsLoading] = useState(false);
 	const [editStatus, setEditStatus] = useState<EditStatusType>(
 		EditStatusType.INFO,
@@ -127,7 +129,9 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 		<Modal
 			closeModal={closeModal}
 			isAnimating={isAnimating}
-			headerTitle='Edit profile'
+			headerTitle={formatMessage({
+				id: 'label.edit_profile',
+			})}
 			headerTitlePosition='left'
 		>
 			<Wrapper>
@@ -142,7 +146,9 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 						/>
 						<TextButton
 							buttonType='texty'
-							label='cancel'
+							label={formatMessage({
+								id: 'label.cancel',
+							})}
 							onClick={() => {
 								onDelete();
 								setEditStatus(EditStatusType.INFO);
@@ -166,14 +172,18 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 								<TextButton
 									buttonType='texty'
 									color={brandColors.pinky[500]}
-									label='upload new picture'
+									label={formatMessage({
+										id: 'label.upload_new_pic',
+									})}
 									onClick={() =>
 										setEditStatus(EditStatusType.PHOTO)
 									}
 								/>
 								<TextButton
 									buttonType='texty'
-									label='delete picture'
+									label={formatMessage({
+										id: 'label.delete_pic',
+									})}
 									onClick={onSaveAvatar}
 								/>
 							</FlexCenter>
@@ -185,9 +195,16 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 										defaultValue={(user as any)[field.name]}
 										key={field.name}
 										registerName={field.name}
-										label={field.label}
+										label={formatMessage({
+											id: field.label,
+										})}
 										placeholder={field.placeholder}
-										caption={field.caption}
+										caption={
+											field.caption &&
+											formatMessage({
+												id: field.caption,
+											})
+										}
 										size={InputSize.SMALL}
 										register={register}
 										error={(errors as any)[field.name]}
@@ -196,13 +213,17 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 								))}
 								<Button
 									buttonType='secondary'
-									label='SAVE'
+									label={formatMessage({
+										id: 'label.save',
+									})}
 									disabled={isLoading}
 									type='submit'
 								/>
 								<TextButton
 									buttonType='texty'
-									label='cancel'
+									label={formatMessage({
+										id: 'label.cancel',
+									})}
 									onClick={closeModal}
 								/>
 							</InputWrapper>
@@ -216,35 +237,35 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 
 const inputFields = [
 	{
-		label: 'first name',
+		label: 'label.first_name',
 		placeholder: 'John',
 		name: 'firstName',
 		registerOptions: requiredOptions.firstName,
 	},
 	{
-		label: 'last name',
+		label: 'label.last_name',
 		placeholder: 'Doe',
 		name: 'lastName',
 		registerOptions: requiredOptions.lastName,
 	},
 	{
-		label: 'email',
+		label: 'label.email',
 		placeholder: 'Example@Domain.com',
 		name: 'email',
 		type: 'email',
 		registerOptions: requiredOptions.email,
 	},
 	{
-		label: 'location (optional)',
+		label: 'label.location_optional',
 		placeholder: 'Portugal, Turkey,...',
 		name: 'location',
 	},
 	{
-		label: 'website or url',
+		label: 'label.website_or_url',
 		placeholder: 'Website',
 		name: 'url',
 		type: 'url',
-		caption: 'Your home page, blog, or company site.',
+		caption: 'label.your_homepage_or_blog',
 		registerOptions: validators.website,
 	},
 ];

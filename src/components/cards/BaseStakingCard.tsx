@@ -2,11 +2,12 @@ import React, { FC, ReactNode, useEffect, useState } from 'react';
 import {
 	brandColors,
 	IconExternalLink,
-	IconHelp,
+	IconHelpFilled,
 	IconSpark,
 	Caption,
-	IconAlertCricle,
-	IconInfo24,
+	IconHelpFilled16,
+	IconAlertCircle32,
+	IconInfoFilled24,
 } from '@giveth/ui-design-system';
 import { constants } from 'ethers';
 import BigNumber from 'bignumber.js';
@@ -290,7 +291,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 			>
 				{poolNetwork !== chainId && (
 					<WrongNetworkContainer>
-						<IconAlertCricle size={32} />
+						<IconAlertCircle32 />
 						<Caption>
 							You are currently connected to{' '}
 							{chainName(chainId || 0)} switch to{' '}
@@ -303,7 +304,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					<DisableModal>
 						<DisableModalContent>
 							<DisableModalImage>
-								<IconInfo24 />
+								<IconInfoFilled24 />
 							</DisableModalImage>
 							<Flex
 								flexDirection='column'
@@ -351,7 +352,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									<IconWithTooltip
 										direction={'top'}
 										icon={
-											<IconHelp
+											<IconHelpFilled
 												color={brandColors.deep[100]}
 												size={12}
 											/>
@@ -373,7 +374,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 										setState(StakeCardState.INTRO)
 									}
 								>
-									<IconHelp size={16} />
+									<IconHelpFilled16 />
 								</IntroIcon>
 							)}
 							{isGIVpower && (
@@ -382,7 +383,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 										setState(StakeCardState.GIVPOWER_INTRO)
 									}
 								>
-									<IconHelp size={16} />
+									<IconHelpFilled16 />
 								</IntroIcon>
 							)}
 						</StakingPoolExchangeRow>
@@ -407,9 +408,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 												StakingType.ICHI_GIV_ONEGIV && (
 												<IconWithTooltip
 													direction='right'
-													icon={
-														<IconHelp size={16} />
-													}
+													icon={<IconHelpFilled16 />}
 												>
 													<AngelVaultTooltip>
 														Your cumulative APR
@@ -435,9 +434,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 											{isGIVpower && (
 												<IconWithTooltip
 													direction='right'
-													icon={
-														<IconHelp size={16} />
-													}
+													icon={<IconHelpFilled16 />}
 												>
 													<AngelVaultTooltip>
 														{isZeroGIVStacked
@@ -499,7 +496,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 																)
 															}
 														>
-															<IconHelp
+															<IconHelpFilled16
 																size={16}
 															/>
 														</IconContainer>
@@ -532,7 +529,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 													);
 												}}
 											>
-												<IconHelp size={16} />
+												<IconHelpFilled16 />
 											</IconHelpWraper>
 										</Flex>
 										<Flex gap='4px' alignItems='center'>
@@ -616,7 +613,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 										</StakeAmount>
 										{isLocked && (
 											<IconWithTooltip
-												icon={<IconHelp size={16} />}
+												icon={<IconHelpFilled16 />}
 												direction={'top'}
 											>
 												<LockInfotooltip>

@@ -8,6 +8,7 @@ import React, {
 	useRef,
 	useState,
 } from 'react';
+import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import {
@@ -78,6 +79,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 	setCreationSuccessful,
 }) => {
 	const dispatch = useAppDispatch();
+	const { formatMessage } = useIntl();
 	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
 	const {
 		categories = [],
@@ -291,7 +293,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 					<>
 						<FullButton
 							buttonType='primary'
-							label='EDIT'
+							label={formatMessage({ id: 'label.edit' })}
 							disabled={!isActive && !isDraft}
 							onClick={() =>
 								router.push(idToProjectEdit(project?.id || ''))
@@ -300,7 +302,9 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 						{!isRevoked && !verified && !isDraft && !verStatus && (
 							<FullOutlineButton
 								buttonType='primary'
-								label='VERIFY YOUR PROJECT'
+								label={formatMessage({
+									id: 'label.verify_your_project',
+								})}
 								disabled={!isActive}
 								onClick={() => setShowVerificationModal(true)}
 							/>
@@ -311,8 +315,12 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 									buttonType='primary'
 									label={
 										isRevoked
-											? 'Re-apply'
-											: 'RESUME VERIFICATION'
+											? formatMessage({
+													id: 'label.re_apply',
+											  })
+											: formatMessage({
+													id: 'label.resume_verification',
+											  })
 									}
 								/>
 							</ExternalLink>
@@ -322,7 +330,9 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 							<FullButton
 								buttonType='primary'
 								onClick={() => handleProjectStatus(false)}
-								label='PUBLISH PROJECT'
+								label={formatMessage({
+									id: 'label.publish_project',
+								})}
 							/>
 						)}
 					</>
@@ -331,7 +341,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 						onClick={() =>
 							router.push(slugToProjectDonate(slug || ''))
 						}
-						label='DONATE'
+						label={formatMessage({ id: 'label.donate' })}
 						disabled={!isActive}
 					/>
 				)}
@@ -379,10 +389,14 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 					<Links>
 						<ExternalLink
 							href={links.REPORT_ISSUE}
-							title='Report an issue'
+							title={formatMessage({
+								id: 'label.report_an_issue',
+							})}
 						/>
 						<div onClick={scrollToSimilarProjects}>
-							View similar projects
+							{formatMessage({
+								id: 'label.view_similar_projects',
+							})}
 						</div>
 					</Links>
 				)}
@@ -391,7 +405,13 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 					<ArchiveButton
 						buttonType='texty'
 						size='small'
-						label={`${isActive ? 'DE' : ''}ACTIVATE PROJECT`}
+						label={`${
+							isActive
+								? formatMessage({ id: 'component.button.de' })
+								: ''
+						}${formatMessage({
+							id: 'component.button.activate_project',
+						})}`}
 						icon={<IconArchiving size={16} />}
 						onClick={() => handleProjectStatus(isActive)}
 					/>
@@ -494,7 +514,7 @@ const Wrapper = styled(motion.div)<{ height: number }>`
 const FullButton = styled(Button)`
 	width: 100%;
 	margin-bottom: 8px;
-
+	text-transform: uppercase;
 	&:disabled {
 		background-color: ${neutralColors.gray[600]};
 		color: ${neutralColors.gray[100]};

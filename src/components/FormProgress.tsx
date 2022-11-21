@@ -12,7 +12,7 @@ interface IFormProgress {
 }
 
 const FormProgress = ({ progress, steps }: IFormProgress) => (
-	<ProgressContainer>
+	<ProgressContainer steps={steps.length}>
 		{steps.map((step, index) => (
 			<ProgressIcon
 				key={`form-progress-${index}`}
@@ -26,16 +26,16 @@ const FormProgress = ({ progress, steps }: IFormProgress) => (
 	</ProgressContainer>
 );
 
-const ProgressContainer = styled.div`
+const ProgressContainer = styled.div<{ steps: number }>`
 	display: grid;
-	grid-template-columns: repeat(3, 1fr);
+	grid-template-columns: repeat(${props => props.steps}, 1fr);
 	justify-content: space-around;
 	align-items: center;
-	margin: 24px 0 8px;
 `;
 
 const ProgressIcon = styled.div<{ done: boolean }>`
 	opacity: ${props => (props.done ? '1' : '0.5')};
+	z-index: 1;
 `;
 
 const ProgressLabel = styled(P)`
@@ -60,7 +60,6 @@ const ProgressLine = styled.hr`
 	border: 1px solid ${brandColors.giv[100]}50;
 	width: 100%;
 	grid-column: 1/4;
-	z-index: -1;
 `;
 
 export default FormProgress;

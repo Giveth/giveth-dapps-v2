@@ -39,6 +39,9 @@ const gqlRes = `{
 		foundationDate
 		achievedMilestones
 		achievedMilestonesProofs
+		problem
+		plans
+		impact
 	}
 	managingFunds {
 		description

@@ -1,7 +1,7 @@
 import {
 	ButtonLink,
 	GLink,
-	IconHelp,
+	IconHelpFilled16,
 	IconRocketInSpace32,
 	P,
 	semanticColors,
@@ -111,7 +111,7 @@ const LockModal: FC<ILockModalProps> = ({
 							<Flex gap='4px' alignItems='center'>
 								<SectionTitle weight={700}>Rounds</SectionTitle>
 								<IconWithTooltip
-									icon={<IconHelp size={16} />}
+									icon={<IconHelpFilled16 />}
 									direction='right'
 									align='top'
 								>

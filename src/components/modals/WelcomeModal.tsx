@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react';
+import { useIntl } from 'react-intl';
 import { H3, P, brandColors, neutralColors, B } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
@@ -25,6 +26,7 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 	const [showLowerShields, setShowLowerShields] = useState<boolean>();
+	const { formatMessage } = useIntl();
 
 	const { activate } = useWeb3React();
 	const dispatch = useAppDispatch();
@@ -72,10 +74,13 @@ const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 				<ModalGrid>
 					<BGContainer />
 					<ContentContainer>
-						<SignInTitle>Sign in to Giveth</SignInTitle>
+						<SignInTitle>
+							{formatMessage({ id: 'label.sign_in_to_giveth' })}
+						</SignInTitle>
 						<ContentSubtitle>
-							Please sign in to your account and start using
-							Giveth.
+							{formatMessage({
+								id: 'label.please_sign_in_to_your_account',
+							})}
 						</ContentSubtitle>
 						<IconContentContainer>
 							<EthIconContainer
@@ -84,11 +89,15 @@ const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 								}
 							>
 								<Image src={ethIcon} alt='Ether icon' />
-								<B>Sign in with Ethereum</B>
+								<B>
+									{formatMessage({
+										id: 'label.sign_in_with_ethereum',
+									})}
+								</B>
 							</EthIconContainer>
 							<BreakPoint>
 								<BreakLine />
-								<P>or</P>
+								<P>{formatMessage({ id: 'label.or' })}</P>
 								<BreakLine />
 							</BreakPoint>
 							<SocialContentContainer>

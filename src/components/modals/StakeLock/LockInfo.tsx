@@ -4,7 +4,7 @@ import {
 	Caption,
 	H4,
 	H6,
-	IconHelp,
+	IconHelpFilled16,
 	IconSpark,
 	neutralColors,
 	Subline,
@@ -34,7 +34,7 @@ const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 					x{multipler.toFixed(2)}
 					<MultiPlyHelp>
 						<IconWithTooltip
-							icon={<IconHelp size={16} />}
+							icon={<IconHelpFilled16 />}
 							direction={'top'}
 						>
 							<LockInfotooltip>
@@ -50,7 +50,7 @@ const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 					APR
 					<LockInfoRowHelp>
 						<IconWithTooltip
-							icon={<IconHelp size={16} />}
+							icon={<IconHelpFilled16 />}
 							direction={'right'}
 						>
 							<LockInfotooltip>
@@ -76,7 +76,7 @@ const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 					GIVpower
 					<LockInfoRowHelp>
 						<IconWithTooltip
-							icon={<IconHelp size={16} />}
+							icon={<IconHelpFilled16 />}
 							direction={'right'}
 						>
 							<LockInfotooltip>

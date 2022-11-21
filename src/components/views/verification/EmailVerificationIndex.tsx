@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
 import { brandColors, H6, Lead, ButtonLink } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -98,6 +99,7 @@ export default function EmailVerificationIndex() {
 function Verified() {
 	const router = useRouter();
 	const { slug } = router.query;
+	const { formatMessage } = useIntl();
 
 	return (
 		<>
@@ -107,13 +109,23 @@ function Verified() {
 				height={80}
 				alt='success icon'
 			/>
-			<H6 weight={700}>Well Done</H6>
+			<H6 weight={700}>{formatMessage({ id: 'label.well_done' })}</H6>
 			<Lead>
-				Your email has been verified! <br />
-				You can now close this page and continue verifying your project.
+				{formatMessage({ id: 'label.your_email_has_been_verified' })}
+				! <br />
+				{formatMessage({
+					id: 'label.you_can_now_close_this_page_and_continue_verifying',
+				})}
 			</Lead>
 			<Link href={slugToVerification(slug as string)} passHref>
-				<ButtonLink size='small' label='CONTINUE VERIFICATION' />
+				<ButtonLink
+					size='small'
+					label={
+						formatMessage({
+							id: 'label.continue_verification',
+						})!
+					}
+				/>
 			</Link>
 			<VCImageContainer>
 				<Link href='/' passHref>
