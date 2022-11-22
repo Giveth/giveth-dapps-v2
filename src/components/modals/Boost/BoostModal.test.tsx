@@ -6,6 +6,22 @@ import BoostModal from './BoostModal';
 import config from '@/configuration';
 import type { ISubgraphState } from '@/features/subgraph/subgraph.types';
 
+beforeAll(() => {
+	Object.defineProperty(window, 'matchMedia', {
+		writable: true,
+		value: jest.fn().mockImplementation(query => ({
+			matches: false,
+			media: query,
+			onchange: null,
+			addListener: jest.fn(), // Deprecated
+			removeListener: jest.fn(), // Deprecated
+			addEventListener: jest.fn(),
+			removeEventListener: jest.fn(),
+			dispatchEvent: jest.fn(),
+		})),
+	});
+});
+
 test('showing the ZeroGivpowerModal if the user GIVpower balance is zero', async () => {
 	const setStateMock = jest.fn();
 	const useStateMock: any = (useState: any) => [useState, setStateMock];

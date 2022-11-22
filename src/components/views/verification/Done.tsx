@@ -1,3 +1,4 @@
+import { useIntl } from 'react-intl';
 import { B, brandColors, H4, neutralColors, P } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import React from 'react';
@@ -10,22 +11,39 @@ import { EVerificationStatus } from '@/apollo/types/types';
 const Done = () => {
 	const { isMobile } = useDetectDevice();
 	const { verificationData } = useVerificationData();
+	const { formatMessage } = useIntl();
 
 	const status = verificationData?.status ?? EVerificationStatus.SUBMITTED;
 
 	const titles = {
-		[EVerificationStatus.DRAFT]: 'Congratulations',
-		[EVerificationStatus.SUBMITTED]: 'Waiting for verification',
-		[EVerificationStatus.REJECTED]: 'Verification rejected',
-		[EVerificationStatus.VERIFIED]: 'Your project is verified now 🎉',
+		[EVerificationStatus.DRAFT]: formatMessage({
+			id: 'label.congratulations',
+		}),
+		[EVerificationStatus.SUBMITTED]: formatMessage({
+			id: 'label.waiting_for_verification',
+		}),
+		[EVerificationStatus.REJECTED]: formatMessage({
+			id: 'label.verification_rejected',
+		}),
+		[EVerificationStatus.VERIFIED]: `${formatMessage({
+			id: 'label.your_project_is_verified_now',
+		})} 🎉`,
 	};
 
 	const subtitles = {
-		[EVerificationStatus.DRAFT]: `Your application has been submitted!
-		The Verification Team will send an email once it has been reviewed.`,
-		[EVerificationStatus.SUBMITTED]: `Your application has been submitted!
-		The Verification Team will send an email once it has been reviewed.`,
-		[EVerificationStatus.REJECTED]: 'Please contact support team.',
+		[EVerificationStatus.DRAFT]: `${formatMessage({
+			id: 'label.your_application_has_been_submitted.one',
+		})}
+		${formatMessage({ id: 'label.your_application_has_been_submitted.two' })}
+		`,
+		[EVerificationStatus.SUBMITTED]: `${formatMessage({
+			id: 'label.your_application_has_been_submitted.one',
+		})}
+		${formatMessage({ id: 'label.your_application_has_been_submitted.two' })}
+		`,
+		[EVerificationStatus.REJECTED]: formatMessage({
+			id: 'label.please_contact_support_team',
+		}),
 		[EVerificationStatus.VERIFIED]: '',
 	};
 
@@ -43,7 +61,7 @@ const Done = () => {
 				)}
 				<StagesContainer>
 					<Submitted>
-						Form submitted
+						{formatMessage({ id: 'label.form_submitted' })}
 						<CheckCircle />
 					</Submitted>
 					<Line />
@@ -55,15 +73,19 @@ const Done = () => {
 						].includes(status)}
 					>
 						{status === EVerificationStatus.REJECTED
-							? 'Verification rejected.'
-							: 'Waiting for verification'}
+							? formatMessage({
+									id: 'label.verification_rejected',
+							  })
+							: formatMessage({
+									id: 'label.waiting_for_verification',
+							  })}
 						{status === EVerificationStatus.VERIFIED && (
 							<CheckCircle />
 						)}
 					</Waiting>
 					<Line />
 					<Voila isActive={status === EVerificationStatus.VERIFIED}>
-						Voila! Verified badge
+						{formatMessage({ id: 'label.voila_verified_badge' })}
 					</Voila>
 					{status === EVerificationStatus.VERIFIED && <CheckCircle />}
 				</StagesContainer>

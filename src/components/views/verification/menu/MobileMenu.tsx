@@ -1,3 +1,4 @@
+import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { B, neutralColors } from '@giveth/ui-design-system';
 import Image from 'next/image';
@@ -15,6 +16,7 @@ const MobileMenu = () => {
 	const { step, verificationData } = useVerificationData();
 	const { project } = verificationData || {};
 	const { title } = project || {};
+	const { formatMessage } = useIntl();
 
 	return (
 		<>
@@ -24,7 +26,7 @@ const MobileMenu = () => {
 					<Image src={MenuIcon} alt='Menu icon' />
 				</MenuSection>
 				<StatusSection>
-					<B>Verified status for</B>
+					<B>{formatMessage({ id: 'label.verified_status_for' })}</B>
 					<B>{title}</B>
 					<StepsProgressBar />
 				</StatusSection>

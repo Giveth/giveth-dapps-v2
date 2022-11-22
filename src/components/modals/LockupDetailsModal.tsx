@@ -3,11 +3,11 @@ import {
 	neutralColors,
 	brandColors,
 	IconRocketInSpace32,
-	IconHelpFilled,
 	IconUnlock32,
 	H5,
 	H6,
 	Caption,
+	IconHelpFilled,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';

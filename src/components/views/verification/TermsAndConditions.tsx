@@ -1,3 +1,4 @@
+import { useIntl } from 'react-intl';
 import { Button, H6, Lead, semanticColors } from '@giveth/ui-design-system';
 import React, { useState } from 'react';
 import styled from 'styled-components';
@@ -19,6 +20,7 @@ export default function TermsAndConditions() {
 	const [accepted, setAccepted] = useState(
 		verificationData?.isTermAndConditionsAccepted || false,
 	);
+	const { formatMessage } = useIntl();
 
 	const updateVerificationState = () => {
 		setVerificationData(prevState =>
@@ -56,46 +58,39 @@ export default function TermsAndConditions() {
 	return (
 		<>
 			<Lead>
-				<H6 weight={700}>Terms & Conditions</H6>
+				<H6 weight={700}>{formatMessage({ id: 'label.tos' })}</H6>
 				<TermItemsContainer>
 					<Relative>
 						<BulletCircle />
 						<TermItem>
-							I pledge that funds raised will be used for public
-							benefit, not for personal gain.
+							{formatMessage({ id: 'page.verification.tos.one' })}
 						</TermItem>
 					</Relative>
 					<Relative>
 						<BulletCircle />
 						<TermItem>
-							We understand that Giveth will be analyzing all
-							donations looking for fraud or abuse. If there is
-							any reason to suspect abuse, we understand that we
-							may lose our verified status, our donors may not
-							receive GIVbacks and that Giveth may share any
-							evidence of fraud publicly.
+							{formatMessage({ id: 'page.verification.tos.two' })}
 						</TermItem>
 					</Relative>
 					<Relative>
 						<BulletCircle />
 						<TermItem>
-							We will only accept new, external donations through
-							Giveth, and we understand that if we are found to be
-							recirculating our own funds through Giveth this will
-							be considered abuse of the system.
+							{formatMessage({
+								id: 'page.verification.tos.three',
+							})}
 							<SubTermItem>
-								Only “first touch” donations count for GIVbacks.
-								If your project receives funding from outside of
-								Giveth and is found to be circulating these
-								donations within the Giveth platform to receive
-								GIVbacks, you will be disqualified.
+								{formatMessage({
+									id: 'page.verification.tos.four',
+								})}
 							</SubTermItem>
 						</TermItem>
 					</Relative>
 				</TermItemsContainer>
 				{isDraft && (
 					<CheckBox
-						label='I accept all of the Giveth community terms and conditions.'
+						label={formatMessage({
+							id: 'label.i_accept_all_giveth_tos',
+						})}
 						checked={accepted}
 						onChange={setAccepted}
 					/>
@@ -104,12 +99,19 @@ export default function TermsAndConditions() {
 			<div>
 				<ContentSeparator />
 				<BtnContainer>
-					<Button onClick={() => setStep(6)} label='<     PREVIOUS' />
+					<Button
+						onClick={() => setStep(6)}
+						label={`<     ${formatMessage({
+							id: 'label.prev',
+						})}`}
+					/>
 					<Button
 						onClick={handleNext}
 						loading={loading}
 						disabled={!accepted}
-						label='FINISH     >'
+						label={`${formatMessage({
+							id: 'label.finish',
+						})}     >`}
 					/>
 				</BtnContainer>
 			</div>

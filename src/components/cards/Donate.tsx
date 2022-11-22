@@ -5,10 +5,10 @@ import BigNumber from 'bignumber.js';
 import {
 	Subline,
 	neutralColors,
-	IconHelpFilled16,
 	H2,
 	H5,
 	Lead,
+	IconHelpFilled16,
 } from '@giveth/ui-design-system';
 import { InputWithUnit } from '../input/index';
 import { Flex } from '../styled-components/Flex';

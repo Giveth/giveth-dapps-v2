@@ -1,10 +1,10 @@
 import {
-	IconInfoFilled32,
 	Lead,
 	semanticColors,
-	IconInfoFilled16,
 	Caption,
 	Button,
+	IconInfoFilled16,
+	IconInfoFilled32,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';

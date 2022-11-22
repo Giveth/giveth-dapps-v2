@@ -1,5 +1,6 @@
 import { brandColors, D3 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { Arc } from '@/components/styled-components/Arc';
 import questionIcon from '/public/images/ask_question.svg';
 import feedbackIcon from '/public/images/feedback.svg';
@@ -10,6 +11,39 @@ import links from '@/lib/constants/links';
 import { mediaQueries } from '@/lib/constants/constants';
 
 const SupportIndex = () => {
+	const { formatMessage } = useIntl();
+
+	const cardsArray = [
+		{
+			icon: questionIcon,
+			title: 'label.ask_us_a_question',
+			caption: 'label.ask_us_a_question.caption',
+			buttonLabel: 'label.ask_us_a_question',
+			route: links.ASK_QUESTION,
+		},
+		{
+			icon: reportIcon,
+			title: 'label.report_an_issue',
+			caption: 'label.report_an_issue.caption',
+			buttonLabel: 'label.report_an_issue',
+			route: links.REPORT_ISSUE,
+		},
+		{
+			icon: feedbackIcon,
+			title: 'label.leave_feedback',
+			caption: 'label.leave_feedback.caption',
+			buttonLabel: 'label.leave_feedback',
+			route: links.FEEDBACK,
+		},
+		{
+			icon: featureIcon,
+			title: 'label.request_a_new_feature',
+			caption: 'label.request_a_new_feature.caption',
+			buttonLabel: 'label.request_a_new_feature',
+			route: links.FEATURE_REQUEST,
+		},
+	];
+
 	return (
 		<>
 			<UpperSection>
@@ -17,7 +51,9 @@ const SupportIndex = () => {
 				<DotCyan />
 				<ArcPurple />
 				<TextContainer>
-					<Title>How can we help you?</Title>
+					<Title>
+						{formatMessage({ id: 'label.how_can_we_help_you' })}
+					</Title>
 				</TextContainer>
 			</UpperSection>
 
@@ -41,41 +77,6 @@ const CardsSection = styled.div`
 	margin: -50px auto 0;
 	padding: 0 16px 48px;
 `;
-
-const cardsArray = [
-	{
-		icon: questionIcon,
-		title: 'Ask us a Question',
-		caption:
-			'Do you have a specific question or a general inquiry that requires a response?',
-		buttonLabel: 'ask us a question',
-		route: links.ASK_QUESTION,
-	},
-	{
-		icon: reportIcon,
-		title: 'Report an issue',
-		caption:
-			'Having problems with our site? Is something not functioning as expected?',
-		buttonLabel: 'Report an issue',
-		route: links.REPORT_ISSUE,
-	},
-	{
-		icon: feedbackIcon,
-		title: 'Leave Feedback',
-		caption:
-			'Let us know how your experience was! \n' + 'How can we improve?',
-		buttonLabel: 'Leave Feedback',
-		route: links.FEEDBACK,
-	},
-	{
-		icon: featureIcon,
-		title: 'Request a New Feature',
-		caption:
-			'Want to see a new feature on Giveth? Are we missing a critical functionality?',
-		buttonLabel: 'Request a New Feature',
-		route: links.FEATURE_REQUEST,
-	},
-];
 
 const ArcPurple = styled(Arc)`
 	border-width: 140px;

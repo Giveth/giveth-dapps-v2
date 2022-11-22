@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
 import {
 	Caption,
 	H6,
@@ -53,6 +54,7 @@ const WalletAddressInput: FC<IProps> = ({
 
 	const [isHidden, setIsHidden] = useState(false);
 	const [isValidating, setIsValidating] = useState(false);
+	const { formatMessage } = useIntl();
 
 	const { chainId, library } = useWeb3React();
 
@@ -64,7 +66,9 @@ const WalletAddressInput: FC<IProps> = ({
 	const error = errors[inputName];
 	const errorMessage = (error?.message || '') as string;
 	const isAddressUsed =
-		errorMessage.indexOf('is already being used for a project') > -1;
+		errorMessage.indexOf(
+			formatMessage({ id: 'label.is_already_being_used_for_a_project' }),
+		) > -1;
 
 	const delayedResolvedENS = useDelay(!!resolvedENS);
 	const delayedIsAddressUsed = useDelay(isAddressUsed);
@@ -75,15 +79,18 @@ const WalletAddressInput: FC<IProps> = ({
 
 	let caption: string = '';
 	if (isDefaultAddress) {
-		caption =
-			'This is the default wallet address associated with your account. You can choose a different receiving address.';
+		caption = formatMessage({
+			id: 'label.this_is_the_default_address_associated_with_your_account',
+		});
 	} else if (errorMessage || !value) {
-		caption = `You can enter a new address to receive funds on ${
+		caption = `${formatMessage({
+			id: 'label.you_can_enter_a_new_address',
+		})} ${
 			sameAddress
-				? 'all supported networks'
+				? formatMessage({ id: 'label.all_supported_networks' })
 				: isGnosis
 				? 'Gnosis Chain'
-				: 'Mainnet network'
+				: 'Mainnet'
 		}.`;
 	}
 
@@ -97,14 +104,18 @@ const WalletAddressInput: FC<IProps> = ({
 
 	const ENSHandler = async (ens: string) => {
 		if (networkId !== config.PRIMARY_NETWORK.id) {
-			throw 'ENS is only supported on Ethereum Mainnet';
+			throw formatMessage({
+				id: 'label.ens_is_only_supported_on_mainnet',
+			});
 		}
 		if (chainId !== 1) {
-			throw 'Please switch to the Ethereum Mainnet to handle ENS';
+			throw formatMessage({
+				id: 'label.please_switcth_to_mainnet_to_handle_ens',
+			});
 		}
 		const address = await getAddressFromENS(ens, library);
 		if (address) return address;
-		else throw 'Invalid ENS address';
+		else throw formatMessage({ id: 'label.invalid_ens_address' });
 	};
 
 	const addressValidation = async (address: string) => {
@@ -113,7 +124,7 @@ const WalletAddressInput: FC<IProps> = ({
 			setResolvedENS('');
 			if (disabled) return true;
 			if (address.length === 0) {
-				return 'This field is required';
+				return formatMessage({ id: 'label.this_field_is_required' });
 			}
 			let _address = (' ' + address).slice(1);
 			setIsValidating(true);
@@ -127,7 +138,7 @@ const WalletAddressInput: FC<IProps> = ({
 			}
 			if (!utils.isAddress(_address)) {
 				setIsValidating(false);
-				return 'Eth address not valid';
+				return formatMessage({ id: 'label.eth_addres_not_valid' });
 			}
 			const res = await gqlAddressValidation(_address);
 			setIsValidating(false);
@@ -153,10 +164,10 @@ const WalletAddressInput: FC<IProps> = ({
 			<Header>
 				<H6>
 					{isGnosis
-						? 'Gnosis Chain address'
+						? formatMessage({ id: 'label.gnosis_chain_address' })
 						: sameAddress
-						? 'Receiving address'
-						: 'Mainnet address'}
+						? formatMessage({ id: 'label.receiving_address' })
+						: formatMessage({ id: 'label.mainnet_address' })}
 				</H6>
 				<Flex gap='10px'>
 					{sameAddress ? (
@@ -174,12 +185,16 @@ const WalletAddressInput: FC<IProps> = ({
 			<Input
 				label={
 					isGnosis
-						? 'Receiving address on Gnosis Chain'
+						? formatMessage({
+								id: 'label.receiving_address_on_gnosis',
+						  })
 						: sameAddress
-						? 'Receiving address'
-						: 'Receiving address on Mainnet'
+						? formatMessage({ id: 'label.receiving_address' })
+						: formatMessage({
+								id: 'label.receiving_address_on_mainnet',
+						  })
 				}
-				placeholder='My Wallet Address'
+				placeholder={formatMessage({ id: 'label.my_wallet_address' })}
 				caption={caption}
 				size={InputSize.LARGE}
 				disabled={disabled}
@@ -193,21 +208,27 @@ const WalletAddressInput: FC<IProps> = ({
 				<InlineToast
 					isHidden={!resolvedENS}
 					type={EToastType.Success}
-					message={'Resolves as ' + resolvedENS}
+					message={
+						formatMessage({ id: 'label.resolved_as' }) + resolvedENS
+					}
 				/>
 			)}
 			{delayedIsAddressUsed && (
 				<InlineToast
 					isHidden={!isAddressUsed}
 					type={EToastType.Error}
-					message='This address is already used for another project. Please enter an address which is not currently associated with any other project.'
+					message={formatMessage({
+						id: 'label.this_address_is_already_used',
+					})}
 				/>
 			)}
 			{(isGnosis || sameAddress) && (
 				<ExchangeNotify>
 					<Warning>!</Warning>
 					<Caption>
-						Please DO NOT enter exchange addresses for Gnosis Chain.
+						{formatMessage({
+							id: 'label.please_do_not_enter_exchange_addresses_for_gnosis_chain',
+						})}
 					</Caption>
 				</ExchangeNotify>
 			)}
@@ -217,7 +238,9 @@ const WalletAddressInput: FC<IProps> = ({
 				>
 					<CheckBox
 						onChange={setIsActive}
-						label='I’ll receive fund on this address'
+						label={formatMessage({
+							id: 'label.ill_receive_funds_on_this_address',
+						})}
 						checked={isActive}
 					/>
 				</CheckBoxContainer>

@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { brandColors, IconX, neutralColors, P } from '@giveth/ui-design-system';
 
+import { useIntl } from 'react-intl';
 import { headerRoutes } from './HeaderRoutes';
 import { Shadow } from '../styled-components/Shadow';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -18,6 +19,7 @@ const HeaderRoutesResponsive = () => {
 	const router = useRouter();
 	const [isOpen, setIsOpen] = useState(false);
 	const theme = useAppSelector(state => state.general.theme);
+	const { formatMessage } = useIntl();
 
 	const activeIndex = headerRoutes.findIndex(i => router.pathname === i.href);
 	const activeMenu = headerRoutes[activeIndex]?.title;
@@ -34,7 +36,7 @@ const HeaderRoutesResponsive = () => {
 					src={isDark ? MenuWhite : MenuPurple}
 					alt={'drawer menu'}
 				/>
-				{activeMenu && <P>{activeMenu}</P>}
+				{activeMenu && <P>{formatMessage({ id: activeMenu })}</P>}
 			</DrawerClosed>
 			{isOpen && (
 				<Modal>
@@ -48,7 +50,7 @@ const HeaderRoutesResponsive = () => {
 								<HeaderRoutesItem
 									key={i.title}
 									href={i.href}
-									title={i.title}
+									title={formatMessage({ id: i.title })}
 								/>
 							))}
 						</HeaderItems>

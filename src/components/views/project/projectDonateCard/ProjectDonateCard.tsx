@@ -8,6 +8,7 @@ import React, {
 	useRef,
 	useState,
 } from 'react';
+import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import styled, { css } from 'styled-components';
 import {
@@ -83,6 +84,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 	setCreationSuccessful,
 }) => {
 	const dispatch = useAppDispatch();
+	const { formatMessage } = useIntl();
 	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
 	const {
 		categories = [],
@@ -615,7 +617,7 @@ const DonateWrapper = styled.div<IWrapper>`
 const FullButton = styled(Button)`
 	width: 100%;
 	margin-bottom: 8px;
-
+	text-transform: uppercase;
 	&:disabled {
 		background-color: ${neutralColors.gray[600]};
 		color: ${neutralColors.gray[100]};

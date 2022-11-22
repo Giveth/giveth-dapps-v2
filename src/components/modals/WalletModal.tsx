@@ -1,5 +1,6 @@
 import { FC, useState } from 'react';
 import Image from 'next/image';
+import { useIntl } from 'react-intl';
 import { useWeb3React } from '@web3-react/core';
 import styled from 'styled-components';
 import { brandColors, H5, Lead, neutralColors } from '@giveth/ui-design-system';
@@ -24,6 +25,7 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 const WalletModal: FC<IModal> = ({ setShowModal }) => {
 	const [showLowerShields, setShowLowerShields] = useState<boolean>();
+	const { formatMessage } = useIntl();
 
 	const router = useRouter();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
@@ -105,7 +107,12 @@ const WalletModal: FC<IModal> = ({ setShowModal }) => {
 								width={64}
 							/>
 							<WalletName>{i.name}</WalletName>
-							<WalletDesc>Connect with your {i.name}</WalletDesc>
+							<WalletDesc>
+								{formatMessage({
+									id: 'label.connect_with_your',
+								})}{' '}
+								{i.name}
+							</WalletDesc>
 						</WalletItem>
 					))}
 				</IconsContainer>

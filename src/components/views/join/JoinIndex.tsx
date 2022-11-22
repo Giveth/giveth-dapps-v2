@@ -1,18 +1,28 @@
 import { D3, H4, brandColors, deviceSize } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 
 import { mediaQueries } from '@/lib/constants/constants';
 import { Arc } from '@/components/styled-components/Arc';
 
 const JoinIndex = () => {
+	const { formatMessage } = useIntl();
 	return (
 		<UpperSection>
 			<ArcBig />
 			<ArcCyan />
 			<ArcMustard />
 			<TextContainer>
-				<D3Styled>Join our Community</D3Styled>
-				<H4>Building the Future of Giving</H4>
+				<D3Styled>
+					{formatMessage({
+						id: 'component.title.join_our_community',
+					})}
+				</D3Styled>
+				<H4>
+					{formatMessage({
+						id: 'label.building_the_future_of_giving',
+					})}
+				</H4>
 			</TextContainer>
 		</UpperSection>
 	);

@@ -8,12 +8,13 @@ import {
 	SublineBold,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-
+import { useIntl } from 'react-intl';
 import { HomeContainer } from '@/components/views/homepage/Home.sc';
 import { deviceSize } from '@/lib/constants/constants';
 import useNewsletterSubscription from '@/hooks/useNewsletterSubscription';
 
 const HomeGetUpdates = () => {
+	const { formatMessage } = useIntl();
 	const {
 		email,
 		setEmail,
@@ -27,32 +28,38 @@ const HomeGetUpdates = () => {
 			<Container>
 				<Title weight={700}>
 					{successSubscription
-						? `You're In!`
-						: 'Get the latest updates'}
+						? formatMessage({ id: 'page.home.section.you_in' })
+						: formatMessage({
+								id: 'page.home.section.get_updates',
+						  })}
 				</Title>
 				<P>
 					{successSubscription ? (
 						<span>
-							We just sent you an email to confirm your
-							subscription!
+							{formatMessage({
+								id: 'page.home.section.success_subs_one',
+							})}
 							<br />
-							Once you do, you'll receive the next issue of our
-							newsletter in your inbox. If you'd like to view
-							previous issues, visit our{' '}
+							{formatMessage({
+								id: 'page.home.section.success_subs_two',
+							})}{' '}
 							<StyledLink
 								href='http://news.giveth.io/'
 								target='_blank'
 								rel='noreferrer'
 							>
 								GIVnews page
+								{formatMessage({
+									id: 'page.home.section.givnews_page',
+								})}
 							</StyledLink>
 							.
 						</span>
 					) : (
 						<span>
-							Subscribe to our newsletter to get the latest news,
-							updates and amazing offers delivered directly
-							straight to your mailbox!
+							{formatMessage({
+								id: 'page.home.section.subscribe_newsletter',
+							})}
 						</span>
 					)}
 				</P>
@@ -68,7 +75,9 @@ const HomeGetUpdates = () => {
 						<InputBox>
 							<div>
 								<EmailInput
-									placeholder='Your email address'
+									placeholder={formatMessage({
+										id: 'component.button.your_email_address',
+									})}
 									error={error}
 									onChange={e => setEmail(e.target.value)}
 									name='member[email]'
@@ -82,7 +91,9 @@ const HomeGetUpdates = () => {
 							</div>
 							<SubscribeButton
 								disabled={!validateEmail(email)}
-								label='SUBSCRIBE'
+								label={formatMessage({
+									id: 'component.button.subscribe',
+								})}
 								type='submit'
 							/>
 						</InputBox>

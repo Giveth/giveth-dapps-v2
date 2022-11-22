@@ -12,30 +12,38 @@ import { switchNetwork } from '@/lib/wallet';
 import { getNetworkNames } from '@/components/views/donate/helpers';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import { ISwitchNetworkToast } from '@/components/views/donate/common.types';
 
-interface IDonateWrongNetwork extends IModal {
-	targetNetworks: number[];
-}
+interface IDonateWrongNetwork extends IModal, ISwitchNetworkToast {}
 
-export const DonateWrongNetwork: FC<IDonateWrongNetwork> = ({
-	setShowModal,
-	targetNetworks,
-}) => {
+const { PRIMARY_NETWORK, SECONDARY_NETWORK } = config;
+const { id: primaryId } = PRIMARY_NETWORK;
+const { id: secondaryId } = SECONDARY_NETWORK;
+
+export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
+	const { setShowModal, acceptedChains } = props;
 	const { chainId } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	useEffect(() => {
-		if (chainId && targetNetworks.includes(chainId)) {
+		if (chainId && acceptedChains?.includes(chainId)) {
 			closeModal();
 		}
-	}, [chainId, targetNetworks]);
+	}, [chainId, acceptedChains]);
 
-	const NetworkName = getNetworkNames(targetNetworks, 'or');
+	const NetworkName = getNetworkNames(acceptedChains!, 'or');
+
+	const gnosisOnly =
+		acceptedChains?.length === 1 && acceptedChains[0] === secondaryId;
+	const ethereumOnly =
+		acceptedChains?.length === 1 && acceptedChains[0] === primaryId;
 
 	return (
 		<Modal closeModal={closeModal} isAnimating={isAnimating}>
 			<ModalContainer>
-				{!targetNetworks.includes(config.SECONDARY_NETWORK.id) ? (
+				{gnosisOnly ? (
+					<IconGnosisChain size={64} />
+				) : ethereumOnly ? (
 					<IconEthereum size={64} />
 				) : (
 					<>
@@ -49,7 +57,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = ({
 					network. Please switch your wallet network to {NetworkName}.
 				</P>
 				<SwitchCaption
-					onClick={() => switchNetwork(config.PRIMARY_NETWORK.id)}
+					onClick={() => switchNetwork(acceptedChains![0])}
 				>
 					Switch network
 				</SwitchCaption>

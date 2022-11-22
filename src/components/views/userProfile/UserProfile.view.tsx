@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { useWeb3React } from '@web3-react/core';
 import {
 	brandColors,
@@ -47,6 +48,7 @@ export interface IUserProfileView {
 const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 	const dispatch = useAppDispatch();
 	const { isSignedIn } = useAppSelector(state => state.user);
+	const { formatMessage } = useIntl();
 
 	const { chainId } = useWeb3React();
 
@@ -64,7 +66,7 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 	if (myAccount && !isSignedIn)
 		return (
 			<NoUserContainer>
-				<H5>Please Sign In</H5>
+				<H5>{formatMessage({ id: 'label.please_sign_in' })}</H5>
 			</NoUserContainer>
 		);
 
@@ -95,7 +97,9 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 										size='Big'
 										onClick={() => setShowModal(true)}
 									>
-										Edit Profile
+										{formatMessage({
+											id: 'label.edit_profile',
+										})}
 									</EditProfile>
 								)}
 								<AddressContainer>

@@ -1,9 +1,9 @@
 import {
 	brandColors,
 	Caption,
+	IconAlertCircle16,
 	semanticColors,
 	ButtonText,
-	IconAlertCircle16,
 	IconCheckCircleFilled16,
 } from '@giveth/ui-design-system';
 import toast, { ToastPosition } from 'react-hot-toast';
