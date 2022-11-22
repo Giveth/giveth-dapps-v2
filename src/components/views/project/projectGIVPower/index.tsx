@@ -57,12 +57,12 @@ const ProjectGIVPowerIndex = ({
 
 	return (
 		<>
-			<GIVPowerHeader
-				projectPower={projectPower}
-				projectFuturePower={projectFuturePower}
-			/>
 			{hasGivPower ? (
 				<>
+					<GIVPowerHeader
+						projectPower={projectPower}
+						projectFuturePower={projectFuturePower}
+					/>
 					<GIVPowerTable
 						powerBoostings={
 							boostersData?.powerBoostings.slice(
