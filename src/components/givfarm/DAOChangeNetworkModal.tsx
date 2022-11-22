@@ -1,9 +1,9 @@
 import {
-	IconInfoFilled16,
 	neutralColors,
 	brandColors,
 	Caption,
 	Button,
+	IconInfoFilled16,
 } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 import { InjectedConnector } from '@web3-react/injected-connector';

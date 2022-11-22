@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { brandColors, neutralColors, P } from '@giveth/ui-design-system';
 import Link from 'next/link';
 
+import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
 import ProfileDonationsTab from './donationsTab/ProfileDonationsTab';
 import ProfileLikedTab from './ProfileLikedTab';
@@ -30,6 +31,7 @@ interface ITab {
 const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 	const router = useRouter();
 	const [tab, setTab] = useState(EProfile.OVERVIEW);
+	const { formatMessage } = useIntl();
 
 	useEffect(() => {
 		const tab = router?.query?.tab;
@@ -82,7 +84,11 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 				<Link href={pathname + profileTabs.projects}>
 					<a>
 						<ProfileTab active={tab === EProfile.PROJECTS}>
-							{`${myAccount ? 'My ' : userName + '’s'} Projects`}
+							{`${
+								myAccount
+									? formatMessage({ id: 'label.my_projects' })
+									: formatMessage({ id: 'label.projects' })
+							}`}
 							{myAccount && user?.projectsCount != 0 && (
 								<Count active={tab === EProfile.PROJECTS}>
 									{user?.projectsCount}
@@ -94,7 +100,13 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 				<Link href={pathname + profileTabs.donations}>
 					<a>
 						<ProfileTab active={tab === EProfile.DONATIONS}>
-							{`${myAccount ? 'My ' : ''}Donations`}
+							{`${
+								myAccount
+									? formatMessage({
+											id: 'label.my_donations',
+									  })
+									: formatMessage({ id: 'label.donations' })
+							}`}
 							{myAccount && user?.donationsCount != 0 && (
 								<Count active={tab === EProfile.DONATIONS}>
 									{user?.donationsCount}
@@ -109,7 +121,7 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 							active={tab === EProfile.LIKED}
 							onClick={() => setTab(EProfile.LIKED)}
 						>
-							Liked Projects
+							{formatMessage({ id: 'label.liked_projects' })}
 							{myAccount && !!user.likedProjectsCount && (
 								<Count active={tab === EProfile.LIKED}>
 									{user?.likedProjectsCount}

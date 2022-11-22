@@ -1,4 +1,5 @@
 import { MouseEvent, useRef, useState } from 'react';
+import { useIntl } from 'react-intl';
 import { IconOptions16 } from '@giveth/ui-design-system';
 import { FilterMenu, PinkyColoredNumber } from '@/components/menu/FilterMenu';
 import { useProjectsContext } from '@/context/projects.context';
@@ -7,6 +8,7 @@ import { FiltersButton } from '@/components/views/projects/common.styled';
 import useDelay from '@/hooks/useDelay';
 
 const ProjectsFiltersButton = () => {
+	const { formatMessage } = useIntl();
 	const { variables } = useProjectsContext();
 	const [isFilterOpen, setIsFilterOpen] = useState(false);
 	const filtersCount = variables?.filters?.length ?? 0;
@@ -25,7 +27,7 @@ const ProjectsFiltersButton = () => {
 	return (
 		<>
 			<FiltersButton onClick={() => setIsFilterOpen(true)}>
-				Filters
+				{formatMessage({ id: 'label.filters' })}
 				{filtersCount !== 0 && (
 					<PinkyColoredNumber>{filtersCount}</PinkyColoredNumber>
 				)}

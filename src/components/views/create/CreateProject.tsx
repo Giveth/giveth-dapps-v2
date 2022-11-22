@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
 import {
 	brandColors,
 	Button,
@@ -84,6 +85,7 @@ export type TInputs = {
 };
 
 const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
+	const { formatMessage } = useIntl();
 	const [addProjectMutation] = useMutation(CREATE_PROJECT);
 	const [editProjectMutation] = useMutation(UPDATE_PROJECT);
 	const router = useRouter();
@@ -264,7 +266,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			<CreateContainer>
 				<div>
 					<Title>
-						{isEditMode ? 'Project details' : 'Create a project'}
+						{isEditMode
+							? formatMessage({ id: 'label.project_details' })
+							: formatMessage({ id: 'label.create_a_project' })}
 					</Title>
 					{isSmallScreen && (
 						<GuidelinesStyleTablet>
@@ -280,15 +284,20 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						<CategoryInput />
 						<LocationIndex />
 						<ImageInput setIsLoading={setIsLoading} />
-						<H5>Receiving funds</H5>
+						<H5>
+							{formatMessage({ id: 'label.receiving_funds' })}
+						</H5>
 						<CaptionContainer>
-							You can set a custom Ethereum address or ENS to
-							receive donations.
+							{formatMessage({
+								id: 'label.you_can_set_a_custom_ethereum_address',
+							})}
 						</CaptionContainer>
 						<CheckBox
 							onChange={setIsSameMainnetGnosisAddress}
 							checked={isSameMainnetGnosisAddress}
-							label='I’ll raise & receive funds on Mainnet and Gnosis Chain networks with the same address.'
+							label={formatMessage({
+								id: 'label.ill_raise_and_receive_funds_on_mainnet_and_gnosis',
+							})}
 						/>
 						<WalletAddressInput
 							networkId={ethereumId}
@@ -300,7 +309,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							setIsActive={e => {
 								if (!e && !gnosisAddressActive)
 									return showToastError(
-										'You must select at least one address',
+										formatMessage({
+											id: 'label.you_must_select_at_least_one_address',
+										}),
 									);
 								if (!e) unregister(EInputs.mainAddress);
 								setMainnetAddressActive(e);
@@ -315,7 +326,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							setIsActive={e => {
 								if (!e && !mainnetAddressActive)
 									return showToastError(
-										'You must select at least one address',
+										formatMessage({
+											id: 'label.you_must_select_at_least_one_address',
+										}),
 									);
 								if (!e) unregister(EInputs.secondaryAddress);
 								setGnosisAddressActive(e);
@@ -323,29 +336,46 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						/>
 						<PublishTitle>
 							{isEditMode
-								? 'Publish edited project'
-								: `Let's Publish!`}
+								? formatMessage({
+										id: 'label.publish_edited_project',
+								  })
+								: formatMessage({ id: 'label.lets_publish' })}
 						</PublishTitle>
 						<PublishList>
 							<li>
-								{isEditMode ? 'Edited' : 'Newly published'}{' '}
-								projects will be &quot;unlisted&quot; until
-								reviewed by our team{isEditMode && ' again'}.
+								{isEditMode
+									? formatMessage({
+											id: 'label.edited_projects',
+									  })
+									: formatMessage({
+											id: 'label.newly_published_projects',
+									  })}{' '}
+								{formatMessage({
+									id: 'label.will_be_unlisted_until',
+								})}
+								{isEditMode &&
+									` ${formatMessage({
+										id: 'label.again',
+									})}`}
+								.
 							</li>
 							<li>
-								You can still access your project from your
-								account and share it with your friends via the
-								project link!
+								{formatMessage({
+									id: 'label.you_can_still_access_your_project_from_your_account',
+								})}
 							</li>
 							<li>
-								You&apos;ll receive an email from us once your
-								project is listed.
+								{formatMessage({
+									id: 'label.youll_receive_an_email_from_us_once_its_listed',
+								})}
 							</li>
 						</PublishList>
 						<Buttons>
 							{(!isEditMode || isDraft) && (
 								<OutlineButton
-									label='PREVIEW '
+									label={formatMessage({
+										id: 'label.preview',
+									})}
 									buttonType='primary'
 									disabled={isLoading}
 									icon={<IconExternalLink size={16} />}
@@ -356,7 +386,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								/>
 							)}
 							<Button
-								label='PUBLISH'
+								label={formatMessage({ id: 'label.publish' })}
 								buttonType='primary'
 								type='submit'
 								disabled={isLoading}
@@ -364,7 +394,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							{isEditMode && (
 								<OutlineButton
 									onClick={() => !isLoading && router.back()}
-									label='CANCEL'
+									label={formatMessage({
+										id: 'label.cancel',
+									})}
 									buttonType='primary'
 									disabled={isLoading}
 								/>

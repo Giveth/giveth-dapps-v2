@@ -2,6 +2,7 @@ import { GLink, neutralColors, brandColors } from '@giveth/ui-design-system';
 import { BigNumber, utils } from 'ethers';
 import { FC, useState, useCallback, Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
 import { formatWeiHelper } from '@/helpers/number';
 import { PoolStakingConfig, StakingPlatform } from '@/types/config';
@@ -21,6 +22,7 @@ export const AmountInput: FC<IAmountInput> = ({
 	poolStakingConfig,
 	disabled = false,
 }) => {
+	const { formatMessage } = useIntl();
 	const [displayAmount, setDisplayAmount] = useState('');
 	const [activeStep, setActiveStep] = useState(0);
 
@@ -59,7 +61,9 @@ export const AmountInput: FC<IAmountInput> = ({
 		<>
 			<InputLabelRow justifyContent='space-between'>
 				<InputLabel>
-					<InputLabelText>Available: </InputLabelText>
+					<InputLabelText>
+						{formatMessage({ id: 'label.available' })}:{' '}
+					</InputLabelText>
 					<InputLabelValue>
 						&nbsp;
 						{formatWeiHelper(maxAmount)}

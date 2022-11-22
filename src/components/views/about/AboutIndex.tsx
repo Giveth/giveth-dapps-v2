@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useIntl } from 'react-intl';
 import {
 	H1,
 	Lead,
@@ -23,14 +24,17 @@ import { Arc } from '@/components/styled-components/Arc';
 import FlowerIcon from '/public/images/flower.svg';
 import AboutMission from './AboutMission';
 
-const tabTitles = ['Mission & Vision', 'History', 'Team'];
-
 const AboutHistory = dynamic(() => import('./AboutHistory'));
 const AboutTeam = dynamic(() => import('./AboutTeam'));
 
 const AboutIndex = () => {
+	const { formatMessage } = useIntl();
+	const tabTitles = [
+		formatMessage({ id: 'label.mission_vission' }),
+		formatMessage({ id: 'label.history' }),
+		formatMessage({ id: 'label.team' }),
+	];
 	const [activeTab, setActiveTab] = useState(tabTitles[0]);
-
 	return (
 		<>
 			<Upper>
@@ -44,17 +48,20 @@ const AboutIndex = () => {
 					/>
 				</TeamImageWrapper>
 				<Container>
-					<UpperTitle>Building the Future of Giving</UpperTitle>
+					<UpperTitle>
+						{formatMessage({
+							id: 'label.building_the_future_of_giving',
+						})}
+					</UpperTitle>
 					<UpperCaption>
-						Giveth is a community focused on Building the Future of
-						Giving using blockchain technology. Our vision is to
-						make giving effortless, to reward people all over the
-						world for creating positive change.
+						{formatMessage({ id: 'page.about.desc' })}
 					</UpperCaption>
 					<Link href={links.SUPPORT_US} passHref>
 						<SupportGivethButton
 							linkType='primary'
-							label='SUPPORT GIVETH'
+							label={formatMessage({
+								id: 'label.support_giveth',
+							})}
 							size='large'
 						/>
 					</Link>
@@ -66,27 +73,24 @@ const AboutIndex = () => {
 					<Image src={FlowerIcon} alt='flower icon' />
 				</Flower>
 				<MiddleBody>
-					<H1>About us</H1>
+					<H1>{formatMessage({ id: 'component.title.about_us' })}</H1>
 					<br />
 					<Lead>
-						Giveth is a community focused on Building the Future of
-						Giving using blockchain technology. Our intention is to
-						support and reward the funding of public goods by
-						creating open, transparent and free access to the
-						revolutionary funding opportunities available within the
-						Ethereum ecosystem.
+						{formatMessage({ id: 'page.about_us.desc.one' })}
 					</Lead>
 					<br />
 					<Lead>
-						Giveth is building a culture of giving that empowers and
-						rewards those who give -- to projects, to society, and
-						to the world. We aim to inspire our community to
-						participate in an ecosystem of collective support,
-						abundance and value-creation. Check out our{' '}
-						<ExternalLink title='Calendar' href={links.CALENDAR} />{' '}
-						and{' '}
-						<InternalLink href={Routes.Join} title='Join Page' /> to
-						get more involved.
+						{formatMessage({ id: 'page.about_us.desc.two' })}{' '}
+						<ExternalLink
+							title={formatMessage({ id: 'label.calendar' })}
+							href={links.CALENDAR}
+						/>{' '}
+						{formatMessage({ id: 'label.and' })}{' '}
+						<InternalLink
+							href={Routes.Join}
+							title={formatMessage({ id: 'label.join_page' })}
+						/>{' '}
+						{formatMessage({ id: 'label.to_get_more_involved' })}
 					</Lead>
 				</MiddleBody>
 			</Middle>

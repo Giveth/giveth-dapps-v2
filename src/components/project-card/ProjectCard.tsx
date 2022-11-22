@@ -16,11 +16,12 @@ import {
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 
+import { useIntl } from 'react-intl';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectCardBadges from './ProjectCardLikeAndShareButtons';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
 import { IProject } from '@/apollo/types/types';
-import { calcBiggestUnitDifferenceTime, htmlToText } from '@/lib/helpers';
+import { timeFromNow, htmlToText } from '@/lib/helpers';
 import ProjectCardImage from './ProjectCardImage';
 import {
 	addressToUserView,
@@ -61,6 +62,7 @@ const ProjectCard = (props: IProjectCard) => {
 	const isForeignOrg =
 		orgLabel !== ORGANIZATION.trace && orgLabel !== ORGANIZATION.giveth;
 	const name = adminUser?.name;
+	const { formatMessage, formatRelativeTime } = useIntl();
 
 	return (
 		<Link href={slugToProjectView(slug)} passHref>
@@ -84,8 +86,12 @@ const ProjectCard = (props: IProjectCard) => {
 				>
 					<div style={{ position: 'relative' }}>
 						<LastUpdatedContainer isHover={isHover}>
-							Last updated:
-							{calcBiggestUnitDifferenceTime(updatedAt)}
+							{formatMessage({ id: 'label.last_updated' })}:
+							{timeFromNow(
+								updatedAt,
+								formatRelativeTime,
+								formatMessage({ id: 'label.just_now' }),
+							)}
 						</LastUpdatedContainer>
 
 						<InternalLink href={slugToProjectView(slug)}>
@@ -111,7 +117,10 @@ const ProjectCard = (props: IProjectCard) => {
 						<PriceText>
 							${Math.ceil(totalDonations as number)}
 						</PriceText>
-						<LightSubline> Raised</LightSubline>
+						<LightSubline>
+							{' '}
+							{formatMessage({ id: 'label.raised_two' })}
+						</LightSubline>
 					</Flex>
 					{verified && (
 						<>
@@ -122,7 +131,11 @@ const ProjectCard = (props: IProjectCard) => {
 										<IconVerifiedBadge16
 											color={semanticColors.jade[500]}
 										/>
-										<VerifiedText>VERIFIED</VerifiedText>
+										<VerifiedText>
+											{formatMessage({
+												id: 'label.verified',
+											})}
+										</VerifiedText>
 									</Flex>
 									<Flex alignItems='center' gap='2px'>
 										<GivBackIconContainer>
@@ -131,7 +144,11 @@ const ProjectCard = (props: IProjectCard) => {
 												color={brandColors.giv[500]}
 											/>
 										</GivBackIconContainer>
-										<GivBackText>GIVBACKS</GivBackText>
+										<GivBackText>
+											{formatMessage({
+												id: 'label.givback_eligible',
+											})}
+										</GivBackText>
 									</Flex>
 								</Flex>
 								<GivpowerRankContainer
@@ -157,7 +174,7 @@ const ProjectCard = (props: IProjectCard) => {
 							<CustomizedDonateButton
 								linkType='primary'
 								size='small'
-								label='DONATE'
+								label={formatMessage({ id: 'label.donate' })}
 								isHover={isHover}
 							/>
 						</Link>
@@ -192,10 +209,12 @@ const LightSubline = styled(Subline)`
 `;
 
 const VerifiedText = styled(Subline)`
+	text-transform: uppercase;
 	color: ${semanticColors.jade[500]};
 `;
 
 const GivBackText = styled(Subline)`
+	text-transform: uppercase;
 	color: ${brandColors.giv[500]};
 `;
 

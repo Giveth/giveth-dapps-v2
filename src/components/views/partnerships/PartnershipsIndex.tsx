@@ -6,6 +6,7 @@ import {
 	deviceSize,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 
 import PartnershipsCard from './PartnershipsCard';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -13,6 +14,8 @@ import { Arc } from '@/components/styled-components/Arc';
 import { PartnershipArray, IPartner } from '@/content/Partnerships';
 
 const PartnershipsIndex = () => {
+	const { formatMessage } = useIntl();
+
 	function sortPartners(x: IPartner, y: IPartner) {
 		return x.title.localeCompare(y.title);
 	}
@@ -25,16 +28,24 @@ const PartnershipsIndex = () => {
 			<MustardDot />
 			<PurpleArc />
 			<Wrapper>
-				<Title>Partnerships</Title>
+				<Title>
+					{formatMessage({ id: 'component.title.partnerships' })}
+				</Title>
 				<Caption>
-					We have many partnerships in the Ethereum Community.
+					{formatMessage({ id: 'label.we_have_many_partnerships' })}
 				</Caption>
 				<PartnershipsContainer>
-					<OurPartners>Our partners and friends</OurPartners>
+					<OurPartners>
+						{formatMessage({
+							id: 'label.our_partners_and_friends',
+						})}
+					</OurPartners>
 					{sortedPartnerships.map((partner: IPartner) => (
 						<PartnershipsCard
 							key={partner.title}
-							description={partner.description}
+							description={formatMessage({
+								id: partner.description,
+							})}
 							link={partner.link}
 							icon={partner.icon}
 							title={partner.title}

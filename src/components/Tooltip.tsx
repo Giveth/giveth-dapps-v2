@@ -10,6 +10,7 @@ import {
 import styled from 'styled-components';
 import { createPortal } from 'react-dom';
 import { zIndex } from '@/lib/constants/constants';
+import useDetectDevice from '@/hooks/useDetectDevice';
 
 export interface ITooltipDirection {
 	direction: 'right' | 'left' | 'top' | 'bottom';
@@ -32,6 +33,8 @@ export const Tooltip: FC<ITooltipProps> = ({
 	const [style, setStyle] = useState<CSSProperties>({});
 	const el = useRef(document.createElement('div'));
 	const childRef = useRef<HTMLDivElement>(null);
+	const { isMobile } = useDetectDevice();
+
 	useEffect(() => {
 		const current = el.current;
 		const body = document.querySelector('body') as HTMLElement;
@@ -50,16 +53,18 @@ export const Tooltip: FC<ITooltipProps> = ({
 		if (typeof window === 'undefined') return;
 		const parentRect = parentRef.current.getBoundingClientRect();
 		const childRect = childRef.current?.getBoundingClientRect();
+
 		const _style = tooltipStyleCalc(
 			{
 				direction,
 				align,
 			},
+			isMobile,
 			parentRect,
 			childRect,
 		);
 		setStyle(_style);
-	}, [align, direction, parentRef, childRef]);
+	}, [align, direction, parentRef, childRef, isMobile]);
 
 	return createPortal(
 		style.top ? (
@@ -99,7 +104,6 @@ const translateYForRightLeft = (
 	switch (align) {
 		case 'top':
 			return `-100%`;
-
 		case 'bottom':
 			return `-${parentRect.width + ARROW_SIZE}px`;
 
@@ -110,6 +114,7 @@ const translateYForRightLeft = (
 
 const tooltipStyleCalc = (
 	position: ITooltipDirection,
+	isMobile: Boolean,
 	parentRect: DOMRect,
 	childRect?: DOMRect, // left it here for future usage
 ): CSSProperties => {
@@ -117,39 +122,56 @@ const tooltipStyleCalc = (
 	let style = {};
 	let translateX;
 	let translateY;
-	switch (direction) {
-		case 'top':
-			translateX = translateXForTopBottom(align, parentRect);
-			style = {
-				top: parentRect.top - ARROW_SIZE,
-				left: parentRect.left,
-				transform: `translate(${translateX}, -100%)`,
-			};
-			break;
-		case 'bottom':
-			translateX = translateXForTopBottom(align, parentRect);
-			style = {
-				top: parentRect.bottom + ARROW_SIZE,
-				left: parentRect.left,
-				transform: `translate(${translateX}, 0)`,
-			};
-			break;
-		case 'right':
-			translateY = translateYForRightLeft(align, parentRect);
-			style = {
-				top: parentRect.bottom,
-				left: parentRect.right + ARROW_SIZE,
-				transform: `translate(0, ${translateY})`,
-			};
-			break;
-		case 'left':
-			translateY = translateYForRightLeft(align, parentRect);
-			style = {
-				top: parentRect.bottom,
-				left: parentRect.left - ARROW_SIZE,
-				transform: `translate(-100%, ${translateY})`,
-			};
-			break;
+	if (isMobile && direction !== 'bottom') {
+		style = {
+			top: parentRect.top - ARROW_SIZE - 50,
+			left: 10,
+			transform: `translate(${translateX}, -100%)`,
+			width: '95vw',
+		};
+	} else if (isMobile && direction === 'bottom') {
+		style = {
+			top: parentRect.bottom + ARROW_SIZE,
+			left: 10,
+			transform: `translate(${translateX}, 0)`,
+			width: '95vw',
+		};
+	} else {
+		switch (direction) {
+			case 'top':
+				translateX = translateXForTopBottom(align, parentRect);
+				style = {
+					top: parentRect.top - ARROW_SIZE,
+					left: parentRect.left,
+					transform: `translate(${translateX}, -100%)`,
+				};
+				break;
+			case 'bottom':
+				translateX = translateXForTopBottom(align, parentRect);
+				style = {
+					top: parentRect.bottom + ARROW_SIZE,
+					left: parentRect.left,
+					transform: `translate(${translateX}, 0)`,
+				};
+				break;
+
+			case 'right':
+				translateY = translateYForRightLeft(align, parentRect);
+				style = {
+					top: parentRect.bottom,
+					left: parentRect.right + ARROW_SIZE,
+					transform: `translate(0, ${translateY})`,
+				};
+				break;
+			case 'left':
+				translateY = translateYForRightLeft(align, parentRect);
+				style = {
+					top: parentRect.bottom,
+					left: parentRect.left - ARROW_SIZE,
+					transform: `translate(-100%, ${translateY})`,
+				};
+				break;
+		}
 	}
 	return style;
 };

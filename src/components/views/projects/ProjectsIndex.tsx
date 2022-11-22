@@ -7,6 +7,7 @@ import {
 	H5,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
 
 import ProjectCard from '@/components/project-card/ProjectCard';
@@ -46,6 +47,7 @@ interface IQueries {
 }
 
 const ProjectsIndex = (props: IProjectsView) => {
+	const { formatMessage } = useIntl();
 	const { projects, totalCount: _totalCount } = props;
 
 	const user = useAppSelector(state => state.user.userData);
@@ -219,7 +221,15 @@ const ProjectsIndex = (props: IProjectsView) => {
 						alignItems={isMobile ? 'stretch' : 'center'}
 					>
 						<Title>
-							Explore <span>{totalCount} Projects</span>
+							{formatMessage({
+								id: 'page.projects.title.explore',
+							})}
+							<span>
+								{totalCount}{' '}
+								{formatMessage({
+									id: 'page.projects.title.projects',
+								})}
+							</span>
 						</Title>
 						<ProjectsSortSelect />
 					</Flex>
@@ -230,7 +240,13 @@ const ProjectsIndex = (props: IProjectsView) => {
 					<>
 						<StyledButton
 							onClick={loadMore}
-							label={isLoading ? '' : 'LOAD MORE'}
+							label={
+								isLoading
+									? ''
+									: formatMessage({
+											id: 'component.button.load_more',
+									  })
+							}
 							icon={
 								isLoading && (
 									<LoadingDotIcon>
@@ -241,7 +257,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 						/>
 						<StyledButton
 							onClick={handleCreateButton}
-							label='Create a Project'
+							label={formatMessage({
+								id: 'component.button.create_project',
+							})}
 							transparent
 						/>
 					</>

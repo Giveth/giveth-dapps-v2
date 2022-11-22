@@ -1,4 +1,5 @@
 import React, { Dispatch, FC, SetStateAction, useState } from 'react';
+import { useIntl } from 'react-intl';
 import {
 	H5,
 	Caption,
@@ -37,6 +38,7 @@ interface ImageInputProps {
 
 const ImageInput: FC<ImageInputProps> = ({ setIsLoading }) => {
 	const { getValues, setValue } = useFormContext();
+	const { formatMessage } = useIntl();
 
 	const [image, setImage] = useState(getValues(EInputs.image));
 	const [isUploadTab, setIsUploadTab] = useState(true);
@@ -66,9 +68,13 @@ const ImageInput: FC<ImageInputProps> = ({ setIsLoading }) => {
 
 	return (
 		<>
-			<H5>Add an image to your project</H5>
+			<H5>
+				{formatMessage({ id: 'label.add_an_image_to_your_project' })}
+			</H5>
 			<CaptionContainer>
-				Displayed in the header of the project page.
+				{formatMessage({
+					id: 'label.displayed_in_the_header_of_the_project',
+				})}
 			</CaptionContainer>
 
 			<Tabs>
@@ -76,13 +82,13 @@ const ImageInput: FC<ImageInputProps> = ({ setIsLoading }) => {
 					onClick={() => setIsUploadTab(true)}
 					isActive={isUploadTab}
 				>
-					Upload cover image
+					{formatMessage({ id: 'label.upload_cover_image' })}
 				</Tab>
 				<Tab
 					onClick={() => setIsUploadTab(false)}
 					isActive={!isUploadTab}
 				>
-					Search for photos
+					{formatMessage({ id: 'label.search_for_photos' })}
 				</Tab>
 			</Tabs>
 
@@ -100,16 +106,21 @@ const ImageInput: FC<ImageInputProps> = ({ setIsLoading }) => {
 
 				{attributes.name && (
 					<Attributes>
-						Photo by{' '}
+						{formatMessage({ id: 'label.photo_by' })}{' '}
 						<ExternalLink
 							href={unsplashPhoto(attributes.username)}
 							title={attributes.name}
 						/>{' '}
-						on <ExternalLink href={unsplashUrl} title='Unsplash' />
+						{formatMessage({ id: 'label.on' })}{' '}
+						<ExternalLink href={unsplashUrl} title='Unsplash' />
 					</Attributes>
 				)}
 
-				<Caption>Select an image from our gallery.</Caption>
+				<Caption>
+					{formatMessage({
+						id: 'label.select_an_image_from_our_gallery',
+					})}
+				</Caption>
 				<PickImageContainer>
 					{OurImages.map((imageOption: any, index: number) => (
 						<ColorBox
@@ -122,7 +133,7 @@ const ImageInput: FC<ImageInputProps> = ({ setIsLoading }) => {
 						<Separator />
 						<RemoveBox isActive={!!image} onClick={removeImage}>
 							<IconTrash size={24} />
-							<div>REMOVE</div>
+							<div>{formatMessage({ id: 'label.remove' })}</div>
 						</RemoveBox>
 					</div>
 				</PickImageContainer>
@@ -197,7 +208,7 @@ const RemoveBox = styled(FlexCenter)<{ isActive: boolean }>`
 	flex-direction: column;
 	color: ${props =>
 		props.isActive ? neutralColors.gray[700] : neutralColors.gray[500]};
-
+	text-transform: uppercase;
 	> :first-child {
 		color: inherit;
 	}
