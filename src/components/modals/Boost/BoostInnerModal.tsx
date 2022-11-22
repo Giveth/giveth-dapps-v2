@@ -47,6 +47,7 @@ import { client } from '@/apollo/apolloClient';
 import { IPowerBoosting } from '@/apollo/types/types';
 import { useAppSelector } from '@/features/hooks';
 import LoadingAnimation from '@/animations/loading_giv.json';
+import { useProjectContext } from '@/context/project.context';
 import type { FC, Dispatch, SetStateAction } from 'react';
 import type { BigNumber } from 'ethers';
 
@@ -74,6 +75,9 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 	const [boostedProjects, setBoostedProjects] = useState<IPowerBoosting[]>(
 		[],
 	);
+
+	const { fetchProjectBoosters } = useProjectContext();
+
 	const boostedProjectsCount = boostedProjects.length ?? 0;
 	const user = useAppSelector(state => state.user.userData);
 	const isOnlyBoostedProjectIsThisProject =
@@ -189,6 +193,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 				projectId: +projectId,
 			},
 		});
+		fetchProjectBoosters(+projectId);
 		setIsSaving(false);
 		if (res) {
 			setFinalPercentage(percentage);
