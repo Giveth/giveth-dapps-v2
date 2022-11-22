@@ -95,14 +95,22 @@ export const fetchNotificationsData = async (
 	query: any = {},
 	additionalOptions: RequestInit = {},
 ) => {
-	const data: Promise<INotificationsState> = await getRequest(
-		`${config.MICROSERVICES.notification}`,
-		true,
-		query,
-		undefined,
-		additionalOptions,
-	);
-	return data;
+	try {
+		const data: Promise<INotificationsState> = await getRequest(
+			`${config.MICROSERVICES.notification}`,
+			true,
+			query,
+			undefined,
+			additionalOptions,
+		);
+		return data;
+	} catch (e) {
+		captureException(e, {
+			tags: {
+				section: 'setNotificationRead',
+			},
+		});
+	}
 };
 
 export const setNotificationRead = async (notificationId: number) => {
