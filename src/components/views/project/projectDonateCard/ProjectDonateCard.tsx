@@ -293,40 +293,43 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 			>
 				{isMobile && <BlueBar />}
 
-				<BoostWrapper isMobile={isMobile}>
-					{!isMobile && (
-						<Flex gap='8px' alignItems='center'>
-							<IconRocketInSpace24 />
-							<Subline>GIVPOWER RANK</Subline>
-							<IconWithTooltip
-								icon={<IconHelpFilled16 />}
-								direction={'bottom'}
-							>
-								<BoostTooltip>
-									Boost this project with GIVpower to improve
-									its rank! Rank is updated at the beginning
-									of every GIVbacks round. You can see the
-									projected rank for next round as well below.
-								</BoostTooltip>
-							</IconWithTooltip>
-						</Flex>
-					)}
-					<Flex gap='8px' alignItems='flex-end'>
-						{isMobile && projectPower?.totalPower !== 0 && (
-							<IconRocketInSpace32 />
+				{isActive && (
+					<BoostWrapper isMobile={isMobile}>
+						{!isMobile && (
+							<Flex gap='8px' alignItems='center'>
+								<IconRocketInSpace24 />
+								<Subline>GIVPOWER RANK</Subline>
+								<IconWithTooltip
+									icon={<IconHelpFilled16 />}
+									direction={'bottom'}
+								>
+									<BoostTooltip>
+										Boost this project with GIVpower to
+										improve its rank! Rank is updated at the
+										beginning of every GIVbacks round. You
+										can see the projected rank for next
+										round as well below.
+									</BoostTooltip>
+								</IconWithTooltip>
+							</Flex>
 						)}
-						<CurrentRank projectPower={projectPower} />
-						<NextRank
-							projectPower={projectPower}
-							projectFuturePower={projectFuturePower}
-						/>
-						<FlexSpacer />
-						<BoostButton onClick={handleBoostClick}>
-							<IconRocketInSpace />
-							<BoostButtonText>Boost</BoostButtonText>
-						</BoostButton>
-					</Flex>
-				</BoostWrapper>
+						<Flex gap='8px' alignItems='flex-end'>
+							{isMobile && projectPower?.totalPower !== 0 && (
+								<IconRocketInSpace32 />
+							)}
+							<CurrentRank projectPower={projectPower} />
+							<NextRank
+								projectPower={projectPower}
+								projectFuturePower={projectFuturePower}
+							/>
+							<FlexSpacer />
+							<BoostButton onClick={handleBoostClick}>
+								<IconRocketInSpace />
+								<BoostButtonText>Boost</BoostButtonText>
+							</BoostButton>
+						</Flex>
+					</BoostWrapper>
+				)}
 				<DonateWrapper isMobile={isMobile}>
 					{!isMobile && (
 						<ProjectCardOrgBadge
