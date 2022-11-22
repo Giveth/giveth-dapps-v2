@@ -106,8 +106,8 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
 					const _allocated = new BigNumber(
 						powerBoosting.user.givpowerBalance,
 					)
-						.multipliedBy(100)
-						.div(powerBoosting.percentage);
+						.multipliedBy(powerBoosting.percentage)
+						.div(100);
 					powerBoosting.user.allocated = formatWeiHelper(_allocated);
 					_total = _total.plus(_allocated);
 				}
