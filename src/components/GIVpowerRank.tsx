@@ -39,7 +39,9 @@ export const NextRank: FC<IGIVpowerRank> = ({
 			<H6 weight={700}>
 				{projectFuturePower?.powerRank
 					? `#${projectFuturePower?.powerRank}`
-					: '--'}
+					: projectPower?.totalPower === 0
+					? '--'
+					: `#${projectPower?.powerRank}`}
 			</H6>
 		</NextRankContainer>
 	);
