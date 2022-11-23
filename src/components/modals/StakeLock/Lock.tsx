@@ -174,8 +174,8 @@ const LockModal: FC<ILockModalProps> = ({
 							<LockingBrief round={round} amount={amount} />
 							<TotalGIVpowerBox />
 							<P>
-								Use your GIVpower to support projects on Giveth
-								while earning rewards.
+								Use your GIVpower to support verified projects
+								on Giveth while earning rewards.
 							</P>
 							<BoostButton
 								linkType='primary'
