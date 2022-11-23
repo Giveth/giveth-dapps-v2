@@ -293,7 +293,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 			>
 				{isMobile && <BlueBar />}
 
-				{isActive && (
+				{isActive && verified && (
 					<BoostWrapper isMobile={isMobile}>
 						{!isMobile && (
 							<Flex gap='8px' alignItems='center'>
