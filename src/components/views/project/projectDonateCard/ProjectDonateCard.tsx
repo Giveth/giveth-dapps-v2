@@ -528,7 +528,7 @@ interface IWrapperWithHeight extends IWrapper {
 const Wrapper = styled(motion.div)<IWrapperWithHeight>`
 	margin-top: -62px;
 	height: fit-content;
-	z-index: ${zIndex.HEADER};
+	z-index: ${zIndex.BOTTOM_SHEET};
 	align-self: flex-start;
 	width: 100%;
 	position: fixed;
