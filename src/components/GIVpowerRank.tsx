@@ -22,10 +22,14 @@ export const NextRank: FC<IGIVpowerRank> = ({
 	projectPower,
 	projectFuturePower,
 }) => {
+	const projectedRank =
+		projectFuturePower?.totalPower === 0
+			? undefined
+			: projectFuturePower?.powerRank;
 	const goingUp =
-		!projectFuturePower?.powerRank || !projectPower?.powerRank
+		!projectedRank || !projectPower?.powerRank
 			? 0
-			: projectFuturePower.powerRank - projectPower?.powerRank;
+			: projectedRank - projectPower?.powerRank;
 	return (
 		<NextRankContainer state={goingUp} alignItems='baseline' gap='4px'>
 			{goingUp === 0 ? (
@@ -35,10 +39,10 @@ export const NextRank: FC<IGIVpowerRank> = ({
 			) : (
 				<IconArrowUp16 />
 			)}
-			{!projectFuturePower?.powerRank && <IconRocketInSpace16 />}
+			{!projectedRank && <IconRocketInSpace16 />}
 			<H6 weight={700}>
-				{projectFuturePower?.powerRank
-					? `#${projectFuturePower?.powerRank}`
+				{projectedRank
+					? `#${projectedRank}`
 					: projectPower?.totalPower === 0
 					? '--'
 					: `#${projectPower?.powerRank}`}
