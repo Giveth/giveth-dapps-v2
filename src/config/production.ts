@@ -174,7 +174,7 @@ const config: EnvConfig = {
 							link: 'https://cultdao.io/',
 						},
 						exploited: true,
-						farmEndTimeMS: 1668200400000,
+						farmEndTimeMS: 1664922291000,
 					},
 					{
 						network: MAINNET_NETWORK_NUMBER,
