@@ -329,7 +329,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 											for details.
 										</>
 									) : (
-										'Harvest your rewards and move your funds to another farm to keep earning rewards '
+										'Harvest your rewards and move your funds to another farm to keep earning.'
 									)}
 								</DisableModalText>
 								<DisableModalCloseButton
