@@ -130,12 +130,12 @@ const ProfileOverviewTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 					{myAccount ? (
 						<ContributeCard
 							data1={{
-								label: 'Total Amount of GIVpower',
-								value: `${formatWeiHelper(givPower.balance)}`,
-							}}
-							data2={{
 								label: 'Projects Boosted',
 								value: boostedProjectsCount,
+							}}
+							data2={{
+								label: 'GIVpower',
+								value: `${formatWeiHelper(givPower.balance)}`,
 							}}
 						/>
 					) : (
