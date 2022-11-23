@@ -202,12 +202,12 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({
 					{myAccount ? (
 						<ContributeCard
 							data1={{
-								label: 'Total Amount of GIVpower',
-								value: `${formatWeiHelper(givPower.balance)}`,
-							}}
-							data2={{
 								label: 'Projects Boosted',
 								value: boostedProjectsCount,
+							}}
+							data2={{
+								label: 'GIVpower',
+								value: `${formatWeiHelper(givPower.balance)}`,
 							}}
 						/>
 					) : (

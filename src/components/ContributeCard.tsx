@@ -66,12 +66,12 @@ export const PublicGIVpowerContributeCard: FC<IUserProfileView> = ({
 	return (
 		<ContributeCard
 			data1={{
-				label: 'total Amount of GIVpower',
-				value: total !== undefined ? formatWeiHelper(total) : '--',
-			}}
-			data2={{
 				label: 'Projects boosted',
 				value: user.boostedProjectsCount || 0,
+			}}
+			data2={{
+				label: 'GIVpower',
+				value: total !== undefined ? formatWeiHelper(total) : '--',
 			}}
 		/>
 	);
