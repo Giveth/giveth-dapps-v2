@@ -8,7 +8,7 @@ export const profileTabs = {
 	likedProjects: '?tab=liked',
 	projects: '?tab=projects',
 	donations: '?tab=donations',
-	boosted: '?tab=boosted',
+	boosted: '?tab=givpower',
 };
 
 const Routes = {
