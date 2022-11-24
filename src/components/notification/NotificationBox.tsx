@@ -44,7 +44,12 @@ export const NotificationBox: FC<INotificationBox> = ({
 	}, [notification.id]);
 
 	return (
-		<NotificationBoxContainer gap='16px' isShort={short} ref={NotifRef}>
+		<NotificationBoxContainer
+			gap='16px'
+			isShort={short}
+			ref={NotifRef}
+			role='notification'
+		>
 			{!notification.isRead && <UnreadCircle isShort={short} />}
 			{!short && (
 				<IconContainer>
