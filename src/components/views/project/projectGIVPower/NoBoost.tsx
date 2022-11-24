@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { QuoteText } from '@giveth/ui-design-system';
+import { QuoteText, IconRocketInSpace24 } from '@giveth/ui-design-system';
 
 const NoBoost = ({ isAdmin }: { isAdmin: boolean }) => {
 	return (
@@ -14,7 +14,7 @@ const NoBoost = ({ isAdmin }: { isAdmin: boolean }) => {
 			) : (
 				<div>
 					This project doesn't have any GIVpower behind it! Give it a
-					boost rocket
+					boost <IconRocketInSpace24></IconRocketInSpace24>
 				</div>
 			)}
 		</Wrapper>

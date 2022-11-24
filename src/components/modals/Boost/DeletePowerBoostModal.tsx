@@ -44,7 +44,8 @@ export const DeletePowerBoostModal: FC<IDeletePowerBoostModal> = ({
 				{canDelete ? (
 					<Content>
 						If you remove GIVpower from this project, it will be
-						distributed to other projects you have boosted.
+						distributed proportionally to the other projects you
+						have boosted.
 					</Content>
 				) : (
 					<Content>

@@ -61,7 +61,7 @@ const TotalGIVpowerBox = () => {
 		<BoxContainer>
 			{totalGIVpower ? (
 				<>
-					<H6>You Have</H6>
+					<H6>You have</H6>
 					<BoxRow
 						alignItems='baseline'
 						gap='8px'

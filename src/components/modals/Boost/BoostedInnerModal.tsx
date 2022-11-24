@@ -33,7 +33,7 @@ const BoostedInnerModal: FC<IBoostedModalProps> = ({
 					GIVpower.
 					<br />
 					Note: This project’s rank will only change at the start of
-					of the next GIVbacks round
+					of the next GIVbacks round.
 				</Desc>
 				<ActionsSection>
 					<GetButton
