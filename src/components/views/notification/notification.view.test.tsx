@@ -49,6 +49,6 @@ afterAll(() => {
 test('show no notifications when we dont have notifications', async () => {
 	renderWithProviders(<NotificationView />);
 	expect(
-		await screen.getByText(/you don't have any notifications/i),
+		screen.getByText(/you don't have any notifications/i),
 	).toBeInTheDocument();
 });
