@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { renderWithProviders } from '@/tests/utils';
@@ -51,4 +51,10 @@ test('show no notifications when we dont have notifications', async () => {
 	expect(
 		screen.getByText(/you don't have any notifications/i),
 	).toBeInTheDocument();
+});
+
+test('show notifications', async () => {
+	renderWithProviders(<NotificationView />);
+	await waitFor(() => screen.getByRole('notification'));
+	expect(await screen.getByRole('notification')).toBeInTheDocument();
 });
