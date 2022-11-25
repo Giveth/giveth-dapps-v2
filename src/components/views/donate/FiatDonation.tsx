@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
-import { Button, H4 } from '@giveth/ui-design-system';
+import { useAppSelector } from '@/features/hooks';
+import { Button } from '@giveth/ui-design-system';
 import OnramperWidget from '@onramper/widget';
 import styled from 'styled-components';
 import { IProject } from '@/apollo/types/types';
@@ -11,14 +12,26 @@ const FiatDonation = (props: {
 	project: IProject;
 	setSuccessDonation: (i: ISuccessDonation) => void;
 }) => {
+	const isProd = process.env.NEXT_PUBLIC_ENV === 'production';
 	const { setSuccessDonation, project } = props;
+	const { id } = project;
+	const { userData, isSignedIn, isEnabled } = useAppSelector(
+		state => state.user,
+	);
+	const givethProjectId = isProd ? '1' : '41';
 	const [openOnramper, setOpenOnramper] = useState(false);
+	const [openDonorBox, setOpenDonorBox] = useState(false);
 	const mainnetAddress = project.addresses?.find(
 		i => i.networkId === config.PRIMARY_NETWORK.id,
 	)?.address;
+	const partnerContext = {
+		userId: isEnabled && userData && userData!.id,
+		userWallet: isEnabled && userData && userData?.walletAddress,
+		projectWallet: mainnetAddress,
+		projectId: id,
+	};
 	const wallets = {
 		ETH: { address: mainnetAddress },
-		// BTC: { address: '2N3oefVeg6stiTb5Kh3ozCSkaqmx91FDbsm' }, // Only for testing
 	};
 
 	return (
@@ -36,17 +49,51 @@ const FiatDonation = (props: {
 					<OnramperWidget
 						API_KEY={process.env.NEXT_PUBLIC_ONRAMPER_API_KEY}
 						filters={{
-							// onlyCryptos: ['ETH', 'BTC'],
-							onlyCryptos: ['ETH'],
+							onlyCryptos: ['ETH', 'USDC', 'USDT', 'RAI', 'DAI'],
 						}}
 						defaultFiat='USD'
+						defaultCrypto='USDC'
 						defaultAddrs={wallets}
-						redirectURL={'http://localhost:3000/donate/'}
+						redirectURL={'https://giveth.io/'}
+						partnerContext={partnerContext}
 					/>
 				</div>
-			) : (
+			) : openDonorBox ? (
 				<>
-					<H4>Coming soon ...</H4>
+					<script src='https://donorbox.org/widget.js'></script>
+					<iframe
+						src='https://donorbox.org/embed/giveth'
+						name='donorbox'
+						scrolling='no'
+						height='520px'
+						width='100%'
+						style={{
+							maxWidth: '500px',
+							minWidth: '250px',
+							maxHeight: 'none !important',
+						}}
+					></iframe>
+				</>
+			) : (
+				<Buttons>
+					{id === givethProjectId && (
+						<ButtonContainer>
+							<Button
+								label='CONTINUE WITH DONORBOX'
+								onClick={() => setOpenDonorBox(true)}
+								// disabled
+							/>
+							<ImageContainer>
+								<Image
+									src='/images/powered_by_donorbox.png'
+									width='165px'
+									height='24px'
+									alt={'Powered by Donorbox'}
+								/>
+							</ImageContainer>
+						</ButtonContainer>
+					)}
+
 					<ButtonContainer>
 						<Button
 							label='CONTINUE WITH ONRAMPER'
@@ -63,7 +110,7 @@ const FiatDonation = (props: {
 							alt={'Powered by OnRamper'}
 						/>
 					</ImageContainer>
-				</>
+				</Buttons>
 			)}
 		</FiatContainer>
 	);
@@ -72,11 +119,9 @@ const FiatDonation = (props: {
 const FiatContainer = styled.div`
 	display: flex;
 	flex-direction: column;
+	justify-content: center;
+	text-align: center;
 	align-items: center;
-
-	> h4 {
-		margin: 90px 0;
-	}
 `;
 const ImageContainer = styled.div`
 	width: 100%;
@@ -88,6 +133,10 @@ const ImageContainer = styled.div`
 `;
 const ButtonContainer = styled.div`
 	padding: 32px 0 0 0;
+`;
+
+const Buttons = styled.div`
+	margin: 40px 0 0 0;
 `;
 
 export default FiatDonation;
