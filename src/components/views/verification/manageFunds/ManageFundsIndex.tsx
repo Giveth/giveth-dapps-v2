@@ -2,8 +2,8 @@ import { useIntl } from 'react-intl';
 import { Button, H6, Lead, neutralColors, P } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-
 import { useForm } from 'react-hook-form';
+
 import AddAddressModal from '@/components/views/verification/manageFunds/AddAddressModal';
 import UserAddress from '@/components/views/verification/manageFunds/UserAddress';
 import { ContentSeparator, BtnContainer } from '../Common.sc';

@@ -11,6 +11,7 @@ export interface IProjectPower {
 	totalPower?: number;
 	updateTime: string;
 }
+
 export interface IProject {
 	id?: string;
 	title?: string;
@@ -56,6 +57,10 @@ export interface IProject {
 	projectVerificationForm?: IProjectVerification;
 	projectPower: IProjectPower;
 	verificationFormStatus?: EVerificationStatus;
+}
+
+export interface IDonationProject extends IProject {
+	givethAddresses: IWalletAddress[];
 }
 
 export interface IWalletAddress {
@@ -212,6 +217,9 @@ export interface IProjectMilestones {
 	mission?: string;
 	achievedMilestones?: string;
 	achievedMilestonesProofs?: string[];
+	problem?: string;
+	plans?: string;
+	impact?: string;
 }
 
 export interface IProjectManagingFunds {
@@ -270,7 +278,7 @@ export enum EVerificationSteps {
 	PROJECT_REGISTRY = 'projectRegistry',
 	PROJECT_CONTACTS = 'projectContacts',
 	MANAGING_FUNDS = 'managingFunds',
-	MILESTONES = 'milestones',
+	IMPACT = 'milestones',
 	TERM_AND_CONDITION = 'termAndCondition',
 	SUBMIT = 'submit',
 }

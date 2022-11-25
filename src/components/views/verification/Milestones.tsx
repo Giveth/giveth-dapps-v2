@@ -22,43 +22,40 @@ import { ContentSeparator, BtnContainer } from './Common.sc';
 import { useVerificationData } from '@/context/verification.context';
 import { client } from '@/apollo/apolloClient';
 import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
-import { EVerificationSteps } from '@/apollo/types/types';
+import { EVerificationSteps, IProjectMilestones } from '@/apollo/types/types';
 import DescriptionInput from '@/components/DescriptionInput';
 import { requiredOptions } from '@/lib/constants/regex';
-
-export interface IMilestonesForm {
-	foundationDate?: Date;
-	mission?: string;
-	achievedMilestones?: string;
-	achievedMilestonesProofs?: string[];
-}
 
 export default function Milestones() {
 	const [uploading, setUploading] = useState(false);
 
 	const { verificationData, setVerificationData, setStep, isDraft } =
 		useVerificationData();
+
 	const { milestones } = verificationData || {};
 	const {
 		control,
 		register,
 		handleSubmit,
 		formState: { errors, isDirty, isSubmitting },
-	} = useForm<IMilestonesForm>();
+	} = useForm<IProjectMilestones>();
 	const { formatMessage } = useIntl();
 
-	const handleNext = (formData: IMilestonesForm) => {
+	const handleNext = (formData: IProjectMilestones) => {
 		async function sendReq() {
 			const { data } = await client.mutate({
 				mutation: UPDATE_PROJECT_VERIFICATION,
 				variables: {
 					projectVerificationUpdateInput: {
 						projectVerificationId: Number(verificationData?.id),
-						step: EVerificationSteps.MILESTONES,
+						step: EVerificationSteps.IMPACT,
 						milestones: {
-							foundationDate: formData.foundationDate?.toString(),
+							problem: formData.problem,
+							foundationDate: formData.foundationDate,
 							mission: formData.mission,
 							achievedMilestones: formData.achievedMilestones,
+							impact: formData.impact,
+							plans: formData.plans,
 							achievedMilestonesProofs:
 								formData.achievedMilestonesProofs
 									? formData.achievedMilestonesProofs
@@ -86,9 +83,43 @@ export default function Milestones() {
 				</H6>
 				<LeadStyled>
 					{formatMessage({
-						id: 'page.verification.activity_and_milestones.one',
+						id: 'page.verification.activity_and_milestones.problem',
 					})}
 				</LeadStyled>
+				<br />
+				<DescriptionInput
+					height='82px'
+					defaultValue={milestones?.problem}
+					register={register}
+					registerOptions={isDraft ? requiredOptions.field : {}}
+					registerName='problem'
+					error={errors.problem}
+					disabled={!isDraft}
+				/>
+				<Lead>
+					{formatMessage({
+						id: 'page.verification.activity_and_milestones.two',
+					})}
+				</Lead>
+				<Paragraph>
+					{formatMessage({
+						id: 'page.verification.activity_and_milestones.three',
+					})}
+				</Paragraph>
+				<DescriptionInput
+					height='82px'
+					defaultValue={milestones?.mission}
+					register={register}
+					registerOptions={isDraft ? requiredOptions.field : {}}
+					registerName='mission'
+					error={errors.mission}
+					disabled={!isDraft}
+				/>
+				<Lead>
+					{formatMessage({
+						id: 'page.verification.activity_and_milestones.one',
+					})}
+				</Lead>
 				<br />
 				<DatePickerWrapper>
 					<IconChevronDown color={neutralColors.gray[600]} />
@@ -97,14 +128,20 @@ export default function Milestones() {
 						name='foundationDate'
 						defaultValue={
 							milestones?.foundationDate
-								? new Date(milestones?.foundationDate)
+								? milestones?.foundationDate
 								: undefined
 						}
 						rules={isDraft ? requiredOptions.date : {}}
 						render={({ field }) => (
 							<StyledDatePicker
-								selected={field.value}
-								onChange={date => field.onChange(date)}
+								selected={
+									field.value
+										? new Date(field.value)
+										: undefined
+								}
+								onChange={date =>
+									field.onChange(date?.toString())
+								}
 								dateFormat='MM/yyyy'
 								showMonthYearPicker
 								showPopperArrow={false}
@@ -124,28 +161,9 @@ export default function Milestones() {
 				)}
 				<LeadStyled>
 					{formatMessage({
-						id: 'page.verification.activity_and_milestones.two',
-					})}
-				</LeadStyled>
-				<Paragraph>
-					{formatMessage({
-						id: 'page.verification.activity_and_milestones.three',
-					})}
-				</Paragraph>
-				<DescriptionInput
-					height='82px'
-					defaultValue={milestones?.mission}
-					register={register}
-					registerOptions={isDraft ? requiredOptions.field : {}}
-					registerName='mission'
-					error={errors.mission}
-					disabled={!isDraft}
-				/>
-				<Lead>
-					{formatMessage({
 						id: 'page.verification.activity_and_milestones.four',
 					})}
-				</Lead>
+				</LeadStyled>
 				<Paragraph>
 					{formatMessage({
 						id: 'page.verification.activity_and_milestones.five',
@@ -158,6 +176,25 @@ export default function Milestones() {
 					registerOptions={isDraft ? requiredOptions.field : {}}
 					registerName='achievedMilestones'
 					error={errors.achievedMilestones}
+					disabled={!isDraft}
+				/>
+				<Lead>
+					{formatMessage({
+						id: 'page.verification.activity_and_milestones.impact1',
+					})}
+				</Lead>
+				<Paragraph>
+					{formatMessage({
+						id: 'page.verification.activity_and_milestones.impact2',
+					})}
+				</Paragraph>
+				<DescriptionInput
+					height='82px'
+					defaultValue={milestones?.impact}
+					register={register}
+					registerOptions={isDraft ? requiredOptions.field : {}}
+					registerName='impact'
+					error={errors.impact}
 					disabled={!isDraft}
 				/>
 				<Lead>
@@ -179,6 +216,21 @@ export default function Milestones() {
 							limit={5}
 						/>
 					)}
+				/>
+				<LeadStyled>
+					{formatMessage({
+						id: 'page.verification.activity_and_milestones.plans',
+					})}
+				</LeadStyled>
+				<br />
+				<DescriptionInput
+					height='82px'
+					defaultValue={milestones?.plans}
+					register={register}
+					registerOptions={isDraft ? requiredOptions.field : {}}
+					registerName='plans'
+					error={errors.plans}
+					disabled={!isDraft}
 				/>
 			</div>
 			<div>

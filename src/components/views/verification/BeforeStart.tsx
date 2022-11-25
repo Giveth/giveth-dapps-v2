@@ -46,7 +46,7 @@ const BeforeStart = () => {
 					<br />
 					<br />
 					{formatMessage({
-						id: 'page.verification.before_you_start.two',
+						id: 'page.verification.before_you_start.one',
 					})}
 					<br />
 					<br />
@@ -77,6 +77,11 @@ const BeforeStart = () => {
 					<br />
 					{formatMessage({
 						id: 'page.verification.before_you_start.seven',
+					})}
+					<br />
+					<br />
+					{formatMessage({
+						id: 'page.verification.before_you_start.eight',
 					})}
 				</Lead>
 			</div>

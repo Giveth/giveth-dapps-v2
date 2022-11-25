@@ -150,7 +150,7 @@ const FileUploader: FC<IFileUploader> = ({
 					<P>
 						{formatMessage({
 							id: 'label.drag_and_drop_an_image_or',
-						})}
+						})}{' '}
 						<span onClick={open}>
 							{formatMessage({ id: 'label.upload_from_device' })}
 						</span>

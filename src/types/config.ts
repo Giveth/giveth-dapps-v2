@@ -6,9 +6,7 @@ export interface BasicStakingConfig {
 	farmStartTimeMS?: number;
 	farmEndTimeMS?: number;
 	icon?: string;
-	active: boolean;
-	archived?: boolean;
-	paused?: boolean;
+	exploited?: boolean;
 }
 export enum StakingPlatform {
 	GIVETH = 'Staking',
@@ -156,6 +154,7 @@ interface MicroservicesConfig {
 }
 
 export interface EnvConfig {
+	GIVETH_PROJECT_ID: number;
 	MAINNET_NETWORK_NUMBER: number;
 	XDAI_NETWORK_NUMBER: number;
 	MAINNET_CONFIG: MainnetNetworkConfig;
@@ -166,13 +165,20 @@ export interface EnvConfig {
 	MICROSERVICES: MicroservicesConfig;
 }
 
+interface INetworkConfig {
+	name: string;
+	id: number;
+	chain: string;
+	mainToken: string;
+}
+
 export interface GlobalConfig extends EnvConfig {
 	TOKEN_NAME: string;
 	WEB3_POLLING_INTERVAL: number;
 	SUBGRAPH_POLLING_INTERVAL: number;
 	TOKEN_PRECISION: number;
-	PRIMARY_NETWORK: any;
-	SECONDARY_NETWORK: any;
+	PRIMARY_NETWORK: INetworkConfig;
+	SECONDARY_NETWORK: INetworkConfig;
 	NETWORKS_CONFIG: {
 		[key: number]: MainnetNetworkConfig | XDaiNetworkConfig;
 	};
