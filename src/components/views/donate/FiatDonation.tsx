@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import Image from 'next/image';
-import { useAppSelector } from '@/features/hooks';
+import styled from 'styled-components';
 import { Button } from '@giveth/ui-design-system';
 import OnramperWidget from '@onramper/widget';
-import styled from 'styled-components';
+import { useAppSelector } from '@/features/hooks';
 import { IProject } from '@/apollo/types/types';
 import { ISuccessDonation } from '@/components/views/donate/CryptoDonation';
 import config from '@/configuration';
@@ -12,13 +12,12 @@ const FiatDonation = (props: {
 	project: IProject;
 	setSuccessDonation: (i: ISuccessDonation) => void;
 }) => {
-	const isProd = process.env.NEXT_PUBLIC_ENV === 'production';
 	const { setSuccessDonation, project } = props;
 	const { id } = project;
 	const { userData, isSignedIn, isEnabled } = useAppSelector(
 		state => state.user,
 	);
-	const givethProjectId = isProd ? '1' : '41';
+	const givethProjectId = '1';
 	const [openOnramper, setOpenOnramper] = useState(false);
 	const [openDonorBox, setOpenDonorBox] = useState(false);
 	const mainnetAddress = project.addresses?.find(
