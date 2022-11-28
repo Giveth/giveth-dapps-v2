@@ -6,11 +6,13 @@ import {
 	Lead,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useRouter } from 'next/router';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch } from '@/features/hooks';
+import Routes from '@/lib/constants/Routes';
 
 interface IDeletePowerBoostModal extends IModal {
 	boostId: string;
@@ -26,7 +28,7 @@ export const DeletePowerBoostModal: FC<IDeletePowerBoostModal> = ({
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const dispatch = useAppDispatch();
-
+	const router = useRouter();
 	const onDelete = async () => {
 		deleteBoost(boostId);
 		closeModal();
@@ -49,8 +51,9 @@ export const DeletePowerBoostModal: FC<IDeletePowerBoostModal> = ({
 					</Content>
 				) : (
 					<Content>
-						You can&apos;t remove GIVpower from this project because
-						it is the only boost you have!
+						You can&apos;t remove your GIVpower from this project
+						because it is the only boost you have. Please boost
+						another project with GIVpower before continuing.
 					</Content>
 				)}
 				{canDelete ? (
@@ -63,11 +66,17 @@ export const DeletePowerBoostModal: FC<IDeletePowerBoostModal> = ({
 						/>
 					</>
 				) : (
-					<CustomButton
-						buttonType='texty-primary'
-						label='Dismiss'
-						onClick={closeModal}
-					/>
+					<>
+						<CustomButton
+							label='view projects'
+							onClick={() => router.push(Routes.Projects)}
+						/>
+						<CustomButton
+							buttonType='texty-primary'
+							label='Dismiss'
+							onClick={closeModal}
+						/>
+					</>
 				)}
 			</ConfirmPowerBoostModalContainer>
 		</Modal>
