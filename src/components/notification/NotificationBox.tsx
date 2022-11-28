@@ -21,7 +21,6 @@ export const NotificationBox: FC<INotificationBox> = ({
 	short = false,
 	markOneNotificationRead,
 }) => {
-	// const [isRead, setIsRead] = useState(notification.isRead);
 	const NotifRef = useRef(null);
 
 	useEffect(() => {
@@ -35,13 +34,17 @@ export const NotificationBox: FC<INotificationBox> = ({
 				);
 			}
 		};
+		let observerRefValue: any = null;
 		let observer = new IntersectionObserver(read);
-		if (NotifRef.current) observer.observe(NotifRef.current);
+		if (NotifRef.current) {
+			observer.observe(NotifRef.current);
+			observerRefValue = NotifRef.current;
+		}
 
 		return () => {
-			if (NotifRef.current) observer.unobserve(NotifRef.current);
+			if (observerRefValue) observer.unobserve(observerRefValue);
 		};
-	}, [notification.id]);
+	}, [markOneNotificationRead, notification.id, notification.isRead]);
 
 	return (
 		<NotificationBoxContainer
