@@ -1,17 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import { motion } from 'framer-motion';
-import { IProject } from '@/apollo/types/types';
 import ProjectCard from '@/components/project-card/ProjectCardAlt';
 import SocialBox from '@/components/views/donate/SocialBox';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { mediaQueries } from '@/lib/constants/constants';
 import useDetectDevice from '@/hooks/useDetectDevice';
+import { IDonateRouteProps } from '../../../../pages/donate/[slug]';
 
-const ProjectCardSelector = (props: { project: IProject }) => {
-	const { project } = props;
-
+const ProjectCardSelector: FC<IDonateRouteProps> = ({ project }) => {
 	const [wrapperHeight, setWrapperHeight] = useState<number>(0);
 
 	const { isMobile } = useDetectDevice();

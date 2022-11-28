@@ -13,7 +13,7 @@ interface ICheckBox {
 	label: string;
 	checked?: boolean;
 	disabled?: boolean;
-	size?: 14 | 16 | 18 | 20 | 24 | 32;
+	size?: 12 | 14 | 16 | 18 | 20 | 24 | 32;
 	labelSize?: 'Tiny' | 'Small' | 'Medium' | 'Big';
 }
 
@@ -53,13 +53,10 @@ const Wrapper = styled(Flex)<{
 	color: ${props =>
 		props.disabled ? neutralColors.gray[600] : neutralColors.gray[800]};
 	> div:first-child {
-		border: 2px solid
-			${props =>
-				props.disabled
-					? neutralColors.gray[400]
-					: neutralColors.gray[900]};
+		border-color: ${props =>
+			props.disabled ? neutralColors.gray[400] : neutralColors.gray[900]};
+		border-style: solid;
 		flex-shrink: 0;
-		border-radius: 4px;
 		width: ${props => `${props.size}px`};
 		height: ${props => `${props.size}px`};
 		background-color: ${props =>
@@ -68,11 +65,23 @@ const Wrapper = styled(Flex)<{
 	}
 	${props => {
 		switch (props.size) {
+			case 12:
+				return css`
+					gap: 10px;
+					> div:first-child {
+						border-width: 1px;
+						border-radius: 2px;
+					}
+					> span:last-child {
+						font-size: 0.75rem;
+					}
+				`;
 			case 14:
 				return css`
 					gap: 10px;
 					> div:first-child {
 						border-width: 1px;
+						border-radius: 2px;
 					}
 				`;
 			case 16:
@@ -94,6 +103,7 @@ const Wrapper = styled(Flex)<{
 					gap: 10px;
 					> div:first-child {
 						border-width: 2px;
+						border-radius: 4px;
 					}
 				`;
 			case 24:
@@ -101,6 +111,7 @@ const Wrapper = styled(Flex)<{
 					gap: 12px;
 					> div:first-child {
 						border-width: 2px;
+						border-radius: 4px;
 					}
 				`;
 			case 32:
@@ -108,6 +119,7 @@ const Wrapper = styled(Flex)<{
 					gap: 12px;
 					> div:first-child {
 						border-width: 2px;
+						border-radius: 4px;
 					}
 				`;
 			default:

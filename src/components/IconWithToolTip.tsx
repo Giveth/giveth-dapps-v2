@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ITooltipDirection, Tooltip } from './Tooltip';
 import type { FC, ReactNode } from 'react';
 
@@ -16,6 +16,18 @@ export const IconWithTooltip: FC<IIconWithTooltipProps> = ({
 }) => {
 	const [show, setShow] = useState(false);
 	const elRef = useRef<HTMLDivElement>(null);
+
+	function handleRemoveTooltip() {
+		setShow(false);
+	}
+
+	useEffect(() => {
+		window.addEventListener('scroll', handleRemoveTooltip);
+
+		return () => {
+			window.removeEventListener('scroll', handleRemoveTooltip);
+		};
+	}, []);
 
 	return (
 		<IconWithTooltipContainer

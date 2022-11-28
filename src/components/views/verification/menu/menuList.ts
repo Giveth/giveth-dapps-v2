@@ -4,7 +4,7 @@ const menuList = [
 	'label.social_profiles',
 	'label.registration',
 	'label.project_contact',
-	'label.milestones',
+	'label.impact',
 	'label.managing_funds',
 	'label.tos',
 	'label.done',
