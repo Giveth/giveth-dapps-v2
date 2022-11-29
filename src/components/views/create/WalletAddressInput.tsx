@@ -3,7 +3,6 @@ import { useIntl } from 'react-intl';
 import {
 	Caption,
 	H6,
-	IconETH,
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
@@ -25,6 +24,7 @@ import CheckBox from '@/components/Checkbox';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import useDelay from '@/hooks/useDelay';
+import { IconEthereum } from '@/components/Icons/Eth';
 
 interface IProps {
 	networkId: number;
@@ -257,7 +257,7 @@ const GnosisIcon = () => (
 
 const MainnetIcon = () => (
 	<ChainIconShadow>
-		<IconETH size={24} />
+		<IconEthereum size={24} />
 	</ChainIconShadow>
 );
 

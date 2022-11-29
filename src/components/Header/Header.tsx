@@ -3,7 +3,7 @@ import { FC, useState, useEffect } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { Button, GLink, IconGiveth } from '@giveth/ui-design-system';
+import { Button, GLink } from '@giveth/ui-design-system';
 
 import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
@@ -49,6 +49,7 @@ import {
 } from '@/features/modal/modal.slice';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { IconGIV } from '../Icons/GIV';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -247,7 +248,7 @@ const Header: FC<IHeader> = () => {
 						>
 							<BalanceButton outline theme={theme}>
 								<HBContainer>
-									<IconGiveth size={24} />
+									<IconGIV size={24} />
 									<HBContent size='Big'>
 										{formatWeiHelper(givBalance.balance)}
 									</HBContent>
