@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import { H2, Lead } from '@giveth/ui-design-system';
-import Lottie from 'react-lottie';
 import Image from 'next/image';
 import { useWeb3React } from '@web3-react/core';
 import { Button } from '../styled-components/Button';
@@ -14,6 +13,7 @@ import { Flex } from '../styled-components/Flex';
 import { AddTokenButton } from '../AddTokenButton';
 import { Container } from '@/components/Grid';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
+import { LottieControl } from '../animations/lottieControl';
 
 const SmileImage = styled.div`
 	position: absolute;
@@ -113,30 +113,6 @@ const SparkleBurstContainer = styled.div`
 	}
 `;
 
-const SparkleAnimationOptions = {
-	// loop: false,
-	animationData: SparkleAnimation,
-	rendererSettings: {
-		preserveAspectRatio: 'xMidYMid slice',
-	},
-};
-
-const SparkleBurstAnimationOptions = {
-	// loop: false,
-	animationData: SparkleBurstAnimation,
-	rendererSettings: {
-		preserveAspectRatio: 'xMidYMid slice',
-	},
-};
-
-const BlowingAnimationOptions = {
-	// loop: false,
-	animationData: BlowingAnimation,
-	rendererSettings: {
-		preserveAspectRatio: 'xMidYMid slice',
-	},
-};
-
 const ExploreRow = styled.div`
 	position: relative;
 `;
@@ -171,10 +147,9 @@ export const CongratulationsCard = () => {
 				<CongHeader weight={700}>
 					Congratulations!
 					<SparkleContainer>
-						<Lottie
-							options={SparkleAnimationOptions}
-							height={100}
-							width={100}
+						<LottieControl
+							animationData={SparkleAnimation}
+							size='100'
 							speed={0.8}
 						/>
 					</SparkleContainer>
@@ -188,10 +163,9 @@ export const CongratulationsCard = () => {
 						<AddTokenButton provider={library} showText={false} />
 						<SmileImage>
 							<SparkleBurstContainer>
-								<Lottie
-									options={SparkleBurstAnimationOptions}
-									height={200}
-									width={200}
+								<LottieControl
+									animationData={SparkleBurstAnimation}
+									size='200'
 									speed={0.8}
 								/>
 							</SparkleBurstContainer>
@@ -265,10 +239,9 @@ export const CongratulationsCard = () => {
 						<ExploreButton>explore the giveconomy</ExploreButton>
 					</a>
 					<BlowingContainer>
-						<Lottie
-							options={BlowingAnimationOptions}
-							height={100}
-							width={80}
+						<LottieControl
+							animationData={BlowingAnimation}
+							size={100}
 							speed={0.8}
 						/>
 					</BlowingContainer>
