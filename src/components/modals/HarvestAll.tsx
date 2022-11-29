@@ -64,7 +64,7 @@ import { LiquidityPosition } from '@/types/nfts';
 import { Flex } from '../styled-components/Flex';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { LottieControl } from '../animations/lottieControl';
+import LottieControl from '@/components/animations/lottieControl';
 import type { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 
 interface IHarvestAllModalProps extends IModal {

@@ -17,7 +17,7 @@ import TikAnimation from '@/animations/tik.json';
 import ErrorAnimation from '@/animations/error.json';
 import { AddTokenButton } from '../AddTokenButton';
 import { Flex } from '../styled-components/Flex';
-import { LottieControl } from '../animations/lottieControl';
+import LottieControl from '@/components/animations/lottieControl';
 
 const AddTokenRow = styled(Flex)`
 	margin-top: 16px;

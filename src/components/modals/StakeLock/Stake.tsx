@@ -38,7 +38,7 @@ import {
 	SimplePoolStakingConfig,
 	StakingPlatform,
 } from '@/types/config';
-import { LottieControl } from '@/components/animations/lottieControl';
+import LottieControl from '@/components/animations/lottieControl';
 
 interface IStakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;

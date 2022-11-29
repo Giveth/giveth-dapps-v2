@@ -19,7 +19,7 @@ import {
 	VerificationCard,
 	VerificationContainer,
 } from './Common.sc';
-import { LottieControl } from '@/components/animations/lottieControl';
+import LottieControl from '@/components/animations/lottieControl';
 
 export enum EEmailVerificationStatus {
 	Pending = 'Pending',

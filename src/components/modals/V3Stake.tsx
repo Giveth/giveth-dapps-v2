@@ -33,7 +33,7 @@ import { useAppSelector } from '@/features/hooks';
 import { LiquidityPosition } from '@/types/nfts';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { LottieControl } from '../animations/lottieControl';
+import LottieControl from '@/components/animations/lottieControl';
 
 interface IV3StakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;

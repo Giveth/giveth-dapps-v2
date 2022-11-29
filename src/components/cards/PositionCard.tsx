@@ -20,7 +20,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import { IconWithTooltip } from '../IconWithToolTip';
 import LoadingAnimation from '@/animations/loading.json';
 import { Pending } from '../modals/HarvestAll.sc';
-import { LottieControl } from '../animations/lottieControl';
+import LottieControl from '@/components/animations/lottieControl';
 
 interface IV3StakeCardProps {
 	position: LiquidityPosition;

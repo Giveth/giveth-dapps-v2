@@ -15,7 +15,7 @@ import config from '@/configuration';
 import LoadingAnimation from '@/animations/loading.json';
 import { useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { LottieControl } from '@/components/animations/lottieControl';
+import LottieControl from '@/components/animations/lottieControl';
 
 const TotalGIVpowerBox = () => {
 	const [totalGIVpower, setTotalGIVpower] = useState<BigNumber>();

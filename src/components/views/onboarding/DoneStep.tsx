@@ -18,7 +18,7 @@ import { isUserRegistered } from '@/lib/helpers';
 import { Col, Row } from '@/components/Grid';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
-import { LottieControl } from '@/components/animations/lottieControl';
+import LottieControl from '@/components/animations/lottieControl';
 
 const DoneStep = () => {
 	const router = useRouter();
