@@ -7,7 +7,6 @@ import {
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
-import Lottie from 'react-lottie';
 import BigNumber from 'bignumber.js';
 import { Flex } from '@/components/styled-components/Flex';
 import { formatWeiHelper } from '@/helpers/number';
@@ -16,15 +15,7 @@ import config from '@/configuration';
 import LoadingAnimation from '@/animations/loading.json';
 import { useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-
-const loadingAnimationOptions = {
-	loop: true,
-	autoplay: true,
-	animationData: LoadingAnimation,
-	rendererSettings: {
-		preserveAspectRatio: 'xMidYMid slice',
-	},
-};
+import { LottieControl } from '@/components/animations/lottieControl';
 
 const TotalGIVpowerBox = () => {
 	const [totalGIVpower, setTotalGIVpower] = useState<BigNumber>();
@@ -75,11 +66,7 @@ const TotalGIVpowerBox = () => {
 					</BoxRow>
 				</>
 			) : (
-				<Lottie
-					options={loadingAnimationOptions}
-					height={40}
-					width={40}
-				/>
+				<LottieControl animationData={LoadingAnimation} size='40' />
 			)}
 		</BoxContainer>
 	);
