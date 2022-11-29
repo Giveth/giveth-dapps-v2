@@ -9,8 +9,6 @@ import {
 	Button,
 	Overline,
 	B,
-	IconGiveth,
-	IconETH,
 	semanticColors,
 	Subline,
 } from '@giveth/ui-design-system';
@@ -21,6 +19,8 @@ import { Flex } from '@/components/styled-components/Flex';
 import { IconWithTooltip } from '../IconWithToolTip';
 import LoadingAnimation from '@/animations/loading.json';
 import { Pending } from '../modals/HarvestAll.sc';
+import { IconEthereum } from '../Icons/Eth';
+import { IconGIV } from '../Icons/GIV';
 
 const loadingAnimationOptions = {
 	loop: true,
@@ -135,7 +135,7 @@ const V3StakingCard: FC<IV3StakeCardProps> = ({
 					</RoundedInfo>
 				</PositionInfoRow>
 				<TokenAmountRow>
-					<IconGiveth size={16} />
+					<IconGIV size={16} />
 					<TokenValue>
 						{position._position
 							? position._position.amount0.toSignificant(4)
@@ -143,7 +143,7 @@ const V3StakingCard: FC<IV3StakeCardProps> = ({
 					</TokenValue>
 				</TokenAmountRow>
 				<TokenAmountRow>
-					<IconETH size={16} />
+					<IconEthereum />
 					<TokenValue>
 						{position._position
 							? position._position.amount1.toSignificant(4)
