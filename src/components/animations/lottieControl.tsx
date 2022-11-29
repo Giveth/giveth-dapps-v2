@@ -1,41 +1,40 @@
-import React from 'react';
-import Lottie from 'react-lottie';
+import dynamic from 'next/dynamic';
 
-type MyProps = { size: any; animationData: any };
-type MyState = { isStopped: boolean; isPaused: boolean };
+const Lottie = dynamic(() => import('react-lottie'), { ssr: false });
 
-export default class LottieControl extends React.Component<MyProps, MyState> {
-	constructor(props: { size: any; animationData: any }) {
-		super(props);
-		this.state = { isStopped: false, isPaused: false };
-	}
+type MyProps = {
+	size?: string | number;
+	animationData: any;
+	speed?: number;
+	loop?: boolean;
+};
 
-	render() {
-		// const buttonStyle = {
-		//   display: 'block',
-		//   margin: '10px auto'
-		// }
+export const LottieControl = ({
+	size = 400,
+	animationData,
+	speed = 1,
+	loop = true,
+}: MyProps) => {
+	const defaultOptions = {
+		loop,
+		autoplay: true,
+		animationData: animationData,
+		rendererSettings: {
+			preserveAspectRatio: 'xMidYMid slice',
+		},
+	};
 
-		const defaultOptions = {
-			loop: true,
-			autoplay: true,
-			animationData: this.props?.animationData,
-			rendererSettings: {
-				preserveAspectRatio: 'xMidYMid slice',
-			},
-		};
-
-		return (
-			<div>
-				<Lottie
-					options={defaultOptions}
-					height={this.props?.size || 400}
-					width={this.props?.size || 400}
-					isStopped={this.state.isStopped}
-					isPaused={this.state.isPaused}
-					isClickToPauseDisabled={true}
-				/>
-			</div>
-		);
-	}
-}
+	return (
+		<div>
+			<Lottie
+				options={defaultOptions}
+				height={size}
+				width={size}
+				isStopped={false}
+				isPaused={false}
+				isClickToPauseDisabled={true}
+				speed={speed}
+			/>
+		</div>
+	);
+};
