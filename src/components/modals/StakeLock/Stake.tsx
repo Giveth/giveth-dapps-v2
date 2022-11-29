@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { P } from '@giveth/ui-design-system';
 import { BigNumber } from 'ethers';
-import Lottie from 'react-lottie';
 import { useWeb3React } from '@web3-react/core';
 import { Contract, ethers } from 'ethers';
 import { captureException } from '@sentry/nextjs';
@@ -39,21 +38,13 @@ import {
 	SimplePoolStakingConfig,
 	StakingPlatform,
 } from '@/types/config';
+import { LottieControl } from '@/components/animations/lottieControl';
 
 interface IStakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
 	regenStreamConfig?: RegenFarmConfig;
 	maxAmount: BigNumber;
 }
-
-export const loadingAnimationOptions = {
-	loop: true,
-	autoplay: true,
-	animationData: LoadingAnimation,
-	rendererSettings: {
-		preserveAspectRatio: 'xMidYMid slice',
-	},
-};
 
 export const StakeModal: FC<IStakeModalProps> = ({
 	poolStakingConfig,
@@ -242,10 +233,9 @@ export const StakeModal: FC<IStakeModalProps> = ({
 								)}
 								{stakeState === StakeState.APPROVING && (
 									<Pending>
-										<Lottie
-											options={loadingAnimationOptions}
-											height={40}
-											width={40}
+										<LottieControl
+											animationData={LoadingAnimation}
+											size='40'
 										/>
 										&nbsp;APPROVE PENDING
 									</Pending>
@@ -263,10 +253,9 @@ export const StakeModal: FC<IStakeModalProps> = ({
 								)}
 								{stakeState === StakeState.STAKING && (
 									<Pending>
-										<Lottie
-											options={loadingAnimationOptions}
-											height={40}
-											width={40}
+										<LottieControl
+											animationData={LoadingAnimation}
+											size='40'
 										/>
 										&nbsp;STAKE PENDING
 									</Pending>
