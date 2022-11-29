@@ -9,7 +9,7 @@ type MyProps = {
 	loop?: boolean;
 };
 
-export const LottieControl = ({
+const LottieControl = ({
 	size = 400,
 	animationData,
 	speed = 1,
@@ -38,3 +38,5 @@ export const LottieControl = ({
 		</div>
 	);
 };
+
+export default LottieControl;
