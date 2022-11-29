@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import styled from 'styled-components';
-import Lottie from 'react-lottie';
 import Image from 'next/image';
 import {
 	IconExternalLink,
@@ -21,15 +20,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import { IconWithTooltip } from '../IconWithToolTip';
 import LoadingAnimation from '@/animations/loading.json';
 import { Pending } from '../modals/HarvestAll.sc';
-
-const loadingAnimationOptions = {
-	loop: true,
-	autoplay: true,
-	animationData: LoadingAnimation,
-	rendererSettings: {
-		preserveAspectRatio: 'xMidYMid slice',
-	},
-};
+import { LottieControl } from '../animations/lottieControl';
 
 interface IV3StakeCardProps {
 	position: LiquidityPosition;
@@ -154,10 +145,9 @@ const V3StakingCard: FC<IV3StakeCardProps> = ({
 			<PositionActions>
 				{isConfirming && selectedPosition ? (
 					<PendingStyled>
-						<Lottie
-							options={loadingAnimationOptions}
-							height={40}
-							width={40}
+						<LottieControl
+							animationData={LoadingAnimation}
+							size='40'
 						/>
 						&nbsp;PENDING
 					</PendingStyled>
