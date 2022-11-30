@@ -28,6 +28,7 @@ import { NotificationBox } from '@/components/notification/NotificationBox';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import InternalLink from '@/components/InternalLink';
 import Routes from '@/lib/constants/Routes';
+
 import { fetchNotificationsData } from '@/features/notification/notification.services';
 import { useNotification } from '@/hooks/useNotification';
 
@@ -115,16 +116,23 @@ function NotificationView() {
 					/>
 				</Loading>
 			)}
-			<Flex gap='8px'>
-				<IconContainer>
-					<IconNotificationOutline32 />
-				</IconContainer>
-				<NotificationDesc flexDirection='column'>
-					<H5 weight={700}>Notification Center</H5>
-					<Lead>
-						Your activity history, starting with the most recent
-					</Lead>
-				</NotificationDesc>
+			<Flex gap='8px' justifyContent='space-between'>
+				<Flex gap='8px'>
+					<IconContainer>
+						<IconNotificationOutline32 />
+					</IconContainer>
+					<NotificationDesc flexDirection='column'>
+						<H5 weight={700}>Notification Center</H5>
+						<Lead>
+							Your activity history, starting with the most recent
+						</Lead>
+					</NotificationDesc>
+				</Flex>
+				<InternalLink href={Routes.NotificationsSettings}>
+					<ConfigContainer>
+						<IconConfig24 />
+					</ConfigContainer>
+				</InternalLink>
 			</Flex>
 			<Flex justifyContent='space-between' alignItems='center'>
 				<TabsContainer>
@@ -187,11 +195,7 @@ function NotificationView() {
 						)}
 					</NotifisTabItem>
 				</TabsContainer>
-				<InternalLink href={Routes.NotificationsSettings}>
-					<ConfigContainer>
-						<IconConfig24 />
-					</ConfigContainer>
-				</InternalLink>
+				Show Only Unread
 			</Flex>
 			<NotifsHr color={neutralColors.gray[300]} />
 			<div>
