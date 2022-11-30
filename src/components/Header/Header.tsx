@@ -180,8 +180,8 @@ const Header: FC<IHeader> = () => {
 				{showBackBtn ? (
 					<Logo onClick={handleBack}>
 						<Image
-							width='26px'
-							height='26px'
+							width='26'
+							height='26'
 							alt='Giveth logo'
 							src={`/images/back-2.svg`}
 						/>
@@ -192,8 +192,8 @@ const Header: FC<IHeader> = () => {
 							<Link href={Routes.Home} passHref>
 								<Logo>
 									<Image
-										width='48px'
-										height='48px'
+										width='48'
+										height='48'
 										alt='Giveth logo'
 										src={`/images/logo/logo1.png`}
 									/>
