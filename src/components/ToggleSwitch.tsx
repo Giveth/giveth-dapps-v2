@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import { brandColors, neutralColors, P } from '@giveth/ui-design-system';
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 
 interface IToggleButton {
 	isOn: boolean;
 	toggleOnOff: (isOn: boolean) => void;
-	caption: string;
+	caption: ReactNode;
 }
 
 const ToggleSwitch: FC<IToggleButton> = ({ isOn, toggleOnOff, caption }) => {
@@ -61,7 +61,7 @@ const Caption = styled(P)`
 
 const Container = styled.div`
 	display: flex;
-	gap: 25px;
+	gap: 3px;
 	align-items: center;
 	cursor: pointer;
 `;
