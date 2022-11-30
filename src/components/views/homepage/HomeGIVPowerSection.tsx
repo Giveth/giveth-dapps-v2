@@ -9,16 +9,14 @@ import givpowerIsHere from '../../../../public/images/backgrounds/givpowerishere
 const HomePurpleSection = () => {
 	return (
 		<Link href='/givpower'>
-			<a>
-				<Wrapper>
-					<Image
-						alt='GIVpower is here'
-						src={givpowerIsHere}
-						layout='fill'
-						objectFit='cover'
-					/>
-				</Wrapper>
-			</a>
+			<Wrapper>
+				<Image
+					alt='GIVpower is here'
+					src={givpowerIsHere}
+					layout='fill'
+					objectFit='cover'
+				/>
+			</Wrapper>
 		</Link>
 	);
 };
