@@ -15,6 +15,7 @@ import {
 	NotifisTabItem,
 	NotifsHr,
 	Loading,
+	PinkText,
 } from './notification.sc';
 import LottieControl from '@/components/animations/lottieControl';
 import LoadingAnimation from '@/animations/loading_giv.json';
@@ -31,6 +32,7 @@ import Routes from '@/lib/constants/Routes';
 
 import { fetchNotificationsData } from '@/features/notification/notification.services';
 import { useNotification } from '@/hooks/useNotification';
+import ToggleSwitch from '@/components/ToggleSwitch';
 
 enum ENotificationTabs {
 	ALL,
@@ -48,6 +50,7 @@ function NotificationView() {
 	const [loading, setLoading] = useState(false);
 	const [totalCount, setTotalCount] = useState(0);
 	const [pageNumber, setPageNumber] = useState(0);
+	const [unreadToggle, setUnreadToggle] = useState(false);
 	const showLoadMore = totalCount > notifications.length;
 	const {
 		total: totalUnreadNotifications,
@@ -195,7 +198,12 @@ function NotificationView() {
 						)}
 					</NotifisTabItem>
 				</TabsContainer>
-				Show Only Unread
+
+				<ToggleSwitch
+					isOn={unreadToggle}
+					toggleOnOff={setUnreadToggle}
+					caption={<PinkText>Show only unread</PinkText>}
+				/>
 			</Flex>
 			<NotifsHr color={neutralColors.gray[300]} />
 			<div>
