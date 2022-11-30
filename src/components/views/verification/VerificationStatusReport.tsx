@@ -49,14 +49,12 @@ function Submitted() {
 			</Link>
 			<VCImageContainer>
 				<Link href='/' passHref>
-					<a>
-						<Image
-							src={givFontLogo}
-							width='150'
-							height='50'
-							alt='giveth logo'
-						/>
-					</a>
+					<Image
+						src={givFontLogo}
+						width='150'
+						height='50'
+						alt='giveth logo'
+					/>
 				</Link>
 			</VCImageContainer>
 		</>
@@ -87,14 +85,12 @@ function Verified() {
 			</Link>
 			<VCImageContainer>
 				<Link href='/' passHref>
-					<a>
-						<Image
-							src={givFontLogo}
-							width='150'
-							height='50'
-							alt='giveth logo'
-						/>
-					</a>
+					<Image
+						src={givFontLogo}
+						width='150'
+						height='50'
+						alt='giveth logo'
+					/>
 				</Link>
 			</VCImageContainer>
 		</>
@@ -125,14 +121,12 @@ function Rejected() {
 
 			<VCImageContainer>
 				<Link href='/' passHref>
-					<a>
-						<Image
-							src={givFontLogo}
-							width='150'
-							height='50'
-							alt='giveth logo'
-						/>
-					</a>
+					<Image
+						src={givFontLogo}
+						width='150'
+						height='50'
+						alt='giveth logo'
+					/>
 				</Link>
 			</VCImageContainer>
 		</>
