@@ -7,7 +7,6 @@ import {
 	neutralColors,
 	Overline,
 } from '@giveth/ui-design-system';
-import Lottie from 'react-lottie';
 import styled from 'styled-components';
 import { BigNumber, constants } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
@@ -34,15 +33,7 @@ import { useAppSelector } from '@/features/hooks';
 import { LiquidityPosition } from '@/types/nfts';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-
-const loadingAnimationOptions = {
-	loop: true,
-	autoplay: true,
-	animationData: LoadingAnimation,
-	rendererSettings: {
-		preserveAspectRatio: 'xMidYMid slice',
-	},
-};
+import LottieControl from '@/components/animations/lottieControl';
 
 interface IV3StakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
@@ -186,10 +177,9 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 						<HarvestButtonContainer>
 							{stakeStatus === StakeState.CONFIRM_UNSTAKE ? (
 								<Pending>
-									<Lottie
-										options={loadingAnimationOptions}
-										height={40}
-										width={40}
+									<LottieControl
+										animationData={LoadingAnimation}
+										size='40'
 									/>
 									&nbsp; PENDING
 								</Pending>

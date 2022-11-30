@@ -10,7 +10,6 @@ import {
 import { ethers, constants } from 'ethers';
 import { Zero } from '@ethersproject/constants';
 import BigNumber from 'bignumber.js';
-import Lottie from 'react-lottie';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
@@ -48,16 +47,8 @@ import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import LottieControl from '@/components/animations/lottieControl';
 import type { TransactionResponse } from '@ethersproject/providers';
-
-const loadingAnimationOptions = {
-	loop: true,
-	autoplay: true,
-	animationData: LoadingAnimation,
-	rendererSettings: {
-		preserveAspectRatio: 'xMidYMid slice',
-	},
-};
 
 enum ClaimState {
 	UNKNOWN,
@@ -324,10 +315,9 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 						</HarvestAllDesc>
 						{claimState === ClaimState.WAITING ? (
 							<ClaimPending>
-								<Lottie
-									options={loadingAnimationOptions}
-									height={40}
-									width={40}
+								<LottieControl
+									animationData={LoadingAnimation}
+									size='40'
 								/>
 								&nbsp;CLAIM PENDING
 							</ClaimPending>

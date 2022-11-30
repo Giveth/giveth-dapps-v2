@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
-import Lottie from 'react-lottie';
 import {
 	brandColors,
 	Caption,
@@ -65,6 +64,7 @@ import { LiquidityPosition } from '@/types/nfts';
 import { Flex } from '../styled-components/Flex';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import LottieControl from '@/components/animations/lottieControl';
 import type { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 
 interface IHarvestAllModalProps extends IModal {
@@ -79,15 +79,6 @@ interface IHarvestAllModalProps extends IModal {
 		key?: (string | number)[] | null | undefined;
 	};
 }
-
-const loadingAnimationOptions = {
-	loop: true,
-	autoplay: true,
-	animationData: LoadingAnimation,
-	rendererSettings: {
-		preserveAspectRatio: 'xMidYMid slice',
-	},
-};
 
 enum HarvestStates {
 	HARVEST,
@@ -568,10 +559,9 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 								)}
 								{state === HarvestStates.HARVESTING && (
 									<HarvestAllPending>
-										<Lottie
-											options={loadingAnimationOptions}
-											height={40}
-											width={40}
+										<LottieControl
+											animationData={LoadingAnimation}
+											size='40'
 										/>
 										&nbsp;HARVEST PENDING
 									</HarvestAllPending>

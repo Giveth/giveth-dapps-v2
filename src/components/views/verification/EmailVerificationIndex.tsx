@@ -4,7 +4,6 @@ import { brandColors, H6, Lead, ButtonLink } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import givFontLogo from '/public/images/icons/giv_font_logo.svg';
 import check_stars from '/public/images/icons/check_stars.svg';
@@ -20,17 +19,7 @@ import {
 	VerificationCard,
 	VerificationContainer,
 } from './Common.sc';
-
-const LazyLottie = dynamic(() => import('react-lottie'));
-
-const loadingAnimationOptions = {
-	loop: true,
-	autoplay: true,
-	animationData: LoadingAnimation,
-	rendererSettings: {
-		preserveAspectRatio: 'xMidYMid slice',
-	},
-};
+import LottieControl from '@/components/animations/lottieControl';
 
 export enum EEmailVerificationStatus {
 	Pending = 'Pending',
@@ -51,10 +40,9 @@ const ContentSelector: FC<IContentSelector> = ({ status }) => {
 		default:
 			return (
 				<FlexCenter>
-					<LazyLottie
-						options={loadingAnimationOptions}
-						height={150}
-						width={150}
+					<LottieControl
+						animationData={LoadingAnimation}
+						size='150'
 					/>
 				</FlexCenter>
 			);

@@ -1,4 +1,3 @@
-import Lottie from 'react-lottie';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
@@ -19,14 +18,7 @@ import { isUserRegistered } from '@/lib/helpers';
 import { Col, Row } from '@/components/Grid';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
-
-const CongratsAnimationOptions = {
-	loop: true,
-	animationData: CongratsAnimation,
-	rendererSettings: {
-		preserveAspectRatio: 'xMidYMid slice',
-	},
-};
+import LottieControl from '@/components/animations/lottieControl';
 
 const DoneStep = () => {
 	const router = useRouter();
@@ -45,10 +37,8 @@ const DoneStep = () => {
 		<>
 			<DoneStepContainer xs={12} xl={10}>
 				<AnimationContainer>
-					<Lottie
-						options={CongratsAnimationOptions}
-						// height={287}
-						// width={750}
+					<LottieControl
+						animationData={CongratsAnimation}
 						speed={0.8}
 					/>
 				</AnimationContainer>
