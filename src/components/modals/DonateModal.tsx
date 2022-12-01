@@ -65,8 +65,8 @@ const DonateModal = (props: IDonateModalProps) => {
 	const dispatch = useAppDispatch();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const isDonatingToGiveth = donationToGiveth > 0;
-
 	const { formatMessage } = useIntl();
+
 	const [donating, setDonating] = useState(false);
 	const [firstDonationSaved, setFirstDonationSaved] = useState(false);
 	const [secondDonationSaved, setSecondDonationSaved] = useState(false);
@@ -74,6 +74,7 @@ const DonateModal = (props: IDonateModalProps) => {
 	const [secondTxHash, setSecondTxHash] = useState('');
 	const [isFirstTxSuccess, setIsFirstTxSuccess] = useState(false);
 	const [secondTxStatus, setSecondTxStatus] = useState<EToastType>();
+	const [processFinished, setProcessFinished] = useState(false);
 	const [failedModalType, setFailedModalType] =
 		useState<EDonationFailedType>();
 
@@ -111,6 +112,8 @@ const DonateModal = (props: IDonateModalProps) => {
 	};
 
 	const delayedCloseModal = (txHash1: string, txHash2?: string) => {
+		setProcessFinished(true);
+		setDonating(false);
 		const txHash = txHash2 ? [txHash1, txHash2] : [txHash1];
 		setTimeout(() => {
 			closeModal();
@@ -278,7 +281,7 @@ const DonateModal = (props: IDonateModalProps) => {
 						)}
 					</DonatingBox>
 					<Buttons>
-						{firstDonationSaved && (
+						{firstDonationSaved && !processFinished && (
 							<InlineToast
 								type={EToastType.Info}
 								message={formatMessage({
@@ -289,7 +292,7 @@ const DonateModal = (props: IDonateModalProps) => {
 						<DonateButton
 							loading={donating}
 							buttonType='primary'
-							disabled={donating}
+							disabled={donating || processFinished}
 							label={
 								donating
 									? formatMessage({ id: 'label.donating' })
@@ -372,13 +375,6 @@ const Buttons = styled.div`
 
 	> :first-child {
 		margin: 15px 0;
-	}
-`;
-
-const CloseButton = styled(Button)`
-	margin: 5px 0 0 0;
-	:hover {
-		background: transparent;
 	}
 `;
 
