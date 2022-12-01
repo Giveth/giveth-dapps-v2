@@ -611,7 +611,7 @@ export const ACTIVATE_PROJECT = gql`
 	}
 `;
 
-export const TITLE_IS_VALID = gql`
+export const TITLE_IS_VALID = `
 	query IsValidTitleForProject($title: String!, $projectId: Float) {
 		isValidTitleForProject(title: $title, projectId: $projectId)
 	}
