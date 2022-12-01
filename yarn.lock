@@ -966,10 +966,10 @@
     intl-messageformat "10.2.1"
     tslib "2.4.0"
 
-"@giveth/ui-design-system@^1.11.0":
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/@giveth/ui-design-system/-/ui-design-system-1.11.0.tgz#a213212cd84047ea7ed7410ac559124577bdc527"
-  integrity sha512-Ih2hlLyqHJpD9aEOXL5FUcgszqUQlP0X1ksmpuBipv5rU+JkAvdTYxLWrFC6Q9vGvdGsJi60vuY+XfzqWZY2nA==
+"@giveth/ui-design-system@^1.11.1":
+  version "1.11.1"
+  resolved "https://registry.yarnpkg.com/@giveth/ui-design-system/-/ui-design-system-1.11.1.tgz#8190842e845b6cf656ffa0a27790336f7ab2b954"
+  integrity sha512-I3oRQHPAKXdnJBNCyeek0X8QatfnETFzFnzOKWhr+o0V8cj1nWuKl+9i+XcFhUWh/Gbtyw27r5JyLd+FYtcuhw==
   dependencies:
     next "12.0.7"
     react "17.0.2"
