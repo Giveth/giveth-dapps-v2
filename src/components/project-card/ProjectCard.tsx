@@ -65,7 +65,7 @@ const ProjectCard = (props: IProjectCard) => {
 	const { formatMessage, formatRelativeTime } = useIntl();
 
 	return (
-		<Link href={slugToProjectView(slug)} passHref>
+		<Link href={slugToProjectView(slug)}>
 			<Wrapper
 				onMouseEnter={() => setIsHover(true)}
 				onMouseLeave={() => setIsHover(false)}
@@ -103,7 +103,6 @@ const ProjectCard = (props: IProjectCard) => {
 					{adminUser && !isForeignOrg ? (
 						<Link
 							href={addressToUserView(adminUser?.walletAddress)}
-							passHref
 						>
 							<Author size='Big'>{name || '\u200C'}</Author>
 						</Link>
@@ -170,7 +169,7 @@ const ProjectCard = (props: IProjectCard) => {
 					)}
 
 					<ActionButtons>
-						<Link href={slugToProjectDonate(slug)} passHref>
+						<Link href={slugToProjectDonate(slug)}>
 							<CustomizedDonateButton
 								linkType='primary'
 								size='small'
