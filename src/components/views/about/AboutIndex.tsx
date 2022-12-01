@@ -41,10 +41,9 @@ const AboutIndex = () => {
 				<TeamImageWrapper>
 					<Image
 						src={'/images/giveth-team-new.png'}
-						width='100%'
-						height='45vh'
 						layout='responsive'
 						alt='giveth team'
+						style={{ width: '100%', height: '45vh' }}
 					/>
 				</TeamImageWrapper>
 				<Container>
@@ -56,7 +55,7 @@ const AboutIndex = () => {
 					<UpperCaption>
 						{formatMessage({ id: 'page.about.desc' })}
 					</UpperCaption>
-					<Link href={links.SUPPORT_US} passHref>
+					<Link href={links.SUPPORT_US}>
 						<SupportGivethButton
 							linkType='primary'
 							label={formatMessage({
