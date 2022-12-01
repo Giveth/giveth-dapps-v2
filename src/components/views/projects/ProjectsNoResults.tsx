@@ -43,7 +43,6 @@ const ProjectsNoResults = (props: { mainCategories: IMainCategory[] }) => {
 									? Routes.Projects
 									: `/projects/${category.slug}`
 							}
-							passHref
 						>
 							<MainCategoryItem
 								onClick={() => {
