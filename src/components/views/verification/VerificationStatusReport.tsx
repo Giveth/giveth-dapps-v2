@@ -44,11 +44,11 @@ function Submitted() {
 			<Lead>
 				Your project is now submitted, our team will check your request.
 			</Lead>
-			<Link href={slugToProjectView(slug as string)} passHref>
+			<Link href={slugToProjectView(slug as string)}>
 				<ButtonLink size='small' label='GO TO THE PROJECT' />
 			</Link>
 			<VCImageContainer>
-				<Link href='/' passHref>
+				<Link href='/'>
 					<Image
 						src={givFontLogo}
 						width='150'
@@ -80,11 +80,11 @@ function Verified() {
 				Your project is now verified, so the donors may have GIVbacks
 				for their donations to your projects.
 			</Lead>
-			<Link href={slugToProjectView(slug as string)} passHref>
+			<Link href={slugToProjectView(slug as string)}>
 				<ButtonLink size='small' label='GO TO THE PROJECT' />
 			</Link>
 			<VCImageContainer>
-				<Link href='/' passHref>
+				<Link href='/'>
 					<Image
 						src={givFontLogo}
 						width='150'
@@ -120,7 +120,7 @@ function Rejected() {
 			/>
 
 			<VCImageContainer>
-				<Link href='/' passHref>
+				<Link href='/'>
 					<Image
 						src={givFontLogo}
 						width='150'
