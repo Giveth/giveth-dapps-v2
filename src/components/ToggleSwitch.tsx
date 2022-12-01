@@ -14,7 +14,7 @@ const ToggleSwitch: FC<IToggleButton> = ({ isOn, toggleOnOff, caption }) => {
 	};
 	return (
 		<Container onClick={handleClick}>
-			<InputStyled checked={isOn} type='checkbox' />
+			<InputStyled defaultChecked={isOn} type='checkbox' />
 			<Switch isOn={isOn}>
 				<Bullet isOn={isOn} />
 			</Switch>
