@@ -121,6 +121,7 @@ export function TabPowerTop() {
 													: Routes.Projects
 											}
 											passHref
+											legacyBehavior
 										>
 											<BoostProjectButton
 												label={
@@ -199,7 +200,7 @@ export function TabPowerBottom() {
 							/>
 							<H4 weight={700}>Stake & lock GIV </H4>
 							<Lead>Stake & lock GIV to get GIVpower.</Lead>
-							<Link href={Routes.GIVfarm} passHref>
+							<Link href={Routes.GIVfarm}>
 								<CardBottomText>GET GIVPOWER</CardBottomText>
 							</Link>
 						</FeaturesCardItem>
@@ -214,7 +215,7 @@ export function TabPowerBottom() {
 								The longer you lock, the greater your rewards.
 							</Lead>
 
-							<Link href={Routes.GIVfarm} passHref>
+							<Link href={Routes.GIVfarm}>
 								<CardBottomText>SEE REWARDS</CardBottomText>
 							</Link>
 						</FeaturesCardItem>
@@ -230,7 +231,7 @@ export function TabPowerBottom() {
 								Boost your favourite projects to help them rise
 								through the ranks.
 							</Lead>
-							<Link href={Routes.Projects} passHref>
+							<Link href={Routes.Projects}>
 								<CardBottomText>BOOST PROJECTS</CardBottomText>
 							</Link>
 						</FeaturesCardItem>
@@ -270,7 +271,7 @@ export function TabPowerBottom() {
 									</QuoteText>
 									<br />
 								</BenefitsCardTextContainer>
-								<Link href={Routes.GIVfarm} passHref>
+								<Link href={Routes.GIVfarm}>
 									<CardBottomText>Stake GIV</CardBottomText>
 								</Link>
 							</BenefitsCardContainer>
@@ -293,7 +294,7 @@ export function TabPowerBottom() {
 									funding from the Giveth Matching Pool.
 								</QuoteText>
 								<br />
-								<Link href={Routes.Projects} passHref>
+								<Link href={Routes.Projects}>
 									<CardBottomText>
 										BROWSE PROJECTS
 									</CardBottomText>
