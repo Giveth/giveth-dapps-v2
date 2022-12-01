@@ -9,8 +9,8 @@ import {
 import { durationToString } from '@/lib/helpers';
 import { INotification } from '@/features/notification/notification.types';
 import { PinkText } from '../views/notification/notification.sc';
-import useDetectDevice from '@/hooks/useDetectDevice';
 import { mediaQueries } from '@/lib/constants/constants';
+import { setNotificationRead } from '@/features/notification/notification.services';
 
 interface INotificationBox {
 	notification: INotification;
@@ -24,29 +24,12 @@ export const NotificationBox: FC<INotificationBox> = ({
 	markOneNotificationRead,
 }) => {
 	const NotifRef = useRef(null);
-	const { isMobile } = useDetectDevice();
-	// useEffect(() => {
-	// 	if (notification.isRead) return;
-	// 	const read = (entries: IntersectionObserverEntry[]) => {
-	// 		const [entry] = entries;
-	// 		if (entry.isIntersecting) {
-	// 			setNotificationRead(notification.id).then(
-	// 				(notif: INotification) =>
-	// 					markOneNotificationRead(notification.id),
-	// 			);
-	// 		}
-	// 	};
-	// 	let observerRefValue: any = null;
-	// 	let observer = new IntersectionObserver(read);
-	// 	if (NotifRef.current) {
-	// 		observer.observe(NotifRef.current);
-	// 		observerRefValue = NotifRef.current;
-	// 	}
 
-	// 	return () => {
-	// 		if (observerRefValue) observer.unobserve(observerRefValue);
-	// 	};
-	// }, [markOneNotificationRead, notification.id, notification.isRead]);
+	const handleRead = () => {
+		setNotificationRead(notification.id).then(() =>
+			markOneNotificationRead(notification.id),
+		);
+	};
 
 	return (
 		<NotificationBoxContainer
@@ -68,19 +51,18 @@ export const NotificationBox: FC<INotificationBox> = ({
 				{/* {!short && notification.quote && (
 					<NotificationQuote>{notification.quote}</NotificationQuote>
 				)} */}
-				<Flex style={{ width: '100%' }}>
-					<NotificationTime medium>
-						{durationToString(
-							Date.now() -
-								new Date(notification.createdAt).getTime(),
-							1,
-							true,
-						) + ' ago'}
-					</NotificationTime>{' '}
-					{isMobile && <MarkAsRead>Mark as read</MarkAsRead>}
-				</Flex>
+				<NotificationTime medium>
+					{durationToString(
+						Date.now() - new Date(notification.createdAt).getTime(),
+						1,
+						true,
+					) + ' ago'}
+				</NotificationTime>{' '}
 			</NotificationContent>
-			{!isMobile && <MarkAsRead>Mark as read</MarkAsRead>}
+			{/* {!notification.isRead && (
+				<MarkAsRead onClick={handleRead}>Mark as read</MarkAsRead>
+			)} */}
+			<MarkAsRead onClick={handleRead}>Mark as read</MarkAsRead>
 		</NotificationBoxContainer>
 	);
 };
@@ -135,9 +117,9 @@ const MarkAsRead = styled(PinkText)`
 	cursor: pointer;
 	margin-left: auto;
 	white-space: nowrap;
-	align-self: auto;
+	align-self: flex-end;
 
 	${mediaQueries.mobileL} {
-		align-self: flex-end;
+		align-self: auto;
 	}
 `;
