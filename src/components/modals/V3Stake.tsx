@@ -179,7 +179,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 								<Pending>
 									<LottieControl
 										animationData={LoadingAnimation}
-										size='40'
+										size={40}
 									/>
 									&nbsp; PENDING
 								</Pending>

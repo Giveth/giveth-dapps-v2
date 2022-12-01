@@ -66,7 +66,7 @@ const TotalGIVpowerBox = () => {
 					</BoxRow>
 				</>
 			) : (
-				<LottieControl animationData={LoadingAnimation} size='40' />
+				<LottieControl animationData={LoadingAnimation} size={40} />
 			)}
 		</BoxContainer>
 	);

@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 const Lottie = dynamic(() => import('react-lottie'), { ssr: false });
 
 type MyProps = {
-	size?: string | number;
+	size?: number;
 	animationData: any;
 	speed?: number;
 	loop?: boolean;

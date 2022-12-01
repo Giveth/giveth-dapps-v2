@@ -561,7 +561,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 									<HarvestAllPending>
 										<LottieControl
 											animationData={LoadingAnimation}
-											size='40'
+											size={40}
 										/>
 										&nbsp;HARVEST PENDING
 									</HarvestAllPending>

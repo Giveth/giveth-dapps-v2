@@ -317,7 +317,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 							<ClaimPending>
 								<LottieControl
 									animationData={LoadingAnimation}
-									size='40'
+									size={40}
 								/>
 								&nbsp;CLAIM PENDING
 							</ClaimPending>
