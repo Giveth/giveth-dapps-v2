@@ -50,7 +50,8 @@ function NotificationView() {
 	const [loading, setLoading] = useState(false);
 	const [totalCount, setTotalCount] = useState(0);
 	const [pageNumber, setPageNumber] = useState(0);
-	const [unreadToggle, setUnreadToggle] = useState(false);
+	const [showUnread, setShowUnread] = useState(false);
+
 	const showLoadMore = totalCount > notifications.length;
 	const {
 		total: totalUnreadNotifications,
@@ -90,6 +91,12 @@ function NotificationView() {
 					limit,
 					offset: pageNumber * limit,
 			  });
+		if (showUnread === true) {
+			query = {
+				...query,
+				isRead: !showUnread,
+			};
+		}
 		fetchNotificationsData(query, { signal })
 			.then(res => {
 				if (res?.notifications) {
@@ -107,7 +114,7 @@ function NotificationView() {
 		return () => {
 			controller.abort();
 		};
-	}, [tab, pageNumber]);
+	}, [tab, pageNumber, showUnread]);
 
 	return (
 		<NotificationContainer>
@@ -200,8 +207,8 @@ function NotificationView() {
 				</TabsContainer>
 
 				<ToggleSwitch
-					isOn={unreadToggle}
-					toggleOnOff={setUnreadToggle}
+					isOn={showUnread}
+					toggleOnOff={setShowUnread}
 					caption={<PinkText>Show only unread</PinkText>}
 				/>
 			</Flex>
