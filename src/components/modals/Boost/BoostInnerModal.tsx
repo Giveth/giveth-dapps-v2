@@ -91,7 +91,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 					Since this is your first time using Boost, 100% of your
 					GIVpower will be allocated to this project. You can check
 					your allocation in &nbsp;
-					<Link href={Routes.MyBoostedProjects} passHref>
+					<Link href={Routes.MyBoostedProjects}>
 						<GLink>
 							<b>My GIVpower</b>
 						</GLink>
@@ -105,7 +105,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 					You can't edit the allocation unless you have at least 1
 					other boosted project. Try boosting other projects or
 					managing them in &nbsp;
-					<Link href={Routes.MyBoostedProjects} passHref>
+					<Link href={Routes.MyBoostedProjects}>
 						<GLink>
 							<b>My GIVpower</b>
 						</GLink>
@@ -119,7 +119,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 					your GIVpower, you will remove your GIVpower from all the
 					other projects you boosted. <br />
 					You can review and manage your GIVpower allocations in
-					<Link href={Routes.MyBoostedProjects} passHref>
+					<Link href={Routes.MyBoostedProjects}>
 						<GLink>
 							<b>My GIVpower.</b>
 						</GLink>
@@ -134,7 +134,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 					decrease proportionally. <br />
 					You can review and manage your GIVpower allocations in
 					&nbsp;
-					<Link href={Routes.MyBoostedProjects} passHref>
+					<Link href={Routes.MyBoostedProjects}>
 						<GLink>
 							<b>My GIVpower.</b>
 						</GLink>
@@ -217,7 +217,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 						back to this project again!
 					</Lead>
 				</ExceededContainer>
-				<Link href={Routes.MyBoostedProjects} passHref>
+				<Link href={Routes.MyBoostedProjects}>
 					<BoostedProjectsLink
 						size='medium'
 						label='Go to My GIVpower'
@@ -350,7 +350,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 				}
 				onClick={confirmAllocation}
 			/>
-			<Link href={Routes.MyBoostedProjects} passHref>
+			<Link href={Routes.MyBoostedProjects}>
 				<ManageLink>Manage your GIVpower</ManageLink>
 			</Link>
 		</>
