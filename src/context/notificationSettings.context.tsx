@@ -45,7 +45,7 @@ export const NotificationSettingsProvider: FC<IProviderProps> = props => {
 	const handleSet = (inputObj: INotificationSettingsPutInput) => {
 		const { id, allowDappPushNotification, allowEmailNotification } =
 			inputObj;
-		const newItem: INotificationSettingsPutInput = { id };
+		let newItem: INotificationSettingsPutInput = { id };
 		if (allowDappPushNotification !== undefined) {
 			newItem['allowDappPushNotification'] = allowDappPushNotification;
 		}
@@ -54,13 +54,19 @@ export const NotificationSettingsProvider: FC<IProviderProps> = props => {
 		}
 		const newSettingsItems = notificationSettings?.map(i => {
 			if (i.id === id) {
+				const { allowDappPushNotification, allowEmailNotification } = i;
+				newItem = {
+					allowDappPushNotification,
+					allowEmailNotification,
+					...newItem,
+				};
 				return { ...i, ...newItem };
 			}
 			return i;
 		});
 		const oldSettingsItems = structuredClone(notificationSettings);
 		setNotificationSettings(newSettingsItems);
-		putNotificationSettings(inputObj).catch(() => {
+		putNotificationSettings(newItem).catch(() => {
 			setNotificationSettings(oldSettingsItems);
 		});
 	};

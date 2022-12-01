@@ -96,6 +96,7 @@ const Wrapper = styled(Flex)<{
 					gap: 18px;
 					> div:first-child {
 						border-width: 2px;
+						border-radius: 3px;
 					}
 				`;
 			case 20:
