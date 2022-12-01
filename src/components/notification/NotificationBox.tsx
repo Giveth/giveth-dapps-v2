@@ -59,10 +59,9 @@ export const NotificationBox: FC<INotificationBox> = ({
 					) + ' ago'}
 				</NotificationTime>{' '}
 			</NotificationContent>
-			{/* {!notification.isRead && (
+			{!notification.isRead && (
 				<MarkAsRead onClick={handleRead}>Mark as read</MarkAsRead>
-			)} */}
-			<MarkAsRead onClick={handleRead}>Mark as read</MarkAsRead>
+			)}
 		</NotificationBoxContainer>
 	);
 };
