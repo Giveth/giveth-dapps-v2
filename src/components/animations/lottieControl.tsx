@@ -1,7 +1,6 @@
-// import dynamic from 'next/dynamic';
-import Lottie from 'react-lottie';
+import dynamic from 'next/dynamic';
 
-// const Lottie = dynamic(() => import('react-lottie'), { ssr: false });
+const Lottie = dynamic(() => import('react-lottie'), { ssr: false });
 
 type MyProps = {
 	size?: number;
