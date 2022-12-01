@@ -189,7 +189,7 @@ const Header: FC<IHeader> = () => {
 				) : (
 					<>
 						<MainLogoBtn>
-							<Link href={Routes.Home} passHref>
+							<Link href={Routes.Home}>
 								<Logo>
 									<Image
 										width='48'
