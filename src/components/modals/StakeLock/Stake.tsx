@@ -235,7 +235,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 									<Pending>
 										<LottieControl
 											animationData={LoadingAnimation}
-											size='40'
+											size={40}
 										/>
 										&nbsp;APPROVE PENDING
 									</Pending>
@@ -255,7 +255,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 									<Pending>
 										<LottieControl
 											animationData={LoadingAnimation}
-											size='40'
+											size={40}
 										/>
 										&nbsp;STAKE PENDING
 									</Pending>

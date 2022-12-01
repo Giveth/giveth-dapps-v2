@@ -42,7 +42,7 @@ const ContentSelector: FC<IContentSelector> = ({ status }) => {
 				<FlexCenter>
 					<LottieControl
 						animationData={LoadingAnimation}
-						size='150'
+						size={150}
 					/>
 				</FlexCenter>
 			);

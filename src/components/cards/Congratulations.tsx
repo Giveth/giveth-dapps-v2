@@ -149,7 +149,7 @@ export const CongratulationsCard = () => {
 					<SparkleContainer>
 						<LottieControl
 							animationData={SparkleAnimation}
-							size='100'
+							size={100}
 							speed={0.8}
 						/>
 					</SparkleContainer>
@@ -165,7 +165,7 @@ export const CongratulationsCard = () => {
 							<SparkleBurstContainer>
 								<LottieControl
 									animationData={SparkleBurstAnimation}
-									size='200'
+									size={200}
 									speed={0.8}
 								/>
 							</SparkleBurstContainer>

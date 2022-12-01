@@ -146,7 +146,7 @@ const V3StakingCard: FC<IV3StakeCardProps> = ({
 					<PendingStyled>
 						<LottieControl
 							animationData={LoadingAnimation}
-							size='40'
+							size={40}
 						/>
 						&nbsp;PENDING
 					</PendingStyled>

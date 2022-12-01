@@ -43,7 +43,7 @@ export const SubmittedInnerModal: FC<IConfirmSubmitProps> = ({
 	return (
 		<>
 			<Title>{title}</Title>
-			<LottieControl animationData={LoadingAnimation} size='100' />
+			<LottieControl animationData={LoadingAnimation} size={100} />
 			<TxSubmit weight={700}>{txHash && 'Transaction pending'}</TxSubmit>
 			<AddTokenRow alignItems={'center'} justifyContent={'center'}>
 				<AddTokenButton
@@ -83,7 +83,7 @@ export const ConfirmedInnerModal: FC<IConfirmSubmitProps> = ({
 			<Title>{title}</Title>
 			<LottieControl
 				animationData={TikAnimation}
-				size='100'
+				size={100}
 				loop={false}
 			/>
 			<TxConfirm weight={700}>Transaction confirmed!</TxConfirm>
@@ -125,7 +125,7 @@ export const ErrorInnerModal: FC<IErrorProps> = ({
 			<Title>{title}</Title>
 			<LottieControl
 				animationData={ErrorAnimation}
-				size='60'
+				size={60}
 				loop={false}
 			/>
 			<TxFailed weight={700}>Transaction Error!</TxFailed>

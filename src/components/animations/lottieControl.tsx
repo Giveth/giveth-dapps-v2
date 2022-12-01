@@ -1,9 +1,10 @@
-import dynamic from 'next/dynamic';
+// import dynamic from 'next/dynamic';
+import Lottie from 'react-lottie';
 
-const Lottie = dynamic(() => import('react-lottie'), { ssr: false });
+// const Lottie = dynamic(() => import('react-lottie'), { ssr: false });
 
 type MyProps = {
-	size?: string | number;
+	size?: number;
 	animationData: any;
 	speed?: number;
 	loop?: boolean;
