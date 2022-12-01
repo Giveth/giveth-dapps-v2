@@ -147,7 +147,7 @@ export const RewardMenu = ({
 						</IconHelpWraper>
 					</FlowrateRow>
 				</FlowrateBox>
-				<Link href={Routes.GIVstream} passHref>
+				<Link href={Routes.GIVstream}>
 					<PartRow theme={theme}>
 						<PartInfo>
 							<PartTitle as='span'>
@@ -168,7 +168,7 @@ export const RewardMenu = ({
 						/>
 					</PartRow>
 				</Link>
-				<Link href={Routes.GIVfarm} passHref>
+				<Link href={Routes.GIVfarm}>
 					<PartRow theme={theme}>
 						<PartInfo>
 							<PartTitle as='span'>GIVfarm & GIVgarden</PartTitle>
@@ -187,7 +187,7 @@ export const RewardMenu = ({
 						/>
 					</PartRow>
 				</Link>
-				<Link href={Routes.GIVbacks} passHref>
+				<Link href={Routes.GIVbacks}>
 					<PartRow theme={theme}>
 						<PartInfo>
 							<PartTitle as='span'>GIVbacks</PartTitle>
