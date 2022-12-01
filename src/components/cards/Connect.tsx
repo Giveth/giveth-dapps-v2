@@ -200,7 +200,7 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 				<span>
 					But there are more ways to get GIV! Try another address or
 					donate to verified projects to qualify for{' '}
-					<Link href={Routes.GIVbacks} passHref>
+					<Link href={Routes.GIVbacks}>
 						<ClickableStrong>GIVbacks</ClickableStrong>
 					</Link>
 					.
