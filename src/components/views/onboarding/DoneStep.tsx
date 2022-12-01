@@ -75,7 +75,7 @@ const DoneStep = () => {
 										Take a look and donate to projects.
 									</ContributeCardDesc>
 								</div>
-								<Link href={Routes.Projects} passHref>
+								<Link href={Routes.Projects}>
 									<ContributeCardButton label='View projects' />
 								</Link>
 							</ContributeCard>
@@ -85,7 +85,7 @@ const DoneStep = () => {
 			</DoneStepContainer>
 			<GotoHomeWrapper>
 				<P>or go to the homepage to start exploring.</P>
-				<Link href={Routes.Home} passHref>
+				<Link href={Routes.Home}>
 					<GotoHomeLink as='a'>Home page</GotoHomeLink>
 				</Link>
 			</GotoHomeWrapper>
