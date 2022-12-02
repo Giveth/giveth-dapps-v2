@@ -324,6 +324,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 											rewards from this pool. Please refer
 											to
 											<DisableModalLink
+												as='a'
 												size='Big'
 												target='_blank'
 												href='https://forum.giveth.io/t/ending-givfarm-liquidity-incentives-programs-for-giv/872'
