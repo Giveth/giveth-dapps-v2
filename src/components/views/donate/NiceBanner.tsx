@@ -27,6 +27,7 @@ const NiceBanner: FC<IDonateRouteProps> = ({ project }) => {
 					Donate DAI, xDAI, wxDAI or USDC to this project and receive
 					$nice tokens in addition to GIVbacks.
 					<InfoReadMore
+						as='a'
 						rel='noopener noreferrer'
 						target='_blank'
 						href={links.NICE_DOC}
