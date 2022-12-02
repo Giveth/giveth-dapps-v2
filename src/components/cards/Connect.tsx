@@ -273,6 +273,7 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 										</WalletCheckButton>
 									</WalletDisplayerInputContainer>
 									<WalletLink
+										as='a'
 										href='https://docs.giveth.io/giveconomy/givdrop/#if-you-get-stuck-in-the-givdrop-claim'
 										target='_blank'
 									>
