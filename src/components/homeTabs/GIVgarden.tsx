@@ -4,6 +4,7 @@ import { H1, IconGIVGarden } from '@giveth/ui-design-system';
 import BigNumber from 'bignumber.js';
 import { Zero } from '@ethersproject/constants';
 import { ethers } from 'ethers';
+import { useIntl } from 'react-intl';
 import { useWeb3React } from '@web3-react/core';
 import {
 	GardenTopContainer,
@@ -37,6 +38,7 @@ const poolStakingConfig = getGivStakingConfig(config.XDAI_CONFIG);
 export const TabGardenTop = () => {
 	const { chainId } = useWeb3React();
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
+	const { formatMessage } = useIntl();
 
 	const [showModal, setShowModal] = useState(false);
 	const [earnedLiquidPart, setEarnedLiquidPart] =
@@ -64,17 +66,22 @@ export const TabGardenTop = () => {
 							</GardenIconContainer>
 						</Title>
 						<Subtitle size='medium'>
-							The GIVgarden is the decentralized governance
-							platform for the GIVeconomy.
+							{formatMessage({
+								id: 'label.givgarden_is_the_decentralized_gov_platform',
+							})}
 						</Subtitle>
 					</Col>
 					<Col xs={12} sm={5} md={4}>
 						<GardenRewardCard
-							title='Your GIVgarden rewards'
-							wrongNetworkText='GIVgarden is only available on Gnosis Chain.'
+							title={formatMessage({
+								id: 'label.your_giv_garden_rewards',
+							})}
+							wrongNetworkText={formatMessage({
+								id: 'label.givgarden_is_only_available_on_gnosis',
+							})}
 							liquidAmount={earnedLiquidPart}
 							stream={earnedStream}
-							actionLabel='HARVEST'
+							actionLabel={formatMessage({ id: 'label.harvest' })}
 							actionCb={() => {
 								setShowModal(true);
 							}}
@@ -86,7 +93,7 @@ export const TabGardenTop = () => {
 			</TopInnerContainer>
 			{showModal && (
 				<HarvestAllModal
-					title='GIVgarden Rewards'
+					title={formatMessage({ id: 'label.givgarden_rewards' })}
 					setShowModal={setShowModal}
 					poolStakingConfig={poolStakingConfig}
 					earned={earned}
@@ -99,6 +106,8 @@ export const TabGardenTop = () => {
 };
 
 export const TabGardenBottom = () => {
+	const { formatMessage } = useIntl();
+
 	const goToGarden = () => {
 		const url = config.GARDEN_LINK;
 		window.open(url, '_blank');
@@ -107,27 +116,29 @@ export const TabGardenBottom = () => {
 	return (
 		<GardenBottomContainer>
 			<Container>
-				<Section1Title weight={700}>Vote & Earn</Section1Title>
+				<Section1Title weight={700}>
+					{formatMessage({ id: 'label.vote_and_earn' })}
+				</Section1Title>
 				<GivGardenSection>
 					<Section1Subtitle size='small'>
-						GIV token holders influence the treasury, roadmap and
-						mission of the Giveth ecosystem. By voting in the
-						GIVgarden you earn rewards on your staked GIV!
+						{formatMessage({
+							id: 'label.givtoken_holders_influence_the_treasyry',
+						})}
 					</Section1Subtitle>
 					<OpenGardenButton
 						buttonType='primary'
-						label='OPEN GIVGARDEN'
+						label={formatMessage({ id: 'label.open_givgarden' })}
 						size='large'
 						onClick={goToGarden}
 					/>
 				</GivGardenSection>
 				<Section2Title weight={500}>
-					Three Pillars of Governance
+					{formatMessage({ id: 'label.three_pillars_of_governance' })}
 				</Section2Title>
 				<GovernanceRaw>
 					<Col xs={12} sm={6} md={4}>
 						<GovernanceDB
-							title='Covenant'
+							title={formatMessage({ id: 'label.covenant' })}
 							button={
 								<GovernanceLink
 									size='Medium'
@@ -135,18 +146,20 @@ export const TabGardenBottom = () => {
 									rel='noreferrer'
 									href='https://docs.giveth.io/whatisgiveth/covenant'
 								>
-									LEARN MORE
+									{formatMessage({ id: 'label.learn_more' })}
 								</GovernanceLink>
 							}
 						>
-							A decentralized social contract that outlines
-							standards for on-chain and off-chain community
-							behaviour.
+							{formatMessage({
+								id: 'label.a_decentralized_social_contract',
+							})}
 						</GovernanceDB>
 					</Col>
 					<Col xs={12} sm={6} md={4}>
 						<GovernanceDB
-							title='Conviction Voting'
+							title={formatMessage({
+								id: 'label.conviction_voting',
+							})}
 							button={
 								<GovernanceLink
 									size='Medium'
@@ -154,18 +167,18 @@ export const TabGardenBottom = () => {
 									rel='noreferrer'
 									href='https://forum.giveth.io/t/conviction-voting/154'
 								>
-									LEARN MORE
+									{formatMessage({ id: 'label.learn_more' })}
 								</GovernanceLink>
 							}
 						>
-							A token-weighted decision making tool, used for
-							funds allocation, in which voting power is accrued
-							as a function of tokens staked and time.
+							{formatMessage({
+								id: 'label.a_token_weighted_deicision_making_tool',
+							})}
 						</GovernanceDB>
 					</Col>
 					<Col xs={12} sm={6} md={4}>
 						<GovernanceDB
-							title='Tao Voting'
+							title={formatMessage({ id: 'label.tao_voting' })}
 							button={
 								<GovernanceLink
 									size='Medium'
@@ -173,24 +186,27 @@ export const TabGardenBottom = () => {
 									rel='noreferrer'
 									href='https://forum.giveth.io/t/tao-voting-explained/155'
 								>
-									LEARN MORE
+									{formatMessage({ id: 'label.learn_more' })}
 								</GovernanceLink>
 							}
 						>
-							A token-weighted YES/NO decision making tool, with
-							the option of delegation, that is used to make
-							non-financial decisions in the GIVgarden.
+							{formatMessage({
+								id: 'label.a_token_weighted_yes_no',
+							})}
 						</GovernanceDB>
 					</Col>
 				</GovernanceRaw>
 				<VoteCard>
-					<H1>Vote in the GIVgarden</H1>
+					<H1>
+						{formatMessage({ id: 'label.vote_in_the_givgarden' })}
+					</H1>
 					<VoteCardDesc size='small'>
-						The GIVgarden empowers the Giveth community to
-						coordinate around shared resources from the bottom up.
+						{formatMessage({
+							id: 'label.the_giv_garden_empowers_the_giv_community',
+						})}
 					</VoteCardDesc>
 					<VoteCardButton
-						label='OPEN GIVGARDEN'
+						label={formatMessage({ id: 'label.open_givgarden' })}
 						buttonType='primary'
 						onClick={goToGarden}
 					/>

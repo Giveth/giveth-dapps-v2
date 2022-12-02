@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import router from 'next/router';
 import { Button, IconExternalLink, P } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import { useWeb3React } from '@web3-react/core';
 import {
 	OverviewTopContainer,
@@ -28,16 +29,17 @@ import { Flex } from '../styled-components/Flex';
 import { ExtLinkCyan } from './commons';
 
 export const TabOverviewTop = () => {
+	const { formatMessage } = useIntl();
 	return (
 		<OverviewTopContainer>
 			<Container>
-				<PreTitle as='span'>Welcome to the</PreTitle>
+				<PreTitle as='span'>
+					{formatMessage({ id: 'label.welcome_to_the' })}
+				</PreTitle>
 				<OverviewTitle>GIVeconomy</OverviewTitle>
 				<Col lg={9}>
 					<SubTitle size='medium'>
-						The GIVeconomy empowers our collective of projects,
-						donors, builders, and community members to build the
-						Future of Giving.
+						{formatMessage({ id: 'label.the_giveconomy_empowers' })}
 					</SubTitle>
 				</Col>
 			</Container>
@@ -47,6 +49,7 @@ export const TabOverviewTop = () => {
 
 export const TabOverviewBottom = () => {
 	const { chainId } = useWeb3React();
+	const { formatMessage } = useIntl();
 
 	const goToClaim = () => {
 		router.push(Routes.Claim);
@@ -55,116 +58,146 @@ export const TabOverviewBottom = () => {
 	return (
 		<OverviewBottomContainer>
 			<Container>
-				<TabTitle weight={700}>The Economy of Giving</TabTitle>
+				<TabTitle weight={700}>
+					{formatMessage({ id: 'label.the_economy_of_giving' })}
+				</TabTitle>
 				<Col md={10} lg={8}>
 					<TabDesc size='medium'>
-						Giveth is rewarding and empowering those who give to
-						projects, to society, and to the world!
+						{formatMessage({
+							id: 'label.giveth_is_rewarding_and_empowering_those',
+						})}
 					</TabDesc>
 				</Col>
 				<Row>
 					<Col xs={12} sm={6} md={4}>
 						<DataBlockWithMargin
 							title='GIV Token'
-							subtitle='Donate, earn, govern'
+							subtitle={formatMessage({
+								id: 'label.donate_earn_govern',
+							})}
 							button={
 								<Button
-									label='CLAIM YOUR GIVDROP'
+									label={formatMessage({
+										id: 'label.claim_your_givdrop',
+									})}
 									buttonType='primary'
 									onClick={goToClaim}
 								/>
 							}
 							icon={<IconGIV size={32} />}
 						>
-							GIV fuels and directs the Future of Giving,
-							inspiring people to become Givers and participate in
-							an ecosystem of collective support, abundance, and
-							value-creation.
+							{formatMessage({
+								id: 'label.giv_fuels_and_directs',
+							})}
 						</DataBlockWithMargin>
 					</Col>
 					<Col xs={12} sm={6} md={4}>
 						<DataBlockWithMargin
 							title='GIVbacks'
-							subtitle='GIVE AND RECEIVE'
+							subtitle={formatMessage({
+								id: 'label.give_and_receive',
+							})}
 						>
-							Giveth is a donor owned and governed economy. With
-							GIVbacks, we reward donors to verified projects on
-							Giveth with GIV tokens.
+							{formatMessage({
+								id: 'label.giveth_is_a_donor_owned_economy',
+							})}
 						</DataBlockWithMargin>
 					</Col>
 					<Col xs={12} sm={6} md={4}>
 						<DataBlockWithMargin
 							title='GIVstream'
-							subtitle='Get more GIV'
+							subtitle={formatMessage({
+								id: 'label.get_more_giv',
+							})}
 						>
-							Welcome to the expanding GIViverse! With the
-							GIVstream, our community members become long-term
-							stakeholders in the Future of Giving.
+							{formatMessage({
+								id: 'label.welcome_to_the_expanding_giviverse',
+							})}
 						</DataBlockWithMargin>
 					</Col>
 				</Row>
-				<Section2Title>How to participate</Section2Title>
+				<Section2Title>
+					{formatMessage({ id: 'label.how_to_participate' })}
+				</Section2Title>
 				<Row>
 					<Col xs={12} sm={6} md={4}>
 						<DataBlockWithMargin
-							title='Give'
+							title={formatMessage({ id: 'label.give' })}
 							button={
 								<Link href={Routes.Projects} passHref>
-									<DataBlockButton label='DONATE TO PROJECTS' />
+									<DataBlockButton
+										label={formatMessage({
+											id: 'label.donate_to_projects',
+										})}
+									/>
 								</Link>
 							}
 						>
-							Donate to empower change-makers that are working
-							hard to make a difference. Get GIVbacks when you
-							donate to verified projects.
+							{formatMessage({
+								id: 'label.donate_to_empower_changemakers',
+							})}
 						</DataBlockWithMargin>
 					</Col>
 					<Col xs={12} sm={6} md={4}>
 						<DataBlockWithMargin
-							title='Govern'
+							title={formatMessage({ id: 'label.govern' })}
 							button={
 								<DataBlockButton
 									href={config.GARDEN_LINK}
 									target='_blank'
-									label='SEE PROPOSALS'
+									label={formatMessage({
+										id: 'label.see_proposals',
+									})}
 								/>
 							}
 						>
-							The GIVeconomy empowers our collective of projects,
-							donors, builders and community members to build the
-							Future of Giving.
+							{formatMessage({
+								id: 'label.the_giveconomy_empowers_our_collective',
+							})}
 						</DataBlockWithMargin>
 					</Col>
 					<Col xs={12} sm={6} md={4}>
 						<DataBlockWithMargin
-							title='Earn'
+							title={formatMessage({ id: 'label.earn' })}
 							button={
 								<Link href={Routes.GIVfarm} passHref>
-									<DataBlockButton label='SEE FARMS' />
+									<DataBlockButton
+										label={formatMessage({
+											id: 'label.see_farms',
+										})}
+									/>
 								</Link>
 							}
 						>
-							Become a liquidity provider and stake tokens in the
-							GIVfarm to generate even more GIV in rewards.
+							{formatMessage({
+								id: 'label.become_a_liquidity_provider',
+							})}
 						</DataBlockWithMargin>
 					</Col>
 				</Row>
 				<ClaimCard>
 					<ClaimCardTitle weight={900}>
-						Claim your GIVdrop
+						{formatMessage({ id: 'label.claim_your_givdrop' })}
 					</ClaimCardTitle>
 					<ClaimCardQuote size='small'>
-						Connect your wallet or check an ethereum address to see
-						your rewards.
+						{formatMessage({
+							id: 'label.connect_your_wallet_or_check_an_eth_address',
+						})}
 					</ClaimCardQuote>
 					<ClaimRow alignItems='center'>
 						<ClaimCardButton
-							label='CLAIM YOUR GIV'
+							label={formatMessage({
+								id: 'label.claim_your_giv',
+							})}
 							buttonType='primary'
 							onClick={goToClaim}
 						/>
 						<Flex gap='8px'>
-							<P>Didn’t get the GIVdrop?</P>
+							<P>
+								{formatMessage({
+									id: 'label.didnt_get_the_givdrop',
+								})}
+							</P>
 							<ExtLinkCyan
 								size='Big'
 								target='_blank'
@@ -175,7 +208,8 @@ export const TabOverviewBottom = () => {
 										: config.MAINNET_CONFIG.GIV.BUY_LINK
 								}
 							>
-								Buy GIV token <IconExternalLink />
+								{formatMessage({ id: 'label.buy_giv_token' })}{' '}
+								<IconExternalLink />
 							</ExtLinkCyan>
 						</Flex>
 					</ClaimRow>
