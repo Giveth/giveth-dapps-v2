@@ -54,6 +54,7 @@ export const SubmittedInnerModal: FC<IConfirmSubmitProps> = ({
 			</AddTokenRow>
 			{txHash && (
 				<BlockExplorerLink
+					as='a'
 					href={`${config.NETWORKS_CONFIG[walletNetwork]?.blockExplorerUrls}
 			/tx/${txHash}`}
 					target='_blank'
@@ -96,6 +97,7 @@ export const ConfirmedInnerModal: FC<IConfirmSubmitProps> = ({
 				/>
 			</AddTokenRow>
 			<BlockExplorerLink
+				as='a'
 				href={`${config.NETWORKS_CONFIG[walletNetwork]?.blockExplorerUrls}
 							/tx/${txHash}`}
 				target='_blank'
@@ -132,6 +134,7 @@ export const ErrorInnerModal: FC<IErrorProps> = ({
 			{message && <ErrorMessage>{message}</ErrorMessage>}
 			{txHash && (
 				<BlockExplorerLink
+					as='a'
 					href={`${config.NETWORKS_CONFIG[walletNetwork]?.blockExplorerUrls}
 			/tx/${txHash}`}
 					target='_blank'
