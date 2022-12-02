@@ -48,7 +48,13 @@ const FiatDonation = (props: {
 					<OnramperWidget
 						API_KEY={process.env.NEXT_PUBLIC_ONRAMPER_API_KEY}
 						filters={{
-							onlyCryptos: ['ETH', 'USDC', 'USDT', 'RAI', 'DAI'],
+							onlyCryptos: [
+								'ETH',
+								'USDC',
+								'USDT',
+								'RAI',
+								'DAI_ERC20',
+							],
 						}}
 						defaultFiat='USD'
 						defaultCrypto='USDC'
