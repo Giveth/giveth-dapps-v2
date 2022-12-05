@@ -225,6 +225,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 								id: 'page.projects.title.explore',
 							})}
 							<span>
+								{' '}
 								{totalCount}{' '}
 								{formatMessage({
 									id: 'page.projects.title.projects',
