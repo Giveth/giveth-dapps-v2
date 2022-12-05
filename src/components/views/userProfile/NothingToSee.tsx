@@ -18,7 +18,8 @@ const NothingToSee = ({ title, heartIcon }: IEmptyBox) => {
 						: '/images/empty-box.svg'
 				}
 				alt='nothing'
-				style={{ width: '100%', height: '100%' }}
+				width={100}
+				height={100}
 			/>
 			<Lead>{title}</Lead>
 		</NothingBox>
