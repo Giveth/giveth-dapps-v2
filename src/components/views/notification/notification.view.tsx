@@ -35,7 +35,7 @@ enum ENotificationTabs {
 	ALL,
 	GENERAL = 'general',
 	PROJECTS = 'projectRelated',
-	GIVECONOMY = 'givEconomyRelated',
+	GIVECONOMY = 'givEconomy',
 }
 
 const limit = 6;
