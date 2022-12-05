@@ -15,7 +15,7 @@ const Tabs: FC = () => {
 			<Container>
 				<Flex gap='16px'>
 					{giveconomyTabs.map((tab, idx) => (
-						<Link key={idx} href={tab.href} passHref>
+						<Link key={idx} href={tab.href}>
 							<Label size='Big' isActive={asPath === tab.href}>
 								{tab.label}
 							</Label>
