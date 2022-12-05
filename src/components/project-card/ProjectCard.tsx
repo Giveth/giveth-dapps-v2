@@ -70,16 +70,16 @@ const ProjectCard = (props: IProjectCard) => {
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
 		>
-			<Link href={slugToProjectView(slug)}>
-				<ImagePlaceholder>
-					<ProjectCardBadges project={project} />
-					<ProjectCardOrgBadge
-						organization={orgLabel}
-						isHover={isHover}
-					/>
+			<ImagePlaceholder>
+				<ProjectCardBadges project={project} />
+				<ProjectCardOrgBadge
+					organization={orgLabel}
+					isHover={isHover}
+				/>
+				<Link href={slugToProjectView(slug)}>
 					<ProjectCardImage image={image} />
-				</ImagePlaceholder>
-			</Link>
+				</Link>
+			</ImagePlaceholder>
 			<CardBody
 				isHover={isHover}
 				isOtherOrganization={
