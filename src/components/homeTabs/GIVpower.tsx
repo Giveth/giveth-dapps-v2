@@ -120,7 +120,6 @@ export function TabPowerTop() {
 													? Routes.GIVfarm
 													: Routes.Projects
 											}
-											passHref
 											legacyBehavior
 										>
 											<BoostProjectButton
