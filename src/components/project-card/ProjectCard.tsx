@@ -307,7 +307,6 @@ const Wrapper = styled.div`
 	overflow: hidden;
 	box-shadow: ${Shadow.Neutral[400]};
 	height: 536px;
-	cursor: pointer;
 	${mediaQueries.laptopS} {
 		height: 472px;
 	}
