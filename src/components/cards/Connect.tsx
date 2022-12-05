@@ -252,7 +252,7 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 									</ConnectButton>
 									{giveDropState ===
 										GiveDropStateType.Missed && (
-										<Link href='/' passHref>
+										<Link href='/'>
 											<WalletLink>
 												Go to GIVeconomy
 											</WalletLink>
