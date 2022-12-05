@@ -41,7 +41,6 @@ const AboutIndex = () => {
 				<TeamImageWrapper>
 					<Image
 						src={'/images/giveth-team-new.png'}
-						layout='responsive'
 						alt='giveth team'
 						style={{ width: '100%', height: '45vh' }}
 					/>
