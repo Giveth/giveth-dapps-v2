@@ -207,7 +207,7 @@ const Header: FC<IHeader> = () => {
 			{!showBackBtn && (
 				<HeaderLinks theme={theme}>
 					{menuRoutes.map((link, index) => (
-						<Link href={link.href[0]} passHref key={index}>
+						<Link href={link.href[0]} key={index}>
 							<HeaderLink
 								size='Big'
 								theme={theme}
