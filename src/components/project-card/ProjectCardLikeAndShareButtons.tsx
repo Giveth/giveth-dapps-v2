@@ -133,6 +133,7 @@ const BadgeButton = styled(Flex)`
 	&:hover {
 		color: ${neutralColors.gray[900]};
 	}
+	pointer-events: auto;
 `;
 
 const BadgeWrapper = styled.div`
@@ -142,6 +143,7 @@ const BadgeWrapper = styled.div`
 	display: flex;
 	justify-content: flex-end;
 	padding: 16px;
+	pointer-events: none;
 `;
 
 export default ProjectCardLikeAndShareButtons;
