@@ -10,7 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useState } from 'react';
 import styled from 'styled-components';
-// import Routes from '@/lib/constants/Routes';
+import Link from 'next/link';
 import links from '@/lib/constants/links';
 import TotalGIVpowerBox from '../modals/StakeLock/TotalGIVpowerBox';
 import { Flex, FlexSpacer } from '../styled-components/Flex';
@@ -57,8 +57,11 @@ const GIVpowerCardIntro: FC<IGIVpowerCardIntro> = ({ setState }) => {
 					With GIVpower, you can support the projects you believe in,
 					without sacrificing!
 				</Desc>
-				<ButtonLink label='Boost Projects' href={Routes.Projects} />
+				<Link href={Routes.Projects}>
+					<ButtonLink label='Boost Projects' />
+				</Link>
 				<LearnMoreButton
+					isExternal
 					label='Learn More'
 					linkType='texty'
 					href={links.GIVPOWER_DOC}

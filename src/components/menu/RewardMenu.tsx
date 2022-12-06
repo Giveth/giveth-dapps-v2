@@ -117,9 +117,11 @@ export const RewardMenu = ({
 				</NetworkTitle>
 				<NetworkRow>
 					<B>{networkName}</B>
-					<SwithNetwork onClick={() => switchNetworkHandler(chainId)}>
+					<SwitchNetwork
+						onClick={() => switchNetworkHandler(chainId)}
+					>
 						{formatMessage({ id: 'label.switch_network' })}
-					</SwithNetwork>
+					</SwitchNetwork>
 				</NetworkRow>
 				<FlowrateBox theme={theme}>
 					<Overline styleType='Small'>
@@ -222,7 +224,7 @@ export const NetworkRow = styled(Flex)`
 	align-items: center;
 `;
 
-export const SwithNetwork = styled(GLink)`
+export const SwitchNetwork = styled(GLink)`
 	color: ${brandColors.pinky[500]};
 	cursor: pointer;
 `;

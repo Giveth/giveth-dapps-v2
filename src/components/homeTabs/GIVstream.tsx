@@ -214,6 +214,7 @@ export const TabGIVstreamBottom = () => {
 							title='GIVstream'
 							button={
 								<GsButton
+									isExternal
 									label='LEARN MORE'
 									linkType='secondary'
 									size='large'

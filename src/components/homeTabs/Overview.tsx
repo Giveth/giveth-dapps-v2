@@ -124,7 +124,7 @@ export const TabOverviewBottom = () => {
 							title='Govern'
 							button={
 								<DataBlockButton
-									isExternal={true}
+									isExternal
 									href={config.GARDEN_LINK}
 									target='_blank'
 									label='SEE PROPOSALS'
