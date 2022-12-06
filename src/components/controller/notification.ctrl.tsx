@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
+import { useWeb3React } from '@web3-react/core';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 
 import { fetchNotificationCountAsync } from '@/features/notification/notification.thunks';
-import { useWeb3React } from '@web3-react/core';
 
 const NotificationController = () => {
 	const dispatch = useAppDispatch();
-	const { isSignedIn, isEnabled } = useAppSelector(state => state.user);
+	const { isEnabled } = useAppSelector(state => state.user);
 	const { account } = useWeb3React();
 
 	useEffect(() => {
@@ -21,7 +21,7 @@ const NotificationController = () => {
 		return () => {
 			if (interval) clearInterval(interval);
 		};
-	}, [isSignedIn, dispatch]);
+	}, [dispatch, isEnabled, account]);
 	return null;
 };
 
