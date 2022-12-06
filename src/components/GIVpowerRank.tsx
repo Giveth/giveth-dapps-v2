@@ -18,18 +18,27 @@ interface IGIVpowerRank {
 	projectFuturePower?: IProjectPower;
 }
 
+const calculateProjectedRank = (
+	currentRank?: IProjectPower,
+	futureRank?: IProjectPower,
+) => {
+	if (!futureRank) return currentRank?.powerRank;
+	if (futureRank.totalPower === 0) return undefined;
+	return futureRank.powerRank;
+};
+
 export const NextRank: FC<IGIVpowerRank> = ({
 	projectPower,
 	projectFuturePower,
 }) => {
-	const projectedRank =
-		projectFuturePower?.totalPower === 0
-			? undefined
-			: projectFuturePower?.powerRank;
+	const projectedRank = calculateProjectedRank(
+		projectPower,
+		projectFuturePower,
+	);
 	const goingUp =
-		!projectedRank || !projectPower?.powerRank
-			? 0
-			: projectedRank - projectPower?.powerRank;
+		projectedRank && projectPower?.powerRank
+			? projectedRank - projectPower?.powerRank
+			: 0;
 	return (
 		<NextRankContainer state={goingUp} alignItems='baseline' gap='4px'>
 			{goingUp === 0 ? (
@@ -40,13 +49,7 @@ export const NextRank: FC<IGIVpowerRank> = ({
 				<IconArrowUp16 />
 			)}
 			{!projectedRank && <IconRocketInSpace16 />}
-			<H6 weight={700}>
-				{projectedRank
-					? `#${projectedRank}`
-					: projectPower?.totalPower === 0
-					? '--'
-					: `#${projectPower?.powerRank}`}
-			</H6>
+			<H6 weight={700}>{projectedRank ? `#${projectedRank}` : '--'}</H6>
 		</NextRankContainer>
 	);
 };
