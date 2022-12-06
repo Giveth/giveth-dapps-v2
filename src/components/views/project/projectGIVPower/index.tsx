@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import BigNumber from 'bignumber.js';
 import GIVPowerHeader from './GIVPowerHeader';
 import GIVPowerTable from './GIVPowerTable';
 import NoBoost from '@/components/views/project/projectGIVPower/NoBoost';
@@ -14,16 +15,10 @@ export interface IPowerBoostingWithUserGIVpower
 	user: {
 		name: string;
 		walletAddress: string;
-		allocated: string;
+		allocated: BigNumber;
 		givpowerBalance: string;
 	};
 }
-interface IBoostersData {
-	powerBoostings: IPowerBoostingWithUserGIVpower[];
-	totalPowerBoosting: string;
-	totalCount: number;
-}
-
 interface ProjectGIVPowerIndexProps {
 	userId?: string;
 	projectId: string;
