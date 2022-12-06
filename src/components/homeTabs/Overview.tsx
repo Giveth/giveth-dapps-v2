@@ -109,7 +109,7 @@ export const TabOverviewBottom = () => {
 						<DataBlockWithMargin
 							title='Give'
 							button={
-								<Link href={Routes.Projects} passHref>
+								<Link href={Routes.Projects}>
 									<DataBlockButton label='DONATE TO PROJECTS' />
 								</Link>
 							}
@@ -124,6 +124,7 @@ export const TabOverviewBottom = () => {
 							title='Govern'
 							button={
 								<DataBlockButton
+									isExternal={true}
 									href={config.GARDEN_LINK}
 									target='_blank'
 									label='SEE PROPOSALS'
@@ -139,7 +140,7 @@ export const TabOverviewBottom = () => {
 						<DataBlockWithMargin
 							title='Earn'
 							button={
-								<Link href={Routes.GIVfarm} passHref>
+								<Link href={Routes.GIVfarm}>
 									<DataBlockButton label='SEE FARMS' />
 								</Link>
 							}
@@ -166,6 +167,7 @@ export const TabOverviewBottom = () => {
 						<Flex gap='8px'>
 							<P>Didn’t get the GIVdrop?</P>
 							<ExtLinkCyan
+								as='a'
 								size='Big'
 								target='_blank'
 								rel='noreferrer'

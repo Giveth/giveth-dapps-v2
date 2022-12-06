@@ -41,7 +41,7 @@ const BoostedInnerModal: FC<IBoostedModalProps> = ({
 						size='small'
 						href={`${Routes.GIVfarm}/?open=${StakingType.GIV_LM}&chain=gnosis`}
 					/>
-					<Link href={Routes.MyBoostedProjects} passHref>
+					<Link href={Routes.MyBoostedProjects}>
 						<CustomButtonLink
 							linkType='texty-primary'
 							size='small'

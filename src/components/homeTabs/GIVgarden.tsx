@@ -130,6 +130,7 @@ export const TabGardenBottom = () => {
 							title='Covenant'
 							button={
 								<GovernanceLink
+									as='a'
 									size='Medium'
 									target='_blank'
 									rel='noreferrer'
@@ -149,6 +150,7 @@ export const TabGardenBottom = () => {
 							title='Conviction Voting'
 							button={
 								<GovernanceLink
+									as='a'
 									size='Medium'
 									target='_blank'
 									rel='noreferrer'
@@ -168,6 +170,7 @@ export const TabGardenBottom = () => {
 							title='Tao Voting'
 							button={
 								<GovernanceLink
+									as='a'
 									size='Medium'
 									target='_blank'
 									rel='noreferrer'

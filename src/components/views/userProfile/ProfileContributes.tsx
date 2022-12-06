@@ -63,72 +63,62 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 		<ProfileContainer>
 			<ProfileTabsContainer>
 				<Link href={pathname + profileTabs.overview}>
-					<a>
-						<ProfileTab active={tab === EProfile.OVERVIEW}>
-							Overview
-						</ProfileTab>
-					</a>
+					<ProfileTab active={tab === EProfile.OVERVIEW}>
+						Overview
+					</ProfileTab>
 				</Link>
 				<Link href={pathname + profileTabs.givpower}>
-					<a>
-						<ProfileTab active={tab === EProfile.GIVPOWER}>
-							{`${myAccount ? 'My ' : ''} GIVpower`}
-							{myAccount && user?.boostedProjectsCount !== 0 && (
-								<Count active={tab === EProfile.GIVPOWER}>
-									{user?.boostedProjectsCount}
-								</Count>
-							)}
-						</ProfileTab>
-					</a>
+					<ProfileTab active={tab === EProfile.GIVPOWER}>
+						{`${myAccount ? 'My ' : ''} GIVpower`}
+						{myAccount && user?.boostedProjectsCount !== 0 && (
+							<Count active={tab === EProfile.GIVPOWER}>
+								{user?.boostedProjectsCount}
+							</Count>
+						)}
+					</ProfileTab>
 				</Link>
 				<Link href={pathname + profileTabs.projects}>
-					<a>
-						<ProfileTab active={tab === EProfile.PROJECTS}>
-							{`${
-								myAccount
-									? formatMessage({ id: 'label.my_projects' })
-									: formatMessage({ id: 'label.projects' })
-							}`}
-							{myAccount && user?.projectsCount != 0 && (
-								<Count active={tab === EProfile.PROJECTS}>
-									{user?.projectsCount}
-								</Count>
-							)}
-						</ProfileTab>
-					</a>
+					<ProfileTab active={tab === EProfile.PROJECTS}>
+						{`${
+							myAccount
+								? formatMessage({ id: 'label.my_projects' })
+								: formatMessage({ id: 'label.projects' })
+						}`}
+						{myAccount && user?.projectsCount != 0 && (
+							<Count active={tab === EProfile.PROJECTS}>
+								{user?.projectsCount}
+							</Count>
+						)}
+					</ProfileTab>
 				</Link>
 				<Link href={pathname + profileTabs.donations}>
-					<a>
-						<ProfileTab active={tab === EProfile.DONATIONS}>
-							{`${
-								myAccount
-									? formatMessage({
-											id: 'label.my_donations',
-									  })
-									: formatMessage({ id: 'label.donations' })
-							}`}
-							{myAccount && user?.donationsCount != 0 && (
-								<Count active={tab === EProfile.DONATIONS}>
-									{user?.donationsCount}
-								</Count>
-							)}
-						</ProfileTab>
-					</a>
+					<ProfileTab active={tab === EProfile.DONATIONS}>
+						{`${
+							myAccount
+								? formatMessage({
+										id: 'label.my_donations',
+								  })
+								: formatMessage({ id: 'label.donations' })
+						}`}
+						{myAccount && user?.donationsCount != 0 && (
+							<Count active={tab === EProfile.DONATIONS}>
+								{user?.donationsCount}
+							</Count>
+						)}
+					</ProfileTab>
 				</Link>
 				<Link href={pathname + profileTabs.likedProjects}>
-					<a>
-						<ProfileTab
-							active={tab === EProfile.LIKED}
-							onClick={() => setTab(EProfile.LIKED)}
-						>
-							{formatMessage({ id: 'label.liked_projects' })}
-							{myAccount && !!user.likedProjectsCount && (
-								<Count active={tab === EProfile.LIKED}>
-									{user?.likedProjectsCount}
-								</Count>
-							)}
-						</ProfileTab>
-					</a>
+					<ProfileTab
+						active={tab === EProfile.LIKED}
+						onClick={() => setTab(EProfile.LIKED)}
+					>
+						{formatMessage({ id: 'label.liked_projects' })}
+						{myAccount && !!user.likedProjectsCount && (
+							<Count active={tab === EProfile.LIKED}>
+								{user?.likedProjectsCount}
+							</Count>
+						)}
+					</ProfileTab>
 				</Link>
 			</ProfileTabsContainer>
 			{tab === EProfile.OVERVIEW && (

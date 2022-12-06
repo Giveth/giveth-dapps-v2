@@ -419,6 +419,7 @@ export const GIVstreamHistory: FC = () => {
 									{chainId && (
 										<TxSpan>
 											<TxHash
+												as='a'
 												size='Big'
 												href={`${config.NETWORKS_CONFIG[chainId]?.blockExplorerUrls}/tx/${tokenAllocation.txHash}`}
 												target='_blank'

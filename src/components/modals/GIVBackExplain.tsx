@@ -36,6 +36,7 @@ export const GIVBackExplainModal: FC<IModal> = ({ setShowModal }) => {
 				<LinksRow alignItems='center' justifyContent='center'>
 					<GLink
 						onClick={closeModal}
+						as='a'
 						target='_blank'
 						href={links.GIVBACK_DOC}
 					>

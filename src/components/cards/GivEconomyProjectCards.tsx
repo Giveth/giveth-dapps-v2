@@ -46,7 +46,7 @@ const GivEconomyProjectCards = () => {
 				<IGsDataBox
 					title='GIVfarm'
 					button={
-						<Link href={Routes.GIVfarm} passHref>
+						<Link href={Routes.GIVfarm}>
 							<GsButton
 								label='SEE OPPORTUNITIES'
 								linkType='primary'

@@ -16,25 +16,25 @@ export const EmptyPowerBoosting = () => {
 			{givPower.balance === '0' ? (
 				<>
 					<Title size='small'>
-						You don't have any GIVpower yet!
+						You don&apos;t have any GIVpower yet!
 						<br />
 						Stake and lock GIV to get GIVpower and starting boosting
 						projects.
 					</Title>
 					<br />
-					<Link href={Routes.GIVfarm} passHref>
+					<Link href={Routes.GIVfarm}>
 						<ButtonLink label='Get GIVpower' size='small' />
 					</Link>
 				</>
 			) : (
 				<>
 					<Title size='small'>
-						You haven't boosted any projects yet!
+						You haven&apos;t boosted any projects yet!
 						<br />
 						Use your GIVpower to support projects you love.
 					</Title>
 					<br />
-					<Link href={Routes.Projects} passHref>
+					<Link href={Routes.Projects}>
 						<ButtonLink label='Go to projects' size='small' />
 					</Link>
 				</>

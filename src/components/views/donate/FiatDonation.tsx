@@ -23,8 +23,8 @@ const FiatDonation = (props: {
 			<ImageContainer>
 				<Image
 					src='/images/powered_by_transak.svg'
-					width='165px'
-					height='24px'
+					width='165'
+					height='24'
 					alt={'Powered by Transak'}
 				/>
 			</ImageContainer>

@@ -65,123 +65,122 @@ const ProjectCard = (props: IProjectCard) => {
 	const { formatMessage, formatRelativeTime } = useIntl();
 
 	return (
-		<Link href={slugToProjectView(slug)} passHref>
-			<Wrapper
-				onMouseEnter={() => setIsHover(true)}
-				onMouseLeave={() => setIsHover(false)}
-			>
-				<ImagePlaceholder>
-					<ProjectCardBadges project={project} />
-					<ProjectCardOrgBadge
-						organization={orgLabel}
-						isHover={isHover}
-					/>
-					<ProjectCardImage image={image} />
-				</ImagePlaceholder>
-				<CardBody
+		// <Link href={slugToProjectView(slug)}>
+		<Wrapper
+			onMouseEnter={() => setIsHover(true)}
+			onMouseLeave={() => setIsHover(false)}
+		>
+			<ImagePlaceholder>
+				<ProjectCardBadges project={project} />
+				<ProjectCardOrgBadge
+					organization={orgLabel}
 					isHover={isHover}
-					isOtherOrganization={
-						orgLabel && orgLabel !== ORGANIZATION.giveth
-					}
-				>
-					<div style={{ position: 'relative' }}>
-						<LastUpdatedContainer isHover={isHover}>
-							{formatMessage({ id: 'label.last_updated' })}:
-							{timeFromNow(
-								updatedAt,
-								formatRelativeTime,
-								formatMessage({ id: 'label.just_now' }),
-							)}
-						</LastUpdatedContainer>
+				/>
+				<Link href={slugToProjectView(slug)}>
+					<ProjectCardImage image={image} />
+				</Link>
+			</ImagePlaceholder>
+			<CardBody
+				isHover={isHover}
+				isOtherOrganization={
+					orgLabel && orgLabel !== ORGANIZATION.giveth
+				}
+			>
+				<div style={{ position: 'relative' }}>
+					<LastUpdatedContainer isHover={isHover}>
+						{formatMessage({ id: 'label.last_updated' })}:
+						{timeFromNow(
+							updatedAt,
+							formatRelativeTime,
+							formatMessage({ id: 'label.just_now' }),
+						)}
+					</LastUpdatedContainer>
 
-						<InternalLink href={slugToProjectView(slug)}>
-							<Title weight={700} isHover={isHover}>
-								{title}
-							</Title>
-						</InternalLink>
-					</div>
-					{adminUser && !isForeignOrg ? (
-						<Link
-							href={addressToUserView(adminUser?.walletAddress)}
-							passHref
-						>
-							<Author size='Big'>{name || '\u200C'}</Author>
-						</Link>
-					) : (
-						<Author size='Big'>
-							<br />
-						</Author>
-					)}
-					<Description>{htmlToText(description)}</Description>
-					<Flex alignItems='center' gap='4px'>
-						<PriceText>
-							${Math.ceil(totalDonations as number)}
-						</PriceText>
-						<LightSubline>
-							{' '}
-							{formatMessage({ id: 'label.raised_two' })}
-						</LightSubline>
-					</Flex>
-					{verified && (
-						<>
-							<Hr />
-							<Flex justifyContent='space-between'>
-								<Flex gap='16px'>
-									<Flex alignItems='center' gap='4px'>
-										<IconVerifiedBadge16
-											color={semanticColors.jade[500]}
-										/>
-										<VerifiedText>
-											{formatMessage({
-												id: 'label.verified',
-											})}
-										</VerifiedText>
-									</Flex>
-									<Flex alignItems='center' gap='2px'>
-										<GivBackIconContainer>
-											<IconGIVBack
-												size={24}
-												color={brandColors.giv[500]}
-											/>
-										</GivBackIconContainer>
-										<GivBackText>
-											{formatMessage({
-												id: 'label.givback_eligible',
-											})}
-										</GivBackText>
-									</Flex>
-								</Flex>
-								<GivpowerRankContainer
-									gap='8px'
-									alignItems='center'
-								>
-									<IconRocketInSpace16
-										color={neutralColors.gray[700]}
+					<InternalLink href={slugToProjectView(slug)}>
+						<Title weight={700} isHover={isHover}>
+							{title}
+						</Title>
+					</InternalLink>
+				</div>
+				{adminUser?.name && !isForeignOrg ? (
+					<Link href={addressToUserView(adminUser?.walletAddress)}>
+						<Author size='Big'>{name || '\u200C'}</Author>
+					</Link>
+				) : (
+					<Author size='Big'>
+						<br />
+					</Author>
+				)}
+				<Description>{htmlToText(description)}</Description>
+				<Flex alignItems='center' gap='4px'>
+					<PriceText>
+						${Math.ceil(totalDonations as number)}
+					</PriceText>
+					<LightSubline>
+						{' '}
+						{formatMessage({ id: 'label.raised_two' })}
+					</LightSubline>
+				</Flex>
+				{verified && (
+					<>
+						<Hr />
+						<Flex justifyContent='space-between'>
+							<Flex gap='16px'>
+								<Flex alignItems='center' gap='4px'>
+									<IconVerifiedBadge16
+										color={semanticColors.jade[500]}
 									/>
-									<B>
-										{projectPower?.powerRank &&
-										projectPower?.totalPower !== 0
-											? `#${projectPower.powerRank}`
-											: '--'}
-									</B>
-								</GivpowerRankContainer>
+									<VerifiedText>
+										{formatMessage({
+											id: 'label.verified',
+										})}
+									</VerifiedText>
+								</Flex>
+								<Flex alignItems='center' gap='2px'>
+									<GivBackIconContainer>
+										<IconGIVBack
+											size={24}
+											color={brandColors.giv[500]}
+										/>
+									</GivBackIconContainer>
+									<GivBackText>
+										{formatMessage({
+											id: 'label.givback_eligible',
+										})}
+									</GivBackText>
+								</Flex>
 							</Flex>
-						</>
-					)}
+							<GivpowerRankContainer
+								gap='8px'
+								alignItems='center'
+							>
+								<IconRocketInSpace16
+									color={neutralColors.gray[700]}
+								/>
+								<B>
+									{projectPower?.powerRank &&
+									projectPower?.totalPower !== 0
+										? `#${projectPower.powerRank}`
+										: '--'}
+								</B>
+							</GivpowerRankContainer>
+						</Flex>
+					</>
+				)}
 
-					<ActionButtons>
-						<Link href={slugToProjectDonate(slug)} passHref>
-							<CustomizedDonateButton
-								linkType='primary'
-								size='small'
-								label={formatMessage({ id: 'label.donate' })}
-								isHover={isHover}
-							/>
-						</Link>
-					</ActionButtons>
-				</CardBody>
-			</Wrapper>
-		</Link>
+				<ActionButtons>
+					<Link href={slugToProjectDonate(slug)}>
+						<CustomizedDonateButton
+							linkType='primary'
+							size='small'
+							label={formatMessage({ id: 'label.donate' })}
+							isHover={isHover}
+						/>
+					</Link>
+				</ActionButtons>
+			</CardBody>
+		</Wrapper>
+		// </Link>
 	);
 };
 
@@ -308,7 +307,6 @@ const Wrapper = styled.div`
 	overflow: hidden;
 	box-shadow: ${Shadow.Neutral[400]};
 	height: 536px;
-	cursor: pointer;
 	${mediaQueries.laptopS} {
 		height: 472px;
 	}

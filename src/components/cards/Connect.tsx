@@ -200,7 +200,7 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 				<span>
 					But there are more ways to get GIV! Try another address or
 					donate to verified projects to qualify for{' '}
-					<Link href={Routes.GIVbacks} passHref>
+					<Link href={Routes.GIVbacks}>
 						<ClickableStrong>GIVbacks</ClickableStrong>
 					</Link>
 					.
@@ -252,7 +252,7 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 									</ConnectButton>
 									{giveDropState ===
 										GiveDropStateType.Missed && (
-										<Link href='/' passHref>
+										<Link href='/'>
 											<WalletLink>
 												Go to GIVeconomy
 											</WalletLink>
@@ -273,6 +273,7 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 										</WalletCheckButton>
 									</WalletDisplayerInputContainer>
 									<WalletLink
+										as='a'
 										href='https://docs.giveth.io/giveconomy/givdrop/#if-you-get-stuck-in-the-givdrop-claim'
 										target='_blank'
 									>

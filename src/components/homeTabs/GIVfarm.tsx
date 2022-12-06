@@ -145,6 +145,7 @@ export const TabGIVfarmBottom = () => {
 					<Flex alignItems='center' gap='24px' wrap={1}>
 						<ExtLinkRow alignItems='center'>
 							<GLink
+								as='a'
 								size='Big'
 								target='_blank'
 								rel='noreferrer'
@@ -156,6 +157,7 @@ export const TabGIVfarmBottom = () => {
 						</ExtLinkRow>
 						<ExtLinkRow alignItems='center'>
 							<GLink
+								as='a'
 								size='Big'
 								target='_blank'
 								rel='noreferrer'

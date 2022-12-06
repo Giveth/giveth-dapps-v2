@@ -273,6 +273,7 @@ export const TabGIVbacksBottom = () => {
 									order to be included in the round.
 								</InfoDesc>
 								<InfoReadMore
+									as='a'
 									target='_blank'
 									href={links.GIVBACK_DOC}
 								>
