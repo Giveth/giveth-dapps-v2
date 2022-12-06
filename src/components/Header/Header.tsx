@@ -216,6 +216,70 @@ const Header: FC<IHeader> = () => {
 		}
 	};
 
+	const handleShowNotifications = () => {
+		if (isEnabled && !isSignedIn) {
+			return (
+				<MenuAndButtonContainer
+					onClick={() => dispatch(setShowSignWithWallet(true))}
+				>
+					<NotificationsButton outline theme={theme}>
+						<NotificationsIconContainer>
+							{totalUnreadNotifications > 0 && (
+								<NotificationsButtonCircle>
+									<Overline styleType='Small'>
+										{totalUnreadNotifications}
+									</Overline>
+								</NotificationsButtonCircle>
+							)}
+							<IconNotificationFilled16
+								color={
+									isLight
+										? brandColors.pinky[500]
+										: neutralColors.gray[100]
+								}
+							/>
+						</NotificationsIconContainer>
+						<CoverLine theme={theme} />
+					</NotificationsButton>
+				</MenuAndButtonContainer>
+			);
+		} else if (isSignedIn) {
+			return (
+				<MenuAndButtonContainer
+					onClick={() => setShowNotifications(true)}
+					onMouseEnter={() => setShowNotifications(true)}
+					onMouseLeave={() => setShowNotifications(false)}
+				>
+					<NotificationsButton outline theme={theme}>
+						<NotificationsIconContainer>
+							{totalUnreadNotifications > 0 && (
+								<NotificationsButtonCircle>
+									<Overline styleType='Small'>
+										{totalUnreadNotifications}
+									</Overline>
+								</NotificationsButtonCircle>
+							)}
+							<IconNotificationFilled16
+								color={
+									isLight
+										? brandColors.pinky[500]
+										: neutralColors.gray[100]
+								}
+							/>
+						</NotificationsIconContainer>
+						<CoverLine theme={theme} />
+					</NotificationsButton>
+					{showNotifications && (
+						<NotificationMenu
+							notifications={notifications}
+							markOneNotificationRead={markOneNotificationRead}
+						/>
+					)}
+				</MenuAndButtonContainer>
+			);
+		} else return null;
+	};
+
 	return (
 		<StyledHeader
 			justifyContent='space-between'
@@ -288,42 +352,7 @@ const Header: FC<IHeader> = () => {
 				</SmallCreateProjectParent>
 				{active && account && chainId ? (
 					<>
-						{!isMobile && isSignedIn && (
-							<MenuAndButtonContainer
-								onClick={() => setShowNotifications(true)}
-								onMouseEnter={() => setShowNotifications(true)}
-								onMouseLeave={() => setShowNotifications(false)}
-							>
-								<NotificationsButton outline theme={theme}>
-									<NotificationsIconContainer>
-										{totalUnreadNotifications > 0 && (
-											<NotificationsButtonCircle>
-												<Overline styleType='Small'>
-													{totalUnreadNotifications}
-												</Overline>
-											</NotificationsButtonCircle>
-										)}
-										<IconNotificationFilled16
-											color={
-												isLight
-													? brandColors.pinky[500]
-													: neutralColors.gray[100]
-											}
-										/>
-									</NotificationsIconContainer>
-									<CoverLine theme={theme} />
-								</NotificationsButton>
-								{showNotifications && (
-									<NotificationMenu
-										notifications={notifications}
-										markOneNotificationRead={
-											markOneNotificationRead
-										}
-									/>
-								)}
-							</MenuAndButtonContainer>
-						)}
-
+						{!isMobile && handleShowNotifications()}
 						<MenuAndButtonContainer
 							onClick={() => setShowRewardMenu(true)}
 							onMouseEnter={() => setShowRewardMenu(true)}
