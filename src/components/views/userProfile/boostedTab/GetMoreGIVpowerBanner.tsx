@@ -32,6 +32,7 @@ const GetMoreGIVpowerBanner = () => {
 					/>
 				</Link>
 				<OutlineLinkButton
+					isExternal
 					label='Get GIV'
 					size='small'
 					linkType='primary'
