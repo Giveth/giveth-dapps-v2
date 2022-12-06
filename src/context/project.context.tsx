@@ -108,9 +108,12 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
 					)
 						.multipliedBy(powerBoosting.percentage)
 						.div(100);
-					powerBoosting.user.allocated = formatWeiHelper(_allocated);
+					powerBoosting.user.allocated = _allocated;
 					_total = _total.plus(_allocated);
 				}
+				_boostersData.powerBoostings.sort((pb1, pb2) =>
+					pb1.user.allocated.gt(pb2.user.allocated) ? -1 : 1,
+				);
 				_boostersData.totalPowerBoosting = formatWeiHelper(_total);
 				setBoostersData(_boostersData);
 			} catch (err) {
