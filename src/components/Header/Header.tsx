@@ -188,7 +188,7 @@ const Header: FC<IHeader> = () => {
 		}
 
 		fetchNotificationsAndSetState();
-	}, [lastNotificationId]);
+	}, [lastNotificationId, isSignedIn]);
 
 	const handleModals = () => {
 		if (isGIVeconomyRoute) {
