@@ -113,6 +113,7 @@ function Rejected() {
 				If you have any objections please contact the support team.
 			</Lead>
 			<ButtonLink
+				isExternal
 				size='small'
 				label='Support Team - Discord'
 				target='_blank'
