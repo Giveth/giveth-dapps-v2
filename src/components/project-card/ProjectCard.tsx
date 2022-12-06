@@ -102,7 +102,7 @@ const ProjectCard = (props: IProjectCard) => {
 						</Title>
 					</InternalLink>
 				</div>
-				{adminUser && !isForeignOrg ? (
+				{adminUser?.name && !isForeignOrg ? (
 					<Link href={addressToUserView(adminUser?.walletAddress)}>
 						<Author size='Big'>{name || '\u200C'}</Author>
 					</Link>
