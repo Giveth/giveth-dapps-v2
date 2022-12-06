@@ -120,7 +120,14 @@ function NotificationView() {
 					<IconNotificationOutline32 />
 				</IconContainer>
 				<NotificationDesc flexDirection='column'>
-					<H5 weight={700}>Notification Center</H5>
+					<Flex justifyContent='space-between'>
+						<H5 weight={700}>Notification Center</H5>
+						<InternalLink href={Routes.NotificationsSettings}>
+							<ConfigContainer>
+								<IconConfig24 />
+							</ConfigContainer>
+						</InternalLink>
+					</Flex>
 					<Lead>
 						Your activity history, starting with the most recent
 					</Lead>
@@ -187,11 +194,6 @@ function NotificationView() {
 						)}
 					</NotifisTabItem>
 				</TabsContainer>
-				<InternalLink href={Routes.NotificationsSettings}>
-					<ConfigContainer>
-						<IconConfig24 />
-					</ConfigContainer>
-				</InternalLink>
 			</Flex>
 			<NotifsHr color={neutralColors.gray[300]} />
 			<div>
