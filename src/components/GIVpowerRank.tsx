@@ -18,6 +18,8 @@ interface IGIVpowerRank {
 	projectFuturePower?: IProjectPower;
 }
 
+//if the futureRank is null it means that it's not calculated yet,
+//  but if it's total is zero, it means it's calculated and has not any boost
 const calculateProjectedRank = (
 	currentRank?: IProjectPower,
 	futureRank?: IProjectPower,
