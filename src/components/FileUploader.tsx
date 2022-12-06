@@ -191,14 +191,14 @@ const FileUploader: FC<IFileUploader> = ({
 												id: 'label.uplodaded',
 											})}
 										</SublineBold>
-										<GLink size='Tiny'>
-											<a
-												href={file.url}
-												target='_blank'
-												rel='noreferrer'
-											>
-												&nbsp;- Link
-											</a>
+										<GLink
+											as='a'
+											size='Tiny'
+											href={file.url}
+											target='_blank'
+											rel='noreferrer'
+										>
+											&nbsp;- Link
 										</GLink>
 										<FlexSpacer />
 										<DeleteRow
@@ -247,14 +247,14 @@ const FileUploader: FC<IFileUploader> = ({
 											id: 'label.uploaded',
 										})}
 									</SublineBold>
-									<GLink size='Tiny'>
-										<a
-											href={url}
-											target='_blank'
-											rel='noreferrer'
-										>
-											&nbsp;- Link
-										</a>
+									<GLink
+										as='a'
+										size='Tiny'
+										href={url}
+										target='_blank'
+										rel='noreferrer'
+									>
+										&nbsp;- Link
 									</GLink>
 								</Flex>
 								<UplaodBar
