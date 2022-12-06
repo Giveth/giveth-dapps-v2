@@ -175,6 +175,7 @@ export function TabPowerBottom() {
 						</QuoteText>
 					</HeadingTextContainer>
 					<LearnMoreButton
+						isExternal
 						label='Learn More'
 						target='_blank'
 						href={links.GIVPOWER_DOC}
@@ -309,12 +310,13 @@ export function TabPowerBottom() {
 						Lock your GIV to increase your multiplier.
 					</GivpowerCTASubheading>
 					<GivpowerCTAButtonContainer>
-						<GivpowerCTAButton
-							label='GET GIVPOWER'
-							size='large'
-							linkType='primary'
-							href={Routes.GIVfarm}
-						/>
+						<Link href={Routes.GIVfarm}>
+							<GivpowerCTAButton
+								label='GET GIVPOWER'
+								size='large'
+								linkType='primary'
+							/>
+						</Link>
 						<GivpowerCTAButtonOutlined
 							label='GET GIV'
 							size='large'
