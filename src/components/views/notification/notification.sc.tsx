@@ -16,6 +16,7 @@ export const IconContainer = styled.div`
 `;
 
 export const NotificationDesc = styled(Flex)`
+	width: 100%;
 	margin-top: 2px;
 	gap: 16px;
 `;
