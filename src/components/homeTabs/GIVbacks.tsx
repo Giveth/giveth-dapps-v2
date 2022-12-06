@@ -7,6 +7,7 @@ import {
 } from '@giveth/ui-design-system';
 import BigNumber from 'bignumber.js';
 import { useWeb3React } from '@web3-react/core';
+import Link from 'next/link';
 import { Flex } from '../styled-components/Flex';
 import {
 	GIVbacksTopContainer,
@@ -158,12 +159,13 @@ export const TabGIVbacksBottom = () => {
 						<GbDataBlock
 							title='Donor Rewards'
 							button={
-								<GbButton
-									label='DONATE TO EARN GIV'
-									linkType='secondary'
-									size='large'
-									href={Routes.Projects}
-								/>
+								<Link href={Routes.Projects}>
+									<GbButton
+										label='DONATE TO EARN GIV'
+										linkType='secondary'
+										size='large'
+									/>
+								</Link>
 							}
 						>
 							When you donate to verified projects you qualify to
@@ -176,10 +178,11 @@ export const TabGIVbacksBottom = () => {
 							title='Project Verification'
 							button={
 								<GbButton
+									isExternal
 									label='VERIFY YOUR PROJECT'
 									linkType='secondary'
 									size='large'
-									href='https://docs.giveth.io/dapps/projectVerification'
+									href={links.VERIFICATION_DOCS}
 									target='_blank'
 								/>
 							}
@@ -248,12 +251,13 @@ export const TabGIVbacksBottom = () => {
 											<NoWrap>1 Million GIV</NoWrap>
 										</GivAllocated>
 									</RoundInfoTallRow>
-									<RoundButton
-										size='small'
-										label={'DONATE TO EARN GIV'}
-										linkType='primary'
-										href={Routes.Projects}
-									/>
+									<Link href={Routes.Projects}>
+										<RoundButton
+											size='small'
+											label={'DONATE TO EARN GIV'}
+											linkType='primary'
+										/>
+									</Link>
 								</RoundInfo>
 							</RoundSection>
 						</Col>
