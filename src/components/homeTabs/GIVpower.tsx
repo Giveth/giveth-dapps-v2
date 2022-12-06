@@ -318,6 +318,7 @@ export function TabPowerBottom() {
 							/>
 						</Link>
 						<GivpowerCTAButtonOutlined
+							isExternal
 							label='GET GIV'
 							size='large'
 							href={getGivLink}
