@@ -36,11 +36,11 @@ const BoostedInnerModal: FC<IBoostedModalProps> = ({
 					of the next GIVbacks round.
 				</Desc>
 				<ActionsSection>
-					<GetButton
-						label='Get more GIVpower'
-						size='small'
+					<Link
 						href={`${Routes.GIVfarm}/?open=${StakingType.GIV_LM}&chain=gnosis`}
-					/>
+					>
+						<GetButton label='Get more GIVpower' size='small' />
+					</Link>
 					<Link href={Routes.MyBoostedProjects}>
 						<CustomButtonLink
 							linkType='texty-primary'
