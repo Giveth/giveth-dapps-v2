@@ -60,7 +60,11 @@ const Wrapper = styled(Flex)<{
 		width: ${props => `${props.size}px`};
 		height: ${props => `${props.size}px`};
 		background-color: ${props =>
-			props.checked ? brandColors.deep[900] : 'transparent'};
+			props.disabled && props.checked
+				? neutralColors.gray[400]
+				: props.checked
+				? brandColors.deep[900]
+				: 'transparent'};
 		transition: background-color 0.3s ease;
 	}
 	${props => {
