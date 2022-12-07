@@ -1,5 +1,7 @@
-import { Container, neutralColors } from '@giveth/ui-design-system';
+import { Button, Container, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { mediaQueries } from '@/lib/constants/constants';
+
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { TabItem } from '@/components/styled-components/Tabs';
 
@@ -64,4 +66,11 @@ export const Loading = styled(FlexCenter)`
 	background-color: gray;
 	transition: opacity 0.3s ease-in-out;
 	opacity: 0.9;
+`;
+
+export const MarkAllNotifsButton = styled(Button)`
+	align-self: baseline;
+	${mediaQueries.tablet} {
+		align-self: auto;
+	}
 `;
