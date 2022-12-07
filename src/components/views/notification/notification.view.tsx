@@ -7,6 +7,7 @@ import {
 	OutlineButton,
 } from '@giveth/ui-design-system';
 import { useEffect, useState } from 'react';
+import { useWeb3React } from '@web3-react/core';
 import {
 	NotificationContainer,
 	IconContainer,
@@ -35,6 +36,7 @@ import {
 } from '@/features/notification/notification.services';
 import { useNotification } from '@/hooks/useNotification';
 import useDetectDevice from '@/hooks/useDetectDevice';
+import { fetchNotificationCountAsync } from '@/features/notification/notification.thunks';
 
 enum ENotificationTabs {
 	ALL,
@@ -46,12 +48,17 @@ enum ENotificationTabs {
 const limit = 6;
 
 function NotificationView() {
-	const [tab, setTab] = useState(ENotificationTabs.ALL);
 	const { notifications, setNotifications, markOneNotificationRead } =
 		useNotification();
+	const dispatch = useAppDispatch();
+	const { isEnabled } = useAppSelector(state => state.user);
+	const { account } = useWeb3React();
+	const [tab, setTab] = useState(ENotificationTabs.ALL);
 	const [loading, setLoading] = useState(false);
 	const [totalCount, setTotalCount] = useState(0);
 	const [pageNumber, setPageNumber] = useState(0);
+	const [markedAllNotificationsRead, setMarkedAllNotificationsRead] =
+		useState(false);
 	const showLoadMore = totalCount > notifications.length;
 	const {
 		total: totalUnreadNotifications,
@@ -61,8 +68,6 @@ function NotificationView() {
 	} = useAppSelector(state => state.notification.notificationInfo);
 
 	const { isMobile } = useDetectDevice();
-
-	const dispatch = useAppDispatch();
 
 	const handleLoadMore = () => {
 		if (notifications.length < totalCount) setPageNumber(pageNumber + 1);
@@ -110,7 +115,7 @@ function NotificationView() {
 		return () => {
 			controller.abort();
 		};
-	}, [tab, pageNumber]);
+	}, [tab, pageNumber, markedAllNotificationsRead]);
 
 	return (
 		<NotificationContainer>
@@ -208,7 +213,15 @@ function NotificationView() {
 				<MarkAllNotifsButton
 					size='small'
 					label='Mark all As read'
-					onClick={readAllNotifications}
+					onClick={() => {
+						return readAllNotifications().then(() => {
+							setMarkedAllNotificationsRead(
+								!markedAllNotificationsRead,
+							);
+							if (account)
+								dispatch(fetchNotificationCountAsync(account));
+						});
+					}}
 					buttonType='texty-primary'
 					disabled={totalUnreadNotifications === 0}
 				/>
