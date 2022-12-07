@@ -24,7 +24,10 @@ const calculateProjectedRank = (
 	currentRank?: IProjectPower,
 	futureRank?: IProjectPower,
 ) => {
-	if (!futureRank) return currentRank?.powerRank;
+	if (!futureRank)
+		return currentRank?.totalPower === 0
+			? undefined
+			: currentRank?.powerRank;
 	if (futureRank.totalPower === 0) return undefined;
 	return futureRank.powerRank;
 };
