@@ -14,6 +14,7 @@ import {
 	ConfigContainer,
 	NotifisTabItem,
 	NotifsHr,
+	MarkAllNotifsButton,
 	Loading,
 } from './notification.sc';
 import LottieControl from '@/components/animations/lottieControl';
@@ -28,8 +29,12 @@ import { NotificationBox } from '@/components/notification/NotificationBox';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import InternalLink from '@/components/InternalLink';
 import Routes from '@/lib/constants/Routes';
-import { fetchNotificationsData } from '@/features/notification/notification.services';
+import {
+	fetchNotificationsData,
+	readAllNotifications,
+} from '@/features/notification/notification.services';
 import { useNotification } from '@/hooks/useNotification';
+import useDetectDevice from '@/hooks/useDetectDevice';
 
 enum ENotificationTabs {
 	ALL,
@@ -54,6 +59,8 @@ function NotificationView() {
 		projectsRelated,
 		givEconomyRelated,
 	} = useAppSelector(state => state.notification.notificationInfo);
+
+	const { isMobile } = useDetectDevice();
 
 	const dispatch = useAppDispatch();
 
@@ -133,7 +140,11 @@ function NotificationView() {
 					</Lead>
 				</NotificationDesc>
 			</Flex>
-			<Flex justifyContent='space-between' alignItems='center'>
+			<Flex
+				justifyContent='space-between'
+				alignItems={isMobile ? 'stretch' : 'center'}
+				flexDirection={isMobile ? 'column' : 'row'}
+			>
 				<TabsContainer>
 					<NotifisTabItem
 						active={tab === ENotificationTabs.ALL}
@@ -194,6 +205,13 @@ function NotificationView() {
 						)}
 					</NotifisTabItem>
 				</TabsContainer>
+				<MarkAllNotifsButton
+					size='small'
+					label='Mark all As read'
+					onClick={readAllNotifications}
+					buttonType='texty-primary'
+					disabled={totalUnreadNotifications === 0}
+				/>
 			</Flex>
 			<NotifsHr color={neutralColors.gray[300]} />
 			<div>
