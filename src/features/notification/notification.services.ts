@@ -114,3 +114,20 @@ export const setNotificationRead = async (notificationId: number) => {
 		return null;
 	}
 };
+
+export const readAllNotifications = async () => {
+	try {
+		return await putRequest(
+			`${config.MICROSERVICES.notification}/readAll`,
+			true,
+		);
+	} catch (e) {
+		showToastError(e);
+		captureException(e, {
+			tags: {
+				section: 'readAllNotifications',
+			},
+		});
+		return null;
+	}
+};
