@@ -11,13 +11,14 @@ const GivEconomyProjectCards = () => {
 				<IGsDataBox
 					title='GIVbacks'
 					button={
-						<GsButton
-							label='SEE PROJECTS'
-							linkType='primary'
-							size='medium'
-							href={Routes.Projects}
-							target='_blank'
-						/>
+						<Link href={Routes.Projects}>
+							<GsButton
+								label='SEE PROJECTS'
+								linkType='primary'
+								size='medium'
+								target='_blank'
+							/>
+						</Link>
 					}
 				>
 					Donate to verified projects on Giveth. Get GIV and increase
@@ -29,6 +30,7 @@ const GivEconomyProjectCards = () => {
 					title='GIVgarden'
 					button={
 						<GsButton
+							isExternal
 							label='SEE PROPOSALS'
 							linkType='primary'
 							size='medium'
