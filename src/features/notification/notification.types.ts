@@ -56,6 +56,8 @@ interface INotificationSettingType {
 	id: number;
 	description: string;
 	content: string;
+	isEmailEditable: boolean;
+	isWebEditable: boolean;
 }
 
 export interface INotificationSetting {
@@ -65,6 +67,9 @@ export interface INotificationSetting {
 	allowEmailNotification: boolean;
 	allowNotifications: boolean;
 	notificationType?: INotificationSettingType;
+	createdAt: string;
+	updatedAt: string;
+	userAddressId: number;
 }
 
 export interface INotificationSettings {

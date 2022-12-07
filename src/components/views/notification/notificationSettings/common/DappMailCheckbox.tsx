@@ -10,8 +10,13 @@ interface IDappMailCheckbox {
 
 const DappMailCheckbox: FC<IDappMailCheckbox> = ({ notificationItem }) => {
 	const { setNotificationSettings } = useNotificationSettingsData();
-	const { id, allowDappPushNotification, allowEmailNotification } =
-		notificationItem;
+	const {
+		id,
+		allowDappPushNotification,
+		allowEmailNotification,
+		notificationType,
+	} = notificationItem;
+	const { isEmailEditable, isWebEditable } = notificationType || {};
 
 	const setEmailNotification = (i: boolean) => {
 		setNotificationSettings({ id, allowEmailNotification: i });
@@ -27,12 +32,14 @@ const DappMailCheckbox: FC<IDappMailCheckbox> = ({ notificationItem }) => {
 				label='Send me email'
 				checked={allowEmailNotification}
 				onChange={setEmailNotification}
+				disabled={!isEmailEditable}
 				size={18}
 			/>
 			<Checkbox
 				label='Dapp notification'
 				checked={allowDappPushNotification}
 				onChange={setDappNotification}
+				disabled={!isWebEditable}
 				size={18}
 			/>
 		</Container>

@@ -66,9 +66,27 @@ export const NotificationSettingsProvider: FC<IProviderProps> = props => {
 		});
 		const oldSettingsItems = structuredClone(notificationSettings);
 		setNotificationSettings(newSettingsItems);
-		putNotificationSettings(newItem).catch(() => {
-			setNotificationSettings(oldSettingsItems);
-		});
+		putNotificationSettings(newItem)
+			.then(res => {
+				// Check if items are written to the database, change them back if not
+				if (
+					res.allowDappPushNotification !==
+						newItem.allowDappPushNotification ||
+					res.allowEmailNotification !==
+						newItem.allowEmailNotification
+				) {
+					const _newSettingsItems = newSettingsItems?.map(i => {
+						if (i.id === res.id) {
+							return { ...i, ...res };
+						}
+						return i;
+					});
+					setNotificationSettings(_newSettingsItems);
+				}
+			})
+			.catch(() => {
+				setNotificationSettings(oldSettingsItems);
+			});
 	};
 
 	return (
