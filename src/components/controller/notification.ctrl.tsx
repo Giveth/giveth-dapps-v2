@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useWeb3React } from '@web3-react/core';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 
@@ -6,20 +7,21 @@ import { fetchNotificationCountAsync } from '@/features/notification/notificatio
 
 const NotificationController = () => {
 	const dispatch = useAppDispatch();
-	const isSignedIn = useAppSelector(state => state.user.isSignedIn);
+	const { isEnabled } = useAppSelector(state => state.user);
+	const { account } = useWeb3React();
 
 	useEffect(() => {
 		let interval: NodeJS.Timer;
-		if (isSignedIn) {
-			dispatch(fetchNotificationCountAsync());
+		if (isEnabled && account) {
+			dispatch(fetchNotificationCountAsync(account));
 			interval = setInterval(() => {
-				dispatch(fetchNotificationCountAsync());
+				dispatch(fetchNotificationCountAsync(account));
 			}, config.NOTIFICATION_POLLING_INTERVAL);
 		}
 		return () => {
 			if (interval) clearInterval(interval);
 		};
-	}, [isSignedIn, dispatch]);
+	}, [dispatch, isEnabled, account]);
 	return null;
 };
 

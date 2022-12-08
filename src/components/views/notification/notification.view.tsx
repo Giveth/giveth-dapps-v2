@@ -7,6 +7,7 @@ import {
 	OutlineButton,
 } from '@giveth/ui-design-system';
 import { useEffect, useState } from 'react';
+import { useWeb3React } from '@web3-react/core';
 import {
 	NotificationContainer,
 	IconContainer,
@@ -14,6 +15,7 @@ import {
 	ConfigContainer,
 	NotifisTabItem,
 	NotifsHr,
+	MarkAllNotifsButton,
 	Loading,
 } from './notification.sc';
 import LottieControl from '@/components/animations/lottieControl';
@@ -28,8 +30,13 @@ import { NotificationBox } from '@/components/notification/NotificationBox';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import InternalLink from '@/components/InternalLink';
 import Routes from '@/lib/constants/Routes';
-import { fetchNotificationsData } from '@/features/notification/notification.services';
+import {
+	fetchNotificationsData,
+	readAllNotifications,
+} from '@/features/notification/notification.services';
 import { useNotification } from '@/hooks/useNotification';
+import useDetectDevice from '@/hooks/useDetectDevice';
+import { fetchNotificationCountAsync } from '@/features/notification/notification.thunks';
 
 enum ENotificationTabs {
 	ALL,
@@ -41,12 +48,17 @@ enum ENotificationTabs {
 const limit = 6;
 
 function NotificationView() {
-	const [tab, setTab] = useState(ENotificationTabs.ALL);
 	const { notifications, setNotifications, markOneNotificationRead } =
 		useNotification();
+	const dispatch = useAppDispatch();
+	const { isEnabled } = useAppSelector(state => state.user);
+	const { account } = useWeb3React();
+	const [tab, setTab] = useState(ENotificationTabs.ALL);
 	const [loading, setLoading] = useState(false);
 	const [totalCount, setTotalCount] = useState(0);
 	const [pageNumber, setPageNumber] = useState(0);
+	const [markedAllNotificationsRead, setMarkedAllNotificationsRead] =
+		useState(false);
 	const showLoadMore = totalCount > notifications.length;
 	const {
 		total: totalUnreadNotifications,
@@ -55,7 +67,7 @@ function NotificationView() {
 		givEconomyRelated,
 	} = useAppSelector(state => state.notification.notificationInfo);
 
-	const dispatch = useAppDispatch();
+	const { isMobile } = useDetectDevice();
 
 	const handleLoadMore = () => {
 		if (notifications.length < totalCount) setPageNumber(pageNumber + 1);
@@ -103,7 +115,7 @@ function NotificationView() {
 		return () => {
 			controller.abort();
 		};
-	}, [tab, pageNumber]);
+	}, [tab, pageNumber, markedAllNotificationsRead]);
 
 	return (
 		<NotificationContainer>
@@ -120,13 +132,24 @@ function NotificationView() {
 					<IconNotificationOutline32 />
 				</IconContainer>
 				<NotificationDesc flexDirection='column'>
-					<H5 weight={700}>Notification Center</H5>
+					<Flex justifyContent='space-between'>
+						<H5 weight={700}>Notification Center</H5>
+						<InternalLink href={Routes.NotificationsSettings}>
+							<ConfigContainer>
+								<IconConfig24 />
+							</ConfigContainer>
+						</InternalLink>
+					</Flex>
 					<Lead>
 						Your activity history, starting with the most recent
 					</Lead>
 				</NotificationDesc>
 			</Flex>
-			<Flex justifyContent='space-between' alignItems='center'>
+			<Flex
+				justifyContent='space-between'
+				alignItems={isMobile ? 'stretch' : 'center'}
+				flexDirection={isMobile ? 'column' : 'row'}
+			>
 				<TabsContainer>
 					<NotifisTabItem
 						active={tab === ENotificationTabs.ALL}
@@ -187,11 +210,21 @@ function NotificationView() {
 						)}
 					</NotifisTabItem>
 				</TabsContainer>
-				<InternalLink href={Routes.NotificationsSettings}>
-					<ConfigContainer>
-						<IconConfig24 />
-					</ConfigContainer>
-				</InternalLink>
+				<MarkAllNotifsButton
+					size='small'
+					label='Mark all As read'
+					onClick={() => {
+						return readAllNotifications().then(() => {
+							setMarkedAllNotificationsRead(
+								!markedAllNotificationsRead,
+							);
+							if (account)
+								dispatch(fetchNotificationCountAsync(account));
+						});
+					}}
+					buttonType='texty-primary'
+					disabled={totalUnreadNotifications === 0}
+				/>
 			</Flex>
 			<NotifsHr color={neutralColors.gray[300]} />
 			<div>

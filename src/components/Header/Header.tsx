@@ -188,7 +188,7 @@ const Header: FC<IHeader> = () => {
 		}
 
 		fetchNotificationsAndSetState();
-	}, [lastNotificationId]);
+	}, [lastNotificationId, isSignedIn]);
 
 	const handleModals = () => {
 		if (isGIVeconomyRoute) {
@@ -215,6 +215,17 @@ const Header: FC<IHeader> = () => {
 			setShowRewardMenu(false);
 		}
 	};
+
+	const notificationsProps =
+		isEnabled && !isSignedIn
+			? {
+					onClick: () => dispatch(setShowSignWithWallet(true)),
+			  }
+			: {
+					onClick: () => setShowNotifications(true),
+					onMouseEnter: () => setShowNotifications(true),
+					onMouseLeave: () => setShowNotifications(false),
+			  };
 
 	return (
 		<StyledHeader
@@ -288,12 +299,8 @@ const Header: FC<IHeader> = () => {
 				</SmallCreateProjectParent>
 				{active && account && chainId ? (
 					<>
-						{!isMobile && isSignedIn && (
-							<MenuAndButtonContainer
-								onClick={() => setShowNotifications(true)}
-								onMouseEnter={() => setShowNotifications(true)}
-								onMouseLeave={() => setShowNotifications(false)}
-							>
+						{!isMobile && (
+							<MenuAndButtonContainer {...notificationsProps}>
 								<NotificationsButton outline theme={theme}>
 									<NotificationsIconContainer>
 										{totalUnreadNotifications > 0 && (
@@ -313,7 +320,7 @@ const Header: FC<IHeader> = () => {
 									</NotificationsIconContainer>
 									<CoverLine theme={theme} />
 								</NotificationsButton>
-								{showNotifications && (
+								{showNotifications && isSignedIn && (
 									<NotificationMenu
 										notifications={notifications}
 										markOneNotificationRead={
@@ -323,7 +330,6 @@ const Header: FC<IHeader> = () => {
 								)}
 							</MenuAndButtonContainer>
 						)}
-
 						<MenuAndButtonContainer
 							onClick={() => setShowRewardMenu(true)}
 							onMouseEnter={() => setShowRewardMenu(true)}
