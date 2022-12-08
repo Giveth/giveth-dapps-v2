@@ -10,7 +10,6 @@ import { formatUSD } from '@/lib/helpers';
 import { ContributeCard, ContributeCardTitles } from './common.sc';
 
 const ProfileContributeCard: FC<IUserProfileView> = ({ user, myAccount }) => {
-	const userName = user?.name || 'Unknown';
 	const { formatMessage } = useIntl();
 
 	return (

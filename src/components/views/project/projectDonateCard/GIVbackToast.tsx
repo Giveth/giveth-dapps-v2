@@ -32,7 +32,7 @@ const GIVbackToast = () => {
 					>
 						<Popup>
 							{formatMessage({
-								id: 'component.givback_elibible.desc',
+								id: 'component.givback_eligible.desc',
 							})}
 						</Popup>
 					</IconWithTooltip>
