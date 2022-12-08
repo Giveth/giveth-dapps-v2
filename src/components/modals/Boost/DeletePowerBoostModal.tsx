@@ -61,7 +61,7 @@ export const DeletePowerBoostModal: FC<IDeletePowerBoostModal> = ({
 						<CustomButton label='cancel' onClick={closeModal} />
 						<CustomButton
 							buttonType='texty-primary'
-							label='Remove the boosting'
+							label='Remove GIVpower'
 							onClick={onDelete}
 						/>
 					</>
