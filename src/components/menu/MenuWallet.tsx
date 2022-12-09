@@ -168,6 +168,11 @@ const walletMenuArray = [
 		requiresSign: true,
 	},
 	{
+		title: 'label.my_givpower',
+		url: Routes.MyBoostedProjects,
+		requiresSign: true,
+	},
+	{
 		title: 'label.create_a_project',
 		url: Routes.CreateProject,
 		requiresSign: true,
@@ -244,7 +249,7 @@ interface IWalletMenuContainer {
 }
 
 const WalletMenuContainer = styled(MenuContainer)<IWalletMenuContainer>`
-	max-height: ${props => (props.isSignedIn ? '485px' : '435px')};
+	max-height: ${props => (props.isSignedIn ? '525px' : '480px')};
 	overflow-y: auto;
 `;
 
