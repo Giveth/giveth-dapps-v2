@@ -99,17 +99,20 @@ const ProjectCard = (props: IProjectCard) => {
 						</Title>
 					</Link>
 				</TitleWrapper>
-				{adminUser?.name && !isForeignOrg ? (
-					<Link href={addressToUserView(adminUser?.walletAddress)}>
-						<Author size='Big'>{name || '\u200C'}</Author>
-					</Link>
-				) : (
-					<Link href={slugToProjectView(slug)}>
+				<PaddedRow>
+					{adminUser?.name && !isForeignOrg && (
+						<Link
+							href={addressToUserView(adminUser?.walletAddress)}
+						>
+							<Author size='Big'>{name || '\u200C'}</Author>
+						</Link>
+					)}
+					<Link href={slugToProjectView(slug)} style={{ flex: 1 }}>
 						<Author size='Big'>
 							<br />
 						</Author>
 					</Link>
-				)}
+				</PaddedRow>
 				<Link href={slugToProjectView(slug)}>
 					<Description>{htmlToText(description)}</Description>
 					<PaddedRow alignItems='center' gap='4px'>
@@ -286,7 +289,6 @@ const Title = styled(H6)<{ isHover?: boolean }>`
 
 const Author = styled(GLink)`
 	color: ${brandColors.pinky[500]};
-	padding: 0 ${SIDE_PADDING};
 	margin-bottom: 16px;
 	display: block;
 	&:hover {
