@@ -8,7 +8,7 @@ import {
 	IconRocketInSpace16,
 } from '@giveth/ui-design-system';
 import React, { FC } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { IProjectPower } from '@/apollo/types/types';
 import { Flex } from './styled-components/Flex';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -44,6 +44,7 @@ export const NextRank: FC<IGIVpowerRank> = ({
 		projectedRank && projectPower?.powerRank
 			? projectedRank - projectPower?.powerRank
 			: 0;
+
 	return (
 		<NextRankContainer state={goingUp} alignItems='baseline' gap='4px'>
 			{goingUp === 0 ? (
@@ -54,7 +55,9 @@ export const NextRank: FC<IGIVpowerRank> = ({
 				<IconArrowUp16 />
 			)}
 			{!projectedRank && <IconRocketInSpace16 />}
-			<H6 weight={700}>{projectedRank ? `#${projectedRank}` : '--'}</H6>
+			<ProjectedRank weight={700} loading={true}>
+				{projectedRank ? `#${projectedRank}` : '--'}
+			</ProjectedRank>
 		</NextRankContainer>
 	);
 };
@@ -85,4 +88,44 @@ const NextRankContainer = styled(RankContainer)<{ state: number }>`
 	${mediaQueries.tablet} {
 		padding-top: 21px;
 	}
+`;
+
+interface ILoading {
+	loading: boolean;
+}
+
+const ProjectedRank = styled(H6)<ILoading>`
+	${props =>
+		props.loading
+			? css`
+					display: inline-block;
+					position: relative;
+					overflow: hidden;
+					background-color: #e8e8e8;
+					min-width: 40px;
+					&::after {
+						position: absolute;
+						top: 0;
+						right: 0;
+						bottom: 0;
+						left: 0;
+						transform: translateX(-100%);
+						background: rgb(232, 232, 232);
+						background: linear-gradient(
+							90deg,
+							rgba(232, 232, 232, 1) 0%,
+							rgba(255, 255, 255, 1) 50%,
+							rgba(232, 232, 232, 1) 100%
+						);
+						animation: shimmer 1s infinite;
+						content: '';
+					}
+
+					@keyframes shimmer {
+						100% {
+							transform: translateX(100%);
+						}
+					}
+			  `
+			: undefined}
 `;
