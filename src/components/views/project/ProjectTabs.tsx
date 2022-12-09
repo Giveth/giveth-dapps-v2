@@ -32,11 +32,9 @@ const ProjectTabs = (props: IProjectTabs) => {
 		{ title: 'label.about' },
 		{ title: 'label.updates', badge: totalProjectUpdates },
 		{ title: 'label.donations', badge: totalDonations },
-		//TODO: Boosting - uncomment this on boosting launch
-		// { title: 'GIVpower' },
 	];
 
-	if (project?.verified) tabsArray.push({ title: 'GIVpower' });
+	if (project?.verified) tabsArray.push({ title: 'label.givpower' });
 
 	return (
 		<Wrapper>

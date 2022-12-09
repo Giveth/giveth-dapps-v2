@@ -10,11 +10,14 @@ import BigNumber from 'bignumber.js';
 import config from '@/configuration';
 import { IPowerBoostingWithUserGIVpower } from '@/components/views/project/projectGIVPower';
 import { client } from '@/apollo/apolloClient';
-import { FETCH_PROJECT_BOOSTERS } from '@/apollo/gql/gqlPowerBoosting';
+import {
+	FETCH_PROJECTED_RANK,
+	FETCH_PROJECT_BOOSTERS,
+} from '@/apollo/gql/gqlPowerBoosting';
 import { FETCH_USERS_GIVPOWER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
 import { IPowerBoosting } from '@/apollo/types/types';
 import { formatWeiHelper } from '@/helpers/number';
-import { gqlRequest } from '@/helpers/requests';
+import { backendGQLRequest, gqlRequest } from '@/helpers/requests';
 import { showToastError } from '@/lib/helpers';
 
 interface IBoostersData {
@@ -25,7 +28,7 @@ interface IBoostersData {
 
 interface IProjectContext {
 	boostersData?: IBoostersData;
-
+	projectedRank?: number | null;
 	isBoostingsLoading: boolean;
 	fetchProjectBoosters: (projectId: number) => Promise<void>;
 }
@@ -40,6 +43,9 @@ ProjectContext.displayName = 'ProjectContext';
 export const ProjectProvider = ({ children }: { children: ReactNode }) => {
 	const [boostersData, setBoostersData] = useState<IBoostersData>();
 	const [isBoostingsLoading, setIsBoostingsLoading] = useState(false);
+	const [projectedRank, setProjectedRank] = useState<
+		number | undefined | null
+	>(undefined);
 
 	const fetchProjectBoosters = useCallback(async (projectId: number) => {
 		setIsBoostingsLoading(true);
@@ -115,6 +121,15 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
 					pb1.user.allocated.gt(pb2.user.allocated) ? -1 : 1,
 				);
 				_boostersData.totalPowerBoosting = formatWeiHelper(_total);
+				const _projectedRank = await backendGQLRequest(
+					FETCH_PROJECTED_RANK,
+					{
+						powerAmount: Number(formatWeiHelper(_total, 2, false)),
+					},
+				);
+				if (_projectedRank?.data?.powerAmountRank) {
+					setProjectedRank(_projectedRank?.data?.powerAmountRank);
+				} else setProjectedRank(null);
 				setBoostersData(_boostersData);
 			} catch (err) {
 				showToastError(err);
@@ -130,6 +145,7 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
 		<ProjectContext.Provider
 			value={{
 				boostersData,
+				projectedRank,
 				isBoostingsLoading,
 				fetchProjectBoosters,
 			}}
