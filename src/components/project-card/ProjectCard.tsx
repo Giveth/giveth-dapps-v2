@@ -28,7 +28,6 @@ import {
 	slugToProjectDonate,
 	slugToProjectView,
 } from '@/lib/routeCreators';
-import { Row } from '@/components/Grid';
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
@@ -190,9 +189,7 @@ const DonateButton = styled(ButtonLink)`
 `;
 
 const CustomizedDonateButton = styled(DonateButton)<{ isHover: boolean }>`
-	margin: 25px 0;
 	${mediaQueries.laptopS} {
-		margin: 25px 12px;
 		opacity: ${props => (props.isHover ? '1' : '0')};
 		transition: opacity 0.3s ease-in-out;
 	}
@@ -236,10 +233,6 @@ const LastUpdatedContainer = styled(Subline)<{ isHover?: boolean }>`
 		display: inline;
 		opacity: ${props => (props.isHover ? 1 : 0)};
 	}
-`;
-
-const ActionButtons = styled(Row)`
-	gap: 16px;
 `;
 
 const Hr = styled.hr`
@@ -332,6 +325,12 @@ const GivpowerRankContainer = styled(Flex)`
 
 const PaddedRow = styled(Flex)`
 	padding: 0 ${SIDE_PADDING};
+`;
+
+const ActionButtons = styled(PaddedRow)`
+	margin: 25px 0;
+	gap: 16px;
+	flex-direction: column;
 `;
 
 export default ProjectCard;
