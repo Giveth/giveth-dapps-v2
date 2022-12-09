@@ -43,7 +43,9 @@ ProjectContext.displayName = 'ProjectContext';
 export const ProjectProvider = ({ children }: { children: ReactNode }) => {
 	const [boostersData, setBoostersData] = useState<IBoostersData>();
 	const [isBoostingsLoading, setIsBoostingsLoading] = useState(false);
-	const [projectedRank, setProjectedRank] = useState(undefined);
+	const [projectedRank, setProjectedRank] = useState<
+		number | undefined | null
+	>(undefined);
 
 	const fetchProjectBoosters = useCallback(async (projectId: number) => {
 		setIsBoostingsLoading(true);
@@ -125,7 +127,9 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
 						powerAmount: Number(formatWeiHelper(_total, 2, false)),
 					},
 				);
-				setProjectedRank(_projectedRank);
+				if (_projectedRank?.data?.powerAmountRank) {
+					setProjectedRank(_projectedRank?.data?.powerAmountRank);
+				} else setProjectedRank(null);
 				setBoostersData(_boostersData);
 			} catch (err) {
 				showToastError(err);
