@@ -12,6 +12,7 @@ import styled, { css } from 'styled-components';
 import { IProjectPower } from '@/apollo/types/types';
 import { Flex } from './styled-components/Flex';
 import { mediaQueries } from '@/lib/constants/constants';
+import { useProjectContext } from '@/context/project.context';
 
 interface IGIVpowerRank {
 	projectPower?: IProjectPower;
@@ -23,7 +24,9 @@ interface IGIVpowerRank {
 const calculateProjectedRank = (
 	currentRank?: IProjectPower,
 	futureRank?: IProjectPower,
+	instanteRank?: number | null,
 ) => {
+	if (instanteRank !== null) return instanteRank;
 	if (!futureRank)
 		return currentRank?.totalPower === 0
 			? undefined
@@ -36,16 +39,22 @@ export const NextRank: FC<IGIVpowerRank> = ({
 	projectPower,
 	projectFuturePower,
 }) => {
+	const { projectedRank: instantRank, isBoostingsLoading } =
+		useProjectContext();
+
 	const projectedRank = calculateProjectedRank(
 		projectPower,
 		projectFuturePower,
+		instantRank,
 	);
 	const goingUp =
 		projectedRank && projectPower?.powerRank
 			? projectedRank - projectPower?.powerRank
 			: 0;
 
-	return (
+	return isBoostingsLoading ? (
+		<NextRankContainer state={0} isLoading={true}></NextRankContainer>
+	) : (
 		<NextRankContainer state={goingUp} alignItems='baseline' gap='4px'>
 			{goingUp === 0 ? (
 				''
@@ -55,9 +64,7 @@ export const NextRank: FC<IGIVpowerRank> = ({
 				<IconArrowUp16 />
 			)}
 			{!projectedRank && <IconRocketInSpace16 />}
-			<ProjectedRank weight={700} loading={true}>
-				{projectedRank ? `#${projectedRank}` : '--'}
-			</ProjectedRank>
+			<H6 weight={700}>{projectedRank ? `#${projectedRank}` : '--'}</H6>
 		</NextRankContainer>
 	);
 };
@@ -80,23 +87,20 @@ const RankContainer = styled(Flex)`
 		height: 54px;
 	}
 `;
+interface ILoading {
+	state: number;
+	isLoading?: boolean;
+}
 
-const NextRankContainer = styled(RankContainer)<{ state: number }>`
+const NextRankContainer = styled(RankContainer)<ILoading>`
 	padding-top: 13px;
 	color: ${props =>
 		props.state > 0 ? semanticColors.punch[700] : semanticColors.jade[700]};
 	${mediaQueries.tablet} {
 		padding-top: 21px;
 	}
-`;
-
-interface ILoading {
-	loading: boolean;
-}
-
-const ProjectedRank = styled(H6)<ILoading>`
 	${props =>
-		props.loading
+		props.isLoading
 			? css`
 					display: inline-block;
 					position: relative;
