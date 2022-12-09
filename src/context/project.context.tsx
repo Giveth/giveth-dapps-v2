@@ -28,7 +28,7 @@ interface IBoostersData {
 
 interface IProjectContext {
 	boostersData?: IBoostersData;
-
+	projectedRank?: number | null;
 	isBoostingsLoading: boolean;
 	fetchProjectBoosters: (projectId: number) => Promise<void>;
 }
@@ -141,6 +141,7 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
 		<ProjectContext.Provider
 			value={{
 				boostersData,
+				projectedRank,
 				isBoostingsLoading,
 				fetchProjectBoosters,
 			}}
