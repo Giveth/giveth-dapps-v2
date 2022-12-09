@@ -124,7 +124,9 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
 				const _projectedRank = await backendGQLRequest(
 					FETCH_PROJECTED_RANK,
 					{
-						powerAmount: Number(formatWeiHelper(_total, 10, false)),
+						powerAmount: +_total
+							.div(10 ** 18)
+							.toFixed(2, BigNumber.ROUND_UP),
 					},
 				);
 				if (_projectedRank?.data?.powerAmountRank) {
