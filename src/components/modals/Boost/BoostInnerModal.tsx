@@ -88,22 +88,23 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 		if (boostedProjectsCount === 0) {
 			return (
 				<Caption style={{ whiteSpace: `pre-line` }}>
-					Since this is your first time using Boost, 100% of your
-					GIVpower will be allocated to this project. You can check
-					your allocation in &nbsp;
+					Since this is your first time boosting a project, 100% of
+					your GIVpower will be allocated to it. You can review and
+					manage your GIVpower allocations in &nbsp;
 					<Link href={Routes.MyBoostedProjects}>
 						<GLink>
 							<b>My GIVpower</b>
 						</GLink>
 					</Link>
+					.
 				</Caption>
 			);
 		} else if (isOnlyBoostedProjectIsThisProject) {
 			return (
 				<Caption style={{ whiteSpace: `pre-line` }}>
 					You supported this project with 100% of your total GIVpower.
-					You can't edit the allocation unless you have at least 1
-					other boosted project. Try boosting other projects or
+					You can&apos;t edit the allocation unless you have at least
+					1 other boosted project. Try boosting other projects or
 					managing them in &nbsp;
 					<Link href={Routes.MyBoostedProjects}>
 						<GLink>
