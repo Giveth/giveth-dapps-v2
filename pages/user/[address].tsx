@@ -47,9 +47,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 			: queryAddress.toLowerCase();
 		const { data: userData } = await client.query({
 			query: GET_USER_BY_ADDRESS,
-			variables: {
-				address: address,
-			},
+			variables: { address },
 			fetchPolicy: 'no-cache',
 		});
 		const user = userData?.userByAddress;

@@ -5,9 +5,9 @@ import { setShowFooter, setShowHeader } from '@/features/general/general.slice';
 import { useAppDispatch } from '@/features/hooks';
 
 const deckPDFUrl =
-	'https://giveth.mypinata.cloud/ipfs/QmRZvjuUR8DWowN6GZTWz6wfoqSdkdBsYm2gesHqN8j82v';
+	'https://docs.google.com/gview?embedded=true&url=https://giveth.mypinata.cloud/ipfs/QmRZvjuUR8DWowN6GZTWz6wfoqSdkdBsYm2gesHqN8j82v';
 
-const DeckRoute = () => {
+const DeckRoute1 = () => {
 	const dispatch = useAppDispatch();
 
 	useEffect(() => {
@@ -21,7 +21,7 @@ const DeckRoute = () => {
 				data={deckPDFUrl}
 				type='application/pdf'
 				width='100%'
-				height='100%'
+				height='99%'
 			>
 				<ContainerStyled>
 					Link to the PDF <a href={deckPDFUrl}>here!</a>
@@ -44,4 +44,4 @@ const Wrapper = styled.div`
 	overflow: hidden;
 `;
 
-export default DeckRoute;
+export default DeckRoute1;
