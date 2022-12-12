@@ -94,6 +94,7 @@ export interface IntroCardConfig {
 export interface RegenPoolStakingConfig extends SimplePoolStakingConfig {
 	regenStreamType: StreamType;
 	regenFarmType: RegenFarmType;
+	dontArchive?: boolean;
 }
 
 export interface GasPreference {
