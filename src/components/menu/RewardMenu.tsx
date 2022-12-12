@@ -117,9 +117,11 @@ export const RewardMenu = ({
 				</NetworkTitle>
 				<NetworkRow>
 					<B>{networkName}</B>
-					<SwithNetwork onClick={() => switchNetworkHandler(chainId)}>
+					<SwitchNetwork
+						onClick={() => switchNetworkHandler(chainId)}
+					>
 						{formatMessage({ id: 'label.switch_network' })}
-					</SwithNetwork>
+					</SwitchNetwork>
 				</NetworkRow>
 				<FlowrateBox theme={theme}>
 					<Overline styleType='Small'>
@@ -147,73 +149,64 @@ export const RewardMenu = ({
 						</IconHelpWraper>
 					</FlowrateRow>
 				</FlowrateBox>
-				<Link href={Routes.GIVstream} passHref>
-					<a>
-						<PartRow theme={theme}>
-							<PartInfo>
-								<PartTitle as='span'>
-									{formatMessage({ id: 'label.from' })}{' '}
-									GIVstream
-								</PartTitle>
-								<Flex gap='4px'>
-									<PartAmount medium>
-										{formatWeiHelper(givStreamLiquidPart)}
-									</PartAmount>
-									<PartUnit>GIV</PartUnit>
-								</Flex>
-							</PartInfo>
-							<Image
-								src='/images/rarrow1.svg'
-								height='32'
-								width='16'
-								alt='Thunder image'
-							/>
-						</PartRow>
-					</a>
+				<Link href={Routes.GIVstream}>
+					<PartRow theme={theme}>
+						<PartInfo>
+							<PartTitle as='span'>
+								{formatMessage({ id: 'label.from' })} GIVstream
+							</PartTitle>
+							<Flex gap='4px'>
+								<PartAmount medium>
+									{formatWeiHelper(givStreamLiquidPart)}
+								</PartAmount>
+								<PartUnit>GIV</PartUnit>
+							</Flex>
+						</PartInfo>
+						<Image
+							src='/images/rarrow1.svg'
+							height='32'
+							width='16'
+							alt='Thunder image'
+						/>
+					</PartRow>
 				</Link>
-				<Link href={Routes.GIVfarm} passHref>
-					<a>
-						<PartRow theme={theme}>
-							<PartInfo>
-								<PartTitle as='span'>
-									GIVfarm & GIVgarden
-								</PartTitle>
-								<Flex gap='4px'>
-									<PartAmount medium>
-										{formatWeiHelper(farmsLiquidPart)}
-									</PartAmount>
-									<PartUnit>GIV</PartUnit>
-								</Flex>
-							</PartInfo>
-							<Image
-								src='/images/rarrow1.svg'
-								height='32'
-								width='16'
-								alt='Thunder image'
-							/>
-						</PartRow>
-					</a>
+				<Link href={Routes.GIVfarm}>
+					<PartRow theme={theme}>
+						<PartInfo>
+							<PartTitle as='span'>GIVfarm & GIVgarden</PartTitle>
+							<Flex gap='4px'>
+								<PartAmount medium>
+									{formatWeiHelper(farmsLiquidPart)}
+								</PartAmount>
+								<PartUnit>GIV</PartUnit>
+							</Flex>
+						</PartInfo>
+						<Image
+							src='/images/rarrow1.svg'
+							height='32'
+							width='16'
+							alt='Thunder image'
+						/>
+					</PartRow>
 				</Link>
-				<Link href={Routes.GIVbacks} passHref>
-					<a>
-						<PartRow theme={theme}>
-							<PartInfo>
-								<PartTitle as='span'>GIVbacks</PartTitle>
-								<Flex gap='4px'>
-									<PartAmount medium>
-										{formatWeiHelper(givbackLiquidPart)}
-									</PartAmount>
-									<PartUnit>GIV</PartUnit>
-								</Flex>
-							</PartInfo>
-							<Image
-								src='/images/rarrow1.svg'
-								height='32'
-								width='16'
-								alt='Thunder image'
-							/>
-						</PartRow>
-					</a>
+				<Link href={Routes.GIVbacks}>
+					<PartRow theme={theme}>
+						<PartInfo>
+							<PartTitle as='span'>GIVbacks</PartTitle>
+							<Flex gap='4px'>
+								<PartAmount medium>
+									{formatWeiHelper(givbackLiquidPart)}
+								</PartAmount>
+								<PartUnit>GIV</PartUnit>
+							</Flex>
+						</PartInfo>
+						<Image
+							src='/images/rarrow1.svg'
+							height='32'
+							width='16'
+							alt='Thunder image'
+						/>
+					</PartRow>
 				</Link>
 			</RewardMenuContainer>
 			{showWhatIsGIVstreamModal && (
@@ -231,7 +224,7 @@ export const NetworkRow = styled(Flex)`
 	align-items: center;
 `;
 
-export const SwithNetwork = styled(GLink)`
+export const SwitchNetwork = styled(GLink)`
 	color: ${brandColors.pinky[500]};
 	cursor: pointer;
 `;

@@ -25,6 +25,7 @@ export const GIVfrens: FC<IGIVfrensProps> = ({ showArchivedPools }) => {
 					Explore a multiverse of projects changing the world and earn
 					rewards for staking liquidity.&nbsp;
 					<GIVfrensLink
+						as='a'
 						size='Big'
 						href='https://docs.giveth.io/regenFarms'
 						target='_blank'

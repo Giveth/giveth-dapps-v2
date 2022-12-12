@@ -3,10 +3,10 @@ import { useWeb3React } from '@web3-react/core';
 import styled from 'styled-components';
 import {
 	brandColors,
-	Button,
 	IconDonation,
 	Lead,
 	neutralColors,
+	Button,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 

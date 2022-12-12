@@ -9,7 +9,7 @@ import {
 	IconDonation16,
 	neutralColors,
 	P,
-	IconSorting16,
+	IconRocketInSpace16,
 } from '@giveth/ui-design-system';
 import Select, {
 	components,
@@ -24,7 +24,6 @@ import selectCustomStyles from '@/lib/constants/selectCustomStyles';
 import { useProjectsContext } from '@/context/projects.context';
 import { Flex } from '@/components/styled-components/Flex';
 import useDetectDevice from '@/hooks/useDetectDevice';
-import { IS_BOOSTING_ENABLED } from '@/configuration';
 
 export interface ISelectedSort {
 	icon: ReactElement;
@@ -38,9 +37,9 @@ const DropdownIndicator: ComponentType<DropdownIndicatorProps> = props => {
 
 const sortByOptions = [
 	{
-		label: 'Default',
-		value: ESortbyAllProjects.QUALITYSCORE,
-		icon: <IconSorting16 color={brandColors.deep[900]} />,
+		label: 'Rank',
+		value: ESortbyAllProjects.GIVPOWER,
+		icon: <IconRocketInSpace16 color={brandColors.deep[900]} />,
 	},
 	{
 		label: 'Newest',
@@ -64,15 +63,6 @@ const sortByOptions = [
 	},
 ];
 
-if (IS_BOOSTING_ENABLED) {
-	// TODO: add GIVpower icon
-	sortByOptions.unshift({
-		label: 'GIVpower',
-		value: ESortbyAllProjects.GIVPOWER,
-		icon: <></>,
-	});
-}
-
 const ProjectsSortSelect = () => {
 	const { variables, setVariables } = useProjectsContext();
 	const { isMobile } = useDetectDevice();
@@ -95,11 +85,7 @@ const ProjectsSortSelect = () => {
 						sortingBy: e.value,
 					})
 				}
-				defaultValue={{
-					label: 'Default',
-					value: ESortbyAllProjects.QUALITYSCORE,
-					icon: <IconSorting16 color={brandColors.deep[900]} />,
-				}}
+				defaultValue={sortByOptions[0]}
 				options={sortByOptions}
 				styles={selectStyles}
 				id='sorting'

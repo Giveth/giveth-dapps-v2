@@ -15,6 +15,7 @@ export const DaoCard = () => {
 				Apply to kickstart a RegenFarm for your for-good DAO
 			</DaoCardQuote>
 			<DaoCardButton
+				isExternal
 				label='APPLY NOW'
 				linkType='primary'
 				href={links.JOINGIVFRENS}

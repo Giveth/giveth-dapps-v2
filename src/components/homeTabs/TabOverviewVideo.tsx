@@ -34,8 +34,8 @@ export const TabOverviewVideo = () => {
 			<VideoOverlay onClick={handleVideoClick} hidden={isPlaying}>
 				<Image
 					src='/images/video_play.svg'
-					width='90px'
-					height='90px'
+					width='90'
+					height='90'
 					alt='giveconomy video play button'
 					draggable={false}
 				/>

@@ -3,7 +3,7 @@ import { FC, useState, useEffect } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { Button, GLink, IconGiveth } from '@giveth/ui-design-system';
+import { Button, GLink } from '@giveth/ui-design-system';
 
 import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
@@ -49,6 +49,7 @@ import {
 } from '@/features/modal/modal.slice';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { IconGIV } from '../Icons/GIV';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -179,8 +180,8 @@ const Header: FC<IHeader> = () => {
 				{showBackBtn ? (
 					<Logo onClick={handleBack}>
 						<Image
-							width='26px'
-							height='26px'
+							width='26'
+							height='26'
 							alt='Giveth logo'
 							src={`/images/back-2.svg`}
 						/>
@@ -188,11 +189,11 @@ const Header: FC<IHeader> = () => {
 				) : (
 					<>
 						<MainLogoBtn>
-							<Link href={Routes.Home} passHref>
+							<Link href={Routes.Home}>
 								<Logo>
 									<Image
-										width='48px'
-										height='48px'
+										width='48'
+										height='48'
 										alt='Giveth logo'
 										src={`/images/logo/logo1.png`}
 									/>
@@ -206,7 +207,7 @@ const Header: FC<IHeader> = () => {
 			{!showBackBtn && (
 				<HeaderLinks theme={theme}>
 					{menuRoutes.map((link, index) => (
-						<Link href={link.href[0]} passHref key={index}>
+						<Link href={link.href[0]} key={index}>
 							<HeaderLink
 								size='Big'
 								theme={theme}
@@ -247,7 +248,7 @@ const Header: FC<IHeader> = () => {
 						>
 							<BalanceButton outline theme={theme}>
 								<HBContainer>
-									<IconGiveth size={24} />
+									<IconGIV size={24} />
 									<HBContent size='Big'>
 										{formatWeiHelper(givBalance.balance)}
 									</HBContent>

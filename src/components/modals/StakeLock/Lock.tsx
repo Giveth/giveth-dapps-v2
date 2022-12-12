@@ -11,6 +11,7 @@ import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
 import { useWeb3React } from '@web3-react/core';
+import Link from 'next/link';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
 import {
@@ -32,6 +33,7 @@ import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { Flex } from '@/components/styled-components/Flex';
 import links from '@/lib/constants/links';
 import ExternalLink from '@/components/ExternalLink';
+import Routes from '@/lib/constants/Routes';
 import type { PoolStakingConfig } from '@/types/config';
 
 interface ILockModalProps extends IModal {
@@ -172,40 +174,20 @@ const LockModal: FC<ILockModalProps> = ({
 						<>
 							<LockingBrief round={round} amount={amount} />
 							<TotalGIVpowerBox />
-							{/* <P>
-								You get GIVpower when you stake &amp; lock GIV.
-								GIVpower allows you to influence the ranking of
-								projects on Giveth.
-							</P>
 							<P>
-								Top ranked projects may be eligible for matching
-								funds, &amp; their donors get more GIVbacks!
+								Use your GIVpower to support verified projects
+								on Giveth while earning rewards.
 							</P>
-							<P>
-								Boost your favorite projects, or delegate your
-								GIVpower to community representatives.
-							</P> */}
-							<P>
-								Coming soon: GIVpower will allow you to support
-								verified projects while earning rewards.
-							</P>
+							<Link href={Routes.Projects}>
+								<BoostButton
+									linkType='primary'
+									label={'Boost projects'}
+									size='small'
+								/>
+							</Link>
 							<ExternalLink href={links.GIVPOWER_DOC}>
 								<LearnMoreLink>Learn More</LearnMoreLink>
 							</ExternalLink>
-							{/* <BoostButton
-								linkType='primary'
-								label={'Boost projects'}
-								size='small'
-								href={Routes.Projects}
-							/>
-							<CancelButton
-								buttonType='texty'
-								size='small'
-								label={'I’ll do it later'}
-								onClick={() => {
-									setShowModal(false);
-								}}
-							/> */}
 						</>
 					)}
 				</StakeInnerModal>
