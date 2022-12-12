@@ -164,7 +164,7 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 										? user.avatar
 										: '/images/avatar.svg'
 								}
-								alt={user.name}
+								alt={user.name || ''}
 								height={80}
 								width={80}
 							/>

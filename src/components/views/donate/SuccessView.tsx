@@ -1,6 +1,7 @@
 import {
 	brandColors,
 	Button,
+	ButtonLink,
 	H4,
 	H6,
 	neutralColors,
@@ -111,7 +112,7 @@ const SuccessView: FC<IProps> = props => {
 						</TxLink>
 					</>
 				)}
-				<Link passHref href={Routes.Projects}>
+				<Link href={Routes.Projects}>
 					<ProjectsButton size='small' label='SEE MORE PROJECTS' />
 				</Link>
 			</Options>
@@ -160,7 +161,7 @@ const Options = styled(FlexCenter)`
 	margin-top: 24px;
 `;
 
-const ProjectsButton = styled(Button)`
+const ProjectsButton = styled(ButtonLink)`
 	width: 242px;
 	margin-top: 24px;
 `;

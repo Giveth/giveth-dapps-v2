@@ -1,49 +1,81 @@
 import Link from 'next/link';
 import styled from 'styled-components';
-import { HomeContainer } from '@/components/views/homepage/Home.sc';
-import { mediaQueries } from '@/lib/constants/constants';
+import Image from 'next/image';
+import {
+	D1,
+	H2,
+	H4,
+	neutralColors,
+	semanticColors,
+} from '@giveth/ui-design-system';
 import { Shadow } from '@/components/styled-components/Shadow';
+import givpowerIsHere from '../../../../public/images/backgrounds/givpower.png';
+import wave from '../../../../public/images/wave.svg';
+import { FlexCenter } from '@/components/styled-components/Flex';
+import { HomeContainer } from './Home.sc';
 
 const HomePurpleSection = () => {
 	return (
-		<Link href='/givpower'>
-			<Wrapper />
-		</Link>
+		<Wrapper>
+			<Link href='/givpower'>
+				<Image
+					alt='GIVpower is here'
+					src={givpowerIsHere}
+					fill
+					style={{ objectFit: 'cover' }}
+				/>
+				<Content>
+					<Title>GIVpower</Title>
+					<Subtitle>
+						<Image src={wave} height={30} width={148} alt='wave' />
+						<H2>is here</H2>
+					</Subtitle>
+					<Desc weight={700}>
+						Earn rewards while boosting projects to new heights
+					</Desc>
+				</Content>
+			</Link>
+		</Wrapper>
 	);
 };
 
 const Wrapper = styled(HomeContainer)`
-	cursor: pointer;
-	min-height: 200px;
-	margin: 0 32px 64px 32px;
-	border-radius: 12px;
-	background: white;
-	padding-top: 90px;
 	position: relative;
-	z-index: 2;
+	cursor: pointer;
+	min-height: 550px;
+	border-radius: 12px;
 	overflow: hidden;
 	box-shadow: ${Shadow.Neutral[400]};
-	top: -50px;
-	::after {
-		background-image: url('/images/backgrounds/GIVPowerIsComing.png');
-		background-position: center;
-		content: '';
-		top: 0;
-		left: 0;
-		bottom: 0;
-		right: 0;
-		position: absolute;
-		z-index: -1;
-		width: 100%;
-		background-size: cover;
-	}
+	display: flex;
+	overflow: hidden;
+	flex-direction: column;
+	align-items: center;
+	margin: 0 32px 64px 32px;
+	padding-top: 70px;
+`;
+const Content = styled(FlexCenter)`
+	position: relative;
+	flex-direction: column;
+`;
 
-	${mediaQueries.tablet} {
-		min-height: 450px;
-		::after {
-			background-size: cover;
-		}
-	}
+const Title = styled(D1)`
+	z-index: 2;
+	color: ${neutralColors.gray['100']};
+`;
+
+const Subtitle = styled(FlexCenter)`
+	z-index: 1;
+	color: ${semanticColors.golden[500]};
+	margin: 8px 0;
+	gap: 8px;
+`;
+
+const Desc = styled(H4)`
+	z-index: 1;
+	color: ${neutralColors.gray['100']};
+	padding: 0 16px;
+	max-width: 520px;
+	text-align: center;
 `;
 
 export default HomePurpleSection;

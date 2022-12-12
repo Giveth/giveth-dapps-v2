@@ -8,7 +8,6 @@ import {
 	IconExternalLink,
 	neutralColors,
 } from '@giveth/ui-design-system';
-import Lottie from 'react-lottie';
 import styled from 'styled-components';
 import { FC } from 'react';
 import { useWeb3React } from '@web3-react/core';
@@ -18,33 +17,7 @@ import TikAnimation from '@/animations/tik.json';
 import ErrorAnimation from '@/animations/error.json';
 import { AddTokenButton } from '../AddTokenButton';
 import { Flex } from '../styled-components/Flex';
-
-const loadingAnimationOptions = {
-	loop: true,
-	autoplay: true,
-	animationData: LoadingAnimation,
-	rendererSettings: {
-		preserveAspectRatio: 'xMidYMid slice',
-	},
-};
-
-const tikAnimationOptions = {
-	loop: false,
-	autoplay: true,
-	animationData: TikAnimation,
-	rendererSettings: {
-		preserveAspectRatio: 'xMidYMid slice',
-	},
-};
-
-const errorAnimationOptions = {
-	loop: false,
-	autoplay: true,
-	animationData: ErrorAnimation,
-	rendererSettings: {
-		preserveAspectRatio: 'xMidYMid slice',
-	},
-};
+import LottieControl from '@/components/animations/lottieControl';
 
 const AddTokenRow = styled(Flex)`
 	margin-top: 16px;
@@ -70,11 +43,7 @@ export const SubmittedInnerModal: FC<IConfirmSubmitProps> = ({
 	return (
 		<>
 			<Title>{title}</Title>
-			<Lottie
-				options={loadingAnimationOptions}
-				height={100}
-				width={100}
-			/>
+			<LottieControl animationData={LoadingAnimation} size={100} />
 			<TxSubmit weight={700}>{txHash && 'Transaction pending'}</TxSubmit>
 			<AddTokenRow alignItems={'center'} justifyContent={'center'}>
 				<AddTokenButton
@@ -85,6 +54,7 @@ export const SubmittedInnerModal: FC<IConfirmSubmitProps> = ({
 			</AddTokenRow>
 			{txHash && (
 				<BlockExplorerLink
+					as='a'
 					href={`${config.NETWORKS_CONFIG[walletNetwork]?.blockExplorerUrls}
 			/tx/${txHash}`}
 					target='_blank'
@@ -112,7 +82,11 @@ export const ConfirmedInnerModal: FC<IConfirmSubmitProps> = ({
 	return (
 		<>
 			<Title>{title}</Title>
-			<Lottie options={tikAnimationOptions} height={100} width={100} />
+			<LottieControl
+				animationData={TikAnimation}
+				size={100}
+				loop={false}
+			/>
 			<TxConfirm weight={700}>Transaction confirmed!</TxConfirm>
 			<Info>It may take a few minutes for the UI to update</Info>
 			<AddTokenRow alignItems={'center'} justifyContent={'center'}>
@@ -123,6 +97,7 @@ export const ConfirmedInnerModal: FC<IConfirmSubmitProps> = ({
 				/>
 			</AddTokenRow>
 			<BlockExplorerLink
+				as='a'
 				href={`${config.NETWORKS_CONFIG[walletNetwork]?.blockExplorerUrls}
 							/tx/${txHash}`}
 				target='_blank'
@@ -150,11 +125,16 @@ export const ErrorInnerModal: FC<IErrorProps> = ({
 	return (
 		<>
 			<Title>{title}</Title>
-			<Lottie options={errorAnimationOptions} height={60} width={60} />
+			<LottieControl
+				animationData={ErrorAnimation}
+				size={60}
+				loop={false}
+			/>
 			<TxFailed weight={700}>Transaction Error!</TxFailed>
 			{message && <ErrorMessage>{message}</ErrorMessage>}
 			{txHash && (
 				<BlockExplorerLink
+					as='a'
 					href={`${config.NETWORKS_CONFIG[walletNetwork]?.blockExplorerUrls}
 			/tx/${txHash}`}
 					target='_blank'

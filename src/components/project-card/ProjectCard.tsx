@@ -28,15 +28,13 @@ import {
 	slugToProjectDonate,
 	slugToProjectView,
 } from '@/lib/routeCreators';
-import { Row } from '@/components/Grid';
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
-import { IS_BOOSTING_ENABLED } from '@/configuration';
-import InternalLink from '@/components/InternalLink';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
+const SIDE_PADDING = '26px';
 
 interface IProjectCard {
 	project: IProject;
@@ -66,55 +64,58 @@ const ProjectCard = (props: IProjectCard) => {
 	const { formatMessage, formatRelativeTime } = useIntl();
 
 	return (
-		<Link href={slugToProjectView(slug)} passHref>
-			<Wrapper
-				onMouseEnter={() => setIsHover(true)}
-				onMouseLeave={() => setIsHover(false)}
-			>
-				<ImagePlaceholder>
-					<ProjectCardBadges project={project} />
-					<ProjectCardOrgBadge
-						organization={orgLabel}
-						isHover={isHover}
-					/>
-					<ProjectCardImage image={image} />
-				</ImagePlaceholder>
-				<CardBody
+		<Wrapper
+			onMouseEnter={() => setIsHover(true)}
+			onMouseLeave={() => setIsHover(false)}
+		>
+			<ImagePlaceholder>
+				<ProjectCardBadges project={project} />
+				<ProjectCardOrgBadge
+					organization={orgLabel}
 					isHover={isHover}
-					isOtherOrganization={
-						orgLabel && orgLabel !== ORGANIZATION.giveth
-					}
-				>
-					<div style={{ position: 'relative' }}>
-						<LastUpdatedContainer isHover={isHover}>
-							{formatMessage({ id: 'label.last_updated' })}:
-							{timeFromNow(
-								updatedAt,
-								formatRelativeTime,
-								formatMessage({ id: 'label.just_now' }),
-							)}
-						</LastUpdatedContainer>
-
-						<InternalLink href={slugToProjectView(slug)}>
-							<Title weight={700} isHover={isHover}>
-								{title}
-							</Title>
-						</InternalLink>
-					</div>
-					{adminUser && !isForeignOrg ? (
+				/>
+				<Link href={slugToProjectView(slug)}>
+					<ProjectCardImage image={image} />
+				</Link>
+			</ImagePlaceholder>
+			<CardBody
+				isHover={isHover}
+				isOtherOrganization={
+					orgLabel && orgLabel !== ORGANIZATION.giveth
+				}
+			>
+				<TitleWrapper>
+					<LastUpdatedContainer isHover={isHover}>
+						{formatMessage({ id: 'label.last_updated' })}:
+						{timeFromNow(
+							updatedAt,
+							formatRelativeTime,
+							formatMessage({ id: 'label.just_now' }),
+						)}
+					</LastUpdatedContainer>
+					<Link href={slugToProjectView(slug)}>
+						<Title weight={700} isHover={isHover}>
+							{title}
+						</Title>
+					</Link>
+				</TitleWrapper>
+				<PaddedRow>
+					{adminUser?.name && !isForeignOrg && (
 						<Link
 							href={addressToUserView(adminUser?.walletAddress)}
-							passHref
 						>
 							<Author size='Big'>{name || '\u200C'}</Author>
 						</Link>
-					) : (
+					)}
+					<Link href={slugToProjectView(slug)} style={{ flex: 1 }}>
 						<Author size='Big'>
 							<br />
 						</Author>
-					)}
+					</Link>
+				</PaddedRow>
+				<Link href={slugToProjectView(slug)}>
 					<Description>{htmlToText(description)}</Description>
-					<Flex alignItems='center' gap='4px'>
+					<PaddedRow alignItems='center' gap='4px'>
 						<PriceText>
 							${Math.ceil(totalDonations as number)}
 						</PriceText>
@@ -122,64 +123,67 @@ const ProjectCard = (props: IProjectCard) => {
 							{' '}
 							{formatMessage({ id: 'label.raised_two' })}
 						</LightSubline>
-					</Flex>
-					<>
+					</PaddedRow>
+				</Link>
+				{verified && (
+					<Link href={slugToProjectView(slug)}>
 						<Hr />
-						<Flex justifyContent='space-between'>
-							{verified && (
-								<Flex gap='16px'>
-									<Flex alignItems='center' gap='4px'>
-										<IconVerifiedBadge16
-											color={semanticColors.jade[500]}
-										/>
-										<VerifiedText>
-											{formatMessage({
-												id: 'label.verified',
-											})}
-										</VerifiedText>
-									</Flex>
-									<Flex alignItems='center' gap='2px'>
-										<GivBackIconContainer>
-											<IconGIVBack
-												size={24}
-												color={brandColors.giv[500]}
-											/>
-										</GivBackIconContainer>
-										<GivBackText>
-											{formatMessage({
-												id: 'label.givback_eligible',
-											})}
-										</GivBackText>
-									</Flex>
-								</Flex>
-							)}
-							{/* // TODO: Boosting - remove this for boosting launch */}
-							{IS_BOOSTING_ENABLED && projectPower?.powerRank && (
-								<GivpowerRankContainer
-									gap='8px'
-									alignItems='center'
-								>
-									<IconRocketInSpace16
-										color={neutralColors.gray[700]}
+						<PaddedRow justifyContent='space-between'>
+							<Flex gap='16px'>
+								<Flex alignItems='center' gap='4px'>
+									<IconVerifiedBadge16
+										color={semanticColors.jade[500]}
 									/>
-									<B>#{projectPower?.powerRank || '--'}</B>
-								</GivpowerRankContainer>
-							)}
-						</Flex>
-					</>
-					<ActionButtons>
-						<Link href={slugToProjectDonate(slug)} passHref>
-							<CustomizedDonateButton
-								linkType='primary'
-								size='small'
-								label={formatMessage({ id: 'label.donate' })}
-								isHover={isHover}
-							/>
-						</Link>
-					</ActionButtons>
-				</CardBody>
-			</Wrapper>
-		</Link>
+									<VerifiedText>
+										{formatMessage({
+											id: 'label.verified',
+										})}
+									</VerifiedText>
+								</Flex>
+								<Flex alignItems='center' gap='2px'>
+									<GivBackIconContainer>
+										<IconGIVBack
+											size={24}
+											color={brandColors.giv[500]}
+										/>
+									</GivBackIconContainer>
+									<GivBackText>
+										{formatMessage({
+											id: 'label.givback_eligible',
+										})}
+									</GivBackText>
+								</Flex>
+							</Flex>
+							<GivpowerRankContainer
+								gap='8px'
+								alignItems='center'
+							>
+								<IconRocketInSpace16
+									color={neutralColors.gray[700]}
+								/>
+								<B>
+									{projectPower?.powerRank &&
+									projectPower?.totalPower !== 0
+										? `#${projectPower.powerRank}`
+										: '--'}
+								</B>
+							</GivpowerRankContainer>
+						</PaddedRow>
+					</Link>
+				)}
+				<ActionButtons>
+					<Link href={slugToProjectDonate(slug)}>
+						<CustomizedDonateButton
+							linkType='primary'
+							size='small'
+							label={formatMessage({ id: 'label.donate' })}
+							isHover={isHover}
+						/>
+					</Link>
+				</ActionButtons>
+			</CardBody>
+		</Wrapper>
+		// </Link>
 	);
 };
 
@@ -188,9 +192,7 @@ const DonateButton = styled(ButtonLink)`
 `;
 
 const CustomizedDonateButton = styled(DonateButton)<{ isHover: boolean }>`
-	margin: 25px 0;
 	${mediaQueries.laptopS} {
-		margin: 25px 12px;
 		opacity: ${props => (props.isHover ? '1' : '0')};
 		transition: opacity 0.3s ease-in-out;
 	}
@@ -236,15 +238,12 @@ const LastUpdatedContainer = styled(Subline)<{ isHover?: boolean }>`
 	}
 `;
 
-const ActionButtons = styled(Row)`
-	gap: 16px;
-`;
-
 const Hr = styled.hr`
 	border: 1px solid ${neutralColors.gray[300]};
 `;
 
 const Description = styled(P)`
+	padding: 0 ${SIDE_PADDING};
 	height: 75px;
 	overflow: hidden;
 	color: ${neutralColors.gray[800]};
@@ -255,7 +254,6 @@ const CardBody = styled.div<{
 	isOtherOrganization?: boolean | '';
 	isHover?: boolean;
 }>`
-	padding: 32px 26px 26px;
 	position: absolute;
 	left: 0;
 	right: 0;
@@ -275,10 +273,9 @@ const CardBody = styled.div<{
 	}
 `;
 
-const Author = styled(GLink)`
-	color: ${brandColors.pinky[500]};
-	margin-bottom: 16px;
-	display: block;
+const TitleWrapper = styled.div`
+	padding: 32px ${SIDE_PADDING} 0;
+	position: relative;
 `;
 
 const Title = styled(H6)<{ isHover?: boolean }>`
@@ -288,6 +285,15 @@ const Title = styled(H6)<{ isHover?: boolean }>`
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	margin-bottom: 2px;
+`;
+
+const Author = styled(GLink)`
+	color: ${brandColors.pinky[500]};
+	margin-bottom: 16px;
+	display: block;
+	&:hover {
+		color: ${brandColors.pinky[800]};
+	}
 `;
 
 const ImagePlaceholder = styled.div`
@@ -306,7 +312,6 @@ const Wrapper = styled.div`
 	overflow: hidden;
 	box-shadow: ${Shadow.Neutral[400]};
 	height: 536px;
-	cursor: pointer;
 	${mediaQueries.laptopS} {
 		height: 472px;
 	}
@@ -318,6 +323,16 @@ const GivpowerRankContainer = styled(Flex)`
 	color: ${neutralColors.gray[800]};
 	border-radius: 8px;
 	margin-left: auto;
+`;
+
+const PaddedRow = styled(Flex)`
+	padding: 0 ${SIDE_PADDING};
+`;
+
+const ActionButtons = styled(PaddedRow)`
+	margin: 25px 0;
+	gap: 16px;
+	flex-direction: column;
 `;
 
 export default ProjectCard;

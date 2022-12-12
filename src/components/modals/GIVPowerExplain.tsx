@@ -45,6 +45,7 @@ export const GIVPowerExplainModal: FC<IModal> = ({ setShowModal }) => {
 					get more GIVbacks.
 					<GLink
 						onClick={() => setShowModal(false)}
+						as='a'
 						target='_blank'
 						href={links.GIVPOWER_DOC}
 					>

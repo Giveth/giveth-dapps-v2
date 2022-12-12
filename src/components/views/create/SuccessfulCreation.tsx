@@ -61,7 +61,7 @@ const SuccessfulCreation = (props: {
 							You can still access your project from your account
 							and share it with your friends.
 						</P>
-						<Link passHref href={projectPath}>
+						<Link href={projectPath}>
 							<ProjectsButton
 								onClick={() =>
 									showSuccess && showSuccess(false)

@@ -76,7 +76,7 @@ const ErrorsIndex = ({ statusCode }: IErrorProps) => {
 					<b>Oops!</b> {ErrorsObject[statusCode].title}
 				</CustomH4>
 				<LogoContainer>
-					<Link href='/' passHref>
+					<Link href='/'>
 						<StyledImage
 							src={givFontLogo}
 							width='150'

@@ -6,6 +6,7 @@ import {
 	H6,
 	IconHelpFilled16,
 	IconRocketInSpace24,
+	Lead,
 	neutralColors,
 	P,
 } from '@giveth/ui-design-system';
@@ -27,13 +28,15 @@ import {
 	ColoredRocketIcon,
 	DescToast,
 	SliderWrapper,
-	SliderTooltip,
 	StyledSlider,
 	Handle,
 	HandleTooltip,
 	SliderDesc,
 	ConfirmButton,
 	ManageLink,
+	ExceededContainer,
+	BoostedProjectsLink,
+	NotNowButton,
 } from './BoostModal.sc';
 import { EBoostModalState } from './BoostModal';
 import {
@@ -44,21 +47,27 @@ import { client } from '@/apollo/apolloClient';
 import { IPowerBoosting } from '@/apollo/types/types';
 import { useAppSelector } from '@/features/hooks';
 import LoadingAnimation from '@/animations/loading_giv.json';
+import { useProjectContext } from '@/context/project.context';
+import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import type { FC, Dispatch, SetStateAction } from 'react';
 import type { BigNumber } from 'ethers';
 
 interface IInnerBoostModalProps {
 	totalGIVpower: BigNumber;
 	setPercentage: Dispatch<SetStateAction<number>>;
+	state: EBoostModalState;
 	setState: Dispatch<SetStateAction<EBoostModalState>>;
 	projectId: string;
+	setShowModal: (showModal: boolean) => void;
 }
 
 const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 	totalGIVpower,
 	setPercentage: setFinalPercentage,
+	state,
 	setState,
 	projectId,
+	setShowModal,
 }) => {
 	const [percentage, setPercentage] = useState(0);
 	const [isChanged, setIsChanged] = useState(false);
@@ -67,6 +76,9 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 	const [boostedProjects, setBoostedProjects] = useState<IPowerBoosting[]>(
 		[],
 	);
+
+	const { fetchProjectBoosters } = useProjectContext();
+
 	const boostedProjectsCount = boostedProjects.length ?? 0;
 	const user = useAppSelector(state => state.user.userData);
 	const isOnlyBoostedProjectIsThisProject =
@@ -77,25 +89,41 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 		if (boostedProjectsCount === 0) {
 			return (
 				<Caption style={{ whiteSpace: `pre-line` }}>
-					This is your first time boosting, so 100% will be allocated
-					to this project. You can check your allocation on &nbsp;
-					<Link href={Routes.MyBoostedProjects} passHref>
+					Since this is your first time boosting a project, 100% of
+					your GIVpower will be allocated to it. You can review and
+					manage your GIVpower allocations in &nbsp;
+					<Link href={Routes.MyBoostedProjects}>
 						<GLink>
-							<b>My account</b>
+							<b>My GIVpower</b>
 						</GLink>
 					</Link>
+					.
 				</Caption>
 			);
 		} else if (isOnlyBoostedProjectIsThisProject) {
 			return (
 				<Caption style={{ whiteSpace: `pre-line` }}>
-					You supported with 100% of your total GIVpower to this
-					project. You can't edit the allocation unless you have at
-					least 1 other boosted project. Try boosting other projects
-					or managing them in &nbsp;
-					<Link href={Routes.MyBoostedProjects} passHref>
+					You supported this project with 100% of your total GIVpower.
+					You can&apos;t edit the allocation unless you have at least
+					1 other boosted project. Try boosting other projects or
+					managing them in &nbsp;
+					<Link href={Routes.MyBoostedProjects}>
 						<GLink>
-							<b>My account</b>
+							<b>My GIVpower</b>
+						</GLink>
+					</Link>
+				</Caption>
+			);
+		} else if (percentage === 100) {
+			return (
+				<Caption style={{ whiteSpace: `pre-line` }}>
+					Are you Sure? <br /> If you boost this project with 100% of
+					your GIVpower, you will remove your GIVpower from all the
+					other projects you boosted. <br />
+					You can review and manage your GIVpower allocations in
+					<Link href={Routes.MyBoostedProjects}>
+						<GLink>
+							<b>My GIVpower.</b>
 						</GLink>
 					</Link>
 				</Caption>
@@ -103,12 +131,14 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 		} else {
 			return (
 				<Caption style={{ whiteSpace: `pre-line` }}>
-					By allocating GIVpower to this project, we will reduce your
-					allocation on previous project proportionally. You can check
-					your previous allocation on &nbsp;
-					<Link href={Routes.MyBoostedProjects} passHref>
+					When you allocate a percentage of your total GIVpower to
+					this project, the GIVpower you have on other projects will
+					decrease proportionally. <br />
+					You can review and manage your GIVpower allocations in
+					&nbsp;
+					<Link href={Routes.MyBoostedProjects}>
 						<GLink>
-							<b>My account</b>
+							<b>My GIVpower.</b>
 						</GLink>
 					</Link>
 				</Caption>
@@ -136,23 +166,26 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 				const powerBoostings: IPowerBoosting[] =
 					data.getPowerBoosting.powerBoostings;
 				setBoostedProjects(powerBoostings);
+				const count = data.getPowerBoosting.powerBoostings?.length ?? 0;
+				if (count === 0) {
+					setPercentage(100);
+					setIsChanged(true);
+				} else {
+					const sameProject = powerBoostings.find(
+						project => project?.project.id === projectId,
+					);
+					const _percentage = Math.floor(
+						sameProject?.percentage ?? 0,
+					);
+					setPercentage(_percentage);
+					if (count >= 20 && !sameProject) {
+						setState(EBoostModalState.LIMIT_EXCEEDED);
+					}
+				}
 			}
 		};
-		fetchUserBoosts().then();
+		fetchUserBoosts();
 	}, [user]);
-
-	useEffect(() => {
-		if (boostedProjectsCount === 0) {
-			setPercentage(100);
-			setIsChanged(true);
-		} else {
-			const sameProject = boostedProjects.find(
-				project => project?.project.id === projectId,
-			);
-			const _percentage = Math.floor(sameProject?.percentage ?? 0);
-			setPercentage(_percentage);
-		}
-	}, [boostedProjectsCount]);
 
 	const confirmAllocation = async () => {
 		setIsSaving(true);
@@ -163,6 +196,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 				projectId: +projectId,
 			},
 		});
+		fetchProjectBoosters(+projectId, EProjectStatus.ACTIVE);
 		setIsSaving(false);
 		if (res) {
 			setFinalPercentage(percentage);
@@ -172,6 +206,32 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 
 	if (loading) {
 		return <LottieControl animationData={LoadingAnimation} size={50} />;
+	}
+
+	if (state === EBoostModalState.LIMIT_EXCEEDED) {
+		return (
+			<>
+				<ExceededContainer>
+					<Lead>
+						You have already boosted the maximum 20 projects!
+						<br /> To continue with this boosting, remove at least
+						one other boosted project from your account and come
+						back to this project again!
+					</Lead>
+				</ExceededContainer>
+				<Link href={Routes.MyBoostedProjects}>
+					<BoostedProjectsLink
+						size='medium'
+						label='Go to My GIVpower'
+					/>
+				</Link>
+				<NotNowButton
+					buttonType='texty-primary'
+					label='Not now'
+					onClick={() => setShowModal(false)}
+				/>
+			</>
+		);
 	}
 
 	return (
@@ -187,9 +247,8 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 								direction={'bottom'}
 							>
 								<LockInfotooltip>
-									This is the total GIVpower you have, you can
-									get more GIVpower by stake & lock more
-									tokens
+									Get more GIVpower by staking & locking more
+									GIV tokens.
 								</LockInfotooltip>
 							</IconWithTooltip>
 						</GIVpowerHelp>
@@ -203,7 +262,8 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 							direction={'bottom'}
 						>
 							<LockInfotooltip>
-								This is the project you boosted before
+								This is the number of projects you have boosted
+								before
 							</LockInfotooltip>
 						</IconWithTooltip>
 					</Flex>
@@ -215,13 +275,16 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 					</Flex>
 				</Flex>
 			</InfoPart>
-			<DescToast>{handleCaptionText()}</DescToast>
+			<DescToast
+				hasError={
+					boostedProjectsCount !== 0 &&
+					!isOnlyBoostedProjectIsThisProject &&
+					percentage === 100
+				}
+			>
+				{handleCaptionText()}
+			</DescToast>
 			<SliderWrapper>
-				{!isChanged && (
-					<SliderTooltip>
-						Allocated to previous projects
-					</SliderTooltip>
-				)}
 				<StyledSlider
 					min={0}
 					max={100}
@@ -274,7 +337,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 										totalGIVpower.mul(percentage).div(100),
 								  )
 								: 0
-					  } GIVpower.`
+					  } GIVpower`
 					: 'Drag to allocate.'}
 			</SliderDesc>
 			<ConfirmButton
@@ -289,8 +352,8 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 				}
 				onClick={confirmAllocation}
 			/>
-			<Link href={Routes.MyBoostedProjects} passHref>
-				<ManageLink>Manage your allocations</ManageLink>
+			<Link href={Routes.MyBoostedProjects}>
+				<ManageLink>Manage your GIVpower</ManageLink>
 			</Link>
 		</>
 	);

@@ -24,7 +24,6 @@ const GetMoreGIVpowerBanner = () => {
 			<Actions gap='16px' wrap={1}>
 				<Link
 					href={`${Routes.GIVfarm}/?open=${StakingType.GIV_LM}&chain=gnosis`}
-					passHref
 				>
 					<ButtonLink
 						label='Stake GIV'
@@ -33,6 +32,7 @@ const GetMoreGIVpowerBanner = () => {
 					/>
 				</Link>
 				<OutlineLinkButton
+					isExternal
 					label='Get GIV'
 					size='small'
 					linkType='primary'

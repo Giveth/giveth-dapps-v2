@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import styled from 'styled-components';
-import Lottie from 'react-lottie';
 import Image from 'next/image';
 import {
 	IconExternalLink,
@@ -9,8 +8,6 @@ import {
 	Button,
 	Overline,
 	B,
-	IconGiveth,
-	IconETH,
 	semanticColors,
 	Subline,
 } from '@giveth/ui-design-system';
@@ -21,16 +18,9 @@ import { Flex } from '@/components/styled-components/Flex';
 import { IconWithTooltip } from '../IconWithToolTip';
 import LoadingAnimation from '@/animations/loading.json';
 import { Pending } from '../modals/HarvestAll.sc';
-
-const loadingAnimationOptions = {
-	loop: true,
-	autoplay: true,
-	animationData: LoadingAnimation,
-	rendererSettings: {
-		preserveAspectRatio: 'xMidYMid slice',
-	},
-};
-
+import LottieControl from '@/components/animations/lottieControl';
+import { IconEthereum } from '../Icons/Eth';
+import { IconGIV } from '../Icons/GIV';
 interface IV3StakeCardProps {
 	position: LiquidityPosition;
 	isUnstaking?: boolean;
@@ -135,7 +125,7 @@ const V3StakingCard: FC<IV3StakeCardProps> = ({
 					</RoundedInfo>
 				</PositionInfoRow>
 				<TokenAmountRow>
-					<IconGiveth size={16} />
+					<IconGIV size={16} />
 					<TokenValue>
 						{position._position
 							? position._position.amount0.toSignificant(4)
@@ -143,7 +133,7 @@ const V3StakingCard: FC<IV3StakeCardProps> = ({
 					</TokenValue>
 				</TokenAmountRow>
 				<TokenAmountRow>
-					<IconETH size={16} />
+					<IconEthereum />
 					<TokenValue>
 						{position._position
 							? position._position.amount1.toSignificant(4)
@@ -154,10 +144,9 @@ const V3StakingCard: FC<IV3StakeCardProps> = ({
 			<PositionActions>
 				{isConfirming && selectedPosition ? (
 					<PendingStyled>
-						<Lottie
-							options={loadingAnimationOptions}
-							height={40}
-							width={40}
+						<LottieControl
+							animationData={LoadingAnimation}
+							size={40}
 						/>
 						&nbsp;PENDING
 					</PendingStyled>

@@ -31,18 +31,21 @@ const BoostedInnerModal: FC<IBoostedModalProps> = ({
 				<Desc>
 					You boosted this project with {percentage}% of your
 					GIVpower.
+					<br />
+					Note: This project’s rank will only change at the start of
+					of the next GIVbacks round.
 				</Desc>
 				<ActionsSection>
-					<GetButton
-						label='Get GIVpower'
-						size='small'
+					<Link
 						href={`${Routes.GIVfarm}/?open=${StakingType.GIV_LM}&chain=gnosis`}
-					/>
-					<Link href={Routes.MyBoostedProjects} passHref>
+					>
+						<GetButton label='Get more GIVpower' size='small' />
+					</Link>
+					<Link href={Routes.MyBoostedProjects}>
 						<CustomButtonLink
-							linkType='texty'
+							linkType='texty-primary'
 							size='small'
-							label='see your boosted projects'
+							label='see your GIVpower allocations'
 						/>
 					</Link>
 					<CustomButton

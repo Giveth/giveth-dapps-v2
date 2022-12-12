@@ -94,6 +94,7 @@ export const givEconomySupportedNetworks = [
 ];
 
 export const zIndex = {
+	BOTTOM_SHEET: 90,
 	HEADER: 100,
 	DROPDOWN: 1000,
 	STICKY: 1020,

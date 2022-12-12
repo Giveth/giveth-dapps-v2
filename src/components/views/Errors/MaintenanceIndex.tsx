@@ -78,7 +78,7 @@ const MaintenanceIndex = () => {
 					</H4>
 				</div>
 				<LogoContainer>
-					<Link href='/' passHref>
+					<Link href='/'>
 						<StyledImage
 							src={givFontLogo}
 							width='150'
