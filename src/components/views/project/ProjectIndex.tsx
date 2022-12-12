@@ -139,7 +139,7 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 					},
 				});
 			});
-		fetchProjectBoosters(+id);
+		fetchProjectBoosters(+id, project?.status.name);
 	}, [id]);
 
 	useEffect(() => {

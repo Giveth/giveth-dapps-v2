@@ -48,6 +48,7 @@ import { IPowerBoosting } from '@/apollo/types/types';
 import { useAppSelector } from '@/features/hooks';
 import LoadingAnimation from '@/animations/loading_giv.json';
 import { useProjectContext } from '@/context/project.context';
+import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import type { FC, Dispatch, SetStateAction } from 'react';
 import type { BigNumber } from 'ethers';
 
@@ -195,7 +196,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 				projectId: +projectId,
 			},
 		});
-		fetchProjectBoosters(+projectId);
+		fetchProjectBoosters(+projectId, EProjectStatus.ACTIVE);
 		setIsSaving(false);
 		if (res) {
 			setFinalPercentage(percentage);
