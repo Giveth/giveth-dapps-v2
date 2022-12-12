@@ -105,7 +105,7 @@ export const RewardCard: FC<IRewardCardProps> = ({
 							<IconGIVStream size={24} />
 							<P>{formatWeiHelper(stream)}</P>
 							<RateUnit>{rewardTokenSymbol}/week</RateUnit>
-							<IconHelpWraper
+							<IconHelpFilledWraper
 								onClick={() => {
 									setShowWhatIsGIVstreamModal(true);
 								}}
@@ -113,7 +113,7 @@ export const RewardCard: FC<IRewardCardProps> = ({
 								<IconHelpFilled24
 									color={brandColors.deep[200]}
 								/>
-							</IconHelpWraper>
+							</IconHelpFilledWraper>
 						</RateInfo>
 						{actionLabel && actionCb ? (
 							<ActionButton
@@ -191,7 +191,7 @@ const ActionButton = styled(Button)`
 	width: 100%;
 `;
 
-const IconHelpWraper = styled.div`
+const IconHelpFilledWraper = styled.div`
 	cursor: pointer;
 `;
 

@@ -33,6 +33,7 @@ import { useAppSelector } from '@/features/hooks';
 import { ProjectMeta } from '@/components/Metatag';
 import { Col, Row } from '@/components/Grid';
 import ProjectGIVPowerIndex from '@/components/views/project/projectGIVPower';
+import { useProjectContext } from '@/context/project.context';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
@@ -57,6 +58,7 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 	const [creationSuccessful, setCreationSuccessful] = useState(false);
 
 	const user = useAppSelector(state => state.user.userData);
+	const { fetchProjectBoosters } = useProjectContext();
 
 	const project = draftProject || props.project;
 
@@ -67,6 +69,7 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 		status,
 		id = '',
 		projectPower,
+		projectFuturePower,
 	} = project || {};
 	const router = useRouter();
 	const slug = router.query.projectIdSlug as string;
@@ -136,6 +139,7 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 					},
 				});
 			});
+		fetchProjectBoosters(+id, project?.status.name);
 	}, [id]);
 
 	useEffect(() => {
@@ -214,8 +218,9 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 						)}
 						{activeTab === 3 && (
 							<ProjectGIVPowerIndex
-								projectId={id}
 								projectPower={projectPower}
+								projectFuturePower={projectFuturePower}
+								isAdmin={isAdmin}
 							/>
 						)}
 					</Col>

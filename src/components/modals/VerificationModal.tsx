@@ -5,7 +5,7 @@ import {
 	Button,
 	H5,
 	IconExternalLink,
-	IconVerifiedBadge,
+	IconVerifiedBadge32,
 	Lead,
 	neutralColors,
 } from '@giveth/ui-design-system';
@@ -34,7 +34,7 @@ export const VerificationModal = (props: { onClose: () => void }) => {
 		<Modal closeModal={closeModal} isAnimating={isAnimating} hiddenClose>
 			<Container>
 				<Header>
-					<IconVerifiedBadge
+					<IconVerifiedBadge32
 						size={54}
 						color={brandColors.cyan[500]}
 					/>

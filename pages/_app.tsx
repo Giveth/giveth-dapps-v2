@@ -109,9 +109,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 							<SubgraphController />
 							<UserController />
 							<HeaderWrapper />
-							{pageProps.errorStatus ? (
+							{(pageProps as any).errorStatus ? (
 								<ErrorsIndex
-									statusCode={pageProps.errorStatus}
+									statusCode={(pageProps as any).errorStatus}
 								/>
 							) : (
 								<Component {...pageProps} />

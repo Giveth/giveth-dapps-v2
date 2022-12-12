@@ -33,60 +33,48 @@ const Footer = () => {
 				<LeftContainer wrap={1}>
 					<LinkColumn>
 						<Link href={Routes.Home}>
-							<a>
-								<LinkItem color={textColor}>
-									{formatMessage({
-										id: 'component.title.home',
-									})}
-								</LinkItem>
-							</a>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.home',
+								})}
+							</LinkItem>
 						</Link>
 						<Link href={Routes.Projects}>
-							<a>
-								<LinkItem color={textColor}>
-									{formatMessage({
-										id: 'component.title.projects',
-									})}
-								</LinkItem>
-							</a>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.projects',
+								})}
+							</LinkItem>
 						</Link>
 						<Link href={Routes.AboutUs}>
-							<a>
-								<LinkItem color={textColor}>
-									{formatMessage({
-										id: 'component.title.about_us',
-									})}
-								</LinkItem>
-							</a>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.about_us',
+								})}
+							</LinkItem>
 						</Link>
 						<Link href={Routes.Faq}>
-							<a>
-								<LinkItem color={textColor}>
-									{formatMessage({
-										id: 'component.title.faq',
-									})}
-								</LinkItem>
-							</a>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.faq',
+								})}
+							</LinkItem>
 						</Link>
 						<Link href={Routes.Support}>
-							<a>
-								<LinkItem color={textColor}>
-									{formatMessage({
-										id: 'component.title.support',
-									})}
-								</LinkItem>
-							</a>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.support',
+								})}
+							</LinkItem>
 						</Link>
 					</LinkColumn>
 					<LinkColumn>
 						<Link href={Routes.Join}>
-							<a>
-								<LinkItem color={textColor}>
-									{formatMessage({
-										id: 'component.title.join_our_community',
-									})}
-								</LinkItem>
-							</a>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.join_our_community',
+								})}
+							</LinkItem>
 						</Link>
 						<a href={links.GIVETH_DOCS}>
 							<LinkItem color={textColor}>
@@ -110,13 +98,11 @@ const Footer = () => {
 							</LinkItem>
 						</a>
 						<Link href={Routes.Terms}>
-							<a>
-								<LinkItem color={textColor}>
-									{formatMessage({
-										id: 'component.title.tos',
-									})}
-								</LinkItem>
-							</a>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.tos',
+								})}
+							</LinkItem>
 						</Link>
 					</LinkColumn>
 					<LinkColumn>
@@ -135,13 +121,11 @@ const Footer = () => {
 							</LinkItem>
 						</a>
 						<Link href={Routes.Partnerships}>
-							<a>
-								<LinkItem color={textColor}>
-									{formatMessage({
-										id: 'component.title.partnerships',
-									})}
-								</LinkItem>
-							</a>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.partnerships',
+								})}
+							</LinkItem>
 						</Link>
 						<a href={links.RECRUITEE}>
 							<LinkItem color={textColor}>
@@ -183,14 +167,12 @@ const Footer = () => {
 							})}
 						</Caption>
 						<Link href={links.SUPPORT_US}>
-							<a>
-								<CaptionRed medium>
-									&nbsp;
-									{formatMessage({
-										id: 'component.title.with_your_donation',
-									})}
-								</CaptionRed>
-							</a>
+							<CaptionRed medium>
+								&nbsp;
+								{formatMessage({
+									id: 'component.title.with_your_donation',
+								})}
+							</CaptionRed>
 						</Link>
 					</SupportUs>
 				</RightContainer>

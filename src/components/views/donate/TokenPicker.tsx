@@ -50,7 +50,7 @@ const ImageIcon = (props: { symbol: string }) => {
 	} catch (err) {
 		image_path = '/images/tokens/eth.png'; //set default image path
 	}
-	return <Image alt={symbol} src={image_path} width='24px' height='24px' />;
+	return <Image alt={symbol} src={image_path} width='24' height='24' />;
 };
 
 const MenuList = (props: MenuListProps<IProjectAcceptedToken, false>) => {

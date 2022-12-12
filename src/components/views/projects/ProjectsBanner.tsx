@@ -26,7 +26,7 @@ const ProjectsBanner: FC<IProjectsBanner> = ({ mainCategory }) => {
 				src={
 					mainCategory?.banner || '/images/banners/categories/all.png'
 				}
-				layout='fill'
+				fill
 				alt={_mainCategory.title}
 				objectFit='cover'
 				objectPosition='left'

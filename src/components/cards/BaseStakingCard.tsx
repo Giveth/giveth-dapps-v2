@@ -5,8 +5,8 @@ import {
 	IconHelpFilled,
 	IconSpark,
 	Caption,
-	IconHelpFilled16,
 	IconAlertCircle32,
+	IconHelpFilled16,
 	IconInfoFilled24,
 } from '@giveth/ui-design-system';
 import { constants } from 'ethers';
@@ -40,7 +40,7 @@ import {
 	FirstDetail,
 	GIVgardenTooltip,
 	IconContainer,
-	IconHelpWraper,
+	IconHelpFilledWraper,
 	IntroIcon,
 	LiquidityButton,
 	LockInfotooltip,
@@ -76,7 +76,11 @@ import { UniV3APRModal } from '../modals/UNIv3APR';
 import StakingCardIntro from './StakingCardIntro';
 import { getNowUnixMS } from '@/helpers/time';
 import FarmCountDown from '../FarmCountDown';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+import {
+	Flex,
+	FlexCenter,
+	FlexSpacer,
+} from '@/components/styled-components/Flex';
 import { IStakeInfo } from '@/hooks/useStakingPool';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { GIVPowerExplainModal } from '../modals/GIVPowerExplain';
@@ -320,6 +324,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 											rewards from this pool. Please refer
 											to
 											<DisableModalLink
+												as='a'
 												size='Big'
 												target='_blank'
 												href='https://forum.giveth.io/t/ending-givfarm-liquidity-incentives-programs-for-giv/872'
@@ -360,13 +365,14 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									>
 										<GIVgardenTooltip>
 											Staking GIV in this pool allows you
-											to support projects with GIVpower &
-											grants you voting power in Giveth
-											DAO (gGIV), in addition to the APR.
+											to support verified projects with
+											GIVpower & grants you voting power
+											in Giveth DAO (gGIV), in addition to
+											the APR.
 										</GIVgardenTooltip>
 									</IconWithTooltip>
 								)}
-							<div style={{ flex: 1 }}></div>
+							<FlexSpacer />
 							{notif && notif}
 							{introCard && (
 								<IntroIcon
@@ -496,9 +502,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 																)
 															}
 														>
-															<IconHelpFilled16
-																size={16}
-															/>
+															<IconHelpFilled />
 														</IconContainer>
 													</>
 												</>
@@ -522,7 +526,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									<Detail justifyContent='space-between'>
 										<Flex gap='8px' alignItems='center'>
 											<DetailLabel>Streaming</DetailLabel>
-											<IconHelpWraper
+											<IconHelpFilledWraper
 												onClick={() => {
 													setShowWhatIsGIVstreamModal(
 														true,
@@ -530,7 +534,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 												}}
 											>
 												<IconHelpFilled16 />
-											</IconHelpWraper>
+											</IconHelpFilledWraper>
 										</Flex>
 										<Flex gap='4px' alignItems='center'>
 											<DetailValue>
@@ -564,10 +568,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							/>
 							{isGIVpower && (
 								<ClaimButton
-									disabled={
-										earned.isZero() ||
-										availableStakedToken.lte(constants.Zero)
-									}
+									disabled={availableStakedToken.lte(
+										constants.Zero,
+									)}
 									onClick={() => setShowLockModal(true)}
 									label='Increase your reward'
 									buttonType='primary'

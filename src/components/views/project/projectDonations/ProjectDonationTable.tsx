@@ -4,7 +4,6 @@ import {
 	B,
 	brandColors,
 	H6,
-	IconETH,
 	IconExternalLink,
 	neutralColors,
 } from '@giveth/ui-design-system';
@@ -38,6 +37,7 @@ import {
 	TableCell,
 	TableHeader,
 } from '@/components/styled-components/Table';
+import { IconEthereum } from '@/components/Icons/Eth';
 
 const itemPerPage = 10;
 
@@ -237,7 +237,7 @@ const ProjectDonationTable = ({
 										</>
 									) : (
 										<>
-											<IconETH size={24} />
+											<IconEthereum size={24} />
 											Ethereum
 										</>
 									)}

@@ -1,14 +1,22 @@
 import styled from 'styled-components';
-import { QuoteText } from '@giveth/ui-design-system';
+import { QuoteText, IconRocketInSpace24 } from '@giveth/ui-design-system';
 
-const NoBoost = () => {
+const NoBoost = ({ isAdmin }: { isAdmin: boolean }) => {
 	return (
 		<Wrapper size='small'>
-			<div>This project hasn't received any boosts yet!</div>
-			<div>
-				Share this project on social media and ask your friends for a
-				boost!
-			</div>
+			{isAdmin ? (
+				<div>
+					Your project hasn't received any boosts yet!
+					<br />
+					Share this project on social media and ask your friends for
+					a boost!
+				</div>
+			) : (
+				<div>
+					This project doesn't have any GIVpower behind it! Give it a
+					boost <IconRocketInSpace24></IconRocketInSpace24>
+				</div>
+			)}
 		</Wrapper>
 	);
 };

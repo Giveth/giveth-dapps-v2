@@ -6,6 +6,7 @@ import {
 	Lead,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import Link from 'next/link';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
@@ -29,11 +30,11 @@ export const ZeroGivpowerModal: FC<IModal> = ({ setShowModal }) => {
 					You don’t have any GIVpower!
 					<br /> Stake and lock your GIV to get GIVpower.
 				</Lead>
-				<GetButton
-					label='Get GIVpower'
-					size='small'
+				<Link
 					href={`${Routes.GIVfarm}/?open=${StakingType.GIV_LM}&chain=gnosis`}
-				/>
+				>
+					<GetButton label='Get GIVpower' size='small' />
+				</Link>
 				<CustomButton
 					buttonType='texty'
 					label='Not Now'
