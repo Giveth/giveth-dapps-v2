@@ -1,19 +1,27 @@
 import styled from 'styled-components';
 import { ButtonLink, neutralColors, QuoteText } from '@giveth/ui-design-system';
 import Link from 'next/link';
+import { FC } from 'react';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
 import { useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+interface IEmptyPowerBoosting {
+	myAccount?: boolean;
+}
 
-export const EmptyPowerBoosting = () => {
+export const EmptyPowerBoosting: FC<IEmptyPowerBoosting> = ({ myAccount }) => {
 	const sdh = new SubgraphDataHelper(
 		useAppSelector(state => state.subgraph.xDaiValues),
 	);
 	const givPower = sdh.getUserGIVPowerBalance();
 	return (
 		<EmptyPowerBoostingContainer direction='column'>
-			{givPower.balance === '0' ? (
+			{!myAccount ? (
+				<Title size='small'>
+					This user hasn&apos;t started boosting with GIVpower yet!
+				</Title>
+			) : givPower.balance === '0' ? (
 				<>
 					<Title size='small'>
 						You don&apos;t have any GIVpower yet!
