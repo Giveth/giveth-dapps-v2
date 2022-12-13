@@ -6,6 +6,7 @@ import OnramperWidget from '@onramper/widget';
 import { useAppSelector } from '@/features/hooks';
 import { IProject } from '@/apollo/types/types';
 import { ISuccessDonation } from '@/components/views/donate/CryptoDonation';
+import { FiatDonationConfirmationModal } from '@/components/modals/FiatDonationConfirmationModal';
 import config from '@/configuration';
 
 const FiatDonation = (props: {
@@ -13,6 +14,10 @@ const FiatDonation = (props: {
 	setSuccessDonation: (i: ISuccessDonation) => void;
 }) => {
 	const { setSuccessDonation, project } = props;
+	const [onramperConfirmationModal, setOnramperConfirmationModal] =
+		useState(false);
+	const [donorboxConfirmationModal, setDonorboxConfirmationModal] =
+		useState(false);
 	const { id } = project;
 	const { userData, isSignedIn, isEnabled } = useAppSelector(
 		state => state.user,
@@ -81,6 +86,18 @@ const FiatDonation = (props: {
 				</>
 			) : (
 				<Buttons>
+					{onramperConfirmationModal && (
+						<FiatDonationConfirmationModal
+							setShowModal={setOnramperConfirmationModal}
+							continueProcess={() => setOpenOnramper(true)}
+						/>
+					)}
+					{donorboxConfirmationModal && (
+						<FiatDonationConfirmationModal
+							setShowModal={setDonorboxConfirmationModal}
+							continueProcess={() => setOpenDonorBox(true)}
+						/>
+					)}
 					<ImageContainer>
 						<Image
 							src='/images/powered_by_onramper.png'
@@ -97,7 +114,9 @@ const FiatDonation = (props: {
 					<Button
 						label='CONTINUE WITH ONRAMPER'
 						// onClick={() => setSuccessDonation()}
-						onClick={() => setOpenOnramper(true)}
+						onClick={() => {
+							setOnramperConfirmationModal(true);
+						}}
 						// disabled
 					/>
 					{id === givethProjectId && (
@@ -117,7 +136,9 @@ const FiatDonation = (props: {
 							</Info>
 							<Button
 								label='CONTINUE WITH DONORBOX'
-								onClick={() => setOpenDonorBox(true)}
+								onClick={() =>
+									setDonorboxConfirmationModal(true)
+								}
 								// disabled
 							/>
 						</DonorBoxContainer>
