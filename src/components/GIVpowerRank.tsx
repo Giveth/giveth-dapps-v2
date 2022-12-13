@@ -75,8 +75,9 @@ export const CurrentRank: FC<IGIVpowerRank> = ({ projectPower }) => {
 	const isGIVPowerFirstRound = getNowUnixMS() < 1672156800000;
 	return (
 		<RankContainer alignItems='baseline' gap='4px'>
-			{isGIVPowerFirstRound ||
-				(projectPower?.totalPower === 0 && <IconRocketInSpace32 />)}
+			{(isGIVPowerFirstRound || projectPower?.totalPower === 0) && (
+				<IconRocketInSpace32 />
+			)}
 			<H3 weight={700}>
 				{isGIVPowerFirstRound || projectPower?.totalPower === 0
 					? '--'
