@@ -113,6 +113,7 @@ export const FeaturesCardItem = styled.div`
 	gap: 10px;
 	max-width: 300px;
 	margin: auto;
+	align-items: center;
 `;
 
 export const CardBottomText = styled(ButtonText)`

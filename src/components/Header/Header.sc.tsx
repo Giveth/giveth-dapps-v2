@@ -24,7 +24,7 @@ export const StyledHeader = styled(Flex)<IHeader>`
 	transition: top 0.3s ease;
 `;
 
-export const Logo = styled.a`
+export const Logo = styled.span`
 	display: flex;
 	justify-content: center;
 	align-items: center;

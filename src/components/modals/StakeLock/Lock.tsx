@@ -11,6 +11,7 @@ import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
 import { useWeb3React } from '@web3-react/core';
+import Link from 'next/link';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
 import {
@@ -177,12 +178,13 @@ const LockModal: FC<ILockModalProps> = ({
 								Use your GIVpower to support verified projects
 								on Giveth while earning rewards.
 							</P>
-							<BoostButton
-								linkType='primary'
-								label={'Boost projects'}
-								size='small'
-								href={Routes.Projects}
-							/>
+							<Link href={Routes.Projects}>
+								<BoostButton
+									linkType='primary'
+									label={'Boost projects'}
+									size='small'
+								/>
+							</Link>
 							<ExternalLink href={links.GIVPOWER_DOC}>
 								<LearnMoreLink>Learn More</LearnMoreLink>
 							</ExternalLink>

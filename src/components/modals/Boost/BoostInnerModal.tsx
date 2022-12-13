@@ -48,6 +48,7 @@ import { IPowerBoosting } from '@/apollo/types/types';
 import { useAppSelector } from '@/features/hooks';
 import LoadingAnimation from '@/animations/loading_giv.json';
 import { useProjectContext } from '@/context/project.context';
+import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import type { FC, Dispatch, SetStateAction } from 'react';
 import type { BigNumber } from 'ethers';
 
@@ -88,24 +89,25 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 		if (boostedProjectsCount === 0) {
 			return (
 				<Caption style={{ whiteSpace: `pre-line` }}>
-					Since this is your first time using Boost, 100% of your
-					GIVpower will be allocated to this project. You can check
-					your allocation in &nbsp;
-					<Link href={Routes.MyBoostedProjects} passHref>
+					Since this is your first time boosting a project, 100% of
+					your GIVpower will be allocated to it. You can review and
+					manage your GIVpower allocations in &nbsp;
+					<Link href={Routes.MyBoostedProjects}>
 						<GLink>
 							<b>My GIVpower</b>
 						</GLink>
 					</Link>
+					.
 				</Caption>
 			);
 		} else if (isOnlyBoostedProjectIsThisProject) {
 			return (
 				<Caption style={{ whiteSpace: `pre-line` }}>
 					You supported this project with 100% of your total GIVpower.
-					You can't edit the allocation unless you have at least 1
-					other boosted project. Try boosting other projects or
+					You can&apos;t edit the allocation unless you have at least
+					1 other boosted project. Try boosting other projects or
 					managing them in &nbsp;
-					<Link href={Routes.MyBoostedProjects} passHref>
+					<Link href={Routes.MyBoostedProjects}>
 						<GLink>
 							<b>My GIVpower</b>
 						</GLink>
@@ -119,7 +121,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 					your GIVpower, you will remove your GIVpower from all the
 					other projects you boosted. <br />
 					You can review and manage your GIVpower allocations in
-					<Link href={Routes.MyBoostedProjects} passHref>
+					<Link href={Routes.MyBoostedProjects}>
 						<GLink>
 							<b>My GIVpower.</b>
 						</GLink>
@@ -134,7 +136,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 					decrease proportionally. <br />
 					You can review and manage your GIVpower allocations in
 					&nbsp;
-					<Link href={Routes.MyBoostedProjects} passHref>
+					<Link href={Routes.MyBoostedProjects}>
 						<GLink>
 							<b>My GIVpower.</b>
 						</GLink>
@@ -194,7 +196,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 				projectId: +projectId,
 			},
 		});
-		fetchProjectBoosters(+projectId);
+		fetchProjectBoosters(+projectId, EProjectStatus.ACTIVE);
 		setIsSaving(false);
 		if (res) {
 			setFinalPercentage(percentage);
@@ -217,7 +219,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 						back to this project again!
 					</Lead>
 				</ExceededContainer>
-				<Link href={Routes.MyBoostedProjects} passHref>
+				<Link href={Routes.MyBoostedProjects}>
 					<BoostedProjectsLink
 						size='medium'
 						label='Go to My GIVpower'
@@ -350,7 +352,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 				}
 				onClick={confirmAllocation}
 			/>
-			<Link href={Routes.MyBoostedProjects} passHref>
+			<Link href={Routes.MyBoostedProjects}>
 				<ManageLink>Manage your GIVpower</ManageLink>
 			</Link>
 		</>

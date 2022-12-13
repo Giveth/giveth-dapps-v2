@@ -124,7 +124,7 @@ export const TabOverviewBottom = () => {
 						<DataBlockWithMargin
 							title={formatMessage({ id: 'label.give' })}
 							button={
-								<Link href={Routes.Projects} passHref>
+								<Link href={Routes.Projects}>
 									<DataBlockButton
 										label={formatMessage({
 											id: 'label.donate_to_projects',
@@ -143,6 +143,7 @@ export const TabOverviewBottom = () => {
 							title={formatMessage({ id: 'label.govern' })}
 							button={
 								<DataBlockButton
+									isExternal
 									href={config.GARDEN_LINK}
 									target='_blank'
 									label={formatMessage({
@@ -199,6 +200,7 @@ export const TabOverviewBottom = () => {
 								})}
 							</P>
 							<ExtLinkCyan
+								as='a'
 								size='Big'
 								target='_blank'
 								rel='noreferrer'

@@ -214,6 +214,7 @@ export const TabGIVstreamBottom = () => {
 							title='GIVstream'
 							button={
 								<GsButton
+									isExternal
 									label='LEARN MORE'
 									linkType='secondary'
 									size='large'
@@ -419,6 +420,7 @@ export const GIVstreamHistory: FC = () => {
 									{chainId && (
 										<TxSpan>
 											<TxHash
+												as='a'
 												size='Big'
 												href={`${config.NETWORKS_CONFIG[chainId]?.blockExplorerUrls}/tx/${tokenAllocation.txHash}`}
 												target='_blank'

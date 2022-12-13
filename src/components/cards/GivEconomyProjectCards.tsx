@@ -13,15 +13,16 @@ const GivEconomyProjectCards = () => {
 				<IGsDataBox
 					title='GIVbacks'
 					button={
-						<GsButton
-							label={formatMessage({
-								id: 'page.home.bigscreen.see_projects',
-							})}
-							linkType='primary'
-							size='medium'
-							href={Routes.Projects}
-							target='_blank'
-						/>
+						<Link href={Routes.Projects}>
+							<GsButton
+								label={formatMessage({
+									id: 'page.home.bigscreen.see_projects',
+								})}
+								linkType='primary'
+								size='medium'
+								target='_blank'
+							/>
+						</Link>
 					}
 				>
 					{formatMessage({
@@ -34,6 +35,7 @@ const GivEconomyProjectCards = () => {
 					title='GIVgarden'
 					button={
 						<GsButton
+							isExternal
 							label={formatMessage({ id: 'label.see_proposals' })}
 							linkType='primary'
 							size='medium'
@@ -51,7 +53,7 @@ const GivEconomyProjectCards = () => {
 				<IGsDataBox
 					title='GIVfarm'
 					button={
-						<Link href={Routes.GIVfarm} passHref>
+						<Link href={Routes.GIVfarm}>
 							<GsButton
 								label={formatMessage({
 									id: 'label.see_opportunities',

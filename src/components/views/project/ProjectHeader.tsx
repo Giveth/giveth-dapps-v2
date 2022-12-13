@@ -48,10 +48,7 @@ const ProjectHeader = (props: { project?: IProject }) => {
 					<Title fixSize={adjustTitle} weight={700}>
 						{title}
 					</Title>
-					<Link
-						href={addressToUserView(adminUser?.walletAddress)}
-						passHref
-					>
+					<Link href={addressToUserView(adminUser?.walletAddress)}>
 						<Author>{name}</Author>
 					</Link>
 				</TitleContainer>

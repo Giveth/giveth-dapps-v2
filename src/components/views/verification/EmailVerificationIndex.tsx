@@ -105,7 +105,7 @@ function Verified() {
 					id: 'label.you_can_now_close_this_page_and_continue_verifying',
 				})}
 			</Lead>
-			<Link href={slugToVerification(slug as string)} passHref>
+			<Link href={slugToVerification(slug as string)}>
 				<ButtonLink
 					size='small'
 					label={
@@ -116,15 +116,13 @@ function Verified() {
 				/>
 			</Link>
 			<VCImageContainer>
-				<Link href='/' passHref>
-					<a>
-						<Image
-							src={givFontLogo}
-							width='150'
-							height='50'
-							alt='giveth logo'
-						/>
-					</a>
+				<Link href='/'>
+					<Image
+						src={givFontLogo}
+						width='150'
+						height='50'
+						alt='giveth logo'
+					/>
 				</Link>
 			</VCImageContainer>
 		</>
@@ -153,15 +151,13 @@ function Rejected() {
 			</VCLeadContainer>
 
 			<VCImageContainer>
-				<Link href='/' passHref>
-					<a>
-						<Image
-							src={givFontLogo}
-							width='150'
-							height='50'
-							alt='giveth logo'
-						/>
-					</a>
+				<Link href='/'>
+					<Image
+						src={givFontLogo}
+						width='150'
+						height='50'
+						alt='giveth logo'
+					/>
 				</Link>
 			</VCImageContainer>
 		</>

@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import BigNumber from 'bignumber.js';
 import GIVPowerHeader from './GIVPowerHeader';
 import GIVPowerTable from './GIVPowerTable';
 import NoBoost from '@/components/views/project/projectGIVPower/NoBoost';
@@ -14,19 +15,11 @@ export interface IPowerBoostingWithUserGIVpower
 	user: {
 		name: string;
 		walletAddress: string;
-		allocated: string;
+		allocated: BigNumber;
 		givpowerBalance: string;
 	};
 }
-interface IBoostersData {
-	powerBoostings: IPowerBoostingWithUserGIVpower[];
-	totalPowerBoosting: string;
-	totalCount: number;
-}
-
 interface ProjectGIVPowerIndexProps {
-	userId?: string;
-	projectId: string;
 	projectPower?: IProjectPower;
 	projectFuturePower?: IProjectPower;
 	isAdmin: boolean;
@@ -35,22 +28,16 @@ interface ProjectGIVPowerIndexProps {
 const itemPerPage = 10;
 
 const ProjectGIVPowerIndex = ({
-	projectId,
 	projectPower,
 	projectFuturePower,
 	isAdmin,
 }: ProjectGIVPowerIndexProps) => {
 	const [page, setPage] = useState(0);
 
-	const { fetchProjectBoosters, isBoostingsLoading, boostersData } =
-		useProjectContext();
+	const { isBoostingsLoading, boostersData } = useProjectContext();
 
 	const hasGivPower = boostersData ? boostersData.totalCount > 0 : false;
 	const totalCount = boostersData?.totalCount ?? 0;
-
-	useEffect(() => {
-		fetchProjectBoosters(+projectId);
-	}, [projectId]);
 
 	if (isBoostingsLoading)
 		return <LottieControl animationData={LoadingAnimation} size={150} />;

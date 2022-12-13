@@ -11,6 +11,7 @@ import { useIntl } from 'react-intl';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { IProject } from '@/apollo/types/types';
+import { useProjectContext } from '@/context/project.context';
 
 interface IProjectTabs {
 	project?: IProject;
@@ -27,16 +28,19 @@ const ProjectTabs = (props: IProjectTabs) => {
 	const { project, activeTab, setActiveTab, totalDonations } = props;
 	const { totalProjectUpdates } = project || {};
 	const { formatMessage } = useIntl();
+	const { boostersData } = useProjectContext();
 
 	const tabsArray = [
 		{ title: 'label.about' },
 		{ title: 'label.updates', badge: totalProjectUpdates },
 		{ title: 'label.donations', badge: totalDonations },
-		//TODO: Boosting - uncomment this on boosting launch
-		// { title: 'GIVpower' },
 	];
 
-	if (project?.verified) tabsArray.push({ title: 'GIVpower' });
+	if (project?.verified)
+		tabsArray.push({
+			title: 'label.givpower',
+			badge: boostersData?.totalCount,
+		});
 
 	return (
 		<Wrapper>

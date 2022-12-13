@@ -141,6 +141,7 @@ export const TabGardenBottom = () => {
 							title={formatMessage({ id: 'label.covenant' })}
 							button={
 								<GovernanceLink
+									as='a'
 									size='Medium'
 									target='_blank'
 									rel='noreferrer'
@@ -162,6 +163,7 @@ export const TabGardenBottom = () => {
 							})}
 							button={
 								<GovernanceLink
+									as='a'
 									size='Medium'
 									target='_blank'
 									rel='noreferrer'
@@ -181,6 +183,7 @@ export const TabGardenBottom = () => {
 							title={formatMessage({ id: 'label.tao_voting' })}
 							button={
 								<GovernanceLink
+									as='a'
 									size='Medium'
 									target='_blank'
 									rel='noreferrer'

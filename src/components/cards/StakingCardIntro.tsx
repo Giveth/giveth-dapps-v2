@@ -43,6 +43,7 @@ const StakingCardIntro: FC<IStakingCardIntro> = ({
 			>
 				<Description>{introCard?.description}</Description>
 				<LearnMoreButton
+					isExternal
 					label='LEARN MORE'
 					href={introCard?.link}
 					linkType='texty'

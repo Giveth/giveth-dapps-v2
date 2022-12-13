@@ -23,8 +23,8 @@ const HomeBlogPost = ({ post }: IHomeBlogPost) => {
 			</a>
 			<Description>{htmlToText(description)}</Description>
 			<AuthorContainer>
-				<GLink size='Medium'>{author}</GLink>
-				<GLink size='Medium'>{pubDate.split(' ')[0]}</GLink>
+				<CustomLink size='Medium'>{author}</CustomLink>
+				<CustomLink size='Medium'>{pubDate.split(' ')[0]}</CustomLink>
 				<ReadMoreButton href={link}>READ MORE</ReadMoreButton>
 			</AuthorContainer>
 		</Wrapper>
@@ -63,6 +63,10 @@ const Wrapper = styled.div`
 	color: ${brandColors.deep[500]};
 	padding-right: 50px;
 	padding-bottom: 50px;
+`;
+
+const CustomLink = styled(GLink)`
+	display: block;
 `;
 
 export default HomeBlogPost;
