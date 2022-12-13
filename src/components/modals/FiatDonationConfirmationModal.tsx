@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { Button, neutralColors, P } from '@giveth/ui-design-system';
+import { Button, P } from '@giveth/ui-design-system';
 import Image from 'next/image';
 
 import { Modal } from '@/components/modals/Modal';
