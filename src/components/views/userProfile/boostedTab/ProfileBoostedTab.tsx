@@ -228,7 +228,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({
 						myAccount={myAccount}
 					/>
 				) : (
-					<EmptyPowerBoosting />
+					<EmptyPowerBoosting myAccount={myAccount} />
 				)}
 			</PowerBoostingContainer>
 			<GetMoreGIVpowerBanner />
