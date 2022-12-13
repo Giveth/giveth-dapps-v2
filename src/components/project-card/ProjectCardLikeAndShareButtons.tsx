@@ -1,8 +1,9 @@
-import { useEffect, useState, MouseEvent } from 'react';
+import { useEffect, useState } from 'react';
 import {
 	brandColors,
 	IconHeartFilled16,
 	IconHeartOutline16,
+	IconRocketInSpace,
 	IconShare16,
 	neutralColors,
 	Subline,
@@ -10,6 +11,7 @@ import {
 import styled from 'styled-components';
 
 import { captureException } from '@sentry/nextjs';
+import Link from 'next/link';
 import ShareModal from '../modals/ShareModal';
 import { likeProject, unlikeProject } from '@/lib/reaction';
 import { showToastError } from '@/lib/helpers';
@@ -21,6 +23,7 @@ import {
 	decrementLikedProjectsCount,
 	incrementLikedProjectsCount,
 } from '@/features/user/user.slice';
+import { slugToProjectView } from '@/lib/routeCreators';
 
 interface IProjectCardLikeAndShareButtons {
 	project: IProject;
@@ -31,7 +34,7 @@ const ProjectCardLikeAndShareButtons = (
 ) => {
 	const [showModal, setShowModal] = useState<boolean>(false);
 	const { project } = props;
-	const { slug, id: projectId } = project;
+	const { slug, id: projectId, verified } = project;
 	const [reaction, setReaction] = useState(project.reaction);
 	const [totalReactions, setTotalReactions] = useState(
 		project.totalReactions,
@@ -40,8 +43,7 @@ const ProjectCardLikeAndShareButtons = (
 	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
 	const dispatch = useAppDispatch();
 
-	const likeUnlikeProject = async (e: MouseEvent<HTMLElement>) => {
-		e.stopPropagation();
+	const likeUnlikeProject = async () => {
 		if (!isSignedIn) {
 			dispatch(setShowSignWithWallet(true));
 			return;
@@ -96,6 +98,13 @@ const ProjectCardLikeAndShareButtons = (
 			)}
 			<BadgeWrapper>
 				<Flex gap='3px'>
+					{verified && (
+						<Link href={`${slugToProjectView(slug)}?open=boost`}>
+							<BadgeButton>
+								<IconRocketInSpace />
+							</BadgeButton>
+						</Link>
+					)}
 					<BadgeButton onClick={likeUnlikeProject}>
 						{Number(totalReactions) > 0 && (
 							<Subline>{totalReactions}</Subline>
@@ -108,7 +117,6 @@ const ProjectCardLikeAndShareButtons = (
 					</BadgeButton>
 					<BadgeButton
 						onClick={e => {
-							e.stopPropagation();
 							setShowModal(true);
 						}}
 					>
@@ -128,7 +136,7 @@ const BadgeButton = styled(Flex)`
 	border-radius: 16px;
 	cursor: pointer;
 	transition: color 0.3s ease;
-	color: ${neutralColors.gray[800]};
+	color: ${neutralColors.gray[600]};
 	box-shadow: 0 3px 20px ${brandColors.giv[400]}21;
 	&:hover {
 		color: ${neutralColors.gray[900]};
