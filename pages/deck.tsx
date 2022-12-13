@@ -1,11 +1,10 @@
 import { useEffect } from 'react';
 import styled from 'styled-components';
-import { Container } from '@giveth/ui-design-system';
 import { setShowFooter, setShowHeader } from '@/features/general/general.slice';
 import { useAppDispatch } from '@/features/hooks';
 
 const deckPDFUrl =
-	'https://giveth.mypinata.cloud/ipfs/QmRZvjuUR8DWowN6GZTWz6wfoqSdkdBsYm2gesHqN8j82v';
+	'https://docs.google.com/gview?embedded=true&url=https://giveth.mypinata.cloud/ipfs/QmRZvjuUR8DWowN6GZTWz6wfoqSdkdBsYm2gesHqN8j82v';
 
 const DeckRoute = () => {
 	const dispatch = useAppDispatch();
@@ -17,30 +16,19 @@ const DeckRoute = () => {
 
 	return (
 		<Wrapper>
-			<object
-				data={deckPDFUrl}
-				type='application/pdf'
+			<iframe
 				width='100%'
 				height='100%'
-			>
-				<ContainerStyled>
-					Link to the PDF <a href={deckPDFUrl}>here!</a>
-				</ContainerStyled>
-			</object>
+				src={deckPDFUrl}
+				title='PDF View'
+			/>
 		</Wrapper>
 	);
 };
 
-const ContainerStyled = styled(Container)`
-	margin-top: 200px;
-	> a {
-		color: blue;
-		font-weight: bold;
-	}
-`;
-
 const Wrapper = styled.div`
-	height: 99.5vh;
+	height: 100vh;
+	overflow: hidden;
 `;
 
 export default DeckRoute;
