@@ -111,7 +111,7 @@
 		"jest-environment-jsdom": "^28.1.2",
 		"jest-extended": "^3.0.2",
 		"jest-watch-typeahead": "^2.0.0",
-		"msw": "^0.44.2",
+		"msw": "^0.49.2",
 		"prettier": "^2.4.1",
 		"test-data-bot": "^0.8.0",
 		"ts-jest": "^28.0.5",
