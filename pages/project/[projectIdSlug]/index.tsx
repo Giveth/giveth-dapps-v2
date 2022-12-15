@@ -8,7 +8,7 @@ import { ProjectProvider } from '@/context/project.context';
 
 const ProjectRoute: FC<IProjectBySlug> = ({ project }) => {
 	return (
-		<ProjectProvider>
+		<ProjectProvider project={project}>
 			<ProjectIndex project={project} />
 		</ProjectProvider>
 	);
