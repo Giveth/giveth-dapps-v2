@@ -39,7 +39,8 @@ const ProjectCardLikeAndShareButtons = (
 	const [totalReactions, setTotalReactions] = useState(
 		project.totalReactions,
 	);
-	const [loading, setLoading] = useState(false);
+	const [boostLoading, setBoostLoading] = useState(false);
+	const [likeLoading, setLikeLoading] = useState(false);
 	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
 	const dispatch = useAppDispatch();
 	const router = useRouter();
@@ -50,10 +51,10 @@ const ProjectCardLikeAndShareButtons = (
 			return;
 		}
 
-		if (loading) return;
+		if (likeLoading) return;
 
 		if (projectId) {
-			setLoading(true);
+			setLikeLoading(true);
 
 			try {
 				if (!reaction) {
@@ -79,18 +80,20 @@ const ProjectCardLikeAndShareButtons = (
 					},
 				});
 			} finally {
-				setLoading(false);
+				setLikeLoading(false);
 			}
 		}
 	};
 
-	const boostProject = async () => {
+	const boostProject = () => {
+		setBoostLoading(true);
 		if (!isSignedIn) {
 			dispatch(setShowSignWithWallet(true));
+			setBoostLoading(false);
 			return;
 		}
 
-		if (loading) return;
+		if (boostLoading) return;
 
 		if (projectId) router.push(`${slugToProjectView(slug)}?open=boost`);
 	};
@@ -111,11 +114,17 @@ const ProjectCardLikeAndShareButtons = (
 			<BadgeWrapper>
 				<Flex gap='6px'>
 					{verified && (
-						<BadgeButton onClick={boostProject}>
+						<BadgeButton
+							loading={boostLoading}
+							onClick={boostProject}
+						>
 							<IconRocketInSpace />
 						</BadgeButton>
 					)}
-					<BadgeButton loading={loading} onClick={likeUnlikeProject}>
+					<BadgeButton
+						loading={likeLoading}
+						onClick={likeUnlikeProject}
+					>
 						{Number(totalReactions) > 0 && (
 							<Subline>{totalReactions}</Subline>
 						)}
