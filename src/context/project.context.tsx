@@ -15,7 +15,7 @@ import {
 	FETCH_PROJECT_BOOSTERS,
 } from '@/apollo/gql/gqlPowerBoosting';
 import { FETCH_USERS_GIVPOWER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
-import { IPowerBoosting } from '@/apollo/types/types';
+import { IPowerBoosting, IProject } from '@/apollo/types/types';
 import { formatWeiHelper } from '@/helpers/number';
 import { backendGQLRequest, gqlRequest } from '@/helpers/requests';
 import { showToastError } from '@/lib/helpers';
@@ -44,13 +44,18 @@ const ProjectContext = createContext<IProjectContext>({
 });
 ProjectContext.displayName = 'ProjectContext';
 
-export const ProjectProvider = ({ children }: { children: ReactNode }) => {
+export const ProjectProvider = ({
+	children,
+	project,
+}: {
+	children: ReactNode;
+	project?: IProject;
+}) => {
 	const [boostersData, setBoostersData] = useState<IBoostersData>();
 	const [isBoostingsLoading, setIsBoostingsLoading] = useState(false);
 	const [projectedRank, setProjectedRank] = useState<
 		number | undefined | null
 	>(undefined);
-
 	const fetchProjectBoosters = useCallback(
 		async (projectId: number, status?: EProjectStatus) => {
 			setIsBoostingsLoading(true);
