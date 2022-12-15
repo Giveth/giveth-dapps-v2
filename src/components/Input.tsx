@@ -34,10 +34,6 @@ import type {
 	UseFormRegister,
 } from 'react-hook-form';
 
-export interface IFormValidations {
-	[key: string]: EInputValidation;
-}
-
 export enum InputSize {
 	SMALL,
 	MEDIUM,
