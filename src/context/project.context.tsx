@@ -22,6 +22,7 @@ import { backendGQLRequest, gqlRequest } from '@/helpers/requests';
 import { showToastError } from '@/lib/helpers';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { useAppSelector } from '@/features/hooks';
+import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 
 interface IBoostersData {
 	powerBoostings: IPowerBoostingWithUserGIVpower[];
@@ -173,6 +174,32 @@ export const ProjectProvider = ({
 		},
 		[],
 	);
+
+	const fetchProjectBySlug = async () => {
+		client
+			.query({
+				query: FETCH_PROJECT_BY_SLUG,
+				variables: { slug, connectedWalletUserId: Number(user?.id) },
+				fetchPolicy: 'network-only',
+			})
+			.then((res: { data: { projectBySlug: IProject } }) => {
+				const _project = res.data.projectBySlug;
+				if (_project.status.name !== EProjectStatus.CANCEL) {
+					setProjectData(_project);
+				} else {
+					//Todo: why?!
+					projectData && setProjectData(undefined);
+				}
+			})
+			.catch((error: unknown) => {
+				showToastError(error);
+				captureException(error, {
+					tags: {
+						section: 'fetchProject',
+					},
+				});
+			});
+	};
 
 	return (
 		<ProjectContext.Provider
