@@ -11,7 +11,7 @@ import {
 import styled from 'styled-components';
 
 import { captureException } from '@sentry/nextjs';
-import Link from 'next/link';
+import { useRouter } from 'next/router';
 import ShareModal from '../modals/ShareModal';
 import { likeProject, unlikeProject } from '@/lib/reaction';
 import { showToastError } from '@/lib/helpers';
@@ -42,6 +42,7 @@ const ProjectCardLikeAndShareButtons = (
 	const [loading, setLoading] = useState(false);
 	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
 	const dispatch = useAppDispatch();
+	const router = useRouter();
 
 	const likeUnlikeProject = async () => {
 		if (!isSignedIn) {
@@ -83,6 +84,17 @@ const ProjectCardLikeAndShareButtons = (
 		}
 	};
 
+	const boostProject = async () => {
+		if (!isSignedIn) {
+			dispatch(setShowSignWithWallet(true));
+			return;
+		}
+
+		if (loading) return;
+
+		if (projectId) router.push(`${slugToProjectView(slug)}?open=boost`);
+	};
+
 	useEffect(() => {
 		setReaction(project.reaction);
 	}, [project.reaction]);
@@ -99,11 +111,9 @@ const ProjectCardLikeAndShareButtons = (
 			<BadgeWrapper>
 				<Flex gap='3px'>
 					{verified && (
-						<Link href={`${slugToProjectView(slug)}?open=boost`}>
-							<BadgeButton>
-								<IconRocketInSpace />
-							</BadgeButton>
-						</Link>
+						<BadgeButton onClick={boostProject}>
+							<IconRocketInSpace />
+						</BadgeButton>
 					)}
 					<BadgeButton onClick={likeUnlikeProject}>
 						{Number(totalReactions) > 0 && (
