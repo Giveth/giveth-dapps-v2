@@ -8,7 +8,7 @@ import {
 	neutralColors,
 	Subline,
 } from '@giveth/ui-design-system';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { captureException } from '@sentry/nextjs';
 import { useRouter } from 'next/router';
@@ -109,13 +109,13 @@ const ProjectCardLikeAndShareButtons = (
 				<ShareModal setShowModal={setShowModal} projectHref={slug} />
 			)}
 			<BadgeWrapper>
-				<Flex gap='3px'>
+				<Flex gap='6px'>
 					{verified && (
 						<BadgeButton onClick={boostProject}>
 							<IconRocketInSpace />
 						</BadgeButton>
 					)}
-					<BadgeButton onClick={likeUnlikeProject}>
+					<BadgeButton loading={loading} onClick={likeUnlikeProject}>
 						{Number(totalReactions) > 0 && (
 							<Subline>{totalReactions}</Subline>
 						)}
@@ -138,10 +138,14 @@ const ProjectCardLikeAndShareButtons = (
 	);
 };
 
-const BadgeButton = styled(Flex)`
+interface IBadgeButton {
+	loading?: boolean;
+}
+
+const BadgeButton = styled(Flex)<IBadgeButton>`
 	gap: 3px;
 	padding: 6px 7px;
-	background: ${neutralColors.gray[100]};
+	z-index: 2;
 	align-items: center;
 	border-radius: 16px;
 	cursor: pointer;
@@ -152,6 +156,58 @@ const BadgeButton = styled(Flex)`
 		color: ${neutralColors.gray[900]};
 	}
 	pointer-events: auto;
+	position: relative;
+	overflow: hidden;
+
+	&::after {
+		content: '';
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		border-radius: 16px;
+		z-index: -1;
+		background-color: #ffffff;
+	}
+	${props =>
+		props.loading
+			? css`
+					&::before {
+						content: '';
+						position: absolute;
+						top: -10px;
+						bottom: -10px;
+						left: -10px;
+						right: -10px;
+						z-index: -2;
+						animation: rotate linear 1s infinite;
+						background-color: #399953;
+						background-repeat: no-repeat;
+						background-size: 50% 50%, 50% 50%;
+						background-position: 0 0, 100% 0, 100% 100%, 0 100%;
+						background-image: linear-gradient(#ffffff, #ffffff),
+							linear-gradient(#ffffff, #ffffff),
+							linear-gradient(#ffffff, #ffffff),
+							linear-gradient(
+								${brandColors.giv[500]},
+								${brandColors.giv[500]}
+							);
+					}
+					&::after {
+						top: 2px;
+						bottom: 2px;
+						left: 2px;
+						right: 2px;
+					}
+			  `
+			: ``}
+
+	@keyframes rotate {
+		100% {
+			transform: rotate(1turn);
+		}
+	}
 `;
 
 const BadgeWrapper = styled.div`
