@@ -14,6 +14,7 @@ import Link from 'next/link';
 import { useWeb3React } from '@web3-react/core';
 import { Col, Row } from '../Grid';
 import { Flex } from '../styled-components/Flex';
+import { useIntl } from 'react-intl';
 import {
 	GIVpowerTopContainer,
 	Title,
@@ -159,6 +160,7 @@ export function TabPowerTop() {
 
 export function TabPowerBottom() {
 	const getGivLink = config.XDAI_CONFIG.GIV.BUY_LINK;
+	const { formatMessage } = useIntl();
 
 	return (
 		<>
@@ -176,7 +178,7 @@ export function TabPowerBottom() {
 					</HeadingTextContainer>
 					<LearnMoreButton
 						isExternal
-						label='Learn More'
+						label={formatMessage({ id: 'label.learn_more' })}
 						target='_blank'
 						href={links.GIVPOWER_DOC}
 						size='large'

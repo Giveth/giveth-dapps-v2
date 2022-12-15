@@ -18,6 +18,7 @@ import { constants, ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { Zero } from '@ethersproject/constants';
 import { useWeb3React } from '@web3-react/core';
+import { useIntl } from 'react-intl';
 import {
 	Bar,
 	FlowRateRow,
@@ -148,6 +149,7 @@ export const TabGIVstreamTop = () => {
 export const TabGIVstreamBottom = () => {
 	const { chainId } = useWeb3React();
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
+	const { formatMessage } = useIntl();
 
 	const [percent, setPercent] = useState(0);
 	const [remain, setRemain] = useState('');
@@ -196,7 +198,9 @@ export const TabGIVstreamBottom = () => {
 							? formatWeiHelper(streamAmount)
 							: '0'}
 					</H1>
-					<FlowRateUnit>GIV/week</FlowRateUnit>
+					<FlowRateUnit>
+						GIV{formatMessage({ id: 'label./week' })}
+					</FlowRateUnit>
 					<IconWithTooltip
 						icon={<IconHelpFilled16 />}
 						direction={'top'}
@@ -215,7 +219,9 @@ export const TabGIVstreamBottom = () => {
 							button={
 								<GsButton
 									isExternal
-									label='LEARN MORE'
+									label={formatMessage({
+										id: 'label.learn_more',
+									})}
 									linkType='secondary'
 									size='large'
 									target='_blank'
@@ -351,6 +357,7 @@ export const GIVstreamHistory: FC = () => {
 	const [tokenAllocations, setTokenAllocations] = useState<
 		ITokenAllocation[]
 	>([]);
+	const { formatMessage } = useIntl();
 	const [loading, setLoading] = useState(true);
 	const [page, setPage] = useState(0);
 	const currentValue = useAppSelector(state => state.subgraph.currentValues);
@@ -414,7 +421,9 @@ export const GIVstreamHistory: FC = () => {
 												),
 											),
 										)}
-										<GsHFrUnit as='span'>{` GIV/week`}</GsHFrUnit>
+										<GsHFrUnit as='span'>{` GIV${formatMessage(
+											{ id: 'label./week' },
+										)}`}</GsHFrUnit>
 									</B>
 									<P as='span'>{date}</P>
 									{chainId && (

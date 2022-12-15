@@ -5,6 +5,7 @@ import { H2, Lead, H5 } from '@giveth/ui-design-system';
 import { Flex } from '../styled-components/Flex';
 import { ArrowButton, Card, PreviousArrowButton } from './common';
 import { IClaimViewCardProps } from '../views/claim/Claim.view';
+import { useIntl } from 'react-intl';
 
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { formatWeiHelper } from '@/helpers/number';
@@ -97,6 +98,7 @@ export const StreamCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const { totalAmount, step, goNextStep, goPreviousStep } = useClaim();
 	const [streamValue, setStreamValue] = useState<string>('0');
 	const [remain, setRemain] = useState('');
+	const { formatMessage } = useIntl();
 
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 
@@ -139,7 +141,9 @@ export const StreamCard: FC<IClaimViewCardProps> = ({ index }) => {
 						alt='Thunder image'
 					/>
 					<StreamValue>{streamValue}</StreamValue>
-					<StreamPlaceholder>GIV/week</StreamPlaceholder>
+					<StreamPlaceholder>
+						GIV{formatMessage({ id: 'label./week' })}
+					</StreamPlaceholder>
 				</StreamValueContainer>
 			</StreamRow>
 			{step === index && (

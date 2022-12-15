@@ -10,6 +10,7 @@ import {
 import { Dispatch, FC, SetStateAction } from 'react';
 import styled from 'styled-components';
 import { IntroCardConfig } from '@/types/config';
+import { useIntl } from 'react-intl';
 import { getSymbolIconWithName } from '../StakingPoolImages';
 import { Flex } from '../styled-components/Flex';
 import { StakeCardState } from './BaseStakingCard';
@@ -25,6 +26,7 @@ const StakingCardIntro: FC<IStakingCardIntro> = ({
 	introCard,
 	setState,
 }) => {
+	const { formatMessage } = useIntl();
 	const titleIcon = introCard?.icon
 		? introCard?.icon
 		: symbol.split(' / ')[0];
@@ -44,7 +46,9 @@ const StakingCardIntro: FC<IStakingCardIntro> = ({
 				<Description>{introCard?.description}</Description>
 				<LearnMoreButton
 					isExternal
-					label='LEARN MORE'
+					label={formatMessage({
+						id: 'label.learn_more',
+					})}
 					href={introCard?.link}
 					linkType='texty'
 					target='_blank'

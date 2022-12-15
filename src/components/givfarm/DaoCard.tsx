@@ -6,17 +6,21 @@ import {
 	DaoCardQuote,
 	DaoCardTitle,
 } from './DaoCard.sc';
+import { useIntl } from 'react-intl';
 
 export const DaoCard = () => {
+	const { formatMessage } = useIntl();
 	return (
 		<DaoCardContainer>
-			<DaoCardTitle weight={900}>Add Your DAO</DaoCardTitle>
+			<DaoCardTitle weight={900}>
+				{formatMessage({ id: 'label.add_your_dao' })}
+			</DaoCardTitle>
 			<DaoCardQuote size='small'>
-				Apply to kickstart a RegenFarm for your for-good DAO
+				{formatMessage({ id: 'label.apply_to_kickstart_a_regenfarm' })}
 			</DaoCardQuote>
 			<DaoCardButton
 				isExternal
-				label='APPLY NOW'
+				label={formatMessage({ id: 'label.apply_now' })}
 				linkType='primary'
 				href={links.JOINGIVFRENS}
 				target='_blank'

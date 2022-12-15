@@ -10,10 +10,12 @@ import {
 } from '@giveth/ui-design-system';
 import { mediaQueries } from '@/lib/constants/constants';
 import links from '@/lib/constants/links';
+import { useIntl } from 'react-intl';
 import { IDonateRouteProps } from '../../../../pages/donate/[slug]';
 import config from '@/configuration';
 
 const NiceBanner: FC<IDonateRouteProps> = ({ project }) => {
+	const { formatMessage } = useIntl();
 	// Only show this on the Giveth project
 	if (+project.id! !== config.GIVETH_PROJECT_ID) return null;
 	return (
@@ -32,7 +34,9 @@ const NiceBanner: FC<IDonateRouteProps> = ({ project }) => {
 						target='_blank'
 						href={links.NICE_DOC}
 					>
-						<span>Learn More </span>
+						<span>
+							{formatMessage({ id: 'label.learn_more' })}{' '}
+						</span>
 						<IconExternalLink
 							size={16}
 							color={brandColors.pinky[500]}

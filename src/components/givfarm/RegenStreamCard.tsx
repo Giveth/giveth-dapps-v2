@@ -23,6 +23,7 @@ import {
 	GsPTooltip,
 	PercentageRow,
 } from '@/components/homeTabs/GIVstream.sc';
+import { useIntl } from 'react-intl';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { RegenFarmConfig, StreamType } from '@/types/config';
 import { BN, formatWeiHelper } from '@/helpers/number';
@@ -57,6 +58,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 	network,
 	streamConfig,
 }) => {
+	const { formatMessage } = useIntl();
 	const [state, setState] = useState(StakeCardState.NORMAL);
 	const [showModal, setShowModal] = useState(false);
 	const [usdAmount, setUSDAmount] = useState('0');
@@ -149,7 +151,8 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 								{formatWeiHelper(rewardStream)}
 							</StreamRate>
 							<StreamRateUnit>
-								{streamConfig.rewardTokenSymbol}/week
+								{streamConfig.rewardTokenSymbol}
+								{formatMessage({ id: 'label./week' })}
 							</StreamRateUnit>
 						</RateRow>
 					</HeaderRow>
@@ -157,8 +160,14 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 						<RegenStreamInfoRow>
 							<Flex alignItems='flex-end' gap='6px'>
 								<H6>
-									{streamConfig.rewardTokenSymbol}stream
-									progress
+									{formatMessage(
+										{
+											id: 'label.stream_progress',
+										},
+										{
+											token: streamConfig.rewardTokenSymbol,
+										},
+									)}
 								</H6>
 
 								<IconWithTooltip
@@ -166,11 +175,15 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 									direction={'bottom'}
 								>
 									<GsPTooltip>
-										Liquid{'	 '}
-										{streamConfig.rewardTokenSymbol}
-										{'	 '}
-										that has already flowed out of the{' '}
-										{streamConfig.rewardTokenSymbol}stream
+										{formatMessage(
+											{
+												id: 'label.liquid_reward_token_that_has_flowed',
+											},
+											{
+												rewardTokenSymbol:
+													streamConfig.rewardTokenSymbol,
+											},
+										)}
 									</GsPTooltip>
 								</IconWithTooltip>
 							</Flex>
@@ -181,7 +194,10 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 							<B>100%</B>
 						</PercentageRow>
 					</div>
-					<Remaining>{`Time remaining: ` + remainTime}</Remaining>
+					<Remaining>
+						{`${formatMessage({ id: 'label.time_remaining' })}: ` +
+							remainTime}
+					</Remaining>
 					<HarvestContainer wrap={1} gap='24px'>
 						<div>
 							<AmountInfo alignItems='flex-end' gap='4px'>
@@ -196,7 +212,9 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 							<Converted>~${usdAmount}</Converted>
 						</div>
 						<HarvestButton
-							label={`HARVEST ${streamConfig.rewardTokenSymbol}`}
+							label={`${formatMessage({ id: 'label.harvest' })} ${
+								streamConfig.rewardTokenSymbol
+							}`}
 							onClick={() => setShowModal(true)}
 							buttonType='primary'
 							disabled={rewardLiquidPart.isZero()}
@@ -213,7 +231,10 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 			)}
 			{showModal && (
 				<HarvestAllModal
-					title={streamConfig.rewardTokenSymbol + 'stream Rewards'}
+					title={formatMessage(
+						{ id: 'label.token_stream_rewards' },
+						{ rewardTokenSymbol: streamConfig.rewardTokenSymbol },
+					)}
 					setShowModal={setShowModal}
 					network={network}
 					regenStreamConfig={streamConfig}

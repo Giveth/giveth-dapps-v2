@@ -14,6 +14,7 @@ import { useWeb3React } from '@web3-react/core';
 import Link from 'next/link';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
+import { useIntl } from 'react-intl';
 import {
 	CancelButton,
 	StyledButton,
@@ -54,6 +55,7 @@ const LockModal: FC<ILockModalProps> = ({
 	maxAmount,
 	setShowModal,
 }) => {
+	const { formatMessage } = useIntl();
 	const [amount, setAmount] = useState('0');
 	const [round, setRound] = useState(0);
 	const [lockState, setLockState] = useState<ELockState>(ELockState.LOCK);
@@ -95,7 +97,7 @@ const LockModal: FC<ILockModalProps> = ({
 			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerTitlePosition={'left'}
-			headerTitle={'Stake for GIVpower'}
+			headerTitle={formatMessage({ id: 'label.stake_for_givpower' })}
 			headerIcon={<IconRocketInSpace32 />}
 		>
 			<StakeModalContainer>
@@ -103,7 +105,9 @@ const LockModal: FC<ILockModalProps> = ({
 					{lockState === ELockState.LOCK && (
 						<>
 							<SectionTitle weight={700}>
-								Lock your staked GIV
+								{formatMessage({
+									id: 'label.lock_your_staked_giv',
+								})}
 							</SectionTitle>
 							<AmountInput
 								setAmount={setAmount}
@@ -111,15 +115,18 @@ const LockModal: FC<ILockModalProps> = ({
 								poolStakingConfig={poolStakingConfig}
 							/>
 							<Flex gap='4px' alignItems='center'>
-								<SectionTitle weight={700}>Rounds</SectionTitle>
+								<SectionTitle weight={700}>
+									{formatMessage({ id: 'label.rounds' })}
+								</SectionTitle>
 								<IconWithTooltip
 									icon={<IconHelpFilled16 />}
 									direction='right'
 									align='top'
 								>
 									<LockInfotooltip>
-										Rounds are 2 week periods corresponding
-										to GIVbacks rounds.
+										{formatMessage({
+											id: 'label.rounds_are_two_weeks_periods',
+										})}
 									</LockInfotooltip>
 								</IconWithTooltip>
 							</Flex>
@@ -128,7 +135,9 @@ const LockModal: FC<ILockModalProps> = ({
 							<StyledButton
 								buttonType='primary'
 								size='small'
-								label={'Lock to increase your multiplier'}
+								label={formatMessage({
+									id: 'label.lock_to_increase_your_multiplier',
+								})}
 								onClick={() => {
 									setLockState(ELockState.CONFIRM);
 								}}
@@ -141,7 +150,7 @@ const LockModal: FC<ILockModalProps> = ({
 							<CancelButton
 								buttonType='texty'
 								size='small'
-								label={'cancel'}
+								label={formatMessage({ id: 'label.cancel' })}
 								onClick={() => {
 									setShowModal(false);
 								}}
@@ -159,7 +168,9 @@ const LockModal: FC<ILockModalProps> = ({
 							<LockInfo round={round} amount={amount} />
 							<StyledButton
 								buttonType='primary'
-								label={'Lock your tokens'}
+								label={formatMessage({
+									id: 'label.lock_your_tokens',
+								})}
 								onClick={onLock}
 								disabled={
 									amount == '0' ||
@@ -175,18 +186,23 @@ const LockModal: FC<ILockModalProps> = ({
 							<LockingBrief round={round} amount={amount} />
 							<TotalGIVpowerBox />
 							<P>
-								Use your GIVpower to support verified projects
-								on Giveth while earning rewards.
+								{formatMessage({
+									id: 'label.user_your_givpower_to_support_verified_projects',
+								})}
 							</P>
 							<Link href={Routes.Projects}>
 								<BoostButton
 									linkType='primary'
-									label={'Boost projects'}
+									label={formatMessage({
+										id: 'label.boost_projects',
+									})}
 									size='small'
 								/>
 							</Link>
 							<ExternalLink href={links.GIVPOWER_DOC}>
-								<LearnMoreLink>Learn More</LearnMoreLink>
+								<LearnMoreLink>
+									{formatMessage({ id: 'label.learn_more' })}
+								</LearnMoreLink>
 							</ExternalLink>
 						</>
 					)}

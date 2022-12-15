@@ -12,6 +12,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
 import links from '@/lib/constants/links';
+import { useIntl } from 'react-intl';
 import TotalGIVpowerBox from '../modals/StakeLock/TotalGIVpowerBox';
 import { Flex, FlexSpacer } from '../styled-components/Flex';
 import { StakeCardState } from './BaseStakingCard';
@@ -27,6 +28,7 @@ interface IGIVpowerCardIntro {
 }
 
 const GIVpowerCardIntro: FC<IGIVpowerCardIntro> = ({ setState }) => {
+	const { formatMessage } = useIntl();
 	const [showLockDetailModal, setShowLockDetailModal] = useState(false);
 	const { stakedAmount } = useGIVpower();
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
@@ -49,20 +51,23 @@ const GIVpowerCardIntro: FC<IGIVpowerCardIntro> = ({ setState }) => {
 				</HeaderRow>
 				<TotalGIVpowerBox />
 				<Desc>
-					You get GIVpower when you stake & lock GIV. Use your
-					GIVpower to boost projects on Giveth to influence their
-					rank. Donors to top-ranked projects get more GIVbacks.
+					{formatMessage({
+						id: 'label.you_get_givpower_when_you_stake',
+					})}
 				</Desc>
 				<Desc>
-					With GIVpower, you can support the projects you believe in,
-					without sacrificing!
+					{formatMessage({
+						id: 'label.with_givpower_you_can_support_projects',
+					})}
 				</Desc>
 				<Link href={Routes.Projects}>
-					<ButtonLink label='Boost Projects' />
+					<ButtonLink
+						label={formatMessage({ id: 'label.boost_projects' })}
+					/>
 				</Link>
 				<LearnMoreButton
 					isExternal
-					label='Learn More'
+					label={formatMessage({ id: 'label.learn_more' })}
 					linkType='texty'
 					href={links.GIVPOWER_DOC}
 					target='_blank'
