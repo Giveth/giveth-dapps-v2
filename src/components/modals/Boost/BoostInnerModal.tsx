@@ -284,62 +284,72 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 			>
 				{handleCaptionText()}
 			</DescToast>
-			<SliderWrapper>
-				<StyledSlider
-					min={0}
-					max={100}
-					railStyle={{
-						backgroundColor: brandColors.giv[900],
-					}}
-					trackStyle={{
-						backgroundColor:
-							boostedProjectsCount === 0
-								? brandColors.giv[200]
-								: brandColors.giv[500],
-					}}
-					handleStyle={{
-						backgroundColor: neutralColors.gray[100],
-						border: `3px solid ${
-							boostedProjectsCount === 0
-								? neutralColors.gray[500]
-								: brandColors.giv[800]
-						}`,
-						opacity: 1,
-					}}
-					onChange={(value: any) => {
-						const _value = Array.isArray(value) ? value[0] : value;
-						if (
-							boostedProjectsCount === 0 ||
-							isSaving ||
-							isOnlyBoostedProjectIsThisProject
-						)
-							return;
-						setPercentage(_value);
-						setIsChanged(true);
-					}}
-					handleRender={(renderProps: any) => {
-						return (
-							<Handle {...renderProps.props}>
-								{isChanged && (
-									<HandleTooltip>{percentage}%</HandleTooltip>
-								)}
-							</Handle>
-						);
-					}}
-					value={percentage}
-				/>
-			</SliderWrapper>
-			<SliderDesc isChanged={isChanged} weight={700}>
-				{isChanged
-					? `~${
-							percentage > 0
-								? formatWeiHelper(
-										totalGIVpower.mul(percentage).div(100),
-								  )
-								: 0
-					  } GIVpower`
-					: 'Drag to allocate.'}
-			</SliderDesc>
+			{boostedProjectsCount > 0 && (
+				<>
+					<SliderWrapper>
+						<StyledSlider
+							min={0}
+							max={100}
+							railStyle={{
+								backgroundColor: brandColors.giv[900],
+							}}
+							trackStyle={{
+								backgroundColor:
+									boostedProjectsCount === 0
+										? brandColors.giv[200]
+										: brandColors.giv[500],
+							}}
+							handleStyle={{
+								backgroundColor: neutralColors.gray[100],
+								border: `3px solid ${
+									boostedProjectsCount === 0
+										? neutralColors.gray[500]
+										: brandColors.giv[800]
+								}`,
+								opacity: 1,
+							}}
+							onChange={(value: any) => {
+								const _value = Array.isArray(value)
+									? value[0]
+									: value;
+								if (
+									boostedProjectsCount === 0 ||
+									isSaving ||
+									isOnlyBoostedProjectIsThisProject
+								)
+									return;
+								setPercentage(_value);
+								setIsChanged(true);
+							}}
+							handleRender={(renderProps: any) => {
+								return (
+									<Handle {...renderProps.props}>
+										{isChanged && (
+											<HandleTooltip>
+												{percentage}%
+											</HandleTooltip>
+										)}
+									</Handle>
+								);
+							}}
+							value={percentage}
+						/>
+					</SliderWrapper>
+					<SliderDesc isChanged={isChanged} weight={700}>
+						{isChanged
+							? `~${
+									percentage > 0
+										? formatWeiHelper(
+												totalGIVpower
+													.mul(percentage)
+													.div(100),
+										  )
+										: 0
+							  } GIVpower`
+							: 'Drag to allocate.'}
+					</SliderDesc>
+				</>
+			)}
 			<ConfirmButton
 				label='Confirm'
 				size='small'
