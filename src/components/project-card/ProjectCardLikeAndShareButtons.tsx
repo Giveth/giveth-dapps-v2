@@ -1,15 +1,17 @@
-import { useEffect, useState, MouseEvent } from 'react';
+import { useEffect, useState } from 'react';
 import {
 	brandColors,
 	IconHeartFilled16,
 	IconHeartOutline16,
+	IconRocketInSpace,
 	IconShare16,
 	neutralColors,
 	Subline,
 } from '@giveth/ui-design-system';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { captureException } from '@sentry/nextjs';
+import { useRouter } from 'next/router';
 import ShareModal from '../modals/ShareModal';
 import { likeProject, unlikeProject } from '@/lib/reaction';
 import { showToastError } from '@/lib/helpers';
@@ -21,6 +23,7 @@ import {
 	decrementLikedProjectsCount,
 	incrementLikedProjectsCount,
 } from '@/features/user/user.slice';
+import { slugToProjectView } from '@/lib/routeCreators';
 
 interface IProjectCardLikeAndShareButtons {
 	project: IProject;
@@ -31,26 +34,27 @@ const ProjectCardLikeAndShareButtons = (
 ) => {
 	const [showModal, setShowModal] = useState<boolean>(false);
 	const { project } = props;
-	const { slug, id: projectId } = project;
+	const { slug, id: projectId, verified } = project;
 	const [reaction, setReaction] = useState(project.reaction);
 	const [totalReactions, setTotalReactions] = useState(
 		project.totalReactions,
 	);
-	const [loading, setLoading] = useState(false);
+	const [boostLoading, setBoostLoading] = useState(false);
+	const [likeLoading, setLikeLoading] = useState(false);
 	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
 	const dispatch = useAppDispatch();
+	const router = useRouter();
 
-	const likeUnlikeProject = async (e: MouseEvent<HTMLElement>) => {
-		e.stopPropagation();
+	const likeUnlikeProject = async () => {
 		if (!isSignedIn) {
 			dispatch(setShowSignWithWallet(true));
 			return;
 		}
 
-		if (loading) return;
+		if (likeLoading) return;
 
 		if (projectId) {
-			setLoading(true);
+			setLikeLoading(true);
 
 			try {
 				if (!reaction) {
@@ -76,9 +80,22 @@ const ProjectCardLikeAndShareButtons = (
 					},
 				});
 			} finally {
-				setLoading(false);
+				setLikeLoading(false);
 			}
 		}
+	};
+
+	const boostProject = () => {
+		setBoostLoading(true);
+		if (!isSignedIn) {
+			dispatch(setShowSignWithWallet(true));
+			setBoostLoading(false);
+			return;
+		}
+
+		if (boostLoading) return;
+
+		if (projectId) router.push(`${slugToProjectView(slug)}?open=boost`);
 	};
 
 	useEffect(() => {
@@ -95,8 +112,19 @@ const ProjectCardLikeAndShareButtons = (
 				<ShareModal setShowModal={setShowModal} projectHref={slug} />
 			)}
 			<BadgeWrapper>
-				<Flex gap='3px'>
-					<BadgeButton onClick={likeUnlikeProject}>
+				<Flex gap='6px'>
+					{verified && (
+						<BadgeButton
+							loading={boostLoading}
+							onClick={boostProject}
+						>
+							<IconRocketInSpace />
+						</BadgeButton>
+					)}
+					<BadgeButton
+						loading={likeLoading}
+						onClick={likeUnlikeProject}
+					>
 						{Number(totalReactions) > 0 && (
 							<Subline>{totalReactions}</Subline>
 						)}
@@ -108,7 +136,6 @@ const ProjectCardLikeAndShareButtons = (
 					</BadgeButton>
 					<BadgeButton
 						onClick={e => {
-							e.stopPropagation();
 							setShowModal(true);
 						}}
 					>
@@ -120,20 +147,76 @@ const ProjectCardLikeAndShareButtons = (
 	);
 };
 
-const BadgeButton = styled(Flex)`
+interface IBadgeButton {
+	loading?: boolean;
+}
+
+const BadgeButton = styled(Flex)<IBadgeButton>`
 	gap: 3px;
 	padding: 6px 7px;
-	background: ${neutralColors.gray[100]};
+	z-index: 2;
 	align-items: center;
 	border-radius: 16px;
 	cursor: pointer;
 	transition: color 0.3s ease;
-	color: ${neutralColors.gray[800]};
+	color: ${neutralColors.gray[600]};
 	box-shadow: 0 3px 20px ${brandColors.giv[400]}21;
 	&:hover {
 		color: ${neutralColors.gray[900]};
 	}
 	pointer-events: auto;
+	position: relative;
+	overflow: hidden;
+
+	&::after {
+		content: '';
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		border-radius: 16px;
+		z-index: -1;
+		background-color: #ffffff;
+	}
+	${props =>
+		props.loading
+			? css`
+					&::before {
+						content: '';
+						position: absolute;
+						top: -10px;
+						bottom: -10px;
+						left: -10px;
+						right: -10px;
+						z-index: -2;
+						animation: rotate linear 1s infinite;
+						background-color: #399953;
+						background-repeat: no-repeat;
+						background-size: 50% 50%, 50% 50%;
+						background-position: 0 0, 100% 0, 100% 100%, 0 100%;
+						background-image: linear-gradient(#ffffff, #ffffff),
+							linear-gradient(#ffffff, #ffffff),
+							linear-gradient(#ffffff, #ffffff),
+							linear-gradient(
+								${brandColors.giv[500]},
+								${brandColors.giv[500]}
+							);
+					}
+					&::after {
+						top: 2px;
+						bottom: 2px;
+						left: 2px;
+						right: 2px;
+					}
+			  `
+			: ``}
+
+	@keyframes rotate {
+		100% {
+			transform: rotate(1turn);
+		}
+	}
 `;
 
 const BadgeWrapper = styled.div`
