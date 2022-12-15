@@ -7,6 +7,7 @@ import {
 } from 'react';
 import { captureException } from '@sentry/nextjs';
 import BigNumber from 'bignumber.js';
+import { useRouter } from 'next/router';
 import config from '@/configuration';
 import { IPowerBoostingWithUserGIVpower } from '@/components/views/project/projectGIVPower';
 import { client } from '@/apollo/apolloClient';
@@ -20,6 +21,7 @@ import { formatWeiHelper } from '@/helpers/number';
 import { backendGQLRequest, gqlRequest } from '@/helpers/requests';
 import { showToastError } from '@/lib/helpers';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
+import { useAppSelector } from '@/features/hooks';
 
 interface IBoostersData {
 	powerBoostings: IPowerBoostingWithUserGIVpower[];
@@ -56,6 +58,13 @@ export const ProjectProvider = ({
 	const [projectedRank, setProjectedRank] = useState<
 		number | undefined | null
 	>(undefined);
+
+	const [projectData, setProjectData] = useState(project);
+
+	const user = useAppSelector(state => state.user.userData);
+	const router = useRouter();
+	const slug = router.query.projectIdSlug as string;
+
 	const fetchProjectBoosters = useCallback(
 		async (projectId: number, status?: EProjectStatus) => {
 			setIsBoostingsLoading(true);
