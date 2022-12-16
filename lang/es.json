@@ -791,5 +791,20 @@
 	"label.giv_allocated_to_round": "",
 	"label.one_million_giv": "1 Millón de GIV",
 	"label.when_you_giv_you_get_giv_back": "",
-	"label.each_givbacks_round_lasts_two_weeks": ""
+	"label.each_givbacks_round_lasts_two_weeks": "",
+	"label.givstream_is_only_available_on_gnosis": "",
+	"label.your_flowrate": "",
+	"label.the_rate_at_which_you_receive_liquid_giv": "",
+	"label.your_givstream_provides_a_continous_flow_until_2026": "",
+	"label.the_giveconomy_begins_humbly": "",
+	"label.everytime_you_claim_giv_rewards": "",
+	"label.increase_your_givstream": "",
+	"label.givstream_rewards": "Recompensas de GIVstream",
+	"label.giviverse_expansion": "",
+	"label.liquid_giv_that_has_already_flowed": "",
+	"label.givstream_source": "Origen GIVstream",
+	"label.flowrate_change": "Cambio de flujo",
+	"label.date": "Fecha",
+	"label.tx": "Tx",
+	"label.no_data": "No data"
 }

@@ -793,5 +793,20 @@
 	"label.giv_allocated_to_round": "GIV Allocated to Round",
 	"label.one_million_giv": "1 Million GIV",
 	"label.when_you_giv_you_get_giv_back": "When you give you get GIV back!",
-	"label.each_givbacks_round_lasts_two_weeks": "Each GIVbacks round lasts two weeks. After the End Date, the GIV Allocated to that round is distributed to Givers who donated to verified projects during the round. Projects must apply for verification at least 1 week prior to the Start Date in order to be included in the round."
+	"label.each_givbacks_round_lasts_two_weeks": "Each GIVbacks round lasts two weeks. After the End Date, the GIV Allocated to that round is distributed to Givers who donated to verified projects during the round. Projects must apply for verification at least 1 week prior to the Start Date in order to be included in the round.",
+	"label.givstream_is_only_available_on_gnosis": "GIVstream is only available on Mainnet and Gnosis Chain.",
+	"label.your_flowrate": "Your Flowrate",
+	"label.the_rate_at_which_you_receive_liquid_giv": "The rate at which you receive liquid GIV from your GIVstream.",
+	"label.your_givstream_provides_a_continous_flow_until_2026": "Your GIVstream provides a continuous flow of claimable GIV until December 23, 2026. Anyone can get or increase their GIVstream by participating in the GIVeconomy.",
+	"label.the_giveconomy_begins_humbly": "The GIVeconomy begins humbly but as time passes, the GIViverse expands and more GIV flows from GIVstream. This way, as the GIVeconomy grows, so do the governance rights of our community.",
+	"label.everytime_you_claim_giv_rewards": "Every time you claim GIV rewards from GIVbacks, the GIVgarden, or the GIVfarm, your GIVstream flowrate increases. Below is a summary.",
+	"label.increase_your_givstream": "Increase your GIVstream",
+	"label.givstream_rewards": "GIVstream Rewards",
+	"label.giviverse_expansion": "GIViverse Expansion",
+	"label.liquid_giv_that_has_already_flowed": "Liquid GIV that has already flowed out of the GIVstream",
+	"label.givstream_source": "GIVstream Source",
+	"label.flowrate_change": "Flowrate Change",
+	"label.date": "Date",
+	"label.tx": "",
+	"label.no_data": ""
 }

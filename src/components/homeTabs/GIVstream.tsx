@@ -14,11 +14,11 @@ import {
 	IconSpark,
 	P,
 } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import { constants, ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { Zero } from '@ethersproject/constants';
 import { useWeb3React } from '@web3-react/core';
-import { useIntl } from 'react-intl';
 import {
 	Bar,
 	FlowRateRow,
@@ -71,6 +71,7 @@ import { useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
 export const TabGIVstreamTop = () => {
+	const { formatMessage } = useIntl();
 	const [showModal, setShowModal] = useState(false);
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
 	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
@@ -110,17 +111,21 @@ export const TabGIVstreamTop = () => {
 								<IconGIVStream size={64} />
 							</Flex>
 							<GSSubtitle size='medium'>
-								Welcome to the expanding GIViverse! The
-								GIVstream aligns community members with the long
-								term success of Giveth and the GIVeconomy.
+								{formatMessage({
+									id: 'label.welcome_to_the_expanding_giviverse',
+								})}
 							</GSSubtitle>
 						</TitleCol>
 						<Col xs={12} sm={5} xl={4}>
 							<GIVstreamRewardCard
-								wrongNetworkText='GIVstream is only available on Mainnet and Gnosis Chain.'
+								wrongNetworkText={formatMessage({
+									id: 'label.givstream_is_only_available_on_gnosis',
+								})}
 								liquidAmount={rewardLiquidPart}
 								stream={rewardStream}
-								actionLabel='HARVEST'
+								actionLabel={formatMessage({
+									id: 'label.harvest',
+								})}
 								actionCb={() => {
 									setShowModal(true);
 								}}
@@ -189,7 +194,7 @@ export const TabGIVstreamBottom = () => {
 				<NetworkSelector />
 				<FlowRateRow alignItems='baseline' gap='8px' wrap={1}>
 					<H3 id='flowRate' weight={700}>
-						Your Flowrate:
+						{formatMessage({ id: 'label.your_flowrate' })}:
 					</H3>
 					<IconGIVStream size={64} />
 					<H1>
@@ -206,8 +211,9 @@ export const TabGIVstreamBottom = () => {
 						direction={'top'}
 					>
 						<FlowRateTooltip>
-							The rate at which you receive liquid GIV from your
-							GIVstream.
+							{formatMessage({
+								id: 'label.the_rate_at_which_you_receive_liquid_giv',
+							})}
 						</FlowRateTooltip>
 					</IconWithTooltip>
 				</FlowRateRow>
@@ -229,31 +235,31 @@ export const TabGIVstreamBottom = () => {
 								/>
 							}
 						>
-							Your GIVstream provides a continuous flow of
-							claimable GIV until December 23, 2026. Anyone can
-							get or increase their GIVstream by participating in
-							the GIVeconomy.
+							{formatMessage({
+								id: 'label.your_givstream_provides_a_continous_flow_until_2026',
+							})}
 						</GsDataBlock>
 					</Col>
 					<Col xs={12} sm={6}>
 						<GsDataBlock title='Expanding GIViverse'>
-							The GIVeconomy begins humbly but as time passes, the
-							GIViverse expands and more GIV flows from GIVstream.
-							This way, as the GIVeconomy grows, so do the
-							governance rights of our community.
+							{formatMessage({
+								id: 'label.the_giveconomy_begins_humbly',
+							})}
 						</GsDataBlock>
 					</Col>
 				</Row>
 				<HistoryTitleRow>
-					<HistoryTitle>History</HistoryTitle>
+					<HistoryTitle>
+						{formatMessage({ id: 'label.history' })}
+					</HistoryTitle>
 					<IconWithTooltip
 						icon={<IconHelpFilled16 />}
 						direction={'top'}
 					>
 						<HistoryTooltip>
-							Every time you claim GIV rewards from GIVbacks, the
-							GIVgarden, or the GIVfarm, your GIVstream flowrate
-							increases. Below is a summary.
+							{formatMessage({
+								id: 'label.everytime_you_claim_giv_rewards',
+							})}
 						</HistoryTooltip>
 					</IconWithTooltip>
 				</HistoryTitleRow>
@@ -262,7 +268,7 @@ export const TabGIVstreamBottom = () => {
 			<IncreaseSection ref={increaseSecRef}>
 				<Container>
 					<IncreaseSectionTitle>
-						Increase your GIVstream
+						{formatMessage({ id: 'label.increase_your_givstream' })}
 						<IconSpark size={32} color={brandColors.mustard[500]} />
 					</IncreaseSectionTitle>
 					<GivEconomyProjectCards />
@@ -281,22 +287,29 @@ export const GIVstreamProgress: FC<IGIVstreamProgressProps> = ({
 	percentage = 0,
 	remainTime = '',
 }) => {
+	const { formatMessage } = useIntl();
 	return (
 		<GIVstreamProgressContainer>
 			<GsPTitleRow justifyContent='space-between'>
 				<GsPTitle alignItems='center' gap='8px'>
-					<H6>GIViverse Expansion</H6>
+					<H6>
+						{formatMessage({ id: 'label.giviverse_expansion' })}
+					</H6>
 					<IconWithTooltip
 						icon={<IconHelpFilled16 />}
 						direction={'bottom'}
 					>
 						<GsPTooltip>
-							Liquid GIV that has already flowed out of the
-							GIVstream
+							{formatMessage({
+								id: 'label.liquid_giv_that_has_already_flowed',
+							})}
 						</GsPTooltip>
 					</IconWithTooltip>
 				</GsPTitle>
-				<P>{`Time remaining: ` + remainTime}</P>
+				<P>
+					{`${formatMessage({ id: 'label.time_remaining' })}: ` +
+						remainTime}
+				</P>
 			</GsPTitleRow>
 			<Bar percentage={percentage} />
 			<PercentageRow justifyContent='space-between'>
@@ -386,10 +399,14 @@ export const GIVstreamHistory: FC = () => {
 		<HistoryContainer>
 			<GridWrapper>
 				<Grid>
-					<B as='span'>GIVstream Source</B>
-					<B as='span'>Flowrate Change</B>
-					<B as='span'>Date</B>
-					<B as='span'>Tx</B>
+					<B as='span'>
+						{formatMessage({ id: 'label.givstream_source' })}
+					</B>
+					<B as='span'>
+						{formatMessage({ id: 'label.flowrate_change' })}
+					</B>
+					<B as='span'>{formatMessage({ id: 'label.date' })}</B>
+					<B as='span'>{formatMessage({ id: 'label.tx' })}</B>
 				</Grid>
 				{tokenAllocations && tokenAllocations.length > 0 && (
 					<Grid>
