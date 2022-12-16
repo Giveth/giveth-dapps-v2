@@ -83,9 +83,9 @@ export const durationToString = (ms: number, length = 3) => {
 	return res.slice(0, length).join(' ');
 };
 
-export const formatDate = (date: Date) => {
+export const formatDate = (date: Date, locale?: string) => {
 	return date
-		.toLocaleString('en-US', {
+		.toLocaleString(locale || 'en-US', {
 			weekday: 'short',
 			day: 'numeric',
 			year: 'numeric',

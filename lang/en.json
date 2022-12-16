@@ -776,5 +776,22 @@
 	"label.token_stream_rewards": "{rewardTokenSymbol} stream rewards",
 	"label.add_your_dao": "Add Your DAO",
 	"label.apply_to_kickstart_a_regenfarm": "Apply to kickstart a RegenFarm for your for-good DAO",
-	"label.apply_now": "Apply now"
+	"label.apply_now": "Apply now",
+	"label.givbacks_rewards_donors_to_verified_projects": "GIVbacks rewards donors to verified projects with GIV, super-charging Giveth as a donor-driven force for good.",
+	"label.your_givbacks_rewards": "Your GIVbacks rewards",
+	"label.givbacks_is_only_available_on_gnosis": "GIVbacks is only available on Gnosis Chain.",
+	"label.why_dont_i_have_givbacks": "Why don't I have GIVbacks?",
+	"label.givbacks_rewards": "GIVbacks Rewards",
+	"label.donor_rewards": "Donor Rewards",
+	"label.donate_to_earn_giv": "Donate to earn GIV",
+	"label.when_you_donate_to_Verified_projects": "When you donate to verified projects you qualify to receive GIV tokens. Through GIVbacks, GIV empowers donors with governance rights via the GIVgarden.",
+	"label.project_verification": "Project Verification",
+	"label.great_projects_make_the_giveconomy_thrive": "Great projects make the GIVeconomy thrive! As a project owner, when you get your project verified, your donors become eligible to receive GIVbacks.",
+	"label.round": "Round",
+	"label.start_date": "Start Date",
+	"label.end_date": "End Date",
+	"label.giv_allocated_to_round": "GIV Allocated to Round",
+	"label.one_million_giv": "1 Million GIV",
+	"label.when_you_giv_you_get_giv_back": "When you give you get GIV back!",
+	"label.each_givbacks_round_lasts_two_weeks": "Each GIVbacks round lasts two weeks. After the End Date, the GIV Allocated to that round is distributed to Givers who donated to verified projects during the round. Projects must apply for verification at least 1 week prior to the Start Date in order to be included in the round."
 }

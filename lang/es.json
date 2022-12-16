@@ -774,5 +774,22 @@
 	"label.token_stream_rewards": "Recompensas del {rewardTokenSymbol} stream",
 	"label.add_your_dao": "Agrega tu DAO",
 	"label.apply_to_kickstart_a_regenfarm": "Aplica para iniciar una RegenFarm para tu DAO",
-	"label.apply_now": "Aplica ahora"
+	"label.apply_now": "Aplica ahora",
+	"label.givbacks_rewards_donors_to_verified_projects": "",
+	"label.your_givbacks_rewards": "",
+	"label.givbacks_is_only_available_on_gnosis": "",
+	"label.why_dont_i_have_givbacks": "",
+	"label.givbacks_rewards": "",
+	"label.donor_rewards": "",
+	"label.donate_to_earn_giv": "",
+	"label.when_you_donate_to_Verified_projects": "",
+	"label.project_verification": "",
+	"label.great_projects_make_the_giveconomy_thrive": "",
+	"label.round": "Round",
+	"label.start_date": "Fecha de inicio",
+	"label.end_date": "Fecha de finalización",
+	"label.giv_allocated_to_round": "",
+	"label.one_million_giv": "1 Millón de GIV",
+	"label.when_you_giv_you_get_giv_back": "",
+	"label.each_givbacks_round_lasts_two_weeks": ""
 }
