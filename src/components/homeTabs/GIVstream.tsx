@@ -370,7 +370,7 @@ export const GIVstreamHistory: FC = () => {
 	const [tokenAllocations, setTokenAllocations] = useState<
 		ITokenAllocation[]
 	>([]);
-	const { formatMessage } = useIntl();
+	const { formatMessage, locale } = useIntl();
 	const [loading, setLoading] = useState(true);
 	const [page, setPage] = useState(0);
 	const currentValue = useAppSelector(state => state.subgraph.currentValues);
@@ -414,11 +414,11 @@ export const GIVstreamHistory: FC = () => {
 							const d = new Date(
 								+`${tokenAllocation.timestamp}000`,
 							);
-							const date = d
-								.toDateString()
-								.split(' ')
-								.splice(1, 3)
-								.join(' ');
+							const date = d.toLocaleDateString(locale, {
+								day: 'numeric',
+								year: 'numeric',
+								month: 'short',
+							});
 							return (
 								// <span key={idx}>1</span>
 								<Fragment key={idx}>
