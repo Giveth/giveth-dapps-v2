@@ -65,6 +65,7 @@ import { formatWeiHelper } from '@/helpers/number';
 import links from '@/lib/constants/links';
 
 export function TabPowerTop() {
+	const { formatMessage } = useIntl();
 	const { account } = useWeb3React();
 	const sdh = new SubgraphDataHelper(
 		useAppSelector(state => state.subgraph.xDaiValues),
@@ -90,14 +91,20 @@ export function TabPowerTop() {
 							/>
 						</Flex>
 						<Subtitle size='medium'>
-							Use GIV to boost projects to new heights!
+							{formatMessage({
+								id: 'label.use_giv_to_boost_projects',
+							})}
 						</Subtitle>
 					</Col>
 					<Col xs={12} sm={4}>
 						<GivPowerCardContainer>
 							{account ? (
 								<>
-									<Caption>Your GIVpower</Caption>
+									<Caption>
+										{formatMessage({
+											id: 'label.your_givpower',
+										})}
+									</Caption>
 									<GivAmount>
 										<Image
 											src={RocketImage}
@@ -112,7 +119,10 @@ export function TabPowerTop() {
 									<BoostLinkContainer>
 										{hasZeroGivPower && (
 											<CaptionStyled medium>
-												Stake GIV to get GIVpower!
+												{formatMessage({
+													id: 'label.stake_giv_to_get_givpower',
+												})}
+												!
 											</CaptionStyled>
 										)}
 										<Link
@@ -125,8 +135,12 @@ export function TabPowerTop() {
 											<BoostProjectButton
 												label={
 													hasZeroGivPower
-														? 'STAKE FOR GIVPOWER'
-														: 'BOOST PROJECTS'
+														? formatMessage({
+																id: 'label.stake_for_givpower',
+														  })
+														: formatMessage({
+																id: 'label.boost_projects',
+														  })
 												}
 												size='large'
 												linkType='primary'
@@ -137,8 +151,9 @@ export function TabPowerTop() {
 							) : (
 								<ConnectWallet>
 									<ConnectWalletDesc>
-										To see your GIVpower, please connect
-										your wallet.
+										{formatMessage({
+											id: 'label.to_see_your_givpower_please_connect',
+										})}
 									</ConnectWalletDesc>
 									<ConnectWalletButton
 										label='Connect Wallet'
@@ -165,15 +180,18 @@ export function TabPowerBottom() {
 	return (
 		<>
 			<GIVpowerContainer>
-				<H3 weight={700}>Boost Projects with GIVpower</H3>
+				<H3 weight={700}>
+					{formatMessage({
+						id: 'label.boost_projects_with_givpower',
+					})}
+				</H3>
 				<br />
 				<HeadingSectionContainer>
 					<HeadingTextContainer>
 						<QuoteText size='small'>
-							Use your GIVpower to <i>boost</i> verified projects
-							to improve their project ranking. Donors to higher
-							ranked projects will get more GIV from our GIVbacks
-							program.
+							{formatMessage({
+								id: 'label.use_your_givpower_to_boost_verified_projects',
+							})}
 						</QuoteText>
 					</HeadingTextContainer>
 					<LearnMoreButton
@@ -186,11 +204,12 @@ export function TabPowerBottom() {
 				</HeadingSectionContainer>
 				<FeaturesCardContainer>
 					<FeaturesCardHeading weight={700}>
-						How does GIVpower work?
+						{formatMessage({ id: 'label.how_does_givpower_work' })}
 					</FeaturesCardHeading>
 					<FeaturesCardSubheading size='small'>
-						With GIVpower, you can support verified projects, while
-						earning rewards on your GIV.
+						{formatMessage({
+							id: 'label.with_givpower_you_can_support_verified_projects',
+						})}
 					</FeaturesCardSubheading>
 					<FeaturesCardItemsContainer>
 						<FeaturesCardItem>
@@ -199,10 +218,22 @@ export function TabPowerBottom() {
 								src={GivStake}
 								alt='givpower stake and lock icon'
 							/>
-							<H4 weight={700}>Stake & lock GIV </H4>
-							<Lead>Stake & lock GIV to get GIVpower.</Lead>
+							<H4 weight={700}>
+								{formatMessage({
+									id: 'label.stake_and_lock_giv',
+								})}{' '}
+							</H4>
+							<Lead>
+								{formatMessage({
+									id: 'label.stake_and_lock_giv_to_get_givpower',
+								})}
+							</Lead>
 							<Link href={Routes.GIVfarm}>
-								<CardBottomText>GET GIVPOWER</CardBottomText>
+								<CardBottomText>
+									{formatMessage({
+										id: 'label.get_givpower',
+									})}
+								</CardBottomText>
 							</Link>
 						</FeaturesCardItem>
 						<FeaturesCardItem>
@@ -211,13 +242,19 @@ export function TabPowerBottom() {
 								src={Growth}
 								alt='givpower earn yield icon'
 							/>
-							<H4 weight={700}>Earn a Yield</H4>
+							<H4 weight={700}>
+								{formatMessage({ id: 'label.earn_a_yield' })}
+							</H4>
 							<Lead>
-								The longer you lock, the greater your rewards.
+								{formatMessage({
+									id: 'label.the_longer_you_lock_the_greater_your_reward',
+								})}
 							</Lead>
 
 							<Link href={Routes.GIVfarm}>
-								<CardBottomText>SEE REWARDS</CardBottomText>
+								<CardBottomText>
+									{formatMessage({ id: 'label.see_rewards' })}
+								</CardBottomText>
 							</Link>
 						</FeaturesCardItem>
 						<FeaturesCardItem>
@@ -227,13 +264,22 @@ export function TabPowerBottom() {
 									color={brandColors.mustard[500]}
 								/>
 							</div>
-							<H4 weight={700}>Boost Projects</H4>
+							<H4 weight={700}>
+								{formatMessage({
+									id: 'label.boost_projects',
+								})}
+							</H4>
 							<Lead>
-								Boost your favourite projects to help them rise
-								through the ranks.
+								{formatMessage({
+									id: 'label.boost_your_favorite_projects_to_help_them_rise',
+								})}
 							</Lead>
 							<Link href={Routes.Projects}>
-								<CardBottomText>BOOST PROJECTS</CardBottomText>
+								<CardBottomText>
+									{formatMessage({
+										id: 'label.boost_projects',
+									})}
+								</CardBottomText>
 							</Link>
 						</FeaturesCardItem>
 					</FeaturesCardItemsContainer>
@@ -243,7 +289,9 @@ export function TabPowerBottom() {
 					<Circle size={700} />
 					<Circle size={1150} />
 					<CenteredHeader weight={700}>
-						Win-win for GIVers & Projects
+						{formatMessage({
+							id: 'label.winwin_for_givers_and_projects',
+						})}
 					</CenteredHeader>
 				</HeaderAndCirclesContainer>
 			</GIVpowerContainer>
@@ -254,50 +302,62 @@ export function TabPowerBottom() {
 					<BenefitsCardsContainer>
 						<BenefitsCard>
 							<BenefitsCardHeading weight={700}>
-								For GIVers
+								{formatMessage({ id: 'label.for_givers' })}
 							</BenefitsCardHeading>
 							<BenefitsCardContainer>
 								<BenefitsCardTextContainer>
 									<QuoteText size='small'>
-										Stake GIV to get GIVpower & earn
-										rewards.
+										{formatMessage({
+											id: 'label.stake_giv_to_get_givpower_and_earn_rewards',
+										})}
 									</QuoteText>
 									<QuoteText size='small'>
-										Lock your GIV to increase your rewards
-										multiplier.
+										{formatMessage({
+											id: 'label.lock_your_giv_to_increase_your_rewards',
+										})}
 									</QuoteText>
 									<QuoteText size='small'>
-										Donate to top-ranked projects and get
-										more GIV back!
+										{formatMessage({
+											id: 'label.donate_to_top_ranked_projects_and_get_more_giv_back',
+										})}
 									</QuoteText>
 									<br />
 								</BenefitsCardTextContainer>
 								<Link href={Routes.GIVfarm}>
-									<CardBottomText>Stake GIV</CardBottomText>
+									<CardBottomText>
+										{formatMessage({
+											id: 'label.stake_giv',
+										})}
+									</CardBottomText>
 								</Link>
 							</BenefitsCardContainer>
 						</BenefitsCard>
 						<BenefitsCard>
 							<BenefitsCardHeading weight={700}>
-								For Projects
+								{formatMessage({ id: 'label.for_projects' })}
 							</BenefitsCardHeading>
 							<BenefitsCardTextContainer>
 								<QuoteText size='small'>
-									Fire up your community to use GIVpower to
-									improve your rank.
+									{formatMessage({
+										id: 'label.fireup_your_community_to_use_givpower',
+									})}
 								</QuoteText>
 								<QuoteText size='small'>
-									The higher your rank, the more GIVbacks your
-									donors will receive.
+									{formatMessage({
+										id: 'label.the_higher_your_rank_the_more_givback',
+									})}
 								</QuoteText>
 								<QuoteText size='small'>
-									Top-ranked projects will eventually get
-									funding from the Giveth Matching Pool.
+									{formatMessage({
+										id: 'label.topranked_projects_will_eventually_get_funding',
+									})}
 								</QuoteText>
 								<br />
 								<Link href={Routes.Projects}>
 									<CardBottomText>
-										BROWSE PROJECTS
+										{formatMessage({
+											id: 'label.browse_projects',
+										})}
 									</CardBottomText>
 								</Link>
 							</BenefitsCardTextContainer>
@@ -307,21 +367,29 @@ export function TabPowerBottom() {
 			</div>
 			<GIVpowerContainer>
 				<GivpowerCTAContainer>
-					<H1 weight={700}>Stake GIV to get GIVpower</H1>
+					<H1 weight={700}>
+						{formatMessage({
+							id: 'label.stake_giv_to_get_givpower',
+						})}
+					</H1>
 					<GivpowerCTASubheading size='small'>
-						Lock your GIV to increase your multiplier.
+						{formatMessage({
+							id: 'label.lock_your_giv_to_increase_your_multiplier',
+						})}
 					</GivpowerCTASubheading>
 					<GivpowerCTAButtonContainer>
 						<Link href={Routes.GIVfarm}>
 							<GivpowerCTAButton
-								label='GET GIVPOWER'
+								label={formatMessage({
+									id: 'label.get_givpower',
+								})}
 								size='large'
 								linkType='primary'
 							/>
 						</Link>
 						<GivpowerCTAButtonOutlined
 							isExternal
-							label='GET GIV'
+							label={formatMessage({ id: 'label.get_giv' })}
 							size='large'
 							href={getGivLink}
 							target='_blank'
