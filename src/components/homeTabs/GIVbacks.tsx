@@ -8,6 +8,7 @@ import {
 import BigNumber from 'bignumber.js';
 import { useWeb3React } from '@web3-react/core';
 import Link from 'next/link';
+import { useIntl } from 'react-intl';
 import { Flex } from '../styled-components/Flex';
 import {
 	GIVbacksTopContainer,
@@ -32,7 +33,6 @@ import {
 } from './GIVbacks.sc';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import config from '@/configuration';
-import { FormattedMessage, useIntl } from 'react-intl';
 import { HarvestAllModal } from '../modals/HarvestAll';
 import { getNowUnixMS } from '@/helpers/time';
 import { formatDate } from '@/lib/helpers';

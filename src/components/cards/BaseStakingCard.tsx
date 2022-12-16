@@ -9,6 +9,7 @@ import {
 	IconHelpFilled16,
 	IconInfoFilled24,
 } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import { constants } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { useWeb3React } from '@web3-react/core';
@@ -76,7 +77,6 @@ import { UniV3APRModal } from '../modals/UNIv3APR';
 import StakingCardIntro from './StakingCardIntro';
 import { getNowUnixMS } from '@/helpers/time';
 import FarmCountDown from '../FarmCountDown';
-import { useIntl } from 'react-intl';
 import {
 	Flex,
 	FlexCenter,

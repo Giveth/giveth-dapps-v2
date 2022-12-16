@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import { H3 } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
-import config from '@/configuration';
 import { useIntl } from 'react-intl';
+import config from '@/configuration';
 import { Col } from '../Grid';
 import { RegenFarm } from '../RegenFarm';
 import { Subtitle, GIVfrensLink } from './GIVfrens.sc';

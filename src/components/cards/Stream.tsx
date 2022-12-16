@@ -1,11 +1,11 @@
 import { useState, FC, useEffect } from 'react';
 import Image from 'next/image';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { H2, Lead, H5 } from '@giveth/ui-design-system';
 import { Flex } from '../styled-components/Flex';
 import { ArrowButton, Card, PreviousArrowButton } from './common';
 import { IClaimViewCardProps } from '../views/claim/Claim.view';
-import { useIntl } from 'react-intl';
 
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { formatWeiHelper } from '@/helpers/number';

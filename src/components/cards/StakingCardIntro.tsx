@@ -7,10 +7,10 @@ import {
 	IconExternalLink,
 	neutralColors,
 } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import { Dispatch, FC, SetStateAction } from 'react';
 import styled from 'styled-components';
 import { IntroCardConfig } from '@/types/config';
-import { useIntl } from 'react-intl';
 import { getSymbolIconWithName } from '../StakingPoolImages';
 import { Flex } from '../styled-components/Flex';
 import { StakeCardState } from './BaseStakingCard';

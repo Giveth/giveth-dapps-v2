@@ -11,10 +11,10 @@ import {
 	Title as TitleBase,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
+import { useIntl } from 'react-intl';
 import { useWeb3React } from '@web3-react/core';
 import { Col, Row } from '../Grid';
 import { Flex } from '../styled-components/Flex';
-import { useIntl } from 'react-intl';
 import {
 	GIVpowerTopContainer,
 	Title,

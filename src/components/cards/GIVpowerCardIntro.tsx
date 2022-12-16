@@ -9,10 +9,10 @@ import {
 	ButtonLink,
 } from '@giveth/ui-design-system';
 import { useState } from 'react';
+import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import Link from 'next/link';
 import links from '@/lib/constants/links';
-import { useIntl } from 'react-intl';
 import TotalGIVpowerBox from '../modals/StakeLock/TotalGIVpowerBox';
 import { Flex, FlexSpacer } from '../styled-components/Flex';
 import { StakeCardState } from './BaseStakingCard';

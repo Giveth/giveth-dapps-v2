@@ -8,9 +8,9 @@ import {
 	Lead,
 	IconSpark,
 } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import { mediaQueries } from '@/lib/constants/constants';
 import links from '@/lib/constants/links';
-import { useIntl } from 'react-intl';
 import { IDonateRouteProps } from '../../../../pages/donate/[slug]';
 import config from '@/configuration';
 

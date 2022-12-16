@@ -17,13 +17,13 @@ import {
 import { constants, ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { durationToString } from '@/lib/helpers';
 import {
 	Bar,
 	GsPTooltip,
 	PercentageRow,
 } from '@/components/homeTabs/GIVstream.sc';
-import { useIntl } from 'react-intl';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { RegenFarmConfig, StreamType } from '@/types/config';
 import { BN, formatWeiHelper } from '@/helpers/number';

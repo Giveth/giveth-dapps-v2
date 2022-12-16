@@ -10,8 +10,8 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Dispatch, FC, SetStateAction, useState } from 'react';
-import { Flex } from '@/components/styled-components/Flex';
 import { useIntl } from 'react-intl';
+import { Flex } from '@/components/styled-components/Flex';
 import { smallFormatDate } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import { getUnlockDate } from '@/helpers/givpower';

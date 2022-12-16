@@ -1,4 +1,5 @@
 import React from 'react';
+import { useIntl } from 'react-intl';
 import links from '@/lib/constants/links';
 import {
 	DaoCardButton,
@@ -6,7 +7,6 @@ import {
 	DaoCardQuote,
 	DaoCardTitle,
 } from './DaoCard.sc';
-import { useIntl } from 'react-intl';
 
 export const DaoCard = () => {
 	const { formatMessage } = useIntl();

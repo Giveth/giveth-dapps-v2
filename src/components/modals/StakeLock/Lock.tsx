@@ -12,9 +12,9 @@ import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
 import { useWeb3React } from '@web3-react/core';
 import Link from 'next/link';
+import { useIntl } from 'react-intl';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
-import { useIntl } from 'react-intl';
 import {
 	CancelButton,
 	StyledButton,
