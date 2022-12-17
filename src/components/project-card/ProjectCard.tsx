@@ -153,7 +153,7 @@ const ProjectCard = (props: IProjectCard) => {
 									</GivBackIconContainer>
 									<GivBackText>
 										{formatMessage({
-											id: 'label.givback_eligible',
+											id: 'label.givbacks',
 										})}
 									</GivBackText>
 								</Flex>
