@@ -132,6 +132,14 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 		if (el) el.scrollIntoView({ behavior: 'smooth' });
 	};
 
+	useEffect(() => {
+		const { open } = router.query;
+		const _open = Array.isArray(open) ? open[0] : open;
+		if (_open === 'boost') {
+			handleBoostClick();
+		}
+	}, [router]);
+
 	const likeUnlikeProject = async () => {
 		if (!isSignedIn) {
 			dispatch(setShowSignWithWallet(true));

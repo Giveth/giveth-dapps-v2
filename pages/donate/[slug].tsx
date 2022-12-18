@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import Head from 'next/head';
-import dynamic from 'next/dynamic';
 import { captureException } from '@sentry/nextjs';
+import dynamic from 'next/dynamic';
 
 import { IDonationProject } from '@/apollo/types/types';
 import {
@@ -12,25 +12,26 @@ import { client } from '@/apollo/apolloClient';
 import { ProjectMeta } from '@/components/Metatag';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import config from '@/configuration';
+import { DonateProvider } from '@/context/donate.context';
+
+export interface IDonateRouteProps {
+	project: IDonationProject;
+}
 
 const DonateIndex = dynamic(
 	() => import('@/components/views/donate/DonateIndex'),
 	{ ssr: false },
 );
 
-export interface IDonateRouteProps {
-	project: IDonationProject;
-}
-
-const DonateRoute: FC<IDonateRouteProps> = props => {
+const DonateRoute: FC<IDonateRouteProps> = ({ project }) => {
 	return (
-		<>
+		<DonateProvider project={project}>
 			<Head>
-				<title>{props.project.title} | Giveth</title>
-				<ProjectMeta project={props.project} preTitle='Donate to' />
+				<title>{project.title} | Giveth</title>
+				<ProjectMeta project={project} preTitle='Donate to' />
 			</Head>
-			<DonateIndex {...props} />
-		</>
+			<DonateIndex />
+		</DonateProvider>
 	);
 };
 
