@@ -156,7 +156,7 @@ export const TabOverviewBottom = () => {
 					</ClaimCardTitle>
 					<ClaimCardQuote size='small'>
 						Connect your wallet or check an ethereum address to see
-						your rewards.
+						your rewards. Ends December 24, 2022.
 					</ClaimCardQuote>
 					<ClaimRow alignItems='center'>
 						<ClaimCardButton
