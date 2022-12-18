@@ -38,12 +38,19 @@ interface IProjectContext {
 		projectId: number,
 		status?: EProjectStatus,
 	) => Promise<void>;
+	fetchProjectBySlug: () => Promise<void>;
+	isActive: boolean;
+	isDraft: boolean;
 }
 
 const ProjectContext = createContext<IProjectContext>({
 	isBoostingsLoading: false,
 	fetchProjectBoosters: (a, b) =>
 		Promise.reject('fetchProjectBoosters not initialed yet!'),
+	fetchProjectBySlug: () =>
+		Promise.reject('fetchProjectBySlug not initialed yet!'),
+	isActive: true,
+	isDraft: false,
 });
 ProjectContext.displayName = 'ProjectContext';
 
@@ -211,6 +218,9 @@ export const ProjectProvider = ({
 				projectedRank,
 				isBoostingsLoading,
 				fetchProjectBoosters,
+				fetchProjectBySlug,
+				isActive,
+				isDraft,
 			}}
 		>
 			{children}
