@@ -39,6 +39,7 @@ interface IProjectContext {
 		status?: EProjectStatus,
 	) => Promise<void>;
 	fetchProjectBySlug: () => Promise<void>;
+	projectData?: IProject;
 	isActive: boolean;
 	isDraft: boolean;
 }
@@ -49,6 +50,7 @@ const ProjectContext = createContext<IProjectContext>({
 		Promise.reject('fetchProjectBoosters not initialed yet!'),
 	fetchProjectBySlug: () =>
 		Promise.reject('fetchProjectBySlug not initialed yet!'),
+	projectData: undefined,
 	isActive: true,
 	isDraft: false,
 });
@@ -219,6 +221,7 @@ export const ProjectProvider = ({
 				isBoostingsLoading,
 				fetchProjectBoosters,
 				fetchProjectBySlug,
+				projectData,
 				isActive,
 				isDraft,
 			}}
