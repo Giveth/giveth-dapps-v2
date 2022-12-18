@@ -31,7 +31,7 @@ import { captureException } from '@sentry/nextjs';
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { compareAddresses, showToastError } from '@/lib/helpers';
-import { EVerificationStatus, IProject } from '@/apollo/types/types';
+import { EVerificationStatus } from '@/apollo/types/types';
 import links from '@/lib/constants/links';
 import ShareModal from '@/components/modals/ShareModal';
 import { IReaction } from '@/apollo/types/types';
@@ -65,27 +65,19 @@ import CategoryBadge from '@/components/badges/CategoryBadge';
 import { mapCategoriesToMainCategories } from '@/helpers/singleProject';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { CurrentRank, NextRank } from '@/components/GIVpowerRank';
+import { useProjectContext } from '@/context/project.context';
 
 interface IProjectDonateCard {
-	project: IProject;
-	isActive?: boolean;
-	setIsActive: Dispatch<SetStateAction<boolean>>;
-	isDraft?: boolean;
-	setIsDraft: Dispatch<SetStateAction<boolean>>;
 	setCreationSuccessful: Dispatch<SetStateAction<boolean>>;
 }
 
 const ProjectDonateCard: FC<IProjectDonateCard> = ({
-	project,
-	isActive,
-	setIsActive,
-	isDraft,
-	setIsDraft,
 	setCreationSuccessful,
 }) => {
 	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();
 	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
+	const { projectData, isActive, isDraft } = useProjectContext();
 	const {
 		categories = [],
 		slug,
@@ -97,7 +89,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 		verificationFormStatus,
 		projectPower,
 		projectFuturePower,
-	} = project || {};
+	} = projectData || {};
 
 	const convertedCategories = mapCategoriesToMainCategories(categories);
 
@@ -109,7 +101,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 	const [showVerificationModal, setShowVerificationModal] = useState(false);
 	const [showBoost, setShowBoost] = useState(false);
 	const [reaction, setReaction] = useState<IReaction | undefined>(
-		project?.reaction,
+		projectData?.reaction,
 	);
 
 	const { isMobile } = useDetectDevice();
@@ -219,7 +211,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 
 	useEffect(() => {
 		setHeartedByUser(!!reaction?.id && reaction?.userId === user?.id);
-	}, [project, reaction, user?.id]);
+	}, [projectData, reaction, user?.id]);
 
 	useEffect(() => {
 		setIsAdmin(
@@ -237,7 +229,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 		return () => {
 			window.removeEventListener('resize', handleResize);
 		};
-	}, [project, isMobile]);
+	}, [projectData, isMobile]);
 
 	const handleProjectStatus = async (deactivate?: boolean) => {
 		if (deactivate) {
@@ -248,15 +240,11 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 					dispatch(setShowSignWithWallet(true));
 					return;
 				}
-				const { data } = await client.mutate({
+				await client.mutate({
 					mutation: ACTIVATE_PROJECT,
 					variables: { projectId: Number(id) },
 				});
-				if (data.activateProject) {
-					setIsActive(true);
-					setIsDraft(false);
-					setCreationSuccessful(true);
-				}
+				setCreationSuccessful(true);
 			} catch (e) {
 				showToastError(e);
 				captureException(e, {
@@ -282,12 +270,11 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 				<DeactivateProjectModal
 					setShowModal={setDeactivateModal}
 					projectId={id}
-					setIsActive={setIsActive}
 				/>
 			)}
-			{showBoost && project?.id && (
+			{showBoost && projectData?.id && (
 				<BoostModal
-					projectId={project.id}
+					projectId={projectData.id}
 					setShowModal={setShowBoost}
 				/>
 			)}
@@ -354,7 +341,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 								disabled={!isActive && !isDraft}
 								onClick={() =>
 									router.push(
-										idToProjectEdit(project?.id || ''),
+										idToProjectEdit(projectData?.id || ''),
 									)
 								}
 							/>
