@@ -175,6 +175,9 @@ export const ProjectProvider = ({
 		[],
 	);
 
+	const isActive = projectData?.status.name === EProjectStatus.ACTIVE;
+	const isDraft = projectData?.status.name === EProjectStatus.DRAFT;
+
 	const fetchProjectBySlug = async () => {
 		client
 			.query({
