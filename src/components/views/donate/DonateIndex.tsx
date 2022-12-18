@@ -1,7 +1,6 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components';
 
-import { ISuccessDonation } from './CryptoDonation';
 import { BigArc } from '@/components/styled-components/Arc';
 import { mediaQueries } from '@/lib/constants/constants';
 import SocialBox from './SocialBox';
@@ -10,37 +9,30 @@ import ProjectCardSelector from '@/components/views/donate/ProjectCardSelector';
 import DonationTypes from '@/components/views/donate/DonationTypes';
 import NiceBanner from './NiceBanner';
 import useDetectDevice from '@/hooks/useDetectDevice';
-import { IDonateRouteProps } from '../../../../pages/donate/[slug]';
+import { useDonateData } from '@/context/donate.context';
 
-const DonateIndex: FC<IDonateRouteProps> = ({ project }) => {
-	const [isSuccess, setSuccess] = useState<ISuccessDonation>();
+const DonateIndex: FC = () => {
 	const { isMobile } = useDetectDevice();
-
-	const { givBackEligible, txHash } = isSuccess || {};
+	const { project, isSuccessDonation } = useDonateData();
 
 	return (
 		<>
 			<BigArc />
 			<Wrapper>
-				<NiceBanner project={project} />
+				<NiceBanner />
 				<Sections>
-					<ProjectCardSelector project={project} />
+					<ProjectCardSelector />
 					<Right isMobile={isMobile}>
-						{isSuccess ? (
-							<SuccessView
-								txHash={txHash!}
-								project={project}
-								givBackEligible={givBackEligible!}
-							/>
+						{isSuccessDonation ? (
+							<SuccessView />
 						) : (
-							<DonationTypes
-								project={project}
-								setSuccess={setSuccess}
-							/>
+							<DonationTypes />
 						)}
 					</Right>
 				</Sections>
-				{!isSuccess && !isMobile && <SocialBox project={project} />}
+				{!isSuccessDonation && !isMobile && (
+					<SocialBox project={project} />
+				)}
 			</Wrapper>
 		</>
 	);
