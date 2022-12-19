@@ -3,6 +3,7 @@ import {
 	ReactNode,
 	useCallback,
 	useContext,
+	useEffect,
 	useState,
 } from 'react';
 import { captureException } from '@sentry/nextjs';
@@ -212,6 +213,14 @@ export const ProjectProvider = ({
 				});
 			});
 	};
+
+	useEffect(() => {
+		if (user?.isSignedIn && !project) {
+			fetchProjectBySlug();
+		} else {
+			setProjectData(project);
+		}
+	}, [project, user?.isSignedIn]);
 
 	return (
 		<ProjectContext.Provider
