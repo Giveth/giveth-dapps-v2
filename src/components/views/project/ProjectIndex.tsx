@@ -49,13 +49,8 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 	const [creationSuccessful, setCreationSuccessful] = useState(false);
 
 	const user = useAppSelector(state => state.user.userData);
-	const {
-		fetchProjectBoosters,
-		projectData,
-		isActive,
-		isDraft,
-		fetchProjectBySlug,
-	} = useProjectContext();
+	const { fetchProjectBoosters, projectData, isActive, isDraft } =
+		useProjectContext();
 
 	const router = useRouter();
 	const slug = router.query.projectIdSlug as string;
@@ -105,12 +100,6 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 			});
 		fetchProjectBoosters(+id, projectData?.status.name);
 	}, [id]);
-
-	useEffect(() => {
-		if (!props.project && user?.isSignedIn) {
-			fetchProjectBySlug();
-		}
-	}, [props.project, user]);
 
 	if (creationSuccessful) {
 		return (
