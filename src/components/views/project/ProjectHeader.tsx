@@ -5,14 +5,14 @@ import styled from 'styled-components';
 
 import VerificationBadge from '@/components/badges/VerificationBadge';
 import { isNoImg, noImgColor, noImgIcon } from '@/lib/helpers';
-import { IProject } from '@/apollo/types/types';
 import { mediaQueries } from '@/lib/constants/constants';
 import { addressToUserView } from '@/lib/routeCreators';
+import { useProjectContext } from '@/context/project.context';
 
-const ProjectHeader = (props: { project?: IProject }) => {
-	const { project } = props;
+const ProjectHeader = () => {
+	const { projectData } = useProjectContext();
 	const { title, verified, image, adminUser, traceCampaignId } =
-		project || {};
+		projectData || {};
 	const [adjustTitle, setAdjustTitle] = useState<boolean>(false);
 	const containerRef = useRef(null);
 
