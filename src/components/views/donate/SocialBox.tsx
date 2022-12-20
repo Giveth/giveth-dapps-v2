@@ -98,6 +98,7 @@ const BLead = styled(Lead)`
 `;
 
 const Social = styled.div<{ isSuccess?: boolean }>`
+	z-index: 1;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
