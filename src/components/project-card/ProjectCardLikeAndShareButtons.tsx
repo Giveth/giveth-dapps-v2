@@ -115,14 +115,14 @@ const ProjectCardLikeAndShareButtons = (
 				<Flex gap='6px'>
 					{verified && (
 						<BadgeButton
-							loading={boostLoading}
+							isLoading={boostLoading}
 							onClick={boostProject}
 						>
 							<IconRocketInSpace />
 						</BadgeButton>
 					)}
 					<BadgeButton
-						loading={likeLoading}
+						isLoading={likeLoading}
 						onClick={likeUnlikeProject}
 					>
 						{Number(totalReactions) > 0 && (
@@ -148,7 +148,7 @@ const ProjectCardLikeAndShareButtons = (
 };
 
 interface IBadgeButton {
-	loading?: boolean;
+	isLoading?: boolean;
 }
 
 const BadgeButton = styled(Flex)<IBadgeButton>`
@@ -180,7 +180,7 @@ const BadgeButton = styled(Flex)<IBadgeButton>`
 		background-color: #ffffff;
 	}
 	${props =>
-		props.loading
+		props.isLoading
 			? css`
 					&::before {
 						content: '';
