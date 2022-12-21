@@ -10,6 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Dispatch, FC, SetStateAction, useState } from 'react';
+import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
 import { smallFormatDate } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
@@ -23,6 +24,7 @@ interface ILockSlider {
 }
 
 const LockSlider: FC<ILockSlider> = ({ round, setRound }) => {
+	const { formatMessage, locale } = useIntl();
 	const [isChanged, setIsChanged] = useState(false);
 	const givpowerInfo = useAppSelector(
 		state => state.subgraph.xDaiValues.givpowerInfo,
@@ -32,10 +34,14 @@ const LockSlider: FC<ILockSlider> = ({ round, setRound }) => {
 		<>
 			<Flex justifyContent='space-between'>
 				<SliderLabel>
-					<P>Rounds to lock: &nbsp;</P>
+					<P>
+						{formatMessage({ id: 'label.rounds_to_lock' })}: &nbsp;
+					</P>
 					<B>{round}</B>
 				</SliderLabel>
-				<SliderMax onClick={() => setRound(maxRound)}>Max</SliderMax>
+				<SliderMax onClick={() => setRound(maxRound)}>
+					{formatMessage({ id: 'label.max' })}
+				</SliderMax>
 			</Flex>
 			<StyledSlider
 				min={0}
@@ -54,32 +60,58 @@ const LockSlider: FC<ILockSlider> = ({ round, setRound }) => {
 				value={round}
 			/>
 			<Flex>
-				{round < 1 && <GLink>Min 1 round</GLink>}
+				{round < 1 && (
+					<GLink>
+						{formatMessage({ id: 'label.min_one_round' })}
+					</GLink>
+				)}
 				<Flex1 />
 				<GLink>
 					{isChanged
-						? `Lock until ${smallFormatDate(unlockDate)}`
-						: `Max ${maxRound} round`}
+						? `${formatMessage({
+								id: 'label.lock_until',
+						  })} ${smallFormatDate(unlockDate, locale)}`
+						: formatMessage(
+								{
+									id: 'label.max_max_round',
+								},
+								{ maxRound },
+						  )}
 				</GLink>
 			</Flex>
 			<MidRoundToast>
 				{round > 0 ? (
 					<>
-						<ToastTitle medium>Mid-round lock</ToastTitle>
+						<ToastTitle medium>
+							{formatMessage({ id: 'label.mid_round_lock' })}
+						</ToastTitle>
 						<ToastDesc>
-							Your tokens will be locked for the remainder of the
-							current round + the{' '}
+							{formatMessage({
+								id: 'label.your_tokens_will_be_locked_for_the_remainder',
+							})}{' '}
 							<ToastRound as='span' medium>
-								{round} round{round > 1 ? 's' : ''}
+								{round > 1
+									? formatMessage(
+											{
+												id: 'label.plural.round_count',
+											},
+											{ round },
+									  )
+									: formatMessage(
+											{
+												id: 'label.singular.round_count',
+											},
+											{ round },
+									  )}
 							</ToastRound>{' '}
-							you selected.
+							{formatMessage({ id: 'label.you_selected' })}
 						</ToastDesc>
 					</>
 				) : (
 					<ToastDesc>
-						When you lock your tokens mid-round, they will be locked
-						for the remainder of the current round + the numbers of
-						rounds you select.
+						{formatMessage({
+							id: 'label.when_you_lock_your_tokens_midround',
+						})}
 					</ToastDesc>
 				)}
 			</MidRoundToast>
