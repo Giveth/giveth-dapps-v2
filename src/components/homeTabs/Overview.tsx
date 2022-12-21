@@ -1,6 +1,11 @@
 import Link from 'next/link';
 import router from 'next/router';
-import { Button, IconExternalLink, P } from '@giveth/ui-design-system';
+import {
+	Button,
+	ButtonLink,
+	IconExternalLink,
+	P,
+} from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useWeb3React } from '@web3-react/core';
 import {
@@ -27,6 +32,7 @@ import { Col, Container, Row } from '@/components/Grid';
 import GivEconomyProjectCards from '../cards/GivEconomyProjectCards';
 import { Flex } from '../styled-components/Flex';
 import { ExtLinkCyan } from './commons';
+import { StakingType } from '@/types/config';
 
 export const TabOverviewTop = () => {
 	const { formatMessage } = useIntl();
@@ -109,6 +115,17 @@ export const TabOverviewBottom = () => {
 							subtitle={formatMessage({
 								id: 'label.boost_projects',
 							})}
+							button={
+								<Link
+									href={`${Routes.GIVfarm}/?open=${StakingType.GIV_LM}&chain=gnosis`}
+								>
+									<ButtonLink
+										label={formatMessage({
+											id: 'label.stake_for_givpower',
+										})}
+									/>
+								</Link>
+							}
 						>
 							{formatMessage({
 								id: 'label.givpower_allows_you_to_boost',
