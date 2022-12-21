@@ -69,6 +69,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const router = useRouter();
 	const pageNum = useRef(0);
 	const lastElementRef = useRef<HTMLDivElement>(null);
+	const isInfiniteScrolling = useRef(true);
 	const { isDesktop, isTablet, isMobile, isLaptopL } = useDetectDevice();
 
 	const fetchProjects = (
@@ -102,9 +103,11 @@ const ProjectsIndex = (props: IProjectsView) => {
 				const data = res.data?.allProjects?.projects;
 				const count = res.data?.allProjects?.totalCount;
 				setTotalCount(count);
-				setFilteredProjects(
-					isLoadMore ? [...filteredProjects, ...data] : data,
-				);
+				setFilteredProjects(prevProjects => {
+					isInfiniteScrolling.current =
+						(data.length + prevProjects.length) % 45 !== 0;
+					return isLoadMore ? [...prevProjects, ...data] : data;
+				});
 				setIsLoading(false);
 			})
 			.catch((err: any) => {
@@ -153,9 +156,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 		}
 	};
 
-	const isInfinityScrolling = filteredProjects?.length % 45 !== 0;
 	const showLoadMore =
-		totalCount > filteredProjects?.length && !isInfinityScrolling;
+		totalCount > filteredProjects?.length && !isInfiniteScrolling.current;
 	const isTabletSlice = useMediaQuery(device.tablet);
 
 	const handleSliceNumber = () => {
@@ -201,10 +203,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 	console.log('filteredProjects', filteredProjects.length);
 
 	const handleObserver = (entities: any) => {
-		if (!isInfinityScrolling) return;
+		if (!isInfiniteScrolling.current) return;
 		const target = entities[0];
 		if (target.isIntersecting) {
-			// console.log('entities', entities);
 			loadMore();
 		}
 	};
