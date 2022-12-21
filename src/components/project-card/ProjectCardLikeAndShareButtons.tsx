@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
 	brandColors,
 	IconHeartFilled16,
@@ -24,6 +24,7 @@ import {
 	incrementLikedProjectsCount,
 } from '@/features/user/user.slice';
 import { slugToProjectView } from '@/lib/routeCreators';
+import { useModalCallback } from '@/hooks/useModalCallback';
 
 interface IProjectCardLikeAndShareButtons {
 	project: IProject;
@@ -45,14 +46,15 @@ const ProjectCardLikeAndShareButtons = (
 	const dispatch = useAppDispatch();
 	const router = useRouter();
 
-	const likeUnlikeProject = async () => {
-		if (!isSignedIn) {
-			dispatch(setShowSignWithWallet(true));
-			return;
-		}
+	useEffect(() => {
+		setReaction(project.reaction);
+	}, [project.reaction]);
 
-		if (likeLoading) return;
+	useEffect(() => {
+		setTotalReactions(project.totalReactions);
+	}, [project.totalReactions]);
 
+	const likeUnlikeProject = useCallback(async () => {
 		if (projectId) {
 			setLikeLoading(true);
 
@@ -61,14 +63,18 @@ const ProjectCardLikeAndShareButtons = (
 					const newReaction = await likeProject(projectId);
 					setReaction(newReaction);
 					if (newReaction) {
-						setTotalReactions((totalReactions || 0) + 1);
+						setTotalReactions(
+							_totalReactions => (_totalReactions || 0) + 1,
+						);
 						dispatch(incrementLikedProjectsCount());
 					}
 				} else if (reaction?.userId === user?.id) {
 					const successful = await unlikeProject(reaction.id);
 					if (successful) {
 						setReaction(undefined);
-						setTotalReactions((totalReactions || 1) - 1);
+						setTotalReactions(
+							_totalReactions => (_totalReactions || 1) - 1,
+						);
 						dispatch(decrementLikedProjectsCount());
 					}
 				}
@@ -82,6 +88,17 @@ const ProjectCardLikeAndShareButtons = (
 			} finally {
 				setLikeLoading(false);
 			}
+		}
+	}, [dispatch, projectId, reaction, user?.id]);
+
+	const { signInThenDoSomething } = useModalCallback(likeUnlikeProject);
+
+	const signInThenLike = () => {
+		if (typeof window === 'undefined') return;
+		if (!isSignedIn) {
+			signInThenDoSomething();
+		} else {
+			likeUnlikeProject();
 		}
 	};
 
@@ -97,14 +114,6 @@ const ProjectCardLikeAndShareButtons = (
 
 		if (projectId) router.push(`${slugToProjectView(slug)}?open=boost`);
 	};
-
-	useEffect(() => {
-		setReaction(project.reaction);
-	}, [project.reaction]);
-
-	useEffect(() => {
-		setTotalReactions(project.totalReactions);
-	}, [project.totalReactions]);
 
 	return (
 		<>
@@ -123,7 +132,7 @@ const ProjectCardLikeAndShareButtons = (
 					)}
 					<BadgeButton
 						isLoading={likeLoading}
-						onClick={likeUnlikeProject}
+						onClick={likeLoading ? undefined : signInThenLike}
 					>
 						{Number(totalReactions) > 0 && (
 							<Subline>{totalReactions}</Subline>
