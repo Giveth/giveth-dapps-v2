@@ -13,7 +13,7 @@ export const OverviewBottomContainer = styled.div`
 	background-position: center;
 	background-repeat: repeat-x;
 	background-size: 200px;
-	padding: 120px;
+	padding-bottom: 120px;
 `;
 
 export const VoteCardButton = styled(ButtonLink)`
