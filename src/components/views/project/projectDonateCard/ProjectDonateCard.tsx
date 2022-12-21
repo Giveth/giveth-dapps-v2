@@ -77,7 +77,11 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 }) => {
 	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();
-	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
+	const {
+		isSignedIn,
+		userData: user,
+		isLoading: isUserLoading,
+	} = useAppSelector(state => state.user);
 	const { projectData, isActive, isDraft } = useProjectContext();
 	const {
 		categories = [],
@@ -124,14 +128,6 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 		const el = document.getElementById('similar-projects');
 		if (el) el.scrollIntoView({ behavior: 'smooth' });
 	};
-
-	useEffect(() => {
-		const { open } = router.query;
-		const _open = Array.isArray(open) ? open[0] : open;
-		if (_open === 'boost') {
-			handleBoostClick();
-		}
-	}, [router]);
 
 	const likeUnlikeProject = async () => {
 		if (!isSignedIn) {
@@ -198,9 +194,10 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 		}
 	}, [id, user?.id]);
 
-	const showBoostModal = () => {
+	const showBoostModal = useCallback(() => {
 		setShowBoost(true);
-	};
+	}, []);
+
 	const { signInThenDoSomething: signInThenBoost } =
 		useModalCallback(showBoostModal);
 
@@ -208,9 +205,18 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 		if (!isSignedIn) {
 			signInThenBoost();
 		} else {
-			showBoostModal;
+			showBoostModal();
 		}
 	};
+
+	useEffect(() => {
+		if (isUserLoading) return;
+		const { open } = router.query;
+		const _open = Array.isArray(open) ? open[0] : open;
+		if (_open === 'boost') {
+			handleBoostClick();
+		}
+	}, [isUserLoading, router]);
 
 	useEffect(() => {
 		fetchProjectReaction().then();
