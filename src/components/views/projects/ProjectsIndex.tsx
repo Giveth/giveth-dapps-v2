@@ -68,6 +68,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	const router = useRouter();
 	const pageNum = useRef(0);
+	const lastElementRef = useRef<HTMLDivElement>(null);
 	const { isDesktop, isTablet, isMobile, isLaptopL } = useDetectDevice();
 
 	const fetchProjects = (
@@ -102,7 +103,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				const count = res.data?.allProjects?.totalCount;
 				setTotalCount(count);
 				setFilteredProjects(
-					isLoadMore ? filteredProjects.concat(data) : data,
+					isLoadMore ? [...filteredProjects, ...data] : data,
 				);
 				setIsLoading(false);
 			})
@@ -152,7 +153,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 		}
 	};
 
-	const showLoadMore = totalCount > filteredProjects?.length;
+	const isInfinityScrolling = filteredProjects?.length % 45 !== 0;
+	const showLoadMore =
+		totalCount > filteredProjects?.length && !isInfinityScrolling;
 	const isTabletSlice = useMediaQuery(device.tablet);
 
 	const handleSliceNumber = () => {
@@ -194,6 +197,33 @@ const ProjectsIndex = (props: IProjectsView) => {
 			return <ProjectsNoResults mainCategories={mainCategories} />;
 		}
 	};
+
+	console.log('filteredProjects', filteredProjects.length);
+
+	const handleObserver = (entities: any) => {
+		if (!isInfinityScrolling) return;
+		const target = entities[0];
+		if (target.isIntersecting) {
+			// console.log('entities', entities);
+			loadMore();
+		}
+	};
+
+	useEffect(() => {
+		const option = {
+			root: null,
+			threshold: 1,
+		};
+		const observer = new IntersectionObserver(handleObserver, option);
+		if (lastElementRef.current) {
+			observer.observe(lastElementRef.current);
+		}
+		return () => {
+			if (observer) {
+				observer.disconnect();
+			}
+		};
+	}, []);
 
 	return (
 		<>
@@ -237,6 +267,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				</SortingContainer>
 				{isLoading && <Loader className='dot-flashing' />}
 				{renderProjects()}
+				<div ref={lastElementRef} />
 				{showLoadMore && (
 					<>
 						<StyledButton

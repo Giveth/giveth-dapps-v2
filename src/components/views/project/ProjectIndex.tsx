@@ -42,7 +42,7 @@ const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {
 
 const donationsPerPage = 10;
 
-const ProjectIndex: FC<IProjectBySlug> = props => {
+const ProjectIndex: FC<IProjectBySlug> = () => {
 	const [activeTab, setActiveTab] = useState(0);
 	const [donations, setDonations] = useState<IDonation[]>([]);
 	const [totalDonations, setTotalDonations] = useState(0);
