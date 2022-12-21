@@ -7,16 +7,15 @@ import {
 	PreTitle,
 	OverviewTitle,
 	OverviewBottomContainer,
-	ClaimCard,
-	ClaimCardButton,
-	ClaimCardTitle,
+	VoteCard,
+	VoteCardButton,
+	VoteCardTitle,
 	TabDesc,
 	TabTitle,
 	SubTitle,
 	DataBlockWithMargin,
-	ClaimCardQuote,
+	VoteCardQuote,
 	DataBlockButton,
-	ClaimRow,
 } from './Overview.sc';
 import { IconGIV } from '../Icons/GIV';
 import config from '@/configuration';
@@ -135,27 +134,25 @@ export const TabOverviewBottom = () => {
 						</DataBlockWithMargin>
 					</Col>
 				</Row>
-				<ClaimCard>
-					<ClaimCardTitle weight={900}>
+				<VoteCard>
+					<VoteCardTitle weight={900}>
 						{formatMessage({ id: 'label.vote_in_giveth_dao' })}
-					</ClaimCardTitle>
-					<ClaimCardQuote size='small'>
+					</VoteCardTitle>
+					<VoteCardQuote size='small'>
 						{formatMessage({
 							id: 'label.use_giv_to_vote',
 						})}
-					</ClaimCardQuote>
-					<ClaimRow alignItems='center'>
-						<ClaimCardButton
-							isExternal
-							label={formatMessage({
-								id: 'label.see_proposals',
-							})}
-							linkType='primary'
-							href={config.GARDEN_LINK}
-							size='large'
-						/>
-					</ClaimRow>
-				</ClaimCard>
+					</VoteCardQuote>
+					<VoteCardButton
+						isExternal
+						label={formatMessage({
+							id: 'label.see_proposals',
+						})}
+						linkType='primary'
+						href={config.GARDEN_LINK}
+						size='large'
+					/>
+				</VoteCard>
 			</Container>
 		</OverviewBottomContainer>
 	);

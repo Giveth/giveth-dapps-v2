@@ -10,7 +10,6 @@ import {
 } from '@giveth/ui-design-system';
 import { TopContainer } from './commons';
 import { device, mediaQueries } from '@/lib/constants/constants';
-import { Flex } from '../styled-components/Flex';
 
 export const OverviewBottomContainer = styled.div`
 	background-image: url('/images/backgrounds/wave.svg');
@@ -42,7 +41,7 @@ export const PreTitle = styled(D3)`
 
 export const SubTitle = styled(QuoteText)``;
 
-export const ClaimCardButton = styled(ButtonLink)`
+export const VoteCardButton = styled(ButtonLink)`
 	width: 221px;
 	margin-top: 36px;
 	margin-bottom: 36px;
@@ -59,7 +58,7 @@ export const TabDesc = styled(QuoteText)`
 	margin-bottom: 50px;
 `;
 
-export const ClaimCard = styled.div`
+export const VoteCard = styled.div`
 	background-color: #3c14c5;
 	padding: 141px 16px 106px;
 	background-image: url('/images/backgrounds/giv-outline.svg');
@@ -89,7 +88,7 @@ export const ClaimCard = styled.div`
 		padding: 100px 64px 146px;
 	}
 `;
-export const ClaimCardTitle = styled(H1)`
+export const VoteCardTitle = styled(H1)`
 	margin-bottom: 22px;
 `;
 
@@ -104,7 +103,7 @@ export const DataBlockButton = styled(ButtonLink)`
 	min-width: 300px;
 `;
 
-export const ClaimCardQuote = styled(QuoteText)`
+export const VoteCardQuote = styled(QuoteText)`
 	color: ${brandColors.giv[200]};
 `;
 
@@ -135,12 +134,5 @@ export const VideoOverlay = styled.div<{ hidden: boolean }>`
 	user-select: none;
 	&:hover {
 		background: rgba(0, 0, 0, 0.5);
-	}
-`;
-
-export const ClaimRow = styled(Flex)`
-	gap: 8px;
-	${mediaQueries.laptopS} {
-		gap: 32px;
 	}
 `;
