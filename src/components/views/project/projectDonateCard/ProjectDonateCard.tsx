@@ -129,11 +129,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 		if (el) el.scrollIntoView({ behavior: 'smooth' });
 	};
 
-	const likeUnlikeProject = async () => {
-		if (!isSignedIn) {
-			dispatch(setShowSignWithWallet(true));
-			return;
-		}
+	const likeUnlikeProject = useCallback(async () => {
 		if (loading) return;
 
 		if (id) {
@@ -163,6 +159,18 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 			} finally {
 				setLoading(false);
 			}
+		}
+	}, [dispatch, id, reaction, user?.id]);
+
+	const { signInThenDoSomething: signInThenLike } =
+		useModalCallback(likeUnlikeProject);
+
+	const checkSignInThenLike = () => {
+		if (typeof window === 'undefined') return;
+		if (!isSignedIn) {
+			signInThenLike();
+		} else {
+			likeUnlikeProject();
 		}
 	};
 
@@ -411,7 +419,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 						<ShareLikeBadge
 							type='like'
 							active={heartedByUser}
-							onClick={() => isActive && likeUnlikeProject()}
+							onClick={() => isActive && checkSignInThenLike()}
 							isSimple={isMobile}
 						/>
 					</BadgeWrapper>
