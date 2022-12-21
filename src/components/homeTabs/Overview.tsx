@@ -1,16 +1,12 @@
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import {
-	OverviewTopContainer,
-	PreTitle,
-	OverviewTitle,
 	OverviewBottomContainer,
 	VoteCard,
 	VoteCardButton,
 	VoteCardTitle,
 	TabDesc,
 	TabTitle,
-	SubTitle,
 	DataBlockWithMargin,
 	VoteCardQuote,
 	DataBlockButton,
@@ -20,25 +16,6 @@ import config from '@/configuration';
 import Routes from '@/lib/constants/Routes';
 import { Col, Container, Row } from '@/components/Grid';
 import { StakingType } from '@/types/config';
-
-export const TabOverviewTop = () => {
-	const { formatMessage } = useIntl();
-	return (
-		<OverviewTopContainer>
-			<Container>
-				<PreTitle as='span'>
-					{formatMessage({ id: 'label.welcome_to_the' })}
-				</PreTitle>
-				<OverviewTitle>GIVeconomy</OverviewTitle>
-				<Col lg={9}>
-					<SubTitle size='medium'>
-						{formatMessage({ id: 'label.the_giveconomy_empowers' })}
-					</SubTitle>
-				</Col>
-			</Container>
-		</OverviewTopContainer>
-	);
-};
 
 export const TabOverviewBottom = () => {
 	const { formatMessage } = useIntl();

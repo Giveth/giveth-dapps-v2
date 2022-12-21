@@ -1,14 +1,11 @@
 import styled from 'styled-components';
 import {
-	D3,
 	H1,
 	QuoteText,
 	DataBlock,
 	brandColors,
 	ButtonLink,
-	D1,
 } from '@giveth/ui-design-system';
-import { TopContainer } from './commons';
 import { device, mediaQueries } from '@/lib/constants/constants';
 
 export const OverviewBottomContainer = styled.div`
@@ -16,30 +13,6 @@ export const OverviewBottomContainer = styled.div`
 	background-position: center;
 	background-repeat: repeat-x;
 `;
-
-export const OverviewTopContainer = styled(TopContainer)`
-	height: 650px;
-`;
-
-export const OverviewTitle = styled(D1)`
-	padding-bottom: 36px;
-	font-size: 4.4rem;
-	${mediaQueries.tablet} {
-		font-size: 6.69rem;
-	}
-`;
-
-export const PreTitle = styled(D3)`
-	padding-top: 77px;
-	display: block;
-	font-size: 4.4rem;
-	color: ${brandColors.deep[100]};
-	${mediaQueries.tablet} {
-		font-size: 5.5rem;
-	}
-`;
-
-export const SubTitle = styled(QuoteText)``;
 
 export const VoteCardButton = styled(ButtonLink)`
 	width: 221px;
