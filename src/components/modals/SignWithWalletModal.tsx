@@ -65,8 +65,11 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 								pathname: router.pathname,
 							}),
 						);
-						closeModal();
-						!!signature && callback && callback();
+						if (signature) {
+							const event = new Event('signin');
+							window.dispatchEvent(event);
+							callback && callback();
+						}
 					}}
 					buttonType={theme === ETheme.Dark ? 'secondary' : 'primary'}
 				/>
