@@ -105,13 +105,13 @@ export const TabOverviewBottom = () => {
 					</Col>
 					<Col xs={12} sm={6} md={4}>
 						<DataBlockWithMargin
-							title='GIVstream'
+							title='GIVpower'
 							subtitle={formatMessage({
-								id: 'label.get_more_giv',
+								id: 'label.boost_projects',
 							})}
 						>
 							{formatMessage({
-								id: 'label.welcome_to_the_expanding_giviverse',
+								id: 'label.givpower_allows_you_to_boost',
 							})}
 						</DataBlockWithMargin>
 					</Col>
