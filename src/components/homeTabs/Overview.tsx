@@ -16,12 +16,14 @@ import config from '@/configuration';
 import Routes from '@/lib/constants/Routes';
 import { Col, Container, Row } from '@/components/Grid';
 import { StakingType } from '@/types/config';
+import TabOverviewVideo from './TabOverviewVideo';
 
 export const TabOverview = () => {
 	const { formatMessage } = useIntl();
 
 	return (
 		<OverviewBottomContainer>
+			<TabOverviewVideo src='/video/giveconomy.mp4' />
 			<Container>
 				<TabTitle weight={700}>
 					{formatMessage({ id: 'label.the_economy_of_giving' })}
@@ -104,6 +106,9 @@ export const TabOverview = () => {
 						</DataBlockWithMargin>
 					</Col>
 				</Row>
+			</Container>
+			<TabOverviewVideo src='/video/givpower.mp4' />
+			<Container>
 				<VoteCard>
 					<VoteCardTitle weight={900}>
 						{formatMessage({ id: 'label.vote_in_giveth_dao' })}
