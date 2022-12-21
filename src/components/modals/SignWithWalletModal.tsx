@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import {
@@ -25,6 +25,7 @@ interface IProps extends IModal {
 }
 
 export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
+	const [loading, setLoading] = useState(false);
 	const theme = useAppSelector(state => state.general.theme);
 	const { formatMessage } = useIntl();
 	const { account, library, chainId } = useWeb3React();
@@ -53,10 +54,12 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 				</NoteDescription>
 				<OkButton
 					label={formatMessage({ id: 'component.button.sign_in' })}
+					loading={loading}
 					onClick={async () => {
 						if (!account) {
 							return dispatch(setShowWelcomeModal(true));
 						}
+						setLoading(true);
 						const signature = await dispatch(
 							signToGetToken({
 								address: account,
@@ -65,6 +68,7 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 								pathname: router.pathname,
 							}),
 						);
+						setLoading(false);
 						if (signature) {
 							const event = new Event('signin');
 							window.dispatchEvent(event);
