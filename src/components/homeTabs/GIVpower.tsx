@@ -156,7 +156,9 @@ export function TabPowerTop() {
 										})}
 									</ConnectWalletDesc>
 									<ConnectWalletButton
-										label='Connect Wallet'
+										label={formatMessage({
+											id: 'component.button.connect_wallet',
+										})}
 										buttonType='primary'
 										size='small'
 										onClick={() =>

@@ -836,5 +836,7 @@
 	"label.topranked_projects_will_eventually_get_funding": "Top-ranked projects will eventually get funding from the Giveth Matching Pool.",
 	"label.browse_projects": "Browse Projects",
 	"label.lock_your_giv_to_increase_your_multiplier": "Lock your GIV to increase your multiplier.",
-	"label.get_giv": "Get GIV"
+	"label.get_giv": "Get GIV",
+	"label.you_need_to_connect_your_wallet_to_continue": "You need to connect your wallet to continue!",
+	"label.loading_data": "Loading Data"
 }
