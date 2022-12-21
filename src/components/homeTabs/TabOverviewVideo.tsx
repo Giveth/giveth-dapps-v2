@@ -1,8 +1,13 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, FC } from 'react';
 import Image from 'next/image';
 import { VideoContainer, VideoOverlay } from './Overview.sc';
 
-export const TabOverviewVideo = () => {
+interface ITabOverviewVideo {
+	src: string;
+	poster?: string;
+}
+
+export const TabOverviewVideo: FC<ITabOverviewVideo> = ({ src, poster }) => {
 	const [isPlaying, setIsPlaying] = useState(false);
 	const videoRef = useRef<HTMLVideoElement | null>(null);
 	function handleVideoClick() {
@@ -28,8 +33,9 @@ export const TabOverviewVideo = () => {
 				onClick={handleVideoClick}
 				width='100%'
 				onEnded={handleVideoEnd}
+				poster={poster}
 			>
-				<source src='/video/GivEconomy.mp4' type='video/mp4' />
+				<source src={src} type='video/mp4' />
 			</video>
 			<VideoOverlay onClick={handleVideoClick} hidden={isPlaying}>
 				<Image

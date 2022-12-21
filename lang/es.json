@@ -667,7 +667,7 @@
 	"label.giveth_is_a_donor_owned_economy": "",
 	"label.get_more_giv": "",
 	"label.welcome_to_the_expanding_giviverse": "",
-	"label.how_to_participate": "",
+	"label.givpower_allows_you_to_boost": "",
 	"label.donate_to_empower_changemakers": "",
 	"label.see_proposals": "",
 	"label.the_giveconomy_empowers_our_collective": "",
@@ -838,5 +838,7 @@
 	"label.lock_your_giv_to_increase_your_multiplier": "",
 	"label.get_giv": "Obtén GIV",
 	"label.you_need_to_connect_your_wallet_to_continue": "Debes conectar tu billetera para continuar!",
-	"label.loading_data": "Cargando Información"
+	"label.loading_data": "Cargando Información",
+	"label.vote_in_giveth_dao": "",
+	"label.use_giv_to_vote": ""
 }
