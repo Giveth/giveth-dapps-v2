@@ -106,6 +106,9 @@ export const DataBlockWithMargin = styled(DataBlock)`
 
 export const DataBlockButton = styled(ButtonLink)`
 	margin-top: auto;
+	padding: 24px 48px;
+	width: max-content;
+	min-width: 300px;
 `;
 
 export const ClaimCardQuote = styled(QuoteText)`
