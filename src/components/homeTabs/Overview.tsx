@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import router from 'next/router';
-import { IconExternalLink, P } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useWeb3React } from '@web3-react/core';
 import {
@@ -23,8 +22,6 @@ import { IconGIV } from '../Icons/GIV';
 import config from '@/configuration';
 import Routes from '@/lib/constants/Routes';
 import { Col, Container, Row } from '@/components/Grid';
-import { Flex } from '../styled-components/Flex';
-import { ExtLinkCyan } from './commons';
 import { StakingType } from '@/types/config';
 
 export const TabOverviewTop = () => {
@@ -140,42 +137,23 @@ export const TabOverviewBottom = () => {
 				</Row>
 				<ClaimCard>
 					<ClaimCardTitle weight={900}>
-						{formatMessage({ id: 'label.claim_your_givdrop' })}
+						{formatMessage({ id: 'label.vote_in_giveth_dao' })}
 					</ClaimCardTitle>
 					<ClaimCardQuote size='small'>
 						{formatMessage({
-							id: 'label.connect_your_wallet_or_check_an_eth_address',
+							id: 'label.use_giv_to_vote',
 						})}
 					</ClaimCardQuote>
 					<ClaimRow alignItems='center'>
 						<ClaimCardButton
+							isExternal
 							label={formatMessage({
-								id: 'label.claim_your_giv',
+								id: 'label.see_proposals',
 							})}
-							buttonType='primary'
-							onClick={goToClaim}
+							linkType='primary'
+							href={config.GARDEN_LINK}
+							size='large'
 						/>
-						<Flex gap='8px'>
-							<P>
-								{formatMessage({
-									id: 'label.didnt_get_the_givdrop',
-								})}
-							</P>
-							<ExtLinkCyan
-								as='a'
-								size='Big'
-								target='_blank'
-								rel='noreferrer'
-								href={
-									chainId === config.XDAI_NETWORK_NUMBER
-										? config.XDAI_CONFIG.GIV.BUY_LINK
-										: config.MAINNET_CONFIG.GIV.BUY_LINK
-								}
-							>
-								{formatMessage({ id: 'label.buy_giv_token' })}{' '}
-								<IconExternalLink />
-							</ExtLinkCyan>
-						</Flex>
 					</ClaimRow>
 				</ClaimCard>
 			</Container>

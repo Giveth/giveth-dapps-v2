@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import {
 	D3,
 	H1,
-	Button,
 	QuoteText,
 	DataBlock,
 	brandColors,
@@ -43,7 +42,7 @@ export const PreTitle = styled(D3)`
 
 export const SubTitle = styled(QuoteText)``;
 
-export const ClaimCardButton = styled(Button)`
+export const ClaimCardButton = styled(ButtonLink)`
 	width: 221px;
 	margin-top: 36px;
 	margin-bottom: 36px;

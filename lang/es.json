@@ -837,5 +837,7 @@
 	"label.lock_your_giv_to_increase_your_multiplier": "",
 	"label.get_giv": "Obtén GIV",
 	"label.you_need_to_connect_your_wallet_to_continue": "Debes conectar tu billetera para continuar!",
-	"label.loading_data": "Cargando Información"
+	"label.loading_data": "Cargando Información",
+	"label.vote_in_giveth_dao": "",
+	"label.use_giv_to_vote": ""
 }

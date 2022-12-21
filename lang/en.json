@@ -838,5 +838,7 @@
 	"label.lock_your_giv_to_increase_your_multiplier": "Lock your GIV to increase your multiplier.",
 	"label.get_giv": "Get GIV",
 	"label.you_need_to_connect_your_wallet_to_continue": "You need to connect your wallet to continue!",
-	"label.loading_data": "Loading Data"
+	"label.loading_data": "Loading Data",
+	"label.vote_in_giveth_dao": "Vote in the Giveth DAO",
+	"label.use_giv_to_vote": "Use GIV to vote on funding proposals in the GIVgarden."
 }
