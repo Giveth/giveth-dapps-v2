@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic';
-import { TabOverviewBottom } from '../homeTabs/Overview';
+import { TabOverview } from '../homeTabs/Overview';
 
 import Tabs from '../Tabs';
 
@@ -12,7 +12,7 @@ function HomeView() {
 		<>
 			<Tabs />
 			<TabOverviewVideo />
-			<TabOverviewBottom />
+			<TabOverview />
 		</>
 	);
 }

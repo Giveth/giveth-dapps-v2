@@ -17,7 +17,7 @@ import Routes from '@/lib/constants/Routes';
 import { Col, Container, Row } from '@/components/Grid';
 import { StakingType } from '@/types/config';
 
-export const TabOverviewBottom = () => {
+export const TabOverview = () => {
 	const { formatMessage } = useIntl();
 
 	return (
