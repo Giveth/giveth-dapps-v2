@@ -22,91 +22,93 @@ export const TabOverview = () => {
 	const { formatMessage } = useIntl();
 
 	return (
-		<OverviewBottomContainer>
+		<>
 			<TabOverviewVideo src='/video/giveconomy.mp4' />
-			<Container>
-				<TabTitle weight={700}>
-					{formatMessage({ id: 'label.the_economy_of_giving' })}
-				</TabTitle>
-				<Col md={10} lg={8}>
-					<TabDesc size='medium'>
-						{formatMessage({
-							id: 'label.giveth_is_rewarding_and_empowering_those',
-						})}
-					</TabDesc>
-				</Col>
-				<Row>
-					<Col xs={12} sm={6} md={4}>
-						<DataBlockWithMargin
-							title='GIV'
-							subtitle={formatMessage({
-								id: 'label.donate_earn_govern',
-							})}
-							button={
-								<DataBlockButton
-									href={config.XDAI_CONFIG.GIV.BUY_LINK}
-									isExternal
-									label={formatMessage({
-										id: 'label.get_giv',
-									})}
-									linkType='primary'
-								/>
-							}
-							icon={<IconGIV size={32} />}
-						>
+			<OverviewBottomContainer>
+				<Container>
+					<TabTitle weight={700}>
+						{formatMessage({ id: 'label.the_economy_of_giving' })}
+					</TabTitle>
+					<Col md={10} lg={8}>
+						<TabDesc size='medium'>
 							{formatMessage({
-								id: 'label.giv_fuels_and_directs',
+								id: 'label.giveth_is_rewarding_and_empowering_those',
 							})}
-						</DataBlockWithMargin>
+						</TabDesc>
 					</Col>
-					<Col xs={12} sm={6} md={4}>
-						<DataBlockWithMargin
-							title='GIVbacks'
-							subtitle={formatMessage({
-								id: 'label.give_and_receive',
-							})}
-							button={
-								<Link href={Routes.Projects}>
+					<Row>
+						<Col xs={12} sm={6} md={4}>
+							<DataBlockWithMargin
+								title='GIV'
+								subtitle={formatMessage({
+									id: 'label.donate_earn_govern',
+								})}
+								button={
 									<DataBlockButton
+										href={config.XDAI_CONFIG.GIV.BUY_LINK}
+										isExternal
 										label={formatMessage({
-											id: 'page.home.bigscreen.see_projects',
+											id: 'label.get_giv',
 										})}
+										linkType='primary'
 									/>
-								</Link>
-							}
-						>
-							{formatMessage({
-								id: 'label.giveth_is_a_donor_owned_economy',
-							})}
-						</DataBlockWithMargin>
-					</Col>
-					<Col xs={12} sm={6} md={4}>
-						<DataBlockWithMargin
-							title='GIVpower'
-							subtitle={formatMessage({
-								id: 'label.boost_projects',
-							})}
-							button={
-								<Link
-									href={`${Routes.GIVfarm}/?open=${StakingType.GIV_LM}&chain=gnosis`}
-								>
-									<DataBlockButton
-										label={formatMessage({
-											id: 'label.stake_for_givpower',
-										})}
-									/>
-								</Link>
-							}
-						>
-							{formatMessage({
-								id: 'label.givpower_allows_you_to_boost',
-							})}
-							<br />
-							<br />
-						</DataBlockWithMargin>
-					</Col>
-				</Row>
-			</Container>
+								}
+								icon={<IconGIV size={32} />}
+							>
+								{formatMessage({
+									id: 'label.giv_fuels_and_directs',
+								})}
+							</DataBlockWithMargin>
+						</Col>
+						<Col xs={12} sm={6} md={4}>
+							<DataBlockWithMargin
+								title='GIVbacks'
+								subtitle={formatMessage({
+									id: 'label.give_and_receive',
+								})}
+								button={
+									<Link href={Routes.Projects}>
+										<DataBlockButton
+											label={formatMessage({
+												id: 'page.home.bigscreen.see_projects',
+											})}
+										/>
+									</Link>
+								}
+							>
+								{formatMessage({
+									id: 'label.giveth_is_a_donor_owned_economy',
+								})}
+							</DataBlockWithMargin>
+						</Col>
+						<Col xs={12} sm={6} md={4}>
+							<DataBlockWithMargin
+								title='GIVpower'
+								subtitle={formatMessage({
+									id: 'label.boost_projects',
+								})}
+								button={
+									<Link
+										href={`${Routes.GIVfarm}/?open=${StakingType.GIV_LM}&chain=gnosis`}
+									>
+										<DataBlockButton
+											label={formatMessage({
+												id: 'label.stake_for_givpower',
+											})}
+										/>
+									</Link>
+								}
+							>
+								{formatMessage({
+									id: 'label.givpower_allows_you_to_boost',
+								})}
+								<br />
+								<br />
+							</DataBlockWithMargin>
+						</Col>
+					</Row>
+				</Container>
+			</OverviewBottomContainer>
 			<TabOverviewVideo src='/video/givpower.mp4' />
 			<Container>
 				<VoteCard>
@@ -129,6 +131,6 @@ export const TabOverview = () => {
 					/>
 				</VoteCard>
 			</Container>
-		</OverviewBottomContainer>
+		</>
 	);
 };

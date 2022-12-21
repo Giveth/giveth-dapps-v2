@@ -12,6 +12,8 @@ export const OverviewBottomContainer = styled.div`
 	background-image: url('/images/backgrounds/wave.svg');
 	background-position: center;
 	background-repeat: repeat-x;
+	background-size: 200px;
+	padding: 120px;
 `;
 
 export const VoteCardButton = styled(ButtonLink)`
