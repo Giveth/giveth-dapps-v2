@@ -1,7 +1,5 @@
 import Link from 'next/link';
-import router from 'next/router';
 import { useIntl } from 'react-intl';
-import { useWeb3React } from '@web3-react/core';
 import {
 	OverviewTopContainer,
 	PreTitle,
@@ -43,12 +41,7 @@ export const TabOverviewTop = () => {
 };
 
 export const TabOverviewBottom = () => {
-	const { chainId } = useWeb3React();
 	const { formatMessage } = useIntl();
-
-	const goToClaim = () => {
-		router.push(Routes.Claim);
-	};
 
 	return (
 		<OverviewBottomContainer>
