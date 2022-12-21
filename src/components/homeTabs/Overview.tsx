@@ -103,6 +103,15 @@ export const TabOverviewBottom = () => {
 							subtitle={formatMessage({
 								id: 'label.give_and_receive',
 							})}
+							button={
+								<Link href={Routes.Projects}>
+									<ButtonLink
+										label={formatMessage({
+											id: 'page.home.bigscreen.see_projects',
+										})}
+									/>
+								</Link>
+							}
 						>
 							{formatMessage({
 								id: 'label.giveth_is_a_donor_owned_economy',
@@ -130,6 +139,8 @@ export const TabOverviewBottom = () => {
 							{formatMessage({
 								id: 'label.givpower_allows_you_to_boost',
 							})}
+							<br />
+							<br />
 						</DataBlockWithMargin>
 					</Col>
 				</Row>
