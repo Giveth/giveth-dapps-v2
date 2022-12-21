@@ -92,6 +92,7 @@ export const VideoContainer = styled.div`
 	max-width: 1440px;
 	overflow: hidden;
 	margin-bottom: 100px;
+	cursor: pointer;
 `;
 
 export const VideoOverlay = styled.div<{ hidden: boolean }>`
