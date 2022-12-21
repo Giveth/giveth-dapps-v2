@@ -1,11 +1,6 @@
 import Link from 'next/link';
 import router from 'next/router';
-import {
-	Button,
-	ButtonLink,
-	IconExternalLink,
-	P,
-} from '@giveth/ui-design-system';
+import { IconExternalLink, P } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useWeb3React } from '@web3-react/core';
 import {
@@ -77,17 +72,18 @@ export const TabOverviewBottom = () => {
 				<Row>
 					<Col xs={12} sm={6} md={4}>
 						<DataBlockWithMargin
-							title='GIV Token'
+							title='GIV'
 							subtitle={formatMessage({
 								id: 'label.donate_earn_govern',
 							})}
 							button={
-								<Button
+								<DataBlockButton
+									href={config.XDAI_CONFIG.GIV.BUY_LINK}
+									isExternal
 									label={formatMessage({
-										id: 'label.claim_your_givdrop',
+										id: 'label.get_giv',
 									})}
-									buttonType='primary'
-									onClick={goToClaim}
+									linkType='primary'
 								/>
 							}
 							icon={<IconGIV size={32} />}
@@ -105,7 +101,7 @@ export const TabOverviewBottom = () => {
 							})}
 							button={
 								<Link href={Routes.Projects}>
-									<ButtonLink
+									<DataBlockButton
 										label={formatMessage({
 											id: 'page.home.bigscreen.see_projects',
 										})}
@@ -128,7 +124,7 @@ export const TabOverviewBottom = () => {
 								<Link
 									href={`${Routes.GIVfarm}/?open=${StakingType.GIV_LM}&chain=gnosis`}
 								>
-									<ButtonLink
+									<DataBlockButton
 										label={formatMessage({
 											id: 'label.stake_for_givpower',
 										})}
