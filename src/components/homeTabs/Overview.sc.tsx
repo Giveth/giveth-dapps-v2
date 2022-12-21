@@ -60,12 +60,6 @@ export const TabDesc = styled(QuoteText)`
 	margin-bottom: 50px;
 `;
 
-export const Section2Title = styled(H1)`
-	margin-top: 124px;
-	margin-bottom: 60px;
-	color: ${brandColors.giv[200]};
-`;
-
 export const ClaimCard = styled.div`
 	background-color: #3c14c5;
 	padding: 141px 16px 106px;

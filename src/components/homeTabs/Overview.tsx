@@ -11,7 +11,6 @@ import {
 	ClaimCard,
 	ClaimCardButton,
 	ClaimCardTitle,
-	Section2Title,
 	TabDesc,
 	TabTitle,
 	SubTitle,
@@ -137,66 +136,6 @@ export const TabOverviewBottom = () => {
 							})}
 							<br />
 							<br />
-						</DataBlockWithMargin>
-					</Col>
-				</Row>
-				<Section2Title>
-					{formatMessage({ id: 'label.how_to_participate' })}
-				</Section2Title>
-				<Row>
-					<Col xs={12} sm={6} md={4}>
-						<DataBlockWithMargin
-							title={formatMessage({ id: 'label.give' })}
-							button={
-								<Link href={Routes.Projects}>
-									<DataBlockButton
-										label={formatMessage({
-											id: 'label.donate_to_projects',
-										})}
-									/>
-								</Link>
-							}
-						>
-							{formatMessage({
-								id: 'label.donate_to_empower_changemakers',
-							})}
-						</DataBlockWithMargin>
-					</Col>
-					<Col xs={12} sm={6} md={4}>
-						<DataBlockWithMargin
-							title={formatMessage({ id: 'label.govern' })}
-							button={
-								<DataBlockButton
-									isExternal
-									href={config.GARDEN_LINK}
-									target='_blank'
-									label={formatMessage({
-										id: 'label.see_proposals',
-									})}
-								/>
-							}
-						>
-							{formatMessage({
-								id: 'label.the_giveconomy_empowers_our_collective',
-							})}
-						</DataBlockWithMargin>
-					</Col>
-					<Col xs={12} sm={6} md={4}>
-						<DataBlockWithMargin
-							title={formatMessage({ id: 'label.earn' })}
-							button={
-								<Link href={Routes.GIVfarm} passHref>
-									<DataBlockButton
-										label={formatMessage({
-											id: 'label.see_farms',
-										})}
-									/>
-								</Link>
-							}
-						>
-							{formatMessage({
-								id: 'label.become_a_liquidity_provider',
-							})}
 						</DataBlockWithMargin>
 					</Col>
 				</Row>
