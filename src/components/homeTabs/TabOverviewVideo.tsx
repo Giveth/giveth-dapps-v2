@@ -4,9 +4,10 @@ import { VideoContainer, VideoOverlay } from './Overview.sc';
 
 interface ITabOverviewVideo {
 	src: string;
+	poster?: string;
 }
 
-export const TabOverviewVideo: FC<ITabOverviewVideo> = ({ src }) => {
+export const TabOverviewVideo: FC<ITabOverviewVideo> = ({ src, poster }) => {
 	const [isPlaying, setIsPlaying] = useState(false);
 	const videoRef = useRef<HTMLVideoElement | null>(null);
 	function handleVideoClick() {
@@ -32,6 +33,7 @@ export const TabOverviewVideo: FC<ITabOverviewVideo> = ({ src }) => {
 				onClick={handleVideoClick}
 				width='100%'
 				onEnded={handleVideoEnd}
+				poster={poster}
 			>
 				<source src={src} type='video/mp4' />
 			</video>

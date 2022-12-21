@@ -23,7 +23,10 @@ export const TabOverview = () => {
 
 	return (
 		<>
-			<TabOverviewVideo src='/video/giveconomy.mp4' />
+			<TabOverviewVideo
+				src='/video/giveconomy.mp4'
+				poster='/video/giveconomy.webp'
+			/>
 			<OverviewBottomContainer>
 				<Container>
 					<TabTitle weight={700}>
@@ -109,7 +112,10 @@ export const TabOverview = () => {
 					</Row>
 				</Container>
 			</OverviewBottomContainer>
-			<TabOverviewVideo src='/video/givpower.mp4' />
+			<TabOverviewVideo
+				src='/video/givpower.mp4'
+				poster='/video/givpower.webp'
+			/>
 			<Container>
 				<VoteCard>
 					<VoteCardTitle weight={900}>
