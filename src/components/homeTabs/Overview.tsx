@@ -23,7 +23,6 @@ import { IconGIV } from '../Icons/GIV';
 import config from '@/configuration';
 import Routes from '@/lib/constants/Routes';
 import { Col, Container, Row } from '@/components/Grid';
-import GivEconomyProjectCards from '../cards/GivEconomyProjectCards';
 import { Flex } from '../styled-components/Flex';
 import { ExtLinkCyan } from './commons';
 import { StakingType } from '@/types/config';
@@ -179,7 +178,6 @@ export const TabOverviewBottom = () => {
 						</Flex>
 					</ClaimRow>
 				</ClaimCard>
-				<GivEconomyProjectCards />
 			</Container>
 		</OverviewBottomContainer>
 	);
