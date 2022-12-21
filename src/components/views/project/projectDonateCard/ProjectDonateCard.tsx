@@ -65,6 +65,7 @@ import CategoryBadge from '@/components/badges/CategoryBadge';
 import { mapCategoriesToMainCategories } from '@/helpers/singleProject';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { CurrentRank, NextRank } from '@/components/GIVpowerRank';
+import { useModalCallback } from '@/hooks/useModalCallback';
 
 interface IProjectDonateCard {
 	project: IProject;
@@ -205,11 +206,17 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 		}
 	}, [id, user?.id]);
 
+	const showBoostModal = () => {
+		setShowBoost(true);
+	};
+	const { signInThenDoSomething: signInThenBoost } =
+		useModalCallback(showBoostModal);
+
 	const handleBoostClick = () => {
 		if (!isSignedIn) {
-			dispatch(setShowSignWithWallet(true));
+			signInThenBoost();
 		} else {
-			setShowBoost(true);
+			showBoostModal;
 		}
 	};
 

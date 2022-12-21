@@ -18,7 +18,6 @@ import { showToastError } from '@/lib/helpers';
 import { Flex } from '../styled-components/Flex';
 import { IProject } from '@/apollo/types/types';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import {
 	decrementLikedProjectsCount,
 	incrementLikedProjectsCount,
@@ -91,28 +90,23 @@ const ProjectCardLikeAndShareButtons = (
 		}
 	}, [dispatch, projectId, reaction, user?.id]);
 
-	const { signInThenDoSomething } = useModalCallback(likeUnlikeProject);
+	const boostProject = () => {
+		if (!projectId) return;
+		if (boostLoading) return;
+		setBoostLoading(true);
+		router.push(`${slugToProjectView(slug)}?open=boost`);
+	};
 
-	const signInThenLike = () => {
+	const { signInThenDoSomething: signInThenLike } =
+		useModalCallback(likeUnlikeProject);
+
+	const checkSignInThenLike = () => {
 		if (typeof window === 'undefined') return;
 		if (!isSignedIn) {
-			signInThenDoSomething();
+			signInThenLike();
 		} else {
 			likeUnlikeProject();
 		}
-	};
-
-	const boostProject = () => {
-		setBoostLoading(true);
-		if (!isSignedIn) {
-			dispatch(setShowSignWithWallet(true));
-			setBoostLoading(false);
-			return;
-		}
-
-		if (boostLoading) return;
-
-		if (projectId) router.push(`${slugToProjectView(slug)}?open=boost`);
 	};
 
 	return (
@@ -132,7 +126,7 @@ const ProjectCardLikeAndShareButtons = (
 					)}
 					<BadgeButton
 						isLoading={likeLoading}
-						onClick={likeLoading ? undefined : signInThenLike}
+						onClick={likeLoading ? undefined : checkSignInThenLike}
 					>
 						{Number(totalReactions) > 0 && (
 							<Subline>{totalReactions}</Subline>
