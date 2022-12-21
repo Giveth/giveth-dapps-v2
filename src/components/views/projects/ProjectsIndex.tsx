@@ -200,8 +200,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 		}
 	};
 
-	console.log('filteredProjects', filteredProjects.length);
-
 	const handleObserver = (entities: any) => {
 		if (!isInfiniteScrolling.current) return;
 		const target = entities[0];
