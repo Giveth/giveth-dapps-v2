@@ -68,6 +68,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	const router = useRouter();
 	const pageNum = useRef(0);
+	const lastElementRef = useRef<HTMLDivElement>(null);
+	const isInfiniteScrolling = useRef(true);
 	const { isDesktop, isTablet, isMobile, isLaptopL } = useDetectDevice();
 
 	const fetchProjects = (
@@ -101,9 +103,11 @@ const ProjectsIndex = (props: IProjectsView) => {
 				const data = res.data?.allProjects?.projects;
 				const count = res.data?.allProjects?.totalCount;
 				setTotalCount(count);
-				setFilteredProjects(
-					isLoadMore ? filteredProjects.concat(data) : data,
-				);
+				setFilteredProjects(prevProjects => {
+					isInfiniteScrolling.current =
+						(data.length + prevProjects.length) % 45 !== 0;
+					return isLoadMore ? [...prevProjects, ...data] : data;
+				});
 				setIsLoading(false);
 			})
 			.catch((err: any) => {
@@ -152,7 +156,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 		}
 	};
 
-	const showLoadMore = totalCount > filteredProjects?.length;
+	const showLoadMore =
+		totalCount > filteredProjects?.length && !isInfiniteScrolling.current;
 	const isTabletSlice = useMediaQuery(device.tablet);
 
 	const handleSliceNumber = () => {
@@ -194,6 +199,30 @@ const ProjectsIndex = (props: IProjectsView) => {
 			return <ProjectsNoResults mainCategories={mainCategories} />;
 		}
 	};
+
+	const handleObserver = (entities: any) => {
+		if (!isInfiniteScrolling.current) return;
+		const target = entities[0];
+		if (target.isIntersecting) {
+			loadMore();
+		}
+	};
+
+	useEffect(() => {
+		const option = {
+			root: null,
+			threshold: 1,
+		};
+		const observer = new IntersectionObserver(handleObserver, option);
+		if (lastElementRef.current) {
+			observer.observe(lastElementRef.current);
+		}
+		return () => {
+			if (observer) {
+				observer.disconnect();
+			}
+		};
+	}, []);
 
 	return (
 		<>
@@ -237,6 +266,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				</SortingContainer>
 				{isLoading && <Loader className='dot-flashing' />}
 				{renderProjects()}
+				<div ref={lastElementRef} />
 				{showLoadMore && (
 					<>
 						<StyledButton
