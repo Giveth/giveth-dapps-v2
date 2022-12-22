@@ -417,7 +417,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 										{givBackStream != 0 && (
 											<>
 												<GIVbackStreamDesc>
-													Recieved from GIVbacks
+													Received from GIVbacks
 												</GIVbackStreamDesc>
 												<BreakdownRate>
 													{formatWeiHelper(
