@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 
+// should we use callback or ref?!!!
 export const useModalCallback = (callback: () => void) => {
 	const dispatch = useAppDispatch();
 	const showSignWithWallet = useAppSelector(
