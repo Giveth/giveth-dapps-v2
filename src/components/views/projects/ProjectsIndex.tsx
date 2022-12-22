@@ -274,7 +274,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 				</SortingContainer>
 				{isLoading && <Loader className='dot-flashing' />}
 				{renderProjects()}
-				<div ref={lastElementRef} />
+				{totalCount > filteredProjects?.length && (
+					<div ref={lastElementRef} />
+				)}
 				{showLoadMore && (
 					<>
 						<StyledButton
