@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import {
 	brandColors,
@@ -72,54 +72,63 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const isInfiniteScrolling = useRef(true);
 	const { isDesktop, isTablet, isMobile, isLaptopL } = useDetectDevice();
 
-	const fetchProjects = (
-		isLoadMore?: boolean,
-		loadNum?: number,
-		userIdChanged = false,
-	) => {
-		const variables: IQueries = {
-			limit: userIdChanged ? filteredProjects.length : projects.length,
-			skip: userIdChanged ? 0 : projects.length * (loadNum || 0),
-		};
+	const fetchProjects = useCallback(
+		(isLoadMore?: boolean, loadNum?: number, userIdChanged = false) => {
+			const variables: IQueries = {
+				limit: userIdChanged
+					? filteredProjects.length
+					: projects.length,
+				skip: userIdChanged ? 0 : projects.length * (loadNum || 0),
+			};
 
-		if (user?.id) {
-			variables.connectedWalletUserId = Number(user?.id);
-		}
+			if (user?.id) {
+				variables.connectedWalletUserId = Number(user?.id);
+			}
 
-		if (!userIdChanged) setIsLoading(true);
-		if (contextVariables.mainCategory !== router.query?.slug?.toString())
-			return;
+			if (!userIdChanged) setIsLoading(true);
+			if (
+				contextVariables.mainCategory !== router.query?.slug?.toString()
+			)
+				return;
 
-		client
-			.query({
-				query: FETCH_ALL_PROJECTS,
-				variables: {
-					...variables,
-					...contextVariables,
-				},
-				fetchPolicy: 'network-only',
-			})
-			.then((res: { data: { allProjects: IFetchAllProjects } }) => {
-				const data = res.data?.allProjects?.projects;
-				const count = res.data?.allProjects?.totalCount;
-				setTotalCount(count);
-				setFilteredProjects(prevProjects => {
-					isInfiniteScrolling.current =
-						(data.length + prevProjects.length) % 45 !== 0;
-					return isLoadMore ? [...prevProjects, ...data] : data;
-				});
-				setIsLoading(false);
-			})
-			.catch((err: any) => {
-				setIsLoading(false);
-				showToastError(err);
-				captureException(err, {
-					tags: {
-						section: 'fetchAllProjects',
+			client
+				.query({
+					query: FETCH_ALL_PROJECTS,
+					variables: {
+						...variables,
+						...contextVariables,
 					},
+					fetchPolicy: 'network-only',
+				})
+				.then((res: { data: { allProjects: IFetchAllProjects } }) => {
+					const data = res.data?.allProjects?.projects;
+					const count = res.data?.allProjects?.totalCount;
+					setTotalCount(count);
+					setFilteredProjects(prevProjects => {
+						isInfiniteScrolling.current =
+							(data.length + prevProjects.length) % 45 !== 0;
+						return isLoadMore ? [...prevProjects, ...data] : data;
+					});
+					setIsLoading(false);
+				})
+				.catch((err: any) => {
+					setIsLoading(false);
+					showToastError(err);
+					captureException(err, {
+						tags: {
+							section: 'fetchAllProjects',
+						},
+					});
 				});
-			});
-	};
+		},
+		[
+			contextVariables,
+			filteredProjects.length,
+			projects.length,
+			router.query?.slug,
+			user?.id,
+		],
+	);
 
 	useEffect(() => {
 		pageNum.current = 0;
@@ -142,11 +151,11 @@ const ProjectsIndex = (props: IProjectsView) => {
 		}
 	}, [router.query?.slug]);
 
-	const loadMore = () => {
+	const loadMore = useCallback(() => {
 		if (isLoading) return;
 		fetchProjects(true, pageNum.current + 1);
 		pageNum.current = pageNum.current + 1;
-	};
+	}, [fetchProjects, isLoading]);
 
 	const handleCreateButton = () => {
 		if (isUserRegistered(user)) {
@@ -200,15 +209,14 @@ const ProjectsIndex = (props: IProjectsView) => {
 		}
 	};
 
-	const handleObserver = (entities: any) => {
-		if (!isInfiniteScrolling.current) return;
-		const target = entities[0];
-		if (target.isIntersecting) {
-			loadMore();
-		}
-	};
-
 	useEffect(() => {
+		const handleObserver = (entities: any) => {
+			if (!isInfiniteScrolling.current) return;
+			const target = entities[0];
+			if (target.isIntersecting) {
+				loadMore();
+			}
+		};
 		const option = {
 			root: null,
 			threshold: 1,
@@ -222,7 +230,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				observer.disconnect();
 			}
 		};
-	}, []);
+	}, [loadMore]);
 
 	return (
 		<>
