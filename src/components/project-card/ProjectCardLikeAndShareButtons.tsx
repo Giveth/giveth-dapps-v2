@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
 	brandColors,
 	IconHeartFilled16,
@@ -53,7 +53,7 @@ const ProjectCardLikeAndShareButtons = (
 		setTotalReactions(project.totalReactions);
 	}, [project.totalReactions]);
 
-	const likeUnlikeProject = useCallback(async () => {
+	const likeUnlikeProject = async () => {
 		if (projectId) {
 			setLikeLoading(true);
 
@@ -88,7 +88,7 @@ const ProjectCardLikeAndShareButtons = (
 				setLikeLoading(false);
 			}
 		}
-	}, [dispatch, projectId, reaction, user?.id]);
+	};
 
 	const boostProject = () => {
 		if (!projectId) return;

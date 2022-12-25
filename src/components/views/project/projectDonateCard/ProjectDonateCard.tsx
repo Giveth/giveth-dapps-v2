@@ -129,7 +129,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 		if (el) el.scrollIntoView({ behavior: 'smooth' });
 	};
 
-	const likeUnlikeProject = useCallback(async () => {
+	const likeUnlikeProject = async () => {
 		if (loading) return;
 
 		if (id) {
@@ -160,7 +160,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 				setLoading(false);
 			}
 		}
-	}, [dispatch, id, reaction, user?.id]);
+	};
 
 	const { signInThenDoSomething: signInThenLike } =
 		useModalCallback(likeUnlikeProject);
@@ -202,9 +202,9 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 		}
 	}, [id, user?.id]);
 
-	const showBoostModal = useCallback(() => {
+	const showBoostModal = () => {
 		setShowBoost(true);
-	}, []);
+	};
 
 	const { signInThenDoSomething: signInThenBoost } =
 		useModalCallback(showBoostModal);
