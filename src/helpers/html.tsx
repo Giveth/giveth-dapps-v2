@@ -58,6 +58,7 @@ export const convertRawDataToHTML = (notification: INotification) => {
 					<StyledGlink
 						key={idx}
 						size='Big'
+						as='a'
 						href={href}
 						target='_blank'
 					>
