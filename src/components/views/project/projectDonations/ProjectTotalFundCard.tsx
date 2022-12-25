@@ -5,11 +5,12 @@ import { useIntl } from 'react-intl';
 
 import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectWalletAddress from '@/components/views/project/projectDonations/ProjectWalletAddress';
-import { IProjectBySlug } from '@/apollo/types/gqlTypes';
+import { useProjectContext } from '@/context/project.context';
 
-const ProjectTotalFundCard: FC<IProjectBySlug> = ({ project }) => {
+const ProjectTotalFundCard: FC = () => {
+	const { projectData } = useProjectContext();
 	const { totalDonations, addresses, traceCampaignId, totalTraceDonations } =
-		project || {};
+		projectData || {};
 	const { formatMessage } = useIntl();
 
 	return (

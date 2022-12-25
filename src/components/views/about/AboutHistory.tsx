@@ -34,6 +34,7 @@ const AboutHistory = () => {
 			title: 'label.take_a_dive_into_the_history',
 			body: (
 				<ReadMoreButton
+					isExternal
 					href={links.HISTORY}
 					target='_blank'
 					label={formatMessage({ id: 'label.read_more' })}

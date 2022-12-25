@@ -38,7 +38,7 @@ export const RegenFarm: FC<IRegenFarmProps> = ({
 					!(
 						pool.farmEndTimeMS &&
 						now > pool.farmEndTimeMS + TWO_WEEK
-					),
+					) || pool.dontArchive,
 		  );
 
 	if (filteredPools.length === 0) return null;

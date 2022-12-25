@@ -36,9 +36,7 @@ const CheckBox: FC<ICheckBox> = ({
 			<FlexCenter>
 				{checked && <IconCheck size={size} color='white' />}
 			</FlexCenter>
-			<GLink as='span' size={labelSize}>
-				{label}
-			</GLink>
+			<GLink size={labelSize}>{label}</GLink>
 		</Wrapper>
 	);
 };

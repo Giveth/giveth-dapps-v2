@@ -7,6 +7,7 @@ import {
 	H5,
 	Button,
 	GLink,
+	ButtonLink,
 } from '@giveth/ui-design-system';
 import Slider from 'rc-slider';
 import styled, { css } from 'styled-components';
@@ -67,11 +68,25 @@ export const ColoredRocketIcon = styled.div`
 	color: ${brandColors.giv[500]};
 `;
 
-export const DescToast = styled.div`
+interface IDescToast {
+	hasError?: boolean;
+}
+
+export const DescToast = styled.div<IDescToast>`
 	padding: 16px;
-	border: 1px solid ${semanticColors.blueSky[700]};
-	background-color: ${semanticColors.blueSky[100]};
-	color: ${semanticColors.blueSky[700]};
+	border: 1px solid
+		${props =>
+			props.hasError
+				? semanticColors.punch[700]
+				: semanticColors.blueSky[700]};
+	background-color: ${props =>
+		props.hasError
+			? semanticColors.punch[100]
+			: semanticColors.blueSky[100]};
+	color: ${props =>
+		props.hasError
+			? semanticColors.punch[700]
+			: semanticColors.blueSky[700]};
 	border-radius: 8px;
 	margin-bottom: 32px;
 `;
@@ -180,4 +195,18 @@ export const ConfettiContainer = styled.div`
 	margin-right: auto;
 	height: 200px;
 	overflow-y: hidden;
+`;
+
+export const ExceededContainer = styled.div`
+	padding: 48px 0;
+`;
+
+export const BoostedProjectsLink = styled(ButtonLink)`
+	width: 300px;
+	margin: 20px auto;
+	margin-top: 0;
+`;
+
+export const NotNowButton = styled(Button)`
+	margin: 0 auto;
 `;

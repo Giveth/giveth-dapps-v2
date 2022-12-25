@@ -10,7 +10,7 @@ import React, {
 } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import {
 	Button,
 	brandColors,
@@ -20,6 +20,10 @@ import {
 	Caption,
 	IconRocketInSpace,
 	ButtonText,
+	IconRocketInSpace24,
+	Subline,
+	IconHelpFilled16,
+	IconRocketInSpace32,
 } from '@giveth/ui-design-system';
 import { motion } from 'framer-motion';
 import { captureException } from '@sentry/nextjs';
@@ -27,7 +31,7 @@ import { captureException } from '@sentry/nextjs';
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { compareAddresses, showToastError } from '@/lib/helpers';
-import { EVerificationStatus, IProject } from '@/apollo/types/types';
+import { EVerificationStatus } from '@/apollo/types/types';
 import links from '@/lib/constants/links';
 import ShareModal from '@/components/modals/ShareModal';
 import { IReaction } from '@/apollo/types/types';
@@ -42,7 +46,7 @@ import {
 	slugToVerification,
 } from '@/lib/routeCreators';
 import { VerificationModal } from '@/components/modals/VerificationModal';
-import { mediaQueries } from '@/lib/constants/constants';
+import { mediaQueries, zIndex } from '@/lib/constants/constants';
 import ProjectCardOrgBadge from '../../../project-card/ProjectCardOrgBadge';
 import ExternalLink from '@/components/ExternalLink';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -55,32 +59,25 @@ import { EProjectVerificationStatus } from '@/apollo/types/gqlEnums';
 import VerificationStatus from '@/components/views/project/projectDonateCard/VerificationStatus';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import GIVbackToast from '@/components/views/project/projectDonateCard/GIVbackToast';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+import { Flex, FlexSpacer } from '@/components/styled-components/Flex';
 import BoostModal from '@/components/modals/Boost/BoostModal';
-import { IS_BOOSTING_ENABLED } from '@/configuration';
 import CategoryBadge from '@/components/badges/CategoryBadge';
 import { mapCategoriesToMainCategories } from '@/helpers/singleProject';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
+import { CurrentRank, NextRank } from '@/components/GIVpowerRank';
+import { useProjectContext } from '@/context/project.context';
 
 interface IProjectDonateCard {
-	project: IProject;
-	isActive?: boolean;
-	setIsActive: Dispatch<SetStateAction<boolean>>;
-	isDraft?: boolean;
-	setIsDraft: Dispatch<SetStateAction<boolean>>;
 	setCreationSuccessful: Dispatch<SetStateAction<boolean>>;
 }
 
 const ProjectDonateCard: FC<IProjectDonateCard> = ({
-	project,
-	isActive,
-	setIsActive,
-	isDraft,
-	setIsDraft,
 	setCreationSuccessful,
 }) => {
 	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();
 	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
+	const { projectData, isActive, isDraft } = useProjectContext();
 	const {
 		categories = [],
 		slug,
@@ -90,7 +87,9 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 		verificationStatus,
 		organization,
 		verificationFormStatus,
-	} = project || {};
+		projectPower,
+		projectFuturePower,
+	} = projectData || {};
 
 	const convertedCategories = mapCategoriesToMainCategories(categories);
 
@@ -102,7 +101,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 	const [showVerificationModal, setShowVerificationModal] = useState(false);
 	const [showBoost, setShowBoost] = useState(false);
 	const [reaction, setReaction] = useState<IReaction | undefined>(
-		project?.reaction,
+		projectData?.reaction,
 	);
 
 	const { isMobile } = useDetectDevice();
@@ -124,6 +123,14 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 		const el = document.getElementById('similar-projects');
 		if (el) el.scrollIntoView({ behavior: 'smooth' });
 	};
+
+	useEffect(() => {
+		const { open } = router.query;
+		const _open = Array.isArray(open) ? open[0] : open;
+		if (_open === 'boost') {
+			handleBoostClick();
+		}
+	}, [router]);
 
 	const likeUnlikeProject = async () => {
 		if (!isSignedIn) {
@@ -204,7 +211,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 
 	useEffect(() => {
 		setHeartedByUser(!!reaction?.id && reaction?.userId === user?.id);
-	}, [project, reaction, user?.id]);
+	}, [projectData, reaction, user?.id]);
 
 	useEffect(() => {
 		setIsAdmin(
@@ -222,7 +229,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 		return () => {
 			window.removeEventListener('resize', handleResize);
 		};
-	}, [project, isMobile]);
+	}, [projectData, isMobile]);
 
 	const handleProjectStatus = async (deactivate?: boolean) => {
 		if (deactivate) {
@@ -233,15 +240,11 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 					dispatch(setShowSignWithWallet(true));
 					return;
 				}
-				const { data } = await client.mutate({
+				await client.mutate({
 					mutation: ACTIVATE_PROJECT,
 					variables: { projectId: Number(id) },
 				});
-				if (data.activateProject) {
-					setIsActive(true);
-					setIsDraft(false);
-					setCreationSuccessful(true);
-				}
+				setCreationSuccessful(true);
 			} catch (e) {
 				showToastError(e);
 				captureException(e, {
@@ -267,12 +270,11 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 				<DeactivateProjectModal
 					setShowModal={setDeactivateModal}
 					projectId={id}
-					setIsActive={setIsActive}
 				/>
 			)}
-			{showBoost && project?.id && (
+			{showBoost && projectData?.id && (
 				<BoostModal
-					projectId={project.id}
+					projectId={projectData.id}
 					setShowModal={setShowBoost}
 				/>
 			)}
@@ -281,157 +283,188 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 				height={wrapperHeight}
 				drag={isMobile ? 'y' : false}
 				dragElastic={0}
-				dragConstraints={{ top: -(wrapperHeight - 165), bottom: 120 }}
+				dragConstraints={{ top: -(wrapperHeight - 165), bottom: 132 }}
+				isMobile={isMobile}
 			>
 				{isMobile && <BlueBar />}
-				<ProjectCardOrgBadge
-					organization={organization?.label}
-					isHover={false}
-					isProjectView={true}
-				/>
-				{isAdmin ? (
-					<>
-						<FullButton
-							buttonType='primary'
-							label={formatMessage({ id: 'label.edit' })}
-							disabled={!isActive && !isDraft}
-							onClick={() =>
-								router.push(idToProjectEdit(project?.id || ''))
-							}
-						/>
-						{!isRevoked && !verified && !isDraft && !verStatus && (
-							<FullOutlineButton
-								buttonType='primary'
-								label={formatMessage({
-									id: 'label.verify_your_project',
-								})}
-								disabled={!isActive}
-								onClick={() => setShowVerificationModal(true)}
+
+				{isActive && verified && (
+					<BoostWrapper isMobile={isMobile}>
+						{!isMobile && (
+							<Flex gap='8px' alignItems='center'>
+								<IconRocketInSpace24 />
+								<Subline>GIVPOWER RANK</Subline>
+								<IconWithTooltip
+									icon={<IconHelpFilled16 />}
+									direction={'bottom'}
+								>
+									<BoostTooltip>
+										Boost this project with GIVpower to
+										improve its rank! Rank is updated at the
+										beginning of every GIVbacks round. You
+										can see the projected rank for next
+										round as well below.
+									</BoostTooltip>
+								</IconWithTooltip>
+							</Flex>
+						)}
+						<Flex gap='8px' alignItems='flex-end'>
+							{isMobile && projectPower?.totalPower !== 0 && (
+								<IconRocketInSpace32 />
+							)}
+							<CurrentRank projectPower={projectPower} />
+							<NextRank
+								projectPower={projectPower}
+								projectFuturePower={projectFuturePower}
 							/>
-						)}
-						{isVerDraft && (
-							<ExternalLink href={slugToVerification(slug)}>
-								<FullOutlineButton
-									buttonType='primary'
-									label={
-										isRevoked
-											? formatMessage({
-													id: 'label.re_apply',
-											  })
-											: formatMessage({
-													id: 'label.resume_verification',
-											  })
-									}
-								/>
-							</ExternalLink>
-						)}
-						<VerificationStatus status={verStatus} />
-						{isDraft && (
+							<FlexSpacer />
+							<BoostButton onClick={handleBoostClick}>
+								<IconRocketInSpace />
+								<BoostButtonText>Boost</BoostButtonText>
+							</BoostButton>
+						</Flex>
+					</BoostWrapper>
+				)}
+				<DonateWrapper isMobile={isMobile}>
+					{!isMobile && (
+						<ProjectCardOrgBadge
+							organization={organization?.label}
+							isHover={false}
+							isProjectView={true}
+						/>
+					)}
+					{isAdmin ? (
+						<>
 							<FullButton
 								buttonType='primary'
-								onClick={() => handleProjectStatus(false)}
-								label={formatMessage({
-									id: 'label.publish_project',
-								})}
+								label='EDIT'
+								disabled={!isActive && !isDraft}
+								onClick={() =>
+									router.push(
+										idToProjectEdit(projectData?.id || ''),
+									)
+								}
 							/>
-						)}
-					</>
-				) : (
-					<FullButton
-						onClick={() =>
-							router.push(slugToProjectDonate(slug || ''))
-						}
-						label={formatMessage({ id: 'label.donate' })}
-						disabled={!isActive}
-					/>
-				)}
-				<BadgeWrapper>
-					<ShareLikeBadge
-						type='share'
-						onClick={() => isActive && setShowModal(true)}
-						isSimple={!isAdmin}
-					/>
-					<ShareLikeBadge
-						type='like'
-						active={heartedByUser}
-						onClick={() => isActive && likeUnlikeProject()}
-						isSimple={!isAdmin}
-					/>
-					{/* // TODO: Boosting - remove this for boosting launch */}
-					{IS_BOOSTING_ENABLED && !isAdmin && (
-						<BoostButton onClick={handleBoostClick}>
-							<BoostButtonText>Boost</BoostButtonText>
-							<IconRocketInSpace color={brandColors.giv[500]} />
-						</BoostButton>
-					)}
-				</BadgeWrapper>
-				{!isAdmin && verified && <GIVbackToast />}
-				{isCategories && (
-					<MainCategoryWrapper flexDirection='column'>
-						{Object.entries(convertedCategories)?.map(
-							([mainCategory, subcategories]) => (
-								<Fragment key={mainCategory}>
-									<MainCategory>{mainCategory}</MainCategory>
-									<CategoryWrapper>
-										{subcategories.map(subcategory => (
-											<CategoryBadge
-												key={subcategory.name}
-												category={subcategory.value}
-											/>
-										))}
-									</CategoryWrapper>
-								</Fragment>
-							),
-						)}
-					</MainCategoryWrapper>
-				)}
-				{!isDraft && !isAdmin && (
-					<Links>
-						<ExternalLink
-							href={links.REPORT_ISSUE}
-							title={formatMessage({
-								id: 'label.report_an_issue',
-							})}
+							{!isRevoked &&
+								!verified &&
+								!isDraft &&
+								!verStatus && (
+									<FullOutlineButton
+										buttonType='primary'
+										label='VERIFY YOUR PROJECT'
+										disabled={!isActive}
+										onClick={() =>
+											setShowVerificationModal(true)
+										}
+									/>
+								)}
+							{isVerDraft && (
+								<ExternalLink href={slugToVerification(slug)}>
+									<FullOutlineButton
+										buttonType='primary'
+										label={
+											isRevoked
+												? 'Re-apply'
+												: 'RESUME VERIFICATION'
+										}
+									/>
+								</ExternalLink>
+							)}
+							<VerificationStatus status={verStatus} />
+							{isDraft && (
+								<FullButton
+									buttonType='primary'
+									onClick={() => handleProjectStatus(false)}
+									label='PUBLISH PROJECT'
+								/>
+							)}
+						</>
+					) : (
+						<FullButton
+							onClick={() =>
+								router.push(slugToProjectDonate(slug || ''))
+							}
+							label='DONATE'
+							buttonType='primary'
+							disabled={!isActive}
 						/>
-						<div onClick={scrollToSimilarProjects}>
-							{formatMessage({
-								id: 'label.view_similar_projects',
-							})}
-						</div>
-					</Links>
-				)}
+					)}
+					<BadgeWrapper>
+						<ShareLikeBadge
+							type='share'
+							onClick={() => isActive && setShowModal(true)}
+							isSimple={isMobile}
+						/>
+						<ShareLikeBadge
+							type='like'
+							active={heartedByUser}
+							onClick={() => isActive && likeUnlikeProject()}
+							isSimple={isMobile}
+						/>
+					</BadgeWrapper>
+					{!isAdmin && verified && <GIVbackToast />}
+					{isCategories && (
+						<MainCategoryWrapper flexDirection='column'>
+							{Object.entries(convertedCategories)?.map(
+								([mainCategory, subcategories]) => (
+									<Fragment key={mainCategory}>
+										<MainCategory>
+											{mainCategory}
+										</MainCategory>
+										<CategoryWrapper>
+											{subcategories.map(subcategory => (
+												<CategoryBadge
+													key={subcategory.name}
+													category={subcategory.value}
+												/>
+											))}
+										</CategoryWrapper>
+									</Fragment>
+								),
+							)}
+						</MainCategoryWrapper>
+					)}
+					{!isDraft && !isAdmin && (
+						<Links>
+							<ExternalLink
+								href={links.REPORT_ISSUE}
+								title='Report an issue'
+							/>
+							<div onClick={scrollToSimilarProjects}>
+								View similar projects
+							</div>
+						</Links>
+					)}
 
-				{isAdmin && !isDraft && (
-					<ArchiveButton
-						buttonType='texty'
-						size='small'
-						label={`${
-							isActive
-								? formatMessage({ id: 'component.button.de' })
-								: ''
-						}${formatMessage({
-							id: 'component.button.activate_project',
-						})}`}
-						icon={<IconArchiving size={16} />}
-						onClick={() => handleProjectStatus(isActive)}
-					/>
-				)}
+					{isAdmin && !isDraft && (
+						<ArchiveButton
+							buttonType='texty'
+							size='small'
+							label={`${isActive ? 'DE' : ''}ACTIVATE PROJECT`}
+							icon={<IconArchiving size={16} />}
+							onClick={() => handleProjectStatus(isActive)}
+						/>
+					)}
+				</DonateWrapper>
 			</Wrapper>
 		</>
 	);
 };
 
-const BoostButton = styled(FlexCenter)`
+const BoostButton = styled(Flex)`
 	border-radius: 48px;
 	box-shadow: ${Shadow.Neutral[500]};
 	display: flex;
 	gap: 4px;
-	padding-right: 22px;
-	padding-left: 22px;
-	color: ${brandColors.giv[500]};
+	padding: 16px 24px;
+	color: ${brandColors.giv[900]};
 	cursor: pointer;
 	background: white;
-	width: 100%;
+	align-items: flex-end;
+	transition: color 0.2s ease;
+	&:hover {
+		color: ${brandColors.giv[400]};
+	}
 `;
 
 const BoostButtonText = styled(ButtonText)`
@@ -452,7 +485,7 @@ const BlueBar = styled.div`
 	width: 80px;
 	height: 3px;
 	background-color: ${brandColors.giv[500]};
-	margin: 0 auto 16px;
+	margin: 0 auto 8px;
 	position: relative;
 	top: -8px;
 `;
@@ -479,36 +512,104 @@ const BadgeWrapper = styled.div`
 	gap: 8px;
 `;
 
-const Wrapper = styled(motion.div)<{ height: number }>`
-	margin-top: -32px;
-	background: white;
-	padding: 32px;
+interface IWrapper {
+	isMobile: boolean;
+}
+
+interface IWrapperWithHeight extends IWrapper {
+	height: number;
+}
+
+const Wrapper = styled(motion.div)<IWrapperWithHeight>`
+	margin-top: -62px;
 	height: fit-content;
-	box-shadow: ${Shadow.Neutral[400]};
-	z-index: 10;
+	z-index: ${zIndex.BOTTOM_SHEET};
 	align-self: flex-start;
 	width: 100%;
 	position: fixed;
 	bottom: ${({ height }) => `calc(165px - ${height}px)`};
 	left: 0;
-	border-radius: 40px 40px 0 0;
-
 	${mediaQueries.tablet} {
-		padding: 16px;
-		max-width: 225px;
 		position: sticky;
-		top: 168px;
-		border-radius: 40px;
+		top: 132px;
 	}
+	${props =>
+		props.isMobile
+			? css`
+					background: ${brandColors.giv['000']};
+					box-shadow: ${Shadow.Neutral[400]};
+					border-radius: 40px 40px 0 0;
+					padding: 32px;
+					${mediaQueries.tablet} {
+						padding: 16px;
+						max-width: 225px;
+						border-radius: 40px;
+					}
 
-	${mediaQueries.laptopS} {
-		max-width: 285px;
-	}
+					${mediaQueries.laptopS} {
+						max-width: 285px;
+					}
 
-	${mediaQueries.laptopL} {
-		padding: 32px;
-		max-width: 325px;
-	}
+					${mediaQueries.laptopL} {
+						padding: 32px;
+						max-width: 325px;
+					}
+			  `
+			: css``}
+`;
+
+const BoostWrapper = styled.div<IWrapper>`
+	${props =>
+		props.isMobile
+			? css`
+					padding-bottom: 16px;
+			  `
+			: css`
+					background: ${brandColors.giv['000']};
+					border-radius: 40px;
+					padding: 24px;
+					margin-bottom: 16px;
+					${mediaQueries.tablet} {
+						padding: 16px;
+						max-width: 225px;
+						border-radius: 40px;
+					}
+
+					${mediaQueries.laptopS} {
+						max-width: 285px;
+					}
+
+					${mediaQueries.laptopL} {
+						padding: 32px;
+						max-width: 325px;
+					}
+			  `}
+`;
+
+const DonateWrapper = styled.div<IWrapper>`
+	${props =>
+		props.isMobile
+			? css``
+			: css`
+					background: ${brandColors.giv['000']};
+					box-shadow: ${Shadow.Neutral[400]};
+					border-radius: 40px 40px 0 0;
+					padding: 32px;
+					${mediaQueries.tablet} {
+						padding: 16px;
+						max-width: 225px;
+						border-radius: 40px;
+					}
+
+					${mediaQueries.laptopS} {
+						max-width: 285px;
+					}
+
+					${mediaQueries.laptopL} {
+						padding: 32px;
+						max-width: 325px;
+					}
+			  `}
 `;
 
 const FullButton = styled(Button)`
@@ -535,6 +636,11 @@ const ArchiveButton = styled(Button)`
 		color: ${brandColors.giv[500]};
 		background-color: transparent;
 	}
+`;
+
+export const BoostTooltip = styled(Subline)`
+	color: ${neutralColors.gray[100]};
+	width: 260px;
 `;
 
 export default ProjectDonateCard;

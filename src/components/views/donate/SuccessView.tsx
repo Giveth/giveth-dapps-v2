@@ -1,18 +1,18 @@
 import {
 	brandColors,
 	Button,
+	ButtonLink,
 	H4,
 	H6,
 	neutralColors,
 	P,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 
 import ConfettiAnimation from '@/components/animations/confetti';
-import { IProject } from '@/apollo/types/types';
 import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
 import SocialBox from '@/components/views/donate/SocialBox';
@@ -24,18 +24,17 @@ import { FETCH_GIVETH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
 import config from '@/configuration';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { IFetchGivethProjectGQL } from '@/apollo/types/gqlTypes';
+import { useDonateData } from '@/context/donate.context';
 
-interface IProps {
-	project: IProject;
-	txHash: string[];
-	givBackEligible?: boolean;
-}
-
-const SuccessView: FC<IProps> = props => {
-	const { txHash, project, givBackEligible } = props;
+const SuccessView: FC = () => {
+	const { isSuccessDonation } = useDonateData();
+	const { givBackEligible, txHash = [] } = isSuccessDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
+
 	const { chainId } = useWeb3React();
-	const [givethSlug, setGivethSlug] = React.useState<string>('');
+	const [givethSlug, setGivethSlug] = useState<string>('');
+	const { project } = useDonateData();
+
 	const message = hasMultipleTxs ? (
 		<>
 			Thank you for supporting {project?.title} and thanks for your
@@ -111,7 +110,7 @@ const SuccessView: FC<IProps> = props => {
 						</TxLink>
 					</>
 				)}
-				<Link passHref href={Routes.Projects}>
+				<Link href={Routes.Projects}>
 					<ProjectsButton size='small' label='SEE MORE PROJECTS' />
 				</Link>
 			</Options>
@@ -160,7 +159,7 @@ const Options = styled(FlexCenter)`
 	margin-top: 24px;
 `;
 
-const ProjectsButton = styled(Button)`
+const ProjectsButton = styled(ButtonLink)`
 	width: 242px;
 	margin-top: 24px;
 `;

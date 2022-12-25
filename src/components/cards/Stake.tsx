@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { BigNumber as EthersBigNumber, constants, utils } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { H2, H5, Lead } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import { InputWithUnit } from '../input/index';
 import { Flex } from '../styled-components/Flex';
 import {
@@ -88,6 +89,7 @@ const Desc = styled(Lead)`
 
 const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const { totalAmount, step, goNextStep, goPreviousStep } = useClaim();
+	const { formatMessage } = useIntl();
 
 	const [deposit, setDeposit] = useState<string>('0');
 	const [potentialClaim, setPotentialClaim] = useState<EthersBigNumber>(
@@ -242,7 +244,8 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 							<Flex justifyContent='space-between'>
 								<PoolItem>Streaming</PoolItem>
 								<PoolItemBold>
-									{formatWeiHelper(earnEstimate)} GIV/week
+									{formatWeiHelper(earnEstimate)} GIV
+									{formatMessage({ id: 'label./week' })}
 								</PoolItemBold>
 							</Flex>
 						</PoolItems>

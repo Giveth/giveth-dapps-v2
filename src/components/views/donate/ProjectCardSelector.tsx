@@ -7,11 +7,12 @@ import SocialBox from '@/components/views/donate/SocialBox';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { mediaQueries } from '@/lib/constants/constants';
 import useDetectDevice from '@/hooks/useDetectDevice';
-import { IDonateRouteProps } from '../../../../pages/donate/[slug]';
+import { useDonateData } from '@/context/donate.context';
 
-const ProjectCardSelector: FC<IDonateRouteProps> = ({ project }) => {
+const ProjectCardSelector: FC = () => {
 	const [wrapperHeight, setWrapperHeight] = useState<number>(0);
 
+	const { project } = useDonateData();
 	const { isMobile } = useDetectDevice();
 	const wrapperRef = useRef<HTMLDivElement>(null);
 

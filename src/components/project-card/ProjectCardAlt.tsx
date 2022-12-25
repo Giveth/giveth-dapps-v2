@@ -64,9 +64,11 @@ const ProjectCard = (props: IProjectCard) => {
 					<Title>{title}</Title>
 				</InternalLink>
 				{name && (
-					<InternalLink href={addressToUserView(walletAddress)}>
-						<Author>{name}</Author>
-					</InternalLink>
+					<div>
+						<InternalLink href={addressToUserView(walletAddress)}>
+							<Author>{name}</Author>
+						</InternalLink>
+					</div>
 				)}
 				<Description>{htmlToText(description)}</Description>
 				{!isNew && (

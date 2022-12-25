@@ -41,6 +41,7 @@ export const BridgeGIVModal: FC<IBridgeGIVModal> = ({ setShowModal }) => {
 					bridge.
 				</P>
 				<BridgeButton
+					isExternal
 					size='medium'
 					label='Bridge your GIV'
 					icon={<IconExternalLink size={16} />}

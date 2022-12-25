@@ -1,187 +1,142 @@
 import Link from 'next/link';
-import router from 'next/router';
-import { Button, IconExternalLink, P } from '@giveth/ui-design-system';
-import { useWeb3React } from '@web3-react/core';
+import { useIntl } from 'react-intl';
 import {
-	OverviewTopContainer,
-	PreTitle,
-	OverviewTitle,
 	OverviewBottomContainer,
-	ClaimCard,
-	ClaimCardButton,
-	ClaimCardTitle,
-	Section2Title,
+	VoteCard,
+	VoteCardButton,
+	VoteCardTitle,
 	TabDesc,
 	TabTitle,
-	SubTitle,
 	DataBlockWithMargin,
-	ClaimCardQuote,
+	VoteCardQuote,
 	DataBlockButton,
-	ClaimRow,
 } from './Overview.sc';
 import { IconGIV } from '../Icons/GIV';
 import config from '@/configuration';
 import Routes from '@/lib/constants/Routes';
 import { Col, Container, Row } from '@/components/Grid';
-import GivEconomyProjectCards from '../cards/GivEconomyProjectCards';
-import { Flex } from '../styled-components/Flex';
-import { ExtLinkCyan } from './commons';
+import { StakingType } from '@/types/config';
+import TabOverviewVideo from './TabOverviewVideo';
 
-export const TabOverviewTop = () => {
-	return (
-		<OverviewTopContainer>
-			<Container>
-				<PreTitle as='span'>Welcome to the</PreTitle>
-				<OverviewTitle>GIVeconomy</OverviewTitle>
-				<Col lg={9}>
-					<SubTitle size='medium'>
-						The GIVeconomy empowers our collective of projects,
-						donors, builders, and community members to build the
-						Future of Giving.
-					</SubTitle>
-				</Col>
-			</Container>
-		</OverviewTopContainer>
-	);
-};
-
-export const TabOverviewBottom = () => {
-	const { chainId } = useWeb3React();
-
-	const goToClaim = () => {
-		router.push(Routes.Claim);
-	};
+export const TabOverview = () => {
+	const { formatMessage } = useIntl();
 
 	return (
-		<OverviewBottomContainer>
-			<Container>
-				<TabTitle weight={700}>The Economy of Giving</TabTitle>
-				<Col md={10} lg={8}>
-					<TabDesc size='medium'>
-						Giveth is rewarding and empowering those who give to
-						projects, to society, and to the world!
-					</TabDesc>
-				</Col>
-				<Row>
-					<Col xs={12} sm={6} md={4}>
-						<DataBlockWithMargin
-							title='GIV Token'
-							subtitle='Donate, earn, govern'
-							button={
-								<Button
-									label='CLAIM YOUR GIVDROP'
-									buttonType='primary'
-									onClick={goToClaim}
-								/>
-							}
-							icon={<IconGIV size={32} />}
-						>
-							GIV fuels and directs the Future of Giving,
-							inspiring people to become Givers and participate in
-							an ecosystem of collective support, abundance, and
-							value-creation.
-						</DataBlockWithMargin>
+		<>
+			<TabOverviewVideo
+				src='/video/giveconomy.mp4'
+				poster='/video/giveconomy.webp'
+			/>
+			<OverviewBottomContainer>
+				<Container>
+					<TabTitle weight={700}>
+						{formatMessage({ id: 'label.the_economy_of_giving' })}
+					</TabTitle>
+					<Col md={10} lg={8}>
+						<TabDesc size='medium'>
+							{formatMessage({
+								id: 'label.giveth_is_rewarding_and_empowering_those',
+							})}
+						</TabDesc>
 					</Col>
-					<Col xs={12} sm={6} md={4}>
-						<DataBlockWithMargin
-							title='GIVbacks'
-							subtitle='GIVE AND RECEIVE'
-						>
-							Giveth is a donor owned and governed economy. With
-							GIVbacks, we reward donors to verified projects on
-							Giveth with GIV tokens.
-						</DataBlockWithMargin>
-					</Col>
-					<Col xs={12} sm={6} md={4}>
-						<DataBlockWithMargin
-							title='GIVstream'
-							subtitle='Get more GIV'
-						>
-							Welcome to the expanding GIViverse! With the
-							GIVstream, our community members become long-term
-							stakeholders in the Future of Giving.
-						</DataBlockWithMargin>
-					</Col>
-				</Row>
-				<Section2Title>How to participate</Section2Title>
-				<Row>
-					<Col xs={12} sm={6} md={4}>
-						<DataBlockWithMargin
-							title='Give'
-							button={
-								<Link href={Routes.Projects} passHref>
-									<DataBlockButton label='DONATE TO PROJECTS' />
-								</Link>
-							}
-						>
-							Donate to empower change-makers that are working
-							hard to make a difference. Get GIVbacks when you
-							donate to verified projects.
-						</DataBlockWithMargin>
-					</Col>
-					<Col xs={12} sm={6} md={4}>
-						<DataBlockWithMargin
-							title='Govern'
-							button={
-								<DataBlockButton
-									href={config.GARDEN_LINK}
-									target='_blank'
-									label='SEE PROPOSALS'
-								/>
-							}
-						>
-							The GIVeconomy empowers our collective of projects,
-							donors, builders and community members to build the
-							Future of Giving.
-						</DataBlockWithMargin>
-					</Col>
-					<Col xs={12} sm={6} md={4}>
-						<DataBlockWithMargin
-							title='Earn'
-							button={
-								<Link href={Routes.GIVfarm} passHref>
-									<DataBlockButton label='SEE FARMS' />
-								</Link>
-							}
-						>
-							Become a liquidity provider and stake tokens in the
-							GIVfarm to generate even more GIV in rewards.
-						</DataBlockWithMargin>
-					</Col>
-				</Row>
-				<ClaimCard>
-					<ClaimCardTitle weight={900}>
-						Claim your GIVdrop
-					</ClaimCardTitle>
-					<ClaimCardQuote size='small'>
-						Connect your wallet or check an ethereum address to see
-						your rewards.
-					</ClaimCardQuote>
-					<ClaimRow alignItems='center'>
-						<ClaimCardButton
-							label='CLAIM YOUR GIV'
-							buttonType='primary'
-							onClick={goToClaim}
-						/>
-						<Flex gap='8px'>
-							<P>Didn’t get the GIVdrop?</P>
-							<ExtLinkCyan
-								size='Big'
-								target='_blank'
-								rel='noreferrer'
-								href={
-									chainId === config.XDAI_NETWORK_NUMBER
-										? config.XDAI_CONFIG.GIV.BUY_LINK
-										: config.MAINNET_CONFIG.GIV.BUY_LINK
+					<Row>
+						<Col xs={12} sm={6} md={4}>
+							<DataBlockWithMargin
+								title='GIV'
+								subtitle={formatMessage({
+									id: 'label.donate_earn_govern',
+								})}
+								button={
+									<DataBlockButton
+										href={config.XDAI_CONFIG.GIV.BUY_LINK}
+										isExternal
+										label={formatMessage({
+											id: 'label.get_giv',
+										})}
+										linkType='primary'
+									/>
+								}
+								icon={<IconGIV size={32} />}
+							>
+								{formatMessage({
+									id: 'label.giv_fuels_and_directs',
+								})}
+							</DataBlockWithMargin>
+						</Col>
+						<Col xs={12} sm={6} md={4}>
+							<DataBlockWithMargin
+								title='GIVbacks'
+								subtitle={formatMessage({
+									id: 'label.give_and_receive',
+								})}
+								button={
+									<Link href={Routes.Projects}>
+										<DataBlockButton
+											label={formatMessage({
+												id: 'page.home.bigscreen.see_projects',
+											})}
+										/>
+									</Link>
 								}
 							>
-								Buy GIV token <IconExternalLink />
-							</ExtLinkCyan>
-						</Flex>
-					</ClaimRow>
-				</ClaimCard>
-				<GivEconomyProjectCards />
+								{formatMessage({
+									id: 'label.giveth_is_a_donor_owned_economy',
+								})}
+							</DataBlockWithMargin>
+						</Col>
+						<Col xs={12} sm={6} md={4}>
+							<DataBlockWithMargin
+								title='GIVpower'
+								subtitle={formatMessage({
+									id: 'label.boost_projects',
+								})}
+								button={
+									<Link
+										href={`${Routes.GIVfarm}/?open=${StakingType.GIV_LM}&chain=gnosis`}
+									>
+										<DataBlockButton
+											label={formatMessage({
+												id: 'label.stake_for_givpower',
+											})}
+										/>
+									</Link>
+								}
+							>
+								{formatMessage({
+									id: 'label.givpower_allows_you_to_boost',
+								})}
+								<br />
+								<br />
+							</DataBlockWithMargin>
+						</Col>
+					</Row>
+				</Container>
+			</OverviewBottomContainer>
+			<TabOverviewVideo
+				src='/video/givpower.mp4'
+				poster='/video/givpower.webp'
+			/>
+			<Container>
+				<VoteCard>
+					<VoteCardTitle weight={900}>
+						{formatMessage({ id: 'label.vote_in_giveth_dao' })}
+					</VoteCardTitle>
+					<VoteCardQuote size='small'>
+						{formatMessage({
+							id: 'label.use_giv_to_vote',
+						})}
+					</VoteCardQuote>
+					<VoteCardButton
+						isExternal
+						label={formatMessage({
+							id: 'label.see_proposals',
+						})}
+						linkType='primary'
+						href={config.GARDEN_LINK}
+						size='large'
+					/>
+				</VoteCard>
 			</Container>
-		</OverviewBottomContainer>
+		</>
 	);
 };

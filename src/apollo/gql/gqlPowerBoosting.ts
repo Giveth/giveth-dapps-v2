@@ -14,6 +14,7 @@ export const SAVE_POWER_BOOSTING = gql`
 				id
 				title
 				slug
+				verified
 			}
 			percentage
 		}
@@ -37,6 +38,7 @@ export const SAVE_MULTIPLE_POWER_BOOSTING = gql`
 				id
 				title
 				slug
+				verified
 			}
 			percentage
 		}
@@ -68,6 +70,33 @@ export const FETCH_POWER_BOOSTING_INFO = gql`
 					id
 					title
 					slug
+					verified
+				}
+				percentage
+			}
+		}
+	}
+`;
+
+export const FETCH_PROJECT_BOOSTERS = gql`
+	query getPowerBoostingsQuery(
+		$take: Int
+		$skip: Int
+		$orderBy: PowerBoostingOrderBy
+		$projectId: Int
+	) {
+		getPowerBoosting(
+			take: $take
+			skip: $skip
+			orderBy: $orderBy
+			projectId: $projectId
+		) {
+			totalCount
+			powerBoostings {
+				id
+				user {
+					name
+					walletAddress
 				}
 				percentage
 			}
@@ -93,10 +122,9 @@ export const FETCH_PROJECT_BOOSTINGS = gql`
 				id
 				userId
 				projectId
-				percentage
-				userPower
 				boostedPower
 				rank
+				round
 				user {
 					id
 					firstName
@@ -105,5 +133,11 @@ export const FETCH_PROJECT_BOOSTINGS = gql`
 				}
 			}
 		}
+	}
+`;
+
+export const FETCH_PROJECTED_RANK = `
+	query powerAmountRank($powerAmount: Float!) {
+		powerAmountRank(powerAmount: $powerAmount)
 	}
 `;

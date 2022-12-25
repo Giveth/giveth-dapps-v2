@@ -11,14 +11,14 @@ interface IHeaderRouteItem {
 }
 
 const HeaderRoutesItem = ({ href, title }: IHeaderRouteItem) => (
-	<Link href={href} passHref>
-		<RoutesItem isCreate={href === Routes.CreateProject} href={href}>
+	<Link href={href}>
+		<RoutesItem isCreate={href === Routes.CreateProject}>
 			{title}
 		</RoutesItem>
 	</Link>
 );
 
-const RoutesItem = styled.a<{ isCreate: boolean }>`
+const RoutesItem = styled.span<{ isCreate: boolean }>`
 	font-weight: 400;
 	font-size: 16px;
 	cursor: pointer;

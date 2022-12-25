@@ -2,30 +2,26 @@ import Image from 'next/image';
 import styled from 'styled-components';
 import { Lead, neutralColors } from '@giveth/ui-design-system';
 
-import { IProject } from '@/apollo/types/types';
 import { IDonationsByProjectId } from '@/apollo/types/gqlTypes';
 import ProjectTotalFundCard from './ProjectTotalFundCard';
 import ProjectDonationTable from './ProjectDonationTable';
 import { FlexCenter } from '@/components/styled-components/Flex';
+import { useProjectContext } from '@/context/project.context';
 
 const ProjectDonationsIndex = (props: {
 	donationsByProjectId: IDonationsByProjectId;
-	project?: IProject;
-	isActive?: boolean;
-	isDraft: boolean;
 }) => {
-	const { donationsByProjectId, project, isActive, isDraft } = props;
+	const { donationsByProjectId } = props;
 	const { totalCount } = donationsByProjectId || 0;
-
+	const { isActive, isDraft } = useProjectContext();
 	return (
 		<>
 			{totalCount > 0 ? (
 				<>
-					<ProjectTotalFundCard project={project} />
+					<ProjectTotalFundCard />
 					<ProjectDonationTable
 						donations={donationsByProjectId.donations}
 						totalDonations={donationsByProjectId.totalCount}
-						project={project}
 					/>
 				</>
 			) : (

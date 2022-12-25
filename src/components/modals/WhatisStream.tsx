@@ -77,7 +77,7 @@ export const WhatisStreamModal: FC<IWhatisStreamModal> = ({
 				</Desc>
 				{!regenStreamConfig && (
 					<LinksRow>
-						<Link href={Routes.GIVstream} passHref>
+						<Link href={Routes.GIVstream}>
 							<GLink onClick={closeModal}>
 								<Flex justifyContent='center'>
 									View Your {rewardTokenSymbol}stream{' '}
