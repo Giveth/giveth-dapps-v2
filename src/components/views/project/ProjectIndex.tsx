@@ -11,14 +11,8 @@ import ProjectTabs from './ProjectTabs';
 import ProjectDonateCard from './projectDonateCard/ProjectDonateCard';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { client } from '@/apollo/apolloClient';
-import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
-import { IDonation, IProject } from '@/apollo/types/types';
-import {
-	EDirection,
-	EDonationStatus,
-	EProjectStatus,
-	ESortby,
-} from '@/apollo/types/gqlEnums';
+import { IDonation } from '@/apollo/types/types';
+import { EDirection, EDonationStatus, ESortby } from '@/apollo/types/gqlEnums';
 import InfoBadge from '@/components/badges/InfoBadge';
 import {
 	IDonationsByProjectIdGQL,
@@ -33,6 +27,7 @@ import { useAppSelector } from '@/features/hooks';
 import { ProjectMeta } from '@/components/Metatag';
 import { Col, Row } from '@/components/Grid';
 import ProjectGIVPowerIndex from '@/components/views/project/projectGIVPower';
+import { useProjectContext } from '@/context/project.context';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
@@ -47,65 +42,32 @@ const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {
 
 const donationsPerPage = 10;
 
-const ProjectIndex: FC<IProjectBySlug> = props => {
+const ProjectIndex: FC<IProjectBySlug> = () => {
 	const [activeTab, setActiveTab] = useState(0);
-	const [isActive, setIsActive] = useState<boolean>(true);
-	const [isDraft, setIsDraft] = useState<boolean>(false);
-	const [draftProject, setDraftProject] = useState<IProject>();
 	const [donations, setDonations] = useState<IDonation[]>([]);
 	const [totalDonations, setTotalDonations] = useState(0);
 	const [creationSuccessful, setCreationSuccessful] = useState(false);
 
 	const user = useAppSelector(state => state.user.userData);
+	const { fetchProjectBoosters, projectData, isActive, isDraft } =
+		useProjectContext();
 
-	const project = draftProject || props.project;
+	const router = useRouter();
+	const slug = router.query.projectIdSlug as string;
 
 	const {
 		adminUser,
 		description = '',
 		title,
-		status,
 		id = '',
 		projectPower,
-	} = project || {};
-	const router = useRouter();
-	const slug = router.query.projectIdSlug as string;
+		projectFuturePower,
+	} = projectData || {};
+
 	const isAdmin = compareAddresses(
 		adminUser?.walletAddress,
 		user?.walletAddress,
 	);
-
-	const fetchProject = async () => {
-		client
-			.query({
-				query: FETCH_PROJECT_BY_SLUG,
-				variables: { slug, connectedWalletUserId: Number(user?.id) },
-				fetchPolicy: 'network-only',
-			})
-			.then((res: { data: { projectBySlug: IProject } }) => {
-				const _project = res.data.projectBySlug;
-				if (_project.status.name !== EProjectStatus.CANCEL) {
-					setDraftProject(_project);
-				} else {
-					draftProject && setDraftProject(undefined);
-				}
-			})
-			.catch((error: unknown) => {
-				showToastError(error);
-				captureException(error, {
-					tags: {
-						section: 'fetchProject',
-					},
-				});
-			});
-	};
-
-	useEffect(() => {
-		if (status) {
-			setIsActive(status.name === EProjectStatus.ACTIVE);
-			setIsDraft(status.name === EProjectStatus.DRAFT);
-		}
-	}, [status]);
 
 	useEffect(() => {
 		if (!id) return;
@@ -136,26 +98,19 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 					},
 				});
 			});
+		fetchProjectBoosters(+id, projectData?.status.name);
 	}, [id]);
-
-	useEffect(() => {
-		draftProject && setDraftProject(undefined);
-		// Re-fetch project if project is draft and user is signed in
-		if (!props.project && user?.isSignedIn) {
-			fetchProject().then();
-		}
-	}, [props.project, user]);
 
 	if (creationSuccessful) {
 		return (
 			<SuccessfulCreation
+				project={projectData!}
 				showSuccess={setCreationSuccessful}
-				project={project as IProject}
 			/>
 		);
 	}
 
-	if (!project) {
+	if (!projectData) {
 		return <NotAvailableProject />;
 	}
 
@@ -164,10 +119,10 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 			<Wrapper>
 				<Head>
 					<title>{title && `${title} |`} Giveth</title>
-					<ProjectMeta project={project} preTitle='Check out' />
+					<ProjectMeta project={projectData} preTitle='Check out' />
 				</Head>
 
-				<ProjectHeader project={project} />
+				<ProjectHeader />
 				{isDraft && (
 					<DraftIndicator>
 						<InfoBadge />
@@ -178,11 +133,10 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 				)}
 				<BodyWrapper>
 					<Col sm={8}>
-						{project && !isDraft && (
+						{projectData && !isDraft && (
 							<ProjectTabs
 								activeTab={activeTab}
 								setActiveTab={setActiveTab}
-								project={project}
 								totalDonations={totalDonations}
 							/>
 						)}
@@ -195,38 +149,26 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 						{activeTab === 0 && (
 							<RichTextViewer content={description} />
 						)}
-						{activeTab === 1 && (
-							<ProjectUpdates
-								project={project}
-								fetchProject={fetchProject}
-							/>
-						)}
+						{activeTab === 1 && <ProjectUpdates />}
 						{activeTab === 2 && (
 							<ProjectDonations
 								donationsByProjectId={{
 									donations,
 									totalCount: totalDonations,
 								}}
-								project={project}
-								isActive={isActive}
-								isDraft={isDraft}
 							/>
 						)}
 						{activeTab === 3 && (
 							<ProjectGIVPowerIndex
-								projectId={id}
 								projectPower={projectPower}
+								projectFuturePower={projectFuturePower}
+								isAdmin={isAdmin}
 							/>
 						)}
 					</Col>
-					{project && (
+					{projectData && (
 						<Col sm={4}>
 							<ProjectDonateCard
-								isDraft={isDraft}
-								project={project!}
-								isActive={isActive}
-								setIsActive={setIsActive}
-								setIsDraft={setIsDraft}
 								setCreationSuccessful={setCreationSuccessful}
 							/>
 						</Col>

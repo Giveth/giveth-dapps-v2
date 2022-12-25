@@ -11,6 +11,8 @@ import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
 import { useWeb3React } from '@web3-react/core';
+import Link from 'next/link';
+import { useIntl } from 'react-intl';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
 import {
@@ -32,6 +34,7 @@ import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { Flex } from '@/components/styled-components/Flex';
 import links from '@/lib/constants/links';
 import ExternalLink from '@/components/ExternalLink';
+import Routes from '@/lib/constants/Routes';
 import type { PoolStakingConfig } from '@/types/config';
 
 interface ILockModalProps extends IModal {
@@ -52,6 +55,7 @@ const LockModal: FC<ILockModalProps> = ({
 	maxAmount,
 	setShowModal,
 }) => {
+	const { formatMessage } = useIntl();
 	const [amount, setAmount] = useState('0');
 	const [round, setRound] = useState(0);
 	const [lockState, setLockState] = useState<ELockState>(ELockState.LOCK);
@@ -93,7 +97,7 @@ const LockModal: FC<ILockModalProps> = ({
 			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerTitlePosition={'left'}
-			headerTitle={'Stake for GIVpower'}
+			headerTitle={formatMessage({ id: 'label.stake_for_givpower' })}
 			headerIcon={<IconRocketInSpace32 />}
 		>
 			<StakeModalContainer>
@@ -101,7 +105,9 @@ const LockModal: FC<ILockModalProps> = ({
 					{lockState === ELockState.LOCK && (
 						<>
 							<SectionTitle weight={700}>
-								Lock your staked GIV
+								{formatMessage({
+									id: 'label.lock_your_staked_giv',
+								})}
 							</SectionTitle>
 							<AmountInput
 								setAmount={setAmount}
@@ -109,15 +115,18 @@ const LockModal: FC<ILockModalProps> = ({
 								poolStakingConfig={poolStakingConfig}
 							/>
 							<Flex gap='4px' alignItems='center'>
-								<SectionTitle weight={700}>Rounds</SectionTitle>
+								<SectionTitle weight={700}>
+									{formatMessage({ id: 'label.rounds' })}
+								</SectionTitle>
 								<IconWithTooltip
 									icon={<IconHelpFilled16 />}
 									direction='right'
 									align='top'
 								>
 									<LockInfotooltip>
-										Rounds are 2 week periods corresponding
-										to GIVbacks rounds.
+										{formatMessage({
+											id: 'label.rounds_are_two_weeks_periods',
+										})}
 									</LockInfotooltip>
 								</IconWithTooltip>
 							</Flex>
@@ -126,7 +135,9 @@ const LockModal: FC<ILockModalProps> = ({
 							<StyledButton
 								buttonType='primary'
 								size='small'
-								label={'Lock to increase your multiplier'}
+								label={formatMessage({
+									id: 'label.lock_to_increase_your_multiplier',
+								})}
 								onClick={() => {
 									setLockState(ELockState.CONFIRM);
 								}}
@@ -139,7 +150,7 @@ const LockModal: FC<ILockModalProps> = ({
 							<CancelButton
 								buttonType='texty'
 								size='small'
-								label={'cancel'}
+								label={formatMessage({ id: 'label.cancel' })}
 								onClick={() => {
 									setShowModal(false);
 								}}
@@ -157,7 +168,9 @@ const LockModal: FC<ILockModalProps> = ({
 							<LockInfo round={round} amount={amount} />
 							<StyledButton
 								buttonType='primary'
-								label={'Lock your tokens'}
+								label={formatMessage({
+									id: 'label.lock_your_tokens',
+								})}
 								onClick={onLock}
 								disabled={
 									amount == '0' ||
@@ -172,40 +185,25 @@ const LockModal: FC<ILockModalProps> = ({
 						<>
 							<LockingBrief round={round} amount={amount} />
 							<TotalGIVpowerBox />
-							{/* <P>
-								You get GIVpower when you stake &amp; lock GIV.
-								GIVpower allows you to influence the ranking of
-								projects on Giveth.
-							</P>
 							<P>
-								Top ranked projects may be eligible for matching
-								funds, &amp; their donors get more GIVbacks!
+								{formatMessage({
+									id: 'label.user_your_givpower_to_support_verified_projects',
+								})}
 							</P>
-							<P>
-								Boost your favorite projects, or delegate your
-								GIVpower to community representatives.
-							</P> */}
-							<P>
-								Coming soon: GIVpower will allow you to support
-								verified projects while earning rewards.
-							</P>
+							<Link href={Routes.Projects}>
+								<BoostButton
+									linkType='primary'
+									label={formatMessage({
+										id: 'label.boost_projects',
+									})}
+									size='small'
+								/>
+							</Link>
 							<ExternalLink href={links.GIVPOWER_DOC}>
-								<LearnMoreLink>Learn More</LearnMoreLink>
+								<LearnMoreLink>
+									{formatMessage({ id: 'label.learn_more' })}
+								</LearnMoreLink>
 							</ExternalLink>
-							{/* <BoostButton
-								linkType='primary'
-								label={'Boost projects'}
-								size='small'
-								href={Routes.Projects}
-							/>
-							<CancelButton
-								buttonType='texty'
-								size='small'
-								label={'I’ll do it later'}
-								onClick={() => {
-									setShowModal(false);
-								}}
-							/> */}
 						</>
 					)}
 				</StakeInnerModal>

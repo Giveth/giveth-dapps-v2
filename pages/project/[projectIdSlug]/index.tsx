@@ -4,9 +4,14 @@ import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 
 import ProjectIndex from '@/components/views/project/ProjectIndex';
 import { IProjectBySlug } from '@/apollo/types/gqlTypes';
+import { ProjectProvider } from '@/context/project.context';
 
 const ProjectRoute: FC<IProjectBySlug> = ({ project }) => {
-	return <ProjectIndex project={project} />;
+	return (
+		<ProjectProvider project={project}>
+			<ProjectIndex />
+		</ProjectProvider>
+	);
 };
 
 export async function getServerSideProps(props: {
@@ -28,6 +33,7 @@ export async function getServerSideProps(props: {
 			},
 		};
 	} catch (error) {
+		// TODO: Handle 502 error
 		return {
 			props: {},
 		};

@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { GLink, H2, Lead } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 
@@ -135,6 +136,7 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const [walletIsChanged, setWalletIsChanged] = useState(false);
 
 	const dispatch = useAppDispatch();
+	const { formatMessage } = useIntl();
 
 	const {
 		totalAmount,
@@ -169,10 +171,13 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 
 	switch (giveDropState) {
 		case GiveDropStateType.notConnected:
-			title = 'Claim your GIVdrop';
-			desc =
-				'Connect your wallet or check an Ethereum address to see your rewards.';
-			btnLabel = isloading ? 'Loading Data' : 'CONNECT WALLET';
+			title = formatMessage({ id: 'label.claim_your_givdrop' });
+			desc = formatMessage({
+				id: 'label.connect_your_wallet_or_check_an_eth_address',
+			});
+			btnLabel = isloading
+				? formatMessage({ id: 'label.loading_data' })
+				: formatMessage({ id: 'component.button.connect_wallet' });
 			bg = {
 				width: '473px',
 				height: '210px',
@@ -200,13 +205,13 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 				<span>
 					But there are more ways to get GIV! Try another address or
 					donate to verified projects to qualify for{' '}
-					<Link href={Routes.GIVbacks} passHref>
+					<Link href={Routes.GIVbacks}>
 						<ClickableStrong>GIVbacks</ClickableStrong>
 					</Link>
 					.
 				</span>
 			);
-			btnLabel = 'CHANGE WALLET';
+			btnLabel = formatMessage({ id: 'label.change_wallet' });
 			bg = {
 				width: '622px',
 				height: '245px',
@@ -252,7 +257,7 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 									</ConnectButton>
 									{giveDropState ===
 										GiveDropStateType.Missed && (
-										<Link href='/' passHref>
+										<Link href='/'>
 											<WalletLink>
 												Go to GIVeconomy
 											</WalletLink>
@@ -273,6 +278,7 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 										</WalletCheckButton>
 									</WalletDisplayerInputContainer>
 									<WalletLink
+										as='a'
 										href='https://docs.giveth.io/giveconomy/givdrop/#if-you-get-stuck-in-the-givdrop-claim'
 										target='_blank'
 									>

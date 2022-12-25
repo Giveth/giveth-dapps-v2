@@ -98,7 +98,7 @@ Explore @givethio to support this vision for the Future of Giving. 💜`;
 						})}
 					</Lead>
 					<br />
-					<Link href={Routes.GIVECONOMY} passHref>
+					<Link href={Routes.GIVECONOMY}>
 						<GIVeconomyUrl>
 							{formatMessage({
 								id: 'component.button.learn_more_giveconomy',
@@ -235,7 +235,7 @@ const GIVeconomy = styled.div`
 	}
 `;
 
-const GIVeconomyUrl = styled.a`
+const GIVeconomyUrl = styled.span`
 	color: ${brandColors.mustard[500]} !important;
 	font-size: 16px;
 `;

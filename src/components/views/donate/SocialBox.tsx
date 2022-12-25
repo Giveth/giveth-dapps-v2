@@ -51,9 +51,9 @@ Donate directly on Ethereum Mainnet or @gnosischain w/ no fees or intermediaries
 					>
 						<Image
 							src={'/images/social-tw.svg'}
-							alt='tw'
-							width='44px'
-							height='44px'
+							alt='twitter'
+							width='44'
+							height='44'
 						/>
 					</TwitterShareButton>
 				</SocialItem>
@@ -65,9 +65,9 @@ Donate directly on Ethereum Mainnet or @gnosischain w/ no fees or intermediaries
 					>
 						<Image
 							src={'/images/social-linkedin.svg'}
-							alt='lin'
-							width='44px'
-							height='44px'
+							alt='linked-in'
+							width='44'
+							height='44'
 						/>
 					</LinkedinShareButton>
 				</SocialItem>
@@ -79,9 +79,9 @@ Donate directly on Ethereum Mainnet or @gnosischain w/ no fees or intermediaries
 					>
 						<Image
 							src={'/images/social-fb.svg'}
-							alt='fb'
-							width='44px'
-							height='44px'
+							alt='facebook'
+							width='44'
+							height='44'
 						/>
 					</FacebookShareButton>
 				</SocialItem>
@@ -98,6 +98,7 @@ const BLead = styled(Lead)`
 `;
 
 const Social = styled.div<{ isSuccess?: boolean }>`
+	z-index: 1;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;

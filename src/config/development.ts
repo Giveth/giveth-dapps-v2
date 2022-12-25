@@ -289,7 +289,6 @@ const config: EnvConfig = {
 						unit: 'LP',
 						regenStreamType: StreamType.FOX,
 						regenFarmType: RegenFarmType.FOX_XDAI,
-
 						farmStartTimeMS: 1646306818206,
 						introCard: {
 							title: 'ShapeShift DAO',

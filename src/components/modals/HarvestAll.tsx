@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
-import Lottie from 'react-lottie';
 import {
 	brandColors,
 	Caption,
@@ -11,6 +10,7 @@ import {
 	P,
 } from '@giveth/ui-design-system';
 import { ethers } from 'ethers';
+import { useIntl } from 'react-intl';
 import BigNumber from 'bignumber.js';
 import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
@@ -65,6 +65,7 @@ import { LiquidityPosition } from '@/types/nfts';
 import { Flex } from '../styled-components/Flex';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import LottieControl from '@/components/animations/lottieControl';
 import type { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 
 interface IHarvestAllModalProps extends IModal {
@@ -79,15 +80,6 @@ interface IHarvestAllModalProps extends IModal {
 		key?: (string | number)[] | null | undefined;
 	};
 }
-
-const loadingAnimationOptions = {
-	loop: true,
-	autoplay: true,
-	animationData: LoadingAnimation,
-	rendererSettings: {
-		preserveAspectRatio: 'xMidYMid slice',
-	},
-};
 
 enum HarvestStates {
 	HARVEST,
@@ -113,6 +105,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	const sdh = new SubgraphDataHelper(
 		useAppSelector(state => state.subgraph.currentValues),
 	);
+	const { formatMessage } = useIntl();
 	const {
 		mainnetThirdPartyTokensPrice,
 		xDaiThirdPartyTokensPrice,
@@ -131,7 +124,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	//GIVfarm
 	const [earnedLiquid, setEarnedLiquid] = useState(ethers.constants.Zero);
 	const [earnedStream, setEarnedStream] = useState<BigNumber>(Zero);
-	//GIVback
+	//GIVbacks
 	const [givBackStream, setGivBackStream] = useState<BigNumber.Value>(0);
 	//Sum
 	const [sumLiquid, setSumLiquid] = useState(ethers.constants.Zero);
@@ -189,12 +182,12 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 
 	//calculate Liquid Sum
 	useEffect(() => {
-		setSumLiquid(rewardLiquidPart.add(earnedLiquid)); // earnedLiquid includes the givback liquid part
+		setSumLiquid(rewardLiquidPart.add(earnedLiquid)); // earnedLiquid includes the givbacks liquid part
 	}, [rewardLiquidPart, earnedLiquid]);
 
 	//calculate Stream Sum
 	useEffect(() => {
-		setSumStream(BigNumber.sum(rewardStream, earnedStream)); // earnedStream includes the givback stream part
+		setSumStream(BigNumber.sum(rewardStream, earnedStream)); // earnedStream includes the givbacks stream part
 	}, [rewardStream, earnedStream]);
 
 	useEffect(() => {
@@ -350,8 +343,13 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 										/>
 										<HelpRow alignItems='baseline' wrap={1}>
 											<Caption>
-												Your new {tokenSymbol}
-												stream flowrate
+												{formatMessage({
+													id: 'label.your_new',
+												})}{' '}
+												{tokenSymbol}{' '}
+												{formatMessage({
+													id: 'label.stream_flowrate',
+												})}
 											</Caption>
 											<IconWithTooltip
 												icon={
@@ -365,9 +363,13 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 												direction={'top'}
 											>
 												<TooltipContent>
-													Increase your {tokenSymbol}
-													stream flowrate when you
-													claim liquid rewards!
+													{formatMessage({
+														id: 'label.increase_your',
+													})}{' '}
+													{tokenSymbol}
+													{formatMessage({
+														id: 'label.stream_flowrate_when_you_claim',
+													})}
 												</TooltipContent>
 											</IconWithTooltip>
 											<Flex gap='8px'>
@@ -375,21 +377,28 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 												<GIVRate>
 													{formatWeiHelper(sumStream)}
 												</GIVRate>
-												<Lead>{tokenSymbol}/week</Lead>
+												<Lead>
+													{tokenSymbol}
+													{formatMessage({
+														id: 'label./week',
+													})}
+												</Lead>
 											</Flex>
 										</HelpRow>
 									</>
 								)}
 								<HarvestAllDesc>
-									When you harvest {tokenSymbol}
-									rewards, all liquid {tokenSymbol} allocated
-									to you on that chain is sent to your wallet.
-									Your {tokenSymbol}stream flowrate may also
-									increase. Below is the breakdown of rewards
-									you will get when you harvest.
+									{formatMessage(
+										{
+											id: 'label.when_you_harvest',
+										},
+										{ tokenSymbol },
+									)}
 								</HarvestAllDesc>
 								<BreakdownTableTitle>
-									Rewards breakdown
+									{formatMessage({
+										id: 'label.rewards_breakdown',
+									})}
 								</BreakdownTableTitle>
 								<BreakdownTableBody>
 									<BreakdownRow>
@@ -421,12 +430,17 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 											)}
 										</BreakdownRate>
 										<BreakdownUnit>
-											{tokenSymbol}/week
+											{tokenSymbol}
+											{formatMessage({
+												id: 'label./week',
+											})}
 										</BreakdownUnit>
 										{givBackStream != 0 && (
 											<>
 												<GIVbackStreamDesc>
-													Recieved from GIVbacks
+													{formatMessage({
+														id: 'label.received_from_givbacks',
+													})}
 												</GIVbackStreamDesc>
 												<BreakdownRate>
 													{formatWeiHelper(
@@ -436,7 +450,10 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 													)}
 												</BreakdownRate>
 												<BreakdownUnit>
-													{tokenSymbol}/week
+													{tokenSymbol}
+													{formatMessage({
+														id: 'label./week',
+													})}
 													<IconWithTooltip
 														icon={
 															<Flex gap='4px'>
@@ -451,12 +468,9 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 														direction={'left'}
 													>
 														<TooltipContent>
-															Your GIVstream
-															flowrate was
-															automatically
-															increased when
-															GIVbacks were
-															distributed.
+															{formatMessage({
+																id: 'label.your_givstream_flowrate_was_automatically_increased',
+															})}
 														</TooltipContent>
 													</IconWithTooltip>
 												</BreakdownUnit>
@@ -526,7 +540,10 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 													)}
 												</BreakdownRate>
 												<BreakdownUnit>
-													{tokenSymbol}/week
+													{tokenSymbol}
+													{formatMessage({
+														id: 'label./week',
+													})}
 												</BreakdownUnit>
 											</BreakdownRow>
 										)}
@@ -553,14 +570,19 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 											</P>
 										</BreakdownStreamSum>
 										<BreakdownUnit>
-											{tokenSymbol}/week
+											{tokenSymbol}
+											{formatMessage({
+												id: 'label./week',
+											})}
 										</BreakdownUnit>
 									</BreakdownSumRow>
 								</BreakdownTableBody>
 
 								{state === HarvestStates.HARVEST && (
 									<HarvestButton
-										label='HARVEST'
+										label={formatMessage({
+											id: 'label.harvest',
+										})}
 										size='medium'
 										buttonType='primary'
 										onClick={onHarvest}
@@ -568,17 +590,21 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 								)}
 								{state === HarvestStates.HARVESTING && (
 									<HarvestAllPending>
-										<Lottie
-											options={loadingAnimationOptions}
-											height={40}
-											width={40}
+										<LottieControl
+											animationData={LoadingAnimation}
+											size={40}
 										/>
-										&nbsp;HARVEST PENDING
+										&nbsp;
+										{formatMessage({
+											id: 'label.harvest_pending',
+										})}
 									</HarvestAllPending>
 								)}
 								<CancelButton
 									disabled={state !== HarvestStates.HARVEST}
-									label='CANCEL'
+									label={formatMessage({
+										id: 'label.cancel',
+									})}
 									size='medium'
 									buttonType='texty'
 									onClick={closeModal}
@@ -610,7 +636,9 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 				)}
 				{state === HarvestStates.ERROR && (
 					<ErrorInnerModal
-						title='Something went wrong!'
+						title={formatMessage({
+							id: 'label.something_went_wrong',
+						})}
 						walletNetwork={network}
 						txHash={txHash}
 					/>

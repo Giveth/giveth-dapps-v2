@@ -5,21 +5,22 @@ import {
 	IconRocketInSpace32,
 	IconX,
 	neutralColors,
-	// ButtonLink,
-	Button,
 	brandColors,
+	ButtonLink,
 } from '@giveth/ui-design-system';
 import { useState } from 'react';
+import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-// import Routes from '@/lib/constants/Routes';
+import Link from 'next/link';
 import links from '@/lib/constants/links';
 import TotalGIVpowerBox from '../modals/StakeLock/TotalGIVpowerBox';
-import { Flex } from '../styled-components/Flex';
+import { Flex, FlexSpacer } from '../styled-components/Flex';
 import { StakeCardState } from './BaseStakingCard';
 import { LockupDetailsModal } from '../modals/LockupDetailsModal';
 import { useGIVpower } from '@/context/givpower.context';
 import { useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import Routes from '@/lib/constants/Routes';
 import type { Dispatch, FC, SetStateAction } from 'react';
 
 interface IGIVpowerCardIntro {
@@ -27,6 +28,7 @@ interface IGIVpowerCardIntro {
 }
 
 const GIVpowerCardIntro: FC<IGIVpowerCardIntro> = ({ setState }) => {
+	const { formatMessage } = useIntl();
 	const [showLockDetailModal, setShowLockDetailModal] = useState(false);
 	const { stakedAmount } = useGIVpower();
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
@@ -40,7 +42,7 @@ const GIVpowerCardIntro: FC<IGIVpowerCardIntro> = ({ setState }) => {
 				<HeaderRow>
 					<IconRocketInSpace32 />
 					<H6 weight={700}>GIVpower</H6>
-					<div style={{ flex: 1 }}></div>
+					<FlexSpacer />
 					<CloseButton
 						onClick={() => setState(StakeCardState.NORMAL)}
 					>
@@ -49,30 +51,26 @@ const GIVpowerCardIntro: FC<IGIVpowerCardIntro> = ({ setState }) => {
 				</HeaderRow>
 				<TotalGIVpowerBox />
 				<Desc>
-					You get GIVpower when you stake &amp; lock GIV. GIVpower
-					will allow you to boost projects to influence their ranking
-					on Giveth.
+					{formatMessage({
+						id: 'label.you_get_givpower_when_you_stake',
+					})}
 				</Desc>
 				<Desc>
-					It will allow you to support the projects you believe in,
-					without donating.
+					{formatMessage({
+						id: 'label.with_givpower_you_can_support_projects',
+					})}
 				</Desc>
-				{/* <ButtonLink
-				label='Boost projects with GIVpower'
-				href={Routes.Projects}
-			/> */}
-				{
-					// Commenting for now, we may need it later
-				}
-				{/* <LearnMoreButton
-					label='locked GIV details'
-					buttonType='texty'
-					onClick={() => setShowLockDetailModal(true)}
-				/> */}
+				<Link href={Routes.Projects}>
+					<ButtonLink
+						label={formatMessage({ id: 'label.boost_projects' })}
+					/>
+				</Link>
 				<LearnMoreButton
-					label='Learn More'
-					onClick={() => window.open(links.GIVPOWER_DOC)}
-					buttonType='texty'
+					isExternal
+					label={formatMessage({ id: 'label.learn_more' })}
+					linkType='texty'
+					href={links.GIVPOWER_DOC}
+					target='_blank'
 					icon={
 						<IconExternalLink
 							size={16}
@@ -107,11 +105,12 @@ const CloseButton = styled.div`
 
 const Desc = styled(P)`
 	text-align: center;
-	margin-bottom: 32px;
+	margin-bottom: 16px;
 `;
 
-const LearnMoreButton = styled(Button)`
+const LearnMoreButton = styled(ButtonLink)`
 	width: 100%;
+	margin-top: 8px;
 	margin-bottom: 16px;
 `;
 

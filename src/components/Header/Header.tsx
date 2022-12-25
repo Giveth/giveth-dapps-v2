@@ -7,7 +7,6 @@ import {
 	brandColors,
 	Button,
 	GLink,
-	IconGiveth,
 	IconNotificationFilled16,
 	neutralColors,
 	Overline,
@@ -64,6 +63,7 @@ import NotificationMenu from '../notification/NotificationMenu';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { fetchNotificationsData } from '@/features/notification/notification.services';
 import { useNotification } from '@/hooks/useNotification';
+import { IconGIV } from '../Icons/GIV';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -238,8 +238,8 @@ const Header: FC<IHeader> = () => {
 				{showBackBtn ? (
 					<Logo onClick={handleBack}>
 						<Image
-							width='26px'
-							height='26px'
+							width='26'
+							height='26'
 							alt='Giveth logo'
 							src={`/images/back-2.svg`}
 						/>
@@ -247,13 +247,13 @@ const Header: FC<IHeader> = () => {
 				) : (
 					<>
 						<MainLogoBtn>
-							<Link href={Routes.Home} passHref>
+							<Link href={Routes.Home}>
 								<Logo>
 									<Image
-										width='48px'
-										height='48px'
+										width='48'
+										height='48'
 										alt='Giveth logo'
-										src={`/images/logo/logo1.png`}
+										src='/images/logo/logo1.png'
 									/>
 								</Logo>
 							</Link>
@@ -265,7 +265,7 @@ const Header: FC<IHeader> = () => {
 			{!showBackBtn && (
 				<HeaderLinks theme={theme}>
 					{menuRoutes.map((link, index) => (
-						<Link href={link.href[0]} passHref key={index}>
+						<Link href={link.href[0]} key={index}>
 							<HeaderLink
 								size='Big'
 								theme={theme}
@@ -337,7 +337,7 @@ const Header: FC<IHeader> = () => {
 						>
 							<BalanceButton outline theme={theme}>
 								<HBContainer>
-									<IconGiveth size={24} />
+									<IconGIV size={24} />
 									<HBContent size='Big'>
 										{formatWeiHelper(givBalance.balance)}
 									</HBContent>

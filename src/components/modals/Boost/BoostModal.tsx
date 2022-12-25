@@ -20,6 +20,7 @@ interface IBoostModalProps extends IModal {
 export enum EBoostModalState {
 	BOOSTING,
 	BOOSTED,
+	LIMIT_EXCEEDED,
 }
 
 const BoostModal: FC<IBoostModalProps> = ({ setShowModal, projectId }) => {
@@ -35,24 +36,38 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal, projectId }) => {
 		return <ZeroGivpowerModal setShowModal={setShowModal} />;
 	}
 
-	const title = state === EBoostModalState.BOOSTING ? 'Boost' : 'Well done!';
+	const title = () => {
+		switch (state) {
+			case EBoostModalState.BOOSTING:
+				return 'Boost';
+			case EBoostModalState.LIMIT_EXCEEDED:
+				return 'Oh no!';
+			case EBoostModalState.BOOSTED:
+				return 'Well done!';
+			default:
+				return 'Boost';
+		}
+	};
 
 	return (
 		<Modal
 			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerTitlePosition={'left'}
-			headerTitle={title}
+			headerTitle={title()}
 			headerIcon={<IconRocketInSpace32 />}
 		>
 			<BoostModalContainer state={state} data-testid='boost-modal'>
-				{state === EBoostModalState.BOOSTING ? (
+				{state === EBoostModalState.BOOSTING ||
+				state === EBoostModalState.LIMIT_EXCEEDED ? (
 					<BoostInnerModal
 						totalGIVpower={BN(givPower.balance)}
 						setPercentage={setPercentage}
+						state={state}
 						setState={setState}
 						// TODO: Create Project context
 						projectId={projectId}
+						setShowModal={setShowModal}
 					/>
 				) : (
 					<BoostedInnerModal

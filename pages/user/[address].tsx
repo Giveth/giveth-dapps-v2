@@ -50,6 +50,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 			variables: {
 				address: address,
 			},
+			fetchPolicy: 'no-cache',
 		});
 		const user = userData?.userByAddress;
 		return {

@@ -1,144 +1,139 @@
 import { useRouter } from 'next/router';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useIntl } from 'react-intl';
+import { brandColors, neutralColors, P } from '@giveth/ui-design-system';
+import Link from 'next/link';
 
+import { useIntl } from 'react-intl';
+import { Flex } from '@/components/styled-components/Flex';
 import ProfileDonationsTab from './donationsTab/ProfileDonationsTab';
 import ProfileLikedTab from './ProfileLikedTab';
 import ProfileProjectsTab from './projectsTab/ProfileProjectsTab';
 import ProfileOverviewTab from './ProfileOverviewTab';
 import { IUserProfileView } from './UserProfile.view';
 import { Container } from '@/components/Grid';
-import ContributeCard from '@/components/views/userProfile/ProfileContributeCard';
 import { ProfileBoostedTab } from './boostedTab/ProfileBoostedTab';
-import { IS_BOOSTING_ENABLED } from '@/configuration';
-import {
-	TabItem,
-	TabItemCount,
-	TabsContainer,
-} from '@/components/styled-components/Tabs';
+import { profileTabs } from '@/lib/constants/Routes';
+import { isSSRMode } from '@/lib/helpers';
 
-enum EPublicProfile {
+enum EProfile {
 	OVERVIEW,
-	BOOSTED,
+	GIVPOWER,
 	PROJECTS,
 	DONATIONS,
 	LIKED,
 }
 
+interface ITab {
+	active: boolean;
+}
+
 const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 	const router = useRouter();
+	const [tab, setTab] = useState(EProfile.OVERVIEW);
 	const { formatMessage } = useIntl();
-	const [tab, setTab] = useState(
-		myAccount ? EPublicProfile.OVERVIEW : EPublicProfile.PROJECTS,
-	);
 
 	useEffect(() => {
 		const tab = router?.query?.tab;
 		switch (tab) {
-			case 'projects':
-				setTab(EPublicProfile.PROJECTS);
+			case 'overview':
+				setTab(EProfile.OVERVIEW);
 				break;
-			case 'boosted':
-				setTab(EPublicProfile.BOOSTED);
+			case 'givpower':
+				setTab(EProfile.GIVPOWER);
+				break;
+			case 'projects':
+				setTab(EProfile.PROJECTS);
 				break;
 			case 'donations':
-				setTab(EPublicProfile.DONATIONS);
+				setTab(EProfile.DONATIONS);
 				break;
 			case 'liked':
-				setTab(EPublicProfile.LIKED);
+				setTab(EProfile.LIKED);
 				break;
 			default:
-				setTab(
-					myAccount
-						? EPublicProfile.OVERVIEW
-						: EPublicProfile.PROJECTS,
-				);
+				setTab(EProfile.OVERVIEW);
 		}
 	}, [router?.query?.tab]);
 
+	const userName = user?.name || 'Unknown';
+	const { pathname = '' } = isSSRMode ? {} : window.location;
+
 	return (
 		<ProfileContainer>
-			{!myAccount && tab === EPublicProfile.PROJECTS && (
-				<ContributeCard user={user} />
-			)}
-			<TabsContainer>
-				{myAccount && (
-					<TabItem
-						active={tab === EPublicProfile.OVERVIEW}
-						onClick={() => setTab(EPublicProfile.OVERVIEW)}
+			<ProfileTabsContainer>
+				<Link href={pathname + profileTabs.overview}>
+					<ProfileTab active={tab === EProfile.OVERVIEW}>
+						Overview
+					</ProfileTab>
+				</Link>
+				<Link href={pathname + profileTabs.givpower}>
+					<ProfileTab active={tab === EProfile.GIVPOWER}>
+						{`${myAccount ? 'My ' : ''} GIVpower`}
+						{myAccount && user?.boostedProjectsCount !== 0 && (
+							<Count active={tab === EProfile.GIVPOWER}>
+								{user?.boostedProjectsCount}
+							</Count>
+						)}
+					</ProfileTab>
+				</Link>
+				<Link href={pathname + profileTabs.projects}>
+					<ProfileTab active={tab === EProfile.PROJECTS}>
+						{`${
+							myAccount
+								? formatMessage({ id: 'label.my_projects' })
+								: formatMessage({ id: 'label.projects' })
+						}`}
+						{myAccount && user?.projectsCount != 0 && (
+							<Count active={tab === EProfile.PROJECTS}>
+								{user?.projectsCount}
+							</Count>
+						)}
+					</ProfileTab>
+				</Link>
+				<Link href={pathname + profileTabs.donations}>
+					<ProfileTab active={tab === EProfile.DONATIONS}>
+						{`${
+							myAccount
+								? formatMessage({
+										id: 'label.my_donations',
+								  })
+								: formatMessage({ id: 'label.donations' })
+						}`}
+						{myAccount && user?.donationsCount != 0 && (
+							<Count active={tab === EProfile.DONATIONS}>
+								{user?.donationsCount}
+							</Count>
+						)}
+					</ProfileTab>
+				</Link>
+				<Link href={pathname + profileTabs.likedProjects}>
+					<ProfileTab
+						active={tab === EProfile.LIKED}
+						onClick={() => setTab(EProfile.LIKED)}
 					>
-						{formatMessage({ id: 'label.overview' })}
-					</TabItem>
-				)}
-				{/* // TODO: Boosting - remove this for boosting launch */}
-				{myAccount && IS_BOOSTING_ENABLED && (
-					<TabItem
-						active={tab === EPublicProfile.BOOSTED}
-						onClick={() => setTab(EPublicProfile.BOOSTED)}
-					>
-						{formatMessage({
-							id: 'label.boosted_projects',
-						})}
-					</TabItem>
-				)}
-				<TabItem
-					active={tab === EPublicProfile.PROJECTS}
-					onClick={() => setTab(EPublicProfile.PROJECTS)}
-				>
-					{`${
-						myAccount
-							? formatMessage({ id: 'label.my_projects' })
-							: formatMessage({ id: 'label.projects' })
-					}`}
-					{myAccount && user?.projectsCount != 0 && (
-						<TabItemCount active={tab === EPublicProfile.PROJECTS}>
-							{user?.projectsCount}
-						</TabItemCount>
-					)}
-				</TabItem>
-				<TabItem
-					active={tab === EPublicProfile.DONATIONS}
-					onClick={() => setTab(EPublicProfile.DONATIONS)}
-				>
-					{`${
-						myAccount
-							? formatMessage({
-									id: 'label.my_donations',
-							  })
-							: formatMessage({ id: 'label.donations' })
-					}`}
-					{myAccount && user?.donationsCount != 0 && (
-						<TabItemCount active={tab === EPublicProfile.DONATIONS}>
-							{user?.donationsCount}
-						</TabItemCount>
-					)}
-				</TabItem>
-				<TabItem
-					active={tab === EPublicProfile.LIKED}
-					onClick={() => setTab(EPublicProfile.LIKED)}
-				>
-					{formatMessage({ id: 'label.liked_projects' })}
-					{myAccount && !!user.likedProjectsCount && (
-						<TabItemCount active={tab === EPublicProfile.LIKED}>
-							{user?.likedProjectsCount}
-						</TabItemCount>
-					)}
-				</TabItem>
-			</TabsContainer>
-			{tab === EPublicProfile.OVERVIEW && (
-				<ProfileOverviewTab user={user} />
+						{formatMessage({ id: 'label.liked_projects' })}
+						{myAccount && !!user.likedProjectsCount && (
+							<Count active={tab === EProfile.LIKED}>
+								{user?.likedProjectsCount}
+							</Count>
+						)}
+					</ProfileTab>
+				</Link>
+			</ProfileTabsContainer>
+			{tab === EProfile.OVERVIEW && (
+				<ProfileOverviewTab user={user} myAccount={myAccount} />
 			)}
-			{tab === EPublicProfile.BOOSTED && (
-				<ProfileBoostedTab user={user} />
+			{tab === EProfile.GIVPOWER && (
+				<ProfileBoostedTab user={user} myAccount={myAccount} />
 			)}
-			{tab === EPublicProfile.PROJECTS && (
+			{tab === EProfile.PROJECTS && (
 				<ProfileProjectsTab user={user} myAccount={myAccount} />
 			)}
-			{tab === EPublicProfile.DONATIONS && (
+			{tab === EProfile.DONATIONS && (
 				<ProfileDonationsTab user={user} myAccount={myAccount} />
 			)}
-			{tab === EPublicProfile.LIKED && (
+			{tab === EProfile.LIKED && (
 				<ProfileLikedTab user={user} myAccount={myAccount} />
 			)}
 		</ProfileContainer>
@@ -147,6 +142,42 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 
 const ProfileContainer = styled(Container)`
 	padding: 0 10px !important;
+`;
+
+const ProfileTabsContainer = styled(Flex)`
+	padding: 37px 0;
+	gap: 16px;
+	overflow: auto;
+`;
+
+const ProfileTab = styled(P)<ITab>`
+	display: flex;
+	align-items: center;
+	padding: 9px 10px;
+	word-break: break-word;
+	white-space: nowrap;
+	cursor: pointer;
+	color: ${(props: ITab) =>
+		props.active ? brandColors.deep[600] : brandColors.pinky[500]};
+	${props =>
+		props.active &&
+		`
+		background: ${neutralColors.gray[100]};
+		box-shadow: 0 3px 20px rgba(212, 218, 238, 0.4);
+		border-radius: 50px;
+	`}
+`;
+
+const Count = styled.div`
+	background-color: ${(props: ITab) =>
+		props.active ? neutralColors.gray[500] : brandColors.pinky[500]};
+	color: white;
+	width: 24px;
+	height: 24px;
+	text-align: center;
+	border-radius: 50%;
+	font-size: 12px;
+	margin-left: 4px;
 `;
 
 export default ProfileContributes;

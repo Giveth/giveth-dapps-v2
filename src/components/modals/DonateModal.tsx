@@ -1,21 +1,19 @@
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import styled from 'styled-components';
 import {
 	brandColors,
-	Button,
 	IconDonation,
 	Lead,
 	neutralColors,
+	Button,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 
 import { Modal } from '@/components/modals/Modal';
-import { IProject } from '@/apollo/types/types';
-import { compareAddresses, formatTxLink } from '@/lib/helpers';
+import { compareAddresses, formatTxLink, showToastError } from '@/lib/helpers';
 import { mediaQueries, minDonationAmount } from '@/lib/constants/constants';
 import { IMeGQL, IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
-import { ISuccessDonation } from '@/components/views/donate/CryptoDonation';
 import { createDonation } from '@/components/views/donate/helpers';
 import { IModal } from '@/types/common';
 import FailedDonation, {
@@ -31,32 +29,25 @@ import config from '@/configuration';
 import DonateSummary from '@/components/views/donate/DonateSummary';
 import ExternalLink from '@/components/ExternalLink';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
+import { useDonateData } from '@/context/donate.context';
 
-export interface IDonateModalProps extends IModal {
-	project: IProject;
+interface IDonateModalProps extends IModal {
 	token: IProjectAcceptedToken;
 	amount: number;
 	donationToGiveth: number;
 	price?: number;
 	anonymous?: boolean;
-	setSuccessDonation: (i: ISuccessDonation) => void;
 	givBackEligible?: boolean;
-	projectWalletAddress: string;
-	givethWalletAddress: string;
 }
 
-const DonateModal = (props: IDonateModalProps) => {
+const DonateModal: FC<IDonateModalProps> = props => {
 	const {
-		project,
 		token,
 		amount,
 		price,
 		setShowModal,
-		projectWalletAddress,
-		givethWalletAddress,
 		donationToGiveth,
 		anonymous,
-		setSuccessDonation,
 		givBackEligible,
 	} = props;
 
@@ -66,6 +57,7 @@ const DonateModal = (props: IDonateModalProps) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const isDonatingToGiveth = donationToGiveth > 0;
 	const { formatMessage } = useIntl();
+	const { setSuccessDonation, project } = useDonateData();
 
 	const [donating, setDonating] = useState(false);
 	const [firstDonationSaved, setFirstDonationSaved] = useState(false);
@@ -78,7 +70,15 @@ const DonateModal = (props: IDonateModalProps) => {
 	const [failedModalType, setFailedModalType] =
 		useState<EDonationFailedType>();
 
-	const { title } = project || {};
+	const { title, addresses, givethAddresses } = project || {};
+
+	const projectWalletAddress =
+		addresses?.find(a => a.isRecipient && a.networkId === chainId)
+			?.address || '';
+
+	const givethWalletAddress =
+		givethAddresses?.find(a => a.isRecipient && a.networkId === chainId)
+			?.address || '';
 
 	const avgPrice = price && price * amount;
 	let donationToGivethAmount = (amount * donationToGiveth) / 100;
@@ -136,30 +136,37 @@ const DonateModal = (props: IDonateModalProps) => {
 			setDonationSaved: setFirstDonationSaved,
 			walletAddress: projectWalletAddress,
 			projectId: Number(project.id),
-		}).then(({ isSaved, txHash: firstHash }) => {
-			setIsFirstTxSuccess(true);
-			if (isDonatingToGiveth) {
-				createDonation({
-					...txProps,
-					setTxHash: setSecondTxHash,
-					setDonationSaved: setSecondDonationSaved,
-					walletAddress: givethWalletAddress,
-					amount: donationToGivethAmount,
-					projectId: config.GIVETH_PROJECT_ID,
-				})
-					.then(({ txHash: secondHash }) => {
-						setSecondTxStatus(EToastType.Success);
-						isSaved && delayedCloseModal(firstHash, secondHash);
+		})
+			.then(({ isSaved, txHash: firstHash }) => {
+				setIsFirstTxSuccess(true);
+				if (isDonatingToGiveth) {
+					createDonation({
+						...txProps,
+						setTxHash: setSecondTxHash,
+						setDonationSaved: setSecondDonationSaved,
+						walletAddress: givethWalletAddress,
+						amount: donationToGivethAmount,
+						projectId: config.GIVETH_PROJECT_ID,
 					})
-					.catch(({ txHash: secondHash }) => {
-						setSecondTxStatus(EToastType.Error);
-						isSaved && delayedCloseModal(firstHash, secondHash);
-					});
-			} else if (isSaved) {
-				delayedCloseModal(firstHash);
-			}
-		});
+						.then(({ txHash: secondHash }) => {
+							setSecondTxStatus(EToastType.Success);
+							isSaved && delayedCloseModal(firstHash, secondHash);
+						})
+						.catch(({ txHash: secondHash }) => {
+							setSecondTxStatus(EToastType.Error);
+							isSaved && delayedCloseModal(firstHash, secondHash);
+						});
+				} else if (isSaved) {
+					delayedCloseModal(firstHash);
+				}
+			})
+			.catch(showToastError);
 	};
+
+	if (!projectWalletAddress) {
+		showToastError('There is no eth address assigned for this project');
+		return null;
+	}
 
 	return (
 		<>

@@ -28,7 +28,7 @@ const ImageResults: FC<IImageResults> = ({
 						<Image
 							src={i.urls.thumb}
 							alt={i.alt_description!}
-							layout='fill'
+							fill
 						/>
 					</ImageContainer>
 				))}

@@ -1,15 +1,8 @@
 import Image from 'next/image';
 import { Button, H4 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { IProject } from '@/apollo/types/types';
-import { ISuccessDonation } from '@/components/views/donate/CryptoDonation';
 
-const FiatDonation = (props: {
-	project: IProject;
-	setSuccessDonation: (i: ISuccessDonation) => void;
-}) => {
-	// const { setSuccessDonation } = props;
-
+const FiatDonation = () => {
 	return (
 		<FiatContainer>
 			<H4>Coming soon ...</H4>
@@ -23,8 +16,8 @@ const FiatDonation = (props: {
 			<ImageContainer>
 				<Image
 					src='/images/powered_by_transak.svg'
-					width='165px'
-					height='24px'
+					width='165'
+					height='24'
 					alt={'Powered by Transak'}
 				/>
 			</ImageContainer>

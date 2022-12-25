@@ -11,6 +11,7 @@ import {
 } from '@giveth/ui-design-system';
 import React, { FC, MouseEventHandler, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { IconGIV } from './Icons/GIV';
@@ -54,6 +55,7 @@ export const RewardCard: FC<IRewardCardProps> = ({
 	rewardTokenSymbol = 'GIV',
 	tokenPrice,
 }) => {
+	const { formatMessage } = useIntl();
 	const [usdAmount, setUSDAmount] = useState('0');
 	const [showWhatIsGIVstreamModal, setShowWhatIsGIVstreamModal] =
 		useState(false);
@@ -104,8 +106,11 @@ export const RewardCard: FC<IRewardCardProps> = ({
 						<RateInfo alignItems='center' gap='8px'>
 							<IconGIVStream size={24} />
 							<P>{formatWeiHelper(stream)}</P>
-							<RateUnit>{rewardTokenSymbol}/week</RateUnit>
-							<IconHelpWraper
+							<RateUnit>
+								{rewardTokenSymbol}
+								{formatMessage({ id: 'label./week' })}
+							</RateUnit>
+							<IconHelpFilledWraper
 								onClick={() => {
 									setShowWhatIsGIVstreamModal(true);
 								}}
@@ -113,7 +118,7 @@ export const RewardCard: FC<IRewardCardProps> = ({
 								<IconHelpFilled24
 									color={brandColors.deep[200]}
 								/>
-							</IconHelpWraper>
+							</IconHelpFilledWraper>
 						</RateInfo>
 						{actionLabel && actionCb ? (
 							<ActionButton
@@ -191,7 +196,7 @@ const ActionButton = styled(Button)`
 	width: 100%;
 `;
 
-const IconHelpWraper = styled.div`
+const IconHelpFilledWraper = styled.div`
 	cursor: pointer;
 `;
 

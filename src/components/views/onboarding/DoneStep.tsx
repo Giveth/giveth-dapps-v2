@@ -1,4 +1,3 @@
-import Lottie from 'react-lottie';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
@@ -7,10 +6,11 @@ import {
 	H4,
 	H6,
 	neutralColors,
-	OutlineLinkButton,
+	OutlineButton,
 	P,
 } from '@giveth/ui-design-system';
 
+import { useWeb3React } from '@web3-react/core';
 import { OnboardStep } from './common';
 import { Flex } from '@/components/styled-components/Flex';
 import CongratsAnimation from '@/animations/congrats.json';
@@ -19,21 +19,17 @@ import { isUserRegistered } from '@/lib/helpers';
 import { Col, Row } from '@/components/Grid';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
-
-const CongratsAnimationOptions = {
-	loop: true,
-	animationData: CongratsAnimation,
-	rendererSettings: {
-		preserveAspectRatio: 'xMidYMid slice',
-	},
-};
+import LottieControl from '@/components/animations/lottieControl';
+import { fetchUserByAddress } from '@/features/user/user.thunks';
 
 const DoneStep = () => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 	const user = useAppSelector(state => state.user.userData);
+	const { account } = useWeb3React();
 
-	const handleCreateButton = () => {
+	const handleCreateButton = async () => {
+		if (account) await dispatch(fetchUserByAddress(account));
 		if (isUserRegistered(user)) {
 			router.push(Routes.CreateProject);
 		} else {
@@ -45,10 +41,8 @@ const DoneStep = () => {
 		<>
 			<DoneStepContainer xs={12} xl={10}>
 				<AnimationContainer>
-					<Lottie
-						options={CongratsAnimationOptions}
-						// height={287}
-						// width={750}
+					<LottieControl
+						animationData={CongratsAnimation}
 						speed={0.8}
 					/>
 				</AnimationContainer>
@@ -85,7 +79,7 @@ const DoneStep = () => {
 										Take a look and donate to projects.
 									</ContributeCardDesc>
 								</div>
-								<Link href={Routes.Projects} passHref>
+								<Link href={Routes.Projects}>
 									<ContributeCardButton label='View projects' />
 								</Link>
 							</ContributeCard>
@@ -95,7 +89,7 @@ const DoneStep = () => {
 			</DoneStepContainer>
 			<GotoHomeWrapper>
 				<P>or go to the homepage to start exploring.</P>
-				<Link href={Routes.Home} passHref>
+				<Link href={Routes.Home}>
 					<GotoHomeLink as='a'>Home page</GotoHomeLink>
 				</Link>
 			</GotoHomeWrapper>
@@ -154,7 +148,7 @@ const ContributeCardTitle = styled(H6)`
 `;
 const ContributeCardDesc = styled(P)``;
 
-const ContributeCardButton = styled(OutlineLinkButton)`
+const ContributeCardButton = styled(OutlineButton)`
 	width: 156px;
 `;
 

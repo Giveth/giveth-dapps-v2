@@ -8,12 +8,16 @@ import {
 	Lead,
 	IconSpark,
 } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import { mediaQueries } from '@/lib/constants/constants';
 import links from '@/lib/constants/links';
-import { IDonateRouteProps } from '../../../../pages/donate/[slug]';
 import config from '@/configuration';
+import { useDonateData } from '@/context/donate.context';
 
-const NiceBanner: FC<IDonateRouteProps> = ({ project }) => {
+const NiceBanner: FC = () => {
+	const { project } = useDonateData();
+
+	const { formatMessage } = useIntl();
 	// Only show this on the Giveth project
 	if (+project.id! !== config.GIVETH_PROJECT_ID) return null;
 	return (
@@ -27,11 +31,14 @@ const NiceBanner: FC<IDonateRouteProps> = ({ project }) => {
 					Donate DAI, xDAI, wxDAI or USDC to this project and receive
 					$nice tokens in addition to GIVbacks.
 					<InfoReadMore
+						as='a'
 						rel='noopener noreferrer'
 						target='_blank'
 						href={links.NICE_DOC}
 					>
-						<span>Learn More </span>
+						<span>
+							{formatMessage({ id: 'label.learn_more' })}{' '}
+						</span>
 						<IconExternalLink
 							size={16}
 							color={brandColors.pinky[500]}

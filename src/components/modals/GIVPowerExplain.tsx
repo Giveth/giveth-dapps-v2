@@ -10,6 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
+import { useIntl } from 'react-intl';
 import { Flex } from '../styled-components/Flex';
 import { Modal } from './Modal';
 import links from '@/lib/constants/links';
@@ -18,6 +19,7 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 export const GIVPowerExplainModal: FC<IModal> = ({ setShowModal }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const { formatMessage } = useIntl();
 
 	return (
 		<Modal
@@ -45,10 +47,14 @@ export const GIVPowerExplainModal: FC<IModal> = ({ setShowModal }) => {
 					get more GIVbacks.
 					<GLink
 						onClick={() => setShowModal(false)}
+						as='a'
 						target='_blank'
 						href={links.GIVPOWER_DOC}
 					>
-						<LinksRow> Learn More</LinksRow>
+						<LinksRow>
+							{' '}
+							{formatMessage({ id: 'label.learn_more' })}
+						</LinksRow>
 					</GLink>
 				</Desc>
 

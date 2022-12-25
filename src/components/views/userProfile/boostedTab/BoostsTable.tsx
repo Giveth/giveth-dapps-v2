@@ -3,6 +3,7 @@ import {
 	brandColors,
 	Button,
 	H5,
+	IconAlertCircle16,
 	IconLock16,
 	IconTrash,
 	IconUnlock16,
@@ -10,6 +11,7 @@ import {
 	neutralColors,
 	OutlineButton,
 	semanticColors,
+	Subline,
 } from '@giveth/ui-design-system';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
@@ -32,6 +34,7 @@ import { InputSuffix } from '@/components/styled-components/Input';
 import { DeletePowerBoostModal } from '@/components/modals/Boost/DeletePowerBoostModal';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { ApprovePowerBoostModal } from '@/components/modals/Boost/ApprovePowerBoostModal';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
 
 interface IBoostsTable {
 	boosts: IPowerBoosting[];
@@ -40,6 +43,7 @@ interface IBoostsTable {
 	changeOrder: (orderBy: EPowerBoostingOrder) => void;
 	saveBoosts: (newBoosts: IPowerBoosting[]) => Promise<boolean>;
 	deleteBoost: (id: string) => Promise<boolean>;
+	myAccount?: boolean;
 }
 
 interface IEnhancedPowerBoosting extends IPowerBoosting {
@@ -61,6 +65,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 	changeOrder,
 	saveBoosts,
 	deleteBoost,
+	myAccount,
 }) => {
 	const [mode, setMode] = useState(ETableNode.VIEWING);
 	const [editBoosts, setEditBoosts] = useState<IEnhancedPowerBoosting[]>([]);
@@ -120,8 +125,13 @@ const BoostsTable: FC<IBoostsTable> = ({
 		e: ChangeEvent<HTMLInputElement>,
 		isOnBlur?: boolean,
 	) => {
-		if (isOnBlur && e.target.value == '') {
-			e.target.value = '0.1';
+		if (isOnBlur) {
+			if (e.target.value === '') {
+				e.target.value = '0.1';
+			} else {
+				// only run this function in onblur when the input is empty
+				return;
+			}
 		}
 		const newPercentage = +e.target.value;
 		if (isNaN(newPercentage) || newPercentage < 0 || newPercentage > 100)
@@ -193,47 +203,52 @@ const BoostsTable: FC<IBoostsTable> = ({
 		<>
 			<Header justifyContent='space-between' wrap={1} gap='16px'>
 				<H5 weight={700}>GIVpower Summary</H5>
-				<Actions gap='8px'>
-					{mode === ETableNode.VIEWING ? (
-						<Button
-							buttonType='primary'
-							label='edit boosting'
-							size='small'
-							onClick={() => setMode(ETableNode.EDITING)}
-						/>
-					) : (
-						<>
-							<OutlineButton
-								buttonType='primary'
-								label='reset all'
-								size='small'
-								onClick={() =>
-									setEditBoosts(structuredClone(boosts))
-								}
-							/>
+				{myAccount && (
+					<Actions gap='8px'>
+						{mode === ETableNode.VIEWING ? (
 							<Button
 								buttonType='primary'
-								label='Apply changes'
+								label='modify'
 								size='small'
-								disabled={isExceed}
-								onClick={() => {
-									setShowApproveModal(true);
-								}}
+								onClick={() => setMode(ETableNode.EDITING)}
+								disabled={editBoosts.length < 2}
 							/>
-							<OutlineButton
-								buttonType='primary'
-								label='cancel'
-								size='small'
-								onClick={() => {
-									setEditBoosts(structuredClone(boosts));
-									setMode(ETableNode.VIEWING);
-								}}
-							/>
-						</>
-					)}
-				</Actions>
+						) : (
+							<>
+								<OutlineButton
+									buttonType='primary'
+									label='reset all'
+									size='small'
+									onClick={() => {
+										setEditBoosts(structuredClone(boosts));
+										setSum(100);
+									}}
+								/>
+								<Button
+									buttonType='primary'
+									label='Apply changes'
+									size='small'
+									disabled={isExceed}
+									onClick={() => {
+										setShowApproveModal(true);
+									}}
+								/>
+								<OutlineButton
+									buttonType='primary'
+									label='cancel'
+									size='small'
+									onClick={() => {
+										setEditBoosts(structuredClone(boosts));
+										setSum(100);
+										setMode(ETableNode.VIEWING);
+									}}
+								/>
+							</>
+						)}
+					</Actions>
+				)}
 			</Header>
-			<Table>
+			<Table hasLastCol={!!myAccount && mode === ETableNode.VIEWING}>
 				<TableHeader>Projects</TableHeader>
 				<TableHeader
 					onClick={() => {
@@ -248,10 +263,15 @@ const BoostsTable: FC<IBoostsTable> = ({
 					/>
 				</TableHeader>
 				<TableHeader>% of Total</TableHeader>
-				<TableHeader></TableHeader>
+				{myAccount && mode === ETableNode.VIEWING && (
+					<TableHeader></TableHeader>
+				)}
 				{editBoosts?.map(boost => {
 					return (
-						<BoostsRowWrapper key={boost.project.id}>
+						<BoostsRowWrapper
+							key={boost.project.id}
+							hasError={myAccount && !boost.project.verified}
+						>
 							<BoostsTableCell bold>
 								<Link
 									href={slugToProjectView(boost.project.slug)}
@@ -316,13 +336,25 @@ const BoostsTable: FC<IBoostsTable> = ({
 														}
 													/>
 												) : (
-													<IconUnLockable16
-														size={16}
-														color={
-															neutralColors
-																.gray[400]
+													<IconWithTooltip
+														icon={
+															<IconUnLockable16
+																size={16}
+																color={
+																	neutralColors
+																		.gray[400]
+																}
+															/>
 														}
-													/>
+														direction='top'
+													>
+														<BoostTooltip>
+															You can’t lock every
+															percentage because
+															the total must equal
+															100%
+														</BoostTooltip>
+													</IconWithTooltip>
 												)}
 											</IconWrapper>
 										}
@@ -337,20 +369,41 @@ const BoostsTable: FC<IBoostsTable> = ({
 									/>
 								)}
 							</BoostsTableCell>
-							<BoostsTableCell>
-								{mode === ETableNode.VIEWING && (
-									<>
+							{myAccount && mode === ETableNode.VIEWING && (
+								<BoostsTableCell>
+									<IconWrapper
+										onClick={() => {
+											setSelectedBoost(boost.id);
+											setShowDeleteModal(true);
+										}}
+									>
+										<IconTrash size={24} />
+									</IconWrapper>
+									{!boost.project.verified && (
 										<IconWrapper
 											onClick={() => {
 												setSelectedBoost(boost.id);
 												setShowDeleteModal(true);
 											}}
 										>
-											<IconTrash size={24} />
+											<IconWithTooltip
+												icon={<IconAlertCircle16 />}
+												direction='top'
+												align='left'
+											>
+												<BoostTooltip>
+													This project has lost its
+													verified status and
+													therefore is no longer
+													eligible for GIVpower. We
+													recommend removing this
+													boost.
+												</BoostTooltip>
+											</IconWithTooltip>
 										</IconWrapper>
-									</>
-								)}
-							</BoostsTableCell>
+									)}
+								</BoostsTableCell>
+							)}
 						</BoostsRowWrapper>
 					);
 				})}
@@ -362,7 +415,9 @@ const BoostsTable: FC<IBoostsTable> = ({
 						<ExceedError>You can’t exceed 100%</ExceedError>
 					)}
 				</CustomTableFooter>
-				<TableFooter></TableFooter>
+				{myAccount && mode === ETableNode.VIEWING && (
+					<TableFooter></TableFooter>
+				)}
 			</Table>
 			{showDeleteModal && (
 				<DeletePowerBoostModal
@@ -391,9 +446,10 @@ const Actions = styled(Flex)`
 	padding-bottom: 16px;
 `;
 
-const Table = styled.div`
+const Table = styled.div<{ hasLastCol: boolean }>`
 	display: grid;
-	grid-template-columns: 4fr 1.2fr 1fr 0.3fr;
+	grid-template-columns: ${props =>
+		props.hasLastCol ? '4fr 1.2fr 1fr 0.3fr' : '4fr 1.5fr 0.6fr'};
 	min-width: 700px;
 `;
 
@@ -405,7 +461,12 @@ const BoostsTableCell = styled(TableCell)<{ bold?: boolean }>`
 	line-height: unset;
 `;
 
-const BoostsRowWrapper = styled(RowWrapper)`
+interface IBoostsRowWrapper {
+	hasError?: boolean;
+}
+
+const BoostsRowWrapper = styled(RowWrapper)<IBoostsRowWrapper>`
+	color: ${props => (props.hasError ? semanticColors.punch[500] : '')};
 	&:hover > div {
 		background-color: ${neutralColors.gray[300]};
 		color: ${brandColors.pinky[500]};
@@ -450,6 +511,11 @@ const ExceedError = styled(B)`
 const Percentage = styled(InputSuffix)`
 	color: ${neutralColors.gray[800]};
 	user-select: none;
+`;
+
+const BoostTooltip = styled(Subline)`
+	color: ${neutralColors.gray[100]};
+	width: 240px;
 `;
 
 export default BoostsTable;
