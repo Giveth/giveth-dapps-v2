@@ -119,6 +119,7 @@ export const FeaturesCardItem = styled.div`
 export const CardBottomText = styled(ButtonText)`
 	color: ${brandColors.mustard[500]};
 	margin: 3px auto 0;
+	text-transform: uppercase;
 `;
 
 export const CenteredHeader = styled(H2)`

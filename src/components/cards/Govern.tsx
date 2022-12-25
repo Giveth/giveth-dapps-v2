@@ -5,6 +5,7 @@ import { utils, BigNumber as EthersBigNumber, constants } from 'ethers';
 import styled from 'styled-components';
 import { H2, H5, Lead } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
+import { useIntl } from 'react-intl';
 import {
 	APRRow,
 	ArrowButton,
@@ -98,6 +99,7 @@ const MaxStakeGIV = styled(MaxGIV)`
 
 const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const { totalAmount, step, goNextStep, goPreviousStep } = useClaim();
+	const { formatMessage } = useIntl();
 
 	const [stacked, setStacked] = useState<string>('0');
 	const [potentialClaim, setPotentialClaim] = useState<EthersBigNumber>(
@@ -244,7 +246,8 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 							<Flex justifyContent='space-between'>
 								<PoolItem>Streaming</PoolItem>
 								<PoolItemBold>
-									{formatWeiHelper(earnEstimate)} GIV/week
+									{formatWeiHelper(earnEstimate)} GIV
+									{formatMessage({ id: 'label./week' })}
 								</PoolItemBold>
 							</Flex>
 						</PoolItems>
