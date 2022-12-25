@@ -1,16 +1,17 @@
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
+import { useEvent } from './useEvent';
 
-// should we use callback or ref?!!!
 export const useModalCallback = (callback: () => void) => {
 	const dispatch = useAppDispatch();
+	const cbRef = useEvent(callback);
 	const showSignWithWallet = useAppSelector(
 		state => state.modal.showSignWithWallet,
 	);
 	const signInThenDoSomething = () => {
 		if (typeof window === 'undefined') return;
-		window.addEventListener('signin', callback, {
+		window.addEventListener('signin', cbRef, {
 			once: true,
 		});
 		dispatch(setShowSignWithWallet(true));
@@ -18,7 +19,7 @@ export const useModalCallback = (callback: () => void) => {
 
 	useEffect(() => {
 		if (showSignWithWallet === false) {
-			window.removeEventListener('signin', callback);
+			window.removeEventListener('signin', cbRef);
 		}
 	}, [showSignWithWallet]);
 	return { signInThenDoSomething };
