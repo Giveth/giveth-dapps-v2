@@ -17,7 +17,6 @@ import { useDonateData } from '@/context/donate.context';
 const NiceBanner: FC = () => {
 	const { project } = useDonateData();
 
-const NiceBanner: FC<IDonateRouteProps> = ({ project }) => {
 	const { formatMessage } = useIntl();
 	// Only show this on the Giveth project
 	if (+project.id! !== config.GIVETH_PROJECT_ID) return null;
