@@ -1,10 +1,12 @@
 import Link from 'next/link';
+import { useIntl } from 'react-intl';
 import { Row, Col } from '@/components/Grid';
 import Routes from '@/lib/constants/Routes';
 import { GsButton, IGsDataBox } from '../homeTabs/GIVstream.sc';
 import config from '@/configuration';
 
 const GivEconomyProjectCards = () => {
+	const { formatMessage } = useIntl();
 	return (
 		<Row>
 			<Col xs={12} sm={6} md={4}>
@@ -13,7 +15,9 @@ const GivEconomyProjectCards = () => {
 					button={
 						<Link href={Routes.Projects}>
 							<GsButton
-								label='SEE PROJECTS'
+								label={formatMessage({
+									id: 'page.home.bigscreen.see_projects',
+								})}
 								linkType='primary'
 								size='medium'
 								target='_blank'
@@ -21,8 +25,9 @@ const GivEconomyProjectCards = () => {
 						</Link>
 					}
 				>
-					Donate to verified projects on Giveth. Get GIV and increase
-					your GIVstream with the GIVbacks program.
+					{formatMessage({
+						id: 'label.donate_to_verified_projects_on_giveth',
+					})}
 				</IGsDataBox>
 			</Col>
 			<Col xs={12} sm={6} md={4}>
@@ -31,7 +36,7 @@ const GivEconomyProjectCards = () => {
 					button={
 						<GsButton
 							isExternal
-							label='SEE PROPOSALS'
+							label={formatMessage({ id: 'label.see_proposals' })}
 							linkType='primary'
 							size='medium'
 							href={config.GARDEN_LINK}
@@ -39,9 +44,9 @@ const GivEconomyProjectCards = () => {
 						/>
 					}
 				>
-					The GIVgarden is the decentralized governance platform for
-					the GIVeconomy. Increase your GIVstream when you wrap GIV to
-					vote.
+					{formatMessage({
+						id: 'label.the_givgarden_is_the_descentralized_gov_platform',
+					})}
 				</IGsDataBox>
 			</Col>
 			<Col xs={12} sm={6} md={4}>
@@ -50,16 +55,18 @@ const GivEconomyProjectCards = () => {
 					button={
 						<Link href={Routes.GIVfarm}>
 							<GsButton
-								label='SEE OPPORTUNITIES'
+								label={formatMessage({
+									id: 'label.see_opportunities',
+								})}
 								linkType='primary'
 								size='medium'
 							/>
 						</Link>
 					}
 				>
-					Stake GIV, or become a liquidity provider and stake LP
-					tokens in the GIVfarm. Get GIV rewards and increase your
-					GIVstream.
+					{formatMessage({
+						id: 'label.stake_giv_or_become_a_liquidity_provider',
+					})}
 				</IGsDataBox>
 			</Col>
 		</Row>

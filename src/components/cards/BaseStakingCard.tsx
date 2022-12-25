@@ -9,6 +9,7 @@ import {
 	IconHelpFilled16,
 	IconInfoFilled24,
 } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import { constants } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { useWeb3React } from '@web3-react/core';
@@ -153,6 +154,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	unstakedPositions,
 	currentIncentive,
 }) => {
+	const { formatMessage } = useIntl();
 	const [state, setState] = useState(StakeCardState.NORMAL);
 	const [started, setStarted] = useState(true);
 	const [showAPRModal, setShowAPRModal] = useState(false);
@@ -297,10 +299,15 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					<WrongNetworkContainer>
 						<IconAlertCircle32 />
 						<Caption>
-							You are currently connected to{' '}
-							{chainName(chainId || 0)} switch to{' '}
-							{chainName(poolNetwork || 0)} to interact with this
-							farm.
+							{formatMessage({
+								id: 'label.you_are_currently_connected_to',
+							})}{' '}
+							{chainName(chainId || 0)}{' '}
+							{formatMessage({ id: 'label.switch_to' })}{' '}
+							{chainName(poolNetwork || 0)}{' '}
+							{formatMessage({
+								id: 'label.to_interact_with_this_farm',
+							})}
 						</Caption>
 					</WrongNetworkContainer>
 				)}
@@ -315,30 +322,42 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								justifyContent='space-evenly'
 							>
 								<DisableModalText weight={700}>
-									This farm has ended
+									{formatMessage({
+										id: 'label.this_farm_has_ended',
+									})}
 								</DisableModalText>
 								<DisableModalText>
 									{exploited ? (
 										<>
-											An exploit has removed available
-											rewards from this pool. Please refer
-											to
+											{formatMessage({
+												id: 'label.an_exploit_has_removed_available_rewards',
+											})}
 											<DisableModalLink
 												as='a'
 												size='Big'
 												target='_blank'
 												href='https://forum.giveth.io/t/ending-givfarm-liquidity-incentives-programs-for-giv/872'
 											>
-												&nbsp;this forum post&nbsp;
+												&nbsp;
+												{formatMessage({
+													id: 'label.this_forum_post',
+												})}
+												&nbsp;
 											</DisableModalLink>
-											for details.
+											{formatMessage({
+												id: 'label.for_details',
+											})}
 										</>
 									) : (
-										'Harvest your rewards and move your funds to another farm to keep earning.'
+										formatMessage({
+											id: 'label.harvest_your_rewards_and_remove_your_funds',
+										})
 									)}
 								</DisableModalText>
 								<DisableModalCloseButton
-									label='GOT IT'
+									label={formatMessage({
+										id: 'label.got_it',
+									})}
 									onClick={() => setDisableModal(false)}
 								/>
 							</Flex>
@@ -364,11 +383,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 										}
 									>
 										<GIVgardenTooltip>
-											Staking GIV in this pool allows you
-											to support verified projects with
-											GIVpower & grants you voting power
-											in Giveth DAO (gGIV), in addition to
-											the APR.
+											{formatMessage({
+												id: 'label.staking_giv_in_this_pool_allows_to_support_verified_projects',
+											})}
 										</GIVgardenTooltip>
 									</IconWithTooltip>
 								)}
@@ -417,18 +434,19 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 													icon={<IconHelpFilled16 />}
 												>
 													<AngelVaultTooltip>
-														Your cumulative APR
-														including both rewards
-														earned as fees & added
-														automatically to your
-														position (
+														{formatMessage({
+															id: 'label.your_cummulative_apr_including_both_rewards',
+														})}{' '}
+														(
 														{apr?.vaultIRR &&
 															formatEthHelper(
 																apr.vaultIRR,
 															)}
-														% IRR), and rewards
-														earned in GIV from
-														staking your LP (
+														% IRR),{' '}
+														{formatMessage({
+															id: 'label.and_rewards_earned_in_giv',
+														})}{' '}
+														(
 														{apr &&
 															formatEthHelper(
 																apr.effectiveAPR,
@@ -444,8 +462,12 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 												>
 													<AngelVaultTooltip>
 														{isZeroGIVStacked
-															? `This is the range of possible APRs for staked and locked GIV. Lock your GIV for longer to earn greater rewards.`
-															: `This is the weighted average APR for your staked (and locked) GIV. The full range of APRs for staking and/or locking is ${
+															? formatMessage({
+																	id: 'label.this_is_the_range_of_possible_apr',
+															  })
+															: `${formatMessage({
+																	id: 'label.this_is_the_weighed_average_apr',
+															  })} ${
 																	apr &&
 																	formatEthHelper(
 																		apr.effectiveAPR,
@@ -457,7 +479,11 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 																			5.2, // sqrt(1 + max rounds)
 																		),
 																	)
-															  }%. Lock your GIV for longer to earn greater rewards.`}
+															  }%. ${formatMessage(
+																	{
+																		id: 'label.lock_your_giv_for_longer',
+																	},
+															  )}`}
 													</AngelVaultTooltip>
 												</IconWithTooltip>
 											)}
@@ -507,25 +533,42 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 													</>
 												</>
 											) : (
-												<div>N/A %</div>
+												<div>
+													{formatMessage({
+														id: 'label.n/a',
+													})}{' '}
+													%
+												</div>
 											)}
 										</Flex>
 									</FirstDetail>
 									<Detail justifyContent='space-between'>
-										<DetailLabel>Claimable</DetailLabel>
+										<DetailLabel>
+											{formatMessage({
+												id: 'label.claimable',
+											})}
+										</DetailLabel>
 										<DetailValue>
 											{!exploited ? (
 												`${formatWeiHelper(
 													rewardLiquidPart,
 												)} ${rewardTokenSymbol}`
 											) : (
-												<div>N/A</div>
+												<div>
+													{formatMessage({
+														id: 'label.n/a',
+													})}
+												</div>
 											)}
 										</DetailValue>
 									</Detail>
 									<Detail justifyContent='space-between'>
 										<Flex gap='8px' alignItems='center'>
-											<DetailLabel>Streaming</DetailLabel>
+											<DetailLabel>
+												{formatMessage({
+													id: 'label.streaming',
+												})}
+											</DetailLabel>
 											<IconHelpFilledWraper
 												onClick={() => {
 													setShowWhatIsGIVstreamModal(
@@ -543,11 +586,18 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 														rewardStream,
 													)
 												) : (
-													<div>N/A</div>
+													<div>
+														{formatMessage({
+															id: 'label.n/a',
+														})}
+													</div>
 												)}
 											</DetailValue>
 											<DetailUnit>
-												{rewardTokenSymbol}/week
+												{rewardTokenSymbol}
+												{formatMessage({
+													id: 'label./week',
+												})}
 											</DetailUnit>
 										</Flex>
 									</Detail>
@@ -561,7 +611,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							<ClaimButton
 								disabled={exploited || earned.isZero()}
 								onClick={() => setShowHarvestModal(true)}
-								label='HARVEST REWARDS'
+								label={formatMessage({
+									id: 'label.harvest_rewards',
+								})}
 								buttonType={
 									isGIVpower ? 'secondary' : 'primary'
 								}
@@ -572,14 +624,18 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 										constants.Zero,
 									)}
 									onClick={() => setShowLockModal(true)}
-									label='Increase your reward'
+									label={formatMessage({
+										id: 'label.increase_rewards',
+									})}
 									buttonType='primary'
 								/>
 							)}
 							<StakeButtonsRow>
 								<StakeContainer flexDirection='column'>
 									<StakeButton
-										label='STAKE'
+										label={formatMessage({
+											id: 'label.stake',
+										})}
 										size='small'
 										disabled={
 											isDiscontinued ||
@@ -598,7 +654,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								</StakeContainer>
 								<StakeContainer flexDirection='column'>
 									<StakeButton
-										label='UNSTAKE'
+										label={formatMessage({
+											id: 'label.unstake',
+										})}
 										size='small'
 										disabled={availableStakedToken.isZero()}
 										onClick={() =>
@@ -620,11 +678,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 												direction={'top'}
 											>
 												<LockInfotooltip>
-													Some or all of your staked
-													GIV is locked. Click
-													&ldquo;Locked GIV
-													Details&rdquo; for more
-													information.
+													{formatMessage({
+														id: 'label.some_or_all_of_your_staked_giv_is_locked',
+													})}
 												</LockInfotooltip>
 											</IconWithTooltip>
 										)}
@@ -635,7 +691,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 								(!isGIVpower ? (
 									<Flex>
 										<LiquidityButton
-											label='PROVIDE LIQUIDITY'
+											label={formatMessage({
+												id: 'label.provide_liquidity',
+											})}
 											onClick={() => {
 												if (
 													type ===
@@ -663,7 +721,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									<ClaimButton
 										buttonType='texty'
 										size='small'
-										label='Locked GIV Details'
+										label={formatMessage({
+											id: 'label.locked_giv_details',
+										})}
 										disabled={!isLocked}
 										onClick={() => {
 											setShowLockDetailModal(true);
@@ -758,7 +818,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				))}
 			{showHarvestModal && chainId && (
 				<HarvestAllModal
-					title='GIVfarm Rewards'
+					title={formatMessage({ id: 'label.givfarm_rewards' })}
 					setShowModal={setShowHarvestModal}
 					poolStakingConfig={poolStakingConfig}
 					earned={earned}
