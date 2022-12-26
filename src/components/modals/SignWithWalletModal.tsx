@@ -19,6 +19,7 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { signToGetToken } from '@/features/user/user.thunks';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import { EModalEvents } from '@/hooks/useModalCallback';
 
 interface IProps extends IModal {
 	callback?: () => void;
@@ -70,7 +71,7 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 						);
 						setLoading(false);
 						if (signature) {
-							const event = new Event('signin');
+							const event = new Event(EModalEvents.SIGNEDIN);
 							window.dispatchEvent(event);
 							callback && callback();
 						}
