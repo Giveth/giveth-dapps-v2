@@ -65,6 +65,7 @@ import CategoryBadge from '@/components/badges/CategoryBadge';
 import { mapCategoriesToMainCategories } from '@/helpers/singleProject';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { CurrentRank, NextRank } from '@/components/GIVpowerRank';
+import { useModalCallback } from '@/hooks/useModalCallback';
 import { useProjectContext } from '@/context/project.context';
 
 interface IProjectDonateCard {
@@ -76,7 +77,11 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 }) => {
 	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();
-	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
+	const {
+		isSignedIn,
+		userData: user,
+		isLoading: isUserLoading,
+	} = useAppSelector(state => state.user);
 	const { projectData, isActive, isDraft } = useProjectContext();
 	const {
 		categories = [],
@@ -124,19 +129,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 		if (el) el.scrollIntoView({ behavior: 'smooth' });
 	};
 
-	useEffect(() => {
-		const { open } = router.query;
-		const _open = Array.isArray(open) ? open[0] : open;
-		if (_open === 'boost') {
-			handleBoostClick();
-		}
-	}, [router]);
-
 	const likeUnlikeProject = async () => {
-		if (!isSignedIn) {
-			dispatch(setShowSignWithWallet(true));
-			return;
-		}
 		if (loading) return;
 
 		if (id) {
@@ -169,6 +162,18 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 		}
 	};
 
+	const { modalCallback: signInThenLike } =
+		useModalCallback(likeUnlikeProject);
+
+	const checkSignInThenLike = () => {
+		if (typeof window === 'undefined') return;
+		if (!isSignedIn) {
+			signInThenLike();
+		} else {
+			likeUnlikeProject();
+		}
+	};
+
 	const fetchProjectReaction = useCallback(async () => {
 		if (user?.id && id) {
 			// Already fetched
@@ -197,13 +202,28 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 		}
 	}, [id, user?.id]);
 
+	const showBoostModal = () => {
+		setShowBoost(true);
+	};
+
+	const { modalCallback: signInThenBoost } = useModalCallback(showBoostModal);
+
 	const handleBoostClick = () => {
 		if (!isSignedIn) {
-			dispatch(setShowSignWithWallet(true));
+			signInThenBoost();
 		} else {
-			setShowBoost(true);
+			showBoostModal();
 		}
 	};
+
+	useEffect(() => {
+		if (isUserLoading) return;
+		const { open } = router.query;
+		const _open = Array.isArray(open) ? open[0] : open;
+		if (_open === 'boost') {
+			handleBoostClick();
+		}
+	}, [isUserLoading, router]);
 
 	useEffect(() => {
 		fetchProjectReaction().then();
@@ -398,7 +418,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 						<ShareLikeBadge
 							type='like'
 							active={heartedByUser}
-							onClick={() => isActive && likeUnlikeProject()}
+							onClick={() => isActive && checkSignInThenLike()}
 							isSimple={isMobile}
 						/>
 					</BadgeWrapper>
