@@ -1,6 +1,9 @@
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { setShowSignWithWallet } from '@/features/modal/modal.slice';
+import {
+	setShowSignWithWallet,
+	setShowWalletModal,
+} from '@/features/modal/modal.slice';
 import { useEvent } from './useEvent';
 
 export enum EModalEvents {
@@ -8,9 +11,18 @@ export enum EModalEvents {
 	CONNECTED = 'conneced',
 }
 
-const obj: Record<EModalEvents, 'showSignWithWallet' | 'showWalletModal'> = {
-	[EModalEvents.SIGNEDIN]: 'showSignWithWallet',
-	[EModalEvents.CONNECTED]: 'showWalletModal',
+const stateObj: Record<EModalEvents, 'showSignWithWallet' | 'showWalletModal'> =
+	{
+		[EModalEvents.SIGNEDIN]: 'showSignWithWallet',
+		[EModalEvents.CONNECTED]: 'showWalletModal',
+	};
+
+const actionObj: Record<
+	EModalEvents,
+	typeof setShowSignWithWallet | typeof setShowWalletModal
+> = {
+	[EModalEvents.SIGNEDIN]: setShowSignWithWallet,
+	[EModalEvents.CONNECTED]: setShowWalletModal,
 };
 
 export const useModalCallback = (
@@ -19,13 +31,13 @@ export const useModalCallback = (
 ) => {
 	const dispatch = useAppDispatch();
 	const cbRef = useEvent(callback);
-	const showModal = useAppSelector(state => state.modal[obj[event]]);
+	const showModal = useAppSelector(state => state.modal[stateObj[event]]);
 	const signInThenDoSomething = () => {
 		if (typeof window === 'undefined') return;
 		window.addEventListener(event, cbRef, {
 			once: true,
 		});
-		dispatch(setShowSignWithWallet(true));
+		dispatch(actionObj[event](true));
 	};
 
 	useEffect(() => {
