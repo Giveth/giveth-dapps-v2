@@ -32,7 +32,7 @@ export const useModalCallback = (
 	const dispatch = useAppDispatch();
 	const cbRef = useEvent(callback);
 	const showModal = useAppSelector(state => state.modal[stateObj[event]]);
-	const signInThenDoSomething = () => {
+	const modalCallback = () => {
 		if (typeof window === 'undefined') return;
 		window.addEventListener(event, cbRef, {
 			once: true,
@@ -45,5 +45,5 @@ export const useModalCallback = (
 			window.removeEventListener(event, cbRef);
 		}
 	}, [showModal]);
-	return { signInThenDoSomething };
+	return { modalCallback };
 };

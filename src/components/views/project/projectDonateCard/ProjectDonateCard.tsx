@@ -162,7 +162,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 		}
 	};
 
-	const { signInThenDoSomething: signInThenLike } =
+	const { modalCallback: signInThenLike } =
 		useModalCallback(likeUnlikeProject);
 
 	const checkSignInThenLike = () => {
@@ -206,8 +206,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 		setShowBoost(true);
 	};
 
-	const { signInThenDoSomething: signInThenBoost } =
-		useModalCallback(showBoostModal);
+	const { modalCallback: signInThenBoost } = useModalCallback(showBoostModal);
 
 	const handleBoostClick = () => {
 		if (!isSignedIn) {

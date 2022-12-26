@@ -97,7 +97,7 @@ const ProjectCardLikeAndShareButtons = (
 		router.push(`${slugToProjectView(slug)}?open=boost`);
 	};
 
-	const { signInThenDoSomething: signInThenLike } =
+	const { modalCallback: signInThenLike } =
 		useModalCallback(likeUnlikeProject);
 
 	const checkSignInThenLike = () => {
