@@ -5,15 +5,12 @@ import { Button, B, neutralColors } from '@giveth/ui-design-system';
 import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk';
 import { useAppSelector } from '@/features/hooks';
 import { IProject } from '@/apollo/types/types';
-import { ISuccessDonation } from '@/components/views/donate/CryptoDonation';
 import { FiatDonationConfirmationModal } from '@/components/modals/FiatDonationConfirmationModal';
+import { useDonateData } from '@/context/donate.context';
 import config from '@/configuration';
 
-const FiatDonation = (props: {
-	project: IProject;
-	setSuccessDonation: (i: ISuccessDonation) => void;
-}) => {
-	const { setSuccessDonation, project } = props;
+const FiatDonation = () => {
+	const { project } = useDonateData();
 	const [onramperConfirmationModal, setOnramperConfirmationModal] =
 		useState(false);
 	const [donorboxConfirmationModal, setDonorboxConfirmationModal] =
@@ -45,7 +42,6 @@ const FiatDonation = (props: {
 		url: 'https://ri-widget-staging.firebaseapp.com/',
 	});
 
-const FiatDonation = () => {
 	return (
 		<>
 			<FiatContainer>
@@ -112,8 +108,8 @@ const FiatDonation = () => {
 						<ImageContainer>
 							<Image
 								src='/images/powered_by_onramper.png'
-								width='220px'
-								height='60px'
+								width='220'
+								height='60'
 								alt={'Powered by OnRamper'}
 							/>
 						</ImageContainer>
@@ -133,8 +129,8 @@ const FiatDonation = () => {
 								<ImageContainer>
 									<Image
 										src='/images/powered_by_donorbox.png'
-										width='220px'
-										height='60px'
+										width='220'
+										height='60'
 										alt={'Powered by Donorbox'}
 									/>
 								</ImageContainer>

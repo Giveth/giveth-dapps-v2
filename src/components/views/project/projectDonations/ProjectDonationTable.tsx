@@ -249,8 +249,8 @@ const ProjectDonationTable = ({
 									{donation?.onramperId ? (
 										<Image
 											src='/images/powered_by_onramper.png'
-											width='95px'
-											height='30px'
+											width='95'
+											height='30'
 											alt={'Powered by OnRamper'}
 										/>
 									) : (
