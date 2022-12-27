@@ -57,12 +57,12 @@ export const FiatDonationConfirmationModal: FC<IModal> = ({
 									>
 										SDG impact fund
 									</a>
-									<li>
-										You'll get a confirmation from donorbox
-										on your email but you won't see it
-										listed on our platform, we will be very
-										very grateful for your support!
-									</li>
+								</li>
+								<li>
+									You'll get a confirmation from donorbox on
+									your email but you won't see it listed on
+									our platform, we will be very very grateful
+									for your support!
 								</li>
 							</>
 						)
