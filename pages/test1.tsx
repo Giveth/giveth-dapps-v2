@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 import { useWeb3React } from '@web3-react/core';
 import { IconHelpFilled16 } from '@giveth/ui-design-system';
+import { useRef, useState } from 'react';
 import { gToast, ToastType } from '@/components/toasts';
 import { useAppDispatch } from '@/features/hooks';
 import { fetchXDaiInfoAsync } from '@/features/subgraph/subgraph.thunks';
@@ -15,11 +16,17 @@ const TestRoute = () => {
 	// );
 	const { account } = useWeb3React();
 	const dispatch = useAppDispatch();
+	const functionRef = useRef<Function>();
+	const [state, setState] = useState(0);
 
 	// const { data, isLoading, error, refetch } = useGetSubgraphValuesQuery({
 	// 	chain: chainId,
 	// 	userAddress: account,
 	// });
+
+	functionRef.current = () => {
+		console.log(state);
+	};
 
 	const notify = () =>
 		gToast('Testeeee', {
@@ -78,6 +85,18 @@ const TestRoute = () => {
 					}}
 				>
 					Throw error
+				</button>
+				<button
+					type='button'
+					onClick={() => functionRef.current && functionRef.current()}
+				>
+					check
+				</button>
+				<button
+					type='button'
+					onClick={() => setState(state => state + 1)}
+				>
+					increase
 				</button>
 				<div>
 					--------------------------------------------
