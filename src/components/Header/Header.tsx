@@ -130,7 +130,7 @@ const Header: FC<IHeader> = () => {
 		setIsGIVeconomyRoute(router.route.startsWith('/giv'));
 		setShowBackBtn(
 			router.route.startsWith(Routes.CreateProject) ||
-				router.route.startsWith(Routes.Verification),
+			router.route.startsWith(Routes.Verification),
 		);
 	}, [router.route]);
 
@@ -220,16 +220,20 @@ const Header: FC<IHeader> = () => {
 		}
 	};
 
+	const { modalCallback: signInThenGoToNotifs } = useModalCallback(() =>
+		router.push(Routes.Notifications),
+	);
+
 	const notificationsProps =
 		isEnabled && !isSignedIn
 			? {
-					onClick: () => dispatch(setShowSignWithWallet(true)),
-			  }
+				onClick: () => signInThenGoToNotifs(),
+			}
 			: {
-					onClick: () => setShowNotifications(true),
-					onMouseEnter: () => setShowNotifications(true),
-					onMouseLeave: () => setShowNotifications(false),
-			  };
+				onClick: () => setShowNotifications(true),
+				onMouseEnter: () => setShowNotifications(true),
+				onMouseLeave: () => setShowNotifications(false),
+			};
 
 	return (
 		<StyledHeader
