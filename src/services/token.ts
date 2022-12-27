@@ -44,11 +44,7 @@ export async function __oldWay_getToken(
 	}
 }
 
-export const fetchPrice = async (
-	chainId: number,
-	tokenAddress: string | undefined,
-	catchFunction: any,
-) => {
+export const fetchPrice = async (chainId: number, tokenAddress?: string) => {
 	try {
 		const chain =
 			chainId === config.PRIMARY_NETWORK.id ? 'ethereum' : 'xdai';
@@ -56,9 +52,8 @@ export const fetchPrice = async (
 			`https://api.coingecko.com/api/v3/simple/token_price/${chain}?contract_addresses=${tokenAddress}&vs_currencies=usd`,
 		);
 		const data = await fetchCall.json();
-		return parseFloat(data[Object.keys(data)[0]]?.usd?.toFixed(2));
+		return parseFloat(data[Object.keys(data)[0]]?.usd);
 	} catch (error) {
-		catchFunction(0);
 		captureException(error, {
 			tags: {
 				section: 'fetchPrice',

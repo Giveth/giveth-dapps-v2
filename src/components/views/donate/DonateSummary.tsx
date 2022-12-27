@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { B, H5 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { FlexCenter } from '@/components/styled-components/Flex';
-import { formatPrice } from '@/lib/helpers';
+import { formatPrice, formatUSD } from '@/lib/helpers';
 
 interface IProps {
 	value: number;
@@ -21,7 +21,7 @@ const DonateSummary: FC<IProps> = props => {
 				<H5 weight={700}>
 					{formatPrice(value) + ' ' + tokenSymbol + ' ~'}
 				</H5>
-				<b>{formatPrice(usdValue) + ' USD'}</b>
+				<b>{(usdValue ? formatUSD(usdValue) : '--') + ' USD'}</b>
 			</Amount>
 			<Amount gap='5px'>
 				<div>{formatMessage({ id: 'label.to_lowercase' })}</div>
