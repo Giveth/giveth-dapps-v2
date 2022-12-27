@@ -31,9 +31,9 @@ export const FiatDonationConfirmationModal: FC<IModal> = ({
 					{type === 'onramper' ? (
 						<>
 							<li>
-								You will be purchasing crypto on behalf the
+								You will be purchasing crypto on behalf of the
 								project account, the destination address will be
-								the one set for the project
+								the one set for the project.
 							</li>
 							<li>
 								Note that your donations history will be updated
