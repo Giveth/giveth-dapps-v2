@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { Button, B, neutralColors } from '@giveth/ui-design-system';
 import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk';
 import { useAppSelector } from '@/features/hooks';
-import { IProject } from '@/apollo/types/types';
 import { FiatDonationConfirmationModal } from '@/components/modals/FiatDonationConfirmationModal';
 import { useDonateData } from '@/context/donate.context';
 import config from '@/configuration';
