@@ -3,11 +3,11 @@ import Image from 'next/image';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { Button, B, neutralColors } from '@giveth/ui-design-system';
+import { useWeb3React } from '@web3-react/core';
 import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { FiatDonationConfirmationModal } from '@/components/modals/FiatDonationConfirmationModal';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
-import { useWeb3React } from '@web3-react/core';
 import { useDonateData } from '@/context/donate.context';
 import config from '@/configuration';
 
