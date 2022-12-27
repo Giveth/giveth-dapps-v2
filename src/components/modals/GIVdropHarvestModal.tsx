@@ -7,6 +7,7 @@ import {
 	Lead,
 	IconHelpFilled16,
 } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import { ethers, constants } from 'ethers';
 import { Zero } from '@ethersproject/constants';
 import BigNumber from 'bignumber.js';
@@ -72,6 +73,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 	checkNetworkAndWallet,
 	onSuccess,
 }) => {
+	const { formatMessage } = useIntl();
 	const [givBackLiquidPart, setGivBackLiquidPart] = useState(Zero);
 	const [txResp, setTxResp] = useState<TransactionResponse | undefined>();
 	const [givBackStream, setGivBackStream] = useState<BigNumber.Value>(0);
@@ -246,7 +248,10 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 									<GIVRate>
 										{formatWeiHelper(givDropStream)}
 									</GIVRate>
-									<Lead>GIV/week</Lead>
+									<Lead>
+										GIV
+										{formatMessage({ id: 'label./week' })}
+									</Lead>
 								</RateRow>
 							</>
 						)}
@@ -288,7 +293,10 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 									<GIVRate>
 										{formatWeiHelper(givBackStream)}
 									</GIVRate>
-									<Lead>GIV/week</Lead>
+									<Lead>
+										GIV
+										{formatMessage({ id: 'label./week' })}
+									</Lead>
 								</RateRow>
 							</>
 						)}

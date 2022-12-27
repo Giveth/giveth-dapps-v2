@@ -42,16 +42,14 @@ import { getERC20Info } from '@/lib/contracts';
 import GIVBackToast from '@/components/views/donate/GIVBackToast';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import {
-	setShowSignWithWallet,
-	setShowWalletModal,
-} from '@/features/modal/modal.slice';
+import { setShowWalletModal } from '@/features/modal/modal.slice';
 import usePurpleList from '@/hooks/usePurpleList';
 import DonateToGiveth from '@/components/views/donate/DonateToGiveth';
 import TotalDonation from '@/components/views/donate/TotalDonation';
 import SaveGasFees from '@/components/views/donate/SaveGasFees';
 import SwitchToAcceptedChain from '@/components/views/donate/SwitchToAcceptedChain';
 import { useDonateData } from '@/context/donate.context';
+import { useModalCallback } from '@/hooks/useModalCallback';
 
 const ethereumChain = config.PRIMARY_NETWORK;
 const gnosisChain = config.SECONDARY_NETWORK;
@@ -107,6 +105,9 @@ const CryptoDonation: FC = () => {
 	const [acceptedChains, setAcceptedChains] = useState<number[]>();
 	const [donationToGiveth, setDonationToGiveth] = useState(
 		noDonationSplit ? 0 : 5,
+	);
+	const { modalCallback: signInThenDonate } = useModalCallback(() =>
+		setShowDonateModal(true),
 	);
 
 	const stopPolling = useRef<any>(null);
@@ -274,9 +275,10 @@ const CryptoDonation: FC = () => {
 			return setShowInsufficientModal(true);
 		}
 		if (!isSignedIn) {
-			return dispatch(setShowSignWithWallet(true));
+			signInThenDonate();
+		} else {
+			setShowDonateModal(true);
 		}
-		setShowDonateModal(true);
 	};
 
 	const donationDisabled =

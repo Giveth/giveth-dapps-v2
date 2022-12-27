@@ -24,7 +24,7 @@ const GIVbackToast = () => {
 			<div>
 				<Title>
 					<Caption medium>
-						{formatMessage({ id: 'label.givback_eligible' })}
+						{formatMessage({ id: 'label.givbacks' })}
 					</Caption>
 					<IconWithTooltip
 						icon={<IconHelpFilled16 />}
