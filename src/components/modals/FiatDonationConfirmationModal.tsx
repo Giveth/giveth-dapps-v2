@@ -47,6 +47,7 @@ export const FiatDonationConfirmationModal: FC<IModal> = ({
 									<a
 										href='https://www.sdgimpactfund.org/giveth-foundation'
 										target='_blank'
+										rel='noreferrer'
 									>
 										SDG impact fund
 									</a>
