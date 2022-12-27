@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import Image from 'next/image';
 import {
 	B,
 	brandColors,
@@ -182,6 +183,7 @@ const ProjectDonationTable = ({
 						<TableHeader>
 							{formatMessage({ id: 'label.network' })}
 						</TableHeader>
+						<TableHeader>Source</TableHeader>
 						<TableHeader
 							onClick={() =>
 								orderChangeHandler(EOrderBy.TokenAmount)
@@ -204,6 +206,7 @@ const ProjectDonationTable = ({
 								title={EOrderBy.UsdAmount}
 							/>
 						</TableHeader>
+
 						{pageDonations?.donations?.map(donation => (
 							<DonationRowWrapper key={donation.id}>
 								<DonationTableCell>
@@ -221,6 +224,7 @@ const ProjectDonationTable = ({
 										: donation.user?.name ||
 										  donation.user?.firstName}
 								</DonationTableCell>
+
 								{isAdmin && (
 									<DonationTableCell>
 										<DonationStatus
@@ -240,6 +244,18 @@ const ProjectDonationTable = ({
 											<IconETH size={24} />
 											Ethereum
 										</>
+									)}
+								</DonationTableCell>
+								<DonationTableCell>
+									{donation?.onramperId ? (
+										<Image
+											src='/images/powered_by_onramper.png'
+											width='95px'
+											height='30px'
+											alt={'Powered by OnRamper'}
+										/>
+									) : (
+										'Wallet'
 									)}
 								</DonationTableCell>
 								<DonationTableCell>
@@ -326,8 +342,8 @@ const DonationTableContainer = styled.div<{ isAdmin?: boolean }>`
 	width: 100%;
 	grid-template-columns: ${props =>
 		props.isAdmin
-			? '1.25fr 2fr 1fr 1.25fr 1fr 1fr'
-			: '1.25fr 2fr 1.25fr 1fr 1fr'};
+			? '1.25fr 1.25fr 1fr 1.25fr 1fr 1fr 1fr'
+			: '1.25fr 1.25fr 1.25fr 1fr 1fr 1fr'};
 	min-width: 800px;
 `;
 

@@ -34,6 +34,7 @@ export const FETCH_PROJECT_DONATIONS = gql`
 				createdAt
 				donationType
 				status
+				onramperId
 			}
 			totalCount
 		}

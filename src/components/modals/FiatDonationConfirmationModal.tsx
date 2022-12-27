@@ -13,6 +13,7 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 export const FiatDonationConfirmationModal: FC<IModal> = ({
 	setShowModal,
 	continueProcess,
+	type,
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
@@ -27,14 +28,38 @@ export const FiatDonationConfirmationModal: FC<IModal> = ({
 		>
 			<Container>
 				<Bullets>
-					<li>
-						Note that your donations history will be updated some
-						time after successful transaction.
-					</li>
-					<li>
-						Donations will only be confirmed after a while they have
-						been sent, time depends on the chosen onramp
-					</li>
+					{type === 'onramper' ? (
+						<>
+							<li>
+								Note that your donations history will be updated
+								some time after a successful transaction.
+							</li>
+							<li>
+								Donations will only be confirmed after a while
+								of being sent, time depends on the chosen onramp
+							</li>
+						</>
+					) : (
+						type === 'donorbox' && (
+							<>
+								<li>
+									This is a way to support Giveth using our{' '}
+									<a
+										href='https://www.sdgimpactfund.org/giveth-foundation'
+										target='_blank'
+									>
+										SDG impact fund
+									</a>
+									<li>
+										You'll get a confirmation from donorbox
+										on your email but you won't see it
+										listed on our platform, we will be
+										grateful anyways!
+									</li>
+								</li>
+							</>
+						)
+					)}
 				</Bullets>
 				<Buttons>
 					<OkButton

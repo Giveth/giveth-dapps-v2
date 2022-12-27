@@ -39,10 +39,10 @@ const FiatDonation = (props: {
 	};
 
 	const rampNetwork = new RampInstantSDK({
-		hostAppName: 'Giveth',
-		hostLogoUrl:
-			'https://raw.githubusercontent.com/Giveth/giveth-dapps-v2/develop/public/images/logo/logo1.png',
+		hostAppName: 'giveth',
+		hostLogoUrl: 'https://rampnetwork.github.io/assets/misc/test-logo.png',
 		hostApiKey: 've2mesm3jbhjjoqs8t57v3qzdnveza662sugh88e',
+		url: 'https://ri-widget-staging.firebaseapp.com/',
 	});
 
 	return (
@@ -61,7 +61,7 @@ const FiatDonation = (props: {
 						<iframe
 							src={`https://widget.onramper.com?color=266677&apiKey=${
 								process.env.NEXT_PUBLIC_ONRAMPER_API_KEY
-							}&onlyCryptos=ETH,USDC,USDT,RAI,DAI_ERC20&defaultFiat=USD&defaultCrypto=USDC&wallets=ETH:${mainnetAddress}&partnerContext=${JSON.stringify(
+							}&supportSwap=false&supportSell=false&onlyCryptos=ETH,USDC,USDT,RAI,DAI_ERC20&defaultFiat=USD&defaultCrypto=USDC&wallets=ETH:${mainnetAddress}&partnerContext=${JSON.stringify(
 								partnerContext,
 							)}`}
 							height='660px'
@@ -98,12 +98,14 @@ const FiatDonation = (props: {
 							<FiatDonationConfirmationModal
 								setShowModal={setOnramperConfirmationModal}
 								continueProcess={() => setOpenOnramper(true)}
+								type='onramper'
 							/>
 						)}
 						{donorboxConfirmationModal && (
 							<FiatDonationConfirmationModal
 								setShowModal={setDonorboxConfirmationModal}
 								continueProcess={() => setOpenDonorBox(true)}
+								type='donorbox'
 							/>
 						)}
 						<ImageContainer>
@@ -121,11 +123,9 @@ const FiatDonation = (props: {
 						</Info>
 						<Button
 							label='CONTINUE WITH ONRAMPER'
-							// onClick={() => setSuccessDonation()}
 							onClick={() => {
 								setOnramperConfirmationModal(true);
 							}}
-							// disabled
 						/>
 						{id === givethProjectId && (
 							<DonorBoxContainer>
@@ -154,7 +154,7 @@ const FiatDonation = (props: {
 					</Buttons>
 				)}
 			</FiatContainer>
-			<a onClick={() => rampNetwork.show()}>ramp-network</a>
+			{/* <a onClick={() => rampNetwork.show()}>ramp-network</a> */}
 		</>
 	);
 };

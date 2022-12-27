@@ -11,4 +11,7 @@ export const Bullets = styled.ul<{ image?: string }>`
 	> li {
 		margin-top: 16px;
 	}
+	a {
+		text-decoration: underline;
+	}
 `;
