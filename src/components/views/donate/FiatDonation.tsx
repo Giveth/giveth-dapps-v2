@@ -45,6 +45,7 @@ const FiatDonation = (props: {
 		url: 'https://ri-widget-staging.firebaseapp.com/',
 	});
 
+const FiatDonation = () => {
 	return (
 		<>
 			<FiatContainer>

@@ -5,7 +5,6 @@ import {
 	B,
 	brandColors,
 	H6,
-	IconETH,
 	IconExternalLink,
 	neutralColors,
 } from '@giveth/ui-design-system';
@@ -13,7 +12,7 @@ import {
 import { useIntl } from 'react-intl';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
-import { IDonation, IProject } from '@/apollo/types/types';
+import { IDonation } from '@/apollo/types/types';
 import SearchBox from '@/components/SearchBox';
 import Pagination from '@/components/Pagination';
 import {
@@ -39,6 +38,8 @@ import {
 	TableCell,
 	TableHeader,
 } from '@/components/styled-components/Table';
+import { IconEthereum } from '@/components/Icons/Eth';
+import { useProjectContext } from '@/context/project.context';
 
 const itemPerPage = 10;
 
@@ -56,7 +57,6 @@ interface IOrder {
 interface IProjectDonationTable {
 	donations: IDonation[];
 	totalDonations?: number;
-	project?: IProject;
 }
 
 interface PageDonations {
@@ -67,7 +67,6 @@ interface PageDonations {
 const ProjectDonationTable = ({
 	donations,
 	totalDonations,
-	project,
 }: IProjectDonationTable) => {
 	const [pageDonations, setPageDonations] = useState<PageDonations>({
 		donations: donations,
@@ -80,10 +79,10 @@ const ProjectDonationTable = ({
 	});
 	const [activeTab, setActiveTab] = useState<number>(0);
 	const [searchTerm, setSearchTerm] = useState<string>('');
-
+	const { projectData } = useProjectContext();
 	const user = useAppSelector(state => state.user.userData);
 	const { formatMessage, locale } = useIntl();
-	const { id, traceCampaignId, adminUser } = project || {};
+	const { id, traceCampaignId, adminUser } = projectData || {};
 	const isAdmin = compareAddresses(
 		adminUser?.walletAddress,
 		user?.walletAddress,
@@ -241,7 +240,7 @@ const ProjectDonationTable = ({
 										</>
 									) : (
 										<>
-											<IconETH size={24} />
+											<IconEthereum size={24} />
 											Ethereum
 										</>
 									)}

@@ -5,6 +5,7 @@ import {
 	GLink,
 	IconCopy,
 } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import { BigNumber } from 'bignumber.js';
 import { constants } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
@@ -83,6 +84,7 @@ const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
 };
 
 export const TabGIVfarmTop = () => {
+	const { formatMessage } = useIntl();
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
 	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
@@ -106,13 +108,19 @@ export const TabGIVfarmTop = () => {
 							<IconGIVFarm size={64} />
 						</Flex>
 						<Subtitle size='medium'>
-							Stake tokens in the GIVfarm to grow your rewards.
+							{formatMessage({
+								id: 'label.stake_tokens_in_the_givfarm',
+							})}
 						</Subtitle>
 					</Col>
 					<Col xs={12} sm={5} xl={4}>
 						<GIVfarmRewardCard
-							title='Your GIVfarm rewards'
-							wrongNetworkText='GIVfarm is only available on Mainnet and Gnosis Chain.'
+							title={formatMessage({
+								id: 'label.your_givfarm_rewards',
+							})}
+							wrongNetworkText={formatMessage({
+								id: 'label.givfarm_is_only_available_on_main_and_gnosis',
+							})}
 							liquidAmount={rewardLiquidPart}
 							stream={rewardStream}
 							network={chainId}
@@ -129,6 +137,7 @@ export const TabGIVfarmTop = () => {
 };
 
 export const TabGIVfarmBottom = () => {
+	const { formatMessage } = useIntl();
 	const { chainId } = useWeb3React();
 	const [showArchivedPools, setArchivedPools] = useState(false);
 
@@ -145,17 +154,19 @@ export const TabGIVfarmBottom = () => {
 					<Flex alignItems='center' gap='24px' wrap={1}>
 						<ExtLinkRow alignItems='center'>
 							<GLink
+								as='a'
 								size='Big'
 								target='_blank'
 								rel='noreferrer'
 								href='https://omni.xdaichain.com/bridge'
 							>
-								Bridge your GIV
+								{formatMessage({ id: 'label.bridge_your_giv' })}
 							</GLink>
 							<IconExternalLink />
 						</ExtLinkRow>
 						<ExtLinkRow alignItems='center'>
 							<GLink
+								as='a'
 								size='Big'
 								target='_blank'
 								rel='noreferrer'
@@ -165,12 +176,14 @@ export const TabGIVfarmBottom = () => {
 										: config.MAINNET_CONFIG.GIV.BUY_LINK
 								}
 							>
-								Buy GIV token
+								{formatMessage({ id: 'label.buy_giv_token' })}
 							</GLink>
 							<IconExternalLink />
 						</ExtLinkRow>
 						<ContractRow>
-							<GLink>{`Contract (${
+							<GLink>{`${formatMessage({
+								id: 'label.contract',
+							})} (${
 								chainId === config.XDAI_NETWORK_NUMBER
 									? config.XDAI_CONFIG.chainName
 									: config.MAINNET_CONFIG.chainName
@@ -199,7 +212,9 @@ export const TabGIVfarmBottom = () => {
 				</Flex>
 				<ArchivedPoolsToggle>
 					<RadioButton
-						title='Show archived pools'
+						title={formatMessage({
+							id: 'label.show_archived_pools',
+						})}
 						toggleRadio={() => setArchivedPools(!showArchivedPools)}
 						isSelected={showArchivedPools}
 					/>

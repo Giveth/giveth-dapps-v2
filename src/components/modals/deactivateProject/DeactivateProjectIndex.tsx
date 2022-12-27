@@ -1,10 +1,4 @@
-import React, {
-	Dispatch,
-	FC,
-	SetStateAction,
-	useEffect,
-	useState,
-} from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
 	Button,
@@ -28,6 +22,7 @@ import DoneContent from './DoneContent';
 import DeactivatingContent from './DeactivatingContent';
 import WhyContent from './WhyContent';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import { useProjectContext } from '@/context/project.context';
 
 export interface ISelectObj {
 	value: number;
@@ -42,12 +37,10 @@ const buttonLabels: { [key: string]: string }[] = [
 
 interface IDeactivateProjectModal extends IModal {
 	projectId?: string;
-	setIsActive: Dispatch<SetStateAction<boolean>>;
 }
 
 const DeactivateProjectModal: FC<IDeactivateProjectModal> = ({
 	projectId,
-	setIsActive,
 	setShowModal,
 }) => {
 	const [tab, setTab] = useState<number>(0);
@@ -59,6 +52,7 @@ const DeactivateProjectModal: FC<IDeactivateProjectModal> = ({
 	const dispatch = useAppDispatch();
 	const isSignedIn = useAppSelector(state => state.user.isSignedIn);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const { fetchProjectBySlug } = useProjectContext();
 
 	const fetchReasons = async () => {
 		const { data } = await client.query({
@@ -83,15 +77,14 @@ const DeactivateProjectModal: FC<IDeactivateProjectModal> = ({
 				dispatch(setShowSignWithWallet(true));
 				return;
 			}
-			const { data } = await client.mutate({
+			await client.mutate({
 				mutation: DEACTIVATE_PROJECT,
 				variables: {
 					projectId: Number(projectId),
 					reasonId: Number(selectedReason.value),
 				},
 			});
-			const status = data.deactivateProject;
-			setIsActive(!status);
+			await fetchProjectBySlug();
 		}
 		setTab(previousTab => previousTab + 1);
 	};

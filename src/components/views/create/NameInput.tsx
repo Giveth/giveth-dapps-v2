@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useFormContext } from 'react-hook-form';
+import { useRouter } from 'next/router';
 import Input, { InputSize } from '@/components/Input';
 import { requiredOptions } from '@/lib/constants/regex';
 import { EInputs } from '@/components/views/create/CreateProject';
@@ -11,6 +12,9 @@ interface IProps {
 }
 
 const NameInput: FC<IProps> = ({ preTitle }) => {
+	const router = useRouter();
+	const locale = router.locale || 'en';
+
 	const {
 		register,
 		formState: { errors: formErrors },
@@ -27,7 +31,7 @@ const NameInput: FC<IProps> = ({ preTitle }) => {
 	const titleValidation = async (title: string) => {
 		if (noTitleValidation(title)) return true;
 		setIsTitleValidating(true);
-		const result = await gqlTitleValidation(title);
+		const result = await gqlTitleValidation(title, locale);
 		setIsTitleValidating(false);
 		return result;
 	};

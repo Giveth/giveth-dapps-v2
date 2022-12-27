@@ -34,10 +34,6 @@ import type {
 	UseFormRegister,
 } from 'react-hook-form';
 
-export interface IFormValidations {
-	[key: string]: EInputValidation;
-}
-
 export enum InputSize {
 	SMALL,
 	MEDIUM,
@@ -48,6 +44,7 @@ interface IInputLabelProps {
 	required?: boolean;
 	disabled?: boolean;
 }
+
 interface IInput extends InputHTMLAttributes<HTMLInputElement> {
 	label?: string;
 	caption?: string;

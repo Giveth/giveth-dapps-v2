@@ -13,7 +13,7 @@ import {
 	brandColors,
 	IconImage,
 } from '@giveth/ui-design-system';
-import { Flex } from './styled-components/Flex';
+import { Flex, FlexSpacer } from './styled-components/Flex';
 import { showToastError } from '@/lib/helpers';
 import { client } from '@/apollo/apolloClient';
 import { UPLOAD_PROFILE_PHOTO } from '@/apollo/gql/gqlUser';
@@ -191,16 +191,16 @@ const FileUploader: FC<IFileUploader> = ({
 												id: 'label.uplodaded',
 											})}
 										</SublineBold>
-										<GLink size='Tiny'>
-											<a
-												href={file.url}
-												target='_blank'
-												rel='noreferrer'
-											>
-												&nbsp;- Link
-											</a>
+										<GLink
+											as='a'
+											size='Tiny'
+											href={file.url}
+											target='_blank'
+											rel='noreferrer'
+										>
+											&nbsp;- Link
 										</GLink>
-										<div style={{ flex: 1 }}></div>
+										<FlexSpacer />
 										<DeleteRow
 											onClick={() => onDelete(file.url)}
 										>
@@ -247,14 +247,14 @@ const FileUploader: FC<IFileUploader> = ({
 											id: 'label.uploaded',
 										})}
 									</SublineBold>
-									<GLink size='Tiny'>
-										<a
-											href={url}
-											target='_blank'
-											rel='noreferrer'
-										>
-											&nbsp;- Link
-										</a>
+									<GLink
+										as='a'
+										size='Tiny'
+										href={url}
+										target='_blank'
+										rel='noreferrer'
+									>
+										&nbsp;- Link
 									</GLink>
 								</Flex>
 								<UplaodBar

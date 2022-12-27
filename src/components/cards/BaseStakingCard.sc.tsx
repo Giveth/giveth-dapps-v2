@@ -141,7 +141,7 @@ export const AngelVaultTooltip = styled(Subline)`
 	text-align: left;
 `;
 
-export const IconHelpWraper = styled.div`
+export const IconHelpFilledWraper = styled.div`
 	cursor: pointer;
 `;
 
@@ -195,7 +195,7 @@ export const DisableModalText = styled(P)<{ weight?: number }>`
 	font-weight: ${props => (props.weight ? props.weight : 400)};
 `;
 
-export const DisableModalLink = styled(GLink)<{ weight?: number }>`
+export const DisableModalLink = styled(GLink)`
 	color: ${brandColors.pinky[500]};
 `;
 

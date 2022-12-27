@@ -67,10 +67,7 @@ const DonationTable: FC<DonationTable> = ({
 					<DonationTableCell>
 						{smallFormatDate(new Date(donation.createdAt), locale)}
 					</DonationTableCell>
-					<Link
-						href={slugToProjectView(donation.project.slug)}
-						passHref
-					>
+					<Link href={slugToProjectView(donation.project.slug)}>
 						<ProjectTitleCell>
 							<B>{donation.project.title}</B>
 							<IconLink24 />

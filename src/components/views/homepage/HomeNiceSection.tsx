@@ -32,15 +32,15 @@ const HomePurpleSection = () => {
 				</BigTitle>
 				<Desc>{formatMessage({ id: 'page.home.nice_desc' })}</Desc>
 				<Links xs={12} sm={7} md={8}>
-					<GLink href={links.NICE_DOC} target='_blank'>
+					<GLink as='a' href={links.NICE_DOC} target='_blank'>
 						<span>
 							{formatMessage({ id: 'page.home.nice_learn' })}
 						</span>
 					</GLink>
-					<Link href={Routes.GivethProject} passHref>
+					<Link href={Routes.GivethProject}>
 						{formatMessage({ id: 'page.home.nice_donate' })}
 					</Link>
-					<PurpleLink href={links.SWAG} target='_blank'>
+					<PurpleLink as='a' href={links.SWAG} target='_blank'>
 						<span>
 							{formatMessage({ id: 'page.home.nice_swag' })}
 						</span>

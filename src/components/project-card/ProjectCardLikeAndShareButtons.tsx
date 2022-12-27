@@ -1,26 +1,29 @@
-import { useEffect, useState, MouseEvent } from 'react';
+import { useEffect, useState } from 'react';
 import {
 	brandColors,
 	IconHeartFilled16,
 	IconHeartOutline16,
+	IconRocketInSpace,
 	IconShare16,
 	neutralColors,
 	Subline,
 } from '@giveth/ui-design-system';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { captureException } from '@sentry/nextjs';
+import { useRouter } from 'next/router';
 import ShareModal from '../modals/ShareModal';
 import { likeProject, unlikeProject } from '@/lib/reaction';
 import { showToastError } from '@/lib/helpers';
 import { Flex } from '../styled-components/Flex';
 import { IProject } from '@/apollo/types/types';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import {
 	decrementLikedProjectsCount,
 	incrementLikedProjectsCount,
 } from '@/features/user/user.slice';
+import { slugToProjectView } from '@/lib/routeCreators';
+import { useModalCallback } from '@/hooks/useModalCallback';
 
 interface IProjectCardLikeAndShareButtons {
 	project: IProject;
@@ -31,40 +34,46 @@ const ProjectCardLikeAndShareButtons = (
 ) => {
 	const [showModal, setShowModal] = useState<boolean>(false);
 	const { project } = props;
-	const { slug, id: projectId } = project;
+	const { slug, id: projectId, verified } = project;
 	const [reaction, setReaction] = useState(project.reaction);
 	const [totalReactions, setTotalReactions] = useState(
 		project.totalReactions,
 	);
-	const [loading, setLoading] = useState(false);
+	const [boostLoading, setBoostLoading] = useState(false);
+	const [likeLoading, setLikeLoading] = useState(false);
 	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
 	const dispatch = useAppDispatch();
+	const router = useRouter();
 
-	const likeUnlikeProject = async (e: MouseEvent<HTMLElement>) => {
-		e.stopPropagation();
-		if (!isSignedIn) {
-			dispatch(setShowSignWithWallet(true));
-			return;
-		}
+	useEffect(() => {
+		setReaction(project.reaction);
+	}, [project.reaction]);
 
-		if (loading) return;
+	useEffect(() => {
+		setTotalReactions(project.totalReactions);
+	}, [project.totalReactions]);
 
+	const likeUnlikeProject = async () => {
 		if (projectId) {
-			setLoading(true);
+			setLikeLoading(true);
 
 			try {
 				if (!reaction) {
 					const newReaction = await likeProject(projectId);
 					setReaction(newReaction);
 					if (newReaction) {
-						setTotalReactions((totalReactions || 0) + 1);
+						setTotalReactions(
+							_totalReactions => (_totalReactions || 0) + 1,
+						);
 						dispatch(incrementLikedProjectsCount());
 					}
 				} else if (reaction?.userId === user?.id) {
 					const successful = await unlikeProject(reaction.id);
 					if (successful) {
 						setReaction(undefined);
-						setTotalReactions((totalReactions || 1) - 1);
+						setTotalReactions(
+							_totalReactions => (_totalReactions || 1) - 1,
+						);
 						dispatch(decrementLikedProjectsCount());
 					}
 				}
@@ -76,18 +85,29 @@ const ProjectCardLikeAndShareButtons = (
 					},
 				});
 			} finally {
-				setLoading(false);
+				setLikeLoading(false);
 			}
 		}
 	};
 
-	useEffect(() => {
-		setReaction(project.reaction);
-	}, [project.reaction]);
+	const boostProject = () => {
+		if (!projectId) return;
+		if (boostLoading) return;
+		setBoostLoading(true);
+		router.push(`${slugToProjectView(slug)}?open=boost`);
+	};
 
-	useEffect(() => {
-		setTotalReactions(project.totalReactions);
-	}, [project.totalReactions]);
+	const { modalCallback: signInThenLike } =
+		useModalCallback(likeUnlikeProject);
+
+	const checkSignInThenLike = () => {
+		if (typeof window === 'undefined') return;
+		if (!isSignedIn) {
+			signInThenLike();
+		} else {
+			likeUnlikeProject();
+		}
+	};
 
 	return (
 		<>
@@ -95,8 +115,19 @@ const ProjectCardLikeAndShareButtons = (
 				<ShareModal setShowModal={setShowModal} projectHref={slug} />
 			)}
 			<BadgeWrapper>
-				<Flex gap='3px'>
-					<BadgeButton onClick={likeUnlikeProject}>
+				<Flex gap='6px'>
+					{verified && (
+						<BadgeButton
+							isLoading={boostLoading}
+							onClick={boostProject}
+						>
+							<IconRocketInSpace />
+						</BadgeButton>
+					)}
+					<BadgeButton
+						isLoading={likeLoading}
+						onClick={likeLoading ? undefined : checkSignInThenLike}
+					>
 						{Number(totalReactions) > 0 && (
 							<Subline>{totalReactions}</Subline>
 						)}
@@ -108,7 +139,6 @@ const ProjectCardLikeAndShareButtons = (
 					</BadgeButton>
 					<BadgeButton
 						onClick={e => {
-							e.stopPropagation();
 							setShowModal(true);
 						}}
 					>
@@ -120,18 +150,75 @@ const ProjectCardLikeAndShareButtons = (
 	);
 };
 
-const BadgeButton = styled(Flex)`
+interface IBadgeButton {
+	isLoading?: boolean;
+}
+
+const BadgeButton = styled(Flex)<IBadgeButton>`
 	gap: 3px;
 	padding: 6px 7px;
-	background: ${neutralColors.gray[100]};
+	z-index: 2;
 	align-items: center;
 	border-radius: 16px;
 	cursor: pointer;
 	transition: color 0.3s ease;
-	color: ${neutralColors.gray[800]};
+	color: ${neutralColors.gray[600]};
 	box-shadow: 0 3px 20px ${brandColors.giv[400]}21;
 	&:hover {
 		color: ${neutralColors.gray[900]};
+	}
+	pointer-events: auto;
+	position: relative;
+	overflow: hidden;
+
+	&::after {
+		content: '';
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		border-radius: 16px;
+		z-index: -1;
+		background-color: #ffffff;
+	}
+	${props =>
+		props.isLoading
+			? css`
+					&::before {
+						content: '';
+						position: absolute;
+						top: -10px;
+						bottom: -10px;
+						left: -10px;
+						right: -10px;
+						z-index: -2;
+						animation: rotate linear 1s infinite;
+						background-color: #399953;
+						background-repeat: no-repeat;
+						background-size: 50% 50%, 50% 50%;
+						background-position: 0 0, 100% 0, 100% 100%, 0 100%;
+						background-image: linear-gradient(#ffffff, #ffffff),
+							linear-gradient(#ffffff, #ffffff),
+							linear-gradient(#ffffff, #ffffff),
+							linear-gradient(
+								${brandColors.giv[500]},
+								${brandColors.giv[500]}
+							);
+					}
+					&::after {
+						top: 2px;
+						bottom: 2px;
+						left: 2px;
+						right: 2px;
+					}
+			  `
+			: ``}
+
+	@keyframes rotate {
+		100% {
+			transform: rotate(1turn);
+		}
 	}
 `;
 
@@ -142,6 +229,7 @@ const BadgeWrapper = styled.div`
 	display: flex;
 	justify-content: flex-end;
 	padding: 16px;
+	pointer-events: none;
 `;
 
 export default ProjectCardLikeAndShareButtons;

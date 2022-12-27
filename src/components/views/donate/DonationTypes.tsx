@@ -3,20 +3,12 @@ import styled from 'styled-components';
 import { H4, neutralColors } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 
-import CryptoDonation, {
-	ISuccessDonation,
-} from '@/components/views/donate/CryptoDonation';
+import CryptoDonation from '@/components/views/donate/CryptoDonation';
 import FiatDonation from '@/components/views/donate/FiatDonation';
-import { IDonationProject } from '@/apollo/types/types';
 import RadioButton from '@/components/RadioButton';
 
-const DonationTypes = (props: {
-	project: IDonationProject;
-	setSuccess: (i: ISuccessDonation) => void;
-}) => {
+const DonationTypes = () => {
 	const { formatMessage } = useIntl();
-	const { project, setSuccess } = props;
-
 	const [isCrypto, setIsCrypto] = useState(true);
 
 	return (
@@ -37,17 +29,7 @@ const DonationTypes = (props: {
 				/>
 			</RadioBox>
 			<Break />
-			{isCrypto ? (
-				<CryptoDonation
-					project={project}
-					setSuccessDonation={setSuccess}
-				/>
-			) : (
-				<FiatDonation
-					project={project}
-					setSuccessDonation={setSuccess}
-				/>
-			)}
+			{isCrypto ? <CryptoDonation /> : <FiatDonation />}
 		</>
 	);
 };

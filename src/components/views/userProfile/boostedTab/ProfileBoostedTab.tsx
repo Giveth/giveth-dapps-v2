@@ -1,14 +1,8 @@
-import { H5, mediaQueries } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
-import {
-	ContributeCard,
-	ContributeCardTitles,
-	UserProfileTab,
-} from '../common.sc';
+
 import { IUserProfileView } from '../UserProfile.view';
-import { formatWeiHelper } from '@/helpers/number';
 import { EDirection } from '@/apollo/types/gqlEnums';
 import BoostsTable from './BoostsTable';
 import { IPowerBoosting } from '@/apollo/types/types';
@@ -21,8 +15,17 @@ import {
 import { Loading } from '../projectsTab/ProfileProjectsTab';
 import { EmptyPowerBoosting } from './EmptyPowerBoosting';
 import GetMoreGIVpowerBanner from './GetMoreGIVpowerBanner';
-import { useAppSelector } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { sortBoosts } from '@/helpers/givpower';
+import { setBoostedProjectsCount } from '@/features/user/user.slice';
+import { UserProfileTab } from '../common.sc';
+import {
+	ContributeCard,
+	PublicGIVpowerContributeCard,
+} from '@/components/ContributeCard';
+import { formatWeiHelper } from '@/helpers/number';
+import { Row, Col } from '@/components/Grid';
 
 export enum EPowerBoostingOrder {
 	CreationAt = 'createdAt',
@@ -35,7 +38,10 @@ export interface IBoostedOrder {
 	direction: EDirection;
 }
 
-export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
+export const ProfileBoostedTab: FC<IUserProfileView> = ({
+	user,
+	myAccount,
+}) => {
 	const [loading, setLoading] = useState(false);
 	const [boosts, setBoosts] = useState<IPowerBoosting[]>([]);
 	const [order, setOrder] = useState<IBoostedOrder>({
@@ -46,7 +52,10 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 	const sdh = new SubgraphDataHelper(
 		useAppSelector(state => state.subgraph.xDaiValues),
 	);
+	const { userData } = useAppSelector(state => state.user);
+	const boostedProjectsCount = userData?.boostedProjectsCount ?? 0;
 	const givPower = sdh.getUserGIVPowerBalance();
+	const dispatch = useAppDispatch();
 
 	useEffect(() => {
 		if (!user) return;
@@ -67,6 +76,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 				const powerBoostings: IPowerBoosting[] =
 					data.getPowerBoosting.powerBoostings;
 				setBoosts(powerBoostings);
+				dispatch(setBoostedProjectsCount(powerBoostings.length));
 			}
 		};
 		fetchUserBoosts();
@@ -92,38 +102,59 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 		[order.by, order.direction],
 	);
 
-	const saveBoosts = useCallback(async (newBoosts: IPowerBoosting[]) => {
-		setLoading(true);
-		const percentages = newBoosts.map(boost => Number(boost.percentage));
-		const projectIds = newBoosts.map(boost => Number(boost.project.id));
-		try {
-			const res = await client.mutate({
-				mutation: SAVE_MULTIPLE_POWER_BOOSTING,
-				variables: {
-					percentages,
-					projectIds,
-				},
-			});
-			if (res.data) {
-				const setMultiplePowerBoosting: IPowerBoosting[] =
-					res.data.setMultiplePowerBoosting;
-				setBoosts(setMultiplePowerBoosting);
-				setLoading(false);
-				return true;
+	const saveBoosts = useCallback(
+		async (newBoosts: IPowerBoosting[]) => {
+			setLoading(true);
+			const percentages = newBoosts.map(boost =>
+				Number(boost.percentage),
+			);
+			const projectIds = newBoosts.map(boost => Number(boost.project.id));
+			//fix calculation error
+			let indexOfMax = 0;
+			let sum = 0;
+			for (let i = 0; i < percentages.length; i++) {
+				const percentage = percentages[i];
+				if (percentage > percentages[indexOfMax]) indexOfMax = i;
+				sum += percentage;
 			}
-			setLoading(false);
-			return false;
-		} catch (error) {
-			console.log({ error });
-			captureException(error, {
-				tags: {
-					section: 'Save manage power boosting',
-				},
-			});
-			setLoading(false);
-			return false;
-		}
-	}, []);
+			const error = 100 - sum;
+			if (error > 0.00001 || error < -0.00001) {
+				percentages[indexOfMax] += error;
+			}
+			try {
+				const res = await client.mutate({
+					mutation: SAVE_MULTIPLE_POWER_BOOSTING,
+					variables: {
+						percentages,
+						projectIds,
+					},
+				});
+				if (res.data) {
+					const setMultiplePowerBoosting: IPowerBoosting[] =
+						res.data.setMultiplePowerBoosting;
+					const sortedBoosts = sortBoosts(
+						setMultiplePowerBoosting,
+						order,
+					);
+					setBoosts(sortedBoosts);
+					setLoading(false);
+					return true;
+				}
+				setLoading(false);
+				return false;
+			} catch (error) {
+				console.log({ error });
+				captureException(error, {
+					tags: {
+						section: 'Save manage power boosting',
+					},
+				});
+				setLoading(false);
+				return false;
+			}
+		},
+		[order],
+	);
 
 	const deleteBoost = useCallback(
 		async (id: string) => {
@@ -142,7 +173,9 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 				if (res.data) {
 					const newBoosts: IPowerBoosting[] =
 						res.data.setSinglePowerBoosting;
-					setBoosts(newBoosts);
+					const sortedBoosts = sortBoosts(newBoosts, order);
+					setBoosts(sortedBoosts);
+					dispatch(setBoostedProjectsCount(sortedBoosts.length));
 					setLoading(false);
 					return true;
 				}
@@ -159,22 +192,32 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 				return false;
 			}
 		},
-		[boosts],
+		[boosts, order],
 	);
 
 	return (
 		<UserProfileTab>
-			<CustomContributeCard>
-				<ContributeCardTitles>
-					Total Amount of GIVpower
-				</ContributeCardTitles>
-				<ContributeCardTitles>Projects Boosted</ContributeCardTitles>
-				<H5>~{formatWeiHelper(givPower.balance)}</H5>
-				<H5>{boosts.length}</H5>
-			</CustomContributeCard>
+			<Row>
+				<Col lg={6}>
+					{myAccount ? (
+						<ContributeCard
+							data1={{
+								label: 'Projects Boosted',
+								value: boostedProjectsCount,
+							}}
+							data2={{
+								label: 'GIVpower',
+								value: `${formatWeiHelper(givPower.balance)}`,
+							}}
+						/>
+					) : (
+						<PublicGIVpowerContributeCard user={user} />
+					)}
+				</Col>
+			</Row>
 			<PowerBoostingContainer>
 				{loading && <Loading />}
-				{boosts.length > 0 ? (
+				{boostedProjectsCount && boostedProjectsCount > 0 ? (
 					<BoostsTable
 						boosts={boosts}
 						totalAmountOfGIVpower={givPower.balance}
@@ -182,9 +225,10 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 						changeOrder={changeOrder}
 						saveBoosts={saveBoosts}
 						deleteBoost={deleteBoost}
+						myAccount={myAccount}
 					/>
 				) : (
-					<EmptyPowerBoosting />
+					<EmptyPowerBoosting myAccount={myAccount} />
 				)}
 			</PowerBoostingContainer>
 			<GetMoreGIVpowerBanner />
@@ -192,12 +236,12 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 	);
 };
 
-const CustomContributeCard = styled(ContributeCard)`
-	width: 100%;
-	${mediaQueries.tablet} {
-		width: 614px;
-	}
-`;
+// const CustomContributeCard = styled(ContributeCard)`
+// 	width: 100%;
+// 	${mediaQueries.tablet} {
+// 		width: 614px;
+// 	}
+// `;
 
 export const PowerBoostingContainer = styled.div`
 	position: relative;

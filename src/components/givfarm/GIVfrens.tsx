@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { H3 } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
+import { useIntl } from 'react-intl';
 import config from '@/configuration';
 import { Col } from '../Grid';
 import { RegenFarm } from '../RegenFarm';
@@ -12,6 +13,7 @@ interface IGIVfrensProps {
 
 export const GIVfrens: FC<IGIVfrensProps> = ({ showArchivedPools }) => {
 	const { chainId } = useWeb3React();
+	const { formatMessage } = useIntl();
 	const regenFarms =
 		chainId === config.XDAI_NETWORK_NUMBER
 			? config.XDAI_CONFIG.regenFarms
@@ -22,15 +24,18 @@ export const GIVfrens: FC<IGIVfrensProps> = ({ showArchivedPools }) => {
 			<H3 weight={700}>RegenFarms</H3>
 			<Col md={8} lg={6}>
 				<Subtitle>
-					Explore a multiverse of projects changing the world and earn
-					rewards for staking liquidity.&nbsp;
+					{formatMessage({
+						id: 'label.explore_a_multiverse_of_projects',
+					})}
+					&nbsp;
 					<GIVfrensLink
+						as='a'
 						size='Big'
-						href=' https://medium.com/giveth/regenfarms-the-next-generation-of-refi-opportunities-7a46f3cf1e09'
+						href='https://docs.giveth.io/regenFarms'
 						target='_blank'
 						rel='noreferrer'
 					>
-						Learn more
+						{formatMessage({ id: 'label.learn_more' })}
 					</GIVfrensLink>
 					.
 				</Subtitle>

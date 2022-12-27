@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { Contract } from '@ethersproject/contracts';
 import BigNumber from 'bignumber.js';
@@ -21,7 +21,6 @@ import CheckBox from '@/components/Checkbox';
 import DonateModal from '@/components/modals/DonateModal';
 import { mediaQueries, minDonationAmount } from '@/lib/constants/constants';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
-import { IDonationProject } from '@/apollo/types/types';
 import { fetchPrice } from '@/services/token';
 import GeminiModal from './GeminiModal';
 import config from '@/configuration';
@@ -45,35 +44,26 @@ import { getERC20Info } from '@/lib/contracts';
 import GIVBackToast from '@/components/views/donate/GIVBackToast';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import {
-	setShowSignWithWallet,
-	setShowWalletModal,
-} from '@/features/modal/modal.slice';
+import { setShowWalletModal } from '@/features/modal/modal.slice';
 import usePurpleList from '@/hooks/usePurpleList';
 import DonateToGiveth from '@/components/views/donate/DonateToGiveth';
 import TotalDonation from '@/components/views/donate/TotalDonation';
 import SaveGasFees from '@/components/views/donate/SaveGasFees';
 import SwitchToAcceptedChain from '@/components/views/donate/SwitchToAcceptedChain';
+import { useDonateData } from '@/context/donate.context';
+import { useModalCallback } from '@/hooks/useModalCallback';
 
 const ethereumChain = config.PRIMARY_NETWORK;
 const gnosisChain = config.SECONDARY_NETWORK;
 const stableCoins = [gnosisChain.mainToken, 'DAI', 'USDT'];
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
-export interface ISuccessDonation {
-	txHash: string[];
-	givBackEligible?: boolean;
-}
-
 interface IInputBox {
 	error: boolean;
 	focused: boolean;
 }
 
-const CryptoDonation = (props: {
-	setSuccessDonation: (i: ISuccessDonation) => void;
-	project: IDonationProject;
-}) => {
+const CryptoDonation: FC = () => {
 	const { chainId: networkId, account, library, active } = useWeb3React();
 	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();
@@ -83,14 +73,14 @@ const CryptoDonation = (props: {
 	const ethPrice = useAppSelector(state => state.price.ethPrice);
 	const isPurpleListed = usePurpleList();
 
-	const { project, setSuccessDonation } = props;
+	const { project } = useDonateData();
+
 	const {
 		organization,
 		verified,
 		id: projectId,
 		status,
 		addresses,
-		givethAddresses,
 		title: projectTitle,
 	} = project;
 
@@ -98,13 +88,6 @@ const CryptoDonation = (props: {
 	const isActive = status?.name === EProjectStatus.ACTIVE;
 	const mainTokenPrice = new BigNumber(ethPrice).toNumber();
 	const noDonationSplit = Number(projectId!) === config.GIVETH_PROJECT_ID;
-
-	const projectWalletAddress =
-		addresses?.find(a => a.isRecipient && a.networkId === networkId)
-			?.address || '';
-	const givethWalletAddress =
-		givethAddresses?.find(a => a.isRecipient && a.networkId === networkId)
-			?.address || '';
 
 	const [selectedToken, setSelectedToken] = useState<IProjectAcceptedToken>();
 	const [selectedTokenBalance, setSelectedTokenBalance] = useState<any>();
@@ -128,6 +111,9 @@ const CryptoDonation = (props: {
 	const [acceptedChains, setAcceptedChains] = useState<number[]>();
 	const [donationToGiveth, setDonationToGiveth] = useState(
 		noDonationSplit ? 0 : 5,
+	);
+	const { modalCallback: signInThenDonate } = useModalCallback(() =>
+		setShowDonateModal(true),
 	);
 
 	const stopPolling = useRef<any>(null);
@@ -328,15 +314,11 @@ const CryptoDonation = (props: {
 		if (selectedTokenBalance < totalDonation) {
 			return setShowInsufficientModal(true);
 		}
-		if (!projectWalletAddress) {
-			return showToastError(
-				'There is no eth address assigned for this project',
-			);
-		}
 		if (!isSignedIn) {
-			return dispatch(setShowSignWithWallet(true));
+			signInThenDonate();
+		} else {
+			setShowDonateModal(true);
 		}
-		setShowDonateModal(true);
 	};
 
 	const donationDisabled =
@@ -359,10 +341,6 @@ const CryptoDonation = (props: {
 			{showDonateModal && selectedToken && amountTyped && (
 				<DonateModal
 					setShowModal={setShowDonateModal}
-					setSuccessDonation={setSuccessDonation}
-					project={project}
-					projectWalletAddress={projectWalletAddress}
-					givethWalletAddress={givethWalletAddress}
 					token={selectedToken}
 					amount={amountTyped}
 					donationToGiveth={donationToGiveth}

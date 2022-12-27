@@ -43,21 +43,18 @@ const ProjectsNoResults = (props: { mainCategories: IMainCategory[] }) => {
 									? Routes.Projects
 									: `/projects/${category.slug}`
 							}
-							passHref
 						>
-							<a>
-								<MainCategoryItem
-									onClick={() => {
-										setVariables(prevVariables => ({
-											...prevVariables,
-											sortingBy: undefined,
-											filters: undefined,
-										}));
-									}}
-								>
-									{category.title}
-								</MainCategoryItem>
-							</a>
+							<MainCategoryItem
+								onClick={() => {
+									setVariables(prevVariables => ({
+										...prevVariables,
+										sortingBy: undefined,
+										filters: undefined,
+									}));
+								}}
+							>
+								{category.title}
+							</MainCategoryItem>
 						</Link>
 					);
 				})}

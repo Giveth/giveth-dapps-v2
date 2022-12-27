@@ -22,6 +22,7 @@ import LowerShields from '@/components/modals/LowerShields';
 import { IModal } from '@/types/common';
 import { useAppDispatch } from '@/features/hooks';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import { EModalEvents } from '@/hooks/useModalCallback';
 
 const WalletModal: FC<IModal> = ({ setShowModal }) => {
 	const [showLowerShields, setShowLowerShields] = useState<boolean>();
@@ -57,6 +58,8 @@ const WalletModal: FC<IModal> = ({ setShowModal }) => {
 						// if (!isGIVeconomyRoute && !isModalShowedBefor) {
 						// 	dispatch(setShowFirstWelcomeModal(true));
 						// }
+						const event = new Event(EModalEvents.CONNECTED);
+						window.dispatchEvent(event);
 					})
 					.catch(error => {
 						showToastError(error);
