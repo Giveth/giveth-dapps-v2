@@ -1,15 +1,21 @@
 import { useState } from 'react';
 import Image from 'next/image';
+import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { Button, B, neutralColors } from '@giveth/ui-design-system';
 import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk';
-import { useAppSelector } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { FiatDonationConfirmationModal } from '@/components/modals/FiatDonationConfirmationModal';
+import { setShowWalletModal } from '@/features/modal/modal.slice';
+import { useWeb3React } from '@web3-react/core';
 import { useDonateData } from '@/context/donate.context';
 import config from '@/configuration';
 
 const FiatDonation = () => {
+	const { formatMessage } = useIntl();
 	const { project } = useDonateData();
+	const { account } = useWeb3React();
+	const dispatch = useAppDispatch();
 	const [onramperConfirmationModal, setOnramperConfirmationModal] =
 		useState(false);
 	const [donorboxConfirmationModal, setDonorboxConfirmationModal] =
@@ -44,110 +50,126 @@ const FiatDonation = () => {
 	return (
 		<>
 			<FiatContainer>
-				{openOnramper && mainnetAddress ? (
-					<div
-						style={{
-							width: '440px',
-							height: '595px',
-							boxShadow: '0 2px 10px 0 rgba(0, 0, 0, 0.1)',
-							borderRadius: '10px',
-							margin: '20px auto',
-						}}
-					>
-						<iframe
-							src={`https://widget.onramper.com?color=266677&apiKey=${
-								process.env.NEXT_PUBLIC_ONRAMPER_API_KEY
-							}&supportSwap=false&supportSell=false&onlyCryptos=ETH,USDC,USDT,RAI,DAI_ERC20&defaultFiat=USD&defaultCrypto=USDC&wallets=ETH:${mainnetAddress}&partnerContext=${JSON.stringify(
-								partnerContext,
-							)}`}
-							height='660px'
-							width='100%'
-							title='Onramper widget'
-							frameBorder='0'
-							allow='accelerometer;
+				{account ? (
+					openOnramper && mainnetAddress ? (
+						<div
+							style={{
+								width: '440px',
+								height: '595px',
+								boxShadow: '0 2px 10px 0 rgba(0, 0, 0, 0.1)',
+								borderRadius: '10px',
+								margin: '20px auto',
+							}}
+						>
+							<iframe
+								src={`https://widget.onramper.com?color=266677&apiKey=${
+									process.env.NEXT_PUBLIC_ONRAMPER_API_KEY
+								}&supportSwap=false&supportSell=false&onlyCryptos=ETH,USDC,USDT,RAI,DAI_ERC20&defaultFiat=USD&defaultCrypto=USDC&wallets=ETH:${mainnetAddress}&partnerContext=${JSON.stringify(
+									partnerContext,
+								)}`}
+								height='660px'
+								width='100%'
+								title='Onramper widget'
+								frameBorder='0'
+								allow='accelerometer;
   autoplay; camera; gyroscope; payment'
-							style={{
-								boxShadow: '1px 1px 1px 1px rgba(0,0,0,0.2)',
-								margin: '0 0 20px 0',
-							}}
-						/>
-					</div>
-				) : openDonorBox ? (
-					<>
-						<script src='https://donorbox.org/widget.js'></script>
-						<iframe
-							src='https://donorbox.org/embed/giveth'
-							name='donorbox'
-							scrolling='no'
-							height='520px'
-							width='100%'
-							style={{
-								maxWidth: '500px',
-								minWidth: '250px',
-								maxHeight: 'none !important',
-							}}
-						></iframe>
-					</>
-				) : (
-					<Buttons>
-						{onramperConfirmationModal && (
-							<FiatDonationConfirmationModal
-								setShowModal={setOnramperConfirmationModal}
-								continueProcess={() => setOpenOnramper(true)}
-								type='onramper'
+								style={{
+									boxShadow:
+										'1px 1px 1px 1px rgba(0,0,0,0.2)',
+									margin: '0 0 20px 0',
+								}}
 							/>
-						)}
-						{donorboxConfirmationModal && (
-							<FiatDonationConfirmationModal
-								setShowModal={setDonorboxConfirmationModal}
-								continueProcess={() => setOpenDonorBox(true)}
-								type='donorbox'
-							/>
-						)}
-						<ImageContainer>
-							<Image
-								src='/images/powered_by_onramper.png'
-								width='220'
-								height='60'
-								alt={'Powered by OnRamper'}
-							/>
-						</ImageContainer>
-						<Info>
-							Buy crypto with your credit without leaving the
-							platform. Donate the purchase to this project
-							directly with your credit card with Onramper
-						</Info>
-						<Button
-							label='CONTINUE WITH ONRAMPER'
-							onClick={() => {
-								setOnramperConfirmationModal(true);
-							}}
-						/>
-						{id === givethProjectId && (
-							<DonorBoxContainer>
-								<ImageContainer>
-									<Image
-										src='/images/powered_by_donorbox.png'
-										width='220'
-										height='60'
-										alt={'Powered by Donorbox'}
-									/>
-								</ImageContainer>
-								<Info>
-									Easily connect a PayPal or Stripe account to
-									this form and donate directly from your
-									account with Donorbox
-								</Info>
-								<Button
-									label='CONTINUE WITH DONORBOX'
-									onClick={() =>
-										setDonorboxConfirmationModal(true)
+						</div>
+					) : openDonorBox ? (
+						<>
+							<script src='https://donorbox.org/widget.js'></script>
+							<iframe
+								src='https://donorbox.org/embed/giveth'
+								name='donorbox'
+								scrolling='no'
+								height='520px'
+								width='100%'
+								style={{
+									maxWidth: '500px',
+									minWidth: '250px',
+									maxHeight: 'none !important',
+								}}
+							></iframe>
+						</>
+					) : (
+						<Buttons>
+							{onramperConfirmationModal && (
+								<FiatDonationConfirmationModal
+									setShowModal={setOnramperConfirmationModal}
+									continueProcess={() =>
+										setOpenOnramper(true)
 									}
-									// disabled
+									type='onramper'
 								/>
-							</DonorBoxContainer>
-						)}
-					</Buttons>
+							)}
+							{donorboxConfirmationModal && (
+								<FiatDonationConfirmationModal
+									setShowModal={setDonorboxConfirmationModal}
+									continueProcess={() =>
+										setOpenDonorBox(true)
+									}
+									type='donorbox'
+								/>
+							)}
+							<ImageContainer>
+								<Image
+									src='/images/powered_by_onramper.png'
+									width='220'
+									height='60'
+									alt={'Powered by OnRamper'}
+								/>
+							</ImageContainer>
+							<Info>
+								Buy crypto with your credit without leaving the
+								platform. Donate the purchase to this project
+								directly with your credit card with Onramper
+							</Info>
+							<Button
+								label='CONTINUE WITH ONRAMPER'
+								onClick={() => {
+									setOnramperConfirmationModal(true);
+								}}
+							/>
+							{id === givethProjectId && (
+								<DonorBoxContainer>
+									<ImageContainer>
+										<Image
+											src='/images/powered_by_donorbox.png'
+											width='220'
+											height='60'
+											alt={'Powered by Donorbox'}
+										/>
+									</ImageContainer>
+									<Info>
+										Easily connect a PayPal or Stripe
+										account to this form and donate directly
+										from your account with Donorbox
+									</Info>
+									<Button
+										label='CONTINUE WITH DONORBOX'
+										onClick={() =>
+											setDonorboxConfirmationModal(true)
+										}
+										// disabled
+									/>
+								</DonorBoxContainer>
+							)}
+						</Buttons>
+					)
+				) : (
+					<ConnectWalletBtn
+						label={formatMessage({
+							id: 'component.button.connect_wallet',
+						})}
+						buttonType='secondary'
+						size='large'
+						onClick={() => dispatch(setShowWalletModal(true))}
+					/>
 				)}
 			</FiatContainer>
 			{/* <a onClick={() => rampNetwork.show()}>ramp-network</a> */}
@@ -191,6 +213,11 @@ const Info = styled(B)`
 
 const DonorBoxContainer = styled(Buttons)`
 	border-top: 1px solid ${neutralColors.gray[400]};
+`;
+
+const ConnectWalletBtn = styled(Button)`
+	width: 100%;
+	margin: 20px 0;
 `;
 
 export default FiatDonation;
