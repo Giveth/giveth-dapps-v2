@@ -127,7 +127,7 @@ export function convertBackendIconsToComponents(icon: string) {
 		case 'IconUnstake':
 			return <IconUnstake24 />;
 		case 'IconGIVBack':
-			return <IconGIVBack size={24} />;
+			return <IconGIVBack size={24} color='currentColor' />;
 		case 'IconStake':
 			return <IconStake24 />;
 		case 'IconDonation':
