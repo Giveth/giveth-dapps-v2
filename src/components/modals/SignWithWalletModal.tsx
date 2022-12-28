@@ -61,12 +61,17 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 							return dispatch(setShowWelcomeModal(true));
 						}
 						setLoading(true);
+						let host;
+						if (typeof window !== 'undefined') {
+							host = window.location.origin;
+						}
 						const signature = await dispatch(
 							signToGetToken({
 								address: account,
 								chainId,
 								signer: library?.getSigner(),
 								pathname: router.pathname,
+								host,
 							}),
 						);
 						setLoading(false);
