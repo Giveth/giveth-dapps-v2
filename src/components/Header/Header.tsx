@@ -220,10 +220,14 @@ const Header: FC<IHeader> = () => {
 		}
 	};
 
+	const { modalCallback: signInThenGoToNotifs } = useModalCallback(() =>
+		router.push(Routes.Notifications),
+	);
+
 	const notificationsProps =
 		isEnabled && !isSignedIn
 			? {
-					onClick: () => dispatch(setShowSignWithWallet(true)),
+					onClick: () => signInThenGoToNotifs(),
 			  }
 			: {
 					onClick: () => setShowNotifications(true),

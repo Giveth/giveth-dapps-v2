@@ -53,7 +53,9 @@ export const convertRawDataToHTML = (notification: INotification) => {
 				);
 				break;
 			case 'a':
-				const href = metadata[template.href.substring(1)] || '';
+				const href = template.href.startsWith('$')
+					? metadata[template.href.substring(1)]
+					: template.href;
 				res.push(
 					<StyledGlink
 						key={idx}
