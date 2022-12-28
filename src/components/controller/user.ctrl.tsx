@@ -12,8 +12,9 @@ import {
 } from '@/features/user/user.slice';
 import { isSSRMode } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
-import { fetchUserByAddress, signOut } from '@/features/user/user.thunks';
+import { fetchUserByAddress } from '@/features/user/user.thunks';
 import { walletsArray } from '@/lib/wallet/walletTypes';
+import { getTokens } from '@/helpers/user';
 
 const UserController = () => {
 	const { account, library, chainId, activate } = useWeb3React();
@@ -52,21 +53,20 @@ const UserController = () => {
 				// Case when wallet is locked
 				dispatch(setIsEnabled(false));
 			}
-			// Sign out if wallet is changed
-			dispatch(signOut());
 		}
 		if (account) {
+			const tokens = getTokens();
+			const _account = account.toLowerCase();
+			if (tokens[_account]) {
+				dispatch(setToken(tokens[_account]));
+				localStorage.setItem(StorageLabel.USER, _account);
+				localStorage.setItem(StorageLabel.TOKEN, tokens[_account]);
+			}
 			isMounted.current = true;
 			dispatch(fetchUserByAddress(account));
 			dispatch(setIsEnabled(true));
 		}
 	}, [account]);
-
-	useEffect(() => {
-		if (token) {
-			dispatch(setToken(token));
-		}
-	}, [token]);
 
 	useEffect(() => {
 		if (account && library) {
