@@ -562,7 +562,6 @@ const Wrapper = styled(motion.div)<IWrapperWithHeight>`
 					padding: 32px;
 					${mediaQueries.tablet} {
 						padding: 16px;
-						max-width: 225px;
 						border-radius: 40px;
 					}
 
@@ -591,7 +590,6 @@ const BoostWrapper = styled.div<IWrapper>`
 					margin-bottom: 16px;
 					${mediaQueries.tablet} {
 						padding: 16px;
-						max-width: 225px;
 						border-radius: 40px;
 					}
 
@@ -617,7 +615,6 @@ const DonateWrapper = styled.div<IWrapper>`
 					padding: 32px;
 					${mediaQueries.tablet} {
 						padding: 16px;
-						max-width: 225px;
 						border-radius: 40px;
 					}
 
