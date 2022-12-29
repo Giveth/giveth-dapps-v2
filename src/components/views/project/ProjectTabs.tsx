@@ -91,7 +91,7 @@ const Wrapper = styled(Flex)`
 	z-index: 1;
 	background-color: ${neutralColors.gray[200]};
 	flex-wrap: nowrap;
-	overflow-x: scroll;
+	overflow-x: auto;
 	max-width: calc(100vw - 32px);
 
 	${mediaQueries.tablet} {
