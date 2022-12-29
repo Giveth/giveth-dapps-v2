@@ -11,6 +11,7 @@ import { useIntl } from 'react-intl';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { useProjectContext } from '@/context/project.context';
+import { Flex } from '@/components/styled-components/Flex';
 
 interface IProjectTabs {
 	activeTab: number;
@@ -82,23 +83,16 @@ const Tab = styled(P)`
 	}
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled(Flex)`
 	padding: 24px 0 24px 0;
 	margin-bottom: 16px;
 	color: ${brandColors.deep[600]};
-	display: flex;
 	align-items: center;
 	z-index: 1;
 	background-color: ${neutralColors.gray[200]};
 	flex-wrap: nowrap;
 	overflow-x: auto;
 	max-width: calc(100vw - 32px);
-
-	::-webkit-scrollbar {
-		width: 0;
-		height: 0;
-		background-color: transparent;
-	}
 
 	${mediaQueries.tablet} {
 		padding: 16px 0 12px;
