@@ -540,6 +540,22 @@ interface IWrapperWithHeight extends IWrapper {
 	height: number;
 }
 
+const wrapperMQs = css`
+	${mediaQueries.tablet} {
+		padding: 16px;
+		border-radius: 40px;
+	}
+
+	${mediaQueries.laptopS} {
+		max-width: 285px;
+	}
+
+	${mediaQueries.laptopL} {
+		padding: 32px;
+		max-width: 325px;
+	}
+`;
+
 const Wrapper = styled(motion.div)<IWrapperWithHeight>`
 	margin-top: -62px;
 	height: fit-content;
@@ -560,19 +576,7 @@ const Wrapper = styled(motion.div)<IWrapperWithHeight>`
 					box-shadow: ${Shadow.Neutral[400]};
 					border-radius: 40px 40px 0 0;
 					padding: 32px;
-					${mediaQueries.tablet} {
-						padding: 16px;
-						border-radius: 40px;
-					}
-
-					${mediaQueries.laptopS} {
-						max-width: 285px;
-					}
-
-					${mediaQueries.laptopL} {
-						padding: 32px;
-						max-width: 325px;
-					}
+					${wrapperMQs}
 			  `
 			: css``}
 `;
@@ -588,19 +592,7 @@ const BoostWrapper = styled.div<IWrapper>`
 					border-radius: 40px;
 					padding: 24px;
 					margin-bottom: 16px;
-					${mediaQueries.tablet} {
-						padding: 16px;
-						border-radius: 40px;
-					}
-
-					${mediaQueries.laptopS} {
-						max-width: 285px;
-					}
-
-					${mediaQueries.laptopL} {
-						padding: 32px;
-						max-width: 325px;
-					}
+					${wrapperMQs}
 			  `}
 `;
 
@@ -613,19 +605,7 @@ const DonateWrapper = styled.div<IWrapper>`
 					box-shadow: ${Shadow.Neutral[400]};
 					border-radius: 40px 40px 0 0;
 					padding: 32px;
-					${mediaQueries.tablet} {
-						padding: 16px;
-						border-radius: 40px;
-					}
-
-					${mediaQueries.laptopS} {
-						max-width: 285px;
-					}
-
-					${mediaQueries.laptopL} {
-						padding: 32px;
-						max-width: 325px;
-					}
+					${wrapperMQs}
 			  `}
 `;
 
