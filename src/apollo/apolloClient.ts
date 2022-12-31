@@ -97,6 +97,7 @@ function createApolloClient() {
 		const currentToken: string | null = !ssrMode
 			? localStorage.getItem(StorageLabel.TOKEN)
 			: null;
+		console.log('local currT Apollo', currentToken);
 		const mutation: any = {
 			Authorization: currentToken ? `Bearer ${currentToken}` : '',
 			authVersion: '2',
