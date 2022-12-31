@@ -25,6 +25,7 @@ const initialState: {
 type UserStateType = RootState['user'];
 
 const signOutUser = (state: UserStateType) => {
+	console.log('localAddress_SignOut');
 	localStorage.removeItem(StorageLabel.USER);
 	localStorage.removeItem(StorageLabel.TOKEN);
 	const tokens = getTokens();
@@ -90,16 +91,24 @@ export const userSlice = createSlice({
 					const localAddress = localStorage.getItem(
 						StorageLabel.USER,
 					);
+					console.log(
+						'localAddress',
+						localAddress,
+						action.payload.data?.userByAddress?.walletAddress,
+						localStorage.getItem(StorageLabel.TOKEN) ?? undefined,
+					);
 					if (
 						compareAddresses(
 							localAddress,
 							action.payload.data?.userByAddress?.walletAddress,
 						)
 					) {
+						console.log('local true');
 						state.token =
 							localStorage.getItem(StorageLabel.TOKEN) ??
 							undefined;
 					} else {
+						console.log('local false');
 						state.token = undefined;
 						state.isSignedIn = false;
 						localStorage.removeItem(StorageLabel.USER);
@@ -109,6 +118,7 @@ export const userSlice = createSlice({
 					if (
 						action.payload.data?.userByAddress?.isSignedIn === true
 					) {
+						console.log('local true');
 						state.isSignedIn = true;
 					} else {
 						signOutUser(state);
