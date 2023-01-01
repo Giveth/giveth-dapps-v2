@@ -61,6 +61,9 @@ const UserController = () => {
 				dispatch(setToken(tokens[_account]));
 				localStorage.setItem(StorageLabel.USER, _account);
 				localStorage.setItem(StorageLabel.TOKEN, tokens[_account]);
+			} else {
+				localStorage.removeItem(StorageLabel.TOKEN);
+				localStorage.removeItem(StorageLabel.USER);
 			}
 			isMounted.current = true;
 			dispatch(fetchUserByAddress(account));
