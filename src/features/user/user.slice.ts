@@ -90,12 +90,6 @@ export const userSlice = createSlice({
 					const localAddress = localStorage.getItem(
 						StorageLabel.USER,
 					);
-					console.log(
-						'localAddress',
-						localAddress,
-						action.payload.data?.userByAddress?.walletAddress,
-						localStorage.getItem(StorageLabel.TOKEN) ?? undefined,
-					);
 					if (
 						compareAddresses(
 							localAddress,
