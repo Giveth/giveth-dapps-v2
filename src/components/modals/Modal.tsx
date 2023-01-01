@@ -55,10 +55,12 @@ export const Modal: FC<IModal> = ({
 	useEffect(() => {
 		const current = el.current;
 		const modalRoot = document.querySelector('body') as HTMLElement;
-		const innerWindowDiff =
-			window.innerWidth - modalRoot.getBoundingClientRect().width;
 		modalRoot.style.overflowY = 'hidden';
-		modalRoot.style.paddingRight = `${innerWindowDiff}px`;
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === 'Escape') {
+				closeModal();
+			}
+		};
 
 		if (modalRoot) {
 			modalRoot.addEventListener('keydown', handleKeyDown);
@@ -66,17 +68,10 @@ export const Modal: FC<IModal> = ({
 		}
 		return () => {
 			modalRoot.removeEventListener('keydown', handleKeyDown);
-			modalRoot.style.overflowY = 'unset';
-			modalRoot.style.paddingRight = '0';
+			modalRoot.style.overflowY = 'overlay';
 			modalRoot!.removeChild(current);
 		};
-	}, []);
-
-	const handleKeyDown = (e: KeyboardEvent) => {
-		if (e.key === 'Escape') {
-			closeModal();
-		}
-	};
+	}, [closeModal]);
 
 	const ScrollBarsNotFullScreenProps = {
 		autoHeight: true,
