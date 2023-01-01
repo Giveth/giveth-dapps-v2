@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { Contract } from '@ethersproject/contracts';
-import BigNumber from 'bignumber.js';
 import { useIntl } from 'react-intl';
 import {
 	brandColors,
@@ -21,7 +20,6 @@ import CheckBox from '@/components/Checkbox';
 import DonateModal from '@/components/modals/DonateModal';
 import { mediaQueries, minDonationAmount } from '@/lib/constants/constants';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
-import { fetchPrice } from '@/services/token';
 import GeminiModal from './GeminiModal';
 import config from '@/configuration';
 import TokenPicker from './TokenPicker';
@@ -55,7 +53,6 @@ import { useModalCallback } from '@/hooks/useModalCallback';
 
 const ethereumChain = config.PRIMARY_NETWORK;
 const gnosisChain = config.SECONDARY_NETWORK;
-const stableCoins = [gnosisChain.mainToken, 'DAI', 'USDT'];
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
 interface IInputBox {
@@ -70,7 +67,6 @@ const CryptoDonation: FC = () => {
 	const { isEnabled, isSignedIn, balance } = useAppSelector(
 		state => state.user,
 	);
-	const ethPrice = useAppSelector(state => state.price.ethPrice);
 	const isPurpleListed = usePurpleList();
 
 	const { project } = useDonateData();
@@ -86,13 +82,11 @@ const CryptoDonation: FC = () => {
 
 	const { supportCustomTokens, label: orgLabel } = organization || {};
 	const isActive = status?.name === EProjectStatus.ACTIVE;
-	const mainTokenPrice = new BigNumber(ethPrice).toNumber();
 	const noDonationSplit = Number(projectId!) === config.GIVETH_PROJECT_ID;
 
 	const [selectedToken, setSelectedToken] = useState<IProjectAcceptedToken>();
 	const [selectedTokenBalance, setSelectedTokenBalance] = useState<any>();
 	const [customInput, setCustomInput] = useState<any>();
-	const [tokenPrice, setTokenPrice] = useState<number>(1);
 	const [amountTyped, setAmountTyped] = useState<number>();
 	const [inputBoxFocused, setInputBoxFocused] = useState(false);
 	const [geminiModal, setGeminiModal] = useState(false);
@@ -118,7 +112,6 @@ const CryptoDonation: FC = () => {
 
 	const stopPolling = useRef<any>(null);
 	const tokenSymbol = selectedToken?.symbol;
-	const isGnosis = networkId === gnosisChain.id;
 	const projectIsGivBackEligible = !!verified;
 	const totalDonation = ((amountTyped || 0) * (donationToGiveth + 100)) / 100;
 
@@ -173,39 +166,6 @@ const CryptoDonation: FC = () => {
 				});
 			});
 	}, []);
-
-	useEffect(() => {
-		const setPrice = async () => {
-			if (
-				selectedToken?.symbol &&
-				stableCoins.includes(selectedToken.symbol)
-			) {
-				setTokenPrice(1);
-			} else if (selectedToken?.symbol === ethereumChain.mainToken) {
-				setTokenPrice(mainTokenPrice || 0);
-			} else if (selectedToken?.address) {
-				let tokenAddress = selectedToken.address;
-				// Coingecko doesn't have these tokens in Gnosis Chain, so fetching price from ethereum
-				if (isGnosis && selectedToken.mainnetAddress) {
-					tokenAddress = selectedToken.mainnetAddress || '';
-				}
-				const coingeckoChainId =
-					!isGnosis || selectedToken.mainnetAddress
-						? ethereumChain.id
-						: gnosisChain.id;
-				const fetchedPrice = await fetchPrice(
-					coingeckoChainId,
-					tokenAddress,
-					setTokenPrice,
-				);
-				setTokenPrice(fetchedPrice || 0);
-			}
-		};
-
-		if (selectedToken) {
-			setPrice().then();
-		}
-	}, [selectedToken, mainTokenPrice]);
 
 	const checkGIVTokenAvailability = () => {
 		if (orgLabel !== ORGANIZATION.givingBlock) return true;
@@ -344,7 +304,6 @@ const CryptoDonation: FC = () => {
 					token={selectedToken}
 					amount={amountTyped}
 					donationToGiveth={donationToGiveth}
-					price={tokenPrice}
 					anonymous={anonymous}
 					givBackEligible={
 						projectIsGivBackEligible && tokenIsGivBackEligible

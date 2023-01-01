@@ -70,7 +70,10 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 							}),
 						);
 						setLoading(false);
-						if (signature) {
+						if (
+							signature &&
+							signature.type === 'user/signToGetToken/fulfilled'
+						) {
 							const event = new Event(EModalEvents.SIGNEDIN);
 							window.dispatchEvent(event);
 							callback && callback();

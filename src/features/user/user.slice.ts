@@ -4,6 +4,7 @@ import { fetchUserByAddress, signToGetToken, signOut } from './user.thunks';
 import StorageLabel from '@/lib/localStorage';
 import { compareAddresses } from '@/lib/helpers';
 import { RootState } from '../store';
+import { getTokens } from '@/helpers/user';
 
 const initialState: {
 	userData?: IUser;
@@ -26,6 +27,10 @@ type UserStateType = RootState['user'];
 const signOutUser = (state: UserStateType) => {
 	localStorage.removeItem(StorageLabel.USER);
 	localStorage.removeItem(StorageLabel.TOKEN);
+	const tokens = getTokens();
+	if (state.userData?.walletAddress)
+		delete tokens[state.userData?.walletAddress?.toLowerCase()];
+	localStorage.setItem(StorageLabel.TOKENS, JSON.stringify(tokens));
 	state.token = undefined;
 	state.isSignedIn = false;
 };
@@ -118,6 +123,7 @@ export const userSlice = createSlice({
 				state.token = action.payload;
 				state.isSignedIn = true;
 			})
+			//We want it to call when fullfilled and rejected
 			.addCase(signOut.pending, state => {
 				signOutUser(state);
 			});
