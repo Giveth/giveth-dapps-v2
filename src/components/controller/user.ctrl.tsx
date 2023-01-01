@@ -59,15 +59,12 @@ const UserController = () => {
 			const _account = account.toLowerCase();
 			if (tokens[_account]) {
 				dispatch(setToken(tokens[_account]));
-				console.log('local_account1', _account);
 				localStorage.setItem(StorageLabel.USER, _account);
 				localStorage.setItem(StorageLabel.TOKEN, tokens[_account]);
 			} else {
-				console.log('local _acc _ sign', _account);
 				localStorage.removeItem(StorageLabel.TOKEN);
 				localStorage.removeItem(StorageLabel.USER);
 			}
-			console.log('local_account2', _account);
 			isMounted.current = true;
 			dispatch(fetchUserByAddress(account));
 			dispatch(setIsEnabled(true));

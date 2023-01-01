@@ -12,7 +12,6 @@ export function sendRequest(
 	additionalOptions: RequestInit = {},
 ) {
 	const token = !isSSRMode ? localStorage.getItem(StorageLabel.TOKEN) : null;
-	console.log('local currT requests', token);
 	const Authorization =
 		authorization && token ? `Bearer ${token}` : undefined;
 	const defaultHeaders = {
