@@ -222,16 +222,14 @@ const WalletAddressInput: FC<IProps> = ({
 					})}
 				/>
 			)}
-			{(isGnosis || sameAddress) && (
-				<ExchangeNotify>
-					<Warning>!</Warning>
-					<Caption>
-						{formatMessage({
-							id: 'label.please_do_not_enter_exchange_addresses_for_gnosis_chain',
-						})}
-					</Caption>
-				</ExchangeNotify>
-			)}
+			<ExchangeNotify>
+				<Warning>!</Warning>
+				<Caption>
+					{formatMessage({
+						id: 'label.please_do_not_enter_exchange_deposit',
+					})}
+				</Caption>
+			</ExchangeNotify>
 			{!isHidden && (
 				<CheckBoxContainer
 					className={sameAddress ? 'fadeOut' : 'fadeIn'}
