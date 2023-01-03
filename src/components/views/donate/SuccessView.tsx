@@ -185,6 +185,7 @@ const GivBackContainer = styled.div`
 	background-repeat: no-repeat;
 	border-radius: 12px;
 	color: white;
+	z-index: 1;
 	h6 {
 		font-weight: bold;
 		margin: 0 0 8px 0;
