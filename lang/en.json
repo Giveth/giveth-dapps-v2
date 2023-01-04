@@ -870,6 +870,6 @@
 	"label.if_you_remove_givpower_it_will_be_distributed_proportionally": "If you remove GIVpower from this project, it will be distributed proportionally to the other projects you have boosted.",
 	"label.you_cant_remove_your_givpower_from_this_project": "You can't remove your GIVpower from this project because it is the only boost you have. Please boost another project with GIVpower before continuing.",
 	"label.remove_givpower": "Remove GIVpower",
-	"label.you_dont_have_any_givpower": "",
-	"label.stake_and_lock_your_giv_to_get_givpower": ""
+	"label.you_dont_have_any_givpower": "You don’t have any GIVpower!",
+	"label.stake_and_lock_your_giv_to_get_givpower": "Stake and lock your GIV to get GIVpower."
 }
