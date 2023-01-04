@@ -150,7 +150,7 @@
 	"label.complete_profile.desc": "Complete your profile for better management of your donations & projects",
 	"label.start_donating": "Start donating or raising funds",
 	"label.start_donating.desc": "Giveth is the place to donate to or raise funds for awesome projects with zero added feeds.",
-	"label.view_projects": "VIEW PROJECTS",
+	"label.view_projects": "View Projects",
 	"label.git_and_get_giv": "Give and get GIV",
 	"label.donate_to_verified_projects.desc": " Donate to verified projects and get rewarded with GIV",
 	"label.explore_givbacks": "EXPLORE GIVBACKS",
@@ -863,5 +863,13 @@
 	"label.this_is_the_number_of_projects_you_have_boosted": "This is the number of projects you have boosted before",
 	"label.drag_to_allocate": "Drag to allocate",
 	"label.manage_your_givpower": "Manage your GIVpower",
-	"label.confirm": "Confirm"
+	"label.confirm": "Confirm",
+	"label.boost": "Boost",
+	"label.oh_no": "Oh no!",
+	"label.oops": "Oops!",
+	"label.if_you_remove_givpower_it_will_be_distributed_proportionally": "If you remove GIVpower from this project, it will be distributed proportionally to the other projects you have boosted.",
+	"label.you_cant_remove_your_givpower_from_this_project": "You can't remove your GIVpower from this project because it is the only boost you have. Please boost another project with GIVpower before continuing.",
+	"label.remove_givpower": "Remove GIVpower",
+	"label.you_dont_have_any_givpower": "",
+	"label.stake_and_lock_your_giv_to_get_givpower": ""
 }

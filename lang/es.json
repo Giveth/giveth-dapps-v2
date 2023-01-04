@@ -863,5 +863,13 @@
 	"label.this_is_the_number_of_projects_you_have_boosted": "",
 	"label.drag_to_allocate": "",
 	"label.manage_your_givpower": "",
-	"label.confirm": "Confirmar"
+	"label.confirm": "Confirmar",
+	"label.boost": "Boost",
+	"label.oh_no": "Oh no!",
+	"label.oops": "Oops!",
+	"label.if_you_remove_givpower_it_will_be_distributed_proportionally": "",
+	"label.you_cant_remove_your_givpower_from_this_project": "",
+	"label.remove_givpower": "Remover GIVpower",
+	"label.you_dont_have_any_givpower": "",
+	"label.stake_and_lock_your_giv_to_get_givpower": ""
 }
