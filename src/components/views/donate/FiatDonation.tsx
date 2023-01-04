@@ -64,13 +64,12 @@ const FiatDonation = () => {
 							<iframe
 								src={`https://widget.onramper.com?color=266677&apiKey=${
 									process.env.NEXT_PUBLIC_ONRAMPER_API_KEY
-								}&supportSwap=false&supportSell=false&onlyCryptos=ETH,USDC,DAI_ERC20&defaultFiat=USD&defaultCrypto=USDC&wallets=ETH:${mainnetAddress}&partnerContext=${JSON.stringify(
+								}&supportSwap=false&supportSell=false&onlyCryptos=ETH,USDC,DAI_ERC20&defaultFiat=USD&defaultCrypto=USDC&wallets=ETH:${mainnetAddress},USDC:${mainnetAddress},DAI_ERC20:${mainnetAddress}&partnerContext=${JSON.stringify(
 									partnerContext,
 								)}`}
 								height='660px'
 								width='100%'
 								title='Onramper widget'
-								frameBorder='0'
 								allow='accelerometer;
   autoplay; camera; gyroscope; payment'
 								style={{
