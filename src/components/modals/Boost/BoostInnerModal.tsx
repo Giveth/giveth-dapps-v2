@@ -215,21 +215,24 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 			<>
 				<ExceededContainer>
 					<Lead>
-						You have already boosted the maximum 20 projects!
-						<br /> To continue with this boosting, remove at least
-						one other boosted project from your account and come
-						back to this project again!
+						{formatMessage({
+							id: 'label.you_have_already_boosted_20_projects',
+						})}
+						<br />{' '}
+						{formatMessage({
+							id: 'label.to_continue_please_remove_at_least_one_to_boost',
+						})}
 					</Lead>
 				</ExceededContainer>
 				<Link href={Routes.MyBoostedProjects}>
 					<BoostedProjectsLink
 						size='medium'
-						label='Go to My GIVpower'
+						label={formatMessage({ id: 'label.go_to_my_givpower' })}
 					/>
 				</Link>
 				<NotNowButton
 					buttonType='texty-primary'
-					label='Not now'
+					label={formatMessage({ id: 'label.not_now' })}
 					onClick={() => setShowModal(false)}
 				/>
 			</>
@@ -240,7 +243,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 		<>
 			<InfoPart>
 				<TotalGIVpowerRow alignItems='baseline' gap='12px'>
-					<H6>Total GIVpower</H6>
+					<H6>{formatMessage({ id: 'label.total_givpower' })}</H6>
 					<GIVpowerValue weight={700}>
 						{formatWeiHelper(totalGIVpower)}
 						<GIVpowerHelp>
@@ -249,8 +252,9 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 								direction={'bottom'}
 							>
 								<LockInfotooltip>
-									Get more GIVpower by staking & locking more
-									GIV tokens.
+									{formatMessage({
+										id: 'label.get_more_givpower_by_staking',
+									})}
 								</LockInfotooltip>
 							</IconWithTooltip>
 						</GIVpowerHelp>
@@ -258,14 +262,15 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 				</TotalGIVpowerRow>
 				<Flex justifyContent='space-between'>
 					<Flex alignItems='baseline' gap='4px'>
-						<P>Boosted projects</P>
+						<P>{formatMessage({ id: 'label.boosted_projects' })}</P>
 						<IconWithTooltip
 							icon={<IconHelpFilled16 />}
 							direction={'bottom'}
 						>
 							<LockInfotooltip>
-								This is the number of projects you have boosted
-								before
+								{formatMessage({
+									id: 'label.this_is_the_number_of_projects_you_have_boosted',
+								})}
 							</LockInfotooltip>
 						</IconWithTooltip>
 					</Flex>
@@ -348,12 +353,14 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 										  )
 										: 0
 							  } GIVpower`
-							: 'Drag to allocate.'}
+							: `${formatMessage({
+									id: 'label.drag_to_allocate',
+							  })}.`}
 					</SliderDesc>
 				</>
 			)}
 			<ConfirmButton
-				label='Confirm'
+				label={formatMessage({ id: 'label.confirm' })}
 				size='small'
 				loading={isSaving}
 				disabled={
@@ -366,7 +373,9 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 			/>
 			{boostedProjectsCount > 0 && (
 				<Link href={Routes.MyBoostedProjects}>
-					<ManageLink>Manage your GIVpower</ManageLink>
+					<ManageLink>
+						{formatMessage({ id: 'label.manage_your_givpower' })}
+					</ManageLink>
 				</Link>
 			)}
 		</>
