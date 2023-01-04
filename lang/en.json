@@ -853,5 +853,15 @@
 	"label.you_supported_this_project_with_100%": "You supported this project with 100% of your total GIVpower. You can't edit the allocation unless you have at least 1 other boosted project. Try boosting other projects or managing them in",
 	"label.if_you_boost_this_project_with_100%": "If you boost this project with 100% of your GIVpower, you will remove your GIVpower from all the other projects you boosted.",
 	"label.you_can_review_and_manage_your_givpower": "You can review and manage your GIVpower allocations in",
-	"label.when_you_allocate_a_percentage_of_your_total_givpower": "When you allocate a percentage of your total GIVpower to this project, the GIVpower you have on other projects will decrease proportionally."
+	"label.when_you_allocate_a_percentage_of_your_total_givpower": "When you allocate a percentage of your total GIVpower to this project, the GIVpower you have on other projects will decrease proportionally.",
+	"label.you_have_already_boosted_20_projects": "You have already boosted the maximum 20 projects!",
+	"label.to_continue_please_remove_at_least_one_to_boost": "To continue with this boosting, remove at least one other boosted project from your account and come back to this project again!",
+	"label.go_to_my_givpower": "Go to My GIVpower",
+	"label.not_now": "Not now",
+	"label.total_givpower": "Total GIVpower",
+	"label.get_more_givpower_by_staking": "Get more GIVpower by staking & locking more GIV tokens.",
+	"label.this_is_the_number_of_projects_you_have_boosted": "This is the number of projects you have boosted before",
+	"label.drag_to_allocate": "Drag to allocate",
+	"label.manage_your_givpower": "Manage your GIVpower",
+	"label.confirm": "Confirm"
 }

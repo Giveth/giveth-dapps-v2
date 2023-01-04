@@ -853,5 +853,15 @@
 	"label.you_supported_this_project_with_100%": "",
 	"label.if_you_boost_this_project_with_100%": "",
 	"label.you_can_review_and_manage_your_givpower": "",
-	"label.when_you_allocate_a_percentage_of_your_total_givpower": ""
+	"label.when_you_allocate_a_percentage_of_your_total_givpower": "",
+	"label.you_have_already_boosted_20_projects": "",
+	"label.to_continue_please_remove_at_least_one_to_boost": "",
+	"label.go_to_my_givpower": "",
+	"label.not_now": "Ahora no",
+	"label.total_givpower": "",
+	"label.get_more_givpower_by_staking": "",
+	"label.this_is_the_number_of_projects_you_have_boosted": "",
+	"label.drag_to_allocate": "",
+	"label.manage_your_givpower": "",
+	"label.confirm": "Confirmar"
 }
