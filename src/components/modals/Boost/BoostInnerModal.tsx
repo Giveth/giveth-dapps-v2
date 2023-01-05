@@ -90,14 +90,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 			return (
 				<Caption style={{ whiteSpace: `pre-line` }}>
 					Since this is your first time boosting a project, 100% of
-					your GIVpower will be allocated to it. You can review and
-					manage your GIVpower allocations in &nbsp;
-					<Link href={Routes.MyBoostedProjects}>
-						<GLink>
-							<b>My GIVpower</b>
-						</GLink>
-					</Link>
-					.
+					your GIVpower will be allocated to it.
 				</Caption>
 			);
 		} else if (isOnlyBoostedProjectIsThisProject) {
@@ -362,9 +355,11 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 				}
 				onClick={confirmAllocation}
 			/>
-			<Link href={Routes.MyBoostedProjects}>
-				<ManageLink>Manage your GIVpower</ManageLink>
-			</Link>
+			{boostedProjectsCount > 0 && (
+				<Link href={Routes.MyBoostedProjects}>
+					<ManageLink>Manage your GIVpower</ManageLink>
+				</Link>
+			)}
 		</>
 	);
 };

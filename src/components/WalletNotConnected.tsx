@@ -7,6 +7,7 @@ import {
 	IconWalletOutline,
 	IconXCircle,
 } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import InternalLink from '@/components/InternalLink';
@@ -16,6 +17,7 @@ import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 
 const WalletNotConnected = () => {
 	const dispatch = useAppDispatch();
+	const { formatMessage } = useIntl();
 
 	const handleConnectWallet = () => {
 		dispatch(setShowWelcomeModal(true));
@@ -29,17 +31,21 @@ const WalletNotConnected = () => {
 					<IconXCircle color={brandColors.pinky[500]} size={30} />
 				</IconXContainer>
 			</IconContainer>
-			<H4Styled>You need to connect your wallet to continue!</H4Styled>
+			<H4Styled>
+				{formatMessage({
+					id: 'label.you_need_to_connect_your_wallet_to_continue',
+				})}
+			</H4Styled>
 			<ButtonStyled
 				onClick={handleConnectWallet}
 				size='medium'
-				label='Connect wallet'
+				label={formatMessage({ id: 'component.button.connect_wallet' })}
 				buttonType='primary'
 			/>
 			<InternalLink href={Routes.Home}>
 				<ButtonTexty
 					buttonType='texty'
-					label='or Go back to Homepage'
+					label={formatMessage({ id: 'label.or_go_back_to_home' })}
 				/>
 			</InternalLink>
 		</ContainerStyled>
