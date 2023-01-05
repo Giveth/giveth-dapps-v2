@@ -51,7 +51,6 @@ function NotificationView() {
 	const { notifications, setNotifications, markOneNotificationRead } =
 		useNotification();
 	const dispatch = useAppDispatch();
-	const { isEnabled } = useAppSelector(state => state.user);
 	const { account } = useWeb3React();
 	const [tab, setTab] = useState(ENotificationTabs.ALL);
 	const [loading, setLoading] = useState(false);
@@ -115,7 +114,7 @@ function NotificationView() {
 		return () => {
 			controller.abort();
 		};
-	}, [tab, pageNumber, markedAllNotificationsRead]);
+	}, [tab, pageNumber, markedAllNotificationsRead, totalUnreadNotifications]);
 
 	return (
 		<NotificationContainer>
