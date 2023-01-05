@@ -4,7 +4,7 @@ import { setShowFooter, setShowHeader } from '@/features/general/general.slice';
 import { useAppDispatch } from '@/features/hooks';
 
 const deckPDFUrl =
-	'https://docs.google.com/gview?embedded=true&url=https://giveth.mypinata.cloud/ipfs/QmeT5CKwffqDDeAsRRwjcypvZoWkiYxVYQ3JE6evshx28Y';
+	'https://docs.google.com/gview?embedded=true&url=https://giveth.mypinata.cloud/ipfs/QmTbtB4nVToViVuPP2qsiSSqNH4dzfGaZULBfZJbafJoiU';
 
 const DeckRoute = () => {
 	const dispatch = useAppDispatch();
