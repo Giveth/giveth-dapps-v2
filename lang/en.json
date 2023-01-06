@@ -770,7 +770,7 @@
 	"label.when_you_lock_your_tokens_midround": "When you lock your tokens mid-round, they will be locked for the remainder of the current round + the numbers of rounds you select.",
 	"label.explore_a_multiverse_of_projects": "Explore a multiverse of projects changing the world and earn rewards for staking liquidity.",
 	"label.time_remaining": "Time remaining",
-	"label.stream_rewards": "",
+	"label.stream_rewards": "Stream Rewards",
 	"label.stream_progress": "{token}stream progress",
 	"label.liquid_reward_token_that_has_flowed": "Liquid {rewardTokenSymbol} that has already flowed out of the {rewardTokenSymbol}stream",
 	"label.token_stream_rewards": "{rewardTokenSymbol} stream rewards",
