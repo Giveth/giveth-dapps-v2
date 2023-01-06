@@ -7,6 +7,7 @@ import { useWeb3React } from '@web3-react/core';
 import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { FiatDonationConfirmationModal } from '@/components/modals/FiatDonationConfirmationModal';
+import UserNotSignedIn from '@/components/UserNotSignedIn';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
 import { useDonateData } from '@/context/donate.context';
 import config from '@/configuration';
@@ -50,7 +51,7 @@ const FiatDonation = () => {
 	return (
 		<>
 			<FiatContainer>
-				{account ? (
+				{isSignedIn ? (
 					openOnramper && mainnetAddress ? (
 						<div
 							style={{
@@ -160,7 +161,7 @@ const FiatDonation = () => {
 							)}
 						</Buttons>
 					)
-				) : (
+				) : !account ? (
 					<ConnectWalletBtn
 						label={formatMessage({
 							id: 'component.button.connect_wallet',
@@ -169,6 +170,8 @@ const FiatDonation = () => {
 						size='large'
 						onClick={() => dispatch(setShowWalletModal(true))}
 					/>
+				) : (
+					!isSignedIn && <UserNotSignedIn />
 				)}
 			</FiatContainer>
 			{/* <a onClick={() => rampNetwork.show()}>ramp-network</a> */}
