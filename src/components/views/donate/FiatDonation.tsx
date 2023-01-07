@@ -1,18 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import InputStyled from '@/components/styled-components/Input';
-import { InputSize } from '@/components/Input';
 import { Button, B, neutralColors } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk';
+import { InputSize } from '@/components/Input';
+import InputStyled from '@/components/styled-components/Input';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { FiatDonationConfirmationModal } from '@/components/modals/FiatDonationConfirmationModal';
-import {
-	setShowWalletModal,
-	setShowSignWithWallet,
-} from '@/features/modal/modal.slice';
+import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { useDonateData } from '@/context/donate.context';
 import config from '@/configuration';
 
@@ -54,6 +51,7 @@ const FiatDonation = () => {
 		hostApiKey: 've2mesm3jbhjjoqs8t57v3qzdnveza662sugh88e',
 		url: 'https://ri-widget-staging.firebaseapp.com/',
 	});
+
 	return (
 		<>
 			<FiatContainer>
