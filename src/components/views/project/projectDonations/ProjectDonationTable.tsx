@@ -221,7 +221,8 @@ const ProjectDonationTable = ({
 										: donation.anonymous
 										? 'Anonymous'
 										: donation.user?.name ||
-										  donation.user?.firstName}
+										  donation.user?.firstName ||
+										  'Anonymous'}
 								</DonationTableCell>
 
 								{isAdmin && (

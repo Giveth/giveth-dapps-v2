@@ -1,14 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
+import InputStyled from '@/components/styled-components/Input';
+import { InputSize } from '@/components/Input';
 import { Button, B, neutralColors } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { FiatDonationConfirmationModal } from '@/components/modals/FiatDonationConfirmationModal';
-import UserNotSignedIn from '@/components/UserNotSignedIn';
-import { setShowWalletModal } from '@/features/modal/modal.slice';
+import {
+	setShowWalletModal,
+	setShowSignWithWallet,
+} from '@/features/modal/modal.slice';
 import { useDonateData } from '@/context/donate.context';
 import config from '@/configuration';
 
@@ -26,16 +30,19 @@ const FiatDonation = () => {
 		state => state.user,
 	);
 	const givethProjectId = '1';
+	const [temporaryEmail, setTemporaryEmail] = useState('');
+	const [emailReady, setEmailReady] = useState(false);
 	const [openOnramper, setOpenOnramper] = useState(false);
 	const [openDonorBox, setOpenDonorBox] = useState(false);
 	const mainnetAddress = project.addresses?.find(
 		i => i.networkId === config.PRIMARY_NETWORK.id,
 	)?.address;
 	const partnerContext = {
-		userId: isEnabled && userData && userData!.id,
-		userWallet: isEnabled && userData && userData?.walletAddress,
+		userId: userData?.id,
+		userWallet: userData?.walletAddress,
 		projectWallet: mainnetAddress,
 		projectId: id,
+		email: userData?.email || temporaryEmail,
 	};
 	const wallets = {
 		ETH: { address: mainnetAddress },
@@ -47,11 +54,10 @@ const FiatDonation = () => {
 		hostApiKey: 've2mesm3jbhjjoqs8t57v3qzdnveza662sugh88e',
 		url: 'https://ri-widget-staging.firebaseapp.com/',
 	});
-
 	return (
 		<>
 			<FiatContainer>
-				{isSignedIn ? (
+				{emailReady || isSignedIn ? (
 					openOnramper && mainnetAddress ? (
 						<div
 							style={{
@@ -161,17 +167,38 @@ const FiatDonation = () => {
 							)}
 						</Buttons>
 					)
-				) : !account ? (
-					<ConnectWalletBtn
-						label={formatMessage({
-							id: 'component.button.connect_wallet',
-						})}
-						buttonType='secondary'
-						size='large'
-						onClick={() => dispatch(setShowWalletModal(true))}
-					/>
 				) : (
-					!isSignedIn && <UserNotSignedIn />
+					<FirstContainer>
+						<InputStyled
+							inputSize={InputSize.LARGE}
+							hasLeftIcon={false}
+							value={temporaryEmail}
+							placeholder='Proceed with an email'
+							onChange={e => setTemporaryEmail(e.target.value)}
+						/>
+						<StyledButton
+							label={'Donate with email'}
+							buttonType='secondary'
+							size='medium'
+							disabled={!temporaryEmail}
+							onClick={() => {
+								setEmailReady(true);
+							}}
+						/>
+						{formatMessage({ id: 'label.or' })}
+						{!isSignedIn && (
+							<StyledButton
+								label={formatMessage({
+									id: 'label.sign_wallet',
+								})}
+								buttonType='secondary'
+								size='medium'
+								onClick={() => {
+									dispatch(setShowSignWithWallet(true));
+								}}
+							/>
+						)}
+					</FirstContainer>
 				)}
 			</FiatContainer>
 			{/* <a onClick={() => rampNetwork.show()}>ramp-network</a> */}
@@ -185,6 +212,12 @@ const FiatContainer = styled.div`
 	justify-content: center;
 	text-align: center;
 	align-items: center;
+`;
+const FirstContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	padding: 20px 0;
+	width: 100%;
 `;
 const ImageContainer = styled.div`
 	width: 100%;
@@ -217,7 +250,7 @@ const DonorBoxContainer = styled(Buttons)`
 	border-top: 1px solid ${neutralColors.gray[400]};
 `;
 
-const ConnectWalletBtn = styled(Button)`
+const StyledButton = styled(Button)`
 	width: 100%;
 	margin: 20px 0;
 `;
