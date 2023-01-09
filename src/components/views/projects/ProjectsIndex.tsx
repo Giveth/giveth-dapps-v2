@@ -18,7 +18,12 @@ import { client } from '@/apollo/apolloClient';
 import { ICategory, IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
-import { device, deviceSize, mediaQueries } from '@/lib/constants/constants';
+import {
+	BACKEND_QUERY_LIMIT,
+	device,
+	deviceSize,
+	mediaQueries,
+} from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import ProjectsBanner from './ProjectsBanner';
@@ -76,7 +81,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 		(isLoadMore?: boolean, loadNum?: number, userIdChanged = false) => {
 			const variables: IQueries = {
 				limit: userIdChanged
-					? filteredProjects.length
+					? filteredProjects.length > 50
+						? BACKEND_QUERY_LIMIT
+						: filteredProjects.length
 					: projects.length,
 				skip: userIdChanged ? 0 : projects.length * (loadNum || 0),
 			};
