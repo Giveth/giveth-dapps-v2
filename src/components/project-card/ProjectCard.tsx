@@ -31,8 +31,6 @@ import {
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
-import { getNowUnixMS } from '@/helpers/time';
-import { isProduction } from '@/configuration';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -64,9 +62,6 @@ const ProjectCard = (props: IProjectCard) => {
 		orgLabel !== ORGANIZATION.trace && orgLabel !== ORGANIZATION.giveth;
 	const name = adminUser?.name;
 	const { formatMessage, formatRelativeTime } = useIntl();
-
-	//TODO: remove this after 27 dec 2022
-	const isGIVPowerFirstRound = isProduction && getNowUnixMS() < 1672156800000;
 
 	return (
 		<Wrapper
@@ -154,7 +149,7 @@ const ProjectCard = (props: IProjectCard) => {
 									</GivBackIconContainer>
 									<GivBackText>
 										{formatMessage({
-											id: 'label.givback_eligible',
+											id: 'label.givbacks',
 										})}
 									</GivBackText>
 								</Flex>
@@ -167,8 +162,7 @@ const ProjectCard = (props: IProjectCard) => {
 									color={neutralColors.gray[700]}
 								/>
 								<B>
-									{!isGIVPowerFirstRound &&
-									projectPower?.powerRank &&
+									{projectPower?.powerRank &&
 									projectPower?.totalPower !== 0
 										? `#${projectPower.powerRank}`
 										: '--'}

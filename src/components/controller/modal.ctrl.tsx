@@ -43,9 +43,12 @@ const ModalController = () => {
 		}
 	}, [active, showWelcomeModal]);
 
+	//I think we need to handle it in better way
 	useEffect(() => {
 		if (isSignedIn && showSignWithWallet) {
-			dispatch(setShowSignWithWallet(false));
+			setTimeout(() => {
+				dispatch(setShowSignWithWallet(false));
+			}, 300);
 		}
 	}, [isSignedIn]);
 

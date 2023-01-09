@@ -13,8 +13,6 @@ import { IProjectPower } from '@/apollo/types/types';
 import { Flex } from './styled-components/Flex';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useProjectContext } from '@/context/project.context';
-import { getNowUnixMS } from '@/helpers/time';
-import { isProduction } from '@/configuration';
 
 interface IGIVpowerRank {
 	projectPower?: IProjectPower;
@@ -72,15 +70,11 @@ export const NextRank: FC<IGIVpowerRank> = ({
 };
 
 export const CurrentRank: FC<IGIVpowerRank> = ({ projectPower }) => {
-	//TODO: remove this after 27 dec 2022
-	const isGIVPowerFirstRound = isProduction && getNowUnixMS() < 1672156800000;
 	return (
 		<RankContainer alignItems='baseline' gap='4px'>
-			{(isGIVPowerFirstRound || projectPower?.totalPower === 0) && (
-				<IconRocketInSpace32 />
-			)}
+			{projectPower?.totalPower === 0 && <IconRocketInSpace32 />}
 			<H3 weight={700}>
-				{isGIVPowerFirstRound || projectPower?.totalPower === 0
+				{projectPower?.totalPower === 0
 					? '--'
 					: `#${projectPower?.powerRank}`}
 			</H3>

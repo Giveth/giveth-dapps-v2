@@ -3,10 +3,12 @@ import {
 	ReactNode,
 	useCallback,
 	useContext,
+	useEffect,
 	useState,
 } from 'react';
 import { captureException } from '@sentry/nextjs';
 import BigNumber from 'bignumber.js';
+import { useRouter } from 'next/router';
 import config from '@/configuration';
 import { IPowerBoostingWithUserGIVpower } from '@/components/views/project/projectGIVPower';
 import { client } from '@/apollo/apolloClient';
@@ -15,11 +17,13 @@ import {
 	FETCH_PROJECT_BOOSTERS,
 } from '@/apollo/gql/gqlPowerBoosting';
 import { FETCH_USERS_GIVPOWER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
-import { IPowerBoosting } from '@/apollo/types/types';
+import { IPowerBoosting, IProject } from '@/apollo/types/types';
 import { formatWeiHelper } from '@/helpers/number';
 import { backendGQLRequest, gqlRequest } from '@/helpers/requests';
 import { showToastError } from '@/lib/helpers';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
+import { useAppSelector } from '@/features/hooks';
+import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 
 interface IBoostersData {
 	powerBoostings: IPowerBoostingWithUserGIVpower[];
@@ -35,21 +39,42 @@ interface IProjectContext {
 		projectId: number,
 		status?: EProjectStatus,
 	) => Promise<void>;
+	fetchProjectBySlug: () => Promise<void>;
+	projectData?: IProject;
+	isActive: boolean;
+	isDraft: boolean;
 }
 
 const ProjectContext = createContext<IProjectContext>({
 	isBoostingsLoading: false,
 	fetchProjectBoosters: (a, b) =>
 		Promise.reject('fetchProjectBoosters not initialed yet!'),
+	fetchProjectBySlug: () =>
+		Promise.reject('fetchProjectBySlug not initialed yet!'),
+	projectData: undefined,
+	isActive: true,
+	isDraft: false,
 });
 ProjectContext.displayName = 'ProjectContext';
 
-export const ProjectProvider = ({ children }: { children: ReactNode }) => {
+export const ProjectProvider = ({
+	children,
+	project,
+}: {
+	children: ReactNode;
+	project?: IProject;
+}) => {
 	const [boostersData, setBoostersData] = useState<IBoostersData>();
 	const [isBoostingsLoading, setIsBoostingsLoading] = useState(false);
 	const [projectedRank, setProjectedRank] = useState<
 		number | undefined | null
 	>(undefined);
+
+	const [projectData, setProjectData] = useState(project);
+
+	const user = useAppSelector(state => state.user.userData);
+	const router = useRouter();
+	const slug = router.query.projectIdSlug as string;
 
 	const fetchProjectBoosters = useCallback(
 		async (projectId: number, status?: EProjectStatus) => {
@@ -161,6 +186,43 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
 		[],
 	);
 
+	const isActive = projectData?.status.name === EProjectStatus.ACTIVE;
+	const isDraft = projectData?.status.name === EProjectStatus.DRAFT;
+
+	const fetchProjectBySlug = async () => {
+		client
+			.query({
+				query: FETCH_PROJECT_BY_SLUG,
+				variables: { slug, connectedWalletUserId: Number(user?.id) },
+				fetchPolicy: 'network-only',
+			})
+			.then((res: { data: { projectBySlug: IProject } }) => {
+				const _project = res.data.projectBySlug;
+				if (_project.status.name !== EProjectStatus.CANCEL) {
+					setProjectData(_project);
+				} else {
+					//Todo: why?!
+					projectData && setProjectData(undefined);
+				}
+			})
+			.catch((error: unknown) => {
+				showToastError(error);
+				captureException(error, {
+					tags: {
+						section: 'fetchProject',
+					},
+				});
+			});
+	};
+
+	useEffect(() => {
+		if (user?.isSignedIn && !project) {
+			fetchProjectBySlug();
+		} else {
+			setProjectData(project);
+		}
+	}, [project, user?.isSignedIn]);
+
 	return (
 		<ProjectContext.Provider
 			value={{
@@ -168,6 +230,10 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
 				projectedRank,
 				isBoostingsLoading,
 				fetchProjectBoosters,
+				fetchProjectBySlug,
+				projectData,
+				isActive,
+				isDraft,
 			}}
 		>
 			{children}

@@ -11,10 +11,12 @@ import {
 import { useIntl } from 'react-intl';
 import { mediaQueries } from '@/lib/constants/constants';
 import links from '@/lib/constants/links';
-import { IDonateRouteProps } from '../../../../pages/donate/[slug]';
 import config from '@/configuration';
+import { useDonateData } from '@/context/donate.context';
 
-const NiceBanner: FC<IDonateRouteProps> = ({ project }) => {
+const NiceBanner: FC = () => {
+	const { project } = useDonateData();
+
 	const { formatMessage } = useIntl();
 	// Only show this on the Giveth project
 	if (+project.id! !== config.GIVETH_PROJECT_ID) return null;

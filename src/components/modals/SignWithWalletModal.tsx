@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import {
@@ -19,12 +19,14 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { signToGetToken } from '@/features/user/user.thunks';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import { EModalEvents } from '@/hooks/useModalCallback';
 
 interface IProps extends IModal {
 	callback?: () => void;
 }
 
 export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
+	const [loading, setLoading] = useState(false);
 	const theme = useAppSelector(state => state.general.theme);
 	const { formatMessage } = useIntl();
 	const { account, library, chainId } = useWeb3React();
@@ -53,10 +55,12 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 				</NoteDescription>
 				<OkButton
 					label={formatMessage({ id: 'component.button.sign_in' })}
+					loading={loading}
 					onClick={async () => {
 						if (!account) {
 							return dispatch(setShowWelcomeModal(true));
 						}
+						setLoading(true);
 						const signature = await dispatch(
 							signToGetToken({
 								address: account,
@@ -65,8 +69,15 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 								pathname: router.pathname,
 							}),
 						);
-						closeModal();
-						!!signature && callback && callback();
+						setLoading(false);
+						if (
+							signature &&
+							signature.type === 'user/signToGetToken/fulfilled'
+						) {
+							const event = new Event(EModalEvents.SIGNEDIN);
+							window.dispatchEvent(event);
+							callback && callback();
+						}
 					}}
 					buttonType={theme === ETheme.Dark ? 'secondary' : 'primary'}
 				/>
