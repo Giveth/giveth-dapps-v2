@@ -44,12 +44,12 @@ import { ETheme } from '@/features/general/general.slice';
 import {
 	setShowWalletModal,
 	setShowWelcomeModal,
-	setShowSignWithWallet,
 	setShowCompleteProfile,
 } from '@/features/modal/modal.slice';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { IconGIV } from '../Icons/GIV';
+import { useModalCallback } from '@/hooks/useModalCallback';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -151,11 +151,15 @@ const Header: FC<IHeader> = () => {
 		}
 	};
 
+	const { modalCallback: signInThenCreate } = useModalCallback(() =>
+		router.push(Routes.CreateProject),
+	);
+
 	const handleCreateButton = () => {
 		if (!isEnabled) {
 			dispatch(setShowWelcomeModal(true));
 		} else if (!isSignedIn) {
-			dispatch(setShowSignWithWallet(true));
+			signInThenCreate();
 		} else if (isUserRegistered(userData)) {
 			router.push(Routes.CreateProject);
 		} else {
@@ -195,7 +199,7 @@ const Header: FC<IHeader> = () => {
 										width='48'
 										height='48'
 										alt='Giveth logo'
-										src={`/images/logo/logo1.png`}
+										src='/images/logo/logo1.png'
 									/>
 								</Logo>
 							</Link>

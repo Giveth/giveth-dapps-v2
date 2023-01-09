@@ -18,12 +18,12 @@ import { showToastError } from '@/lib/helpers';
 import { Flex } from '../styled-components/Flex';
 import { IProject } from '@/apollo/types/types';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import {
 	decrementLikedProjectsCount,
 	incrementLikedProjectsCount,
 } from '@/features/user/user.slice';
 import { slugToProjectView } from '@/lib/routeCreators';
+import { useModalCallback } from '@/hooks/useModalCallback';
 
 interface IProjectCardLikeAndShareButtons {
 	project: IProject;
@@ -45,14 +45,15 @@ const ProjectCardLikeAndShareButtons = (
 	const dispatch = useAppDispatch();
 	const router = useRouter();
 
+	useEffect(() => {
+		setReaction(project.reaction);
+	}, [project.reaction, user?.id]);
+
+	useEffect(() => {
+		setTotalReactions(project.totalReactions);
+	}, [project.totalReactions]);
+
 	const likeUnlikeProject = async () => {
-		if (!isSignedIn) {
-			dispatch(setShowSignWithWallet(true));
-			return;
-		}
-
-		if (likeLoading) return;
-
 		if (projectId) {
 			setLikeLoading(true);
 
@@ -61,14 +62,18 @@ const ProjectCardLikeAndShareButtons = (
 					const newReaction = await likeProject(projectId);
 					setReaction(newReaction);
 					if (newReaction) {
-						setTotalReactions((totalReactions || 0) + 1);
+						setTotalReactions(
+							_totalReactions => (_totalReactions || 0) + 1,
+						);
 						dispatch(incrementLikedProjectsCount());
 					}
 				} else if (reaction?.userId === user?.id) {
 					const successful = await unlikeProject(reaction.id);
 					if (successful) {
 						setReaction(undefined);
-						setTotalReactions((totalReactions || 1) - 1);
+						setTotalReactions(
+							_totalReactions => (_totalReactions || 1) - 1,
+						);
 						dispatch(decrementLikedProjectsCount());
 					}
 				}
@@ -86,25 +91,23 @@ const ProjectCardLikeAndShareButtons = (
 	};
 
 	const boostProject = () => {
-		setBoostLoading(true);
-		if (!isSignedIn) {
-			dispatch(setShowSignWithWallet(true));
-			setBoostLoading(false);
-			return;
-		}
-
+		if (!projectId) return;
 		if (boostLoading) return;
-
-		if (projectId) router.push(`${slugToProjectView(slug)}?open=boost`);
+		setBoostLoading(true);
+		router.push(`${slugToProjectView(slug)}?open=boost`);
 	};
 
-	useEffect(() => {
-		setReaction(project.reaction);
-	}, [project.reaction]);
+	const { modalCallback: signInThenLike } =
+		useModalCallback(likeUnlikeProject);
 
-	useEffect(() => {
-		setTotalReactions(project.totalReactions);
-	}, [project.totalReactions]);
+	const checkSignInThenLike = () => {
+		if (typeof window === 'undefined') return;
+		if (!isSignedIn) {
+			signInThenLike();
+		} else {
+			likeUnlikeProject();
+		}
+	};
 
 	return (
 		<>
@@ -115,15 +118,15 @@ const ProjectCardLikeAndShareButtons = (
 				<Flex gap='6px'>
 					{verified && (
 						<BadgeButton
-							loading={boostLoading}
+							isLoading={boostLoading}
 							onClick={boostProject}
 						>
 							<IconRocketInSpace />
 						</BadgeButton>
 					)}
 					<BadgeButton
-						loading={likeLoading}
-						onClick={likeUnlikeProject}
+						isLoading={likeLoading}
+						onClick={likeLoading ? undefined : checkSignInThenLike}
 					>
 						{Number(totalReactions) > 0 && (
 							<Subline>{totalReactions}</Subline>
@@ -148,7 +151,7 @@ const ProjectCardLikeAndShareButtons = (
 };
 
 interface IBadgeButton {
-	loading?: boolean;
+	isLoading?: boolean;
 }
 
 const BadgeButton = styled(Flex)<IBadgeButton>`
@@ -180,7 +183,7 @@ const BadgeButton = styled(Flex)<IBadgeButton>`
 		background-color: #ffffff;
 	}
 	${props =>
-		props.loading
+		props.isLoading
 			? css`
 					&::before {
 						content: '';

@@ -4,7 +4,7 @@ import { captureException } from '@sentry/nextjs';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { networksParams } from '@/helpers/blockchain';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
-import { sendTransaction, showToastError } from '@/lib/helpers';
+import { sendTransaction } from '@/lib/helpers';
 import { saveDonation, updateDonation } from '@/services/donation';
 import { EDonationStatus } from '@/apollo/types/gqlEnums';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
@@ -165,6 +165,7 @@ export const createDonation: TCreateDonation = async props => {
 		return { isSaved: donationId > 0, txHash: _txHash };
 	} catch (error: any) {
 		_txHash = error.replacement?.hash || error.transactionHash;
+		console.log({ error });
 		if (
 			(error.replacement && error.cancelled === true) ||
 			error.reason === 'transaction failed'
@@ -176,10 +177,9 @@ export const createDonation: TCreateDonation = async props => {
 					: EDonationFailedType.FAILED,
 			);
 			updateDonation(donationId, EDonationStatus.FAILED);
-		} else if (error.code === 4001) {
+		} else if (error.code === 'ACTION_REJECTED') {
 			setFailedModalType(EDonationFailedType.REJECTED);
 		} else {
-			showToastError(error);
 			setFailedModalType(EDonationFailedType.FAILED);
 		}
 		setDonating(false);

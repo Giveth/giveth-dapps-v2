@@ -19,11 +19,12 @@ import {
 import { showToastError } from '@/lib/helpers';
 import { gToast, ToastType } from '@/components/toasts';
 import ProjectTimeline, { TimelineSection } from './ProjectTimeline';
-import { IProject, IProjectUpdate } from '@/apollo/types/types';
+import { IProjectUpdate } from '@/apollo/types/types';
 import { RemoveUpdateModal } from '@/components/modals/RemoveUpdateModal';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
+import { useProjectContext } from '@/context/project.context';
 
 const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
 	ssr: false,
@@ -31,12 +32,9 @@ const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
 
 const UPDATE_LIMIT = 2000;
 
-const ProjectUpdates = (props: {
-	project?: IProject;
-	fetchProject: () => void;
-}) => {
-	const { project, fetchProject } = props;
-	const { id, creationDate, adminUser } = project || {};
+const ProjectUpdates = () => {
+	const { projectData, fetchProjectBySlug } = useProjectContext();
+	const { id, creationDate, adminUser } = projectData || {};
 
 	const dispatch = useAppDispatch();
 	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
@@ -84,7 +82,7 @@ const ProjectUpdates = (props: {
 					},
 				],
 			});
-			fetchProject();
+			fetchProjectBySlug();
 			gToast(`Your updates are saved`, {
 				type: ToastType.SUCCESS,
 				// direction: ToastDirection.RIGHT,
@@ -126,7 +124,7 @@ const ProjectUpdates = (props: {
 					},
 				],
 			});
-			fetchProject();
+			fetchProjectBySlug();
 			gToast(`Your update was deleted`, {
 				type: ToastType.SUCCESS,
 				title: 'Success!',
@@ -195,7 +193,7 @@ const ProjectUpdates = (props: {
 			});
 			setTitle('');
 			setNewUpdate(' ');
-			fetchProject();
+			fetchProjectBySlug();
 			return gToast(`Your update was created`, {
 				type: ToastType.SUCCESS,
 				title: 'Success!',

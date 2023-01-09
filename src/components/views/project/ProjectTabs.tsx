@@ -10,11 +10,10 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Shadow } from '@/components/styled-components/Shadow';
-import { IProject } from '@/apollo/types/types';
 import { useProjectContext } from '@/context/project.context';
+import { Flex } from '@/components/styled-components/Flex';
 
 interface IProjectTabs {
-	project?: IProject;
 	activeTab: number;
 	totalDonations?: number;
 	setActiveTab: Dispatch<SetStateAction<number>>;
@@ -25,8 +24,9 @@ const badgeCount = (count?: number) => {
 };
 
 const ProjectTabs = (props: IProjectTabs) => {
-	const { project, activeTab, setActiveTab, totalDonations } = props;
-	const { totalProjectUpdates } = project || {};
+	const { activeTab, setActiveTab, totalDonations } = props;
+	const { projectData } = useProjectContext();
+	const { totalProjectUpdates } = projectData || {};
 	const { formatMessage } = useIntl();
 	const { boostersData } = useProjectContext();
 
@@ -36,7 +36,7 @@ const ProjectTabs = (props: IProjectTabs) => {
 		{ title: 'label.donations', badge: totalDonations },
 	];
 
-	if (project?.verified)
+	if (projectData?.verified)
 		tabsArray.push({
 			title: 'label.givpower',
 			badge: boostersData?.totalCount,
@@ -83,23 +83,16 @@ const Tab = styled(P)`
 	}
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled(Flex)`
 	padding: 24px 0 24px 0;
 	margin-bottom: 16px;
 	color: ${brandColors.deep[600]};
-	display: flex;
 	align-items: center;
 	z-index: 1;
 	background-color: ${neutralColors.gray[200]};
 	flex-wrap: nowrap;
 	overflow-x: auto;
 	max-width: calc(100vw - 32px);
-
-	::-webkit-scrollbar {
-		width: 0;
-		height: 0;
-		background-color: transparent;
-	}
 
 	${mediaQueries.tablet} {
 		padding: 16px 0 12px;

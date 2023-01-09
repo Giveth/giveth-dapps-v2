@@ -7,6 +7,7 @@ import { RootState } from '../store';
 import { postRequest } from '@/helpers/requests';
 import config from '@/configuration';
 import StorageLabel from '@/lib/localStorage';
+import { getTokens } from '@/helpers/user';
 
 export const fetchUserByAddress = createAsyncThunk(
 	'user/fetchUser',
@@ -44,8 +45,15 @@ export const signToGetToken = createAsyncThunk(
 						nonce,
 					},
 				);
-				localStorage.setItem(StorageLabel.USER, address);
+				const _address = address.toLowerCase();
+				localStorage.setItem(StorageLabel.USER, _address);
 				localStorage.setItem(StorageLabel.TOKEN, token.jwt);
+				const tokens = getTokens();
+				tokens[_address] = token.jwt;
+				localStorage.setItem(
+					StorageLabel.TOKENS,
+					JSON.stringify(tokens),
+				);
 				// When token is fetched, user should be fetched again to get email address
 				await dispatch(fetchUserByAddress(address));
 				return token.jwt;

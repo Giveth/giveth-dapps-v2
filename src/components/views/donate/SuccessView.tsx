@@ -8,12 +8,11 @@ import {
 	P,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 
 import ConfettiAnimation from '@/components/animations/confetti';
-import { IProject } from '@/apollo/types/types';
 import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
 import SocialBox from '@/components/views/donate/SocialBox';
@@ -25,18 +24,17 @@ import { FETCH_GIVETH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
 import config from '@/configuration';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { IFetchGivethProjectGQL } from '@/apollo/types/gqlTypes';
+import { useDonateData } from '@/context/donate.context';
 
-interface IProps {
-	project: IProject;
-	txHash: string[];
-	givBackEligible?: boolean;
-}
-
-const SuccessView: FC<IProps> = props => {
-	const { txHash, project, givBackEligible } = props;
+const SuccessView: FC = () => {
+	const { isSuccessDonation } = useDonateData();
+	const { givBackEligible, txHash = [] } = isSuccessDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
+
 	const { chainId } = useWeb3React();
-	const [givethSlug, setGivethSlug] = React.useState<string>('');
+	const [givethSlug, setGivethSlug] = useState<string>('');
+	const { project } = useDonateData();
+
 	const message = hasMultipleTxs ? (
 		<>
 			Thank you for supporting {project?.title} and thanks for your
@@ -187,6 +185,7 @@ const GivBackContainer = styled.div`
 	background-repeat: no-repeat;
 	border-radius: 12px;
 	color: white;
+	z-index: 1;
 	h6 {
 		font-weight: bold;
 		margin: 0 0 8px 0;

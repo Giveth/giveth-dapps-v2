@@ -14,6 +14,7 @@ const StorageLabel = {
 	WALLET: 'selectedWallet',
 	USER: getLocalUserLabel(),
 	TOKEN: getLocalTokenLabel(),
+	TOKENS: 'tokens',
 	FIRSTMODALSHOWED: 'FIRSTMODALSHOWED',
 };
 
