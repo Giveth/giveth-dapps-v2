@@ -171,7 +171,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 					delayedCloseModal(firstHash);
 				}
 			})
-			.catch(showToastError);
+			.catch(console.log);
 	};
 
 	useEffect(() => {

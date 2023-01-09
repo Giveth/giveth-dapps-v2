@@ -554,7 +554,7 @@
 	"label.my_wallet_address": "Mi dirección de la billetera",
 	"label.resolved_as": "Resuelto como ",
 	"label.this_address_is_already_used": "Esta dirección ya esta en uso",
-	"label.please_do_not_enter_exchange_addresses_for_gnosis_chain": "Por favor NO INGRESAR direcciones de exchanges para Gnosis Chain",
+	"label.please_do_not_enter_exchange_deposit": "",
 	"label.ill_receive_funds_on_this_address": "Recibiré fondos en esta dirección",
 	"label.is_already_being_used_for_a_project": "esta siendo usada por otro proyecto.",
 	"label.this_is_the_default_address_associated_with_your_account": "Esta es la dirección de tu cuenta por defecto. Puedes usar una dirección diferente.",

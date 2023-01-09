@@ -34,7 +34,6 @@ declare global {
 
 const DEFAULT_WRITE_KEY = 'MHK95b7o6FRNHt0ZZJU9bNGUT5MNCEyB';
 
-type IntlMessageKeys = keyof typeof en;
 const messages = {
 	en,
 	es,
