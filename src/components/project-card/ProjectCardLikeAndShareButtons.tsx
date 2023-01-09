@@ -47,7 +47,7 @@ const ProjectCardLikeAndShareButtons = (
 
 	useEffect(() => {
 		setReaction(project.reaction);
-	}, [project.reaction]);
+	}, [project.reaction, user?.id]);
 
 	useEffect(() => {
 		setTotalReactions(project.totalReactions);
