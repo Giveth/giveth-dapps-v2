@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import HomeHeader from './HomeHeader';
 import HomeExploreProjects from './HomeExploreProjects';
 import HomePurpleSection from './HomePurpleSection';
@@ -16,7 +17,7 @@ interface IHomeView {
 
 const projectsSlice = 6;
 
-const HomeIndex = (props: IHomeView) => {
+const HomeIndex: FC<IHomeView> = props => {
 	const { projects, totalCount } = props;
 	return (
 		<>
