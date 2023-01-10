@@ -62,7 +62,9 @@ export const NotificationBox: FC<INotificationBox> = ({
 				</IconContainer>
 			)}
 			<NotificationContent>
-				<div>{convertRawDataToHTML(notification)}</div>
+				<ConvertedTextContainer>
+					{convertRawDataToHTML(notification)}
+				</ConvertedTextContainer>
 				{/* {!short && notification.quote && (
 					<NotificationQuote>{notification.quote}</NotificationQuote>
 				)} */}
@@ -101,6 +103,10 @@ const UnreadCircle = styled.div<{ isShort: boolean }>`
 	background-color: ${brandColors.pinky[500]};
 	border: 1px solid ${brandColors.pinky[700]};
 	border-radius: 4px;
+`;
+
+const ConvertedTextContainer = styled.div`
+	word-break: break-word;
 `;
 
 const NotificationContent = styled.div``;
