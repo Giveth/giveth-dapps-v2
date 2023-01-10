@@ -92,7 +92,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				variables.connectedWalletUserId = Number(user?.id);
 			}
 
-			if (!userIdChanged) setIsLoading(true);
+			setIsLoading(true);
 			if (
 				contextVariables.mainCategory !== router.query?.slug?.toString()
 			)
