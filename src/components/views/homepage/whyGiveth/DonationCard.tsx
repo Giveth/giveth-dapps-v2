@@ -5,7 +5,7 @@ import { Flex } from '@/components/styled-components/Flex';
 
 interface IDonationCard {
 	address: string;
-	amount: number;
+	amount: string;
 	projectTitle: string;
 }
 
