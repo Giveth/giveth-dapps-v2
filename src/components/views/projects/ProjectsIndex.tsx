@@ -98,6 +98,12 @@ const ProjectsIndex = (props: IProjectsView) => {
 			)
 				return;
 
+			console.log(
+				Date.now(),
+				'fetchProjects Projects index',
+				JSON.stringify(user),
+			);
+
 			client
 				.query({
 					query: FETCH_ALL_PROJECTS,
@@ -108,6 +114,12 @@ const ProjectsIndex = (props: IProjectsView) => {
 					fetchPolicy: 'network-only',
 				})
 				.then((res: { data: { allProjects: IFetchAllProjects } }) => {
+					console.log(
+						Date.now(),
+						'fetchProjects Projects index',
+						JSON.stringify(user),
+						JSON.stringify(res),
+					);
 					const data = res.data?.allProjects?.projects;
 					const count = res.data?.allProjects?.totalCount;
 					setTotalCount(count);
@@ -138,6 +150,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 	);
 
 	useEffect(() => {
+		console.log(Date.now(), 'user Id changed in Projects index');
 		pageNum.current = 0;
 		fetchProjects(false, 0, true);
 	}, [user?.id]);
