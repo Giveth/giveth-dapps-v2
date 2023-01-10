@@ -1,13 +1,7 @@
-import HomeHeader from './HomeHeader';
-import HomeExploreProjects from './HomeExploreProjects';
-import HomePurpleSection from './HomePurpleSection';
-import HomeNiceSection from './HomeNiceSection';
-import HomeGIVPowerSection from './HomeGIVPowerSection';
+import { FC } from 'react';
 import HomeFromBlog from './HomeFromBlog';
 import HomeGetUpdates from './HomeGetUpdates';
-import HomeChangeMakers from './HomeChangeMakers';
 import { IProject } from '@/apollo/types/types';
-import { BigArc } from '@/components/styled-components/Arc';
 import WhyGivethIndex from '@/components/views/homepage/whyGiveth';
 
 interface IHomeView {
@@ -15,27 +9,10 @@ interface IHomeView {
 	totalCount: number;
 }
 
-const projectsSlice = 6;
-
-const HomeIndex = (props: IHomeView) => {
-	const { projects, totalCount } = props;
+const HomeIndex: FC<IHomeView> = props => {
 	return (
 		<>
-			<BigArc />
-			<HomeHeader />
 			<WhyGivethIndex />
-			<HomeExploreProjects
-				totalCount={totalCount}
-				projects={projects.slice(0, projectsSlice)}
-			/>
-			<HomeGIVPowerSection />
-			<HomeNiceSection />
-			<HomePurpleSection />
-			<HomeExploreProjects
-				projects={projects.slice(projectsSlice)}
-				noTitle
-			/>
-			<HomeChangeMakers />
 			<HomeFromBlog />
 			<HomeGetUpdates />
 		</>
