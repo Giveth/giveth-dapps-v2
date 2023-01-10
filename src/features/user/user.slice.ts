@@ -25,6 +25,7 @@ const initialState: {
 type UserStateType = RootState['user'];
 
 const signOutUser = (state: UserStateType) => {
+	console.log(Date.now(), 'signOutUser in user slice');
 	localStorage.removeItem(StorageLabel.USER);
 	localStorage.removeItem(StorageLabel.TOKEN);
 	const tokens = getTokens();
