@@ -116,9 +116,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 				.then((res: { data: { allProjects: IFetchAllProjects } }) => {
 					console.log(
 						Date.now(),
-						'fetchProjects Projects index',
+						'fetchProjects Projects index done',
 						JSON.stringify(user),
-						JSON.stringify(res),
 					);
 					const data = res.data?.allProjects?.projects;
 					const count = res.data?.allProjects?.totalCount;
@@ -131,6 +130,11 @@ const ProjectsIndex = (props: IProjectsView) => {
 					setIsLoading(false);
 				})
 				.catch((err: any) => {
+					console.log(
+						Date.now(),
+						'fetchProjects Projects index fail',
+						JSON.stringify(err),
+					);
 					setIsLoading(false);
 					showToastError(err);
 					captureException(err, {
@@ -145,7 +149,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 			filteredProjects.length,
 			projects.length,
 			router.query?.slug,
-			user?.id,
+			user,
 		],
 	);
 
