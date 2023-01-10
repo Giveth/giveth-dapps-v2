@@ -8,6 +8,7 @@ import HomeGetUpdates from './HomeGetUpdates';
 import HomeChangeMakers from './HomeChangeMakers';
 import { IProject } from '@/apollo/types/types';
 import { BigArc } from '@/components/styled-components/Arc';
+import WhyGivethIndex from '@/components/views/homepage/whyGiveth';
 
 interface IHomeView {
 	projects: IProject[];
@@ -22,6 +23,7 @@ const HomeIndex = (props: IHomeView) => {
 		<>
 			<BigArc />
 			<HomeHeader />
+			<WhyGivethIndex />
 			<HomeExploreProjects
 				totalCount={totalCount}
 				projects={projects.slice(0, projectsSlice)}
