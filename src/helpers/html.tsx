@@ -31,6 +31,16 @@ import type { ReactNode } from 'react';
 export const convertRawDataToHTML = (notification: INotification) => {
 	const { metadata, notificationType } = notification;
 	const { htmlTemplate } = notificationType;
+	if (htmlTemplate[0].type === 'html') {
+		return (
+			<StyledHtml
+				as='span'
+				dangerouslySetInnerHTML={{
+					__html: metadata['html'],
+				}}
+			/>
+		);
+	}
 	const res: ReactNode[] = [];
 	htmlTemplate.forEach((template: any, idx) => {
 		const { content } = template;
@@ -89,6 +99,19 @@ const StyledGlink = styled(GLink)`
 	transition: color 0.1s ease;
 	&:hover {
 		color: ${brandColors.pinky[500]};
+	}
+`;
+
+const StyledHtml = styled(P)`
+	*:first-child {
+		margin-top: 4px;
+	}
+	a {
+		color: ${brandColors.pinky[500]};
+		transition: color 0.1s ease;
+		&:hover {
+			color: ${brandColors.pinky[800]};
+		}
 	}
 `;
 
