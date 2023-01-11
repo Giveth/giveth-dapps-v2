@@ -8,12 +8,12 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import StatsCard from '@/components/views/homepage/whyGiveth/StatsCard';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+import { Flex } from '@/components/styled-components/Flex';
 import DonationCard from '@/components/views/homepage/whyGiveth/DonationCard';
 
 export default function WhyGivethIndex() {
 	return (
-		<ContainerStyled>
+		<>
 			<GivethStats>
 				<WhyGiveth weight={700}>Why Giveth?</WhyGiveth>
 				<Stats>
@@ -40,7 +40,7 @@ export default function WhyGivethIndex() {
 					))}
 				</Donations>
 			</RecentDonations>
-		</ContainerStyled>
+		</>
 	);
 }
 
@@ -77,28 +77,37 @@ const statsArray = [
 	},
 ];
 
-const Donations = styled.div``;
-
-const GivethStats = styled(FlexCenter)`
-	gap: 40px;
-	flex-direction: column;
-	${mediaQueries.laptopS} {
-		flex-direction: row;
-	}
-	${mediaQueries.laptopL} {
-		gap: 40px 104px;
+const Donations = styled(Flex)`
+	gap: 16px;
+	${mediaQueries.tablet} {
+		gap: 8px;
 	}
 `;
 
 const Line = styled.div`
 	width: 1px;
 	background: ${neutralColors.gray[300]};
+	height: 40px;
+	display: none;
+	${mediaQueries.tablet} {
+		display: block;
+	}
 `;
 
-const RecentDonations = styled.div`
+const RecentDonations = styled(Flex)`
 	margin-top: 60px;
-	display: flex;
+	overflow: hidden;
 	gap: 40px;
+	flex-direction: column;
+	margin-left: 24px;
+	> * {
+		flex-shrink: 0;
+	}
+	${mediaQueries.tablet} {
+		align-items: center;
+		flex-direction: row;
+		margin-left: 40px;
+	}
 `;
 
 const Stats = styled(Flex)`
@@ -113,7 +122,18 @@ const WhyGiveth = styled(H3)`
 	color: ${brandColors.giv[600]};
 `;
 
-const ContainerStyled = styled(Container)`
+const GivethStats = styled(Container)`
 	position: relative;
 	padding-top: 58px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 40px;
+	flex-direction: column;
+	${mediaQueries.laptopS} {
+		flex-direction: row;
+	}
+	${mediaQueries.laptopL} {
+		gap: 40px 104px;
+	}
 `;
