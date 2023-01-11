@@ -196,8 +196,8 @@ const Header: FC<IHeader> = () => {
 							<Link href={Routes.Home}>
 								<Logo>
 									<Image
-										width='48'
-										height='48'
+										width='60'
+										height='60'
 										alt='Giveth logo'
 										src='/images/logo/logo1.png'
 									/>
