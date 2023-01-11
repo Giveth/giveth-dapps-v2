@@ -36,10 +36,11 @@ export default function WhyGivethIndex() {
 				<Line />
 				<Swiper
 					autoplay={{
-						delay: 1000,
+						delay: 1,
 						pauseOnMouseEnter: true,
 						disableOnInteraction: false,
 					}}
+					speed={3000}
 					slidesPerView='auto'
 					spaceBetween={16}
 				>
@@ -120,6 +121,9 @@ const RecentDonations = styled(Flex)`
 		align-items: center;
 		flex-direction: row;
 		margin-left: 40px;
+	}
+	.swiper-wrapper {
+		transition-timing-function: linear;
 	}
 `;
 
