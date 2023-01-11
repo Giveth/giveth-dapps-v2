@@ -8,7 +8,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper';
 import Image from 'next/image';
 import { Swiper as SwiperClass } from 'swiper/types';
-
 import { useIntl } from 'react-intl';
 import { client } from '@/apollo/apolloClient';
 import { SIMILAR_PROJECTS } from '@/apollo/gql/gqlProjects';

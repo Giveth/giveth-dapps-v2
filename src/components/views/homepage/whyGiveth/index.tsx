@@ -7,9 +7,14 @@ import {
 	Subline,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import StatsCard from '@/components/views/homepage/whyGiveth/StatsCard';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import SwiperCore, { Autoplay } from 'swiper';
 import { Flex } from '@/components/styled-components/Flex';
+import StatsCard from '@/components/views/homepage/whyGiveth/StatsCard';
 import DonationCard from '@/components/views/homepage/whyGiveth/DonationCard';
+import 'swiper/css';
+
+SwiperCore.use([Autoplay]);
 
 export default function WhyGivethIndex() {
 	return (
@@ -29,16 +34,25 @@ export default function WhyGivethIndex() {
 			<RecentDonations>
 				<Subline>RECENT DONATIONS</Subline>
 				<Line />
-				<Donations>
+				<Swiper
+					autoplay={{
+						delay: 1000,
+						pauseOnMouseEnter: true,
+						disableOnInteraction: false,
+					}}
+					slidesPerView='auto'
+					spaceBetween={16}
+				>
 					{donationsArray.map((i, index) => (
-						<DonationCard
-							key={index}
-							address={i.address}
-							amount={i.amount}
-							projectTitle={i.projectTitle}
-						/>
+						<SwiperSlide style={{ width: 'auto' }} key={index}>
+							<DonationCard
+								address={i.address}
+								amount={i.amount}
+								projectTitle={i.projectTitle}
+							/>
+						</SwiperSlide>
 					))}
-				</Donations>
+				</Swiper>
 			</RecentDonations>
 		</>
 	);
@@ -46,9 +60,19 @@ export default function WhyGivethIndex() {
 
 const donationsArray = [
 	{
+		address: '0x6B806496B55908851c498122212dba88d0e4231A',
+		amount: '0.657742344523',
+		projectTitle: 'The Teen Project, Inc.',
+	},
+	{
 		address: '0x49a38e2E232F64a07273256B31449688Fa85D151',
 		amount: '25.657742344523',
 		projectTitle: 'Women of Crypto Art (WOCA)',
+	},
+	{
+		address: '0x6B806496B55908851c498122212dba88d0e4231A',
+		amount: '0.657742344523',
+		projectTitle: 'The Teen Project, Inc.',
 	},
 	{
 		address: '0x4f59bF2F819cc2E62B9eC9709Abf3c0dEae503d6',
@@ -77,13 +101,6 @@ const statsArray = [
 	},
 ];
 
-const Donations = styled(Flex)`
-	gap: 16px;
-	${mediaQueries.tablet} {
-		gap: 8px;
-	}
-`;
-
 const Line = styled.div`
 	width: 1px;
 	background: ${neutralColors.gray[300]};
@@ -96,13 +113,9 @@ const Line = styled.div`
 
 const RecentDonations = styled(Flex)`
 	margin-top: 60px;
-	overflow: hidden;
 	gap: 40px;
 	flex-direction: column;
 	margin-left: 24px;
-	> * {
-		flex-shrink: 0;
-	}
 	${mediaQueries.tablet} {
 		align-items: center;
 		flex-direction: row;

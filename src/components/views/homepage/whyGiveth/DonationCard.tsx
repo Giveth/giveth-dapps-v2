@@ -62,6 +62,7 @@ const CardContainer = styled(Flex)`
 	border: 1px solid ${neutralColors.gray[300]};
 	gap: 8px;
 	flex-direction: column;
+	width: 100%;
 	${mediaQueries.tablet} {
 		border-radius: 100px;
 		flex-direction: row;
