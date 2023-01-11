@@ -32,7 +32,6 @@ export const convertRawDataToHTML = (notification: INotification) => {
 	const { metadata, notificationType } = notification;
 	const { htmlTemplate } = notificationType;
 	if (htmlTemplate[0].type === 'html') {
-		console.log('htmlTemplate', htmlTemplate);
 		return (
 			<StyledHtml
 				as='span'
