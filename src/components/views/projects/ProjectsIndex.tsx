@@ -98,12 +98,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 			)
 				return;
 
-			console.log(
-				Date.now(),
-				'fetchProjects Projects index',
-				JSON.stringify(user),
-			);
-
 			client
 				.query({
 					query: FETCH_ALL_PROJECTS,
@@ -114,11 +108,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 					fetchPolicy: 'network-only',
 				})
 				.then((res: { data: { allProjects: IFetchAllProjects } }) => {
-					console.log(
-						Date.now(),
-						'fetchProjects Projects index done',
-						JSON.stringify(user),
-					);
 					const data = res.data?.allProjects?.projects;
 					const count = res.data?.allProjects?.totalCount;
 					setTotalCount(count);
@@ -130,11 +119,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 					setIsLoading(false);
 				})
 				.catch((err: any) => {
-					console.log(
-						Date.now(),
-						'fetchProjects Projects index fail',
-						JSON.stringify(err),
-					);
 					setIsLoading(false);
 					showToastError(err);
 					captureException(err, {
@@ -149,12 +133,11 @@ const ProjectsIndex = (props: IProjectsView) => {
 			filteredProjects.length,
 			projects.length,
 			router.query?.slug,
-			user,
+			user?.id,
 		],
 	);
 
 	useEffect(() => {
-		console.log(Date.now(), 'user Id changed in Projects index');
 		pageNum.current = 0;
 		fetchProjects(false, 0, true);
 	}, [user?.id]);

@@ -56,26 +56,10 @@ const ProjectCardLikeAndShareButtons = (
 	const likeUnlikeProject = async () => {
 		if (projectId) {
 			setLikeLoading(true);
-			console.log(
-				Date.now(),
-				'Like in likeUnlikeProject',
-				JSON.stringify(user),
-			);
 
 			try {
 				if (!reaction) {
-					console.log(
-						Date.now(),
-						'hasnt reaction start',
-						JSON.stringify(user),
-					);
 					const newReaction = await likeProject(projectId);
-					console.log(
-						Date.now(),
-						'hasnt reaction done',
-						JSON.stringify(user),
-						JSON.stringify(newReaction),
-					);
 					setReaction(newReaction);
 					if (newReaction) {
 						setTotalReactions(
@@ -84,18 +68,7 @@ const ProjectCardLikeAndShareButtons = (
 						dispatch(incrementLikedProjectsCount());
 					}
 				} else if (reaction?.userId === user?.id) {
-					console.log(
-						Date.now(),
-						'has reaction',
-						JSON.stringify(user),
-					);
 					const successful = await unlikeProject(reaction.id);
-					console.log(
-						Date.now(),
-						'has reaction done',
-						JSON.stringify(user),
-						JSON.stringify(successful),
-					);
 					if (successful) {
 						setReaction(undefined);
 						setTotalReactions(
@@ -129,11 +102,6 @@ const ProjectCardLikeAndShareButtons = (
 
 	const checkSignInThenLike = () => {
 		if (typeof window === 'undefined') return;
-		console.log(
-			Date.now(),
-			'Like in checkSignInThenLike',
-			JSON.stringify(user),
-		);
 		if (!isSignedIn) {
 			signInThenLike();
 		} else {
