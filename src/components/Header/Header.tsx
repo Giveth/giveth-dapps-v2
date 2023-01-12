@@ -3,7 +3,7 @@ import { FC, useState, useEffect } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { Button, GLink } from '@giveth/ui-design-system';
+import { Button, GLink, IconMenu24 } from '@giveth/ui-design-system';
 
 import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
@@ -26,13 +26,12 @@ import {
 	CoverLine,
 	SmallCreateProjectParent,
 	LargeCreateProject,
-	MainLogoBtn,
 	HeaderLink,
+	HomeButton,
 } from './Header.sc';
 import { RewardMenu } from '@/components/menu/RewardMenu';
 import MenuWallet from '@/components/menu/MenuWallet';
 import { isUserRegistered, shortenAddress } from '@/lib/helpers';
-import HeaderRoutesResponsive from './HeaderResponsiveRoutes';
 import Routes from '@/lib/constants/Routes';
 import {
 	currentValuesHelper,
@@ -81,6 +80,7 @@ const Header: FC<IHeader> = () => {
 	const router = useRouter();
 	const { formatMessage } = useIntl();
 	const isDesktop = useMediaQuery(device.laptopL);
+	const isMobile = useMediaQuery(device.mobileL);
 
 	const handleBack = () => {
 		const calculateSlug = () => {
@@ -195,19 +195,26 @@ const Header: FC<IHeader> = () => {
 						/>
 					</Logo>
 				) : (
-					<MainLogoBtn>
-						<Link href={Routes.Home}>
-							<Logo>
-								<Image
-									width='50'
-									height='50'
-									alt='Giveth logo'
-									src='/images/logo/logo1.png'
-								/>
-							</Logo>
-						</Link>
-						<HeaderRoutesResponsive />
-					</MainLogoBtn>
+					<Flex gap='24px' alignItems='center'>
+						{isMobile && (
+							<Link href={Routes.Home}>
+								<Logo>
+									<Image
+										width='50'
+										height='50'
+										alt='Giveth logo'
+										src='/images/logo/logo1.png'
+									/>
+								</Logo>
+							</Link>
+						)}
+						{!isDesktop && (
+							<HomeButton gap='4px'>
+								<IconMenu24 />
+								<GLink size='Big'>Home</GLink>
+							</HomeButton>
+						)}
+					</Flex>
 				)}
 			</Flex>
 			{isDesktop && !showBackBtn && (

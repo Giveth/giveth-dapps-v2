@@ -19,9 +19,9 @@ export const StyledHeader = styled(Flex)<IHeader>`
 	left: 0;
 	right: 0;
 	top: ${props => (props.show ? 0 : '-100px')};
-	padding: 16px 32px;
 	z-index: ${zIndex.HEADER};
 	transition: top 0.3s ease;
+	padding: 16px 24px;
 	background: ${props =>
 		props.theme === ETheme.Dark
 			? brandColors.giv[600]
@@ -30,6 +30,9 @@ export const StyledHeader = styled(Flex)<IHeader>`
 		props.theme === ETheme.Dark
 			? '0px 3px 20px rgba(33, 32, 60, 0.24)'
 			: '0px 3px 20px rgba(212, 218, 238, 0.4)'};
+	${mediaQueries.tablet} {
+		padding: 16px 32px;
+	}
 `;
 
 export const Logo = styled.span`
@@ -216,9 +219,7 @@ export const CoverLine = styled.div<IThemed>`
 	border-radius: 48px;
 `;
 
-export const MainLogoBtn = styled.div`
-	display: none;
-	${mediaQueries.laptopL} {
-		display: flex;
-	}
+export const HomeButton = styled(Flex)`
+	padding: 10px 16px;
+	cursor: pointer;
 `;
