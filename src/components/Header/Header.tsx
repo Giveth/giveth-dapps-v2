@@ -212,6 +212,7 @@ const Header: FC<IHeader> = () => {
 			{!showBackBtn && (
 				<HeaderLinks theme={theme}>
 					<LinkWithMenu title='Projects' />
+					<LinkWithMenu title='GIVeconomy' />
 					{menuRoutes.map((link, index) => (
 						<Link href={link.href[0]} key={index}>
 							<HeaderLink
