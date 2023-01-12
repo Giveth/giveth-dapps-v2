@@ -11,6 +11,7 @@ import { ETheme } from '@/features/general/general.slice';
 import { Shadow } from '../styled-components/Shadow';
 import { useAppSelector } from '@/features/hooks';
 import { Flex } from '../styled-components/Flex';
+import { HighlightSection, NormalSection } from './common';
 
 const categories = [
 	{ name: 'Art & Culture', slug: '' },
@@ -31,7 +32,7 @@ export const ProjectsMenu = () => {
 
 	return (
 		<MenuContainer theme={theme}>
-			<TopSection theme={theme}>
+			<HighlightSection theme={theme}>
 				<Caption medium>Explore by</Caption>
 				<ExploreByRow gap='24px'>
 					<B>Trending</B>
@@ -40,8 +41,8 @@ export const ProjectsMenu = () => {
 					<B>Popular</B>
 					<B>All projects</B>
 				</ExploreByRow>
-			</TopSection>
-			<BottomSection>
+			</HighlightSection>
+			<NormalSection>
 				<CategoriesLabel medium>BY CATEGORY</CategoriesLabel>
 				<CategoriesGrid>
 					{categories.map((category, idx) => (
@@ -50,7 +51,7 @@ export const ProjectsMenu = () => {
 						</GLink>
 					))}
 				</CategoriesGrid>
-			</BottomSection>
+			</NormalSection>
 		</MenuContainer>
 	);
 };
@@ -67,23 +68,8 @@ const MenuContainer = styled.div`
 	color: ${brandColors.giv[100]};
 `;
 
-const TopSection = styled.div`
-	padding: 16px;
-	background-color: ${props =>
-		props.theme === ETheme.Dark
-			? brandColors.giv[500]
-			: neutralColors.gray[600]};
-	border-radius: 16px;
-`;
-
 const ExploreByRow = styled(Flex)`
 	margin-top: 16px;
-`;
-
-const BottomSection = styled.div`
-	margin-top: 16px;
-	padding: 8px 16px;
-	border-radius: 16px;
 `;
 
 const CategoriesGrid = styled.div`
