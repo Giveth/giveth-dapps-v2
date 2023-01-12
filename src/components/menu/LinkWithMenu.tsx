@@ -26,7 +26,7 @@ export const LinkWithMenu: FC<ILinkWithMenu> = ({ title, children }) => {
 			theme={theme}
 		>
 			<GLink size='Big'>{title}</GLink>
-			<ArrowContainer up={show}>
+			<ArrowContainer up={show && !isAnimating}>
 				<IconChevronDown24 />
 			</ArrowContainer>
 			{show && (
