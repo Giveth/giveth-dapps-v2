@@ -11,13 +11,11 @@ import { useProjectContext } from '@/context/project.context';
 
 const ProjectHeader = () => {
 	const { projectData } = useProjectContext();
-	const { title, verified, image, adminUser, traceCampaignId } =
-		projectData || {};
+	const { title, verified, image, adminUser } = projectData || {};
 	const [adjustTitle, setAdjustTitle] = useState<boolean>(false);
 	const containerRef = useRef(null);
 
 	const name = adminUser?.name;
-	const traceable = !!traceCampaignId;
 
 	useEffect(() => {
 		const observerHandler = (entries: IntersectionObserverEntry[]) => {
@@ -42,8 +40,7 @@ const ProjectHeader = () => {
 			<TitleSection>
 				<TitleContainer>
 					<BadgeSection>
-						{verified && <VerificationBadge verified />}
-						{traceable && <VerificationBadge trace />}
+						{verified && <VerificationBadge />}
 					</BadgeSection>
 					<Title fixSize={adjustTitle} weight={700}>
 						{title}
