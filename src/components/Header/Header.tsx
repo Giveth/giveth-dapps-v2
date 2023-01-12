@@ -16,7 +16,6 @@ import {
 	HBPic,
 	BalanceButton,
 	HeaderLinks,
-	HeaderLink,
 	StyledHeader,
 	WalletButton,
 	WBInfo,
@@ -28,10 +27,10 @@ import {
 	SmallCreateProjectParent,
 	LargeCreateProject,
 	MainLogoBtn,
+	HeaderLink,
 } from './Header.sc';
 import { RewardMenu } from '@/components/menu/RewardMenu';
 import MenuWallet from '@/components/menu/MenuWallet';
-import { menuRoutes } from '../menu/menuRoutes';
 import { isUserRegistered, shortenAddress } from '@/lib/helpers';
 import HeaderRoutesResponsive from './HeaderResponsiveRoutes';
 import Routes from '@/lib/constants/Routes';
@@ -219,17 +218,11 @@ const Header: FC<IHeader> = () => {
 					<LinkWithMenu title='GIVeconomy'>
 						<GIVeconomyMenu />
 					</LinkWithMenu>
-					{menuRoutes.map((link, index) => (
-						<Link href={link.href[0]} key={index}>
-							<HeaderLink
-								size='Big'
-								theme={theme}
-								active={link.href.includes(router.route)}
-							>
-								{formatMessage({ id: link.title })}
-							</HeaderLink>
+					<HeaderLink theme={theme}>
+						<Link href='\nft'>
+							<GLink>NFTs</GLink>
 						</Link>
-					))}
+					</HeaderLink>
 				</HeaderLinks>
 			)}
 
