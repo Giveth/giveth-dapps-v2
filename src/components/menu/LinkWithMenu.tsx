@@ -23,7 +23,7 @@ export const LinkWithMenu: FC<ILinkWithMenu> = ({ title, children }) => {
 			ref={elRef}
 			theme={theme}
 		>
-			<GLink>{title}</GLink>
+			<GLink size='Big'>{title}</GLink>
 			<ArrowContainer up={show}>
 				<IconChevronDown24 />
 			</ArrowContainer>
