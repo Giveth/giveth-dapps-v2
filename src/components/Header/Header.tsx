@@ -52,6 +52,8 @@ import { useModalCallback } from '@/hooks/useModalCallback';
 import { LinkWithMenu } from '../menu/LinkWithMenu';
 import { ProjectsMenu } from '../menu/ProjectsMenu';
 import { GIVeconomyMenu } from '../menu/GIVeconomyMenu';
+import useMediaQuery from '@/hooks/useMediaQuery';
+import { device } from '@/lib/constants/constants';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -78,6 +80,7 @@ const Header: FC<IHeader> = () => {
 	const theme = useAppSelector(state => state.general.theme);
 	const router = useRouter();
 	const { formatMessage } = useIntl();
+	const isDesktop = useMediaQuery(device.laptopL);
 
 	const handleBack = () => {
 		const calculateSlug = () => {
@@ -192,24 +195,22 @@ const Header: FC<IHeader> = () => {
 						/>
 					</Logo>
 				) : (
-					<>
-						<MainLogoBtn>
-							<Link href={Routes.Home}>
-								<Logo>
-									<Image
-										width='60'
-										height='60'
-										alt='Giveth logo'
-										src='/images/logo/logo1.png'
-									/>
-								</Logo>
-							</Link>
-						</MainLogoBtn>
+					<MainLogoBtn>
+						<Link href={Routes.Home}>
+							<Logo>
+								<Image
+									width='50'
+									height='50'
+									alt='Giveth logo'
+									src='/images/logo/logo1.png'
+								/>
+							</Logo>
+						</Link>
 						<HeaderRoutesResponsive />
-					</>
+					</MainLogoBtn>
 				)}
 			</Flex>
-			{!showBackBtn && (
+			{isDesktop && !showBackBtn && (
 				<HeaderLinks theme={theme}>
 					<LinkWithMenu title='Projects'>
 						<ProjectsMenu />

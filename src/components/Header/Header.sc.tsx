@@ -38,11 +38,11 @@ export const Logo = styled.span`
 	align-items: center;
 	background: ${neutralColors.gray[100]};
 	box-shadow: ${props =>
-		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
+		props.theme === ETheme.Dark ? '' : Shadow.Neutral[400]};
 	border-radius: 99px;
 	padding: 8px;
-	width: 64px;
-	height: 64px;
+	width: 60px;
+	height: 60px;
 	cursor: pointer;
 `;
 
