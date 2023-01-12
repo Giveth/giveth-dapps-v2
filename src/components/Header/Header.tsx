@@ -233,7 +233,7 @@ const Header: FC<IHeader> = () => {
 							id: 'component.button.create_project',
 						})}
 						size='small'
-						buttonType={isLight ? 'primary' : 'secondary'}
+						buttonType='primary'
 						onClick={handleCreateButton}
 					/>
 				</LargeCreateProject>
@@ -242,7 +242,7 @@ const Header: FC<IHeader> = () => {
 						onClick={handleCreateButton}
 						theme={theme}
 						label='+'
-						linkType={isLight ? 'primary' : 'secondary'}
+						linkType='primary'
 					/>
 				</SmallCreateProjectParent>
 				{active && account && chainId ? (
