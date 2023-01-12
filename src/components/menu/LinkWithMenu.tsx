@@ -7,9 +7,10 @@ import { FlexCenter } from '../styled-components/Flex';
 
 interface ILinkWithMenu {
 	title: string;
+	children: ReactNode;
 }
 
-export const LinkWithMenu: FC<ILinkWithMenu> = ({ title }) => {
+export const LinkWithMenu: FC<ILinkWithMenu> = ({ title, children }) => {
 	const [show, setShow] = useState(false);
 	const elRef = useRef<HTMLDivElement>(null);
 
@@ -23,27 +24,7 @@ export const LinkWithMenu: FC<ILinkWithMenu> = ({ title }) => {
 			<ArrowContainer up={show}>
 				<IconChevronDown24 />
 			</ArrowContainer>
-			{show && (
-				<Menu parentRef={elRef}>
-					<div
-						style={{
-							padding: '10px 16px',
-							backgroundColor: 'red',
-						}}
-					>
-						salam salam salam salam salam salam salam
-						<br />
-						salam salam salam salam salam salam salam
-						<br />
-						salam salam salam salam salam salam salam
-						<br />
-						salam salam salam salam salam salam salam
-						<br />
-						salam salam salam salam salam salam salam
-						<br />
-					</div>
-				</Menu>
-			)}
+			{show && <Menu parentRef={elRef}>{children}</Menu>}
 		</LinkWithMenuContainer>
 	);
 };

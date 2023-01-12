@@ -51,6 +51,8 @@ import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { IconGIV } from '../Icons/GIV';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import { LinkWithMenu } from '../menu/LinkWithMenu';
+import { ProjectsMenu } from '../menu/ProjectsMenu';
+import { GIVeconomyMenu } from '../menu/GIVeconomyMenu';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -211,8 +213,12 @@ const Header: FC<IHeader> = () => {
 			</Flex>
 			{!showBackBtn && (
 				<HeaderLinks theme={theme}>
-					<LinkWithMenu title='Projects' />
-					<LinkWithMenu title='GIVeconomy' />
+					<LinkWithMenu title='Projects'>
+						<ProjectsMenu />
+					</LinkWithMenu>
+					<LinkWithMenu title='GIVeconomy'>
+						<GIVeconomyMenu />
+					</LinkWithMenu>
 					{menuRoutes.map((link, index) => (
 						<Link href={link.href[0]} key={index}>
 							<HeaderLink
