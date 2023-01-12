@@ -22,6 +22,6 @@ export const HighlightSection = styled.div`
 	background-color: ${props =>
 		props.theme === ETheme.Dark
 			? brandColors.giv[500]
-			: neutralColors.gray[600]};
+			: neutralColors.gray[200]};
 	border-radius: 16px;
 `;
