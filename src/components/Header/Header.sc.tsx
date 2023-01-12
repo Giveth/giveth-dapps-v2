@@ -160,8 +160,8 @@ export const HeaderLink = styled(GLink)<IHeaderLinkProps>`
 	&:hover {
 		background-color: ${props =>
 			props.theme === ETheme.Dark
-				? brandColors.giv[800]
-				: neutralColors.gray[200]};
+				? brandColors.giv[300]
+				: brandColors.giv[50]};
 	}
 `;
 
