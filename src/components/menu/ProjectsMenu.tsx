@@ -1,17 +1,9 @@
-import {
-	B,
-	brandColors,
-	Caption,
-	GLink,
-	neutralColors,
-} from '@giveth/ui-design-system';
+import { B, Caption, GLink } from '@giveth/ui-design-system';
 import React from 'react';
 import styled from 'styled-components';
-import { ETheme } from '@/features/general/general.slice';
-import { Shadow } from '../styled-components/Shadow';
 import { useAppSelector } from '@/features/hooks';
 import { Flex } from '../styled-components/Flex';
-import { HighlightSection, NormalSection } from './common';
+import { HighlightSection, MenuContainer } from './common';
 
 const categories = [
 	{ name: 'Art & Culture', slug: '' },
@@ -56,20 +48,14 @@ export const ProjectsMenu = () => {
 	);
 };
 
-const MenuContainer = styled.div`
-	width: 697px;
-	padding: 16px;
-	background-color: ${props =>
-		props.theme === ETheme.Dark
-			? brandColors.giv[600]
-			: neutralColors.gray[100]};
-	border-radius: 16px;
-	box-shadow: ${Shadow.Dark[500]};
-	color: ${brandColors.giv[100]};
-`;
-
 const ExploreByRow = styled(Flex)`
 	margin-top: 16px;
+`;
+
+const NormalSection = styled.div`
+	margin-top: 16px;
+	padding: 8px 16px;
+	border-radius: 16px;
 `;
 
 const CategoriesGrid = styled.div`
