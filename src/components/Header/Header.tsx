@@ -78,7 +78,6 @@ const Header: FC<IHeader> = () => {
 	const theme = useAppSelector(state => state.general.theme);
 	const router = useRouter();
 	const { formatMessage } = useIntl();
-	const isLight = theme === ETheme.Light;
 
 	const handleBack = () => {
 		const calculateSlug = () => {
