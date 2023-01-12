@@ -7,14 +7,9 @@ import {
 	Subline,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import SwiperCore, { Autoplay } from 'swiper';
 import { Flex } from '@/components/styled-components/Flex';
 import StatsCard from '@/components/views/homepage/whyGiveth/StatsCard';
 import DonationCard from '@/components/views/homepage/whyGiveth/DonationCard';
-import 'swiper/css';
-
-SwiperCore.use([Autoplay]);
 
 export default function WhyGivethIndex() {
 	return (
@@ -34,26 +29,18 @@ export default function WhyGivethIndex() {
 			<RecentDonations>
 				<Subline>RECENT DONATIONS</Subline>
 				<Line />
-				<Swiper
-					autoplay={{
-						delay: 1,
-						pauseOnMouseEnter: true,
-						disableOnInteraction: false,
-					}}
-					speed={3000}
-					slidesPerView='auto'
-					spaceBetween={16}
-				>
-					{donationsArray.map((i, index) => (
-						<SwiperSlide style={{ width: 'auto' }} key={index}>
+				<DonationCardWrapper>
+					<DonationCardContainer>
+						{donationsArray.map((i, index) => (
 							<DonationCard
+								key={index}
 								address={i.address}
 								amount={i.amount}
 								projectTitle={i.projectTitle}
 							/>
-						</SwiperSlide>
-					))}
-				</Swiper>
+						))}
+					</DonationCardContainer>
+				</DonationCardWrapper>
 			</RecentDonations>
 		</>
 	);
@@ -102,6 +89,23 @@ const statsArray = [
 	},
 ];
 
+const DonationCardWrapper = styled.div`
+	overflow: hidden;
+`;
+
+const DonationCardContainer = styled(Flex)`
+	transform: translate3d(0, 0, 0);
+	animation: moveSlideshow 10s linear infinite;
+	:hover {
+		animation-play-state: paused;
+	}
+	@keyframes moveSlideshow {
+		100% {
+			transform: translateX(-100%);
+		}
+	}
+`;
+
 const Line = styled.div`
 	width: 1px;
 	background: ${neutralColors.gray[300]};
@@ -114,16 +118,14 @@ const Line = styled.div`
 
 const RecentDonations = styled(Flex)`
 	margin-top: 60px;
-	gap: 40px;
+	gap: 4px;
 	flex-direction: column;
 	margin-left: 24px;
 	${mediaQueries.tablet} {
+		gap: 40px;
 		align-items: center;
 		flex-direction: row;
 		margin-left: 40px;
-	}
-	.swiper-wrapper {
-		transition-timing-function: linear;
 	}
 	> div:first-of-type {
 		flex-shrink: 0;

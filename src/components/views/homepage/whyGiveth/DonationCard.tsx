@@ -59,7 +59,7 @@ const Amount = styled(B)`
 `;
 
 const CardWrapper = styled.div`
-	padding: 24px 8px;
+	padding: 20px 8px;
 `;
 
 const CardContainer = styled(Flex)`
@@ -69,6 +69,7 @@ const CardContainer = styled(Flex)`
 	border: 1px solid ${neutralColors.gray[300]};
 	flex-direction: column;
 	width: 100%;
+	background: white;
 	:hover {
 		box-shadow: ${Shadow.Ocean[400]};
 	}
