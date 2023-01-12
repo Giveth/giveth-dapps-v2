@@ -143,20 +143,7 @@ interface IHeaderLinkProps {
 }
 
 export const HeaderLinks = styled(Flex)<IThemed>`
-	background-color: ${props =>
-		props.theme === ETheme.Dark ? brandColors.giv[900] : 'white'};
-	border: 1px solid
-		${props =>
-			props.theme === ETheme.Dark ? brandColors.giv[600] : 'white'};
-	border-radius: 48px;
-	padding: 6px;
 	gap: 8px;
-	display: none;
-	box-shadow: ${props =>
-		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
-	${mediaQueries.laptopL} {
-		display: flex;
-	}
 `;
 
 export const HeaderLink = styled(GLink)<IHeaderLinkProps>`
