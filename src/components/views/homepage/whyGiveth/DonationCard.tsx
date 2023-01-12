@@ -8,6 +8,7 @@ import {
 } from '@giveth/ui-design-system';
 import { Flex } from '@/components/styled-components/Flex';
 import { shortenAddress } from '@/lib/helpers';
+import { Shadow } from '@/components/styled-components/Shadow';
 
 interface IDonationCard {
 	address: string;
@@ -18,19 +19,21 @@ interface IDonationCard {
 const DonationCard: FC<IDonationCard> = props => {
 	const { address, amount, projectTitle } = props;
 	return (
-		<CardContainer>
-			<Section>
-				<B>{'@' + shortenAddress(address)}</B>
-				<div>donated</div>
-				<Amount>{'~$' + Number(amount).toFixed(1)}</Amount>
-			</Section>
-			<Section>
-				<Arrow>
-					<IconArrowRight />
-				</Arrow>
-				<Title>{projectTitle}</Title>
-			</Section>
-		</CardContainer>
+		<CardWrapper>
+			<CardContainer>
+				<Section>
+					<B>{'@' + shortenAddress(address)}</B>
+					<div>donated</div>
+					<Amount>{'~$' + Number(amount).toFixed(1)}</Amount>
+				</Section>
+				<Section>
+					<Arrow>
+						<IconArrowRight />
+					</Arrow>
+					<Title>{projectTitle}</Title>
+				</Section>
+			</CardContainer>
+		</CardWrapper>
 	);
 };
 
@@ -55,14 +58,20 @@ const Amount = styled(B)`
 	background: ${neutralColors.gray[300]};
 `;
 
+const CardWrapper = styled.div`
+	padding: 24px 8px;
+`;
+
 const CardContainer = styled(Flex)`
 	color: ${neutralColors.gray[700]};
 	padding: 8px 24px;
 	border-radius: 12px;
 	border: 1px solid ${neutralColors.gray[300]};
-	gap: 8px;
 	flex-direction: column;
 	width: 100%;
+	:hover {
+		box-shadow: ${Shadow.Ocean[400]};
+	}
 	${mediaQueries.tablet} {
 		border-radius: 100px;
 		flex-direction: row;

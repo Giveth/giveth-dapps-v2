@@ -125,6 +125,9 @@ const RecentDonations = styled(Flex)`
 	.swiper-wrapper {
 		transition-timing-function: linear;
 	}
+	> div:first-of-type {
+		flex-shrink: 0;
+	}
 `;
 
 const Stats = styled(Flex)`
