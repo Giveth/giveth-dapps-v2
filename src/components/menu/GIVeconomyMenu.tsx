@@ -78,7 +78,7 @@ const MenuItem = styled(Flex)`
 		background-color: ${props =>
 			props.theme === ETheme.Dark
 				? brandColors.giv[500]
-				: neutralColors.gray[600]};
+				: neutralColors.gray[200]};
 	}
 	border-radius: 8px;
 	margin: 8px 0;
@@ -87,8 +87,10 @@ const MenuItem = styled(Flex)`
 
 const Title = styled(GLink)`
 	color: ${brandColors.giv[200]};
+	color: ${props =>
+		props.theme === ETheme.Dark
+			? brandColors.giv[200]
+			: neutralColors.gray[600]};
 `;
 
-const Label = styled(GLink)`
-	color: ${neutralColors.gray[100]};
-`;
+const Label = styled(GLink)``;

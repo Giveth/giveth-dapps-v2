@@ -11,7 +11,10 @@ export const BaseMenuContainer = styled.div`
 			: neutralColors.gray[100]};
 	border-radius: 16px;
 	box-shadow: ${Shadow.Dark[500]};
-	color: ${brandColors.giv[100]};
+	color: ${props =>
+		props.theme === ETheme.Dark
+			? neutralColors.gray[100]
+			: neutralColors.gray[900]};
 `;
 
 export const HighlightSection = styled.div`
