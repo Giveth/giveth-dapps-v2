@@ -48,21 +48,26 @@ export const GIVeconomyMenu = () => {
 						/>
 					</Flex>
 				</HighlightSection>
-				{items.map((item, idx) => (
-					<Link key={idx} href={item.href}>
-						<MenuItem theme={theme}>
-							<Title size='Small'>{item.title}</Title>
-							<Label size='Big'>{item.label}</Label>
-						</MenuItem>
-					</Link>
-				))}
 			</Link>
+			<LearnStyle medium>Learn about</LearnStyle>
+			{items.map((item, idx) => (
+				<Link key={idx} href={item.href}>
+					<MenuItem theme={theme}>
+						<Title size='Small'>{item.title}</Title>
+						<Label size='Big'>{item.label}</Label>
+					</MenuItem>
+				</Link>
+			))}
 		</MenuContainer>
 	);
 };
 
 const MenuContainer = styled(BaseMenuContainer)`
 	width: 239px;
+`;
+
+const LearnStyle = styled(Caption)`
+	margin: 24px 16px 16px;
 `;
 
 const MenuItem = styled(Flex)`
