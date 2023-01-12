@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { zIndex } from '@/lib/constants/constants';
 import { useAppSelector } from '@/features/hooks';
 import { HeaderLink } from '../Header/Header.sc';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 interface ILinkWithMenu {
 	title: string;
@@ -15,11 +16,12 @@ export const LinkWithMenu: FC<ILinkWithMenu> = ({ title, children }) => {
 	const [show, setShow] = useState(false);
 	const elRef = useRef<HTMLDivElement>(null);
 	const theme = useAppSelector(state => state.general.theme);
+	const { isAnimating, closeModal: closeMenu } = useModalAnimation(setShow);
 
 	return (
 		<LinkWithMenuContainer
 			onMouseEnter={() => setShow(true)}
-			onMouseLeave={() => setShow(false)}
+			onMouseLeave={closeMenu}
 			ref={elRef}
 			theme={theme}
 		>
@@ -27,7 +29,11 @@ export const LinkWithMenu: FC<ILinkWithMenu> = ({ title, children }) => {
 			<ArrowContainer up={show}>
 				<IconChevronDown24 />
 			</ArrowContainer>
-			{show && <Menu parentRef={elRef}>{children}</Menu>}
+			{show && (
+				<Menu isAnimating={isAnimating} parentRef={elRef}>
+					{children}
+				</Menu>
+			)}
 		</LinkWithMenuContainer>
 	);
 };
@@ -53,10 +59,11 @@ const ArrowContainer = styled.span<{ up: boolean }>`
 
 interface IMenuProps {
 	parentRef: RefObject<HTMLDivElement>;
+	isAnimating: boolean;
 	children: ReactNode;
 }
 
-export const Menu: FC<IMenuProps> = ({ parentRef, children }) => {
+export const Menu: FC<IMenuProps> = ({ parentRef, isAnimating, children }) => {
 	const el = useRef(document.createElement('div'));
 
 	useEffect(() => {
@@ -73,6 +80,7 @@ export const Menu: FC<IMenuProps> = ({ parentRef, children }) => {
 
 	return createPortal(
 		<MenuContainer
+			isAnimating={isAnimating}
 			style={{
 				top: parentRef?.current?.getBoundingClientRect().bottom,
 				left: parentRef?.current?.getBoundingClientRect().left,
@@ -84,7 +92,7 @@ export const Menu: FC<IMenuProps> = ({ parentRef, children }) => {
 	);
 };
 
-const MenuContainer = styled.div`
+const MenuContainer = styled.div<{ isAnimating: boolean }>`
 	position: fixed;
 	color: #fff;
 	border-radius: 6px;
@@ -92,4 +100,6 @@ const MenuContainer = styled.div`
 	z-index: ${zIndex.MODAL};
 	top: 0;
 	left: 0;
+	opacity: ${props => (props.isAnimating ? 0 : 1)};
+	transition: opacity 0.3s ease;
 `;
