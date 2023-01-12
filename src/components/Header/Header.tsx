@@ -53,6 +53,8 @@ import { ProjectsMenu } from '../menu/ProjectsMenu';
 import { GIVeconomyMenu } from '../menu/GIVeconomyMenu';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
+import { ESideBarDirection, SideBar } from '../SideBar';
+import { useDelayedState } from '@/hooks/useDelayedState';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -66,6 +68,9 @@ const Header: FC<IHeader> = () => {
 	const [showHeader, setShowHeader] = useState(true);
 	const [isGIVeconomyRoute, setIsGIVeconomyRoute] = useState(false);
 	const [showBackBtn, setShowBackBtn] = useState(false);
+
+	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
+		useDelayedState();
 
 	const { chainId, active, account, library } = useWeb3React();
 	const sdh = new SubgraphDataHelper(
@@ -209,7 +214,7 @@ const Header: FC<IHeader> = () => {
 							</Link>
 						)}
 						{!isDesktop && (
-							<HomeButton gap='4px'>
+							<HomeButton gap='4px' onClick={openSidebar}>
 								<IconMenu24 />
 								<GLink size='Big'>Home</GLink>
 							</HomeButton>
@@ -328,6 +333,15 @@ const Header: FC<IHeader> = () => {
 					/>
 				)}
 			</Flex>
+			{sidebarCondition && (
+				<SideBar
+					close={closeSidebar}
+					isAnimating={showSidebar}
+					direction={ESideBarDirection.Left}
+				>
+					sidebaarrrrrrrrr
+				</SideBar>
+			)}
 		</StyledHeader>
 	);
 };
