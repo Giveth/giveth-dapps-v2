@@ -50,6 +50,7 @@ import { slugToProjectView } from '@/lib/routeCreators';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { IconGIV } from '../Icons/GIV';
 import { useModalCallback } from '@/hooks/useModalCallback';
+import { LinkWithMenu } from '../LinkWithMenu';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -210,6 +211,7 @@ const Header: FC<IHeader> = () => {
 			</Flex>
 			{!showBackBtn && (
 				<HeaderLinks theme={theme}>
+					<LinkWithMenu title='Projects' />
 					{menuRoutes.map((link, index) => (
 						<Link href={link.href[0]} key={index}>
 							<HeaderLink
