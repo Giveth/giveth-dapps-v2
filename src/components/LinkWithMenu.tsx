@@ -1,8 +1,9 @@
-import { GLink } from '@giveth/ui-design-system';
+import { GLink, IconChevronDown24 } from '@giveth/ui-design-system';
 import { FC, ReactNode, RefObject, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import { zIndex } from '@/lib/constants/constants';
+import { FlexCenter } from './styled-components/Flex';
 
 interface ILinkWithMenu {
 	title: string;
@@ -13,16 +14,15 @@ export const LinkWithMenu: FC<ILinkWithMenu> = ({ title }) => {
 	const elRef = useRef<HTMLDivElement>(null);
 
 	return (
-		<GLink
+		<LinkWithMenuContainer
 			onMouseEnter={() => setShow(true)}
 			onMouseLeave={() => setShow(false)}
 			ref={elRef}
-			style={{
-				padding: '10px 16px',
-				backgroundColor: 'red',
-			}}
 		>
-			{title}
+			<GLink>{title}</GLink>
+			<ArrowContainer up={show}>
+				<IconChevronDown24 />
+			</ArrowContainer>
 			{show && (
 				<Menu parentRef={elRef}>
 					<div
@@ -44,9 +44,29 @@ export const LinkWithMenu: FC<ILinkWithMenu> = ({ title }) => {
 					</div>
 				</Menu>
 			)}
-		</GLink>
+		</LinkWithMenuContainer>
 	);
 };
+
+const LinkWithMenuContainer = styled(FlexCenter)`
+	padding: 10px 42px 10px 16px;
+	background-color: red;
+	cursor: pointer;
+	position: relative;
+`;
+
+const ArrowContainer = styled.span<{ up: boolean }>`
+	position: relative;
+	margin-left: 10px;
+	width: 24px;
+	height: 24px;
+	display: inline-block;
+	transition: transform 0.3s ease;
+	transform: ${props => (props.up ? 'rotate(-180deg)' : 'rotate(0deg)')};
+	position: absolute;
+	top: 9px;
+	right: 10px;
+`;
 
 interface IMenuProps {
 	parentRef: RefObject<HTMLDivElement>;
