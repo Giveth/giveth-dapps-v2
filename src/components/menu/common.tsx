@@ -3,8 +3,7 @@ import styled from 'styled-components';
 import { ETheme } from '@/features/general/general.slice';
 import { Shadow } from '../styled-components/Shadow';
 
-export const MenuContainer = styled.div`
-	width: 697px;
+export const BaseMenuContainer = styled.div`
 	padding: 16px;
 	background-color: ${props =>
 		props.theme === ETheme.Dark

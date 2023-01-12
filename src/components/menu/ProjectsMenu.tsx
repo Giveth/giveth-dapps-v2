@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useAppSelector } from '@/features/hooks';
 import { Flex } from '../styled-components/Flex';
-import { HighlightSection, MenuContainer } from './common';
+import { HighlightSection, BaseMenuContainer } from './common';
 
 const categories = [
 	{ name: 'Art & Culture', slug: '' },
@@ -47,6 +47,10 @@ export const ProjectsMenu = () => {
 		</MenuContainer>
 	);
 };
+
+const MenuContainer = styled(BaseMenuContainer)`
+	width: 697px;
+`;
 
 const ExploreByRow = styled(Flex)`
 	margin-top: 16px;
