@@ -1,12 +1,21 @@
-import { Button, Container, H3, neutralColors } from '@giveth/ui-design-system';
+import {
+	ButtonLink,
+	Container,
+	H3,
+	IconBulbOutline32,
+	IconDonation32,
+	IconSpark32,
+	neutralColors,
+} from '@giveth/ui-design-system';
 import React from 'react';
 import styled from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
+import IntroCard from './IntroCard';
 
 const IntroBlock = () => {
 	return (
 		<Container>
-			<IntroBlockContainer>
+			<IntroContainer>
 				<Flex justifyContent='space-around'>
 					<IntroTitle>
 						<H3 weight={700}>
@@ -15,23 +24,63 @@ const IntroBlock = () => {
 							society, and to the world!
 						</H3>
 						<ButtonsContainer gap='16px'>
-							<Button label='Explore projects' />
-							<Button
-								buttonType='texty-secondary'
+							<ButtonLink label='Explore projects' />
+							<ButtonLink
+								linkType='texty-secondary'
 								label='Our mission'
 							/>
 						</ButtonsContainer>
 					</IntroTitle>
 					<div>Image</div>
 				</Flex>
-			</IntroBlockContainer>
+				<IntroCards justifyContent='space-between' gap='40px'>
+					<IntroCard
+						Icon={<IconDonation32 />}
+						LinkComponent={
+							<ButtonLink
+								linkType='texty-secondary'
+								label='HOW IT WORKS	'
+							/>
+						}
+						title='Zero fees'
+						description='Create a project or donate directly to for-good projects with zero fees.
+'
+					/>
+					<IntroCard
+						Icon={<IconBulbOutline32 />}
+						LinkComponent={
+							<ButtonLink
+								linkType='texty-secondary'
+								label='HOW IT WORKS	'
+							/>
+						}
+						title='Earn rewards'
+						description='By donating crypto to verified projects, you get rewarded!
+
+'
+					/>
+					<IntroCard
+						Icon={<IconSpark32 />}
+						LinkComponent={
+							<ButtonLink
+								linkType='texty-secondary'
+								label='HOW IT WORKS	'
+							/>
+						}
+						title='Easy onboarding'
+						description='New to crypto? No Problem Start right here
+
+'
+					/>
+				</IntroCards>
+			</IntroContainer>
 		</Container>
 	);
 };
 
-const IntroBlockContainer = styled.div`
+const IntroContainer = styled.div`
 	margin-top: 200px;
-	background-color: ${neutralColors.gray[100]};
+	/* background-color: ${neutralColors.gray[100]}; */
 `;
 
 const IntroTitle = styled.div`
@@ -45,6 +94,10 @@ const UnderlinedText = styled.span`
 
 const ButtonsContainer = styled(Flex)`
 	margin-top: 16px;
+`;
+
+const IntroCards = styled(Flex)`
+	margin-top: 40px;
 `;
 
 export default IntroBlock;
