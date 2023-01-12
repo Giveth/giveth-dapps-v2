@@ -22,6 +22,14 @@ export const StyledHeader = styled(Flex)<IHeader>`
 	padding: 16px 32px;
 	z-index: ${zIndex.HEADER};
 	transition: top 0.3s ease;
+	background: ${props =>
+		props.theme === ETheme.Dark
+			? brandColors.giv[600]
+			: neutralColors.gray[100]};
+	box-shadow: ${props =>
+		props.theme === ETheme.Dark
+			? '0px 3px 20px rgba(33, 32, 60, 0.24)'
+			: '0px 3px 20px rgba(212, 218, 238, 0.4)'};
 `;
 
 export const Logo = styled.span`
