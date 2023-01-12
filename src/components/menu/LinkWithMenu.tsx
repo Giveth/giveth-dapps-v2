@@ -50,7 +50,6 @@ export const LinkWithMenu: FC<ILinkWithMenu> = ({ title }) => {
 
 const LinkWithMenuContainer = styled(FlexCenter)`
 	padding: 10px 42px 10px 16px;
-	background-color: red;
 	cursor: pointer;
 	position: relative;
 `;
