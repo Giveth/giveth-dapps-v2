@@ -3,7 +3,7 @@ import { FC, ReactNode, RefObject, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import { zIndex } from '@/lib/constants/constants';
-import { FlexCenter } from './styled-components/Flex';
+import { FlexCenter } from '../styled-components/Flex';
 
 interface ILinkWithMenu {
 	title: string;

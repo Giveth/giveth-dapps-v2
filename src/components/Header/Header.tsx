@@ -50,7 +50,7 @@ import { slugToProjectView } from '@/lib/routeCreators';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { IconGIV } from '../Icons/GIV';
 import { useModalCallback } from '@/hooks/useModalCallback';
-import { LinkWithMenu } from '../LinkWithMenu';
+import { LinkWithMenu } from '../menu/LinkWithMenu';
 
 export interface IHeader {
 	theme?: ETheme;
