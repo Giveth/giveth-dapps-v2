@@ -3,7 +3,8 @@ import { FC, ReactNode, RefObject, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import { zIndex } from '@/lib/constants/constants';
-import { FlexCenter } from '../styled-components/Flex';
+import { useAppSelector } from '@/features/hooks';
+import { HeaderLink } from '../Header/Header.sc';
 
 interface ILinkWithMenu {
 	title: string;
@@ -13,12 +14,14 @@ interface ILinkWithMenu {
 export const LinkWithMenu: FC<ILinkWithMenu> = ({ title, children }) => {
 	const [show, setShow] = useState(false);
 	const elRef = useRef<HTMLDivElement>(null);
+	const theme = useAppSelector(state => state.general.theme);
 
 	return (
 		<LinkWithMenuContainer
 			onMouseEnter={() => setShow(true)}
 			onMouseLeave={() => setShow(false)}
 			ref={elRef}
+			theme={theme}
 		>
 			<GLink>{title}</GLink>
 			<ArrowContainer up={show}>
@@ -29,7 +32,7 @@ export const LinkWithMenu: FC<ILinkWithMenu> = ({ title, children }) => {
 	);
 };
 
-const LinkWithMenuContainer = styled(FlexCenter)`
+const LinkWithMenuContainer = styled(HeaderLink)`
 	padding: 10px 42px 10px 16px;
 	cursor: pointer;
 	position: relative;
