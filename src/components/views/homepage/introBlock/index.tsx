@@ -11,8 +11,11 @@ import React from 'react';
 import styled from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
 import IntroCard from './IntroCard';
+import useDetectDevice from '@/hooks/useDetectDevice';
 
 const IntroBlock = () => {
+	const { isMobile } = useDetectDevice();
+
 	return (
 		<Container>
 			<IntroContainer>
@@ -33,7 +36,12 @@ const IntroBlock = () => {
 					</IntroTitle>
 					<div>Image</div>
 				</Flex>
-				<IntroCards justifyContent='space-between' gap='40px'>
+				<IntroCards
+					justifyContent='space-between'
+					gap='24px'
+					flexDirection={!isMobile ? 'row' : 'column'}
+					alignItems={!isMobile ? 'stretch' : 'center'}
+				>
 					<IntroCard
 						Icon={<IconDonation32 />}
 						LinkComponent={
