@@ -1,11 +1,11 @@
 import { GLink, IconChevronDown24 } from '@giveth/ui-design-system';
-import { FC, ReactNode, RefObject, useEffect, useRef, useState } from 'react';
+import { FC, ReactNode, RefObject, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import { zIndex } from '@/lib/constants/constants';
 import { useAppSelector } from '@/features/hooks';
 import { HeaderLink } from '../Header/Header.sc';
-import { useModalAnimation } from '@/hooks/useModalAnimation';
+import { useDelayedState } from '@/hooks/useDelayedState';
 
 interface ILinkWithMenu {
 	title: string;
@@ -13,24 +13,23 @@ interface ILinkWithMenu {
 }
 
 export const LinkWithMenu: FC<ILinkWithMenu> = ({ title, children }) => {
-	const [show, setShow] = useState(false);
 	const elRef = useRef<HTMLDivElement>(null);
 	const theme = useAppSelector(state => state.general.theme);
-	const { isAnimating, closeModal: closeMenu } = useModalAnimation(setShow);
+	const [showMenu, menuCondition, openMenu, closeMenu] = useDelayedState();
 
 	return (
 		<LinkWithMenuContainer
-			onMouseEnter={() => setShow(true)}
+			onMouseEnter={openMenu}
 			onMouseLeave={closeMenu}
 			ref={elRef}
 			theme={theme}
 		>
 			<GLink size='Big'>{title}</GLink>
-			<ArrowContainer up={show && !isAnimating}>
+			<ArrowContainer up={showMenu}>
 				<IconChevronDown24 />
 			</ArrowContainer>
-			{show && (
-				<Menu isAnimating={isAnimating} parentRef={elRef}>
+			{menuCondition && (
+				<Menu isAnimating={showMenu} parentRef={elRef}>
 					{children}
 				</Menu>
 			)}
@@ -100,6 +99,6 @@ const MenuContainer = styled.div<{ isAnimating: boolean }>`
 	z-index: ${zIndex.MODAL};
 	top: 0;
 	left: 0;
-	opacity: ${props => (props.isAnimating ? 0 : 1)};
+	opacity: ${props => (props.isAnimating ? 1 : 0)};
 	transition: opacity 0.3s ease;
 `;
