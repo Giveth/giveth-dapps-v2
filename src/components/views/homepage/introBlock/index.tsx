@@ -39,7 +39,9 @@ const IntroBlock = () => {
 							</H3>
 							<ButtonsContainer gap='16px'>
 								<ButtonLink
-									label='Explore projects'
+									label={formatMessage({
+										id: 'label.explore_projects',
+									})}
 									icon={<IconChevronRight24 />}
 								/>
 								<ButtonLink
