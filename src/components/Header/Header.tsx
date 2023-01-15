@@ -204,7 +204,6 @@ const Header: FC<IHeader> = () => {
 					</HeaderLink>
 				</HeaderLinks>
 			)}
-
 			<Flex gap='8px'>
 				<LargeCreateProject>
 					<Button
@@ -257,7 +256,6 @@ const Header: FC<IHeader> = () => {
 					close={closeSidebar}
 					isAnimating={showSidebar}
 					direction={ESideBarDirection.Left}
-					header={<div>WOW</div>}
 				>
 					sidebaarrrrrrrrr
 				</SideBar>

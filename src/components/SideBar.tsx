@@ -3,7 +3,7 @@ import React, { FC, ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styled, { css } from 'styled-components';
 import { zIndex } from '@/lib/constants/constants';
-import { FlexCenter } from './styled-components/Flex';
+import { Flex, FlexCenter } from './styled-components/Flex';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 
@@ -69,8 +69,8 @@ export const SideBar: FC<ISideBar> = ({
 					e.stopPropagation();
 				}}
 			>
-				<HeaderContainer>
-					{header && header}
+				<HeaderContainer direction={direction}>
+					<HeaderWrapper>{header && header}</HeaderWrapper>
 					{showClose && (
 						<CloseWrapper onClick={close} direction={direction}>
 							<IconX24 />
@@ -127,15 +127,19 @@ const SidebarContainer = styled.div<{
 	}};
 `;
 
-const HeaderContainer = styled.div`
-	display: grid;
-	grid-template: 48px / auto 48px;
+const HeaderContainer = styled(Flex)<{ direction: ESideBarDirection }>`
 	padding: 8px 16px;
+	position: relative;
+	height: 64px;
+	flex-direction: ${props =>
+		props.direction === ESideBarDirection.Left ? 'row' : 'row-reverse'};
+`;
+
+const HeaderWrapper = styled(Flex)`
+	flex: 1;
 `;
 
 const CloseWrapper = styled.div<{ direction: ESideBarDirection }>`
 	padding: 12px;
 	cursor: pointer;
-	justify-self: ${props =>
-		props.direction === ESideBarDirection.Left ? 'flex-end' : 'flex-start'};
 `;
