@@ -46,7 +46,9 @@ const IntroBlock = () => {
 								/>
 								<ButtonLink
 									linkType='texty-secondary'
-									label='Our mission'
+									label={formatMessage({
+										id: 'label.our_mission',
+									})}
 									icon={<IconChevronRight24 />}
 								/>
 							</ButtonsContainer>
