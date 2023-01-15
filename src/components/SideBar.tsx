@@ -17,6 +17,7 @@ interface ISideBar {
 	isAnimating: boolean;
 	direction: ESideBarDirection;
 	showClose?: boolean;
+	header?: ReactNode;
 	children: ReactNode;
 }
 
@@ -25,6 +26,7 @@ export const SideBar: FC<ISideBar> = ({
 	isAnimating,
 	direction,
 	showClose = true,
+	header,
 	children,
 }) => {
 	const theme = useAppSelector(state => state.general.theme);
@@ -60,13 +62,14 @@ export const SideBar: FC<ISideBar> = ({
 			}}
 		>
 			<SidebarContainer isAnimating={isAnimating} theme={theme}>
-				<HeaderWrapper>
+				<HeaderContainer>
+					{header && header}
 					{showClose && (
 						<CloseWrapper onClick={close} direction={direction}>
-							<IconX24 />{' '}
+							<IconX24 />
 						</CloseWrapper>
 					)}
-				</HeaderWrapper>
+				</HeaderContainer>
 				{children}
 			</SidebarContainer>
 		</Background>,
@@ -108,8 +111,9 @@ const SidebarContainer = styled.div<{ isAnimating: boolean }>`
 			: neutralColors.gray[900]};
 `;
 
-const HeaderWrapper = styled.div`
+const HeaderContainer = styled.div`
 	display: grid;
+	grid-template: 48px / auto 48px;
 	padding: 8px 16px;
 `;
 
