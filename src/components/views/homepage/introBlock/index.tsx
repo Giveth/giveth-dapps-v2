@@ -3,6 +3,7 @@ import {
 	Container,
 	H3,
 	IconBulbOutline32,
+	IconChevronRight24,
 	IconDonation32,
 	IconSpark32,
 	neutralColors,
@@ -31,10 +32,14 @@ const IntroBlock = () => {
 							society, and to the world!
 						</H3>
 						<ButtonsContainer gap='16px'>
-							<ButtonLink label='Explore projects' />
+							<ButtonLink
+								label='Explore projects'
+								icon={<IconChevronRight24 />}
+							/>
 							<ButtonLink
 								linkType='texty-secondary'
 								label='Our mission'
+								icon={<IconChevronRight24 />}
 							/>
 						</ButtonsContainer>
 					</IntroTitle>
