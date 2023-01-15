@@ -54,7 +54,7 @@
 		"react-dom": "^18.2.0",
 		"react-dropzone": "^14.2.2",
 		"react-google-maps": "^9.4.5",
-		"react-hook-form": "^7.32.2",
+		"react-hook-form": "^7.42.1",
 		"react-hot-toast": "^2.1.1",
 		"react-intl": "^6.2.1",
 		"react-lottie": "^1.2.3",
