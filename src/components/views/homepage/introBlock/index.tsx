@@ -57,6 +57,7 @@ const IntroBlock = () => {
 							<ButtonLink
 								linkType='texty-secondary'
 								label='HOW IT WORKS	'
+								icon={<IconChevronRight24 />}
 							/>
 						}
 						title='Zero fees'
@@ -69,6 +70,7 @@ const IntroBlock = () => {
 							<ButtonLink
 								linkType='texty-secondary'
 								label='HOW IT WORKS	'
+								icon={<IconChevronRight24 />}
 							/>
 						}
 						title='Earn rewards'
@@ -82,6 +84,7 @@ const IntroBlock = () => {
 							<ButtonLink
 								linkType='texty-secondary'
 								label='HOW IT WORKS	'
+								icon={<IconChevronRight24 />}
 							/>
 						}
 						title='Easy onboarding'
