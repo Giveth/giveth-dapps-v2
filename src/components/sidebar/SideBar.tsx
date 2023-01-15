@@ -3,7 +3,7 @@ import React, { FC, ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styled, { css } from 'styled-components';
 import { zIndex } from '@/lib/constants/constants';
-import { Flex, FlexCenter } from './styled-components/Flex';
+import { Flex, FlexCenter } from '../styled-components/Flex';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 
