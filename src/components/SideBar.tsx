@@ -1,7 +1,7 @@
 import { brandColors, IconX24, neutralColors } from '@giveth/ui-design-system';
 import React, { FC, ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { zIndex } from '@/lib/constants/constants';
 import { FlexCenter } from './styled-components/Flex';
 import { useAppSelector } from '@/features/hooks';
@@ -61,7 +61,11 @@ export const SideBar: FC<ISideBar> = ({
 				close();
 			}}
 		>
-			<SidebarContainer isAnimating={isAnimating} theme={theme}>
+			<SidebarContainer
+				isAnimating={isAnimating}
+				theme={theme}
+				direction={direction}
+			>
 				<HeaderContainer>
 					{header && header}
 					{showClose && (
@@ -90,7 +94,10 @@ const Background = styled(FlexCenter)<{ isAnimating: boolean }>`
 	transition: opacity 0.3s ease;
 `;
 
-const SidebarContainer = styled.div<{ isAnimating: boolean }>`
+const SidebarContainer = styled.div<{
+	isAnimating: boolean;
+	direction: ESideBarDirection;
+}>`
 	width: 353px;
 	height: 100%;
 	overflow-y: auto;
@@ -98,9 +105,6 @@ const SidebarContainer = styled.div<{ isAnimating: boolean }>`
 	position: fixed;
 	top: 0;
 	z-index: ${zIndex.MODAL};
-	left: 0;
-	left: ${props => (props.isAnimating ? 0 : '-353px')};
-	transition: left 0.3s ease;
 	background-color: ${props =>
 		props.theme === ETheme.Dark
 			? brandColors.giv[600]
@@ -109,6 +113,15 @@ const SidebarContainer = styled.div<{ isAnimating: boolean }>`
 		props.theme === ETheme.Dark
 			? neutralColors.gray[100]
 			: neutralColors.gray[900]};
+	${props => {
+		const key =
+			props.direction === ESideBarDirection.Left ? 'left' : 'right';
+		return css<{ isAnimating: boolean }>`
+			${key}: 0;
+			${key}: ${props => (props.isAnimating ? 0 : '-353px')};
+			transition: ${key} 0.3s ease;
+		`;
+	}};
 `;
 
 const HeaderContainer = styled.div`
