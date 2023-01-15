@@ -1,4 +1,4 @@
-import { brandColors, neutralColors } from '@giveth/ui-design-system';
+import { brandColors, IconX24, neutralColors } from '@giveth/ui-design-system';
 import React, { FC, ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
@@ -16,10 +16,17 @@ interface ISideBar {
 	close: () => void;
 	isAnimating: boolean;
 	direction: ESideBarDirection;
+	showClose?: boolean;
 	children: ReactNode;
 }
 
-export const SideBar: FC<ISideBar> = ({ close, isAnimating, children }) => {
+export const SideBar: FC<ISideBar> = ({
+	close,
+	isAnimating,
+	direction,
+	showClose = true,
+	children,
+}) => {
 	const theme = useAppSelector(state => state.general.theme);
 	const el = useRef(document.createElement('div'));
 
@@ -53,6 +60,13 @@ export const SideBar: FC<ISideBar> = ({ close, isAnimating, children }) => {
 			}}
 		>
 			<SidebarContainer isAnimating={isAnimating} theme={theme}>
+				<HeaderWrapper>
+					{showClose && (
+						<CloseWrapper onClick={close} direction={direction}>
+							<IconX24 />{' '}
+						</CloseWrapper>
+					)}
+				</HeaderWrapper>
 				{children}
 			</SidebarContainer>
 		</Background>,
@@ -73,7 +87,7 @@ const Background = styled(FlexCenter)<{ isAnimating: boolean }>`
 	transition: opacity 0.3s ease;
 `;
 
-const SidebarContainer = styled(FlexCenter)<{ isAnimating: boolean }>`
+const SidebarContainer = styled.div<{ isAnimating: boolean }>`
 	width: 353px;
 	height: 100%;
 	overflow-y: auto;
@@ -92,4 +106,16 @@ const SidebarContainer = styled(FlexCenter)<{ isAnimating: boolean }>`
 		props.theme === ETheme.Dark
 			? neutralColors.gray[100]
 			: neutralColors.gray[900]};
+`;
+
+const HeaderWrapper = styled.div`
+	display: grid;
+	padding: 8px 16px;
+`;
+
+const CloseWrapper = styled.div<{ direction: ESideBarDirection }>`
+	padding: 12px;
+	cursor: pointer;
+	justify-self: ${props =>
+		props.direction === ESideBarDirection.Left ? 'flex-end' : 'flex-start'};
 `;
