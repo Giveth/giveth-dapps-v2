@@ -73,7 +73,9 @@ const IntroBlock = () => {
 							title={formatMessage({
 								id: 'label.zero_fees',
 							})}
-							description='Create a project or donate directly to for-good projects with zero fees.'
+							description={formatMessage({
+								id: 'label.create_a_project_or_donate_directly',
+							})}
 						/>
 						<IntroCard
 							Icon={<IconBulbOutline32 />}
