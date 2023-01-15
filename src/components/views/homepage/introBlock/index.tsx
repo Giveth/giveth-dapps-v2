@@ -116,7 +116,6 @@ const SectionContainer = styled.div`
 
 const IntroContainer = styled.div`
 	margin-top: 200px;
-	/* background-color: ${neutralColors.gray[100]}; */
 `;
 
 const IntroTitle = styled.div`
