@@ -70,7 +70,9 @@ const IntroBlock = () => {
 									icon={<IconChevronRight24 />}
 								/>
 							}
-							title='Zero fees'
+							title={formatMessage({
+								id: 'label.zero_fees',
+							})}
 							description='Create a project or donate directly to for-good projects with zero fees.'
 						/>
 						<IntroCard
