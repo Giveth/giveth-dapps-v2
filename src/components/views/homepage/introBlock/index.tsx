@@ -66,7 +66,9 @@ const IntroBlock = () => {
 							LinkComponent={
 								<ButtonLink
 									linkType='texty-secondary'
-									label='HOW IT WORKS	'
+									label={formatMessage({
+										id: 'label.how_it_works',
+									})}
 									icon={<IconChevronRight24 />}
 								/>
 							}
@@ -82,12 +84,18 @@ const IntroBlock = () => {
 							LinkComponent={
 								<ButtonLink
 									linkType='texty-secondary'
-									label='LEARN MORE'
+									label={formatMessage({
+										id: 'label.learn_more',
+									})}
 									icon={<IconChevronRight24 />}
 								/>
 							}
-							title='Earn rewards'
-							description='By donating crypto to verified projects, you get rewarded!'
+							title={formatMessage({
+								id: 'label.earn_rewards',
+							})}
+							description={formatMessage({
+								id: 'label.by_donating_crypto',
+							})}
 						/>
 						<IntroCard
 							Icon={<IconSpark32 />}
