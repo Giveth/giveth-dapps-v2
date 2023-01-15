@@ -65,6 +65,9 @@ export const SideBar: FC<ISideBar> = ({
 				isAnimating={isAnimating}
 				theme={theme}
 				direction={direction}
+				onClick={e => {
+					e.stopPropagation();
+				}}
 			>
 				<HeaderContainer>
 					{header && header}
