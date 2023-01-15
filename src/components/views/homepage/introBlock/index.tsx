@@ -10,13 +10,14 @@ import {
 } from '@giveth/ui-design-system';
 import React from 'react';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
 import IntroCard from './IntroCard';
 import useDetectDevice from '@/hooks/useDetectDevice';
 
 const IntroBlock = () => {
 	const { isMobile } = useDetectDevice();
-
+	const { formatMessage } = useIntl();
 	return (
 		<SectionContainer>
 			<Container>
@@ -28,10 +29,13 @@ const IntroBlock = () => {
 					>
 						<IntroTitle>
 							<H3 weight={700}>
-								Giveth is{' '}
-								<UnderlinedText>rewarding</UnderlinedText> and
-								empowering those who give to projects, to
-								society, and to the world!
+								{formatMessage({ id: 'label.giveth_is' })}
+								<UnderlinedText>
+									{formatMessage({ id: 'label.rewarding' })}
+								</UnderlinedText>{' '}
+								{formatMessage({
+									id: 'label.and_empowering_those_who_give_to',
+								})}
 							</H3>
 							<ButtonsContainer gap='16px'>
 								<ButtonLink
