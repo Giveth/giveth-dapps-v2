@@ -15,6 +15,10 @@ import {
 import MenuWallet from './MenuWallet';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
+import { useDelayedState } from '@/hooks/useDelayedState';
+import useMediaQuery from '@/hooks/useMediaQuery';
+import { device } from '@/lib/constants/constants';
+import { SideBar, ESideBarDirection } from '../SideBar';
 
 export interface IHeaderButtonProps {
 	isHeaderShowing: boolean;
@@ -37,6 +41,9 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 	const [showUserMenu, setShowUserMenu] = useState(false);
 	const { userData } = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
+	const isDesktop = useMediaQuery(device.laptopL);
+	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
+		useDelayedState();
 
 	useEffect(() => {
 		if (!isHeaderShowing) {
@@ -44,12 +51,15 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 		}
 	}, [isHeaderShowing]);
 
+	const props = isDesktop
+		? {
+				onMouseEnter: () => setShowUserMenu(true),
+				onMouseLeave: () => setShowUserMenu(false),
+		  }
+		: { onClick: openSidebar };
+
 	return (
-		<MenuAndButtonContainer
-			onClick={() => setShowUserMenu(true)}
-			onMouseEnter={() => setShowUserMenu(true)}
-			onMouseLeave={() => setShowUserMenu(false)}
-		>
+		<MenuAndButtonContainer {...props}>
 			<WalletButton outline theme={theme}>
 				<HBContainer>
 					<HBPic
@@ -77,6 +87,16 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 				<CoverLine theme={theme} />
 			</WalletButton>
 			{showUserMenu && <MenuWallet />}
+			{sidebarCondition && (
+				<SideBar
+					close={closeSidebar}
+					isAnimating={showSidebar}
+					direction={ESideBarDirection.Right}
+					header={<div>WOW</div>}
+				>
+					sidebaarrrrrrrrr
+				</SideBar>
+			)}
 		</MenuAndButtonContainer>
 	);
 };
