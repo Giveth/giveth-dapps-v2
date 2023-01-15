@@ -7,37 +7,20 @@ import { Button, GLink, IconMenu24 } from '@giveth/ui-design-system';
 
 import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
-import { formatWeiHelper } from '@/helpers/number';
-import { networksParams } from '@/helpers/blockchain';
 import {
 	ConnectButton,
-	HBContainer,
-	HBContent,
-	HBPic,
-	BalanceButton,
 	HeaderLinks,
 	StyledHeader,
-	WalletButton,
-	WBInfo,
-	WBNetwork,
 	SmallCreateProject,
 	Logo,
-	MenuAndButtonContainer,
-	CoverLine,
 	SmallCreateProjectParent,
 	LargeCreateProject,
 	HeaderLink,
 	HomeButton,
 } from './Header.sc';
-import { RewardMenu } from '@/components/menu/RewardMenu';
-import MenuWallet from '@/components/menu/MenuWallet';
-import { isUserRegistered, shortenAddress } from '@/lib/helpers';
+import { isUserRegistered } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
-import {
-	currentValuesHelper,
-	useAppDispatch,
-	useAppSelector,
-} from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 import {
 	setShowWalletModal,
@@ -45,8 +28,6 @@ import {
 	setShowCompleteProfile,
 } from '@/features/modal/modal.slice';
 import { slugToProjectView } from '@/lib/routeCreators';
-import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { IconGIV } from '../Icons/GIV';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import { LinkWithMenu } from '../menu/LinkWithMenu';
 import { ProjectsMenu } from '../menu/ProjectsMenu';
@@ -55,6 +36,8 @@ import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
 import { ESideBarDirection, SideBar } from '../SideBar';
 import { useDelayedState } from '@/hooks/useDelayedState';
+import { RewardButtonWithMenu } from '../menu/RewardButtonWithMenu';
+import { UserButtonWithMenu } from '../menu/UserButtonWithMenu';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -62,9 +45,6 @@ export interface IHeader {
 }
 
 const Header: FC<IHeader> = () => {
-	const [showRewardMenu, setShowRewardMenu] = useState(false);
-	const [showRewardMenuModal, setShowRewardMenuModal] = useState(false);
-	const [showUserMenu, setShowUserMenu] = useState(false);
 	const [showHeader, setShowHeader] = useState(true);
 	const [isGIVeconomyRoute, setIsGIVeconomyRoute] = useState(false);
 	const [showBackBtn, setShowBackBtn] = useState(false);
@@ -73,10 +53,7 @@ const Header: FC<IHeader> = () => {
 		useDelayedState();
 
 	const { chainId, active, account, library } = useWeb3React();
-	const sdh = new SubgraphDataHelper(
-		useAppSelector(state => state.subgraph[currentValuesHelper(chainId)]),
-	);
-	const givBalance = sdh.getGIVTokenBalance();
+
 	const dispatch = useAppDispatch();
 	const { isEnabled, isSignedIn, userData } = useAppSelector(
 		state => state.user,
@@ -132,10 +109,6 @@ const Header: FC<IHeader> = () => {
 			}
 			const show = scrollY <= lastScrollY;
 			setShowHeader(show);
-			if (!show) {
-				setShowRewardMenu(false);
-				setShowUserMenu(false);
-			}
 			lastScrollY = scrollY > 0 ? scrollY : 0;
 			ticking = false;
 		};
@@ -173,12 +146,6 @@ const Header: FC<IHeader> = () => {
 			router.push(Routes.CreateProject);
 		} else {
 			dispatch(setShowCompleteProfile(true));
-		}
-	};
-
-	const handleRewardMenuOnLeave = () => {
-		if (!showRewardMenuModal) {
-			setShowRewardMenu(false);
 		}
 	};
 
@@ -259,66 +226,18 @@ const Header: FC<IHeader> = () => {
 				</SmallCreateProjectParent>
 				{active && account && chainId ? (
 					<>
-						<MenuAndButtonContainer
-							onClick={() => setShowRewardMenu(true)}
-							onMouseEnter={() => setShowRewardMenu(true)}
-							onMouseLeave={handleRewardMenuOnLeave}
-						>
-							<BalanceButton outline theme={theme}>
-								<HBContainer>
-									<IconGIV size={24} />
-									<HBContent size='Big'>
-										{formatWeiHelper(givBalance.balance)}
-									</HBContent>
-								</HBContainer>
-								<CoverLine theme={theme} />
-							</BalanceButton>
-							{showRewardMenu && (
-								<RewardMenu
-									showWhatIsGIVstreamModal={
-										showRewardMenuModal
-									}
-									setShowWhatIsGIVstreamModal={
-										setShowRewardMenuModal
-									}
-								/>
-							)}
-						</MenuAndButtonContainer>
-						<MenuAndButtonContainer
-							onClick={() => setShowUserMenu(true)}
-							onMouseEnter={() => setShowUserMenu(true)}
-							onMouseLeave={() => setShowUserMenu(false)}
-						>
-							<WalletButton outline theme={theme}>
-								<HBContainer>
-									<HBPic
-										src={
-											userData?.avatar ||
-											'/images/placeholders/profile.png'
-										}
-										alt='Profile Pic'
-										width={'24px'}
-										height={'24px'}
-									/>
-									<WBInfo>
-										<GLink size='Medium'>
-											{userData?.name ||
-												shortenAddress(account)}
-										</GLink>
-										<WBNetwork size='Tiny'>
-											{formatMessage({
-												id: 'label.connected_to',
-											})}{' '}
-											{networksParams[chainId]
-												?.chainName ||
-												library?._network?.name}
-										</WBNetwork>
-									</WBInfo>
-								</HBContainer>
-								<CoverLine theme={theme} />
-							</WalletButton>
-							{showUserMenu && <MenuWallet />}
-						</MenuAndButtonContainer>
+						<RewardButtonWithMenu
+							isHeaderShowing={showHeader}
+							theme={theme}
+							chainId={chainId}
+						/>
+						<UserButtonWithMenu
+							isHeaderShowing={showHeader}
+							theme={theme}
+							chainId={chainId}
+							account={account}
+							library={library}
+						/>
 					</>
 				) : (
 					<ConnectButton
@@ -338,6 +257,7 @@ const Header: FC<IHeader> = () => {
 					close={closeSidebar}
 					isAnimating={showSidebar}
 					direction={ESideBarDirection.Left}
+					header={<div>WOW</div>}
 				>
 					sidebaarrrrrrrrr
 				</SideBar>
