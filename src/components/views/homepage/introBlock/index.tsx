@@ -61,8 +61,7 @@ const IntroBlock = () => {
 							/>
 						}
 						title='Zero fees'
-						description='Create a project or donate directly to for-good projects with zero fees.
-'
+						description='Create a project or donate directly to for-good projects with zero fees.'
 					/>
 					<IntroCard
 						Icon={<IconBulbOutline32 />}
@@ -74,9 +73,7 @@ const IntroBlock = () => {
 							/>
 						}
 						title='Earn rewards'
-						description='By donating crypto to verified projects, you get rewarded!
-
-'
+						description='By donating crypto to verified projects, you get rewarded!'
 					/>
 					<IntroCard
 						Icon={<IconSpark32 />}
@@ -88,9 +85,7 @@ const IntroBlock = () => {
 							/>
 						}
 						title='Easy onboarding'
-						description='New to crypto? No Problem Start right here
-
-'
+						description='New to crypto? No Problem Start right here'
 					/>
 				</IntroCards>
 			</IntroContainer>
