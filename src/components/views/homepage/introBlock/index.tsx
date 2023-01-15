@@ -19,7 +19,11 @@ const IntroBlock = () => {
 	return (
 		<Container>
 			<IntroContainer>
-				<Flex justifyContent='space-around'>
+				<Flex
+					justifyContent='space-around'
+					flexDirection={isMobile ? 'column' : 'row'}
+					alignItems={isMobile ? 'center' : 'stretch'}
+				>
 					<IntroTitle>
 						<H3 weight={700}>
 							Giveth is <UnderlinedText>rewarding</UnderlinedText>{' '}
@@ -39,8 +43,8 @@ const IntroBlock = () => {
 				<IntroCards
 					justifyContent='space-between'
 					gap='24px'
-					flexDirection={!isMobile ? 'row' : 'column'}
-					alignItems={!isMobile ? 'stretch' : 'center'}
+					flexDirection={isMobile ? 'column' : 'row'}
+					alignItems={isMobile ? 'center' : 'stretch'}
 				>
 					<IntroCard
 						Icon={<IconDonation32 />}
