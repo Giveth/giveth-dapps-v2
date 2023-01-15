@@ -42,6 +42,8 @@ const IntroCardContainer = styled(Flex)`
 	max-width: 360px;
 	flex: 1;
 	justify-content: space-between;
+	z-index: 1;
+	background-color: ${neutralColors.gray[100]};
 	${mediaQueries.desktop} {
 		padding: 16px 40px;
 	}
