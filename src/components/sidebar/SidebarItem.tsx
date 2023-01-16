@@ -26,11 +26,11 @@ export const SidebarItem: FC<ISidebarItemProps> = ({ item, children }) => {
 	const theme = useAppSelector(state => state.general.theme);
 
 	return (
-		<ItemContainer
-			flexDirection='column'
-			onClick={() => setShowChildren(s => !s)}
-		>
-			<ItemWrapper justifyContent='space-between'>
+		<ItemContainer flexDirection='column'>
+			<ItemWrapper
+				justifyContent='space-between'
+				onClick={() => setShowChildren(s => !s)}
+			>
 				<GLink size='Big'>{item.title}</GLink>
 				{children && <IconChevronDown24 />}
 			</ItemWrapper>
