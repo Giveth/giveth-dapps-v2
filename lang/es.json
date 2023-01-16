@@ -840,5 +840,17 @@
 	"label.you_need_to_connect_your_wallet_to_continue": "Debes conectar tu billetera para continuar!",
 	"label.loading_data": "Cargando Información",
 	"label.vote_in_giveth_dao": "",
-	"label.use_giv_to_vote": ""
+	"label.use_giv_to_vote": "",
+	"label.giveth_is": "",
+	"label.rewarding": "",
+	"label.and_empowering_those_who_give_to": "",
+	"label.explore_projects": "",
+	"label.zero_fees": "",
+	"label.create_a_project_or_donate_directly": "",
+	"label.how_it_works": "",
+	"label.earn_rewards": "",
+	"label.by_donating_crypto": "",
+	"label.easy_onboarding": "",
+	"label.new_to_crypto": "",
+	"label.get_started": ""
 }
