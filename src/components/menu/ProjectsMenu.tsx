@@ -5,19 +5,28 @@ import { useAppSelector } from '@/features/hooks';
 import { Flex } from '../styled-components/Flex';
 import { HighlightSection, BaseMenuContainer } from './common';
 
-const categories = [
-	{ name: 'Art & Culture', slug: '' },
-	{ name: 'Community', slug: '' },
-	{ name: 'Education', slug: '' },
-	{ name: 'Equality', slug: '' },
-	{ name: 'Economics & Infrastructure', slug: '' },
-	{ name: 'Environment & Energy', slug: '' },
-	{ name: 'Finance', slug: '' },
-	{ name: 'Health & Wellness', slug: '' },
-	{ name: 'Nature', slug: '' },
-	{ name: 'NGO', slug: '' },
-	{ name: 'Technology', slug: '' },
-];
+export const projectsMenuItem = {
+	explore: [
+		{ name: 'Trending', url: '' },
+		{ name: 'Recently updated', url: '' },
+		{ name: 'Just launched', url: '' },
+		{ name: 'Popular', url: '' },
+		{ name: 'All projects', url: '' },
+	],
+	categories: [
+		{ name: 'Art & Culture', slug: '' },
+		{ name: 'Community', slug: '' },
+		{ name: 'Education', slug: '' },
+		{ name: 'Equality', slug: '' },
+		{ name: 'Economics & Infrastructure', slug: '' },
+		{ name: 'Environment & Energy', slug: '' },
+		{ name: 'Finance', slug: '' },
+		{ name: 'Health & Wellness', slug: '' },
+		{ name: 'Nature', slug: '' },
+		{ name: 'NGO', slug: '' },
+		{ name: 'Technology', slug: '' },
+	],
+};
 
 export const ProjectsMenu = () => {
 	const theme = useAppSelector(state => state.general.theme);
@@ -27,17 +36,15 @@ export const ProjectsMenu = () => {
 			<HighlightSection theme={theme}>
 				<Caption medium>Explore by</Caption>
 				<ExploreByRow gap='24px'>
-					<B>Trending</B>
-					<B>Recently updated</B>
-					<B>Just launched</B>
-					<B>Popular</B>
-					<B>All projects</B>
+					{projectsMenuItem.explore.map((explore, idx) => (
+						<B key={idx}>{explore.name}</B>
+					))}
 				</ExploreByRow>
 			</HighlightSection>
 			<NormalSection>
 				<CategoriesLabel medium>BY CATEGORY</CategoriesLabel>
 				<CategoriesGrid>
-					{categories.map((category, idx) => (
+					{projectsMenuItem.categories.map((category, idx) => (
 						<GLink size='Big' key={idx}>
 							{category.name}
 						</GLink>
