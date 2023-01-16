@@ -103,7 +103,7 @@ const SidebarContainer = styled.div<{
 }>`
 	width: 353px;
 	height: 100%;
-	overflow-y: auto;
+	overflow-y: overlay;
 	background: ${brandColors.giv[900]};
 	position: fixed;
 	top: 0;
@@ -125,6 +125,7 @@ const SidebarContainer = styled.div<{
 			transition: ${key} 0.3s ease;
 		`;
 	}};
+	user-select: none;
 `;
 
 const HeaderContainer = styled(Flex)<{ direction: ESideBarDirection }>`

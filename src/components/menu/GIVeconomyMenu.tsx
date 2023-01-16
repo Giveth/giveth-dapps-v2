@@ -15,7 +15,7 @@ import Routes from '@/lib/constants/Routes';
 import { Flex } from '../styled-components/Flex';
 import { ETheme } from '@/features/general/general.slice';
 
-const items = [
+export const giveconomyMenuItem = [
 	{
 		title: 'The economy of giving',
 		label: 'Giveconomy',
@@ -50,10 +50,12 @@ export const GIVeconomyMenu = () => {
 				</HighlightSection>
 			</Link>
 			<LearnStyle medium>Learn about</LearnStyle>
-			{items.map((item, idx) => (
+			{giveconomyMenuItem.map((item, idx) => (
 				<Link key={idx} href={item.href}>
 					<MenuItem theme={theme}>
-						<Title size='Small'>{item.title}</Title>
+						<GIVeconomyItemTitle size='Small'>
+							{item.title}
+						</GIVeconomyItemTitle>
 						<Label size='Big'>{item.label}</Label>
 					</MenuItem>
 				</Link>
@@ -70,7 +72,7 @@ const LearnStyle = styled(Caption)`
 	margin: 24px 16px 16px;
 `;
 
-const MenuItem = styled(Flex)`
+export const MenuItem = styled(Flex)`
 	flex-direction: column;
 	gap: 4px;
 	padding: 4px 16px;
@@ -85,7 +87,7 @@ const MenuItem = styled(Flex)`
 	transition: background-color 0.3s ease;
 `;
 
-const Title = styled(GLink)`
+export const GIVeconomyItemTitle = styled(GLink)`
 	color: ${brandColors.giv[200]};
 	color: ${props =>
 		props.theme === ETheme.Dark

@@ -1,4 +1,4 @@
-import { B, Caption, GLink } from '@giveth/ui-design-system';
+import { B, Caption, GLink, IconGIVFarm } from '@giveth/ui-design-system';
 import React from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
@@ -7,6 +7,10 @@ import { Flex } from '../styled-components/Flex';
 import { projectsMenuItem } from '../menu/ProjectsMenu';
 import { SidebarItem } from './SidebarItem';
 import { HighlightSection } from '../menu/common';
+import {
+	GIVeconomyItemTitle,
+	giveconomyMenuItem,
+} from '../menu/GIVeconomyMenu';
 
 export const HomeSidebar = () => {
 	const theme = useAppSelector(state => state.general.theme);
@@ -21,20 +25,46 @@ export const HomeSidebar = () => {
 					</ChildTitle>
 					{projectsMenuItem.explore.map((explore, idx) => (
 						<Link href={explore.url} key={idx}>
-							<ChildItemBold>
-								<B>{explore.name}</B>
-							</ChildItemBold>
+							<ChildItemBold>{explore.name}</ChildItemBold>
 						</Link>
 					))}
 				</SidebarHighlightSection>
-				<SibarChildSection>
+				<SidebarChildSection>
 					<ChildTitle medium>BY CATEGORY</ChildTitle>
 					{projectsMenuItem.categories.map((explore, idx) => (
 						<ChildItem size='Big' key={idx}>
 							{explore.name}
 						</ChildItem>
 					))}
-				</SibarChildSection>
+				</SidebarChildSection>
+			</SidebarItem>
+			<SidebarItem item={{ title: 'GIVeconomy' }}>
+				<SidebarHighlightSection theme={theme}>
+					<ChildTitle>
+						<Caption medium>Liquidity</Caption>
+					</ChildTitle>
+					<Link href='/givfarm'>
+						<ChildItemBold>
+							<Flex justifyContent='space-between'>
+								<B>GIVfarm</B>
+								<IconGIVFarm size={24} />
+							</Flex>
+						</ChildItemBold>
+					</Link>
+				</SidebarHighlightSection>
+				<SidebarChildSection>
+					<ChildTitle medium>Learn about</ChildTitle>
+					{giveconomyMenuItem.map((item, idx) => (
+						<Link key={idx} href={item.href}>
+							<ChildItem theme={theme}>
+								<GIVeconomyItemTitle size='Small'>
+									{item.title}
+								</GIVeconomyItemTitle>
+								<GLink size='Big'>{item.label}</GLink>
+							</ChildItem>
+						</Link>
+					))}
+				</SidebarChildSection>
 			</SidebarItem>
 		</HomeSidebarContainer>
 	);
@@ -53,7 +83,8 @@ const ChildTitle = styled(Caption)`
 
 const ChildItem = styled(GLink)`
 	padding: 4px 16px;
-	display: block;
+	display: flex;
+	flex-direction: column;
 `;
 
 const ChildItemBold = styled(B)`
@@ -65,7 +96,7 @@ const SidebarHighlightSection = styled(HighlightSection)`
 	padding: 8px;
 `;
 
-const SibarChildSection = styled(Flex)`
+const SidebarChildSection = styled(Flex)`
 	margin-top: 16px;
 	gap: 8px;
 	flex-direction: column;
