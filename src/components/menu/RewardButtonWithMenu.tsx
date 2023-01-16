@@ -6,6 +6,7 @@ import {
 	HBContainer,
 	HBContent,
 	CoverLine,
+	HeaderSidebarButtonWrapper,
 } from '../Header/Header.sc';
 import { IconGIV } from '../Icons/GIV';
 import { RewardMenu } from './RewardMenu';
@@ -16,6 +17,7 @@ import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
 import { useDelayedState } from '@/hooks/useDelayedState';
 import { SideBar, ESideBarDirection } from '../sidebar/SideBar';
+import { FlexSpacer } from '../styled-components/Flex';
 
 interface IRewardButtonWithMenuProps extends IHeaderButtonProps {
 	chainId?: number;
@@ -69,7 +71,14 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 					close={closeSidebar}
 					isAnimating={showSidebar}
 					direction={ESideBarDirection.Right}
-					header={<div>WOW</div>}
+					header={
+						<>
+							<FlexSpacer />
+							<HeaderSidebarButtonWrapper>
+								<HeaderRewardButton chainId={chainId} />
+							</HeaderSidebarButtonWrapper>
+						</>
+					}
 				>
 					<RewardMenu
 						showWhatIsGIVstreamModal={showRewardMenuModal}
