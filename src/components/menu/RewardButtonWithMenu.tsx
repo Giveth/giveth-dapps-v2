@@ -29,10 +29,6 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 	const [showRewardMenuModal, setShowRewardMenuModal] = useState(false);
 	const [showRewardMenu, setShowRewardMenu] = useState(false);
 
-	const sdh = new SubgraphDataHelper(
-		useAppSelector(state => state.subgraph[currentValuesHelper(chainId)]),
-	);
-	const givBalance = sdh.getGIVTokenBalance();
 	const isDesktop = useMediaQuery(device.laptopL);
 	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
 		useDelayedState();
@@ -59,12 +55,7 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 	return (
 		<MenuAndButtonContainer {...props}>
 			<BalanceButton outline theme={theme}>
-				<HBContainer>
-					<IconGIV size={24} />
-					<HBContent size='Big'>
-						{formatWeiHelper(givBalance.balance)}
-					</HBContent>
-				</HBContainer>
+				<HeaderRewardButton chainId={chainId} />
 				<CoverLine theme={theme} />
 			</BalanceButton>
 			{showRewardMenu && (
@@ -80,9 +71,31 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 					direction={ESideBarDirection.Right}
 					header={<div>WOW</div>}
 				>
-					sidebaarrrrrrrrr
+					<RewardMenu
+						showWhatIsGIVstreamModal={showRewardMenuModal}
+						setShowWhatIsGIVstreamModal={setShowRewardMenuModal}
+					/>
 				</SideBar>
 			)}
 		</MenuAndButtonContainer>
+	);
+};
+
+interface IRewardButtonProps {
+	chainId?: number;
+}
+
+const HeaderRewardButton: FC<IRewardButtonProps> = ({ chainId }) => {
+	const sdh = new SubgraphDataHelper(
+		useAppSelector(state => state.subgraph[currentValuesHelper(chainId)]),
+	);
+	const givBalance = sdh.getGIVTokenBalance();
+	return (
+		<HBContainer>
+			<IconGIV size={24} />
+			<HBContent size='Big'>
+				{formatWeiHelper(givBalance.balance)}
+			</HBContent>
+		</HBContainer>
 	);
 };
