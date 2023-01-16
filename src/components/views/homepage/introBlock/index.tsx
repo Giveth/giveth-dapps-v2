@@ -141,6 +141,7 @@ const SectionContainer = styled.div`
 `;
 
 const IntroContainer = styled.div`
+	position: relative;
 	margin-top: 200px;
 `;
 
