@@ -15,7 +15,7 @@ import { IHeaderButtonProps } from './UserButtonWithMenu';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
 import { useDelayedState } from '@/hooks/useDelayedState';
-import { SideBar, ESideBarDirection } from '../SideBar';
+import { SideBar, ESideBarDirection } from '../sidebar/SideBar';
 
 interface IRewardButtonWithMenuProps extends IHeaderButtonProps {
 	chainId?: number;

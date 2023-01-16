@@ -18,7 +18,7 @@ import { ETheme } from '@/features/general/general.slice';
 import { useDelayedState } from '@/hooks/useDelayedState';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
-import { SideBar, ESideBarDirection } from '../SideBar';
+import { SideBar, ESideBarDirection } from '../sidebar/SideBar';
 
 export interface IHeaderButtonProps {
 	isHeaderShowing: boolean;
