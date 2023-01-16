@@ -102,12 +102,18 @@ const IntroBlock = () => {
 							LinkComponent={
 								<ButtonLink
 									linkType='texty-primary'
-									label='GET STARTED'
+									label={formatMessage({
+										id: 'label.get_started',
+									})}
 									icon={<IconChevronRight24 />}
 								/>
 							}
-							title='Easy onboarding'
-							description='New to crypto? No Problem Start right here'
+							title={formatMessage({
+								id: 'label.easy_onboarding',
+							})}
+							description={formatMessage({
+								id: 'label.new_to_crypto',
+							})}
 						/>
 					</IntroCards>
 				</IntroContainer>

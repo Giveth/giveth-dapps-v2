@@ -849,5 +849,8 @@
 	"label.create_a_project_or_donate_directly": "Create a project or donate directly to for-good projects with zero fees.",
 	"label.how_it_works": "HOW IT WORKS",
 	"label.earn_rewards": " Earn rewards",
-	"label.by_donating_crypto": "By donating crypto to verified projects, you get rewarded!"
+	"label.by_donating_crypto": "By donating crypto to verified projects, you get rewarded!",
+	"label.easy_onboarding": "Easy onboarding",
+	"label.new_to_crypto": "New to crypto? No Problem Start right here",
+	"label.get_started": "GET STARTED"
 }
