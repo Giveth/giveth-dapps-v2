@@ -34,10 +34,11 @@ import { ProjectsMenu } from '../menu/ProjectsMenu';
 import { GIVeconomyMenu } from '../menu/GIVeconomyMenu';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
-import { ESideBarDirection, SideBar } from '../SideBar';
+import { ESideBarDirection, SideBar } from '../sidebar/SideBar';
 import { useDelayedState } from '@/hooks/useDelayedState';
 import { RewardButtonWithMenu } from '../menu/RewardButtonWithMenu';
 import { UserButtonWithMenu } from '../menu/UserButtonWithMenu';
+import { HomeSidebar } from '../sidebar/HomeSidebar';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -257,7 +258,7 @@ const Header: FC<IHeader> = () => {
 					isAnimating={showSidebar}
 					direction={ESideBarDirection.Left}
 				>
-					sidebaarrrrrrrrr
+					<HomeSidebar />
 				</SideBar>
 			)}
 		</StyledHeader>
