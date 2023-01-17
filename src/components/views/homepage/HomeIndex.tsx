@@ -4,6 +4,7 @@ import HomeGetUpdates from './HomeGetUpdates';
 import { IProject } from '@/apollo/types/types';
 import IntroBlock from './introBlock';
 import WhyGivethIndex from '@/components/views/homepage/whyGiveth';
+import VideoBlock from './videoBlock';
 
 interface IHomeView {
 	projects: IProject[];
@@ -15,6 +16,7 @@ const HomeIndex: FC<IHomeView> = props => {
 		<>
 			<IntroBlock />
 			<WhyGivethIndex />
+			<VideoBlock />
 			<HomeFromBlog />
 			<HomeGetUpdates />
 		</>
