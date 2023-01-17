@@ -16,7 +16,13 @@ import {
 	setShowWalletModal,
 } from '@/features/modal/modal.slice';
 import { signOut } from '@/features/user/user.thunks';
-import { ItemContainer, ItemRow, ItemTitle, ItemAction } from './common';
+import {
+	ItemContainer,
+	ItemRow,
+	ItemTitle,
+	ItemAction,
+	ItemSpacer,
+} from './common';
 
 export const UserItems = () => {
 	const { formatMessage } = useIntl();
@@ -80,6 +86,7 @@ export const UserItems = () => {
 					</ItemAction>
 				</ItemRow>
 			</ItemContainer>
+			<ItemSpacer />
 			{walletMenuArray.map(i => (
 				<ItemContainer
 					key={i.title}

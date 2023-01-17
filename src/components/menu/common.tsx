@@ -69,3 +69,8 @@ export const ItemAction = styled(GLink)`
 	color: ${brandColors.pinky[500]};
 	cursor: pointer;
 `;
+
+export const ItemSpacer = styled.div`
+	border-bottom: 1px solid;
+	border-color: ${neutralColors.gray[300]};
+`;
