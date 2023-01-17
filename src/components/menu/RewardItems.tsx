@@ -22,10 +22,6 @@ import { ETheme } from '@/features/general/general.slice';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { SimplePoolStakingConfig, StakingType } from '@/types/config';
 import {
-	RewardMenuItem,
-	RewardMenuTitle,
-	NetworkRow,
-	SwitchNetwork,
 	FlowrateRow,
 	FlowrateAmount,
 	FlowrateUnit,
@@ -34,6 +30,7 @@ import {
 	PartUnit,
 } from './RewardItems.sc';
 import { IRewardMenuProps } from './RewardMenu';
+import { ItemAction, ItemContainer, ItemRow, ItemTitle } from './common';
 
 export interface IRewardItemsProps extends IRewardMenuProps {
 	theme: ETheme;
@@ -107,23 +104,24 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 	}, [currentValues, chainId, givTokenDistroHelper]);
 	return (
 		<>
-			<RewardMenuItem theme={theme}>
-				<RewardMenuTitle theme={theme}>
+			<ItemContainer theme={theme}>
+				<ItemTitle theme={theme}>
 					{formatMessage({ id: 'label.network' })}
-				</RewardMenuTitle>
-				<NetworkRow>
+				</ItemTitle>
+				<ItemRow>
 					<B>{networkName}</B>
-					<SwitchNetwork
+					<ItemAction
+						size='Small'
 						onClick={() => switchNetworkHandler(chainId)}
 					>
 						{formatMessage({ id: 'label.switch_network' })}
-					</SwitchNetwork>
-				</NetworkRow>
-			</RewardMenuItem>
-			<RewardMenuItem isHighlighted theme={theme}>
-				<RewardMenuTitle theme={theme}>
+					</ItemAction>
+				</ItemRow>
+			</ItemContainer>
+			<ItemContainer isHighlighted theme={theme}>
+				<ItemTitle theme={theme}>
 					{formatMessage({ id: 'label.givstream_flowrate' })}
-				</RewardMenuTitle>
+				</ItemTitle>
 				<FlowrateRow>
 					<Image
 						src='/images/icons/thunder.svg'
@@ -145,43 +143,41 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 						<IconHelpFilled16 />
 					</IconHelpWrapper>
 				</FlowrateRow>
-			</RewardMenuItem>
+			</ItemContainer>
 			<Link href={Routes.GIVstream}>
-				<RewardMenuItem theme={theme}>
-					<RewardMenuTitle theme={theme}>
+				<ItemContainer theme={theme}>
+					<ItemTitle theme={theme}>
 						{formatMessage({ id: 'label.from' })} GIVstream
-					</RewardMenuTitle>
+					</ItemTitle>
 					<Flex gap='4px'>
 						<PartAmount medium>
 							{formatWeiHelper(givStreamLiquidPart)}
 						</PartAmount>
 						<PartUnit>GIV</PartUnit>
 					</Flex>
-				</RewardMenuItem>
+				</ItemContainer>
 			</Link>
 			<Link href={Routes.GIVfarm}>
-				<RewardMenuItem theme={theme}>
-					<RewardMenuTitle theme={theme}>
-						GIVfarm & GIVgarden
-					</RewardMenuTitle>
+				<ItemContainer theme={theme}>
+					<ItemTitle theme={theme}>GIVfarm & GIVgarden</ItemTitle>
 					<Flex gap='4px'>
 						<PartAmount medium>
 							{formatWeiHelper(farmsLiquidPart)}
 						</PartAmount>
 						<PartUnit>GIV</PartUnit>
 					</Flex>
-				</RewardMenuItem>
+				</ItemContainer>
 			</Link>
 			<Link href={Routes.GIVbacks}>
-				<RewardMenuItem theme={theme}>
-					<RewardMenuTitle theme={theme}>GIVbacks</RewardMenuTitle>
+				<ItemContainer theme={theme}>
+					<ItemTitle theme={theme}>GIVbacks</ItemTitle>
 					<Flex gap='4px'>
 						<PartAmount medium>
 							{formatWeiHelper(givbackLiquidPart)}
 						</PartAmount>
 						<PartUnit>GIV</PartUnit>
 					</Flex>
-				</RewardMenuItem>
+				</ItemContainer>
 			</Link>
 			{showWhatIsGIVstreamModal && (
 				<WhatisStreamModal

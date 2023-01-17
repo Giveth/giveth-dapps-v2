@@ -6,11 +6,12 @@ import { useRouter } from 'next/router';
 
 import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
+import { B } from '@giveth/ui-design-system';
 import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
 import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
 import { switchNetworkHandler } from '@/lib/wallet';
-import { isUserRegistered, networkInfo } from '@/lib/helpers';
+import { isUserRegistered, networkInfo, shortenAddress } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import {
@@ -19,13 +20,7 @@ import {
 } from '@/features/modal/modal.slice';
 import { signOut } from '@/features/user/user.thunks';
 import { MenuItem } from './GIVeconomyMenu';
-import {
-	Title,
-	Subtitle,
-	LeftSection,
-	StyledButton,
-	Menus,
-} from './UserItems.sc';
+import { ItemContainer, ItemRow, ItemTitle, ItemAction } from './common';
 
 export const UserItems = () => {
 	const { formatMessage } = useIntl();
@@ -73,10 +68,58 @@ export const UserItems = () => {
 		}
 	}, [account, library, chainId]);
 
-	const { networkName, networkToken } = networkInfo(chainId);
+	const { networkName } = networkInfo(chainId);
 
 	return (
 		<>
+			<ItemContainer theme={theme}>
+				<ItemTitle theme={theme}>
+					{formatMessage({ id: 'label.wallet' })}
+				</ItemTitle>
+				<ItemRow>
+					<B>{shortenAddress(account)}</B>
+					<ItemAction
+						size='Small'
+						onClick={() => {
+							window.localStorage.removeItem(StorageLabel.WALLET);
+							dispatch(setShowWalletModal(true));
+						}}
+					>
+						{formatMessage({ id: 'label.change_wallet' })}
+					</ItemAction>
+				</ItemRow>
+			</ItemContainer>
+			<ItemContainer theme={theme}>
+				<ItemTitle theme={theme}>
+					{formatMessage({ id: 'label.network' })}
+				</ItemTitle>
+				<ItemRow>
+					<B>{networkName}</B>
+					<ItemAction
+						size='Small'
+						onClick={() => switchNetworkHandler(chainId)}
+					>
+						{formatMessage({ id: 'label.switch_network' })}
+					</ItemAction>
+				</ItemRow>
+			</ItemContainer>
+			{walletMenuArray.map(i => (
+				<MenuItem
+					key={i.title}
+					onClick={() => goRoute(i)}
+					theme={theme}
+				>
+					{formatMessage({ id: i.title })}
+				</MenuItem>
+			))}
+			{isSignedIn && (
+				<MenuItem
+					onClick={() => dispatch(signOut(token!))}
+					theme={theme}
+				>
+					{formatMessage({ id: 'label.sign_out' })}
+				</MenuItem>
+			)}
 			{SignWithWallet && (
 				<SignWithWalletModal
 					callback={() => {
@@ -89,49 +132,6 @@ export const UserItems = () => {
 					}}
 				/>
 			)}
-			<Title>{formatMessage({ id: 'label.wallet' })}</Title>
-			<Subtitle>
-				<LeftSection>
-					{balance + ' '}
-					<span>{networkToken}</span>
-				</LeftSection>
-				<StyledButton
-					onClick={() => {
-						window.localStorage.removeItem(StorageLabel.WALLET);
-						dispatch(setShowWalletModal(true));
-					}}
-				>
-					{formatMessage({ id: 'label.change_wallet' })}
-				</StyledButton>
-			</Subtitle>
-			<Title>{formatMessage({ id: 'label.network' })}</Title>
-			<Subtitle>
-				<LeftSection>{networkName}</LeftSection>
-				{chainId && (
-					<StyledButton onClick={() => switchNetworkHandler(chainId)}>
-						{formatMessage({ id: 'label.switch_network' })}
-					</StyledButton>
-				)}
-			</Subtitle>
-			<Menus>
-				{walletMenuArray.map(i => (
-					<MenuItem
-						key={i.title}
-						onClick={() => goRoute(i)}
-						theme={theme}
-					>
-						{formatMessage({ id: i.title })}
-					</MenuItem>
-				))}
-				{isSignedIn && (
-					<MenuItem
-						onClick={() => dispatch(signOut(token!))}
-						theme={theme}
-					>
-						{formatMessage({ id: 'label.sign_out' })}
-					</MenuItem>
-				)}
-			</Menus>
 		</>
 	);
 };
