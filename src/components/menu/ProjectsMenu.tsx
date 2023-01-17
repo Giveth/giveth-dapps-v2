@@ -1,6 +1,7 @@
 import { B, Caption, GLink } from '@giveth/ui-design-system';
 import React from 'react';
 import styled from 'styled-components';
+import Link from 'next/link';
 import { useAppSelector } from '@/features/hooks';
 import { Flex } from '../styled-components/Flex';
 import { HighlightSection, BaseMenuContainer } from './common';
@@ -13,23 +14,10 @@ export const projectsMenuItem = {
 		{ name: 'Popular', url: '' },
 		{ name: 'All projects', url: '' },
 	],
-	categories: [
-		{ name: 'Art & Culture', slug: '' },
-		{ name: 'Community', slug: '' },
-		{ name: 'Education', slug: '' },
-		{ name: 'Equality', slug: '' },
-		{ name: 'Economics & Infrastructure', slug: '' },
-		{ name: 'Environment & Energy', slug: '' },
-		{ name: 'Finance', slug: '' },
-		{ name: 'Health & Wellness', slug: '' },
-		{ name: 'Nature', slug: '' },
-		{ name: 'NGO', slug: '' },
-		{ name: 'Technology', slug: '' },
-	],
 };
 
 export const ProjectsMenu = () => {
-	const theme = useAppSelector(state => state.general.theme);
+	const { theme, mainCategories } = useAppSelector(state => state.general);
 
 	return (
 		<MenuContainer theme={theme}>
@@ -44,10 +32,12 @@ export const ProjectsMenu = () => {
 			<NormalSection>
 				<CategoriesLabel medium>BY CATEGORY</CategoriesLabel>
 				<CategoriesGrid>
-					{projectsMenuItem.categories.map((category, idx) => (
-						<GLink size='Big' key={idx}>
-							{category.name}
-						</GLink>
+					{mainCategories.map((category, idx) => (
+						<Link key={idx} href={`/projects/${category.slug}`}>
+							<GLink size='Big' key={idx}>
+								{category.title}
+							</GLink>
+						</Link>
 					))}
 				</CategoriesGrid>
 			</NormalSection>
