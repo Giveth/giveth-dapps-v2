@@ -8,11 +8,11 @@ import { HighlightSection, BaseMenuContainer } from './common';
 
 export const projectsMenuItem = {
 	explore: [
-		{ name: 'Trending', url: '' },
-		{ name: 'Recently updated', url: '' },
-		{ name: 'Just launched', url: '' },
-		{ name: 'Popular', url: '' },
-		{ name: 'All projects', url: '' },
+		{ name: 'Trending', query: '?q=?q=trending' },
+		{ name: 'Recently updated', query: '?q=recently' },
+		{ name: 'Just launched', query: '?q=new' },
+		{ name: 'Popular', query: '?q=popular' },
+		{ name: 'All projects', query: '' },
 	],
 };
 
@@ -25,7 +25,9 @@ export const ProjectsMenu = () => {
 				<Caption medium>Explore by</Caption>
 				<ExploreByRow gap='24px'>
 					{projectsMenuItem.explore.map((explore, idx) => (
-						<B key={idx}>{explore.name}</B>
+						<Link key={idx} href={`/projects${explore.query}`}>
+							<B key={idx}>{explore.name}</B>
+						</Link>
 					))}
 				</ExploreByRow>
 			</HighlightSection>

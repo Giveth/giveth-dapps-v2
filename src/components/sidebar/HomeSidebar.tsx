@@ -24,7 +24,7 @@ export const HomeSidebar = () => {
 						<Caption medium>Explore by</Caption>
 					</ChildTitle>
 					{projectsMenuItem.explore.map((explore, idx) => (
-						<Link href={explore.url} key={idx}>
+						<Link href={`/projects${explore.query}`} key={idx}>
 							<ChildItemBold>{explore.name}</ChildItemBold>
 						</Link>
 					))}
