@@ -31,15 +31,15 @@ const VideoBlock = () => {
 	return (
 		<SectionContainer>
 			<Container>
-				<Flex>
-					<Flex flexDirection='column'>
+				<Flex alignItems='center'>
+					<Flex flexDirection='column' gap='24px'>
 						<H2>Lean about Giveth in 60 seconds</H2>
 						<H4>
 							What people say about the Giveth and why they love
 							it.
 						</H4>
 					</Flex>
-					<VideoContainer>
+					<CustomizedVideoContainer>
 						<video
 							ref={videoRef}
 							id='video'
@@ -64,7 +64,7 @@ const VideoBlock = () => {
 								draggable={false}
 							/>
 						</VideoOverlay>
-					</VideoContainer>
+					</CustomizedVideoContainer>
 				</Flex>
 			</Container>
 		</SectionContainer>
@@ -74,6 +74,12 @@ const VideoBlock = () => {
 const SectionContainer = styled.div`
 	background-color: ${neutralColors.gray[100]};
 	position: relative;
+	padding: 70px 0;
+`;
+
+const CustomizedVideoContainer = styled(VideoContainer)`
+	border-radius: 20px;
+	margin-bottom: 0;
 `;
 
 export default VideoBlock;
