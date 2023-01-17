@@ -49,6 +49,7 @@ export const ItemContainer = styled(Flex)<{ isHighlighted?: boolean }>`
 				? brandColors.giv[800]
 				: neutralColors.gray[200]};
 	}
+	transition: background-color 0.3s ease;
 `;
 
 export const ItemTitle = styled(Overline)`
