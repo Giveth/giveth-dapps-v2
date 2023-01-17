@@ -39,6 +39,7 @@ import { useDelayedState } from '@/hooks/useDelayedState';
 import { RewardButtonWithMenu } from '../menu/RewardButtonWithMenu';
 import { UserButtonWithMenu } from '../menu/UserButtonWithMenu';
 import { HomeSidebar } from '../sidebar/HomeSidebar';
+import { fetchMainCategories } from '@/features/general/general.thunk';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -87,6 +88,10 @@ const Header: FC<IHeader> = () => {
 			router.back();
 		}
 	};
+
+	useEffect(() => {
+		dispatch(fetchMainCategories());
+	}, []);
 
 	useEffect(() => {
 		setIsGIVeconomyRoute(router.route.startsWith('/giv'));
