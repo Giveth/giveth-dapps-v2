@@ -1,6 +1,7 @@
 import { GLink } from '@giveth/ui-design-system';
 import React, { FC, useEffect } from 'react';
 import { useIntl } from 'react-intl';
+import { useWeb3React } from '@web3-react/core';
 import { networksParams } from '@/helpers/blockchain';
 import { shortenAddress } from '@/lib/helpers';
 import {
@@ -11,6 +12,8 @@ import {
 	WBInfo,
 	WBNetwork,
 	CoverLine,
+	HeaderSidebarButtonWrapper,
+	SidebarInnerContainer,
 } from '../Header/Header.sc';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
@@ -20,6 +23,7 @@ import { device } from '@/lib/constants/constants';
 import { SideBar, ESideBarDirection } from '../sidebar/SideBar';
 import { MenuContainer } from './Menu.sc';
 import { UserItems } from './UserItems';
+import { FlexSpacer } from '../styled-components/Flex';
 
 export interface IHeaderButtonProps {
 	isHeaderShowing: boolean;
@@ -35,13 +39,9 @@ interface IUserButtonWithMenuProps extends IHeaderButtonProps {
 export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 	isHeaderShowing,
 	theme,
-	chainId,
-	account,
-	library,
 }) => {
 	const [showMenu, menuCondition, openMenu, closeMenu] = useDelayedState();
-	const { userData } = useAppSelector(state => state.user);
-	const { formatMessage } = useIntl();
+
 	const isDesktop = useMediaQuery(device.laptopL);
 	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
 		useDelayedState();
@@ -62,29 +62,7 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 	return (
 		<MenuAndButtonContainer {...props}>
 			<WalletButton outline theme={theme}>
-				<HBContainer>
-					<HBPic
-						src={
-							userData?.avatar ||
-							'/images/placeholders/profile.png'
-						}
-						alt='Profile Pic'
-						width={'24px'}
-						height={'24px'}
-					/>
-					<WBInfo>
-						<GLink size='Medium'>
-							{userData?.name || shortenAddress(account)}
-						</GLink>
-						<WBNetwork size='Tiny'>
-							{formatMessage({
-								id: 'label.connected_to',
-							})}{' '}
-							{(chainId && networksParams[chainId]?.chainName) ||
-								library?._network?.name}
-						</WBNetwork>
-					</WBInfo>
-				</HBContainer>
+				<HeaderUserButton />
 				<CoverLine theme={theme} />
 			</WalletButton>
 			{menuCondition && (
@@ -97,11 +75,48 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 					close={closeSidebar}
 					isAnimating={showSidebar}
 					direction={ESideBarDirection.Right}
-					header={<div>WOW</div>}
+					header={
+						<>
+							<FlexSpacer />
+							<HeaderSidebarButtonWrapper>
+								<HeaderUserButton />
+							</HeaderSidebarButtonWrapper>
+						</>
+					}
 				>
-					sidebaarrrrrrrrr
+					<SidebarInnerContainer>
+						<UserItems />
+					</SidebarInnerContainer>
 				</SideBar>
 			)}
 		</MenuAndButtonContainer>
+	);
+};
+
+const HeaderUserButton = ({}) => {
+	const { chainId, account, library } = useWeb3React();
+	const { userData } = useAppSelector(state => state.user);
+	const { formatMessage } = useIntl();
+	return (
+		<HBContainer>
+			<HBPic
+				src={userData?.avatar || '/images/placeholders/profile.png'}
+				alt='Profile Pic'
+				width={'24px'}
+				height={'24px'}
+			/>
+			<WBInfo>
+				<GLink size='Medium'>
+					{userData?.name || shortenAddress(account)}
+				</GLink>
+				<WBNetwork size='Tiny'>
+					{formatMessage({
+						id: 'label.connected_to',
+					})}{' '}
+					{(chainId && networksParams[chainId]?.chainName) ||
+						library?._network?.name}
+				</WBNetwork>
+			</WBInfo>
+		</HBContainer>
 	);
 };
