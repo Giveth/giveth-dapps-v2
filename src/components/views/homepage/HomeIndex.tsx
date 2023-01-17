@@ -6,6 +6,7 @@ import HomeGetUpdates from './HomeGetUpdates';
 import { IProject } from '@/apollo/types/types';
 import WhyGiveth from '@/components/views/homepage/whyGiveth';
 import CampaignBlock from '@/components/views/homepage/CampaignBlock';
+import IntroBlock from './introBlock';
 
 interface IHomeView {
 	projects: IProject[];
@@ -15,6 +16,7 @@ interface IHomeView {
 const HomeIndex: FC<IHomeView> = ({ projects }) => {
 	return (
 		<Wrapper>
+			<IntroBlock />
 			<Separator />
 			<CampaignBlock projects={projects} />
 			<Separator />

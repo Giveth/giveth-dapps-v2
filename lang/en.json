@@ -840,5 +840,17 @@
 	"label.you_need_to_connect_your_wallet_to_continue": "You need to connect your wallet to continue!",
 	"label.loading_data": "Loading Data",
 	"label.vote_in_giveth_dao": "Vote in the Giveth DAO",
-	"label.use_giv_to_vote": "Use GIV to vote on funding proposals in the GIVgarden."
+	"label.use_giv_to_vote": "Use GIV to vote on funding proposals in the GIVgarden.",
+	"label.giveth_is": "Giveth is ",
+	"label.rewarding": "rewarding",
+	"label.and_empowering_those_who_give_to": "and empowering those who give to projects, to society, and to the world!",
+	"label.explore_projects": "EXPLORE PROJECTS",
+	"label.zero_fees": "Zero fees",
+	"label.create_a_project_or_donate_directly": "Create a project or donate directly to for-good projects with zero fees.",
+	"label.how_it_works": "HOW IT WORKS",
+	"label.earn_rewards": " Earn rewards",
+	"label.by_donating_crypto": "By donating crypto to verified projects, you get rewarded!",
+	"label.easy_onboarding": "Easy onboarding",
+	"label.new_to_crypto": "New to crypto? No Problem Start right here",
+	"label.get_started": "GET STARTED"
 }
