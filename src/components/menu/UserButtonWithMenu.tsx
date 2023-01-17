@@ -12,7 +12,7 @@ import {
 	WBNetwork,
 	CoverLine,
 } from '../Header/Header.sc';
-import MenuWallet from './MenuWallet';
+import { UserMenu } from './UserMenu';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 import { useDelayedState } from '@/hooks/useDelayedState';
@@ -86,7 +86,7 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 				</HBContainer>
 				<CoverLine theme={theme} />
 			</WalletButton>
-			{showUserMenu && <MenuWallet />}
+			{showUserMenu && <UserMenu />}
 			{sidebarCondition && (
 				<SideBar
 					close={closeSidebar}

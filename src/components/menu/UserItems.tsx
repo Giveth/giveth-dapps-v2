@@ -3,14 +3,6 @@ import { useWeb3React } from '@web3-react/core';
 import { formatEther } from '@ethersproject/units';
 import { BigNumberish } from '@ethersproject/bignumber';
 import { useRouter } from 'next/router';
-import styled from 'styled-components';
-import {
-	brandColors,
-	neutralColors,
-	Subline,
-	P,
-	Overline,
-} from '@giveth/ui-design-system';
 
 import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
@@ -18,7 +10,6 @@ import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
 import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
 import { switchNetworkHandler } from '@/lib/wallet';
-import { MenuContainer } from './Menu.sc';
 import { isUserRegistered, networkInfo } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -27,11 +18,17 @@ import {
 	setShowWalletModal,
 } from '@/features/modal/modal.slice';
 import { signOut } from '@/features/user/user.thunks';
-import { ETheme } from '@/features/general/general.slice';
+import { MenuItem } from './GIVeconomyMenu';
+import {
+	Title,
+	Subtitle,
+	LeftSection,
+	StyledButton,
+	Menus,
+} from './UserItems.sc';
 
-const MenuWallet = () => {
+export const UserItems = () => {
 	const { formatMessage } = useIntl();
-	const [isMounted, setIsMounted] = useState(false);
 	const [balance, setBalance] = useState<string | null>(null);
 	const { chainId, account, library } = useWeb3React();
 	const [SignWithWallet, setSignWithWallet] = useState<boolean>(false);
@@ -78,10 +75,6 @@ const MenuWallet = () => {
 
 	const { networkName, networkToken } = networkInfo(chainId);
 
-	useEffect(() => {
-		setIsMounted(true);
-	}, []);
-
 	return (
 		<>
 			{SignWithWallet && (
@@ -96,57 +89,49 @@ const MenuWallet = () => {
 					}}
 				/>
 			)}
-			<WalletMenuContainer
-				isMounted={isMounted}
-				theme={theme}
-				isSignedIn={isSignedIn || false}
-			>
-				<Title>{formatMessage({ id: 'label.wallet' })}</Title>
-				<Subtitle>
-					<LeftSection>
-						{balance + ' '}
-						<span>{networkToken}</span>
-					</LeftSection>
-					<StyledButton
-						onClick={() => {
-							window.localStorage.removeItem(StorageLabel.WALLET);
-							dispatch(setShowWalletModal(true));
-						}}
-					>
-						{formatMessage({ id: 'label.change_wallet' })}
+			<Title>{formatMessage({ id: 'label.wallet' })}</Title>
+			<Subtitle>
+				<LeftSection>
+					{balance + ' '}
+					<span>{networkToken}</span>
+				</LeftSection>
+				<StyledButton
+					onClick={() => {
+						window.localStorage.removeItem(StorageLabel.WALLET);
+						dispatch(setShowWalletModal(true));
+					}}
+				>
+					{formatMessage({ id: 'label.change_wallet' })}
+				</StyledButton>
+			</Subtitle>
+			<Title>{formatMessage({ id: 'label.network' })}</Title>
+			<Subtitle>
+				<LeftSection>{networkName}</LeftSection>
+				{chainId && (
+					<StyledButton onClick={() => switchNetworkHandler(chainId)}>
+						{formatMessage({ id: 'label.switch_network' })}
 					</StyledButton>
-				</Subtitle>
-				<Title>{formatMessage({ id: 'label.network' })}</Title>
-				<Subtitle>
-					<LeftSection>{networkName}</LeftSection>
-					{chainId && (
-						<StyledButton
-							onClick={() => switchNetworkHandler(chainId)}
-						>
-							{formatMessage({ id: 'label.switch_network' })}
-						</StyledButton>
-					)}
-				</Subtitle>
-				<Menus>
-					{walletMenuArray.map(i => (
-						<MenuItem
-							key={i.title}
-							onClick={() => goRoute(i)}
-							theme={theme}
-						>
-							{formatMessage({ id: i.title })}
-						</MenuItem>
-					))}
-					{isSignedIn && (
-						<MenuItem
-							onClick={() => dispatch(signOut(token!))}
-							theme={theme}
-						>
-							{formatMessage({ id: 'label.sign_out' })}
-						</MenuItem>
-					)}
-				</Menus>
-			</WalletMenuContainer>
+				)}
+			</Subtitle>
+			<Menus>
+				{walletMenuArray.map(i => (
+					<MenuItem
+						key={i.title}
+						onClick={() => goRoute(i)}
+						theme={theme}
+					>
+						{formatMessage({ id: i.title })}
+					</MenuItem>
+				))}
+				{isSignedIn && (
+					<MenuItem
+						onClick={() => dispatch(signOut(token!))}
+						theme={theme}
+					>
+						{formatMessage({ id: 'label.sign_out' })}
+					</MenuItem>
+				)}
+			</Menus>
 		</>
 	);
 };
@@ -185,72 +170,3 @@ const walletMenuArray = [
 	},
 	{ title: 'label.support', url: Routes.Support, requiresSign: false },
 ];
-
-const MenuItem = styled.a`
-	height: 45px;
-	line-height: 45px;
-	padding: 0 16px;
-	font-size: 14px;
-	cursor: pointer;
-	color: ${props =>
-		props.theme === ETheme.Dark
-			? neutralColors.gray[100]
-			: neutralColors.gray[800]};
-	border-top: 2px solid
-		${props =>
-			props.theme === ETheme.Dark
-				? brandColors.giv[300]
-				: neutralColors.gray[300]};
-	&:hover {
-		background-color: ${props =>
-			props.theme === ETheme.Dark
-				? brandColors.giv[700]
-				: neutralColors.gray[200]};
-	}
-`;
-
-const Menus = styled.div`
-	display: flex;
-	flex-direction: column;
-	margin-top: 15px;
-	padding: 0 !important;
-	/* border-bottom: 2px solid ${brandColors.giv[300]}; */
-`;
-
-const StyledButton = styled(Subline)`
-	color: ${brandColors.pinky[500]};
-	cursor: pointer;
-`;
-
-const LeftSection = styled(P)`
-	font-weight: 500;
-
-	> span {
-		font-size: 14px;
-		font-weight: 400;
-	}
-`;
-
-const Subtitle = styled(Overline)`
-	display: flex;
-	justify-content: space-between;
-	margin-bottom: 7px;
-`;
-
-const Title = styled(Overline)`
-	/* color: ${neutralColors.gray[800]}; */
-	text-transform: uppercase;
-	/* font-weight: 500; */
-	margin-bottom: 2px;
-`;
-
-interface IWalletMenuContainer {
-	isSignedIn: boolean;
-}
-
-const WalletMenuContainer = styled(MenuContainer)<IWalletMenuContainer>`
-	max-height: ${props => (props.isSignedIn ? '525px' : '480px')};
-	overflow-y: auto;
-`;
-
-export default MenuWallet;

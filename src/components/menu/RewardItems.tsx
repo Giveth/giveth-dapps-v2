@@ -32,7 +32,7 @@ import {
 	IconHelpWrapper,
 	PartAmount,
 	PartUnit,
-} from './RewardInnerMenu.sc';
+} from './RewardItems.sc';
 import { IRewardMenuProps } from './RewardMenu';
 
 export interface IRewardItemsProps extends IRewardMenuProps {
