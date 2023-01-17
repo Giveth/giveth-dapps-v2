@@ -1,5 +1,5 @@
 import { GLink } from '@giveth/ui-design-system';
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { networksParams } from '@/helpers/blockchain';
 import { shortenAddress } from '@/lib/helpers';
@@ -39,7 +39,7 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 	account,
 	library,
 }) => {
-	const [showUserMenu, setShowUserMenu] = useState(false);
+	const [showMenu, menuCondition, openMenu, closeMenu] = useDelayedState();
 	const { userData } = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
 	const isDesktop = useMediaQuery(device.laptopL);
@@ -48,14 +48,14 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 
 	useEffect(() => {
 		if (!isHeaderShowing) {
-			setShowUserMenu(false);
+			closeMenu();
 		}
 	}, [isHeaderShowing]);
 
 	const props = isDesktop
 		? {
-				onMouseEnter: () => setShowUserMenu(true),
-				onMouseLeave: () => setShowUserMenu(false),
+				onMouseEnter: () => openMenu(),
+				onMouseLeave: () => closeMenu(),
 		  }
 		: { onClick: openSidebar };
 
@@ -87,8 +87,8 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 				</HBContainer>
 				<CoverLine theme={theme} />
 			</WalletButton>
-			{showUserMenu && (
-				<MenuContainer>
+			{menuCondition && (
+				<MenuContainer isAnimating={showMenu}>
 					<UserItems />
 				</MenuContainer>
 			)}

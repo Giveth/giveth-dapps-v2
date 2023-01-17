@@ -31,10 +31,8 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 	chainId,
 }) => {
 	const [showRewardMenuModal, setShowRewardMenuModal] = useState(false);
-	const [showRewardMenu, setShowRewardMenu] = useState(false);
-
 	const isDesktop = useMediaQuery(device.laptopL);
-	const [showMenu, MenuCondition, openMenu, closeMenu] = useDelayedState();
+	const [showMenu, menuCondition, openMenu, closeMenu] = useDelayedState();
 	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
 		useDelayedState();
 
@@ -58,7 +56,7 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 				<HeaderRewardButton chainId={chainId} />
 				<CoverLine theme={theme} />
 			</BalanceButton>
-			{MenuCondition && (
+			{menuCondition && (
 				<MenuContainer isAnimating={showMenu}>
 					<RewardItems
 						showWhatIsGIVstreamModal={showRewardMenuModal}
