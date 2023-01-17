@@ -1,11 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
-import { formatEther } from '@ethersproject/units';
-import { BigNumberish } from '@ethersproject/bignumber';
 import { useRouter } from 'next/router';
 
 import { useIntl } from 'react-intl';
-import { captureException } from '@sentry/nextjs';
 import { B, GLink } from '@giveth/ui-design-system';
 import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
@@ -23,8 +20,7 @@ import { ItemContainer, ItemRow, ItemTitle, ItemAction } from './common';
 
 export const UserItems = () => {
 	const { formatMessage } = useIntl();
-	const [balance, setBalance] = useState<string | null>(null);
-	const { chainId, account, library } = useWeb3React();
+	const { chainId, account } = useWeb3React();
 	const [SignWithWallet, setSignWithWallet] = useState<boolean>(false);
 	const [queueRoute, setQueueRoute] = useState<string>('');
 
@@ -48,24 +44,6 @@ export const UserItems = () => {
 		}
 		router.push(url);
 	};
-
-	useEffect(() => {
-		if (!!account && !!library) {
-			library
-				.getBalance(account)
-				.then((_balance: BigNumberish) => {
-					setBalance(parseFloat(formatEther(_balance)).toFixed(3));
-				})
-				.catch((error: unknown) => {
-					setBalance(null);
-					captureException(error, {
-						tags: {
-							section: 'getBalance',
-						},
-					});
-				});
-		}
-	}, [account, library, chainId]);
 
 	const { networkName } = networkInfo(chainId);
 
