@@ -62,7 +62,7 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 				<CoverLine theme={theme} />
 			</WalletButton>
 			{menuCondition && (
-				<MenuContainer isAnimating={showMenu}>
+				<MenuContainer isAnimating={showMenu} theme={theme}>
 					<UserItems />
 				</MenuContainer>
 			)}

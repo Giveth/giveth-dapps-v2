@@ -55,7 +55,7 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 				<CoverLine theme={theme} />
 			</BalanceButton>
 			{menuCondition && (
-				<MenuContainer isAnimating={showMenu}>
+				<MenuContainer isAnimating={showMenu} theme={theme}>
 					<RewardItems
 						showWhatIsGIVstreamModal={showRewardMenuModal}
 						setShowWhatIsGIVstreamModal={setShowRewardMenuModal}
