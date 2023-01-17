@@ -27,9 +27,8 @@ const UserController = () => {
 	useEffect(() => {
 		const selectedWalletName = localStorage.getItem(StorageLabel.WALLET);
 		const wallet = walletsArray.find(w => w.value === selectedWalletName);
-		// try to connect to safe
+		// try to connect to safe. this is only for the gnosis safe environment, it won't stop the flow if it fails
 		const safeWallet = walletsArray.find(w => w.name === 'GnosisSafe');
-		console.log({ safeWallet });
 		if (safeWallet) {
 			activate(safeWallet.connector, console.log)
 				.then(() => setIsActivatedCalled(true))
