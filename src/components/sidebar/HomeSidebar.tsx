@@ -71,7 +71,7 @@ export const HomeSidebar = () => {
 };
 
 const HomeSidebarContainer = styled(Flex)`
-	padding: 16px;
+	padding: 0 16px 16px;
 	gap: 16px;
 	justify-content: stretch;
 	flex-direction: column;
