@@ -15,11 +15,7 @@ export const UserMenu = () => {
 	}, []);
 
 	return (
-		<UserMenuContainer
-			isMounted={isMounted}
-			theme={theme}
-			isSignedIn={isSignedIn || false}
-		>
+		<UserMenuContainer theme={theme} isSignedIn={isSignedIn || false}>
 			<UserItems />
 		</UserMenuContainer>
 	);
@@ -29,7 +25,4 @@ interface IUserMenuContainer {
 	isSignedIn: boolean;
 }
 
-const UserMenuContainer = styled(MenuContainer)<IUserMenuContainer>`
-	max-height: ${props => (props.isSignedIn ? '525px' : '480px')};
-	overflow-y: auto;
-`;
+const UserMenuContainer = styled(MenuContainer)<IUserMenuContainer>``;

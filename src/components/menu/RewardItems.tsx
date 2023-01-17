@@ -29,10 +29,11 @@ import {
 	PartAmount,
 	PartUnit,
 } from './RewardItems.sc';
-import { IRewardMenuProps } from './RewardMenu';
 import { ItemAction, ItemContainer, ItemRow, ItemTitle } from './common';
 
-export interface IRewardItemsProps extends IRewardMenuProps {
+export interface IRewardItemsProps {
+	showWhatIsGIVstreamModal: boolean;
+	setShowWhatIsGIVstreamModal: (value: boolean) => void;
 	theme: ETheme;
 }
 

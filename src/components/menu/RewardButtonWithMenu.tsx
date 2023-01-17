@@ -10,7 +10,6 @@ import {
 	HeaderSidebarButtonWrapper,
 } from '../Header/Header.sc';
 import { IconGIV } from '../Icons/GIV';
-import { RewardMenu } from './RewardMenu';
 import { useAppSelector, currentValuesHelper } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { IHeaderButtonProps } from './UserButtonWithMenu';
@@ -20,6 +19,7 @@ import { useDelayedState } from '@/hooks/useDelayedState';
 import { SideBar, ESideBarDirection } from '../sidebar/SideBar';
 import { FlexSpacer } from '../styled-components/Flex';
 import { RewardItems } from './RewardItems';
+import { MenuContainer } from './Menu.sc';
 
 interface IRewardButtonWithMenuProps extends IHeaderButtonProps {
 	chainId?: number;
@@ -34,25 +34,21 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 	const [showRewardMenu, setShowRewardMenu] = useState(false);
 
 	const isDesktop = useMediaQuery(device.laptopL);
+	const [showMenu, MenuCondition, openMenu, closeMenu] = useDelayedState();
 	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
 		useDelayedState();
 
-	const handleRewardMenuOnLeave = () => {
-		if (!showRewardMenuModal) {
-			setShowRewardMenu(false);
-		}
-	};
-
 	useEffect(() => {
 		if (!isHeaderShowing) {
-			setShowRewardMenu(false);
+			closeMenu();
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isHeaderShowing]);
 
 	const props = isDesktop
 		? {
-				onMouseEnter: () => setShowRewardMenu(true),
-				onMouseLeave: handleRewardMenuOnLeave,
+				onMouseEnter: openMenu,
+				onMouseLeave: closeMenu,
 		  }
 		: { onClick: openSidebar };
 
@@ -62,11 +58,14 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 				<HeaderRewardButton chainId={chainId} />
 				<CoverLine theme={theme} />
 			</BalanceButton>
-			{showRewardMenu && (
-				<RewardMenu
-					showWhatIsGIVstreamModal={showRewardMenuModal}
-					setShowWhatIsGIVstreamModal={setShowRewardMenuModal}
-				/>
+			{MenuCondition && (
+				<MenuContainer isAnimating={showMenu}>
+					<RewardItems
+						showWhatIsGIVstreamModal={showRewardMenuModal}
+						setShowWhatIsGIVstreamModal={setShowRewardMenuModal}
+						theme={theme}
+					/>
+				</MenuContainer>
 			)}
 			{sidebarCondition && (
 				<SideBar
