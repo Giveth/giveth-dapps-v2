@@ -30,11 +30,7 @@ export interface IHeaderButtonProps {
 	theme: ETheme;
 }
 
-interface IUserButtonWithMenuProps extends IHeaderButtonProps {
-	chainId?: number;
-	account?: string | null;
-	library: any;
-}
+interface IUserButtonWithMenuProps extends IHeaderButtonProps {}
 
 export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 	isHeaderShowing,

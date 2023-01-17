@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
+import { useWeb3React } from '@web3-react/core';
 import { formatWeiHelper } from '@/helpers/number';
 import {
 	MenuAndButtonContainer,
@@ -21,14 +22,11 @@ import { FlexSpacer } from '../styled-components/Flex';
 import { RewardItems } from './RewardItems';
 import { MenuContainer } from './Menu.sc';
 
-interface IRewardButtonWithMenuProps extends IHeaderButtonProps {
-	chainId?: number;
-}
+interface IRewardButtonWithMenuProps extends IHeaderButtonProps {}
 
 export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 	isHeaderShowing,
 	theme,
-	chainId,
 }) => {
 	const [showRewardMenuModal, setShowRewardMenuModal] = useState(false);
 	const isDesktop = useMediaQuery(device.laptopL);
@@ -53,7 +51,7 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 	return (
 		<MenuAndButtonContainer {...props}>
 			<BalanceButton outline theme={theme}>
-				<HeaderRewardButton chainId={chainId} />
+				<HeaderRewardButton />
 				<CoverLine theme={theme} />
 			</BalanceButton>
 			{menuCondition && (
@@ -74,7 +72,7 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 						<>
 							<FlexSpacer />
 							<HeaderSidebarButtonWrapper>
-								<HeaderRewardButton chainId={chainId} />
+								<HeaderRewardButton />
 							</HeaderSidebarButtonWrapper>
 						</>
 					}
@@ -92,11 +90,8 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 	);
 };
 
-interface IRewardButtonProps {
-	chainId?: number;
-}
-
-const HeaderRewardButton: FC<IRewardButtonProps> = ({ chainId }) => {
+const HeaderRewardButton = () => {
+	const { chainId } = useWeb3React();
 	const sdh = new SubgraphDataHelper(
 		useAppSelector(state => state.subgraph[currentValuesHelper(chainId)]),
 	);

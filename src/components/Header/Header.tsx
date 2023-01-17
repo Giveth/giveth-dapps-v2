@@ -53,7 +53,7 @@ const Header: FC<IHeader> = () => {
 	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
 		useDelayedState();
 
-	const { chainId, active, account, library } = useWeb3React();
+	const { chainId, active, account } = useWeb3React();
 
 	const dispatch = useAppDispatch();
 	const { isEnabled, isSignedIn, userData } = useAppSelector(
@@ -225,14 +225,10 @@ const Header: FC<IHeader> = () => {
 						<RewardButtonWithMenu
 							isHeaderShowing={showHeader}
 							theme={theme}
-							chainId={chainId}
 						/>
 						<UserButtonWithMenu
 							isHeaderShowing={showHeader}
 							theme={theme}
-							chainId={chainId}
-							account={account}
-							library={library}
 						/>
 					</>
 				) : (
