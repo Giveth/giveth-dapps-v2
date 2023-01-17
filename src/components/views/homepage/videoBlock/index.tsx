@@ -8,6 +8,7 @@ import {
 	VideoContainer,
 	VideoOverlay,
 } from '@/components/homeTabs/Overview.sc';
+import { mediaQueries } from '@/lib/constants/constants';
 
 const VideoBlock = () => {
 	const [isPlaying, setIsPlaying] = useState(false);
@@ -31,7 +32,7 @@ const VideoBlock = () => {
 	return (
 		<SectionContainer>
 			<Container>
-				<Flex alignItems='center'>
+				<CustomFlex alignItems='center'>
 					<Flex flexDirection='column' gap='24px'>
 						<H2>Lean about Giveth in 60 seconds</H2>
 						<H4>
@@ -65,7 +66,7 @@ const VideoBlock = () => {
 							/>
 						</VideoOverlay>
 					</CustomizedVideoContainer>
-				</Flex>
+				</CustomFlex>
 			</Container>
 		</SectionContainer>
 	);
@@ -80,6 +81,15 @@ const SectionContainer = styled.div`
 const CustomizedVideoContainer = styled(VideoContainer)`
 	border-radius: 20px;
 	margin-bottom: 0;
+	margin-top: 0;
+`;
+
+const CustomFlex = styled(Flex)`
+	flex-direction: column-reverse;
+	gap: 40px;
+	${mediaQueries.laptopS} {
+		flex-direction: row;
+	}
 `;
 
 export default VideoBlock;
