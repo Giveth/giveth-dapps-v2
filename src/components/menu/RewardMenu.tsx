@@ -2,14 +2,14 @@ import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { MenuContainer } from './Menu.sc';
 import { useAppSelector } from '@/features/hooks';
-import { RewardInnerMenu } from './RewardInnerMenu';
+import { RewardItems } from './RewardItems';
 
-export interface IRewardMenu {
+export interface IRewardMenuProps {
 	showWhatIsGIVstreamModal: boolean;
 	setShowWhatIsGIVstreamModal: (value: boolean) => void;
 }
 
-export const RewardMenu: FC<IRewardMenu> = ({
+export const RewardMenu: FC<IRewardMenuProps> = ({
 	showWhatIsGIVstreamModal,
 	setShowWhatIsGIVstreamModal,
 }) => {
@@ -22,7 +22,7 @@ export const RewardMenu: FC<IRewardMenu> = ({
 	return (
 		<>
 			<RewardMenuContainer isMounted={isMounted} theme={theme}>
-				<RewardInnerMenu
+				<RewardItems
 					showWhatIsGIVstreamModal={showWhatIsGIVstreamModal}
 					setShowWhatIsGIVstreamModal={setShowWhatIsGIVstreamModal}
 					theme={theme}

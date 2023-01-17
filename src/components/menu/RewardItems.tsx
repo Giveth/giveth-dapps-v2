@@ -21,7 +21,6 @@ import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { SimplePoolStakingConfig, StakingType } from '@/types/config';
-import { IRewardMenu } from './RewardMenu';
 import {
 	RewardMenuItem,
 	RewardMenuTitle,
@@ -34,12 +33,13 @@ import {
 	PartAmount,
 	PartUnit,
 } from './RewardInnerMenu.sc';
+import { IRewardMenuProps } from './RewardMenu';
 
-interface IRewardMenuInner extends IRewardMenu {
+export interface IRewardItemsProps extends IRewardMenuProps {
 	theme: ETheme;
 }
 
-export const RewardInnerMenu: FC<IRewardMenuInner> = ({
+export const RewardItems: FC<IRewardItemsProps> = ({
 	showWhatIsGIVstreamModal,
 	setShowWhatIsGIVstreamModal,
 	theme,
