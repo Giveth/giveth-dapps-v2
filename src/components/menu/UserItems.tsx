@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 
 import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
-import { B } from '@giveth/ui-design-system';
+import { B, GLink } from '@giveth/ui-design-system';
 import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
 import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
@@ -19,7 +19,6 @@ import {
 	setShowWalletModal,
 } from '@/features/modal/modal.slice';
 import { signOut } from '@/features/user/user.thunks';
-import { MenuItem } from './GIVeconomyMenu';
 import { ItemContainer, ItemRow, ItemTitle, ItemAction } from './common';
 
 export const UserItems = () => {
@@ -104,21 +103,23 @@ export const UserItems = () => {
 				</ItemRow>
 			</ItemContainer>
 			{walletMenuArray.map(i => (
-				<MenuItem
+				<ItemContainer
 					key={i.title}
 					onClick={() => goRoute(i)}
 					theme={theme}
 				>
-					{formatMessage({ id: i.title })}
-				</MenuItem>
+					<GLink size='Big'>{formatMessage({ id: i.title })}</GLink>
+				</ItemContainer>
 			))}
 			{isSignedIn && (
-				<MenuItem
+				<ItemContainer
 					onClick={() => dispatch(signOut(token!))}
 					theme={theme}
 				>
-					{formatMessage({ id: 'label.sign_out' })}
-				</MenuItem>
+					<GLink size='Big'>
+						{formatMessage({ id: 'label.sign_out' })}
+					</GLink>
+				</ItemContainer>
 			)}
 			{SignWithWallet && (
 				<SignWithWalletModal
