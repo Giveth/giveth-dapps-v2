@@ -5,7 +5,7 @@ import HomeFromBlog from './HomeFromBlog';
 import HomeGetUpdates from './HomeGetUpdates';
 import { IProject } from '@/apollo/types/types';
 import WhyGiveth from '@/components/views/homepage/whyGiveth';
-import CampaignBlock from '@/components/views/homepage/campaignBlock';
+import CampaignBlock from '@/components/views/homepage/CampaignBlock';
 
 interface IHomeView {
 	projects: IProject[];
