@@ -50,6 +50,7 @@ export const ItemContainer = styled(Flex)<{ isHighlighted?: boolean }>`
 				: neutralColors.gray[200]};
 	}
 	transition: background-color 0.3s ease;
+	cursor: pointer;
 `;
 
 export const ItemTitle = styled(Overline)`

@@ -229,6 +229,8 @@ export const HeaderSidebarButtonWrapper = styled.div`
 	padding: 12px;
 `;
 
-export const SidebarInnerContainer = styled.div`
+export const SidebarInnerContainer = styled(Flex)`
 	padding: 4px 16px 16px;
+	flex-direction: column;
+	gap: 16px;
 `;
