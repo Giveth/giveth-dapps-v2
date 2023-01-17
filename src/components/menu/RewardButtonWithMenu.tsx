@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState } from 'react';
-import styled from 'styled-components';
 import { formatWeiHelper } from '@/helpers/number';
 import {
 	MenuAndButtonContainer,
@@ -8,6 +7,7 @@ import {
 	HBContent,
 	CoverLine,
 	HeaderSidebarButtonWrapper,
+	SidebarInnerContainer,
 } from '../Header/Header.sc';
 import { IconGIV } from '../Icons/GIV';
 import { useAppSelector, currentValuesHelper } from '@/features/hooks';
@@ -79,13 +79,13 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 						</>
 					}
 				>
-					<RewardInnerSidebarContainer>
+					<SidebarInnerContainer>
 						<RewardItems
 							showWhatIsGIVstreamModal={showRewardMenuModal}
 							setShowWhatIsGIVstreamModal={setShowRewardMenuModal}
 							theme={theme}
 						/>
-					</RewardInnerSidebarContainer>
+					</SidebarInnerContainer>
 				</SideBar>
 			)}
 		</MenuAndButtonContainer>
@@ -110,7 +110,3 @@ const HeaderRewardButton: FC<IRewardButtonProps> = ({ chainId }) => {
 		</HBContainer>
 	);
 };
-
-const RewardInnerSidebarContainer = styled.div`
-	padding: 4px 16px 16px;
-`;
