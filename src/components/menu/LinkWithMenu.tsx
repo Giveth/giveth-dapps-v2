@@ -10,12 +10,23 @@ import { useDelayedState } from '@/hooks/useDelayedState';
 interface ILinkWithMenu {
 	title: string;
 	children: ReactNode;
+	isHeaderShowing: boolean;
 }
 
-export const LinkWithMenu: FC<ILinkWithMenu> = ({ title, children }) => {
+export const LinkWithMenu: FC<ILinkWithMenu> = ({
+	title,
+	isHeaderShowing,
+	children,
+}) => {
 	const elRef = useRef<HTMLDivElement>(null);
 	const theme = useAppSelector(state => state.general.theme);
 	const [showMenu, menuCondition, openMenu, closeMenu] = useDelayedState();
+
+	useEffect(() => {
+		if (!isHeaderShowing) {
+			closeMenu();
+		}
+	}, [isHeaderShowing]);
 
 	return (
 		<LinkWithMenuContainer

@@ -187,10 +187,13 @@ const Header: FC<IHeader> = () => {
 			</Flex>
 			{isDesktop && !showBackBtn && (
 				<HeaderLinks theme={theme}>
-					<LinkWithMenu title='Projects'>
+					<LinkWithMenu title='Projects' isHeaderShowing={showHeader}>
 						<ProjectsMenu />
 					</LinkWithMenu>
-					<LinkWithMenu title='GIVeconomy'>
+					<LinkWithMenu
+						title='GIVeconomy'
+						isHeaderShowing={showHeader}
+					>
 						<GIVeconomyMenu />
 					</LinkWithMenu>
 					<HeaderLink theme={theme}>
