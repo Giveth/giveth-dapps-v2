@@ -12,13 +12,14 @@ import {
 	WBNetwork,
 	CoverLine,
 } from '../Header/Header.sc';
-import { UserMenu } from './UserMenu';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 import { useDelayedState } from '@/hooks/useDelayedState';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
 import { SideBar, ESideBarDirection } from '../sidebar/SideBar';
+import { MenuContainer } from './Menu.sc';
+import { UserItems } from './UserItems';
 
 export interface IHeaderButtonProps {
 	isHeaderShowing: boolean;
@@ -86,7 +87,11 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 				</HBContainer>
 				<CoverLine theme={theme} />
 			</WalletButton>
-			{showUserMenu && <UserMenu />}
+			{showUserMenu && (
+				<MenuContainer>
+					<UserItems />
+				</MenuContainer>
+			)}
 			{sidebarCondition && (
 				<SideBar
 					close={closeSidebar}
