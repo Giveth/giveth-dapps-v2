@@ -57,9 +57,9 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 
 	return (
 		<MenuAndButtonContainer {...props}>
-			<WalletButton outline theme={theme}>
+			<WalletButton outline theme={theme} isHover={showMenu}>
 				<HeaderUserButton />
-				<CoverLine theme={theme} />
+				<CoverLine theme={theme} className='cover-line' />
 			</WalletButton>
 			{menuCondition && (
 				<MenuContainer isAnimating={showMenu} theme={theme}>

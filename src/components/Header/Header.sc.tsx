@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import {
 	neutralColors,
 	brandColors,
@@ -49,11 +49,11 @@ export const Logo = styled.span`
 	cursor: pointer;
 `;
 
-interface IThemed {
-	theme?: ETheme;
+interface IHeaderButtonProps {
+	isHover: boolean;
 }
 
-export const HeaderButton = styled(CButton)<IThemed>`
+export const HeaderButton = styled(CButton)<IHeaderButtonProps>`
 	display: flex;
 	height: 50px;
 	font-weight: normal;
@@ -70,7 +70,22 @@ export const HeaderButton = styled(CButton)<IThemed>`
 		${props =>
 			props.theme === ETheme.Dark ? brandColors.giv[600] : 'white'};
 	box-shadow: ${props =>
-		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
+		props.theme === ETheme.Dark ? Shadow.Dark[500] : Shadow.Neutral[500]};
+	${props =>
+		props.isHover
+			? css`
+					background-color: ${props =>
+						props.theme === ETheme.Dark
+							? brandColors.giv[600]
+							: 'white'};
+					.cover-line {
+						background-color: ${props =>
+							props.theme === ETheme.Dark
+								? brandColors.giv[600]
+								: 'white'};
+					}
+			  `
+			: ''}
 `;
 
 export const BalanceButton = styled(HeaderButton)`
@@ -145,7 +160,7 @@ interface IHeaderLinkProps {
 	theme?: ETheme;
 }
 
-export const HeaderLinks = styled(Flex)<IThemed>`
+export const HeaderLinks = styled(Flex)`
 	margin-left: 48px;
 	gap: 8px;
 `;
@@ -208,7 +223,7 @@ export const MenuAndButtonContainer = styled.div`
 	z-index: 2;
 `;
 
-export const CoverLine = styled.div<IThemed>`
+export const CoverLine = styled.div`
 	background-color: ${props =>
 		props.theme === ETheme.Dark ? brandColors.giv[900] : 'white'};
 	position: absolute;
@@ -233,4 +248,8 @@ export const SidebarInnerContainer = styled(Flex)`
 	padding: 4px 16px 16px;
 	flex-direction: column;
 	gap: 16px;
+`;
+
+export const HeaderPlaceHolder = styled.div`
+	height: 92px;
 `;

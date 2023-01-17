@@ -16,7 +16,7 @@ export const MenuContainer = styled(Flex)<IMenuContainerProps>`
 	right: 0;
 	width: 276px;
 	background-color: ${props =>
-		props.theme === ETheme.Dark ? brandColors.giv[900] : 'white'};
+		props.theme === ETheme.Dark ? brandColors.giv[600] : 'white'};
 	border: 1px solid
 		${props =>
 			props.theme === ETheme.Dark ? brandColors.giv[600] : 'white'};
