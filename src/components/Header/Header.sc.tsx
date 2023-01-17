@@ -146,6 +146,7 @@ interface IHeaderLinkProps {
 }
 
 export const HeaderLinks = styled(Flex)<IThemed>`
+	margin-left: 48px;
 	gap: 8px;
 `;
 

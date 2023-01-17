@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { Button, GLink, IconMenu24 } from '@giveth/ui-design-system';
 
 import { useIntl } from 'react-intl';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex, FlexSpacer } from '@/components/styled-components/Flex';
 import {
 	ConnectButton,
 	HeaderLinks,
@@ -151,12 +151,7 @@ const Header: FC<IHeader> = () => {
 	};
 
 	return (
-		<StyledHeader
-			justifyContent='space-between'
-			alignItems='center'
-			theme={theme}
-			show={showHeader}
-		>
+		<StyledHeader alignItems='center' theme={theme} show={showHeader}>
 			<Flex>
 				{showBackBtn ? (
 					<Logo onClick={handleBack}>
@@ -205,6 +200,7 @@ const Header: FC<IHeader> = () => {
 					</HeaderLink>
 				</HeaderLinks>
 			)}
+			<FlexSpacer />
 			<Flex gap='8px'>
 				<LargeCreateProject>
 					<Button
