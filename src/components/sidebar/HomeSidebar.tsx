@@ -13,7 +13,7 @@ import {
 } from '../menu/GIVeconomyMenu';
 
 export const HomeSidebar = () => {
-	const theme = useAppSelector(state => state.general.theme);
+	const { theme, mainCategories } = useAppSelector(state => state.general);
 
 	return (
 		<HomeSidebarContainer>
@@ -31,10 +31,12 @@ export const HomeSidebar = () => {
 				</SidebarHighlightSection>
 				<SidebarChildSection>
 					<ChildTitle medium>BY CATEGORY</ChildTitle>
-					{projectsMenuItem.categories.map((explore, idx) => (
-						<ChildItem size='Big' key={idx}>
-							{explore.name}
-						</ChildItem>
+					{mainCategories.map((category, idx) => (
+						<Link key={idx} href={`/projects/${category.slug}`}>
+							<ChildItem size='Big' key={idx}>
+								{category.title}
+							</ChildItem>
+						</Link>
 					))}
 				</SidebarChildSection>
 			</SidebarItem>
