@@ -26,20 +26,22 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 	return (
 		<>
 			<HighlightSection theme={theme}>
-				<Caption medium>Explore by</Caption>
+				<Label medium>Explore by</Label>
 				<ExploreByRow
 					gap='24px'
 					flexDirection={inSidebar ? 'column' : undefined}
 				>
 					{projectsItems.explore.map((explore, idx) => (
 						<Link key={idx} href={`/projects${explore.query}`}>
-							<B key={idx}>{explore.name}</B>
+							<ItemContainer key={idx} theme={theme}>
+								<B key={idx}>{explore.name}</B>
+							</ItemContainer>
 						</Link>
 					))}
 				</ExploreByRow>
 			</HighlightSection>
 			<NormalSection inSidebar={inSidebar}>
-				<CategoriesLabel medium>BY CATEGORY</CategoriesLabel>
+				<Label medium>BY CATEGORY</Label>
 				<CategoriesGrid inSidebar={inSidebar}>
 					{mainCategories.map((category, idx) => (
 						<Link key={idx} href={`/projects/${category.slug}`}>
@@ -60,7 +62,7 @@ const ExploreByRow = styled(Flex)`
 
 const NormalSection = styled.div<{ inSidebar?: boolean }>`
 	margin-top: 16px;
-	padding: ${props => (props.inSidebar ? '0' : '8px 16px')};
+	padding: 8px;
 	border-radius: 16px;
 `;
 
@@ -74,4 +76,6 @@ const CategoriesGrid = styled.div<{ inSidebar?: boolean }>`
 	margin-bottom: 8px;
 `;
 
-const CategoriesLabel = styled(Caption)``;
+const Label = styled(Caption)`
+	padding-left: 8px;
+`;
