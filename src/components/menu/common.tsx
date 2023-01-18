@@ -45,8 +45,12 @@ export const ItemContainer = styled(Flex)<{ isHighlighted?: boolean }>`
 			: 'unset'};
 	&:hover {
 		background-color: ${props =>
-			props.theme === ETheme.Dark
-				? brandColors.giv[800]
+			props.isHighlighted
+				? props.theme === ETheme.Dark
+					? brandColors.giv[600]
+					: neutralColors.gray[300]
+				: props.theme === ETheme.Dark
+				? brandColors.giv[500]
 				: neutralColors.gray[200]};
 	}
 	transition: background-color 0.3s ease;

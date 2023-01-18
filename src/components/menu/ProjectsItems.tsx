@@ -33,7 +33,11 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 				>
 					{projectsItems.explore.map((explore, idx) => (
 						<Link key={idx} href={`/projects${explore.query}`}>
-							<ItemContainer key={idx} theme={theme}>
+							<ItemContainer
+								key={idx}
+								theme={theme}
+								isHighlighted
+							>
 								<B key={idx}>{explore.name}</B>
 							</ItemContainer>
 						</Link>
