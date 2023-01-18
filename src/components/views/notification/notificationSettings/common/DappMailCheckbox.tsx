@@ -29,14 +29,14 @@ const DappMailCheckbox: FC<IDappMailCheckbox> = ({ notificationItem }) => {
 	return (
 		<Container>
 			<Checkbox
-				label='Send me email'
+				label='Send me an email'
 				checked={allowEmailNotification}
 				onChange={setEmailNotification}
 				disabled={!isEmailEditable}
 				size={18}
 			/>
 			<Checkbox
-				label='Dapp notification'
+				label='Notify me in the DApp'
 				checked={allowDappPushNotification}
 				onChange={setDappNotification}
 				disabled={!isWebEditable}
