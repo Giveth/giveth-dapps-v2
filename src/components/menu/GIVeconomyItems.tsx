@@ -9,9 +9,10 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useAppSelector } from '@/features/hooks';
-import { ItemContainer, ItemRow, ItemTitle } from './common';
+import { ItemRow, ItemTitle } from './common';
 import Routes from '@/lib/constants/Routes';
 import { ETheme } from '@/features/general/general.slice';
+import { Item } from './Item';
 
 const giveconomyItems = [
 	{
@@ -32,7 +33,7 @@ export const GIVeconomyItems = () => {
 	return (
 		<>
 			<Link href={Routes.GIVfarm}>
-				<ItemContainer isHighlighted theme={theme}>
+				<Item isHighlighted theme={theme}>
 					<ItemTitle theme={theme}>Liquidity</ItemTitle>
 					<ItemRow>
 						<B>GIVfarm</B>
@@ -45,17 +46,17 @@ export const GIVeconomyItems = () => {
 							}
 						/>
 					</ItemRow>
-				</ItemContainer>
+				</Item>
 			</Link>
 			<LabelStyle medium>Learn about</LabelStyle>
 			{giveconomyItems.map((item, idx) => (
 				<Link key={idx} href={item.href}>
-					<ItemContainer theme={theme}>
+					<Item theme={theme}>
 						<ItemTitle theme={theme}>{item.title}</ItemTitle>
 						<ItemRow>
 							<GLink>{item.label}</GLink>
 						</ItemRow>
-					</ItemContainer>
+					</Item>
 				</Link>
 			))}
 		</>
