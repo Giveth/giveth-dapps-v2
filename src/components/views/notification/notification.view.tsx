@@ -140,7 +140,8 @@ function NotificationView() {
 						</InternalLink>
 					</Flex>
 					<Lead>
-						Your activity history, starting with the most recent
+						Your history of notifications, starting with the most
+						recent.
 					</Lead>
 				</NotificationDesc>
 			</Flex>
