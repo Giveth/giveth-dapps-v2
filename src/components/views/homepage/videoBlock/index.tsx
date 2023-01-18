@@ -34,7 +34,7 @@ const VideoBlock = () => {
 			<Container>
 				<CustomFlex alignItems='center'>
 					<Flex flexDirection='column' gap='24px'>
-						<H2>Lean about Giveth in 60 seconds</H2>
+						<H2>Learn about Giveth in 60 seconds</H2>
 						<H4>
 							What people say about the Giveth and why they love
 							it.
