@@ -1,4 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { fetchMainCategories } from './general.thunk';
+import { IMainCategory } from '@/apollo/types/types';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 export enum ETheme {
@@ -10,6 +12,7 @@ const initialState = {
 	theme: ETheme.Light,
 	showHeader: true,
 	showFooter: true,
+	mainCategories: [] as IMainCategory[],
 };
 
 export const GeneralSlice = createSlice({
@@ -36,6 +39,11 @@ export const GeneralSlice = createSlice({
 		setShowFooter: (state, action: PayloadAction<boolean>) => {
 			state.showFooter = action.payload;
 		},
+	},
+	extraReducers: builder => {
+		builder.addCase(fetchMainCategories.fulfilled, (state, action) => {
+			state.mainCategories = action.payload.data.mainCategories;
+		});
 	},
 });
 
