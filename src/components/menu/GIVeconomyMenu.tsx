@@ -15,5 +15,8 @@ export const GIVeconomyMenu = () => {
 };
 
 const MenuContainer = styled(BaseMenuContainer)`
+	display: flex;
+	flex-direction: column;
 	width: 239px;
+	gap: 4px;
 `;

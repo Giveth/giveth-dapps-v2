@@ -1,18 +1,16 @@
 import React from 'react';
 import Link from 'next/link';
-import styled from 'styled-components';
 import {
 	B,
-	brandColors,
 	Caption,
 	GLink,
 	IconGIVFarm,
 	neutralColors,
 } from '@giveth/ui-design-system';
+import styled from 'styled-components';
 import { useAppSelector } from '@/features/hooks';
-import { HighlightSection } from './common';
+import { ItemContainer, ItemRow, ItemTitle } from './common';
 import Routes from '@/lib/constants/Routes';
-import { Flex } from '../styled-components/Flex';
 import { ETheme } from '@/features/general/general.slice';
 
 const giveconomyItems = [
@@ -34,9 +32,9 @@ export const GIVeconomyItems = () => {
 	return (
 		<>
 			<Link href={Routes.GIVfarm}>
-				<HighlightSection theme={theme}>
-					<Caption>Liquidity</Caption>
-					<Flex justifyContent='space-between'>
+				<ItemContainer isHighlighted theme={theme}>
+					<ItemTitle theme={theme}>Liquidity</ItemTitle>
+					<ItemRow>
 						<B>GIVfarm</B>
 						<IconGIVFarm
 							size={24}
@@ -46,49 +44,24 @@ export const GIVeconomyItems = () => {
 									: neutralColors.gray[900]
 							}
 						/>
-					</Flex>
-				</HighlightSection>
+					</ItemRow>
+				</ItemContainer>
 			</Link>
-			<LearnStyle medium>Learn about</LearnStyle>
+			<LabelStyle medium>Learn about</LabelStyle>
 			{giveconomyItems.map((item, idx) => (
 				<Link key={idx} href={item.href}>
-					<MenuItem theme={theme}>
-						<GIVeconomyItemTitle size='Small'>
-							{item.title}
-						</GIVeconomyItemTitle>
-						<Label size='Big'>{item.label}</Label>
-					</MenuItem>
+					<ItemContainer theme={theme}>
+						<ItemTitle theme={theme}>{item.title}</ItemTitle>
+						<ItemRow>
+							<GLink>{item.label}</GLink>
+						</ItemRow>
+					</ItemContainer>
 				</Link>
 			))}
 		</>
 	);
 };
 
-const LearnStyle = styled(Caption)`
-	margin: 24px 16px 16px;
+const LabelStyle = styled(Caption)`
+	margin: 24px 8px 16px;
 `;
-
-const MenuItem = styled(Flex)`
-	flex-direction: column;
-	gap: 4px;
-	padding: 4px 16px;
-	&:hover {
-		background-color: ${props =>
-			props.theme === ETheme.Dark
-				? brandColors.giv[500]
-				: neutralColors.gray[200]};
-	}
-	border-radius: 8px;
-	margin: 8px 0;
-	transition: background-color 0.3s ease;
-`;
-
-const GIVeconomyItemTitle = styled(GLink)`
-	color: ${brandColors.giv[200]};
-	color: ${props =>
-		props.theme === ETheme.Dark
-			? brandColors.giv[200]
-			: neutralColors.gray[600]};
-`;
-
-const Label = styled(GLink)``;
