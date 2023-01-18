@@ -114,7 +114,7 @@ const translateYForRightLeft = (
 
 const tooltipStyleCalc = (
 	position: ITooltipDirection,
-	isMobile: Boolean,
+	isMobile: Boolean | null,
 	parentRect: DOMRect,
 	childRect?: DOMRect, // left it here for future usage
 ): CSSProperties => {
