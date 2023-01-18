@@ -29,7 +29,8 @@ import {
 	PartAmount,
 	PartUnit,
 } from './RewardItems.sc';
-import { ItemAction, ItemContainer, ItemRow, ItemTitle } from './common';
+import { ItemAction, ItemRow, ItemTitle } from './common';
+import { Item } from './Item';
 
 export interface IRewardItemsProps {
 	showWhatIsGIVstreamModal: boolean;
@@ -105,7 +106,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 	}, [currentValues, chainId, givTokenDistroHelper]);
 	return (
 		<>
-			<ItemContainer theme={theme}>
+			<Item theme={theme}>
 				<ItemTitle theme={theme}>
 					{formatMessage({ id: 'label.network' })}
 				</ItemTitle>
@@ -118,8 +119,8 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 						{formatMessage({ id: 'label.switch_network' })}
 					</ItemAction>
 				</ItemRow>
-			</ItemContainer>
-			<ItemContainer isHighlighted theme={theme}>
+			</Item>
+			<Item isHighlighted theme={theme}>
 				<ItemTitle theme={theme}>
 					{formatMessage({ id: 'label.givstream_flowrate' })}
 				</ItemTitle>
@@ -144,9 +145,9 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 						<IconHelpFilled16 />
 					</IconHelpWrapper>
 				</FlowrateRow>
-			</ItemContainer>
+			</Item>
 			<Link href={Routes.GIVstream}>
-				<ItemContainer theme={theme}>
+				<Item theme={theme}>
 					<ItemTitle theme={theme}>
 						{formatMessage({ id: 'label.from' })} GIVstream
 					</ItemTitle>
@@ -156,10 +157,10 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 						</PartAmount>
 						<PartUnit>GIV</PartUnit>
 					</Flex>
-				</ItemContainer>
+				</Item>
 			</Link>
 			<Link href={Routes.GIVfarm}>
-				<ItemContainer theme={theme}>
+				<Item theme={theme}>
 					<ItemTitle theme={theme}>GIVfarm & GIVgarden</ItemTitle>
 					<Flex gap='4px'>
 						<PartAmount medium>
@@ -167,10 +168,10 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 						</PartAmount>
 						<PartUnit>GIV</PartUnit>
 					</Flex>
-				</ItemContainer>
+				</Item>
 			</Link>
 			<Link href={Routes.GIVbacks}>
-				<ItemContainer theme={theme}>
+				<Item theme={theme}>
 					<ItemTitle theme={theme}>GIVbacks</ItemTitle>
 					<Flex gap='4px'>
 						<PartAmount medium>
@@ -178,7 +179,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 						</PartAmount>
 						<PartUnit>GIV</PartUnit>
 					</Flex>
-				</ItemContainer>
+				</Item>
 			</Link>
 			{showWhatIsGIVstreamModal && (
 				<WhatisStreamModal
