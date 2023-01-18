@@ -16,13 +16,8 @@ import {
 	setShowWalletModal,
 } from '@/features/modal/modal.slice';
 import { signOut } from '@/features/user/user.thunks';
-import {
-	ItemContainer,
-	ItemRow,
-	ItemTitle,
-	ItemAction,
-	ItemSpacer,
-} from './common';
+import { ItemRow, ItemTitle, ItemAction, ItemSpacer } from './common';
+import { Item } from './Item';
 
 export const UserItems = () => {
 	const { formatMessage } = useIntl();
@@ -55,7 +50,7 @@ export const UserItems = () => {
 
 	return (
 		<>
-			<ItemContainer theme={theme}>
+			<Item theme={theme}>
 				<ItemTitle theme={theme}>
 					{formatMessage({ id: 'label.wallet' })}
 				</ItemTitle>
@@ -71,8 +66,8 @@ export const UserItems = () => {
 						{formatMessage({ id: 'label.change_wallet' })}
 					</ItemAction>
 				</ItemRow>
-			</ItemContainer>
-			<ItemContainer theme={theme}>
+			</Item>
+			<Item theme={theme}>
 				<ItemTitle theme={theme}>
 					{formatMessage({ id: 'label.network' })}
 				</ItemTitle>
@@ -85,26 +80,19 @@ export const UserItems = () => {
 						{formatMessage({ id: 'label.switch_network' })}
 					</ItemAction>
 				</ItemRow>
-			</ItemContainer>
+			</Item>
 			<ItemSpacer />
 			{walletMenuArray.map(i => (
-				<ItemContainer
-					key={i.title}
-					onClick={() => goRoute(i)}
-					theme={theme}
-				>
+				<Item key={i.title} onClick={() => goRoute(i)} theme={theme}>
 					<GLink size='Big'>{formatMessage({ id: i.title })}</GLink>
-				</ItemContainer>
+				</Item>
 			))}
 			{isSignedIn && (
-				<ItemContainer
-					onClick={() => dispatch(signOut(token!))}
-					theme={theme}
-				>
+				<Item onClick={() => dispatch(signOut(token!))} theme={theme}>
 					<GLink size='Big'>
 						{formatMessage({ id: 'label.sign_out' })}
 					</GLink>
-				</ItemContainer>
+				</Item>
 			)}
 			{SignWithWallet && (
 				<SignWithWalletModal
