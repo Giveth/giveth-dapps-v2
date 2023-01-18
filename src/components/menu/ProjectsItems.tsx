@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import Link from 'next/link';
 import { useAppSelector } from '@/features/hooks';
 import { Flex } from '../styled-components/Flex';
-import { HighlightSection, ItemContainer } from './common';
+import { HighlightSection } from './common';
+import { Item } from './Item';
 
 const projectsItems = {
 	explore: [
@@ -33,13 +34,9 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 				>
 					{projectsItems.explore.map((explore, idx) => (
 						<Link key={idx} href={`/projects${explore.query}`}>
-							<ItemContainer
-								key={idx}
-								theme={theme}
-								isHighlighted
-							>
+							<Item key={idx} theme={theme} isHighlighted>
 								<B key={idx}>{explore.name}</B>
-							</ItemContainer>
+							</Item>
 						</Link>
 					))}
 				</ExploreByRow>
@@ -49,9 +46,9 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 				<CategoriesGrid inSidebar={inSidebar}>
 					{mainCategories.map((category, idx) => (
 						<Link key={idx} href={`/projects/${category.slug}`}>
-							<ItemContainer key={idx} theme={theme}>
+							<Item key={idx} theme={theme}>
 								<GLink size='Big'>{category.title}</GLink>
-							</ItemContainer>
+							</Item>
 						</Link>
 					))}
 				</CategoriesGrid>
