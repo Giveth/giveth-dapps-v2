@@ -52,7 +52,6 @@ export const device = {
 	laptopS: `(min-width: ${deviceSize.laptopS}px)`,
 	laptopL: `(min-width: ${deviceSize.laptopL}px)`,
 	desktop: `(min-width: ${deviceSize.desktop}px)`,
-	desktopL: `(min-width: ${deviceSize.desktop}px)`,
 };
 
 export const mediaQueries = {

@@ -18,7 +18,7 @@ import { client } from '@/apollo/apolloClient';
 import { ICategory, IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
-import { device, deviceSize, mediaQueries } from '@/lib/constants/constants';
+import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import ProjectsBanner from './ProjectsBanner';
@@ -31,7 +31,6 @@ import LoadingAnimation from '@/animations/loading_giv.json';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import ProjectsSortSelect from './ProjectsSortSelect';
-import useMediaQuery from '@/hooks/useMediaQuery';
 import ProjectsMiddleBanner from './ProjectsMiddleBanner';
 
 export interface IProjectsView {
@@ -70,7 +69,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const pageNum = useRef(0);
 	const lastElementRef = useRef<HTMLDivElement>(null);
 	const isInfiniteScrolling = useRef(true);
-	const { isDesktop, isTablet, isMobile, isLaptopL } = useDetectDevice();
+	const { isTablet, isMobile } = useDetectDevice();
 
 	const fetchProjects = useCallback(
 		(isLoadMore?: boolean, loadNum?: number, userIdChanged = false) => {
@@ -167,12 +166,11 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	const showLoadMore =
 		totalCount > filteredProjects?.length && !isInfiniteScrolling.current;
-	const isTabletSlice = useMediaQuery(device.tablet);
 
 	const handleSliceNumber = () => {
 		if (isMobile) {
 			return 1;
-		} else if (isTabletSlice && !isLaptopL) {
+		} else if (isTablet) {
 			return 2;
 		} else {
 			return 3;
@@ -246,7 +244,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 			<ProjectsBanner mainCategory={selectedMainCategory} />
 			<Wrapper>
 				<FiltersContainer>
-					{isDesktop && <ProjectsFiltersDesktop />}
+					{!isTablet && !isMobile && <ProjectsFiltersDesktop />}
 					{isTablet && <ProjectsFiltersTablet />}
 					{isMobile && <ProjectsFiltersMobile />}
 				</FiltersContainer>

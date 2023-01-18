@@ -11,11 +11,11 @@ import { Flex } from '@/components/styled-components/Flex';
 import StatsCard from '@/components/views/homepage/whyGiveth/StatsCard';
 import DonationCard from '@/components/views/homepage/whyGiveth/DonationCard';
 
-export default function WhyGivethIndex() {
+const WhyGiveth = () => {
 	return (
 		<>
 			<GivethStats>
-				<WhyGiveth weight={700}>Why Giveth?</WhyGiveth>
+				<Title weight={700}>Why Giveth?</Title>
 				<Stats>
 					{statsArray.map(i => (
 						<StatsCard
@@ -44,7 +44,7 @@ export default function WhyGivethIndex() {
 			</RecentDonations>
 		</>
 	);
-}
+};
 
 const donationsArray = [
 	{
@@ -140,7 +140,7 @@ const Stats = styled(Flex)`
 	}
 `;
 
-const WhyGiveth = styled(H3)`
+const Title = styled(H3)`
 	color: ${brandColors.giv[600]};
 `;
 
@@ -159,3 +159,5 @@ const GivethStats = styled(Container)`
 		gap: 40px 104px;
 	}
 `;
+
+export default WhyGiveth;
