@@ -54,11 +54,7 @@ const HomeRoute = (props: IHomeRoute) => {
 	);
 };
 
-export async function getServerSideProps({ res }: any) {
-	res.setHeader(
-		'Cache-Control',
-		'public, s-maxage=10, stale-while-revalidate=59',
-	);
+export async function getStaticProps() {
 	try {
 		const { projects, totalCount } = await fetchProjects();
 		return {
