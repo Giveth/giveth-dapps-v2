@@ -26,6 +26,10 @@ const ProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 		categories,
 	} = props;
 
+	if (!projects) {
+		return <div>{selectedMainCategory.slug} Not found</div>;
+	}
+
 	return (
 		<ProjectsProvider
 			mainCategories={mainCategories}
