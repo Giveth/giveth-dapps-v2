@@ -45,7 +45,7 @@ const PaginationContainer = styled(Flex)`
 	align-items: center;
 `;
 
-const PaginationItem = styled(H5)<{ isActive: boolean }>`
+export const PaginationItem = styled(H5)<{ isActive: boolean }>`
 	border-radius: 50%;
 	cursor: pointer;
 	user-select: none;

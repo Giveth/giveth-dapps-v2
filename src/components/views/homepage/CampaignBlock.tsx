@@ -3,7 +3,6 @@ import {
 	ButtonText,
 	H1,
 	H4,
-	H5,
 	IconChevronRight32,
 	IconPointerLeft,
 	IconPointerRight,
@@ -22,6 +21,7 @@ import ProjectCard from '@/components/project-card/ProjectCard';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { Shadow } from '@/components/styled-components/Shadow';
 import 'swiper/css';
+import { PaginationItem } from '@/components/SwiperPagination';
 
 const CampaignBlock = (props: { projects: IProject[] }) => {
 	const { isMobile, isTablet, isLaptopS, isLaptopL, isDesktop } =
@@ -103,15 +103,6 @@ const CampaignBlock = (props: { projects: IProject[] }) => {
 		</Wrapper>
 	);
 };
-
-const PaginationItem = styled(H5)<{ isActive: boolean }>`
-	border-radius: 50%;
-	cursor: pointer;
-	user-select: none;
-	color: ${({ isActive }) =>
-		isActive ? neutralColors.gray[900] : neutralColors.gray[700]};
-	font-weight: ${({ isActive }) => (isActive ? 700 : 500)};
-`;
 
 const UpperSection = styled(Flex)`
 	flex-direction: column;
