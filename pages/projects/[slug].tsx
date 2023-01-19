@@ -51,16 +51,15 @@ export async function getStaticPaths() {
 		query: FETCH_MAIN_CATEGORIES,
 		fetchPolicy: 'network-only',
 	});
-	const _path = mainCategories.map(c => {
+	const paths = mainCategories.map(c => {
 		return {
 			params: {
 				slug: c.slug,
 			},
 		};
 	});
-	console.log('_path', _path);
 	return {
-		paths: _path,
+		paths,
 		fallback: true, //false or "blocking" // See the "fallback" section below
 	};
 }
@@ -69,8 +68,8 @@ export const getStaticProps: GetServerSideProps = async context => {
 	const apolloClient = initializeApollo();
 	const { variables, notifyOnNetworkStatusChange } = OPTIONS_HOME_PROJECTS;
 	try {
-		const { query } = context;
-		const slug = query.slug;
+		const { params } = context;
+		const slug = params?.slug;
 		if (!slug)
 			return {
 				redirect: {
