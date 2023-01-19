@@ -41,7 +41,31 @@ const ProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 	);
 };
 
-export const getServerSideProps: GetServerSideProps = async context => {
+export async function getStaticPaths() {
+	const apolloClient = initializeApollo();
+	const {
+		data: { mainCategories },
+	}: {
+		data: { mainCategories: IMainCategory[] };
+	} = await apolloClient.query({
+		query: FETCH_MAIN_CATEGORIES,
+		fetchPolicy: 'network-only',
+	});
+	const _path = mainCategories.map(c => {
+		return {
+			params: {
+				slug: c.slug,
+			},
+		};
+	});
+	console.log('_path', _path);
+	return {
+		paths: _path,
+		fallback: true, //false or "blocking" // See the "fallback" section below
+	};
+}
+
+export const getStaticProps: GetServerSideProps = async context => {
 	const apolloClient = initializeApollo();
 	const { variables, notifyOnNetworkStatusChange } = OPTIONS_HOME_PROJECTS;
 	try {
@@ -63,6 +87,8 @@ export const getServerSideProps: GetServerSideProps = async context => {
 			fetchPolicy: 'network-only',
 		});
 
+		console.log('mainCategories', mainCategories);
+
 		const allCategoriesItem = {
 			title: 'All',
 			description: '',
@@ -82,7 +108,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
 				...selectedMainCategory,
 				selected: true,
 			};
-			const apolloClient = initializeApollo();
 			const { data } = await apolloClient.query({
 				query: FETCH_ALL_PROJECTS,
 				variables: {
