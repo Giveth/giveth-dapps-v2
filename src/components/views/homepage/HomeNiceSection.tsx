@@ -111,7 +111,7 @@ const GitcoinContainer = styled.div`
 
 	img {
 		width: 100%;
-		max-width: 1980px;
+		max-width: 1280px;
 		height: 660px;
 		object-fit: contain;
 		border-radius: 12px;
