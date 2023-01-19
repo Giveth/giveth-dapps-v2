@@ -47,7 +47,7 @@ interface IQueries {
 }
 
 const ProjectsIndex = (props: IProjectsView) => {
-	console.log('ProjectsIndex', props.projects.length);
+	console.log('ProjectsIndex', props.projects?.length);
 	const { formatMessage } = useIntl();
 	const { projects, totalCount: _totalCount } = props;
 
@@ -77,9 +77,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 		(isLoadMore?: boolean, loadNum?: number, userIdChanged = false) => {
 			const variables: IQueries = {
 				limit: userIdChanged
-					? filteredProjects.length
-					: projects.length,
-				skip: userIdChanged ? 0 : projects.length * (loadNum || 0),
+					? filteredProjects?.length
+					: projects?.length,
+				skip: userIdChanged ? 0 : projects?.length * (loadNum || 0),
 			};
 
 			if (user?.id) {
@@ -107,7 +107,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 					setTotalCount(count);
 					setFilteredProjects(prevProjects => {
 						isInfiniteScrolling.current =
-							(data.length + prevProjects.length) % 45 !== 0;
+							(data?.length + prevProjects?.length) % 45 !== 0;
 						return isLoadMore ? [...prevProjects, ...data] : data;
 					});
 					setIsLoading(false);
@@ -124,8 +124,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 		},
 		[
 			contextVariables,
-			filteredProjects.length,
-			projects.length,
+			filteredProjects?.length,
+			projects?.length,
 			router.query?.slug,
 			user?.id,
 		],
