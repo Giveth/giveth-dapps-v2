@@ -185,7 +185,7 @@ function NotificationView() {
 							handleChangeTab(ENotificationTabs.PROJECTS)
 						}
 					>
-						Projects
+						My projects
 						{projectsRelated !== 0 && (
 							<TabItemCount
 								active={tab === ENotificationTabs.PROJECTS}
@@ -200,7 +200,7 @@ function NotificationView() {
 							handleChangeTab(ENotificationTabs.GIVECONOMY)
 						}
 					>
-						GIVeconomy
+						Rewards
 						{givEconomyRelated !== 0 && (
 							<TabItemCount
 								active={tab === ENotificationTabs.GIVECONOMY}
