@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Image from 'next/image';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import { D3, GLink, Lead, brandColors } from '@giveth/ui-design-system';
@@ -13,6 +14,27 @@ import { Col, Container } from '@/components/Grid';
 
 const HomePurpleSection = () => {
 	const { formatMessage } = useIntl();
+
+	// replacing this by the gitcoin alpha round for now
+	const gitcoinGrantAlpha =
+		'https://grant-explorer.gitcoin.co/#/round/1/0xd95a1969c41112cee9a2c931e849bcef36a16f4c/0xb746c0f648f9b930ea4568cf8741067a7fc7eb3928ac13cced8076212cf3cf37-0xd95a1969c41112cee9a2c931e849bcef36a16f4c';
+	return (
+		<GitcoinContainer>
+			<Link
+				href={gitcoinGrantAlpha}
+				target='_blank'
+				rel='noopener noreferrer'
+			>
+				<Image
+					alt='gitcoin alpha is here'
+					src={'/images/banners/gitcoin-alpha-banner.png'}
+					fill
+					style={{ objectFit: 'cover' }}
+				/>
+			</Link>
+		</GitcoinContainer>
+	);
+
 	return (
 		<Wrapper>
 			<Arcs>
@@ -64,7 +86,7 @@ const Wrapper = styled(HomeContainer)`
 	top: -50px;
 	::after {
 		content: '';
-		background-image: url('/images/backgrounds/GIVGIVGIV.png');
+		background-image: url('/images/banners/gitcoin-alpha-bannerV.png');
 		opacity: 0.1;
 		top: 0;
 		left: 0;
@@ -72,6 +94,24 @@ const Wrapper = styled(HomeContainer)`
 		right: 0;
 		position: absolute;
 		z-index: -1;
+	}
+`;
+
+const GitcoinContainer = styled.div`
+	display: none;
+	position: relative;
+	cursor: pointer;
+	min-height: 550px;
+	border-radius: 12px;
+	overflow: hidden;
+	box-shadow: ${Shadow.Neutral[400]};
+	overflow: hidden;
+	flex-direction: column;
+	align-items: center;
+	margin: 32px 32px 64px 32px;
+	padding-top: 70px;
+	${mediaQueries.laptopL} {
+		display: flex;
 	}
 `;
 
