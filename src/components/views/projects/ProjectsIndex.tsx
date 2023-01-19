@@ -47,6 +47,7 @@ interface IQueries {
 }
 
 const ProjectsIndex = (props: IProjectsView) => {
+	console.log('ProjectsIndex', props.projects.length);
 	const { formatMessage } = useIntl();
 	const { projects, totalCount: _totalCount } = props;
 

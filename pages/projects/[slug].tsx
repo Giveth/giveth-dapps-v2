@@ -59,7 +59,13 @@ export async function getStaticPaths() {
 		};
 	});
 	return {
-		paths,
+		paths: [
+			{
+				params: {
+					slug: 'equality',
+				},
+			},
+		],
 		fallback: true, //false or "blocking" // See the "fallback" section below
 	};
 }
@@ -85,9 +91,6 @@ export const getStaticProps: GetServerSideProps = async context => {
 			query: FETCH_MAIN_CATEGORIES,
 			fetchPolicy: 'network-only',
 		});
-
-		console.log('mainCategories', mainCategories);
-
 		const allCategoriesItem = {
 			title: 'All',
 			description: '',
@@ -117,6 +120,13 @@ export const getStaticProps: GetServerSideProps = async context => {
 				fetchPolicy: 'network-only',
 			});
 			const { projects, totalCount, categories } = data.allProjects;
+			console.log(
+				'\nselectedMainCategory',
+				selectedMainCategory?.slug,
+				projects.length,
+				'\n',
+			);
+
 			return {
 				props: {
 					projects,
@@ -131,6 +141,7 @@ export const getStaticProps: GetServerSideProps = async context => {
 			notFound: true,
 		};
 	} catch (error: any) {
+		console.log('***********************************', context.params);
 		const statusCode = transformGraphQLErrorsToStatusCode(
 			error?.graphQLErrors,
 		);
