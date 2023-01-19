@@ -25,8 +25,6 @@ const HomePurpleSection = () => {
 				rel='noopener noreferrer'
 			>
 				<img
-					width={100}
-					height={660}
 					alt='gitcoin alpha is here'
 					src={'/images/banners/gitcoin-alpha-banner.png'}
 				/>
@@ -110,11 +108,9 @@ const GitcoinContainer = styled.div`
 	margin: 64px 32px;
 
 	img {
-		width: 100%;
-		max-width: 1280px;
 		height: 660px;
 		object-fit: contain;
-		border-radius: 12px;
+		border-radius: 12px !important;
 	}
 
 	${mediaQueries.laptopL} {
