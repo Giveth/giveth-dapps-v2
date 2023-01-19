@@ -32,7 +32,7 @@ const ProjectsRoute = (props: IProjectsRouteProps) => {
 	);
 };
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
 	try {
 		const apolloClient = initializeApollo();
 		const { data } = await apolloClient.query({
