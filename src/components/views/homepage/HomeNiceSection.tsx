@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import Image from 'next/image';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import { D3, GLink, Lead, brandColors } from '@giveth/ui-design-system';
@@ -25,11 +24,11 @@ const HomePurpleSection = () => {
 				target='_blank'
 				rel='noopener noreferrer'
 			>
-				<Image
+				<img
+					width={100}
+					height={660}
 					alt='gitcoin alpha is here'
 					src={'/images/banners/gitcoin-alpha-banner.png'}
-					fill
-					style={{ objectFit: 'cover' }}
 				/>
 			</Link>
 		</GitcoinContainer>
@@ -101,15 +100,21 @@ const GitcoinContainer = styled.div`
 	display: none;
 	position: relative;
 	cursor: pointer;
-	min-height: 550px;
+	height: 660px;
 	border-radius: 12px;
 	overflow: hidden;
 	box-shadow: ${Shadow.Neutral[400]};
 	overflow: hidden;
 	flex-direction: column;
 	align-items: center;
-	margin: 32px 32px 64px 32px;
-	padding-top: 70px;
+	margin: 64px 32px;
+
+	img {
+		width: 100%;
+		height: 660px;
+		border-radius: 12px;
+	}
+
 	${mediaQueries.laptopL} {
 		display: flex;
 	}
