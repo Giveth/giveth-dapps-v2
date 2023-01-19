@@ -98,19 +98,14 @@ const GitcoinContainer = styled.div`
 	display: none;
 	position: relative;
 	cursor: pointer;
-	height: 660px;
 	border-radius: 12px;
-	overflow: hidden;
-	box-shadow: ${Shadow.Neutral[400]};
-	overflow: hidden;
 	flex-direction: column;
 	align-items: center;
 	margin: 64px 32px;
 
 	img {
-		height: 660px;
-		object-fit: contain;
-		border-radius: 12px !important;
+		max-width: 1080px;
+		border-radius: 12px;
 	}
 
 	${mediaQueries.laptopL} {
