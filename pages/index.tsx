@@ -9,6 +9,7 @@ import { useAppSelector } from '@/features/hooks';
 import { homeMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
+import type { GetStaticProps } from 'next/types';
 
 interface IHomeRoute {
 	projects: IProject[];
@@ -54,7 +55,7 @@ const HomeRoute = (props: IHomeRoute) => {
 	);
 };
 
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps = async context => {
 	try {
 		const { projects, totalCount } = await fetchProjects();
 		return {
@@ -73,6 +74,6 @@ export async function getStaticProps() {
 			},
 		};
 	}
-}
+};
 
 export default HomeRoute;

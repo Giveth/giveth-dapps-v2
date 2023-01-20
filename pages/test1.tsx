@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { GetServerSideProps } from 'next';
+import { GetStaticProps } from 'next';
 import { useWeb3React } from '@web3-react/core';
 import { IconHelpFilled16 } from '@giveth/ui-design-system';
 import { useRef, useState } from 'react';
@@ -118,10 +118,10 @@ const TestRoute = () => {
 
 export default TestRoute;
 
-export const getServerSideProps: GetServerSideProps = async context => {
+export const getStaticProps: GetStaticProps = async context => {
 	// let { statusCode } = context.res;
 	// statusCode = 500;
-	context.res.statusCode = 500;
+	// context.res.statusCode = 500;
 	return {
 		props: {
 			name: 'test',

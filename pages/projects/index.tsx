@@ -10,6 +10,7 @@ import { GeneralMetatags } from '@/components/Metatag';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import { ICategory, IMainCategory, IProject } from '@/apollo/types/types';
 import { ProjectsProvider } from '@/context/projects.context';
+import type { GetStaticProps } from 'next/types';
 
 export interface IProjectsRouteProps {
 	projects: IProject[];
@@ -32,7 +33,7 @@ const ProjectsRoute = (props: IProjectsRouteProps) => {
 	);
 };
 
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps = async context => {
 	try {
 		const apolloClient = initializeApollo();
 		const { data } = await apolloClient.query({
@@ -78,6 +79,6 @@ export async function getStaticProps() {
 			},
 		};
 	}
-}
+};
 
 export default ProjectsRoute;
