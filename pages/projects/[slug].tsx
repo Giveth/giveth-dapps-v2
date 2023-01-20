@@ -25,9 +25,10 @@ const ProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 		totalCount,
 		categories,
 	} = props;
+	console.log('props', props);
 
 	if (!projects) {
-		return <div>{selectedMainCategory.slug} Not found</div>;
+		return <div>{selectedMainCategory.slug}Not found</div>;
 	}
 
 	return (
@@ -53,7 +54,6 @@ export async function getStaticPaths() {
 		data: { mainCategories: IMainCategory[] };
 	} = await apolloClient.query({
 		query: FETCH_MAIN_CATEGORIES,
-		fetchPolicy: 'network-only',
 	});
 	const paths = mainCategories.map(c => {
 		return {
@@ -70,13 +70,14 @@ export async function getStaticPaths() {
 				},
 			},
 		],
-		fallback: true, //false or "blocking" // See the "fallback" section below
+		fallback: 'blocking', //false or "blocking" // See the "fallback" section below
 	};
 }
 
 export const getStaticProps: GetServerSideProps = async context => {
 	const apolloClient = initializeApollo();
 	const { variables, notifyOnNetworkStatusChange } = OPTIONS_HOME_PROJECTS;
+	console.log('***********************************', 3);
 	try {
 		const { params } = context;
 		const slug = params?.slug;
@@ -130,7 +131,7 @@ export const getStaticProps: GetServerSideProps = async context => {
 				projects.length,
 				'\n',
 			);
-
+			console.log('***********************************', 2);
 			return {
 				props: {
 					projects,
@@ -141,6 +142,7 @@ export const getStaticProps: GetServerSideProps = async context => {
 				},
 			};
 		}
+		console.log('***********************************', 1);
 		return {
 			notFound: true,
 		};
