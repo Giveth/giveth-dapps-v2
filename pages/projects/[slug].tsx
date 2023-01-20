@@ -25,7 +25,6 @@ const ProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 		totalCount,
 		categories,
 	} = props;
-	console.log('props', props);
 
 	if (!projects) {
 		return <div>{selectedMainCategory.slug}Not found</div>;
@@ -63,13 +62,6 @@ export async function getStaticPaths() {
 		};
 	});
 	return {
-		// paths: [
-		// 	{
-		// 		params: {
-		// 			slug: 'equality',
-		// 		},
-		// 	},
-		// ],
 		paths,
 		fallback: 'blocking', //false or "blocking" // See the "fallback" section below
 	};
@@ -78,7 +70,6 @@ export async function getStaticPaths() {
 export const getStaticProps: GetStaticProps = async context => {
 	const apolloClient = initializeApollo();
 	const { variables, notifyOnNetworkStatusChange } = OPTIONS_HOME_PROJECTS;
-	console.log('***********************************', 3);
 	try {
 		const { params } = context;
 		const slug = params?.slug;
@@ -126,13 +117,7 @@ export const getStaticProps: GetStaticProps = async context => {
 				fetchPolicy: 'network-only',
 			});
 			const { projects, totalCount, categories } = data.allProjects;
-			console.log(
-				'\nselectedMainCategory',
-				selectedMainCategory?.slug,
-				projects.length,
-				'\n',
-			);
-			console.log('***********************************', 2);
+
 			return {
 				props: {
 					projects,
@@ -143,12 +128,10 @@ export const getStaticProps: GetStaticProps = async context => {
 				},
 			};
 		}
-		console.log('***********************************', 1);
 		return {
 			notFound: true,
 		};
 	} catch (error: any) {
-		console.log('***********************************', context.params);
 		const statusCode = transformGraphQLErrorsToStatusCode(
 			error?.graphQLErrors,
 		);
