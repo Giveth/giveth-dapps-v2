@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { GetStaticProps } from 'next/types';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 
@@ -14,13 +15,19 @@ const ProjectRoute: FC<IProjectBySlug> = ({ project }) => {
 	);
 };
 
-export async function getServerSideProps(props: {
-	query: { projectIdSlug: string };
-}) {
-	try {
-		const { query } = props;
-		const slug = decodeURI(query.projectIdSlug).replace(/\s/g, '');
+export async function getStaticPaths() {
+	return {
+		paths: [],
+		fallback: 'blocking', //false or "blocking" // See the "fallback" section below
+	};
+}
 
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+	try {
+		const slug = decodeURI(params?.projectIdSlug as string).replace(
+			/\s/g,
+			'',
+		);
 		const { data } = await client.query({
 			query: FETCH_PROJECT_BY_SLUG,
 			variables: { slug },
@@ -38,6 +45,6 @@ export async function getServerSideProps(props: {
 			props: {},
 		};
 	}
-}
+};
 
 export default ProjectRoute;
