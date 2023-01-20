@@ -99,7 +99,7 @@ const TestRoute = () => {
 					increase
 				</button>
 				<div>
-					--------------------------------------------
+					---------------------------------------------
 					<IconWithTooltip
 						icon={<IconHelpFilled16 />}
 						direction='right'
