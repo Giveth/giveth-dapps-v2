@@ -6,7 +6,7 @@ import useDetectDevice from '@/hooks/useDetectDevice';
 import { mediaQueries } from '@/lib/constants/constants';
 
 const GitcoinGrants = () => {
-	const { isTablet } = useDetectDevice();
+	const { isDesktop } = useDetectDevice();
 	const gitcoinGrantAlpha =
 		'https://grant-explorer.gitcoin.co/#/round/1/0xd95a1969c41112cee9a2c931e849bcef36a16f4c/0xb746c0f648f9b930ea4568cf8741067a7fc7eb3928ac13cced8076212cf3cf37-0xd95a1969c41112cee9a2c931e849bcef36a16f4c';
 	const refiGrant =
@@ -19,14 +19,13 @@ const GitcoinGrants = () => {
 					target='_blank'
 					rel='noopener noreferrer'
 				>
-					<Image
+					<img
 						alt='gitcoin alpha is here'
-						fill
 						style={{ objectFit: 'cover' }}
 						src={
-							isTablet
-								? '/images/banners/gitcoin-alpha-banner_2_mobile.png'
-								: '/images/banners/gitcoin-alpha-banner_2.png'
+							isDesktop
+								? '/images/banners/gitcoin-alpha-banner_2.png'
+								: '/images/banners/gitcoin-alpha-banner_2_mobile.png'
 						}
 					/>
 				</Link>
@@ -120,8 +119,6 @@ const Container = styled.div`
 
 const GitcoinContainer = styled.div`
 	display: flex;
-	width: 527px;
-	height: 1021px;
 	position: relative;
 	cursor: pointer;
 	border-radius: 12px;
@@ -132,10 +129,6 @@ const GitcoinContainer = styled.div`
 	object-fit: contain;
 	img {
 		border-radius: 12px;
-	}
-	${mediaQueries.laptopS} {
-		width: 1450px;
-		height: 450px;
 	}
 `;
 
