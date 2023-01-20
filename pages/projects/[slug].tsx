@@ -1,4 +1,4 @@
-import { GetServerSideProps } from 'next/types';
+import { GetStaticProps } from 'next/types';
 import { IMainCategory } from '@/apollo/types/types';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import { initializeApollo } from '@/apollo/apolloClient';
@@ -63,18 +63,19 @@ export async function getStaticPaths() {
 		};
 	});
 	return {
-		paths: [
-			{
-				params: {
-					slug: 'equality',
-				},
-			},
-		],
+		// paths: [
+		// 	{
+		// 		params: {
+		// 			slug: 'equality',
+		// 		},
+		// 	},
+		// ],
+		paths,
 		fallback: 'blocking', //false or "blocking" // See the "fallback" section below
 	};
 }
 
-export const getStaticProps: GetServerSideProps = async context => {
+export const getStaticProps: GetStaticProps = async context => {
 	const apolloClient = initializeApollo();
 	const { variables, notifyOnNetworkStatusChange } = OPTIONS_HOME_PROJECTS;
 	console.log('***********************************', 3);
