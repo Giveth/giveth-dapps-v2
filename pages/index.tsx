@@ -63,6 +63,7 @@ export const getStaticProps: GetStaticProps = async context => {
 				projects,
 				totalCount,
 			},
+			revalidate: 600,
 		};
 	} catch (error: any) {
 		const statusCode = transformGraphQLErrorsToStatusCode(

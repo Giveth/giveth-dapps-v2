@@ -43,6 +43,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 		// TODO: Handle 502 error
 		return {
 			props: {},
+			revalidate: 600,
 		};
 	}
 };

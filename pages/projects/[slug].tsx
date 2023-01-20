@@ -126,6 +126,7 @@ export const getStaticProps: GetStaticProps = async context => {
 					totalCount,
 					categories,
 				},
+				revalidate: 600,
 			};
 		}
 		return {
