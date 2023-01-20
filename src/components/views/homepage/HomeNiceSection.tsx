@@ -10,11 +10,13 @@ import { HomeContainer } from '@/components/views/homepage/Home.sc';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { Col, Container } from '@/components/Grid';
+import useDetectDevice from '@/hooks/useDetectDevice';
 
 const HomePurpleSection = () => {
 	const { formatMessage } = useIntl();
 
 	// replacing this by the gitcoin alpha round for now
+	const { isMobile } = useDetectDevice();
 	const gitcoinGrantAlpha =
 		'https://grant-explorer.gitcoin.co/#/round/1/0xd95a1969c41112cee9a2c931e849bcef36a16f4c/0xb746c0f648f9b930ea4568cf8741067a7fc7eb3928ac13cced8076212cf3cf37-0xd95a1969c41112cee9a2c931e849bcef36a16f4c';
 	return (
@@ -26,7 +28,11 @@ const HomePurpleSection = () => {
 			>
 				<img
 					alt='gitcoin alpha is here'
-					src={'/images/banners/gitcoin-alpha-banner.png'}
+					src={
+						isMobile
+							? '/images/banners/gitcoin-alpha-banner_mobile.png'
+							: '/images/banners/gitcoin-alpha-banner.png'
+					}
 				/>
 			</Link>
 		</GitcoinContainer>
@@ -95,7 +101,7 @@ const Wrapper = styled(HomeContainer)`
 `;
 
 const GitcoinContainer = styled.div`
-	display: none;
+	display: flex;
 	position: relative;
 	cursor: pointer;
 	border-radius: 12px;
@@ -104,12 +110,14 @@ const GitcoinContainer = styled.div`
 	margin: 64px 32px;
 
 	img {
-		max-width: 1080px;
+		max-width: 100%;
 		border-radius: 12px;
 	}
 
-	${mediaQueries.laptopL} {
-		display: flex;
+	${mediaQueries.laptopS} {
+		img {
+			max-width: 1080px;
+		}
 	}
 `;
 
