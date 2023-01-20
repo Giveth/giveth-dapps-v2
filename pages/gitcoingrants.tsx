@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { Button, H4, Lead } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import useDetectDevice from '@/hooks/useDetectDevice';
