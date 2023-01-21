@@ -21,11 +21,7 @@ const HomePurpleSection = () => {
 		'https://grant-explorer.gitcoin.co/#/round/1/0xd95a1969c41112cee9a2c931e849bcef36a16f4c/0xb746c0f648f9b930ea4568cf8741067a7fc7eb3928ac13cced8076212cf3cf37-0xd95a1969c41112cee9a2c931e849bcef36a16f4c';
 	return (
 		<GitcoinContainer>
-			<Link
-				href={gitcoinGrantAlpha}
-				target='_blank'
-				rel='noopener noreferrer'
-			>
+			<Link href={'/gitcoingrants'}>
 				<img
 					alt='gitcoin alpha is here'
 					src={
