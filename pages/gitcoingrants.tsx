@@ -5,7 +5,7 @@ import useDetectDevice from '@/hooks/useDetectDevice';
 import { mediaQueries } from '@/lib/constants/constants';
 
 const GitcoinGrants = () => {
-	const { isDesktop } = useDetectDevice();
+	const { isDesktop, isTablet } = useDetectDevice();
 	const gitcoinGrantAlpha =
 		'https://grant-explorer.gitcoin.co/#/round/1/0xd95a1969c41112cee9a2c931e849bcef36a16f4c/0xb746c0f648f9b930ea4568cf8741067a7fc7eb3928ac13cced8076212cf3cf37-0xd95a1969c41112cee9a2c931e849bcef36a16f4c';
 	const refiGrant =
@@ -22,7 +22,9 @@ const GitcoinGrants = () => {
 						alt='gitcoin alpha is here'
 						style={{ objectFit: 'cover' }}
 						src={
-							isDesktop
+							isTablet
+								? '/images/banners/gitcoin-alpha-banner-md.png'
+								: isDesktop
 								? '/images/banners/gitcoin-alpha-banner_2.png'
 								: '/images/banners/gitcoin-alpha-banner_2_mobile.png'
 						}
@@ -109,11 +111,15 @@ const GitcoinGrants = () => {
 const Container = styled.div`
 	display: flex;
 	flex-direction: column;
-	margin: 160px 40px 40px;
-	padding: 80px;
 	background: white;
 	align-items: center;
 	text-align: left;
+	padding: 30px;
+
+	${mediaQueries.laptopS} {
+		margin: 160px 40px 40px;
+		padding: 80px;
+	}
 `;
 
 const GitcoinContainer = styled.div`
@@ -128,6 +134,17 @@ const GitcoinContainer = styled.div`
 	object-fit: contain;
 	img {
 		border-radius: 12px;
+		width: 100%;
+	}
+	${mediaQueries.laptopS} {
+		img {
+			width: 1500px;
+		}
+	}
+	${mediaQueries.tablet} {
+		img {
+			width: 100%;
+		}
 	}
 `;
 
@@ -137,8 +154,15 @@ const Section = styled.div`
 	flex-direction: column-reverse;
 	margin: 60px 0;
 	gap: 30px;
+	img {
+		object-fit: contain;
+		width: 100%;
+	}
 	${mediaQueries.laptopS} {
 		flex-direction: row;
+		img {
+			width: 460px;
+		}
 	}
 `;
 
@@ -157,7 +181,13 @@ const Description = styled.div`
 	max-width: 1000px;
 	button {
 		margin: 20px 0 0 0;
-		width: 500px;
+		width: 100%;
+	}
+	${mediaQueries.laptopS} {
+		button {
+			margin: 20px 0 0 0;
+			width: 500px;
+		}
 	}
 `;
 
