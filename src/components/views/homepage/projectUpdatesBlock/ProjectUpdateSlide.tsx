@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { neutralColors } from '@giveth/ui-design-system';
 import { Flex } from '@/components/styled-components/Flex';
@@ -14,8 +14,32 @@ export const ProjectUpdateSlide: FC<IProjectUpdateSlideProps> = ({
 	project,
 }) => {
 	const [isVisibe, setIsVisibe] = useState(false);
+	const elRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		const handleObserver = (entities: any) => {
+			const target = entities[0];
+			if (target.isIntersecting) {
+				console.log(project.title);
+			}
+		};
+		const option = {
+			root: null,
+			threshold: 1,
+		};
+		const observer = new IntersectionObserver(handleObserver, option);
+		if (elRef.current) {
+			observer.observe(elRef.current);
+		}
+		return () => {
+			if (observer) {
+				observer.disconnect();
+			}
+		};
+	}, []);
+
 	return (
-		<ProjectUpdateSlideWrapper>
+		<ProjectUpdateSlideWrapper ref={elRef}>
 			<StyledProjectCard project={project} />
 			<ProjectUpdateCard>Project Updates</ProjectUpdateCard>
 		</ProjectUpdateSlideWrapper>
