@@ -32,7 +32,11 @@ export const SwiperPagination: FC<ISwiperPagination> = ({ swiper, items }) => {
 	return (
 		<PaginationContainer>
 			{items.map((item, idx) => (
-				<PaginationItem isActive={realIndex === item.page} key={idx}>
+				<PaginationItem
+					isActive={realIndex === item.page}
+					key={idx}
+					onClick={() => swiper?.slideTo(item.page)}
+				>
 					{item.label}
 				</PaginationItem>
 			))}
