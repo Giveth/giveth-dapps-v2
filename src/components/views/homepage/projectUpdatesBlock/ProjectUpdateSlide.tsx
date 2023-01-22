@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { B, H6, neutralColors } from '@giveth/ui-design-system';
+import { B, H6, neutralColors, P } from '@giveth/ui-design-system';
 import { Flex } from '@/components/styled-components/Flex';
 import { IProject, IProjectUpdate } from '@/apollo/types/types';
 import ProjectCard from '@/components/project-card/ProjectCard';
@@ -16,6 +16,7 @@ export const ProjectUpdateSlide: FC<IProjectUpdateSlideProps> = ({
 	project,
 }) => {
 	const [update, setUpdate] = useState<IProjectUpdate>();
+	const [loading, setLoading] = useState(true);
 	const elRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
@@ -23,6 +24,7 @@ export const ProjectUpdateSlide: FC<IProjectUpdateSlideProps> = ({
 		const handleObserver = async (entities: any) => {
 			const target = entities[0];
 			if (project.id && target.isIntersecting) {
+				setLoading(true);
 				const { data } = await client.query({
 					query: FETCH_PROJECT_UPDATES,
 					variables: {
@@ -31,6 +33,7 @@ export const ProjectUpdateSlide: FC<IProjectUpdateSlideProps> = ({
 						skip: 0,
 					},
 				});
+				setLoading(false);
 				const _update = data.getProjectUpdates[0];
 				_update && setUpdate(_update);
 			}
@@ -54,15 +57,31 @@ export const ProjectUpdateSlide: FC<IProjectUpdateSlideProps> = ({
 		<ProjectUpdateSlideWrapper ref={elRef}>
 			<StyledProjectCard project={project} />
 			<ProjectUpdateCard>
-				<UpdateDate>
-					{update?.createdAt &&
-						new Date(update?.createdAt).toLocaleString('en-GB', {
-							day: 'numeric',
-							month: 'short',
-							year: 'numeric',
-						})}
-				</UpdateDate>
-				<UpdateTitle weight={700}>{update?.title}</UpdateTitle>
+				{loading ? (
+					'Loading'
+				) : update ? (
+					<>
+						<UpdateDate>
+							{update?.createdAt &&
+								new Date(update?.createdAt).toLocaleString(
+									'en-GB',
+									{
+										day: 'numeric',
+										month: 'short',
+										year: 'numeric',
+									},
+								)}
+						</UpdateDate>
+						<UpdateTitle weight={700}>{update?.title}</UpdateTitle>
+						<UpdateDesc
+							dangerouslySetInnerHTML={{
+								__html: update?.content,
+							}}
+						/>
+					</>
+				) : (
+					"This Project hasn't any update"
+				)}
 			</ProjectUpdateCard>
 		</ProjectUpdateSlideWrapper>
 	);
@@ -96,6 +115,11 @@ const UpdateDate = styled(B)`
 `;
 
 const UpdateTitle = styled(H6)`
+	color: ${neutralColors.gray[900]};
+	margin-bottom: 8px;
+`;
+
+const UpdateDesc = styled(P)`
 	color: ${neutralColors.gray[900]};
 	margin-bottom: 8px;
 `;
