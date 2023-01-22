@@ -1,12 +1,22 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { B, H6, neutralColors, P } from '@giveth/ui-design-system';
-import { Flex } from '@/components/styled-components/Flex';
+import {
+	B,
+	brandColors,
+	ButtonText,
+	H6,
+	IconChevronRight32,
+	neutralColors,
+	P,
+} from '@giveth/ui-design-system';
+import Link from 'next/link';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { IProject, IProjectUpdate } from '@/apollo/types/types';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import { mediaQueries } from '@/lib/constants/constants';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_UPDATES } from '@/apollo/gql/gqlProjects';
+import Routes from '@/lib/constants/Routes';
 
 interface IProjectUpdateSlideProps {
 	project: IProject;
@@ -78,6 +88,14 @@ export const ProjectUpdateSlide: FC<IProjectUpdateSlideProps> = ({
 								__html: update.content,
 							}}
 						/>
+						<Flex justifyContent='flex-end'>
+							<Link href={`${Routes.Project}/${project.slug}`}>
+								<ReadMore gap='22px'>
+									<ButtonText>Read more</ButtonText>
+									<IconChevronRight32 />
+								</ReadMore>
+							</Link>
+						</Flex>
 					</>
 				) : (
 					"This Project hasn't any update"
@@ -104,10 +122,9 @@ const StyledProjectCard = styled(ProjectCard)`
 
 const ProjectUpdateCard = styled.div`
 	flex: 1;
-	padding: 32px 32px 88px;
+	padding: 32px;
 	border: 1px solid ${neutralColors.gray[300]};
 	border-radius: 16px;
-	max-height: 448px;
 `;
 
 const UpdateDate = styled(B)`
@@ -123,5 +140,12 @@ const UpdateTitle = styled(H6)`
 const UpdateDesc = styled(P)`
 	color: ${neutralColors.gray[900]};
 	margin-bottom: 8px;
-	height: 360px;
+	height: 290px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+`;
+
+const ReadMore = styled(FlexCenter)`
+	color: ${brandColors.giv[500]};
+	cursor: pointer;
 `;
