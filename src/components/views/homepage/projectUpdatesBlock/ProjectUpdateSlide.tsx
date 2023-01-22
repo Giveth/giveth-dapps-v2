@@ -2,9 +2,11 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { neutralColors } from '@giveth/ui-design-system';
 import { Flex } from '@/components/styled-components/Flex';
-import { IProject } from '@/apollo/types/types';
+import { IProject, IProjectUpdate } from '@/apollo/types/types';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import { mediaQueries } from '@/lib/constants/constants';
+import { client } from '@/apollo/apolloClient';
+import { FETCH_PROJECT_UPDATES } from '@/apollo/gql/gqlProjects';
 
 interface IProjectUpdateSlideProps {
 	project: IProject;
@@ -13,14 +15,23 @@ interface IProjectUpdateSlideProps {
 export const ProjectUpdateSlide: FC<IProjectUpdateSlideProps> = ({
 	project,
 }) => {
-	const [isVisibe, setIsVisibe] = useState(false);
+	const [update, setUpdate] = useState<IProjectUpdate>();
 	const elRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		const handleObserver = (entities: any) => {
+		const handleObserver = async (entities: any) => {
 			const target = entities[0];
-			if (target.isIntersecting) {
-				console.log(project.title);
+			if (!update && project.id && target.isIntersecting) {
+				const { data } = await client.query({
+					query: FETCH_PROJECT_UPDATES,
+					variables: {
+						projectId: parseInt(project.id),
+						take: 1,
+						skip: 0,
+					},
+				});
+				const _update = data.getProjectUpdates[0];
+				_update && setUpdate(_update);
 			}
 		};
 		const option = {
@@ -41,7 +52,7 @@ export const ProjectUpdateSlide: FC<IProjectUpdateSlideProps> = ({
 	return (
 		<ProjectUpdateSlideWrapper ref={elRef}>
 			<StyledProjectCard project={project} />
-			<ProjectUpdateCard>Project Updates</ProjectUpdateCard>
+			<ProjectUpdateCard>{update?.title}</ProjectUpdateCard>
 		</ProjectUpdateSlideWrapper>
 	);
 };
