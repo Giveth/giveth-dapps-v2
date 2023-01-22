@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { B, neutralColors } from '@giveth/ui-design-system';
+import { B, H6, neutralColors } from '@giveth/ui-design-system';
 import { Flex } from '@/components/styled-components/Flex';
 import { IProject, IProjectUpdate } from '@/apollo/types/types';
 import ProjectCard from '@/components/project-card/ProjectCard';
@@ -62,6 +62,7 @@ export const ProjectUpdateSlide: FC<IProjectUpdateSlideProps> = ({
 							year: 'numeric',
 						})}
 				</UpdateDate>
+				<UpdateTitle weight={700}>{update?.title}</UpdateTitle>
 			</ProjectUpdateCard>
 		</ProjectUpdateSlideWrapper>
 	);
@@ -82,7 +83,7 @@ const StyledProjectCard = styled(ProjectCard)`
 	}
 `;
 
-const ProjectUpdateCard = styled(Flex)`
+const ProjectUpdateCard = styled.div`
 	flex: 1;
 	padding: 32px;
 	border: 1px solid ${neutralColors.gray[300]};
@@ -91,5 +92,10 @@ const ProjectUpdateCard = styled(Flex)`
 
 const UpdateDate = styled(B)`
 	color: ${neutralColors.gray[700]};
+	margin-bottom: 8px;
+`;
+
+const UpdateTitle = styled(H6)`
+	color: ${neutralColors.gray[900]};
 	margin-bottom: 8px;
 `;
