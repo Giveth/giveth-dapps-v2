@@ -19,9 +19,10 @@ export const ProjectUpdateSlide: FC<IProjectUpdateSlideProps> = ({
 	const elRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
+		if (update) return;
 		const handleObserver = async (entities: any) => {
 			const target = entities[0];
-			if (!update && project.id && target.isIntersecting) {
+			if (project.id && target.isIntersecting) {
 				const { data } = await client.query({
 					query: FETCH_PROJECT_UPDATES,
 					variables: {
@@ -47,7 +48,7 @@ export const ProjectUpdateSlide: FC<IProjectUpdateSlideProps> = ({
 				observer.disconnect();
 			}
 		};
-	}, []);
+	}, [project.id, update]);
 
 	return (
 		<ProjectUpdateSlideWrapper ref={elRef}>
