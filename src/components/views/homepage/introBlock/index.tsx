@@ -11,10 +11,12 @@ import {
 import React from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import dynamic from 'next/dynamic';
 import { Flex } from '@/components/styled-components/Flex';
 import IntroCard from './IntroCard';
 import useDetectDevice from '@/hooks/useDetectDevice';
-import Wave from '@/components/particles/wave';
+
+const Wave = dynamic(() => import('@/components/particles/wave'));
 
 const IntroBlock = () => {
 	const { isMobile } = useDetectDevice();
