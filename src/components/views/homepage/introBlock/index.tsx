@@ -14,6 +14,7 @@ import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
 import IntroCard from './IntroCard';
 import useDetectDevice from '@/hooks/useDetectDevice';
+import Wave from '@/components/particles/wave';
 
 const IntroBlock = () => {
 	const { isMobile } = useDetectDevice();
@@ -54,6 +55,12 @@ const IntroBlock = () => {
 							</ButtonsContainer>
 						</IntroTitle>
 						<div>Image</div>
+						<TopWaveContainer>
+							<Wave />
+						</TopWaveContainer>
+						<BottomWaveContainer>
+							<Wave color='#FFC9E2' />
+						</BottomWaveContainer>
 					</TopSectionContainer>
 					<IntroCards
 						justifyContent='space-between'
@@ -152,6 +159,7 @@ const IntroTitle = styled.div`
 
 const TopSectionContainer = styled(Flex)`
 	position: relative;
+	margin-bottom: 100px;
 `;
 
 const UnderlinedText = styled.span`
@@ -165,6 +173,18 @@ const ButtonsContainer = styled(Flex)`
 
 const IntroCards = styled(Flex)`
 	margin-top: 40px;
+`;
+
+const TopWaveContainer = styled.div`
+	position: absolute;
+	top: -60px;
+	left: 0;
+`;
+
+const BottomWaveContainer = styled.div`
+	position: absolute;
+	bottom: -60px;
+	right: 0;
 `;
 
 export default IntroBlock;
