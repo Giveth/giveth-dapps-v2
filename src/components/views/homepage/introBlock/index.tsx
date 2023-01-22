@@ -22,7 +22,7 @@ const IntroBlock = () => {
 		<SectionContainer>
 			<Container>
 				<IntroContainer>
-					<Flex
+					<TopSectionContainer
 						justifyContent='space-around'
 						flexDirection={isMobile ? 'column' : 'row'}
 						alignItems={isMobile ? 'center' : 'stretch'}
@@ -54,7 +54,7 @@ const IntroBlock = () => {
 							</ButtonsContainer>
 						</IntroTitle>
 						<div>Image</div>
-					</Flex>
+					</TopSectionContainer>
 					<IntroCards
 						justifyContent='space-between'
 						gap='24px'
@@ -125,6 +125,8 @@ const IntroBlock = () => {
 const SectionContainer = styled.div`
 	position: relative;
 	background-color: ${neutralColors.gray[100]};
+	padding: 100px 0;
+	margin-top: 10px;
 	::before {
 		content: '';
 		background-image: url('/images/backgrounds/giv-outlined-bright-opacity.png');
@@ -142,11 +144,14 @@ const SectionContainer = styled.div`
 
 const IntroContainer = styled.div`
 	position: relative;
-	margin-top: 200px;
 `;
 
 const IntroTitle = styled.div`
 	max-width: 500px;
+`;
+
+const TopSectionContainer = styled(Flex)`
+	position: relative;
 `;
 
 const UnderlinedText = styled.span`
