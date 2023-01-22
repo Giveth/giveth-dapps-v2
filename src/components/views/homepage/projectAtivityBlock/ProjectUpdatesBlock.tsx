@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperType } from 'swiper/types';
 import 'swiper/css';
@@ -10,6 +10,7 @@ import {
 	SwiperPagination,
 } from '@/components/SwiperPagination';
 import { Flex } from '@/components/styled-components/Flex';
+import { IProject } from '@/apollo/types/types';
 
 const items: ISwiperPaginationItem[] = [
 	{
@@ -38,7 +39,11 @@ const items: ISwiperPaginationItem[] = [
 	},
 ];
 
-export const ProjectUpdatesBlock = () => {
+interface IProjectUpdatesBlockProps {
+	projects: IProject[];
+}
+
+export const ProjectUpdatesBlock: FC<IProjectUpdatesBlockProps> = () => {
 	const [swiper, setSwiper] = useState<SwiperType>();
 
 	return (
