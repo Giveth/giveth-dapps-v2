@@ -3,10 +3,13 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperType } from 'swiper/types';
 import 'swiper/css';
 import { Navigation } from 'swiper';
+import styled from 'styled-components';
+import { H4, neutralColors } from '@giveth/ui-design-system';
 import {
 	ISwiperPaginationItem,
 	SwiperPagination,
 } from '@/components/SwiperPagination';
+import { Flex } from '@/components/styled-components/Flex';
 
 const items: ISwiperPaginationItem[] = [
 	{
@@ -40,7 +43,10 @@ export const ProjectUpdatesBlock = () => {
 
 	return (
 		<>
-			<SwiperPagination swiper={swiper} items={items} />
+			<Header>
+				<BlockTitle>Awesome Project Updates</BlockTitle>
+				<SwiperPagination swiper={swiper} items={items} />
+			</Header>
 			<Swiper
 				slidesPerView={1}
 				onSwiper={setSwiper}
@@ -59,3 +65,12 @@ export const ProjectUpdatesBlock = () => {
 		</>
 	);
 };
+
+const Header = styled(Flex)`
+	justify-content: space-between;
+	align-items: center;
+`;
+
+const BlockTitle = styled(H4)`
+	color: ${neutralColors.gray[600]};
+`;
