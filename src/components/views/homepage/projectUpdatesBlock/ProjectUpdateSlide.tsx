@@ -23,6 +23,7 @@ export const ProjectUpdateSlide: FC<IProjectUpdateSlideProps> = ({
 };
 
 const ProjectUpdateSlideWrapper = styled(Flex)`
+	padding: 16px 0;
 	gap: 24px;
 	flex-direction: column;
 	${mediaQueries.laptopS} {

@@ -82,7 +82,7 @@ export const ProjectUpdatesBlock: FC<IProjectUpdatesBlockProps> = ({
 	);
 };
 const ProjectUpdatesBlockWrapper = styled.div`
-	padding: 80px 0;
+	padding: 80px 0 64px;
 `;
 
 const Header = styled(Flex)`
@@ -93,7 +93,7 @@ const Header = styled(Flex)`
 		flex-direction: row;
 	}
 	gap: 24px;
-	margin-bottom: 50px;
+	margin-bottom: 32px;
 `;
 
 const BlockTitle = styled(H4)`
