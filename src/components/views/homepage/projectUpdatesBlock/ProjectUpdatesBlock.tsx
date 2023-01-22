@@ -4,7 +4,7 @@ import { Swiper as SwiperType } from 'swiper/types';
 import 'swiper/css';
 import { Navigation } from 'swiper';
 import styled from 'styled-components';
-import { H4, neutralColors } from '@giveth/ui-design-system';
+import { H4, mediaQueries, neutralColors } from '@giveth/ui-design-system';
 import {
 	ISwiperPaginationItem,
 	SwiperPagination,
@@ -54,7 +54,9 @@ export const ProjectUpdatesBlock: FC<IProjectUpdatesBlockProps> = ({
 		<ProjectUpdatesBlockWrapper>
 			<Container>
 				<Header>
-					<BlockTitle>Awesome Project Updates</BlockTitle>
+					<BlockTitle weight={700}>
+						Awesome Project Updates
+					</BlockTitle>
 					<SwiperPagination swiper={swiper} items={items} />
 				</Header>
 				<SwiperWrapper>
@@ -79,16 +81,24 @@ export const ProjectUpdatesBlock: FC<IProjectUpdatesBlockProps> = ({
 		</ProjectUpdatesBlockWrapper>
 	);
 };
+const ProjectUpdatesBlockWrapper = styled.div`
+	padding: 80px 0;
+`;
 
 const Header = styled(Flex)`
 	justify-content: space-between;
 	align-items: center;
+	flex-direction: column;
+	${mediaQueries.laptopS} {
+		flex-direction: row;
+	}
+	gap: 24px;
+	margin-bottom: 50px;
 `;
 
 const BlockTitle = styled(H4)`
 	color: ${neutralColors.gray[600]};
+	text-align: center;
 `;
-
-const ProjectUpdatesBlockWrapper = styled.div``;
 
 const SwiperWrapper = styled(Row)``;
