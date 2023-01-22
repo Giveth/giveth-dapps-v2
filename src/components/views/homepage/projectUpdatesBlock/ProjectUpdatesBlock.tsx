@@ -11,6 +11,8 @@ import {
 } from '@/components/SwiperPagination';
 import { Flex } from '@/components/styled-components/Flex';
 import { IProject } from '@/apollo/types/types';
+import { Container } from '@/components/Grid';
+import { ProjectUpdateSlide } from './ProjectUpdateSlide';
 
 const items: ISwiperPaginationItem[] = [
 	{
@@ -43,31 +45,35 @@ interface IProjectUpdatesBlockProps {
 	projects: IProject[];
 }
 
-export const ProjectUpdatesBlock: FC<IProjectUpdatesBlockProps> = () => {
+export const ProjectUpdatesBlock: FC<IProjectUpdatesBlockProps> = ({
+	projects,
+}) => {
 	const [swiper, setSwiper] = useState<SwiperType>();
 
 	return (
-		<>
-			<Header>
-				<BlockTitle>Awesome Project Updates</BlockTitle>
-				<SwiperPagination swiper={swiper} items={items} />
-			</Header>
-			<Swiper
-				slidesPerView={1}
-				onSwiper={setSwiper}
-				modules={[Navigation]}
-				navigation={{
-					nextEl: '#homeCampaignNext',
-					prevEl: '#homeCampaignPrev',
-				}}
-			>
-				<SwiperSlide>Slide 1</SwiperSlide>
-				<SwiperSlide>Slide 2</SwiperSlide>
-				<SwiperSlide>Slide 3</SwiperSlide>
-				<SwiperSlide>Slide 4</SwiperSlide>
-				...
-			</Swiper>
-		</>
+		<ProjectUpdatesBlockWrapper>
+			<Container>
+				<Header>
+					<BlockTitle>Awesome Project Updates</BlockTitle>
+					<SwiperPagination swiper={swiper} items={items} />
+				</Header>
+				<Swiper
+					slidesPerView={1}
+					onSwiper={setSwiper}
+					modules={[Navigation]}
+					navigation={{
+						nextEl: '#homeCampaignNext',
+						prevEl: '#homeCampaignPrev',
+					}}
+				>
+					{projects.map((project, idx) => (
+						<SwiperSlide key={idx}>
+							<ProjectUpdateSlide project={project} />
+						</SwiperSlide>
+					))}
+				</Swiper>
+			</Container>
+		</ProjectUpdatesBlockWrapper>
 	);
 };
 
@@ -79,3 +85,5 @@ const Header = styled(Flex)`
 const BlockTitle = styled(H4)`
 	color: ${neutralColors.gray[600]};
 `;
+
+const ProjectUpdatesBlockWrapper = styled.div``;

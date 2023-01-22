@@ -4,19 +4,19 @@ import { Flex } from '@/components/styled-components/Flex';
 import { IProject } from '@/apollo/types/types';
 import ProjectCard from '@/components/project-card/ProjectCard';
 
-interface IProjectActivitySlideProps {
+interface IProjectUpdateSlideProps {
 	project: IProject;
 }
 
-export const ProjectActivitySlide: FC<IProjectActivitySlideProps> = ({
+export const ProjectUpdateSlide: FC<IProjectUpdateSlideProps> = ({
 	project,
 }) => {
 	const [isVisibe, setIsVisibe] = useState(false);
 	return (
-		<ProjectActivitySlideWrapper>
+		<ProjectUpdateSlideWrapper>
 			<ProjectCard project={project} />
-		</ProjectActivitySlideWrapper>
+		</ProjectUpdateSlideWrapper>
 	);
 };
 
-const ProjectActivitySlideWrapper = styled(Flex)``;
+const ProjectUpdateSlideWrapper = styled(Flex)``;
