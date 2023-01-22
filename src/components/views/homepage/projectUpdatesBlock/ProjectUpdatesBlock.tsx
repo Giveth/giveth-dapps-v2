@@ -11,7 +11,7 @@ import {
 } from '@/components/SwiperPagination';
 import { Flex } from '@/components/styled-components/Flex';
 import { IProject } from '@/apollo/types/types';
-import { Container } from '@/components/Grid';
+import { Container, Row } from '@/components/Grid';
 import { ProjectUpdateSlide } from './ProjectUpdateSlide';
 
 const items: ISwiperPaginationItem[] = [
@@ -57,21 +57,24 @@ export const ProjectUpdatesBlock: FC<IProjectUpdatesBlockProps> = ({
 					<BlockTitle>Awesome Project Updates</BlockTitle>
 					<SwiperPagination swiper={swiper} items={items} />
 				</Header>
-				<Swiper
-					slidesPerView={1}
-					onSwiper={setSwiper}
-					modules={[Navigation]}
-					navigation={{
-						nextEl: '#homeCampaignNext',
-						prevEl: '#homeCampaignPrev',
-					}}
-				>
-					{projects.map((project, idx) => (
-						<SwiperSlide key={idx}>
-							<ProjectUpdateSlide project={project} />
-						</SwiperSlide>
-					))}
-				</Swiper>
+				<SwiperWrapper>
+					<Swiper
+						slidesPerView={1}
+						onSwiper={setSwiper}
+						modules={[Navigation]}
+						navigation={{
+							nextEl: '#homeCampaignNext',
+							prevEl: '#homeCampaignPrev',
+						}}
+						spaceBetween={24}
+					>
+						{projects.map((project, idx) => (
+							<SwiperSlide key={idx}>
+								<ProjectUpdateSlide project={project} />
+							</SwiperSlide>
+						))}
+					</Swiper>
+				</SwiperWrapper>
 			</Container>
 		</ProjectUpdatesBlockWrapper>
 	);
@@ -87,3 +90,5 @@ const BlockTitle = styled(H4)`
 `;
 
 const ProjectUpdatesBlockWrapper = styled.div``;
+
+const SwiperWrapper = styled(Row)``;
