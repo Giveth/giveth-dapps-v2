@@ -63,7 +63,7 @@ export const ProjectUpdateSlide: FC<IProjectUpdateSlideProps> = ({
 					<>
 						<UpdateDate>
 							{update?.createdAt &&
-								new Date(update?.createdAt).toLocaleString(
+								new Date(update.createdAt).toLocaleString(
 									'en-GB',
 									{
 										day: 'numeric',
@@ -72,10 +72,10 @@ export const ProjectUpdateSlide: FC<IProjectUpdateSlideProps> = ({
 									},
 								)}
 						</UpdateDate>
-						<UpdateTitle weight={700}>{update?.title}</UpdateTitle>
+						<UpdateTitle weight={700}>{update.title}</UpdateTitle>
 						<UpdateDesc
 							dangerouslySetInnerHTML={{
-								__html: update?.content,
+								__html: update.content,
 							}}
 						/>
 					</>
@@ -104,9 +104,10 @@ const StyledProjectCard = styled(ProjectCard)`
 
 const ProjectUpdateCard = styled.div`
 	flex: 1;
-	padding: 32px;
+	padding: 32px 32px 88px;
 	border: 1px solid ${neutralColors.gray[300]};
 	border-radius: 16px;
+	max-height: 448px;
 `;
 
 const UpdateDate = styled(B)`
@@ -122,4 +123,5 @@ const UpdateTitle = styled(H6)`
 const UpdateDesc = styled(P)`
 	color: ${neutralColors.gray[900]};
 	margin-bottom: 8px;
+	height: 360px;
 `;
