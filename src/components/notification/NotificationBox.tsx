@@ -9,6 +9,7 @@ import {
 import { durationToString } from '@/lib/helpers';
 import { INotification } from '@/features/notification/notification.types';
 import { setNotificationRead } from '@/features/notification/notification.services';
+import { getNowUnixMS } from '@/helpers/time';
 
 interface INotificationBox {
 	notification: INotification;
@@ -65,12 +66,10 @@ export const NotificationBox: FC<INotificationBox> = ({
 				<ConvertedTextContainer>
 					{convertRawDataToHTML(notification)}
 				</ConvertedTextContainer>
-				{/* {!short && notification.quote && (
-					<NotificationQuote>{notification.quote}</NotificationQuote>
-				)} */}
 				<NotificationTime medium>
 					{durationToString(
-						Date.now() - new Date(notification.createdAt).getTime(),
+						getNowUnixMS() -
+							new Date(notification.createdAt).getTime(),
 						1,
 						true,
 					) + ' ago'}
@@ -110,20 +109,6 @@ const ConvertedTextContainer = styled.div`
 `;
 
 const NotificationContent = styled.div``;
-
-// const NotificationQuote = styled(B)`
-// 	border-left: 4px solid ${neutralColors.gray[400]};
-// 	font-weight: bold;
-// 	padding-left: 16px;
-// 	margin-top: 16px;
-// 	white-space: pre-wrap;
-// 	&::before {
-// 		content: '"';
-// 	}
-// 	&::after {
-// 		content: '"';
-// 	}
-// `;
 
 const NotificationTime = styled(Caption)`
 	margin-top: 16px;
