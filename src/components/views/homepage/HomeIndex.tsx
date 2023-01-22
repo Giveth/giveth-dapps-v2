@@ -8,7 +8,6 @@ import WhyGiveth from '@/components/views/homepage/whyGiveth';
 import CampaignBlock from '@/components/views/homepage/CampaignBlock';
 import IntroBlock from './introBlock';
 import VideoBlock from './videoBlock';
-import { ProjectActivity } from './projectUpdatesBlock/ProjectActivity';
 import { ProjectUpdatesBlock } from './projectUpdatesBlock/ProjectUpdatesBlock';
 
 interface IHomeView {
@@ -27,7 +26,6 @@ const HomeIndex: FC<IHomeView> = ({ projects }) => {
 			<Separator />
 			<VideoBlock />
 			<ProjectUpdatesBlock projects={projects} />
-			<ProjectActivity />
 			<Separator />
 			<HomeFromBlog />
 			<HomeGetUpdates />
