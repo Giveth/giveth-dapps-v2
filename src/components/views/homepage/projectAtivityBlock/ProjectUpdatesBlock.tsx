@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperType } from 'swiper/types';
 import 'swiper/css';
+import { Navigation } from 'swiper';
 import {
 	ISwiperPaginationItem,
 	SwiperPagination,
@@ -40,7 +41,15 @@ export const ProjectUpdatesBlock = () => {
 	return (
 		<>
 			<SwiperPagination swiper={swiper} items={items} />
-			<Swiper slidesPerView={1} onSwiper={setSwiper}>
+			<Swiper
+				slidesPerView={1}
+				onSwiper={setSwiper}
+				modules={[Navigation]}
+				navigation={{
+					nextEl: '#homeCampaignNext',
+					prevEl: '#homeCampaignPrev',
+				}}
+			>
 				<SwiperSlide>Slide 1</SwiperSlide>
 				<SwiperSlide>Slide 2</SwiperSlide>
 				<SwiperSlide>Slide 3</SwiperSlide>
