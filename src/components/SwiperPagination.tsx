@@ -61,7 +61,7 @@ export const SwiperPagination: FC<ISwiperPagination> = ({
 					key={idx}
 					onClick={() => swiper?.slideTo(item.page || item)}
 				>
-					{item}
+					{item.label || item + 1}
 				</PaginationItem>
 			))}
 			{hasNextButton && (
