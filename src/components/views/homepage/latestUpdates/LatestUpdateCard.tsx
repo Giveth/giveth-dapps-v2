@@ -19,14 +19,15 @@ export const LatestUpdateCard: FC<ILatestUpdateCardProps> = ({
 	return (
 		<LatestUpdateCardContainer>
 			<ImageWrapper>
-				<Image  fill src={cover} alt='' style={{objectFit: 'cover'}}/>
+				<Image fill src={cover} alt='' style={{ objectFit: 'cover' }} />
 			</ImageWrapper>
 			<Content>
-				<Time>{durationToString(
-						getNowUnixMS() -
-						Number(projectUpdate.createdAt),
+				<Time>
+					{durationToString(
+						getNowUnixMS() - Number(projectUpdate.createdAt),
 						1,
-					) + ' ago'}</Time>
+					) + ' ago'}
+				</Time>
 				<Title>{projectUpdate.title}</Title>
 				<Desc
 					dangerouslySetInnerHTML={{ __html: projectUpdate.content }}
@@ -42,8 +43,8 @@ const LatestUpdateCardContainer = styled(Flex)`
 `;
 
 const ImageWrapper = styled.div`
-	width:96px;
-	height:96px;
+	width: 96px;
+	height: 96px;
 	overflow: hidden;
 	position: relative;
 	border-radius: 8px;
