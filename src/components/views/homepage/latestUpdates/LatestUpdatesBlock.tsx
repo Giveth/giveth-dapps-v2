@@ -100,11 +100,11 @@ const LatestUpdatesCardsWrapper = styled.div`
 
 const LatestUpdatesCardsContainer = styled(Flex)`
 	transform: translate3d(0, 0, 0);
-	animation: moveSlideshow 10s linear infinite;
+	animation: marquee 10s linear infinite;
 	:hover {
 		animation-play-state: paused;
 	}
-	@keyframes moveSlideshow {
+	@keyframes marquee {
 		0% {
 			transform: translateX(100%);
 		}
