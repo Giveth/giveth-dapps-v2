@@ -471,3 +471,10 @@ export const createSiweMessage = async (
 export function isObjEmpty(obj: Object) {
 	return Object.keys(obj).length > 0;
 }
+
+export const ArrayFrom0ToN = (n: number) => {
+	let a = Array(n),
+		b = 0;
+	while (b < n) a[b] = b++;
+	return a;
+};

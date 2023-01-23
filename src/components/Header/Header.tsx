@@ -40,6 +40,7 @@ import { RewardButtonWithMenu } from '../menu/RewardButtonWithMenu';
 import { UserButtonWithMenu } from '../menu/UserButtonWithMenu';
 import { HomeSidebar } from '../sidebar/HomeSidebar';
 import { fetchMainCategories } from '@/features/general/general.thunk';
+import { ItemsProvider } from '@/context/Items.context';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -258,7 +259,9 @@ const Header: FC<IHeader> = () => {
 					isAnimating={showSidebar}
 					direction={ESideBarDirection.Left}
 				>
-					<HomeSidebar />
+					<ItemsProvider close={closeSidebar}>
+						<HomeSidebar />
+					</ItemsProvider>
 				</SideBar>
 			)}
 		</StyledHeader>

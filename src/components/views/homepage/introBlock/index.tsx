@@ -11,21 +11,26 @@ import {
 import React from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import { Flex } from '@/components/styled-components/Flex';
 import IntroCard from './IntroCard';
-import useDetectDevice from '@/hooks/useDetectDevice';
+import introBanner from '/public/images/banners/introBanner.svg';
+import { mediaQueries } from '@/lib/constants/constants';
+
+const SemiCircle = dynamic(() => import('@/components/particles/SemiCircle'));
+const Circle = dynamic(() => import('@/components/particles/Circle'));
+const Wave = dynamic(() => import('@/components/particles/Wave'));
 
 const IntroBlock = () => {
-	const { isMobile } = useDetectDevice();
 	const { formatMessage } = useIntl();
 	return (
 		<SectionContainer>
-			<Container>
+			<Container style={{ position: 'relative' }}>
 				<IntroContainer>
-					<Flex
+					<TopSectionContainer
 						justifyContent='space-around'
-						flexDirection={isMobile ? 'column' : 'row'}
-						alignItems={isMobile ? 'center' : 'stretch'}
+						gap='32px'
 					>
 						<IntroTitle>
 							<H3 weight={700}>
@@ -53,14 +58,27 @@ const IntroBlock = () => {
 								/>
 							</ButtonsContainer>
 						</IntroTitle>
-						<div>Image</div>
-					</Flex>
-					<IntroCards
-						justifyContent='space-between'
-						gap='24px'
-						flexDirection={isMobile ? 'column' : 'row'}
-						alignItems={isMobile ? 'center' : 'stretch'}
-					>
+						<div>
+							<Image
+								src={introBanner}
+								alt='intro-banner'
+								width={300}
+							/>
+						</div>
+						<TopWaveContainer>
+							<Wave />
+						</TopWaveContainer>
+						<BottomWaveContainer>
+							<Wave color='#FFC9E2' />
+						</BottomWaveContainer>
+						<SemiCircleContainer>
+							<SemiCircle />
+						</SemiCircleContainer>
+						<CircleContainer>
+							<Circle />
+						</CircleContainer>
+					</TopSectionContainer>
+					<IntroCards justifyContent='space-between' gap='24px'>
 						<IntroCard
 							Icon={<IconDonation32 />}
 							LinkComponent={
@@ -125,6 +143,8 @@ const IntroBlock = () => {
 const SectionContainer = styled.div`
 	position: relative;
 	background-color: ${neutralColors.gray[100]};
+	padding: 100px 0;
+	margin-top: 10px;
 	::before {
 		content: '';
 		background-image: url('/images/backgrounds/giv-outlined-bright-opacity.png');
@@ -142,11 +162,22 @@ const SectionContainer = styled.div`
 
 const IntroContainer = styled.div`
 	position: relative;
-	margin-top: 200px;
+	padding: 0 8px;
 `;
 
 const IntroTitle = styled.div`
 	max-width: 500px;
+`;
+
+const TopSectionContainer = styled(Flex)`
+	position: relative;
+	margin-bottom: 100px;
+	flex-direction: column;
+	align-items: center;
+	${mediaQueries.tablet} {
+		flex-direction: row;
+		align-items: stretch;
+	}
 `;
 
 const UnderlinedText = styled.span`
@@ -155,11 +186,52 @@ const UnderlinedText = styled.span`
 `;
 
 const ButtonsContainer = styled(Flex)`
+	position: relative;
 	margin-top: 16px;
+	flex-direction: column;
+	z-index: 1;
+	${mediaQueries.tablet} {
+		flex-direction: row;
+	}
 `;
 
 const IntroCards = styled(Flex)`
 	margin-top: 40px;
+	flex-direction: column;
+	align-items: center;
+	${mediaQueries.tablet} {
+		flex-direction: row;
+		align-items: stretch;
+	}
+`;
+
+const TopWaveContainer = styled.div`
+	position: absolute;
+	top: -60px;
+	left: -10px;
+`;
+
+const BottomWaveContainer = styled.div`
+	position: absolute;
+	bottom: -60px;
+	right: 0;
+`;
+
+const SemiCircleContainer = styled.div`
+	z-index: 0;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+`;
+
+const CircleContainer = styled.div`
+	position: absolute;
+	bottom: -50px;
+	left: 50%;
+	display: none;
+	${mediaQueries.mobileL} {
+		display: inline;
+	}
 `;
 
 export default IntroBlock;

@@ -5,7 +5,7 @@ import { BaseMenuContainer } from './common';
 import { ProjectsItems } from './ProjectsItems';
 
 export const ProjectsMenu = () => {
-	const { theme, mainCategories } = useAppSelector(state => state.general);
+	const { theme } = useAppSelector(state => state.general);
 
 	return (
 		<MenuContainer theme={theme}>

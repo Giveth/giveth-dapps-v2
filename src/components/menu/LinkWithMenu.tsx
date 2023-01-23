@@ -6,6 +6,7 @@ import { zIndex } from '@/lib/constants/constants';
 import { useAppSelector } from '@/features/hooks';
 import { HeaderLink } from '../Header/Header.sc';
 import { useDelayedState } from '@/hooks/useDelayedState';
+import { ItemsProvider } from '@/context/Items.context';
 
 interface ILinkWithMenu {
 	title: string;
@@ -40,9 +41,11 @@ export const LinkWithMenu: FC<ILinkWithMenu> = ({
 				<IconChevronDown24 />
 			</ArrowContainer>
 			{menuCondition && (
-				<Menu isAnimating={showMenu} parentRef={elRef}>
-					{children}
-				</Menu>
+				<ItemsProvider close={closeMenu}>
+					<Menu isAnimating={showMenu} parentRef={elRef}>
+						{children}
+					</Menu>
+				</ItemsProvider>
 			)}
 		</LinkWithMenuContainer>
 	);

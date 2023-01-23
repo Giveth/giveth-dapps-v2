@@ -38,10 +38,11 @@ const SIDE_PADDING = '26px';
 
 interface IProjectCard {
 	project: IProject;
+	className?: string;
 }
 
 const ProjectCard = (props: IProjectCard) => {
-	const { project } = props;
+	const { project, className } = props;
 	const {
 		title,
 		description,
@@ -67,6 +68,7 @@ const ProjectCard = (props: IProjectCard) => {
 		<Wrapper
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
+			className={className}
 		>
 			<ImagePlaceholder>
 				<ProjectCardBadges project={project} />
