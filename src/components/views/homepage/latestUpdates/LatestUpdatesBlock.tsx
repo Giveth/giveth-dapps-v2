@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Container } from '@/components/Grid';
 import { BlockTitle } from '../common';
+import { LatestUpdateCard } from './LatestUpdateCard';
 
 export const LatestUpdatesBlock = () => {
 	return (
@@ -9,6 +10,7 @@ export const LatestUpdatesBlock = () => {
 			<Container>
 				<BlockTitle>Awesome Project Updates</BlockTitle>
 			</Container>
+			<LatestUpdateCard />
 		</LatestUpdatesBlockWrapper>
 	);
 };
