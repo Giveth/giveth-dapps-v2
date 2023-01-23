@@ -56,32 +56,32 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 				<CoverLine theme={theme} className='cover-line' />
 			</BalanceButton>
 			{menuCondition && (
-				<ItemsProvider close={closeMenu}>
-					<MenuContainer isAnimating={showMenu} theme={theme}>
+				<MenuContainer isAnimating={showMenu} theme={theme}>
+					<ItemsProvider close={closeMenu}>
 						<RewardItems
 							showWhatIsGIVstreamModal={showRewardMenuModal}
 							setShowWhatIsGIVstreamModal={setShowRewardMenuModal}
 							theme={theme}
 						/>
-					</MenuContainer>
-				</ItemsProvider>
+					</ItemsProvider>
+				</MenuContainer>
 			)}
 			{sidebarCondition && (
-				<ItemsProvider close={closeSidebar}>
-					<SideBar
-						close={closeSidebar}
-						isAnimating={showSidebar}
-						direction={ESideBarDirection.Right}
-						header={
-							<>
-								<FlexSpacer />
-								<HeaderSidebarButtonWrapper>
-									<HeaderRewardButton />
-								</HeaderSidebarButtonWrapper>
-							</>
-						}
-					>
-						<SidebarInnerContainer>
+				<SideBar
+					close={closeSidebar}
+					isAnimating={showSidebar}
+					direction={ESideBarDirection.Right}
+					header={
+						<>
+							<FlexSpacer />
+							<HeaderSidebarButtonWrapper>
+								<HeaderRewardButton />
+							</HeaderSidebarButtonWrapper>
+						</>
+					}
+				>
+					<SidebarInnerContainer>
+						<ItemsProvider close={closeSidebar}>
 							<RewardItems
 								showWhatIsGIVstreamModal={showRewardMenuModal}
 								setShowWhatIsGIVstreamModal={
@@ -89,9 +89,9 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 								}
 								theme={theme}
 							/>
-						</SidebarInnerContainer>
-					</SideBar>
-				</ItemsProvider>
+						</ItemsProvider>
+					</SidebarInnerContainer>
+				</SideBar>
 			)}
 		</MenuAndButtonContainer>
 	);

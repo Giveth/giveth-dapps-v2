@@ -254,15 +254,15 @@ const Header: FC<IHeader> = () => {
 				)}
 			</Flex>
 			{sidebarCondition && (
-				<ItemsProvider close={closeSidebar}>
-					<SideBar
-						close={closeSidebar}
-						isAnimating={showSidebar}
-						direction={ESideBarDirection.Left}
-					>
+				<SideBar
+					close={closeSidebar}
+					isAnimating={showSidebar}
+					direction={ESideBarDirection.Left}
+				>
+					<ItemsProvider close={closeSidebar}>
 						<HomeSidebar />
-					</SideBar>
-				</ItemsProvider>
+					</ItemsProvider>
+				</SideBar>
 			)}
 		</StyledHeader>
 	);

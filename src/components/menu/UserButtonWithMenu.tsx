@@ -63,32 +63,32 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 				<CoverLine theme={theme} className='cover-line' />
 			</WalletButton>
 			{menuCondition && (
-				<ItemsProvider close={closeMenu}>
-					<MenuContainer isAnimating={showMenu} theme={theme}>
+				<MenuContainer isAnimating={showMenu} theme={theme}>
+					<ItemsProvider close={closeMenu}>
 						<UserItems />
-					</MenuContainer>
-				</ItemsProvider>
+					</ItemsProvider>
+				</MenuContainer>
 			)}
 			{sidebarCondition && (
-				<ItemsProvider close={closeSidebar}>
-					<SideBar
-						close={closeSidebar}
-						isAnimating={showSidebar}
-						direction={ESideBarDirection.Right}
-						header={
-							<>
-								<FlexSpacer />
-								<HeaderSidebarButtonWrapper>
-									<HeaderUserButton />
-								</HeaderSidebarButtonWrapper>
-							</>
-						}
-					>
-						<SidebarInnerContainer>
+				<SideBar
+					close={closeSidebar}
+					isAnimating={showSidebar}
+					direction={ESideBarDirection.Right}
+					header={
+						<>
+							<FlexSpacer />
+							<HeaderSidebarButtonWrapper>
+								<HeaderUserButton />
+							</HeaderSidebarButtonWrapper>
+						</>
+					}
+				>
+					<SidebarInnerContainer>
+						<ItemsProvider close={closeSidebar}>
 							<UserItems />
-						</SidebarInnerContainer>
-					</SideBar>
-				</ItemsProvider>
+						</ItemsProvider>
+					</SidebarInnerContainer>
+				</SideBar>
 			)}
 		</MenuAndButtonContainer>
 	);
