@@ -142,6 +142,7 @@ const MenuWallet = () => {
 							onClick={() => {
 								deactivate();
 								dispatch(signOut(token!));
+								localStorage.removeItem(StorageLabel.WALLET);
 							}}
 							theme={theme}
 						>
