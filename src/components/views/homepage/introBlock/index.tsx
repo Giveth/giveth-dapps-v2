@@ -19,9 +19,9 @@ import useDetectDevice from '@/hooks/useDetectDevice';
 import introBanner from '/public/images/banners/introBanner.svg';
 import { mediaQueries } from '@/lib/constants/constants';
 
-const Wave = dynamic(() => import('@/components/particles/Wave'));
 const SemiCircle = dynamic(() => import('@/components/particles/SemiCircle'));
 const Circle = dynamic(() => import('@/components/particles/Circle'));
+const Wave = dynamic(() => import('@/components/particles/Wave'));
 
 const IntroBlock = () => {
 	const { isMobile } = useDetectDevice();
