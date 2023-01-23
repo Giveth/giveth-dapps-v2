@@ -2,7 +2,6 @@ import { H5, neutralColors, P } from '@giveth/ui-design-system';
 import React, { ReactElement } from 'react';
 import styled from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
-import useDetectDevice from '@/hooks/useDetectDevice';
 import { mediaQueries } from '@/lib/constants/constants';
 
 interface IntroCardProps {
@@ -18,22 +17,24 @@ const IntroCard = ({
 	title,
 	description,
 }: IntroCardProps) => {
-	const { isDesktop } = useDetectDevice();
 	return (
 		<IntroCardContainer flexDirection='column' gap='16px'>
-			<Flex
-				gap='16px'
-				flexDirection={isDesktop ? 'row' : 'column'}
-				alignItems='center'
-			>
+			<IconAndTitleContainer gap='16px' alignItems='center'>
 				{Icon}
 				<H5 weight={700}>{title}</H5>
-			</Flex>
+			</IconAndTitleContainer>
 			<P>{description}</P>
 			{LinkComponent}
 		</IntroCardContainer>
 	);
 };
+
+const IconAndTitleContainer = styled(Flex)`
+	flex-direction: column;
+	${mediaQueries.desktop} {
+		flex-direction: row;
+	}
+`;
 
 const IntroCardContainer = styled(Flex)`
 	border: 1px solid ${neutralColors.gray[300]};

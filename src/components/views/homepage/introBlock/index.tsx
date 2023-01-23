@@ -15,7 +15,6 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { Flex } from '@/components/styled-components/Flex';
 import IntroCard from './IntroCard';
-import useDetectDevice from '@/hooks/useDetectDevice';
 import introBanner from '/public/images/banners/introBanner.svg';
 import { mediaQueries } from '@/lib/constants/constants';
 
@@ -24,7 +23,6 @@ const Circle = dynamic(() => import('@/components/particles/Circle'));
 const Wave = dynamic(() => import('@/components/particles/Wave'));
 
 const IntroBlock = () => {
-	const { isMobile } = useDetectDevice();
 	const { formatMessage } = useIntl();
 	return (
 		<SectionContainer>
@@ -32,8 +30,6 @@ const IntroBlock = () => {
 				<IntroContainer>
 					<TopSectionContainer
 						justifyContent='space-around'
-						flexDirection={isMobile ? 'column' : 'row'}
-						alignItems={isMobile ? 'center' : 'stretch'}
 						gap='32px'
 					>
 						<IntroTitle>
@@ -82,12 +78,7 @@ const IntroBlock = () => {
 							<Circle />
 						</CircleContainer>
 					</TopSectionContainer>
-					<IntroCards
-						justifyContent='space-between'
-						gap='24px'
-						flexDirection={isMobile ? 'column' : 'row'}
-						alignItems={isMobile ? 'center' : 'stretch'}
-					>
+					<IntroCards justifyContent='space-between' gap='24px'>
 						<IntroCard
 							Icon={<IconDonation32 />}
 							LinkComponent={
@@ -181,6 +172,12 @@ const IntroTitle = styled.div`
 const TopSectionContainer = styled(Flex)`
 	position: relative;
 	margin-bottom: 100px;
+	flex-direction: column;
+	align-items: center;
+	${mediaQueries.tablet} {
+		flex-direction: row;
+		align-items: stretch;
+	}
 `;
 
 const UnderlinedText = styled.span`
@@ -193,13 +190,19 @@ const ButtonsContainer = styled(Flex)`
 	margin-top: 16px;
 	flex-direction: column;
 	z-index: 1;
-	${mediaQueries.mobileL} {
+	${mediaQueries.tablet} {
 		flex-direction: row;
 	}
 `;
 
 const IntroCards = styled(Flex)`
 	margin-top: 40px;
+	flex-direction: column;
+	align-items: center;
+	${mediaQueries.tablet} {
+		flex-direction: row;
+		align-items: stretch;
+	}
 `;
 
 const TopWaveContainer = styled.div`
