@@ -25,7 +25,7 @@ const GitcoinGrants = () => {
 							isTablet
 								? '/images/banners/gitcoin-alpha-banner-md.png'
 								: isDesktop
-								? '/images/banners/gitcoin-alpha-banner_2.png'
+								? '/images/banners/gitcoin-alpha-banner_3.png'
 								: '/images/banners/gitcoin-alpha-banner_2_mobile.png'
 						}
 					/>
