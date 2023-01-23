@@ -19,7 +19,8 @@ import useDetectDevice from '@/hooks/useDetectDevice';
 import introBanner from '/public/images/banners/introBanner.svg';
 import { mediaQueries } from '@/lib/constants/constants';
 
-const Wave = dynamic(() => import('@/components/particles/wave'));
+const Wave = dynamic(() => import('@/components/particles/Wave'));
+const SemiCircle = dynamic(() => import('@/components/particles/SemiCircle'));
 
 const IntroBlock = () => {
 	const { isMobile } = useDetectDevice();
@@ -73,6 +74,9 @@ const IntroBlock = () => {
 						<BottomWaveContainer>
 							<Wave color='#FFC9E2' />
 						</BottomWaveContainer>
+						<SemiCircleContainer>
+							<SemiCircle />
+						</SemiCircleContainer>
 					</TopSectionContainer>
 					<IntroCards
 						justifyContent='space-between'
@@ -181,8 +185,10 @@ const UnderlinedText = styled.span`
 `;
 
 const ButtonsContainer = styled(Flex)`
+	position: relative;
 	margin-top: 16px;
 	flex-direction: column;
+	z-index: 1;
 	${mediaQueries.mobileL} {
 		flex-direction: row;
 	}
@@ -202,6 +208,13 @@ const BottomWaveContainer = styled.div`
 	position: absolute;
 	bottom: -60px;
 	right: 0;
+`;
+
+const SemiCircleContainer = styled.div`
+	z-index: 0;
+	position: absolute;
+	bottom: 0;
+	left: 0;
 `;
 
 export default IntroBlock;
