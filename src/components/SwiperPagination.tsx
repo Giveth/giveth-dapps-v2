@@ -32,11 +32,9 @@ export const SwiperPagination: FC<ISwiperPagination> = ({
 	hasNextButton = true,
 }) => {
 	const _items = items ? items : ArrayFrom0ToN(itemsCount || 1);
-	console.log('_items', _items);
 	const [realIndex, setRealIndex] = useState(_items[0].page || _items[0]);
 	useEffect(() => {
 		function realIndexChangeHandler(_swiper: SwiperType) {
-			console.log('realIndexChange', _swiper.realIndex);
 			setRealIndex(_swiper.realIndex);
 		}
 		swiper && swiper.on('realIndexChange', realIndexChangeHandler);
@@ -48,7 +46,7 @@ export const SwiperPagination: FC<ISwiperPagination> = ({
 	return (
 		<PaginationContainer>
 			{hasPrevButton && (
-				<Navigation>
+				<Navigation onClick={() => swiper?.slidePrev()}>
 					<IconPointerLeft size={24} />
 				</Navigation>
 			)}
@@ -64,7 +62,7 @@ export const SwiperPagination: FC<ISwiperPagination> = ({
 				</PaginationItem>
 			))}
 			{hasNextButton && (
-				<Navigation id='homeCampaignNext'>
+				<Navigation onClick={() => swiper?.slideNext()}>
 					<IconPointerRight size={24} />
 				</Navigation>
 			)}
