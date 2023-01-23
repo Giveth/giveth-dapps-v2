@@ -21,13 +21,14 @@ import { mediaQueries } from '@/lib/constants/constants';
 
 const Wave = dynamic(() => import('@/components/particles/Wave'));
 const SemiCircle = dynamic(() => import('@/components/particles/SemiCircle'));
+const Circle = dynamic(() => import('@/components/particles/Circle'));
 
 const IntroBlock = () => {
 	const { isMobile } = useDetectDevice();
 	const { formatMessage } = useIntl();
 	return (
 		<SectionContainer>
-			<Container>
+			<Container style={{ position: 'relative' }}>
 				<IntroContainer>
 					<TopSectionContainer
 						justifyContent='space-around'
@@ -77,6 +78,9 @@ const IntroBlock = () => {
 						<SemiCircleContainer>
 							<SemiCircle />
 						</SemiCircleContainer>
+						<CircleContainer>
+							<Circle />
+						</CircleContainer>
 					</TopSectionContainer>
 					<IntroCards
 						justifyContent='space-between'
@@ -215,6 +219,16 @@ const SemiCircleContainer = styled.div`
 	position: absolute;
 	bottom: 0;
 	left: 0;
+`;
+
+const CircleContainer = styled.div`
+	position: absolute;
+	bottom: -50px;
+	left: 50%;
+	display: none;
+	${mediaQueries.mobileL} {
+		display: inline;
+	}
 `;
 
 export default IntroBlock;
