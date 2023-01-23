@@ -26,8 +26,8 @@ const HomePurpleSection = () => {
 					alt='gitcoin alpha is here'
 					src={
 						isMobile
-							? '/images/banners/gitcoin-alpha-banner_mobile.png'
-							: '/images/banners/gitcoin-alpha-banner.png'
+							? '/images/banners/gitcoin-alpha-banner_2_mobile.png'
+							: '/images/banners/gitcoin-alpha-banner_3.png'
 					}
 				/>
 			</Link>
