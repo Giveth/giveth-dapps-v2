@@ -7,6 +7,7 @@ import {
 import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Swiper as SwiperType } from 'swiper/types';
+import { ArrayFrom0ToN } from '@/lib/helpers';
 import { Flex } from './styled-components/Flex';
 import { Shadow } from './styled-components/Shadow';
 
@@ -17,7 +18,8 @@ export interface ISwiperPaginationItem {
 
 interface ISwiperPagination {
 	swiper?: SwiperType;
-	items: ISwiperPaginationItem[];
+	items?: ISwiperPaginationItem[];
+	itemsCount?: number;
 	hasPrevButton?: boolean;
 	hasNextButton?: boolean;
 }
@@ -25,10 +27,13 @@ interface ISwiperPagination {
 export const SwiperPagination: FC<ISwiperPagination> = ({
 	swiper,
 	items,
+	itemsCount,
 	hasPrevButton = true,
 	hasNextButton = true,
 }) => {
-	const [realIndex, setRealIndex] = useState(items[0].page);
+	const _items = items ? items : ArrayFrom0ToN(itemsCount || 1);
+	console.log('_items', _items);
+	const [realIndex, setRealIndex] = useState(_items[0].page || _items[0]);
 	useEffect(() => {
 		function realIndexChangeHandler(_swiper: SwiperType) {
 			console.log('realIndexChange', _swiper.realIndex);
@@ -43,17 +48,19 @@ export const SwiperPagination: FC<ISwiperPagination> = ({
 	return (
 		<PaginationContainer>
 			{hasPrevButton && (
-				<Navigation id='homeCampaignPrev'>
+				<Navigation>
 					<IconPointerLeft size={24} />
 				</Navigation>
 			)}
-			{items.map((item, idx) => (
+			{_items.map((item, idx) => (
 				<PaginationItem
-					isActive={realIndex === item.page}
+					isActive={
+						item.page ? realIndex === item.page : realIndex === item
+					}
 					key={idx}
-					onClick={() => swiper?.slideTo(item.page)}
+					onClick={() => swiper?.slideTo(item.page || item)}
 				>
-					{item.label}
+					{item}
 				</PaginationItem>
 			))}
 			{hasNextButton && (
