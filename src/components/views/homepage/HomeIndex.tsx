@@ -26,6 +26,7 @@ const HomeIndex: FC<IHomeView> = ({ projects }) => {
 			<WhyGiveth />
 			<Separator />
 			<VideoBlock />
+			<Separator />
 			<ProjectUpdatesBlock projects={projects} />
 			<LatestUpdatesBlock />
 			<Separator />
