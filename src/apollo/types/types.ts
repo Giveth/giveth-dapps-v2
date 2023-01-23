@@ -161,6 +161,7 @@ export interface IMediumBlogPost {
 	link: string;
 	pubDate: string;
 	guid: string;
+	thumbnail: string;
 }
 
 export interface ICategory {
