@@ -45,7 +45,7 @@ const ItemContainer = styled(Flex)``;
 
 const ItemWrapper = styled(Flex)`
 	cursor: pointer;
-	padding: 12px 16px;
+	padding: 12px 8px;
 `;
 
 const ChildrenWrapper = styled.div`

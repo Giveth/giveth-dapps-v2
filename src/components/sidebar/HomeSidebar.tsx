@@ -1,18 +1,25 @@
 import React from 'react';
 import styled from 'styled-components';
+import { GLink } from '@giveth/ui-design-system';
+import Link from 'next/link';
 import { useAppSelector } from '@/features/hooks';
 import { Flex } from '../styled-components/Flex';
 import { SidebarItem } from './SidebarItem';
 
 import { ProjectsItems } from '../menu/ProjectsItems';
 import { GIVeconomyItems } from '../menu/GIVeconomyItems';
+import { Item } from '../menu/Item';
 
 export const HomeSidebar = () => {
 	const { theme, mainCategories } = useAppSelector(state => state.general);
 
 	return (
 		<HomeSidebarContainer>
-			<SidebarItem item={{ title: 'Home', href: '/' }} />
+			<Link href='/'>
+				<Item theme={theme}>
+					<GLink size='Big'>Home</GLink>
+				</Item>
+			</Link>
 			<SidebarItem item={{ title: 'Projects', href: '/projects' }}>
 				<ProjectsItems inSidebar />
 			</SidebarItem>
