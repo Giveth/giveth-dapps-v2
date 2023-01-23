@@ -21,6 +21,7 @@ import { SideBar, ESideBarDirection } from '../sidebar/SideBar';
 import { FlexSpacer } from '../styled-components/Flex';
 import { RewardItems } from './RewardItems';
 import { MenuContainer } from './Menu.sc';
+import { ItemsProvider } from '@/context/Items.context';
 
 interface IRewardButtonWithMenuProps extends IHeaderButtonProps {}
 
@@ -56,11 +57,13 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 			</BalanceButton>
 			{menuCondition && (
 				<MenuContainer isAnimating={showMenu} theme={theme}>
-					<RewardItems
-						showWhatIsGIVstreamModal={showRewardMenuModal}
-						setShowWhatIsGIVstreamModal={setShowRewardMenuModal}
-						theme={theme}
-					/>
+					<ItemsProvider close={closeMenu}>
+						<RewardItems
+							showWhatIsGIVstreamModal={showRewardMenuModal}
+							setShowWhatIsGIVstreamModal={setShowRewardMenuModal}
+							theme={theme}
+						/>
+					</ItemsProvider>
 				</MenuContainer>
 			)}
 			{sidebarCondition && (
@@ -78,11 +81,15 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 					}
 				>
 					<SidebarInnerContainer>
-						<RewardItems
-							showWhatIsGIVstreamModal={showRewardMenuModal}
-							setShowWhatIsGIVstreamModal={setShowRewardMenuModal}
-							theme={theme}
-						/>
+						<ItemsProvider close={closeSidebar}>
+							<RewardItems
+								showWhatIsGIVstreamModal={showRewardMenuModal}
+								setShowWhatIsGIVstreamModal={
+									setShowRewardMenuModal
+								}
+								theme={theme}
+							/>
+						</ItemsProvider>
 					</SidebarInnerContainer>
 				</SideBar>
 			)}

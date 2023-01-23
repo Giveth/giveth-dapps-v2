@@ -24,6 +24,7 @@ import { SideBar, ESideBarDirection } from '../sidebar/SideBar';
 import { MenuContainer } from './Menu.sc';
 import { UserItems } from './UserItems';
 import { FlexSpacer } from '../styled-components/Flex';
+import { ItemsProvider } from '@/context/Items.context';
 
 export interface IHeaderButtonProps {
 	isHeaderShowing: boolean;
@@ -63,7 +64,9 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 			</WalletButton>
 			{menuCondition && (
 				<MenuContainer isAnimating={showMenu} theme={theme}>
-					<UserItems />
+					<ItemsProvider close={closeMenu}>
+						<UserItems />
+					</ItemsProvider>
 				</MenuContainer>
 			)}
 			{sidebarCondition && (
@@ -81,7 +84,9 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 					}
 				>
 					<SidebarInnerContainer>
-						<UserItems />
+						<ItemsProvider close={closeSidebar}>
+							<UserItems />
+						</ItemsProvider>
 					</SidebarInnerContainer>
 				</SideBar>
 			)}
