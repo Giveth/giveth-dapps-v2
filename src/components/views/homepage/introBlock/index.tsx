@@ -21,7 +21,6 @@ import { mediaQueries } from '@/lib/constants/constants';
 
 const SemiCircle = dynamic(() => import('@/components/particles/SemiCircle'));
 const Circle = dynamic(() => import('@/components/particles/Circle'));
-const Wave = dynamic(() => import('@/components/particles/Wave'));
 
 const IntroBlock = () => {
 	const { isMobile } = useDetectDevice();
@@ -69,11 +68,9 @@ const IntroBlock = () => {
 								width={300}
 							/>
 						</div>
-						<TopWaveContainer>
-							<Wave />
-						</TopWaveContainer>
+						<TopWaveContainer>{/* <Wave /> */}</TopWaveContainer>
 						<BottomWaveContainer>
-							<Wave color='#FFC9E2' />
+							{/* <Wave color='#FFC9E2' /> */}
 						</BottomWaveContainer>
 						<SemiCircleContainer>
 							<SemiCircle />
