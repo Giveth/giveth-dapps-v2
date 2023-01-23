@@ -22,6 +22,7 @@ interface ISwiperPagination {
 	itemsCount?: number;
 	hasPrevButton?: boolean;
 	hasNextButton?: boolean;
+	className?: string;
 }
 
 export const SwiperPagination: FC<ISwiperPagination> = ({
@@ -30,6 +31,7 @@ export const SwiperPagination: FC<ISwiperPagination> = ({
 	itemsCount,
 	hasPrevButton = true,
 	hasNextButton = true,
+	className,
 }) => {
 	const _items = items ? items : ArrayFrom0ToN(itemsCount || 1);
 	const [realIndex, setRealIndex] = useState(_items[0].page || _items[0]);
@@ -44,7 +46,7 @@ export const SwiperPagination: FC<ISwiperPagination> = ({
 	}, [swiper]);
 
 	return (
-		<PaginationContainer>
+		<PaginationContainer className={className}>
 			{hasPrevButton && (
 				<Navigation
 					onClick={() => swiper?.slidePrev()}
