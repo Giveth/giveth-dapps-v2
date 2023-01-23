@@ -45,7 +45,7 @@ const mockData = [
 			title: '2',
 			userId: '2',
 		},
-		cover: 'https://giveth.mypinata.cloud/ipfs/QmcQFkNQ3o6f555whoRtFqJgPz6k9nb8WfNEBHk3j2i3CW',
+		cover: 'https://static.tgbwidget.com/organization_logo%2F095875ef-b026-4c2f-b89f-08a9b1b0a336.jpg',
 	},
 	{
 		projectUpdate: {
@@ -56,7 +56,7 @@ const mockData = [
 			title: '3',
 			userId: '3',
 		},
-		cover: 'https://giveth.mypinata.cloud/ipfs/QmcQFkNQ3o6f555whoRtFqJgPz6k9nb8WfNEBHk3j2i3CW',
+		cover: 'https://static.tgbwidget.com/organization_logo%2F1988fd88-042c-4c4b-aaad-82e0939a4d88.jpg',
 	},
 	{
 		projectUpdate: {
@@ -67,7 +67,7 @@ const mockData = [
 			title: '4',
 			userId: '4',
 		},
-		cover: 'https://giveth.mypinata.cloud/ipfs/QmcQFkNQ3o6f555whoRtFqJgPz6k9nb8WfNEBHk3j2i3CW',
+		cover: 'https://giveth.mypinata.cloud/ipfs/QmSgVyzhFWyrYSgo6fEmSCa7pBAE5sESZLDM7h6XNeEeZU',
 	},
 	{
 		projectUpdate: {
@@ -78,7 +78,7 @@ const mockData = [
 			title: '5',
 			userId: '5',
 		},
-		cover: 'https://giveth.mypinata.cloud/ipfs/QmcQFkNQ3o6f555whoRtFqJgPz6k9nb8WfNEBHk3j2i3CW',
+		cover: 'https://i.imgur.com/uPFEgJu.png',
 	},
 ];
 
