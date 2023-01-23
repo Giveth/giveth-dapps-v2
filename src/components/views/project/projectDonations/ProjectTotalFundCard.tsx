@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import styled from 'styled-components';
-import { Subline, H2, H5, brandColors } from '@giveth/ui-design-system';
+import { Subline, H2, H5, brandColors, H4 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 
 import { Shadow } from '@/components/styled-components/Shadow';
@@ -20,7 +20,15 @@ const ProjectTotalFundCard: FC = () => {
 					<Subline>
 						{formatMessage({ id: 'label.all_time_funding' })}
 					</Subline>
-					<TotalFund>{'$' + totalDonations}</TotalFund>
+					{totalDonations && totalDonations > 0 ? (
+						<TotalFund>{'$' + totalDonations}</TotalFund>
+					) : (
+						<NoDonation>
+							{formatMessage({
+								id: 'label.be_the_first_to_donate',
+							})}
+						</NoDonation>
+					)}
 				</div>
 				{traceCampaignId && (
 					<div>
@@ -35,6 +43,10 @@ const ProjectTotalFundCard: FC = () => {
 		</Wrapper>
 	);
 };
+
+const NoDonation = styled(H4)`
+	margin-top: 20px;
+`;
 
 const Wrapper = styled.div`
 	background: white;
