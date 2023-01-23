@@ -5,7 +5,7 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import React, { FC, useEffect, useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Swiper as SwiperType } from 'swiper/types';
 import { ArrayFrom0ToN } from '@/lib/helpers';
 import { Flex } from './styled-components/Flex';
@@ -46,7 +46,10 @@ export const SwiperPagination: FC<ISwiperPagination> = ({
 	return (
 		<PaginationContainer>
 			{hasPrevButton && (
-				<Navigation onClick={() => swiper?.slidePrev()}>
+				<Navigation
+					onClick={() => swiper?.slidePrev()}
+					disabled={realIndex === 0}
+				>
 					<IconPointerLeft size={24} />
 				</Navigation>
 			)}
@@ -62,7 +65,10 @@ export const SwiperPagination: FC<ISwiperPagination> = ({
 				</PaginationItem>
 			))}
 			{hasNextButton && (
-				<Navigation onClick={() => swiper?.slideNext()}>
+				<Navigation
+					onClick={() => swiper?.slideNext()}
+					disabled={realIndex === _items.length - 1}
+				>
 					<IconPointerRight size={24} />
 				</Navigation>
 			)}
@@ -75,15 +81,18 @@ const PaginationContainer = styled(Flex)`
 	align-items: center;
 `;
 
-const Navigation = styled.div`
+const Navigation = styled.div<{ disabled: boolean }>`
 	cursor: pointer;
 	border-radius: 48px;
 	box-shadow: ${Shadow.Giv[400]};
 	padding: 8px 13px;
-	&.swiper-button-disabled {
-		opacity: 0.4;
-		cursor: default;
-	}
+	${props =>
+		props.disabled
+			? css`
+					opacity: 0.4;
+					cursor: default;
+			  `
+			: ''}
 `;
 
 export const PaginationItem = styled(H5)<{ isActive: boolean }>`
