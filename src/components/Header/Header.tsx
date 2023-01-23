@@ -40,6 +40,7 @@ import { RewardButtonWithMenu } from '../menu/RewardButtonWithMenu';
 import { UserButtonWithMenu } from '../menu/UserButtonWithMenu';
 import { HomeSidebar } from '../sidebar/HomeSidebar';
 import { fetchMainCategories } from '@/features/general/general.thunk';
+import { ItemsProvider } from '@/context/Items.context';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -253,13 +254,15 @@ const Header: FC<IHeader> = () => {
 				)}
 			</Flex>
 			{sidebarCondition && (
-				<SideBar
-					close={closeSidebar}
-					isAnimating={showSidebar}
-					direction={ESideBarDirection.Left}
-				>
-					<HomeSidebar />
-				</SideBar>
+				<ItemsProvider close={closeSidebar}>
+					<SideBar
+						close={closeSidebar}
+						isAnimating={showSidebar}
+						direction={ESideBarDirection.Left}
+					>
+						<HomeSidebar />
+					</SideBar>
+				</ItemsProvider>
 			)}
 		</StyledHeader>
 	);

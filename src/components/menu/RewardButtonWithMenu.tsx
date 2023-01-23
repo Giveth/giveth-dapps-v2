@@ -21,6 +21,7 @@ import { SideBar, ESideBarDirection } from '../sidebar/SideBar';
 import { FlexSpacer } from '../styled-components/Flex';
 import { RewardItems } from './RewardItems';
 import { MenuContainer } from './Menu.sc';
+import { ItemsProvider } from '@/context/Items.context';
 
 interface IRewardButtonWithMenuProps extends IHeaderButtonProps {}
 
@@ -55,36 +56,42 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 				<CoverLine theme={theme} className='cover-line' />
 			</BalanceButton>
 			{menuCondition && (
-				<MenuContainer isAnimating={showMenu} theme={theme}>
-					<RewardItems
-						showWhatIsGIVstreamModal={showRewardMenuModal}
-						setShowWhatIsGIVstreamModal={setShowRewardMenuModal}
-						theme={theme}
-					/>
-				</MenuContainer>
-			)}
-			{sidebarCondition && (
-				<SideBar
-					close={closeSidebar}
-					isAnimating={showSidebar}
-					direction={ESideBarDirection.Right}
-					header={
-						<>
-							<FlexSpacer />
-							<HeaderSidebarButtonWrapper>
-								<HeaderRewardButton />
-							</HeaderSidebarButtonWrapper>
-						</>
-					}
-				>
-					<SidebarInnerContainer>
+				<ItemsProvider close={closeMenu}>
+					<MenuContainer isAnimating={showMenu} theme={theme}>
 						<RewardItems
 							showWhatIsGIVstreamModal={showRewardMenuModal}
 							setShowWhatIsGIVstreamModal={setShowRewardMenuModal}
 							theme={theme}
 						/>
-					</SidebarInnerContainer>
-				</SideBar>
+					</MenuContainer>
+				</ItemsProvider>
+			)}
+			{sidebarCondition && (
+				<ItemsProvider close={closeSidebar}>
+					<SideBar
+						close={closeSidebar}
+						isAnimating={showSidebar}
+						direction={ESideBarDirection.Right}
+						header={
+							<>
+								<FlexSpacer />
+								<HeaderSidebarButtonWrapper>
+									<HeaderRewardButton />
+								</HeaderSidebarButtonWrapper>
+							</>
+						}
+					>
+						<SidebarInnerContainer>
+							<RewardItems
+								showWhatIsGIVstreamModal={showRewardMenuModal}
+								setShowWhatIsGIVstreamModal={
+									setShowRewardMenuModal
+								}
+								theme={theme}
+							/>
+						</SidebarInnerContainer>
+					</SideBar>
+				</ItemsProvider>
 			)}
 		</MenuAndButtonContainer>
 	);

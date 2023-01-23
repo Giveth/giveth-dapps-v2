@@ -24,6 +24,7 @@ import { SideBar, ESideBarDirection } from '../sidebar/SideBar';
 import { MenuContainer } from './Menu.sc';
 import { UserItems } from './UserItems';
 import { FlexSpacer } from '../styled-components/Flex';
+import { ItemsProvider } from '@/context/Items.context';
 
 export interface IHeaderButtonProps {
 	isHeaderShowing: boolean;
@@ -62,28 +63,32 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 				<CoverLine theme={theme} className='cover-line' />
 			</WalletButton>
 			{menuCondition && (
-				<MenuContainer isAnimating={showMenu} theme={theme}>
-					<UserItems />
-				</MenuContainer>
+				<ItemsProvider close={closeMenu}>
+					<MenuContainer isAnimating={showMenu} theme={theme}>
+						<UserItems />
+					</MenuContainer>
+				</ItemsProvider>
 			)}
 			{sidebarCondition && (
-				<SideBar
-					close={closeSidebar}
-					isAnimating={showSidebar}
-					direction={ESideBarDirection.Right}
-					header={
-						<>
-							<FlexSpacer />
-							<HeaderSidebarButtonWrapper>
-								<HeaderUserButton />
-							</HeaderSidebarButtonWrapper>
-						</>
-					}
-				>
-					<SidebarInnerContainer>
-						<UserItems />
-					</SidebarInnerContainer>
-				</SideBar>
+				<ItemsProvider close={closeSidebar}>
+					<SideBar
+						close={closeSidebar}
+						isAnimating={showSidebar}
+						direction={ESideBarDirection.Right}
+						header={
+							<>
+								<FlexSpacer />
+								<HeaderSidebarButtonWrapper>
+									<HeaderUserButton />
+								</HeaderSidebarButtonWrapper>
+							</>
+						}
+					>
+						<SidebarInnerContainer>
+							<UserItems />
+						</SidebarInnerContainer>
+					</SideBar>
+				</ItemsProvider>
 			)}
 		</MenuAndButtonContainer>
 	);
