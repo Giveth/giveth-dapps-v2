@@ -1,22 +1,28 @@
 import Image from 'next/image';
-import React from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components';
 import { H6, neutralColors, P, SublineBold } from '@giveth/ui-design-system';
 import { Flex } from '@/components/styled-components/Flex';
+import { IProjectUpdate } from '@/apollo/types/types';
 
-export const LatestUpdateCard = () => {
+interface ILatestUpdateCardProps {
+	projectUpdate: IProjectUpdate;
+	cover: string;
+}
+
+export const LatestUpdateCard: FC<ILatestUpdateCardProps> = ({
+	projectUpdate,
+	cover,
+}) => {
 	return (
 		<LatestUpdateCardContainer>
 			<Image width={98} height={98} src='' alt='' />
 			<Content>
-				<Time>4 hours ago</Time>
-				<Title>
-					EVMcrispr v0.10.0 change change change change change
-				</Title>
-				<Desc>
-					We released EVMcrispr v0.10.0, "collective wisdom," with the
-					following change change change
-				</Desc>
+				<Time>{projectUpdate.createdAt}</Time>
+				<Title>{projectUpdate.title}</Title>
+				<Desc
+					dangerouslySetInnerHTML={{ __html: projectUpdate.content }}
+				/>
 			</Content>
 		</LatestUpdateCardContainer>
 	);
