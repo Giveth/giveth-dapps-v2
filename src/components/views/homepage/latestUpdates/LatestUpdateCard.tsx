@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import { H6, neutralColors, P, SublineBold } from '@giveth/ui-design-system';
 import { Flex } from '@/components/styled-components/Flex';
 import { IProjectUpdate } from '@/apollo/types/types';
+import { getNowUnixMS } from '@/helpers/time';
+import { durationToString } from '@/lib/helpers';
 
 interface ILatestUpdateCardProps {
 	projectUpdate: IProjectUpdate;
@@ -16,9 +18,15 @@ export const LatestUpdateCard: FC<ILatestUpdateCardProps> = ({
 }) => {
 	return (
 		<LatestUpdateCardContainer>
-			<Image width={98} height={98} src='' alt='' />
+			<ImageWrapper>
+				<Image  fill src={cover} alt='' style={{objectFit: 'cover'}}/>
+			</ImageWrapper>
 			<Content>
-				<Time>{projectUpdate.createdAt}</Time>
+				<Time>{durationToString(
+						getNowUnixMS() -
+						Number(projectUpdate.createdAt),
+						1,
+					) + ' ago'}</Time>
 				<Title>{projectUpdate.title}</Title>
 				<Desc
 					dangerouslySetInnerHTML={{ __html: projectUpdate.content }}
@@ -30,6 +38,15 @@ export const LatestUpdateCard: FC<ILatestUpdateCardProps> = ({
 
 const LatestUpdateCardContainer = styled(Flex)`
 	gap: 16px;
+	margin-right: 16px;
+`;
+
+const ImageWrapper = styled.div`
+	width:96px;
+	height:96px;
+	overflow: hidden;
+	position: relative;
+	border-radius: 8px;
 `;
 
 const Content = styled.div`
