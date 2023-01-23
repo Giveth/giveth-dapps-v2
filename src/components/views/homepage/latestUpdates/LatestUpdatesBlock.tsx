@@ -12,13 +12,15 @@ export const LatestUpdatesBlock = () => {
 				<BlockTitle>Awesome Project Updates</BlockTitle>
 			</Container>
 			<LatestUpdatesCardsWrapper>
-				{mockData.map((data, idx) => (
-					<LatestUpdateCard
-						key={idx}
-						cover={data.cover}
-						projectUpdate={data.projectUpdate}
-					/>
-				))}
+				<LatestUpdatesCardsContainer>
+					{mockData.map((data, idx) => (
+						<LatestUpdateCard
+							key={idx}
+							cover={data.cover}
+							projectUpdate={data.projectUpdate}
+						/>
+					))}
+				</LatestUpdatesCardsContainer>
 			</LatestUpdatesCardsWrapper>
 		</LatestUpdatesBlockWrapper>
 	);
@@ -27,7 +29,8 @@ export const LatestUpdatesBlock = () => {
 const mockData = [
 	{
 		projectUpdate: {
-			content: '<p>1</p>',
+			content:
+				'<p>We released EVMcrispr v0.10.0, "collective wisdom," with the following changes ...</p>',
 			createdAt: '1674476181589',
 			id: '1',
 			projectId: '1',
@@ -38,7 +41,8 @@ const mockData = [
 	},
 	{
 		projectUpdate: {
-			content: '<p>2</p>',
+			content:
+				'<p>We released EVMcrispr v0.10.0, "collective wisdom," with the following changes ...</p>',
 			createdAt: '1674476282589',
 			id: '2',
 			projectId: '2',
@@ -49,7 +53,8 @@ const mockData = [
 	},
 	{
 		projectUpdate: {
-			content: '<p>3</p>',
+			content:
+				'<p>We released EVMcrispr v0.10.0, "collective wisdom," with the following changes ...</p>',
 			createdAt: '1674476383589',
 			id: '3',
 			projectId: '3',
@@ -60,7 +65,8 @@ const mockData = [
 	},
 	{
 		projectUpdate: {
-			content: '<p>4</p>',
+			content:
+				'<p>We released EVMcrispr v0.10.0, "collective wisdom," with the following changes ...</p>',
 			createdAt: '1674476484589',
 			id: '4',
 			projectId: '4',
@@ -71,7 +77,8 @@ const mockData = [
 	},
 	{
 		projectUpdate: {
-			content: '<p>5</p>',
+			content:
+				'<p>We released EVMcrispr v0.10.0, "collective wisdom," with the following changes ...</p>',
 			createdAt: '1674476585589',
 			id: '5',
 			projectId: '5',
@@ -86,4 +93,23 @@ const LatestUpdatesBlockWrapper = styled.div`
 	padding: 80px 0;
 `;
 
-const LatestUpdatesCardsWrapper = styled(Flex)``;
+const LatestUpdatesCardsWrapper = styled.div`
+	overflow: hidden;
+	padding-top: 40px;
+`;
+
+const LatestUpdatesCardsContainer = styled(Flex)`
+	transform: translate3d(0, 0, 0);
+	animation: moveSlideshow 10s linear infinite;
+	:hover {
+		animation-play-state: paused;
+	}
+	@keyframes moveSlideshow {
+		0% {
+			transform: translateX(100%);
+		}
+		100% {
+			transform: translateX(-100%);
+		}
+	}
+`;
