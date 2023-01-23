@@ -33,7 +33,7 @@ const MenuWallet = () => {
 	const { formatMessage } = useIntl();
 	const [isMounted, setIsMounted] = useState(false);
 	const [balance, setBalance] = useState<string | null>(null);
-	const { chainId, account, library } = useWeb3React();
+	const { chainId, account, library, deactivate } = useWeb3React();
 	const [SignWithWallet, setSignWithWallet] = useState<boolean>(false);
 	const [queueRoute, setQueueRoute] = useState<string>('');
 
@@ -139,7 +139,10 @@ const MenuWallet = () => {
 					))}
 					{isSignedIn && (
 						<MenuItem
-							onClick={() => dispatch(signOut(token!))}
+							onClick={() => {
+								deactivate();
+								dispatch(signOut(token!));
+							}}
 							theme={theme}
 						>
 							{formatMessage({ id: 'label.sign_out' })}
