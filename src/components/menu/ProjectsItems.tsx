@@ -34,8 +34,8 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 				>
 					{projectsItems.explore.map((explore, idx) => (
 						<Link key={idx} href={`/projects${explore.query}`}>
-							<Item key={idx} theme={theme} isHighlighted>
-								<B key={idx}>{explore.name}</B>
+							<Item theme={theme} isHighlighted>
+								<B>{explore.name}</B>
 							</Item>
 						</Link>
 					))}
@@ -46,7 +46,7 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 				<CategoriesGrid inSidebar={inSidebar}>
 					{mainCategories.map((category, idx) => (
 						<Link key={idx} href={`/projects/${category.slug}`}>
-							<Item key={idx} theme={theme}>
+							<Item theme={theme}>
 								<GLink size='Big'>{category.title}</GLink>
 							</Item>
 						</Link>
