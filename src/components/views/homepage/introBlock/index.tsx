@@ -12,9 +12,12 @@ import React from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import { Flex } from '@/components/styled-components/Flex';
 import IntroCard from './IntroCard';
 import useDetectDevice from '@/hooks/useDetectDevice';
+import introBanner from '/public/images/banners/introBanner.svg';
+import { mediaQueries } from '@/lib/constants/constants';
 
 const Wave = dynamic(() => import('@/components/particles/wave'));
 
@@ -29,6 +32,7 @@ const IntroBlock = () => {
 						justifyContent='space-around'
 						flexDirection={isMobile ? 'column' : 'row'}
 						alignItems={isMobile ? 'center' : 'stretch'}
+						gap='32px'
 					>
 						<IntroTitle>
 							<H3 weight={700}>
@@ -56,7 +60,13 @@ const IntroBlock = () => {
 								/>
 							</ButtonsContainer>
 						</IntroTitle>
-						<div>Image</div>
+						<div>
+							<Image
+								src={introBanner}
+								alt='intro-banner'
+								width={300}
+							/>
+						</div>
 						<TopWaveContainer>
 							<Wave />
 						</TopWaveContainer>
@@ -153,6 +163,7 @@ const SectionContainer = styled.div`
 
 const IntroContainer = styled.div`
 	position: relative;
+	padding: 0 8px;
 `;
 
 const IntroTitle = styled.div`
@@ -171,6 +182,10 @@ const UnderlinedText = styled.span`
 
 const ButtonsContainer = styled(Flex)`
 	margin-top: 16px;
+	flex-direction: column;
+	${mediaQueries.mobileL} {
+		flex-direction: row;
+	}
 `;
 
 const IntroCards = styled(Flex)`
@@ -180,7 +195,7 @@ const IntroCards = styled(Flex)`
 const TopWaveContainer = styled.div`
 	position: absolute;
 	top: -60px;
-	left: 0;
+	left: -10px;
 `;
 
 const BottomWaveContainer = styled.div`
