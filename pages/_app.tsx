@@ -23,7 +23,6 @@ import ModalController from '@/components/controller/modal.ctrl';
 import PriceController from '@/components/controller/price.ctrl';
 import GeneralController from '@/components/controller/general.ctrl';
 import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
-import { HeaderPlaceHolder } from '@/components/Header/Header.sc';
 import type { AppProps } from 'next/app';
 
 declare global {
@@ -114,10 +113,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 									statusCode={(pageProps as any).errorStatus}
 								/>
 							) : (
-								<>
-									<HeaderPlaceHolder />
-									<Component {...pageProps} />
-								</>
+								<Component {...pageProps} />
 							)}
 							{process.env.NEXT_PUBLIC_ENV === 'production' && (
 								<Script
