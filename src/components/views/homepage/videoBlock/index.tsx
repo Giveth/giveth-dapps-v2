@@ -9,6 +9,7 @@ import {
 	VideoOverlay,
 } from '@/components/homeTabs/Overview.sc';
 import { mediaQueries } from '@/lib/constants/constants';
+import Wave from '@/components/particles/Wave';
 
 const VideoBlock = () => {
 	const [isPlaying, setIsPlaying] = useState(false);
@@ -65,6 +66,9 @@ const VideoBlock = () => {
 								draggable={false}
 							/>
 						</VideoOverlay>
+						<VideoWaveContainer>
+							<Wave />
+						</VideoWaveContainer>
 					</CustomizedVideoContainer>
 				</CustomFlex>
 			</Container>
@@ -79,6 +83,7 @@ const SectionContainer = styled.div`
 `;
 
 const CustomizedVideoContainer = styled(VideoContainer)`
+	position: relative;
 	border-radius: 20px;
 	margin-bottom: 0;
 	margin-top: 0;
@@ -90,6 +95,10 @@ const CustomFlex = styled(Flex)`
 	${mediaQueries.laptopS} {
 		flex-direction: row;
 	}
+`;
+
+const VideoWaveContainer = styled.div`
+	position: absolute;
 `;
 
 export default VideoBlock;
