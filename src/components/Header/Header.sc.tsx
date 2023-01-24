@@ -24,7 +24,7 @@ export const StyledHeader = styled(Flex)<IHeader>`
 	transition: top 0.3s ease;
 `;
 
-export const Logo = styled.a`
+export const Logo = styled.span`
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -173,6 +173,7 @@ export const HeaderLink = styled(GLink)<IHeaderLinkProps>`
 export const ConnectButton = styled(Button)`
 	box-shadow: ${props =>
 		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
+	text-transform: uppercase;
 `;
 
 export const SmallCreateProject = styled(ButtonLink)`

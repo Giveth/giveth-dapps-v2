@@ -13,6 +13,7 @@ import {
 import Link from 'next/link';
 import styled from 'styled-components';
 
+import { useIntl } from 'react-intl';
 import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -22,6 +23,7 @@ import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 
 const Footer = () => {
+	const { formatMessage } = useIntl();
 	const theme = useAppSelector(state => state.general.theme);
 	const textColor =
 		theme === ETheme.Dark ? brandColors.deep[100] : brandColors.deep[800];
@@ -31,76 +33,106 @@ const Footer = () => {
 				<LeftContainer wrap={1}>
 					<LinkColumn>
 						<Link href={Routes.Home}>
-							<a>
-								<LinkItem color={textColor}>Home</LinkItem>
-							</a>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.home',
+								})}
+							</LinkItem>
 						</Link>
 						<Link href={Routes.Projects}>
-							<a>
-								<LinkItem color={textColor}>Projects</LinkItem>
-							</a>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.projects',
+								})}
+							</LinkItem>
 						</Link>
 						<Link href={Routes.AboutUs}>
-							<a>
-								<LinkItem color={textColor}>About Us</LinkItem>
-							</a>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.about_us',
+								})}
+							</LinkItem>
 						</Link>
 						<Link href={Routes.Faq}>
-							<a>
-								<LinkItem color={textColor}>FAQ</LinkItem>
-							</a>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.faq',
+								})}
+							</LinkItem>
 						</Link>
 						<Link href={Routes.Support}>
-							<a>
-								<LinkItem color={textColor}>Support</LinkItem>
-							</a>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.support',
+								})}
+							</LinkItem>
 						</Link>
 					</LinkColumn>
 					<LinkColumn>
 						<Link href={Routes.Join}>
-							<a>
-								<LinkItem color={textColor}>
-									Join Our Community
-								</LinkItem>
-							</a>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.join_our_community',
+								})}
+							</LinkItem>
 						</Link>
 						<a href={links.GIVETH_DOCS}>
 							<LinkItem color={textColor}>
-								What is Giveth?
+								{formatMessage({
+									id: 'component.title.what_is_giveth',
+								})}
 							</LinkItem>
 						</a>
 						<a href={links.USER_DOCS}>
-							<LinkItem color={textColor}>User Guides</LinkItem>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.user_guides',
+								})}
+							</LinkItem>
 						</a>
 						<a href={links.DEVELOPER_DOCS}>
 							<LinkItem color={textColor}>
-								Developer Docs
+								{formatMessage({
+									id: 'component.title.dev_docs',
+								})}
 							</LinkItem>
 						</a>
 						<Link href={Routes.Terms}>
-							<a>
-								<LinkItem color={textColor}>
-									Terms of Use
-								</LinkItem>
-							</a>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.tos',
+								})}
+							</LinkItem>
 						</Link>
 					</LinkColumn>
 					<LinkColumn>
 						<a href={links.TRACE}>
-							<LinkItem color={textColor}>Giveth TRACE</LinkItem>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.giveth_trace',
+								})}
+							</LinkItem>
 						</a>
 						<a href={links.COMMONS_STACK}>
-							<LinkItem color={textColor}>Commons Stack</LinkItem>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.commons_stack',
+								})}
+							</LinkItem>
 						</a>
 						<Link href={Routes.Partnerships}>
-							<a>
-								<LinkItem color={textColor}>
-									Partnerships
-								</LinkItem>
-							</a>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.partnerships',
+								})}
+							</LinkItem>
 						</Link>
 						<a href={links.RECRUITEE}>
-							<LinkItem color={textColor}>We’re Hiring!</LinkItem>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.we_hiring',
+								})}
+							</LinkItem>
 						</a>
 					</LinkColumn>
 				</LeftContainer>
@@ -129,13 +161,18 @@ const Footer = () => {
 						</a>
 					</SocialContainer>
 					<SupportUs>
-						<Caption medium>Support us</Caption>
+						<Caption medium>
+							{formatMessage({
+								id: 'component.title.support_us',
+							})}
+						</Caption>
 						<Link href={links.SUPPORT_US}>
-							<a>
-								<CaptionRed medium>
-									&nbsp;with your Donation
-								</CaptionRed>
-							</a>
+							<CaptionRed medium>
+								&nbsp;
+								{formatMessage({
+									id: 'component.title.with_your_donation',
+								})}
+							</CaptionRed>
 						</Link>
 					</SupportUs>
 				</RightContainer>

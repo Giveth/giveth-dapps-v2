@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
 import {
 	brandColors,
 	Button,
@@ -45,15 +46,13 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 // import useLeaveConfirm from '@/hooks/useLeaveConfirm';
 import config from '@/configuration';
-import Input, { InputSize } from '@/components/Input';
-import { requiredOptions } from '@/lib/constants/regex';
-import { gqlTitleValidation } from '@/components/views/create/helpers';
 import CheckBox from '@/components/Checkbox';
 import Guidelines from '@/components/views/create/Guidelines';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { Container } from '@/components/Grid';
 import { setShowFooter } from '@/features/general/general.slice';
 import { useAppDispatch } from '@/features/hooks';
+import NameInput from '@/components/views/create/NameInput';
 
 const { PRIMARY_NETWORK, SECONDARY_NETWORK } = config;
 const ethereumId = PRIMARY_NETWORK.id;
@@ -86,6 +85,7 @@ export type TInputs = {
 };
 
 const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
+	const { formatMessage } = useIntl();
 	const [addProjectMutation] = useMutation(CREATE_PROJECT);
 	const [editProjectMutation] = useMutation(UPDATE_PROJECT);
 	const router = useRouter();
@@ -120,7 +120,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		reValidateMode: 'onBlur',
 		defaultValues: {
 			[EInputs.name]: title,
-			[EInputs.description]: description,
+			[EInputs.description]: description || '',
 			[EInputs.categories]: categories || [],
 			[EInputs.impactLocation]: defaultImpactLocation,
 			[EInputs.image]: image || '',
@@ -129,21 +129,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		},
 	});
 
-	const {
-		register,
-		unregister,
-		handleSubmit,
-		formState: { errors: formErrors },
-		setValue,
-		watch,
-	} = formMethods;
-
-	const [watchName, watchDescription, watchCategories, watchImage] = watch([
-		EInputs.name,
-		EInputs.description,
-		EInputs.categories,
-		EInputs.image,
-	]);
+	const { unregister, handleSubmit, setValue } = formMethods;
 
 	const [creationSuccessful, setCreationSuccessful] = useState<IProject>();
 	const [mainnetAddressActive, setMainnetAddressActive] = useState(
@@ -155,12 +141,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const [isSameMainnetGnosisAddress, setIsSameMainnetGnosisAddress] =
 		useState(isEditMode ? isSameDefaultAddresses : true);
 	const [isLoading, setIsLoading] = useState(false);
-	const [isTitleValidating, setIsTitleValidating] = useState(false);
 	const [resolvedENS, setResolvedENS] = useState('');
 
 	// useLeaveConfirm({ shouldConfirm: formChange });
-
-	const noTitleValidation = (i: string) => isEditMode && title === i;
 
 	const onSubmit = async (formData: TInputs) => {
 		try {
@@ -264,14 +247,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		}
 	};
 
-	const titleValidation = async (title: string) => {
-		if (noTitleValidation(title)) return true;
-		setIsTitleValidating(true);
-		const result = await gqlTitleValidation(title);
-		setIsTitleValidating(false);
-		return result;
-	};
-
 	useEffect(() => {
 		dispatch(setShowFooter(false));
 		return () => {
@@ -291,7 +266,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			<CreateContainer>
 				<div>
 					<Title>
-						{isEditMode ? 'Project details' : 'Create a project'}
+						{isEditMode
+							? formatMessage({ id: 'label.project_details' })
+							: formatMessage({ id: 'label.create_a_project' })}
 					</Title>
 					{isSmallScreen && (
 						<GuidelinesStyleTablet>
@@ -302,48 +279,25 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 				<FormProvider {...formMethods}>
 					<form onSubmit={handleSubmit(onSubmit)}>
-						<Input
-							label='Project name'
-							placeholder='My First Project'
-							maxLength={55}
-							size={InputSize.LARGE}
-							value={watchName}
-							isValidating={isTitleValidating}
-							register={register}
-							registerName={EInputs.name}
-							registerOptions={{
-								...requiredOptions.name,
-								validate: titleValidation,
-							}}
-							error={formErrors[EInputs.name]}
-						/>
-						<br />
-						<DescriptionInput
-							value={watchDescription}
-							setValue={e => setValue(EInputs.description, e)}
-						/>
-						<CategoryInput
-							value={watchCategories}
-							setValue={e => setValue(EInputs.categories, e)}
-						/>
-						<LocationIndex
-							defaultValue={defaultImpactLocation}
-							setValue={e => setValue(EInputs.impactLocation, e)}
-						/>
-						<ImageInput
-							value={watchImage}
-							setValue={e => setValue(EInputs.image, e)}
-							setIsLoading={setIsLoading}
-						/>
-						<H5>Receiving funds</H5>
+						<NameInput preTitle={title} />
+						<DescriptionInput />
+						<CategoryInput />
+						<LocationIndex />
+						<ImageInput setIsLoading={setIsLoading} />
+						<H5>
+							{formatMessage({ id: 'label.receiving_funds' })}
+						</H5>
 						<CaptionContainer>
-							You can set a custom Ethereum address or ENS to
-							receive donations.
+							{formatMessage({
+								id: 'label.you_can_set_a_custom_ethereum_address',
+							})}
 						</CaptionContainer>
 						<CheckBox
 							onChange={setIsSameMainnetGnosisAddress}
 							checked={isSameMainnetGnosisAddress}
-							title='I’ll raise & receive funds on Mainnet and Gnosis Chain networks with the same address.'
+							label={formatMessage({
+								id: 'label.ill_raise_and_receive_funds_on_mainnet_and_gnosis',
+							})}
 						/>
 						<WalletAddressInput
 							networkId={ethereumId}
@@ -355,7 +309,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							setIsActive={e => {
 								if (!e && !gnosisAddressActive)
 									return showToastError(
-										'You must select at least one address',
+										formatMessage({
+											id: 'label.you_must_select_at_least_one_address',
+										}),
 									);
 								if (!e) unregister(EInputs.mainAddress);
 								setMainnetAddressActive(e);
@@ -370,7 +326,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							setIsActive={e => {
 								if (!e && !mainnetAddressActive)
 									return showToastError(
-										'You must select at least one address',
+										formatMessage({
+											id: 'label.you_must_select_at_least_one_address',
+										}),
 									);
 								if (!e) unregister(EInputs.secondaryAddress);
 								setGnosisAddressActive(e);
@@ -378,29 +336,46 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						/>
 						<PublishTitle>
 							{isEditMode
-								? 'Publish edited project'
-								: `Let's Publish!`}
+								? formatMessage({
+										id: 'label.publish_edited_project',
+								  })
+								: formatMessage({ id: 'label.lets_publish' })}
 						</PublishTitle>
 						<PublishList>
 							<li>
-								{isEditMode ? 'Edited' : 'Newly published'}{' '}
-								projects will be &quot;unlisted&quot; until
-								reviewed by our team{isEditMode && ' again'}.
+								{isEditMode
+									? formatMessage({
+											id: 'label.edited_projects',
+									  })
+									: formatMessage({
+											id: 'label.newly_published_projects',
+									  })}{' '}
+								{formatMessage({
+									id: 'label.will_be_unlisted_until',
+								})}
+								{isEditMode &&
+									` ${formatMessage({
+										id: 'label.again',
+									})}`}
+								.
 							</li>
 							<li>
-								You can still access your project from your
-								account and share it with your friends via the
-								project link!
+								{formatMessage({
+									id: 'label.you_can_still_access_your_project_from_your_account',
+								})}
 							</li>
 							<li>
-								You&apos;ll receive an email from us once your
-								project is listed.
+								{formatMessage({
+									id: 'label.youll_receive_an_email_from_us_once_its_listed',
+								})}
 							</li>
 						</PublishList>
 						<Buttons>
 							{(!isEditMode || isDraft) && (
 								<OutlineButton
-									label='PREVIEW '
+									label={formatMessage({
+										id: 'label.preview',
+									})}
 									buttonType='primary'
 									disabled={isLoading}
 									icon={<IconExternalLink size={16} />}
@@ -411,16 +386,19 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								/>
 							)}
 							<Button
-								label='PUBLISH'
+								label={formatMessage({ id: 'label.publish' })}
 								buttonType='primary'
 								type='submit'
 								disabled={isLoading}
 							/>
 							{isEditMode && (
 								<OutlineButton
-									onClick={() => router.back()}
-									label='CANCEL'
+									onClick={() => !isLoading && router.back()}
+									label={formatMessage({
+										id: 'label.cancel',
+									})}
 									buttonType='primary'
+									disabled={isLoading}
 								/>
 							)}
 						</Buttons>

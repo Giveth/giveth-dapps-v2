@@ -2,6 +2,7 @@ import { GLink, neutralColors, brandColors } from '@giveth/ui-design-system';
 import { BigNumber, utils } from 'ethers';
 import { FC, useState, useCallback, Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
 import { formatWeiHelper } from '@/helpers/number';
 import { PoolStakingConfig, StakingPlatform } from '@/types/config';
@@ -21,6 +22,7 @@ export const AmountInput: FC<IAmountInput> = ({
 	poolStakingConfig,
 	disabled = false,
 }) => {
+	const { formatMessage } = useIntl();
 	const [displayAmount, setDisplayAmount] = useState('');
 	const [activeStep, setActiveStep] = useState(0);
 
@@ -59,7 +61,9 @@ export const AmountInput: FC<IAmountInput> = ({
 		<>
 			<InputLabelRow justifyContent='space-between'>
 				<InputLabel>
-					<InputLabelText>Available: </InputLabelText>
+					<InputLabelText>
+						{formatMessage({ id: 'label.available' })}:{' '}
+					</InputLabelText>
 					<InputLabelValue>
 						&nbsp;
 						{formatWeiHelper(maxAmount)}
@@ -72,6 +76,7 @@ export const AmountInput: FC<IAmountInput> = ({
 				</InputLabel>
 				<InputLabelAction
 					onClick={() => {
+						if (disabled) return;
 						setAmountPercentage(100);
 						setActiveStep(100);
 					}}
@@ -79,10 +84,15 @@ export const AmountInput: FC<IAmountInput> = ({
 					Max
 				</InputLabelAction>
 			</InputLabelRow>
-			<NumericalInput value={displayAmount} onUserInput={onUserInput} />
+			<NumericalInput
+				value={displayAmount}
+				onUserInput={onUserInput}
+				disabled={disabled}
+			/>
 			<FiltersRow>
 				<Step
 					onClick={() => {
+						if (disabled) return;
 						setAmountPercentage(25);
 						setActiveStep(25);
 					}}
@@ -92,6 +102,7 @@ export const AmountInput: FC<IAmountInput> = ({
 				</Step>
 				<Step
 					onClick={() => {
+						if (disabled) return;
 						setAmountPercentage(50);
 						setActiveStep(50);
 					}}
@@ -101,6 +112,7 @@ export const AmountInput: FC<IAmountInput> = ({
 				</Step>
 				<Step
 					onClick={() => {
+						if (disabled) return;
 						setAmountPercentage(75);
 						setActiveStep(75);
 					}}
@@ -110,6 +122,7 @@ export const AmountInput: FC<IAmountInput> = ({
 				</Step>
 				<Step
 					onClick={() => {
+						if (disabled) return;
 						setAmountPercentage(100);
 						setActiveStep(100);
 					}}
@@ -129,7 +142,9 @@ const InputLabel = styled(GLink)`
 const InputLabelText = styled.div`
 	color: ${neutralColors.gray[100]};
 `;
-const InputLabelValue = styled.div``;
+const InputLabelValue = styled.div`
+	color: ${brandColors.deep[100]};
+`;
 const InputLabelAction = styled(GLink)`
 	color: ${brandColors.cyan[500]};
 	cursor: pointer;

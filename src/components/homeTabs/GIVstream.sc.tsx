@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 import {
-	D1,
 	H2,
 	H4,
 	P,
@@ -18,6 +17,7 @@ import {
 	TopInnerContainer,
 	BottomContainer,
 	EnhancedRewardCard,
+	MobileD1,
 } from './commons';
 import { Flex } from '../styled-components/Flex';
 import { DataBox } from '../DataBox';
@@ -43,7 +43,7 @@ export const TitleCol = styled(Col)`
 	position: relative;
 `;
 
-export const GSTitle = styled(D1)`
+export const GSTitle = styled(MobileD1)`
 	margin-top: 60px;
 	margin-bottom: 24px;
 `;
@@ -89,6 +89,7 @@ export const GIVstreamProgressContainer = styled.div`
 	border-radius: 8px;
 	padding: 28px 33px;
 	margin: 40px 0 64px;
+	overflow: hidden;
 `;
 
 export const GsPTitleRow = styled(Flex)``;
@@ -175,16 +176,23 @@ export const HistoryLoading = styled.div`
 	z-index: 1;
 `;
 
+export const GridWrapper = styled.div`
+	overflow-x: auto;
+	padding-bottom: 10px;
+`;
+
 export const Grid = styled.div`
 	display: grid;
-	grid-template-columns: 1fr 2fr 2fr 1fr;
+	grid-template-columns: 160px 1fr 160px 160px;
 	border-bottom: 2px solid ${brandColors.giv[500]};
+	width: 100%;
+	min-width: 600px;
 	& > span {
 		padding: 8px 4px;
-		// border-left: 1px solid black;
-		// border-bottom: 1px solid black;
-		text-overflow: ellipsis;
-		overflow: hidden;
+		overflow-x: hidden;
+	}
+	${mediaQueries.tablet} {
+		grid-template-columns: 1fr 2fr 2fr 1fr;
 	}
 `;
 

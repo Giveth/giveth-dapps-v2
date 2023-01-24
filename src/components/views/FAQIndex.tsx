@@ -1,10 +1,11 @@
 import Image from 'next/image';
 import { brandColors, D3 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 
 // import SearchBox from '../SearchBox';
 import Accordion from '../Accordion';
-import faqContent from '@/content/FAQ';
+import _faqContent from '@/content/FAQ';
 import { Arc } from '@/components/styled-components/Arc';
 import FlowerIcon from '/public//images/flower_faq.svg';
 import { Container } from '@/components/Grid';
@@ -13,6 +14,8 @@ import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 type TFAQ = 'General' | 'Giveth' | 'GIVeconomy';
 
 const FAQIndex = () => {
+	const { formatMessage } = useIntl();
+	const faqContent = _faqContent(formatMessage);
 	return (
 		<>
 			<PurpleArc />
@@ -21,7 +24,9 @@ const FAQIndex = () => {
 				<FlowerContainer>
 					<Image src={FlowerIcon} alt='flower' />
 				</FlowerContainer>
-				<Title>Frequently Asked Questions</Title>
+				<Title>
+					{formatMessage({ id: 'label.frequently_asked_questions' })}
+				</Title>
 				<SearchStyles>
 					{/*TODO implement search function*/}
 					{/*<SearchBox*/}
@@ -32,11 +37,14 @@ const FAQIndex = () => {
 				</SearchStyles>
 				<FAQContainer>
 					{Object.keys(faqContent).map(i => (
-						<Accordion key={i} title={i}>
+						<Accordion
+							key={i}
+							title={formatMessage({ id: i?.toLowerCase() })}
+						>
 							{faqContent[i as TFAQ].map(faq => (
 								<Accordion
 									key={faq.question}
-									title={faq.question}
+									title={formatMessage({ id: faq.question })}
 									description={faq.answer}
 								/>
 							))}

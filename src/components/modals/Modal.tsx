@@ -9,9 +9,10 @@ import {
 	ModalHeaderTitlePosition,
 } from '@/components/modals/ModalHeader';
 import { ETheme } from '@/features/general/general.slice';
-import { zIndex } from '@/lib/constants/constants';
+import { mediaQueries, zIndex } from '@/lib/constants/constants';
 import { useAppSelector } from '@/features/hooks';
-import { checkUserAgentIsMobile } from '@/hooks/useDeviceDetect';
+import useDetectDevice from '@/hooks/useDetectDevice';
+import { FlexCenter } from '@/components/styled-components/Flex';
 
 interface ModalWrapperProps {
 	fullScreen?: boolean;
@@ -29,7 +30,8 @@ interface IModal extends ModalWrapperProps {
 	headerIcon?: ReactNode;
 	customTheme?: ETheme;
 	headerColor?: string;
-	children: React.ReactNode;
+	children: ReactNode;
+	doNotCloseOnClickOutside?: boolean;
 }
 
 export const Modal: FC<IModal> = ({
@@ -44,35 +46,32 @@ export const Modal: FC<IModal> = ({
 	customTheme,
 	fullScreen = false,
 	headerColor,
+	doNotCloseOnClickOutside,
 }) => {
 	const theme = useAppSelector(state => state.general.theme);
 	const el = useRef(document.createElement('div'));
+	const { isMobile } = useDetectDevice();
 
 	useEffect(() => {
 		const current = el.current;
 		const modalRoot = document.querySelector('body') as HTMLElement;
 		modalRoot.style.overflowY = 'hidden';
-		let isMobile = checkUserAgentIsMobile();
-		if (!isMobile) {
-			modalRoot.style.paddingRight = '15px';
-		}
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === 'Escape') {
+				closeModal();
+			}
+		};
+
 		if (modalRoot) {
 			modalRoot.addEventListener('keydown', handleKeyDown);
 			modalRoot.appendChild(current);
 		}
 		return () => {
 			modalRoot.removeEventListener('keydown', handleKeyDown);
-			modalRoot.style.overflowY = 'unset';
-			modalRoot.style.paddingRight = '0';
+			modalRoot.style.overflowY = 'overlay';
 			modalRoot!.removeChild(current);
 		};
-	}, []);
-
-	const handleKeyDown = (e: KeyboardEvent) => {
-		if (e.key === 'Escape') {
-			closeModal();
-		}
-	};
+	}, [closeModal]);
 
 	const ScrollBarsNotFullScreenProps = {
 		autoHeight: true,
@@ -85,7 +84,7 @@ export const Modal: FC<IModal> = ({
 			isAnimating={isAnimating}
 			onClick={e => e.stopPropagation()}
 		>
-			<Surrounding onClick={closeModal} />
+			{!doNotCloseOnClickOutside && <Surrounding onClick={closeModal} />}
 			<ModalWrapper fullScreen={fullScreen} theme={customTheme || theme}>
 				<ModalHeader
 					hiddenClose={hiddenClose}
@@ -100,7 +99,9 @@ export const Modal: FC<IModal> = ({
 					renderTrackHorizontal={props => (
 						<div {...props} style={{ display: 'none' }} />
 					)}
-					{...(fullScreen ? {} : ScrollBarsNotFullScreenProps)}
+					{...(fullScreen || isMobile
+						? {}
+						: ScrollBarsNotFullScreenProps)}
 				>
 					{children}
 				</Scrollbars>
@@ -116,14 +117,11 @@ const Surrounding = styled.div`
 	height: 100%;
 `;
 
-const Background = styled.div<{ isAnimating: boolean }>`
+const Background = styled(FlexCenter)<{ isAnimating: boolean }>`
 	width: 100%;
 	height: 100%;
 	background: ${brandColors.giv[900]}b3;
 	position: fixed;
-	display: flex;
-	justify-content: center;
-	align-items: center;
 	top: 0;
 	left: 0;
 	z-index: ${zIndex.MODAL};
@@ -136,9 +134,6 @@ const ModalWrapper = styled.div<ModalWrapperProps>`
 		props.theme === ETheme.Dark
 			? brandColors.giv[600]
 			: neutralColors.gray[100]};
-	box-shadow: 0 3px 20px
-		${props => (props.theme === ETheme.Dark ? '#00000026' : '#21203c')};
-	border-radius: ${props => (props.fullScreen ? 0 : '8px')};
 	color: ${props =>
 		props.theme === ETheme.Dark
 			? neutralColors.gray[100]
@@ -146,8 +141,15 @@ const ModalWrapper = styled.div<ModalWrapperProps>`
 	position: relative;
 	z-index: 10;
 	text-align: center;
-	max-height: ${props => (props.fullScreen ? 'none' : '90vh')};
-	width: ${props => (props.fullScreen ? '100%' : 'auto')};
-	height: ${props => (props.fullScreen ? '100%' : 'auto')};
 	overflow: hidden;
+	height: 100%;
+	width: 100%;
+	${mediaQueries.tablet} {
+		border-radius: ${props => (props.fullScreen ? 0 : '8px')};
+		box-shadow: 0 3px 20px
+			${props => (props.theme === ETheme.Dark ? '#00000026' : '#21203c')};
+		max-height: ${props => (props.fullScreen ? 'none' : '90vh')};
+		width: ${props => (props.fullScreen ? '100%' : 'auto')};
+		height: ${props => (props.fullScreen ? '100%' : 'auto')};
+	}
 `;

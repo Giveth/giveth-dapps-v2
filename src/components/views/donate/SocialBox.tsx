@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import Image from 'next/image';
+import { useIntl } from 'react-intl';
 import {
 	FacebookShareButton,
 	LinkedinShareButton,
@@ -18,13 +19,18 @@ interface ISocialBox {
 
 const SocialBox: FC<ISocialBox> = ({ project, isSuccess }) => {
 	const { description, slug } = project;
-	const shareTitleTwitter = `Our project is raising funds in crypto on @givethio! 🙌
+	const { formatMessage } = useIntl();
+	const shareTitleTwitter = `${
+		isSuccess ? 'This' : 'Our'
+	} project is raising funds in crypto on @givethio! 🙌
 Donate directly on Ethereum Mainnet or @gnosischain w/ no fees or intermediaries.👇`;
 
-	const shareTitleFacebookAndLinkedin = `Our project is raising funds in crypto on @givethio!
+	const shareTitleFacebookAndLinkedin = `${
+		isSuccess ? 'This' : 'Our'
+	} project is raising funds in crypto on @givethio!
 	Donate directly on Ethereum Mainnet or Gnosis Chain with no fees or intermediaries.
 	
-	Here's the link to our project:
+	Here's the link to ${isSuccess ? 'this' : 'our'} project:
 	`;
 
 	const projectUrl = fullPath(slugToProjectView(slug));
@@ -33,8 +39,8 @@ Donate directly on Ethereum Mainnet or @gnosischain w/ no fees or intermediaries
 		<Social isSuccess={isSuccess}>
 			<BLead>
 				{isSuccess
-					? 'Share this with your friends'
-					: `Can't donate? Share this page instead.`}
+					? formatMessage({ id: 'label.share_this' })
+					: formatMessage({ id: 'label.cant_donate' })}
 			</BLead>
 			<SocialItems>
 				<SocialItem isSuccess={isSuccess}>
@@ -45,9 +51,9 @@ Donate directly on Ethereum Mainnet or @gnosischain w/ no fees or intermediaries
 					>
 						<Image
 							src={'/images/social-tw.svg'}
-							alt='tw'
-							width='44px'
-							height='44px'
+							alt='twitter'
+							width='44'
+							height='44'
 						/>
 					</TwitterShareButton>
 				</SocialItem>
@@ -59,9 +65,9 @@ Donate directly on Ethereum Mainnet or @gnosischain w/ no fees or intermediaries
 					>
 						<Image
 							src={'/images/social-linkedin.svg'}
-							alt='lin'
-							width='44px'
-							height='44px'
+							alt='linked-in'
+							width='44'
+							height='44'
 						/>
 					</LinkedinShareButton>
 				</SocialItem>
@@ -73,9 +79,9 @@ Donate directly on Ethereum Mainnet or @gnosischain w/ no fees or intermediaries
 					>
 						<Image
 							src={'/images/social-fb.svg'}
-							alt='fb'
-							width='44px'
-							height='44px'
+							alt='facebook'
+							width='44'
+							height='44'
 						/>
 					</FacebookShareButton>
 				</SocialItem>
@@ -92,10 +98,11 @@ const BLead = styled(Lead)`
 `;
 
 const Social = styled.div<{ isSuccess?: boolean }>`
+	z-index: 1;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	margin: ${props => (props.isSuccess ? 0 : '18px 0')};
+	margin: ${props => (props.isSuccess ? '50px 0' : '18px 0')};
 	color: ${neutralColors.gray[900]};
 	align-items: center;
 `;

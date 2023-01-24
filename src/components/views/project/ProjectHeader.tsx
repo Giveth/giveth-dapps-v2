@@ -5,19 +5,17 @@ import styled from 'styled-components';
 
 import VerificationBadge from '@/components/badges/VerificationBadge';
 import { isNoImg, noImgColor, noImgIcon } from '@/lib/helpers';
-import { IProject } from '@/apollo/types/types';
 import { mediaQueries } from '@/lib/constants/constants';
 import { addressToUserView } from '@/lib/routeCreators';
+import { useProjectContext } from '@/context/project.context';
 
-const ProjectHeader = (props: { project?: IProject }) => {
-	const { project } = props;
-	const { title, verified, image, adminUser, traceCampaignId } =
-		project || {};
+const ProjectHeader = () => {
+	const { projectData } = useProjectContext();
+	const { title, verified, image, adminUser } = projectData || {};
 	const [adjustTitle, setAdjustTitle] = useState<boolean>(false);
 	const containerRef = useRef(null);
 
 	const name = adminUser?.name;
-	const traceable = !!traceCampaignId;
 
 	useEffect(() => {
 		const observerHandler = (entries: IntersectionObserverEntry[]) => {
@@ -42,16 +40,12 @@ const ProjectHeader = (props: { project?: IProject }) => {
 			<TitleSection>
 				<TitleContainer>
 					<BadgeSection>
-						{verified && <VerificationBadge verified />}
-						{traceable && <VerificationBadge trace />}
+						{verified && <VerificationBadge />}
 					</BadgeSection>
 					<Title fixSize={adjustTitle} weight={700}>
 						{title}
 					</Title>
-					<Link
-						href={addressToUserView(adminUser?.walletAddress)}
-						passHref
-					>
+					<Link href={addressToUserView(adminUser?.walletAddress)}>
 						<Author>{name}</Author>
 					</Link>
 				</TitleContainer>

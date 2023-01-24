@@ -1,25 +1,40 @@
 import { FC } from 'react';
 import styled from 'styled-components';
-import { Subline, H2, H5, brandColors } from '@giveth/ui-design-system';
+import { Subline, H2, H5, brandColors, H4 } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 
 import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectWalletAddress from '@/components/views/project/projectDonations/ProjectWalletAddress';
-import { IProjectBySlug } from '@/apollo/types/gqlTypes';
+import { useProjectContext } from '@/context/project.context';
 
-const ProjectTotalFundCard: FC<IProjectBySlug> = ({ project }) => {
+const ProjectTotalFundCard: FC = () => {
+	const { projectData } = useProjectContext();
 	const { totalDonations, addresses, traceCampaignId, totalTraceDonations } =
-		project || {};
+		projectData || {};
+	const { formatMessage } = useIntl();
 
 	return (
 		<Wrapper>
 			<UpperSection>
 				<div>
-					<Subline>All time funding received</Subline>
-					<TotalFund>{'$' + totalDonations}</TotalFund>
+					<Subline>
+						{formatMessage({ id: 'label.all_time_funding' })}
+					</Subline>
+					{totalDonations && totalDonations > 0 ? (
+						<TotalFund>{'$' + totalDonations}</TotalFund>
+					) : (
+						<NoDonation>
+							{formatMessage({
+								id: 'label.be_the_first_to_donate',
+							})}
+						</NoDonation>
+					)}
 				</div>
 				{traceCampaignId && (
 					<div>
-						<Subline>Funding from Traces</Subline>
+						<Subline>
+							{formatMessage({ id: 'label.funding_from_traces' })}
+						</Subline>
 						<FromTraces>{'$' + totalTraceDonations}</FromTraces>
 					</div>
 				)}
@@ -28,6 +43,10 @@ const ProjectTotalFundCard: FC<IProjectBySlug> = ({ project }) => {
 		</Wrapper>
 	);
 };
+
+const NoDonation = styled(H4)`
+	margin-top: 20px;
+`;
 
 const Wrapper = styled.div`
 	background: white;

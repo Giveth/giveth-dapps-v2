@@ -75,7 +75,7 @@ class LocationInput extends Component<MyProps, MyState> {
 					onSelect={this.handleSelect}
 				/>
 				<CheckBox
-					title='This project has a global impact'
+					label='This project has a global impact'
 					checked={isGlobal}
 					onChange={() => {
 						const loc = isGlobal ? '' : globalLocation;

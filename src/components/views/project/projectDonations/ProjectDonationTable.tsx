@@ -4,16 +4,15 @@ import {
 	B,
 	brandColors,
 	H6,
-	IconETH,
 	IconExternalLink,
 	neutralColors,
 } from '@giveth/ui-design-system';
 
+import { useIntl } from 'react-intl';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
-import { IDonation, IProject } from '@/apollo/types/types';
+import { IDonation } from '@/apollo/types/types';
 import SearchBox from '@/components/SearchBox';
-import { Flex } from '@/components/styled-components/Flex';
 import Pagination from '@/components/Pagination';
 import {
 	smallFormatDate,
@@ -33,6 +32,13 @@ import { useAppSelector } from '@/features/hooks';
 import DonationStatus from '@/components/badges/DonationStatusBadge';
 import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import useDebounce from '@/hooks/useDebounce';
+import {
+	RowWrapper,
+	TableCell,
+	TableHeader,
+} from '@/components/styled-components/Table';
+import { IconEthereum } from '@/components/Icons/Eth';
+import { useProjectContext } from '@/context/project.context';
 
 const itemPerPage = 10;
 
@@ -50,7 +56,6 @@ interface IOrder {
 interface IProjectDonationTable {
 	donations: IDonation[];
 	totalDonations?: number;
-	project?: IProject;
 }
 
 interface PageDonations {
@@ -61,7 +66,6 @@ interface PageDonations {
 const ProjectDonationTable = ({
 	donations,
 	totalDonations,
-	project,
 }: IProjectDonationTable) => {
 	const [pageDonations, setPageDonations] = useState<PageDonations>({
 		donations: donations,
@@ -74,10 +78,10 @@ const ProjectDonationTable = ({
 	});
 	const [activeTab, setActiveTab] = useState<number>(0);
 	const [searchTerm, setSearchTerm] = useState<string>('');
-
+	const { projectData } = useProjectContext();
 	const user = useAppSelector(state => state.user.userData);
-
-	const { id, traceCampaignId, adminUser } = project || {};
+	const { formatMessage, locale } = useIntl();
+	const { id, traceCampaignId, adminUser } = projectData || {};
 	const isAdmin = compareAddresses(
 		adminUser?.walletAddress,
 		user?.walletAddress,
@@ -136,7 +140,7 @@ const ProjectDonationTable = ({
 						onClick={() => setActiveTab(0)}
 						className={activeTab === 0 ? 'active' : ''}
 					>
-						Donations
+						{formatMessage({ id: 'label.donations' })}
 					</Tab>
 					{!!traceCampaignId && (
 						<Tab
@@ -160,21 +164,29 @@ const ProjectDonationTable = ({
 								orderChangeHandler(EOrderBy.CreationDate)
 							}
 						>
-							Donated at
+							{formatMessage({ id: 'label.donated_at' })}
 							<SortIcon
 								order={order}
 								title={EOrderBy.CreationDate}
 							/>
 						</TableHeader>
-						<TableHeader>Donor</TableHeader>
-						{isAdmin && <TableHeader>Status</TableHeader>}
-						<TableHeader>Network</TableHeader>
+						<TableHeader>
+							{formatMessage({ id: 'label.donor' })}
+						</TableHeader>
+						{isAdmin && (
+							<TableHeader>
+								{formatMessage({ id: 'label.status' })}
+							</TableHeader>
+						)}
+						<TableHeader>
+							{formatMessage({ id: 'label.network' })}
+						</TableHeader>
 						<TableHeader
 							onClick={() =>
 								orderChangeHandler(EOrderBy.TokenAmount)
 							}
 						>
-							Amount
+							{formatMessage({ id: 'label.amount' })}
 							<SortIcon
 								order={order}
 								title={EOrderBy.TokenAmount}
@@ -185,20 +197,21 @@ const ProjectDonationTable = ({
 								orderChangeHandler(EOrderBy.UsdAmount)
 							}
 						>
-							USD Value
+							{formatMessage({ id: 'label.usd_value' })}
 							<SortIcon
 								order={order}
 								title={EOrderBy.UsdAmount}
 							/>
 						</TableHeader>
 						{pageDonations?.donations?.map(donation => (
-							<RowWrapper key={donation.id}>
-								<TableCell>
+							<DonationRowWrapper key={donation.id}>
+								<DonationTableCell>
 									{smallFormatDate(
 										new Date(donation.createdAt),
+										locale,
 									)}
-								</TableCell>
-								<TableCell>
+								</DonationTableCell>
+								<DonationTableCell>
 									{donation.donationType ===
 									EDonationType.POIGNART
 										? 'PoignART'
@@ -206,15 +219,15 @@ const ProjectDonationTable = ({
 										? 'Anonymous'
 										: donation.user?.name ||
 										  donation.user?.firstName}
-								</TableCell>
+								</DonationTableCell>
 								{isAdmin && (
-									<TableCell>
+									<DonationTableCell>
 										<DonationStatus
 											status={donation.status}
 										/>
-									</TableCell>
+									</DonationTableCell>
 								)}
-								<TableCell>
+								<DonationTableCell>
 									{donation.transactionNetworkId ===
 									config.XDAI_NETWORK_NUMBER ? (
 										<>
@@ -223,12 +236,12 @@ const ProjectDonationTable = ({
 										</>
 									) : (
 										<>
-											<IconETH size={24} />
+											<IconEthereum size={24} />
 											Ethereum
 										</>
 									)}
-								</TableCell>
-								<TableCell>
+								</DonationTableCell>
+								<DonationTableCell>
 									<B>{donation.amount}</B>
 									<Currency>{donation.currency}</Currency>
 									{!donation.anonymous && (
@@ -244,12 +257,12 @@ const ProjectDonationTable = ({
 											/>
 										</ExternalLink>
 									)}
-								</TableCell>
-								<TableCell>
+								</DonationTableCell>
+								<DonationTableCell>
 									{donation.valueUsd &&
 										'$' + formatUSD(donation.valueUsd)}
-								</TableCell>
-							</RowWrapper>
+								</DonationTableCell>
+							</DonationRowWrapper>
 						))}
 					</DonationTableContainer>
 				</DonationTableWrapper>
@@ -317,34 +330,16 @@ const DonationTableContainer = styled.div<{ isAdmin?: boolean }>`
 	min-width: 800px;
 `;
 
-const TableHeader = styled(B)`
-	height: 40px;
-	border-bottom: 1px solid ${neutralColors.gray[400]};
-	align-items: center;
-	display: flex;
-	${props =>
-		props.onClick &&
-		`cursor: pointer;
-	gap: 8px;
-	align-items: center;`}
-`;
-
-const RowWrapper = styled.div`
-	display: contents;
+const DonationRowWrapper = styled(RowWrapper)`
 	&:hover > div {
 		background-color: ${neutralColors.gray[300]};
 		color: ${brandColors.pinky[500]};
 	}
-	& > div:first-child {
-		padding-left: 4px;
-	}
 `;
 
-const TableCell = styled(Flex)`
+const DonationTableCell = styled(TableCell)`
 	height: 60px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
-	align-items: center;
-	gap: 8px;
 `;
 
 export default ProjectDonationTable;

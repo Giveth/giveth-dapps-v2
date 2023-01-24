@@ -3,8 +3,9 @@ import { FC, useState, useEffect } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { Button, GLink, IconGiveth } from '@giveth/ui-design-system';
+import { Button, GLink } from '@giveth/ui-design-system';
 
+import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
 import { formatWeiHelper } from '@/helpers/number';
 import { networksParams } from '@/helpers/blockchain';
@@ -43,11 +44,12 @@ import { ETheme } from '@/features/general/general.slice';
 import {
 	setShowWalletModal,
 	setShowWelcomeModal,
-	setShowSignWithWallet,
 	setShowCompleteProfile,
 } from '@/features/modal/modal.slice';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { IconGIV } from '../Icons/GIV';
+import { useModalCallback } from '@/hooks/useModalCallback';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -73,6 +75,7 @@ const Header: FC<IHeader> = () => {
 	);
 	const theme = useAppSelector(state => state.general.theme);
 	const router = useRouter();
+	const { formatMessage } = useIntl();
 	const isLight = theme === ETheme.Light;
 
 	const handleBack = () => {
@@ -148,11 +151,15 @@ const Header: FC<IHeader> = () => {
 		}
 	};
 
+	const { modalCallback: signInThenCreate } = useModalCallback(() =>
+		router.push(Routes.CreateProject),
+	);
+
 	const handleCreateButton = () => {
 		if (!isEnabled) {
 			dispatch(setShowWelcomeModal(true));
 		} else if (!isSignedIn) {
-			dispatch(setShowSignWithWallet(true));
+			signInThenCreate();
 		} else if (isUserRegistered(userData)) {
 			router.push(Routes.CreateProject);
 		} else {
@@ -177,8 +184,8 @@ const Header: FC<IHeader> = () => {
 				{showBackBtn ? (
 					<Logo onClick={handleBack}>
 						<Image
-							width='26px'
-							height='26px'
+							width='26'
+							height='26'
 							alt='Giveth logo'
 							src={`/images/back-2.svg`}
 						/>
@@ -186,13 +193,13 @@ const Header: FC<IHeader> = () => {
 				) : (
 					<>
 						<MainLogoBtn>
-							<Link href={Routes.Home} passHref>
+							<Link href={Routes.Home}>
 								<Logo>
 									<Image
-										width='48px'
-										height='48px'
+										width='48'
+										height='48'
 										alt='Giveth logo'
-										src={`/images/logo/logo1.png`}
+										src='/images/logo/logo1.png'
 									/>
 								</Logo>
 							</Link>
@@ -204,13 +211,13 @@ const Header: FC<IHeader> = () => {
 			{!showBackBtn && (
 				<HeaderLinks theme={theme}>
 					{menuRoutes.map((link, index) => (
-						<Link href={link.href[0]} passHref key={index}>
+						<Link href={link.href[0]} key={index}>
 							<HeaderLink
 								size='Big'
 								theme={theme}
 								active={link.href.includes(router.route)}
 							>
-								{link.title}
+								{formatMessage({ id: link.title })}
 							</HeaderLink>
 						</Link>
 					))}
@@ -220,7 +227,9 @@ const Header: FC<IHeader> = () => {
 			<Flex gap='8px'>
 				<LargeCreateProject>
 					<Button
-						label='CREATE A PROJECT'
+						label={formatMessage({
+							id: 'component.button.create_project',
+						})}
 						size='small'
 						buttonType={isLight ? 'primary' : 'secondary'}
 						onClick={handleCreateButton}
@@ -243,7 +252,7 @@ const Header: FC<IHeader> = () => {
 						>
 							<BalanceButton outline theme={theme}>
 								<HBContainer>
-									<IconGiveth size={24} />
+									<IconGIV size={24} />
 									<HBContent size='Big'>
 										{formatWeiHelper(givBalance.balance)}
 									</HBContent>
@@ -283,7 +292,9 @@ const Header: FC<IHeader> = () => {
 												shortenAddress(account)}
 										</GLink>
 										<WBNetwork size='Tiny'>
-											Connected to{' '}
+											{formatMessage({
+												id: 'label.connected_to',
+											})}{' '}
 											{networksParams[chainId]
 												?.chainName ||
 												library?._network?.name}
@@ -299,7 +310,11 @@ const Header: FC<IHeader> = () => {
 					<ConnectButton
 						buttonType='primary'
 						size='small'
-						label={isGIVeconomyRoute ? 'CONNECT WALLET' : 'SIGN IN'}
+						label={formatMessage({
+							id: isGIVeconomyRoute
+								? 'component.button.connect_wallet'
+								: 'component.button.sign_in',
+						})}
 						onClick={handleModals}
 					/>
 				)}

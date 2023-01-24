@@ -1,9 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
 import { brandColors, H6, Lead, ButtonLink } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import givFontLogo from '/public/images/icons/giv_font_logo.svg';
 import check_stars from '/public/images/icons/check_stars.svg';
@@ -19,17 +19,7 @@ import {
 	VerificationCard,
 	VerificationContainer,
 } from './Common.sc';
-
-const LazyLottie = dynamic(() => import('react-lottie'));
-
-const loadingAnimationOptions = {
-	loop: true,
-	autoplay: true,
-	animationData: LoadingAnimation,
-	rendererSettings: {
-		preserveAspectRatio: 'xMidYMid slice',
-	},
-};
+import LottieControl from '@/components/animations/lottieControl';
 
 export enum EEmailVerificationStatus {
 	Pending = 'Pending',
@@ -50,10 +40,9 @@ const ContentSelector: FC<IContentSelector> = ({ status }) => {
 		default:
 			return (
 				<FlexCenter>
-					<LazyLottie
-						options={loadingAnimationOptions}
-						height={150}
-						width={150}
+					<LottieControl
+						animationData={LoadingAnimation}
+						size={150}
 					/>
 				</FlexCenter>
 			);
@@ -98,6 +87,7 @@ export default function EmailVerificationIndex() {
 function Verified() {
 	const router = useRouter();
 	const { slug } = router.query;
+	const { formatMessage } = useIntl();
 
 	return (
 		<>
@@ -107,24 +97,32 @@ function Verified() {
 				height={80}
 				alt='success icon'
 			/>
-			<H6 weight={700}>Well Done</H6>
+			<H6 weight={700}>{formatMessage({ id: 'label.well_done' })}</H6>
 			<Lead>
-				Your email has been verified! <br />
-				You can now close this page and continue verifying your project.
+				{formatMessage({ id: 'label.your_email_has_been_verified' })}
+				! <br />
+				{formatMessage({
+					id: 'label.you_can_now_close_this_page_and_continue_verifying',
+				})}
 			</Lead>
-			<Link href={slugToVerification(slug as string)} passHref>
-				<ButtonLink size='small' label='CONTINUE VERIFICATION' />
+			<Link href={slugToVerification(slug as string)}>
+				<ButtonLink
+					size='small'
+					label={
+						formatMessage({
+							id: 'label.continue_verification',
+						})!
+					}
+				/>
 			</Link>
 			<VCImageContainer>
-				<Link href='/' passHref>
-					<a>
-						<Image
-							src={givFontLogo}
-							width='150'
-							height='50'
-							alt='giveth logo'
-						/>
-					</a>
+				<Link href='/'>
+					<Image
+						src={givFontLogo}
+						width='150'
+						height='50'
+						alt='giveth logo'
+					/>
 				</Link>
 			</VCImageContainer>
 		</>
@@ -153,15 +151,13 @@ function Rejected() {
 			</VCLeadContainer>
 
 			<VCImageContainer>
-				<Link href='/' passHref>
-					<a>
-						<Image
-							src={givFontLogo}
-							width='150'
-							height='50'
-							alt='giveth logo'
-						/>
-					</a>
+				<Link href='/'>
+					<Image
+						src={givFontLogo}
+						width='150'
+						height='50'
+						alt='giveth logo'
+					/>
 				</Link>
 			</VCImageContainer>
 		</>

@@ -11,14 +11,8 @@ import ProjectTabs from './ProjectTabs';
 import ProjectDonateCard from './projectDonateCard/ProjectDonateCard';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { client } from '@/apollo/apolloClient';
-import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
-import { IDonation, IProject } from '@/apollo/types/types';
-import {
-	EDirection,
-	EDonationStatus,
-	EProjectStatus,
-	gqlEnums,
-} from '@/apollo/types/gqlEnums';
+import { IDonation } from '@/apollo/types/types';
+import { EDirection, EDonationStatus, ESortby } from '@/apollo/types/gqlEnums';
 import InfoBadge from '@/components/badges/InfoBadge';
 import {
 	IDonationsByProjectIdGQL,
@@ -31,6 +25,9 @@ import SimilarProjects from '@/components/views/project/SimilarProjects';
 import { compareAddresses, showToastError } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import { ProjectMeta } from '@/components/Metatag';
+import { Col, Row } from '@/components/Grid';
+import ProjectGIVPowerIndex from '@/components/views/project/projectGIVPower';
+import { useProjectContext } from '@/context/project.context';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
@@ -45,58 +42,32 @@ const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {
 
 const donationsPerPage = 10;
 
-const ProjectIndex: FC<IProjectBySlug> = props => {
+const ProjectIndex: FC<IProjectBySlug> = () => {
 	const [activeTab, setActiveTab] = useState(0);
-	const [isActive, setIsActive] = useState<boolean>(true);
-	const [isDraft, setIsDraft] = useState<boolean>(false);
-	const [project, setProject] = useState<IProject | undefined>(props.project);
 	const [donations, setDonations] = useState<IDonation[]>([]);
 	const [totalDonations, setTotalDonations] = useState(0);
 	const [creationSuccessful, setCreationSuccessful] = useState(false);
-	const [isCancelled, setIsCancelled] = useState<boolean>(false);
+
 	const user = useAppSelector(state => state.user.userData);
+	const { fetchProjectBoosters, projectData, isActive, isDraft } =
+		useProjectContext();
+
+	const router = useRouter();
+	const slug = router.query.projectIdSlug as string;
 
 	const {
 		adminUser,
 		description = '',
 		title,
-		status,
 		id = '',
-	} = project || {};
-	const router = useRouter();
-	const slug = router.query.projectIdSlug as string;
+		projectPower,
+		projectFuturePower,
+	} = projectData || {};
+
 	const isAdmin = compareAddresses(
 		adminUser?.walletAddress,
 		user?.walletAddress,
 	);
-
-	const fetchProject = async () => {
-		client
-			.query({
-				query: FETCH_PROJECT_BY_SLUG,
-				variables: { slug, connectedWalletUserId: Number(user?.id) },
-				fetchPolicy: 'network-only',
-			})
-			.then((res: { data: { projectBySlug: IProject } }) => {
-				setProject(res.data.projectBySlug);
-			})
-			.catch((error: unknown) => {
-				setIsCancelled(true);
-				captureException(error, {
-					tags: {
-						section: 'fetchProject',
-					},
-				});
-			});
-	};
-
-	useEffect(() => {
-		if (status) {
-			setIsActive(status.name === EProjectStatus.ACTIVE);
-			setIsDraft(status.name === EProjectStatus.DRAFT);
-			setIsCancelled(status.name === EProjectStatus.CANCEL);
-		}
-	}, [status]);
 
 	useEffect(() => {
 		if (!id) return;
@@ -109,7 +80,7 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 					take: donationsPerPage,
 					status: isAdmin ? null : EDonationStatus.VERIFIED,
 					orderBy: {
-						field: gqlEnums.CREATIONDATE,
+						field: ESortby.CREATIONDATE,
 						direction: EDirection.DESC,
 					},
 				},
@@ -127,24 +98,19 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 					},
 				});
 			});
+		fetchProjectBoosters(+id, projectData?.status.name);
 	}, [id]);
-
-	useEffect(() => {
-		if (slug && user?.id) {
-			fetchProject().then();
-		}
-	}, [slug, user?.id]);
 
 	if (creationSuccessful) {
 		return (
 			<SuccessfulCreation
+				project={projectData!}
 				showSuccess={setCreationSuccessful}
-				project={project as IProject}
 			/>
 		);
 	}
 
-	if (isCancelled || !project) {
+	if (!projectData) {
 		return <NotAvailableProject />;
 	}
 
@@ -153,10 +119,10 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 			<Wrapper>
 				<Head>
 					<title>{title && `${title} |`} Giveth</title>
-					<ProjectMeta project={project} preTitle='Check out' />
+					<ProjectMeta project={projectData} preTitle='Check out' />
 				</Head>
 
-				<ProjectHeader project={project} />
+				<ProjectHeader />
 				{isDraft && (
 					<DraftIndicator>
 						<InfoBadge />
@@ -166,12 +132,11 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 					</DraftIndicator>
 				)}
 				<BodyWrapper>
-					<ContentWrapper>
-						{project && !isDraft && (
+					<Col sm={8}>
+						{projectData && !isDraft && (
 							<ProjectTabs
 								activeTab={activeTab}
 								setActiveTab={setActiveTab}
-								project={project}
 								totalDonations={totalDonations}
 							/>
 						)}
@@ -184,33 +149,29 @@ const ProjectIndex: FC<IProjectBySlug> = props => {
 						{activeTab === 0 && (
 							<RichTextViewer content={description} />
 						)}
-						{activeTab === 1 && (
-							<ProjectUpdates
-								project={project}
-								fetchProject={fetchProject}
-							/>
-						)}
+						{activeTab === 1 && <ProjectUpdates />}
 						{activeTab === 2 && (
 							<ProjectDonations
 								donationsByProjectId={{
 									donations,
 									totalCount: totalDonations,
 								}}
-								project={project}
-								isActive={isActive}
-								isDraft={isDraft}
 							/>
 						)}
-					</ContentWrapper>
-					{project && (
-						<ProjectDonateCard
-							isDraft={isDraft}
-							project={project!}
-							isActive={isActive}
-							setIsActive={setIsActive}
-							setIsDraft={setIsDraft}
-							setCreationSuccessful={setCreationSuccessful}
-						/>
+						{activeTab === 3 && (
+							<ProjectGIVPowerIndex
+								projectPower={projectPower}
+								projectFuturePower={projectFuturePower}
+								isAdmin={isAdmin}
+							/>
+						)}
+					</Col>
+					{projectData && (
+						<Col sm={4}>
+							<ProjectDonateCard
+								setCreationSuccessful={setCreationSuccessful}
+							/>
+						</Col>
 					)}
 				</BodyWrapper>
 			</Wrapper>
@@ -232,27 +193,19 @@ const Wrapper = styled.div`
 	position: relative;
 `;
 
-const BodyWrapper = styled.div`
-	display: flex;
-	justify-content: space-between;
+const BodyWrapper = styled(Row)`
 	margin: 0 auto;
 	min-height: calc(100vh - 312px);
 	max-width: 1280px;
 	padding: 0 16px;
 
 	${mediaQueries.mobileL} {
-		padding: 0 32px;
+		padding: 0 22px;
 	}
 
 	${mediaQueries.laptopS} {
 		padding: 0 40px;
 	}
-`;
-
-const ContentWrapper = styled.div`
-	flex-grow: 1;
-	padding-right: 16px;
-	width: 100%;
 `;
 
 export default ProjectIndex;

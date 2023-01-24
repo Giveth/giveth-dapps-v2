@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { useIntl } from 'react-intl';
 import { H6 } from '@giveth/ui-design-system';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
@@ -9,6 +10,7 @@ import Routes from '@/lib/constants/Routes';
 
 const Guidelines = () => {
 	const [showGuidelineModal, setShowGuidelineModal] = useState(false);
+	const { formatMessage } = useIntl();
 
 	const router = useRouter();
 	const isCreateMode = router.pathname.includes(Routes.CreateProject);
@@ -23,7 +25,7 @@ const Guidelines = () => {
 		<>
 			<GuidelinesCard onClick={() => setShowGuidelineModal(true)}>
 				<Image src={LightBulbIcon} alt='Light Bulb Icon' />
-				<H6>Submission guidelines</H6>
+				<H6>{formatMessage({ id: 'label.submission_guidelines' })}</H6>
 			</GuidelinesCard>
 			{showGuidelineModal && (
 				<ProjectGuidelineModal setShowModal={setShowGuidelineModal} />

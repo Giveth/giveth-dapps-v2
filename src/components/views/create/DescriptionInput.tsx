@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
 import {
 	H5,
 	Caption,
@@ -7,21 +8,30 @@ import {
 } from '@giveth/ui-design-system';
 import dynamic from 'next/dynamic';
 import styled from 'styled-components';
+import { useFormContext } from 'react-hook-form';
 
 import { InputContainer, Label } from './Create.sc';
 import { GoodProjectDescription } from '@/components/modals/GoodProjectDescription';
+import { EInputs } from '@/components/views/create/CreateProject';
 
 const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
 	ssr: false,
 });
 
-const DescriptionInput = (props: {
-	setValue: (e: string) => void;
-	// error: string;
-	value?: string;
-}) => {
+const DescriptionInput = () => {
+	const { getValues, setValue } = useFormContext();
+	const { formatMessage } = useIntl();
+
 	const [showModal, setShowModal] = useState(false);
-	const { value, setValue } = props;
+	const [description, setDescription] = useState(
+		getValues(EInputs.description),
+	);
+
+	const handleDescription = (value: string) => {
+		setDescription(value);
+		setValue(EInputs.description, value);
+	};
+
 	return (
 		<>
 			{showModal && (
@@ -30,19 +40,21 @@ const DescriptionInput = (props: {
 				/>
 			)}
 
-			<H5>Tell us about your project...</H5>
+			<H5>{formatMessage({ id: 'label.tell_us_about_your_project' })}</H5>
 			<CaptionContainer>
-				Aim for 200-500 words.{' '}
+				{formatMessage({ id: 'label.aim_for_200_500_words' })}{' '}
 				<span onClick={() => setShowModal(true)}>
-					How to write a good project description.
+					{formatMessage({
+						id: 'label.how_to_write_a_good_project_desc',
+					})}
 				</span>
 			</CaptionContainer>
 			<InputContainerStyled>
-				<Label>Project story</Label>
+				<Label>{formatMessage({ id: 'label.project_story' })}</Label>
 				<RichTextInput
 					style={TextInputStyle}
-					setValue={setValue}
-					value={value}
+					setValue={handleDescription}
+					value={description}
 				/>
 			</InputContainerStyled>
 			{/*<ErrorStyled>{error || null}</ErrorStyled>*/}

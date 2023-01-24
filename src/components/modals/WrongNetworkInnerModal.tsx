@@ -1,11 +1,12 @@
 import { P, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
+import { useIntl } from 'react-intl';
 import { Button } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 import { switchNetwork } from '@/lib/wallet';
 
-import { chainName } from '@/lib/constants/constants';
+import { chainName, mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch } from '@/features/hooks';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
 
@@ -20,6 +21,7 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 }) => {
 	const { account } = useWeb3React();
 	const dispatch = useAppDispatch();
+	const { formatMessage } = useIntl();
 
 	const connectWallet = () => {
 		dispatch(setShowWalletModal(true));
@@ -40,7 +42,9 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 					<ButtonsContainer>
 						{targetNetworks.map(network => (
 							<Button
-								label={`SWITCH TO ${chainName(network)}`}
+								label={`${formatMessage({
+									id: 'label.switch_to',
+								})} ${chainName(network)}`}
 								onClick={() =>
 									checkWalletAndSwitchNetwork(network)
 								}
@@ -57,7 +61,9 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 					</Description>
 					<ButtonsContainer>
 						<Button
-							label='Connect Wallet'
+							label={formatMessage({
+								id: 'component.button.connect_wallet',
+							})}
 							onClick={connectWallet}
 							buttonType='primary'
 						/>
@@ -69,8 +75,11 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 };
 
 const WrongNetworkInnerModalContainer = styled.div`
-	max-width: 450px;
 	padding: 6px 24px;
+	width: 100%;
+	${mediaQueries.tablet} {
+		max-width: 450px;
+	}
 `;
 
 const Description = styled.div`

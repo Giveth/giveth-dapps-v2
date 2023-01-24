@@ -13,7 +13,7 @@ export interface IStep {
 	setStep: Dispatch<SetStateAction<OnboardSteps>>;
 }
 
-export const OnboardActionsContianer = styled(Row)`
+export const OnboardActionsContainer = styled(Row)`
 	justify-content: space-between;
 	border-top: 1px solid ${neutralColors.gray[400]};
 	padding-top: 16px;

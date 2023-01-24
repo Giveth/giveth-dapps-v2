@@ -6,6 +6,7 @@ import {
 	H4,
 	IconAlertTriangleOutline,
 } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import InternalLink from '@/components/InternalLink';
@@ -15,6 +16,7 @@ import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 
 const UserNotSignedIn = () => {
 	const dispatch = useAppDispatch();
+	const { formatMessage } = useIntl();
 
 	const handleSignIn = () => {
 		dispatch(setShowSignWithWallet(true));
@@ -28,17 +30,21 @@ const UserNotSignedIn = () => {
 					size={70}
 				/>
 			</IconContainer>
-			<H4Styled>You need to sign in first!</H4Styled>
+			<H4Styled>
+				{formatMessage({ id: 'label.you_need_to_sign_in_first' })}
+			</H4Styled>
 			<ButtonStyled
 				onClick={handleSignIn}
 				size='medium'
-				label='Sign in'
+				label={formatMessage({ id: 'component.button.sign_in' })}
 				buttonType='primary'
 			/>
 			<InternalLink href={Routes.Home}>
 				<ButtonTexty
 					buttonType='texty'
-					label='or Go back to Homepage'
+					label={formatMessage({
+						id: 'label.or_go_back_to_home',
+					})}
 				/>
 			</InternalLink>
 		</ContainerStyled>

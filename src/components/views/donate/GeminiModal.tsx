@@ -3,17 +3,17 @@ import { TwitterShareButton } from 'react-share';
 import { Lead } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
-import useDeviceDetect from '@/hooks/useDeviceDetect';
 import { mediaQueries } from '@/lib/constants/constants';
 // We need to add icon customization on the design system
 import { Button } from '../../styled-components/Button';
 import { isSSRMode } from '@/lib/helpers';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import useDetectDevice from '@/hooks/useDetectDevice';
 
 const GeminiModal = ({ setShowModal }: any) => {
 	const url = !isSSRMode ? window?.location?.href : null;
-	const { isMobile } = useDeviceDetect();
+	const { isMobile } = useDetectDevice();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	if (isSSRMode) return null;

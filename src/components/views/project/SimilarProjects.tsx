@@ -7,7 +7,9 @@ import { captureException } from '@sentry/nextjs';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper';
 import Image from 'next/image';
+import { Swiper as SwiperClass } from 'swiper/types';
 
+import { useIntl } from 'react-intl';
 import { client } from '@/apollo/apolloClient';
 import { SIMILAR_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { IProject } from '@/apollo/types/types';
@@ -24,20 +26,24 @@ const projectsToFetch = 12;
 const SimilarProjects = (props: { slug: string }) => {
 	const { slug } = props;
 
-	const device = useDetectDevice();
+	const { isMobile, isTablet, isLaptopS } = useDetectDevice();
+
+	const [swiperInstance, setSwiperInstance] = useState<SwiperClass>();
 
 	let projectsToShow;
-	if (device.isMobile) {
+	if (isMobile) {
 		projectsToShow = 1;
-	} else if (device.isTablet || device.isLaptopS) {
+	} else if (isTablet || isLaptopS) {
 		projectsToShow = 2;
 	} else {
 		projectsToShow = 3;
 	}
 
+	const { formatMessage } = useIntl();
 	const [suggestedProjects, setSuggestedProjects] = useState<IProject[]>([]);
 
 	useEffect(() => {
+		swiperInstance?.slideTo(0);
 		client
 			.query({
 				query: SIMILAR_PROJECTS,
@@ -65,12 +71,15 @@ const SimilarProjects = (props: { slug: string }) => {
 	if (!suggestedProjects || suggestedProjects.length === 0) return null;
 	return (
 		<ContainerStyled id='similar-projects'>
-			<H5 weight={700}>Similar projects</H5>
+			<H5 weight={700}>
+				{formatMessage({ id: 'label.similar_projects' })}
+			</H5>
 			<SwiperContainer>
 				<CaretLeft id='prevIcon'>
 					<Image src={CaretRightIcon} alt='caret right' />
 				</CaretLeft>
 				<Swiper
+					onSwiper={setSwiperInstance}
 					modules={[Navigation]}
 					navigation={{
 						nextEl: '#nextIcon',

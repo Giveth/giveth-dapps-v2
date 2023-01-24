@@ -2,25 +2,26 @@ import Routes from '@/lib/constants/Routes';
 
 export const menuRoutes = [
 	{
-		title: 'Home',
+		title: 'label.home',
 		href: [Routes.Home],
 	},
 	{
-		title: 'Projects',
+		title: 'label.projects',
 		href: [Routes.Projects],
 	},
 	{
-		title: 'GIVeconomy',
+		title: 'label.giveconomy',
 		href: [
 			Routes.GIVECONOMY,
 			Routes.GIVbacks,
 			Routes.GIVfarm,
 			Routes.GIVgarden,
+			Routes.GIVpower,
 			Routes.GIVstream,
 		],
 	},
 	{
-		title: 'Community',
+		title: 'label.community',
 		href: [Routes.Join],
 	},
 ];

@@ -14,6 +14,7 @@ const MAINNET_NETWORK_NUMBER = 1; // Mainnet
 const XDAI_NETWORK_NUMBER = 100; // xDAI
 
 const config: EnvConfig = {
+	GIVETH_PROJECT_ID: 1,
 	BACKEND_LINK: 'https://mainnet.serve.giveth.io/graphql',
 	FRONTEND_LINK: 'https://giveth.io',
 	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
@@ -50,9 +51,9 @@ const config: EnvConfig = {
 			LM_ADDRESS: '0x4B9EfAE862a1755F7CEcb021856D467E86976755',
 			BUY_LINK:
 				'https://app.uniswap.org/#/swap?outputCurrency=0x900db999074d9277c5da2a43f252d74366230da0',
-			discontinued: SEPT_8TH_2022,
-			active: false,
-			archived: true,
+			platformTitle: 'GIV staking',
+			exploited: true,
+			farmEndTimeMS: SEPT_8TH_2022,
 		},
 
 		nodeUrl: 'https://mainnet.infura.io/v3/' + INFURA_API_KEY,
@@ -70,9 +71,7 @@ const config: EnvConfig = {
 					'https://app.uniswap.org/#/add/v2/0x6B175474E89094C44Da98b954EedeAC495271d0F/0x900dB999074d9277c5DA2A43F252D74366230DA0?chain=mainnet',
 				unit: 'LP',
 				farmStartTimeMS: 1651345200000,
-				active: false,
-				discontinued: SEPT_8TH_2022,
-				archived: true,
+				farmEndTimeMS: SEPT_8TH_2022,
 			},
 			{
 				network: MAINNET_NETWORK_NUMBER,
@@ -87,7 +86,6 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://app.ichi.org/vault?poolId=20009&back=vault',
 				unit: 'LP',
-				active: true,
 				farmStartTimeMS: 1659625200000,
 				introCard: {
 					title: 'Angel Vault',
@@ -95,6 +93,8 @@ const config: EnvConfig = {
 					description: `The Angel Vault is shared Univ3 position structured to protect GIV from downward volatility.\n\nProvide oneGIV as liquidity in our Angel Vault and stake the LP token to earn rewards proportional to the liquidity provided. When you remove liquidity, you will get oneGIV & GIV proportional to the holdings in the Angel Vault.`,
 					link: 'https://medium.com/@karmaticacid/the-evolution-of-giv-liquidity-introducing-the-giveth-angel-vault-5ee34b2965c1',
 				},
+				exploited: true,
+				farmEndTimeMS: 1664922291000,
 			},
 			{
 				network: MAINNET_NETWORK_NUMBER,
@@ -110,7 +110,8 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://app.balancer.fi/#/pool/0x7819f1532c49388106f7762328c51ee70edd134c000200000000000000000109',
 				unit: 'LP',
-				active: true,
+				exploited: true,
+				farmEndTimeMS: 1660946400000,
 			},
 			{
 				network: MAINNET_NETWORK_NUMBER,
@@ -134,12 +135,12 @@ const config: EnvConfig = {
 				provideLiquidityLink: `https://app.uniswap.org/#/add/ETH/0x900dB999074d9277c5DA2A43F252D74366230DA0/3000`,
 				unit: 'NFT',
 				infinitePositionId: 193935,
-				active: false,
+				farmEndTimeMS: 1660946400000,
 			},
 		],
 		uniswapV2Subgraph:
 			'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
-		regenStreams: [
+		regenFarms: [
 			{
 				tokenDistroAddress:
 					'0x73f2D115C2cBAa3b5F477A78F7A7CD348D8b70a2',
@@ -150,29 +151,56 @@ const config: EnvConfig = {
 				rewardTokenSymbol: 'CULT',
 				tokenAddressOnUniswapV2:
 					'0xf0f9D895aCa5c8678f706FB8216fa22957685A13',
-			},
-		],
-		regenFarms: [
-			{
-				network: MAINNET_NETWORK_NUMBER,
-				POOL_ADDRESS: '0x5281E311734869C64ca60eF047fd87759397EFe6',
-				LM_ADDRESS: '0xa479103c2618aD514653B53F064Bc6c9dC35a30b',
-				type: StakingType.UNISWAPV2_CULT_ETH,
-				platform: StakingPlatform.UNISWAP,
-				title: 'CULT / ETH',
-				description: '50% CULT, 50% ETH',
-				provideLiquidityLink:
-					'https://app.uniswap.org/#/add/v2/0xf0f9D895aCa5c8678f706FB8216fa22957685A13/ETH?chain=mainnet',
-				unit: 'LP',
-				regenStreamType: StreamType.CULT,
-				regenFarmType: RegenFarmType.CULT_ETH,
-				introCard: {
-					title: 'CULT',
-					description: `The purpose of CULT is to empower those building and contributing to our decentralized future. Our society makes it as difficult as possible to break away from societal, economic and other norms, and CULT serves to fund and support those who are working to take back our future. CULT is a reminder that the power in people is stronger than the people in power.\n\n CULT is the governance token of the Cult DAO. Every transaction of the CULT token allows you to contribute & fast-forward economic & societal change by contributing a 0.4% tax to the treasury. Fight from within until you get out, or change the system in doing so.`,
-					link: 'https://cultdao.io/',
-				},
-				farmStartTimeMS: 1655218800000,
-				active: true,
+				pools: [
+					{
+						network: MAINNET_NETWORK_NUMBER,
+						POOL_ADDRESS:
+							'0x5281E311734869C64ca60eF047fd87759397EFe6',
+						LM_ADDRESS:
+							'0xa479103c2618aD514653B53F064Bc6c9dC35a30b',
+						type: StakingType.UNISWAPV2_CULT_ETH,
+						platform: StakingPlatform.UNISWAP,
+						title: 'CULT / ETH',
+						description: '50% CULT, 50% ETH',
+						provideLiquidityLink:
+							'https://app.uniswap.org/#/add/v2/0xf0f9D895aCa5c8678f706FB8216fa22957685A13/ETH?chain=mainnet',
+						unit: 'LP',
+						regenStreamType: StreamType.CULT,
+						regenFarmType: RegenFarmType.CULT_ETH,
+						farmStartTimeMS: 1655218800000,
+						introCard: {
+							title: 'CULT',
+							description: `The purpose of CULT is to empower those building and contributing to our decentralized future. Our society makes it as difficult as possible to break away from societal, economic and other norms, and CULT serves to fund and support those who are working to take back our future. CULT is a reminder that the power in people is stronger than the people in power.\n\n CULT is the governance token of the Cult DAO. Every transaction of the CULT token allows you to contribute & fast-forward economic & societal change by contributing a 0.4% tax to the treasury. Fight from within until you get out, or change the system in doing so.`,
+							link: 'https://cultdao.io/',
+						},
+						exploited: true,
+						farmEndTimeMS: 1664922291000,
+					},
+					{
+						network: MAINNET_NETWORK_NUMBER,
+						POOL_ADDRESS:
+							'0x5281E311734869C64ca60eF047fd87759397EFe6',
+						LM_ADDRESS:
+							'0xcA128517053e8c459E12E3aCB615bb421d768219',
+						type: StakingType.UNISWAPV2_CULT_ETH,
+						platform: StakingPlatform.UNISWAP,
+						title: 'CULT / ETH',
+						description: '50% CULT, 50% ETH - V2',
+						provideLiquidityLink:
+							'https://app.uniswap.org/#/add/v2/0xf0f9D895aCa5c8678f706FB8216fa22957685A13/ETH?chain=mainnet',
+						unit: 'LP',
+						regenStreamType: StreamType.CULT,
+						regenFarmType: RegenFarmType.CULT_ETH,
+						farmStartTimeMS: 1668691800000,
+						farmEndTimeMS: 1669901843000,
+						dontArchive: true,
+						introCard: {
+							title: 'CULT',
+							description: `The purpose of CULT is to empower those building and contributing to our decentralized future. Our society makes it as difficult as possible to break away from societal, economic and other norms, and CULT serves to fund and support those who are working to take back our future. CULT is a reminder that the power in people is stronger than the people in power.\n\n CULT is the governance token of the Cult DAO. Every transaction of the CULT token allows you to contribute & fast-forward economic & societal change by contributing a 0.4% tax to the treasury. Fight from within until you get out, or change the system in doing so.`,
+							link: 'https://cultdao.io/',
+						},
+					},
+				],
 			},
 		],
 	},
@@ -197,6 +225,7 @@ const config: EnvConfig = {
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-xdai',
 
 		TOKEN_ADDRESS: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
+		gGIV_ADDRESS: '0xfFBAbEb49be77E5254333d5fdfF72920B989425f',
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		MERKLE_ADDRESS: '0xFad63adEFb8203F7605F25f6a921c8bf45604A5e',
 		TOKEN_DISTRO_ADDRESS: '0xc0dbDcA66a0636236fAbe1B3C16B1bD4C84bB1E1',
@@ -208,6 +237,7 @@ const config: EnvConfig = {
 			GARDEN_ADDRESS: '0x24f2d06446af8d6e89febc205e7936a602a87b60',
 			BUY_LINK:
 				'https://app.honeyswap.org/#/swap?outputCurrency=0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
+			platformTitle: 'GIVPOWER',
 		},
 
 		pools: [
@@ -222,8 +252,7 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://app.honeyswap.org/#/add/0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75/0x71850b7E9Ee3f13Ab46d67167341E4bDc905Eef9',
 				unit: 'LP',
-				active: true,
-				archived: true,
+				farmEndTimeMS: 1656108000000,
 			},
 			{
 				network: XDAI_NETWORK_NUMBER,
@@ -236,9 +265,7 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://gnosis.sushi.com/add/0x6A023CCd1ff6F2045C3309768eAd9E68F978f6e1/0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 				unit: 'LP',
-				active: false,
-				discontinued: SEPT_8TH_2022,
-				archived: true,
+				farmEndTimeMS: 1656108000,
 			},
 			{
 				network: XDAI_NETWORK_NUMBER,
@@ -251,17 +278,15 @@ const config: EnvConfig = {
 				provideLiquidityLink:
 					'https://app.honeyswap.org/#/add/0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75/xdai',
 				unit: 'LP',
-				active: false,
-				discontinued: SEPT_8TH_2022, // change this to  archived: true when it's over
+				farmEndTimeMS: 1656108000000,
 				farmStartTimeMS: 1656086400000,
-				archived: true,
 			},
 		],
 
 		uniswapV2Subgraph:
 			'https://api.thegraph.com/subgraphs/name/1hive/honeyswap-v2',
 
-		regenStreams: [
+		regenFarms: [
 			{
 				tokenDistroAddress:
 					'0xA9a37a14E562D0E1d335B4714E3455483ede7A9a',
@@ -272,30 +297,55 @@ const config: EnvConfig = {
 				rewardTokenSymbol: 'FOX',
 				tokenAddressOnUniswapV2:
 					'0x21a42669643f45bc0e086b8fc2ed70c23d67509d',
-			},
-		],
-		regenFarms: [
-			{
-				network: XDAI_NETWORK_NUMBER,
-				POOL_ADDRESS: '0x8a0bee989c591142414ad67fb604539d917889df',
-				LM_ADDRESS: '0x502EC7a040F486EE6Cb7d634D94764874B29dE68',
-				type: StakingType.HONEYSWAP_FOX_HNY,
-				platform: StakingPlatform.HONEYSWAP,
-				title: 'FOX / HNY',
-				description: '50% FOX, 50% HNY',
-				provideLiquidityLink:
-					'https://app.honeyswap.org/#/add/0x21a42669643f45bc0e086b8fc2ed70c23d67509d/0x71850b7e9ee3f13ab46d67167341e4bdc905eef9?chainId=100',
-				unit: 'LP',
-				regenStreamType: StreamType.FOX,
-				regenFarmType: RegenFarmType.FOX_HNY,
-				introCard: {
-					title: 'FOX',
-					description:
-						'ShapeShift is the free and open-source one-stop-shop for cross-chain DeFi. Buy, sell, send, receive, trade, and earn yield on your crypto across a growing number of protocols and chains with no added fees ever. FOX is the governance token of the ShapeShift DAO.',
-					link: 'https://shapeshift.com/',
-				},
-				farmStartTimeMS: 1649001600000,
-				active: true,
+				pools: [
+					{
+						network: XDAI_NETWORK_NUMBER,
+						POOL_ADDRESS:
+							'0x8a0bee989c591142414ad67fb604539d917889df',
+						LM_ADDRESS:
+							'0x502EC7a040F486EE6Cb7d634D94764874B29dE68',
+						type: StakingType.HONEYSWAP_FOX_HNY,
+						platform: StakingPlatform.HONEYSWAP,
+						title: 'FOX / HNY',
+						description: '50% FOX, 50% HNY',
+						provideLiquidityLink:
+							'https://app.honeyswap.org/#/add/0x21a42669643f45bc0e086b8fc2ed70c23d67509d/0x71850b7e9ee3f13ab46d67167341e4bdc905eef9?chainId=100',
+						unit: 'LP',
+						regenStreamType: StreamType.FOX,
+						regenFarmType: RegenFarmType.FOX_HNY,
+						farmStartTimeMS: 1649001600000,
+						farmEndTimeMS: 1665932450000,
+						introCard: {
+							title: 'ShapeShift DAO',
+							description:
+								'ShapeShift is the free and open-source one-stop-shop for cross-chain DeFi. Buy, sell, send, receive, trade, and earn yield on your crypto across a growing number of protocols and chains with no added fees ever. FOX is the governance token of the ShapeShift DAO.',
+							link: 'https://shapeshift.com/',
+						},
+					},
+					{
+						network: XDAI_NETWORK_NUMBER,
+						POOL_ADDRESS:
+							'0xc22313fd39f7d4d73a89558f9e8e444c86464bac',
+						LM_ADDRESS:
+							'0x9A333AD00868472c0314F76DB8dA305B83890129',
+						type: StakingType.HONEYSWAP_FOX_XDAI,
+						platform: StakingPlatform.HONEYSWAP,
+						title: 'FOX / xDAI',
+						description: '50% FOX, 50% xDAI',
+						provideLiquidityLink:
+							'https://app.honeyswap.org/#/add/0x21a42669643f45bc0e086b8fc2ed70c23d67509d/XDAI?chainId=100',
+						unit: 'LP',
+						regenStreamType: StreamType.FOX,
+						regenFarmType: RegenFarmType.FOX_XDAI,
+						farmStartTimeMS: 1666026660000,
+						introCard: {
+							title: 'ShapeShift DAO',
+							description:
+								'ShapeShift is the free and open-source one-stop-shop for cross-chain DeFi. Buy, sell, send, receive, trade, and earn yield on your crypto across a growing number of protocols and chains with no added fees ever. FOX is the governance token of the ShapeShift DAO.',
+							link: 'https://shapeshift.com/',
+						},
+					},
+				],
 			},
 		],
 	},

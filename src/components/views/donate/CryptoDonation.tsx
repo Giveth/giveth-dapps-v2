@@ -1,30 +1,25 @@
 import styled from 'styled-components';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { Contract } from '@ethersproject/contracts';
-import BigNumber from 'bignumber.js';
+import { useIntl } from 'react-intl';
 import {
-	B,
 	brandColors,
 	Button,
-	Caption,
 	GLink,
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
 // @ts-ignore
 import tokenAbi from 'human-standard-token-abi';
-
 import { captureException } from '@sentry/nextjs';
+
 import { Shadow } from '@/components/styled-components/Shadow';
 import InputBox from './InputBox';
 import CheckBox from '@/components/Checkbox';
 import DonateModal from '@/components/modals/DonateModal';
-import { mediaQueries } from '@/lib/constants/constants';
+import { mediaQueries, minDonationAmount } from '@/lib/constants/constants';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
-import { IProject } from '@/apollo/types/types';
-import { fetchPrice } from '@/services/token';
-import { switchNetwork } from '@/lib/wallet';
 import GeminiModal from './GeminiModal';
 import config from '@/configuration';
 import TokenPicker from './TokenPicker';
@@ -32,12 +27,7 @@ import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { client } from '@/apollo/apolloClient';
 import { PROJECT_ACCEPTED_TOKENS } from '@/apollo/gql/gqlProjects';
-import {
-	formatBalance,
-	formatTxLink,
-	pollEvery,
-	showToastError,
-} from '@/lib/helpers';
+import { formatBalance, pollEvery, showToastError } from '@/lib/helpers';
 import {
 	IProjectAcceptedToken,
 	IProjectAcceptedTokensGQL,
@@ -45,77 +35,58 @@ import {
 import {
 	filterTokens,
 	getNetworkIds,
-	getNetworkNames,
 	prepareTokenList,
 } from '@/components/views/donate/helpers';
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { getERC20Info } from '@/lib/contracts';
 import GIVBackToast from '@/components/views/donate/GIVBackToast';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
-import FailedDonation, {
-	EDonationFailedType,
-} from '@/components/modals/FailedDonation';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import {
-	setShowSignWithWallet,
-	setShowWalletModal,
-} from '@/features/modal/modal.slice';
+import { setShowWalletModal } from '@/features/modal/modal.slice';
 import usePurpleList from '@/hooks/usePurpleList';
+import DonateToGiveth from '@/components/views/donate/DonateToGiveth';
+import TotalDonation from '@/components/views/donate/TotalDonation';
+import SaveGasFees from '@/components/views/donate/SaveGasFees';
+import SwitchToAcceptedChain from '@/components/views/donate/SwitchToAcceptedChain';
+import { useDonateData } from '@/context/donate.context';
+import { useModalCallback } from '@/hooks/useModalCallback';
 
 const ethereumChain = config.PRIMARY_NETWORK;
 const gnosisChain = config.SECONDARY_NETWORK;
-const stableCoins = [gnosisChain.mainToken, 'DAI', 'USDT'];
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
-
-export interface ISuccessDonation {
-	txHash: string;
-	givBackEligible?: boolean;
-}
 
 interface IInputBox {
 	error: boolean;
 	focused: boolean;
 }
 
-const CryptoDonation = (props: {
-	setSuccessDonation: (i: ISuccessDonation) => void;
-	project: IProject;
-}) => {
+const CryptoDonation: FC = () => {
 	const { chainId: networkId, account, library, active } = useWeb3React();
 	const dispatch = useAppDispatch();
+	const { formatMessage } = useIntl();
 	const { isEnabled, isSignedIn, balance } = useAppSelector(
 		state => state.user,
 	);
-	const ethPrice = useAppSelector(state => state.price.ethPrice);
 	const isPurpleListed = usePurpleList();
 
-	const { project, setSuccessDonation } = props;
+	const { project } = useDonateData();
+
 	const {
 		organization,
 		verified,
 		id: projectId,
 		status,
 		addresses,
+		title: projectTitle,
 	} = project;
-	const {
-		supportCustomTokens,
-		name: orgName,
-		label: orgLabel,
-	} = organization || {};
-	const isActive = status?.name === EProjectStatus.ACTIVE;
-	const mainTokenPrice = new BigNumber(ethPrice).toNumber();
 
-	const mainProjectAddress = addresses?.find(
-		a => a.isRecipient && a.networkId === config.PRIMARY_NETWORK.id,
-	)?.address;
-	const secondaryProjectAddress = addresses?.find(
-		a => a.isRecipient && a.networkId === config.SECONDARY_NETWORK.id,
-	)?.address;
+	const { supportCustomTokens, label: orgLabel } = organization || {};
+	const isActive = status?.name === EProjectStatus.ACTIVE;
+	const noDonationSplit = Number(projectId!) === config.GIVETH_PROJECT_ID;
 
 	const [selectedToken, setSelectedToken] = useState<IProjectAcceptedToken>();
 	const [selectedTokenBalance, setSelectedTokenBalance] = useState<any>();
 	const [customInput, setCustomInput] = useState<any>();
-	const [tokenPrice, setTokenPrice] = useState<number>(1);
 	const [amountTyped, setAmountTyped] = useState<number>();
 	const [inputBoxFocused, setInputBoxFocused] = useState(false);
 	const [geminiModal, setGeminiModal] = useState(false);
@@ -123,7 +94,7 @@ const CryptoDonation = (props: {
 	const [erc20OriginalList, setErc20OriginalList] = useState<any>();
 	const [anonymous, setAnonymous] = useState<boolean>(false);
 	// const [selectLoading, setSelectLoading] = useState(false);
-	const [error, setError] = useState<boolean>(false);
+	const [amountError, setAmountError] = useState<boolean>(false);
 	const [tokenIsGivBackEligible, setTokenIsGivBackEligible] =
 		useState<boolean>();
 	const [showDonateModal, setShowDonateModal] = useState(false);
@@ -132,14 +103,17 @@ const CryptoDonation = (props: {
 	const [acceptedTokens, setAcceptedTokens] =
 		useState<IProjectAcceptedToken[]>();
 	const [acceptedChains, setAcceptedChains] = useState<number[]>();
-	const [failedModalType, setFailedModalType] =
-		useState<EDonationFailedType>();
-	const [txHash, setTxHash] = useState<string>();
+	const [donationToGiveth, setDonationToGiveth] = useState(
+		noDonationSplit ? 0 : 5,
+	);
+	const { modalCallback: signInThenDonate } = useModalCallback(() =>
+		setShowDonateModal(true),
+	);
 
 	const stopPolling = useRef<any>(null);
 	const tokenSymbol = selectedToken?.symbol;
-	const isGnosis = networkId === gnosisChain.id;
 	const projectIsGivBackEligible = !!verified;
+	const totalDonation = ((amountTyped || 0) * (donationToGiveth + 100)) / 100;
 
 	useEffect(() => {
 		if (networkId && acceptedTokens) {
@@ -192,39 +166,6 @@ const CryptoDonation = (props: {
 				});
 			});
 	}, []);
-
-	useEffect(() => {
-		const setPrice = async () => {
-			if (
-				selectedToken?.symbol &&
-				stableCoins.includes(selectedToken.symbol)
-			) {
-				setTokenPrice(1);
-			} else if (selectedToken?.symbol === ethereumChain.mainToken) {
-				setTokenPrice(mainTokenPrice || 0);
-			} else if (selectedToken?.address) {
-				let tokenAddress = selectedToken.address;
-				// Coingecko doesn't have these tokens in Gnosis Chain, so fetching price from ethereum
-				if (isGnosis && selectedToken.mainnetAddress) {
-					tokenAddress = selectedToken.mainnetAddress || '';
-				}
-				const coingeckoChainId =
-					!isGnosis || selectedToken.mainnetAddress
-						? ethereumChain.id
-						: gnosisChain.id;
-				const fetchedPrice = await fetchPrice(
-					coingeckoChainId,
-					tokenAddress,
-					setTokenPrice,
-				);
-				setTokenPrice(fetchedPrice || 0);
-			}
-		};
-
-		if (selectedToken) {
-			setPrice().then();
-		}
-	}, [selectedToken, mainTokenPrice]);
 
 	const checkGIVTokenAvailability = () => {
 		if (orgLabel !== ORGANIZATION.givingBlock) return true;
@@ -330,26 +271,18 @@ const CryptoDonation = (props: {
 	};
 
 	const handleDonate = () => {
-		if (selectedTokenBalance < amountTyped!) {
+		if (selectedTokenBalance < totalDonation) {
 			return setShowInsufficientModal(true);
 		}
-		if (!mainProjectAddress && !secondaryProjectAddress) {
-			return showToastError(
-				'There is no eth address assigned for this project',
-			);
-		}
 		if (!isSignedIn) {
-			return dispatch(setShowSignWithWallet(true));
+			signInThenDonate();
+		} else {
+			setShowDonateModal(true);
 		}
-		setShowDonateModal(true);
 	};
 
 	const donationDisabled =
-		!isActive ||
-		!amountTyped ||
-		amountTyped <= 0 ||
-		!selectedToken ||
-		error;
+		!isActive || !amountTyped || !selectedToken || amountError;
 
 	return (
 		<MainContainer>
@@ -357,7 +290,7 @@ const CryptoDonation = (props: {
 			{showChangeNetworkModal && acceptedChains && (
 				<DonateWrongNetwork
 					setShowModal={setShowChangeNetworkModal}
-					targetNetworks={acceptedChains}
+					acceptedChains={acceptedChains}
 				/>
 			)}
 			{showInsufficientModal && (
@@ -368,66 +301,20 @@ const CryptoDonation = (props: {
 			{showDonateModal && selectedToken && amountTyped && (
 				<DonateModal
 					setShowModal={setShowDonateModal}
-					setSuccessDonation={setSuccessDonation}
-					setFailedModalType={setFailedModalType}
-					setTxHash={setTxHash}
-					project={project}
-					mainProjectAddress={mainProjectAddress}
-					secondaryProjectAddress={secondaryProjectAddress}
 					token={selectedToken}
 					amount={amountTyped}
-					price={tokenPrice}
+					donationToGiveth={donationToGiveth}
 					anonymous={anonymous}
 					givBackEligible={
 						projectIsGivBackEligible && tokenIsGivBackEligible
 					}
 				/>
 			)}
-			{failedModalType && (
-				<FailedDonation
-					txUrl={formatTxLink(networkId, txHash)}
-					setShowModal={() => setFailedModalType(undefined)}
-					type={failedModalType}
-				/>
-			)}
 
 			<InputContainer>
-				{networkId &&
-					acceptedChains &&
-					!acceptedChains.includes(networkId) && (
-						<NetworkToast>
-							<div>
-								<Caption medium>
-									Projects from {orgName} only accept
-									donations on{' '}
-									{getNetworkNames(acceptedChains, 'and')}.
-								</Caption>
-							</div>
-							<SwitchCaption
-								onClick={() => switchNetwork(ethereumChain.id)}
-							>
-								Switch network
-							</SwitchCaption>
-						</NetworkToast>
-					)}
-				{networkId &&
-					networkId === ethereumChain.id &&
-					acceptedChains?.includes(gnosisChain.id) && (
-						<NetworkToast>
-							<div>
-								<img src='/images/gas_station.svg' alt='gas' />
-								<Caption medium>
-									Save on gas fees, switch to Gnosis Chain.
-								</Caption>
-							</div>
-							<SwitchCaption
-								onClick={() => switchNetwork(gnosisChain.id)}
-							>
-								Switch network
-							</SwitchCaption>
-						</NetworkToast>
-					)}
-				<SearchContainer error={error} focused={inputBoxFocused}>
+				<SwitchToAcceptedChain acceptedChains={acceptedChains} />
+				<SaveGasFees acceptedChains={acceptedChains} />
+				<SearchContainer error={amountError} focused={inputBoxFocused}>
 					<DropdownContainer>
 						<TokenPicker
 							tokenList={erc20List}
@@ -442,8 +329,12 @@ const CryptoDonation = (props: {
 							onInputChange={handleCustomToken}
 							placeholder={
 								supportCustomTokens
-									? 'Search name or paste an address'
-									: 'Search name'
+									? formatMessage({
+											id: 'component.input.search_or_paste',
+									  })
+									: formatMessage({
+											id: 'component.input.search_name',
+									  })
 							}
 							projectVerified={project?.verified!}
 							disabled={!active}
@@ -451,30 +342,38 @@ const CryptoDonation = (props: {
 					</DropdownContainer>
 					<InputBox
 						value={amountTyped}
-						error={error}
-						setError={setError}
-						errorHandler={{
-							condition: value => value >= 0 && value <= 0.000001,
-							message: 'Set a valid amount',
-						}}
-						type='number'
+						error={amountError}
 						onChange={val => {
 							const checkGIV = checkGIVTokenAvailability();
 							if (/^0+(?=\d)/.test(String(val))) return;
+							setAmountError(
+								val !== undefined
+									? val < minDonationAmount
+									: false,
+							);
 							if (checkGIV) setAmountTyped(val);
 						}}
-						onFocus={(val: any) => setInputBoxFocused(!!val)}
-						placeholder='Amount'
+						onFocus={setInputBoxFocused}
 						disabled={!active}
 					/>
 				</SearchContainer>
 				{selectedToken && (
 					<AvText>
-						Available: {formatBalance(selectedTokenBalance)}{' '}
-						{tokenSymbol}
+						{formatMessage({ id: 'label.available' })}:{' '}
+						{formatBalance(selectedTokenBalance)} {tokenSymbol}
 					</AvText>
 				)}
 			</InputContainer>
+
+			{!noDonationSplit ? (
+				<DonateToGiveth
+					setDonationToGiveth={setDonationToGiveth}
+					donationToGiveth={donationToGiveth}
+				/>
+			) : (
+				<br />
+			)}
+
 			{selectedToken && (
 				<GIVBackToast
 					projectEligible={projectIsGivBackEligible}
@@ -482,53 +381,65 @@ const CryptoDonation = (props: {
 					userEligible={!isPurpleListed}
 				/>
 			)}
-			<CheckBoxContainer>
-				<CheckBox
-					title={'Make it anonymous'}
-					checked={anonymous}
-					onChange={() => setAnonymous(!anonymous)}
+
+			{!noDonationSplit ? (
+				<TotalDonation
+					donationToGiveth={donationToGiveth}
+					donationToProject={amountTyped}
+					projectTitle={projectTitle}
+					tokenSymbol={selectedToken?.symbol}
+					isActive={!donationDisabled}
 				/>
-				<B>
-					By checking this, we won't consider your profile information
-					as a donor for this donation and won't show it on public
-					pages.
-				</B>
-			</CheckBoxContainer>
+			) : (
+				<EmptySpace />
+			)}
 
 			{!isActive && (
 				<InlineToast
 					type={EToastType.Warning}
-					message='This project is not active.'
+					message={formatMessage({
+						id: 'label.this_project_is_not_active',
+					})}
 				/>
 			)}
 
 			{isEnabled && (
-				<>
-					<MainButton
-						label='DONATE'
-						disabled={donationDisabled}
-						size='large'
-						onClick={handleDonate}
-					/>
-					<AnotherWalletTxt>
-						Want to use another wallet?{' '}
-						<span
-							onClick={() => dispatch(setShowWalletModal(true))}
-						>
-							Change Wallet
-						</span>
-					</AnotherWalletTxt>
-				</>
+				<MainButton
+					label={formatMessage({ id: 'label.donate' })}
+					disabled={donationDisabled}
+					size='medium'
+					onClick={handleDonate}
+				/>
 			)}
 			{!isEnabled && (
 				<MainButton
-					label='CONNECT WALLET'
+					label={formatMessage({
+						id: 'component.button.connect_wallet',
+					})}
 					onClick={() => dispatch(setShowWalletModal(true))}
 				/>
 			)}
+
+			<CheckBoxContainer>
+				<CheckBox
+					label={formatMessage({ id: 'label.make_it_anonymous' })}
+					checked={anonymous}
+					onChange={() => setAnonymous(!anonymous)}
+					size={14}
+				/>
+				<div>
+					{formatMessage({
+						id: 'component.tooltip.by_checking_this',
+					})}
+				</div>
+			</CheckBoxContainer>
 		</MainContainer>
 	);
 };
+
+const EmptySpace = styled.div`
+	margin-top: 70px;
+`;
 
 const MainContainer = styled.div`
 	display: flex;
@@ -571,53 +482,21 @@ const DropdownContainer = styled.div`
 	}
 `;
 
-const NetworkToast = styled.div`
-	display: flex;
-	gap: 10px;
-	width: 100%;
-	margin-bottom: 20px;
-	color: ${neutralColors.gray[800]};
-	> :last-child {
-		flex-shrink: 0;
-	}
-	> div:first-child {
-		display: flex;
-	}
-	img {
-		padding-right: 12px;
-	}
-`;
-
-const SwitchCaption = styled(Caption)`
-	color: ${brandColors.pinky[500]};
-	cursor: pointer;
-	margin: 0 auto;
-`;
-
 const MainButton = styled(Button)`
 	width: 100%;
 	background-color: ${props =>
 		props.disabled ? brandColors.giv[200] : brandColors.giv[500]};
 	color: white;
+	text-transform: uppercase;
 `;
 
 const CheckBoxContainer = styled.div`
-	margin: 24px 0;
+	margin-top: 16px;
 	> div:nth-child(2) {
-		color: ${neutralColors.gray[700]};
+		color: ${neutralColors.gray[900]};
 		font-size: 12px;
-		margin-top: 10px;
-	}
-`;
-
-const AnotherWalletTxt = styled(GLink)`
-	font-size: 14px;
-	color: ${neutralColors.gray[800]};
-	padding: 16px 0;
-	text-align: center;
-	> span {
-		color: ${brandColors.pinky[500]};
-		cursor: pointer;
+		margin-top: 3px;
+		margin-left: 24px;
 	}
 `;
 

@@ -1,4 +1,5 @@
 import React, { Dispatch, FC, SetStateAction, useState } from 'react';
+import { useIntl } from 'react-intl';
 import {
 	H5,
 	Caption,
@@ -9,6 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import dynamic from 'next/dynamic';
+import { useFormContext } from 'react-hook-form';
 
 import { InputContainer } from '../Create.sc';
 import { Shadow } from '@/components/styled-components/Shadow';
@@ -17,6 +19,7 @@ import { FlexCenter } from '@/components/styled-components/Flex';
 import ImageUploader from '@/components/ImageUploader';
 import ExternalLink from '@/components/ExternalLink';
 import useUpload from '@/hooks/useUpload';
+import { EInputs } from '@/components/views/create/CreateProject';
 
 const ImageSearch = dynamic(() => import('./ImageSearch'), {
 	ssr: false,
@@ -30,18 +33,25 @@ const unsplashPhoto = (i: string) =>
 	`${unsplashOrgUrl}@${i}${unsplashReferral}`;
 
 interface ImageInputProps {
-	setValue: (img: string) => void;
-	value: string;
 	setIsLoading: Dispatch<SetStateAction<boolean>>;
 }
 
-const ImageInput: FC<ImageInputProps> = ({ value, setValue, setIsLoading }) => {
+const ImageInput: FC<ImageInputProps> = ({ setIsLoading }) => {
+	const { getValues, setValue } = useFormContext();
+	const { formatMessage } = useIntl();
+
+	const [image, setImage] = useState(getValues(EInputs.image));
 	const [isUploadTab, setIsUploadTab] = useState(true);
 	const [attributes, setAttributes] = useState({ name: '', username: '' });
 
-	const useUploadProps = useUpload(setValue, setIsLoading);
+	const handleSetImage = (img: string) => {
+		setImage(img);
+		setValue(EInputs.image, img);
+	};
+
+	const useUploadProps = useUpload(handleSetImage, setIsLoading);
 	const { onDelete } = useUploadProps;
-	const imageUploaderProps = { ...useUploadProps, url: value };
+	const imageUploaderProps = { ...useUploadProps, url: image };
 
 	const removeAttributes = () => setAttributes({ name: '', username: '' });
 
@@ -52,15 +62,19 @@ const ImageInput: FC<ImageInputProps> = ({ value, setValue, setIsLoading }) => {
 
 	const pickBg = (index: number) => {
 		onDelete();
-		setValue(`/images/defaultProjectImages/${index}.png`);
+		handleSetImage(`/images/defaultProjectImages/${index}.png`);
 		removeAttributes();
 	};
 
 	return (
 		<>
-			<H5>Add an image to your project</H5>
+			<H5>
+				{formatMessage({ id: 'label.add_an_image_to_your_project' })}
+			</H5>
 			<CaptionContainer>
-				Displayed in the header of the project page.
+				{formatMessage({
+					id: 'label.displayed_in_the_header_of_the_project',
+				})}
 			</CaptionContainer>
 
 			<Tabs>
@@ -68,13 +82,13 @@ const ImageInput: FC<ImageInputProps> = ({ value, setValue, setIsLoading }) => {
 					onClick={() => setIsUploadTab(true)}
 					isActive={isUploadTab}
 				>
-					Upload cover image
+					{formatMessage({ id: 'label.upload_cover_image' })}
 				</Tab>
 				<Tab
 					onClick={() => setIsUploadTab(false)}
 					isActive={!isUploadTab}
 				>
-					Search for photos
+					{formatMessage({ id: 'label.search_for_photos' })}
 				</Tab>
 			</Tabs>
 
@@ -82,26 +96,31 @@ const ImageInput: FC<ImageInputProps> = ({ value, setValue, setIsLoading }) => {
 				{!isUploadTab && (
 					<ImageSearch
 						setAttributes={setAttributes}
-						setValue={setValue}
+						setValue={handleSetImage}
 						attributes={!!attributes.name}
 					/>
 				)}
-				{(isUploadTab || (!isUploadTab && value)) && (
+				{(isUploadTab || (!isUploadTab && image)) && (
 					<ImageUploader {...imageUploaderProps} />
 				)}
 
 				{attributes.name && (
 					<Attributes>
-						Photo by{' '}
+						{formatMessage({ id: 'label.photo_by' })}{' '}
 						<ExternalLink
 							href={unsplashPhoto(attributes.username)}
 							title={attributes.name}
 						/>{' '}
-						on <ExternalLink href={unsplashUrl} title='Unsplash' />
+						{formatMessage({ id: 'label.on' })}{' '}
+						<ExternalLink href={unsplashUrl} title='Unsplash' />
 					</Attributes>
 				)}
 
-				<Caption>Select an image from our gallery.</Caption>
+				<Caption>
+					{formatMessage({
+						id: 'label.select_an_image_from_our_gallery',
+					})}
+				</Caption>
 				<PickImageContainer>
 					{OurImages.map((imageOption: any, index: number) => (
 						<ColorBox
@@ -112,9 +131,9 @@ const ImageInput: FC<ImageInputProps> = ({ value, setValue, setIsLoading }) => {
 					))}
 					<div>
 						<Separator />
-						<RemoveBox isActive={!!value} onClick={removeImage}>
+						<RemoveBox isActive={!!image} onClick={removeImage}>
 							<IconTrash size={24} />
-							<div>REMOVE</div>
+							<div>{formatMessage({ id: 'label.remove' })}</div>
 						</RemoveBox>
 					</div>
 				</PickImageContainer>
@@ -189,7 +208,7 @@ const RemoveBox = styled(FlexCenter)<{ isActive: boolean }>`
 	flex-direction: column;
 	color: ${props =>
 		props.isActive ? neutralColors.gray[700] : neutralColors.gray[500]};
-
+	text-transform: uppercase;
 	> :first-child {
 		color: inherit;
 	}

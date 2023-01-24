@@ -5,10 +5,11 @@ import {
 	GLink,
 	brandColors,
 	Caption,
-	IconHelp,
 	neutralColors,
+	IconHelpFilled,
 } from '@giveth/ui-design-system';
 import { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import Image from 'next/image';
 import BigNumber from 'bignumber.js';
@@ -41,6 +42,7 @@ export const RewardMenu = ({
 	showWhatIsGIVstreamModal,
 	setShowWhatIsGIVstreamModal,
 }: IRewardMenu) => {
+	const { formatMessage } = useIntl();
 	const [isMounted, setIsMounted] = useState(false);
 	const [farmsLiquidPart, setFarmsLiquidPart] = useState(Zero);
 	const [givStreamLiquidPart, setGIVstreamLiquidPart] = useState(Zero);
@@ -110,15 +112,21 @@ export const RewardMenu = ({
 	return (
 		<>
 			<RewardMenuContainer isMounted={isMounted} theme={theme}>
-				<Overline>NETWORK</Overline>
+				<NetworkTitle>
+					{formatMessage({ id: 'label.network' })}
+				</NetworkTitle>
 				<NetworkRow>
 					<B>{networkName}</B>
-					<SwithNetwork onClick={() => switchNetworkHandler(chainId)}>
-						Switch network
-					</SwithNetwork>
+					<SwitchNetwork
+						onClick={() => switchNetworkHandler(chainId)}
+					>
+						{formatMessage({ id: 'label.switch_network' })}
+					</SwitchNetwork>
 				</NetworkRow>
 				<FlowrateBox theme={theme}>
-					<Overline styleType='Small'>GIVstream Flowrate</Overline>
+					<Overline styleType='Small'>
+						{formatMessage({ id: 'label.givstream_flowrate' })}
+					</Overline>
 					<FlowrateRow>
 						<Image
 							src='/images/icons/thunder.svg'
@@ -129,80 +137,76 @@ export const RewardMenu = ({
 						<FlowrateAmount>
 							{formatWeiHelper(flowRateNow)}
 						</FlowrateAmount>
-						<FlowrateUnit>GIV/week</FlowrateUnit>
+						<FlowrateUnit>
+							GIV/{formatMessage({ id: 'label.week' })}
+						</FlowrateUnit>
 						<IconHelpWraper
 							onClick={() => {
 								setShowWhatIsGIVstreamModal(true);
 							}}
 						>
-							<IconHelp color='currentColor' />
+							<IconHelpFilled />
 						</IconHelpWraper>
 					</FlowrateRow>
 				</FlowrateBox>
-				<Link href={Routes.GIVstream} passHref>
-					<a>
-						<PartRow theme={theme}>
-							<PartInfo>
-								<PartTitle as='span'>From GIVstream</PartTitle>
-								<Flex gap='4px'>
-									<PartAmount medium>
-										{formatWeiHelper(givStreamLiquidPart)}
-									</PartAmount>
-									<PartUnit>GIV</PartUnit>
-								</Flex>
-							</PartInfo>
-							<Image
-								src='/images/rarrow1.svg'
-								height='32'
-								width='16'
-								alt='Thunder image'
-							/>
-						</PartRow>
-					</a>
+				<Link href={Routes.GIVstream}>
+					<PartRow theme={theme}>
+						<PartInfo>
+							<PartTitle as='span'>
+								{formatMessage({ id: 'label.from' })} GIVstream
+							</PartTitle>
+							<Flex gap='4px'>
+								<PartAmount medium>
+									{formatWeiHelper(givStreamLiquidPart)}
+								</PartAmount>
+								<PartUnit>GIV</PartUnit>
+							</Flex>
+						</PartInfo>
+						<Image
+							src='/images/rarrow1.svg'
+							height='32'
+							width='16'
+							alt='Thunder image'
+						/>
+					</PartRow>
 				</Link>
-				<Link href={Routes.GIVfarm} passHref>
-					<a>
-						<PartRow theme={theme}>
-							<PartInfo>
-								<PartTitle as='span'>
-									GIVfarm & GIVgarden
-								</PartTitle>
-								<Flex gap='4px'>
-									<PartAmount medium>
-										{formatWeiHelper(farmsLiquidPart)}
-									</PartAmount>
-									<PartUnit>GIV</PartUnit>
-								</Flex>
-							</PartInfo>
-							<Image
-								src='/images/rarrow1.svg'
-								height='32'
-								width='16'
-								alt='Thunder image'
-							/>
-						</PartRow>
-					</a>
+				<Link href={Routes.GIVfarm}>
+					<PartRow theme={theme}>
+						<PartInfo>
+							<PartTitle as='span'>GIVfarm & GIVgarden</PartTitle>
+							<Flex gap='4px'>
+								<PartAmount medium>
+									{formatWeiHelper(farmsLiquidPart)}
+								</PartAmount>
+								<PartUnit>GIV</PartUnit>
+							</Flex>
+						</PartInfo>
+						<Image
+							src='/images/rarrow1.svg'
+							height='32'
+							width='16'
+							alt='Thunder image'
+						/>
+					</PartRow>
 				</Link>
-				<Link href={Routes.GIVbacks} passHref>
-					<a>
-						<PartRow theme={theme}>
-							<PartInfo>
-								<PartTitle as='span'>GIVbacks</PartTitle>
-								<Flex gap='4px'>
-									<PartAmount medium>
-										{formatWeiHelper(givbackLiquidPart)}
-									</PartAmount>
-									<PartUnit>GIV</PartUnit>
-								</Flex>
-							</PartInfo>
-							<Image
-								src='/images/rarrow1.svg'
-								height='32'
-								width='16'
-								alt='Thunder image'
-							/>
-						</PartRow>
-					</a>
+				<Link href={Routes.GIVbacks}>
+					<PartRow theme={theme}>
+						<PartInfo>
+							<PartTitle as='span'>GIVbacks</PartTitle>
+							<Flex gap='4px'>
+								<PartAmount medium>
+									{formatWeiHelper(givbackLiquidPart)}
+								</PartAmount>
+								<PartUnit>GIV</PartUnit>
+							</Flex>
+						</PartInfo>
+						<Image
+							src='/images/rarrow1.svg'
+							height='32'
+							width='16'
+							alt='Thunder image'
+						/>
+					</PartRow>
 				</Link>
 			</RewardMenuContainer>
 			{showWhatIsGIVstreamModal && (
@@ -220,7 +224,7 @@ export const NetworkRow = styled(Flex)`
 	align-items: center;
 `;
 
-export const SwithNetwork = styled(GLink)`
+export const SwitchNetwork = styled(GLink)`
 	color: ${brandColors.pinky[500]};
 	cursor: pointer;
 `;
@@ -270,6 +274,10 @@ export const PartTitle = styled(Overline)`
 `;
 export const PartAmount = styled(Caption)``;
 export const PartUnit = styled(Caption)``;
+
+const NetworkTitle = styled(Overline)`
+	text-transform: uppercase;
+`;
 
 const IconHelpWraper = styled.div`
 	cursor: pointer;

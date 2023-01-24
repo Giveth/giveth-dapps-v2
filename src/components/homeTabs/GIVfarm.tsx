@@ -5,13 +5,18 @@ import {
 	GLink,
 	IconCopy,
 } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import { BigNumber } from 'bignumber.js';
 import { constants } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
 import { Flex } from '@/components/styled-components/Flex';
 import StakingPoolCard from '@/components/cards/StakingPoolCard';
 import config from '@/configuration';
-import { SimplePoolStakingConfig, StakingType } from '@/types/config';
+import {
+	SimplePoolStakingConfig,
+	StakingType,
+	UniswapV3PoolStakingConfig,
+} from '@/types/config';
 import {
 	GIVfarmTopContainer,
 	Subtitle,
@@ -30,67 +35,56 @@ import { getGivStakingConfig } from '@/helpers/networkProvider';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { useFarms } from '@/context/farm.context';
 import { TopInnerContainer, ExtLinkRow } from './commons';
-import { GIVfrens } from '@/components/GIVfrens';
 import { shortenAddress } from '@/lib/helpers';
 import { Col, Container, Row } from '@/components/Grid';
-import links from '@/lib/constants/links';
-import {
-	DaoCard,
-	DaoCardTitle,
-	DaoCardQuote,
-	DaoCardButton,
-} from '../GIVfrens.sc';
+
+import { GIVfrens } from '@/components/givfarm/GIVfrens';
+import GIVpowerStakingPoolCard from '../cards/GIVpowerStakingPoolCard';
+import { GIVpowerProvider } from '@/context/givpower.context';
+import { DaoCard } from '../givfarm/DaoCard';
+import { getNowUnixMS } from '@/helpers/time';
+import { TWO_WEEK } from '@/lib/constants/constants';
+
+const renderPool = (
+	pool: SimplePoolStakingConfig | UniswapV3PoolStakingConfig,
+	id: number,
+) => (
+	<Col sm={6} lg={4} key={`staking_pool_card_${pool.network}_${id}`}>
+		{pool.type === StakingType.UNISWAPV3_ETH_GIV ? (
+			<StakingPositionCard poolStakingConfig={pool} />
+		) : (
+			<StakingPoolCard
+				poolStakingConfig={pool as SimplePoolStakingConfig}
+			/>
+		)}
+	</Col>
+);
 
 const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
-	const pools = [...config.MAINNET_CONFIG.pools, ...config.XDAI_CONFIG.pools];
-	if (chainId === config.XDAI_NETWORK_NUMBER) {
-		pools.reverse();
+	const pools =
+		chainId === config.XDAI_NETWORK_NUMBER
+			? [...config.XDAI_CONFIG.pools, ...config.MAINNET_CONFIG.pools]
+			: [...config.MAINNET_CONFIG.pools, ...config.XDAI_CONFIG.pools];
+
+	const now = getNowUnixMS();
+	const filteredPools = [];
+	const discontinuedPools = [];
+	for (let i = 0; i < pools.length; i++) {
+		const pool = pools[i];
+		const { farmEndTimeMS } = pool;
+		const archived = farmEndTimeMS && now > farmEndTimeMS + TWO_WEEK;
+		if (!showArchivedPools && archived) continue;
+		if (farmEndTimeMS && now > farmEndTimeMS) {
+			discontinuedPools.push(renderPool(pool, i));
+		} else {
+			filteredPools.push(renderPool(pool, i));
+		}
 	}
-	return pools
-		.filter(p => (showArchivedPools ? true : p.active && !p.archived))
-		.map((poolStakingConfig, idx) => ({ poolStakingConfig, idx }))
-		.sort(
-			(
-				{
-					idx: idx1,
-					poolStakingConfig: { active: active1, archived: archived1 },
-				},
-				{
-					idx: idx2,
-					poolStakingConfig: { active: active2, archived: archived2 },
-				},
-			) =>
-				+active2 - +active1 ||
-				+!!archived2 - +!!archived1 ||
-				idx1 - idx2,
-		)
-		.map(({ poolStakingConfig }, index) => {
-			const network = poolStakingConfig?.network || 0;
-			return (
-				<Col
-					sm={6}
-					lg={4}
-					key={`staking_pool_card_${network}_${index}`}
-				>
-					{poolStakingConfig.type ===
-					StakingType.UNISWAPV3_ETH_GIV ? (
-						<StakingPositionCard
-							poolStakingConfig={poolStakingConfig}
-						/>
-					) : (
-						<StakingPoolCard
-							key={`staking_pool_card_${network}_${index}`}
-							poolStakingConfig={
-								poolStakingConfig as SimplePoolStakingConfig
-							}
-						/>
-					)}
-				</Col>
-			);
-		});
+	return [...filteredPools, ...discontinuedPools];
 };
 
 export const TabGIVfarmTop = () => {
+	const { formatMessage } = useIntl();
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
 	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
@@ -114,13 +108,19 @@ export const TabGIVfarmTop = () => {
 							<IconGIVFarm size={64} />
 						</Flex>
 						<Subtitle size='medium'>
-							Stake tokens in the GIVfarm to grow your rewards.
+							{formatMessage({
+								id: 'label.stake_tokens_in_the_givfarm',
+							})}
 						</Subtitle>
 					</Col>
 					<Col xs={12} sm={5} xl={4}>
 						<GIVfarmRewardCard
-							title='Your GIVfarm rewards'
-							wrongNetworkText='GIVfarm is only available on Mainnet and Gnosis Chain.'
+							title={formatMessage({
+								id: 'label.your_givfarm_rewards',
+							})}
+							wrongNetworkText={formatMessage({
+								id: 'label.givfarm_is_only_available_on_main_and_gnosis',
+							})}
 							liquidAmount={rewardLiquidPart}
 							stream={rewardStream}
 							network={chainId}
@@ -137,6 +137,7 @@ export const TabGIVfarmTop = () => {
 };
 
 export const TabGIVfarmBottom = () => {
+	const { formatMessage } = useIntl();
 	const { chainId } = useWeb3React();
 	const [showArchivedPools, setArchivedPools] = useState(false);
 
@@ -153,17 +154,19 @@ export const TabGIVfarmBottom = () => {
 					<Flex alignItems='center' gap='24px' wrap={1}>
 						<ExtLinkRow alignItems='center'>
 							<GLink
+								as='a'
 								size='Big'
 								target='_blank'
 								rel='noreferrer'
 								href='https://omni.xdaichain.com/bridge'
 							>
-								Bridge your GIV
+								{formatMessage({ id: 'label.bridge_your_giv' })}
 							</GLink>
 							<IconExternalLink />
 						</ExtLinkRow>
 						<ExtLinkRow alignItems='center'>
 							<GLink
+								as='a'
 								size='Big'
 								target='_blank'
 								rel='noreferrer'
@@ -173,12 +176,14 @@ export const TabGIVfarmBottom = () => {
 										: config.MAINNET_CONFIG.GIV.BUY_LINK
 								}
 							>
-								Buy GIV token
+								{formatMessage({ id: 'label.buy_giv_token' })}
 							</GLink>
 							<IconExternalLink />
 						</ExtLinkRow>
 						<ContractRow>
-							<GLink>{`Contract (${
+							<GLink>{`${formatMessage({
+								id: 'label.contract',
+							})} (${
 								chainId === config.XDAI_NETWORK_NUMBER
 									? config.XDAI_CONFIG.chainName
 									: config.MAINNET_CONFIG.chainName
@@ -207,56 +212,33 @@ export const TabGIVfarmBottom = () => {
 				</Flex>
 				<ArchivedPoolsToggle>
 					<RadioButton
-						title='Show archived pools'
+						title={formatMessage({
+							id: 'label.show_archived_pools',
+						})}
 						toggleRadio={() => setArchivedPools(!showArchivedPools)}
 						isSelected={showArchivedPools}
 					/>
 				</ArchivedPoolsToggle>
-				<>
-					<PoolRow>
+				<PoolRow>
+					<GIVpowerProvider>
+						<Col sm={6} lg={4} key={`givpower_card`}>
+							<GIVpowerStakingPoolCard />
+						</Col>
+					</GIVpowerProvider>
+					{showArchivedPools && (
 						<Col sm={6} lg={4}>
 							<StakingPoolCard
 								poolStakingConfig={getGivStakingConfig(
-									config.XDAI_CONFIG,
+									config.MAINNET_CONFIG,
 								)}
 							/>
 						</Col>
-						{showArchivedPools && (
-							<Col sm={6} lg={4}>
-								<StakingPoolCard
-									poolStakingConfig={getGivStakingConfig(
-										config.MAINNET_CONFIG,
-									)}
-								/>
-							</Col>
-						)}
-						{renderPools(chainId, showArchivedPools)}
-					</PoolRow>
-					{chainId === config.XDAI_NETWORK_NUMBER ? (
-						<GIVfrens
-							regenFarms={config.XDAI_CONFIG.regenFarms}
-							network={config.XDAI_NETWORK_NUMBER}
-						/>
-					) : (
-						<GIVfrens
-							regenFarms={config.MAINNET_CONFIG.regenFarms}
-							network={config.MAINNET_NETWORK_NUMBER}
-						/>
 					)}
-				</>
+					{renderPools(chainId, showArchivedPools)}
+				</PoolRow>
+				<GIVfrens showArchivedPools={showArchivedPools} />
 				<Col xs={12}>
-					<DaoCard>
-						<DaoCardTitle weight={900}>Add Your DAO</DaoCardTitle>
-						<DaoCardQuote size='small'>
-							Apply to kickstart a RegenFarm for your for-good DAO
-						</DaoCardQuote>
-						<DaoCardButton
-							label='APPLY NOW'
-							linkType='primary'
-							href={links.JOINGIVFRENS}
-							target='_blank'
-						/>
-					</DaoCard>
+					<DaoCard />
 				</Col>
 			</Container>
 		</GIVfarmBottomContainer>

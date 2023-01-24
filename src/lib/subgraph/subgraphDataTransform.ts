@@ -9,8 +9,10 @@ import {
 	IUniswapV2Pair,
 	IUniswapV3Pool,
 	IUniswapV3Position,
+	IGIVpower,
 } from '@/types/subgraph';
 import config from '@/configuration';
+import { getGIVpowerRoundsInfo } from '@/helpers/givpower';
 import type { ISubgraphState } from '@/features/subgraph/subgraph.types';
 
 export const transformTokenDistro = (info: any = {}): ITokenDistro => {
@@ -174,6 +176,28 @@ export const transformTokenDistroBalance = (info: any): ITokenDistroBalance => {
 	};
 };
 
+const transformGIVpowerInfo = (info: any = {}): IGIVpower => {
+	const id = info.id || '';
+	const initialDate = info.initialDate || '0';
+	const locksCreated = Number(info.locksCreated || 0);
+	const totalGIVLocked = info.totalGIVLocked || '0';
+	const roundDuration = Number(info.roundDuration || 0);
+	return {
+		id,
+		initialDate,
+		locksCreated,
+		roundDuration,
+		totalGIVLocked,
+		...getGIVpowerRoundsInfo(initialDate, roundDuration),
+	};
+};
+
+export const transformUserGIVLocked = (info: any = {}): ITokenBalance => {
+	return {
+		balance: info?.givLocked || '0',
+	};
+};
+
 export const transformSubgraphData = (data: any = {}): ISubgraphState => {
 	const result: ISubgraphState = {};
 	Object.entries(data).forEach(([key, value]) => {
@@ -197,6 +221,14 @@ export const transformSubgraphData = (data: any = {}): ISubgraphState => {
 			case key.startsWith('tokenDistroBalance_'):
 				result[key] = transformTokenDistroBalance(value);
 				break;
+			case key === 'givpowerInfo':
+				result[key] = transformGIVpowerInfo(value);
+				break;
+
+			case key === 'userGIVLocked':
+				result[key] = transformUserGIVLocked(value);
+				break;
+
 			default:
 		}
 	});

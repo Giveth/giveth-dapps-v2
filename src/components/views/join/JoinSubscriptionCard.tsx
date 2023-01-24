@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import {
 	brandColors,
 	neutralColors,
@@ -26,27 +27,25 @@ const JoinSubscriptionCard = () => {
 		error,
 		successSubscription,
 	} = useNewsletterSubscription();
+	const { formatMessage } = useIntl();
 	const titleText = successSubscription
-		? `You're In!`
-		: 'Subscribe to our newsletter';
+		? formatMessage({ id: 'page.home.section.you_in' })
+		: formatMessage({ id: 'label.subscribe_to_our_newsletter' });
 	const captionText = successSubscription ? (
 		<span>
-			We just sent you an email to confirm your subscription! Once you do,
-			you'll receive the next issue of our newsletter in your inbox. If
-			you'd like to view previous issues, visit our{' '}
+			{formatMessage({ id: 'label.we_just_sent_you_an_email' })}{' '}
 			<StyledLink
 				href='http://news.giveth.io/'
 				target='_blank'
 				rel='noreferrer'
 			>
-				GIVnews page
+				{formatMessage({ id: 'label.givnews_page' })}
 			</StyledLink>
 			.
 		</span>
 	) : (
 		<span>
-			Subscribe to our newsletter to get the latest news, updates and
-			amazing offers delivered directly straight to your mailbox!
+			{formatMessage({ id: 'label.subscribe_to_our_newsletter.desc' })}
 		</span>
 	);
 	return (
@@ -67,7 +66,9 @@ const JoinSubscriptionCard = () => {
 						<SubscriptionActionWrapper>
 							<InputWrapper>
 								<EmailInput
-									placeholder='Your Email Address'
+									placeholder={formatMessage({
+										id: 'component.button.your_email_address',
+									})}
 									error={error}
 									name='member[email]'
 									id='member_email'
@@ -75,13 +76,17 @@ const JoinSubscriptionCard = () => {
 								/>
 								{error && (
 									<InvalidEmail>
-										Please insert a valid email address!
+										{formatMessage({
+											id: 'label.please_set_a_valid_email',
+										})}
 									</InvalidEmail>
 								)}
 							</InputWrapper>
 							<CustomizedButtonStyled
 								disabled={!validateEmail(email)}
-								label='Subscribe'
+								label={formatMessage({
+									id: 'component.button.subscribe',
+								})}
 								buttonType='primary'
 								type='submit'
 							/>

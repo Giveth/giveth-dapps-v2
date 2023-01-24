@@ -1,53 +1,122 @@
 import {
 	brandColors,
+	GLink,
 	IconCheck,
 	neutralColors,
-	P,
 } from '@giveth/ui-design-system';
-import styled from 'styled-components';
-import { FlexCenter } from '@/components/styled-components/Flex';
+import styled, { css } from 'styled-components';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+import type { FC } from 'react';
 
-const CheckBox = (props: {
+interface ICheckBox {
 	onChange: (e: boolean) => void;
-	title: string;
+	label: string;
 	checked?: boolean;
 	disabled?: boolean;
+	size?: 12 | 14 | 16 | 20 | 24 | 32;
+	labelSize?: 'Tiny' | 'Small' | 'Medium' | 'Big';
+}
+
+const CheckBox: FC<ICheckBox> = ({
+	onChange,
+	checked,
+	label,
+	disabled,
+	size = 24,
+	labelSize = 'Big',
 }) => {
-	const { onChange, checked, title, disabled } = props;
 	return (
 		<Wrapper
 			onClick={() => !disabled && onChange(!checked)}
 			disabled={disabled}
 			checked={checked}
+			size={size}
+			alignItems='center'
 		>
 			<FlexCenter>
-				{checked && <IconCheck size={24} color='white' />}
+				{checked && <IconCheck size={size} color='white' />}
 			</FlexCenter>
-			<P>{title}</P>
+			<GLink size={labelSize}>{label}</GLink>
 		</Wrapper>
 	);
 };
 
-const Wrapper = styled.div<{ disabled?: boolean; checked?: boolean }>`
+const Wrapper = styled(Flex)<{
+	size: number;
+	disabled?: boolean;
+	checked?: boolean;
+}>`
 	cursor: pointer;
-	display: flex;
-	align-items: center;
-	gap: 12px;
 	color: ${props =>
-		props.disabled ? neutralColors.gray[600] : neutralColors.gray[900]};
+		props.disabled ? neutralColors.gray[600] : neutralColors.gray[800]};
 	> div:first-child {
-		border: 2px solid
-			${props =>
-				props.disabled
-					? neutralColors.gray[400]
-					: neutralColors.gray[900]};
-		border-radius: 4px;
-		width: 20px;
-		height: 20px;
+		border-color: ${props =>
+			props.disabled ? neutralColors.gray[400] : neutralColors.gray[900]};
+		border-style: solid;
 		flex-shrink: 0;
-		background: ${props =>
-			props.checked ? brandColors.deep[900] : 'white'};
+		width: ${props => `${props.size}px`};
+		height: ${props => `${props.size}px`};
+		background-color: ${props =>
+			props.checked ? brandColors.deep[900] : 'transparent'};
+		transition: background-color 0.3s ease;
 	}
+	${props => {
+		switch (props.size) {
+			case 12:
+				return css`
+					gap: 10px;
+					> div:first-child {
+						border-width: 1px;
+						border-radius: 2px;
+					}
+					> span:last-child {
+						font-size: 0.75rem;
+					}
+				`;
+			case 14:
+				return css`
+					gap: 10px;
+					> div:first-child {
+						border-width: 1px;
+						border-radius: 2px;
+					}
+				`;
+			case 16:
+				return css`
+					gap: 10px;
+					> div:first-child {
+						border-width: 1px;
+						border-radius: 3px;
+					}
+				`;
+			case 20:
+				return css`
+					gap: 10px;
+					> div:first-child {
+						border-width: 2px;
+						border-radius: 4px;
+					}
+				`;
+			case 24:
+				return css`
+					gap: 12px;
+					> div:first-child {
+						border-width: 2px;
+						border-radius: 4px;
+					}
+				`;
+			case 32:
+				return css`
+					gap: 12px;
+					> div:first-child {
+						border-width: 2px;
+						border-radius: 4px;
+					}
+				`;
+			default:
+				break;
+		}
+	}};
 `;
 
 export default CheckBox;

@@ -1,63 +1,24 @@
 import { gql } from '@apollo/client';
 
-export const FETCH_HOME_PROJECTS = gql`
-	query FetchAllProjects(
-		$limit: Int
-		$orderBy: OrderBy
-		$connectedWalletUserId: Int
-	) {
-		projects(
-			take: $limit
-			orderBy: $orderBy
-			connectedWalletUserId: $connectedWalletUserId
-		) {
-			projects {
-				id
-				title
-				image
-				slug
-				description
-				verified
-				totalDonations
-				traceCampaignId
-				reaction {
-					id
-					userId
-				}
-				totalReactions
-				adminUser {
-					name
-					walletAddress
-				}
-				updatedAt
-				organization {
-					name
-					label
-					supportCustomTokens
-				}
-			}
-			totalCount
-		}
-	}
-`;
-
 export const FETCH_ALL_PROJECTS = gql`
 	query FetchAllProjects(
 		$limit: Int
 		$skip: Int
-		$orderBy: OrderBy
-		$filterBy: FilterBy
+		$sortingBy: SortingField
+		$filters: [FilterField!]
 		$searchTerm: String
 		$category: String
+		$mainCategory: String
 		$connectedWalletUserId: Int
 	) {
-		projects(
-			take: $limit
+		allProjects(
+			limit: $limit
 			skip: $skip
-			orderBy: $orderBy
-			filterBy: $filterBy
+			sortingBy: $sortingBy
+			filters: $filters
 			searchTerm: $searchTerm
 			category: $category
+			mainCategory: $mainCategory
 			connectedWalletUserId: $connectedWalletUserId
 		) {
 			projects {
@@ -83,6 +44,11 @@ export const FETCH_ALL_PROJECTS = gql`
 					name
 					label
 					supportCustomTokens
+				}
+				projectPower {
+					powerRank
+					totalPower
+					round
 				}
 			}
 			totalCount
@@ -105,7 +71,6 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 			slug
 			description
 			verified
-			verificationStatus
 			traceCampaignId
 			addresses {
 				address
@@ -124,6 +89,10 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 			traceCampaignId
 			categories {
 				name
+				value
+				mainCategory {
+					title
+				}
 			}
 			adminUser {
 				id
@@ -141,6 +110,17 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 			}
 			projectVerificationForm {
 				status
+			}
+			verificationFormStatus
+			projectPower {
+				powerRank
+				totalPower
+				round
+			}
+			projectFuturePower {
+				totalPower
+				powerRank
+				round
 			}
 		}
 	}
@@ -161,12 +141,26 @@ export const FETCH_PROJECT_BY_ID = gql`
 			impactLocation
 			categories {
 				name
+				value
 			}
 			adminUser {
 				walletAddress
 			}
 			status {
 				name
+			}
+			slug
+		}
+	}
+`;
+
+export const FETCH_GIVETH_PROJECT_BY_ID = gql`
+	query ProjectById($id: Float!) {
+		projectById(id: $id) {
+			addresses {
+				address
+				isRecipient
+				networkId
 			}
 			slug
 		}
@@ -286,6 +280,7 @@ export const FETCH_USER_LIKED_PROJECTS = gql`
 				totalDonations
 				categories {
 					name
+					value
 				}
 				reaction {
 					id
@@ -339,6 +334,7 @@ export const CREATE_PROJECT = gql`
 			}
 			categories {
 				name
+				value
 			}
 		}
 	}
@@ -365,6 +361,7 @@ export const UPDATE_PROJECT = gql`
 			impactLocation
 			categories {
 				name
+				value
 			}
 		}
 	}
@@ -412,7 +409,7 @@ export const ACTIVATE_PROJECT = gql`
 	}
 `;
 
-export const TITLE_IS_VALID = gql`
+export const TITLE_IS_VALID = `
 	query IsValidTitleForProject($title: String!, $projectId: Float) {
 		isValidTitleForProject(title: $title, projectId: $projectId)
 	}
@@ -455,6 +452,22 @@ export const SIMILAR_PROJECTS = gql`
 					name
 					label
 				}
+			}
+		}
+	}
+`;
+
+export const FETCH_MAIN_CATEGORIES = gql`
+	query {
+		mainCategories {
+			title
+			banner
+			slug
+			description
+			categories {
+				name
+				value
+				isActive
 			}
 		}
 	}

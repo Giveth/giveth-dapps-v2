@@ -7,6 +7,8 @@ import {
 } from '@giveth/ui-design-system';
 import BigNumber from 'bignumber.js';
 import { useWeb3React } from '@web3-react/core';
+import Link from 'next/link';
+import { useIntl } from 'react-intl';
 import { Flex } from '../styled-components/Flex';
 import {
 	GIVbacksTopContainer,
@@ -44,6 +46,7 @@ import { useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
 export const TabGIVbacksTop = () => {
+	const { formatMessage } = useIntl();
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
 	const [showGivBackExplain, setShowGivBackExplain] = useState(false);
 	const [givBackStream, setGivBackStream] = useState<BigNumber.Value>(0);
@@ -73,20 +76,26 @@ export const TabGIVbacksTop = () => {
 								<IconGIVBack size={64} />
 							</Flex>
 							<GBSubtitle size='medium'>
-								GIVbacks rewards donors to verified projects
-								with GIV, super-charging Giveth as a
-								donor-driven force for good.
+								{formatMessage({
+									id: 'label.givbacks_rewards_donors_to_verified_projects',
+								})}
 							</GBSubtitle>
 						</Col>
 						<Col xs={12} sm={5} xl={4}>
 							<GIVbackRewardCard
-								title='Your GIVbacks rewards'
-								wrongNetworkText='GIVbacks is only available on Gnosis Chain.'
+								title={formatMessage({
+									id: 'label.your_givbacks_rewards',
+								})}
+								wrongNetworkText={formatMessage({
+									id: 'label.givbacks_is_only_available_on_gnosis',
+								})}
 								liquidAmount={BN(
 									givTokenDistroBalance.givbackLiquidPart,
 								)}
 								stream={givBackStream}
-								actionLabel='HARVEST'
+								actionLabel={formatMessage({
+									id: 'label.harvest',
+								})}
 								actionCb={() => {
 									setShowHarvestModal(true);
 								}}
@@ -94,7 +103,9 @@ export const TabGIVbacksTop = () => {
 									BN(
 										givTokenDistroBalance.givbackLiquidPart,
 									)?.isZero()
-										? "Why don't I have GIVbacks?"
+										? formatMessage({
+												id: 'label.why_dont_i_have_givbacks',
+										  })
 										: undefined
 								}
 								subButtonCb={() => setShowGivBackExplain(true)}
@@ -107,7 +118,7 @@ export const TabGIVbacksTop = () => {
 			</GIVbacksTopContainer>
 			{showHarvestModal && (
 				<HarvestAllModal
-					title='GIVbacks Rewards'
+					title={formatMessage({ id: 'label.givbacks_rewards' })}
 					setShowModal={setShowHarvestModal}
 					network={config.XDAI_NETWORK_NUMBER}
 					tokenDistroHelper={givTokenDistroHelper}
@@ -121,34 +132,33 @@ export const TabGIVbacksTop = () => {
 };
 
 export const TabGIVbacksBottom = () => {
+	const { formatMessage, locale } = useIntl();
 	const [round, setRound] = useState(0);
-	const [roundStartime, setRoundStartime] = useState(new Date());
+	const [roundStarTime, setRoundStarTime] = useState(new Date());
 	const [roundEndTime, setRoundEndTime] = useState(new Date());
-	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
-
+	const { givTokenDistroHelper, isLoaded } = useGIVTokenDistroHelper();
 	useEffect(() => {
-		if (givTokenDistroHelper) {
+		if (
+			givTokenDistroHelper &&
+			isLoaded &&
+			givTokenDistroHelper.startTime.getTime() !== 0
+		) {
 			const now = getNowUnixMS();
-			const deltaT = now - givTokenDistroHelper.startTime.getTime();
+			const ROUND_20_OFFSET = 4; // At round 20 we changed the rounds from Fridays to Tuesdays
+			const startTime = new Date(givTokenDistroHelper.startTime);
+			startTime.setDate(startTime.getDate() + ROUND_20_OFFSET);
+			const deltaT = now - startTime.getTime();
 			const TwoWeek = 1_209_600_000;
 			const _round = Math.floor(deltaT / TwoWeek) + 1;
 			setRound(_round);
-			const _rounStartTime = new Date(givTokenDistroHelper.startTime);
-			_rounStartTime.setDate(
-				givTokenDistroHelper.startTime.getDate() + (_round - 1) * 14,
-			);
-			_rounStartTime.setHours(givTokenDistroHelper.startTime.getHours());
-			_rounStartTime.setMinutes(
-				givTokenDistroHelper.startTime.getMinutes(),
-			);
-			setRoundStartime(_rounStartTime);
-			const _roundEndTime = new Date(_rounStartTime);
-			_roundEndTime.setDate(_rounStartTime.getDate() + 14);
-			_roundEndTime.setHours(givTokenDistroHelper.startTime.getHours());
-			_roundEndTime.setMinutes(
-				givTokenDistroHelper.startTime.getMinutes(),
-			);
+			const _roundEndTime = new Date(startTime);
+			_roundEndTime.setDate(startTime.getDate() + _round * 14);
+			_roundEndTime.setHours(startTime.getHours());
+			_roundEndTime.setMinutes(startTime.getMinutes());
 			setRoundEndTime(_roundEndTime);
+			const _roundStartTime = new Date(_roundEndTime);
+			_roundStartTime.setDate(_roundEndTime.getDate() - 14);
+			setRoundStarTime(_roundStartTime);
 		}
 	}, [givTokenDistroHelper]);
 
@@ -158,37 +168,45 @@ export const TabGIVbacksBottom = () => {
 				<Row>
 					<Col xs={12} sm={6}>
 						<GbDataBlock
-							title='Donor Rewards'
+							title={formatMessage({ id: 'label.donor_rewards' })}
 							button={
-								<GbButton
-									label='DONATE TO EARN GIV'
-									linkType='secondary'
-									size='large'
-									href={Routes.Projects}
-								/>
+								<Link href={Routes.Projects}>
+									<GbButton
+										label={formatMessage({
+											id: 'label.donate_to_earn_giv',
+										})}
+										linkType='secondary'
+										size='large'
+									/>
+								</Link>
 							}
 						>
-							When you donate to verified projects you qualify to
-							receive GIV tokens. Through GIVbacks, GIV empowers
-							donors with governance rights via the GIVgarden.
+							{formatMessage({
+								id: 'label.when_you_donate_to_Verified_projects',
+							})}
 						</GbDataBlock>
 					</Col>
 					<Col xs={12} sm={6}>
 						<GbDataBlock
-							title='Project Verification'
+							title={formatMessage({
+								id: 'label.project_verification',
+							})}
 							button={
 								<GbButton
-									label='VERIFY YOUR PROJECT'
+									isExternal
+									label={formatMessage({
+										id: 'label.verify_your_project',
+									})}
 									linkType='secondary'
 									size='large'
-									href='https://giveth.typeform.com/verification'
+									href={links.VERIFICATION_DOCS}
 									target='_blank'
 								/>
 							}
 						>
-							Great projects make the GIVeconomy thrive! As a
-							project owner, when you get your project verified,
-							your donors become eligible to receive GIVbacks.
+							{formatMessage({
+								id: 'label.great_projects_make_the_giveconomy_thrive',
+							})}
 						</GbDataBlock>
 					</Col>
 				</Row>
@@ -197,7 +215,11 @@ export const TabGIVbacksBottom = () => {
 						<Col xs={12} md={8}>
 							<RoundSection>
 								<RoundTitle>
-									GIVbacks <NoWrap>Round {round}</NoWrap>
+									GIVbacks{' '}
+									<NoWrap>
+										{formatMessage({ id: 'label.round' })}{' '}
+										{isLoaded ? round : '--'}
+									</NoWrap>
 								</RoundTitle>
 								<RoundInfo>
 									<RoundInfoTallRow
@@ -207,13 +229,20 @@ export const TabGIVbacksBottom = () => {
 									>
 										{' '}
 										<P>
-											<NoWrap>Start Date</NoWrap>
+											<NoWrap>
+												{formatMessage({
+													id: 'label.start_date',
+												})}
+											</NoWrap>
 										</P>
 										<P>
 											<NoWrap>
-												{givTokenDistroHelper
-													? formatDate(roundStartime)
-													: '-'}
+												{isLoaded
+													? formatDate(
+															roundStarTime,
+															locale,
+													  )
+													: '--'}
 											</NoWrap>
 										</P>
 									</RoundInfoTallRow>
@@ -223,13 +252,20 @@ export const TabGIVbacksBottom = () => {
 										wrap={1}
 									>
 										<P>
-											<NoWrap>End Date</NoWrap>
+											<NoWrap>
+												{formatMessage({
+													id: 'label.end_date',
+												})}
+											</NoWrap>
 										</P>
 										<P>
 											<NoWrap>
-												{givTokenDistroHelper
-													? formatDate(roundEndTime)
-													: '-'}
+												{isLoaded
+													? formatDate(
+															roundEndTime,
+															locale,
+													  )
+													: '--'}
 											</NoWrap>
 										</P>
 									</RoundInfoTallRow>
@@ -240,19 +276,28 @@ export const TabGIVbacksBottom = () => {
 									>
 										<P>
 											<NoWrap>
-												GIV Allocated to Round
+												{formatMessage({
+													id: 'label.giv_allocated_to_round',
+												})}
 											</NoWrap>
 										</P>
 										<GivAllocated>
-											<NoWrap>1 Million GIV</NoWrap>
+											<NoWrap>
+												{formatMessage({
+													id: 'label.one_million_giv',
+												})}
+											</NoWrap>
 										</GivAllocated>
 									</RoundInfoTallRow>
-									<RoundButton
-										size='small'
-										label={'DONATE TO EARN GIV'}
-										linkType='primary'
-										href={Routes.Projects}
-									/>
+									<Link href={Routes.Projects}>
+										<RoundButton
+											size='small'
+											label={formatMessage({
+												id: 'label.donate_to_earn_giv',
+											})}
+											linkType='primary'
+										/>
+									</Link>
 								</RoundInfo>
 							</RoundSection>
 						</Col>
@@ -260,22 +305,25 @@ export const TabGIVbacksBottom = () => {
 							<InfoSection>
 								<InfoImage src='/images/hands.svg' />
 								<InfoTitle weight={700}>
-									When you give you get GIV back!
+									{formatMessage({
+										id: 'label.when_you_giv_you_get_giv_back',
+									})}
 								</InfoTitle>
 								<InfoDesc>
-									Each GIVbacks round lasts two weeks. After
-									the End Date, the GIV Allocated to that
-									round is distributed to Givers who donated
-									to verified projects during the round.
-									Projects must apply for verification at
-									least 1 week prior to the Start Date in
-									order to be included in the round.
+									{formatMessage({
+										id: 'label.each_givbacks_round_lasts_two_weeks',
+									})}
 								</InfoDesc>
 								<InfoReadMore
+									as='a'
 									target='_blank'
 									href={links.GIVBACK_DOC}
 								>
-									<span>Read More </span>
+									<span>
+										{formatMessage({
+											id: 'label.read_more',
+										})}{' '}
+									</span>
 									<IconExternalLink
 										size={16}
 										color={brandColors.cyan[500]}

@@ -13,6 +13,7 @@ import {
 	OutlineButton,
 } from '@giveth/ui-design-system';
 
+import { useIntl } from 'react-intl';
 import { Modal } from './Modal';
 import FacebookIcon from '../../../public/images/social-fb.svg';
 import LinkedinIcon from '../../../public/images/social-linkedin.svg';
@@ -32,22 +33,27 @@ interface IShareModal extends IModal {
 const ShareModal = ({ projectHref, setShowModal }: IShareModal) => {
 	const url = fullPath(slugToProjectView(projectHref));
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const { formatMessage } = useIntl();
 
 	return (
 		<Modal
 			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerIcon={<Image src={ShareIcon} alt='share icon' />}
-			headerTitle='Share'
+			headerTitle={formatMessage({ id: 'label.share' })}
 			headerTitlePosition='left'
 		>
 			<Container>
-				<Subtitle weight={700}>Share this with your friends!</Subtitle>
+				<Subtitle weight={700}>
+					{formatMessage({ id: 'label.share_this' })}!
+				</Subtitle>
 				<FlexCenter gap={'16px'}>
 					<SocialButtonContainer>
 						<TwitterShareButton
 							hashtags={['giveth']}
-							title={'Check out on @Givethio'}
+							title={`${formatMessage({
+								id: 'label.check_out_on',
+							})} @Givethio`}
 							url={url}
 						>
 							<Image src={TwitterIcon} alt='twitter icon' />
@@ -55,7 +61,9 @@ const ShareModal = ({ projectHref, setShowModal }: IShareModal) => {
 					</SocialButtonContainer>
 					<SocialButtonContainer>
 						<LinkedinShareButton
-							title={'Check out on @Givethio'}
+							title={`${formatMessage({
+								id: 'label.check_out_on',
+							})} @Givethio`}
 							url={url}
 						>
 							<Image src={LinkedinIcon} alt='twitter icon' />
@@ -64,19 +72,23 @@ const ShareModal = ({ projectHref, setShowModal }: IShareModal) => {
 					<SocialButtonContainer>
 						<FacebookShareButton
 							hashtag='#giveth'
-							quote='Check out on @Givethio'
+							quote={`${formatMessage({
+								id: 'label.check_out_on',
+							})} @Givethio`}
 							url={url}
 						>
 							<Image src={FacebookIcon} alt='facebook icon' />
 						</FacebookShareButton>
 					</SocialButtonContainer>
 				</FlexCenter>
-				<LeadText>Or copy the link</LeadText>
+				<LeadText>
+					{formatMessage({ id: 'label.or_copy_the_link' })}
+				</LeadText>
 				<CopyLink url={url} />
 				<CustomOutlineButton
 					buttonType='texty'
 					size='small'
-					label='dismiss'
+					label={formatMessage({ id: 'label.dismiss' })}
 					onClick={closeModal}
 				/>
 			</Container>

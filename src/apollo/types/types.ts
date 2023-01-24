@@ -6,6 +6,12 @@ import {
 } from '@/apollo/types/gqlEnums';
 import { IAddress } from '@/components/views/verification/manageFunds/ManageFundsIndex';
 
+export interface IProjectPower {
+	powerRank: number;
+	totalPower?: number;
+	round: number;
+}
+
 export interface IProject {
 	id?: string;
 	title?: string;
@@ -49,6 +55,13 @@ export interface IProject {
 		supportCustomTokens: boolean;
 	};
 	projectVerificationForm?: IProjectVerification;
+	projectPower: IProjectPower;
+	verificationFormStatus?: EVerificationStatus;
+	projectFuturePower: IProjectPower;
+}
+
+export interface IDonationProject extends IProject {
+	givethAddresses: IWalletAddress[];
 }
 
 export interface IWalletAddress {
@@ -102,6 +115,7 @@ export interface IUser {
 	projectsCount?: number;
 	donationsCount?: number;
 	likedProjectsCount?: number;
+	boostedProjectsCount?: number;
 	isSignedIn: boolean;
 }
 
@@ -151,6 +165,13 @@ export interface IMediumBlogPost {
 
 export interface ICategory {
 	name: string;
+	value?: string;
+	isActive?: boolean;
+	mainCategory?: Pick<IMainCategory, 'title'>;
+}
+
+export interface IConvertedCategories {
+	[key: string]: { name: string; value: string }[];
 }
 
 export interface IProjectBySlug {
@@ -171,6 +192,14 @@ export interface ISiweMessage {
 	message: string;
 }
 
+export interface IMainCategory {
+	title: string;
+	description: string;
+	banner: string;
+	slug: string;
+	categories: ICategory[];
+	selected?: boolean;
+}
 export interface IProjectRegistry {
 	isNonProfitOrganization?: boolean;
 	organizationCountry?: string;
@@ -190,6 +219,9 @@ export interface IProjectMilestones {
 	mission?: string;
 	achievedMilestones?: string;
 	achievedMilestonesProofs?: string[];
+	problem?: string;
+	plans?: string;
+	impact?: string;
 }
 
 export interface IProjectManagingFunds {
@@ -248,7 +280,14 @@ export enum EVerificationSteps {
 	PROJECT_REGISTRY = 'projectRegistry',
 	PROJECT_CONTACTS = 'projectContacts',
 	MANAGING_FUNDS = 'managingFunds',
-	MILESTONES = 'milestones',
+	IMPACT = 'milestones',
 	TERM_AND_CONDITION = 'termAndCondition',
 	SUBMIT = 'submit',
+}
+
+export interface IPowerBoosting {
+	id: string;
+	user: IUser;
+	project: IProject;
+	percentage: number;
 }

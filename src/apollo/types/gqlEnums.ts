@@ -1,4 +1,4 @@
-export enum gqlEnums {
+export enum ESortby {
 	ACCEPTGIV = 'AcceptGiv',
 	QUALITYSCORE = 'QualityScore',
 	CREATIONDATE = 'CreationDate',
@@ -7,6 +7,16 @@ export enum gqlEnums {
 	TRACEABLE = 'Traceable',
 	HEARTS = 'Reactions',
 	DONATIONS = 'Donations',
+	GIVPOWER = 'GIVPower',
+}
+
+export enum ESortbyAllProjects {
+	MOSTFUNDED = 'MostFunded',
+	MOSTLIKED = 'MostLiked',
+	NEWEST = 'Newest',
+	OLDEST = 'Oldest',
+	QUALITYSCORE = 'QualityScore',
+	GIVPOWER = 'GIVPower',
 }
 
 export enum EProjectStatus {

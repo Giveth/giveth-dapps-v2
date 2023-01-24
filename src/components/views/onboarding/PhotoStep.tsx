@@ -8,7 +8,7 @@ import { captureException } from '@sentry/nextjs';
 import { useWeb3React } from '@web3-react/core';
 import {
 	IStep,
-	OnboardActionsContianer,
+	OnboardActionsContainer,
 	OnboardStep,
 	SaveButton,
 	SkipButton,
@@ -88,7 +88,7 @@ const PhotoStep: FC<IStep> = ({ setStep }) => {
 				Upload a photo that represents who you are.
 			</Desc>
 			<ImageUploader {...useUploadProps} />
-			<OnboardActionsContianer>
+			<OnboardActionsContainer>
 				<Col xs={12} md={7}>
 					<SaveButton
 						label='SAVE'
@@ -105,7 +105,7 @@ const PhotoStep: FC<IStep> = ({ setStep }) => {
 						onClick={() => setStep(OnboardSteps.DONE)}
 					/>
 				</Col>
-			</OnboardActionsContianer>
+			</OnboardActionsContainer>
 		</OnboardStep>
 	);
 };

@@ -1,84 +1,99 @@
 import { H2, Lead, neutralColors, H5 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 
 const AboutMission = () => {
+	const { formatMessage } = useIntl();
+
 	return (
 		<>
 			<MissionVision>
 				<MissionItem>
-					<H2>Our Mission</H2>
+					<H2>{formatMessage({ id: 'label.our_mission' })}</H2>
 					<Lead color={neutralColors.gray[900]}>
-						To build a culture of giving that rewards and empowers
-						those who give - to projects, to society, and to the
-						world.
+						{formatMessage({ id: 'label.our_mission.desc' })}
 					</Lead>
 				</MissionItem>
 				<MissionItem>
-					<H2>Our Vision</H2>
+					<H2>{formatMessage({ id: 'label.our_vision' })}</H2>
 					<Lead color={neutralColors.gray[900]}>
-						Giving is effortless and people all around the world are
-						rewarded for creating positive change.
+						{formatMessage({ id: 'label.our_vision.desc' })}
 					</Lead>
 				</MissionItem>
 			</MissionVision>
 
 			<ValuesItem>
-				<H2>Our Values</H2>
+				<H2>{formatMessage({ id: 'label.our_values' })}</H2>
 			</ValuesItem>
 			<ValuesItem>
-				<H5 className='mb-3'>Giveth encourages Decentralization:</H5>
+				<H5 className='mb-3'>
+					{formatMessage({
+						id: 'label.giveth_encourages_decentralization',
+					})}
+					:
+				</H5>
 				<ul>
 					<ListItem>
-						Giveth offers innovative open-source solutions built on
-						blockchain technology, which is inherently
-						decentralized.
+						{formatMessage({
+							id: 'label.giveth_encourages_decentralization.bullet.one',
+						})}
 					</ListItem>
 					<ListItem>
-						Giveth is pioneering and experimenting with
-						decentralized governance and communication techniques
-						and supporting their adoption by other communities.
+						{formatMessage({
+							id: 'label.giveth_encourages_decentralization.bullet.two',
+						})}
 					</ListItem>
 				</ul>
 			</ValuesItem>
 			<ValuesItem>
-				<H5 className='mb-3'>Giveth promotes Altruism:</H5>
+				<H5 className='mb-3'>
+					{formatMessage({
+						id: 'label.giveth_promotes_altruism',
+					})}
+					:
+				</H5>
 				<ul>
 					<ListItem>
-						Giveth is an open, non-hierarchical global initiative
-						empowering social, environmental and humanistic impact
-						projects with modern technologies.
+						{formatMessage({
+							id: 'label.giveth_promotes_altruism.bullet.one',
+						})}
 					</ListItem>
 					<ListItem>
-						Giveth supports many like-minded initiatives that are
-						adding value to the world without necessarily having a
-						direct profit motive.
+						{formatMessage({
+							id: 'label.giveth_promotes_altruism.bullet.two',
+						})}
 					</ListItem>
 					<ListItem>
-						Giveth is building a self-sustaining giving economy that
-						encourages and rewards altruistic intention.
+						{formatMessage({
+							id: 'label.giveth_promotes_altruism.bullet.three',
+						})}
 					</ListItem>
 				</ul>
 			</ValuesItem>
 			<ValuesItem>
-				<H5 className='mb-3'>Giveth builds Community:</H5>
+				<H5 className='mb-3'>
+					{formatMessage({ id: 'label.giveth_builds_community' })}:
+				</H5>
 				<ul>
 					<ListItem>
-						Giveth is an inclusive community united around a common
-						goal.
+						{formatMessage({
+							id: 'label.giveth_builds_community.bullet.one',
+						})}
 					</ListItem>
 					<ListItem>
-						Giveth is a community-owned platform, building and
-						developing our DApps based on feedback from our members.
+						{formatMessage({
+							id: 'label.giveth_builds_community.bullet.two',
+						})}
 					</ListItem>
 					<ListItem>
-						Giveth enables trust within communities by increasing
-						transparency and accountability through blockchain
-						technology.
+						{formatMessage({
+							id: 'label.giveth_builds_community.bullet.three',
+						})}
 					</ListItem>
 					<ListItem>
-						Giveth proactively reaches out to similar initiatives
-						which we see as potential collaborators, as opposed to
-						competitors.
+						{formatMessage({
+							id: 'label.giveth_builds_community.bullet.four',
+						})}
 					</ListItem>
 				</ul>
 			</ValuesItem>

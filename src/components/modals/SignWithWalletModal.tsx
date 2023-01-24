@@ -1,9 +1,10 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import {
 	brandColors,
 	Button,
-	IconWalletApprove,
+	IconWalletApprove32,
 	Lead,
 	neutralColors,
 } from '@giveth/ui-design-system';
@@ -18,13 +19,16 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { signToGetToken } from '@/features/user/user.thunks';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import { EModalEvents } from '@/hooks/useModalCallback';
 
 interface IProps extends IModal {
 	callback?: () => void;
 }
 
 export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
+	const [loading, setLoading] = useState(false);
 	const theme = useAppSelector(state => state.general.theme);
+	const { formatMessage } = useIntl();
 	const { account, library, chainId } = useWeb3React();
 	const router = useRouter();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
@@ -34,25 +38,29 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 		<Modal
 			closeModal={closeModal}
 			isAnimating={isAnimating}
-			headerIcon={<IconWalletApprove />}
-			headerTitle='Sign Wallet'
+			headerIcon={<IconWalletApprove32 />}
+			headerTitle={formatMessage({ id: 'label.sign_wallet' })}
 			headerTitlePosition='left'
 		>
 			<Container>
 				<Description>
-					You need to authorize your wallet to be able to use it on
-					Giveth.
+					{formatMessage({
+						id: 'label.you_need_to_authorize_your_wallet',
+					})}
 				</Description>
 				<NoteDescription color='red'>
-					Note: This is necessary to be able to donate to projects or
-					receive funding.
+					{formatMessage({
+						id: 'label.note:this_is_necessary_to_donate_to_projects_or_receive_funding',
+					})}
 				</NoteDescription>
 				<OkButton
-					label='SIGN IN'
+					label={formatMessage({ id: 'component.button.sign_in' })}
+					loading={loading}
 					onClick={async () => {
 						if (!account) {
 							return dispatch(setShowWelcomeModal(true));
 						}
+						setLoading(true);
 						const signature = await dispatch(
 							signToGetToken({
 								address: account,
@@ -61,13 +69,20 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 								pathname: router.pathname,
 							}),
 						);
-						closeModal();
-						!!signature && callback && callback();
+						setLoading(false);
+						if (
+							signature &&
+							signature.type === 'user/signToGetToken/fulfilled'
+						) {
+							const event = new Event(EModalEvents.SIGNEDIN);
+							window.dispatchEvent(event);
+							callback && callback();
+						}
 					}}
 					buttonType={theme === ETheme.Dark ? 'secondary' : 'primary'}
 				/>
 				<SkipButton
-					label='SKIP FOR NOW'
+					label={formatMessage({ id: 'label.skip_for_now' })}
 					onClick={closeModal}
 					buttonType='texty'
 				/>

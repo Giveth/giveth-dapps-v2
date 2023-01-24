@@ -1,6 +1,5 @@
 import ReactQuill from 'react-quill';
 import styled from 'styled-components';
-import { mediaQueries } from '@/lib/constants/constants';
 
 const RichTextViewer = (props: { content?: string }) => {
 	return (
@@ -24,10 +23,6 @@ const Wrapper = styled.div`
 
 	.ql-container > .ql-editor {
 		word-break: break-word;
-	}
-
-	${mediaQueries.tablet} {
-		padding: 0 16px;
 	}
 `;
 

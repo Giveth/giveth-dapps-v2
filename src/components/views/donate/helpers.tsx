@@ -4,12 +4,10 @@ import { captureException } from '@sentry/nextjs';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { networksParams } from '@/helpers/blockchain';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
-import { sendTransaction, showToastError } from '@/lib/helpers';
+import { sendTransaction } from '@/lib/helpers';
 import { saveDonation, updateDonation } from '@/services/donation';
-import { IDonateModalProps } from '@/components/modals/DonateModal';
 import { EDonationStatus } from '@/apollo/types/gqlEnums';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
-import config from '@/configuration';
 import { MAX_TOKEN_ORDER } from '@/lib/constants/tokens';
 import { IWalletAddress } from '@/apollo/types/types';
 
@@ -96,35 +94,43 @@ export const getNetworkNames = (networks: number[], text: string) => {
 	});
 };
 
-export interface IConfirmDonation extends IDonateModalProps {
-	setDonationSaved: (value: boolean) => void;
+export interface ICreateDonation {
+	setDonationSaved?: (value: boolean) => void;
 	web3Context: Web3ReactContextInterface;
 	setDonating: (value: boolean) => void;
+	walletAddress: string;
+	projectId: number;
+	amount: number;
+	token: IProjectAcceptedToken;
+	setFailedModalType: (i: EDonationFailedType) => void;
+	setTxHash: (i: string) => void;
+	anonymous?: boolean;
 }
 
-export const confirmDonation = async (props: IConfirmDonation) => {
+export interface ICreateDonationResult {
+	isSaved: boolean;
+	txHash: string;
+}
+
+type TCreateDonation = (i: ICreateDonation) => Promise<ICreateDonationResult>;
+
+export const createDonation: TCreateDonation = async props => {
 	const {
-		mainProjectAddress,
-		secondaryProjectAddress,
+		walletAddress,
 		amount,
 		token,
-		setSuccessDonation,
 		setFailedModalType,
 		web3Context,
 		setDonating,
 		setDonationSaved,
-		givBackEligible,
 		setTxHash,
 	} = props;
 
-	const { library, chainId } = web3Context;
-	const walletAddress =
-		chainId === config.PRIMARY_NETWORK.id
-			? mainProjectAddress
-			: secondaryProjectAddress;
+	const { library } = web3Context;
 	const { address } = token;
+
 	let donationId = 0,
-		donationSaved = false;
+		_txHash = '';
 
 	try {
 		const toAddress = isAddressENS(walletAddress!)
@@ -137,51 +143,52 @@ export const confirmDonation = async (props: IConfirmDonation) => {
 		};
 
 		const txCallbacks = {
-			onTxHash: async (txHash: string, nonce: number) => {
+			onTxHash: (txHash: string, nonce: number) => {
+				_txHash = txHash;
 				setTxHash(txHash);
 				saveDonation({ nonce, txHash, ...props })
 					.then(res => {
 						donationId = res;
-						setDonationSaved(true);
-						donationSaved = true;
+						setDonationSaved && setDonationSaved(true);
 					})
 					.catch(() => {
 						setFailedModalType(EDonationFailedType.NOT_SAVED);
 						setDonating(false);
 					});
 			},
-			onReceipt: async (txHash: string) => {
+			onReceipt: () => {
 				updateDonation(donationId, EDonationStatus.VERIFIED);
-				donationSaved &&
-					setSuccessDonation({ txHash, givBackEligible });
 			},
 		};
 
 		await sendTransaction(library, transactionObj, txCallbacks, address);
+		return { isSaved: donationId > 0, txHash: _txHash };
 	} catch (error: any) {
+		_txHash = error.replacement?.hash || error.transactionHash;
+		console.log({ error });
 		if (
 			(error.replacement && error.cancelled === true) ||
 			error.reason === 'transaction failed'
 		) {
-			setTxHash(error.replacement?.hash || error.transactionHash);
+			setTxHash(_txHash);
 			setFailedModalType(
 				error.cancelled
 					? EDonationFailedType.CANCELLED
 					: EDonationFailedType.FAILED,
 			);
 			updateDonation(donationId, EDonationStatus.FAILED);
-		} else if (error.code === 4001) {
+		} else if (error.code === 'ACTION_REJECTED') {
 			setFailedModalType(EDonationFailedType.REJECTED);
 		} else {
-			showToastError(error);
 			setFailedModalType(EDonationFailedType.FAILED);
 		}
 		setDonating(false);
-		setDonationSaved(false);
+		setDonationSaved && setDonationSaved(false);
 		captureException(error, {
 			tags: {
 				section: 'confirmDonation',
 			},
 		});
+		throw { isSaved: donationId > 0, txHash: _txHash };
 	}
 };

@@ -1,11 +1,17 @@
 import { B, brandColors, H5 } from '@giveth/ui-design-system';
-import { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Container } from '@/components/Grid';
 
+import { Container } from '@/components/Grid';
 import DoneStep from './DoneStep';
 import InfoStep from './InfoStep';
 import PhotoStep from './PhotoStep';
+import Spinner from '@/components/Spinner';
+import WalletNotConnected from '@/components/WalletNotConnected';
+import UserNotSignedIn from '@/components/UserNotSignedIn';
+import { useAppSelector } from '@/features/hooks';
+import { isUserRegistered } from '@/lib/helpers';
+import AlreadyRegistered from '@/components/views/onboarding/AlreadyRegistered';
 
 const StatesLabel = [
 	'Register on Giveth',
@@ -27,6 +33,34 @@ export interface IOnboard {
 
 const OnboardView = () => {
 	const [step, setStep] = useState(OnboardSteps.INFO);
+	const [isFirstRegistration, setFirstRegistration] = useState(true);
+	const [firstLoading, setFirstLoading] = useState(true); // To prevent first flickering
+
+	const { isLoading, isEnabled, isSignedIn, userData } = useAppSelector(
+		state => state.user,
+	);
+
+	const isRegistered = isUserRegistered(userData);
+
+	useEffect(() => {
+		if (userData?.isSignedIn) {
+			// Do not show "Already completed profile" message when user completes first step
+			setFirstRegistration(!isRegistered);
+			setStep(OnboardSteps.INFO);
+			setFirstLoading(false);
+		}
+	}, [userData?.isSignedIn]);
+
+	if (isLoading || firstLoading) {
+		return <Spinner />;
+	} else if (!isEnabled) {
+		return <WalletNotConnected />;
+	} else if (!isSignedIn) {
+		return <UserNotSignedIn />;
+	} else if (isRegistered && !isFirstRegistration) {
+		return <AlreadyRegistered />;
+	}
+
 	return (
 		<OnboardViewContainer>
 			<OnboardHeader step={step} />

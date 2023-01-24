@@ -1,10 +1,10 @@
 import {
-	IconInfo32,
 	Lead,
 	semanticColors,
-	IconInfo16,
 	Caption,
 	Button,
+	IconInfoFilled16,
+	IconInfoFilled32,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
@@ -13,6 +13,7 @@ import { Flex } from '../styled-components/Flex';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import { mediaQueries } from '@/lib/constants/constants';
 
 export const SkipOnboardingModal: FC<IModal> = ({ setShowModal }) => {
 	const router = useRouter();
@@ -22,17 +23,17 @@ export const SkipOnboardingModal: FC<IModal> = ({ setShowModal }) => {
 		<Modal
 			closeModal={closeModal}
 			isAnimating={isAnimating}
-			headerIcon={<IconInfo32 />}
+			headerIcon={<IconInfoFilled32 />}
 			headerTitle='Are you sure?'
 			headerTitlePosition='left'
 		>
 			<SkipOnboardingModalContainer>
 				<Desc>
-					If you don’t add required informations, you can’t create
+					If you don’t add required information, you can’t create
 					projects to receive funds.
 				</Desc>
 				<AlertBox>
-					<IconInfo16 />
+					<IconInfoFilled16 />
 					<Caption>
 						You can update your info from profile later too.
 					</Caption>
@@ -54,8 +55,11 @@ export const SkipOnboardingModal: FC<IModal> = ({ setShowModal }) => {
 };
 
 const SkipOnboardingModalContainer = styled.div`
-	width: 494px;
 	padding: 24px;
+	width: 100%;
+	${mediaQueries.tablet} {
+		width: 494px;
+	}
 `;
 
 const Desc = styled(Lead)`

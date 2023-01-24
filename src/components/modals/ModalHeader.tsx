@@ -27,6 +27,7 @@ export const ModalHeader: React.FC<IModalHeader> = ({
 	return !hiddenHeader ? (
 		<ModalHeaderRow
 			justifyContent={position === 'center' ? 'center' : 'flex-start'}
+			hasContent={!!icon || !!title}
 			color={color}
 		>
 			{icon}
@@ -36,6 +37,7 @@ export const ModalHeader: React.FC<IModalHeader> = ({
 					<IconX size={24} />
 				</CloseModalButton>
 			)}
+			{!hiddenClose && <CloseModalPlaceHolder />}
 		</ModalHeaderRow>
 	) : !hiddenClose ? (
 		<CloseModalButton onClick={closeModal}>
@@ -44,9 +46,12 @@ export const ModalHeader: React.FC<IModalHeader> = ({
 	) : null;
 };
 
-export const ModalHeaderRow = styled(Flex)<{ color?: string }>`
+export const ModalHeaderRow = styled(Flex)<{
+	color?: string;
+	hasContent: boolean;
+}>`
 	gap: 14px;
-	min-height: 48px;
+	min-height: ${props => (props.hasContent ? '48px' : '36px')};
 	padding: 24px 24px 8px;
 	position: relative;
 	align-items: center;
@@ -59,4 +64,9 @@ const CloseModalButton = styled.div`
 	right: 16px;
 	cursor: pointer;
 	z-index: 1;
+`;
+
+const CloseModalPlaceHolder = styled.div`
+	width: 24px;
+	height: 24px;
 `;

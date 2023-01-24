@@ -32,14 +32,14 @@ export const fetchMainnetThirdPartyTokensPriceAsync = createAsyncThunk(
 	'price/fetchMainnetThirdPartyTokensPrice',
 	async () => {
 		const promises: Promise<string>[] = [];
-		config.MAINNET_CONFIG.regenStreams.forEach(streamConfig => {
+		config.MAINNET_CONFIG.regenFarms.forEach(streamConfig => {
 			const tokenAddress =
 				streamConfig.tokenAddressOnUniswapV2.toLowerCase();
 			promises.push(fetchMainnetTokenPrice(tokenAddress));
 		});
 		return Promise.all(promises).then(prices => {
 			let res: { [x: string]: string } = {};
-			config.MAINNET_CONFIG.regenStreams.forEach((streamConfig, idx) => {
+			config.MAINNET_CONFIG.regenFarms.forEach((streamConfig, idx) => {
 				const tokenAddress =
 					streamConfig.tokenAddressOnUniswapV2.toLowerCase();
 				res[tokenAddress] = prices[idx];
@@ -53,14 +53,14 @@ export const fetchGnosisThirdPartyTokensPriceAsync = createAsyncThunk(
 	'price/fetchGnosisThirdPartyTokensPric',
 	async () => {
 		const promises: Promise<string>[] = [];
-		config.XDAI_CONFIG.regenStreams.forEach(streamConfig => {
+		config.XDAI_CONFIG.regenFarms.forEach(streamConfig => {
 			const tokenAddress =
 				streamConfig.tokenAddressOnUniswapV2.toLowerCase();
 			promises.push(fetchGnosisTokenPrice(tokenAddress));
 		});
 		return Promise.all(promises).then(prices => {
 			let res: { [x: string]: string } = {};
-			config.XDAI_CONFIG.regenStreams.forEach((streamConfig, idx) => {
+			config.XDAI_CONFIG.regenFarms.forEach((streamConfig, idx) => {
 				const tokenAddress =
 					streamConfig.tokenAddressOnUniswapV2.toLowerCase();
 				res[tokenAddress] = prices[idx];

@@ -13,6 +13,7 @@ import {
 	IconX,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import Select, {
 	GroupBase,
@@ -23,10 +24,10 @@ import Select, {
 	MenuListProps,
 } from 'react-select';
 
-import useDeviceDetect from '@/hooks/useDeviceDetect';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
+import useDetectDevice from '@/hooks/useDetectDevice';
 
 declare module 'react-select/dist/declarations/src/Select' {
 	export interface Props<
@@ -49,17 +50,22 @@ const ImageIcon = (props: { symbol: string }) => {
 	} catch (err) {
 		image_path = '/images/tokens/eth.png'; //set default image path
 	}
-	return <Image alt={symbol} src={image_path} width='24px' height='24px' />;
+	return <Image alt={symbol} src={image_path} width='24' height='24' />;
 };
 
 const MenuList = (props: MenuListProps<IProjectAcceptedToken, false>) => {
 	const projectVerified = props.selectProps.projectVerified;
+	const { formatMessage } = useIntl();
 	return (
 		<components.MenuList {...props}>
 			{projectVerified && (
 				<GivBackIconContainer>
 					<IconGIVBack size={24} color={brandColors.giv[500]} />
-					<Caption>GIVbacks eligible tokens</Caption>
+					<Caption>
+						{formatMessage({
+							id: 'label.givbacks_eligible_tokens',
+						})}
+					</Caption>
 				</GivBackIconContainer>
 			)}
 			{props.children}
@@ -90,11 +96,16 @@ const Option = ({ ...props }: OptionProps<IProjectAcceptedToken, false>) => {
 };
 
 const NotFound = ({ emptyField }: any) => {
+	const { formatMessage } = useIntl();
 	return (
 		<NotFoundContainer>
-			<P>No results found</P>
-			<P>Please try a different address or select one from the list</P>
-			<P onClick={emptyField}>Token List</P>
+			<P>{formatMessage({ id: 'label.no_results_found' })}</P>
+			<P>
+				{formatMessage({ id: 'label.please_try_a_different_address' })}
+			</P>
+			<P onClick={emptyField}>
+				{formatMessage({ id: 'label.token_list' })}
+			</P>
 		</NotFoundContainer>
 	);
 };
@@ -120,8 +131,9 @@ const TokenPicker = (props: {
 		disabled,
 	} = props;
 
-	const { isMobile } = useDeviceDetect();
+	const { isMobile } = useDetectDevice();
 	const [isOpen, setIsOpen] = useState(false);
+	const { formatMessage } = useIntl();
 
 	const selectStyles: StylesConfig<IProjectAcceptedToken, false> = {
 		control: (base: any) => ({
@@ -234,7 +246,9 @@ const TokenPicker = (props: {
 					{selectedToken && (
 						<ImageIcon symbol={selectedToken.symbol} />
 					)}
-					{selectedToken ? selectedToken.symbol : 'Select a token'}
+					{selectedToken
+						? selectedToken.symbol
+						: formatMessage({ id: 'label.select_a_token' })}
 				</TokenContainer>
 				{isOpen ? <IconCaretUp /> : <IconCaretDown />}
 			</TargetContainer>

@@ -7,7 +7,7 @@ import {
 	H6,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-
+import { useIntl } from 'react-intl';
 import ProjectCardImage from './ProjectCardImage';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
 import { IProject } from '@/apollo/types/types';
@@ -30,7 +30,6 @@ const ProjectCard = (props: IProjectCard) => {
 		description,
 		image,
 		verified,
-		traceCampaignId,
 		adminUser,
 		slug,
 		totalDonations,
@@ -39,6 +38,7 @@ const ProjectCard = (props: IProjectCard) => {
 
 	const { name, walletAddress } = adminUser || {};
 	const orgLabel = organization?.label;
+	const { formatMessage } = useIntl();
 
 	return (
 		<Wrapper isNew={isNew}>
@@ -54,23 +54,25 @@ const ProjectCard = (props: IProjectCard) => {
 			/>
 			{!isNew && (
 				<BadgeContainer>
-					{verified && <VerificationBadge verified />}
-					{traceCampaignId && <VerificationBadge trace />}
+					{verified && <VerificationBadge />}
 				</BadgeContainer>
 			)}
-			<CardBody>
+			<CardBody isNew={isNew}>
 				<InternalLink href={slugToProjectView(slug)}>
 					<Title>{title}</Title>
 				</InternalLink>
 				{name && (
-					<InternalLink href={addressToUserView(walletAddress)}>
-						<Author>{name}</Author>
-					</InternalLink>
+					<div>
+						<InternalLink href={addressToUserView(walletAddress)}>
+							<Author>{name}</Author>
+						</InternalLink>
+					</div>
 				)}
 				<Description>{htmlToText(description)}</Description>
 				{!isNew && (
 					<BodyCaption>
-						Raised: ${totalDonations?.toLocaleString()}
+						{formatMessage({ id: 'label.raised' })}: $
+						{totalDonations?.toLocaleString()}
 					</BodyCaption>
 				)}
 			</CardBody>
@@ -94,10 +96,11 @@ const Description = styled(P)`
 	overflow: hidden;
 	color: ${neutralColors.gray[900]};
 	margin-bottom: 20px;
+	margin-top: 8px;
 `;
 
-const CardBody = styled.div`
-	margin: 50px 24px 0 24px;
+const CardBody = styled.div<{ isNew?: boolean }>`
+	margin: ${props => (props.isNew ? '50px 24px 0' : '50px 0 0')};
 	text-align: left;
 `;
 

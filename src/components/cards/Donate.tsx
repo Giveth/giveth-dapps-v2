@@ -5,11 +5,12 @@ import BigNumber from 'bignumber.js';
 import {
 	Subline,
 	neutralColors,
-	IconHelp,
 	H2,
 	H5,
 	Lead,
+	IconHelpFilled16,
 } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import { InputWithUnit } from '../input/index';
 import { Flex } from '../styled-components/Flex';
 import {
@@ -95,6 +96,7 @@ const Desc = styled(Lead)`
 `;
 
 export const DonateCard: FC<IClaimViewCardProps> = ({ index }) => {
+	const { formatMessage } = useIntl();
 	const { totalAmount, step, goNextStep, goPreviousStep } = useClaim();
 
 	const [donation, setDonation] = useState<string>('0');
@@ -149,7 +151,7 @@ export const DonateCard: FC<IClaimViewCardProps> = ({ index }) => {
 							<Flex gap='4px' alignItems='center'>
 								<ImpactCardLabel>Your donation</ImpactCardLabel>
 								<IconWithTooltip
-									icon={<IconHelp size={16} />}
+									icon={<IconHelpFilled16 />}
 									direction={'top'}
 								>
 									<GdropDonateTooltip>
@@ -190,7 +192,8 @@ export const DonateCard: FC<IClaimViewCardProps> = ({ index }) => {
 							<Flex justifyContent='space-between'>
 								<PoolItem>Streaming</PoolItem>
 								<PoolItemBold>
-									{formatWeiHelper(earnEstimate)} GIV/week
+									{formatWeiHelper(earnEstimate)} GIV
+									{formatMessage({ id: 'label./week' })}
 								</PoolItemBold>
 							</Flex>
 						</PoolItems>

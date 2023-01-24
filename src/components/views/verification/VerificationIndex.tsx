@@ -1,3 +1,4 @@
+import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { semanticColors, SublineBold } from '@giveth/ui-design-system';
 import { useState } from 'react';
@@ -17,10 +18,11 @@ import { VerificationContainer } from './Common.sc';
 
 const VerificationIndex = () => {
 	const [showModal, setShowModal] = useState(false);
-	const device = useDetectDevice();
-	const isMobile = device.isMobile;
+	const { isMobile } = useDetectDevice();
 	const { verificationData } = useVerificationData();
 	const status = verificationData?.status || EVerificationStatus.DRAFT;
+	const { formatMessage } = useIntl();
+
 	return (
 		<VerificationContainer>
 			{status == EVerificationStatus.DRAFT ? (
@@ -29,7 +31,7 @@ const VerificationIndex = () => {
 					<ContentSection sm={8} md={9}>
 						<AbsoluteSection>
 							<SaveSection>
-								Auto save
+								{formatMessage({ id: 'label.auto_save' })}
 								<SaveCircle />
 							</SaveSection>
 							{/* <GuideSection onClick={() => setShowModal(true)}>

@@ -94,6 +94,7 @@ export const givEconomySupportedNetworks = [
 ];
 
 export const zIndex = {
+	BOTTOM_SHEET: 90,
 	HEADER: 100,
 	DROPDOWN: 1000,
 	STICKY: 1020,
@@ -115,3 +116,21 @@ export const statusCodes = [
 	'503',
 	'504',
 ] as const;
+
+export const searchSuggestions = [
+	'open source',
+	'blockchain',
+	'children',
+	'land stewardship',
+	'homelessness',
+	'indigenous',
+];
+
+export const regenFarmStreamCardCol = {
+	sm: [12, 6, 12],
+	lg: [12, 8, 4],
+};
+
+export const TWO_WEEK = 1_209_600_000;
+
+export const minDonationAmount = 0.000001;

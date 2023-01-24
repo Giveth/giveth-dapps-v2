@@ -1,16 +1,16 @@
 import { FC, useState, useEffect } from 'react';
 import {
 	B,
-	IconHelp,
 	brandColors,
 	Caption,
 	IconGIVStream,
 	Lead,
+	IconHelpFilled16,
 } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import { ethers, constants } from 'ethers';
 import { Zero } from '@ethersproject/constants';
 import BigNumber from 'bignumber.js';
-import Lottie from 'react-lottie';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
@@ -48,16 +48,8 @@ import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import LottieControl from '@/components/animations/lottieControl';
 import type { TransactionResponse } from '@ethersproject/providers';
-
-const loadingAnimationOptions = {
-	loop: true,
-	autoplay: true,
-	animationData: LoadingAnimation,
-	rendererSettings: {
-		preserveAspectRatio: 'xMidYMid slice',
-	},
-};
 
 enum ClaimState {
 	UNKNOWN,
@@ -81,6 +73,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 	checkNetworkAndWallet,
 	onSuccess,
 }) => {
+	const { formatMessage } = useIntl();
 	const [givBackLiquidPart, setGivBackLiquidPart] = useState(Zero);
 	const [txResp, setTxResp] = useState<TransactionResponse | undefined>();
 	const [givBackStream, setGivBackStream] = useState<BigNumber.Value>(0);
@@ -255,7 +248,10 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 									<GIVRate>
 										{formatWeiHelper(givDropStream)}
 									</GIVRate>
-									<Lead>GIV/week</Lead>
+									<Lead>
+										GIV
+										{formatMessage({ id: 'label./week' })}
+									</Lead>
 								</RateRow>
 							</>
 						)}
@@ -280,16 +276,15 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 									</Caption>
 									<IconWithTooltip
 										icon={
-											<IconHelp
-												size={16}
+											<IconHelpFilled16
 												color={brandColors.deep[100]}
 											/>
 										}
 										direction={'top'}
 									>
 										<TooltipContent>
-											Increase you GIVstream flowrate when
-											you claim liquid rewards!
+											Increase your GIVstream flowrate
+											when you claim liquid rewards!
 										</TooltipContent>
 									</IconWithTooltip>
 								</HelpRow>
@@ -298,7 +293,10 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 									<GIVRate>
 										{formatWeiHelper(givBackStream)}
 									</GIVRate>
-									<Lead>GIV/week</Lead>
+									<Lead>
+										GIV
+										{formatMessage({ id: 'label./week' })}
+									</Lead>
 								</RateRow>
 							</>
 						)}
@@ -325,10 +323,9 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 						</HarvestAllDesc>
 						{claimState === ClaimState.WAITING ? (
 							<ClaimPending>
-								<Lottie
-									options={loadingAnimationOptions}
-									height={40}
-									width={40}
+								<LottieControl
+									animationData={LoadingAnimation}
+									size={40}
 								/>
 								&nbsp;CLAIM PENDING
 							</ClaimPending>

@@ -1,59 +1,50 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { H4 } from '@giveth/ui-design-system';
+import { H4, neutralColors } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 
-import CryptoDonation, {
-	ISuccessDonation,
-} from '@/components/views/donate/CryptoDonation';
+import CryptoDonation from '@/components/views/donate/CryptoDonation';
 import FiatDonation from '@/components/views/donate/FiatDonation';
-import { IProject } from '@/apollo/types/types';
 import RadioButton from '@/components/RadioButton';
 
-const DonationTypes = (props: {
-	project: IProject;
-	setSuccess: (i: ISuccessDonation) => void;
-}) => {
-	const { project, setSuccess } = props;
-
+const DonationTypes = () => {
+	const { formatMessage } = useIntl();
 	const [isCrypto, setIsCrypto] = useState(true);
 
 	return (
 		<>
-			<H4 weight={700}>Donate With</H4>
+			<H4 weight={700}>{formatMessage({ id: 'page.donate.title' })}</H4>
 			<RadioBox>
 				<RadioButton
-					title='Cryptocurrency'
+					title={formatMessage({ id: 'label.cryptocurrency' })}
 					toggleRadio={() => setIsCrypto(true)}
 					isSelected={isCrypto}
-					subtitle='Zero Fees'
+					small
 				/>
 				<RadioButton
-					title='Credit Card'
+					title={formatMessage({ id: 'label.credit_card' })}
 					toggleRadio={() => setIsCrypto(false)}
 					isSelected={!isCrypto}
-					subtitle='Bank Fees'
+					small
 				/>
 			</RadioBox>
-			{isCrypto ? (
-				<CryptoDonation
-					project={project}
-					setSuccessDonation={setSuccess}
-				/>
-			) : (
-				<FiatDonation
-					project={project}
-					setSuccessDonation={setSuccess}
-				/>
-			)}
+			<Break />
+			{isCrypto ? <CryptoDonation /> : <FiatDonation />}
 		</>
 	);
 };
 
+const Break = styled.hr`
+	border: 1px solid ${neutralColors.gray[400]};
+`;
+
 const RadioBox = styled.div`
 	display: flex;
 	justify-content: space-between;
-	margin-top: 29px;
+	margin-top: 32px;
 	flex-wrap: wrap;
+	max-width: 350px;
+	gap: 10px;
 
 	@media (max-width: 850px) {
 		/* Very unique size issue */

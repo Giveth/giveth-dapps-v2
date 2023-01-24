@@ -48,7 +48,7 @@ const ProjectWalletAddress: FC<IProjectWalletAddress> = ({ addresses }) => {
 					if (!address.isRecipient) return null;
 					return (
 						<WalletAddress
-							key={address.address}
+							key={`${address.networkId}${address.address}`}
 							address={address.address!}
 							networkId={address.networkId}
 						/>

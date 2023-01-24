@@ -1,11 +1,12 @@
 export interface BasicStakingConfig {
 	LM_ADDRESS: string;
 	network: number;
-	discontinued?: number;
 	GARDEN_ADDRESS?: string;
 	BUY_LINK?: string;
 	farmStartTimeMS?: number;
+	farmEndTimeMS?: number;
 	icon?: string;
+	exploited?: boolean;
 }
 export enum StakingPlatform {
 	GIVETH = 'Staking',
@@ -26,11 +27,13 @@ export enum StakingType {
 	ICHI_GIV_ONEGIV = 'Ichi_GIV_oneGIV',
 
 	HONEYSWAP_FOX_HNY = 'Honeyswap_FOX_HNY',
+	HONEYSWAP_FOX_XDAI = 'Honeyswap_FOX_DAI',
 	UNISWAPV2_CULT_ETH = 'UniswapV2_CULT_ETH',
 }
 
 export enum RegenFarmType {
 	FOX_HNY = 'FOX_HNY_FARM',
+	FOX_XDAI = 'FOX_XDAI_FARM',
 	CULT_ETH = 'CULT_ETH_FARM',
 }
 
@@ -55,8 +58,6 @@ export interface SimplePoolStakingConfig extends BasicStakingConfig {
 	description?: string;
 	provideLiquidityLink?: string;
 	unit: string;
-	active: boolean;
-	archived?: boolean;
 	introCard?: IntroCardConfig;
 }
 
@@ -93,6 +94,7 @@ export interface IntroCardConfig {
 export interface RegenPoolStakingConfig extends SimplePoolStakingConfig {
 	regenStreamType: StreamType;
 	regenFarmType: RegenFarmType;
+	dontArchive?: boolean;
 }
 
 export interface GasPreference {
@@ -100,7 +102,7 @@ export interface GasPreference {
 	maxPriorityFeePerGas?: string;
 }
 
-export interface RegenStreamConfig {
+export interface RegenFarmConfig {
 	title: string;
 	tokenDistroAddress: string;
 	type: StreamType;
@@ -108,6 +110,8 @@ export interface RegenStreamConfig {
 	rewardTokenSymbol: string;
 	// For price purpose
 	tokenAddressOnUniswapV2: string;
+	pools: RegenPoolStakingConfig[];
+	introCard?: IntroCardConfig;
 }
 
 export interface BasicNetworkConfig {
@@ -137,8 +141,7 @@ export interface BasicNetworkConfig {
 	>;
 	uniswapV2Subgraph: string;
 
-	regenStreams: RegenStreamConfig[];
-	regenFarms: RegenPoolStakingConfig[];
+	regenFarms: RegenFarmConfig[];
 }
 
 interface MainnetNetworkConfig extends BasicNetworkConfig {
@@ -152,6 +155,7 @@ interface MicroservicesConfig {
 }
 
 export interface EnvConfig {
+	GIVETH_PROJECT_ID: number;
 	MAINNET_NETWORK_NUMBER: number;
 	XDAI_NETWORK_NUMBER: number;
 	MAINNET_CONFIG: MainnetNetworkConfig;
@@ -162,13 +166,20 @@ export interface EnvConfig {
 	MICROSERVICES: MicroservicesConfig;
 }
 
+interface INetworkConfig {
+	name: string;
+	id: number;
+	chain: string;
+	mainToken: string;
+}
+
 export interface GlobalConfig extends EnvConfig {
 	TOKEN_NAME: string;
 	WEB3_POLLING_INTERVAL: number;
 	SUBGRAPH_POLLING_INTERVAL: number;
 	TOKEN_PRECISION: number;
-	PRIMARY_NETWORK: any;
-	SECONDARY_NETWORK: any;
+	PRIMARY_NETWORK: INetworkConfig;
+	SECONDARY_NETWORK: INetworkConfig;
 	NETWORKS_CONFIG: {
 		[key: number]: MainnetNetworkConfig | XDaiNetworkConfig;
 	};
