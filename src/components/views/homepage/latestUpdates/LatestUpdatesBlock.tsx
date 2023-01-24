@@ -9,7 +9,7 @@ export const LatestUpdatesBlock = () => {
 	return (
 		<LatestUpdatesBlockWrapper>
 			<Container>
-				<BlockTitle>Awesome Project Updates</BlockTitle>
+				<BlockTitle>Latest updates</BlockTitle>
 			</Container>
 			<LatestUpdatesCardsWrapper>
 				<LatestUpdatesCardsContainer>
@@ -100,7 +100,7 @@ const LatestUpdatesCardsWrapper = styled.div`
 
 const LatestUpdatesCardsContainer = styled(Flex)`
 	transform: translate3d(0, 0, 0);
-	animation: marquee 10s linear infinite;
+	/* animation: marquee 10s linear infinite; */
 	:hover {
 		animation-play-state: paused;
 	}
