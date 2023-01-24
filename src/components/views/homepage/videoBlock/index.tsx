@@ -11,6 +11,7 @@ import {
 import { mediaQueries } from '@/lib/constants/constants';
 import Wave from '@/components/particles/Wave';
 import SemiCircle from '@/components/particles/SemiCircle';
+import QuarterCircle from '@/components/particles/QuarterCircle';
 
 const VideoBlock = () => {
 	const [isPlaying, setIsPlaying] = useState(false);
@@ -81,6 +82,9 @@ const VideoBlock = () => {
 					</TopWaveContainer>
 				</CustomFlex>
 			</Container>
+			<QuarterCircleContainer>
+				<QuarterCircle />
+			</QuarterCircleContainer>
 		</SectionContainer>
 	);
 };
@@ -126,6 +130,12 @@ const VideoSemiCircleContainer = styled.div`
 	position: absolute;
 	top: -40px;
 	right: 40px;
+`;
+
+const QuarterCircleContainer = styled.div`
+	position: absolute;
+	bottom: 20px;
+	left: 30%;
 `;
 
 export default VideoBlock;
