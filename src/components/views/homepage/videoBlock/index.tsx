@@ -76,6 +76,9 @@ const VideoBlock = () => {
 							<SemiCircle color={brandColors.giv[200]} />
 						</VideoSemiCircleContainer>
 					</VideoParticlesContainer>
+					<TopWaveContainer>
+						<Wave />
+					</TopWaveContainer>
 				</CustomFlex>
 			</Container>
 		</SectionContainer>
@@ -111,6 +114,12 @@ const VideoWaveContainer = styled.div`
 	position: absolute;
 	bottom: 20px;
 	right: -30px;
+`;
+
+const TopWaveContainer = styled.div`
+	position: absolute;
+	top: 30px;
+	left: 0;
 `;
 
 const VideoSemiCircleContainer = styled.div`
