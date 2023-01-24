@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { GLink, IconSearch24 } from '@giveth/ui-design-system';
 import Link from 'next/link';
-import { useAppSelector } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { Flex } from '../styled-components/Flex';
 import { SidebarParentItem } from './SidebarItem';
 
@@ -11,9 +11,11 @@ import { GIVeconomyItems } from '../menu/GIVeconomyItems';
 import { Item } from '../menu/Item';
 import { ItemSpacer } from '../menu/common';
 import Routes from '@/lib/constants/Routes';
+import { setShowSearchModal } from '@/features/modal/modal.slice';
 
 export const HomeSidebar = () => {
 	const { theme } = useAppSelector(state => state.general);
+	const dispatch = useAppDispatch();
 
 	return (
 		<HomeSidebarContainer>
@@ -34,7 +36,11 @@ export const HomeSidebar = () => {
 					<GLink size='Big'>NFT</GLink>
 				</Item>
 			</Link>
-			<SearchButton theme={theme} isHighlighted>
+			<SearchButton
+				theme={theme}
+				isHighlighted
+				onClick={() => dispatch(setShowSearchModal(true))}
+			>
 				<Flex alignItems='center' justifyContent='space-between'>
 					<GLink size='Big'>Search</GLink>
 					<IconSearch24 />
