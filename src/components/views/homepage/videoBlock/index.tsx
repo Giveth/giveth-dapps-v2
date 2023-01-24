@@ -77,7 +77,7 @@ const VideoBlock = () => {
 						</VideoSemiCircleContainer>
 					</VideoParticlesContainer>
 					<TopWaveContainer>
-						<Wave />
+						<Wave color={brandColors.pinky[200]} />
 					</TopWaveContainer>
 				</CustomFlex>
 			</Container>
