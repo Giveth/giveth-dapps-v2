@@ -99,7 +99,7 @@ const ProjectCard = (props: IProjectCard) => {
 						</Title>
 					</Link>
 				</TitleWrapper>
-				<PaddedRow>
+				<PaddedRow style={{ marginTop: '6px' }}>
 					{adminUser?.name && !isForeignOrg && (
 						<Link
 							href={addressToUserView(adminUser?.walletAddress)}
