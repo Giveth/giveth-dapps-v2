@@ -77,4 +77,7 @@ const Desc = styled(P)`
 	display: -webkit-box;
 	-webkit-box-orient: vertical;
 	white-space: normal;
+	& > p {
+		margin: 0;
+	}
 `;
