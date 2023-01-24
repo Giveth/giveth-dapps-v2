@@ -1,14 +1,38 @@
 import React, { FC } from 'react';
+import styled from 'styled-components';
+import { H6 } from '@giveth/ui-design-system';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import { Container } from '../Grid';
+import { Flex } from '../styled-components/Flex';
+import { mediaQueries } from '@/lib/constants/constants';
 
 export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	return (
 		<Modal closeModal={closeModal} isAnimating={isAnimating} fullScreen>
-			<div>Salam</div>
+			<SearchModalContainer>
+				<SearchBox>
+					<H6>Find awesome projects on Giveth</H6>
+					<div>search bar</div>
+				</SearchBox>
+			</SearchModalContainer>
 		</Modal>
 	);
 };
+
+const SearchModalContainer = styled(Container)`
+	padding-top: 132px;
+	padding-bottom: 80px;
+`;
+
+const SearchBox = styled(Flex)`
+	flex-direction: column;
+	gap: 16px;
+	${mediaQueries.tablet} {
+		width: 600px;
+	}
+	margin: auto;
+`;
