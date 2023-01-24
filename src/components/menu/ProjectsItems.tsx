@@ -29,7 +29,7 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 			<HighlightSection theme={theme}>
 				<Label medium>Explore by</Label>
 				<ExploreByRow
-					gap='24px'
+					gap='6px'
 					flexDirection={inSidebar ? 'column' : undefined}
 				>
 					{projectsItems.explore.map((explore, idx) => (
