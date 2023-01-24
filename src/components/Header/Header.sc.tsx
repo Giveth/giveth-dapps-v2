@@ -184,6 +184,11 @@ export const HeaderLink = styled(GLink)<IHeaderLinkProps>`
 	}
 `;
 
+export const SearchButton = styled(HeaderLink)`
+	background-color: ${neutralColors.gray[200]};
+	cursor: pointer;
+`;
+
 export const ConnectButton = styled(Button)`
 	box-shadow: ${props =>
 		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};

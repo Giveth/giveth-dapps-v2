@@ -3,7 +3,12 @@ import { FC, useState, useEffect } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { Button, GLink, IconMenu24 } from '@giveth/ui-design-system';
+import {
+	Button,
+	GLink,
+	IconMenu24,
+	IconSearch24,
+} from '@giveth/ui-design-system';
 
 import { useIntl } from 'react-intl';
 import { Flex, FlexSpacer } from '@/components/styled-components/Flex';
@@ -17,6 +22,7 @@ import {
 	LargeCreateProject,
 	HeaderLink,
 	HomeButton,
+	SearchButton,
 } from './Header.sc';
 import { isUserRegistered } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
@@ -207,6 +213,12 @@ const Header: FC<IHeader> = () => {
 							<GLink>NFTs</GLink>
 						</Link>
 					</HeaderLink>
+					<SearchButton theme={theme}>
+						<Flex alignItems='center' gap='16px'>
+							<GLink>Search projects</GLink>
+							<IconSearch24 />
+						</Flex>
+					</SearchButton>
 				</HeaderLinks>
 			)}
 			<FlexSpacer />
