@@ -4,19 +4,20 @@ import { Container } from '@/components/Grid';
 import { BlockTitle } from '../common';
 import { LatestUpdateCard } from './LatestUpdateCard';
 import { Flex } from '@/components/styled-components/Flex';
+import { mediaQueries } from '@/lib/constants/constants';
 
 export const LatestUpdatesBlock = () => {
 	return (
 		<LatestUpdatesBlockWrapper>
 			<Container>
-				<BlockTitle>Awesome Project Updates</BlockTitle>
+				<BlockTitle>Latest updates</BlockTitle>
 			</Container>
 			<LatestUpdatesCardsWrapper>
 				<LatestUpdatesCardsContainer>
 					{mockData.map((data, idx) => (
 						<LatestUpdateCard
 							key={idx}
-							cover={data.cover}
+							project={data.project}
 							projectUpdate={data.projectUpdate}
 						/>
 					))}
@@ -37,7 +38,10 @@ const mockData = [
 			title: '1',
 			userId: '1',
 		},
-		cover: 'https://giveth.mypinata.cloud/ipfs/QmcQFkNQ3o6f555whoRtFqJgPz6k9nb8WfNEBHk3j2i3CW',
+		project: {
+			slug: 'how-many-photos-is-too-many-photos',
+			image: 'https://giveth.mypinata.cloud/ipfs/QmcQFkNQ3o6f555whoRtFqJgPz6k9nb8WfNEBHk3j2i3CW',
+		},
 	},
 	{
 		projectUpdate: {
@@ -49,7 +53,10 @@ const mockData = [
 			title: '2',
 			userId: '2',
 		},
-		cover: 'https://static.tgbwidget.com/organization_logo%2F095875ef-b026-4c2f-b89f-08a9b1b0a336.jpg',
+		project: {
+			slug: 'how-many-photos-is-too-many-photos',
+			image: 'https://static.tgbwidget.com/organization_logo%2F095875ef-b026-4c2f-b89f-08a9b1b0a336.jpg',
+		},
 	},
 	{
 		projectUpdate: {
@@ -61,7 +68,10 @@ const mockData = [
 			title: '3',
 			userId: '3',
 		},
-		cover: 'https://static.tgbwidget.com/organization_logo%2F1988fd88-042c-4c4b-aaad-82e0939a4d88.jpg',
+		project: {
+			slug: 'how-many-photos-is-too-many-photos',
+			image: 'https://static.tgbwidget.com/organization_logo%2F1988fd88-042c-4c4b-aaad-82e0939a4d88.jpg',
+		},
 	},
 	{
 		projectUpdate: {
@@ -73,7 +83,10 @@ const mockData = [
 			title: '4',
 			userId: '4',
 		},
-		cover: 'https://giveth.mypinata.cloud/ipfs/QmSgVyzhFWyrYSgo6fEmSCa7pBAE5sESZLDM7h6XNeEeZU',
+		project: {
+			slug: 'how-many-photos-is-too-many-photos',
+			image: 'https://giveth.mypinata.cloud/ipfs/QmSgVyzhFWyrYSgo6fEmSCa7pBAE5sESZLDM7h6XNeEeZU',
+		},
 	},
 	{
 		projectUpdate: {
@@ -85,7 +98,10 @@ const mockData = [
 			title: '5',
 			userId: '5',
 		},
-		cover: 'https://i.imgur.com/uPFEgJu.png',
+		project: {
+			slug: 'how-many-photos-is-too-many-photos',
+			image: 'https://i.imgur.com/uPFEgJu.png',
+		},
 	},
 ];
 
@@ -101,6 +117,12 @@ const LatestUpdatesCardsWrapper = styled.div`
 const LatestUpdatesCardsContainer = styled(Flex)`
 	transform: translate3d(0, 0, 0);
 	animation: marquee 10s linear infinite;
+	${mediaQueries.tablet} {
+		animation-duration: 20s;
+	}
+	${mediaQueries.laptopL} {
+		animation-duration: 30s;
+	}
 	:hover {
 		animation-play-state: paused;
 	}
