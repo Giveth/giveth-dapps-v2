@@ -41,35 +41,37 @@ const VideoBlock = () => {
 							it.
 						</H4>
 					</Flex>
-					<CustomizedVideoContainer>
-						<video
-							ref={videoRef}
-							id='video'
-							onClick={handleVideoClick}
-							width='100%'
-							onEnded={handleVideoEnd}
-						>
-							<source
-								src='/video/givpower.mp4'
-								type='video/mp4'
-							/>
-						</video>
-						<VideoOverlay
-							onClick={handleVideoClick}
-							hidden={isPlaying}
-						>
-							<Image
-								src='/images/video_play.svg'
-								width='90'
-								height='90'
-								alt='giveconomy video play button'
-								draggable={false}
-							/>
-						</VideoOverlay>
+					<VideoParticlesContainer>
+						<CustomizedVideoContainer>
+							<video
+								ref={videoRef}
+								id='video'
+								onClick={handleVideoClick}
+								width='100%'
+								onEnded={handleVideoEnd}
+							>
+								<source
+									src='/video/givpower.mp4'
+									type='video/mp4'
+								/>
+							</video>
+							<VideoOverlay
+								onClick={handleVideoClick}
+								hidden={isPlaying}
+							>
+								<Image
+									src='/images/video_play.svg'
+									width='90'
+									height='90'
+									alt='giveconomy video play button'
+									draggable={false}
+								/>
+							</VideoOverlay>
+						</CustomizedVideoContainer>
 						<VideoWaveContainer>
 							<Wave />
 						</VideoWaveContainer>
-					</CustomizedVideoContainer>
+					</VideoParticlesContainer>
 				</CustomFlex>
 			</Container>
 		</SectionContainer>
@@ -97,8 +99,14 @@ const CustomFlex = styled(Flex)`
 	}
 `;
 
+const VideoParticlesContainer = styled.div`
+	position: relative;
+`;
+
 const VideoWaveContainer = styled.div`
 	position: absolute;
+	bottom: 20px;
+	right: -30px;
 `;
 
 export default VideoBlock;
