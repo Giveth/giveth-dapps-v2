@@ -4,6 +4,7 @@ import { Container } from '@/components/Grid';
 import { BlockTitle } from '../common';
 import { LatestUpdateCard } from './LatestUpdateCard';
 import { Flex } from '@/components/styled-components/Flex';
+import { mediaQueries } from '@/lib/constants/constants';
 
 export const LatestUpdatesBlock = () => {
 	return (
@@ -100,7 +101,13 @@ const LatestUpdatesCardsWrapper = styled.div`
 
 const LatestUpdatesCardsContainer = styled(Flex)`
 	transform: translate3d(0, 0, 0);
-	/* animation: marquee 10s linear infinite; */
+	animation: marquee 10s linear infinite;
+	${mediaQueries.tablet} {
+		animation-duration: 20s;
+	}
+	${mediaQueries.laptopL} {
+		animation-duration: 30s;
+	}
 	:hover {
 		animation-play-state: paused;
 	}
