@@ -9,6 +9,8 @@ import { SidebarItem } from './SidebarItem';
 import { ProjectsItems } from '../menu/ProjectsItems';
 import { GIVeconomyItems } from '../menu/GIVeconomyItems';
 import { Item } from '../menu/Item';
+import { ItemSpacer } from '../menu/common';
+import Routes from '@/lib/constants/Routes';
 
 export const HomeSidebar = () => {
 	const { theme, mainCategories } = useAppSelector(state => state.general);
@@ -26,6 +28,12 @@ export const HomeSidebar = () => {
 			<SidebarItem item={{ title: 'GIVeconomy' }}>
 				<GIVeconomyItems />
 			</SidebarItem>
+			<ItemSpacer />
+			<Link href={Routes.NFT}>
+				<Item theme={theme}>
+					<GLink size='Big'>NFT</GLink>
+				</Item>
+			</Link>
 		</HomeSidebarContainer>
 	);
 };
