@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import { H6 } from '@giveth/ui-design-system';
+import { H6, Lead } from '@giveth/ui-design-system';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import { Container } from '../Grid';
+import { Col, Container, Row } from '../Grid';
 import { Flex } from '../styled-components/Flex';
 import { mediaQueries } from '@/lib/constants/constants';
 
@@ -19,6 +19,12 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 					<div>search bar</div>
 				</SearchBox>
 			</SearchModalContainer>
+			<Row>
+				<Col xs={12} sm={4}>
+					<Lead size='large'>Quick links</Lead>
+					<Lead>Top ranking projects</Lead>
+				</Col>
+			</Row>
 		</Modal>
 	);
 };
