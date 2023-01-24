@@ -32,6 +32,7 @@ import {
 	setShowWalletModal,
 	setShowWelcomeModal,
 	setShowCompleteProfile,
+	setShowSearchModal,
 } from '@/features/modal/modal.slice';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { useModalCallback } from '@/hooks/useModalCallback';
@@ -213,7 +214,10 @@ const Header: FC<IHeader> = () => {
 							<GLink>NFTs</GLink>
 						</Link>
 					</HeaderLink>
-					<SearchButton theme={theme}>
+					<SearchButton
+						theme={theme}
+						onClick={() => dispatch(setShowSearchModal(true))}
+					>
 						<Flex alignItems='center' gap='16px'>
 							<GLink>Search projects</GLink>
 							<IconSearch24 />
