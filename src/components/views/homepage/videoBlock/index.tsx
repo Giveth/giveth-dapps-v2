@@ -1,4 +1,4 @@
-import { H2, H4, neutralColors } from '@giveth/ui-design-system';
+import { brandColors, H2, H4, neutralColors } from '@giveth/ui-design-system';
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
@@ -10,6 +10,7 @@ import {
 } from '@/components/homeTabs/Overview.sc';
 import { mediaQueries } from '@/lib/constants/constants';
 import Wave from '@/components/particles/Wave';
+import SemiCircle from '@/components/particles/SemiCircle';
 
 const VideoBlock = () => {
 	const [isPlaying, setIsPlaying] = useState(false);
@@ -71,6 +72,9 @@ const VideoBlock = () => {
 						<VideoWaveContainer>
 							<Wave />
 						</VideoWaveContainer>
+						<VideoSemiCircleContainer>
+							<SemiCircle color={brandColors.giv[200]} />
+						</VideoSemiCircleContainer>
 					</VideoParticlesContainer>
 				</CustomFlex>
 			</Container>
@@ -107,6 +111,12 @@ const VideoWaveContainer = styled.div`
 	position: absolute;
 	bottom: 20px;
 	right: -30px;
+`;
+
+const VideoSemiCircleContainer = styled.div`
+	position: absolute;
+	top: -40px;
+	right: 40px;
 `;
 
 export default VideoBlock;
