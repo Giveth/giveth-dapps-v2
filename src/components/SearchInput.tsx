@@ -20,7 +20,7 @@ import { Flex } from './styled-components/Flex';
 import { useAppSelector } from '@/features/hooks';
 
 interface ISearchInputProps {
-	setTerm: Dispatch<SetStateAction<string | undefined>>;
+	setTerm: Dispatch<SetStateAction<string>>;
 	className?: string;
 }
 
