@@ -1,4 +1,4 @@
-import { H2, H4, neutralColors } from '@giveth/ui-design-system';
+import { brandColors, H2, H4, neutralColors } from '@giveth/ui-design-system';
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
@@ -9,6 +9,9 @@ import {
 	VideoOverlay,
 } from '@/components/homeTabs/Overview.sc';
 import { mediaQueries } from '@/lib/constants/constants';
+import Wave from '@/components/particles/Wave';
+import SemiCircle from '@/components/particles/SemiCircle';
+import QuarterCircle from '@/components/particles/QuarterCircle';
 
 const VideoBlock = () => {
 	const [isPlaying, setIsPlaying] = useState(false);
@@ -40,34 +43,48 @@ const VideoBlock = () => {
 							it.
 						</H4>
 					</Flex>
-					<CustomizedVideoContainer>
-						<video
-							ref={videoRef}
-							id='video'
-							onClick={handleVideoClick}
-							width='100%'
-							onEnded={handleVideoEnd}
-						>
-							<source
-								src='/video/givpower.mp4'
-								type='video/mp4'
-							/>
-						</video>
-						<VideoOverlay
-							onClick={handleVideoClick}
-							hidden={isPlaying}
-						>
-							<Image
-								src='/images/video_play.svg'
-								width='90'
-								height='90'
-								alt='giveconomy video play button'
-								draggable={false}
-							/>
-						</VideoOverlay>
-					</CustomizedVideoContainer>
+					<VideoParticlesContainer>
+						<CustomizedVideoContainer>
+							<video
+								ref={videoRef}
+								id='video'
+								onClick={handleVideoClick}
+								width='100%'
+								onEnded={handleVideoEnd}
+							>
+								<source
+									src='/video/givpower.mp4'
+									type='video/mp4'
+								/>
+							</video>
+							<VideoOverlay
+								onClick={handleVideoClick}
+								hidden={isPlaying}
+							>
+								<Image
+									src='/images/video_play.svg'
+									width='90'
+									height='90'
+									alt='giveconomy video play button'
+									draggable={false}
+								/>
+							</VideoOverlay>
+						</CustomizedVideoContainer>
+						<VideoWaveContainer>
+							<Wave />
+						</VideoWaveContainer>
+						<VideoSemiCircleContainer>
+							<SemiCircle color={brandColors.giv[200]} />
+						</VideoSemiCircleContainer>
+					</VideoParticlesContainer>
+					<TopWaveContainer>
+						<Wave color={brandColors.pinky[200]} />
+					</TopWaveContainer>
 				</CustomFlex>
 			</Container>
+			<QuarterCircleContainer>
+				<QuarterCircle />
+			</QuarterCircleContainer>
 		</SectionContainer>
 	);
 };
@@ -79,6 +96,7 @@ const SectionContainer = styled.div`
 `;
 
 const CustomizedVideoContainer = styled(VideoContainer)`
+	position: relative;
 	border-radius: 20px;
 	margin-bottom: 0;
 	margin-top: 0;
@@ -90,6 +108,34 @@ const CustomFlex = styled(Flex)`
 	${mediaQueries.laptopS} {
 		flex-direction: row;
 	}
+`;
+
+const VideoParticlesContainer = styled.div`
+	position: relative;
+`;
+
+const VideoWaveContainer = styled.div`
+	position: absolute;
+	bottom: 20px;
+	right: -30px;
+`;
+
+const TopWaveContainer = styled.div`
+	position: absolute;
+	top: 30px;
+	left: 0;
+`;
+
+const VideoSemiCircleContainer = styled.div`
+	position: absolute;
+	top: -40px;
+	right: 40px;
+`;
+
+const QuarterCircleContainer = styled.div`
+	position: absolute;
+	bottom: 20px;
+	left: 30%;
 `;
 
 export default VideoBlock;
