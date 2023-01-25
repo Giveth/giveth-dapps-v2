@@ -23,7 +23,12 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 	const theme = useAppSelector(state => state.general.theme);
 
 	return (
-		<Modal closeModal={closeModal} isAnimating={isAnimating} fullScreen>
+		<StyledModal
+			closeModal={closeModal}
+			isAnimating={isAnimating}
+			theme={theme}
+			fullScreen
+		>
 			<SearchModalContainer>
 				<SearchBox>
 					<H6 weight={700}>Find awesome projects on Giveth</H6>
@@ -80,9 +85,16 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 					</Col>
 				</Row>
 			</SearchModalContainer>
-		</Modal>
+		</StyledModal>
 	);
 };
+
+const StyledModal = styled(Modal)`
+	background-color: ${props =>
+		props.theme === ETheme.Dark
+			? brandColors.giv[800]
+			: neutralColors.gray[200]};
+`;
 
 const SearchModalContainer = styled(Container)`
 	padding-top: 132px;
