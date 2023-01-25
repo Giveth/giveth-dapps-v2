@@ -37,7 +37,10 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 	const theme = useAppSelector(state => state.general.theme);
 
 	useEffect(() => {
-		if (!term) return;
+		if (!term) {
+			setProjects([]);
+			return;
+		}
 		setLoading(true);
 		client
 			.query({
@@ -80,16 +83,18 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 				</SearchBox>
 				{loading ? (
 					<div>Loading</div>
-				) : projects.length > 0 ? (
-					<ProjectsWrapper>
-						<ProjectsContainer>
-							{projects.map((project, idx) => (
-								<ProjectCard key={idx} project={project} />
-							))}
-						</ProjectsContainer>
-					</ProjectsWrapper>
 				) : term.length > 0 ? (
-					<div>no result</div>
+					projects.length > 0 ? (
+						<ProjectsWrapper>
+							<ProjectsContainer>
+								{projects.map((project, idx) => (
+									<ProjectCard key={idx} project={project} />
+								))}
+							</ProjectsContainer>
+						</ProjectsWrapper>
+					) : (
+						<div>no result</div>
+					)
 				) : (
 					''
 				)}

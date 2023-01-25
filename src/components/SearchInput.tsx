@@ -4,6 +4,7 @@ import {
 	IconAlertCircle16,
 	IconEnter24,
 	IconSearch24,
+	IconX24,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import {
@@ -29,7 +30,7 @@ export const SearchInput: FC<ISearchInputProps> = ({ setTerm, className }) => {
 	const theme = useAppSelector(state => state.general.theme);
 
 	function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
-		if (event.code === 'Enter' && value.length > 3) {
+		if (event.code === 'Enter' && value.length > 2) {
 			setTerm(value);
 		}
 	}
@@ -48,21 +49,32 @@ export const SearchInput: FC<ISearchInputProps> = ({ setTerm, className }) => {
 					theme={theme}
 					value={value}
 				/>
-				<IconWrapper>
-					<IconSearch24 />
-				</IconWrapper>
+				{value.length > 0 ? (
+					<IconRemoveWrapper
+						onClick={() => {
+							setValue('');
+							setTerm('');
+						}}
+					>
+						<IconX24 />
+					</IconRemoveWrapper>
+				) : (
+					<IconWrapper>
+						<IconSearch24 />
+					</IconWrapper>
+				)}
 			</InputContainer>
 			<HintRow>
 				{value.length > 0 ? (
-					value.length < 3 ? (
-						<>
-							<Hint>Minimum 3 characters</Hint>
-							<IconAlertCircle16 />
-						</>
-					) : (
+					value.length > 2 ? (
 						<>
 							<Hint>Press Enter to search</Hint>
 							<IconEnter24 />
+						</>
+					) : (
+						<>
+							<Hint>Minimum 3 characters</Hint>
+							<IconAlertCircle16 />
 						</>
 					)
 				) : (
@@ -112,6 +124,11 @@ const IconWrapper = styled.div`
 	top: 14px;
 	right: 16px;
 `;
+
+const IconRemoveWrapper = styled(IconWrapper)`
+	cursor: pointer;
+`;
+
 const HintRow = styled(Flex)`
 	height: 24px;
 	align-items: center;
