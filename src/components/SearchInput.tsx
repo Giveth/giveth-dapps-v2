@@ -1,6 +1,8 @@
 import {
 	brandColors,
 	ButtonText,
+	IconAlertCircle16,
+	IconEnter24,
 	IconSearch24,
 	neutralColors,
 } from '@giveth/ui-design-system';
@@ -50,9 +52,23 @@ export const SearchInput: FC<ISearchInputProps> = ({ setTerm, className }) => {
 					<IconSearch24 />
 				</IconWrapper>
 			</InputContainer>
-			<Flex>
-				<Hint />
-			</Flex>
+			<HintRow>
+				{value.length > 0 ? (
+					value.length < 3 ? (
+						<>
+							<Hint>Minimum 3 characters</Hint>
+							<IconAlertCircle16 />
+						</>
+					) : (
+						<>
+							<Hint>Press Enter to search</Hint>
+							<IconEnter24 />
+						</>
+					)
+				) : (
+					''
+				)}
+			</HintRow>
 		</SearchInputContainer>
 	);
 };
@@ -96,5 +112,16 @@ const IconWrapper = styled.div`
 	top: 14px;
 	right: 16px;
 `;
-
+const HintRow = styled(Flex)`
+	height: 24px;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 12px;
+	margin-top: 4px;
+	padding: 4px;
+	color: ${props =>
+		props.theme === ETheme.Dark
+			? brandColors.giv[300]
+			: neutralColors.gray[600]};
+`;
 const Hint = styled(ButtonText)``;
