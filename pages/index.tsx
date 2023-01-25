@@ -4,15 +4,17 @@ import HomeIndex from '@/components/views/homepage/HomeIndex';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { ESortbyAllProjects } from '@/apollo/types/gqlEnums';
-import { IProject } from '@/apollo/types/types';
+import { IProject, IRecentDonation } from '@/apollo/types/types';
 import { useAppSelector } from '@/features/hooks';
 import { homeMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
+import { RECENT_DONATIONS } from '@/apollo/gql/gqlDonations';
 
-interface IHomeRoute {
+export interface IHomeRoute {
 	projects: IProject[];
 	totalCount: number;
+	recentDonations: IRecentDonation[];
 }
 
 const fetchProjects = async (userId: string | undefined = undefined) => {
@@ -49,7 +51,11 @@ const HomeRoute = (props: IHomeRoute) => {
 	return (
 		<>
 			<GeneralMetatags info={homeMetatags} />
-			<HomeIndex projects={projects} totalCount={totalCount} />
+			<HomeIndex
+				projects={projects}
+				totalCount={totalCount}
+				recentDonations={props.recentDonations}
+			/>
 		</>
 	);
 };
@@ -60,11 +66,17 @@ export async function getServerSideProps({ res }: any) {
 		'public, s-maxage=10, stale-while-revalidate=59',
 	);
 	try {
+		const { data } = await client.query({
+			query: RECENT_DONATIONS,
+			variables: { take: 50 },
+			fetchPolicy: 'network-only',
+		});
 		const { projects, totalCount } = await fetchProjects();
 		return {
 			props: {
 				projects,
 				totalCount,
+				recentDonations: data.recentDonations,
 			},
 		};
 	} catch (error: any) {
