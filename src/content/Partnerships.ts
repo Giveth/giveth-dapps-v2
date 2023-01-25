@@ -137,7 +137,6 @@ export const PartnershipArray: IPartner[] = [
 		description: 'page.partnerships.metagammadelta',
 		link: 'https://metagammadelta.com/',
 	},
-
 	{
 		icon: MyEtherWallet,
 		title: 'MyEtherWallet (MEW)',
