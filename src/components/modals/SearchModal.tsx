@@ -1,37 +1,58 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import { H6, Lead } from '@giveth/ui-design-system';
+import { brandColors, H6, Lead, neutralColors } from '@giveth/ui-design-system';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Col, Container, Row } from '../Grid';
 import { Flex } from '../styled-components/Flex';
 import { mediaQueries } from '@/lib/constants/constants';
+import { ETheme } from '@/features/general/general.slice';
+import { useAppSelector } from '@/features/hooks';
+
+const quickLinks = [
+	{ title: 'Top ranking projects', query: '' },
+	{ title: 'Most funded projects', query: '' },
+	{ title: 'New projects', query: '' },
+	{ title: 'Most liked projects', query: '' },
+];
 
 export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const theme = useAppSelector(state => state.general.theme);
 
 	return (
 		<Modal closeModal={closeModal} isAnimating={isAnimating} fullScreen>
 			<SearchModalContainer>
 				<SearchBox>
-					<H6>Find awesome projects on Giveth</H6>
+					<H6 weight={700}>Find awesome projects on Giveth</H6>
 					<div>search bar</div>
 				</SearchBox>
+				<Row>
+					<Col xs={12} sm={4}>
+						<Flex
+							gap='24px'
+							flexDirection='column'
+							alignItems='flex-start'
+						>
+							<Title size='large' theme={theme}>
+								Quick links
+							</Title>
+							{quickLinks.map((item, idx) => (
+								<Item key={idx} theme={theme}>
+									{item.title}
+								</Item>
+							))}
+						</Flex>
+					</Col>
+				</Row>
 			</SearchModalContainer>
-			<Row>
-				<Col xs={12} sm={4}>
-					<Lead size='large'>Quick links</Lead>
-					<Lead>Top ranking projects</Lead>
-				</Col>
-			</Row>
 		</Modal>
 	);
 };
 
 const SearchModalContainer = styled(Container)`
 	padding-top: 132px;
-	padding-bottom: 80px;
 `;
 
 const SearchBox = styled(Flex)`
@@ -40,5 +61,20 @@ const SearchBox = styled(Flex)`
 	${mediaQueries.tablet} {
 		width: 600px;
 	}
-	margin: auto;
+	margin: 0 auto 80px;
+`;
+
+const Title = styled(Lead)`
+	margin-bottom: 16px;
+	color: ${props =>
+		props.theme === ETheme.Dark
+			? brandColors.giv[200]
+			: neutralColors.gray[700]};
+`;
+
+const Item = styled(Lead)`
+	color: ${props =>
+		props.theme === ETheme.Dark
+			? neutralColors.gray[100]
+			: neutralColors.gray[900]};
 `;
