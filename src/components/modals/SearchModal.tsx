@@ -45,6 +45,38 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 							))}
 						</Flex>
 					</Col>
+					<Col xs={12} sm={4}>
+						<Flex
+							gap='24px'
+							flexDirection='column'
+							alignItems='flex-start'
+						>
+							<Title size='large' theme={theme}>
+								Featuerd projects
+							</Title>
+							{quickLinks.map((item, idx) => (
+								<Item key={idx} theme={theme}>
+									{item.title}
+								</Item>
+							))}
+						</Flex>
+					</Col>
+					<Col xs={12} sm={4}>
+						<Flex
+							gap='24px'
+							flexDirection='column'
+							alignItems='flex-start'
+						>
+							<Title size='large' theme={theme}>
+								Popular categories
+							</Title>
+							{quickLinks.map((item, idx) => (
+								<Item key={idx} theme={theme}>
+									{item.title}
+								</Item>
+							))}
+						</Flex>
+					</Col>
 				</Row>
 			</SearchModalContainer>
 		</Modal>
