@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 import { brandColors, H6, Lead, neutralColors } from '@giveth/ui-design-system';
 import { Modal } from './Modal';
@@ -19,6 +19,7 @@ const quickLinks = [
 ];
 
 export const SearchModal: FC<IModal> = ({ setShowModal }) => {
+	const [term, setTerm] = useState<string>();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const theme = useAppSelector(state => state.general.theme);
 
@@ -32,7 +33,7 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 			<SearchModalContainer>
 				<SearchBox>
 					<H6 weight={700}>Find awesome projects on Giveth</H6>
-					<SearchInput />
+					<SearchInput setTerm={setTerm} />
 				</SearchBox>
 				<Row>
 					<Col xs={12} sm={1.5}></Col>

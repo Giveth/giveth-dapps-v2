@@ -4,26 +4,47 @@ import {
 	IconSearch24,
 	neutralColors,
 } from '@giveth/ui-design-system';
-import React, { FC } from 'react';
+import {
+	Dispatch,
+	SetStateAction,
+	FC,
+	KeyboardEvent,
+	ChangeEvent,
+	useState,
+} from 'react';
 import styled, { css } from 'styled-components';
 import { ETheme } from '@/features/general/general.slice';
 import { Flex } from './styled-components/Flex';
 import { useAppSelector } from '@/features/hooks';
 
 interface ISearchInputProps {
+	setTerm: Dispatch<SetStateAction<string | undefined>>;
 	className?: string;
 }
 
-export const SearchInput: FC<ISearchInputProps> = ({ className }) => {
+export const SearchInput: FC<ISearchInputProps> = ({ setTerm, className }) => {
+	const [value, setValue] = useState<string>('');
 	const theme = useAppSelector(state => state.general.theme);
+
+	function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+		if (event.code === 'Enter' && value.length > 3) {
+			setTerm(value);
+		}
+	}
+
+	function handleOnChange(event: ChangeEvent<HTMLInputElement>) {
+		setValue(event.target.value);
+	}
 
 	return (
 		<SearchInputContainer className={className} theme={theme}>
-			<InputContainer theme={theme}>
+			<InputContainer theme={theme} onKeyDown={handleKeyDown}>
 				<StyledInput
+					onChange={handleOnChange}
 					as='input'
 					placeholder='Search for project...'
 					theme={theme}
+					value={value}
 				/>
 				<IconWrapper>
 					<IconSearch24 />
