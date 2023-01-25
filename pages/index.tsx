@@ -9,12 +9,15 @@ import { useAppSelector } from '@/features/hooks';
 import { homeMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
-import { RECENT_DONATIONS } from '@/apollo/gql/gqlDonations';
+import { HOMEPAGE_DATA } from '@/apollo/gql/gqlHomePage';
 
 export interface IHomeRoute {
 	projects: IProject[];
 	totalCount: number;
 	recentDonations: IRecentDonation[];
+	projectsPerDate: { total: number };
+	totalDonorsCountPerDate: { total: number };
+	donationsTotalUsdPerDate: { total: number };
 }
 
 const fetchProjects = async (userId: string | undefined = undefined) => {
@@ -36,6 +39,7 @@ const fetchProjects = async (userId: string | undefined = undefined) => {
 };
 
 const HomeRoute = (props: IHomeRoute) => {
+	const { projects: _projects, totalCount: _totalCount, ...rest } = props;
 	const user = useAppSelector(state => state.user.userData);
 	const [projects, setProjects] = useState(props.projects);
 	const [totalCount, setTotalCount] = useState(props.totalCount);
@@ -51,11 +55,7 @@ const HomeRoute = (props: IHomeRoute) => {
 	return (
 		<>
 			<GeneralMetatags info={homeMetatags} />
-			<HomeIndex
-				projects={projects}
-				totalCount={totalCount}
-				recentDonations={props.recentDonations}
-			/>
+			<HomeIndex projects={projects} totalCount={totalCount} {...rest} />
 		</>
 	);
 };
@@ -67,16 +67,24 @@ export async function getServerSideProps({ res }: any) {
 	);
 	try {
 		const { data } = await client.query({
-			query: RECENT_DONATIONS,
-			variables: { take: 50 },
+			query: HOMEPAGE_DATA,
+			variables: {
+				take: 50,
+				fromDate: '2021-01-01',
+				toDate: new Date().toISOString(),
+				limit: 12,
+				sortingBy: ESortbyAllProjects.GIVPOWER,
+			},
 			fetchPolicy: 'network-only',
 		});
-		const { projects, totalCount } = await fetchProjects();
 		return {
 			props: {
-				projects,
-				totalCount,
+				projects: data.allProjects.projects,
+				totalCount: data.allProjects.totalCount,
 				recentDonations: data.recentDonations,
+				projectsPerDate: data.projectsPerDate,
+				totalDonorsCountPerDate: data.totalDonorsCountPerDate,
+				donationsTotalUsdPerDate: data.donationsTotalUsdPerDate,
 			},
 		};
 	} catch (error: any) {

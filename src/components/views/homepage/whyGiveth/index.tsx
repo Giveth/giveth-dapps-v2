@@ -11,17 +11,36 @@ import { FC, useRef } from 'react';
 import { Flex } from '@/components/styled-components/Flex';
 import StatsCard from '@/components/views/homepage/whyGiveth/StatsCard';
 import DonationCard from '@/components/views/homepage/whyGiveth/DonationCard';
-import { IRecentDonation } from '@/apollo/types/types';
+import { IHomeRoute } from '../../../../../pages';
+import { thousandsSeparator } from '@/lib/helpers';
 
-interface IWhyGiveth {
-	recentDonations: IRecentDonation[];
-}
-
-const WhyGiveth: FC<IWhyGiveth> = props => {
-	const { recentDonations } = props;
+const WhyGiveth: FC<Omit<IHomeRoute, 'projects'>> = props => {
+	const {
+		recentDonations,
+		projectsPerDate,
+		totalDonorsCountPerDate,
+		donationsTotalUsdPerDate,
+	} = props;
 	const nonZeroDonations = recentDonations.filter(
 		i => i.valueUsd && i.valueUsd > 0.1,
 	);
+
+	const statsArray = [
+		{
+			title: 'Projects on Giveth',
+			value: thousandsSeparator(projectsPerDate.total),
+		},
+		{
+			title: 'Donated to projects',
+			value:
+				'~$' +
+				thousandsSeparator(donationsTotalUsdPerDate.total.toFixed()),
+		},
+		{
+			title: '# of givers',
+			value: thousandsSeparator(totalDonorsCountPerDate.total),
+		},
+	];
 
 	const donationCardsRef = useRef<HTMLDivElement>(null);
 
@@ -61,21 +80,6 @@ const WhyGiveth: FC<IWhyGiveth> = props => {
 		</>
 	);
 };
-
-const statsArray = [
-	{
-		title: 'Projects on Giveth',
-		value: '1,726',
-	},
-	{
-		title: 'Donated to projects',
-		value: '~$190,854',
-	},
-	{
-		title: '# of givers',
-		value: '19,702',
-	},
-];
 
 const DonationCardWrapper = styled.div`
 	overflow: hidden;
