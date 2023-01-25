@@ -25,7 +25,9 @@ export const SearchInput: FC<ISearchInputProps> = ({ className }) => {
 					placeholder='Search for project...'
 					theme={theme}
 				/>
-				<IconSearch24 />
+				<IconWrapper>
+					<IconSearch24 />
+				</IconWrapper>
 			</InputContainer>
 			<Flex>
 				<Hint />
@@ -37,39 +39,41 @@ export const SearchInput: FC<ISearchInputProps> = ({ className }) => {
 const SearchInputContainer = styled.div``;
 
 const InputContainer = styled(Flex)`
-	padding: 16px;
-	border-radius: 30px;
-	${props =>
-		props.theme === ETheme.Dark
-			? css`
-					background-color: ${brandColors.giv[600]};
-					border: 1px solid ${brandColors.giv[500]};
-			  `
-			: css`
-					background-color: ${neutralColors.gray[100]};
-					border: 1px solid ${neutralColors.gray[400]};
-			  `}
+	position: relative;
 `;
 
 const StyledInput = styled(ButtonText)`
 	border: none;
 	background-color: inherit;
 	flex: 1;
-	padding-left: 8px;
+	padding: 16px 48px 16px 24px;
+	border-radius: 30px;
 	${props =>
 		props.theme === ETheme.Dark
 			? css`
+					background-color: ${brandColors.giv[600]};
+					border: 1px solid ${brandColors.giv[500]};
 					color: ${neutralColors.gray[100]};
 					::placeholder {
 						color: ${brandColors.giv[300]};
 					}
 			  `
 			: css`
+					background-color: ${neutralColors.gray[100]};
+					border: 1px solid ${neutralColors.gray[400]};
 					color: ${neutralColors.gray[900]};
 					::placeholder {
 						color: ${neutralColors.gray[700]};
 					}
 			  `}
+`;
+
+const IconWrapper = styled.div`
+	width: 24px;
+	height: 24px;
+	position: absolute;
+	top: 14px;
+	right: 16px;
 `;
 
 const Hint = styled(ButtonText)``;
