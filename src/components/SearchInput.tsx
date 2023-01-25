@@ -42,10 +42,12 @@ const InputContainer = styled(Flex)`
 	${props =>
 		props.theme === ETheme.Dark
 			? css`
-					background-color: ${brandColors.giv[500]};
+					background-color: ${brandColors.giv[600]};
+					border: 1px solid ${brandColors.giv[500]};
 			  `
 			: css`
 					background-color: ${neutralColors.gray[100]};
+					border: 1px solid ${neutralColors.gray[400]};
 			  `}
 `;
 
