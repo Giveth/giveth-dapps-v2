@@ -279,12 +279,13 @@ const TitleWrapper = styled.div`
 `;
 
 const Title = styled(H6)<{ isHover?: boolean }>`
-	color: ${props =>
-		props.isHover ? brandColors.pinky[500] : brandColors.deep[700]};
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	margin-bottom: 2px;
+	&:hover {
+		color: ${brandColors.pinky[500]};
+	}
 `;
 
 const Author = styled(GLink)`
