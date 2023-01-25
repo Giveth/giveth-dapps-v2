@@ -35,7 +35,8 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 					<SearchInput />
 				</SearchBox>
 				<Row>
-					<Col xs={12} sm={4}>
+					<Col xs={12} sm={1.5}></Col>
+					<Col xs={12} sm={3}>
 						<Flex
 							gap='24px'
 							flexDirection='column'
@@ -51,7 +52,7 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 							))}
 						</Flex>
 					</Col>
-					<Col xs={12} sm={4}>
+					<Col xs={12} sm={3}>
 						<Flex
 							gap='24px'
 							flexDirection='column'
@@ -67,7 +68,7 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 							))}
 						</Flex>
 					</Col>
-					<Col xs={12} sm={4}>
+					<Col xs={12} sm={3}>
 						<Flex
 							gap='24px'
 							flexDirection='column'
@@ -83,6 +84,7 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 							))}
 						</Flex>
 					</Col>
+					<Col xs={12} sm={1.5}></Col>
 				</Row>
 			</SearchModalContainer>
 		</StyledModal>
