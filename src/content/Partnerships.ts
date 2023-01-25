@@ -1,6 +1,5 @@
 import Alibre from '/public/images/partnerships/Alibre.svg';
 import Maker_DAO from '/public/images/partnerships/Maker_DAO.svg';
-import MyCrypto from '/public/images/partnerships/MyCrypto.svg';
 import Aragon from '/public/images/partnerships/Aragon.svg';
 import MyEtherWallet from '/public/images/partnerships/MyEtherWallet.svg';
 import Status_im from '/public/images/partnerships/Status.im.svg';
@@ -138,12 +137,7 @@ export const PartnershipArray: IPartner[] = [
 		description: 'page.partnerships.metagammadelta',
 		link: 'https://metagammadelta.com/',
 	},
-	{
-		icon: MyCrypto,
-		title: 'MyCrypto',
-		description: 'page.partnerships.mycrypto',
-		link: 'https://mycrypto.com/',
-	},
+
 	{
 		icon: MyEtherWallet,
 		title: 'MyEtherWallet (MEW)',
