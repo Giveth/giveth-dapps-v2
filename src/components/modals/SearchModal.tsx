@@ -9,6 +9,7 @@ import { Flex } from '../styled-components/Flex';
 import { mediaQueries } from '@/lib/constants/constants';
 import { ETheme } from '@/features/general/general.slice';
 import { useAppSelector } from '@/features/hooks';
+import { SearchInput } from '../SearchInput';
 
 const quickLinks = [
 	{ title: 'Top ranking projects', query: '' },
@@ -26,7 +27,7 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 			<SearchModalContainer>
 				<SearchBox>
 					<H6 weight={700}>Find awesome projects on Giveth</H6>
-					<div>search bar</div>
+					<SearchInput />
 				</SearchBox>
 				<Row>
 					<Col xs={12} sm={4}>
