@@ -17,6 +17,10 @@ import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
 import { showToastError } from '@/lib/helpers';
 import { IProject } from '@/apollo/types/types';
 import ProjectCard from '../project-card/ProjectCard';
+import {
+	ProjectsWrapper,
+	ProjectsContainer,
+} from '../views/projects/ProjectsIndex';
 
 const quickLinks = [
 	{ title: 'Top ranking projects', query: '' },
@@ -77,13 +81,15 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 				{loading ? (
 					<div>Loading</div>
 				) : projects.length > 0 ? (
-					<div>
-						{projects.map((project, idx) => (
-							<ProjectCard key={idx} project={project} />
-						))}
-					</div>
+					<ProjectsWrapper>
+						<ProjectsContainer>
+							{projects.map((project, idx) => (
+								<ProjectCard key={idx} project={project} />
+							))}
+						</ProjectsContainer>
+					</ProjectsWrapper>
 				) : term.length > 0 ? (
-					<div>no resutl</div>
+					<div>no result</div>
 				) : (
 					''
 				)}

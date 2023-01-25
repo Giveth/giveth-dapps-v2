@@ -344,11 +344,11 @@ const FiltersContainer = styled.div`
 	}
 `;
 
-const ProjectsWrapper = styled.div`
+export const ProjectsWrapper = styled.div`
 	margin-bottom: 64px;
 `;
 
-const ProjectsContainer = styled.div`
+export const ProjectsContainer = styled.div`
 	display: grid;
 	gap: 25px;
 	padding: 0 23px;
