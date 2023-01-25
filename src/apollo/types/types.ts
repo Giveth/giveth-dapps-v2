@@ -291,3 +291,11 @@ export interface IPowerBoosting {
 	project: IProject;
 	percentage: number;
 }
+
+export interface IRecentDonation {
+	createAt: string;
+	id: string;
+	project: { title: string };
+	user: { walletAddress: string };
+	valueUsd: number | null;
+}

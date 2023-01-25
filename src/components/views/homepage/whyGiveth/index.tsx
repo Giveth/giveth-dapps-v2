@@ -7,11 +7,22 @@ import {
 	Subline,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { FC } from 'react';
 import { Flex } from '@/components/styled-components/Flex';
 import StatsCard from '@/components/views/homepage/whyGiveth/StatsCard';
 import DonationCard from '@/components/views/homepage/whyGiveth/DonationCard';
+import { IRecentDonation } from '@/apollo/types/types';
 
-const WhyGiveth = () => {
+interface IWhyGiveth {
+	recentDonations: IRecentDonation[];
+}
+
+const WhyGiveth: FC<IWhyGiveth> = props => {
+	const { recentDonations } = props;
+	const nonZeroDonations = recentDonations.filter(
+		i => i.valueUsd && i.valueUsd > 1,
+	);
+
 	return (
 		<>
 			<GivethStats>
@@ -31,12 +42,12 @@ const WhyGiveth = () => {
 				<Line />
 				<DonationCardWrapper>
 					<DonationCardContainer>
-						{donationsArray.map((i, index) => (
+						{nonZeroDonations.map(i => (
 							<DonationCard
-								key={index}
-								address={i.address}
-								amount={i.amount}
-								projectTitle={i.projectTitle}
+								key={i.id}
+								address={i.user.walletAddress}
+								amount={i.valueUsd!}
+								projectTitle={i.project.title}
 							/>
 						))}
 					</DonationCardContainer>
@@ -45,34 +56,6 @@ const WhyGiveth = () => {
 		</>
 	);
 };
-
-const donationsArray = [
-	{
-		address: '0x6B806496B55908851c498122212dba88d0e4231A',
-		amount: '0.657742344523',
-		projectTitle: 'The Teen Project, Inc.',
-	},
-	{
-		address: '0x49a38e2E232F64a07273256B31449688Fa85D151',
-		amount: '25.657742344523',
-		projectTitle: 'Women of Crypto Art (WOCA)',
-	},
-	{
-		address: '0x6B806496B55908851c498122212dba88d0e4231A',
-		amount: '0.657742344523',
-		projectTitle: 'The Teen Project, Inc.',
-	},
-	{
-		address: '0x4f59bF2F819cc2E62B9eC9709Abf3c0dEae503d6',
-		amount: '1492.657742344523',
-		projectTitle: 'Herbs and Drugs and Tools to Combat Sleepiness',
-	},
-	{
-		address: '0x6B806496B55908851c498122212dba88d0e4231A',
-		amount: '0.657742344523',
-		projectTitle: 'The Teen Project, Inc.',
-	},
-];
 
 const statsArray = [
 	{
