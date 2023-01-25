@@ -288,11 +288,11 @@ const Title = styled(H6)<{ isHover?: boolean }>`
 `;
 
 const Author = styled(GLink)`
-	color: ${brandColors.pinky[500]};
+	color: ${neutralColors.gray[700]};
 	margin-bottom: 16px;
 	display: block;
 	&:hover {
-		color: ${brandColors.pinky[800]};
+		color: ${brandColors.pinky[500]};
 	}
 `;
 
