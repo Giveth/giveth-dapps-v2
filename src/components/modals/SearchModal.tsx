@@ -163,7 +163,10 @@ const StyledModal = styled(Modal)`
 `;
 
 const SearchModalContainer = styled(Container)`
-	padding-top: 132px;
+	padding-top: 36px;
+	${mediaQueries.tablet} {
+		padding-top: 132px;
+	}
 `;
 
 const SearchBox = styled(Flex)`
