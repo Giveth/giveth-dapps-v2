@@ -117,7 +117,7 @@ const ProjectCard = (props: IProjectCard) => {
 					<Description>{htmlToText(description)}</Description>
 					<PaddedRow alignItems='center' gap='4px'>
 						<PriceText>
-							${Math.ceil(totalDonations as number)}
+							${Math.round(totalDonations as number)}
 						</PriceText>
 						<LightSubline>
 							{' '}
