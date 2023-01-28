@@ -79,6 +79,7 @@ const UpdatesSection = (props: {
 	const [isEditing, setIsEditing] = useState<boolean>(false);
 	const [updateContent, setUpdateContent] = useState<string>(content);
 	const [newTitle, setNewTitle] = useState<string>(title);
+	const [count, setCount] = useState(0);
 
 	return (
 		<Wrapper>
@@ -102,6 +103,8 @@ const UpdatesSection = (props: {
 								style={TextInputStyle}
 								setValue={setUpdateContent}
 								withLimit={UPDATE_LIMIT}
+								count={count}
+								setCount={setCount}
 								placeholder='Edit your project'
 							/>
 						) : (
