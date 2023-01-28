@@ -323,7 +323,7 @@ const Input = styled.input`
 
 const TextInputStyle = {
 	marginTop: '4px',
-	marginBottom: '100px',
+	marginBottom: '24px',
 	fontFamily: 'body',
 	backgroundColor: 'white',
 };
