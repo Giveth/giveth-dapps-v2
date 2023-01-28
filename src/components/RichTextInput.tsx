@@ -12,6 +12,7 @@ import * as Emoji from 'quill-emoji';
 import { neutralColors } from '@giveth/ui-design-system';
 
 import { captureException } from '@sentry/nextjs';
+import { convert } from 'html-to-text';
 import ImageUploader from './richImageUploader/imageUploader';
 import { UPLOAD_IMAGE } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
@@ -155,13 +156,36 @@ const formats = [
 ];
 
 function TextRichWithQuill(props: any) {
-	const { value, setValue, placeholder, withLimit, style, projectId } = props;
+	const {
+		value,
+		setValue,
+		count,
+		setCount,
+		placeholder,
+		withLimit,
+		style,
+		projectId,
+	} = props;
 
 	const [mod, setMod] = useState<any>();
 
 	useEffect(() => {
 		setMod(modules(projectId));
 	}, []);
+
+	useEffect(() => {
+		const a = convert(value, {
+			selectors: [
+				{ selector: 'a', options: { ignoreHref: true } },
+				{ selector: 'img', format: 'skip' },
+				{
+					selector: 'p',
+					format: 'inlineSurround',
+				},
+			],
+		});
+		setCount(a.length);
+	}, [value]);
 
 	if (!mod) return null;
 
@@ -178,7 +202,7 @@ function TextRichWithQuill(props: any) {
 			/>
 			{withLimit && (
 				<Counter>
-					{value?.length} / {withLimit}
+					{count} / {withLimit}
 				</Counter>
 			)}
 		</>
