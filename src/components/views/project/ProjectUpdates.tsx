@@ -39,11 +39,11 @@ const ProjectUpdates = () => {
 	const dispatch = useAppDispatch();
 	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
 
-	const [count, setCount] = useState(0);
 	const [newUpdate, setNewUpdate] = useState<string>('');
 	const [title, setTitle] = useState<string>('');
 	const [currentUpdate, setCurrentUpdate] = useState<string>('');
 	const [showRemoveUpdateModal, setShowRemoveUpdateModal] = useState(false);
+	const [isLimitExceeded, setIsLimitExceeded] = useState(false);
 
 	const [addUpdateMutation] = useMutation(ADD_PROJECT_UPDATE);
 	const [deleteUpdateMutation] = useMutation(DELETE_PROJECT_UPDATE);
@@ -164,7 +164,7 @@ const ProjectUpdates = () => {
 					position: 'top-center',
 				});
 			}
-			if (count > UPDATE_LIMIT) {
+			if (isLimitExceeded) {
 				return gToast(
 					`Please enter less than ${UPDATE_LIMIT} characters`,
 					{
@@ -237,9 +237,8 @@ const ProjectUpdates = () => {
 								value={newUpdate}
 								style={TextInputStyle}
 								setValue={setNewUpdate}
-								count={count}
-								setCount={setCount}
-								withLimit={UPDATE_LIMIT}
+								setIsLimitExceeded={setIsLimitExceeded}
+								limit={UPDATE_LIMIT}
 								placeholder='Clear project description explaining who your are and what you want to do with the funds...'
 							/>
 						</div>

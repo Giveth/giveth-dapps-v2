@@ -18,7 +18,6 @@ import * as Emoji from 'quill-emoji';
 import { neutralColors } from '@giveth/ui-design-system';
 
 import { captureException } from '@sentry/nextjs';
-import { convert } from 'html-to-text';
 import ImageUploader from './richImageUploader/imageUploader';
 import { UPLOAD_IMAGE } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
@@ -163,10 +162,9 @@ const formats = [
 interface ITextRichWithQuillProps {
 	value: string;
 	setValue: (value: string) => void;
-	count?: number;
-	setCount?: Dispatch<SetStateAction<number>>;
+	setIsLimitExceeded?: Dispatch<SetStateAction<boolean>>;
 	placeholder?: string;
-	withLimit?: number;
+	limit?: number;
 	style?: any;
 	projectId?: string;
 }
@@ -174,10 +172,8 @@ interface ITextRichWithQuillProps {
 const TextRichWithQuill: FC<ITextRichWithQuillProps> = ({
 	value,
 	setValue,
-	count,
-	setCount,
 	placeholder,
-	withLimit,
+	limit,
 	style,
 	projectId,
 }) => {
@@ -186,22 +182,6 @@ const TextRichWithQuill: FC<ITextRichWithQuillProps> = ({
 	useEffect(() => {
 		setMod(modules(projectId));
 	}, []);
-
-	useEffect(() => {
-		if (setCount) {
-			const a = convert(value, {
-				selectors: [
-					{ selector: 'a', options: { ignoreHref: true } },
-					{ selector: 'img', format: 'skip' },
-					{
-						selector: 'p',
-						format: 'inlineSurround',
-					},
-				],
-			});
-			setCount(a.length);
-		}
-	}, [value]);
 
 	if (!mod) return null;
 
@@ -216,12 +196,47 @@ const TextRichWithQuill: FC<ITextRichWithQuillProps> = ({
 				style={style}
 				placeholder={placeholder}
 			/>
-			{withLimit && (
-				<Counter>
-					{count} / {withLimit}
-				</Counter>
-			)}
+			{limit && <RichtextCounter limit={limit} value={value} />}
 		</>
+	);
+};
+
+const calcLengthOfHTML = (html: string) => {
+	var plainString = html.replace(/<[^>]+>/g, '');
+	console.log('plainString', plainString);
+	return plainString.length;
+};
+interface IRichtextCounterProps {
+	value: string;
+	limit: number;
+	setIsLimitExceeded?: Dispatch<SetStateAction<boolean>>;
+}
+
+const RichtextCounter: FC<IRichtextCounterProps> = ({
+	value,
+	limit,
+	setIsLimitExceeded,
+}) => {
+	const [count, setCount] = useState(0);
+	useEffect(() => {
+		const temp = setTimeout(() => {
+			console.log('Calc');
+			const _count = calcLengthOfHTML(value);
+			setCount(_count);
+			setIsLimitExceeded && _count > limit && setIsLimitExceeded(true);
+		}, 1000);
+		console.log('value changed');
+
+		return () => {
+			console.log('clear');
+			clearTimeout(temp);
+		};
+	}, [limit, setIsLimitExceeded, value]);
+
+	return (
+		<CounterContainer>
+			{count} / {limit}
+		</CounterContainer>
 	);
 };
 
@@ -234,7 +249,7 @@ const ReactQuillStyled = styled(ReactQuill)`
 	}
 `;
 
-const Counter = styled.div`
+const CounterContainer = styled.div`
 	position: absolute;
 	background-color: ${neutralColors.gray[300]};
 	border-radius: 64px;
