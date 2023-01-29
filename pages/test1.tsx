@@ -10,6 +10,7 @@ import { fetchXDaiInfoAsync } from '@/features/subgraph/subgraph.thunks';
 import { FlowRateTooltip } from '@/components/homeTabs/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { zIndex } from '@/lib/constants/constants';
+import { Container } from '@/components/Grid';
 
 const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
 	ssr: false,
@@ -140,7 +141,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 	};
 };
 
-const TestContainer = styled.div`
+const TestContainer = styled(Container)`
 	padding: 200px 0;
 `;
 
