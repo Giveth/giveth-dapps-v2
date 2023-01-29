@@ -202,7 +202,7 @@ const TextRichWithQuill: FC<ITextRichWithQuillProps> = ({
 };
 
 const calcLengthOfHTML = (html: string) => {
-	var plainString = html.replace(/<[^>]+>/g, '');
+	const plainString = html.replace(/<[^>]+>/g, '');
 	return plainString.length;
 };
 interface IRichtextCounterProps {
