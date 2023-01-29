@@ -203,7 +203,6 @@ const TextRichWithQuill: FC<ITextRichWithQuillProps> = ({
 
 const calcLengthOfHTML = (html: string) => {
 	var plainString = html.replace(/<[^>]+>/g, '');
-	console.log('plainString', plainString);
 	return plainString.length;
 };
 interface IRichtextCounterProps {
@@ -220,15 +219,12 @@ const RichtextCounter: FC<IRichtextCounterProps> = ({
 	const [count, setCount] = useState(0);
 	useEffect(() => {
 		const temp = setTimeout(() => {
-			console.log('Calc');
 			const _count = calcLengthOfHTML(value);
 			setCount(_count);
 			setIsLimitExceeded && _count > limit && setIsLimitExceeded(true);
 		}, 1000);
-		console.log('value changed');
 
 		return () => {
-			console.log('clear');
 			clearTimeout(temp);
 		};
 	}, [limit, setIsLimitExceeded, value]);
