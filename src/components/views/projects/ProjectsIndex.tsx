@@ -18,7 +18,12 @@ import { client } from '@/apollo/apolloClient';
 import { ICategory, IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
-import { device, deviceSize, mediaQueries } from '@/lib/constants/constants';
+import {
+	BACKEND_QUERY_LIMIT,
+	device,
+	deviceSize,
+	mediaQueries,
+} from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import ProjectsBanner from './ProjectsBanner';
@@ -27,6 +32,7 @@ import ProjectsFiltersDesktop from '@/components/views/projects/ProjectsFiltersD
 import ProjectsFiltersTablet from '@/components/views/projects/ProjectsFiltersTablet';
 import ProjectsFiltersMobile from '@/components/views/projects/ProjectsFiltersMobile';
 import LottieControl from '@/components/animations/lottieControl';
+import GitcoinBanner from '@/components/views/homepage/HomeNiceSection';
 import LoadingAnimation from '@/animations/loading_giv.json';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
@@ -76,7 +82,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 		(isLoadMore?: boolean, loadNum?: number, userIdChanged = false) => {
 			const variables: IQueries = {
 				limit: userIdChanged
-					? filteredProjects.length
+					? filteredProjects.length > 50
+						? BACKEND_QUERY_LIMIT
+						: filteredProjects.length
 					: projects.length,
 				skip: userIdChanged ? 0 : projects.length * (loadNum || 0),
 			};
@@ -85,7 +93,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				variables.connectedWalletUserId = Number(user?.id);
 			}
 
-			if (!userIdChanged) setIsLoading(true);
+			setIsLoading(true);
 			if (
 				contextVariables.mainCategory !== router.query?.slug?.toString()
 			)
@@ -244,6 +252,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 			)}
 
 			<ProjectsBanner mainCategory={selectedMainCategory} />
+			<GitcoinBanner />
 			<Wrapper>
 				<FiltersContainer>
 					{isDesktop && <ProjectsFiltersDesktop />}
