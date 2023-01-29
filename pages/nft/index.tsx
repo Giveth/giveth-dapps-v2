@@ -1,13 +1,25 @@
 import Head from 'next/head';
-import { NFTIndex } from '@/components/views/nft/NFTIndex';
+import { useEffect } from 'react';
+import { setDarkTheme, setLightTheme } from '@/features/general/general.slice';
+import { useAppDispatch } from '@/features/hooks';
+import OverviewIndex from '@/components/views/nft/overview';
 
 const NFTRoute = () => {
+	const dispatch = useAppDispatch();
+
+	useEffect(() => {
+		dispatch(setDarkTheme());
+		return () => {
+			dispatch(setLightTheme());
+		};
+	}, [dispatch]);
+
 	return (
 		<>
 			<Head>
 				<title>Edit Project | Giveth</title>
 			</Head>
-			<NFTIndex />
+			<OverviewIndex />
 		</>
 	);
 };
