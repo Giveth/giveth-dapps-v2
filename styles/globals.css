@@ -74,9 +74,7 @@ a {
 .ql-tooltip.ql-hidden {
 	display: none;
 }
-.ql-clipboard {
-	display: none;
-}
+
 .ql-container {
 	min-height: 10rem;
 	height: 100%;

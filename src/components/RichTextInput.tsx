@@ -1,4 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+	Dispatch,
+	FC,
+	SetStateAction,
+	useEffect,
+	useState,
+} from 'react';
 // eslint-disable-next-line import/named
 import ReactQuill, { Quill } from 'react-quill';
 import QuillImageDropAndPaste from 'quill-image-drop-and-paste';
@@ -153,10 +159,24 @@ const formats = [
 	'video',
 	'emoji',
 ];
+interface ITextRichWithQuillProps {
+	value: string;
+	setValue: (value: string) => void;
+	setIsLimitExceeded?: Dispatch<SetStateAction<boolean>>;
+	placeholder?: string;
+	limit?: number;
+	style?: any;
+	projectId?: string;
+}
 
-function TextRichWithQuill(props: any) {
-	const { value, setValue, placeholder, withLimit, style, projectId } = props;
-
+const TextRichWithQuill: FC<ITextRichWithQuillProps> = ({
+	value,
+	setValue,
+	placeholder,
+	limit,
+	style,
+	projectId,
+}) => {
 	const [mod, setMod] = useState<any>();
 
 	useEffect(() => {
@@ -176,14 +196,45 @@ function TextRichWithQuill(props: any) {
 				style={style}
 				placeholder={placeholder}
 			/>
-			{withLimit && (
-				<Counter>
-					{value?.length} / {withLimit}
-				</Counter>
-			)}
+			{limit && <RichtextCounter limit={limit} value={value} />}
 		</>
 	);
+};
+
+const calcLengthOfHTML = (html: string) => {
+	var plainString = html.replace(/<[^>]+>/g, '');
+	return plainString.length;
+};
+interface IRichtextCounterProps {
+	value: string;
+	limit: number;
+	setIsLimitExceeded?: Dispatch<SetStateAction<boolean>>;
 }
+
+const RichtextCounter: FC<IRichtextCounterProps> = ({
+	value,
+	limit,
+	setIsLimitExceeded,
+}) => {
+	const [count, setCount] = useState(0);
+	useEffect(() => {
+		const temp = setTimeout(() => {
+			const _count = calcLengthOfHTML(value);
+			setCount(_count);
+			setIsLimitExceeded && _count > limit && setIsLimitExceeded(true);
+		}, 1000);
+
+		return () => {
+			clearTimeout(temp);
+		};
+	}, [limit, setIsLimitExceeded, value]);
+
+	return (
+		<CounterContainer>
+			{count} / {limit}
+		</CounterContainer>
+	);
+};
 
 const ReactQuillStyled = styled(ReactQuill)`
 	> .ql-container {
@@ -194,7 +245,7 @@ const ReactQuillStyled = styled(ReactQuill)`
 	}
 `;
 
-const Counter = styled.div`
+const CounterContainer = styled.div`
 	position: absolute;
 	background-color: ${neutralColors.gray[300]};
 	border-radius: 64px;
