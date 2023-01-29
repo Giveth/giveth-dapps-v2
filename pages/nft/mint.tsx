@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { useEffect } from 'react';
 import { setDarkTheme, setLightTheme } from '@/features/general/general.slice';
 import { useAppDispatch } from '@/features/hooks';
-import OverviewIndex from '@/components/views/nft/overview';
+import { NFTMintIndex } from '@/components/views/nft/mint/NFTMintIndex';
 
 const NFTMinRoute = () => {
 	const dispatch = useAppDispatch();
@@ -19,7 +19,7 @@ const NFTMinRoute = () => {
 			<Head>
 				<title>Mint PFP | Giveth</title>
 			</Head>
-			<OverviewIndex />
+			<NFTMintIndex />
 		</>
 	);
 };
