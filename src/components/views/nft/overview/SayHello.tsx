@@ -31,7 +31,6 @@ const SayHelloSection = () => {
 
 const OverviewContainer = styled.div`
 	padding-top: 200px;
-	height: 1000px;
 	position: relative;
 `;
 
