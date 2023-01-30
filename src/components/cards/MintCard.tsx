@@ -1,6 +1,7 @@
 import {
 	B,
 	brandColors,
+	Button,
 	GLink,
 	P,
 	semanticColors,
@@ -58,6 +59,7 @@ export const MintCard = () => {
 					<InfoBoxValue>100</InfoBoxValue>
 				</Flex>
 			</InfoBox>
+			<MintButton size='small' label='Mint' buttonType='primary' />
 		</MintCardContainer>
 	);
 };
@@ -104,4 +106,9 @@ const InfoBoxTitle = styled(B)`
 
 const InfoBoxValue = styled(B)`
 	color: ${brandColors.giv['000']};
+`;
+
+const MintButton = styled(Button)`
+	margin-bottom: 8px;
+	width: 100%;
 `;
