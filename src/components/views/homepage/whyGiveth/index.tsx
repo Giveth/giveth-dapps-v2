@@ -7,7 +7,7 @@ import {
 	Subline,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { FC, useRef } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { Flex } from '@/components/styled-components/Flex';
 import StatsCard from '@/components/views/homepage/whyGiveth/StatsCard';
 import DonationCard from '@/components/views/homepage/whyGiveth/DonationCard';
@@ -23,7 +23,16 @@ const WhyGiveth: FC<IWhyGiveth> = props => {
 		i => i.valueUsd && i.valueUsd > 0.1,
 	);
 
+	const [animationWidth, setAnimationWidth] = useState(1000);
+
 	const donationCardsRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		if (donationCardsRef.current) {
+			const { clientWidth } = donationCardsRef.current;
+			setAnimationWidth(clientWidth);
+		}
+	}, [donationCardsRef.current]);
 
 	return (
 		<>
@@ -44,7 +53,7 @@ const WhyGiveth: FC<IWhyGiveth> = props => {
 				<Line />
 				<DonationCardWrapper>
 					<DonationCardContainer
-						width={donationCardsRef.current?.clientWidth}
+						width={animationWidth}
 						ref={donationCardsRef}
 					>
 						{nonZeroDonations.map(i => (
@@ -104,6 +113,7 @@ const Line = styled.div`
 	height: 40px;
 	display: none;
 	${mediaQueries.tablet} {
+		flex-shrink: 0;
 		display: block;
 	}
 `;
