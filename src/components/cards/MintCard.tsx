@@ -1,35 +1,51 @@
-import { brandColors, P } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	GLink,
+	P,
+	semanticColors,
+} from '@giveth/ui-design-system';
 import React, { ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
 import { Flex } from '../styled-components/Flex';
 
-const MAX_NFT_AMOUNT = 1000;
-const MIN_NFT_AMOUNT = 1;
+const MAX_NFT_QTY = 5;
+const MIN_NFT_QTY = 1;
 
 export const MintCard = () => {
-	const [amount, setAmount] = useState('1');
+	const [qtyNFT, setQtyNFT] = useState('1');
+	const mintedNFT = 20;
 	function onChangeHandler(event: ChangeEvent<HTMLInputElement>) {
 		//handle empty input
-		if (event.target.value === '') setAmount('');
+		if (event.target.value === '') setQtyNFT('');
 
 		//handle number
-		const _amount = Number.parseInt(event.target.value);
+		const _qty = Number.parseInt(event.target.value);
 
 		//handle range
-		if (_amount > MAX_NFT_AMOUNT || _amount < MIN_NFT_AMOUNT) return;
+		if (_qty > MAX_NFT_QTY || _qty < MIN_NFT_QTY) return;
 
-		if (Number.isInteger(_amount)) setAmount('' + _amount);
+		if (Number.isInteger(_qty)) setQtyNFT('' + _qty);
 	}
 
 	return (
 		<MintCardContainer>
-			<Flex gap='16px'>
+			<Flex gap='16px' flexDirection='column'>
+				<Flex justifyContent='space-between'>
+					<GLink size='Small'>NFT Amount</GLink>
+					<MaxLink
+						size='Small'
+						onClick={() => setQtyNFT('' + MAX_NFT_QTY)}
+					>
+						MAX
+					</MaxLink>
+				</Flex>
 				<StyledInput
 					as='input'
 					type='number'
-					value={amount}
+					value={qtyNFT}
 					onChange={onChangeHandler}
 				/>
+				<InputHint>{mintedNFT}/1000 Minted</InputHint>
 			</Flex>
 		</MintCardContainer>
 	);
@@ -53,4 +69,12 @@ const StyledInput = styled(P)`
 		margin: 0;
 	}
 	-moz-appearance: textfield;
+`;
+
+const MaxLink = styled(GLink)`
+	color: ${semanticColors.blueSky[500]};
+`;
+
+const InputHint = styled(GLink)`
+	color: ${brandColors.deep[100]};
 `;
