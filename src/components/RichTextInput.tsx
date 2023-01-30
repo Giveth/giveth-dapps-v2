@@ -176,6 +176,7 @@ const TextRichWithQuill: FC<ITextRichWithQuillProps> = ({
 	limit,
 	style,
 	projectId,
+	setIsLimitExceeded,
 }) => {
 	const [mod, setMod] = useState<any>();
 
@@ -196,7 +197,13 @@ const TextRichWithQuill: FC<ITextRichWithQuillProps> = ({
 				style={style}
 				placeholder={placeholder}
 			/>
-			{limit && <RichtextCounter limit={limit} value={value} />}
+			{limit && (
+				<RichtextCounter
+					limit={limit}
+					value={value}
+					setIsLimitExceeded={setIsLimitExceeded}
+				/>
+			)}
 		</>
 	);
 };
