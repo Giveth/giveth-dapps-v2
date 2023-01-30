@@ -101,7 +101,7 @@ const UpdatesSection = (props: {
 								value={updateContent}
 								style={TextInputStyle}
 								setValue={setUpdateContent}
-								withLimit={UPDATE_LIMIT}
+								limit={UPDATE_LIMIT}
 								placeholder='Edit your project'
 							/>
 						) : (

@@ -101,7 +101,7 @@ const ProjectCard = (props: IProjectCard) => {
 						</Title>
 					</Link>
 				</TitleWrapper>
-				<PaddedRow>
+				<PaddedRow style={{ marginTop: '6px' }}>
 					{adminUser?.name && !isForeignOrg && (
 						<Link
 							href={addressToUserView(adminUser?.walletAddress)}
@@ -119,7 +119,7 @@ const ProjectCard = (props: IProjectCard) => {
 					<Description>{htmlToText(description)}</Description>
 					<PaddedRow alignItems='center' gap='4px'>
 						<PriceText>
-							${Math.ceil(totalDonations as number)}
+							${Math.round(totalDonations as number)}
 						</PriceText>
 						<LightSubline>
 							{' '}
@@ -281,20 +281,21 @@ const TitleWrapper = styled.div`
 `;
 
 const Title = styled(H6)<{ isHover?: boolean }>`
-	color: ${props =>
-		props.isHover ? brandColors.pinky[500] : brandColors.deep[700]};
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	margin-bottom: 2px;
+	&:hover {
+		color: ${brandColors.pinky[500]};
+	}
 `;
 
 const Author = styled(GLink)`
-	color: ${brandColors.pinky[500]};
+	color: ${neutralColors.gray[700]};
 	margin-bottom: 16px;
 	display: block;
 	&:hover {
-		color: ${brandColors.pinky[800]};
+		color: ${brandColors.pinky[500]};
 	}
 `;
 
