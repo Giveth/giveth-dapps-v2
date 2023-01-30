@@ -8,9 +8,11 @@ const SayHelloSection = () => {
 	return (
 		<OverviewContainer>
 			<Container>
-				<Flex>
-					<Flex flexDirection='column'>
-						<H1>Say Hello to... The Givers </H1>
+				<FlexContainer>
+					<Flex flexDirection='column' gap='24px'>
+						<H1>
+							Say Hello to... <br /> The Givers{' '}
+						</H1>
 						<QuoteText>
 							Show your support for the Future of Giving and
 							unlock your unique Giveth flair by minting one of
@@ -18,7 +20,7 @@ const SayHelloSection = () => {
 						</QuoteText>
 					</Flex>
 					<TestImage />
-				</Flex>
+				</FlexContainer>
 			</Container>
 			<OvalVerticalGradient />
 			<OvalHorizontalGradient />
@@ -32,9 +34,14 @@ const OverviewContainer = styled.div`
 	position: relative;
 `;
 
+const FlexContainer = styled(Flex)`
+	position: relative;
+	z-index: 1;
+`;
+
 const TestImage = styled.div`
-	width: 500px;
-	height: 500px;
+	min-width: 500px;
+	min-height: 500px;
 	background-color: red;
 `;
 
