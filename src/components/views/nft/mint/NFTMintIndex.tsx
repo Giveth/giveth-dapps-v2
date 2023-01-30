@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { brandColors, H1, Lead } from '@giveth/ui-design-system';
 import { OvalVerticalGradient, OvalHorizontalGradient } from '../common.styles';
 import { Col, Container, Row } from '@/components/Grid';
+import { MintCard } from '@/components/cards/MintCard';
 
 export const NFTMintIndex = () => {
 	return (
@@ -20,7 +21,9 @@ export const NFTMintIndex = () => {
 							minted for 100 DAI each and funds raised will go
 							towards supporting the Giveth DAO.
 						</Desc>
+						<MintCard />
 					</Col>
+					<Col xs={12} md={6}></Col>
 				</Row>
 			</MintContainer>
 		</MintViewContainer>
