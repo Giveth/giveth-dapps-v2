@@ -1,4 +1,5 @@
 import {
+	B,
 	brandColors,
 	GLink,
 	P,
@@ -29,7 +30,7 @@ export const MintCard = () => {
 
 	return (
 		<MintCardContainer>
-			<Flex gap='16px' flexDirection='column'>
+			<InputWrapper gap='16px' flexDirection='column'>
 				<Flex justifyContent='space-between'>
 					<GLink size='Small'>NFT Amount</GLink>
 					<MaxLink
@@ -46,7 +47,17 @@ export const MintCard = () => {
 					onChange={onChangeHandler}
 				/>
 				<InputHint>{mintedNFT}/1000 Minted</InputHint>
-			</Flex>
+			</InputWrapper>
+			<InfoBox gap='16px' flexDirection='column'>
+				<Flex justifyContent='space-between'>
+					<InfoBoxTitle>Max Mint </InfoBoxTitle>
+					<InfoBoxValue>5</InfoBoxValue>
+				</Flex>
+				<Flex justifyContent='space-between'>
+					<InfoBoxTitle>Mint Prince per</InfoBoxTitle>
+					<InfoBoxValue>100</InfoBoxValue>
+				</Flex>
+			</InfoBox>
 		</MintCardContainer>
 	);
 };
@@ -55,6 +66,10 @@ const MintCardContainer = styled.div`
 	padding: 24px;
 	background-color: ${brandColors.giv[800]};
 	border-radius: 8px;
+`;
+
+const InputWrapper = styled(Flex)`
+	margin-bottom: 24px;
 `;
 
 const StyledInput = styled(P)`
@@ -77,4 +92,16 @@ const MaxLink = styled(GLink)`
 
 const InputHint = styled(GLink)`
 	color: ${brandColors.deep[100]};
+`;
+
+const InfoBox = styled(Flex)`
+	margin-bottom: 32px;
+`;
+
+const InfoBoxTitle = styled(B)`
+	color: ${brandColors.giv[300]};
+`;
+
+const InfoBoxValue = styled(B)`
+	color: ${brandColors.giv['000']};
 `;
