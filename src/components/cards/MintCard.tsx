@@ -68,6 +68,7 @@ const MintCardContainer = styled.div`
 	padding: 24px;
 	background-color: ${brandColors.giv[800]};
 	border-radius: 8px;
+	max-width: 458px;
 `;
 
 const InputWrapper = styled(Flex)`
@@ -90,6 +91,7 @@ const StyledInput = styled(P)`
 
 const MaxLink = styled(GLink)`
 	color: ${semanticColors.blueSky[500]};
+	cursor: pointer;
 `;
 
 const InputHint = styled(GLink)`
@@ -109,6 +111,7 @@ const InfoBoxValue = styled(B)`
 `;
 
 const MintButton = styled(Button)`
-	margin-bottom: 8px;
+	margin: auto;
 	width: 100%;
+	max-width: 332px;
 `;
