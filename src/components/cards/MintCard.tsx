@@ -6,7 +6,9 @@ import {
 	P,
 	semanticColors,
 } from '@giveth/ui-design-system';
+import { useWeb3React } from '@web3-react/core';
 import React, { ChangeEvent, useState } from 'react';
+import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { Flex } from '../styled-components/Flex';
 
@@ -15,6 +17,9 @@ const MIN_NFT_QTY = 1;
 
 export const MintCard = () => {
 	const [qtyNFT, setQtyNFT] = useState('1');
+	const { account } = useWeb3React();
+	const { formatMessage } = useIntl();
+
 	const mintedNFT = 20;
 	function onChangeHandler(event: ChangeEvent<HTMLInputElement>) {
 		//handle empty input
@@ -59,7 +64,17 @@ export const MintCard = () => {
 					<InfoBoxValue>100</InfoBoxValue>
 				</Flex>
 			</InfoBox>
-			<MintButton size='small' label='Mint' buttonType='primary' />
+			<MintButton
+				size='small'
+				label={formatMessage(
+					account
+						? { id: 'label.mint' }
+						: {
+								id: 'component.button.connect_wallet',
+						  },
+				)}
+				buttonType='primary'
+			/>
 		</MintCardContainer>
 	);
 };
