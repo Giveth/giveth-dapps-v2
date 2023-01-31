@@ -134,19 +134,3 @@ export const UPDATE_DONATION_STATUS = gql`
 		}
 	}
 `;
-
-export const RECENT_DONATIONS = gql`
-	query recentDonations($take: Int) {
-		recentDonations(take: $take) {
-			createdAt
-			id
-			user {
-				walletAddress
-			}
-			project {
-				title
-			}
-			valueUsd
-		}
-	}
-`;

@@ -11,14 +11,15 @@ import { ProjectUpdatesBlock } from './projectUpdatesBlock/ProjectUpdatesBlock';
 import { LatestUpdatesBlock } from './latestUpdates/LatestUpdatesBlock';
 import { IHomeRoute } from '../../../../pages';
 
-const HomeIndex: FC<IHomeRoute> = ({ projects, recentDonations }) => {
+const HomeIndex: FC<IHomeRoute> = props => {
+	const { projects, ...rest } = props;
 	return (
 		<Wrapper>
 			<IntroBlock />
 			<Separator />
 			<CampaignBlock projects={projects} />
 			<Separator />
-			<WhyGiveth recentDonations={recentDonations} />
+			<WhyGiveth {...rest} />
 			<Separator />
 			<VideoBlock />
 			<Separator />
