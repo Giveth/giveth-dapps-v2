@@ -5,7 +5,7 @@ import { Flex } from '@/components/styled-components/Flex';
 
 const WhatAreGivers = () => {
 	return (
-		<Flex
+		<SectionContainer
 			justifyContent='center'
 			alignItems='center'
 			flexDirection='column'
@@ -60,7 +60,7 @@ const WhatAreGivers = () => {
 					}}
 				/>
 			</ImagesContainer>
-		</Flex>
+		</SectionContainer>
 	);
 };
 
@@ -79,6 +79,10 @@ const ImagesContainer = styled.div`
 	> img {
 		margin: 0 -50px;
 	}
+`;
+
+const SectionContainer = styled(Flex)`
+	margin-top: 32px;
 `;
 
 export default WhatAreGivers;
