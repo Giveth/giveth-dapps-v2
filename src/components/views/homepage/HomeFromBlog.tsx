@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { brandColors, SemiTitle } from '@giveth/ui-design-system';
+import { H4, mediaQueries, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-
 import { useIntl } from 'react-intl';
-import HomeBlogPost from './HomeBlogPost';
 import { IMediumBlogPost } from '@/apollo/types/types';
-import { HomeContainer } from '@/components/views/homepage/Home.sc';
-import { Col, Row } from '@/components/Grid';
-import { deviceSize } from '@/lib/constants/constants';
+import BlogCard from '@/components/BlogCard';
+import { Flex } from '@/components/styled-components/Flex';
 
 const HomeFromBlog = () => {
 	const [mediumPosts, setMediumPosts] = useState<IMediumBlogPost[]>();
@@ -19,7 +16,7 @@ const HomeFromBlog = () => {
 				'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/giveth/',
 			);
 			const posts = await medium.json();
-			setMediumPosts(posts?.items?.slice(0, 2));
+			setMediumPosts(posts?.items?.slice(0, 3));
 		};
 		getPosts().then();
 	}, []);
@@ -27,36 +24,54 @@ const HomeFromBlog = () => {
 	return (
 		<Wrapper>
 			<Container>
-				<Title>
+				<Title weight={700}>
 					{formatMessage({ id: 'page.home.section.from_blog' })}
 				</Title>
-				{mediumPosts && (
-					<Row>
-						{mediumPosts.map((post: IMediumBlogPost) => (
-							<Col md={6} key={post.guid}>
-								<HomeBlogPost post={post} />
-							</Col>
-						))}
-					</Row>
-				)}
+				<Cards>
+					{mediumPosts?.map(post => (
+						<BlogCard
+							key={post.guid}
+							title={post.title}
+							description={post.description}
+							image={post.thumbnail}
+							link={post.link}
+							author={post.author}
+							date={post.pubDate}
+						/>
+					))}
+				</Cards>
 			</Container>
 		</Wrapper>
 	);
 };
 
-const Title = styled(SemiTitle)`
-	color: ${brandColors.giv[500]};
-`;
-
 const Container = styled.div`
 	margin: 0 auto;
-	max-width: ${deviceSize.desktop + 'px'};
+	padding: 0 24px;
+	${mediaQueries.tablet} {
+		padding: 0 40px;
+		width: fit-content;
+	}
 `;
 
-const Wrapper = styled(HomeContainer)`
-	background: url('/images/curves_homepage.svg');
-	padding-top: 90px;
-	padding-bottom: 40px;
+const Cards = styled(Flex)`
+	flex-direction: column;
+	gap: 24px;
+	max-width: 1200px;
+	${mediaQueries.laptopS} {
+		flex-direction: row;
+	}
+`;
+
+const Title = styled(H4)`
+	color: ${neutralColors.gray[600]};
+	margin-bottom: 24px;
+`;
+
+const Wrapper = styled.div`
+	padding-top: 70px;
+	padding-bottom: 110px;
+	background: ${neutralColors.gray[200]};
 `;
 
 export default HomeFromBlog;
