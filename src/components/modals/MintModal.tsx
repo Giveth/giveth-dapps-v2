@@ -43,8 +43,10 @@ export const MintModal: FC<IMintModalProps> = ({
 	const { formatMessage } = useIntl();
 	const { account, library } = useWeb3React();
 
-	async function onApprove() {
-		if (qty === 0) return;
+	const price = nftPrice.multipliedBy(qty);
+
+	async function approveHandler() {
+		if (price.isZero()) return;
 		if (!library) {
 			console.error('library is null');
 			return;
@@ -56,20 +58,26 @@ export const MintModal: FC<IMintModalProps> = ({
 
 		const userAddress = await signer.getAddress();
 
+		const isApproved = true;
 		// const isApproved = await approveERC20tokenTransfer(
-		// 	amount,
+		// 	price.toString(),
 		// 	userAddress,
 		// 	LM_ADDRESS,
 		// 	POOL_ADDRESS,
 		// 	library,
 		// );
 
-		// if (isApproved) {
-		// 	setStep(MintStep.MINT);
-		// } else {
-		// 	setStep(MintStep.APPROVE);
-		// }
+		if (isApproved) {
+			setStep(MintStep.MINT);
+		} else {
+			setStep(MintStep.APPROVE);
+		}
 	}
+
+	async function mintHandle() {}
+
+	const isApproving =
+		step === MintStep.APPROVE || step === MintStep.APPROVING;
 
 	return (
 		<Modal
@@ -88,10 +96,10 @@ export const MintModal: FC<IMintModalProps> = ({
 						<StakeStepNumber>1</StakeStepNumber>
 					</StakeStep>
 					<StakeStep>
-						<StakeStepTitle disable={step !== MintStep.MINT}>
+						<StakeStepTitle disable={isApproving}>
 							{formatMessage({ id: 'label.mint' })}
 						</StakeStepTitle>
-						<StakeStepNumber disable={step !== MintStep.MINT}>
+						<StakeStepNumber disable={isApproving}>
 							2
 						</StakeStepNumber>
 					</StakeStep>
@@ -99,22 +107,37 @@ export const MintModal: FC<IMintModalProps> = ({
 				<Desc>
 					You are Minting {qty} Giver NFT {qty > 1 && 's'} for{' '}
 				</Desc>
-				<Price>{formatWeiHelper(nftPrice.multipliedBy(qty))} DAI</Price>
-				<StyledButton
-					size='small'
-					label={formatMessage({
-						id: 'label.approve',
-					})}
-					buttonType='primary'
-					disabled={step === MintStep.APPROVING}
-				/>
+				<Price>{formatWeiHelper(price)} DAI</Price>
+				{isApproving ? (
+					<StyledButton
+						size='small'
+						label={formatMessage({
+							id: 'label.approve',
+						})}
+						buttonType='primary'
+						loading={step === MintStep.APPROVING}
+						disabled={step === MintStep.APPROVING}
+						onClick={approveHandler}
+					/>
+				) : (
+					<StyledButton
+						size='small'
+						label={formatMessage({
+							id: 'label.mint',
+						})}
+						buttonType='primary'
+						loading={step === MintStep.MINTING}
+						disabled={step === MintStep.MINTING}
+						onClick={mintHandle}
+					/>
+				)}
 				<StyledButton
 					size='small'
 					label={formatMessage({
 						id: 'label.cancel',
 					})}
 					buttonType='texty'
-					disabled={step === MintStep.MINTING}
+					onClick={closeModal}
 				/>
 			</MintModalContainer>
 		</Modal>
