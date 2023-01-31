@@ -841,5 +841,6 @@
 	"label.loading_data": "Cargando Información",
 	"label.vote_in_giveth_dao": "",
 	"label.use_giv_to_vote": "",
-	"label.mint": ""
+	"label.mint": "",
+	"label.approve": ""
 }
