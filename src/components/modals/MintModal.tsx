@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { mediaQueries } from '@giveth/ui-design-system';
+import { B, brandColors, mediaQueries, P } from '@giveth/ui-design-system';
 import { IModal } from '@/types/common';
 import { Modal } from './Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -18,10 +18,15 @@ export enum MintStep {
 }
 
 interface IMintModalProps extends IModal {
-	maxQty: number;
+	qty: number;
+	nftPrice: number;
 }
 
-export const MintModal: FC<IMintModalProps> = (maxQty, setShowModal) => {
+export const MintModal: FC<IMintModalProps> = ({
+	qty,
+	nftPrice,
+	setShowModal,
+}) => {
 	const [step, setStep] = useState(MintStep.APPROVE);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
@@ -36,18 +41,25 @@ export const MintModal: FC<IMintModalProps> = (maxQty, setShowModal) => {
 			<MintModalContainer>
 				<StakeStepsContainer>
 					<StakeStep>
-						<StakeStepTitle>Approve</StakeStepTitle>
+						<StakeStepTitle>
+							{' '}
+							{formatMessage({ id: 'label.approve' })}
+						</StakeStepTitle>
 						<StakeStepNumber>1</StakeStepNumber>
 					</StakeStep>
 					<StakeStep>
 						<StakeStepTitle disable={step !== MintStep.MINT}>
-							Stake
+							{formatMessage({ id: 'label.mint' })}
 						</StakeStepTitle>
 						<StakeStepNumber disable={step !== MintStep.MINT}>
 							2
 						</StakeStepNumber>
 					</StakeStep>
 				</StakeStepsContainer>
+				<Desc>
+					You are Minting {qty} Giver NFT {qty > 1 && 's'} for{' '}
+				</Desc>
+				<Price>{qty * nftPrice}</Price>
 			</MintModalContainer>
 		</Modal>
 	);
@@ -60,4 +72,15 @@ const MintModalContainer = styled.div`
 	${mediaQueries.tablet} {
 		width: 370px;
 	}
+`;
+
+const Desc = styled(P)`
+	margin-top: 24px;
+	margin-bottom: 8px;
+	color: ${brandColors.giv[300]};
+`;
+
+const Price = styled(B)`
+	margin-bottom: 32px;
+	color: ${brandColors.giv['000']};
 `;

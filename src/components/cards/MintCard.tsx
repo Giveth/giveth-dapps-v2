@@ -26,6 +26,7 @@ export const MintCard = () => {
 	const dispatch = useAppDispatch();
 
 	const mintedNFT = 20;
+	const nftPrice = 100;
 	function onChangeHandler(event: ChangeEvent<HTMLInputElement>) {
 		//handle empty input
 		if (event.target.value === '') setQtyNFT('');
@@ -37,11 +38,6 @@ export const MintCard = () => {
 		if (_qty > MAX_NFT_QTY || _qty < MIN_NFT_QTY) return;
 
 		if (Number.isInteger(_qty)) setQtyNFT('' + _qty);
-	}
-
-	function handleMintClick() {
-		if (!account) return dispatch(setShowWalletModal);
-		setShowModal(true);
 	}
 
 	return (
@@ -72,24 +68,34 @@ export const MintCard = () => {
 					</Flex>
 					<Flex justifyContent='space-between'>
 						<InfoBoxTitle>Mint Prince per</InfoBoxTitle>
-						<InfoBoxValue>100</InfoBoxValue>
+						<InfoBoxValue>{nftPrice}</InfoBoxValue>
 					</Flex>
 				</InfoBox>
-				<MintButton
-					size='small'
-					label={formatMessage(
-						account
-							? { id: 'label.mint' }
-							: {
-									id: 'component.button.connect_wallet',
-							  },
-					)}
-					buttonType='primary'
-					onClick={handleMintClick}
-				/>
+				{account ? (
+					<MintButton
+						size='small'
+						label={formatMessage({ id: 'label.mint' })}
+						buttonType='primary'
+						onClick={() => setShowModal(true)}
+						disabled={Number(qtyNFT) < 1}
+					/>
+				) : (
+					<MintButton
+						size='small'
+						label={formatMessage({
+							id: 'component.button.connect_wallet',
+						})}
+						buttonType='primary'
+						onClick={() => dispatch(setShowWalletModal)}
+					/>
+				)}
 			</MintCardContainer>
 			{showModal && (
-				<MintModal setShowModal={setShowModal} maxQty={MAX_NFT_QTY} />
+				<MintModal
+					setShowModal={setShowModal}
+					qty={Number(qtyNFT)}
+					nftPrice={nftPrice}
+				/>
 			)}
 		</>
 	);
