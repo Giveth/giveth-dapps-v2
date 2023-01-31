@@ -1,12 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import SayHelloSection from './SayHello';
+import WhatAreGivers from './WhatAreGivers';
 import WhatElse from './WhatElse';
 
 const OverviewIndex = () => {
 	return (
 		<div>
 			<SayHelloSection />
+			<Separator />
+			<WhatAreGivers />
 			<Separator />
 			<WhatElse />
 		</div>
