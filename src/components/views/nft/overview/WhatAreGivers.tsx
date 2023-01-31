@@ -2,6 +2,7 @@ import { H2, QuoteText } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { Flex } from '@/components/styled-components/Flex';
+import { OvalVerticalGradient } from '../common.styles';
 
 const WhatAreGivers = () => {
 	return (
@@ -60,6 +61,7 @@ const WhatAreGivers = () => {
 					}}
 				/>
 			</ImagesContainer>
+			<OvalVerticalGradient />
 		</SectionContainer>
 	);
 };
@@ -67,6 +69,7 @@ const WhatAreGivers = () => {
 const QuoteContainer = styled.div`
 	max-width: 925px;
 	text-align: center;
+	z-index: 1;
 `;
 
 const ImagesContainer = styled.div`
@@ -76,12 +79,14 @@ const ImagesContainer = styled.div`
 	justify-content: center;
 	align-items: center;
 	overflow: hidden;
+	z-index: 1;
 	> img {
 		margin: 0 -50px;
 	}
 `;
 
 const SectionContainer = styled(Flex)`
+	position: relative;
 	margin-top: 32px;
 `;
 
