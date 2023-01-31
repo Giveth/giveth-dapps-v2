@@ -7,7 +7,7 @@ import {
 	Subline,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { FC } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { Flex } from '@/components/styled-components/Flex';
 import StatsCard from '@/components/views/homepage/whyGiveth/StatsCard';
 import DonationCard from '@/components/views/homepage/whyGiveth/DonationCard';
@@ -20,8 +20,19 @@ interface IWhyGiveth {
 const WhyGiveth: FC<IWhyGiveth> = props => {
 	const { recentDonations } = props;
 	const nonZeroDonations = recentDonations.filter(
-		i => i.valueUsd && i.valueUsd > 1,
+		i => i.valueUsd && i.valueUsd > 0.1,
 	);
+
+	const [animationWidth, setAnimationWidth] = useState(1000);
+
+	const donationCardsRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		if (donationCardsRef.current) {
+			const { clientWidth } = donationCardsRef.current;
+			setAnimationWidth(clientWidth);
+		}
+	}, [donationCardsRef.current]);
 
 	return (
 		<>
@@ -41,7 +52,10 @@ const WhyGiveth: FC<IWhyGiveth> = props => {
 				<Subline>RECENT DONATIONS</Subline>
 				<Line />
 				<DonationCardWrapper>
-					<DonationCardContainer>
+					<DonationCardContainer
+						width={animationWidth}
+						ref={donationCardsRef}
+					>
 						{nonZeroDonations.map(i => (
 							<DonationCard
 								key={i.id}
@@ -76,15 +90,19 @@ const DonationCardWrapper = styled.div`
 	overflow: hidden;
 `;
 
-const DonationCardContainer = styled(Flex)`
-	transform: translate3d(0, 0, 0);
-	animation: moveSlideshow 10s linear infinite;
+const DonationCardContainer = styled(Flex)<{ width?: number }>`
+	animation: moveSlideshow ${props => (props.width || 1000) / 100}s linear
+		infinite;
+	width: max-content;
 	:hover {
 		animation-play-state: paused;
 	}
 	@keyframes moveSlideshow {
+		0% {
+			transform: translateX(0);
+		}
 		100% {
-			transform: translateX(-100%);
+			transform: translateX(-${props => props.width}px);
 		}
 	}
 `;
@@ -95,6 +113,7 @@ const Line = styled.div`
 	height: 40px;
 	display: none;
 	${mediaQueries.tablet} {
+		flex-shrink: 0;
 		display: block;
 	}
 `;
