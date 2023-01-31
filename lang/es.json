@@ -842,5 +842,7 @@
 	"label.vote_in_giveth_dao": "",
 	"label.use_giv_to_vote": "",
 	"label.mint": "",
-	"label.approve": ""
+	"label.approve": "",
+	"label.mint_your_giver": "",
+	"page.mint.mint_your_giver.desc": ""
 }

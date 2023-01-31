@@ -74,7 +74,9 @@ export const MintModal: FC<IMintModalProps> = ({
 		}
 	}
 
-	async function mintHandle() {}
+	async function mintHandle() {
+		closeModal();
+	}
 
 	const isApproving =
 		step === MintStep.APPROVE || step === MintStep.APPROVING;

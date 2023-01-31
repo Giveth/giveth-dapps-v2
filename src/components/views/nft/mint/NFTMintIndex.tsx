@@ -1,11 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 import { brandColors, H1, Lead } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import { OvalVerticalGradient, OvalHorizontalGradient } from '../common.styles';
 import { Col, Container, Row } from '@/components/Grid';
 import { MintCard } from '@/components/cards/MintCard';
 
 export const NFTMintIndex = () => {
+	const { formatMessage } = useIntl();
+
 	return (
 		<MintViewContainer>
 			<OvalVerticalGradient />
@@ -13,13 +16,13 @@ export const NFTMintIndex = () => {
 			<MintContainer>
 				<Row>
 					<Col xs={12} md={6}>
-						<Title>Mint your Giver</Title>
+						<Title>
+							{formatMessage({ id: 'label.mint_your_giver' })}
+						</Title>
 						<Desc>
-							The Givers collection is available on Ethereum
-							Mainnet and 1,150 of the total 1,250 Givers are
-							available for public minting. Each Giver can be
-							minted for 100 DAI each and funds raised will go
-							towards supporting the Giveth DAO.
+							{formatMessage({
+								id: 'page.mint.mint_your_giver.desc',
+							})}
 						</Desc>
 						<MintCard />
 					</Col>
@@ -47,5 +50,5 @@ const Title = styled(H1)`
 `;
 
 const Desc = styled(Lead)`
-	margin-bottom: 22px;
+	margin-bottom: 32px;
 `;

@@ -842,5 +842,7 @@
 	"label.vote_in_giveth_dao": "Vote in the Giveth DAO",
 	"label.use_giv_to_vote": "Use GIV to vote on funding proposals in the GIVgarden.",
 	"label.mint": "Mint",
-	"label.approve": "Approve"
+	"label.approve": "Approve",
+	"label.mint_your_giver": "Mint your Giver",
+	"page.mint.mint_your_giver.desc": "The Givers collection is available on Ethereum Mainnet and 1,150 of the total 1,250 Givers are available for public minting. Each Giver can be minted for 100 DAI each and funds raised will go towards supporting the Giveth DAO."
 }
