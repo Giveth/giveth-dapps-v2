@@ -106,6 +106,7 @@ export const MintModal: FC<IMintModalProps> = ({
 						id: 'label.approve',
 					})}
 					buttonType='primary'
+					disabled={step === MintStep.APPROVING}
 				/>
 				<StyledButton
 					size='small'
@@ -113,6 +114,7 @@ export const MintModal: FC<IMintModalProps> = ({
 						id: 'label.cancel',
 					})}
 					buttonType='texty'
+					disabled={step === MintStep.MINTING}
 				/>
 			</MintModalContainer>
 		</Modal>
