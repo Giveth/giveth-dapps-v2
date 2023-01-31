@@ -10,10 +10,12 @@ import { useWeb3React } from '@web3-react/core';
 import React, { ChangeEvent, useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
+import BigNumber from 'bignumber.js';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
 import { MintModal } from '../modals/MintModal';
 import { Flex } from '../styled-components/Flex';
 import { useAppDispatch } from '@/features/hooks';
+import { formatWeiHelper } from '@/helpers/number';
 
 const MAX_NFT_QTY = 5;
 const MIN_NFT_QTY = 1;
@@ -26,7 +28,7 @@ export const MintCard = () => {
 	const dispatch = useAppDispatch();
 
 	const mintedNFT = 20;
-	const nftPrice = 100;
+	const nftPrice = new BigNumber('100000000000000000000');
 	function onChangeHandler(event: ChangeEvent<HTMLInputElement>) {
 		//handle empty input
 		if (event.target.value === '') setQtyNFT('');
@@ -68,7 +70,9 @@ export const MintCard = () => {
 					</Flex>
 					<Flex justifyContent='space-between'>
 						<InfoBoxTitle>Mint Prince per</InfoBoxTitle>
-						<InfoBoxValue>{nftPrice}</InfoBoxValue>
+						<InfoBoxValue>
+							{formatWeiHelper(nftPrice)} DAI
+						</InfoBoxValue>
 					</Flex>
 				</InfoBox>
 				{account ? (
