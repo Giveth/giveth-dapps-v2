@@ -1,8 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button, Container, H1, QuoteText } from '@giveth/ui-design-system';
+import { ButtonLink, Container, H1, QuoteText } from '@giveth/ui-design-system';
+import Link from 'next/link';
 import { Flex } from '@/components/styled-components/Flex';
 import { OvalHorizontalGradient, OvalVerticalGradient } from '../common.styles';
+import Routes from '@/lib/constants/Routes';
 
 const SayHelloSection = () => {
 	return (
@@ -18,7 +20,12 @@ const SayHelloSection = () => {
 							unlock your unique Giveth flair by minting one of
 							the first NFT PFP artworks inspired by Giveth.
 						</QuoteText>
-						<MintNowButton label='Mint Now' buttonType='primary' />
+						<CustomLink href={Routes.mint} passHref>
+							<MintNowButton
+								label='Mint Now'
+								linkType='primary'
+							/>
+						</CustomLink>
 					</Flex>
 					<TestImage />
 				</FlexContainer>
@@ -45,8 +52,12 @@ const TestImage = styled.div`
 	background-color: red;
 `;
 
-const MintNowButton = styled(Button)`
-	max-width: 150px;
+const MintNowButton = styled(ButtonLink)`
+	width: 150px;
+`;
+
+const CustomLink = styled(Link)`
+	width: fit-content;
 `;
 
 export default SayHelloSection;
