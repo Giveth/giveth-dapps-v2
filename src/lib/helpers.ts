@@ -437,11 +437,10 @@ export const networkInfo = (networkId?: number) => {
 export const createSiweMessage = async (
 	address: string,
 	chainId: number,
-	host: string,
 	statement: string,
 ) => {
 	try {
-		let domain = host;
+		let domain = 'giveth.io';
 
 		if (typeof window !== 'undefined') {
 			domain = window.location.hostname;

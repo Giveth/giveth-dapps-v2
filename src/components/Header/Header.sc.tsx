@@ -4,7 +4,6 @@ import {
 	brandColors,
 	Button,
 	GLink,
-	ButtonLink,
 } from '@giveth/ui-design-system';
 import { zIndex } from '@/lib/constants/constants';
 import { Flex } from '@/components/styled-components/Flex';
@@ -190,12 +189,15 @@ export const ConnectButton = styled(Button)`
 	text-transform: uppercase;
 `;
 
-export const SmallCreateProject = styled(ButtonLink)`
+export const SmallCreateProject = styled(Button)`
 	width: 48px;
 	height: 48px;
 	box-shadow: ${props =>
 		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
-	span {
+	> :first-child {
+		display: none;
+	}
+	> span {
 		font-weight: 500;
 		font-size: 20px;
 	}

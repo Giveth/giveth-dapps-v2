@@ -224,9 +224,8 @@ const Header: FC<IHeader> = () => {
 				<SmallCreateProjectParent>
 					<SmallCreateProject
 						onClick={handleCreateButton}
-						theme={theme}
+						buttonType='primary'
 						label='+'
-						linkType='primary'
 					/>
 				</SmallCreateProjectParent>
 				{active && account && chainId ? (
