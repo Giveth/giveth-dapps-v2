@@ -129,6 +129,7 @@ export interface BasicNetworkConfig {
 		decimals: 18;
 	};
 	blockExplorerUrls?: string[];
+	PFP_CONTRACT_ADDRESS?: string;
 	iconUrls?: string[]; // Currently ignored.
 	blockExplorerName: string[];
 	subgraphAddress: string;
