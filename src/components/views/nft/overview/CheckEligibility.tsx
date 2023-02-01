@@ -6,10 +6,24 @@ import {
 	P,
 	QuoteText,
 } from '@giveth/ui-design-system';
+import { Contract } from 'ethers';
 import React from 'react';
 import styled from 'styled-components';
+import { useWeb3React } from '@web3-react/core';
+import { ERC20 } from '@/types/contracts';
+import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
+import config from '@/configuration';
 
 const CheckEligibility = () => {
+	const { library } = useWeb3React();
+	const PFPContract = new Contract(
+		config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS ?? '',
+		ERC20_ABI,
+		library,
+	) as ERC20;
+
+	console.log('Contract', PFPContract);
+
 	return (
 		<SectionContainer>
 			<H2>Early Minting has started!</H2>
