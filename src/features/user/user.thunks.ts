@@ -19,14 +19,13 @@ export const fetchUserByAddress = createAsyncThunk(
 export const signToGetToken = createAsyncThunk(
 	'user/signToGetToken',
 	async (
-		{ address, chainId, signer, pathname }: ISignToGetToken,
+		{ address, chainId, signer }: ISignToGetToken,
 		{ getState, dispatch },
 	) => {
 		try {
 			const siweMessage: any = await createSiweMessage(
 				address!,
 				chainId!,
-				pathname!,
 				'Login into Giveth services',
 			);
 			const { nonce, message } = siweMessage;
