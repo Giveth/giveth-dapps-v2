@@ -11,11 +11,16 @@ import React, { ChangeEvent, useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import BigNumber from 'bignumber.js';
+import { Contract } from 'ethers';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
 import { MintModal } from '../modals/MintModal';
 import { Flex } from '../styled-components/Flex';
 import { useAppDispatch } from '@/features/hooks';
 import { formatWeiHelper } from '@/helpers/number';
+import { ERC20 } from '@/types/contracts';
+import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
+import { switchNetwork } from '@/lib/metamask';
+import config from '@/configuration';
 
 const MAX_NFT_QTY = 5;
 const MIN_NFT_QTY = 1;
@@ -23,7 +28,7 @@ const MIN_NFT_QTY = 1;
 export const MintCard = () => {
 	const [qtyNFT, setQtyNFT] = useState('1');
 	const [showModal, setShowModal] = useState(false);
-	const { account } = useWeb3React();
+	const { account, library, chainId } = useWeb3React();
 	const { formatMessage } = useIntl();
 	const dispatch = useAppDispatch();
 
@@ -40,6 +45,26 @@ export const MintCard = () => {
 		if (_qty > MAX_NFT_QTY || _qty < MIN_NFT_QTY) return;
 
 		if (Number.isInteger(_qty)) setQtyNFT('' + _qty);
+	}
+
+	async function handleMint() {
+		if (!config.MAINNET_CONFIG.DAI_CONTRACT_ADDRESS) return;
+
+		//handle balance
+		const signer = library.getSigner();
+		const userAddress = await signer.getAddress();
+		const DAIContract = new Contract(
+			config.MAINNET_CONFIG.DAI_CONTRACT_ADDRESS,
+			ERC20_ABI,
+			library,
+		) as ERC20;
+		const balance = await DAIContract.balanceOf(userAddress);
+		// if (balance.lte()) {
+		// }
+		console.log('balance', balance);
+
+		//mint
+		setShowModal(true);
 	}
 
 	return (
@@ -75,22 +100,31 @@ export const MintCard = () => {
 						</InfoBoxValue>
 					</Flex>
 				</InfoBox>
-				{account ? (
-					<MintButton
-						size='small'
-						label={formatMessage({ id: 'label.mint' })}
-						buttonType='primary'
-						onClick={() => setShowModal(true)}
-						disabled={Number(qtyNFT) < 1}
-					/>
-				) : (
+				{!account ? (
 					<MintButton
 						size='small'
 						label={formatMessage({
 							id: 'component.button.connect_wallet',
 						})}
 						buttonType='primary'
-						onClick={() => dispatch(setShowWalletModal)}
+						onClick={() => dispatch(setShowWalletModal(true))}
+					/>
+				) : chainId !== config.MAINNET_NETWORK_NUMBER ? (
+					<MintButton
+						size='small'
+						label={formatMessage({ id: 'label.switch_network' })}
+						buttonType='primary'
+						onClick={() =>
+							switchNetwork(config.MAINNET_NETWORK_NUMBER)
+						}
+					/>
+				) : (
+					<MintButton
+						size='small'
+						label={formatMessage({ id: 'label.mint' })}
+						buttonType='primary'
+						onClick={handleMint}
+						disabled={Number(qtyNFT) < 1}
 					/>
 				)}
 			</MintCardContainer>
