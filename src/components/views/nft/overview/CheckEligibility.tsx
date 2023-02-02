@@ -12,7 +12,7 @@ import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import config from '@/configuration';
-import { switchNetwork } from '@/lib/wallet';
+import { getAddressFromENS, isAddressENS, switchNetwork } from '@/lib/wallet';
 
 const CheckEligibility = () => {
 	const { account, library, chainId } = useWeb3React();
@@ -32,9 +32,14 @@ const CheckEligibility = () => {
 		console.log(res);
 	};
 
-	const handleVerify = () => {
+	const handleVerify = async () => {
+		//change network to mainnet
+		let resolvedAddress;
 		if (chainId !== config.MAINNET_NETWORK_NUMBER) {
-			switchNetwork(config.MAINNET_NETWORK_NUMBER);
+			await switchNetwork(config.MAINNET_NETWORK_NUMBER);
+		}
+		if (isAddressENS(walletAddress)) {
+			resolvedAddress = getAddressFromENS(walletAddress, library);
 		}
 	};
 
