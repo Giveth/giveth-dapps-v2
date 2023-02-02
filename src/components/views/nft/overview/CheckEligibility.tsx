@@ -10,19 +10,21 @@ import { Contract } from 'ethers';
 import React from 'react';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
-import { ERC20 } from '@/types/contracts';
-import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
+import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import config from '@/configuration';
 
 const CheckEligibility = () => {
-	const { library } = useWeb3React();
-	const PFPContract = new Contract(
-		config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS ?? '',
-		ERC20_ABI,
-		library,
-	) as ERC20;
+	const { account, library } = useWeb3React();
 
-	console.log('Contract', PFPContract);
+	const checkAddress = async (address: string) => {
+		const PFPContract = new Contract(
+			config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS ?? '',
+			PFP_ABI,
+			library,
+		);
+		const res = await PFPContract.allowList(address);
+		console.log(res);
+	};
 
 	return (
 		<SectionContainer>
@@ -35,7 +37,11 @@ const CheckEligibility = () => {
 				as='input'
 				placeholder='Input your wallet address here'
 			/>
-			<CustomButton buttonType='primary' label='VERIFY' />
+			<CustomButton
+				buttonType='primary'
+				label='VERIFY'
+				onClick={() => checkAddress(account || '')}
+			/>
 		</SectionContainer>
 	);
 };
