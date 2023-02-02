@@ -34,7 +34,9 @@ const config: EnvConfig = {
 			symbol: 'ETH', // 2-6 characters long
 			decimals: 18,
 		},
+		DAI_CONTRACT_ADDRESS: '0x73967c6a0904aA032C103b4104747E88c566B1A2',
 		PFP_CONTRACT_ADDRESS: '0x2288ecE5A0c73ea615efaEf107eF802dCF43361a',
+
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},

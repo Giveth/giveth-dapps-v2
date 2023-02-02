@@ -128,8 +128,9 @@ export interface BasicNetworkConfig {
 		symbol: string; // 2-6 characters long
 		decimals: 18;
 	};
-	blockExplorerUrls?: string[];
+	DAI_CONTRACT_ADDRESS?: string;
 	PFP_CONTRACT_ADDRESS?: string;
+	blockExplorerUrls?: string[];
 	iconUrls?: string[]; // Currently ignored.
 	blockExplorerName: string[];
 	subgraphAddress: string;
