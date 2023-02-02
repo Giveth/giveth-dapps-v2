@@ -30,7 +30,7 @@ const CampaignBlock = (props: { projects: IProject[] }) => {
 	const [currentSlide, setCurrentSlide] = useState(1);
 	const { projects } = props;
 	const slidesPerView = isMobile
-		? 1.1
+		? 1
 		: isTablet
 		? 1.3
 		: isLaptopS
@@ -40,7 +40,7 @@ const CampaignBlock = (props: { projects: IProject[] }) => {
 		: 3;
 	const _projects = projects.slice(0, 5);
 	let paginationCount = Math.floor(_projects.length - slidesPerView + 1);
-	if (!isDesktop) paginationCount += 1;
+	if (!isDesktop && !isMobile) paginationCount += 1;
 	const pages = Array.from(Array(paginationCount).keys());
 
 	useEffect(() => {
@@ -192,7 +192,6 @@ const SavePlanet = styled.div`
 	box-shadow: 12px 0 20px rgba(212, 218, 238, 0.4);
 	padding: 16px 24px 20px 16px;
 	margin: 0 32px;
-	max-width: 311px;
 	user-select: none;
 	${mediaQueries.tablet} {
 		margin: 0;
