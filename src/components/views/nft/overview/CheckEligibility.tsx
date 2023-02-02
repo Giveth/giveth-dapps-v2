@@ -7,7 +7,7 @@ import {
 	QuoteText,
 } from '@giveth/ui-design-system';
 import { Contract } from 'ethers';
-import React from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
@@ -15,6 +15,11 @@ import config from '@/configuration';
 
 const CheckEligibility = () => {
 	const { account, library } = useWeb3React();
+	const [walletAddress, setWalletAddress] = useState('');
+
+	function onAddressChange(event: ChangeEvent<HTMLInputElement>) {
+		setWalletAddress(event.target.value);
+	}
 
 	const checkAddress = async (address: string) => {
 		const PFPContract = new Contract(
@@ -36,6 +41,8 @@ const CheckEligibility = () => {
 			<StyledInput
 				as='input'
 				placeholder='Input your wallet address here'
+				value={walletAddress}
+				onChange={onAddressChange}
 			/>
 			<CustomButton
 				buttonType='primary'
