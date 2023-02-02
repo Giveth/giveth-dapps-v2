@@ -12,14 +12,15 @@ import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import config from '@/configuration';
+import { switchNetwork } from '@/lib/wallet';
 
 const CheckEligibility = () => {
-	const { account, library } = useWeb3React();
+	const { account, library, chainId } = useWeb3React();
 	const [walletAddress, setWalletAddress] = useState('');
 
-	function onAddressChange(event: ChangeEvent<HTMLInputElement>) {
+	const onAddressChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setWalletAddress(event.target.value);
-	}
+	};
 
 	const checkAddress = async (address: string) => {
 		const PFPContract = new Contract(
@@ -29,6 +30,12 @@ const CheckEligibility = () => {
 		);
 		const res = await PFPContract.allowList(address);
 		console.log(res);
+	};
+
+	const handleVerify = () => {
+		if (chainId !== config.MAINNET_NETWORK_NUMBER) {
+			switchNetwork(config.MAINNET_NETWORK_NUMBER);
+		}
 	};
 
 	return (
@@ -47,7 +54,7 @@ const CheckEligibility = () => {
 			<CustomButton
 				buttonType='primary'
 				label='VERIFY'
-				onClick={() => checkAddress(account || '')}
+				onClick={handleVerify}
 			/>
 		</SectionContainer>
 	);
