@@ -131,6 +131,7 @@ export interface BasicNetworkConfig {
 	DAI_CONTRACT_ADDRESS?: string;
 	PFP_CONTRACT_ADDRESS?: string;
 	blockExplorerUrls?: string[];
+	PFP_CONTRACT_ADDRESS?: string;
 	iconUrls?: string[]; // Currently ignored.
 	blockExplorerName: string[];
 	subgraphAddress: string;

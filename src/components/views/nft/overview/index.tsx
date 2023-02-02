@@ -1,19 +1,27 @@
 import React from 'react';
 import styled from 'styled-components';
-import { OvalHorizontalGradient, OvalVerticalGradient } from '../common.styles';
+import CheckEligibility from './CheckEligibility';
+import SayHelloSection from './SayHello';
+import WhatAreGivers from './WhatAreGivers';
+import WhatElse from './WhatElse';
 
 const OverviewIndex = () => {
 	return (
-		<OverviewContainer>
-			<OvalVerticalGradient />
-			<OvalHorizontalGradient />
-		</OverviewContainer>
+		<div>
+			<SayHelloSection />
+			<Separator />
+			<WhatAreGivers />
+			<Separator />
+			<WhatElse />
+			<Separator />
+			<CheckEligibility />
+		</div>
 	);
 };
 
-const OverviewContainer = styled.div`
-	height: 1000px;
-	position: relative;
+const Separator = styled.div`
+	width: 100%;
+	height: 40px;
 `;
 
 export default OverviewIndex;
