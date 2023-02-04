@@ -15,17 +15,19 @@ export const NFTMintIndex = () => {
 			<OvalVerticalGradient />
 			<OvalHorizontalGradient />
 			<MintContainer>
-				<Row>
+				<Row style={{ paddingBottom: '20px;' }}>
 					<Col xs={12} md={6}>
 						<Title>
 							{formatMessage({ id: 'label.mint_your_giver' })}
 						</Title>
-						<Desc>
-							{formatMessage({
-								id: 'page.mint.mint_your_giver.desc',
-							})}
-						</Desc>
-						<MintCard />
+						<ContentWrapper>
+							<Desc>
+								{formatMessage({
+									id: 'page.mint.mint_your_giver.desc',
+								})}
+							</Desc>
+							<MintCard />
+						</ContentWrapper>
 					</Col>
 					<Col xs={12} md={6}>
 						<ImageWrapper>
@@ -50,7 +52,7 @@ export const NFTMintIndex = () => {
 };
 
 const MintViewContainer = styled.div`
-	height: 100vh;
+	min-height: 100vh;
 	position: relative;
 `;
 
@@ -65,12 +67,17 @@ const Title = styled(H1)`
 	margin-bottom: 22px;
 `;
 
+const ContentWrapper = styled.div`
+	width: 480px;
+`;
+
 const Desc = styled(Lead)`
 	margin-bottom: 32px;
 `;
 
 const ImageWrapper = styled.div`
 	position: relative;
+	height: 1000px;
 `;
 
 const Image1 = styled(Image)`
@@ -81,7 +88,7 @@ const Image1 = styled(Image)`
 const Image2 = styled(Image)`
 	z-index: 1;
 	position: absolute;
-	right: 50%;
-	top: 50%;
+	right: 250px;
+	top: 250px;
 	opacity: 0.6;
 `;
