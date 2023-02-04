@@ -238,9 +238,8 @@ const Header: FC<IHeader> = () => {
 				<SmallCreateProjectParent>
 					<SmallCreateProject
 						onClick={handleCreateButton}
-						theme={theme}
+						buttonType='primary'
 						label='+'
-						linkType={isLight ? 'primary' : 'secondary'}
 					/>
 				</SmallCreateProjectParent>
 				{active && account && chainId ? (
