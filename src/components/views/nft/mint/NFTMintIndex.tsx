@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { brandColors, H1, Lead } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+import Image from 'next/image';
 import { OvalVerticalGradient, OvalHorizontalGradient } from '../common.styles';
 import { Col, Container, Row } from '@/components/Grid';
 import { MintCard } from '@/components/cards/MintCard';
@@ -26,7 +27,22 @@ export const NFTMintIndex = () => {
 						</Desc>
 						<MintCard />
 					</Col>
-					<Col xs={12} md={6}></Col>
+					<Col xs={12} md={6}>
+						<ImageWrapper>
+							<Image1
+								src='/images/nft/pfp-mint.png'
+								alt='nft'
+								width={500}
+								height={500}
+							/>
+							<Image2
+								src='/images/nft/pfp-mint.png'
+								alt='nft'
+								width={500}
+								height={500}
+							/>
+						</ImageWrapper>
+					</Col>
 				</Row>
 			</MintContainer>
 		</MintViewContainer>
@@ -51,4 +67,21 @@ const Title = styled(H1)`
 
 const Desc = styled(Lead)`
 	margin-bottom: 32px;
+`;
+
+const ImageWrapper = styled.div`
+	position: relative;
+`;
+
+const Image1 = styled(Image)`
+	z-index: 2;
+	position: relative;
+`;
+
+const Image2 = styled(Image)`
+	z-index: 1;
+	position: absolute;
+	right: 50%;
+	top: 50%;
+	opacity: 0.6;
 `;
