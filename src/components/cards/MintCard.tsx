@@ -7,7 +7,7 @@ import {
 	semanticColors,
 } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import BigNumber from 'bignumber.js';
@@ -21,20 +21,39 @@ import { ERC20 } from '@/types/contracts';
 import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
 import { switchNetwork } from '@/lib/metamask';
 import config from '@/configuration';
+import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 
-const MAX_NFT_QTY = 5;
 const MIN_NFT_QTY = 1;
 
 export const MintCard = () => {
 	const [qtyNFT, setQtyNFT] = useState('1');
 	const [showModal, setShowModal] = useState(false);
+	const [nftPrice, setNFTPrice] = useState<BigNumber>();
+	const [maxMintAmount, setMaxMintAmount] = useState<number>();
 	const { account, library, chainId } = useWeb3React();
 	const { formatMessage } = useIntl();
 	const dispatch = useAppDispatch();
 
+	useEffect(() => {
+		if (!library) return;
+		async function fetchData() {
+			const PFPContract = new Contract(
+				config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS ?? '',
+				PFP_ABI,
+				library,
+			);
+			const _price = await PFPContract.price();
+			const _maxMintAmount = await PFPContract.maxMintAmount();
+			console.log('_maxMintAmount', typeof _maxMintAmount);
+			setNFTPrice(_price);
+			setMaxMintAmount(_maxMintAmount);
+		}
+		fetchData();
+	}, [library]);
+
 	const mintedNFT = 20;
-	const nftPrice = new BigNumber('100000000000000000000');
 	function onChangeHandler(event: ChangeEvent<HTMLInputElement>) {
+		if (!maxMintAmount) return;
 		//handle empty input
 		if (event.target.value === '') setQtyNFT('');
 
@@ -42,7 +61,7 @@ export const MintCard = () => {
 		const _qty = Number.parseInt(event.target.value);
 
 		//handle range
-		if (_qty > MAX_NFT_QTY || _qty < MIN_NFT_QTY) return;
+		if (_qty > maxMintAmount || _qty < MIN_NFT_QTY) return;
 
 		if (Number.isInteger(_qty)) setQtyNFT('' + _qty);
 	}
@@ -75,7 +94,7 @@ export const MintCard = () => {
 						<GLink size='Small'>NFT Amount</GLink>
 						<MaxLink
 							size='Small'
-							onClick={() => setQtyNFT('' + MAX_NFT_QTY)}
+							onClick={() => setQtyNFT('' + maxMintAmount)}
 						>
 							MAX
 						</MaxLink>
@@ -91,12 +110,12 @@ export const MintCard = () => {
 				<InfoBox gap='16px' flexDirection='column'>
 					<Flex justifyContent='space-between'>
 						<InfoBoxTitle>Max Mint </InfoBoxTitle>
-						<InfoBoxValue>{MAX_NFT_QTY}</InfoBoxValue>
+						<InfoBoxValue>{maxMintAmount}</InfoBoxValue>
 					</Flex>
 					<Flex justifyContent='space-between'>
 						<InfoBoxTitle>Mint Prince per</InfoBoxTitle>
 						<InfoBoxValue>
-							{formatWeiHelper(nftPrice)} DAI
+							{nftPrice && formatWeiHelper(nftPrice)} DAI
 						</InfoBoxValue>
 					</Flex>
 				</InfoBox>

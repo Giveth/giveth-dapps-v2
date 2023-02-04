@@ -30,7 +30,7 @@ export enum MintStep {
 
 interface IMintModalProps extends IModal {
 	qty: number;
-	nftPrice: BigNumber;
+	nftPrice?: BigNumber;
 }
 
 export const MintModal: FC<IMintModalProps> = ({
@@ -43,7 +43,7 @@ export const MintModal: FC<IMintModalProps> = ({
 	const { formatMessage } = useIntl();
 	const { account, library } = useWeb3React();
 
-	const price = nftPrice.multipliedBy(qty);
+	const price = nftPrice ? nftPrice.multipliedBy(qty) : new BigNumber(0);
 
 	async function approveHandler() {
 		if (price.isZero()) return;
