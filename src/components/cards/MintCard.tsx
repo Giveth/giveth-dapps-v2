@@ -22,12 +22,15 @@ import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
 import { switchNetwork } from '@/lib/metamask';
 import config from '@/configuration';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
+import { InsufficientFundModal } from '../modals/InsufficientFund';
 
 const MIN_NFT_QTY = 1;
 
 export const MintCard = () => {
 	const [qtyNFT, setQtyNFT] = useState('1');
-	const [showModal, setShowModal] = useState(false);
+	const [showMintModal, setShowMintModal] = useState(false);
+	const [showInsufficientFundModal, setShowInsufficientFundModal] =
+		useState(false);
 	const [nftPrice, setNFTPrice] = useState<BigNumber>();
 	const [maxMintAmount, setMaxMintAmount] = useState<number>();
 	const { account, library, chainId } = useWeb3React();
@@ -44,9 +47,9 @@ export const MintCard = () => {
 			);
 			const _price = await PFPContract.price();
 			const _maxMintAmount = await PFPContract.maxMintAmount();
-			console.log('_maxMintAmount', typeof _maxMintAmount);
-			setNFTPrice(_price);
-			setMaxMintAmount(_maxMintAmount);
+			console.log('_maxMintAmount', _maxMintAmount);
+			setNFTPrice(new BigNumber(_price.toString()));
+			setMaxMintAmount(Number(_maxMintAmount));
 		}
 		fetchData();
 	}, [library]);
@@ -68,6 +71,7 @@ export const MintCard = () => {
 
 	async function handleMint() {
 		if (!config.MAINNET_CONFIG.DAI_CONTRACT_ADDRESS) return;
+		if (!nftPrice) return;
 
 		//handle balance
 		const signer = library.getSigner();
@@ -78,12 +82,13 @@ export const MintCard = () => {
 			library,
 		) as ERC20;
 		const balance = await DAIContract.balanceOf(userAddress);
-		// if (balance.lte()) {
-		// }
-		console.log('balance', balance);
 
-		//mint
-		setShowModal(true);
+		const price = nftPrice.multipliedBy(qtyNFT);
+		if (price.lte(balance.toString())) {
+			setShowMintModal(true);
+		} else {
+			setShowInsufficientFundModal(true);
+		}
 	}
 
 	return (
@@ -147,11 +152,16 @@ export const MintCard = () => {
 					/>
 				)}
 			</MintCardContainer>
-			{showModal && (
+			{showMintModal && (
 				<MintModal
-					setShowModal={setShowModal}
+					setShowModal={setShowMintModal}
 					qty={Number(qtyNFT)}
 					nftPrice={nftPrice}
+				/>
+			)}
+			{showInsufficientFundModal && (
+				<InsufficientFundModal
+					setShowModal={setShowInsufficientFundModal}
 				/>
 			)}
 		</>
