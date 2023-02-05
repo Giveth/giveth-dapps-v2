@@ -83,7 +83,7 @@ export async function getServerSideProps({ res }: any) {
 				limit: 12,
 				sortingBy: ESortbyAllProjects.GIVPOWER,
 			},
-			fetchPolicy: 'network-only',
+			fetchPolicy: 'no-cache',
 		});
 		return {
 			props: {
