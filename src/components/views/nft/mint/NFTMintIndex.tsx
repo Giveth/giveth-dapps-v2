@@ -1,14 +1,33 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { brandColors, H1, Lead } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
+import { Contract } from 'ethers';
+import { useWeb3React } from '@web3-react/core';
 import { OvalVerticalGradient, OvalHorizontalGradient } from '../common.styles';
 import { Col, Container, Row } from '@/components/Grid';
 import { MintCard } from '@/components/cards/MintCard';
+import config from '@/configuration';
+import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 
 export const NFTMintIndex = () => {
 	const { formatMessage } = useIntl();
+	const { account, library, chainId } = useWeb3React();
+
+	useEffect(() => {
+		const checkAddress = async () => {
+			if (!library || !account) return;
+			const PFPContract = new Contract(
+				config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS ?? '',
+				PFP_ABI,
+				library,
+			);
+			const res = await PFPContract.allowList(account);
+			console.log(res);
+		};
+		checkAddress();
+	}, [account, library]);
 
 	return (
 		<MintViewContainer>
