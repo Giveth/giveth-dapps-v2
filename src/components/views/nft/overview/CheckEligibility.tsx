@@ -10,12 +10,13 @@ import { Contract } from 'ethers';
 import React, { ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
+import { utils } from 'ethers';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import config from '@/configuration';
 import { getAddressFromENS, isAddressENS, switchNetwork } from '@/lib/wallet';
 
 const CheckEligibility = () => {
-	const { account, library, chainId } = useWeb3React();
+	const { library, chainId } = useWeb3React();
 	const [walletAddress, setWalletAddress] = useState('');
 
 	const onAddressChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -23,23 +24,45 @@ const CheckEligibility = () => {
 	};
 
 	const checkAddress = async (address: string) => {
-		const PFPContract = new Contract(
-			config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS ?? '',
-			PFP_ABI,
-			library,
-		);
-		const res = await PFPContract.allowList(address);
-		console.log(res);
+		if (utils.isAddress(address)) {
+			try {
+				const PFPContract = new Contract(
+					config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS ?? '',
+					PFP_ABI,
+					library,
+				);
+				const res = await PFPContract.allowList(address);
+				console.log(res);
+			} catch (error) {
+				console.log('Error', error);
+			}
+		} else {
+			console.log('Address is Not valid');
+		}
 	};
 
 	const handleVerify = async () => {
 		//change network to mainnet
-		let resolvedAddress;
-		if (chainId !== config.MAINNET_NETWORK_NUMBER) {
-			await switchNetwork(config.MAINNET_NETWORK_NUMBER);
-		}
-		if (isAddressENS(walletAddress)) {
-			resolvedAddress = getAddressFromENS(walletAddress, library);
+		try {
+			if (walletAddress) {
+				let resolvedAddress;
+				if (chainId !== config.MAINNET_NETWORK_NUMBER) {
+					await switchNetwork(config.MAINNET_NETWORK_NUMBER);
+				}
+				if (isAddressENS(walletAddress)) {
+					console.log('1');
+					resolvedAddress = await getAddressFromENS(
+						walletAddress,
+						library,
+					);
+					checkAddress(resolvedAddress);
+				} else {
+					console.log('3');
+					checkAddress(walletAddress);
+				}
+			}
+		} catch (error) {
+			console.log('Error', error);
 		}
 	};
 
