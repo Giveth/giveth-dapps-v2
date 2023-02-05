@@ -10,6 +10,7 @@ import { Col, Container, Row } from '@/components/Grid';
 import { MintCard } from '@/components/cards/MintCard';
 import config from '@/configuration';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
+import { GiversPFP } from '@/types/contracts';
 
 export const NFTMintIndex = () => {
 	const { formatMessage } = useIntl();
@@ -22,7 +23,7 @@ export const NFTMintIndex = () => {
 				config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS ?? '',
 				PFP_ABI,
 				library,
-			);
+			) as GiversPFP;
 			const res = await PFPContract.allowList(account);
 			console.log(res);
 		};
