@@ -96,11 +96,7 @@ const MenuWallet = () => {
 					}}
 				/>
 			)}
-			<WalletMenuContainer
-				isMounted={isMounted}
-				theme={theme}
-				isSignedIn={isSignedIn || false}
-			>
+			<WalletMenuContainer isMounted={isMounted} theme={theme}>
 				<Title>{formatMessage({ id: 'label.wallet' })}</Title>
 				<Subtitle>
 					<LeftSection>
@@ -137,18 +133,16 @@ const MenuWallet = () => {
 							{formatMessage({ id: i.title })}
 						</MenuItem>
 					))}
-					{isSignedIn && (
-						<MenuItem
-							onClick={() => {
-								deactivate();
-								dispatch(signOut(token!));
-								localStorage.removeItem(StorageLabel.WALLET);
-							}}
-							theme={theme}
-						>
-							{formatMessage({ id: 'label.sign_out' })}
-						</MenuItem>
-					)}
+					<MenuItem
+						onClick={() => {
+							deactivate();
+							isSignedIn && dispatch(signOut(token!));
+							localStorage.removeItem(StorageLabel.WALLET);
+						}}
+						theme={theme}
+					>
+						{formatMessage({ id: 'label.sign_out' })}
+					</MenuItem>
 				</Menus>
 			</WalletMenuContainer>
 		</>
@@ -248,12 +242,8 @@ const Title = styled(Overline)`
 	margin-bottom: 2px;
 `;
 
-interface IWalletMenuContainer {
-	isSignedIn: boolean;
-}
-
-const WalletMenuContainer = styled(MenuContainer)<IWalletMenuContainer>`
-	max-height: ${props => (props.isSignedIn ? '525px' : '480px')};
+const WalletMenuContainer = styled(MenuContainer)`
+	max-height: 525px;
 	overflow-y: auto;
 `;
 
