@@ -844,5 +844,7 @@
 	"label.mint": "",
 	"label.approve": "",
 	"label.mint_your_giver": "",
-	"page.mint.mint_your_giver.desc": ""
+	"page.mint.mint_your_giver.desc": "",
+	"label.insufficient_funds": "",
+	"label.add_fund_desc": ""
 }
