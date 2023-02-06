@@ -4,7 +4,11 @@ import HomeIndex from '@/components/views/homepage/HomeIndex';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { ESortbyAllProjects } from '@/apollo/types/gqlEnums';
-import { IProject, IRecentDonation } from '@/apollo/types/types';
+import {
+	IProject,
+	IProjectUpdateWithProject,
+	IRecentDonation,
+} from '@/apollo/types/types';
 import { useAppSelector } from '@/features/hooks';
 import { homeMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
@@ -18,6 +22,7 @@ export interface IHomeRoute {
 	projectsPerDate: { total: number };
 	totalDonorsCountPerDate: { total: number };
 	donationsTotalUsdPerDate: { total: number };
+	latestUpdates: IProjectUpdateWithProject[];
 }
 
 const fetchProjects = async (userId: string | undefined = undefined) => {
@@ -78,6 +83,8 @@ export async function getServerSideProps({ res }: any) {
 			query: HOMEPAGE_DATA,
 			variables: {
 				take: 50,
+				takeLatestUpdates: 50,
+				skipLatestUpdates: 0,
 				fromDate: '2021-01-01',
 				toDate: dateFormat(new Date()),
 				limit: 12,
@@ -93,6 +100,7 @@ export async function getServerSideProps({ res }: any) {
 				projectsPerDate: data.projectsPerDate,
 				totalDonorsCountPerDate: data.totalDonorsCountPerDate,
 				donationsTotalUsdPerDate: data.donationsTotalUsdPerDate,
+				lastUpdates: data.projectUpdates.projectUpdates,
 			},
 		};
 	} catch (error: any) {

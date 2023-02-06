@@ -188,6 +188,13 @@ export interface IProjectUpdate {
 	userId: string;
 }
 
+export interface IProjectUpdateWithProject extends IProjectUpdate {
+	project: {
+		slug: string;
+		image: string;
+	};
+}
+
 export interface ISiweMessage {
 	nonce: string;
 	message: string;

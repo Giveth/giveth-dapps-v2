@@ -3,6 +3,8 @@ import { gql } from '@apollo/client';
 export const HOMEPAGE_DATA = gql`
 	query (
 		$take: Int
+		$takeLatestUpdates: Int
+		$skipLatestUpdates: Int
 		$fromDate: String
 		$toDate: String
 		$limit: Int
@@ -27,6 +29,29 @@ export const HOMEPAGE_DATA = gql`
 		}
 		donationsTotalUsdPerDate(fromDate: $fromDate, toDate: $toDate) {
 			total
+		}
+		projectUpdates(take: $takeLatestUpdates, skip: $skipLatestUpdates) {
+			projectUpdates {
+				id
+				title
+				projectId
+				userId
+				content
+				isMain
+				totalReactions
+				createdAt
+				reaction {
+					id
+					userId
+					reaction
+					projectUpdateId
+				}
+				project {
+					slug
+					image
+				}
+			}
+			count
 		}
 		allProjects(limit: $limit, sortingBy: $sortingBy) {
 			projects {
