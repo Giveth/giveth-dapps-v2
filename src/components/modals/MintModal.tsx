@@ -48,7 +48,7 @@ export const MintModal: FC<IMintModalProps> = ({
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
 	const { library } = useWeb3React();
-	const { setStep: setMintStep } = usePFPMintData();
+	const { setStep: setMintStep, setTx } = usePFPMintData();
 
 	const price = nftPrice ? nftPrice.multipliedBy(qty) : new BigNumber(0);
 
@@ -103,6 +103,7 @@ export const MintModal: FC<IMintModalProps> = ({
 			) as GiversPFP;
 			console.log('PFPContract', PFPContract, price.toString());
 			const tx = await PFPContract.mint(qty);
+			setTx(tx.hash);
 			console.log('tx', tx);
 			const res = await tx.wait();
 			console.log('res', res);

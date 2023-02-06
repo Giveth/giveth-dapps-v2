@@ -1,6 +1,12 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { brandColors, Button, H1, Lead } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	Button,
+	ButtonLink,
+	H1,
+	Lead,
+} from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { Contract } from 'ethers';
@@ -18,7 +24,7 @@ import { Flex } from '@/components/styled-components/Flex';
 export const NFTMintIndex = () => {
 	const { formatMessage } = useIntl();
 	const { account, library, chainId } = useWeb3React();
-	const { step, setStep, qty } = usePFPMintData();
+	const { step, setStep, qty, tx: txHash } = usePFPMintData();
 
 	useEffect(() => {
 		const checkAddress = async () => {
@@ -83,6 +89,11 @@ export const NFTMintIndex = () => {
 											},
 										)}
 									</Desc>
+									<ButtonLink
+										linkType='texty'
+										label='View on  OPENSEA'
+										href=''
+									/>
 									<Image
 										src='/images/yellow_flower_full.svg'
 										alt='yellow flower'
@@ -104,6 +115,11 @@ export const NFTMintIndex = () => {
 											id: 'page.mint.fail.desc',
 										})}
 									</Desc>
+									<ButtonLink
+										linkType='texty'
+										label='View transaction on etherscan'
+										href={`${config.MAINNET_CONFIG.blockExplorerUrls}/tx/${txHash}`}
+									/>
 									<MintAgainButton
 										label={formatMessage({
 											id: 'label.mint_again',
