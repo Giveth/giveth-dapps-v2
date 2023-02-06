@@ -12,10 +12,12 @@ import { MintCard } from '@/components/cards/MintCard';
 import config from '@/configuration';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import { GiversPFP } from '@/types/contracts';
+import { EPFPMinSteps, usePFPMintData } from '@/context/pfpmint.context';
 
 export const NFTMintIndex = () => {
 	const { formatMessage } = useIntl();
 	const { account, library, chainId } = useWeb3React();
+	const { step } = usePFPMintData();
 
 	useEffect(() => {
 		const checkAddress = async () => {
@@ -46,17 +48,45 @@ export const NFTMintIndex = () => {
 			<MintContainer>
 				<Row style={{ paddingBottom: '20px;' }}>
 					<Col xs={12} md={6}>
-						<Title>
-							{formatMessage({ id: 'label.mint_your_giver' })}
-						</Title>
-						<ContentWrapper>
-							<Desc>
-								{formatMessage({
-									id: 'page.mint.mint_your_giver.desc',
-								})}
-							</Desc>
-							<MintCard />
-						</ContentWrapper>
+						{step === EPFPMinSteps.MINT ? (
+							<>
+								<Title>
+									{formatMessage({
+										id: 'label.mint_your_giver',
+									})}
+								</Title>
+								<ContentWrapper>
+									<Desc>
+										{formatMessage({
+											id: 'page.mint.mint_your_giver.desc',
+										})}
+									</Desc>
+									<MintCard />
+								</ContentWrapper>
+							</>
+						) : step === EPFPMinSteps.SUCCESS ? (
+							<>
+								<Title>
+									{formatMessage({
+										id: 'label.welcome_giver',
+									})}
+								</Title>
+								<ContentWrapper>
+									<Desc>
+										{formatMessage(
+											{
+												id: 'page.mint.welcome_giver.desc',
+											},
+											{
+												itemCount: 5,
+											},
+										)}
+									</Desc>
+								</ContentWrapper>
+							</>
+						) : (
+							<></>
+						)}
 					</Col>
 					<Col xs={12} md={6}>
 						<ImageWrapper>
