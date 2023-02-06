@@ -172,7 +172,7 @@ const MintCardContainer = styled.div`
 	padding: 24px;
 	background-color: ${brandColors.giv[800]};
 	border-radius: 8px;
-	max-width: 458px;
+	width: 458px;
 `;
 
 const InputWrapper = styled(Flex)`
