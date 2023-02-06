@@ -14,11 +14,12 @@ import { utils } from 'ethers';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import config from '@/configuration';
 import { getAddressFromENS, isAddressENS, switchNetwork } from '@/lib/wallet';
+import { Flex } from '@/components/styled-components/Flex';
 
 const CheckEligibility = () => {
 	const { library, chainId } = useWeb3React();
 	const [walletAddress, setWalletAddress] = useState('');
-
+	const [error, setError] = useState('');
 	const onAddressChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setWalletAddress(event.target.value);
 	};
@@ -34,15 +35,18 @@ const CheckEligibility = () => {
 				const res = await PFPContract.allowList(address);
 				console.log(res);
 			} catch (error) {
-				console.log('Error', error);
+				setError('Please check your address');
+				console.log('ErrorRRR', error);
 			}
 		} else {
+			setError('Address is not valid');
 			console.log('Address is Not valid');
 		}
 	};
 
 	const handleVerify = async () => {
 		//change network to mainnet
+		setError('');
 		try {
 			if (walletAddress) {
 				let resolvedAddress;
@@ -62,6 +66,7 @@ const CheckEligibility = () => {
 				}
 			}
 		} catch (error) {
+			setError('Please connect your wallet');
 			console.log('Error', error);
 		}
 	};
@@ -73,12 +78,15 @@ const CheckEligibility = () => {
 			<CustomQuote size='small'>
 				Check here to verify your eligibility
 			</CustomQuote>
-			<StyledInput
-				as='input'
-				placeholder='Input your wallet address here'
-				value={walletAddress}
-				onChange={onAddressChange}
-			/>
+			<Flex flexDirection='column'>
+				<StyledInput
+					as='input'
+					placeholder='Input your wallet address here'
+					value={walletAddress}
+					onChange={onAddressChange}
+				/>
+				<span>{error}</span>
+			</Flex>
 			<CustomButton
 				buttonType='primary'
 				label='VERIFY'
@@ -100,7 +108,6 @@ const StyledInput = styled(P)`
 	background-color: ${brandColors.giv[700]};
 	border: 1px solid ${brandColors.giv[500]};
 	border-radius: 8px;
-	margin-bottom: 38px;
 	max-width: 440px;
 	&::-webkit-inner-spin-button {
 		-webkit-appearance: none;
@@ -115,6 +122,7 @@ const CustomQuote = styled(QuoteText)`
 `;
 
 const CustomButton = styled(Button)`
+	margin-top: 20px;
 	width: 250px;
 `;
 
