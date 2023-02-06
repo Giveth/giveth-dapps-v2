@@ -15,11 +15,14 @@ import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import config from '@/configuration';
 import { getAddressFromENS, isAddressENS, switchNetwork } from '@/lib/wallet';
 import { Flex } from '@/components/styled-components/Flex';
+import EligibilityModal from './EligibilityModal';
 
 const CheckEligibility = () => {
 	const { library, chainId } = useWeb3React();
 	const [walletAddress, setWalletAddress] = useState('');
 	const [error, setError] = useState('');
+	const [showModal, setShowModal] = useState(false);
+	const [status, setStatus] = useState<boolean | undefined>();
 	const onAddressChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setWalletAddress(event.target.value);
 	};
@@ -34,6 +37,8 @@ const CheckEligibility = () => {
 				);
 				const res = await PFPContract.allowList(address);
 				console.log(res);
+				res === true ? setStatus(true) : setStatus(false);
+				setShowModal(true);
 			} catch (error) {
 				setError('Please check your address');
 				console.log('ErrorRRR', error);
@@ -92,6 +97,12 @@ const CheckEligibility = () => {
 				label='VERIFY'
 				onClick={handleVerify}
 			/>
+			{showModal && (
+				<EligibilityModal
+					isSuccess={!!status}
+					setShowModal={setShowModal}
+				/>
+			)}
 		</SectionContainer>
 	);
 };
