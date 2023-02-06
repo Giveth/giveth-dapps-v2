@@ -6,6 +6,7 @@ import {
 	Lead,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
@@ -16,6 +17,7 @@ import { StakingType } from '@/types/config';
 
 export const ZeroGivpowerModal: FC<IModal> = ({ setShowModal }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const { formatMessage } = useIntl();
 
 	return (
 		<Modal
@@ -27,17 +29,23 @@ export const ZeroGivpowerModal: FC<IModal> = ({ setShowModal }) => {
 		>
 			<ZeroGivpowerModalContainer data-testid='zero-givpower-modal'>
 				<Lead>
-					You don’t have any GIVpower!
-					<br /> Stake and lock your GIV to get GIVpower.
+					{formatMessage({ id: 'label.you_dont_have_any_givpower' })}
+					<br />{' '}
+					{formatMessage({
+						id: 'label.stake_and_lock_your_giv_to_get_givpower',
+					})}
 				</Lead>
 				<Link
 					href={`${Routes.GIVfarm}/?open=${StakingType.GIV_LM}&chain=gnosis`}
 				>
-					<GetButton label='Get GIVpower' size='small' />
+					<GetButton
+						label={formatMessage({ id: 'label.get_givpower' })}
+						size='small'
+					/>
 				</Link>
 				<CustomButton
 					buttonType='texty'
-					label='Not Now'
+					label={formatMessage({ id: 'label.not_now' })}
 					onClick={closeModal}
 				/>
 			</ZeroGivpowerModalContainer>
