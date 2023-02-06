@@ -1,5 +1,6 @@
 import { IconRocketInSpace32 } from '@giveth/ui-design-system';
 import { FC, useState } from 'react';
+import { useIntl } from 'react-intl';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
 
@@ -24,6 +25,7 @@ export enum EBoostModalState {
 }
 
 const BoostModal: FC<IBoostModalProps> = ({ setShowModal, projectId }) => {
+	const { formatMessage } = useIntl();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const [percentage, setPercentage] = useState(0);
 	const [state, setState] = useState(EBoostModalState.BOOSTING);
@@ -39,13 +41,13 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal, projectId }) => {
 	const title = () => {
 		switch (state) {
 			case EBoostModalState.BOOSTING:
-				return 'Boost';
+				return formatMessage({ id: 'label.boost' });
 			case EBoostModalState.LIMIT_EXCEEDED:
-				return 'Oh no!';
+				return formatMessage({ id: 'label.oh_no' });
 			case EBoostModalState.BOOSTED:
-				return 'Well done!';
+				return formatMessage({ id: 'label.well_done' });
 			default:
-				return 'Boost';
+				return formatMessage({ id: 'label.boost' });
 		}
 	};
 

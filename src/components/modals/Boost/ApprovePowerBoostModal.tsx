@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react';
 import { IconRocketInSpace32 } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
@@ -19,6 +20,7 @@ export const ApprovePowerBoostModal: FC<IApprovePowerBoostModal> = ({
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const [loading, setLoading] = useState(false);
+	const { formatMessage } = useIntl();
 
 	const onSave = async () => {
 		setLoading(true);
@@ -32,24 +34,25 @@ export const ApprovePowerBoostModal: FC<IApprovePowerBoostModal> = ({
 			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerTitlePosition={'left'}
-			headerTitle={'Are you sure?'}
+			headerTitle={formatMessage({ id: 'label.are_you_sure' })}
 			headerIcon={<IconRocketInSpace32 />}
 		>
 			<ConfirmPowerBoostModalContainer>
 				<Content>
-					You are about to save the changes you made to your GIVpower
-					allocations. This cannot be undone.
+					{formatMessage({
+						id: 'label.you_are_about_to_save_the_changes_you_made',
+					})}
 				</Content>
 				<>
 					<CustomButton
-						label='Save changes'
+						label={formatMessage({ id: 'label.save_changes' })}
 						onClick={onSave}
 						loading={loading}
 						disabled={loading}
 					/>
 					<CustomButton
 						buttonType='texty-primary'
-						label='Cancel'
+						label={formatMessage({ id: 'label.cancel' })}
 						onClick={closeModal}
 					/>
 				</>

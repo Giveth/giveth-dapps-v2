@@ -5,6 +5,7 @@ import {
 	IconRocketInSpace32,
 	Lead,
 } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -26,6 +27,7 @@ export const DeletePowerBoostModal: FC<IDeletePowerBoostModal> = ({
 	deleteBoost,
 	canDelete,
 }) => {
+	const { formatMessage } = useIntl();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const dispatch = useAppDispatch();
 	const router = useRouter();
@@ -39,21 +41,25 @@ export const DeletePowerBoostModal: FC<IDeletePowerBoostModal> = ({
 			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerTitlePosition={'left'}
-			headerTitle={canDelete ? 'Are you sure?' : 'Oops!'}
+			headerTitle={
+				canDelete
+					? formatMessage({ id: 'label.are_you_sure' })
+					: formatMessage({ id: 'label.oops' })
+			}
 			headerIcon={<IconRocketInSpace32 />}
 		>
 			<ConfirmPowerBoostModalContainer>
 				{canDelete ? (
 					<Content>
-						If you remove GIVpower from this project, it will be
-						distributed proportionally to the other projects you
-						have boosted.
+						{formatMessage({
+							id: 'label.if_you_remove_givpower_it_will_be_distributed_proportionally',
+						})}
 					</Content>
 				) : (
 					<Content>
-						You can&apos;t remove your GIVpower from this project
-						because it is the only boost you have. Please boost
-						another project with GIVpower before continuing.
+						{formatMessage({
+							id: 'label.you_cant_remove_your_givpower_from_this_project',
+						})}
 					</Content>
 				)}
 				{canDelete ? (
@@ -61,19 +67,21 @@ export const DeletePowerBoostModal: FC<IDeletePowerBoostModal> = ({
 						<CustomButton label='cancel' onClick={closeModal} />
 						<CustomButton
 							buttonType='texty-primary'
-							label='Remove GIVpower'
+							label={formatMessage({
+								id: 'label.remove_givpower',
+							})}
 							onClick={onDelete}
 						/>
 					</>
 				) : (
 					<>
 						<CustomButton
-							label='view projects'
+							label={formatMessage({ id: 'label.view_projects' })}
 							onClick={() => router.push(Routes.Projects)}
 						/>
 						<CustomButton
 							buttonType='texty-primary'
-							label='Dismiss'
+							label={formatMessage({ id: 'label.dismiss' })}
 							onClick={closeModal}
 						/>
 					</>
