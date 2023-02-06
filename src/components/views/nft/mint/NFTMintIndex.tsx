@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { brandColors, H1, Lead } from '@giveth/ui-design-system';
+import { brandColors, Button, H1, Lead } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { Contract } from 'ethers';
@@ -13,6 +13,7 @@ import config from '@/configuration';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import { GiversPFP } from '@/types/contracts';
 import { EPFPMinSteps, usePFPMintData } from '@/context/pfpmint.context';
+import { Flex } from '@/components/styled-components/Flex';
 
 export const NFTMintIndex = () => {
 	const { formatMessage } = useIntl();
@@ -94,20 +95,27 @@ export const NFTMintIndex = () => {
 							<>
 								<Title>
 									{formatMessage({
-										id: 'label.welcome_giver',
+										id: 'label.uh_oh',
 									})}
 								</Title>
 								<ContentWrapper>
 									<Desc>
 										{formatMessage(
 											{
-												id: 'page.mint.welcome_giver.desc',
+												id: 'page.mint.fail.desc',
 											},
 											{
 												itemCount: 5,
 											},
 										)}
 									</Desc>
+									<MintAgainButton
+										label={formatMessage({
+											id: 'label.mint_again',
+										})}
+										buttonType='primary'
+										size='large'
+									/>
 									<Image
 										src='/images/yellow_flower_full.svg'
 										alt='yellow flower'
@@ -156,12 +164,21 @@ const Title = styled(H1)`
 	margin-bottom: 22px;
 `;
 
-const ContentWrapper = styled.div`
+const ContentWrapper = styled(Flex)`
+	flex-direction: column;
+	align-items: center;
+	gap: 21px;
 	width: 480px;
 `;
 
 const Desc = styled(Lead)`
 	margin-bottom: 32px;
+	text-align: center;
+`;
+
+const MintAgainButton = styled(Button)`
+	width: 251px;
+	margin-bottom: 48px;
 `;
 
 const ImageWrapper = styled.div`

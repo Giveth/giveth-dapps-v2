@@ -850,5 +850,6 @@
 	"page.mint.welcome_giver.desc": "You have minted {itemCount, plural, one {{itemCount} item} other {{itemCount} items} } Giver PFPs. Thank you for supporting Giveth!",
 	"page.mint.fail.desc": "An error occurred while trying to mint. Let’s see what happened...",
 	"label.insufficient_funds": "Insufficient funds",
-	"label.add_fund_desc": "You don’t have enough funds. Please add funds to your wallet or switch to a different wallet."
+	"label.add_fund_desc": "You don’t have enough funds. Please add funds to your wallet or switch to a different wallet.",
+	"label.mint_again": "Mint Again"
 }
