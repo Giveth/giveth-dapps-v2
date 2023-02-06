@@ -17,7 +17,7 @@ interface IPFPMintContext {
 }
 
 const PFPMintContext = createContext<IPFPMintContext>({
-	step: EPFPMinSteps.FAILURE,
+	step: EPFPMinSteps.MINT,
 	setStep: () => {
 		console.log('setStep not initialed yet!');
 	},
@@ -34,7 +34,7 @@ const PFPMintContext = createContext<IPFPMintContext>({
 PFPMintContext.displayName = 'PFPMintContext';
 
 export const PFPMintProvider = ({ children }: { children: ReactNode }) => {
-	const [step, setStep] = useState(EPFPMinSteps.FAILURE);
+	const [step, setStep] = useState(EPFPMinSteps.MINT);
 	const [qty, setQty] = useState(1);
 	const [tx, setTx] = useState<string>('');
 
