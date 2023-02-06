@@ -18,7 +18,7 @@ import { Flex } from '@/components/styled-components/Flex';
 export const NFTMintIndex = () => {
 	const { formatMessage } = useIntl();
 	const { account, library, chainId } = useWeb3React();
-	const { step } = usePFPMintData();
+	const { step, setStep } = usePFPMintData();
 
 	useEffect(() => {
 		const checkAddress = async () => {
@@ -115,6 +115,9 @@ export const NFTMintIndex = () => {
 										})}
 										buttonType='primary'
 										size='large'
+										onClick={() =>
+											setStep(EPFPMinSteps.MINT)
+										}
 									/>
 									<Image
 										src='/images/yellow_flower_full.svg'
