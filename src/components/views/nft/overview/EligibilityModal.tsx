@@ -1,5 +1,7 @@
 import React from 'react';
 import {
+	brandColors,
+	ButtonLink,
 	IconAlertTriangleFilled32,
 	IconCheckCircleFilled32,
 } from '@giveth/ui-design-system';
@@ -37,6 +39,12 @@ const EligibilityModal = ({ isSuccess, setShowModal }: IEligibilityModal) => {
 					? '"You are eligible to mint your Giver early! Thanks for supporting Giveth"'
 					: '"The wallet address input is not eligible for early minting. If you think this is a mistake, please contact the team. Check out our documentation for full details on eligibility."'}
 			</ModalContentContainer>
+			<CustomizedButtonLink
+				linkType='texty-secondary'
+				label='LEARN MORE'
+			/>
+			<br />
+			<br />
 		</Modal>
 	);
 };
@@ -44,6 +52,12 @@ const EligibilityModal = ({ isSuccess, setShowModal }: IEligibilityModal) => {
 const ModalContentContainer = styled.div`
 	padding: 42px 24px;
 	max-width: 445px;
+`;
+
+const CustomizedButtonLink = styled(ButtonLink)`
+	margin: 0 auto;
+	max-width: 150px;
+	color: ${brandColors.deep[100]};
 `;
 
 export default EligibilityModal;
