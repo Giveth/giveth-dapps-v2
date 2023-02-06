@@ -16,7 +16,7 @@ const EligibilityModal = ({ isSuccess, setShowModal }: IEligibilityModal) => {
 			headerTitle={'hello'}
 			headerTitlePosition='left'
 		>
-			123
+			{isSuccess === true ? 'True' : 'False'}
 		</Modal>
 	);
 };
