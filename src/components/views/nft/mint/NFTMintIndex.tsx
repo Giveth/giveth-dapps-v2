@@ -1,32 +1,161 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { brandColors, H1, Lead } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	Button,
+	ButtonLink,
+	H1,
+	Lead,
+} from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+import Image from 'next/image';
+import { Contract } from 'ethers';
+import { useWeb3React } from '@web3-react/core';
+import { JsonRpcProvider } from '@ethersproject/providers';
 import { OvalVerticalGradient, OvalHorizontalGradient } from '../common.styles';
 import { Col, Container, Row } from '@/components/Grid';
 import { MintCard } from '@/components/cards/MintCard';
+import config from '@/configuration';
+import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
+import { GiversPFP } from '@/types/contracts';
+import { EPFPMinSteps, usePFPMintData } from '@/context/pfpmint.context';
+import { Flex } from '@/components/styled-components/Flex';
 
 export const NFTMintIndex = () => {
 	const { formatMessage } = useIntl();
+	const { account, library, chainId } = useWeb3React();
+	const { step, setStep, qty, tx: txHash } = usePFPMintData();
+
+	useEffect(() => {
+		const checkAddress = async () => {
+			if (!library || !account) return;
+			try {
+				const _provider =
+					chainId === config.MAINNET_NETWORK_NUMBER
+						? library
+						: new JsonRpcProvider(config.MAINNET_CONFIG.nodeUrl);
+				const PFPContract = new Contract(
+					config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS ?? '',
+					PFP_ABI,
+					_provider,
+				) as GiversPFP;
+				const res = await PFPContract.allowList(account);
+				console.log(res);
+			} catch (error) {
+				console.log('Error on check allow List', error);
+			}
+		};
+		checkAddress();
+	}, [account, chainId, library]);
 
 	return (
 		<MintViewContainer>
 			<OvalVerticalGradient />
 			<OvalHorizontalGradient />
 			<MintContainer>
-				<Row>
+				<Row style={{ paddingBottom: '20px;' }}>
 					<Col xs={12} md={6}>
-						<Title>
-							{formatMessage({ id: 'label.mint_your_giver' })}
-						</Title>
-						<Desc>
-							{formatMessage({
-								id: 'page.mint.mint_your_giver.desc',
-							})}
-						</Desc>
-						<MintCard />
+						{step === EPFPMinSteps.MINT ? (
+							<>
+								<Title>
+									{formatMessage({
+										id: 'label.mint_your_giver',
+									})}
+								</Title>
+								<ContentWrapper>
+									<Desc>
+										{formatMessage({
+											id: 'page.mint.mint_your_giver.desc',
+										})}
+									</Desc>
+									<MintCard />
+								</ContentWrapper>
+							</>
+						) : step === EPFPMinSteps.SUCCESS ? (
+							<>
+								<Title>
+									{formatMessage({
+										id: 'label.welcome_giver',
+									})}
+								</Title>
+								<ContentWrapper>
+									<Desc>
+										{formatMessage(
+											{
+												id: 'page.mint.welcome_giver.desc',
+											},
+											{
+												itemCount: qty,
+											},
+										)}
+									</Desc>
+									<ButtonLink
+										linkType='texty'
+										label='View on  OPENSEA'
+										href=''
+									/>
+									<Image
+										src='/images/yellow_flower_full.svg'
+										alt='yellow flower'
+										width={360}
+										height={360}
+									/>
+								</ContentWrapper>
+							</>
+						) : (
+							<>
+								<Title>
+									{formatMessage({
+										id: 'label.uh_oh',
+									})}
+								</Title>
+								<ContentWrapper>
+									<Desc>
+										{formatMessage({
+											id: 'page.mint.fail.desc',
+										})}
+									</Desc>
+									<ButtonLink
+										linkType='texty'
+										label='View transaction on etherscan'
+										href={`${config.MAINNET_CONFIG.blockExplorerUrls}/tx/${txHash}`}
+									/>
+									<MintAgainButton
+										label={formatMessage({
+											id: 'label.mint_again',
+										})}
+										buttonType='primary'
+										size='large'
+										onClick={() =>
+											setStep(EPFPMinSteps.MINT)
+										}
+									/>
+									<Image
+										src='/images/yellow_flower_full.svg'
+										alt='yellow flower'
+										width={360}
+										height={360}
+									/>
+								</ContentWrapper>
+							</>
+						)}
 					</Col>
-					<Col xs={12} md={6}></Col>
+					<Col xs={12} md={6}>
+						<ImageWrapper>
+							<Image1
+								src='/images/nft/pfp-mint.png'
+								alt='nft'
+								width={500}
+								height={500}
+							/>
+							<Image2
+								src='/images/nft/pfp-mint.png'
+								alt='nft'
+								width={500}
+								height={500}
+							/>
+						</ImageWrapper>
+					</Col>
 				</Row>
 			</MintContainer>
 		</MintViewContainer>
@@ -34,7 +163,7 @@ export const NFTMintIndex = () => {
 };
 
 const MintViewContainer = styled.div`
-	height: 100vh;
+	min-height: 100vh;
 	position: relative;
 `;
 
@@ -49,6 +178,37 @@ const Title = styled(H1)`
 	margin-bottom: 22px;
 `;
 
+const ContentWrapper = styled(Flex)`
+	flex-direction: column;
+	align-items: center;
+	gap: 21px;
+	width: 480px;
+`;
+
 const Desc = styled(Lead)`
 	margin-bottom: 32px;
+	text-align: center;
+`;
+
+const MintAgainButton = styled(Button)`
+	width: 251px;
+	margin-bottom: 48px;
+`;
+
+const ImageWrapper = styled.div`
+	position: relative;
+	height: 1000px;
+`;
+
+const Image1 = styled(Image)`
+	z-index: 2;
+	position: relative;
+`;
+
+const Image2 = styled(Image)`
+	z-index: 1;
+	position: absolute;
+	right: 250px;
+	top: 250px;
+	opacity: 0.6;
 `;
