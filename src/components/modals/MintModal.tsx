@@ -10,6 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 import BigNumber from 'bignumber.js';
+import { Contract } from 'ethers';
 import { IModal } from '@/types/common';
 import { Modal } from './Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -22,6 +23,8 @@ import {
 import { formatWeiHelper } from '@/helpers/number';
 import { approveERC20tokenTransfer } from '@/lib/stakingPool';
 import config from '@/configuration';
+import { GiversPFP } from '@/types/contracts';
+import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 
 export enum MintStep {
 	APPROVE,
@@ -82,7 +85,35 @@ export const MintModal: FC<IMintModalProps> = ({
 	}
 
 	async function mintHandle() {
-		closeModal();
+		if (!library) {
+			console.error('library is null');
+			return;
+		}
+		if (!config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS) return;
+
+		setStep(MintStep.MINTING);
+		try {
+			const signer = library.getSigner();
+			const PFPContract = new Contract(
+				config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS ?? '',
+				PFP_ABI,
+				signer,
+			) as GiversPFP;
+			console.log('PFPContract', PFPContract, price.toString());
+			const tx = await PFPContract.mint(qty);
+			console.log('tx', tx);
+			const res = await tx.wait();
+			console.log('res', res);
+
+			if (res) {
+				closeModal();
+			} else {
+				setStep(MintStep.MINT);
+			}
+		} catch (error) {
+			setStep(MintStep.MINT);
+			console.log('error on mint', error);
+		}
 	}
 
 	const isApproving =
