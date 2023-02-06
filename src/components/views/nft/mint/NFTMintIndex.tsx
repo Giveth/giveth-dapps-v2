@@ -5,6 +5,7 @@ import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { Contract } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
+import { JsonRpcProvider } from '@ethersproject/providers';
 import { OvalVerticalGradient, OvalHorizontalGradient } from '../common.styles';
 import { Col, Container, Row } from '@/components/Grid';
 import { MintCard } from '@/components/cards/MintCard';
@@ -19,16 +20,24 @@ export const NFTMintIndex = () => {
 	useEffect(() => {
 		const checkAddress = async () => {
 			if (!library || !account) return;
-			const PFPContract = new Contract(
-				config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS ?? '',
-				PFP_ABI,
-				library,
-			) as GiversPFP;
-			const res = await PFPContract.allowList(account);
-			console.log(res);
+			try {
+				const _provider =
+					chainId === config.MAINNET_NETWORK_NUMBER
+						? library
+						: new JsonRpcProvider(config.MAINNET_CONFIG.nodeUrl);
+				const PFPContract = new Contract(
+					config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS ?? '',
+					PFP_ABI,
+					_provider,
+				) as GiversPFP;
+				const res = await PFPContract.allowList(account);
+				console.log(res);
+			} catch (error) {
+				console.log('Error on check allow List', error);
+			}
 		};
 		checkAddress();
-	}, [account, library]);
+	}, [account, chainId, library]);
 
 	return (
 		<MintViewContainer>

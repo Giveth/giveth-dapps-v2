@@ -20,6 +20,8 @@ import {
 	StakeStepNumber,
 } from './StakeLock/StakeSteps.sc';
 import { formatWeiHelper } from '@/helpers/number';
+import { approveERC20tokenTransfer } from '@/lib/stakingPool';
+import config from '@/configuration';
 
 export enum MintStep {
 	APPROVE,
@@ -51,6 +53,8 @@ export const MintModal: FC<IMintModalProps> = ({
 			console.error('library is null');
 			return;
 		}
+		if (!config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS) return;
+		if (!config.MAINNET_CONFIG.DAI_CONTRACT_ADDRESS) return;
 
 		setStep(MintStep.APPROVING);
 
@@ -58,14 +62,13 @@ export const MintModal: FC<IMintModalProps> = ({
 
 		const userAddress = await signer.getAddress();
 
-		const isApproved = true;
-		// const isApproved = await approveERC20tokenTransfer(
-		// 	price.toString(),
-		// 	userAddress,
-		// 	LM_ADDRESS,
-		// 	POOL_ADDRESS,
-		// 	library,
-		// );
+		const isApproved = await approveERC20tokenTransfer(
+			price.toString(),
+			userAddress,
+			config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS,
+			config.MAINNET_CONFIG.DAI_CONTRACT_ADDRESS,
+			library,
+		);
 
 		if (isApproved) {
 			setStep(MintStep.MINT);
