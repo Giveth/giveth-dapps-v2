@@ -32,7 +32,6 @@ import ProjectsFiltersDesktop from '@/components/views/projects/ProjectsFiltersD
 import ProjectsFiltersTablet from '@/components/views/projects/ProjectsFiltersTablet';
 import ProjectsFiltersMobile from '@/components/views/projects/ProjectsFiltersMobile';
 import LottieControl from '@/components/animations/lottieControl';
-import GitcoinBanner from '@/components/views/homepage/HomeNiceSection';
 import LoadingAnimation from '@/animations/loading_giv.json';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
@@ -252,7 +251,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 			)}
 
 			<ProjectsBanner mainCategory={selectedMainCategory} />
-			<GitcoinBanner />
 			<Wrapper>
 				<FiltersContainer>
 					{isDesktop && <ProjectsFiltersDesktop />}
