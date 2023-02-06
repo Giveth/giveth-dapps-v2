@@ -12,6 +12,8 @@ interface IPFPMintContext {
 	setStep: Dispatch<SetStateAction<number>>;
 	qty: number;
 	setQty: Dispatch<SetStateAction<number>>;
+	tx: string;
+	setTx: Dispatch<SetStateAction<string>>;
 }
 
 const PFPMintContext = createContext<IPFPMintContext>({
@@ -23,6 +25,10 @@ const PFPMintContext = createContext<IPFPMintContext>({
 	setQty: () => {
 		console.log('setQty not initialed yet!');
 	},
+	tx: '',
+	setTx: () => {
+		console.log('setTx not initialed yet!');
+	},
 });
 
 PFPMintContext.displayName = 'PFPMintContext';
@@ -30,6 +36,7 @@ PFPMintContext.displayName = 'PFPMintContext';
 export const PFPMintProvider = ({ children }: { children: ReactNode }) => {
 	const [step, setStep] = useState(EPFPMinSteps.FAILURE);
 	const [qty, setQty] = useState(1);
+	const [tx, setTx] = useState<string>('');
 
 	return (
 		<PFPMintContext.Provider
@@ -38,6 +45,8 @@ export const PFPMintProvider = ({ children }: { children: ReactNode }) => {
 				setStep,
 				qty,
 				setQty,
+				tx,
+				setTx,
 			}}
 		>
 			{children}
