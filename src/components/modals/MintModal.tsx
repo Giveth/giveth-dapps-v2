@@ -57,23 +57,27 @@ export const MintModal: FC<IMintModalProps> = ({
 		if (!config.MAINNET_CONFIG.DAI_CONTRACT_ADDRESS) return;
 
 		setStep(MintStep.APPROVING);
+		try {
+			const signer = library.getSigner();
 
-		const signer = library.getSigner();
+			const userAddress = await signer.getAddress();
 
-		const userAddress = await signer.getAddress();
+			const isApproved = await approveERC20tokenTransfer(
+				price.toString(),
+				userAddress,
+				config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS,
+				config.MAINNET_CONFIG.DAI_CONTRACT_ADDRESS,
+				library,
+			);
 
-		const isApproved = await approveERC20tokenTransfer(
-			price.toString(),
-			userAddress,
-			config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS,
-			config.MAINNET_CONFIG.DAI_CONTRACT_ADDRESS,
-			library,
-		);
-
-		if (isApproved) {
-			setStep(MintStep.MINT);
-		} else {
+			if (isApproved) {
+				setStep(MintStep.MINT);
+			} else {
+				setStep(MintStep.APPROVE);
+			}
+		} catch (error) {
 			setStep(MintStep.APPROVE);
+			console.log('error on approve dai', error);
 		}
 	}
 
