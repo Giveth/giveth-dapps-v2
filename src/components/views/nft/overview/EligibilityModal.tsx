@@ -1,4 +1,8 @@
 import React from 'react';
+import {
+	IconAlertTriangleFilled32,
+	IconCheckCircleFilled32,
+} from '@giveth/ui-design-system';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -15,6 +19,13 @@ const EligibilityModal = ({ isSuccess, setShowModal }: IEligibilityModal) => {
 			isAnimating={isAnimating}
 			headerTitle={'hello'}
 			headerTitlePosition='left'
+			headerIcon={
+				isSuccess === true ? (
+					<IconCheckCircleFilled32 />
+				) : (
+					<IconAlertTriangleFilled32 />
+				)
+			}
 		>
 			{isSuccess === true ? 'True' : 'False'}
 		</Modal>
