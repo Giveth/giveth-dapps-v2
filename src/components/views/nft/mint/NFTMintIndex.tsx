@@ -18,7 +18,7 @@ import { Flex } from '@/components/styled-components/Flex';
 export const NFTMintIndex = () => {
 	const { formatMessage } = useIntl();
 	const { account, library, chainId } = useWeb3React();
-	const { step, setStep } = usePFPMintData();
+	const { step, setStep, qty } = usePFPMintData();
 
 	useEffect(() => {
 		const checkAddress = async () => {
@@ -79,7 +79,7 @@ export const NFTMintIndex = () => {
 												id: 'page.mint.welcome_giver.desc',
 											},
 											{
-												itemCount: 5,
+												itemCount: qty,
 											},
 										)}
 									</Desc>
@@ -100,14 +100,9 @@ export const NFTMintIndex = () => {
 								</Title>
 								<ContentWrapper>
 									<Desc>
-										{formatMessage(
-											{
-												id: 'page.mint.fail.desc',
-											},
-											{
-												itemCount: 5,
-											},
-										)}
+										{formatMessage({
+											id: 'page.mint.fail.desc',
+										})}
 									</Desc>
 									<MintAgainButton
 										label={formatMessage({

@@ -23,6 +23,7 @@ import { switchNetwork } from '@/lib/metamask';
 import config from '@/configuration';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import { InsufficientFundModal } from '../modals/InsufficientFund';
+import { usePFPMintData } from '@/context/pfpmint.context';
 
 const MIN_NFT_QTY = 1;
 
@@ -36,6 +37,7 @@ export const MintCard = () => {
 	const { account, library, chainId } = useWeb3React();
 	const { formatMessage } = useIntl();
 	const dispatch = useAppDispatch();
+	const { setQty } = usePFPMintData();
 
 	useEffect(() => {
 		if (!library) return;
@@ -85,6 +87,7 @@ export const MintCard = () => {
 
 		const price = nftPrice.multipliedBy(qtyNFT);
 		if (price.lte(balance.toString())) {
+			setQty(Number(qtyNFT));
 			setShowMintModal(true);
 		} else {
 			setShowInsufficientFundModal(true);
