@@ -119,7 +119,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 			<Wrapper>
 				<Head>
 					<title>{title && `${title} |`} Giveth</title>
-					<ProjectMeta project={projectData} preTitle='Check out' />
+					<ProjectMeta project={projectData} />
 				</Head>
 
 				<ProjectHeader />

@@ -20,7 +20,7 @@ const SayHelloSection = () => {
 							unlock your unique Giveth flair by minting one of
 							the first NFT PFP artworks inspired by Giveth.
 						</QuoteText>
-						<CustomLink href={Routes.mint} passHref>
+						<CustomLink href={Routes.NFTMint} passHref>
 							<MintNowButton
 								label='Mint Now'
 								linkType='primary'

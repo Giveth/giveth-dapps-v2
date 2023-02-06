@@ -10,6 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 import BigNumber from 'bignumber.js';
+import { Contract } from 'ethers';
 import { IModal } from '@/types/common';
 import { Modal } from './Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -20,6 +21,11 @@ import {
 	StakeStepNumber,
 } from './StakeLock/StakeSteps.sc';
 import { formatWeiHelper } from '@/helpers/number';
+import { approveERC20tokenTransfer } from '@/lib/stakingPool';
+import config from '@/configuration';
+import { GiversPFP } from '@/types/contracts';
+import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
+import { EPFPMinSteps, usePFPMintData } from '@/context/pfpmint.context';
 
 export enum MintStep {
 	APPROVE,
@@ -30,7 +36,7 @@ export enum MintStep {
 
 interface IMintModalProps extends IModal {
 	qty: number;
-	nftPrice: BigNumber;
+	nftPrice?: BigNumber;
 }
 
 export const MintModal: FC<IMintModalProps> = ({
@@ -41,9 +47,10 @@ export const MintModal: FC<IMintModalProps> = ({
 	const [step, setStep] = useState(MintStep.APPROVE);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
-	const { account, library } = useWeb3React();
+	const { library } = useWeb3React();
+	const { setStep: setMintStep, setTx } = usePFPMintData();
 
-	const price = nftPrice.multipliedBy(qty);
+	const price = nftPrice ? nftPrice.multipliedBy(qty) : new BigNumber(0);
 
 	async function approveHandler() {
 		if (price.isZero()) return;
@@ -51,31 +58,66 @@ export const MintModal: FC<IMintModalProps> = ({
 			console.error('library is null');
 			return;
 		}
+		if (!config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS) return;
+		if (!config.MAINNET_CONFIG.DAI_CONTRACT_ADDRESS) return;
 
 		setStep(MintStep.APPROVING);
+		try {
+			const signer = library.getSigner();
 
-		const signer = library.getSigner();
+			const userAddress = await signer.getAddress();
 
-		const userAddress = await signer.getAddress();
+			const isApproved = await approveERC20tokenTransfer(
+				price.toString(),
+				userAddress,
+				config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS,
+				config.MAINNET_CONFIG.DAI_CONTRACT_ADDRESS,
+				library,
+			);
 
-		const isApproved = true;
-		// const isApproved = await approveERC20tokenTransfer(
-		// 	price.toString(),
-		// 	userAddress,
-		// 	LM_ADDRESS,
-		// 	POOL_ADDRESS,
-		// 	library,
-		// );
-
-		if (isApproved) {
-			setStep(MintStep.MINT);
-		} else {
+			if (isApproved) {
+				setStep(MintStep.MINT);
+			} else {
+				setStep(MintStep.APPROVE);
+			}
+		} catch (error) {
 			setStep(MintStep.APPROVE);
+			console.log('error on approve dai', error);
 		}
 	}
 
 	async function mintHandle() {
-		closeModal();
+		if (!library) {
+			console.error('library is null');
+			return;
+		}
+		if (!config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS) return;
+
+		setStep(MintStep.MINTING);
+		try {
+			const signer = library.getSigner();
+			const PFPContract = new Contract(
+				config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS ?? '',
+				PFP_ABI,
+				signer,
+			) as GiversPFP;
+			console.log('PFPContract', PFPContract, price.toString());
+			const tx = await PFPContract.mint(qty);
+			setTx(tx.hash);
+			console.log('tx', tx);
+			const res = await tx.wait();
+			console.log('res', res);
+
+			if (res.status) {
+				setMintStep(EPFPMinSteps.SUCCESS);
+				closeModal();
+			} else {
+				setMintStep(EPFPMinSteps.FAILURE);
+			}
+		} catch (error) {
+			setMintStep(EPFPMinSteps.FAILURE);
+			console.log('error on mint', error);
+		}
 	}
 
 	const isApproving =
