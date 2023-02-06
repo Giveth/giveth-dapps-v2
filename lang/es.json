@@ -845,8 +845,10 @@
 	"label.approve": "",
 	"label.mint_your_giver": "",
 	"label.welcome_giver": "",
+	"label.uh_oh": "",
 	"page.mint.mint_your_giver.desc": "",
 	"page.mint.welcome_giver.desc": "",
+	"page.mint.fail.desc": "",
 	"label.insufficient_funds": "",
 	"label.add_fund_desc": ""
 }

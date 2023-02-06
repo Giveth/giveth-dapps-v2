@@ -25,6 +25,7 @@ import { approveERC20tokenTransfer } from '@/lib/stakingPool';
 import config from '@/configuration';
 import { GiversPFP } from '@/types/contracts';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
+import { EPFPMinSteps, usePFPMintData } from '@/context/pfpmint.context';
 
 export enum MintStep {
 	APPROVE,
@@ -47,6 +48,7 @@ export const MintModal: FC<IMintModalProps> = ({
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
 	const { account, library } = useWeb3React();
+	const { setStep: setMintStep } = usePFPMintData();
 
 	const price = nftPrice ? nftPrice.multipliedBy(qty) : new BigNumber(0);
 
@@ -105,13 +107,14 @@ export const MintModal: FC<IMintModalProps> = ({
 			const res = await tx.wait();
 			console.log('res', res);
 
-			if (res) {
+			if (res.status) {
+				setMintStep(EPFPMinSteps.SUCCESS);
 				closeModal();
 			} else {
-				setStep(MintStep.MINT);
+				setMintStep(EPFPMinSteps.FAILURE);
 			}
 		} catch (error) {
-			setStep(MintStep.MINT);
+			setMintStep(EPFPMinSteps.FAILURE);
 			console.log('error on mint', error);
 		}
 	}

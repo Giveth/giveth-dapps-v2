@@ -82,10 +82,40 @@ export const NFTMintIndex = () => {
 											},
 										)}
 									</Desc>
+									<Image
+										src='/images/yellow_flower_full.svg'
+										alt='yellow flower'
+										width={360}
+										height={360}
+									/>
 								</ContentWrapper>
 							</>
 						) : (
-							<></>
+							<>
+								<Title>
+									{formatMessage({
+										id: 'label.welcome_giver',
+									})}
+								</Title>
+								<ContentWrapper>
+									<Desc>
+										{formatMessage(
+											{
+												id: 'page.mint.welcome_giver.desc',
+											},
+											{
+												itemCount: 5,
+											},
+										)}
+									</Desc>
+									<Image
+										src='/images/yellow_flower_full.svg'
+										alt='yellow flower'
+										width={360}
+										height={360}
+									/>
+								</ContentWrapper>
+							</>
 						)}
 					</Col>
 					<Col xs={12} md={6}>
