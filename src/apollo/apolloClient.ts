@@ -24,7 +24,7 @@ const parseHeaders = (rawHeaders: any) => {
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
 	// https://tools.ietf.org/html/rfc7230#section-3.2
 	const preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/g, ' ');
-	preProcessedHeaders.split(/\r?\n/).forEach((line: any) => {
+	preProcessedHeaders.split(/\r?\n/)?.forEach((line: any) => {
 		const parts = line.split(':');
 		const key = parts.shift().trim();
 		if (key) {
@@ -60,7 +60,7 @@ const uploadFetch = (url: string, options: any) =>
 		};
 		xhr.open(options.method, url, true);
 
-		Object.keys(options.headers).forEach(key => {
+		Object.keys(options.headers)?.forEach(key => {
 			xhr.setRequestHeader(key, options.headers[key]);
 		});
 
