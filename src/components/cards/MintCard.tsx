@@ -12,6 +12,7 @@ import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import BigNumber from 'bignumber.js';
 import { Contract } from 'ethers';
+import { JsonRpcProvider } from '@ethersproject/providers';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
 import { MintModal } from '../modals/MintModal';
 import { Flex } from '../styled-components/Flex';
@@ -49,10 +50,14 @@ export const MintCard = () => {
 		if (!library) return;
 		async function fetchData() {
 			try {
+				const _provider =
+					chainId === config.MAINNET_NETWORK_NUMBER
+						? library
+						: new JsonRpcProvider(config.MAINNET_CONFIG.nodeUrl);
 				const PFPContract = new Contract(
 					config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS ?? '',
 					PFP_ABI,
-					library,
+					_provider,
 				) as GiversPFP;
 				const _price = await PFPContract.price();
 				const _maxMintAmount = await PFPContract.maxMintAmount();
