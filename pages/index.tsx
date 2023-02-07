@@ -39,11 +39,13 @@ const fetchProjects = async (userId: string | undefined = undefined) => {
 };
 
 const dateFormat = (d: Date) => {
-	// return date with hour precision for caching efficiency
+	// return date with day precision for caching efficiency
+	// Add year by one to ensure fetching new data
 	const ISODate = d.toISOString();
-	const date = ISODate.split('T')[0];
-	const hour = d.getHours();
-	return `${date}T${hour}:00:00.000Z`;
+	const nextYear = d.getUTCFullYear() + 1;
+	const year = d.getUTCFullYear();
+	const date = ISODate.replace(year.toString(), nextYear.toString());
+	return date.split('T')[0];
 };
 
 const HomeRoute = (props: IHomeRoute) => {
