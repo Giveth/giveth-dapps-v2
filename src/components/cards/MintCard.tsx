@@ -48,21 +48,25 @@ export const MintCard = () => {
 	useEffect(() => {
 		if (!library) return;
 		async function fetchData() {
-			const PFPContract = new Contract(
-				config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS ?? '',
-				PFP_ABI,
-				library,
-			) as GiversPFP;
-			const _price = await PFPContract.price();
-			const _maxMintAmount = await PFPContract.maxMintAmount();
-			const _totalSupply = await PFPContract.totalSupply();
-			const _maxSupply = await PFPContract.maxSupply();
-			setPfpData({
-				price: new BigNumber(_price.toString()),
-				maxMintAmount: _maxMintAmount,
-				totalSupply: _totalSupply.toNumber(),
-				maxSupply: _maxSupply.toNumber(),
-			});
+			try {
+				const PFPContract = new Contract(
+					config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS ?? '',
+					PFP_ABI,
+					library,
+				) as GiversPFP;
+				const _price = await PFPContract.price();
+				const _maxMintAmount = await PFPContract.maxMintAmount();
+				const _totalSupply = await PFPContract.totalSupply();
+				const _maxSupply = await PFPContract.maxSupply();
+				setPfpData({
+					price: new BigNumber(_price.toString()),
+					maxMintAmount: _maxMintAmount,
+					totalSupply: _totalSupply.toNumber(),
+					maxSupply: _maxSupply.toNumber(),
+				});
+			} catch (error) {
+				console.log('failed to fetch GIversPFP data');
+			}
 		}
 		fetchData();
 	}, [library]);
