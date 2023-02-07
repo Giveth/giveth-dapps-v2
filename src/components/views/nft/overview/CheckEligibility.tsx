@@ -5,6 +5,7 @@ import {
 	H2,
 	P,
 	QuoteText,
+	semanticColors,
 } from '@giveth/ui-design-system';
 import { Contract } from 'ethers';
 import React, { ChangeEvent, useState } from 'react';
@@ -83,15 +84,17 @@ const CheckEligibility = () => {
 			<CustomQuote size='small'>
 				Check here to verify your eligibility
 			</CustomQuote>
-			<Flex flexDirection='column'>
-				<StyledInput
-					as='input'
-					placeholder='Input your wallet address here'
-					value={walletAddress}
-					onChange={onAddressChange}
-				/>
-				<span>{error}</span>
-			</Flex>
+			<InputContainer>
+				<Flex flexDirection='column' gap='8px'>
+					<StyledInput
+						as='input'
+						placeholder='Input your wallet address here'
+						value={walletAddress}
+						onChange={onAddressChange}
+					/>
+					<CustomError>{error}</CustomError>
+				</Flex>
+			</InputContainer>
 			<CustomButton
 				buttonType='primary'
 				label='VERIFY'
@@ -135,6 +138,14 @@ const CustomQuote = styled(QuoteText)`
 const CustomButton = styled(Button)`
 	margin-top: 20px;
 	width: 250px;
+`;
+
+const InputContainer = styled.div`
+	height: 80px;
+`;
+
+const CustomError = styled.span`
+	color: ${semanticColors.punch[500]};
 `;
 
 export default CheckEligibility;
