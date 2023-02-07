@@ -140,7 +140,8 @@ function NotificationView() {
 						</InternalLink>
 					</Flex>
 					<Lead>
-						Your activity history, starting with the most recent
+						Your history of notifications, starting with the most
+						recent.
 					</Lead>
 				</NotificationDesc>
 			</Flex>
@@ -184,7 +185,7 @@ function NotificationView() {
 							handleChangeTab(ENotificationTabs.PROJECTS)
 						}
 					>
-						Projects
+						My projects
 						{projectsRelated !== 0 && (
 							<TabItemCount
 								active={tab === ENotificationTabs.PROJECTS}
@@ -199,7 +200,7 @@ function NotificationView() {
 							handleChangeTab(ENotificationTabs.GIVECONOMY)
 						}
 					>
-						GIVeconomy
+						Rewards
 						{givEconomyRelated !== 0 && (
 							<TabItemCount
 								active={tab === ENotificationTabs.GIVECONOMY}

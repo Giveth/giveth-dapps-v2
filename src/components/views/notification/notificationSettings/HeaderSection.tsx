@@ -26,8 +26,9 @@ const HeaderSection = () => {
 				<AutoSave />
 			</AutoSaveContainer>
 			<Lead>
-				Important notifications outside you notification settings may
-				still be sent to you
+				Change your settings at any time to adjust how and when you see
+				notifications. Important notifications outside of your settings
+				may still be sent to you.
 			</Lead>
 		</Header>
 	);

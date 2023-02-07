@@ -33,8 +33,8 @@ const ProjectSection = () => {
 			<GrayBar />
 			<SectionContainer>
 				<SectionHeader
-					title='Project activities'
-					description='All notifications related to project activities'
+					title='My Project Activity'
+					description='Notifications for project owners about project activity.'
 					isOpen={isOpen}
 					onClick={() => setIsOpen(!isOpen)}
 				/>
