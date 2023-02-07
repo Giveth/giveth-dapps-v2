@@ -17,7 +17,7 @@ import { MintModal } from '../modals/MintModal';
 import { Flex } from '../styled-components/Flex';
 import { useAppDispatch } from '@/features/hooks';
 import { formatWeiHelper } from '@/helpers/number';
-import { ERC20 } from '@/types/contracts';
+import { ERC20, GiversPFP } from '@/types/contracts';
 import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
 import { switchNetwork } from '@/lib/metamask';
 import config from '@/configuration';
@@ -27,13 +27,19 @@ import { usePFPMintData } from '@/context/pfpmint.context';
 
 const MIN_NFT_QTY = 1;
 
+interface IPFPData {
+	price: BigNumber;
+	maxMintAmount: number;
+	totalSupply: number;
+	maxSupply: number;
+}
+
 export const MintCard = () => {
 	const [qtyNFT, setQtyNFT] = useState('1');
 	const [showMintModal, setShowMintModal] = useState(false);
 	const [showInsufficientFundModal, setShowInsufficientFundModal] =
 		useState(false);
-	const [nftPrice, setNFTPrice] = useState<BigNumber>();
-	const [maxMintAmount, setMaxMintAmount] = useState<number>();
+	const [pfpData, setPfpData] = useState<IPFPData>();
 	const { account, library, chainId } = useWeb3React();
 	const { formatMessage } = useIntl();
 	const dispatch = useAppDispatch();
@@ -46,19 +52,23 @@ export const MintCard = () => {
 				config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS ?? '',
 				PFP_ABI,
 				library,
-			);
+			) as GiversPFP;
 			const _price = await PFPContract.price();
 			const _maxMintAmount = await PFPContract.maxMintAmount();
-			console.log('_maxMintAmount', _maxMintAmount);
-			setNFTPrice(new BigNumber(_price.toString()));
-			setMaxMintAmount(Number(_maxMintAmount));
+			const _totalSupply = await PFPContract.totalSupply();
+			const _maxSupply = await PFPContract.maxSupply();
+			setPfpData({
+				price: new BigNumber(_price.toString()),
+				maxMintAmount: _maxMintAmount,
+				totalSupply: _totalSupply.toNumber(),
+				maxSupply: _maxSupply.toNumber(),
+			});
 		}
 		fetchData();
 	}, [library]);
 
-	const mintedNFT = 20;
 	function onChangeHandler(event: ChangeEvent<HTMLInputElement>) {
-		if (!maxMintAmount) return;
+		if (!pfpData?.maxMintAmount) return;
 		//handle empty input
 		if (event.target.value === '') setQtyNFT('');
 
@@ -66,14 +76,14 @@ export const MintCard = () => {
 		const _qty = Number.parseInt(event.target.value);
 
 		//handle range
-		if (_qty > maxMintAmount || _qty < MIN_NFT_QTY) return;
+		if (_qty > pfpData.maxMintAmount || _qty < MIN_NFT_QTY) return;
 
 		if (Number.isInteger(_qty)) setQtyNFT('' + _qty);
 	}
 
 	async function handleMint() {
 		if (!config.MAINNET_CONFIG.DAI_CONTRACT_ADDRESS) return;
-		if (!nftPrice) return;
+		if (!pfpData?.price) return;
 
 		//handle balance
 		const signer = library.getSigner();
@@ -85,8 +95,8 @@ export const MintCard = () => {
 		) as ERC20;
 		const balance = await DAIContract.balanceOf(userAddress);
 
-		const price = nftPrice.multipliedBy(qtyNFT);
-		if (price.lte(balance.toString())) {
+		const total = pfpData?.price.multipliedBy(qtyNFT);
+		if (total.lte(balance.toString())) {
 			setQty(Number(qtyNFT));
 			setShowMintModal(true);
 		} else {
@@ -102,7 +112,9 @@ export const MintCard = () => {
 						<GLink size='Small'>NFT Amount</GLink>
 						<MaxLink
 							size='Small'
-							onClick={() => setQtyNFT('' + maxMintAmount)}
+							onClick={() =>
+								setQtyNFT('' + pfpData?.maxMintAmount)
+							}
 						>
 							MAX
 						</MaxLink>
@@ -113,17 +125,27 @@ export const MintCard = () => {
 						value={qtyNFT}
 						onChange={onChangeHandler}
 					/>
-					<InputHint>{mintedNFT}/1000 Minted</InputHint>
+					<InputHint>
+						{pfpData?.totalSupply ? pfpData.totalSupply : '-'}/
+						{pfpData?.maxSupply ? pfpData.maxSupply : '-'} Minted
+					</InputHint>
 				</InputWrapper>
 				<InfoBox gap='16px' flexDirection='column'>
 					<Flex justifyContent='space-between'>
 						<InfoBoxTitle>Max Mint </InfoBoxTitle>
-						<InfoBoxValue>{maxMintAmount}</InfoBoxValue>
+						<InfoBoxValue>
+							{pfpData?.maxMintAmount
+								? pfpData.maxMintAmount
+								: '-'}
+						</InfoBoxValue>
 					</Flex>
 					<Flex justifyContent='space-between'>
 						<InfoBoxTitle>Mint Prince per</InfoBoxTitle>
 						<InfoBoxValue>
-							{nftPrice && formatWeiHelper(nftPrice)} DAI
+							{pfpData?.price
+								? formatWeiHelper(pfpData.price)
+								: '-'}{' '}
+							DAI
 						</InfoBoxValue>
 					</Flex>
 				</InfoBox>
@@ -159,7 +181,7 @@ export const MintCard = () => {
 				<MintModal
 					setShowModal={setShowMintModal}
 					qty={Number(qtyNFT)}
-					nftPrice={nftPrice}
+					nftPrice={pfpData?.price}
 				/>
 			)}
 			{showInsufficientFundModal && (
