@@ -173,7 +173,7 @@ export const MintCard = () => {
 						label={formatMessage({ id: 'label.mint' })}
 						buttonType='primary'
 						onClick={handleMint}
-						disabled={Number(qtyNFT) < 1}
+						disabled={Number(qtyNFT) < 1 || !pfpData}
 					/>
 				)}
 			</MintCardContainer>
