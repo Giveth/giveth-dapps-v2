@@ -17,7 +17,7 @@ const NFTRoute = () => {
 	return (
 		<>
 			<Head>
-				<title>Edit Project | Giveth</title>
+				<title>Givers PFP</title>
 			</Head>
 			<OverviewIndex />
 		</>
