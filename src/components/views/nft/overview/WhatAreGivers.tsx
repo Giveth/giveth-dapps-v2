@@ -5,6 +5,77 @@ import { Flex } from '@/components/styled-components/Flex';
 import { OvalVerticalGradient } from '../common.styles';
 import { mediaQueries } from '@/lib/constants/constants';
 
+const DesktopImages = () => {
+	return (
+		<DesktopImagesContainer>
+			<Image
+				src={'/images/nft/pfp-o-4.png'}
+				width={400}
+				height={400}
+				alt='pfp-image'
+			/>
+			<Image
+				src={'/images/nft/pfp-o-5.png'}
+				width={450}
+				height={450}
+				alt='pfp-image'
+			/>
+			<Image
+				src={'/images/nft/pfp-o-1.png'}
+				width={500}
+				height={500}
+				alt='pfp-image'
+				style={{
+					zIndex: 2,
+				}}
+			/>
+			<Image
+				src={'/images/nft/pfp-o-1.png'}
+				width={450}
+				height={450}
+				alt='pfp-image'
+				style={{
+					zIndex: 1,
+				}}
+			/>
+			<Image
+				src={'/images/nft/pfp-o-3.png'}
+				width={400}
+				height={400}
+				alt='pfp-image'
+				style={{
+					zIndex: 0,
+				}}
+			/>
+		</DesktopImagesContainer>
+	);
+};
+
+const MobileImages = () => {
+	return (
+		<MobileImagesContainer flexDirection='column'>
+			<Image
+				src={'/images/nft/pfp-o-1.png'}
+				width={300}
+				height={300}
+				alt='pfp-image'
+			/>
+			<Image
+				src={'/images/nft/pfp-o-3.png'}
+				width={300}
+				height={300}
+				alt='pfp-image'
+			/>
+			<Image
+				src={'/images/nft/pfp-o-5.png'}
+				width={300}
+				height={300}
+				alt='pfp-image'
+			/>
+		</MobileImagesContainer>
+	);
+};
+
 const WhatAreGivers = () => {
 	return (
 		<SectionContainer
@@ -21,47 +92,8 @@ const WhatAreGivers = () => {
 					of Giveth, in its own fun and vibrant style.
 				</QuoteText>
 			</QuoteContainer>
-			<DesktopImagesContainer>
-				<Image
-					src={'/images/nft/pfp-o-4.png'}
-					width={400}
-					height={400}
-					alt='pfp-image'
-				/>
-				<Image
-					src={'/images/nft/pfp-o-5.png'}
-					width={450}
-					height={450}
-					alt='pfp-image'
-				/>
-				<Image
-					src={'/images/nft/pfp-o-1.png'}
-					width={500}
-					height={500}
-					alt='pfp-image'
-					style={{
-						zIndex: 2,
-					}}
-				/>
-				<Image
-					src={'/images/nft/pfp-o-1.png'}
-					width={450}
-					height={450}
-					alt='pfp-image'
-					style={{
-						zIndex: 1,
-					}}
-				/>
-				<Image
-					src={'/images/nft/pfp-o-3.png'}
-					width={400}
-					height={400}
-					alt='pfp-image'
-					style={{
-						zIndex: 0,
-					}}
-				/>
-			</DesktopImagesContainer>
+			<DesktopImages />
+			<MobileImages />
 			<OvalVerticalGradient />
 		</SectionContainer>
 	);
@@ -86,6 +118,15 @@ const DesktopImagesContainer = styled.div`
 	}
 	${mediaQueries.tablet} {
 		display: flex;
+	}
+`;
+
+const MobileImagesContainer = styled(Flex)`
+	z-index: 1;
+	margin-top: 80px;
+	display: flex;
+	${mediaQueries.tablet} {
+		display: none;
 	}
 `;
 
