@@ -871,5 +871,19 @@
 	"label.you_cant_remove_your_givpower_from_this_project": "",
 	"label.remove_givpower": "Remover GIVpower",
 	"label.you_dont_have_any_givpower": "",
-	"label.stake_and_lock_your_giv_to_get_givpower": ""
+	"label.stake_and_lock_your_giv_to_get_givpower": "",
+	"label.the_givdrop_has_ended": "",
+	"label.but_you_can_still_get_giv": "",
+	"label.go_to_projets_page": "",
+	"label.check_another_address": "",
+	"label.you_have_successfuly_claimed": "",
+	"label.plus_you_are_getting_an_additional": "",
+	"label.per_week": "",
+	"label.share_on_twitter": "",
+	"label.claim_your_free_swag": "",
+	"label.join_our_discord": "",
+	"label.explore_the_giveconomy": "explore the giveconomy",
+	"label.choose_language": "Escoger Idioma",
+	"lang.en": "Inglés",
+	"lang.es": "Español"
 }

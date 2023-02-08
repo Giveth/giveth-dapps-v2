@@ -871,5 +871,19 @@
 	"label.you_cant_remove_your_givpower_from_this_project": "You can't remove your GIVpower from this project because it is the only boost you have. Please boost another project with GIVpower before continuing.",
 	"label.remove_givpower": "Remove GIVpower",
 	"label.you_dont_have_any_givpower": "You don’t have any GIVpower!",
-	"label.stake_and_lock_your_giv_to_get_givpower": "Stake and lock your GIV to get GIVpower."
+	"label.stake_and_lock_your_giv_to_get_givpower": "Stake and lock your GIV to get GIVpower.",
+	"label.the_givdrop_has_ended": "The GIVdrop has ended",
+	"label.but_you_can_still_get_giv": "But you can still get GIV! Donate to verified projects and get GIV from GIVbacks.",
+	"label.go_to_projets_page": "Go to Projects page",
+	"label.check_another_address": "check another address!",
+	"label.you_have_successfuly_claimed": "You have successfully claimed",
+	"label.plus_you_are_getting_an_additional": "Plus you're getting an additional",
+	"label.per_week": "per week",
+	"label.share_on_twitter": "share on twitter",
+	"label.claim_your_free_swag": "claim your free swag",
+	"label.join_our_discord": "join our discord",
+	"label.explore_the_giveconomy": "explore the giveconomy",
+	"label.choose_language": "Choose Language",
+	"lang.en": "English",
+	"lang.es": "Spanish"
 }
