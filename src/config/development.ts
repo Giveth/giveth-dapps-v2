@@ -26,6 +26,7 @@ const config: EnvConfig = {
 	GARDEN_LINK:
 		'https://gardens-staging.1hive.org/#/xdai/garden/0x16388d99199a74810fc572049b3d4d657e7d5deb',
 
+	OPENSEA_ADDRESS: 'https://testnets.opensea.io/',
 	MAINNET_CONFIG: {
 		chainId: '0x5', // A 0x-prefixed hexadecimal string
 		chainName: 'Goerli',

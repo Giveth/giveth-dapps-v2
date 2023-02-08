@@ -97,7 +97,7 @@ export const NFTMintIndex = () => {
 									<ButtonLink
 										linkType='texty'
 										label='View on  OPENSEA'
-										href=''
+										href={config.OPENSEA_ADDRESS + account}
 									/>
 									<Image
 										src='/images/yellow_flower_full.svg'
@@ -140,6 +140,10 @@ export const NFTMintIndex = () => {
 										alt='yellow flower'
 										width={360}
 										height={360}
+										style={{
+											margin: 'auto',
+											display: 'block',
+										}}
 									/>
 								</ContentWrapper>
 							</>
@@ -218,7 +222,7 @@ const Desc = styled(Lead)`
 
 const MintAgainButton = styled(Button)`
 	width: 251px;
-	margin-bottom: 48px;
+	margin: 16px auto 48px;
 `;
 
 const ImagesWrapper = styled.div`
