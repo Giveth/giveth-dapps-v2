@@ -6,6 +6,7 @@ import {
 	ButtonLink,
 	H1,
 	Lead,
+	mediaQueries,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
@@ -19,7 +20,6 @@ import config from '@/configuration';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import { GiversPFP } from '@/types/contracts';
 import { EPFPMinSteps, usePFPMintData } from '@/context/pfpmint.context';
-import { Flex } from '@/components/styled-components/Flex';
 import EligibilityModal from '../overview/EligibilityModal';
 
 export const NFTMintIndex = () => {
@@ -59,7 +59,7 @@ export const NFTMintIndex = () => {
 			<OvalHorizontalGradient />
 			<MintContainer>
 				<Row style={{ paddingBottom: '20px;' }}>
-					<Col xs={12} md={6}>
+					<Col xs={12} sm={8} md={6}>
 						{step === EPFPMinSteps.MINT ? (
 							<>
 								<Title>
@@ -68,7 +68,7 @@ export const NFTMintIndex = () => {
 									})}
 								</Title>
 								<ContentWrapper>
-									<Desc>
+									<Desc size='medium'>
 										{formatMessage({
 											id: 'page.mint.mint_your_giver.desc',
 										})}
@@ -145,21 +145,23 @@ export const NFTMintIndex = () => {
 							</>
 						)}
 					</Col>
-					<Col xs={12} md={6}>
-						<ImageWrapper>
-							<Image1
-								src='/images/nft/pfp-mint.png'
-								alt='nft'
-								width={500}
-								height={500}
-							/>
-							<Image2
-								src='/images/nft/pfp-mint.png'
-								alt='nft'
-								width={500}
-								height={500}
-							/>
-						</ImageWrapper>
+					<Col xs={12} sm={4} md={6}>
+						<ImagesWrapper>
+							<Image1>
+								<Image
+									src='/images/nft/pfp-mint.png'
+									alt='nft'
+									fill
+								/>
+							</Image1>
+							<Image2>
+								<Image
+									src='/images/nft/pfp-mint.png'
+									alt='nft'
+									fill
+								/>
+							</Image2>
+						</ImagesWrapper>
 					</Col>
 				</Row>
 			</MintContainer>
@@ -176,6 +178,7 @@ export const NFTMintIndex = () => {
 const MintViewContainer = styled.div`
 	min-height: 100vh;
 	position: relative;
+	overflow-x: hidden;
 `;
 
 const MintContainer = styled(Container)`
@@ -189,16 +192,28 @@ const Title = styled(H1)`
 	margin-bottom: 22px;
 `;
 
-const ContentWrapper = styled(Flex)`
-	flex-direction: column;
-	align-items: center;
+const ContentWrapper = styled.div`
+	/* flex-direction: column; */
+	/* align-items: center; */
 	gap: 21px;
-	width: 480px;
+	position: relative;
+	z-index: 2;
+	${mediaQueries.tablet} {
+		max-width: 480px;
+	}
 `;
 
 const Desc = styled(Lead)`
 	margin-bottom: 32px;
 	text-align: center;
+	width: 100%;
+	${mediaQueries.laptopS} {
+		text-align: left;
+		max-width: 360px;
+	}
+	${mediaQueries.laptopL} {
+		max-width: 480px;
+	}
 `;
 
 const MintAgainButton = styled(Button)`
@@ -206,20 +221,49 @@ const MintAgainButton = styled(Button)`
 	margin-bottom: 48px;
 `;
 
-const ImageWrapper = styled.div`
+const ImagesWrapper = styled.div`
 	position: relative;
 	height: 1000px;
 `;
 
-const Image1 = styled(Image)`
-	z-index: 2;
-	position: relative;
+const ImageWrapper = styled.div`
+	position: absolute;
+	right: 0;
+	width: 100%;
+	& > img {
+		object-fit: contain;
+		height: unset !important;
+	}
+	${mediaQueries.tablet} {
+		width: 400px;
+		height: 400px;
+	}
 `;
 
-const Image2 = styled(Image)`
+const Image1 = styled(ImageWrapper)`
+	z-index: 2;
+	${mediaQueries.tablet} {
+		display: none;
+	}
+	${mediaQueries.laptopS} {
+		display: block;
+	}
+`;
+
+const Image2 = styled(ImageWrapper)`
 	z-index: 1;
 	position: absolute;
-	right: 250px;
-	top: 250px;
+	right: 92px;
+	top: 200px;
 	opacity: 0.6;
+	display: none;
+	${mediaQueries.tablet} {
+		display: block;
+		right: -100px;
+		top: 370px;
+	}
+	${mediaQueries.laptopS} {
+		right: 92px;
+		top: 200px;
+	}
 `;

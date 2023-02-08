@@ -3,6 +3,7 @@ import {
 	brandColors,
 	Button,
 	GLink,
+	mediaQueries,
 	P,
 	semanticColors,
 } from '@giveth/ui-design-system';
@@ -206,7 +207,12 @@ const MintCardContainer = styled.div`
 	padding: 24px;
 	background-color: ${brandColors.giv[800]};
 	border-radius: 8px;
-	width: 458px;
+	position: relative;
+	z-index: 2;
+	width: 100%;
+	${mediaQueries.tablet} {
+		max-width: 458px;
+	}
 `;
 
 const InputWrapper = styled(Flex)`
