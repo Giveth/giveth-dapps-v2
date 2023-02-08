@@ -22,13 +22,13 @@ const WhatAreGivers = () => {
 			</QuoteContainer>
 			<ImagesContainer>
 				<Image
-					src={'/images/nft/pfp-o-1.png'}
+					src={'/images/nft/pfp-o-4.png'}
 					width={400}
 					height={400}
 					alt='pfp-image'
 				/>
 				<Image
-					src={'/images/nft/pfp-o-1.png'}
+					src={'/images/nft/pfp-o-5.png'}
 					width={450}
 					height={450}
 					alt='pfp-image'
@@ -43,7 +43,7 @@ const WhatAreGivers = () => {
 					}}
 				/>
 				<Image
-					src={'/images/nft/pfp-o-1.png'}
+					src={'/images/nft/pfp-o-2.png'}
 					width={450}
 					height={450}
 					alt='pfp-image'
@@ -52,7 +52,7 @@ const WhatAreGivers = () => {
 					}}
 				/>
 				<Image
-					src={'/images/nft/pfp-o-1.png'}
+					src={'/images/nft/pfp-o-3.png'}
 					width={400}
 					height={400}
 					alt='pfp-image'
