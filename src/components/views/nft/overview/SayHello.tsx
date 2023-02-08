@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { Flex } from '@/components/styled-components/Flex';
 import { OvalHorizontalGradient, OvalVerticalGradient } from '../common.styles';
 import Routes from '@/lib/constants/Routes';
+import { mediaQueries } from '@/lib/constants/constants';
 
 const SayHelloSection = () => {
 	return (
@@ -28,7 +29,7 @@ const SayHelloSection = () => {
 							/>
 						</CustomLink>
 					</Flex>
-					<Image
+					<CustomImage
 						src={'/images/nft/pfp-o-5.png'}
 						width={450}
 						height={450}
@@ -52,18 +53,19 @@ const FlexContainer = styled(Flex)`
 	z-index: 1;
 `;
 
-const TestImage = styled.div`
-	min-width: 500px;
-	min-height: 500px;
-	background-color: red;
-`;
-
 const MintNowButton = styled(ButtonLink)`
 	width: 150px;
 `;
 
 const CustomLink = styled(Link)`
 	width: fit-content;
+`;
+
+const CustomImage = styled(Image)`
+	display: none;
+	${mediaQueries.laptopS} {
+		display: inline-block;
+	}
 `;
 
 export default SayHelloSection;
