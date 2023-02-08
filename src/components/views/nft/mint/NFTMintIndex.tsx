@@ -97,7 +97,7 @@ export const NFTMintIndex = () => {
 									<ButtonLink
 										linkType='texty'
 										label='View on  OPENSEA'
-										href=''
+										href={config.OPENSEA_ADDRESS + account}
 									/>
 									<Image
 										src='/images/yellow_flower_full.svg'
