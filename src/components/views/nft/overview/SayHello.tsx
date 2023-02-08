@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { ButtonLink, Container, H1, QuoteText } from '@giveth/ui-design-system';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Flex } from '@/components/styled-components/Flex';
 import { OvalHorizontalGradient, OvalVerticalGradient } from '../common.styles';
 import Routes from '@/lib/constants/Routes';
@@ -27,7 +28,12 @@ const SayHelloSection = () => {
 							/>
 						</CustomLink>
 					</Flex>
-					<TestImage />
+					<Image
+						src={'/images/nft/pfp-o-5.png'}
+						width={450}
+						height={450}
+						alt='pfp-image'
+					/>
 				</FlexContainer>
 			</Container>
 			<OvalVerticalGradient />
