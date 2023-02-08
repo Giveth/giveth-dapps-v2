@@ -25,6 +25,7 @@ const config: EnvConfig = {
 	GARDEN_LINK:
 		'https://gardens.1hive.org/#/xdai/garden/0xb25f0ee2d26461e2b5b3d3ddafe197a0da677b98',
 
+	OPENSEA_ADDRESS: 'https://opensea.io/',
 	MAINNET_CONFIG: {
 		chainId: '0x1', // A 0x-prefixed hexadecimal string
 		chainName: 'Ethereum Mainnet',
