@@ -1,4 +1,4 @@
-import { H2, QuoteText } from '@giveth/ui-design-system';
+import { Container, H2, QuoteText } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { Flex } from '@/components/styled-components/Flex';
@@ -78,24 +78,26 @@ const MobileImages = () => {
 
 const WhatAreGivers = () => {
 	return (
-		<SectionContainer
-			justifyContent='center'
-			alignItems='center'
-			flexDirection='column'
-			gap='24px'
-		>
-			<H2>What are the Givers</H2>
-			<QuoteContainer>
-				<QuoteText size='small'>
-					The Givers are a limited collection of 1,250 artworks
-					inspired by the Giveth Galaxy. Each NFT tells a unique story
-					of Giveth, in its own fun and vibrant style.
-				</QuoteText>
-			</QuoteContainer>
-			<DesktopImages />
-			<MobileImages />
-			<OvalVerticalGradient />
-		</SectionContainer>
+		<Container>
+			<SectionContainer
+				justifyContent='center'
+				alignItems='center'
+				flexDirection='column'
+				gap='24px'
+			>
+				<H2>What are the Givers</H2>
+				<QuoteContainer>
+					<QuoteText size='small'>
+						The Givers are a limited collection of 1,250 artworks
+						inspired by the Giveth Galaxy. Each NFT tells a unique
+						story of Giveth, in its own fun and vibrant style.
+					</QuoteText>
+				</QuoteContainer>
+				<DesktopImages />
+				<MobileImages />
+				<OvalVerticalGradient />
+			</SectionContainer>
+		</Container>
 	);
 };
 
