@@ -3,6 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
 import { OvalHorizontalGradient, OvalVerticalGradient } from '../common.styles';
+import { mediaQueries } from '@/lib/constants/constants';
 
 const WhatElse = () => {
 	return (
@@ -10,7 +11,7 @@ const WhatElse = () => {
 			<Container>
 				<ContentContainer>
 					<H1>What else?</H1>
-					<Flex gap='64px'>
+					<CustomFlex gap='64px'>
 						<Flex flexDirection='column' gap='16px'>
 							<HeaderTitle>
 								Get on the ‘$nice list’ for early access to
@@ -37,7 +38,7 @@ const WhatElse = () => {
 								more about the benefits.
 							</Lead>
 						</Flex>
-					</Flex>
+					</CustomFlex>
 				</ContentContainer>
 			</Container>
 			<OvalHorizontalGradient />
@@ -54,6 +55,13 @@ const WhatElseContainer = styled.div`
 const ContentContainer = styled.div`
 	position: relative;
 	z-index: 1;
+`;
+
+const CustomFlex = styled(Flex)`
+	flex-direction: column;
+	${mediaQueries.tablet} {
+		flex-direction: row;
+	}
 `;
 
 const HeaderTitle = styled(H3)`
