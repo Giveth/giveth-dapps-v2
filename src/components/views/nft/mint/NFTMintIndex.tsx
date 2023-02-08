@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
 	brandColors,
@@ -20,11 +20,13 @@ import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import { GiversPFP } from '@/types/contracts';
 import { EPFPMinSteps, usePFPMintData } from '@/context/pfpmint.context';
 import { Flex } from '@/components/styled-components/Flex';
+import EligibilityModal from '../overview/EligibilityModal';
 
 export const NFTMintIndex = () => {
 	const { formatMessage } = useIntl();
 	const { account, library, chainId } = useWeb3React();
 	const { step, setStep, qty, tx: txHash } = usePFPMintData();
+	const [showEligibilityModal, setShowEligibilityModal] = useState(false);
 
 	useEffect(() => {
 		const checkAddress = async () => {
@@ -40,6 +42,9 @@ export const NFTMintIndex = () => {
 					_provider,
 				) as GiversPFP;
 				const res = await PFPContract.allowList(account);
+				if (!res) {
+					setShowEligibilityModal(true);
+				}
 				console.log(res);
 			} catch (error) {
 				console.log('Error on check allow List', error);
@@ -158,6 +163,12 @@ export const NFTMintIndex = () => {
 					</Col>
 				</Row>
 			</MintContainer>
+			{showEligibilityModal && (
+				<EligibilityModal
+					isSuccess={false}
+					setShowModal={setShowEligibilityModal}
+				/>
+			)}
 		</MintViewContainer>
 	);
 };
