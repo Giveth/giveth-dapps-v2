@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import { Flex } from '@/components/styled-components/Flex';
 import { OvalVerticalGradient } from '../common.styles';
+import { mediaQueries } from '@/lib/constants/constants';
 
 const WhatAreGivers = () => {
 	return (
@@ -20,7 +21,7 @@ const WhatAreGivers = () => {
 					of Giveth, in its own fun and vibrant style.
 				</QuoteText>
 			</QuoteContainer>
-			<ImagesContainer>
+			<DesktopImagesContainer>
 				<Image
 					src={'/images/nft/pfp-o-4.png'}
 					width={400}
@@ -43,7 +44,7 @@ const WhatAreGivers = () => {
 					}}
 				/>
 				<Image
-					src={'/images/nft/pfp-o-2.png'}
+					src={'/images/nft/pfp-o-1.png'}
 					width={450}
 					height={450}
 					alt='pfp-image'
@@ -60,7 +61,7 @@ const WhatAreGivers = () => {
 						zIndex: 0,
 					}}
 				/>
-			</ImagesContainer>
+			</DesktopImagesContainer>
 			<OvalVerticalGradient />
 		</SectionContainer>
 	);
@@ -72,9 +73,9 @@ const QuoteContainer = styled.div`
 	z-index: 1;
 `;
 
-const ImagesContainer = styled.div`
+const DesktopImagesContainer = styled.div`
 	position: relative;
-	display: flex;
+	display: none;
 	width: 100%;
 	justify-content: center;
 	align-items: center;
@@ -82,6 +83,9 @@ const ImagesContainer = styled.div`
 	z-index: 1;
 	> img {
 		margin: 0 -50px;
+	}
+	${mediaQueries.tablet} {
+		display: flex;
 	}
 `;
 
