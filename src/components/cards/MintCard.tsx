@@ -48,7 +48,6 @@ export const MintCard = () => {
 	const { setQty } = usePFPMintData();
 
 	useEffect(() => {
-		if (!library) return;
 		async function fetchData() {
 			try {
 				const _provider =
@@ -75,7 +74,7 @@ export const MintCard = () => {
 			}
 		}
 		fetchData();
-	}, [library]);
+	}, [chainId, library]);
 
 	function onChangeHandler(event: ChangeEvent<HTMLInputElement>) {
 		if (!pfpData?.maxMintAmount) return;
