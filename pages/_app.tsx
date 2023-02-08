@@ -9,7 +9,6 @@ import NProgress from 'nprogress';
 import * as snippet from '@segment/snippet';
 import { useRouter } from 'next/router';
 import { Provider } from 'react-redux';
-import StorageLabel from '@/lib/localStorage';
 
 import Script from 'next/script';
 import { useApollo } from '@/apollo/apolloClient';
@@ -25,6 +24,8 @@ import ModalController from '@/components/controller/modal.ctrl';
 import PriceController from '@/components/controller/price.ctrl';
 import GeneralController from '@/components/controller/general.ctrl';
 import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
+import StorageLabel from '@/lib/localStorage';
+
 import type { AppProps } from 'next/app';
 
 declare global {
