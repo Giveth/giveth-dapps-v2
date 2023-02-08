@@ -67,6 +67,7 @@ export const LanguageModal: FC<IModal> = ({ setShowModal }) => {
 
 const LanguageContainer = styled.div<{ isDark?: boolean }>`
 	width: 362px;
+
 	color: ${props =>
 		props.isDark ? neutralColors.gray[100] : brandColors.deep[900]};
 `;
