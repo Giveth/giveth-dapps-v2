@@ -94,12 +94,16 @@ function createApolloClient() {
 	}) as unknown as ApolloLink;
 
 	const authLink = setContext((_, { headers }) => {
+		let locale: string | null = !ssrMode
+			? localStorage.getItem(StorageLabel.LOCALE)
+			: 'en';
 		const currentToken: string | null = !ssrMode
 			? localStorage.getItem(StorageLabel.TOKEN)
 			: null;
 		const mutation: any = {
 			Authorization: currentToken ? `Bearer ${currentToken}` : '',
 			authVersion: '2',
+			'Accept-Language': locale,
 		};
 		if (userWalletAddress) mutation['wallet-address'] = userWalletAddress;
 		return {
@@ -218,6 +222,7 @@ export function addApolloState(client: any, pageProps: any) {
 
 export function useApollo(pageProps: any) {
 	const state = pageProps[APOLLO_STATE_PROP_NAME];
+
 	return useMemo(() => initializeApollo(state), [state]);
 }
 

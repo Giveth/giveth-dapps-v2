@@ -16,6 +16,7 @@ const StorageLabel = {
 	TOKEN: getLocalTokenLabel(),
 	TOKENS: 'tokens',
 	FIRSTMODALSHOWED: 'FIRSTMODALSHOWED',
+	LOCALE: 'locale',
 };
 
 export default StorageLabel;

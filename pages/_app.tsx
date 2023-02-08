@@ -9,6 +9,8 @@ import NProgress from 'nprogress';
 import * as snippet from '@segment/snippet';
 import { useRouter } from 'next/router';
 import { Provider } from 'react-redux';
+import StorageLabel from '@/lib/localStorage';
+
 import Script from 'next/script';
 import { useApollo } from '@/apollo/apolloClient';
 import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
@@ -86,6 +88,10 @@ function MyApp({ Component, pageProps }: AppProps) {
 			router.events.off('routeChangeError', handleChangeError);
 		};
 	}, [router]);
+
+	useEffect(() => {
+		localStorage.setItem(StorageLabel.LOCALE, locale || 'en');
+	}, [locale]);
 
 	return (
 		<>
