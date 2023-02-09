@@ -42,7 +42,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 		if (referrerId) {
 			// this sets the cookie saying this session comes from a referal
 			nookies.set(context, 'chainvineReferred', referrerId as string, {
-				maxAge: 30 * 24 * 60 * 60,
+				maxAge: 1 * 24 * 60 * 60,
 				path: '/',
 			});
 		}

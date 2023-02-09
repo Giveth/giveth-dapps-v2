@@ -17,6 +17,7 @@ import { mediaQueries, minDonationAmount } from '@/lib/constants/constants';
 import { IMeGQL, IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { createDonation } from '@/components/views/donate/helpers';
 import { IModal } from '@/types/common';
+import { parseCookies } from 'nookies';
 import FailedDonation, {
 	EDonationFailedType,
 } from '@/components/modals/FailedDonation';
@@ -55,7 +56,6 @@ const DonateModal: FC<IDonateModalProps> = props => {
 		anonymous,
 		givBackEligible,
 	} = props;
-
 	const web3Context = useWeb3React();
 	const { account, chainId } = web3Context;
 	const dispatch = useAppDispatch();
@@ -79,6 +79,9 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const [tokenPrice, setTokenPrice] = useState<number>();
 	const [failedModalType, setFailedModalType] =
 		useState<EDonationFailedType>();
+
+	const cookies = parseCookies();
+	const chainvineReferred = cookies?.chainvineReferred;
 
 	const { title, addresses, givethAddresses } = project || {};
 
@@ -147,6 +150,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			setDonationSaved: setFirstDonationSaved,
 			walletAddress: projectWalletAddress,
 			projectId: Number(project.id),
+			chainvineReferred,
 		})
 			.then(({ isSaved, txHash: firstHash }) => {
 				setIsFirstTxSuccess(true);

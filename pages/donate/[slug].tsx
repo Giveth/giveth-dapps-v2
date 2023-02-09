@@ -1,4 +1,6 @@
 import React, { FC } from 'react';
+import { GetServerSideProps } from 'next/types';
+import { parseCookies } from 'nookies';
 import Head from 'next/head';
 import { captureException } from '@sentry/nextjs';
 import dynamic from 'next/dynamic';
@@ -35,10 +37,10 @@ const DonateRoute: FC<IDonateRouteProps> = ({ project }) => {
 	);
 };
 
-export async function getServerSideProps(props: { query: { slug: string } }) {
+export const getServerSideProps: GetServerSideProps = async props => {
 	try {
 		const { query } = props;
-		const slug = decodeURI(query.slug).replace(/\s/g, '');
+		const slug = decodeURI(query.slug as string).replace(/\s/g, '');
 		const { data } = await client.query({
 			query: FETCH_PROJECT_BY_SLUG,
 			variables: { slug },
@@ -75,6 +77,6 @@ export async function getServerSideProps(props: { query: { slug: string } }) {
 			},
 		};
 	}
-}
+};
 
 export default DonateRoute;
