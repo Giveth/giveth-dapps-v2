@@ -1,3 +1,4 @@
+import { GetServerSideProps } from 'next/types';
 import { addApolloState, initializeApollo } from '@/apollo/apolloClient';
 import {
 	FETCH_ALL_PROJECTS,
@@ -20,6 +21,7 @@ export interface IProjectsRouteProps {
 
 const ProjectsRoute = (props: IProjectsRouteProps) => {
 	const { projects, mainCategories, totalCount, categories } = props;
+
 	return (
 		<ProjectsProvider mainCategories={mainCategories}>
 			<GeneralMetatags info={projectsMetatags} />
@@ -32,7 +34,9 @@ const ProjectsRoute = (props: IProjectsRouteProps) => {
 	);
 };
 
-export async function getServerSideProps() {
+export const getServerSideProps: GetServerSideProps = async context => {
+	const { query } = context;
+	const { referrer_id } = query;
 	try {
 		const apolloClient = initializeApollo();
 		const { data } = await apolloClient.query({
@@ -78,6 +82,6 @@ export async function getServerSideProps() {
 			},
 		};
 	}
-}
+};
 
 export default ProjectsRoute;
