@@ -1,4 +1,5 @@
 import { GetServerSideProps } from 'next/types';
+import nookies from 'nookies';
 import { addApolloState, initializeApollo } from '@/apollo/apolloClient';
 import {
 	FETCH_ALL_PROJECTS,
@@ -36,8 +37,15 @@ const ProjectsRoute = (props: IProjectsRouteProps) => {
 
 export const getServerSideProps: GetServerSideProps = async context => {
 	const { query } = context;
-	const { referrer_id } = query;
+	const referrerId = query?.referrer_id;
 	try {
+		if (referrerId) {
+			// this sets the cookie saying this session comes from a referal
+			nookies.set(context, 'chainvineReferred', referrerId as string, {
+				maxAge: 30 * 24 * 60 * 60,
+				path: '/',
+			});
+		}
 		const apolloClient = initializeApollo();
 		const { data } = await apolloClient.query({
 			query: FETCH_ALL_PROJECTS,
