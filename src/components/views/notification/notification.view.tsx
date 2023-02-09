@@ -43,6 +43,7 @@ enum ENotificationTabs {
 	GENERAL = 'general',
 	PROJECTS = 'projectRelated',
 	GIVECONOMY = 'givEconomy',
+	SUPPORTED = 'supportedProjects',
 }
 
 const limit = 6;
@@ -63,6 +64,7 @@ function NotificationView() {
 		total: totalUnreadNotifications,
 		general,
 		projectsRelated,
+		supportedProjectsRelated,
 		givEconomyRelated,
 	} = useAppSelector(state => state.notification.notificationInfo);
 
@@ -191,6 +193,21 @@ function NotificationView() {
 								active={tab === ENotificationTabs.PROJECTS}
 							>
 								{projectsRelated}
+							</TabItemCount>
+						)}
+					</NotifisTabItem>
+					<NotifisTabItem
+						active={tab === ENotificationTabs.SUPPORTED}
+						onClick={() =>
+							handleChangeTab(ENotificationTabs.SUPPORTED)
+						}
+					>
+						Supported projects
+						{supportedProjectsRelated !== 0 && (
+							<TabItemCount
+								active={tab === ENotificationTabs.SUPPORTED}
+							>
+								{supportedProjectsRelated}
 							</TabItemCount>
 						)}
 					</NotifisTabItem>

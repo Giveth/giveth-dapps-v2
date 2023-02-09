@@ -2,6 +2,7 @@ export interface INotificationCountState {
 	general: number;
 	givEconomyRelated: number;
 	projectsRelated: number;
+	supportedProjectsRelated: number;
 	lastNotificationId: number;
 	total: number;
 }
@@ -38,6 +39,7 @@ export enum ENotificationCategory {
 	givEconomy = 'givEconomy',
 	projectRelated = 'projectRelated',
 	discussion = 'discussion',
+	supportedProjects = 'supportedProjects',
 }
 
 interface INotificationSettingType {
