@@ -9,6 +9,7 @@ import {
 	Button,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+import { parseCookies } from 'nookies';
 import BigNumber from 'bignumber.js';
 
 import { Modal } from '@/components/modals/Modal';
@@ -17,7 +18,6 @@ import { mediaQueries, minDonationAmount } from '@/lib/constants/constants';
 import { IMeGQL, IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { createDonation } from '@/components/views/donate/helpers';
 import { IModal } from '@/types/common';
-import { parseCookies } from 'nookies';
 import FailedDonation, {
 	EDonationFailedType,
 } from '@/components/modals/FailedDonation';

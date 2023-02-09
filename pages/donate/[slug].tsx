@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { GetServerSideProps } from 'next/types';
-import { parseCookies } from 'nookies';
 import Head from 'next/head';
 import { captureException } from '@sentry/nextjs';
 import dynamic from 'next/dynamic';
