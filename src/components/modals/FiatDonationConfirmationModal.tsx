@@ -23,7 +23,7 @@ export const FiatDonationConfirmationModal: FC<IModal> = ({
 			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerIcon={<Image src={BulbIcon} alt='light bulb' />}
-			headerTitle={formatMessage({ id: 'Before you continue' })}
+			headerTitle={formatMessage({ id: 'label.before_you_start' })}
 			headerTitlePosition='left'
 		>
 			<Container>
