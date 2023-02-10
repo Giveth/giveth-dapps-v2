@@ -13,6 +13,15 @@ import { Col, Container } from '@/components/Grid';
 
 const HomePurpleSection = () => {
 	const { formatMessage } = useIntl();
+	// hiding it for now for turkey relief banner
+	return (
+		<Link
+			target='_blank'
+			href='https://medium.com/giveth/ways-to-help-earthquake-victims-in-turkey-and-syria-on-giveth-155d7855164'
+		>
+			<ReliefBanner />
+		</Link>
+	);
 	return (
 		<Wrapper>
 			<Arcs>
@@ -62,6 +71,20 @@ const Wrapper = styled(HomeContainer)`
 	overflow: hidden;
 	box-shadow: ${Shadow.Neutral[400]};
 	top: -50px;
+`;
+
+const ReliefBanner = styled(Wrapper)`
+	margin: 120px 40px 60px 40px;
+	background: transparent;
+	background-image: url('/images/banners/relief-banner.png');
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+	box-shadow: none;
+
+	${mediaQueries.tablet} {
+		margin: 120px 0 60px 0;
+	}
 `;
 
 const BigTitle = styled(D3)`
