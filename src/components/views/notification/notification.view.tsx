@@ -64,7 +64,7 @@ function NotificationView() {
 		total: totalUnreadNotifications,
 		general,
 		projectsRelated,
-		supportedProjectsRelated,
+		supportedProjects,
 		givEconomyRelated,
 	} = useAppSelector(state => state.notification.notificationInfo);
 
@@ -203,11 +203,11 @@ function NotificationView() {
 						}
 					>
 						Supported projects
-						{supportedProjectsRelated !== 0 && (
+						{supportedProjects !== 0 && (
 							<TabItemCount
 								active={tab === ENotificationTabs.SUPPORTED}
 							>
-								{supportedProjectsRelated}
+								{supportedProjects}
 							</TabItemCount>
 						)}
 					</NotifisTabItem>

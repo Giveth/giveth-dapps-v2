@@ -2,7 +2,7 @@ export interface INotificationCountState {
 	general: number;
 	givEconomyRelated: number;
 	projectsRelated: number;
-	supportedProjectsRelated: number;
+	supportedProjects: number;
 	lastNotificationId: number;
 	total: number;
 }
