@@ -287,16 +287,19 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 			<ProjectsBanner mainCategory={selectedMainCategory} />
 			<Wrapper>
-				<CampaignBlock
-					projects={
-						turkeyReliefProjects
-							?.slice()
-							.sort(
-								(a: IProject, b: IProject) =>
-									b?.totalDonations! - a?.totalDonations!,
-							) || []
-					}
-				/>
+				{turkeyReliefProjects && turkeyReliefProjects.length > 0 && (
+					<CampaignBlock
+						projects={
+							turkeyReliefProjects
+								?.slice()
+								.sort(
+									(a: IProject, b: IProject) =>
+										b?.totalDonations! - a?.totalDonations!,
+								) || []
+						}
+					/>
+				)}
+
 				<FiltersContainer>
 					{isDesktop && <ProjectsFiltersDesktop />}
 					{isTablet && <ProjectsFiltersTablet />}
