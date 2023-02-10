@@ -25,6 +25,7 @@ const HomeIndex = (props: IHomeView) => {
 			<BigArc />
 			<HomeHeader />
 			<CampaignBlock
+				displayReliefBanner
 				projects={
 					reliefTurkeyProjects
 						?.slice()

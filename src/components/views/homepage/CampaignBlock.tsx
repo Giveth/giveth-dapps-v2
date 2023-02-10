@@ -21,12 +21,15 @@ import useDetectDevice from '@/hooks/useDetectDevice';
 import { Shadow } from '@/components/styled-components/Shadow';
 import 'swiper/css';
 
-const CampaignBlock = (props: { projects: IProject[] }) => {
+const CampaignBlock = (props: {
+	projects: IProject[];
+	displayReliefBanner?: boolean;
+}) => {
 	const { isMobile, isTablet, isLaptopS, isLaptopL, isDesktop } =
 		useDetectDevice();
 	const [swiperInstance, setSwiperInstance] = useState<SwiperClass>();
 	const [currentSlide, setCurrentSlide] = useState(1);
-	const { projects } = props;
+	const { projects, displayReliefBanner } = props;
 
 	const slidesPerView = isMobile
 		? 1.1
@@ -52,12 +55,14 @@ const CampaignBlock = (props: { projects: IProject[] }) => {
 
 	return (
 		<Wrapper>
-			<Link
-				target='_blank'
-				href='https://medium.com/giveth/ways-to-help-earthquake-victims-in-turkey-and-syria-on-giveth-155d7855164'
-			>
-				<ReliefBanner />
-			</Link>
+			{displayReliefBanner && (
+				<Link
+					target='_blank'
+					href='https://medium.com/giveth/ways-to-help-earthquake-victims-in-turkey-and-syria-on-giveth-155d7855164'
+				>
+					<ReliefBanner />
+				</Link>
+			)}
 			<UpperSection>
 				<Title weight={700}>Earthquake Response</Title>
 				<Pagination>
