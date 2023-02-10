@@ -75,6 +75,8 @@ function NotificationView() {
 	};
 
 	const handleChangeTab = (newTab: ENotificationTabs) => {
+		if (newTab === tab) return;
+		setLoading(true);
 		setNotifications([]);
 		setPageNumber(0);
 		setTab(newTab);
@@ -245,22 +247,24 @@ function NotificationView() {
 			</Flex>
 			<NotifsHr color={neutralColors.gray[300]} />
 			<div>
-				{notifications.length > 0 ? (
-					notifications.map(notification => (
-						<NotificationBox
-							key={notification.id}
-							notification={notification}
-							markOneNotificationRead={markOneNotificationRead}
-						/>
-					))
-				) : (
-					<FlexCenter>
-						<Lead>You don't have any notifications</Lead>
-					</FlexCenter>
-				)}
+				{notifications.length > 0
+					? notifications.map(notification => (
+							<NotificationBox
+								key={notification.id}
+								notification={notification}
+								markOneNotificationRead={
+									markOneNotificationRead
+								}
+							/>
+					  ))
+					: !loading && (
+							<FlexCenter>
+								<Lead>You don't have any notifications</Lead>
+							</FlexCenter>
+					  )}
 			</div>
 			<FlexCenter>
-				{showLoadMore && (
+				{showLoadMore && !loading && (
 					<OutlineButton
 						buttonType='primary'
 						label='Load More'
