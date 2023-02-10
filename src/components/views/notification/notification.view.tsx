@@ -43,6 +43,7 @@ enum ENotificationTabs {
 	GENERAL = 'general',
 	PROJECTS = 'projectRelated',
 	GIVECONOMY = 'givEconomy',
+	SUPPORTED = 'supportedProjects',
 }
 
 const limit = 6;
@@ -63,6 +64,7 @@ function NotificationView() {
 		total: totalUnreadNotifications,
 		general,
 		projectsRelated,
+		supportedProjects,
 		givEconomyRelated,
 	} = useAppSelector(state => state.notification.notificationInfo);
 
@@ -73,6 +75,8 @@ function NotificationView() {
 	};
 
 	const handleChangeTab = (newTab: ENotificationTabs) => {
+		if (newTab === tab) return;
+		setLoading(true);
 		setNotifications([]);
 		setPageNumber(0);
 		setTab(newTab);
@@ -195,6 +199,21 @@ function NotificationView() {
 						)}
 					</NotifisTabItem>
 					<NotifisTabItem
+						active={tab === ENotificationTabs.SUPPORTED}
+						onClick={() =>
+							handleChangeTab(ENotificationTabs.SUPPORTED)
+						}
+					>
+						Supported projects
+						{supportedProjects !== 0 && (
+							<TabItemCount
+								active={tab === ENotificationTabs.SUPPORTED}
+							>
+								{supportedProjects}
+							</TabItemCount>
+						)}
+					</NotifisTabItem>
+					<NotifisTabItem
 						active={tab === ENotificationTabs.GIVECONOMY}
 						onClick={() =>
 							handleChangeTab(ENotificationTabs.GIVECONOMY)
@@ -228,22 +247,24 @@ function NotificationView() {
 			</Flex>
 			<NotifsHr color={neutralColors.gray[300]} />
 			<div>
-				{notifications.length > 0 ? (
-					notifications.map(notification => (
-						<NotificationBox
-							key={notification.id}
-							notification={notification}
-							markOneNotificationRead={markOneNotificationRead}
-						/>
-					))
-				) : (
-					<FlexCenter>
-						<Lead>You don't have any notifications</Lead>
-					</FlexCenter>
-				)}
+				{notifications.length > 0
+					? notifications.map(notification => (
+							<NotificationBox
+								key={notification.id}
+								notification={notification}
+								markOneNotificationRead={
+									markOneNotificationRead
+								}
+							/>
+					  ))
+					: !loading && (
+							<FlexCenter>
+								<Lead>You don't have any notifications</Lead>
+							</FlexCenter>
+					  )}
 			</div>
 			<FlexCenter>
-				{showLoadMore && (
+				{showLoadMore && !loading && (
 					<OutlineButton
 						buttonType='primary'
 						label='Load More'

@@ -42,6 +42,7 @@ export const ConfigContainer = styled(FlexCenter)`
 
 export const NotifisTabItem = styled(TabItem)`
 	color: ${neutralColors.gray[900]};
+	user-select: none;
 	${props =>
 		props.active &&
 		`

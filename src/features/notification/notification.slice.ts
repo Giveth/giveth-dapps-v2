@@ -7,6 +7,7 @@ export const defaultNotificationValues: INotificationCountState = {
 	general: 0,
 	givEconomyRelated: 0,
 	projectsRelated: 0,
+	supportedProjects: 0,
 	lastNotificationId: 0,
 	total: 0,
 };

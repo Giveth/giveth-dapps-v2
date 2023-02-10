@@ -9,7 +9,6 @@ export interface ITab {
 export const TabsContainer = styled(Flex)`
 	padding: 37px 0;
 	gap: 16px;
-	max-width: 600px;
 	overflow: auto;
 `;
 
