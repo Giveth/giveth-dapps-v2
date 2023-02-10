@@ -489,6 +489,7 @@ export const FETCH_PROJECTS_BY_SLUG = gql`
 				impactLocation
 				listed
 				givingBlocksId
+				totalDonations
 				categories {
 					name
 				}
