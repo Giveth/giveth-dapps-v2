@@ -6,22 +6,25 @@ import HomeGIVPowerSection from './HomeGIVPowerSection';
 import HomeFromBlog from './HomeFromBlog';
 import HomeGetUpdates from './HomeGetUpdates';
 import HomeChangeMakers from './HomeChangeMakers';
+import CampaignBlock from './CampaignBlock';
 import { IProject } from '@/apollo/types/types';
 import { BigArc } from '@/components/styled-components/Arc';
 
 interface IHomeView {
 	projects: IProject[];
 	totalCount: number;
+	reliefTurkeyProjects?: IProject[];
 }
 
 const projectsSlice = 6;
 
 const HomeIndex = (props: IHomeView) => {
-	const { projects, totalCount } = props;
+	const { projects, totalCount, reliefTurkeyProjects } = props;
 	return (
 		<>
 			<BigArc />
 			<HomeHeader />
+			<CampaignBlock projects={reliefTurkeyProjects || []} />
 			<HomeExploreProjects
 				totalCount={totalCount}
 				projects={projects.slice(0, projectsSlice)}
