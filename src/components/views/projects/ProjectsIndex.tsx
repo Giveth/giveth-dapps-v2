@@ -137,6 +137,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 					const data = res.data?.allProjects?.projects;
 					const count = res.data?.allProjects?.totalCount;
 					setTotalCount(count);
+
 					setFilteredProjects(prevProjects => {
 						isInfiniteScrolling.current =
 							(data.length + prevProjects.length) % 45 !== 0;
