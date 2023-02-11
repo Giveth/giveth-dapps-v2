@@ -13,6 +13,7 @@ import { Col, Container } from '@/components/Grid';
 
 const HomePurpleSection = () => {
 	const { formatMessage } = useIntl();
+
 	return (
 		<Wrapper>
 			<Arcs>
