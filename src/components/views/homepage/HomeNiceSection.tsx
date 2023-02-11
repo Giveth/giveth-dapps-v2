@@ -13,6 +13,7 @@ import { Col, Container } from '@/components/Grid';
 
 const HomePurpleSection = () => {
 	const { formatMessage } = useIntl();
+
 	return (
 		<Wrapper>
 			<Arcs>
@@ -62,17 +63,6 @@ const Wrapper = styled(HomeContainer)`
 	overflow: hidden;
 	box-shadow: ${Shadow.Neutral[400]};
 	top: -50px;
-	::after {
-		content: '';
-		background-image: url('/images/backgrounds/GIVGIVGIV.png');
-		opacity: 0.1;
-		top: 0;
-		left: 0;
-		bottom: 0;
-		right: 0;
-		position: absolute;
-		z-index: -1;
-	}
 `;
 
 const BigTitle = styled(D3)`

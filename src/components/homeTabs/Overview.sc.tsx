@@ -14,6 +14,7 @@ export const OverviewBottomContainer = styled.div`
 	background-repeat: repeat-x;
 	background-size: 200px;
 	padding-bottom: 120px;
+	margin-top: 100px;
 `;
 
 export const VoteCardButton = styled(ButtonLink)`
@@ -39,7 +40,7 @@ export const VoteCard = styled.div`
 	background-image: url('/images/backgrounds/giv-outline.svg');
 	border-radius: 8px;
 	min-height: 480px;
-	margin: 80px 0 45px;
+	margin: 100px 0 45px;
 	position: relative;
 	::before {
 		content: url('/images/pie1.png');
