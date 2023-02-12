@@ -24,17 +24,19 @@ const HomeIndex = (props: IHomeView) => {
 		<>
 			<BigArc />
 			<HomeHeader />
-			<CampaignBlock
-				displayReliefBanner
-				projects={
-					reliefTurkeyProjects
-						?.slice()
-						.sort(
-							(a: IProject, b: IProject) =>
-								b?.totalDonations! - a?.totalDonations!,
-						) || []
-				}
-			/>
+			{reliefTurkeyProjects && reliefTurkeyProjects.length > 0 && (
+				<CampaignBlock
+					displayReliefBanner
+					projects={
+						reliefTurkeyProjects
+							?.slice()
+							.sort(
+								(a: IProject, b: IProject) =>
+									b?.totalDonations! - a?.totalDonations!,
+							) || []
+					}
+				/>
+			)}
 			<HomeExploreProjects
 				totalCount={totalCount}
 				projects={projects.slice(0, projectsSlice)}
