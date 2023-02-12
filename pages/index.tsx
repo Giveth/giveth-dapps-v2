@@ -100,7 +100,7 @@ export async function getServerSideProps({ res }: any) {
 				projectsPerDate: data.projectsPerDate,
 				totalDonorsCountPerDate: data.totalDonorsCountPerDate,
 				donationsTotalUsdPerDate: data.donationsTotalUsdPerDate,
-				lastUpdates: data.projectUpdates.projectUpdates,
+				latestUpdates: data.projectUpdates.projectUpdates,
 			},
 		};
 	} catch (error: any) {
