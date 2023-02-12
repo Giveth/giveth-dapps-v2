@@ -18,12 +18,14 @@ export const LatestUpdateCard: FC<ILatestUpdateCardProps> = ({ update }) => {
 		<Link href={`${Routes.Project}/${update.project.slug}`}>
 			<LatestUpdateCardContainer>
 				<ImageWrapper>
-					<Image
-						fill
-						src={update.project.image || ''}
-						alt=''
-						style={{ objectFit: 'cover' }}
-					/>
+					{update.project.image?.startsWith('http') && (
+						<Image
+							fill
+							src={update.project.image || ''}
+							alt=''
+							style={{ objectFit: 'cover' }}
+						/>
+					)}
 				</ImageWrapper>
 				<Content>
 					<Time>
