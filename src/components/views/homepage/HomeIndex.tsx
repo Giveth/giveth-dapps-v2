@@ -24,7 +24,7 @@ const HomeIndex = (props: IHomeView) => {
 		<>
 			<BigArc />
 			<HomeHeader />
-			{reliefTurkeyProjects?.length && (
+			{reliefTurkeyProjects && reliefTurkeyProjects.length > 0 && (
 				<CampaignBlock
 					displayReliefBanner
 					projects={
