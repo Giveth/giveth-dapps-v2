@@ -225,7 +225,7 @@ const Wrapper = styled.div`
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		padding: 42px 0;
+		padding: 42px;
 	}
 `;
 
