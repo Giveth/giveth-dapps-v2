@@ -23,6 +23,7 @@ import ModalController from '@/components/controller/modal.ctrl';
 import PriceController from '@/components/controller/price.ctrl';
 import GeneralController from '@/components/controller/general.ctrl';
 import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
+import NotificationController from '@/components/controller/notification.ctrl';
 import type { AppProps } from 'next/app';
 
 declare global {
@@ -103,6 +104,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 				>
 					<ApolloProvider client={apolloClient}>
 						<Web3ReactProvider getLibrary={getLibrary}>
+							<NotificationController />
 							<GeneralController />
 							<PriceController />
 							<SubgraphController />
