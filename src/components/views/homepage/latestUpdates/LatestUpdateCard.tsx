@@ -1,7 +1,13 @@
 import Image from 'next/image';
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import { H6, neutralColors, P, SublineBold } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	H6,
+	neutralColors,
+	P,
+	SublineBold,
+} from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { Flex } from '@/components/styled-components/Flex';
 import { IProjectUpdateWithProject } from '@/apollo/types/types';
@@ -58,6 +64,7 @@ const ImageWrapper = styled.div`
 	overflow: hidden;
 	position: relative;
 	border-radius: 8px;
+	background-color: ${brandColors.giv[500]};
 `;
 
 const Content = styled.div`
