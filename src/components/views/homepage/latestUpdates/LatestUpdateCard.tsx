@@ -30,7 +30,8 @@ export const LatestUpdateCard: FC<ILatestUpdateCardProps> = ({ update }) => {
 				<Content>
 					<Time>
 						{durationToString(
-							getNowUnixMS() - Number(update.createdAt),
+							getNowUnixMS() -
+								new Date(update.createdAt).getTime(),
 							1,
 						) + ' ago'}
 					</Time>
