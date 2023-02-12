@@ -160,6 +160,7 @@ const SwiperWrapper = styled.div`
 	padding: 24px 32px 20px;
 	width: 100%;
 	overflow: hidden;
+
 	.swiper {
 		overflow: unset;
 	}
@@ -172,7 +173,9 @@ const SwiperWrapper = styled.div`
 `;
 
 const BottomSection = styled(Flex)`
+	width: 100%;
 	flex-direction: column;
+
 	${mediaQueries.tablet} {
 		flex-direction: row;
 	}
