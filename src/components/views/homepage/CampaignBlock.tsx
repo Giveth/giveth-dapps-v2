@@ -44,7 +44,7 @@ const CampaignBlock = (props: {
 	const _projects = projects;
 	let paginationCount = Math.floor(_projects.length - slidesPerView + 1);
 	if (!isDesktop) paginationCount += 1;
-	const pages = Array.from(Array(paginationCount).keys());
+	const pages = Array.from(Array(paginationCount + 1).keys());
 
 	useEffect(() => {
 		if (swiperInstance)
