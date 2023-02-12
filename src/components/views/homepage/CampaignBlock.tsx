@@ -151,14 +151,7 @@ const Pagination = styled(Flex)`
 	align-items: center;
 	margin: 0 auto;
 	${mediaQueries.tablet} {
-		margin-left: 0;
-		margin-right: 32px;
-	}
-	${mediaQueries.laptopL} {
-		margin-right: 40px;
-	}
-	${mediaQueries.desktop} {
-		margin-right: 120px;
+		margin: 0;
 	}
 `;
 
@@ -186,17 +179,9 @@ const BottomSection = styled(Flex)`
 
 const Title = styled(H4)`
 	color: ${neutralColors.gray[600]};
-	padding-left: 58px;
 	margin-bottom: 40px;
 	${mediaQueries.tablet} {
 		margin-bottom: 0;
-		padding-left: 32px;
-	}
-	${mediaQueries.laptopL} {
-		padding-left: 40px;
-	}
-	${mediaQueries.desktop} {
-		padding-left: 120px;
 	}
 `;
 
