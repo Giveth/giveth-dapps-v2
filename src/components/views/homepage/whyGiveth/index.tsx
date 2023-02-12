@@ -1,7 +1,6 @@
 import {
 	B,
 	brandColors,
-	Container,
 	H3,
 	mediaQueries,
 	neutralColors,
@@ -9,11 +8,14 @@ import {
 import styled from 'styled-components';
 import { FC, useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
+import Image from 'next/image';
 import { Flex } from '@/components/styled-components/Flex';
 import StatsCard from '@/components/views/homepage/whyGiveth/StatsCard';
 import DonationCard from '@/components/views/homepage/whyGiveth/DonationCard';
 import { IHomeRoute } from '../../../../../pages';
 import { thousandsSeparator } from '@/lib/helpers';
+import { Relative } from '@/components/styled-components/Position';
+import CominhoPlusIcon from 'public/images/cominho-plus.svg';
 
 const WhyGiveth: FC<Omit<IHomeRoute, 'projects'>> = props => {
 	const {
@@ -57,7 +59,7 @@ const WhyGiveth: FC<Omit<IHomeRoute, 'projects'>> = props => {
 	}, [donationCardsRef.current]);
 
 	return (
-		<>
+		<Relative>
 			<GivethStats>
 				<Title weight={700}>WAGMI 🤘💜</Title>
 				<Stats>
@@ -93,9 +95,97 @@ const WhyGiveth: FC<Omit<IHomeRoute, 'projects'>> = props => {
 					</DonationCardContainer>
 				</DonationCardWrapper>
 			</RecentDonations>
-		</>
+			<CyanRing />
+			<GivArc />
+			<MustardArc />
+			<MustardDot />
+			<CominhoPlus>
+				<Image src={CominhoPlusIcon} alt='Cominho Plus' />
+			</CominhoPlus>
+		</Relative>
 	);
 };
+
+const CominhoPlus = styled.div`
+	position: absolute;
+	bottom: 119px;
+	right: 100px;
+	${mediaQueries.tablet} {
+		bottom: 75px;
+		right: 15px;
+	}
+	${mediaQueries.desktop} {
+		bottom: 110px;
+		right: 20px;
+	}
+`;
+
+const MustardDot = styled.div`
+	width: 15px;
+	height: 15px;
+	border-radius: 50%;
+	background-color: ${brandColors.mustard[500]};
+	position: absolute;
+	top: 60px;
+	left: 25px;
+	${mediaQueries.desktop} {
+		top: 210px;
+		left: 25px;
+	}
+`;
+
+const MustardArc = styled.div`
+	border-radius: 50%;
+	border: 10px solid ${brandColors.mustard[500]};
+	border-top-color: transparent;
+	border-right-color: transparent;
+	transform: rotate(-30deg);
+	width: 70px;
+	height: 70px;
+	position: absolute;
+	top: 36px;
+	left: -35px;
+	${mediaQueries.desktop} {
+		top: 186px;
+		left: -35px;
+	}
+`;
+
+const GivArc = styled.div`
+	border-radius: 50%;
+	border: 13px solid ${brandColors.giv[200]};
+	border-bottom-color: transparent;
+	border-top-color: transparent;
+	border-left-color: transparent;
+	transform: rotate(45deg);
+	width: 54px;
+	height: 54px;
+	top: 45px;
+	right: 10px;
+	position: absolute;
+	${mediaQueries.tablet} {
+		top: 45px;
+		right: 146px;
+	}
+`;
+
+const CyanRing = styled.div`
+	border-radius: 50%;
+	border: 5px solid ${brandColors.cyan[700]};
+	width: 21px;
+	height: 21px;
+	position: absolute;
+	bottom: -10px;
+	left: 90px;
+	${mediaQueries.tablet} {
+		bottom: 0;
+		left: 90px;
+	}
+	${mediaQueries.desktop} {
+		top: 26px;
+		left: 250px;
+	}
+`;
 
 const DonationCardWrapper = styled.div`
 	overflow: hidden;
@@ -132,8 +222,9 @@ const Line = styled.div`
 const RecentDonations = styled(Flex)`
 	gap: 4px;
 	flex-direction: column;
-	margin: 60px 0 20px 24px;
+	margin: 40px 0 20px 24px;
 	${mediaQueries.tablet} {
+		margin-top: 20px;
 		gap: 40px;
 		align-items: center;
 		flex-direction: row;
@@ -145,17 +236,22 @@ const RecentDonations = styled(Flex)`
 `;
 
 const Stats = styled(Flex)`
-	gap: 40px 112px;
+	gap: 40px;
 	flex-direction: column;
 	border-radius: 16px;
 	background: ${brandColors.giv[500]};
 	color: ${neutralColors.gray[100]};
 	padding: 20px;
+	width: 100%;
+	max-width: 1200px;
+	justify-content: center;
+	align-items: center;
 	${mediaQueries.tablet} {
 		flex-direction: row;
+		gap: 100px;
 	}
 	${mediaQueries.laptopS} {
-		padding: 40px 219px;
+		gap: 180px;
 	}
 `;
 
@@ -163,9 +259,9 @@ const Title = styled(H3)`
 	color: ${brandColors.giv[600]};
 `;
 
-const GivethStats = styled(Container)`
+const GivethStats = styled.div`
 	position: relative;
-	padding-top: 40px;
+	padding: 40px 40px 0;
 	display: flex;
 	justify-content: center;
 	align-items: center;
