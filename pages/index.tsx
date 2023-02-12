@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { GetStaticProps } from 'next/types';
 
 import HomeIndex from '@/components/views/homepage/HomeIndex';
 import { client } from '@/apollo/apolloClient';
@@ -73,11 +74,7 @@ const HomeRoute = (props: IHomeRoute) => {
 	);
 };
 
-export async function getServerSideProps({ res }: any) {
-	res.setHeader(
-		'Cache-Control',
-		'public, s-maxage=10, stale-while-revalidate=59',
-	);
+export const getStaticProps: GetStaticProps = async context => {
 	try {
 		const { data } = await client.query({
 			query: HOMEPAGE_DATA,
@@ -102,6 +99,7 @@ export async function getServerSideProps({ res }: any) {
 				donationsTotalUsdPerDate: data.donationsTotalUsdPerDate,
 				latestUpdates: data.projectUpdates.projectUpdates,
 			},
+			revalidate: 600,
 		};
 	} catch (error: any) {
 		const statusCode = transformGraphQLErrorsToStatusCode(
@@ -113,6 +111,6 @@ export async function getServerSideProps({ res }: any) {
 			},
 		};
 	}
-}
+};
 
 export default HomeRoute;
