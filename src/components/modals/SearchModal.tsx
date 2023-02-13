@@ -1,6 +1,7 @@
 import { FC, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { brandColors, H6, Lead, neutralColors } from '@giveth/ui-design-system';
+import Link from 'next/link';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -10,12 +11,23 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { ETheme } from '@/features/general/general.slice';
 import { useAppSelector } from '@/features/hooks';
 import { SearchInput } from '../SearchInput';
+import { ESortbyAllProjects } from '@/apollo/types/gqlEnums';
+import Routes from '@/lib/constants/Routes';
 
 const quickLinks = [
-	{ title: 'Top ranking projects', query: '' },
-	{ title: 'Most funded projects', query: '' },
-	{ title: 'New projects', query: '' },
-	{ title: 'Most liked projects', query: '' },
+	{
+		title: 'Top ranking projects',
+		query: '?sort=' + ESortbyAllProjects.GIVPOWER,
+	},
+	{
+		title: 'Most funded projects',
+		query: '?sort=' + ESortbyAllProjects.MOSTFUNDED,
+	},
+	{ title: 'New projects', query: '?sort=' + ESortbyAllProjects.NEWEST },
+	{
+		title: 'Most liked projects',
+		query: '?sort=' + ESortbyAllProjects.MOSTLIKED,
+	},
 ];
 
 export const SearchModal: FC<IModal> = ({ setShowModal }) => {
@@ -49,9 +61,14 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 								Quick links
 							</Title>
 							{quickLinks.map((item, idx) => (
-								<Item key={idx} theme={theme}>
-									{item.title}
-								</Item>
+								<Link
+									key={idx}
+									href={Routes.Projects + item.query}
+								>
+									<Item theme={theme} onClick={closeModal}>
+										{item.title}
+									</Item>
+								</Link>
 							))}
 						</Flex>
 					</Col>
