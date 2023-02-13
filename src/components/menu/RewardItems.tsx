@@ -1,5 +1,6 @@
 import {
 	B,
+	IconForward16,
 	IconHelpFilled16,
 	OutlineLinkButton,
 } from '@giveth/ui-design-system';
@@ -32,6 +33,7 @@ import {
 	IconHelpWrapper,
 	PartAmount,
 	PartUnit,
+	ForwardWrapper,
 } from './RewardItems.sc';
 import { ItemAction, ItemRow, ItemTitle } from './common';
 import { Item } from './Item';
@@ -160,6 +162,9 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 							{formatWeiHelper(givStreamLiquidPart)}
 						</PartAmount>
 						<PartUnit>GIV</PartUnit>
+						<ForwardWrapper>
+							<IconForward16 />
+						</ForwardWrapper>
 					</Flex>
 				</Item>
 			</Link>
@@ -171,6 +176,9 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 							{formatWeiHelper(farmsLiquidPart)}
 						</PartAmount>
 						<PartUnit>GIV</PartUnit>
+						<ForwardWrapper>
+							<IconForward16 />
+						</ForwardWrapper>
 					</Flex>
 				</Item>
 			</Link>
@@ -182,6 +190,9 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 							{formatWeiHelper(givbackLiquidPart)}
 						</PartAmount>
 						<PartUnit>GIV</PartUnit>
+						<ForwardWrapper>
+							<IconForward16 />
+						</ForwardWrapper>
 					</Flex>
 				</Item>
 			</Link>
