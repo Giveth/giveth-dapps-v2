@@ -79,12 +79,14 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 							alignItems='flex-start'
 						>
 							<Title size='large' theme={theme}>
-								Featuerd projects
+								Featured projects
 							</Title>
 							{quickLinks.map((item, idx) => (
-								<Item key={idx} theme={theme}>
-									{item.title}
-								</Item>
+								<Link key={idx} href={Routes.Project}>
+									<Item theme={theme} onClick={closeModal}>
+										{item.title}
+									</Item>
+								</Link>
 							))}
 						</Flex>
 					</Col>
