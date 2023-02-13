@@ -31,7 +31,7 @@ const NotificationMenu: FC<INotificationMenuProps> = ({
 	}, []);
 
 	return (
-		<NotifsMenuContainer isMounted={isMounted} theme={theme}>
+		<NotifsMenuContainer theme={theme}>
 			<NotificationsTitle styleType='Small'>
 				NOTIFICATIONS
 			</NotificationsTitle>
