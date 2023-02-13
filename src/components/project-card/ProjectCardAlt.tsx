@@ -30,7 +30,6 @@ const ProjectCard = (props: IProjectCard) => {
 		description,
 		image,
 		verified,
-		traceCampaignId,
 		adminUser,
 		slug,
 		totalDonations,
@@ -55,8 +54,7 @@ const ProjectCard = (props: IProjectCard) => {
 			/>
 			{!isNew && (
 				<BadgeContainer>
-					{verified && <VerificationBadge verified />}
-					{traceCampaignId && <VerificationBadge trace />}
+					{verified && <VerificationBadge />}
 				</BadgeContainer>
 			)}
 			<CardBody isNew={isNew}>

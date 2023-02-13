@@ -3,7 +3,14 @@ import { FC, useState, useEffect } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { Button, GLink } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	Button,
+	GLink,
+	IconNotificationFilled16,
+	neutralColors,
+	Overline,
+} from '@giveth/ui-design-system';
 
 import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
@@ -28,6 +35,9 @@ import {
 	SmallCreateProjectParent,
 	LargeCreateProject,
 	MainLogoBtn,
+	NotificationsButton,
+	NotificationsIconContainer,
+	NotificationsButtonCircle,
 } from './Header.sc';
 import { RewardMenu } from '@/components/menu/RewardMenu';
 import MenuWallet from '@/components/menu/MenuWallet';
@@ -48,6 +58,10 @@ import {
 } from '@/features/modal/modal.slice';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import NotificationMenu from '../notification/NotificationMenu';
+import useDetectDevice from '@/hooks/useDetectDevice';
+import { fetchNotificationsData } from '@/features/notification/notification.services';
+import { useNotification } from '@/hooks/useNotification';
 import { IconGIV } from '../Icons/GIV';
 import { useModalCallback } from '@/hooks/useModalCallback';
 
@@ -60,9 +74,12 @@ const Header: FC<IHeader> = () => {
 	const [showRewardMenu, setShowRewardMenu] = useState(false);
 	const [showRewardMenuModal, setShowRewardMenuModal] = useState(false);
 	const [showUserMenu, setShowUserMenu] = useState(false);
+	const [showNotifications, setShowNotifications] = useState(false);
 	const [showHeader, setShowHeader] = useState(true);
 	const [isGIVeconomyRoute, setIsGIVeconomyRoute] = useState(false);
 	const [showBackBtn, setShowBackBtn] = useState(false);
+	const { notifications, setNotifications, markOneNotificationRead } =
+		useNotification();
 
 	const { chainId, active, account, library } = useWeb3React();
 	const sdh = new SubgraphDataHelper(
@@ -74,10 +91,18 @@ const Header: FC<IHeader> = () => {
 		state => state.user,
 	);
 	const theme = useAppSelector(state => state.general.theme);
+	const { total: totalUnreadNotifications } = useAppSelector(
+		state => state.notification.notificationInfo,
+	);
+	const { lastNotificationId } = useAppSelector(
+		state => state.notification.notificationInfo,
+	);
+	const { isMobile } = useDetectDevice();
+
 	const router = useRouter();
 	const { formatMessage } = useIntl();
 	const isLight = theme === ETheme.Light;
-
+	const lastFetchedNotificationId = notifications[0]?.id ?? undefined;
 	const handleBack = () => {
 		const calculateSlug = () => {
 			if (typeof router.query?.slug === 'string') {
@@ -143,6 +168,28 @@ const Header: FC<IHeader> = () => {
 		return () => window.removeEventListener('scroll', onScroll);
 	}, [showHeader]);
 
+	useEffect(() => {
+		const fetchNotificationsAndSetState = async () => {
+			if (!isSignedIn) return;
+			try {
+				const res = await fetchNotificationsData({ limit: 4 });
+				if (res?.notifications) setNotifications(res.notifications);
+			} catch {
+				console.log('Error fetching notifications');
+			}
+		};
+
+		if (
+			typeof lastFetchedNotificationId === 'number' &&
+			lastNotificationId > lastFetchedNotificationId
+		) {
+			fetchNotificationsAndSetState();
+			return;
+		}
+
+		fetchNotificationsAndSetState();
+	}, [lastNotificationId, isSignedIn]);
+
 	const handleModals = () => {
 		if (isGIVeconomyRoute) {
 			dispatch(setShowWalletModal(true));
@@ -172,6 +219,21 @@ const Header: FC<IHeader> = () => {
 			setShowRewardMenu(false);
 		}
 	};
+
+	const { modalCallback: signInThenGoToNotifs } = useModalCallback(() =>
+		router.push(Routes.Notifications),
+	);
+
+	const notificationsProps =
+		isEnabled && !isSignedIn
+			? {
+					onClick: () => signInThenGoToNotifs(),
+			  }
+			: {
+					onClick: () => setShowNotifications(true),
+					onMouseEnter: () => setShowNotifications(true),
+					onMouseLeave: () => setShowNotifications(false),
+			  };
 
 	return (
 		<StyledHeader
@@ -238,13 +300,43 @@ const Header: FC<IHeader> = () => {
 				<SmallCreateProjectParent>
 					<SmallCreateProject
 						onClick={handleCreateButton}
-						theme={theme}
+						buttonType='primary'
 						label='+'
-						linkType={isLight ? 'primary' : 'secondary'}
 					/>
 				</SmallCreateProjectParent>
 				{active && account && chainId ? (
 					<>
+						{!isMobile && (
+							<MenuAndButtonContainer {...notificationsProps}>
+								<NotificationsButton outline theme={theme}>
+									<NotificationsIconContainer>
+										{totalUnreadNotifications > 0 && (
+											<NotificationsButtonCircle>
+												<Overline styleType='Small'>
+													{totalUnreadNotifications}
+												</Overline>
+											</NotificationsButtonCircle>
+										)}
+										<IconNotificationFilled16
+											color={
+												isLight
+													? brandColors.pinky[500]
+													: neutralColors.gray[100]
+											}
+										/>
+									</NotificationsIconContainer>
+									<CoverLine theme={theme} />
+								</NotificationsButton>
+								{showNotifications && isSignedIn && (
+									<NotificationMenu
+										notifications={notifications}
+										markOneNotificationRead={
+											markOneNotificationRead
+										}
+									/>
+								)}
+							</MenuAndButtonContainer>
+						)}
 						<MenuAndButtonContainer
 							onClick={() => setShowRewardMenu(true)}
 							onMouseEnter={() => setShowRewardMenu(true)}

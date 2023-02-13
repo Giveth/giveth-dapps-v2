@@ -39,7 +39,7 @@ const ProjectTabs = (props: IProjectTabs) => {
 	if (projectData?.verified)
 		tabsArray.push({
 			title: 'label.givpower',
-			badge: boostersData?.totalCount,
+			badge: boostersData?.powerBoostings.length,
 		});
 
 	return (

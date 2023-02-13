@@ -3,6 +3,7 @@ import { isProduction } from '@/configuration';
 import Routes from '@/lib/constants/Routes';
 
 const DOCS = 'https://docs.giveth.io/';
+const GIVDROP_DOC = DOCS + 'giveconomy/givdrop/';
 const DISCOURSE = 'https://forum.giveth.io/';
 const TYPEFORM = 'https://giveth.typeform.com/';
 
@@ -28,9 +29,12 @@ const links = {
 	GIVSTREAM_DOCS: DOCS + 'giveconomy/givstream',
 	GIVBACK_DOC: DOCS + 'giveconomy/givbacks',
 	GIVPOWER_DOC: DOCS + 'giveconomy/givpower',
+	GIVGARDEN_DOC: DOCS + 'giveconomy/givgarden',
+	GIVDROP_DOC,
+	CLAIM_GIVDROP_DOC: GIVDROP_DOC + '#claiming-your-givdrop',
+	NICE_DOC: DOCS + 'giveconomy/niceToken',
 	COVENANT_DOC: DOCS + 'whatisgiveth/covenant/',
 	GIVETH_DOCS: DOCS + 'whatisgiveth/',
-	NICE_DOC: DOCS + 'giveconomy/niceToken',
 	USER_DOCS: DOCS + 'dapps/',
 	DEVELOPER_DOCS: DOCS + 'dapps/givethioinstallation',
 	CAMPAIGN_DOCS: DOCS + 'dapps/entitiesAndRoles/#campaigns',
