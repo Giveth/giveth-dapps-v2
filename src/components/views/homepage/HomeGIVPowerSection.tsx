@@ -43,6 +43,7 @@ const Wrapper = styled(HomeContainer)`
 	position: relative;
 	cursor: pointer;
 	min-height: 550px;
+	max-width: 200px:
 	border-radius: 12px;
 	overflow: hidden;
 	box-shadow: ${Shadow.Neutral[400]};
