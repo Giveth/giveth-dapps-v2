@@ -25,7 +25,6 @@ const HomeIndex: FC<IHomeRoute> = props => {
 			<Separator />
 			<ProjectUpdatesBlock projects={projects} />
 			<LatestUpdatesBlock />
-			<Separator />
 			<HomeFromBlog />
 			<HomeGetUpdates />
 		</Wrapper>
