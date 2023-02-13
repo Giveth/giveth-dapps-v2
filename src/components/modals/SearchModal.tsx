@@ -2,6 +2,7 @@ import { FC, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { brandColors, H6, Lead, neutralColors } from '@giveth/ui-design-system';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -34,8 +35,14 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 	const [term, setTerm] = useState<string>('');
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { theme, mainCategories } = useAppSelector(state => state.general);
+	const router = useRouter();
 
-	useEffect(() => {}, [term]);
+	useEffect(() => {
+		if (term) {
+			router.push(`${Routes.Projects}?term=${term}`);
+			closeModal();
+		}
+	}, [closeModal, router, term]);
 
 	return (
 		<StyledModal
