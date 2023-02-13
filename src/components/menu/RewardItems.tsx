@@ -1,4 +1,8 @@
-import { B, IconHelpFilled16 } from '@giveth/ui-design-system';
+import {
+	B,
+	IconHelpFilled16,
+	OutlineLinkButton,
+} from '@giveth/ui-design-system';
 import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
@@ -181,6 +185,14 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 					</Flex>
 				</Item>
 			</Link>
+			<OutlineLinkButton
+				isExternal
+				label='Get GIV Token'
+				size='small'
+				linkType='primary'
+				href={config.XDAI_CONFIG.GIV.BUY_LINK}
+				target='_blank'
+			/>
 			{showWhatIsGIVstreamModal && (
 				<WhatisStreamModal
 					tokenDistroHelper={givTokenDistroHelper}
