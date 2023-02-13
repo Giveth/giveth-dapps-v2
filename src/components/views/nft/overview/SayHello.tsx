@@ -11,6 +11,7 @@ import { mediaQueries } from '@/lib/constants/constants';
 const SayHelloSection = () => {
 	return (
 		<OverviewContainer>
+			{/* <Wrapper> */}
 			<Container>
 				<FlexContainer>
 					<Flex flexDirection='column' gap='24px'>
@@ -39,6 +40,7 @@ const SayHelloSection = () => {
 			</Container>
 			<OvalVerticalGradient />
 			<OvalHorizontalGradient />
+			{/* </Wrapper> */}
 		</OverviewContainer>
 	);
 };
@@ -46,6 +48,17 @@ const SayHelloSection = () => {
 const OverviewContainer = styled.div`
 	padding-top: 200px;
 	position: relative;
+	::before {
+		content: ' ';
+		position: absolute;
+		background-image: url('/images/GIV_homepage.svg');
+		width: 100%;
+		height: 100%;
+		max-height: 450px;
+		z-index: 2;
+		opacity: 0.15;
+		overflow: hidden;
+	}
 `;
 
 const FlexContainer = styled(Flex)`
@@ -66,6 +79,12 @@ const CustomImage = styled(Image)`
 	${mediaQueries.laptopS} {
 		display: inline-block;
 	}
+`;
+
+const Wrapper = styled.div`
+	height: 650px;
+	position: relative;
+	background-image: url('/images/GIV_homepage.svg');
 `;
 
 export default SayHelloSection;
