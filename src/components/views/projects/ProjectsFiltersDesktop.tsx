@@ -1,6 +1,7 @@
 import { IconSearch, IconX } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import ProjectsSearchDesktop from '@/components/views/projects/ProjectsSearchDesktop';
 import ProjectsFiltersSwiper from '@/components/views/projects/ProjectsFiltersSwiper';
 import ProjectsSubCategories from '@/components/views/projects/ProjectsSubCategories';
@@ -15,6 +16,12 @@ import ProjectsFiltersButton from '@/components/views/projects/ProjectsFiltersBu
 const ProjectsFiltersDesktop = () => {
 	const { selectedMainCategory } = useProjectsContext();
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
+	const router = useRouter();
+
+	useEffect(() => {
+		if (router.query.term) setIsSearchOpen(true);
+	}, [router.query.term]);
+
 	const toggleSearch = () => setIsSearchOpen(!isSearchOpen);
 
 	return (
