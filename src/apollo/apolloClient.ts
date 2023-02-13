@@ -115,6 +115,7 @@ function createApolloClient() {
 			graphQLErrors.forEach(({ message, locations, path }) => {
 				console.log(`[GraphQL error]: ${message}`, { locations, path });
 				if (message.toLowerCase().includes('authentication required')) {
+					console.log(Date.now(), 'sign out from graphQL');
 					//   removes token and user from store
 					store.dispatch(signOut()).finally(() => {
 						//show signin modal
