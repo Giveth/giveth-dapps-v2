@@ -33,7 +33,7 @@ const quickLinks = [
 export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 	const [term, setTerm] = useState<string>('');
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const theme = useAppSelector(state => state.general.theme);
+	const { theme, mainCategories } = useAppSelector(state => state.general);
 
 	useEffect(() => {}, [term]);
 
@@ -97,10 +97,15 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 							<Title size='large' theme={theme}>
 								Popular categories
 							</Title>
-							{quickLinks.map((item, idx) => (
-								<Item key={idx} theme={theme}>
-									{item.title}
-								</Item>
+							{mainCategories.map((item, idx) => (
+								<Link
+									key={idx}
+									href={Routes.Projects + item.slug}
+								>
+									<Item theme={theme} onClick={closeModal}>
+										{item.title}
+									</Item>
+								</Link>
 							))}
 						</Flex>
 					</Col>
