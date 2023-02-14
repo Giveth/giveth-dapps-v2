@@ -10,6 +10,7 @@ import {
 	neutralColors,
 	P,
 	IconRocketInSpace16,
+	IconFast16,
 } from '@giveth/ui-design-system';
 import Select, {
 	components,
@@ -61,6 +62,11 @@ const sortByOptions = [
 		label: 'Most funded',
 		value: ESortbyAllProjects.MOSTFUNDED,
 		icon: <IconDonation16 color={brandColors.deep[900]} />,
+	},
+	{
+		label: 'RecentlyUpdated',
+		value: ESortbyAllProjects.RECENTLY_UPDATED,
+		icon: <IconFast16 color={brandColors.deep[900]} />,
 	},
 ];
 
