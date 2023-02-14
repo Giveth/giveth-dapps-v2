@@ -38,6 +38,7 @@ interface IPFPData {
 
 export const MintCard = () => {
 	const [qtyNFT, setQtyNFT] = useState('1');
+	const [errorMsg, setErrorMsg] = useState('');
 	const [showMintModal, setShowMintModal] = useState(false);
 	const [showInsufficientFundModal, setShowInsufficientFundModal] =
 		useState(false);
@@ -84,11 +85,29 @@ export const MintCard = () => {
 		//handle number
 		const _qty = Number.parseInt(event.target.value);
 
-		//handle range
-		if (_qty > pfpData.maxMintAmount || _qty < MIN_NFT_QTY) return;
-
 		if (Number.isInteger(_qty)) setQtyNFT('' + _qty);
 	}
+
+	useEffect(() => {
+		//handle range
+		const _qty = Number(qtyNFT);
+		if (pfpData && _qty > pfpData.maxMintAmount)
+			return setErrorMsg(
+				'You can’t mint more than the max mint amount per transaction. ',
+			);
+
+		if (_qty < MIN_NFT_QTY)
+			return setErrorMsg('Specify an amount greater than 0');
+
+		if (
+			pfpData?.maxSupply &&
+			pfpData?.totalSupply &&
+			_qty > pfpData?.maxSupply - pfpData?.totalSupply
+		)
+			return setErrorMsg('Oops! You can’t mint over current NFT supply.');
+
+		setErrorMsg('');
+	}, [pfpData, qtyNFT]);
 
 	async function handleMint() {
 		if (!config.MAINNET_CONFIG.DAI_CONTRACT_ADDRESS) return;
@@ -116,7 +135,7 @@ export const MintCard = () => {
 	return (
 		<>
 			<MintCardContainer>
-				<InputWrapper gap='16px' flexDirection='column'>
+				<InputWrapper gap='8px' flexDirection='column'>
 					<Flex justifyContent='space-between'>
 						<GLink size='Small'>NFT Amount</GLink>
 						<MaxLink
@@ -133,11 +152,13 @@ export const MintCard = () => {
 						type='number'
 						value={qtyNFT}
 						onChange={onChangeHandler}
+						hasError={!!errorMsg}
 					/>
 					<InputHint>
 						{pfpData?.totalSupply ? pfpData.totalSupply : '-'}/
 						{pfpData?.maxSupply ? pfpData.maxSupply : '-'} Minted
 					</InputHint>
+					<ErrorPlaceHolder>{errorMsg}</ErrorPlaceHolder>
 				</InputWrapper>
 				<InfoBox gap='16px' flexDirection='column'>
 					<Flex justifyContent='space-between'>
@@ -182,7 +203,7 @@ export const MintCard = () => {
 						label={formatMessage({ id: 'label.mint' })}
 						buttonType='primary'
 						onClick={handleMint}
-						disabled={Number(qtyNFT) < 1 || !pfpData}
+						disabled={Number(qtyNFT) < 1 || !pfpData || !!errorMsg}
 					/>
 				)}
 			</MintCardContainer>
@@ -215,15 +236,22 @@ const MintCardContainer = styled.div`
 `;
 
 const InputWrapper = styled(Flex)`
-	margin-bottom: 24px;
+	margin-bottom: 16px;
 `;
 
-const StyledInput = styled(P)`
+interface IStyledInput {
+	hasError: boolean;
+}
+
+const StyledInput = styled(P)<IStyledInput>`
 	padding: 15px 16px;
 	width: 100%;
-	color: ${brandColors.giv[200]};
+	color: ${props =>
+		props.hasError ? semanticColors.punch[500] : brandColors.giv[200]};
 	background-color: ${brandColors.giv[700]};
-	border: 1px solid ${brandColors.giv[500]};
+	border: 1px solid
+		${props =>
+			props.hasError ? semanticColors.punch[500] : brandColors.giv[500]};
 	border-radius: 8px;
 	&::-webkit-inner-spin-button {
 		-webkit-appearance: none;
@@ -257,4 +285,9 @@ const MintButton = styled(Button)`
 	margin: auto;
 	width: 100%;
 	max-width: 332px;
+`;
+
+const ErrorPlaceHolder = styled(GLink)`
+	min-height: 44px;
+	color: ${semanticColors.punch[700]};
 `;
