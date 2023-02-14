@@ -37,6 +37,7 @@ export const ItemContainer = styled(Flex)<{ isHighlighted?: boolean }>`
 	gap: 6px;
 	flex-direction: column;
 	border-radius: 8px;
+	position: relative;
 	background-color: ${props =>
 		props.isHighlighted
 			? props.theme === ETheme.Dark
