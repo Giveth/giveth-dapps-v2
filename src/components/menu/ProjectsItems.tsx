@@ -9,10 +9,10 @@ import { Item } from './Item';
 
 const projectsItems = {
 	explore: [
-		{ name: 'Trending', query: '?q=?q=trending' },
+		// { name: 'Trending', query: '?q=?q=trending' },
 		{ name: 'Recently updated', query: '?q=recently' },
 		{ name: 'Just launched', query: '?q=new' },
-		{ name: 'Popular', query: '?q=popular' },
+		// { name: 'Popular', query: '?q=popular' },
 		{ name: 'All projects', query: '' },
 	],
 };
