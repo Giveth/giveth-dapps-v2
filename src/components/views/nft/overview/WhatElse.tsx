@@ -56,7 +56,7 @@ const WhatElseContainer = styled.div`
 		background-image: url('/images/GIV_homepage.svg');
 		width: 100%;
 		height: 100%;
-		max-height: 450px;
+		max-height: 400px;
 		z-index: 2;
 		opacity: 0.15;
 		overflow: hidden;
