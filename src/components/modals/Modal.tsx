@@ -18,7 +18,7 @@ interface ModalWrapperProps {
 	fullScreen?: boolean;
 }
 
-interface IModal extends ModalWrapperProps {
+interface IModal {
 	fullScreen?: boolean;
 	closeModal: () => void;
 	callback?: () => void;
@@ -32,6 +32,7 @@ interface IModal extends ModalWrapperProps {
 	headerColor?: string;
 	children: ReactNode;
 	doNotCloseOnClickOutside?: boolean;
+	className?: string;
 }
 
 export const Modal: FC<IModal> = ({
@@ -47,6 +48,7 @@ export const Modal: FC<IModal> = ({
 	fullScreen = false,
 	headerColor,
 	doNotCloseOnClickOutside,
+	className,
 }) => {
 	const theme = useAppSelector(state => state.general.theme);
 	const el = useRef(document.createElement('div'));
@@ -85,7 +87,11 @@ export const Modal: FC<IModal> = ({
 			onClick={e => e.stopPropagation()}
 		>
 			{!doNotCloseOnClickOutside && <Surrounding onClick={closeModal} />}
-			<ModalWrapper fullScreen={fullScreen} theme={customTheme || theme}>
+			<ModalWrapper
+				fullScreen={fullScreen}
+				theme={customTheme || theme}
+				className={className}
+			>
 				<ModalHeader
 					hiddenClose={hiddenClose}
 					hiddenHeader={hiddenHeader}

@@ -1,4 +1,4 @@
-import React, { ComponentType, ReactElement } from 'react';
+import React, { ComponentType, ReactElement, useEffect, useState } from 'react';
 import {
 	IconCaretUp,
 	IconCaretDown,
@@ -10,6 +10,7 @@ import {
 	neutralColors,
 	P,
 	IconRocketInSpace16,
+	IconFast16,
 } from '@giveth/ui-design-system';
 import Select, {
 	components,
@@ -19,6 +20,7 @@ import Select, {
 } from 'react-select';
 
 import styled from 'styled-components';
+import { useRouter } from 'next/router';
 import { ESortbyAllProjects } from '@/apollo/types/gqlEnums';
 import selectCustomStyles from '@/lib/constants/selectCustomStyles';
 import { useProjectsContext } from '@/context/projects.context';
@@ -28,7 +30,7 @@ import useDetectDevice from '@/hooks/useDetectDevice';
 export interface ISelectedSort {
 	icon: ReactElement;
 	label: string;
-	value: string;
+	value: ESortbyAllProjects;
 }
 
 const DropdownIndicator: ComponentType<DropdownIndicatorProps> = props => {
@@ -61,11 +63,29 @@ const sortByOptions = [
 		value: ESortbyAllProjects.MOSTFUNDED,
 		icon: <IconDonation16 color={brandColors.deep[900]} />,
 	},
+	{
+		label: 'RecentlyUpdated',
+		value: ESortbyAllProjects.RECENTLY_UPDATED,
+		icon: <IconFast16 color={brandColors.deep[900]} />,
+	},
 ];
 
 const ProjectsSortSelect = () => {
+	const [value, setValue] = useState(sortByOptions[0]);
 	const { variables, setVariables } = useProjectsContext();
 	const { isMobile } = useDetectDevice();
+	const router = useRouter();
+
+	useEffect(() => {
+		if (router.query.sort) {
+			const _value = sortByOptions.find(
+				option =>
+					option.value.toLowerCase() ===
+					(router.query.sort as string).toLowerCase(),
+			);
+			if (_value) setValue(_value);
+		}
+	}, [router.query.sort]);
 
 	return (
 		<Flex
@@ -79,13 +99,14 @@ const ProjectsSortSelect = () => {
 					DropdownIndicator,
 					Option: (props: any) => <Option {...props} />,
 				}}
-				onChange={(e: any) =>
+				onChange={(e: any) => {
 					setVariables({
 						...variables,
 						sortingBy: e.value,
-					})
-				}
-				defaultValue={sortByOptions[0]}
+					});
+					setValue(e);
+				}}
+				value={value}
 				options={sortByOptions}
 				styles={selectStyles}
 				id='sorting'

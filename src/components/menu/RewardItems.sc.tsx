@@ -23,3 +23,9 @@ export const IconHelpWrapper = styled.div`
 	cursor: pointer;
 	color: ${brandColors.deep[100]};
 `;
+
+export const ForwardWrapper = styled.div`
+	position: absolute;
+	top: 22px;
+	right: 16px;
+`;

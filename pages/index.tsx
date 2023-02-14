@@ -49,7 +49,6 @@ const HomeRoute = (props: IHomeRoute) => {
 	const user = useAppSelector(state => state.user.userData);
 	const [projects, setProjects] = useState(props.projects);
 	const [totalCount, setTotalCount] = useState(props.totalCount);
-
 	useEffect(() => {
 		if (!user) return;
 		fetchProjects(user?.id).then(({ projects, totalCount }) => {

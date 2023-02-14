@@ -5,9 +5,10 @@ import type { GraphQLErrors } from '@apollo/client/errors';
 
 export function sendRequest(
 	url: string,
-	method: 'POST' | 'GET',
+	method: 'POST' | 'GET' | 'PUT',
 	authorization: boolean = false,
 	body?: {},
+	query?: {},
 	additionalHeaders: HeadersInit = {},
 	additionalOptions: RequestInit = {},
 ) {
@@ -26,7 +27,7 @@ export function sendRequest(
 		  }
 		: { ...defaultHeaders };
 	try {
-		return fetch(url, {
+		return fetch(url + '?' + new URLSearchParams(query), {
 			method,
 			headers,
 			body: JSON.stringify(body),
@@ -37,7 +38,8 @@ export function sendRequest(
 			} else {
 				const errorObject = await response.json();
 				const errorMessage =
-					errorObject?.errors[0]?.message ?? 'An error occurred';
+					(errorObject.message || errorObject?.errors[0]?.message) ??
+					'An error occurred';
 				return Promise.reject(new Error(errorMessage));
 			}
 		});
@@ -49,6 +51,7 @@ export function sendRequest(
 export function getRequest(
 	url: string,
 	authorization: boolean = false,
+	query: {} = {},
 	additionalHeaders: HeadersInit = {},
 	additionalOptions: RequestInit = {},
 ) {
@@ -57,6 +60,7 @@ export function getRequest(
 		'GET',
 		authorization,
 		undefined,
+		query,
 		additionalHeaders,
 		additionalOptions,
 	);
@@ -74,6 +78,25 @@ export function postRequest(
 		'POST',
 		authorization,
 		body,
+		undefined,
+		additionalHeaders,
+		additionalOptions,
+	);
+}
+
+export function putRequest(
+	url: string,
+	authorization: boolean = false,
+	body: {} = {},
+	additionalHeaders: HeadersInit = {},
+	additionalOptions: RequestInit = {},
+) {
+	return sendRequest(
+		url,
+		'PUT',
+		authorization,
+		body,
+		undefined,
 		additionalHeaders,
 		additionalOptions,
 	);
