@@ -25,6 +25,7 @@ import PriceController from '@/components/controller/price.ctrl';
 import GeneralController from '@/components/controller/general.ctrl';
 import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
 import StorageLabel from '@/lib/localStorage';
+import NotificationController from '@/components/controller/notification.ctrl';
 
 import type { AppProps } from 'next/app';
 
@@ -110,6 +111,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 				>
 					<ApolloProvider client={apolloClient}>
 						<Web3ReactProvider getLibrary={getLibrary}>
+							<NotificationController />
 							<GeneralController />
 							<PriceController />
 							<SubgraphController />
