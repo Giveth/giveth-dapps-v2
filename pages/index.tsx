@@ -41,7 +41,7 @@ const fetchTurkeyReliefProjects = async () => {
 	const variables: any = {
 		skip: 0,
 		slugs: [
-			'Giveth-Matching-Pool-0',
+			'earthquake-relief-qf-matching-pool',
 			'gnosisdao-earthquake-relief',
 			'banklessdao-turkey-disaster-relief-fund',
 			'graceaid-earthquake-relief',
