@@ -6,12 +6,20 @@ import { useAppSelector } from '@/features/hooks';
 import { Flex } from '../styled-components/Flex';
 import { HighlightSection } from './common';
 import { Item } from './Item';
+import { ESortbyAllProjects } from '@/apollo/types/gqlEnums';
+import Routes from '@/lib/constants/Routes';
 
 const projectsItems = {
 	explore: [
 		// { name: 'Trending', query: '?q=?q=trending' },
-		{ name: 'Recently updated', query: '?q=recently' },
-		{ name: 'Just launched', query: '?q=new' },
+		{
+			name: 'Recently updated',
+			query: '?sort=' + ESortbyAllProjects.RECENTLY_UPDATED,
+		},
+		{
+			name: 'Just launched',
+			query: '?sort=' + ESortbyAllProjects.NEWEST,
+		},
 		// { name: 'Popular', query: '?q=popular' },
 		{ name: 'All projects', query: '' },
 	],
@@ -33,7 +41,10 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 					flexDirection={inSidebar ? 'column' : undefined}
 				>
 					{projectsItems.explore.map((explore, idx) => (
-						<Link key={idx} href={`/projects${explore.query}`}>
+						<Link
+							key={idx}
+							href={`${Routes.Projects}${explore.query}`}
+						>
 							<Item theme={theme} isHighlighted>
 								<B>{explore.name}</B>
 							</Item>
@@ -45,7 +56,10 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 				<Label medium>BY CATEGORY</Label>
 				<CategoriesGrid inSidebar={inSidebar}>
 					{mainCategories.map((category, idx) => (
-						<Link key={idx} href={`/projects/${category.slug}`}>
+						<Link
+							key={idx}
+							href={`${Routes.Projects}/${category.slug}`}
+						>
 							<Item theme={theme}>
 								<GLink size='Big'>{category.title}</GLink>
 							</Item>
