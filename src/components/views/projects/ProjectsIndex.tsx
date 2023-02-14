@@ -85,10 +85,12 @@ const ProjectsIndex = (props: IProjectsView) => {
 		const variables: any = {
 			skip: 0,
 			slugs: [
+				'Giveth-Matching-Pool-0',
 				'gnosisdao-earthquake-relief',
 				'banklessdao-turkey-disaster-relief-fund',
 				'graceaid-earthquake-relief',
 				'anka-relief',
+				'earthquake-relief-qf-matching-pool',
 			],
 		};
 		try {
