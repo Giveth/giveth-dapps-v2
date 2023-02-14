@@ -53,7 +53,7 @@ const OverviewContainer = styled.div`
 		width: 100%;
 		height: 100%;
 		max-height: 450px;
-		z-index: 2;
+		z-index: 1;
 		opacity: 0.15;
 		overflow: hidden;
 	}
