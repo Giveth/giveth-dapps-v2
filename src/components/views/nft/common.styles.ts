@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { mediaQueries } from '@/lib/constants/constants';
 
 export const OvalVerticalGradient = styled.div`
 	position: absolute;
@@ -10,7 +11,10 @@ export const OvalVerticalGradient = styled.div`
 	height: 477px;
 	width: 340px;
 	top: 20%;
-	left: 20%;
+	left: 0;
+	${mediaQueries.tablet} {
+		left: 20%;
+	}
 `;
 
 export const OvalHorizontalGradient = styled.div`

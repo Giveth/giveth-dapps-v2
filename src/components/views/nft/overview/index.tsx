@@ -14,6 +14,8 @@ const OverviewIndex = () => {
 			<Separator />
 			<WhatElse />
 			<Separator />
+			<Separator />
+			<Separator />
 			<CheckEligibility />
 		</div>
 	);
