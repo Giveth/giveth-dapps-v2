@@ -102,6 +102,7 @@ export const getStaticProps: GetStaticProps = async context => {
 			revalidate: 600,
 		};
 	} catch (error: any) {
+		console.log('error', error);
 		const statusCode = transformGraphQLErrorsToStatusCode(
 			error?.graphQLErrors,
 		);
