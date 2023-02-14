@@ -1,10 +1,15 @@
 import { useEffect, useState } from 'react';
+import { GetStaticProps } from 'next/types';
 
 import HomeIndex from '@/components/views/homepage/HomeIndex';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { ESortbyAllProjects } from '@/apollo/types/gqlEnums';
-import { IProject, IRecentDonation } from '@/apollo/types/types';
+import {
+	IProject,
+	IProjectUpdateWithProject,
+	IRecentDonation,
+} from '@/apollo/types/types';
 import { useAppSelector } from '@/features/hooks';
 import { homeMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
@@ -18,6 +23,7 @@ export interface IHomeRoute {
 	projectsPerDate: { total: number };
 	totalDonorsCountPerDate: { total: number };
 	donationsTotalUsdPerDate: { total: number };
+	latestUpdates: IProjectUpdateWithProject[];
 }
 
 const fetchProjects = async (userId: string | undefined = undefined) => {
@@ -36,16 +42,6 @@ const fetchProjects = async (userId: string | undefined = undefined) => {
 	});
 
 	return data.allProjects;
-};
-
-const dateFormat = (d: Date) => {
-	// return date with day precision for caching efficiency
-	// Add year by one to ensure fetching new data
-	const ISODate = d.toISOString();
-	const nextYear = d.getUTCFullYear() + 1;
-	const year = d.getUTCFullYear();
-	const date = ISODate.replace(year.toString(), nextYear.toString());
-	return date.split('T')[0];
 };
 
 const HomeRoute = (props: IHomeRoute) => {
@@ -69,18 +65,15 @@ const HomeRoute = (props: IHomeRoute) => {
 	);
 };
 
-export async function getServerSideProps({ res }: any) {
-	res.setHeader(
-		'Cache-Control',
-		'public, s-maxage=10, stale-while-revalidate=59',
-	);
+export const getStaticProps: GetStaticProps = async context => {
 	try {
 		const { data } = await client.query({
 			query: HOMEPAGE_DATA,
 			variables: {
 				take: 50,
+				takeLatestUpdates: 50,
+				skipLatestUpdates: 0,
 				fromDate: '2021-01-01',
-				toDate: dateFormat(new Date()),
 				limit: 12,
 				sortingBy: ESortbyAllProjects.GIVPOWER,
 			},
@@ -94,9 +87,12 @@ export async function getServerSideProps({ res }: any) {
 				projectsPerDate: data.projectsPerDate,
 				totalDonorsCountPerDate: data.totalDonorsCountPerDate,
 				donationsTotalUsdPerDate: data.donationsTotalUsdPerDate,
+				latestUpdates: data.projectUpdates.projectUpdates,
 			},
+			revalidate: 600,
 		};
 	} catch (error: any) {
+		console.log('error', error);
 		const statusCode = transformGraphQLErrorsToStatusCode(
 			error?.graphQLErrors,
 		);
@@ -106,6 +102,6 @@ export async function getServerSideProps({ res }: any) {
 			},
 		};
 	}
-}
+};
 
 export default HomeRoute;

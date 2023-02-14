@@ -1,48 +1,50 @@
 import Image from 'next/image';
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import { H6, neutralColors, P, SublineBold } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	H6,
+	neutralColors,
+	P,
+	SublineBold,
+} from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { Flex } from '@/components/styled-components/Flex';
-import { IProjectUpdate } from '@/apollo/types/types';
+import { IProjectUpdateWithProject } from '@/apollo/types/types';
 import { getNowUnixMS } from '@/helpers/time';
 import { durationToString } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
 
 interface ILatestUpdateCardProps {
-	projectUpdate: IProjectUpdate;
-	project: {
-		image: string;
-		slug: string;
-	};
+	update: IProjectUpdateWithProject;
 }
 
-export const LatestUpdateCard: FC<ILatestUpdateCardProps> = ({
-	projectUpdate,
-	project,
-}) => {
+export const LatestUpdateCard: FC<ILatestUpdateCardProps> = ({ update }) => {
 	return (
-		<Link href={`${Routes.Project}/${project.slug}`}>
+		<Link href={`${Routes.Project}/${update.project.slug}`}>
 			<LatestUpdateCardContainer>
 				<ImageWrapper>
-					<Image
-						fill
-						src={project.image || ''}
-						alt=''
-						style={{ objectFit: 'cover' }}
-					/>
+					{update.project.image?.startsWith('http') && (
+						<Image
+							fill
+							src={update.project.image || ''}
+							alt=''
+							style={{ objectFit: 'cover' }}
+						/>
+					)}
 				</ImageWrapper>
 				<Content>
 					<Time>
 						{durationToString(
-							getNowUnixMS() - Number(projectUpdate.createdAt),
+							getNowUnixMS() -
+								new Date(update.createdAt).getTime(),
 							1,
 						) + ' ago'}
 					</Time>
-					<Title>{projectUpdate.title}</Title>
+					<Title>{update.title}</Title>
 					<Desc
 						dangerouslySetInnerHTML={{
-							__html: projectUpdate.content,
+							__html: update.content,
 						}}
 					/>
 				</Content>
@@ -62,6 +64,7 @@ const ImageWrapper = styled.div`
 	overflow: hidden;
 	position: relative;
 	border-radius: 8px;
+	background-color: ${brandColors.giv[500]};
 `;
 
 const Content = styled.div`
