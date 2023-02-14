@@ -44,14 +44,6 @@ const fetchProjects = async (userId: string | undefined = undefined) => {
 	return data.allProjects;
 };
 
-const dateFormat = (d: Date) => {
-	// return date with hour precision for caching efficiency
-	const ISODate = d.toISOString();
-	const date = ISODate.split('T')[0];
-	const hour = d.getHours();
-	return `${date}T${hour}:00:00.000Z`;
-};
-
 const HomeRoute = (props: IHomeRoute) => {
 	const { projects: _projects, totalCount: _totalCount, ...rest } = props;
 	const user = useAppSelector(state => state.user.userData);
@@ -83,7 +75,6 @@ export const getStaticProps: GetStaticProps = async context => {
 				takeLatestUpdates: 50,
 				skipLatestUpdates: 0,
 				fromDate: '2021-01-01',
-				toDate: dateFormat(new Date()),
 				limit: 12,
 				sortingBy: ESortbyAllProjects.GIVPOWER,
 			},
