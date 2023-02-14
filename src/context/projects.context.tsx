@@ -73,6 +73,9 @@ export const ProjectsProvider = (props: {
 				case ESortbyAllProjects.GIVPOWER.toLowerCase():
 					sort = ESortbyAllProjects.GIVPOWER;
 					break;
+				case ESortbyAllProjects.RECENTLY_UPDATED.toLowerCase():
+					sort = ESortbyAllProjects.RECENTLY_UPDATED;
+					break;
 				default:
 					break;
 			}
