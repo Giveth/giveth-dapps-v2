@@ -91,12 +91,20 @@ export const MintCard = () => {
 	useEffect(() => {
 		//handle range
 		const _qty = Number(qtyNFT);
-		if ((pfpData && _qty > pfpData.maxMintAmount) || _qty < MIN_NFT_QTY)
+		if (pfpData && _qty > pfpData.maxMintAmount)
 			return setErrorMsg(
 				'You can’t mint more than the max mint amount per transaction. ',
 			);
+
 		if (_qty < MIN_NFT_QTY)
 			return setErrorMsg('You can’t mint more than the required amount.');
+
+		if (
+			pfpData?.maxSupply &&
+			pfpData?.totalSupply &&
+			_qty > pfpData?.maxSupply - pfpData?.totalSupply
+		)
+			return setErrorMsg('Oops! You can’t mint over current NFT supply.');
 
 		setErrorMsg('');
 	}, [pfpData, qtyNFT]);
@@ -195,7 +203,7 @@ export const MintCard = () => {
 						label={formatMessage({ id: 'label.mint' })}
 						buttonType='primary'
 						onClick={handleMint}
-						disabled={Number(qtyNFT) < 1 || !pfpData}
+						disabled={Number(qtyNFT) < 1 || !pfpData || !!errorMsg}
 					/>
 				)}
 			</MintCardContainer>
@@ -227,7 +235,9 @@ const MintCardContainer = styled.div`
 	}
 `;
 
-const InputWrapper = styled(Flex)``;
+const InputWrapper = styled(Flex)`
+	margin-bottom: 16px;
+`;
 
 interface IStyledInput {
 	hasError: boolean;
