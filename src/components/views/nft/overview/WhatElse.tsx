@@ -50,6 +50,17 @@ const WhatElse = () => {
 const WhatElseContainer = styled.div`
 	padding-top: 100px;
 	position: relative;
+	::before {
+		content: ' ';
+		position: absolute;
+		background-image: url('/images/GIV_homepage.svg');
+		width: 100%;
+		height: 100%;
+		max-height: 450px;
+		z-index: 2;
+		opacity: 0.15;
+		overflow: hidden;
+	}
 `;
 
 const ContentContainer = styled.div`
