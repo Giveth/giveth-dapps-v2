@@ -15,6 +15,7 @@ export enum ESortbyAllProjects {
 	MOSTLIKED = 'MostLiked',
 	NEWEST = 'Newest',
 	OLDEST = 'Oldest',
+	RECENTLY_UPDATED = 'RecentlyUpdated',
 	QUALITYSCORE = 'QualityScore',
 	GIVPOWER = 'GIVPower',
 }

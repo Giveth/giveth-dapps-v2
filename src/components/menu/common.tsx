@@ -32,33 +32,6 @@ export const HighlightSection = styled.div`
 	border-radius: 16px;
 `;
 
-export const ItemContainer = styled(Flex)<{ isHighlighted?: boolean }>`
-	padding: 8px;
-	gap: 6px;
-	flex-direction: column;
-	border-radius: 8px;
-	position: relative;
-	background-color: ${props =>
-		props.isHighlighted
-			? props.theme === ETheme.Dark
-				? brandColors.giv[500]
-				: neutralColors.gray[200]
-			: 'unset'};
-	&:hover {
-		background-color: ${props =>
-			// props.isHighlighted
-			// 	? props.theme === ETheme.Dark
-			// 		? brandColors.giv[700]
-			// 		: neutralColors.gray[400]
-			// 	:
-			props.theme === ETheme.Dark
-				? brandColors.giv[500]
-				: neutralColors.gray[200]};
-	}
-	transition: background-color 0.3s ease;
-	cursor: pointer;
-`;
-
 export const ItemTitle = styled(Overline)`
 	color: ${props =>
 		props.theme === ETheme.Dark

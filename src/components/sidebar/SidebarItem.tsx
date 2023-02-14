@@ -18,15 +18,18 @@ interface ISidebarItem {
 
 interface ISidebarItemProps {
 	item: ISidebarItem;
-	children?: ReactNode;
+	children: ReactNode;
 }
 
-export const SidebarItem: FC<ISidebarItemProps> = ({ item, children }) => {
+export const SidebarParentItem: FC<ISidebarItemProps> = ({
+	item,
+	children,
+}) => {
 	const [showChildren, setShowChildren] = useState(false);
 	const theme = useAppSelector(state => state.general.theme);
 
 	return (
-		<ItemContainer flexDirection='column'>
+		<Flex flexDirection='column'>
 			<ItemWrapper
 				justifyContent='space-between'
 				onClick={() => setShowChildren(s => !s)}
@@ -37,11 +40,9 @@ export const SidebarItem: FC<ISidebarItemProps> = ({ item, children }) => {
 			{showChildren && children && (
 				<ChildrenWrapper theme={theme}>{children}</ChildrenWrapper>
 			)}
-		</ItemContainer>
+		</Flex>
 	);
 };
-
-const ItemContainer = styled(Flex)``;
 
 const ItemWrapper = styled(Flex)`
 	cursor: pointer;

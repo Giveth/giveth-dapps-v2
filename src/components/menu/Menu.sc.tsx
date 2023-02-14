@@ -11,7 +11,7 @@ interface IMenuContainerProps {
 export const MenuContainer = styled(Flex)<IMenuContainerProps>`
 	position: absolute;
 	flex-direction: column;
-	gap: 16px;
+	gap: 8px;
 	top: 40%;
 	right: 0;
 	width: 276px;

@@ -3,7 +3,12 @@ import { FC, useState, useEffect } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { Button, GLink, IconMenu24 } from '@giveth/ui-design-system';
+import {
+	Button,
+	GLink,
+	IconMenu24,
+	IconSearch24,
+} from '@giveth/ui-design-system';
 
 import { useIntl } from 'react-intl';
 import { Flex, FlexSpacer } from '@/components/styled-components/Flex';
@@ -17,6 +22,7 @@ import {
 	LargeCreateProject,
 	HeaderLink,
 	HomeButton,
+	SearchButton,
 } from './Header.sc';
 import { isUserRegistered } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
@@ -26,6 +32,7 @@ import {
 	setShowWalletModal,
 	setShowWelcomeModal,
 	setShowCompleteProfile,
+	setShowSearchModal,
 } from '@/features/modal/modal.slice';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { fetchNotificationsData } from '@/features/notification/notification.services';
@@ -257,10 +264,19 @@ const Header: FC<IHeader> = () => {
 						<GIVeconomyMenu />
 					</LinkWithMenu>
 					<HeaderLink theme={theme}>
-						<Link href='/nft'>
+						<Link href={Routes.NFT}>
 							<GLink>NFTs</GLink>
 						</Link>
 					</HeaderLink>
+					<SearchButton
+						theme={theme}
+						onClick={() => dispatch(setShowSearchModal(true))}
+					>
+						<Flex alignItems='center' gap='16px'>
+							<GLink>Search projects</GLink>
+							<IconSearch24 />
+						</Flex>
+					</SearchButton>
 				</HeaderLinks>
 			)}
 			<FlexSpacer />
