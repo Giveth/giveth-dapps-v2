@@ -13,12 +13,19 @@ import { captureException } from '@sentry/nextjs';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered, showToastError } from '@/lib/helpers';
-import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
+import {
+	FETCH_ALL_PROJECTS,
+	FETCH_PROJECTS_BY_SLUG,
+} from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { ICategory, IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
-import { deviceSize, mediaQueries } from '@/lib/constants/constants';
+import {
+	BACKEND_QUERY_LIMIT,
+	deviceSize,
+	mediaQueries,
+} from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import ProjectsBanner from './ProjectsBanner';
@@ -26,6 +33,7 @@ import { useProjectsContext } from '@/context/projects.context';
 import ProjectsFiltersDesktop from '@/components/views/projects/ProjectsFiltersDesktop';
 import ProjectsFiltersTablet from '@/components/views/projects/ProjectsFiltersTablet';
 import ProjectsFiltersMobile from '@/components/views/projects/ProjectsFiltersMobile';
+import CampaignBlock from '../homepage/CampaignBlock';
 import LottieControl from '@/components/animations/lottieControl';
 import LoadingAnimation from '@/animations/loading_giv.json';
 import useDetectDevice from '@/hooks/useDetectDevice';
@@ -48,13 +56,13 @@ interface IQueries {
 const ProjectsIndex = (props: IProjectsView) => {
 	const { formatMessage } = useIntl();
 	const { projects, totalCount: _totalCount } = props;
-
 	const user = useAppSelector(state => state.user.userData);
 
 	const [isLoading, setIsLoading] = useState(false);
 	const [filteredProjects, setFilteredProjects] =
 		useState<IProject[]>(projects);
 	const [totalCount, setTotalCount] = useState(_totalCount);
+	const [turkeyReliefProjects, setTurkeyReliefProjects] = useState([]);
 
 	const dispatch = useAppDispatch();
 
@@ -71,11 +79,35 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const isInfiniteScrolling = useRef(true);
 	const { isTablet, isMobile } = useDetectDevice();
 
+	const fetchTurkeyReliefProjects = async () => {
+		const variables: any = {
+			skip: 0,
+			slugs: [
+				'gnosisdao-earthquake-relief',
+				'banklessdao-turkey-disaster-relief-fund',
+				'graceaid-earthquake-relief',
+				'anka-relief',
+			],
+		};
+		try {
+			const { data } = await client.query({
+				query: FETCH_PROJECTS_BY_SLUG,
+				variables,
+				fetchPolicy: 'network-only',
+			});
+			return data.projectsBySlugs;
+		} catch (error) {
+			console.log({ error });
+		}
+	};
+
 	const fetchProjects = useCallback(
 		(isLoadMore?: boolean, loadNum?: number, userIdChanged = false) => {
 			const variables: IQueries = {
 				limit: userIdChanged
-					? filteredProjects.length
+					? filteredProjects.length > 50
+						? BACKEND_QUERY_LIMIT
+						: filteredProjects.length
 					: projects.length,
 				skip: userIdChanged ? 0 : projects.length * (loadNum || 0),
 			};
@@ -84,7 +116,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				variables.connectedWalletUserId = Number(user?.id);
 			}
 
-			if (!userIdChanged) setIsLoading(true);
+			setIsLoading(true);
 			if (
 				contextVariables.mainCategory !== router.query?.slug?.toString()
 			)
@@ -103,6 +135,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 					const data = res.data?.allProjects?.projects;
 					const count = res.data?.allProjects?.totalCount;
 					setTotalCount(count);
+
 					setFilteredProjects(prevProjects => {
 						isInfiniteScrolling.current =
 							(data.length + prevProjects.length) % 45 !== 0;
@@ -230,6 +263,15 @@ const ProjectsIndex = (props: IProjectsView) => {
 		};
 	}, [loadMore]);
 
+	useEffect(() => {
+		const fetchReliefProjects = async () => {
+			const { projects: reliefProjects } =
+				await fetchTurkeyReliefProjects();
+			setTurkeyReliefProjects(reliefProjects);
+		};
+		fetchReliefProjects();
+	}, []);
+
 	return (
 		<>
 			{isLoading && (
@@ -243,6 +285,19 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 			<ProjectsBanner mainCategory={selectedMainCategory} />
 			<Wrapper>
+				{turkeyReliefProjects && turkeyReliefProjects.length > 0 && (
+					<CampaignBlock
+						projects={
+							turkeyReliefProjects
+								?.slice()
+								.sort(
+									(a: IProject, b: IProject) =>
+										b?.totalDonations! - a?.totalDonations!,
+								) || []
+						}
+					/>
+				)}
+
 				<FiltersContainer>
 					{!isTablet && !isMobile && <ProjectsFiltersDesktop />}
 					{isTablet && <ProjectsFiltersTablet />}

@@ -1,5 +1,6 @@
 const MyAccount = '/account';
 const GIVstream = '/givstream';
+const Notifications = '/notifications';
 
 // Public profile and my account
 export const profileTabs = {
@@ -30,6 +31,8 @@ const Routes = {
 	MyBoostedProjects: MyAccount + profileTabs.boosted,
 	Onboard: '/onboard',
 	Verification: '/verification',
+	Notifications,
+	NotificationsSettings: Notifications + '/settings',
 	GIVECONOMY: '/giveconomy',
 	GIVgarden: '/givgarden',
 	GIVfarm: '/givfarm',

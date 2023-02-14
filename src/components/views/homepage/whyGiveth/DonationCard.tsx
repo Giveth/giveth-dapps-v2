@@ -12,7 +12,7 @@ import { Shadow } from '@/components/styled-components/Shadow';
 
 interface IDonationCard {
 	address: string;
-	amount: string;
+	amount: number;
 	projectTitle: string;
 }
 
@@ -24,7 +24,7 @@ const DonationCard: FC<IDonationCard> = props => {
 				<Section>
 					<B>{'@' + shortenAddress(address)}</B>
 					<div>donated</div>
-					<Amount>{'~$' + Number(amount).toFixed(1)}</Amount>
+					<Amount>{'~$' + amount.toFixed(1)}</Amount>
 				</Section>
 				<Section>
 					<Arrow>
@@ -59,7 +59,7 @@ const Amount = styled(B)`
 `;
 
 const CardWrapper = styled.div`
-	padding: 20px 8px;
+	padding: 20px 4px;
 `;
 
 const CardContainer = styled(Flex)`
@@ -70,8 +70,11 @@ const CardContainer = styled(Flex)`
 	flex-direction: column;
 	width: 100%;
 	background: white;
+	cursor: pointer;
+	transition: box-shadow 0.3s ease-in-out;
 	:hover {
 		box-shadow: ${Shadow.Ocean[400]};
+		transition: box-shadow 0.3s ease-in-out;
 	}
 	${mediaQueries.tablet} {
 		border-radius: 100px;

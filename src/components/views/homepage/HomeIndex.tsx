@@ -3,33 +3,28 @@ import styled from 'styled-components';
 import { neutralColors } from '@giveth/ui-design-system';
 import HomeFromBlog from './HomeFromBlog';
 import HomeGetUpdates from './HomeGetUpdates';
-import { IProject } from '@/apollo/types/types';
 import WhyGiveth from '@/components/views/homepage/whyGiveth';
 import CampaignBlock from '@/components/views/homepage/CampaignBlock';
 import IntroBlock from './introBlock';
 import VideoBlock from './videoBlock';
 import { ProjectUpdatesBlock } from './projectUpdatesBlock/ProjectUpdatesBlock';
 import { LatestUpdatesBlock } from './latestUpdates/LatestUpdatesBlock';
+import { IHomeRoute } from '../../../../pages';
 
-interface IHomeView {
-	projects: IProject[];
-	totalCount: number;
-}
-
-const HomeIndex: FC<IHomeView> = ({ projects }) => {
+const HomeIndex: FC<IHomeRoute> = props => {
+	const { projects, ...rest } = props;
 	return (
 		<Wrapper>
 			<IntroBlock />
 			<Separator />
 			<CampaignBlock projects={projects} />
 			<Separator />
-			<WhyGiveth />
+			<WhyGiveth {...rest} />
 			<Separator />
 			<VideoBlock />
 			<Separator />
 			<ProjectUpdatesBlock projects={projects} />
 			<LatestUpdatesBlock />
-			<Separator />
 			<HomeFromBlog />
 			<HomeGetUpdates />
 		</Wrapper>

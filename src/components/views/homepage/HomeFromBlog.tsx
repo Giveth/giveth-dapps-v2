@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { brandColors, SemiTitle } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	ButtonText,
+	H4,
+	IconChevronRight,
+	mediaQueries,
+	neutralColors,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
-
 import { useIntl } from 'react-intl';
-import HomeBlogPost from './HomeBlogPost';
 import { IMediumBlogPost } from '@/apollo/types/types';
-import { HomeContainer } from '@/components/views/homepage/Home.sc';
-import { Col, Row } from '@/components/Grid';
-import { deviceSize } from '@/lib/constants/constants';
+import BlogCard from '@/components/BlogCard';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+import ExternalLink from '@/components/ExternalLink';
+import links from '@/lib/constants/links';
 
 const HomeFromBlog = () => {
 	const [mediumPosts, setMediumPosts] = useState<IMediumBlogPost[]>();
@@ -19,7 +25,7 @@ const HomeFromBlog = () => {
 				'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/giveth/',
 			);
 			const posts = await medium.json();
-			setMediumPosts(posts?.items?.slice(0, 2));
+			setMediumPosts(posts?.items?.slice(0, 3));
 		};
 		getPosts().then();
 	}, []);
@@ -27,36 +33,84 @@ const HomeFromBlog = () => {
 	return (
 		<Wrapper>
 			<Container>
-				<Title>
-					{formatMessage({ id: 'page.home.section.from_blog' })}
-				</Title>
-				{mediumPosts && (
-					<Row>
-						{mediumPosts.map((post: IMediumBlogPost) => (
-							<Col md={6} key={post.guid}>
-								<HomeBlogPost post={post} />
-							</Col>
-						))}
-					</Row>
-				)}
+				<Header>
+					<Title weight={700}>
+						{formatMessage({
+							id: 'page.home.section.recent_posts',
+						})}
+					</Title>
+					<ExternalLink href={links.MEDIUM}>
+						<VisitBlog>
+							<ButtonText size='large'>
+								{formatMessage({
+									id: 'page.home.section.visit_blog',
+								})}
+							</ButtonText>
+							<IconChevronRight size={28} />
+						</VisitBlog>
+					</ExternalLink>
+				</Header>
+				<Cards>
+					{mediumPosts?.map(post => (
+						<BlogCard
+							key={post.guid}
+							title={post.title}
+							description={post.description}
+							image={post.thumbnail}
+							link={post.link}
+							author={post.author}
+							date={post.pubDate}
+						/>
+					))}
+				</Cards>
 			</Container>
 		</Wrapper>
 	);
 };
 
-const Title = styled(SemiTitle)`
+const VisitBlog = styled(FlexCenter)`
 	color: ${brandColors.giv[500]};
+	text-transform: uppercase;
+	gap: 5px;
+`;
+
+const Header = styled(Flex)`
+	margin-bottom: 24px;
+	justify-content: space-between;
+	align-items: center;
+	gap: 35px;
+	flex-direction: column;
+	${mediaQueries.tablet} {
+		flex-direction: row;
+	}
 `;
 
 const Container = styled.div`
 	margin: 0 auto;
-	max-width: ${deviceSize.desktop + 'px'};
+	padding: 0 24px;
+	${mediaQueries.tablet} {
+		padding: 0 40px;
+		width: fit-content;
+	}
 `;
 
-const Wrapper = styled(HomeContainer)`
-	background: url('/images/curves_homepage.svg');
-	padding-top: 90px;
-	padding-bottom: 40px;
+const Cards = styled(Flex)`
+	flex-direction: column;
+	gap: 24px;
+	max-width: 1200px;
+	${mediaQueries.laptopS} {
+		flex-direction: row;
+	}
+`;
+
+const Title = styled(H4)`
+	color: ${neutralColors.gray[600]};
+`;
+
+const Wrapper = styled.div`
+	padding-top: 70px;
+	padding-bottom: 110px;
+	background: ${neutralColors.gray[200]};
 `;
 
 export default HomeFromBlog;

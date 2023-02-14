@@ -472,3 +472,50 @@ export const FETCH_MAIN_CATEGORIES = gql`
 		}
 	}
 `;
+
+export const FETCH_PROJECTS_BY_SLUG = gql`
+	query ($take: Float, $skip: Float, $slugs: [String!]!) {
+		projectsBySlugs(take: $take, skip: $skip, slugs: $slugs) {
+			projects {
+				id
+				title
+				balance
+				description
+				image
+				slug
+				creationDate
+				admin
+				walletAddress
+				impactLocation
+				listed
+				givingBlocksId
+				totalDonations
+				categories {
+					name
+				}
+				reaction {
+					reaction
+					id
+					projectUpdateId
+					userId
+				}
+				addresses {
+					address
+					isRecipient
+					networkId
+				}
+				organization {
+					label
+				}
+				adminUser {
+					firstName
+					email
+					id
+					walletAddress
+				}
+				qualityScore
+			}
+			totalCount
+		}
+	}
+`;

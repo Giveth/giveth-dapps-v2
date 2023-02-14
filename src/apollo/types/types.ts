@@ -161,6 +161,7 @@ export interface IMediumBlogPost {
 	link: string;
 	pubDate: string;
 	guid: string;
+	thumbnail: string;
 }
 
 export interface ICategory {
@@ -290,4 +291,12 @@ export interface IPowerBoosting {
 	user: IUser;
 	project: IProject;
 	percentage: number;
+}
+
+export interface IRecentDonation {
+	createAt: string;
+	id: string;
+	project: { title: string };
+	user: { walletAddress: string };
+	valueUsd: number | null;
 }

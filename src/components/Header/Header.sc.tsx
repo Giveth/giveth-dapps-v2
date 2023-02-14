@@ -4,7 +4,6 @@ import {
 	brandColors,
 	Button,
 	GLink,
-	ButtonLink,
 } from '@giveth/ui-design-system';
 import { zIndex } from '@/lib/constants/constants';
 import { Flex } from '@/components/styled-components/Flex';
@@ -92,6 +91,27 @@ export const BalanceButton = styled(HeaderButton)`
 	position: relative;
 `;
 
+export const NotificationsButton = styled(HeaderButton)`
+	align-items: center;
+	position: relative;
+	background-color: ${props =>
+		props.theme === ETheme.Dark ? brandColors.giv[900] : 'white'};
+`;
+
+export const NotificationsButtonCircle = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+	top: -5%;
+	right: 0;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	color: white;
+	background-color: ${brandColors.pinky[500]};
+`;
+
 export const WalletButton = styled(HeaderButton)`
 	div:nth-child(2) {
 		display: none;
@@ -116,6 +136,11 @@ export const HBContainer = styled.div`
 	display: flex;
 	align-items: center;
 	z-index: 2;
+`;
+
+export const NotificationsIconContainer = styled(HBContainer)`
+	padding-right: 5px;
+	padding-left: 5px;
 `;
 
 export const WBInfo = styled.div`
@@ -198,12 +223,15 @@ export const ConnectButton = styled(Button)`
 	text-transform: uppercase;
 `;
 
-export const SmallCreateProject = styled(ButtonLink)`
+export const SmallCreateProject = styled(Button)`
 	width: 48px;
 	height: 48px;
 	box-shadow: ${props =>
 		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
-	span {
+	> :first-child {
+		display: none;
+	}
+	> span {
 		font-weight: 500;
 		font-size: 20px;
 	}
@@ -211,6 +239,11 @@ export const SmallCreateProject = styled(ButtonLink)`
 
 export const LargeCreateProject = styled.div`
 	display: none;
+	> button {
+		box-shadow: ${props =>
+			props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
+	}
+
 	${mediaQueries.laptopS} {
 		display: unset;
 	}
