@@ -97,7 +97,7 @@ export const MintCard = () => {
 			);
 
 		if (_qty < MIN_NFT_QTY)
-			return setErrorMsg('You can’t mint more than the required amount.');
+			return setErrorMsg('Specify an amount greater than 0');
 
 		if (
 			pfpData?.maxSupply &&
