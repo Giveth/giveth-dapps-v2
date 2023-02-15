@@ -6,6 +6,7 @@ import { client } from '@/apollo/apolloClient';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { ESortbyAllProjects } from '@/apollo/types/gqlEnums';
 import {
+	ICampaign,
 	IProject,
 	IProjectUpdateWithProject,
 	IRecentDonation,
@@ -24,6 +25,7 @@ export interface IHomeRoute {
 	totalDonorsCountPerDate: { total: number };
 	donationsTotalUsdPerDate: { total: number };
 	latestUpdates: IProjectUpdateWithProject[];
+	campaigns: ICampaign[];
 }
 
 const fetchProjects = async (userId: string | undefined = undefined) => {
@@ -56,6 +58,7 @@ const HomeRoute = (props: IHomeRoute) => {
 			setTotalCount(totalCount);
 		});
 	}, [user]);
+	console.log('props', props.campaigns);
 
 	return (
 		<>
@@ -88,6 +91,7 @@ export const getStaticProps: GetStaticProps = async context => {
 				totalDonorsCountPerDate: data.totalDonorsCountPerDate,
 				donationsTotalUsdPerDate: data.donationsTotalUsdPerDate,
 				latestUpdates: data.projectUpdates.projectUpdates,
+				campaigns: data.campaigns,
 			},
 			revalidate: 600,
 		};

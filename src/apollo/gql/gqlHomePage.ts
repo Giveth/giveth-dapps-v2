@@ -60,6 +60,7 @@ export const HOMEPAGE_DATA = gql`
 			totalCount
 		}
 		campaigns {
+			id
 			title
 			slug
 			isFeatured
@@ -97,7 +98,6 @@ export const HOMEPAGE_DATA = gql`
 			relatedProjectsCount
 			media
 			type
-			slug
 			isActive
 			order
 			landingLink
