@@ -1,7 +1,14 @@
 import { FC } from 'react';
-import { GLink, H2, H4 } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	ButtonText,
+	H2,
+	H4,
+	IconChevronRight32,
+} from '@giveth/ui-design-system';
 import Image from 'next/image';
 import styled from 'styled-components';
+import Link from 'next/link';
 import { ICampaign } from '@/apollo/types/types';
 import { Col, Row } from '@/components/Grid';
 
@@ -15,7 +22,11 @@ export const CampaignsSlide: FC<ICampaignsSlideProps> = ({ campaign }) => {
 			<ContentCol sm={12} md={5}>
 				<H2>{campaign.title}</H2>
 				<H4>{campaign.description}</H4>
-				<GLink>Explore </GLink>
+				<Link href=''>
+					<ExploreLink>
+						Explore <IconChevronRight32 />
+					</ExploreLink>
+				</Link>
 			</ContentCol>
 			<Col sm={12} md={7}>
 				<ImageWrapper>
@@ -46,4 +57,11 @@ const ContentCol = styled(Col)`
 	align-items: center;
 	gap: 24px;
 	flex-direction: column;
+`;
+
+const ExploreLink = styled(ButtonText)`
+	color: ${brandColors.giv[500]};
+	display: flex;
+	align-items: center;
+	gap: 10px;
 `;
