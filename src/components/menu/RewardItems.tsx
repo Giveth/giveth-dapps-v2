@@ -17,7 +17,7 @@ import { switchNetworkHandler } from '@/lib/wallet';
 import config from '@/configuration';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { BN, formatWeiHelper } from '@/helpers/number';
-import { WhatisStreamModal } from '@/components/modals/WhatisStream';
+import { WhatIsStreamModal } from '@/components/modals/WhatIsStream';
 import { getGivStakingConfig } from '@/helpers/networkProvider';
 import { getUserStakeInfo } from '@/lib/stakingPool';
 import Routes from '@/lib/constants/Routes';
@@ -37,6 +37,7 @@ import {
 } from './RewardItems.sc';
 import { ItemAction, ItemRow, ItemTitle } from './common';
 import { Item } from './Item';
+import { useItemsContext } from '@/context/Items.context';
 
 export interface IRewardItemsProps {
 	showWhatIsGIVstreamModal: boolean;
@@ -63,6 +64,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 	const tokenDistroBalance = sdh.getGIVTokenDistroBalance();
 	const { givbackLiquidPart } = tokenDistroBalance;
 	const { networkName } = networkInfo(chainId);
+	const { close } = useItemsContext();
 
 	useEffect(() => {
 		const _allocatedTokens = BN(tokenDistroBalance.allocatedTokens);
@@ -113,7 +115,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 	return (
 		<>
 			<Item theme={theme}>
-				<ItemTitle theme={theme}>
+				<ItemTitle upperCase theme={theme}>
 					{formatMessage({ id: 'label.network' })}
 				</ItemTitle>
 				<ItemRow>
@@ -126,35 +128,39 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 					</ItemAction>
 				</ItemRow>
 			</Item>
-			<Item isHighlighted theme={theme}>
-				<ItemTitle theme={theme}>
-					{formatMessage({ id: 'label.givstream_flowrate' })}
-				</ItemTitle>
-				<FlowrateRow>
-					<Image
-						src='/images/icons/thunder.svg'
-						height='16'
-						width='12'
-						alt='Thunder image'
-					/>
-					<FlowrateAmount>
-						{formatWeiHelper(flowRateNow)}
-					</FlowrateAmount>
-					<FlowrateUnit>
-						GIV/{formatMessage({ id: 'label.week' })}
-					</FlowrateUnit>
-					<IconHelpWrapper
-						onClick={() => {
-							setShowWhatIsGIVstreamModal(true);
-						}}
-					>
-						<IconHelpFilled16 />
-					</IconHelpWrapper>
-				</FlowrateRow>
-			</Item>
+			<Link href={Routes.GIVstream_FlowRate}>
+				<Item isHighlighted theme={theme}>
+					<ItemTitle upperCase theme={theme}>
+						{formatMessage({ id: 'label.givstream_flowrate' })}
+					</ItemTitle>
+					<FlowrateRow>
+						<Image
+							src='/images/icons/thunder.svg'
+							height='16'
+							width='12'
+							alt='Thunder image'
+						/>
+						<FlowrateAmount>
+							{formatWeiHelper(flowRateNow)}
+						</FlowrateAmount>
+						<FlowrateUnit>
+							GIV/{formatMessage({ id: 'label.week' })}
+						</FlowrateUnit>
+						<IconHelpWrapper
+							onClick={e => {
+								e.preventDefault();
+								e.stopPropagation();
+								setShowWhatIsGIVstreamModal(true);
+							}}
+						>
+							<IconHelpFilled16 />
+						</IconHelpWrapper>
+					</FlowrateRow>
+				</Item>
+			</Link>
 			<Link href={Routes.GIVstream}>
 				<Item theme={theme}>
-					<ItemTitle theme={theme}>
+					<ItemTitle upperCase theme={theme}>
 						{formatMessage({ id: 'label.from' })} GIVstream
 					</ItemTitle>
 					<Flex gap='4px'>
@@ -170,7 +176,9 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 			</Link>
 			<Link href={Routes.GIVfarm}>
 				<Item theme={theme}>
-					<ItemTitle theme={theme}>GIVfarm & GIVgarden</ItemTitle>
+					<ItemTitle upperCase theme={theme}>
+						GIVfarm & GIVgarden
+					</ItemTitle>
 					<Flex gap='4px'>
 						<PartAmount medium>
 							{formatWeiHelper(farmsLiquidPart)}
@@ -184,7 +192,9 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 			</Link>
 			<Link href={Routes.GIVbacks}>
 				<Item theme={theme}>
-					<ItemTitle theme={theme}>GIVbacks</ItemTitle>
+					<ItemTitle upperCase theme={theme}>
+						GIVbacks
+					</ItemTitle>
 					<Flex gap='4px'>
 						<PartAmount medium>
 							{formatWeiHelper(givbackLiquidPart)}
@@ -205,9 +215,10 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 				target='_blank'
 			/>
 			{showWhatIsGIVstreamModal && (
-				<WhatisStreamModal
+				<WhatIsStreamModal
 					tokenDistroHelper={givTokenDistroHelper}
 					setShowModal={setShowWhatIsGIVstreamModal}
+					cb={close}
 				/>
 			)}
 		</>

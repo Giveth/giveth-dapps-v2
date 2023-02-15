@@ -32,11 +32,16 @@ export const HighlightSection = styled.div`
 	border-radius: 16px;
 `;
 
-export const ItemTitle = styled(Overline)`
+interface IItemTitle {
+	upperCase?: boolean;
+}
+
+export const ItemTitle = styled(Overline)<IItemTitle>`
 	color: ${props =>
 		props.theme === ETheme.Dark
 			? brandColors.giv[300]
 			: neutralColors.gray[800]};
+	text-transform: ${props => (props.upperCase ? 'uppercase' : 'none')};
 `;
 
 export const ItemRow = styled(Flex)`

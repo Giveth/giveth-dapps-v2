@@ -22,15 +22,17 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { RegenFarmConfig } from '@/types/config';
 import type { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 
-interface IWhatisStreamModal extends IModal {
+interface IWhatIsStreamModal extends IModal {
 	tokenDistroHelper?: TokenDistroHelper;
 	regenStreamConfig?: RegenFarmConfig;
+	cb?: any;
 }
 
-export const WhatisStreamModal: FC<IWhatisStreamModal> = ({
+export const WhatIsStreamModal: FC<IWhatIsStreamModal> = ({
 	setShowModal,
 	tokenDistroHelper,
 	regenStreamConfig,
+	cb,
 }) => {
 	const theme = useAppSelector(state => state.general.theme);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
@@ -38,10 +40,14 @@ export const WhatisStreamModal: FC<IWhatisStreamModal> = ({
 	const { rewardTokenSymbol } = regenStreamConfig || {
 		rewardTokenSymbol: 'GIV',
 	};
+	const closeModalWithCb = () => {
+		closeModal();
+		cb();
+	};
 
 	return (
-		<Modal closeModal={closeModal} isAnimating={isAnimating}>
-			<WhatisStreamContainer theme={theme}>
+		<Modal closeModal={closeModalWithCb} isAnimating={isAnimating}>
+			<WhatIsStreamContainer theme={theme}>
 				<TitleRow>
 					<IconGIVStream size={24} />
 					<Title>
@@ -78,7 +84,7 @@ export const WhatisStreamModal: FC<IWhatisStreamModal> = ({
 				{!regenStreamConfig && (
 					<LinksRow>
 						<Link href={Routes.GIVstream}>
-							<GLink onClick={closeModal}>
+							<GLink onClick={closeModalWithCb}>
 								<Flex justifyContent='center'>
 									View Your {rewardTokenSymbol}stream{' '}
 									<IconExternalLink
@@ -93,14 +99,14 @@ export const WhatisStreamModal: FC<IWhatisStreamModal> = ({
 				<GotItButton
 					label='GOT IT'
 					buttonType={theme === ETheme.Dark ? 'secondary' : 'primary'}
-					onClick={closeModal}
+					onClick={closeModalWithCb}
 				/>
-			</WhatisStreamContainer>
+			</WhatIsStreamContainer>
 		</Modal>
 	);
 };
 
-const WhatisStreamContainer = styled.div`
+const WhatIsStreamContainer = styled.div`
 	padding: 24px 24px 24px;
 	background-image: ${props =>
 		props.theme === ETheme.Dark
