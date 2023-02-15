@@ -22,12 +22,12 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { RegenFarmConfig } from '@/types/config';
 import type { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 
-interface IWhatisStreamModal extends IModal {
+interface IWhatIsStreamModal extends IModal {
 	tokenDistroHelper?: TokenDistroHelper;
 	regenStreamConfig?: RegenFarmConfig;
 }
 
-export const WhatisStreamModal: FC<IWhatisStreamModal> = ({
+export const WhatIsStreamModal: FC<IWhatIsStreamModal> = ({
 	setShowModal,
 	tokenDistroHelper,
 	regenStreamConfig,
@@ -41,7 +41,7 @@ export const WhatisStreamModal: FC<IWhatisStreamModal> = ({
 
 	return (
 		<Modal closeModal={closeModal} isAnimating={isAnimating}>
-			<WhatisStreamContainer theme={theme}>
+			<WhatIsStreamContainer theme={theme}>
 				<TitleRow>
 					<IconGIVStream size={24} />
 					<Title>
@@ -95,12 +95,12 @@ export const WhatisStreamModal: FC<IWhatisStreamModal> = ({
 					buttonType={theme === ETheme.Dark ? 'secondary' : 'primary'}
 					onClick={closeModal}
 				/>
-			</WhatisStreamContainer>
+			</WhatIsStreamContainer>
 		</Modal>
 	);
 };
 
-const WhatisStreamContainer = styled.div`
+const WhatIsStreamContainer = styled.div`
 	padding: 24px 24px 24px;
 	background-image: ${props =>
 		props.theme === ETheme.Dark

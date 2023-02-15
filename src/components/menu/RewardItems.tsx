@@ -17,7 +17,7 @@ import { switchNetworkHandler } from '@/lib/wallet';
 import config from '@/configuration';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { BN, formatWeiHelper } from '@/helpers/number';
-import { WhatisStreamModal } from '@/components/modals/WhatisStream';
+import { WhatIsStreamModal } from '@/components/modals/WhatIsStream';
 import { getGivStakingConfig } from '@/helpers/networkProvider';
 import { getUserStakeInfo } from '@/lib/stakingPool';
 import Routes from '@/lib/constants/Routes';
@@ -213,7 +213,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 				target='_blank'
 			/>
 			{showWhatIsGIVstreamModal && (
-				<WhatisStreamModal
+				<WhatIsStreamModal
 					tokenDistroHelper={givTokenDistroHelper}
 					setShowModal={setShowWhatIsGIVstreamModal}
 				/>
