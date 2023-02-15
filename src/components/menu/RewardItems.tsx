@@ -113,7 +113,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 	return (
 		<>
 			<Item theme={theme}>
-				<ItemTitle theme={theme}>
+				<ItemTitle upperCase theme={theme}>
 					{formatMessage({ id: 'label.network' })}
 				</ItemTitle>
 				<ItemRow>
@@ -127,7 +127,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 				</ItemRow>
 			</Item>
 			<Item isHighlighted theme={theme}>
-				<ItemTitle theme={theme}>
+				<ItemTitle upperCase theme={theme}>
 					{formatMessage({ id: 'label.givstream_flowrate' })}
 				</ItemTitle>
 				<FlowrateRow>
@@ -154,7 +154,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 			</Item>
 			<Link href={Routes.GIVstream}>
 				<Item theme={theme}>
-					<ItemTitle theme={theme}>
+					<ItemTitle upperCase theme={theme}>
 						{formatMessage({ id: 'label.from' })} GIVstream
 					</ItemTitle>
 					<Flex gap='4px'>
@@ -170,7 +170,9 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 			</Link>
 			<Link href={Routes.GIVfarm}>
 				<Item theme={theme}>
-					<ItemTitle theme={theme}>GIVfarm & GIVgarden</ItemTitle>
+					<ItemTitle upperCase theme={theme}>
+						GIVfarm & GIVgarden
+					</ItemTitle>
 					<Flex gap='4px'>
 						<PartAmount medium>
 							{formatWeiHelper(farmsLiquidPart)}
@@ -184,7 +186,9 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 			</Link>
 			<Link href={Routes.GIVbacks}>
 				<Item theme={theme}>
-					<ItemTitle theme={theme}>GIVbacks</ItemTitle>
+					<ItemTitle upperCase theme={theme}>
+						GIVbacks
+					</ItemTitle>
 					<Flex gap='4px'>
 						<PartAmount medium>
 							{formatWeiHelper(givbackLiquidPart)}
