@@ -2,6 +2,7 @@ import { brandColors, H2, H4, neutralColors } from '@giveth/ui-design-system';
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
+import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
 import { Container } from '@/components/Grid';
 import {
@@ -16,6 +17,8 @@ import QuarterCircle from '@/components/particles/QuarterCircle';
 const VideoBlock = () => {
 	const [isPlaying, setIsPlaying] = useState(false);
 	const videoRef = useRef<HTMLVideoElement | null>(null);
+	const { formatMessage } = useIntl();
+
 	function handleVideoClick() {
 		const { current: video } = videoRef;
 		if (video?.paused) {
@@ -37,7 +40,9 @@ const VideoBlock = () => {
 			<Container>
 				<CustomFlex alignItems='center'>
 					<Flex flexDirection='column' gap='24px'>
-						<H2>Learn about Giveth in 60 seconds</H2>
+						<H2>
+							{formatMessage({ id: 'label.learn_about_giveth' })}
+						</H2>
 						<H4>
 							What people say about the Giveth and why they love
 							it.
