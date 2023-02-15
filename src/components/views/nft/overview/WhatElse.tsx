@@ -14,7 +14,7 @@ const WhatElse = () => {
 					<CustomFlex gap='64px'>
 						<Flex flexDirection='column' gap='16px'>
 							<HeaderTitle>
-								Get on the ‘$nice list’ for early access to
+								Get on the "$nice list" for early access to
 								minting.
 							</HeaderTitle>
 							<Lead>
@@ -34,8 +34,8 @@ const WhatElse = () => {
 								up differently on the Giveth dApp; wherever you
 								make an impact, people will notice your style.
 								You’ll also receive a discount when you register
-								your custom ‘.giveth’ Punk Domain name. Learn
-								more about the benefits.
+								your custom <code>.giveth</code> Punk Domain
+								name. Learn more about the benefits.
 							</Lead>
 						</Flex>
 					</CustomFlex>
