@@ -37,6 +37,7 @@ export const Item: FC<IItem> = ({
 };
 
 const ItemContainer = styled(Flex)<{ isHighlighted?: boolean }>`
+	position: relative;
 	padding: 12px 16px;
 	gap: 6px;
 	flex-direction: column;
