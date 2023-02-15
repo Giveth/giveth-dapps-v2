@@ -126,32 +126,34 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 					</ItemAction>
 				</ItemRow>
 			</Item>
-			<Item isHighlighted theme={theme}>
-				<ItemTitle upperCase theme={theme}>
-					{formatMessage({ id: 'label.givstream_flowrate' })}
-				</ItemTitle>
-				<FlowrateRow>
-					<Image
-						src='/images/icons/thunder.svg'
-						height='16'
-						width='12'
-						alt='Thunder image'
-					/>
-					<FlowrateAmount>
-						{formatWeiHelper(flowRateNow)}
-					</FlowrateAmount>
-					<FlowrateUnit>
-						GIV/{formatMessage({ id: 'label.week' })}
-					</FlowrateUnit>
-					<IconHelpWrapper
-						onClick={() => {
-							setShowWhatIsGIVstreamModal(true);
-						}}
-					>
-						<IconHelpFilled16 />
-					</IconHelpWrapper>
-				</FlowrateRow>
-			</Item>
+			<Link href={Routes.GIVstream_FlowRate}>
+				<Item isHighlighted theme={theme}>
+					<ItemTitle upperCase theme={theme}>
+						{formatMessage({ id: 'label.givstream_flowrate' })}
+					</ItemTitle>
+					<FlowrateRow>
+						<Image
+							src='/images/icons/thunder.svg'
+							height='16'
+							width='12'
+							alt='Thunder image'
+						/>
+						<FlowrateAmount>
+							{formatWeiHelper(flowRateNow)}
+						</FlowrateAmount>
+						<FlowrateUnit>
+							GIV/{formatMessage({ id: 'label.week' })}
+						</FlowrateUnit>
+						<IconHelpWrapper
+							onClick={() => {
+								setShowWhatIsGIVstreamModal(true);
+							}}
+						>
+							<IconHelpFilled16 />
+						</IconHelpWrapper>
+					</FlowrateRow>
+				</Item>
+			</Link>
 			<Link href={Routes.GIVstream}>
 				<Item theme={theme}>
 					<ItemTitle upperCase theme={theme}>
