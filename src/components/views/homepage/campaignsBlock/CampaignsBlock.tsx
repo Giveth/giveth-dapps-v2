@@ -11,6 +11,7 @@ import { ICampaign } from '@/apollo/types/types';
 import { CampaignsSlide } from './CampaignsSlide';
 import TrazadoPink from '/public/images/trazado-pink.svg';
 import CaminhoPink from '/public/images/caminho-pink.svg';
+import CaminhoGIV from '/public/images/caminho-giv.svg';
 
 interface ICampaignsBlockProps {
 	campaigns: ICampaign[];
@@ -58,6 +59,14 @@ export const CampaignsBlock: FC<ICampaignsBlockProps> = ({ campaigns }) => {
 						alt='caminho'
 					/>
 				</CaminhoPinkWrapper>
+				<CaminhoGivWrapper>
+					<Image
+						src={CaminhoGIV}
+						width={27}
+						height={27}
+						alt='caminho'
+					/>
+				</CaminhoGivWrapper>
 			</ContainerRelative>
 		</CampaignsBlockWrapper>
 	);
@@ -85,4 +94,10 @@ const CaminhoPinkWrapper = styled.div`
 	position: absolute;
 	bottom: -72px;
 	left: 30%;
+`;
+
+const CaminhoGivWrapper = styled.div`
+	position: absolute;
+	bottom: 30px;
+	right: -70px;
 `;
