@@ -64,6 +64,25 @@ export interface IDonationProject extends IProject {
 	givethAddresses: IWalletAddress[];
 }
 
+export interface ICampaign {
+	id: string;
+	title: string;
+	slug: string;
+	isFeatured: boolean;
+	description: string;
+	relatedProjects: IProject[];
+	relatedProjectsCount: number;
+	media: string;
+	type: string;
+	isActive: boolean;
+	order: number;
+	landingLink: string;
+	filterFields: string;
+	sortingField: string;
+	createdAt: string;
+	updatedAt: string;
+}
+
 export interface IWalletAddress {
 	address?: string;
 	isRecipient?: boolean;
