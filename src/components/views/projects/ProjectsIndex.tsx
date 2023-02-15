@@ -33,7 +33,6 @@ import { useProjectsContext } from '@/context/projects.context';
 import ProjectsFiltersDesktop from '@/components/views/projects/ProjectsFiltersDesktop';
 import ProjectsFiltersTablet from '@/components/views/projects/ProjectsFiltersTablet';
 import ProjectsFiltersMobile from '@/components/views/projects/ProjectsFiltersMobile';
-import CampaignBlock from '../homepage/CampaignBlock';
 import LottieControl from '@/components/animations/lottieControl';
 import LoadingAnimation from '@/animations/loading_giv.json';
 import useDetectDevice from '@/hooks/useDetectDevice';
@@ -285,8 +284,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 			<ProjectsBanner mainCategory={selectedMainCategory} />
 			<Wrapper>
-				{turkeyReliefProjects && turkeyReliefProjects.length > 0 && (
-					<CampaignBlock
+				{/* {turkeyReliefProjects && turkeyReliefProjects.length > 0 && (
+					<ProjectsCampaignBlock
 						projects={
 							turkeyReliefProjects
 								?.slice()
@@ -296,7 +295,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 								) || []
 						}
 					/>
-				)}
+				)} */}
 
 				<FiltersContainer>
 					{!isTablet && !isMobile && <ProjectsFiltersDesktop />}
