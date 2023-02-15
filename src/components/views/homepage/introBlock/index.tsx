@@ -62,7 +62,7 @@ const IntroBlock = () => {
 							<Image
 								src={introBanner}
 								alt='intro-banner'
-								width={300}
+								width={350}
 							/>
 						</div>
 						<TopWaveContainer>
