@@ -27,6 +27,7 @@ import { ETheme } from '@/features/general/general.slice';
 import { useAppSelector } from '@/features/hooks';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import Routes from '@/lib/constants/Routes';
+import { NotificationItems } from './NotificationItems';
 
 interface INotificationButtonWithMenuProps extends IHeaderButtonProps {}
 
@@ -68,7 +69,7 @@ export const NotificationButtonWithMenu: FC<
 			{menuCondition && (
 				<MenuContainer isAnimating={showMenu} theme={theme}>
 					<ItemsProvider close={closeMenu}>
-						<div>Notifs</div>
+						<NotificationItems />
 					</ItemsProvider>
 				</MenuContainer>
 			)}
@@ -88,7 +89,7 @@ export const NotificationButtonWithMenu: FC<
 				>
 					<SidebarInnerContainer>
 						<ItemsProvider close={closeSidebar}>
-							<div>Notifs</div>
+							<NotificationItems />
 						</ItemsProvider>
 					</SidebarInnerContainer>
 				</SideBar>

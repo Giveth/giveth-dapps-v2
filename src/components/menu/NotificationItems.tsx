@@ -13,10 +13,12 @@ import { NotificationBox } from '../notification/NotificationBox';
 import { useAppSelector } from '@/features/hooks';
 import { fetchNotificationsData } from '@/features/notification/notification.services';
 import { useNotification } from '@/hooks/useNotification';
+import { useItemsContext } from '@/context/Items.context';
 
 export const NotificationItems = () => {
 	const { notifications, setNotifications, markOneNotificationRead } =
 		useNotification();
+	const { close } = useItemsContext();
 
 	const { lastNotificationId } = useAppSelector(
 		state => state.notification.notificationInfo,
@@ -50,8 +52,6 @@ export const NotificationItems = () => {
 			<NotificationsTitle styleType='Small'>
 				NOTIFICATIONS
 			</NotificationsTitle>
-			<br />
-			<br />
 			{notifications?.length > 0 ? (
 				notifications.map(notification => (
 					<NotificationBox
@@ -66,7 +66,10 @@ export const NotificationItems = () => {
 			)}
 			<br />
 			<Link href={Routes.Notifications} passHref>
-				<AllNotificationsLink color={brandColors.pinky[500]}>
+				<AllNotificationsLink
+					onClick={close}
+					color={brandColors.pinky[500]}
+				>
 					All notifications
 				</AllNotificationsLink>
 			</Link>
