@@ -44,8 +44,7 @@ const VideoBlock = () => {
 							{formatMessage({ id: 'label.learn_about_giveth' })}
 						</H2>
 						<H4>
-							What people say about the Giveth and why they love
-							it.
+							{formatMessage({ id: 'label.what_people_say' })}
 						</H4>
 					</Flex>
 					<VideoParticlesContainer>
