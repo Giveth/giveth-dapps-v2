@@ -25,8 +25,6 @@ import { MenuContainer } from './Menu.sc';
 import { ItemsProvider } from '@/context/Items.context';
 import { ETheme } from '@/features/general/general.slice';
 import { useAppSelector } from '@/features/hooks';
-import { fetchNotificationsData } from '@/features/notification/notification.services';
-import { useNotification } from '@/hooks/useNotification';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import Routes from '@/lib/constants/Routes';
 
@@ -106,35 +104,10 @@ interface IHeaderNotificationButtonProps {
 const HeaderNotificationButton: FC<IHeaderNotificationButtonProps> = ({
 	theme,
 }) => {
-	const { notifications, setNotifications, markOneNotificationRead } =
-		useNotification();
-	const { isSignedIn } = useAppSelector(state => state.user);
-	const { total: totalUnreadNotifications, lastNotificationId } =
-		useAppSelector(state => state.notification.notificationInfo);
+	const { total: totalUnreadNotifications } = useAppSelector(
+		state => state.notification.notificationInfo,
+	);
 
-	const lastFetchedNotificationId = notifications[0]?.id ?? undefined;
-
-	useEffect(() => {
-		const fetchNotificationsAndSetState = async () => {
-			if (!isSignedIn) return;
-			try {
-				const res = await fetchNotificationsData({ limit: 4 });
-				if (res?.notifications) setNotifications(res.notifications);
-			} catch {
-				console.log('Error fetching notifications');
-			}
-		};
-
-		if (
-			typeof lastFetchedNotificationId === 'number' &&
-			lastNotificationId > lastFetchedNotificationId
-		) {
-			fetchNotificationsAndSetState();
-			return;
-		}
-
-		fetchNotificationsAndSetState();
-	}, [lastNotificationId, isSignedIn]);
 	return (
 		<NotificationsIconContainer>
 			{totalUnreadNotifications > 0 && (
