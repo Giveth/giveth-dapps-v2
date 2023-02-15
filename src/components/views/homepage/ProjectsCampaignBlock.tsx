@@ -48,11 +48,10 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 				variables,
 				fetchPolicy: 'network-only',
 			});
-			console.log('data', data);
 			setProjects(data.findCampaignBySlug.relatedProjects);
 		};
 		fetchCampaign(user.id);
-	}, [user]);
+	}, [campaign.slug, user]);
 
 	const { isMobile, isTablet, isLaptopS, isLaptopL, isDesktop } =
 		useDetectDevice();
@@ -78,11 +77,16 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 				setCurrentSlide(swiperInstance?.realIndex + 1),
 			);
 	}, [swiperInstance]);
+	console.log('campaign', campaign);
 
 	return (
 		<Wrapper>
 			<UpperSection>
-				<Title weight={700}>#FreshCampaign</Title>
+				<Title weight={700}>
+					{campaign.hashtags && campaign.hashtags.length > 0
+						? campaign.hashtags.map(hashtag => `#${hashtag} `)
+						: ''}
+				</Title>
 				<Pagination>
 					<PointerWrapper id='homeCampaignPrev'>
 						<IconPointerLeft size={24} />
