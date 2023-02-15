@@ -3,11 +3,13 @@ import styled from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperType } from 'swiper/types';
 import { neutralColors } from '@giveth/ui-design-system';
+import Image from 'next/image';
 import { Container, Row } from '@/components/Grid';
 import { SwiperPagination } from '@/components/SwiperPagination';
 import { BlockHeader, BlockTitle } from '../common';
 import { ICampaign } from '@/apollo/types/types';
 import { CampaignsSlide } from './CampaignsSlide';
+import TrazadoPink from '/public/images/trazado-pink.svg';
 
 interface ICampaignsBlockProps {
 	campaigns: ICampaign[];
@@ -25,6 +27,14 @@ export const CampaignsBlock: FC<ICampaignsBlockProps> = ({ campaigns }) => {
 						swiper={swiper}
 						itemsCount={campaigns.length}
 					/>
+					<TrazadoPinkWrapper>
+						<Image
+							src={TrazadoPink}
+							width={216}
+							height={38}
+							alt='wave'
+						/>
+					</TrazadoPinkWrapper>
 				</BlockHeader>
 				<SwiperWrapper>
 					<Swiper
@@ -50,3 +60,9 @@ const CampaignsBlockWrapper = styled.div`
 	background: ${neutralColors.gray[200]};
 `;
 const SwiperWrapper = styled(Row)``;
+
+const TrazadoPinkWrapper = styled.div`
+	position: absolute;
+	top: -44px;
+	left: -151px;
+`;

@@ -20,4 +20,5 @@ export const BlockHeader = styled(Flex)`
 	}
 	gap: 24px;
 	margin-bottom: 32px;
+	position: relative;
 `;
