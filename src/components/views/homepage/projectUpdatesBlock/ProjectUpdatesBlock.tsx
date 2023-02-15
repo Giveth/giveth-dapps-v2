@@ -3,13 +3,11 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperType } from 'swiper/types';
 import 'swiper/css';
 import styled from 'styled-components';
-import { mediaQueries } from '@giveth/ui-design-system';
 import { SwiperPagination } from '@/components/SwiperPagination';
-import { Flex } from '@/components/styled-components/Flex';
 import { IProject } from '@/apollo/types/types';
 import { Container, Row } from '@/components/Grid';
 import { ProjectUpdateSlide } from './ProjectUpdateSlide';
-import { BlockTitle } from '../common';
+import { BlockHeader, BlockTitle } from '../common';
 
 interface IProjectUpdatesBlockProps {
 	projects: IProject[];
@@ -23,10 +21,10 @@ export const ProjectUpdatesBlock: FC<IProjectUpdatesBlockProps> = ({
 	return (
 		<ProjectUpdatesBlockWrapper>
 			<Container>
-				<Header>
+				<BlockHeader>
 					<BlockTitle>Awesome Project Updates</BlockTitle>
 					<SwiperPagination swiper={swiper} itemsCount={6} />
-				</Header>
+				</BlockHeader>
 				<SwiperWrapper>
 					<Swiper
 						slidesPerView={1}
@@ -46,17 +44,6 @@ export const ProjectUpdatesBlock: FC<IProjectUpdatesBlockProps> = ({
 };
 const ProjectUpdatesBlockWrapper = styled.div`
 	padding: 80px 0 64px;
-`;
-
-const Header = styled(Flex)`
-	justify-content: space-between;
-	align-items: center;
-	flex-direction: column;
-	${mediaQueries.laptopS} {
-		flex-direction: row;
-	}
-	gap: 24px;
-	margin-bottom: 32px;
 `;
 
 const SwiperWrapper = styled(Row)``;

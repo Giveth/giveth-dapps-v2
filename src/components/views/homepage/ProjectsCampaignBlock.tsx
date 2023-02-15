@@ -77,7 +77,6 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 				setCurrentSlide(swiperInstance?.realIndex + 1),
 			);
 	}, [swiperInstance]);
-	console.log('campaign', campaign);
 
 	return (
 		<Wrapper>
