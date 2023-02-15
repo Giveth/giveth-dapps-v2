@@ -145,7 +145,9 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 							GIV/{formatMessage({ id: 'label.week' })}
 						</FlowrateUnit>
 						<IconHelpWrapper
-							onClick={() => {
+							onClick={e => {
+								e.preventDefault();
+								e.stopPropagation();
 								setShowWhatIsGIVstreamModal(true);
 							}}
 						>
