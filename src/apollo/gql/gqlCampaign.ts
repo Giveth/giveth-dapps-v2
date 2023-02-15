@@ -98,6 +98,8 @@ export const FETCH_CAMPAIGN_BY_SLUG = gql`
 					round
 				}
 			}
+			relatedProjectsCount
+			hashtags
 			media
 			slug
 			isActive

@@ -96,6 +96,7 @@ export const HOMEPAGE_DATA = gql`
 				}
 			}
 			relatedProjectsCount
+			hashtags
 			media
 			type
 			isActive
