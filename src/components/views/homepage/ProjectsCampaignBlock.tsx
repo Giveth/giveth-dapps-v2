@@ -82,11 +82,11 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 	return (
 		<Wrapper>
 			<UpperSection>
-				<Title weight={700}>
+				<HashTags weight={700}>
 					{campaign.hashtags && campaign.hashtags.length > 0
 						? campaign.hashtags.map(hashtag => `#${hashtag} `)
 						: ''}
-				</Title>
+				</HashTags>
 				<Pagination>
 					<PointerWrapper id='homeCampaignPrev'>
 						<IconPointerLeft size={24} />
@@ -106,14 +106,21 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 				</Pagination>
 			</UpperSection>
 			<BottomSection>
-				<SavePlanet>
-					<H1 weight={700}>Save The Planet!</H1>
+				<Title>
+					<H1 weight={700}>
+						{campaign.title.split(' ').map(t => (
+							<>
+								<span>{t}</span>
+								<br />
+							</>
+						))}
+					</H1>
 					<InternalLink href={''} color={brandColors.giv[500]}>
 						<ExploreText>
 							EXPLORE <IconChevronRight32 />
 						</ExploreText>
 					</InternalLink>
-				</SavePlanet>
+				</Title>
 				<SwiperWrapper>
 					<Swiper
 						onSwiper={setSwiperInstance}
@@ -197,7 +204,7 @@ const BottomSection = styled(Flex)`
 	}
 `;
 
-const Title = styled(H4)`
+const HashTags = styled(H4)`
 	color: ${neutralColors.gray[600]};
 	padding-left: 58px;
 	margin-bottom: 40px;
@@ -220,20 +227,18 @@ const ExploreText = styled(ButtonText)`
 	gap: 10px;
 `;
 
-const SavePlanet = styled.div`
+const Title = styled(FlexCenter)`
+	flex-direction: column;
 	border-radius: 12px;
 	box-shadow: 12px 0 20px rgba(212, 218, 238, 0.4);
-	padding: 16px 24px 20px 16px;
 	margin: 0 32px;
 	user-select: none;
 	${mediaQueries.tablet} {
 		margin: 0;
-		max-width: 263px;
-		padding: 73px 24px 70px 34px;
+		width: 263px;
 	}
 	${mediaQueries.desktop} {
-		max-width: 391px;
-		padding: 73px 24px 77px 144px;
+		width: 391px;
 	}
 `;
 
