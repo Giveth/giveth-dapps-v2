@@ -37,6 +37,7 @@ import {
 } from './RewardItems.sc';
 import { ItemAction, ItemRow, ItemTitle } from './common';
 import { Item } from './Item';
+import { useItemsContext } from '@/context/Items.context';
 
 export interface IRewardItemsProps {
 	showWhatIsGIVstreamModal: boolean;
@@ -63,6 +64,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 	const tokenDistroBalance = sdh.getGIVTokenDistroBalance();
 	const { givbackLiquidPart } = tokenDistroBalance;
 	const { networkName } = networkInfo(chainId);
+	const { close } = useItemsContext();
 
 	useEffect(() => {
 		const _allocatedTokens = BN(tokenDistroBalance.allocatedTokens);
@@ -216,6 +218,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 				<WhatIsStreamModal
 					tokenDistroHelper={givTokenDistroHelper}
 					setShowModal={setShowWhatIsGIVstreamModal}
+					cb={close}
 				/>
 			)}
 		</>

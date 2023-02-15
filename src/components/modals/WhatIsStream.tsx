@@ -25,12 +25,14 @@ import type { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 interface IWhatIsStreamModal extends IModal {
 	tokenDistroHelper?: TokenDistroHelper;
 	regenStreamConfig?: RegenFarmConfig;
+	cb?: any;
 }
 
 export const WhatIsStreamModal: FC<IWhatIsStreamModal> = ({
 	setShowModal,
 	tokenDistroHelper,
 	regenStreamConfig,
+	cb,
 }) => {
 	const theme = useAppSelector(state => state.general.theme);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
@@ -38,9 +40,13 @@ export const WhatIsStreamModal: FC<IWhatIsStreamModal> = ({
 	const { rewardTokenSymbol } = regenStreamConfig || {
 		rewardTokenSymbol: 'GIV',
 	};
+	const closeModalWithCb = () => {
+		closeModal();
+		cb();
+	};
 
 	return (
-		<Modal closeModal={closeModal} isAnimating={isAnimating}>
+		<Modal closeModal={closeModalWithCb} isAnimating={isAnimating}>
 			<WhatIsStreamContainer theme={theme}>
 				<TitleRow>
 					<IconGIVStream size={24} />
@@ -78,7 +84,7 @@ export const WhatIsStreamModal: FC<IWhatIsStreamModal> = ({
 				{!regenStreamConfig && (
 					<LinksRow>
 						<Link href={Routes.GIVstream}>
-							<GLink onClick={closeModal}>
+							<GLink onClick={closeModalWithCb}>
 								<Flex justifyContent='center'>
 									View Your {rewardTokenSymbol}stream{' '}
 									<IconExternalLink
@@ -93,7 +99,7 @@ export const WhatIsStreamModal: FC<IWhatIsStreamModal> = ({
 				<GotItButton
 					label='GOT IT'
 					buttonType={theme === ETheme.Dark ? 'secondary' : 'primary'}
-					onClick={closeModal}
+					onClick={closeModalWithCb}
 				/>
 			</WhatIsStreamContainer>
 		</Modal>
