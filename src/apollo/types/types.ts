@@ -181,6 +181,7 @@ export interface IProjectBySlug {
 
 export interface IProjectUpdate {
 	content: string;
+	plainSummaryContent: string;
 	createdAt: string;
 	id: string;
 	projectId: string;

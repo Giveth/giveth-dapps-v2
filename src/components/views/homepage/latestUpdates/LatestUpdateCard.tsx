@@ -44,7 +44,7 @@ export const LatestUpdateCard: FC<ILatestUpdateCardProps> = ({ update }) => {
 					<Title>{update.title}</Title>
 					<Desc
 						dangerouslySetInnerHTML={{
-							__html: update.content,
+							__html: update.plainSummaryContent,
 						}}
 					/>
 				</Content>
