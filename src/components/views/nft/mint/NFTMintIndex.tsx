@@ -58,7 +58,7 @@ export const NFTMintIndex = () => {
 			<OvalVerticalGradient />
 			<OvalHorizontalGradient />
 			<MintContainer>
-				<Row style={{ paddingBottom: '20px;' }}>
+				<Row style={{ paddingBottom: '20px' }}>
 					<Col xs={12} sm={8} md={6}>
 						{step === EPFPMinSteps.MINT ? (
 							<>
