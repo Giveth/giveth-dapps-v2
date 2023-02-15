@@ -10,6 +10,7 @@ import VideoBlock from './videoBlock';
 import { LatestUpdatesBlock } from './latestUpdates/LatestUpdatesBlock';
 import { IHomeRoute } from '../../../../pages';
 import InformationBlock from '@/components/views/homepage/InformationBlock';
+import { CampaignsBlock } from './CampaignsBlock';
 
 const HomeIndex: FC<IHomeRoute> = props => {
 	const { campaigns, latestUpdates, ...rest } = props;
@@ -35,6 +36,11 @@ const HomeIndex: FC<IHomeRoute> = props => {
 			<Separator />
 			<LatestUpdatesBlock latestUpdates={latestUpdates} />
 			<Separator />
+			{campaigns && campaigns.length > 0 ? (
+				<CampaignsBlock campaigns={campaigns} />
+			) : (
+				''
+			)}
 			<HomeFromBlog />
 			<InformationBlock />
 			<HomeGetUpdates />
