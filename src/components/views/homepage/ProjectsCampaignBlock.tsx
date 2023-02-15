@@ -12,23 +12,51 @@ import {
 import styled from 'styled-components';
 import { Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Swiper as SwiperClass } from 'swiper/types';
 import InternalLink from '@/components/InternalLink';
-import { IProject } from '@/apollo/types/types';
+import { ICampaign } from '@/apollo/types/types';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { Shadow } from '@/components/styled-components/Shadow';
 import 'swiper/css';
 import { PaginationItem } from '@/components/SwiperPagination';
+import { useAppSelector } from '@/features/hooks';
+import { client } from '@/apollo/apolloClient';
+import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 
-const CampaignBlock = (props: { projects: IProject[] }) => {
+interface IProjectsCampaignBlockProps {
+	campaign: ICampaign;
+}
+
+const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
+	campaign,
+}) => {
+	const user = useAppSelector(state => state.user.userData);
+	const [projects, setProjects] = useState(campaign);
+
+	useEffect(() => {
+		if (!user || !user.id) return;
+		const variables: any = {};
+		const fetchCampaign = async (userId: string) => {
+			if (userId) {
+				variables.connectedWalletUserId = Number(userId);
+			}
+			const { data } = await client.query({
+				query: FETCH_ALL_PROJECTS,
+				variables,
+				fetchPolicy: 'network-only',
+			});
+			console.log('data', data);
+		};
+		fetchCampaign(user.id);
+	}, [user]);
+
 	const { isMobile, isTablet, isLaptopS, isLaptopL, isDesktop } =
 		useDetectDevice();
 	const [swiperInstance, setSwiperInstance] = useState<SwiperClass>();
 	const [currentSlide, setCurrentSlide] = useState(1);
-	const { projects } = props;
 	const slidesPerView = isMobile
 		? 1
 		: isTablet
@@ -38,8 +66,10 @@ const CampaignBlock = (props: { projects: IProject[] }) => {
 		: isLaptopL
 		? 2.3
 		: 3;
-	const _projects = projects.slice(0, 5);
-	let paginationCount = Math.floor(_projects.length - slidesPerView + 1);
+
+	let paginationCount = Math.floor(
+		campaign.relatedProjectsCount - slidesPerView + 1,
+	);
 	if (!isDesktop && !isMobile) paginationCount += 1;
 	const pages = Array.from(Array(paginationCount).keys());
 
@@ -92,7 +122,7 @@ const CampaignBlock = (props: { projects: IProject[] }) => {
 						}}
 						spaceBetween={24}
 					>
-						{_projects.map(project => (
+						{campaign.relatedProjects.map(project => (
 							<SwiperSlide key={project.id}>
 								<ProjectCard project={project} />
 							</SwiperSlide>
@@ -213,4 +243,4 @@ const Wrapper = styled.div`
 	}
 `;
 
-export default CampaignBlock;
+export default ProjectsCampaignBlock;
