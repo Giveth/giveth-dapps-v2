@@ -17,7 +17,7 @@ import TikAnimation from '@/animations/tik.json';
 import ErrorAnimation from '@/animations/error.json';
 import { AddTokenButton } from '../AddTokenButton';
 import { Flex } from '../styled-components/Flex';
-import LottieControl from '@/components/animations/lottieControl';
+import LottieControl from '@/components/LottieControl';
 
 const AddTokenRow = styled(Flex)`
 	margin-top: 16px;
@@ -43,7 +43,7 @@ export const SubmittedInnerModal: FC<IConfirmSubmitProps> = ({
 	return (
 		<>
 			<Title>{title}</Title>
-			<LottieControl animationData={LoadingAnimation} size={100} />
+			<LottieControl animationData={LoadingAnimation} size={200} />
 			<TxSubmit weight={700}>{txHash && 'Transaction pending'}</TxSubmit>
 			<AddTokenRow alignItems={'center'} justifyContent={'center'}>
 				<AddTokenButton

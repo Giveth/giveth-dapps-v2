@@ -16,7 +16,7 @@ import React, {
 import styled, { css } from 'styled-components';
 import { EInputValidation, IInputValidation } from '@/types/inputValidation';
 import InputStyled from './styled-components/Input';
-import LottieControl from '@/components/animations/lottieControl';
+import LottieControl from '@/components/LottieControl';
 import LoadingAnimation from '@/animations/loading_giv_600.json';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { getTextWidth } from '@/helpers/text';
@@ -175,7 +175,7 @@ const Input: FC<InputType> = props => {
 					{isValidating && (
 						<LottieControl
 							animationData={LoadingAnimation}
-							size={22.4}
+							size={40}
 						/>
 					)}
 					{maxLength && (

@@ -12,7 +12,6 @@ import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 
-import ConfettiAnimation from '@/components/animations/confetti';
 import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
 import SocialBox from '@/components/views/donate/SocialBox';
@@ -25,6 +24,8 @@ import config from '@/configuration';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { IFetchGivethProjectGQL } from '@/apollo/types/gqlTypes';
 import { useDonateData } from '@/context/donate.context';
+import CongratsAnimation from '@/animations/congrats.json';
+import LottieControl from '@/components/LottieControl';
 
 const SuccessView: FC = () => {
 	const { isSuccessDonation } = useDonateData();
@@ -60,7 +61,7 @@ const SuccessView: FC = () => {
 	return (
 		<SuccessContainer>
 			<ConfettiContainer>
-				<ConfettiAnimation size={300} />
+				<LottieControl size={400} animationData={CongratsAnimation} />
 			</ConfettiContainer>
 			<GiverH4 weight={700}>You&#39;re a giver now!</GiverH4>
 			<SuccessMessage>{message}</SuccessMessage>

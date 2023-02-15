@@ -18,7 +18,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import { IconWithTooltip } from '../IconWithToolTip';
 import LoadingAnimation from '@/animations/loading.json';
 import { Pending } from '../modals/HarvestAll.sc';
-import LottieControl from '@/components/animations/lottieControl';
+import LottieControl from '@/components/LottieControl';
 import { IconEthereum } from '../Icons/Eth';
 import { IconGIV } from '../Icons/GIV';
 interface IV3StakeCardProps {
