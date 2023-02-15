@@ -5,8 +5,9 @@ import { Swiper as SwiperType } from 'swiper/types';
 import { neutralColors } from '@giveth/ui-design-system';
 import { Container, Row } from '@/components/Grid';
 import { SwiperPagination } from '@/components/SwiperPagination';
-import { BlockHeader, BlockTitle } from './common';
+import { BlockHeader, BlockTitle } from '../common';
 import { ICampaign } from '@/apollo/types/types';
+import { CampaignsSlide } from './CampaignsSlide';
 
 interface ICampaignsBlockProps {
 	campaigns: ICampaign[];
@@ -33,7 +34,7 @@ export const CampaignsBlock: FC<ICampaignsBlockProps> = ({ campaigns }) => {
 					>
 						{campaigns.map(campaign => (
 							<SwiperSlide key={campaign.id}>
-								<div>{campaign.title}</div>
+								<CampaignsSlide campaign={campaign} />
 							</SwiperSlide>
 						))}
 					</Swiper>

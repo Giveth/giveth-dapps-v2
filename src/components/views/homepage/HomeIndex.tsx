@@ -10,7 +10,7 @@ import VideoBlock from './videoBlock';
 import { LatestUpdatesBlock } from './latestUpdates/LatestUpdatesBlock';
 import { IHomeRoute } from '../../../../pages';
 import InformationBlock from '@/components/views/homepage/InformationBlock';
-import { CampaignsBlock } from './CampaignsBlock';
+import { CampaignsBlock } from './campaignsBlock/CampaignsBlock';
 
 const HomeIndex: FC<IHomeRoute> = props => {
 	const { campaigns, latestUpdates, ...rest } = props;
