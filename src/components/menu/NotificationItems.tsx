@@ -6,46 +6,23 @@ import {
 	GLink,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
-import React, { useEffect } from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components';
 import Routes from '@/lib/constants/Routes';
 import { NotificationBox } from '../notification/NotificationBox';
-import { useAppSelector } from '@/features/hooks';
-import { fetchNotificationsData } from '@/features/notification/notification.services';
-import { useNotification } from '@/hooks/useNotification';
 import { useItemsContext } from '@/context/Items.context';
+import { INotification } from '@/features/notification/notification.types';
 
-export const NotificationItems = () => {
-	const { notifications, setNotifications, markOneNotificationRead } =
-		useNotification();
+interface INotificationMenuProps {
+	notifications: INotification[] | [];
+	markOneNotificationRead: (notificationId: number) => void;
+}
+
+export const NotificationItems: FC<INotificationMenuProps> = ({
+	notifications,
+	markOneNotificationRead,
+}) => {
 	const { close } = useItemsContext();
-
-	const { lastNotificationId } = useAppSelector(
-		state => state.notification.notificationInfo,
-	);
-
-	const lastFetchedNotificationId = notifications[0]?.id ?? undefined;
-
-	useEffect(() => {
-		const fetchNotificationsAndSetState = async () => {
-			try {
-				const res = await fetchNotificationsData({ limit: 4 });
-				if (res?.notifications) setNotifications(res.notifications);
-			} catch {
-				console.log('Error fetching notifications');
-			}
-		};
-
-		if (
-			typeof lastFetchedNotificationId === 'number' &&
-			lastNotificationId > lastFetchedNotificationId
-		) {
-			fetchNotificationsAndSetState();
-			return;
-		}
-
-		fetchNotificationsAndSetState();
-	}, [lastNotificationId]);
 
 	return (
 		<>

@@ -28,6 +28,8 @@ import { useAppSelector } from '@/features/hooks';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import Routes from '@/lib/constants/Routes';
 import { NotificationItems } from './NotificationItems';
+import { fetchNotificationsData } from '@/features/notification/notification.services';
+import { useNotification } from '@/hooks/useNotification';
 
 interface INotificationButtonWithMenuProps extends IHeaderButtonProps {}
 
@@ -44,6 +46,36 @@ export const NotificationButtonWithMenu: FC<
 	const { modalCallback: signInThenGoToNotifs } = useModalCallback(() =>
 		router.push(Routes.Notifications),
 	);
+
+	const { notifications, setNotifications, markOneNotificationRead } =
+		useNotification();
+
+	const { lastNotificationId } = useAppSelector(
+		state => state.notification.notificationInfo,
+	);
+
+	const lastFetchedNotificationId = notifications[0]?.id ?? undefined;
+
+	useEffect(() => {
+		const fetchNotificationsAndSetState = async () => {
+			try {
+				const res = await fetchNotificationsData({ limit: 4 });
+				if (res?.notifications) setNotifications(res.notifications);
+			} catch {
+				console.log('Error fetching notifications');
+			}
+		};
+
+		if (
+			typeof lastFetchedNotificationId === 'number' &&
+			lastNotificationId > lastFetchedNotificationId
+		) {
+			fetchNotificationsAndSetState();
+			return;
+		}
+
+		fetchNotificationsAndSetState();
+	}, [lastNotificationId]);
 
 	useEffect(() => {
 		if (!isHeaderShowing) {
@@ -69,7 +101,10 @@ export const NotificationButtonWithMenu: FC<
 			{menuCondition && (
 				<MenuContainer isAnimating={showMenu} theme={theme}>
 					<ItemsProvider close={closeMenu}>
-						<NotificationItems />
+						<NotificationItems
+							notifications={notifications}
+							markOneNotificationRead={markOneNotificationRead}
+						/>
 					</ItemsProvider>
 				</MenuContainer>
 			)}
@@ -89,7 +124,12 @@ export const NotificationButtonWithMenu: FC<
 				>
 					<SidebarInnerContainer>
 						<ItemsProvider close={closeSidebar}>
-							<NotificationItems />
+							<NotificationItems
+								notifications={notifications}
+								markOneNotificationRead={
+									markOneNotificationRead
+								}
+							/>
 						</ItemsProvider>
 					</SidebarInnerContainer>
 				</SideBar>
