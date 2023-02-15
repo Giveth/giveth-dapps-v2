@@ -67,6 +67,7 @@ export interface IDonationProject extends IProject {
 export interface ICampaign {
 	id: string;
 	title: string;
+	hashtags: string[];
 	slug: string;
 	isFeatured: boolean;
 	description: string;
