@@ -10,6 +10,7 @@ import { BlockHeader, BlockTitle } from '../common';
 import { ICampaign } from '@/apollo/types/types';
 import { CampaignsSlide } from './CampaignsSlide';
 import TrazadoPink from '/public/images/trazado-pink.svg';
+import CaminhoPink from '/public/images/caminho-pink.svg';
 
 interface ICampaignsBlockProps {
 	campaigns: ICampaign[];
@@ -20,7 +21,7 @@ export const CampaignsBlock: FC<ICampaignsBlockProps> = ({ campaigns }) => {
 
 	return (
 		<CampaignsBlockWrapper>
-			<Container>
+			<ContainerRelative>
 				<BlockHeader>
 					<BlockTitle>What’s up on Giveth</BlockTitle>
 					<SwiperPagination
@@ -49,7 +50,15 @@ export const CampaignsBlock: FC<ICampaignsBlockProps> = ({ campaigns }) => {
 						))}
 					</Swiper>
 				</SwiperWrapper>
-			</Container>
+				<CaminhoPinkWrapper>
+					<Image
+						src={CaminhoPink}
+						width={32}
+						height={32}
+						alt='caminho'
+					/>
+				</CaminhoPinkWrapper>
+			</ContainerRelative>
 		</CampaignsBlockWrapper>
 	);
 };
@@ -59,10 +68,21 @@ const CampaignsBlockWrapper = styled.div`
 	padding-bottom: 110px;
 	background: ${neutralColors.gray[200]};
 `;
+
+const ContainerRelative = styled(Container)`
+	position: relative;
+`;
+
 const SwiperWrapper = styled(Row)``;
 
 const TrazadoPinkWrapper = styled.div`
 	position: absolute;
 	top: -44px;
 	left: -151px;
+`;
+
+const CaminhoPinkWrapper = styled.div`
+	position: absolute;
+	bottom: -72px;
+	left: 30%;
 `;
