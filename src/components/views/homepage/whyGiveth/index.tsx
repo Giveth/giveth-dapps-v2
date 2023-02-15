@@ -12,12 +12,14 @@ import Image from 'next/image';
 import { Flex } from '@/components/styled-components/Flex';
 import StatsCard from '@/components/views/homepage/whyGiveth/StatsCard';
 import DonationCard from '@/components/views/homepage/whyGiveth/DonationCard';
-import { IHomeRoute } from '../../../../../pages';
 import { thousandsSeparator } from '@/lib/helpers';
 import { Relative } from '@/components/styled-components/Position';
 import CominhoPlusIcon from 'public/images/cominho-plus.svg';
+import { IHomeRoute } from 'pages';
 
-const WhyGiveth: FC<Omit<IHomeRoute, 'projects'>> = props => {
+type IWhyGivethProps = Omit<IHomeRoute, 'campaigns' | 'latestUpdates'>;
+
+const WhyGiveth: FC<IWhyGivethProps> = props => {
 	const {
 		recentDonations,
 		projectsPerDate,
