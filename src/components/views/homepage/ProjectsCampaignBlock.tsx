@@ -24,7 +24,7 @@ import 'swiper/css';
 import { PaginationItem } from '@/components/SwiperPagination';
 import { useAppSelector } from '@/features/hooks';
 import { client } from '@/apollo/apolloClient';
-import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
+import { FETCH_CAMPAIGN_BY_SLUG } from '@/apollo/gql/gqlCampaign';
 
 interface IProjectsCampaignBlockProps {
 	campaign: ICampaign;
@@ -34,21 +34,22 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 	campaign,
 }) => {
 	const user = useAppSelector(state => state.user.userData);
-	const [projects, setProjects] = useState(campaign);
+	const [projects, setProjects] = useState(campaign.relatedProjects);
 
 	useEffect(() => {
 		if (!user || !user.id) return;
-		const variables: any = {};
+		const variables: any = {
+			slug: campaign.slug,
+		};
 		const fetchCampaign = async (userId: string) => {
-			if (userId) {
-				variables.connectedWalletUserId = Number(userId);
-			}
+			variables.connectedWalletUserId = Number(userId);
 			const { data } = await client.query({
-				query: FETCH_ALL_PROJECTS,
+				query: FETCH_CAMPAIGN_BY_SLUG,
 				variables,
 				fetchPolicy: 'network-only',
 			});
 			console.log('data', data);
+			setProjects(data.findCampaignBySlug.relatedProjects);
 		};
 		fetchCampaign(user.id);
 	}, [user]);
@@ -67,9 +68,7 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 		? 2.3
 		: 3;
 
-	let paginationCount = Math.floor(
-		campaign.relatedProjects.length - slidesPerView + 1,
-	);
+	let paginationCount = Math.floor(projects.length - slidesPerView + 1);
 	if (!isDesktop && !isMobile) paginationCount += 1;
 	const pages = Array.from(Array(paginationCount).keys());
 
@@ -122,7 +121,7 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 						}}
 						spaceBetween={24}
 					>
-						{campaign.relatedProjects.map(project => (
+						{projects.map(project => (
 							<SwiperSlide key={project.id}>
 								<ProjectCard project={project} />
 							</SwiperSlide>
