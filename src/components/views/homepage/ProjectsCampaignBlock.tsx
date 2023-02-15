@@ -68,7 +68,7 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 		: 3;
 
 	let paginationCount = Math.floor(
-		campaign.relatedProjectsCount - slidesPerView + 1,
+		campaign.relatedProjects.length - slidesPerView + 1,
 	);
 	if (!isDesktop && !isMobile) paginationCount += 1;
 	const pages = Array.from(Array(paginationCount).keys());
