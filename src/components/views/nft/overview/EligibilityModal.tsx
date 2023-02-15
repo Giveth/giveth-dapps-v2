@@ -38,8 +38,8 @@ const EligibilityModal = ({ isSuccess, setShowModal }: IEligibilityModal) => {
 		>
 			<ModalContentContainer>
 				{isSuccess === true
-					? '"You are eligible to mint your Giver early! Thanks for supporting Giveth"'
-					: '"The wallet address input is not eligible for early minting. If you think this is a mistake, please contact the team. Check out our documentation for full details on eligibility."'}
+					? 'You are eligible to mint your Giver early! Thanks for supporting Giveth'
+					: 'The wallet address input is not eligible for early minting. If you think this is a mistake, please contact the team. Check out our documentation for full details on eligibility.'}
 			</ModalContentContainer>
 			{isSuccess ? (
 				<CustomizedLink href={Routes.NFTMint} passHref>
@@ -49,6 +49,7 @@ const EligibilityModal = ({ isSuccess, setShowModal }: IEligibilityModal) => {
 					/>
 				</CustomizedLink>
 			) : (
+				// if it is not successful we should link to the documentation article - mitch needs to publish this!!
 				<CustomizedLink href={Routes.NFT} passHref>
 					<CustomizedButtonLink
 						linkType='texty-secondary'
