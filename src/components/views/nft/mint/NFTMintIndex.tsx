@@ -4,6 +4,7 @@ import {
 	brandColors,
 	Button,
 	ButtonLink,
+	ButtonText,
 	H1,
 	Lead,
 	mediaQueries,
@@ -94,11 +95,11 @@ export const NFTMintIndex = () => {
 											},
 										)}
 									</Desc>
-									<ButtonLink
-										linkType='texty'
-										label='View on  OPENSEA'
-										href={config.OPENSEA_ADDRESS + account}
-									/>
+									<a href={config.OPENSEA_ADDRESS + account}>
+										<OpenSeaLink>
+											View on OPENSEA
+										</OpenSeaLink>
+									</a>
 									<Image
 										src='/images/yellow_flower_full.svg'
 										alt='yellow flower'
@@ -218,6 +219,13 @@ const Desc = styled(Lead)`
 	${mediaQueries.laptopL} {
 		max-width: 480px;
 	}
+`;
+
+const OpenSeaLink = styled(ButtonText)`
+	color: ${brandColors.deep[100]};
+	margin-bottom: 32px;
+	display: block;
+	text-align: center;
 `;
 
 const MintAgainButton = styled(Button)`
