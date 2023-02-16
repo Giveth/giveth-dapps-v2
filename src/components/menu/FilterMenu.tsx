@@ -14,6 +14,7 @@ import { FlexCenter } from '../styled-components/Flex';
 import CheckBox from '../Checkbox';
 import { useProjectsContext } from '@/context/projects.context';
 import { zIndex } from '@/lib/constants/constants';
+import { EProjectsFilter } from '@/apollo/types/types';
 
 interface IFilterMenuProps {
 	handleClose: (e?: any) => void;
@@ -26,7 +27,7 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 		const { setVariables, variables } = useProjectsContext();
 		const filtersCount = variables?.filters?.length ?? 0;
 
-		const handleSelectFilter = (e: boolean, filter: string) => {
+		const handleSelectFilter = (e: boolean, filter: EProjectsFilter) => {
 			if (e) {
 				setVariables({
 					...variables,
@@ -101,11 +102,17 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 FilterMenu.displayName = 'FilterMenu';
 
 const projectFeatures = [
-	{ label: 'Accepts GIV', value: 'AcceptGiv' },
-	{ label: 'Verified', value: 'Verified' },
-	{ label: 'Boosted with GIVpower', value: 'BoostedWithGivPower' },
-	{ label: 'From GivingBlock', value: 'GivingBlock' },
-	{ label: 'Accepts Funds on Gnosis', value: 'AcceptFundOnGnosis' },
+	{ label: 'Accepts GIV', value: EProjectsFilter.ACCEPT_GIV },
+	{ label: 'Verified', value: EProjectsFilter.VERIFIED },
+	{
+		label: 'Boosted with GIVpower',
+		value: EProjectsFilter.BOOSTED_WITH_GIVPOWER,
+	},
+	{ label: 'From GivingBlock', value: EProjectsFilter.GIVING_BLOCK },
+	{
+		label: 'Accepts Funds on Gnosis',
+		value: EProjectsFilter.ACCEPT_FUND_ON_GNOSIS,
+	},
 ];
 
 const ButtonStyled = styled(Button)`
