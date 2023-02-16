@@ -3,6 +3,7 @@ import {
 	EDonationType,
 	EProjectStatus,
 	EProjectVerificationStatus,
+	ESortbyAllProjects,
 } from '@/apollo/types/gqlEnums';
 import { IAddress } from '@/components/views/verification/manageFunds/ManageFundsIndex';
 
@@ -65,27 +66,18 @@ export interface IDonationProject extends IProject {
 }
 
 export enum ECampaignType {
-	ManuallySelected = 'ManuallySelected',
-	SortField = 'SortField',
-	FilterFields = 'FilterFields',
-	WithoutProjects = 'WithoutProjects',
+	MANUALLY_SELECTED = 'ManuallySelected',
+	SORT_FIELD = 'SortField',
+	FILTER_FIELDS = 'FilterFields',
+	WITHOUT_PROJECTS = 'WithoutProjects',
 }
 
 export enum ECampaignFilterField {
-	verified = 'verified',
-	givingBlocksId = 'givingBlocksId',
-	acceptFundOnGnosis = 'acceptFundOnGnosis',
-	fromGivingBlock = 'fromGivingBlock',
-	boostedWithGivPower = 'boostedWithGivPower',
-}
-
-export enum ECampaignSortingField {
-	MostFunded = 'MostFunded',
-	MostLiked = 'MostLiked',
-	Newest = 'Newest',
-	Oldest = 'Oldest',
-	QualityScore = 'QualityScore',
-	GIVPower = 'GIVPower',
+	Verified = 'verified',
+	AcceptGiv = 'givingBlocksId',
+	AcceptFundOnGnosis = 'acceptFundOnGnosis',
+	GivingBlock = 'fromGivingBlock',
+	BoostedWithGivPower = 'boostedWithGivPower',
 }
 
 export interface ICampaign {
@@ -104,7 +96,7 @@ export interface ICampaign {
 	order: number;
 	landingLink: string;
 	filterFields: ECampaignFilterField;
-	sortingField: ECampaignSortingField;
+	sortingField: ESortbyAllProjects;
 	createdAt: string;
 	updatedAt: string;
 }
