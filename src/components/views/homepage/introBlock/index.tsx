@@ -1,6 +1,5 @@
 import {
 	ButtonLink,
-	Container,
 	H3,
 	IconBulbOutline32,
 	IconChevronRight24,
@@ -17,6 +16,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import IntroCard from './IntroCard';
 import introBanner from '/public/images/banners/introBanner.svg';
 import { mediaQueries } from '@/lib/constants/constants';
+import { Container } from '@/components/Grid';
 
 const SemiCircle = dynamic(() => import('@/components/particles/SemiCircle'));
 const Circle = dynamic(() => import('@/components/particles/Circle'));
