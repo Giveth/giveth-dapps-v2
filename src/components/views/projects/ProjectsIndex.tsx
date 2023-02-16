@@ -33,7 +33,7 @@ import { useProjectsContext } from '@/context/projects.context';
 import ProjectsFiltersDesktop from '@/components/views/projects/ProjectsFiltersDesktop';
 import ProjectsFiltersTablet from '@/components/views/projects/ProjectsFiltersTablet';
 import ProjectsFiltersMobile from '@/components/views/projects/ProjectsFiltersMobile';
-import LottieControl from '@/components/animations/lottieControl';
+import LottieControl from '@/components/LottieControl';
 import LoadingAnimation from '@/animations/loading_giv.json';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
@@ -277,7 +277,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				<Loading>
 					<LottieControl
 						animationData={LoadingAnimation}
-						size={150}
+						size={250}
 					/>
 				</Loading>
 			)}
