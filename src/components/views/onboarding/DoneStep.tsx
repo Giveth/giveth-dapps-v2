@@ -9,18 +9,18 @@ import {
 	OutlineButton,
 	P,
 } from '@giveth/ui-design-system';
-
 import { useWeb3React } from '@web3-react/core';
+import React from 'react';
 import { OnboardStep } from './common';
 import { Flex } from '@/components/styled-components/Flex';
-import CongratsAnimation from '@/animations/congrats.json';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered } from '@/lib/helpers';
 import { Col, Row } from '@/components/Grid';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
-import LottieControl from '@/components/animations/lottieControl';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
+import CongratsAnimation from '@/animations/congrats.json';
+import LottieControl from '@/components/LottieControl';
 
 const DoneStep = () => {
 	const router = useRouter();
@@ -42,8 +42,9 @@ const DoneStep = () => {
 			<DoneStepContainer xs={12} xl={10}>
 				<AnimationContainer>
 					<LottieControl
-						animationData={CongratsAnimation}
+						size={400}
 						speed={0.8}
+						animationData={CongratsAnimation}
 					/>
 				</AnimationContainer>
 				<CongratsContainer>
