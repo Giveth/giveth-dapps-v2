@@ -13,6 +13,7 @@ import { useIntl } from 'react-intl';
 import { ICampaign } from '@/apollo/types/types';
 import { Col, Row } from '@/components/Grid';
 import { VideoContainer, VideoOverlay } from '@/components/VideoBlock';
+import { campaignLinkGenerator } from '@/helpers/url';
 
 interface ICampaignsSlideProps {
 	campaign: ICampaign;
@@ -43,7 +44,7 @@ export const CampaignsSlide: FC<ICampaignsSlideProps> = ({ campaign }) => {
 			<ContentCol sm={12} md={5}>
 				<H2>{campaign.title}</H2>
 				<H4>{campaign.description}</H4>
-				<Link href=''>
+				<Link href={campaignLinkGenerator(campaign)}>
 					<ExploreLink>
 						Explore <IconChevronRight32 />
 					</ExploreLink>
