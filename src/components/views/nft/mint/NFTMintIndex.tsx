@@ -22,6 +22,7 @@ import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import { GiversPFP } from '@/types/contracts';
 import { EPFPMinSteps, usePFPMintData } from '@/context/pfpmint.context';
 import EligibilityModal from '../overview/EligibilityModal';
+import { Flex } from '@/components/styled-components/Flex';
 
 export const NFTMintIndex = () => {
 	const { formatMessage } = useIntl();
@@ -79,13 +80,13 @@ export const NFTMintIndex = () => {
 							</>
 						) : step === EPFPMinSteps.SUCCESS ? (
 							<>
-								<Title>
+								<TitleCenter>
 									{formatMessage({
 										id: 'label.welcome_giver',
 									})}
-								</Title>
-								<ContentWrapper>
-									<Desc>
+								</TitleCenter>
+								<ContentWrapperCenter>
+									<DescCenter>
 										{formatMessage(
 											{
 												id: 'page.mint.welcome_giver.desc',
@@ -94,7 +95,7 @@ export const NFTMintIndex = () => {
 												itemCount: qty,
 											},
 										)}
-									</Desc>
+									</DescCenter>
 									<a href={config.OPENSEA_ADDRESS + account}>
 										<OpenSeaLink>
 											View on OPENSEA
@@ -106,21 +107,21 @@ export const NFTMintIndex = () => {
 										width={360}
 										height={360}
 									/>
-								</ContentWrapper>
+								</ContentWrapperCenter>
 							</>
 						) : (
 							<>
-								<Title>
+								<TitleCenter>
 									{formatMessage({
 										id: 'label.uh_oh',
 									})}
-								</Title>
-								<ContentWrapper>
-									<Desc>
+								</TitleCenter>
+								<ContentWrapperCenter>
+									<DescCenter>
 										{formatMessage({
 											id: 'page.mint.fail.desc',
 										})}
-									</Desc>
+									</DescCenter>
 									<ButtonLink
 										linkType='texty'
 										label='View transaction on etherscan'
@@ -146,7 +147,7 @@ export const NFTMintIndex = () => {
 											display: 'block',
 										}}
 									/>
-								</ContentWrapper>
+								</ContentWrapperCenter>
 							</>
 						)}
 					</Col>
@@ -197,28 +198,28 @@ const Title = styled(H1)`
 	margin-bottom: 22px;
 `;
 
-const ContentWrapper = styled.div`
-	/* flex-direction: column; */
-	/* align-items: center; */
+const TitleCenter = styled(Title)`
+	text-align: center;
+`;
+
+const ContentWrapper = styled(Flex)`
+	flex-direction: column;
 	gap: 21px;
 	position: relative;
 	z-index: 2;
-	${mediaQueries.tablet} {
-		max-width: 480px;
-	}
+`;
+
+const ContentWrapperCenter = styled(ContentWrapper)`
+	align-items: center;
 `;
 
 const Desc = styled(Lead)`
 	margin-bottom: 32px;
-	text-align: center;
 	width: 100%;
-	${mediaQueries.laptopS} {
-		text-align: left;
-		max-width: 360px;
-	}
-	${mediaQueries.laptopL} {
-		max-width: 480px;
-	}
+`;
+
+const DescCenter = styled(Desc)`
+	text-align: center;
 `;
 
 const OpenSeaLink = styled(ButtonText)`
