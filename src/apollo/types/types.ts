@@ -73,7 +73,8 @@ export interface ICampaign {
 	description: string;
 	relatedProjects: IProject[];
 	relatedProjectsCount: number;
-	media: string;
+	photo: string;
+	video: string;
 	type: string;
 	isActive: boolean;
 	order: number;
