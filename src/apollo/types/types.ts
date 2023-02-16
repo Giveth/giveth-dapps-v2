@@ -65,6 +65,14 @@ export interface IDonationProject extends IProject {
 	givethAddresses: IWalletAddress[];
 }
 
+export enum EProjectsFilter {
+	ACCEPT_GIV = 'AcceptGiv',
+	VERIFIED = 'Verified',
+	BOOSTED_WITH_GIVPOWER = 'BoostedWithGivPower',
+	GIVING_BLOCK = 'GivingBlock',
+	ACCEPT_FUND_ON_GNOSIS = 'AcceptFundOnGnosis',
+}
+
 export enum ECampaignType {
 	MANUALLY_SELECTED = 'ManuallySelected',
 	SORT_FIELD = 'SortField',
