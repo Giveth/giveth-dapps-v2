@@ -2,7 +2,7 @@
 name: Test report - PFP
 about: Create a test-report to help us improve the feature
 title: 'PFP | '
-labels: ''
+labels: PFP
 assignees: ''
 
 ---
