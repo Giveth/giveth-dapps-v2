@@ -80,12 +80,22 @@ export const ProjectsProvider = (props: {
 					break;
 			}
 		}
+		let filters;
+		if (router.query.filter) {
+			filters = (
+				Array.isArray(router.query.filter)
+					? router.query.filter
+					: [router.query.filter]
+			) as EProjectsFilter[];
+		}
+
 		let term = router.query.term as string;
 		setVariables({
 			sortingBy: sort,
 			searchTerm: term,
+			filters,
 		});
-	}, [router.query.sort, router.query.term]);
+	}, [router.query.sort, router.query.term, router.query.filter]);
 
 	return (
 		<ProjectsContext.Provider
