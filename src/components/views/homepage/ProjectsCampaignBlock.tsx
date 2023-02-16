@@ -24,6 +24,7 @@ import { useAppSelector } from '@/features/hooks';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_CAMPAIGN_BY_SLUG } from '@/apollo/gql/gqlCampaign';
 import { BlockHeader, BlockTitle } from './common';
+import { Container } from '@/components/Grid';
 
 interface IProjectsCampaignBlockProps {
 	campaign: ICampaign;
@@ -202,13 +203,8 @@ const Title = styled(FlexCenter)`
 	}
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled(Container)`
 	padding: 40px 0 80px;
-	max-width: 1440px;
-	margin: 0 auto;
-	${mediaQueries.tablet} {
-		padding: 42px 0;
-	}
 `;
 
 export default ProjectsCampaignBlock;
