@@ -78,10 +78,7 @@ export const CampaignsSlide: FC<ICampaignsSlideProps> = ({ campaign }) => {
 				) : (
 					<ImageWrapper>
 						<Image
-							src={
-								campaign.photo ||
-								'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80'
-							}
+							src={campaign.photo}
 							alt='campaign image'
 							fill
 							style={{ objectFit: 'cover' }}
@@ -97,6 +94,7 @@ const ImageWrapper = styled.div`
 	width: 100%;
 	& > img {
 		position: relative !important;
+		max-height: 380px;
 	}
 `;
 
