@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useRef, useState } from 'react';
 import {
 	brandColors,
 	ButtonText,
@@ -9,14 +9,35 @@ import {
 import Image from 'next/image';
 import styled from 'styled-components';
 import Link from 'next/link';
+import { useIntl } from 'react-intl';
 import { ICampaign } from '@/apollo/types/types';
 import { Col, Row } from '@/components/Grid';
+import { VideoContainer, VideoOverlay } from '@/components/VideoBlock';
 
 interface ICampaignsSlideProps {
 	campaign: ICampaign;
 }
 
 export const CampaignsSlide: FC<ICampaignsSlideProps> = ({ campaign }) => {
+	const [isPlaying, setIsPlaying] = useState(false);
+	const videoRef = useRef<HTMLVideoElement | null>(null);
+	const { formatMessage } = useIntl();
+
+	function handleVideoClick() {
+		const { current: video } = videoRef;
+		if (video?.paused) {
+			video?.play();
+			setIsPlaying(true);
+		} else {
+			video?.pause();
+			setIsPlaying(false);
+		}
+	}
+	function handleVideoEnd() {
+		const { current: video } = videoRef;
+		video && (video.currentTime = 0);
+		setIsPlaying(false);
+	}
 	return (
 		<Row>
 			<ContentCol sm={12} md={5}>
@@ -29,26 +50,53 @@ export const CampaignsSlide: FC<ICampaignsSlideProps> = ({ campaign }) => {
 				</Link>
 			</ContentCol>
 			<Col sm={12} md={7}>
-				<ImageWrapper>
-					<Image
-						src={
-							campaign.media ||
-							'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80'
-						}
-						alt='campaign image'
-						fill
-						style={{ objectFit: 'cover' }}
-					/>
-				</ImageWrapper>
+				{campaign.video ? (
+					<VideoContainer>
+						<video
+							ref={videoRef}
+							id='video'
+							onClick={handleVideoClick}
+							width='100%'
+							onEnded={handleVideoEnd}
+						>
+							<source src={campaign.video} type='video/mp4' />
+						</video>
+						<VideoOverlay
+							onClick={handleVideoClick}
+							hidden={isPlaying}
+						>
+							<Image
+								src='/images/video_play.svg'
+								width='90'
+								height='90'
+								alt='giveconomy video play button'
+								draggable={false}
+							/>
+						</VideoOverlay>
+					</VideoContainer>
+				) : (
+					<ImageWrapper>
+						<Image
+							src={
+								campaign.photo ||
+								'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80'
+							}
+							alt='campaign image'
+							fill
+							style={{ objectFit: 'cover' }}
+						/>
+					</ImageWrapper>
+				)}
 			</Col>
 		</Row>
 	);
 };
 
 const ImageWrapper = styled.div`
-	position: relative;
 	width: 100%;
-	height: 314px;
+	& > img {
+		position: relative !important;
+	}
 `;
 
 const ContentCol = styled(Col)`
