@@ -14,30 +14,43 @@ export function campaignLinkGenerator(campaign: ICampaign) {
 		return campaign.landingLink;
 	if (campaign.type === ECampaignType.MANUALLY_SELECTED)
 		return `${Routes.Projects}?campaign=${campaign.slug}`;
+	let params = new URLSearchParams('');
 	if (campaign.type === ECampaignType.SORT_FIELD)
-		return `${Routes.Projects}?sort=${campaign.sortingField}`;
+		params.append('sort', campaign.sortingField);
+
 	if (campaign.type === ECampaignType.FILTER_FIELDS) {
-		let filter = '';
-		switch (campaign.filterFields) {
-			case ECampaignFilterField.Verified:
-				filter = EProjectsFilter.VERIFIED;
-				break;
-			case ECampaignFilterField.GivingBlock:
-				filter = EProjectsFilter.GIVING_BLOCK;
-				break;
-			case ECampaignFilterField.AcceptFundOnGnosis:
-				filter = EProjectsFilter.ACCEPT_FUND_ON_GNOSIS;
-				break;
-			case ECampaignFilterField.AcceptFundOnGnosis:
-				filter = EProjectsFilter.ACCEPT_FUND_ON_GNOSIS;
-				break;
-			case ECampaignFilterField.BoostedWithGivPower:
-				filter = EProjectsFilter.BOOSTED_WITH_GIVPOWER;
-				break;
-			default:
-				break;
-		}
-		return `${Routes.Projects}?filter=${filter}`;
+		campaign.filterFields.forEach(filter => {
+			switch (filter) {
+				case ECampaignFilterField.Verified:
+					params.append('filter', EProjectsFilter.VERIFIED);
+					break;
+				case ECampaignFilterField.GivingBlock:
+					params.append('filter', EProjectsFilter.GIVING_BLOCK);
+					break;
+				case ECampaignFilterField.AcceptFundOnGnosis:
+					params.append(
+						'filter',
+						EProjectsFilter.ACCEPT_FUND_ON_GNOSIS,
+					);
+					break;
+				case ECampaignFilterField.AcceptFundOnGnosis:
+					params.append(
+						'filter',
+						EProjectsFilter.ACCEPT_FUND_ON_GNOSIS,
+					);
+					break;
+				case ECampaignFilterField.BoostedWithGivPower:
+					params.append(
+						'filter',
+						EProjectsFilter.BOOSTED_WITH_GIVPOWER,
+					);
+					break;
+				default:
+					break;
+			}
+		});
 	}
-	return '';
+
+	const query = params.toString();
+	return `${Routes.Projects}${query ? `?${query}` : ''}`;
 }

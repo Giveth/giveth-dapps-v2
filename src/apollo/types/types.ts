@@ -103,7 +103,7 @@ export interface ICampaign {
 	isActive: boolean;
 	order: number;
 	landingLink: string;
-	filterFields: ECampaignFilterField;
+	filterFields: ECampaignFilterField[];
 	sortingField: ESortbyAllProjects;
 	createdAt: string;
 	updatedAt: string;
