@@ -97,7 +97,8 @@ export const HOMEPAGE_DATA = gql`
 			}
 			relatedProjectsCount
 			hashtags
-			media
+			photo
+			video
 			type
 			isActive
 			order

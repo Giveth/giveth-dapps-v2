@@ -39,7 +39,8 @@ export const FETCH_CAMPAIGNS = gql`
 				}
 			}
 			relatedProjectsCount
-			media
+			photo
+			video
 			type
 			isActive
 			order
@@ -53,16 +54,9 @@ export const FETCH_CAMPAIGNS = gql`
 `;
 
 export const FETCH_CAMPAIGN_BY_SLUG = gql`
-	query FetchCampaignBySlug(
-		$slug: String
-		$limit: Int
-		$skip: Int
-		$connectedWalletUserId: Int
-	) {
+	query FetchCampaignBySlug($slug: String, $connectedWalletUserId: Int) {
 		findCampaignBySlug(
 			slug: $slug
-			skip: $skip
-			limit: $limit
 			connectedWalletUserId: $connectedWalletUserId
 		) {
 			id
@@ -100,7 +94,8 @@ export const FETCH_CAMPAIGN_BY_SLUG = gql`
 			}
 			relatedProjectsCount
 			hashtags
-			media
+			photo
+			video
 			slug
 			isActive
 			order
