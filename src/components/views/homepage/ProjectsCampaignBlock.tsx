@@ -2,12 +2,10 @@ import {
 	brandColors,
 	ButtonText,
 	H1,
-	H4,
 	IconChevronRight32,
 	IconPointerLeft,
 	IconPointerRight,
 	mediaQueries,
-	neutralColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Navigation } from 'swiper';
@@ -25,6 +23,7 @@ import { PaginationItem } from '@/components/SwiperPagination';
 import { useAppSelector } from '@/features/hooks';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_CAMPAIGN_BY_SLUG } from '@/apollo/gql/gqlCampaign';
+import { BlockHeader, BlockTitle } from './common';
 
 interface IProjectsCampaignBlockProps {
 	campaign: ICampaign;
@@ -80,12 +79,12 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 
 	return (
 		<Wrapper>
-			<UpperSection>
-				<HashTags weight={700}>
+			<BlockHeader>
+				<BlockTitle weight={700}>
 					{campaign.hashtags && campaign.hashtags.length > 0
 						? campaign.hashtags.map(hashtag => `#${hashtag} `)
 						: ''}
-				</HashTags>
+				</BlockTitle>
 				<Pagination>
 					<PointerWrapper id='homeCampaignPrev'>
 						<IconPointerLeft size={24} />
@@ -103,7 +102,7 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 						<IconPointerRight size={24} />
 					</PointerWrapper>
 				</Pagination>
-			</UpperSection>
+			</BlockHeader>
 			<BottomSection>
 				<Title>
 					<H1 weight={700} style={{ overflowWrap: 'anywhere' }}>
@@ -143,17 +142,6 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 	);
 };
 
-const UpperSection = styled(Flex)`
-	flex-direction: column;
-	margin-bottom: 50px;
-	${mediaQueries.tablet} {
-		margin-bottom: 32px;
-		flex-direction: row;
-		justify-content: space-between;
-		align-items: center;
-	}
-`;
-
 const PointerWrapper = styled(FlexCenter)`
 	cursor: pointer;
 	border-radius: 48px;
@@ -168,17 +156,6 @@ const PointerWrapper = styled(FlexCenter)`
 const Pagination = styled(Flex)`
 	gap: 24px;
 	align-items: center;
-	margin: 0 auto;
-	${mediaQueries.tablet} {
-		margin-left: 0;
-		margin-right: 32px;
-	}
-	${mediaQueries.laptopL} {
-		margin-right: 40px;
-	}
-	${mediaQueries.desktop} {
-		margin-right: 120px;
-	}
 `;
 
 const SwiperWrapper = styled.div`
@@ -200,22 +177,6 @@ const BottomSection = styled(Flex)`
 	flex-direction: column;
 	${mediaQueries.tablet} {
 		flex-direction: row;
-	}
-`;
-
-const HashTags = styled(H4)`
-	color: ${neutralColors.gray[600]};
-	padding-left: 58px;
-	margin-bottom: 40px;
-	${mediaQueries.tablet} {
-		margin-bottom: 0;
-		padding-left: 32px;
-	}
-	${mediaQueries.laptopL} {
-		padding-left: 40px;
-	}
-	${mediaQueries.desktop} {
-		padding-left: 120px;
 	}
 `;
 
