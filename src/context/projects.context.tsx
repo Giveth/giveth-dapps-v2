@@ -8,12 +8,12 @@ import {
 	useState,
 } from 'react';
 import { useRouter } from 'next/router';
-import { IMainCategory } from '@/apollo/types/types';
+import { EProjectsFilter, IMainCategory } from '@/apollo/types/types';
 import { ESortbyAllProjects } from '@/apollo/types/gqlEnums';
 
 interface IVariables {
-	sortingBy?: string;
-	filters?: string[];
+	sortingBy?: ESortbyAllProjects;
+	filters?: EProjectsFilter[];
 	mainCategory?: string;
 	category?: string;
 	searchTerm?: string;
