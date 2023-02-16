@@ -14,11 +14,11 @@ export const BlockTitle = styled(H4)`
 export const BlockHeader = styled(Flex)`
 	justify-content: space-between;
 	align-items: center;
+	gap: 24px;
+	margin-bottom: 32px;
+	position: relative;
 	flex-direction: column;
 	${mediaQueries.laptopS} {
 		flex-direction: row;
 	}
-	gap: 24px;
-	margin-bottom: 32px;
-	position: relative;
 `;

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import {
 	brandColors,
 	ButtonText,
-	H4,
 	IconChevronRight,
 	mediaQueries,
 	neutralColors,
@@ -11,9 +10,11 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { IMediumBlogPost } from '@/apollo/types/types';
 import BlogCard from '@/components/BlogCard';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+import { FlexCenter } from '@/components/styled-components/Flex';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
+import { Col, Container, Row } from '@/components/Grid';
+import { BlockHeader, BlockTitle } from './common';
 
 const HomeFromBlog = () => {
 	const [mediumPosts, setMediumPosts] = useState<IMediumBlogPost[]>();
@@ -33,12 +34,12 @@ const HomeFromBlog = () => {
 	return (
 		<Wrapper>
 			<Container>
-				<Header>
-					<Title weight={700}>
+				<BlockHeader>
+					<BlockTitle weight={700}>
 						{formatMessage({
 							id: 'page.home.section.recent_posts',
 						})}
-					</Title>
+					</BlockTitle>
 					<ExternalLink href={links.MEDIUM}>
 						<VisitBlog>
 							<ButtonText size='large'>
@@ -49,20 +50,21 @@ const HomeFromBlog = () => {
 							<IconChevronRight size={28} />
 						</VisitBlog>
 					</ExternalLink>
-				</Header>
-				<Cards>
+				</BlockHeader>
+				<CardsRow>
 					{mediumPosts?.map(post => (
-						<BlogCard
-							key={post.guid}
-							title={post.title}
-							description={post.description}
-							image={post.thumbnail}
-							link={post.link}
-							author={post.author}
-							date={post.pubDate}
-						/>
+						<Col sm={12} lg={4} key={post.guid}>
+							<BlogCard
+								title={post.title}
+								description={post.description}
+								image={post.thumbnail}
+								link={post.link}
+								author={post.author}
+								date={post.pubDate}
+							/>
+						</Col>
 					))}
-				</Cards>
+				</CardsRow>
 			</Container>
 		</Wrapper>
 	);
@@ -74,37 +76,11 @@ const VisitBlog = styled(FlexCenter)`
 	gap: 5px;
 `;
 
-const Header = styled(Flex)`
-	margin-bottom: 24px;
-	justify-content: space-between;
-	align-items: center;
-	gap: 35px;
+const CardsRow = styled(Row)`
 	flex-direction: column;
-	${mediaQueries.tablet} {
-		flex-direction: row;
-	}
-`;
-
-const Container = styled.div`
-	margin: 0 auto;
-	padding: 0 24px;
-	${mediaQueries.tablet} {
-		padding: 0 40px;
-		width: fit-content;
-	}
-`;
-
-const Cards = styled(Flex)`
-	flex-direction: column;
-	gap: 24px;
-	max-width: 1200px;
 	${mediaQueries.laptopS} {
 		flex-direction: row;
 	}
-`;
-
-const Title = styled(H4)`
-	color: ${neutralColors.gray[600]};
 `;
 
 const Wrapper = styled.div`
