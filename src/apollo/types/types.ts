@@ -64,6 +64,30 @@ export interface IDonationProject extends IProject {
 	givethAddresses: IWalletAddress[];
 }
 
+export enum ECampaignType {
+	ManuallySelected = 'ManuallySelected',
+	SortField = 'SortField',
+	FilterFields = 'FilterFields',
+	WithoutProjects = 'WithoutProjects',
+}
+
+export enum ECampaignFilterField {
+	verified = 'verified',
+	givingBlocksId = 'givingBlocksId',
+	acceptFundOnGnosis = 'acceptFundOnGnosis',
+	fromGivingBlock = 'fromGivingBlock',
+	boostedWithGivPower = 'boostedWithGivPower',
+}
+
+export enum ECampaignSortingField {
+	MostFunded = 'MostFunded',
+	MostLiked = 'MostLiked',
+	Newest = 'Newest',
+	Oldest = 'Oldest',
+	QualityScore = 'QualityScore',
+	GIVPower = 'GIVPower',
+}
+
 export interface ICampaign {
 	id: string;
 	title: string;
@@ -75,12 +99,12 @@ export interface ICampaign {
 	relatedProjectsCount: number;
 	photo: string;
 	video: string;
-	type: string;
+	type: ECampaignType;
 	isActive: boolean;
 	order: number;
 	landingLink: string;
-	filterFields: string;
-	sortingField: string;
+	filterFields: ECampaignFilterField;
+	sortingField: ECampaignSortingField;
 	createdAt: string;
 	updatedAt: string;
 }
