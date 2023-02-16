@@ -106,7 +106,7 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 			</UpperSection>
 			<BottomSection>
 				<Title>
-					<H1 weight={700}>
+					<H1 weight={700} style={{ overflowWrap: 'anywhere' }}>
 						{campaign.title.split(' ').map(t => (
 							<>
 								<span>{t}</span>
