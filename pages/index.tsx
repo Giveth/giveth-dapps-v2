@@ -2,7 +2,7 @@ import { GetStaticProps } from 'next/types';
 
 import HomeIndex from '@/components/views/homepage/HomeIndex';
 import { client } from '@/apollo/apolloClient';
-import { ESortbyAllProjects } from '@/apollo/types/gqlEnums';
+import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 import {
 	ICampaign,
 	IProjectUpdateWithProject,
@@ -41,7 +41,7 @@ export const getStaticProps: GetStaticProps = async context => {
 				skipLatestUpdates: 0,
 				fromDate: '2021-01-01',
 				limit: 12,
-				sortingBy: ESortbyAllProjects.GIVPOWER,
+				sortingBy: EProjectsSortBy.GIVPOWER,
 			},
 			fetchPolicy: 'no-cache',
 		});

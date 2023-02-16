@@ -3,7 +3,7 @@ import {
 	EDonationType,
 	EProjectStatus,
 	EProjectVerificationStatus,
-	ESortbyAllProjects,
+	EProjectsSortBy,
 } from '@/apollo/types/gqlEnums';
 import { IAddress } from '@/components/views/verification/manageFunds/ManageFundsIndex';
 
@@ -104,7 +104,7 @@ export interface ICampaign {
 	order: number;
 	landingLink: string;
 	filterFields: ECampaignFilterField[];
-	sortingField: ESortbyAllProjects;
+	sortingField: EProjectsSortBy;
 	createdAt: string;
 	updatedAt: string;
 }

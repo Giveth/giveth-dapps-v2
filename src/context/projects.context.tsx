@@ -9,10 +9,10 @@ import {
 } from 'react';
 import { useRouter } from 'next/router';
 import { EProjectsFilter, IMainCategory } from '@/apollo/types/types';
-import { ESortbyAllProjects } from '@/apollo/types/gqlEnums';
+import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 
 interface IVariables {
-	sortingBy?: ESortbyAllProjects;
+	sortingBy?: EProjectsSortBy;
 	filters?: EProjectsFilter[];
 	mainCategory?: string;
 	category?: string;
@@ -27,7 +27,7 @@ interface IProjectsContext {
 }
 
 const variablesDefaultValue = {
-	sortingBy: ESortbyAllProjects.GIVPOWER,
+	sortingBy: EProjectsSortBy.GIVPOWER,
 	filters: undefined,
 };
 
@@ -55,26 +55,26 @@ export const ProjectsProvider = (props: {
 		let sort;
 		if (router.query.sort) {
 			switch ((router.query.sort as string).toLowerCase()) {
-				case ESortbyAllProjects.MOSTFUNDED.toLowerCase():
-					sort = ESortbyAllProjects.MOSTFUNDED;
+				case EProjectsSortBy.MOST_FUNDED.toLowerCase():
+					sort = EProjectsSortBy.MOST_FUNDED;
 					break;
-				case ESortbyAllProjects.MOSTLIKED.toLowerCase():
-					sort = ESortbyAllProjects.MOSTLIKED;
+				case EProjectsSortBy.MOST_LIKED.toLowerCase():
+					sort = EProjectsSortBy.MOST_LIKED;
 					break;
-				case ESortbyAllProjects.NEWEST.toLowerCase():
-					sort = ESortbyAllProjects.NEWEST;
+				case EProjectsSortBy.NEWEST.toLowerCase():
+					sort = EProjectsSortBy.NEWEST;
 					break;
-				case ESortbyAllProjects.OLDEST.toLowerCase():
-					sort = ESortbyAllProjects.OLDEST;
+				case EProjectsSortBy.OLDEST.toLowerCase():
+					sort = EProjectsSortBy.OLDEST;
 					break;
-				case ESortbyAllProjects.QUALITYSCORE.toLowerCase():
-					sort = ESortbyAllProjects.QUALITYSCORE;
+				case EProjectsSortBy.QUALITY_SCORE.toLowerCase():
+					sort = EProjectsSortBy.QUALITY_SCORE;
 					break;
-				case ESortbyAllProjects.GIVPOWER.toLowerCase():
-					sort = ESortbyAllProjects.GIVPOWER;
+				case EProjectsSortBy.GIVPOWER.toLowerCase():
+					sort = EProjectsSortBy.GIVPOWER;
 					break;
-				case ESortbyAllProjects.RECENTLY_UPDATED.toLowerCase():
-					sort = ESortbyAllProjects.RECENTLY_UPDATED;
+				case EProjectsSortBy.RECENTLY_UPDATED.toLowerCase():
+					sort = EProjectsSortBy.RECENTLY_UPDATED;
 					break;
 				default:
 					break;
