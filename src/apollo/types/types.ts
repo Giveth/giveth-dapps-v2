@@ -41,9 +41,7 @@ export interface IProject {
 	}[];
 	users: IUser[];
 	totalDonations?: number;
-	totalTraceDonations?: number;
 	totalProjectUpdates?: number;
-	traceCampaignId: string | null;
 	status: {
 		id?: string;
 		name?: EProjectStatus;
