@@ -13,32 +13,22 @@ const PartnersArray = [
 	{
 		icon: OneHive,
 		title: '1Hive',
-		description: 'page.partnerships.1hive',
-		link: 'https://about.1hive.org/',
 	},
 	{
 		icon: Gnosis_Chain,
 		title: 'Gnosis Chain',
-		description: 'page.partnerships.gnosischain',
-		link: 'https://xdaichain.com',
 	},
 	{
 		icon: The_Commons_Stack,
 		title: 'The Commons Stack',
-		description: 'page.partnerships.thecommonsstack',
-		link: 'https://commonsstack.org',
 	},
 	{
 		icon: Gitcoin,
 		title: 'Gitcoin',
-		description: 'page.partnerships.gitcoin',
-		link: 'https://gitcoin.co/',
 	},
 	{
 		icon: ShapeShift_DAO,
 		title: 'ShapeShift DAO',
-		description: 'page.partnerships.shapeshiftdao',
-		link: 'https://shapeshift.com/',
 	},
 ];
 
