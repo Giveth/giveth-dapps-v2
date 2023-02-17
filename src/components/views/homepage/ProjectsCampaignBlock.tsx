@@ -3,12 +3,9 @@ import {
 	ButtonText,
 	H1,
 	IconChevronRight32,
-	IconPointerLeft,
-	IconPointerRight,
 	mediaQueries,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FC, useEffect, useState } from 'react';
 import { Swiper as SwiperClass } from 'swiper/types';
@@ -16,10 +13,7 @@ import InternalLink from '@/components/InternalLink';
 import { ICampaign } from '@/apollo/types/types';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import ProjectCard from '@/components/project-card/ProjectCard';
-import useDetectDevice from '@/hooks/useDetectDevice';
-import { Shadow } from '@/components/styled-components/Shadow';
 import 'swiper/css';
-import { PaginationItem } from '@/components/SwiperPagination';
 import { useAppSelector } from '@/features/hooks';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_CAMPAIGN_BY_SLUG } from '@/apollo/gql/gqlCampaign';
@@ -54,23 +48,8 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 		fetchCampaign(user.id);
 	}, [campaign.slug, user]);
 
-	const { isMobile, isTablet, isLaptopS, isLaptopL, isDesktop } =
-		useDetectDevice();
 	const [swiperInstance, setSwiperInstance] = useState<SwiperClass>();
 	const [currentSlide, setCurrentSlide] = useState(1);
-	const slidesPerView = isMobile
-		? 1
-		: isTablet
-		? 1.3
-		: isLaptopS
-		? 2.1
-		: isLaptopL
-		? 2.3
-		: 3;
-
-	let paginationCount = Math.floor(projects.length - slidesPerView + 1);
-	if (!isDesktop && !isMobile) paginationCount += 1;
-	const pages = Array.from(Array(paginationCount).keys());
 
 	useEffect(() => {
 		if (swiperInstance)
@@ -87,23 +66,6 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 						? campaign.hashtags.map(hashtag => `#${hashtag} `)
 						: ''}
 				</BlockTitle>
-				<Pagination>
-					<PointerWrapper id='homeCampaignPrev'>
-						<IconPointerLeft size={24} />
-					</PointerWrapper>
-					{pages.map(index => (
-						<PaginationItem
-							key={index}
-							onClick={() => swiperInstance?.slideTo(index)}
-							isActive={currentSlide === index + 1}
-						>
-							{index + 1}
-						</PaginationItem>
-					))}
-					<PointerWrapper id='homeCampaignNext'>
-						<IconPointerRight size={24} />
-					</PointerWrapper>
-				</Pagination>
 			</BlockHeader>
 			<BottomSection>
 				<Title>
@@ -126,14 +88,22 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 				</Title>
 				<SwiperWrapper>
 					<Swiper
-						onSwiper={setSwiperInstance}
-						slidesPerView={slidesPerView}
-						modules={[Navigation]}
-						navigation={{
-							nextEl: '#homeCampaignNext',
-							prevEl: '#homeCampaignPrev',
-						}}
 						spaceBetween={24}
+						breakpoints={{
+							// when window width is >= 320px
+							320: {
+								slidesPerView: 1.1,
+							},
+							768: {
+								slidesPerView: 1.3,
+							},
+							1024: {
+								slidesPerView: 2.1,
+							},
+							1280: {
+								slidesPerView: 2.2,
+							},
+						}}
 					>
 						{projects.map(project => (
 							<SwiperSlide key={project.id}>
@@ -147,21 +117,21 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 	);
 };
 
-const PointerWrapper = styled(FlexCenter)`
-	cursor: pointer;
-	border-radius: 48px;
-	box-shadow: ${Shadow.Giv[400]};
-	padding: 8px 13px;
-	&.swiper-button-disabled {
-		opacity: 0.4;
-		cursor: default;
-	}
-`;
+// const PointerWrapper = styled(FlexCenter)`
+// 	cursor: pointer;
+// 	border-radius: 48px;
+// 	box-shadow: ${Shadow.Giv[400]};
+// 	padding: 8px 13px;
+// 	&.swiper-button-disabled {
+// 		opacity: 0.4;
+// 		cursor: default;
+// 	}
+// `;
 
-const Pagination = styled(Flex)`
-	gap: 24px;
-	align-items: center;
-`;
+// const Pagination = styled(Flex)`
+// 	gap: 24px;
+// 	align-items: center;
+// `;
 
 const SwiperWrapper = styled.div`
 	padding: 24px 32px 20px;
