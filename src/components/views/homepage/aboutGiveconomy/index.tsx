@@ -72,6 +72,7 @@ const AboutGiveconomy = () => {
 						</Content>
 						<ImageBox>
 							<Image
+								className='earn-img'
 								src='/images/earn-reward.png'
 								width={476}
 								height={460}
@@ -111,6 +112,7 @@ const AboutGiveconomy = () => {
 						</Content>
 						<ImageBox>
 							<Image
+								className='elevate-img'
 								src='/images/GIVpower.png'
 								width={476}
 								height={460}
@@ -144,6 +146,7 @@ const AboutGiveconomy = () => {
 						</Content>
 						<ImageBox>
 							<Image
+								className='enable-img'
 								src='/images/enable-change.png'
 								width={476}
 								height={460}
@@ -214,10 +217,19 @@ const ImageBox = styled.div`
 		}
 
 		img {
-			width: 500px;
+			width: 100%;
 			object-fit: contain;
 			position: relative !important;
 			height: unset !important;
+		}
+		.earn-img {
+			width: 476px !important;
+		}
+		.elevate-img {
+			width: 367px !important;
+		}
+		.enable-img {
+			width: 386px !important;
 		}
 	}
 `;
