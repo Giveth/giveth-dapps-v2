@@ -35,8 +35,7 @@ import {
 	setShowSearchModal,
 } from '@/features/modal/modal.slice';
 import { slugToProjectView } from '@/lib/routeCreators';
-import { fetchNotificationsData } from '@/features/notification/notification.services';
-import { useNotification } from '@/hooks/useNotification';
+
 import { useModalCallback } from '@/hooks/useModalCallback';
 import { LinkWithMenu } from '../menu/LinkWithMenu';
 import { ProjectsMenu } from '../menu/ProjectsMenu';
@@ -47,6 +46,7 @@ import { ESideBarDirection, SideBar } from '../sidebar/SideBar';
 import { useDelayedState } from '@/hooks/useDelayedState';
 import { RewardButtonWithMenu } from '../menu/RewardButtonWithMenu';
 import { UserButtonWithMenu } from '../menu/UserButtonWithMenu';
+import { NotificationButtonWithMenu } from '../menu/NotificationButtonWithMenu';
 import { HomeSidebar } from '../sidebar/HomeSidebar';
 import { fetchMainCategories } from '@/features/general/general.thunk';
 import { ItemsProvider } from '@/context/Items.context';
@@ -57,15 +57,9 @@ export interface IHeader {
 }
 
 const Header: FC<IHeader> = () => {
-	const [showRewardMenu, setShowRewardMenu] = useState(false);
-	const [showRewardMenuModal, setShowRewardMenuModal] = useState(false);
-	const [showUserMenu, setShowUserMenu] = useState(false);
-	const [showNotifications, setShowNotifications] = useState(false);
 	const [showHeader, setShowHeader] = useState(true);
 	const [isGIVeconomyRoute, setIsGIVeconomyRoute] = useState(false);
 	const [showBackBtn, setShowBackBtn] = useState(false);
-	const { notifications, setNotifications, markOneNotificationRead } =
-		useNotification();
 
 	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
 		useDelayedState();
@@ -77,20 +71,12 @@ const Header: FC<IHeader> = () => {
 		state => state.user,
 	);
 	const theme = useAppSelector(state => state.general.theme);
-	const { total: totalUnreadNotifications } = useAppSelector(
-		state => state.notification.notificationInfo,
-	);
-	const { lastNotificationId } = useAppSelector(
-		state => state.notification.notificationInfo,
-	);
 
 	const router = useRouter();
 	const { formatMessage } = useIntl();
 	const isDesktop = useMediaQuery(device.laptopL);
 	const isMobile = useMediaQuery(device.mobileL);
 
-	const isLight = theme === ETheme.Light;
-	const lastFetchedNotificationId = notifications[0]?.id ?? undefined;
 	const handleBack = () => {
 		const calculateSlug = () => {
 			if (typeof router.query?.slug === 'string') {
@@ -156,28 +142,6 @@ const Header: FC<IHeader> = () => {
 		return () => window.removeEventListener('scroll', onScroll);
 	}, [showHeader]);
 
-	useEffect(() => {
-		const fetchNotificationsAndSetState = async () => {
-			if (!isSignedIn) return;
-			try {
-				const res = await fetchNotificationsData({ limit: 4 });
-				if (res?.notifications) setNotifications(res.notifications);
-			} catch {
-				console.log('Error fetching notifications');
-			}
-		};
-
-		if (
-			typeof lastFetchedNotificationId === 'number' &&
-			lastNotificationId > lastFetchedNotificationId
-		) {
-			fetchNotificationsAndSetState();
-			return;
-		}
-
-		fetchNotificationsAndSetState();
-	}, [lastNotificationId, isSignedIn]);
-
 	const handleModals = () => {
 		if (isGIVeconomyRoute) {
 			dispatch(setShowWalletModal(true));
@@ -201,21 +165,6 @@ const Header: FC<IHeader> = () => {
 			dispatch(setShowCompleteProfile(true));
 		}
 	};
-
-	const { modalCallback: signInThenGoToNotifs } = useModalCallback(() =>
-		router.push(Routes.Notifications),
-	);
-
-	const notificationsProps =
-		isEnabled && !isSignedIn
-			? {
-					onClick: () => signInThenGoToNotifs(),
-			  }
-			: {
-					onClick: () => setShowNotifications(true),
-					onMouseEnter: () => setShowNotifications(true),
-					onMouseLeave: () => setShowNotifications(false),
-			  };
 
 	return (
 		<StyledHeader alignItems='center' theme={theme} show={showHeader}>
@@ -300,6 +249,10 @@ const Header: FC<IHeader> = () => {
 				</SmallCreateProjectParent>
 				{active && account && chainId ? (
 					<>
+						<NotificationButtonWithMenu
+							isHeaderShowing={showHeader}
+							theme={theme}
+						/>
 						<RewardButtonWithMenu
 							isHeaderShowing={showHeader}
 							theme={theme}

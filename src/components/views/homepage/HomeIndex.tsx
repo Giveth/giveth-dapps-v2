@@ -12,6 +12,7 @@ import { ProjectUpdatesBlock } from './projectUpdatesBlock/ProjectUpdatesBlock';
 import { LatestUpdatesBlock } from './latestUpdates/LatestUpdatesBlock';
 import { IHomeRoute } from '../../../../pages';
 import InformationBlock from '@/components/views/homepage/InformationBlock';
+import HomePartners from './partners';
 
 const HomeIndex: FC<IHomeRoute> = props => {
 	const { projects, ...rest } = props;
@@ -26,6 +27,8 @@ const HomeIndex: FC<IHomeRoute> = props => {
 			<VideoBlock />
 			<Separator />
 			<AboutGiveconomy />
+			<Separator />
+			<HomePartners />
 			<Separator />
 			<ProjectUpdatesBlock projects={projects} />
 			<LatestUpdatesBlock latestUpdates={props.latestUpdates} />
