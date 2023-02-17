@@ -92,6 +92,21 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 							/>
 						</FeatureItem>
 					))}
+					{variables?.campaignSlug && (
+						<FeatureItem>
+							<CheckBox
+								label='Campaign'
+								onChange={e => {
+									setVariables({
+										...variables,
+										campaignSlug: undefined,
+									});
+								}}
+								checked={!!variables?.campaignSlug}
+								size={14}
+							/>
+						</FeatureItem>
+					)}
 				</Section>
 				<ButtonStyled
 					onClick={clearFilters}
