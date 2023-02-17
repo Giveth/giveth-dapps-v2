@@ -13,7 +13,7 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { Arc } from '@/components/styled-components/Arc';
 import { PartnershipArray, IPartner } from '@/content/Partnerships';
 
-const PartnershipsIndex = () => {
+const GIVfriendsIndex = () => {
 	const { formatMessage } = useIntl();
 
 	function sortPartners(x: IPartner, y: IPartner) {
@@ -28,11 +28,9 @@ const PartnershipsIndex = () => {
 			<MustardDot />
 			<PurpleArc />
 			<Wrapper>
-				<Title>
-					{formatMessage({ id: 'component.title.partnerships' })}
-				</Title>
+				<Title>GIVfriends</Title>
 				<Caption>
-					{formatMessage({ id: 'label.we_have_many_partnerships' })}
+					{formatMessage({ id: 'label.check_out_our_GIVfriends' })}
 				</Caption>
 				<PartnershipsContainer>
 					<OurPartners>
@@ -115,8 +113,9 @@ const PurpleArc = styled(Arc)`
 `;
 
 const Caption = styled(Lead)`
-	max-width: 368px;
+	max-width: 700px;
 	margin: 0 auto;
+	padding: 0 18px;
 `;
 
 const Title = styled(D3)`
@@ -136,4 +135,4 @@ const Wrapper = styled.div`
 	}
 `;
 
-export default PartnershipsIndex;
+export default GIVfriendsIndex;
