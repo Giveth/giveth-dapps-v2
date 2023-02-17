@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, Fragment } from 'react';
 import styled from 'styled-components';
 import { neutralColors } from '@giveth/ui-design-system';
 import HomeFromBlog from './HomeFromBlog';
@@ -23,13 +23,12 @@ const HomeIndex: FC<IHomeRoute> = props => {
 			<Separator />
 			{featuredProjectsCampaigns.length > 0
 				? featuredProjectsCampaigns.map(campaign => (
-						<ProjectsCampaignBlock
-							key={campaign.id}
-							campaign={campaign}
-						/>
+						<Fragment key={campaign.id}>
+							<ProjectsCampaignBlock campaign={campaign} />
+							<Separator />
+						</Fragment>
 				  ))
 				: []}
-			<Separator />
 			<InformationBlock />
 			<Separator />
 			<WhyGiveth {...rest} />
