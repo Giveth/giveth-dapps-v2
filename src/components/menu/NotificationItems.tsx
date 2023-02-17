@@ -1,17 +1,16 @@
-import { useState, useEffect, FC } from 'react';
-import styled from 'styled-components';
 import {
-	brandColors,
-	GLink,
-	neutralColors,
-	Overline,
 	P,
+	brandColors,
+	Overline,
+	neutralColors,
+	GLink,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
-import { useAppSelector } from '@/features/hooks';
-import { MenuContainer } from '../menu/Menu.sc';
-import { NotificationBox } from './NotificationBox';
+import React, { FC } from 'react';
+import styled from 'styled-components';
 import Routes from '@/lib/constants/Routes';
+import { NotificationBox } from '../notification/NotificationBox';
+import { useItemsContext } from '@/context/Items.context';
 import { INotification } from '@/features/notification/notification.types';
 
 interface INotificationMenuProps {
@@ -19,24 +18,17 @@ interface INotificationMenuProps {
 	markOneNotificationRead: (notificationId: number) => void;
 }
 
-const NotificationMenu: FC<INotificationMenuProps> = ({
+export const NotificationItems: FC<INotificationMenuProps> = ({
 	notifications,
 	markOneNotificationRead,
 }) => {
-	const [isMounted, setIsMounted] = useState(false);
-	const theme = useAppSelector(state => state.general.theme);
-
-	useEffect(() => {
-		setIsMounted(true);
-	}, []);
+	const { close } = useItemsContext();
 
 	return (
-		<NotifsMenuContainer theme={theme}>
+		<>
 			<NotificationsTitle styleType='Small'>
 				NOTIFICATIONS
 			</NotificationsTitle>
-			<br />
-			<br />
 			{notifications?.length > 0 ? (
 				notifications.map(notification => (
 					<NotificationBox
@@ -51,20 +43,16 @@ const NotificationMenu: FC<INotificationMenuProps> = ({
 			)}
 			<br />
 			<Link href={Routes.Notifications} passHref>
-				<AllNotificationsLink color={brandColors.pinky[500]}>
+				<AllNotificationsLink
+					onClick={close}
+					color={brandColors.pinky[500]}
+				>
 					All notifications
 				</AllNotificationsLink>
 			</Link>
-		</NotifsMenuContainer>
+		</>
 	);
 };
-
-export default NotificationMenu;
-
-const NotifsMenuContainer = styled(MenuContainer)`
-	height: unset;
-	overflow-y: auto;
-`;
 
 const NotificationsTitle = styled(Overline)`
 	color: ${neutralColors.gray[700]};
