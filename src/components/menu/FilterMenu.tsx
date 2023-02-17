@@ -16,6 +16,7 @@ import CheckBox from '../Checkbox';
 import { useProjectsContext } from '@/context/projects.context';
 import { zIndex } from '@/lib/constants/constants';
 import { EProjectsFilter } from '@/apollo/types/types';
+import { removeQueryParamAndRedirect } from '@/helpers/url';
 
 interface IFilterMenuProps {
 	handleClose: (e?: any) => void;
@@ -55,6 +56,7 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 				filters: [],
 				campaignSlug: undefined,
 			});
+			removeQueryParamAndRedirect(router, ['filter', 'campaign']);
 		};
 
 		return (
@@ -101,6 +103,9 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 										...variables,
 										campaignSlug: undefined,
 									});
+									removeQueryParamAndRedirect(router, [
+										'campaign',
+									]);
 								}}
 								checked={!!variables?.campaignSlug}
 								size={14}
