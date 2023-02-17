@@ -1,5 +1,13 @@
 import Image from 'next/image';
-import { Button, H3, Lead, neutralColors } from '@giveth/ui-design-system';
+import {
+	Button,
+	H3,
+	Lead,
+	neutralColors,
+	IconChevronRight16,
+	IconGIVBack,
+	IconRocketInSpace,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
@@ -22,14 +30,7 @@ const AboutGiveconomy = () => {
 						id: label,
 					})}
 					buttonType='texty-primary'
-					icon={
-						<Image
-							alt='arrow'
-							src='/images/icons/right-mini-arrow.svg'
-							width={16}
-							height={16}
-						/>
-					}
+					icon={<IconChevronRight16 />}
 					onClick={() => window?.open(route, '_ blank')}
 				/>
 			</>
@@ -48,12 +49,12 @@ const AboutGiveconomy = () => {
 										id: 'label.earn_rewards',
 									})}
 								</Title>
-								<Image
-									src='/images/icons/hand-with-heart.svg'
-									width={32}
-									height={32}
-									alt='GIVpower'
-								/>
+								<Icon>
+									<IconGIVBack
+										size={64}
+										color={neutralColors.gray[900]}
+									/>
+								</Icon>
 							</TitleBox>
 							<Subtitle>
 								{formatMessage({
@@ -88,12 +89,9 @@ const AboutGiveconomy = () => {
 										id: 'label.elevate_projects',
 									})}
 								</Title>
-								<Image
-									src='/images/icons/rocket-in-space.svg'
-									width={32}
-									height={32}
-									alt='GIVpower'
-								/>
+								<Icon>
+									<IconRocketInSpace size={60} />
+								</Icon>
 							</TitleBox>
 							<Subtitle>
 								{formatMessage({
@@ -202,6 +200,13 @@ const TitleBox = styled(Flex)`
 		img {
 			margin: 0 0 32px 46px;
 		}
+	}
+`;
+
+const Icon = styled.div`
+	margin: 0 0 12px 0;
+	${mediaQueries.tablet} {
+		margin: 0 0 12px 32px;
 	}
 `;
 
