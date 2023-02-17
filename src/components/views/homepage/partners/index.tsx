@@ -1,21 +1,46 @@
 import { B, Container, H3, neutralColors } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import styled from 'styled-components';
-import { PartnershipArray } from '@/content/Partnerships';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { mediaQueries } from '@/lib/constants/constants';
+import The_Commons_Stack from '/public/images/partnerships/The_Commons_Stack.svg';
+import Gitcoin from '/public/images/partnerships/Gitcoin.svg';
+import ShapeShift_DAO from '/public/images/partnerships/ShapeShift_DAO.svg';
+import OneHive from '/public/images/partnerships/1Hive.svg';
+import Gnosis_Chain from '/public/images/partnerships/Gnosis_Chain.svg';
 
-const OneHive = PartnershipArray.find(item => item.title.includes('1Hive'));
-const Gnosis = PartnershipArray.find(item => item.title.includes('Gnosis'));
-const CommonsStack = PartnershipArray.find(item =>
-	item.title.includes('Commons Stack'),
-);
-const Gitcoin = PartnershipArray.find(item => item.title.includes('Gitcoin'));
-const ShapeShift = PartnershipArray.find(item =>
-	item.title.includes('ShapeShift'),
-);
-
-const PartnersArray = [OneHive, Gnosis, CommonsStack, Gitcoin, ShapeShift];
+const PartnersArray = [
+	{
+		icon: OneHive,
+		title: '1Hive',
+		description: 'page.partnerships.1hive',
+		link: 'https://about.1hive.org/',
+	},
+	{
+		icon: Gnosis_Chain,
+		title: 'Gnosis Chain',
+		description: 'page.partnerships.gnosischain',
+		link: 'https://xdaichain.com',
+	},
+	{
+		icon: The_Commons_Stack,
+		title: 'The Commons Stack',
+		description: 'page.partnerships.thecommonsstack',
+		link: 'https://commonsstack.org',
+	},
+	{
+		icon: Gitcoin,
+		title: 'Gitcoin',
+		description: 'page.partnerships.gitcoin',
+		link: 'https://gitcoin.co/',
+	},
+	{
+		icon: ShapeShift_DAO,
+		title: 'ShapeShift DAO',
+		description: 'page.partnerships.shapeshiftdao',
+		link: 'https://shapeshift.com/',
+	},
+];
 
 const HomePartners = () => {
 	return (
