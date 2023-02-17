@@ -4,6 +4,8 @@ import {
 	H1,
 	H5,
 	IconChevronRight32,
+	IconPointerLeft,
+	IconPointerRight,
 	mediaQueries,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
@@ -22,6 +24,7 @@ import { FETCH_CAMPAIGN_BY_SLUG } from '@/apollo/gql/gqlCampaign';
 import { BlockHeader, BlockTitle } from './common';
 import { Container } from '@/components/Grid';
 import { campaignLinkGenerator } from '@/helpers/url';
+import { NavigationWrapper } from '@/components/SwiperPagination';
 
 interface IProjectsCampaignBlockProps {
 	campaign: ICampaign;
@@ -34,6 +37,8 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 	const [projects, setProjects] = useState(campaign.relatedProjects);
 
 	const pagElRef = useRef<HTMLDivElement>(null);
+	const nextElRef = useRef<HTMLDivElement>(null);
+	const prevElRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		if (!user || !user.id) return;
@@ -62,7 +67,15 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 						? campaign.hashtags.map(hashtag => `#${hashtag} `)
 						: ''}
 				</BlockTitle>
-				<PaginationWrapper ref={pagElRef}></PaginationWrapper>
+				<FlexCenter>
+					<NavigationWrapper ref={prevElRef}>
+						<IconPointerLeft size={24} />
+					</NavigationWrapper>
+					<PaginationWrapper ref={pagElRef}></PaginationWrapper>
+					<NavigationWrapper ref={nextElRef}>
+						<IconPointerRight size={24} />
+					</NavigationWrapper>
+				</FlexCenter>
 			</BlockHeader>
 			<BottomSection>
 				<Title>
@@ -87,6 +100,10 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 					<Swiper
 						onSwiper={setSwiperInstance}
 						modules={[Navigation, Pagination]}
+						navigation={{
+							nextEl: nextElRef.current,
+							prevEl: prevElRef.current,
+						}}
 						pagination={{
 							el: pagElRef.current,
 							clickable: true,
