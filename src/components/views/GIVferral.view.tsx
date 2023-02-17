@@ -11,7 +11,7 @@ import {
 	brandColors,
 	ButtonLink,
 	Button,
-	IconArrowRight16,
+	IconChevronRight16,
 } from '@giveth/ui-design-system';
 import { isProduction } from '@/configuration';
 import { Col, Container, Row } from '@/components/Grid';
@@ -127,7 +127,7 @@ const GIVferralView = () => {
 					<Button
 						label={formatMessage({ id: 'label.get_started' })}
 						buttonType='primary'
-						icon={<IconArrowRight16 />}
+						icon={<IconChevronRight16 />}
 						onClick={() => window?.open(chainvineURL, '_ blank')}
 					/>
 				</CompleteBox>
