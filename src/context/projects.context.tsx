@@ -16,7 +16,7 @@ interface IVariables {
 	filters?: EProjectsFilter[];
 	mainCategory?: string;
 	category?: string;
-	campaign?: string;
+	campaignSlug?: string;
 	searchTerm?: string;
 }
 
@@ -91,12 +91,12 @@ export const ProjectsProvider = (props: {
 		}
 
 		let term = router.query.term as string;
-		let campaign = router.query.campaign as string;
+		let campaignSlug = router.query.campaign as string;
 		setVariables({
 			sortingBy: sort,
 			searchTerm: term,
 			filters,
-			campaign,
+			campaignSlug,
 		});
 	}, [
 		router.query.sort,
