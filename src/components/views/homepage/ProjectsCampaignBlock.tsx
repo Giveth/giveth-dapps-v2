@@ -2,6 +2,7 @@ import {
 	brandColors,
 	ButtonText,
 	H1,
+	H5,
 	IconChevronRight32,
 	mediaQueries,
 } from '@giveth/ui-design-system';
@@ -52,14 +53,6 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 	}, [campaign.slug, user]);
 
 	const [swiperInstance, setSwiperInstance] = useState<SwiperClass>();
-	const [currentSlide, setCurrentSlide] = useState(1);
-
-	useEffect(() => {
-		if (swiperInstance)
-			swiperInstance?.on('slideChange', () =>
-				setCurrentSlide(swiperInstance?.realIndex + 1),
-			);
-	}, [swiperInstance]);
 
 	return (
 		<Wrapper>
@@ -69,7 +62,7 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 						? campaign.hashtags.map(hashtag => `#${hashtag} `)
 						: ''}
 				</BlockTitle>
-				<div ref={pagElRef}>salam</div>
+				<PaginationWrapper ref={pagElRef}></PaginationWrapper>
 			</BlockHeader>
 			<BottomSection>
 				<Title>
@@ -111,7 +104,6 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 						spaceBetween={24}
 						slidesPerGroupAuto
 						breakpoints={{
-							// when window width is >= 320px
 							320: {
 								slidesPerView: 1.1,
 							},
@@ -138,21 +130,10 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 	);
 };
 
-// const PointerWrapper = styled(FlexCenter)`
-// 	cursor: pointer;
-// 	border-radius: 48px;
-// 	box-shadow: ${Shadow.Giv[400]};
-// 	padding: 8px 13px;
-// 	&.swiper-button-disabled {
-// 		opacity: 0.4;
-// 		cursor: default;
-// 	}
-// `;
-
-// const Pagination = styled(Flex)`
-// 	gap: 24px;
-// 	align-items: center;
-// `;
+const PaginationWrapper = styled(H5)`
+	display: flex;
+	align-items: center;
+`;
 
 const SwiperWrapper = styled.div`
 	padding: 24px 32px 20px;
