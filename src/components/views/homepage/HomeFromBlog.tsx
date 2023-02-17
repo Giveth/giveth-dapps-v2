@@ -22,13 +22,17 @@ const HomeFromBlog = () => {
 
 	useEffect(() => {
 		const getPosts = async () => {
-			const medium = await fetch(
-				'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/giveth/',
-			);
-			const posts = await medium.json();
-			setMediumPosts(posts?.items?.slice(0, 3));
+			try {
+				const medium = await fetch(
+					'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/giveth/',
+				);
+				const posts = await medium.json();
+				setMediumPosts(posts?.items?.slice(0, 3));
+			} catch (error) {
+				console.log('error', error);
+			}
 		};
-		getPosts().then();
+		getPosts();
 	}, []);
 
 	return (
