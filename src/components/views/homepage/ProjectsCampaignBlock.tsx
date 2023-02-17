@@ -6,8 +6,9 @@ import {
 	mediaQueries,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { Swiper as SwiperClass } from 'swiper/types';
 import InternalLink from '@/components/InternalLink';
 import { ICampaign } from '@/apollo/types/types';
@@ -30,6 +31,8 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 }) => {
 	const user = useAppSelector(state => state.user.userData);
 	const [projects, setProjects] = useState(campaign.relatedProjects);
+
+	const pagElRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		if (!user || !user.id) return;
@@ -66,6 +69,7 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 						? campaign.hashtags.map(hashtag => `#${hashtag} `)
 						: ''}
 				</BlockTitle>
+				<div ref={pagElRef}>salam</div>
 			</BlockHeader>
 			<BottomSection>
 				<Title>
@@ -88,7 +92,24 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 				</Title>
 				<SwiperWrapper>
 					<Swiper
+						onSwiper={setSwiperInstance}
+						modules={[Navigation, Pagination]}
+						pagination={{
+							el: pagElRef.current,
+							clickable: true,
+							type: 'bullets',
+							renderBullet: function (index, className) {
+								return (
+									'<span class="' +
+									className +
+									'">' +
+									(index + 1) +
+									'</span>'
+								);
+							},
+						}}
 						spaceBetween={24}
+						slidesPerGroupAuto
 						breakpoints={{
 							// when window width is >= 320px
 							320: {
