@@ -56,3 +56,13 @@ export function campaignLinkGenerator(campaign: ICampaign) {
 	const query = params.toString();
 	return `${Routes.Projects}${query ? `?${query}` : ''}`;
 }
+
+export function removeQueryParam(asPath: string, params: string[]) {
+	const oldQuery = asPath.split('?')[1];
+	const urlParams = new URLSearchParams(oldQuery);
+	params.forEach(param => {
+		urlParams.delete(param);
+	});
+	const newQuery = urlParams.toString();
+	return newQuery ? `?${newQuery}` : '';
+}
