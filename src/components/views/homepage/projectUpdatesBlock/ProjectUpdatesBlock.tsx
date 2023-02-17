@@ -13,7 +13,7 @@ import { FlexCenter } from '@/components/styled-components/Flex';
 import {
 	NavigationWrapper,
 	PaginationWrapper,
-} from '@/components/SwiperPagination';
+} from '@/components/styled-components/SwiperPagination';
 
 interface IProjectUpdatesBlockProps {
 	projects: IProject[];
