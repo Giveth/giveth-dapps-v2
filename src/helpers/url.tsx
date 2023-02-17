@@ -12,9 +12,11 @@ export function campaignLinkGenerator(campaign: ICampaign) {
 		campaign.landingLink
 	)
 		return campaign.landingLink;
-	if (campaign.type === ECampaignType.MANUALLY_SELECTED)
-		return `${Routes.Projects}?campaign=${campaign.slug}`;
+
 	let params = new URLSearchParams('');
+	if (campaign.type === ECampaignType.MANUALLY_SELECTED)
+		params.append('campaign', campaign.slug);
+
 	if (campaign.type === ECampaignType.SORT_FIELD)
 		params.append('sort', campaign.sortingField);
 
