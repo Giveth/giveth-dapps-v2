@@ -13,6 +13,7 @@ import {
 	Button,
 	IconArrowRight16,
 } from '@giveth/ui-design-system';
+import { isProduction } from '@/configuration';
 import { Col, Container, Row } from '@/components/Grid';
 import VideoBlock from '@/components/VideoBlock';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -20,7 +21,9 @@ import { Flex } from '../styled-components/Flex';
 
 const GIVferralView = () => {
 	const { formatMessage } = useIntl();
-
+	const chainvineURL = isProduction
+		? 'https://app.chainvine.xyz/giveth'
+		: 'https://staging.chainvine.xyz/giveth-staging';
 	return (
 		<Container>
 			<Wrapper>
@@ -61,7 +64,7 @@ const GIVferralView = () => {
 									})}
 									linkType='texty-primary'
 									isExternal
-									href='https://app.chainvine.xyz/giveth'
+									href={chainvineURL}
 									icon={
 										<Image
 											alt='outlink'
@@ -125,12 +128,7 @@ const GIVferralView = () => {
 						label={formatMessage({ id: 'label.get_started' })}
 						buttonType='primary'
 						icon={<IconArrowRight16 />}
-						onClick={() =>
-							window?.open(
-								'https://app.chainvine.xyz/giveth',
-								'_ blank',
-							)
-						}
+						onClick={() => window?.open(chainvineURL, '_ blank')}
 					/>
 				</CompleteBox>
 			</Section>
