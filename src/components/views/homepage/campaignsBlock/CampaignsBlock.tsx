@@ -120,20 +120,22 @@ const ContainerRelative = styled(Container)`
 
 const SwiperWrapper = styled(Row)``;
 
-const TrazadoPinkWrapper = styled.div`
+const ParticleWrapper = styled.div`
 	position: absolute;
+	user-select: none;
+`;
+
+const TrazadoPinkWrapper = styled(ParticleWrapper)`
 	top: -44px;
 	left: -151px;
 `;
 
-const CaminhoPinkWrapper = styled.div`
-	position: absolute;
+const CaminhoPinkWrapper = styled(ParticleWrapper)`
 	bottom: -72px;
 	left: 30%;
 `;
 
-const CaminhoGivWrapper = styled.div`
-	position: absolute;
+const CaminhoGivWrapper = styled(ParticleWrapper)`
 	bottom: 30px;
 	right: -70px;
 `;
