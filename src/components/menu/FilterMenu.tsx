@@ -9,6 +9,7 @@ import {
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { forwardRef } from 'react';
+import { useRouter } from 'next/router';
 import { mediaQueries } from '@/lib/constants/constants';
 import { FlexCenter } from '../styled-components/Flex';
 import CheckBox from '../Checkbox';
@@ -26,6 +27,9 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 		const { formatMessage } = useIntl();
 		const { setVariables, variables } = useProjectsContext();
 		const filtersCount = variables?.filters?.length ?? 0;
+		const campaignCount = variables?.campaignSlug ? 1 : 0;
+		const count = filtersCount + campaignCount;
+		const router = useRouter();
 
 		const handleSelectFilter = (e: boolean, filter: EProjectsFilter) => {
 			if (e) {
@@ -49,6 +53,7 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 			setVariables({
 				...variables,
 				filters: [],
+				campaignSlug: undefined,
 			});
 		};
 
@@ -62,9 +67,9 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 						<ButtonText size='medium'>
 							{formatMessage({ id: 'label.filters' })}
 						</ButtonText>
-						{filtersCount !== 0 && (
+						{count !== 0 && (
 							<PinkyColoredNumber size='medium'>
-								{filtersCount}
+								{count}
 							</PinkyColoredNumber>
 						)}
 					</FlexCenter>
@@ -90,7 +95,7 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 				</Section>
 				<ButtonStyled
 					onClick={clearFilters}
-					disabled={filtersCount === 0}
+					disabled={count === 0}
 					buttonType='texty-secondary'
 					label={formatMessage({ id: 'label.clear_all_filters' })}
 				/>
