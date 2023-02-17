@@ -26,7 +26,7 @@ import { campaignLinkGenerator } from '@/helpers/url';
 import {
 	NavigationWrapper,
 	PaginationWrapper,
-} from '@/components/SwiperPagination';
+} from '@/components/styled-components/SwiperPagination';
 
 interface IProjectsCampaignBlockProps {
 	campaign: ICampaign;

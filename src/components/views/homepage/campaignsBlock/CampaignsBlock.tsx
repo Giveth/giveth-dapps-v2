@@ -1,17 +1,26 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperType } from 'swiper/types';
-import { neutralColors } from '@giveth/ui-design-system';
+import {
+	IconPointerLeft,
+	IconPointerRight,
+	neutralColors,
+} from '@giveth/ui-design-system';
 import Image from 'next/image';
+import { Navigation, Pagination } from 'swiper';
 import { Container, Row } from '@/components/Grid';
-import { SwiperPagination } from '@/components/SwiperPagination';
 import { BlockHeader, BlockTitle } from '../common';
 import { ICampaign } from '@/apollo/types/types';
 import { CampaignsSlide } from './CampaignsSlide';
 import TrazadoPink from '/public/images/trazado-pink.svg';
 import CaminhoPink from '/public/images/caminho-pink.svg';
 import CaminhoGIV from '/public/images/caminho-giv.svg';
+import { FlexCenter } from '@/components/styled-components/Flex';
+import {
+	NavigationWrapper,
+	PaginationWrapper,
+} from '@/components/styled-components/SwiperPagination';
 
 interface ICampaignsBlockProps {
 	campaigns: ICampaign[];
@@ -19,16 +28,24 @@ interface ICampaignsBlockProps {
 
 export const CampaignsBlock: FC<ICampaignsBlockProps> = ({ campaigns }) => {
 	const [swiper, setSwiper] = useState<SwiperType>();
+	const pagElRef = useRef<HTMLDivElement>(null);
+	const nextElRef = useRef<HTMLDivElement>(null);
+	const prevElRef = useRef<HTMLDivElement>(null);
 
 	return (
 		<CampaignsBlockWrapper>
 			<ContainerRelative>
 				<BlockHeader>
 					<BlockTitle>What’s up on Giveth</BlockTitle>
-					<SwiperPagination
-						swiper={swiper}
-						itemsCount={campaigns.length}
-					/>
+					<FlexCenter>
+						<NavigationWrapper ref={prevElRef}>
+							<IconPointerLeft size={24} />
+						</NavigationWrapper>
+						<PaginationWrapper ref={pagElRef}></PaginationWrapper>
+						<NavigationWrapper ref={nextElRef}>
+							<IconPointerRight size={24} />
+						</NavigationWrapper>
+					</FlexCenter>
 					<TrazadoPinkWrapper>
 						<Image
 							src={TrazadoPink}
@@ -42,6 +59,25 @@ export const CampaignsBlock: FC<ICampaignsBlockProps> = ({ campaigns }) => {
 					<Swiper
 						slidesPerView={1}
 						onSwiper={setSwiper}
+						modules={[Navigation, Pagination]}
+						navigation={{
+							nextEl: nextElRef.current,
+							prevEl: prevElRef.current,
+						}}
+						pagination={{
+							el: pagElRef.current,
+							clickable: true,
+							type: 'bullets',
+							renderBullet: function (index, className) {
+								return (
+									'<span class="' +
+									className +
+									'">' +
+									(index + 1) +
+									'</span>'
+								);
+							},
+						}}
 						spaceBetween={24}
 					>
 						{campaigns.map(campaign => (
