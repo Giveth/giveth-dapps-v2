@@ -1,3 +1,4 @@
+import { NextRouter } from 'next/router';
 import {
 	ECampaignFilterField,
 	ECampaignType,
@@ -65,4 +66,19 @@ export function removeQueryParam(asPath: string, params: string[]) {
 	});
 	const newQuery = urlParams.toString();
 	return newQuery ? `?${newQuery}` : '';
+}
+
+export function removeQueryParamAndRedirect(
+	router: NextRouter,
+	params: string[],
+) {
+	const newParams = removeQueryParam(router.asPath, params);
+	if (router.isReady)
+		router.push(
+			{
+				query: newParams,
+			},
+			undefined,
+			{ shallow: true },
+		);
 }
