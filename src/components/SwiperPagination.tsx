@@ -83,6 +83,11 @@ const PaginationContainer = styled(Flex)`
 	align-items: center;
 `;
 
+export const PaginationWrapper = styled(H5)`
+	display: flex;
+	align-items: center;
+`;
+
 export const NavigationWrapper = styled.div<{ disabled?: boolean }>`
 	cursor: pointer;
 	border-radius: 48px;

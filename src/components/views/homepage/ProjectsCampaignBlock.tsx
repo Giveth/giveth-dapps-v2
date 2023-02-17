@@ -2,7 +2,6 @@ import {
 	brandColors,
 	ButtonText,
 	H1,
-	H5,
 	IconChevronRight32,
 	IconPointerLeft,
 	IconPointerRight,
@@ -24,7 +23,10 @@ import { FETCH_CAMPAIGN_BY_SLUG } from '@/apollo/gql/gqlCampaign';
 import { BlockHeader, BlockTitle } from './common';
 import { Container } from '@/components/Grid';
 import { campaignLinkGenerator } from '@/helpers/url';
-import { NavigationWrapper } from '@/components/SwiperPagination';
+import {
+	NavigationWrapper,
+	PaginationWrapper,
+} from '@/components/SwiperPagination';
 
 interface IProjectsCampaignBlockProps {
 	campaign: ICampaign;
@@ -146,11 +148,6 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 		</Wrapper>
 	);
 };
-
-const PaginationWrapper = styled(H5)`
-	display: flex;
-	align-items: center;
-`;
 
 const SwiperWrapper = styled.div`
 	padding: 24px 32px 20px;
