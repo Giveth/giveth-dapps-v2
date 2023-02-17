@@ -124,7 +124,7 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 						slidesPerGroupAuto
 						breakpoints={{
 							320: {
-								slidesPerView: 1.1,
+								slidesPerView: 1,
 							},
 							768: {
 								slidesPerView: 1.3,

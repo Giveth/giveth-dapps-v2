@@ -112,6 +112,7 @@ const CampaignsBlockWrapper = styled.div`
 	padding-top: 70px;
 	padding-bottom: 110px;
 	background: ${neutralColors.gray[200]};
+	overflow-x: hidden;
 `;
 
 const ContainerRelative = styled(Container)`
