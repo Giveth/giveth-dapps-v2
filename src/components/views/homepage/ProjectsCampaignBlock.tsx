@@ -25,6 +25,7 @@ import { client } from '@/apollo/apolloClient';
 import { FETCH_CAMPAIGN_BY_SLUG } from '@/apollo/gql/gqlCampaign';
 import { BlockHeader, BlockTitle } from './common';
 import { Container } from '@/components/Grid';
+import { campaignLinkGenerator } from '@/helpers/url';
 
 interface IProjectsCampaignBlockProps {
 	campaign: ICampaign;
@@ -114,7 +115,10 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 							</>
 						))}
 					</H1>
-					<InternalLink href={''} color={brandColors.giv[500]}>
+					<InternalLink
+						href={campaignLinkGenerator(campaign)}
+						color={brandColors.giv[500]}
+					>
 						<ExploreText>
 							EXPLORE <IconChevronRight32 />
 						</ExploreText>
