@@ -255,10 +255,10 @@ const Section = styled.div`
 	flex-direction: row;
 	width: 100%;
 	margin: 50px 0;
-	justify-content: space-between;
+	justify-content: center;
 	align-items: center;
 	text-align: left;
-	grid-gap: 32px;
+	grid-gap: 100px;
 	overflow-wrap: break-word;
 	flex-direction: column;
 	max-width: 100%;
