@@ -7,6 +7,7 @@ import WhyGiveth from '@/components/views/homepage/whyGiveth';
 import CampaignBlock from '@/components/views/homepage/CampaignBlock';
 import IntroBlock from './introBlock';
 import VideoBlock from './videoBlock';
+import AboutGiveconomy from './aboutGiveconomy';
 import { ProjectUpdatesBlock } from './projectUpdatesBlock/ProjectUpdatesBlock';
 import { LatestUpdatesBlock } from './latestUpdates/LatestUpdatesBlock';
 import { IHomeRoute } from '../../../../pages';
@@ -23,6 +24,8 @@ const HomeIndex: FC<IHomeRoute> = props => {
 			<WhyGiveth {...rest} />
 			<Separator />
 			<VideoBlock />
+			<Separator />
+			<AboutGiveconomy />
 			<Separator />
 			<ProjectUpdatesBlock projects={projects} />
 			<LatestUpdatesBlock latestUpdates={props.latestUpdates} />
