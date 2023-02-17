@@ -2,21 +2,24 @@ import { IconSearch, neutralColors } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import Input from '@/components/Input';
 import IconEnter from '../../../../public/images/icons/enter.svg';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { useProjectsContext } from '@/context/projects.context';
+import { removeQueryParamAndRedirect } from '@/helpers/url';
 
 const ProjectsSearchDesktop = () => {
 	const { variables, setVariables } = useProjectsContext();
-
 	const [searchValue, setSearchValue] = useState(variables.searchTerm);
+	const router = useRouter();
 
 	const handleSearch = (searchTerm?: string) =>
 		setVariables(prevVariables => ({ ...prevVariables, searchTerm }));
 	const removeSearch = () => {
 		setSearchValue('');
 		handleSearch();
+		removeQueryParamAndRedirect(router, ['term']);
 	};
 
 	useEffect(() => {
