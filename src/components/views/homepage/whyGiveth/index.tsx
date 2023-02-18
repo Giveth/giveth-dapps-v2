@@ -90,6 +90,7 @@ const WhyGiveth: FC<Omit<IHomeRoute, 'projects'>> = props => {
 								address={i.user.walletAddress}
 								amount={i.valueUsd!}
 								projectTitle={i.project.title}
+								slug={i.project.slug}
 							/>
 						))}
 					</DonationCardContainer>

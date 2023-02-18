@@ -304,7 +304,7 @@ export interface IPowerBoosting {
 export interface IRecentDonation {
 	createAt: string;
 	id: string;
-	project: { title: string };
+	project: { title: string; slug: string };
 	user: { walletAddress: string };
 	valueUsd: number | null;
 }

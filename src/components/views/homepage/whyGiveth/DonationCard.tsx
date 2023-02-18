@@ -9,30 +9,35 @@ import {
 import { Flex } from '@/components/styled-components/Flex';
 import { shortenAddress } from '@/lib/helpers';
 import { Shadow } from '@/components/styled-components/Shadow';
+import ExternalLink from '@/components/ExternalLink';
+import { slugToProjectView } from '@/lib/routeCreators';
 
 interface IDonationCard {
 	address: string;
 	amount: number;
 	projectTitle: string;
+	slug: string;
 }
 
 const DonationCard: FC<IDonationCard> = props => {
-	const { address, amount, projectTitle } = props;
+	const { address, amount, projectTitle, slug } = props;
 	return (
 		<CardWrapper>
-			<CardContainer>
-				<Section>
-					<B>{'@' + shortenAddress(address)}</B>
-					<div>donated</div>
-					<Amount>{'~$' + amount.toFixed(1)}</Amount>
-				</Section>
-				<Section>
-					<Arrow>
-						<IconArrowRight />
-					</Arrow>
-					<Title>{projectTitle}</Title>
-				</Section>
-			</CardContainer>
+			<ExternalLink href={slugToProjectView(slug) + '#donations'}>
+				<CardContainer>
+					<Section>
+						<B>{'@' + shortenAddress(address)}</B>
+						<div>donated</div>
+						<Amount>{'~$' + amount.toFixed(1)}</Amount>
+					</Section>
+					<Section>
+						<Arrow>
+							<IconArrowRight />
+						</Arrow>
+						<Title>{projectTitle}</Title>
+					</Section>
+				</CardContainer>
+			</ExternalLink>
 		</CardWrapper>
 	);
 };
