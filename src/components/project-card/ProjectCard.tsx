@@ -241,6 +241,8 @@ const LastUpdatedContainer = styled(Subline)<{ isHover?: boolean }>`
 `;
 
 const Hr = styled.hr`
+	margin-left: ${SIDE_PADDING};
+	margin-right: ${SIDE_PADDING};
 	border: 1px solid ${neutralColors.gray[300]};
 `;
 

@@ -10,13 +10,13 @@ export enum ESortby {
 	GIVPOWER = 'GIVPower',
 }
 
-export enum ESortbyAllProjects {
-	MOSTFUNDED = 'MostFunded',
-	MOSTLIKED = 'MostLiked',
+export enum EProjectsSortBy {
+	MOST_FUNDED = 'MostFunded',
+	MOST_LIKED = 'MostLiked',
 	NEWEST = 'Newest',
 	OLDEST = 'Oldest',
 	RECENTLY_UPDATED = 'RecentlyUpdated',
-	QUALITYSCORE = 'QualityScore',
+	QUALITY_SCORE = 'QualityScore',
 	GIVPOWER = 'GIVPower',
 }
 

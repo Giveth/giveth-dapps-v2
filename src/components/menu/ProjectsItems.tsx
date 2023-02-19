@@ -6,7 +6,7 @@ import { useAppSelector } from '@/features/hooks';
 import { Flex } from '../styled-components/Flex';
 import { HighlightSection } from './common';
 import { Item } from './Item';
-import { ESortbyAllProjects } from '@/apollo/types/gqlEnums';
+import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 import Routes from '@/lib/constants/Routes';
 
 const projectsItems = {
@@ -14,11 +14,11 @@ const projectsItems = {
 		// { name: 'Trending', query: '?q=?q=trending' },
 		{
 			name: 'Recently updated',
-			query: '?sort=' + ESortbyAllProjects.RECENTLY_UPDATED,
+			query: '?sort=' + EProjectsSortBy.RECENTLY_UPDATED,
 		},
 		{
 			name: 'Just launched',
-			query: '?sort=' + ESortbyAllProjects.NEWEST,
+			query: '?sort=' + EProjectsSortBy.NEWEST,
 		},
 		// { name: 'Popular', query: '?q=popular' },
 		{ name: 'All projects', query: '' },

@@ -9,6 +9,7 @@ export const FETCH_ALL_PROJECTS = gql`
 		$searchTerm: String
 		$category: String
 		$mainCategory: String
+		$campaignSlug: String
 		$connectedWalletUserId: Int
 	) {
 		allProjects(
@@ -19,6 +20,7 @@ export const FETCH_ALL_PROJECTS = gql`
 			searchTerm: $searchTerm
 			category: $category
 			mainCategory: $mainCategory
+			campaignSlug: $campaignSlug
 			connectedWalletUserId: $connectedWalletUserId
 		) {
 			projects {
