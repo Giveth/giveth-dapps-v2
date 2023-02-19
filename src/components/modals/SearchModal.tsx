@@ -12,22 +12,22 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { ETheme } from '@/features/general/general.slice';
 import { useAppSelector } from '@/features/hooks';
 import { SearchInput } from '../SearchInput';
-import { ESortbyAllProjects } from '@/apollo/types/gqlEnums';
+import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 import Routes from '@/lib/constants/Routes';
 
 const quickLinks = [
 	{
 		title: 'Top ranking projects',
-		query: '?sort=' + ESortbyAllProjects.GIVPOWER,
+		query: '?sort=' + EProjectsSortBy.GIVPOWER,
 	},
 	{
 		title: 'Most funded projects',
-		query: '?sort=' + ESortbyAllProjects.MOSTFUNDED,
+		query: '?sort=' + EProjectsSortBy.MOST_FUNDED,
 	},
-	{ title: 'New projects', query: '?sort=' + ESortbyAllProjects.NEWEST },
+	{ title: 'New projects', query: '?sort=' + EProjectsSortBy.NEWEST },
 	{
 		title: 'Most liked projects',
-		query: '?sort=' + ESortbyAllProjects.MOSTLIKED,
+		query: '?sort=' + EProjectsSortBy.MOST_LIKED,
 	},
 ];
 

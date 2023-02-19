@@ -9,9 +9,8 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { HomeContainer } from '@/components/views/homepage/Home.sc';
-import { deviceSize } from '@/lib/constants/constants';
 import useNewsletterSubscription from '@/hooks/useNewsletterSubscription';
+import { Container } from '@/components/Grid';
 
 const HomeGetUpdates = () => {
 	const { formatMessage } = useIntl();
@@ -143,14 +142,9 @@ const SubscribeButton = styled(Button)`
 	}
 `;
 
-const Container = styled.div`
-	margin: 0 auto;
-	max-width: ${deviceSize.desktop + 'px'};
-`;
-
-const Wrapper = styled(HomeContainer)`
-	margin-top: 50px;
-	margin-bottom: 50px;
+const Wrapper = styled.div`
+	padding-bottom: 48px;
+	background: ${neutralColors.gray[200]};
 `;
 
 const StyledLink = styled.a`

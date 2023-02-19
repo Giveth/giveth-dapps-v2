@@ -228,3 +228,17 @@ a {
 	height: 4px;
 	background-color: #8668fc;
 }
+
+.swiper-pagination-bullet {
+	border-radius: 50%;
+    cursor: pointer;
+    user-select: none;
+    color: #82899A;
+    font-weight: 500;
+	padding: 0 8px;
+} 
+
+.swiper-pagination-bullet-active{
+    color: #1D1E1F;
+    font-weight: 700;
+}

@@ -9,12 +9,13 @@ import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import TrazadoPinkIcon from 'public/images/particles/trazado-pink.svg';
 import TrazadoGivIcon from 'public/images/particles/trazado-giv.svg';
+import { Container } from '@/components/Grid';
 
 const InformationBlock = () => {
 	const { formatMessage } = useIntl();
 
 	return (
-		<Wrapper>
+		<StyledContainer>
 			<H3 weight={700}>
 				{formatMessage({ id: 'page.home.philanthropy_needs_more' })}
 			</H3>
@@ -44,7 +45,7 @@ const InformationBlock = () => {
 				<Image src={TrazadoPinkIcon} alt='Trazado Pink' />
 			</TrazadoPink>
 			<QuarterCircle />
-		</Wrapper>
+		</StyledContainer>
 	);
 };
 
@@ -57,7 +58,7 @@ const TrazadoGiv = styled.div`
 const TrazadoPink = styled.div`
 	position: absolute;
 	bottom: 35px;
-	left: 0;
+	left: -30px;
 `;
 
 const QuarterCircle = styled.div`
@@ -68,22 +69,18 @@ const QuarterCircle = styled.div`
 	border-top-color: transparent;
 	transform: rotate(-45deg);
 	position: absolute;
-	top: 45px;
-	left: 250px;
+	top: 55px;
+	left: 170px;
 `;
 
 const SpanStyled = styled.span`
 	color: ${brandColors.giv[600]};
 `;
 
-const Wrapper = styled.div`
-	padding: 80px 40px;
+const StyledContainer = styled(Container)`
 	position: relative;
-	max-width: 1200px;
-	margin: 0 auto;
-	> h3:first-child {
-		padding-right: 40px;
-	}
+	padding-top: 80px;
+	padding-bottom: 80px;
 `;
 
 export default InformationBlock;

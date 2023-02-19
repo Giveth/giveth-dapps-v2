@@ -1,25 +1,35 @@
-import { FC } from 'react';
+import { FC, Fragment } from 'react';
 import styled from 'styled-components';
 import { neutralColors } from '@giveth/ui-design-system';
 import HomeFromBlog from './HomeFromBlog';
 import HomeGetUpdates from './HomeGetUpdates';
 import WhyGiveth from '@/components/views/homepage/whyGiveth';
-import CampaignBlock from '@/components/views/homepage/CampaignBlock';
+import ProjectsCampaignBlock from '@/components/views/homepage/ProjectsCampaignBlock';
 import IntroBlock from './introBlock';
 import VideoBlock from './videoBlock';
-import { ProjectUpdatesBlock } from './projectUpdatesBlock/ProjectUpdatesBlock';
-import { LatestUpdatesBlock } from './latestUpdates/LatestUpdatesBlock';
 import { IHomeRoute } from '../../../../pages';
 import InformationBlock from '@/components/views/homepage/InformationBlock';
+import { CampaignsBlock } from './campaignsBlock/CampaignsBlock';
 import HomePartners from './partners';
 
 const HomeIndex: FC<IHomeRoute> = props => {
-	const { projects, ...rest } = props;
+	const { campaigns, latestUpdates, ...rest } = props;
+	const featuredProjectsCampaigns = campaigns.filter(
+		campaign => campaign.isFeatured && campaign.relatedProjects.length > 0,
+	);
 	return (
 		<Wrapper>
 			<IntroBlock />
 			<Separator />
-			<CampaignBlock projects={projects} />
+			{featuredProjectsCampaigns.length > 0
+				? featuredProjectsCampaigns.map(campaign => (
+						<Fragment key={campaign.id}>
+							<ProjectsCampaignBlock campaign={campaign} />
+							<Separator />
+						</Fragment>
+				  ))
+				: []}
+			<InformationBlock />
 			<Separator />
 			<WhyGiveth {...rest} />
 			<Separator />
@@ -27,11 +37,12 @@ const HomeIndex: FC<IHomeRoute> = props => {
 			<Separator />
 			<HomePartners />
 			<Separator />
-			<ProjectUpdatesBlock projects={projects} />
-			<LatestUpdatesBlock latestUpdates={props.latestUpdates} />
-			<Separator />
+			{campaigns && campaigns.length > 0 ? (
+				<CampaignsBlock campaigns={campaigns} />
+			) : (
+				''
+			)}
 			<HomeFromBlog />
-			<InformationBlock />
 			<HomeGetUpdates />
 		</Wrapper>
 	);

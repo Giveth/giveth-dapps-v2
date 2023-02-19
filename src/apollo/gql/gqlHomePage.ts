@@ -56,6 +56,17 @@ export const HOMEPAGE_DATA = gql`
 		allProjects(limit: $limit, sortingBy: $sortingBy) {
 			projects {
 				id
+			}
+			totalCount
+		}
+		campaigns {
+			id
+			title
+			slug
+			isFeatured
+			description
+			relatedProjects {
+				id
 				title
 				image
 				slug
@@ -84,7 +95,18 @@ export const HOMEPAGE_DATA = gql`
 					round
 				}
 			}
-			totalCount
+			relatedProjectsCount
+			hashtags
+			photo
+			video
+			type
+			isActive
+			order
+			landingLink
+			filterFields
+			sortingField
+			createdAt
+			updatedAt
 		}
 	}
 `;

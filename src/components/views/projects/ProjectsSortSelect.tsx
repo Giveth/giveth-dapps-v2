@@ -21,7 +21,7 @@ import Select, {
 
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
-import { ESortbyAllProjects } from '@/apollo/types/gqlEnums';
+import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 import selectCustomStyles from '@/lib/constants/selectCustomStyles';
 import { useProjectsContext } from '@/context/projects.context';
 import { Flex } from '@/components/styled-components/Flex';
@@ -30,7 +30,7 @@ import useDetectDevice from '@/hooks/useDetectDevice';
 export interface ISelectedSort {
 	icon: ReactElement;
 	label: string;
-	value: ESortbyAllProjects;
+	value: EProjectsSortBy;
 }
 
 const DropdownIndicator: ComponentType<DropdownIndicatorProps> = props => {
@@ -40,32 +40,32 @@ const DropdownIndicator: ComponentType<DropdownIndicatorProps> = props => {
 const sortByOptions = [
 	{
 		label: 'Rank',
-		value: ESortbyAllProjects.GIVPOWER,
+		value: EProjectsSortBy.GIVPOWER,
 		icon: <IconRocketInSpace16 color={brandColors.deep[900]} />,
 	},
 	{
 		label: 'Newest',
-		value: ESortbyAllProjects.NEWEST,
+		value: EProjectsSortBy.NEWEST,
 		icon: <IconArrowTop size={16} color={brandColors.deep[900]} />,
 	},
 	{
 		label: 'Oldest',
-		value: ESortbyAllProjects.OLDEST,
+		value: EProjectsSortBy.OLDEST,
 		icon: <IconArrowBottom size={16} color={brandColors.deep[900]} />,
 	},
 	{
 		label: 'Most liked',
-		value: ESortbyAllProjects.MOSTLIKED,
+		value: EProjectsSortBy.MOST_LIKED,
 		icon: <IconHeartOutline16 color={brandColors.deep[900]} />,
 	},
 	{
 		label: 'Most funded',
-		value: ESortbyAllProjects.MOSTFUNDED,
+		value: EProjectsSortBy.MOST_FUNDED,
 		icon: <IconDonation16 color={brandColors.deep[900]} />,
 	},
 	{
 		label: 'RecentlyUpdated',
-		value: ESortbyAllProjects.RECENTLY_UPDATED,
+		value: EProjectsSortBy.RECENTLY_UPDATED,
 		icon: <IconFast16 color={brandColors.deep[900]} />,
 	},
 ];

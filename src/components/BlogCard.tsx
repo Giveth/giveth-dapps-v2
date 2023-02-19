@@ -5,7 +5,6 @@ import {
 	ButtonText,
 	Caption,
 	H5,
-	mediaQueries,
 	neutralColors,
 	P,
 } from '@giveth/ui-design-system';
@@ -102,12 +101,7 @@ const Wrapper = styled(Flex)`
 	border-radius: 16px;
 	padding: 24px;
 	width: 100%;
-	${mediaQueries.laptopS} {
-		width: 298px;
-	}
-	${mediaQueries.laptopL} {
-		width: 384px;
-	}
+	height: 100%;
 `;
 
 export default BlogCard;
