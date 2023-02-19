@@ -132,6 +132,7 @@ const TestRoute = () => {
 						</FlowRateTooltip>
 					</IconWithTooltip>
 				</div>
+				redeploy!
 				<RichTextInput
 					setValue={setDescription}
 					value={description}
