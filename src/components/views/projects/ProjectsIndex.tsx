@@ -145,17 +145,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 		fetchProjects(false, 0);
 	}, [contextVariables]);
 
-	useEffect(() => {
-		if (router.query?.slug) {
-			setVariables(prevVariables => {
-				return {
-					...prevVariables,
-					mainCategory: router.query?.slug?.toString(),
-				};
-			});
-		}
-	}, [router.query?.slug]);
-
 	const loadMore = useCallback(() => {
 		if (isLoading) return;
 		fetchProjects(true, pageNum.current + 1);
