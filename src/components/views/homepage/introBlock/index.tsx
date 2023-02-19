@@ -34,12 +34,8 @@ const IntroBlock = () => {
 					>
 						<IntroTitle>
 							<H3 weight={700}>
-								{formatMessage({ id: 'label.giveth_is' })}
-								<UnderlinedText>
-									{formatMessage({ id: 'label.rewarding' })}
-								</UnderlinedText>{' '}
 								{formatMessage({
-									id: 'label.and_empowering_those_who_give_to',
+									id: 'label.giveth_empowers_changemakers',
 								})}
 							</H3>
 							<ButtonsContainer gap='16px'>
