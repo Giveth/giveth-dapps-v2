@@ -14,6 +14,9 @@ import { useAppSelector } from '@/features/hooks';
 import { SearchInput } from '../SearchInput';
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 import Routes from '@/lib/constants/Routes';
+import { client } from '@/apollo/apolloClient';
+import { FETCH_CAMPAIGN_BY_SLUG } from '@/apollo/gql/gqlCampaign';
+import { ICampaign, IProject } from '@/apollo/types/types';
 
 const quickLinks = [
 	{
@@ -85,6 +88,7 @@ const popular_categories = [
 
 export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 	const [term, setTerm] = useState<string>('');
+	const [projects, setProjects] = useState<IProject[]>();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { theme } = useAppSelector(state => state.general);
 	const router = useRouter();
@@ -95,6 +99,23 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 			closeModal();
 		}
 	}, [closeModal, router, term]);
+
+	useEffect(() => {
+		async function fetchFeaturedCampaign() {
+			try {
+				const { data } = await client.query({
+					query: FETCH_CAMPAIGN_BY_SLUG,
+					variables: {},
+					fetchPolicy: 'no-cache',
+				});
+				const campaign: ICampaign = data.findCampaignBySlug;
+				setProjects(campaign.relatedProjects);
+			} catch (error) {
+				console.log('error', error);
+			}
+		}
+		fetchFeaturedCampaign();
+	}, []);
 
 	return (
 		<StyledModal
@@ -109,13 +130,8 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 					<SearchInput setTerm={setTerm} />
 				</SearchBox>
 				<Row>
-					<Col xs={12} md={1.5}></Col>
-					<Col xs={12} sm={4} md={3}>
-						<Flex
-							gap='24px'
-							flexDirection='column'
-							alignItems='flex-start'
-						>
+					<Col xs={12} sm={3}>
+						<Columns>
 							<Title size='large' theme={theme}>
 								Quick links
 							</Title>
@@ -129,32 +145,29 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 									</Item>
 								</Link>
 							))}
-						</Flex>
+						</Columns>
 					</Col>
-					<Col xs={12} sm={4} md={3}>
-						<Flex
-							gap='24px'
-							flexDirection='column'
-							alignItems='flex-start'
-						>
+					<Col xs={12} sm={6}>
+						<Columns>
 							<Title size='large' theme={theme}>
 								Featured projects
 							</Title>
-							{quickLinks.map((item, idx) => (
-								<Link key={idx} href={Routes.Project}>
-									<Item theme={theme} onClick={closeModal}>
-										{item.title}
-									</Item>
-								</Link>
-							))}
-						</Flex>
+							{projects &&
+								projects.length > 0 &&
+								projects.slice(0, 4).map((item, idx) => (
+									<Link key={idx} href={Routes.Project}>
+										<Item
+											theme={theme}
+											onClick={closeModal}
+										>
+											{item.title}
+										</Item>
+									</Link>
+								))}
+						</Columns>
 					</Col>
-					<Col xs={12} sm={4} md={3}>
-						<Flex
-							gap='24px'
-							flexDirection='column'
-							alignItems='flex-start'
-						>
+					<Col xs={12} sm={3}>
+						<Columns>
 							<Title size='large' theme={theme}>
 								Popular categories
 							</Title>
@@ -168,9 +181,8 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 									</Item>
 								</Link>
 							))}
-						</Flex>
+						</Columns>
 					</Col>
-					<Col xs={12} md={1.5}></Col>
 				</Row>
 			</SearchModalContainer>
 		</StyledModal>
@@ -189,6 +201,13 @@ const SearchModalContainer = styled(Container)`
 	${mediaQueries.tablet} {
 		padding-top: 132px;
 	}
+`;
+
+const Columns = styled(Flex)`
+	gap: 24px;
+	flex-direction: column;
+	align-items: center;
+	margin-bottom: 48px;
 `;
 
 const SearchBox = styled(Flex)`
