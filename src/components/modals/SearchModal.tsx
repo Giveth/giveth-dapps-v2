@@ -31,10 +31,61 @@ const quickLinks = [
 	},
 ];
 
+const popular_categories = [
+	{
+		title: 'Community',
+		slug: 'community',
+	},
+	{
+		title: 'NGO',
+		slug: 'ngo',
+	},
+	{
+		title: 'Technology',
+		slug: 'technology',
+	},
+	{
+		title: 'Equality',
+		slug: 'equality',
+	},
+	// {
+	// 	title: 'Health & Wellness',
+	// 	slug: 'health-and-wellness',
+	// },
+	// {
+	// 	title: 'Finance',
+	// 	slug: 'finance',
+	// },
+	// {
+	// 	title: 'Art & Culture',
+	// 	slug: 'art-and-culture',
+	// },
+	// {
+	// 	title: 'Economic & Infrastructure',
+	// 	slug: 'economic-and-infrastructure',
+	// },
+	// {
+	// 	title: 'Education',
+	// 	slug: 'education',
+	// },
+	// {
+	// 	title: 'Environment & Energy',
+	// 	slug: 'environment-and-energy',
+	// },
+	// {
+	// 	title: 'Nature',
+	// 	slug: 'nature',
+	// },
+	// {
+	// 	title: 'Other',
+	// 	slug: 'other',
+	// },
+];
+
 export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 	const [term, setTerm] = useState<string>('');
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const { theme, mainCategories } = useAppSelector(state => state.general);
+	const { theme } = useAppSelector(state => state.general);
 	const router = useRouter();
 
 	useEffect(() => {
@@ -57,8 +108,8 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 					<SearchInput setTerm={setTerm} />
 				</SearchBox>
 				<Row>
-					<Col xs={12} sm={1.5}></Col>
-					<Col xs={12} sm={3}>
+					<Col xs={12} md={1.5}></Col>
+					<Col xs={12} sm={4} md={3}>
 						<Flex
 							gap='24px'
 							flexDirection='column'
@@ -79,7 +130,7 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 							))}
 						</Flex>
 					</Col>
-					<Col xs={12} sm={3}>
+					<Col xs={12} sm={4} md={3}>
 						<Flex
 							gap='24px'
 							flexDirection='column'
@@ -97,7 +148,7 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 							))}
 						</Flex>
 					</Col>
-					<Col xs={12} sm={3}>
+					<Col xs={12} sm={4} md={3}>
 						<Flex
 							gap='24px'
 							flexDirection='column'
@@ -106,7 +157,7 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 							<Title size='large' theme={theme}>
 								Popular categories
 							</Title>
-							{mainCategories.map((item, idx) => (
+							{popular_categories.map((item, idx) => (
 								<Link
 									key={idx}
 									href={Routes.Projects + item.slug}
@@ -118,7 +169,7 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 							))}
 						</Flex>
 					</Col>
-					<Col xs={12} sm={1.5}></Col>
+					<Col xs={12} md={1.5}></Col>
 				</Row>
 			</SearchModalContainer>
 		</StyledModal>
