@@ -7,6 +7,7 @@ import WhyGiveth from '@/components/views/homepage/whyGiveth';
 import ProjectsCampaignBlock from '@/components/views/homepage/ProjectsCampaignBlock';
 import IntroBlock from './introBlock';
 import VideoBlock from './videoBlock';
+import AboutGiveconomy from './aboutGiveconomy';
 import { IHomeRoute } from '../../../../pages';
 import InformationBlock from '@/components/views/homepage/InformationBlock';
 import { CampaignsBlock } from './campaignsBlock/CampaignsBlock';
@@ -34,6 +35,8 @@ const HomeIndex: FC<IHomeRoute> = props => {
 			<WhyGiveth {...rest} />
 			<Separator />
 			<VideoBlock />
+			<Separator />
+			<AboutGiveconomy />
 			<Separator />
 			<HomePartners />
 			<Separator />
