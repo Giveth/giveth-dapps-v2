@@ -31,6 +31,7 @@ const quickLinks = [
 	},
 ];
 
+//We should update it manually
 const popular_categories = [
 	{
 		title: 'Community',
