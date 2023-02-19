@@ -53,7 +53,7 @@ export const ProjectsProvider = (props: {
 	const router = useRouter();
 
 	useEffect(() => {
-		let sort;
+		let sort: EProjectsSortBy | undefined;
 		if (router.query.sort) {
 			switch ((router.query.sort as string).toLowerCase()) {
 				case EProjectsSortBy.MOST_FUNDED.toLowerCase():
@@ -81,7 +81,7 @@ export const ProjectsProvider = (props: {
 					break;
 			}
 		}
-		let filters;
+		let filters: EProjectsFilter[] | undefined;
 		if (router.query.filter) {
 			filters = (
 				Array.isArray(router.query.filter)
@@ -92,17 +92,29 @@ export const ProjectsProvider = (props: {
 
 		let term = router.query.term as string;
 		let campaignSlug = router.query.campaign as string;
-		setVariables({
-			sortingBy: sort,
-			searchTerm: term,
-			filters,
-			campaignSlug,
-		});
+		const variablesObject = router.query?.slug
+			? {
+					...variables,
+					sortingBy: sort,
+					searchTerm: term,
+					filters,
+					campaignSlug,
+					mainCategory: router.query?.slug?.toString(),
+			  }
+			: {
+					...variables,
+					sortingBy: sort,
+					searchTerm: term,
+					filters,
+					campaignSlug,
+			  };
+		setVariables(variablesObject);
 	}, [
 		router.query.sort,
 		router.query.term,
 		router.query.filter,
 		router.query.campaign,
+		router.query?.slug,
 	]);
 
 	return (
