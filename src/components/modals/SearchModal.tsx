@@ -201,6 +201,7 @@ const SearchModalContainer = styled(Container)`
 	${mediaQueries.tablet} {
 		padding-top: 132px;
 	}
+	margin-bottom: 48px;
 `;
 
 const Columns = styled(Flex)`
