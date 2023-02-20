@@ -136,6 +136,7 @@ export const MintCard = () => {
 			setShowInsufficientFundModal(true);
 		}
 	}
+	console.log('pfpData', pfpData);
 
 	return (
 		<>
@@ -146,7 +147,14 @@ export const MintCard = () => {
 						<MaxLink
 							size='Small'
 							onClick={() =>
-								setQtyNFT('' + pfpData?.maxMintAmount)
+								setQtyNFT(
+									pfpData
+										? (
+												pfpData.maxMintAmount -
+												pfpData.balance
+										  ).toString()
+										: '',
+								)
 							}
 						>
 							MAX
