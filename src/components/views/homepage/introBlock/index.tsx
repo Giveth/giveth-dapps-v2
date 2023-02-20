@@ -1,10 +1,11 @@
 import {
 	ButtonLink,
 	H3,
-	IconBulbOutline32,
 	IconChevronRight24,
 	IconDonation32,
 	IconSpark32,
+	IconVerifiedBadge32,
+	Lead,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import React from 'react';
@@ -12,11 +13,13 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Flex } from '@/components/styled-components/Flex';
 import IntroCard from './IntroCard';
 import introBanner from '/public/images/banners/introBanner.svg';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Container } from '@/components/Grid';
+import Routes from '@/lib/constants/Routes';
 
 const SemiCircle = dynamic(() => import('@/components/particles/SemiCircle'));
 const Circle = dynamic(() => import('@/components/particles/Circle'));
@@ -34,28 +37,36 @@ const IntroBlock = () => {
 					>
 						<IntroTitle>
 							<H3 weight={700}>
-								{formatMessage({ id: 'label.giveth_is' })}
-								<UnderlinedText>
-									{formatMessage({ id: 'label.rewarding' })}
-								</UnderlinedText>{' '}
 								{formatMessage({
-									id: 'label.and_empowering_those_who_give_to',
+									id: 'label.giveth_empowers_changemakers',
 								})}
 							</H3>
+							<br />
+							<CustomLead>
+								Join our community-driven movement to transform
+								the way we fund nonprofits and social causes.
+							</CustomLead>
 							<ButtonsContainer gap='16px'>
-								<ButtonLink
-									label={formatMessage({
-										id: 'label.explore_projects',
-									})}
-									icon={<IconChevronRight24 />}
-								/>
-								<ButtonLink
-									linkType='texty-secondary'
-									label={formatMessage({
-										id: 'label.our_mission',
-									})}
-									icon={<IconChevronRight24 />}
-								/>
+								<Link href={Routes.Projects}>
+									<ButtonLink
+										label={formatMessage({
+											id: 'label.explore_projects',
+										})}
+										icon={<IconChevronRight24 />}
+									/>
+								</Link>
+								<Link
+									href='https://docs.giveth.io/whatisgiveth/#our-mission'
+									target='_blank'
+								>
+									<OurMissionButton
+										linkType='texty-secondary'
+										label={formatMessage({
+											id: 'label.our_mission',
+										})}
+										icon={<IconChevronRight24 />}
+									/>
+								</Link>
 							</ButtonsContainer>
 						</IntroTitle>
 						<div>
@@ -80,7 +91,11 @@ const IntroBlock = () => {
 					</TopSectionContainer>
 					<IntroCards justifyContent='space-between' gap='24px'>
 						<IntroCard
-							Icon={<IconDonation32 />}
+							Icon={
+								<IconVerifiedBadge32
+									color={neutralColors.gray[800]}
+								/>
+							}
 							LinkComponent={
 								<ButtonLink
 									linkType='texty-secondary'
@@ -98,7 +113,11 @@ const IntroBlock = () => {
 							})}
 						/>
 						<IntroCard
-							Icon={<IconBulbOutline32 />}
+							Icon={
+								<IconDonation32
+									color={neutralColors.gray[800]}
+								/>
+							}
 							LinkComponent={
 								<ButtonLink
 									linkType='texty-secondary'
@@ -116,7 +135,9 @@ const IntroBlock = () => {
 							})}
 						/>
 						<IntroCard
-							Icon={<IconSpark32 />}
+							Icon={
+								<IconSpark32 color={neutralColors.gray[800]} />
+							}
 							LinkComponent={
 								<ButtonLink
 									linkType='texty-primary'
@@ -232,6 +253,16 @@ const CircleContainer = styled.div`
 	${mediaQueries.mobileL} {
 		display: inline;
 	}
+`;
+
+const CustomLead = styled(Lead)`
+	color: ${neutralColors.gray[800]};
+`;
+
+const OurMissionButton = styled(ButtonLink)`
+	display: flex;
+	align-items: center;
+	height: 100%;
 `;
 
 export default IntroBlock;

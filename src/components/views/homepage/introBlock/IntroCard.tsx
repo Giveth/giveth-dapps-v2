@@ -24,7 +24,7 @@ const IntroCard = ({
 				<H5 weight={700}>{title}</H5>
 			</IconAndTitleContainer>
 			<P>{description}</P>
-			{LinkComponent}
+			{/* {LinkComponent} */}
 		</IntroCardContainer>
 	);
 };
@@ -48,6 +48,7 @@ const IntroCardContainer = styled(Flex)`
 	${mediaQueries.desktop} {
 		padding: 16px 40px;
 	}
+	color: ${neutralColors.gray[800]};
 `;
 
 export default IntroCard;
