@@ -24,7 +24,7 @@ const IntroCard = ({
 				<H5 weight={700}>{title}</H5>
 			</IconAndTitleContainer>
 			<P>{description}</P>
-			{LinkComponent}
+			{/* {LinkComponent} */}
 		</IntroCardContainer>
 	);
 };
