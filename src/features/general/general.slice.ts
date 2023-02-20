@@ -4,12 +4,13 @@ import { IMainCategory } from '@/apollo/types/types';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 export enum ETheme {
+	NOT_INITIATED,
 	Light = 1,
 	Dark,
 }
 
 const initialState = {
-	theme: ETheme.Light,
+	theme: ETheme.NOT_INITIATED,
 	showHeader: true,
 	showFooter: true,
 	mainCategories: [] as IMainCategory[],
