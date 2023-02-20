@@ -22,6 +22,7 @@ export interface IProject {
 	creationDate?: string;
 	admin?: string;
 	description?: string;
+	descriptionSummary?: string;
 	addresses?: IWalletAddress[];
 	impactLocation?: string;
 	qualityScore?: number;
@@ -226,7 +227,7 @@ export interface IProjectBySlug {
 
 export interface IProjectUpdate {
 	content: string;
-	plainSummaryContent: string;
+	contentSummary: string;
 	createdAt: string;
 	id: string;
 	projectId: string;
