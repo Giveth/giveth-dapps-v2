@@ -28,7 +28,7 @@ export const FETCH_ALL_PROJECTS = gql`
 				title
 				image
 				slug
-				description
+				descriptionSummary
 				verified
 				totalDonations
 				traceCampaignId
@@ -263,7 +263,7 @@ export const FETCH_USER_LIKED_PROJECTS = gql`
 				id
 				title
 				balance
-				description
+				descriptionSummary
 				image
 				slug
 				creationDate
@@ -442,7 +442,7 @@ export const SIMILAR_PROJECTS = gql`
 				image
 				slug
 				creationDate
-				description
+				descriptionSummary
 				verified
 				adminUser {
 					name
@@ -482,7 +482,7 @@ export const FETCH_PROJECTS_BY_SLUG = gql`
 				id
 				title
 				balance
-				description
+				descriptionSummary
 				image
 				slug
 				creationDate
