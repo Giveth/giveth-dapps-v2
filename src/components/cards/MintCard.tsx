@@ -34,6 +34,7 @@ interface IPFPData {
 	maxMintAmount: number;
 	totalSupply: number;
 	maxSupply: number;
+	balance: number;
 }
 
 export const MintCard = () => {
@@ -64,18 +65,22 @@ export const MintCard = () => {
 				const _maxMintAmount = await PFPContract.maxMintAmount();
 				const _totalSupply = await PFPContract.totalSupply();
 				const _maxSupply = await PFPContract.maxSupply();
+				let _balanceOf;
+				if (account) _balanceOf = await PFPContract.balanceOf(account);
+
 				setPfpData({
 					price: new BigNumber(_price.toString()),
-					maxMintAmount: _maxMintAmount,
-					totalSupply: _totalSupply.toNumber(),
-					maxSupply: _maxSupply.toNumber(),
+					maxMintAmount: _maxMintAmount || 0,
+					totalSupply: _totalSupply.toNumber() || 0,
+					maxSupply: _maxSupply.toNumber() || 0,
+					balance: Number(_balanceOf?.toString() || '0'),
 				});
 			} catch (error) {
 				console.log('failed to fetch GIversPFP data');
 			}
 		}
 		fetchData();
-	}, [chainId, library]);
+	}, [account, chainId, library]);
 
 	function onChangeHandler(event: ChangeEvent<HTMLInputElement>) {
 		if (!pfpData?.maxMintAmount) return;
@@ -91,7 +96,7 @@ export const MintCard = () => {
 	useEffect(() => {
 		//handle range
 		const _qty = Number(qtyNFT);
-		if (pfpData && _qty > pfpData.maxMintAmount)
+		if (pfpData && _qty + pfpData.balance > pfpData.maxMintAmount)
 			return setErrorMsg(
 				'You can’t mint more than the max mint amount per transaction. ',
 			);
@@ -164,9 +169,7 @@ export const MintCard = () => {
 					<Flex justifyContent='space-between'>
 						<InfoBoxTitle>Max Mint </InfoBoxTitle>
 						<InfoBoxValue>
-							{pfpData?.maxMintAmount
-								? pfpData.maxMintAmount
-								: '-'}
+							{pfpData ? pfpData.maxMintAmount : '-'}
 						</InfoBoxValue>
 					</Flex>
 					<Flex justifyContent='space-between'>
