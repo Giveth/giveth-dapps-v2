@@ -41,6 +41,7 @@ const links = {
 	TRACES_DOCS: DOCS + 'dapps/entitiesAndRoles/#traces',
 	MAKE_TRACEABLE_DOCS: DOCS + 'dapps/makeTraceableProject',
 	VERIFICATION_DOCS: DOCS + 'dapps/projectVerification',
+	CANCELLED_PROJECTS_DOCS: DOCS + 'dapps/listedUnlisted/#cancelled-projects',
 	FUNDRAISING_DOCS: DOCS + 'whatisgiveth/fundraisingGuide',
 	TRACE: 'https://trace.giveth.io/',
 	SWAG: 'https://swag.giveth.io/',

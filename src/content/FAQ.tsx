@@ -339,29 +339,24 @@ const faqContent = (formatMessage: any) => {
 				answer: (
 					<>
 						<FormattedMessage id='page.faq.what_types_of_projects_are_prohibited.content.one' />{' '}
-						<a
-							href='https://docs.giveth.io/whatisgiveth/covenant/'
-							target='_blank'
-							rel='noopener noreferrer'
-						>
-							<FormattedMessage id='label.covenant' />
-						</a>{' '}
+						<ExternalLink
+							href={links.COVENANT_DOC}
+							title={<FormattedMessage id='label.covenant' />}
+						/>{' '}
 						<FormattedMessage id='label.and_or' />{' '}
-						<a
-							href='https://giveth.io/tos'
-							target='_blank'
-							rel='noopener noreferrer'
-						>
-							<FormattedMessage id='component.title.tos' />
-						</a>{' '}
+						<ExternalLink
+							href={Routes.Terms}
+							title={
+								<FormattedMessage id='component.title.tos' />
+							}
+						/>{' '}
 						<FormattedMessage id='page.faq.what_types_of_projects_are_prohibited.content.two' />{' '}
-						<a
-							href='https://docs.giveth.io/dapps/listedUnlisted/#cancelled-projects'
-							target='_blank'
-							rel='noopener noreferrer'
-						>
-							<FormattedMessage id='page.faq.what_types_of_projects_are_prohibited.content.three' />
-						</a>
+						<ExternalLink
+							href={links.CANCELLED_PROJECTS_DOCS}
+							title={
+								<FormattedMessage id='page.faq.what_types_of_projects_are_prohibited.content.three' />
+							}
+						/>
 						.
 					</>
 				),
