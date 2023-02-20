@@ -96,10 +96,13 @@ export const MintCard = () => {
 	useEffect(() => {
 		//handle range
 		const _qty = Number(qtyNFT);
-		if (pfpData && _qty + pfpData.balance > pfpData.maxMintAmount)
+		if (pfpData && _qty > pfpData.maxMintAmount)
 			return setErrorMsg(
 				'You can’t mint more than the max mint amount per transaction. ',
 			);
+
+		if (pfpData && _qty + pfpData.balance > pfpData.maxMintAmount)
+			return setErrorMsg('You can’t mint more than the max mint amount.');
 
 		if (_qty < MIN_NFT_QTY)
 			return setErrorMsg('Specify an amount greater than 0');
