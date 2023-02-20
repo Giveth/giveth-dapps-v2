@@ -21,7 +21,7 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectCardBadges from './ProjectCardLikeAndShareButtons';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
 import { IProject } from '@/apollo/types/types';
-import { timeFromNow, htmlToText } from '@/lib/helpers';
+import { timeFromNow } from '@/lib/helpers';
 import ProjectCardImage from './ProjectCardImage';
 import {
 	addressToUserView,
@@ -45,7 +45,7 @@ const ProjectCard = (props: IProjectCard) => {
 	const { project, className } = props;
 	const {
 		title,
-		description,
+		descriptionSummary,
 		image,
 		slug,
 		adminUser,
@@ -116,7 +116,7 @@ const ProjectCard = (props: IProjectCard) => {
 					</Link>
 				</PaddedRow>
 				<Link href={slugToProjectView(slug)}>
-					<Description>{htmlToText(description)}</Description>
+					<Description>{descriptionSummary}</Description>
 					<PaddedRow alignItems='center' gap='4px'>
 						<PriceText>
 							${Math.round(totalDonations as number)}

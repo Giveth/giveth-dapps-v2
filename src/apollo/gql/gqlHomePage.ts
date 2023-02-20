@@ -37,7 +37,7 @@ export const HOMEPAGE_DATA = gql`
 				title
 				projectId
 				userId
-				content
+				contentSummary
 				isMain
 				totalReactions
 				createdAt
@@ -71,7 +71,7 @@ export const HOMEPAGE_DATA = gql`
 				title
 				image
 				slug
-				description
+				descriptionSummary
 				verified
 				totalDonations
 				traceCampaignId

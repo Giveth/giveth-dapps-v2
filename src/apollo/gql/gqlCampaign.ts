@@ -13,7 +13,7 @@ export const FETCH_CAMPAIGNS = gql`
 				title
 				image
 				slug
-				description
+				descriptionSummary
 				verified
 				totalDonations
 				traceCampaignId
@@ -67,7 +67,7 @@ export const FETCH_CAMPAIGN_BY_SLUG = gql`
 				title
 				image
 				slug
-				description
+				descriptionSummary
 				verified
 				totalDonations
 				traceCampaignId
