@@ -1,10 +1,10 @@
 import {
 	ButtonLink,
 	H3,
-	IconBulbOutline32,
 	IconChevronRight24,
 	IconDonation32,
 	IconSpark32,
+	IconVerifiedBadge32,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import React from 'react';
@@ -76,7 +76,11 @@ const IntroBlock = () => {
 					</TopSectionContainer>
 					<IntroCards justifyContent='space-between' gap='24px'>
 						<IntroCard
-							Icon={<IconDonation32 />}
+							Icon={
+								<IconVerifiedBadge32
+									color={neutralColors.gray[800]}
+								/>
+							}
 							LinkComponent={
 								<ButtonLink
 									linkType='texty-secondary'
@@ -94,7 +98,11 @@ const IntroBlock = () => {
 							})}
 						/>
 						<IntroCard
-							Icon={<IconBulbOutline32 />}
+							Icon={
+								<IconDonation32
+									color={neutralColors.gray[800]}
+								/>
+							}
 							LinkComponent={
 								<ButtonLink
 									linkType='texty-secondary'
@@ -112,7 +120,9 @@ const IntroBlock = () => {
 							})}
 						/>
 						<IntroCard
-							Icon={<IconSpark32 />}
+							Icon={
+								<IconSpark32 color={neutralColors.gray[800]} />
+							}
 							LinkComponent={
 								<ButtonLink
 									linkType='texty-primary'
