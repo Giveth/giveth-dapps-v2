@@ -48,6 +48,7 @@ const IntroCardContainer = styled(Flex)`
 	${mediaQueries.desktop} {
 		padding: 16px 40px;
 	}
+	color: ${neutralColors.gray[800]};
 `;
 
 export default IntroCard;
