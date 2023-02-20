@@ -13,11 +13,13 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Flex } from '@/components/styled-components/Flex';
 import IntroCard from './IntroCard';
 import introBanner from '/public/images/banners/introBanner.svg';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Container } from '@/components/Grid';
+import Routes from '@/lib/constants/Routes';
 
 const SemiCircle = dynamic(() => import('@/components/particles/SemiCircle'));
 const Circle = dynamic(() => import('@/components/particles/Circle'));
@@ -45,19 +47,26 @@ const IntroBlock = () => {
 								the way we fund nonprofits and social causes.
 							</CustomLead>
 							<ButtonsContainer gap='16px'>
-								<ButtonLink
-									label={formatMessage({
-										id: 'label.explore_projects',
-									})}
-									icon={<IconChevronRight24 />}
-								/>
-								<ButtonLink
-									linkType='texty-secondary'
-									label={formatMessage({
-										id: 'label.our_mission',
-									})}
-									icon={<IconChevronRight24 />}
-								/>
+								<Link href={Routes.Projects}>
+									<ButtonLink
+										label={formatMessage({
+											id: 'label.explore_projects',
+										})}
+										icon={<IconChevronRight24 />}
+									/>
+								</Link>
+								<Link
+									href='https://docs.giveth.io/whatisgiveth/#our-mission'
+									target='_blank'
+								>
+									<OurMissionButton
+										linkType='texty-secondary'
+										label={formatMessage({
+											id: 'label.our_mission',
+										})}
+										icon={<IconChevronRight24 />}
+									/>
+								</Link>
 							</ButtonsContainer>
 						</IntroTitle>
 						<div>
@@ -248,6 +257,12 @@ const CircleContainer = styled.div`
 
 const CustomLead = styled(Lead)`
 	color: ${neutralColors.gray[800]};
+`;
+
+const OurMissionButton = styled(ButtonLink)`
+	display: flex;
+	align-items: center;
+	height: 100%;
 `;
 
 export default IntroBlock;
