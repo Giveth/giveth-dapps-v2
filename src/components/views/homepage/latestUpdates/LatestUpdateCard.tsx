@@ -42,11 +42,7 @@ export const LatestUpdateCard: FC<ILatestUpdateCardProps> = ({ update }) => {
 						) + ' ago'}
 					</Time>
 					<Title>{update.title}</Title>
-					<Desc
-						dangerouslySetInnerHTML={{
-							__html: update.plainSummaryContent,
-						}}
-					/>
+					<Desc>{update.contentSummary}</Desc>
 				</Content>
 			</LatestUpdateCardContainer>
 		</Link>
