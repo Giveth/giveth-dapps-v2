@@ -5,6 +5,7 @@ import {
 	IconDonation32,
 	IconSpark32,
 	IconVerifiedBadge32,
+	Lead,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import React from 'react';
@@ -38,6 +39,11 @@ const IntroBlock = () => {
 									id: 'label.giveth_empowers_changemakers',
 								})}
 							</H3>
+							<br />
+							<CustomLead>
+								Join our community-driven movement to transform
+								the way we fund nonprofits and social causes.
+							</CustomLead>
 							<ButtonsContainer gap='16px'>
 								<ButtonLink
 									label={formatMessage({
@@ -238,6 +244,10 @@ const CircleContainer = styled.div`
 	${mediaQueries.mobileL} {
 		display: inline;
 	}
+`;
+
+const CustomLead = styled(Lead)`
+	color: ${neutralColors.gray[800]};
 `;
 
 export default IntroBlock;
