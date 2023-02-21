@@ -203,13 +203,13 @@ export const MintCard = () => {
 				</InputWrapper>
 				<InfoBox gap='16px' flexDirection='column'>
 					<Flex justifyContent='space-between'>
-						<InfoBoxTitle>Max Mint </InfoBoxTitle>
+						<InfoBoxTitle>Max Mint Amount</InfoBoxTitle>
 						<InfoBoxValue>
 							{pfpData ? pfpData.maxMintAmount : '-'}
 						</InfoBoxValue>
 					</Flex>
 					<Flex justifyContent='space-between'>
-						<InfoBoxTitle>Mint Prince per</InfoBoxTitle>
+						<InfoBoxTitle>Mint price per NFT</InfoBoxTitle>
 						<InfoBoxValue>
 							{pfpData?.price
 								? formatWeiHelper(pfpData.price)
