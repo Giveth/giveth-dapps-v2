@@ -148,7 +148,7 @@ export const MintCard = () => {
 			<MintCardContainer>
 				<InputWrapper gap='8px' flexDirection='column'>
 					<Flex justifyContent='space-between'>
-						<GLink size='Small'>NFT Amount</GLink>
+						<GLink size='Small'>Amount of NFTs to mint</GLink>
 						<MaxLink
 							size='Small'
 							onClick={() =>
