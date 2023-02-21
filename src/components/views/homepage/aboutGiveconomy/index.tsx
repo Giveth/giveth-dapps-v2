@@ -57,11 +57,11 @@ const AboutGiveconomy = () => {
 									/>
 								</Icon>
 							</TitleBox>
-							<Subtitle>
+							<FirstSubtitle>
 								{formatMessage({
 									id: 'label.the_first_step_to_empowering',
 								})}
-							</Subtitle>
+							</FirstSubtitle>
 							<Description>
 								{formatMessage({
 									id: 'label.donate_to_verified_projects_and_get_giv',
@@ -256,12 +256,15 @@ const Description = styled(Lead)`
 `;
 
 const Subtitle = styled(Description)`
-	margin: 0 0 0 0;
 	text-align: center;
 	font-style: italic;
 	${mediaQueries.tablet} {
 		text-align: left;
 	}
+`;
+
+const FirstSubtitle = styled(Subtitle)`
+	margin: -20px 0 0 0;
 `;
 
 const Section = styled.div`
