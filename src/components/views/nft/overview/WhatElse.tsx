@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
 import { OvalHorizontalGradient, OvalVerticalGradient } from '../common.styles';
 import { mediaQueries } from '@/lib/constants/constants';
+import Link from 'next/link';
 
 const WhatElse = () => {
 	return (
@@ -22,7 +23,10 @@ const WhatElse = () => {
 								xDAI to the Giveth Project is eligible for early
 								minting of a Givers PFP. Eligible donations will
 								also earn additional rewards through the $nice
-								token program. Learn more about $nice.
+								token program.{' '}
+								<DocLink href='https://docs.giveth.io/giveconomy/niceToken'>
+									Learn more about $nice.
+								</DocLink>
 							</Lead>
 						</Flex>
 						<Flex flexDirection='column' gap='16px'>
@@ -35,7 +39,10 @@ const WhatElse = () => {
 								make an impact, people will notice your style.
 								You’ll also receive a discount when you register
 								your custom <code>.giveth</code> Punk Domain
-								name. Learn more about the benefits.
+								name.{' '}
+								<DocLink href='https://docs.giveth.io/dapps/giverspfp/#benefits'>
+									Learn more about the benefits.
+								</DocLink>
 							</Lead>
 						</Flex>
 					</CustomFlex>
@@ -60,6 +67,14 @@ const WhatElseContainer = styled.div`
 		z-index: 1;
 		opacity: 0.15;
 		overflow: hidden;
+	}
+`;
+
+const DocLink = styled(Link)`
+	color: ${brandColors.giv[300]};
+	font-weight: 500;
+	&:hover {
+		color: ${brandColors.giv[200]};
 	}
 `;
 
