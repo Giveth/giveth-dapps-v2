@@ -1,10 +1,10 @@
 import { brandColors, Container, H1, H3, Lead } from '@giveth/ui-design-system';
 import React from 'react';
 import styled from 'styled-components';
+import Link from 'next/link';
 import { Flex } from '@/components/styled-components/Flex';
 import { OvalHorizontalGradient, OvalVerticalGradient } from '../common.styles';
 import { mediaQueries } from '@/lib/constants/constants';
-import Link from 'next/link';
 
 const WhatElse = () => {
 	return (
