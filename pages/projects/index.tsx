@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next/types';
 import { addApolloState, initializeApollo } from '@/apollo/apolloClient';
 import {
@@ -12,8 +14,6 @@ import { GeneralMetatags } from '@/components/Metatag';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import { ICategory, IMainCategory, IProject } from '@/apollo/types/types';
 import { ProjectsProvider } from '@/context/projects.context';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 
 export interface IProjectsRouteProps {
 	projects: IProject[];
