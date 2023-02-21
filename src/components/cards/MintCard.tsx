@@ -126,7 +126,9 @@ export const MintCard = () => {
 
 		if (pfpData && balance && _qty + balance > pfpData.maxMintAmount)
 			return setErrorMsg(
-				`You cannot mint or own more than the maximum amount. This wallet holds ${balance} Givers NFTs`,
+				`You cannot mint or own more than the maximum amount. This wallet holds ${balance} Givers NFT${
+					balance > 1 ? 's' : ''
+				}`,
 			);
 
 		if (_qty < MIN_NFT_QTY)
