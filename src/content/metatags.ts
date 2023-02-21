@@ -68,11 +68,11 @@ export const supportMetatags = {
 	url: 'https://giveth.io/support',
 };
 
-export const GIVfriendsMetatags = {
-	title: 'Check out our GIVfriends: partners and fellow organizations that are helping us further our mission.',
+export const partnershipMetatags = {
+	title: 'Learn about the partners helping us build the Future of Giving',
 	desc: `Learn more about our partnerships & friends in the Ethereum Community helping us build the Future of Giving. From Gnosis Chain to 1Hive, ShapeShift DAO & more!`,
 	image: 'https://i.ibb.co/HTbdCdd/Thumbnail.png',
-	url: 'https://giveth.io/GIVfriends',
+	url: 'https://giveth.io/partnerships',
 };
 
 export const joinMetatags = {
