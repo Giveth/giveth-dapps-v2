@@ -1,10 +1,10 @@
 import { GetServerSideProps } from 'next/types';
-import nookies from 'nookies';
 import { addApolloState, initializeApollo } from '@/apollo/apolloClient';
 import {
 	FETCH_ALL_PROJECTS,
 	FETCH_MAIN_CATEGORIES,
 } from '@/apollo/gql/gqlProjects';
+import StorageLabel, { setWithExpiry } from '@/lib/localStorage';
 import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
 import ProjectsIndex from '@/components/views/projects/ProjectsIndex';
 import { projectsMetatags } from '@/content/metatags';
@@ -12,6 +12,8 @@ import { GeneralMetatags } from '@/components/Metatag';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import { ICategory, IMainCategory, IProject } from '@/apollo/types/types';
 import { ProjectsProvider } from '@/context/projects.context';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 export interface IProjectsRouteProps {
 	projects: IProject[];
@@ -22,6 +24,20 @@ export interface IProjectsRouteProps {
 
 const ProjectsRoute = (props: IProjectsRouteProps) => {
 	const { projects, mainCategories, totalCount, categories } = props;
+
+	const router = useRouter();
+	const referrerId = router?.query?.referrer_id;
+
+	useEffect(() => {
+		if (referrerId) {
+			// this sets the cookie saying this session comes from a referal
+			setWithExpiry(
+				StorageLabel.CHAINVINEREFERRED,
+				referrerId,
+				1 * 24 * 60 * 60,
+			);
+		}
+	}, [referrerId]);
 
 	return (
 		<ProjectsProvider mainCategories={mainCategories}>
@@ -36,16 +52,7 @@ const ProjectsRoute = (props: IProjectsRouteProps) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
-	const { query } = context;
-	const referrerId = query?.referrer_id;
 	try {
-		if (referrerId) {
-			// this sets the cookie saying this session comes from a referal
-			nookies.set(context, 'chainvineReferred', referrerId as string, {
-				maxAge: 1 * 24 * 60 * 60,
-				path: '/',
-			});
-		}
 		const apolloClient = initializeApollo();
 		const { data } = await apolloClient.query({
 			query: FETCH_ALL_PROJECTS,

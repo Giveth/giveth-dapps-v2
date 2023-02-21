@@ -182,6 +182,7 @@ const LeadText = styled(Lead)`
 
 const H4Text = styled(H4)`
 	line-height: -0.01em;
+	max-width: 467px;
 	color: ${neutralColors.gray[800]};
 	font-weight: 400;
 	font-size: 32px;

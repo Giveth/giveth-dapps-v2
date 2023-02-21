@@ -9,9 +9,9 @@ import {
 	Button,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { parseCookies } from 'nookies';
 import BigNumber from 'bignumber.js';
 
+import StorageLabel, { getWithExpiry } from '@/lib/localStorage';
 import { Modal } from '@/components/modals/Modal';
 import { compareAddresses, formatTxLink, showToastError } from '@/lib/helpers';
 import { mediaQueries, minDonationAmount } from '@/lib/constants/constants';
@@ -80,9 +80,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const [failedModalType, setFailedModalType] =
 		useState<EDonationFailedType>();
 
-	const cookies = parseCookies();
-	const chainvineReferred = cookies?.chainvineReferred;
-
+	const chainvineReferred = getWithExpiry(StorageLabel.CHAINVINEREFERRED);
 	const { title, addresses, givethAddresses } = project || {};
 
 	const projectWalletAddress =

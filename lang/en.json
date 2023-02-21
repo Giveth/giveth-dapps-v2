@@ -883,12 +883,12 @@
 	"label.claim_your_free_swag": "claim your free swag",
 	"label.join_our_discord": "join our discord",
 	"label.explore_the_giveconomy": "explore the giveconomy",
-	"label.givferral_rewards_program": "GIVferral Reward Program",
+	"label.givferral_rewards_program": "Giveth Referral Program",
 	"label.refer_a_friend": "Refer a friend, earn $GIV tokens for every donation.",
 	"label.how_to_refer_your_friends": "How to refer your friends",
 	"label.go_to_chainvine_and_connect_your_wallet": "Go to chainvine and connect your wallet.",
 	"label.go_to_chainvine": "Go to Chainvine",
-	"label.generate_your_unique_url": "Generate your unique URL to share with your network.",
+	"label.generate_your_unique_url": "Get your unique URL to share with your network.",
 	"label.earn_giv_tokens_for_each_donation_made_through_your_link": "Earn GIV tokens for each donation made through your link",
 	"label.up_to_10_percent_of_the_total_donation": "Up to 10% of the total donation amount!",
 	"label.when_others_give_you_earn": "When others give, you earn",
@@ -896,5 +896,5 @@
 	"label.by_encouraging_your_network": "By encouraging your network to give to good causes, you’re not only making a positive impact but also earning rewards for your efforts!",
 	"label.get_started": "Get Started",
 	"label.see_it_in_action": "See it in action!",
-	"label.learn_how_to_become_an_active_part": "Learn how to become an active part of our giving network with the GIVferral program."
+	"label.learn_how_to_become_an_active_part": "Learn how to become an active part of our giving network."
 }
