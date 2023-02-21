@@ -108,6 +108,7 @@ const QuoteContainer = styled.div`
 	max-width: 925px;
 	text-align: center;
 	z-index: 1;
+	margin: auto;
 `;
 
 const DesktopImagesContainer = styled.div`
