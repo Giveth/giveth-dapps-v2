@@ -29,7 +29,6 @@ export const FETCH_ALL_PROJECTS = gql`
 				description
 				verified
 				totalDonations
-				traceCampaignId
 				reaction {
 					id
 					userId
@@ -71,7 +70,6 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 			slug
 			description
 			verified
-			traceCampaignId
 			addresses {
 				address
 				isRecipient
@@ -79,14 +77,12 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 			}
 			totalProjectUpdates
 			totalDonations
-			totalTraceDonations
 			creationDate
 			reaction {
 				id
 				userId
 			}
 			totalReactions
-			traceCampaignId
 			categories {
 				name
 				value

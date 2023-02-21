@@ -106,13 +106,6 @@ const Footer = () => {
 						</Link>
 					</LinkColumn>
 					<LinkColumn>
-						<a href={links.TRACE}>
-							<LinkItem color={textColor}>
-								{formatMessage({
-									id: 'component.title.giveth_trace',
-								})}
-							</LinkItem>
-						</a>
 						<a href={links.COMMONS_STACK}>
 							<LinkItem color={textColor}>
 								{formatMessage({
@@ -120,12 +113,8 @@ const Footer = () => {
 								})}
 							</LinkItem>
 						</a>
-						<Link href={Routes.Partnerships}>
-							<LinkItem color={textColor}>
-								{formatMessage({
-									id: 'component.title.partnerships',
-								})}
-							</LinkItem>
+						<Link href={Routes.GIVfriends}>
+							<LinkItem color={textColor}>GIVfriends</LinkItem>
 						</Link>
 						<a href={links.RECRUITEE}>
 							<LinkItem color={textColor}>

@@ -24,7 +24,7 @@ const Routes = {
 	Support: '/support',
 	Join: '/join',
 	Terms: '/tos',
-	Partnerships: '/partnerships',
+	GIVfriends: '/GIVfriends',
 	MyAccount,
 	MyProjects: MyAccount + profileTabs.projects,
 	MyDonations: MyAccount + profileTabs.donations,
