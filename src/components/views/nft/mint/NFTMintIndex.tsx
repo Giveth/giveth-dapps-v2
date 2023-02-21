@@ -96,7 +96,11 @@ export const NFTMintIndex = () => {
 											},
 										)}
 									</DescCenter>
-									<a href={config.OPENSEA_ADDRESS + account}>
+									<a
+										href={config.OPENSEA_ADDRESS + account}
+										target='_blank'
+										rel='noreferrer'
+									>
 										<OpenSeaLink>
 											View on OPENSEA
 										</OpenSeaLink>
