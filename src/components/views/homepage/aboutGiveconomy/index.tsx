@@ -7,6 +7,7 @@ import {
 	IconChevronRight16,
 	IconGIVBack,
 	IconRocketInSpace,
+	IconFarm,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
@@ -74,7 +75,7 @@ const AboutGiveconomy = () => {
 						<ImageBox>
 							<Image
 								className='earn-img'
-								src='/images/earn-reward.png'
+								src='/images/earn-rewards.png'
 								width={476}
 								height={460}
 								alt='GIVpower'
@@ -126,6 +127,12 @@ const AboutGiveconomy = () => {
 										id: 'label.enable_change',
 									})}
 								</Title>
+								<Icon>
+									<IconFarm
+										size={64}
+										color={neutralColors.gray[900]}
+									/>
+								</Icon>
 							</TitleBox>
 							<Subtitle>
 								{formatMessage({
@@ -145,7 +152,7 @@ const AboutGiveconomy = () => {
 						<ImageBox>
 							<Image
 								className='enable-img'
-								src='/images/enable-change.png'
+								src='/images/enable-change-earth.png'
 								width={476}
 								height={460}
 								alt='GIVpower'
@@ -197,6 +204,7 @@ const TitleBox = styled(Flex)`
 	${mediaQueries.tablet} {
 		justify-content: flex-start;
 		flex-direction: row;
+		margin: 0 0 -30px 0;
 		img {
 			margin: 0 0 32px 46px;
 		}
@@ -248,8 +256,9 @@ const Description = styled(Lead)`
 `;
 
 const Subtitle = styled(Description)`
-	margin: -15px 0 0 0;
+	margin: 0 0 0 0;
 	text-align: center;
+	font-style: italic;
 	${mediaQueries.tablet} {
 		text-align: left;
 	}
