@@ -29,12 +29,11 @@ import { usePFPMintData } from '@/context/pfpmint.context';
 
 const MIN_NFT_QTY = 1;
 
-interface IPFPData {
+interface IPFPContractData {
 	price: BigNumber;
 	maxMintAmount: number;
 	totalSupply: number;
 	maxSupply: number;
-	balance: number;
 }
 
 export const MintCard = () => {
@@ -43,13 +42,16 @@ export const MintCard = () => {
 	const [showMintModal, setShowMintModal] = useState(false);
 	const [showInsufficientFundModal, setShowInsufficientFundModal] =
 		useState(false);
-	const [pfpData, setPfpData] = useState<IPFPData>();
+	const [pfpData, setPfpData] = useState<IPFPContractData>();
+	const [balance, setBalance] = useState<number>();
 	const { account, library, chainId } = useWeb3React();
 	const { formatMessage } = useIntl();
 	const dispatch = useAppDispatch();
 	const { setQty } = usePFPMintData();
 
 	useEffect(() => {
+		console.log('1');
+
 		async function fetchData() {
 			try {
 				const _provider =
@@ -66,17 +68,38 @@ export const MintCard = () => {
 				const _totalSupply = await PFPContract.totalSupply();
 				const _maxSupply = await PFPContract.maxSupply();
 				let _balanceOf;
-				if (account) _balanceOf = await PFPContract.balanceOf(account);
-
 				setPfpData({
 					price: new BigNumber(_price.toString()),
 					maxMintAmount: _maxMintAmount || 0,
 					totalSupply: _totalSupply.toNumber() || 0,
 					maxSupply: _maxSupply.toNumber() || 0,
-					balance: Number(_balanceOf?.toString() || '0'),
 				});
 			} catch (error) {
 				console.log('failed to fetch GIversPFP data');
+			}
+		}
+		fetchData();
+	}, [chainId, library]);
+
+	useEffect(() => {
+		console.log('2');
+
+		async function fetchData() {
+			if (!account) return;
+			try {
+				const _provider =
+					chainId === config.MAINNET_NETWORK_NUMBER
+						? library
+						: new JsonRpcProvider(config.MAINNET_CONFIG.nodeUrl);
+				const PFPContract = new Contract(
+					config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS ?? '',
+					PFP_ABI,
+					_provider,
+				) as GiversPFP;
+				let _balanceOf = await PFPContract.balanceOf(account);
+				setBalance(Number(_balanceOf?.toString() || '0'));
+			} catch (error) {
+				console.log('failed to fetch user balance data');
 			}
 		}
 		fetchData();
@@ -101,9 +124,9 @@ export const MintCard = () => {
 				'You can’t mint more than the max mint amount per transaction. ',
 			);
 
-		if (pfpData && _qty + pfpData.balance > pfpData.maxMintAmount)
+		if (pfpData && balance && _qty + balance > pfpData.maxMintAmount)
 			return setErrorMsg(
-				`You cannot mint or own more than the maximum amount. This wallet holds ${pfpData.balance} Givers NFTs`,
+				`You cannot mint or own more than the maximum amount. This wallet holds ${balance} Givers NFTs`,
 			);
 
 		if (_qty < MIN_NFT_QTY)
@@ -117,7 +140,7 @@ export const MintCard = () => {
 			return setErrorMsg('Oops! You can’t mint over current NFT supply.');
 
 		setErrorMsg('');
-	}, [pfpData, qtyNFT]);
+	}, [balance, pfpData, qtyNFT]);
 
 	async function handleMint() {
 		if (!config.MAINNET_CONFIG.DAI_CONTRACT_ADDRESS) return;
@@ -141,7 +164,6 @@ export const MintCard = () => {
 			setShowInsufficientFundModal(true);
 		}
 	}
-	console.log('pfpData', pfpData);
 
 	return (
 		<>
@@ -153,10 +175,9 @@ export const MintCard = () => {
 							size='Small'
 							onClick={() =>
 								setQtyNFT(
-									pfpData
+									pfpData && balance !== undefined
 										? (
-												pfpData.maxMintAmount -
-												pfpData.balance
+												pfpData.maxMintAmount - balance
 										  ).toString()
 										: '',
 								)
