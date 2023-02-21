@@ -50,7 +50,11 @@ const EligibilityModal = ({ isSuccess, setShowModal }: IEligibilityModal) => {
 				</CustomizedLink>
 			) : (
 				// if it is not successful we should link to the documentation article - mitch needs to publish this!!
-				<CustomizedLink href={Routes.NFT} passHref>
+				<CustomizedLink
+					href='https://docs.giveth.io/dapps/giverspfp/'
+					passHref
+					target='_blank'
+				>
 					<CustomizedButtonLink
 						linkType='texty-secondary'
 						label='LEARN MORE'
