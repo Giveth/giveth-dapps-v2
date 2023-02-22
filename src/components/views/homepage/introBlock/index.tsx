@@ -106,7 +106,7 @@ const IntroBlock = () => {
 								/>
 							}
 							title={formatMessage({
-								id: 'label.zero_fees',
+								id: 'label.verified_projects',
 							})}
 							description={formatMessage({
 								id: 'label.trust_that_your_donations_will_make',
