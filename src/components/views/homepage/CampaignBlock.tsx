@@ -60,7 +60,7 @@ const CampaignBlock = (props: {
 					target='_blank'
 					href='https://medium.com/giveth/ways-to-help-earthquake-victims-in-turkey-and-syria-on-giveth-155d7855164'
 				>
-					<ReliefBanner />
+					<ReliefBanner src={'/images/banners/relief-banner.png'} />
 				</Link>
 			)}
 			<UpperSection>
@@ -128,6 +128,7 @@ const UpperSection = styled(Flex)`
 	flex-direction: column;
 	margin-bottom: 50px;
 	${mediaQueries.tablet} {
+		width: 100%;
 		margin-bottom: 32px;
 		flex-direction: row;
 		justify-content: space-between;
@@ -159,6 +160,7 @@ const SwiperWrapper = styled.div`
 	padding: 24px 32px 20px;
 	width: 100%;
 	overflow: hidden;
+
 	.swiper {
 		overflow: unset;
 	}
@@ -171,7 +173,9 @@ const SwiperWrapper = styled.div`
 `;
 
 const BottomSection = styled(Flex)`
+	width: 100%;
 	flex-direction: column;
+
 	${mediaQueries.tablet} {
 		flex-direction: row;
 	}
@@ -214,26 +218,30 @@ const SavePlanet = styled.div`
 
 const Wrapper = styled.div`
 	padding: 40px 0 80px;
-	max-width: 1440px;
-	margin: 0 auto;
+	background: ${neutralColors.gray[100]};
+	align-items: center;
+
+	div {
+		max-width: 1440px;
+	}
 	${mediaQueries.tablet} {
-		padding: 42px 0;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		padding: 42px;
 	}
 `;
 
-const ReliefBanner = styled.div`
+const ReliefBanner = styled.img`
 	display: none;
+	width: 100%;
+	max-width: 1440px;
 	min-height: 600px;
 	position: relative;
 	margin: 0;
 	z-index: 2;
+	object-fit: contain;
 	overflow: hidden;
-	background: transparent;
-	background-image: url('/images/banners/relief-banner.png');
-	background-size: contain;
-	background-repeat: no-repeat;
-	background-position: center;
-	box-shadow: none;
 	${mediaQueries.tablet} {
 		display: flex;
 		margin: 20px 10px 40px 10px;

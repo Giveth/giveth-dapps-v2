@@ -41,6 +41,12 @@ const moduleExports = withBundleAnalyzer({
 				destination: '/projects',
 				permanent: false,
 			},
+			{
+				source: '/quests',
+				destination:
+					'https://giveth.notion.site/Giveth-s-Galactic-Impact-Quests-f8ef267e16d14acfaba41b43183c17de',
+				permanent: false,
+			},
 		];
 	},
 	webpack: (config, { isServer, dev }) => {

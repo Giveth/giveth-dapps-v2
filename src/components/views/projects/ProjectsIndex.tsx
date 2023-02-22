@@ -89,6 +89,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				'banklessdao-turkey-disaster-relief-fund',
 				'graceaid-earthquake-relief',
 				'anka-relief',
+				'earthquake-relief-qf-matching-pool',
 			],
 		};
 		try {
