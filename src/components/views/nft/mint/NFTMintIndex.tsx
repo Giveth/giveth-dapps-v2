@@ -43,11 +43,13 @@ export const NFTMintIndex = () => {
 					PFP_ABI,
 					_provider,
 				) as GiversPFP;
-				const res = await PFPContract.allowList(account);
-				if (!res) {
-					setShowEligibilityModal(true);
+				const _allowListOnly = await PFPContract.allowListOnly();
+				if (_allowListOnly) {
+					const res = await PFPContract.allowList(account);
+					if (!res) {
+						setShowEligibilityModal(true);
+					}
 				}
-				console.log(res);
 			} catch (error) {
 				console.log('Error on check allow List', error);
 			}
