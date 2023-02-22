@@ -72,11 +72,11 @@ export const NFTMintIndex = () => {
 									})}
 								</Title>
 								<ContentWrapper>
-									<Desc size='medium'>
+									<DescMint size='medium'>
 										{formatMessage({
 											id: 'page.mint.mint_your_giver.desc',
 										})}
-									</Desc>
+									</DescMint>
 									<MintCard />
 								</ContentWrapper>
 							</>
@@ -222,6 +222,15 @@ const ContentWrapperCenter = styled(ContentWrapper)`
 const Desc = styled(Lead)`
 	margin-bottom: 32px;
 	width: 100%;
+`;
+
+const DescMint = styled(Desc)`
+	${mediaQueries.laptopS} {
+		max-width: 370px;
+	}
+	${mediaQueries.laptopL} {
+		max-width: unset;
+	}
 `;
 
 const DescCenter = styled(Desc)`
