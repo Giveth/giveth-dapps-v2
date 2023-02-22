@@ -21,6 +21,7 @@ const InternalLink = (props: {
 
 const Styled = styled(GLink)`
 	color: ${props => props.color || 'inherit'};
+	font-size: inherit;
 `;
 
 export default InternalLink;

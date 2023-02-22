@@ -18,16 +18,11 @@ const GIVBackToast = (props: {
 		message = formatMessage({
 			id: 'label.your_current_wallet_is_associated_with_a_giveth_project',
 		});
-	} else if (!projectEligible) {
-		message = formatMessage({ id: 'label.this_project_is_not_eligible' });
-	} else if (tokenEligible) {
-		type = EToastType.Hint;
-		message = formatMessage({ id: 'label.this_token_is_eligible' });
-	} else {
+	} else if (!tokenEligible) {
 		message = (
 			<>
 				{formatMessage({
-					id: 'label.this_project_is_not_eligible.desc',
+					id: 'label.this_token_is_not_eligible.desc',
 				})}{' '}
 				<ExternalLink
 					href={links.GIVBACK_TOKENS_FORUM}
@@ -36,6 +31,11 @@ const GIVBackToast = (props: {
 				.
 			</>
 		);
+	} else if (tokenEligible && projectEligible) {
+		type = EToastType.Hint;
+		message = formatMessage({ id: 'label.this_token_is_eligible' });
+	} else {
+		return null;
 	}
 
 	return (

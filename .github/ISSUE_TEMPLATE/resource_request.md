@@ -2,8 +2,8 @@
 name: Resource request
 about: For developers requesting resources from devops (for internal use only)
 title: 'RR - '
-labels: 'devops'
-assignees: 'geleeroyale, mhmdksh'
+labels: devops
+assignees: geleeroyale, mhmdksh
 
 ---
 

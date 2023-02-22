@@ -10,7 +10,7 @@ export const fetchEthPrice = async (): Promise<string> => {
 	const res = await getRequest(
 		'https://feathers.giveth.io/conversionRates?from=ETH&to=USD&interval=hourly',
 	);
-	return res.rate;
+	return res?.rates?.USD;
 };
 
 export const fetchMainnetTokenPrice = async (

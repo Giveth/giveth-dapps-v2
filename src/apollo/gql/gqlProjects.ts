@@ -31,7 +31,6 @@ export const FETCH_ALL_PROJECTS = gql`
 				descriptionSummary
 				verified
 				totalDonations
-				traceCampaignId
 				reaction {
 					id
 					userId
@@ -73,7 +72,6 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 			slug
 			description
 			verified
-			traceCampaignId
 			addresses {
 				address
 				isRecipient
@@ -81,14 +79,12 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 			}
 			totalProjectUpdates
 			totalDonations
-			totalTraceDonations
 			creationDate
 			reaction {
 				id
 				userId
 			}
 			totalReactions
-			traceCampaignId
 			categories {
 				name
 				value
@@ -485,37 +481,59 @@ export const FETCH_PROJECTS_BY_SLUG = gql`
 				descriptionSummary
 				image
 				slug
-				creationDate
-				admin
-				walletAddress
-				impactLocation
-				listed
-				givingBlocksId
-				totalDonations
-				categories {
-					name
-				}
-				reaction {
-					reaction
-					id
-					projectUpdateId
-					userId
-				}
+				description
+				verified
+				traceCampaignId
 				addresses {
 					address
 					isRecipient
 					networkId
 				}
-				organization {
-					label
+				totalProjectUpdates
+				totalDonations
+				totalTraceDonations
+				creationDate
+				reaction {
+					id
+					userId
+				}
+				totalReactions
+				traceCampaignId
+				categories {
+					name
+					value
+					mainCategory {
+						title
+					}
 				}
 				adminUser {
-					firstName
-					email
 					id
+					name
 					walletAddress
 				}
-				qualityScore
+				status {
+					id
+					name
+				}
+				organization {
+					name
+					label
+					supportCustomTokens
+				}
+				projectVerificationForm {
+					status
+				}
+				verificationFormStatus
+				projectPower {
+					powerRank
+					totalPower
+					round
+				}
+				projectFuturePower {
+					totalPower
+					powerRank
+					round
+				}
 			}
 			totalCount
 		}
