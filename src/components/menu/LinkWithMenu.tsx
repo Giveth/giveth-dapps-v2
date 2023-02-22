@@ -128,7 +128,7 @@ export const Menu: FC<IMenuProps> = ({
 							close();
 						}}
 					/>
-					<Ajab
+					<LinkCover
 						style={{
 							top: parentRef?.current?.getBoundingClientRect()
 								.top,
@@ -172,7 +172,7 @@ const MenuContainer = styled.div<{ isAnimating: boolean }>`
 	transition: opacity 0.3s ease;
 `;
 
-const Ajab = styled.div`
+const LinkCover = styled.div`
 	position: absolute;
 	z-index: ${zIndex.HEADER + 1};
 	cursor: pointer;
