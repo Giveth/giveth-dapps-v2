@@ -853,6 +853,7 @@
 	"label.trust_that_your_donations_will_make": "Trust that your donations will make an impact with our verification system.",
 	"label.how_it_works": "HOW IT WORKS",
 	"label.get_rewarded_for_giving": "Get rewarded for giving to verified public goods projects.",
+	"label.earn_rewards": "Earn rewards",
 	"label.easy_onboarding": "Easy Onboarding",
 	"label.new_to_crypto": "New to crypto? It’s easy to get started on Giveth.",
 	"label.get_started": "GET STARTED",
@@ -898,7 +899,7 @@
 	"label.claim_your_free_swag": "claim your free swag",
 	"label.join_our_discord": "join our discord",
 	"label.explore_the_giveconomy": "explore the giveconomy",
-	"label.learn_about_giveth": "Learn about Giveth in 60 seconds",
+	"label.what_is_giveth": "What is Giveth?",
 	"label.what_people_say": "What people say about the Giveth and why they love it.",
 	"label.the_first_step_to_empowering": "The first step to empowering donors on Giveth. ",
 	"label.donate_to_verified_projects_and_get_giv": "Donate to verified projects and get GIV - a token that grants you access to our community as a voting member, as well as opportunities to earn additional rewards.",
@@ -910,5 +911,6 @@
 	"label.enable_change": "Enable Change",
 	"label.an_evolution_in_community_fundrising": "An evolution in community fundraising.",
 	"label.your_donations_and_participation_in_the_giveconomy": "Your donations, and participation in the GIVeconomy, enables us to build a new future where real world impact projects benefit from their own community-driven regenerative economies.",
-	"label.discover_our_roadmap": "discover our roadmap"
+	"label.discover_our_roadmap": "discover our roadmap",
+	"label.more_about_us": "More about us"
 }
