@@ -160,9 +160,9 @@ const HeaderNotificationButton: FC<IHeaderNotificationButtonProps> = ({
 			)}
 			<IconNotificationFilled16
 				color={
-					theme === ETheme.Light
-						? brandColors.pinky[500]
-						: neutralColors.gray[100]
+					theme === ETheme.Dark
+						? neutralColors.gray[100]
+						: brandColors.pinky[500]
 				}
 			/>
 		</NotificationsIconContainer>
