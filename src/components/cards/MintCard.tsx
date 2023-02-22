@@ -50,8 +50,6 @@ export const MintCard = () => {
 	const { setQty } = usePFPMintData();
 
 	useEffect(() => {
-		console.log('1');
-
 		async function fetchData() {
 			try {
 				const _provider =
@@ -82,8 +80,6 @@ export const MintCard = () => {
 	}, [chainId, library]);
 
 	useEffect(() => {
-		console.log('2');
-
 		async function fetchData() {
 			if (!account) return;
 			try {
