@@ -27,7 +27,6 @@ const InformationBlock = () => {
 				})}
 			</Lead>
 			<br />
-			<br />
 			<Lead size='large'>
 				{formatMessage({
 					id: 'page.home.philanthropy_needs_more_desc_2',
