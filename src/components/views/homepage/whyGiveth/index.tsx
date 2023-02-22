@@ -225,13 +225,13 @@ const Line = styled.div`
 const RecentDonations = styled(Flex)`
 	gap: 4px;
 	flex-direction: column;
-	margin: 40px 0 20px 24px;
+	margin: 40px 0 10px 24px;
 	${mediaQueries.tablet} {
-		margin-top: 20px;
+		margin-top: 10px;
+		margin-left: 40px;
 		gap: 40px;
 		align-items: center;
 		flex-direction: row;
-		margin-left: 40px;
 	}
 	> div:first-of-type {
 		flex-shrink: 0;
@@ -244,7 +244,7 @@ const Stats = styled(Flex)`
 	border-radius: 16px;
 	background: ${brandColors.giv[500]};
 	color: ${neutralColors.gray[100]};
-	padding: 20px;
+	padding: 40px 20px;
 	width: 100%;
 	max-width: 1200px;
 	justify-content: center;

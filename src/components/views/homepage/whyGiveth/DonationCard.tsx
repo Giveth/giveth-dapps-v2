@@ -64,7 +64,7 @@ const Amount = styled(B)`
 `;
 
 const CardWrapper = styled.div`
-	padding: 20px 4px;
+	padding: 30px 4px;
 `;
 
 const CardContainer = styled(Flex)`
