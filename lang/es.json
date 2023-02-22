@@ -849,11 +849,11 @@
 	"label.use_giv_to_vote": "",
 	"label.giveth_empowers_changemakers": "",
 	"label.explore_projects": "",
-	"label.zero_fees": "",
-	"label.create_a_project_or_donate_directly": "",
+	"label.verified_projects": "",
+	"label.trust_that_your_donations_will_make": "",
 	"label.how_it_works": "",
+	"label.get_rewarded_for_giving": "",
 	"label.earn_rewards": "",
-	"label.by_donating_crypto": "",
 	"label.easy_onboarding": "",
 	"label.new_to_crypto": "",
 	"label.get_started": "",
@@ -899,7 +899,7 @@
 	"label.claim_your_free_swag": "",
 	"label.join_our_discord": "",
 	"label.explore_the_giveconomy": "",
-	"label.learn_about_giveth": "",
+	"label.what_is_giveth": "",
 	"label.what_people_say": "",
 	"label.the_first_step_to_empowering": "",
 	"label.donate_to_verified_projects_and_get_giv": "",
@@ -911,5 +911,6 @@
 	"label.enable_change": "",
 	"label.an_evolution_in_community_fundrising": "",
 	"label.your_donations_and_participation_in_the_giveconomy": "",
-	"label.discover_our_roadmap": ""
+	"label.discover_our_roadmap": "",
+	"label.more_about_us": ""
 }

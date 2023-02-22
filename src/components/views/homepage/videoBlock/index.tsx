@@ -1,8 +1,16 @@
-import { brandColors, H2, H4, neutralColors } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	ButtonLink,
+	H2,
+	H4,
+	IconChevronRight24,
+	neutralColors,
+} from '@giveth/ui-design-system';
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { useIntl } from 'react-intl';
+import Link from 'next/link';
 import { Flex } from '@/components/styled-components/Flex';
 import { Container } from '@/components/Grid';
 import {
@@ -13,6 +21,7 @@ import { mediaQueries } from '@/lib/constants/constants';
 import Wave from '@/components/particles/Wave';
 import SemiCircle from '@/components/particles/SemiCircle';
 import QuarterCircle from '@/components/particles/QuarterCircle';
+import Routes from '@/lib/constants/Routes';
 
 const VideoBlock = () => {
 	const [isPlaying, setIsPlaying] = useState(false);
@@ -40,12 +49,19 @@ const VideoBlock = () => {
 			<Container>
 				<CustomFlex alignItems='center'>
 					<Flex flexDirection='column' gap='24px'>
-						<H2>
-							{formatMessage({ id: 'label.learn_about_giveth' })}
-						</H2>
+						<H2>{formatMessage({ id: 'label.what_is_giveth' })}</H2>
 						<H4>
 							{formatMessage({ id: 'label.what_people_say' })}
 						</H4>
+						<Link href={Routes.AboutUs} passHref>
+							<AboutUsButton
+								linkType='texty-secondary'
+								label={formatMessage({
+									id: 'label.more_about_us',
+								})}
+								icon={<IconChevronRight24 />}
+							/>
+						</Link>
 					</Flex>
 					<VideoParticlesContainer>
 						<CustomizedVideoContainer>
@@ -140,6 +156,10 @@ const QuarterCircleContainer = styled.div`
 	position: absolute;
 	bottom: 20px;
 	left: 30%;
+`;
+
+const AboutUsButton = styled(ButtonLink)`
+	max-width: 200px;
 `;
 
 export default VideoBlock;
