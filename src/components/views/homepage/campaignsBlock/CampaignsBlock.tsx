@@ -16,10 +16,10 @@ import { CampaignsSlide } from './CampaignsSlide';
 import TrazadoPink from '/public/images/trazado-pink.svg';
 import CaminhoPink from '/public/images/caminho-pink.svg';
 import CaminhoGIV from '/public/images/caminho-giv.svg';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import {
 	NavigationWrapper,
 	PaginationWrapper,
+	SwiperPaginationWrapper,
 } from '@/components/styled-components/SwiperPagination';
 
 interface ICampaignsBlockProps {
@@ -37,7 +37,7 @@ export const CampaignsBlock: FC<ICampaignsBlockProps> = ({ campaigns }) => {
 			<ContainerRelative>
 				<BlockHeader>
 					<BlockTitle>What’s up on Giveth</BlockTitle>
-					<FlexCenter>
+					<SwiperPaginationWrapper>
 						<NavigationWrapper ref={prevElRef}>
 							<IconPointerLeft size={24} />
 						</NavigationWrapper>
@@ -45,7 +45,7 @@ export const CampaignsBlock: FC<ICampaignsBlockProps> = ({ campaigns }) => {
 						<NavigationWrapper ref={nextElRef}>
 							<IconPointerRight size={24} />
 						</NavigationWrapper>
-					</FlexCenter>
+					</SwiperPaginationWrapper>
 					<TrazadoPinkWrapper>
 						<Image
 							src={TrazadoPink}

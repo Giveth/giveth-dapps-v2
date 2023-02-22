@@ -1,5 +1,6 @@
-import { H5, neutralColors } from '@giveth/ui-design-system';
+import { H5 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { FlexCenter } from './Flex';
 import { Shadow } from './Shadow';
 
 export const PaginationWrapper = styled(H5)`
@@ -18,11 +19,6 @@ export const NavigationWrapper = styled.div<{ disabled?: boolean }>`
 	}
 `;
 
-export const PaginationItem = styled(H5)<{ isActive: boolean }>`
-	border-radius: 50%;
-	cursor: pointer;
-	user-select: none;
-	color: ${({ isActive }) =>
-		isActive ? neutralColors.gray[900] : neutralColors.gray[700]};
-	font-weight: ${({ isActive }) => (isActive ? 700 : 500)};
+export const SwiperPaginationWrapper = styled(FlexCenter)`
+	padding: 16px;
 `;
