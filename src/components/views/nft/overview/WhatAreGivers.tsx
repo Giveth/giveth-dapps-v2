@@ -1,4 +1,4 @@
-import { Container, H2, QuoteText } from '@giveth/ui-design-system';
+import { Container, QuoteText } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { Flex } from '@/components/styled-components/Flex';
@@ -86,7 +86,6 @@ const WhatAreGivers = () => {
 		>
 			<Container>
 				<TextContainer>
-					<H2>What are the Givers</H2>
 					<QuoteContainer>
 						<QuoteText size='small'>
 							The Givers are a limited collection of 1,250

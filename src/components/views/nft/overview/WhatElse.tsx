@@ -1,4 +1,4 @@
-import { brandColors, Container, H1, H3, Lead } from '@giveth/ui-design-system';
+import { brandColors, Container, H3, Lead } from '@giveth/ui-design-system';
 import React from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
@@ -11,35 +11,28 @@ const WhatElse = () => {
 		<WhatElseContainer>
 			<Container>
 				<ContentContainer>
-					<H1>What else?</H1>
 					<CustomFlex gap='64px'>
 						<Flex flexDirection='column' gap='16px'>
-							<HeaderTitle>
-								Get on the "$nice list" for early access to
-								minting.
-							</HeaderTitle>
+							<HeaderTitle>Get on the "$nice list".</HeaderTitle>
 							<Lead>
-								Anyone who has donated 100 or more DAI, USDC or
-								xDAI to the Giveth Project is eligible for early
-								minting of a Givers PFP. Eligible donations will
-								also earn additional rewards through the $nice
-								token program.{' '}
+								Anyone who donates 100 or more DAI, USDC or xDAI
+								to the Giveth Project is on our $nice list and
+								eligible for early minting of a Giver. Eligible
+								donations will also earn additional rewards
+								through the $nice token program.{' '}
 								<DocLink href='https://docs.giveth.io/giveconomy/niceToken'>
 									Learn more about $nice.
 								</DocLink>
 							</Lead>
 						</Flex>
 						<Flex flexDirection='column' gap='16px'>
-							<HeaderTitle>
-								Owning a Giver unlocks special benefits.
-							</HeaderTitle>
+							<HeaderTitle>Unlock special benefits.</HeaderTitle>
 							<Lead>
-								By holding a Giver in your wallet you will show
-								up differently on the Giveth dApp; wherever you
-								make an impact, people will notice your style.
-								You’ll also receive a discount when you register
-								your custom <code>.giveth</code> Punk Domain
-								name.{' '}
+								If you hold a Giver, your profile will be
+								emphasized wherever you make an impact on
+								Giveth. You’ll also receive a discount to
+								register a custom <code>.giveth</code> Punk
+								Domain name (e.g. <code>vitalik.giveth</code>).{' '}
 								<DocLink href='https://docs.giveth.io/dapps/giverspfp/#benefits'>
 									Learn more about the benefits.
 								</DocLink>
