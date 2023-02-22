@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import {
-	brandColors,
 	Button,
 	H3,
 	IconChevronRight,
 	Lead,
+	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
@@ -90,13 +90,17 @@ const QuarterCircle = styled.div`
 `;
 
 const SpanStyled = styled.span`
-	color: ${brandColors.giv[600]};
+	color: ${neutralColors.gray[900]};
 `;
 
 const StyledContainer = styled(Container)`
 	position: relative;
 	padding-top: 80px;
 	padding-bottom: 80px;
+	color: ${neutralColors.gray[800]};
+	> h3 {
+		color: ${neutralColors.gray[900]};
+	}
 `;
 
 export default InformationBlock;
