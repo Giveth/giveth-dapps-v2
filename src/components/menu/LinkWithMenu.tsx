@@ -1,13 +1,18 @@
-import { GLink, IconChevronDown24 } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	GLink,
+	IconChevronDown24,
+} from '@giveth/ui-design-system';
 import { FC, ReactNode, RefObject, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { zIndex } from '@/lib/constants/constants';
 import { useAppSelector } from '@/features/hooks';
 import { HeaderLink } from '../Header/Header.sc';
 import { useDelayedState } from '@/hooks/useDelayedState';
 import { ItemsProvider, useItemsContext } from '@/context/Items.context';
 import { FlexCenter } from '../styled-components/Flex';
+import { ETheme } from '@/features/general/general.slice';
 
 interface ILinkWithMenu {
 	title: string;
@@ -32,16 +37,17 @@ export const LinkWithMenu: FC<ILinkWithMenu> = ({
 
 	return (
 		<>
-			<LinkWithMenuContainer
+			<LinkWrapper
 				ref={elRef}
 				theme={theme}
 				onMouseEnter={openMenu}
+				isOpen={showMenu}
 			>
 				<GLink size='Big'>{title}</GLink>
 				<ArrowContainer up={showMenu}>
 					<IconChevronDown24 />
 				</ArrowContainer>
-			</LinkWithMenuContainer>
+			</LinkWrapper>
 			{menuCondition && (
 				<ItemsProvider close={closeMenu}>
 					<Menu
@@ -57,10 +63,18 @@ export const LinkWithMenu: FC<ILinkWithMenu> = ({
 	);
 };
 
-const LinkWithMenuContainer = styled(HeaderLink)`
+const LinkWrapper = styled(HeaderLink)<{ isOpen?: boolean }>`
 	padding: 10px 42px 10px 16px;
 	cursor: pointer;
 	position: relative;
+	${props =>
+		props.isOpen &&
+		css`
+			background-color: ${props =>
+				props.theme === ETheme.Dark
+					? brandColors.giv[300]
+					: brandColors.giv[50]};
+		`}
 `;
 
 const ArrowContainer = styled.span<{ up: boolean }>`
@@ -161,6 +175,7 @@ const MenuContainer = styled.div<{ isAnimating: boolean }>`
 const Ajab = styled.div`
 	position: absolute;
 	z-index: ${zIndex.HEADER + 1};
+	cursor: pointer;
 `;
 
 const Background = styled(FlexCenter)`

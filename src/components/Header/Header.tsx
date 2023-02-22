@@ -20,9 +20,9 @@ import {
 	Logo,
 	SmallCreateProjectParent,
 	LargeCreateProject,
-	HeaderLink,
 	HomeButton,
 	SearchButton,
+	HeaderLinkWithHover,
 } from './Header.sc';
 import { isUserRegistered } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
@@ -212,11 +212,11 @@ const Header: FC<IHeader> = () => {
 					>
 						<GIVeconomyMenu />
 					</LinkWithMenu>
-					<HeaderLink theme={theme}>
+					<HeaderLinkWithHover theme={theme}>
 						<Link href={Routes.NFT}>
 							<GLink>NFTs</GLink>
 						</Link>
-					</HeaderLink>
+					</HeaderLinkWithHover>
 					<SearchButton
 						theme={theme}
 						onClick={() => dispatch(setShowSearchModal(true))}

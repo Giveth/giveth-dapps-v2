@@ -193,6 +193,7 @@ export const HeaderLinks = styled(Flex)`
 export const HeaderLink = styled(GLink)<IHeaderLinkProps>`
 	padding: 8px 16px 7px;
 	border-radius: 72px;
+	transition: background-color 0.3s ease;
 	background-color: ${props => {
 		if (props.active) {
 			return props.theme === ETheme.Dark
@@ -201,6 +202,9 @@ export const HeaderLink = styled(GLink)<IHeaderLinkProps>`
 		}
 		return '';
 	}};
+`;
+
+export const HeaderLinkWithHover = styled(HeaderLink)`
 	&:hover {
 		background-color: ${props =>
 			props.theme === ETheme.Dark
