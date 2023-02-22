@@ -9,10 +9,10 @@ import { IProject } from '@/apollo/types/types';
 import { Container, Row } from '@/components/Grid';
 import { ProjectUpdateSlide } from './ProjectUpdateSlide';
 import { BlockHeader, BlockTitle } from '../common';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import {
 	NavigationWrapper,
 	PaginationWrapper,
+	SwiperPaginationWrapper,
 } from '@/components/styled-components/SwiperPagination';
 
 interface IProjectUpdatesBlockProps {
@@ -32,7 +32,7 @@ export const ProjectUpdatesBlock: FC<IProjectUpdatesBlockProps> = ({
 			<Container>
 				<BlockHeader>
 					<BlockTitle>Awesome Project Updates</BlockTitle>
-					<FlexCenter>
+					<SwiperPaginationWrapper>
 						<NavigationWrapper ref={prevElRef}>
 							<IconPointerLeft size={24} />
 						</NavigationWrapper>
@@ -40,7 +40,7 @@ export const ProjectUpdatesBlock: FC<IProjectUpdatesBlockProps> = ({
 						<NavigationWrapper ref={nextElRef}>
 							<IconPointerRight size={24} />
 						</NavigationWrapper>
-					</FlexCenter>
+					</SwiperPaginationWrapper>
 				</BlockHeader>
 				<SwiperWrapper>
 					<Swiper

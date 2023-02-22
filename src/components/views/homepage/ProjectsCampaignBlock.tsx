@@ -26,6 +26,7 @@ import { campaignLinkGenerator } from '@/helpers/url';
 import {
 	NavigationWrapper,
 	PaginationWrapper,
+	SwiperPaginationWrapper,
 } from '@/components/styled-components/SwiperPagination';
 
 interface IProjectsCampaignBlockProps {
@@ -69,7 +70,7 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 						? campaign.hashtags.map(hashtag => `#${hashtag} `)
 						: ''}
 				</BlockTitle>
-				<FlexCenter>
+				<SwiperPaginationWrapper>
 					<NavigationWrapper ref={prevElRef}>
 						<IconPointerLeft size={24} />
 					</NavigationWrapper>
@@ -77,7 +78,7 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 					<NavigationWrapper ref={nextElRef}>
 						<IconPointerRight size={24} />
 					</NavigationWrapper>
-				</FlexCenter>
+				</SwiperPaginationWrapper>
 			</BlockHeader>
 			<BottomSection>
 				<Title>
