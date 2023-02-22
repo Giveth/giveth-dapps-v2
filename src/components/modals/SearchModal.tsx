@@ -154,13 +154,18 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 							</Title>
 							{projects &&
 								projects.length > 0 &&
-								projects.slice(0, 4).map((item, idx) => (
-									<Link key={idx} href={Routes.Project}>
+								projects.slice(0, 4).map((project, idx) => (
+									<Link
+										key={idx}
+										href={
+											Routes.Project + '/' + project.slug
+										}
+									>
 										<Item
 											theme={theme}
 											onClick={closeModal}
 										>
-											{item.title}
+											{project.title}
 										</Item>
 									</Link>
 								))}
@@ -171,13 +176,13 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 							<Title size='large' theme={theme}>
 								Popular categories
 							</Title>
-							{popular_categories.map((item, idx) => (
+							{popular_categories.map((category, idx) => (
 								<Link
 									key={idx}
-									href={Routes.Projects + item.slug}
+									href={Routes.Projects + '/' + category.slug}
 								>
 									<Item theme={theme} onClick={closeModal}>
-										{item.title}
+										{category.title}
 									</Item>
 								</Link>
 							))}
