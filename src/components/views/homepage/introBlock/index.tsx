@@ -109,7 +109,7 @@ const IntroBlock = () => {
 								id: 'label.zero_fees',
 							})}
 							description={formatMessage({
-								id: 'label.create_a_project_or_donate_directly',
+								id: 'label.trust_that_your_donations_will_make',
 							})}
 						/>
 						<IntroCard
@@ -128,10 +128,10 @@ const IntroBlock = () => {
 								/>
 							}
 							title={formatMessage({
-								id: 'label.earn_rewards',
+								id: 'label.donor_rewards',
 							})}
 							description={formatMessage({
-								id: 'label.by_donating_crypto',
+								id: 'label.get_rewarded_for_giving',
 							})}
 						/>
 						<IntroCard
