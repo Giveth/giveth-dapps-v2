@@ -54,13 +54,35 @@ export const StakeGIVModal: FC<IStakeModalProps> = ({
 	showLockModal,
 	setShowModal,
 }) => {
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+
+	return (
+		<Modal
+			closeModal={closeModal}
+			isAnimating={isAnimating}
+			headerTitle='Stake for GIVpower'
+			headerTitlePosition='left'
+		>
+			<StakeGIVInnerModal
+				poolStakingConfig={poolStakingConfig}
+				showLockModal={showLockModal}
+				setShowModal={setShowModal}
+			/>
+		</Modal>
+	);
+};
+
+const StakeGIVInnerModal: FC<IStakeModalProps> = ({
+	poolStakingConfig,
+	showLockModal,
+	setShowModal,
+}) => {
 	const [amount, setAmount] = useState('0');
 	const [txHash, setTxHash] = useState('');
 	const [stakeState, setStakeState] = useState<StakeState>(
 		StakeState.APPROVE,
 	);
 	const { chainId, library } = useWeb3React();
-	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { notStakedAmount: maxAmount } = useStakingPool(poolStakingConfig);
 
 	const { POOL_ADDRESS, GARDEN_ADDRESS } =
@@ -166,148 +188,128 @@ export const StakeGIVModal: FC<IStakeModalProps> = ({
 			});
 		}
 	};
-
 	return (
-		<Modal
-			closeModal={closeModal}
-			isAnimating={isAnimating}
-			headerTitle='Stake for GIVpower'
-			headerTitlePosition='left'
-		>
-			<StakeModalContainer>
-				{stakeState !== StakeState.CONFIRMED &&
-					stakeState !== StakeState.ERROR && (
-						<>
-							<StakeInnerModalContainer>
-								<StakeSteps stakeState={stakeState} />
-								{(stakeState === StakeState.APPROVE ||
-									stakeState === StakeState.APPROVING) && (
-									<>
-										<SectionTitle>
-											Amount to stake
-										</SectionTitle>
-										<AmountInput
-											setAmount={setAmount}
-											maxAmount={maxAmount}
-											poolStakingConfig={
-												poolStakingConfig
-											}
-											disabled={
-												stakeState ===
-												StakeState.APPROVING
-											}
-										/>
-										<StyledOutlineButton
-											label={
-												stakeState ===
-												StakeState.APPROVE
-													? 'APPROVE'
-													: 'approve pending'
-											}
-											onClick={onApprove}
-											disabled={
-												amount == '0' ||
-												maxAmount.lt(amount) ||
-												stakeState ===
-													StakeState.APPROVING
-											}
-											loading={
-												stakeState ===
-												StakeState.APPROVING
-											}
-										/>
-										<ButtonLink
-											isExternal
-											label='get more giv'
-											linkType='texty'
-											size='small'
-											href={poolStakingConfig.BUY_LINK}
-											target='_blank'
-											icon={
-												<IconExternalLink size={16} />
-											}
-										/>
-									</>
-								)}
+		<StakeModalContainer>
+			{stakeState !== StakeState.CONFIRMED &&
+				stakeState !== StakeState.ERROR && (
+					<>
+						<StakeInnerModalContainer>
+							<StakeSteps stakeState={stakeState} />
+							{(stakeState === StakeState.APPROVE ||
+								stakeState === StakeState.APPROVING) && (
+								<>
+									<SectionTitle>Amount to stake</SectionTitle>
+									<AmountInput
+										setAmount={setAmount}
+										maxAmount={maxAmount}
+										poolStakingConfig={poolStakingConfig}
+										disabled={
+											stakeState === StakeState.APPROVING
+										}
+									/>
+									<StyledOutlineButton
+										label={
+											stakeState === StakeState.APPROVE
+												? 'APPROVE'
+												: 'approve pending'
+										}
+										onClick={onApprove}
+										disabled={
+											amount == '0' ||
+											maxAmount.lt(amount) ||
+											stakeState === StakeState.APPROVING
+										}
+										loading={
+											stakeState === StakeState.APPROVING
+										}
+									/>
+									<ButtonLink
+										isExternal
+										label='get more giv'
+										linkType='texty'
+										size='small'
+										href={poolStakingConfig.BUY_LINK}
+										target='_blank'
+										icon={<IconExternalLink size={16} />}
+									/>
+								</>
+							)}
 
-								{(stakeState === StakeState.WRAP ||
-									stakeState === StakeState.WRAPPING) && (
-									<>
-										<BriefContainer>
-											<H5>You are staking</H5>
-											<H5White weight={700}>
-												{formatWeiHelper(amount)} GIV
-											</H5White>
-										</BriefContainer>
-										<StyledOutlineButton
-											label={
-												stakeState === StakeState.WRAP
-													? 'stake'
-													: 'stake pending'
-											}
-											onClick={onWrap}
-											disabled={
-												amount == '0' ||
-												maxAmount.lt(amount) ||
-												stakeState ===
-													StakeState.WRAPPING
-											}
-											loading={
-												stakeState ===
-												StakeState.WRAPPING
-											}
-										/>
-										<CancelButton
-											buttonType='texty'
-											size='small'
-											label='CANCEL'
-											onClick={() => {
-												setShowModal(false);
-											}}
-										/>
-									</>
-								)}
-							</StakeInnerModalContainer>
-						</>
-					)}
-				{chainId && stakeState === StakeState.CONFIRMED && (
-					<StakeInnerModalContainer>
-						<BriefContainer>
-							<H5>Successful!</H5>
-							<H5White>You have staked</H5White>
-							<H5White weight={700}>
-								{formatWeiHelper(amount)} GIV
-							</H5White>
-							<ButtonLink
-								isExternal
-								label='View on blockscout'
-								linkType='texty'
-								size='small'
-								icon={<IconExternalLink size={16} />}
-								href={`${config.XDAI_CONFIG.blockExplorerUrls}/tx/${txHash}`}
-								target='_blank'
-							/>
-						</BriefContainer>
-						<LockInfo amount={amount} round={0} />
-						<StyledButton
-							buttonType='primary'
-							label='Increase your multiplier'
+							{(stakeState === StakeState.WRAP ||
+								stakeState === StakeState.WRAPPING) && (
+								<>
+									<BriefContainer>
+										<H5>You are staking</H5>
+										<H5White weight={700}>
+											{formatWeiHelper(amount)} GIV
+										</H5White>
+									</BriefContainer>
+									<StyledOutlineButton
+										label={
+											stakeState === StakeState.WRAP
+												? 'stake'
+												: 'stake pending'
+										}
+										onClick={onWrap}
+										disabled={
+											amount == '0' ||
+											maxAmount.lt(amount) ||
+											stakeState === StakeState.WRAPPING
+										}
+										loading={
+											stakeState === StakeState.WRAPPING
+										}
+									/>
+									<CancelButton
+										buttonType='texty'
+										size='small'
+										label='CANCEL'
+										onClick={() => {
+											setShowModal(false);
+										}}
+									/>
+								</>
+							)}
+						</StakeInnerModalContainer>
+					</>
+				)}
+			{chainId && stakeState === StakeState.CONFIRMED && (
+				<StakeInnerModalContainer>
+					<BriefContainer>
+						<H5>Successful!</H5>
+						<H5White>You have staked</H5White>
+						<H5White weight={700}>
+							{formatWeiHelper(amount)} GIV
+						</H5White>
+						<ButtonLink
+							isExternal
+							label='View on blockscout'
+							linkType='texty'
 							size='small'
-							onClick={() => {
-								setShowModal(false);
-								showLockModal();
-							}}
+							icon={<IconExternalLink size={16} />}
+							href={`${config.XDAI_CONFIG.blockExplorerUrls}/tx/${txHash}`}
+							target='_blank'
 						/>
-					</StakeInnerModalContainer>
-				)}
-				{chainId && stakeState === StakeState.ERROR && (
-					<ErrorInnerModal
-						title='Something went wrong!'
-						walletNetwork={chainId}
-						txHash={txHash}
+					</BriefContainer>
+					<LockInfo amount={amount} round={0} />
+					<StyledButton
+						buttonType='primary'
+						label='Increase your multiplier'
+						size='small'
+						onClick={() => {
+							setShowModal(false);
+							showLockModal();
+						}}
 					/>
-				)}
-			</StakeModalContainer>
-		</Modal>
+				</StakeInnerModalContainer>
+			)}
+			{chainId && stakeState === StakeState.ERROR && (
+				<ErrorInnerModal
+					title='Something went wrong!'
+					walletNetwork={chainId}
+					txHash={txHash}
+				/>
+			)}
+		</StakeModalContainer>
 	);
 };
