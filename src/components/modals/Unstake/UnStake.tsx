@@ -47,6 +47,24 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 	regenStreamConfig,
 	setShowModal,
 }) => {
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+
+	return (
+		<Modal closeModal={closeModal} isAnimating={isAnimating}>
+			<UnStakeInnerModal
+				poolStakingConfig={poolStakingConfig}
+				regenStreamConfig={regenStreamConfig}
+				setShowModal={setShowModal}
+			/>
+		</Modal>
+	);
+};
+
+const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
+	poolStakingConfig,
+	regenStreamConfig,
+	setShowModal,
+}) => {
 	const [txHash, setTxHash] = useState('');
 	const [amount, setAmount] = useState('0');
 	const [showLockDetailModal, setShowLockDetailModal] = useState(false);
@@ -57,7 +75,6 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 		getGivStakingConfig(config.XDAI_CONFIG),
 	);
 	const { library, chainId } = useWeb3React();
-	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { title, type, LM_ADDRESS, GARDEN_ADDRESS } =
 		poolStakingConfig as SimplePoolStakingConfig;
 
@@ -84,9 +101,8 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 			setUnstakeState(StakeState.ERROR);
 		}
 	};
-
 	return (
-		<Modal closeModal={closeModal} isAnimating={isAnimating}>
+		<>
 			<UnStakeModalContainer>
 				{(unStakeState === StakeState.UNSTAKE ||
 					unStakeState === StakeState.UNSTAKING) && (
@@ -213,7 +229,7 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 					unstakeable={maxAmount}
 				/>
 			)}
-		</Modal>
+		</>
 	);
 };
 
