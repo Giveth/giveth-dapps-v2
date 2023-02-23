@@ -45,7 +45,7 @@ export enum StreamType {
 export type PoolStakingConfig =
 	| SimplePoolStakingConfig
 	| BalancerPoolStakingConfig
-	| UniswapV3PoolStakingConfig
+	// | UniswapV3PoolStakingConfig
 	| RegenPoolStakingConfig
 	| ICHIPoolStakingConfig;
 
