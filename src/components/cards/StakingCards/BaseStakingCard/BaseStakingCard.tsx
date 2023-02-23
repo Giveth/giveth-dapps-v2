@@ -7,7 +7,6 @@ import {
 	Caption,
 	IconAlertCircle32,
 	IconHelpFilled16,
-	IconInfoFilled24,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { constants } from 'ethers';
@@ -31,12 +30,6 @@ import {
 	Details,
 	DetailUnit,
 	DetailValue,
-	DisableModal,
-	DisableModalCloseButton,
-	DisableModalContent,
-	DisableModalImage,
-	DisableModalLink,
-	DisableModalText,
 	FirstDetail,
 	GIVgardenTooltip,
 	HarvestButtonsWrapper,
@@ -99,6 +92,7 @@ import { useFarms } from '@/context/farm.context';
 import { getNowUnixMS } from '@/helpers/time';
 import GIVpowerCardIntro from '../GIVpowerCard/GIVpowerCardIntro';
 import StakingCardIntro from '../StakingCardIntro';
+import { ArchiveCover } from './ArchiveCover';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -174,7 +168,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
 	const [tokenDistroHelper, setTokenDistroHelper] =
 		useState<TokenDistroHelper>();
-	const [disableModal, setDisableModal] = useState<boolean>(true);
 	const router = useRouter();
 	const { setInfo } = useFarms();
 	const { chainId, account, active: isWalletActive } = useWeb3React();
@@ -310,58 +303,8 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 						</Caption>
 					</WrongNetworkContainer>
 				)}
-				{(isDiscontinued || exploited) && disableModal && (
-					<DisableModal>
-						<DisableModalContent>
-							<DisableModalImage>
-								<IconInfoFilled24 />
-							</DisableModalImage>
-							<Flex
-								flexDirection='column'
-								justifyContent='space-evenly'
-							>
-								<DisableModalText weight={700}>
-									{formatMessage({
-										id: 'label.this_farm_has_ended',
-									})}
-								</DisableModalText>
-								<DisableModalText>
-									{exploited ? (
-										<>
-											{formatMessage({
-												id: 'label.an_exploit_has_removed_available_rewards',
-											})}
-											<DisableModalLink
-												as='a'
-												size='Big'
-												target='_blank'
-												href='https://forum.giveth.io/t/ending-givfarm-liquidity-incentives-programs-for-giv/872'
-											>
-												&nbsp;
-												{formatMessage({
-													id: 'label.this_forum_post',
-												})}
-												&nbsp;
-											</DisableModalLink>
-											{formatMessage({
-												id: 'label.for_details',
-											})}
-										</>
-									) : (
-										formatMessage({
-											id: 'label.harvest_your_rewards_and_remove_your_funds',
-										})
-									)}
-								</DisableModalText>
-								<DisableModalCloseButton
-									label={formatMessage({
-										id: 'label.got_it',
-									})}
-									onClick={() => setDisableModal(false)}
-								/>
-							</Flex>
-						</DisableModalContent>
-					</DisableModal>
+				{(isDiscontinued || exploited) && (
+					<ArchiveCover isExploited={exploited} />
 				)}
 				{state === StakeCardState.NORMAL ? (
 					<>

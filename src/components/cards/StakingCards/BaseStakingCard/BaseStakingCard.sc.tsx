@@ -10,9 +10,7 @@ import {
 	Button,
 	OutlineButton,
 	Subline,
-	GLink,
 } from '@giveth/ui-design-system';
-import { Shadow } from '@/components/styled-components/Shadow';
 import { Flex } from '@/components/styled-components/Flex';
 
 export const StakingPoolContainer = styled.div`
@@ -159,55 +157,6 @@ export const IntroIcon = styled.div`
 	:hover {
 		color: ${neutralColors.gray[100]};
 	}
-`;
-
-export const DisableModal = styled.div`
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	background: transparent;
-	z-index: 10;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	background-color: #00000070;
-`;
-
-export const DisableModalContent = styled.div`
-	display: flex;
-	background: white;
-	gap: 12px;
-	border-radius: 12px;
-	box-shadow: ${Shadow.Neutral[400]};
-	max-width: 80%;
-	height: 190px;
-	padding: 16px 12px;
-`;
-
-export const DisableModalText = styled(P)<{ weight?: number }>`
-	color: ${brandColors.giv[500]};
-	font-weight: ${props => (props.weight ? props.weight : 400)};
-`;
-
-export const DisableModalLink = styled(GLink)`
-	color: ${brandColors.pinky[500]};
-`;
-
-export const DisableModalCloseButton = styled(OutlineButton)`
-	border: none;
-	color: ${brandColors.giv[500]};
-	font-weight: 700;
-	margin-left: auto;
-	padding-right: 4px;
-
-	&:hover {
-		background-color: transparent;
-	}
-`;
-
-export const DisableModalImage = styled.div`
-	width: 36px;
-	color: ${brandColors.giv[500]};
 `;
 
 export const LockInfotooltip = styled(Subline)`
