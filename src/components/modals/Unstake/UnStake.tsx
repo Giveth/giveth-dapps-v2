@@ -35,10 +35,12 @@ import config from '@/configuration';
 import { getGivStakingConfig } from '@/helpers/networkProvider';
 import { useStakingPool } from '@/hooks/useStakingPool';
 
-interface IUnStakeModalProps extends IModal {
+interface IUnStakeInnerModalProps {
 	poolStakingConfig: PoolStakingConfig;
 	regenStreamConfig?: RegenFarmConfig;
 }
+
+interface IUnStakeModalProps extends IModal, IUnStakeInnerModalProps {}
 
 export const UnStakeModal: FC<IUnStakeModalProps> = ({
 	poolStakingConfig,
