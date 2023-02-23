@@ -51,6 +51,7 @@ interface IStakingPoolInfoAndActionsProps {
 	isDiscontinued: boolean;
 	isGIVpower: boolean;
 	setShowAPRModal: React.Dispatch<React.SetStateAction<boolean>>;
+	setShowStakeModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
@@ -59,6 +60,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	isDiscontinued,
 	isGIVpower,
 	setShowAPRModal,
+	setShowStakeModal,
 }) => {
 	const [started, setStarted] = useState(true);
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
@@ -324,7 +326,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 							exploited ||
 							BN(userNotStakedAmount).isZero()
 						}
-						// onClick={() => setShowStakeModal(true)}
+						onClick={() => setShowStakeModal(true)}
 					/>
 					<StakeAmount>
 						{type === StakingType.UNISWAPV3_ETH_GIV
