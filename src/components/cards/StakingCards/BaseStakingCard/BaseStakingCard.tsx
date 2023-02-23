@@ -7,6 +7,7 @@ import {
 	PoolStakingConfig,
 	RegenFarmConfig,
 	RegenPoolStakingConfig,
+	SimplePoolStakingConfig,
 	StakingPlatform,
 	StakingType,
 } from '@/types/config';
@@ -38,6 +39,8 @@ import { StakingCardHeader } from './StakingCardHeader';
 import Routes from '@/lib/constants/Routes';
 import { getNowUnixMS } from '@/helpers/time';
 import { StakingPoolInfoAndActions } from './StakingPoolInfoAndActions';
+import { StakeModal } from '@/components/modals/StakeLock/Stake';
+import { StakeGIVModal } from '@/components/modals/StakeLock/StakeGIV';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -153,8 +156,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	}, [router, account, isWalletActive]);
 
 	const isGIVStaking = type === StakingType.GIV_LM;
-	const isBridge =
-		isGIVStaking && poolNetwork === config.MAINNET_NETWORK_NUMBER;
 	const isGIVpower =
 		isGIVStaking && poolNetwork === config.XDAI_NETWORK_NUMBER;
 
@@ -209,6 +210,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							isDiscontinued={isDiscontinued}
 							isGIVpower={isGIVpower}
 							setShowAPRModal={setShowAPRModal}
+							setShowStakeModal={setShowStakeModal}
 						/>
 					</>
 				) : state === StakeCardState.GIVPOWER_INTRO ? (
@@ -238,30 +240,15 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					poolStakingConfig={poolStakingConfig}
 				/>
 			)} */}
-			{/* {showStakeModal &&
-				(type === StakingType.UNISWAPV3_ETH_GIV ? (
-					<V3StakeModal
-						setShowModal={setShowStakeModal}
-						poolStakingConfig={poolStakingConfig}
-						stakedPositions={stakedPositions || []}
-						unstakedPositions={unstakedPositions || []}
-						currentIncentive={
-							currentIncentive || {
-								key: undefined,
-							}
-						}
-					/>
-				) : isGIVpower ? (
+			{showStakeModal &&
+				(isGIVpower ? (
 					<StakeGIVModal
 						setShowModal={setShowStakeModal}
 						poolStakingConfig={
 							poolStakingConfig as SimplePoolStakingConfig
 						}
-						maxAmount={userNotStakedAmount}
 						showLockModal={() => setShowLockModal(true)}
 					/>
-				) : isBridge ? (
-					<BridgeGIVModal setShowModal={setShowStakeModal} />
 				) : (
 					<StakeModal
 						setShowModal={setShowStakeModal}
@@ -269,9 +256,8 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							poolStakingConfig as SimplePoolStakingConfig
 						}
 						regenStreamConfig={regenStreamConfig}
-						maxAmount={userNotStakedAmount}
 					/>
-				))} */}
+				))}
 			{/* {showUnStakeModal &&
 				(type === StakingType.UNISWAPV3_ETH_GIV ? (
 					<V3StakeModal
