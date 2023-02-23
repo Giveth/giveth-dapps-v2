@@ -32,8 +32,9 @@ import { formatWeiHelper } from '@/helpers/number';
 import { LockupDetailsModal } from '../LockupDetailsModal';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import { useGIVpower } from '@/context/givpower.context';
 import config from '@/configuration';
+import { getGivStakingConfig } from '@/helpers/networkProvider';
+import { useStakingPool } from '@/hooks/useStakingPool';
 
 interface IUnStakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
@@ -53,7 +54,9 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 	const [unStakeState, setUnstakeState] = useState<StakeState>(
 		StakeState.UNSTAKE,
 	);
-	const { stakedAmount } = useGIVpower();
+	const { stakedAmount } = useStakingPool(
+		getGivStakingConfig(config.XDAI_CONFIG),
+	);
 	const { library, chainId } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { title, type, LM_ADDRESS, GARDEN_ADDRESS } =
