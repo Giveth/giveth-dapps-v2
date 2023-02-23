@@ -16,11 +16,13 @@ import { RegenFarmConfig, StreamType } from '@/types/config';
 import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 
-interface IAPRModalProps extends IModal {
+interface IAPRInnerModalProps {
 	poolNetwork: number;
 	regenStreamConfig?: RegenFarmConfig;
 	regenStreamType?: StreamType;
 }
+
+interface IAPRModalProps extends IModal, IAPRInnerModalProps {}
 
 export const APRModal: FC<IAPRModalProps> = ({
 	setShowModal,
@@ -68,11 +70,11 @@ export const APRModal: FC<IAPRModalProps> = ({
 	);
 };
 
-const Content: FC<{
-	poolNetwork: number;
-	regenStreamConfig?: RegenFarmConfig;
-	regenStreamType?: StreamType;
-}> = ({ regenStreamConfig, poolNetwork, regenStreamType }) => {
+const Content: FC<IAPRInnerModalProps> = ({
+	regenStreamConfig,
+	poolNetwork,
+	regenStreamType,
+}) => {
 	const { tokenDistroHelper } = useTokenDistroHelper(
 		poolNetwork,
 		regenStreamType,
