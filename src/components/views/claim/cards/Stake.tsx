@@ -5,8 +5,6 @@ import { BigNumber as EthersBigNumber, constants, utils } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { H2, H5, Lead } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { InputWithUnit } from '../input/index';
-import { Flex } from '../styled-components/Flex';
 import {
 	APRRow,
 	ArrowButton,
@@ -24,7 +22,6 @@ import {
 	PoolItems,
 	PreviousArrowButton,
 } from './common';
-import { IClaimViewCardProps } from '../views/claim/Claim.view';
 import useClaim from '@/context/claim.context';
 import config from '@/configuration';
 import { formatEthHelper, formatWeiHelper, Zero } from '@/helpers/number';
@@ -35,6 +32,9 @@ import { networkProviders } from '@/helpers/networkProvider';
 import { useAppSelector } from '@/features/hooks';
 import { SimplePoolStakingConfig, StakingType } from '@/types/config';
 import { getNowUnixMS } from '@/helpers/time';
+import { InputWithUnit } from '@/components/input';
+import { Flex } from '@/components/styled-components/Flex';
+import { IClaimViewCardProps } from '../Claim.view';
 
 const InvestCardContainer = styled(Card)`
 	::before {

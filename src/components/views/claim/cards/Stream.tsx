@@ -3,14 +3,14 @@ import Image from 'next/image';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { H2, Lead, H5 } from '@giveth/ui-design-system';
-import { Flex } from '../styled-components/Flex';
 import { ArrowButton, Card, PreviousArrowButton } from './common';
-import { IClaimViewCardProps } from '../views/claim/Claim.view';
 
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { formatWeiHelper } from '@/helpers/number';
 import { durationToString } from '@/lib/helpers';
 import useClaim from '@/context/claim.context';
+import { Flex } from '@/components/styled-components/Flex';
+import { IClaimViewCardProps } from '../Claim.view';
 
 const StreamCardContainer = styled(Card)`
 	::before {

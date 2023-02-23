@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Flex } from '../styled-components/Flex';
+import { Flex } from '@/components/styled-components/Flex';
 
 export interface ICardProps {
 	activeIndex: number;

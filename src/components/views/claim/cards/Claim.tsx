@@ -3,14 +3,14 @@ import styled from 'styled-components';
 import { H2, Lead } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 import { InjectedConnector } from '@web3-react/injected-connector';
-import { Button } from '../styled-components/Button';
-import { Flex } from '../styled-components/Flex';
+import { Button } from '../../../styled-components/Button';
+import { Flex } from '../../../styled-components/Flex';
 import { Card, Header, PreviousArrowButton } from './common';
-import { IClaimViewCardProps } from '../views/claim/Claim.view';
+import { IClaimViewCardProps } from '../Claim.view';
 import useClaim from '@/context/claim.context';
 import config from '@/configuration';
-import { GIVdropHarvestModal } from '../modals/GIVdropHarvestModal';
-import { AddTokenButton } from '../AddTokenButton';
+import { GIVdropHarvestModal } from '../../../modals/GIVdropHarvestModal';
+import { AddTokenButton } from '../../../AddTokenButton';
 import type { TransactionResponse } from '@ethersproject/providers';
 
 interface IClaimCardContainer {

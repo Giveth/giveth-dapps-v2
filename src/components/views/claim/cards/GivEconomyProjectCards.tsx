@@ -2,8 +2,8 @@ import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { Row, Col } from '@/components/Grid';
 import Routes from '@/lib/constants/Routes';
-import { GsButton, IGsDataBox } from '../homeTabs/GIVstream.sc';
 import config from '@/configuration';
+import { IGsDataBox, GsButton } from '@/components/homeTabs/GIVstream.sc';
 
 const GivEconomyProjectCards = () => {
 	const { formatMessage } = useIntl();

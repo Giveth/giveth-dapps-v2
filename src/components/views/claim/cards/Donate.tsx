@@ -11,8 +11,7 @@ import {
 	IconHelpFilled16,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { InputWithUnit } from '../input/index';
-import { Flex } from '../styled-components/Flex';
+
 import {
 	APRRow,
 	ArrowButton,
@@ -30,10 +29,13 @@ import {
 	PreviousArrowButton,
 } from './common';
 import { IClaimViewCardProps } from '@/components/views/claim/Claim.view';
-import { formatWeiHelper, Zero } from '@/helpers/number';
-import { IconWithTooltip } from '../IconWithToolTip';
+
 import useClaim from '@/context/claim.context';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
+import { InputWithUnit } from '@/components/input';
+import { Flex } from '@/components/styled-components/Flex';
+import { Zero, formatWeiHelper } from '@/helpers/number';
 
 const DonatePoolCard = styled(PoolCard)`
 	height: 127px;

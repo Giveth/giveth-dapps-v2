@@ -2,18 +2,17 @@ import { FC, useEffect, useState } from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { GLink, H2, Lead, brandColors } from '@giveth/ui-design-system';
+import { GLink, H2, Lead, brandColors, Button } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 
-import { Button } from '../styled-components/Button';
-import { Flex } from '../styled-components/Flex';
 import { ArrowButton, Card } from './common';
 import useClaim, { GiveDropStateType } from '@/context/claim.context';
-import { IClaimViewCardProps } from '../views/claim/Claim.view';
 import { formatWeiHelper } from '@/helpers/number';
 import Routes from '@/lib/constants/Routes';
 import { useAppDispatch } from '@/features/hooks';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
+import { Flex } from '@/components/styled-components/Flex';
+import { IClaimViewCardProps } from '../Claim.view';
 
 interface IConnectCardContainerProps {
 	data: any;
@@ -260,15 +259,14 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 							>
 								<WalletDisplayer>
 									<ConnectButton
-										secondary
+										buttonType='secondary'
 										onClick={() => {
 											deactivate();
 											setWalletIsChanged(true);
 											dispatch(setShowWalletModal(true));
 										}}
-									>
-										{btnLabel}
-									</ConnectButton>
+										label={btnLabel || ''}
+									/>
 									{giveDropState ===
 										GiveDropStateType.Missed && (
 										<Link href='/'>

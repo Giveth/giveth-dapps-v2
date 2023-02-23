@@ -23,9 +23,7 @@ import {
 	PoolItems,
 	PreviousArrowButton,
 } from './common';
-import { InputWithUnit } from '../input/index';
-import { Flex } from '../styled-components/Flex';
-import { IClaimViewCardProps } from '../views/claim/Claim.view';
+
 import config from '@/configuration';
 import { formatEthHelper, formatWeiHelper, Zero } from '@/helpers/number';
 import { getGivStakingAPR } from '@/lib/stakingPool';
@@ -33,6 +31,9 @@ import { APR } from '@/types/poolInfo';
 import useClaim from '@/context/claim.context';
 import { useAppSelector } from '@/features/hooks';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
+import { InputWithUnit } from '@/components/input';
+import { Flex } from '@/components/styled-components/Flex';
+import { IClaimViewCardProps } from '../Claim.view';
 
 const GovernCardContainer = styled(Card)`
 	padding-left: 254px;

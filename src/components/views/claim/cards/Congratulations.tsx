@@ -4,17 +4,17 @@ import { H2, Lead } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { useWeb3React } from '@web3-react/core';
-import { Button } from '../styled-components/Button';
 import useClaim from '@/context/claim.context';
 import { formatWeiHelper } from '@/helpers/number';
 import SparkleBurstAnimation from '@/animations/sparkle-burst.json';
 import SparkleAnimation from '@/animations/sparkle.json';
 import BlowingAnimation from '@/animations/blowing.json';
-import { Flex } from '../styled-components/Flex';
-import { AddTokenButton } from '../AddTokenButton';
 import { Container } from '@/components/Grid';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import LottieControl from '@/components/animations/lottieControl';
+import { AddTokenButton } from '@/components/AddTokenButton';
+import { Flex } from '@/components/styled-components/Flex';
+import { Button } from '@/components/styled-components/Button';
 
 const SmileImage = styled.div`
 	position: absolute;
