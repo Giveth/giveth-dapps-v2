@@ -1,4 +1,11 @@
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import React, {
+	Dispatch,
+	FC,
+	SetStateAction,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react';
 import {
 	brandColors,
 	Caption,
@@ -20,6 +27,7 @@ import {
 	PoolStakingConfig,
 	RegenFarmConfig,
 	SimplePoolStakingConfig,
+	StreamType,
 } from '@/types/config';
 import { BN, formatWeiHelper, Zero } from '@/helpers/number';
 import { harvestTokens } from '@/lib/stakingPool';
@@ -63,18 +71,30 @@ import { useAppSelector } from '@/features/hooks';
 import { LiquidityPosition } from '@/types/nfts';
 import { Flex } from '../styled-components/Flex';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import LottieControl from '@/components/animations/lottieControl';
 import { getPoolIconWithName } from '../cards/StakingCards/BaseStakingCard/BaseStakingCard';
-import type { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
+import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
+import { useStakingPool } from '@/hooks/useStakingPool';
+import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 
-interface IHarvestAllModalProps extends IModal {
+interface IHarvestAllInnerModalProps {
 	title: string;
 	poolStakingConfig?: PoolStakingConfig;
-	earned?: ethers.BigNumber;
 	network: number;
-	tokenDistroHelper?: TokenDistroHelper;
 	regenStreamConfig?: RegenFarmConfig;
+	regenStreamType?: StreamType;
+	stakedPositions?: LiquidityPosition[];
+	currentIncentive?: {
+		key?: (string | number)[] | null | undefined;
+	};
+}
+
+interface IHarvestAllModalProps extends IModal, IHarvestAllInnerModalProps {
+	title: string;
+	poolStakingConfig?: PoolStakingConfig;
+	network: number;
+	regenStreamConfig?: RegenFarmConfig;
+	regenStreamType?: StreamType;
 	stakedPositions?: LiquidityPosition[];
 	currentIncentive?: {
 		key?: (string | number)[] | null | undefined;
@@ -93,18 +113,14 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	title,
 	setShowModal,
 	poolStakingConfig,
-	earned,
 	network,
-	tokenDistroHelper,
 	regenStreamConfig,
+	regenStreamType,
 	stakedPositions,
 	currentIncentive,
 }) => {
 	const [state, setState] = useState<HarvestStates>(HarvestStates.HARVEST);
 	const tokenSymbol = regenStreamConfig?.rewardTokenSymbol || 'GIV';
-	const sdh = new SubgraphDataHelper(
-		useAppSelector(state => state.subgraph.currentValues),
-	);
 	const { formatMessage } = useIntl();
 	const {
 		mainnetThirdPartyTokensPrice,
@@ -131,6 +147,12 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	const [sumStream, setSumStream] = useState<BigNumber>(Zero);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
+	const { tokenDistroHelper, sdh } = useTokenDistroHelper(
+		network,
+		regenStreamType,
+		regenStreamConfig,
+	);
+
 	const tokenDistroBalance = regenStreamConfig
 		? sdh.getTokenDistroBalance(regenStreamConfig.tokenDistroAddress)
 		: sdh.getGIVTokenDistroBalance();
@@ -156,12 +178,6 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 
 	useEffect(() => {
 		if (!tokenDistroHelper) return;
-		if (earned) {
-			setRewardLiquidPart(tokenDistroHelper.getLiquidPart(earned));
-			setEarnedStream(
-				tokenDistroHelper.getStreamPartTokenPerWeek(earned),
-			);
-		}
 		setEarnedLiquid(
 			tokenDistroHelper.getUserClaimableNow(tokenDistroBalance),
 		);
@@ -172,13 +188,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 			tokenDistroHelper.getStreamPartTokenPerWeek(lockedAmount),
 		);
 		setGivBackStream(tokenDistroHelper.getStreamPartTokenPerWeek(givback));
-	}, [
-		earned,
-		tokenDistroBalance,
-		tokenDistroHelper,
-		givback,
-		regenStreamConfig,
-	]);
+	}, [tokenDistroBalance, tokenDistroHelper, givback, regenStreamConfig]);
 
 	//calculate Liquid Sum
 	useEffect(() => {
@@ -499,54 +509,27 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 											<BreakdownUnit></BreakdownUnit>
 										</BreakdownRow>
 									)}
-									{poolStakingConfig &&
-										earned &&
-										earned.gt(0) && (
-											<BreakdownRow>
-												<BreakdownTitle>
-													<BreakdownIcon>
-														<IconGIVFarm
-															size={24}
-														/>
-													</BreakdownIcon>
-													<P>
-														{regenStreamConfig
-															? 'RegenFarm'
-															: 'GIVfarm'}
-													</P>
-													{poolStakingConfig.title}
-													<PoolIcon>
-														{getPoolIconWithName(
-															poolStakingConfig.platform,
-														)}
-													</PoolIcon>
-												</BreakdownTitle>
-												<BreakdownAmount>
-													{formatWeiHelper(
-														rewardLiquidPart,
-														config.TOKEN_PRECISION,
-														false,
-													)}
-												</BreakdownAmount>
-												<BreakdownUnit>
-													{tokenSymbol}
-												</BreakdownUnit>
-												<BreakdownRate>
-													+
-													{formatWeiHelper(
-														earnedStream,
-														config.TOKEN_PRECISION,
-														false,
-													)}
-												</BreakdownRate>
-												<BreakdownUnit>
-													{tokenSymbol}
-													{formatMessage({
-														id: 'label./week',
-													})}
-												</BreakdownUnit>
-											</BreakdownRow>
-										)}
+									{poolStakingConfig && tokenDistroHelper && (
+										<EarnedBreakDown
+											poolStakingConfig={
+												poolStakingConfig
+											}
+											regenStreamConfig={
+												regenStreamConfig
+											}
+											tokenDistroHelper={
+												tokenDistroHelper
+											}
+											setRewardLiquidPart={
+												setRewardLiquidPart
+											}
+											setEarnedStream={setEarnedStream}
+											rewardLiquidPart={rewardLiquidPart}
+											tokenSymbol={tokenSymbol}
+											earnedStream={earnedStream}
+										/>
+									)}
+
 									<BreakdownSumRow>
 										<div></div>
 										<BreakdownLiquidSum>
@@ -646,4 +629,71 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 			</HarvestAllModalContainer>
 		</Modal>
 	);
+};
+
+interface IEarnedBreakDownProps {
+	poolStakingConfig: PoolStakingConfig;
+	tokenDistroHelper: TokenDistroHelper;
+	setRewardLiquidPart: Dispatch<SetStateAction<ethers.BigNumber>>;
+	setEarnedStream: Dispatch<SetStateAction<BigNumber>>;
+	regenStreamConfig?: RegenFarmConfig;
+	rewardLiquidPart: ethers.BigNumber;
+	tokenSymbol: string;
+	earnedStream: BigNumber;
+}
+
+const EarnedBreakDown: FC<IEarnedBreakDownProps> = ({
+	poolStakingConfig,
+	regenStreamConfig,
+	tokenDistroHelper,
+	setRewardLiquidPart,
+	setEarnedStream,
+	rewardLiquidPart,
+	tokenSymbol,
+	earnedStream,
+}) => {
+	const { earned } = useStakingPool(poolStakingConfig);
+	const { formatMessage } = useIntl();
+
+	useEffect(() => {
+		if (!tokenDistroHelper) return;
+		if (earned) {
+			setRewardLiquidPart(tokenDistroHelper.getLiquidPart(earned));
+			setEarnedStream(
+				tokenDistroHelper.getStreamPartTokenPerWeek(earned),
+			);
+		}
+	}, [earned, tokenDistroHelper]);
+
+	return earned && earned.gt(0) ? (
+		<BreakdownRow>
+			<BreakdownTitle>
+				<BreakdownIcon>
+					<IconGIVFarm size={24} />
+				</BreakdownIcon>
+				<P>{regenStreamConfig ? 'RegenFarm' : 'GIVfarm'}</P>
+				{poolStakingConfig.title}
+				<PoolIcon>
+					{getPoolIconWithName(poolStakingConfig.platform)}
+				</PoolIcon>
+			</BreakdownTitle>
+			<BreakdownAmount>
+				{formatWeiHelper(
+					rewardLiquidPart,
+					config.TOKEN_PRECISION,
+					false,
+				)}
+			</BreakdownAmount>
+			<BreakdownUnit>{tokenSymbol}</BreakdownUnit>
+			<BreakdownRate>
+				+{formatWeiHelper(earnedStream, config.TOKEN_PRECISION, false)}
+			</BreakdownRate>
+			<BreakdownUnit>
+				{tokenSymbol}
+				{formatMessage({
+					id: 'label./week',
+				})}
+			</BreakdownUnit>
+		</BreakdownRow>
+	) : null;
 };

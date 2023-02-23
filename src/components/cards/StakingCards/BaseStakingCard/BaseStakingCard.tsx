@@ -42,6 +42,7 @@ import { StakingPoolInfoAndActions } from './StakingPoolInfoAndActions';
 import { StakeModal } from '@/components/modals/StakeLock/Stake';
 import { StakeGIVModal } from '@/components/modals/StakeLock/StakeGIV';
 import { UnStakeModal } from '@/components/modals/Unstake/UnStake';
+import { HarvestAllModal } from '@/components/modals/HarvestAll';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -213,6 +214,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							setShowAPRModal={setShowAPRModal}
 							setShowStakeModal={setShowStakeModal}
 							setShowUnStakeModal={setShowUnStakeModal}
+							setShowHarvestModal={setShowHarvestModal}
 						/>
 					</>
 				) : state === StakeCardState.GIVPOWER_INTRO ? (
@@ -263,19 +265,17 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					regenStreamConfig={regenStreamConfig}
 				/>
 			)}
-			{/* {showHarvestModal && chainId && (
+			{showHarvestModal && chainId && (
 				<HarvestAllModal
 					title={formatMessage({ id: 'label.givfarm_rewards' })}
 					setShowModal={setShowHarvestModal}
 					poolStakingConfig={poolStakingConfig}
-					earned={earned}
 					network={chainId}
-					tokenDistroHelper={tokenDistroHelper}
 					regenStreamConfig={regenStreamConfig}
 					stakedPositions={stakedPositions}
 					currentIncentive={currentIncentive}
 				/>
-			)} */}
+			)}
 			{/* {showLockModal && (
 				<LockModal
 					setShowModal={setShowLockModal}
