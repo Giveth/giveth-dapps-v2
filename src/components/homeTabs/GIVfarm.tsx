@@ -13,7 +13,6 @@ import { Flex } from '@/components/styled-components/Flex';
 import config from '@/configuration';
 import {
 	SimplePoolStakingConfig,
-	StakingType,
 	UniswapV3PoolStakingConfig,
 } from '@/types/config';
 import {
@@ -37,12 +36,9 @@ import { shortenAddress } from '@/lib/helpers';
 import { Col, Container, Row } from '@/components/Grid';
 
 import { GIVfrens } from '@/components/givfarm/GIVfrens';
-import { GIVpowerProvider } from '@/context/givpower.context';
 import { DaoCard } from '../givfarm/DaoCard';
 import { getNowUnixMS } from '@/helpers/time';
 import { TWO_WEEK } from '@/lib/constants/constants';
-import GIVpowerStakingPoolCard from '../cards/StakingCards/GIVpowerCard/GIVpowerStakingPoolCard';
-import StakingPositionCard from '../cards/StakingCards/PositionCard/StakingPositionCard';
 import StakingPoolCard from '../cards/StakingCards/StakingPoolCard';
 
 const renderPool = (
@@ -50,13 +46,11 @@ const renderPool = (
 	id: number,
 ) => (
 	<Col sm={6} lg={4} key={`staking_pool_card_${pool.network}_${id}`}>
-		{pool.type === StakingType.UNISWAPV3_ETH_GIV ? (
+		{/* {pool.type === StakingType.UNISWAPV3_ETH_GIV ? (
 			<StakingPositionCard poolStakingConfig={pool} />
 		) : (
-			<StakingPoolCard
-				poolStakingConfig={pool as SimplePoolStakingConfig}
-			/>
-		)}
+			)} */}
+		<StakingPoolCard poolStakingConfig={pool as SimplePoolStakingConfig} />
 	</Col>
 );
 
@@ -220,11 +214,13 @@ export const TabGIVfarmBottom = () => {
 					/>
 				</ArchivedPoolsToggle>
 				<PoolRow>
-					<GIVpowerProvider>
-						<Col sm={6} lg={4} key={`givpower_card`}>
-							<GIVpowerStakingPoolCard />
-						</Col>
-					</GIVpowerProvider>
+					<Col sm={6} lg={4} key={`givpower_card`}>
+						<StakingPoolCard
+							poolStakingConfig={getGivStakingConfig(
+								config.XDAI_CONFIG,
+							)}
+						/>
+					</Col>
 					{showArchivedPools && (
 						<Col sm={6} lg={4}>
 							<StakingPoolCard
