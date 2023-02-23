@@ -13,8 +13,10 @@ import styled from 'styled-components';
 import BigNumber from 'bignumber.js';
 import { Flex } from '@/components/styled-components/Flex';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
-import { useGIVpower } from '@/context/givpower.context';
 import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
+import { getGivStakingConfig } from '@/helpers/networkProvider';
+import { useStakingPool } from '@/hooks/useStakingPool';
+import config from '@/configuration';
 import type { FC } from 'react';
 
 interface ILockInfo {
@@ -23,7 +25,7 @@ interface ILockInfo {
 }
 
 const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
-	const { apr } = useGIVpower();
+	const { apr } = useStakingPool(getGivStakingConfig(config.XDAI_CONFIG));
 	const multipler = Math.sqrt(1 + round);
 
 	return (
