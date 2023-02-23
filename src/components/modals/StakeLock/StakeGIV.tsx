@@ -27,6 +27,7 @@ import { formatWeiHelper } from '@/helpers/number';
 import LockInfo from './LockInfo';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import config from '@/configuration';
+import { useStakingPool } from '@/hooks/useStakingPool';
 import type {
 	PoolStakingConfig,
 	SimplePoolStakingConfig,
@@ -34,7 +35,6 @@ import type {
 
 interface IStakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
-	maxAmount: BigNumber;
 	showLockModal: () => void;
 }
 
@@ -49,7 +49,6 @@ export const loadingAnimationOptions = {
 
 export const StakeGIVModal: FC<IStakeModalProps> = ({
 	poolStakingConfig,
-	maxAmount,
 	showLockModal,
 	setShowModal,
 }) => {
@@ -60,6 +59,7 @@ export const StakeGIVModal: FC<IStakeModalProps> = ({
 	);
 	const { chainId, library } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const { notStakedAmount: maxAmount } = useStakingPool(poolStakingConfig);
 
 	const { POOL_ADDRESS, GARDEN_ADDRESS } =
 		poolStakingConfig as SimplePoolStakingConfig;
