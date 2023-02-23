@@ -110,7 +110,7 @@ export const RewardCard: FC<IRewardCardProps> = ({
 								{rewardTokenSymbol}
 								{formatMessage({ id: 'label./week' })}
 							</RateUnit>
-							<IconHelpFilledWraper
+							<IconHelpFilledWrapper
 								onClick={() => {
 									setShowWhatIsGIVstreamModal(true);
 								}}
@@ -118,7 +118,7 @@ export const RewardCard: FC<IRewardCardProps> = ({
 								<IconHelpFilled24
 									color={brandColors.deep[200]}
 								/>
-							</IconHelpFilledWraper>
+							</IconHelpFilledWrapper>
 						</RateInfo>
 						{actionLabel && actionCb ? (
 							<ActionButton
@@ -196,7 +196,7 @@ const ActionButton = styled(Button)`
 	width: 100%;
 `;
 
-const IconHelpFilledWraper = styled.div`
+const IconHelpFilledWrapper = styled.div`
 	cursor: pointer;
 `;
 

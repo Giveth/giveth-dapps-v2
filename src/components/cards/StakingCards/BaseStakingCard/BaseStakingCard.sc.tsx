@@ -133,7 +133,7 @@ export const AngelVaultTooltip = styled(Subline)`
 	text-align: left;
 `;
 
-export const IconHelpFilledWraper = styled.div`
+export const IconHelpFilledWrapper = styled.div`
 	cursor: pointer;
 `;
 

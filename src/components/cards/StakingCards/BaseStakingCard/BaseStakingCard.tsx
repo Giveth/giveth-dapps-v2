@@ -34,7 +34,7 @@ import {
 	GIVgardenTooltip,
 	HarvestButtonsWrapper,
 	IconContainer,
-	IconHelpFilledWraper,
+	IconHelpFilledWrapper,
 	IntroIcon,
 	LiquidityButton,
 	LockInfoTooltip,
@@ -511,7 +511,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 													id: 'label.streaming',
 												})}
 											</DetailLabel>
-											<IconHelpFilledWraper
+											<IconHelpFilledWrapper
 												onClick={() => {
 													setShowWhatIsGIVstreamModal(
 														true,
@@ -519,7 +519,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 												}}
 											>
 												<IconHelpFilled16 />
-											</IconHelpFilledWraper>
+											</IconHelpFilledWrapper>
 										</Flex>
 										<Flex gap='4px' alignItems='center'>
 											<DetailValue>
