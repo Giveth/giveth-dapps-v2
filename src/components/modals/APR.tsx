@@ -14,16 +14,13 @@ import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { mediaQueries } from '@/lib/constants/constants';
 import { RegenFarmConfig } from '@/types/config';
-import type { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 
 interface IAPRModalProps extends IModal {
-	tokenDistroHelper?: TokenDistroHelper;
 	regenStreamConfig?: RegenFarmConfig;
 }
 
 export const APRModal: FC<IAPRModalProps> = ({
 	setShowModal,
-	tokenDistroHelper,
 	regenStreamConfig,
 }) => {
 	const { rewardTokenSymbol = 'GIV' } = regenStreamConfig || {};
@@ -58,14 +55,13 @@ export const APRModal: FC<IAPRModalProps> = ({
 					<DescTitle>Current Distribution:</DescTitle>
 					<Desc>
 						Claimable immediately:{' '}
-						{tokenDistroHelper?.GlobalReleasePercentage.toFixed(2)}%
+						{/* {tokenDistroHelper?.GlobalReleasePercentage.toFixed(2)}% */}
 					</Desc>
 					<Desc>
 						Increasing your {streamName}:{' '}
-						{(
-							100 -
-							(tokenDistroHelper?.GlobalReleasePercentage || 0)
-						).toFixed(2)}
+						{(100)
+							// (tokenDistroHelper?.GlobalReleasePercentage || 0)
+							.toFixed(2)}
 						%
 					</Desc>
 				</DescContainer>
