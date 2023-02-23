@@ -1,4 +1,3 @@
-import { useStakingPool } from '@/hooks/useStakingPool';
 import BaseStakingCard from './BaseStakingCard/BaseStakingCard';
 import type {
 	RegenFarmConfig,
@@ -15,18 +14,8 @@ const StakingPoolCard: FC<IStakingPoolCardProps> = ({
 	poolStakingConfig,
 	regenStreamConfig,
 }) => {
-	const { apr, notStakedAmount, stakedAmount, earned } =
-		useStakingPool(poolStakingConfig);
-	const stakeInfo = {
-		apr: apr,
-		notStakedAmount: notStakedAmount,
-		earned: earned,
-		stakedAmount: stakedAmount,
-	};
-
 	return (
 		<BaseStakingCard
-			stakeInfo={stakeInfo}
 			poolStakingConfig={poolStakingConfig}
 			regenStreamConfig={regenStreamConfig}
 		/>
