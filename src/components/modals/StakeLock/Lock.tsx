@@ -19,7 +19,7 @@ import {
 	CancelButton,
 	StyledButton,
 	SectionTitle,
-	StakeInnerModal,
+	StakeInnerModalContainer,
 	StakeModalContainer,
 } from './StakeLock.sc';
 import { AmountInput } from '@/components/AmountInput';
@@ -101,7 +101,7 @@ const LockModal: FC<ILockModalProps> = ({
 			headerIcon={<IconRocketInSpace32 />}
 		>
 			<StakeModalContainer>
-				<StakeInnerModal>
+				<StakeInnerModalContainer>
 					{lockState === ELockState.LOCK && (
 						<>
 							<SectionTitle weight={700}>
@@ -206,7 +206,7 @@ const LockModal: FC<ILockModalProps> = ({
 							</ExternalLink>
 						</>
 					)}
-				</StakeInnerModal>
+				</StakeInnerModalContainer>
 			</StakeModalContainer>
 		</Modal>
 	);

@@ -26,7 +26,7 @@ import {
 	StakeModalContainer,
 	StakeModalTitle,
 	StakeModalTitleText,
-	StakeInnerModal,
+	StakeInnerModalContainer,
 	StyledOutlineButton,
 	StyledButton,
 	ToggleContainer,
@@ -189,7 +189,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 									Stake
 								</StakeModalTitleText>
 							</StakeModalTitle>
-							<StakeInnerModal>
+							<StakeInnerModalContainer>
 								<StakeSteps stakeState={stakeState} />
 								<AmountInput
 									setAmount={setAmount}
@@ -267,7 +267,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 										setShowModal(false);
 									}}
 								/>
-							</StakeInnerModal>
+							</StakeInnerModalContainer>
 						</>
 					)}
 				{chainId && stakeState === StakeState.CONFIRMING && (

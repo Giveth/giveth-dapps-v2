@@ -17,7 +17,7 @@ import { ERC20 } from '@/types/contracts';
 import {
 	CancelButton,
 	StakeModalContainer,
-	StakeInnerModal,
+	StakeInnerModalContainer,
 	StyledOutlineButton,
 	SectionTitle,
 	StyledButton,
@@ -33,10 +33,12 @@ import type {
 	SimplePoolStakingConfig,
 } from '@/types/config';
 
-interface IStakeModalProps extends IModal {
+interface IStakeInnerModalProps {
 	poolStakingConfig: PoolStakingConfig;
 	showLockModal: () => void;
 }
+
+interface IStakeModalProps extends IModal, IStakeInnerModalProps {}
 
 export const loadingAnimationOptions = {
 	loop: true,
@@ -176,7 +178,7 @@ export const StakeGIVModal: FC<IStakeModalProps> = ({
 				{stakeState !== StakeState.CONFIRMED &&
 					stakeState !== StakeState.ERROR && (
 						<>
-							<StakeInnerModal>
+							<StakeInnerModalContainer>
 								<StakeSteps stakeState={stakeState} />
 								{(stakeState === StakeState.APPROVE ||
 									stakeState === StakeState.APPROVING) && (
@@ -265,11 +267,11 @@ export const StakeGIVModal: FC<IStakeModalProps> = ({
 										/>
 									</>
 								)}
-							</StakeInnerModal>
+							</StakeInnerModalContainer>
 						</>
 					)}
 				{chainId && stakeState === StakeState.CONFIRMED && (
-					<StakeInnerModal>
+					<StakeInnerModalContainer>
 						<BriefContainer>
 							<H5>Successful!</H5>
 							<H5White>You have staked</H5White>
@@ -296,7 +298,7 @@ export const StakeGIVModal: FC<IStakeModalProps> = ({
 								showLockModal();
 							}}
 						/>
-					</StakeInnerModal>
+					</StakeInnerModalContainer>
 				)}
 				{chainId && stakeState === StakeState.ERROR && (
 					<ErrorInnerModal

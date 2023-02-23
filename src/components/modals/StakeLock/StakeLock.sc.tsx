@@ -27,7 +27,7 @@ export const StakeModalTitleText = styled(H4)`
 	color: ${neutralColors.gray[100]};
 `;
 
-export const StakeInnerModal = styled.div`
+export const StakeInnerModalContainer = styled.div`
 	padding: 0 24px;
 `;
 
