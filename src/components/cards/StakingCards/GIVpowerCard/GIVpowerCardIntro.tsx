@@ -13,7 +13,6 @@ import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import Link from 'next/link';
 import links from '@/lib/constants/links';
-import { useGIVpower } from '@/context/givpower.context';
 import { useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import Routes from '@/lib/constants/Routes';
@@ -21,6 +20,9 @@ import { LockupDetailsModal } from '@/components/modals/LockupDetailsModal';
 import TotalGIVpowerBox from '@/components/modals/StakeLock/TotalGIVpowerBox';
 import { FlexSpacer, Flex } from '@/components/styled-components/Flex';
 import { StakeCardState } from '../BaseStakingCard/BaseStakingCard';
+import { getGivStakingConfig } from '@/helpers/networkProvider';
+import { useStakingPool } from '@/hooks/useStakingPool';
+import config from '@/configuration';
 import type { Dispatch, FC, SetStateAction } from 'react';
 
 interface IGIVpowerCardIntro {
@@ -30,7 +32,9 @@ interface IGIVpowerCardIntro {
 const GIVpowerCardIntro: FC<IGIVpowerCardIntro> = ({ setState }) => {
 	const { formatMessage } = useIntl();
 	const [showLockDetailModal, setShowLockDetailModal] = useState(false);
-	const { stakedAmount } = useGIVpower();
+	const { stakedAmount } = useStakingPool(
+		getGivStakingConfig(config.XDAI_CONFIG),
+	);
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
 
 	const sdh = new SubgraphDataHelper(currentValues);
