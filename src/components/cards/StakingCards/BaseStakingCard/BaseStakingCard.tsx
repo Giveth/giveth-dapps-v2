@@ -41,6 +41,7 @@ import { getNowUnixMS } from '@/helpers/time';
 import { StakingPoolInfoAndActions } from './StakingPoolInfoAndActions';
 import { StakeModal } from '@/components/modals/StakeLock/Stake';
 import { StakeGIVModal } from '@/components/modals/StakeLock/StakeGIV';
+import { UnStakeModal } from '@/components/modals/Unstake/UnStake';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -252,30 +253,15 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 						regenStreamConfig={regenStreamConfig}
 					/>
 				))}
-			{/* {showUnStakeModal &&
-				(type === StakingType.UNISWAPV3_ETH_GIV ? (
-					<V3StakeModal
-						isUnstakingModal={true}
-						setShowModal={setShowUnStakeModal}
-						poolStakingConfig={poolStakingConfig}
-						stakedPositions={stakedPositions || []}
-						unstakedPositions={unstakedPositions || []}
-						currentIncentive={
-							currentIncentive || {
-								key: undefined,
-							}
-						}
-					/>
-				) : (
-					<UnStakeModal
-						setShowModal={setShowUnStakeModal}
-						poolStakingConfig={
-							poolStakingConfig as SimplePoolStakingConfig
-						}
-						regenStreamConfig={regenStreamConfig}
-						maxAmount={availableStakedToken}
-					/>
-				))} */}
+			{showUnStakeModal && (
+				<UnStakeModal
+					setShowModal={setShowUnStakeModal}
+					poolStakingConfig={
+						poolStakingConfig as SimplePoolStakingConfig
+					}
+					regenStreamConfig={regenStreamConfig}
+				/>
+			)}
 			{/* {showHarvestModal && chainId && (
 				<HarvestAllModal
 					title={formatMessage({ id: 'label.givfarm_rewards' })}
