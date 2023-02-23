@@ -234,12 +234,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					poolNetwork={poolNetwork}
 				/>
 			)}
-			{/* {showUniV3APRModal && (
-				<UniV3APRModal
-					setShowModal={setShowUniV3APRModal}
-					poolStakingConfig={poolStakingConfig}
-				/>
-			)} */}
 			{showStakeModal &&
 				(isGIVpower ? (
 					<StakeGIVModal
