@@ -53,6 +53,7 @@ interface IStakingPoolInfoAndActionsProps {
 	setShowAPRModal: React.Dispatch<React.SetStateAction<boolean>>;
 	setShowStakeModal: React.Dispatch<React.SetStateAction<boolean>>;
 	setShowUnStakeModal: React.Dispatch<React.SetStateAction<boolean>>;
+	setShowHarvestModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
@@ -63,6 +64,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	setShowAPRModal,
 	setShowStakeModal,
 	setShowUnStakeModal,
+	setShowHarvestModal,
 }) => {
 	const [started, setStarted] = useState(true);
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
@@ -299,7 +301,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 			<HarvestButtonsWrapper>
 				<ClaimButton
 					disabled={exploited || earned.isZero()}
-					// onClick={() => setShowHarvestModal(true)}
+					onClick={() => setShowHarvestModal(true)}
 					label={formatMessage({
 						id: 'label.harvest_rewards',
 					})}
