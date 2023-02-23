@@ -60,7 +60,6 @@ const StakingPositionCard: FC<IStakingPositionCardProps> = ({
 
 	return (
 		<BaseStakingCard
-			stakeInfo={stakeInfo}
 			poolStakingConfig={poolStakingConfig}
 			stakedPositions={stakedPositions}
 			unstakedPositions={unstakedPositions}
