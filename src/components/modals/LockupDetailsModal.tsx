@@ -16,13 +16,14 @@ import { Flex } from '../styled-components/Flex';
 import { Modal } from './Modal';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
-import { useGIVpower } from '@/context/givpower.context';
 import { fetchSubgraph } from '@/services/subgraph.service';
 import config from '@/configuration';
 import { SubgraphQueryBuilder } from '@/lib/subgraph/subgraphQueryBuilder';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { RowWrapper, TableCell, TableHeader } from '../styled-components/Table';
+import { getGivStakingConfig } from '@/helpers/networkProvider';
+import { useStakingPool } from '@/hooks/useStakingPool';
 import type { IGIVpowerPosition } from '@/types/subgraph';
 import type { BigNumber } from 'ethers';
 import type { IModal } from '@/types/common';
@@ -35,7 +36,9 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 	unstakeable,
 	setShowModal,
 }) => {
-	const { apr, stakedAmount } = useGIVpower();
+	const { apr, stakedAmount } = useStakingPool(
+		getGivStakingConfig(config.XDAI_CONFIG),
+	);
 	const { account } = useWeb3React();
 	const [locksInfo, setLocksInfo] = useState<IGIVpowerPosition[]>([]);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
