@@ -15,22 +15,16 @@ import {
 import { Flex } from '../styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 
-interface IStakingPoolContainer {
-	shadowColor?: string;
-	big?: boolean;
-}
-
-export const StakingPoolContainer = styled.div<IStakingPoolContainer>`
-	height: ${props => (props.big ? '542px' : '488px')};
+export const StakingPoolContainer = styled.div`
+	height: 542px;
 	border-radius: 8px;
 	background: ${brandColors.giv[600]};
 	color: ${neutralColors.gray[100]};
 	position: relative;
 	margin-bottom: 32px;
 	padding: 1px 0;
-	box-shadow: ${props =>
-		props.shadowColor ? `0px 0px 24px 6px ${props.shadowColor}` : 'unset'};
 `;
+
 export const StakingPoolExchangeRow = styled(Flex)`
 	margin: 16px 16px 0;
 	height: 21px;

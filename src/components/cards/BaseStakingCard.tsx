@@ -291,10 +291,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 
 	return (
 		<>
-			<StakingPoolContainer
-				big={isGIVpower}
-				shadowColor={isGIVpower ? '#E1458D' : ''}
-			>
+			<StakingPoolContainer>
 				{poolNetwork !== chainId && (
 					<WrongNetworkContainer>
 						<IconAlertCircle32 />
