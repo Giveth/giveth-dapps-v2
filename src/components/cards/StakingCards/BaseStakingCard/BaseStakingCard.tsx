@@ -228,6 +228,8 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				<APRModal
 					setShowModal={setShowAPRModal}
 					regenStreamConfig={regenStreamConfig}
+					regenStreamType={regenStreamType}
+					poolNetwork={poolNetwork}
 				/>
 			)}
 			{/* {showUniV3APRModal && (
