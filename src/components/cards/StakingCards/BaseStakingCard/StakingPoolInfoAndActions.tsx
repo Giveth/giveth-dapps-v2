@@ -43,11 +43,8 @@ import {
 } from './BaseStakingCard.sc';
 import { getNowUnixMS } from '@/helpers/time';
 import { useStakingPool } from '@/hooks/useStakingPool';
-import config from '@/configuration';
-import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { useAppSelector } from '@/features/hooks';
-import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { useFarms } from '@/context/farm.context';
+import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
 interface IStakingPoolInfoAndActionsProps {
 	poolStakingConfig: PoolStakingConfig | RegenPoolStakingConfig;
 	regenStreamConfig?: RegenFarmConfig;
@@ -66,12 +63,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	const [started, setStarted] = useState(true);
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
 	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
-	const [tokenDistroHelper, setTokenDistroHelper] =
-		useState<TokenDistroHelper>();
 
-	const { mainnetValues, xDaiValues } = useAppSelector(
-		state => state.subgraph,
-	);
 	const { formatMessage } = useIntl();
 	const { setInfo } = useFarms();
 	const { chainId, account, active: isWalletActive } = useWeb3React();
@@ -86,39 +78,22 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 
 	const {
 		type,
-		provideLiquidityLink,
 		unit,
 		farmStartTimeMS,
-		farmEndTimeMS,
 		exploited,
 		network: poolNetwork,
 	} = poolStakingConfig;
-
-	const currentValues =
-		poolNetwork === config.XDAI_NETWORK_NUMBER ? xDaiValues : mainnetValues;
-	const sdh = new SubgraphDataHelper(currentValues);
+	const { tokenDistroHelper, sdh } = useTokenDistroHelper(
+		poolNetwork,
+		regenStreamType,
+		regenStreamConfig,
+	);
 
 	const userGIVLocked = sdh.getUserGIVLockedBalance();
 
 	useEffect(() => {
 		setStarted(farmStartTimeMS ? getNowUnixMS() > farmStartTimeMS : true);
 	}, [farmStartTimeMS]);
-
-	useEffect(() => {
-		if (regenStreamType) {
-			setTokenDistroHelper(
-				new TokenDistroHelper(
-					sdh.getTokenDistro(
-						regenStreamConfig?.tokenDistroAddress as string,
-					),
-				),
-			);
-		} else {
-			setTokenDistroHelper(
-				new TokenDistroHelper(sdh.getGIVTokenDistro()),
-			);
-		}
-	}, [currentValues, poolStakingConfig, regenStreamConfig]);
 
 	useEffect(() => {
 		if (!(exploited || regenStreamConfig))
