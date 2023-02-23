@@ -37,7 +37,7 @@ import {
 	IconHelpFilledWraper,
 	IntroIcon,
 	LiquidityButton,
-	LockInfotooltip,
+	LockInfoTooltip,
 	SPTitle,
 	StakeAmount,
 	StakeButton,
@@ -621,11 +621,11 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 												icon={<IconHelpFilled16 />}
 												direction={'top'}
 											>
-												<LockInfotooltip>
+												<LockInfoTooltip>
 													{formatMessage({
 														id: 'label.some_or_all_of_your_staked_giv_is_locked',
 													})}
-												</LockInfotooltip>
+												</LockInfoTooltip>
 											</IconWithTooltip>
 										)}
 									</FlexCenter>

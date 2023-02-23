@@ -24,7 +24,7 @@ import {
 } from './StakeLock.sc';
 import { AmountInput } from '@/components/AmountInput';
 import LockSlider from './LockSlider';
-import LockInfo, { LockInfotooltip } from './LockInfo';
+import LockInfo, { LockInfoTooltip } from './LockInfo';
 import LockingBrief from './LockingBrief';
 import { lockToken } from '@/lib/stakingPool';
 import config from '@/configuration';
@@ -123,11 +123,11 @@ const LockModal: FC<ILockModalProps> = ({
 									direction='right'
 									align='top'
 								>
-									<LockInfotooltip>
+									<LockInfoTooltip>
 										{formatMessage({
 											id: 'label.rounds_are_two_weeks_periods',
 										})}
-									</LockInfotooltip>
+									</LockInfoTooltip>
 								</IconWithTooltip>
 							</Flex>
 							<LockSlider setRound={setRound} round={round} />

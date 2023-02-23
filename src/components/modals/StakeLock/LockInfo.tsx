@@ -37,10 +37,10 @@ const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 							icon={<IconHelpFilled16 />}
 							direction={'top'}
 						>
-							<LockInfotooltip>
+							<LockInfoTooltip>
 								The longer you lock your GIV, the greater your
 								APR & GIVpower.
-							</LockInfotooltip>
+							</LockInfoTooltip>
 						</IconWithTooltip>
 					</MultiPlyHelp>
 				</MultiPlyValue>
@@ -53,10 +53,10 @@ const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 							icon={<IconHelpFilled16 />}
 							direction={'right'}
 						>
-							<LockInfotooltip>
+							<LockInfoTooltip>
 								This is your rate of return for this set of GIV
 								tokens.
-							</LockInfotooltip>
+							</LockInfoTooltip>
 						</IconWithTooltip>
 					</LockInfoRowHelp>
 				</LockInfoRowTitle>
@@ -79,10 +79,10 @@ const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 							icon={<IconHelpFilled16 />}
 							direction={'right'}
 						>
-							<LockInfotooltip>
+							<LockInfoTooltip>
 								GIVpower allows you to support verified projects
 								on Giveth while earning rewards.
-							</LockInfotooltip>
+							</LockInfoTooltip>
 						</IconWithTooltip>
 					</LockInfoRowHelp>
 				</LockInfoRowTitle>
@@ -155,7 +155,7 @@ const LockInfoRowSpark = styled.div`
 	}
 `;
 
-export const LockInfotooltip = styled(Subline)`
+export const LockInfoTooltip = styled(Subline)`
 	color: ${neutralColors.gray[100]};
 	width: 160px;
 `;

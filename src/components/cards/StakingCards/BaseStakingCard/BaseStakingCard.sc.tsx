@@ -159,7 +159,7 @@ export const IntroIcon = styled.div`
 	}
 `;
 
-export const LockInfotooltip = styled(Subline)`
+export const LockInfoTooltip = styled(Subline)`
 	color: ${neutralColors.gray[100]};
 	width: 180px;
 `;
