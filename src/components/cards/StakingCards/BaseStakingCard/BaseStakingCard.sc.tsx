@@ -12,8 +12,8 @@ import {
 	Subline,
 	GLink,
 } from '@giveth/ui-design-system';
-import { Flex } from '../styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
+import { Flex } from '@/components/styled-components/Flex';
 
 export const StakingPoolContainer = styled.div`
 	height: 542px;
@@ -236,4 +236,8 @@ export const GIVgardenTooltip = styled.div`
 	text-align: center;
 	width: 150px;
 	font-size: 0.8em;
+`;
+
+export const HarvestButtonsWrapper = styled(Flex)`
+	flex-direction: column;
 `;

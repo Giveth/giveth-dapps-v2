@@ -10,7 +10,6 @@ import { BigNumber } from 'bignumber.js';
 import { constants } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
 import { Flex } from '@/components/styled-components/Flex';
-import StakingPoolCard from '@/components/cards/StakingPoolCard';
 import config from '@/configuration';
 import {
 	SimplePoolStakingConfig,
@@ -30,7 +29,6 @@ import {
 } from './GIVfarm.sc';
 import RadioButton from '@/components/RadioButton';
 import { NetworkSelector } from '@/components/NetworkSelector';
-import StakingPositionCard from '@/components/cards/StakingPositionCard';
 import { getGivStakingConfig } from '@/helpers/networkProvider';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { useFarms } from '@/context/farm.context';
@@ -39,11 +37,13 @@ import { shortenAddress } from '@/lib/helpers';
 import { Col, Container, Row } from '@/components/Grid';
 
 import { GIVfrens } from '@/components/givfarm/GIVfrens';
-import GIVpowerStakingPoolCard from '../cards/GIVpowerStakingPoolCard';
 import { GIVpowerProvider } from '@/context/givpower.context';
 import { DaoCard } from '../givfarm/DaoCard';
 import { getNowUnixMS } from '@/helpers/time';
 import { TWO_WEEK } from '@/lib/constants/constants';
+import GIVpowerStakingPoolCard from '../cards/StakingCards/GIVpowerCard/GIVpowerStakingPoolCard';
+import StakingPositionCard from '../cards/StakingCards/PositionCard/StakingPositionCard';
+import StakingPoolCard from '../cards/StakingCards/StakingPoolCard';
 
 const renderPool = (
 	pool: SimplePoolStakingConfig | UniswapV3PoolStakingConfig,

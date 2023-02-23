@@ -15,12 +15,12 @@ import {
 import { captureException } from '@sentry/nextjs';
 import { LiquidityPosition } from '@/types/nfts';
 import { Flex } from '@/components/styled-components/Flex';
-import { IconWithTooltip } from '../IconWithToolTip';
+import { IconWithTooltip } from '../../../IconWithToolTip';
 import LoadingAnimation from '@/animations/loading.json';
-import { Pending } from '../modals/HarvestAll.sc';
+import { Pending } from '../../../modals/HarvestAll.sc';
 import LottieControl from '@/components/animations/lottieControl';
-import { IconEthereum } from '../Icons/Eth';
-import { IconGIV } from '../Icons/GIV';
+import { IconEthereum } from '../../../Icons/Eth';
+import { IconGIV } from '../../../Icons/GIV';
 interface IV3StakeCardProps {
 	position: LiquidityPosition;
 	isUnstaking?: boolean;

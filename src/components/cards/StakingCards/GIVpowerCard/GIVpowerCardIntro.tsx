@@ -13,14 +13,14 @@ import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import Link from 'next/link';
 import links from '@/lib/constants/links';
-import TotalGIVpowerBox from '../modals/StakeLock/TotalGIVpowerBox';
-import { Flex, FlexSpacer } from '../styled-components/Flex';
-import { StakeCardState } from './BaseStakingCard';
-import { LockupDetailsModal } from '../modals/LockupDetailsModal';
 import { useGIVpower } from '@/context/givpower.context';
 import { useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import Routes from '@/lib/constants/Routes';
+import { LockupDetailsModal } from '@/components/modals/LockupDetailsModal';
+import TotalGIVpowerBox from '@/components/modals/StakeLock/TotalGIVpowerBox';
+import { FlexSpacer, Flex } from '@/components/styled-components/Flex';
+import { StakeCardState } from '../BaseStakingCard/BaseStakingCard';
 import type { Dispatch, FC, SetStateAction } from 'react';
 
 interface IGIVpowerCardIntro {

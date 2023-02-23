@@ -16,7 +16,7 @@ import { CancelButton, HarvestButton, HelpRow, Pending } from './HarvestAll.sc';
 import { Flex } from '../styled-components/Flex';
 import { PoolStakingConfig } from '@/types/config';
 import { StakingPoolImages } from '../StakingPoolImages';
-import V3StakingCard from '../cards/PositionCard';
+import V3StakingCard from '../cards/StakingCards/PositionCard/PositionCard';
 import LoadingAnimation from '@/animations/loading.json';
 import { exit, getReward, transfer } from '@/lib/stakingNFT';
 import {

@@ -14,7 +14,7 @@ import {
 	P,
 	Subline,
 } from '@giveth/ui-design-system';
-import { constants, ethers } from 'ethers';
+import { constants, BigNumber as EthBignumber } from 'ethers';
 import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
@@ -35,8 +35,8 @@ import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
-import { StakeCardState } from '../cards/BaseStakingCard';
-import StakingCardIntro from '../cards/StakingCardIntro';
+import StakingCardIntro from '../cards/StakingCards/StakingCardIntro';
+import { StakeCardState } from '../cards/StakingCards/BaseStakingCard/BaseStakingCard';
 
 interface RegenStreamProps {
 	network: number;
@@ -64,10 +64,10 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 	const [usdAmount, setUSDAmount] = useState('0');
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
 	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
-	const [lockedAmount, setLockedAmount] = useState<ethers.BigNumber>(
+	const [lockedAmount, setLockedAmount] = useState<EthBignumber>(
 		constants.Zero,
 	);
-	const [claimedAmount, setClaimedAmount] = useState<ethers.BigNumber>(
+	const [claimedAmount, setClaimedAmount] = useState<EthBignumber>(
 		constants.Zero,
 	);
 
@@ -96,9 +96,10 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 		);
 		if (!price || price.isNaN()) return;
 
-		const usd = (+ethers.utils.formatEther(
+		const usd = formatWeiHelper(
 			price.times(rewardLiquidPart.toString()).toFixed(0),
-		)).toFixed(2);
+			2,
+		);
 		setUSDAmount(usd);
 	}, [
 		rewardLiquidPart,

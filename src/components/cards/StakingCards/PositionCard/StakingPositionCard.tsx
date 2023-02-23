@@ -1,17 +1,16 @@
-import React, { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { BigNumber } from 'ethers';
-
 import { SublineBold } from '@giveth/ui-design-system';
-import BaseStakingCard from './BaseStakingCard';
 import { PoolStakingConfig } from '@/types/config';
 import { useStakingNFT } from '@/hooks/useStakingNFT';
+import { useLiquidityPositions } from '@/hooks/useLiquidityPositions';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { YellowDot } from './PositionCard';
+import BaseStakingCard from '../BaseStakingCard/BaseStakingCard';
 import {
 	OutOfRangeBadgeContianer,
 	OutOfRangeTooltip,
-} from './BaseStakingCard.sc';
-import { IconWithTooltip } from '../IconWithToolTip';
-import { useLiquidityPositions } from '@/hooks/useLiquidityPositions';
+} from '../BaseStakingCard/BaseStakingCard.sc';
 
 const OutOfRangeBadge = () => (
 	<OutOfRangeBadgeContianer alignItems='center'>

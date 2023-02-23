@@ -1,5 +1,5 @@
-import BaseStakingCard from './BaseStakingCard';
 import { useStakingPool } from '@/hooks/useStakingPool';
+import BaseStakingCard from './BaseStakingCard/BaseStakingCard';
 import type {
 	RegenFarmConfig,
 	RegenPoolStakingConfig,

@@ -14,7 +14,6 @@ import { constants } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
-import config from '../../configuration';
 import {
 	PoolStakingConfig,
 	RegenFarmConfig,
@@ -40,6 +39,7 @@ import {
 	DisableModalText,
 	FirstDetail,
 	GIVgardenTooltip,
+	HarvestButtonsWrapper,
 	IconContainer,
 	IconHelpFilledWraper,
 	IntroIcon,
@@ -58,25 +58,7 @@ import {
 	StakingPoolSubtitle,
 	WrongNetworkContainer,
 } from './BaseStakingCard.sc';
-import { APRModal } from '../modals/APR';
-import { StakeModal } from '../modals/StakeLock/Stake';
-import { UnStakeModal } from '../modals/Unstake/UnStake';
-import { StakingPoolImages } from '../StakingPoolImages';
-import { V3StakeModal } from '../modals/V3Stake';
-import { IconEthereum } from '../Icons/Eth';
-import { IconGnosisChain } from '../Icons/GnosisChain';
-import { IconGIV } from '../Icons/GIV';
-import { IconHoneyswap } from '../Icons/Honeyswap';
-import { IconBalancer } from '../Icons/Balancer';
-import { IconUniswap } from '../Icons/Uniswap';
-import { HarvestAllModal } from '../modals/HarvestAll';
-import { useFarms } from '@/context/farm.context';
-import { WhatisStreamModal } from '../modals/WhatisStream';
-import { IconSushiswap } from '../Icons/Sushiswap';
-import { UniV3APRModal } from '../modals/UNIv3APR';
-import StakingCardIntro from './StakingCardIntro';
-import { getNowUnixMS } from '@/helpers/time';
-import FarmCountDown from '../FarmCountDown';
+
 import {
 	Flex,
 	FlexCenter,
@@ -84,19 +66,39 @@ import {
 } from '@/components/styled-components/Flex';
 import { IStakeInfo } from '@/hooks/useStakingPool';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
-import { GIVPowerExplainModal } from '../modals/GIVPowerExplain';
-import GIVpowerCardIntro from './GIVpowerCardIntro';
-import LockModal from '../modals/StakeLock/Lock';
-import { StakeGIVModal } from '../modals/StakeLock/StakeGIV';
-import { LockupDetailsModal } from '../modals/LockupDetailsModal';
 import { useAppSelector } from '@/features/hooks';
 import Routes from '@/lib/constants/Routes';
 import { chainName } from '@/lib/constants/constants';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { IconAngelVault } from '../Icons/AngelVault';
-import { IconWithTooltip } from '../IconWithToolTip';
 import { avgAPR } from '@/helpers/givpower';
-import { BridgeGIVModal } from '../modals/BridgeGIV';
+import config from '@/configuration';
+import FarmCountDown from '@/components/FarmCountDown';
+import { IconAngelVault } from '@/components/Icons/AngelVault';
+import { IconBalancer } from '@/components/Icons/Balancer';
+import { IconEthereum } from '@/components/Icons/Eth';
+import { IconGIV } from '@/components/Icons/GIV';
+import { IconGnosisChain } from '@/components/Icons/GnosisChain';
+import { IconHoneyswap } from '@/components/Icons/Honeyswap';
+import { IconSushiswap } from '@/components/Icons/Sushiswap';
+import { IconUniswap } from '@/components/Icons/Uniswap';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
+import { APRModal } from '@/components/modals/APR';
+import { BridgeGIVModal } from '@/components/modals/BridgeGIV';
+import { GIVPowerExplainModal } from '@/components/modals/GIVPowerExplain';
+import { HarvestAllModal } from '@/components/modals/HarvestAll';
+import { LockupDetailsModal } from '@/components/modals/LockupDetailsModal';
+import LockModal from '@/components/modals/StakeLock/Lock';
+import { StakeModal } from '@/components/modals/StakeLock/Stake';
+import { StakeGIVModal } from '@/components/modals/StakeLock/StakeGIV';
+import { UniV3APRModal } from '@/components/modals/UNIv3APR';
+import { UnStakeModal } from '@/components/modals/Unstake/UnStake';
+import { V3StakeModal } from '@/components/modals/V3Stake';
+import { WhatisStreamModal } from '@/components/modals/WhatisStream';
+import { StakingPoolImages } from '@/components/StakingPoolImages';
+import { useFarms } from '@/context/farm.context';
+import { getNowUnixMS } from '@/helpers/time';
+import GIVpowerCardIntro from '../GIVpowerCard/GIVpowerCardIntro';
+import StakingCardIntro from '../StakingCardIntro';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -605,28 +607,30 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 									setStarted={setStarted}
 								/>
 							)}
-							<ClaimButton
-								disabled={exploited || earned.isZero()}
-								onClick={() => setShowHarvestModal(true)}
-								label={formatMessage({
-									id: 'label.harvest_rewards',
-								})}
-								buttonType={
-									isGIVpower ? 'secondary' : 'primary'
-								}
-							/>
-							{isGIVpower && (
+							<HarvestButtonsWrapper>
 								<ClaimButton
-									disabled={availableStakedToken.lte(
-										constants.Zero,
-									)}
-									onClick={() => setShowLockModal(true)}
+									disabled={exploited || earned.isZero()}
+									onClick={() => setShowHarvestModal(true)}
 									label={formatMessage({
-										id: 'label.increase_rewards',
+										id: 'label.harvest_rewards',
 									})}
-									buttonType='primary'
+									buttonType={
+										isGIVpower ? 'secondary' : 'primary'
+									}
 								/>
-							)}
+								{isGIVpower && (
+									<ClaimButton
+										disabled={availableStakedToken.lte(
+											constants.Zero,
+										)}
+										onClick={() => setShowLockModal(true)}
+										label={formatMessage({
+											id: 'label.increase_rewards',
+										})}
+										buttonType='primary'
+									/>
+								)}
+							</HarvestButtonsWrapper>
 							<StakeButtonsRow>
 								<StakeContainer flexDirection='column'>
 									<StakeButton

@@ -1,6 +1,5 @@
-import BaseStakingCard from './BaseStakingCard';
 import { useGIVpower } from '@/context/givpower.context';
-
+import BaseStakingCard from '../BaseStakingCard/BaseStakingCard';
 import type { FC } from 'react';
 
 interface IGIVpowerStakingPoolCardProps {}

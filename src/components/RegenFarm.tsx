@@ -7,7 +7,6 @@ import {
 	regenFarmStreamCardCol,
 	TWO_WEEK,
 } from '@/lib/constants/constants';
-import StakingPoolCard from './cards/StakingPoolCard';
 import { Row, Col } from './Grid';
 import { PoolRow } from './homeTabs/GIVfarm.sc';
 import config from '@/configuration';
@@ -16,6 +15,7 @@ import { DAOChangeNetworkModal } from './DAOChangeNetworkModal';
 import { DAOContainer, DAOChangeNetwork } from './givfarm/GIVfrens.sc';
 import { RegenStreamCard } from './givfarm/RegenStreamCard';
 import { getNowUnixMS } from '@/helpers/time';
+import StakingPoolCard from './cards/StakingCards/StakingPoolCard';
 
 interface IRegenFarmProps {
 	regenFarm: RegenFarmConfig;
