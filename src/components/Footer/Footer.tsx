@@ -113,7 +113,7 @@ const Footer = () => {
 								})}
 							</LinkItem>
 						</a>
-						<Link href={Routes.GIVfriends}>
+						<Link href={Routes.partnerships}>
 							<LinkItem color={textColor}>GIVfriends</LinkItem>
 						</Link>
 						<a href={links.RECRUITEE}>
