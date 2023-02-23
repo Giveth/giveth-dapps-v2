@@ -8,7 +8,6 @@ import {
 	P,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { BigNumber } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
 import { Modal } from '../Modal';
 import { Flex } from '../../styled-components/Flex';
@@ -39,13 +38,11 @@ import { useStakingPool } from '@/hooks/useStakingPool';
 interface IUnStakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
 	regenStreamConfig?: RegenFarmConfig;
-	maxAmount: BigNumber;
 }
 
 export const UnStakeModal: FC<IUnStakeModalProps> = ({
 	poolStakingConfig,
 	regenStreamConfig,
-	maxAmount,
 	setShowModal,
 }) => {
 	const [txHash, setTxHash] = useState('');
@@ -54,7 +51,7 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 	const [unStakeState, setUnstakeState] = useState<StakeState>(
 		StakeState.UNSTAKE,
 	);
-	const { stakedAmount } = useStakingPool(
+	const { stakedAmount, notStakedAmount: maxAmount } = useStakingPool(
 		getGivStakingConfig(config.XDAI_CONFIG),
 	);
 	const { library, chainId } = useWeb3React();
