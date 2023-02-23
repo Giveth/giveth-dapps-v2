@@ -42,7 +42,7 @@ export const useStakingPool = (
 			? xDaiValues
 			: mainnetValues;
 	const { isLoaded } = currentValues;
-	const { type, LM_ADDRESS } = poolStakingConfig;
+	const { type } = poolStakingConfig;
 	const providerNetwork = library?.network?.chainId;
 	const _library = chainId === network ? library : undefined;
 
