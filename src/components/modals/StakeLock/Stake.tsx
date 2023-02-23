@@ -41,12 +41,32 @@ import {
 import LottieControl from '@/components/animations/lottieControl';
 import { useStakingPool } from '@/hooks/useStakingPool';
 
-interface IStakeModalProps extends IModal {
+interface IStakeInnerModalProps {
 	poolStakingConfig: PoolStakingConfig;
 	regenStreamConfig?: RegenFarmConfig;
 }
 
+interface IStakeModalProps extends IModal, IStakeInnerModalProps {}
+
 export const StakeModal: FC<IStakeModalProps> = ({
+	poolStakingConfig,
+	regenStreamConfig,
+	setShowModal,
+}) => {
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+
+	return (
+		<Modal closeModal={closeModal} isAnimating={isAnimating}>
+			<StakeInnerModal
+				poolStakingConfig={poolStakingConfig}
+				regenStreamConfig={regenStreamConfig}
+				setShowModal={setShowModal}
+			/>
+		</Modal>
+	);
+};
+
+const StakeInnerModal: FC<IStakeModalProps> = ({
 	poolStakingConfig,
 	regenStreamConfig,
 	setShowModal,
@@ -58,7 +78,6 @@ export const StakeModal: FC<IStakeModalProps> = ({
 		StakeState.APPROVE,
 	);
 	const { chainId, library } = useWeb3React();
-	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { notStakedAmount: maxAmount } = useStakingPool(poolStakingConfig);
 
 	const { title, LM_ADDRESS, POOL_ADDRESS, platform } =
@@ -175,135 +194,121 @@ export const StakeModal: FC<IStakeModalProps> = ({
 			setStakeState(StakeState.STAKE);
 		}
 	};
-
 	return (
-		<Modal closeModal={closeModal} isAnimating={isAnimating}>
-			<StakeModalContainer>
-				{stakeState !== StakeState.CONFIRMING &&
-					stakeState !== StakeState.CONFIRMED &&
-					stakeState !== StakeState.ERROR && (
-						<>
-							<StakeModalTitle alignItems='center'>
-								<StakingPoolImages title={title} />
-								<StakeModalTitleText weight={700}>
-									Stake
-								</StakeModalTitleText>
-							</StakeModalTitle>
-							<StakeInnerModalContainer>
-								<StakeSteps stakeState={stakeState} />
-								<AmountInput
-									setAmount={setAmount}
-									maxAmount={maxAmount}
-									poolStakingConfig={poolStakingConfig}
+		<StakeModalContainer>
+			{stakeState !== StakeState.CONFIRMING &&
+				stakeState !== StakeState.CONFIRMED &&
+				stakeState !== StakeState.ERROR && (
+					<>
+						<StakeModalTitle alignItems='center'>
+							<StakingPoolImages title={title} />
+							<StakeModalTitleText weight={700}>
+								Stake
+							</StakeModalTitleText>
+						</StakeModalTitle>
+						<StakeInnerModalContainer>
+							<StakeSteps stakeState={stakeState} />
+							<AmountInput
+								setAmount={setAmount}
+								maxAmount={maxAmount}
+								poolStakingConfig={poolStakingConfig}
+								disabled={
+									!(
+										stakeState === StakeState.APPROVE ||
+										stakeState === StakeState.STAKE
+									)
+								}
+							/>
+							{!onlyApproveMode && (
+								<ToggleContainer>
+									<ToggleSwitch
+										checked={permit}
+										disabled={
+											!(
+												stakeState ===
+													StakeState.APPROVE ||
+												stakeState === StakeState.STAKE
+											)
+										}
+										setStateChange={handlePermit}
+									/>
+									<P>{permit ? 'Permit' : 'Approve'} mode</P>
+								</ToggleContainer>
+							)}
+							{stakeState === StakeState.APPROVE && (
+								<StyledOutlineButton
+									label={'APPROVE'}
+									onClick={onApprove}
 									disabled={
-										!(
-											stakeState === StakeState.APPROVE ||
-											stakeState === StakeState.STAKE
-										)
+										amount == '0' || maxAmount.lt(amount)
 									}
 								/>
-								{!onlyApproveMode && (
-									<ToggleContainer>
-										<ToggleSwitch
-											checked={permit}
-											disabled={
-												!(
-													stakeState ===
-														StakeState.APPROVE ||
-													stakeState ===
-														StakeState.STAKE
-												)
-											}
-											setStateChange={handlePermit}
-										/>
-										<P>
-											{permit ? 'Permit' : 'Approve'} mode
-										</P>
-									</ToggleContainer>
-								)}
-								{stakeState === StakeState.APPROVE && (
-									<StyledOutlineButton
-										label={'APPROVE'}
-										onClick={onApprove}
-										disabled={
-											amount == '0' ||
-											maxAmount.lt(amount)
-										}
+							)}
+							{stakeState === StakeState.APPROVING && (
+								<Pending>
+									<LottieControl
+										animationData={LoadingAnimation}
+										size={40}
 									/>
-								)}
-								{stakeState === StakeState.APPROVING && (
-									<Pending>
-										<LottieControl
-											animationData={LoadingAnimation}
-											size={40}
-										/>
-										&nbsp;APPROVE PENDING
-									</Pending>
-								)}
-								{stakeState === StakeState.STAKE && (
-									<StyledButton
-										label={'STAKE'}
-										onClick={onStake}
-										disabled={
-											amount == '0' ||
-											maxAmount.lt(amount)
-										}
-										buttonType='primary'
-									/>
-								)}
-								{stakeState === StakeState.STAKING && (
-									<Pending>
-										<LottieControl
-											animationData={LoadingAnimation}
-											size={40}
-										/>
-										&nbsp;STAKE PENDING
-									</Pending>
-								)}
-								<CancelButton
-									buttonType='texty'
-									label='CANCEL'
-									onClick={() => {
-										setShowModal(false);
-									}}
+									&nbsp;APPROVE PENDING
+								</Pending>
+							)}
+							{stakeState === StakeState.STAKE && (
+								<StyledButton
+									label={'STAKE'}
+									onClick={onStake}
+									disabled={
+										amount == '0' || maxAmount.lt(amount)
+									}
+									buttonType='primary'
 								/>
-							</StakeInnerModalContainer>
-						</>
-					)}
-				{chainId && stakeState === StakeState.CONFIRMING && (
-					<SubmittedInnerModal
-						title={title}
-						walletNetwork={chainId}
-						txHash={txHash}
-						rewardTokenAddress={
-							regenStreamConfig?.rewardTokenAddress
-						}
-						rewardTokenSymbol={regenStreamConfig?.rewardTokenSymbol}
-					/>
+							)}
+							{stakeState === StakeState.STAKING && (
+								<Pending>
+									<LottieControl
+										animationData={LoadingAnimation}
+										size={40}
+									/>
+									&nbsp;STAKE PENDING
+								</Pending>
+							)}
+							<CancelButton
+								buttonType='texty'
+								label='CANCEL'
+								onClick={() => {
+									setShowModal(false);
+								}}
+							/>
+						</StakeInnerModalContainer>
+					</>
 				)}
-				{chainId && stakeState === StakeState.CONFIRMED && (
-					<ConfirmedInnerModal
-						title={title}
-						walletNetwork={chainId}
-						txHash={txHash}
-						rewardTokenAddress={
-							regenStreamConfig?.rewardTokenAddress
-						}
-						rewardTokenSymbol={regenStreamConfig?.rewardTokenSymbol}
-					/>
-				)}
-				{chainId && stakeState === StakeState.ERROR && (
-					<ErrorInnerModal
-						title='Something went wrong!'
-						walletNetwork={chainId}
-						txHash={txHash}
-						rewardTokenAddress={
-							regenStreamConfig?.rewardTokenAddress
-						}
-						rewardTokenSymbol={regenStreamConfig?.rewardTokenSymbol}
-					/>
-				)}
-			</StakeModalContainer>
-		</Modal>
+			{chainId && stakeState === StakeState.CONFIRMING && (
+				<SubmittedInnerModal
+					title={title}
+					walletNetwork={chainId}
+					txHash={txHash}
+					rewardTokenAddress={regenStreamConfig?.rewardTokenAddress}
+					rewardTokenSymbol={regenStreamConfig?.rewardTokenSymbol}
+				/>
+			)}
+			{chainId && stakeState === StakeState.CONFIRMED && (
+				<ConfirmedInnerModal
+					title={title}
+					walletNetwork={chainId}
+					txHash={txHash}
+					rewardTokenAddress={regenStreamConfig?.rewardTokenAddress}
+					rewardTokenSymbol={regenStreamConfig?.rewardTokenSymbol}
+				/>
+			)}
+			{chainId && stakeState === StakeState.ERROR && (
+				<ErrorInnerModal
+					title='Something went wrong!'
+					walletNetwork={chainId}
+					txHash={txHash}
+					rewardTokenAddress={regenStreamConfig?.rewardTokenAddress}
+					rewardTokenSymbol={regenStreamConfig?.rewardTokenSymbol}
+				/>
+			)}
+		</StakeModalContainer>
 	);
 };
