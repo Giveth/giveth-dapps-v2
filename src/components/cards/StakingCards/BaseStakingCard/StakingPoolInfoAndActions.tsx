@@ -52,6 +52,7 @@ interface IStakingPoolInfoAndActionsProps {
 	isGIVpower: boolean;
 	setShowAPRModal: React.Dispatch<React.SetStateAction<boolean>>;
 	setShowStakeModal: React.Dispatch<React.SetStateAction<boolean>>;
+	setShowUnStakeModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
@@ -61,6 +62,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	isGIVpower,
 	setShowAPRModal,
 	setShowStakeModal,
+	setShowUnStakeModal,
 }) => {
 	const [started, setStarted] = useState(true);
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
@@ -341,7 +343,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 						})}
 						size='small'
 						disabled={availableStakedToken.isZero()}
-						// onClick={() => setShowUnStakeModal(true)}
+						onClick={() => setShowUnStakeModal(true)}
 					/>
 					<FlexCenter gap='5px'>
 						<StakeAmount>

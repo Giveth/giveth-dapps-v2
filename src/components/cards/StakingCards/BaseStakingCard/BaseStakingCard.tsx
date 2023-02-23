@@ -212,6 +212,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							isGIVpower={isGIVpower}
 							setShowAPRModal={setShowAPRModal}
 							setShowStakeModal={setShowStakeModal}
+							setShowUnStakeModal={setShowUnStakeModal}
 						/>
 					</>
 				) : state === StakeCardState.GIVPOWER_INTRO ? (
