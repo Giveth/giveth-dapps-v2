@@ -39,17 +39,16 @@ import {
 	StakingPlatform,
 } from '@/types/config';
 import LottieControl from '@/components/animations/lottieControl';
+import { useStakingPool } from '@/hooks/useStakingPool';
 
 interface IStakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
 	regenStreamConfig?: RegenFarmConfig;
-	maxAmount: BigNumber;
 }
 
 export const StakeModal: FC<IStakeModalProps> = ({
 	poolStakingConfig,
 	regenStreamConfig,
-	maxAmount,
 	setShowModal,
 }) => {
 	const [amount, setAmount] = useState('0');
@@ -60,6 +59,7 @@ export const StakeModal: FC<IStakeModalProps> = ({
 	);
 	const { chainId, library } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const { notStakedAmount: maxAmount } = useStakingPool(poolStakingConfig);
 
 	const { title, LM_ADDRESS, POOL_ADDRESS, platform } =
 		poolStakingConfig as SimplePoolStakingConfig;
