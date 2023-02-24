@@ -16,15 +16,15 @@ import { Item } from './Item';
 
 const giveconomyItems = [
 	{
-		title: 'The economy of giving',
+		title: 'An Economy of Giving',
 		label: 'Giveconomy',
 		href: Routes.GIVECONOMY,
 	},
-	{ title: 'The governance', label: 'GIVgarden', href: Routes.GIVgarden },
-	{ title: 'Liquidity to earn', label: 'GIVfarm', href: Routes.GIVfarm },
-	{ title: 'Donors reward', label: 'GIVbacks', href: Routes.GIVbacks },
-	{ title: 'Invest your GIV', label: 'GIVpower', href: Routes.GIVpower },
-	{ title: 'Giveth rewards', label: 'GIVstream', href: Routes.GIVstream },
+	{ title: 'Governance', label: 'GIVgarden', href: Routes.GIVgarden },
+	{ title: 'Earn with Liqudity', label: 'GIVfarm', href: Routes.GIVfarm },
+	{ title: 'Donor Rewards', label: 'GIVbacks', href: Routes.GIVbacks },
+	{ title: 'Curate Projects', label: 'GIVpower', href: Routes.GIVpower },
+	{ title: 'Streamed Rewards', label: 'GIVstream', href: Routes.GIVstream },
 ];
 
 export const GIVeconomyItems = () => {
@@ -34,7 +34,7 @@ export const GIVeconomyItems = () => {
 		<>
 			<Link href={Routes.GIVfarm}>
 				<Item isHighlighted theme={theme}>
-					<ItemTitle theme={theme}>Liquidity</ItemTitle>
+					<ItemTitle theme={theme}>Use your GIV</ItemTitle>
 					<ItemRow>
 						<B>GIVfarm</B>
 						<IconGIVFarm
@@ -48,7 +48,7 @@ export const GIVeconomyItems = () => {
 					</ItemRow>
 				</Item>
 			</Link>
-			<LabelStyle medium>Learn about</LabelStyle>
+			<LabelStyle medium>Explore</LabelStyle>
 			{giveconomyItems.map((item, idx) => (
 				<Link key={idx} href={item.href}>
 					<Item theme={theme}>

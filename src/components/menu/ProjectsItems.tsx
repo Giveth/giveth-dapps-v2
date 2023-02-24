@@ -13,15 +13,15 @@ const projectsItems = {
 	explore: [
 		// { name: 'Trending', query: '?q=?q=trending' },
 		{
-			name: 'Recently updated',
+			name: 'Recently Updated',
 			query: '?sort=' + EProjectsSortBy.RECENTLY_UPDATED,
 		},
 		{
-			name: 'Just launched',
+			name: 'Just Launched',
 			query: '?sort=' + EProjectsSortBy.NEWEST,
 		},
 		// { name: 'Popular', query: '?q=popular' },
-		{ name: 'All projects', query: '' },
+		{ name: 'All Projects', query: '' },
 	],
 };
 
