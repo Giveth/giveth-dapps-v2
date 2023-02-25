@@ -3,11 +3,13 @@ import { neutralColors } from '@giveth/ui-design-system';
 import ImpactQuests from '@/components/views/landings/EthDenver/impactQuest/ImpactQuests';
 import ImpactDenver from '@/components/views/landings/EthDenver/impactQuest/ImpactDenver';
 import Partners from '@/components/views/landings/EthDenver/impactQuest/Partners';
+import ImpactTrackMentorship from '@/components/views/landings/EthDenver/impactQuest/ImpactTrackMentorship';
 
 const ImpactQuest = () => {
 	return (
 		<Wrapper>
 			<ImpactQuests />
+			<ImpactTrackMentorship />
 			<ImpactDenver />
 			<Partners />
 		</Wrapper>
