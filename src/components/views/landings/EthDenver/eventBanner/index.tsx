@@ -9,20 +9,27 @@ import Image from 'next/image';
 const EventBanner = () => {
 	return (
 		<Wrapper>
-			<TextBox>
-				<H5>Learn What We’re Up To and How to Get Involved!</H5>
-				<H1Styled weight={700}>Giveth at ETHDenver 2023</H1Styled>
-				<Image src={ETHDenverIcon} alt='ETHDenver 2023' />
-			</TextBox>
-			<SporkWhale>
-				<Image src={SporkWhaleIcon} alt='Spork Whale' />
-			</SporkWhale>
-			<GoldSpork>
-				<Image src={GoldSporkIcon} alt='Gold Spork' />
-			</GoldSpork>
+			<InnerWrapper>
+				<TextBox>
+					<H5>Learn What We’re Up To and How to Get Involved!</H5>
+					<H1Styled weight={700}>Giveth at ETHDenver 2023</H1Styled>
+					<Image src={ETHDenverIcon} alt='ETHDenver 2023' />
+				</TextBox>
+				<SporkWhale>
+					<Image src={SporkWhaleIcon} alt='Spork Whale' />
+				</SporkWhale>
+				<GoldSpork>
+					<Image src={GoldSporkIcon} alt='Gold Spork' />
+				</GoldSpork>
+			</InnerWrapper>
 		</Wrapper>
 	);
 };
+
+const InnerWrapper = styled.div`
+	max-width: 1200px;
+	margin: 0 auto;
+`;
 
 const TextBox = styled.div`
 	max-width: 701px;
