@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { neutralColors } from '@giveth/ui-design-system';
-import EventBanner from '@/components/views/landings/EthDenver/eventBanner';
-import EventDetails from '@/components/views/landings/EthDenver/eventDetails';
+import EventBanner from '@/components/views/landings/EthDenver/EventBanner';
+import EventDetails from '@/components/views/landings/EthDenver/EventDetails';
 import GivethTalks from '@/components/views/landings/EthDenver/givethTalks';
 import GivethSwag from '@/components/views/landings/EthDenver/GivethSwag';
 import ImpactQuest from '@/components/views/landings/EthDenver/impactQuest';
