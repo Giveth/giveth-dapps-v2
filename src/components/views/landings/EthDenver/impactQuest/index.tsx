@@ -1,16 +1,22 @@
 import styled from 'styled-components';
 import { neutralColors } from '@giveth/ui-design-system';
+import { FC } from 'react';
 import ImpactQuests from '@/components/views/landings/EthDenver/impactQuest/ImpactQuests';
 import ImpactDenver from '@/components/views/landings/EthDenver/impactQuest/ImpactDenver';
 import Partners from '@/components/views/landings/EthDenver/impactQuest/Partners';
 import ImpactTrackMentorship from '@/components/views/landings/EthDenver/impactQuest/ImpactTrackMentorship';
+import { ICampaign } from '@/apollo/types/types';
 
-const ImpactQuest = () => {
+interface IImpactQuest {
+	campaign?: ICampaign;
+}
+
+const ImpactQuest: FC<IImpactQuest> = ({ campaign }) => {
 	return (
 		<Wrapper>
 			<ImpactQuests />
 			<ImpactTrackMentorship />
-			<ImpactDenver />
+			<ImpactDenver campaign={campaign} />
 			<Partners />
 		</Wrapper>
 	);

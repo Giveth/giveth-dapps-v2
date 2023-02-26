@@ -26,7 +26,7 @@ export const getStaticProps: GetStaticProps = async context => {
 		const { data } = await client.query({
 			query: FETCH_CAMPAIGN_BY_SLUG,
 			variables: {
-				slug: 'buenos-dias',
+				slug: 'ethDenver',
 			},
 			fetchPolicy: 'no-cache',
 		});
