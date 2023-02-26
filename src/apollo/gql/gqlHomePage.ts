@@ -7,8 +7,6 @@ export const HOMEPAGE_DATA = gql`
 		$skipLatestUpdates: Int
 		$fromDate: String
 		$toDate: String
-		$limit: Int
-		$sortingBy: SortingField
 	) {
 		recentDonations(take: $take) {
 			createdAt
@@ -53,12 +51,6 @@ export const HOMEPAGE_DATA = gql`
 				}
 			}
 			count
-		}
-		allProjects(limit: $limit, sortingBy: $sortingBy) {
-			projects {
-				id
-			}
-			totalCount
 		}
 		campaigns {
 			id
