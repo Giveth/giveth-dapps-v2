@@ -10,7 +10,6 @@ import {
 } from '@/apollo/types/types';
 import { homeMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
-import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import { HOMEPAGE_DATA } from '@/apollo/gql/gqlHomePage';
 
 export interface IHomeRoute {
@@ -32,43 +31,31 @@ const HomeRoute = (props: IHomeRoute) => {
 };
 
 export const getStaticProps: GetStaticProps = async context => {
-	try {
-		const { data } = await client.query({
-			query: HOMEPAGE_DATA,
-			variables: {
-				take: 50,
-				takeLatestUpdates: 50,
-				skipLatestUpdates: 0,
-				fromDate: '2021-01-01',
-				limit: 12,
-				sortingBy: EProjectsSortBy.GIVPOWER,
-			},
-			fetchPolicy: 'no-cache',
-		});
-		return {
-			props: {
-				projects: data.allProjects.projects,
-				totalCount: data.allProjects.totalCount,
-				recentDonations: data.recentDonations,
-				projectsPerDate: data.projectsPerDate,
-				totalDonorsCountPerDate: data.totalDonorsCountPerDate,
-				donationsTotalUsdPerDate: data.donationsTotalUsdPerDate,
-				latestUpdates: data.projectUpdates.projectUpdates,
-				campaigns: data.campaigns,
-			},
-			revalidate: 600,
-		};
-	} catch (error: any) {
-		console.log('error', error);
-		const statusCode = transformGraphQLErrorsToStatusCode(
-			error?.graphQLErrors,
-		);
-		return {
-			props: {
-				errorStatus: statusCode,
-			},
-		};
-	}
+	const { data } = await client.query({
+		query: HOMEPAGE_DATA,
+		variables: {
+			take: 50,
+			takeLatestUpdates: 50,
+			skipLatestUpdates: 0,
+			fromDate: '2021-01-01',
+			limit: 12,
+			sortingBy: EProjectsSortBy.GIVPOWER,
+		},
+		fetchPolicy: 'no-cache',
+	});
+	return {
+		props: {
+			projects: data.allProjects.projects,
+			totalCount: data.allProjects.totalCount,
+			recentDonations: data.recentDonations,
+			projectsPerDate: data.projectsPerDate,
+			totalDonorsCountPerDate: data.totalDonorsCountPerDate,
+			donationsTotalUsdPerDate: data.donationsTotalUsdPerDate,
+			latestUpdates: data.projectUpdates.projectUpdates,
+			campaigns: data.campaigns,
+		},
+		revalidate: 600,
+	};
 };
 
 export default HomeRoute;
