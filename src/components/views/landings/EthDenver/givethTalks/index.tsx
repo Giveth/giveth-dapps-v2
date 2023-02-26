@@ -46,22 +46,6 @@ const GivethTalks = () => {
 				<Calendar xs={12} md={6} xl={8}>
 					<Flex flexDirection='column' gap='40px'>
 						<CalendarItem
-							title='Combating the Metacrisis'
-							lecturer='Griff Green'
-							date='Mar 03, 2023'
-							time='13:00 - 13:15 MST'
-							link='https://events.ethdenver.com/eden23/attendease/networking/experience/9dfae4fa-a017-47bb-837c-e2b7b8da8468/af96b57b-a734-45c0-918f-f32bb030cbcc'
-							calendarLink='https://calendar.google.com/calendar/event?action=TEMPLATE&tmeid=MGYxZ25uNWJjc25qdmVpdWFzMHQxNmk0YnIgZ2l2ZXRoZXRoZGVudmVyQG0&tmsrc=givethethdenver%40gmail.com'
-						/>
-						<CalendarItem
-							title='Why DAOs will change the world'
-							lecturer='Lauren Luz'
-							date='Mar 04, 2023'
-							time='10:20 - 10:40 MST'
-							link='https://events.ethdenver.com/eden23/attendease/networking/experience/3185f05e-1283-47c4-b1cd-c456c3b6af3a/dd50c09c-f707-4389-a60a-75c2d37c2aa5'
-							calendarLink='https://calendar.google.com/calendar/event?action=TEMPLATE&tmeid=MjAwN3Nwc2dvbGhuNWh2N3B1cjdiZDg5c24gZ2l2ZXRoZXRoZGVudmVyQG0&tmsrc=givethethdenver%40gmail.com'
-						/>
-						<CalendarItem
 							title='DAO it like you mean it'
 							lecturer='Lauren Luz'
 							date='Feb 28, 2023'
@@ -76,6 +60,22 @@ const GivethTalks = () => {
 							time='3:40PM MST'
 							link='https://events.ethdenver.com/eden23/attendease/networking/experience/bf427728-b151-4edf-ab90-f501a3d84970/212d0aa6-f013-45af-8b31-f98155087c88'
 							calendarLink='https://calendar.google.com/calendar/event?action=TEMPLATE&tmeid=NzBlNG85YTUyMGFucTI3c3M2MjBmM2YxMjUgZ2l2ZXRoZXRoZGVudmVyQG0&tmsrc=givethethdenver%40gmail.com'
+						/>
+						<CalendarItem
+							title='Why DAOs will change the world'
+							lecturer='Lauren Luz'
+							date='Mar 04, 2023'
+							time='10:20 - 10:40 MST'
+							link='https://events.ethdenver.com/eden23/attendease/networking/experience/3185f05e-1283-47c4-b1cd-c456c3b6af3a/dd50c09c-f707-4389-a60a-75c2d37c2aa5'
+							calendarLink='https://calendar.google.com/calendar/event?action=TEMPLATE&tmeid=MjAwN3Nwc2dvbGhuNWh2N3B1cjdiZDg5c24gZ2l2ZXRoZXRoZGVudmVyQG0&tmsrc=givethethdenver%40gmail.com'
+						/>
+						<CalendarItem
+							title='Combating the Metacrisis'
+							lecturer='Griff Green'
+							date='Mar 03, 2023'
+							time='13:00 - 13:15 MST'
+							link='https://events.ethdenver.com/eden23/attendease/networking/experience/9dfae4fa-a017-47bb-837c-e2b7b8da8468/af96b57b-a734-45c0-918f-f32bb030cbcc'
+							calendarLink='https://calendar.google.com/calendar/event?action=TEMPLATE&tmeid=MGYxZ25uNWJjc25qdmVpdWFzMHQxNmk0YnIgZ2l2ZXRoZXRoZGVudmVyQG0&tmsrc=givethethdenver%40gmail.com'
 						/>
 					</Flex>
 				</Calendar>
