@@ -11,16 +11,18 @@ import CalendarGray from '/public/images/calendar-gray.svg';
 import ClockBlack from '/public/images/clock-black.svg';
 import Image from 'next/image';
 import { GhostButton } from '@/components/styled-components/Button';
+import ExternalLink from '@/components/ExternalLink';
 
 interface IProps {
 	title: string;
 	lecturer: string;
 	date: string;
 	time: string;
+	link: string;
 }
 
 const CalendarItem: FC<IProps> = props => {
-	const { title, lecturer, date, time } = props;
+	const { title, lecturer, date, time, link } = props;
 	return (
 		<Wrapper>
 			<H5 weight={700}>{title}</H5>
@@ -33,11 +35,13 @@ const CalendarItem: FC<IProps> = props => {
 				<B>{time}</B>
 			</DateTime>
 			<Buttons>
-				<GhostButton
-					label='LEARN MORE'
-					size='large'
-					icon={<IconExternalLink24 />}
-				/>
+				<ExternalLink href={link}>
+					<GhostButton
+						label='LEARN MORE'
+						size='large'
+						icon={<IconExternalLink24 />}
+					/>
+				</ExternalLink>
 				<GhostButton
 					label='Add to calendar'
 					size='large'

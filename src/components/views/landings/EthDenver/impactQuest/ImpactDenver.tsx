@@ -1,7 +1,6 @@
 import styled from 'styled-components';
-import { brandColors, H1, Lead } from '@giveth/ui-design-system';
+import { H1, Lead } from '@giveth/ui-design-system';
 import { FC, useEffect, useState } from 'react';
-import ExternalLink from '@/components/ExternalLink';
 import { client } from '@/apollo/apolloClient';
 import { ICampaign } from '@/apollo/types/types';
 import ProjectsCampaignBlock from '@/components/views/homepage/ProjectsCampaignBlock';
@@ -43,14 +42,9 @@ const ImpactDenver: FC<IImpactDenver> = props => {
 			<H1 weight={700}>Impact @ Denver</H1>
 			<Lead size='large'>
 				We’re all about supporting real world impact at Giveth. If
-				you’re feeling generous and want to take part in our{' '}
-				<ExternalLink
-					color={brandColors.pinky[500]}
-					href=''
-					title='Impact Quests'
-				/>
-				, discover some of our favorite on-the-ground projects in the
-				Denver area.
+				you’re feeling generous and want to take part in our Impact
+				Quests, discover some of our favorite on-the-ground projects in
+				the Denver area.
 			</Lead>
 			{campaign && <ProjectsCampaignBlock campaign={campaign} />}
 		</Wrapper>
