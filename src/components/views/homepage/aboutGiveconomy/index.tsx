@@ -75,7 +75,7 @@ const AboutGiveconomy = () => {
 						<ImageBox>
 							<Image
 								className='earn-img'
-								src='/images/earn-rewards.png'
+								src='/images/earn-rewards.svg'
 								width={476}
 								height={460}
 								alt='GIVpower'
@@ -112,7 +112,7 @@ const AboutGiveconomy = () => {
 						<ImageBox>
 							<Image
 								className='elevate-img'
-								src='/images/GIVpower.png'
+								src='/images/GIVpower.svg'
 								width={476}
 								height={460}
 								alt='GIVpower'
@@ -152,7 +152,7 @@ const AboutGiveconomy = () => {
 						<ImageBox>
 							<Image
 								className='enable-img'
-								src='/images/enable-change-earth.png'
+								src='/images/enable-change-earth.svg'
 								width={476}
 								height={460}
 								alt='GIVpower'
