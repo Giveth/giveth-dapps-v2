@@ -21,7 +21,7 @@ const EventDetails = () => {
 				team at <b>ETHDenver</b> and make an impact!
 			</H4>
 			<FindUs>
-				<Col xs={12} sm={6}>
+				<Col xs={12} md={6}>
 					<FindUsText>
 						<H3 weight={700}>Where to find us?</H3>
 						<Lead size='large'>
