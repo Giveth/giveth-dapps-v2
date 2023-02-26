@@ -73,7 +73,7 @@ const VideoBlock = () => {
 								onEnded={handleVideoEnd}
 							>
 								<source
-									src='/video/givpower.mp4'
+									src='/video/homepage-intro.mp4'
 									type='video/mp4'
 								/>
 							</video>
