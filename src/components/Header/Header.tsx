@@ -214,7 +214,7 @@ const Header: FC<IHeader> = () => {
 					</LinkWithMenu>
 					<HeaderLink theme={theme}>
 						<Link href={Routes.Join}>
-							<GLink>Community</GLink>
+							<GLink size='Big'>Community</GLink>
 						</Link>
 					</HeaderLink>
 					<SearchButton
@@ -222,7 +222,7 @@ const Header: FC<IHeader> = () => {
 						onClick={() => dispatch(setShowSearchModal(true))}
 					>
 						<Flex alignItems='center' gap='16px'>
-							<GLink>Search projects</GLink>
+							<GLink size='Big'>Search projects</GLink>
 							<IconSearch24 />
 						</Flex>
 					</SearchButton>
