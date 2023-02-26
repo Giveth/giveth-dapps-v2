@@ -40,9 +40,9 @@ const EventDetails = () => {
 						/>
 					</FindUsText>
 				</Col>
-				<Col xs={12} sm={6}>
+				<Col xs={12} md={6}>
 					<Map>
-						<Image src={MapImage} alt='ETHDenver map' />
+						<CustomImage src={MapImage} alt='ETHDenver map' />
 					</Map>
 				</Col>
 			</FindUs>
@@ -83,7 +83,7 @@ const FindUsText = styled.div`
 `;
 
 const Map = styled.div`
-	max-width: 100%;
+	/* max-width: 300px; */
 `;
 
 const CustomImage = styled(Image)`
