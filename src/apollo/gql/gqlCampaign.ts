@@ -7,6 +7,7 @@ export const FETCH_CAMPAIGNS = gql`
 			title
 			slug
 			isFeatured
+			isNew
 			description
 			relatedProjects {
 				id
