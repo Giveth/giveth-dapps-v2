@@ -49,10 +49,12 @@ const VideoBlock = () => {
 			<Container>
 				<CustomFlex alignItems='center'>
 					<Flex flexDirection='column' gap='24px'>
-						<H2>{formatMessage({ id: 'label.what_is_giveth' })}</H2>
-						<H4>
+						<H2 weight={700}>
+							{formatMessage({ id: 'label.what_is_giveth' })}
+						</H2>
+						<Desc>
 							{formatMessage({ id: 'label.what_people_say' })}
-						</H4>
+						</Desc>
 						<Link href={Routes.AboutUs} passHref>
 							<AboutUsButton
 								linkType='texty-secondary'
@@ -160,6 +162,10 @@ const QuarterCircleContainer = styled.div`
 
 const AboutUsButton = styled(ButtonLink)`
 	max-width: 200px;
+`;
+
+const Desc = styled(H4)`
+	color: ${neutralColors.gray[800]};
 `;
 
 export default VideoBlock;
