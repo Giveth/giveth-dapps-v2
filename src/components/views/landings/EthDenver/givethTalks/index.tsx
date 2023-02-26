@@ -25,13 +25,22 @@ const GivethTalks = () => {
 						the Future of Giving, check out these upcoming
 						presentations at ETH Denver!
 					</Lead>
-					<ButtonStyled
-						label='Add all to calendar'
-						icon={
-							<Image src={CalendarWhite} alt='Calendar black' />
-						}
-						size='small'
-					/>
+					<a
+						href='https://calendar.google.com/calendar/u/0?cid=Z2l2ZXRoZXRoZGVudmVyQGdtYWlsLmNvbQ'
+						target='_blank'
+						rel='noreferrer'
+					>
+						<ButtonStyled
+							label='Add all to calendar'
+							icon={
+								<Image
+									src={CalendarWhite}
+									alt='Calendar black'
+								/>
+							}
+							size='small'
+						/>
+					</a>
 				</Talks>
 				<Calendar xs={12} md={6} xl={8}>
 					<CalendarItem
