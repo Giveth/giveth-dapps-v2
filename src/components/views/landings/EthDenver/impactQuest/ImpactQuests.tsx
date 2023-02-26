@@ -34,18 +34,15 @@ const ImpactQuests = () => {
 					/>
 				</Col>
 				<Col xs={12} md={6}>
-					<Img>
-						<Image src={PizzaImage} alt='EthDenver Pizza Image' />
-					</Img>
+					<Img src={PizzaImage} alt='EthDenver Pizza Image' />
 				</Col>
 			</Row>
 		</Wrapper>
 	);
 };
 
-const Img = styled.div`
-	display: flex;
-	justify-content: center;
+const Img = styled(Image)`
+	max-width: 100%;
 `;
 
 const LeadStyled = styled(Lead)`
