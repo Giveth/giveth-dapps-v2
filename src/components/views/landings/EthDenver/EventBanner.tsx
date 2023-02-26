@@ -5,6 +5,7 @@ import SporkWhaleIcon from '/public/images/ETHDenver-spork-whale.png';
 import GoldSporkIcon from '/public/images/ETHDenver-gold-sporke.png';
 import Image from 'next/image';
 import { Container } from '@/components/Grid';
+import { mediaQueries } from '@/lib/constants/constants';
 
 const EventBanner = () => {
 	return (
@@ -33,13 +34,23 @@ const TextBox = styled.div`
 const GoldSpork = styled.div`
 	position: absolute;
 	bottom: 0;
-	right: 155px;
+	display: none;
+	overflow: hidden;
+	${mediaQueries.laptopS} {
+		margin-top: 160px;
+		right: -50px;
+		display: inline-block;
+	}
+	${mediaQueries.desktop} {
+		right: 155px;
+		display: inline-block;
+	}
 `;
 
 const SporkWhale = styled.div`
 	position: absolute;
 	top: 0;
-	left: 520px;
+	left: 30%;
 `;
 
 const H1Styled = styled(H1)`
@@ -49,7 +60,7 @@ const H1Styled = styled(H1)`
 
 const Wrapper = styled.div`
 	position: relative;
-	padding: 224px 86px 177px;
+	padding: 224px 0px;
 	background-image: url('/images/ETHDenver-banner.png');
 	background-repeat: no-repeat;
 	background-size: cover;

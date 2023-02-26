@@ -11,7 +11,7 @@ import DiscordIcon from '/public/images/ETHDenver-discord.svg';
 import MapImage from '/public/images/ETHDenver-map.png';
 import Image from 'next/image';
 import { GhostButton } from '@/components/styled-components/Button';
-import { Container, Row } from '@/components/Grid';
+import { Col, Container, Row } from '@/components/Grid';
 
 const EventDetails = () => {
 	return (
@@ -21,29 +21,33 @@ const EventDetails = () => {
 				team at <b>ETHDenver</b> and make an impact!
 			</H4>
 			<FindUs>
-				<FindUsText>
-					<H3 weight={700}>Where to find us?</H3>
-					<Lead size='large'>
-						If you’re attending the conference in person, come visit
-						our booth! Find us at:
+				<Col xs={12} md={6}>
+					<FindUsText>
+						<H3 weight={700}>Where to find us?</H3>
+						<Lead size='large'>
+							If you’re attending the conference in person, come
+							visit our booth! Find us at:
+							<br />
+							<br />
+							Regenlandia (Impact Zone) At the National Western
+							Complex: 4655 Humboldt St, Denver, CO 80216
+						</Lead>
 						<br />
-						<br />
-						Regenlandia (Impact Zone) At the National Western
-						Complex: 4655 Humboldt St, Denver, CO 80216
-					</Lead>
-					<br />
-					<GhostButton
-						size='large'
-						label='Get Directions'
-						icon={<IconArrowRight32 />}
-					/>
-				</FindUsText>
-				<Map>
-					<Image src={MapImage} alt='ETHDenver map' />
-				</Map>
+						<GhostButton
+							size='large'
+							label='Get Directions'
+							icon={<IconArrowRight32 />}
+						/>
+					</FindUsText>
+				</Col>
+				<Col xs={12} md={6}>
+					<Map>
+						<CustomImage src={MapImage} alt='ETHDenver map' />
+					</Map>
+				</Col>
 			</FindUs>
 			<Discord>
-				<Image src={DiscordIcon} alt='Discord icon' />
+				<CustomImage src={DiscordIcon} alt='Discord icon' />
 				<DiscordText>
 					<H4 weight={700}>We’d love to hear from you on Discord!</H4>
 					<H4>
@@ -78,7 +82,13 @@ const FindUsText = styled.div`
 	max-width: 504px;
 `;
 
-const Map = styled.div``;
+const Map = styled.div`
+	/* max-width: 300px; */
+`;
+
+const CustomImage = styled(Image)`
+	max-width: 100%;
+`;
 
 const FindUs = styled(Row)`
 	padding-top: 203px;
