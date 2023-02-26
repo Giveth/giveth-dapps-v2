@@ -18,6 +18,7 @@ const HomeIndex: FC<IHomeRoute> = props => {
 	const featuredProjectsCampaigns = campaigns.filter(
 		campaign => campaign.isFeatured && campaign.relatedProjects?.length > 0,
 	);
+	const newCampaigns = campaigns.filter(campaign => campaign.isNew);
 	return (
 		<Wrapper>
 			<IntroBlock />
@@ -40,7 +41,7 @@ const HomeIndex: FC<IHomeRoute> = props => {
 			<Separator />
 			<HomePartners />
 			<Separator />
-			{campaigns && campaigns.length > 0 ? (
+			{newCampaigns && newCampaigns.length > 0 ? (
 				<CampaignsBlock campaigns={campaigns} />
 			) : (
 				''
