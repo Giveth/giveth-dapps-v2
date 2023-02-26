@@ -93,6 +93,7 @@ export interface ICampaign {
 	hashtags: string[];
 	slug: string;
 	isFeatured: boolean;
+	isNew: boolean;
 	description: string;
 	relatedProjects: IProject[];
 	relatedProjectsCount: number;
