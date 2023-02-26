@@ -91,7 +91,7 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 						))}
 					</H1>
 					<InternalLink
-						href={campaignLinkGenerator(campaign)}
+						href={campaignLinkGenerator(campaign) || ''}
 						color={brandColors.giv[500]}
 					>
 						<ExploreText>

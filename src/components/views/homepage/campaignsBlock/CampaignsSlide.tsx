@@ -44,7 +44,7 @@ export const CampaignsSlide: FC<ICampaignsSlideProps> = ({ campaign }) => {
 			<ContentCol sm={12} md={5}>
 				<H2>{campaign.title}</H2>
 				<H4>{campaign.description}</H4>
-				<Link href={campaignLinkGenerator(campaign)}>
+				<Link href={campaignLinkGenerator(campaign) || ''}>
 					<ExploreLink>
 						Explore <IconChevronRight32 />
 					</ExploreLink>
@@ -75,7 +75,7 @@ export const CampaignsSlide: FC<ICampaignsSlideProps> = ({ campaign }) => {
 							/>
 						</VideoOverlay>
 					</VideoContainer>
-				) : (
+				) : campaign.photo ? (
 					<ImageWrapper>
 						<Image
 							src={campaign.photo}
@@ -84,6 +84,8 @@ export const CampaignsSlide: FC<ICampaignsSlideProps> = ({ campaign }) => {
 							style={{ objectFit: 'cover' }}
 						/>
 					</ImageWrapper>
+				) : (
+					''
 				)}
 			</Col>
 		</Row>
