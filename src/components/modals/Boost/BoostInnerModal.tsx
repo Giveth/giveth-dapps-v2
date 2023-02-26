@@ -11,6 +11,7 @@ import {
 	P,
 } from '@giveth/ui-design-system';
 import { useState, useEffect } from 'react';
+import { useIntl } from 'react-intl';
 import Link from 'next/link';
 
 import LottieControl from '@/components/LottieControl';
@@ -69,6 +70,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 	projectId,
 	setShowModal,
 }) => {
+	const { formatMessage } = useIntl();
 	const [percentage, setPercentage] = useState(0);
 	const [isChanged, setIsChanged] = useState(false);
 	const [isSaving, setIsSaving] = useState(false);
@@ -89,20 +91,20 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 		if (boostedProjectsCount === 0) {
 			return (
 				<Caption style={{ whiteSpace: `pre-line` }}>
-					Since this is your first time boosting a project, 100% of
-					your GIVpower will be allocated to it.
+					{formatMessage({
+						id: 'label.since_this_is_your_first_time_boosting',
+					})}
 				</Caption>
 			);
 		} else if (isOnlyBoostedProjectIsThisProject) {
 			return (
 				<Caption style={{ whiteSpace: `pre-line` }}>
-					You supported this project with 100% of your total GIVpower.
-					You can&apos;t edit the allocation unless you have at least
-					1 other boosted project. Try boosting other projects or
-					managing them in &nbsp;
+					{formatMessage({
+						id: 'label.you_supported_this_project_with_100%',
+					})}
 					<Link href={Routes.MyBoostedProjects}>
 						<GLink>
-							<b>My GIVpower</b>
+							<b>{formatMessage({ id: 'label.my_givpower' })}</b>
 						</GLink>
 					</Link>
 				</Caption>
@@ -110,13 +112,17 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 		} else if (percentage === 100) {
 			return (
 				<Caption style={{ whiteSpace: `pre-line` }}>
-					Are you Sure? <br /> If you boost this project with 100% of
-					your GIVpower, you will remove your GIVpower from all the
-					other projects you boosted. <br />
-					You can review and manage your GIVpower allocations in
+					{formatMessage({ id: 'label.are_you_sure' })} <br />{' '}
+					{formatMessage({
+						id: 'label.if_you_boost_this_project_with_100%',
+					})}{' '}
+					<br />
+					{formatMessage({
+						id: 'label.you_can_review_and_manage_your_givpower',
+					})}
 					<Link href={Routes.MyBoostedProjects}>
 						<GLink>
-							<b>My GIVpower.</b>
+							<b>{formatMessage({ id: 'label.my_givpower' })}</b>
 						</GLink>
 					</Link>
 				</Caption>
@@ -124,14 +130,17 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 		} else {
 			return (
 				<Caption style={{ whiteSpace: `pre-line` }}>
-					When you allocate a percentage of your total GIVpower to
-					this project, the GIVpower you have on other projects will
-					decrease proportionally. <br />
-					You can review and manage your GIVpower allocations in
+					{formatMessage({
+						id: 'label.when_you_allocate_a_percentage_of_your_total_givpower',
+					})}{' '}
+					<br />
+					{formatMessage({
+						id: 'label.you_can_review_and_manage_your_givpower',
+					})}
 					&nbsp;
 					<Link href={Routes.MyBoostedProjects}>
 						<GLink>
-							<b>My GIVpower.</b>
+							<b>{formatMessage({ id: 'label.my_givpower' })}</b>
 						</GLink>
 					</Link>
 				</Caption>
@@ -206,21 +215,24 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 			<>
 				<ExceededContainer>
 					<Lead>
-						You have already boosted the maximum 20 projects!
-						<br /> To continue with this boosting, remove at least
-						one other boosted project from your account and come
-						back to this project again!
+						{formatMessage({
+							id: 'label.you_have_already_boosted_20_projects',
+						})}
+						<br />{' '}
+						{formatMessage({
+							id: 'label.to_continue_please_remove_at_least_one_to_boost',
+						})}
 					</Lead>
 				</ExceededContainer>
 				<Link href={Routes.MyBoostedProjects}>
 					<BoostedProjectsLink
 						size='medium'
-						label='Go to My GIVpower'
+						label={formatMessage({ id: 'label.go_to_my_givpower' })}
 					/>
 				</Link>
 				<NotNowButton
 					buttonType='texty-primary'
-					label='Not now'
+					label={formatMessage({ id: 'label.not_now' })}
 					onClick={() => setShowModal(false)}
 				/>
 			</>
@@ -231,7 +243,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 		<>
 			<InfoPart>
 				<TotalGIVpowerRow alignItems='baseline' gap='12px'>
-					<H6>Total GIVpower</H6>
+					<H6>{formatMessage({ id: 'label.total_givpower' })}</H6>
 					<GIVpowerValue weight={700}>
 						{formatWeiHelper(totalGIVpower)}
 						<GIVpowerHelp>
@@ -240,8 +252,9 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 								direction={'bottom'}
 							>
 								<LockInfotooltip>
-									Get more GIVpower by staking & locking more
-									GIV tokens.
+									{formatMessage({
+										id: 'label.get_more_givpower_by_staking',
+									})}
 								</LockInfotooltip>
 							</IconWithTooltip>
 						</GIVpowerHelp>
@@ -249,14 +262,15 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 				</TotalGIVpowerRow>
 				<Flex justifyContent='space-between'>
 					<Flex alignItems='baseline' gap='4px'>
-						<P>Boosted projects</P>
+						<P>{formatMessage({ id: 'label.boosted_projects' })}</P>
 						<IconWithTooltip
 							icon={<IconHelpFilled16 />}
 							direction={'bottom'}
 						>
 							<LockInfotooltip>
-								This is the number of projects you have boosted
-								before
+								{formatMessage({
+									id: 'label.this_is_the_number_of_projects_you_have_boosted',
+								})}
 							</LockInfotooltip>
 						</IconWithTooltip>
 					</Flex>
@@ -339,12 +353,14 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 										  )
 										: 0
 							  } GIVpower`
-							: 'Drag to allocate.'}
+							: `${formatMessage({
+									id: 'label.drag_to_allocate',
+							  })}.`}
 					</SliderDesc>
 				</>
 			)}
 			<ConfirmButton
-				label='Confirm'
+				label={formatMessage({ id: 'label.confirm' })}
 				size='small'
 				loading={isSaving}
 				disabled={
@@ -357,7 +373,9 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 			/>
 			{boostedProjectsCount > 0 && (
 				<Link href={Routes.MyBoostedProjects}>
-					<ManageLink>Manage your GIVpower</ManageLink>
+					<ManageLink>
+						{formatMessage({ id: 'label.manage_your_givpower' })}
+					</ManageLink>
 				</Link>
 			)}
 		</>

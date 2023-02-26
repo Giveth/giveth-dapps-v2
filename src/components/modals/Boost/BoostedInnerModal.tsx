@@ -1,5 +1,6 @@
 import { Lead } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import React from 'react';
 import useDetectDevice from '@/hooks/useDetectDevice';
@@ -22,6 +23,7 @@ const BoostedInnerModal: FC<IBoostedModalProps> = ({
 	closeModal,
 }) => {
 	const { isMobile } = useDetectDevice();
+	const { formatMessage } = useIntl();
 
 	return (
 		<div>
@@ -31,26 +33,47 @@ const BoostedInnerModal: FC<IBoostedModalProps> = ({
 					animationData={CongratsAnimation}
 				/>
 			</ConfettiContainer>
-			<BoostedTitle>Project boosted!</BoostedTitle>
+			<BoostedTitle>
+				{formatMessage({ id: 'label.project_boosted' })}
+			</BoostedTitle>
 			<Desc>
-				You boosted this project with {percentage}% of your GIVpower.
+				{formatMessage(
+					{
+						id: 'label.you_boosted_this_project_with_percentage',
+					},
+					{ percentage },
+				)}
 				<br />
-				Note: This project’s rank will only change at the start of of
-				the next GIVbacks round.
+				{formatMessage({
+					id: 'label.this_project_rank_will_only_change',
+				})}
 			</Desc>
 			<ActionsSection>
 				<Link
 					href={`${Routes.GIVfarm}/?open=${StakingType.GIV_LM}&chain=gnosis`}
 				>
-					<GetButton label='Get more GIVpower' size='small' />
+					<GetButton
+						label={formatMessage({
+							id: 'label.get_more_givpower',
+						})}
+						size='small'
+					/>
 				</Link>
 				<Link href={Routes.MyBoostedProjects}>
 					<CustomButtonLink
 						linkType='texty-primary'
 						size='small'
-						label='see your GIVpower allocations'
+						label={formatMessage({
+							id: 'label.see_your_givpower_allocation',
+						})}
 					/>
 				</Link>
+				<CustomButton
+					buttonType='texty'
+					size='small'
+					label={formatMessage({ id: 'label.dismiss' })}
+					onClick={closeModal}
+				/>
 				<CustomButton
 					buttonType='texty'
 					size='small'

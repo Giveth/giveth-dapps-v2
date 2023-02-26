@@ -106,16 +106,6 @@ export const zIndex = {
 	NAVBAR: 1100,
 };
 
-export const statusCodes = [
-	'401',
-	'403',
-	'404',
-	'500',
-	'502',
-	'503',
-	'504',
-] as const;
-
 export const searchSuggestions = [
 	'open source',
 	'blockchain',
